@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import Login from './Login';
 
 class App extends Component {
   constructor(props) {
@@ -18,6 +19,7 @@ class App extends Component {
 
   render() {
     return (
+      
       <div id="content">
         <div id="content-header">
           <div className="padding">
@@ -31,8 +33,12 @@ class App extends Component {
               <h3>Try it out</h3>
               <button onClick={this.onSetColor}>Set color</button>
           </div>
+          <div>
+          <Login> </Login>
+        </div>
         </div>
       </div>
+
     );
   }
 }
