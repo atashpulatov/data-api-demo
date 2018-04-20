@@ -49,10 +49,11 @@ class Login extends Component {
                 // const loginMode = this.state.authMode.toString();
 
                 //-------- only for debugging
-                const username = 'mstr';
-                const password = '*********** ';
-                const envUrl = '//env-89722.customer.cloud.microstrategy.com/MicroStrategyLibrary/api';
-                const loginMode = 1;
+                const credentials = require('./Credentials');
+                const username = credentials.username;
+                const password = credentials.password;
+                const envUrl = credentials.envUrl;
+                const loginMode = credentials.loginMode;
                 //-------------------
 
                 return request.post(envUrl + '/auth/login').send({ username, password, loginMode });
