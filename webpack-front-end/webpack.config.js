@@ -12,8 +12,16 @@ var config = {
     loaders : [
       {
         test : /\.jsx?/,
+        exclude: /node_modules/,
         include : APP_DIR,
-        loader : 'babel-loader'
+        loader : 'babel-loader',
+        query: {
+          presets: ['react']
+        }
+      },
+      {
+        test: /\.css$/,
+        use: [ 'style-loader', 'css-loader' ]
       }
     ]
   }

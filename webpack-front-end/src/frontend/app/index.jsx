@@ -1,10 +1,21 @@
 import React from 'react';
-import {render} from 'react-dom';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App.jsx';
+import registerServiceWorker from './registerServiceWorker';
 
-class App extends React.Component {
-  render () {
-    return <p>Yo!</p>;
-  }
+const Office = window.Office;
+
+function officeInitialize(){
+  Office.initialize = () => {
+  };
 }
 
-render(<App/>, document.getElementById('app'));
+function goReact(){
+  ReactDOM.render(<App />, document.getElementById('root'));
+}
+
+goReact();
+officeInitialize();
+
+registerServiceWorker();

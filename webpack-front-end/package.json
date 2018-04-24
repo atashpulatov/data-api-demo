@@ -20,7 +20,12 @@
     "react": "^15.6.2",
     "react-dom": "^15.6.2",
     "react-router": "^4.2.0",
-    "webpack": "^3.11.0",
+    "style-loader": "^0.21.0",
+    "superagent": "^3.8.2",
+    "webpack": "^3.11.0"
+  },
+  "devDependencies": {
+    "css-loader": "^0.28.11",
     "webpack-dev-server": "^2.11.2"
   }
 }
