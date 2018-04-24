@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import credentials from './Credentials';
 const request = require('superagent');
 
 class Login extends Component {
@@ -72,7 +73,7 @@ class Login extends Component {
                 console.log(res);
             })
             .catch(err => {
-                console.error(`Error: ${err.response.res.statusCode} (${err.response.res.statusMessage})`);
+                console.error(`Error: ${err.response.status} (${err.response.statusMessage})`);
             });
     }
 
