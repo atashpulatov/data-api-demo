@@ -1,0 +1,26 @@
+{
+  "name": "react-with-webpack",
+  "version": "1.0.0",
+  "description": "A fixed version of the project from the `broken` branch that works as expected with webpack-dev-server.",
+  "main": "index.js",
+  "scripts": {
+    "devNoServer": "webpack --d --watch",
+    "dev": "webpack-dev-server --content-base=src/frontend/public",
+    "build": "webpack -p",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "jsx": "^0.9.89",
+    "react": "^15.6.2",
+    "react-dom": "^15.6.2",
+    "react-router": "^4.2.0",
+    "webpack": "^3.11.0",
+    "webpack-dev-server": "^2.11.2"
+  }
+}
