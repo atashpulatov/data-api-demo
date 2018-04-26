@@ -287,5 +287,5 @@ __pycache__/
 *.odx.cs
 *.xsd.cs
 
-# Developer utilities
+# Custom exclusions
 src/Credentials.js
