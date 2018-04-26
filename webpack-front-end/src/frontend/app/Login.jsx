@@ -36,7 +36,9 @@ class Login extends Component {
     onLoginUser(event) {
         console.log('hello');
         event.preventDefault();
-        const envUrl = this.state.envUrl;
+        const credentials = require('./Credentials');
+        const envUrl = credentials.envUrl;
+        //const envUrl = this.state.envUrl;
         request.get(envUrl + '/status').withCredentials()
             .then(() => {
                 console.log(`+ Able to connect to the Admin REST Server: ${envUrl}`);

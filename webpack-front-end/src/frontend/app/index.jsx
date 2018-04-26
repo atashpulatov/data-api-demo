@@ -8,6 +8,7 @@ const Office = window.Office;
 
 function officeInitialize(){
   Office.initialize = () => {
+    
   };
 }
 

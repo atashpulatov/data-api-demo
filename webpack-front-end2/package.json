@@ -1,12 +1,11 @@
 {
-  "name": "react-with-webpack",
+  "name": "react-sample-broken",
   "version": "1.0.0",
-  "description": "A fixed version of the project from the `broken` branch that works as expected with webpack-dev-server.",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "devNoServer": "webpack --d --watch",
     "dev": "webpack-dev-server --content-base=src/frontend/public",
-    "start-dev": "webpack-dev-server --https --port 3000 && node --inspect ./src/frontend/public/js/bundle.js",
     "build": "webpack -p",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,16 +16,11 @@
     "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
-    "jsx": "^0.9.89",
     "react": "^15.6.2",
     "react-dom": "^15.6.2",
-    "react-router": "^4.2.0",
-    "style-loader": "^0.21.0",
-    "superagent": "^3.8.2",
     "webpack": "^3.11.0"
   },
   "devDependencies": {
-    "css-loader": "^0.28.11",
     "webpack-dev-server": "^2.11.2"
   }
 }
