@@ -1,5 +1,5 @@
 #content-header {
-  background: #2a8dd4;
+  background: #d9232f;
   color: #fff;
   position: absolute;
   top: 0;
@@ -40,12 +40,12 @@
 }
 .button-submit{
   padding: 10px;
-  background-color: #2a8dd4;
+  background-color: #d9232f;
   color: white;
   text-align: center;
   display: inline-block;
   font-size: 26px;
 }
 .button-submit:hover{
-  background-color: #185683;
+  background-color: #971c24;
 }
