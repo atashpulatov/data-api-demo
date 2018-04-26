@@ -25,7 +25,8 @@
             "name": "Attach to Chrome with WebPack",
             "port": 9222,
             "webRoot": "${workspaceRoot}/src/frontend/app",
-            "sourceMaps": true
+            "sourceMaps": true,
+            "smartStep": true
         },
 
         {

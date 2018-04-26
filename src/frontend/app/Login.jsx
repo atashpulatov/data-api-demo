@@ -44,12 +44,6 @@ class Login extends Component {
                 console.log(`+ Able to connect to the Admin REST Server: ${envUrl}`);
             })
             .then(() => {
-                // Now try to login using the specified authMode, username and password
-                //const {username, password} = program,
-                // const username = this.state.username;
-                // const password = this.state.password;
-                // const envUrl = this.state.envUrl;
-                // const loginMode = this.state.authMode.toString();
 
                 //-------- only for debugging
                 const credentials = require('./Credentials');
@@ -75,34 +69,40 @@ class Login extends Component {
                 console.log(res);
             })
             .catch(err => {
-                console.error(`Error: ${err.response.status} (${err.response.statusMessage})`);
+                console.error(`Error: ${err.status} (${err.message})`);
             });
     }
 
     render() {
         return (
             <form onSubmit={this.onLoginUser}>
-                <label>
-                    Username:
-                <input type='text' value={this.state.username} onChange={this.handleUsernameChange} name='username' />
-                </label>
-                <br />
-                <label>
-                    Password:
-                <input type='password' value={this.state.password} onChange={this.handlePasswordChange} name='password' />
-                </label>
-                <br />
-                <label>
-                    Environment URL:
-                <input type='text' value={this.state.envUrl} onChange={this.handleEnvURLChange} name='envUrl' />
-                </label>
-                <br />
-                <label>
-                    Auth Mode:
-                <input type='number' value={this.state.authMode} onChange={this.handleAuthModeChange} name='envUrl' />
-                </label>
-                <br />
-                <input type='submit' value='Submit' />
+                <div className='grid-container'>
+                    <label className='grid-item'>
+                        Username:
+                    </label>
+                    <input className='grid-item' type='text' value={this.state.username} onChange={this.handleUsernameChange} name='username' />
+                    
+                    {/* <br /> */}
+                    <label className='grid-item'>
+                        Password:
+                    </label>
+                    <input className='grid-item' type='password' value={this.state.password} onChange={this.handlePasswordChange} name='password' />
+                    
+                    {/* <br /> */}
+                    <label className='grid-item'>
+                        Environment URL:
+                    </label>
+                    <input className='grid-item' type='text' value={this.state.envUrl} onChange={this.handleEnvURLChange} name='envUrl' />
+                    
+                    {/* <br /> */}
+                    <label className='grid-item'>
+                        Auth Mode:
+                    </label>
+                    <input className='grid-item' type='number' value={this.state.authMode} onChange={this.handleAuthModeChange} name='envUrl' />
+                    
+                    {/* <br /> */}
+                    <input className='grid-item-2 button-submit' type='submit' value='Submit' />
+                </div>
             </form>
         )
     }
