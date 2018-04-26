@@ -9,7 +9,7 @@
             "request": "launch",
             "name": "Launch Chrome",
             "url": "https://localhost:3000",
-            "webRoot": "${workspaceRoot}/webpack-front-end/src/frontend/app",
+            "webRoot": "${workspaceRoot}/src/frontend/app",
             "sourceMaps": true
         },
         {
@@ -17,14 +17,14 @@
             "request": "attach",
             "name": "Attach to Chrome",
             "port": 9222,
-            "webRoot": "${workspaceFolder}/front-end/public"
+            "webRoot": "${workspaceFolder}"
         },
         {
             "type": "chrome",
             "request": "attach",
             "name": "Attach to Chrome with WebPack",
             "port": 9222,
-            "webRoot": "${workspaceRoot}/webpack-front-end/src/frontend/app",
+            "webRoot": "${workspaceRoot}/src/frontend/app",
             "sourceMaps": true
         },
 
@@ -32,43 +32,19 @@
             "type": "node",
             "request": "launch",
             "name": "WebpackDEV",
-            "program": "${workspaceRoot}/webpack-front-end/node_modules/.bin/webpack-dev-server",
+            "program": "${workspaceRoot}/node_modules/.bin/webpack-dev-server",
             "args":[
                 "--https",
                 "--port",
                 "3000"
             ],
             "outFiles": [
-                "${workspaceRoot}/webpack-front-end/src/frontend/public/js/*"
+                "${workspaceRoot}/src/frontend/public/js/*"
             ],
-            // "stopOnEntry": false,
-            "cwd": "${workspaceFolder}/webpack-front-end",
+            "cwd": "${workspaceFolder}",
             "console": "internalConsole",
             "sourceMaps": true
         },
-
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "DevExperimental",
-            //"program": "${workspaceFolder}/webpack-front-end",
-            "stopOnEntry": false,
-            "outFiles": [
-                "${workspaceRoot}/webpack-front-end/src/frontend/public/js/*"
-            ],
-            "args": [],
-            "cwd": "${workspaceFolder}/webpack-front-end",
-            "runtimeExecutable": "npm",
-            "runtimeArgs": [
-                "run-script", "start-dev"
-            ],
-            "env": {
-                "NODE_ENV": "development"
-            },
-            "console": "integratedTerminal",
-            "port": 9229
-        
-        }
 
     ]
 }
