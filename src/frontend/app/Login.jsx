@@ -81,25 +81,25 @@ class Login extends Component {
                         Username:
                     </label>
                     <input className='grid-item' type='text' value={this.state.username} onChange={this.handleUsernameChange} name='username' />
-                    
+
                     {/* <br /> */}
                     <label className='grid-item'>
                         Password:
                     </label>
                     <input className='grid-item' type='password' value={this.state.password} onChange={this.handlePasswordChange} name='password' />
-                    
+
                     {/* <br /> */}
                     <label className='grid-item'>
                         Environment URL:
                     </label>
                     <input className='grid-item' type='text' value={this.state.envUrl} onChange={this.handleEnvURLChange} name='envUrl' />
-                    
+
                     {/* <br /> */}
                     <label className='grid-item'>
                         Auth Mode:
                     </label>
                     <input className='grid-item' type='number' value={this.state.authMode} onChange={this.handleAuthModeChange} name='envUrl' />
-                    
+
                     {/* <br /> */}
                     <input className='grid-item-2 button-submit' type='submit' value='Submit' />
                 </div>

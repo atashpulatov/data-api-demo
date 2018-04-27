@@ -22,7 +22,7 @@ class App extends Component {
       <div id="content">
         <div id="content-header">
           <div className="padding">
-              <h1>Microstrategy Office</h1>
+            <h1>Microstrategy Office</h1>
           </div>
         </div>
         <div id="content-main">
@@ -32,11 +32,11 @@ class App extends Component {
               <h3>Try it out</h3>
               <button onClick={this.onSetColor}>Set color</button>
           </div> */}
-          <br/>
-          <br/>
+          <br />
+          <br />
           <div>
-          <Login> </Login>
-        </div>
+            <Login> </Login>
+          </div>
         </div>
       </div>
 

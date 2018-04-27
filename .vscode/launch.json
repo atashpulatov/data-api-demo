@@ -28,13 +28,12 @@
             "sourceMaps": true,
             "smartStep": true
         },
-
         {
             "type": "node",
             "request": "launch",
             "name": "WebpackDEV",
             "program": "${workspaceRoot}/node_modules/.bin/webpack-dev-server",
-            "args":[
+            "args": [
                 "--https",
                 "--port",
                 "3000"
@@ -46,6 +45,5 @@
             "console": "internalConsole",
             "sourceMaps": true
         },
-
     ]
 }
