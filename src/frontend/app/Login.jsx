@@ -38,11 +38,16 @@ class Login extends Component {
         const credentials = require('./Credentials');
         const envUrl = credentials.envUrl;
         // const envUrl = this.state.envUrl;
-        request.get(envUrl + '/status').withCredentials()
+        fetch(envUrl + '/status')
             .then(() => {
                 console.log(`+ Able to connect to the Admin REST Server: `
                     + `${envUrl}`);
             })
+            // .then(() => {
+            //     return fetch(envUrl + '/auth/login', {
+            //         method: 'OPTIONS',
+            //     });
+            // })
             .then(() => {
                 // Now try to login using the specified authMode,
                 // username and password
@@ -61,7 +66,17 @@ class Login extends Component {
                 // -------------------
 
                 return request.post(envUrl + '/auth/login')
-                    .send({ username, password, loginMode });
+                    .send({ username, password, loginMode })
+                    .withCredentials();
+                // return fetch(envUrl + '/auth/login', {
+                //     method: 'POST',
+                //     body: {
+                //         username: username,
+                //         password: password,
+                //         loginMode: loginMode,
+                //     },
+                //     mode: 'cors',
+                // });
             })
             .then((res) => {
                 console.log(res);
@@ -71,12 +86,15 @@ class Login extends Component {
                 return authToken;
             })
             .then((token) => {
-                return request.get(envUrl + '/folders')
-                    .set('x-mstr-authtoken', token);
+                let ret = request.get(envUrl + '/projects')
+                    .set('x-mstr-authtoken', token)
+                    .withCredentials();
+                console.log(ret);
+                return ret;
             })
-            .then((res) => {
-                console.log(res);
-            })
+            // .then((res) => {
+            //     console.log(res);
+            // })
             .catch((err) => {
                 console.error(`Error: ${err.response.status}`
                     + ` (${err.response.statusMessage})`);
