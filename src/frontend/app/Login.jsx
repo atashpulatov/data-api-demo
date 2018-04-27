@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import credentials from './Credentials';
+import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
 const request = require('superagent');
 
 class Login extends Component {
@@ -9,7 +8,7 @@ class Login extends Component {
             username: '',
             password: '',
             envUrl: '',
-            authMode: ''
+            authMode: '',
         };
 
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -38,38 +37,49 @@ class Login extends Component {
         event.preventDefault();
         const credentials = require('./Credentials');
         const envUrl = credentials.envUrl;
-        //const envUrl = this.state.envUrl;
+        // const envUrl = this.state.envUrl;
         request.get(envUrl + '/status').withCredentials()
             .then(() => {
-                console.log(`+ Able to connect to the Admin REST Server: ${envUrl}`);
+                console.log(`+ Able to connect to the Admin REST Server: `
+                    + `${envUrl}`);
             })
             .then(() => {
+                // Now try to login using the specified authMode,
+                // username and password
+                // const {username, password} = program,
+                // const username = this.state.username;
+                // const password = this.state.password;
+                // const envUrl = this.state.envUrl;
+                // const loginMode = this.state.authMode.toString();
 
-                //-------- only for debugging
+                // -------- only for debugging
                 const credentials = require('./Credentials');
                 const username = credentials.username;
                 const password = credentials.password;
                 const envUrl = credentials.envUrl;
                 const loginMode = credentials.loginMode;
-                //-------------------
+                // -------------------
 
-                return request.post(envUrl + '/auth/login').send({ username, password, loginMode });
+                return request.post(envUrl + '/auth/login')
+                    .send({ username, password, loginMode });
             })
-            .then(res => {
+            .then((res) => {
                 console.log(res);
                 const authToken = res.headers['x-mstr-authtoken'];
                 sessionStorage.setItem('x-mstr-authtoken', authToken);
-                console.log(sessionStorage.getItem('x-mstr-authtoken'))
+                console.log(sessionStorage.getItem('x-mstr-authtoken'));
                 return authToken;
             })
-            .then(token => {
-                return request.get(envUrl + '/folders').set('x-mstr-authtoken', token);
+            .then((token) => {
+                return request.get(envUrl + '/folders')
+                    .set('x-mstr-authtoken', token);
             })
-            .then(res => {
+            .then((res) => {
                 console.log(res);
             })
-            .catch(err => {
-                console.error(`Error: ${err.status} (${err.message})`);
+            .catch((err) => {
+                console.error(`Error: ${err.response.status}`
+                    + ` (${err.response.statusMessage})`);
             });
     }
 
@@ -80,34 +90,41 @@ class Login extends Component {
                     <label className='grid-item'>
                         Username:
                     </label>
-                    <input className='grid-item' type='text' value={this.state.username} onChange={this.handleUsernameChange} name='username' />
+                    <input className='grid-item' type='text'
+                        value={this.state.username}
+                        onChange={this.handleUsernameChange} name='username' />
 
                     {/* <br /> */}
                     <label className='grid-item'>
                         Password:
                     </label>
-                    <input className='grid-item' type='password' value={this.state.password} onChange={this.handlePasswordChange} name='password' />
+                    <input className='grid-item' type='password'
+                        value={this.state.password}
+                        onChange={this.handlePasswordChange} name='password' />
 
                     {/* <br /> */}
                     <label className='grid-item'>
                         Environment URL:
                     </label>
-                    <input className='grid-item' type='text' value={this.state.envUrl} onChange={this.handleEnvURLChange} name='envUrl' />
+                    <input className='grid-item' type='text'
+                        value={this.state.envUrl}
+                        onChange={this.handleEnvURLChange} name='envUrl' />
 
                     {/* <br /> */}
                     <label className='grid-item'>
                         Auth Mode:
                     </label>
-                    <input className='grid-item' type='number' value={this.state.authMode} onChange={this.handleAuthModeChange} name='envUrl' />
+                    <input className='grid-item' type='number'
+                        value={this.state.authMode}
+                        onChange={this.handleAuthModeChange} name='envUrl' />
 
                     {/* <br /> */}
-                    <input className='grid-item-2 button-submit' type='submit' value='Submit' />
+                    <input className='grid-item-2 button-submit'
+                        type='submit' value='Submit' />
                 </div>
             </form>
-        )
+        );
     }
-
-
 }
 
 export default Login;
