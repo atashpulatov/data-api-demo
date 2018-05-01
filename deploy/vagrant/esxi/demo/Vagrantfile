@@ -1,0 +1,7 @@
+require 'git'
+
+Vagrant::Project.configure(:esxi) do |env|
+  mstr_office_centos :"mstr_office_centos_#{Git.branch_name}_demo" do
+
+  end
+end

@@ -1,0 +1,6 @@
+name             'mstr_office'
+maintainer       'Someone'
+maintainer_email 'someone@microstrategy.com'
+description      'Installs/Configures mstr_office servers'
+long_description 'Installs and configures the servers this project produces'
+version          '1.0.0'

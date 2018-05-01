@@ -1,0 +1,12 @@
+Vagrant::Project.configure(:virtualbox) do |env|
+  mstr_office_centos :mstr_office_centos do
+
+    provider{
+      network{
+        ip_address "10.62.78.100"
+      }
+      memory '480'
+    }
+  
+  end
+end
