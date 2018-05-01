@@ -1,0 +1,18 @@
+load_berks_file($WORKSPACE_SETTINGS[:ecosystem][:root][:chef][:berksfile])
+
+cookbook_from_git 'virtualbox', '0.8.9'
+cookbook_from_git 'chef_commons', '1.1.11'
+cookbook_from_git 'extras', '0.1.61'
+
+cookbook 'build-essential'
+
+__END__
+below are some examples of additional cookbooks
+
+cookbook_from_git 'idea', '0.2.16'
+cookbook_from_git 'gradle', '0.1.4'
+
+cookbook_from_git 'java-osx', '0.1.1'
+cookbook_from_git 'java-windows', '1.0.3'
+cookbook 'ark'
+cookbook 'java'
