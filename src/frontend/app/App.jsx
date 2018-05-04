@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
+import {
+  BrowserRouter as Router, 
+  Route, 
+  browserHistory,
+  Link 
+} from 'react-router-dom';
 import './App.css';
 import Login from './Login.jsx';
+import Projects from './Projects.jsx';
 
 class App extends Component {
   constructor(props) {
@@ -19,27 +26,24 @@ class App extends Component {
 
   render() {
     return (
-      <div id="content">
-        <div id="content-header">
-          <div className="padding">
-            <h1>Microstrategy Office</h1>
+      <Router>
+        <div id="content">
+          <div id="content-header">
+            <div className="padding">
+              <h1>Microstrategy Office</h1>
+            </div>
+          </div>
+          <div id="content-main">
+            <br />
+            <br />
+            <div>
+              <Route exact path="/" component={Login}/>
+              <Route path="/projects" component={Projects}/>
+            </div>
+            <Link to="/projects"> Link </Link>
           </div>
         </div>
-        <div id="content-main">
-          {/* <div className="padding">
-              <p>Choose the button below to set the color of the selected range to green.</p>
-              <br />
-              <h3>Try it out</h3>
-              <button onClick={this.onSetColor}>Set color</button>
-          </div> */}
-          <br />
-          <br />
-          <div>
-            <Login> </Login>
-          </div>
-        </div>
-      </div>
-
+      </Router>
     );
   }
 }
