@@ -38,67 +38,107 @@ class Login extends Component {
         const credentials = require('./Credentials');
         const envUrl = credentials.envUrl;
         // const envUrl = this.state.envUrl;
-        fetch(envUrl + '/status')
-            .then(() => {
-                console.log(`+ Able to connect to the Admin REST Server: `
-                    + `${envUrl}`);
-            })
-            // .then(() => {
-            //     return fetch(envUrl + '/auth/login', {
-            //         method: 'OPTIONS',
-            //     });
-            // })
-            .then(() => {
-                // Now try to login using the specified authMode,
-                // username and password
-                // const {username, password} = program,
-                // const username = this.state.username;
-                // const password = this.state.password;
-                // const envUrl = this.state.envUrl;
-                // const loginMode = this.state.authMode.toString();
 
-                // -------- only for debugging
-                const credentials = require('./Credentials');
-                const username = credentials.username;
-                const password = credentials.password;
-                const envUrl = credentials.envUrl;
-                const loginMode = credentials.loginMode;
-                // -------------------
+        let superagentVariant = false;
+        if (superagentVariant) {
+            request.get(envUrl + '/status')
+                .then(() => {
+                    console.log(`+ Able to connect to the Admin REST Server: `
+                        + `${envUrl}`);
+                })
+                .then(() => {
+                    // Now try to login using the specified authMode,
+                    // username and password
+                    // const {username, password} = program,
+                    // const username = this.state.username;
+                    // const password = this.state.password;
+                    // const envUrl = this.state.envUrl;
+                    // const loginMode = this.state.authMode.toString();
 
-                return request.post(envUrl + '/auth/login')
-                    .send({ username, password, loginMode })
-                    .withCredentials();
-                // return fetch(envUrl + '/auth/login', {
-                //     method: 'POST',
-                //     body: {
-                //         username: username,
-                //         password: password,
-                //         loginMode: loginMode,
-                //     },
-                //     mode: 'cors',
-                // });
+                    // -------- only for debugging
+                    // const credentials = require('./Credentials');
+                    const username = credentials.username;
+                    const password = credentials.password;
+                    const envUrl = credentials.envUrl;
+                    const loginMode = credentials.loginMode;
+                    // -------------------
+
+                    return request.post(envUrl + '/auth/login')
+                        .send({ username, password, loginMode })
+                        .withCredentials();
+                })
+                .then((res) => {
+                    console.log(res);
+                    const authToken = res.headers['x-mstr-authtoken'];
+                    sessionStorage.setItem('x-mstr-authtoken', authToken);
+                    console.log(sessionStorage.getItem('x-mstr-authtoken'));
+                    return authToken;
+                })
+                .then((token) => {
+                    return request.get(envUrl + '/projects')
+                        .set('x-mstr-authtoken', token)
+                        .withCredentials();
+                })
+                .catch((err) => {
+                    console.error(`Error: ${err.response.status}`
+                        + ` (${err.response.statusMessage})`);
+                });
+        } else {
+            const username = credentials.username;
+            const password = credentials.password;
+            const loginMode = credentials.loginMode;
+            fetch(envUrl + '/status', {
+                method: 'GET',
+                credentials: 'include', // Including cookie
+                mode: 'no-cors', // Setting as cors mode for cross origin
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                    // 'X-Requested-With': 'XMLHttpRequest'
+                },
             })
-            .then((res) => {
-                console.log(res);
-                const authToken = res.headers['x-mstr-authtoken'];
-                sessionStorage.setItem('x-mstr-authtoken', authToken);
-                console.log(sessionStorage.getItem('x-mstr-authtoken'));
-                return authToken;
-            })
-            .then((token) => {
-                let ret = request.get(envUrl + '/projects')
-                    .set('x-mstr-authtoken', token)
-                    .withCredentials();
-                console.log(ret);
-                return ret;
-            })
-            // .then((res) => {
-            //     console.log(res);
-            // })
-            .catch((err) => {
-                console.error(`Error: ${err.response.status}`
-                    + ` (${err.response.statusMessage})`);
-            });
+                .then(() => {
+                    return fetch(envUrl + '/auth/login', {
+                        method: 'POST',
+                        credentials: 'include', // Including cookie
+                        mode: 'cors', // Setting as cors mode for cross origin
+                        headers: {
+                            'Content-Type': 'application/json',
+                            // 'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: {
+                            username: username,
+                            password: password,
+                            loginMode: loginMode,
+                        },
+                    });
+                })
+                .then((res) => {
+                    console.log(res);
+                    const authToken = res.headers['x-mstr-authtoken'];
+                    sessionStorage.setItem('x-mstr-authtoken', authToken);
+                    console.log(sessionStorage.getItem('x-mstr-authtoken'));
+                    return authToken;
+                })
+                .then((token) => {
+                    return fetch(envUrl + '/projects', {
+                        method: 'GET',
+                        credentials: 'include', // Including cookie
+                        mode: 'cors', // Setting as cors mode for cross origin
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                            'x-mstr-authtoken': token,
+                            // 'X-Requested-With': 'XMLHttpRequest'
+                        },
+                    });
+                })
+                .then((res) => {
+                    console.log(res);
+                })
+                .catch((err) => {
+                    console.error(`Error: ${err.response.status}`
+                        + ` (${err.response.statusMessage})`);
+                });
+        }
     }
 
     render() {
