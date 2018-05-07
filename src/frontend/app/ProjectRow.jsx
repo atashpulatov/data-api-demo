@@ -15,6 +15,7 @@ class ProjectRow extends Component {
             <h2>Alias: {this.state.data.alias}</h2>
             <h2>Description: {this.state.data.description}</h2>
             <h2>Status: {this.state.data.status}</h2>
+            <hr />
         </div>
         );
     }

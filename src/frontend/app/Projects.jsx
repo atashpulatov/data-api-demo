@@ -8,12 +8,10 @@ class Projects extends Component {
         };
     }
     render() {
-        let rows = [];
         let testResult = this.props.location.state.tarray;
-        let testResultLngt = testResult.length;
-        for ( let i = 0; i < testResultLngt; i++) {
-            rows.push(<ProjectRow projectRow={testResult[i]}/>);
-        }
+        let rows = testResult.map(((element) => {
+            return <ProjectRow key={element.id} projectRow={element}/>;
+        }));
         return (
         <div>
             {rows}

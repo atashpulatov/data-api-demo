@@ -40,7 +40,6 @@ class App extends Component {
               <Route exact path="/" component={Login}/>
               <Route path="/projects" component={Projects}/>
             </div>
-            <Link to="/projects"> Link </Link>
           </div>
         </div>
       </Router>
