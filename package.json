@@ -6,7 +6,7 @@
   "scripts": {
     "devNoServer": "webpack --d --watch",
     "dev": "webpack-dev-server --content-base=src/frontend/public",
-    "start-dev": "webpack-dev-server --https --port 3000 && node --inspect ./src/frontend/public/js/bundle.js",
+    "start-dev": "webpack-dev-server --https --port 3000",
     "build": "webpack -p",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

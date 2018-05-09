@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import {
-  BrowserRouter as Router, 
-  Route, 
-  browserHistory,
-  Link 
+  HashRouter as Router, 
+  Route
 } from 'react-router-dom';
 import './App.css';
-import Login from './Login.jsx';
-import Projects from './Projects.jsx';
+import Login from './Authentication/Login.jsx';
+import Projects from './MSTRStructureObject/Projects.jsx';
+
+var routerType = 'HashRouter';
 
 class App extends Component {
   constructor(props) {

@@ -29,7 +29,9 @@
             "args": [
                 "--https",
                 "--port",
-                "3000"
+                "3000",
+                "--config",
+                "webpack.config.js"
             ],
             "outFiles": [
                 "${workspaceRoot}/src/frontend/public/js/*"
