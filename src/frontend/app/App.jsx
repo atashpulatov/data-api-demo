@@ -4,10 +4,9 @@ import {
   Route
 } from 'react-router-dom';
 import './App.css';
-import Login from './Authentication/Login.jsx';
+import Main from './Main.jsx'
+import Login from './Authentication/LoginComponent.jsx';
 import Projects from './MSTRStructureObject/Projects.jsx';
-
-var routerType = 'HashRouter';
 
 class App extends Component {
   constructor(props) {
@@ -37,7 +36,8 @@ class App extends Component {
             <br />
             <br />
             <div>
-              <Route exact path="/" component={Login}/>
+              <Route exact path="/" component={Main}/>
+              <Route exact path="/login" component={Login}/>              
               <Route path="/projects" component={Projects}/>
             </div>
           </div>

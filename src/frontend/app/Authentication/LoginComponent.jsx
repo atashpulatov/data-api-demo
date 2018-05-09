@@ -1,4 +1,6 @@
 import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
+import Credentials from './Credentials.js';
+
 const request = require('superagent');
 
 class Login extends Component {
@@ -35,60 +37,16 @@ class Login extends Component {
     onLoginUser(event) {
         console.log('hello');
         event.preventDefault();
-        const credentials = require('./Credentials');
-        const mockProjects = require('../MSTRStructureObject/mockData.js').projectsArray;
-        console.log(mockProjects);
-        const envUrl = credentials.envUrl;
-        // const envUrl = this.state.envUrl;
+        const projects = require('../MSTRStructureObject/mockData.js').projectsArray;
+        console.log(projects);
 
         this.props.history.push({
             pathname: '/projects',
             state: {
-                tarray: mockProjects,
+                tarray: projects,
             },
         });
-
-        // request.get(envUrl + '/status')
-        //     .then(() => {
-        //         console.log(`+ Able to connect to the Admin REST Server: `
-        //             + `${envUrl}`);
-        //     })
-        //     .then(() => {
-
-        //         // -------- only for debugging
-        //         const credentials = require('./Credentials');
-        //         const username = credentials.username;
-        //         const password = credentials.password;
-        //         const envUrl = credentials.envUrl;
-        //         const loginMode = credentials.loginMode;
-        //         // -------------------
-
-        //         return request.post(envUrl + '/auth/login')
-        //             .send({ username, password, loginMode })
-        //             .withCredentials();
-        //     })
-        //     .then((res) => {
-        //         console.log(res);
-        //         const authToken = res.headers['x-mstr-authtoken'];
-        //         sessionStorage.setItem('x-mstr-authtoken', authToken);
-        //         console.log(sessionStorage.getItem('x-mstr-authtoken'));
-        //         return authToken;
-        //     })
-        //     .then((token) => {
-        //         return request.get(envUrl + '/projects')
-        //             .set('x-mstr-authtoken', token)
-        //             .withCredentials()
-        //     })
-        //     .then((res) => {
-        //         console.log(res);
-        //     })
-        //     .catch((err) => {
-        //         console.error(`Error: ${err.status}`
-        //             + ` (${err.message})`);
-        //     });
     }
-
-
 
     render() {
         return (
