@@ -105,16 +105,15 @@ class Login extends Component {
                             'Content-Type': 'application/json',
                             // 'X-Requested-With': 'XMLHttpRequest'
                         },
-                        body: {
+                        body: JSON.stringify({
                             username: username,
                             password: password,
                             loginMode: loginMode,
-                        },
+                        }),
                     });
                 })
                 .then((res) => {
-                    console.log(res);
-                    const authToken = res.headers['x-mstr-authtoken'];
+                    const authToken = res.headers.get('x-mstr-authtoken');
                     sessionStorage.setItem('x-mstr-authtoken', authToken);
                     console.log(sessionStorage.getItem('x-mstr-authtoken'));
                     return authToken;
@@ -132,13 +131,16 @@ class Login extends Component {
                     });
                 })
                 .then((res) => {
+                    return res.json();
+                })
+                .then((res) => {
                     console.log(res);
                 })
                 .catch((err) => {
-                    console.error(`Error: ${err.response.status}`
-                        + ` (${err.response.statusMessage})`);
+                    console.log(err);
+                    // console.error(`Error: ${err.response.status}`
+                    //     + ` (${err.response.statusMessage})`);
                 });
-        }
     }
 
     render() {
