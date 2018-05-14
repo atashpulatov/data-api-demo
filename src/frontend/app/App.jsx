@@ -5,7 +5,7 @@ import {
 } from 'react-router-dom';
 import './App.css';
 import Login from './Authentication/Login.jsx';
-import Projects from './MSTRStructureObject/Projects.jsx';
+import Projects from './MSTRStructureObject/Project/Projects.jsx';
 
 var routerType = 'HashRouter';
 
