@@ -1,5 +1,4 @@
 import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
-const axios = require('axios');
 const request = require('superagent');
 
 class Login extends Component {
@@ -44,129 +43,28 @@ class Login extends Component {
         const password = credentials.password;
         const loginMode = credentials.loginMode;
 
-        let variant = 'fetch';
-        switch (variant) {
-            case 'superagent':
-                request.post(envUrl + '/auth/login')
-                    .send({ username, password, loginMode })
-                    .withCredentials()
-                    .then((res) => {
-                        console.log(res);
-                        const authToken = res.headers['x-mstr-authtoken'];
-                        sessionStorage.setItem('x-mstr-authtoken', authToken);
-                        console.log(sessionStorage.getItem('x-mstr-authtoken'));
-                        return authToken;
-                    })
-                    .then((token) => {
-                        return request.get(envUrl + '/projects')
-                            .set('x-mstr-authtoken', token)
-                            .withCredentials();
-                    })
-                    .then((res) => {
-                        console.log(res.text);
-                    })
-                    .catch((err) => {
-                        console.error(`Error: ${err.response.status}`
-                            + ` (${err.response.statusMessage})`);
-                    });
-                break;
-            case 'fetch':
-                fetch(envUrl + '/status', {
-                    method: 'GET',
-                    credentials: 'include', // Including cookie
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-                        // 'X-Requested-With': 'XMLHttpRequest'
-                    },
-                })
-                    .then((res) => {
-                        return fetch(envUrl + '/auth/login', {
-                            method: 'POST',
-                            credentials: 'include', // Including cookie
-                            mode: 'cors', // Setting as cors mode for cross origin
-                            headers: {
-                                'Content-Type': 'application/json',
-                                // 'X-Requested-With': 'XMLHttpRequest'
-                            },
-                            body: JSON.stringify({
-                                username: username,
-                                password: password,
-                                loginMode: loginMode,
-                            }),
-                        });
-                    })
-                    .then((res) => {
-                        if (!res.ok) {
-                            throw Error(res.statusText);
-                        }
-                        const authToken = res.headers.get('x-mstr-authtoken');
-                        sessionStorage.setItem('x-mstr-authtoken', authToken);
-                        console.log(sessionStorage.getItem('x-mstr-authtoken'));
-                        return authToken;
-                    })
-                    .then((token) => {
-                        return fetch(envUrl + '/projects', {
-                            method: 'GET',
-                            credentials: 'include', // Including cookie
-                            mode: 'cors', // Setting as cors mode for cross origin
-                            headers: {
-                                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-                                'x-mstr-authtoken': token,
-                                // 'X-Requested-With': 'XMLHttpRequest'
-                            },
-                        });
-                    })
-                    .then((res) => {
-                        if (!res.ok) {
-                            throw Error(res.statusText);
-                        }
-                        return res.json();
-                    })
-                    .then((res) => {
-                        console.log(res);
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                        // console.error(`Error: ${err.response.status}`
-                        //     + ` (${err.response.statusMessage})`);
-                    });
-                break;
-            case 'axios':
-                axios.post(envUrl + '/auth/login',
-                    { username, password, loginMode },
-                    {
-                        withCredentials: true, // Including cookie
-                        headers: {
-                            'Content-Type': 'application/json',
-                            // 'X-Requested-With': 'XMLHttpRequest'
-                        },
-                    })
-                    .then((res) => {
-                        console.log(res);
-                        const authToken = res.headers['x-mstr-authtoken'];
-                        sessionStorage.setItem('x-mstr-authtoken', authToken);
-                        console.log(sessionStorage.getItem('x-mstr-authtoken'));
-                        return authToken;
-                    })
-                    .then((token) => {
-                        return axios.get(envUrl + '/projects',
-                            {
-                                withCredentials: true, // Including cookie
-                                headers: {
-                                    'x-mstr-authtoken': token,
-                                },
-                            });
-                    })
-                    .then((res) => {
-                        console.log(res.data);
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                        // console.error(`Error: ${err.response.status}`
-                        //     + ` (${err.response.statusMessage})`);
-                    });
-                break;
-        }
+        request.post(envUrl + '/auth/login')
+            .send({ username, password, loginMode })
+            .withCredentials()
+            .then((res) => {
+                console.log(res);
+                const authToken = res.headers['x-mstr-authtoken'];
+                sessionStorage.setItem('x-mstr-authtoken', authToken);
+                console.log(sessionStorage.getItem('x-mstr-authtoken'));
+                return authToken;
+            })
+            .then((token) => {
+                return request.get(envUrl + '/projects')
+                    .set('x-mstr-authtoken', token)
+                    .withCredentials();
+            })
+            .then((res) => {
+                console.log(res.text);
+            })
+            .catch((err) => {
+                console.error(`Error: ${err.response.status}`
+                    + ` (${err.response.statusMessage})`);
+            });
     }
 
     render() {
