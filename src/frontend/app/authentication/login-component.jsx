@@ -1,5 +1,5 @@
 import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
-import Credentials from './Credentials.js';
+import Credentials from '../credentials.js';
 
 const request = require('superagent');
 
@@ -37,7 +37,7 @@ class Login extends Component {
     onLoginUser(event) {
         console.log('hello');
         event.preventDefault();
-        const projects = require('../MSTRStructureObject/mockData.js').projectsArray;
+        // const projects = require('../MSTRStructureObject/mockData.js').projectsArray;
         console.log(projects);
 
         this.props.history.push({

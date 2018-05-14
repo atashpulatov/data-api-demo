@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
 import {
-  HashRouter as Router, 
-  Route
+  HashRouter as Router,
+  Route,
 } from 'react-router-dom';
-import './App.css';
-import Main from './Main.jsx'
-import Login from './Authentication/LoginComponent.jsx';
-import Projects from './MSTRStructureObject/Project/Projects.jsx';
+import './app.css';
+import Main from './navigator.jsx';
+import Login from './authentication/login-component.jsx';
+import Projects from './project/project-list.jsx';
 
 class App extends Component {
   constructor(props) {
@@ -37,7 +37,7 @@ class App extends Component {
             <br />
             <div>
               <Route exact path="/" component={Main}/>
-              <Route exact path="/login" component={Login}/>              
+              <Route exact path="/login" component={Login}/>
               <Route path="/projects" component={Projects}/>
             </div>
           </div>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
-import {projects} from './MSTRStructureObject/mockData';
+import {projects} from './mockData';
 
 class Main extends Component {
     constructor(props) {

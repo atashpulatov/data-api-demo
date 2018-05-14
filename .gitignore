@@ -288,4 +288,4 @@ __pycache__/
 *.xsd.cs
 
 # Custom exclusions
-src/frontend/app/Credentials.js
+src/frontend/app/credentials.js
