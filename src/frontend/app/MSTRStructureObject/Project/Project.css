@@ -1,0 +1,14 @@
+.projectRowContainer {
+    padding: 20px;
+    background: red;
+    display: grid;
+}
+
+.projectRowRadioButton{
+    font-size: 20px;
+}
+
+.projectRowDescription{
+    font-size: 30px;
+    /* font- */
+}

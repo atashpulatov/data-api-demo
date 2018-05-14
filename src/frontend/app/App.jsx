@@ -6,7 +6,7 @@ import {
 import './App.css';
 import Main from './Main.jsx'
 import Login from './Authentication/LoginComponent.jsx';
-import Projects from './MSTRStructureObject/Projects.jsx';
+import Projects from './MSTRStructureObject/Project/Projects.jsx';
 
 class App extends Component {
   constructor(props) {
