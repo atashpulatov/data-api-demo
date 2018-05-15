@@ -4,8 +4,12 @@ import {projects} from './mockData';
 class Main extends Component {
     constructor(props) {
         super(props);
+        console.log('test');
+        this.navigateToProjects = this.navigateToProjects.bind(this);
+    }
 
-        this.navigateToProjects.call(this);
+    componentDidMount() {
+        this.navigateToProjects();
     }
 
     navigateToProjects() {

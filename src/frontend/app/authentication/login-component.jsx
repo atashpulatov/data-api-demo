@@ -1,7 +1,6 @@
 import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
-import Credentials from '../credentials.js';
-
-const request = require('superagent');
+import Credentials from './credentials.js';
+import request from 'superagent';
 
 class Login extends Component {
     constructor(props) {
@@ -38,7 +37,7 @@ class Login extends Component {
         console.log('hello');
         event.preventDefault();
         // const projects = require('../MSTRStructureObject/mockData.js').projectsArray;
-        console.log(projects);
+        // console.log(projects);
 
         this.props.history.push({
             pathname: '/projects',

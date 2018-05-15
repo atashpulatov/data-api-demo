@@ -1,5 +1,6 @@
 import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
-import './Project.css';
+// import './project.css';
+import di from './project-di';
 
 class ProjectRow extends Component {
     constructor(props) {

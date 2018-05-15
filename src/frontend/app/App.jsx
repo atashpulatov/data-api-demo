@@ -1,12 +1,8 @@
 import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
-import {
-  HashRouter as Router,
-  Route,
-} from 'react-router-dom';
-import './app.css';
-import Main from './navigator.jsx';
-import Login from './authentication/login-component.jsx';
-import Projects from './project/project-list.jsx';
+import di from './root-di';
+
+const Router = di.Router;
+const Route = di.Route;
 
 class App extends Component {
   constructor(props) {
@@ -24,6 +20,8 @@ class App extends Component {
   }
 
   render() {
+    console.log(Router);
+    console.log(Route);
     return (
       <Router>
         <div id="content">
@@ -36,9 +34,9 @@ class App extends Component {
             <br />
             <br />
             <div>
-              <Route exact path="/" component={Main}/>
-              <Route exact path="/login" component={Login}/>
-              <Route path="/projects" component={Projects}/>
+              <Route exact path="/" component={di.Main}/>
+              <Route path="/login" component={di.Login}/>
+              <Route path="/projects" component={di.Projects}/>
             </div>
           </div>
         </div>
