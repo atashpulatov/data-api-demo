@@ -6,13 +6,13 @@ import {
 import './app.css';
 
 import Main from './navigator.jsx';
-import Login from './authentication/login-component.jsx';
+import Auth from './authentication/auth-component.jsx';
 import Projects from './project/project-list.jsx';
 
 export default {
     Router,
     Route,
     Main,
-    Login,
+    Auth,
     Projects,
 };

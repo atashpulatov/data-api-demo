@@ -35,7 +35,7 @@ class App extends Component {
             <br />
             <div>
               <Route exact path="/" component={di.Main}/>
-              <Route path="/login" component={di.Login}/>
+              <Route path="/login" component={di.Auth}/>
               <Route path="/projects" component={di.Projects}/>
             </div>
           </div>
