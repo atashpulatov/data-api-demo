@@ -1,6 +1,7 @@
 import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
-import di from './root-di';
+import di from './root-di.js';
 
+console.log(di);
 const Router = di.Router;
 const Route = di.Route;
 
@@ -35,7 +36,7 @@ class App extends Component {
             <br />
             <div>
               <Route exact path="/" component={di.Main}/>
-              <Route path="/login" component={di.Auth}/>
+              <Route path="/auth" component={di.Auth}/>
               <Route path="/projects" component={di.Projects}/>
             </div>
           </div>

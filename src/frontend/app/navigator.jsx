@@ -1,25 +1,17 @@
 import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
-import {projects} from './mockData';
+import navigationService from './navigation-service.js';
 
 class Main extends Component {
     constructor(props) {
         super(props);
         console.log('test');
-        this.navigateToProjects = this.navigateToProjects.bind(this);
+        this.navigationService = navigationService.navigationDispatcher.bind(this);
     }
 
     componentDidMount() {
-        this.navigateToProjects();
-    }
-
-    navigateToProjects() {
-        console.log('this: ' + this);
-        this.props.history.push({
-            pathname: '/projects',
-            state: {
-                tarray: projects.projectsArray,
-            },
-        });
+        let navigate = this.navigationService();
+        navigate = navigate.bind(this);
+        navigate();
     }
 
     render() {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
-import Credentials from './credentials.js';
-import request from 'superagent';
+import * as authService from './auth-di.js';
+const authenticate = authService.default.authRestService.default.authenticate;
 
 class Login extends Component {
     constructor(props) {
@@ -18,6 +18,7 @@ class Login extends Component {
         this.handleAuthModeChange = this.handleAuthModeChange.bind(this);
 
         this.onLoginUser = this.onLoginUser.bind(this);
+        this.authenticate = authenticate.bind(this);
     }
 
     handleUsernameChange(event) {
@@ -33,19 +34,19 @@ class Login extends Component {
         this.setState({ authMode: event.target.value });
     }
 
-    onLoginUser(event) {
+    async onLoginUser(event) {
         console.log('hello');
         event.preventDefault();
-        // const projects = require('../MSTRStructureObject/mockData.js').projectsArray;
-        // console.log(projects);
 
+        await this.authenticate(this.state.username, this.state.password, this.state.envUrl, this.state.authMode);
+        console.log(sessionStorage.getItem('x-mstr-authtoken'));
         this.props.history.push({
-            pathname: '/projects',
+            pathname: '/',
             state: {
-                tarray: projects,
             },
         });
     }
+
 
     render() {
         return (
