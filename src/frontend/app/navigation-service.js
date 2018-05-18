@@ -1,31 +1,31 @@
 import projectDI from './project/project-di';
 
-function NavigationService() {
-    async function navigateToProjects(navigatorInstance) {
+function NavigationService() { // TODO: rethink the name.
+    async function projectsRoute(navigatorInstance) {
         let projects = await projectDI.projectRestService.projectRestService.getProjectList();
         console.log(projects);
-        navigatorInstance.props.history.push({
+        return {
                 pathname: '/projects',
                 state: {
                     tarray: projects,
                 },
-            });
+            };
         };
 
-    function navigateToLogin(navigatorInstance) {
-        navigatorInstance.props.history.push({
+    function loginRoute(navigatorInstance) {
+        return {
                 pathname: '/auth',
                 state: {
                 },
-            });
+            };
         };
 
-    this.navigationDispatcher = function() {
+    this.getNavigationRoute = async function() {
             let session = sessionStorage.getItem('x-mstr-authtoken');
             if (session === null) {
-                return navigateToLogin;
+                return loginRoute();
             }
-            return navigateToProjects;
+            return await projectsRoute();
         };
 }
 

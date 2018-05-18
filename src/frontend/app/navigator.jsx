@@ -5,12 +5,16 @@ class Main extends Component {
     constructor(props) {
         super(props);
         console.log('test');
-        this.navigationDispatcher = navigationService.navigationDispatcher.bind(this);
+        this.pushHistory = this.pushHistory.bind(this);
     }
 
-    componentDidMount() {
-        let navigate = this.navigationDispatcher();
-        navigate(this);
+    pushHistory(historyObject) {
+        this.props.history.push(historyObject);
+    }
+
+    async componentDidMount() {
+        let historyObject = await navigationService.getNavigationRoute();
+        this.pushHistory(historyObject);
     }
 
     render() {
