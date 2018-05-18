@@ -5,13 +5,12 @@ class Main extends Component {
     constructor(props) {
         super(props);
         console.log('test');
-        this.navigationService = navigationService.navigationDispatcher.bind(this);
+        this.navigationDispatcher = navigationService.navigationDispatcher.bind(this);
     }
 
     componentDidMount() {
-        let navigate = this.navigationService();
-        navigate = navigate.bind(this);
-        navigate();
+        let navigate = this.navigationDispatcher();
+        navigate(this);
     }
 
     render() {
