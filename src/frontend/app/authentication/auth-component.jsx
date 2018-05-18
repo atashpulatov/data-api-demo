@@ -10,6 +10,7 @@ class Login extends Component {
             password: '',
             envUrl: '',
             authMode: '',
+            origin: this.props.location.state.origin,
         };
 
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -35,16 +36,12 @@ class Login extends Component {
     }
 
     async onLoginUser(event) {
-        console.log('hello');
+        console.log('hello'); // TODO: Refactor
         event.preventDefault();
 
         await this.authenticate(this.state.username, this.state.password, this.state.envUrl, this.state.authMode);
         console.log(sessionStorage.getItem('x-mstr-authtoken'));
-        this.props.history.push({
-            pathname: '/',
-            state: {
-            },
-        });
+        this.props.history.push(this.state.origin);
     }
 
 

@@ -14,6 +14,7 @@ class Main extends Component {
 
     async componentDidMount() {
         let historyObject = await navigationService.getNavigationRoute();
+        historyObject.state.origin = this.props.location;
         this.pushHistory(historyObject);
     }
 
