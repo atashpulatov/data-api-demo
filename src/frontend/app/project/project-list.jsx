@@ -9,7 +9,7 @@ class Projects extends Component {
     }
 
     render() {
-        let testResult = this.props.location.state.tarray;
+        let testResult = this.props.location.state.projects;
         let rows = testResult.map(((element) => {
             return <ProjectRow key={element.id} projectRow={element} />;
         }));

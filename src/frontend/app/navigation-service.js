@@ -5,28 +5,31 @@ function NavigationService() { // TODO: rethink the name.
         let projects = await projectDI.projectRestService.projectRestService.getProjectList();
         console.log(projects);
         return {
-                pathname: '/projects',
-                state: {
-                    tarray: projects,
-                },
-            };
+            pathname: '/projects',
+            state: {
+                projects: projects,
+            },
         };
+    };
 
     function loginRoute(navigatorInstance) {
         return {
-                pathname: '/auth',
-                state: {
-                },
-            };
+            pathname: '/auth',
+            state: {
+            },
         };
+    };
 
-    this.getNavigationRoute = async function() {
-            let session = sessionStorage.getItem('x-mstr-authtoken');
-            if (session === null) {
-                return loginRoute();
-            }
-            return await projectsRoute();
-        };
+    async function getNavigationRoute() {
+        const session = sessionStorage.getItem('x-mstr-authtoken');
+        if (session === null) {
+            return loginRoute();
+        }
+        return await projectsRoute();
+    };
+    return {
+        getNavigationRoute,
+    };
 }
 
 export default new NavigationService();
