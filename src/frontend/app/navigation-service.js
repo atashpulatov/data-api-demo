@@ -7,7 +7,7 @@ function NavigationService() { // TODO: rethink the name.
         return {
                 pathname: '/projects',
                 state: {
-                    tarray: projects,
+                    projects: projects,
                 },
             };
         };
