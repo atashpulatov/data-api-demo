@@ -1,4 +1,4 @@
-import * as _authRestService from './auth-rest-service';
+import _authRestService from './auth-rest-service';
 import _request from 'superagent';
 
 export default{

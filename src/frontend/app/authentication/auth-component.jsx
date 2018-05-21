@@ -1,6 +1,6 @@
 import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
-import * as authService from './auth-di.js';
-const authenticate = authService.default.authRestService.default.authenticate;
+import authService from './auth-di.js';
+const authenticate = authService.authRestService.authenticate;
 
 class Login extends Component {
     constructor(props) {
