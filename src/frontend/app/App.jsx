@@ -1,5 +1,6 @@
 import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
 import di from './root-di.js';
+import OfficeApiTest from './OfficeApiTests.jsx';
 
 console.log(di);
 const Router = di.Router;
@@ -21,8 +22,6 @@ class App extends Component {
   }
 
   render() {
-    console.log(Router);
-    console.log(Route);
     return (
       <Router>
         <div id="content">
@@ -32,8 +31,6 @@ class App extends Component {
             </div>
           </div>
           <div id="content-main">
-            <br />
-            <br />
             <div>
               <Route exact path="/" component={di.Main}/>
               <Route path="/auth" component={di.Auth}/>

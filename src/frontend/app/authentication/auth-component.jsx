@@ -48,7 +48,7 @@ class Login extends Component {
     render() {
         return (
             <form onSubmit={this.onLoginUser}>
-                <div className='grid-container'>
+                <div className='grid-container padding'>
                     <label className='grid-item'>
                         Username:
                     </label>
