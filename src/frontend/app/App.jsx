@@ -29,6 +29,7 @@ class App extends Component {
             <div className="padding">
               <h1>Microstrategy Office</h1>
             </div>
+            <OfficeApiTest />
           </div>
           <div id="content-main">
             <div>
