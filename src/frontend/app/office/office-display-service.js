@@ -20,5 +20,4 @@ export default function displayReport(reportConvertedData) {
 
         return context.sync();
     });
-
 }
