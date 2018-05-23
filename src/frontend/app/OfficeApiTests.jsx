@@ -1,5 +1,6 @@
 import React, { Component } from 'react'; // eslint-disable-line no-unused-lets
 import di from './root-di.js';
+import interconnector from './interconnector.js';
 
 class OfficeApiTest extends Component {
     constructor(props) {
