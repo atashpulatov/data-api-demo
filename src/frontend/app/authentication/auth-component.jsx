@@ -10,8 +10,15 @@ class Login extends Component {
             password: '',
             envUrl: '',
             authMode: '',
-            origin: this.props.location.state.origin,
         };
+        if (this.props.location.state === undefined) {
+            this.state.origin = { origin: '/' };
+        } else {
+            origin: this.props.location.state.origin;
+        }
+
+
+        console.log(this.state.origin);
 
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);

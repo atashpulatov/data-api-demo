@@ -9,16 +9,6 @@ const Route = di.Route;
 class App extends Component {
   constructor(props) {
     super(props);
-
-    this.onSetColor = this.onSetColor.bind(this);
-  }
-
-  onSetColor() {
-    window.Excel.run(async (context) => {
-      const range = context.workbook.getSelectedRange();
-      range.format.fill.color = 'red';
-      await context.sync();
-    });
   }
 
   render() {
