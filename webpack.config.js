@@ -1,4 +1,4 @@
-let webpack = require('webpack');
+let webpack = require('webpack'); // eslint-disable-line no-unused-vars
 let path = require('path');
 let BUILD_DIR = path.resolve(__dirname, 'src/frontend/public');
 let APP_DIR = path.resolve(__dirname, 'src/frontend/app');
@@ -19,7 +19,16 @@ let config = {
         test: /\.jsx?/,
         loader: 'babel-loader',
         query: {
-          presets: ['react'],
+          presets: [
+            [
+              'env',
+              {
+                'targets': {
+                  'node': 'current',
+                },
+              },
+            ],
+            'react'],
         },
       },
       {
