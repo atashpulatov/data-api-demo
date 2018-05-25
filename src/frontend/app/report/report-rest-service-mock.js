@@ -1,7 +1,7 @@
 import * as mockData from '../mockData.js';
 
 function _getReportData() {
-    return mockData.testReport;
+    return mockData.complexReport;
 }
 
 export default {

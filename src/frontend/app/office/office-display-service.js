@@ -3,7 +3,8 @@ import officeApiHelpers from './office-api-helpers.js';
 export default function displayReport(reportConvertedData) {
     Excel.run(function (context) {
         let sheet = context.workbook.worksheets.getActiveWorksheet();
-        let mstrTable = sheet.tables.add('A1:D1', true /* hasHeaders */);
+        let range = getRange(reportConvertedData.headers.length - 1);
+        let mstrTable = sheet.tables.add(range, true /* hasHeaders */);
         // mstrTable.name = 'ExpensesTable';
 
         mstrTable.getHeaderRowRange().values = [reportConvertedData.headers];
@@ -28,4 +29,9 @@ export default function displayReport(reportConvertedData) {
             console.log('Debug info: ' + JSON.stringify(error.debugInfo));
         }
     });
+}
+
+function getRange(headerCount) { // TODO: Right now we are supporting up to 25 columns
+    let endRange = String.fromCharCode(65 + headerCount);
+    return 'A1:'.concat(endRange).concat('1');
 }
