@@ -8,7 +8,8 @@
     "dev": "webpack-dev-server --content-base=src/frontend/public",
     "start-dev": "webpack-dev-server --https --port 3000",
     "build": "webpack -p",
-    "test": "jest"
+    "test": "jest",
+    "test-debug": "node --nolazy --inspect-brk=9229 ./node_modules/.bin/jest -i"
   },
   "jest": {
     "setupTestFrameworkScriptFile": "./test/frontend/app/setup-tests.js"

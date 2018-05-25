@@ -40,5 +40,16 @@
             "console": "internalConsole",
             "sourceMaps": true
         },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Jest Tests",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run-script", "test-debug"
+            ],
+            "port": 9229
+        },
     ]
 }
