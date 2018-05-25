@@ -26,6 +26,16 @@ describe('getConvertedTable', () => {
         expect(result).toBeDefined();
         expectPropertiesDefined(result);
     });
+
+    it('should convert same report thrice', () => {
+        // when
+        _officeConverterService(simpleReport);
+        _officeConverterService(simpleReport);
+        const result = _officeConverterService(simpleReport);
+        // then
+        expect(result).toBeDefined();
+        expectPropertiesDefined(result);
+    });
 });
 
 function expectPropertiesDefined(result) {

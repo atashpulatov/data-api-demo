@@ -47,10 +47,9 @@ function createRowEnding(node, header) {
     let metrics = node.metrics;
     for (let property in metrics) {
         if (metrics.hasOwnProperty(property)) {
-            metrics[property] = metrics[property].rv;
+            row[property] = metrics[property].rv;
         }
     }
-    row = Object.assign(row, metrics);
     return row;
 }
 
