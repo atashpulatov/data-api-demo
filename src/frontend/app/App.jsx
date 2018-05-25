@@ -1,10 +1,10 @@
 import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
 import di from './root-di.js';
-import OfficeApiTest from './OfficeApiTests.jsx';
+import OfficeApiTest from './OfficeApiTests.jsx'; // eslint-disable-line no-unused-vars
 
 console.log(di);
-const Router = di.Router;
-const Route = di.Route;
+const Router = di.Router; // eslint-disable-line no-unused-vars
+const Route = di.Route; // eslint-disable-line no-unused-vars
 
 class App extends Component {
   constructor(props) {

@@ -9,7 +9,7 @@ import './index.css';
 import Main from './navigator.jsx';
 import Auth from './authentication/auth-component.jsx';
 import Projects from './project/project-list.jsx';
-//import App from './app.jsx';
+// import App from './app.jsx';
 import registerServiceWorker from './registerServiceWorker';
 
 export default {
@@ -18,7 +18,7 @@ export default {
     Main,
     Auth,
     Projects,
-    //App,
+    // App,
     registerServiceWorker,
 };
     // The thing is that we cannot throw into one basked all views and logic.
