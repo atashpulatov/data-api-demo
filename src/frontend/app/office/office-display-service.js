@@ -4,15 +4,13 @@ export default function displayReport(reportConvertedData) {
     Excel.run(function (context) {
         let sheet = context.workbook.worksheets.getActiveWorksheet();
         let mstrTable = sheet.tables.add('A1:D1', true /* hasHeaders */);
-        //mstrTable.name = 'ExpensesTable';
+        // mstrTable.name = 'ExpensesTable';
 
         mstrTable.getHeaderRowRange().values = [reportConvertedData.headers];
 
-        let rows = reportConvertedData.rows.map((item) => {
-            return reportConvertedData.headers.map((header) => {
-                return item[header];
-            });
-        });
+        let rows = reportConvertedData.rows
+            .map((item) => reportConvertedData.headers
+                .map((header) => item[header]));
 
         mstrTable.rows.add(null, rows);
 
