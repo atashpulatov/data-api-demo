@@ -8,7 +8,11 @@
     "dev": "webpack-dev-server --content-base=src/frontend/public",
     "start-dev": "webpack-dev-server --https --port 3000",
     "build": "webpack -p",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "test-debug": "node --nolazy --inspect-brk=9229 ./node_modules/.bin/jest -i"
+  },
+  "jest": {
+    "setupTestFrameworkScriptFile": "./test/frontend/app/setup-tests.js"
   },
   "author": "",
   "license": "ISC",
@@ -27,10 +31,16 @@
     "webpack": "^3.12.0"
   },
   "devDependencies": {
+    "babel-polyfill": "^6.26.0",
     "css-loader": "^0.28.11",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-15": "^1.0.5",
     "eslint": "^4.19.1",
     "eslint-config-google": "^0.9.1",
     "eslint-plugin-react": "^7.8.2",
+    "jest": "^22.4.4",
+    "jest-cli": "^22.4.4",
+    "react-test-renderer": "^15.6.2",
     "webpack-dev-server": "^2.11.2"
   }
 }
