@@ -9,12 +9,11 @@ export default function displayReport(reportConvertedData) {
         mstrTable.getHeaderRowRange().values = [reportConvertedData.headers];
 
         let rows = reportConvertedData.rows.map((item) => {
-                let row = [];
-                reportConvertedData.headers.forEach((header) => {
-                    row.push(item[header]);
-                });
-                return row;
+            return reportConvertedData.headers.map((header) => {
+                return item[header];
+            });
         });
+
         mstrTable.rows.add(null, rows);
 
         if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
