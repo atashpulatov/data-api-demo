@@ -26,15 +26,7 @@ function createRows(node, headers, level = -1) {
     level++;
     let rows = [];
     if (node.children === undefined) {
-        let row = {};
-        row[headers[level]] = node.element.name;
-        let metrics = node.metrics;
-        for (let property in metrics) {
-            if (metrics.hasOwnProperty(property)) {
-                metrics[property] = metrics[property].rv;
-            }
-        }
-        row = Object.assign(row, metrics);
+        let row = createRowEnding(node, headers[level]);
         rows.push(row);
     } else {
         node.children.forEach((child) => {
@@ -47,6 +39,19 @@ function createRows(node, headers, level = -1) {
         });
     }
     return rows;
+}
+
+function createRowEnding(node, header) {
+    let row = {};
+    row[header] = node.element.name;
+    let metrics = node.metrics;
+    for (let property in metrics) {
+        if (metrics.hasOwnProperty(property)) {
+            metrics[property] = metrics[property].rv;
+        }
+    }
+    row = Object.assign(row, metrics);
+    return row;
 }
 
 function getRows(jsonReport) {
