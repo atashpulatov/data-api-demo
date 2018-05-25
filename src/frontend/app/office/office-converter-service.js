@@ -22,53 +22,40 @@ function getHeaders(jsonReport) {
     return _headers;
 }
 
-function createRows(node, headers, level) {
+function createRows(node, headers, level = -1) {
     level++;
+    let rows = [];
     if (node.children === undefined) {
         let row = {};
         row[headers[level]] = node.element.name;
-        row = Object.assign(row, node.metrics);
-        return [row];
-        // rows.push(Object.assign(row, node.metrics));
+        let metrics = node.metrics;
+        for (let property in metrics) {
+            if (metrics.hasOwnProperty(property)) {
+                metrics[property] = metrics[property].rv;
+            }
+        }
+        row = Object.assign(row, metrics);
+        rows.push(row);
     } else {
-        let rows = [];
         node.children.forEach((child) => {
             let childRows = createRows(child, headers, level);
             childRows = childRows.map((childRow) => {
                 childRow[headers[level]] = node.element.name;
                 return childRow;
             });
-            // childRows[headers[level]] = node.element.name;
             rows = rows.concat(childRows);
         });
-        return rows;
     }
+    return rows;
 }
 
 function getRows(jsonReport) {
     let rows = [];
-    let data = jsonReportTest.result.data.root.children;
     const headers = getHeaders(jsonReport);
 
+    let data = jsonReport.result.data.root.children;
     data.forEach((rootNode) => {
-        rows = rows.concat(createRows(rootNode, headers, 0));
+        rows = rows.concat(createRows(rootNode, headers));
     });
-
-    // for (let i = 0; i < data.length; i++) {
-    //     let dataChildren = data[i].children;
-    //     for (let j = 0; j < dataChildren.length; j++) {
-    //         let dataGrandChildren = dataChildren[j].children;
-    //         for (let k = 0; k < dataGrandChildren.length; k++) {
-    //             let row = [];
-    //             row.push(data[i].element.formValues.DESC);
-    //             row.push(dataChildren[j].element.formValues.DESC);
-    //             row.push(dataGrandChildren[k].element.formValues.DESC);
-    //             row.push(dataGrandChildren[k].metrics['Count of Customers'].rv);
-    //             rows.push(row);
-    //         }
-    //     }
-    // }
     return rows;
 }
-
-getConvertedTable(jsonReportTest);
