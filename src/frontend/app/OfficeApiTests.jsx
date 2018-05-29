@@ -2,6 +2,7 @@ import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
 // import di from './root-di.js';
 import reportDI from './report/report-di.js';
 import officeDI from './office/office-di.js';
+import officeHelper from './office/office-api-helper';
 class OfficeApiTest extends Component {
     constructor(props) {
         super(props);
@@ -18,12 +19,15 @@ class OfficeApiTest extends Component {
     }
 
     onCreateTable() {
-        Excel.run(function(context) {
+        Excel.run((context) => {
+            const hasHeaders = true;
             let sheet = context.workbook.worksheets.getItem('Sample');
-            let expensesTable = sheet.tables.add('A1:D1', true /* hasHeaders */);
+            let expensesTable = sheet.tables.add('A1:D1', hasHeaders);
             expensesTable.name = 'ExpensesTable';
 
-            expensesTable.getHeaderRowRange().values = [['Date', 'Merchant', 'Category', 'Amount']];
+            expensesTable.getHeaderRowRange().values = [
+                ['Date', 'Merchant', 'Category', 'Amount'],
+            ];
 
             expensesTable.rows.add(null /* add rows to the end of the table */, [
                 ['1/1/2017', 'The Phone Company', 'Communications', '$120'],
@@ -43,16 +47,11 @@ class OfficeApiTest extends Component {
             sheet.activate();
 
             return context.sync();
-        }).catch(function(error) {
-            console.log('error: ' + error);
-            if (error instanceof OfficeExtension.Error) {
-                console.log('Debug info: ' + JSON.stringify(error.debugInfo));
-            }
-        });
+        }).catch((error) => officeHelper.handleOfficeApiException(error));
     }
 
     onAddToTable() {
-        Excel.run(function(context) {
+        Excel.run((context) => {
             let sheet = context.workbook.worksheets.getItem('Sample');
             let expensesTable = sheet.tables.getItem('ExpensesTable');
 
@@ -76,7 +75,7 @@ class OfficeApiTest extends Component {
     }
 
     onCreateChart() {
-        Excel.run(function(context) {
+        Excel.run((context) => {
             let range = context.workbook.getSelectedRange();
             let sheet = context.workbook.worksheets.getActiveWorksheet();
             let dataRange = range;
@@ -94,7 +93,9 @@ class OfficeApiTest extends Component {
 
     onImportReport() {
         let jsonData = reportDI.reportRestService.getReportData();
-        let convertedReport = officeDI.officeConverterService(jsonData);
+        let convertedReport = officeDI.officeConverterService
+            .getConvertedTable(jsonData);
+        convertedReport.id = jsonData.id;
         officeDI.officeDisplayService(convertedReport);
     }
 

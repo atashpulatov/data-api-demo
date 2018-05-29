@@ -1,11 +1,13 @@
-import officeApiHelpers from './office-api-helpers.js';
+import officeApiHelper from './office-api-helper';
 
 export default function displayReport(reportConvertedData) {
-    Excel.run(function (context) {
+    Excel.run((context) => {
         let sheet = context.workbook.worksheets.getActiveWorksheet();
-        let range = getRange(reportConvertedData.headers.length);
-        let mstrTable = sheet.tables.add(range, true /* hasHeaders */);
-        // mstrTable.name = 'ExpensesTable';
+        let range = officeApiHelper
+            .getRange(reportConvertedData.headers.length);
+        const hasHeaders = true;
+        let mstrTable = sheet.tables.add(range, hasHeaders);
+        // mstrTable.name = reportConvertedData.id;
 
         mstrTable.getHeaderRowRange().values = [reportConvertedData.headers];
 
@@ -19,26 +21,11 @@ export default function displayReport(reportConvertedData) {
             sheet.getUsedRange().format.autofitColumns();
             sheet.getUsedRange().format.autofitRows();
         }
+        // Office.context.document.settings
+            // .set('mstrReportId', reportConvertedData.id);
 
         sheet.activate();
 
         return context.sync();
-    }).catch(function (error) {
-        console.log('error: ' + error);
-        if (error instanceof OfficeExtension.Error) {
-            console.log('Debug info: ' + JSON.stringify(error.debugInfo));
-        }
-    });
-}
-
-function getRange(headerCount) {
-    let endRange = '';
-        for (let aNumber = 1, bNumber = 26;
-            (headerCount -= aNumber) >= 0;
-            aNumber = bNumber, bNumber *= 26) {
-          endRange = String.fromCharCode(parseInt(
-              (headerCount % bNumber) / aNumber) + 65)
-              + endRange;
-        }
-    return 'A1:'.concat(endRange).concat('1');
+    }).catch((error) => officeApiHelper.handleOfficeApiException(error));
 }
