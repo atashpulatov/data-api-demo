@@ -3,6 +3,7 @@ import officeDI from './office/office-di.js';
 
 export default function importReport(context) {
     let jsonData = reportDI.reportRestService.getReportData();
-    let convertedReport = officeDI.officeConverterService(jsonData);
+    let convertedReport = officeDI.officeConverterService
+        .getConvertedTable(jsonData);
     officeDI.officeDisplayService(convertedReport);
 }

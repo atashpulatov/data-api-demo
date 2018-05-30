@@ -2,7 +2,7 @@ import { testReport } from '../mockData.js';
 
 let jsonReportTest = testReport;
 
-export default function getConvertedTable(jsonReport) {
+function getConvertedTable(jsonReport) {
     let _headers = getHeaders(jsonReport);
     let _rows = getRows(jsonReport);
     console.log(jsonReportTest);
@@ -63,3 +63,7 @@ function getRows(jsonReport) {
     });
     return rows;
 }
+
+export default {
+    getConvertedTable,
+};

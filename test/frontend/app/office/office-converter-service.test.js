@@ -1,50 +1,65 @@
-import React from 'react'; // eslint-disable-line
-import _officeConverterService from '../../../../src/frontend/app/office/office-converter-service';
+import React from 'react'; // eslint-disable-line no-unused-vars
+import path from 'path';
+import testHelper from '../test-helper';
+import officeConverterService from '../../../../src/frontend/app/office/office-converter-service';
 import { testReport, simpleReport, complexReport } from '../../../../src/frontend/app/mockData';
 
-describe('getConvertedTable', () => {
+describe('officeConverterService', () => {
     it('should convert simple report', () => {
+        // given
+        let expectedReportPath = path.join(
+            __dirname,
+            'expected-result/expected-simple-report.js'
+        );
         // when
-        const result = _officeConverterService(simpleReport);
+        const result = officeConverterService.getConvertedTable(simpleReport);
         // then
         expect(result).toBeDefined();
-        expectPropertiesDefined(result);
+        testHelper.expectPropertiesDefined(result);
+        testHelper.expectEqualsGivenReport(result, expectedReportPath);
     });
 
     it('should convert test report', () => {
+        // given
+        let expectedReportPath = path.join(
+            __dirname,
+            'expected-result/expected-test-report.js'
+        );
         // when
-        const result = _officeConverterService(testReport);
+        const result = officeConverterService.getConvertedTable(testReport);
         // then
         expect(result).toBeDefined();
-        expectPropertiesDefined(result);
+        testHelper.expectPropertiesDefined(result);
+        testHelper.expectEqualsGivenReport(result, expectedReportPath);
     });
 
     it('should convert complex report', () => {
+        // given
+        let expectedReportPath = path.join(
+            __dirname,
+            'expected-result/expected-complex-report.js'
+        );
         // when
-        const result = _officeConverterService(complexReport);
+        const result = officeConverterService.getConvertedTable(complexReport);
         // then
         expect(result).toBeDefined();
-        expectPropertiesDefined(result);
+        testHelper.expectPropertiesDefined(result);
+        testHelper.expectEqualsGivenReport(result, expectedReportPath);
     });
 
     it('should convert same report thrice', () => {
+        // given
+        let expectedReportPath = path.join(
+            __dirname,
+            'expected-result/expected-simple-report.js'
+        );
         // when
-        _officeConverterService(simpleReport);
-        _officeConverterService(simpleReport);
-        const result = _officeConverterService(simpleReport);
+        officeConverterService.getConvertedTable(simpleReport);
+        officeConverterService.getConvertedTable(simpleReport);
+        const result = officeConverterService.getConvertedTable(simpleReport);
         // then
         expect(result).toBeDefined();
-        expectPropertiesDefined(result);
+        testHelper.expectPropertiesDefined(result);
+        testHelper.expectEqualsGivenReport(result, expectedReportPath);
     });
 });
-
-function expectPropertiesDefined(result) {
-    result.rows.forEach((row) => {
-        for (const property in row) {
-            if (row.hasOwnProperty(property)) {
-                expect(row[property]).toBeDefined();
-            }
-        }
-    });
-}
-
