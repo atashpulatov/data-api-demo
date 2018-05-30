@@ -1,8 +1,9 @@
-import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
+import React from 'react'; // eslint-disable-line no-unused-vars
+import BaseComponent from '../BaseComponent.jsx';
 import authService from './auth-di.js';
 const authenticate = authService.authRestService.authenticate;
 
-class Login extends Component {
+class Login extends BaseComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -11,14 +12,6 @@ class Login extends Component {
             envUrl: '',
             authMode: '',
         };
-        if (this.props.location.state === undefined) {
-            this.state.origin = { origin: '/' };
-        } else {
-            origin: this.props.location.state.origin;
-        }
-
-
-        console.log(this.state.origin);
 
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
