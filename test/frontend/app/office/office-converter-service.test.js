@@ -4,12 +4,12 @@ import testHelper from '../test-helper';
 import officeConverterService from '../../../../src/frontend/app/office/office-converter-service';
 import { testReport, simpleReport, complexReport } from '../../../../src/frontend/app/mockData';
 
-describe('officeConverterService', () => {
+describe('OfficeConverterService', () => {
     it('should convert simple report', () => {
         // given
         let expectedReportPath = path.join(
             __dirname,
-            'expected-result/expected-simple-report.js'
+            '__expected__/expected-simple-report.js'
         );
         // when
         const result = officeConverterService.getConvertedTable(simpleReport);
@@ -23,7 +23,7 @@ describe('officeConverterService', () => {
         // given
         let expectedReportPath = path.join(
             __dirname,
-            'expected-result/expected-test-report.js'
+            '__expected__/expected-test-report.js'
         );
         // when
         const result = officeConverterService.getConvertedTable(testReport);
@@ -37,7 +37,7 @@ describe('officeConverterService', () => {
         // given
         let expectedReportPath = path.join(
             __dirname,
-            'expected-result/expected-complex-report.js'
+            '__expected__/expected-complex-report.js'
         );
         // when
         const result = officeConverterService.getConvertedTable(complexReport);
@@ -51,7 +51,7 @@ describe('officeConverterService', () => {
         // given
         let expectedReportPath = path.join(
             __dirname,
-            'expected-result/expected-simple-report.js'
+            '__expected__/expected-simple-report.js'
         );
         // when
         officeConverterService.getConvertedTable(simpleReport);
