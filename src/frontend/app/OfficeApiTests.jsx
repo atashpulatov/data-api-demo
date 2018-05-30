@@ -96,7 +96,7 @@ class OfficeApiTest extends Component {
         let convertedReport = officeDI.officeConverterService
             .getConvertedTable(jsonData);
         convertedReport.id = jsonData.id;
-        officeDI.officeDisplayService(convertedReport);
+        officeDI.officeDisplayService.displayReport(convertedReport);
     }
 
     render() {
