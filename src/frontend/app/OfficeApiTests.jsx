@@ -3,11 +3,37 @@ import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
 import reportDI from './report/report-di.js';
 import officeDI from './office/office-di.js';
 import officeHelper from './office/office-api-helper';
+import RadioSelectionForm from './radio-selection-form.jsx';
+import { mockReports } from './mockData';
+
 class OfficeApiTest extends Component {
     constructor(props) {
         super(props);
 
         this.onSetColor = this.onSetColor.bind(this);
+        this.handleOptionChange = this.handleOptionChange.bind(this);
+
+        this.state = {
+            selectedOption: 'MediumReport',
+        };
+        this.onImportReport = this.onImportReport.bind(this);
+        this.reportList = this.generateReportList();
+    }
+
+    generateReportList() {
+        return mockReports.map((report) => {
+            return {
+                id: report.id,
+                name: report.name,
+                handleOptionChange: this.handleOptionChange,
+            };
+        });
+    }
+
+    handleOptionChange(changeEvent) {
+        this.setState({
+            selectedOption: changeEvent.target.value,
+        });
     }
 
     onSetColor() {
@@ -15,62 +41,6 @@ class OfficeApiTest extends Component {
             const range = context.workbook.getSelectedRange();
             range.format.fill.color = 'red';
             await context.sync();
-        });
-    }
-
-    onCreateTable() {
-        Excel.run((context) => {
-            const hasHeaders = true;
-            let sheet = context.workbook.worksheets.getItem('Sample');
-            let expensesTable = sheet.tables.add('A1:D1', hasHeaders);
-            expensesTable.name = 'ExpensesTable';
-
-            expensesTable.getHeaderRowRange().values = [
-                ['Date', 'Merchant', 'Category', 'Amount'],
-            ];
-
-            expensesTable.rows.add(null /* add rows to the end of the table */, [
-                ['1/1/2017', 'The Phone Company', 'Communications', '$120'],
-                ['1/2/2017', 'Northwind Electric Cars', 'Transportation', '$142'],
-                ['1/5/2017', 'Best For You Organics Company', 'Groceries', '$27'],
-                ['1/10/2017', 'Coho Vineyard', 'Restaurant', '$33'],
-                ['1/11/2017', 'Bellows College', 'Education', '$350'],
-                ['1/15/2017', 'Trey Research', 'Other', '$135'],
-                ['1/15/2017', 'Best For You Organics Company', 'Groceries', '$97'],
-            ]);
-
-            if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
-                sheet.getUsedRange().format.autofitColumns();
-                sheet.getUsedRange().format.autofitRows();
-            }
-
-            sheet.activate();
-
-            return context.sync();
-        }).catch((error) => officeHelper.handleOfficeApiException(error));
-    }
-
-    onAddToTable() {
-        Excel.run((context) => {
-            let sheet = context.workbook.worksheets.getItem('Sample');
-            let expensesTable = sheet.tables.getItem('ExpensesTable');
-
-            expensesTable.rows.add(null /* add rows to the end of the table*/, [
-                ['1/16/2017', 'THE PHONE COMPANY', 'Communications', '$120'],
-                ['1/20/2017', 'NORTHWIND ELECTRIC CARS', 'Transportation', '$142'],
-                ['1/20/2017', 'BEST FOR YOU ORGANICS COMPANY', 'Groceries', '$27'],
-                ['1/21/2017', 'COHO VINEYARD', 'Restaurant', '$33'],
-                ['1/25/2017', 'BELLOWS COLLEGE', 'Education', '$350'],
-                ['1/28/2017', 'TREY RESEARCH', 'Other', '$135'],
-                ['1/31/2017', 'BEST FOR YOU ORGANICS COMPANY', 'Groceries', '$97'],
-            ]);
-
-            if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
-                sheet.getUsedRange().format.autofitColumns();
-                sheet.getUsedRange().format.autofitRows();
-            }
-
-            return context.sync();
         });
     }
 
@@ -92,7 +62,7 @@ class OfficeApiTest extends Component {
     }
 
     onImportReport() {
-        let jsonData = reportDI.reportRestService.getReportData();
+        let jsonData = reportDI.reportRestService.getReportData(this.state.selectedOption);
         let convertedReport = officeDI.officeConverterService
             .getConvertedTable(jsonData);
         convertedReport.id = jsonData.id;
@@ -107,21 +77,12 @@ class OfficeApiTest extends Component {
                     <button onClick={this.onSetColor}>Set color</button>
                 </div>
                 <div>
-                    <h3>TableFunction</h3>
-                    <button onClick={this.onCreateTable}>Create Table</button>
-                </div>
-                <div>
-                    <h3>TableFunction</h3>
-                    <button onClick={this.onAddToTable}>Add to Table</button>
-                </div>
-                <div>
-                    <h3>TableFunction</h3>
+                    <h3>Create chart</h3>
                     <button onClick={this.onCreateChart}>Add Chart</button>
                 </div>
-                <div>
-                    <h3>TableFunction</h3>
-                    <button onClick={this.onImportReport}>Insert Report</button>
-                </div>
+                <RadioSelectionForm reportList={this.reportList}
+                    onImportReport={this.onImportReport}
+                    selectedOption={this.state.selectedOption} />
                 {/* <div>
                     <h3></h3>
                     <button onClick={this.}></button>
