@@ -4,6 +4,7 @@ class BaseComponent extends Component {
     constructor(props) {
         super(props);
         if (this.props.location.state === undefined) {
+            this.state = {};
             this.props.history.push({ pathname: '/' });
         } else {
             this.state = {

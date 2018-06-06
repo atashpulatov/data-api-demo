@@ -11,6 +11,7 @@ class Login extends BaseComponent {
             password: '',
             envUrl: '',
             authMode: '',
+            origin: this.state.origin,
         };
 
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -36,7 +37,6 @@ class Login extends BaseComponent {
     }
 
     async onLoginUser(event) {
-        console.log('hello'); // TODO: Refactor
         event.preventDefault();
 
         await this.authenticate(this.state.username, this.state.password, this.state.envUrl, this.state.authMode);
