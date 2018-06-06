@@ -12,7 +12,10 @@
     "test-debug": "node --nolazy --inspect-brk=9229 ./node_modules/.bin/jest -i"
   },
   "jest": {
-    "setupTestFrameworkScriptFile": "./test/frontend/app/setup-tests.js"
+    "setupTestFrameworkScriptFile": "./test/frontend/app/setup-tests.js",
+    "moduleNameMapper": {
+      "\\.(css|less)$": "identity-obj-proxy"
+    }
   },
   "author": "",
   "license": "ISC",
@@ -38,6 +41,7 @@
     "eslint": "^4.19.1",
     "eslint-config-google": "^0.9.1",
     "eslint-plugin-react": "^7.8.2",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^22.4.4",
     "jest-cli": "^22.4.4",
     "react-test-renderer": "^15.6.2",

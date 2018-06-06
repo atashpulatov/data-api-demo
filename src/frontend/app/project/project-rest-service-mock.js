@@ -4,6 +4,6 @@ function getProjectList() {
     return mockData.projects.projectsArray;
 }
 
-export let projectRestService = {
-    'getProjectList': getProjectList,
+export default {
+    getProjectList,
 };

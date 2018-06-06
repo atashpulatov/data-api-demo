@@ -27,6 +27,7 @@ function NavigationService() { // TODO: rethink the name.
         }
         return await projectsRoute();
     };
+
     return {
         getNavigationRoute,
     };
