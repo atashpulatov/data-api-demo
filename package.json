@@ -7,7 +7,7 @@
     "devNoServer": "webpack --d --watch",
     "dev": "webpack-dev-server --content-base=src/frontend/public",
     "start-dev": "webpack-dev-server --https --port 3000",
-    "build": "webpack -p",
+    "build": "webpack --d",
     "test": "jest",
     "test-debug": "node --nolazy --inspect-brk=9229 ./node_modules/.bin/jest -i"
   },
