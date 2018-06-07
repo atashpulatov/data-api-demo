@@ -44,6 +44,23 @@ describe('ProjectList', () => {
         // then
         const items = component.find('ul');
         const firstItem = items.childAt(0);
+        console.log(firstItem.props().onClick);
         expect(firstItem.props().onClick).toBeDefined();
+    });
+
+    it('should navigate to MSTR Objects after clicking', () => {
+        // when
+        const component = shallow(<Projects location={location} />);
+        // then
+        const items = component.find('ul');
+        const firstItem = items.childAt(0);
+        firstItem.props().onClick();
+
+        const mstrComponent = shallow(<MSTRObjects />);
+        expect(mstr.getElements()).toMatchSnapshot();
+    });
+
+    it('should display MSTR Objects', () => {
+
     });
 });

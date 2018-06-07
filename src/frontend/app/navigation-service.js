@@ -25,7 +25,10 @@ function NavigationService() { // TODO: rethink the name.
         if (session === null) {
             return loginRoute();
         }
-        return await projectsRoute();
+        const currentProject = sessionStorage.getItem('current-project');
+        if (currentProject === null) {
+            return await projectsRoute();
+        }
     };
 
     return {
