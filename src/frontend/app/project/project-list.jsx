@@ -3,7 +3,7 @@ import ProjectRow from './project-row.jsx'; // eslint-disable-line no-unused-var
 
 const Projects = (props) => (
     <div>
-        <ul>
+        <ul className='projectRowContainer'>
             {props.location.state.projects.map((project) => (
                 <ProjectRow key={project.id} projectRow={project} />
             ))}

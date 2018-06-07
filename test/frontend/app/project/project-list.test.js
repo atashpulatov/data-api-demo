@@ -19,14 +19,23 @@ describe('ProjectList', () => {
     });
 
     // User notices project's info
-    it('shoud have row defined', () => {
+    it('shoud have row rendered', () => {
         // when
         const component = shallow(<Projects location={location} />);
         // then
         const items = component.find('ul');
+        // should have proper css class
+        expect(items.hasClass('projectRowContainer')).toBeTruthy();
+
         const firstItem = items.childAt(0);
         console.log(firstItem.props().projectRow);
-        expect(firstItem.props().projectRow).toBeDefined();
+        const projectRow = firstItem.props().projectRow;
+        // should have row defined
+        expect(projectRow).toBeDefined();
+
+        // should have name and alias
+        expect(projectRow.find('h1')).toContain('Name:');
+        expect(projectRow.find('h2')).toContain('Alias:');
     });
 
     // User can click the project
