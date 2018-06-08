@@ -40,24 +40,25 @@ describe('ProjectList', () => {
     // User can click the project
     it('shoud be clickable', () => {
         // when
-        const component = shallow(<Projects location={location} />);
+        const component = mount(<Projects location={location} />);
         // then
         const items = component.find('ul');
         const firstItem = items.childAt(0);
-        console.log(firstItem.props().onClick);
-        expect(firstItem.props().onClick).toBeDefined();
+        expect(firstItem.find('li').props().onClick).toBeDefined();
     });
 
-    it('should navigate to MSTR Objects after clicking', () => {
+    // App pushes project to history
+    it('should push project to history after clicking', () => {
         // when
-        const component = shallow(<Projects location={location} />);
-        // then
+        const component = mount(<Projects location={location} />);
         const items = component.find('ul');
         const firstItem = items.childAt(0);
-        firstItem.props().onClick();
+        const mockPush = jest.fn();
+        firstItem.props.history = {push: mockPush};
+        // then
+        firstItem.find('li').props().onClick();
 
-        const mstrComponent = shallow(<MSTRObjects />);
-        expect(mstr.getElements()).toMatchSnapshot();
+        expect(mockPush).toBeCalled();
     });
 
     it('should display MSTR Objects', () => {
