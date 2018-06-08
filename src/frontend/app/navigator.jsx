@@ -8,14 +8,14 @@ class Main extends Component {
         this.pushHistory = this.pushHistory.bind(this);
     }
 
-    pushHistory(historyObject) {
-        this.props.history.push(historyObject);
+    pushHistory(routeObject) {
+        this.props.history.push(routeObject);
     }
 
     async componentDidMount() {
-        let historyObject = await navigationService.getNavigationRoute();
-        historyObject.state.origin = this.props.location;
-        this.pushHistory(historyObject);
+        let routeObject = await navigationService.getNavigationRoute();
+        routeObject.state.origin = this.props.location;
+        this.pushHistory(routeObject);
     }
 
     render() {

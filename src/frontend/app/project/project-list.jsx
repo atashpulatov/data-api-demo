@@ -10,12 +10,14 @@ class Projects extends BaseComponent {
             projects: props.location.state.projects,
         };
 
-        this.projectChosen = this.projectChosen.bind(this);
+        this.navigateToProject = this.navigateToProject.bind(this);
     }
 
-    projectChosen(event) {
-        console.log(event);
-        this.props.history.push({ pathname: '/' });
+    navigateToProject(event) {
+        this.props.history.push({
+            pathname: '/',
+            origin: this.props.location,
+        });
         return;
     }
 
@@ -24,7 +26,7 @@ class Projects extends BaseComponent {
             <ul className='projectRowContainer'>
                 {this.state.projects.map((project) => (
                     <ProjectRow key={project.id} projectRow={project}
-                        onClick={this.projectChosen} />
+                        onClick={this.navigateToProject} />
                 ))}
             </ul>
         );

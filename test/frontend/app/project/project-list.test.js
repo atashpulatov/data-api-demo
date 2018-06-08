@@ -41,27 +41,46 @@ describe('ProjectList', () => {
     it('shoud be clickable', () => {
         // when
         const component = mount(<Projects location={location} />);
-        // then
         const items = component.find('ul');
         const firstItem = items.childAt(0);
+
+        // then
         expect(firstItem.find('li').props().onClick).toBeDefined();
     });
 
-    // App pushes project to history
-    it('should push project to history after clicking', () => {
+    it('shoud be reponsive', () => {
         // when
         const component = mount(<Projects location={location} />);
+        const mockPush = jest.fn();
+        component.setProps({ history: { push: mockPush } });
+
         const items = component.find('ul');
         const firstItem = items.childAt(0);
-        const mockPush = jest.fn();
-        firstItem.props.history = {push: mockPush};
-        // then
-        firstItem.find('li').props().onClick();
 
+        firstItem.find('li').simulate('click');
+
+        // then
         expect(mockPush).toBeCalled();
     });
 
-    it('should display MSTR Objects', () => {
+    it('should pass project when clicked', () => {
+        // when
+        const component = mount(<Projects location={location} />);
+        const mockPush = jest.fn();
+        component.setProps({ history: { push: mockPush } });
 
+        const items = component.find('ul');
+        const firstItem = items.childAt(0);
+
+        firstItem.find('li').simulate('click');
+
+        // then
+        expect(mockPush).toBeCalledWith({
+            pathname: '/',
+            origin: component.props().location,
+            projectId: firstItem.props().projectRow.id,
+        });
+
+        expect(false).toBeTruthy();
     });
 });
