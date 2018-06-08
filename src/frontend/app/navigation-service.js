@@ -1,6 +1,4 @@
 import projectDI from './project/project-di';
-import projectLogic from './project/project-logic';
-
 
 function NavigationService() { // TODO: rethink the name.
     async function projectsRoute(navigatorInstance) {
@@ -10,7 +8,6 @@ function NavigationService() { // TODO: rethink the name.
             pathname: '/projects',
             state: {
                 projects: projects,
-                navigateToProject: projectLogic.navigateToProject,
             },
         };
     };
