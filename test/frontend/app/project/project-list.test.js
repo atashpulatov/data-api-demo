@@ -5,7 +5,8 @@ import projectRestService from '../../../../src/frontend/app/project/project-res
 
 describe('ProjectList', () => {
     const location = {};
-
+    const navigateToProjectMock = jest.fn();
+    
     beforeAll(() => {
         // origin path
         const origin = { pathname: '/' };
@@ -14,6 +15,7 @@ describe('ProjectList', () => {
         const state = {
             origin,
             projects,
+            navigateToProject: navigateToProjectMock,
         };
         location.state = state;
     });
@@ -53,12 +55,12 @@ describe('ProjectList', () => {
         const component = mount(<Projects location={location} />);
         const items = component.find('ul');
         const firstItem = items.childAt(0);
-        const mockPush = jest.fn();
-        firstItem.props.history = {push: mockPush};
+        // const mockPush = jest.fn();
+        // firstItem.props.history = { push: mockPush };
         // then
-        firstItem.find('li').props().onClick();
+        firstItem.find('li').simulate('click');
 
-        expect(mockPush).toBeCalled();
+        expect(navigateToProjectMock).toBeCalled();
     });
 
     it('should display MSTR Objects', () => {
