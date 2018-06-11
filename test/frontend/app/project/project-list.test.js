@@ -1,5 +1,5 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
-import { shallow, mount } from 'enzyme';
+import { mount } from 'enzyme';
 import Projects from '../../../../src/frontend/app/project/project-list'; // eslint-disable-line no-unused-vars
 import { projects } from '../../../../src/frontend/app/mockData';
 
@@ -18,8 +18,17 @@ describe('ProjectList', () => {
         location.state = state;
     });
 
+    // User sees all data
+    it('shoud have all rows', () => {
+        // when
+        const component = mount(<Projects location={location} />);
+        // then
+        const items = component.find('ul');
+        expect(items.children()).toHaveLength(projects.projectsArray.length);
+    });
+
     // User notices project's info
-    it('shoud have row rendered', () => {
+    it('shoud row be rendered', () => {
         // when
         const component = mount(<Projects location={location} />);
         // then
@@ -27,27 +36,18 @@ describe('ProjectList', () => {
         // should have proper css class
         expect(items.hasClass('projectRowContainer')).toBeTruthy();
 
-        const firstItem = items.childAt(0);
-        const projectRow = firstItem.props().projectRow;
-        // should have row defined
-        expect(projectRow).toBeDefined();
+        items.children().forEach((row) => {
+            const projectRow = row.props().projectRow;
+            // should have row defined
+            expect(projectRow).toBeDefined();
 
-        // should have name and alias
-        expect(firstItem.find('h1').text()).toContain('Name:');
-        expect(firstItem.find('h2').text()).toContain('Alias:');
+            // should have name and alias
+            expect(row.find('h1').text()).toContain('Name:');
+            expect(row.find('h2').text()).toContain('Alias:');
+        });
     });
 
-    // User can click the project
-    it('shoud be clickable', () => {
-        // when
-        const component = mount(<Projects location={location} />);
-        const items = component.find('ul');
-        const firstItem = items.childAt(0);
-
-        // then
-        expect(firstItem.find('li').props().onClick).toBeDefined();
-    });
-
+    // User sees that project is clickable
     it('should have proper mouse pointer icon on Mouse Over', () => {
         // when
         const component = mount(<Projects location={location} />);
@@ -59,7 +59,18 @@ describe('ProjectList', () => {
         expect(projectRowLi.hasClass('cursorIsPointer')).toBeTruthy();
     });
 
-    it('shoud be reponsive', () => {
+    // User can click the project
+    it('shoud row be clickable', () => {
+        // when
+        const component = mount(<Projects location={location} />);
+        const items = component.find('ul');
+        const firstItem = items.childAt(0);
+
+        // then
+        expect(firstItem.find('li').props().onClick).toBeDefined();
+    });
+
+    it('shoud row be reponsive', () => {
         // when
         const component = mount(<Projects location={location} />);
         const mockPush = jest.fn();
