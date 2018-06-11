@@ -1,6 +1,6 @@
 import React from 'react'; // eslint-disable-line
 import { shallow } from 'enzyme';
-import AuthComponent from '../../../../src/frontend/app/authentication/auth-component'; // eslint-disable-line no-unused-vars
+import AuthComponent from '../../../../src/frontend/app/authentication/auth-component.jsx'; // eslint-disable-line no-unused-vars
 
 describe('AuthComponent', () => {
     const location = {};

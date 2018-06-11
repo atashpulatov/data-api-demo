@@ -1,9 +1,7 @@
-import React from 'react'; // eslint-disable-line no-unused-vars
-import BaseComponent from '../base-component.jsx';
-import authService from './auth-di.js';
-const authenticate = authService.authRestService.authenticate;
+import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
+const request = require('superagent');
 
-class Login extends BaseComponent {
+class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -11,7 +9,6 @@ class Login extends BaseComponent {
             password: '',
             envUrl: '',
             authMode: '',
-            origin: this.state.origin,
         };
 
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -20,7 +17,6 @@ class Login extends BaseComponent {
         this.handleAuthModeChange = this.handleAuthModeChange.bind(this);
 
         this.onLoginUser = this.onLoginUser.bind(this);
-        this.authenticate = authenticate.bind(this);
     }
 
     handleUsernameChange(event) {
@@ -36,19 +32,45 @@ class Login extends BaseComponent {
         this.setState({ authMode: event.target.value });
     }
 
-    async onLoginUser(event) {
+    onLoginUser(event) {
+        console.log('hello');
         event.preventDefault();
+        const credentials = require('./Credentials');
+        const envUrl = credentials.envUrl;
+        // const envUrl = this.state.envUrl;
 
-        await this.authenticate(this.state.username, this.state.password, this.state.envUrl, this.state.authMode);
-        console.log(sessionStorage.getItem('x-mstr-authtoken'));
-        this.props.history.push(this.state.origin);
+        const username = credentials.username;
+        const password = credentials.password;
+        const loginMode = credentials.loginMode;
+
+        request.post(envUrl + '/auth/login')
+            .send({ username, password, loginMode })
+            .withCredentials()
+            .then((res) => {
+                console.log(res);
+                const authToken = res.headers['x-mstr-authtoken'];
+                sessionStorage.setItem('x-mstr-authtoken', authToken);
+                console.log(sessionStorage.getItem('x-mstr-authtoken'));
+                return authToken;
+            })
+            .then((token) => {
+                return request.get(envUrl + '/projects')
+                    .set('x-mstr-authtoken', token)
+                    .withCredentials();
+            })
+            .then((res) => {
+                console.log(res.text);
+            })
+            .catch((err) => {
+                console.error(`Error: ${err.response.status}`
+                    + ` (${err.response.statusMessage})`);
+            });
     }
-
 
     render() {
         return (
             <form onSubmit={this.onLoginUser}>
-                <div className='grid-container padding'>
+                <div className='grid-container'>
                     <label className='grid-item'>
                         Username:
                     </label>
@@ -56,6 +78,7 @@ class Login extends BaseComponent {
                         value={this.state.username}
                         onChange={this.handleUsernameChange} name='username' />
 
+                    {/* <br /> */}
                     <label className='grid-item'>
                         Password:
                     </label>
@@ -63,6 +86,7 @@ class Login extends BaseComponent {
                         value={this.state.password}
                         onChange={this.handlePasswordChange} name='password' />
 
+                    {/* <br /> */}
                     <label className='grid-item'>
                         Environment URL:
                     </label>
@@ -70,6 +94,7 @@ class Login extends BaseComponent {
                         value={this.state.envUrl}
                         onChange={this.handleEnvURLChange} name='envUrl' />
 
+                    {/* <br /> */}
                     <label className='grid-item'>
                         Auth Mode:
                     </label>
@@ -77,6 +102,7 @@ class Login extends BaseComponent {
                         value={this.state.authMode}
                         onChange={this.handleAuthModeChange} name='envUrl' />
 
+                    {/* <br /> */}
                     <input className='grid-item-2 button-submit'
                         type='submit' value='Submit' />
                 </div>

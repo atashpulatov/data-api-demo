@@ -1,6 +1,6 @@
 import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
 import ProjectRow from './project-row.jsx'; // eslint-disable-line no-unused-vars
-import BaseComponent from '../BaseComponent.jsx';
+import BaseComponent from '../base-component.jsx';
 
 class Projects extends BaseComponent {
     constructor(props) {
