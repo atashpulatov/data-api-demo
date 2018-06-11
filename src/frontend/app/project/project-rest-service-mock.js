@@ -1,7 +1,7 @@
-import * as mockData from '../mockData.js';
+import {projects} from '../mockData.js';
 
 function getProjectList() {
-    return mockData.projects.projectsArray;
+    return projects.projectsArray;
 }
 
 export default {

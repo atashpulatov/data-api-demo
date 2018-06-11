@@ -24,8 +24,8 @@ function NavigationService() { // TODO: rethink the name.
         const session = sessionStorage.getItem('x-mstr-authtoken');
         if (session === null) {
             return loginRoute();
-        }
-        const currentProject = sessionStorage.getItem('current-project');
+        } // o-mstr-name
+        const currentProject = sessionStorage.getItem('x-mstr-projectid');
         if (currentProject === null) {
             return await projectsRoute();
         }

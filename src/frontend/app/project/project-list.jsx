@@ -13,7 +13,8 @@ class Projects extends BaseComponent {
         this.navigateToProject = this.navigateToProject.bind(this);
     }
 
-    navigateToProject(event) {
+    navigateToProject(projectId) {
+        sessionStorage.setItem('x-mstr-projectid', projectId);
         this.props.history.push({
             pathname: '/',
             origin: this.props.location,

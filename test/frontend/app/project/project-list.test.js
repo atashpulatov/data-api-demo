@@ -1,7 +1,7 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
 import { shallow, mount } from 'enzyme';
 import Projects from '../../../../src/frontend/app/project/project-list'; // eslint-disable-line no-unused-vars
-import projectRestService from '../../../../src/frontend/app/project/project-rest-service-mock';
+import { projects } from '../../../../src/frontend/app/mockData';
 
 describe('ProjectList', () => {
     const location = {};
@@ -10,10 +10,10 @@ describe('ProjectList', () => {
         // origin path
         const origin = { pathname: '/' };
         // projects data
-        const projects = projectRestService.getProjectList();
+        const mockProjects = projects.projectsArray;
         const state = {
             origin,
-            projects,
+            projects: mockProjects,
         };
         location.state = state;
     });
@@ -48,6 +48,17 @@ describe('ProjectList', () => {
         expect(firstItem.find('li').props().onClick).toBeDefined();
     });
 
+    it('should have proper mouse pointer icon on Mouse Over', () => {
+        // when
+        const component = mount(<Projects location={location} />);
+        const mockPush = jest.fn();
+        component.setProps({ history: { push: mockPush } });
+
+        const items = component.find('ul');
+        const projectRowLi = items.childAt(0).find('li');
+        expect(projectRowLi.hasClass('cursorIsPointer')).toBeTruthy();
+    });
+
     it('shoud be reponsive', () => {
         // when
         const component = mount(<Projects location={location} />);
@@ -64,6 +75,8 @@ describe('ProjectList', () => {
     });
 
     it('should pass project when clicked', () => {
+        // given
+        const expectedProjectId = projects.projectsArray[0].id;
         // when
         const component = mount(<Projects location={location} />);
         const mockPush = jest.fn();
@@ -78,9 +91,9 @@ describe('ProjectList', () => {
         expect(mockPush).toBeCalledWith({
             pathname: '/',
             origin: component.props().location,
-            projectId: firstItem.props().projectRow.id,
         });
 
-        expect(false).toBeTruthy();
+        expect(sessionStorage.getItem('x-mstr-projectid')).toBeDefined();
+        expect(sessionStorage.getItem('x-mstr-projectid')).toBe(expectedProjectId);
     });
 });
