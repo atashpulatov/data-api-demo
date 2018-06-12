@@ -27,7 +27,7 @@ describe('ProjectList', () => {
         expect(items.children()).toHaveLength(projects.projectsArray.length);
     });
 
-    // User notices project's info
+    // User notices projects' info
     it('shoud row be rendered', () => {
         // when
         const component = mount(<Projects location={location} />);

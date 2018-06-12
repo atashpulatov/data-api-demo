@@ -2518,7 +2518,7 @@ export let mockReports = [
     },
 ];
 
-export let MstrTutorial = [
+export let mstrTutorial = [
     {
         'name': 'Business Roles',
         'id': '032A5E114A59D28267BDD8B6D9E58B22',
