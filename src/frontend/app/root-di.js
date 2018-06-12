@@ -6,7 +6,7 @@ import {
 import './app.css';
 import './index.css';
 
-import Main from './navigator.jsx';
+import Navigator from './navigator/navigator.jsx';
 import Auth from './authentication/auth-component.jsx';
 import Projects from './project/project-list.jsx';
 // import App from './app.jsx';
@@ -15,7 +15,7 @@ import registerServiceWorker from './registerServiceWorker';
 export default {
     'Router': Router,
     Route,
-    Main,
+    Navigator,
     Auth,
     Projects,
     // App,

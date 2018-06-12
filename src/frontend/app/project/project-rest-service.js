@@ -17,6 +17,6 @@ async function getProjectList() {
         });
 }
 
-export let projectRestService = {
-    'getProjectList': getProjectList,
+export default {
+    getProjectList,
 };

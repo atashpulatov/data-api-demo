@@ -23,7 +23,7 @@ class App extends Component {
           </div>
           <div id="content-main">
             <div>
-              <Route exact path="/" component={di.Main}/>
+              <Route exact path="/" component={di.Navigator}/>
               <Route path="/auth" component={di.Auth}/>
               <Route path="/projects" component={di.Projects}/>
             </div>
