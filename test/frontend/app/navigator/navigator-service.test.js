@@ -1,14 +1,12 @@
 /* es-lint-disable */
 import NavigationService from '../../../../src/frontend/app/navigator/navigation-service';
 import projectRestService from '../../../../src/frontend/app/project/project-rest-service';
-import projectRestServiceMock from '../../../../src/frontend/app/project/project-rest-service-mock';
+import projectRestServiceMock from '../project/project-rest-service-mock';
 import mstrObjectRestService from '../../../../src/frontend/app/mstr-object/mstr-object-rest-service';
-import mstrObjectRestServiceMock from '../../../../src/frontend/app/mstr-object/mstr-object-rest-service-mock';
+import mstrObjectRestServiceMock from '../mstr-objects/mstr-object-rest-service-mock';
 /* es-lint-enable */
 
 describe('NavigatorService', () => {
-    beforeAll(() => {
-    });
 
     it('should give a path object to authentication page',
             async () => {
@@ -23,6 +21,7 @@ describe('NavigatorService', () => {
         expect(pathObject.pathname).toContain('/auth');
         expect(pathObject.state).toBeDefined();
     });
+
     it('should give a path object to project page',
             async () => {
         // given
@@ -44,6 +43,7 @@ describe('NavigatorService', () => {
         expect(pathObject.state.projects[0]).toHaveProperty('description');
         expect(pathObject.state.projects[0]).toHaveProperty('status');
     });
+
     it('should give a path object to folder contents',
             async () => {
         // given

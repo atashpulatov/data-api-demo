@@ -1,6 +1,7 @@
+import { mstrTutorial } from '../mockData';
 
 function getProjectContent(projectId) {
-    return [];
+    return mstrTutorial;
 }
 
 export default {

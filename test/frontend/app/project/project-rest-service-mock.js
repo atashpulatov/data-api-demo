@@ -1,4 +1,4 @@
-import {projects} from '../mockData.js';
+import {projects} from '../mockData';
 
 function getProjectList() {
     return projects.projectsArray;

@@ -1,7 +1,7 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
 import { mount } from 'enzyme';
 import Projects from '../../../../src/frontend/app/project/project-list'; // eslint-disable-line no-unused-vars
-import { projects } from '../../../../src/frontend/app/mockData';
+import { projects } from '../mockData';
 
 describe('ProjectList', () => {
     const location = {};
