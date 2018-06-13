@@ -14,12 +14,11 @@ class Projects extends BaseComponent {
     }
 
     navigateToProject(projectId) {
-        sessionStorage.setItem('x-mstr-projectid', projectId);
         this.props.history.push({
             pathname: '/',
             origin: this.props.location,
+            projectId,
         });
-        return;
     }
 
     render() {

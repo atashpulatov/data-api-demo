@@ -15,6 +15,15 @@ class MstrObjects extends BaseComponent {
         this.state = {
             mstrObjects: props.location.state.mstrObjects,
         };
+        this.navigateToDir = this.navigateToDir.bind(this);
+    }
+
+    navigateToDir(directoryId) {
+        this.props.history.push({
+            pathname: '/',
+            origin: this.props.location,
+            directoryId,
+        });
     }
 
     render() {
@@ -25,7 +34,8 @@ class MstrObjects extends BaseComponent {
                         .filter((obj) => objectsTypesMap.directory === obj.type)
                         .map((directory) => (
                             <DirectoryRow key={directory.id}
-                                directory={directory} />
+                                directory={directory}
+                                onClick={this.navigateToDir} />
                         ))}
                 </ul>
                 <ul>

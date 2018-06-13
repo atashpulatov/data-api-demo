@@ -21,18 +21,18 @@ describe('ProjectList', () => {
     // User sees all data
     it('shoud have all rows', () => {
         // when
-        const component = mount(<Projects location={location} />);
+        const componentWrapper = mount(<Projects location={location} />);
         // then
-        const items = component.find('ul');
+        const items = componentWrapper.find('ul');
         expect(items.children()).toHaveLength(projects.projectsArray.length);
     });
 
     // User notices projects' info
     it('shoud row be rendered', () => {
         // when
-        const component = mount(<Projects location={location} />);
+        const componentWrapper = mount(<Projects location={location} />);
         // then
-        const items = component.find('ul');
+        const items = componentWrapper.find('ul');
         // should have proper css class
         expect(items.hasClass('projectRowContainer')).toBeTruthy();
 
@@ -50,11 +50,11 @@ describe('ProjectList', () => {
     // User sees that project is clickable
     it('should have proper mouse pointer icon on Mouse Over', () => {
         // when
-        const component = mount(<Projects location={location} />);
+        const componentWrapper = mount(<Projects location={location} />);
         const mockPush = jest.fn();
-        component.setProps({ history: { push: mockPush } });
+        componentWrapper.setProps({ history: { push: mockPush } });
 
-        const items = component.find('ul');
+        const items = componentWrapper.find('ul');
         const projectRowLi = items.childAt(0).find('li');
         expect(projectRowLi.hasClass('cursorIsPointer')).toBeTruthy();
     });
@@ -62,8 +62,8 @@ describe('ProjectList', () => {
     // User can click the project
     it('shoud row be clickable', () => {
         // when
-        const component = mount(<Projects location={location} />);
-        const items = component.find('ul');
+        const componentWrapper = mount(<Projects location={location} />);
+        const items = componentWrapper.find('ul');
         const firstItem = items.childAt(0);
 
         // then
@@ -71,29 +71,36 @@ describe('ProjectList', () => {
     });
 
     it('shoud row be reponsive', () => {
-        // when
-        const component = mount(<Projects location={location} />);
-        const mockPush = jest.fn();
-        component.setProps({ history: { push: mockPush } });
+        const originalMethod = Projects.prototype.navigateToProject;
+        // given
+        const mockClick = jest.fn();
+        try {
+            Projects.prototype.navigateToProject = mockClick;
+            // when
+            const componentWrapper = mount(<Projects location={location} />);
 
-        const items = component.find('ul');
-        const firstItem = items.childAt(0);
+            const items = componentWrapper.find('ul');
+            const firstItem = items.childAt(0);
 
-        firstItem.find('li').simulate('click');
+            firstItem.find('li').simulate('click');
 
-        // then
-        expect(mockPush).toBeCalled();
+            // then
+            expect(mockClick).toBeCalled();
+            expect(originalMethod).toBeDefined();
+        } finally {
+            Projects.prototype.navigateToProject = originalMethod;
+        }
     });
 
     it('should pass project when clicked', () => {
         // given
         const expectedProjectId = projects.projectsArray[0].id;
         // when
-        const component = mount(<Projects location={location} />);
+        const componentWrapper = mount(<Projects location={location} />);
         const mockPush = jest.fn();
-        component.setProps({ history: { push: mockPush } });
+        componentWrapper.setProps({ history: { push: mockPush } });
 
-        const items = component.find('ul');
+        const items = componentWrapper.find('ul');
         const firstItem = items.childAt(0);
 
         firstItem.find('li').simulate('click');
@@ -101,10 +108,8 @@ describe('ProjectList', () => {
         // then
         expect(mockPush).toBeCalledWith({
             pathname: '/',
-            origin: component.props().location,
+            origin: componentWrapper.props().location,
+            projectId: expectedProjectId,
         });
-
-        expect(sessionStorage.getItem('x-mstr-projectid')).toBeDefined();
-        expect(sessionStorage.getItem('x-mstr-projectid')).toBe(expectedProjectId);
     });
 });

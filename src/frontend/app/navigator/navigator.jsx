@@ -4,7 +4,6 @@ import navigationService from './navigation-service.js';
 class Navigator extends Component {
     constructor(props) {
         super(props);
-        console.log('test');
         this.pushHistory = this.pushHistory.bind(this);
     }
 

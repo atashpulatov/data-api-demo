@@ -1,7 +1,7 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
 import { mount } from 'enzyme';
 import MstrObjects from '../../../../src/frontend/app/mstr-object/mstr-object-list'; // eslint-disable-line no-unused-vars
-import { mstrTutorial } from '../../../../src/frontend/app/mockData';
+import { mstrTutorial } from '../mockData';
 
 describe('MstrObjectList', () => {
     const mockMstrObjects = [];
@@ -20,24 +20,24 @@ describe('MstrObjectList', () => {
     });
 
     // User sees all data
-    it('shoud have all rows', () => {
+    it('should have all rows', () => {
         // when
-        const component = mount(<MstrObjects location={location} />);
+        const componentWrapper = mount(<MstrObjects location={location} />);
         // then
 
         // mockMstrObjects consists of project representation also,
         // which we don't want to display here
-        expect(component.find('li')).toHaveLength(mockMstrObjects.length - 1);
+        expect(componentWrapper.find('li'))
+            .toHaveLength(mockMstrObjects.length - 1);
     });
 
-    // User notices objects' info
-    it('shoud row be rendered', () => {
+    // User notices directories' info
+    it('should directory rows be rendered', () => {
         // when
-        const component = mount(<MstrObjects location={location} />);
+        const componentWrapper = mount(<MstrObjects location={location} />);
         // then
-        const items = component.find('ul');
-        const directories = items.at(0);
-        const reports = items.at(1);
+        const items = componentWrapper.find('ul');
+        const directories = items.at(0); // directories first
 
         directories.children().forEach((row) => {
             const directory = row.props().directory;
@@ -46,9 +46,17 @@ describe('MstrObjectList', () => {
 
             // should have name and image
             expect(row.find('h1').text()).toContain('Name:');
-            console.log(row.find('img').html());
             expect(row.find('img').html()).toBeTruthy();
         });
+    });
+
+    // User notices reports' info
+    it('should report rows be rendered', () => {
+        // when
+        const componentWrapper = mount(<MstrObjects location={location} />);
+        // then
+        const items = componentWrapper.find('ul');
+        const reports = items.at(1); // reports second
 
         reports.children().forEach((row) => {
             const report = row.props().report;
@@ -57,33 +65,75 @@ describe('MstrObjectList', () => {
 
             // should have name and image
             expect(row.find('h1').text()).toContain('Name:');
+            expect(row.find('img').html()).toBeTruthy();
         });
     });
 
-    // it('should get project content data from server', () => {
-    //     const mstrObjects = mstrObjectRestService.getProjectContent('B7CA92F04B9FAE8D941C3E9B7E0CD754');
-    //     expect(mstrObjects).toBeDefined();
-    //     expect(mstrObjects.length).toBeGreaterThan(1);
-    //     expect(mstrObjects).toContain('032A5E114A59D28267BDD8B6D9E58B22');
-    //     //expect(false).toBeTruthy();
-    // });
+    // User sees directories may be clicked
+    it('should directory rows be clickable', () => {
+        // when
+        const componentWrapper = mount(<MstrObjects location={location} />);
+        // then
+        const items = componentWrapper.find('ul');
+        const directories = items.at(0); // directories first
 
-    // it('should have project content rendered', () => {
-    //     // when
-    //     const component = mount(<MstrObjects location={location} />);
-    //     // then
-    //     const items = component.find('ul');
-    //     // should have proper css class
-    //     expect(items.hasClass('projectRowContainer')).toBeTruthy();
+        directories.children().forEach((row) => {
+            const directoryRowLi = row.find('li');
+            expect(directoryRowLi.hasClass('cursorIsPointer')).toBeTruthy();
+        });
+    });
 
-    //     const firstItem = items.childAt(0);
-    //     const projectRow = firstItem.props().projectRow;
-    //     // should have row defined
-    //     expect(projectRow).toBeDefined();
+    // User can click a directory
+    it('should directory row be reponsive', () => {
+        // given
+        const originalMethod = MstrObjects.prototype.navigateToDir;
+        const mockClick = jest.fn();
+        try {
+            MstrObjects.prototype.navigateToDir = mockClick;
+            // when
+            const componentWrapper = mount(<MstrObjects location={location} />);
 
-    //     // should have name and alias
-    //     expect(firstItem.find('h1').text()).toContain('Name:');
-    //     expect(firstItem.find('h2').text()).toContain('Alias:');
-    //     expect(false).toBeTruthy();
-    // });
+            // then
+            const items = componentWrapper.find('ul');
+            const directories = items.at(0); // directories first
+
+            directories.children().forEach((row) => {
+                const directoryRowLi = row.find('li');
+                directoryRowLi.simulate('click');
+                expect(mockClick).toBeCalled();
+            });
+            expect(originalMethod).toBeDefined();
+        } finally {
+            MstrObjects.prototype.navigateToDir = originalMethod;
+        }
+    });
+
+    // User can open a directory
+    it('should pass directory when clicked', () => {
+        // when
+        const componentWrapper = mount(<MstrObjects location={location} />);
+        const mockPush = jest.fn();
+        componentWrapper.setProps({ history: { push: mockPush } });
+        // then
+        const items = componentWrapper.find('ul');
+        const directories = items.at(0); // directories first
+
+        let iterateId = 0;
+        directories.children().forEach((row) => {
+            const directoryRowLi = row.find('li');
+            directoryRowLi.simulate('click');
+            expect(mockPush).toBeCalledWith({
+                pathname: '/',
+                origin: componentWrapper.props().location,
+                directoryId: mockMstrObjects[iterateId].id,
+            });
+            ++iterateId;
+        });
+    });
+
+    // User sees reports may be clicked
+
+    // User can click a report
+
+    // User can open report
 });
