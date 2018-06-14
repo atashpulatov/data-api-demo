@@ -2,7 +2,6 @@ import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
 import di from './root-di.js';
 import OfficeApiTest from './OfficeApiTests.jsx'; // eslint-disable-line no-unused-vars
 
-console.log(di);
 const Router = di.Router; // eslint-disable-line no-unused-vars
 const Route = di.Route; // eslint-disable-line no-unused-vars
 
@@ -26,6 +25,7 @@ class App extends Component {
               <Route exact path="/" component={di.Navigator}/>
               <Route path="/auth" component={di.Auth}/>
               <Route path="/projects" component={di.Projects}/>
+              <Route path="/objects" component={di.MstrObjects}/>
             </div>
           </div>
         </div>

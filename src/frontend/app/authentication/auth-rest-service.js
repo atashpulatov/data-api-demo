@@ -5,8 +5,6 @@ async function _authenticate(username, password, envUrl, loginMode = 1) {
         .send({ username, password, loginMode })
         .withCredentials()
         .then((res) => {
-            console.log('response');
-            console.log(res);
             return res.headers['x-mstr-authtoken'];
         })
         .catch((err) => {

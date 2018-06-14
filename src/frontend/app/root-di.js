@@ -9,7 +9,8 @@ import './index.css';
 import Navigator from './navigator/navigator.jsx';
 import Auth from './authentication/auth-component.jsx';
 import Projects from './project/project-list.jsx';
-// import App from './app.jsx';
+import MstrObjects from './mstr-object/mstr-object-list';
+
 import registerServiceWorker from './registerServiceWorker';
 
 export default {
@@ -18,6 +19,7 @@ export default {
     Navigator,
     Auth,
     Projects,
+    MstrObjects,
     // App,
     registerServiceWorker,
 };
