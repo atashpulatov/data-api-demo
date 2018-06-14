@@ -1,7 +1,7 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
 import BaseComponent from '../base-component.jsx';
-import authService from './auth-di.js';
-const authenticate = authService.authRestService.authenticate;
+import authService from './auth-rest-service';
+const authenticate = authService.authenticate;
 
 class Login extends BaseComponent {
     constructor(props) {
@@ -39,8 +39,10 @@ class Login extends BaseComponent {
     async onLoginUser(event) {
         event.preventDefault();
 
-        await this.authenticate(this.state.username, this.state.password, this.state.envUrl, this.state.authMode);
+        sessionStorage.setItem('envUrl', this.state.envUrl);
+        let authToken = await this.authenticate(this.state.username, this.state.password, this.state.envUrl, this.state.authMode);
         console.log(sessionStorage.getItem('x-mstr-authtoken'));
+        sessionStorage.setItem('x-mstr-authtoken', authToken);
         this.props.history.push(this.state.origin);
     }
 

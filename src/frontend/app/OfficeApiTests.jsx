@@ -4,7 +4,7 @@ import reportDI from './report/report-di.js';
 import officeDI from './office/office-di.js';
 import officeHelper from './office/office-api-helper';
 import RadioSelectionForm from './radio-selection-form.jsx';
-import { mockReports } from './mockData';
+import { mockReports } from '../../../test/frontend/app/mockData';
 
 class OfficeApiTest extends Component {
     constructor(props) {
