@@ -1,12 +1,14 @@
 import di from './mstr-object-di';
+import StorageService from '../storage/storage-service';
+import propertiesEnum from '../storage/properties-enum';
 
 async function getProjectContent(folderType) {
-    const envUrl = sessionStorage.getItem('envUrl');
-    const token = sessionStorage.getItem('x-mstr-authtoken');
-    const projectId = sessionStorage.getItem('x-mstr-projectid');
+    const envUrl = StorageService.getProperty(propertiesEnum['envUrl']);
+    const authToken = StorageService.getProperty(propertiesEnum['authToken']);
+    const projectId = StorageService.getProperty(propertiesEnum['projectId']);
     const fullPath = `${envUrl}/folders/preDefined/${folderType}`;
     return await di.request.get(fullPath)
-        .set('x-mstr-authtoken', token)
+        .set('x-mstr-authtoken', authToken)
         .set('x-mstr-projectid', projectId)
         .withCredentials()
         .then((res) => {

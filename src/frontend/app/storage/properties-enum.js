@@ -4,4 +4,5 @@ export default {
      */
     authToken: 'x-mstr-authtoken',
     projectId: 'x-mstr-projectid',
+    envUrl: 'mstr-environment-url',
 };

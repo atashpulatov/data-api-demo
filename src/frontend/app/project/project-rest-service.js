@@ -1,10 +1,12 @@
 import di from './project-di';
+import StorageService from '../storage/storage-service';
+import propertiesEnum from '../storage/properties-enum';
 
 async function getProjectList() {
-    const envUrl = sessionStorage.getItem('envUrl');
-    const token = sessionStorage.getItem('x-mstr-authtoken');
+    const envUrl = StorageService.getProperty(propertiesEnum['envUrl']);
+    const authToken = StorageService.getProperty(propertiesEnum['authToken']);
     return await di.request.get(envUrl + '/projects')
-            .set('x-mstr-authtoken', token)
+            .set('x-mstr-authtoken', authToken)
             .withCredentials()
             .then((res) => {
                 console.log(res);

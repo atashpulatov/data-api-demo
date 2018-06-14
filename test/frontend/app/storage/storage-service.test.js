@@ -2,13 +2,14 @@
 /* eslint-disable */
 import storageService from '../../../../src/frontend/app/storage/storage-service';
 import UnknownPropertyError from '../../../../src/frontend/app/storage/unknown-property-error';
+import propertiesEnum from '../../../../src/frontend/app/storage/properties-enum';
 /* eslint-enable */
 
-describe.skip('StorageService', () => {
+describe('StorageService', () => {
     it('should set value x-mstr-authtoken to sessionStorage', () => {
         // given
         let firstToken = 'firstTokenTest1';
-        let property = 'x-mstr-authtoken';
+        let property = 'authToken';
         sessionStorage.removeItem(property);
         // when
         storageService.setProperty(property, firstToken);
@@ -18,25 +19,26 @@ describe.skip('StorageService', () => {
     it('should update value of x-mstr-authtoken in sessionStorage', () => {
         // given
         let firstToken = 'firstTokenTest2';
-        let secondToken = 'secondToken';
-        let property = 'x-mstr-authtoken';
-        sessionStorage.removeItem(property);
+        let secondToken = 'secondTokenTest2';
+        let property = 'authToken';
+        sessionStorage.removeItem(propertiesEnum[property]);
         // when
         storageService.setProperty(property, firstToken);
         storageService.setProperty(property, secondToken);
         // then
-        expect(sessionStorage.getItem(property)).toBeDefined();
-        expect(sessionStorage.getItem(property)).toEqual(secondToken);
+        expect(sessionStorage.getItem(propertiesEnum[property])).toBeDefined();
+        expect(sessionStorage.getItem(propertiesEnum[property])).toEqual(secondToken);
     });
     it('should set value x-mstr-projectid to sessionStorage', () => {
         // given
         let firstProject = 'firstProjectTest3';
-        let property = 'x-mstr-projectid';
+        let property = 'projectId';
         sessionStorage.removeItem(property);
         // when
         storageService.setProperty(property, firstProject);
         // then
-        expect(sessionStorage.getItem(property)).toBeDefined();
+        expect(sessionStorage.getItem(propertiesEnum[property])).toBeDefined();
+        expect(sessionStorage.getItem(propertiesEnum[property])).toEqual(firstProject);
     });
     it('should throw an error due to misspell', () => {
         // given
@@ -50,21 +52,13 @@ describe.skip('StorageService', () => {
     it('should return a value of provided property', () => {
         // given
         let firstToken = 'firstTokenTest';
-        let property = 'x-mstr-authtoken';
-        sessionStorage.removeItem(property);
+        let property = 'authToken';
+        sessionStorage.removeItem(propertiesEnum[property]);
         storageService.setProperty(property, firstToken);
         // when
-        let propertyValue = storageService.getProperty(property);
+        let propertyValue = storageService.getProperty(propertiesEnum[property]);
         // then
         expect(propertyValue).toBeDefined();
         expect(propertyValue).toEqual(firstToken);
-    });
-    it('should display complete list of available properties', () => {
-        // given
-
-        // when
-
-        // then
-
     });
 });
