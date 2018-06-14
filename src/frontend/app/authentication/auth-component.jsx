@@ -40,10 +40,10 @@ class Login extends BaseComponent {
 
     async onLoginUser(event) {
         event.preventDefault();
-        StorageService.setProperty(propertiesEnum['envUrl']. this.state.envUrl);
+        StorageService.setProperty('envUrl', this.state.envUrl);
         // sessionStorage.setItem('envUrl', this.state.envUrl);
         let authToken = await this.authenticate(this.state.username, this.state.password, this.state.envUrl, this.state.authMode);
-        StorageService.setProperty(propertiesEnum['authToken'], authToken);
+        StorageService.setProperty('authToken', authToken);
         // sessionStorage.setItem('x-mstr-authtoken', authToken);
         this.props.history.push(this.state.origin);
     }
