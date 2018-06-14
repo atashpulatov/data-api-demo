@@ -1,6 +1,8 @@
-import React from 'react'; // eslint-disable-line no-unused-vars
+/* eslint-disable no-unused-vars */
+import React from 'react';
+import Projects from '../../../../src/frontend/app/project/project-list';
+/* eslint-enable */
 import { mount } from 'enzyme';
-import Projects from '../../../../src/frontend/app/project/project-list'; // eslint-disable-line no-unused-vars
 import { projects } from '../mockData';
 
 describe('ProjectList', () => {

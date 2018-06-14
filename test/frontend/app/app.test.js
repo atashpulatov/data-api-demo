@@ -1,6 +1,8 @@
-import React from 'react'; // eslint-disable-line no-unused-vars
+/* eslint-disable no-unused-vars */
+import React from 'react';
+import App from '../../../src/frontend/app/app';
+/* eslint-enable  */
 import { mount } from 'enzyme';
-import App from '../../../src/frontend/app/app'; // eslint-disable-line no-unused-vars
 import Navigator from '../../../src/frontend/app/navigator/navigator';
 import Login from '../../../src/frontend/app/authentication/auth-component';
 import Projects from '../../../src/frontend/app/project/project-list';
@@ -10,10 +12,10 @@ describe('App', () => {
     it('should have routes defined', () => {
         // given
         const routesExpected = [
-            {path: '/', component: Navigator},
-            {path: '/auth', component: Login},
-            {path: '/projects', component: Projects},
-            {path: '/objects', component: MstrObjects},
+            { path: '/', component: Navigator },
+            { path: '/auth', component: Login },
+            { path: '/projects', component: Projects },
+            { path: '/objects', component: MstrObjects },
         ];
         const routesDefined = [];
         // when

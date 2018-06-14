@@ -1,6 +1,8 @@
-import React from 'react'; // eslint-disable-line no-unused-vars
+/* eslint-disable no-unused-vars */
+import React from 'react';
+import MstrObjects from '../../../../src/frontend/app/mstr-object/mstr-object-list';
+/* eslint-enable */
 import { mount } from 'enzyme';
-import MstrObjects from '../../../../src/frontend/app/mstr-object/mstr-object-list'; // eslint-disable-line no-unused-vars
 import { mstrTutorial } from '../mockData';
 
 describe('MstrObjectList', () => {
