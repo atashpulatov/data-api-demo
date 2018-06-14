@@ -1,5 +1,9 @@
 import projectRestService from '../project/project-rest-service';
 import mstrObjectRestService from '../mstr-object/mstr-object-rest-service';
+import StorageService from '../storage/storage-service';
+import propertiesEnum from '../storage/properties-enum';
+
+const sharedFolderIdType = 7;
 
 function NavigationService() { // TODO: rethink the name.
     async function projectsRoute() {
@@ -21,7 +25,8 @@ function NavigationService() { // TODO: rethink the name.
     };
 
     async function objectsRoute() {
-        let objects = await mstrObjectRestService.getProjectContent(7);
+        let objects = await mstrObjectRestService
+                                .getProjectContent(sharedFolderIdType);
         return {
             pathname: '/objects',
             state: {
@@ -31,11 +36,11 @@ function NavigationService() { // TODO: rethink the name.
     }
 
     async function getNavigationRoute() {
-        const authToken = sessionStorage.getItem('x-mstr-authtoken');
+        const authToken = StorageService.getProperty(propertiesEnum['authToken']);
         if (authToken === null) {
             return loginRoute();
         } // o-mstr-name
-        const projectId = sessionStorage.getItem('x-mstr-projectid');
+        const projectId = StorageService.getProperty(propertiesEnum['projectId']);
         if (projectId === null) {
             return await projectsRoute();
         } else {

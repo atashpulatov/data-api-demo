@@ -1,6 +1,8 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
 import BaseComponent from '../base-component.jsx';
 import authService from './auth-rest-service';
+import StorageService from '../storage/storage-service';
+import propertiesEnum from '../storage/properties-enum';
 const authenticate = authService.authenticate;
 
 class Login extends BaseComponent {
@@ -38,11 +40,11 @@ class Login extends BaseComponent {
 
     async onLoginUser(event) {
         event.preventDefault();
-
-        sessionStorage.setItem('envUrl', this.state.envUrl);
+        StorageService.setProperty(propertiesEnum['envUrl']. this.state.envUrl);
+        // sessionStorage.setItem('envUrl', this.state.envUrl);
         let authToken = await this.authenticate(this.state.username, this.state.password, this.state.envUrl, this.state.authMode);
-        console.log(sessionStorage.getItem('x-mstr-authtoken'));
-        sessionStorage.setItem('x-mstr-authtoken', authToken);
+        StorageService.setProperty(propertiesEnum['authToken'], authToken);
+        // sessionStorage.setItem('x-mstr-authtoken', authToken);
         this.props.history.push(this.state.origin);
     }
 
