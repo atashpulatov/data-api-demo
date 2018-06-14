@@ -1,5 +1,6 @@
 import projectRestService from '../project/project-rest-service';
 import mstrObjectRestService from '../mstr-object/mstr-object-rest-service';
+import propertiesEnum from '../storage/properties-enum';
 
 function NavigationService() { // TODO: rethink the name.
     async function projectsRoute() {
@@ -31,16 +32,15 @@ function NavigationService() { // TODO: rethink the name.
     }
 
     async function getNavigationRoute() {
-        const authToken = sessionStorage.getItem('x-mstr-authtoken');
+        const authToken = sessionStorage.getItem(propertiesEnum.authToken);
         if (authToken === null) {
             return loginRoute();
-        } // o-mstr-name
-        const projectId = sessionStorage.getItem('x-mstr-projectid');
+        }
+        const projectId = sessionStorage.getItem(propertiesEnum.projectId);
         if (projectId === null) {
             return await projectsRoute();
-        } else {
-            return await objectsRoute();
         }
+        return await objectsRoute();
     };
 
     return {

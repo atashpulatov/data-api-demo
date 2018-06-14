@@ -1,6 +1,6 @@
 import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
 import directoryImg from './images/baseline-folder-24px.svg';
-import fileImg from './images/baseline-attachmenttt-24px.svg';
+import fileImg from './images/baseline-attachment-24px.svg';
 
 export const DirectoryRow = ({ directory, onClick }) => (
     <li className='cursorIsPointer'
