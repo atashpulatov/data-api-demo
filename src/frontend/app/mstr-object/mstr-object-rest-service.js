@@ -26,6 +26,7 @@ async function getFolderContent() {
     const envUrl = StorageService.getProperty(propertiesEnum['envUrl']);
     const authToken = StorageService.getProperty(propertiesEnum['authToken']);
     const folderId = StorageService.getProperty(propertiesEnum['folderId']);
+    const projectId = StorageService.getProperty(propertiesEnum['projectId']);
     const fullPath = `${envUrl}/folders/${folderId}`;
     return await di.request.get(fullPath)
         .set('x-mstr-authtoken', authToken)
