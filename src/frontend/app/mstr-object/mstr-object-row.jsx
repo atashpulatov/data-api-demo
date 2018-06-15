@@ -1,13 +1,15 @@
-import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
-import directoryImg from './images/baseline-folder-24px.svg';
-import fileImg from './images/baseline-attachment-24px.svg';
+/* eslint-disable no-unused-vars */
+import React from 'react';
+import DirectoryImg from './images/baseline-folder-24px.svg';
+import FileImg from './images/baseline-attachment-24px.svg';
+/* eslint-enable */
 
 export const DirectoryRow = ({ directory, onClick }) => (
     <li className='cursorIsPointer'
         onClick={onClick.bind(null, directory.id)}>
         <h1>
-            <img src={directoryImg} />
-            Name: {directory.name}
+            <DirectoryImg />>
+            {directory.name}
         </h1>
         <hr />
     </li >
@@ -17,8 +19,8 @@ export const ReportRow = ({ report }) => (
     <li
         /* onClick={onClick.bind(null, report.id)} */>
         <h1>
-            <img src={fileImg} />
-            Name: {report.name}
+            <FileImg />
+            {report.name}
         </h1>
         <hr />
     </li >
