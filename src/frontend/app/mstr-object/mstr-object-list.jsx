@@ -19,10 +19,12 @@ class MstrObjects extends BaseComponent {
     }
 
     navigateToDir(directoryId) {
+        const sessionObject = {};
+        sessionObject[propertiesEnum.directoryId] = directoryId;
         this.props.history.push({
             pathname: '/',
             origin: this.props.location,
-            directoryId,
+            sessionObject,
         });
     }
 

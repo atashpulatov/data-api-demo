@@ -4,20 +4,20 @@ import propertiesEnum from './properties-enum';
 class StorageService {
     constructor() {
     }
-    setProperty(propertyCandidate, propertyValue) {
-        let found = false;
-        for (let defProperty in propertiesEnum) {
-            if (propertiesEnum.hasOwnProperty(defProperty)) {
-                if (propertyCandidate === propertiesEnum[defProperty]) {
-                    found = true;
+    setProperty(propertyToBeSet, propertyValue) {
+        let foundProperty = false;
+        for (let propertyKey in propertiesEnum) {
+            if (propertiesEnum.hasOwnProperty(propertyKey)) {
+                if (propertyToBeSet === propertiesEnum[propertyKey]) {
+                    foundProperty = true;
                     break;
                 }
             }
         }
-        if (!found) {
-            throw new UnknownPropertyError(propertyCandidate, propertyValue);
+        if (!foundProperty) {
+            throw new UnknownPropertyError(propertyToBeSet, propertyValue);
         } else {
-            sessionStorage.setItem(propertyCandidate, propertyValue);
+            sessionStorage.setItem(propertyToBeSet, propertyValue);
         }
     };
     getProperty(propertyName) {

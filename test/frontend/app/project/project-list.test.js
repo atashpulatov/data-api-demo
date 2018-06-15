@@ -4,6 +4,7 @@ import Projects from '../../../../src/frontend/app/project/project-list';
 /* eslint-enable */
 import { mount } from 'enzyme';
 import { projects } from '../mockData';
+import propertiesEnum from '../../../../src/frontend/app/storage/properties-enum';
 
 describe('ProjectList', () => {
     const location = {};
@@ -97,6 +98,8 @@ describe('ProjectList', () => {
     it('should pass project when clicked', () => {
         // given
         const expectedProjectId = projects.projectsArray[0].id;
+        const expectedSessionObject = {};
+        expectedSessionObject[propertiesEnum.projectId] = expectedProjectId
         // when
         const componentWrapper = mount(<Projects location={location} />);
         const mockPush = jest.fn();
@@ -106,12 +109,12 @@ describe('ProjectList', () => {
         const firstItem = items.childAt(0);
 
         firstItem.find('li').simulate('click');
-
+        
         // then
         expect(mockPush).toBeCalledWith({
             pathname: '/',
             origin: componentWrapper.props().location,
-            projectId: expectedProjectId,
+            sessionObject: expectedSessionObject,
         });
     });
 });

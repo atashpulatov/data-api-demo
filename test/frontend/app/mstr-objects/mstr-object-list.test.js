@@ -4,6 +4,7 @@ import MstrObjects from '../../../../src/frontend/app/mstr-object/mstr-object-li
 /* eslint-enable */
 import { mount } from 'enzyme';
 import { mstrTutorial } from '../mockData';
+import propertiesEnum from '../../../../src/frontend/app/storage/properties-enum';
 
 describe('MstrObjectList', () => {
     const mockMstrObjects = [];
@@ -112,6 +113,8 @@ describe('MstrObjectList', () => {
 
     // User can open a directory
     it('should pass directory when clicked', () => {
+        // given
+        const expectedSessionObject = {};
         // when
         const componentWrapper = mount(<MstrObjects location={location} />);
         const mockPush = jest.fn();
@@ -122,12 +125,14 @@ describe('MstrObjectList', () => {
 
         let iterateId = 0;
         directories.children().forEach((row) => {
+            const dirId = mockMstrObjects[iterateId].id;
+            expectedSessionObject[propertiesEnum.directoryId] = dirId;
             const directoryRowLi = row.find('li');
             directoryRowLi.simulate('click');
             expect(mockPush).toBeCalledWith({
                 pathname: '/',
                 origin: componentWrapper.props().location,
-                directoryId: mockMstrObjects[iterateId].id,
+                sessionObject: expectedSessionObject,
             });
             ++iterateId;
         });
