@@ -25,11 +25,11 @@ describe('navigator', () => {
         const expectedValue = 'testt';
         const sessionObject = {};
         const location = { sessionObject };
-        sessionObject[propertiesEnum.directoryId] = expectedValue;
+        sessionObject[propertiesEnum.folderId] = expectedValue;
         // when
         mount(<Navigator location={location} />);
         // then
-        expect(sessionStorage.getItem(propertiesEnum.directoryId))
+        expect(sessionStorage.getItem(propertiesEnum.folderId))
             .toEqual(expectedValue);
     });
 });

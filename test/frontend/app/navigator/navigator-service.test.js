@@ -42,7 +42,7 @@ describe('NavigatorService', () => {
             expect(pathObject.state.projects[0]).toHaveProperty('status');
         });
 
-    it('should give a path object to folder contents',
+    it('should give a path object to project contents',
         async () => {
             // given
             const authToken = 'someAuthToken';
@@ -69,5 +69,26 @@ describe('NavigatorService', () => {
             expect(pathObjectSet[0]).toHaveProperty('dateCreated');
             expect(pathObjectSet[0]).toHaveProperty('dateModified');
             expect(pathObjectSet[0]).toHaveProperty('version');
+        });
+        it('should give a path object to folder contents',
+        async () => {
+            // given
+            const authToken = 'someAuthToken';
+            sessionStorage.setItem(propertiesEnum.authToken, authToken);
+            const folderId = 'someFolderId';
+            sessionStorage.setItem(propertiesEnum.folderId, folderId);
+            mstrObjectRestService.getFolderContent
+                = mstrObjectRestServiceMock.getFolderContent;
+            // when
+            const pathObject = await NavigationService.getNavigationRoute();
+            // then
+            expect(authToken).toBeDefined();
+            expect(pathObject).toBeDefined();
+            expect(pathObject.pathname).toBeDefined();
+            expect(pathObject.pathname).toContain('/objects');
+            const pathObjectSet = pathObject.state.mstrObjects;
+            expect(pathObjectSet).toBeDefined();
+            expect(pathObjectSet.length).toBeGreaterThan(1);
+            expect(pathObjectSet).toContain('ProperContent');
         });
 });

@@ -23,9 +23,20 @@ function NavigationService() { // TODO: rethink the name.
         };
     };
 
-    async function objectsRoute() {
+    async function rootObjectsRoute() {
         let mstrObjects = await mstrObjectRestService
             .getProjectContent(sharedFolderIdType);
+        return {
+            pathname: '/objects',
+            state: {
+                mstrObjects,
+            },
+        };
+    }
+
+    async function objectsRoute() {
+        let mstrObjects = await mstrObjectRestService
+            .getFolderContent();
         return {
             pathname: '/objects',
             state: {
@@ -39,11 +50,15 @@ function NavigationService() { // TODO: rethink the name.
         if (authToken === null) {
             return loginRoute();
         }
+        const folderId = sessionStorage.getItem(propertiesEnum.folderId);
+        if (folderId !== null) {
+            return await objectsRoute();
+        }
         const projectId = sessionStorage.getItem(propertiesEnum.projectId);
         if (projectId === null) {
             return await projectsRoute();
         }
-        return await objectsRoute();
+        return await rootObjectsRoute();
     };
 
     return {

@@ -22,6 +22,63 @@ async function getProjectContent(folderType) {
         });
 }
 
+async function getFolderContent() {
+    const envUrl = StorageService.getProperty(propertiesEnum['envUrl']);
+    const authToken = StorageService.getProperty(propertiesEnum['authToken']);
+    const folderId = StorageService.getProperty(propertiesEnum['folderId']);
+    const projectId = StorageService.getProperty(propertiesEnum['projectId']);
+    const fullPath = `${envUrl}/folders/${folderId}`;
+    return await di.request.get(fullPath)
+        .set('x-mstr-authtoken', authToken)
+        .set('x-mstr-projectid', projectId)
+        .withCredentials()
+        .then((res) => {
+            console.log(res);
+            let objects = res.body;
+            return objects;
+        })
+        .catch((err) => {
+            console.error(`Error: ${err.response.status}`
+                + ` (${err.response.statusMessage})`);
+        });
+}
+
+async function getObjectContent(objectId) {
+    const envUrl = StorageService.getProperty(propertiesEnum['envUrl']);
+    const authToken = StorageService.getProperty(propertiesEnum['authToken']);
+    const projectId = StorageService.getProperty(propertiesEnum['projectId']);
+    let fullPath = `${envUrl}/reports/${objectId}/instances`;
+    const reportInstance = await di.request.post(fullPath)
+        .set('x-mstr-authtoken', authToken)
+        .set('x-mstr-projectid', projectId)
+        .withCredentials()
+        .then((res) => {
+            console.log(res);
+            let objects = res.body;
+            return objects.instanceId;
+        })
+        .catch((err) => {
+            console.error(`Error: ${err.response.status}`
+                + ` (${err.response.statusMessage})`);
+        });
+    fullPath += `/${reportInstance}`;
+    return await di.request.get(fullPath)
+        .set('x-mstr-authtoken', authToken)
+        .set('x-mstr-projectid', projectId)
+        .withCredentials()
+        .then((res) => {
+            console.log(res);
+            let objects = res.body;
+            return objects;
+        })
+        .catch((err) => {
+            console.error(`Error: ${err.response.status}`
+                + ` (${err.response.statusMessage})`);
+        });
+}
+
 export default {
     getProjectContent,
+    getFolderContent,
+    getObjectContent,
 };
