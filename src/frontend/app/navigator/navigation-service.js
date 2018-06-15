@@ -1,6 +1,5 @@
 import projectRestService from '../project/project-rest-service';
 import mstrObjectRestService from '../mstr-object/mstr-object-rest-service';
-import StorageService from '../storage/storage-service';
 import propertiesEnum from '../storage/properties-enum';
 
 const sharedFolderIdType = 7;

@@ -1,5 +1,7 @@
 import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
 import navigationService from './navigation-service.js';
+import StorageService from '../storage/storage-service';
+import propertiesEnum from '../storage/properties-enum';
 
 class Navigator extends Component {
     constructor(props) {
@@ -12,6 +14,13 @@ class Navigator extends Component {
     }
 
     async componentDidMount() {
+        const sessionProperties = this.props.location.sessionObject;
+        for (let prop in sessionProperties) {
+            if (sessionProperties.hasOwnProperty(prop)) {
+                const propName = propertiesEnum[prop];
+                StorageService.setProperty(propName, sessionProperties[prop]);
+            }
+        }
         let routeObject = await navigationService.getNavigationRoute();
         routeObject.state.origin = this.props.location;
         this.pushHistory(routeObject);
