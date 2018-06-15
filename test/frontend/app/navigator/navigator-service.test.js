@@ -58,7 +58,7 @@ describe('NavigatorService', () => {
             expect(pathObject).toBeDefined();
             expect(pathObject.pathname).toBeDefined();
             expect(pathObject.pathname).toContain('/objects');
-            const pathObjectSet = pathObject.state.objects;
+            const pathObjectSet = pathObject.state.mstrObjects;
             expect(pathObjectSet).toBeDefined();
             expect(pathObjectSet.length).toBeGreaterThan(1);
             expect(pathObjectSet[0]).toHaveProperty('id');

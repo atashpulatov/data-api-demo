@@ -1,11 +1,10 @@
 /* eslint-disable */
 import authRestService from '../../../../src/frontend/app/authentication/auth-rest-service';
 import mstrObjectRestService from '../../../../src/frontend/app/mstr-object/mstr-object-rest-service';
-import {mstrTutorial} from '../mockData';
+import { mstrTutorial } from '../mockData';
 /* eslint-enable */
 
 describe('MstrObjectRestService', () => {
-
     beforeEach(() => {
         sessionStorage.removeItem('x-mstr-authtoken');
         sessionStorage.removeItem('x-mstr-projectid');
@@ -29,10 +28,10 @@ describe('MstrObjectRestService', () => {
     });
     it('should fail and return expection', () => {
         // given
-        
+
         // when
-        
+
         // then
-    
+
     });
 });
