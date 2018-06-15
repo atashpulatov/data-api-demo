@@ -1,7 +1,6 @@
 import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
 import navigationService from './navigation-service.js';
 import StorageService from '../storage/storage-service';
-import propertiesEnum from '../storage/properties-enum';
 
 class Navigator extends Component {
     constructor(props) {
