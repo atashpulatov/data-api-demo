@@ -17,8 +17,7 @@ class Navigator extends Component {
         const sessionProperties = this.props.location.sessionObject;
         for (let prop in sessionProperties) {
             if (sessionProperties.hasOwnProperty(prop)) {
-                const propName = propertiesEnum[prop];
-                StorageService.setProperty(propName, sessionProperties[prop]);
+                StorageService.setProperty(prop, sessionProperties[prop]);
             }
         }
         let routeObject = await navigationService.getNavigationRoute();

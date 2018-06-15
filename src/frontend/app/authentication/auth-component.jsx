@@ -43,52 +43,52 @@ class Login extends BaseComponent {
         let authToken = await this.authenticate(
             this.state.username, this.state.password,
             this.state.envUrl, this.state.authMode);
-        this.state.origin.sessionObject = {
-            envUrl: this.state.envUrl,
-            authToken: authToken,
-        };
+        const sessionObject = {};
+        sessionObject[propertiesEnum.envUrl] = this.state.envUrl;
+        sessionObject[propertiesEnum.authToken] = authToken;
+        this.state.origin.sessionObject = sessionObject;
         this.props.history.push(this.state.origin);
     }
 
 
-    render() {
-        return (
-            <form onSubmit={this.onLoginUser}>
-                <div className='grid-container padding'>
-                    <label className='grid-item'>
-                        Username:
+render() {
+    return (
+        <form onSubmit={this.onLoginUser}>
+            <div className='grid-container padding'>
+                <label className='grid-item'>
+                    Username:
                     </label>
-                    <input className='grid-item' type='text'
-                        value={this.state.username}
-                        onChange={this.handleUsernameChange} name='username' />
+                <input className='grid-item' type='text'
+                    value={this.state.username}
+                    onChange={this.handleUsernameChange} name='username' />
 
-                    <label className='grid-item'>
-                        Password:
+                <label className='grid-item'>
+                    Password:
                     </label>
-                    <input className='grid-item' type='password'
-                        value={this.state.password}
-                        onChange={this.handlePasswordChange} name='password' />
+                <input className='grid-item' type='password'
+                    value={this.state.password}
+                    onChange={this.handlePasswordChange} name='password' />
 
-                    <label className='grid-item'>
-                        Environment URL:
+                <label className='grid-item'>
+                    Environment URL:
                     </label>
-                    <input className='grid-item' type='text'
-                        value={this.state.envUrl}
-                        onChange={this.handleEnvURLChange} name='envUrl' />
+                <input className='grid-item' type='text'
+                    value={this.state.envUrl}
+                    onChange={this.handleEnvURLChange} name='envUrl' />
 
-                    <label className='grid-item'>
-                        Auth Mode:
+                <label className='grid-item'>
+                    Auth Mode:
                     </label>
-                    <input className='grid-item' type='number'
-                        value={this.state.authMode}
-                        onChange={this.handleAuthModeChange} name='envUrl' />
+                <input className='grid-item' type='number'
+                    value={this.state.authMode}
+                    onChange={this.handleAuthModeChange} name='envUrl' />
 
-                    <input className='grid-item-2 button-submit'
-                        type='submit' value='Submit' />
-                </div>
-            </form>
-        );
-    }
+                <input className='grid-item-2 button-submit'
+                    type='submit' value='Submit' />
+            </div>
+        </form>
+    );
+}
 }
 
 export default Login;

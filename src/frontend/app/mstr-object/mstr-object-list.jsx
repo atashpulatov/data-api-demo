@@ -1,6 +1,7 @@
 import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
 import BaseComponent from '../base-component.jsx';
 import { DirectoryRow, ReportRow } from './mstr-object-row.jsx'; // eslint-disable-line no-unused-vars
+import propertiesEnum from '../storage/properties-enum';
 
 const objectsTypesMap = {
     directory: 8,
