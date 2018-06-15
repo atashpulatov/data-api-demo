@@ -5,6 +5,7 @@ import MstrObjects from '../../../../src/frontend/app/mstr-object/mstr-object-li
 import { mount } from 'enzyme';
 import { mstrTutorial } from '../mockData';
 import propertiesEnum from '../../../../src/frontend/app/storage/properties-enum';
+/* eslint-enable */
 
 describe('MstrObjectList', () => {
     const mockMstrObjects = [];
@@ -126,7 +127,7 @@ describe('MstrObjectList', () => {
         let iterateId = 0;
         directories.children().forEach((row) => {
             const dirId = mockMstrObjects[iterateId].id;
-            expectedSessionObject[propertiesEnum.directoryId] = dirId;
+            expectedSessionObject[propertiesEnum.folderId] = dirId;
             const directoryRowLi = row.find('li');
             directoryRowLi.simulate('click');
             expect(mockPush).toBeCalledWith({
