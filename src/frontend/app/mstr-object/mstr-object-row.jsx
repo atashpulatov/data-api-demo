@@ -13,9 +13,9 @@ export const DirectoryRow = ({ directory, onClick }) => (
     </li >
 );
 
-export const ReportRow = ({ report }) => (
-    <li
-        /* onClick={onClick.bind(null, report.id)} */>
+export const ReportRow = ({ report, onClick }) => (
+    <li className='cursorIsPointer'
+        onClick={onClick.bind(null, report.id)} >
         <h1>
             <img src={fileImg} />
             Name: {report.name}
