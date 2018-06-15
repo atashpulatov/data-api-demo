@@ -9,7 +9,7 @@ describe('StorageService', () => {
     it('should set value x-mstr-authtoken to sessionStorage', () => {
         // given
         let firstToken = 'firstTokenTest1';
-        let property = 'authToken';
+        let property = propertiesEnum.authToken;
         sessionStorage.removeItem(property);
         // when
         storageService.setProperty(property, firstToken);
@@ -20,25 +20,25 @@ describe('StorageService', () => {
         // given
         let firstToken = 'firstTokenTest2';
         let secondToken = 'secondTokenTest2';
-        let property = 'authToken';
-        sessionStorage.removeItem(propertiesEnum[property]);
+        let property = propertiesEnum.authToken;
+        sessionStorage.removeItem(property);
         // when
         storageService.setProperty(property, firstToken);
         storageService.setProperty(property, secondToken);
         // then
-        expect(sessionStorage.getItem(propertiesEnum[property])).toBeDefined();
-        expect(sessionStorage.getItem(propertiesEnum[property])).toEqual(secondToken);
+        expect(sessionStorage.getItem(property)).toBeDefined();
+        expect(sessionStorage.getItem(property)).toEqual(secondToken);
     });
     it('should set value x-mstr-projectid to sessionStorage', () => {
         // given
         let firstProject = 'firstProjectTest3';
-        let property = 'projectId';
+        let property = propertiesEnum.projectId;
         sessionStorage.removeItem(property);
         // when
         storageService.setProperty(property, firstProject);
         // then
-        expect(sessionStorage.getItem(propertiesEnum[property])).toBeDefined();
-        expect(sessionStorage.getItem(propertiesEnum[property])).toEqual(firstProject);
+        expect(sessionStorage.getItem(property)).toBeDefined();
+        expect(sessionStorage.getItem(property)).toEqual(firstProject);
     });
     it('should throw an error due to misspell', () => {
         // given
@@ -52,11 +52,11 @@ describe('StorageService', () => {
     it('should return a value of provided property', () => {
         // given
         let firstToken = 'firstTokenTest';
-        let property = 'authToken';
-        sessionStorage.removeItem(propertiesEnum[property]);
+        let property = propertiesEnum.authToken;
+        sessionStorage.removeItem(property);
         storageService.setProperty(property, firstToken);
         // when
-        let propertyValue = storageService.getProperty(propertiesEnum[property]);
+        let propertyValue = storageService.getProperty(property);
         // then
         expect(propertyValue).toBeDefined();
         expect(propertyValue).toEqual(firstToken);

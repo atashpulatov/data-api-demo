@@ -26,7 +26,7 @@ function NavigationService() { // TODO: rethink the name.
 
     async function objectsRoute() {
         let objects = await mstrObjectRestService
-                                .getProjectContent(sharedFolderIdType);
+            .getProjectContent(sharedFolderIdType);
         return {
             pathname: '/objects',
             state: {
