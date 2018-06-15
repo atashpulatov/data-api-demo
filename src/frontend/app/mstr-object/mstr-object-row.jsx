@@ -8,7 +8,7 @@ export const DirectoryRow = ({ directory, onClick }) => (
     <li className='cursorIsPointer'
         onClick={onClick.bind(null, directory.id)}>
         <h1>
-            <DirectoryImg />>
+            <DirectoryImg />
             {directory.name}
         </h1>
         <hr />
