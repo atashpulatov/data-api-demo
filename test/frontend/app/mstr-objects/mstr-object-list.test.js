@@ -139,6 +139,33 @@ describe('MstrObjectList', () => {
         });
     });
 
+    it('should pass object to renderer when clicked', () => {
+        // given
+        const expectedSessionObject = {};
+        // when
+        const componentWrapper = mount(<MstrObjects location={location} />);
+        const mockPush = jest.fn();
+        componentWrapper.setProps({ history: { push: mockPush } });
+        // then
+        const items = componentWrapper.find('ul');
+        const directories = items.at(0); // directories first
+
+        let iterateId = 0;
+        directories.children().forEach((row) => {
+            const dirId = mockMstrObjects[iterateId].id;
+            expectedSessionObject[propertiesEnum.folderId] = dirId;
+            const directoryRowLi = row.find('li');
+            directoryRowLi.simulate('click');
+            expect(mockPush).toBeCalledWith({
+                pathname: '/',
+                origin: componentWrapper.props().location,
+                sessionObject: expectedSessionObject,
+            });
+            ++iterateId;
+            expect(false).toBeTruthy();
+        });
+    });
+
     // User sees reports may be clicked
 
     // User can click a report

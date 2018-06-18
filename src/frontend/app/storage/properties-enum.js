@@ -6,4 +6,5 @@ export default {
     projectId: 'x-mstr-projectid',
     folderId: 'mstr-directoryid',
     envUrl: 'mstr-environment-url',
+    sessionHistory: 'mstr-session-history',
 };

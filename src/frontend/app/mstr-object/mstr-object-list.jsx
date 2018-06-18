@@ -19,7 +19,7 @@ class MstrObjects extends BaseComponent {
             mstrObjects: props.location.state.mstrObjects,
         };
         this.navigateToDir = this.navigateToDir.bind(this);
-        this.navigateToObject = this.navigateToObject.bind(this);
+        this.printObject = this.printObject.bind(this);
     }
 
     navigateToDir(folderId) {
@@ -32,7 +32,7 @@ class MstrObjects extends BaseComponent {
         });
     }
 
-    async navigateToObject(objectId) {
+    async printObject(objectId) {
         let jsonData = await mstrObjectRestService.getObjectContent(objectId);
         let convertedReport = officeDi.officeConverterService
             .getConvertedTable(jsonData);
@@ -58,7 +58,7 @@ class MstrObjects extends BaseComponent {
                         .map((report) => (
                             <ReportRow key={report.id}
                                 report={report}
-                                onClick={this.navigateToObject}/>
+                                onClick={this.printObject}/>
                         ))}
                 </ul>
             </div>

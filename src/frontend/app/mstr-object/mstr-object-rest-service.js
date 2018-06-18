@@ -2,10 +2,7 @@ import di from './mstr-object-di';
 import StorageService from '../storage/storage-service';
 import propertiesEnum from '../storage/properties-enum';
 
-async function getProjectContent(folderType) {
-    const envUrl = StorageService.getProperty(propertiesEnum['envUrl']);
-    const authToken = StorageService.getProperty(propertiesEnum['authToken']);
-    const projectId = StorageService.getProperty(propertiesEnum['projectId']);
+async function getProjectContent(folderType, envUrl, authToken, projectId) {
     const fullPath = `${envUrl}/folders/preDefined/${folderType}`;
     return await di.request.get(fullPath)
         .set('x-mstr-authtoken', authToken)
@@ -22,11 +19,7 @@ async function getProjectContent(folderType) {
         });
 }
 
-async function getFolderContent() {
-    const envUrl = StorageService.getProperty(propertiesEnum['envUrl']);
-    const authToken = StorageService.getProperty(propertiesEnum['authToken']);
-    const folderId = StorageService.getProperty(propertiesEnum['folderId']);
-    const projectId = StorageService.getProperty(propertiesEnum['projectId']);
+async function getFolderContent(envUrl, authToken, folderId, projectId) {
     const fullPath = `${envUrl}/folders/${folderId}`;
     return await di.request.get(fullPath)
         .set('x-mstr-authtoken', authToken)

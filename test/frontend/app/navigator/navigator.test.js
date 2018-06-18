@@ -20,7 +20,7 @@ describe('navigator', () => {
             .toEqual(expectedValue);
     });
 
-    it('should save directoryId', () => {
+    it('should save folderId', () => {
         // given
         const expectedValue = 'testt';
         const sessionObject = {};
