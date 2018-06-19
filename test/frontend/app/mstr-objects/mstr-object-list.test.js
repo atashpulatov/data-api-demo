@@ -49,7 +49,7 @@ describe('MstrObjectList', () => {
             expect(directory).toBeDefined();
 
             // should have name and image
-            expect(row.find('h1').text()).toContain('Name:');
+            expect(row.find('h1').text()).toBeTruthy();
             expect(row.find('img').html()).toBeTruthy();
         });
     });
@@ -68,7 +68,7 @@ describe('MstrObjectList', () => {
             expect(report).toBeDefined();
 
             // should have name and image
-            expect(row.find('h1').text()).toContain('Name:');
+            expect(row.find('h1').text()).toBeTruthy();
             expect(row.find('img').html()).toBeTruthy();
         });
     });

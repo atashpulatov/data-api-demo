@@ -42,11 +42,11 @@
     "eslint": "^4.19.1",
     "eslint-config-google": "^0.9.1",
     "eslint-plugin-react": "^7.8.2",
+    "file-loader": "^1.1.11",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^22.4.4",
     "jest-cli": "^22.4.4",
     "jest-localstorage-mock": "^2.2.0",
-    "react-svg-loader": "^2.1.0",
     "react-test-renderer": "^15.6.2",
     "webpack-dev-server": "^2.11.2"
   }
