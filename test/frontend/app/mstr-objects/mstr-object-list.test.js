@@ -1,7 +1,6 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable no-unused-vars max-len */
 import React from 'react';
 import MstrObjects from '../../../../src/frontend/app/mstr-object/mstr-object-list';
-/* eslint-enable */
 import { mount } from 'enzyme';
 import { mstrTutorial } from '../mockData';
 import propertiesEnum from '../../../../src/frontend/app/storage/properties-enum';
