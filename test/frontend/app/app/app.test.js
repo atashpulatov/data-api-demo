@@ -3,37 +3,32 @@ import React from 'react';
 import App from '../../../../src/frontend/app/app';
 /* eslint-enable  */
 import { mount } from 'enzyme';
-import Navigator from '../../../../src/frontend/app/navigator/navigator';
-import Login from '../../../../src/frontend/app/authentication/auth-component';
-import Projects from '../../../../src/frontend/app/project/project-list';
-import MstrObjects from '../../../../src/frontend/app/mstr-object/mstr-object-list';
 
 describe('App', () => {
-    it('should have routes defined', () => {
+    it('should have header component with proper text', () => {
         // given
-        const routesExpected = [
-            { path: '/', component: Navigator },
-            { path: '/auth', component: Login },
-            { path: '/projects', component: Projects },
-            { path: '/objects', component: MstrObjects },
-        ];
-        // const routesDefined = [];
+
         // when
         const componentWrapper = mount(<App />);
         // then
-        const routesWrapper = componentWrapper.find('Route');
-        let routesDefined = routesWrapper.map((routeWrapper) => {
-            return {
-                path: routeWrapper.props().path,
-                component: routeWrapper.props().component,
-            };
-        });
-        routesWrapper.forEach((routeWrapper) => {
-            routesDefined.push({
-                path: routeWrapper.props().path,
-                component: routeWrapper.props().component,
-            });
-        });
-        expect(routesDefined.sort()).toEqual(routesExpected.sort());
+        const nodeComponentWrapper = componentWrapper.find('Header');
+        expect(nodeComponentWrapper).toHaveLength(1);
+        expect(nodeComponentWrapper.find('h1').text()).toBeTruthy();
+    });
+    it('should have routes defined', () => {
+        // given
+
+        // when
+        const componentWrapper = mount(<App />);
+        // then
+        expect(componentWrapper.find('Routes')).toHaveLength(1);
+    });
+    it('should have footer defined', () => {
+        // given
+
+        // when
+        const componentWrapper = mount(<App />);
+        // then
+        expect(componentWrapper.find('Footer')).toHaveLength(1);
     });
 });

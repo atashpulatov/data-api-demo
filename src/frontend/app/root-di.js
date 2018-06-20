@@ -14,12 +14,11 @@ import MstrObjects from './mstr-object/mstr-object-list.jsx';
 import registerServiceWorker from './registerServiceWorker';
 
 export default {
-    'Router': Router,
+    Router,
     Route,
     Navigator,
-    Auth,
+    'Authenticate': Auth,
     Projects,
     MstrObjects,
-    // App,
     registerServiceWorker,
 };

@@ -25,6 +25,7 @@ class Projects extends BaseComponent {
     }
 
     render() {
+        if (this.state.projects === undefined) return null;
         return (
             <ul className='projectRowContainer'>
                 {this.state.projects.map((project) => (

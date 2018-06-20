@@ -41,6 +41,7 @@ class MstrObjects extends BaseComponent {
     }
 
     render() {
+        if (this.state.mstrObjects === undefined) return null;
         return (
             <div>
                 <ul>

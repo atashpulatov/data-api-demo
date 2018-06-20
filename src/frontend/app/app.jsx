@@ -14,8 +14,8 @@ class App extends Component {
     return (
       <Router>
         <div id="content">
-        <Header />
-        <Routes />
+          <Header />
+          <Routes />
         </div>
       </Router>
     );
