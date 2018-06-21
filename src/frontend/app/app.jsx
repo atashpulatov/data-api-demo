@@ -1,9 +1,8 @@
+/* eslint-disable */
 import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
 import di from './root-di.js';
-import Header from './header.jsx';
 import Routes from './routes.jsx';
-
-const Router = di.Router; // eslint-disable-line no-unused-vars
+/* eslint-enable */
 
 class App extends Component {
   constructor(props) {
@@ -12,12 +11,13 @@ class App extends Component {
 
   render() {
     return (
-      <Router>
+      <di.Router>
         <div id="content">
-          <Header />
+          <di.Header />
           <Routes />
+          <di.Footer />
         </div>
-      </Router>
+      </di.Router>
     );
   }
 }

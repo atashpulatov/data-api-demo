@@ -1,7 +1,6 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
 import { Switch } from 'react-router-dom';
 import di from './root-di.js';
-import Error from './error.jsx';
 import PathEnum from './path-enum';
 
 const Route = di.Route; // eslint-disable-line no-unused-vars
@@ -16,7 +15,7 @@ const Routes = () => (
                         component={di[path.component]} />
             );
         })}
-        <Route component={Error} />
+        <Route component={di.Error} />
     </Switch>
 );
 

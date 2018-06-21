@@ -7,7 +7,6 @@ import { mount } from 'enzyme';
 describe('App', () => {
     it('should have header component with proper text', () => {
         // given
-
         // when
         const componentWrapper = mount(<App />);
         // then
@@ -17,7 +16,6 @@ describe('App', () => {
     });
     it('should have routes defined', () => {
         // given
-
         // when
         const componentWrapper = mount(<App />);
         // then
@@ -25,10 +23,11 @@ describe('App', () => {
     });
     it('should have footer defined', () => {
         // given
-
         // when
         const componentWrapper = mount(<App />);
         // then
-        expect(componentWrapper.find('Footer')).toHaveLength(1);
+        const nodeComponentWrapper = componentWrapper.find('Footer');
+        expect(nodeComponentWrapper).toHaveLength(1);
+        expect(nodeComponentWrapper.find('p').text()).toBeTruthy();
     });
 });

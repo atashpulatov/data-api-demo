@@ -1,11 +1,10 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
 import BaseComponent from '../base-component.jsx';
 import authService from './auth-rest-service';
-import StorageService from '../storage/storage-service';
 import propertiesEnum from '../storage/properties-enum';
 const authenticate = authService.authenticate;
 
-class Login extends BaseComponent {
+class Authenticate extends BaseComponent {
     constructor(props) {
         super(props);
         this.state = {
