@@ -3,7 +3,7 @@ import React from 'react';
 import Projects from '../../../../src/frontend/app/project/project-list';
 /* eslint-enable */
 import { mount } from 'enzyme';
-import { projects } from '../mockData';
+import { projects } from './mock-data';
 import propertiesEnum from '../../../../src/frontend/app/storage/properties-enum';
 
 describe('ProjectList', () => {

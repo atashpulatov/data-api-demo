@@ -19,7 +19,7 @@ async function getProjectContent(folderType, envUrl, authToken, projectId) {
         });
 }
 
-async function getFolderContent(envUrl, authToken, folderId, projectId) {
+async function getFolderContent(envUrl, authToken, projectId, folderId) {
     const fullPath = `${envUrl}/folders/${folderId}`;
     return await di.request.get(fullPath)
         .set('x-mstr-authtoken', authToken)

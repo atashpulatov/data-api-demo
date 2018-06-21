@@ -1,10 +1,6 @@
 import di from './project-di';
-import StorageService from '../storage/storage-service';
-import propertiesEnum from '../storage/properties-enum';
 
-async function getProjectList() {
-    const envUrl = StorageService.getProperty(propertiesEnum['envUrl']);
-    const authToken = StorageService.getProperty(propertiesEnum['authToken']);
+async function getProjectList(envUrl, authToken) {
     return await di.request.get(envUrl + '/projects')
             .set('x-mstr-authtoken', authToken)
             .withCredentials()

@@ -1,19 +1,19 @@
-import { mstrTutorial, mockReports } from '../mockData';
+// import { mstrTutorial, mockReports } from '../mockData';
 
-function getProjectContent(projectId) {
-    return mstrTutorial;
-}
+// function getProjectContent(projectId) {
+//     return mstrTutorial;
+// }
 
-function getFolderContent() {
-    return 'ProperContent';
-}
+// function getFolderContent() {
+//     return 'ProperContent';
+// }
 
-function getObjectContent() {
-    return mockReports[1];
-}
+// function getObjectContent() {
+//     return mockReports[1];
+// }
 
-export default {
-    getProjectContent,
-    getFolderContent,
-    getObjectContent,
-};
+// export default {
+//     getProjectContent,
+//     getFolderContent,
+//     getObjectContent,
+// };
