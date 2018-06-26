@@ -3,8 +3,8 @@ import mstrObjectRestService from '../mstr-object/mstr-object-rest-service';
 
 const sharedFolderIdType = 7;
 
-function NavigationService() { // TODO: rethink the name.
-    function getLoginRoute() {
+class NavigationService { // TODO: rethink the name.
+    getLoginRoute() {
         return {
             pathname: '/auth',
             state: {
@@ -12,21 +12,18 @@ function NavigationService() { // TODO: rethink the name.
         };
     };
 
-    async function getProjectsRoute(envUrl, authToken) {
+    async getProjectsRoute(envUrl, authToken) {
         let projects = await projectRestService
             .getProjectList(envUrl, authToken);
         return {
             pathname: '/projects',
             state: {
-                projects: projects,
+                projects,
             },
         };
     };
 
-    async function getRootObjectsRoute(envUrl, authToken, projectId) {
-        // const envUrl = StorageService.getProperty(propertiesEnum['envUrl']);
-        // const authToken = StorageService.getProperty(propertiesEnum['authToken']);
-        // const projectId = StorageService.getProperty(propertiesEnum['projectId']);
+    async getRootObjectsRoute(envUrl, authToken, projectId) {
         let mstrObjects = await mstrObjectRestService
             .getProjectContent(sharedFolderIdType, envUrl,
                 authToken, projectId);
@@ -38,7 +35,7 @@ function NavigationService() { // TODO: rethink the name.
         };
     }
 
-    async function getObjectsRoute(envUrl, authToken, projectId, folderId) {
+    async getObjectsRoute(envUrl, authToken, projectId, folderId) {
         let mstrObjects = await mstrObjectRestService
             .getFolderContent(envUrl, authToken, projectId, folderId);
         return {
@@ -48,13 +45,7 @@ function NavigationService() { // TODO: rethink the name.
             },
         };
     }
-
-    return {
-        getLoginRoute,
-        getProjectsRoute,
-        getRootObjectsRoute,
-        getObjectsRoute,
-    };
 }
 
-export default new NavigationService();
+const _instance = new NavigationService();
+export default _instance;
