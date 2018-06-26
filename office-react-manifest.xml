@@ -18,8 +18,8 @@
   <Description DefaultValue="New plugin to insert data from Microstrategy into Microsoft Office products."/>
 
   <!-- Icon for your add-in. Used on installation screens and the add-ins dialog. -->
-  <IconUrl DefaultValue="https://localhost:3000/assets/icon-32.png" />
-  <HighResolutionIconUrl DefaultValue="https://localhost:3000/assets/hi-res-icon.png"/>
+  <IconUrl DefaultValue="https://localhost:3000/assets/mstr_logo.png" />
+  <HighResolutionIconUrl DefaultValue="https://localhost:3000/assets/mstr_logo.png"/>
 
   <!--If you plan to submit this add-in to the Office Store, uncomment the SupportUrl element below-->
   <SupportUrl DefaultValue="https://localhost:3000/index.html" />
