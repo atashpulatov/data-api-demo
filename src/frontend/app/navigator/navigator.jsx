@@ -5,6 +5,7 @@ import StorageService from '../storage/storage-service';
 class Navigator extends Component {
     constructor(props) {
         super(props);
+        window.mstr = {history: this.props.history};
         this.pushHistory = this.pushHistory.bind(this);
     }
 
@@ -13,6 +14,7 @@ class Navigator extends Component {
     }
 
     async componentDidMount() {
+
         const sessionProperties = this.props.location.sessionObject;
         for (let prop in sessionProperties) {
             if (sessionProperties.hasOwnProperty(prop)) {
