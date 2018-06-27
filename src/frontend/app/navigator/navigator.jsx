@@ -35,6 +35,10 @@ class Navigator extends Component {
     }
 
     async componentDidMount() {
+        this.saveSessionData(this.props.location.sessionObject);
+    }
+
+    saveSessionData(sessionProperties) {
         for (let prop in sessionProperties) {
             if (sessionProperties.hasOwnProperty(prop)) {
                 StorageService.setProperty(prop, sessionProperties[prop]);
@@ -42,10 +46,10 @@ class Navigator extends Component {
         }
     }
 
+
     render() {
         return null;
     };
 }
 
 export default Navigator;
-
