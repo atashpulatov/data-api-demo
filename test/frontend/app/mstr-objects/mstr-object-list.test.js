@@ -161,11 +161,14 @@ describe('MstrObjectList', () => {
                 sessionObject: expectedSessionObject,
             });
             ++iterateId;
-            expect(false).toBeTruthy();
         });
     });
 
     // User sees reports may be clicked
+    it('should', ()=> {
+        expect(false).toBeTruthy();
+    }
+);
 
     // User can click a report
 

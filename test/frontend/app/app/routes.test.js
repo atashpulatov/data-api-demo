@@ -32,9 +32,13 @@ describe('Routes', () => {
     });
     it('should return proper route for each valid path', () => {
         PathEnum.forEach((path) => {
+            let entry = {pathname: path.pathName,
+                state: {
+                    origin: {},
+                    }};
+            entry.state[path.viewState] = [];
             let wrapper = mount(
-                <MemoryRouter initialEntries={[{pathname: path.pathName,
-                                                state: {origin: {}}}]}>
+                <MemoryRouter initialEntries={[entry]}>
                     <Routes />
                 </MemoryRouter>
             );
