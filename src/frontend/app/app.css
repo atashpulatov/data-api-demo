@@ -86,3 +86,20 @@
 .button-submit:hover{
   background-color: rgb(14, 83, 139);
 }
+
+.menu-bar-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0px;
+  background-color: #1983D9;
+}
+
+.menu-button{
+  width: 100px;
+  height: 30px;
+  padding: 0px;
+  flex: 0 0 50%;
+  border: none;
+  background-color: #1983D9;
+}

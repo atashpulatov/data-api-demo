@@ -14,6 +14,7 @@ import MstrObjects from './mstr-object/mstr-object-list.jsx';
 import Header from './header.jsx';
 import Footer from './footer.jsx';
 import Error from './error.jsx';
+import MenuBar from './menu-bar.jsx';
 import registerServiceWorker from './registerServiceWorker';
 
 export default {
@@ -26,5 +27,6 @@ export default {
     Header,
     Footer,
     Error,
+    MenuBar,
     registerServiceWorker,
 };
