@@ -26,12 +26,18 @@ class Projects extends BaseComponent {
 
     render() {
         return (
-            <ul className='projectRowContainer'>
-                {this.state.projects.map((project) => (
-                    <ProjectRow key={project.id} projectRow={project}
-                        onClick={this.navigateToProject} />
-                ))}
-            </ul>
+            <div>
+                <h2 className='projects-header'>
+                All Projects
+                </h2>
+                <hr className='projects-header-line' />
+                <ul className='projectRowContainer no-padding'>
+                    {this.state.projects.map((project) => (
+                        <ProjectRow key={project.id} projectRow={project}
+                            onClick={this.navigateToProject} />
+                    ))}
+                </ul>
+            </div>
         );
     }
 }

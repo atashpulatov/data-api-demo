@@ -4,6 +4,7 @@ import { DirectoryRow, ReportRow } from './mstr-object-row.jsx'; // eslint-disab
 import propertiesEnum from '../storage/properties-enum';
 import mstrObjectRestService from './mstr-object-rest-service';
 import officeDi from '../office/office-di';
+import './mstr-object.css';
 
 const objectsTypesMap = {
     directory: 8,
@@ -42,8 +43,12 @@ class MstrObjects extends BaseComponent {
 
     render() {
         return (
-            <div>
-                <ul>
+            <div className='objects-container'>
+                <p className='mstr-objects-header'>
+                    All Files
+                </p>
+                <hr className='projects-header-line' />
+                <ul className='no-padding object-list'>
                     {this.state.mstrObjects
                         .filter((obj) => objectsTypesMap.directory === obj.type)
                         .map((directory) => (
@@ -52,13 +57,13 @@ class MstrObjects extends BaseComponent {
                                 onClick={this.navigateToDir} />
                         ))}
                 </ul>
-                <ul>
+                <ul className='no-padding object-list'>
                     {this.state.mstrObjects
                         .filter((obj) => objectsTypesMap.report === obj.type)
                         .map((report) => (
                             <ReportRow key={report.id}
                                 report={report}
-                                onClick={this.printObject}/>
+                                onClick={this.printObject} />
                         ))}
                 </ul>
             </div>

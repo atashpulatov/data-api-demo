@@ -1,3 +1,45 @@
-.cursorIsPointer{
-    cursor: pointer;
+
+.mstr-objects-header{
+    font-size: 16px;
+    font-weight: 400;
+    padding: 0px 0px 0px 30px;
+    color: #75808B;
+    margin-top: 20px;
+    margin-bottom: 5px;
+}
+
+.objects-container{
+    display: flex;
+    flex-direction: column;
+}
+
+.object-list{
+    margin: 0px;
+    margin-bottom: 5px;
+}
+
+.object-image{
+    padding: 0px;
+    margin: 0px;
+}
+
+.no-padding {
+    padding: 0px;
+}
+
+.no-margin{
+    margin: 0px;
+}
+
+.object-label{
+    margin-top: 12px;
+    margin-left: 5px;
+    text-align: center;
+}
+
+.row{
+    display: flex;
+    font-size: 14px;
+    list-style-type: none;
+    padding: 2px 0px 2px 20px;
 }

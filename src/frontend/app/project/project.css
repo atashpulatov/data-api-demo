@@ -1,18 +1,35 @@
 .projectRowContainer {
-    padding: 20px;
-    /* background: #d9232f; */
     display: grid;
-}
-
-.projectRowRadioButton{
-    font-size: 20px;
-}
-
-.projectRowDescription{
-    font-size: 30px;
-    /* font- */
+    list-style-type: none;
+    margin: 0px;
 }
 
 .cursorIsPointer{
     cursor: pointer;
+}
+
+.cursorIsPointer:hover{
+    cursor: pointer;
+    background-color: #F1F1F1;
+}
+
+.project-row{
+    padding: 10px 0px 10px 40px;
+}
+
+.projects-header{
+    font-size: 24;
+    margin-left: 30px;
+    color: #75808B;
+}
+
+.projects-header-line{
+    margin-left: 20px;
+    margin-right: 20px;
+    color: #75808B;
+}
+
+.projects-mstr-object{
+    font-size: 24px;
+    font-weight: 400;
 }
