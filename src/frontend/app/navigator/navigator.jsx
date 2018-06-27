@@ -36,6 +36,9 @@ class Navigator extends Component {
 
     async componentDidMount() {
         this.saveSessionData(this.props.location.sessionObject);
+        let routeObject = await this.getNavigationRoute();
+        routeObject.state.origin = this.props.location;
+        this.pushHistory(routeObject);
     }
 
     saveSessionData(sessionProperties) {
@@ -45,7 +48,6 @@ class Navigator extends Component {
             }
         }
     }
-
 
     render() {
         return null;
