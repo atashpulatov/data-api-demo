@@ -6,7 +6,7 @@ const sharedFolderIdType = 7;
 class NavigationService { // TODO: rethink the name.
     getLoginRoute() {
         return {
-            pathname: '/auth',
+            pathname: '/authenticate',
             state: {
             },
         };

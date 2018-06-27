@@ -56,7 +56,7 @@ describe('navigator', () => {
     it('should navigate to authComponent', async () => {
         // given
         const expectedRoute = {
-            pathname: '/auth',
+            pathname: '/authenticate',
             state: {
             },
         };
