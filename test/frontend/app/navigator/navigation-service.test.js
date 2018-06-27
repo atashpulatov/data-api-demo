@@ -1,19 +1,49 @@
+/* eslint-disable */
 import NavigationService from '../../../../src/frontend/app/navigator/navigation-service';
 import projectRestService from '../../../../src/frontend/app/project/project-rest-service';
-import projectRestServiceMock from '../project/project-rest-service-mock';
+import { projects } from '../project/mock-data';
 import mstrObjectRestService from '../../../../src/frontend/app/mstr-object/mstr-object-rest-service';
-import mstrObjectRestServiceMock from '../mstr-objects/mstr-object-rest-service-mock';
+import { mstrTutorial } from '../mockData';
 import propertiesEnum from '../../../../src/frontend/app/storage/properties-enum';
+/* eslint-enable */
 
 describe('NavigatorService', () => {
+    // given
+    const envUrl = 'someEnvUrl';
+    const authToken = 'someAuthToken';
+    const projectId = 'someProjectId';
+
+    let _originalGetProjectList;
+    let _originalGetProjectContent;
+    let _originalGetFolderContent;
+
+    beforeAll(() => {
+        _originalGetProjectList = projectRestService.getProjectList;
+        projectRestService.getProjectList = jest.fn();
+        projectRestService.getProjectList
+            .mockResolvedValue(projects.projectsArray);
+
+        _originalGetProjectContent = mstrObjectRestService.getProjectContent;
+        mstrObjectRestService.getProjectContent = jest.fn();
+        mstrObjectRestService.getProjectContent
+            .mockResolvedValue(mstrTutorial);
+
+        _originalGetFolderContent = mstrObjectRestService.getFolderContent;
+        mstrObjectRestService.getFolderContent = jest.fn();
+        mstrObjectRestService.getFolderContent.mockReturnValue('ProperContent');
+    });
+
+    afterAll(() => {
+        projectRestService.getProjectList = _originalGetProjectList;
+        mstrObjectRestService.getProjectContent = _originalGetProjectContent;
+        mstrObjectRestService.getFolderContent = _originalGetFolderContent;
+    });
+
     it('should give a path object to authentication page',
         async () => {
-            // given
-            const authToken = sessionStorage.getItem(propertiesEnum.authToken);
             // when
-            const pathObject = await NavigationService.getNavigationRoute();
+            const pathObject = NavigationService.getLoginRoute();
             // then
-            expect(authToken).toBeNull();
             expect(pathObject).toBeDefined();
             expect(pathObject.pathname).toBeDefined();
             expect(pathObject.pathname).toContain('/auth');
@@ -22,13 +52,12 @@ describe('NavigatorService', () => {
 
     it('should give a path object to project page',
         async () => {
-            // given
-            const authToken = 'someAuthToken';
-            sessionStorage.setItem(propertiesEnum.authToken, authToken);
-            projectRestService.getProjectList = projectRestServiceMock.getProjectList;
             // when
-            const pathObject = await NavigationService.getNavigationRoute();
+            const pathObject = await NavigationService
+                .getProjectsRoute(envUrl, authToken);
             // then
+            expect(projectRestService.getProjectList)
+                .toBeCalledWith(envUrl, authToken);
             expect(authToken).toBeDefined();
             expect(pathObject).toBeDefined();
             expect(pathObject.pathname).toBeDefined();
@@ -45,15 +74,13 @@ describe('NavigatorService', () => {
     it('should give a path object to project contents',
         async () => {
             // given
-            const authToken = 'someAuthToken';
-            sessionStorage.setItem(propertiesEnum.authToken, authToken);
-            const projectId = 'someProjectId';
-            sessionStorage.setItem(propertiesEnum.projectId, projectId);
-            mstrObjectRestService.getProjectContent
-                = mstrObjectRestServiceMock.getProjectContent;
+            const folderType = 7;
             // when
-            const pathObject = await NavigationService.getNavigationRoute();
+            const pathObject = await NavigationService
+                .getRootObjectsRoute(envUrl, authToken, projectId);
             // then
+            expect(mstrObjectRestService.getProjectContent)
+                .toBeCalledWith(folderType, envUrl, authToken, projectId);
             expect(authToken).toBeDefined();
             expect(pathObject).toBeDefined();
             expect(pathObject.pathname).toBeDefined();
@@ -70,19 +97,16 @@ describe('NavigatorService', () => {
             expect(pathObjectSet[0]).toHaveProperty('dateModified');
             expect(pathObjectSet[0]).toHaveProperty('version');
         });
-        it('should give a path object to folder contents',
+
+    it('should give a path object to folder contents',
         async () => {
             // given
-            const authToken = 'someAuthToken';
-            sessionStorage.setItem(propertiesEnum.authToken, authToken);
             const folderId = 'someFolderId';
-            sessionStorage.setItem(propertiesEnum.folderId, folderId);
-            mstrObjectRestService.getFolderContent
-                = mstrObjectRestServiceMock.getFolderContent;
             // when
-            const pathObject = await NavigationService.getNavigationRoute();
+            const pathObject = await NavigationService.getObjectsRoute(envUrl, authToken, projectId, folderId);
             // then
-            expect(authToken).toBeDefined();
+            expect(mstrObjectRestService.getFolderContent)
+                .toBeCalledWith(envUrl, authToken, projectId, folderId);
             expect(pathObject).toBeDefined();
             expect(pathObject.pathname).toBeDefined();
             expect(pathObject.pathname).toContain('/objects');

@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable */
 import React from 'react';
 import directoryImg from './images/baseline_folder_black_18dp.png';
 import fileImg from './images/baseline_attachment_black_18dp.png';
