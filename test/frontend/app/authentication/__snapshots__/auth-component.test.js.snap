@@ -2,66 +2,73 @@
 
 exports[`AuthComponent should render my component 1`] = `
 Array [
-  <form
-    onSubmit={[Function]}
-  >
-    <div
-      className="grid-container padding"
+  <div>
+    <h2
+      className="authenticate-message"
     >
-      <label
-        className="grid-item"
+      Connect to MicroStrategy Environment
+    </h2>
+    <form
+      onSubmit={[Function]}
+    >
+      <div
+        className="grid-container padding"
       >
-        Username:
-      </label>
-      <input
-        className="grid-item"
-        name="username"
-        onChange={[Function]}
-        type="text"
-        value=""
-      />
-      <label
-        className="grid-item"
-      >
-        Password:
-      </label>
-      <input
-        className="grid-item"
-        name="password"
-        onChange={[Function]}
-        type="password"
-        value=""
-      />
-      <label
-        className="grid-item"
-      >
-        Environment URL:
-      </label>
-      <input
-        className="grid-item"
-        name="envUrl"
-        onChange={[Function]}
-        type="text"
-        value=""
-      />
-      <label
-        className="grid-item"
-      >
-        Auth Mode:
-      </label>
-      <input
-        className="grid-item"
-        name="envUrl"
-        onChange={[Function]}
-        type="number"
-        value=""
-      />
-      <input
-        className="grid-item-2 button-submit"
-        type="submit"
-        value="Submit"
-      />
-    </div>
-  </form>,
+        <label
+          className="grid-item grid-item-label"
+        >
+          Username
+        </label>
+        <input
+          className="grid-item grid-item-input"
+          name="username"
+          onChange={[Function]}
+          type="text"
+          value=""
+        />
+        <label
+          className="grid-item grid-item-label"
+        >
+          Password
+        </label>
+        <input
+          className="grid-item grid-item-input"
+          name="password"
+          onChange={[Function]}
+          type="password"
+          value=""
+        />
+        <label
+          className="grid-item grid-item-label"
+        >
+          Environment URL
+        </label>
+        <input
+          className="grid-item grid-item-input"
+          name="envUrl"
+          onChange={[Function]}
+          type="text"
+          value=""
+        />
+        <label
+          className="grid-item grid-item-label"
+        >
+          Auth Mode
+        </label>
+        <input
+          className="grid-item grid-item-input"
+          name="envUrl"
+          onChange={[Function]}
+          type="number"
+          value=""
+        />
+        <input
+          className="grid-item-2 button-submit"
+          type="submit"
+          value="Submit"
+        />
+      </div>
+    </form>
+  </div>,
 ]
 `;
