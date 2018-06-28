@@ -14,7 +14,7 @@ class App extends Component {
       <di.Router>
         <div id="content">
           <di.Header />
-          <di.MenuBar />
+          {/* <di.MenuBar /> */}
           <Routes />
           <di.Footer />
         </div>

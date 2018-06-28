@@ -11,7 +11,7 @@ class Authenticate extends BaseComponent {
             username: '',
             password: '',
             envUrl: '',
-            authMode: '',
+            authMode: undefined,
             origin: this.state.origin,
         };
 
@@ -81,12 +81,12 @@ class Authenticate extends BaseComponent {
                             value={this.state.envUrl}
                             onChange={this.handleEnvURLChange} name='envUrl' />
 
-                        <label className='grid-item grid-item-label'>
-                            Auth Mode
+                    {/* <label className='grid-item grid-item-label'>
+                        Auth Mode
                     </label>
                         <input className='grid-item grid-item-input' type='number'
                             value={this.state.authMode}
-                            onChange={this.handleAuthModeChange} name='envUrl' />
+                            onChange={this.handleAuthModeChange} name='envUrl' /> */}
 
                         <input className='grid-item-2 button-submit'
                             type='submit' value='Submit' />
