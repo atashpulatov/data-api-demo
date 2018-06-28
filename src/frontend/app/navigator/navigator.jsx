@@ -1,7 +1,7 @@
 import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
 import navigationService from './navigation-service';
 import StorageService from '../storage/storage-service';
-import propertiesEnum from '../storage/properties-enum';
+import sessionPropertiesEnum from '../storage/session-properties';
 
 class Navigator extends Component {
     constructor(props) {
@@ -16,16 +16,16 @@ class Navigator extends Component {
     }
 
     async getNavigationRoute() {
-        const envUrl = sessionStorage.getItem(propertiesEnum.envUrl);
-        const authToken = sessionStorage.getItem(propertiesEnum.authToken);
+        const envUrl = sessionStorage.getItem(sessionPropertiesEnum.envUrl);
+        const authToken = sessionStorage.getItem(sessionPropertiesEnum.authToken);
         if ((envUrl === null) || (authToken === null)) {
             return navigationService.getLoginRoute();
         }
-        const projectId = sessionStorage.getItem(propertiesEnum.projectId);
+        const projectId = sessionStorage.getItem(sessionPropertiesEnum.projectId);
         if (projectId === null) {
             return await navigationService.getProjectsRoute(envUrl, authToken);
         }
-        const folderId = sessionStorage.getItem(propertiesEnum.folderId);
+        const folderId = sessionStorage.getItem(sessionPropertiesEnum.folderId);
         if (folderId === null) {
             return await navigationService.getRootObjectsRoute(envUrl,
                 authToken, projectId);

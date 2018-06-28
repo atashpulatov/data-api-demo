@@ -1,14 +1,15 @@
 import UnknownPropertyError from './unknown-property-error';
-import propertiesEnum from './properties-enum';
+import sessionPropertiesEnum from './session-properties';
 
 class StorageService {
     constructor() {
     }
+
     setProperty(propertyToBeSet, propertyValue) {
         let foundProperty = false;
-        for (let propertyKey in propertiesEnum) {
-            if (propertiesEnum.hasOwnProperty(propertyKey)) {
-                if (propertyToBeSet === propertiesEnum[propertyKey]) {
+        for (let propertyKey in sessionPropertiesEnum) {
+            if (sessionPropertiesEnum.hasOwnProperty(propertyKey)) {
+                if (propertyToBeSet === sessionPropertiesEnum[propertyKey]) {
                     foundProperty = true;
                     break;
                 }
@@ -20,6 +21,7 @@ class StorageService {
             sessionStorage.setItem(propertyToBeSet, propertyValue);
         }
     };
+
     getProperty(propertyName) {
         return sessionStorage.getItem(propertyName);
     };

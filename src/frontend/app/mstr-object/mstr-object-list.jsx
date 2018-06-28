@@ -1,7 +1,7 @@
 import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
 import BaseComponent from '../base-component.jsx';
 import { DirectoryRow, ReportRow } from './mstr-object-row.jsx'; // eslint-disable-line no-unused-vars
-import propertiesEnum from '../storage/properties-enum';
+import sessionPropertiesEnum from '../storage/session-properties';
 import mstrObjectRestService from './mstr-object-rest-service';
 import officeDi from '../office/office-di';
 
@@ -24,7 +24,7 @@ class MstrObjects extends BaseComponent {
 
     navigateToDir(folderId) {
         const sessionObject = {};
-        sessionObject[propertiesEnum.folderId] = folderId;
+        sessionObject[sessionPropertiesEnum.folderId] = folderId;
         this.props.history.push({
             pathname: '/',
             origin: this.props.location,

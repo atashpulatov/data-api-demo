@@ -4,7 +4,7 @@ import projectRestService from '../../../../src/frontend/app/project/project-res
 import { projects } from '../project/mock-data';
 import mstrObjectRestService from '../../../../src/frontend/app/mstr-object/mstr-object-rest-service';
 import { mstrTutorial } from '../mockData';
-import propertiesEnum from '../../../../src/frontend/app/storage/properties-enum';
+import sessionPropertiesEnum from '../../../../src/frontend/app/storage/session-properties';
 /* eslint-enable */
 
 describe('NavigatorService', () => {

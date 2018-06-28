@@ -1,7 +1,7 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
 import BaseComponent from '../base-component.jsx';
 import authService from './auth-rest-service';
-import propertiesEnum from '../storage/properties-enum';
+import sessionPropertiesEnum from '../storage/session-properties';
 const authenticate = authService.authenticate;
 
 class Authenticate extends BaseComponent {
@@ -44,8 +44,8 @@ class Authenticate extends BaseComponent {
             this.state.envUrl, this.state.authMode);
         if (authToken !== undefined) {
             const sessionObject = {};
-            sessionObject[propertiesEnum.envUrl] = this.state.envUrl;
-            sessionObject[propertiesEnum.authToken] = authToken;
+            sessionObject[sessionPropertiesEnum.envUrl] = this.state.envUrl;
+            sessionObject[sessionPropertiesEnum.authToken] = authToken;
             this.state.origin.sessionObject = sessionObject;
         }
         this.props.history.push(this.state.origin);

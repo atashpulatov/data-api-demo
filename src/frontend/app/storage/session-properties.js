@@ -4,7 +4,5 @@ export default {
      */
     authToken: 'x-mstr-authtoken',
     projectId: 'x-mstr-projectid',
-    folderId: 'mstr-directoryid',
     envUrl: 'mstr-environment-url',
-    sessionHistory: 'mstr-session-history',
 };

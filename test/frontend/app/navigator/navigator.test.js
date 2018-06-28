@@ -2,7 +2,8 @@
 import React from 'react';
 import Navigator from '../../../../src/frontend/app/navigator/navigator';
 import { shallow, mount } from 'enzyme';
-import propertiesEnum from '../../../../src/frontend/app/storage/properties-enum';
+import sessionPropertiesEnum from '../../../../src/frontend/app/storage/session-properties';
+import historyPropertiesEnum from '../../../../src/frontend/app/history/history-properties';
 import projectRestService from '../../../../src/frontend/app/project/project-rest-service';
 import mstrObjectRestService from '../../../../src/frontend/app/mstr-object/mstr-object-rest-service';
 /* eslint-enable */
@@ -32,25 +33,24 @@ describe('navigator', () => {
         const expectedValue = 'testt';
         const sessionObject = {};
         const location = { sessionObject };
-        sessionObject[propertiesEnum.authToken] = expectedValue;
+        sessionObject[sessionPropertiesEnum.authToken] = expectedValue;
         // when
         mount(<Navigator location={location} />);
         // then
-        expect(sessionStorage.getItem(propertiesEnum.authToken))
+        expect(sessionStorage.getItem(sessionPropertiesEnum.authToken))
             .toEqual(expectedValue);
     });
 
-    it('should save folderId', () => {
+    it('should save folderId to array', () => {
         // given
-        const expectedValue = 'testt';
-        const sessionObject = {};
-        const location = { sessionObject };
-        sessionObject[propertiesEnum.folderId] = expectedValue;
+        const givenValue = 'testt';
+        const historyObject = {};
+        const location = { historyObject };
+        historyObject[historyPropertiesEnum.folderId] = givenValue;
         // when
         mount(<Navigator location={location} />);
         // then
-        expect(sessionStorage.getItem(propertiesEnum.folderId))
-            .toEqual(expectedValue);
+        expect(historyManager.getCurrentFolder()).toEqual(givenValue);
     });
 
     it('should navigate to authComponent', async () => {
@@ -82,8 +82,8 @@ describe('navigator', () => {
         mockGet.mockResolvedValue(mockProjects);
         const originalGetMethod = projectRestService.getProjectList;
 
-        sessionStorage.setItem(propertiesEnum.envUrl, sampleEnvUrl);
-        sessionStorage.setItem(propertiesEnum.authToken, sampleAuthToken);
+        sessionStorage.setItem(sessionPropertiesEnum.envUrl, sampleEnvUrl);
+        sessionStorage.setItem(sessionPropertiesEnum.authToken, sampleAuthToken);
         try {
             projectRestService.getProjectList = mockGet;
             // when
@@ -112,9 +112,9 @@ describe('navigator', () => {
         mockGet.mockResolvedValue(mockObjects);
         const originalGetMethod = mstrObjectRestService.getProjectContent;
 
-        sessionStorage.setItem(propertiesEnum.envUrl, sampleEnvUrl);
-        sessionStorage.setItem(propertiesEnum.authToken, sampleAuthToken);
-        sessionStorage.setItem(propertiesEnum.projectId, sampleProjectId);
+        sessionStorage.setItem(sessionPropertiesEnum.envUrl, sampleEnvUrl);
+        sessionStorage.setItem(sessionPropertiesEnum.authToken, sampleAuthToken);
+        sessionStorage.setItem(sessionPropertiesEnum.projectId, sampleProjectId);
         try {
             mstrObjectRestService.getProjectContent = mockGet;
             // when
@@ -143,10 +143,10 @@ describe('navigator', () => {
         mockGet.mockResolvedValue(mockObjects);
         const originalGetMethod = mstrObjectRestService.getFolderContent;
 
-        sessionStorage.setItem(propertiesEnum.envUrl, sampleEnvUrl);
-        sessionStorage.setItem(propertiesEnum.authToken, sampleAuthToken);
-        sessionStorage.setItem(propertiesEnum.projectId, sampleProjectId);
-        sessionStorage.setItem(propertiesEnum.folderId, sampleFolderId);
+        sessionStorage.setItem(sessionPropertiesEnum.envUrl, sampleEnvUrl);
+        sessionStorage.setItem(sessionPropertiesEnum.authToken, sampleAuthToken);
+        sessionStorage.setItem(sessionPropertiesEnum.projectId, sampleProjectId);
+        sessionStorage.setItem(sessionPropertiesEnum.folderId, sampleFolderId);
         try {
             mstrObjectRestService.getFolderContent = mockGet;
             // when
