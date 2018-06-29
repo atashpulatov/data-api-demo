@@ -50,18 +50,6 @@ Array [
           type="text"
           value=""
         />
-        <label
-          className="grid-item grid-item-label"
-        >
-          Auth Mode
-        </label>
-        <input
-          className="grid-item grid-item-input"
-          name="envUrl"
-          onChange={[Function]}
-          type="number"
-          value=""
-        />
         <input
           className="grid-item-2 button-submit"
           type="submit"
