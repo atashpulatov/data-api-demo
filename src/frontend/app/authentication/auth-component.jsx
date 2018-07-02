@@ -67,21 +67,21 @@ class Authenticate extends BaseComponent {
                             value={this.state.username}
                             onChange={this.handleUsernameChange} name='username' />
 
-                        <label className='grid-item grid-item-label'>
-                            Password
+                    <label className='grid-item grid-item-label'>
+                        Password
                     </label>
                         <input className='grid-item grid-item-input' type='password'
                             value={this.state.password}
                             onChange={this.handlePasswordChange} name='password' />
 
-                        <label className='grid-item grid-item-label'>
-                            Environment URL
+                    <label className='grid-item grid-item-label'>
+                        Environment URL
                     </label>
                         <input className='grid-item grid-item-input' type='text'
                             value={this.state.envUrl}
                             onChange={this.handleEnvURLChange} name='envUrl' />
 
-                    {/* <label className='grid-item grid-item-label'>
+                        {/* <label className='grid-item grid-item-label'>
                         Auth Mode
                     </label>
                         <input className='grid-item grid-item-input' type='number'
