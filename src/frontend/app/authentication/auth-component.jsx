@@ -11,7 +11,7 @@ class Authenticate extends BaseComponent {
             username: '',
             password: '',
             envUrl: '',
-            authMode: '',
+            authMode: undefined,
             origin: this.state.origin,
         };
 
@@ -54,40 +54,45 @@ class Authenticate extends BaseComponent {
 
     render() {
         return (
-            <form onSubmit={this.onLoginUser}>
-                <div className='grid-container padding'>
-                    <label className='grid-item'>
-                        Username:
+            <div>
+                <h2 className='authenticate-message'>
+                    Connect to MicroStrategy Environment
+                </h2>
+                <form onSubmit={this.onLoginUser}>
+                    <div className='grid-container padding'>
+                        <label className='grid-item grid-item-label'>
+                            Username
                     </label>
-                    <input className='grid-item' type='text'
-                        value={this.state.username}
-                        onChange={this.handleUsernameChange} name='username' />
+                        <input className='grid-item grid-item-input' type='text'
+                            value={this.state.username}
+                            onChange={this.handleUsernameChange} name='username' />
 
-                    <label className='grid-item'>
-                        Password:
+                    <label className='grid-item grid-item-label'>
+                        Password
                     </label>
-                    <input className='grid-item' type='password'
-                        value={this.state.password}
-                        onChange={this.handlePasswordChange} name='password' />
+                        <input className='grid-item grid-item-input' type='password'
+                            value={this.state.password}
+                            onChange={this.handlePasswordChange} name='password' />
 
-                    <label className='grid-item'>
-                        Environment URL:
+                    <label className='grid-item grid-item-label'>
+                        Environment URL
                     </label>
-                    <input className='grid-item' type='text'
-                        value={this.state.envUrl}
-                        onChange={this.handleEnvURLChange} name='envUrl' />
+                        <input className='grid-item grid-item-input' type='text'
+                            value={this.state.envUrl}
+                            onChange={this.handleEnvURLChange} name='envUrl' />
 
-                    <label className='grid-item'>
-                        Auth Mode:
+                        {/* <label className='grid-item grid-item-label'>
+                        Auth Mode
                     </label>
-                    <input className='grid-item' type='number'
-                        value={this.state.authMode}
-                        onChange={this.handleAuthModeChange} name='envUrl' />
+                        <input className='grid-item grid-item-input' type='number'
+                            value={this.state.authMode}
+                            onChange={this.handleAuthModeChange} name='envUrl' /> */}
 
-                    <input className='grid-item-2 button-submit'
-                        type='submit' value='Submit' />
-                </div>
-            </form>
+                        <input className='grid-item-2 button-submit'
+                            type='submit' value='Submit' />
+                    </div>
+                </form>
+            </div>
         );
     }
 }

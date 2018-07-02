@@ -12,7 +12,7 @@ describe('App', () => {
         // then
         const nodeComponentWrapper = componentWrapper.find('Header');
         expect(nodeComponentWrapper).toHaveLength(1);
-        expect(nodeComponentWrapper.find('h1').text()).toBeTruthy();
+        expect(nodeComponentWrapper.find('p').text()).toBeTruthy();
     });
     it('should have routes defined', () => {
         // given

@@ -45,8 +45,7 @@ describe('ProjectList', () => {
             expect(projectRow).toBeDefined();
 
             // should have name and alias
-            expect(row.find('h1').text()).toContain('Name:');
-            expect(row.find('h2').text()).toContain('Alias:');
+            expect(row.find('label').text()).toBeTruthy();
         });
     });
 

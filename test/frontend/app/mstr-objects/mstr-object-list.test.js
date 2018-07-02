@@ -48,7 +48,7 @@ describe('MstrObjectList', () => {
             expect(directory).toBeDefined();
 
             // should have name and image
-            expect(row.find('h1').text()).toBeTruthy();
+            expect(row.find('span').text()).toBeTruthy();
             expect(row.find('img').html()).toBeTruthy();
         });
     });
@@ -67,7 +67,7 @@ describe('MstrObjectList', () => {
             expect(report).toBeDefined();
 
             // should have name and image
-            expect(row.find('h1').text()).toBeTruthy();
+            expect(row.find('span').text()).toBeTruthy();
             expect(row.find('img').html()).toBeTruthy();
         });
     });
