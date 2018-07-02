@@ -3,7 +3,7 @@ import React from 'react';
 import Navigator from '../../../../src/frontend/app/navigator/navigator';
 import { shallow, mount } from 'enzyme';
 import sessionPropertiesEnum from '../../../../src/frontend/app/storage/session-properties';
-import historyPropertiesEnum from '../../../../src/frontend/app/history/history-properties';
+import { historyProperties } from '../../../../src/frontend/app/history/history-properties';
 import projectRestService from '../../../../src/frontend/app/project/project-rest-service';
 import mstrObjectRestService from '../../../../src/frontend/app/mstr-object/mstr-object-rest-service';
 /* eslint-enable */
@@ -22,6 +22,14 @@ describe('navigator', () => {
 
     beforeEach(() => {
         Navigator.prototype.pushHistory = jest.fn();
+        location.sessionObject = {};
+        location.historyObject = {};
+        sessionStorage.setItem(historyProperties.directoryArray, undefined);
+    });
+
+    afterEach(() => {
+        location.sessionObject = undefined;
+        location.historyObject = undefined;
     });
 
     afterAll(() => {
@@ -31,9 +39,7 @@ describe('navigator', () => {
     it('should save authToken', () => {
         // given
         const expectedValue = 'testt';
-        const sessionObject = {};
-        const location = { sessionObject };
-        sessionObject[sessionPropertiesEnum.authToken] = expectedValue;
+        location.sessionObject[sessionPropertiesEnum.authToken] = expectedValue;
         // when
         mount(<Navigator location={location} />);
         // then
@@ -41,16 +47,50 @@ describe('navigator', () => {
             .toEqual(expectedValue);
     });
 
-    it('should save folderId to array', () => {
+    it('should save folderId when first folder chosen', () => {
         // given
         const givenValue = 'testt';
-        const historyObject = {};
-        const location = { historyObject };
-        historyObject[historyPropertiesEnum.folderId] = givenValue;
+        location.historyObject[historyProperties.command] =
+            historyProperties.goInside;
+        location.historyObject[historyProperties.directoryId] = givenValue;
         // when
         mount(<Navigator location={location} />);
         // then
-        expect(historyManager.getCurrentFolder()).toEqual(givenValue);
+        const currDir = getCurrentDirectory();
+        expect(currDir).toEqual(givenValue);
+    });
+
+    it('should save folderId when another folder chosen', () => {
+        // given
+        const givenValue = 'testt';
+        location.historyObject[historyProperties.command] =
+            historyProperties.goInside;
+        location.historyObject[historyProperties.directoryId] = 'whatever';
+        const oldId = 'oldId';
+        const recentId = 'newId';
+        const givenJson = JSON.stringify([oldId, recentId]);
+        sessionStorage.setItem(historyProperties.directoryArray, givenJson);
+        location.historyObject[historyProperties.directoryId] = givenValue;
+        // when
+        mount(<Navigator location={location} />);
+        // then
+        const currId = getCurrentDirectory();
+        expect(currId).toEqual(givenValue);
+    });
+
+    it('should remove most recent folderId when go up chosen', () => {
+        // given
+        const oldId = 'oldId';
+        const recentId = 'newId';
+        const givenJson = JSON.stringify([oldId, recentId]);
+        sessionStorage.setItem(historyProperties.directoryArray, givenJson);
+        // when
+        location.historyObject[historyProperties.command] =
+            historyProperties.goUp;
+        mount(<Navigator location={location} />);
+        // then
+        const currId = getCurrentDirectory();
+        expect(currId).toEqual(oldId);
     });
 
     it('should navigate to authComponent', async () => {
@@ -83,7 +123,8 @@ describe('navigator', () => {
         const originalGetMethod = projectRestService.getProjectList;
 
         sessionStorage.setItem(sessionPropertiesEnum.envUrl, sampleEnvUrl);
-        sessionStorage.setItem(sessionPropertiesEnum.authToken, sampleAuthToken);
+        sessionStorage.setItem(sessionPropertiesEnum.authToken,
+            sampleAuthToken);
         try {
             projectRestService.getProjectList = mockGet;
             // when
@@ -113,8 +154,10 @@ describe('navigator', () => {
         const originalGetMethod = mstrObjectRestService.getProjectContent;
 
         sessionStorage.setItem(sessionPropertiesEnum.envUrl, sampleEnvUrl);
-        sessionStorage.setItem(sessionPropertiesEnum.authToken, sampleAuthToken);
-        sessionStorage.setItem(sessionPropertiesEnum.projectId, sampleProjectId);
+        sessionStorage.setItem(sessionPropertiesEnum.authToken,
+            sampleAuthToken);
+        sessionStorage.setItem(sessionPropertiesEnum.projectId,
+            sampleProjectId);
         try {
             mstrObjectRestService.getProjectContent = mockGet;
             // when
@@ -144,9 +187,12 @@ describe('navigator', () => {
         const originalGetMethod = mstrObjectRestService.getFolderContent;
 
         sessionStorage.setItem(sessionPropertiesEnum.envUrl, sampleEnvUrl);
-        sessionStorage.setItem(sessionPropertiesEnum.authToken, sampleAuthToken);
-        sessionStorage.setItem(sessionPropertiesEnum.projectId, sampleProjectId);
-        sessionStorage.setItem(sessionPropertiesEnum.folderId, sampleFolderId);
+        sessionStorage.setItem(sessionPropertiesEnum.authToken,
+            sampleAuthToken);
+        sessionStorage.setItem(sessionPropertiesEnum.projectId,
+            sampleProjectId);
+        sessionStorage.setItem(sessionPropertiesEnum.folderId,
+            sampleFolderId);
         try {
             mstrObjectRestService.getFolderContent = mockGet;
             // when
@@ -162,3 +208,11 @@ describe('navigator', () => {
         }
     });
 });
+
+function getCurrentDirectory() {
+    const dirJson = sessionStorage
+        .getItem(historyProperties.directoryArray);
+    const dirArray = JSON.parse(dirJson);
+    return dirArray[dirArray.length - 1];
+}
+
