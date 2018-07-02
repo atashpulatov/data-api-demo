@@ -2,6 +2,7 @@ import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
 import navigationService from './navigation-service';
 import StorageService from '../storage/storage-service';
 import sessionPropertiesEnum from '../storage/session-properties';
+import { historyManager } from '../history/history-manager';
 
 class Navigator extends Component {
     constructor(props) {
@@ -36,6 +37,7 @@ class Navigator extends Component {
 
     async componentDidMount() {
         this.saveSessionData(this.props.location.sessionObject);
+        historyManager.handleHistoryData(this.props.location.historyObject);
         let routeObject = await this.getNavigationRoute();
         routeObject.state.origin = this.props.location;
         this.pushHistory(routeObject);
