@@ -1,13 +1,26 @@
 /* eslint-disable */
 import authRestService from '../../../../src/frontend/app/authentication/auth-rest-service';
 import mstrObjectRestService from '../../../../src/frontend/app/mstr-object/mstr-object-rest-service';
+import superagent from 'superagent';
+import authDi from '../../../../src/frontend/app/authentication/auth-di';
+import objectDi from '../../../../src/frontend/app/mstr-object/mstr-object-di';
+
 import { mstrTutorial } from '../mockData';
 /* eslint-enable */
 
+const folderType = 7;
+const loginType = 1;
+
 describe('MstrObjectRestService', () => {
-    beforeEach(() => {
-        sessionStorage.removeItem('x-mstr-authtoken');
-        sessionStorage.removeItem('x-mstr-projectid');
+    beforeAll(() => {
+        const mockAgent = superagent.agent();
+        authDi.request = mockAgent;
+        objectDi.request = mockAgent;
+    });
+
+    afterAll(() => {
+        authDi.request = superagent;
+        objectDi.request = superagent;
     });
 
     it('should return list of objects within project', async () => {
@@ -17,18 +30,22 @@ describe('MstrObjectRestService', () => {
             'mstr',
             '',
             'https://env-94174.customer.cloud.microstrategy.com/MicroStrategyLibrary/api',
-            '1');
-        sessionStorage.setItem('x-mstr-authtoken', authToken);
-        sessionStorage.setItem('x-mstr-projectid', projectId);
+            loginType);
         // when
-        const result = mstrObjectRestService.getProjectContent();
+        const result = await mstrObjectRestService.getProjectContent(
+            folderType,
+            'https://env-94174.customer.cloud.microstrategy.com/MicroStrategyLibrary/api',
+            authToken,
+            projectId,
+        );
         // then
         expect(result).toBeDefined();
-        // expect(result).toEqual(mstrTutorial);
+        expect(result.length).toBeGreaterThanOrEqual(2);
+        expect(result).toEqual(mstrTutorial);
     });
     it('should fail and return expection', () => {
         // given
-
+        
         // when
 
         // then

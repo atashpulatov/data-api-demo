@@ -4,15 +4,12 @@ import sessionPropertiesEnum from '../storage/session-properties';
 
 class MstrObjectRestService {
     async getProjectContent(folderType, envUrl, authToken, projectId) {
-        console.log('dont want to be here');
-
         const fullPath = `${envUrl}/folders/preDefined/${folderType}`;
         return await di.request.get(fullPath)
             .set('x-mstr-authtoken', authToken)
             .set('x-mstr-projectid', projectId)
             .withCredentials()
             .then((res) => {
-                console.log(res);
                 let objects = res.body;
                 return objects;
             })
