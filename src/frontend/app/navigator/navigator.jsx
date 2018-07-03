@@ -3,6 +3,7 @@ import navigationService from './navigation-service';
 import StorageService from '../storage/storage-service';
 import sessionPropertiesEnum from '../storage/session-properties';
 import { historyManager } from '../history/history-manager';
+import { historyProperties } from '../history/history-properties';
 
 class Navigator extends Component {
     constructor(props) {
@@ -26,13 +27,14 @@ class Navigator extends Component {
         if (projectId === null) {
             return await navigationService.getProjectsRoute(envUrl, authToken);
         }
-        const folderId = sessionStorage.getItem(sessionPropertiesEnum.folderId);
-        if (folderId === null) {
+        try {
+            const dirId = historyManager.getCurrentDirectory();
+            return await navigationService.getObjectsRoute(envUrl, authToken,
+                projectId, dirId);
+        } catch (error) {
             return await navigationService.getRootObjectsRoute(envUrl,
                 authToken, projectId);
         }
-        return await navigationService.getObjectsRoute(envUrl, authToken,
-            projectId, folderId);
     }
 
     async componentDidMount() {

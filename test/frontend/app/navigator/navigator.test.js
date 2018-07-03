@@ -13,7 +13,7 @@ describe('navigator', () => {
     const sampleEnvUrl = 'someEnvUrl';
     const sampleAuthToken = 'someEnvUrl';
     const sampleProjectId = 'someProjectId';
-    const sampleFolderId = 'someFolderId';
+    const sampleDirArray = ['oldDir', 'newDir'];
 
     const location = {};
     beforeAll(() => {
@@ -65,7 +65,6 @@ describe('navigator', () => {
         const givenValue = 'testt';
         location.historyObject[historyProperties.command] =
             historyProperties.goInside;
-        location.historyObject[historyProperties.directoryId] = 'whatever';
         const oldId = 'oldId';
         const recentId = 'newId';
         const givenJson = JSON.stringify([oldId, recentId]);
@@ -191,8 +190,8 @@ describe('navigator', () => {
             sampleAuthToken);
         sessionStorage.setItem(sessionPropertiesEnum.projectId,
             sampleProjectId);
-        sessionStorage.setItem(sessionPropertiesEnum.folderId,
-            sampleFolderId);
+        sessionStorage.setItem(historyProperties.directoryArray,
+            JSON.stringify(sampleDirArray));
         try {
             mstrObjectRestService.getFolderContent = mockGet;
             // when
