@@ -5,6 +5,7 @@ import sessionPropertiesEnum from '../storage/session-properties';
 import mstrObjectRestService from './mstr-object-rest-service';
 import officeDi from '../office/office-di';
 import './mstr-object.css';
+import { historyProperties } from '../history/history-properties';
 
 const objectsTypesMap = {
     directory: 8,
@@ -23,13 +24,15 @@ class MstrObjects extends BaseComponent {
         this.printObject = this.printObject.bind(this);
     }
 
-    navigateToDir(folderId) {
-        const sessionObject = {};
-        sessionObject[sessionPropertiesEnum.folderId] = folderId;
+    navigateToDir(dirId) {
+        const historyObject = {};
+        historyObject[historyProperties.command] =
+            historyProperties.goInside;
+        historyObject[historyProperties.directoryId] = dirId;
         this.props.history.push({
             pathname: '/',
             origin: this.props.location,
-            sessionObject,
+            historyObject,
         });
     }
 

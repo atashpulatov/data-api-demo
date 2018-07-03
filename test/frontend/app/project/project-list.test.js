@@ -98,7 +98,8 @@ describe('ProjectList', () => {
         // given
         const expectedProjectId = projects.projectsArray[0].id;
         const expectedSessionObject = {};
-        expectedSessionObject[sessionPropertiesEnum.projectId] = expectedProjectId;
+        expectedSessionObject[sessionPropertiesEnum.projectId] =
+            expectedProjectId;
         // when
         const componentWrapper = mount(<Projects location={location} />);
         const mockPush = jest.fn();

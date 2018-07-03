@@ -7,7 +7,7 @@ import { historyManager } from '../history/history-manager';
 class Navigator extends Component {
     constructor(props) {
         super(props);
-        window.mstr = {history: this.props.history};
+        window.mstr = { history: this.props.history };
         this.pushHistory = this.pushHistory.bind(this);
         this.getNavigationRoute = this.getNavigationRoute.bind(this);
     }
@@ -37,7 +37,9 @@ class Navigator extends Component {
 
     async componentDidMount() {
         this.saveSessionData(this.props.location.sessionObject);
-        historyManager.handleHistoryData(this.props.location.historyObject);
+        if (this.props.location.historyObject) {
+            historyManager.handleHistoryData(this.props.location.historyObject);
+        }
         let routeObject = await this.getNavigationRoute();
         routeObject.state.origin = this.props.location;
         this.pushHistory(routeObject);

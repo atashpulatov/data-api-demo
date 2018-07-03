@@ -1,9 +1,10 @@
-/* eslint-disable no-unused-vars max-len */
+/* eslint-disable */
 import React from 'react';
 import MstrObjects from '../../../../src/frontend/app/mstr-object/mstr-object-list';
 import { mount } from 'enzyme';
 import { mstrTutorial } from '../mockData';
 import sessionPropertiesEnum from '../../../../src/frontend/app/storage/session-properties';
+import { historyProperties } from '../../../../src/frontend/app/history/history-properties';
 /* eslint-enable */
 
 describe('MstrObjectList', () => {
@@ -114,7 +115,7 @@ describe('MstrObjectList', () => {
     // User can open a directory
     it('should pass directory when clicked', () => {
         // given
-        const expectedSessionObject = {};
+        const expectedHistoryObject = {};
         // when
         const componentWrapper = mount(<MstrObjects location={location} />);
         const mockPush = jest.fn();
@@ -126,49 +127,25 @@ describe('MstrObjectList', () => {
         let iterateId = 0;
         directories.children().forEach((row) => {
             const dirId = mockMstrObjects[iterateId].id;
-            expectedSessionObject[sessionPropertiesEnum.folderId] = dirId;
+            expectedHistoryObject[historyProperties.command] =
+                historyProperties.goInside;
+            expectedHistoryObject[historyProperties.directoryId] = dirId;
             const directoryRowLi = row.find('li');
             directoryRowLi.simulate('click');
             expect(mockPush).toBeCalledWith({
                 pathname: '/',
                 origin: componentWrapper.props().location,
-                sessionObject: expectedSessionObject,
-            });
-            ++iterateId;
-        });
-    });
-
-    it('should pass object to renderer when clicked', () => {
-        // given
-        const expectedSessionObject = {};
-        // when
-        const componentWrapper = mount(<MstrObjects location={location} />);
-        const mockPush = jest.fn();
-        componentWrapper.setProps({ history: { push: mockPush } });
-        // then
-        const items = componentWrapper.find('ul');
-        const directories = items.at(0); // directories first
-
-        let iterateId = 0;
-        directories.children().forEach((row) => {
-            const dirId = mockMstrObjects[iterateId].id;
-            expectedSessionObject[sessionPropertiesEnum.folderId] = dirId;
-            const directoryRowLi = row.find('li');
-            directoryRowLi.simulate('click');
-            expect(mockPush).toBeCalledWith({
-                pathname: '/',
-                origin: componentWrapper.props().location,
-                sessionObject: expectedSessionObject,
+                historyObject: expectedHistoryObject,
             });
             ++iterateId;
         });
     });
 
     // User sees reports may be clicked
-    it.skip('should', ()=> {
+    it.skip('should', () => {
         expect(false).toBeTruthy();
     }
-);
+    );
 
     // User can click a report
 
