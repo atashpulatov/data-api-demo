@@ -7,18 +7,22 @@ import { EnvironmentNotFoundError } from '../../../../src/frontend/app/error/env
 /* eslint-enable */
 
 const loginType = 1;
+const folderType = 7;
 const envURL = 'https://env-94174.customer.cloud.microstrategy.com/MicroStrategyLibrary/api';
 
 describe('MstrObjectRestService', () => {
     beforeAll(() => {
         const mockAgent = superagent.agent();
+        mockAgent['myField'] = 'if we get correct version it should be available';
         authDi.request = mockAgent;
     });
 
     afterAll(() => {
         authDi.request = superagent;
     });
-
+    it('should fail', () => {
+        expect(false).toBeTruthy();
+    });
     it('should return authToken when called', async () => {
         // given
         // when
