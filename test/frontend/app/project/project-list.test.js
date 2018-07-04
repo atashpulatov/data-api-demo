@@ -1,10 +1,10 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable */
 import React from 'react';
 import Projects from '../../../../src/frontend/app/project/project-list';
-/* eslint-enable */
 import { mount } from 'enzyme';
 import { projects } from './mock-data';
-import { sessionProperties} from '../../../../src/frontend/app/storage/session-properties';
+import { sessionProperties } from '../../../../src/frontend/app/storage/session-properties';
+/* eslint-enable */
 
 describe('ProjectList', () => {
     const location = {};
