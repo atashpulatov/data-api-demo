@@ -10,6 +10,9 @@ async function _authenticate(username, password, envUrl, loginMode = 1) {
             return res.headers['x-mstr-authtoken'];
         })
         .catch((err) => {
+            if (!err.response || err.response.status === 404) {
+                throw new EnvironmentNotFoundError();
+            }
             if (err.response.status === 401) {
                 throw new UnauthorizedError();
             }

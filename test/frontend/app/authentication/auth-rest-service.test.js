@@ -77,13 +77,28 @@ describe('MstrObjectRestService', () => {
             expect(error).toBeInstanceOf(UnauthorizedError);
         };
     });
-    it('should throw error due to incorrect or offline environment', async () => {
+    it('should throw error due to incorrect url but within existing domain', async () => {
         // given
         // when
         let authToken = authRestService.authenticate(
             'mstr',
             '',
-            'www.notworking.com',
+            'https://env-94174.customer.cloud.microstrategy.com/incorecturl',
+            loginType);
+        // then
+        try {
+            await authToken;
+        } catch (error) {
+            expect(error).toBeInstanceOf(EnvironmentNotFoundError);
+        };
+    });
+    it('should throw error due to incorrect url and domain doesnt exist', async () => {
+        // given
+        // when
+        let authToken = authRestService.authenticate(
+            'mstr',
+            '',
+            'https://www.domainwhichshouldnotexist.com.pl',
             loginType);
         // then
         try {
