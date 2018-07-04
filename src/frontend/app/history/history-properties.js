@@ -1,4 +1,6 @@
-export const historyProperties = {
+import { propsProxy } from '../enum-props-proxy';
+
+export const historyProperties = new Proxy({
     /**
      * propertyAlias: propertyName,
      */
@@ -9,4 +11,4 @@ export const historyProperties = {
     logOut: 'history-logOut',
     directoryId: 'mstr-directoryid',
     directoryArray: 'history-directory-array',
-};
+}, propsProxy);

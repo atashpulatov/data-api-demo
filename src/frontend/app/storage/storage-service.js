@@ -1,5 +1,5 @@
 import UnknownPropertyError from './unknown-property-error';
-import sessionPropertiesEnum from './session-properties';
+import { sessionProperties} from './session-properties';
 
 class StorageService {
     constructor() {
@@ -7,9 +7,9 @@ class StorageService {
 
     setProperty(propertyToBeSet, propertyValue) {
         let foundProperty = false;
-        for (let propertyKey in sessionPropertiesEnum) {
-            if (sessionPropertiesEnum.hasOwnProperty(propertyKey)) {
-                if (propertyToBeSet === sessionPropertiesEnum[propertyKey]) {
+        for (let propertyKey in sessionProperties) {
+            if (sessionProperties.hasOwnProperty(propertyKey)) {
+                if (propertyToBeSet === sessionProperties[propertyKey]) {
                     foundProperty = true;
                     break;
                 }

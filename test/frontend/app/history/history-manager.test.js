@@ -2,7 +2,7 @@
 import { historyManager } from '../../../../src/frontend/app/history/history-manager';
 import { historyProperties } from '../../../../src/frontend/app/history/history-properties';
 import { HistoryError } from '../../../../src/frontend/app/history/history-error';
-import sessionProperties from '../../../../src/frontend/app/storage/session-properties';
+import { sessionProperties} from '../../../../src/frontend/app/storage/session-properties';
 /* eslint-enable */
 
 describe('historyManager', () => {
@@ -58,7 +58,7 @@ describe('historyManager', () => {
         const historyObject = {};
         historyObject[historyProperties.command] = historyProperties.goInside;
         // when
-        const wrongFunctionCall = function () {
+        const wrongFunctionCall = () => {
             historyManager.handleHistoryData(historyObject);
         };
         // then

@@ -4,7 +4,7 @@ import Projects from '../../../../src/frontend/app/project/project-list';
 /* eslint-enable */
 import { mount } from 'enzyme';
 import { projects } from './mock-data';
-import sessionPropertiesEnum from '../../../../src/frontend/app/storage/session-properties';
+import { sessionProperties} from '../../../../src/frontend/app/storage/session-properties';
 
 describe('ProjectList', () => {
     const location = {};
@@ -98,7 +98,7 @@ describe('ProjectList', () => {
         // given
         const expectedProjectId = projects.projectsArray[0].id;
         const expectedSessionObject = {};
-        expectedSessionObject[sessionPropertiesEnum.projectId] =
+        expectedSessionObject[sessionProperties.projectId] =
             expectedProjectId;
         // when
         const componentWrapper = mount(<Projects location={location} />);

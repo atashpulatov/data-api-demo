@@ -1,6 +1,6 @@
 import { historyProperties } from './history-properties';
 import { HistoryError } from './history-error';
-import sessionProperties from '../storage/session-properties';
+import { sessionProperties} from '../storage/session-properties';
 
 class HistoryManager {
     getCurrentDirectory() {

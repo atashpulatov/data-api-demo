@@ -2,7 +2,7 @@
 import React from 'react';
 import Navigator from '../../../../src/frontend/app/navigator/navigator';
 import { shallow, mount } from 'enzyme';
-import sessionPropertiesEnum from '../../../../src/frontend/app/storage/session-properties';
+import { sessionProperties} from '../../../../src/frontend/app/storage/session-properties';
 import { historyProperties } from '../../../../src/frontend/app/history/history-properties';
 import projectRestService from '../../../../src/frontend/app/project/project-rest-service';
 import mstrObjectRestService from '../../../../src/frontend/app/mstr-object/mstr-object-rest-service';
@@ -39,11 +39,11 @@ describe('navigator', () => {
     it('should save authToken', () => {
         // given
         const expectedValue = 'testt';
-        location.sessionObject[sessionPropertiesEnum.authToken] = expectedValue;
+        location.sessionObject[sessionProperties.authToken] = expectedValue;
         // when
         mount(<Navigator location={location} />);
         // then
-        expect(sessionStorage.getItem(sessionPropertiesEnum.authToken))
+        expect(sessionStorage.getItem(sessionProperties.authToken))
             .toEqual(expectedValue);
     });
 
@@ -121,8 +121,8 @@ describe('navigator', () => {
         mockGet.mockResolvedValue(mockProjects);
         const originalGetMethod = projectRestService.getProjectList;
 
-        sessionStorage.setItem(sessionPropertiesEnum.envUrl, sampleEnvUrl);
-        sessionStorage.setItem(sessionPropertiesEnum.authToken,
+        sessionStorage.setItem(sessionProperties.envUrl, sampleEnvUrl);
+        sessionStorage.setItem(sessionProperties.authToken,
             sampleAuthToken);
         try {
             projectRestService.getProjectList = mockGet;
@@ -152,10 +152,10 @@ describe('navigator', () => {
         mockGet.mockResolvedValue(mockObjects);
         const originalGetMethod = mstrObjectRestService.getProjectContent;
 
-        sessionStorage.setItem(sessionPropertiesEnum.envUrl, sampleEnvUrl);
-        sessionStorage.setItem(sessionPropertiesEnum.authToken,
+        sessionStorage.setItem(sessionProperties.envUrl, sampleEnvUrl);
+        sessionStorage.setItem(sessionProperties.authToken,
             sampleAuthToken);
-        sessionStorage.setItem(sessionPropertiesEnum.projectId,
+        sessionStorage.setItem(sessionProperties.projectId,
             sampleProjectId);
         try {
             mstrObjectRestService.getProjectContent = mockGet;
@@ -185,10 +185,10 @@ describe('navigator', () => {
         mockGet.mockResolvedValue(mockObjects);
         const originalGetMethod = mstrObjectRestService.getFolderContent;
 
-        sessionStorage.setItem(sessionPropertiesEnum.envUrl, sampleEnvUrl);
-        sessionStorage.setItem(sessionPropertiesEnum.authToken,
+        sessionStorage.setItem(sessionProperties.envUrl, sampleEnvUrl);
+        sessionStorage.setItem(sessionProperties.authToken,
             sampleAuthToken);
-        sessionStorage.setItem(sessionPropertiesEnum.projectId,
+        sessionStorage.setItem(sessionProperties.projectId,
             sampleProjectId);
         sessionStorage.setItem(historyProperties.directoryArray,
             JSON.stringify(sampleDirArray));

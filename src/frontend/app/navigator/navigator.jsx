@@ -1,9 +1,8 @@
 import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
 import navigationService from './navigation-service';
 import StorageService from '../storage/storage-service';
-import sessionPropertiesEnum from '../storage/session-properties';
+import { sessionProperties} from '../storage/session-properties';
 import { historyManager } from '../history/history-manager';
-import { historyProperties } from '../history/history-properties';
 
 class Navigator extends Component {
     constructor(props) {
@@ -18,12 +17,12 @@ class Navigator extends Component {
     }
 
     async getNavigationRoute() {
-        const envUrl = sessionStorage.getItem(sessionPropertiesEnum.envUrl);
-        const authToken = sessionStorage.getItem(sessionPropertiesEnum.authToken);
+        const envUrl = sessionStorage.getItem(sessionProperties.envUrl);
+        const authToken = sessionStorage.getItem(sessionProperties.authToken);
         if ((envUrl === null) || (authToken === null)) {
             return navigationService.getLoginRoute();
         }
-        const projectId = sessionStorage.getItem(sessionPropertiesEnum.projectId);
+        const projectId = sessionStorage.getItem(sessionProperties.projectId);
         if (projectId === null) {
             return await navigationService.getProjectsRoute(envUrl, authToken);
         }
