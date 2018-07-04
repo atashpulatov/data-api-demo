@@ -58,6 +58,7 @@ describe('ProjectsRestService', () => {
         } catch (error) {
             expect(error).toBeInstanceOf(UnauthorizedError);
         }
+        expect(result).rejects.toThrow();
     });
 
     it('should return throw an error due to missing cookies', async () => {
@@ -79,6 +80,7 @@ describe('ProjectsRestService', () => {
         } catch (error) {
             expect(error).toBeInstanceOf(UnauthorizedError);
         }
+        expect(result).rejects.toThrow();
     });
 
     it('should return throw an error due to incorrect URL', async () => {
@@ -100,5 +102,6 @@ describe('ProjectsRestService', () => {
         } catch (error) {
             expect(error).toBeInstanceOf(EnvironmentNotFoundError);
         }
+        expect(result).rejects.toThrow();
     });
 });

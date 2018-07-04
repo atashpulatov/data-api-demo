@@ -49,6 +49,7 @@ describe('MstrObjectRestService', () => {
         expect(result.length).toBeGreaterThanOrEqual(2);
         expect(result).toEqual(mstrTutorial);
     });
+
     it('should throw exception due to incorrect authToken', async () => {
         // given
         const authToken = 'wrongToken';
@@ -65,7 +66,9 @@ describe('MstrObjectRestService', () => {
         } catch (error) {
             expect(error).toBeInstanceOf(UnauthorizedError);
         }
+        expect(result).rejects.toThrow();
     });
+
     it('should throw error due to incorrect folderType', async () => {
         // given
         const authToken = await authRestService.authenticate(
@@ -87,7 +90,9 @@ describe('MstrObjectRestService', () => {
         } catch (error) {
             expect(error).toBeInstanceOf(InternalServerError);
         }
+        expect(result).rejects.toThrow();
     });
+
     it('should throw error due to incorrect projectId', async () => {
         // given
         const authToken = await authRestService.authenticate(
@@ -109,5 +114,6 @@ describe('MstrObjectRestService', () => {
         } catch (error) {
             expect(error).toBeInstanceOf(BadRequestError);
         }
+        expect(result).rejects.toThrow();
     });
 });

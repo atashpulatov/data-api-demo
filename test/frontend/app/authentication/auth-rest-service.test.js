@@ -24,7 +24,7 @@ describe('MstrObjectRestService', () => {
     it('should return authToken when called', async () => {
         // given
         // when
-        let authToken = await authRestService.authenticate(
+        const authToken = await authRestService.authenticate(
             correctLogin,
             correctPassword,
             envURL,
@@ -37,7 +37,7 @@ describe('MstrObjectRestService', () => {
         // given
         const incorrectLogin = 'mst';
         // when
-        let authToken = authRestService.authenticate(
+        const authToken = authRestService.authenticate(
             incorrectLogin,
             correctPassword,
             envURL,
@@ -48,12 +48,13 @@ describe('MstrObjectRestService', () => {
         } catch (error) {
             expect(error).toBeInstanceOf(UnauthorizedError);
         };
+        expect(authToken).rejects.toThrow();
     });
     it('should throw error due to incorrect password', async () => {
         // given
         const incorrectPassword = 'wrongPass';
         // when
-        let authToken = authRestService.authenticate(
+        const authToken = authRestService.authenticate(
             correctLogin,
             incorrectPassword,
             envURL,
@@ -64,12 +65,13 @@ describe('MstrObjectRestService', () => {
         } catch (error) {
             expect(error).toBeInstanceOf(UnauthorizedError);
         };
+        expect(authToken).rejects.toThrow();
     });
     it('should throw error due to incorrect login mode', async () => {
         // given
         const incorrectAuthType = 122;
         // when
-        let authToken = authRestService.authenticate(
+        const authToken = authRestService.authenticate(
             correctLogin,
             correctPassword,
             envURL,
@@ -80,12 +82,13 @@ describe('MstrObjectRestService', () => {
         } catch (error) {
             expect(error).toBeInstanceOf(UnauthorizedError);
         };
+        expect(authToken).rejects.toThrow();
     });
     it('should throw error due to incorrect url but within existing domain', async () => {
         // given
         const incorrectUrl = 'https://env-94174.customer.cloud.microstrategy.com/incorecturl';
         // when
-        let authToken = authRestService.authenticate(
+        const authToken = authRestService.authenticate(
             correctLogin,
             correctPassword,
             incorrectUrl,
@@ -96,12 +99,13 @@ describe('MstrObjectRestService', () => {
         } catch (error) {
             expect(error).toBeInstanceOf(EnvironmentNotFoundError);
         };
+        expect(authToken).rejects.toThrow();
     });
     it('should throw error due to incorrect url and provided domain does not exist', async () => {
         // given
         const nonExistingDomainUrl = 'https://www.domainwhichshouldnotexist.com.pl'; 
         // when
-        let authToken = authRestService.authenticate(
+        const authToken = authRestService.authenticate(
             correctLogin,
             correctPassword,
             nonExistingDomainUrl,
@@ -112,5 +116,6 @@ describe('MstrObjectRestService', () => {
         } catch (error) {
             expect(error).toBeInstanceOf(EnvironmentNotFoundError);
         };
+        expect(authToken).rejects.toThrow();
     });
 });
