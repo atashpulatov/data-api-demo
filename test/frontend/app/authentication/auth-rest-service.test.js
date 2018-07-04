@@ -6,7 +6,9 @@ import { UnauthorizedError } from '../../../../src/frontend/app/error/unauthoriz
 import { EnvironmentNotFoundError } from '../../../../src/frontend/app/error/environment-not-found-error';
 /* eslint-enable */
 
-const loginType = 1;
+const correctLogin = 'mstr';
+const correctPassword = '';
+const authType = 1;
 const envURL = 'https://env-94174.customer.cloud.microstrategy.com/MicroStrategyLibrary/api';
 
 describe('MstrObjectRestService', () => {
@@ -23,22 +25,23 @@ describe('MstrObjectRestService', () => {
         // given
         // when
         let authToken = await authRestService.authenticate(
-            'mstr',
-            '',
+            correctLogin,
+            correctPassword,
             envURL,
-            loginType);
+            authType);
         // then
         expect(authToken).toBeDefined();
         expect(authToken).toBeTruthy();
     });
     it('should throw error due to incorrect username', async () => {
         // given
+        const incorrectLogin = 'mst';
         // when
         let authToken = authRestService.authenticate(
-            'mst',
-            '',
+            incorrectLogin,
+            correctPassword,
             envURL,
-            loginType);
+            authType);
         // then
         try {
             await authToken;
@@ -48,12 +51,13 @@ describe('MstrObjectRestService', () => {
     });
     it('should throw error due to incorrect password', async () => {
         // given
+        const incorrectPassword = 'wrongPass';
         // when
         let authToken = authRestService.authenticate(
-            'mstr',
-            'wrongPassword',
+            correctLogin,
+            incorrectPassword,
             envURL,
-            loginType);
+            authType);
         // then
         try {
             await authToken;
@@ -63,12 +67,13 @@ describe('MstrObjectRestService', () => {
     });
     it('should throw error due to incorrect login mode', async () => {
         // given
+        const incorrectAuthType = 122;
         // when
         let authToken = authRestService.authenticate(
-            'mstr',
-            '',
+            correctLogin,
+            correctPassword,
             envURL,
-            128);
+            incorrectAuthType);
         // then
         try {
             await authToken;
@@ -78,12 +83,13 @@ describe('MstrObjectRestService', () => {
     });
     it('should throw error due to incorrect url but within existing domain', async () => {
         // given
+        const incorrectUrl = 'https://env-94174.customer.cloud.microstrategy.com/incorecturl';
         // when
         let authToken = authRestService.authenticate(
-            'mstr',
-            '',
-            'https://env-94174.customer.cloud.microstrategy.com/incorecturl',
-            loginType);
+            correctLogin,
+            correctPassword,
+            incorrectUrl,
+            authType);
         // then
         try {
             await authToken;
@@ -93,12 +99,13 @@ describe('MstrObjectRestService', () => {
     });
     it('should throw error due to incorrect url and provided domain does not exist', async () => {
         // given
+        const nonExistingDomainUrl = 'https://www.domainwhichshouldnotexist.com.pl'; 
         // when
         let authToken = authRestService.authenticate(
-            'mstr',
-            '',
-            'https://www.domainwhichshouldnotexist.com.pl',
-            loginType);
+            correctLogin,
+            correctPassword,
+            nonExistingDomainUrl,
+            authType);
         // then
         try {
             await authToken;

@@ -1,6 +1,7 @@
-import di from './mstr-object-di';
-import StorageService from '../storage/storage-service';
 import sessionPropertiesEnum from '../storage/session-properties';
+import StorageService from '../storage/storage-service';
+import di from './mstr-object-di';
+import { errorHandler } from '../error/error-service';
 
 class MstrObjectRestService {
     async getProjectContent(folderType, envUrl, authToken, projectId) {
@@ -14,8 +15,7 @@ class MstrObjectRestService {
                 return objects;
             })
             .catch((err) => {
-                console.error(`Error: ${err.response.status}`
-                    + ` (${err.response.statusMessage})`);
+                errorHandler(err);
             });
     }
 
@@ -31,8 +31,7 @@ class MstrObjectRestService {
                 return objects;
             })
             .catch((err) => {
-                console.error(`Error: ${err.response.status}`
-                    + ` (${err.response.statusMessage})`);
+                errorHandler(err);
             });
     }
 
@@ -51,8 +50,7 @@ class MstrObjectRestService {
                 return objects.instanceId;
             })
             .catch((err) => {
-                console.error(`Error: ${err.response.status}`
-                    + ` (${err.response.statusMessage})`);
+                errorHandler(err);
             });
         fullPath += `/${reportInstance}`;
         return await di.request.get(fullPath)
@@ -65,8 +63,7 @@ class MstrObjectRestService {
                 return objects;
             })
             .catch((err) => {
-                console.error(`Error: ${err.response.status}`
-                    + ` (${err.response.statusMessage})`);
+                errorHandler(err);
             });
     }
 };

@@ -13,101 +13,29 @@ const envURL = 'https://env-94174.customer.cloud.microstrategy.com/MicroStrategy
 describe('MstrObjectRestService', () => {
     beforeAll(() => {
         const mockAgent = superagent.agent();
-        mockAgent['myField'] = 'if we get correct version it should be available';
         authDi.request = mockAgent;
     });
 
     afterAll(() => {
         authDi.request = superagent;
     });
-    it('should fail', () => {
-        expect(false).toBeTruthy();
-    });
-    it('should return authToken when called', async () => {
+    it('should return list of objects within project', async () => {
         // given
-        // when
-        let authToken = await authRestService.authenticate(
+        const authToken = await authRestService.authenticate(
             'mstr',
             '',
             envURL,
             loginType);
-        // then
-        expect(authToken).toBeDefined();
-        expect(authToken).toBeTruthy();
-    });
-    it('should throw error due to incorrect username', async () => {
-        // given
         // when
-        let authToken = authRestService.authenticate(
-            'mst',
-            '',
+        const result = await mstrObjectRestService.getProjectContent(
+            folderType,
             envURL,
-            loginType);
+            authToken,
+            projectId,
+        );
         // then
-        try {
-            await authToken;
-        } catch (error) {
-            expect(error).toBeInstanceOf(UnauthorizedError);
-        };
-    });
-    it('should throw error due to incorrect password', async () => {
-        // given
-        // when
-        let authToken = authRestService.authenticate(
-            'mstr',
-            'wrongPassword',
-            envURL,
-            loginType);
-        // then
-        try {
-            await authToken;
-        } catch (error) {
-            expect(error).toBeInstanceOf(UnauthorizedError);
-        };
-    });
-    it('should throw error due to incorrect login mode', async () => {
-        // given
-        // when
-        let authToken = authRestService.authenticate(
-            'mstr',
-            '',
-            envURL,
-            128);
-        // then
-        try {
-            await authToken;
-        } catch (error) {
-            expect(error).toBeInstanceOf(UnauthorizedError);
-        };
-    });
-    it('should throw error due to incorrect url but within existing domain', async () => {
-        // given
-        // when
-        let authToken = authRestService.authenticate(
-            'mstr',
-            '',
-            'https://env-94174.customer.cloud.microstrategy.com/incorecturl',
-            loginType);
-        // then
-        try {
-            await authToken;
-        } catch (error) {
-            expect(error).toBeInstanceOf(EnvironmentNotFoundError);
-        };
-    });
-    it('should throw error due to incorrect url and provided domain does not exist', async () => {
-        // given
-        // when
-        let authToken = authRestService.authenticate(
-            'mstr',
-            '',
-            'https://www.domainwhichshouldnotexist.com.pl',
-            loginType);
-        // then
-        try {
-            await authToken;
-        } catch (error) {
-            expect(error).toBeInstanceOf(EnvironmentNotFoundError);
-        };
+        expect(result).toBeDefined();
+        expect(result.length).toBeGreaterThanOrEqual(2);
+        expect(result).toEqual(mstrTutorial);
     });
 });

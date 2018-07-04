@@ -16,4 +16,6 @@ export let errorHandler = function(error) {
     if (error.response.status === 500) {
         throw new InternalServerError();
     }
+    console.error(`Error: ${error.response.status}`
+    + ` (${error.response.statusMessage})`);
 };

@@ -10,6 +10,8 @@ import { mstrTutorial } from '../mockData';
 
 const folderType = 7;
 const loginType = 1;
+const envURL = 'https://env-94174.customer.cloud.microstrategy.com/MicroStrategyLibrary/api';
+const projectId = 'B7CA92F04B9FAE8D941C3E9B7E0CD754';
 
 describe('MstrObjectRestService', () => {
     beforeAll(() => {
@@ -25,16 +27,15 @@ describe('MstrObjectRestService', () => {
 
     it('should return list of objects within project', async () => {
         // given
-        const projectId = 'B7CA92F04B9FAE8D941C3E9B7E0CD754';
-        let authToken = await authRestService.authenticate(
+        const authToken = await authRestService.authenticate(
             'mstr',
             '',
-            'https://env-94174.customer.cloud.microstrategy.com/MicroStrategyLibrary/api',
+            envURL,
             loginType);
         // when
         const result = await mstrObjectRestService.getProjectContent(
             folderType,
-            'https://env-94174.customer.cloud.microstrategy.com/MicroStrategyLibrary/api',
+            envURL,
             authToken,
             projectId,
         );

@@ -10,8 +10,6 @@ async function _authenticate(username, password, envUrl, loginMode = 1) {
         })
         .catch((err) => {
             errorHandler(err);
-            console.error(`Error: ${err.response.status}`
-                + ` (${err.response.statusMessage})`);
         });
 }
 
