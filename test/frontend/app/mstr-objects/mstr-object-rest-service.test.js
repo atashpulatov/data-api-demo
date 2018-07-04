@@ -6,8 +6,13 @@ import authDi from '../../../../src/frontend/app/authentication/auth-di';
 import objectDi from '../../../../src/frontend/app/mstr-object/mstr-object-di';
 
 import { mstrTutorial } from '../mockData';
+import { UnauthorizedError } from '../../../../src/frontend/app/error/unauthorized-error';
+import { InternalServerError } from '../../../../src/frontend/app/error/internal-server-error';
+import { BadRequestError } from '../../../../src/frontend/app/error/bad-request-error';
 /* eslint-enable */
 
+const correctLogin = 'mstr';
+const correctPassword = '';
 const folderType = 7;
 const loginType = 1;
 const envURL = 'https://env-94174.customer.cloud.microstrategy.com/MicroStrategyLibrary/api';
@@ -28,8 +33,8 @@ describe('MstrObjectRestService', () => {
     it('should return list of objects within project', async () => {
         // given
         const authToken = await authRestService.authenticate(
-            'mstr',
-            '',
+            correctLogin,
+            correctPassword,
             envURL,
             loginType);
         // when
@@ -44,12 +49,65 @@ describe('MstrObjectRestService', () => {
         expect(result.length).toBeGreaterThanOrEqual(2);
         expect(result).toEqual(mstrTutorial);
     });
-    it('should fail and return expection', () => {
+    it('should throw exception due to incorrect authToken', async () => {
         // given
-        
+        const authToken = 'wrongToken';
         // when
-
+        const result = mstrObjectRestService.getProjectContent(
+            folderType,
+            envURL,
+            authToken,
+            projectId,
+        );
         // then
-
+        try {
+            await result;
+        } catch (error) {
+            expect(error).toBeInstanceOf(UnauthorizedError);
+        }
+    });
+    it('should throw error due to incorrect folderType', async () => {
+        // given
+        const authToken = await authRestService.authenticate(
+            correctLogin,
+            correctPassword,
+            envURL,
+            loginType);
+        const wrongFolderType = 7434234;
+        // when
+        const result = mstrObjectRestService.getProjectContent(
+            wrongFolderType,
+            envURL,
+            authToken,
+            projectId,
+        );
+        // then
+        try {
+            await result;
+        } catch (error) {
+            expect(error).toBeInstanceOf(InternalServerError);
+        }
+    });
+    it('should throw error due to incorrect projectId', async () => {
+        // given
+        const authToken = await authRestService.authenticate(
+            correctLogin,
+            correctPassword,
+            envURL,
+            loginType);
+        const wrongProjectId = 'incorrectProjectId';
+        // when
+        const result = mstrObjectRestService.getProjectContent(
+            folderType,
+            envURL,
+            authToken,
+            wrongProjectId,
+        );
+        // then
+        try {
+            await result;
+        } catch (error) {
+            expect(error).toBeInstanceOf(BadRequestError);
+        }
     });
 });
