@@ -2,14 +2,14 @@
 /* eslint-disable */
 import storageService from '../../../../src/frontend/app/storage/storage-service';
 import UnknownPropertyError from '../../../../src/frontend/app/storage/unknown-property-error';
-import sessionPropertiesEnum from '../../../../src/frontend/app/storage/session-properties';
+import { sessionProperties} from '../../../../src/frontend/app/storage/session-properties';
 /* eslint-enable */
 
 describe('StorageService', () => {
     it('should set value x-mstr-authtoken to sessionStorage', () => {
         // given
         let firstToken = 'firstTokenTest1';
-        let property = sessionPropertiesEnum.authToken;
+        let property = sessionProperties.authToken;
         sessionStorage.removeItem(property);
         // when
         storageService.setProperty(property, firstToken);
@@ -20,7 +20,7 @@ describe('StorageService', () => {
         // given
         let firstToken = 'firstTokenTest2';
         let secondToken = 'secondTokenTest2';
-        let property = sessionPropertiesEnum.authToken;
+        let property = sessionProperties.authToken;
         sessionStorage.removeItem(property);
         // when
         storageService.setProperty(property, firstToken);
@@ -32,7 +32,7 @@ describe('StorageService', () => {
     it('should set value x-mstr-projectid to sessionStorage', () => {
         // given
         let firstProject = 'firstProjectTest3';
-        let property = sessionPropertiesEnum.projectId;
+        let property = sessionProperties.projectId;
         sessionStorage.removeItem(property);
         // when
         storageService.setProperty(property, firstProject);
@@ -52,7 +52,7 @@ describe('StorageService', () => {
     it('should return a value of provided property', () => {
         // given
         let firstToken = 'firstTokenTest';
-        let property = sessionPropertiesEnum.authToken;
+        let property = sessionProperties.authToken;
         sessionStorage.removeItem(property);
         storageService.setProperty(property, firstToken);
         // when

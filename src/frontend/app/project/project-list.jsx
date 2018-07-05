@@ -1,7 +1,7 @@
 import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
 import ProjectRow from './project-row.jsx'; // eslint-disable-line no-unused-vars
 import BaseComponent from '../base-component.jsx';
-import sessionPropertiesEnum from '../storage/session-properties';
+import { sessionProperties } from '../storage/session-properties';
 
 class Projects extends BaseComponent {
     constructor(props) {
@@ -16,7 +16,7 @@ class Projects extends BaseComponent {
 
     navigateToProject(projectId) {
         const sessionObject = {};
-        sessionObject[sessionPropertiesEnum.projectId] = projectId;
+        sessionObject[sessionProperties.projectId] = projectId;
         this.props.history.push({
             pathname: '/',
             origin: this.props.location,
@@ -28,7 +28,7 @@ class Projects extends BaseComponent {
         return (
             <div>
                 <h2 className='projects-header'>
-                All Projects
+                    All Projects
                 </h2>
                 <hr className='projects-header-line' />
                 <ul className='projectRowContainer no-padding'>

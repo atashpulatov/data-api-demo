@@ -1,13 +1,13 @@
 import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
 import navigationService from './navigation-service';
 import StorageService from '../storage/storage-service';
-import sessionPropertiesEnum from '../storage/session-properties';
+import { sessionProperties} from '../storage/session-properties';
 import { historyManager } from '../history/history-manager';
 
 class Navigator extends Component {
     constructor(props) {
         super(props);
-        window.mstr = {history: this.props.history};
+        window.mstr = { history: this.props.history };
         this.pushHistory = this.pushHistory.bind(this);
         this.getNavigationRoute = this.getNavigationRoute.bind(this);
     }
@@ -17,27 +17,30 @@ class Navigator extends Component {
     }
 
     async getNavigationRoute() {
-        const envUrl = sessionStorage.getItem(sessionPropertiesEnum.envUrl);
-        const authToken = sessionStorage.getItem(sessionPropertiesEnum.authToken);
+        const envUrl = sessionStorage.getItem(sessionProperties.envUrl);
+        const authToken = sessionStorage.getItem(sessionProperties.authToken);
         if ((envUrl === null) || (authToken === null)) {
             return navigationService.getLoginRoute();
         }
-        const projectId = sessionStorage.getItem(sessionPropertiesEnum.projectId);
+        const projectId = sessionStorage.getItem(sessionProperties.projectId);
         if (projectId === null) {
             return await navigationService.getProjectsRoute(envUrl, authToken);
         }
-        const folderId = sessionStorage.getItem(sessionPropertiesEnum.folderId);
-        if (folderId === null) {
+        try {
+            const dirId = historyManager.getCurrentDirectory();
+            return await navigationService.getObjectsRoute(envUrl, authToken,
+                projectId, dirId);
+        } catch (error) {
             return await navigationService.getRootObjectsRoute(envUrl,
                 authToken, projectId);
         }
-        return await navigationService.getObjectsRoute(envUrl, authToken,
-            projectId, folderId);
     }
 
     async componentDidMount() {
         this.saveSessionData(this.props.location.sessionObject);
-        historyManager.handleHistoryData(this.props.location.historyObject);
+        if (this.props.location.historyObject) {
+            historyManager.handleHistoryData(this.props.location.historyObject);
+        }
         let routeObject = await this.getNavigationRoute();
         routeObject.state.origin = this.props.location;
         this.pushHistory(routeObject);
