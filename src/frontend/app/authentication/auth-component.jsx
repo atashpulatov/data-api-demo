@@ -1,5 +1,6 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
 import BaseComponent from '../base-component.jsx';
+import './auth-component.css';
 import authService from './auth-rest-service';
 import sessionPropertiesEnum from '../storage/session-properties';
 const authenticate = authService.authenticate;
@@ -55,42 +56,32 @@ class Authenticate extends BaseComponent {
     render() {
         return (
             <div>
-                <h2 className='authenticate-message'>
-                    Connect to MicroStrategy Environment
-                </h2>
-                <form onSubmit={this.onLoginUser}>
-                    <div className='grid-container padding'>
-                        <label className='grid-item grid-item-label'>
-                            Username
-                    </label>
-                        <input className='grid-item grid-item-input' type='text'
-                            value={this.state.username}
-                            onChange={this.handleUsernameChange} name='username' />
+                <header>
+                    <h1 id='authenticate-message'>Connect to MicroStrategy Environment</h1>
+                </header>
+                <form onSubmit={this.onLoginUser} className='grid-container padding'>
+                    <label className='grid-item'>
+                        Username
+                        </label>
+                    <input className='grid-item' type='text'
+                        value={this.state.username}
+                        onChange={this.handleUsernameChange} name='username' />
 
-                    <label className='grid-item grid-item-label'>
+                    <label className='grid-item'>
                         Password
-                    </label>
-                        <input className='grid-item grid-item-input' type='password'
-                            value={this.state.password}
-                            onChange={this.handlePasswordChange} name='password' />
+                        </label>
+                    <input className='grid-item' type='password'
+                        value={this.state.password}
+                        onChange={this.handlePasswordChange} name='password' />
 
-                    <label className='grid-item grid-item-label'>
+                    <label className='grid-item'>
                         Environment URL
-                    </label>
-                        <input className='grid-item grid-item-input' type='text'
-                            value={this.state.envUrl}
-                            onChange={this.handleEnvURLChange} name='envUrl' />
-
-                        {/* <label className='grid-item grid-item-label'>
-                        Auth Mode
-                    </label>
-                        <input className='grid-item grid-item-input' type='number'
-                            value={this.state.authMode}
-                            onChange={this.handleAuthModeChange} name='envUrl' /> */}
-
-                        <input className='grid-item-2 button-submit'
-                            type='submit' value='Submit' />
-                    </div>
+                        </label>
+                    <input className='grid-item' type='text'
+                        value={this.state.envUrl}
+                        onChange={this.handleEnvURLChange} name='envUrl' />
+                    <input className='grid-item-2 button-submit'
+                        type='submit' value='Submit' />
                 </form>
             </div>
         );

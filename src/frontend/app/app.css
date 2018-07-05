@@ -3,26 +3,39 @@
   flex-direction: column;
 }
 
-#content-header {
+#app-header {
   background: #313435;
   display: flex;
   color: #fff;
   width: 100%;
-  text-align: center;
 }
 
-#content-main {
+#app-footer {
+  background: #313435;
+  display: flex;
+  color: #fff;
+  width: 100%;
+  justify-content: flex-end;
+}
+
+#footer-text {
+  margin-right: 20px;
+  font-size: 12px;
+  font-weight: 100;
+}
+
+#app-main {
   background: #fff;
 }
 
-.header {
+#header {
   font-size: 18px;
   text-align: left;
   align-items: center;
   padding: 4px 0px 0px 0px;
 }
 
-.header-image {
+#header-image {
   border-radius: 50%;
   height: 40px;
   width: 40px;
@@ -33,56 +46,4 @@
   padding: 15px;
 }
 
-.grid-container {
-  display: flex;
-  flex-direction: column;
-  grid-template-columns: auto;
-  grid-row-gap: 2px;
-}
 
-.grid-item {
-  font-size: 18px;
-}
-
-.grid-item-label {
-  color: #28333d;
-  margin-bottom: 5px;
-  margin-left: 2px;
-  font-size: 14px;
-  font-weight: 200;
-  /* padding: 10px; */
-}
-
-.grid-item-input {
-  border-color: #e3e2e2;
-  border-style: solid;
-  border-radius: 3px;
-  border-width: 1px;
-  padding: 5px 0px 5px 0px;
-  margin-bottom: 20px;
-}
-
-.grid-item-2 {
-  grid-column: span 2;
-}
-
-.authenticate-message {
-  padding: 10px 0px 0px 15px;
-  font-size: 18px;
-  font-weight: 200;
-}
-
-.button-submit {
-  padding: 10px;
-  background-color: #1983d9;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  text-align: center;
-  display: inline-block;
-  font-size: 20px;
-}
-
-.button-submit:hover {
-  background-color: rgb(14, 83, 139);
-}

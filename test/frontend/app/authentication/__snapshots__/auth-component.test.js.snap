@@ -3,11 +3,13 @@
 exports[`AuthComponent should render my component 1`] = `
 Array [
   <div>
-    <h2
-      className="authenticate-message"
-    >
-      Connect to MicroStrategy Environment
-    </h2>
+    <header>
+      <h1
+        id="authenticate-message"
+      >
+        Connect to MicroStrategy Environment
+      </h1>
+    </header>
     <form
       onSubmit={[Function]}
     >
