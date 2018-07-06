@@ -17,7 +17,7 @@ const goProjectsObject = {
     pathname: '/',
     historyObject: {},
 };
-goUpObject.historyObject[historyProperties.command] =
+goProjectsObject.historyObject[historyProperties.command] =
     historyProperties.goToProject;
 
 const logOutObject = {
