@@ -1,5 +1,5 @@
 
-.mstr-objects-header{
+header.mstr-objects{
     font-size: 16px;
     font-weight: 400;
     padding: 0px 0px 0px 30px;
@@ -18,7 +18,7 @@
     margin-bottom: 5px;
 }
 
-.object-image{
+img.object{
     padding: 0px;
     margin: 0px;
 }
@@ -31,7 +31,7 @@
     margin: 0px;
 }
 
-.object-label{
+label.object{
     margin-top: 12px;
     margin-left: 5px;
     text-align: center;

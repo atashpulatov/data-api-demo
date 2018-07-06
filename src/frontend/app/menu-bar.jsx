@@ -45,36 +45,35 @@ class MenuBar extends Component {
         return (
             <div className='menu-bar-container'>
                 <div className='menu-bar-nav-container'>
-                    <button className='menu-button menu-button-nav'
+                    <button className='menu menu-nav'
                         onClick={this.pushHistory.bind(this, this.goUpObject)}>
-                        <div className='button-with-tooltip'>
+                        <div className='with-tooltip'>
                             {back}
-                            <span className='button-tooltip-right'>Back</span>
+                            <span className='tooltip right'>Back</span>
                         </div>
                     </button>
-                    <button className='menu-button menu-button-nav'
+                    <button className='menu menu-nav'
                         onClick={this.pushHistory.bind(this,
                             this.goProjectsObject)}>
-                        <div className='button-with-tooltip'>
+                        <div className='with-tooltip'>
                             {goTop}
-                            <span className='button-tooltip-right'>Go top</span>
+                            <span className='tooltip right'>Go top</span>
                         </div>
                     </button>
                 </div>
                 <div className='menu-bar-options-container'>
-                    {/* <button className='menu-button menu-button-nav'>{forward}</button> */}
-                    <button className='menu-button menu-button-options'
+                    <button className='menu menu-options'
                         onClick={this.pushHistory.bind(this,
                             this.logOutObject)}>
-                        <div className='button-with-tooltip'>
+                        <div className='with-tooltip'>
                             {logout}
-                            <span className='button-tooltip-left'>Log out</span>
+                            <span className='tooltip left'>Log out</span>
                         </div>
                     </button>
-                    <button className='menu-button menu-button-options'>
-                        <div className='button-with-tooltip'>
+                    <button className='menu menu-options'>
+                        <div className='with-tooltip'>
                             {settings}
-                            <span className='button-tooltip-left'>Settings</span>
+                            <span className='tooltip left'>Settings</span>
                         </div>
                     </button>
                 </div>

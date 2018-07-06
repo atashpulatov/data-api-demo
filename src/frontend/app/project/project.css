@@ -1,14 +1,14 @@
-.projectRowContainer {
+.project-row-container {
     display: grid;
     list-style-type: none;
     margin: 0px;
 }
 
-.cursorIsPointer{
+.cursor-is-pointer{
     cursor: pointer;
 }
 
-.cursorIsPointer:hover{
+.cursor-is-pointer:hover{
     cursor: pointer;
     background-color: #F1F1F1;
 }
@@ -20,12 +20,6 @@
 .projects-header{
     font-size: 24;
     margin-left: 30px;
-    color: #75808B;
-}
-
-.projects-header-line{
-    margin-left: 20px;
-    margin-right: 20px;
     color: #75808B;
 }
 

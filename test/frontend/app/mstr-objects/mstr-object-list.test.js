@@ -3,7 +3,6 @@ import React from 'react';
 import MstrObjects from '../../../../src/frontend/app/mstr-object/mstr-object-list';
 import { mount } from 'enzyme';
 import { mstrTutorial } from '../mockData';
-import sessionPropertiesEnum from '../../../../src/frontend/app/storage/session-properties';
 import { historyProperties } from '../../../../src/frontend/app/history/history-properties';
 /* eslint-enable */
 
@@ -49,7 +48,7 @@ describe('MstrObjectList', () => {
             expect(directory).toBeDefined();
 
             // should have name and image
-            expect(row.find('span').text()).toBeTruthy();
+            expect(row.find('label').text()).toBeTruthy();
             expect(row.find('img').html()).toBeTruthy();
         });
     });
@@ -68,7 +67,7 @@ describe('MstrObjectList', () => {
             expect(report).toBeDefined();
 
             // should have name and image
-            expect(row.find('span').text()).toBeTruthy();
+            expect(row.find('label').text()).toBeTruthy();
             expect(row.find('img').html()).toBeTruthy();
         });
     });
@@ -83,7 +82,7 @@ describe('MstrObjectList', () => {
 
         directories.children().forEach((row) => {
             const directoryRowLi = row.find('li');
-            expect(directoryRowLi.hasClass('cursorIsPointer')).toBeTruthy();
+            expect(directoryRowLi.hasClass('cursor-is-pointer')).toBeTruthy();
         });
     });
 

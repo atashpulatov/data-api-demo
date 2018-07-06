@@ -37,7 +37,7 @@ describe('ProjectList', () => {
         // then
         const items = componentWrapper.find('ul');
         // should have proper css class
-        expect(items.hasClass('projectRowContainer')).toBeTruthy();
+        expect(items.hasClass('project-row-container')).toBeTruthy();
 
         items.children().forEach((row) => {
             const projectRow = row.props().projectRow;
@@ -58,7 +58,7 @@ describe('ProjectList', () => {
 
         const items = componentWrapper.find('ul');
         const projectRowLi = items.childAt(0).find('li');
-        expect(projectRowLi.hasClass('cursorIsPointer')).toBeTruthy();
+        expect(projectRowLi.hasClass('cursor-is-pointer')).toBeTruthy();
     });
 
     // User can click the project

@@ -46,11 +46,11 @@ class MstrObjects extends BaseComponent {
 
     render() {
         return (
-            <div className='objects-container'>
-                <p className='mstr-objects-header'>
+            <article className='objects-container'>
+                <header className='mstr-objects'>
                     All Files
-                </p>
-                <hr className='projects-header-line' />
+                </header>
+                <hr />
                 <ul className='no-padding object-list'>
                     {this.state.mstrObjects
                         .filter((obj) => objectsTypesMap.directory === obj.type)
@@ -69,7 +69,7 @@ class MstrObjects extends BaseComponent {
                                 onClick={this.printObject} />
                         ))}
                 </ul>
-            </div>
+            </article>
         );
     }
 };

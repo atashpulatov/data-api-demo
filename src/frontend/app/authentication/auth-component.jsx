@@ -55,7 +55,7 @@ class Authenticate extends BaseComponent {
 
     render() {
         return (
-            <div>
+            <article>
                 <header>
                     <h1 id='authenticate-message'>Connect to MicroStrategy Environment</h1>
                 </header>
@@ -83,7 +83,7 @@ class Authenticate extends BaseComponent {
                     <input className='grid-item-2 button-submit'
                         type='submit' value='Submit' />
                 </form>
-            </div>
+            </article>
         );
     }
 }

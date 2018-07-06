@@ -2,7 +2,7 @@
 
 exports[`AuthComponent should render my component 1`] = `
 Array [
-  <div>
+  <article>
     <header>
       <h1
         id="authenticate-message"
@@ -56,6 +56,6 @@ Array [
         value="Submit"
       />
     </form>
-  </div>,
+  </article>,
 ]
 `;

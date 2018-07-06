@@ -1,3 +1,13 @@
+hr {
+  margin-left: 20px;
+  margin-right: 20px;
+  color: #75808B;
+}
+
+.padding {
+  padding: 15px;
+}
+
 #content {
   display: flex;
   flex-direction: column;
@@ -41,9 +51,3 @@
   width: 40px;
   padding: 10px;
 }
-
-.padding {
-  padding: 15px;
-}
-
-

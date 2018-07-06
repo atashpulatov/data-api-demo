@@ -6,7 +6,7 @@
   background-color: #eeeeee;
 }
 
-.menu-button {
+button.menu {
   border: none;
   border-radius: 5px;
   color: #323435;
@@ -14,7 +14,7 @@
   background-color: #eeeeee;
 }
 
-.menu-button div:hover {
+button.menu:hover {
   color: #1983d9;
 }
 
@@ -26,24 +26,24 @@
   justify-content: left;
 }
 
-.menu-button-nav {
+button.menu-nav {
   padding: 5px 10px 5px 10px;
   font-weight: 400;
   font-size: 20px;
 }
 
-.menu-button-options {
+button.menu-options {
   padding: 7px 10px 8px 10px;
   font-weight: 400;
   font-size: 16px;
 }
 
-.button-with-tooltip {
+.with-tooltip {
   position: relative;
   display: inline-block;
 }
 
-.button-tooltip-right {
+.tooltip {
   visibility: hidden;
   font-size: 16px;
   transition: 0s;
@@ -55,32 +55,22 @@
   padding: 5px 0;
   position: absolute;
   z-index: 1;
-  top: -5px;
-  left: 110%;
 }
 
-.button-tooltip-left {
-  visibility: hidden;
-  font-size: 16px;
-  transition: 0s;
-  width: 120px;
-  background-color: #313435;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-  position: absolute;
-  z-index: 1;
-  top: -5px;
+.tooltip.right {
+  left: 120%;
+}
+
+.tooltip.left {
   right: 110%;
 }
 
-.menu-button:hover .button-tooltip-right {
+button.menu:hover .tooltip.right {
   visibility: visible;
   transition-delay: 1s;
 }
 
-.menu-button:hover .button-tooltip-left {
+button.menu:hover .tooltip.left {
   visibility: visible;
   transition-delay: 1s;
 }

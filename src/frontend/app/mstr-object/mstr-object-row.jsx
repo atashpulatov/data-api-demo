@@ -5,15 +5,17 @@ import fileImg from './images/baseline_attachment_black_18dp.png';
 /* eslint-enable */
 
 export const DirectoryRow = ({ directory, onClick }) => (
-    <li className='cursorIsPointer row'
+    <li className='cursor-is-pointer row'
         onClick={onClick.bind(null, directory.id)}>
-            <img className='object-img' src={directoryImg} /> <span className='object-label'>{directory.name}</span>
+            <img className='object' src={directoryImg} />
+            <label className='object'>{directory.name}</label>
     </li >
 );
 
 export const ReportRow = ({ report, onClick }) => (
-    <li className='cursorIsPointer row'
+    <li className='cursor-is-pointer row'
         onClick={onClick.bind(null, report.id)} >
-            <img className='object-img' src={fileImg} /> <span className='object-label'>{report.name}</span>
+            <img className='object' src={fileImg} />
+            <label className='object'>{report.name}</label>
     </li >
 );
