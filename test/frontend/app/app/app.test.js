@@ -28,6 +28,6 @@ describe('App', () => {
         // then
         const nodeComponentWrapper = componentWrapper.find('Footer');
         expect(nodeComponentWrapper).toHaveLength(1);
-        expect(nodeComponentWrapper.find('p').text()).toBeTruthy();
+        expect(nodeComponentWrapper.find('footer').text()).toBeTruthy();
     });
 });

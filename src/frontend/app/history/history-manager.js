@@ -15,8 +15,7 @@ class HistoryManager {
 
     handleHistoryData(historyData) {
         const dirArray = this._getDirectories();
-        // const historyCommand = historyData[historyProperties.command];
-        const historyCommand = {};
+        const historyCommand = historyData[historyProperties.command];
         switch (historyCommand) {
             case historyProperties.logOut:
                 sessionStorage.removeItem(sessionProperties.authToken);
