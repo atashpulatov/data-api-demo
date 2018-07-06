@@ -1,11 +1,12 @@
-import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
+/* eslint-disable */
+import React from 'react';
 import BaseComponent from '../base-component.jsx';
-import { DirectoryRow, ReportRow } from './mstr-object-row.jsx'; // eslint-disable-line no-unused-vars
-import sessionPropertiesEnum from '../storage/session-properties';
+import { DirectoryRow, ReportRow } from './mstr-object-row.jsx';
 import mstrObjectRestService from './mstr-object-rest-service';
 import officeDi from '../office/office-di';
 import './mstr-object.css';
 import { historyProperties } from '../history/history-properties';
+/* eslint-enable */
 
 const objectsTypesMap = {
     directory: 8,

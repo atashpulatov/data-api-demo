@@ -1,7 +1,9 @@
-import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
+/* eslint-disable */
+import React, {Component} from 'react';
 import './menu-bar.css';
 import { historyProperties } from './history/history-properties';
 import { withRouter } from 'react-router';
+/* eslint-enable */
 
 const back = '‹';
 const settings = '⏣';
