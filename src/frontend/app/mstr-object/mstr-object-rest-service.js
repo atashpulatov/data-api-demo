@@ -1,4 +1,4 @@
-import sessionPropertiesEnum from '../storage/session-properties';
+import { sessionProperties } from '../storage/session-properties';
 import StorageService from '../storage/storage-service';
 import di from './mstr-object-di';
 import { errorHandler } from '../error/error-service';
@@ -36,9 +36,9 @@ class MstrObjectRestService {
     }
 
     async getObjectContent(objectId) {
-        const envUrl = StorageService.getProperty(sessionPropertiesEnum['envUrl']);
-        const authToken = StorageService.getProperty(sessionPropertiesEnum['authToken']);
-        const projectId = StorageService.getProperty(sessionPropertiesEnum['projectId']);
+        const envUrl = StorageService.getProperty(sessionProperties['envUrl']);
+        const authToken = StorageService.getProperty(sessionProperties['authToken']);
+        const projectId = StorageService.getProperty(sessionProperties['projectId']);
         let fullPath = `${envUrl}/reports/${objectId}/instances`;
         const reportInstance = await di.request.post(fullPath)
             .set('x-mstr-authtoken', authToken)
