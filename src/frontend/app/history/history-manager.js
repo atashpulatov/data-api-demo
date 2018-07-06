@@ -1,6 +1,6 @@
 import { historyProperties } from './history-properties';
 import { HistoryError } from './history-error';
-import sessionProperties from '../storage/session-properties';
+import { sessionProperties } from '../storage/session-properties';
 
 class HistoryManager {
     getCurrentDirectory() {
@@ -34,8 +34,10 @@ class HistoryManager {
                 this._handleGoInside(historyData, dirArray);
                 break;
             default:
-                console.error(`History command: \
-                ${history[historyProperties.command]} wrong value.`);
+                // TODO: Refactor the lines below
+                console.warn(`History command: `
+                    + `'${history[historyProperties.command]}'`
+                    + ` is not supported.`);
         }
     }
 
