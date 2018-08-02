@@ -21,21 +21,21 @@ class MenuBar extends Component {
             historyObject: {},
         };
         this.goUpObject.historyObject[historyProperties.command] =
-            historyProperties.goUp;
+            historyProperties.actions.goUp;
 
         this.goProjectsObject = {
             pathname: '/',
             historyObject: {},
         };
         this.goProjectsObject.historyObject[historyProperties.command] =
-            historyProperties.goToProject;
+            historyProperties.actions.goToProject;
 
         this.logOutObject = {
             pathname: '/',
             historyObject: {},
         };
         this.logOutObject.historyObject[historyProperties.command] =
-            historyProperties.logOut;
+            historyProperties.actions.logOut;
     }
 
     pushHistory(historyObject) {

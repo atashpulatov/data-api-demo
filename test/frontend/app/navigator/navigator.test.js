@@ -51,7 +51,7 @@ describe('navigator', () => {
         // given
         const givenValue = 'testt';
         location.historyObject[historyProperties.command] =
-            historyProperties.goInside;
+            historyProperties.actions.goInside;
         location.historyObject[historyProperties.directoryId] = givenValue;
         // when
         mount(<Navigator location={location} />);
@@ -64,7 +64,7 @@ describe('navigator', () => {
         // given
         const givenValue = 'testt';
         location.historyObject[historyProperties.command] =
-            historyProperties.goInside;
+            historyProperties.actions.goInside;
         const oldId = 'oldId';
         const recentId = 'newId';
         const givenJson = JSON.stringify([oldId, recentId]);
@@ -85,7 +85,7 @@ describe('navigator', () => {
         sessionStorage.setItem(historyProperties.directoryArray, givenJson);
         // when
         location.historyObject[historyProperties.command] =
-            historyProperties.goUp;
+            historyProperties.actions.goUp;
         mount(<Navigator location={location} />);
         // then
         const currId = getCurrentDirectory();

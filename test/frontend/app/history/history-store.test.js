@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { historyStore } from '../../../../src/frontend/app/history/history-store';
-import { historyActions } from '../../../../src/frontend/app/history/history-actions';
 import { HistoryError } from '../../../../src/frontend/app/history/history-error';
+import { historyProperties } from '../../../../src/frontend/app/history/history-properties';
 /* eslint-enable */
 
 describe('historyStore', () => {
@@ -12,7 +12,7 @@ describe('historyStore', () => {
 
     afterEach(() => {
         historyStore.dispatch({
-            type: historyActions.logOut,
+            type: historyProperties.actions.logOut,
         });
     });
 
@@ -21,7 +21,7 @@ describe('historyStore', () => {
         const givenDirId = 'someId';
         // when
         historyStore.dispatch({
-            type: historyActions.goInside,
+            type: historyProperties.actions.goInside,
             dirId: givenDirId,
         });
         // then
@@ -36,12 +36,12 @@ describe('historyStore', () => {
         const givenDirId = 'someId';
         const anotherDirId = 'anotherId';
         historyStore.dispatch({
-            type: historyActions.goInside,
+            type: historyProperties.actions.goInside,
             dirId: givenDirId,
         });
         // when
         historyStore.dispatch({
-            type: historyActions.goInside,
+            type: historyProperties.actions.goInside,
             dirId: anotherDirId,
         });
         // then
@@ -55,7 +55,7 @@ describe('historyStore', () => {
         // when
         const wrongFunctionCall = () => {
             historyStore.dispatch({
-                type: historyActions.goInside,
+                type: historyProperties.actions.goInside,
             });
         };
         // then
@@ -69,16 +69,16 @@ describe('historyStore', () => {
         const oldId = 'oldId';
         const recentId = 'newId';
         historyStore.dispatch({
-            type: historyActions.goInside,
+            type: historyProperties.actions.goInside,
             dirId: oldId,
         });
         historyStore.dispatch({
-            type: historyActions.goInside,
+            type: historyProperties.actions.goInside,
             dirId: recentId,
         });
         // when
         historyStore.dispatch({
-            type: historyActions.goUp,
+            type: historyProperties.actions.goUp,
         });
         // then
         const dirArray = historyStore.getState().directoryArray;
@@ -91,12 +91,12 @@ describe('historyStore', () => {
         // given
         const givenDirId = 'someId';
         historyStore.dispatch({
-            type: historyActions.goInside,
+            type: historyProperties.actions.goInside,
             dirId: givenDirId,
         });
         // when
         historyStore.dispatch({
-            type: historyActions.goToProject,
+            type: historyProperties.actions.goToProject,
         });
         // then
         const dirArray = historyStore.getState().directoryArray;
@@ -107,12 +107,12 @@ describe('historyStore', () => {
         // given
         const givenDirId = 'someId';
         historyStore.dispatch({
-            type: historyActions.goInside,
+            type: historyProperties.actions.goInside,
             dirId: givenDirId,
         });
         // when
         historyStore.dispatch({
-            type: historyActions.logOut,
+            type: historyProperties.actions.logOut,
         });
         // then
         const dirArray = historyStore.getState().directoryArray;

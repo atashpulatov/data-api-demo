@@ -28,7 +28,7 @@ class MstrObjects extends BaseComponent {
     navigateToDir(dirId) {
         const historyObject = {};
         historyObject[historyProperties.command] =
-            historyProperties.goInside;
+            historyProperties.actions.goInside;
         historyObject[historyProperties.directoryId] = dirId;
         this.props.history.push({
             pathname: '/',

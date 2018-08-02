@@ -11,21 +11,21 @@ const goUpObject = {
     historyObject: {},
 };
 goUpObject.historyObject[historyProperties.command] =
-    historyProperties.goUp;
+    historyProperties.actions.goUp;
 
 const goProjectsObject = {
     pathname: '/',
     historyObject: {},
 };
 goProjectsObject.historyObject[historyProperties.command] =
-    historyProperties.goToProject;
+    historyProperties.actions.goToProject;
 
 const logOutObject = {
     pathname: '/',
     historyObject: {},
 };
 logOutObject.historyObject[historyProperties.command] =
-    historyProperties.logOut;
+    historyProperties.actions.logOut;
 
 describe('menu bar', () => {
     const realPushHistory = MenuBar.WrappedComponent.prototype.pushHistory;

@@ -17,19 +17,19 @@ class HistoryManager {
         const dirArray = this._getDirectories();
         const historyCommand = historyData[historyProperties.command];
         switch (historyCommand) {
-            case historyProperties.logOut:
+            case historyProperties.actions.logOut:
                 sessionStorage.removeItem(sessionProperties.authToken);
                 sessionStorage.removeItem(sessionProperties.projectId);
                 sessionStorage.removeItem(historyProperties.directoryArray);
                 break;
-            case historyProperties.goToProject:
+            case historyProperties.actions.goToProject:
                 sessionStorage.removeItem(sessionProperties.projectId);
                 sessionStorage.removeItem(historyProperties.directoryArray);
                 break;
-            case historyProperties.goUp:
+            case historyProperties.actions.goUp:
                 this._handleGoUp(dirArray);
                 break;
-            case historyProperties.goInside:
+            case historyProperties.actions.goInside:
                 this._handleGoInside(historyData, dirArray);
                 break;
             default:

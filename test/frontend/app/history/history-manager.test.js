@@ -16,7 +16,7 @@ describe('historyManager', () => {
             .toBeFalsy();
         const givenDirId = 'someId';
         const historyObject = {};
-        historyObject[historyProperties.command] = historyProperties.goInside;
+        historyObject[historyProperties.command] = historyProperties.actions.goInside;
         historyObject[historyProperties.directoryId] = givenDirId;
         // when
         historyManager.handleHistoryData(historyObject);
@@ -38,7 +38,7 @@ describe('historyManager', () => {
             JSON.stringify(['whatever']));
         const givenDirId = 'someId';
         const historyObject = {};
-        historyObject[historyProperties.command] = historyProperties.goInside;
+        historyObject[historyProperties.command] = historyProperties.actions.goInside;
         historyObject[historyProperties.directoryId] = givenDirId;
         // when
         historyManager.handleHistoryData(historyObject);
@@ -56,7 +56,7 @@ describe('historyManager', () => {
         expect(sessionStorage.getItem(historyProperties.directoryArray))
             .toBeFalsy();
         const historyObject = {};
-        historyObject[historyProperties.command] = historyProperties.goInside;
+        historyObject[historyProperties.command] = historyProperties.actions.goInside;
         // when
         const wrongFunctionCall = () => {
             historyManager.handleHistoryData(historyObject);
@@ -110,7 +110,7 @@ describe('historyManager', () => {
         const givenJson = JSON.stringify([oldId, recentId]);
         sessionStorage.setItem(historyProperties.directoryArray, givenJson);
         const historyObject = {};
-        historyObject[historyProperties.command] = historyProperties.goUp;
+        historyObject[historyProperties.command] = historyProperties.actions.goUp;
         // when
         historyManager.handleHistoryData(historyObject);
         // then
@@ -123,7 +123,7 @@ describe('historyManager', () => {
         const projectId = 'someId';
         sessionStorage.setItem(sessionProperties.projectId, projectId);
         const historyObject = {};
-        historyObject[historyProperties.command] = historyProperties.goUp;
+        historyObject[historyProperties.command] = historyProperties.actions.goUp;
         // when
         historyManager.handleHistoryData(historyObject);
         // then
@@ -142,7 +142,7 @@ describe('historyManager', () => {
 
         const historyObject = {};
         historyObject[historyProperties.command] =
-            historyProperties.goToProject;
+            historyProperties.actions.goToProject;
         // when
         historyManager.handleHistoryData(historyObject);
         // then
@@ -164,7 +164,7 @@ describe('historyManager', () => {
 
         const historyObject = {};
         historyObject[historyProperties.command] =
-            historyProperties.logOut;
+            historyProperties.actions.logOut;
         // when
         historyManager.handleHistoryData(historyObject);
         // then

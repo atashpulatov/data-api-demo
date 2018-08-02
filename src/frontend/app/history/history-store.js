@@ -1,10 +1,10 @@
 import { createStore } from 'redux';
-import { historyActions } from './history-actions';
 import { HistoryError } from './history-error';
+import { historyProperties } from './history-properties';
 
 const historyReducer = (state = {}, action) => {
     switch (action.type) {
-        case historyActions.goInside:
+        case historyProperties.actions.goInside:
             if (!action.dirId) {
                 throw new HistoryError('Missing directoryId.');
             }
@@ -13,15 +13,15 @@ const historyReducer = (state = {}, action) => {
                 ...state,
                 directoryArray: oldArr.concat(action.dirId),
             };
-        case historyActions.goUp:
+        case historyProperties.actions.goUp:
             const updatedArr = [...state.directoryArray];
             updatedArr.splice(-1, 1);
             return {
                 ...state,
                 directoryArray: updatedArr,
             };
-        case historyActions.goToProject:
-        case historyActions.logOut:
+        case historyProperties.actions.goToProject:
+        case historyProperties.actions.logOut:
             return {
                 ...state,
                 directoryArray: undefined,

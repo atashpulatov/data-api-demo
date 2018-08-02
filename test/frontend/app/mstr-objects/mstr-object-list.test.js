@@ -127,7 +127,7 @@ describe('MstrObjectList', () => {
         directories.children().forEach((row) => {
             const dirId = mockMstrObjects[iterateId].id;
             expectedHistoryObject[historyProperties.command] =
-                historyProperties.goInside;
+                historyProperties.actions.goInside;
             expectedHistoryObject[historyProperties.directoryId] = dirId;
             const directoryRowLi = row.find('li');
             directoryRowLi.simulate('click');
