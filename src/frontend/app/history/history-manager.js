@@ -1,6 +1,7 @@
 import { historyProperties } from './history-properties';
 import { HistoryError } from './history-error';
 import { sessionProperties } from '../storage/session-properties';
+import { reduxStore } from '../store';
 
 class HistoryManager {
     getCurrentDirectory() {
@@ -14,42 +15,29 @@ class HistoryManager {
     }
 
     handleHistoryData(historyData) {
-        const dirArray = this._getDirectories();
         const historyCommand = historyData[historyProperties.command];
         switch (historyCommand) {
             case historyProperties.actions.logOut:
-                sessionStorage.removeItem(sessionProperties.authToken);
-                sessionStorage.removeItem(sessionProperties.projectId);
-                sessionStorage.removeItem(historyProperties.directoryArray);
-                break;
             case historyProperties.actions.goToProject:
-                sessionStorage.removeItem(sessionProperties.projectId);
-                sessionStorage.removeItem(historyProperties.directoryArray);
-                break;
             case historyProperties.actions.goUp:
-                this._handleGoUp(dirArray);
-                break;
+                reduxStore.dispatch({
+                    type: historyCommand,
+                });
             case historyProperties.actions.goInside:
-                this._handleGoInside(historyData, dirArray);
+                const dirId = historyData[historyProperties.directoryId];
+                if (dirId === undefined) {
+                    throw new HistoryError('Missing directoryId.');
+                }
+                reduxStore.dispatch({
+                    type: historyCommand,
+                    dirId: dirId,
+                });
                 break;
             default:
                 // TODO: Refactor the lines below
                 console.warn(`History command: `
                     + `'${history[historyProperties.command]}'`
                     + ` is not supported.`);
-        }
-    }
-
-    _handleGoInside(historyData, dirArray) {
-        const dirId = historyData[historyProperties.directoryId];
-        if (dirId === undefined) {
-            throw new HistoryError('Missing directoryId.');
-        }
-        if (dirArray === null) {
-            this._setDirectories([dirId]);
-        } else {
-            dirArray.push(dirId);
-            this._setDirectories(dirArray);
         }
     }
 

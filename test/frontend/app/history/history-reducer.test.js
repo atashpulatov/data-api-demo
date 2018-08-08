@@ -1,10 +1,13 @@
 /* eslint-disable */
-import { historyStore } from '../../../../src/frontend/app/history/history-store';
+import { createStore } from 'redux';
+import { historyReducer } from '../../../../src/frontend/app/history/history-reducer';
 import { HistoryError } from '../../../../src/frontend/app/history/history-error';
 import { historyProperties } from '../../../../src/frontend/app/history/history-properties';
 /* eslint-enable */
 
-describe('historyStore', () => {
+describe('historyReducer', () => {
+    const historyStore = createStore(historyReducer);
+
     beforeEach(() => {
         // default state should be empty
         expect(historyStore.getState()).toEqual({});
@@ -14,6 +17,19 @@ describe('historyStore', () => {
         historyStore.dispatch({
             type: historyProperties.actions.logOut,
         });
+    });
+
+    it('should save projectId on go to project (no dir saved)', () => {
+        // given
+        const givenId = 'someId';
+        // when
+        historyStore.dispatch({
+            type: historyProperties.actions.goToProject,
+            projectId: givenId,
+        });
+        // then
+        const projectId = historyStore.getState().projectId;
+        expect(projectId).toBe(givenId);
     });
 
     it('should save folderId on go inside (no previous)', () => {

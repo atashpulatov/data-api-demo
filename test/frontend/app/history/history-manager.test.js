@@ -3,17 +3,23 @@ import { historyManager } from '../../../../src/frontend/app/history/history-man
 import { historyProperties } from '../../../../src/frontend/app/history/history-properties';
 import { HistoryError } from '../../../../src/frontend/app/history/history-error';
 import { sessionProperties } from '../../../../src/frontend/app/storage/session-properties';
+import { reduxStore } from '../../../../src/frontend/app/store';
 /* eslint-enable */
 
 describe('historyManager', () => {
+    beforeEach(() => {
+        // default state should be empty
+        expect(reduxStore.getState().historyReducer).toEqual({});
+    });
+
     afterEach(() => {
-        sessionStorage.setItem(historyProperties.directoryArray, undefined);
+        reduxStore.dispatch({
+            type: historyProperties.actions.logOut,
+        });
     });
 
     it('should save folderId when navigating inside (first folder)', () => {
         // given
-        expect(sessionStorage.getItem(historyProperties.directoryArray))
-            .toBeFalsy();
         const givenDirId = 'someId';
         const historyObject = {};
         historyObject[historyProperties.command] = historyProperties.actions.goInside;
@@ -21,9 +27,7 @@ describe('historyManager', () => {
         // when
         historyManager.handleHistoryData(historyObject);
         // then
-        const dirJson = sessionStorage
-            .getItem(historyProperties.directoryArray);
-        const dirArray = JSON.parse(dirJson);
+        const dirArray = reduxStore.getState().historyReducer.directoryArray;
         expect(dirArray).toBeTruthy();
         expect(dirArray.length).toBe(1);
         expect(dirArray[0]).toBe(givenDirId);
@@ -31,11 +35,10 @@ describe('historyManager', () => {
 
     it('should save folderId when navigating inside (another folder)', () => {
         // given
-        expect(sessionStorage.getItem(historyProperties.directoryArray))
-            .toBeFalsy();
-        sessionStorage.setItem(
-            historyProperties.directoryArray,
-            JSON.stringify(['whatever']));
+        reduxStore.dispatch({
+            type: historyProperties.actions.goInside,
+            dirId: 'whatever',
+        });
         const givenDirId = 'someId';
         const historyObject = {};
         historyObject[historyProperties.command] = historyProperties.actions.goInside;
@@ -43,9 +46,7 @@ describe('historyManager', () => {
         // when
         historyManager.handleHistoryData(historyObject);
         // then
-        const dirJson = sessionStorage
-            .getItem(historyProperties.directoryArray);
-        const dirArray = JSON.parse(dirJson);
+        const dirArray = reduxStore.getState().historyReducer.directoryArray;
         expect(dirArray).toBeTruthy();
         expect(dirArray.length).toBe(2);
         expect(dirArray[1]).toBe(givenDirId);
@@ -53,8 +54,6 @@ describe('historyManager', () => {
 
     it('should throw error when navigating inside without folder', () => {
         // given
-        expect(sessionStorage.getItem(historyProperties.directoryArray))
-            .toBeFalsy();
         const historyObject = {};
         historyObject[historyProperties.command] = historyProperties.actions.goInside;
         // when
@@ -71,8 +70,10 @@ describe('historyManager', () => {
     it('should return current directory when there is one', () => {
         // given
         const expectedDirId = 'someId';
-        const givenJson = JSON.stringify([expectedDirId]);
-        sessionStorage.setItem(historyProperties.directoryArray, givenJson);
+        reduxStore.dispatch({
+            type: historyProperties.actions.goInside,
+            dirId: expectedDirId,
+        })
         // when
         const currDir = historyManager.getCurrentDirectory();
         // then
