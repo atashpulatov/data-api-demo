@@ -5,16 +5,12 @@ export const sessionReducer = (state = {}, action) => {
     switch (action.type) {
         case sessionProperties.actions.logIn:
             return onLogIn(action, state);
-            break;
         case sessionProperties.actions.logOut:
             return onLogOut(action, state);
-            break;
         case sessionProperties.actions.loggedIn:
             return onLoggedIn(action, state);
-            break;
         case sessionProperties.actions.setProperty:
             return onSetProperty(action, state);
-            break;
     }
     console.warn(`History command: `
         + `'${action.type}'`
@@ -59,7 +55,7 @@ function onLoggedIn(action, state) {
 }
 
 function onSetProperty(action, state) {
-    let newState = {...state};
+    let newState = { ...state };
     newState[action.propertyName] = action.propertyValue;
     return newState;
 }

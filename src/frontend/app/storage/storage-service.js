@@ -1,13 +1,8 @@
 import UnknownPropertyError from './unknown-property-error';
 import { sessionProperties } from './session-properties';
-import { sessionReducer } from './session-reducer';
-import { createStore } from '../../../../node_modules/redux';
+import { reduxStore } from '../store';
 
 class StorageService {
-    constructor() {
-        this._sessionStore = createStore(sessionReducer);
-    }
-
     setProperty(propertyToBeSet, propertyValue) {
         let foundProperty = false;
         for (let propertyKey in sessionProperties) {
@@ -21,19 +16,20 @@ class StorageService {
         if (!foundProperty) {
             throw new UnknownPropertyError(propertyToBeSet, propertyValue);
         } else {
-            this._sessionStore.dispatch({
+            reduxStore.dispatch({
                 type: sessionProperties.actions.setProperty,
                 propertyName: propertyToBeSet,
                 propertyValue: propertyValue,
             });
-            // sessionStorage.setItem(propertyToBeSet, propertyValue);
         }
     };
 
     getProperty(propertyName) {
-        return this._sessionStore.getState().propertyName;
+        const constSessionStateProps = reduxStore
+            .getState().sessionReducer;
+        return constSessionStateProps[propertyName];
         // return sessionStorage.getItem(propertyName);
     };
 }
 
-export default new StorageService();
+export const storageService = new StorageService();
