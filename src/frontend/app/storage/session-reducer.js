@@ -12,6 +12,9 @@ export const sessionReducer = (state = {}, action) => {
         case sessionProperties.actions.loggedIn:
             return onLoggedIn(action, state);
             break;
+        case sessionProperties.actions.setProperty:
+            return onSetProperty(action, state);
+            break;
     }
     console.warn(`History command: `
         + `'${action.type}'`
@@ -53,4 +56,10 @@ function onLoggedIn(action, state) {
         ...state,
         authToken: action.authToken,
     };
+}
+
+function onSetProperty(action, state) {
+    let newState = {...state};
+    newState[action.propertyName] = action.propertyValue;
+    return newState;
 }

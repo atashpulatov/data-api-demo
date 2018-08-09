@@ -14,7 +14,8 @@ describe('StorageService', () => {
         // when
         storageService.setProperty(property, firstToken);
         // then
-        expect(sessionStorage.getItem(property)).toBeDefined();
+        const tokenToCheck = sessionStorage.getItem(property);
+        expect(tokenToCheck).toBeDefined();
     });
     it('should update value of x-mstr-authtoken in sessionStorage', () => {
         // given

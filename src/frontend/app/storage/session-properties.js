@@ -13,5 +13,6 @@ export const sessionProperties = new Proxy({
         logIn: 'SESSION_LOG_IN',
         logOut: 'SESSION_LOG_OUT',
         loggedIn: 'SESSION_LOGGED_IN',
+        setProperty: 'SESSION_SET_PROPERTY',
     },
 }, propsProxy);
