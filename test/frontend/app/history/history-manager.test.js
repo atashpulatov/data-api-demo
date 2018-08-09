@@ -18,6 +18,22 @@ describe('historyManager', () => {
         });
     });
 
+    it('should throw an error on unknown command', () => {
+        // given
+        const wrongCommand = 'whatever';
+        const historyObject = {
+            historyCommand: wrongCommand,
+        };
+        // when
+        const wrongFunctionCall = () => {
+            historyManager.handleHistoryData(historyObject);
+        };
+        // then
+        expect(wrongFunctionCall).toThrowError(HistoryError);
+        expect(wrongFunctionCall)
+            .toThrowError('History command is not supported.');
+    });
+
     it('should save folderId when navigating inside (first folder)', () => {
         // given
         const givenDirId = 'someId';
@@ -166,19 +182,22 @@ describe('historyManager', () => {
         // then
         expect(reduxStore.getState().historyReducer.projectId).toBeFalsy();
         expect(reduxStore.getState().historyReducer.directoryArray).toBeFalsy();
-
     });
 
-    it('should remove project, directories and token on go logout', () => {
+    it('should remove project and directories on log out', () => {
         // given
-        const autToken = 'someToken';
-        sessionStorage.setItem(sessionProperties.authToken, autToken);
-        const projectId = 'someId';
-        sessionStorage.setItem(sessionProperties.projectId, projectId);
-        const oldId = 'oldId';
-        const recentId = 'newId';
-        const givenJson = JSON.stringify([oldId, recentId]);
-        sessionStorage.setItem(historyProperties.directoryArray, givenJson);
+        reduxStore.dispatch({
+            type: historyProperties.actions.goInsideProject,
+            projectId: 'projectId',
+        });
+        reduxStore.dispatch({
+            type: historyProperties.actions.goInside,
+            dirId: 'oldId',
+        });
+        reduxStore.dispatch({
+            type: historyProperties.actions.goInside,
+            dirId: 'newId',
+        });
 
         const historyObject = {};
         historyObject[historyProperties.command] =
@@ -186,9 +205,7 @@ describe('historyManager', () => {
         // when
         historyManager.handleHistoryData(historyObject);
         // then
-        expect(sessionStorage.getItem(sessionProperties.authToken)).toBeFalsy();
-        expect(sessionStorage.getItem(sessionProperties.projectId)).toBeFalsy();
-        expect(sessionStorage.getItem(historyProperties.directoryArray))
-            .toBeFalsy();
+        expect(reduxStore.getState().historyReducer.projectId).toBeFalsy();
+        expect(reduxStore.getState().historyReducer.directoryArray).toBeFalsy();
     });
 });

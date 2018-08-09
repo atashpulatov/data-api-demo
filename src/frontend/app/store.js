@@ -1,8 +1,17 @@
 import { createStore, combineReducers } from 'redux';
 import { historyReducer } from './history/history-reducer';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
-const masterReducer = combineReducers({
+const rootReducer = combineReducers({
     historyReducer,
 });
+const persistConfig = {
+    key: 'root',
+    storage,
+    blacklist: ['historyReducer'],
+};
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-export const reduxStore = createStore(masterReducer);
+export const reduxStore = createStore(persistedReducer);
+export const reduxPersistor = persistStore(reduxStore);
