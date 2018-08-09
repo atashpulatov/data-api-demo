@@ -2,8 +2,7 @@ import UnknownPropertyError from './unknown-property-error';
 import { sessionProperties} from './session-properties';
 
 class StorageService {
-    constructor() {
-    }
+    constructor() { }
 
     setProperty(propertyToBeSet, propertyValue) {
         let foundProperty = false;
