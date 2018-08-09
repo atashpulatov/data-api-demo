@@ -19,17 +19,30 @@ describe('historyReducer', () => {
         });
     });
 
-    it('should save projectId on go to project (no dir saved)', () => {
+    it('should save projectId on go into project (no dir saved)', () => {
         // given
         const givenId = 'someId';
         // when
         historyStore.dispatch({
-            type: historyProperties.actions.goToProject,
+            type: historyProperties.actions.goInsideProject,
             projectId: givenId,
         });
         // then
         const projectId = historyStore.getState().projectId;
         expect(projectId).toBe(givenId);
+    });
+
+    it('should throw an error on go into project without id provided', () => {
+        // when
+        const wrongFunctionCall = () => {
+            historyStore.dispatch({
+                type: historyProperties.actions.goInsideProject,
+            });
+        };
+        // then
+        expect(wrongFunctionCall).toThrowError(HistoryError);
+        expect(wrongFunctionCall).toThrowError('Missing projectId.');
+        expect(historyStore.getState().directoryArray).toBeFalsy();
     });
 
     it('should save folderId on go inside (no previous)', () => {
@@ -103,7 +116,23 @@ describe('historyReducer', () => {
         expect(dirArray[0]).toBe(oldId);
     });
 
-    it('should erase history on go to project', () => {
+    it('should remove project id on go up when there is no dir id', () => {
+        // given
+        const givenId = 'projectId';
+        historyStore.dispatch({
+            type: historyProperties.actions.goInsideProject,
+            projectId: givenId,
+        });
+        // when
+        historyStore.dispatch({
+            type: historyProperties.actions.goUp,
+        });
+        // then
+        const projectId = historyStore.getState().projectId;
+        expect(projectId).toBeFalsy();
+    });
+
+    it('should erase history on go to projects', () => {
         // given
         const givenDirId = 'someId';
         historyStore.dispatch({
@@ -112,7 +141,7 @@ describe('historyReducer', () => {
         });
         // when
         historyStore.dispatch({
-            type: historyProperties.actions.goToProject,
+            type: historyProperties.actions.goToProjects,
         });
         // then
         const dirArray = historyStore.getState().directoryArray;

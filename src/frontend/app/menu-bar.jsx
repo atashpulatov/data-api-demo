@@ -28,7 +28,7 @@ class MenuBar extends Component {
             historyObject: {},
         };
         this.goProjectsObject.historyObject[historyProperties.command] =
-            historyProperties.actions.goToProject;
+            historyProperties.actions.goToProjects;
 
         this.logOutObject = {
             pathname: '/',

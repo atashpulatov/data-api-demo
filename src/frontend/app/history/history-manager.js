@@ -5,9 +5,7 @@ import { reduxStore } from '../store';
 
 class HistoryManager {
     getCurrentDirectory() {
-        const dirJson = sessionStorage
-            .getItem(historyProperties.directoryArray);
-        const dirArr = JSON.parse(dirJson);
+        const dirArr = reduxStore.getState().historyReducer.directoryArray;
         if (!dirArr || (dirArr.length == 0)) {
             throw new HistoryError('No directory ID was stored.');
         }
@@ -18,11 +16,12 @@ class HistoryManager {
         const historyCommand = historyData[historyProperties.command];
         switch (historyCommand) {
             case historyProperties.actions.logOut:
-            case historyProperties.actions.goToProject:
+            case historyProperties.actions.goToProjects:
             case historyProperties.actions.goUp:
                 reduxStore.dispatch({
                     type: historyCommand,
                 });
+                break;
             case historyProperties.actions.goInside:
                 const dirId = historyData[historyProperties.directoryId];
                 if (dirId === undefined) {
@@ -34,10 +33,7 @@ class HistoryManager {
                 });
                 break;
             default:
-                // TODO: Refactor the lines below
-                console.warn(`History command: `
-                    + `'${history[historyProperties.command]}'`
-                    + ` is not supported.`);
+                throw new HistoryError(`History command is not supported.`);
         }
     }
 

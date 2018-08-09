@@ -73,7 +73,7 @@ describe('historyManager', () => {
         reduxStore.dispatch({
             type: historyProperties.actions.goInside,
             dirId: expectedDirId,
-        })
+        });
         // when
         const currDir = historyManager.getCurrentDirectory();
         // then
@@ -82,9 +82,15 @@ describe('historyManager', () => {
 
     it('should return current directory when there is many', () => {
         // given
+        reduxStore.dispatch({
+            type: historyProperties.actions.goInside,
+            dirId: 'oldId',
+        });
         const expectedDirId = 'someId';
-        const givenJson = JSON.stringify(['whateverId', expectedDirId]);
-        sessionStorage.setItem(historyProperties.directoryArray, givenJson);
+        reduxStore.dispatch({
+            type: historyProperties.actions.goInside,
+            dirId: expectedDirId,
+        });
         // when
         const currDir = historyManager.getCurrentDirectory();
         // then
@@ -107,9 +113,14 @@ describe('historyManager', () => {
     it('should remove most recent directory when go up', () => {
         // given
         const oldId = 'oldId';
-        const recentId = 'newId';
-        const givenJson = JSON.stringify([oldId, recentId]);
-        sessionStorage.setItem(historyProperties.directoryArray, givenJson);
+        reduxStore.dispatch({
+            type: historyProperties.actions.goInside,
+            dirId: oldId,
+        });
+        reduxStore.dispatch({
+            type: historyProperties.actions.goInside,
+            dirId: 'newId',
+        });
         const historyObject = {};
         historyObject[historyProperties.command] = historyProperties.actions.goUp;
         // when
@@ -121,35 +132,41 @@ describe('historyManager', () => {
 
     it('should remove project on go up command when there is no dir', () => {
         // given
-        const projectId = 'someId';
-        sessionStorage.setItem(sessionProperties.projectId, projectId);
+        reduxStore.dispatch({
+            type: historyProperties.actions.goInsideProject,
+            projectId: 'id',
+        });
         const historyObject = {};
         historyObject[historyProperties.command] = historyProperties.actions.goUp;
         // when
         historyManager.handleHistoryData(historyObject);
         // then
-
-        expect(sessionStorage.getItem(sessionProperties.projectId)).toBeFalsy();
+        expect(reduxStore.getState().historyReducer.projectId).toBeFalsy();
     });
 
     it('should remove project and directories on go to project', () => {
         // given
-        const projectId = 'someId';
-        sessionStorage.setItem(sessionProperties.projectId, projectId);
-        const oldId = 'oldId';
-        const recentId = 'newId';
-        const givenJson = JSON.stringify([oldId, recentId]);
-        sessionStorage.setItem(historyProperties.directoryArray, givenJson);
-
+        reduxStore.dispatch({
+            type: historyProperties.actions.goInsideProject,
+            projectId: 'projectId',
+        });
+        reduxStore.dispatch({
+            type: historyProperties.actions.goInside,
+            dirId: 'oldId',
+        });
+        reduxStore.dispatch({
+            type: historyProperties.actions.goInside,
+            dirId: 'newId',
+        });
         const historyObject = {};
         historyObject[historyProperties.command] =
-            historyProperties.actions.goToProject;
+            historyProperties.actions.goToProjects;
         // when
         historyManager.handleHistoryData(historyObject);
         // then
-        expect(sessionStorage.getItem(sessionProperties.projectId)).toBeFalsy();
-        expect(sessionStorage.getItem(historyProperties.directoryArray))
-            .toBeFalsy();
+        expect(reduxStore.getState().historyReducer.projectId).toBeFalsy();
+        expect(reduxStore.getState().historyReducer.directoryArray).toBeFalsy();
+
     });
 
     it('should remove project, directories and token on go logout', () => {

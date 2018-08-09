@@ -3,20 +3,15 @@ import { historyProperties } from './history-properties';
 
 export const historyReducer = (state = {}, action) => {
     switch (action.type) {
+        case historyProperties.actions.goInsideProject:
+            return onGoInsideProject(action, state);
         case historyProperties.actions.goInside:
             return onGoInside(action, state);
         case historyProperties.actions.goUp:
             return onGoUp(state);
-        case historyProperties.actions.goToProject:
-            if (!action.projectId) {
-                throw new HistoryError('Missing projectId.');
-            }
-            return {
-                ...state,
-                projectId: action.projectId,
-            };
+        case historyProperties.actions.goToProjects:
         case historyProperties.actions.logOut:
-            return onLogOut(state);
+            return eraseHistory(state);
     }
     console.warn(`History command: `
         + `'${action.type}'`
@@ -24,14 +19,32 @@ export const historyReducer = (state = {}, action) => {
     return state;
 };
 
-function onLogOut(state) {
+function onGoInsideProject(action, state) {
+    if (!action.projectId) {
+        throw new HistoryError('Missing projectId.');
+    }
+    ;
     return {
         ...state,
+        projectId: action.projectId,
+    };
+}
+
+function eraseHistory(state) {
+    return {
+        ...state,
+        projectId: undefined,
         directoryArray: undefined,
     };
 }
 
 function onGoUp(state) {
+    if (!state.directoryArray) {
+        return {
+            ...state,
+            projectId: undefined,
+        };
+    }
     const updatedArr = [...state.directoryArray];
     updatedArr.splice(-1, 1);
     return {

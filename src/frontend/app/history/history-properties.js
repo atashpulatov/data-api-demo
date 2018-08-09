@@ -11,7 +11,8 @@ export const historyProperties = new Proxy({
     // Reducer actions' types. Don't need to be wrapped into Proxy
     actions: {
         goUp: 'HISTORY_GO_UP',
-        goToProject: 'HISTORY_GO_PROJECT',
+        goToProjects: 'HISTORY_GO_PROJECTS',
+        goInsideProject: 'HISTORY_GO_INTO_PROJECTS',
         goInside: 'HISTORY_GO_INSIDE',
         logOut: 'HISTORY_LOG_OUT',
     },
