@@ -3,6 +3,7 @@ import { historyManager } from '../../../../src/frontend/app/history/history-man
 import { historyProperties } from '../../../../src/frontend/app/history/history-properties';
 import { HistoryError } from '../../../../src/frontend/app/history/history-error';
 import { reduxStore } from '../../../../src/frontend/app/store';
+import { sessionProperties } from '../../../../src/frontend/app/storage/session-properties';
 /* eslint-enable */
 
 describe('historyManager', () => {
@@ -13,7 +14,7 @@ describe('historyManager', () => {
 
     afterEach(() => {
         reduxStore.dispatch({
-            type: historyProperties.actions.logOut,
+            type: sessionProperties.actions.logOut,
         });
     });
 
@@ -200,7 +201,7 @@ describe('historyManager', () => {
 
         const historyObject = {};
         historyObject[historyProperties.command] =
-            historyProperties.actions.logOut;
+            sessionProperties.actions.logOut;
         // when
         historyManager.handleHistoryData(historyObject);
         // then

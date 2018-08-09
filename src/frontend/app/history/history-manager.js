@@ -15,7 +15,7 @@ class HistoryManager {
     handleHistoryData(historyData) {
         const historyCommand = historyData[historyProperties.command];
         switch (historyCommand) {
-            case historyProperties.actions.logOut:
+            case sessionProperties.actions.logOut:
             case historyProperties.actions.goToProjects:
             case historyProperties.actions.goUp:
                 reduxStore.dispatch({

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
 import navigationService from './navigation-service';
-import StorageService from '../storage/storage-service';
+import { storageService} from '../storage/storage-service';
 import { sessionProperties} from '../storage/session-properties';
 import { historyManager } from '../history/history-manager';
 
@@ -49,7 +49,7 @@ class Navigator extends Component {
     saveSessionData(sessionProperties) {
         for (let prop in sessionProperties) {
             if (sessionProperties.hasOwnProperty(prop)) {
-                StorageService.setProperty(prop, sessionProperties[prop]);
+                storageService.setProperty(prop, sessionProperties[prop]);
             }
         }
     }

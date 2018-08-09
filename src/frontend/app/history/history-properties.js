@@ -14,6 +14,5 @@ export const historyProperties = new Proxy({
         goToProjects: 'HISTORY_GO_PROJECTS',
         goInsideProject: 'HISTORY_GO_INTO_PROJECTS',
         goInside: 'HISTORY_GO_INSIDE',
-        logOut: 'HISTORY_LOG_OUT',
     },
 }, propsProxy);

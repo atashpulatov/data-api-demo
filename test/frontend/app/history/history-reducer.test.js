@@ -3,6 +3,7 @@ import { createStore } from 'redux';
 import { historyReducer } from '../../../../src/frontend/app/history/history-reducer';
 import { HistoryError } from '../../../../src/frontend/app/history/history-error';
 import { historyProperties } from '../../../../src/frontend/app/history/history-properties';
+import { sessionProperties } from '../../../../src/frontend/app/storage/session-properties';
 /* eslint-enable */
 
 describe('historyReducer', () => {
@@ -15,7 +16,7 @@ describe('historyReducer', () => {
 
     afterEach(() => {
         historyStore.dispatch({
-            type: historyProperties.actions.logOut,
+            type: sessionProperties.actions.logOut,
         });
     });
 
@@ -157,7 +158,7 @@ describe('historyReducer', () => {
         });
         // when
         historyStore.dispatch({
-            type: historyProperties.actions.logOut,
+            type: sessionProperties.actions.logOut,
         });
         // then
         const dirArray = historyStore.getState().directoryArray;
