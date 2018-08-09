@@ -13,9 +13,6 @@ export const historyReducer = (state = {}, action) => {
         case historyProperties.actions.logOut:
             return eraseHistory(state);
     }
-    console.warn(`History command: `
-        + `'${action.type}'`
-        + ` is not supported.`);
     return state;
 };
 

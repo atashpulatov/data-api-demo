@@ -12,9 +12,6 @@ export const sessionReducer = (state = {}, action) => {
         case sessionProperties.actions.setProperty:
             return onSetProperty(action, state);
     }
-    console.warn(`History command: `
-        + `'${action.type}'`
-        + ` is not supported.`);
     return state;
 };
 
