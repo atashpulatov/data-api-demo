@@ -21,7 +21,6 @@ function onGoInsideProject(action, state) {
     if (!action.projectId) {
         throw new HistoryError('Missing projectId.');
     }
-    ;
     return {
         ...state,
         projectId: action.projectId,

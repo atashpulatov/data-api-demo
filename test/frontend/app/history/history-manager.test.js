@@ -78,7 +78,7 @@ describe('historyManager', () => {
         };
         // then
         expect(wrongFunctionCall).toThrowError(HistoryError);
-        expect(wrongFunctionCall).toThrowError('Missing directoryId.');
+        expect(wrongFunctionCall).toThrowError('Missing dirId.');
         expect(sessionStorage.getItem(historyProperties.directoryArray))
             .toBeFalsy();
     });

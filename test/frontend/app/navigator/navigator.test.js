@@ -7,12 +7,13 @@ import { historyProperties } from '../../../../src/frontend/app/history/history-
 import projectRestService from '../../../../src/frontend/app/project/project-rest-service';
 import mstrObjectRestService from '../../../../src/frontend/app/mstr-object/mstr-object-rest-service';
 import { reduxStore } from '../../../../src/frontend/app/store';
+import { historyManager } from '../../../../src/frontend/app/history/history-manager';
 /* eslint-enable */
 
 describe('navigator', () => {
     const originalPushMethod = Navigator.prototype.pushHistory;
     const sampleEnvUrl = 'someEnvUrl';
-    const sampleAuthToken = 'someEnvUrl';
+    const sampleAuthToken = 'someAuthToken';
     const sampleProjectId = 'someProjectId';
     const sampleDirArray = ['oldDir', 'newDir'];
 
@@ -29,7 +30,7 @@ describe('navigator', () => {
         Navigator.prototype.pushHistory = jest.fn();
         location.sessionObject = {};
         location.historyObject = {};
-        sessionStorage.setItem(historyProperties.directoryArray, undefined);
+        // sessionStorage.setItem(historyProperties.directoryArray, undefined);
     });
 
     afterEach(() => {
@@ -52,7 +53,8 @@ describe('navigator', () => {
         // when
         mount(<Navigator location={location} />);
         // then
-        expect(sessionStorage.getItem(sessionProperties.authToken))
+        expect(reduxStore.getState()
+            .sessionReducer[sessionProperties.authToken])
             .toEqual(expectedValue);
     });
 
@@ -65,7 +67,7 @@ describe('navigator', () => {
         // when
         mount(<Navigator location={location} />);
         // then
-        const currDir = getCurrentDirectory();
+        const currDir = historyManager.getCurrentDirectory();
         expect(currDir).toEqual(givenValue);
     });
 
@@ -75,14 +77,20 @@ describe('navigator', () => {
         location.historyObject[historyProperties.command] =
             historyProperties.actions.goInside;
         const oldId = 'oldId';
-        const recentId = 'newId';
-        const givenJson = JSON.stringify([oldId, recentId]);
-        sessionStorage.setItem(historyProperties.directoryArray, givenJson);
+        const newId = 'newId';
+        reduxStore.dispatch({
+            type: historyProperties.actions.goInside,
+            dirId: oldId,
+        });
+        reduxStore.dispatch({
+            type: historyProperties.actions.goInside,
+            dirId: newId,
+        });
         location.historyObject[historyProperties.directoryId] = givenValue;
         // when
         mount(<Navigator location={location} />);
         // then
-        const currId = getCurrentDirectory();
+        const currId = historyManager.getCurrentDirectory();
         expect(currId).toEqual(givenValue);
     });
 
@@ -90,14 +98,20 @@ describe('navigator', () => {
         // given
         const oldId = 'oldId';
         const recentId = 'newId';
-        const givenJson = JSON.stringify([oldId, recentId]);
-        sessionStorage.setItem(historyProperties.directoryArray, givenJson);
+        reduxStore.dispatch({
+            type: historyProperties.actions.goInside,
+            dirId: oldId,
+        });
+        reduxStore.dispatch({
+            type: historyProperties.actions.goInside,
+            dirId: recentId,
+        });
         // when
         location.historyObject[historyProperties.command] =
             historyProperties.actions.goUp;
         mount(<Navigator location={location} />);
         // then
-        const currId = getCurrentDirectory();
+        const currId = historyManager.getCurrentDirectory();
         expect(currId).toEqual(oldId);
     });
 
@@ -130,9 +144,16 @@ describe('navigator', () => {
         mockGet.mockResolvedValue(mockProjects);
         const originalGetMethod = projectRestService.getProjectList;
 
-        sessionStorage.setItem(sessionProperties.envUrl, sampleEnvUrl);
-        sessionStorage.setItem(sessionProperties.authToken,
-            sampleAuthToken);
+        reduxStore.dispatch({
+            type: sessionProperties.actions.setProperty,
+            propertyName: sessionProperties.envUrl,
+            propertyValue: sampleEnvUrl,
+        });
+        reduxStore.dispatch({
+            type: sessionProperties.actions.setProperty,
+            propertyName: sessionProperties.authToken,
+            propertyValue: sampleAuthToken,
+        });
         try {
             projectRestService.getProjectList = mockGet;
             // when
@@ -161,11 +182,20 @@ describe('navigator', () => {
         mockGet.mockResolvedValue(mockObjects);
         const originalGetMethod = mstrObjectRestService.getProjectContent;
 
-        sessionStorage.setItem(sessionProperties.envUrl, sampleEnvUrl);
-        sessionStorage.setItem(sessionProperties.authToken,
-            sampleAuthToken);
-        sessionStorage.setItem(sessionProperties.projectId,
-            sampleProjectId);
+        reduxStore.dispatch({
+            type: sessionProperties.actions.setProperty,
+            propertyName: sessionProperties.envUrl,
+            propertyValue: sampleEnvUrl,
+        });
+        reduxStore.dispatch({
+            type: sessionProperties.actions.setProperty,
+            propertyName: sessionProperties.authToken,
+            propertyValue: sampleAuthToken,
+        });
+        reduxStore.dispatch({
+            type: historyProperties.actions.goInsideProject,
+            projectId: sampleProjectId,
+        });
         try {
             mstrObjectRestService.getProjectContent = mockGet;
             // when
@@ -194,11 +224,24 @@ describe('navigator', () => {
         mockGet.mockResolvedValue(mockObjects);
         const originalGetMethod = mstrObjectRestService.getFolderContent;
 
-        sessionStorage.setItem(sessionProperties.envUrl, sampleEnvUrl);
-        sessionStorage.setItem(sessionProperties.authToken,
-            sampleAuthToken);
-        sessionStorage.setItem(sessionProperties.projectId,
-            sampleProjectId);
+        reduxStore.dispatch({
+            type: sessionProperties.actions.setProperty,
+            propertyName: sessionProperties.envUrl,
+            propertyValue: sampleEnvUrl,
+        });
+        reduxStore.dispatch({
+            type: sessionProperties.actions.setProperty,
+            propertyName: sessionProperties.authToken,
+            propertyValue: sampleAuthToken,
+        });
+        reduxStore.dispatch({
+            type: historyProperties.actions.goInsideProject,
+            projectId: sampleProjectId,
+        });
+        reduxStore.dispatch({
+            type: historyProperties.actions.goInside,
+            dirId: sampleDirArray[0],
+        });
         sessionStorage.setItem(historyProperties.directoryArray,
             JSON.stringify(sampleDirArray));
         try {
@@ -216,11 +259,4 @@ describe('navigator', () => {
         }
     });
 });
-
-function getCurrentDirectory() {
-    const dirJson = sessionStorage
-        .getItem(historyProperties.directoryArray);
-    const dirArray = JSON.parse(dirJson);
-    return dirArray[dirArray.length - 1];
-}
 

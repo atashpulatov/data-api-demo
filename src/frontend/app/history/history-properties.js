@@ -12,7 +12,7 @@ export const historyProperties = new Proxy({
     actions: {
         goUp: 'HISTORY_GO_UP',
         goToProjects: 'HISTORY_GO_PROJECTS',
-        goInsideProject: 'HISTORY_GO_INTO_PROJECTS',
+        goInsideProject: 'HISTORY_GO_INSIDE_PROJECTS',
         goInside: 'HISTORY_GO_INSIDE',
     },
 }, propsProxy);

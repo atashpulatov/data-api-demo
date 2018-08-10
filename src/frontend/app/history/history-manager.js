@@ -25,7 +25,7 @@ class HistoryManager {
             case historyProperties.actions.goInside:
                 const dirId = historyData[historyProperties.directoryId];
                 if (dirId === undefined) {
-                    throw new HistoryError('Missing directoryId.');
+                    throw new HistoryError('Missing dirId.');
                 }
                 reduxStore.dispatch({
                     type: historyCommand,
