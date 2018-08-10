@@ -13,14 +13,23 @@ class NavigationService { // TODO: rethink the name.
     };
 
     async getProjectsRoute(envUrl, authToken) {
-        let projects = await projectRestService
-            .getProjectList(envUrl, authToken);
-        return {
-            pathname: '/projects',
-            state: {
-                projects,
-            },
-        };
+        try {
+            let projects = await projectRestService
+                .getProjectList(envUrl, authToken);
+            return {
+                pathname: '/projects',
+                state: {
+                    projects,
+                },
+            };
+        } catch (err) {
+            if (err instanceof UnauthorizedError) {
+                reduxStore.dispatch({
+                    type: sessionProperties.actions.logOut,
+                });
+                this.getLoginRoute();
+            }
+        }
     };
 
     async getRootObjectsRoute(envUrl, authToken, projectId) {
