@@ -1,5 +1,8 @@
 import projectRestService from '../project/project-rest-service';
 import mstrObjectRestService from '../mstr-object/mstr-object-rest-service';
+import { UnauthorizedError } from '../error/unauthorized-error';
+import { reduxStore } from '../store';
+import { sessionProperties } from '../storage/session-properties';
 
 const sharedFolderIdType = 7;
 

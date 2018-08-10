@@ -13,6 +13,7 @@ class Authenticate extends BaseComponent {
             password: '',
             envUrl: '',
             authMode: undefined,
+            isRememberMeOn: true,
             origin: this.state.origin,
         };
 
@@ -20,6 +21,7 @@ class Authenticate extends BaseComponent {
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.handleEnvURLChange = this.handleEnvURLChange.bind(this);
         this.handleAuthModeChange = this.handleAuthModeChange.bind(this);
+        this.handleRememberMeOnChange = this.handleRememberMeOnChange.bind(this);
 
         this.onLoginUser = this.onLoginUser.bind(this);
         this.authenticate = authenticate.bind(this);
@@ -36,6 +38,9 @@ class Authenticate extends BaseComponent {
     }
     handleAuthModeChange(event) {
         this.setState({ authMode: event.target.value });
+    }
+    handleRememberMeOnChange(event) {
+        this.setState({ isRememberMeOn: event.target.value });
     }
 
     async onLoginUser(event) {
@@ -60,9 +65,13 @@ class Authenticate extends BaseComponent {
         return (
             <article>
                 <header>
-                    <h1 id='authenticate-message'>Connect to MicroStrategy Environment</h1>
+                    <h1 id='authenticate-message'>
+                        Connect to MicroStrategy Environment
+                    </h1>
                 </header>
-                <form onSubmit={this.onLoginUser} className='grid-container padding'>
+                <form
+                    onSubmit={this.onLoginUser}
+                    className='grid-container padding'>
                     <label className='grid-item'>
                         Username
                         </label>
@@ -83,6 +92,11 @@ class Authenticate extends BaseComponent {
                     <input className='grid-item' type='text'
                         value={this.state.envUrl}
                         onChange={this.handleEnvURLChange} name='envUrl' />
+                    <input
+                        name='isRememberMeOn'
+                        type='checkbox'
+                        checked={this.state.isRememberMeOn}
+                        onChange={this.handleRememberMeOnChange} />
                     <input className='grid-item-2 button-submit'
                         type='submit' value='Submit' />
                 </form>
