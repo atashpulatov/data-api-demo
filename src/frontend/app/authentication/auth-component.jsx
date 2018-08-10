@@ -49,6 +49,9 @@ class Authenticate extends BaseComponent {
             sessionObject[sessionProperties.authToken] = authToken;
             this.state.origin.sessionObject = sessionObject;
         }
+        if (this.state.origin.historyObject) {
+            this.state.origin.historyObject = {};
+        }
         this.props.history.push(this.state.origin);
     }
 
