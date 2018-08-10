@@ -42,7 +42,10 @@ class Navigator extends Component {
     }
 
     async componentDidMount() {
-        this.saveSessionData(this.props.location.sessionObject);
+        const sessionObject = this.props.location.sessionObject;
+        if (sessionObject) {
+            this.saveSessionData(sessionObject);
+        }
         const histObj = this.props.location.historyObject;
         if (histObj
             && (Object.keys(histObj).length !== 0
@@ -54,10 +57,23 @@ class Navigator extends Component {
         this.pushHistory(routeObject);
     }
 
-    saveSessionData(sessionProperties) {
-        for (let prop in sessionProperties) {
-            if (sessionProperties.hasOwnProperty(prop)) {
-                storageService.setProperty(prop, sessionProperties[prop]);
+    saveSessionData(propertiesToSave) {
+        if (propertiesToSave[historyProperties.projectId]) {
+            reduxStore.dispatch({
+                type: historyProperties.actions.goInsideProject,
+                projectId: propertiesToSave[historyProperties.projectId],
+            });
+            return;
+        }
+        if (propertiesToSave[historyProperties.directoryId]) {
+            reduxStore.dispatch({
+                type: historyProperties.actions.goInside,
+                dirId: propertiesToSave[historyProperties.directoryId],
+            });
+        }
+        for (let prop in propertiesToSave) {
+            if (propertiesToSave.hasOwnProperty(prop)) {
+                storageService.setProperty(prop, propertiesToSave[prop]);
             }
         }
     }
