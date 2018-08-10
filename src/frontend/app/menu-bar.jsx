@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import './menu-bar.css';
 import { historyProperties } from './history/history-properties';
 import { withRouter } from 'react-router';
+import { sessionProperties } from './storage/session-properties';
 /* eslint-enable */
 
 const back = '‹';
@@ -35,7 +36,7 @@ class MenuBar extends Component {
             historyObject: {},
         };
         this.logOutObject.historyObject[historyProperties.command] =
-            historyProperties.actions.logOut;
+            sessionProperties.actions.logOut;
     }
 
     pushHistory(historyObject) {

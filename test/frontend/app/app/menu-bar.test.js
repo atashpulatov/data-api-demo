@@ -4,6 +4,7 @@ import { HashRouter as Router } from "react-router-dom";
 import { mount } from "enzyme";
 import MenuBar from "../../../../src/frontend/app/menu-bar";
 import { historyProperties } from '../../../../src/frontend/app/history/history-properties';
+import { sessionProperties } from "../../../../src/frontend/app/storage/session-properties";
 /* eslint-enable */
 
 const goUpObject = {
@@ -25,7 +26,7 @@ const logOutObject = {
     historyObject: {},
 };
 logOutObject.historyObject[historyProperties.command] =
-    historyProperties.actions.logOut;
+    sessionProperties.actions.logOut;
 
 describe('menu bar', () => {
     const realPushHistory = MenuBar.WrappedComponent.prototype.pushHistory;
