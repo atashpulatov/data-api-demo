@@ -1,6 +1,5 @@
 import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
 import navigationService from './navigation-service';
-import { storageService } from '../storage/storage-service';
 import { sessionProperties } from '../storage/session-properties';
 import { historyManager } from '../history/history-manager';
 import { reduxStore } from '../store';

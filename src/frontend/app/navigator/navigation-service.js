@@ -30,7 +30,7 @@ class NavigationService { // TODO: rethink the name.
                 reduxStore.dispatch({
                     type: sessionProperties.actions.logOut,
                 });
-                this.getLoginRoute();
+                return this.getLoginRoute();
             }
         }
     };
