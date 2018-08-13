@@ -32,11 +32,10 @@ function onLogIn(action, state) {
     };
 }
 function onLogOut(action, state) {
-    if (state.isRememberMeOn) {
-        return {
-            ...state,
-            authToken: undefined,
-        };
+    if (state[sessionProperties.isRememberMeOn]) {
+        let newState = { ...state };
+        newState[sessionProperties.authToken] = undefined;
+        return newState;
     }
     return {};
 }

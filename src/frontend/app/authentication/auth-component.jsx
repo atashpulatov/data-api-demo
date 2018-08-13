@@ -3,15 +3,17 @@ import BaseComponent from '../base-component.jsx';
 import './auth-component.css';
 import authService from './auth-rest-service';
 import { sessionProperties } from '../storage/session-properties';
+import { reduxStore } from '../store';
 const authenticate = authService.authenticate;
 
 class Authenticate extends BaseComponent {
     constructor(props) {
         super(props);
+        this.stateFromRedux = reduxStore.getState().sessionReducer;
         this.state = {
-            username: '',
+            username: this.stateFromRedux[sessionProperties.username] || '',
             password: '',
-            envUrl: '',
+            envUrl: this.stateFromRedux[sessionProperties.envUrl] || '',
             authMode: undefined,
             isRememberMeOn: true,
             origin: this.state.origin,
@@ -40,7 +42,7 @@ class Authenticate extends BaseComponent {
         this.setState({ authMode: event.target.value });
     }
     handleRememberMeOnChange(event) {
-        this.setState({ isRememberMeOn: event.target.value });
+        this.setState({ isRememberMeOn: event.target.checked });
     }
 
     async onLoginUser(event) {
@@ -52,6 +54,8 @@ class Authenticate extends BaseComponent {
             const sessionObject = {};
             sessionObject[sessionProperties.envUrl] = this.state.envUrl;
             sessionObject[sessionProperties.authToken] = authToken;
+            sessionObject[sessionProperties.username] = this.state.username;
+            sessionObject[sessionProperties.isRememberMeOn] = this.state.isRememberMeOn;
             this.state.origin.sessionObject = sessionObject;
         }
         if (this.state.origin.historyObject) {
@@ -92,11 +96,17 @@ class Authenticate extends BaseComponent {
                     <input className='grid-item' type='text'
                         value={this.state.envUrl}
                         onChange={this.handleEnvURLChange} name='envUrl' />
-                    <input
-                        name='isRememberMeOn'
-                        type='checkbox'
-                        checked={this.state.isRememberMeOn}
-                        onChange={this.handleRememberMeOnChange} />
+                    <div>
+                        <input
+                            name='isRememberMeOn'
+                            className='grid-item'
+                            type='checkbox'
+                            checked={this.state.isRememberMeOn}
+                            onChange={this.handleRememberMeOnChange} />
+                        <label className='grid-idem'>
+                            Remember Me
+                        </label>
+                    </div>
                     <input className='grid-item-2 button-submit'
                         type='submit' value='Submit' />
                 </form>
