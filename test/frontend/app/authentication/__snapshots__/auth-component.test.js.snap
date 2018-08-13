@@ -50,6 +50,20 @@ Array [
         type="text"
         value=""
       />
+      <div>
+        <input
+          checked={true}
+          className="grid-item"
+          name="isRememberMeOn"
+          onChange={[Function]}
+          type="checkbox"
+        />
+        <label
+          className="grid-idem"
+        >
+          Remember Me
+        </label>
+      </div>
       <input
         className="grid-item-2 button-submit"
         type="submit"

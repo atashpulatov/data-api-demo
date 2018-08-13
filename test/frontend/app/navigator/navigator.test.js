@@ -29,8 +29,16 @@ describe('navigator', () => {
 
         Navigator.prototype.pushHistory = jest.fn();
         location.sessionObject = {};
+        reduxStore.dispatch({
+            type: sessionProperties.actions.logIn,
+            username: 'givenUsername',
+            envUrl: 'givenEnvUrl',
+            isRememberMeOn: false,
+        });
+        reduxStore.dispatch({
+            type: sessionProperties.actions.logOut,
+        });
         location.historyObject = {};
-        // sessionStorage.setItem(historyProperties.directoryArray, undefined);
     });
 
     afterEach(() => {
@@ -48,14 +56,14 @@ describe('navigator', () => {
 
     it('should save authToken', () => {
         // given
-        const expectedValue = 'testt';
-        location.sessionObject[sessionProperties.authToken] = expectedValue;
+        const expectedAuthToken = 'testt';
+        location.sessionObject[sessionProperties.authToken] = expectedAuthToken;
         // when
         mount(<Navigator location={location} />);
         // then
         expect(reduxStore.getState()
-            .sessionReducer[sessionProperties.authToken])
-            .toEqual(expectedValue);
+            .sessionReducer.authToken)
+            .toEqual(expectedAuthToken);
     });
 
     it('should save folderId when first folder chosen', () => {
@@ -145,15 +153,16 @@ describe('navigator', () => {
         const originalGetMethod = projectRestService.getProjectList;
 
         reduxStore.dispatch({
-            type: sessionProperties.actions.setProperty,
-            propertyName: sessionProperties.envUrl,
-            propertyValue: sampleEnvUrl,
+            type: sessionProperties.actions.logIn,
+            username: 'exampleUsername',
+            envUrl: 'exampleEnvUrl',
+            isRememberMeOn: false,
         });
         reduxStore.dispatch({
-            type: sessionProperties.actions.setProperty,
-            propertyName: sessionProperties.authToken,
-            propertyValue: sampleAuthToken,
+            type: sessionProperties.actions.loggedIn,
+            authToken: 'exampleAuthToken',
         });
+
         try {
             projectRestService.getProjectList = mockGet;
             // when
@@ -183,14 +192,14 @@ describe('navigator', () => {
         const originalGetMethod = mstrObjectRestService.getProjectContent;
 
         reduxStore.dispatch({
-            type: sessionProperties.actions.setProperty,
-            propertyName: sessionProperties.envUrl,
-            propertyValue: sampleEnvUrl,
+            type: sessionProperties.actions.logIn,
+            username: 'exampleUsername',
+            envUrl: 'exampleEnvUrl',
+            isRememberMeOn: false,
         });
         reduxStore.dispatch({
-            type: sessionProperties.actions.setProperty,
-            propertyName: sessionProperties.authToken,
-            propertyValue: sampleAuthToken,
+            type: sessionProperties.actions.loggedIn,
+            authToken: 'exampleAuthToken',
         });
         reduxStore.dispatch({
             type: historyProperties.actions.goInsideProject,
@@ -225,14 +234,14 @@ describe('navigator', () => {
         const originalGetMethod = mstrObjectRestService.getFolderContent;
 
         reduxStore.dispatch({
-            type: sessionProperties.actions.setProperty,
-            propertyName: sessionProperties.envUrl,
-            propertyValue: sampleEnvUrl,
+            type: sessionProperties.actions.logIn,
+            username: 'exampleUsername',
+            envUrl: 'exampleEnvUrl',
+            isRememberMeOn: false,
         });
         reduxStore.dispatch({
-            type: sessionProperties.actions.setProperty,
-            propertyName: sessionProperties.authToken,
-            propertyValue: sampleAuthToken,
+            type: sessionProperties.actions.loggedIn,
+            authToken: 'exampleAuthToken',
         });
         reduxStore.dispatch({
             type: historyProperties.actions.goInsideProject,

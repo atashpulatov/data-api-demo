@@ -9,6 +9,7 @@ const rootReducer = combineReducers({
     sessionReducer,
     historyReducer,
 });
+
 const persistConfig = {
     key: 'root',
     storage,

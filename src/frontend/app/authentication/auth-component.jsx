@@ -11,9 +11,9 @@ class Authenticate extends BaseComponent {
         super(props);
         this.stateFromRedux = reduxStore.getState().sessionReducer;
         this.state = {
-            username: this.stateFromRedux[sessionProperties.username] || '',
+            username: this.stateFromRedux.username || '',
             password: '',
-            envUrl: this.stateFromRedux[sessionProperties.envUrl] || '',
+            envUrl: this.stateFromRedux.envUrl || '',
             authMode: undefined,
             isRememberMeOn: true,
             origin: this.state.origin,
@@ -63,7 +63,6 @@ class Authenticate extends BaseComponent {
         }
         this.props.history.push(this.state.origin);
     }
-
 
     render() {
         return (
