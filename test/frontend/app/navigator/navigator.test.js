@@ -14,6 +14,7 @@ describe('navigator', () => {
     const originalPushMethod = Navigator.prototype.pushHistory;
     const sampleEnvUrl = 'someEnvUrl';
     const sampleAuthToken = 'someAuthToken';
+    const sampleUsername = 'someUsername';
     const sampleProjectId = 'someProjectId';
     const sampleDirArray = ['oldDir', 'newDir'];
 
@@ -31,8 +32,8 @@ describe('navigator', () => {
         location.sessionObject = {};
         reduxStore.dispatch({
             type: sessionProperties.actions.logIn,
-            username: 'givenUsername',
-            envUrl: 'givenEnvUrl',
+            username: sampleUsername,
+            envUrl: sampleEnvUrl,
             isRememberMeOn: false,
         });
         reduxStore.dispatch({
@@ -154,13 +155,13 @@ describe('navigator', () => {
 
         reduxStore.dispatch({
             type: sessionProperties.actions.logIn,
-            username: 'exampleUsername',
-            envUrl: 'exampleEnvUrl',
+            username: sampleUsername,
+            envUrl: sampleEnvUrl,
             isRememberMeOn: false,
         });
         reduxStore.dispatch({
             type: sessionProperties.actions.loggedIn,
-            authToken: 'exampleAuthToken',
+            authToken: sampleAuthToken,
         });
 
         try {
@@ -193,13 +194,13 @@ describe('navigator', () => {
 
         reduxStore.dispatch({
             type: sessionProperties.actions.logIn,
-            username: 'exampleUsername',
-            envUrl: 'exampleEnvUrl',
+            username: sampleUsername,
+            envUrl: sampleEnvUrl,
             isRememberMeOn: false,
         });
         reduxStore.dispatch({
             type: sessionProperties.actions.loggedIn,
-            authToken: 'exampleAuthToken',
+            authToken: sampleAuthToken,
         });
         reduxStore.dispatch({
             type: historyProperties.actions.goInsideProject,
@@ -235,13 +236,13 @@ describe('navigator', () => {
 
         reduxStore.dispatch({
             type: sessionProperties.actions.logIn,
-            username: 'exampleUsername',
-            envUrl: 'exampleEnvUrl',
+            username: sampleUsername,
+            envUrl: sampleEnvUrl,
             isRememberMeOn: false,
         });
         reduxStore.dispatch({
             type: sessionProperties.actions.loggedIn,
-            authToken: 'exampleAuthToken',
+            authToken: sampleAuthToken,
         });
         reduxStore.dispatch({
             type: historyProperties.actions.goInsideProject,
