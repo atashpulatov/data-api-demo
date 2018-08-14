@@ -252,8 +252,10 @@ describe('navigator', () => {
             type: historyProperties.actions.goInside,
             dirId: sampleDirArray[0],
         });
-        sessionStorage.setItem(historyProperties.directoryArray,
-            JSON.stringify(sampleDirArray));
+        reduxStore.dispatch({
+            type: historyProperties.actions.goInside,
+            dirId: sampleDirArray[1],
+        });
         try {
             mstrObjectRestService.getFolderContent = mockGet;
             // when
