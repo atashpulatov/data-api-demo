@@ -7,6 +7,7 @@ import { mstrTutorial } from '../mockData';
 import sessionPropertiesEnum, { sessionProperties } from '../../../../src/frontend/app/storage/session-properties';
 import { reduxStore } from '../../../../src/frontend/app/store';
 import { historyProperties } from '../../../../src/frontend/app/history/history-properties';
+import { UnauthorizedError } from '../../../../src/frontend/app/error/unauthorized-error';
 /* eslint-enable */
 
 describe('NavigatorService', () => {
@@ -19,11 +20,36 @@ describe('NavigatorService', () => {
     let _originalGetProjectContent;
     let _originalGetFolderContent;
 
+    let originalStore = {};
+    const thunk = ({ dispatch, getState }) => (next) => (action) => {
+        if (typeof action === 'function') {
+            return action(dispatch, getState);
+        }
+        return next(action);
+    };
+
+    const create = () => {
+        const store = {
+            getState: jest.fn(() => ({})),
+            dispatch: jest.fn(),
+        };
+        const next = jest.fn();
+
+        const invoke = (action) => thunk(store)(next)(action);
+
+        return { store, next, invoke };
+    };
+
     beforeAll(() => {
         _originalGetProjectList = projectRestService.getProjectList;
-        projectRestService.getProjectList = jest.fn();
-        projectRestService.getProjectList
-            .mockResolvedValue(projects.projectsArray);
+        projectRestService.getProjectList = jest
+            .fn()
+            .mockImplementationOnce(() => {
+                return projects.projectsArray;
+            })
+            .mockImplementationOnce(() => {
+                throw new UnauthorizedError();
+            });
 
         _originalGetProjectContent = mstrObjectRestService.getProjectContent;
         mstrObjectRestService.getProjectContent = jest.fn();
@@ -33,12 +59,17 @@ describe('NavigatorService', () => {
         _originalGetFolderContent = mstrObjectRestService.getFolderContent;
         mstrObjectRestService.getFolderContent = jest.fn();
         mstrObjectRestService.getFolderContent.mockReturnValue('ProperContent');
+
+        originalStore = NavigationService.store;
+        const { store } = create();
+        NavigationService.store = store;
     });
 
     afterAll(() => {
         projectRestService.getProjectList = _originalGetProjectList;
         mstrObjectRestService.getProjectContent = _originalGetProjectContent;
         mstrObjectRestService.getFolderContent = _originalGetFolderContent;
+        NavigationService.store = originalStore;
     });
 
     it('should give a path object to authentication page',
@@ -71,6 +102,23 @@ describe('NavigatorService', () => {
             expect(pathObject.state.projects[0]).toHaveProperty('alias');
             expect(pathObject.state.projects[0]).toHaveProperty('description');
             expect(pathObject.state.projects[0]).toHaveProperty('status');
+        });
+
+    it('should call logout if client is Unauthorized',
+        async () => {
+            // when
+            const mockedMethod = projectRestService.getProjectList;
+            const pathObject = await NavigationService
+                .getProjectsRoute(envUrl, authToken);
+            // then
+            expect(NavigationService.store.dispatch).toBeCalledWith({
+                type: sessionProperties.actions.logOut,
+            });
+            expect(pathObject).toEqual({
+                pathname: '/authenticate',
+                state: {},
+            });
+            projectRestService.getProjectList = mockedMethod;
         });
 
     it('should give a path object to project contents',
@@ -119,35 +167,6 @@ describe('NavigatorService', () => {
         });
 
     describe('saveSessionData', () => {
-        let originalStore = {};
-        const thunk = ({ dispatch, getState }) => (next) => (action) => {
-            if (typeof action === 'function') {
-                return action(dispatch, getState);
-            }
-            return next(action);
-        };
-
-        const create = () => {
-            const store = {
-                getState: jest.fn(() => ({})),
-                dispatch: jest.fn(),
-            };
-            const next = jest.fn();
-
-            const invoke = (action) => thunk(store)(next)(action);
-
-            return { store, next, invoke };
-        };
-
-        beforeAll(() => {
-            originalStore = NavigationService.store;
-            const { store } = create();
-            NavigationService.store = store;
-        });
-        afterAll(() => {
-            NavigationService.store = originalStore;
-        });
-
         it('should call store to save username, envUrl and isRememberMeOn', () => {
             // given
             const store = NavigationService.store;

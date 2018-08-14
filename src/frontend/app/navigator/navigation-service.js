@@ -116,7 +116,6 @@ class NavigationService { // TODO: rethink the name.
             });
         }
     }
-
 }
 
 const _instance = new NavigationService();
