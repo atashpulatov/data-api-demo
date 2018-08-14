@@ -2,6 +2,7 @@ import { sessionProperties } from '../storage/session-properties';
 import StorageService from '../storage/storage-service';
 import di from './mstr-object-di';
 import { errorHandler } from '../error/error-service';
+import { reduxStore } from '../store';
 
 class MstrObjectRestService {
     async getProjectContent(folderType, envUrl, authToken, projectId) {
@@ -36,9 +37,10 @@ class MstrObjectRestService {
     }
 
     async getObjectContent(objectId) {
-        const envUrl = StorageService.getProperty(sessionProperties['envUrl']);
-        const authToken = StorageService.getProperty(sessionProperties['authToken']);
-        const projectId = StorageService.getProperty(sessionProperties['projectId']);
+        const storeState = reduxStore.getState();
+        const envUrl = storeState.sessionReducer.envUrl;
+        const authToken = storeState.sessionReducer.authToken;
+        const projectId = storeState.historyReducer.projectId;
         let fullPath = `${envUrl}/reports/${objectId}/instances`;
         const reportInstance = await di.request.post(fullPath)
             .set('x-mstr-authtoken', authToken)
