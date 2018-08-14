@@ -9,6 +9,10 @@ import { historyManager } from '../history/history-manager';
 const sharedFolderIdType = 7;
 
 class NavigationService { // TODO: rethink the name.
+    constructor() {
+        this.store = reduxStore;
+    };
+
     getLoginRoute() {
         return {
             pathname: '/authenticate',
@@ -29,7 +33,7 @@ class NavigationService { // TODO: rethink the name.
             };
         } catch (err) {
             if (err instanceof UnauthorizedError) {
-                reduxStore.dispatch({
+                this.store.dispatch({
                     type: sessionProperties.actions.logOut,
                 });
                 return this.getLoginRoute();
@@ -61,14 +65,14 @@ class NavigationService { // TODO: rethink the name.
     }
 
     async getNavigationRoute() {
-        const envUrl = reduxStore.getState()
+        const envUrl = this.store.getState()
             .sessionReducer.envUrl;
-        const authToken = reduxStore.getState()
+        const authToken = this.store.getState()
             .sessionReducer.authToken;
         if (!envUrl || !authToken) {
             return this.getLoginRoute();
         }
-        const projectId = reduxStore.getState()
+        const projectId = this.store.getState()
             .historyReducer.projectId;
         if (!projectId) {
             return await this.getProjectsRoute(envUrl, authToken);
@@ -85,7 +89,7 @@ class NavigationService { // TODO: rethink the name.
 
     saveSessionData(propertiesToSave) {
         if (propertiesToSave[sessionProperties.username]) {
-            reduxStore.dispatch({
+            this.store.dispatch({
                 type: sessionProperties.actions.logIn,
                 username: propertiesToSave[sessionProperties.username],
                 envUrl: propertiesToSave[sessionProperties.envUrl],
@@ -93,20 +97,20 @@ class NavigationService { // TODO: rethink the name.
             });
         }
         if (propertiesToSave[sessionProperties.authToken]) {
-            reduxStore.dispatch({
+            this.store.dispatch({
                 type: sessionProperties.actions.loggedIn,
                 authToken: propertiesToSave[sessionProperties.authToken],
             });
         }
         if (propertiesToSave[historyProperties.projectId]) {
-            reduxStore.dispatch({
+            this.store.dispatch({
                 type: historyProperties.actions.goInsideProject,
                 projectId: propertiesToSave[historyProperties.projectId],
             });
             return;
         }
         if (propertiesToSave[historyProperties.directoryId]) {
-            reduxStore.dispatch({
+            this.store.dispatch({
                 type: historyProperties.actions.goInside,
                 dirId: propertiesToSave[historyProperties.directoryId],
             });

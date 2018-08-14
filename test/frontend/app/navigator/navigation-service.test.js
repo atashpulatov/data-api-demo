@@ -4,7 +4,9 @@ import projectRestService from '../../../../src/frontend/app/project/project-res
 import { projects } from '../project/mock-data';
 import mstrObjectRestService from '../../../../src/frontend/app/mstr-object/mstr-object-rest-service';
 import { mstrTutorial } from '../mockData';
-import sessionPropertiesEnum from '../../../../src/frontend/app/storage/session-properties';
+import sessionPropertiesEnum, { sessionProperties } from '../../../../src/frontend/app/storage/session-properties';
+import { reduxStore } from '../../../../src/frontend/app/store';
+import { historyProperties } from '../../../../src/frontend/app/history/history-properties';
 /* eslint-enable */
 
 describe('NavigatorService', () => {
@@ -115,4 +117,107 @@ describe('NavigatorService', () => {
             expect(pathObjectSet.length).toBeGreaterThan(1);
             expect(pathObjectSet).toContain('ProperContent');
         });
+
+    describe('saveSessionData', () => {
+        let originalStore = {};
+        const thunk = ({ dispatch, getState }) => (next) => (action) => {
+            if (typeof action === 'function') {
+                return action(dispatch, getState);
+            }
+            return next(action);
+        };
+
+        const create = () => {
+            const store = {
+                getState: jest.fn(() => ({})),
+                dispatch: jest.fn(),
+            };
+            const next = jest.fn();
+
+            const invoke = (action) => thunk(store)(next)(action);
+
+            return { store, next, invoke };
+        };
+
+        beforeAll(() => {
+            originalStore = NavigationService.store;
+            const { store } = create();
+            NavigationService.store = store;
+        });
+        afterAll(() => {
+            NavigationService.store = originalStore;
+        });
+
+        it('should call store to save username, envUrl and isRememberMeOn', () => {
+            // given
+            const store = NavigationService.store;
+            const someUsername = 'someUsername';
+            const isRememberMeOn = false;
+            const propertiesToSave = {};
+            propertiesToSave[sessionProperties.username] = someUsername;
+            propertiesToSave[sessionProperties.envUrl] = envUrl;
+            propertiesToSave[sessionProperties.isRememberMeOn] = isRememberMeOn;
+            const dispatchAction = {
+                type: sessionProperties.actions.logIn,
+                username: someUsername,
+                envUrl: envUrl,
+                isRememberMeOn: isRememberMeOn,
+            };
+            // when
+            NavigationService.saveSessionData(propertiesToSave);
+            // then
+            expect(store.dispatch).toHaveBeenCalled();
+            expect(store.dispatch).toHaveBeenCalledWith(dispatchAction);
+        });
+
+        it('should call store to save authToken', () => {
+            // given
+            const store = NavigationService.store;
+            const propertiesToSave = {};
+            propertiesToSave[sessionProperties.authToken] = authToken;
+            const dispatchAction = {
+                type: sessionProperties.actions.loggedIn,
+                authToken: authToken,
+            };
+            // when
+            NavigationService.saveSessionData(propertiesToSave);
+            // then
+            expect(store.dispatch).toHaveBeenCalled();
+            expect(store.dispatch).toHaveBeenCalledWith(dispatchAction);
+        });
+
+        it('should call store to save projectId', () => {
+            // given
+            const store = NavigationService.store;
+            const someProjectId = 'someProjectId';
+            const propertiesToSave = {};
+            propertiesToSave[historyProperties.projectId] = someProjectId;
+            const dispatchAction = {
+                type: historyProperties.actions.goInsideProject,
+                projectId: someProjectId,
+            };
+            // when
+            NavigationService.saveSessionData(propertiesToSave);
+            // then
+            expect(store.dispatch).toHaveBeenCalled();
+            expect(store.dispatch).toHaveBeenCalledWith(dispatchAction);
+        });
+
+        it('should call store to save directoryId', () => {
+            // given
+            const store = NavigationService.store;
+            const someDirId = 'someDirId';
+            const propertiesToSave = {};
+            propertiesToSave[historyProperties.directoryId] = someDirId;
+            const dispatchAction = {
+                type: historyProperties.actions.goInside,
+                dirId: someDirId,
+            };
+            // when
+            NavigationService.saveSessionData(propertiesToSave);
+            // then
+            expect(store.dispatch).toHaveBeenCalled();
+            expect(store.dispatch).toHaveBeenCalledWith(dispatchAction);
+        });
+    });
 });
