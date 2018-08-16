@@ -138,11 +138,11 @@ describe('MstrObjectRestService', () => {
             const wrongAuthToken = 'wrongToken';
             // when
             const result = mstrObjectRestService.getFolderContent(
-                    envURL,
-                    wrongAuthToken,
-                    projectId,
-                    folderId,
-                );
+                envURL,
+                wrongAuthToken,
+                projectId,
+                folderId,
+            );
             // then
             try {
                 await result;
@@ -192,8 +192,7 @@ describe('MstrObjectRestService', () => {
         });
     });
     describe('getObjectContent', () => {
-        it('should return list of objects within project', async () => {
-            // given
+        beforeEach(() => {
             reduxStore.dispatch({
                 type: sessionProperties.actions.logIn,
                 username: correctLogin,
@@ -208,6 +207,9 @@ describe('MstrObjectRestService', () => {
                 type: historyProperties.actions.goInsideProject,
                 projectId: projectId,
             });
+        });
+        it('should return list of objects within project', async () => {
+            // given
             // when
             const result = await mstrObjectRestService.getObjectContent(
                 objectId
@@ -219,53 +221,64 @@ describe('MstrObjectRestService', () => {
 
         it('should throw exception due to incorrect authToken', async () => {
             // given
-            const authToken = 'wrongToken';
+            const wrongAuthToken = 'wrongToken';
+            reduxStore.dispatch({
+                type: sessionProperties.actions.loggedIn,
+                authToken: wrongAuthToken,
+            });
             // when
-            // const result = mstrObjectRestService.getObjectContent(
-            //     objectId
-            // );
-            // // then
-            // try {
-            //     await result;
-            // } catch (error) {
-            //     expect(error).toBeInstanceOf(UnauthorizedError);
-            // }
-            // expect(result).rejects.toThrow();
-            expect(false).toBeTruthy();
+            const result = mstrObjectRestService.getObjectContent(
+                objectId
+            );
+            // then
+            try {
+                await result;
+            } catch (error) {
+                expect(error).toBeInstanceOf(UnauthorizedError);
+            }
+            expect(result).rejects.toThrow();
         });
 
         it('should throw error due to incorrect objectId', async () => {
             // given
-            const wrongFolderType = 7434234;
+            const incorrectObjectId = 'abc123';
             // when
-            // const result = mstrObjectRestService.getObjectContent(
-            //     objectId
-            // );
-            // // then
-            // try {
-            //     await result;
-            // } catch (error) {
-            //     expect(error).toBeInstanceOf(InternalServerError);
-            // }
-            // expect(result).rejects.toThrow();
-            expect(false).toBeTruthy();
+            const result = mstrObjectRestService.getObjectContent(
+                incorrectObjectId
+            );
+            // then
+            try {
+                await result;
+            } catch (error) {
+                expect(error).toBeInstanceOf(BadRequestError);
+            }
+            expect(result).rejects.toThrow();
         });
 
         it('should throw error due to incorrect projectId', async () => {
             // given
             const wrongProjectId = 'incorrectProjectId';
+            reduxStore.dispatch({
+                type: historyProperties.actions.goInsideProject,
+                projectId: wrongProjectId,
+            });
+            const originalInstanceIdMethod = mstrObjectRestService._getInstanceId;
+            mstrObjectRestService._getInstanceId = jest
+                .fn()
+                .mockResolvedValue('wrongInstanceId');
             // when
-            // const result = mstrObjectRestService.getObjectContent(
-            //     objectId
-            // );
-            // // then
-            // try {
-            //     await result;
-            // } catch (error) {
-            //     expect(error).toBeInstanceOf(BadRequestError);
-            // }
-            // expect(result).rejects.toThrow();
-            expect(false).toBeTruthy();
+            const result = mstrObjectRestService.getObjectContent(
+                objectId
+            );
+            // then
+            try {
+                await result;
+            } catch (error) {
+                expect(error).toBeInstanceOf(BadRequestError);
+            }
+            expect(mstrObjectRestService._getInstanceId).toBeCalled();
+            expect(result).rejects.toThrow();
+            mstrObjectRestService._getInstanceId = originalInstanceIdMethod;
         });
     });
 });

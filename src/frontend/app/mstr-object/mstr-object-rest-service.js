@@ -27,9 +27,22 @@ class MstrObjectRestService {
             .set('x-mstr-projectid', projectId)
             .withCredentials()
             .then((res) => {
-                console.log(res);
                 let objects = res.body;
                 return objects;
+            })
+            .catch((err) => {
+                errorHandler(err);
+            });
+    }
+
+    async _getInstanceId(fullPath, authToken, projectId) {
+        return await di.request.post(fullPath)
+            .set('x-mstr-authtoken', authToken)
+            .set('x-mstr-projectid', projectId)
+            .withCredentials()
+            .then((res) => {
+                let objects = res.body;
+                return objects.instanceId;
             })
             .catch((err) => {
                 errorHandler(err);
@@ -42,25 +55,13 @@ class MstrObjectRestService {
         const authToken = storeState.sessionReducer.authToken;
         const projectId = storeState.historyReducer.projectId;
         let fullPath = `${envUrl}/reports/${objectId}/instances`;
-        const reportInstance = await di.request.post(fullPath)
-            .set('x-mstr-authtoken', authToken)
-            .set('x-mstr-projectid', projectId)
-            .withCredentials()
-            .then((res) => {
-                console.log(res);
-                let objects = res.body;
-                return objects.instanceId;
-            })
-            .catch((err) => {
-                errorHandler(err);
-            });
+        const reportInstance = await this._getInstanceId(fullPath, authToken, projectId);
         fullPath += `/${reportInstance}`;
         return await di.request.get(fullPath)
             .set('x-mstr-authtoken', authToken)
             .set('x-mstr-projectid', projectId)
             .withCredentials()
             .then((res) => {
-                console.log(res);
                 let objects = res.body;
                 return objects;
             })

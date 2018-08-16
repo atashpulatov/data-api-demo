@@ -40,7 +40,6 @@ class MenuBar extends Component {
     }
 
     pushHistory(historyObject) {
-        console.log(this);
         this.props.history.push(historyObject);
     }
 
