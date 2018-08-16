@@ -6,6 +6,7 @@ export const sessionProperties = new Proxy({
      */
     authToken: 'x-mstr-authtoken',
     projectId: 'x-mstr-projectid',
+    projectName: 'mstr-project-name',
     envUrl: 'mstr-environment-url',
     isRememberMeOn: 'mstr-remember-me-on',
     username: 'mstr-username',

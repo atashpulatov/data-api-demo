@@ -14,9 +14,10 @@ class Projects extends BaseComponent {
         this.navigateToProject = this.navigateToProject.bind(this);
     }
 
-    navigateToProject(projectId) {
+    navigateToProject(projectId, projectName) {
         const sessionObject = {};
         sessionObject[sessionProperties.projectId] = projectId;
+        sessionObject[sessionProperties.projectName] = projectName;
         this.props.history.push({
             pathname: '/',
             origin: this.props.location,

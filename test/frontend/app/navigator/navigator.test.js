@@ -16,6 +16,7 @@ describe('navigator', () => {
     const sampleAuthToken = 'someAuthToken';
     const sampleUsername = 'someUsername';
     const sampleProjectId = 'someProjectId';
+    const sampleProjectName = 'someProjectName';
     const sampleDirArray = ['oldDir', 'newDir'];
 
     const location = {};
@@ -205,6 +206,7 @@ describe('navigator', () => {
         reduxStore.dispatch({
             type: historyProperties.actions.goInsideProject,
             projectId: sampleProjectId,
+            projectName: sampleProjectName,
         });
         try {
             mstrObjectRestService.getProjectContent = mockGet;
@@ -247,6 +249,7 @@ describe('navigator', () => {
         reduxStore.dispatch({
             type: historyProperties.actions.goInsideProject,
             projectId: sampleProjectId,
+            projectName: sampleProjectName,
         });
         reduxStore.dispatch({
             type: historyProperties.actions.goInside,

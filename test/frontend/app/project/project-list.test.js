@@ -97,9 +97,12 @@ describe('ProjectList', () => {
     it('should pass project when clicked', () => {
         // given
         const expectedProjectId = projects.projectsArray[0].id;
+        const expectedProjectName = projects.projectsArray[0].name;
         const expectedSessionObject = {};
         expectedSessionObject[sessionProperties.projectId] =
             expectedProjectId;
+        expectedSessionObject[sessionProperties.projectName] = 
+            expectedProjectName;
         // when
         const componentWrapper = mount(<Projects location={location} />);
         const mockPush = jest.fn();

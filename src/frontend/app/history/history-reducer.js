@@ -21,16 +21,22 @@ function onGoInsideProject(action, state) {
     if (!action.projectId) {
         throw new HistoryError('Missing projectId.');
     }
+    if (!action.projectName) {
+        throw new HistoryError('Missing projectName.');
+    }
     return {
         ...state,
-        projectId: action.projectId,
+        project: {
+            projectId: action.projectId,
+            projectName: action.projectName,
+        },
     };
 }
 
 function eraseHistory(state) {
     return {
         ...state,
-        projectId: undefined,
+        project: undefined,
         directoryArray: undefined,
     };
 }
@@ -39,7 +45,7 @@ function onGoUp(state) {
     if (!state.directoryArray) {
         return {
             ...state,
-            projectId: undefined,
+            project: undefined,
         };
     }
     const updatedArr = [...state.directoryArray];

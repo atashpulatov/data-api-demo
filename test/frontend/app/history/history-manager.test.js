@@ -34,6 +34,22 @@ describe('historyManager', () => {
             .toThrowError('History command is not supported.');
     });
 
+    // it('should save projectId on navigating to one', () => {
+    //     // given
+    //     const givenProjectId = 'someProjectId';
+    //     const givenProjectName = 'someProjectName';
+    //     const historyObject = {};
+    //     historyObject[historyProperties.command] = historyProperties.actions.goInsideProject;
+    //     historyObject[historyProperties.projectId] = givenProjectId;
+    //     historyObject[historyProperties.projectName] = givenProjectName;
+    //     // when
+    //     historyManager.handleHistoryData(historyObject);
+    //     // then
+    //     const currentProject = reduxStore.getState().historyReducer.currentProject;
+    //     expect(currentProject.projectId).toBe(givenProjectId);
+    //     expect(currentProject.projectName).toBe(givenProjectName);
+    // });
+
     it('should save folderId when navigating inside (first folder)', () => {
         // given
         const givenDirId = 'someId';
@@ -151,6 +167,7 @@ describe('historyManager', () => {
         reduxStore.dispatch({
             type: historyProperties.actions.goInsideProject,
             projectId: 'id',
+            projectName: 'name',
         });
         const historyObject = {};
         historyObject[historyProperties.command] = historyProperties.actions.goUp;
@@ -165,6 +182,7 @@ describe('historyManager', () => {
         reduxStore.dispatch({
             type: historyProperties.actions.goInsideProject,
             projectId: 'projectId',
+            projectName: 'projectName',
         });
         reduxStore.dispatch({
             type: historyProperties.actions.goInside,
@@ -189,6 +207,7 @@ describe('historyManager', () => {
         reduxStore.dispatch({
             type: historyProperties.actions.goInsideProject,
             projectId: 'projectId',
+            projectName: 'projectName',
         });
         reduxStore.dispatch({
             type: historyProperties.actions.goInside,

@@ -23,14 +23,17 @@ describe('historyReducer', () => {
     it('should save projectId on go into project (no dir saved)', () => {
         // given
         const givenId = 'someId';
+        const givenName = 'someName';
         // when
         historyStore.dispatch({
             type: historyProperties.actions.goInsideProject,
             projectId: givenId,
+            projectName: givenName,
         });
         // then
-        const projectId = historyStore.getState().projectId;
-        expect(projectId).toBe(givenId);
+        const project = historyStore.getState().project;
+        expect(project.projectId).toBe(givenId);
+        expect(project.projectName).toBe(givenName);
     });
 
     it('should throw an error on go into project without id provided', () => {
@@ -43,6 +46,22 @@ describe('historyReducer', () => {
         // then
         expect(wrongFunctionCall).toThrowError(HistoryError);
         expect(wrongFunctionCall).toThrowError('Missing projectId.');
+        expect(historyStore.getState().directoryArray).toBeFalsy();
+    });
+
+    it('should throw an error on go into project without name provided', () => {
+        // given
+        const givenProjectId = 'someProjectId';
+        // when
+        const wrongFunctionCall = () => {
+            historyStore.dispatch({
+                type: historyProperties.actions.goInsideProject,
+                projectId: givenProjectId,
+            });
+        };
+        // then
+        expect(wrongFunctionCall).toThrowError(HistoryError);
+        expect(wrongFunctionCall).toThrowError('Missing projectName.');
         expect(historyStore.getState().directoryArray).toBeFalsy();
     });
 
@@ -120,9 +139,11 @@ describe('historyReducer', () => {
     it('should remove project id on go up when there is no dir id', () => {
         // given
         const givenId = 'projectId';
+        const givenName = 'projectName';
         historyStore.dispatch({
             type: historyProperties.actions.goInsideProject,
             projectId: givenId,
+            projectName: givenName,
         });
         // when
         historyStore.dispatch({

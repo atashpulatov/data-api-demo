@@ -7,6 +7,7 @@ export const historyProperties = new Proxy({
     directoryId: 'mstr-directoryid',
     directoryArray: 'history-directory-array',
     projectId: 'x-mstr-projectid',
+    projectName: 'mstr-project-name',
     command: 'history-command',
     // Reducer actions' types. Don't need to be wrapped into Proxy
     actions: {

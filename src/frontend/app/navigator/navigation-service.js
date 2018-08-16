@@ -72,18 +72,18 @@ class NavigationService { // TODO: rethink the name.
         if (!envUrl || !authToken) {
             return this.getLoginRoute();
         }
-        const projectId = this.store.getState()
-            .historyReducer.projectId;
-        if (!projectId) {
+        const project = this.store.getState()
+            .historyReducer.project;
+        if (!project) {
             return await this.getProjectsRoute(envUrl, authToken);
         }
         try {
             const dirId = historyManager.getCurrentDirectory();
             return await this.getObjectsRoute(envUrl, authToken,
-                projectId, dirId);
+                project.projectId, dirId);
         } catch (error) {
             return await this.getRootObjectsRoute(envUrl,
-                authToken, projectId);
+                authToken, project.projectId);
         }
     }
 
@@ -106,6 +106,7 @@ class NavigationService { // TODO: rethink the name.
             this.store.dispatch({
                 type: historyProperties.actions.goInsideProject,
                 projectId: propertiesToSave[historyProperties.projectId],
+                projectName: propertiesToSave[historyProperties.projectName],
             });
             return;
         }

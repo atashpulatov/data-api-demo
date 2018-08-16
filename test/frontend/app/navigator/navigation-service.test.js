@@ -4,10 +4,9 @@ import projectRestService from '../../../../src/frontend/app/project/project-res
 import { projects } from '../project/mock-data';
 import mstrObjectRestService from '../../../../src/frontend/app/mstr-object/mstr-object-rest-service';
 import { mstrTutorial } from '../mockData';
-import sessionPropertiesEnum, { sessionProperties } from '../../../../src/frontend/app/storage/session-properties';
-import { reduxStore } from '../../../../src/frontend/app/store';
 import { historyProperties } from '../../../../src/frontend/app/history/history-properties';
 import { UnauthorizedError } from '../../../../src/frontend/app/error/unauthorized-error';
+import { sessionProperties } from '../../../../src/frontend/app/storage/session-properties';
 /* eslint-enable */
 
 describe('NavigatorService', () => {
@@ -15,6 +14,7 @@ describe('NavigatorService', () => {
     const envUrl = 'someEnvUrl';
     const authToken = 'someAuthToken';
     const projectId = 'someProjectId';
+    const projectName = 'someProjectName';
 
     let _originalGetProjectList;
     let _originalGetProjectContent;
@@ -211,9 +211,11 @@ describe('NavigatorService', () => {
             const someProjectId = 'someProjectId';
             const propertiesToSave = {};
             propertiesToSave[historyProperties.projectId] = someProjectId;
+            propertiesToSave[historyProperties.projectName] = projectName;
             const dispatchAction = {
                 type: historyProperties.actions.goInsideProject,
                 projectId: someProjectId,
+                projectName: projectName,
             };
             // when
             NavigationService.saveSessionData(propertiesToSave);

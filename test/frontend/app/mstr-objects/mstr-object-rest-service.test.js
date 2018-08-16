@@ -20,6 +20,7 @@ const folderType = 7;
 const loginType = 1;
 const envURL = 'https://env-94174.customer.cloud.microstrategy.com/MicroStrategyLibrary/api';
 const projectId = 'B7CA92F04B9FAE8D941C3E9B7E0CD754';
+const projectName = 'Microstrategy Tutorial';
 const folderId = 'D64C532E4E7FBA74D29A7CA3576F39CF';
 const objectId = '3FC4A93A11E85FF62EB70080EFE55315';
 
@@ -206,6 +207,7 @@ describe('MstrObjectRestService', () => {
             reduxStore.dispatch({
                 type: historyProperties.actions.goInsideProject,
                 projectId: projectId,
+                projectName: projectName,
             });
         });
         it('should return list of objects within project', async () => {
@@ -261,6 +263,7 @@ describe('MstrObjectRestService', () => {
             reduxStore.dispatch({
                 type: historyProperties.actions.goInsideProject,
                 projectId: wrongProjectId,
+                projectName: projectName,
             });
             const originalInstanceIdMethod = mstrObjectRestService._getInstanceId;
             mstrObjectRestService._getInstanceId = jest

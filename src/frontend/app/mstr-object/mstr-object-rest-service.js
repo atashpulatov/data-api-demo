@@ -53,7 +53,7 @@ class MstrObjectRestService {
         const storeState = reduxStore.getState();
         const envUrl = storeState.sessionReducer.envUrl;
         const authToken = storeState.sessionReducer.authToken;
-        const projectId = storeState.historyReducer.projectId;
+        const projectId = storeState.historyReducer.project.projectId;
         let fullPath = `${envUrl}/reports/${objectId}/instances`;
         const reportInstance = await this._getInstanceId(fullPath, authToken, projectId);
         fullPath += `/${reportInstance}`;
