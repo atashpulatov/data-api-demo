@@ -14,6 +14,7 @@ class HistoryManager {
 
     handleHistoryData(historyData) {
         const historyCommand = historyData[historyProperties.command];
+        let dirId;
         switch (historyCommand) {
             case sessionProperties.actions.logOut:
             case historyProperties.actions.goToProjects:
@@ -22,8 +23,18 @@ class HistoryManager {
                     type: historyCommand,
                 });
                 break;
+            case historyProperties.actions.goUpTo:
+                dirId = historyData[historyProperties.directoryId];
+                if (dirId === undefined) {
+                    throw new HistoryError('Missing dirId.');
+                }
+                reduxStore.dispatch({
+                    type: historyProperties.actions.goUpTo,
+                    dirId: dirId,
+                });
+                break;
             case historyProperties.actions.goInside:
-                const dirId = historyData[historyProperties.directoryId];
+                dirId = historyData[historyProperties.directoryId];
                 if (dirId === undefined) {
                     throw new HistoryError('Missing dirId.');
                 }
@@ -49,6 +60,18 @@ class HistoryManager {
             dirArray.pop();
             this._setDirectories(dirArray);
         }
+    }
+
+    _handleGoUpTo(dirId) {
+        const dirArray = reduxStore.getState().historyReducer.directoryArray;
+        if (!dirId) {
+            throw new HistoryError('Missing dirId');
+        }
+        const indexOfElement = dirArray.findIndex((dir) => {
+            return (dir.dirId === dirId);
+        });
+        const resultDirArray = dirArray.slice(0, indexOfElement);
+        this._setDirectories(resultDirArray);
     }
 
     _getDirectories() {

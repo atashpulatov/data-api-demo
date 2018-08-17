@@ -78,7 +78,7 @@ class NavigationService { // TODO: rethink the name.
             return await this.getProjectsRoute(envUrl, authToken);
         }
         try {
-            const dirId = historyManager.getCurrentDirectory();
+            const dirId = historyManager.getCurrentDirectory().dirId;
             return await this.getObjectsRoute(envUrl, authToken,
                 project.projectId, dirId);
         } catch (error) {

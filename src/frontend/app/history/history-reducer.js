@@ -10,6 +10,8 @@ export const historyReducer = (state = {}, action) => {
             return onGoInside(action, state);
         case historyProperties.actions.goUp:
             return onGoUp(state);
+        case historyProperties.actions.goUpTo:
+            return onGoUpTo(action, state);
         case historyProperties.actions.goToProjects:
         case sessionProperties.actions.logOut:
             return eraseHistory(state);
@@ -53,6 +55,21 @@ function onGoUp(state) {
     return {
         ...state,
         directoryArray: updatedArr,
+    };
+}
+
+function onGoUpTo(action, state) {
+    const dirArray = [...state.directoryArray];
+    if (!action.dirId) {
+        throw new HistoryError('Missing dirId');
+    }
+    const indexOfElement = dirArray.findIndex((dir) => {
+        return (dir.dirId === action.dirId);
+    });
+    const resultDirArray = dirArray.slice(0, indexOfElement+1);
+    return {
+        ...state,
+        directoryArray: resultDirArray,
     };
 }
 

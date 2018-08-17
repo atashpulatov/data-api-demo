@@ -79,7 +79,7 @@ describe('historyReducer', () => {
         const dirArray = historyStore.getState().directoryArray;
         expect(dirArray).toBeTruthy();
         expect(dirArray.length).toBe(1);
-        expect(dirArray[0]).toBe(givenDirId);
+        expect(dirArray[0].dirId).toBe(givenDirId);
     });
 
     it('should save folderId on go inside (another folder present)', () => {

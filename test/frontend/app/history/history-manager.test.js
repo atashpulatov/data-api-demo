@@ -34,22 +34,6 @@ describe('historyManager', () => {
             .toThrowError('History command is not supported.');
     });
 
-    // it('should save projectId on navigating to one', () => {
-    //     // given
-    //     const givenProjectId = 'someProjectId';
-    //     const givenProjectName = 'someProjectName';
-    //     const historyObject = {};
-    //     historyObject[historyProperties.command] = historyProperties.actions.goInsideProject;
-    //     historyObject[historyProperties.projectId] = givenProjectId;
-    //     historyObject[historyProperties.projectName] = givenProjectName;
-    //     // when
-    //     historyManager.handleHistoryData(historyObject);
-    //     // then
-    //     const currentProject = reduxStore.getState().historyReducer.currentProject;
-    //     expect(currentProject.projectId).toBe(givenProjectId);
-    //     expect(currentProject.projectName).toBe(givenProjectName);
-    // });
-
     it('should save folderId when navigating inside (first folder)', () => {
         // given
         const givenDirId = 'someId';
@@ -179,6 +163,58 @@ describe('historyManager', () => {
         expect(currDir.dirId).toBe(oldId);
     });
 
+    it('should remove all elements down to required one', () => {
+        // given
+        const oldId = 'oldId';
+        const oldName = 'oldName';
+        reduxStore.dispatch({
+            type: historyProperties.actions.goInside,
+            dirId: oldId,
+            dirName: oldName,
+        });
+        for (let i = 0; i < 5; i++) {
+            reduxStore.dispatch({
+                type: historyProperties.actions.goInside,
+                dirId: `newId${i}`,
+                dirName: `newName${i}`,
+            });
+        }
+        const historyObject = {};
+        historyObject[historyProperties.command] = historyProperties.actions.goUpTo;
+        historyObject[historyProperties.directoryId] = oldId;
+        // when
+        historyManager.handleHistoryData(historyObject);
+        // then
+        const currDir = historyManager.getCurrentDirectory();
+        expect(currDir.dirId).toBe(oldId);
+    });
+
+    it('should remove all elements down to required one', () => {
+        // given
+        const oldId = 'oldId';
+        const oldName = 'oldName';
+        reduxStore.dispatch({
+            type: historyProperties.actions.goInside,
+            dirId: oldId,
+            dirName: oldName,
+        });
+        for (let i = 0; i < 5; i++) {
+            reduxStore.dispatch({
+                type: historyProperties.actions.goInside,
+                dirId: `newId${i}`,
+                dirName: `newName${i}`,
+            });
+        }
+        const historyObject = {};
+        historyObject[historyProperties.command] = historyProperties.actions.goUpTo;
+        historyObject[historyProperties.directoryId] = 'newId2';
+        // when
+        historyManager.handleHistoryData(historyObject);
+        // then
+        const currDir = historyManager.getCurrentDirectory();
+        expect(currDir.dirId).toBe('newId2');
+    });
+
     it('should remove project on go up command when there is no dir', () => {
         // given
         reduxStore.dispatch({
@@ -191,7 +227,7 @@ describe('historyManager', () => {
         // when
         historyManager.handleHistoryData(historyObject);
         // then
-        expect(reduxStore.getState().historyReducer.projectId).toBeFalsy();
+        expect(reduxStore.getState().historyReducer.project).toBeFalsy();
     });
 
     it('should remove project and directories on go to project', () => {
