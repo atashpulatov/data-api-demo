@@ -68,10 +68,12 @@ describe('historyReducer', () => {
     it('should save folderId on go inside (no previous)', () => {
         // given
         const givenDirId = 'someId';
+        const givenDirName = 'someName';
         // when
         historyStore.dispatch({
             type: historyProperties.actions.goInside,
             dirId: givenDirId,
+            dirName: givenDirName,
         });
         // then
         const dirArray = historyStore.getState().directoryArray;
@@ -83,21 +85,25 @@ describe('historyReducer', () => {
     it('should save folderId on go inside (another folder present)', () => {
         // given
         const givenDirId = 'someId';
+        const givenDirName = 'someName';
         const anotherDirId = 'anotherId';
+        const anotherDirName = 'anotherName';
         historyStore.dispatch({
             type: historyProperties.actions.goInside,
             dirId: givenDirId,
+            dirName: givenDirName,
         });
         // when
         historyStore.dispatch({
             type: historyProperties.actions.goInside,
             dirId: anotherDirId,
+            dirName: anotherDirName,
         });
         // then
         const dirArray = historyStore.getState().directoryArray;
         expect(dirArray).toBeTruthy();
         expect(dirArray.length).toBe(2);
-        expect(dirArray[1]).toBe(anotherDirId);
+        expect(dirArray[1].dirId).toBe(anotherDirId);
     });
 
     it('should throw error when navigating inside without folder', () => {
@@ -109,21 +115,25 @@ describe('historyReducer', () => {
         };
         // then
         expect(wrongFunctionCall).toThrowError(HistoryError);
-        expect(wrongFunctionCall).toThrowError('Missing directoryId.');
+        expect(wrongFunctionCall).toThrowError('Missing dirId.');
         expect(historyStore.getState().directoryArray).toBeFalsy();
     });
 
     it('should remove most recent directory when go up', () => {
         // given
         const oldId = 'oldId';
+        const oldName = 'oldName';
         const recentId = 'newId';
+        const recentName = 'newName';
         historyStore.dispatch({
             type: historyProperties.actions.goInside,
             dirId: oldId,
+            dirName: oldName,
         });
         historyStore.dispatch({
             type: historyProperties.actions.goInside,
             dirId: recentId,
+            dirName: recentName,
         });
         // when
         historyStore.dispatch({
@@ -133,7 +143,8 @@ describe('historyReducer', () => {
         const dirArray = historyStore.getState().directoryArray;
         expect(dirArray).toBeTruthy();
         expect(dirArray.length).toBe(1);
-        expect(dirArray[0]).toBe(oldId);
+        expect(dirArray[0].dirId).toBe(oldId);
+        expect(dirArray[0].dirName).toBe(oldName);
     });
 
     it('should remove project id on go up when there is no dir id', () => {
@@ -157,9 +168,11 @@ describe('historyReducer', () => {
     it('should erase history on go to projects', () => {
         // given
         const givenDirId = 'someId';
+        const givenDirName = 'someName';
         historyStore.dispatch({
             type: historyProperties.actions.goInside,
             dirId: givenDirId,
+            dirName: givenDirName,
         });
         // when
         historyStore.dispatch({
@@ -173,9 +186,11 @@ describe('historyReducer', () => {
     it('should erase history on log out', () => {
         // given
         const givenDirId = 'someId';
+        const givenDirName = 'someName';
         historyStore.dispatch({
             type: historyProperties.actions.goInside,
             dirId: givenDirId,
+            dirName: givenDirName,
         });
         // when
         historyStore.dispatch({

@@ -5,6 +5,7 @@ export const historyProperties = new Proxy({
      * propertyAlias: propertyName,
      */
     directoryId: 'mstr-directoryid',
+    directoryName: 'mstr-directory-name',
     directoryArray: 'history-directory-array',
     projectId: 'x-mstr-projectid',
     projectName: 'mstr-project-name',

@@ -17,7 +17,10 @@ describe('navigator', () => {
     const sampleUsername = 'someUsername';
     const sampleProjectId = 'someProjectId';
     const sampleProjectName = 'someProjectName';
-    const sampleDirArray = ['oldDir', 'newDir'];
+    const sampleDirArray = [
+        {dirId: 'oldId', dirName: 'oldName'},
+        {dirId: 'newId', dirName: 'newDir'},
+    ];
 
     const location = {};
     beforeAll(() => {
@@ -71,58 +74,71 @@ describe('navigator', () => {
     it('should save folderId when first folder chosen', () => {
         // given
         const givenValue = 'testt';
+        const givenName = 'testName';
         location.historyObject[historyProperties.command] =
             historyProperties.actions.goInside;
         location.historyObject[historyProperties.directoryId] = givenValue;
+        location.historyObject[historyProperties.directoryName] = givenName;
         // when
         mount(<Navigator location={location} />);
         // then
         const currDir = historyManager.getCurrentDirectory();
-        expect(currDir).toEqual(givenValue);
+        expect(currDir.dirId).toEqual(givenValue);
     });
 
     it('should save folderId when another folder chosen', () => {
         // given
-        const givenValue = 'testt';
         location.historyObject[historyProperties.command] =
             historyProperties.actions.goInside;
         const oldId = 'oldId';
+        const oldName = 'oldName';
         const newId = 'newId';
+        const newName = 'newName';
         reduxStore.dispatch({
             type: historyProperties.actions.goInside,
             dirId: oldId,
+            dirName: oldName,
         });
         reduxStore.dispatch({
             type: historyProperties.actions.goInside,
             dirId: newId,
+            dirName: newName,
         });
-        location.historyObject[historyProperties.directoryId] = givenValue;
+        // location.historyObject[historyProperties.directoryId] = givenValue;
         // when
         mount(<Navigator location={location} />);
         // then
-        const currId = historyManager.getCurrentDirectory();
-        expect(currId).toEqual(givenValue);
+        const currDir = historyManager.getCurrentDirectory();
+        expect(currDir.dirId).toEqual(newId);
     });
 
     it('should remove most recent folderId when go up chosen', () => {
         // given
-        const oldId = 'oldId';
-        const recentId = 'newId';
+        const oldDir = {
+            dirId: 'oldId',
+            dirName: 'oldName',
+        };
+        const recentDir = {
+            dirId: 'newId',
+            dirName: 'newName',
+        };
         reduxStore.dispatch({
             type: historyProperties.actions.goInside,
-            dirId: oldId,
+            dirId: oldDir.dirId,
+            dirName: oldDir.dirName,
         });
         reduxStore.dispatch({
             type: historyProperties.actions.goInside,
-            dirId: recentId,
+            dirId: recentDir.dirId,
+            dirName: recentDir.dirName,
         });
         // when
         location.historyObject[historyProperties.command] =
             historyProperties.actions.goUp;
         mount(<Navigator location={location} />);
         // then
-        const currId = historyManager.getCurrentDirectory();
-        expect(currId).toEqual(oldId);
+        const currDir = historyManager.getCurrentDirectory();
+        expect(currDir.dirId).toEqual(oldDir.dirId);
     });
 
     it('should navigate to authComponent', async () => {
@@ -253,11 +269,13 @@ describe('navigator', () => {
         });
         reduxStore.dispatch({
             type: historyProperties.actions.goInside,
-            dirId: sampleDirArray[0],
+            dirId: sampleDirArray[0].dirId,
+            dirName: sampleDirArray[0].dirName,
         });
         reduxStore.dispatch({
             type: historyProperties.actions.goInside,
-            dirId: sampleDirArray[1],
+            dirId: sampleDirArray[1].dirId,
+            dirName: sampleDirArray[1].dirName,
         });
         try {
             mstrObjectRestService.getFolderContent = mockGet;

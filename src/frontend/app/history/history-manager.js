@@ -27,9 +27,14 @@ class HistoryManager {
                 if (dirId === undefined) {
                     throw new HistoryError('Missing dirId.');
                 }
+                const dirName = historyData[historyProperties.directoryName];
+                if (dirName === undefined) {
+                    throw new HistoryError('Missing dirName.');
+                }
                 reduxStore.dispatch({
                     type: historyCommand,
                     dirId: dirId,
+                    dirName: dirName,
                 });
                 break;
             default:

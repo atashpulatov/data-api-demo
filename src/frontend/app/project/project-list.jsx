@@ -1,7 +1,9 @@
-import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
-import ProjectRow from './project-row.jsx'; // eslint-disable-line no-unused-vars
+/* eslint-disable */
+import React, { Component } from 'react';
+import ProjectRow from './project-row.jsx';
 import BaseComponent from '../base-component.jsx';
 import { sessionProperties } from '../storage/session-properties';
+/* eslint-enable */
 
 class Projects extends BaseComponent {
     constructor(props) {

@@ -53,16 +53,19 @@ describe('historyManager', () => {
     it('should save folderId when navigating inside (first folder)', () => {
         // given
         const givenDirId = 'someId';
+        const givenDirName = 'someName';
         const historyObject = {};
         historyObject[historyProperties.command] = historyProperties.actions.goInside;
         historyObject[historyProperties.directoryId] = givenDirId;
+        historyObject[historyProperties.directoryName] = givenDirName;
         // when
         historyManager.handleHistoryData(historyObject);
         // then
         const dirArray = reduxStore.getState().historyReducer.directoryArray;
         expect(dirArray).toBeTruthy();
         expect(dirArray.length).toBe(1);
-        expect(dirArray[0]).toBe(givenDirId);
+        expect(dirArray[0].dirId).toBe(givenDirId);
+        expect(dirArray[0].dirName).toBe(givenDirName);
     });
 
     it('should save folderId when navigating inside (another folder)', () => {
@@ -70,18 +73,22 @@ describe('historyManager', () => {
         reduxStore.dispatch({
             type: historyProperties.actions.goInside,
             dirId: 'whatever',
+            dirName: 'whateverName',
         });
         const givenDirId = 'someId';
+        const givenDirName = 'someName';
         const historyObject = {};
         historyObject[historyProperties.command] = historyProperties.actions.goInside;
         historyObject[historyProperties.directoryId] = givenDirId;
+        historyObject[historyProperties.directoryName] = givenDirName;
         // when
         historyManager.handleHistoryData(historyObject);
         // then
         const dirArray = reduxStore.getState().historyReducer.directoryArray;
         expect(dirArray).toBeTruthy();
         expect(dirArray.length).toBe(2);
-        expect(dirArray[1]).toBe(givenDirId);
+        expect(dirArray[1].dirId).toBe(givenDirId);
+        expect(dirArray[1].dirName).toBe(givenDirName);
     });
 
     it('should throw error when navigating inside without folder', () => {
@@ -102,14 +109,17 @@ describe('historyManager', () => {
     it('should return current directory when there is one', () => {
         // given
         const expectedDirId = 'someId';
+        const expectedDirName = 'someName';
         reduxStore.dispatch({
             type: historyProperties.actions.goInside,
             dirId: expectedDirId,
+            dirName: expectedDirName,
         });
         // when
         const currDir = historyManager.getCurrentDirectory();
         // then
-        expect(currDir).toBe(expectedDirId);
+        expect(currDir.dirId).toBe(expectedDirId);
+        expect(currDir.dirName).toBe(expectedDirName);
     });
 
     it('should return current directory when there is many', () => {
@@ -117,16 +127,20 @@ describe('historyManager', () => {
         reduxStore.dispatch({
             type: historyProperties.actions.goInside,
             dirId: 'oldId',
+            dirName: 'oldName',
         });
         const expectedDirId = 'someId';
+        const expectedDirName = 'someName';
         reduxStore.dispatch({
             type: historyProperties.actions.goInside,
             dirId: expectedDirId,
+            dirName: expectedDirName,
         });
         // when
         const currDir = historyManager.getCurrentDirectory();
         // then
-        expect(currDir).toBe(expectedDirId);
+        expect(currDir.dirId).toBe(expectedDirId);
+        expect(currDir.dirName).toBe(expectedDirName);
     });
 
     it('should throw error when getting current dir but there is no', () => {
@@ -145,13 +159,16 @@ describe('historyManager', () => {
     it('should remove most recent directory when go up', () => {
         // given
         const oldId = 'oldId';
+        const oldName = 'oldName';
         reduxStore.dispatch({
             type: historyProperties.actions.goInside,
             dirId: oldId,
+            dirName: oldName,
         });
         reduxStore.dispatch({
             type: historyProperties.actions.goInside,
             dirId: 'newId',
+            dirName: 'oldName',
         });
         const historyObject = {};
         historyObject[historyProperties.command] = historyProperties.actions.goUp;
@@ -159,7 +176,7 @@ describe('historyManager', () => {
         historyManager.handleHistoryData(historyObject);
         // then
         const currDir = historyManager.getCurrentDirectory();
-        expect(currDir).toBe(oldId);
+        expect(currDir.dirId).toBe(oldId);
     });
 
     it('should remove project on go up command when there is no dir', () => {
@@ -187,10 +204,12 @@ describe('historyManager', () => {
         reduxStore.dispatch({
             type: historyProperties.actions.goInside,
             dirId: 'oldId',
+            dirName: 'oldName',
         });
         reduxStore.dispatch({
             type: historyProperties.actions.goInside,
             dirId: 'newId',
+            dirName: 'newName',
         });
         const historyObject = {};
         historyObject[historyProperties.command] =
@@ -212,10 +231,12 @@ describe('historyManager', () => {
         reduxStore.dispatch({
             type: historyProperties.actions.goInside,
             dirId: 'oldId',
+            dirName: 'oldName',
         });
         reduxStore.dispatch({
             type: historyProperties.actions.goInside,
             dirId: 'newId',
+            dirName: 'newName',
         });
 
         const historyObject = {};

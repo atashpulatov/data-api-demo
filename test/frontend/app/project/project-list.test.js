@@ -101,7 +101,7 @@ describe('ProjectList', () => {
         const expectedSessionObject = {};
         expectedSessionObject[sessionProperties.projectId] =
             expectedProjectId;
-        expectedSessionObject[sessionProperties.projectName] = 
+        expectedSessionObject[sessionProperties.projectName] =
             expectedProjectName;
         // when
         const componentWrapper = mount(<Projects location={location} />);

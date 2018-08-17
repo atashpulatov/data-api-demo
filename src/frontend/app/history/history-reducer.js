@@ -58,11 +58,18 @@ function onGoUp(state) {
 
 function onGoInside(action, state) {
     if (!action.dirId) {
-        throw new HistoryError('Missing directoryId.');
+        throw new HistoryError('Missing dirId.');
     }
+    if (!action.dirName) {
+        throw new HistoryError('Missing dirName.');
+    }
+    const directory = {
+        dirId: action.dirId,
+        dirName: action.dirName,
+    };
     const oldArr = state.directoryArray ? state.directoryArray : [];
     return {
         ...state,
-        directoryArray: oldArr.concat(action.dirId),
+        directoryArray: oldArr.concat(directory),
     };
 }

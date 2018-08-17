@@ -126,9 +126,11 @@ describe('MstrObjectList', () => {
         let iterateId = 0;
         directories.children().forEach((row) => {
             const dirId = mockMstrObjects[iterateId].id;
+            const dirName = mockMstrObjects[iterateId].name;
             expectedHistoryObject[historyProperties.command] =
                 historyProperties.actions.goInside;
             expectedHistoryObject[historyProperties.directoryId] = dirId;
+            expectedHistoryObject[historyProperties.directoryName] = dirName;
             const directoryRowLi = row.find('li');
             directoryRowLi.simulate('click');
             expect(mockPush).toBeCalledWith({
