@@ -5,6 +5,8 @@ import Routes from './routes.jsx';
 import { reduxStore, reduxPersistor } from './store.js';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/lib/integration/react';
+import { Breadcrumbs } from './breadcrumbs/breadcrumbs.jsx';
+import { breadcrumbsService } from './breadcrumbs/breadcrumb-service';
 /* eslint-enable */
 
 class App extends Component {
@@ -19,6 +21,7 @@ class App extends Component {
           <di.Router>
             <div id="content">
               <di.Header />
+              <Breadcrumbs />
               <di.MenuBar />
               <Routes />
               <di.Footer />
