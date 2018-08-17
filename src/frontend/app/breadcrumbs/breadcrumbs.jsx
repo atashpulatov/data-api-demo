@@ -1,25 +1,41 @@
 /* eslint-disable */
-import React from 'react';
-import { reduxStore } from '../store';
+import React, {Component} from 'react';
 import { historyProperties } from '../history/history-properties';
 import { breadcrumbsService } from './breadcrumb-service';
 import { Breadcrumb } from './breadcrumb.jsx';
+import './breadcrumbs.css';
+import { reduxStore } from '../store';
 /* eslint-enable */
 
-export const Breadcrumbs = () => (
-    <ul>
-        {breadcrumbsService.getHistoryObjects()
-            .map((object) => (
-                <Breadcrumb key={object.dirId}
-                    object={object}
-                    onClick={navigateToDir} />
-            ))}
-    </ul>
-);
+export class Breadcrumbs extends Component {
 
-const navigateToDir = (dirId) => {
-    reduxStore.dispatch({
-        type: historyProperties.actions.goUpTo,
-        dirId: dirId,
-    });
-};
+    constructor(props) {
+        super(props);
+
+        this.navigateToDir = this.navigateToDir.bind(this);
+    }
+
+    navigateToDir(dirId) {
+        console.log('getting back');
+        reduxStore.dispatch({
+            type: historyProperties.actions.goUpTo,
+            dirId: dirId,
+        });
+        this.props.history.push({
+            pathname: '/',
+        });
+    };
+
+    render() {
+        return (
+            <ul className='breadcrumb'>
+                {breadcrumbsService.getHistoryObjects()
+                    .map((object) => (
+                        <Breadcrumb key={object.dirId}
+                            object={object}
+                            onClick={this.navigateToDir} />
+                    ))}
+            </ul>
+        );
+    }
+}
