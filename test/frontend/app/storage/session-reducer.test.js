@@ -41,9 +41,10 @@ describe('sessionReducer', () => {
             isRememberMeOn: givenRememberMeFlag,
         });
         // then
-        const username = sessionStore.getState().username;
-        const envUrl = sessionStore.getState().envUrl;
-        const rememberMeFlag = sessionStore.getState().isRememberMeOn;
+        const sessionStoreState = sessionStore.getState();
+        const username = sessionStoreState.username;
+        const envUrl = sessionStoreState.envUrl;
+        const rememberMeFlag = sessionStoreState.isRememberMeOn;
         expect(username).toBe(givenUsername);
         expect(envUrl).toBe(givenEnvUrl);
         expect(rememberMeFlag).toBe(true);
@@ -65,9 +66,10 @@ describe('sessionReducer', () => {
             type: sessionProperties.actions.logOut,
         });
         // then
-        const username = sessionStore.getState().username;
-        const envUrl = sessionStore.getState().envUrl;
-        const rememberMeFlag = sessionStore.getState().isRememberMeOn;
+        const sessionStoreState = sessionStore.getState();
+        const username = sessionStoreState.username;
+        const envUrl = sessionStoreState.envUrl;
+        const rememberMeFlag = sessionStoreState.isRememberMeOn;
         expect(username).toBeUndefined();
         expect(envUrl).toBeUndefined();
         expect(rememberMeFlag).toBeUndefined();
@@ -191,10 +193,11 @@ describe('sessionReducer', () => {
             type: sessionProperties.actions.logOut,
         });
         // then
-        const username = sessionStore.getState().username;
-        const envUrl = sessionStore.getState().envUrl;
-        const rememberMeFlag = sessionStore.getState().isRememberMeOn;
-        const authToken = sessionStore.getState().authToken;
+        const sessionStoreState = sessionStore.getState();
+        const username = sessionStoreState.username;
+        const envUrl = sessionStoreState.envUrl;
+        const rememberMeFlag = sessionStoreState.isRememberMeOn;
+        const authToken = sessionStoreState.authToken;
         expect(username).toBe(givenUsername);
         expect(envUrl).toBe(givenEnvUrl);
         expect(rememberMeFlag).toBe(true);

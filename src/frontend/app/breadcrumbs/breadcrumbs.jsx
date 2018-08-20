@@ -1,13 +1,14 @@
 /* eslint-disable */
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { historyProperties } from '../history/history-properties';
 import { breadcrumbsService } from './breadcrumb-service';
 import { Breadcrumb } from './breadcrumb.jsx';
 import './breadcrumbs.css';
 import { reduxStore } from '../store';
+import { withRouter } from 'react-router';
 /* eslint-enable */
 
-export class Breadcrumbs extends Component {
+class _Breadcrumbs extends Component {
 
     constructor(props) {
         super(props);
@@ -39,3 +40,5 @@ export class Breadcrumbs extends Component {
         );
     }
 }
+
+export const Breadcrumbs = withRouter(_Breadcrumbs);
