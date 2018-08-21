@@ -13,6 +13,10 @@ class _Breadcrumbs extends Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            displayBreadcrumbs: false,
+        };
+
         this.navigateToDir = this.navigateToDir.bind(this);
     }
 
@@ -28,15 +32,28 @@ class _Breadcrumbs extends Component {
     };
 
     render() {
+        const historyObjects = breadcrumbsService.getHistoryObjects();
+        this.state.displayBreadcrumbs = historyObjects.length > 0
+            ? true
+            : false;
+        if (!this.state.displayBreadcrumbs) {
+            return null;
+        }
         return (
-            <ul className='breadcrumb'>
-                {breadcrumbsService.getHistoryObjects()
-                    .map((object) => (
-                        <Breadcrumb key={object.dirId}
-                            object={object}
-                            onClick={this.navigateToDir} />
-                    ))}
-            </ul>
+            <div>
+                <header className='mstr-objects'>
+                    All Files
+                </header>
+                <hr />
+                <ul className='breadcrumb'>
+                    {breadcrumbsService.getHistoryObjects()
+                        .map((object) => (
+                            <Breadcrumb key={object.dirId}
+                                object={object}
+                                onClick={this.navigateToDir} />
+                        ))}
+                </ul>
+            </div>
         );
     }
 }
