@@ -12,7 +12,11 @@
     "test-debug": "node --nolazy --inspect-brk=9229 ./node_modules/.bin/jest -i"
   },
   "jest": {
-    "setupTestFrameworkScriptFile": "./test/frontend/app/setup-tests.js"
+    "setupTestFrameworkScriptFile": "./test/frontend/app/setup-tests.js",
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/test/frontend/app/resource-transform.js",
+      "\\.(css|less)$": "identity-obj-proxy"
+    }
   },
   "author": "",
   "license": "ISC",
@@ -21,11 +25,16 @@
     "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
     "jsx": "^0.9.89",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
+    "react-redux": "^5.0.7",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
+    "redux": "^4.0.0",
+    "redux-devtools-extension": "^2.13.5",
+    "redux-persist": "^5.10.0",
     "style-loader": "^0.21.0",
     "superagent": "^3.8.3",
     "webpack": "^3.12.0"
@@ -38,8 +47,11 @@
     "eslint": "^4.19.1",
     "eslint-config-google": "^0.9.1",
     "eslint-plugin-react": "^7.8.2",
+    "file-loader": "^1.1.11",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^22.4.4",
     "jest-cli": "^22.4.4",
+    "jest-localstorage-mock": "^2.2.0",
     "react-test-renderer": "^15.6.2",
     "webpack-dev-server": "^2.11.2"
   }

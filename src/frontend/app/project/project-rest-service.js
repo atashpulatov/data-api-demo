@@ -1,22 +1,19 @@
 import di from './project-di';
+import { errorHandler } from '../error/error-service';
 
-async function getProjectList() {
-    const envUrl = sessionStorage.getItem('envUrl');
-    const token = sessionStorage.getItem('x-mstr-authtoken');
+async function getProjectList(envUrl, authToken) {
     return await di.request.get(envUrl + '/projects')
-            .set('x-mstr-authtoken', token)
-            .withCredentials()
-            .then((res) => {
-                console.log(res);
-                let projects = res.body;
-                return projects;
-            })
+        .set('x-mstr-authtoken', authToken)
+        .withCredentials()
+        .then((res) => {
+            let projects = res.body;
+            return projects;
+        })
         .catch((err) => {
-        console.error(`Error: ${err.response.status}`
-            + ` (${err.response.statusMessage})`);
+            errorHandler(err);
         });
 }
 
-export let projectRestService = {
-    'getProjectList': getProjectList,
+export default {
+    getProjectList,
 };

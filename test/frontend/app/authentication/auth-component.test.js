@@ -1,14 +1,17 @@
 import React from 'react'; // eslint-disable-line
 import { shallow } from 'enzyme';
-import AuthComponent from '../../../../src/frontend/app/authentication/auth-component'; // eslint-disable-line no-unused-vars
-
+import AuthComponent from '../../../../src/frontend/app/authentication/auth-component.jsx'; // eslint-disable-line no-unused-vars
 
 describe('AuthComponent', () => {
-    it('should render my component', () => {
-        // given
+    const location = {};
+
+    beforeAll(() => {
         const origin = { pathname: '/' };
         const state = { origin: origin };
-        const location = { state: state };
+        location.state = state;
+    });
+
+    it('should render my component', () => {
         // when
         const component = shallow(<AuthComponent location={location} />);
         // then

@@ -4,11 +4,10 @@ import ReactDOM from 'react-dom';
 import di from './root-di.js';
 import App from './app.jsx';
 /* eslint-enable */
-//const App = di.App;
 const Office = window.Office;
 
 function officeInitialize() {
-  Office.initialize = () => {    
+  Office.initialize = () => {
   };
 }
 

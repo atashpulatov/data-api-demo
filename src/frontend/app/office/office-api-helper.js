@@ -1,8 +1,13 @@
+import { IncorrectInputTypeError } from "./incorrect-input-type";
+
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
 const ASCII_CAPITAL_LETTER_INDEX = 65;
 
 function getRange(headerCount, startCell) {
+    if (!Number.isInteger(headerCount)) {
+        throw new IncorrectInputTypeError();
+    }
     let startCellArray = startCell.split(/(\d+)/);
     headerCount += parseInt(lettersToNumber(startCellArray[0]) - 1);
     let endRange = '';
@@ -26,6 +31,9 @@ function handleOfficeApiException(error) {
 }
 
 function lettersToNumber(letters) {
+    if (!letters.match(/^[A-Z]*[A-Z]$/)) {
+        throw new IncorrectInputTypeError();
+    }
     return letters.split('').reduce((r, a) =>
         r * ALPHABET_RANGE_END + parseInt(a, 36) - 9, 0);
 }

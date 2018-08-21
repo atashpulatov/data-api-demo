@@ -1,13 +1,10 @@
 import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
-// import './project.css';
-import di from './project-di';
 
-const ProjectRow = ({ projectRow }) => (
-    <div className='projectRowContainer'>
-        <h1>Name: {projectRow.name}</h1>
-        <h2>Alias: {projectRow.alias}</h2>
-        <hr />
-    </div>
+const ProjectRow = ({ projectRow, onClick }) => (
+    <li className='cursor-is-pointer project-row'
+        onClick={onClick.bind(null, projectRow.id, projectRow.name)}>
+        <label className='projects-mstr-object'>{projectRow.name}</label>
+    </li >
 );
 
 export default ProjectRow;

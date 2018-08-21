@@ -2,16 +2,22 @@
 
 exports[`AuthComponent should render my component 1`] = `
 Array [
-  <form
-    onSubmit={[Function]}
-  >
-    <div
+  <article>
+    <header>
+      <h1
+        id="authenticate-message"
+      >
+        Connect to MicroStrategy Environment
+      </h1>
+    </header>
+    <form
       className="grid-container padding"
+      onSubmit={[Function]}
     >
       <label
         className="grid-item"
       >
-        Username:
+        Username
       </label>
       <input
         className="grid-item"
@@ -23,7 +29,7 @@ Array [
       <label
         className="grid-item"
       >
-        Password:
+        Password
       </label>
       <input
         className="grid-item"
@@ -35,7 +41,7 @@ Array [
       <label
         className="grid-item"
       >
-        Environment URL:
+        Environment URL
       </label>
       <input
         className="grid-item"
@@ -44,24 +50,26 @@ Array [
         type="text"
         value=""
       />
-      <label
-        className="grid-item"
-      >
-        Auth Mode:
-      </label>
-      <input
-        className="grid-item"
-        name="envUrl"
-        onChange={[Function]}
-        type="number"
-        value=""
-      />
+      <div>
+        <input
+          checked={true}
+          className="grid-item"
+          name="isRememberMeOn"
+          onChange={[Function]}
+          type="checkbox"
+        />
+        <label
+          className="grid-idem"
+        >
+          Remember Me
+        </label>
+      </div>
       <input
         className="grid-item-2 button-submit"
         type="submit"
         value="Submit"
       />
-    </div>
-  </form>,
+    </form>
+  </article>,
 ]
 `;
