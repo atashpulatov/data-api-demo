@@ -1,5 +1,3 @@
-import { sessionProperties } from '../storage/session-properties';
-import StorageService from '../storage/storage-service';
 import di from './mstr-object-di';
 import { errorHandler } from '../error/error-service';
 import { reduxStore } from '../store';

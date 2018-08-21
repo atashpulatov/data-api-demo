@@ -9,8 +9,6 @@ export const sessionReducer = (state = {}, action) => {
             return onLogOut(action, state);
         case sessionProperties.actions.loggedIn:
             return onLoggedIn(action, state);
-        case sessionProperties.actions.setProperty:
-            return onSetProperty(action, state);
     }
     return state;
 };

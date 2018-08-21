@@ -25,9 +25,6 @@ class HistoryManager {
                 break;
             case historyProperties.actions.goUpTo:
                 dirId = historyData[historyProperties.directoryId];
-                if (dirId === undefined) {
-                    throw new HistoryError('Missing dirId.');
-                }
                 reduxStore.dispatch({
                     type: historyProperties.actions.goUpTo,
                     dirId: dirId,
@@ -35,13 +32,7 @@ class HistoryManager {
                 break;
             case historyProperties.actions.goInside:
                 dirId = historyData[historyProperties.directoryId];
-                if (dirId === undefined) {
-                    throw new HistoryError('Missing dirId.');
-                }
                 const dirName = historyData[historyProperties.directoryName];
-                if (dirName === undefined) {
-                    throw new HistoryError('Missing dirName.');
-                }
                 reduxStore.dispatch({
                     type: historyCommand,
                     dirId: dirId,
@@ -51,38 +42,6 @@ class HistoryManager {
             default:
                 throw new HistoryError(`History command is not supported.`);
         }
-    }
-
-    _handleGoUp(dirArray) {
-        if (!dirArray || (dirArray.length == 0)) {
-            sessionStorage.removeItem(sessionProperties.projectId);
-        } else {
-            dirArray.pop();
-            this._setDirectories(dirArray);
-        }
-    }
-
-    _handleGoUpTo(dirId) {
-        const dirArray = reduxStore.getState().historyReducer.directoryArray;
-        if (!dirId) {
-            throw new HistoryError('Missing dirId');
-        }
-        const indexOfElement = dirArray.findIndex((dir) => {
-            return (dir.dirId === dirId);
-        });
-        const resultDirArray = dirArray.slice(0, indexOfElement);
-        this._setDirectories(resultDirArray);
-    }
-
-    _getDirectories() {
-        const dirJson = sessionStorage
-            .getItem(historyProperties.directoryArray);
-        return JSON.parse(dirJson);
-    }
-
-    _setDirectories(dirArray) {
-        const dirJson = JSON.stringify(dirArray);
-        sessionStorage.setItem(historyProperties.directoryArray, dirJson);
     }
 };
 

@@ -203,18 +203,4 @@ describe('sessionReducer', () => {
         expect(rememberMeFlag).toBe(true);
         expect(authToken).toBeUndefined();
     });
-
-    it('should add single property to reducer', () => {
-        // given
-            const testToken = 'testToken';
-        // when
-            sessionStore.dispatch({
-                type: sessionProperties.actions.setProperty,
-                propertyName: sessionProperties.authToken,
-                propertyValue: testToken,
-            });
-        // then
-            const authToken = sessionStore.getState()[sessionProperties.authToken];
-            expect(authToken).toBe(testToken);
-    });
 });
