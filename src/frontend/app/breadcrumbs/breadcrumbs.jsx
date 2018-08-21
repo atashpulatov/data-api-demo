@@ -33,12 +33,9 @@ class _Breadcrumbs extends Component {
 
     render() {
         const historyObjects = breadcrumbsService.getHistoryObjects();
-        if (historyObjects.length > 0) {
-            this.state.displayBreadcrumbs = true;
-        }
-        else {
-            this.state.displayBreadcrumbs = false;
-        }
+        this.state.displayBreadcrumbs = historyObjects.length > 0
+            ? true
+            : false;
         if (!this.state.displayBreadcrumbs) {
             return null;
         }

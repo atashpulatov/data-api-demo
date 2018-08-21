@@ -49,7 +49,6 @@ class MstrObjects extends BaseComponent {
     render() {
         return (
             <article className='objects-container'>
-
                 <ul className='no-padding object-list'>
                     {this.state.mstrObjects
                         .filter((obj) => objectsTypesMap.directory === obj.type)
