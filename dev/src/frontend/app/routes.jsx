@@ -1,22 +1,23 @@
+/* eslint-disable */
 import React from 'react'; // eslint-disable-line no-unused-vars
-import { Switch } from 'react-router-dom';
-import di from './root-di.js';
-import PathEnum from './path-enum';
+import { Route, Switch } from 'react-router-dom';
+import { routeContainer } from './routeContainer.js';
 
-const Route = di.Route; // eslint-disable-line no-unused-vars
+import { Error } from './error.jsx';
+import { pathEnum } from './path-enum';
+import { Navigator } from './navigator/navigator.jsx';
+/* eslint-enable */
 
-const Routes = () => (
+export const Routes = () => (
     <Switch>
-        <Route exact path='/' component={di.Navigator} />
-        {PathEnum.map((path) => {
+        <Route exact path='/' component={Navigator} />
+        {pathEnum.map((path) => {
             return (
                 <Route key={path.component}
-                        path={path.pathName}
-                        component={di[path.component]} />
+                    path={path.pathName}
+                    component={routeContainer[path.component]} />
             );
         })}
-        <Route component={di.Error} />
+        <Route component={Error} />
     </Switch>
 );
-
-export default Routes;

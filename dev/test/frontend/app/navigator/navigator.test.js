@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React from 'react';
-import Navigator from '../../../../src/frontend/app/navigator/navigator';
+import { Navigator } from '../../../../src/frontend/app/navigator/navigator';
 import { mount } from 'enzyme';
 import { sessionProperties } from '../../../../src/frontend/app/storage/session-properties';
 import { historyProperties } from '../../../../src/frontend/app/history/history-properties';
@@ -18,8 +18,8 @@ describe('navigator', () => {
     const sampleProjectId = 'someProjectId';
     const sampleProjectName = 'someProjectName';
     const sampleDirArray = [
-        {dirId: 'oldId', dirName: 'oldName'},
-        {dirId: 'newId', dirName: 'newDir'},
+        { dirId: 'oldId', dirName: 'oldName' },
+        { dirId: 'newId', dirName: 'newDir' },
     ];
 
     const location = {};

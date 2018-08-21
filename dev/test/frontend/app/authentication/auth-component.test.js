@@ -1,6 +1,6 @@
 import React from 'react'; // eslint-disable-line
 import { shallow } from 'enzyme';
-import AuthComponent from '../../../../src/frontend/app/authentication/auth-component.jsx'; // eslint-disable-line no-unused-vars
+import { Authenticate } from '../../../../src/frontend/app/authentication/auth-component.jsx'; // eslint-disable-line no-unused-vars
 
 describe('AuthComponent', () => {
     const location = {};
@@ -13,7 +13,7 @@ describe('AuthComponent', () => {
 
     it('should render my component', () => {
         // when
-        const component = shallow(<AuthComponent location={location} />);
+        const component = shallow(<Authenticate location={location} />);
         // then
         expect(component.getElements()).toMatchSnapshot();
     });

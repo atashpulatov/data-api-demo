@@ -14,7 +14,7 @@ const objectsTypesMap = {
     project: 55,
 };
 
-class MstrObjects extends BaseComponent {
+export class MstrObjects extends BaseComponent {
     constructor(props) {
         super(props);
 
@@ -71,5 +71,3 @@ class MstrObjects extends BaseComponent {
         );
     }
 };
-
-export default MstrObjects;

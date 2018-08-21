@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React from 'react';
-import MstrObjects from '../../../../src/frontend/app/mstr-object/mstr-object-list';
+import { MstrObjects } from '../../../../src/frontend/app/mstr-object/mstr-object-list';
 import { mount } from 'enzyme';
 import { mstrTutorial } from '../mockData';
 import { historyProperties } from '../../../../src/frontend/app/history/history-properties';

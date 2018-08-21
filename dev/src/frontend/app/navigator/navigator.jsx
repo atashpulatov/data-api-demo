@@ -2,7 +2,7 @@ import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
 import navigationService from './navigation-service';
 import { historyManager } from '../history/history-manager';
 
-class Navigator extends Component {
+export class Navigator extends Component {
     constructor(props) {
         super(props);
         window.mstr = { history: this.props.history };
@@ -34,5 +34,3 @@ class Navigator extends Component {
         return null;
     };
 }
-
-export default Navigator;

@@ -1,8 +1,8 @@
 /*eslint-disable */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import di from './root-di.js';
-import App from './app.jsx';
+import { App } from './app.jsx';
+import registerServiceWorker from './registerServiceWorker';
 /* eslint-enable */
 const Office = window.Office;
 
@@ -21,4 +21,4 @@ function goReact() {
 goReact();
 officeInitialize();
 
-di.registerServiceWorker();
+registerServiceWorker();

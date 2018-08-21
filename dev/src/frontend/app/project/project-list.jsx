@@ -5,7 +5,7 @@ import BaseComponent from '../base-component.jsx';
 import { sessionProperties } from '../storage/session-properties';
 /* eslint-enable */
 
-class Projects extends BaseComponent {
+export class Projects extends BaseComponent {
     constructor(props) {
         super(props);
 
@@ -46,5 +46,3 @@ class Projects extends BaseComponent {
         );
     }
 }
-
-export default Projects;

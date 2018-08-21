@@ -6,7 +6,7 @@ import { sessionProperties } from '../storage/session-properties';
 import { reduxStore } from '../store';
 const authenticate = authService.authenticate;
 
-class Authenticate extends BaseComponent {
+export class Authenticate extends BaseComponent {
     constructor(props) {
         super(props);
         this.stateFromRedux = reduxStore.getState().sessionReducer;
@@ -113,5 +113,3 @@ class Authenticate extends BaseComponent {
         );
     }
 }
-
-export default Authenticate;
