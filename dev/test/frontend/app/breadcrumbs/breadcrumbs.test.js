@@ -1,16 +1,16 @@
-import Breadcrumbs from '../../../../src/frontend/app/breadcrumbs/breadcrumbs-component';
+import { Breadcrumbs } from '../../../../src/frontend/app/breadcrumbs/breadcrumbs.jsx';
 import BreadcrumService from '../../../../src/frontend/app/breadcrumbs/breadcrumb-service';
 
 describe.skip('Breadcrumbs', () => {
-    beforeAll(()=> {
+    beforeAll(() => {
         BreadcrumService.getHistory = jest
-        .fn()
-        .mockImplementation(() => {
-            return [
-                {},
-                {},
-            ];
-        });
+            .fn()
+            .mockImplementation(() => {
+                return [
+                    {},
+                    {},
+                ];
+            });
     });
     it('should render one breadcrumb', () => {
         // given

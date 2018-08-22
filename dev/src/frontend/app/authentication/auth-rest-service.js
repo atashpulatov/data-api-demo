@@ -1,8 +1,10 @@
-import di from './auth-di.js';
 import { errorHandler } from '../error/error-service.js';
+import { moduleProxy } from '../module-proxy.js';
+
 
 async function _authenticate(username, password, envUrl, loginMode = 1) {
-    return await di.request.post(envUrl + '/auth/login')
+    return await moduleProxy.request
+        .post(envUrl + '/auth/login')
         .send({ username, password, loginMode })
         .withCredentials()
         .then((res) => {

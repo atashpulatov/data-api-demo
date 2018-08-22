@@ -1,11 +1,12 @@
-import di from './mstr-object-di';
 import { errorHandler } from '../error/error-service';
 import { reduxStore } from '../store';
+import { moduleProxy } from '../module-proxy';
 
 class MstrObjectRestService {
     async getProjectContent(folderType, envUrl, authToken, projectId) {
         const fullPath = `${envUrl}/folders/preDefined/${folderType}`;
-        return await di.request.get(fullPath)
+        return await moduleProxy.request
+            .get(fullPath)
             .set('x-mstr-authtoken', authToken)
             .set('x-mstr-projectid', projectId)
             .withCredentials()
@@ -20,7 +21,8 @@ class MstrObjectRestService {
 
     async getFolderContent(envUrl, authToken, projectId, folderId) {
         const fullPath = `${envUrl}/folders/${folderId}`;
-        return await di.request.get(fullPath)
+        return await moduleProxy.request
+            .get(fullPath)
             .set('x-mstr-authtoken', authToken)
             .set('x-mstr-projectid', projectId)
             .withCredentials()
@@ -34,7 +36,8 @@ class MstrObjectRestService {
     }
 
     async _getInstanceId(fullPath, authToken, projectId) {
-        return await di.request.post(fullPath)
+        return await moduleProxy.request
+            .post(fullPath)
             .set('x-mstr-authtoken', authToken)
             .set('x-mstr-projectid', projectId)
             .withCredentials()
@@ -55,7 +58,8 @@ class MstrObjectRestService {
         let fullPath = `${envUrl}/reports/${objectId}/instances`;
         const reportInstance = await this._getInstanceId(fullPath, authToken, projectId);
         fullPath += `/${reportInstance}`;
-        return await di.request.get(fullPath)
+        return await moduleProxy.request
+            .get(fullPath)
             .set('x-mstr-authtoken', authToken)
             .set('x-mstr-projectid', projectId)
             .withCredentials()

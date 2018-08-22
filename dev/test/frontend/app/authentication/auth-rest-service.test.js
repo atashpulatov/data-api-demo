@@ -1,9 +1,9 @@
 /* eslint-disable */
 import authRestService from '../../../../src/frontend/app/authentication/auth-rest-service';
-import superagent from 'superagent';
-import authDi from '../../../../src/frontend/app/authentication/auth-di';
 import { UnauthorizedError } from '../../../../src/frontend/app/error/unauthorized-error';
 import { EnvironmentNotFoundError } from '../../../../src/frontend/app/error/environment-not-found-error';
+import { moduleProxy } from '../../../../src/frontend/app/module-proxy';
+import request from 'superagent';
 /* eslint-enable */
 
 const correctLogin = 'mstr';
@@ -12,13 +12,14 @@ const authType = 1;
 const envURL = 'https://env-94174.customer.cloud.microstrategy.com/MicroStrategyLibrary/api';
 
 describe('MstrObjectRestService', () => {
+    const originalAgent = request;
     beforeAll(() => {
-        const mockAgent = superagent.agent();
-        authDi.request = mockAgent;
+        const mockAgent = request.agent();
+        moduleProxy.request = mockAgent;
     });
 
     afterAll(() => {
-        authDi.request = superagent;
+        moduleProxy.request = originalAgent;
     });
 
     it('should return authToken when called', async () => {
