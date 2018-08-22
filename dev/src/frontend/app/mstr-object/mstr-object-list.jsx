@@ -1,8 +1,8 @@
 /* eslint-disable */
 import React from 'react';
-import BaseComponent from '../base-component.jsx';
+import { BaseComponent } from '../base-component.jsx';
 import { DirectoryRow, ReportRow } from './mstr-object-row.jsx';
-import mstrObjectRestService from './mstr-object-rest-service';
+import { mstrObjectRestService } from './mstr-object-rest-service';
 import officeDi from '../office/office-di';
 import './mstr-object.css';
 import { historyProperties } from '../history/history-properties';

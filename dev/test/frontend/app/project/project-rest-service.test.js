@@ -1,6 +1,6 @@
 /* eslint-disable */
-import authRestService from '../../../../src/frontend/app/authentication/auth-rest-service';
-import mstrProjectRestService from '../../../../src/frontend/app/project/project-rest-service';
+import { authenticationService } from '../../../../src/frontend/app/authentication/auth-rest-service';
+import { projectRestService } from '../../../../src/frontend/app/project/project-rest-service';
 import superagent from 'superagent';
 import { UnauthorizedError } from '../../../../src/frontend/app/error/unauthorized-error';
 import { EnvironmentNotFoundError } from '../../../../src/frontend/app/error/environment-not-found-error';
@@ -25,13 +25,13 @@ describe('ProjectsRestService', () => {
 
     it('should return list of projects from environment', async () => {
         // given
-        const authToken = await authRestService.authenticate(
+        const authToken = await authenticationService.authenticate(
             correctLogin,
             correctPassword,
             envURL,
             loginType);
         // when
-        const result = await mstrProjectRestService.getProjectList(
+        const result = await projectRestService.getProjectList(
             envURL,
             authToken,
         );
@@ -45,7 +45,7 @@ describe('ProjectsRestService', () => {
         // given
         const authToken = 'wrongToken';
         // when
-        const result = mstrProjectRestService.getProjectList(
+        const result = projectRestService.getProjectList(
             envURL,
             authToken,
         );
@@ -60,14 +60,14 @@ describe('ProjectsRestService', () => {
 
     it('should return throw an error due to missing cookies', async () => {
         // given
-        const authToken = await authRestService.authenticate(
+        const authToken = await authenticationService.authenticate(
             correctLogin,
             correctPassword,
             envURL,
             loginType);
         moduleProxy.request = superagent;
         // when
-        const result = mstrProjectRestService.getProjectList(
+        const result = projectRestService.getProjectList(
             envURL,
             authToken,
         );
@@ -85,14 +85,14 @@ describe('ProjectsRestService', () => {
 
     it('should return throw an error due to incorrect URL', async () => {
         // given
-        const authToken = await authRestService.authenticate(
+        const authToken = await authenticationService.authenticate(
             correctLogin,
             correctPassword,
             envURL,
             loginType);
         const wrongEnvURL = 'www.somewrongurlfortest.com.pl';
         // when
-        const result = mstrProjectRestService.getProjectList(
+        const result = projectRestService.getProjectList(
             wrongEnvURL,
             authToken,
         );

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
 
-class BaseComponent extends Component {
+export class BaseComponent extends Component {
     constructor(props) {
         super(props);
         if (this.props.location.state === undefined) {
@@ -17,5 +17,3 @@ class BaseComponent extends Component {
         return;
     }
 };
-
-export default BaseComponent;

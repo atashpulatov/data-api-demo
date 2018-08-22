@@ -1,5 +1,5 @@
 /* eslint-disable */
-import authRestService from '../../../../src/frontend/app/authentication/auth-rest-service';
+import { authenticationService } from '../../../../src/frontend/app/authentication/auth-rest-service';
 import { UnauthorizedError } from '../../../../src/frontend/app/error/unauthorized-error';
 import { EnvironmentNotFoundError } from '../../../../src/frontend/app/error/environment-not-found-error';
 import { moduleProxy } from '../../../../src/frontend/app/module-proxy';
@@ -25,7 +25,7 @@ describe('MstrObjectRestService', () => {
     it('should return authToken when called', async () => {
         // given
         // when
-        const authToken = await authRestService.authenticate(
+        const authToken = await authenticationService.authenticate(
             correctLogin,
             correctPassword,
             envURL,
@@ -38,7 +38,7 @@ describe('MstrObjectRestService', () => {
         // given
         const incorrectLogin = 'mst';
         // when
-        const authToken = authRestService.authenticate(
+        const authToken = authenticationService.authenticate(
             incorrectLogin,
             correctPassword,
             envURL,
@@ -55,7 +55,7 @@ describe('MstrObjectRestService', () => {
         // given
         const incorrectPassword = 'wrongPass';
         // when
-        const authToken = authRestService.authenticate(
+        const authToken = authenticationService.authenticate(
             correctLogin,
             incorrectPassword,
             envURL,
@@ -72,7 +72,7 @@ describe('MstrObjectRestService', () => {
         // given
         const incorrectAuthType = 122;
         // when
-        const authToken = authRestService.authenticate(
+        const authToken = authenticationService.authenticate(
             correctLogin,
             correctPassword,
             envURL,
@@ -89,7 +89,7 @@ describe('MstrObjectRestService', () => {
         // given
         const incorrectUrl = 'https://env-94174.customer.cloud.microstrategy.com/incorecturl';
         // when
-        const authToken = authRestService.authenticate(
+        const authToken = authenticationService.authenticate(
             correctLogin,
             correctPassword,
             incorrectUrl,
@@ -104,9 +104,9 @@ describe('MstrObjectRestService', () => {
     });
     it('should throw error due to incorrect url and provided domain does not exist', async () => {
         // given
-        const nonExistingDomainUrl = 'https://www.domainwhichshouldnotexist.com.pl'; 
+        const nonExistingDomainUrl = 'https://www.domainwhichshouldnotexist.com.pl';
         // when
-        const authToken = authRestService.authenticate(
+        const authToken = authenticationService.authenticate(
             correctLogin,
             correctPassword,
             nonExistingDomainUrl,

@@ -74,4 +74,4 @@ class MstrObjectRestService {
 };
 
 
-export default new MstrObjectRestService();
+export const mstrObjectRestService = new MstrObjectRestService();

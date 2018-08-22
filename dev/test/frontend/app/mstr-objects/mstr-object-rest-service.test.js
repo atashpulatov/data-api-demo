@@ -1,6 +1,6 @@
 /* eslint-disable */
-import authRestService from '../../../../src/frontend/app/authentication/auth-rest-service';
-import mstrObjectRestService from '../../../../src/frontend/app/mstr-object/mstr-object-rest-service';
+import { authenticationService } from '../../../../src/frontend/app/authentication/auth-rest-service';
+import { mstrObjectRestService } from '../../../../src/frontend/app/mstr-object/mstr-object-rest-service';
 import superagent from 'superagent';
 
 import { mstrTutorial, mstrTutorialFolder, mockReports } from '../mockData';
@@ -35,7 +35,7 @@ describe('MstrObjectRestService', () => {
     });
 
     beforeEach(async () => {
-        authToken = await authRestService.authenticate(
+        authToken = await authenticationService.authenticate(
             correctLogin,
             correctPassword,
             envURL,
