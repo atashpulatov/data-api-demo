@@ -1,4 +1,4 @@
-import officeApiHelper from '../../../../src/frontend/app/office/office-api-helper';
+import { officeApiHelper } from '../../../../src/frontend/app/office/office-api-helper';
 import { IncorrectInputTypeError } from '../../../../src/frontend/app/office/incorrect-input-type';
 
 describe('OfficeApiHelper', () => {

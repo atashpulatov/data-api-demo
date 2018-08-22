@@ -1,5 +1,5 @@
 /* eslint-disable */
-import navigationService from '../../../../src/frontend/app/navigator/navigation-service';
+import { navigationService } from '../../../../src/frontend/app/navigator/navigation-service';
 import { projectRestService } from '../../../../src/frontend/app/project/project-rest-service';
 import { projects } from '../project/mock-data';
 import { mstrObjectRestService } from '../../../../src/frontend/app/mstr-object/mstr-object-rest-service';

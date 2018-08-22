@@ -1,5 +1,5 @@
 import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
-import navigationService from './navigation-service';
+import { navigationService } from './navigation-service';
 import { historyManager } from '../history/history-manager';
 
 export class Navigator extends Component {

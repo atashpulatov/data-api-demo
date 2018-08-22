@@ -3,9 +3,10 @@ import React from 'react';
 import { BaseComponent } from '../base-component.jsx';
 import { DirectoryRow, ReportRow } from './mstr-object-row.jsx';
 import { mstrObjectRestService } from './mstr-object-rest-service';
-import officeDi from '../office/office-di';
 import './mstr-object.css';
 import { historyProperties } from '../history/history-properties';
+import { officeConverterService } from '../office/office-converter-service';
+import { officeDisplayService } from '../office/office-display-service';
 /* eslint-enable */
 
 const objectsTypesMap = {
@@ -40,10 +41,10 @@ export class MstrObjects extends BaseComponent {
 
     async printObject(objectId) {
         let jsonData = await mstrObjectRestService.getObjectContent(objectId);
-        let convertedReport = officeDi.officeConverterService
+        let convertedReport = officeConverterService
             .getConvertedTable(jsonData);
         convertedReport.id = jsonData.id;
-        officeDi.officeDisplayService.displayReport(convertedReport);
+        officeDisplayService.displayReport(convertedReport);
     }
 
     render() {

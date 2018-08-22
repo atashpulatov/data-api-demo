@@ -119,5 +119,4 @@ class NavigationService { // TODO: rethink the name.
     }
 }
 
-const _instance = new NavigationService();
-export default _instance;
+export const navigationService = new NavigationService();
