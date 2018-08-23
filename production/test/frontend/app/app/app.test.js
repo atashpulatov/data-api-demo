@@ -2,32 +2,28 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import { App } from '../../../../src/frontend/app/app';
+import { Header } from '../../../../src/frontend/app/header';
+import { HashRouter as Router } from 'react-router-dom';
+import { Footer } from '../../../../src/frontend/app/footer';
 /* eslint-enable  */
 
 describe('App', () => {
     it('should have header component with proper text', () => {
         // given
+        const headerWrapper = mount(<Header />);
         // when
         const componentWrapper = mount(<App />);
         // then
-        const nodeComponentWrapper = componentWrapper.find('Header');
-        expect(nodeComponentWrapper).toHaveLength(1);
-        expect(nodeComponentWrapper.find('p').text()).toBeTruthy();
+        expect(componentWrapper.contains(headerWrapper.get(0))).toBe(true);
     });
-    it('should have routes defined', () => {
-        // given
-        // when
-        const componentWrapper = mount(<App />);
-        // then
-        expect(componentWrapper.find('Routes')).toHaveLength(1);
-    });
+
     it('should have footer defined', () => {
         // given
+        const footerWrapper = mount(<Footer />);
         // when
         const componentWrapper = mount(<App />);
         // then
-        const nodeComponentWrapper = componentWrapper.find('Footer');
-        expect(nodeComponentWrapper).toHaveLength(1);
-        expect(nodeComponentWrapper.find('footer').text()).toBeTruthy();
+        expect(componentWrapper.contains(footerWrapper.get(0))).toBe(true);
+        expect(footerWrapper.find('footer').text()).toBeTruthy();
     });
 });

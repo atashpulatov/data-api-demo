@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React from 'react';
-import { Navigator } from '../../../../src/frontend/app/navigator/navigator';
+import { Navigator } from '../../../../src/frontend/app/navigator/navigator.jsx';
 import { mount } from 'enzyme';
 import { sessionProperties } from '../../../../src/frontend/app/storage/session-properties';
 import { historyProperties } from '../../../../src/frontend/app/history/history-properties';
