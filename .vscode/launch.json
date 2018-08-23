@@ -9,7 +9,7 @@
             "request": "launch",
             "name": "Launch Chrome",
             "url": "https://localhost:3000",
-            "webRoot": "${workspaceRoot}/dev/src/frontend/app",
+            "webRoot": "${workspaceRoot}/production/src/frontend/app",
             "sourceMaps": true
         },
         {
@@ -17,7 +17,7 @@
             "request": "attach",
             "name": "Attach to Chrome with WebPack",
             "port": 9222,
-            "webRoot": "${workspaceRoot}/dev/src/frontend/app",
+            "webRoot": "${workspaceRoot}/production/src/frontend/app",
             "sourceMaps": true,
             "smartStep": true
         },
@@ -25,7 +25,7 @@
             "type": "node",
             "request": "launch",
             "name": "WebpackDEV",
-            "program": "${workspaceRoot}/dev/node_modules/.bin/webpack-dev-server",
+            "program": "${workspaceRoot}/production/node_modules/.bin/webpack-dev-server",
             "args": [
                 "--https",
                 "--port",
@@ -34,9 +34,9 @@
                 "webpack.config.js"
             ],
             "outFiles": [
-                "${workspaceRoot}/dev/src/frontend/public/js/*"
+                "${workspaceRoot}/production/src/frontend/public/js/*"
             ],
-            "cwd": "${workspaceFolder}/dev",
+            "cwd": "${workspaceFolder}/production",
             "console": "internalConsole",
             "sourceMaps": true
         },
