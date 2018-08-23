@@ -1,0 +1,53 @@
+hr {
+  margin-left: 20px;
+  margin-right: 20px;
+  color: #75808B;
+}
+
+.padding {
+  padding: 15px;
+}
+
+#content {
+  display: flex;
+  flex-direction: column;
+}
+
+#app-header {
+  background: #313435;
+  display: flex;
+  color: #fff;
+  width: 100%;
+}
+
+#app-footer {
+  background: #313435;
+  display: flex;
+  color: #fff;
+  width: 100%;
+  justify-content: flex-end;
+}
+
+#footer-text {
+  margin-right: 20px;
+  font-size: 12px;
+  font-weight: 100;
+}
+
+#app-main {
+  background: #fff;
+}
+
+#header {
+  font-size: 18px;
+  text-align: left;
+  align-items: center;
+  padding: 4px 0px 0px 0px;
+}
+
+#header-image {
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  padding: 10px;
+}

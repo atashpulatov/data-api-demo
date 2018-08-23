@@ -1,0 +1,27 @@
+{
+    "extends": "google",
+    "plugins": [
+        "react"
+    ],
+    "parserOptions": {
+        "ecmaVersion": 2017,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true,
+            "experimentalObjectRestSpread": true
+        }
+    },
+    "env": {
+        "es6": true,
+        "browser": true,
+        "node": true,
+        "mocha": true
+    },
+    "rules": {
+        "object-curly-spacing": "off",
+        "max-len": "warn",
+        "require-jsdoc": [
+            "off"
+        ]
+    }
+}
