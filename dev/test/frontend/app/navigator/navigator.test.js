@@ -1,11 +1,11 @@
 /* eslint-disable */
 import React from 'react';
-import Navigator from '../../../../src/frontend/app/navigator/navigator';
+import { Navigator } from '../../../../src/frontend/app/navigator/navigator';
 import { mount } from 'enzyme';
 import { sessionProperties } from '../../../../src/frontend/app/storage/session-properties';
 import { historyProperties } from '../../../../src/frontend/app/history/history-properties';
-import projectRestService from '../../../../src/frontend/app/project/project-rest-service';
-import mstrObjectRestService from '../../../../src/frontend/app/mstr-object/mstr-object-rest-service';
+import { projectRestService } from '../../../../src/frontend/app/project/project-rest-service';
+import { mstrObjectRestService } from '../../../../src/frontend/app/mstr-object/mstr-object-rest-service';
 import { reduxStore } from '../../../../src/frontend/app/store';
 import { historyManager } from '../../../../src/frontend/app/history/history-manager';
 /* eslint-enable */
@@ -18,8 +18,8 @@ describe('navigator', () => {
     const sampleProjectId = 'someProjectId';
     const sampleProjectName = 'someProjectName';
     const sampleDirArray = [
-        {dirId: 'oldId', dirName: 'oldName'},
-        {dirId: 'newId', dirName: 'newDir'},
+        { dirId: 'oldId', dirName: 'oldName' },
+        { dirId: 'newId', dirName: 'newDir' },
     ];
 
     const location = {};

@@ -1,12 +1,12 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
-import BaseComponent from '../base-component.jsx';
+import { BaseComponent } from '../base-component.jsx';
 import './auth-component.css';
-import authService from './auth-rest-service';
+import { authenticationService } from './auth-rest-service';
 import { sessionProperties } from '../storage/session-properties';
 import { reduxStore } from '../store';
-const authenticate = authService.authenticate;
+const authenticate = authenticationService.authenticate;
 
-class Authenticate extends BaseComponent {
+export class Authenticate extends BaseComponent {
     constructor(props) {
         super(props);
         this.stateFromRedux = reduxStore.getState().sessionReducer;
@@ -113,5 +113,3 @@ class Authenticate extends BaseComponent {
         );
     }
 }
-
-export default Authenticate;

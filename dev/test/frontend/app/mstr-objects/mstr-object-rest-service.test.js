@@ -1,9 +1,7 @@
 /* eslint-disable */
-import authRestService from '../../../../src/frontend/app/authentication/auth-rest-service';
-import mstrObjectRestService from '../../../../src/frontend/app/mstr-object/mstr-object-rest-service';
+import { authenticationService } from '../../../../src/frontend/app/authentication/auth-rest-service';
+import { mstrObjectRestService } from '../../../../src/frontend/app/mstr-object/mstr-object-rest-service';
 import superagent from 'superagent';
-import authDi from '../../../../src/frontend/app/authentication/auth-di';
-import objectDi from '../../../../src/frontend/app/mstr-object/mstr-object-di';
 
 import { mstrTutorial, mstrTutorialFolder, mockReports } from '../mockData';
 import { UnauthorizedError } from '../../../../src/frontend/app/error/unauthorized-error';
@@ -12,6 +10,7 @@ import { BadRequestError } from '../../../../src/frontend/app/error/bad-request-
 import { sessionProperties } from '../../../../src/frontend/app/storage/session-properties';
 import { reduxStore } from '../../../../src/frontend/app/store';
 import { historyProperties } from '../../../../src/frontend/app/history/history-properties';
+import { moduleProxy } from '../../../../src/frontend/app/module-proxy';
 /* eslint-enable */
 
 const correctLogin = 'mstr';
@@ -28,17 +27,15 @@ describe('MstrObjectRestService', () => {
     let authToken;
     beforeAll(() => {
         const mockAgent = superagent.agent();
-        authDi.request = mockAgent;
-        objectDi.request = mockAgent;
+        moduleProxy.request = mockAgent;
     });
 
     afterAll(() => {
-        authDi.request = superagent;
-        objectDi.request = superagent;
+        moduleProxy.request = superagent;
     });
 
     beforeEach(async () => {
-        authToken = await authRestService.authenticate(
+        authToken = await authenticationService.authenticate(
             correctLogin,
             correctPassword,
             envURL,

@@ -1,4 +1,4 @@
-class UnknownPropertyError {
+export class UnknownPropertyError {
     constructor(propertyName, propertyValue) {
         this.propertyName = propertyName;
         this.propertyValue = propertyValue;
@@ -8,5 +8,3 @@ class UnknownPropertyError {
                 \nValue ${this.propertyValue} will not be assigned.`;
     };
 };
-
-export default UnknownPropertyError;

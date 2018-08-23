@@ -1,4 +1,4 @@
-import officeApiHelper from './office-api-helper';
+import { officeApiHelper } from './office-api-helper';
 
 class OfficeDisplayService {
     displayReport(reportConvertedData) {
@@ -48,4 +48,4 @@ class OfficeDisplayService {
     }
 }
 
-export default new OfficeDisplayService();
+export const officeDisplayService = new OfficeDisplayService();

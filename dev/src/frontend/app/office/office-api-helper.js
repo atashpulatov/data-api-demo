@@ -1,4 +1,4 @@
-import { IncorrectInputTypeError } from "./incorrect-input-type";
+import { IncorrectInputTypeError } from './incorrect-input-type';
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
@@ -38,7 +38,7 @@ function lettersToNumber(letters) {
         r * ALPHABET_RANGE_END + parseInt(a, 36) - 9, 0);
 }
 
-export default {
+export const officeApiHelper = {
     handleOfficeApiException,
     getRange,
     lettersToNumber,

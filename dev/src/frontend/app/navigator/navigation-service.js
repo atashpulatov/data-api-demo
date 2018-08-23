@@ -1,5 +1,5 @@
-import projectRestService from '../project/project-rest-service';
-import mstrObjectRestService from '../mstr-object/mstr-object-rest-service';
+import { projectRestService } from '../project/project-rest-service';
+import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { UnauthorizedError } from '../error/unauthorized-error';
 import { reduxStore } from '../store';
 import { sessionProperties } from '../storage/session-properties';
@@ -119,5 +119,4 @@ class NavigationService { // TODO: rethink the name.
     }
 }
 
-const _instance = new NavigationService();
-export default _instance;
+export const navigationService = new NavigationService();

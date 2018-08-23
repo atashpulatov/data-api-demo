@@ -1,8 +1,8 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
 import path from 'path';
 import testHelper from '../test-helper';
-import officeConverterService from '../../../../src/frontend/app/office/office-converter-service';
 import { mockReports } from '../mockData';
+import { officeConverterService } from '../../../../src/frontend/app/office/office-converter-service';
 
 describe('OfficeConverterService', () => {
     it('should convert simple report', () => {

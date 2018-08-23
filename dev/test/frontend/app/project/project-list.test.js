@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React from 'react';
-import Projects from '../../../../src/frontend/app/project/project-list';
+import { Projects } from '../../../../src/frontend/app/project/project-list';
 import { mount } from 'enzyme';
 import { projects } from './mock-data';
 import { sessionProperties } from '../../../../src/frontend/app/storage/session-properties';

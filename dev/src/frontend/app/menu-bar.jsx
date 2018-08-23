@@ -11,7 +11,7 @@ const settings = '⏣';
 const logout = '⏏';
 const goTop = '«';
 
-class MenuBar extends Component {
+class _MenuBar extends Component {
     constructor(props) {
         super(props);
 
@@ -85,4 +85,4 @@ class MenuBar extends Component {
 };
 
 
-export default withRouter(MenuBar);
+export const MenuBar = withRouter(_MenuBar);

@@ -1,8 +1,8 @@
 /* eslint-disable */
-import NavigationService from '../../../../src/frontend/app/navigator/navigation-service';
-import projectRestService from '../../../../src/frontend/app/project/project-rest-service';
+import { navigationService } from '../../../../src/frontend/app/navigator/navigation-service';
+import { projectRestService } from '../../../../src/frontend/app/project/project-rest-service';
 import { projects } from '../project/mock-data';
-import mstrObjectRestService from '../../../../src/frontend/app/mstr-object/mstr-object-rest-service';
+import { mstrObjectRestService } from '../../../../src/frontend/app/mstr-object/mstr-object-rest-service';
 import { mstrTutorial } from '../mockData';
 import { historyProperties } from '../../../../src/frontend/app/history/history-properties';
 import { UnauthorizedError } from '../../../../src/frontend/app/error/unauthorized-error';
@@ -60,22 +60,22 @@ describe('NavigatorService', () => {
         mstrObjectRestService.getFolderContent = jest.fn();
         mstrObjectRestService.getFolderContent.mockReturnValue('ProperContent');
 
-        originalStore = NavigationService.store;
+        originalStore = navigationService.store;
         const { store } = create();
-        NavigationService.store = store;
+        navigationService.store = store;
     });
 
     afterAll(() => {
         projectRestService.getProjectList = _originalGetProjectList;
         mstrObjectRestService.getProjectContent = _originalGetProjectContent;
         mstrObjectRestService.getFolderContent = _originalGetFolderContent;
-        NavigationService.store = originalStore;
+        navigationService.store = originalStore;
     });
 
     it('should give a path object to authentication page',
         async () => {
             // when
-            const pathObject = NavigationService.getLoginRoute();
+            const pathObject = navigationService.getLoginRoute();
             // then
             expect(pathObject).toBeDefined();
             expect(pathObject.pathname).toBeDefined();
@@ -86,7 +86,7 @@ describe('NavigatorService', () => {
     it('should give a path object to project page',
         async () => {
             // when
-            const pathObject = await NavigationService
+            const pathObject = await navigationService
                 .getProjectsRoute(envUrl, authToken);
             // then
             expect(projectRestService.getProjectList)
@@ -108,10 +108,10 @@ describe('NavigatorService', () => {
         async () => {
             // when
             const mockedMethod = projectRestService.getProjectList;
-            const pathObject = await NavigationService
+            const pathObject = await navigationService
                 .getProjectsRoute(envUrl, authToken);
             // then
-            expect(NavigationService.store.dispatch).toBeCalledWith({
+            expect(navigationService.store.dispatch).toBeCalledWith({
                 type: sessionProperties.actions.logOut,
             });
             expect(pathObject).toEqual({
@@ -126,7 +126,7 @@ describe('NavigatorService', () => {
             // given
             const folderType = 7;
             // when
-            const pathObject = await NavigationService
+            const pathObject = await navigationService
                 .getRootObjectsRoute(envUrl, authToken, projectId);
             // then
             expect(mstrObjectRestService.getProjectContent)
@@ -153,7 +153,7 @@ describe('NavigatorService', () => {
             // given
             const folderId = 'someFolderId';
             // when
-            const pathObject = await NavigationService.getObjectsRoute(envUrl, authToken, projectId, folderId);
+            const pathObject = await navigationService.getObjectsRoute(envUrl, authToken, projectId, folderId);
             // then
             expect(mstrObjectRestService.getFolderContent)
                 .toBeCalledWith(envUrl, authToken, projectId, folderId);
@@ -169,7 +169,7 @@ describe('NavigatorService', () => {
     describe('saveSessionData', () => {
         it('should call store to save username, envUrl and isRememberMeOn', () => {
             // given
-            const store = NavigationService.store;
+            const store = navigationService.store;
             const someUsername = 'someUsername';
             const isRememberMeOn = false;
             const propertiesToSave = {};
@@ -183,7 +183,7 @@ describe('NavigatorService', () => {
                 isRememberMeOn: isRememberMeOn,
             };
             // when
-            NavigationService.saveSessionData(propertiesToSave);
+            navigationService.saveSessionData(propertiesToSave);
             // then
             expect(store.dispatch).toHaveBeenCalled();
             expect(store.dispatch).toHaveBeenCalledWith(dispatchAction);
@@ -191,7 +191,7 @@ describe('NavigatorService', () => {
 
         it('should call store to save authToken', () => {
             // given
-            const store = NavigationService.store;
+            const store = navigationService.store;
             const propertiesToSave = {};
             propertiesToSave[sessionProperties.authToken] = authToken;
             const dispatchAction = {
@@ -199,7 +199,7 @@ describe('NavigatorService', () => {
                 authToken: authToken,
             };
             // when
-            NavigationService.saveSessionData(propertiesToSave);
+            navigationService.saveSessionData(propertiesToSave);
             // then
             expect(store.dispatch).toHaveBeenCalled();
             expect(store.dispatch).toHaveBeenCalledWith(dispatchAction);
@@ -207,7 +207,7 @@ describe('NavigatorService', () => {
 
         it('should call store to save projectId', () => {
             // given
-            const store = NavigationService.store;
+            const store = navigationService.store;
             const someProjectId = 'someProjectId';
             const propertiesToSave = {};
             propertiesToSave[historyProperties.projectId] = someProjectId;
@@ -218,7 +218,7 @@ describe('NavigatorService', () => {
                 projectName: projectName,
             };
             // when
-            NavigationService.saveSessionData(propertiesToSave);
+            navigationService.saveSessionData(propertiesToSave);
             // then
             expect(store.dispatch).toHaveBeenCalled();
             expect(store.dispatch).toHaveBeenCalledWith(dispatchAction);
@@ -226,7 +226,7 @@ describe('NavigatorService', () => {
 
         it('should call store to save directoryId', () => {
             // given
-            const store = NavigationService.store;
+            const store = navigationService.store;
             const someDirId = 'someDirId';
             const propertiesToSave = {};
             propertiesToSave[historyProperties.directoryId] = someDirId;
@@ -235,7 +235,7 @@ describe('NavigatorService', () => {
                 dirId: someDirId,
             };
             // when
-            NavigationService.saveSessionData(propertiesToSave);
+            navigationService.saveSessionData(propertiesToSave);
             // then
             expect(store.dispatch).toHaveBeenCalled();
             expect(store.dispatch).toHaveBeenCalledWith(dispatchAction);

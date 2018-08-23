@@ -1,12 +1,11 @@
 /* eslint-disable */
-import authRestService from '../../../../src/frontend/app/authentication/auth-rest-service';
-import mstrProjectRestService from '../../../../src/frontend/app/project/project-rest-service';
+import { authenticationService } from '../../../../src/frontend/app/authentication/auth-rest-service';
+import { projectRestService } from '../../../../src/frontend/app/project/project-rest-service';
 import superagent from 'superagent';
-import projectDi from '../../../../src/frontend/app/project/project-di';
-import authDi from '../../../../src/frontend/app/authentication/auth-di';
 import { UnauthorizedError } from '../../../../src/frontend/app/error/unauthorized-error';
 import { EnvironmentNotFoundError } from '../../../../src/frontend/app/error/environment-not-found-error';
 import { environmentProjectList } from '../mockData';
+import { moduleProxy } from '../../../../src/frontend/app/module-proxy';
 /* eslint-enable */
 
 const correctLogin = 'mstr';
@@ -15,26 +14,24 @@ const loginType = 1;
 const envURL = 'https://env-94174.customer.cloud.microstrategy.com/MicroStrategyLibrary/api';
 
 describe('ProjectsRestService', () => {
+    const mockAgent = superagent.agent();
     beforeAll(() => {
-        const mockAgent = superagent.agent();
-        projectDi.request = mockAgent;
-        authDi.request = mockAgent;
+        moduleProxy.request = mockAgent;
     });
 
     afterAll(() => {
-        projectDi.request = superagent;
-        authDi.request = superagent;
+        moduleProxy.request = superagent;
     });
 
     it('should return list of projects from environment', async () => {
         // given
-        const authToken = await authRestService.authenticate(
+        const authToken = await authenticationService.authenticate(
             correctLogin,
             correctPassword,
             envURL,
             loginType);
         // when
-        const result = await mstrProjectRestService.getProjectList(
+        const result = await projectRestService.getProjectList(
             envURL,
             authToken,
         );
@@ -48,7 +45,7 @@ describe('ProjectsRestService', () => {
         // given
         const authToken = 'wrongToken';
         // when
-        const result = mstrProjectRestService.getProjectList(
+        const result = projectRestService.getProjectList(
             envURL,
             authToken,
         );
@@ -63,14 +60,14 @@ describe('ProjectsRestService', () => {
 
     it('should return throw an error due to missing cookies', async () => {
         // given
-        const authToken = await authRestService.authenticate(
+        const authToken = await authenticationService.authenticate(
             correctLogin,
             correctPassword,
             envURL,
             loginType);
-        projectDi.request = superagent;
+        moduleProxy.request = superagent;
         // when
-        const result = mstrProjectRestService.getProjectList(
+        const result = projectRestService.getProjectList(
             envURL,
             authToken,
         );
@@ -79,20 +76,23 @@ describe('ProjectsRestService', () => {
             await result;
         } catch (error) {
             expect(error).toBeInstanceOf(UnauthorizedError);
+        } finally {
+            moduleProxy.request = mockAgent;
         }
         expect(result).rejects.toThrow();
+        moduleProxy.request = mockAgent;
     });
 
     it('should return throw an error due to incorrect URL', async () => {
         // given
-        const authToken = await authRestService.authenticate(
+        const authToken = await authenticationService.authenticate(
             correctLogin,
             correctPassword,
             envURL,
             loginType);
         const wrongEnvURL = 'www.somewrongurlfortest.com.pl';
         // when
-        const result = mstrProjectRestService.getProjectList(
+        const result = projectRestService.getProjectList(
             wrongEnvURL,
             authToken,
         );

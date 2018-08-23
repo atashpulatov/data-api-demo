@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
-import App from '../../../../src/frontend/app/app';
-/* eslint-enable  */
 import { mount } from 'enzyme';
+import { App } from '../../../../src/frontend/app/app';
+/* eslint-enable  */
 
 describe('App', () => {
     it('should have header component with proper text', () => {

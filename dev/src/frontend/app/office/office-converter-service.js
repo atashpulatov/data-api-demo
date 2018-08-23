@@ -1,4 +1,4 @@
-class ConverterService {
+class OfficeConverterService {
     getConvertedTable(jsonReport) {
         let headers = this._getHeaders(jsonReport);
         let rows = this._getRows(jsonReport);
@@ -61,4 +61,4 @@ class ConverterService {
     }
 }
 
-export default new ConverterService();
+export const officeConverterService = new OfficeConverterService();

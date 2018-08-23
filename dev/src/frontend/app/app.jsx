@@ -1,15 +1,17 @@
 /* eslint-disable */
 import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
-import di from './root-di.js';
-import Routes from './routes.jsx';
+import { Routes } from './routes.jsx';
+import { HashRouter as Router } from 'react-router-dom';
 import { reduxStore, reduxPersistor } from './store.js';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/lib/integration/react';
 import { Breadcrumbs } from './breadcrumbs/breadcrumbs.jsx';
-import { breadcrumbsService } from './breadcrumbs/breadcrumb-service';
+import { Header } from './header.jsx';
+import { MenuBar } from './menu-bar.jsx';
+import { Footer } from './footer.jsx';
 /* eslint-enable */
 
-class App extends Component {
+export class App extends Component {
   constructor(props) {
     super(props);
   }
@@ -18,20 +20,17 @@ class App extends Component {
     return (
       <Provider store={reduxStore}>
         <PersistGate persistor={reduxPersistor}>
-          <di.Router>
+          <Router>
             <div id="content">
-              <di.Header />
-              <di.MenuBar />
+              <Header />
+              <MenuBar />
               <Breadcrumbs />
               <Routes />
-              <di.Footer />
+              <Footer />
             </div>
-          </di.Router>
+          </Router>
         </PersistGate>
       </Provider>
-
     );
   }
 }
-
-export default App;
