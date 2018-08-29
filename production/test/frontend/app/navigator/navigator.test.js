@@ -10,7 +10,7 @@ import { reduxStore } from '../../../../src/frontend/app/store';
 import { historyManager } from '../../../../src/frontend/app/history/history-manager';
 /* eslint-enable */
 
-describe('navigator', () => {
+describe.skip('navigator', () => {
     const originalPushMethod = Navigator.prototype.pushHistory;
     const sampleEnvUrl = 'someEnvUrl';
     const sampleAuthToken = 'someAuthToken';
