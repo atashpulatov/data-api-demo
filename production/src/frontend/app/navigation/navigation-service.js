@@ -8,7 +8,7 @@ import { historyManager } from '../history/history-manager';
 
 const sharedFolderIdType = 7;
 
-class NavigationService { // TODO: rethink the name.
+class NavigationService {
     constructor() {
         this.store = reduxStore;
     };
