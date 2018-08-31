@@ -7,6 +7,10 @@ import { TestComponent } from './test-component';
 import { navigationService } from '../../../../src/frontend/app/navigation/navigation-service';
 import { NavigationError } from '../../../../src/frontend/app/navigation/navigation-error';
 import { pathEnum } from '../../../../src/frontend/app/path-enum';
+import { historyProperties } from '../../../../src/frontend/app/history/history-properties';
+import { sessionProperties } from '../../../../src/frontend/app/storage/session-properties';
+import { Provider } from 'react-redux';
+import { mount } from 'enzyme';
 /* eslint-enable */
 
 jest.mock(
@@ -23,6 +27,12 @@ describe('[ut] withNavigation w/ mocked navigationService', () => {
         expect(reduxStore.getState().sessionReducer.authToken).toBeFalsy();
     });
 
+    afterEach(() => {
+        reduxStore.dispatch({
+            type: sessionProperties.actions.logOut,
+        });
+    });
+
     /**
      * Wrapped component does not match anything from path enum.
      * NavigationError expected.
@@ -36,7 +46,10 @@ describe('[ut] withNavigation w/ mocked navigationService', () => {
             .mockReturnValue(testComponentPath);
         // when
         const wrongMount = () => {
-            shallow(<ComponentWithNavigation history={history} />);
+            mount(
+                <Provider store={reduxStore}>
+                    <ComponentWithNavigation history={history} />
+                </Provider>);
         };
         // then
         expect(wrongMount).toThrowError(NavigationError);
@@ -60,7 +73,10 @@ describe('[ut] withNavigation w/ mocked navigationService', () => {
             push: jest.fn(),
         };
         // when
-        shallow(<ComponentWithNavigation history={history} />);
+        mount(
+            <Provider store={reduxStore}>
+                <ComponentWithNavigation history={history} />
+            </Provider>);
         // then
         expect(history.push).toBeCalled();
         expect(history.push).toBeCalledWith(testComponentPath);
@@ -84,11 +100,46 @@ describe('[ut] withNavigation w/ mocked navigationService', () => {
                 push: jest.fn(),
             };
             // when
-            shallow(<ComponentWithNavigation history={history} />);
+            mount(
+                <Provider store={reduxStore}>
+                    <ComponentWithNavigation history={history} />
+                </Provider>);
             // then
             expect(history.push).not.toBeCalled();
         } finally {
             pathEnum[0].component = originalComponent;
         }
+    });
+
+    /**
+     * (Redux state changed.)
+     * Component updated.
+     * withNavigation should conditionally renavigate.
+     */
+    it('should re-navigate', async () => {
+        // given
+        const history = {
+            push: jest.fn(),
+        };
+        const withProviderComponent =
+            mount(
+                <Provider store={reduxStore}>
+                    <ComponentWithNavigation history={history} />
+                </Provider>);
+        const withNavigationComponent = withProviderComponent
+            .find(ComponentWithNavigation).first();
+        withNavigationComponent.instance().conditionallyRenavigate =
+            jest.fn();
+        withProviderComponent.update();
+        // when
+        // reduxStore.dispatch({
+        //     type: historyProperties.actions.goInsideProject,
+        //     projectId: 'projectId',
+        //     projectName: 'projectName',
+        // });
+        // withProviderComponent.update();
+        // then
+        expect(withNavigationComponent.instance().conditionallyRenavigate)
+            .toBeCalled();
     });
 });

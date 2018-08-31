@@ -1,9 +1,9 @@
 /* eslint-disable */
 import React, { Component } from 'react';
-import { reduxStore } from '../store';
 import { navigationService } from './navigation-service';
 import { pathEnum } from '../path-enum';
 import { NavigationError } from './navigation-error';
+import { connect } from 'react-redux';
 /* eslint-enable */
 
 /**
@@ -13,13 +13,17 @@ import { NavigationError } from './navigation-error';
  * @return {React.Component}
  */
 export function withNavigation(WrappedComponent) {
-    return class extends Component {
+    class WithNavigation extends Component {
         constructor(props) {
             super(props);
             this.conditionallyRenavigate =
                 this.conditionallyRenavigate.bind(this);
             this.conditionallyRenavigate();
         }
+
+        componentDidUpdate() {
+            this.conditionallyRenavigate();
+        };
 
         /**
          * Below method does:
@@ -48,4 +52,10 @@ export function withNavigation(WrappedComponent) {
             return <WrappedComponent {...this.props} />;
         }
     };
+
+    function mapStateToProps(state) {
+        return { projectId: state.historyReducer.projectId };
+    }
+
+    return connect(mapStateToProps)(WithNavigation);
 }
