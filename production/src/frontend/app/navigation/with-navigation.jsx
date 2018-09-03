@@ -21,6 +21,12 @@ export function withNavigation(WrappedComponent) {
             this.conditionallyRenavigate();
         }
 
+        componentWillReceiveProps(nextProps) {
+            this.setState({
+                projectId: nextProps.projectId,
+            });
+        }
+
         componentDidUpdate() {
             this.conditionallyRenavigate();
         };

@@ -132,12 +132,12 @@ describe('[ut] withNavigation w/ mocked navigationService', () => {
             jest.fn();
         withProviderComponent.update();
         // when
-        // reduxStore.dispatch({
-        //     type: historyProperties.actions.goInsideProject,
-        //     projectId: 'projectId',
-        //     projectName: 'projectName',
-        // });
-        // withProviderComponent.update();
+        reduxStore.dispatch({
+            type: historyProperties.actions.goInsideProject,
+            projectId: 'projectId',
+            projectName: 'projectName',
+        });
+        // await withProviderComponent.update();
         // then
         expect(withNavigationComponent.instance().conditionallyRenavigate)
             .toBeCalled();

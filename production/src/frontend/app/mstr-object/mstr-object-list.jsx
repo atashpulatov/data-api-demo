@@ -1,6 +1,5 @@
 /* eslint-disable */
 import React from 'react';
-import { BaseComponent } from '../base-component.jsx';
 import { DirectoryRow, ReportRow } from './mstr-object-row.jsx';
 import { mstrObjectRestService } from './mstr-object-rest-service';
 import './mstr-object.css';
@@ -15,7 +14,7 @@ const objectsTypesMap = {
     project: 55,
 };
 
-export class MstrObjects extends BaseComponent {
+export class MstrObjects extends React.Component {
     constructor(props) {
         super(props);
 

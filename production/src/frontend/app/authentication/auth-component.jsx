@@ -1,12 +1,11 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
-import { BaseComponent } from '../base-component.jsx';
 import './auth-component.css';
 import { authenticationService } from './auth-rest-service';
 import { sessionProperties } from '../storage/session-properties';
 import { reduxStore } from '../store';
 const authenticate = authenticationService.authenticate;
 
-export class Authenticate extends BaseComponent {
+export class Authenticate extends React.Component {
     constructor(props) {
         super(props);
         this.stateFromRedux = reduxStore.getState().sessionReducer;

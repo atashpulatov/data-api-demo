@@ -3,14 +3,14 @@ import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { Routes } from '../../../../src/frontend/app/routes.jsx';
 /* eslint-enable  */
-import { mount } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import { pathEnum } from '../../../../src/frontend/app/path-enum';
 import { Error } from '../../../../src/frontend/app/error.jsx';
 import { routeContainer } from '../../../../src/frontend/app/routeContainer';
 
 describe('Routes', () => {
     it('should return path to Navigator for / path', () => {
-        const wrapper = mount(
+        const wrapper = shallow(
             <MemoryRouter initialEntries={[{
                 pathname: '/',
                 state: { origin: {} },
@@ -18,7 +18,7 @@ describe('Routes', () => {
                 <Routes />
             </MemoryRouter>
         );
-        let wrapperPart = wrapper.find(routeContainer.Navigator);
+        let wrapperPart = wrapper.find(routeContainer.Projects);
         expect(wrapperPart).toHaveLength(1);
     });
     it('should return Error for incorrect path', () => {

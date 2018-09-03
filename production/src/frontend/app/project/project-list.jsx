@@ -1,12 +1,11 @@
 /* eslint-disable */
 import React, { Component } from 'react';
 import { ProjectRow } from './project-row.jsx';
-import { BaseComponent } from '../base-component.jsx';
 import { sessionProperties } from '../storage/session-properties';
 import './project.css';
 /* eslint-enable */
 
-export class Projects extends BaseComponent {
+export class Projects extends Component {
     constructor(props) {
         super(props);
 

@@ -2,15 +2,14 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
 import { Route, Switch } from 'react-router-dom';
 import { routeContainer } from './routeContainer.js';
-
 import { Error } from './error.jsx';
 import { pathEnum } from './path-enum';
-import { Navigator } from './navigator/navigator.jsx';
+import { Projects } from './project/project-list';
 /* eslint-enable */
 
 export const Routes = () => (
     <Switch>
-        <Route exact path='/' component={Navigator} />
+        <Route exact path='/' component={Projects} />
         {pathEnum.map((path) => {
             return (
                 <Route key={path.component}
