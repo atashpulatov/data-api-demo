@@ -118,28 +118,26 @@ describe('[ut] withNavigation w/ mocked navigationService', () => {
      */
     it('should re-navigate', async () => {
         // given
+        const testComponentPath = {
+            pathname: pathEnum[0].pathName,
+        };
+        navigationService.getNavigationRoute
+            .mockReturnValue(testComponentPath);
         const history = {
             push: jest.fn(),
         };
-        const withProviderComponent =
-            mount(
-                <Provider store={reduxStore}>
-                    <ComponentWithNavigation history={history} />
-                </Provider>);
-        const withNavigationComponent = withProviderComponent
-            .find(ComponentWithNavigation).first();
-        withNavigationComponent.instance().conditionallyRenavigate =
-            jest.fn();
-        withProviderComponent.update();
+        mount(
+            <Provider store={reduxStore}>
+                <ComponentWithNavigation history={history} />
+            </Provider>);
+        expect(history.push).toHaveBeenCalledTimes(1);
         // when
         reduxStore.dispatch({
             type: historyProperties.actions.goInsideProject,
             projectId: 'projectId',
             projectName: 'projectName',
         });
-        // await withProviderComponent.update();
         // then
-        expect(withNavigationComponent.instance().conditionallyRenavigate)
-            .toBeCalled();
+        expect(history.push).toHaveBeenCalledTimes(2);
     });
 });

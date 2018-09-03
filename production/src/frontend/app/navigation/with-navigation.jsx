@@ -21,12 +21,6 @@ export function withNavigation(WrappedComponent) {
             this.conditionallyRenavigate();
         }
 
-        componentWillReceiveProps(nextProps) {
-            this.setState({
-                projectId: nextProps.projectId,
-            });
-        }
-
         componentDidUpdate() {
             this.conditionallyRenavigate();
         };
@@ -60,7 +54,7 @@ export function withNavigation(WrappedComponent) {
     };
 
     function mapStateToProps(state) {
-        return { projectId: state.historyReducer.projectId };
+        return { project: state.historyReducer.project };
     }
 
     return connect(mapStateToProps)(WithNavigation);
