@@ -3,7 +3,6 @@ import './auth-component.css';
 import { authenticationService } from './auth-rest-service';
 import { sessionProperties } from '../storage/session-properties';
 import { reduxStore } from '../store';
-const authenticate = authenticationService.authenticate;
 
 export class Authenticate extends React.Component {
     constructor(props) {
@@ -15,7 +14,6 @@ export class Authenticate extends React.Component {
             envUrl: this.stateFromRedux.envUrl || '',
             authMode: undefined,
             isRememberMeOn: true,
-            origin: this.state.origin,
         };
 
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -25,7 +23,6 @@ export class Authenticate extends React.Component {
         this.handleRememberMeOnChange = this.handleRememberMeOnChange.bind(this);
 
         this.onLoginUser = this.onLoginUser.bind(this);
-        this.authenticate = authenticate.bind(this);
     }
 
     handleUsernameChange(event) {
@@ -46,21 +43,21 @@ export class Authenticate extends React.Component {
 
     async onLoginUser(event) {
         event.preventDefault();
-        let authToken = await this.authenticate(
+        reduxStore.dispatch({
+            type: sessionProperties.actions.logIn,
+            username: this.state.username,
+            envUrl: this.state.envUrl,
+            isRememberMeOn: this.state.isRememberMeOn,
+        });
+        let authToken = await authenticationService.authenticate(
             this.state.username, this.state.password,
             this.state.envUrl, this.state.authMode);
         if (authToken !== undefined) {
-            const sessionObject = {};
-            sessionObject[sessionProperties.envUrl] = this.state.envUrl;
-            sessionObject[sessionProperties.authToken] = authToken;
-            sessionObject[sessionProperties.username] = this.state.username;
-            sessionObject[sessionProperties.isRememberMeOn] = this.state.isRememberMeOn;
-            this.state.origin.sessionObject = sessionObject;
+            reduxStore.dispatch({
+                type: sessionProperties.actions.loggedIn,
+                authToken: authToken,
+            });
         }
-        if (this.state.origin.historyObject) {
-            this.state.origin.historyObject = {};
-        }
-        this.props.history.push(this.state.origin);
     }
 
     render() {

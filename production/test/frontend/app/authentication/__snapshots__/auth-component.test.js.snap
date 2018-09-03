@@ -24,7 +24,7 @@ Array [
         name="username"
         onChange={[Function]}
         type="text"
-        value=""
+        value="user"
       />
       <label
         className="grid-item"
@@ -48,7 +48,7 @@ Array [
         name="envUrl"
         onChange={[Function]}
         type="text"
-        value=""
+        value="env"
       />
       <div>
         <input
