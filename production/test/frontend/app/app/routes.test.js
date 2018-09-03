@@ -9,15 +9,16 @@ import { Error } from '../../../../src/frontend/app/error.jsx';
 import { routeContainer } from '../../../../src/frontend/app/routeContainer';
 
 describe('Routes', () => {
-    it('should return path to Navigator for / path', () => {
-        const wrapper = shallow(
+    it('should return path to Projects for / path', () => {
+        const wrapper = mount(
             <MemoryRouter initialEntries={[{
                 pathname: '/',
-                state: { origin: {} },
             }]}>
                 <Routes />
             </MemoryRouter>
         );
+        const test = wrapper.html();
+        const test2 = wrapper.instance();
         let wrapperPart = wrapper.find(routeContainer.Projects);
         expect(wrapperPart).toHaveLength(1);
     });

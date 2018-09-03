@@ -12,11 +12,7 @@ import { Provider } from 'react-redux';
 import { mount } from 'enzyme';
 /* eslint-enable */
 
-jest.mock(
-    '../../../../src/frontend/app/navigation/navigation-service'
-);
-
-describe('[ut] withNavigation w/ mocked navigationService', () => {
+describe('[it] withNavigation', () => {
     /* eslint-disable */
     const ComponentWithNavigation = withNavigation(TestComponent);
     /* eslint-enable */
@@ -38,8 +34,6 @@ describe('[ut] withNavigation w/ mocked navigationService', () => {
             const testComponentPath = {
                 pathname: '/test',
             };
-            navigationService.getNavigationRoute
-                .mockReturnValue(testComponentPath);
             // when
             const wrongMount = () => {
                 mount(
@@ -57,11 +51,6 @@ describe('[ut] withNavigation w/ mocked navigationService', () => {
     it('should re-navigate \
     when wrapped component doesn\'t match current proper component.', () => {
             // given
-            const testComponentPath = {
-                pathname: pathEnum[0].pathName,
-            };
-            navigationService.getNavigationRoute
-                .mockReturnValue(testComponentPath);
             const history = {
                 push: jest.fn(),
             };

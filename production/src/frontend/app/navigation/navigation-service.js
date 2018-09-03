@@ -9,10 +9,6 @@ import { historyManager } from '../history/history-manager';
 const sharedFolderIdType = 7;
 
 class NavigationService {
-    constructor() {
-        this.store = reduxStore;
-    };
-
     getLoginRoute() {
         return {
             pathname: '/authenticate',
@@ -21,75 +17,62 @@ class NavigationService {
         };
     };
 
-    async getProjectsRoute(envUrl, authToken) {
-        try {
-            let projects = await projectRestService
-                .getProjectList(envUrl, authToken);
-            return {
-                pathname: '/projects',
-                state: {
-                    projects,
-                },
-            };
-        } catch (err) {
-            if (err instanceof UnauthorizedError) {
-                this.store.dispatch({
-                    type: sessionProperties.actions.logOut,
-                });
-                return this.getLoginRoute();
-            }
-        }
+    getProjectsRoute() {
+        return {
+            pathname: '/projects',
+        };
+        // try {
+        //     let projects = await projectRestService
+        //         .getProjectList(envUrl, authToken);
+        //     return {
+        //         pathname: '/projects',
+        //         state: {
+        //             projects,
+        //         },
+        //     };
+        // } catch (err) {
+        //     if (err instanceof UnauthorizedError) {
+        //         this.store.dispatch({
+        //             type: sessionProperties.actions.logOut,
+        //         });
+        //         return this.getLoginRoute();
+        //     }
+        // }
     };
 
-    async getRootObjectsRoute(envUrl, authToken, projectId) {
-        let mstrObjects = await mstrObjectRestService
-            .getProjectContent(sharedFolderIdType, envUrl,
-                authToken, projectId);
+    getObjectsRoute() {
         return {
             pathname: '/objects',
-            state: {
-                mstrObjects,
-            },
         };
     }
 
-    async getObjectsRoute(envUrl, authToken, projectId, folderId) {
-        let mstrObjects = await mstrObjectRestService
-            .getFolderContent(envUrl, authToken, projectId, folderId);
-        return {
-            pathname: '/objects',
-            state: {
-                mstrObjects,
-            },
-        };
-    }
-
-    async getNavigationRoute() {
-        const envUrl = this.store.getState()
+    getNavigationRoute() {
+        const envUrl = reduxStore.getState()
             .sessionReducer.envUrl;
-        const authToken = this.store.getState()
+        const authToken = reduxStore.getState()
             .sessionReducer.authToken;
         if (!envUrl || !authToken) {
             return this.getLoginRoute();
         }
-        const project = this.store.getState()
+        const project = reduxStore.getState()
             .historyReducer.project;
         if (!project) {
-            return await this.getProjectsRoute(envUrl, authToken);
+            return this.getProjectsRoute(envUrl, authToken);
         }
-        try {
-            const dirId = historyManager.getCurrentDirectory().dirId;
-            return await this.getObjectsRoute(envUrl, authToken,
-                project.projectId, dirId);
-        } catch (error) {
-            return await this.getRootObjectsRoute(envUrl,
-                authToken, project.projectId);
-        }
+        return this.getObjectsRoute();
+        // try {
+        //     const dirId = historyManager.getCurrentDirectory().dirId;
+        //     return this.getObjectsRoute(envUrl, authToken,
+        //         project.projectId, dirId);
+        // } catch (error) {
+        //     return this.getRootObjectsRoute(envUrl,
+        //         authToken, project.projectId);
+        // }
     }
 
     saveSessionData(propertiesToSave) {
         if (propertiesToSave[sessionProperties.username]) {
-            this.store.dispatch({
+            reduxStore.dispatch({
                 type: sessionProperties.actions.logIn,
                 username: propertiesToSave[sessionProperties.username],
                 envUrl: propertiesToSave[sessionProperties.envUrl],
@@ -97,13 +80,13 @@ class NavigationService {
             });
         }
         if (propertiesToSave[sessionProperties.authToken]) {
-            this.store.dispatch({
+            reduxStore.dispatch({
                 type: sessionProperties.actions.loggedIn,
                 authToken: propertiesToSave[sessionProperties.authToken],
             });
         }
         if (propertiesToSave[historyProperties.projectId]) {
-            this.store.dispatch({
+            reduxStore.dispatch({
                 type: historyProperties.actions.goInsideProject,
                 projectId: propertiesToSave[historyProperties.projectId],
                 projectName: propertiesToSave[historyProperties.projectName],
@@ -111,7 +94,7 @@ class NavigationService {
             return;
         }
         if (propertiesToSave[historyProperties.directoryId]) {
-            this.store.dispatch({
+            reduxStore.dispatch({
                 type: historyProperties.actions.goInside,
                 dirId: propertiesToSave[historyProperties.directoryId],
             });
