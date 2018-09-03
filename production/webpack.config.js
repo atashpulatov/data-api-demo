@@ -44,6 +44,10 @@ let config = {
           },
         ],
       },
+      {
+        test: /\.json$/,
+        loader: 'json-loader',
+      },
     ],
   },
 };

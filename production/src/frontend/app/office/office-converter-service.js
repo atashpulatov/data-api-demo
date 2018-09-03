@@ -2,9 +2,14 @@ class OfficeConverterService {
     getConvertedTable(jsonReport) {
         let headers = this._getHeaders(jsonReport);
         let rows = this._getRows(jsonReport);
+        let id = jsonReport.id;
+        let name = jsonReport.name;
+        console.log(name);
         return {
             headers: headers,
             rows: rows,
+            id: id,
+            name: name,
         };
     }
 

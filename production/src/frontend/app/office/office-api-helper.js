@@ -23,6 +23,13 @@ function getRange(headerCount, startCell) {
     return `${startCell}:${endRange}${startCellArray[1]}`;
 }
 
+function getTableRange(rowCount, headerRange, startCell) {
+    let startCellArray = startCell.split(/(\d+)/);
+    const rowRange = +startCellArray[1] + +rowCount;
+    const tableRange = headerRange.replace(/\d+$/, rowRange);
+    return tableRange;
+}
+
 function handleOfficeApiException(error) {
     console.log('error: ' + error);
     if (error instanceof OfficeExtension.Error) {
@@ -42,4 +49,5 @@ export const officeApiHelper = {
     handleOfficeApiException,
     getRange,
     lettersToNumber,
+    getTableRange,
 };

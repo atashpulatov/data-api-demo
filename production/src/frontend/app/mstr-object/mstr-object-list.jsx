@@ -7,6 +7,7 @@ import './mstr-object.css';
 import { historyProperties } from '../history/history-properties';
 import { officeConverterService } from '../office/office-converter-service';
 import { officeDisplayService } from '../office/office-display-service';
+import { notification, message } from 'antd';
 /* eslint-enable */
 
 const objectsTypesMap = {
@@ -44,7 +45,33 @@ export class MstrObjects extends BaseComponent {
         let convertedReport = officeConverterService
             .getConvertedTable(jsonData);
         convertedReport.id = jsonData.id;
-        officeDisplayService.displayReport(convertedReport);
+        const result = await officeDisplayService.displayReport(convertedReport);
+        //this.bindNamedItem('ComplexReport', 'testid');
+        console.log(result);
+        this.displayAllBindingNames();
+    }
+
+
+    displayAllBindingNames() {
+        Office.context.document.bindings.getAllAsync(function (asyncResult) {
+            var bindingString = '';
+            for (var i in asyncResult.value) {
+                bindingString += asyncResult.value[i].id + '\n';
+            }
+            message.info('This is a normal message');
+            console.log('Existing bindings: ' + bindingString);
+        });
+    }
+
+    bindNamedItem(tableName, tableId) {
+        Office.context.document.bindings.addFromNamedItemAsync(
+            tableName, 'table', { id: tableId }, function (result) {
+                if (result.status == 'succeeded') {
+                    console.log('Added new binding with type: ' + result.value.type + ' and id: ' + result.value.id);
+                } else {
+                    console.error('Error: ' + result.error.message);
+                }
+            });
     }
 
     render() {
