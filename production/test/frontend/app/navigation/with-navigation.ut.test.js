@@ -33,64 +33,31 @@ describe('[ut] withNavigation w/ mocked navigationService', () => {
         });
     });
 
-    /**
-     * Wrapped component does not match anything from path enum.
-     * NavigationError expected.
-     */
-    it('should throw navigation error', () => {
-        // given
-        const testComponentPath = {
-            pathname: '/test',
-        };
-        navigationService.getNavigationRoute
-            .mockReturnValue(testComponentPath);
-        // when
-        const wrongMount = () => {
-            mount(
-                <Provider store={reduxStore}>
-                    <ComponentWithNavigation history={history} />
-                </Provider>);
-        };
-        // then
-        expect(wrongMount).toThrowError(NavigationError);
-        expect(wrongMount)
-            .toThrowError(`Component '${testComponentPath.pathname}'`
-                + ` is not defined in routes.`);
-    });
-
-    /**
-     * Wrapped component doesn't match current proper component,
-     * it should renavigate.
-     */
-    it('should re-navigate', () => {
-        // given
-        const testComponentPath = {
-            pathname: pathEnum[0].pathName,
-        };
-        navigationService.getNavigationRoute
-            .mockReturnValue(testComponentPath);
-        const history = {
-            push: jest.fn(),
-        };
-        // when
-        mount(
-            <Provider store={reduxStore}>
-                <ComponentWithNavigation history={history} />
-            </Provider>);
-        // then
-        expect(history.push).toBeCalled();
-        expect(history.push).toBeCalledWith(testComponentPath);
-    });
-
-    /**
-     * Wrapped component matches current proper component,
-     * it should not renavigate.
-     */
-    it('should NOT re-navigate', () => {
-        const originalComponent = pathEnum[0].component;
-        try {
+    it('should throw navigation error \
+    when wrapped component does not match anything from path enum.', () => {
             // given
-            pathEnum[0].component = 'TestComponent';
+            const testComponentPath = {
+                pathname: '/test',
+            };
+            navigationService.getNavigationRoute
+                .mockReturnValue(testComponentPath);
+            // when
+            const wrongMount = () => {
+                mount(
+                    <Provider store={reduxStore}>
+                        <ComponentWithNavigation history={history} />
+                    </Provider>);
+            };
+            // then
+            expect(wrongMount).toThrowError(NavigationError);
+            expect(wrongMount)
+                .toThrowError(`Component '${testComponentPath.pathname}'`
+                    + ` is not defined in routes.`);
+        });
+
+    it('should re-navigate \
+    when wrapped component doesn\'t match current proper component.', () => {
+            // given
             const testComponentPath = {
                 pathname: pathEnum[0].pathName,
             };
@@ -105,39 +72,59 @@ describe('[ut] withNavigation w/ mocked navigationService', () => {
                     <ComponentWithNavigation history={history} />
                 </Provider>);
             // then
-            expect(history.push).not.toBeCalled();
-        } finally {
-            pathEnum[0].component = originalComponent;
-        }
-    });
-
-    /**
-     * (Redux state changed.)
-     * Component updated.
-     * withNavigation should conditionally renavigate.
-     */
-    it('should re-navigate', async () => {
-        // given
-        const testComponentPath = {
-            pathname: pathEnum[0].pathName,
-        };
-        navigationService.getNavigationRoute
-            .mockReturnValue(testComponentPath);
-        const history = {
-            push: jest.fn(),
-        };
-        mount(
-            <Provider store={reduxStore}>
-                <ComponentWithNavigation history={history} />
-            </Provider>);
-        expect(history.push).toHaveBeenCalledTimes(1);
-        // when
-        reduxStore.dispatch({
-            type: historyProperties.actions.goInsideProject,
-            projectId: 'projectId',
-            projectName: 'projectName',
+            expect(history.push).toBeCalled();
+            expect(history.push).toBeCalledWith(testComponentPath);
         });
-        // then
-        expect(history.push).toHaveBeenCalledTimes(2);
-    });
+
+    it('should NOT re-navigate \
+    when wrapped component matches current proper component', () => {
+            const originalComponent = pathEnum[0].component;
+            try {
+                // given
+                pathEnum[0].component = 'TestComponent';
+                const testComponentPath = {
+                    pathname: pathEnum[0].pathName,
+                };
+                navigationService.getNavigationRoute
+                    .mockReturnValue(testComponentPath);
+                const history = {
+                    push: jest.fn(),
+                };
+                // when
+                mount(
+                    <Provider store={reduxStore}>
+                        <ComponentWithNavigation history={history} />
+                    </Provider>);
+                // then
+                expect(history.push).not.toBeCalled();
+            } finally {
+                pathEnum[0].component = originalComponent;
+            }
+        });
+
+    it('should re-navigate \
+    when (some) redux state changed', async () => {
+            // given
+            const testComponentPath = {
+                pathname: pathEnum[0].pathName,
+            };
+            navigationService.getNavigationRoute
+                .mockReturnValue(testComponentPath);
+            const history = {
+                push: jest.fn(),
+            };
+            mount(
+                <Provider store={reduxStore}>
+                    <ComponentWithNavigation history={history} />
+                </Provider>);
+            expect(history.push).toHaveBeenCalledTimes(1);
+            // when
+            reduxStore.dispatch({
+                type: historyProperties.actions.goInsideProject,
+                projectId: 'projectId',
+                projectName: 'projectName',
+            });
+            // then
+            expect(history.push).toHaveBeenCalledTimes(2);
+        });
 });

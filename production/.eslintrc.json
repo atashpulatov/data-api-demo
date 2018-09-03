@@ -20,6 +20,7 @@
     "rules": {
         "object-curly-spacing": "off",
         "max-len": "warn",
+        "no-multi-str": "off",
         "require-jsdoc": [
             "off"
         ]
