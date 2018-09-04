@@ -48,8 +48,16 @@ export function withNavigation(WrappedComponent) {
             }
         };
 
+        /**
+         * Hence all history operations should be done in withNavigation HOC,
+         * we don't want to pass history to wrapped component.
+         * @return {React.Component}
+         */
         render() {
-            return <WrappedComponent {...this.props} />;
+            /* eslint-disable no-unused-vars*/
+            const { history, ...passThroughProps } = this.props;
+            /* eslint-enable */
+            return <WrappedComponent {...passThroughProps} />;
         }
     };
 

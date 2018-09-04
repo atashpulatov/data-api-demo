@@ -32,6 +32,28 @@ describe('[ut] withNavigation w/ mocked navigationService', () => {
         });
     });
 
+    it('should not pass history props to wrapped component', () => {
+        // given
+        const testComponentPath = {
+            pathname: pathEnum[0].pathName,
+        };
+        navigationService.getNavigationRoute
+            .mockReturnValue(testComponentPath);
+        const history = {
+            push: jest.fn(),
+        };
+        // when
+        const wrappedProvider = mount(
+            <Provider store={reduxStore}>
+                <ComponentWithNavigation history={history} />
+            </Provider>);
+        // then
+        const wrappedConnect = wrappedProvider.childAt(0);
+        const wrappedWithNavigation = wrappedConnect.childAt(0);
+        const wrappedComponent = wrappedWithNavigation.childAt(0);
+        expect(wrappedComponent.props().history).toBeUndefined();
+    });
+
     it('should throw navigation error \
     when wrapped component does not match anything from path enum.', () => {
             // given
@@ -44,7 +66,7 @@ describe('[ut] withNavigation w/ mocked navigationService', () => {
             const wrongMount = () => {
                 mount(
                     <Provider store={reduxStore}>
-                        <ComponentWithNavigation history={history} />
+                        <ComponentWithNavigation />
                     </Provider>);
             };
             // then
