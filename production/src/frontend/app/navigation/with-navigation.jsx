@@ -6,6 +6,8 @@ import { NavigationError } from './navigation-error';
 import { connect } from 'react-redux';
 /* eslint-enable */
 
+const ROOT_COMPONENT_DATA = { pathName: '/', component: 'Projects' };
+
 /**
  * HOC to wrap a React.Component
  * provides a navigation logic
@@ -34,19 +36,35 @@ export function withNavigation(WrappedComponent) {
         conditionallyRenavigate() {
             const pathToProperComponent =
                 navigationService.getNavigationRoute();
+            if (pathToProperComponent.pathname
+                === ROOT_COMPONENT_DATA.pathName) {
+                this.conditionallyRenavigateToRoot(pathToProperComponent);
+            } else {
+                this.conditionallyRenavigateToOther(pathToProperComponent);
+            }
+        };
+
+        conditionallyRenavigateToRoot(pathToProperComponent) {
+            const expectedComponentName = '_' + ROOT_COMPONENT_DATA.component;
+            if (WrappedComponent.name !== expectedComponentName) {
+                this.props.history.push(pathToProperComponent);
+            }
+        }
+
+        conditionallyRenavigateToOther(pathToProperComponent) {
             const pathComponentData = pathEnum.find((path) => {
                 return path.pathName === pathToProperComponent.pathname;
             });
             if (!pathComponentData) {
-                throw new NavigationError(
-                    `Component '${pathToProperComponent.pathname}'`
-                    + ` is not defined in routes.`
-                );
+                throw new NavigationError(`Component `
+                    + `'${pathToProperComponent.pathname}'`
+                    + ` is not defined in routes.`);
             }
-            if (WrappedComponent.name !== pathComponentData.component) {
+            const expectedComponentName = '_' + pathComponentData.component;
+            if (WrappedComponent.name !== expectedComponentName) {
                 this.props.history.push(pathToProperComponent);
             }
-        };
+        }
 
         /**
          * Hence all history operations should be done in withNavigation HOC,
@@ -62,7 +80,10 @@ export function withNavigation(WrappedComponent) {
     };
 
     function mapStateToProps(state) {
-        return { project: state.historyReducer.project };
+        return {
+            authToken: state.sessionReducer.authToken,
+            project: state.historyReducer.project,
+        };
     }
 
     return connect(mapStateToProps)(WithNavigation);

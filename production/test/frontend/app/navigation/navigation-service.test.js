@@ -39,7 +39,7 @@ describe('NavigatorService', () => {
             const pathObject = navigationService.getProjectsRoute();
             // then
             expect(pathObject.pathname).toBeDefined();
-            expect(pathObject.pathname).toContain('/projects');
+            expect(pathObject.pathname).toContain('/');
             expect(pathObject.state).not.toBeDefined();
         });
 

@@ -3,8 +3,9 @@ import './auth-component.css';
 import { authenticationService } from './auth-rest-service';
 import { sessionProperties } from '../storage/session-properties';
 import { reduxStore } from '../store';
+import { withNavigation } from '../navigation/with-navigation';
 
-export class Authenticate extends React.Component {
+class _Authenticate extends React.Component {
     constructor(props) {
         super(props);
         this.stateFromRedux = reduxStore.getState().sessionReducer;
@@ -109,3 +110,5 @@ export class Authenticate extends React.Component {
         );
     }
 }
+
+export const Authenticate = withNavigation(_Authenticate);

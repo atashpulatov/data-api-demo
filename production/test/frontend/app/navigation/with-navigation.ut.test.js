@@ -2,7 +2,7 @@
 import React from 'react';
 import { reduxStore } from '../../../../src/frontend/app/store';
 import { withNavigation } from '../../../../src/frontend/app/navigation/with-navigation';
-import { TestComponent } from './test-component';
+import { _TestComponent } from './test-component';
 import { navigationService } from '../../../../src/frontend/app/navigation/navigation-service';
 import { NavigationError } from '../../../../src/frontend/app/navigation/navigation-error';
 import { pathEnum } from '../../../../src/frontend/app/path-enum';
@@ -18,7 +18,7 @@ jest.mock(
 
 describe('[ut] withNavigation w/ mocked navigationService', () => {
     /* eslint-disable */
-    const ComponentWithNavigation = withNavigation(TestComponent);
+    const ComponentWithNavigation = withNavigation(_TestComponent);
     /* eslint-enable */
 
     beforeEach(() => {
@@ -51,7 +51,28 @@ describe('[ut] withNavigation w/ mocked navigationService', () => {
         const wrappedConnect = wrappedProvider.childAt(0);
         const wrappedWithNavigation = wrappedConnect.childAt(0);
         const wrappedComponent = wrappedWithNavigation.childAt(0);
+        expect(wrappedWithNavigation.props().history).toBe(history);
         expect(wrappedComponent.props().history).toBeUndefined();
+    });
+
+    it('should renavigate to root component', () => {
+        // given
+        const rootComponentPath = {
+            pathname: '/',
+        };
+        navigationService.getNavigationRoute
+            .mockReturnValue(rootComponentPath);
+        const history = {
+            push: jest.fn(),
+        };
+        // when
+        mount(
+            <Provider store={reduxStore}>
+                <ComponentWithNavigation history={history} />
+            </Provider>);
+        // then
+        expect(history.push).toBeCalled();
+        expect(history.push).toBeCalledWith(rootComponentPath);
     });
 
     it('should throw navigation error \

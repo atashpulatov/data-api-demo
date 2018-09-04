@@ -19,7 +19,7 @@ class NavigationService {
 
     getProjectsRoute() {
         return {
-            pathname: '/projects',
+            pathname: '/',
         };
         // try {
         //     let projects = await projectRestService
