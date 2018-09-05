@@ -7,7 +7,7 @@ import './mstr-object.css';
 import { historyProperties } from '../history/history-properties';
 import { officeConverterService } from '../office/office-converter-service';
 import { officeDisplayService } from '../office/office-display-service';
-import { notification, message } from 'antd';
+import { Modal, message } from 'antd';
 /* eslint-enable */
 
 const objectsTypesMap = {
@@ -25,6 +25,7 @@ export class MstrObjects extends BaseComponent {
         };
         this.navigateToDir = this.navigateToDir.bind(this);
         this.printObject = this.printObject.bind(this);
+        this.displayAllBindingNames = this.displayAllBindingNames.bind(this);
     }
 
     navigateToDir(dirId, directoryName) {
@@ -45,8 +46,8 @@ export class MstrObjects extends BaseComponent {
         let convertedReport = officeConverterService
             .getConvertedTable(jsonData);
         convertedReport.id = jsonData.id;
-        const result = await officeDisplayService.displayReport(convertedReport);
-        //this.bindNamedItem('ComplexReport', 'testid');
+        const result = officeDisplayService.displayReport(convertedReport);
+        await this.bindNamedItem(result.tableName, convertedReport.id, result.startCell, this.onBindingDataChanged);
         console.log(result);
         this.displayAllBindingNames();
     }
@@ -58,19 +59,25 @@ export class MstrObjects extends BaseComponent {
             for (var i in asyncResult.value) {
                 bindingString += asyncResult.value[i].id + '\n';
             }
-            message.info('This is a normal message');
+            message.info(bindingString);
             console.log('Existing bindings: ' + bindingString);
         });
     }
 
-    bindNamedItem(tableName, tableId) {
+    async bindNamedItem(tableName, tableId, startCell) {
+        const bindingId = `${startCell}${tableId}`;
         Office.context.document.bindings.addFromNamedItemAsync(
-            tableName, 'table', { id: tableId }, function (result) {
-                if (result.status == 'succeeded') {
-                    console.log('Added new binding with type: ' + result.value.type + ' and id: ' + result.value.id);
-                } else {
-                    console.error('Error: ' + result.error.message);
-                }
+            tableName, 'table', { id: bindingId }, (asyncResult) => {
+                console.log('adding eventHandler');
+                const selectString = `bindings#${bindingId}`;
+                console.log(selectString);
+                Office.select(selectString,
+                    function onError() {
+                        console.log('error on attaching event handler');
+                    }).addHandlerAsync(Office.EventType.BindingDataChanged,
+                        (eventArgs) => {
+                            onBindingDataChanged(eventArgs);
+                        });
             });
     }
 
@@ -98,4 +105,20 @@ export class MstrObjects extends BaseComponent {
             </article>
         );
     }
+};
+
+
+// when data in the table is changed, this event will be triggered.
+const onBindingDataChanged = (eventArgs) => {
+    console.log('triggered change');
+    Excel.run(function (ctx) {
+        // highlight the table in orange to indicate data has been changed.
+        ctx.workbook.bindings.getItem(eventArgs.binding.id).getTable().getDataBodyRange().format.fill.color = 'Orange';
+        return ctx.sync().then(function () {
+            console.log('The value in this table got changed!');
+        })
+            .catch(function (error) {
+                console.log(JSON.stringify(error));
+            });
+    });
 };

@@ -3,14 +3,15 @@ import { officeApiHelper } from './office-api-helper';
 class OfficeDisplayService {
     async displayReport(reportConvertedData) {
         const hasHeaders = true;
-        await Excel.run(async (context) => {
+        return Excel.run(async (context) => {
             let sheet = context.workbook.worksheets.getActiveWorksheet();
 
             let startCell = await this._getSelectedCell(context);
             let range = officeApiHelper
                 .getRange(reportConvertedData.headers.length, startCell);
             let mstrTable = sheet.tables.add(range, hasHeaders);
-            mstrTable.name = reportConvertedData.name;
+            const tableName = reportConvertedData.name + startCell;
+            mstrTable.name = tableName;
 
             mstrTable.getHeaderRowRange().values = [reportConvertedData.headers];
             this._pushRows(reportConvertedData, mstrTable);
@@ -18,19 +19,12 @@ class OfficeDisplayService {
             this._formatTable(sheet);
 
             sheet.activate();
-            return context.sync();
+            context.sync();
+            return {
+                startCell,
+                tableName,
+            };
         }).catch((error) => officeApiHelper.handleOfficeApiException(error));
-    }
-
-    bindNamedItem(context, tableName, tableId) {
-        Office.context.document.bindings.addFromNamedItemAsync(
-            tableName, 'table', { id: tableId }, function (result) {
-                if (result.status == 'succeeded') {
-                    console.log('Added new binding with type: ' + result.value.type + ' and id: ' + result.value.id);
-                } else {
-                    console.error('Error: ' + result.error.message);
-                }
-            });
     }
 
     _formatTable(sheet) {
