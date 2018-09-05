@@ -1,29 +1,39 @@
 /* eslint-disable */
 import React, { Component } from 'react';
 import { ProjectRow } from './project-row.jsx';
-import { sessionProperties } from '../storage/session-properties';
 import './project.css';
+import { projectRestService } from './project-rest-service';
+import { reduxStore } from '../store';
+import { historyProperties } from '../history/history-properties';
+import { withNavigation } from '../navigation/with-navigation';
 /* eslint-enable */
 
-export class Projects extends Component {
+export class _Projects extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            projects: props.location.state.projects,
+            projects: [],
         };
 
-        this.navigateToProject = this.navigateToProject.bind(this);
+        this.projectChosen = this.projectChosen.bind(this);
     }
 
-    navigateToProject(projectId, projectName) {
-        const sessionObject = {};
-        sessionObject[sessionProperties.projectId] = projectId;
-        sessionObject[sessionProperties.projectName] = projectName;
-        this.props.history.push({
-            pathname: '/',
-            origin: this.props.location,
-            sessionObject,
+    async componentDidMount() {
+        const envUrl = reduxStore.getState().sessionReducer.envUrl;
+        const authToken = reduxStore.getState().sessionReducer.authToken;
+        const projects = await projectRestService
+            .getProjectList(envUrl, authToken);
+        this.setState({
+            projects: projects,
+        });
+    }
+
+    projectChosen(projectId, projectName) {
+        reduxStore.dispatch({
+            type: historyProperties.actions.goInsideProject,
+            projectId: projectId,
+            projectName: projectName,
         });
     }
 
@@ -39,10 +49,12 @@ export class Projects extends Component {
                 <ul className='project-row-container no-padding'>
                     {this.state.projects.map((project) => (
                         <ProjectRow key={project.id} projectRow={project}
-                            onClick={this.navigateToProject} />
+                            onClick={this.projectChosen} />
                     ))}
                 </ul>
             </article>
         );
     }
 }
+
+export const Projects = withNavigation(_Projects);

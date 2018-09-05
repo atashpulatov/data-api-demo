@@ -144,29 +144,53 @@ describe('[ut] withNavigation w/ mocked navigationService', () => {
             }
         });
 
-    it('should re-navigate \
-    when (some) redux state changed', async () => {
-            // given
-            const testComponentPath = {
-                pathname: pathEnum[0].pathName,
-            };
-            navigationService.getNavigationRoute
-                .mockReturnValue(testComponentPath);
-            const history = {
-                push: jest.fn(),
-            };
-            mount(
-                <Provider store={reduxStore}>
-                    <ComponentWithNavigation history={history} />
-                </Provider>);
-            expect(history.push).toHaveBeenCalledTimes(1);
-            // when
-            reduxStore.dispatch({
-                type: historyProperties.actions.goInsideProject,
-                projectId: 'projectId',
-                projectName: 'projectName',
-            });
-            // then
-            expect(history.push).toHaveBeenCalledTimes(2);
+    it('should re-navigate when project changed', async () => {
+        // given
+        const testComponentPath = {
+            pathname: pathEnum[0].pathName,
+        };
+        navigationService.getNavigationRoute
+            .mockReturnValue(testComponentPath);
+        const history = {
+            push: jest.fn(),
+        };
+        mount(
+            <Provider store={reduxStore}>
+                <ComponentWithNavigation history={history} />
+            </Provider>);
+        expect(history.push).toHaveBeenCalledTimes(1);
+        // when
+        reduxStore.dispatch({
+            type: historyProperties.actions.goInsideProject,
+            projectId: 'projectId',
+            projectName: 'projectName',
         });
+        // then
+        expect(history.push).toHaveBeenCalledTimes(2);
+    });
+
+    it('should renavigate on token changed', () => {
+        // given
+        const history = {
+            push: jest.fn(),
+        };
+        reduxStore.dispatch({
+            type: sessionProperties.actions.logIn,
+            username: 'user',
+            envUrl: 'env',
+            isRememberMeOn: true,
+        });
+        mount(
+            <Provider store={reduxStore}>
+                <ComponentWithNavigation history={history} />
+            </Provider>);
+        expect(history.push).toHaveBeenCalledTimes(1);
+        // when
+        reduxStore.dispatch({
+            type: sessionProperties.actions.loggedIn,
+            authToken: 'token',
+        });
+        // then
+        expect(history.push).toHaveBeenCalledTimes(2);
+    });
 });

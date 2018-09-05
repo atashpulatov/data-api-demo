@@ -5,7 +5,7 @@ import { sessionProperties } from '../storage/session-properties';
 import { reduxStore } from '../store';
 import { withNavigation } from '../navigation/with-navigation';
 
-class _Authenticate extends React.Component {
+export class _Authenticate extends React.Component {
     constructor(props) {
         super(props);
         this.stateFromRedux = reduxStore.getState().sessionReducer;
