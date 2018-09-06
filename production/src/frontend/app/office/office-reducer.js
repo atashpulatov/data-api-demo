@@ -5,10 +5,12 @@ export const officeReducer = (state = {}, action) => {
     switch (action.type) {
         case officeProperties.actions.loadReport:
             return onLoadReport(action, state);
-        case officeProperties.actions.removeReports:
-            return onRemoveReports(action, state);
+        case officeProperties.actions.removeAllReports:
+            return onRemoveAllReports(action, state);
         case officeProperties.actions.removeReport:
             return onRemoveReport(action, state);
+        case officeProperties.actions.loadAllReports:
+            return onLoadAllReports(action, state);
         default:
             break;
     }
@@ -16,18 +18,7 @@ export const officeReducer = (state = {}, action) => {
 };
 
 function onLoadReport(action, state) {
-    if (!action.report) {
-        throw new OfficeError('Missing report');
-    }
-    if (!action.report.id) {
-        throw new OfficeError('Missing report.id');
-    }
-    if (!action.report.name) {
-        throw new OfficeError('Missing report.name');
-    }
-    if (!action.report.bindId) {
-        throw new OfficeError('Missing report.bindId');
-    }
+    _checkReportData(action.report);
     const reportArray = state.reportArray ? state.reportArray : [];
     reportArray.push(action.report);
     return {
@@ -36,7 +27,20 @@ function onLoadReport(action, state) {
     };
 }
 
-function onRemoveReports(action, state) {
+function onLoadAllReports(action, state) {
+    if (!action.reportArray) {
+        throw new OfficeError('Missing reportArray');
+    }
+    action.reportArray.forEach((report) => {
+        _checkReportData(report);
+    });
+    return {
+        ...state,
+        reportArray: action.reportArray,
+    };
+}
+
+function onRemoveAllReports(action, state) {
     return {
         ...state,
         reportArray: undefined,
@@ -57,4 +61,19 @@ function onRemoveReport(action, state) {
             ...state.reportArray.slice(indexOfElement + 1),
         ],
     };
+}
+
+function _checkReportData(report) {
+    if (!report) {
+        throw new OfficeError('Missing report');
+    }
+    if (!report.id) {
+        throw new OfficeError('Missing report.id');
+    }
+    if (!report.name) {
+        throw new OfficeError('Missing report.name');
+    }
+    if (!report.bindId) {
+        throw new OfficeError('Missing report.bindId');
+    }
 }

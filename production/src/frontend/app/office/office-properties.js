@@ -7,7 +7,8 @@ export const officeProperties = new Proxy({
     reportArray: 'mstr-loaded-reports-array',
     actions: {
         loadReport: 'OFFICE_LOAD_REPORT',
-        removeReports: 'OFFICE_REMOVE_REPORTS',
+        loadAllReports: 'OFFICE_LOAD_ALL_REPORTS',
+        removeAllReports: 'OFFICE_REMOVE_ALL_REPORTS',
         removeReport: 'OFFICE_REMOVE_REPORT',
     },
 }, propsProxy);
