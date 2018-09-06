@@ -2,22 +2,24 @@ import { officeApiHelper } from './office-api-helper';
 
 class OfficeDisplayService {
     async displayReport(reportConvertedData) {
+        const result = await this.insertDataIntoExcel(reportConvertedData);
+        await this._bindNamedItem(result.tableName, reportConvertedData.id, result.startCell);
+        return;
+    }
+
+    insertDataIntoExcel(reportConvertedData) {
         const hasHeaders = true;
         return Excel.run(async (context) => {
-            let sheet = context.workbook.worksheets.getActiveWorksheet();
-
-            let startCell = await this._getSelectedCell(context);
-            let range = officeApiHelper
+            const sheet = context.workbook.worksheets.getActiveWorksheet();
+            const startCell = await this._getSelectedCell(context);
+            const range = officeApiHelper
                 .getRange(reportConvertedData.headers.length, startCell);
-            let mstrTable = sheet.tables.add(range, hasHeaders);
+            const mstrTable = sheet.tables.add(range, hasHeaders);
             const tableName = reportConvertedData.name + startCell;
             mstrTable.name = tableName;
-
             mstrTable.getHeaderRowRange().values = [reportConvertedData.headers];
             this._pushRows(reportConvertedData, mstrTable);
-
             this._formatTable(sheet);
-
             sheet.activate();
             context.sync();
             return {
@@ -25,6 +27,23 @@ class OfficeDisplayService {
                 tableName,
             };
         }).catch((error) => officeApiHelper.handleOfficeApiException(error));
+    }
+
+    async _bindNamedItem(tableName, tableId, startCell) {
+        const bindingId = `${startCell}${tableId}`;
+        Office.context.document.bindings.addFromNamedItemAsync(
+            tableName, 'table', { id: bindingId }, (asyncResult) => {
+                console.log('adding eventHandler');
+                const selectString = `bindings#${bindingId}`;
+                console.log(selectString);
+                Office.select(selectString,
+                    function onError() {
+                        console.log('error on attaching event handler');
+                    }).addHandlerAsync(Office.EventType.BindingDataChanged,
+                        (eventArgs) => {
+                            officeApiHelper.onBindingDataChanged(eventArgs);
+                        });
+            });
     }
 
     _formatTable(sheet) {
@@ -43,10 +62,10 @@ class OfficeDisplayService {
 
     async _getSelectedCell(context) {
         // TODO: handle more than one cell selected
-        let selectedRangeStart = context.workbook.getSelectedRange();
+        const selectedRangeStart = context.workbook.getSelectedRange();
         selectedRangeStart.load('address');
         await context.sync();
-        let startCell = selectedRangeStart.address.split('!')[1];
+        const startCell = selectedRangeStart.address.split('!')[1];
         return startCell;
     }
 }

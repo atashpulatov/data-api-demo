@@ -45,9 +45,25 @@ function lettersToNumber(letters) {
         r * ALPHABET_RANGE_END + parseInt(a, 36) - 9, 0);
 }
 
+// when data in the table is changed, this event will be triggered.
+const onBindingDataChanged = (eventArgs) => {
+    console.log('triggered change');
+    Excel.run((ctx) => {
+        // highlight the table in orange to indicate data has been changed.
+        ctx.workbook.bindings.getItem(eventArgs.binding.id).getTable().getDataBodyRange().format.fill.color = 'Orange';
+        return ctx.sync().then(() => {
+            console.log('The value in this table got changed!');
+        })
+            .catch((error) => {
+                console.log(JSON.stringify(error));
+            });
+    });
+};
+
 export const officeApiHelper = {
     handleOfficeApiException,
     getRange,
     lettersToNumber,
     getTableRange,
+    onBindingDataChanged,
 };

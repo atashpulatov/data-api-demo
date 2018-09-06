@@ -47,8 +47,6 @@ export class MstrObjects extends BaseComponent {
             .getConvertedTable(jsonData);
         convertedReport.id = jsonData.id;
         const result = officeDisplayService.displayReport(convertedReport);
-        await this.bindNamedItem(result.tableName, convertedReport.id, result.startCell, this.onBindingDataChanged);
-        console.log(result);
         this.displayAllBindingNames();
     }
 
@@ -62,23 +60,6 @@ export class MstrObjects extends BaseComponent {
             message.info(bindingString);
             console.log('Existing bindings: ' + bindingString);
         });
-    }
-
-    async bindNamedItem(tableName, tableId, startCell) {
-        const bindingId = `${startCell}${tableId}`;
-        Office.context.document.bindings.addFromNamedItemAsync(
-            tableName, 'table', { id: bindingId }, (asyncResult) => {
-                console.log('adding eventHandler');
-                const selectString = `bindings#${bindingId}`;
-                console.log(selectString);
-                Office.select(selectString,
-                    function onError() {
-                        console.log('error on attaching event handler');
-                    }).addHandlerAsync(Office.EventType.BindingDataChanged,
-                        (eventArgs) => {
-                            onBindingDataChanged(eventArgs);
-                        });
-            });
     }
 
     render() {
@@ -105,20 +86,4 @@ export class MstrObjects extends BaseComponent {
             </article>
         );
     }
-};
-
-
-// when data in the table is changed, this event will be triggered.
-const onBindingDataChanged = (eventArgs) => {
-    console.log('triggered change');
-    Excel.run(function (ctx) {
-        // highlight the table in orange to indicate data has been changed.
-        ctx.workbook.bindings.getItem(eventArgs.binding.id).getTable().getDataBodyRange().format.fill.color = 'Orange';
-        return ctx.sync().then(function () {
-            console.log('The value in this table got changed!');
-        })
-            .catch(function (error) {
-                console.log(JSON.stringify(error));
-            });
-    });
 };

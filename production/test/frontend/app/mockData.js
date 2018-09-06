@@ -52,7 +52,7 @@ export let environmentProjectList = [
 export let mockReports = [
     {
         'id': 'F9E139BE11E85E842B520080EFC5C210',
-        'name': 'MediumReport',
+        'name': 'TestReport',
         'instanceId': '88C04DF411E85E8646090080EFD5E10E',
         'result': {
             'definition': {
