@@ -1,6 +1,9 @@
 import { officeApiHelper } from './office-api-helper';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { officeConverterService } from './office-converter-service';
+import { reduxStore } from '../store';
+import { officeProperties } from './office-properties';
+import { message } from 'antd';
 
 class OfficeDisplayService {
     constructor() {
@@ -14,11 +17,19 @@ class OfficeDisplayService {
             .getConvertedTable(jsonData);
         convertedReport.id = jsonData.id;
         const result = await this.insertDataIntoExcel(convertedReport);
-        await this._bindNamedItem(
+        const bindingId = await this._bindNamedItem(
             result.tableName,
             convertedReport.id,
             result.startCell);
-        displayAllBindingNames();
+        reduxStore.dispatch({
+            type: officeProperties.actions.loadReport,
+            report: {
+                id: convertedReport.id,
+                name: jsonData.name,
+                bindId: bindingId,
+            },
+        });
+        this._displayAllBindingNames();
     }
 
     async insertDataIntoExcel(reportConvertedData) {
@@ -56,19 +67,24 @@ class OfficeDisplayService {
 
     async _bindNamedItem(tableName, tableId, startCell) {
         const bindingId = `${startCell}${tableId}`;
-        Office.context.document.bindings.addFromNamedItemAsync(
-            tableName, 'table', { id: bindingId }, (asyncResult) => {
+        const bindingResult = await Office.context.document.bindings.addFromNamedItemAsync(
+            tableName, 'table', { id: bindingId }, async (asyncResult) => {
                 console.log('adding eventHandler');
-                const selectString = `bindings#${bindingId}`;
+                console.log(asyncResult);
+                const selectString = `bindings#${asyncResult.value.id}`;
                 console.log(selectString);
-                Office.select(selectString,
+                const bindingObject = await Office.select(selectString,
                     function onError() {
                         console.log('error on attaching event handler');
-                    }).addHandlerAsync(Office.EventType.BindingDataChanged,
-                        (eventArgs) => {
-                            officeApiHelper.onBindingDataChanged(eventArgs);
-                        });
+                    });
+                const attachHandlerResult = await bindingObject.addHandlerAsync(Office.EventType.BindingDataChanged,
+                    (eventArgs) => {
+                        officeApiHelper.onBindingDataChanged(eventArgs);
+                    });
+                console.log(attachHandlerResult);
+                return asyncResult.value;
             });
+        return bindingId;
     }
 
     _formatTable(sheet) {

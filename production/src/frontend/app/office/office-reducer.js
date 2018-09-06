@@ -2,6 +2,7 @@ import { officeProperties } from './office-properties';
 import { OfficeError } from './office-error';
 
 export const officeReducer = (state = {}, action) => {
+    console.log('in reducer');
     switch (action.type) {
         case officeProperties.actions.loadReport:
             return onLoadReport(action, state);
@@ -19,11 +20,11 @@ export const officeReducer = (state = {}, action) => {
 
 function onLoadReport(action, state) {
     _checkReportData(action.report);
-    const reportArray = state.reportArray ? state.reportArray : [];
-    reportArray.push(action.report);
     return {
         ...state,
-        reportArray,
+        reportArray: state.reportArray
+            ? [...state.reportArray, action.report]
+            : [action.report],
     };
 }
 

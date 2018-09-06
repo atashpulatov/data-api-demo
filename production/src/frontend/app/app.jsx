@@ -9,13 +9,10 @@ import { Breadcrumbs } from './breadcrumbs/breadcrumbs.jsx';
 import { Header } from './header.jsx';
 import { MenuBar } from './menu-bar.jsx';
 import { Footer } from './footer.jsx';
+import { OfficeLoadedFiles } from './office-loaded-files.jsx';
 /* eslint-enable */
 
 export class App extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <Provider store={reduxStore}>
@@ -25,6 +22,7 @@ export class App extends Component {
               <Header />
               <MenuBar />
               <Breadcrumbs />
+              <OfficeLoadedFiles />
               <Routes />
               <Footer />
             </div>
