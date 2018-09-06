@@ -2,8 +2,12 @@ import { errorHandler } from '../error/error-service';
 import { reduxStore } from '../store';
 import { moduleProxy } from '../module-proxy';
 
+const sharedFolderIdType = 7;
+
 class MstrObjectRestService {
-    async getProjectContent(folderType, envUrl, authToken, projectId) {
+    async getProjectContent(envUrl, authToken, projectId,
+        folderType = sharedFolderIdType) {
+        //
         const fullPath = `${envUrl}/folders/preDefined/${folderType}`;
         return await moduleProxy.request
             .get(fullPath)

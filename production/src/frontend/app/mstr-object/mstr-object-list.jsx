@@ -7,6 +7,10 @@ import { historyProperties } from '../history/history-properties';
 import { officeConverterService } from '../office/office-converter-service';
 import { officeDisplayService } from '../office/office-display-service';
 import { reduxStore } from '../store';
+import { historyManager } from '../history/history-manager';
+import { connect } from 'react-redux';
+import { withNavigation } from '../navigation/with-navigation';
+import { sessionReducer } from '../storage/session-reducer';
 /* eslint-enable */
 
 const objectsTypesMap = {
@@ -15,31 +19,49 @@ const objectsTypesMap = {
     project: 55,
 };
 
-export class MstrObjects extends React.Component {
+export class _MstrObjects extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
             mstrObjects: [],
         };
+        this.refreshContent = this.refreshContent.bind(this);
         this.navigateToDir = this.navigateToDir.bind(this);
         this.printObject = this.printObject.bind(this);
     }
 
-    componentDidMount(){
-        reduxStore.getSt
+    async componentDidMount() {
+        await this.refreshContent();
     }
 
-    navigateToDir(dirId, directoryName) {
-        const historyObject = {};
-        historyObject[historyProperties.command] =
-            historyProperties.actions.goInside;
-        historyObject[historyProperties.directoryId] = dirId;
-        historyObject[historyProperties.directoryName] = directoryName;
-        this.props.history.push({
-            pathname: '/',
-            origin: this.props.location,
-            historyObject,
+    async componentDidUpdate() {
+        await this.refreshContent();
+    }
+
+    async refreshContent() {
+        const envUrl = reduxStore.getState().sessionReducer.envUrl;
+        const token = reduxStore.getState().sessionReducer.authToken;
+        const { projectId } = reduxStore.getState().historyReducer.project;
+        let data = [];
+        if (historyManager.isDirectoryStored()) {
+            const { dirId } = historyManager.getCurrentDirectory();
+            data = await mstrObjectRestService
+                .getFolderContent(envUrl, token, projectId, dirId);
+        } else {
+            data = await mstrObjectRestService
+                .getProjectContent(envUrl, token, projectId);
+        }
+        this.setState({
+            mstrObjects: data,
+        });
+    }
+
+    navigateToDir(directoryId, directoryName) {
+        reduxStore.dispatch({
+            type: historyProperties.actions.goInside,
+            dirId: directoryId,
+            dirName: directoryName,
         });
     }
 
@@ -76,3 +98,12 @@ export class MstrObjects extends React.Component {
         );
     }
 };
+
+function mapStateToProps(state) {
+    return {
+        directoryArray: state.historyReducer.directoryArray,
+    };
+}
+
+const _mstrObjectsWithRedux = connect(mapStateToProps)(_MstrObjects);
+export const MstrObjects = withNavigation(_mstrObjectsWithRedux);

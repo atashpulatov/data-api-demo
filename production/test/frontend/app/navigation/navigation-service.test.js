@@ -18,8 +18,6 @@ describe('NavigatorService', () => {
 
     afterAll(() => {
         projectRestService.getProjectList = _originalGetProjectList;
-        mstrObjectRestService.getProjectContent = _originalGetProjectContent;
-        mstrObjectRestService.getFolderContent = _originalGetFolderContent;
         navigationService.store = originalStore;
     });
 

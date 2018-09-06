@@ -6,8 +6,6 @@ import { sessionProperties } from '../storage/session-properties';
 import { historyProperties } from '../history/history-properties';
 import { historyManager } from '../history/history-manager';
 
-const sharedFolderIdType = 7;
-
 class NavigationService {
     getLoginRoute() {
         return {

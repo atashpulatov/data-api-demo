@@ -80,6 +80,7 @@ export function withNavigation(WrappedComponent) {
     };
 
     function mapStateToProps(state) {
+        // TODO: czy przekazyjemy te propsy dalej?
         return {
             authToken: state.sessionReducer.authToken,
             project: state.historyReducer.project,
