@@ -90,6 +90,32 @@ describe('historyManager', () => {
             .toBeFalsy();
     });
 
+    it('should return true when asked is directory stored and there is some',
+        () => {
+            // given
+            const expectedDirId = 'someId';
+            const expectedDirName = 'someName';
+            reduxStore.dispatch({
+                type: historyProperties.actions.goInside,
+                dirId: expectedDirId,
+                dirName: expectedDirName,
+            });
+            // when
+            const isStored = historyManager.isDirectoryStored();
+            // then
+            expect(isStored).toBe(true);
+        }
+    );
+
+    it('should return true false asked is directory stored and there is none',
+        () => {
+            // when
+            const isStored = historyManager.isDirectoryStored();
+            // then
+            expect(isStored).toBe(false);
+        }
+    );
+
     it('should return current directory when there is one', () => {
         // given
         const expectedDirId = 'someId';

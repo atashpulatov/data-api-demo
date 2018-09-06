@@ -5,15 +5,17 @@ import { mount } from 'enzyme';
 import { projects } from './mock-data';
 import { sessionProperties } from '../../../../src/frontend/app/storage/session-properties';
 import { projectRestService } from '../../../../src/frontend/app/project/project-rest-service';
-import { historyReducer } from '../../../../src/frontend/app/history/history-reducer';
 import { reduxStore } from '../../../../src/frontend/app/store';
 import { Provider } from 'react-redux';
+import { UnauthorizedError } from '../../../../src/frontend/app/error/unauthorized-error';
 /* eslint-enable */
 
 jest.mock('../../../../src/frontend/app/project/project-rest-service');
 
 describe('ProjectList', () => {
     beforeEach(() => {
+        expect(reduxStore.getState().sessionReducer.authToken).toBeFalsy();
+
         projectRestService.getProjectList
             .mockResolvedValue(projects.projectsArray);
     });
@@ -31,6 +33,33 @@ describe('ProjectList', () => {
         await componentWrapper.instance().componentDidMount();
         // then
         expect(componentWrapper.state().projects).toBe(projects.projectsArray);
+    });
+
+    it('should dispatch logout on unauthorized', async () => {
+        // given
+        projectRestService.getProjectList
+            .mockImplementation(() => {
+                throw new UnauthorizedError();
+            });
+        // when
+        await mountAndReturn();
+        // then
+        expect(reduxStore.getState().sessionReducer.authToken).toBeFalsy();
+    });
+
+    it('should pass error on other error types', async () => {
+        try {
+            // given
+            projectRestService.getProjectList
+                .mockImplementation(() => {
+                    throw new Error();
+                });
+            // when
+            await mountAndReturn();
+            // then
+        } catch (err) {
+            // done!
+        }
     });
 
     // User sees all data

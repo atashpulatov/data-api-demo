@@ -4,6 +4,11 @@ import { sessionProperties } from '../storage/session-properties';
 import { reduxStore } from '../store';
 
 class HistoryManager {
+    isDirectoryStored() {
+        const dirArr = reduxStore.getState().historyReducer.directoryArray;
+        return ((dirArr !== undefined) && (dirArr.length > 0));
+    }
+
     getCurrentDirectory() {
         const dirArr = reduxStore.getState().historyReducer.directoryArray;
         if (!dirArr || (dirArr.length == 0)) {

@@ -6,6 +6,8 @@ import { projectRestService } from './project-rest-service';
 import { reduxStore } from '../store';
 import { historyProperties } from '../history/history-properties';
 import { withNavigation } from '../navigation/with-navigation';
+import { UnauthorizedError } from '../error/unauthorized-error';
+import { sessionProperties } from '../storage/session-properties';
 /* eslint-enable */
 
 export class _Projects extends Component {
@@ -20,13 +22,23 @@ export class _Projects extends Component {
     }
 
     async componentDidMount() {
-        const envUrl = reduxStore.getState().sessionReducer.envUrl;
-        const authToken = reduxStore.getState().sessionReducer.authToken;
-        const projects = await projectRestService
-            .getProjectList(envUrl, authToken);
-        this.setState({
-            projects: projects,
-        });
+        try {
+            const envUrl = reduxStore.getState().sessionReducer.envUrl;
+            const authToken = reduxStore.getState().sessionReducer.authToken;
+            const projects = await projectRestService
+                .getProjectList(envUrl, authToken);
+            this.setState({
+                projects: projects,
+            });
+        } catch (err) {
+            if (err instanceof UnauthorizedError) {
+                reduxStore.dispatch({
+                    type: sessionProperties.actions.logOut,
+                });
+            } else {
+                throw err;
+            }
+        };
     }
 
     projectChosen(projectId, projectName) {

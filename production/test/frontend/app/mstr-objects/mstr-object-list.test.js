@@ -8,24 +8,15 @@ import { historyProperties } from '../../../../src/frontend/app/history/history-
 
 describe('MstrObjectList', () => {
     const mockMstrObjects = [];
-    const location = {};
 
     beforeAll(() => {
         mockMstrObjects.push(...mstrTutorial);
-        // origin path
-        const origin = { pathname: '/' };
-        // projects data
-        const state = {
-            origin,
-            mstrObjects: mockMstrObjects,
-        };
-        location.state = state;
     });
 
     // User sees all data
     it('should have all rows', () => {
         // when
-        const componentWrapper = mount(<MstrObjects location={location} />);
+        const componentWrapper = mount(<MstrObjects />);
         // then
 
         // mockMstrObjects consists of project representation also,
@@ -37,7 +28,7 @@ describe('MstrObjectList', () => {
     // User notices directories' info
     it('should directory rows be rendered', () => {
         // when
-        const componentWrapper = mount(<MstrObjects location={location} />);
+        const componentWrapper = mount(<MstrObjects />);
         // then
         const items = componentWrapper.find('ul');
         const directories = items.at(0); // directories first
@@ -56,7 +47,7 @@ describe('MstrObjectList', () => {
     // User notices reports' info
     it('should report rows be rendered', () => {
         // when
-        const componentWrapper = mount(<MstrObjects location={location} />);
+        const componentWrapper = mount(<MstrObjects />);
         // then
         const items = componentWrapper.find('ul');
         const reports = items.at(1); // reports second
@@ -75,7 +66,7 @@ describe('MstrObjectList', () => {
     // User sees directories may be clicked
     it('should directory rows be clickable', () => {
         // when
-        const componentWrapper = mount(<MstrObjects location={location} />);
+        const componentWrapper = mount(<MstrObjects />);
         // then
         const items = componentWrapper.find('ul');
         const directories = items.at(0); // directories first
@@ -94,7 +85,7 @@ describe('MstrObjectList', () => {
         try {
             MstrObjects.prototype.navigateToDir = mockClick;
             // when
-            const componentWrapper = mount(<MstrObjects location={location} />);
+            const componentWrapper = mount(<MstrObjects />);
 
             // then
             const items = componentWrapper.find('ul');
@@ -112,11 +103,11 @@ describe('MstrObjectList', () => {
     });
 
     // User can open a directory
-    it('should pass directory when clicked', () => {
+    it('should dispatch directory when clicked', () => {
         // given
         const expectedHistoryObject = {};
         // when
-        const componentWrapper = mount(<MstrObjects location={location} />);
+        const componentWrapper = mount(<MstrObjects />);
         const mockPush = jest.fn();
         componentWrapper.setProps({ history: { push: mockPush } });
         // then

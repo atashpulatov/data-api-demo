@@ -6,6 +6,7 @@ import './mstr-object.css';
 import { historyProperties } from '../history/history-properties';
 import { officeConverterService } from '../office/office-converter-service';
 import { officeDisplayService } from '../office/office-display-service';
+import { reduxStore } from '../store';
 /* eslint-enable */
 
 const objectsTypesMap = {
@@ -19,10 +20,14 @@ export class MstrObjects extends React.Component {
         super(props);
 
         this.state = {
-            mstrObjects: props.location.state.mstrObjects,
+            mstrObjects: [],
         };
         this.navigateToDir = this.navigateToDir.bind(this);
         this.printObject = this.printObject.bind(this);
+    }
+
+    componentDidMount(){
+        reduxStore.getSt
     }
 
     navigateToDir(dirId, directoryName) {
