@@ -1,6 +1,7 @@
 import { IncorrectInputTypeError } from './incorrect-input-type';
 import { reduxStore } from '../store';
 import { officeProperties } from './office-properties';
+import { message } from 'antd';
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
@@ -73,13 +74,26 @@ const onBindingObjectClick = (event) => {
     });
 };
 
+const _displayAllBindingNames = () => {
+    Office.context.document.bindings.getAllAsync((asyncResult) => {
+        var bindingString = '';
+        for (var i in asyncResult.value) {
+            bindingString += asyncResult.value[i].id + '\n';
+        }
+        message.info(bindingString);
+        console.log('Existing bindings: ' + bindingString);
+    });
+};
+
 const loadExistingReportBindings = async () => {
+    _displayAllBindingNames();
     await Office.context.document.bindings.getAllAsync((asyncResult) => {
+        console.log(asyncResult);
         const bindingArray = asyncResult.value;
         const bindingArrayLength = bindingArray.length;
         const reportArray = [];
         for (let i = 0; i < bindingArrayLength; i++) {
-            const splittedBind = bindingArray[i].id.split('-');
+            const splittedBind = bindingArray[i].id.split('_');
             console.log(splittedBind);
             reportArray.push({
                 id: splittedBind[2],
@@ -95,6 +109,53 @@ const loadExistingReportBindings = async () => {
     });
 };
 
+const loadExistingReportBindingsExcel = async () => {
+    _displayAllBindingNames();
+    Excel.run(async (context) => {
+        const workbook = context.workbook;
+        workbook.load('bindings');
+        const bindings = workbook.bindings;
+        await context.sync();
+        bindings.load('items');
+        await context.sync();
+        const bindingArrayLength = bindings.items.length;
+        let reportArray = [];
+        for (let i = 0; i < bindingArrayLength; i++) {
+            const splittedBind = bindings.items[i].id.split('_');
+            console.log(splittedBind);
+            reportArray.push({
+                id: splittedBind[2],
+                name: splittedBind[0],
+                bindId: bindings.items[i].id,
+            });
+        }
+        reduxStore.dispatch({
+            type: officeProperties.actions.loadAllReports,
+            reportArray,
+        });
+    });
+    // await Office.context.document.bindings.getAllAsync((asyncResult) => {
+    //     console.log(asyncResult);
+    //     const bindingArray = asyncResult.value;
+    //     const bindingArrayLength = bindingArray.length;
+    //     const reportArray = [];
+    //     for (let i = 0; i < bindingArrayLength; i++) {
+    //         const splittedBind = bindingArray[i].id.split('_');
+    //         console.log(splittedBind);
+    //         reportArray.push({
+    //             id: splittedBind[2],
+    //             name: splittedBind[0],
+    //             bindId: bindingArray[i].id,
+    //         });
+    //     }
+    //     reduxStore.dispatch({
+    //         type: officeProperties.actions.loadAllReports,
+    //         reportArray,
+    //     });
+    //     console.log('Existing bindings: ' + bindingString);
+    // });
+};
+
 export const officeApiHelper = {
     handleOfficeApiException,
     getRange,
@@ -103,4 +164,5 @@ export const officeApiHelper = {
     onBindingDataChanged,
     onBindingObjectClick,
     loadExistingReportBindings,
+    loadExistingReportBindingsExcel,
 };

@@ -22,7 +22,8 @@ export class Projects extends BaseComponent {
         const sessionObject = {};
         sessionObject[sessionProperties.projectId] = projectId;
         sessionObject[sessionProperties.projectName] = projectName;
-        await officeApiHelper.loadExistingReportBindings();
+        // await officeApiHelper.loadExistingReportBindings();
+        await officeApiHelper.loadExistingReportBindingsExcel();
         this.props.history.push({
             pathname: '/',
             origin: this.props.location,
