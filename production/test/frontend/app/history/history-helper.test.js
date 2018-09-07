@@ -18,8 +18,9 @@ describe('historyHelper', () => {
                 dirId: expectedDirId,
                 dirName: expectedDirName,
             });
+            const dirArr = reduxStore.getState().historyReducer.directoryArray;
             // when
-            const isStored = historyHelper.isDirectoryStored();
+            const isStored = historyHelper.isDirectoryStored(dirArr);
             // then
             expect(isStored).toBe(true);
         }
@@ -43,8 +44,9 @@ describe('historyHelper', () => {
             dirId: expectedDirId,
             dirName: expectedDirName,
         });
+        const dirArr = reduxStore.getState().historyReducer.directoryArray;
         // when
-        const currDir = historyHelper.getCurrentDirectory();
+        const currDir = historyHelper.getCurrentDirectory(dirArr);
         // then
         expect(currDir.dirId).toBe(expectedDirId);
         expect(currDir.dirName).toBe(expectedDirName);
@@ -64,8 +66,9 @@ describe('historyHelper', () => {
             dirId: expectedDirId,
             dirName: expectedDirName,
         });
+        const dirArr = reduxStore.getState().historyReducer.directoryArray;
         // when
-        const currDir = historyHelper.getCurrentDirectory();
+        const currDir = historyHelper.getCurrentDirectory(dirArr);
         // then
         expect(currDir.dirId).toBe(expectedDirId);
         expect(currDir.dirName).toBe(expectedDirName);
