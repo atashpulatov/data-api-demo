@@ -16,6 +16,7 @@ class OfficeDisplayService {
         let convertedReport = officeConverterService
             .getConvertedTable(jsonData);
         convertedReport.id = jsonData.id;
+        convertedReport.name = jsonData.name;
         const result = await this.insertDataIntoExcel(convertedReport);
         reduxStore.dispatch({
             type: officeProperties.actions.loadReport,
@@ -30,7 +31,6 @@ class OfficeDisplayService {
 
     async insertDataIntoExcel(reportConvertedData) {
         const hasHeaders = true;
-        const { id, name } = reportConvertedData;
         return Excel.run(async (context) => {
             const sheet = context.workbook.worksheets.getActiveWorksheet();
             const startCell = await this._getSelectedCell(context);
@@ -51,8 +51,8 @@ class OfficeDisplayService {
             sheet.activate();
             context.sync();
             return {
-                id,
-                name,
+                id: reportConvertedData.id,
+                name: reportConvertedData.name,
                 bindingId,
             };
         }).catch((error) => officeApiHelper.handleOfficeApiException(error));

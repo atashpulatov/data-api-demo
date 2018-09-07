@@ -60,10 +60,22 @@ const onBindingDataChanged = (eventArgs) => {
     });
 };
 
+const onBindingObjectClick = (event) => {
+    console.log(event);
+    Excel.run((ctx) => {
+        // highlight the table in orange to indicate data has been changed.
+        const table = ctx.workbook.bindings.getItem(event).getTable().getRange();
+        //const range = ctx.workbook.bindings.getItem(event).getRange();
+        table.select();
+        return ctx.sync();
+    });
+};
+
 export const officeApiHelper = {
     handleOfficeApiException,
     getRange,
     lettersToNumber,
     getTableRange,
     onBindingDataChanged,
+    onBindingObjectClick,
 };
