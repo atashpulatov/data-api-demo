@@ -12,7 +12,7 @@ import { Provider } from 'react-redux';
 import { mount } from 'enzyme';
 /* eslint-enable */
 
-describe('[it] withNavigation', () => {
+describe.skip('[it] withNavigation', () => {
     /* eslint-disable */
     const ComponentWithNavigation = withNavigation(TestComponent);
     /* eslint-enable */

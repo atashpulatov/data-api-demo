@@ -1,10 +1,6 @@
-import { projectRestService } from '../project/project-rest-service';
-import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
-import { UnauthorizedError } from '../error/unauthorized-error';
 import { reduxStore } from '../store';
 import { sessionProperties } from '../storage/session-properties';
 import { historyProperties } from '../history/history-properties';
-import { historyHelper } from '../history/history-manager';
 
 class NavigationService {
     getLoginRoute() {
@@ -19,23 +15,6 @@ class NavigationService {
         return {
             pathname: '/',
         };
-        // try {
-        //     let projects = await projectRestService
-        //         .getProjectList(envUrl, authToken);
-        //     return {
-        //         pathname: '/projects',
-        //         state: {
-        //             projects,
-        //         },
-        //     };
-        // } catch (err) {
-        //     if (err instanceof UnauthorizedError) {
-        //         this.store.dispatch({
-        //             type: sessionProperties.actions.logOut,
-        //         });
-        //         return this.getLoginRoute();
-        //     }
-        // }
     };
 
     getObjectsRoute() {
@@ -58,14 +37,6 @@ class NavigationService {
             return this.getProjectsRoute(envUrl, authToken);
         }
         return this.getObjectsRoute();
-        // try {
-        //     const dirId = historyManager.getCurrentDirectory().dirId;
-        //     return this.getObjectsRoute(envUrl, authToken,
-        //         project.projectId, dirId);
-        // } catch (error) {
-        //     return this.getRootObjectsRoute(envUrl,
-        //         authToken, project.projectId);
-        // }
     }
 
     saveSessionData(propertiesToSave) {
