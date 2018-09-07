@@ -57,6 +57,7 @@ class _Breadcrumbs extends Component {
 
 function mapStateToProps(state) {
     return {
+        project: state.historyReducer.project,
         directoryArray: state.historyReducer.directoryArray,
     };
 }
