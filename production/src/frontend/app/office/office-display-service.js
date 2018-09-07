@@ -17,24 +17,20 @@ class OfficeDisplayService {
             .getConvertedTable(jsonData);
         convertedReport.id = jsonData.id;
         const result = await this.insertDataIntoExcel(convertedReport);
-        const bindingId = await this._bindNamedItem(
-            result.tableName,
-            convertedReport.id,
-            result.startCell);
         reduxStore.dispatch({
             type: officeProperties.actions.loadReport,
             report: {
-                id: convertedReport.id,
-                name: jsonData.name,
-                bindId: bindingId,
+                id: result.id,
+                name: result.name,
+                bindId: result.bindingId,
             },
         });
-        message.info(`Loaded document: ${jsonData.name}`);
-        this._displayAllBindingNames();
+        message.info(`Loaded document: ${result.name}`);
     }
 
     async insertDataIntoExcel(reportConvertedData) {
         const hasHeaders = true;
+        const { id, name } = reportConvertedData;
         return Excel.run(async (context) => {
             const sheet = context.workbook.worksheets.getActiveWorksheet();
             const startCell = await this._getSelectedCell(context);
@@ -46,48 +42,20 @@ class OfficeDisplayService {
             mstrTable.getHeaderRowRange().values = [reportConvertedData.headers];
             this._pushRows(reportConvertedData, mstrTable);
             this._formatTable(sheet);
+
+            const bindingId = `${startCell}${reportConvertedData.id}`;
+            const tableBinding = context.workbook.bindings.add(mstrTable.getRange(), 'Table', bindingId);
+            console.log(tableBinding);
+            // tableBinding.onDataChanged.add(officeApiHelper.onBindingDataChanged);
+
             sheet.activate();
             context.sync();
             return {
-                startCell,
-                tableName,
+                id,
+                name,
+                bindingId,
             };
         }).catch((error) => officeApiHelper.handleOfficeApiException(error));
-    }
-
-    async _displayAllBindingNames() {
-        console.log('trying to show existing bindings');
-        await Office.context.document.bindings.getAllAsync((asyncResult) => {
-            const bindingArray = asyncResult.value;
-            var bindingString = '';
-            for (var i in bindingArray) {
-                bindingString += bindingArray[i].id + '\n';
-                console.log(bindingArray[i]);
-            }
-            console.log('Existing bindings: ' + bindingString);
-        });
-    }
-
-    async _bindNamedItem(tableName, tableId, startCell) {
-        const bindingId = `${startCell}${tableId}`;
-        await Office.context.document.bindings.addFromNamedItemAsync(
-            tableName, 'table', { id: bindingId, tableName: tableName }, async (asyncResult) => {
-                console.log('adding eventHandler');
-                console.log(asyncResult);
-                const selectString = `bindings#${asyncResult.value.id}`;
-                console.log(selectString);
-                const bindingObject = await Office.select(selectString,
-                    function onError() {
-                        console.log('error on attaching event handler');
-                    });
-                const attachHandlerResult = await bindingObject.addHandlerAsync(Office.EventType.BindingDataChanged,
-                    (eventArgs) => {
-                        officeApiHelper.onBindingDataChanged(eventArgs);
-                    });
-                console.log(attachHandlerResult);
-                return asyncResult.value;
-            });
-        return bindingId;
     }
 
     _formatTable(sheet) {

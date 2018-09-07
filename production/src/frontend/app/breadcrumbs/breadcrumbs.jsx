@@ -46,7 +46,7 @@ class _Breadcrumbs extends Component {
                 </header>
                 <hr />
                 <ul className='breadcrumb'>
-                    {breadcrumbsService.getHistoryObjects()
+                    {historyObjects
                         .map((object) => (
                             <Breadcrumb key={object.dirId}
                                 object={object}
