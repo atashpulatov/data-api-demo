@@ -1,9 +1,9 @@
 /* eslint-disable */
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './menu-bar.css';
 import { historyProperties } from './history/history-properties';
-import { withRouter } from 'react-router';
 import { sessionProperties } from './storage/session-properties';
+import { reduxStore } from './store';
 /* eslint-enable */
 
 const back = '‹';
@@ -12,52 +12,46 @@ const logout = '⏏';
 const goTop = '«';
 
 // TODO: to be refactored
-class _MenuBar extends Component {
+export class MenuBar extends Component {
     constructor(props) {
         super(props);
 
-        this.pushHistory = this.pushHistory.bind(this);
-
-        this.goUpObject = {
-            pathname: '/',
-            historyObject: {},
-        };
-        this.goUpObject.historyObject[historyProperties.command] =
-            historyProperties.actions.goUp;
-
-        this.goProjectsObject = {
-            pathname: '/',
-            historyObject: {},
-        };
-        this.goProjectsObject.historyObject[historyProperties.command] =
-            historyProperties.actions.goToProjects;
-
-        this.logOutObject = {
-            pathname: '/',
-            historyObject: {},
-        };
-        this.logOutObject.historyObject[historyProperties.command] =
-            sessionProperties.actions.logOut;
+        this.goUp = this.goUp.bind(this);
+        this.goProjects = this.goProjects.bind(this);
+        this.logOut = this.logOut.bind(this);
     }
 
-    pushHistory(historyObject) {
-        this.props.history.push(historyObject);
-    }
+    goUp() {
+        reduxStore.dispatch({
+            type: historyProperties.actions.goUp,
+        });
+    };
+
+    goProjects() {
+        reduxStore.dispatch({
+            type: historyProperties.actions.goToProjects,
+        });
+    };
+
+    logOut() {
+        reduxStore.dispatch({
+            type: sessionProperties.actions.logOut,
+        });
+    };
 
     render() {
         return (
             <div className='menu-bar-container'>
                 <div className='menu-bar-nav-container'>
                     <button className='menu menu-nav'
-                        onClick={this.pushHistory.bind(this, this.goUpObject)}>
+                        onClick={this.goUp}>
                         <div className='with-tooltip'>
                             {back}
                             <span className='tooltip right'>Back</span>
                         </div>
                     </button>
                     <button className='menu menu-nav'
-                        onClick={this.pushHistory.bind(this,
-                            this.goProjectsObject)}>
+                        onClick={this.goProjects}>
                         <div className='with-tooltip'>
                             {goTop}
                             <span className='tooltip right'>Go top</span>
@@ -66,8 +60,7 @@ class _MenuBar extends Component {
                 </div>
                 <div className='menu-bar-options-container'>
                     <button className='menu menu-options'
-                        onClick={this.pushHistory.bind(this,
-                            this.logOutObject)}>
+                        onClick={this.logOut}>
                         <div className='with-tooltip'>
                             {logout}
                             <span className='tooltip left'>Log out</span>
@@ -84,6 +77,3 @@ class _MenuBar extends Component {
         );
     }
 };
-
-
-export const MenuBar = withRouter(_MenuBar);

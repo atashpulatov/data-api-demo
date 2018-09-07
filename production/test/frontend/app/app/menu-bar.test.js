@@ -1,101 +1,77 @@
 /* eslint-disable */
 import React from "react";
-import { HashRouter as Router } from "react-router-dom";
 import { mount } from "enzyme";
 import { MenuBar } from "../../../../src/frontend/app/menu-bar";
 import { historyProperties } from '../../../../src/frontend/app/history/history-properties';
 import { sessionProperties } from "../../../../src/frontend/app/storage/session-properties";
+import { reduxStore } from '../../../../src/frontend/app/store';
 /* eslint-enable */
 
-const goUpObject = {
-    pathname: '/',
-    historyObject: {},
-};
-goUpObject.historyObject[historyProperties.command] =
-    historyProperties.actions.goUp;
-
-const goProjectsObject = {
-    pathname: '/',
-    historyObject: {},
-};
-goProjectsObject.historyObject[historyProperties.command] =
-    historyProperties.actions.goToProjects;
-
-const logOutObject = {
-    pathname: '/',
-    historyObject: {},
-};
-logOutObject.historyObject[historyProperties.command] =
-    sessionProperties.actions.logOut;
+jest.mock('../../../../src/frontend/app/store');
 
 describe('menu bar', () => {
-    const realPushHistory = MenuBar.WrappedComponent.prototype.pushHistory;
-
     beforeEach(() => {
-        MenuBar.WrappedComponent.prototype.pushHistory = jest.fn();
+        expect(reduxStore.dispatch).not.toBeCalled();
     });
 
-    afterAll(() => {
-        MenuBar.WrappedComponent.prototype.pushHistory = realPushHistory;
+    afterEach(() => {
+        reduxStore.dispatch.mockClear();
     });
 
     it('should go up', () => {
         // given
         const barWrapper = mount(
-            <Router >
-                <MenuBar />
-            </Router>
+            <MenuBar />
         );
         const buttons = barWrapper.find('button');
         const goBackButton = buttons.filterWhere((button) =>
             button.text().includes('Back')
         );
+        expect(goBackButton).toBeTruthy();
         // when
         goBackButton.simulate('click');
         // then
-        expect(goBackButton).toBeTruthy();
-        expect(MenuBar.WrappedComponent.prototype.pushHistory).toBeCalled();
-        expect(MenuBar.WrappedComponent.prototype.pushHistory)
-            .toBeCalledWith(goUpObject, expect.anything());
+        expect(reduxStore.dispatch).toBeCalled();
+        expect(reduxStore.dispatch).toBeCalledWith({
+            type: historyProperties.actions.goUp,
+        });
     });
 
     it('should go to projects', () => {
         // given
         const barWrapper = mount(
-            <Router >
-                <MenuBar />
-            </Router>
+            <MenuBar />
         );
         const buttons = barWrapper.find('button');
         const goTopButton = buttons.filterWhere((button) =>
             button.text().includes('Go top')
         );
+        expect(goTopButton).toBeTruthy();
         // when
         goTopButton.simulate('click');
         // then
-        expect(goTopButton).toBeTruthy();
-        expect(MenuBar.WrappedComponent.prototype.pushHistory).toBeCalled();
-        expect(MenuBar.WrappedComponent.prototype.pushHistory)
-            .toBeCalledWith(goProjectsObject, expect.anything());
+        expect(reduxStore.dispatch).toBeCalled();
+        expect(reduxStore.dispatch).toBeCalledWith({
+            type: historyProperties.actions.goToProjects,
+        });
     });
 
     it('should log out', () => {
         // given
         const barWrapper = mount(
-            <Router >
-                <MenuBar />
-            </Router>
+            <MenuBar />
         );
         const buttons = barWrapper.find('button');
         const logOutButton = buttons.filterWhere((button) =>
             button.text().includes('Log out')
         );
+        expect(logOutButton).toBeTruthy();
         // when
         logOutButton.simulate('click');
         // then
-        expect(logOutButton).toBeTruthy();
-        expect(MenuBar.WrappedComponent.prototype.pushHistory).toBeCalled();
-        expect(MenuBar.WrappedComponent.prototype.pushHistory)
-            .toBeCalledWith(logOutObject, expect.anything());
+        expect(reduxStore.dispatch).toBeCalled();
+        expect(reduxStore.dispatch).toBeCalledWith({
+            type: sessionProperties.actions.logOut,
+        });
     });
 });
