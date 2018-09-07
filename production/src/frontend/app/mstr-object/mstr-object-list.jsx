@@ -7,10 +7,9 @@ import { historyProperties } from '../history/history-properties';
 import { officeConverterService } from '../office/office-converter-service';
 import { officeDisplayService } from '../office/office-display-service';
 import { reduxStore } from '../store';
-import { historyManager } from '../history/history-manager';
+import { historyHelper } from '../history/history-manager';
 import { connect } from 'react-redux';
 import { withNavigation } from '../navigation/with-navigation';
-import { sessionReducer } from '../storage/session-reducer';
 /* eslint-enable */
 
 const objectsTypesMap = {
@@ -26,26 +25,30 @@ export class _MstrObjects extends React.Component {
         this.state = {
             mstrObjects: [],
         };
-        this.refreshContent = this.refreshContent.bind(this);
+        this.refreshContent = this.fetchContent.bind(this);
         this.navigateToDir = this.navigateToDir.bind(this);
         this.printObject = this.printObject.bind(this);
     }
 
     async componentDidMount() {
-        await this.refreshContent();
+        const dirArray = reduxStore.getState().historyReducer.directoryArray;
+        await this.fetchContent(dirArray);
     }
 
     async componentDidUpdate() {
-        await this.refreshContent();
+        const dirArray = this.props.directoryArray;
+        await this.fetchContent(dirArray);
     }
 
-    async refreshContent() {
+    async fetchContent(dirArray) {
         const envUrl = reduxStore.getState().sessionReducer.envUrl;
         const token = reduxStore.getState().sessionReducer.authToken;
-        const { projectId } = reduxStore.getState().historyReducer.project;
+        const { projectId } = reduxStore.getState()
+            .historyReducer.project;
         let data = [];
-        if (historyManager.isDirectoryStored()) {
-            const { dirId } = historyManager.getCurrentDirectory();
+        if (historyHelper.isDirectoryStored(dirArray)) {
+            const { dirId } = historyHelper
+                .getCurrentDirectory(dirArray);
             data = await mstrObjectRestService
                 .getFolderContent(envUrl, token, projectId, dirId);
         } else {

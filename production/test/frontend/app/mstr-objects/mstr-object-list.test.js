@@ -7,7 +7,7 @@ import { historyProperties } from '../../../../src/frontend/app/history/history-
 import { mstrObjectRestService } from '../../../../src/frontend/app/mstr-object/mstr-object-rest-service';
 import { reduxStore } from '../../../../src/frontend/app/store';
 import { historyReducer } from '../../../../src/frontend/app/history/history-reducer';
-import { historyManager } from '../../../../src/frontend/app/history/history-manager';
+import { historyHelper } from '../../../../src/frontend/app/history/history-manager';
 import { sessionProperties } from '../../../../src/frontend/app/storage/session-properties';
 import { Provider } from 'react-redux';
 /* eslint-enable */
@@ -22,6 +22,10 @@ describe('MstrObjectList', () => {
     const givenProject = {
         projectId: 'projectId',
         projectName: 'projectName',
+    };
+    const props = {
+        authToken: givenToken,
+        project: givenProject,
     };
 
     beforeAll(() => {
@@ -63,7 +67,7 @@ describe('MstrObjectList', () => {
 
     it('should load project content when no dir saved', async () => {
         // when
-        const wrappedComponent = mount(<_MstrObjects />);
+        const wrappedComponent = mount(<_MstrObjects {...props} />);
         await wrappedComponent.instance().componentDidMount();
         // then
         expect(mstrObjectRestService.getProjectContent).toBeCalled();
@@ -82,7 +86,7 @@ describe('MstrObjectList', () => {
             dirName: 'dirName',
         });
         // when
-        const wrappedComponent = mount(<_MstrObjects />);
+        const wrappedComponent = mount(<_MstrObjects {...props} />);
         await wrappedComponent.instance().componentDidMount();
         // then
         expect(mstrObjectRestService.getFolderContent).toBeCalled();
@@ -96,28 +100,28 @@ describe('MstrObjectList', () => {
     // User sees all data
     it('should have all rows', async () => {
         // when
-        const componentWrapper = mount(<_MstrObjects />);
-        await componentWrapper.instance().componentDidMount();
-        componentWrapper.update();
+        const wrappedComponent = mount(<_MstrObjects {...props} />);
+        await wrappedComponent.instance().componentDidMount();
+        wrappedComponent.update();
         // then
 
         // mockMstrObjects consists of project representation also,
         // which we don't want to display here
-        expect(componentWrapper.find('li'))
+        expect(wrappedComponent.find('li'))
             .toHaveLength(mockProjectObjects.length - 1);
     });
 
     // User notices directories' info
     it('should directory rows be rendered', async () => {
         // when
-        const componentWrapper = mount(<_MstrObjects />);
-        await componentWrapper.instance().componentDidMount();
-        componentWrapper.update();
+        const wrappedComponent = mount(<_MstrObjects {...props} />);
+        await wrappedComponent.instance().componentDidMount();
+        wrappedComponent.update();
         // then
-        expect(componentWrapper.find('li'))
+        expect(wrappedComponent.find('li'))
             .toHaveLength(mockProjectObjects.length - 1);
 
-        const items = componentWrapper.find('ul');
+        const items = wrappedComponent.find('ul');
         const directories = items.at(0); // directories first
 
         directories.children().forEach((row) => {
@@ -134,7 +138,7 @@ describe('MstrObjectList', () => {
     // User notices reports' info
     it('should report rows be rendered', async () => {
         // when
-        const componentWrapper = mount(<_MstrObjects />);
+        const componentWrapper = mount(<_MstrObjects {...props} />);
         await componentWrapper.instance().componentDidMount();
         componentWrapper.update();
         // then
@@ -158,7 +162,7 @@ describe('MstrObjectList', () => {
     // User sees directories may be clicked
     it('should directory rows be clickable', async () => {
         // when
-        const componentWrapper = mount(<_MstrObjects />);
+        const componentWrapper = mount(<_MstrObjects {...props} />);
         await componentWrapper.instance().componentDidMount();
         componentWrapper.update();
         // then
@@ -182,7 +186,7 @@ describe('MstrObjectList', () => {
         try {
             _MstrObjects.prototype.navigateToDir = mockClick;
             // when
-            const componentWrapper = mount(<_MstrObjects />);
+            const componentWrapper = mount(<_MstrObjects {...props} />);
             await componentWrapper.instance().componentDidMount();
             componentWrapper.update();
 
@@ -204,7 +208,7 @@ describe('MstrObjectList', () => {
     // User can open a directory
     it('should dispatch directory when clicked', async () => {
         // given
-        const componentWrapper = mount(<_MstrObjects />);
+        const componentWrapper = mount(<_MstrObjects {...props} />);
         await componentWrapper.instance().componentDidMount();
         componentWrapper.update();
 
@@ -220,7 +224,9 @@ describe('MstrObjectList', () => {
             directoryRowLi.simulate('click');
 
             // then
-            const currDir = historyManager.getCurrentDirectory();
+            const dirrArray = reduxStore.getState()
+                .historyReducer.directoryArray;
+            const currDir = historyHelper.getCurrentDirectory(dirrArray);
             expect(currDir.dirId).toBe(dirId);
             expect(currDir.dirName).toBe(dirName);
             ++iterateId;

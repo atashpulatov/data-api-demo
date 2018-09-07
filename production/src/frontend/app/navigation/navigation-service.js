@@ -4,7 +4,7 @@ import { UnauthorizedError } from '../error/unauthorized-error';
 import { reduxStore } from '../store';
 import { sessionProperties } from '../storage/session-properties';
 import { historyProperties } from '../history/history-properties';
-import { historyManager } from '../history/history-manager';
+import { historyHelper } from '../history/history-manager';
 
 class NavigationService {
     getLoginRoute() {
