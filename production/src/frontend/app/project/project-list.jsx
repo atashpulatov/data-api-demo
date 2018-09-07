@@ -4,6 +4,7 @@ import { ProjectRow } from './project-row.jsx';
 import { BaseComponent } from '../base-component.jsx';
 import { sessionProperties } from '../storage/session-properties';
 import './project.css';
+import { officeApiHelper } from '../office/office-api-helper';
 /* eslint-enable */
 
 export class Projects extends BaseComponent {
@@ -17,10 +18,11 @@ export class Projects extends BaseComponent {
         this.navigateToProject = this.navigateToProject.bind(this);
     }
 
-    navigateToProject(projectId, projectName) {
+    async navigateToProject(projectId, projectName) {
         const sessionObject = {};
         sessionObject[sessionProperties.projectId] = projectId;
         sessionObject[sessionProperties.projectName] = projectName;
+        await officeApiHelper.loadExistingReportBindings();
         this.props.history.push({
             pathname: '/',
             origin: this.props.location,

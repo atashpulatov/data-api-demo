@@ -1,4 +1,6 @@
 import { IncorrectInputTypeError } from './incorrect-input-type';
+import { reduxStore } from '../store';
+import { officeProperties } from './office-properties';
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
@@ -71,6 +73,28 @@ const onBindingObjectClick = (event) => {
     });
 };
 
+const loadExistingReportBindings = async () => {
+    await Office.context.document.bindings.getAllAsync((asyncResult) => {
+        const bindingArray = asyncResult.value;
+        const bindingArrayLength = bindingArray.length;
+        const reportArray = [];
+        for (let i = 0; i < bindingArrayLength; i++) {
+            const splittedBind = bindingArray[i].id.split('-');
+            console.log(splittedBind);
+            reportArray.push({
+                id: splittedBind[2],
+                name: splittedBind[0],
+                bindId: bindingArray[i].id,
+            });
+        }
+        reduxStore.dispatch({
+            type: officeProperties.actions.loadAllReports,
+            reportArray,
+        });
+        console.log('Existing bindings: ' + bindingString);
+    });
+};
+
 export const officeApiHelper = {
     handleOfficeApiException,
     getRange,
@@ -78,4 +102,5 @@ export const officeApiHelper = {
     getTableRange,
     onBindingDataChanged,
     onBindingObjectClick,
+    loadExistingReportBindings,
 };

@@ -43,7 +43,7 @@ class OfficeDisplayService {
             this._pushRows(reportConvertedData, mstrTable);
             this._formatTable(sheet);
 
-            const bindingId = `${startCell}${reportConvertedData.id}`;
+            const bindingId = `${reportConvertedData.name}-${startCell}-${reportConvertedData.id}`;
             const tableBinding = context.workbook.bindings.add(mstrTable.getRange(), 'Table', bindingId);
             console.log(tableBinding);
             // tableBinding.onDataChanged.add(officeApiHelper.onBindingDataChanged);

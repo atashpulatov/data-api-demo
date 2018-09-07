@@ -5,7 +5,6 @@ import { OfficeLoadedFile } from './office-loaded-file.jsx';
 import { officeApiHelper } from './office/office-api-helper';
 
 class _OfficeLoadedFiles extends Component {
-
     render() {
         console.log('printing');
         return (
