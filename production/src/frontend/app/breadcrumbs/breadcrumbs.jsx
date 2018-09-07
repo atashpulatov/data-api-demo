@@ -5,11 +5,10 @@ import { breadcrumbsService } from './breadcrumb-service';
 import { Breadcrumb } from './breadcrumb.jsx';
 import './breadcrumbs.css';
 import { reduxStore } from '../store';
-import { withRouter } from 'react-router';
+import { connect } from 'react-redux';
 /* eslint-enable */
 
 class _Breadcrumbs extends Component {
-
     constructor(props) {
         super(props);
 
@@ -25,9 +24,6 @@ class _Breadcrumbs extends Component {
         reduxStore.dispatch({
             type: historyProperties.actions.goUpTo,
             dirId: dirId,
-        });
-        this.props.history.push({
-            pathname: '/',
         });
     };
 
@@ -58,4 +54,11 @@ class _Breadcrumbs extends Component {
     }
 }
 
-export const Breadcrumbs = withRouter(_Breadcrumbs);
+
+function mapStateToProps(state) {
+    return {
+        directoryArray: state.historyReducer.directoryArray,
+    };
+}
+
+export const Breadcrumbs = connect(mapStateToProps)(_Breadcrumbs);
