@@ -87,6 +87,7 @@ export function withNavigation(WrappedComponent) {
         }
     };
 
+    // TODO: we need to rethink this passing props etc.
     function mapStateToProps(state) {
         return {
             authToken: state.sessionReducer.authToken,

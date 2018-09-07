@@ -11,7 +11,6 @@ const settings = '⏣';
 const logout = '⏏';
 const goTop = '«';
 
-// TODO: to be refactored
 export class MenuBar extends Component {
     constructor(props) {
         super(props);

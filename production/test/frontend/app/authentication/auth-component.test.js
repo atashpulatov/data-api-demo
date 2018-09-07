@@ -1,12 +1,11 @@
 /* eslint-disable */
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { mount } from 'enzyme';
 import { Authenticate, _Authenticate } from '../../../../src/frontend/app/authentication/auth-component.jsx';
 import { reduxStore } from '../../../../src/frontend/app/store';
 import { sessionProperties } from '../../../../src/frontend/app/storage/session-properties';
 import { authenticationService } from '../../../../src/frontend/app/authentication/auth-rest-service';
 import { Provider } from 'react-redux';
-import { withNavigation } from '../../../../src/frontend/app/navigation/with-navigation';
 /* eslint-enable */
 
 jest.mock('../../../../src/frontend/app/authentication/auth-rest-service');
@@ -82,45 +81,4 @@ describe('AuthComponent', () => {
             _Authenticate.prototype.isPrototypeOf(wrappedComponent.instance())
         );
     });
-
-    // it('should renavigate on token changed', () => {
-    //     // given
-    //     const history = {
-    //         push: jest.fn(),
-    //     };
-    //     reduxStore.dispatch({
-    //         type: sessionProperties.actions.logIn,
-    //         username: 'user',
-    //         envUrl: 'env',
-    //         isRememberMeOn: true,
-    //     });
-    //     mount(
-    //         <Provider store={reduxStore}>
-    //             <Authenticate history={history} />
-    //         </Provider>);
-    //     expect(history.push).not.toBeCalled();
-    //     // when
-    //     reduxStore.dispatch({
-    //         type: sessionProperties.actions.loggedIn,
-    //         authToken: 'token',
-    //     });
-    //     // then
-    //     expect(history.push).toBeCalled();
-    //     expect(history.push).toBeCalledWith({ pathname: '/' });
-    // });
-
-    // TODO:
-    // it('should render my component', () => {
-    //     // when
-    //     const wrappedProvider = mount(
-    //         <Provider store={reduxStore}>
-    //             <Authenticate history={history} />
-    //         </Provider>);
-    //     // then
-    //     const wrappedConnect = wrappedProvider.childAt(0);
-    //     const wrappedWithNavigation = wrappedConnect.childAt(0);
-    //     const wrappedComponent = wrappedWithNavigation.childAt(0);
-    //     expect(wrappedComponent.get()).toMatchSnapshot();
-    //     expect(true).toBeFalsy();
-    // });
 });

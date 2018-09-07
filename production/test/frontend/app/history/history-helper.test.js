@@ -6,7 +6,6 @@ import { reduxStore } from '../../../../src/frontend/app/store';
 import { sessionProperties } from '../../../../src/frontend/app/storage/session-properties';
 /* eslint-enable */
 
-// TODO: fix these tests
 describe('historyHelper', () => {
     it('should return true when asked is directory stored and there is some',
         () => {
