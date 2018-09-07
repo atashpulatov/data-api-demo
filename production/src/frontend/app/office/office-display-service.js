@@ -29,6 +29,7 @@ class OfficeDisplayService {
                 bindId: bindingId,
             },
         });
+        message.info(`Loaded document: ${jsonData.name}`);
         this._displayAllBindingNames();
     }
 
@@ -54,21 +55,23 @@ class OfficeDisplayService {
         }).catch((error) => officeApiHelper.handleOfficeApiException(error));
     }
 
-    _displayAllBindingNames() {
-        Office.context.document.bindings.getAllAsync((asyncResult) => {
+    async _displayAllBindingNames() {
+        console.log('trying to show existing bindings');
+        await Office.context.document.bindings.getAllAsync((asyncResult) => {
+            const bindingArray = asyncResult.value;
             var bindingString = '';
-            for (var i in asyncResult.value) {
-                bindingString += asyncResult.value[i].id + '\n';
+            for (var i in bindingArray) {
+                bindingString += bindingArray[i].id + '\n';
+                console.log(bindingArray[i]);
             }
-            message.info(bindingString);
             console.log('Existing bindings: ' + bindingString);
         });
     }
 
     async _bindNamedItem(tableName, tableId, startCell) {
         const bindingId = `${startCell}${tableId}`;
-        const bindingResult = await Office.context.document.bindings.addFromNamedItemAsync(
-            tableName, 'table', { id: bindingId }, async (asyncResult) => {
+        await Office.context.document.bindings.addFromNamedItemAsync(
+            tableName, 'table', { id: bindingId, tableName: tableName }, async (asyncResult) => {
                 console.log('adding eventHandler');
                 console.log(asyncResult);
                 const selectString = `bindings#${asyncResult.value.id}`;
