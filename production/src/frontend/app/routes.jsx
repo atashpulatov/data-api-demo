@@ -4,7 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 import { routeContainer } from './routeContainer.js';
 import { Error } from './error.jsx';
 import { pathEnum } from './path-enum';
-import { Projects } from './project/project-list';
+import { Projects } from './project/project-list.jsx';
 /* eslint-enable */
 
 export const Routes = () => (

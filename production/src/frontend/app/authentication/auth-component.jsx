@@ -3,7 +3,7 @@ import './auth-component.css';
 import { authenticationService } from './auth-rest-service';
 import { sessionProperties } from '../storage/session-properties';
 import { reduxStore } from '../store';
-import { withNavigation } from '../navigation/with-navigation';
+import { withNavigation } from '../navigation/with-navigation.jsx';
 
 export class _Authenticate extends React.Component {
     constructor(props) {

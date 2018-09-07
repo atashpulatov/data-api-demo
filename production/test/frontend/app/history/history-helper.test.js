@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { historyHelper } from '../../../../src/frontend/app/history/history-manager';
+import { historyHelper } from '../../../../src/frontend/app/history/history-helper';
 import { historyProperties } from '../../../../src/frontend/app/history/history-properties';
 import { HistoryError } from '../../../../src/frontend/app/history/history-error';
 import { reduxStore } from '../../../../src/frontend/app/store';

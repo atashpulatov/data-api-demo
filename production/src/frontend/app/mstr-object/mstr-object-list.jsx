@@ -7,9 +7,9 @@ import { historyProperties } from '../history/history-properties';
 import { officeConverterService } from '../office/office-converter-service';
 import { officeDisplayService } from '../office/office-display-service';
 import { reduxStore } from '../store';
-import { historyHelper } from '../history/history-manager';
+import { historyHelper } from '../history/history-helper';
 import { connect } from 'react-redux';
-import { withNavigation } from '../navigation/with-navigation';
+import { withNavigation } from '../navigation/with-navigation.jsx';
 /* eslint-enable */
 
 const objectsTypesMap = {
@@ -36,7 +36,7 @@ export class _MstrObjects extends React.Component {
     }
 
     async componentDidUpdate() {
-        const dirArray = this.props.directoryArray;
+        const dirArray = reduxStore.getState().historyReducer.directoryArray;
         await this.fetchContent(dirArray);
     }
 

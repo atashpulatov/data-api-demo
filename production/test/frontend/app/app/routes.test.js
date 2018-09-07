@@ -2,20 +2,24 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { Routes } from '../../../../src/frontend/app/routes.jsx';
+import { Provider } from 'react-redux';
 /* eslint-enable  */
-import { shallow, mount } from 'enzyme';
+import { mount } from 'enzyme';
 import { pathEnum } from '../../../../src/frontend/app/path-enum';
 import { Error } from '../../../../src/frontend/app/error.jsx';
 import { routeContainer } from '../../../../src/frontend/app/routeContainer';
+import { reduxStore } from '../../../../src/frontend/app/store';
 
 describe('Routes', () => {
     it('should return path to Projects for / path', () => {
         const wrapper = mount(
-            <MemoryRouter initialEntries={[{
-                pathname: '/',
-            }]}>
-                <Routes />
-            </MemoryRouter>
+            <Provider store={reduxStore}>
+                <MemoryRouter initialEntries={[{
+                    pathname: '/',
+                }]}>
+                    <Routes />
+                </MemoryRouter>
+            </Provider>
         );
         const test = wrapper.html();
         const test2 = wrapper.instance();

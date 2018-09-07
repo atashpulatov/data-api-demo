@@ -5,7 +5,7 @@ import './project.css';
 import { projectRestService } from './project-rest-service';
 import { reduxStore } from '../store';
 import { historyProperties } from '../history/history-properties';
-import { withNavigation } from '../navigation/with-navigation';
+import { withNavigation } from '../navigation/with-navigation.jsx';
 import { UnauthorizedError } from '../error/unauthorized-error';
 import { sessionProperties } from '../storage/session-properties';
 /* eslint-enable */

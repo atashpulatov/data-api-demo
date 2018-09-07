@@ -18,6 +18,7 @@ export function withNavigation(WrappedComponent) {
     class WithNavigation extends Component {
         constructor(props) {
             super(props);
+            this.state = {};
             this.conditionallyRenavigate =
                 this.conditionallyRenavigate.bind(this);
             this.conditionallyRenavigate();
@@ -61,7 +62,13 @@ export function withNavigation(WrappedComponent) {
                     + ` is not defined in routes.`);
             }
             const expectedComponentName = '_' + pathComponentData.component;
-            if (WrappedComponent.name !== expectedComponentName) {
+            // TODO: refactor below
+            const WrappedComponentChildName =
+                WrappedComponent.WrappedComponent !== undefined
+                    ? WrappedComponent.WrappedComponent.name
+                    : '';
+            if (WrappedComponent.name !== expectedComponentName &&
+                WrappedComponentChildName !== expectedComponentName) {
                 this.props.history.push(pathToProperComponent);
             }
         }
@@ -73,14 +80,14 @@ export function withNavigation(WrappedComponent) {
          */
         render() {
             /* eslint-disable no-unused-vars*/
-            const { history, ...passThroughProps } = this.props;
+            const { history, authToken, project,
+                ...passThroughProps } = this.props;
             /* eslint-enable */
             return <WrappedComponent {...passThroughProps} />;
         }
     };
 
     function mapStateToProps(state) {
-        // TODO: czy przekazyjemy te propsy dalej?
         return {
             authToken: state.sessionReducer.authToken,
             project: state.historyReducer.project,
