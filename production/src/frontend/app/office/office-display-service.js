@@ -18,8 +18,6 @@ class OfficeDisplayService {
         let jsonData = await mstrObjectRestService.getObjectContent(objectId);
         let convertedReport = officeConverterService
             .getConvertedTable(jsonData);
-        convertedReport.id = jsonData.id;
-        convertedReport.name = jsonData.name;
         const result = await this._insertDataIntoExcel(convertedReport);
         reduxStore.dispatch({
             type: officeProperties.actions.loadReport,

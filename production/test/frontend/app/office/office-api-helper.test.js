@@ -1,7 +1,13 @@
+/* eslint-disable */
 import { officeApiHelper } from '../../../../src/frontend/app/office/office-api-helper';
 import { IncorrectInputTypeError } from '../../../../src/frontend/app/office/incorrect-input-type';
+import { OfficeExtension } from './__mock__object__/OfficeExtension';
+/* eslint-enable */
 
 describe('OfficeApiHelper', () => {
+    beforeAll(() => {
+        officeApiHelper.excel = {};
+    });
     it('should convert simple excel column name to number', () => {
         // given
         const columnName = 'A';
@@ -99,7 +105,7 @@ describe('OfficeApiHelper', () => {
         expect(result).toBeUndefined();
     });
 
-    it('should error due to incorrect header count', () => {
+    it('should throw error due to incorrect header count', () => {
         // given
         const headerCount = 'asd';
         const startCell = 'A1';
@@ -112,5 +118,25 @@ describe('OfficeApiHelper', () => {
             expect(error).toBeInstanceOf(IncorrectInputTypeError);
         }
         expect(result).toBeUndefined();
+    });
+    it('should forward error different than OfficeExtension.Error', () => {
+        // given
+        const error = new Error();
+        // when
+        const callThatThrows = () => {
+            officeApiHelper.handleOfficeApiException(error);
+        };
+        // then
+        expect(callThatThrows).toThrowError();
+    });
+    it('should return proper bindingsArray', () => {
+        // given
+        const error = new Error();
+        // when
+        const callThatThrows = () => {
+            officeApiHelper.handleOfficeApiException(error);
+        };
+        // then
+        expect(callThatThrows).toThrowError();
     });
 });
