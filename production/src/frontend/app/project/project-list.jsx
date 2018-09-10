@@ -1,30 +1,24 @@
 /* eslint-disable */
 import React, { Component } from 'react';
 import { ProjectRow } from './project-row.jsx';
-import { BaseComponent } from '../base-component.jsx';
-import { sessionProperties } from '../storage/session-properties';
 import './project.css';
+import { withNavigation } from '../navigation/with-navigation.jsx';
+import { projectListHelper } from './project-list-helper';
 /* eslint-enable */
 
-export class Projects extends BaseComponent {
+export class _Projects extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            projects: props.location.state.projects,
+            projects: [],
         };
-
-        this.navigateToProject = this.navigateToProject.bind(this);
     }
 
-    navigateToProject(projectId, projectName) {
-        const sessionObject = {};
-        sessionObject[sessionProperties.projectId] = projectId;
-        sessionObject[sessionProperties.projectName] = projectName;
-        this.props.history.push({
-            pathname: '/',
-            origin: this.props.location,
-            sessionObject,
+    async componentDidMount() {
+        const projects = await projectListHelper.updateProjectList();
+        this.setState({
+            projects,
         });
     }
 
@@ -40,10 +34,12 @@ export class Projects extends BaseComponent {
                 <ul className='project-row-container no-padding'>
                     {this.state.projects.map((project) => (
                         <ProjectRow key={project.id} projectRow={project}
-                            onClick={this.navigateToProject} />
+                            onClick={projectListHelper.projectChosen} />
                     ))}
                 </ul>
             </article>
         );
     }
 }
+
+export const Projects = withNavigation(_Projects);

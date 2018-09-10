@@ -47,10 +47,10 @@ describe('MstrObjectRestService', () => {
             // given
             // when
             const result = await mstrObjectRestService.getProjectContent(
-                folderType,
                 envURL,
                 authToken,
                 projectId,
+                folderType,
             );
             // then
             expect(result).toBeDefined();
@@ -63,10 +63,10 @@ describe('MstrObjectRestService', () => {
             const authToken = 'wrongToken';
             // when
             const result = mstrObjectRestService.getProjectContent(
-                folderType,
                 envURL,
                 authToken,
                 projectId,
+                folderType,
             );
             // then
             try {
@@ -82,10 +82,10 @@ describe('MstrObjectRestService', () => {
             const wrongFolderType = 7434234;
             // when
             const result = mstrObjectRestService.getProjectContent(
-                wrongFolderType,
                 envURL,
                 authToken,
                 projectId,
+                wrongFolderType,
             );
             // then
             try {
@@ -101,10 +101,10 @@ describe('MstrObjectRestService', () => {
             const wrongProjectId = 'incorrectProjectId';
             // when
             const result = mstrObjectRestService.getProjectContent(
-                folderType,
                 envURL,
                 authToken,
                 wrongProjectId,
+                folderType,
             );
             // then
             try {
