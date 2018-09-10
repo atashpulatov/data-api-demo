@@ -48,9 +48,3 @@ function onLoggedIn(action, state) {
         authToken: action.authToken,
     };
 }
-
-function onSetProperty(action, state) {
-    let newState = { ...state };
-    newState[action.propertyName] = action.propertyValue;
-    return newState;
-}

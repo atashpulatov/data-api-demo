@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/lib/integration/react';
 import { Breadcrumbs } from './breadcrumbs/breadcrumbs.jsx';
 import { Header } from './header.jsx';
-import { MenuBar } from './menu-bar.jsx';
+import { MenuBar } from './navigation/menu-bar.jsx';
 import { Footer } from './footer.jsx';
 import { OfficeLoadedFiles } from './office-loaded-files.jsx';
 /* eslint-enable */

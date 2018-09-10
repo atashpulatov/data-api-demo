@@ -2,7 +2,6 @@ import { officeProperties } from './office-properties';
 import { OfficeError } from './office-error';
 
 export const officeReducer = (state = {}, action) => {
-    console.log('in reducer');
     switch (action.type) {
         case officeProperties.actions.loadReport:
             return onLoadReport(action, state);

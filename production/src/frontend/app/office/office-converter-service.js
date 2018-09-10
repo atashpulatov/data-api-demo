@@ -4,7 +4,6 @@ class OfficeConverterService {
         let rows = this._getRows(jsonReport);
         let id = jsonReport.id;
         let name = jsonReport.name;
-        console.log(name);
         return {
             headers: headers,
             rows: rows,
