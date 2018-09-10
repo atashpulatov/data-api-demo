@@ -68,49 +68,13 @@ const onBindingObjectClick = (event) => {
     Excel.run((ctx) => {
         // highlight the table in orange to indicate data has been changed.
         const table = ctx.workbook.bindings.getItem(event).getTable().getRange();
-        //const range = ctx.workbook.bindings.getItem(event).getRange();
+        // const range = ctx.workbook.bindings.getItem(event).getRange();
         table.select();
         return ctx.sync();
     });
 };
 
-const _displayAllBindingNames = () => {
-    Office.context.document.bindings.getAllAsync((asyncResult) => {
-        var bindingString = '';
-        for (var i in asyncResult.value) {
-            bindingString += asyncResult.value[i].id + '\n';
-        }
-        message.info(bindingString);
-        console.log('Existing bindings: ' + bindingString);
-    });
-};
-
-const loadExistingReportBindings = async () => {
-    _displayAllBindingNames();
-    await Office.context.document.bindings.getAllAsync((asyncResult) => {
-        console.log(asyncResult);
-        const bindingArray = asyncResult.value;
-        const bindingArrayLength = bindingArray.length;
-        const reportArray = [];
-        for (let i = 0; i < bindingArrayLength; i++) {
-            const splittedBind = bindingArray[i].id.split('_');
-            console.log(splittedBind);
-            reportArray.push({
-                id: splittedBind[2],
-                name: splittedBind[0],
-                bindId: bindingArray[i].id,
-            });
-        }
-        reduxStore.dispatch({
-            type: officeProperties.actions.loadAllReports,
-            reportArray,
-        });
-        console.log('Existing bindings: ' + bindingString);
-    });
-};
-
 const loadExistingReportBindingsExcel = async () => {
-    _displayAllBindingNames();
     Excel.run(async (context) => {
         const workbook = context.workbook;
         workbook.load('bindings');
@@ -134,26 +98,6 @@ const loadExistingReportBindingsExcel = async () => {
             reportArray,
         });
     });
-    // await Office.context.document.bindings.getAllAsync((asyncResult) => {
-    //     console.log(asyncResult);
-    //     const bindingArray = asyncResult.value;
-    //     const bindingArrayLength = bindingArray.length;
-    //     const reportArray = [];
-    //     for (let i = 0; i < bindingArrayLength; i++) {
-    //         const splittedBind = bindingArray[i].id.split('_');
-    //         console.log(splittedBind);
-    //         reportArray.push({
-    //             id: splittedBind[2],
-    //             name: splittedBind[0],
-    //             bindId: bindingArray[i].id,
-    //         });
-    //     }
-    //     reduxStore.dispatch({
-    //         type: officeProperties.actions.loadAllReports,
-    //         reportArray,
-    //     });
-    //     console.log('Existing bindings: ' + bindingString);
-    // });
 };
 
 export const officeApiHelper = {
@@ -163,6 +107,5 @@ export const officeApiHelper = {
     getTableRange,
     onBindingDataChanged,
     onBindingObjectClick,
-    loadExistingReportBindings,
     loadExistingReportBindingsExcel,
 };

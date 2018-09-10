@@ -3,12 +3,13 @@ import { connect } from 'react-redux';
 import { List } from 'antd';
 import { OfficeLoadedFile } from './office-loaded-file.jsx';
 import { officeApiHelper } from './office/office-api-helper';
+import { reduxStore } from './store';
 
 class _OfficeLoadedFiles extends Component {
     render() {
-        console.log('printing');
         return (
-            <List
+            reduxStore.getState().historyReducer.project
+            ? <List
                 size="small"
                 bordered
                 header={<p>Loaded files</p>}
@@ -27,6 +28,7 @@ class _OfficeLoadedFiles extends Component {
                     </List.Item>
                 )}
             />
+            : null
         );
     }
 }
