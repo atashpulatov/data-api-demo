@@ -77,7 +77,7 @@ const loadExistingReportBindingsExcel = async () => {
         bindings.load('items');
         await context.sync();
         const bindingArrayLength = bindings.items.length;
-        const reportArray = _excelBindingsToStore(bindingArrayLength, bindings, reportArray);
+        const reportArray = _excelBindingsToStore(bindingArrayLength, bindings);
         reduxStore.dispatch({
             type: officeProperties.actions.loadAllReports,
             reportArray,

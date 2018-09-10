@@ -18,12 +18,9 @@ class OfficeDisplayService {
         let jsonData = await mstrObjectRestService.getObjectContent(objectId);
         let convertedReport = officeConverterService
             .getConvertedTable(jsonData);
+        convertedReport.id = jsonData.id;
+        convertedReport.name = jsonData.name;
         const result = await this._insertDataIntoExcel(convertedReport);
-        this._addReportToState(result);
-        message.info(`Loaded document: ${result.name}`);
-    }
-
-    _addReportToState(result) {
         reduxStore.dispatch({
             type: officeProperties.actions.loadReport,
             report: {
@@ -32,15 +29,19 @@ class OfficeDisplayService {
                 bindId: result.bindingId,
             },
         });
+        message.info(`Loaded document: ${result.name}`);
     }
 
     async _insertDataIntoExcel(reportConvertedData) {
         const hasHeaders = true;
         return Excel.run(async (context) => {
-            const { mstrTable, sheet, startCell } =
-                await this.initializeMstrTable(context, reportConvertedData, hasHeaders);
-            mstrTable.getHeaderRowRange().values =
-                [reportConvertedData.headers];
+            const sheet = context.workbook.worksheets.getActiveWorksheet();
+            const startCell = await this._getSelectedCell(context);
+            const range = officeApiHelper
+                .getRange(reportConvertedData.headers.length, startCell);
+            const mstrTable = sheet.tables.add(range, hasHeaders);
+            mstrTable.name = reportConvertedData.name + startCell;
+            mstrTable.getHeaderRowRange().values = [reportConvertedData.headers];
             this._pushRows(reportConvertedData, mstrTable);
             this._formatTable(sheet);
 
@@ -57,17 +58,6 @@ class OfficeDisplayService {
                 bindingId,
             };
         }).catch((error) => officeApiHelper.handleOfficeApiException(error));
-    }
-
-    async _initializeMstrTable(context, reportConvertedData, hasHeaders) {
-        const sheet = context.workbook.worksheets.getActiveWorksheet();
-        const startCell = await this._getSelectedCell(context);
-        const range = officeApiHelper
-            .getRange(reportConvertedData.headers.length, startCell);
-        const mstrTable = sheet.tables.add(range, hasHeaders);
-        const tableName = reportConvertedData.name + startCell;
-        mstrTable.name = tableName;
-        return { mstrTable, sheet, startCell };
     }
 
     _formatTable(sheet) {
