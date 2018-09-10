@@ -1,9 +1,11 @@
+/* eslint-disable */
 import { Breadcrumbs } from '../../../../src/frontend/app/breadcrumbs/breadcrumbs.jsx';
-import BreadcrumService from '../../../../src/frontend/app/breadcrumbs/breadcrumb-service';
+import { breadcrumbsService } from '../../../../src/frontend/app/breadcrumbs/breadcrumb-service';
+/* eslint-enable */
 
 describe.skip('Breadcrumbs', () => {
     beforeAll(() => {
-        BreadcrumService.getHistory = jest
+        breadcrumbsService.getHistory = jest
             .fn()
             .mockImplementation(() => {
                 return [

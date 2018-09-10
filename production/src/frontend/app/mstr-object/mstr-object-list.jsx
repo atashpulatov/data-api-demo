@@ -42,7 +42,7 @@ export class _MstrObjects extends React.Component {
         const envUrl = reduxStore.getState().sessionReducer.envUrl;
         const token = reduxStore.getState().sessionReducer.authToken;
         const { projectId } = reduxStore.getState()
-            .historyReducer.project;
+            .historyReducer.project || {};
         let data = [];
         if (historyHelper.isDirectoryStored(dirArray)) {
             const { dirId } = historyHelper

@@ -1,7 +1,9 @@
 import { IncorrectInputTypeError } from './incorrect-input-type';
 import { reduxStore } from '../store';
 import { officeProperties } from './office-properties';
-import { message } from 'antd';
+import { globalDefinitions } from '../global-definitions';
+
+const separator = globalDefinitions.reportBindingIdSeparator;
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
@@ -24,13 +26,6 @@ function getRange(headerCount, startCell) {
             + endRange;
     }
     return `${startCell}:${endRange}${startCellArray[1]}`;
-}
-
-function getTableRange(rowCount, headerRange, startCell) {
-    let startCellArray = startCell.split(/(\d+)/);
-    const rowRange = +startCellArray[1] + +rowCount;
-    const tableRange = headerRange.replace(/\d+$/, rowRange);
-    return tableRange;
 }
 
 function handleOfficeApiException(error) {
@@ -64,11 +59,10 @@ const onBindingDataChanged = (eventArgs) => {
 };
 
 const onBindingObjectClick = (event) => {
-    console.log(event);
     Excel.run((ctx) => {
-        // highlight the table in orange to indicate data has been changed.
-        const table = ctx.workbook.bindings.getItem(event).getTable().getRange();
-        // const range = ctx.workbook.bindings.getItem(event).getRange();
+        const table = ctx.workbook.bindings
+            .getItem(event).getTable()
+            .getRange();
         table.select();
         return ctx.sync();
     });
@@ -83,16 +77,7 @@ const loadExistingReportBindingsExcel = async () => {
         bindings.load('items');
         await context.sync();
         const bindingArrayLength = bindings.items.length;
-        let reportArray = [];
-        for (let i = 0; i < bindingArrayLength; i++) {
-            const splittedBind = bindings.items[i].id.split('_');
-            console.log(splittedBind);
-            reportArray.push({
-                id: splittedBind[2],
-                name: splittedBind[0],
-                bindId: bindings.items[i].id,
-            });
-        }
+        const reportArray = _excelBindingsToStore(bindingArrayLength, bindings, reportArray);
         reduxStore.dispatch({
             type: officeProperties.actions.loadAllReports,
             reportArray,
@@ -100,11 +85,24 @@ const loadExistingReportBindingsExcel = async () => {
     });
 };
 
+function _excelBindingsToStore(bindingArrayLength, bindings) {
+    const reportArray = [];
+    for (let i = 0; i < bindingArrayLength; i++) {
+        const splittedBind = bindings.items[i].id.split(separator);
+        console.log(splittedBind);
+        reportArray.push({
+            id: splittedBind[2],
+            name: splittedBind[0],
+            bindId: bindings.items[i].id,
+        });
+    }
+    return reportArray;
+}
+
 export const officeApiHelper = {
     handleOfficeApiException,
     getRange,
     lettersToNumber,
-    getTableRange,
     onBindingDataChanged,
     onBindingObjectClick,
     loadExistingReportBindingsExcel,
