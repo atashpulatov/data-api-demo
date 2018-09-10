@@ -2,6 +2,7 @@ import { IncorrectInputTypeError } from './incorrect-input-type';
 import { reduxStore } from '../store';
 import { officeProperties } from './office-properties';
 import { globalDefinitions } from '../global-definitions';
+import { OfficeError } from './office-error';
 
 const separator = globalDefinitions.reportBindingIdSeparator;
 
@@ -74,8 +75,12 @@ class OfficeApiHelper {
     };
 
     _excelBindingsToStore(bindings) {
-        console.log('converting bindings');
-        console.log(bindings);
+        if(!bindings){
+            throw new OfficeError('Bindings should not be undefined!');
+        }
+        if(!bindings.length){
+            throw new OfficeError('Bindings must be of Array type!');
+        }
         const bindingArrayLength = bindings.length;
         const reportArray = [];
         for (let i = 0; i < bindingArrayLength; i++) {
