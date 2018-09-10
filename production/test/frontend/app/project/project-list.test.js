@@ -8,6 +8,7 @@ import { projectRestService } from '../../../../src/frontend/app/project/project
 import { reduxStore } from '../../../../src/frontend/app/store';
 import { Provider } from 'react-redux';
 import { UnauthorizedError } from '../../../../src/frontend/app/error/unauthorized-error';
+import { projectListHelper } from '../../../../src/frontend/app/project/project-list-helper';
 /* eslint-enable */
 
 jest.mock('../../../../src/frontend/app/project/project-rest-service');
@@ -112,11 +113,11 @@ describe('ProjectList', () => {
     });
 
     it('shoud row be reponsive', async () => {
-        const originalMethod = _Projects.prototype.projectChosen;
+        const originalMethod = projectListHelper.projectChosen;
         // given
         const mockClick = jest.fn();
         try {
-            _Projects.prototype.projectChosen = mockClick;
+            projectListHelper.projectChosen = mockClick;
             // when
             const componentWrapper = await mountAndReturn();
             const items = componentWrapper.find('ul');
@@ -128,7 +129,7 @@ describe('ProjectList', () => {
             expect(mockClick).toBeCalled();
             expect(originalMethod).toBeDefined();
         } finally {
-            _Projects.prototype.projectChosen = originalMethod;
+            projectListHelper.projectChosen = originalMethod;
         }
     });
 
