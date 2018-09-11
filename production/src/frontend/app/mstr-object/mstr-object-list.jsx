@@ -35,7 +35,6 @@ export class _MstrObjects extends React.Component {
     async componentDidUpdate() {
         const dirArray = reduxStore.getState().historyReducer.directoryArray;
         const data = await mstrObjectListHelper.fetchContent(dirArray);
-        console.log('in component did update');
         const arraysEqual = mstrObjectListHelper.compareMstrObjectArrays(this.state.mstrObjects, data);
         if (!arraysEqual) {
             this.setState({
