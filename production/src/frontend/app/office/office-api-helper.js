@@ -78,7 +78,7 @@ class OfficeApiHelper {
         if(!bindings){
             throw new OfficeError('Bindings should not be undefined!');
         }
-        if(!bindings.length){
+        if(!(bindings instanceof Array)){
             throw new OfficeError('Bindings must be of Array type!');
         }
         const bindingArrayLength = bindings.length;
@@ -97,12 +97,3 @@ class OfficeApiHelper {
 }
 
 export const officeApiHelper = new OfficeApiHelper();
-
-// export const officeApiHelper = {
-//     handleOfficeApiException,
-//     getRange,
-//     lettersToNumber,
-//     onBindingObjectClick,
-//     loadExistingReportBindingsExcel,
-//     logError,
-// };

@@ -2,13 +2,11 @@
 import React from 'react';
 import { DirectoryRow, ReportRow } from './mstr-object-row.jsx';
 import './mstr-object.css';
-import { historyProperties } from '../history/history-properties';
 import { officeDisplayService } from '../office/office-display-service';
 import { reduxStore } from '../store';
-import { historyHelper } from '../history/history-helper';
 import { connect } from 'react-redux';
 import { withNavigation } from '../navigation/with-navigation.jsx';
-import { mstrObjectRestService } from './mstr-object-rest-service';
+import { mstrObjectListHelper } from './mstr-object-list-helper';
 /* eslint-enable */
 
 const objectsTypesMap = {
@@ -24,46 +22,26 @@ export class _MstrObjects extends React.Component {
         this.state = {
             mstrObjects: [],
         };
-        this.refreshContent = this.fetchContent.bind(this);
-        this.navigateToDir = this.navigateToDir.bind(this);
     }
 
     async componentDidMount() {
         const dirArray = reduxStore.getState().historyReducer.directoryArray;
-        await this.fetchContent(dirArray);
-    }
-
-    async componentDidUpdate() {
-        const dirArray = reduxStore.getState().historyReducer.directoryArray;
-        await this.fetchContent(dirArray);
-    }
-
-    async fetchContent(dirArray) {
-        const envUrl = reduxStore.getState().sessionReducer.envUrl;
-        const token = reduxStore.getState().sessionReducer.authToken;
-        const { projectId } = reduxStore.getState()
-            .historyReducer.project || {};
-        let data = [];
-        if (historyHelper.isDirectoryStored(dirArray)) {
-            const { dirId } = historyHelper
-                .getCurrentDirectory(dirArray);
-            data = await mstrObjectRestService
-                .getFolderContent(envUrl, token, projectId, dirId);
-        } else {
-            data = await mstrObjectRestService
-                .getProjectContent(envUrl, token, projectId);
-        }
+        const data = await mstrObjectListHelper.fetchContent(dirArray);
         this.setState({
             mstrObjects: data,
         });
     }
 
-    navigateToDir(directoryId, directoryName) {
-        reduxStore.dispatch({
-            type: historyProperties.actions.goInside,
-            dirId: directoryId,
-            dirName: directoryName,
-        });
+    async componentDidUpdate() {
+        const dirArray = reduxStore.getState().historyReducer.directoryArray;
+        const data = await mstrObjectListHelper.fetchContent(dirArray);
+        console.log('in component did update');
+        const arraysEqual = mstrObjectListHelper.compareMstrObjectArrays(this.state.mstrObjects, data);
+        if (!arraysEqual) {
+            this.setState({
+                mstrObjects: data,
+            });
+        }
     }
 
     render() {
@@ -75,7 +53,7 @@ export class _MstrObjects extends React.Component {
                         .map((directory) => (
                             <DirectoryRow key={directory.id}
                                 directory={directory}
-                                onClick={this.navigateToDir} />
+                                onClick={mstrObjectListHelper.navigateToDir} />
                         ))}
                 </ul>
                 <ul className='no-padding object-list'>
