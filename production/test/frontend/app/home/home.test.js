@@ -1,18 +1,17 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import { mount } from 'enzyme';
-import { App } from '../../../../src/frontend/app/app';
-import { Header } from '../../../../src/frontend/app/header';
-import { HashRouter as Router } from 'react-router-dom';
-import { Footer } from '../../../../src/frontend/app/footer';
+import { Home } from '../../../../src/frontend/app/home/home.jsx';
+import { Header } from '../../../../src/frontend/app/home/header.jsx';
+import { Footer } from '../../../../src/frontend/app/home/footer.jsx';
 /* eslint-enable  */
 
-describe('App', () => {
+describe('Home', () => {
     it('should have header component with proper text', () => {
         // given
         const headerWrapper = mount(<Header />);
         // when
-        const componentWrapper = mount(<App />);
+        const componentWrapper = mount(<Home />);
         // then
         expect(componentWrapper.contains(headerWrapper.get(0))).toBe(true);
     });
@@ -21,7 +20,7 @@ describe('App', () => {
         // given
         const footerWrapper = mount(<Footer />);
         // when
-        const componentWrapper = mount(<App />);
+        const componentWrapper = mount(<Home />);
         // then
         expect(componentWrapper.contains(footerWrapper.get(0))).toBe(true);
         expect(footerWrapper.find('footer').text()).toBeTruthy();

@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React, { Component } from 'react';
 import { navigationService } from './navigation-service';
-import { pathEnum } from '../path-enum';
+import { pathEnum } from '../home/path-enum';
 import { NavigationError } from './navigation-error';
 import { connect } from 'react-redux';
 /* eslint-enable */
