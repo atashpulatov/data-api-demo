@@ -7,9 +7,9 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/lib/integration/react';
 import { Breadcrumbs } from '../breadcrumbs/breadcrumbs.jsx';
 import { Header } from './header.jsx';
-import { MenuBar } from '../navigation/menu-bar.jsx';
+import { MenuBar } from '../menu-bar/menu-bar.jsx';
 import { Footer } from './footer.jsx';
-import { OfficeLoadedFiles } from './office-loaded-files.jsx';
+import { FileHistoryContainer } from '../file-history/file-history-container.jsx';
 import './home.css';
 /* eslint-enable */
 
@@ -19,11 +19,11 @@ export class Home extends Component {
       <Provider store={reduxStore}>
         <PersistGate persistor={reduxPersistor}>
           <Router>
-            <div id="content">
+            <div id='content'>
               <Header />
               <MenuBar />
               <Breadcrumbs />
-              <OfficeLoadedFiles />
+              <FileHistoryContainer />
               <Routes />
               <Footer />
             </div>

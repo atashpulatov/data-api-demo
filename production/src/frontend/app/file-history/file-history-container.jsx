@@ -7,12 +7,12 @@ import { officeApiHelper } from '../office/office-api-helper';
 import { reduxStore } from '../store';
 /* eslint-enable */
 
-class _OfficeLoadedFiles extends Component {
+class _FileHistoryContainer extends Component {
     render() {
         return (
             reduxStore.getState().historyReducer.project
                 ? <List
-                    size="small"
+                    size='small'
                     bordered
                     header={<h3>Loaded files</h3>}
                     style={{ borderLeft: 'none', borderRight: 'none' }}
@@ -42,4 +42,4 @@ function mapStateToProps(state) {
     return { reportArray: state.officeReducer.reportArray };
 }
 
-export const OfficeLoadedFiles = connect(mapStateToProps)(_OfficeLoadedFiles);
+export const FileHistoryContainer = connect(mapStateToProps)(_FileHistoryContainer);

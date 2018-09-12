@@ -1,9 +1,9 @@
 /* eslint-disable */
-import React from "react";
-import { mount } from "enzyme";
-import { MenuBar } from "../../../../src/frontend/app/navigation/menu-bar";
+import React from 'react';
+import { mount } from 'enzyme';
+import { MenuBar } from '../../../../src/frontend/app/menu-bar/menu-bar.jsx';
 import { historyProperties } from '../../../../src/frontend/app/history/history-properties';
-import { sessionProperties } from "../../../../src/frontend/app/storage/session-properties";
+import { sessionProperties } from '../../../../src/frontend/app/storage/session-properties';
 import { reduxStore } from '../../../../src/frontend/app/store';
 /* eslint-enable */
 
