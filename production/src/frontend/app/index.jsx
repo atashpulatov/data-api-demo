@@ -7,8 +7,12 @@ import registerServiceWorker from './registerServiceWorker';
 const Office = window.Office;
 
 function officeInitialize() {
-  Office.initialize = () => {
-  };
+  console.log(Office);
+  Office.onReady()
+    .then(() => {
+      console.log(Excel);
+      goReact();
+    });
 }
 
 function goReact() {
@@ -18,7 +22,7 @@ function goReact() {
   );
 }
 
-goReact();
+// goReact();
 officeInitialize();
 
 registerServiceWorker();

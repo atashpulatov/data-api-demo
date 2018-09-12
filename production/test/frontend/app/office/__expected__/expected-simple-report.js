@@ -1,4 +1,8 @@
-/* eslint-disable */export default { headers: [ 'Region', '# of Customers' ],
+/* eslint-disable */
+export default { 
+  id: 'BD1E844211E85FF536AB0080EFB5F215',
+  name: 'SimpleReport',
+  headers: [ 'Region', '# of Customers' ],
   rows: 
    [ { Region: 'Central', '# of Customers': 1620 },
      { Region: 'Mid-Atlantic', '# of Customers': 1432 },

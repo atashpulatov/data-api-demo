@@ -1,7 +1,14 @@
+/* eslint-disable */
 import { officeApiHelper } from '../../../../src/frontend/app/office/office-api-helper';
 import { IncorrectInputTypeError } from '../../../../src/frontend/app/office/incorrect-input-type';
+import { OfficeExtension } from './__mock__object__/OfficeExtension';
+import { OfficeError } from '../../../../src/frontend/app/office/office-error';
+/* eslint-enable */
 
 describe('OfficeApiHelper', () => {
+    beforeAll(() => {
+        officeApiHelper.excel = {};
+    });
     it('should convert simple excel column name to number', () => {
         // given
         const columnName = 'A';
@@ -99,7 +106,7 @@ describe('OfficeApiHelper', () => {
         expect(result).toBeUndefined();
     });
 
-    it('should error due to incorrect header count', () => {
+    it('should throw error due to incorrect header count', () => {
         // given
         const headerCount = 'asd';
         const startCell = 'A1';
@@ -112,5 +119,78 @@ describe('OfficeApiHelper', () => {
             expect(error).toBeInstanceOf(IncorrectInputTypeError);
         }
         expect(result).toBeUndefined();
+    });
+    it('should forward error different than OfficeExtension.Error', () => {
+        // given
+        const error = new Error();
+        // when
+        const callThatThrows = () => {
+            officeApiHelper.handleOfficeApiException(error);
+        };
+        // then
+        expect(callThatThrows).toThrowError();
+    });
+    it('should return proper bindingsArray', () => {
+        // given
+        const entryArray = [
+            { id: 'SimpleReport_B2_BD1E844211E85FF536AB0080EFB5F215' },
+            { id: 'ComplexReport_DB5_BD1E84FF536AB0080EFB5F215' },
+            { id: 'Simple_B542_BD1E844211E85FF53EFB5F215' },
+            { id: 'Report_B22222_BD11E85FF536AB0080EFB5F215' },
+            { id: 'port_BASDFFF2_4211E85FF536AB0080EFB5F215' },
+        ];
+        const resultExpectedArray = [
+            {
+                id: 'BD1E844211E85FF536AB0080EFB5F215',
+                name: 'SimpleReport',
+                bindId: 'SimpleReport_B2_BD1E844211E85FF536AB0080EFB5F215',
+            },
+            {
+                id: 'BD1E84FF536AB0080EFB5F215',
+                name: 'ComplexReport',
+                bindId: 'ComplexReport_DB5_BD1E84FF536AB0080EFB5F215',
+            },
+            {
+                id: 'BD1E844211E85FF53EFB5F215',
+                name: 'Simple',
+                bindId: 'Simple_B542_BD1E844211E85FF53EFB5F215',
+            },
+            {
+                id: 'BD11E85FF536AB0080EFB5F215',
+                name: 'Report',
+                bindId: 'Report_B22222_BD11E85FF536AB0080EFB5F215',
+            },
+            {
+                id: '4211E85FF536AB0080EFB5F215',
+                name: 'port',
+                bindId: 'port_BASDFFF2_4211E85FF536AB0080EFB5F215',
+            },
+        ];
+        // when
+        const resultArray = officeApiHelper._excelBindingsToStore(entryArray);
+        // then
+        expect(resultArray).toEqual(resultExpectedArray);
+    });
+    it('should throw error due to undefined forwarded', () => {
+        // given
+        const entryArray = undefined;
+        // when
+        const wrongMethodCall = () => {
+            officeApiHelper._excelBindingsToStore(entryArray);
+        };
+        // then
+        expect(wrongMethodCall).toThrowError(OfficeError);
+        expect(wrongMethodCall).toThrowError('Bindings should not be undefined!');
+    });
+    it('should throw error due to non array type forwarder', () => {
+        // given
+        const entryArray = {};
+        // when
+        const wrongMethodCall = () => {
+            officeApiHelper._excelBindingsToStore(entryArray);
+        };
+        // then
+        expect(wrongMethodCall).toThrowError(OfficeError);
+        expect(wrongMethodCall).toThrowError('Bindings must be of Array type!');
     });
 });

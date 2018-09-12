@@ -10,6 +10,7 @@ import { historyReducer } from '../../../../src/frontend/app/history/history-red
 import { historyHelper } from '../../../../src/frontend/app/history/history-helper';
 import { sessionProperties } from '../../../../src/frontend/app/storage/session-properties';
 import { Provider } from 'react-redux';
+import { mstrObjectListHelper } from '../../../../src/frontend/app/mstr-object/mstr-object-list-helper';
 /* eslint-enable */
 
 jest.mock('../../../../src/frontend/app/mstr-object/mstr-object-rest-service');
@@ -181,10 +182,10 @@ describe('MstrObjectList', () => {
     // User can click a directory
     it('should directory row be reponsive', async () => {
         // given
-        const originalMethod = _MstrObjects.prototype.navigateToDir;
+        const originalMethod = mstrObjectListHelper.navigateToDir;
         const mockClick = jest.fn();
         try {
-            _MstrObjects.prototype.navigateToDir = mockClick;
+            mstrObjectListHelper.navigateToDir = mockClick;
             // when
             const componentWrapper = mount(<_MstrObjects />);
             await componentWrapper.instance().componentDidMount();
@@ -201,7 +202,7 @@ describe('MstrObjectList', () => {
             });
             expect(originalMethod).toBeDefined();
         } finally {
-            _MstrObjects.prototype.navigateToDir = originalMethod;
+            mstrObjectListHelper.navigateToDir = originalMethod;
         }
     });
 

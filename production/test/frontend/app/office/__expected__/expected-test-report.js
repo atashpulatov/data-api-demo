@@ -1,4 +1,8 @@
-/* eslint-disable */export default { headers: [ 'Country', 'Region', 'Age Range', 'Count of Customers' ],
+/* eslint-disable */
+export default { 
+  id: 'F9E139BE11E85E842B520080EFC5C210',
+  name: 'TestReport',
+  headers: [ 'Country', 'Region', 'Age Range', 'Count of Customers' ],
   rows: 
    [ { 'Age Range': '24 and under',
        'Count of Customers': 1702,

@@ -3,6 +3,7 @@ import { reduxStore } from '../store';
 import { sessionProperties } from '../storage/session-properties';
 import { UnauthorizedError } from '../error/unauthorized-error';
 import { historyProperties } from '../history/history-properties';
+import { officeApiHelper } from '../office/office-api-helper';
 
 class ProjectListHelper {
     async updateProjectList() {
@@ -29,6 +30,7 @@ class ProjectListHelper {
             projectId: projectId,
             projectName: projectName,
         });
+        officeApiHelper.loadExistingReportBindingsExcel();
     }
 }
 

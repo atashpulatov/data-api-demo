@@ -7,15 +7,15 @@ import fileImg from './images/baseline_attachment_black_18dp.png';
 export const DirectoryRow = ({ directory, onClick }) => (
     <li className='cursor-is-pointer row'
         onClick={onClick.bind(null, directory.id, directory.name)}>
-            <img className='object' src={directoryImg} />
-            <label className='object'>{directory.name}</label>
+            <img className='object cursor-is-pointer' src={directoryImg} />
+            <label className='object cursor-is-pointer'>{directory.name}</label>
     </li>
 );
 
 export const ReportRow = ({ report, onClick }) => (
     <li className='cursor-is-pointer row'
         onClick={onClick.bind(null, report.id)}>
-            <img className='object' src={fileImg} />
-            <label className='object'>{report.name}</label>
+            <img className='object cursor-is-pointer' src={fileImg} />
+            <label className='object cursor-is-pointer'>{report.name}</label>
     </li>
 );
