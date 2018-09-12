@@ -19,6 +19,11 @@ class OfficeDisplayService {
         let convertedReport = officeConverterService
             .getConvertedTable(jsonData);
         const result = await this._insertDataIntoExcel(convertedReport);
+        this.addReportToStore(result);
+        message.info(`Loaded document: ${result.name}`);
+    }
+
+    addReportToStore(result) {
         reduxStore.dispatch({
             type: officeProperties.actions.loadReport,
             report: {
@@ -27,35 +32,39 @@ class OfficeDisplayService {
                 bindId: result.bindingId,
             },
         });
-        message.info(`Loaded document: ${result.name}`);
     }
 
     async _insertDataIntoExcel(reportConvertedData) {
         const hasHeaders = true;
-        return Excel.run(async (context) => {
-            const sheet = context.workbook.worksheets.getActiveWorksheet();
-            const startCell = await this._getSelectedCell(context);
-            const range = officeApiHelper
-                .getRange(reportConvertedData.headers.length, startCell);
-            const mstrTable = sheet.tables.add(range, hasHeaders);
-            mstrTable.name = reportConvertedData.name + startCell;
-            mstrTable.getHeaderRowRange().values = [reportConvertedData.headers];
-            this._pushRows(reportConvertedData, mstrTable);
-            this._formatTable(sheet);
+        const context = await officeApiHelper._getOfficeContext();
+        const startCell = await this._getSelectedCell(context);
+        const sheet = context.workbook.worksheets.getActiveWorksheet();
+        const range = officeApiHelper
+            .getRange(reportConvertedData.headers.length, startCell);
+        const mstrTable = sheet.tables.add(range, hasHeaders);
+        mstrTable.name = reportConvertedData.name + startCell;
+        mstrTable.getHeaderRowRange().values = [reportConvertedData.headers];
+        this._pushRows(reportConvertedData, mstrTable);
+        this._formatTable(sheet);
 
-            const bindingId = `${reportConvertedData.name}${separator}${startCell}${separator}${reportConvertedData.id}`;
-            const tableBinding = context.workbook.bindings.add(mstrTable.getRange(), 'Table', bindingId);
-            console.log(tableBinding);
-            // tableBinding.onDataChanged.add(officeApiHelper.onBindingDataChanged);
+        const bindingId = this._createBindingId(reportConvertedData, startCell, separator);
+        const tableBinding = context.workbook.bindings.add(mstrTable.getRange(), 'Table', bindingId);
+        console.log(tableBinding);
+        // tableBinding.onDataChanged.add(officeApiHelper.onBindingDataChanged);
 
-            sheet.activate();
-            context.sync();
-            return {
-                id: reportConvertedData.id,
-                name: reportConvertedData.name,
-                bindingId,
-            };
-        }).catch((error) => officeApiHelper.handleOfficeApiException(error));
+        sheet.activate();
+        context.sync();
+        return {
+            id: reportConvertedData.id,
+            name: reportConvertedData.name,
+            bindingId,
+        };
+    }
+
+    _createBindingId(reportConvertedData, startCell, separator = '_') {
+        return reportConvertedData.name
+            + separator + startCell
+            + separator + reportConvertedData.id;
     }
 
     _formatTable(sheet) {

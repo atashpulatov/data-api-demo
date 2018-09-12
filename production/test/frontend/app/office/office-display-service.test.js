@@ -1,7 +1,16 @@
 import { officeApiHelper } from '../../../../src/frontend/app/office/office-api-helper';
 
+const Excel = {
+    run: jest.fn().mockResolvedValue('test');
+}
+
 describe.skip('OfficeDisplayService', () => {
-    it.skip('it should fail', () => {
+    it('it should fail', () => {
+        // given
+
+        // when
+        
+        // then
 
     });
 });

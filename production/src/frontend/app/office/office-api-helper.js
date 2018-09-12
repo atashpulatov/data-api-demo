@@ -48,37 +48,46 @@ class OfficeApiHelper {
             r * ALPHABET_RANGE_END + parseInt(a, 36) - 9, 0);
     }
 
-    onBindingObjectClick = (event) => {
-        Excel.run((ctx) => {
-            const table = ctx.workbook.bindings
-                .getItem(event).getTable()
-                .getRange();
-            table.select();
-            return ctx.sync();
-        });
+    onBindingObjectClick = async (event) => {
+        const context = await this._getOfficeContext();
+        const table = context.workbook.bindings
+            .getItem(event).getTable()
+            .getRange();
+        table.select();
+        return context.sync();
     };
+
+    async _getOfficeContext () {
+        return await Excel.run(async (context) => {
+            return context;
+        });
+    }
 
     loadExistingReportBindingsExcel = async () => {
-        Excel.run(async (context) => {
-            const workbook = context.workbook;
-            workbook.load('bindings');
-            const bindings = workbook.bindings;
-            await context.sync();
-            bindings.load('items');
-            await context.sync();
-            const reportArray = this._excelBindingsToStore(bindings.items);
-            reduxStore.dispatch({
-                type: officeProperties.actions.loadAllReports,
-                reportArray,
-            });
+        const context = await this._getOfficeContext();
+        const bindingItems = await this._getBindingsFromWorkbook(context);
+        const reportArray = this._excelBindingsToStore(bindingItems);
+        reduxStore.dispatch({
+            type: officeProperties.actions.loadAllReports,
+            reportArray,
         });
     };
 
+    _getBindingsFromWorkbook = async (context) => {
+        const workbook = context.workbook;
+        workbook.load('bindings');
+        const bindings = workbook.bindings;
+        await context.sync();
+        bindings.load('items');
+        await context.sync();
+        return bindings.items;
+    }
+
     _excelBindingsToStore(bindings) {
-        if(!bindings){
+        if (!bindings) {
             throw new OfficeError('Bindings should not be undefined!');
         }
-        if(!(bindings instanceof Array)){
+        if (!(bindings instanceof Array)) {
             throw new OfficeError('Bindings must be of Array type!');
         }
         const bindingArrayLength = bindings.length;
