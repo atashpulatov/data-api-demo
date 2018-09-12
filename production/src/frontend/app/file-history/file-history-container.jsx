@@ -4,13 +4,12 @@ import { connect } from 'react-redux';
 import { List } from 'antd';
 import { OfficeLoadedFile } from './office-loaded-file.jsx';
 import { officeApiHelper } from '../office/office-api-helper';
-import { reduxStore } from '../store';
 /* eslint-enable */
 
 class _FileHistoryContainer extends Component {
     render() {
         return (
-            reduxStore.getState().historyReducer.project
+            this.props.project
                 ? <List
                     size='small'
                     bordered
@@ -39,7 +38,10 @@ class _FileHistoryContainer extends Component {
 }
 
 function mapStateToProps(state) {
-    return { reportArray: state.officeReducer.reportArray };
+    return {
+        reportArray: state.officeReducer.reportArray,
+        project: state.historyReducer.project,
+    };
 }
 
 export const FileHistoryContainer = connect(mapStateToProps)(_FileHistoryContainer);
