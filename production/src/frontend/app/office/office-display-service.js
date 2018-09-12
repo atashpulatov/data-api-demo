@@ -15,29 +15,37 @@ class OfficeDisplayService {
     }
 
     async printObject(objectId) {
+        const context = await officeApiHelper._getOfficeContext();
+        const startCell = await this._getSelectedCell(context);
         let jsonData = await mstrObjectRestService.getObjectContent(objectId);
         let convertedReport = officeConverterService
             .getConvertedTable(jsonData);
-        const result = await this._insertDataIntoExcel(convertedReport);
-        this.addReportToStore(result);
-        message.info(`Loaded document: ${result.name}`);
+        const mstrTable = await this._insertDataIntoExcel(convertedReport, context, startCell);
+        const bindingId = this._createBindingId(convertedReport, startCell, separator);
+        context.workbook.bindings.add(mstrTable.getRange(), 'Table', bindingId);
+        this.addReportToStore({
+            id: convertedReport.id,
+            name: convertedReport.name,
+            bindId: bindingId,
+        });
+        await context.sync();
+        message.info(`Loaded document: ${convertedReport.name}`);
     }
 
     addReportToStore(result) {
+        console.log(result);
         reduxStore.dispatch({
             type: officeProperties.actions.loadReport,
             report: {
                 id: result.id,
                 name: result.name,
-                bindId: result.bindingId,
+                bindId: result.bindId,
             },
         });
     }
 
-    async _insertDataIntoExcel(reportConvertedData) {
+    async _insertDataIntoExcel(reportConvertedData, context, startCell) {
         const hasHeaders = true;
-        const context = await officeApiHelper._getOfficeContext();
-        const startCell = await this._getSelectedCell(context);
         const sheet = context.workbook.worksheets.getActiveWorksheet();
         const range = officeApiHelper
             .getRange(reportConvertedData.headers.length, startCell);
@@ -46,19 +54,9 @@ class OfficeDisplayService {
         mstrTable.getHeaderRowRange().values = [reportConvertedData.headers];
         this._pushRows(reportConvertedData, mstrTable);
         this._formatTable(sheet);
-
-        const bindingId = this._createBindingId(reportConvertedData, startCell, separator);
-        const tableBinding = context.workbook.bindings.add(mstrTable.getRange(), 'Table', bindingId);
-        console.log(tableBinding);
-        // tableBinding.onDataChanged.add(officeApiHelper.onBindingDataChanged);
-
         sheet.activate();
-        context.sync();
-        return {
-            id: reportConvertedData.id,
-            name: reportConvertedData.name,
-            bindingId,
-        };
+        // tableBinding.onDataChanged.add(officeApiHelper.onBindingDataChanged);
+        return mstrTable;
     }
 
     _createBindingId(reportConvertedData, startCell, separator = '_') {
