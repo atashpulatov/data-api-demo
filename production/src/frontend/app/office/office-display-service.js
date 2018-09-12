@@ -5,6 +5,7 @@ import { reduxStore } from '../store';
 import { officeProperties } from './office-properties';
 import { message } from 'antd';
 import { globalDefinitions } from '../global-definitions';
+import { OfficeBindingError } from './office-error';
 
 const separator = globalDefinitions.reportBindingIdSeparator;
 
@@ -33,7 +34,6 @@ class OfficeDisplayService {
     }
 
     addReportToStore(result) {
-        console.log(result);
         reduxStore.dispatch({
             type: officeProperties.actions.loadReport,
             report: {
@@ -60,6 +60,12 @@ class OfficeDisplayService {
     }
 
     _createBindingId(reportConvertedData, startCell, separator = '_') {
+        if (!reportConvertedData) {
+            throw new OfficeBindingError('Missing reportConvertedData');
+        }
+        if (!startCell) {
+            throw new OfficeBindingError('Missing startCell');
+        }
         return reportConvertedData.name
             + separator + startCell
             + separator + reportConvertedData.id;
@@ -69,6 +75,8 @@ class OfficeDisplayService {
         if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
             sheet.getUsedRange().format.autofitColumns();
             sheet.getUsedRange().format.autofitRows();
+        } else {
+            message.warning(`Unable to format table.`);
         }
     }
 
@@ -82,7 +90,7 @@ class OfficeDisplayService {
     async _getSelectedCell(context) {
         // TODO: handle more than one cell selected
         const selectedRangeStart = context.workbook.getSelectedRange();
-        selectedRangeStart.load('address');
+        selectedRangeStart.load(officeProperties.officeAddress);
         await context.sync();
         const startCell = selectedRangeStart.address.split('!')[1];
         return startCell;

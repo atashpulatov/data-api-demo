@@ -5,6 +5,9 @@ export const officeProperties = new Proxy({
      * propertyAlias: propertyName,
      */
     reportArray: 'mstr-loaded-reports-array',
+    officeAddress: 'address',
+    workbookBindings: 'bindings',
+    bindingItems: 'items',
     actions: {
         loadReport: 'OFFICE_LOAD_REPORT',
         loadAllReports: 'OFFICE_LOAD_ALL_REPORTS',
