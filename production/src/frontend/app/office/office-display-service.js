@@ -1,7 +1,7 @@
 import { officeApiHelper } from './office-api-helper';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { officeConverterService } from './office-converter-service';
-import { reduxStore } from '../store';
+import { reduxStore, reduxPersistor } from '../store';
 import { officeProperties } from './office-properties';
 import { message } from 'antd';
 import { globalDefinitions } from '../global-definitions';
@@ -32,7 +32,7 @@ class OfficeDisplayService {
             projectId,
         });
         await context.sync();
-        message.info(`Loaded document: ${convertedReport.name}`);
+        message.info(`Loaded report: ${convertedReport.name}`);
     }
 
     addReportToStore(report) {
@@ -46,6 +46,21 @@ class OfficeDisplayService {
                 envUrl: report.envUrl,
             },
         });
+    }
+
+    async removeReportFromExcel(bindingId) {
+        const context = await officeApiHelper.getOfficeContext();
+        const range = officeApiHelper.getBindingRange(context, bindingId);
+        const binding = await context.workbook.bindings
+            .getItem(bindingId);
+        binding.delete();
+        range.clear('All');
+        reduxStore.dispatch({
+            type: officeProperties.actions.removeReport,
+            reportBindId: bindingId,
+        });
+        context.sync();
+        message.info(`Removed report`);
     }
 
     async _insertDataIntoExcel(reportConvertedData, context, startCell) {

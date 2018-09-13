@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { List } from 'antd';
 import { OfficeLoadedFile } from './office-loaded-file.jsx';
 import { officeApiHelper } from '../office/office-api-helper';
+import { officeDisplayService } from '../office/office-display-service';
 /* eslint-enable */
 
 export class _FileHistoryContainer extends Component {
@@ -19,12 +20,13 @@ export class _FileHistoryContainer extends Component {
                         : []}
                     renderItem={(report) => (
                         <div
-                        className='cursor-is-pointer'>
+                            className='cursor-is-pointer'>
                             <List.Item>
                                 <OfficeLoadedFile
                                     fileName={report.name}
                                     bindingId={report.bindId}
                                     onClick={officeApiHelper.onBindingObjectClick}
+                                    onDelete={officeDisplayService.removeReportFromExcel}
                                 />
                             </List.Item>
                         </div>

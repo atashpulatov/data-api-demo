@@ -1,7 +1,6 @@
 /* eslint-disable */
 import { officeApiHelper } from '../../../../src/frontend/app/office/office-api-helper';
 import { IncorrectInputTypeError } from '../../../../src/frontend/app/office/incorrect-input-type';
-import { OfficeExtension } from './__mock__object__/OfficeExtension';
 import { OfficeError, OfficeBindingError } from '../../../../src/frontend/app/office/office-error';
 import { reduxStore } from '../../../../src/frontend/app/store';
 import { sessionProperties } from '../../../../src/frontend/app/storage/session-properties';
