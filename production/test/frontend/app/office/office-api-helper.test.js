@@ -274,12 +274,13 @@ describe('OfficeApiHelper', () => {
             const convertedReportDataMock = undefined;
             const separator = '-';
             const startCell = 'someCELL';
+            const envUrl = 'someTestUrl';
+            const projectId = 'someTestProjectId';
             // when
             const wrongMethodCall = () => {
-                officeApiHelper.createBindingId(convertedReportDataMock, startCell, separator);
+                officeApiHelper.createBindingId(convertedReportDataMock, startCell, projectId, envUrl, separator);
             };
             // then
-            expect(false).toBeTruthy();
             expect(wrongMethodCall).toThrowError(OfficeBindingError);
             expect(wrongMethodCall).toThrowError('Missing reportConvertedData');
         });
@@ -287,6 +288,8 @@ describe('OfficeApiHelper', () => {
             // given
             const reportId = 'someReportId';
             const reportName = 'someReportName';
+            const envUrl = 'someTestUrl';
+            const projectId = 'someTestProjectId';
             const convertedReportDataMock = {
                 id: reportId,
                 name: reportName,
@@ -295,7 +298,7 @@ describe('OfficeApiHelper', () => {
             const separator = '-';
             // when
             const wrongMethodCall = () => {
-                officeApiHelper.createBindingId(convertedReportDataMock, startCell, separator);
+                officeApiHelper.createBindingId(convertedReportDataMock, startCell, projectId, envUrl, separator);
             };
             // then
             expect(wrongMethodCall).toThrowError(OfficeBindingError);
@@ -305,14 +308,16 @@ describe('OfficeApiHelper', () => {
             // given
             const reportId = 'someReportId';
             const reportName = 'someReportName';
+            const envUrl = 'someTestUrl';
+            const projectId = 'someTestProjectId';
             const convertedReportDataMock = {
                 id: reportId,
                 name: reportName,
             };
             const startCell = 'someCELL';
-            const expectedBindId = `${reportName}_${startCell}_${reportId}`;
+            const expectedBindId = `${reportName}_${startCell}_${reportId}_${projectId}_${envUrl}`;
             // when
-            const receivedBindId = officeApiHelper.createBindingId(convertedReportDataMock, startCell);
+            const receivedBindId = officeApiHelper.createBindingId(convertedReportDataMock, startCell, projectId, envUrl);
             // then
             expect(receivedBindId).toEqual(expectedBindId);
         });
