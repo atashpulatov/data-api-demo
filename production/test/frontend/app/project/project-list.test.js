@@ -127,7 +127,7 @@ describe('ProjectList', () => {
 
             // then
             expect(mockClick).toBeCalled();
-            expect(originalMethod).toBeDefined();
+            expect(originalMethod).toBeDefined();   
         } finally {
             projectListHelper.projectChosen = originalMethod;
         }

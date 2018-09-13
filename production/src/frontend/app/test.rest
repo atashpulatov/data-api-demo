@@ -1,6 +1,0 @@
-
-
-get https://env-93130.customer.cloud.microstrategy.com/MicroStrategyLibrary/api/status
-
-get https://env-93130.customer.cloud.microstrategy.com/MicroStrategyLibrary/api/auth/env-88576.customer.cloud.microstrategy.com/MicroStrategyLibrary/api/auth/login
-content-type: application/json
