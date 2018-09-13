@@ -1,10 +1,11 @@
 /* eslint-disable */
 import React from 'react';
 import { mount } from 'enzyme';
-import { MenuBar } from '../../../../src/frontend/app/menu-bar/menu-bar.jsx';
+import { _MenuBar } from '../../../../src/frontend/app/menu-bar/menu-bar.jsx';
 import { historyProperties } from '../../../../src/frontend/app/history/history-properties';
 import { sessionProperties } from '../../../../src/frontend/app/storage/session-properties';
 import { reduxStore } from '../../../../src/frontend/app/store';
+import { Provider } from 'react-redux';
 /* eslint-enable */
 
 jest.mock('../../../../src/frontend/app/store');
@@ -20,9 +21,7 @@ describe('menu bar', () => {
 
     it('should go up', () => {
         // given
-        const barWrapper = mount(
-            <MenuBar />
-        );
+        const barWrapper = mount(<_MenuBar project='testProject' />);
         const buttons = barWrapper.find('button');
         const goBackButton = buttons.filterWhere((button) =>
             button.text().includes('Back')
@@ -40,7 +39,7 @@ describe('menu bar', () => {
     it('should go to projects', () => {
         // given
         const barWrapper = mount(
-            <MenuBar />
+            <_MenuBar project='testProject' />
         );
         const buttons = barWrapper.find('button');
         const goTopButton = buttons.filterWhere((button) =>
@@ -59,7 +58,7 @@ describe('menu bar', () => {
     it('should log out', () => {
         // given
         const barWrapper = mount(
-            <MenuBar />
+            <_MenuBar project='testProject' />
         );
         const buttons = barWrapper.find('button');
         const logOutButton = buttons.filterWhere((button) =>
@@ -74,4 +73,37 @@ describe('menu bar', () => {
             type: sessionProperties.actions.logOut,
         });
     });
+
+    it('should not render component if project is not set', () => {
+        // given
+        // when
+        const barWrapper = mount(
+            <_MenuBar />
+        );
+        // then
+        expect(barWrapper.html()).toBeNull();
+    });
+    it.skip('should display component when redux state changes', () => {
+        expect(true).toBeFalsy();
+    });
+    it.skip('should hide component when redux state changes', () => {
+        expect(true).toBeFalsy();
+    });
 });
+
+const prepareReduxStore = () => {
+    reduxStore.dispatch({
+        type: sessionProperties.actions.logIn,
+        envUrl: 'testUrl',
+        username: 'testUsername',
+    });
+    reduxStore.dispatch({
+        type: sessionProperties.actions.loggedIn,
+        authToken: 'testAuthToken',
+    });
+    reduxStore.dispatch({
+        type: historyProperties.actions.goInsideProject,
+        projectId: 'someProjectId',
+        projectName: 'someProjectName',
+    });
+};

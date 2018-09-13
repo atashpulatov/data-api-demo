@@ -10,7 +10,7 @@ const settings = '⏣';
 const logout = '⏏';
 const goTop = '«';
 
-class _MenuBar extends Component {
+export class _MenuBar extends Component {
     render() {
         return (
             this.props.project
