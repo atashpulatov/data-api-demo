@@ -1,5 +1,5 @@
-import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
-import logo from '../public/assets/mstr_logo.png';
+import React from 'react'; // eslint-disable-line no-unused-vars
+import logo from '../../public/assets/mstr_logo.png';
 
 export const Header = () => (
     <header id='app-header'>

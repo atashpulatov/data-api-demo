@@ -1,4 +1,4 @@
-import { propsProxy } from '../enum-props-proxy';
+import { propsProxy } from '../home/enum-props-proxy';
 
 export const sessionProperties = new Proxy({
     /**

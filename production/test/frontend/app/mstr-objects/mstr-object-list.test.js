@@ -6,7 +6,6 @@ import { mstrTutorial } from '../mockData';
 import { historyProperties } from '../../../../src/frontend/app/history/history-properties';
 import { mstrObjectRestService } from '../../../../src/frontend/app/mstr-object/mstr-object-rest-service';
 import { reduxStore } from '../../../../src/frontend/app/store';
-import { historyReducer } from '../../../../src/frontend/app/history/history-reducer';
 import { historyHelper } from '../../../../src/frontend/app/history/history-helper';
 import { sessionProperties } from '../../../../src/frontend/app/storage/session-properties';
 import { Provider } from 'react-redux';

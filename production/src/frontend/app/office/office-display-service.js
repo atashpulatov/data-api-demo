@@ -5,6 +5,7 @@ import { reduxStore } from '../store';
 import { officeProperties } from './office-properties';
 import { message } from 'antd';
 import { globalDefinitions } from '../global-definitions';
+import { OfficeBindingError } from './office-error';
 
 const separator = globalDefinitions.reportBindingIdSeparator;
 
@@ -15,12 +16,21 @@ class OfficeDisplayService {
     }
 
     async printObject(objectId) {
+        const context = await officeApiHelper._getOfficeContext();
+        const startCell = await this._getSelectedCell(context);
         let jsonData = await mstrObjectRestService.getObjectContent(objectId);
         let convertedReport = officeConverterService
             .getConvertedTable(jsonData);
-        const result = await this._insertDataIntoExcel(convertedReport);
-        this.addReportToStore(result);
-        message.info(`Loaded document: ${result.name}`);
+        const mstrTable = await this._insertDataIntoExcel(convertedReport, context, startCell);
+        const bindingId = this._createBindingId(convertedReport, startCell, separator);
+        context.workbook.bindings.add(mstrTable.getRange(), 'Table', bindingId);
+        this.addReportToStore({
+            id: convertedReport.id,
+            name: convertedReport.name,
+            bindId: bindingId,
+        });
+        await context.sync();
+        message.info(`Loaded document: ${convertedReport.name}`);
     }
 
     addReportToStore(result) {
@@ -29,15 +39,13 @@ class OfficeDisplayService {
             report: {
                 id: result.id,
                 name: result.name,
-                bindId: result.bindingId,
+                bindId: result.bindId,
             },
         });
     }
 
-    async _insertDataIntoExcel(reportConvertedData) {
+    async _insertDataIntoExcel(reportConvertedData, context, startCell) {
         const hasHeaders = true;
-        const context = await officeApiHelper._getOfficeContext();
-        const startCell = await this._getSelectedCell(context);
         const sheet = context.workbook.worksheets.getActiveWorksheet();
         const range = officeApiHelper
             .getRange(reportConvertedData.headers.length, startCell);
@@ -46,22 +54,18 @@ class OfficeDisplayService {
         mstrTable.getHeaderRowRange().values = [reportConvertedData.headers];
         this._pushRows(reportConvertedData, mstrTable);
         this._formatTable(sheet);
-
-        const bindingId = this._createBindingId(reportConvertedData, startCell, separator);
-        const tableBinding = context.workbook.bindings.add(mstrTable.getRange(), 'Table', bindingId);
-        console.log(tableBinding);
-        // tableBinding.onDataChanged.add(officeApiHelper.onBindingDataChanged);
-
         sheet.activate();
-        context.sync();
-        return {
-            id: reportConvertedData.id,
-            name: reportConvertedData.name,
-            bindingId,
-        };
+        // tableBinding.onDataChanged.add(officeApiHelper.onBindingDataChanged);
+        return mstrTable;
     }
 
     _createBindingId(reportConvertedData, startCell, separator = '_') {
+        if (!reportConvertedData) {
+            throw new OfficeBindingError('Missing reportConvertedData');
+        }
+        if (!startCell) {
+            throw new OfficeBindingError('Missing startCell');
+        }
         return reportConvertedData.name
             + separator + startCell
             + separator + reportConvertedData.id;
@@ -71,6 +75,8 @@ class OfficeDisplayService {
         if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
             sheet.getUsedRange().format.autofitColumns();
             sheet.getUsedRange().format.autofitRows();
+        } else {
+            message.warning(`Unable to format table.`);
         }
     }
 
@@ -84,7 +90,7 @@ class OfficeDisplayService {
     async _getSelectedCell(context) {
         // TODO: handle more than one cell selected
         const selectedRangeStart = context.workbook.getSelectedRange();
-        selectedRangeStart.load('address');
+        selectedRangeStart.load(officeProperties.officeAddress);
         await context.sync();
         const startCell = selectedRangeStart.address.split('!')[1];
         return startCell;

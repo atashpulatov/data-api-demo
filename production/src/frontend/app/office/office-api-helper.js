@@ -75,10 +75,10 @@ class OfficeApiHelper {
 
     _getBindingsFromWorkbook = async (context) => {
         const workbook = context.workbook;
-        workbook.load('bindings');
+        workbook.load(officeProperties.workbookBindings);
         const bindings = workbook.bindings;
         await context.sync();
-        bindings.load('items');
+        bindings.load(officeProperties.bindingItems);
         await context.sync();
         return bindings.items;
     }

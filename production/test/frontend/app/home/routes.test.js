@@ -1,13 +1,13 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { Routes } from '../../../../src/frontend/app/routes.jsx';
+import { Routes } from '../../../../src/frontend/app/home/routes.jsx';
 import { Provider } from 'react-redux';
 /* eslint-enable  */
 import { mount } from 'enzyme';
-import { pathEnum } from '../../../../src/frontend/app/path-enum';
+import { pathEnum } from '../../../../src/frontend/app/home/path-enum';
 import { Error } from '../../../../src/frontend/app/error.jsx';
-import { routeContainer } from '../../../../src/frontend/app/routeContainer';
+import { routeContainer } from '../../../../src/frontend/app/home/routeContainer';
 import { reduxStore } from '../../../../src/frontend/app/store';
 
 describe('Routes', () => {

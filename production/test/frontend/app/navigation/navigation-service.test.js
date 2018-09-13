@@ -1,11 +1,7 @@
 /* eslint-disable */
 import { navigationService } from '../../../../src/frontend/app/navigation/navigation-service';
 import { projectRestService } from '../../../../src/frontend/app/project/project-rest-service';
-import { projects } from '../project/mock-data';
-import { mstrObjectRestService } from '../../../../src/frontend/app/mstr-object/mstr-object-rest-service';
-import { mstrTutorial } from '../mockData';
 import { historyProperties } from '../../../../src/frontend/app/history/history-properties';
-import { UnauthorizedError } from '../../../../src/frontend/app/error/unauthorized-error';
 import { sessionProperties } from '../../../../src/frontend/app/storage/session-properties';
 import { reduxStore } from '../../../../src/frontend/app/store';
 /* eslint-enable */
@@ -146,80 +142,4 @@ describe('NavigatorService', () => {
                 navigationService.getObjectsRoute = originalMethod;
             }
         });
-
-    // describe('saveSessionData', () => {
-    //     it('should call store to save username, envUrl and isRememberMeOn', () => {
-    //         // given
-    //         const store = navigationService.store;
-    //         const someUsername = 'someUsername';
-    //         const isRememberMeOn = false;
-    //         const propertiesToSave = {};
-    //         propertiesToSave[sessionProperties.username] = someUsername;
-    //         propertiesToSave[sessionProperties.envUrl] = envUrl;
-    //         propertiesToSave[sessionProperties.isRememberMeOn] = isRememberMeOn;
-    //         const dispatchAction = {
-    //             type: sessionProperties.actions.logIn,
-    //             username: someUsername,
-    //             envUrl: envUrl,
-    //             isRememberMeOn: isRememberMeOn,
-    //         };
-    //         // when
-    //         navigationService.saveSessionData(propertiesToSave);
-    //         // then
-    //         expect(store.dispatch).toHaveBeenCalled();
-    //         expect(store.dispatch).toHaveBeenCalledWith(dispatchAction);
-    //     });
-
-    //     it('should call store to save authToken', () => {
-    //         // given
-    //         const store = navigationService.store;
-    //         const propertiesToSave = {};
-    //         propertiesToSave[sessionProperties.authToken] = authToken;
-    //         const dispatchAction = {
-    //             type: sessionProperties.actions.loggedIn,
-    //             authToken: authToken,
-    //         };
-    //         // when
-    //         navigationService.saveSessionData(propertiesToSave);
-    //         // then
-    //         expect(store.dispatch).toHaveBeenCalled();
-    //         expect(store.dispatch).toHaveBeenCalledWith(dispatchAction);
-    //     });
-
-    //     it('should call store to save projectId', () => {
-    //         // given
-    //         const store = navigationService.store;
-    //         const someProjectId = 'someProjectId';
-    //         const propertiesToSave = {};
-    //         propertiesToSave[historyProperties.projectId] = someProjectId;
-    //         propertiesToSave[historyProperties.projectName] = projectName;
-    //         const dispatchAction = {
-    //             type: historyProperties.actions.goInsideProject,
-    //             projectId: someProjectId,
-    //             projectName: projectName,
-    //         };
-    //         // when
-    //         navigationService.saveSessionData(propertiesToSave);
-    //         // then
-    //         expect(store.dispatch).toHaveBeenCalled();
-    //         expect(store.dispatch).toHaveBeenCalledWith(dispatchAction);
-    //     });
-
-    //     it('should call store to save directoryId', () => {
-    //         // given
-    //         const store = navigationService.store;
-    //         const someDirId = 'someDirId';
-    //         const propertiesToSave = {};
-    //         propertiesToSave[historyProperties.directoryId] = someDirId;
-    //         const dispatchAction = {
-    //             type: historyProperties.actions.goInside,
-    //             dirId: someDirId,
-    //         };
-    //         // when
-    //         navigationService.saveSessionData(propertiesToSave);
-    //         // then
-    //         expect(store.dispatch).toHaveBeenCalled();
-    //         expect(store.dispatch).toHaveBeenCalledWith(dispatchAction);
-    //     });
-    // });
 });
