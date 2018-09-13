@@ -16,7 +16,7 @@ class OfficeDisplayService {
     }
 
     async printObject(objectId) {
-        const context = await officeApiHelper._getOfficeContext();
+        const context = await officeApiHelper.getOfficeContext();
         const startCell = await this._getSelectedCell(context);
         let jsonData = await mstrObjectRestService.getObjectContent(objectId);
         let convertedReport = officeConverterService

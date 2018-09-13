@@ -76,4 +76,5 @@ function _checkReportData(report) {
     if (!report.bindId) {
         throw new OfficeError('Missing report.bindId');
     }
+    // missing envUrl, projectId
 }

@@ -49,7 +49,7 @@ class OfficeApiHelper {
     }
 
     onBindingObjectClick = async (event) => {
-        const context = await this._getOfficeContext();
+        const context = await this.getOfficeContext();
         const table = context.workbook.bindings
             .getItem(event).getTable()
             .getRange();
@@ -57,14 +57,14 @@ class OfficeApiHelper {
         return context.sync();
     };
 
-    async _getOfficeContext () {
+    async getOfficeContext () {
         return await Excel.run(async (context) => {
             return context;
         });
     }
 
     loadExistingReportBindingsExcel = async () => {
-        const context = await this._getOfficeContext();
+        const context = await this.getOfficeContext();
         const bindingItems = await this._getBindingsFromWorkbook(context);
         const reportArray = this._excelBindingsToStore(bindingItems);
         reduxStore.dispatch({

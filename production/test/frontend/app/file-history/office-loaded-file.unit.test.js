@@ -19,7 +19,7 @@ describe.only('office loaded file', () => {
         const onClickMocked = jest.fn();
         const testBindingId = 'testBindingId';
         const wrappedComponent = mount(<OfficeLoadedFile
-        bindingId={testBindingId}
+            bindingId={testBindingId}
             onClick={onClickMocked}
             fileName='test' />);
         // when
@@ -59,23 +59,6 @@ describe.only('office loaded file', () => {
         expect(onRefreshMocked).toBeCalled();
         expect(onRefreshMocked).toBeCalledWith(testBindingId);
     });
-    it('should invoke refresh method on button click', () => {
-        // given
-        const onRefreshMocked = jest.fn();
-        const testBindingId = 'testBindingId';
-        // when
-        const wrappedComponent = mount(<OfficeLoadedFile
-            bindingId={testBindingId}
-            fileName='test'
-            onRefresh={onRefreshMocked} />);
-        const buttonsContainer = wrappedComponent.childAt(0);
-        console.log(buttonsContainer);
-        const refreshButton = buttonsContainer.find('i').at(0);
-        refreshButton.props().onClick();
-        // then
-        expect(onRefreshMocked).toBeCalled();
-        expect(onRefreshMocked).toBeCalledWith(testBindingId);
-    });
     it('should invoke delete method on button click', () => {
         // given
         const onDeleteMocked = jest.fn();
@@ -92,5 +75,29 @@ describe.only('office loaded file', () => {
         // then
         expect(onDeleteMocked).toBeCalled();
         expect(onDeleteMocked).toBeCalledWith(testBindingId);
+    });
+    it('should invoke ONLY select method on button click', () => {
+        // given
+        const onDeleteMocked = jest.fn();
+        const onClickMocked = jest.fn();
+        const onRefreshMocked = jest.fn();
+        const testBindingId = 'testBindingId';
+        // when
+        const wrappedComponent = mount(<OfficeLoadedFile
+            bindingId={testBindingId}
+            onClick={onClickMocked}
+            fileName='test'
+            onRefresh={onRefreshMocked}
+            onDelete={onDeleteMocked} />);
+        const textWrapper = wrappedComponent.childAt(0).find('span');
+        textWrapper.props().onClick();
+        // then
+        expect(onClickMocked).toBeCalled();
+        expect(onClickMocked).toBeCalledWith(testBindingId);
+        expect(onDeleteMocked).not.toBeCalled();
+        expect(onRefreshMocked).not.toBeCalled();
+    });
+    it.skip('should update list of files on redux state change', () => {
+        expect(false).toBeTruthy();
     });
 });

@@ -6,15 +6,13 @@ import { OfficeLoadedFile } from './office-loaded-file.jsx';
 import { officeApiHelper } from '../office/office-api-helper';
 /* eslint-enable */
 
-class _FileHistoryContainer extends Component {
+export class _FileHistoryContainer extends Component {
     render() {
         return (
             this.props.project
                 ? <List
                     size='small'
-                    bordered
                     header={<h3>Loaded files</h3>}
-                    style={{ borderLeft: 'none', borderRight: 'none' }}
                     locale={{ emptyText: 'No files loaded.' }}
                     dataSource={this.props.reportArray
                         ? this.props.reportArray
@@ -24,7 +22,7 @@ class _FileHistoryContainer extends Component {
                         className='cursor-is-pointer'>
                             <List.Item>
                                 <OfficeLoadedFile
-                                    name={report.name}
+                                    fileName={report.name}
                                     bindingId={report.bindId}
                                     onClick={officeApiHelper.onBindingObjectClick}
                                 />
