@@ -5,7 +5,6 @@ import { reduxStore } from '../store';
 import { officeProperties } from './office-properties';
 import { message } from 'antd';
 import { globalDefinitions } from '../global-definitions';
-import { OfficeBindingError } from './office-error';
 
 const separator = globalDefinitions.reportBindingIdSeparator;
 
@@ -22,24 +21,29 @@ class OfficeDisplayService {
         let convertedReport = officeConverterService
             .getConvertedTable(jsonData);
         const mstrTable = await this._insertDataIntoExcel(convertedReport, context, startCell);
-        const bindingId = this._createBindingId(convertedReport, startCell, separator);
+        const { envUrl, projectId } = officeApiHelper.getCurrentMstrContext();
+        const bindingId = officeApiHelper.createBindingId(convertedReport, startCell, projectId, envUrl, separator);
         context.workbook.bindings.add(mstrTable.getRange(), 'Table', bindingId);
         this.addReportToStore({
             id: convertedReport.id,
             name: convertedReport.name,
             bindId: bindingId,
+            envUrl,
+            projectId,
         });
         await context.sync();
         message.info(`Loaded document: ${convertedReport.name}`);
     }
 
-    addReportToStore(result) {
+    addReportToStore(report) {
         reduxStore.dispatch({
             type: officeProperties.actions.loadReport,
             report: {
-                id: result.id,
-                name: result.name,
-                bindId: result.bindId,
+                id: report.id,
+                name: report.name,
+                bindId: report.bindId,
+                projectId: report.projectId,
+                envUrl: report.envUrl,
             },
         });
     }
@@ -57,18 +61,6 @@ class OfficeDisplayService {
         sheet.activate();
         // tableBinding.onDataChanged.add(officeApiHelper.onBindingDataChanged);
         return mstrTable;
-    }
-
-    _createBindingId(reportConvertedData, startCell, separator = '_') {
-        if (!reportConvertedData) {
-            throw new OfficeBindingError('Missing reportConvertedData');
-        }
-        if (!startCell) {
-            throw new OfficeBindingError('Missing startCell');
-        }
-        return reportConvertedData.name
-            + separator + startCell
-            + separator + reportConvertedData.id;
     }
 
     _formatTable(sheet) {

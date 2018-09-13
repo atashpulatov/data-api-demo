@@ -13,16 +13,22 @@ describe('officeReducer', () => {
             id: 'firstTestId',
             name: 'firstTestName',
             bindId: 'firstBindId',
+            projectId: 'firstProjectId',
+            envUrl: 'firstEnvUrl',
         },
         {
             id: 'secondTestId',
             name: 'secondTestName',
             bindId: 'secondBindId',
+            projectId: 'secondProjectId',
+            envUrl: 'secondEnvUrl',
         },
         {
             id: 'thirdTestId',
             name: 'thirdTestName',
             bindId: 'thirdBindId',
+            projectId: 'thirdProjectId',
+            envUrl: 'thirdEnvUrl',
         },
     ];
 
@@ -41,7 +47,9 @@ describe('officeReducer', () => {
         // given
         const report = {
             name: 'testName',
-            bindId: 'missingBindId',
+            bindId: 'bindId',
+            envUrl: 'testEnvUrl',
+            projectId: 'testProjectId',
         };
         // when
         const wrongDispatch = () => {
@@ -59,7 +67,9 @@ describe('officeReducer', () => {
         // given
         const report = {
             id: 'testId',
-            bindId: 'missingBindId',
+            bindId: 'bindId',
+            envUrl: 'testEnvUrl',
+            projectId: 'testProjectId',
         };
         // when
         const wrongDispatch = () => {
@@ -78,6 +88,8 @@ describe('officeReducer', () => {
         const report = {
             id: 'testId',
             name: 'testName',
+            envUrl: 'testEnvUrl',
+            projectId: 'testProjectId',
         };
         // when
         const wrongDispatch = () => {
@@ -89,6 +101,45 @@ describe('officeReducer', () => {
         // then
         expect(wrongDispatch).toThrowError(OfficeError);
         expect(wrongDispatch).toThrowError('Missing report.bindId');
+    });
+
+    it('should throw an error on missing report.envUrl', () => {
+        // given
+        const report = {
+            id: 'testId',
+            name: 'testName',
+            bindId: 'testBindId',
+            projectId: 'testProjectId',
+        };
+        // when
+        const wrongDispatch = () => {
+            officeStore.dispatch({
+                type: officeProperties.actions.loadReport,
+                report,
+            });
+        };
+        // then
+        expect(wrongDispatch).toThrowError(OfficeError);
+        expect(wrongDispatch).toThrowError('Missing report.envUrl');
+    });
+    it('should throw an error on missing report.projectId', () => {
+        // given
+        const report = {
+            id: 'testId',
+            name: 'testName',
+            bindId: 'testBindId',
+            envUrl: 'testEnvUrl',
+        };
+        // when
+        const wrongDispatch = () => {
+            officeStore.dispatch({
+                type: officeProperties.actions.loadReport,
+                report,
+            });
+        };
+        // then
+        expect(wrongDispatch).toThrowError(OfficeError);
+        expect(wrongDispatch).toThrowError('Missing report.projectId');
     });
 
     it('should save report data to store', () => {
@@ -200,11 +251,15 @@ describe('officeReducer', () => {
                 id: 'NEWfirstTestId',
                 name: 'NEWfirstTestName',
                 bindId: 'NEWfirstBindId',
+                envUrl: 'NEWfirstEnvUrl',
+                projectId: 'NEWfirstProjectId',
             },
             {
                 id: 'NEWsecondTestId',
                 name: 'NEWsecondTestName',
                 bindId: 'NEWsecondBindId',
+                envUrl: 'NEWsecondEnvUrl',
+                projectId: 'NEWsecondProjectId',
             },
         ];
         // when
@@ -256,7 +311,6 @@ describe('officeReducer', () => {
         // then
         expect(wrongDispatch).toThrowError(OfficeError);
         expect(wrongDispatch).toThrowError('Missing report.id');
-
         reportArrayMock[1].id = originalId;
     });
 });

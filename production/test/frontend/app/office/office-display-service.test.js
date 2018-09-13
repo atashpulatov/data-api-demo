@@ -3,6 +3,7 @@ import { officeApiHelper } from '../../../../src/frontend/app/office/office-api-
 import { officeContextMock } from './__mock__object__/OfficeContext';
 import { officeDisplayService } from '../../../../src/frontend/app/office/office-display-service';
 import { OfficeBindingError } from '../../../../src/frontend/app/office/office-error';
+import { reduxStore } from '../../../../src/frontend/app/store';
 /* eslint-enable */
 
 describe('OfficeDisplayService', () => {
@@ -17,83 +18,21 @@ describe('OfficeDisplayService', () => {
         officeApiHelper._getOfficeContext = originalMethod;
     });
 
-    it('should return proper bindingId', () => {
+    it('should add report to store', () => {
         // given
-        const reportId = 'someReportId';
-        const reportName = 'someReportName';
-        const convertedReportDataMock = {
-            id: reportId,
-            name: reportName,
+        const report = {
+            id: 'firstTestId',
+            name: 'firstTestName',
+            bindId: 'firstBindId',
+            projectId: 'firstProjectId',
+            envUrl: 'firstEnvUrl',
         };
-        const separator = '_';
-        const startCell = 'someCELL';
-        const expectedBindId = `${reportName}_${startCell}_${reportId}`;
         // when
-        const receivedBindId = officeDisplayService._createBindingId(convertedReportDataMock, startCell, separator);
+        officeDisplayService.addReportToStore(report);
+        const reportState = reduxStore.getState().officeReducer.reportArray;
         // then
-        expect(receivedBindId).toEqual(expectedBindId);
-    });
-    it('should return proper bindingId with different separator', () => {
-        // given
-        const reportId = 'someReportId';
-        const reportName = 'someReportName';
-        const convertedReportDataMock = {
-            id: reportId,
-            name: reportName,
-        };
-        const separator = '-';
-        const startCell = 'someCELL';
-        const expectedBindId = `${reportName}-${startCell}-${reportId}`;
-        // when
-        const receivedBindId = officeDisplayService._createBindingId(convertedReportDataMock, startCell, separator);
-        // then
-        expect(receivedBindId).toEqual(expectedBindId);
-    });
-    it('should throw error due to missing convertedReportData', () => {
-        // given
-        const convertedReportDataMock = undefined;
-        const separator = '-';
-        const startCell = 'someCELL';
-        // when
-        const wrongMethodCall = () => {
-            officeDisplayService._createBindingId(convertedReportDataMock, startCell, separator);
-        };
-        // then
-        expect(wrongMethodCall).toThrowError(OfficeBindingError);
-        expect(wrongMethodCall).toThrowError('Missing reportConvertedData');
-    });
-    it('should throw error due to missing startCell', () => {
-        // given
-        const reportId = 'someReportId';
-        const reportName = 'someReportName';
-        const convertedReportDataMock = {
-            id: reportId,
-            name: reportName,
-        };
-        const startCell = undefined;
-        const separator = '-';
-        // when
-        const wrongMethodCall = () => {
-            officeDisplayService._createBindingId(convertedReportDataMock, startCell, separator);
-        };
-        // then
-        expect(wrongMethodCall).toThrowError(OfficeBindingError);
-        expect(wrongMethodCall).toThrowError('Missing startCell');
-    });
-    it('should return proper bindingId despite not providing separator', () => {
-        // given
-        const reportId = 'someReportId';
-        const reportName = 'someReportName';
-        const convertedReportDataMock = {
-            id: reportId,
-            name: reportName,
-        };
-        const startCell = 'someCELL';
-        const expectedBindId = `${reportName}_${startCell}_${reportId}`;
-        // when
-        const receivedBindId = officeDisplayService._createBindingId(convertedReportDataMock, startCell);
-        // then
-        expect(receivedBindId).toEqual(expectedBindId);
+        expect(reportState).toBeDefined();
+        expect(reportState[0]).toEqual(report);
     });
 
     describe('_insertDataIntoExcel', async () => {
@@ -133,12 +72,18 @@ describe('OfficeDisplayService', () => {
             expect(result.name).toEqual(`${reportConvertedData.name}${startCell}`);
         });
     });
-    it('it should fail', () => {
+    describe.skip('delete report', () => {
+        it('should fail', () => {
+            // given
+            // when
+            // then
+            expect(false).toBeTruthy();
+        });
+    });
+    it.skip('it should fail', () => {
         // given
-
         // when
-
+        expect(false).toBeTruthy();
         // then
-
     });
 });

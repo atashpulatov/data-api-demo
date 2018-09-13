@@ -3,6 +3,7 @@ import { reduxStore } from '../store';
 import { officeProperties } from './office-properties';
 import { globalDefinitions } from '../global-definitions';
 import { OfficeError } from './office-error';
+import { OfficeBindingError } from './office-error';
 
 const separator = globalDefinitions.reportBindingIdSeparator;
 
@@ -48,22 +49,47 @@ class OfficeApiHelper {
             r * ALPHABET_RANGE_END + parseInt(a, 36) - 9, 0);
     }
 
-    onBindingObjectClick = async (event) => {
+    onBindingObjectClick = async (bindingId) => {
         const context = await this.getOfficeContext();
-        const table = context.workbook.bindings
-            .getItem(event).getTable()
-            .getRange();
-        table.select();
-        return context.sync();
+        const tableRange = this.getBindingRange(context, bindingId);
+        tableRange.select();
+        return await context.sync();
     };
 
-    async getOfficeContext () {
+    getBindingRange(context, bindingId) {
+        return context.workbook.bindings
+            .getItem(bindingId).getTable()
+            .getRange();
+    }
+
+    async getOfficeContext() {
         return await Excel.run(async (context) => {
             return context;
         });
     }
 
+    createBindingId(reportConvertedData, startCell, projectId, envUrl, separator = '_') {
+        if (!reportConvertedData) {
+            throw new OfficeBindingError('Missing reportConvertedData');
+        }
+        if (!startCell) {
+            throw new OfficeBindingError('Missing startCell');
+        }
+        if (!projectId) {
+            throw new OfficeBindingError('Missing projectId');
+        }
+        if (!envUrl) {
+            throw new OfficeBindingError('Missing envUrl');
+        }
+        return reportConvertedData.name
+            + separator + startCell
+            + separator + reportConvertedData.id
+            + separator + projectId
+            + separator + envUrl;
+    }
+
     loadExistingReportBindingsExcel = async () => {
+        console.log('in loading reports');
         const context = await this.getOfficeContext();
         const bindingItems = await this._getBindingsFromWorkbook(context);
         const reportArray = this._excelBindingsToStore(bindingItems);
@@ -72,6 +98,13 @@ class OfficeApiHelper {
             reportArray,
         });
     };
+
+    getCurrentMstrContext() {
+        const envUrl = reduxStore.getState().sessionReducer.envUrl;
+        const projectId = reduxStore.getState().historyReducer.project.projectId;
+        const username = reduxStore.getState().sessionReducer.username;
+        return { envUrl, projectId, username };
+    }
 
     _getBindingsFromWorkbook = async (context) => {
         const workbook = context.workbook;
@@ -99,6 +132,8 @@ class OfficeApiHelper {
                 id: splittedBind[2],
                 name: splittedBind[0],
                 bindId: bindings[i].id,
+                projectId: splittedBind[3],
+                envUrl: splittedBind[4],
             });
         }
         return reportArray;
