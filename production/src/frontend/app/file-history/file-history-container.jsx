@@ -5,33 +5,34 @@ import { List } from 'antd';
 import { OfficeLoadedFile } from './office-loaded-file.jsx';
 import { officeApiHelper } from '../office/office-api-helper';
 import { officeDisplayService } from '../office/office-display-service';
+import './file-history.css';
 /* eslint-enable */
 
 export class _FileHistoryContainer extends Component {
     render() {
         return (
             this.props.project
-                ? <List
-                    size='small'
-                    header={<h3>Loaded files</h3>}
-                    locale={{ emptyText: 'No files loaded.' }}
-                    dataSource={this.props.reportArray
-                        ? this.props.reportArray
-                        : []}
-                    renderItem={(report) => (
-                        <div
-                            className='cursor-is-pointer'>
-                            <List.Item>
-                                <OfficeLoadedFile
-                                    fileName={report.name}
-                                    bindingId={report.bindId}
-                                    onClick={officeApiHelper.onBindingObjectClick}
-                                    onDelete={officeDisplayService.removeReportFromExcel}
-                                />
-                            </List.Item>
-                        </div>
-                    )}
-                />
+                ? <div>
+                    <h3 style={{ textAlign: 'center' }}>Loaded files</h3>
+                    <hr />
+                    <List
+                        className='ant-list-header-override'
+                        size='small'
+                        locale={{ emptyText: 'No files loaded.' }}
+                        dataSource={this.props.reportArray
+                            ? this.props.reportArray
+                            : []}
+                        renderItem={(report) => (
+                            <OfficeLoadedFile
+                                fileName={report.name}
+                                bindingId={report.bindId}
+                                onClick={officeApiHelper.onBindingObjectClick}
+                                onDelete={officeDisplayService.removeReportFromExcel}
+                            />
+                        )}
+                    />
+                    <hr />
+                </div>
                 : null
         );
     }

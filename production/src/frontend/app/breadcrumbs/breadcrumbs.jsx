@@ -36,10 +36,6 @@ class _Breadcrumbs extends Component {
         }
         return (
             <div>
-                <header className='mstr-objects'>
-                    All Files
-                </header>
-                <hr />
                 <ul className='breadcrumb'>
                     {historyObjects
                         .map((object) => (

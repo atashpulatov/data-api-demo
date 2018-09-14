@@ -1,20 +1,21 @@
 /* eslint-disable */
 import React from 'react';
-import { Icon } from 'antd';
+import { Icon, Row, Col } from 'antd';
 /* eslint-enable */
 
 export const OfficeLoadedFile = ({ fileName, bindingId, onClick, onRefresh, onDelete }) => (
-    <li
-        className='cursor-is-pointer'>
-        <span
-            onClick={() => onClick(bindingId)}>
+    <Row
+        className="cursor-is-pointer"
+        type="flex"
+        justify="space-around">
+        <Col span={7} onClick={() => onClick(bindingId)}>
             {fileName}
-        </span>
-        <Icon
-            type='redo'
-            onClick={() => onRefresh(bindingId)} />
-        <Icon
-            type='delete'
-            onClick={() => onDelete(bindingId)} />
-    </li>
+        </Col>
+        <Col span={1} offset={4} onClick={() => onRefresh(bindingId)}>
+            <Icon type='redo' />
+        </Col>
+        <Col span={1} onClick={() => onDelete(bindingId)}>
+            <Icon type='delete' />
+        </Col>
+    </Row >
 );
