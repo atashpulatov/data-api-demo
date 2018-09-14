@@ -1,7 +1,7 @@
 import { officeApiHelper } from './office-api-helper';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { officeConverterService } from './office-converter-service';
-import { reduxStore, reduxPersistor } from '../store';
+import { reduxStore } from '../store';
 import { officeProperties } from './office-properties';
 import { message } from 'antd';
 import { globalDefinitions } from '../global-definitions';
@@ -20,9 +20,10 @@ class OfficeDisplayService {
         let jsonData = await mstrObjectRestService.getObjectContent(objectId);
         let convertedReport = officeConverterService
             .getConvertedTable(jsonData);
-        const mstrTable = await this._insertDataIntoExcel(convertedReport, context, startCell);
+        const tableName = await officeApiHelper.findAvailableTableName(convertedReport.name, context);
+        const mstrTable = await this._insertDataIntoExcel(convertedReport, context, startCell, tableName);
         const { envUrl, projectId } = officeApiHelper.getCurrentMstrContext();
-        const bindingId = officeApiHelper.createBindingId(convertedReport, startCell, projectId, envUrl, separator);
+        const bindingId = officeApiHelper.createBindingId(convertedReport, tableName, projectId, envUrl, separator);
         context.workbook.bindings.add(mstrTable.getRange(), 'Table', bindingId);
         this.addReportToStore({
             id: convertedReport.id,
@@ -32,7 +33,7 @@ class OfficeDisplayService {
             projectId,
         });
         await context.sync();
-        message.info(`Loaded report: ${convertedReport.name}`);
+        message.success(`Loaded report: ${convertedReport.name}`);
     }
 
     addReportToStore(report) {
@@ -63,13 +64,13 @@ class OfficeDisplayService {
         message.info(`Removed report`);
     }
 
-    async _insertDataIntoExcel(reportConvertedData, context, startCell) {
+    async _insertDataIntoExcel(reportConvertedData, context, startCell, tableName) {
         const hasHeaders = true;
         const sheet = context.workbook.worksheets.getActiveWorksheet();
         const range = officeApiHelper
             .getRange(reportConvertedData.headers.length, startCell);
         const mstrTable = sheet.tables.add(range, hasHeaders);
-        mstrTable.name = reportConvertedData.name + startCell;
+        mstrTable.name = tableName;
         mstrTable.getHeaderRowRange().values = [reportConvertedData.headers];
         this._pushRows(reportConvertedData, mstrTable);
         this._formatTable(sheet);

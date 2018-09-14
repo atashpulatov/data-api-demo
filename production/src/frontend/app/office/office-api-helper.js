@@ -68,12 +68,32 @@ class OfficeApiHelper {
         });
     }
 
-    createBindingId(reportConvertedData, startCell, projectId, envUrl, separator = '_') {
+    async findAvailableTableName(reportName, context){
+        let nameExists = true;
+        let tableIncrement = 0;
+        const tableName = reportName;
+        const tableCollection = context.workbook.tables;
+        tableCollection.load();
+        await context.sync();
+        while (nameExists) {
+            let existingTable = await tableCollection.getItemOrNullObject(`${tableName}${tableIncrement}`);
+            existingTable.load();
+            await context.sync();
+            if (!existingTable.isNull) {
+                tableIncrement++;
+            } else {
+                nameExists = false;
+            }
+        }
+        return tableName + tableIncrement;
+    }
+
+    createBindingId(reportConvertedData, tableName, projectId, envUrl, separator = '_') {
         if (!reportConvertedData) {
             throw new OfficeBindingError('Missing reportConvertedData');
         }
-        if (!startCell) {
-            throw new OfficeBindingError('Missing startCell');
+        if (!tableName) {
+            throw new OfficeBindingError('Missing tableName');
         }
         if (!projectId) {
             throw new OfficeBindingError('Missing projectId');
@@ -82,7 +102,7 @@ class OfficeApiHelper {
             throw new OfficeBindingError('Missing envUrl');
         }
         return reportConvertedData.name
-            + separator + startCell
+            + separator + tableName
             + separator + reportConvertedData.id
             + separator + projectId
             + separator + envUrl;
@@ -113,6 +133,7 @@ class OfficeApiHelper {
         await context.sync();
         bindings.load(officeProperties.bindingItems);
         await context.sync();
+        console.log(bindings.items);
         return bindings.items;
     }
 

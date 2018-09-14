@@ -243,10 +243,10 @@ describe('OfficeApiHelper', () => {
                 name: reportName,
             };
             const separator = '_';
-            const startCell = 'someCELL';
-            const expectedBindId = `${reportName}_${startCell}_${reportId}_${projectId}_${envUrl}`;
+            const tableName = 'someTableName';
+            const expectedBindId = `${reportName}_${tableName}_${reportId}_${projectId}_${envUrl}`;
             // when
-            const receivedBindId = officeApiHelper.createBindingId(convertedReportDataMock, startCell, projectId, envUrl, separator);
+            const receivedBindId = officeApiHelper.createBindingId(convertedReportDataMock, tableName, projectId, envUrl, separator);
             // then
             expect(receivedBindId).toEqual(expectedBindId);
         });
@@ -261,10 +261,10 @@ describe('OfficeApiHelper', () => {
                 name: reportName,
             };
             const separator = '-';
-            const startCell = 'someCELL';
-            const expectedBindId = `${reportName}-${startCell}-${reportId}-${projectId}-${envUrl}`;
+            const tableName = 'someTableName';
+            const expectedBindId = `${reportName}-${tableName}-${reportId}-${projectId}-${envUrl}`;
             // when
-            const receivedBindId = officeApiHelper.createBindingId(convertedReportDataMock, startCell, projectId, envUrl, separator);
+            const receivedBindId = officeApiHelper.createBindingId(convertedReportDataMock, tableName, projectId, envUrl, separator);
             // then
             expect(receivedBindId).toEqual(expectedBindId);
         });
@@ -272,18 +272,18 @@ describe('OfficeApiHelper', () => {
             // given
             const convertedReportDataMock = undefined;
             const separator = '-';
-            const startCell = 'someCELL';
+            const tableName = 'someTableName';
             const envUrl = 'someTestUrl';
             const projectId = 'someTestProjectId';
             // when
             const wrongMethodCall = () => {
-                officeApiHelper.createBindingId(convertedReportDataMock, startCell, projectId, envUrl, separator);
+                officeApiHelper.createBindingId(convertedReportDataMock, tableName, projectId, envUrl, separator);
             };
             // then
             expect(wrongMethodCall).toThrowError(OfficeBindingError);
             expect(wrongMethodCall).toThrowError('Missing reportConvertedData');
         });
-        it('should throw error due to missing startCell', () => {
+        it('should throw error due to missing tableName', () => {
             // given
             const reportId = 'someReportId';
             const reportName = 'someReportName';
@@ -293,15 +293,15 @@ describe('OfficeApiHelper', () => {
                 id: reportId,
                 name: reportName,
             };
-            const startCell = undefined;
+            const tableName = undefined;
             const separator = '-';
             // when
             const wrongMethodCall = () => {
-                officeApiHelper.createBindingId(convertedReportDataMock, startCell, projectId, envUrl, separator);
+                officeApiHelper.createBindingId(convertedReportDataMock, tableName, projectId, envUrl, separator);
             };
             // then
             expect(wrongMethodCall).toThrowError(OfficeBindingError);
-            expect(wrongMethodCall).toThrowError('Missing startCell');
+            expect(wrongMethodCall).toThrowError('Missing tableName');
         });
         it('should return proper bindingId despite not providing separator', () => {
             // given
@@ -313,10 +313,10 @@ describe('OfficeApiHelper', () => {
                 id: reportId,
                 name: reportName,
             };
-            const startCell = 'someCELL';
-            const expectedBindId = `${reportName}_${startCell}_${reportId}_${projectId}_${envUrl}`;
+            const tableName = 'someTableName';
+            const expectedBindId = `${reportName}_${tableName}_${reportId}_${projectId}_${envUrl}`;
             // when
-            const receivedBindId = officeApiHelper.createBindingId(convertedReportDataMock, startCell, projectId, envUrl);
+            const receivedBindId = officeApiHelper.createBindingId(convertedReportDataMock, tableName, projectId, envUrl);
             // then
             expect(receivedBindId).toEqual(expectedBindId);
         });
