@@ -15,7 +15,6 @@ class BreadcrumbsService {
         directories.forEach((dir) => {
             historyObjects.push(dir);
         });
-        console.log(historyObjects);
         return historyObjects;
     }
 }

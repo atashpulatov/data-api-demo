@@ -35,7 +35,6 @@ describe.only('office loaded file', () => {
         const wrappedComponent = mount(<OfficeLoadedFile fileName='test' />);
         const buttonsContainer = wrappedComponent.find('Icon');
         // then
-        console.log(buttonsContainer);
         const refreshButton = buttonsContainer.at(0);
         expect(buttonsContainer.length).toBeGreaterThan(0);
         expect(refreshButton.props().type).toEqual('redo');
@@ -52,7 +51,6 @@ describe.only('office loaded file', () => {
             fileName='test'
             onRefresh={onRefreshMocked} />);
         const buttonsContainer = wrappedComponent.childAt(0);
-        console.log(buttonsContainer);
         const refreshButton = buttonsContainer.find('i').at(0);
         refreshButton.props().onClick();
         // then
@@ -69,7 +67,6 @@ describe.only('office loaded file', () => {
             fileName='test'
             onDelete={onDeleteMocked} />);
         const buttonsContainer = wrappedComponent.childAt(0);
-        console.log(buttonsContainer);
         const deleteButton = buttonsContainer.find('i').at(1);
         deleteButton.props().onClick();
         // then

@@ -20,7 +20,6 @@ class _Breadcrumbs extends Component {
     }
 
     navigateToDir(dirId) {
-        console.log('getting back');
         reduxStore.dispatch({
             type: historyProperties.actions.goUpTo,
             dirId: dirId,

@@ -57,6 +57,7 @@ describe('OfficeDisplayService', () => {
             getActiveWorksheetMock.mockReturnValue(mockedWorksheet);
             officeContextMock.workbook.worksheets.getActiveWorksheet = getActiveWorksheetMock;
             const startCell = 'A1';
+            const reportName = 'someReportName';
             const reportConvertedData = {
                 name: 'testName',
                 headers: {
@@ -66,10 +67,10 @@ describe('OfficeDisplayService', () => {
             // when
             const context = officeContextMock;
             // then
-            const result = await officeDisplayService._insertDataIntoExcel(reportConvertedData, context, startCell);
+            const result = await officeDisplayService._insertDataIntoExcel(reportConvertedData, context, startCell, reportName);
             // then
             expect(getActiveWorksheetMock).toBeCalled();
-            expect(result.name).toEqual(`${reportConvertedData.name}${startCell}`);
+            expect(result.name).toEqual(reportName);
         });
     });
     describe.skip('delete report', () => {

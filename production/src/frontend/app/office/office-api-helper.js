@@ -33,7 +33,7 @@ class OfficeApiHelper {
     }
 
     handleOfficeApiException(error) {
-        console.log('error: ' + error);
+        console.error('error: ' + error);
         if (error instanceof OfficeExtension.Error) {
             console.error('Debug info: ' + JSON.stringify(error.debugInfo));
         } else {
@@ -109,7 +109,6 @@ class OfficeApiHelper {
     }
 
     loadExistingReportBindingsExcel = async () => {
-        console.log('in loading reports');
         const context = await this.getOfficeContext();
         const bindingItems = await this._getBindingsFromWorkbook(context);
         const reportArray = this._excelBindingsToStore(bindingItems);
@@ -133,7 +132,6 @@ class OfficeApiHelper {
         await context.sync();
         bindings.load(officeProperties.bindingItems);
         await context.sync();
-        console.log(bindings.items);
         return bindings.items;
     }
 
@@ -148,7 +146,6 @@ class OfficeApiHelper {
         const reportArray = [];
         for (let i = 0; i < bindingArrayLength; i++) {
             const splittedBind = bindings[i].id.split(separator);
-            console.log(splittedBind);
             reportArray.push({
                 id: splittedBind[2],
                 name: splittedBind[0],

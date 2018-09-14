@@ -8,10 +8,8 @@ import './index.css';
 const Office = window.Office;
 
 function officeInitialize() {
-  console.log(Office);
   Office.onReady()
     .then(() => {
-      console.log(Excel);
       goReact();
     });
 }
