@@ -4,6 +4,7 @@ import { ProjectRow } from './project-row.jsx';
 import './project.css';
 import { withNavigation } from '../navigation/with-navigation.jsx';
 import { projectListHelper } from './project-list-helper';
+import { sessionHelper } from '../storage/session-helper';
 /* eslint-enable */
 
 export class _Projects extends Component {
@@ -16,10 +17,12 @@ export class _Projects extends Component {
     }
 
     async componentDidMount() {
+        sessionHelper.enableLoading();
         const projects = await projectListHelper.updateProjectList();
         this.setState({
             projects,
         });
+        sessionHelper.disableLoading();
     }
 
     render() {

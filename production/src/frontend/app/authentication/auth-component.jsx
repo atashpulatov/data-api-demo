@@ -4,6 +4,7 @@ import { authenticationService } from './auth-rest-service';
 import { sessionProperties } from '../storage/session-properties';
 import { reduxStore } from '../store';
 import { withNavigation } from '../navigation/with-navigation.jsx';
+import { sessionHelper } from '../storage/session-helper';
 
 export class _Authenticate extends React.Component {
     constructor(props) {
@@ -50,6 +51,7 @@ export class _Authenticate extends React.Component {
             envUrl: this.state.envUrl,
             isRememberMeOn: this.state.isRememberMeOn,
         });
+        sessionHelper.enableLoading();
         let authToken = await authenticationService.authenticate(
             this.state.username, this.state.password,
             this.state.envUrl, this.state.authMode);
@@ -59,6 +61,7 @@ export class _Authenticate extends React.Component {
                 authToken: authToken,
             });
         }
+        sessionHelper.disableLoading();
     }
 
     render() {

@@ -5,6 +5,7 @@ import { reduxStore } from '../store';
 import { officeProperties } from './office-properties';
 import { message } from 'antd';
 import { globalDefinitions } from '../global-definitions';
+import { sessionHelper } from '../storage/session-helper';
 
 const separator = globalDefinitions.reportBindingIdSeparator;
 
@@ -15,6 +16,7 @@ class OfficeDisplayService {
     }
 
     async printObject(objectId) {
+        sessionHelper.enableLoading();
         const context = await officeApiHelper.getOfficeContext();
         const startCell = await this._getSelectedCell(context);
         let jsonData = await mstrObjectRestService.getObjectContent(objectId);
@@ -33,6 +35,7 @@ class OfficeDisplayService {
             projectId,
         });
         await context.sync();
+        sessionHelper.disableLoading();
         message.success(`Loaded report: ${convertedReport.name}`);
     }
 

@@ -20,6 +20,7 @@ export const historyReducer = (state = {}, action) => {
 };
 
 function onGoInsideProject(action, state) {
+    console.log('going inside project');
     if (!action.projectId) {
         throw new HistoryError('Missing projectId.');
     }

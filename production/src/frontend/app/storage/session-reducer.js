@@ -9,6 +9,8 @@ export const sessionReducer = (state = {}, action) => {
             return onLogOut(action, state);
         case sessionProperties.actions.loggedIn:
             return onLoggedIn(action, state);
+        case sessionProperties.actions.setLoading:
+            return onSetLoading(action, state);
     }
     return state;
 };
@@ -46,5 +48,15 @@ function onLoggedIn(action, state) {
     return {
         ...state,
         authToken: action.authToken,
+    };
+}
+
+function onSetLoading(action, state) {
+    if (typeof action.loading === 'undefined') {
+        throw new SessionError('Missing loading');
+    }
+    return {
+        ...state,
+        loading: action.loading,
     };
 }

@@ -3,6 +3,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Home } from './home/home.jsx';
 import registerServiceWorker from './registerServiceWorker';
+import { reduxStore, reduxPersistor } from './store';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/lib/integration/react';
 import './index.css';
 /* eslint-enable */
 const Office = window.Office;
@@ -16,7 +19,11 @@ function officeInitialize() {
 
 function goReact() {
   ReactDOM.render(
-    <Home />
+    <Provider store={reduxStore}>
+      <PersistGate persistor={reduxPersistor}>
+        <Home loading={false} />
+      </PersistGate>
+    </Provider>
     , document.getElementById('root')
   );
 }

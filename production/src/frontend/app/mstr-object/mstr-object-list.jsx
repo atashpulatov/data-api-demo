@@ -7,6 +7,7 @@ import { reduxStore } from '../store';
 import { connect } from 'react-redux';
 import { withNavigation } from '../navigation/with-navigation.jsx';
 import { mstrObjectListHelper } from './mstr-object-list-helper';
+import { sessionHelper } from '../storage/session-helper';
 /* eslint-enable */
 
 const objectsTypesMap = {
@@ -26,10 +27,12 @@ export class _MstrObjects extends React.Component {
 
     async componentDidMount() {
         const dirArray = reduxStore.getState().historyReducer.directoryArray;
+        sessionHelper.enableLoading();
         const data = await mstrObjectListHelper.fetchContent(dirArray);
         this.setState({
             mstrObjects: data,
         });
+        sessionHelper.disableLoading();
     }
 
     async componentDidUpdate() {
@@ -40,6 +43,7 @@ export class _MstrObjects extends React.Component {
             this.setState({
                 mstrObjects: data,
             });
+            sessionHelper.disableLoading();
         }
     }
 

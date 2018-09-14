@@ -4,6 +4,7 @@ import { sessionProperties } from '../storage/session-properties';
 import { UnauthorizedError } from '../error/unauthorized-error';
 import { historyProperties } from '../history/history-properties';
 import { officeApiHelper } from '../office/office-api-helper';
+import { sessionHelper } from '../storage/session-helper';
 
 class ProjectListHelper {
     async updateProjectList() {
@@ -24,13 +25,13 @@ class ProjectListHelper {
         };
     }
 
-    projectChosen(projectId, projectName) {
+    async projectChosen(projectId, projectName) {
         reduxStore.dispatch({
             type: historyProperties.actions.goInsideProject,
             projectId: projectId,
             projectName: projectName,
         });
-        officeApiHelper.loadExistingReportBindingsExcel();
+        await officeApiHelper.loadExistingReportBindingsExcel();
     }
 }
 
