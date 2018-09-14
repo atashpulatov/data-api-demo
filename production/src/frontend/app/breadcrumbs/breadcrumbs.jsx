@@ -2,7 +2,8 @@
 import React, { Component } from 'react';
 import { historyProperties } from '../history/history-properties';
 import { breadcrumbsService } from './breadcrumb-service';
-import { Breadcrumb } from './breadcrumb.jsx';
+import { CustomBreadcrumb } from './breadcrumb.jsx';
+import { Breadcrumb } from 'antd';
 import './breadcrumbs.css';
 import { reduxStore } from '../store';
 import { connect } from 'react-redux';
@@ -36,14 +37,20 @@ class _Breadcrumbs extends Component {
         }
         return (
             <div>
-                <ul className='breadcrumb'>
+                <header className='mstr-objects'>
+                    All Files
+                </header>
+                <hr />
+                <Breadcrumb
+                    style={{ marginLeft: '25px', marginRight: '25px' }}>
                     {historyObjects
                         .map((object) => (
-                            <Breadcrumb key={object.dirId}
+                            <CustomBreadcrumb key={object.dirId}
                                 object={object}
                                 onClick={this.navigateToDir} />
                         ))}
-                </ul>
+                </Breadcrumb>
+                <hr />
             </div>
         );
     }

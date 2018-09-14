@@ -50,10 +50,6 @@ export class _MstrObjects extends React.Component {
     render() {
         return (
             <article className='objects-container'>
-                <header className='mstr-objects'>
-                    All Files
-                </header>
-                <hr />
                 <ul className='no-padding object-list'>
                     {this.state.mstrObjects
                         .filter((obj) => objectsTypesMap.directory === obj.type)

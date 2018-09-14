@@ -19,8 +19,8 @@ export class _Home extends Component {
         <div id='content'>
           <Header />
           <MenuBar />
-          <Breadcrumbs />
           <FileHistoryContainer />
+          <Breadcrumbs />
           <Spin spinning={this.props.loading}>
             <Routes />
           </Spin>
