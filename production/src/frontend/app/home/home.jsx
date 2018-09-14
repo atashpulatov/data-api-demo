@@ -20,7 +20,7 @@ export class _Home extends Component {
           <Header />
           <MenuBar />
           <FileHistoryContainer />
-          <Breadcrumbs />
+          <Breadcrumbs /> // TODO: create tests for spinner functionality
           <Spin spinning={this.props.loading}>
             <Routes />
           </Spin>

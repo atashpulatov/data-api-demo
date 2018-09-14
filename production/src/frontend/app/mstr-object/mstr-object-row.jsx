@@ -5,7 +5,7 @@ import fileImg from './images/baseline_attachment_black_18dp.png';
 /* eslint-enable */
 
 export const DirectoryRow = ({ directory, onClick }) => (
-    <li className='cursor-is-pointer row'
+    <li className='cursor-is-pointer row'   // TODO: refactor it to arrow functions
         onClick={onClick.bind(null, directory.id, directory.name)}>
             <img className='object cursor-is-pointer' src={directoryImg} />
             <label className='object cursor-is-pointer'>{directory.name}</label>
