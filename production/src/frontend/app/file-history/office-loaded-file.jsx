@@ -2,6 +2,7 @@
 import React from 'react';
 import { Icon, Row, Col } from 'antd';
 import { message } from 'antd';
+import { sessionHelper } from '../storage/session-helper';
 /* eslint-enable */
 
 export const OfficeLoadedFile = ({ fileName, bindingId, onClick, onRefresh, onDelete }) => (
@@ -15,17 +16,29 @@ export const OfficeLoadedFile = ({ fileName, bindingId, onClick, onRefresh, onDe
         <Col span={14} onClick={() => onClick(bindingId)}>
             {fileName}
         </Col>
-        <Col span={1} onClick={() => {
-            onRefresh(bindingId);
-            message.info(`Report refreshed.`);
+        <Col span={1} onClick={async () => {
+            await refreshReport(onRefresh, bindingId);
         }}>
             <Icon type='redo' />
         </Col>
         <Col span={1} offset={2} onClick={async () => {
-            await onDelete(bindingId);
-            message.info(`Removed report`);
+            await deleteReport(onDelete, bindingId);
         }}>
             <Icon type='delete' />
         </Col>
     </Row >
 );
+
+async function refreshReport(onRefresh, bindingId) {
+    sessionHelper.enableLoading();
+    await onRefresh(bindingId);
+    message.info('Report refreshed.');
+    sessionHelper.disableLoading();
+}
+
+async function deleteReport(onDelete, bindingId) {
+    sessionHelper.enableLoading();
+    await onDelete(bindingId);
+    message.info('Report removed');
+    sessionHelper.disableLoading();
+}
