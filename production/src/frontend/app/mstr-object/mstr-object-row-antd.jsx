@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React from 'react';
-import { Row, Col, Icon } from 'antd';
+import { Row, Col, Icon, message } from 'antd';
 /* eslint-enable */
 
 export const DirectoryRow = ({ directory, onClick }) => (
@@ -22,7 +22,10 @@ export const ReportRow = ({ report, onClick }) => (
     <Row
         type='flex'
         className='cursor-is-pointer row'
-        onClick={() => onClick(report.id)}>
+        onClick={ async () => {
+            await onClick(report.id);
+            message.success(`Loaded report: ${report.name}`);
+        }}>
         <Col>
             <Icon type="file-text" theme="outlined" />
         </Col>

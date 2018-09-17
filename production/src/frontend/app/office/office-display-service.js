@@ -36,7 +36,6 @@ class OfficeDisplayService {
         });
         await context.sync();
         sessionHelper.disableLoading();
-        message.success(`Loaded report: ${convertedReport.name}`);
     }
 
     addReportToStore(report) {
@@ -63,8 +62,18 @@ class OfficeDisplayService {
             type: officeProperties.actions.removeReport,
             reportBindId: bindingId,
         });
-        context.sync();
-        message.info(`Removed report`);
+        return await context.sync();
+    }
+
+    async refreshReport(bindingId) {
+        const context = await officeApiHelper.getOfficeContext();
+        const range = officeApiHelper.getBindingRange(context, bindingId);
+        const binding = await context.workbook.bindings
+            .getItem(bindingId);
+        binding.delete();
+        range.clear('All');
+
+        return await context.sync();
     }
 
     async _insertDataIntoExcel(reportConvertedData, context, startCell, tableName) {
