@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, { Component } from 'react';
-import { ProjectRow } from './project-row.jsx';
+import { ProjectRow } from './project-row-antd.jsx';
 import './project.css';
 import { withNavigation } from '../navigation/with-navigation.jsx';
 import { projectListHelper } from './project-list-helper';

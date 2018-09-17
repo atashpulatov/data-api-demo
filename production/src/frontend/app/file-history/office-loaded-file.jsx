@@ -7,14 +7,17 @@ export const OfficeLoadedFile = ({ fileName, bindingId, onClick, onRefresh, onDe
     <Row
         className="cursor-is-pointer"
         type="flex"
-        justify="space-around">
-        <Col span={7} onClick={() => onClick(bindingId)}>
+        justify="center">
+        <Col span={2}>
+            <Icon type="file-text" theme="outlined" />
+        </Col>
+        <Col span={14} onClick={() => onClick(bindingId)}>
             {fileName}
         </Col>
-        <Col span={1} offset={4} onClick={() => onRefresh(bindingId)}>
+        <Col span={1} onClick={() => onRefresh(bindingId)}>
             <Icon type='redo' />
         </Col>
-        <Col span={1} onClick={() => onDelete(bindingId)}>
+        <Col span={1} offset={2} onClick={() => onDelete(bindingId)}>
             <Icon type='delete' />
         </Col>
     </Row >

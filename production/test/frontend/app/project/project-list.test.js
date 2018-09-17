@@ -87,7 +87,8 @@ describe('ProjectList', () => {
             expect(projectRow).toBeDefined();
 
             // should have name and alias
-            expect(row.find('label').text()).toBeTruthy();
+            expect(row.find('Icon').at(0).props().type).toEqual('project');
+            expect(row.find('Col').at(1).text()).toBeTruthy();
         });
     });
 
@@ -96,7 +97,7 @@ describe('ProjectList', () => {
         // when
         const componentWrapper = await mountAndReturn();
         const items = componentWrapper.find('ul');
-        const projectRowLi = items.childAt(0).find('li');
+        const projectRowLi = items.find('Row').at(0);
         // then
         expect(projectRowLi.hasClass('cursor-is-pointer')).toBeTruthy();
     });
@@ -106,10 +107,10 @@ describe('ProjectList', () => {
         // when
         const componentWrapper = await mountAndReturn();
         const items = componentWrapper.find('ul');
-        const firstItem = items.childAt(0);
+        const firstItem = items.find('Row').at(0);
 
         // then
-        expect(firstItem.find('li').props().onClick).toBeDefined();
+        expect(firstItem.props().onClick).toBeDefined();
     });
 
     it('shoud row be reponsive', async () => {
@@ -121,13 +122,13 @@ describe('ProjectList', () => {
             // when
             const componentWrapper = await mountAndReturn();
             const items = componentWrapper.find('ul');
-            const firstItem = items.childAt(0);
+            const firstItem = items.find('Row').at(0);
 
-            firstItem.find('li').simulate('click');
+            firstItem.simulate('click');
 
             // then
             expect(mockClick).toBeCalled();
-            expect(originalMethod).toBeDefined();   
+            expect(originalMethod).toBeDefined();
         } finally {
             projectListHelper.projectChosen = originalMethod;
         }
@@ -140,11 +141,11 @@ describe('ProjectList', () => {
         const wrappedProvider = await mountAndReturn();
 
         const items = wrappedProvider.find('ul');
-        const firstItem = items.childAt(0);
+        const firstItem = items.find('Row').at(0);
         expect(reduxStore.getState().historyReducer.project).not.toBeDefined();
 
         // when
-        firstItem.find('li').simulate('click');
+        firstItem.simulate('click');
 
         // then
         const savedProject = reduxStore.getState().historyReducer.project;
