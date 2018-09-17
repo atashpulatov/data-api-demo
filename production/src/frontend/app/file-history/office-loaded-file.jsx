@@ -15,7 +15,10 @@ export const OfficeLoadedFile = ({ fileName, bindingId, onClick, onRefresh, onDe
         <Col span={14} onClick={() => onClick(bindingId)}>
             {fileName}
         </Col>
-        <Col span={1} onClick={() => onRefresh(bindingId)}>
+        <Col span={1} onClick={() => {
+            onRefresh(bindingId);
+            message.info(`Report refreshed.`);
+        }}>
             <Icon type='redo' />
         </Col>
         <Col span={1} offset={2} onClick={async () => {

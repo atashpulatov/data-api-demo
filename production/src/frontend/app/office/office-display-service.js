@@ -13,12 +13,16 @@ class OfficeDisplayService {
     constructor() {
         this.insertDataIntoExcel = this._insertDataIntoExcel.bind(this);
         this.printObject = this.printObject.bind(this);
+        this.removeReportFromExcel = this.removeReportFromExcel.bind(this);
+        this.refreshReport = this.refreshReport.bind(this);
     }
 
-    async printObject(objectId) {
+    async printObject(objectId, startCell) {
         sessionHelper.enableLoading();
         const context = await officeApiHelper.getOfficeContext();
-        const startCell = await this._getSelectedCell(context);
+        if (!startCell) {
+            startCell = await this._getSelectedCell(context);
+        }
         let jsonData = await mstrObjectRestService.getObjectContent(objectId);
         let convertedReport = officeConverterService
             .getConvertedTable(jsonData);
@@ -66,14 +70,14 @@ class OfficeDisplayService {
     }
 
     async refreshReport(bindingId) {
-        const context = await officeApiHelper.getOfficeContext();
-        const range = officeApiHelper.getBindingRange(context, bindingId);
-        const binding = await context.workbook.bindings
-            .getItem(bindingId);
-        binding.delete();
-        range.clear('All');
-
-        return await context.sync();
+        let context = await officeApiHelper.getOfficeContext();
+        let range = officeApiHelper.getBindingRange(context, bindingId);
+        range.load();
+        await context.sync();
+        const startCell = range.address.split('!')[1].split(':')[0];
+        const bindIdItems = bindingId.split(globalDefinitions.reportBindingIdSeparator);
+        await this.removeReportFromExcel(bindingId);
+        await this.printObject(bindIdItems[2], startCell);
     }
 
     async _insertDataIntoExcel(reportConvertedData, context, startCell, tableName) {
