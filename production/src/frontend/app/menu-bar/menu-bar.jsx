@@ -14,13 +14,17 @@ export class _MenuBar extends Component {
                 <div className='menu-bar-container'>
                     <div className='menu-bar-nav-container'>
                         <Tooltip placement="bottomLeft" title='Back'>
-                            <button className='menu menu-nav'
+                            <button
+                                className='menu menu-nav'
+                                id='goBack'
                                 onClick={menuBarService.goUp}>
                                 <Icon type='left' />
                             </button>
                         </Tooltip>
                         <Tooltip placement="bottom" title='Go top'>
-                            <button className='menu menu-nav'
+                            <button
+                                className='menu menu-nav'
+                                id='goTop'
                                 onClick={menuBarService.goProjects}>
                                 <Icon type='double-left' />
                             </button>
@@ -28,13 +32,17 @@ export class _MenuBar extends Component {
                     </div>
                     <div className='menu-bar-options-container'>
                         <Tooltip placement="bottom" title='Log out'>
-                            <button className='menu menu-options'
+                            <button
+                                className='menu menu-options'
+                                id='logOut'
                                 onClick={menuBarService.logOut}>
                                 <Icon type='logout' />
                             </button>
                         </Tooltip>
                         <Tooltip placement="bottomRight" title='Settings'>
-                            <button className='menu menu-options'>
+                            <button
+                                className='menu menu-options'
+                                id='settings'>
                                 <Icon type='setting' />
                             </button>
                         </Tooltip>

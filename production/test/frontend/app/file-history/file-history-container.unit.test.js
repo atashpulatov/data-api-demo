@@ -52,7 +52,7 @@ describe('FileHistoryContainer', () => {
                 reportArray={mockFiles}
                 project={'testProject'} />
         );
-        const wrappedListElements = wrappedComponent.find('li');
+        const wrappedListElements = wrappedComponent.find('Row');
         // then
         expect(wrappedComponent.html()).not.toContain('No files loaded.');
         expect(wrappedListElements.length).toEqual(mockFiles.length);

@@ -11,7 +11,7 @@ describe.only('office loaded file', () => {
         // when
         const wrappedComponent = mount(<OfficeLoadedFile fileName='test' />);
         // then
-        expect(wrappedComponent.find('li').hasClass('cursor-is-pointer')).toBeTruthy();
+        expect(wrappedComponent.find('Row').hasClass('cursor-is-pointer')).toBeTruthy();
         expect(wrappedComponent.html()).toContain('test');
     });
     it('should invoke select method on report name click', () => {
@@ -23,9 +23,8 @@ describe.only('office loaded file', () => {
             onClick={onClickMocked}
             fileName='test' />);
         // when
-        const textWrapper = wrappedComponent.childAt(0).find('span');
-        textWrapper.props().onClick();
-        // then
+        const textWrapper = wrappedComponent.childAt(0).find('Col');
+        textWrapper.at(0).simulate('click');
         expect(onClickMocked).toBeCalled();
         expect(onClickMocked).toBeCalledWith(testBindingId);
     });
@@ -50,8 +49,8 @@ describe.only('office loaded file', () => {
             bindingId={testBindingId}
             fileName='test'
             onRefresh={onRefreshMocked} />);
-        const buttonsContainer = wrappedComponent.childAt(0);
-        const refreshButton = buttonsContainer.find('i').at(0);
+        const buttonsContainer = wrappedComponent.childAt(0).find('Col');
+        const refreshButton = buttonsContainer.at(1);
         refreshButton.props().onClick();
         // then
         expect(onRefreshMocked).toBeCalled();
@@ -66,8 +65,8 @@ describe.only('office loaded file', () => {
             bindingId={testBindingId}
             fileName='test'
             onDelete={onDeleteMocked} />);
-        const buttonsContainer = wrappedComponent.childAt(0);
-        const deleteButton = buttonsContainer.find('i').at(1);
+        const buttonsContainer = wrappedComponent.childAt(0).find('Col');
+        const deleteButton = buttonsContainer.at(2);
         deleteButton.props().onClick();
         // then
         expect(onDeleteMocked).toBeCalled();
@@ -86,7 +85,7 @@ describe.only('office loaded file', () => {
             fileName='test'
             onRefresh={onRefreshMocked}
             onDelete={onDeleteMocked} />);
-        const textWrapper = wrappedComponent.childAt(0).find('span');
+        const textWrapper = wrappedComponent.childAt(0).find('Col').at(0);
         textWrapper.props().onClick();
         // then
         expect(onClickMocked).toBeCalled();
