@@ -7,7 +7,7 @@ import './breadcrumbs.css';
 import { connect } from 'react-redux';
 /* eslint-enable */
 
-class _Breadcrumbs extends Component {
+export class _Breadcrumbs extends Component {
     render() {
         const historyObjects = breadcrumbsService.getHistoryObjects();
         return (
@@ -34,7 +34,6 @@ class _Breadcrumbs extends Component {
         );
     }
 }
-
 
 function mapStateToProps(state) {
     return {
