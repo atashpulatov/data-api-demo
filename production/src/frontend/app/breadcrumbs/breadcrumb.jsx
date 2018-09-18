@@ -14,6 +14,5 @@ export const CustomBreadcrumb = ({ object, onClick }) => (
         <a className='breadcrumb'>
             {object.projectName || object.dirName}
         </a>
-    </BreadcrumbItem>
+    </BreadcrumbItem >
 );
-

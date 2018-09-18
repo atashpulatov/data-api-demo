@@ -5,6 +5,7 @@ import { InternalServerError } from './internal-server-error.js';
 import { sessionHelper } from '../storage/session-helper.js';
 
 export let errorHandler = (error) => {
+    // TODO: is it proper place for disabling spinner?
     sessionHelper.disableLoading();
     if (!error.response || error.response.status === 404) {
         throw new EnvironmentNotFoundError();

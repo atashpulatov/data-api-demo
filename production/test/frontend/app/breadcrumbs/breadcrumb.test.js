@@ -35,13 +35,34 @@ describe('Breadcrumb', () => {
         };
         const mockMethod = jest.fn();
         // when
-        const componentWrapper = mount(<CustomBreadcrumb object={object} onClick={mockMethod} />);
-        // const breadcrumbWrapper = componentWrapper.find('CustomBreadcrumb');
-        componentWrapper.childAt(0).simulate('click');
+        const componentWrapper = mount(<CustomBreadcrumb
+            object={object}
+            onClick={mockMethod} />);
+        const nestedComponent = componentWrapper.find('BreadcrumbItem');
+        nestedComponent.prop('onClick')();
         const linkCollection = componentWrapper.find('a');
         // then
         expect(linkCollection.at(0).html()).toContain(object.dirName);
         expect(mockMethod).toHaveBeenCalled();
         expect(mockMethod).toHaveBeenCalledWith(object.dirId);
+    });
+    it('should invoke proper method on click for projectName', () => {
+        // given
+        const object = {
+            projectId: 'testId',
+            projectName: 'testName',
+        };
+        const mockMethod = jest.fn();
+        // when
+        const componentWrapper = mount(<CustomBreadcrumb
+            object={object}
+            onClick={mockMethod} />);
+        const nestedComponent = componentWrapper.find('BreadcrumbItem');
+        nestedComponent.prop('onClick')();
+        const linkCollection = componentWrapper.find('a');
+        // then
+        expect(linkCollection.at(0).html()).toContain(object.projectName);
+        expect(mockMethod).toHaveBeenCalled();
+        expect(mockMethod).toHaveBeenCalledWith(object.projectId);
     });
 });
