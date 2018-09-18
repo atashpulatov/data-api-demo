@@ -51,7 +51,8 @@ export class _Authenticate extends React.Component {
             envUrl: this.state.envUrl,
             isRememberMeOn: this.state.isRememberMeOn,
         });
-        sessionHelper.enableLoading();
+        sessionHelper.enableLoading();  
+        console.log('in onLoginUser');
         let authToken = await authenticationService.authenticate(
             this.state.username, this.state.password,
             this.state.envUrl, this.state.authMode);

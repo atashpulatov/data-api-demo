@@ -35,7 +35,6 @@ export function withNavigation(WrappedComponent) {
          * 3) If not, it renavigates
          */
         conditionallyRenavigate() {
-            console.log('in navigation');
             const pathToProperComponent =
                 navigationService.getNavigationRoute();
             if (pathToProperComponent.pathname
