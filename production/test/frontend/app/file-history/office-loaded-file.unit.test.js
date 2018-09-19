@@ -5,7 +5,7 @@ import { mount } from 'enzyme';
 import { OfficeLoadedFile } from '../../../../src/frontend/app/file-history/office-loaded-file';
 /* eslint-enable */
 
-describe.only('office loaded file', () => {
+describe('office loaded file', () => {
     it('should display provided file name', () => {
         // given
         // when

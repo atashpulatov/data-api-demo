@@ -3,7 +3,6 @@ import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { officeConverterService } from './office-converter-service';
 import { reduxStore } from '../store';
 import { officeProperties } from './office-properties';
-import { message } from 'antd';
 import { globalDefinitions } from '../global-definitions';
 import { sessionHelper } from '../storage/session-helper';
 
@@ -21,7 +20,7 @@ class OfficeDisplayService {
         sessionHelper.enableLoading();
         const context = await officeApiHelper.getOfficeContext();
         if (!startCell) {
-            startCell = await this._getSelectedCell(context);
+            startCell = await officeApiHelper.getSelectedCell(context);
         }
         let jsonData = await mstrObjectRestService.getObjectContent(objectId);
         let convertedReport = officeConverterService
@@ -30,7 +29,9 @@ class OfficeDisplayService {
         const mstrTable = await this._insertDataIntoExcel(convertedReport, context, startCell, tableName);
         const { envUrl, projectId } = officeApiHelper.getCurrentMstrContext();
         const bindingId = officeApiHelper.createBindingId(convertedReport, tableName, projectId, envUrl, separator);
-        context.workbook.bindings.add(mstrTable.getRange(), 'Table', bindingId);
+        await context.sync();
+        officeApiHelper.bindNamedItem(tableName, bindingId);
+        // context.workbook.bindings.add(mstrTable.getRange(), 'Table', bindingId);
         this.addReportToStore({
             id: convertedReport.id,
             name: convertedReport.name,
@@ -38,10 +39,10 @@ class OfficeDisplayService {
             envUrl,
             projectId,
         });
-        await context.sync();
         sessionHelper.disableLoading();
     }
 
+    // TODO: move it to api helper?
     addReportToStore(report) {
         reduxStore.dispatch({
             type: officeProperties.actions.loadReport,
@@ -89,19 +90,10 @@ class OfficeDisplayService {
         mstrTable.name = tableName;
         mstrTable.getHeaderRowRange().values = [reportConvertedData.headers];
         this._pushRows(reportConvertedData, mstrTable);
-        this._formatTable(sheet);
+        officeApiHelper.formatTable(sheet);
         sheet.activate();
         // tableBinding.onDataChanged.add(officeApiHelper.onBindingDataChanged);
         return mstrTable;
-    }
-
-    _formatTable(sheet) {
-        if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
-            sheet.getUsedRange().format.autofitColumns();
-            sheet.getUsedRange().format.autofitRows();
-        } else {
-            message.warning(`Unable to format table.`);
-        }
     }
 
     _pushRows(reportConvertedData, mstrTable) {
@@ -109,15 +101,6 @@ class OfficeDisplayService {
             .map((item) => reportConvertedData.headers
                 .map((header) => item[header]));
         mstrTable.rows.add(null, dataRows);
-    }
-
-    async _getSelectedCell(context) {
-        // TODO: handle more than one cell selected
-        const selectedRangeStart = context.workbook.getSelectedRange();
-        selectedRangeStart.load(officeProperties.officeAddress);
-        await context.sync();
-        const startCell = selectedRangeStart.address.split('!')[1];
-        return startCell;
     }
 }
 

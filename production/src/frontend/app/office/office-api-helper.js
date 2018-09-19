@@ -68,7 +68,7 @@ class OfficeApiHelper {
         });
     }
 
-    async findAvailableTableName(reportName, context){
+    async findAvailableTableName(reportName, context) {
         let nameExists = true;
         let tableIncrement = 0;
         const tableName = reportName;
@@ -155,6 +155,35 @@ class OfficeApiHelper {
             });
         }
         return reportArray;
+    }
+
+    formatTable(sheet) {
+        if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
+            sheet.getUsedRange().format.autofitColumns();
+            sheet.getUsedRange().format.autofitRows();
+        } else {
+            message.warning(`Unable to format table.`);
+        }
+    }
+
+    async getSelectedCell(context) {
+        // TODO: handle more than one cell selected
+        const selectedRangeStart = context.workbook.getSelectedRange();
+        selectedRangeStart.load(officeProperties.officeAddress);
+        await context.sync();
+        const startCell = selectedRangeStart.address.split('!')[1];
+        return startCell;
+    }
+
+    async bindNamedItem(namedItem, bindingId) {
+        return await Office.context.document.bindings.addFromNamedItemAsync(
+            namedItem, 'table', { id: bindingId }, (result) => {
+                if (result.status == 'succeeded') {
+                    console.log('Added new binding with type: ' + result.value.type + ' and id: ' + result.value.id);
+                } else {
+                    console.error('Error: ' + result.error.message);
+                }
+            });
     }
 }
 
