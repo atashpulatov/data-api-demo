@@ -1,6 +1,4 @@
 import { reduxStore } from '../store';
-import { sessionProperties } from '../storage/session-properties';
-import { historyProperties } from '../history/history-properties';
 
 class NavigationService {
     getLoginRoute() {
