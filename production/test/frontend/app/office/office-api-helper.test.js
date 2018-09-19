@@ -1,8 +1,10 @@
 /* eslint-disable */
 import { officeApiHelper } from '../../../../src/frontend/app/office/office-api-helper';
 import { IncorrectInputTypeError } from '../../../../src/frontend/app/office/incorrect-input-type';
-import { OfficeExtension } from './__mock__object__/OfficeExtension';
-import { OfficeError } from '../../../../src/frontend/app/office/office-error';
+import { OfficeError, OfficeBindingError } from '../../../../src/frontend/app/office/office-error';
+import { reduxStore } from '../../../../src/frontend/app/store';
+import { sessionProperties } from '../../../../src/frontend/app/storage/session-properties';
+import { historyProperties } from '../../../../src/frontend/app/history/history-properties';
 /* eslint-enable */
 
 describe('OfficeApiHelper', () => {
@@ -133,37 +135,47 @@ describe('OfficeApiHelper', () => {
     it('should return proper bindingsArray', () => {
         // given
         const entryArray = [
-            { id: 'SimpleReport_B2_BD1E844211E85FF536AB0080EFB5F215' },
-            { id: 'ComplexReport_DB5_BD1E84FF536AB0080EFB5F215' },
-            { id: 'Simple_B542_BD1E844211E85FF53EFB5F215' },
-            { id: 'Report_B22222_BD11E85FF536AB0080EFB5F215' },
-            { id: 'port_BASDFFF2_4211E85FF536AB0080EFB5F215' },
+            { id: 'SimpleReport_B2_BD1E844211E85FF536AB0080EFB5F215_projectId_envUrl' },
+            { id: 'ComplexReport_DB5_BD1E84FF536AB0080EFB5F215_projectId_envUrl' },
+            { id: 'Simple_B542_BD1E844211E85FF53EFB5F215_projectId_envUrl' },
+            { id: 'Report_B22222_BD11E85FF536AB0080EFB5F215_projectId_envUrl' },
+            { id: 'port_BASDFFF2_4211E85FF536AB0080EFB5F215_projectId_envUrl' },
         ];
         const resultExpectedArray = [
             {
                 id: 'BD1E844211E85FF536AB0080EFB5F215',
                 name: 'SimpleReport',
-                bindId: 'SimpleReport_B2_BD1E844211E85FF536AB0080EFB5F215',
+                bindId: 'SimpleReport_B2_BD1E844211E85FF536AB0080EFB5F215_projectId_envUrl',
+                projectId: 'projectId',
+                envUrl: 'envUrl',
             },
             {
                 id: 'BD1E84FF536AB0080EFB5F215',
                 name: 'ComplexReport',
-                bindId: 'ComplexReport_DB5_BD1E84FF536AB0080EFB5F215',
+                bindId: 'ComplexReport_DB5_BD1E84FF536AB0080EFB5F215_projectId_envUrl',
+                projectId: 'projectId',
+                envUrl: 'envUrl',
             },
             {
                 id: 'BD1E844211E85FF53EFB5F215',
                 name: 'Simple',
-                bindId: 'Simple_B542_BD1E844211E85FF53EFB5F215',
+                bindId: 'Simple_B542_BD1E844211E85FF53EFB5F215_projectId_envUrl',
+                projectId: 'projectId',
+                envUrl: 'envUrl',
             },
             {
                 id: 'BD11E85FF536AB0080EFB5F215',
                 name: 'Report',
-                bindId: 'Report_B22222_BD11E85FF536AB0080EFB5F215',
+                bindId: 'Report_B22222_BD11E85FF536AB0080EFB5F215_projectId_envUrl',
+                projectId: 'projectId',
+                envUrl: 'envUrl',
             },
             {
                 id: '4211E85FF536AB0080EFB5F215',
                 name: 'port',
-                bindId: 'port_BASDFFF2_4211E85FF536AB0080EFB5F215',
+                bindId: 'port_BASDFFF2_4211E85FF536AB0080EFB5F215_projectId_envUrl',
+                projectId: 'projectId',
+                envUrl: 'envUrl',
             },
         ];
         // when
@@ -192,5 +204,121 @@ describe('OfficeApiHelper', () => {
         // then
         expect(wrongMethodCall).toThrowError(OfficeError);
         expect(wrongMethodCall).toThrowError('Bindings must be of Array type!');
+    });
+    it('should return current mstr context data', () => {
+        // given
+        const project = {
+            projectId: 'testProjectId',
+            projectName: 'testProjectName',
+        };
+        const envUrl = 'testEnvUrl';
+        const username = 'testusername';
+        reduxStore.dispatch({
+            type: sessionProperties.actions.logIn,
+            username,
+            envUrl,
+            password: '',
+        });
+        reduxStore.dispatch({
+            type: historyProperties.actions.goInsideProject,
+            projectId: project.projectId,
+            projectName: project.projectName,
+        });
+        // when
+        const result = officeApiHelper.getCurrentMstrContext();
+        // then
+        expect(result.envUrl).toBe(envUrl);
+        expect(result.projectId).toBe(project.projectId);
+        expect(result.username).toBe(username);
+    });
+    describe('createBindingId', () => {
+        it('should return proper bindingId', () => {
+            // given
+            const reportId = 'someReportId';
+            const reportName = 'someReportName';
+            const envUrl = 'someTestUrl';
+            const projectId = 'someTestProjectId';
+            const convertedReportDataMock = {
+                id: reportId,
+                name: reportName,
+            };
+            const separator = '_';
+            const tableName = 'someTableName';
+            const expectedBindId = `${reportName}_${tableName}_${reportId}_${projectId}_${envUrl}`;
+            // when
+            const receivedBindId = officeApiHelper.createBindingId(convertedReportDataMock, tableName, projectId, envUrl, separator);
+            // then
+            expect(receivedBindId).toEqual(expectedBindId);
+        });
+        it('should return proper bindingId with different separator', () => {
+            // given
+            const reportId = 'someReportId';
+            const reportName = 'someReportName';
+            const envUrl = 'someTestUrl';
+            const projectId = 'someTestProjectId';
+            const convertedReportDataMock = {
+                id: reportId,
+                name: reportName,
+            };
+            const separator = '-';
+            const tableName = 'someTableName';
+            const expectedBindId = `${reportName}-${tableName}-${reportId}-${projectId}-${envUrl}`;
+            // when
+            const receivedBindId = officeApiHelper.createBindingId(convertedReportDataMock, tableName, projectId, envUrl, separator);
+            // then
+            expect(receivedBindId).toEqual(expectedBindId);
+        });
+        it('should throw error due to missing convertedReportData', () => {
+            // given
+            const convertedReportDataMock = undefined;
+            const separator = '-';
+            const tableName = 'someTableName';
+            const envUrl = 'someTestUrl';
+            const projectId = 'someTestProjectId';
+            // when
+            const wrongMethodCall = () => {
+                officeApiHelper.createBindingId(convertedReportDataMock, tableName, projectId, envUrl, separator);
+            };
+            // then
+            expect(wrongMethodCall).toThrowError(OfficeBindingError);
+            expect(wrongMethodCall).toThrowError('Missing reportConvertedData');
+        });
+        it('should throw error due to missing tableName', () => {
+            // given
+            const reportId = 'someReportId';
+            const reportName = 'someReportName';
+            const envUrl = 'someTestUrl';
+            const projectId = 'someTestProjectId';
+            const convertedReportDataMock = {
+                id: reportId,
+                name: reportName,
+            };
+            const tableName = undefined;
+            const separator = '-';
+            // when
+            const wrongMethodCall = () => {
+                officeApiHelper.createBindingId(convertedReportDataMock, tableName, projectId, envUrl, separator);
+            };
+            // then
+            expect(wrongMethodCall).toThrowError(OfficeBindingError);
+            expect(wrongMethodCall).toThrowError('Missing tableName');
+        });
+        it('should return proper bindingId despite not providing separator', () => {
+            // given
+            const reportId = 'someReportId';
+            const reportName = 'someReportName';
+            const envUrl = 'someTestUrl';
+            const projectId = 'someTestProjectId';
+            const convertedReportDataMock = {
+                id: reportId,
+                name: reportName,
+            };
+            const tableName = 'someTableName';
+            const expectedBindId = `${reportName}_${tableName}_${reportId}_${projectId}_${envUrl}`;
+            // when
+            const receivedBindId = officeApiHelper.createBindingId(convertedReportDataMock, tableName, projectId, envUrl);
+            // then
+            expect(receivedBindId).toEqual(expectedBindId);
+        });
     });
 });

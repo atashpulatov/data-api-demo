@@ -22,11 +22,8 @@ describe('menu bar', () => {
     it('should go up', () => {
         // given
         const barWrapper = mount(<_MenuBar project='testProject' />);
-        const buttons = barWrapper.find('button');
-        const goBackButton = buttons.filterWhere((button) =>
-            button.text().includes('Back')
-        );
-        expect(goBackButton).toBeTruthy();
+        const goBackButton = barWrapper.find('#goBack');
+        expect(goBackButton).toHaveLength(1);
         // when
         goBackButton.simulate('click');
         // then
@@ -41,11 +38,8 @@ describe('menu bar', () => {
         const barWrapper = mount(
             <_MenuBar project='testProject' />
         );
-        const buttons = barWrapper.find('button');
-        const goTopButton = buttons.filterWhere((button) =>
-            button.text().includes('Go top')
-        );
-        expect(goTopButton).toBeTruthy();
+        const goTopButton = barWrapper.find('#goTop');
+        expect(goTopButton).toHaveLength(1);
         // when
         goTopButton.simulate('click');
         // then
@@ -60,11 +54,8 @@ describe('menu bar', () => {
         const barWrapper = mount(
             <_MenuBar project='testProject' />
         );
-        const buttons = barWrapper.find('button');
-        const logOutButton = buttons.filterWhere((button) =>
-            button.text().includes('Log out')
-        );
-        expect(logOutButton).toBeTruthy();
+        const logOutButton = barWrapper.find('#logOut');
+        expect(logOutButton).toHaveLength(1);
         // when
         logOutButton.simulate('click');
         // then

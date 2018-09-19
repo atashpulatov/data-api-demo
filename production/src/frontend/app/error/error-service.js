@@ -2,8 +2,11 @@ import { EnvironmentNotFoundError } from './environment-not-found-error.js';
 import { UnauthorizedError } from './unauthorized-error.js';
 import { BadRequestError } from './bad-request-error.js';
 import { InternalServerError } from './internal-server-error.js';
+import { sessionHelper } from '../storage/session-helper.js';
 
-export let errorHandler = function(error) {
+export let errorHandler = (error) => {
+    // TODO: is it proper place for disabling spinner?
+    sessionHelper.disableLoading();
     if (!error.response || error.response.status === 404) {
         throw new EnvironmentNotFoundError();
     }
@@ -17,5 +20,5 @@ export let errorHandler = function(error) {
         throw new InternalServerError();
     }
     console.error(`Error: ${error.response.status}`
-    + ` (${error.response.statusMessage})`);
+        + ` (${error.response.statusMessage})`);
 };

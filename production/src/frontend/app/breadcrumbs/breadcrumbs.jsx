@@ -1,59 +1,39 @@
 /* eslint-disable */
 import React, { Component } from 'react';
-import { historyProperties } from '../history/history-properties';
 import { breadcrumbsService } from './breadcrumb-service';
-import { Breadcrumb } from './breadcrumb.jsx';
+import { CustomBreadcrumb } from './breadcrumb.jsx';
+import { Breadcrumb } from 'antd';
 import './breadcrumbs.css';
-import { reduxStore } from '../store';
 import { connect } from 'react-redux';
 /* eslint-enable */
 
-class _Breadcrumbs extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            displayBreadcrumbs: false,
-        };
-
-        this.navigateToDir = this.navigateToDir.bind(this);
-    }
-
-    navigateToDir(dirId) {
-        console.log('getting back');
-        reduxStore.dispatch({
-            type: historyProperties.actions.goUpTo,
-            dirId: dirId,
-        });
-    };
-
+export class _Breadcrumbs extends Component {
     render() {
         const historyObjects = breadcrumbsService.getHistoryObjects();
-        this.state.displayBreadcrumbs = historyObjects.length > 0
-            ? true
-            : false;
-        if (!this.state.displayBreadcrumbs) {
-            return null;
-        }
         return (
-            <div>
-                <header className='mstr-objects'>
-                    All Files
-                </header>
-                <hr />
-                <ul className='breadcrumb'>
-                    {historyObjects
-                        .map((object) => (
-                            <Breadcrumb key={object.dirId}
-                                object={object}
-                                onClick={this.navigateToDir} />
-                        ))}
-                </ul>
-            </div>
+            historyObjects.length > 0
+                ?
+                <div>
+                    <header className='mstr-objects'>
+                        All Files
+                    </header>
+                    <hr />
+                    <Breadcrumb
+                        style={{ marginLeft: '25px', marginRight: '25px' }}>
+                        {historyObjects
+                            .map((object) => (
+                                <CustomBreadcrumb
+                                    key={object.dirId || object.projectId}
+                                    object={object}
+                                    onClick={breadcrumbsService.navigateToDir} />
+                            ))}
+                    </Breadcrumb>
+                    <hr />
+                </div>
+                : null
         );
     }
 }
-
 
 function mapStateToProps(state) {
     return {

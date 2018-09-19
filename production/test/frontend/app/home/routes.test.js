@@ -3,12 +3,12 @@ import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { Routes } from '../../../../src/frontend/app/home/routes.jsx';
 import { Provider } from 'react-redux';
-/* eslint-enable  */
 import { mount } from 'enzyme';
 import { pathEnum } from '../../../../src/frontend/app/home/path-enum';
 import { Error } from '../../../../src/frontend/app/error.jsx';
 import { routeContainer } from '../../../../src/frontend/app/home/routeContainer';
 import { reduxStore } from '../../../../src/frontend/app/store';
+/* eslint-enable  */
 
 describe('Routes', () => {
     it.skip('should return path to Projects for / path', () => {

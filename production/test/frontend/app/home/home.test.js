@@ -1,9 +1,11 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
+import { Provider } from 'react-redux';
 import { mount } from 'enzyme';
 import { Home } from '../../../../src/frontend/app/home/home.jsx';
 import { Header } from '../../../../src/frontend/app/home/header.jsx';
 import { Footer } from '../../../../src/frontend/app/home/footer.jsx';
+import { reduxStore } from '../../../../src/frontend/app/store';
 /* eslint-enable  */
 
 describe('Home', () => {
@@ -11,7 +13,11 @@ describe('Home', () => {
         // given
         const headerWrapper = mount(<Header />);
         // when
-        const componentWrapper = mount(<Home />);
+        const componentWrapper = mount(
+            <Provider store={reduxStore}>
+                <Home />
+            </Provider>
+        );
         // then
         expect(componentWrapper.contains(headerWrapper.get(0))).toBe(true);
     });
@@ -20,7 +26,11 @@ describe('Home', () => {
         // given
         const footerWrapper = mount(<Footer />);
         // when
-        const componentWrapper = mount(<Home />);
+        const componentWrapper = mount(
+            <Provider store={reduxStore}>
+                <Home />
+            </Provider>
+        );
         // then
         expect(componentWrapper.contains(footerWrapper.get(0))).toBe(true);
         expect(footerWrapper.find('footer').text()).toBeTruthy();

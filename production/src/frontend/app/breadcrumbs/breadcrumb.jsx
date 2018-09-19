@@ -1,12 +1,18 @@
 /* eslint-disable */
 import React from 'react';
 import './breadcrumbs.css';
+import { Breadcrumb } from 'antd';
+const BreadcrumbItem = Breadcrumb.Item;
 /* eslint-enable */
 
-export const Breadcrumb = ({ object, onClick }) => (
-    <li className='cursor-is-pointer row'
-        onClick={onClick.bind(null, object.projectId || object.dirId)}>
-        <label className='object'>{object.projectName || object.dirName}</label>
-    </li>
+export const CustomBreadcrumb = ({ object, onClick }) => (
+    <BreadcrumbItem
+        onClick={() => {
+            const objectContent = object.projectId || object.dirId;
+            onClick(objectContent);
+        }}>
+        <a className='breadcrumb'>
+            {object.projectName || object.dirName}
+        </a>
+    </BreadcrumbItem >
 );
-

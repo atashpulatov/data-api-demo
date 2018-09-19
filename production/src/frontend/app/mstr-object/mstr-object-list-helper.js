@@ -2,6 +2,7 @@ import { reduxStore } from '../store';
 import { historyHelper } from '../history/history-helper';
 import { mstrObjectRestService } from './mstr-object-rest-service';
 import { historyProperties } from '../history/history-properties';
+import { sessionHelper } from '../storage/session-helper';
 
 class MstrObjectListHelper {
     async fetchContent(dirArray) {
@@ -23,6 +24,7 @@ class MstrObjectListHelper {
     }
 
     navigateToDir(directoryId, directoryName) {
+        sessionHelper.enableLoading();
         reduxStore.dispatch({
             type: historyProperties.actions.goInside,
             dirId: directoryId,
