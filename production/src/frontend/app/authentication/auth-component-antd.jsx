@@ -60,7 +60,7 @@ export class _Authenticate extends React.Component {
                     </h1>
                 </header>
                 {/* className='grid-container padding' */}
-                <Form onSubmit={this.onLoginUser} className='login-form'>
+                <Form onSubmit={this.onLoginUser} className='login-form grid-container padding'>
                     <FormItem
                         label='Username'>
                         {getFieldDecorator('username', {
@@ -97,19 +97,22 @@ export class _Authenticate extends React.Component {
                                 placeholder='environment URL' />
                         )}
                     </FormItem>
-                    <FormItem>
-                        {getFieldDecorator('isRememberMeOn', {
-                            valuePropName: 'checked',
-                            initialValue: true,
-                        })(
-                            <Checkbox>Remember me</Checkbox>
-                        )}
-                    </FormItem>
-                    <FormItem>
-                        <Button type='primary' htmlType='submit' className='login-form-button'>
-                            Log in
+                    <div
+                        className='centered-fields-container'>
+                        <FormItem>
+                            {getFieldDecorator('isRememberMeOn', {
+                                valuePropName: 'checked',
+                                initialValue: true,
+                            })(
+                                <Checkbox>Remember me</Checkbox>
+                            )}
+                        </FormItem>
+                        <FormItem>
+                            <Button type='primary' htmlType='submit' className='login-form-button'>
+                                Log in
                         </Button>
-                    </FormItem>
+                        </FormItem>
+                    </div>
                 </Form>
             </article>
         );
