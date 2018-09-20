@@ -57,17 +57,18 @@ class OfficeDisplayService {
     }
 
     async removeReportFromExcel(bindingId) {
+        await Office.context.document.bindings.releaseByIdAsync(bindingId, (asyncResult) => {
+            console.log('released binding');
+        });
+        const tableName = bindingId.split(globalDefinitions.reportBindingIdSeparator)[1];
         const context = await officeApiHelper.getOfficeContext();
-        const range = officeApiHelper.getBindingRange(context, bindingId);
-        const binding = await context.workbook.bindings
-            .getItem(bindingId);
-        binding.delete();
-        range.clear('All');
+        const tableObject = context.workbook.tables.getItem(tableName);
+        await tableObject.delete();
+        await context.sync();
         reduxStore.dispatch({
             type: officeProperties.actions.removeReport,
             reportBindId: bindingId,
         });
-        return await context.sync();
     }
 
     // FIXME: report after refresh goes to bottom of list
