@@ -4,31 +4,6 @@
     grid-template-columns: auto;
     grid-row-gap: 2px;
 }
-  
-.grid-item {
-    font-size: 18px;
-}
-
-label.grid-item {
-    color: #28333d;
-    margin-bottom: 5px;
-    margin-left: 2px;
-    font-size: 14px;
-    font-weight: 200;
-}
-
-input.grid-item {
-    border-color: #e3e2e2;
-    border-style: solid;
-    border-radius: 3px;
-    border-width: 1px;
-    padding: 5px 0px 5px 0px;
-    margin-bottom: 20px;
-}
-
-.grid-item-2 {
-    grid-column: span 2;
-}
 
 #authenticate-message {
     padding: 10px 0px 0px 15px;
@@ -36,17 +11,12 @@ input.grid-item {
     font-weight: 200;
 }
 
-.button-submit {
-    padding: 10px;
-    background-color: #1983d9;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    text-align: center;
-    display: inline-block;
-    font-size: 20px;
+.login-form-button {
+    width: 50vw;
 }
 
-.button-submit:hover {
-    background-color: rgb(14, 83, 139);
+.centered-fields-container {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
 }

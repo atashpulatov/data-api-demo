@@ -5,6 +5,7 @@ import { OfficeError, OfficeBindingError } from '../../../../src/frontend/app/of
 import { reduxStore } from '../../../../src/frontend/app/store';
 import { sessionProperties } from '../../../../src/frontend/app/storage/session-properties';
 import { historyProperties } from '../../../../src/frontend/app/history/history-properties';
+import { officeProperties } from '../../../../src/frontend/app/office/office-properties';
 /* eslint-enable */
 
 describe('OfficeApiHelper', () => {
@@ -303,6 +304,47 @@ describe('OfficeApiHelper', () => {
             expect(wrongMethodCall).toThrowError(OfficeBindingError);
             expect(wrongMethodCall).toThrowError('Missing tableName');
         });
+        it('should throw error due to missing projectId', () => {
+            // given
+            const reportId = 'someReportId';
+            const reportName = 'someReportName';
+            const envUrl = 'someTestUrl';
+            const tableName = 'someTableName';
+            const convertedReportDataMock = {
+                id: reportId,
+                name: reportName,
+            };
+            const projectId = undefined;
+            const separator = '-';
+            // when
+            const wrongMethodCall = () => {
+                officeApiHelper.createBindingId(convertedReportDataMock, tableName, projectId, envUrl, separator);
+            };
+            // then
+            expect(wrongMethodCall).toThrowError(OfficeBindingError);
+            expect(wrongMethodCall).toThrowError('Missing projectId');
+        });
+        it('should throw error due to missing envUrl', () => {
+            // given
+            const reportId = 'someReportId';
+            const reportName = 'someReportName';
+            const projectId = 'someProjectId';
+            const tableName = 'someTableName';
+            const convertedReportDataMock = {
+                id: reportId,
+                name: reportName,
+            };
+
+            const envUrl = undefined;
+            const separator = '-';
+            // when
+            const wrongMethodCall = () => {
+                officeApiHelper.createBindingId(convertedReportDataMock, tableName, projectId, envUrl, separator);
+            };
+            // then
+            expect(wrongMethodCall).toThrowError(OfficeBindingError);
+            expect(wrongMethodCall).toThrowError('Missing envUrl');
+        });
         it('should return proper bindingId despite not providing separator', () => {
             // given
             const reportId = 'someReportId';
@@ -319,6 +361,111 @@ describe('OfficeApiHelper', () => {
             const receivedBindId = officeApiHelper.createBindingId(convertedReportDataMock, tableName, projectId, envUrl);
             // then
             expect(receivedBindId).toEqual(expectedBindId);
+        });
+    });
+    describe('getSelectedCell', () => {
+        it('should return starting cell from range address(single cell)', async () => {
+            // given
+            const loadMock = jest.fn().mockImplementation(() => {
+                return 'Sheet1!A12';
+            });
+            const mockSync = jest.fn();
+            const context = {
+                workbook: {
+                    getSelectedRange: jest.fn().mockImplementation(() => {
+                        return {
+                            load: loadMock,
+                            address: loadMock(),
+                        };
+                    }),
+                },
+                sync: mockSync,
+            };
+            // when
+            const result = await officeApiHelper.getSelectedCell(context);
+            // then
+            expect(context.workbook.getSelectedRange).toBeCalled();
+            expect(loadMock).toBeCalled();
+            expect(loadMock).toBeCalledWith(officeProperties.officeAddress);
+            expect(result).toEqual('A12');
+            expect(mockSync).toBeCalled();
+        });
+        it('should return starting cell from range address(multiple cells)', async () => {
+            // given
+            const loadMock = jest.fn().mockImplementation(() => {
+                return 'Sheet1!A12:B14';
+            });
+            const mockSync = jest.fn();
+            const context = {
+                workbook: {
+                    getSelectedRange: jest.fn().mockImplementation(() => {
+                        return {
+                            load: loadMock,
+                            address: loadMock(),
+                        };
+                    }),
+                },
+                sync: mockSync,
+            };
+            // when
+            const result = await officeApiHelper.getSelectedCell(context);
+            // then
+            expect(context.workbook.getSelectedRange).toBeCalled();
+            expect(loadMock).toBeCalled();
+            expect(loadMock).toBeCalledWith(officeProperties.officeAddress);
+            expect(result).toEqual('A12');
+            expect(mockSync).toBeCalled();
+        });
+    });
+    describe('loadExistingReportBingings', () => {
+        it('should not load anything due to empty bindings', async () => {
+            // given
+            const context = {};
+            const mockArray = [];
+            const originalGetBindingsFromWorkbook = officeApiHelper._getBindingsFromWorkbook;
+            const originalExcelBindingsToStore = officeApiHelper._excelBindingsToStore;
+            const originalGetOfficeContext = officeApiHelper.getOfficeContext;
+            const mockMethodGetBindingsFromWorkbook = jest.fn().mockImplementation(() => {
+                return mockArray;
+            });
+            const mockGetOfficeContext = jest.fn().mockImplementation(() => {
+                return context;
+            });
+            const mockMethodExcelBindingsToStore = jest.fn().mockImplementation(() => {
+                return [
+                    {
+                        id: 'BD1E844211E85FF536AB0080EFB5F215',
+                        name: 'SimpleReport',
+                        bindId: 'SimpleReport_B2_BD1E844211E85FF536AB0080EFB5F215_projectId_envUrl',
+                        projectId: 'projectId',
+                        envUrl: 'envUrl',
+                    },
+                    {
+                        id: 'BD1E84FF536AB0080EFB5F215',
+                        name: 'ComplexReport',
+                        bindId: 'ComplexReport_DB5_BD1E84FF536AB0080EFB5F215_projectId_envUrl',
+                        projectId: 'projectId',
+                        envUrl: 'envUrl',
+                    },
+                ];
+            });
+            officeApiHelper._getBindingsFromWorkbook = mockMethodGetBindingsFromWorkbook;
+            officeApiHelper._excelBindingsToStore = mockMethodExcelBindingsToStore;
+            officeApiHelper.getOfficeContext = mockGetOfficeContext;
+            // when
+            await officeApiHelper.loadExistingReportBindingsExcel();
+            const officeState = reduxStore.getState().officeReducer;
+            // then
+            expect(officeState.reportArray).toHaveLength(2);
+            expect(mockGetOfficeContext).toBeCalled();
+            expect(mockMethodGetBindingsFromWorkbook).toBeCalled();
+            expect(mockMethodGetBindingsFromWorkbook).toBeCalledWith(context);
+            expect(mockMethodExcelBindingsToStore).toBeCalled();
+            expect(mockMethodExcelBindingsToStore).toBeCalledWith(mockArray);
+
+            officeApiHelper._getBindingsFromWorkbook = originalGetBindingsFromWorkbook;
+            officeApiHelper._excelBindingsToStore = originalExcelBindingsToStore;
+            officeApiHelper.getOfficeContext = originalGetOfficeContext;
         });
     });
 });

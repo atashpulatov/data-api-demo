@@ -13,6 +13,7 @@ describe('OfficeDisplayService', () => {
         const mockedMethod = jest.fn();
         mockedMethod.mockReturnValue(officeContextMock);
         officeApiHelper._getOfficeContext = mockedMethod;
+        officeApiHelper.formatTable = jest.fn();
     });
     afterAll(() => {
         officeApiHelper._getOfficeContext = originalMethod;

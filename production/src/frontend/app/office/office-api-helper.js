@@ -171,7 +171,7 @@ class OfficeApiHelper {
         const selectedRangeStart = context.workbook.getSelectedRange();
         selectedRangeStart.load(officeProperties.officeAddress);
         await context.sync();
-        const startCell = selectedRangeStart.address.split('!')[1];
+        const startCell = selectedRangeStart.address.split('!')[1].split(':')[0];
         return startCell;
     }
 
