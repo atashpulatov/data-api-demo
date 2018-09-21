@@ -16,7 +16,7 @@ class OfficeDisplayService {
         this.refreshReport = this.refreshReport.bind(this);
     }
 
-    async printObject(objectId, startCell) {
+    async printObject(objectId, startCell, tableName, bindingId) {
         sessionHelper.enableLoading();
         const context = await officeApiHelper.getOfficeContext();
         if (!startCell) {
@@ -25,20 +25,21 @@ class OfficeDisplayService {
         let jsonData = await mstrObjectRestService.getObjectContent(objectId);
         let convertedReport = officeConverterService
             .getConvertedTable(jsonData);
-        const tableName = await officeApiHelper.findAvailableTableName(convertedReport.name, context);
-        const mstrTable = await this._insertDataIntoExcel(convertedReport, context, startCell, tableName);
+        const newTableName = tableName || await officeApiHelper.findAvailableTableName(convertedReport.name, context);
+        const mstrTable = await this._insertDataIntoExcel(convertedReport, context, startCell, newTableName);
         const { envUrl, projectId } = officeApiHelper.getCurrentMstrContext();
-        const bindingId = officeApiHelper.createBindingId(convertedReport, tableName, projectId, envUrl, separator);
+        const newBindingId = bindingId || officeApiHelper.createBindingId(convertedReport, newTableName, projectId, envUrl, separator);
         await context.sync();
-        officeApiHelper.bindNamedItem(tableName, bindingId);
-        // context.workbook.bindings.add(mstrTable.getRange(), 'Table', bindingId);
-        this.addReportToStore({
-            id: convertedReport.id,
-            name: convertedReport.name,
-            bindId: bindingId,
-            envUrl,
-            projectId,
-        });
+        officeApiHelper.bindNamedItem(newTableName, newBindingId);
+        if (!tableName) {
+            this.addReportToStore({
+                id: convertedReport.id,
+                name: convertedReport.name,
+                bindId: newBindingId,
+                envUrl,
+                projectId,
+            });
+        }
         sessionHelper.disableLoading();
     }
 
@@ -56,31 +57,35 @@ class OfficeDisplayService {
         });
     }
 
-    async removeReportFromExcel(bindingId) {
-        const context = await officeApiHelper.getOfficeContext();
-        const range = officeApiHelper.getBindingRange(context, bindingId);
-        const binding = await context.workbook.bindings
-            .getItem(bindingId);
-        binding.delete();
-        range.clear('All');
-        reduxStore.dispatch({
-            type: officeProperties.actions.removeReport,
-            reportBindId: bindingId,
+    async removeReportFromExcel(bindingId, isRefresh) {
+        await Office.context.document.bindings.releaseByIdAsync(bindingId, (asyncResult) => {
+            console.log('released binding');
         });
-        return await context.sync();
+        const tableName = bindingId.split(globalDefinitions.reportBindingIdSeparator)[1];
+        const context = await officeApiHelper.getOfficeContext();
+        const tableObject = context.workbook.tables.getItem(tableName);
+        await tableObject.delete();
+        await context.sync();
+        if (!isRefresh) {
+            reduxStore.dispatch({
+                type: officeProperties.actions.removeReport,
+                reportBindId: bindingId,
+            });
+        }
     }
 
     // FIXME: report after refresh goes to bottom of list
     // TODO: we could filter data to display options related to current envUrl
     async refreshReport(bindingId) {
+        const isRefresh = true;
         let context = await officeApiHelper.getOfficeContext();
         let range = officeApiHelper.getBindingRange(context, bindingId);
         range.load();
         await context.sync();
         const startCell = range.address.split('!')[1].split(':')[0];
         const bindIdItems = bindingId.split(globalDefinitions.reportBindingIdSeparator);
-        await this.removeReportFromExcel(bindingId);
-        await this.printObject(bindIdItems[2], startCell);
+        await this.removeReportFromExcel(bindingId, isRefresh);
+        await this.printObject(bindIdItems[2], startCell, bindIdItems[1], bindingId);
     }
 
     async _insertDataIntoExcel(reportConvertedData, context, startCell, tableName) {
