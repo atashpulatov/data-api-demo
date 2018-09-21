@@ -165,6 +165,40 @@ describe('historyReducer', () => {
         expect(projectId).toBeFalsy();
     });
 
+    it('should remove project id on go up when there is no more dirId', () => {
+        // given
+        const givenId = 'projectId';
+        const givenName = 'projectName';
+        const oldId = 'oldId';
+        const oldName = 'oldName';
+        const recentId = 'newId';
+        const recentName = 'newName';
+        historyStore.dispatch({
+            type: historyProperties.actions.goInsideProject,
+            projectId: givenId,
+            projectName: givenName,
+        });
+        historyStore.dispatch({
+            type: historyProperties.actions.goInside,
+            dirId: oldId,
+            dirName: oldName,
+        });
+        historyStore.dispatch({
+            type: historyProperties.actions.goInside,
+            dirId: recentId,
+            dirName: recentName,
+        });
+        // when
+        for (let i = 0; i < 5; i++) {
+            historyStore.dispatch({
+                type: historyProperties.actions.goUp,
+            });
+        }
+        // then
+        const project = historyStore.getState().project;
+        expect(project).toBeFalsy();
+    });
+
     it('should erase history on go to projects', () => {
         // given
         const givenDirId = 'someId';

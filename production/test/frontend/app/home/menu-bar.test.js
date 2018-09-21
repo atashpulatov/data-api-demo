@@ -5,7 +5,6 @@ import { _MenuBar } from '../../../../src/frontend/app/menu-bar/menu-bar.jsx';
 import { historyProperties } from '../../../../src/frontend/app/history/history-properties';
 import { sessionProperties } from '../../../../src/frontend/app/storage/session-properties';
 import { reduxStore } from '../../../../src/frontend/app/store';
-import { Provider } from 'react-redux';
 /* eslint-enable */
 
 jest.mock('../../../../src/frontend/app/store');

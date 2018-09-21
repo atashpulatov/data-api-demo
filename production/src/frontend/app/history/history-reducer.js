@@ -44,7 +44,7 @@ function eraseHistory(state) {
 }
 
 function onGoUp(state) {
-    if (!state.directoryArray) {
+    if (!state.directoryArray || state.directoryArray.length === 0) {
         return {
             ...state,
             project: undefined,
@@ -66,7 +66,7 @@ function onGoUpTo(action, state) {
     const indexOfElement = dirArray.findIndex((dir) => {
         return (dir.dirId === action.dirId);
     });
-    const resultDirArray = dirArray.slice(0, indexOfElement+1);
+    const resultDirArray = dirArray.slice(0, indexOfElement + 1);
     return {
         ...state,
         directoryArray: resultDirArray,
