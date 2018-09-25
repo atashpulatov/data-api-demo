@@ -1,0 +1,33 @@
+.menu-bar-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 0px;
+  padding-top: 3px;
+  background-color: #eeeeee;
+}
+
+button.menu {
+  border: none;
+  border-radius: 5px;
+  color: #323435;
+  border-color: #e3e2e2;
+  background-color: #eeeeee;
+}
+
+button.menu:hover {
+  color: #1983d9;
+}
+
+.menu-bar-nav-container {
+  justify-content: right;
+}
+
+.menu-bar-options-container {
+  justify-content: left;
+}
+
+button.menu-nav.menu-options{
+  padding: 5px 10px 5px 10px;
+  font-weight: 400;
+  font-size: 16px;
+}

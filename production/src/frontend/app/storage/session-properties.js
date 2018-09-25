@@ -1,4 +1,4 @@
-import { propsProxy } from '../enum-props-proxy';
+import { propsProxy } from '../home/enum-props-proxy';
 
 export const sessionProperties = new Proxy({
     /**
@@ -15,5 +15,6 @@ export const sessionProperties = new Proxy({
         logOut: 'SESSION_LOG_OUT',
         loggedIn: 'SESSION_LOGGED_IN',
         setProperty: 'SESSION_SET_PROPERTY',
+        setLoading: 'SESSION_SET_LOADING',
     },
 }, propsProxy);

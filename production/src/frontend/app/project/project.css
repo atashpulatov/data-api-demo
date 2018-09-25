@@ -14,11 +14,12 @@
 }
 
 .project-row{
-    padding: 10px 0px 10px 40px;
+    padding: 5px 0px 5px 30px;
 }
 
 .projects-header{
-    font-size: 24;
+    font-size: 18px;
+    margin-top: 5px;
     margin-left: 30px;
     color: #75808B;
 }

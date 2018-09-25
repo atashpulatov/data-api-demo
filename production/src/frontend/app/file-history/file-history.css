@@ -1,0 +1,16 @@
+
+li.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+span.file-text {
+    width: 75%;
+}
+
+span.file-icons{
+    width: 20%;
+    flex-direction: row;
+    justify-content: space-around;
+}

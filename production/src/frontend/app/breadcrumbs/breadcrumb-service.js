@@ -1,4 +1,5 @@
 import { reduxStore } from '../store';
+import { historyProperties } from '../history/history-properties';
 
 class BreadcrumbsService {
     getHistoryObjects() {
@@ -15,9 +16,14 @@ class BreadcrumbsService {
         directories.forEach((dir) => {
             historyObjects.push(dir);
         });
-        console.log(historyObjects);
         return historyObjects;
     }
+    navigateToDir(dirId) {
+        reduxStore.dispatch({
+            type: historyProperties.actions.goUpTo,
+            dirId: dirId,
+        });
+    };
 }
 
 export const breadcrumbsService = new BreadcrumbsService();

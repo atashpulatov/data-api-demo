@@ -5,7 +5,7 @@ import { withNavigation } from '../../../../src/frontend/app/navigation/with-nav
 import { TestComponent } from './test-component';
 import { navigationService } from '../../../../src/frontend/app/navigation/navigation-service';
 import { NavigationError } from '../../../../src/frontend/app/navigation/navigation-error';
-import { pathEnum } from '../../../../src/frontend/app/path-enum';
+import { pathEnum } from '../../../../src/frontend/app/home/path-enum';
 import { historyProperties } from '../../../../src/frontend/app/history/history-properties';
 import { sessionProperties } from '../../../../src/frontend/app/storage/session-properties';
 import { Provider } from 'react-redux';

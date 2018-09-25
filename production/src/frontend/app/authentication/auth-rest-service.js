@@ -1,4 +1,4 @@
-import { errorHandler } from '../error/error-service.js';
+import { errorHandler } from '../error/error-handler.js';
 import { moduleProxy } from '../module-proxy.js';
 
 class AuthenticationService {

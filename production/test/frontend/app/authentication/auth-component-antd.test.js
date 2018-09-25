@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React from 'react';
 import { mount } from 'enzyme';
-import { Authenticate, _Authenticate } from '../../../../src/frontend/app/authentication/auth-component.jsx';
+import { Authenticate, _Authenticate } from '../../../../src/frontend/app/authentication/auth-component-antd.jsx';
 import { reduxStore } from '../../../../src/frontend/app/store';
 import { sessionProperties } from '../../../../src/frontend/app/storage/session-properties';
 import { authenticationService } from '../../../../src/frontend/app/authentication/auth-rest-service';
@@ -73,7 +73,8 @@ describe('AuthComponent', () => {
         // then
         const wrappedConnect = wrappedProvider.childAt(0);
         const wrappedWithNavigation = wrappedConnect.childAt(0);
-        const wrappedComponent = wrappedWithNavigation.childAt(0);
+        const wrappedComponentForm = wrappedWithNavigation.childAt(0);
+        const wrappedComponent = wrappedComponentForm.childAt(0);
         expect(
             wrappedComponent.type().prototype instanceof React.Component
         ).toBeTruthy();

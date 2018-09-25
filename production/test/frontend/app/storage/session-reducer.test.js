@@ -28,6 +28,45 @@ describe('sessionReducer', () => {
         });
     });
 
+
+    it('should throw error due to missing loading property', () => {
+        // given
+        // when
+        const wrongActionCall = () => {
+            sessionStore.dispatch({
+                type: sessionProperties.actions.setLoading,
+            });
+        };
+        // then
+        expect(wrongActionCall).toThrowError(SessionError);
+        expect(wrongActionCall).toThrowError('Missing loading');
+    });
+    it('should set loading to enabled', () => {
+        // given
+        const loading = true;
+        // when
+        sessionStore.dispatch({
+            type: sessionProperties.actions.setLoading,
+            loading,
+        });
+        const sessionStoreState = sessionStore.getState();
+        // then
+        expect(sessionStoreState.loading).toEqual(true);
+    });
+
+    it('should set loading to disabled', () => {
+        // given
+        const loading = false;
+        // when
+        sessionStore.dispatch({
+            type: sessionProperties.actions.setLoading,
+            loading,
+        });
+        const sessionStoreState = sessionStore.getState();
+        // then
+        expect(sessionStoreState.loading).toEqual(false);
+    });
+
     it('should save username and envUrl on login', () => {
         // given
         const givenEnvUrl = 'someEnvUrl';

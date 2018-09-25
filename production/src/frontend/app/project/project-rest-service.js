@@ -1,4 +1,4 @@
-import { errorHandler } from '../error/error-service';
+import { errorHandler } from '../error/error-handler';
 import { moduleProxy } from '../module-proxy';
 
 class ProjectRestService {
