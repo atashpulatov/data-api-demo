@@ -1,4 +1,4 @@
-import { errorHandler } from '../error/error-service';
+import { errorHandler } from '../error/error-handler';
 import { reduxStore } from '../store';
 import { moduleProxy } from '../module-proxy';
 

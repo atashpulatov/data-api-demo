@@ -10,28 +10,25 @@ import { connect } from 'react-redux';
 export class _Breadcrumbs extends Component {
     render() {
         const historyObjects = breadcrumbsService.getHistoryObjects();
-        return (
-            historyObjects.length > 0
-                ?
-                <div>
-                    <header className='mstr-objects'>
-                        All Files
+        return !(historyObjects.length > 0)
+            ? null
+            : <div>
+                <header className='mstr-objects'>
+                    All Files
                     </header>
-                    <hr />
-                    <Breadcrumb
-                        style={{ marginLeft: '25px', marginRight: '25px' }}>
-                        {historyObjects
-                            .map((object) => (
-                                <CustomBreadcrumb
-                                    key={object.dirId || object.projectId}
-                                    object={object}
-                                    onClick={breadcrumbsService.navigateToDir} />
-                            ))}
-                    </Breadcrumb>
-                    <hr />
-                </div>
-                : null
-        );
+                <hr />
+                <Breadcrumb
+                    style={{ marginLeft: '25px', marginRight: '25px' }}>
+                    {historyObjects
+                        .map((object) =>
+                            <CustomBreadcrumb
+                                key={object.dirId || object.projectId}
+                                object={object}
+                                onClick={breadcrumbsService.navigateToDir} />
+                        )}
+                </Breadcrumb>
+                <hr />
+            </div>;
     }
 }
 

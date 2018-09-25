@@ -26,8 +26,6 @@ export class _Authenticate extends React.Component {
         event.preventDefault();
         await this.props.form.validateFields(async (err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
-
                 reduxStore.dispatch({
                     type: sessionProperties.actions.logIn,
                     username: values.username,
@@ -35,7 +33,6 @@ export class _Authenticate extends React.Component {
                     isRememberMeOn: values.isRememberMeOn,
                 });
                 sessionHelper.enableLoading();
-                console.log('in onLoginUser');
                 let authToken = await authenticationService.authenticate(
                     values.username, values.password,
                     values.envUrl, this.state.authMode);
@@ -59,7 +56,6 @@ export class _Authenticate extends React.Component {
                         Connect to MicroStrategy Environment
                     </h1>
                 </header>
-                {/* className='grid-container padding' */}
                 <Form onSubmit={this.onLoginUser} className='login-form grid-container padding'>
                     <FormItem
                         label='Username'>

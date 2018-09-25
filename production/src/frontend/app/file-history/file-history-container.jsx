@@ -10,32 +10,30 @@ import './file-history.css';
 
 export class _FileHistoryContainer extends Component {
     render() {
-        return (
-            this.props.project
-                ? <div>
-                    <h3 style={{ textAlign: 'center' }}>Loaded files</h3>
-                    <hr />
-                    <List
-                        className='ant-list-header-override'
-                        size='small'
-                        locale={{ emptyText: 'No files loaded.' }}
-                        dataSource={this.props.reportArray
-                            ? this.props.reportArray
-                            : []}
-                        renderItem={(report) => (
-                            <OfficeLoadedFile
-                                fileName={report.name}
-                                bindingId={report.bindId}
-                                onClick={officeApiHelper.onBindingObjectClick}
-                                onDelete={officeDisplayService.removeReportFromExcel}
-                                onRefresh={officeDisplayService.refreshReport}
-                            />
-                        )}
-                    />
-                    <hr />
-                </div>
-                : null
-        );
+        return !this.props.project
+            ? null
+            : <div>
+                <h3 style={{ textAlign: 'center' }}>Loaded files</h3>
+                <hr />
+                <List
+                    className='ant-list-header-override'
+                    size='small'
+                    locale={{ emptyText: 'No files loaded.' }}
+                    dataSource={this.props.reportArray
+                        ? this.props.reportArray
+                        : []}
+                    renderItem={(report) => (
+                        <OfficeLoadedFile
+                            fileName={report.name}
+                            bindingId={report.bindId}
+                            onClick={officeApiHelper.onBindingObjectClick}
+                            onDelete={officeDisplayService.removeReportFromExcel}
+                            onRefresh={officeDisplayService.refreshReport}
+                        />
+                    )}
+                />
+                <hr />
+            </div>;
     }
 }
 

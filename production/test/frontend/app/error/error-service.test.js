@@ -1,5 +1,5 @@
 /* eslint-disable  */
-import { errorHandler } from '../../../../src/frontend/app/error/error-service';
+import { errorHandler } from '../../../../src/frontend/app/error/error-handler';
 import { EnvironmentNotFoundError } from '../../../../src/frontend/app/error/environment-not-found-error';
 import { UnauthorizedError } from '../../../../src/frontend/app/error/unauthorized-error';
 import { BadRequestError } from '../../../../src/frontend/app/error/bad-request-error';
