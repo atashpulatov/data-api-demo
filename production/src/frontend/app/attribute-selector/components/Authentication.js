@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, {Component} from 'react';
 import {Form, Radio, Input} from 'antd';
 import MSTRCallback from '../utilities/MSTRCallback';
@@ -7,6 +8,7 @@ const restoreUrl = parameter.data ? parameter.data.connectionData.url : null;
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
+/* eslint-enable */
 
 const formItemLayout = {
     labelCol: {

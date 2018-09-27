@@ -4,8 +4,10 @@ import MainContainer from './components/MainContainer';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Content from './components/Content';
+import Parameters from './components/Parameters';
 import MSTRFetch from './utilities/MSTRFetch';
 import { message } from 'antd';
+import { reduxStore } from '../store';
 import './Bootstrap.css';
 
 export class Bootstrap extends Component {
@@ -92,24 +94,18 @@ export class Bootstrap extends Component {
     }
 
     render() {
+        const currentState = reduxStore.getState();
+        const url = currentState.sessionReducer.envUrl;
+        const api = {
+            url,
+            
+        }
         return (
-            <MainContainer>
-                <Header title='Data Connector' />
-                <Content
-                    changeDisabledSubmit={this.onChangeDisabledSubmit}
-                    changeDisabledConnect={this.onChangeDisabledConnect}
-                    handleSubmit={this.handleSubmit}
-                    api={this.api}
-                    ref={this.content} />
-                <Footer
-                    disabledSubmit={this.state.disabledSubmit}
-                    disabledConnect={this.state.disabledConnect}
-                    token={this.api.isAuthenticated}
-                    onConnect={this.onConnect}
-                    goBack={this.goBack}
-                    onSubmit={this.onSubmit}
-                    loading={this.state.loading} />
-            </MainContainer>
+            <Parameters
+                key={url}
+                changeDisabledSubmit={this.props.changeDisabledSubmit}
+                api={this.props.api}
+                ref={this.parameters} />
         );
     }
 }

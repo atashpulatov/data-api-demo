@@ -19,7 +19,6 @@ export class _Home extends Component {
       <Router>
         <div id='content'>
           <Header />
-          <Bootstrap />
           <MenuBar />
           <FileHistoryContainer />
           <Breadcrumbs />
