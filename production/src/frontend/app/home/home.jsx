@@ -9,6 +9,7 @@ import { Footer } from './footer.jsx';
 import { FileHistoryContainer } from '../file-history/file-history-container.jsx';
 import { Spin } from 'antd';
 import { connect } from 'react-redux';
+import { Bootstrap} from '../attribute-selector/bootstrap.jsx';
 import './home.css';
 /* eslint-enable */
 
@@ -18,6 +19,7 @@ export class _Home extends Component {
       <Router>
         <div id='content'>
           <Header />
+          <Bootstrap />
           <MenuBar />
           <FileHistoryContainer />
           <Breadcrumbs />
