@@ -1,7 +1,8 @@
-import React, {Component} from 'react';
-import {Spin, Tree, Input, Icon, Col} from 'antd';
+import React, { Component } from 'react';
+import { Spin, Tree, Input, Icon, Col } from 'antd';
 import MSTRIcon from './MSTRIcon';
 import setValueByPath from '../utilities/set-value';
+import { msrtFetch } from '../utilities/MSTRFetch';
 
 const DirectoryTree = Tree.DirectoryTree;
 const TreeNode = Tree.TreeNode;
@@ -23,39 +24,42 @@ const setPathIndex = (array, parentPath) => array.map((node, index) => {
     } else {
         node.isLeaf = false;
     }
-    return {...node, path: parentPath + index.toString()};
+    return { ...node, path: parentPath + index.toString() };
 });
 
 
 class FolderTree extends Component {
     constructor(props) {
         super(props);
+        const api = msrtFetch;
+        api.apiInitializer(this.props.session);
         this.state = {
             searching: false,
             searchTree: [],
+            api,
         };
     }
 
     componentDidMount() {
-        if (!this.props.api.envUrl) return;
-        this.props.api.getProjects().then((mstrTree) => {
+        if (!this.state.api.envUrl) return;
+        this.state.api.getProjects().then((mstrTree) => {
             if (mstrTree) {
                 mstrTree = setPathIndex(mstrTree, '');
-                this.setState({...this.state, mstrTree});
+                this.setState({ ...this.state, mstrTree });
             } else {
-                this.props.api.envUrl = null;
+                this.state.api.envUrl = null;
             }
         });
     }
 
     componentWillReceiveProps(props) {
         if (props.url && props.url !== null && props.url !== this.props.url) {
-            this.setState({searchName: ''});
-            this.props.api.getProjects().then((mstrTree) => {
+            this.setState({ searchName: '' });
+            this.state.api.getProjects().then((mstrTree) => {
                 if (mstrTree) {
                     mstrTree = setPathIndex(mstrTree, '');
                 }
-                this.setState({searching: false, mstrTree, searchTree: []});
+                this.setState({ searching: false, mstrTree, searchTree: [] });
             });
         }
     }
@@ -64,11 +68,11 @@ class FolderTree extends Component {
         if (!name || name === this.state.searchName) {
             return;
         }
-        this.setState({searching: true, searchTree: [], searchName: name});
-        const projects = this.props.api.projects;
+        this.setState({ searching: true, searchTree: [], searchName: name });
+        const projects = this.state.api.projects;
         const promises = projects.map((projectId) => {
-            this.props.api.projectId = projectId;
-            return this.props.api.searchDataset(name)
+            this.state.api.projectId = projectId;
+            return this.state.api.searchDataset(name)
                 .then((response) => {
                     return this.updateSearchTree(response, projectId);
                 }).catch((error) => {
@@ -94,12 +98,12 @@ class FolderTree extends Component {
     }
 
     updateSearchTree = (response, projectId) => {
-        const {result, totalItems} = response;
+        const { result, totalItems } = response;
         if (!response || totalItems === 0) {
             return false;
         }
         const results = result.map((result) => {
-            const {id, name, type, subtype} = result;
+            const { id, name, type, subtype } = result;
             return {
                 id,
                 name,
@@ -110,13 +114,13 @@ class FolderTree extends Component {
                 projectId: projectId,
             };
         });
-        this.setState({searchTree: [...this.state.searchTree, ...results]});
+        this.setState({ searchTree: [...this.state.searchTree, ...results] });
         return true;
     }
 
     onSearchChange = (e) => {
         if (!e.target.value) {
-            this.setState({searching: false, searchName: ''});
+            this.setState({ searching: false, searchName: '' });
         }
     }
 
@@ -144,7 +148,7 @@ class FolderTree extends Component {
 
     loadRootFolders(mstrObject) {
         const id = mstrObject.id;
-        this.props.api.projectId = id;
+        this.state.api.projectId = id;
         const path = mstrObject.path;
         const personalObjectsNode = {
             id: id,
@@ -154,7 +158,7 @@ class FolderTree extends Component {
             type: 8,
             subtype: 2048,
         };
-        return this.props.api.getRootFolders()
+        return this.state.api.getRootFolders()
             .then((treeNodes) => {
                 if (!treeNodes) return;
                 treeNodes.push(personalObjectsNode);
@@ -165,8 +169,8 @@ class FolderTree extends Component {
     loadMyPersonalObjects(mstrObject) {
         const id = mstrObject.id;
         const path = mstrObject.path;
-        this.props.api.projectId = this.getProjectId(mstrObject.path);
-        return this.props.api.getMyPersonalObjects(id)
+        this.state.api.projectId = this.getProjectId(mstrObject.path);
+        return this.state.api.getMyPersonalObjects(id)
             .then((treeNodes) => {
                 if (!treeNodes || treeNodes.length === 0) {
                     treeNodes = [{
@@ -184,8 +188,8 @@ class FolderTree extends Component {
     loadFolderContent(mstrObject) {
         const id = mstrObject.id;
         const path = mstrObject.path;
-        this.props.api.projectId = this.getProjectId(mstrObject.path);
-        return this.props.api.getFolderContent(id)
+        this.state.api.projectId = this.getProjectId(mstrObject.path);
+        return this.state.api.getFolderContent(id)
             .then((treeNodes) => {
                 if (!treeNodes || treeNodes.length === 0) {
                     treeNodes = [{
@@ -207,7 +211,7 @@ class FolderTree extends Component {
         treeNodes = setPathIndex(treeNodes, updatePath + '.');
         setValueByPath(newMstrTree, updatePath, treeNodes);
 
-        this.setState({...this.state, mstrTree: newMstrTree});
+        this.setState({ ...this.state, mstrTree: newMstrTree });
     }
 
     getProjectId(path) {
@@ -221,8 +225,8 @@ class FolderTree extends Component {
         }
 
         return treeNodes.map((node) => {
-            const key = this.props.api.token + node.key;
-            const icon = (({expanded, isLeaf}) => {
+            const key = this.state.api.token + node.key;
+            const icon = (({ expanded, isLeaf }) => {
                 if (node.emptyFolder) {
                     return (<Icon type='info-circle-o' />);
                 } else if (!node.subtype) {
@@ -291,10 +295,10 @@ class FolderTree extends Component {
         return (
             <div>
                 <Col span={12}>
-                    <div style={{lineHeight: '24px', fontWeight: 'bold', padding: '8px 0'}}>Select a Dataset</div>
+                    <div style={{ lineHeight: '24px', fontWeight: 'bold', padding: '8px 0' }}>Select a Dataset</div>
                 </Col>
                 <Col span={12}>
-                    <Search key={this.props.url} style={{padding: '8px 0'}} placeholder='Search...' onSearch={this.onSearch} onChange={this.onSearchChange} size='small' />
+                    <Search key={this.props.url} style={{ padding: '8px 0' }} placeholder='Search...' onSearch={this.onSearch} onChange={this.onSearchChange} size='small' />
                 </Col>
                 <Col span={24} className='folder-tree-container'>
                     {tree}

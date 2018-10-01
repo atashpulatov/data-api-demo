@@ -5,15 +5,16 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Content from './components/Content';
 import Parameters from './components/Parameters';
-import MSTRFetch from './utilities/MSTRFetch';
+import MSTRFetch, { msrtFetch } from './utilities/MSTRFetch';
 import { message } from 'antd';
 import { reduxStore } from '../store';
 import './Bootstrap.css';
+import { historyHelper } from '../history/history-helper';
 
 export class Bootstrap extends Component {
     constructor(props) {
         super(props);
-        this.api = new MSTRFetch();
+        this.api = msrtFetch;
         this.state = {
             loading: false,
             disabledSubmit: true,
@@ -94,18 +95,23 @@ export class Bootstrap extends Component {
     }
 
     render() {
-        const currentState = reduxStore.getState();
-        const url = currentState.sessionReducer.envUrl;
-        const api = {
-            url,
-            
-        }
+        const currentStore = reduxStore.getState();
+        const projectId = currentStore.historyReducer.project
+            ? currentStore.historyReducer.project.projectId
+            : undefined;
+        const session = {
+            url: currentStore.sessionReducer.envUrl,
+            authToken: currentStore.sessionReducer.authToken,
+            projectId,
+        };
         return (
-            <Parameters
-                key={url}
-                changeDisabledSubmit={this.props.changeDisabledSubmit}
-                api={this.props.api}
-                ref={this.parameters} />
+            <MainContainer>
+                <Parameters
+                    key={'sumKey'}
+                    changeDisabledSubmit={this.props.changeDisabledSubmit}
+                    session={session}
+                    ref={this.parameters} />
+            </MainContainer>
         );
     }
 }

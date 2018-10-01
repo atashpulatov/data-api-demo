@@ -5,7 +5,6 @@ import './project.css';
 import { withNavigation } from '../navigation/with-navigation.jsx';
 import { projectListHelper } from './project-list-helper';
 import { sessionHelper } from '../storage/session-helper';
-import { Bootstrap } from '../attribute-selector/bootstrap.jsx';
 /* eslint-enable */
 
 export class _Projects extends Component {
@@ -34,7 +33,6 @@ export class _Projects extends Component {
                         All Projects
                     </h2>
                 </header>
-                <Bootstrap />
                 <hr className='projects-header-line' />
                 <ul className='project-row-container no-padding'>
                     {this.state.projects.map((project) => (

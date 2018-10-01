@@ -1,17 +1,20 @@
-import React, {Component} from 'react';
-import {Row, Col, Modal, message} from 'antd';
+import React, { Component } from 'react';
+import { Row, Col, Modal, message } from 'antd';
 import FolderTree from './FolderTree';
 import Selector from './Selector';
 import FilterSelector from './FilterSelector';
 import SearchToolbar from './SearchToolbar';
 import PreviewTable from './PreviewTable';
 import MSTRCallback from '../utilities/MSTRCallback';
+import { msrtFetch } from '../utilities/MSTRFetch';
 
 const parameter = new MSTRCallback('parameter');
 
 class Parameters extends Component {
     constructor(props) {
         super(props);
+        const api = msrtFetch;
+        api.apiInitializer(this.props.session);
         this.state = {
             showSelected: false,
             dataset: {
@@ -31,14 +34,15 @@ class Parameters extends Component {
             loadedAttributes: [],
             loadedMetrics: [],
             loadedFilterElements: [],
+            api,
         };
         this.loadParameterData(props);
     }
 
     loadParameterData = (props) => {
-        if (parameter && parameter.data && parameter.data.connectionData.url === this.props.api.url) {
-            const {projectId, datasetId, isReport, body} = parameter.data.connectionData;
-            const {attributes, metrics} = body.requestedObjects;
+        if (parameter && parameter.data && parameter.data.connectionData.url === this.state.api.url) {
+            const { projectId, datasetId, isReport, body } = parameter.data.connectionData;
+            const { attributes, metrics } = body.requestedObjects;
             const selectedMetrics = metrics ? metrics.map((metric) => metric.id) : [];
             const selectedAttributes = attributes ? attributes.map((att) => att.id) : [];
             props.api.projectId = projectId;
@@ -80,13 +84,13 @@ class Parameters extends Component {
 
     mstrSubmit = () => {
         const mstr = window.mstr;
-        const {dataset, selectedAttributes, selectedMetrics, selectedFilters} = this.state;
+        const { dataset, selectedAttributes, selectedMetrics, selectedFilters } = this.state;
         if (!dataset.datasetId || selectedAttributes.length + selectedMetrics.length === 0) {
             message.warning('No data selected');
             return;
         }
-        const {datasetId, name, isReport = false} = dataset;
-        const body = this.props.api.createBody(selectedAttributes, selectedMetrics, selectedFilters);
+        const { datasetId, name, isReport = false } = dataset;
+        const body = this.state.api.createBody(selectedAttributes, selectedMetrics, selectedFilters);
         mstr.connectionName = 'MicroStrategy Connector';
         mstr.fileType = 'JSON';
         mstr.connectionData = {
@@ -94,47 +98,47 @@ class Parameters extends Component {
             name: name,
             isReport: isReport,
             datasetId: datasetId,
-            url: this.props.api.envUrl,
-            projectId: this.props.api.projectId,
+            url: this.state.api.envUrl,
+            projectId: this.state.api.projectId,
         };
 
-        mstr.authenticationInfo = this.props.api.credentials;
+        mstr.authenticationInfo = this.state.api.credentials;
         const tableName = this.state.dataset.name;
-        mstr.tableList = [{tableName}];
+        mstr.tableList = [{ tableName }];
         mstr.submit();
     }
 
     tableauSubmit = () => {
         const tableau = window.tableau;
-        const {dataset, selectedAttributes, selectedMetrics, selectedFilters} = this.state;
+        const { dataset, selectedAttributes, selectedMetrics, selectedFilters } = this.state;
         if (!dataset.datasetId || selectedAttributes.length + selectedMetrics.length === 0) {
             message.warning('No data selected');
             return;
         }
-        const {datasetId, name, isReport = false} = dataset;
-        const body = this.props.api.createBody(selectedAttributes, selectedMetrics, selectedFilters);
+        const { datasetId, name, isReport = false } = dataset;
+        const body = this.state.api.createBody(selectedAttributes, selectedMetrics, selectedFilters);
         const connectionData = {
             body: body,
             name: name,
             isReport: isReport,
             datasetId: datasetId,
-            url: this.props.api.envUrl,
-            projectId: this.props.api.projectId,
+            url: this.state.api.envUrl,
+            projectId: this.state.api.projectId,
         };
-        const {loginMode, username, password} = this.props.api.credentials;
-        const authenticationInfo = {loginMode};
+        const { loginMode, username, password } = this.state.api.credentials;
+        const authenticationInfo = { loginMode };
         tableau.username = username;
         tableau.password = password;
         tableau.connectionName = 'MicroStrategy Connector';
-        tableau.connectionData = JSON.stringify({connectionData, authenticationInfo});
+        tableau.connectionData = JSON.stringify({ connectionData, authenticationInfo });
         tableau.submit();
     }
 
     getPreviewData = () => {
         const limit = 15;
-        const {dataset, selectedAttributes, selectedMetrics} = this.state;
+        const { dataset, selectedAttributes, selectedMetrics } = this.state;
         if (dataset.isReport) {
-            return this.props.api.getReportDetails(dataset.datasetId, selectedAttributes, selectedMetrics, this.state.selectedFilters, limit)
+            return this.state.api.getReportDetails(dataset.datasetId, selectedAttributes, selectedMetrics, this.state.selectedFilters, limit)
                 .then((res) => {
                     if (!res || res.message) {
                         throw new Error(res.message);
@@ -142,7 +146,7 @@ class Parameters extends Component {
                     return this.processPreviewData(res);
                 });
         } else {
-            return this.props.api.getCubeDetails(dataset.datasetId, selectedAttributes, selectedMetrics, this.state.selectedFilters, limit)
+            return this.state.api.getCubeDetails(dataset.datasetId, selectedAttributes, selectedMetrics, this.state.selectedFilters, limit)
                 .then((res) => {
                     if (!res || res.message) {
                         throw new Error(res.message);
@@ -153,21 +157,21 @@ class Parameters extends Component {
     }
 
     processPreviewData = (res) => {
-        const data = this.props.api.flattenResult(res.result, true);
-        this.setState({previewData: data});
+        const data = this.state.api.flattenResult(res.result, true);
+        this.setState({ previewData: data });
         return data.data.length > 0;
     }
 
     onSwitchChange = (checked) => {
-        this.setState({showSelected: checked});
+        this.setState({ showSelected: checked });
     }
 
     onSearchChange = (event) => {
-        this.setState({searchText: event.target.value});
+        this.setState({ searchText: event.target.value });
     }
 
     showModal = () => {
-        const {dataset, selectedAttributes, selectedMetrics} = this.state;
+        const { dataset, selectedAttributes, selectedMetrics } = this.state;
         if (!dataset.datasetId || selectedAttributes.length + selectedMetrics.length === 0) {
             message.warning('No data selected');
             return;
@@ -179,7 +183,7 @@ class Parameters extends Component {
         this.getPreviewData().catch((error) => {
             console.log(error);
             setTimeout(() => {
-                this.setState({showModal: false});
+                this.setState({ showModal: false });
             }, 500);
             message.warning('Cannot load preview data');
         });
@@ -196,11 +200,11 @@ class Parameters extends Component {
         if (!selectedKey || selectedKey.length === 0 || e.selectedNodes.length === 0) {
             return;
         }
-        this.setState({loadingNode: true});
+        this.setState({ loadingNode: true });
         const subtype = e.selectedNodes[0].props.subtypeId;
-        this.props.api.projectId = e.selectedNodes[0].props.projectId;
+        this.state.api.projectId = e.selectedNodes[0].props.projectId;
         if (subtype === 779 || subtype === 776) { // cubes
-            this.props.api.getCube(e.selectedNodes[0].props.id, 1).then((cube) => {
+            this.state.api.getCube(e.selectedNodes[0].props.id, 1).then((cube) => {
                 if (!cube) {
                     this.failedToLoadErrorHandling('cube');
                     return;
@@ -211,7 +215,7 @@ class Parameters extends Component {
                 this.failedToLoadErrorHandling('cube');
             });
         } else {
-            this.props.api.getReportInfo(e.selectedNodes[0].props.id).then((report) => {
+            this.state.api.getReportInfo(e.selectedNodes[0].props.id).then((report) => {
                 if (!report) {
                     this.failedToLoadErrorHandling('report');
                     return;
@@ -269,32 +273,32 @@ class Parameters extends Component {
 
     getAttributesForFilter = (attributeId, datasetId = this.state.dataset.datasetId, instanceId = this.state.dataset.instanceId) => {
         if (this.state.dataset.isReport) {
-            return this.props.api.getReportAttributeElements(datasetId, attributeId);
+            return this.state.api.getReportAttributeElements(datasetId, attributeId);
         } else {
-            return this.props.api.getCubeAttributeElements(datasetId, instanceId, attributeId);
+            return this.state.api.getCubeAttributeElements(datasetId, instanceId, attributeId);
         }
     }
 
     changeStateOfSubmit(attr, metrics) {
-        if (attr.length || metrics.length) {
-            this.props.changeDisabledSubmit(false);
-        } else {
-            this.props.changeDisabledSubmit(true);
-        }
+        // if (attr.length || metrics.length) {
+        //     this.props.changeDisabledSubmit(false);
+        // } else {
+        //     this.props.changeDisabledSubmit(true);
+        // }
     }
 
     onAttributesChange = (attributes) => {
-        this.setState({selectedAttributes: attributes});
+        this.setState({ selectedAttributes: attributes });
         this.changeStateOfSubmit(attributes, this.state.selectedMetrics);
     }
 
     onMetricsChange = (metrics) => {
-        this.setState({selectedMetrics: metrics});
+        this.setState({ selectedMetrics: metrics });
         this.changeStateOfSubmit(this.state.selectedAttributes, metrics);
     }
 
     onFiltersChange = (filters) => {
-        this.setState({selectedFilters: filters});
+        this.setState({ selectedFilters: filters });
     }
 
     render() {
@@ -302,18 +306,22 @@ class Parameters extends Component {
             <div>
                 <Row gutter={32}>
                     <Col span={8} className='border-right'>
-                        <FolderTree api={this.props.api} url={this.props.api.url} onSelect={this.onTreeSelect} />
+                        <FolderTree
+                            session={this.props.session}
+                            onSelect={this.onTreeSelect} />
                     </Col>
                     <Col span={16}>
                         <Row>
-                            <SearchToolbar selectedElementName={this.state.selectedElementsHeader.name}
+                            <SearchToolbar
+                                selectedElementName={this.state.selectedElementsHeader.name}
                                 selectedElementIcon={this.state.selectedElementsHeader.icon}
                                 onSwitchChange={this.onSwitchChange}
                                 onSearchChange={this.onSearchChange} />
                         </Row>
                         <Row gutter={16}>
                             <Col span={12}>
-                                <Selector title='Attributes'
+                                <Selector
+                                    title='Attributes'
                                     key={this.state.dataset.datasetId}
                                     searchText={this.state.searchText}
                                     showSelected={this.state.showSelected}
@@ -324,7 +332,8 @@ class Parameters extends Component {
                                 />
                             </Col>
                             <Col span={12}>
-                                <Selector title='Metrics'
+                                <Selector
+                                    title='Metrics'
                                     key={this.state.dataset.datasetId}
                                     searchText={this.state.searchText}
                                     showSelected={this.state.showSelected}
@@ -335,7 +344,8 @@ class Parameters extends Component {
                             </Col>
                         </Row>
                         <Row>
-                            <FilterSelector title='Filters'
+                            <FilterSelector
+                                title='Filters'
                                 key={this.state.dataset.datasetId}
                                 searchText={this.state.searchText}
                                 showSelected={this.state.showSelected}

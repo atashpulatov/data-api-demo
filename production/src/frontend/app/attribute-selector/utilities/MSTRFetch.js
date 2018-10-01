@@ -1,23 +1,14 @@
-import {message} from 'antd';
+import { message } from 'antd';
 import MSTRCallback from './MSTRCallback';
 
 const USE_PROXY = false;
 //!(new MSTRCallback('proxy').parameter === 'false');
 
-message.config({maxCount: 1});
+message.config({ maxCount: 1 });
 
-export default class MSTRFetch {
+class MSTRFetch {
     constructor() {
         this.supportedTypes = [3, 8, 768, 769, 779, 776];
-    }
-
-    createConnection(config) {
-        const {url, username, password, loginMode} = config;
-        this.credentials = {username, password, loginMode};
-        this.envUrl = url;
-        this.username = username;
-        this.password = password;
-        this.loginMode = loginMode;
     }
 
     get url() {
@@ -40,8 +31,14 @@ export default class MSTRFetch {
         this.token = null;
     }
 
+    apiInitializer = (session) => {
+        this.token = session.authToken;
+        this.envUrl = session.url;
+        this.project = session.projectId;
+    };
+
     getToken() {
-        const mstrURL = this.envUrl + 'api/auth/login';
+        const mstrURL = this.envUrl + '/auth/login';
         const url = USE_PROXY ? './getMSTRToken' : mstrURL;
         const data = {
             'username': this.username,
@@ -70,7 +67,7 @@ export default class MSTRFetch {
         }).then((response) => {
             if (response.ok) {
                 const token = response.headers.get('X-MSTR-AuthToken');
-                return {token};
+                return { token };
             } else {
                 if (response.status === 401) {
                     message.info('Cannot login. Please check your credentials');
@@ -93,7 +90,7 @@ export default class MSTRFetch {
     }
 
     postData(endpoint, data = {}) {
-        const mstrURL = this.envUrl + 'api/' + endpoint;
+        const mstrURL = this.envUrl + '/' + endpoint;
         const url = USE_PROXY ? './httpPostFull' : mstrURL;
         let headers = {
             'Accept': 'application/json',
@@ -112,7 +109,7 @@ export default class MSTRFetch {
                 'forward.url': mstrURL,
             };
             if (this.project && endpoint !== 'projects') {
-                headers = {...headers, 'forward.X-MSTR-ProjectID': this.project};
+                headers = { ...headers, 'forward.X-MSTR-ProjectID': this.project };
             }
         }
         return fetch(url, {
@@ -136,7 +133,7 @@ export default class MSTRFetch {
     }
 
     getData(endpoint) {
-        const mstrURL = this.envUrl + 'api/' + endpoint;
+        const mstrURL = this.envUrl + '/' + endpoint;
         const url = USE_PROXY ? './httpGetFull' : mstrURL;
         let headers = {
             'Accept': 'application/json',
@@ -153,7 +150,7 @@ export default class MSTRFetch {
                 'forward.url': mstrURL,
             };
             if (this.project && endpoint !== 'projects') {
-                headers = {...headers, 'forward.X-MSTR-ProjectID': this.project};
+                headers = { ...headers, 'forward.X-MSTR-ProjectID': this.project };
             }
         }
         return fetch(url, {
@@ -204,7 +201,7 @@ export default class MSTRFetch {
             let attributes = [];
             if (report.result.data.root && report.result.data.root.children) {
                 report.result.data.root.children.forEach((item) => {
-                    attributes.push({name: item.element.name, id: item.element.id});
+                    attributes.push({ name: item.element.name, id: item.element.id });
                 });
             }
             return attributes;
@@ -253,9 +250,9 @@ export default class MSTRFetch {
         const encodedName = USE_PROXY ? name : encodeURIComponent(name);
         return this.getData(`searches/results?name=${encodedName}&pattern=4&type=3&getAncestors=false&limit=10&certifiedStatus=ALL`)
             .then((response) => {
-                let {result, totalItems} = response;
+                let { result, totalItems } = response;
                 result = this.sortAndFilterArray(result);
-                return {result, totalItems};
+                return { result, totalItems };
             });
     }
 
@@ -306,13 +303,13 @@ export default class MSTRFetch {
         if (attributes && attributes.length > 0) {
             body.requestedObjects.attributes = [];
             attributes.forEach((att) => {
-                body.requestedObjects.attributes.push({'id': att});
+                body.requestedObjects.attributes.push({ 'id': att });
             });
         }
         if (metrics && metrics.length > 0) {
             body.requestedObjects.metrics = [];
             metrics.forEach((met) => {
-                body.requestedObjects.metrics.push({'id': met});
+                body.requestedObjects.metrics.push({ 'id': met });
             });
         }
         if (filters && Object.keys(filters).length > 0) {
@@ -344,7 +341,7 @@ export default class MSTRFetch {
                 let rowobj = {};
                 result.definition.attributes.forEach((att) => {
                     if (att.forms.length > 1) {
-                        att.forms.forEach(function(form) {
+                        att.forms.forEach(function (form) {
                             attributesobj.push(att.name + ' ' + form.name);
                         });
                     } else {
@@ -364,16 +361,16 @@ export default class MSTRFetch {
                     }
 
                     if (node.metrics || !node.children) {
-                        metrics.forEach(function(metric, i) {
+                        metrics.forEach(function (metric, i) {
                             const value = preview ? node.metrics[metric].fv : node.metrics[metric].rv;
                             rowobj[attNum + i] = value;
                         });
                         temp = {};
                         row = {};
-                        attributes.forEach(function(att, i) {
+                        attributes.forEach(function (att, i) {
                             temp[att] = rowobj[i];
                         });
-                        metrics.forEach(function(metric, i) {
+                        metrics.forEach(function (metric, i) {
                             temp[metric] = rowobj[attNum + i];
                         });
 
@@ -470,3 +467,5 @@ export default class MSTRFetch {
         return filter;
     };
 }
+
+export const msrtFetch = new MSTRFetch();

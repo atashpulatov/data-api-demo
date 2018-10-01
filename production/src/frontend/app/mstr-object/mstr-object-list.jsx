@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { withNavigation } from '../navigation/with-navigation.jsx';
 import { mstrObjectListHelper } from './mstr-object-list-helper';
 import { sessionHelper } from '../storage/session-helper';
+import { Bootstrap } from '../attribute-selector/bootstrap.jsx';
 /* eslint-enable */
 
 const objectsTypesMap = {
@@ -50,6 +51,7 @@ export class _MstrObjects extends React.Component {
     render() {
         return (
             <article className='objects-container'>
+                <Bootstrap />
                 <ul className='no-padding object-list'>
                     {this.state.mstrObjects
                         .filter((obj) => objectsTypesMap.directory === obj.type)
