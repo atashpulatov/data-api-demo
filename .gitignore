@@ -322,4 +322,5 @@ __pycache__/
 *.xsd.cs
 
 # Custom exclusions
-coverage/
+production/coverage/
+*bundle.js
