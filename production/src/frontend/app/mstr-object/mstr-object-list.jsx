@@ -9,6 +9,7 @@ import { withNavigation } from '../navigation/with-navigation.jsx';
 import { mstrObjectListHelper } from './mstr-object-list-helper';
 import { sessionHelper } from '../storage/session-helper';
 import { Bootstrap } from '../attribute-selector/bootstrap.jsx';
+import { Modal } from 'antd';
 /* eslint-enable */
 
 const objectsTypesMap = {
@@ -23,7 +24,9 @@ export class _MstrObjects extends React.Component {
 
         this.state = {
             mstrObjects: [],
+            modalVisible: false,
         };
+        this.showModal = this.showModal.bind(this);
     }
 
     async componentDidMount() {
@@ -48,10 +51,23 @@ export class _MstrObjects extends React.Component {
         }
     }
 
+    showModal = (reportId) => {
+        this.setState({
+            modalVisible: true,
+            currentReportId: reportId,
+        });
+    }
+
+    handleCancel = (e) => {
+        console.log(e);
+        this.setState({
+            modalVisible: false,
+        });
+    }
+
     render() {
         return (
             <article className='objects-container'>
-                <Bootstrap />
                 <ul className='no-padding object-list'>
                     {this.state.mstrObjects
                         .filter((obj) => objectsTypesMap.directory === obj.type)
@@ -67,9 +83,18 @@ export class _MstrObjects extends React.Component {
                         .map((report) => (
                             <ReportRow key={report.id}
                                 report={report}
-                                onClick={officeDisplayService.printObject} />
+                                // onClick={officeDisplayService.printObject} />
+                                onClick={this.showModal} />
                         ))}
                 </ul>
+                <Modal
+                    title="Basic Modal"
+                    visible={this.state.modalVisible}
+                    onOk={this.handleOk}
+                    width='auto'
+                    onCancel={this.handleCancel}>
+                    <Bootstrap reportId={this.state.currentReportId} />
+                </Modal>
             </article>
         );
     }

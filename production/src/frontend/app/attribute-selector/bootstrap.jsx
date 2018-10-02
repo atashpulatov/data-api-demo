@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
 
 import MainContainer from './components/MainContainer';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import Content from './components/Content';
 import Parameters from './components/Parameters';
-import MSTRFetch, { msrtFetch } from './utilities/MSTRFetch';
-import { message } from 'antd';
+import { msrtFetch } from './utilities/MSTRFetch';
+import { message, Button } from 'antd';
 import { reduxStore } from '../store';
 import './Bootstrap.css';
-import { historyHelper } from '../history/history-helper';
 
 export class Bootstrap extends Component {
     constructor(props) {
@@ -19,8 +15,10 @@ export class Bootstrap extends Component {
             loading: false,
             disabledSubmit: true,
             disabledConnect: false,
+            selectedAttributes: [],
+            selectedMetrics: [],
+            selectedFilters: [],
         };
-        this.content = React.createRef();
     }
 
 
@@ -94,6 +92,25 @@ export class Bootstrap extends Component {
         }
     }
 
+    showModal = () => {
+        const { selectedAttributes, selectedMetrics } = this.state;
+        if (selectedAttributes.length + selectedMetrics.length === 0) {
+            message.warning('No data selected');
+            return;
+        }
+        this.setState({
+            showModal: true,
+            previewData: null,
+        });
+        this.getPreviewData().catch((error) => {
+            console.log(error);
+            setTimeout(() => {
+                this.setState({ showModal: false });
+            }, 500);
+            message.warning('Cannot load preview data');
+        });
+    }
+
     render() {
         const currentStore = reduxStore.getState();
         const projectId = currentStore.historyReducer.project
@@ -110,7 +127,12 @@ export class Bootstrap extends Component {
                     key={'sumKey'}
                     changeDisabledSubmit={this.props.changeDisabledSubmit}
                     session={session}
-                    ref={this.parameters} />
+                    withDataPreview
+                    onDataPreview={this.showModal}
+                    selectedAttributes={this.state.selectedAttributes}
+                    selectedMetrics={this.state.selectedMetrics}
+                    selectedFilters={this.state.selectedFilters}
+                    reportId={this.props.reportId} />
             </MainContainer>
         );
     }

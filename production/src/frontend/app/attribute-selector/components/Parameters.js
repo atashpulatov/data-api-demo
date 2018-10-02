@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Modal, message } from 'antd';
+import { Row, Col, Modal, message, Button } from 'antd';
 import FolderTree from './FolderTree';
 import Selector from './Selector';
 import FilterSelector from './FilterSelector';
@@ -22,10 +22,10 @@ class Parameters extends Component {
                 metrics: [],
                 filters: [],
             },
-            showModal: false,
             selectedAttributes: [],
             selectedMetrics: [],
             selectedFilters: [],
+            showModal: false,
             loadingNode: false,
             selectedElementsHeader: {
                 name: '',
@@ -36,6 +36,9 @@ class Parameters extends Component {
             loadedFilterElements: [],
             api,
         };
+        if (this.props.reportId) {
+            this.loadReport(this.props.reportId);
+        }
         this.loadParameterData(props);
     }
 
@@ -66,6 +69,12 @@ class Parameters extends Component {
         }
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.reportId !== prevProps.reportId) {
+            this.loadReport(this.props.reportId);
+        }
+    }
+
     failedToLoadErrorHandling = (datasetType) => {
         message.warning(`Cannot load the ${datasetType} definition`);
         this.setState({
@@ -84,7 +93,8 @@ class Parameters extends Component {
 
     mstrSubmit = () => {
         const mstr = window.mstr;
-        const { dataset, selectedAttributes, selectedMetrics, selectedFilters } = this.state;
+        const { selectedAttributes, selectedMetrics, selectedFilters } = this.state;
+        const dataset = this.state.dataset;
         if (!dataset.datasetId || selectedAttributes.length + selectedMetrics.length === 0) {
             message.warning('No data selected');
             return;
@@ -108,37 +118,12 @@ class Parameters extends Component {
         mstr.submit();
     }
 
-    tableauSubmit = () => {
-        const tableau = window.tableau;
-        const { dataset, selectedAttributes, selectedMetrics, selectedFilters } = this.state;
-        if (!dataset.datasetId || selectedAttributes.length + selectedMetrics.length === 0) {
-            message.warning('No data selected');
-            return;
-        }
-        const { datasetId, name, isReport = false } = dataset;
-        const body = this.state.api.createBody(selectedAttributes, selectedMetrics, selectedFilters);
-        const connectionData = {
-            body: body,
-            name: name,
-            isReport: isReport,
-            datasetId: datasetId,
-            url: this.state.api.envUrl,
-            projectId: this.state.api.projectId,
-        };
-        const { loginMode, username, password } = this.state.api.credentials;
-        const authenticationInfo = { loginMode };
-        tableau.username = username;
-        tableau.password = password;
-        tableau.connectionName = 'MicroStrategy Connector';
-        tableau.connectionData = JSON.stringify({ connectionData, authenticationInfo });
-        tableau.submit();
-    }
-
     getPreviewData = () => {
         const limit = 15;
-        const { dataset, selectedAttributes, selectedMetrics } = this.state;
+        const { selectedAttributes, selectedMetrics, selectedFilters } = this.state;
+        const dataset = this.state.dataset;
         if (dataset.isReport) {
-            return this.state.api.getReportDetails(dataset.datasetId, selectedAttributes, selectedMetrics, this.state.selectedFilters, limit)
+            return this.state.api.getReportDetails(dataset.datasetId, selectedAttributes, selectedMetrics, selectedFilters, limit)
                 .then((res) => {
                     if (!res || res.message) {
                         throw new Error(res.message);
@@ -146,7 +131,7 @@ class Parameters extends Component {
                     return this.processPreviewData(res);
                 });
         } else {
-            return this.state.api.getCubeDetails(dataset.datasetId, selectedAttributes, selectedMetrics, this.state.selectedFilters, limit)
+            return this.state.api.getCubeDetails(dataset.datasetId, selectedAttributes, selectedMetrics, selectedFilters, limit)
                 .then((res) => {
                     if (!res || res.message) {
                         throw new Error(res.message);
@@ -171,7 +156,8 @@ class Parameters extends Component {
     }
 
     showModal = () => {
-        const { dataset, selectedAttributes, selectedMetrics } = this.state;
+        const { selectedAttributes, selectedMetrics } = this.state;
+        const dataset = this.state.dataset;
         if (!dataset.datasetId || selectedAttributes.length + selectedMetrics.length === 0) {
             message.warning('No data selected');
             return;
@@ -226,6 +212,19 @@ class Parameters extends Component {
                 this.failedToLoadErrorHandling('report');
             });
         }
+    }
+
+    loadReport(reportId) {
+        this.state.api.getReportInfo(reportId).then((report) => {
+            if (!report) {
+                this.failedToLoadErrorHandling('report');
+                return;
+            }
+            this.loadDataset(true, report);
+        }).catch((error) => {
+            console.log(error);
+            this.failedToLoadErrorHandling('report');
+        });
     }
 
     loadDataset = (isReport, dataset, loadedAttributes, loadedMetrics) => {
@@ -305,11 +304,15 @@ class Parameters extends Component {
         return (
             <div>
                 <Row gutter={32}>
-                    <Col span={8} className='border-right'>
-                        <FolderTree
-                            session={this.props.session}
-                            onSelect={this.onTreeSelect} />
-                    </Col>
+                    {
+                        this.props.withFolderTree
+                            ? <Col span={8} className='border-right'>
+                                <FolderTree
+                                    session={this.props.session}
+                                    onSelect={this.onTreeSelect} />
+                            </Col>
+                            : null
+                    }
                     <Col span={16}>
                         <Row>
                             <SearchToolbar
@@ -356,7 +359,15 @@ class Parameters extends Component {
                         </Row>
                     </Col>
                 </Row>
-
+                {this.props.withDataPreview ?
+                    <Button
+                        className='preview-button'
+                        icon='table'
+                        onClick={this.showModal}>
+                        Data Preview
+                       </Button>
+                    : null
+                }
                 <Modal
                     title="Data Preview"
                     visible={this.state.showModal}
