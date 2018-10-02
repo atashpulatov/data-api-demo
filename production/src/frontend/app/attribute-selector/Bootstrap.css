@@ -241,6 +241,7 @@ span.ant-checkbox {
 
 .ant-tree-iconEle {
     font-weight: bold;
+    vertical-align: middle;
 }
 
 .folder-tree-container {
@@ -274,7 +275,7 @@ span.ant-checkbox {
     vertical-align: middle;
 }
 
-.filter-list.filter-checkbox::before {
+.filter-list .filter-checkbox::before {
     margin-left: -7px;
 }
 
