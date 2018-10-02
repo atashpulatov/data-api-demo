@@ -39,28 +39,44 @@ class MstrObjectRestService {
             });
     }
 
-    async _getInstanceId(fullPath, authToken, projectId) {
-        return await moduleProxy.request
-            .post(fullPath)
-            .set('x-mstr-authtoken', authToken)
-            .set('x-mstr-projectid', projectId)
-            .withCredentials()
-            .then((res) => {
-                let objects = res.body;
-                return objects.instanceId;
-            })
-            .catch((err) => {
-                errorHandler(err);
-            });
+    async _getInstanceId(fullPath, authToken, projectId, body) {
+        if (body) {
+            return await moduleProxy.request
+                .post(fullPath)
+                .set('x-mstr-authtoken', authToken)
+                .set('x-mstr-projectid', projectId)
+                .send(body)
+                .withCredentials()
+                .then((res) => {
+                    let objects = res.body;
+                    return objects.instanceId;
+                })
+                .catch((err) => {
+                    errorHandler(err);
+                });
+        } else {
+            return await moduleProxy.request
+                .post(fullPath)
+                .set('x-mstr-authtoken', authToken)
+                .set('x-mstr-projectid', projectId)
+                .withCredentials()
+                .then((res) => {
+                    let objects = res.body;
+                    return objects.instanceId;
+                })
+                .catch((err) => {
+                    errorHandler(err);
+                });
+        }
     }
 
-    async getObjectContent(objectId) {
+    async getObjectContent(objectId, body) {
         const storeState = reduxStore.getState();
         const envUrl = storeState.sessionReducer.envUrl;
         const authToken = storeState.sessionReducer.authToken;
         const projectId = storeState.historyReducer.project.projectId;
         let fullPath = `${envUrl}/reports/${objectId}/instances`;
-        const reportInstance = await this._getInstanceId(fullPath, authToken, projectId);
+        const reportInstance = await this._getInstanceId(fullPath, authToken, projectId, body);
         fullPath += `/${reportInstance}`;
         return await moduleProxy.request
             .get(fullPath)

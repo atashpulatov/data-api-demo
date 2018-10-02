@@ -16,13 +16,13 @@ class OfficeDisplayService {
         this.refreshReport = this.refreshReport.bind(this);
     }
 
-    async printObject(objectId, startCell, tableName, bindingId) {
+    async printObject(objectId, startCell, tableName, bindingId, body) {
         sessionHelper.enableLoading();
         const context = await officeApiHelper.getOfficeContext();
         if (!startCell) {
             startCell = await officeApiHelper.getSelectedCell(context);
         }
-        let jsonData = await mstrObjectRestService.getObjectContent(objectId);
+        let jsonData = await mstrObjectRestService.getObjectContent(objectId, body);
         let convertedReport = officeConverterService
             .getConvertedTable(jsonData);
         const newTableName = tableName || await officeApiHelper.findAvailableTableName(convertedReport.name, context);

@@ -21,12 +21,13 @@ const objectsTypesMap = {
 export class _MstrObjects extends React.Component {
     constructor(props) {
         super(props);
-
         this.state = {
             mstrObjects: [],
             modalVisible: false,
+            triggerUpdate: false,
         };
         this.showModal = this.showModal.bind(this);
+        this.onTriggerUpdate = this.onTriggerUpdate.bind(this);
     }
 
     async componentDidMount() {
@@ -39,7 +40,11 @@ export class _MstrObjects extends React.Component {
         sessionHelper.disableLoading();
     }
 
-    async componentDidUpdate() {
+    async componentDidUpdate(prevProps, prevState) {
+        if (prevState.body !== this.state.body) {
+            console.log(this.state.body);
+            this.printReportLocalized(this.state.currentReportId, this.state.body);
+        }
         const dirArray = reduxStore.getState().historyReducer.directoryArray;
         const data = await mstrObjectListHelper.fetchContent(dirArray);
         const arraysEqual = mstrObjectListHelper.compareMstrObjectArrays(this.state.mstrObjects, data);
@@ -49,6 +54,10 @@ export class _MstrObjects extends React.Component {
             });
             sessionHelper.disableLoading();
         }
+    }
+
+    printReportLocalized(reportId, body){
+        officeDisplayService.printObject(reportId, null, null, null, body);
     }
 
     showModal = (reportId) => {
@@ -61,6 +70,20 @@ export class _MstrObjects extends React.Component {
     handleCancel = (e) => {
         console.log(e);
         this.setState({
+            modalVisible: false,
+        });
+    }
+
+    onTriggerUpdate(body) {
+        this.setState({
+            body,
+            triggerUpdate: false,
+        });
+    }
+
+    handleOk = () => {
+        this.setState({
+            triggerUpdate: true,
             modalVisible: false,
         });
     }
@@ -88,12 +111,16 @@ export class _MstrObjects extends React.Component {
                         ))}
                 </ul>
                 <Modal
-                    title="Basic Modal"
+                    title="Load report"
                     visible={this.state.modalVisible}
                     onOk={this.handleOk}
-                    width='auto'
+                    // width='auto'
                     onCancel={this.handleCancel}>
-                    <Bootstrap reportId={this.state.currentReportId} />
+                    <Bootstrap
+                        reportId={this.state.currentReportId}
+                        triggerUpdate={this.state.triggerUpdate}
+                        onTriggerUpdate={this.onTriggerUpdate}
+                    />
                 </Modal>
             </article>
         );

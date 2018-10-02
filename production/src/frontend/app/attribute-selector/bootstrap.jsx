@@ -15,33 +15,7 @@ export class Bootstrap extends Component {
             loading: false,
             disabledSubmit: true,
             disabledConnect: false,
-            selectedAttributes: [],
-            selectedMetrics: [],
-            selectedFilters: [],
         };
-    }
-
-
-    goBack = () => {
-        this.api.logout();
-        this.setState({ loading: false });
-    }
-
-    onConnect = () => {
-        const getAuthForm = this.content.current.validateForm();
-        getAuthForm((err, credentials) => {
-            if (!err) {
-                credentials.url = this.urlChecker(credentials.url);
-                this.setState({ loading: true, credentials });
-                this.api.createConnection(credentials);
-                this.api.getToken().then((token) => {
-                    if (token) {
-                        this.tokenChecker();
-                    }
-                    this.setState({ loading: false });
-                });
-            }
-        });
     }
 
     handleSubmit = (e) => {
@@ -60,10 +34,6 @@ export class Bootstrap extends Component {
                 });
             }
         });
-    }
-
-    onSubmit = () => {
-        this.content.current.submit();
     }
 
     tokenChecker = () => {
@@ -92,25 +62,6 @@ export class Bootstrap extends Component {
         }
     }
 
-    showModal = () => {
-        const { selectedAttributes, selectedMetrics } = this.state;
-        if (selectedAttributes.length + selectedMetrics.length === 0) {
-            message.warning('No data selected');
-            return;
-        }
-        this.setState({
-            showModal: true,
-            previewData: null,
-        });
-        this.getPreviewData().catch((error) => {
-            console.log(error);
-            setTimeout(() => {
-                this.setState({ showModal: false });
-            }, 500);
-            message.warning('Cannot load preview data');
-        });
-    }
-
     render() {
         const currentStore = reduxStore.getState();
         const projectId = currentStore.historyReducer.project
@@ -127,11 +78,9 @@ export class Bootstrap extends Component {
                     key={'sumKey'}
                     changeDisabledSubmit={this.props.changeDisabledSubmit}
                     session={session}
+                    triggerUpdate={this.props.triggerUpdate}
+                    onTriggerUpdate={this.props.onTriggerUpdate}
                     withDataPreview
-                    onDataPreview={this.showModal}
-                    selectedAttributes={this.state.selectedAttributes}
-                    selectedMetrics={this.state.selectedMetrics}
-                    selectedFilters={this.state.selectedFilters}
                     reportId={this.props.reportId} />
             </MainContainer>
         );

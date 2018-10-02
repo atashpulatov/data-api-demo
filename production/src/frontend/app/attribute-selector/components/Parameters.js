@@ -73,6 +73,16 @@ class Parameters extends Component {
         if (this.props.reportId !== prevProps.reportId) {
             this.loadReport(this.props.reportId);
         }
+        if (this.props.triggerUpdate !== prevProps.triggerUpdate && this.props.triggerUpdate) {
+            const { selectedAttributes, selectedMetrics, selectedFilters } = this.state;
+            const dataset = this.state.dataset;
+            if (!dataset.datasetId || selectedAttributes.length + selectedMetrics.length === 0) {
+                message.warning('No data selected');
+                return;
+            }
+            const body = this.state.api.createBody(selectedAttributes, selectedMetrics, selectedFilters);
+            this.props.onTriggerUpdate(body);
+        }
     }
 
     failedToLoadErrorHandling = (datasetType) => {
@@ -360,22 +370,24 @@ class Parameters extends Component {
                     </Col>
                 </Row>
                 {this.props.withDataPreview ?
-                    <Button
-                        className='preview-button'
-                        icon='table'
-                        onClick={this.showModal}>
-                        Data Preview
+                    <div>
+                        <Button
+                            className='preview-button'
+                            icon='table'
+                            onClick={this.showModal}>
+                            Data Preview
                        </Button>
+                        <Modal
+                            title="Data Preview"
+                            visible={this.state.showModal}
+                            onCancel={this.handleModalClose}
+                            width={640}
+                            footer={null}>
+                            <PreviewTable previewData={this.state.previewData} />
+                        </Modal>
+                    </div>
                     : null
                 }
-                <Modal
-                    title="Data Preview"
-                    visible={this.state.showModal}
-                    onCancel={this.handleModalClose}
-                    width={640}
-                    footer={null}>
-                    <PreviewTable previewData={this.state.previewData} />
-                </Modal>
             </div>
 
         );
