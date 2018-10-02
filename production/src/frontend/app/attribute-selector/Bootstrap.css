@@ -3,10 +3,10 @@
 .box-container {
     width: 1032px;
     margin-top: 40px;
-    border: 1px solid #979797;
-    border-radius: 4px;
+    /* border: 1px solid #979797;
+    border-radius: 4px; */
     background-color: #ffffff;
-    box-shadow: rgba(68, 70, 73, 0.3) 0 0 8px 2px;
+    /* box-shadow: rgba(68, 70, 73, 0.3) 0 0 8px 2px; */
     margin: 0 auto;
 }
 
@@ -155,7 +155,7 @@
     float: right;
 }
 
-.search-input {
+.search-input.ant-input {
     width: 200px;
     margin: 0px 15px;
 }
@@ -174,7 +174,7 @@
 .ant-list,
 .empty-list {
     border: 1px solid rgba(151, 151, 151, 0.55);
-    border-radius: 0;
+    border-radius: 4px;
     font-size: 13px;
     height: 175px;
     max-height: 175px;
@@ -185,7 +185,7 @@
     border-left: none;
 }
 
-.ant-list-bordered .ant-list-item {
+.ant-list-bordered.ant-list-item {
     border: none;
     padding-top: 2px;
     padding-bottom: 2px;
@@ -249,24 +249,24 @@ span.ant-checkbox {
     overflow: auto;
 }
 
-.filter-list .ant-tree {
+.filter-list.ant-tree {
     font-size: 13px;
 }
 
-.filter-list .ant-tree li {
+.filter-list.ant-tree li {
     display: inline-block;
 }
 
-.filter-list .ant-tree li,
-.filter-list .ant-tree-node-content-wrapper.ant-tree-node-content-wrapper-normal {
+.filter-list.ant-tree li,
+.filter-list.ant-tree-node-content-wrapper.ant-tree-node-content-wrapper-normal {
     width: 100%;
 }
 
-.filter-list .ant-tree-switcher.ant-tree-switcher-noop {
+.filter-list.ant-tree-switcher.ant-tree-switcher-noop {
     display: none;
 }
 
-.filter-list .filter-checkbox {
+.filter-list.filter-checkbox {
     display: inline-block;
     height: 24px;
     line-height: 24px;
@@ -274,13 +274,13 @@ span.ant-checkbox {
     vertical-align: middle;
 }
 
-.filter-list .filter-checkbox::before {
+.filter-list.filter-checkbox::before {
     margin-left: -7px;
 }
 
 /* Selector buttons */
 
-.selector-button {
+.selector-button.ant-btn{
     border: none;
     margin: 0;
     padding-right: 0;
@@ -291,15 +291,15 @@ span.ant-checkbox {
     color: #1890ff;
 }
 
-.preview-button {
+.preview-button.ant-btn {
     border: none;
     margin-top: 10px;
     height: auto;
     color: #1890ff;
 }
 
-.preview-button .anticon,
-.preview-button .anticon:hover {
+.preview-button.anticon,
+.preview-button.anticon:hover {
     color: #979797;
 }
 

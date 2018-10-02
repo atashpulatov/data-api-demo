@@ -114,7 +114,7 @@ export class _MstrObjects extends React.Component {
                     title="Load report"
                     visible={this.state.modalVisible}
                     onOk={this.handleOk}
-                    // width='auto'
+                    width='1100px'
                     onCancel={this.handleCancel}>
                     <Bootstrap
                         reportId={this.state.currentReportId}

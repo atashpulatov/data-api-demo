@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {Icon, Col, Tree, Spin} from 'antd';
+import React, { Component } from 'react';
+import { Icon, Col, Tree, Spin } from 'antd';
 import Selector from './Selector';
 import MSTRIcon from './MSTRIcon';
 
@@ -22,7 +22,7 @@ class FilterSelector extends Component {
     }
 
     onFilterChange = async (selectedKey, e) => {
-        this.setState({selectedTreeKey: selectedKey});
+        this.setState({ selectedTreeKey: selectedKey });
         // on unselect filter
         if (selectedKey.length === 0) {
             this.setState({
@@ -34,7 +34,7 @@ class FilterSelector extends Component {
         let id = this.props.items[selectedKey].id;
         // load items from REST Api
         if (!this.props.items[selectedKey].items) {
-            this.setState({loading: true});
+            this.setState({ loading: true });
             this.props.items[selectedKey].items = await this.props.getAttributes(id);
         }
         // change filter elements
@@ -54,12 +54,12 @@ class FilterSelector extends Component {
                     key={filter.index}
                     title={
                         <span>
-                            <MSTRIcon type='filter' style={{marginRight: '5px'}} className='filter-icon' />
+                            <MSTRIcon type='filter' style={{ marginRight: '5px' }} className='filter-icon' />
                             {filter.item.name}
-                            <span style={{float: 'right', paddingRight: '15px', display: filter.checkedLength ? 'block' : 'none'}}> ({filter.checkedLength}/{filter.item.items ? filter.item.items.length : 0}) </span>
+                            <span style={{ float: 'right', paddingRight: '15px', display: filter.checkedLength ? 'block' : 'none' }}> ({filter.checkedLength}/{filter.item.items ? filter.item.items.length : 0}) </span>
                         </ span>}
                     isLeaf
-                    icon={<span><Icon type='check' className='filter-checkbox' style={{display: filter.checkedLength ? 'block' : 'none'}} /></span>}>
+                    icon={<span><Icon type='check' className='filter-checkbox' style={{ display: filter.checkedLength ? 'block' : 'none' }} /></span>}>
                 </ TreeNode>
             );
         });
@@ -74,7 +74,7 @@ class FilterSelector extends Component {
                 return;
             }
             let checkedLength = (checkedElements && checkedElements.length) ? checkedElements.length : 0;
-            toRender.push({item: item, index: index, checkedLength: checkedLength});
+            toRender.push({ item: item, index: index, checkedLength: checkedLength });
         });
         return toRender;
     }
@@ -97,43 +97,49 @@ class FilterSelector extends Component {
         if (selectedElements.length === 0) {
             delete selectedFilters[id];
         }
-        this.setState({selectedFilters: selectedFilters});
+        this.setState({ selectedFilters: selectedFilters });
         this.props.onChange(selectedFilters);
     }
 
     render() {
         const filtersToRender = this.getItemsToRender();
-        const treeSelector = filtersToRender.length > 0 ? (
-            <Spin indicator={loadingIndicator} wrapperClassName='loading-indicator' spinning={this.props.loading}>
-                <Tree
-                    style={{width: '100%'}}
-                    onSelect={this.onFilterChange}
-                    showIcon={true}
-                    selectedKeys={this.state.selectedTreeKey}
-                >
-                    {this.renderItems(filtersToRender)}
-                </Tree>
-            </Spin>
-        ) : (<div class="ant-list-empty-text"> No data </div>);
+        const treeSelector = filtersToRender.length > 0
+            ? (
+                <Spin indicator={loadingIndicator} wrapperClassName='loading-indicator' spinning={this.props.loading}>
+                    <Tree
+                        style={{ width: '100%' }}
+                        onSelect={this.onFilterChange}
+                        showIcon={true}
+                        selectedKeys={this.state.selectedTreeKey}
+                    >
+                        {this.renderItems(filtersToRender)}
+                    </Tree>
+                </Spin>
+            )
+            : (<div class="ant-list-empty-text"> No data </div>);
         return (
             <div>
-                <Col span={12}>
+                <Col span={12} style={{ 'padding-left': '8px', 'padding-right': '8px' }}>
                     <div className='selector-title'>
                         {this.props.title} ({Object.keys(this.state.selectedFilters).length})
                     </div>
                     <div className='filter-list ant-list'>
-                        {this.props.items.length > 0 ? treeSelector : <div />}
+                        {this.props.items.length > 0
+                            ? treeSelector
+                            : null}
                     </div>
                 </Col>
-                <Col span={12}>
-                    <Selector
-                        key={this.state.key}
-                        searchText={this.props.searchText}
-                        showSelected={this.props.showSelected}
-                        items={this.state.filterItems}
-                        onChange={this.onChangeElement}
-                        loading={this.state.loading}
-                        loadedData={this.state.loadedData} />
+                <Col span={12} style={{ 'padding-left': '8px', 'padding-right': '8px' }}>
+                    {this.state.selectedTreeKey.length > 0
+                        ? <Selector
+                            key={this.state.key}
+                            searchText={this.props.searchText}
+                            showSelected={this.props.showSelected}
+                            items={this.state.filterItems}
+                            onChange={this.onChangeElement}
+                            loading={this.state.loading}
+                            loadedData={this.state.loadedData} />
+                        : null}
                 </Col>
             </div >
         );
