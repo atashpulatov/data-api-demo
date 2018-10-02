@@ -249,24 +249,24 @@ span.ant-checkbox {
     overflow: auto;
 }
 
-.filter-list.ant-tree {
+.filter-list .ant-tree {
     font-size: 13px;
 }
 
-.filter-list.ant-tree li {
+.filter-list .ant-tree li {
     display: inline-block;
 }
 
-.filter-list.ant-tree li,
-.filter-list.ant-tree-node-content-wrapper.ant-tree-node-content-wrapper-normal {
+.filter-list .ant-tree li,
+.filter-list .ant-tree-node-content-wrapper.ant-tree-node-content-wrapper-normal {
     width: 100%;
 }
 
-.filter-list.ant-tree-switcher.ant-tree-switcher-noop {
+.filter-list .ant-tree-switcher.ant-tree-switcher-noop {
     display: none;
 }
 
-.filter-list.filter-checkbox {
+.filter-list .filter-checkbox {
     display: inline-block;
     height: 24px;
     line-height: 24px;
@@ -291,15 +291,15 @@ span.ant-checkbox {
     color: #1890ff;
 }
 
-.preview-button.ant-btn {
+.preview-button {
     border: none;
     margin-top: 10px;
     height: auto;
     color: #1890ff;
 }
 
-.preview-button.anticon,
-.preview-button.anticon:hover {
+.preview-button .anticon,
+.preview-button .anticon:hover {
     color: #979797;
 }
 

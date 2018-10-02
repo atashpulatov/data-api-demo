@@ -54,12 +54,23 @@ class FilterSelector extends Component {
                     key={filter.index}
                     title={
                         <span>
-                            <MSTRIcon type='filter' style={{ marginRight: '5px' }} className='filter-icon' />
+                            <MSTRIcon
+                                type='filter'
+                                style={{ marginRight: '5px' }}
+                                className='filter-icon' />
                             {filter.item.name}
-                            <span style={{ float: 'right', paddingRight: '15px', display: filter.checkedLength ? 'block' : 'none' }}> ({filter.checkedLength}/{filter.item.items ? filter.item.items.length : 0}) </span>
+                            <span
+                                style={{ float: 'right', paddingRight: '15px', display: filter.checkedLength ? 'block' : 'none' }}>
+                                ({filter.checkedLength}/{filter.item.items ? filter.item.items.length : 0})
+                            </span>
                         </ span>}
                     isLeaf
-                    icon={<span><Icon type='check' className='filter-checkbox' style={{ display: filter.checkedLength ? 'block' : 'none' }} /></span>}>
+                    icon={<span>
+                        <Icon
+                            type='check'
+                            className='filter-checkbox'
+                            style={{ display: filter.checkedLength ? 'block' : 'none' }} />
+                    </span>}>
                 </ TreeNode>
             );
         });
