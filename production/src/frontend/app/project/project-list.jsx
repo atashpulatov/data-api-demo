@@ -5,6 +5,7 @@ import './project.css';
 import { withNavigation } from '../navigation/with-navigation.jsx';
 import { projectListHelper } from './project-list-helper';
 import { sessionHelper } from '../storage/session-helper';
+import { reduxStore } from '../store';
 /* eslint-enable */
 
 export class _Projects extends Component {
@@ -23,6 +24,28 @@ export class _Projects extends Component {
             projects,
         });
         sessionHelper.disableLoading();
+        const envUrl = reduxStore.getState().sessionReducer.envUrl;
+        const token = reduxStore.getState().sessionReducer.authToken;
+        if (token === undefined) {
+            return;
+        }
+        await Excel.run(async (context) => {
+            Office.context.ui.displayDialogAsync(
+                'https://localhost:3000/popup.html?envUrl=' + envUrl
+                + '&token=' + token,
+                { height: 100, width: 80 },
+                (asyncResult) => {
+                    console.log(asyncResult);
+                    let dialog = asyncResult.value;
+                    dialog.addEventHandler(
+                        Office.EventType.DialogMessageReceived, (arg) => {
+                            // console.log(arg.message);
+                            // dialog.close();
+                        });
+                });
+
+            await context.sync();
+        });
     }
 
     render() {
