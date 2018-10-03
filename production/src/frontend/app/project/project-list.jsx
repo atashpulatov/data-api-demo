@@ -33,7 +33,7 @@ export class _Projects extends Component {
             Office.context.ui.displayDialogAsync(
                 'https://localhost:3000/popup.html?envUrl=' + envUrl
                 + '&token=' + token,
-                { height: 100, width: 80 },
+                { height: 50, width: 60, displayInIframe: true },
                 (asyncResult) => {
                     console.log(asyncResult);
                     let dialog = asyncResult.value;
