@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React from 'react';
-import { Row, Col, Icon, message, Tooltip } from 'antd';
+import { Row, Col, message, Tooltip } from 'antd';
+import MSTRIcon from '../attribute-selector/components/MSTRIcon';
 /* eslint-enable */
 
 export const DirectoryRow = ({ directory, onClick }) => (
@@ -9,7 +10,8 @@ export const DirectoryRow = ({ directory, onClick }) => (
         className='cursor-is-pointer row'
         onClick={() => onClick(directory.id, directory.name)}>
         <Col>
-            <Icon type="folder" theme="outlined" />
+            <MSTRIcon type='folder-collapsed' />
+            {/* <Icon type="folder" theme="outlined" /> */}
         </Col>
         <Col
             offset={1}>
@@ -23,7 +25,7 @@ export const ReportRow = ({ report, onClick, onFilterReport }) => (
         type='flex'
         className='cursor-is-pointer row'>
         <Col>
-            <Icon type="file-text" theme="outlined" />
+            <MSTRIcon type='report' />
         </Col>
         <Col
             onClick={async () => {
@@ -35,14 +37,16 @@ export const ReportRow = ({ report, onClick, onFilterReport }) => (
         >
             {report.name}
         </Col>
-        <Col
-            offset={1}
-            onClick={() => {
-                onFilterReport(report.id);
-            }}>
-            <Tooltip placement="left" title='Choose data'>
-                <Icon type="filter" theme="outlined" />
-            </Tooltip>
-        </Col>
+        <Tooltip
+            placement='left'
+            title='Choose data'>
+            <Col
+                offset={1}
+                onClick={() => {
+                    onFilterReport(report.id);
+                }}>
+                <MSTRIcon type='filter' />
+            </Col>
+        </Tooltip>
     </Row>
 );
