@@ -109,6 +109,7 @@ class Selector extends Component {
                 value={this.state.selectedValues}
                 defaultValue={this.props.loadedData}>
                 <List size='small'
+                    className='ant-list-selector'
                     loading={{ spinning: loading, ...loadingSettings }}
                     bordered
                     dataSource={this.filterItems(this.state.selectedValues, items, showSelected, searchText)}
