@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Checkbox, List, Icon } from 'antd';
 import SelectorButtons from './SelectorButtons';
 import MSTRIcon from './MSTRIcon';
+import './mstr-react.css';
 
 const loadingIndicator = <Icon type='loading' />;
 const loadingSettings = {

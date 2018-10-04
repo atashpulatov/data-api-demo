@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { withNavigation } from '../navigation/with-navigation.jsx';
 import { mstrObjectListHelper } from './mstr-object-list-helper';
 import { sessionHelper } from '../storage/session-helper';
-import { Bootstrap } from '../attribute-selector/bootstrap.jsx';
+import { AttributeSelector } from '../attribute-selector/attribute-selector.jsx';
 import { Modal } from 'antd';
 /* eslint-enable */
 
@@ -88,6 +88,7 @@ export class _MstrObjects extends React.Component {
     }
 
     render() {
+        const session = sessionHelper.getSession();
         return (
             <article className='objects-container'>
                 <ul className='no-padding object-list'>
@@ -115,7 +116,8 @@ export class _MstrObjects extends React.Component {
                     onOk={this.handleOk}
                     width='1100px'
                     onCancel={this.handleCancel}>
-                    <Bootstrap
+                    <AttributeSelector
+                        session={session}
                         reportId={this.state.currentReportId}
                         triggerUpdate={this.state.triggerUpdate}
                         onTriggerUpdate={this.onTriggerUpdate}
