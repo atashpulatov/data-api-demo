@@ -15,7 +15,7 @@ export class AttributeSelector extends Component {
         return (
             <ErrorBoundary>
                 <Parameters
-                    key={'Mstr-parameters'}  // FIXME: rethink key generation
+                    key={this.props.reportId}
                     session={this.props.session}
                     triggerUpdate={this.props.triggerUpdate}
                     onTriggerUpdate={this.props.onTriggerUpdate}
