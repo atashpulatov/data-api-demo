@@ -1,14 +1,11 @@
 /* eslint-disable */
 import React, { Component } from 'react';
-import Parameters from './components/parameters.jsx';
-import { msrtFetch } from './utilities/MSTRFetch';
-import ErrorBoundary from './components/error-boundary.jsx';
+import { Parameters, ErrorBoundary } from 'mstr-react';
 /* esling-enable */
 
 export class AttributeSelector extends Component {
     constructor(props) {
         super(props);
-        this.api = msrtFetch;
         this.state = {
             loading: false,
         };
