@@ -14,6 +14,19 @@ class SessionHelper {
             loading: false,
         });
     }
+    getSession() {
+        const currentStore = reduxStore.getState();
+        const projectId = currentStore.historyReducer.project
+            ? currentStore.historyReducer.project.projectId
+            : undefined;
+        const session = {
+            USE_PROXY: false,
+            url: currentStore.sessionReducer.envUrl,
+            authToken: currentStore.sessionReducer.authToken,
+            projectId,
+        };
+        return session;
+    }
 }
 
 export const sessionHelper = new SessionHelper();

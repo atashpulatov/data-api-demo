@@ -56,7 +56,7 @@ export class _MstrObjects extends React.Component {
         }
     }
 
-    printReportLocalized(reportId, body){
+    printReportLocalized(reportId, body) {
         officeDisplayService.printObject(reportId, null, null, null, body);
     }
 
@@ -68,7 +68,6 @@ export class _MstrObjects extends React.Component {
     }
 
     handleCancel = (e) => {
-        console.log(e);
         this.setState({
             modalVisible: false,
         });
@@ -106,15 +105,15 @@ export class _MstrObjects extends React.Component {
                         .map((report) => (
                             <ReportRow key={report.id}
                                 report={report}
-                                // onClick={officeDisplayService.printObject} />
-                                onClick={this.showModal} />
+                                onClick={officeDisplayService.printObject}
+                                onFilterReport={this.showModal} />
                         ))}
                 </ul>
                 <Modal
                     title="Load report"
                     visible={this.state.modalVisible}
                     onOk={this.handleOk}
-                    // width='auto'
+                    width='1100px'
                     onCancel={this.handleCancel}>
                     <Bootstrap
                         reportId={this.state.currentReportId}

@@ -3,10 +3,10 @@
 .box-container {
     width: 1032px;
     margin-top: 40px;
-    border: 1px solid #979797;
-    border-radius: 4px;
+    /* border: 1px solid #979797;
+    border-radius: 4px; */
     background-color: #ffffff;
-    box-shadow: rgba(68, 70, 73, 0.3) 0 0 8px 2px;
+    /* box-shadow: rgba(68, 70, 73, 0.3) 0 0 8px 2px; */
     margin: 0 auto;
 }
 
@@ -155,7 +155,7 @@
     float: right;
 }
 
-.search-input {
+.search-input.ant-input {
     width: 200px;
     margin: 0px 15px;
 }
@@ -171,10 +171,11 @@
     margin: 20px 0 5px 0;
 }
 
-.ant-list,
+.ant-list.ant-list-selector,
+.ant-tree,
 .empty-list {
     border: 1px solid rgba(151, 151, 151, 0.55);
-    border-radius: 0;
+    border-radius: 4px;
     font-size: 13px;
     height: 175px;
     max-height: 175px;
@@ -185,7 +186,7 @@
     border-left: none;
 }
 
-.ant-list-bordered .ant-list-item {
+.ant-list-bordered.ant-list-item {
     border: none;
     padding-top: 2px;
     padding-bottom: 2px;
@@ -241,6 +242,7 @@ span.ant-checkbox {
 
 .ant-tree-iconEle {
     font-weight: bold;
+    vertical-align: middle;
 }
 
 .folder-tree-container {
@@ -250,7 +252,7 @@ span.ant-checkbox {
 }
 
 .filter-list .ant-tree {
-    font-size: 13px;
+    font-size: 14px;
 }
 
 .filter-list .ant-tree li {
@@ -280,7 +282,7 @@ span.ant-checkbox {
 
 /* Selector buttons */
 
-.selector-button {
+.selector-button.ant-btn{
     border: none;
     margin: 0;
     padding-right: 0;

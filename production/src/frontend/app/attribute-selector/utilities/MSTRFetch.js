@@ -1,10 +1,8 @@
 import { message } from 'antd';
-import MSTRCallback from './MSTRCallback';
-
-const USE_PROXY = false;
-//!(new MSTRCallback('proxy').parameter === 'false');
+import { MSTRFetchError } from './MSTRFetchError';
 
 message.config({ maxCount: 1 });
+let USE_PROXY = false;
 
 class MSTRFetch {
     constructor() {
@@ -32,10 +30,24 @@ class MSTRFetch {
     }
 
     apiInitializer = (session) => {
+        this.sessionValidator(session);
+        USE_PROXY = session.USE_PROXY;
         this.token = session.authToken;
         this.envUrl = session.url;
         this.project = session.projectId;
     };
+
+    sessionValidator = (session) => {
+        if (!session.authToken) {
+            throw new MSTRFetchError('Missing authToken');
+        }
+        if (!session.url) {
+            throw new MSTRFetchError('Missing url');
+        }
+        if (!session.projectId) {
+            throw new MSTRFetchError('Missing projectId');
+        }
+    }
 
     getToken() {
         const mstrURL = this.envUrl + '/auth/login';
@@ -292,7 +304,6 @@ class MSTRFetch {
         } else {
             message.error(error);
         }
-
         return null;
     }
 

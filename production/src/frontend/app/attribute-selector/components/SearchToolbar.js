@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {Input, Switch, Tooltip} from 'antd';
+import React, { Component } from 'react';
+import { Input, Switch, Tooltip } from 'antd';
 import MSTRIcon from './MSTRIcon';
 
 const Search = Input.Search;
@@ -17,8 +17,10 @@ class SearchToolbar extends Component {
                 </Tooltip>
                 <div className='search-container'>
                     <Search className='search-input' onChange={this.props.onSearchChange} placeholder='Search objects...' size='small' />
-                    <label className='switch-label' htmlFor='view-selected-switch'>View selected</label>
-                    <Switch id='view-selected-switch' onChange={this.props.onSwitchChange} size='small' />
+                    <div style={{ 'padding-top': '12px' }}>
+                        <label className='switch-label' htmlFor='view-selected-switch'>View selected</label>
+                        <Switch id='view-selected-switch' onChange={this.props.onSwitchChange} size='small' />
+                    </div>
                 </div>
             </ div>
         );

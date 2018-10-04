@@ -311,6 +311,7 @@ class Parameters extends Component {
     }
 
     render() {
+        const colSpanCount = this.props.withFolderTree ? 16 : 24;
         return (
             <div>
                 <Row gutter={32}>
@@ -323,7 +324,7 @@ class Parameters extends Component {
                             </Col>
                             : null
                     }
-                    <Col span={16}>
+                    <Col span={colSpanCount}>
                         <Row>
                             <SearchToolbar
                                 selectedElementName={this.state.selectedElementsHeader.name}
@@ -356,8 +357,8 @@ class Parameters extends Component {
                                     loadedData={this.state.loadedMetrics} />
                             </Col>
                         </Row>
-                        <Row>
-                            <FilterSelector
+                        <Row gutter={16}>
+                            <FilterSelector // FIXME: List border disspears on View Selected enabled.
                                 title='Filters'
                                 key={this.state.dataset.datasetId}
                                 searchText={this.state.searchText}
