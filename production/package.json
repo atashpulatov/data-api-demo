@@ -29,6 +29,7 @@
     "babel-preset-stage-2": "^6.24.1",
     "jsx": "^0.9.89",
     "query-string": "^6.2.0",
+    "mstr-react": "ssh://git@github.microstrategy.com:pfilipp/MstrReact.git",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
     "react-redux": "^5.0.7",
