@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Spin, Tree, Input, Icon, Col } from 'antd';
-import MSTRIcon from './MSTRIcon';
+import MSTRIcon from './mstr-icon.jsx';
 import setValueByPath from '../utilities/set-value';
 import { msrtFetch } from '../utilities/MSTRFetch';
 

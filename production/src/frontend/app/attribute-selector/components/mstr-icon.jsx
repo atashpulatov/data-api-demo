@@ -1,4 +1,5 @@
-import React, {Component} from 'react';
+/* eslint-disable */
+import React, { Component } from 'react';
 import {
     Attribute,
     Cube,
@@ -9,8 +10,8 @@ import {
     Report,
     ProjectCollapsed,
     ProjectExpanded,
-} from './IconSource';
-
+} from './icon-source';
+/* eslint-enable */
 
 class MSTRIcon extends Component {
     render() {

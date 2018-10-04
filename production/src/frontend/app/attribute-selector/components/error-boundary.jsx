@@ -1,14 +1,14 @@
 import React from 'react';
-import {Modal} from 'antd';
+import { Modal } from 'antd';
 
 class ErrorBoundary extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {hasError: false};
+        this.state = { hasError: false };
     }
 
     componentDidCatch(error, info) {
-        this.setState({hasError: true});
+        this.setState({ hasError: true });
         console.error(error, info);
     }
 
@@ -24,7 +24,7 @@ class ErrorBoundary extends React.Component {
                 onOk: this.onRefresh,
                 okText: 'Restart',
             });
-            return <div style={{height: '200px', width: '100%'}}></div>;
+            return <div style={{ height: '200px', width: '100%' }}></div>;
         }
         return this.props.children;
     }

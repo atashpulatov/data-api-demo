@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Row, Col, Modal, message, Button } from 'antd';
-import FolderTree from './FolderTree';
-import Selector from './Selector';
-import FilterSelector from './FilterSelector';
-import SearchToolbar from './SearchToolbar';
-import PreviewTable from './PreviewTable';
+import FolderTree from './folder-tree.jsx';
+import Selector from './selector.jsx';
+import FilterSelector from './filter-selector.jsx';
+import SearchToolbar from './search-toolbar.jsx';
+import PreviewTable from './preview-table.jsx';
 import MSTRCallback from '../utilities/MSTRCallback';
 import { msrtFetch } from '../utilities/MSTRFetch';
 

@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React from 'react';
 import { Col, Row } from 'antd';
-import MSTRIcon from '../attribute-selector/components/MSTRIcon';
+import MSTRIcon from '../attribute-selector/components/mstr-icon.jsx';
 /* eslint-enable */
 
 export const ProjectRow = ({ projectRow, onClick }) => (

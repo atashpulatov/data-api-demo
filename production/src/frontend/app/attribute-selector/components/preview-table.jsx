@@ -1,5 +1,7 @@
-import React, {Component} from 'react';
-import {Table} from 'antd';
+/* eslint-disable */
+import React, { Component } from 'react';
+import { Table } from 'antd';
+/* eslint-enable */
 
 class PreviewTable extends Component {
     constructor(props) {
@@ -53,8 +55,8 @@ class PreviewTable extends Component {
                     bordered
                     loading={this.emptyData(this.props.previewData)}
                     pagination={false}
-                    scroll={{x: true}} />
-                <div className='preview-note' style={{display: this.lessThan15(this.props.previewData) ? 'none' : 'block'}}>Note: Only the first 15 rows are shown</div>
+                    scroll={{ x: true }} />
+                <div className='preview-note' style={{ display: this.lessThan15(this.props.previewData) ? 'none' : 'block' }}>Note: Only the first 15 rows are shown</div>
             </div>
         );
     }

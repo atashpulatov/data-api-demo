@@ -1,8 +1,10 @@
+/* eslint-disable */
 import React, { Component } from 'react';
 import { Input, Switch, Tooltip } from 'antd';
-import MSTRIcon from './MSTRIcon';
+import MSTRIcon from './mstr-icon.jsx';
 
 const Search = Input.Search;
+/* eslint-enable */
 
 class SearchToolbar extends Component {
     render() {

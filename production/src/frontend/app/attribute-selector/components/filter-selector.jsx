@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Icon, Col, Tree, Spin } from 'antd';
-import Selector from './Selector';
-import MSTRIcon from './MSTRIcon';
+import Selector from './selector.jsx';
+import MSTRIcon from './mstr-icon.jsx';
 
 const TreeNode = Tree.TreeNode;
 

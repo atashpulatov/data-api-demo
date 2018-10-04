@@ -1,8 +1,8 @@
 /* eslint-disable */
 import React, { Component } from 'react';
-import Parameters from './components/Parameters';
+import Parameters from './components/parameters.jsx';
 import { msrtFetch } from './utilities/MSTRFetch';
-import ErrorBoundary from './components/ErrorBoundry';
+import ErrorBoundary from './components/error-boundary.jsx';
 /* esling-enable */
 
 export class AttributeSelector extends Component {

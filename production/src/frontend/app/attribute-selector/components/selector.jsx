@@ -1,8 +1,10 @@
+/* eslint-disable */
 import React, { Component } from 'react';
 import { Checkbox, List, Icon } from 'antd';
-import SelectorButtons from './SelectorButtons';
-import MSTRIcon from './MSTRIcon';
+import SelectorButtons from './selector-buttons.jsx';
+import MSTRIcon from './mstr-icon.jsx';
 import './mstr-react.css';
+/* eslint-enable */
 
 const loadingIndicator = <Icon type='loading' />;
 const loadingSettings = {

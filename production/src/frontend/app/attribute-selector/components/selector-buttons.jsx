@@ -1,6 +1,7 @@
+/* eslint-disable */
 import React, { Component } from 'react';
 import { Button } from 'antd';
-
+/* eslint-enable */
 
 class SelectorButtons extends Component {
     render() {
