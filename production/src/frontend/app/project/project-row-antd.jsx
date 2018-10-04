@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React from 'react';
-import { Col, Row, Icon } from 'antd';
+import { Col, Row } from 'antd';
+import MSTRIcon from '../attribute-selector/components/mstr-icon.jsx';
 /* eslint-enable */
 
 export const ProjectRow = ({ projectRow, onClick }) => (
@@ -9,7 +10,7 @@ export const ProjectRow = ({ projectRow, onClick }) => (
         type='flex'
         onClick={() => onClick(projectRow.id, projectRow.name)}>
         <Col>
-            <Icon type="project" theme="outlined" />
+            <MSTRIcon type='project-collapsed' />
         </Col>
         <Col
             offset={1}>

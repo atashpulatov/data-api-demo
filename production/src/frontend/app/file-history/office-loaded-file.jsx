@@ -3,6 +3,7 @@ import React from 'react';
 import { Icon, Row, Col } from 'antd';
 import { message } from 'antd';
 import { sessionHelper } from '../storage/session-helper';
+import MSTRIcon from '../attribute-selector/components/mstr-icon.jsx';
 /* eslint-enable */
 
 export const OfficeLoadedFile = ({ fileName, bindingId, onClick, onRefresh, onDelete }) => (
@@ -11,7 +12,7 @@ export const OfficeLoadedFile = ({ fileName, bindingId, onClick, onRefresh, onDe
         type="flex"
         justify="center">
         <Col span={2}>
-            <Icon type="file-text" theme="outlined" />
+            <MSTRIcon type='report' />
         </Col>
         <Col span={14} onClick={() => onClick(bindingId)}>
             {fileName}
