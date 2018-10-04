@@ -3,9 +3,10 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route } from 'react-router-dom';
 import registerServiceWorker from './registerServiceWorker';
-import * as qs from 'query-string';
+import * as queryString from 'query-string';
 import './index.css';
 import { projectRestService } from './project/project-rest-service';
+import { selectorProperties } from './attribute-selector/selector-properties';
 /* eslint-enable */
 
 const Office = window.Office;
@@ -21,38 +22,52 @@ class Popup extends Component {
   constructor(props) {
     super(props);
 
-    const parsed = qs.parse(this.props.location.search);
-
-    console.log(parsed);
+    const parsed = queryString.parse(this.props.location.search);
     this.state = {
-      txt: parsed.token,
+      session: {
+        USE_PROXY: false,
+        url: parsed.url,
+        authToken: parsed.authToken,
+        projectId: parsed.projectId,
+      },
+      reportId: parsed.reportId,
+      triggerUpdate: parsed.triggerUpdate,
     };
   }
 
-  async componentDidMount() {
-    try {
-      const parsed = qs.parse(this.props.location.search);
-      const projects = await projectRestService
-        .getProjectList(parsed.envUrl, parsed.token);
-      console.log(projects);
-      // this.setState({
-      //   txt: projects,
-      // });
-    } catch (err) {
-      this.setState({
-        txt: err,
-      });
-    };
+  handleOk() {
+    Office.context.ui.messageParent({
+      command: selectorProperties.commandOk,
+    });
   }
+
+  handleCancel() {
+    Office.context.ui.messageParent({
+      command: selectorProperties.commandCancel,
+    });
+  }
+
+  onTriggerUpdate(body) {
+    Office.context.ui.messageParent({
+      command: selectorProperties.commandOnUpdate,
+      body,
+    });
+  };
 
   render() {
-    // Office.context.ui.messageParent(this.props.location);
     return (
-      <div>
-        <h1>
-          {this.state.txt}
-        </h1>
-      </div>
+      <Modal
+        title="Load report"
+        onOk={this.handleOk}
+        width='1100px'
+        onCancel={this.handleCancel}>
+        <AttributeSelector
+          session={this.state.session}
+          reportId={this.state.reportId}
+          triggerUpdate={this.state.triggerUpdate}
+          onTriggerUpdate={this.onTriggerUpdate}
+        />
+      </Modal>
     );
   }
 }
