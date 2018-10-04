@@ -20,7 +20,7 @@ export class Bootstrap extends Component {
     render() {
         const session = sessionHelper.getSession();
         return (
-            // <ErrorBoundary>
+            <ErrorBoundary>
                 <Parameters
                     key={'Mstr-parameters'}  // FIXME: rethink key generation
                     session={session}
@@ -28,7 +28,7 @@ export class Bootstrap extends Component {
                     onTriggerUpdate={this.props.onTriggerUpdate}
                     withDataPreview
                     reportId={this.props.reportId} />
-            // </ErrorBoundary>
+            </ErrorBoundary>
         );
     }
 }

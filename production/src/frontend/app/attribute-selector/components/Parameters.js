@@ -358,7 +358,7 @@ class Parameters extends Component {
                             </Col>
                         </Row>
                         <Row gutter={16}>
-                            <FilterSelector
+                            <FilterSelector // FIXME: List border disspears on View Selected enabled.
                                 title='Filters'
                                 key={this.state.dataset.datasetId}
                                 searchText={this.state.searchText}
