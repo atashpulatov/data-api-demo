@@ -24,28 +24,6 @@ export class _Projects extends Component {
             projects,
         });
         sessionHelper.disableLoading();
-        const envUrl = reduxStore.getState().sessionReducer.envUrl;
-        const token = reduxStore.getState().sessionReducer.authToken;
-        if (token === undefined) {
-            return;
-        }
-        await Excel.run(async (context) => {
-            Office.context.ui.displayDialogAsync(
-                'https://localhost:3000/popup.html?envUrl=' + envUrl
-                + '&token=' + token,
-                { height: 50, width: 60, displayInIframe: true },
-                (asyncResult) => {
-                    console.log(asyncResult);
-                    let dialog = asyncResult.value;
-                    dialog.addEventHandler(
-                        Office.EventType.DialogMessageReceived, (arg) => {
-                            // console.log(arg.message);
-                            // dialog.close();
-                        });
-                });
-
-            await context.sync();
-        });
     }
 
     render() {

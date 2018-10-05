@@ -10,6 +10,7 @@ import { historyHelper } from '../../../../src/frontend/app/history/history-help
 import { sessionProperties } from '../../../../src/frontend/app/storage/session-properties';
 import { Provider } from 'react-redux';
 import { mstrObjectListHelper } from '../../../../src/frontend/app/mstr-object/mstr-object-list-helper';
+import { selectorProperties } from '../../../../src/frontend/app/attribute-selector/selector-properties';
 /* eslint-enable */
 
 jest.mock('../../../../src/frontend/app/mstr-object/mstr-object-rest-service');
@@ -304,6 +305,60 @@ describe('MstrObjectList', () => {
         expect(
             _MstrObjects.prototype.isPrototypeOf(wrappedComponent.instance())
         ).toBe(true);
+    });
+
+    // User sees popup works correctly
+    it('should handle command ok', () => {
+        // given
+        const message = `{"command": "${selectorProperties.commandOk}"}`;
+        const wrappedComponent = mount(<_MstrObjects />);
+        const originalMethod = wrappedComponent.instance().handleOk;
+        const mockOk = jest.fn();
+        try {
+            wrappedComponent.instance().handleOk = mockOk;
+            // when
+            wrappedComponent.instance().onMessageFromPopup({ message });
+            console.log(wrappedComponent.instance().onMessageFromPopup);
+            expect(mockOk).toBeCalled();
+        } finally {
+            wrappedComponent.instance().handleOk = originalMethod;
+        }
+    });
+
+    it('should handle command cancel', () => {
+        // given
+        const message = `{"command": "${selectorProperties.commandCancel}"}`;
+        const wrappedComponent = mount(<_MstrObjects />);
+        const originalMethod = wrappedComponent.instance().handleCancel;
+        const mockCancel = jest.fn();
+        try {
+            wrappedComponent.instance().handleCancel = mockCancel;
+            // when
+            wrappedComponent.instance().onMessageFromPopup({ message });
+            console.log(wrappedComponent.instance().onMessageFromPopup);
+            expect(mockCancel).toBeCalled();
+        } finally {
+            wrappedComponent.instance().handleOk = originalMethod;
+        }
+    });
+
+    it('should handle command onUpdate', () => {
+        // given
+        const givenBody = 'testBodytest';
+        const message = `{"command": "${selectorProperties.commandOnUpdate}", "body": "${givenBody}"}`;
+        const wrappedComponent = mount(<_MstrObjects />);
+        const originalMethod = wrappedComponent.instance().onTriggerUpdate;
+        const mockUpdate = jest.fn();
+        try {
+            wrappedComponent.instance().onTriggerUpdate = mockUpdate;
+            // when
+            wrappedComponent.instance().onMessageFromPopup({ message });
+            console.log(wrappedComponent.instance().onMessageFromPopup);
+            expect(mockUpdate).toBeCalled();
+            expect(mockUpdate).toBeCalledWith(givenBody);
+        } finally {
+            wrappedComponent.instance().onTriggerUpdate = originalMethod;
+        }
     });
 });
 
