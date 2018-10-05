@@ -75,7 +75,7 @@ export class _MstrObjects extends React.Component {
                 + '&token=' + session.authToken
                 + '&projectId=' + session.projectId
                 + '&reportId=' + reportId,
-                { height: 50, width: 60, displayInIframe: false },
+                { height: 80, width: 80, displayInIframe: true },
                 (asyncResult) => {
                     console.log(asyncResult);
                     this.dialog = asyncResult.value;
