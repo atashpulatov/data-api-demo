@@ -7,6 +7,7 @@ import { reduxStore, reduxPersistor } from './store';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/lib/integration/react';
 import './index.css';
+import 'mstr-react/lib/css/mstr-react.css';
 /* eslint-enable */
 const Office = window.Office;
 

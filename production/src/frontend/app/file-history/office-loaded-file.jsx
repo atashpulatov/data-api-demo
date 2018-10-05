@@ -3,7 +3,7 @@ import React from 'react';
 import { Icon, Row, Col } from 'antd';
 import { message } from 'antd';
 import { sessionHelper } from '../storage/session-helper';
-import MSTRIcon from 'mstr-react';
+import { MSTRIcon } from 'mstr-react';
 /* eslint-enable */
 
 export const OfficeLoadedFile = ({ fileName, bindingId, onClick, onRefresh, onDelete }) => (

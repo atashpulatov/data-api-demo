@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React from 'react';
 import { Row, Col, message, Tooltip } from 'antd';
-import MSTRIcon from 'mstr-react';
+import { MSTRIcon } from 'mstr-react';
 /* eslint-enable */
 
 export const DirectoryRow = ({ directory, onClick }) => (
