@@ -5,7 +5,7 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import registerServiceWorker from './registerServiceWorker';
 import * as queryString from 'query-string';
 import './index.css';
-import './attribute-selector/components/mstr-react.css';
+import 'mstr-react/lib/css/mstr-react.css';
 import './home/home.css';
 import { projectRestService } from './project/project-rest-service';
 import { selectorProperties } from './attribute-selector/selector-properties';
@@ -69,6 +69,7 @@ class Popup extends Component {
       <Modal
         title="Load report"
         onOk={this.handleOk}
+        closable={false}
         visible={true}
         width='1100px'
         onCancel={this.handleCancel}>

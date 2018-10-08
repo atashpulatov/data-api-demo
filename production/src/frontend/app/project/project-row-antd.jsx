@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React from 'react';
 import { Col, Row } from 'antd';
-import MSTRIcon from '../attribute-selector/components/mstr-icon.jsx';
+import { MSTRIcon } from 'mstr-react';
 /* eslint-enable */
 
 export const ProjectRow = ({ projectRow, onClick }) => (
@@ -18,4 +18,3 @@ export const ProjectRow = ({ projectRow, onClick }) => (
         </Col>
     </Row>
 );
-

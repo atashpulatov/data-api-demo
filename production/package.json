@@ -12,6 +12,8 @@
     "test-debug": "node --nolazy --inspect-brk=9229 ./node_modules/.bin/jest -i"
   },
   "jest": {
+    "verbose": true,
+    "testEnvironment": "node",
     "setupTestFrameworkScriptFile": "./test/frontend/app/setup-tests.js",
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/test/frontend/app/resource-transform.js",
@@ -27,7 +29,9 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
+    "jest": "^23.6.0",
     "jsx": "^0.9.89",
+    "mstr-react": "git+ssh://git@github.microstrategy.com:pfilipp/MstrReact.git",
     "query-string": "^6.2.0",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
@@ -51,7 +55,6 @@
     "eslint-plugin-react": "^7.8.2",
     "file-loader": "^1.1.11",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "^22.4.4",
     "jest-cli": "^22.4.4",
     "jest-localstorage-mock": "^2.2.0",
     "json-loader": "^0.5.7",
