@@ -7,10 +7,9 @@ import * as queryString from 'query-string';
 import './index.css';
 import 'mstr-react/lib/css/mstr-react.css';
 import './home/home.css';
-import { projectRestService } from './project/project-rest-service';
 import { selectorProperties } from './attribute-selector/selector-properties';
 import { AttributeSelector } from './attribute-selector/attribute-selector.jsx';
-import { Modal } from 'antd';
+import { PopupButtons } from './popup-buttons.jsx';
 /* eslint-enable */
 
 const Office = window.Office;
@@ -55,7 +54,6 @@ class Popup extends Component {
   }
 
   onTriggerUpdate = (body) => {
-    console.log('im in onUpdate');
     const updateObject = {
       command: selectorProperties.commandOnUpdate,
       body,
@@ -64,22 +62,19 @@ class Popup extends Component {
   };
 
   render() {
-    console.log('I\'m in render');
     return (
-      <Modal
-        title="Load report"
-        onOk={this.handleOk}
-        closable={false}
-        visible={true}
-        width='1100px'
-        onCancel={this.handleCancel}>
+      <div
+        style={{ padding: '20px' }}>
         <AttributeSelector
           session={this.state.session}
           reportId={this.state.reportId}
           triggerUpdate={this.state.triggerUpdate}
           onTriggerUpdate={this.onTriggerUpdate}
         />
-      </Modal>
+        <PopupButtons
+          handleOk={this.handleOk}
+          handleCancel={this.handleCancel} />
+      </div >
     );
   }
 }
