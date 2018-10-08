@@ -18,4 +18,3 @@ export const ProjectRow = ({ projectRow, onClick }) => (
         </Col>
     </Row>
 );
-
