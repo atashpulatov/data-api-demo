@@ -1,5 +1,7 @@
 {
-  "name": "react-with-webpack",
+  "name": "mstr-office-client",
+  "author": "Microstrategy Inc.",
+  "license": "ISC",
   "version": "1.0.0",
   "description": "A fixed version of the project from the `broken` branch that works as expected with webpack-dev-server.",
   "main": "index.js",
@@ -20,16 +22,16 @@
       "\\.(css|less)$": "identity-obj-proxy"
     }
   },
-  "author": "",
-  "license": "ISC",
+  "babel": {
+    "presets": [
+      "react-app"
+    ]
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
   "dependencies": {
     "antd": "^3.9.1",
-    "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.4",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-2": "^6.24.1",
-    "jest": "^23.6.0",
     "jsx": "^0.9.89",
     "mstr-react": "git+ssh://git@github.microstrategy.com:pfilipp/MstrReact.git",
     "query-string": "^6.2.0",
@@ -41,12 +43,18 @@
     "redux": "^4.0.0",
     "redux-devtools-extension": "^2.13.5",
     "redux-persist": "^5.10.0",
-    "style-loader": "^0.21.0",
-    "superagent": "^3.8.3",
-    "webpack": "^3.12.0"
+    "superagent": "^3.8.3"
   },
   "devDependencies": {
+    "style-loader": "^0.21.0",
+    "webpack": "^3.12.0",
+    "babel-core": "^6.26.3",
     "babel-polyfill": "^6.26.0",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "jest": "^23.6.0",
     "css-loader": "^0.28.11",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
