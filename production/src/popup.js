@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route } from 'react-router-dom';
-import registerServiceWorker from './registerServiceWorker';
 import * as queryString from 'query-string';
 import './index.css';
 import './home/home.css';
@@ -88,5 +87,3 @@ function goReact() {
 }
 
 officeInitialize();
-
-registerServiceWorker();
