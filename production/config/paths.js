@@ -56,4 +56,7 @@ module.exports = {
   appNodeModules: resolveApp('node_modules'),
   publicUrl: getPublicUrl(resolveApp('package.json')),
   servedPath: getServedPath(resolveApp('package.json')),
+  serverKey: fs.readFileSync('config/cert/server.key'),
+  serverCert: fs.readFileSync('config/cert/server.crt'),
+  serverCa: fs.readFileSync('config/cert/server.pem'),
 };
