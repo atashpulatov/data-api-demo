@@ -350,6 +350,7 @@ module.exports = {
       inject: true,
       chunks: ["index"],
       template: paths.appHtml,
+      filename: 'index.html',
     }),
     new HtmlWebpackPlugin({
       inject: true,
