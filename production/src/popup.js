@@ -39,12 +39,10 @@ class Popup extends Component {
   }
 
   handleOk = () => {
-    console.log('im in handle ok');
     this.setState({ triggerUpdate: true });
   }
 
   handleCancel = () => {
-    console.log('im in handle cancel');
     const cancelObject = {
       command: selectorProperties.commandCancel,
     };

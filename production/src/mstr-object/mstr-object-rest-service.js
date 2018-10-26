@@ -40,34 +40,19 @@ class MstrObjectRestService {
     }
 
     async _getInstanceId(fullPath, authToken, projectId, body) {
-        if (body) {
-            return await moduleProxy.request
-                .post(fullPath)
-                .set('x-mstr-authtoken', authToken)
-                .set('x-mstr-projectid', projectId)
-                .send(body)
-                .withCredentials()
-                .then((res) => {
-                    let objects = res.body;
-                    return objects.instanceId;
-                })
-                .catch((err) => {
-                    errorHandler(err);
-                });
-        } else {
-            return await moduleProxy.request
-                .post(fullPath)
-                .set('x-mstr-authtoken', authToken)
-                .set('x-mstr-projectid', projectId)
-                .withCredentials()
-                .then((res) => {
-                    let objects = res.body;
-                    return objects.instanceId;
-                })
-                .catch((err) => {
-                    errorHandler(err);
-                });
-        }
+        return await moduleProxy.request
+            .post(fullPath)
+            .set('x-mstr-authtoken', authToken)
+            .set('x-mstr-projectid', projectId)
+            .send(body)
+            .withCredentials()
+            .then((res) => {
+                let objects = res.body;
+                return objects.instanceId;
+            })
+            .catch((err) => {
+                errorHandler(err);
+            });
     }
 
     async getObjectContent(objectId, body) {

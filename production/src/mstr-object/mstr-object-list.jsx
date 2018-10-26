@@ -8,8 +8,6 @@ import { connect } from 'react-redux';
 import { withNavigation } from '../navigation/with-navigation.jsx';
 import { mstrObjectListHelper } from './mstr-object-list-helper';
 import { sessionHelper } from '../storage/session-helper';
-import { AttributeSelector } from '../attribute-selector/attribute-selector.jsx';
-import { Modal } from 'antd';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 /* eslint-enable */
 
@@ -86,11 +84,6 @@ export class _MstrObjects extends React.Component {
 
             await context.sync();
         });
-        // TODO: remove below
-        // this.setState({
-        //     modalVisible: true,
-        //     currentReportId: reportId,
-        // });
     }
 
     onMessageFromPopup = (arg) => {
@@ -114,14 +107,6 @@ export class _MstrObjects extends React.Component {
 
     handleCancel = () => {
         this.dialog.close();
-    }
-
-    handleOk = (body) => {
-        // this.dialog.close();
-        // this.setState()
-        // this.setState({
-        //     triggerUpdate: true,
-        // });
     }
 
     onTriggerUpdate = (body) => {
@@ -156,19 +141,6 @@ export class _MstrObjects extends React.Component {
                                 onFilterReport={this.showPopup} />
                         ))}
                 </ul>
-                {/* <Modal
-                    title="Load report"
-                    visible={this.state.modalVisible}
-                    onOk={this.handleOk}
-                    width='1100px'
-                    onCancel={this.handleCancel}>
-                    <AttributeSelector
-                        session={session}
-                        reportId={this.state.currentReportId}
-                        triggerUpdate={this.state.triggerUpdate}
-                        onTriggerUpdate={this.onTriggerUpdate}
-                    />
-                </Modal> */}
             </article>
         );
     }

@@ -11,7 +11,6 @@ export const DirectoryRow = ({ directory, onClick }) => (
         onClick={() => onClick(directory.id, directory.name)}>
         <Col>
             <MSTRIcon type='folder-collapsed' />
-            {/* <Icon type="folder" theme="outlined" /> */}
         </Col>
         <Col
             offset={1}>
