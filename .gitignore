@@ -321,6 +321,6 @@ __pycache__/
 *.odx.cs
 *.xsd.cs
 
-# Custom exclusions
+*bundle.js
 coverage/
 **/lost+found/
