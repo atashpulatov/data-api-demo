@@ -25,7 +25,6 @@ class Popup extends Component {
     super(props);
     const parsed = queryString.parse(this.props.location.search);
 
-    console.log(parsed);
     this.state = {
       session: {
         USE_PROXY: false,
