@@ -17,41 +17,31 @@ class OfficeDisplayService {
     }
 
     async printObject(objectId, startCell, tableName, bindingId, body) {
-        try {
-            sessionHelper.enableLoading();
-            const context = await officeApiHelper.getOfficeContext();
-            if (!startCell) {
-                startCell = await officeApiHelper.getSelectedCell(context);
-            }
-            let jsonData = await mstrObjectRestService.getObjectContent(objectId, body);
-            let convertedReport = officeConverterService
-                .getConvertedTable(jsonData);
-            convertedReport.name = convertedReport.name.replace(new RegExp("[^a-zA-Z]", "g"), "X")
-            const newTableName = tableName || await officeApiHelper.findAvailableTableName(convertedReport.name, context);
-            console.log('1');
-            const mstrTable = await this._insertDataIntoExcel(convertedReport, context, startCell, newTableName);
-            console.log('2');
-            const { envUrl, projectId } = officeApiHelper.getCurrentMstrContext();
-            const newBindingId = bindingId || officeApiHelper.createBindingId(convertedReport, newTableName, projectId, envUrl, separator);
-            console.log('3');
-            console.log(convertedReport);
-            await context.sync();
-            console.log('4');
-            officeApiHelper.bindNamedItem(newTableName, newBindingId);
-            if (!tableName) {
-                this.addReportToStore({
-                    id: convertedReport.id,
-                    name: convertedReport.name,
-                    bindId: newBindingId,
-                    envUrl,
-                    projectId,
-                });
-            }
-            sessionHelper.disableLoading();
-        } catch (ex) {
-            console.error(ex);
-            console.error(ex.message);
+        sessionHelper.enableLoading();
+        const context = await officeApiHelper.getOfficeContext();
+        if (!startCell) {
+            startCell = await officeApiHelper.getSelectedCell(context);
         }
+        let jsonData = await mstrObjectRestService.getObjectContent(objectId, body);
+        let convertedReport = officeConverterService
+            .getConvertedTable(jsonData);
+        convertedReport.name = convertedReport.name.replace(new RegExp("[^a-zA-Z]", "g"), "X")
+        const newTableName = tableName || await officeApiHelper.findAvailableTableName(convertedReport.name, context);
+        await this._insertDataIntoExcel(convertedReport, context, startCell, newTableName);
+        const { envUrl, projectId } = officeApiHelper.getCurrentMstrContext();
+        const newBindingId = bindingId || officeApiHelper.createBindingId(convertedReport, newTableName, projectId, envUrl, separator);
+        await context.sync();
+        officeApiHelper.bindNamedItem(newTableName, newBindingId);
+        if (!tableName) {
+            this.addReportToStore({
+                id: convertedReport.id,
+                name: convertedReport.name,
+                bindId: newBindingId,
+                envUrl,
+                projectId,
+            });
+        }
+        sessionHelper.disableLoading();
     }
 
     // TODO: move it to api helper?

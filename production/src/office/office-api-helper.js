@@ -132,7 +132,6 @@ class OfficeApiHelper {
         await context.sync();
         bindings.load(officeProperties.bindingItems);
         await context.sync();
-        console.log(bindings.items[0]);
         return bindings.items;
     }
 
