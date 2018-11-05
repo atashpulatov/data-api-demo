@@ -8,7 +8,20 @@ class OfficeContextMock {
             bindings: {
                 add: () => { },
             },
-            getSelectedRange: () => { },
+            tables: {
+                load: () => { },
+                // getItemOrNullObject: () => {
+                //     return {
+                //         load: () => { },
+                //     }
+                // }
+            },
+            getSelectedRange: () => {
+                return {
+                    load: () => { },
+                    address: 'txt!txt',
+                }
+            },
         };
         this.sync = () => { };
     };

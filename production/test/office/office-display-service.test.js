@@ -4,19 +4,41 @@ import { officeContextMock } from './__mock__object__/OfficeContext';
 import { officeDisplayService } from '../../src/office/office-display-service';
 import { OfficeBindingError } from '../../src/office/office-error';
 import { reduxStore } from '../../src/store';
+import { mstrObjectRestService } from '../../src/mstr-object/mstr-object-rest-service';
+import { mockReports } from '../mockData';
 /* eslint-enable */
 
+jest.mock('../../src/mstr-object/mstr-object-rest-service')
+
 describe('OfficeDisplayService', () => {
-    let originalMethod;
+    const originalGetOfficeContext = officeApiHelper.getOfficeContext;
+    const originalFindAvailableTableName = officeApiHelper.findAvailableTableName;
+    const originalMstrContext = officeApiHelper.getCurrentMstrContext;
+
+    const url = 'url';
+    const projectId = 'pId';
+
     beforeAll(() => {
-        originalMethod = officeApiHelper._getOfficeContext;
         const mockedMethod = jest.fn();
-        mockedMethod.mockReturnValue(officeContextMock);
-        officeApiHelper._getOfficeContext = mockedMethod;
+        mockedMethod.mockResolvedValue(officeContextMock);
+        officeApiHelper.getOfficeContext = mockedMethod;
         officeApiHelper.formatTable = jest.fn();
+
+        mstrObjectRestService.getObjectContent.mockResolvedValue(mockReports[0]);
+
+        officeApiHelper.findAvailableTableName = jest.fn();
+        officeApiHelper.findAvailableTableName.mockImplementation(name => name);
+
+        officeApiHelper.getCurrentMstrContext = jest.fn()
+            .mockReturnValue({
+                url,
+                projectId,
+            });
     });
     afterAll(() => {
-        officeApiHelper._getOfficeContext = originalMethod;
+        officeApiHelper.getOfficeContext = originalGetOfficeContext;
+        officeApiHelper.findAvailableTableName = originalFindAvailableTableName;
+        officeApiHelper.getCurrentMstrContext = originalMstrContext;
     });
 
     it('should add report to store', () => {
@@ -34,6 +56,24 @@ describe('OfficeDisplayService', () => {
         // then
         expect(reportState).toBeDefined();
         expect(reportState[0]).toEqual(report);
+    });
+
+    it.only('should save the report to office settings', async () => {
+        const originalInsert = officeDisplayService._insertDataIntoExcel;
+        try {
+            // given
+            officeDisplayService._insertDataIntoExcel = jest.fn();
+            const objectId = null;
+            const startCell = 'D411';
+            const tableName = 'test';
+            const bindingId = 'binding';
+            // when
+            await officeDisplayService.printObject(objectId, startCell, tableName, bindingId)
+            // then
+            expect(true).toBeFalsy();
+        } finally {
+            officeDisplayService._insertDataIntoExcel = originalInsert;
+        }
     });
 
     describe('_insertDataIntoExcel', async () => {

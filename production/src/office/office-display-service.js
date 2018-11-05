@@ -25,7 +25,7 @@ class OfficeDisplayService {
         let jsonData = await mstrObjectRestService.getObjectContent(objectId, body);
         let convertedReport = officeConverterService
             .getConvertedTable(jsonData);
-        convertedReport.name = convertedReport.name.replace(new RegExp("[^a-zA-Z]", "g"), "X")
+        convertedReport.name = convertedReport.name.replace(new RegExp("[^a-zA-Z]", "g"), "X");
         const newTableName = tableName || await officeApiHelper.findAvailableTableName(convertedReport.name, context);
         await this._insertDataIntoExcel(convertedReport, context, startCell, newTableName);
         const { envUrl, projectId } = officeApiHelper.getCurrentMstrContext();

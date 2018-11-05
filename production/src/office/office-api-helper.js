@@ -17,6 +17,7 @@ class OfficeApiHelper {
         if (!Number.isInteger(headerCount)) {
             throw new IncorrectInputTypeError();
         }
+        console.log(startCell);
         let startCellArray = startCell.split(/(\d+)/);
         headerCount += parseInt(this.lettersToNumber(startCellArray[0]) - 1);
         let endRange = '';
