@@ -5,6 +5,7 @@ import { reduxStore } from '../store';
 import { officeProperties } from './office-properties';
 import { globalDefinitions } from '../global-definitions';
 import { sessionHelper } from '../storage/session-helper';
+import { officeStoreService } from './store/office-store-service';
 
 const separator = globalDefinitions.reportBindingIdSeparator;
 
@@ -16,27 +17,26 @@ class OfficeDisplayService {
         this.refreshReport = this.refreshReport.bind(this);
     }
 
-    async printObject(objectId, startCell, tableName, bindingId, body) {
+    async printObject(objectId, startCell, officeTableId, bindingId, body) {
         sessionHelper.enableLoading();
         const context = await officeApiHelper.getOfficeContext();
         if (!startCell) {
             startCell = await officeApiHelper.getSelectedCell(context);
         }
-        let jsonData = await mstrObjectRestService.getObjectContent(objectId, body);
-        let convertedReport = officeConverterService
+        const jsonData = await mstrObjectRestService.getObjectContent(objectId, body);
+        const convertedReport = officeConverterService
             .getConvertedTable(jsonData);
-        convertedReport.name = convertedReport.name.replace(new RegExp("[^a-zA-Z]", "g"), "X");
-        const newTableName = tableName || await officeApiHelper.findAvailableTableName(convertedReport.name, context);
-        await this._insertDataIntoExcel(convertedReport, context, startCell, newTableName);
+        const newOfficeTableId = officeTableId || await officeApiHelper.findAvailableOfficeTableId(convertedReport.name, context);
+        await this._insertDataIntoExcel(convertedReport, context, startCell, newOfficeTableId);
         const { envUrl, projectId } = officeApiHelper.getCurrentMstrContext();
-        const newBindingId = bindingId || officeApiHelper.createBindingId(convertedReport, newTableName, projectId, envUrl, separator);
+        bindingId = bindingId || officeApiHelper.createBindingId(convertedReport, newOfficeTableId, projectId, envUrl, separator);
         await context.sync();
-        officeApiHelper.bindNamedItem(newTableName, newBindingId);
-        if (!tableName) {
+        officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
+        if (!officeTableId) {
             this.addReportToStore({
                 id: convertedReport.id,
                 name: convertedReport.name,
-                bindId: newBindingId,
+                bindId: bindingId,
                 envUrl,
                 projectId,
             });
@@ -46,6 +46,7 @@ class OfficeDisplayService {
 
     // TODO: move it to api helper?
     addReportToStore(report) {
+        officeStoreService.preserveReport(report);
         reduxStore.dispatch({
             type: officeProperties.actions.loadReport,
             report: {
@@ -79,8 +80,8 @@ class OfficeDisplayService {
     // TODO: we could filter data to display options related to current envUrl
     async refreshReport(bindingId) {
         const isRefresh = true;
-        let context = await officeApiHelper.getOfficeContext();
-        let range = officeApiHelper.getBindingRange(context, bindingId);
+        const context = await officeApiHelper.getOfficeContext();
+        const range = officeApiHelper.getBindingRange(context, bindingId);
         range.load();
         await context.sync();
         const startCell = range.address.split('!')[1].split(':')[0];
@@ -105,7 +106,7 @@ class OfficeDisplayService {
     }
 
     _pushRows(reportConvertedData, mstrTable) {
-        let dataRows = reportConvertedData.rows
+        const dataRows = reportConvertedData.rows
             .map((item) => reportConvertedData.headers
                 .map((header) => item[header]));
         mstrTable.rows.add(null, dataRows);

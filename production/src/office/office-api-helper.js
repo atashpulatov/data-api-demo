@@ -69,10 +69,10 @@ class OfficeApiHelper {
         });
     }
 
-    async findAvailableTableName(reportName, context) {
+    async findAvailableOfficeTableId(reportName, context) {
         let nameExists = true;
         let tableIncrement = 0;
-        const tableName = reportName;
+        const tableName = reportName.replace(new RegExp('[^a-zA-Z]', 'g'), 'X');
         const tableCollection = context.workbook.tables;
         tableCollection.load();
         await context.sync();

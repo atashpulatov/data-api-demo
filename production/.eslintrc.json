@@ -23,6 +23,7 @@
         "no-multi-str": "off",
         "require-jsdoc": [
             "off"
-        ]
+        ],
+        "indent": "off"
     }
 }
