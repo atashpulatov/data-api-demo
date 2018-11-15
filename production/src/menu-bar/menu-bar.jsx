@@ -7,6 +7,27 @@ import './menu-bar.css';
 /* eslint-enable */
 
 export class _MenuBar extends Component {
+    runPopupNavigation = () => {
+        Excel.run(async (context) => {
+            Office.context.ui.displayDialogAsync(
+                'https://localhost:3000/popup.html'
+                + '?envUrl=' + session.url
+                + '&token=' + session.authToken
+                + '&projectId=' + session.projectId
+                + '&reportId=' + reportId,
+                { height: 62, width: 50, displayInIframe: true },
+                (asyncResult) => {
+                    console.log(asyncResult);
+                    this.dialog = asyncResult.value;
+                    this.dialog.addEventHandler(
+                        Office.EventType.DialogMessageReceived,
+                        this.onMessageFromPopup);
+                });
+
+            await context.sync();
+        });
+    }
+
     render() {
         return !this.props.project
             ? null
@@ -30,6 +51,15 @@ export class _MenuBar extends Component {
                     </Tooltip>
                 </div>
                 <div className='menu-bar-options-container'>
+                    {/* TODO: temporary solution below */}
+                    <Tooltip placement="bottom" title='Go popup!'>
+                        <button
+                            className='menu menu-options'
+                            id='goPopup'
+                            onClick={this.runPopupNavigation}>
+                            <Icon type='fullscreen' />
+                        </button>
+                    </Tooltip>
                     <Tooltip placement="bottom" title='Log out'>
                         <button
                             className='menu menu-options'
@@ -46,7 +76,7 @@ export class _MenuBar extends Component {
                         </button>
                     </Tooltip>
                 </div>
-            </div>;
+            </div >;
     }
 };
 
