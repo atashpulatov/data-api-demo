@@ -14,8 +14,8 @@ jest.mock('../../src/office/store/office-store-service');
 
 describe('OfficeDisplayService', () => {
     const givenReport = mockReports[0];
-
-    const originalGetOfficeContext = officeApiHelper.getOfficeContext;
+    const startCell = 'D411';
+    const originalGetExcelContext = officeApiHelper.getExcelContext;
     const originalFindAvailableTableName = officeApiHelper.findAvailableOfficeTableId;
     const originalMstrContext = officeApiHelper.getCurrentMstrContext;
 
@@ -27,7 +27,6 @@ describe('OfficeDisplayService', () => {
     beforeAll(() => {
         const mockedMethod = jest.fn();
         mockedMethod.mockResolvedValue(officeContextMock);
-        officeApiHelper.getOfficeContext = mockedMethod;
         officeApiHelper.formatTable = jest.fn();
 
         mstrObjectRestService.getObjectContent.mockResolvedValue(givenReport);
@@ -37,6 +36,29 @@ describe('OfficeDisplayService', () => {
 
         officeApiHelper.getCurrentMstrContext = jest.fn()
             .mockReturnValue(mstrContext);
+
+        officeApiHelper.getOfficeContext = jest.fn();
+        officeApiHelper.getOfficeContext.mockImplementation(() => {
+           return {
+                document: {
+                    bindings: {
+                        releaseByIdAsync: jest.fn(),
+                    },
+                },
+            }
+        });
+        officeApiHelper.getExcelContext = jest.fn();
+        officeApiHelper.getExcelContext.mockImplementation(() => {
+            return {
+                workbook: {
+                    tables: {
+                        getItem: () => { return { delete: () => {}}},
+                    }
+                },
+                sync: () => {},
+            }
+        });
+
     });
 
     beforeEach(() => {
@@ -44,7 +66,7 @@ describe('OfficeDisplayService', () => {
     });
 
     afterAll(() => {
-        officeApiHelper.getOfficeContext = originalGetOfficeContext;
+        officeApiHelper.getExcelContext = originalGetExcelContext;
         officeApiHelper.findAvailableOfficeTableId = originalFindAvailableTableName;
         officeApiHelper.getCurrentMstrContext = originalMstrContext;
     });
@@ -66,31 +88,44 @@ describe('OfficeDisplayService', () => {
         expect(reportState[0]).toEqual(report);
     });
 
-    it('should call save on office store service', async () => {
-        const originalInsert = officeDisplayService._insertDataIntoExcel;
-        try {
-            // given
-            officeDisplayService._insertDataIntoExcel = jest.fn();
-            const objectId = null;
-            const startCell = 'D411';
-            const bindingId = 'binding';
-            // when
-            await officeDisplayService.printObject(objectId, startCell);
-            await officeDisplayService.printObject(objectId, startCell);
-            // then
-            expect(officeStoreService.preserveReport).toBeCalled();
-            expect(officeStoreService.preserveReport).toBeCalledWith({
-                id: givenReport.id,
-                name: givenReport.name,
-                bindId: bindingId,
-                envUrl: mstrContext.envUrl,
-                projectId: mstrContext.projectId,
-            });
-        } finally {
-            officeDisplayService._insertDataIntoExcel = originalInsert;
-        }
+    it('should call preserveReport on office store service', async () => {
+        // given
+        officeDisplayService._insertDataIntoExcel = jest.fn();
+        const objectId = null;
+        const givenTableId = 'TestReport';
+        // when
+        await officeDisplayService.printObject(objectId, startCell);
+        // await officeDisplayService.printObject(objectId, startCell);
+        // then
+        expect(officeStoreService.preserveReport).toBeCalled();
+        expect(officeStoreService.preserveReport).toBeCalledWith({
+            tableId: givenTableId,
+            id: givenReport.id,
+            name: givenReport.name,
+            bindId: givenReport.name,
+            envUrl: mstrContext.envUrl,
+            projectId: mstrContext.projectId,
+        });
     });
 
+    it('should call deleteReport on office store service', async () => {
+            // given
+            officeStoreService.deleteReport = jest.fn();
+            const report = {
+                id: 'firstTestId',
+                name: 'firstTestName',
+                bindId: 'firstBindId',
+                tableId: 'firstTableId',
+                projectId: 'firstProjectId',
+                envUrl: 'firstEnvUrl',
+            };
+            officeDisplayService.addReportToStore(report);
+            // when            
+            const bindingId = reduxStore.getState().officeReducer.reportArray[0].id;
+            await officeDisplayService.removeReportFromExcel(bindingId);
+            // then
+            expect(officeStoreService.deleteReport).toBeCalled();
+    });
     describe('_insertDataIntoExcel', async () => {
         it('should return table husk with proper name and invoke required methods', async () => {
             // given

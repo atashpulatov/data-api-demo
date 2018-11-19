@@ -232,24 +232,26 @@ describe('OfficeApiHelper', () => {
         expect(result.projectId).toBe(project.projectId);
         expect(result.username).toBe(username);
     });
-    it('should find proper office table id with only a-z characters', async () => {
+    it.only('should find proper office table id with only a-z characters', async () => {
         // given
         const newReportName = 'New 333 Report 333';
+        const mockLoad = () => { };
         const context = {
             workbook: {
-                getSelectedRange: jest.fn().mockImplementation(() => {
-                    return {
-                        load: loadMock,
-                        address: loadMock(),
-                    };
-                }),
+                tables: {
+                    load: mockLoad,
+                    getItemOrNullObject: () => {return {
+                        load: mockLoad,
+                        isNull: true,
+                    }},
+                },                
             },
             sync: () => { },
         };
         // when
         const parsedReportName = await officeApiHelper.findAvailableOfficeTableId(newReportName, context);
         // then
-        expect(/^[a-zA-Z]+$/.test(parsedReportName)).toBeTruthy();
+        expect(/^[a-zA-Z]+0$/.test(parsedReportName)).toBeTruthy();
     });
     describe('createBindingId', () => {
         it('should return proper bindingId', () => {

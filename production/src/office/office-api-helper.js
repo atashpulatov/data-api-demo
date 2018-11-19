@@ -4,6 +4,7 @@ import { officeProperties } from './office-properties';
 import { globalDefinitions } from '../global-definitions';
 import { OfficeError } from './office-error';
 import { OfficeBindingError } from './office-error';
+import { officeStoreService } from './store/office-store-service';
 
 const separator = globalDefinitions.reportBindingIdSeparator;
 
@@ -17,7 +18,6 @@ class OfficeApiHelper {
         if (!Number.isInteger(headerCount)) {
             throw new IncorrectInputTypeError();
         }
-        console.log(startCell);
         let startCellArray = startCell.split(/(\d+)/);
         headerCount += parseInt(this.lettersToNumber(startCellArray[0]) - 1);
         let endRange = '';
@@ -51,7 +51,7 @@ class OfficeApiHelper {
     }
 
     onBindingObjectClick = async (bindingId) => {
-        const context = await this.getOfficeContext();
+        const context = await this.getExcelContext();
         const tableRange = this.getBindingRange(context, bindingId);
         tableRange.select();
         return await context.sync();
@@ -63,10 +63,14 @@ class OfficeApiHelper {
             .getRange();
     }
 
-    async getOfficeContext() {
+    async getExcelContext() {
         return await Excel.run(async (context) => {
             return context;
         });
+    }
+
+    async getOfficeContext() {
+        return await Office.context;
     }
 
     async findAvailableOfficeTableId(reportName, context) {
@@ -89,30 +93,8 @@ class OfficeApiHelper {
         return tableName + tableIncrement;
     }
 
-    createBindingId(reportConvertedData, tableName, projectId, envUrl, separator = '_') {
-        if (!reportConvertedData) {
-            throw new OfficeBindingError('Missing reportConvertedData');
-        }
-        if (!tableName) {
-            throw new OfficeBindingError('Missing tableName');
-        }
-        if (!projectId) {
-            throw new OfficeBindingError('Missing projectId');
-        }
-        if (!envUrl) {
-            throw new OfficeBindingError('Missing envUrl');
-        }
-        return reportConvertedData.name
-            + separator + tableName
-            + separator + reportConvertedData.id
-            + separator + projectId
-            + separator + envUrl;
-    }
-
     loadExistingReportBindingsExcel = async () => {
-        const context = await this.getOfficeContext();
-        const bindingItems = await this._getBindingsFromWorkbook(context);
-        const reportArray = this._excelBindingsToStore(bindingItems);
+        const reportArray = await officeStoreService._getReportProperties();
         reduxStore.dispatch({
             type: officeProperties.actions.loadAllReports,
             reportArray,
@@ -124,38 +106,6 @@ class OfficeApiHelper {
         const projectId = reduxStore.getState().historyReducer.project.projectId;
         const username = reduxStore.getState().sessionReducer.username;
         return { envUrl, projectId, username };
-    }
-
-    _getBindingsFromWorkbook = async (context) => {
-        const workbook = context.workbook;
-        workbook.load(officeProperties.workbookBindings);
-        const bindings = workbook.bindings;
-        await context.sync();
-        bindings.load(officeProperties.bindingItems);
-        await context.sync();
-        return bindings.items;
-    }
-
-    _excelBindingsToStore(bindings) {
-        if (!bindings) {
-            throw new OfficeError('Bindings should not be undefined!');
-        }
-        if (!(bindings instanceof Array)) {
-            throw new OfficeError('Bindings must be of Array type!');
-        }
-        const bindingArrayLength = bindings.length;
-        const reportArray = [];
-        for (let i = 0; i < bindingArrayLength; i++) {
-            const splittedBind = bindings[i].id.split(separator);
-            reportArray.push({
-                id: splittedBind[2],
-                name: splittedBind[0],
-                bindId: bindings[i].id,
-                projectId: splittedBind[3],
-                envUrl: splittedBind[4],
-            });
-        }
-        return reportArray;
     }
 
     formatTable(sheet) {

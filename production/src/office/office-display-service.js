@@ -19,7 +19,7 @@ class OfficeDisplayService {
 
     async printObject(objectId, startCell, officeTableId, bindingId, body) {
         sessionHelper.enableLoading();
-        const context = await officeApiHelper.getOfficeContext();
+        const context = await officeApiHelper.getExcelContext();
         if (!startCell) {
             startCell = await officeApiHelper.getSelectedCell(context);
         }
@@ -29,16 +29,17 @@ class OfficeDisplayService {
         const newOfficeTableId = officeTableId || await officeApiHelper.findAvailableOfficeTableId(convertedReport.name, context);
         await this._insertDataIntoExcel(convertedReport, context, startCell, newOfficeTableId);
         const { envUrl, projectId } = officeApiHelper.getCurrentMstrContext();
-        bindingId = bindingId || officeApiHelper.createBindingId(convertedReport, newOfficeTableId, projectId, envUrl, separator);
+        bindingId = bindingId || newOfficeTableId;
         await context.sync();
         officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
         if (!officeTableId) {
-            this.addReportToStore({
+            await this.addReportToStore({
                 id: convertedReport.id,
                 name: convertedReport.name,
                 bindId: bindingId,
-                envUrl,
+                tableId: newOfficeTableId,
                 projectId,
+                envUrl,                
             });
         }
         sessionHelper.disableLoading();
@@ -46,33 +47,35 @@ class OfficeDisplayService {
 
     // TODO: move it to api helper?
     addReportToStore(report) {
-        officeStoreService.preserveReport(report);
         reduxStore.dispatch({
             type: officeProperties.actions.loadReport,
             report: {
                 id: report.id,
                 name: report.name,
                 bindId: report.bindId,
+                tableId: report.tableId,
                 projectId: report.projectId,
                 envUrl: report.envUrl,
             },
         });
+        officeStoreService.preserveReport(report);
     }
 
     async removeReportFromExcel(bindingId, isRefresh) {
-        await Office.context.document.bindings.releaseByIdAsync(bindingId, (asyncResult) => {
+        const officeContext = await officeApiHelper.getOfficeContext();
+        await officeContext.document.bindings.releaseByIdAsync(bindingId, (asyncResult) => {
             console.log('released binding');
         });
-        const tableName = bindingId.split(globalDefinitions.reportBindingIdSeparator)[1];
-        const context = await officeApiHelper.getOfficeContext();
-        const tableObject = context.workbook.tables.getItem(tableName);
+        const excelContext = await officeApiHelper.getExcelContext();
+        const tableObject = excelContext.workbook.tables.getItem(bindingId);
         await tableObject.delete();
-        await context.sync();
+        await excelContext.sync();
         if (!isRefresh) {
             reduxStore.dispatch({
                 type: officeProperties.actions.removeReport,
                 reportBindId: bindingId,
             });
+            officeStoreService.deleteReport(bindingId);
         }
     }
 
@@ -80,14 +83,14 @@ class OfficeDisplayService {
     // TODO: we could filter data to display options related to current envUrl
     async refreshReport(bindingId) {
         const isRefresh = true;
-        const context = await officeApiHelper.getOfficeContext();
+        const context = await officeApiHelper.getExcelContext();
         const range = officeApiHelper.getBindingRange(context, bindingId);
         range.load();
         await context.sync();
         const startCell = range.address.split('!')[1].split(':')[0];
-        const bindIdItems = bindingId.split(globalDefinitions.reportBindingIdSeparator);
+        const refreshReport = officeStoreService.getReportFromProperties(bindingId);
         await this.removeReportFromExcel(bindingId, isRefresh);
-        await this.printObject(bindIdItems[2], startCell, bindIdItems[1], bindingId);
+        await this.printObject(refreshReport.id, startCell, bindingId, bindingId);
     }
 
     async _insertDataIntoExcel(reportConvertedData, context, startCell, tableName) {
