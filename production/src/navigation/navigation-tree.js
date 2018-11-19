@@ -3,12 +3,12 @@ import React, { Component } from 'react';
 import '../index.css';
 import '../home/home.css';
 import { selectorProperties } from '../attribute-selector/selector-properties';
-import { AttributeSelector } from '../attribute-selector/attribute-selector.jsx';
 import { PopupButtons } from '../popup-buttons.jsx';
 import 'mstr-react-library/src/css/mstr-react.css';
+import { FolderTree } from 'mstr-react-library';
 /* eslint-enable */
 
-export class AttributeSelectorWindow extends Component {
+export class NavigationTree extends Component {
     constructor(props) {
         super(props);
 
@@ -47,7 +47,7 @@ export class AttributeSelectorWindow extends Component {
         return (
             <div
                 style={{ padding: '20px' }}>
-                <AttributeSelector
+                <FolderTree
                     session={this.state.session}
                     reportId={this.state.reportId}
                     triggerUpdate={this.state.triggerUpdate}
@@ -57,6 +57,14 @@ export class AttributeSelectorWindow extends Component {
                     handleOk={this.handleOk}
                     handleCancel={this.handleCancel} />
             </div >
+        );
+    }
+    
+    render() {
+        return (
+            <div>
+                test
+            </div>
         );
     }
 }

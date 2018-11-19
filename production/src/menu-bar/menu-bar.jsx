@@ -4,28 +4,49 @@ import { menuBarService } from './menu-bar-service';
 import { connect } from 'react-redux';
 import { Icon, Tooltip } from 'antd';
 import './menu-bar.css';
+import { PopupTypeEnum } from '../home/popup-type-enum';
+import { sessionHelper } from '../storage/session-helper';
 /* eslint-enable */
 
 export class _MenuBar extends Component {
     runPopupNavigation = () => {
+        const session = sessionHelper.getSession();
         Excel.run(async (context) => {
             Office.context.ui.displayDialogAsync(
                 'https://localhost:3000/popup.html'
+                + '?popupType=' + PopupTypeEnum.navigationTree
                 + '?envUrl=' + session.url
                 + '&token=' + session.authToken
-                + '&projectId=' + session.projectId
-                + '&reportId=' + reportId,
+                + '&projectId=' + session.projectId,
                 { height: 62, width: 50, displayInIframe: true },
                 (asyncResult) => {
                     console.log(asyncResult);
                     this.dialog = asyncResult.value;
                     this.dialog.addEventHandler(
                         Office.EventType.DialogMessageReceived,
-                        this.onMessageFromPopup);
+                        // this.onMessageFromPopup);
+                        () => { });
                 });
 
             await context.sync();
         });
+
+        // Excel.run(async (context) => {
+        //     Office.context.ui.displayDialogAsync(
+        //         'https://localhost:3000/popup.html'
+        //         + '?popupType=' + PopupTypeEnum.navigationTree,
+        //         { height: 62, width: 50, displayInIframe: true },
+        //         (asyncResult) => {
+        //             console.log(asyncResult);
+        //             this.dialog = asyncResult.value;
+        //             this.dialog.addEventHandler(
+        //                 Office.EventType.DialogMessageReceived,
+        //                 // this.onMessageFromPopup);
+        //                 () => { });
+        //         });
+
+        //     await context.sync();
+        // });
     }
 
     render() {
