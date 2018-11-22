@@ -126,6 +126,10 @@ Currently we do not support production builds.
 ## Built With
 
 * [React](https://reactjs.org/)
+* [Redux](https://redux.js.org/) - state container
+* [Ant Design](https://ant.design/docs/react/introduce) - React UI library
+* [superagent](https://visionmedia.github.io/superagent/) - AJAX API
+* [React Router](https://github.com/ReactTraining/react-router) - Router for navigation
 * [yarn](https://yarnpkg.com/en/) - Dependency Management
 * [webpack](https://webpack.js.org/) - module bundler
 * [Babel](https://babeljs.io/) - JavaScript transpiler
