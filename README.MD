@@ -55,15 +55,39 @@ yarn start
 
 
 
-#### Troubleshooting
-
-
-
-End with an example of getting some data out of the system or using it for a little demo
-
 ### Windows
 
 #### Under construction
+
+### Troubleshooting
+
+#### You received below error
+```
+git@github.microstrategy.com: Permission denied (publickey).
+fatal: Could not read from remote repository.
+```
+This means that you don't have ssh key added to ssh-agent. To fix this simply execute
+```
+ssh-add
+```
+Of you have key in some custom path you should provide the path as below
+```
+ssh-add /custom/path/to/ssh/key
+```
+#### You received below error
+```
+Host key verification failed.
+fatal: Could not read from remote repository.
+```
+This means that you don't have microstrategy.github.com added to known hosts. 
+To fix it simply run
+```
+ssh github.microstrategy.com
+The authenticity of host 'github.microstrategy.com (X.X.X.X)' can't be established.
+ECDSA key fingerprint is SHA256:--------------------------------------------.
+Are you sure you want to continue connecting (yes/no)? **yes**
+``` 
+Type yes when prompted.
 
 ## Running the tests
 
