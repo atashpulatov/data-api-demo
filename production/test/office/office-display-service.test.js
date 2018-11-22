@@ -95,7 +95,6 @@ describe('OfficeDisplayService', () => {
         const givenTableId = 'TestReport';
         // when
         await officeDisplayService.printObject(objectId, startCell);
-        // await officeDisplayService.printObject(objectId, startCell);
         // then
         expect(officeStoreService.preserveReport).toBeCalled();
         expect(officeStoreService.preserveReport).toBeCalledWith({

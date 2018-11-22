@@ -10,11 +10,6 @@ class OfficeContextMock {
             },
             tables: {
                 load: () => { },
-                // getItemOrNullObject: () => {
-                //     return {
-                //         load: () => { },
-                //     }
-                // }
             },
             getSelectedRange: () => {
                 return {

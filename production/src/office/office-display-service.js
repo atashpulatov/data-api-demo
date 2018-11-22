@@ -19,18 +19,18 @@ class OfficeDisplayService {
 
     async printObject(objectId, startCell, officeTableId, bindingId, body) {
         sessionHelper.enableLoading();
-        const context = await officeApiHelper.getExcelContext();
+        const excelContext = await officeApiHelper.getExcelContext();
         if (!startCell) {
-            startCell = await officeApiHelper.getSelectedCell(context);
+            startCell = await officeApiHelper.getSelectedCell(excelContext);
         }
         const jsonData = await mstrObjectRestService.getObjectContent(objectId, body);
         const convertedReport = officeConverterService
             .getConvertedTable(jsonData);
-        const newOfficeTableId = officeTableId || await officeApiHelper.findAvailableOfficeTableId(convertedReport.name, context);
-        await this._insertDataIntoExcel(convertedReport, context, startCell, newOfficeTableId);
+        const newOfficeTableId = officeTableId || await officeApiHelper.findAvailableOfficeTableId(convertedReport.name, excelContext);
+        await this._insertDataIntoExcel(convertedReport, excelContext, startCell, newOfficeTableId);
         const { envUrl, projectId } = officeApiHelper.getCurrentMstrContext();
         bindingId = bindingId || newOfficeTableId;
-        await context.sync();
+        await excelContext.sync();
         officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
         if (!officeTableId) {
             await this.addReportToStore({
@@ -83,10 +83,10 @@ class OfficeDisplayService {
     // TODO: we could filter data to display options related to current envUrl
     async refreshReport(bindingId) {
         const isRefresh = true;
-        const context = await officeApiHelper.getExcelContext();
-        const range = officeApiHelper.getBindingRange(context, bindingId);
+        const excelContext = await officeApiHelper.getExcelContext();
+        const range = officeApiHelper.getBindingRange(excelContext, bindingId);
         range.load();
-        await context.sync();
+        await excelContext.sync();
         const startCell = range.address.split('!')[1].split(':')[0];
         const refreshReport = officeStoreService.getReportFromProperties(bindingId);
         await this.removeReportFromExcel(bindingId, isRefresh);

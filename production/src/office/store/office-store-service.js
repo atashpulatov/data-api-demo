@@ -1,6 +1,6 @@
 class OfficeStoreService {
     preserveReport = (report) => {
-        let settings = this.getOfficeSettings();
+        const settings = this.getOfficeSettings();
         let reports = this._getReportProperties();
         reports.push({
             id: report.id,
@@ -14,7 +14,7 @@ class OfficeStoreService {
     }
 
     deleteReport = (bindingId) => {
-        let settings = this.getOfficeSettings();
+        const settings = this.getOfficeSettings();
         let reportProperties = this._getReportProperties();
         const indexOfReport = reportProperties.findIndex((report) => {
             return (report.bindId === bindingId);
@@ -28,7 +28,7 @@ class OfficeStoreService {
     }
 
     getReportFromProperties = (bindingId) => {
-        let reportProperties = this._getReportProperties();
+        const reportProperties = this._getReportProperties();
         const report = reportProperties.find((report) => {
             return report.bindId === bindingId;
         });

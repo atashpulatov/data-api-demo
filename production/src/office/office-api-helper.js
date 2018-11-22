@@ -51,10 +51,10 @@ class OfficeApiHelper {
     }
 
     onBindingObjectClick = async (bindingId) => {
-        const context = await this.getExcelContext();
-        const tableRange = this.getBindingRange(context, bindingId);
+        const excelContext = await this.getExcelContext();
+        const tableRange = this.getBindingRange(excelContext, bindingId);
         tableRange.select();
-        return await context.sync();
+        return await excelContext.sync();
     };
 
     getBindingRange(context, bindingId) {
