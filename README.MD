@@ -61,9 +61,8 @@ yarn start
 
 You need to copy manifest file to Office location in Library like so
 ```
-cp mstr-office/production/office-react-manifest.xml /Users/<username>/Library/Containers/com.microsoft.<product>/documents/wef
+cp mstr-office/production/office-react-manifest.xml ~/Library/Containers/com.microsoft.Excel/documents/wef
 ```
-**product** being one of: Excel, Word, Powerpoint. Note that we currently support only **Excel**
 
 Now you can run add-in using Insert -> My Add-ins. 
 Microstrategy Office Client should appear under Developer Add-ins.
