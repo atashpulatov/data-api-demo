@@ -109,51 +109,45 @@ Type **yes** when prompted.
 
 ## Running the tests
 
-Explain how to run the automated tests for this system
+We currently support only tests using [Jest](https://jestjs.io/) and [Enzyme](https://airbnb.io/enzyme/docs/api/)
+You can run them using
+```
+yarn test
+```
 
 ### Break down into end to end tests
 
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
+#### Not yet implemented
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
+Currently we do not support production builds.
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [React](https://reactjs.org/)
+* [yarn](https://yarnpkg.com/en/) - Dependency Management
+* [webpack](https://webpack.js.org/) - module bundler
+* [Babel](https://babeljs.io/) - JavaScript transpiler
+* [Mstr React Library](https://github.microstrategy.com/pfilipp/mstr-react-library) - MicroStrategy React Components
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+ToDo
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+ToDo
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+* **Dominik Otręba**
+* **Piotr Filipp**
+* **Hryhorii Havryliuk**
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+ToDo
 
 ## Acknowledgments
 
