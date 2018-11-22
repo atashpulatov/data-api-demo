@@ -76,7 +76,7 @@ class OfficeApiHelper {
     async findAvailableOfficeTableId(reportName, context) {
         let nameExists = true;
         let tableIncrement = 0;
-        const tableName = reportName.replace(new RegExp('[^a-zA-Z]', 'g'), 'X');
+        const tableName = this.formatTableName(reportName);
         const tableCollection = context.workbook.tables;
         tableCollection.load();
         await context.sync();
@@ -115,6 +115,12 @@ class OfficeApiHelper {
         } else {
             message.warning(`Unable to format table.`);
         }
+    }
+
+    formatTableName(tableName) {
+        const nonAlphabeticalRegex = new RegExp('[^a-zA-Z]', 'g');
+        const formattedTableName = tableName.replace(nonAlphabeticalRegex, '');
+        return formattedTableName;
     }
 
     async getSelectedCell(context) {

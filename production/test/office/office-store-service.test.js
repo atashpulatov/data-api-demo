@@ -2,43 +2,36 @@ import { mockReports } from '../mockData';
 import { officeDisplayService } from '../../src/office/office-display-service';
 import { officeStoreService } from '../../src/office/store/office-store-service';
 import { officeApiHelper } from '../../src/office/office-api-helper';
+import { mockReportProperties } from './__mock__object__/office-settings-report-properties';
 
 describe('OfficeStoreService', () => {
 
     beforeAll(() => {
-        officeStoreService.getOfficeSettings = jest.fn();
-        officeStoreService.getOfficeSettings.mockReturnValue({
-            set: jest.fn(),
-            get: jest.fn(),
-            saveAsync: jest.fn(),
-        });
-        officeStoreService._getReportProperties = jest.fn(() => [
-            {
-                bindId: "testBindId1",
-                envUrl: "testEnvUrl1",
-                id: "testId1",
-                name: "testName1",
-                projectId: "testProjectId1",
-                tableId: "testTableId1",
-            },
-            {
-                bindId: "testBindId2",
-                envUrl: "testEnvUrl2",
-                id: "testId2",
-                name: "testName2",
-                projectId: "testProjectId2",
-                tableId: "testTableId2",
-            },
-            {
-                bindId: "testBindId3",
-                envUrl: "testEnvUrl3",
-                id: "testId3",
-                name: "testName3",
-                projectId: "testProjectId3",
-                tableId: "testTableId3",
-            },
-        ]);
-    });   
+        // officeStoreService.getOfficeSettings = jest.fn();
+        // officeStoreService.getOfficeSettings.mockReturnValue({
+        //     set: jest.fn(),
+        //     get: jest.fn(),
+        //     saveAsync: jest.fn(),
+        // });
+        // officeStoreService._getReportProperties = jest.fn(() => mockReportProperties[1]);
+
+        const getOfficeSettingsSpy = jest.spyOn(officeStoreService, 'getOfficeSettings')
+            .mockReturnValue({
+                    set: jest.fn(),
+                    get: jest.fn(),
+                    saveAsync: jest.fn(),
+                });
+        const getReportPropertiesSpy = jest.spyOn(officeStoreService, '_getReportProperties')
+            .mockImplementation(() => mockReportProperties[1]);        
+    });
+    
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
+    afterAll(() => {
+        jest.restoreAllMocks();
+    })
 
     it('should save report properties to office settings', () => {
         //given
@@ -54,28 +47,11 @@ describe('OfficeStoreService', () => {
         //given
         const settings = officeStoreService.getOfficeSettings();
         const givenBindingId = 'testBindId3';
-        const newReportProperties = [
-            {
-                bindId: "testBindId1",
-                envUrl: "testEnvUrl1",
-                id: "testId1",
-                name: "testName1",
-                projectId: "testProjectId1",
-                tableId: "testTableId1",
-            },
-            {
-                bindId: "testBindId2",
-                envUrl: "testEnvUrl2",
-                id: "testId2",
-                name: "testName2",
-                projectId: "testProjectId2",
-                tableId: "testTableId2",
-            },
-        ];        
+        const newReportProperties = mockReportProperties[0];        
         //when
         officeStoreService.deleteReport(givenBindingId);
         //then
-        expect(settings.set).toBeCalled();
+        // expect(settings.set).toBeCalled();
         expect(settings.set).toBeCalledWith('reportProperties', newReportProperties);
     });
     it('should return a report found by bindingId', async () => {
@@ -87,11 +63,5 @@ describe('OfficeStoreService', () => {
         expect(result).toBeInstanceOf(Object);
         expect(result.envUrl).toEqual('testEnvUrl3');
         expect(result.tableId).toEqual('testTableId3');
-    });
-    it.skip('should fail', () => {
-        //given
-        //when
-        //then
-        expect(false).toBeTruthy();
     });
 });
