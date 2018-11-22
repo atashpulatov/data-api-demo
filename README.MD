@@ -85,9 +85,9 @@ To fix it simply run
 ssh github.microstrategy.com
 The authenticity of host 'github.microstrategy.com (X.X.X.X)' can't be established.
 ECDSA key fingerprint is SHA256:--------------------------------------------.
-Are you sure you want to continue connecting (yes/no)? **yes**
+Are you sure you want to continue connecting (yes/no)? yes
 ``` 
-Type yes when prompted.
+Type **yes** when prompted.
 
 ## Running the tests
 
