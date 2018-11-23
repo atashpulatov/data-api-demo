@@ -57,6 +57,12 @@ yarn start
 
 ### Sideloading
 
+#### Manifest file
+
+To sideload our plugin on any of the platforms you will need manifest file. 
+The file is being stored in mstr-react/production/office-react-manifest.xml
+Below you can find information and links describe process of sideloading the add-in.
+
 #### Office for Mac
 
 You need to copy manifest file to Office location in Library like so
@@ -68,13 +74,15 @@ Now you can run add-in using Insert -> My Add-ins.
 Microstrategy Office Client should appear under Developer Add-ins.
 You may be required to accept self-signed certificate in order to start add-in.
 
+Additional information can be found on [Microsoft page](https://docs.microsoft.com/en-us/office/dev/add-ins/testing/sideload-an-office-add-in-on-ipad-and-mac)
+
 #### Office for Windows
 
-##### Under construction
+Simply follow instruction from official [Microsoft page](https://docs.microsoft.com/en-us/office/dev/add-ins/testing/create-a-network-shared-folder-catalog-for-task-pane-and-content-add-ins) 
 
 #### Office Online
 
-##### Under construction
+Simply follow instruction from official [Microsoft page](https://docs.microsoft.com/en-us/office/dev/add-ins/testing/sideload-office-add-ins-for-testing)
 
 ### Troubleshooting
 
