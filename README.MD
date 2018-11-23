@@ -174,9 +174,9 @@ ToDo
 
 ## Authors
 
-* **Dominik Otręba**
-* **Piotr Filipp**
-* **Hryhorii Havryliuk**
+* Dominik Otręba
+* Piotr Filipp
+* Hryhorii Havryliuk
 
 ## License
 
