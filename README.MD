@@ -6,9 +6,9 @@ Connector between Microsoft Office applications and MicroStrategy products.
 
 Currently only development version of the plugin is available. You will need to follow below steps to prepare your system and aquire the plugin.
 
-### MacOS
+### Prerequisites
 
-#### Prerequisites
+#### MacOS
 
 What things you need to install the software and how to install them
 * [NVM](https://github.com/creationix/nvm)
@@ -28,12 +28,38 @@ nvm install node
 ```
 npm install --global yarn
 ```
-* ssh-key added to repository (our project depends on 2nd repository, that we contribute, that contains reusable MicroStrategy React components)
+* ssh-key added to your github account (our project depends on 2nd repository, that we contribute, that contains reusable MicroStrategy React components)
 To add key follow instructions on our [github](https://help.github.com/enterprise/2.15/user/articles/connecting-to-github-with-ssh/)
 
-#### Installing
+#### Windows
 
-Start by cloning out repository
+In order to keep development environment as close to our origin environment(macOS - unix based) you will need to install Windows subsystem for Linux and install all additional tools as well.
+
+1. Follow [this](https://docs.microsoft.com/en-us/windows/wsl/install-win10) instruction to enable Linux subsytem for Linux and install distribution of your choice. We recommend **Debian**.
+2. Next initialize distro following [this](https://docs.microsoft.com/en-us/windows/wsl/initialize-distro) instructions
+3. Install [NVM](https://github.com/creationix/nvm)
+
+```
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+```
+or
+```
+wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+```
+4. Install Node from NVM
+```
+nvm install node
+```
+5. Install yarn using npm
+```
+npm install --global yarn
+```
+6. Add ssh-key to your github account (our project depends on 2nd repository, that we contribute, that contains reusable MicroStrategy React components) To add key follow instructions on our [github](https://help.github.com/enterprise/2.15/user/articles/connecting-to-github-with-ssh/)
+
+### Installing
+
+After meeting all requirements the installation should look the same on both macOS and Windows.
+Start by cloning our repository:
 
 ```
 git clone https://github.microstrategy.com/Kiai/mstr-office.git
@@ -50,10 +76,6 @@ To start project just simply type
 ```
 yarn start
 ```
-
-### Windows
-
-#### Under construction
 
 ### Sideloading
 
