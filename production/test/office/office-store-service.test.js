@@ -22,11 +22,12 @@ describe('OfficeStoreService', () => {
                     saveAsync: jest.fn(),
                 });
         const getReportPropertiesSpy = jest.spyOn(officeStoreService, '_getReportProperties')
-            .mockImplementation(() => mockReportProperties[1]);        
+            .mockReturnValue(() => mockReportProperties[1]);        
     });
     
     afterEach(() => {
         jest.clearAllMocks();
+        // jest.resetAllMocks();
     });
 
     afterAll(() => {

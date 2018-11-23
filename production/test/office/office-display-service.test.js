@@ -15,7 +15,6 @@ jest.mock('../../src/office/store/office-store-service');
 describe('OfficeDisplayService', () => {
     const givenReport = mockReports[0];
     const startCell = 'D411';
-    const originalGetExcelContext = officeApiHelper.getExcelContext;
     const originalFindAvailableTableName = officeApiHelper.findAvailableOfficeTableId;
     const originalMstrContext = officeApiHelper.getCurrentMstrContext;
 
@@ -37,27 +36,24 @@ describe('OfficeDisplayService', () => {
         officeApiHelper.getCurrentMstrContext = jest.fn()
             .mockReturnValue(mstrContext);
 
-        officeApiHelper.getOfficeContext = jest.fn();
-        officeApiHelper.getOfficeContext.mockImplementation(() => {
-           return {
+        const getOfficeContextSpy = jest.spyOn(officeApiHelper, 'getOfficeContext')
+            .mockReturnValue({
                 document: {
                     bindings: {
                         releaseByIdAsync: jest.fn(),
                     },
                 },
-            }
-        });
-        officeApiHelper.getExcelContext = jest.fn();
-        officeApiHelper.getExcelContext.mockImplementation(() => {
-            return {
+            });
+
+        const getExcelContextSpy = jest.spyOn(officeApiHelper, 'getExcelContext')
+            .mockReturnValue({
                 workbook: {
                     tables: {
                         getItem: () => { return { delete: () => {}}},
                     }
                 },
                 sync: () => {},
-            }
-        });
+            });
 
     });
 
@@ -66,7 +62,6 @@ describe('OfficeDisplayService', () => {
     });
 
     afterAll(() => {
-        officeApiHelper.getExcelContext = originalGetExcelContext;
         officeApiHelper.findAvailableOfficeTableId = originalFindAvailableTableName;
         officeApiHelper.getCurrentMstrContext = originalMstrContext;
     });

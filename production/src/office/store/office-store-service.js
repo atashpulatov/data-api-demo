@@ -19,10 +19,8 @@ class OfficeStoreService {
         const indexOfReport = reportProperties.findIndex((report) => {
             return (report.bindId === bindingId);
         });
-        const newReportProperties = [
-            ...reportProperties.slice(0, indexOfReport),
-            ...reportProperties.slice(indexOfReport + 1),
-        ];
+        reportProperties.splice(indexOfReport, 1);   
+        const newReportProperties = reportProperties;     
         settings.set('reportProperties', newReportProperties);
         settings.saveAsync();
     }
