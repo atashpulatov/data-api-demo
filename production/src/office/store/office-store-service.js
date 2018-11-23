@@ -1,10 +1,8 @@
-import { officeProperties } from '../office-properties';
-
 class OfficeStoreService {
     preserveReport = (report) => {
         const settings = this.getOfficeSettings();
-        const reportProperties = this._getReportProperties();
-        reportProperties.push({
+        let reports = this._getReportProperties();
+        reports.push({
             id: report.id,
             name: report.name,
             bindId: report.bindId,
@@ -17,11 +15,13 @@ class OfficeStoreService {
 
     deleteReport = (bindingId) => {
         const settings = this.getOfficeSettings();
-        const reportProperties = this._getReportProperties();
+        let reportProperties = this._getReportProperties();
         const indexOfReport = reportProperties.findIndex((report) => {
             return (report.bindId === bindingId);
         });
-        reportProperties.splice(indexOfReport, 1);       
+        reportProperties.splice(indexOfReport, 1);   
+        const newReportProperties = reportProperties;     
+        settings.set('reportProperties', newReportProperties);
         settings.saveAsync();
     }
 
@@ -35,12 +35,12 @@ class OfficeStoreService {
 
     _getReportProperties = () => {
         const settings = this.getOfficeSettings();
-        if (!(settings.get(officeProperties.loadedReportProperties))) {
+        if (!(settings.get('reportProperties'))) {
             let reportProperties = [];
-            settings.set(officeProperties.loadedReportProperties, reportProperties);
+            settings.set('reportProperties', reportProperties);
             settings.saveAsync();
         }
-        return settings.get(officeProperties.loadedReportProperties);
+        return settings.get('reportProperties');
     }
 
     getOfficeSettings = () => {
