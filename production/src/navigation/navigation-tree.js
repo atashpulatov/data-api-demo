@@ -59,12 +59,4 @@ export class NavigationTree extends Component {
             </div >
         );
     }
-    
-    render() {
-        return (
-            <div>
-                test
-            </div>
-        );
-    }
 }

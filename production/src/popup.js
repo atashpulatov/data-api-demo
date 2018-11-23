@@ -36,7 +36,7 @@ export class Popup extends Component {
       );
     } else if (popupType === PopupTypeEnum.navigationTree) {
       return (
-        <NavigationTree parsed={propsToPass}/>
+        <NavigationTree parsed={propsToPass} />
       );
     }
   }

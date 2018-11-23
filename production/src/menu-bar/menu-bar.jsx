@@ -15,7 +15,7 @@ export class _MenuBar extends Component {
             Office.context.ui.displayDialogAsync(
                 'https://localhost:3000/popup.html'
                 + '?popupType=' + PopupTypeEnum.navigationTree
-                + '?envUrl=' + session.url
+                + '&envUrl=' + session.url
                 + '&token=' + session.authToken
                 + '&projectId=' + session.projectId,
                 { height: 62, width: 50, displayInIframe: true },
