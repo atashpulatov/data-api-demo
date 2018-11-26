@@ -15,8 +15,6 @@ jest.mock('../../src/office/store/office-store-service');
 describe('OfficeDisplayService', () => {
     const givenReport = mockReports[0];
     const startCell = 'D411';
-    const originalFindAvailableTableName = officeApiHelper.findAvailableOfficeTableId;
-    const originalMstrContext = officeApiHelper.getCurrentMstrContext;
 
     const mstrContext = {
         envUrl: 'url',
@@ -24,16 +22,14 @@ describe('OfficeDisplayService', () => {
     };
 
     beforeAll(() => {
-        const mockedMethod = jest.fn();
-        mockedMethod.mockResolvedValue(officeContextMock);
-        officeApiHelper.formatTable = jest.fn();
 
-        mstrObjectRestService.getObjectContent.mockResolvedValue(givenReport);
+        const getObjectContentSpy = jest.spyOn(mstrObjectRestService, 'getObjectContent')
+            .mockResolvedValue(givenReport);
 
-        officeApiHelper.findAvailableOfficeTableId = jest.fn();
-        officeApiHelper.findAvailableOfficeTableId.mockImplementation((name) => name);
+        const findAvailableOfficeTableIdSpy = jest.spyOn(officeApiHelper, 'findAvailableOfficeTableId')
+            .mockImplementation((name) => name);
 
-        officeApiHelper.getCurrentMstrContext = jest.fn()
+        const getCurrentMstrContextSpy = jest.spyOn(officeApiHelper, 'getCurrentMstrContext')
             .mockReturnValue(mstrContext);
 
         const getOfficeContextSpy = jest.spyOn(officeApiHelper, 'getOfficeContext')
