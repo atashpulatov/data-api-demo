@@ -18,3 +18,4 @@ export const sessionProperties = new Proxy({
         setLoading: 'SESSION_SET_LOADING',
     },
 }, propsProxy);
+

@@ -11,6 +11,7 @@ const separator = globalDefinitions.reportBindingIdSeparator;
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
 const ASCII_CAPITAL_LETTER_INDEX = 65;
+const NON_ALPHABETICAL_REGEX = new RegExp('[^a-zA-Z]', 'g')
 
 class OfficeApiHelper {
 
@@ -76,7 +77,7 @@ class OfficeApiHelper {
     async findAvailableOfficeTableId(reportName, context) {
         let nameExists = true;
         let tableIncrement = 0;
-        const tableName = this.formatTableName(reportName);
+        const tableName = reportName.replace(NON_ALPHABETICAL_REGEX, '');;
         const tableCollection = context.workbook.tables;
         tableCollection.load();
         await context.sync();
@@ -115,12 +116,6 @@ class OfficeApiHelper {
         } else {
             message.warning(`Unable to format table.`);
         }
-    }
-
-    formatTableName(tableName) {
-        const nonAlphabeticalRegex = new RegExp('[^a-zA-Z]', 'g');
-        const formattedTableName = tableName.replace(nonAlphabeticalRegex, '');
-        return formattedTableName;
     }
 
     async getSelectedCell(context) {
