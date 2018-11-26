@@ -41,7 +41,6 @@ export class _MstrObjects extends React.Component {
 
     async componentDidUpdate(prevProps, prevState) {
         if (prevState.body !== this.state.body) {
-            console.log(this.state.body);
             this.printReportLocalized(this.state.popupReportId
                 , this.state.body);
         }
@@ -57,7 +56,6 @@ export class _MstrObjects extends React.Component {
     }
 
     printReportLocalized = (reportId, body) => {
-        console.log('im in print');
         officeDisplayService.printObject(reportId, null, null, null, body);
     }
 
@@ -75,7 +73,6 @@ export class _MstrObjects extends React.Component {
                 + '&reportId=' + reportId,
                 { height: 62, width: 50, displayInIframe: true },
                 (asyncResult) => {
-                    console.log(asyncResult);
                     this.dialog = asyncResult.value;
                     this.dialog.addEventHandler(
                         Office.EventType.DialogMessageReceived,
@@ -88,7 +85,6 @@ export class _MstrObjects extends React.Component {
 
     onMessageFromPopup = (arg) => {
         const message = arg.message
-        console.log(message);
         const response = JSON.parse(message);
         switch (response.command) {
             case selectorProperties.commandOk:
@@ -110,7 +106,6 @@ export class _MstrObjects extends React.Component {
     }
 
     onTriggerUpdate = (body) => {
-        console.log(body);
         this.dialog.close();
         this.setState({
             body,
