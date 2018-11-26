@@ -32,12 +32,12 @@ describe('office loaded file', () => {
         // given
         // when
         const wrappedComponent = mount(<OfficeLoadedFile fileName='test' />);
-        const buttonsContainer = wrappedComponent.find('Icon');
+        const wrappedButtons = wrappedComponent.find('Icon');
         // then
-        const refreshButton = buttonsContainer.at(2);
-        expect(buttonsContainer.length).toBeGreaterThan(0);
+        const refreshButton = wrappedButtons.at(0);
+        expect(wrappedButtons.length).toBeGreaterThan(0);
         expect(refreshButton.props().type).toEqual('redo');
-        const deleteButton = buttonsContainer.at(4);
+        const deleteButton = wrappedButtons.at(1);
         expect(deleteButton.props().type).toEqual('delete');
     });
     it('should invoke refresh method on button click', () => {

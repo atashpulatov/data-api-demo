@@ -129,11 +129,11 @@ describe('MstrObjectList', () => {
             const directory = row.props().directory;
             // should have row defined
             expect(directory).toBeDefined();
-            const rowIcon = row.find('Icon').at(0);
+            const rowIcon = row.find('MSTRIcon').at(0);
 
             // should have name and image
             expect(row.find('Col').at(1).text()).toBeTruthy();
-            expect(rowIcon.props().type).toEqual('folder');
+            expect(rowIcon.props().type).toEqual('folder-collapsed');
         });
     });
 
@@ -154,11 +154,11 @@ describe('MstrObjectList', () => {
             const report = row.props().report;
             // should have row defined
             expect(report).toBeDefined();
-            const rowIcon = row.find('Icon').at(0);
+            const rowIcon = row.find('MSTRIcon').at(0);
 
             // should have name and image
             expect(row.find('Col').at(1).text()).toBeTruthy();
-            expect(rowIcon.props().type).toEqual('file-text');
+            expect(rowIcon.props().type).toEqual('report');
         });
     });
 
@@ -318,7 +318,6 @@ describe('MstrObjectList', () => {
             wrappedComponent.instance().handleOk = mockOk;
             // when
             wrappedComponent.instance().onMessageFromPopup({ message });
-            console.log(wrappedComponent.instance().onMessageFromPopup);
             expect(mockOk).toBeCalled();
         } finally {
             wrappedComponent.instance().handleOk = originalMethod;
@@ -335,7 +334,6 @@ describe('MstrObjectList', () => {
             wrappedComponent.instance().handleCancel = mockCancel;
             // when
             wrappedComponent.instance().onMessageFromPopup({ message });
-            console.log(wrappedComponent.instance().onMessageFromPopup);
             expect(mockCancel).toBeCalled();
         } finally {
             wrappedComponent.instance().handleOk = originalMethod;
@@ -353,7 +351,6 @@ describe('MstrObjectList', () => {
             wrappedComponent.instance().onTriggerUpdate = mockUpdate;
             // when
             wrappedComponent.instance().onMessageFromPopup({ message });
-            console.log(wrappedComponent.instance().onMessageFromPopup);
             expect(mockUpdate).toBeCalled();
             expect(mockUpdate).toBeCalledWith(givenBody);
         } finally {
