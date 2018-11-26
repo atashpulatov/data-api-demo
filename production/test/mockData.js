@@ -2514,7 +2514,1511 @@ export let mockReports = [
         },
     },
 ];
-
+export let mockBadReports = [
+    {
+        "id": "297AACE74346C3EEA17DC89CB3232C0A",
+        "name": "Quarterly Revenue Forecast",
+        "instanceId": "AB59525E11E8D6CF6DFF0080EF45B5C4",
+        "result": {
+            "definition": {
+                "attributes": [
+                    {
+                        "name": "Quarter",
+                        "id": "8D679D4A11D3E4981000E787EC6DE8A4",
+                        "type": "Attribute",
+                        "forms": [
+                            {
+                                "id": "CCFBE2A5EADB4F50941FB879CCF1721C",
+                                "name": "DESC",
+                                "dataType": "Char"
+                            }
+                        ]
+                    }
+                ],
+                "metrics": [
+                    {
+                        "name": "Revenue",
+                        "id": "4C05177011D3E877C000B3B2D86C964F",
+                        "type": "Metric",
+                        "min": 1682656.0,
+                        "max": 4512939.6499999445,
+                        "numberFormatting": {
+                            "category": 1,
+                            "decimalPlaces": 0,
+                            "thousandSeparator": true,
+                            "currencySymbol": "$",
+                            "currencyPosition": 0,
+                            "formatString": "\"$\"#,##0;(\"$\"#,##0)",
+                            "negativeType": 3
+                        }
+                    }
+                ],
+                "thresholds": [],
+                "sorting": []
+            },
+            "data": {
+                "paging": {
+                    "total": 16,
+                    "current": 16,
+                    "offset": 0,
+                    "limit": 1000,
+                    "prev": null,
+                    "next": null
+                },
+                "root": {
+                    "isPartial": false,
+                    "children": [
+                        {
+                            "depth": 0,
+                            "element": {
+                                "attributeIndex": 0,
+                                "formValues": {
+                                    "DESC": "2014 Q1"
+                                },
+                                "name": "2014 Q1",
+                                "id": "h20141;8D679D4A11D3E4981000E787EC6DE8A4"
+                            },
+                            "metrics": {
+                                "Revenue": {
+                                    "rv": 1682656.0,
+                                    "fv": "$1,682,656",
+                                    "mi": 0
+                                }
+                            }
+                        },
+                        {
+                            "depth": 0,
+                            "element": {
+                                "attributeIndex": 0,
+                                "formValues": {
+                                    "DESC": "2014 Q2"
+                                },
+                                "name": "2014 Q2",
+                                "id": "h20142;8D679D4A11D3E4981000E787EC6DE8A4"
+                            },
+                            "metrics": {
+                                "Revenue": {
+                                    "rv": 1985787.4999999984,
+                                    "fv": "$1,985,788",
+                                    "mi": 0
+                                }
+                            }
+                        },
+                        {
+                            "depth": 0,
+                            "element": {
+                                "attributeIndex": 0,
+                                "formValues": {
+                                    "DESC": "2014 Q3"
+                                },
+                                "name": "2014 Q3",
+                                "id": "h20143;8D679D4A11D3E4981000E787EC6DE8A4"
+                            },
+                            "metrics": {
+                                "Revenue": {
+                                    "rv": 2314294.5000000093,
+                                    "fv": "$2,314,295",
+                                    "mi": 0
+                                }
+                            }
+                        },
+                        {
+                            "depth": 0,
+                            "element": {
+                                "attributeIndex": 0,
+                                "formValues": {
+                                    "DESC": "2014 Q4"
+                                },
+                                "name": "2014 Q4",
+                                "id": "h20144;8D679D4A11D3E4981000E787EC6DE8A4"
+                            },
+                            "metrics": {
+                                "Revenue": {
+                                    "rv": 2664500.0999999717,
+                                    "fv": "$2,664,500",
+                                    "mi": 0
+                                }
+                            }
+                        },
+                        {
+                            "depth": 0,
+                            "element": {
+                                "attributeIndex": 0,
+                                "formValues": {
+                                    "DESC": "2015 Q1"
+                                },
+                                "name": "2015 Q1",
+                                "id": "h20151;8D679D4A11D3E4981000E787EC6DE8A4"
+                            },
+                            "metrics": {
+                                "Revenue": {
+                                    "rv": 2498756.0,
+                                    "fv": "$2,498,756",
+                                    "mi": 0
+                                }
+                            }
+                        },
+                        {
+                            "depth": 0,
+                            "element": {
+                                "attributeIndex": 0,
+                                "formValues": {
+                                    "DESC": "2015 Q2"
+                                },
+                                "name": "2015 Q2",
+                                "id": "h20152;8D679D4A11D3E4981000E787EC6DE8A4"
+                            },
+                            "metrics": {
+                                "Revenue": {
+                                    "rv": 2684763.600000007,
+                                    "fv": "$2,684,764",
+                                    "mi": 0
+                                }
+                            }
+                        },
+                        {
+                            "depth": 0,
+                            "element": {
+                                "attributeIndex": 0,
+                                "formValues": {
+                                    "DESC": "2015 Q3"
+                                },
+                                "name": "2015 Q3",
+                                "id": "h20153;8D679D4A11D3E4981000E787EC6DE8A4"
+                            },
+                            "metrics": {
+                                "Revenue": {
+                                    "rv": 3067019.00000001,
+                                    "fv": "$3,067,019",
+                                    "mi": 0
+                                }
+                            }
+                        },
+                        {
+                            "depth": 0,
+                            "element": {
+                                "attributeIndex": 0,
+                                "formValues": {
+                                    "DESC": "2015 Q4"
+                                },
+                                "name": "2015 Q4",
+                                "id": "h20154;8D679D4A11D3E4981000E787EC6DE8A4"
+                            },
+                            "metrics": {
+                                "Revenue": {
+                                    "rv": 3267067.399999965,
+                                    "fv": "$3,267,067",
+                                    "mi": 0
+                                }
+                            }
+                        },
+                        {
+                            "depth": 0,
+                            "element": {
+                                "attributeIndex": 0,
+                                "formValues": {
+                                    "DESC": "2016 Q1"
+                                },
+                                "name": "2016 Q1",
+                                "id": "h20161;8D679D4A11D3E4981000E787EC6DE8A4"
+                            },
+                            "metrics": {
+                                "Revenue": {
+                                    "rv": 3111989.0,
+                                    "fv": "$3,111,989",
+                                    "mi": 0
+                                }
+                            }
+                        },
+                        {
+                            "depth": 0,
+                            "element": {
+                                "attributeIndex": 0,
+                                "formValues": {
+                                    "DESC": "2016 Q2"
+                                },
+                                "name": "2016 Q2",
+                                "id": "h20162;8D679D4A11D3E4981000E787EC6DE8A4"
+                            },
+                            "metrics": {
+                                "Revenue": {
+                                    "rv": 3504479.1000000276,
+                                    "fv": "$3,504,479",
+                                    "mi": 0
+                                }
+                            }
+                        },
+                        {
+                            "depth": 0,
+                            "element": {
+                                "attributeIndex": 0,
+                                "formValues": {
+                                    "DESC": "2016 Q3"
+                                },
+                                "name": "2016 Q3",
+                                "id": "h20163;8D679D4A11D3E4981000E787EC6DE8A4"
+                            },
+                            "metrics": {
+                                "Revenue": {
+                                    "rv": 3729456.300000008,
+                                    "fv": "$3,729,456",
+                                    "mi": 0
+                                }
+                            }
+                        },
+                        {
+                            "depth": 0,
+                            "element": {
+                                "attributeIndex": 0,
+                                "formValues": {
+                                    "DESC": "2016 Q4"
+                                },
+                                "name": "2016 Q4",
+                                "id": "h20164;8D679D4A11D3E4981000E787EC6DE8A4"
+                            },
+                            "metrics": {
+                                "Revenue": {
+                                    "rv": 4512939.6499999445,
+                                    "fv": "$4,512,940",
+                                    "mi": 0
+                                }
+                            }
+                        },
+                        {
+                            "depth": 0,
+                            "element": {
+                                "attributeIndex": 0,
+                                "formValues": {
+                                    "DESC": "2017 Q1"
+                                },
+                                "name": "2017 Q1",
+                                "id": "h20171;8D679D4A11D3E4981000E787EC6DE8A4"
+                            },
+                            "metrics": {
+                                "Revenue": {
+                                    "rv": "",
+                                    "fv": "",
+                                    "mi": 0
+                                }
+                            }
+                        },
+                        {
+                            "depth": 0,
+                            "element": {
+                                "attributeIndex": 0,
+                                "formValues": {
+                                    "DESC": "2017 Q2"
+                                },
+                                "name": "2017 Q2",
+                                "id": "h20172;8D679D4A11D3E4981000E787EC6DE8A4"
+                            },
+                            "metrics": {
+                                "Revenue": {
+                                    "rv": "",
+                                    "fv": "",
+                                    "mi": 0
+                                }
+                            }
+                        },
+                        {
+                            "depth": 0,
+                            "element": {
+                                "attributeIndex": 0,
+                                "formValues": {
+                                    "DESC": "2017 Q3"
+                                },
+                                "name": "2017 Q3",
+                                "id": "h20173;8D679D4A11D3E4981000E787EC6DE8A4"
+                            },
+                            "metrics": {
+                                "Revenue": {
+                                    "rv": "",
+                                    "fv": "",
+                                    "mi": 0
+                                }
+                            }
+                        },
+                        {
+                            "depth": 0,
+                            "element": {
+                                "attributeIndex": 0,
+                                "formValues": {
+                                    "DESC": "2017 Q4"
+                                },
+                                "name": "2017 Q4",
+                                "id": "h20174;8D679D4A11D3E4981000E787EC6DE8A4"
+                            },
+                            "metrics": {
+                                "Revenue": {
+                                    "rv": "",
+                                    "fv": "",
+                                    "mi": 0
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "id": "19CA15ED451AA1BAAE68418A22793AA3",
+        "name": "ATT SEL Category/ Subcategory",
+        "instanceId": "7B2E58F611E8D6D26DFF0080EF9556C6",
+        "result": {
+            "definition": {
+                "attributes": [
+                    {
+                        "name": "Category",
+                        "id": "8D679D3711D3E4981000E787EC6DE8A4",
+                        "type": "Attribute",
+                        "forms": [
+                            {
+                                "id": "CCFBE2A5EADB4F50941FB879CCF1721C",
+                                "name": "DESC",
+                                "dataType": "Char"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Subcategory",
+                        "id": "8D679D4F11D3E4981000E787EC6DE8A4",
+                        "type": "Attribute",
+                        "forms": [
+                            {
+                                "id": "CCFBE2A5EADB4F50941FB879CCF1721C",
+                                "name": "DESC",
+                                "dataType": "Char"
+                            }
+                        ]
+                    }
+                ],
+                "metrics": [
+                    {
+                        "name": "Revenue",
+                        "id": "4C05177011D3E877C000B3B2D86C964F",
+                        "type": "Metric",
+                        "min": 296228.8500000001,
+                        "max": 5108463.5,
+                        "numberFormatting": {
+                            "category": 1,
+                            "decimalPlaces": 0,
+                            "thousandSeparator": true,
+                            "currencySymbol": "$",
+                            "currencyPosition": 0,
+                            "formatString": "\"$\"#,##0",
+                            "negativeType": 1
+                        }
+                    },
+                    {
+                        "name": "Rank",
+                        "id": "0D222F604A751D4534222D8DCFC2377C",
+                        "type": "Metric",
+                        "isDerived": true,
+                        "min": 1.0,
+                        "max": 6.0,
+                        "numberFormatting": {
+                            "category": 0,
+                            "decimalPlaces": 0,
+                            "formatString": "#,##0;(#,##0)"
+                        }
+                    }
+                ],
+                "thresholds": [],
+                "sorting": [
+                    {
+                        "type": "form",
+                        "attribute": {
+                            "name": "Category",
+                            "id": "8D679D3711D3E4981000E787EC6DE8A4"
+                        },
+                        "form": {
+                            "name": "ID",
+                            "id": "45C11FA478E745FEA08D781CEA190FE5"
+                        },
+                        "order": "descending"
+                    },
+                    {
+                        "type": "metric",
+                        "metric": {
+                            "name": "Revenue",
+                            "id": "4C05177011D3E877C000B3B2D86C964F"
+                        },
+                        "order": "descending"
+                    },
+                    {
+                        "type": "form",
+                        "attribute": {
+                            "name": "Subcategory",
+                            "id": "8D679D4F11D3E4981000E787EC6DE8A4"
+                        },
+                        "form": {
+                            "name": "DESC",
+                            "id": "CCFBE2A5EADB4F50941FB879CCF1721C"
+                        },
+                        "order": "descending"
+                    }
+                ]
+            },
+            "data": {
+                "paging": {
+                    "total": 24,
+                    "current": 24,
+                    "offset": 0,
+                    "limit": 1000,
+                    "prev": null,
+                    "next": null
+                },
+                "root": {
+                    "isPartial": false,
+                    "children": [
+                        {
+                            "depth": 0,
+                            "element": {
+                                "attributeIndex": 0,
+                                "formValues": {
+                                    "DESC": "Music"
+                                },
+                                "name": "Music",
+                                "id": "h4;8D679D3711D3E4981000E787EC6DE8A4"
+                            },
+                            "isPartial": false,
+                            "children": [
+                                {
+                                    "depth": 1,
+                                    "element": {
+                                        "attributeIndex": 1,
+                                        "formValues": {
+                                            "DESC": "Country"
+                                        },
+                                        "name": "Country",
+                                        "id": "h42;8D679D4F11D3E4981000E787EC6DE8A4"
+                                    },
+                                    "metrics": {
+                                        "Revenue": {
+                                            "rv": 729298.9000000006,
+                                            "fv": "$729,299",
+                                            "mi": 0
+                                        },
+                                        "Rank": {
+                                            "rv": 1.0,
+                                            "fv": "1",
+                                            "mi": 1
+                                        }
+                                    }
+                                },
+                                {
+                                    "depth": 1,
+                                    "element": {
+                                        "attributeIndex": 1,
+                                        "formValues": {
+                                            "DESC": "Alternative"
+                                        },
+                                        "name": "Alternative",
+                                        "id": "h41;8D679D4F11D3E4981000E787EC6DE8A4"
+                                    },
+                                    "metrics": {
+                                        "Revenue": {
+                                            "rv": 706129.5500000003,
+                                            "fv": "$706,130",
+                                            "mi": 0
+                                        },
+                                        "Rank": {
+                                            "rv": 2.0,
+                                            "fv": "2",
+                                            "mi": 1
+                                        }
+                                    }
+                                },
+                                {
+                                    "depth": 1,
+                                    "element": {
+                                        "attributeIndex": 1,
+                                        "formValues": {
+                                            "DESC": "Rock"
+                                        },
+                                        "name": "Rock",
+                                        "id": "h45;8D679D4F11D3E4981000E787EC6DE8A4"
+                                    },
+                                    "metrics": {
+                                        "Revenue": {
+                                            "rv": 700755.6999999998,
+                                            "fv": "$700,756",
+                                            "mi": 0
+                                        },
+                                        "Rank": {
+                                            "rv": 3.0,
+                                            "fv": "3",
+                                            "mi": 1
+                                        }
+                                    }
+                                },
+                                {
+                                    "depth": 1,
+                                    "element": {
+                                        "attributeIndex": 1,
+                                        "formValues": {
+                                            "DESC": "Pop"
+                                        },
+                                        "name": "Pop",
+                                        "id": "h44;8D679D4F11D3E4981000E787EC6DE8A4"
+                                    },
+                                    "metrics": {
+                                        "Revenue": {
+                                            "rv": 687861.4,
+                                            "fv": "$687,861",
+                                            "mi": 0
+                                        },
+                                        "Rank": {
+                                            "rv": 4.0,
+                                            "fv": "4",
+                                            "mi": 1
+                                        }
+                                    }
+                                },
+                                {
+                                    "depth": 1,
+                                    "element": {
+                                        "attributeIndex": 1,
+                                        "formValues": {
+                                            "DESC": "Music - Miscellaneous"
+                                        },
+                                        "name": "Music - Miscellaneous",
+                                        "id": "h43;8D679D4F11D3E4981000E787EC6DE8A4"
+                                    },
+                                    "metrics": {
+                                        "Revenue": {
+                                            "rv": 597507.65,
+                                            "fv": "$597,508",
+                                            "mi": 0
+                                        },
+                                        "Rank": {
+                                            "rv": 5.0,
+                                            "fv": "5",
+                                            "mi": 1
+                                        }
+                                    }
+                                },
+                                {
+                                    "depth": 1,
+                                    "element": {
+                                        "attributeIndex": 1,
+                                        "formValues": {
+                                            "DESC": "Soul / R&B"
+                                        },
+                                        "name": "Soul / R&B",
+                                        "id": "h46;8D679D4F11D3E4981000E787EC6DE8A4"
+                                    },
+                                    "metrics": {
+                                        "Revenue": {
+                                            "rv": 471814.1999999999,
+                                            "fv": "$471,814",
+                                            "mi": 0
+                                        },
+                                        "Rank": {
+                                            "rv": 6.0,
+                                            "fv": "6",
+                                            "mi": 1
+                                        }
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "depth": 0,
+                            "element": {
+                                "attributeIndex": 0,
+                                "formValues": {
+                                    "DESC": "Movies"
+                                },
+                                "name": "Movies",
+                                "id": "h3;8D679D3711D3E4981000E787EC6DE8A4"
+                            },
+                            "isPartial": false,
+                            "children": [
+                                {
+                                    "depth": 1,
+                                    "element": {
+                                        "attributeIndex": 1,
+                                        "formValues": {
+                                            "DESC": "Special Interests"
+                                        },
+                                        "name": "Special Interests",
+                                        "id": "h36;8D679D4F11D3E4981000E787EC6DE8A4"
+                                    },
+                                    "metrics": {
+                                        "Revenue": {
+                                            "rv": 813946.2499999993,
+                                            "fv": "$813,946",
+                                            "mi": 0
+                                        },
+                                        "Rank": {
+                                            "rv": 1.0,
+                                            "fv": "1",
+                                            "mi": 1
+                                        }
+                                    }
+                                },
+                                {
+                                    "depth": 1,
+                                    "element": {
+                                        "attributeIndex": 1,
+                                        "formValues": {
+                                            "DESC": "Drama"
+                                        },
+                                        "name": "Drama",
+                                        "id": "h33;8D679D4F11D3E4981000E787EC6DE8A4"
+                                    },
+                                    "metrics": {
+                                        "Revenue": {
+                                            "rv": 698840.3,
+                                            "fv": "$698,840",
+                                            "mi": 0
+                                        },
+                                        "Rank": {
+                                            "rv": 2.0,
+                                            "fv": "2",
+                                            "mi": 1
+                                        }
+                                    }
+                                },
+                                {
+                                    "depth": 1,
+                                    "element": {
+                                        "attributeIndex": 1,
+                                        "formValues": {
+                                            "DESC": "Comedy"
+                                        },
+                                        "name": "Comedy",
+                                        "id": "h32;8D679D4F11D3E4981000E787EC6DE8A4"
+                                    },
+                                    "metrics": {
+                                        "Revenue": {
+                                            "rv": 669641.8000000007,
+                                            "fv": "$669,642",
+                                            "mi": 0
+                                        },
+                                        "Rank": {
+                                            "rv": 3.0,
+                                            "fv": "3",
+                                            "mi": 1
+                                        }
+                                    }
+                                },
+                                {
+                                    "depth": 1,
+                                    "element": {
+                                        "attributeIndex": 1,
+                                        "formValues": {
+                                            "DESC": "Kids / Family"
+                                        },
+                                        "name": "Kids / Family",
+                                        "id": "h35;8D679D4F11D3E4981000E787EC6DE8A4"
+                                    },
+                                    "metrics": {
+                                        "Revenue": {
+                                            "rv": 664957.25,
+                                            "fv": "$664,957",
+                                            "mi": 0
+                                        },
+                                        "Rank": {
+                                            "rv": 4.0,
+                                            "fv": "4",
+                                            "mi": 1
+                                        }
+                                    }
+                                },
+                                {
+                                    "depth": 1,
+                                    "element": {
+                                        "attributeIndex": 1,
+                                        "formValues": {
+                                            "DESC": "Horror"
+                                        },
+                                        "name": "Horror",
+                                        "id": "h34;8D679D4F11D3E4981000E787EC6DE8A4"
+                                    },
+                                    "metrics": {
+                                        "Revenue": {
+                                            "rv": 633992.8500000003,
+                                            "fv": "$633,993",
+                                            "mi": 0
+                                        },
+                                        "Rank": {
+                                            "rv": 5.0,
+                                            "fv": "5",
+                                            "mi": 1
+                                        }
+                                    }
+                                },
+                                {
+                                    "depth": 1,
+                                    "element": {
+                                        "attributeIndex": 1,
+                                        "formValues": {
+                                            "DESC": "Action"
+                                        },
+                                        "name": "Action",
+                                        "id": "h31;8D679D4F11D3E4981000E787EC6DE8A4"
+                                    },
+                                    "metrics": {
+                                        "Revenue": {
+                                            "rv": 617565.0000000005,
+                                            "fv": "$617,565",
+                                            "mi": 0
+                                        },
+                                        "Rank": {
+                                            "rv": 6.0,
+                                            "fv": "6",
+                                            "mi": 1
+                                        }
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "depth": 0,
+                            "element": {
+                                "attributeIndex": 0,
+                                "formValues": {
+                                    "DESC": "Electronics"
+                                },
+                                "name": "Electronics",
+                                "id": "h2;8D679D3711D3E4981000E787EC6DE8A4"
+                            },
+                            "isPartial": false,
+                            "children": [
+                                {
+                                    "depth": 1,
+                                    "element": {
+                                        "attributeIndex": 1,
+                                        "formValues": {
+                                            "DESC": "Video Equipment"
+                                        },
+                                        "name": "Video Equipment",
+                                        "id": "h26;8D679D4F11D3E4981000E787EC6DE8A4"
+                                    },
+                                    "metrics": {
+                                        "Revenue": {
+                                            "rv": 5108463.5,
+                                            "fv": "$5,108,464",
+                                            "mi": 0
+                                        },
+                                        "Rank": {
+                                            "rv": 1.0,
+                                            "fv": "1",
+                                            "mi": 1
+                                        }
+                                    }
+                                },
+                                {
+                                    "depth": 1,
+                                    "element": {
+                                        "attributeIndex": 1,
+                                        "formValues": {
+                                            "DESC": "Cameras"
+                                        },
+                                        "name": "Cameras",
+                                        "id": "h22;8D679D4F11D3E4981000E787EC6DE8A4"
+                                    },
+                                    "metrics": {
+                                        "Revenue": {
+                                            "rv": 5061147.5,
+                                            "fv": "$5,061,148",
+                                            "mi": 0
+                                        },
+                                        "Rank": {
+                                            "rv": 2.0,
+                                            "fv": "2",
+                                            "mi": 1
+                                        }
+                                    }
+                                },
+                                {
+                                    "depth": 1,
+                                    "element": {
+                                        "attributeIndex": 1,
+                                        "formValues": {
+                                            "DESC": "Electronics - Miscellaneous"
+                                        },
+                                        "name": "Electronics - Miscellaneous",
+                                        "id": "h24;8D679D4F11D3E4981000E787EC6DE8A4"
+                                    },
+                                    "metrics": {
+                                        "Revenue": {
+                                            "rv": 4671956.500000002,
+                                            "fv": "$4,671,957",
+                                            "mi": 0
+                                        },
+                                        "Rank": {
+                                            "rv": 3.0,
+                                            "fv": "3",
+                                            "mi": 1
+                                        }
+                                    }
+                                },
+                                {
+                                    "depth": 1,
+                                    "element": {
+                                        "attributeIndex": 1,
+                                        "formValues": {
+                                            "DESC": "TV's"
+                                        },
+                                        "name": "TV's",
+                                        "id": "h25;8D679D4F11D3E4981000E787EC6DE8A4"
+                                    },
+                                    "metrics": {
+                                        "Revenue": {
+                                            "rv": 3837905.8500000006,
+                                            "fv": "$3,837,906",
+                                            "mi": 0
+                                        },
+                                        "Rank": {
+                                            "rv": 4.0,
+                                            "fv": "4",
+                                            "mi": 1
+                                        }
+                                    }
+                                },
+                                {
+                                    "depth": 1,
+                                    "element": {
+                                        "attributeIndex": 1,
+                                        "formValues": {
+                                            "DESC": "Audio Equipment"
+                                        },
+                                        "name": "Audio Equipment",
+                                        "id": "h21;8D679D4F11D3E4981000E787EC6DE8A4"
+                                    },
+                                    "metrics": {
+                                        "Revenue": {
+                                            "rv": 3782832.0,
+                                            "fv": "$3,782,832",
+                                            "mi": 0
+                                        },
+                                        "Rank": {
+                                            "rv": 5.0,
+                                            "fv": "5",
+                                            "mi": 1
+                                        }
+                                    }
+                                },
+                                {
+                                    "depth": 1,
+                                    "element": {
+                                        "attributeIndex": 1,
+                                        "formValues": {
+                                            "DESC": "Computers"
+                                        },
+                                        "name": "Computers",
+                                        "id": "h23;8D679D4F11D3E4981000E787EC6DE8A4"
+                                    },
+                                    "metrics": {
+                                        "Revenue": {
+                                            "rv": 1928997.5000000002,
+                                            "fv": "$1,928,998",
+                                            "mi": 0
+                                        },
+                                        "Rank": {
+                                            "rv": 6.0,
+                                            "fv": "6",
+                                            "mi": 1
+                                        }
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "depth": 0,
+                            "element": {
+                                "attributeIndex": 0,
+                                "formValues": {
+                                    "DESC": "Books"
+                                },
+                                "name": "Books",
+                                "id": "h1;8D679D3711D3E4981000E787EC6DE8A4"
+                            },
+                            "isPartial": false,
+                            "children": [
+                                {
+                                    "depth": 1,
+                                    "element": {
+                                        "attributeIndex": 1,
+                                        "formValues": {
+                                            "DESC": "Science & Technology"
+                                        },
+                                        "name": "Science & Technology",
+                                        "id": "h15;8D679D4F11D3E4981000E787EC6DE8A4"
+                                    },
+                                    "metrics": {
+                                        "Revenue": {
+                                            "rv": 811786.9999999998,
+                                            "fv": "$811,787",
+                                            "mi": 0
+                                        },
+                                        "Rank": {
+                                            "rv": 1.0,
+                                            "fv": "1",
+                                            "mi": 1
+                                        }
+                                    }
+                                },
+                                {
+                                    "depth": 1,
+                                    "element": {
+                                        "attributeIndex": 1,
+                                        "formValues": {
+                                            "DESC": "Art & Architecture"
+                                        },
+                                        "name": "Art & Architecture",
+                                        "id": "h11;8D679D4F11D3E4981000E787EC6DE8A4"
+                                    },
+                                    "metrics": {
+                                        "Revenue": {
+                                            "rv": 480172.8499999997,
+                                            "fv": "$480,173",
+                                            "mi": 0
+                                        },
+                                        "Rank": {
+                                            "rv": 2.0,
+                                            "fv": "2",
+                                            "mi": 1
+                                        }
+                                    }
+                                },
+                                {
+                                    "depth": 1,
+                                    "element": {
+                                        "attributeIndex": 1,
+                                        "formValues": {
+                                            "DESC": "Business"
+                                        },
+                                        "name": "Business",
+                                        "id": "h12;8D679D4F11D3E4981000E787EC6DE8A4"
+                                    },
+                                    "metrics": {
+                                        "Revenue": {
+                                            "rv": 400870.8000000001,
+                                            "fv": "$400,871",
+                                            "mi": 0
+                                        },
+                                        "Rank": {
+                                            "rv": 3.0,
+                                            "fv": "3",
+                                            "mi": 1
+                                        }
+                                    }
+                                },
+                                {
+                                    "depth": 1,
+                                    "element": {
+                                        "attributeIndex": 1,
+                                        "formValues": {
+                                            "DESC": "Sports & Health"
+                                        },
+                                        "name": "Sports & Health",
+                                        "id": "h16;8D679D4F11D3E4981000E787EC6DE8A4"
+                                    },
+                                    "metrics": {
+                                        "Revenue": {
+                                            "rv": 335105.8500000002,
+                                            "fv": "$335,106",
+                                            "mi": 0
+                                        },
+                                        "Rank": {
+                                            "rv": 4.0,
+                                            "fv": "4",
+                                            "mi": 1
+                                        }
+                                    }
+                                },
+                                {
+                                    "depth": 1,
+                                    "element": {
+                                        "attributeIndex": 1,
+                                        "formValues": {
+                                            "DESC": "Books - Miscellaneous"
+                                        },
+                                        "name": "Books - Miscellaneous",
+                                        "id": "h14;8D679D4F11D3E4981000E787EC6DE8A4"
+                                    },
+                                    "metrics": {
+                                        "Revenue": {
+                                            "rv": 315929.1000000004,
+                                            "fv": "$315,929",
+                                            "mi": 0
+                                        },
+                                        "Rank": {
+                                            "rv": 5.0,
+                                            "fv": "5",
+                                            "mi": 1
+                                        }
+                                    }
+                                },
+                                {
+                                    "depth": 1,
+                                    "element": {
+                                        "attributeIndex": 1,
+                                        "formValues": {
+                                            "DESC": "Literature"
+                                        },
+                                        "name": "Literature",
+                                        "id": "h13;8D679D4F11D3E4981000E787EC6DE8A4"
+                                    },
+                                    "metrics": {
+                                        "Revenue": {
+                                            "rv": 296228.8500000001,
+                                            "fv": "$296,229",
+                                            "mi": 0
+                                        },
+                                        "Rank": {
+                                            "rv": 6.0,
+                                            "fv": "6",
+                                            "mi": 1
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "id": "3F221CE44375CB91DD35EA9014778223",
+        "name": "20 Region",
+        "instanceId": "AC8FA1AC11E8D6D26DFF0080EF2577C7",
+        "result": {
+            "definition": {
+                "attributes": [
+                    {
+                        "name": "Region",
+                        "id": "8D679D4B11D3E4981000E787EC6DE8A4",
+                        "type": "Attribute",
+                        "forms": [
+                            {
+                                "id": "CCFBE2A5EADB4F50941FB879CCF1721C",
+                                "name": "DESC",
+                                "dataType": "Char"
+                            }
+                        ]
+                    }
+                ],
+                "metrics": [
+                    {
+                        "name": "Revenue",
+                        "id": "4C05177011D3E877C000B3B2D86C964F",
+                        "type": "Metric",
+                        "min": 1761187.1999999997,
+                        "max": 8554414.549999997,
+                        "numberFormatting": {
+                            "category": 1,
+                            "decimalPlaces": 0,
+                            "thousandSeparator": true,
+                            "currencySymbol": "$",
+                            "currencyPosition": 0,
+                            "formatString": "\"$\"#,##0",
+                            "negativeType": 1
+                        }
+                    },
+                    {
+                        "name": "Standard Deviation of Revenue",
+                        "id": "82F256FE432647176373C289AD3BA126",
+                        "type": "Metric",
+                        "thresholds": [
+                            0
+                        ],
+                        "min": 2427.562126692,
+                        "max": 16037.0517947014,
+                        "numberFormatting": {
+                            "category": 1,
+                            "decimalPlaces": 0,
+                            "thousandSeparator": true,
+                            "currencySymbol": "$",
+                            "currencyPosition": 0,
+                            "formatString": "\"$\"#,##0",
+                            "negativeType": 0
+                        }
+                    },
+                    {
+                        "name": "Max Revenue",
+                        "id": "080A26DE4A288C0037452AA46DF92145",
+                        "type": "Metric",
+                        "min": 23700,
+                        "max": 102050,
+                        "numberFormatting": {
+                            "category": 1,
+                            "decimalPlaces": 0,
+                            "thousandSeparator": true,
+                            "currencySymbol": "$",
+                            "currencyPosition": 0,
+                            "formatString": "\"$\"#,##0",
+                            "negativeType": 0
+                        }
+                    },
+                    {
+                        "name": "Min Revenue",
+                        "id": "D623DEB3499902169FECFA8B57C06A5A",
+                        "type": "Metric",
+                        "min": 45.2,
+                        "max": 1163.25,
+                        "numberFormatting": {
+                            "category": 1,
+                            "decimalPlaces": 0,
+                            "thousandSeparator": true,
+                            "currencySymbol": "$",
+                            "currencyPosition": 0,
+                            "formatString": "\"$\"#,##0",
+                            "negativeType": 0
+                        }
+                    },
+                    {
+                        "name": "Count Distinct (Items Sold)",
+                        "id": "A73DF7944B47BA98D23110A63FC17C90",
+                        "type": "Metric",
+                        "min": 360,
+                        "max": 360,
+                        "numberFormatting": {
+                            "category": 0,
+                            "decimalPlaces": 0,
+                            "formatString": "#,##0;(#,##0)"
+                        }
+                    }
+                ],
+                "thresholds": [
+                    {
+                        "id": "82F256FE432647176373C289AD3BA126#0",
+                        "name": "New Threshold",
+                        "type": "Metric",
+                        "format": {},
+                        "condition": ""
+                    }
+                ],
+                "sorting": []
+            },
+            "data": {
+                "paging": {
+                    "total": 8,
+                    "current": 8,
+                    "offset": 0,
+                    "limit": 1000,
+                    "prev": null,
+                    "next": null
+                },
+                "root": {
+                    "isPartial": false,
+                    "children": [
+                        {
+                            "depth": 0,
+                            "element": {
+                                "attributeIndex": 0,
+                                "formValues": {
+                                    "DESC": "Central"
+                                },
+                                "name": "Central",
+                                "id": "h4;8D679D4B11D3E4981000E787EC6DE8A4"
+                            },
+                            "metrics": {
+                                "Revenue": {
+                                    "rv": 5029366.25,
+                                    "fv": "$5,029,366",
+                                    "mi": 0
+                                },
+                                "Standard Deviation of Revenue": {
+                                    "rv": 5614.4767803597,
+                                    "fv": "$5,614",
+                                    "mi": 1
+                                },
+                                "Max Revenue": {
+                                    "rv": 45480,
+                                    "fv": "$45,480",
+                                    "mi": 2
+                                },
+                                "Min Revenue": {
+                                    "rv": 205.05,
+                                    "fv": "$205",
+                                    "mi": 3
+                                },
+                                "Count Distinct (Items Sold)": {
+                                    "rv": 360,
+                                    "fv": "360",
+                                    "mi": 4
+                                }
+                            }
+                        },
+                        {
+                            "depth": 0,
+                            "element": {
+                                "attributeIndex": 0,
+                                "formValues": {
+                                    "DESC": "Mid-Atlantic"
+                                },
+                                "name": "Mid-Atlantic",
+                                "id": "h2;8D679D4B11D3E4981000E787EC6DE8A4"
+                            },
+                            "metrics": {
+                                "Revenue": {
+                                    "rv": 4452615.050000004,
+                                    "fv": "$4,452,615",
+                                    "mi": 0
+                                },
+                                "Standard Deviation of Revenue": {
+                                    "rv": 3091.9888667382,
+                                    "fv": "$3,092",
+                                    "mi": 1
+                                },
+                                "Max Revenue": {
+                                    "rv": 33050,
+                                    "fv": "$33,050",
+                                    "mi": 2
+                                },
+                                "Min Revenue": {
+                                    "rv": 45.2,
+                                    "fv": "$45",
+                                    "mi": 3
+                                },
+                                "Count Distinct (Items Sold)": {
+                                    "rv": 360,
+                                    "fv": "360",
+                                    "mi": 4
+                                }
+                            }
+                        },
+                        {
+                            "depth": 0,
+                            "element": {
+                                "attributeIndex": 0,
+                                "formValues": {
+                                    "DESC": "Northeast"
+                                },
+                                "name": "Northeast",
+                                "id": "h1;8D679D4B11D3E4981000E787EC6DE8A4"
+                            },
+                            "metrics": {
+                                "Revenue": {
+                                    "rv": 8554414.549999997,
+                                    "fv": "$8,554,415",
+                                    "mi": 0
+                                },
+                                "Standard Deviation of Revenue": {
+                                    "rv": 7452.7014645208,
+                                    "fv": "$7,453",
+                                    "mi": 1
+                                },
+                                "Max Revenue": {
+                                    "rv": 64320,
+                                    "fv": "$64,320",
+                                    "mi": 2
+                                },
+                                "Min Revenue": {
+                                    "rv": 61.35,
+                                    "fv": "$61",
+                                    "mi": 3
+                                },
+                                "Count Distinct (Items Sold)": {
+                                    "rv": 360,
+                                    "fv": "360",
+                                    "mi": 4
+                                }
+                            }
+                        },
+                        {
+                            "depth": 0,
+                            "element": {
+                                "attributeIndex": 0,
+                                "formValues": {
+                                    "DESC": "Northwest"
+                                },
+                                "name": "Northwest",
+                                "id": "h6;8D679D4B11D3E4981000E787EC6DE8A4"
+                            },
+                            "metrics": {
+                                "Revenue": {
+                                    "rv": 1761187.1999999997,
+                                    "fv": "$1,761,187",
+                                    "mi": 0
+                                },
+                                "Standard Deviation of Revenue": {
+                                    "rv": 2646.8625699508,
+                                    "fv": "$2,647",
+                                    "mi": 1
+                                },
+                                "Max Revenue": {
+                                    "rv": 30360,
+                                    "fv": "$30,360",
+                                    "mi": 2
+                                },
+                                "Min Revenue": {
+                                    "rv": 131.55,
+                                    "fv": "$132",
+                                    "mi": 3
+                                },
+                                "Count Distinct (Items Sold)": {
+                                    "rv": 360,
+                                    "fv": "360",
+                                    "mi": 4
+                                }
+                            }
+                        },
+                        {
+                            "depth": 0,
+                            "element": {
+                                "attributeIndex": 0,
+                                "formValues": {
+                                    "DESC": "South"
+                                },
+                                "name": "South",
+                                "id": "h5;8D679D4B11D3E4981000E787EC6DE8A4"
+                            },
+                            "metrics": {
+                                "Revenue": {
+                                    "rv": 5389280.299999999,
+                                    "fv": "$5,389,280",
+                                    "mi": 0
+                                },
+                                "Standard Deviation of Revenue": {
+                                    "rv": 7398.9820094164,
+                                    "fv": "$7,399",
+                                    "mi": 1
+                                },
+                                "Max Revenue": {
+                                    "rv": 51500,
+                                    "fv": "$51,500",
+                                    "mi": 2
+                                },
+                                "Min Revenue": {
+                                    "rv": 470.1,
+                                    "fv": "$470",
+                                    "mi": 3
+                                },
+                                "Count Distinct (Items Sold)": {
+                                    "rv": 360,
+                                    "fv": "360",
+                                    "mi": 4
+                                }
+                            }
+                        },
+                        {
+                            "depth": 0,
+                            "element": {
+                                "attributeIndex": 0,
+                                "formValues": {
+                                    "DESC": "Southeast"
+                                },
+                                "name": "Southeast",
+                                "id": "h3;8D679D4B11D3E4981000E787EC6DE8A4"
+                            },
+                            "metrics": {
+                                "Revenue": {
+                                    "rv": 2239951.0500000003,
+                                    "fv": "$2,239,951",
+                                    "mi": 0
+                                },
+                                "Standard Deviation of Revenue": {
+                                    "rv": 2427.562126692,
+                                    "fv": "$2,428",
+                                    "mi": 1
+                                },
+                                "Max Revenue": {
+                                    "rv": 23700,
+                                    "fv": "$23,700",
+                                    "mi": 2
+                                },
+                                "Min Revenue": {
+                                    "rv": 155.55,
+                                    "fv": "$156",
+                                    "mi": 3
+                                },
+                                "Count Distinct (Items Sold)": {
+                                    "rv": 360,
+                                    "fv": "360",
+                                    "mi": 4
+                                }
+                            }
+                        },
+                        {
+                            "depth": 0,
+                            "element": {
+                                "attributeIndex": 0,
+                                "formValues": {
+                                    "DESC": "Southwest"
+                                },
+                                "name": "Southwest",
+                                "id": "h7;8D679D4B11D3E4981000E787EC6DE8A4"
+                            },
+                            "metrics": {
+                                "Revenue": {
+                                    "rv": 3694131.6999999983,
+                                    "fv": "$3,694,132",
+                                    "mi": 0
+                                },
+                                "Standard Deviation of Revenue": {
+                                    "rv": 3401.4196094712,
+                                    "fv": "$3,401",
+                                    "mi": 1
+                                },
+                                "Max Revenue": {
+                                    "rv": 33840,
+                                    "fv": "$33,840",
+                                    "mi": 2
+                                },
+                                "Min Revenue": {
+                                    "rv": 113.1,
+                                    "fv": "$113",
+                                    "mi": 3
+                                },
+                                "Count Distinct (Items Sold)": {
+                                    "rv": 360,
+                                    "fv": "360",
+                                    "mi": 4
+                                }
+                            }
+                        },
+                        {
+                            "depth": 0,
+                            "element": {
+                                "attributeIndex": 0,
+                                "formValues": {
+                                    "DESC": "Web"
+                                },
+                                "name": "Web",
+                                "id": "h12;8D679D4B11D3E4981000E787EC6DE8A4"
+                            },
+                            "metrics": {
+                                "Revenue": {
+                                    "rv": 3902762.0500000026,
+                                    "fv": "$3,902,762",
+                                    "mi": 0
+                                },
+                                "Standard Deviation of Revenue": {
+                                    "rv": 16037.0517947014,
+                                    "fv": "$16,037",
+                                    "mi": 1
+                                },
+                                "Max Revenue": {
+                                    "rv": 102050,
+                                    "fv": "$102,050",
+                                    "mi": 2
+                                },
+                                "Min Revenue": {
+                                    "rv": 1163.25,
+                                    "fv": "$1,163",
+                                    "mi": 3
+                                },
+                                "Count Distinct (Items Sold)": {
+                                    "rv": 360,
+                                    "fv": "360",
+                                    "mi": 4
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    }
+];
 export let mstrTutorial = [{
     name: 'Business Roles',
     id: '032A5E114A59D28267BDD8B6D9E58B22',
