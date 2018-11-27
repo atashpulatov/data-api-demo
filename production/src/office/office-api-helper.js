@@ -77,7 +77,10 @@ class OfficeApiHelper {
     async findAvailableOfficeTableId(reportName, context) {
         let nameExists = true;
         let tableIncrement = 0;
-        const tableName = reportName.replace(NON_ALPHABETICAL_REGEX, '');;
+        let tableName = reportName.replace(NON_ALPHABETICAL_REGEX, '');
+        if(tableName === '') {
+            tableName = 'report';
+        }  
         const tableCollection = context.workbook.tables;
         tableCollection.load();
         await context.sync();
