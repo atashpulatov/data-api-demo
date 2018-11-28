@@ -11,6 +11,8 @@ import { sessionProperties } from '../../src/storage/session-properties';
 import { Provider } from 'react-redux';
 import { mstrObjectListHelper } from '../../src/mstr-object/mstr-object-list-helper';
 import { selectorProperties } from '../../src/attribute-selector/selector-properties';
+import { InternalServerError } from '../../src/error/internal-server-error';
+import { UnauthorizedError } from '../../src/error/unauthorized-error';
 /* eslint-enable */
 
 jest.mock('../../src/mstr-object/mstr-object-rest-service');
@@ -97,6 +99,51 @@ describe('MstrObjectList', () => {
         expect(wrappedComponent.state().mstrObjects)
             .toBe(mockFolderObjects);
     });
+
+    it('should not update component after navigating to projects', async () => {
+        // given
+        const mstrObjectListHelperSpy = jest.spyOn(mstrObjectListHelper, 'fetchContent')
+            .mockImplementation(() => {
+                throw new InternalServerError();
+            });
+        const wrappedComponent = mount(<_MstrObjects />);
+        const prevStateMock = { body: {} };
+        const prevPropsMock = { body: {} };
+        // when
+        const notThrowingUpdate = async () => {
+            await wrappedComponent.instance().componentDidUpdate(prevPropsMock, prevStateMock);
+        };
+        reduxStore.dispatch({
+            type: historyProperties.actions.goToProjects,
+        });
+        // then
+        await expect(notThrowingUpdate())
+            .resolves.toEqual(undefined);
+        mstrObjectListHelperSpy.mockRestore();
+    });
+
+    it('should not update component after logging out', async () => {
+        // given
+        const mstrObjectListHelperSpy = jest.spyOn(mstrObjectListHelper, 'fetchContent')
+            .mockImplementation(() => {
+                throw new UnauthorizedError();
+            });
+        const wrappedComponent = mount(<_MstrObjects />);
+        const prevStateMock = { body: {} };
+        const prevPropsMock = { body: {} };
+        // when
+        const notThrowingUpdate = async () => {
+            await wrappedComponent.instance().componentDidUpdate(prevPropsMock, prevStateMock);
+        };
+        reduxStore.dispatch({
+            type: sessionProperties.actions.logOut,
+        });
+        // then
+        await expect(notThrowingUpdate())
+            .resolves.toEqual(undefined);
+        mstrObjectListHelperSpy.mockRestore();
+    });
+
 
     // User sees all data
     it('should have all rows', async () => {
