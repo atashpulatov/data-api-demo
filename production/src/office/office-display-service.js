@@ -7,8 +7,6 @@ import { globalDefinitions } from '../global-definitions';
 import { sessionHelper } from '../storage/session-helper';
 import { officeStoreService } from './store/office-store-service';
 
-const separator = globalDefinitions.reportBindingIdSeparator;
-
 class OfficeDisplayService {
     constructor() {
         this.insertDataIntoExcel = this._insertDataIntoExcel.bind(this);
@@ -26,7 +24,7 @@ class OfficeDisplayService {
         const jsonData = await mstrObjectRestService.getObjectContent(objectId, body);
         const convertedReport = officeConverterService
             .getConvertedTable(jsonData);
-        const newOfficeTableId = officeTableId || await officeApiHelper.findAvailableOfficeTableId(convertedReport.name, excelContext);
+        const newOfficeTableId = officeTableId || await officeApiHelper.findAvailableOfficeTableId(excelContext);
         await this._insertDataIntoExcel(convertedReport, excelContext, startCell, newOfficeTableId);
         const { envUrl, projectId } = officeApiHelper.getCurrentMstrContext();
         bindingId = bindingId || newOfficeTableId;
@@ -39,7 +37,7 @@ class OfficeDisplayService {
                 bindId: bindingId,
                 tableId: newOfficeTableId,
                 projectId,
-                envUrl,                
+                envUrl,
             });
         }
         sessionHelper.disableLoading();

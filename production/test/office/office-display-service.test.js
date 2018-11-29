@@ -15,6 +15,7 @@ jest.mock('../../src/office/store/office-store-service');
 describe('OfficeDisplayService', () => {
     const givenReport = mockReports[0];
     const startCell = 'D411';
+    const excelTableNameMock = 'table';
 
     const mstrContext = {
         envUrl: 'url',
@@ -27,7 +28,7 @@ describe('OfficeDisplayService', () => {
             .mockResolvedValue(givenReport);
 
         const findAvailableOfficeTableIdSpy = jest.spyOn(officeApiHelper, 'findAvailableOfficeTableId')
-            .mockImplementation((name) => name);
+            .mockReturnValue(excelTableNameMock);
 
         const getCurrentMstrContextSpy = jest.spyOn(officeApiHelper, 'getCurrentMstrContext')
             .mockReturnValue(mstrContext);
@@ -83,16 +84,15 @@ describe('OfficeDisplayService', () => {
         // given
         officeDisplayService._insertDataIntoExcel = jest.fn();
         const objectId = null;
-        const givenTableId = 'TestReport';
         // when
         await officeDisplayService.printObject(objectId, startCell);
         // then
         expect(officeStoreService.preserveReport).toBeCalled();
         expect(officeStoreService.preserveReport).toBeCalledWith({
-            tableId: givenTableId,
+            tableId: excelTableNameMock,
             id: givenReport.id,
             name: givenReport.name,
-            bindId: givenReport.name,
+            bindId: excelTableNameMock,
             envUrl: mstrContext.envUrl,
             projectId: mstrContext.projectId,
         });
