@@ -45,7 +45,7 @@ export class _MstrObjects extends React.Component {
                 , this.state.body);
         }
         const project = reduxStore.getState().historyReducer.project;
-        if(!project) {
+        if (!project) {
             sessionHelper.disableLoading();
             return;
         };
