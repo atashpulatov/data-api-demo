@@ -17,6 +17,6 @@ describe('NavigationTree', () => {
         // then
         expect(wrappedComponent.instance()).toBeDefined();
         expect(wrappedComponent.find('FolderTree').get(0)).toBeDefined();
-        expect(wrappedComponent.find('PopupButtons').get(0)).toBeDefined();
+        expect(wrappedComponent.find('PopupButtons').length).toBe(0);
     });
 });

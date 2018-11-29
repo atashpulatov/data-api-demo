@@ -24,17 +24,6 @@ export class NavigationTree extends Component {
         };
     }
 
-    handleOk = () => {
-        this.setState({ triggerUpdate: true });
-    }
-
-    handleCancel = () => {
-        const cancelObject = {
-            command: selectorProperties.commandCancel,
-        };
-        Office.context.ui.messageParent(JSON.stringify(cancelObject));
-    }
-
     onTriggerUpdate = (body) => {
         const updateObject = {
             command: selectorProperties.commandOnUpdate,
@@ -53,9 +42,6 @@ export class NavigationTree extends Component {
                     triggerUpdate={this.state.triggerUpdate}
                     onTriggerUpdate={this.onTriggerUpdate}
                 />
-                <PopupButtons
-                    handleOk={this.handleOk}
-                    handleCancel={this.handleCancel} />
             </div >
         );
     }
