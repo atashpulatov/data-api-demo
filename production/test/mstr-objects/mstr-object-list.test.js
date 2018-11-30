@@ -100,7 +100,7 @@ describe('MstrObjectList', () => {
             .toBe(mockFolderObjects);
     });
 
-    it('should not update component after navigating to projects', async () => {
+    it('should not fetch directories after navigating to all project view', async () => {
         // given
         const mstrObjectListHelperSpy = jest.spyOn(mstrObjectListHelper, 'fetchContent')
             .mockImplementation(() => {
@@ -109,10 +109,10 @@ describe('MstrObjectList', () => {
         const wrappedComponent = mount(<_MstrObjects />);
         const prevStateMock = { body: {} };
         const prevPropsMock = { body: {} };
-        // when
         const notThrowingUpdate = async () => {
             await wrappedComponent.instance().componentDidUpdate(prevPropsMock, prevStateMock);
         };
+        // when
         reduxStore.dispatch({
             type: historyProperties.actions.goToProjects,
         });
@@ -122,7 +122,7 @@ describe('MstrObjectList', () => {
         mstrObjectListHelperSpy.mockRestore();
     });
 
-    it('should not update component after logging out', async () => {
+    it('should not fetch directories after logging out', async () => {
         // given
         const mstrObjectListHelperSpy = jest.spyOn(mstrObjectListHelper, 'fetchContent')
             .mockImplementation(() => {
@@ -131,10 +131,10 @@ describe('MstrObjectList', () => {
         const wrappedComponent = mount(<_MstrObjects />);
         const prevStateMock = { body: {} };
         const prevPropsMock = { body: {} };
-        // when
         const notThrowingUpdate = async () => {
             await wrappedComponent.instance().componentDidUpdate(prevPropsMock, prevStateMock);
         };
+        // when
         reduxStore.dispatch({
             type: sessionProperties.actions.logOut,
         });
