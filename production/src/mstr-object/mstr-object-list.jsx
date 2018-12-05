@@ -44,6 +44,11 @@ export class _MstrObjects extends React.Component {
             this.printReportLocalized(this.state.popupReportId
                 , this.state.body);
         }
+        const project = reduxStore.getState().historyReducer.project;
+        if (!project) {
+            sessionHelper.disableLoading();
+            return;
+        };
         const dirArray = reduxStore.getState().historyReducer.directoryArray;
         const data = await mstrObjectListHelper.fetchContent(dirArray);
         const arraysEqual = mstrObjectListHelper.compareMstrObjectArrays(this.state.mstrObjects, data);
