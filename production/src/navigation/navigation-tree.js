@@ -5,7 +5,7 @@ import '../home/home.css';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { PopupButtons } from '../popup-buttons.jsx';
 import 'mstr-react-library/src/css/mstr-react.css';
-import { FolderTree } from 'mstr-react-library';
+import { FolderBrowser } from 'mstr-react-library';
 /* eslint-enable */
 
 export class NavigationTree extends Component {
@@ -36,9 +36,8 @@ export class NavigationTree extends Component {
         return (
             <div
                 style={{ padding: '20px' }}>
-                <FolderTree
+                <FolderBrowser
                     session={this.state.session}
-                    reportId={this.state.reportId}
                     triggerUpdate={this.state.triggerUpdate}
                     onTriggerUpdate={this.onTriggerUpdate}
                 />
