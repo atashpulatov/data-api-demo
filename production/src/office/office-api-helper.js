@@ -6,12 +6,10 @@ import { OfficeError } from './office-error';
 import { OfficeBindingError } from './office-error';
 import { officeStoreService } from './store/office-store-service';
 
-const separator = globalDefinitions.reportBindingIdSeparator;
-
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
 const ASCII_CAPITAL_LETTER_INDEX = 65;
-const NON_ALPHABETICAL_REGEX = new RegExp('[^a-zA-Z]', 'g')
+const EXCEL_TABLE_NAME = 'table';
 
 class OfficeApiHelper {
 
@@ -74,24 +72,23 @@ class OfficeApiHelper {
         return await Office.context;
     }
 
-    async findAvailableOfficeTableId(reportName, context) {
+    async findAvailableOfficeTableId(excelContext) {
         let nameExists = true;
         let tableIncrement = 0;
-        const tableName = reportName.replace(NON_ALPHABETICAL_REGEX, '');;
-        const tableCollection = context.workbook.tables;
+        const tableCollection = excelContext.workbook.tables;
         tableCollection.load();
-        await context.sync();
+        await excelContext.sync();
         while (nameExists) {
-            let existingTable = await tableCollection.getItemOrNullObject(`${tableName}${tableIncrement}`);
+            let existingTable = await tableCollection.getItemOrNullObject(`${EXCEL_TABLE_NAME}${tableIncrement}`);
             existingTable.load();
-            await context.sync();
+            await excelContext.sync();
             if (!existingTable.isNull) {
                 tableIncrement++;
             } else {
                 nameExists = false;
             }
         }
-        return tableName + tableIncrement;
+        return EXCEL_TABLE_NAME + tableIncrement;
     }
 
     loadExistingReportBindingsExcel = async () => {
