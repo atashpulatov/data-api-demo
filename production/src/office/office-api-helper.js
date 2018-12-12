@@ -4,12 +4,12 @@ import { officeProperties } from './office-properties';
 import { globalDefinitions } from '../global-definitions';
 import { OfficeError } from './office-error';
 import { OfficeBindingError } from './office-error';
-
-const separator = globalDefinitions.reportBindingIdSeparator;
+import { officeStoreService } from './store/office-store-service';
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
 const ASCII_CAPITAL_LETTER_INDEX = 65;
+const EXCEL_TABLE_NAME = 'table';
 
 class OfficeApiHelper {
 
@@ -50,10 +50,10 @@ class OfficeApiHelper {
     }
 
     onBindingObjectClick = async (bindingId) => {
-        const context = await this.getOfficeContext();
-        const tableRange = this.getBindingRange(context, bindingId);
+        const excelContext = await this.getExcelContext();
+        const tableRange = this.getBindingRange(excelContext, bindingId);
         tableRange.select();
-        return await context.sync();
+        return await excelContext.sync();
     };
 
     getBindingRange(context, bindingId) {
@@ -62,56 +62,37 @@ class OfficeApiHelper {
             .getRange();
     }
 
-    async getOfficeContext() {
+    async getExcelContext() {
         return await Excel.run(async (context) => {
             return context;
         });
     }
 
-    async findAvailableTableName(reportName, context) {
+    async getOfficeContext() {
+        return await Office.context;
+    }
+
+    async findAvailableOfficeTableId(excelContext) {
         let nameExists = true;
         let tableIncrement = 0;
-        const tableName = reportName;
-        const tableCollection = context.workbook.tables;
+        const tableCollection = excelContext.workbook.tables;
         tableCollection.load();
-        await context.sync();
+        await excelContext.sync();
         while (nameExists) {
-            let existingTable = await tableCollection.getItemOrNullObject(`${tableName}${tableIncrement}`);
+            let existingTable = await tableCollection.getItemOrNullObject(`${EXCEL_TABLE_NAME}${tableIncrement}`);
             existingTable.load();
-            await context.sync();
+            await excelContext.sync();
             if (!existingTable.isNull) {
                 tableIncrement++;
             } else {
                 nameExists = false;
             }
         }
-        return tableName + tableIncrement;
-    }
-
-    createBindingId(reportConvertedData, tableName, projectId, envUrl, separator = '_') {
-        if (!reportConvertedData) {
-            throw new OfficeBindingError('Missing reportConvertedData');
-        }
-        if (!tableName) {
-            throw new OfficeBindingError('Missing tableName');
-        }
-        if (!projectId) {
-            throw new OfficeBindingError('Missing projectId');
-        }
-        if (!envUrl) {
-            throw new OfficeBindingError('Missing envUrl');
-        }
-        return reportConvertedData.name
-            + separator + tableName
-            + separator + reportConvertedData.id
-            + separator + projectId
-            + separator + envUrl;
+        return EXCEL_TABLE_NAME + tableIncrement;
     }
 
     loadExistingReportBindingsExcel = async () => {
-        const context = await this.getOfficeContext();
-        const bindingItems = await this._getBindingsFromWorkbook(context);
-        const reportArray = this._excelBindingsToStore(bindingItems);
+        const reportArray = await officeStoreService._getReportProperties();
         reduxStore.dispatch({
             type: officeProperties.actions.loadAllReports,
             reportArray,
@@ -123,38 +104,6 @@ class OfficeApiHelper {
         const projectId = reduxStore.getState().historyReducer.project.projectId;
         const username = reduxStore.getState().sessionReducer.username;
         return { envUrl, projectId, username };
-    }
-
-    _getBindingsFromWorkbook = async (context) => {
-        const workbook = context.workbook;
-        workbook.load(officeProperties.workbookBindings);
-        const bindings = workbook.bindings;
-        await context.sync();
-        bindings.load(officeProperties.bindingItems);
-        await context.sync();
-        return bindings.items;
-    }
-
-    _excelBindingsToStore(bindings) {
-        if (!bindings) {
-            throw new OfficeError('Bindings should not be undefined!');
-        }
-        if (!(bindings instanceof Array)) {
-            throw new OfficeError('Bindings must be of Array type!');
-        }
-        const bindingArrayLength = bindings.length;
-        const reportArray = [];
-        for (let i = 0; i < bindingArrayLength; i++) {
-            const splittedBind = bindings[i].id.split(separator);
-            reportArray.push({
-                id: splittedBind[2],
-                name: splittedBind[0],
-                bindId: bindings[i].id,
-                projectId: splittedBind[3],
-                envUrl: splittedBind[4],
-            });
-        }
-        return reportArray;
     }
 
     formatTable(sheet) {

@@ -15,8 +15,7 @@ class MstrObjectRestService {
             .set('x-mstr-projectid', projectId)
             .withCredentials()
             .then((res) => {
-                let objects = res.body;
-                return objects;
+                return res.body;
             })
             .catch((err) => {
                 errorHandler(err);
@@ -31,8 +30,7 @@ class MstrObjectRestService {
             .set('x-mstr-projectid', projectId)
             .withCredentials()
             .then((res) => {
-                let objects = res.body;
-                return objects;
+                return res.body;
             })
             .catch((err) => {
                 errorHandler(err);
@@ -47,8 +45,7 @@ class MstrObjectRestService {
             .send(body)
             .withCredentials()
             .then((res) => {
-                let objects = res.body;
-                return objects.instanceId;
+                return res.body.instanceId;
             })
             .catch((err) => {
                 errorHandler(err);
@@ -69,8 +66,7 @@ class MstrObjectRestService {
             .set('x-mstr-projectid', projectId)
             .withCredentials()
             .then((res) => {
-                let objects = res.body;
-                return objects;
+                return res.body;
             })
             .catch((err) => {
                 errorHandler(err);

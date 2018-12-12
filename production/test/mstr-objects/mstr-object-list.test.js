@@ -11,6 +11,8 @@ import { sessionProperties } from '../../src/storage/session-properties';
 import { Provider } from 'react-redux';
 import { mstrObjectListHelper } from '../../src/mstr-object/mstr-object-list-helper';
 import { selectorProperties } from '../../src/attribute-selector/selector-properties';
+import { InternalServerError } from '../../src/error/internal-server-error';
+import { UnauthorizedError } from '../../src/error/unauthorized-error';
 /* eslint-enable */
 
 jest.mock('../../src/mstr-object/mstr-object-rest-service');
@@ -98,6 +100,51 @@ describe('MstrObjectList', () => {
             .toBe(mockFolderObjects);
     });
 
+    it('should not fetch directories after navigating to all project view', async () => {
+        // given
+        const mstrObjectListHelperSpy = jest.spyOn(mstrObjectListHelper, 'fetchContent')
+            .mockImplementation(() => {
+                throw new InternalServerError();
+            });
+        const wrappedComponent = mount(<_MstrObjects />);
+        const prevStateMock = { body: {} };
+        const prevPropsMock = { body: {} };
+        const notThrowingUpdate = async () => {
+            await wrappedComponent.instance().componentDidUpdate(prevPropsMock, prevStateMock);
+        };
+        // when
+        reduxStore.dispatch({
+            type: historyProperties.actions.goToProjects,
+        });
+        // then
+        await expect(notThrowingUpdate())
+            .resolves.toEqual(undefined);
+        mstrObjectListHelperSpy.mockRestore();
+    });
+
+    it('should not fetch directories after logging out', async () => {
+        // given
+        const mstrObjectListHelperSpy = jest.spyOn(mstrObjectListHelper, 'fetchContent')
+            .mockImplementation(() => {
+                throw new UnauthorizedError();
+            });
+        const wrappedComponent = mount(<_MstrObjects />);
+        const prevStateMock = { body: {} };
+        const prevPropsMock = { body: {} };
+        const notThrowingUpdate = async () => {
+            await wrappedComponent.instance().componentDidUpdate(prevPropsMock, prevStateMock);
+        };
+        // when
+        reduxStore.dispatch({
+            type: sessionProperties.actions.logOut,
+        });
+        // then
+        await expect(notThrowingUpdate())
+            .resolves.toEqual(undefined);
+        mstrObjectListHelperSpy.mockRestore();
+    });
+
+
     // User sees all data
     it('should have all rows', async () => {
         // when
@@ -129,11 +176,11 @@ describe('MstrObjectList', () => {
             const directory = row.props().directory;
             // should have row defined
             expect(directory).toBeDefined();
-            const rowIcon = row.find('Icon').at(0);
+            const rowIcon = row.find('MSTRIcon').at(0);
 
             // should have name and image
             expect(row.find('Col').at(1).text()).toBeTruthy();
-            expect(rowIcon.props().type).toEqual('folder');
+            expect(rowIcon.props().type).toEqual('folder-collapsed');
         });
     });
 
@@ -154,11 +201,11 @@ describe('MstrObjectList', () => {
             const report = row.props().report;
             // should have row defined
             expect(report).toBeDefined();
-            const rowIcon = row.find('Icon').at(0);
+            const rowIcon = row.find('MSTRIcon').at(0);
 
             // should have name and image
             expect(row.find('Col').at(1).text()).toBeTruthy();
-            expect(rowIcon.props().type).toEqual('file-text');
+            expect(rowIcon.props().type).toEqual('report');
         });
     });
 
@@ -318,7 +365,6 @@ describe('MstrObjectList', () => {
             wrappedComponent.instance().handleOk = mockOk;
             // when
             wrappedComponent.instance().onMessageFromPopup({ message });
-            console.log(wrappedComponent.instance().onMessageFromPopup);
             expect(mockOk).toBeCalled();
         } finally {
             wrappedComponent.instance().handleOk = originalMethod;
@@ -335,7 +381,6 @@ describe('MstrObjectList', () => {
             wrappedComponent.instance().handleCancel = mockCancel;
             // when
             wrappedComponent.instance().onMessageFromPopup({ message });
-            console.log(wrappedComponent.instance().onMessageFromPopup);
             expect(mockCancel).toBeCalled();
         } finally {
             wrappedComponent.instance().handleOk = originalMethod;
@@ -353,7 +398,6 @@ describe('MstrObjectList', () => {
             wrappedComponent.instance().onTriggerUpdate = mockUpdate;
             // when
             wrappedComponent.instance().onMessageFromPopup({ message });
-            console.log(wrappedComponent.instance().onMessageFromPopup);
             expect(mockUpdate).toBeCalled();
             expect(mockUpdate).toBeCalledWith(givenBody);
         } finally {

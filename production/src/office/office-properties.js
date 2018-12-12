@@ -8,6 +8,7 @@ export const officeProperties = new Proxy({
     officeAddress: 'address',
     workbookBindings: 'bindings',
     bindingItems: 'items',
+    loadedReportProperties: 'reportProperties',
     actions: {
         loadReport: 'OFFICE_LOAD_REPORT',
         loadAllReports: 'OFFICE_LOAD_ALL_REPORTS',

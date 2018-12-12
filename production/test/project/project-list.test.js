@@ -87,7 +87,7 @@ describe('ProjectList', () => {
             expect(projectRow).toBeDefined();
 
             // should have name and alias
-            expect(row.find('Icon').at(0).props().type).toEqual('project');
+            expect(row.find('MSTRIcon').at(0).props().type).toEqual('project-collapsed');
             expect(row.find('Col').at(1).text()).toBeTruthy();
         });
     });
