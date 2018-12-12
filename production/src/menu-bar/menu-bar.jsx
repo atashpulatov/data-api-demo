@@ -6,6 +6,7 @@ import { Icon, Tooltip } from 'antd';
 import './menu-bar.css';
 import { PopupTypeEnum } from '../home/popup-type-enum';
 import { sessionHelper } from '../storage/session-helper';
+import { environment } from '../global-definitions';
 /* eslint-enable */
 
 export class _MenuBar extends Component {
@@ -13,7 +14,7 @@ export class _MenuBar extends Component {
         const session = sessionHelper.getSession();
         Excel.run(async (context) => {
             Office.context.ui.displayDialogAsync(
-                'https://localhost:3000/popup.html'
+                `${environment.scheme}://${environment.host}:${environment.port}/popup.html`
                 + '?popupType=' + PopupTypeEnum.navigationTree
                 + '&envUrl=' + session.url
                 + '&token=' + session.authToken

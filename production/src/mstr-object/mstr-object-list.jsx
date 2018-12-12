@@ -9,6 +9,7 @@ import { withNavigation } from '../navigation/with-navigation.jsx';
 import { mstrObjectListHelper } from './mstr-object-list-helper';
 import { sessionHelper } from '../storage/session-helper';
 import { selectorProperties } from '../attribute-selector/selector-properties';
+import { environment } from '../global-definitions';
 /* eslint-enable */
 
 const objectsTypesMap = {
@@ -71,7 +72,7 @@ export class _MstrObjects extends React.Component {
         const session = sessionHelper.getSession();
         Excel.run(async (context) => {
             Office.context.ui.displayDialogAsync(
-                'https://localhost:3000/popup.html'
+                `${environment.scheme}://${environment.host}:${environment.port}/popup.html`
                 + '?envUrl=' + session.url
                 + '&token=' + session.authToken
                 + '&projectId=' + session.projectId
