@@ -14,7 +14,7 @@ export class _MenuBar extends Component {
         const session = sessionHelper.getSession();
         Excel.run(async (context) => {
             Office.context.ui.displayDialogAsync(
-                `${environment.scheme}://${environment.host}:${environment.port}/popup.html`
+                `${environment.scheme}://${environment.host}/popup.html`
                 + '?popupType=' + PopupTypeEnum.navigationTree
                 + '&envUrl=' + session.url
                 + '&token=' + session.authToken
@@ -28,26 +28,8 @@ export class _MenuBar extends Component {
                         // this.onMessageFromPopup);
                         () => { });
                 });
-
             await context.sync();
         });
-
-        // Excel.run(async (context) => {
-        //     Office.context.ui.displayDialogAsync(
-        //         'https://localhost:3000/popup.html'
-        //         + '?popupType=' + PopupTypeEnum.navigationTree,
-        //         { height: 62, width: 50, displayInIframe: true },
-        //         (asyncResult) => {
-        //             console.log(asyncResult);
-        //             this.dialog = asyncResult.value;
-        //             this.dialog.addEventHandler(
-        //                 Office.EventType.DialogMessageReceived,
-        //                 // this.onMessageFromPopup);
-        //                 () => { });
-        //         });
-
-        //     await context.sync();
-        // });
     }
 
     render() {
