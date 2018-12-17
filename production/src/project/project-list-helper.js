@@ -4,7 +4,8 @@ import { sessionProperties } from '../storage/session-properties';
 import { UnauthorizedError } from '../error/unauthorized-error';
 import { historyProperties } from '../history/history-properties';
 import { officeApiHelper } from '../office/office-api-helper';
-import { sessionHelper } from '../storage/session-helper';
+import { EnvironmentNotFoundError } from '../error/environment-not-found-error';
+import { errorService } from '../error/error-handler';
 
 class ProjectListHelper {
     async updateProjectList() {
@@ -14,7 +15,8 @@ class ProjectListHelper {
             return await projectRestService
                 .getProjectList(envUrl, authToken);
         } catch (err) {
-            if (err instanceof UnauthorizedError) {
+            errorService.handleError(err);
+            if (err instanceof UnauthorizedError || err instanceof EnvironmentNotFoundError) {
                 reduxStore.dispatch({
                     type: sessionProperties.actions.logOut,
                 });

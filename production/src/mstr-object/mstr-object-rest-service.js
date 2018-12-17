@@ -1,4 +1,4 @@
-import { errorHandler } from '../error/error-handler';
+import { errorService } from '../error/error-handler';
 import { reduxStore } from '../store';
 import { moduleProxy } from '../module-proxy';
 
@@ -18,7 +18,7 @@ class MstrObjectRestService {
                 return res.body;
             })
             .catch((err) => {
-                errorHandler(err);
+                errorService.errorFactory(err);
             });
     }
 
@@ -33,7 +33,7 @@ class MstrObjectRestService {
                 return res.body;
             })
             .catch((err) => {
-                errorHandler(err);
+                errorService.errorFactory(err);
             });
     }
 
@@ -48,7 +48,7 @@ class MstrObjectRestService {
                 return res.body.instanceId;
             })
             .catch((err) => {
-                errorHandler(err);
+                errorService.errorFactory(err);
             });
     }
 
@@ -69,7 +69,7 @@ class MstrObjectRestService {
                 return res.body;
             })
             .catch((err) => {
-                errorHandler(err);
+                errorService.errorFactory(err);
             });
     }
 };
