@@ -22,11 +22,12 @@ export class AttributeSelectorWindow extends Component {
             },
             reportId: this.props.parsed.reportId,
             triggerUpdate: false,
+            loading: false,
         };
     }
 
     handleOk = () => {
-        this.setState({ triggerUpdate: true });
+        this.setState({ triggerUpdate: true, loading: true });
     }
 
     handleCancel = () => {
@@ -44,6 +45,12 @@ export class AttributeSelectorWindow extends Component {
         Office.context.ui.messageParent(JSON.stringify(updateObject));
     };
 
+    //this method resets triggerUpdate property to false in order to allow re-pressing OK button
+    //should be called every time OK is pressed but selector popup should not close
+    resetTriggerUpdate = () => {
+        this.setState({triggerUpdate: false, loading: false});
+    };
+
     render() {
         return (
             <div
@@ -53,10 +60,12 @@ export class AttributeSelectorWindow extends Component {
                     reportId={this.state.reportId}
                     triggerUpdate={this.state.triggerUpdate}
                     onTriggerUpdate={this.onTriggerUpdate}
+                    resetTriggerUpdate={this.resetTriggerUpdate}
                 />
                 <PopupButtons
                     handleOk={this.handleOk}
-                    handleCancel={this.handleCancel} />
+                    handleCancel={this.handleCancel}
+                    loading={this.state.loading} />
             </div >
         );
     }

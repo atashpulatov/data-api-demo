@@ -4,7 +4,7 @@ import React from 'react';
 import { Row, Col, Button } from 'antd';
 /* eslint-enable */
 
-export const PopupButtons = ({ handleOk, handleCancel }) => (
+export const PopupButtons = ({ handleOk, handleCancel, loading }) => (
     <Row
         type='flex'
         justify='end'
@@ -18,7 +18,8 @@ export const PopupButtons = ({ handleOk, handleCancel }) => (
         <Col>
             <Button
                 type='primary'
-                onClick={handleOk}>
+                onClick={handleOk}
+                loading={loading}>
                 Ok
       </Button>
         </Col>
