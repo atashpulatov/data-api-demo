@@ -18,7 +18,7 @@ export class _MenuBar extends Component {
                 + '&envUrl=' + session.url
                 + '&token=' + session.authToken
                 + '&projectId=' + session.projectId,
-                { height: 62, width: 50, displayInIframe: true },
+                { height: 70, width: 75, displayInIframe: true },
                 (asyncResult) => {
                     console.log(asyncResult);
                     this.dialog = asyncResult.value;

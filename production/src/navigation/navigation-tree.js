@@ -35,12 +35,13 @@ export class NavigationTree extends Component {
     render() {
         return (
             <div
-                style={{ padding: '20px' }}>
+                style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                 <FolderBrowser
                     session={this.state.session}
                     triggerUpdate={this.state.triggerUpdate}
                     onTriggerUpdate={this.onTriggerUpdate}
                 />
+                <PopupButtons/>
             </div >
         );
     }
