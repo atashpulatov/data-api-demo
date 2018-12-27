@@ -4,11 +4,10 @@ import { EnvironmentNotFoundError } from '../../src/error/environment-not-found-
 import { UnauthorizedError } from '../../src/error/unauthorized-error';
 import { BadRequestError } from '../../src/error/bad-request-error';
 import { InternalServerError } from '../../src/error/internal-server-error';
-import { message } from 'antd';
 import { sessionHelper } from '../../src/storage/session-helper';
+import { notificationService } from '../../src/notification/notification-service';
 /* eslint-enable */
 
-jest.mock('antd');
 jest.mock('../../src/storage/session-helper');
 
 describe('ErrorService', () => {
@@ -77,63 +76,63 @@ describe('ErrorService', () => {
         it('should display notification on EnvironmentNotFoundError', () => {
             // given
             const error = new EnvironmentNotFoundError();
-            const mockedMessage = message;
+            const spyMethod = jest.spyOn(notificationService, 'displayMessage');
             // when
             errorService.handleError(error);
             // then
-            expect(mockedMessage.error).toBeCalled();
-            expect(mockedMessage.error).toBeCalledWith('404 - Environment was not found');
+            expect(spyMethod).toBeCalled();
+            expect(spyMethod).toBeCalledWith('error', '404 - Environment not found');
         });
         it('should display notification on UnauthorizedError', () => {
             // given
             const error = new UnauthorizedError();
-            const mockedMessage = message;
+            const spyMethod = jest.spyOn(notificationService, 'displayMessage');
             // when
             errorService.handleError(error);
             // then
-            expect(mockedMessage.error).toBeCalled();
-            expect(mockedMessage.error).toBeCalledWith('401 - Session expired. Please log in.');
+            expect(spyMethod).toBeCalled();
+            expect(spyMethod).toBeCalledWith('error', '401 - Unauthorized. Please log in.');
         });
         it('should display notification on BadRequestError', () => {
             // given
             const error = new BadRequestError();
-            const mockedMessage = message;
+            const spyMethod = jest.spyOn(notificationService, 'displayMessage');
             // when
             errorService.handleError(error);
             // then
-            expect(mockedMessage.error).toBeCalled();
-            expect(mockedMessage.error).toBeCalledWith('400 - There has been a problem with your request');
+            expect(spyMethod).toBeCalled();
+            expect(spyMethod).toBeCalledWith('error', '400 - There has been a problem with your request');
         });
         it('should display notification on InternalServerError', () => {
             // given
             const error = new InternalServerError();
-            const mockedMessage = message;
+            const spyMethod = jest.spyOn(notificationService, 'displayMessage');
             // when
             errorService.handleError(error);
             // then
-            expect(mockedMessage.error).toBeCalled();
-            expect(mockedMessage.error).toBeCalledWith('500 - We were not able to handle your request');
+            expect(spyMethod).toBeCalled();
+            expect(spyMethod).toBeCalledWith('error', '500 - We were not able to handle your request');
         });
         it('should logout on UnauthorizedError', () => {
             // given
             const error = new UnauthorizedError();
-            const mockedMessage = message;
+            const spyMethod = jest.spyOn(notificationService, 'displayMessage');
             const logoutMethod = sessionHelper.logout;
             // when
             errorService.handleError(error);
             // then
-            expect(mockedMessage.error).toBeCalled();
+            expect(spyMethod).toBeCalled();
             expect(logoutMethod).toBeCalled();
         });
         it('should logout on EnvironmentNotFound', () => {
             // given
             const error = new EnvironmentNotFoundError();
-            const mockedMessage = message;
+            const spyMethod = jest.spyOn(notificationService, 'displayMessage');
             const logoutMethod = sessionHelper.logout;
             // when
             errorService.handleError(error);
             // then
-            expect(mockedMessage.error).toBeCalled();
+            expect(spyMethod).toBeCalled();
             expect(logoutMethod).toBeCalled();
         });
     });

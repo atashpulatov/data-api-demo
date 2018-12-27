@@ -5,6 +5,7 @@ import { globalDefinitions } from '../global-definitions';
 import { OfficeError } from './office-error';
 import { OfficeBindingError } from './office-error';
 import { officeStoreService } from './store/office-store-service';
+import { notificationService } from '../notification/notification-service';
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
@@ -111,7 +112,7 @@ class OfficeApiHelper {
             sheet.getUsedRange().format.autofitColumns();
             sheet.getUsedRange().format.autofitRows();
         } else {
-            message.warning(`Unable to format table.`);
+            notificationService.displayMessage('warning', `Unable to format table.`);
         }
     }
 

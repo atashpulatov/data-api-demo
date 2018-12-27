@@ -10,6 +10,7 @@ import { mstrObjectListHelper } from './mstr-object-list-helper';
 import { sessionHelper } from '../storage/session-helper';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { environment } from '../global-definitions';
+import { errorService } from '../error/error-handler.js';
 /* eslint-enable */
 
 const objectsTypesMap = {
@@ -31,32 +32,42 @@ export class _MstrObjects extends React.Component {
     }
 
     async componentDidMount() {
-        const dirArray = reduxStore.getState().historyReducer.directoryArray;
-        sessionHelper.enableLoading();
-        const data = await mstrObjectListHelper.fetchContent(dirArray);
-        this.setState({
-            mstrObjects: data,
-        });
-        sessionHelper.disableLoading();
-    }
-
-    async componentDidUpdate(prevProps, prevState) {
-        if (prevState.body !== this.state.body) {
-            this.printReportLocalized(this.state.popupReportId
-                , this.state.body);
-        }
-        const project = reduxStore.getState().historyReducer.project;
-        if (!project) {
-            sessionHelper.disableLoading();
-            return;
-        };
-        const dirArray = reduxStore.getState().historyReducer.directoryArray;
-        const data = await mstrObjectListHelper.fetchContent(dirArray);
-        const arraysEqual = mstrObjectListHelper.compareMstrObjectArrays(this.state.mstrObjects, data);
-        if (!arraysEqual) {
+        try {
+            const dirArray = reduxStore.getState().historyReducer.directoryArray;
+            sessionHelper.enableLoading();
+            const data = await mstrObjectListHelper.fetchContent(dirArray);
             this.setState({
                 mstrObjects: data,
             });
+        } catch (error) {
+            errorService.handleError(error);
+        } finally {
+            sessionHelper.disableLoading();
+        }
+    }
+
+    async componentDidUpdate(prevProps, prevState) {
+        try {
+            if (prevState.body !== this.state.body) {
+                this.printReportLocalized(this.state.popupReportId
+                    , this.state.body);
+            }
+            const project = reduxStore.getState().historyReducer.project;
+            if (!project) {
+                sessionHelper.disableLoading();
+                return;
+            };
+            const dirArray = reduxStore.getState().historyReducer.directoryArray;
+            const data = await mstrObjectListHelper.fetchContent(dirArray);
+            const arraysEqual = mstrObjectListHelper.compareMstrObjectArrays(this.state.mstrObjects, data);
+            if (!arraysEqual) {
+                this.setState({
+                    mstrObjects: data,
+                });
+            }
+        } catch (error) {
+            errorService.handleError(error);
+        } finally {
             sessionHelper.disableLoading();
         }
     }

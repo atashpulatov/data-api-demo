@@ -1,9 +1,10 @@
 /* eslint-disable */
 import React from 'react';
 import { Icon, Row, Col } from 'antd';
-import { message } from 'antd';
 import { sessionHelper } from '../storage/session-helper';
 import { MSTRIcon } from 'mstr-react-library';
+import { notificationService } from '../notification/notification-service';
+import { errorService } from '../error/error-handler';
 /* eslint-enable */
 
 export const OfficeLoadedFile = ({ fileName, bindingId, onClick, onRefresh, onDelete }) => (
@@ -32,14 +33,24 @@ export const OfficeLoadedFile = ({ fileName, bindingId, onClick, onRefresh, onDe
 
 async function refreshReport(onRefresh, bindingId) {
     sessionHelper.enableLoading();
-    await onRefresh(bindingId);
-    message.info('Report refreshed.');
-    sessionHelper.disableLoading();
+    try {
+        await onRefresh(bindingId);
+        notificationService.displayMessage('info', 'Report refreshed.');
+    } catch (error) {
+        errorService.handleError(error);
+    } finally {
+        sessionHelper.disableLoading();
+    }
 }
 
 async function deleteReport(onDelete, bindingId) {
     sessionHelper.enableLoading();
-    await onDelete(bindingId);
-    message.info('Report removed');
-    sessionHelper.disableLoading();
+    try {
+        await onDelete(bindingId);
+        notificationService.displayMessage('info', 'Report removed');
+    } catch (error) {
+        errorService.handleError(error);
+    } finally {
+        sessionHelper.disableLoading();
+    }
 }

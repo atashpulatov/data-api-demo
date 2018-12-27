@@ -10,6 +10,7 @@ import { FileHistoryContainer } from '../file-history/file-history-container.jsx
 import { Spin } from 'antd';
 import { connect } from 'react-redux';
 import './home.css';
+import { Notifications } from '../notification/notifications.jsx';
 /* eslint-enable */
 
 export class _Home extends Component {
@@ -17,6 +18,7 @@ export class _Home extends Component {
     return (
       <Router>
         <div id='content'>
+          <Notifications />
           <Header />
           <MenuBar />
           <FileHistoryContainer />

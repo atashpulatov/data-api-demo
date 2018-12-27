@@ -16,7 +16,6 @@ class OfficeDisplayService {
     }
 
     async printObject(objectId, startCell, officeTableId, bindingId, body) {
-        sessionHelper.enableLoading();
         const excelContext = await officeApiHelper.getExcelContext();
         if (!startCell) {
             startCell = await officeApiHelper.getSelectedCell(excelContext);
@@ -40,7 +39,6 @@ class OfficeDisplayService {
                 envUrl,
             });
         }
-        sessionHelper.disableLoading();
     }
 
     // TODO: move it to api helper?

@@ -7,6 +7,7 @@ import { withNavigation } from '../navigation/with-navigation.jsx';
 import { sessionHelper } from '../storage/session-helper';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import { errorService } from '../error/error-handler';
+import { notificationService } from '../notification/notification-service';
 const FormItem = Form.Item;
 /* eslint-enable */
 
@@ -23,23 +24,24 @@ export class _Authenticate extends Component {
     onLoginUser = async (event) => {
         event.preventDefault();
         const validateFields = this.props.form.validateFields;
-        try {
-            await validateFields(async (err, values) => {
-                if (!err) {
+        await validateFields(async (err, values) => {
+            if (!err) {
+                try {
                     sessionHelper.enableLoading();
                     sessionHelper.saveLoginValues(values);
                     const authToken = await authenticationService.authenticate(
                         values.username, values.password,
                         values.envUrl, this.state.authMode);
+                    notificationService.displayMessage('success', 'Logged in');
                     sessionHelper.login(authToken);
+                } catch (error) {
+                    errorService.handlePreAuthError(error);
                 }
-            });
-        } catch (error) {
-            errorService.handleError(error);
-        }
-        finally {
-            sessionHelper.disableLoading();
-        }
+                finally {
+                    sessionHelper.disableLoading();
+                }
+            }
+        });
     }
 
     render() {

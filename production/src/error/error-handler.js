@@ -4,6 +4,7 @@ import { BadRequestError } from './bad-request-error.js';
 import { InternalServerError } from './internal-server-error.js';
 import { sessionHelper } from '../storage/session-helper.js';
 import { message } from 'antd';
+import { notificationService } from '../notification/notification-service.js';
 
 class ErrorService {
     errorFactory = (error) => {
@@ -25,21 +26,30 @@ class ErrorService {
     handleError = (error) => {
         switch (error.constructor) {
             case EnvironmentNotFoundError:
-                message.error('404 - Environment was not found');
+                notificationService.displayMessage('error', '404 - Environment not found');
                 sessionHelper.logout();
                 break;
             case UnauthorizedError:
-                message.error('401 - Session expired. Please log in.');
+                notificationService.displayMessage('error', '401 - Unauthorized. Please log in.');
                 sessionHelper.logout();
                 break;
             case BadRequestError:
-                message.error('400 - There has been a problem with your request');
+                notificationService.displayMessage('error', '400 - There has been a problem with your request');
                 break;
             case InternalServerError:
-                message.error('500 - We were not able to handle your request');
+                notificationService.displayMessage('error', '500 - We were not able to handle your request');
                 break;
             default:
                 throw error;
+        }
+    }
+    handlePreAuthError = (error) => {
+        switch (error.constructor) {
+            case UnauthorizedError:
+                notificationService.displayMessage('error', 'Wrong username or password.');
+                break;
+            default:
+                this.handleError(error);
         }
     }
 }
