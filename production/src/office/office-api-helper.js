@@ -1,9 +1,6 @@
 import { IncorrectInputTypeError } from './incorrect-input-type';
 import { reduxStore } from '../store';
 import { officeProperties } from './office-properties';
-import { globalDefinitions } from '../global-definitions';
-import { OfficeError } from './office-error';
-import { OfficeBindingError } from './office-error';
 import { officeStoreService } from './store/office-store-service';
 import { notificationService } from '../notification/notification-service';
 
@@ -13,7 +10,6 @@ const ASCII_CAPITAL_LETTER_INDEX = 65;
 const EXCEL_TABLE_NAME = 'table';
 
 class OfficeApiHelper {
-
     getRange(headerCount, startCell) {
         if (!Number.isInteger(headerCount)) {
             throw new IncorrectInputTypeError();
@@ -117,7 +113,6 @@ class OfficeApiHelper {
     }
 
     async getSelectedCell(context) {
-        // TODO: handle more than one cell selected
         const selectedRangeStart = context.workbook.getSelectedRange();
         selectedRangeStart.load(officeProperties.officeAddress);
         await context.sync();

@@ -75,7 +75,6 @@ class OfficeDisplayService {
         }
     }
 
-    // FIXME: report after refresh goes to bottom of list
     // TODO: we could filter data to display options related to current envUrl
     async refreshReport(bindingId) {
         const isRefresh = true;
