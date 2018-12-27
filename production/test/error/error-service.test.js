@@ -125,5 +125,16 @@ describe('ErrorService', () => {
             expect(mockedMessage.error).toBeCalled();
             expect(logoutMethod).toBeCalled();
         });
+        it('should logout on EnvironmentNotFound', () => {
+            // given
+            const error = new EnvironmentNotFoundError();
+            const mockedMessage = message;
+            const logoutMethod = sessionHelper.logout;
+            // when
+            errorService.handleError(error);
+            // then
+            expect(mockedMessage.error).toBeCalled();
+            expect(logoutMethod).toBeCalled();
+        });
     });
 });

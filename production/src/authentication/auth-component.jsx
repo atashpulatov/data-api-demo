@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React from 'react';
+import React, { Component } from 'react';
 import './auth-component.css';
 import { authenticationService } from './auth-rest-service';
 import { sessionProperties } from '../storage/session-properties';
@@ -7,10 +7,11 @@ import { reduxStore } from '../store';
 import { withNavigation } from '../navigation/with-navigation.jsx';
 import { sessionHelper } from '../storage/session-helper';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import { errorService } from '../error/error-handler';
 const FormItem = Form.Item;
 /* eslint-enable */
 
-export class _Authenticate extends React.Component {
+export class _Authenticate extends Component {
     constructor(props) {
         super(props);
         this.stateFromRedux = reduxStore.getState().sessionReducer;
@@ -18,33 +19,32 @@ export class _Authenticate extends React.Component {
             username: this.stateFromRedux.username || '',
             envUrl: this.stateFromRedux.envUrl || '',
         };
-
-        this.onLoginUser = this.onLoginUser.bind(this);
     }
 
-    async onLoginUser(event) {
+    onLoginUser = async (event) => {
         event.preventDefault();
-        await this.props.form.validateFields(async (err, values) => {
-            if (!err) {
-                reduxStore.dispatch({
-                    type: sessionProperties.actions.logIn,
-                    username: values.username,
-                    envUrl: values.envUrl,
-                    isRememberMeOn: values.isRememberMeOn,
-                });
-                sessionHelper.enableLoading();
-                let authToken = await authenticationService.authenticate(
-                    values.username, values.password,
-                    values.envUrl, this.state.authMode);
-                if (authToken !== undefined) {
-                    reduxStore.dispatch({
-                        type: sessionProperties.actions.loggedIn,
-                        authToken: authToken,
-                    });
+        try {
+            await this.props.form.validateFields(async (err, values) => {
+                if (!err) {
+                    sessionHelper.enableLoading();
+                    sessionHelper.login(values);
+                    const authToken = await authenticationService.authenticate(
+                        values.username, values.password,
+                        values.envUrl, this.state.authMode);
+                    if (authToken !== undefined) {
+                        reduxStore.dispatch({
+                            type: sessionProperties.actions.loggedIn,
+                            authToken: authToken,
+                        });
+                    }
                 }
-            }
-        });
-        sessionHelper.disableLoading();
+            });
+        } catch (error) {
+            errorService.handleError(error);
+        }
+        finally {
+            sessionHelper.disableLoading();
+        }
     }
 
     render() {

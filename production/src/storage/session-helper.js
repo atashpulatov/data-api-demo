@@ -19,6 +19,14 @@ class SessionHelper {
             type: sessionProperties.actions.logOut,
         });
     }
+    login = (values) => {
+        reduxStore.dispatch({
+            type: sessionProperties.actions.logIn,
+            username: values.username,
+            envUrl: values.envUrl,
+            isRememberMeOn: values.isRememberMeOn,
+        });
+    }
     getSession = () => {
         const currentStore = reduxStore.getState();
         const projectId = currentStore.historyReducer.project

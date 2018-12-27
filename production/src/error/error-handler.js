@@ -27,6 +27,7 @@ class ErrorService {
         switch (error.constructor) {
             case EnvironmentNotFoundError:
                 message.error('404 - Environment was not found');
+                sessionHelper.logout();
                 break;
             case UnauthorizedError:
                 message.error('401 - Session expired. Please log in.');

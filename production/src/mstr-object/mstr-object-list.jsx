@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React from 'react';
-import { DirectoryRow, ReportRow } from './mstr-object-row-antd.jsx';
+import { DirectoryRow, ReportRow } from './mstr-object-row.jsx';
 import './mstr-object.css';
 import { officeDisplayService } from '../office/office-display-service';
 import { reduxStore } from '../store';
