@@ -2,19 +2,24 @@ import { reduxStore } from '../store';
 import { sessionProperties } from './session-properties';
 
 class SessionHelper {
-    enableLoading() {
+    enableLoading = () => {
         reduxStore.dispatch({
             type: sessionProperties.actions.setLoading,
             loading: true,
         });
     }
-    disableLoading() {
+    disableLoading = () => {
         reduxStore.dispatch({
             type: sessionProperties.actions.setLoading,
             loading: false,
         });
     }
-    getSession() {
+    logout = () => {
+        reduxStore.dispatch({
+            type: sessionProperties.actions.logOut,
+        });
+    }
+    getSession = () => {
         const currentStore = reduxStore.getState();
         const projectId = currentStore.historyReducer.project
             ? currentStore.historyReducer.project.projectId

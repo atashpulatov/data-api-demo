@@ -23,26 +23,23 @@ class ErrorService {
             + ` (${error.response.statusMessage})`);
     };
     handleError = (error) => { // TODO: display notifications
-        sessionHelper.disableLoading();
-        if (error instanceof EnvironmentNotFoundError) {
-            message.error('404 - Environment was not found');
-        }
-        if (error instanceof UnauthorizedError) {
-            message.error('401 - Session expired. Please log in.');
-            // if (err instanceof UnauthorizedError || err instanceof EnvironmentNotFoundError) {
-            //     reduxStore.dispatch({
-            //         type: sessionProperties.actions.logOut,
-            //     });
-            //     return [];
-            // } else {
-            //     throw err;
-            // }
-        }
-        if (error instanceof BadRequestError) {
-            message.error('400 - There has been a problem with your request');
-        }
-        if (error instanceof InternalServerError) {
-            message.error('500 - We were not able to handle your request');
+        // sessionHelper.disableLoading();
+        switch (error.constructor) {
+            case EnvironmentNotFoundError:
+                message.error('404 - Environment was not found');
+                break;
+            case UnauthorizedError:
+                message.error('401 - Session expired. Please log in.');
+                sessionHelper.logout();
+                break;
+            case BadRequestError:
+                message.error('400 - There has been a problem with your request');
+                break;
+            case InternalServerError:
+                message.error('500 - We were not able to handle your request');
+                break;
+            default:
+                throw error;
         }
     }
 }

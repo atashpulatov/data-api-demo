@@ -5,9 +5,11 @@ import { UnauthorizedError } from '../../src/error/unauthorized-error';
 import { BadRequestError } from '../../src/error/bad-request-error';
 import { InternalServerError } from '../../src/error/internal-server-error';
 import { message } from 'antd';
+import { sessionHelper } from '../../src/storage/session-helper';
 /* eslint-enable */
 
 jest.mock('antd');
+jest.mock('../../src/storage/session-helper');
 
 describe('ErrorService', () => {
     describe('errorFactory', () => {
@@ -111,6 +113,17 @@ describe('ErrorService', () => {
             // then
             expect(mockedMessage.error).toBeCalled();
             expect(mockedMessage.error).toBeCalledWith('500 - We were not able to handle your request');
+        });
+        it('should logout on UnauthorizedError', () => {
+            // given
+            const error = new UnauthorizedError();
+            const mockedMessage = message;
+            const logoutMethod = sessionHelper.logout;
+            // when
+            errorService.handleError(error);
+            // then
+            expect(mockedMessage.error).toBeCalled();
+            expect(logoutMethod).toBeCalled();
         });
     });
 });
