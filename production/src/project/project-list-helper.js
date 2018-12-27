@@ -9,22 +9,11 @@ import { errorService } from '../error/error-handler';
 
 class ProjectListHelper {
     async updateProjectList() {
-        try {
             const envUrl = reduxStore.getState().sessionReducer.envUrl;
             const authToken = reduxStore.getState().sessionReducer.authToken;
             return await projectRestService
                 .getProjectList(envUrl, authToken);
-        } catch (err) {
-            errorService.handleError(err);
-            if (err instanceof UnauthorizedError || err instanceof EnvironmentNotFoundError) {
-                reduxStore.dispatch({
-                    type: sessionProperties.actions.logOut,
-                });
-                return [];
-            } else {
-                throw err;
-            }
-        };
+
     }
 
     async projectChosen(projectId, projectName) {

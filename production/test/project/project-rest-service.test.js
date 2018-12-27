@@ -9,9 +9,9 @@ import { moduleProxy } from '../../src/module-proxy';
 /* eslint-enable */
 
 const correctLogin = 'mstr';
-const correctPassword = '';
+const correctPassword = '999U2nn1g7gY';
 const loginType = 1;
-const envURL = 'https://env-94174.customer.cloud.microstrategy.com/MicroStrategyLibrary/api';
+const envURL = 'https://env-125323.customer.cloud.microstrategy.com/MicroStrategyLibrary/api';
 
 describe('ProjectsRestService', () => {
     const mockAgent = superagent.agent();

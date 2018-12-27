@@ -7,7 +7,6 @@ const sharedFolderIdType = 7;
 class MstrObjectRestService {
     async getProjectContent(envUrl, authToken, projectId,
         folderType = sharedFolderIdType) {
-        //
         const fullPath = `${envUrl}/folders/preDefined/${folderType}`;
         return await moduleProxy.request
             .get(fullPath)

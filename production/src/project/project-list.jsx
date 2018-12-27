@@ -6,6 +6,7 @@ import { withNavigation } from '../navigation/with-navigation.jsx';
 import { projectListHelper } from './project-list-helper';
 import { sessionHelper } from '../storage/session-helper';
 import { reduxStore } from '../store';
+import { errorService } from '../error/error-handler.js';
 /* eslint-enable */
 
 export class _Projects extends Component {
@@ -18,12 +19,25 @@ export class _Projects extends Component {
     }
 
     async componentDidMount() {
-        sessionHelper.enableLoading();
-        const projects = await projectListHelper.updateProjectList();
-        this.setState({
-            projects,
-        });
-        sessionHelper.disableLoading();
+        try {
+            sessionHelper.enableLoading();
+            const projects = await projectListHelper.updateProjectList();
+            this.setState({
+                projects,
+            });
+        } catch (err) {
+            errorService.handleError(err);
+            // if (err instanceof UnauthorizedError || err instanceof EnvironmentNotFoundError) {
+            //     reduxStore.dispatch({
+            //         type: sessionProperties.actions.logOut,
+            //     });
+            //     return [];
+            // } else {
+            //     throw err;
+            // }
+        } finally {
+            sessionHelper.disableLoading();
+        }
     }
 
     render() {

@@ -1,55 +1,5 @@
-export let environmentProjectList = [
-    {
-        'id': 'B7CA92F04B9FAE8D941C3E9B7E0CD754',
-        'name': 'MicroStrategy Tutorial',
-        'alias': '',
-        'description': 'MicroStrategy Tutorial project and application set designed to illustrate the platform\'s rich functionality. The theme is an Electronics, Books, Movies and Music store. Employees, Inventory, Finance, Product Sales and Suppliers are analyzed.',
-        'status': 0,
-    },
-    {
-        'id': '163613BB4B34BD0B08CE8AB4828EBE97',
-        'name': 'Usher Analytics Self Service',
-        'alias': '',
-        'description': 'Usher Analytics Self Service (10.8.0)',
-        'status': 0,
-    },
-    {
-        'id': 'CE52831411E696C8BD2F0080EFD5AF44',
-        'name': 'Consolidated Education Project',
-        'alias': '',
-        'description': '',
-        'status': 0,
-    },
-    {
-        'id': 'B3FEE61A11E696C8BD0F0080EFC58F44',
-        'name': 'Hierarchies Project',
-        'alias': '',
-        'description': '',
-        'status': 0,
-    },
-    {
-        'id': '4BAE16A340B995CAD24193AA3AC15D29',
-        'name': 'Human Resources Analysis Module',
-        'alias': '',
-        'description': 'The Human Resources Analysis Module analyses workforce headcount, trends and profiles, employee attrition and recruitment, compensation and benefit costs and employee qualifications, performance and satisfaction.',
-        'status': 0,
-    },
-    {
-        'id': '4C09350211E69712BAEE0080EFB56D41',
-        'name': 'Relationships Project',
-        'alias': '',
-        'description': '',
-        'status': 0,
-    },
-    {
-        'id': '85C3FE7E11E7028A06660080EFB5E5D4',
-        'name': 'Enterprise Manager',
-        'alias': '',
-        'description': '',
-        'status': 0,
-    },
-];
-export let mockReports = [
+export const environmentProjectList = [{ 'acg': 255, 'alias': '', 'dateCreated': '2015-06-30T21:55:35.000+0000', 'dateModified': '2018-12-12T13:07:00.000+0000', 'description': 'MicroStrategy Tutorial project and application set designed to illustrate the platform\'s rich functionality. The theme is an Electronics, Books, Movies and Music store. Employees, Inventory, Finance, Product Sales and Suppliers are analyzed.', 'id': 'B7CA92F04B9FAE8D941C3E9B7E0CD754', 'name': 'MicroStrategy Tutorial', 'owner': { 'id': '54F3D26011D2896560009A8E67019608', 'name': 'Administrator' }, 'status': 0 }, { 'acg': 255, 'alias': '', 'dateCreated': '2016-11-20T16:39:48.000+0000', 'dateModified': '2018-12-12T13:05:34.000+0000', 'description': '', 'id': 'CE52831411E696C8BD2F0080EFD5AF44', 'name': 'Consolidated Education Project', 'owner': { 'id': '54F3D26011D2896560009A8E67019608', 'name': 'Administrator' }, 'status': 0 }, { 'acg': 255, 'alias': '', 'dateCreated': '2016-11-20T16:43:45.000+0000', 'dateModified': '2018-12-12T13:06:02.000+0000', 'description': '', 'id': 'B3FEE61A11E696C8BD0F0080EFC58F44', 'name': 'Hierarchies Project', 'owner': { 'id': '54F3D26011D2896560009A8E67019608', 'name': 'Administrator' }, 'status': 0 }, { 'acg': 255, 'alias': '', 'dateCreated': '2016-11-20T16:46:11.000+0000', 'dateModified': '2018-12-12T13:06:29.000+0000', 'description': 'The Human Resources Analysis Module analyses workforce headcount, trends and profiles, employee attrition and recruitment, compensation and benefit costs and employee qualifications, performance and satisfaction.', 'id': '4BAE16A340B995CAD24193AA3AC15D29', 'name': 'Human Resources Analysis Module', 'owner': { 'id': '54F3D26011D2896560009A8E67019608', 'name': 'Administrator' }, 'status': 0 }, { 'acg': 255, 'alias': '', 'dateCreated': '2016-11-20T16:49:27.000+0000', 'dateModified': '2018-12-12T13:07:30.000+0000', 'description': '', 'id': '4C09350211E69712BAEE0080EFB56D41', 'name': 'Relationships Project', 'owner': { 'id': '54F3D26011D2896560009A8E67019608', 'name': 'Administrator' }, 'status': 0 }, { 'acg': 255, 'alias': '', 'dateCreated': '2018-12-12T13:15:41.000+0000', 'dateModified': '2018-12-18T15:58:31.000+0000', 'description': 'Platform Analytics (MicroStrategy 2019)', 'id': '065E7F1E11E8FE1004240080EFE55E79', 'name': 'Platform Analytics', 'owner': { 'id': '54F3D26011D2896560009A8E67019608', 'name': 'Administrator' }, 'platformAnalytics': true, 'status': 0 }];
+export const mockReports = [
     {
         'id': 'F9E139BE11E85E842B520080EFC5C210',
         'name': 'TestReport',
@@ -2514,1696 +2464,1862 @@ export let mockReports = [
         },
     },
 ];
-export let mockBadReports = [
+export const mockBadReports = [
     {
-        "id": "297AACE74346C3EEA17DC89CB3232C0A",
-        "name": "Quarterly Revenue Forecast",
-        "instanceId": "AB59525E11E8D6CF6DFF0080EF45B5C4",
-        "result": {
-            "definition": {
-                "attributes": [
+        'id': '297AACE74346C3EEA17DC89CB3232C0A',
+        'name': 'Quarterly Revenue Forecast',
+        'instanceId': 'AB59525E11E8D6CF6DFF0080EF45B5C4',
+        'result': {
+            'definition': {
+                'attributes': [
                     {
-                        "name": "Quarter",
-                        "id": "8D679D4A11D3E4981000E787EC6DE8A4",
-                        "type": "Attribute",
-                        "forms": [
+                        'name': 'Quarter',
+                        'id': '8D679D4A11D3E4981000E787EC6DE8A4',
+                        'type': 'Attribute',
+                        'forms': [
                             {
-                                "id": "CCFBE2A5EADB4F50941FB879CCF1721C",
-                                "name": "DESC",
-                                "dataType": "Char"
-                            }
-                        ]
-                    }
-                ],
-                "metrics": [
-                    {
-                        "name": "Revenue",
-                        "id": "4C05177011D3E877C000B3B2D86C964F",
-                        "type": "Metric",
-                        "min": 1682656.0,
-                        "max": 4512939.6499999445,
-                        "numberFormatting": {
-                            "category": 1,
-                            "decimalPlaces": 0,
-                            "thousandSeparator": true,
-                            "currencySymbol": "$",
-                            "currencyPosition": 0,
-                            "formatString": "\"$\"#,##0;(\"$\"#,##0)",
-                            "negativeType": 3
-                        }
-                    }
-                ],
-                "thresholds": [],
-                "sorting": []
-            },
-            "data": {
-                "paging": {
-                    "total": 16,
-                    "current": 16,
-                    "offset": 0,
-                    "limit": 1000,
-                    "prev": null,
-                    "next": null
-                },
-                "root": {
-                    "isPartial": false,
-                    "children": [
-                        {
-                            "depth": 0,
-                            "element": {
-                                "attributeIndex": 0,
-                                "formValues": {
-                                    "DESC": "2014 Q1"
-                                },
-                                "name": "2014 Q1",
-                                "id": "h20141;8D679D4A11D3E4981000E787EC6DE8A4"
+                                'id': 'CCFBE2A5EADB4F50941FB879CCF1721C',
+                                'name': 'DESC',
+                                'dataType': 'Char',
                             },
-                            "metrics": {
-                                "Revenue": {
-                                    "rv": 1682656.0,
-                                    "fv": "$1,682,656",
-                                    "mi": 0
-                                }
-                            }
-                        },
-                        {
-                            "depth": 0,
-                            "element": {
-                                "attributeIndex": 0,
-                                "formValues": {
-                                    "DESC": "2014 Q2"
-                                },
-                                "name": "2014 Q2",
-                                "id": "h20142;8D679D4A11D3E4981000E787EC6DE8A4"
-                            },
-                            "metrics": {
-                                "Revenue": {
-                                    "rv": 1985787.4999999984,
-                                    "fv": "$1,985,788",
-                                    "mi": 0
-                                }
-                            }
-                        },
-                        {
-                            "depth": 0,
-                            "element": {
-                                "attributeIndex": 0,
-                                "formValues": {
-                                    "DESC": "2014 Q3"
-                                },
-                                "name": "2014 Q3",
-                                "id": "h20143;8D679D4A11D3E4981000E787EC6DE8A4"
-                            },
-                            "metrics": {
-                                "Revenue": {
-                                    "rv": 2314294.5000000093,
-                                    "fv": "$2,314,295",
-                                    "mi": 0
-                                }
-                            }
-                        },
-                        {
-                            "depth": 0,
-                            "element": {
-                                "attributeIndex": 0,
-                                "formValues": {
-                                    "DESC": "2014 Q4"
-                                },
-                                "name": "2014 Q4",
-                                "id": "h20144;8D679D4A11D3E4981000E787EC6DE8A4"
-                            },
-                            "metrics": {
-                                "Revenue": {
-                                    "rv": 2664500.0999999717,
-                                    "fv": "$2,664,500",
-                                    "mi": 0
-                                }
-                            }
-                        },
-                        {
-                            "depth": 0,
-                            "element": {
-                                "attributeIndex": 0,
-                                "formValues": {
-                                    "DESC": "2015 Q1"
-                                },
-                                "name": "2015 Q1",
-                                "id": "h20151;8D679D4A11D3E4981000E787EC6DE8A4"
-                            },
-                            "metrics": {
-                                "Revenue": {
-                                    "rv": 2498756.0,
-                                    "fv": "$2,498,756",
-                                    "mi": 0
-                                }
-                            }
-                        },
-                        {
-                            "depth": 0,
-                            "element": {
-                                "attributeIndex": 0,
-                                "formValues": {
-                                    "DESC": "2015 Q2"
-                                },
-                                "name": "2015 Q2",
-                                "id": "h20152;8D679D4A11D3E4981000E787EC6DE8A4"
-                            },
-                            "metrics": {
-                                "Revenue": {
-                                    "rv": 2684763.600000007,
-                                    "fv": "$2,684,764",
-                                    "mi": 0
-                                }
-                            }
-                        },
-                        {
-                            "depth": 0,
-                            "element": {
-                                "attributeIndex": 0,
-                                "formValues": {
-                                    "DESC": "2015 Q3"
-                                },
-                                "name": "2015 Q3",
-                                "id": "h20153;8D679D4A11D3E4981000E787EC6DE8A4"
-                            },
-                            "metrics": {
-                                "Revenue": {
-                                    "rv": 3067019.00000001,
-                                    "fv": "$3,067,019",
-                                    "mi": 0
-                                }
-                            }
-                        },
-                        {
-                            "depth": 0,
-                            "element": {
-                                "attributeIndex": 0,
-                                "formValues": {
-                                    "DESC": "2015 Q4"
-                                },
-                                "name": "2015 Q4",
-                                "id": "h20154;8D679D4A11D3E4981000E787EC6DE8A4"
-                            },
-                            "metrics": {
-                                "Revenue": {
-                                    "rv": 3267067.399999965,
-                                    "fv": "$3,267,067",
-                                    "mi": 0
-                                }
-                            }
-                        },
-                        {
-                            "depth": 0,
-                            "element": {
-                                "attributeIndex": 0,
-                                "formValues": {
-                                    "DESC": "2016 Q1"
-                                },
-                                "name": "2016 Q1",
-                                "id": "h20161;8D679D4A11D3E4981000E787EC6DE8A4"
-                            },
-                            "metrics": {
-                                "Revenue": {
-                                    "rv": 3111989.0,
-                                    "fv": "$3,111,989",
-                                    "mi": 0
-                                }
-                            }
-                        },
-                        {
-                            "depth": 0,
-                            "element": {
-                                "attributeIndex": 0,
-                                "formValues": {
-                                    "DESC": "2016 Q2"
-                                },
-                                "name": "2016 Q2",
-                                "id": "h20162;8D679D4A11D3E4981000E787EC6DE8A4"
-                            },
-                            "metrics": {
-                                "Revenue": {
-                                    "rv": 3504479.1000000276,
-                                    "fv": "$3,504,479",
-                                    "mi": 0
-                                }
-                            }
-                        },
-                        {
-                            "depth": 0,
-                            "element": {
-                                "attributeIndex": 0,
-                                "formValues": {
-                                    "DESC": "2016 Q3"
-                                },
-                                "name": "2016 Q3",
-                                "id": "h20163;8D679D4A11D3E4981000E787EC6DE8A4"
-                            },
-                            "metrics": {
-                                "Revenue": {
-                                    "rv": 3729456.300000008,
-                                    "fv": "$3,729,456",
-                                    "mi": 0
-                                }
-                            }
-                        },
-                        {
-                            "depth": 0,
-                            "element": {
-                                "attributeIndex": 0,
-                                "formValues": {
-                                    "DESC": "2016 Q4"
-                                },
-                                "name": "2016 Q4",
-                                "id": "h20164;8D679D4A11D3E4981000E787EC6DE8A4"
-                            },
-                            "metrics": {
-                                "Revenue": {
-                                    "rv": 4512939.6499999445,
-                                    "fv": "$4,512,940",
-                                    "mi": 0
-                                }
-                            }
-                        },
-                        {
-                            "depth": 0,
-                            "element": {
-                                "attributeIndex": 0,
-                                "formValues": {
-                                    "DESC": "2017 Q1"
-                                },
-                                "name": "2017 Q1",
-                                "id": "h20171;8D679D4A11D3E4981000E787EC6DE8A4"
-                            },
-                            "metrics": {
-                                "Revenue": {
-                                    "rv": "",
-                                    "fv": "",
-                                    "mi": 0
-                                }
-                            }
-                        },
-                        {
-                            "depth": 0,
-                            "element": {
-                                "attributeIndex": 0,
-                                "formValues": {
-                                    "DESC": "2017 Q2"
-                                },
-                                "name": "2017 Q2",
-                                "id": "h20172;8D679D4A11D3E4981000E787EC6DE8A4"
-                            },
-                            "metrics": {
-                                "Revenue": {
-                                    "rv": "",
-                                    "fv": "",
-                                    "mi": 0
-                                }
-                            }
-                        },
-                        {
-                            "depth": 0,
-                            "element": {
-                                "attributeIndex": 0,
-                                "formValues": {
-                                    "DESC": "2017 Q3"
-                                },
-                                "name": "2017 Q3",
-                                "id": "h20173;8D679D4A11D3E4981000E787EC6DE8A4"
-                            },
-                            "metrics": {
-                                "Revenue": {
-                                    "rv": "",
-                                    "fv": "",
-                                    "mi": 0
-                                }
-                            }
-                        },
-                        {
-                            "depth": 0,
-                            "element": {
-                                "attributeIndex": 0,
-                                "formValues": {
-                                    "DESC": "2017 Q4"
-                                },
-                                "name": "2017 Q4",
-                                "id": "h20174;8D679D4A11D3E4981000E787EC6DE8A4"
-                            },
-                            "metrics": {
-                                "Revenue": {
-                                    "rv": "",
-                                    "fv": "",
-                                    "mi": 0
-                                }
-                            }
-                        }
-                    ]
-                }
-            }
-        }
-    },
-    {
-        "id": "19CA15ED451AA1BAAE68418A22793AA3",
-        "name": "ATT SEL Category/ Subcategory",
-        "instanceId": "7B2E58F611E8D6D26DFF0080EF9556C6",
-        "result": {
-            "definition": {
-                "attributes": [
-                    {
-                        "name": "Category",
-                        "id": "8D679D3711D3E4981000E787EC6DE8A4",
-                        "type": "Attribute",
-                        "forms": [
-                            {
-                                "id": "CCFBE2A5EADB4F50941FB879CCF1721C",
-                                "name": "DESC",
-                                "dataType": "Char"
-                            }
-                        ]
-                    },
-                    {
-                        "name": "Subcategory",
-                        "id": "8D679D4F11D3E4981000E787EC6DE8A4",
-                        "type": "Attribute",
-                        "forms": [
-                            {
-                                "id": "CCFBE2A5EADB4F50941FB879CCF1721C",
-                                "name": "DESC",
-                                "dataType": "Char"
-                            }
-                        ]
-                    }
-                ],
-                "metrics": [
-                    {
-                        "name": "Revenue",
-                        "id": "4C05177011D3E877C000B3B2D86C964F",
-                        "type": "Metric",
-                        "min": 296228.8500000001,
-                        "max": 5108463.5,
-                        "numberFormatting": {
-                            "category": 1,
-                            "decimalPlaces": 0,
-                            "thousandSeparator": true,
-                            "currencySymbol": "$",
-                            "currencyPosition": 0,
-                            "formatString": "\"$\"#,##0",
-                            "negativeType": 1
-                        }
-                    },
-                    {
-                        "name": "Rank",
-                        "id": "0D222F604A751D4534222D8DCFC2377C",
-                        "type": "Metric",
-                        "isDerived": true,
-                        "min": 1.0,
-                        "max": 6.0,
-                        "numberFormatting": {
-                            "category": 0,
-                            "decimalPlaces": 0,
-                            "formatString": "#,##0;(#,##0)"
-                        }
-                    }
-                ],
-                "thresholds": [],
-                "sorting": [
-                    {
-                        "type": "form",
-                        "attribute": {
-                            "name": "Category",
-                            "id": "8D679D3711D3E4981000E787EC6DE8A4"
-                        },
-                        "form": {
-                            "name": "ID",
-                            "id": "45C11FA478E745FEA08D781CEA190FE5"
-                        },
-                        "order": "descending"
-                    },
-                    {
-                        "type": "metric",
-                        "metric": {
-                            "name": "Revenue",
-                            "id": "4C05177011D3E877C000B3B2D86C964F"
-                        },
-                        "order": "descending"
-                    },
-                    {
-                        "type": "form",
-                        "attribute": {
-                            "name": "Subcategory",
-                            "id": "8D679D4F11D3E4981000E787EC6DE8A4"
-                        },
-                        "form": {
-                            "name": "DESC",
-                            "id": "CCFBE2A5EADB4F50941FB879CCF1721C"
-                        },
-                        "order": "descending"
-                    }
-                ]
-            },
-            "data": {
-                "paging": {
-                    "total": 24,
-                    "current": 24,
-                    "offset": 0,
-                    "limit": 1000,
-                    "prev": null,
-                    "next": null
-                },
-                "root": {
-                    "isPartial": false,
-                    "children": [
-                        {
-                            "depth": 0,
-                            "element": {
-                                "attributeIndex": 0,
-                                "formValues": {
-                                    "DESC": "Music"
-                                },
-                                "name": "Music",
-                                "id": "h4;8D679D3711D3E4981000E787EC6DE8A4"
-                            },
-                            "isPartial": false,
-                            "children": [
-                                {
-                                    "depth": 1,
-                                    "element": {
-                                        "attributeIndex": 1,
-                                        "formValues": {
-                                            "DESC": "Country"
-                                        },
-                                        "name": "Country",
-                                        "id": "h42;8D679D4F11D3E4981000E787EC6DE8A4"
-                                    },
-                                    "metrics": {
-                                        "Revenue": {
-                                            "rv": 729298.9000000006,
-                                            "fv": "$729,299",
-                                            "mi": 0
-                                        },
-                                        "Rank": {
-                                            "rv": 1.0,
-                                            "fv": "1",
-                                            "mi": 1
-                                        }
-                                    }
-                                },
-                                {
-                                    "depth": 1,
-                                    "element": {
-                                        "attributeIndex": 1,
-                                        "formValues": {
-                                            "DESC": "Alternative"
-                                        },
-                                        "name": "Alternative",
-                                        "id": "h41;8D679D4F11D3E4981000E787EC6DE8A4"
-                                    },
-                                    "metrics": {
-                                        "Revenue": {
-                                            "rv": 706129.5500000003,
-                                            "fv": "$706,130",
-                                            "mi": 0
-                                        },
-                                        "Rank": {
-                                            "rv": 2.0,
-                                            "fv": "2",
-                                            "mi": 1
-                                        }
-                                    }
-                                },
-                                {
-                                    "depth": 1,
-                                    "element": {
-                                        "attributeIndex": 1,
-                                        "formValues": {
-                                            "DESC": "Rock"
-                                        },
-                                        "name": "Rock",
-                                        "id": "h45;8D679D4F11D3E4981000E787EC6DE8A4"
-                                    },
-                                    "metrics": {
-                                        "Revenue": {
-                                            "rv": 700755.6999999998,
-                                            "fv": "$700,756",
-                                            "mi": 0
-                                        },
-                                        "Rank": {
-                                            "rv": 3.0,
-                                            "fv": "3",
-                                            "mi": 1
-                                        }
-                                    }
-                                },
-                                {
-                                    "depth": 1,
-                                    "element": {
-                                        "attributeIndex": 1,
-                                        "formValues": {
-                                            "DESC": "Pop"
-                                        },
-                                        "name": "Pop",
-                                        "id": "h44;8D679D4F11D3E4981000E787EC6DE8A4"
-                                    },
-                                    "metrics": {
-                                        "Revenue": {
-                                            "rv": 687861.4,
-                                            "fv": "$687,861",
-                                            "mi": 0
-                                        },
-                                        "Rank": {
-                                            "rv": 4.0,
-                                            "fv": "4",
-                                            "mi": 1
-                                        }
-                                    }
-                                },
-                                {
-                                    "depth": 1,
-                                    "element": {
-                                        "attributeIndex": 1,
-                                        "formValues": {
-                                            "DESC": "Music - Miscellaneous"
-                                        },
-                                        "name": "Music - Miscellaneous",
-                                        "id": "h43;8D679D4F11D3E4981000E787EC6DE8A4"
-                                    },
-                                    "metrics": {
-                                        "Revenue": {
-                                            "rv": 597507.65,
-                                            "fv": "$597,508",
-                                            "mi": 0
-                                        },
-                                        "Rank": {
-                                            "rv": 5.0,
-                                            "fv": "5",
-                                            "mi": 1
-                                        }
-                                    }
-                                },
-                                {
-                                    "depth": 1,
-                                    "element": {
-                                        "attributeIndex": 1,
-                                        "formValues": {
-                                            "DESC": "Soul / R&B"
-                                        },
-                                        "name": "Soul / R&B",
-                                        "id": "h46;8D679D4F11D3E4981000E787EC6DE8A4"
-                                    },
-                                    "metrics": {
-                                        "Revenue": {
-                                            "rv": 471814.1999999999,
-                                            "fv": "$471,814",
-                                            "mi": 0
-                                        },
-                                        "Rank": {
-                                            "rv": 6.0,
-                                            "fv": "6",
-                                            "mi": 1
-                                        }
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            "depth": 0,
-                            "element": {
-                                "attributeIndex": 0,
-                                "formValues": {
-                                    "DESC": "Movies"
-                                },
-                                "name": "Movies",
-                                "id": "h3;8D679D3711D3E4981000E787EC6DE8A4"
-                            },
-                            "isPartial": false,
-                            "children": [
-                                {
-                                    "depth": 1,
-                                    "element": {
-                                        "attributeIndex": 1,
-                                        "formValues": {
-                                            "DESC": "Special Interests"
-                                        },
-                                        "name": "Special Interests",
-                                        "id": "h36;8D679D4F11D3E4981000E787EC6DE8A4"
-                                    },
-                                    "metrics": {
-                                        "Revenue": {
-                                            "rv": 813946.2499999993,
-                                            "fv": "$813,946",
-                                            "mi": 0
-                                        },
-                                        "Rank": {
-                                            "rv": 1.0,
-                                            "fv": "1",
-                                            "mi": 1
-                                        }
-                                    }
-                                },
-                                {
-                                    "depth": 1,
-                                    "element": {
-                                        "attributeIndex": 1,
-                                        "formValues": {
-                                            "DESC": "Drama"
-                                        },
-                                        "name": "Drama",
-                                        "id": "h33;8D679D4F11D3E4981000E787EC6DE8A4"
-                                    },
-                                    "metrics": {
-                                        "Revenue": {
-                                            "rv": 698840.3,
-                                            "fv": "$698,840",
-                                            "mi": 0
-                                        },
-                                        "Rank": {
-                                            "rv": 2.0,
-                                            "fv": "2",
-                                            "mi": 1
-                                        }
-                                    }
-                                },
-                                {
-                                    "depth": 1,
-                                    "element": {
-                                        "attributeIndex": 1,
-                                        "formValues": {
-                                            "DESC": "Comedy"
-                                        },
-                                        "name": "Comedy",
-                                        "id": "h32;8D679D4F11D3E4981000E787EC6DE8A4"
-                                    },
-                                    "metrics": {
-                                        "Revenue": {
-                                            "rv": 669641.8000000007,
-                                            "fv": "$669,642",
-                                            "mi": 0
-                                        },
-                                        "Rank": {
-                                            "rv": 3.0,
-                                            "fv": "3",
-                                            "mi": 1
-                                        }
-                                    }
-                                },
-                                {
-                                    "depth": 1,
-                                    "element": {
-                                        "attributeIndex": 1,
-                                        "formValues": {
-                                            "DESC": "Kids / Family"
-                                        },
-                                        "name": "Kids / Family",
-                                        "id": "h35;8D679D4F11D3E4981000E787EC6DE8A4"
-                                    },
-                                    "metrics": {
-                                        "Revenue": {
-                                            "rv": 664957.25,
-                                            "fv": "$664,957",
-                                            "mi": 0
-                                        },
-                                        "Rank": {
-                                            "rv": 4.0,
-                                            "fv": "4",
-                                            "mi": 1
-                                        }
-                                    }
-                                },
-                                {
-                                    "depth": 1,
-                                    "element": {
-                                        "attributeIndex": 1,
-                                        "formValues": {
-                                            "DESC": "Horror"
-                                        },
-                                        "name": "Horror",
-                                        "id": "h34;8D679D4F11D3E4981000E787EC6DE8A4"
-                                    },
-                                    "metrics": {
-                                        "Revenue": {
-                                            "rv": 633992.8500000003,
-                                            "fv": "$633,993",
-                                            "mi": 0
-                                        },
-                                        "Rank": {
-                                            "rv": 5.0,
-                                            "fv": "5",
-                                            "mi": 1
-                                        }
-                                    }
-                                },
-                                {
-                                    "depth": 1,
-                                    "element": {
-                                        "attributeIndex": 1,
-                                        "formValues": {
-                                            "DESC": "Action"
-                                        },
-                                        "name": "Action",
-                                        "id": "h31;8D679D4F11D3E4981000E787EC6DE8A4"
-                                    },
-                                    "metrics": {
-                                        "Revenue": {
-                                            "rv": 617565.0000000005,
-                                            "fv": "$617,565",
-                                            "mi": 0
-                                        },
-                                        "Rank": {
-                                            "rv": 6.0,
-                                            "fv": "6",
-                                            "mi": 1
-                                        }
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            "depth": 0,
-                            "element": {
-                                "attributeIndex": 0,
-                                "formValues": {
-                                    "DESC": "Electronics"
-                                },
-                                "name": "Electronics",
-                                "id": "h2;8D679D3711D3E4981000E787EC6DE8A4"
-                            },
-                            "isPartial": false,
-                            "children": [
-                                {
-                                    "depth": 1,
-                                    "element": {
-                                        "attributeIndex": 1,
-                                        "formValues": {
-                                            "DESC": "Video Equipment"
-                                        },
-                                        "name": "Video Equipment",
-                                        "id": "h26;8D679D4F11D3E4981000E787EC6DE8A4"
-                                    },
-                                    "metrics": {
-                                        "Revenue": {
-                                            "rv": 5108463.5,
-                                            "fv": "$5,108,464",
-                                            "mi": 0
-                                        },
-                                        "Rank": {
-                                            "rv": 1.0,
-                                            "fv": "1",
-                                            "mi": 1
-                                        }
-                                    }
-                                },
-                                {
-                                    "depth": 1,
-                                    "element": {
-                                        "attributeIndex": 1,
-                                        "formValues": {
-                                            "DESC": "Cameras"
-                                        },
-                                        "name": "Cameras",
-                                        "id": "h22;8D679D4F11D3E4981000E787EC6DE8A4"
-                                    },
-                                    "metrics": {
-                                        "Revenue": {
-                                            "rv": 5061147.5,
-                                            "fv": "$5,061,148",
-                                            "mi": 0
-                                        },
-                                        "Rank": {
-                                            "rv": 2.0,
-                                            "fv": "2",
-                                            "mi": 1
-                                        }
-                                    }
-                                },
-                                {
-                                    "depth": 1,
-                                    "element": {
-                                        "attributeIndex": 1,
-                                        "formValues": {
-                                            "DESC": "Electronics - Miscellaneous"
-                                        },
-                                        "name": "Electronics - Miscellaneous",
-                                        "id": "h24;8D679D4F11D3E4981000E787EC6DE8A4"
-                                    },
-                                    "metrics": {
-                                        "Revenue": {
-                                            "rv": 4671956.500000002,
-                                            "fv": "$4,671,957",
-                                            "mi": 0
-                                        },
-                                        "Rank": {
-                                            "rv": 3.0,
-                                            "fv": "3",
-                                            "mi": 1
-                                        }
-                                    }
-                                },
-                                {
-                                    "depth": 1,
-                                    "element": {
-                                        "attributeIndex": 1,
-                                        "formValues": {
-                                            "DESC": "TV's"
-                                        },
-                                        "name": "TV's",
-                                        "id": "h25;8D679D4F11D3E4981000E787EC6DE8A4"
-                                    },
-                                    "metrics": {
-                                        "Revenue": {
-                                            "rv": 3837905.8500000006,
-                                            "fv": "$3,837,906",
-                                            "mi": 0
-                                        },
-                                        "Rank": {
-                                            "rv": 4.0,
-                                            "fv": "4",
-                                            "mi": 1
-                                        }
-                                    }
-                                },
-                                {
-                                    "depth": 1,
-                                    "element": {
-                                        "attributeIndex": 1,
-                                        "formValues": {
-                                            "DESC": "Audio Equipment"
-                                        },
-                                        "name": "Audio Equipment",
-                                        "id": "h21;8D679D4F11D3E4981000E787EC6DE8A4"
-                                    },
-                                    "metrics": {
-                                        "Revenue": {
-                                            "rv": 3782832.0,
-                                            "fv": "$3,782,832",
-                                            "mi": 0
-                                        },
-                                        "Rank": {
-                                            "rv": 5.0,
-                                            "fv": "5",
-                                            "mi": 1
-                                        }
-                                    }
-                                },
-                                {
-                                    "depth": 1,
-                                    "element": {
-                                        "attributeIndex": 1,
-                                        "formValues": {
-                                            "DESC": "Computers"
-                                        },
-                                        "name": "Computers",
-                                        "id": "h23;8D679D4F11D3E4981000E787EC6DE8A4"
-                                    },
-                                    "metrics": {
-                                        "Revenue": {
-                                            "rv": 1928997.5000000002,
-                                            "fv": "$1,928,998",
-                                            "mi": 0
-                                        },
-                                        "Rank": {
-                                            "rv": 6.0,
-                                            "fv": "6",
-                                            "mi": 1
-                                        }
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            "depth": 0,
-                            "element": {
-                                "attributeIndex": 0,
-                                "formValues": {
-                                    "DESC": "Books"
-                                },
-                                "name": "Books",
-                                "id": "h1;8D679D3711D3E4981000E787EC6DE8A4"
-                            },
-                            "isPartial": false,
-                            "children": [
-                                {
-                                    "depth": 1,
-                                    "element": {
-                                        "attributeIndex": 1,
-                                        "formValues": {
-                                            "DESC": "Science & Technology"
-                                        },
-                                        "name": "Science & Technology",
-                                        "id": "h15;8D679D4F11D3E4981000E787EC6DE8A4"
-                                    },
-                                    "metrics": {
-                                        "Revenue": {
-                                            "rv": 811786.9999999998,
-                                            "fv": "$811,787",
-                                            "mi": 0
-                                        },
-                                        "Rank": {
-                                            "rv": 1.0,
-                                            "fv": "1",
-                                            "mi": 1
-                                        }
-                                    }
-                                },
-                                {
-                                    "depth": 1,
-                                    "element": {
-                                        "attributeIndex": 1,
-                                        "formValues": {
-                                            "DESC": "Art & Architecture"
-                                        },
-                                        "name": "Art & Architecture",
-                                        "id": "h11;8D679D4F11D3E4981000E787EC6DE8A4"
-                                    },
-                                    "metrics": {
-                                        "Revenue": {
-                                            "rv": 480172.8499999997,
-                                            "fv": "$480,173",
-                                            "mi": 0
-                                        },
-                                        "Rank": {
-                                            "rv": 2.0,
-                                            "fv": "2",
-                                            "mi": 1
-                                        }
-                                    }
-                                },
-                                {
-                                    "depth": 1,
-                                    "element": {
-                                        "attributeIndex": 1,
-                                        "formValues": {
-                                            "DESC": "Business"
-                                        },
-                                        "name": "Business",
-                                        "id": "h12;8D679D4F11D3E4981000E787EC6DE8A4"
-                                    },
-                                    "metrics": {
-                                        "Revenue": {
-                                            "rv": 400870.8000000001,
-                                            "fv": "$400,871",
-                                            "mi": 0
-                                        },
-                                        "Rank": {
-                                            "rv": 3.0,
-                                            "fv": "3",
-                                            "mi": 1
-                                        }
-                                    }
-                                },
-                                {
-                                    "depth": 1,
-                                    "element": {
-                                        "attributeIndex": 1,
-                                        "formValues": {
-                                            "DESC": "Sports & Health"
-                                        },
-                                        "name": "Sports & Health",
-                                        "id": "h16;8D679D4F11D3E4981000E787EC6DE8A4"
-                                    },
-                                    "metrics": {
-                                        "Revenue": {
-                                            "rv": 335105.8500000002,
-                                            "fv": "$335,106",
-                                            "mi": 0
-                                        },
-                                        "Rank": {
-                                            "rv": 4.0,
-                                            "fv": "4",
-                                            "mi": 1
-                                        }
-                                    }
-                                },
-                                {
-                                    "depth": 1,
-                                    "element": {
-                                        "attributeIndex": 1,
-                                        "formValues": {
-                                            "DESC": "Books - Miscellaneous"
-                                        },
-                                        "name": "Books - Miscellaneous",
-                                        "id": "h14;8D679D4F11D3E4981000E787EC6DE8A4"
-                                    },
-                                    "metrics": {
-                                        "Revenue": {
-                                            "rv": 315929.1000000004,
-                                            "fv": "$315,929",
-                                            "mi": 0
-                                        },
-                                        "Rank": {
-                                            "rv": 5.0,
-                                            "fv": "5",
-                                            "mi": 1
-                                        }
-                                    }
-                                },
-                                {
-                                    "depth": 1,
-                                    "element": {
-                                        "attributeIndex": 1,
-                                        "formValues": {
-                                            "DESC": "Literature"
-                                        },
-                                        "name": "Literature",
-                                        "id": "h13;8D679D4F11D3E4981000E787EC6DE8A4"
-                                    },
-                                    "metrics": {
-                                        "Revenue": {
-                                            "rv": 296228.8500000001,
-                                            "fv": "$296,229",
-                                            "mi": 0
-                                        },
-                                        "Rank": {
-                                            "rv": 6.0,
-                                            "fv": "6",
-                                            "mi": 1
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    ]
-                }
-            }
-        }
-    },
-    {
-        "id": "3F221CE44375CB91DD35EA9014778223",
-        "name": "20 Region",
-        "instanceId": "AC8FA1AC11E8D6D26DFF0080EF2577C7",
-        "result": {
-            "definition": {
-                "attributes": [
-                    {
-                        "name": "Region",
-                        "id": "8D679D4B11D3E4981000E787EC6DE8A4",
-                        "type": "Attribute",
-                        "forms": [
-                            {
-                                "id": "CCFBE2A5EADB4F50941FB879CCF1721C",
-                                "name": "DESC",
-                                "dataType": "Char"
-                            }
-                        ]
-                    }
-                ],
-                "metrics": [
-                    {
-                        "name": "Revenue",
-                        "id": "4C05177011D3E877C000B3B2D86C964F",
-                        "type": "Metric",
-                        "min": 1761187.1999999997,
-                        "max": 8554414.549999997,
-                        "numberFormatting": {
-                            "category": 1,
-                            "decimalPlaces": 0,
-                            "thousandSeparator": true,
-                            "currencySymbol": "$",
-                            "currencyPosition": 0,
-                            "formatString": "\"$\"#,##0",
-                            "negativeType": 1
-                        }
-                    },
-                    {
-                        "name": "Standard Deviation of Revenue",
-                        "id": "82F256FE432647176373C289AD3BA126",
-                        "type": "Metric",
-                        "thresholds": [
-                            0
                         ],
-                        "min": 2427.562126692,
-                        "max": 16037.0517947014,
-                        "numberFormatting": {
-                            "category": 1,
-                            "decimalPlaces": 0,
-                            "thousandSeparator": true,
-                            "currencySymbol": "$",
-                            "currencyPosition": 0,
-                            "formatString": "\"$\"#,##0",
-                            "negativeType": 0
-                        }
                     },
-                    {
-                        "name": "Max Revenue",
-                        "id": "080A26DE4A288C0037452AA46DF92145",
-                        "type": "Metric",
-                        "min": 23700,
-                        "max": 102050,
-                        "numberFormatting": {
-                            "category": 1,
-                            "decimalPlaces": 0,
-                            "thousandSeparator": true,
-                            "currencySymbol": "$",
-                            "currencyPosition": 0,
-                            "formatString": "\"$\"#,##0",
-                            "negativeType": 0
-                        }
-                    },
-                    {
-                        "name": "Min Revenue",
-                        "id": "D623DEB3499902169FECFA8B57C06A5A",
-                        "type": "Metric",
-                        "min": 45.2,
-                        "max": 1163.25,
-                        "numberFormatting": {
-                            "category": 1,
-                            "decimalPlaces": 0,
-                            "thousandSeparator": true,
-                            "currencySymbol": "$",
-                            "currencyPosition": 0,
-                            "formatString": "\"$\"#,##0",
-                            "negativeType": 0
-                        }
-                    },
-                    {
-                        "name": "Count Distinct (Items Sold)",
-                        "id": "A73DF7944B47BA98D23110A63FC17C90",
-                        "type": "Metric",
-                        "min": 360,
-                        "max": 360,
-                        "numberFormatting": {
-                            "category": 0,
-                            "decimalPlaces": 0,
-                            "formatString": "#,##0;(#,##0)"
-                        }
-                    }
                 ],
-                "thresholds": [
+                'metrics': [
                     {
-                        "id": "82F256FE432647176373C289AD3BA126#0",
-                        "name": "New Threshold",
-                        "type": "Metric",
-                        "format": {},
-                        "condition": ""
-                    }
+                        'name': 'Revenue',
+                        'id': '4C05177011D3E877C000B3B2D86C964F',
+                        'type': 'Metric',
+                        'min': 1682656.0,
+                        'max': 4512939.6499999445,
+                        'numberFormatting': {
+                            'category': 1,
+                            'decimalPlaces': 0,
+                            'thousandSeparator': true,
+                            'currencySymbol': '$',
+                            'currencyPosition': 0,
+                            'formatString': '"$"#,##0;("$"#,##0)',
+                            'negativeType': 3,
+                        },
+                    },
                 ],
-                "sorting": []
+                'thresholds': [],
+                'sorting': [],
             },
-            "data": {
-                "paging": {
-                    "total": 8,
-                    "current": 8,
-                    "offset": 0,
-                    "limit": 1000,
-                    "prev": null,
-                    "next": null
+            'data': {
+                'paging': {
+                    'total': 16,
+                    'current': 16,
+                    'offset': 0,
+                    'limit': 1000,
+                    'prev': null,
+                    'next': null,
                 },
-                "root": {
-                    "isPartial": false,
-                    "children": [
+                'root': {
+                    'isPartial': false,
+                    'children': [
                         {
-                            "depth": 0,
-                            "element": {
-                                "attributeIndex": 0,
-                                "formValues": {
-                                    "DESC": "Central"
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'DESC': '2014 Q1',
                                 },
-                                "name": "Central",
-                                "id": "h4;8D679D4B11D3E4981000E787EC6DE8A4"
+                                'name': '2014 Q1',
+                                'id': 'h20141;8D679D4A11D3E4981000E787EC6DE8A4',
                             },
-                            "metrics": {
-                                "Revenue": {
-                                    "rv": 5029366.25,
-                                    "fv": "$5,029,366",
-                                    "mi": 0
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 1682656.0,
+                                    'fv': '$1,682,656',
+                                    'mi': 0,
                                 },
-                                "Standard Deviation of Revenue": {
-                                    "rv": 5614.4767803597,
-                                    "fv": "$5,614",
-                                    "mi": 1
-                                },
-                                "Max Revenue": {
-                                    "rv": 45480,
-                                    "fv": "$45,480",
-                                    "mi": 2
-                                },
-                                "Min Revenue": {
-                                    "rv": 205.05,
-                                    "fv": "$205",
-                                    "mi": 3
-                                },
-                                "Count Distinct (Items Sold)": {
-                                    "rv": 360,
-                                    "fv": "360",
-                                    "mi": 4
-                                }
-                            }
+                            },
                         },
                         {
-                            "depth": 0,
-                            "element": {
-                                "attributeIndex": 0,
-                                "formValues": {
-                                    "DESC": "Mid-Atlantic"
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'DESC': '2014 Q2',
                                 },
-                                "name": "Mid-Atlantic",
-                                "id": "h2;8D679D4B11D3E4981000E787EC6DE8A4"
+                                'name': '2014 Q2',
+                                'id': 'h20142;8D679D4A11D3E4981000E787EC6DE8A4',
                             },
-                            "metrics": {
-                                "Revenue": {
-                                    "rv": 4452615.050000004,
-                                    "fv": "$4,452,615",
-                                    "mi": 0
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 1985787.4999999984,
+                                    'fv': '$1,985,788',
+                                    'mi': 0,
                                 },
-                                "Standard Deviation of Revenue": {
-                                    "rv": 3091.9888667382,
-                                    "fv": "$3,092",
-                                    "mi": 1
-                                },
-                                "Max Revenue": {
-                                    "rv": 33050,
-                                    "fv": "$33,050",
-                                    "mi": 2
-                                },
-                                "Min Revenue": {
-                                    "rv": 45.2,
-                                    "fv": "$45",
-                                    "mi": 3
-                                },
-                                "Count Distinct (Items Sold)": {
-                                    "rv": 360,
-                                    "fv": "360",
-                                    "mi": 4
-                                }
-                            }
+                            },
                         },
                         {
-                            "depth": 0,
-                            "element": {
-                                "attributeIndex": 0,
-                                "formValues": {
-                                    "DESC": "Northeast"
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'DESC': '2014 Q3',
                                 },
-                                "name": "Northeast",
-                                "id": "h1;8D679D4B11D3E4981000E787EC6DE8A4"
+                                'name': '2014 Q3',
+                                'id': 'h20143;8D679D4A11D3E4981000E787EC6DE8A4',
                             },
-                            "metrics": {
-                                "Revenue": {
-                                    "rv": 8554414.549999997,
-                                    "fv": "$8,554,415",
-                                    "mi": 0
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 2314294.5000000093,
+                                    'fv': '$2,314,295',
+                                    'mi': 0,
                                 },
-                                "Standard Deviation of Revenue": {
-                                    "rv": 7452.7014645208,
-                                    "fv": "$7,453",
-                                    "mi": 1
-                                },
-                                "Max Revenue": {
-                                    "rv": 64320,
-                                    "fv": "$64,320",
-                                    "mi": 2
-                                },
-                                "Min Revenue": {
-                                    "rv": 61.35,
-                                    "fv": "$61",
-                                    "mi": 3
-                                },
-                                "Count Distinct (Items Sold)": {
-                                    "rv": 360,
-                                    "fv": "360",
-                                    "mi": 4
-                                }
-                            }
+                            },
                         },
                         {
-                            "depth": 0,
-                            "element": {
-                                "attributeIndex": 0,
-                                "formValues": {
-                                    "DESC": "Northwest"
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'DESC': '2014 Q4',
                                 },
-                                "name": "Northwest",
-                                "id": "h6;8D679D4B11D3E4981000E787EC6DE8A4"
+                                'name': '2014 Q4',
+                                'id': 'h20144;8D679D4A11D3E4981000E787EC6DE8A4',
                             },
-                            "metrics": {
-                                "Revenue": {
-                                    "rv": 1761187.1999999997,
-                                    "fv": "$1,761,187",
-                                    "mi": 0
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 2664500.0999999717,
+                                    'fv': '$2,664,500',
+                                    'mi': 0,
                                 },
-                                "Standard Deviation of Revenue": {
-                                    "rv": 2646.8625699508,
-                                    "fv": "$2,647",
-                                    "mi": 1
-                                },
-                                "Max Revenue": {
-                                    "rv": 30360,
-                                    "fv": "$30,360",
-                                    "mi": 2
-                                },
-                                "Min Revenue": {
-                                    "rv": 131.55,
-                                    "fv": "$132",
-                                    "mi": 3
-                                },
-                                "Count Distinct (Items Sold)": {
-                                    "rv": 360,
-                                    "fv": "360",
-                                    "mi": 4
-                                }
-                            }
+                            },
                         },
                         {
-                            "depth": 0,
-                            "element": {
-                                "attributeIndex": 0,
-                                "formValues": {
-                                    "DESC": "South"
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'DESC': '2015 Q1',
                                 },
-                                "name": "South",
-                                "id": "h5;8D679D4B11D3E4981000E787EC6DE8A4"
+                                'name': '2015 Q1',
+                                'id': 'h20151;8D679D4A11D3E4981000E787EC6DE8A4',
                             },
-                            "metrics": {
-                                "Revenue": {
-                                    "rv": 5389280.299999999,
-                                    "fv": "$5,389,280",
-                                    "mi": 0
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 2498756.0,
+                                    'fv': '$2,498,756',
+                                    'mi': 0,
                                 },
-                                "Standard Deviation of Revenue": {
-                                    "rv": 7398.9820094164,
-                                    "fv": "$7,399",
-                                    "mi": 1
-                                },
-                                "Max Revenue": {
-                                    "rv": 51500,
-                                    "fv": "$51,500",
-                                    "mi": 2
-                                },
-                                "Min Revenue": {
-                                    "rv": 470.1,
-                                    "fv": "$470",
-                                    "mi": 3
-                                },
-                                "Count Distinct (Items Sold)": {
-                                    "rv": 360,
-                                    "fv": "360",
-                                    "mi": 4
-                                }
-                            }
+                            },
                         },
                         {
-                            "depth": 0,
-                            "element": {
-                                "attributeIndex": 0,
-                                "formValues": {
-                                    "DESC": "Southeast"
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'DESC': '2015 Q2',
                                 },
-                                "name": "Southeast",
-                                "id": "h3;8D679D4B11D3E4981000E787EC6DE8A4"
+                                'name': '2015 Q2',
+                                'id': 'h20152;8D679D4A11D3E4981000E787EC6DE8A4',
                             },
-                            "metrics": {
-                                "Revenue": {
-                                    "rv": 2239951.0500000003,
-                                    "fv": "$2,239,951",
-                                    "mi": 0
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 2684763.600000007,
+                                    'fv': '$2,684,764',
+                                    'mi': 0,
                                 },
-                                "Standard Deviation of Revenue": {
-                                    "rv": 2427.562126692,
-                                    "fv": "$2,428",
-                                    "mi": 1
-                                },
-                                "Max Revenue": {
-                                    "rv": 23700,
-                                    "fv": "$23,700",
-                                    "mi": 2
-                                },
-                                "Min Revenue": {
-                                    "rv": 155.55,
-                                    "fv": "$156",
-                                    "mi": 3
-                                },
-                                "Count Distinct (Items Sold)": {
-                                    "rv": 360,
-                                    "fv": "360",
-                                    "mi": 4
-                                }
-                            }
+                            },
                         },
                         {
-                            "depth": 0,
-                            "element": {
-                                "attributeIndex": 0,
-                                "formValues": {
-                                    "DESC": "Southwest"
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'DESC': '2015 Q3',
                                 },
-                                "name": "Southwest",
-                                "id": "h7;8D679D4B11D3E4981000E787EC6DE8A4"
+                                'name': '2015 Q3',
+                                'id': 'h20153;8D679D4A11D3E4981000E787EC6DE8A4',
                             },
-                            "metrics": {
-                                "Revenue": {
-                                    "rv": 3694131.6999999983,
-                                    "fv": "$3,694,132",
-                                    "mi": 0
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 3067019.00000001,
+                                    'fv': '$3,067,019',
+                                    'mi': 0,
                                 },
-                                "Standard Deviation of Revenue": {
-                                    "rv": 3401.4196094712,
-                                    "fv": "$3,401",
-                                    "mi": 1
-                                },
-                                "Max Revenue": {
-                                    "rv": 33840,
-                                    "fv": "$33,840",
-                                    "mi": 2
-                                },
-                                "Min Revenue": {
-                                    "rv": 113.1,
-                                    "fv": "$113",
-                                    "mi": 3
-                                },
-                                "Count Distinct (Items Sold)": {
-                                    "rv": 360,
-                                    "fv": "360",
-                                    "mi": 4
-                                }
-                            }
+                            },
                         },
                         {
-                            "depth": 0,
-                            "element": {
-                                "attributeIndex": 0,
-                                "formValues": {
-                                    "DESC": "Web"
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'DESC': '2015 Q4',
                                 },
-                                "name": "Web",
-                                "id": "h12;8D679D4B11D3E4981000E787EC6DE8A4"
+                                'name': '2015 Q4',
+                                'id': 'h20154;8D679D4A11D3E4981000E787EC6DE8A4',
                             },
-                            "metrics": {
-                                "Revenue": {
-                                    "rv": 3902762.0500000026,
-                                    "fv": "$3,902,762",
-                                    "mi": 0
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 3267067.399999965,
+                                    'fv': '$3,267,067',
+                                    'mi': 0,
                                 },
-                                "Standard Deviation of Revenue": {
-                                    "rv": 16037.0517947014,
-                                    "fv": "$16,037",
-                                    "mi": 1
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'DESC': '2016 Q1',
                                 },
-                                "Max Revenue": {
-                                    "rv": 102050,
-                                    "fv": "$102,050",
-                                    "mi": 2
+                                'name': '2016 Q1',
+                                'id': 'h20161;8D679D4A11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 3111989.0,
+                                    'fv': '$3,111,989',
+                                    'mi': 0,
                                 },
-                                "Min Revenue": {
-                                    "rv": 1163.25,
-                                    "fv": "$1,163",
-                                    "mi": 3
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'DESC': '2016 Q2',
                                 },
-                                "Count Distinct (Items Sold)": {
-                                    "rv": 360,
-                                    "fv": "360",
-                                    "mi": 4
-                                }
-                            }
-                        }
-                    ]
-                }
-            }
-        }
-    }
+                                'name': '2016 Q2',
+                                'id': 'h20162;8D679D4A11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 3504479.1000000276,
+                                    'fv': '$3,504,479',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'DESC': '2016 Q3',
+                                },
+                                'name': '2016 Q3',
+                                'id': 'h20163;8D679D4A11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 3729456.300000008,
+                                    'fv': '$3,729,456',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'DESC': '2016 Q4',
+                                },
+                                'name': '2016 Q4',
+                                'id': 'h20164;8D679D4A11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 4512939.6499999445,
+                                    'fv': '$4,512,940',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'DESC': '2017 Q1',
+                                },
+                                'name': '2017 Q1',
+                                'id': 'h20171;8D679D4A11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': '',
+                                    'fv': '',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'DESC': '2017 Q2',
+                                },
+                                'name': '2017 Q2',
+                                'id': 'h20172;8D679D4A11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': '',
+                                    'fv': '',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'DESC': '2017 Q3',
+                                },
+                                'name': '2017 Q3',
+                                'id': 'h20173;8D679D4A11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': '',
+                                    'fv': '',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'DESC': '2017 Q4',
+                                },
+                                'name': '2017 Q4',
+                                'id': 'h20174;8D679D4A11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': '',
+                                    'fv': '',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                    ],
+                },
+            },
+        },
+    },
+    {
+        'id': '19CA15ED451AA1BAAE68418A22793AA3',
+        'name': 'ATT SEL Category/ Subcategory',
+        'instanceId': '7B2E58F611E8D6D26DFF0080EF9556C6',
+        'result': {
+            'definition': {
+                'attributes': [
+                    {
+                        'name': 'Category',
+                        'id': '8D679D3711D3E4981000E787EC6DE8A4',
+                        'type': 'Attribute',
+                        'forms': [
+                            {
+                                'id': 'CCFBE2A5EADB4F50941FB879CCF1721C',
+                                'name': 'DESC',
+                                'dataType': 'Char',
+                            },
+                        ],
+                    },
+                    {
+                        'name': 'Subcategory',
+                        'id': '8D679D4F11D3E4981000E787EC6DE8A4',
+                        'type': 'Attribute',
+                        'forms': [
+                            {
+                                'id': 'CCFBE2A5EADB4F50941FB879CCF1721C',
+                                'name': 'DESC',
+                                'dataType': 'Char',
+                            },
+                        ],
+                    },
+                ],
+                'metrics': [
+                    {
+                        'name': 'Revenue',
+                        'id': '4C05177011D3E877C000B3B2D86C964F',
+                        'type': 'Metric',
+                        'min': 296228.8500000001,
+                        'max': 5108463.5,
+                        'numberFormatting': {
+                            'category': 1,
+                            'decimalPlaces': 0,
+                            'thousandSeparator': true,
+                            'currencySymbol': '$',
+                            'currencyPosition': 0,
+                            'formatString': '"$"#,##0',
+                            'negativeType': 1,
+                        },
+                    },
+                    {
+                        'name': 'Rank',
+                        'id': '0D222F604A751D4534222D8DCFC2377C',
+                        'type': 'Metric',
+                        'isDerived': true,
+                        'min': 1.0,
+                        'max': 6.0,
+                        'numberFormatting': {
+                            'category': 0,
+                            'decimalPlaces': 0,
+                            'formatString': '#,##0;(#,##0)',
+                        },
+                    },
+                ],
+                'thresholds': [],
+                'sorting': [
+                    {
+                        'type': 'form',
+                        'attribute': {
+                            'name': 'Category',
+                            'id': '8D679D3711D3E4981000E787EC6DE8A4',
+                        },
+                        'form': {
+                            'name': 'ID',
+                            'id': '45C11FA478E745FEA08D781CEA190FE5',
+                        },
+                        'order': 'descending',
+                    },
+                    {
+                        'type': 'metric',
+                        'metric': {
+                            'name': 'Revenue',
+                            'id': '4C05177011D3E877C000B3B2D86C964F',
+                        },
+                        'order': 'descending',
+                    },
+                    {
+                        'type': 'form',
+                        'attribute': {
+                            'name': 'Subcategory',
+                            'id': '8D679D4F11D3E4981000E787EC6DE8A4',
+                        },
+                        'form': {
+                            'name': 'DESC',
+                            'id': 'CCFBE2A5EADB4F50941FB879CCF1721C',
+                        },
+                        'order': 'descending',
+                    },
+                ],
+            },
+            'data': {
+                'paging': {
+                    'total': 24,
+                    'current': 24,
+                    'offset': 0,
+                    'limit': 1000,
+                    'prev': null,
+                    'next': null,
+                },
+                'root': {
+                    'isPartial': false,
+                    'children': [
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'DESC': 'Music',
+                                },
+                                'name': 'Music',
+                                'id': 'h4;8D679D3711D3E4981000E787EC6DE8A4',
+                            },
+                            'isPartial': false,
+                            'children': [
+                                {
+                                    'depth': 1,
+                                    'element': {
+                                        'attributeIndex': 1,
+                                        'formValues': {
+                                            'DESC': 'Country',
+                                        },
+                                        'name': 'Country',
+                                        'id': 'h42;8D679D4F11D3E4981000E787EC6DE8A4',
+                                    },
+                                    'metrics': {
+                                        'Revenue': {
+                                            'rv': 729298.9000000006,
+                                            'fv': '$729,299',
+                                            'mi': 0,
+                                        },
+                                        'Rank': {
+                                            'rv': 1.0,
+                                            'fv': '1',
+                                            'mi': 1,
+                                        },
+                                    },
+                                },
+                                {
+                                    'depth': 1,
+                                    'element': {
+                                        'attributeIndex': 1,
+                                        'formValues': {
+                                            'DESC': 'Alternative',
+                                        },
+                                        'name': 'Alternative',
+                                        'id': 'h41;8D679D4F11D3E4981000E787EC6DE8A4',
+                                    },
+                                    'metrics': {
+                                        'Revenue': {
+                                            'rv': 706129.5500000003,
+                                            'fv': '$706,130',
+                                            'mi': 0,
+                                        },
+                                        'Rank': {
+                                            'rv': 2.0,
+                                            'fv': '2',
+                                            'mi': 1,
+                                        },
+                                    },
+                                },
+                                {
+                                    'depth': 1,
+                                    'element': {
+                                        'attributeIndex': 1,
+                                        'formValues': {
+                                            'DESC': 'Rock',
+                                        },
+                                        'name': 'Rock',
+                                        'id': 'h45;8D679D4F11D3E4981000E787EC6DE8A4',
+                                    },
+                                    'metrics': {
+                                        'Revenue': {
+                                            'rv': 700755.6999999998,
+                                            'fv': '$700,756',
+                                            'mi': 0,
+                                        },
+                                        'Rank': {
+                                            'rv': 3.0,
+                                            'fv': '3',
+                                            'mi': 1,
+                                        },
+                                    },
+                                },
+                                {
+                                    'depth': 1,
+                                    'element': {
+                                        'attributeIndex': 1,
+                                        'formValues': {
+                                            'DESC': 'Pop',
+                                        },
+                                        'name': 'Pop',
+                                        'id': 'h44;8D679D4F11D3E4981000E787EC6DE8A4',
+                                    },
+                                    'metrics': {
+                                        'Revenue': {
+                                            'rv': 687861.4,
+                                            'fv': '$687,861',
+                                            'mi': 0,
+                                        },
+                                        'Rank': {
+                                            'rv': 4.0,
+                                            'fv': '4',
+                                            'mi': 1,
+                                        },
+                                    },
+                                },
+                                {
+                                    'depth': 1,
+                                    'element': {
+                                        'attributeIndex': 1,
+                                        'formValues': {
+                                            'DESC': 'Music - Miscellaneous',
+                                        },
+                                        'name': 'Music - Miscellaneous',
+                                        'id': 'h43;8D679D4F11D3E4981000E787EC6DE8A4',
+                                    },
+                                    'metrics': {
+                                        'Revenue': {
+                                            'rv': 597507.65,
+                                            'fv': '$597,508',
+                                            'mi': 0,
+                                        },
+                                        'Rank': {
+                                            'rv': 5.0,
+                                            'fv': '5',
+                                            'mi': 1,
+                                        },
+                                    },
+                                },
+                                {
+                                    'depth': 1,
+                                    'element': {
+                                        'attributeIndex': 1,
+                                        'formValues': {
+                                            'DESC': 'Soul / R&B',
+                                        },
+                                        'name': 'Soul / R&B',
+                                        'id': 'h46;8D679D4F11D3E4981000E787EC6DE8A4',
+                                    },
+                                    'metrics': {
+                                        'Revenue': {
+                                            'rv': 471814.1999999999,
+                                            'fv': '$471,814',
+                                            'mi': 0,
+                                        },
+                                        'Rank': {
+                                            'rv': 6.0,
+                                            'fv': '6',
+                                            'mi': 1,
+                                        },
+                                    },
+                                },
+                            ],
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'DESC': 'Movies',
+                                },
+                                'name': 'Movies',
+                                'id': 'h3;8D679D3711D3E4981000E787EC6DE8A4',
+                            },
+                            'isPartial': false,
+                            'children': [
+                                {
+                                    'depth': 1,
+                                    'element': {
+                                        'attributeIndex': 1,
+                                        'formValues': {
+                                            'DESC': 'Special Interests',
+                                        },
+                                        'name': 'Special Interests',
+                                        'id': 'h36;8D679D4F11D3E4981000E787EC6DE8A4',
+                                    },
+                                    'metrics': {
+                                        'Revenue': {
+                                            'rv': 813946.2499999993,
+                                            'fv': '$813,946',
+                                            'mi': 0,
+                                        },
+                                        'Rank': {
+                                            'rv': 1.0,
+                                            'fv': '1',
+                                            'mi': 1,
+                                        },
+                                    },
+                                },
+                                {
+                                    'depth': 1,
+                                    'element': {
+                                        'attributeIndex': 1,
+                                        'formValues': {
+                                            'DESC': 'Drama',
+                                        },
+                                        'name': 'Drama',
+                                        'id': 'h33;8D679D4F11D3E4981000E787EC6DE8A4',
+                                    },
+                                    'metrics': {
+                                        'Revenue': {
+                                            'rv': 698840.3,
+                                            'fv': '$698,840',
+                                            'mi': 0,
+                                        },
+                                        'Rank': {
+                                            'rv': 2.0,
+                                            'fv': '2',
+                                            'mi': 1,
+                                        },
+                                    },
+                                },
+                                {
+                                    'depth': 1,
+                                    'element': {
+                                        'attributeIndex': 1,
+                                        'formValues': {
+                                            'DESC': 'Comedy',
+                                        },
+                                        'name': 'Comedy',
+                                        'id': 'h32;8D679D4F11D3E4981000E787EC6DE8A4',
+                                    },
+                                    'metrics': {
+                                        'Revenue': {
+                                            'rv': 669641.8000000007,
+                                            'fv': '$669,642',
+                                            'mi': 0,
+                                        },
+                                        'Rank': {
+                                            'rv': 3.0,
+                                            'fv': '3',
+                                            'mi': 1,
+                                        },
+                                    },
+                                },
+                                {
+                                    'depth': 1,
+                                    'element': {
+                                        'attributeIndex': 1,
+                                        'formValues': {
+                                            'DESC': 'Kids / Family',
+                                        },
+                                        'name': 'Kids / Family',
+                                        'id': 'h35;8D679D4F11D3E4981000E787EC6DE8A4',
+                                    },
+                                    'metrics': {
+                                        'Revenue': {
+                                            'rv': 664957.25,
+                                            'fv': '$664,957',
+                                            'mi': 0,
+                                        },
+                                        'Rank': {
+                                            'rv': 4.0,
+                                            'fv': '4',
+                                            'mi': 1,
+                                        },
+                                    },
+                                },
+                                {
+                                    'depth': 1,
+                                    'element': {
+                                        'attributeIndex': 1,
+                                        'formValues': {
+                                            'DESC': 'Horror',
+                                        },
+                                        'name': 'Horror',
+                                        'id': 'h34;8D679D4F11D3E4981000E787EC6DE8A4',
+                                    },
+                                    'metrics': {
+                                        'Revenue': {
+                                            'rv': 633992.8500000003,
+                                            'fv': '$633,993',
+                                            'mi': 0,
+                                        },
+                                        'Rank': {
+                                            'rv': 5.0,
+                                            'fv': '5',
+                                            'mi': 1,
+                                        },
+                                    },
+                                },
+                                {
+                                    'depth': 1,
+                                    'element': {
+                                        'attributeIndex': 1,
+                                        'formValues': {
+                                            'DESC': 'Action',
+                                        },
+                                        'name': 'Action',
+                                        'id': 'h31;8D679D4F11D3E4981000E787EC6DE8A4',
+                                    },
+                                    'metrics': {
+                                        'Revenue': {
+                                            'rv': 617565.0000000005,
+                                            'fv': '$617,565',
+                                            'mi': 0,
+                                        },
+                                        'Rank': {
+                                            'rv': 6.0,
+                                            'fv': '6',
+                                            'mi': 1,
+                                        },
+                                    },
+                                },
+                            ],
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'DESC': 'Electronics',
+                                },
+                                'name': 'Electronics',
+                                'id': 'h2;8D679D3711D3E4981000E787EC6DE8A4',
+                            },
+                            'isPartial': false,
+                            'children': [
+                                {
+                                    'depth': 1,
+                                    'element': {
+                                        'attributeIndex': 1,
+                                        'formValues': {
+                                            'DESC': 'Video Equipment',
+                                        },
+                                        'name': 'Video Equipment',
+                                        'id': 'h26;8D679D4F11D3E4981000E787EC6DE8A4',
+                                    },
+                                    'metrics': {
+                                        'Revenue': {
+                                            'rv': 5108463.5,
+                                            'fv': '$5,108,464',
+                                            'mi': 0,
+                                        },
+                                        'Rank': {
+                                            'rv': 1.0,
+                                            'fv': '1',
+                                            'mi': 1,
+                                        },
+                                    },
+                                },
+                                {
+                                    'depth': 1,
+                                    'element': {
+                                        'attributeIndex': 1,
+                                        'formValues': {
+                                            'DESC': 'Cameras',
+                                        },
+                                        'name': 'Cameras',
+                                        'id': 'h22;8D679D4F11D3E4981000E787EC6DE8A4',
+                                    },
+                                    'metrics': {
+                                        'Revenue': {
+                                            'rv': 5061147.5,
+                                            'fv': '$5,061,148',
+                                            'mi': 0,
+                                        },
+                                        'Rank': {
+                                            'rv': 2.0,
+                                            'fv': '2',
+                                            'mi': 1,
+                                        },
+                                    },
+                                },
+                                {
+                                    'depth': 1,
+                                    'element': {
+                                        'attributeIndex': 1,
+                                        'formValues': {
+                                            'DESC': 'Electronics - Miscellaneous',
+                                        },
+                                        'name': 'Electronics - Miscellaneous',
+                                        'id': 'h24;8D679D4F11D3E4981000E787EC6DE8A4',
+                                    },
+                                    'metrics': {
+                                        'Revenue': {
+                                            'rv': 4671956.500000002,
+                                            'fv': '$4,671,957',
+                                            'mi': 0,
+                                        },
+                                        'Rank': {
+                                            'rv': 3.0,
+                                            'fv': '3',
+                                            'mi': 1,
+                                        },
+                                    },
+                                },
+                                {
+                                    'depth': 1,
+                                    'element': {
+                                        'attributeIndex': 1,
+                                        'formValues': {
+                                            'DESC': 'TV\'s',
+                                        },
+                                        'name': 'TV\'s',
+                                        'id': 'h25;8D679D4F11D3E4981000E787EC6DE8A4',
+                                    },
+                                    'metrics': {
+                                        'Revenue': {
+                                            'rv': 3837905.8500000006,
+                                            'fv': '$3,837,906',
+                                            'mi': 0,
+                                        },
+                                        'Rank': {
+                                            'rv': 4.0,
+                                            'fv': '4',
+                                            'mi': 1,
+                                        },
+                                    },
+                                },
+                                {
+                                    'depth': 1,
+                                    'element': {
+                                        'attributeIndex': 1,
+                                        'formValues': {
+                                            'DESC': 'Audio Equipment',
+                                        },
+                                        'name': 'Audio Equipment',
+                                        'id': 'h21;8D679D4F11D3E4981000E787EC6DE8A4',
+                                    },
+                                    'metrics': {
+                                        'Revenue': {
+                                            'rv': 3782832.0,
+                                            'fv': '$3,782,832',
+                                            'mi': 0,
+                                        },
+                                        'Rank': {
+                                            'rv': 5.0,
+                                            'fv': '5',
+                                            'mi': 1,
+                                        },
+                                    },
+                                },
+                                {
+                                    'depth': 1,
+                                    'element': {
+                                        'attributeIndex': 1,
+                                        'formValues': {
+                                            'DESC': 'Computers',
+                                        },
+                                        'name': 'Computers',
+                                        'id': 'h23;8D679D4F11D3E4981000E787EC6DE8A4',
+                                    },
+                                    'metrics': {
+                                        'Revenue': {
+                                            'rv': 1928997.5000000002,
+                                            'fv': '$1,928,998',
+                                            'mi': 0,
+                                        },
+                                        'Rank': {
+                                            'rv': 6.0,
+                                            'fv': '6',
+                                            'mi': 1,
+                                        },
+                                    },
+                                },
+                            ],
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'DESC': 'Books',
+                                },
+                                'name': 'Books',
+                                'id': 'h1;8D679D3711D3E4981000E787EC6DE8A4',
+                            },
+                            'isPartial': false,
+                            'children': [
+                                {
+                                    'depth': 1,
+                                    'element': {
+                                        'attributeIndex': 1,
+                                        'formValues': {
+                                            'DESC': 'Science & Technology',
+                                        },
+                                        'name': 'Science & Technology',
+                                        'id': 'h15;8D679D4F11D3E4981000E787EC6DE8A4',
+                                    },
+                                    'metrics': {
+                                        'Revenue': {
+                                            'rv': 811786.9999999998,
+                                            'fv': '$811,787',
+                                            'mi': 0,
+                                        },
+                                        'Rank': {
+                                            'rv': 1.0,
+                                            'fv': '1',
+                                            'mi': 1,
+                                        },
+                                    },
+                                },
+                                {
+                                    'depth': 1,
+                                    'element': {
+                                        'attributeIndex': 1,
+                                        'formValues': {
+                                            'DESC': 'Art & Architecture',
+                                        },
+                                        'name': 'Art & Architecture',
+                                        'id': 'h11;8D679D4F11D3E4981000E787EC6DE8A4',
+                                    },
+                                    'metrics': {
+                                        'Revenue': {
+                                            'rv': 480172.8499999997,
+                                            'fv': '$480,173',
+                                            'mi': 0,
+                                        },
+                                        'Rank': {
+                                            'rv': 2.0,
+                                            'fv': '2',
+                                            'mi': 1,
+                                        },
+                                    },
+                                },
+                                {
+                                    'depth': 1,
+                                    'element': {
+                                        'attributeIndex': 1,
+                                        'formValues': {
+                                            'DESC': 'Business',
+                                        },
+                                        'name': 'Business',
+                                        'id': 'h12;8D679D4F11D3E4981000E787EC6DE8A4',
+                                    },
+                                    'metrics': {
+                                        'Revenue': {
+                                            'rv': 400870.8000000001,
+                                            'fv': '$400,871',
+                                            'mi': 0,
+                                        },
+                                        'Rank': {
+                                            'rv': 3.0,
+                                            'fv': '3',
+                                            'mi': 1,
+                                        },
+                                    },
+                                },
+                                {
+                                    'depth': 1,
+                                    'element': {
+                                        'attributeIndex': 1,
+                                        'formValues': {
+                                            'DESC': 'Sports & Health',
+                                        },
+                                        'name': 'Sports & Health',
+                                        'id': 'h16;8D679D4F11D3E4981000E787EC6DE8A4',
+                                    },
+                                    'metrics': {
+                                        'Revenue': {
+                                            'rv': 335105.8500000002,
+                                            'fv': '$335,106',
+                                            'mi': 0,
+                                        },
+                                        'Rank': {
+                                            'rv': 4.0,
+                                            'fv': '4',
+                                            'mi': 1,
+                                        },
+                                    },
+                                },
+                                {
+                                    'depth': 1,
+                                    'element': {
+                                        'attributeIndex': 1,
+                                        'formValues': {
+                                            'DESC': 'Books - Miscellaneous',
+                                        },
+                                        'name': 'Books - Miscellaneous',
+                                        'id': 'h14;8D679D4F11D3E4981000E787EC6DE8A4',
+                                    },
+                                    'metrics': {
+                                        'Revenue': {
+                                            'rv': 315929.1000000004,
+                                            'fv': '$315,929',
+                                            'mi': 0,
+                                        },
+                                        'Rank': {
+                                            'rv': 5.0,
+                                            'fv': '5',
+                                            'mi': 1,
+                                        },
+                                    },
+                                },
+                                {
+                                    'depth': 1,
+                                    'element': {
+                                        'attributeIndex': 1,
+                                        'formValues': {
+                                            'DESC': 'Literature',
+                                        },
+                                        'name': 'Literature',
+                                        'id': 'h13;8D679D4F11D3E4981000E787EC6DE8A4',
+                                    },
+                                    'metrics': {
+                                        'Revenue': {
+                                            'rv': 296228.8500000001,
+                                            'fv': '$296,229',
+                                            'mi': 0,
+                                        },
+                                        'Rank': {
+                                            'rv': 6.0,
+                                            'fv': '6',
+                                            'mi': 1,
+                                        },
+                                    },
+                                },
+                            ],
+                        },
+                    ],
+                },
+            },
+        },
+    },
+    {
+        'id': '3F221CE44375CB91DD35EA9014778223',
+        'name': '20 Region',
+        'instanceId': 'AC8FA1AC11E8D6D26DFF0080EF2577C7',
+        'result': {
+            'definition': {
+                'attributes': [
+                    {
+                        'name': 'Region',
+                        'id': '8D679D4B11D3E4981000E787EC6DE8A4',
+                        'type': 'Attribute',
+                        'forms': [
+                            {
+                                'id': 'CCFBE2A5EADB4F50941FB879CCF1721C',
+                                'name': 'DESC',
+                                'dataType': 'Char',
+                            },
+                        ],
+                    },
+                ],
+                'metrics': [
+                    {
+                        'name': 'Revenue',
+                        'id': '4C05177011D3E877C000B3B2D86C964F',
+                        'type': 'Metric',
+                        'min': 1761187.1999999997,
+                        'max': 8554414.549999997,
+                        'numberFormatting': {
+                            'category': 1,
+                            'decimalPlaces': 0,
+                            'thousandSeparator': true,
+                            'currencySymbol': '$',
+                            'currencyPosition': 0,
+                            'formatString': '"$"#,##0',
+                            'negativeType': 1,
+                        },
+                    },
+                    {
+                        'name': 'Standard Deviation of Revenue',
+                        'id': '82F256FE432647176373C289AD3BA126',
+                        'type': 'Metric',
+                        'thresholds': [
+                            0,
+                        ],
+                        'min': 2427.562126692,
+                        'max': 16037.0517947014,
+                        'numberFormatting': {
+                            'category': 1,
+                            'decimalPlaces': 0,
+                            'thousandSeparator': true,
+                            'currencySymbol': '$',
+                            'currencyPosition': 0,
+                            'formatString': '"$"#,##0',
+                            'negativeType': 0,
+                        },
+                    },
+                    {
+                        'name': 'Max Revenue',
+                        'id': '080A26DE4A288C0037452AA46DF92145',
+                        'type': 'Metric',
+                        'min': 23700,
+                        'max': 102050,
+                        'numberFormatting': {
+                            'category': 1,
+                            'decimalPlaces': 0,
+                            'thousandSeparator': true,
+                            'currencySymbol': '$',
+                            'currencyPosition': 0,
+                            'formatString': '"$"#,##0',
+                            'negativeType': 0,
+                        },
+                    },
+                    {
+                        'name': 'Min Revenue',
+                        'id': 'D623DEB3499902169FECFA8B57C06A5A',
+                        'type': 'Metric',
+                        'min': 45.2,
+                        'max': 1163.25,
+                        'numberFormatting': {
+                            'category': 1,
+                            'decimalPlaces': 0,
+                            'thousandSeparator': true,
+                            'currencySymbol': '$',
+                            'currencyPosition': 0,
+                            'formatString': '"$"#,##0',
+                            'negativeType': 0,
+                        },
+                    },
+                    {
+                        'name': 'Count Distinct (Items Sold)',
+                        'id': 'A73DF7944B47BA98D23110A63FC17C90',
+                        'type': 'Metric',
+                        'min': 360,
+                        'max': 360,
+                        'numberFormatting': {
+                            'category': 0,
+                            'decimalPlaces': 0,
+                            'formatString': '#,##0;(#,##0)',
+                        },
+                    },
+                ],
+                'thresholds': [
+                    {
+                        'id': '82F256FE432647176373C289AD3BA126#0',
+                        'name': 'New Threshold',
+                        'type': 'Metric',
+                        'format': {},
+                        'condition': '',
+                    },
+                ],
+                'sorting': [],
+            },
+            'data': {
+                'paging': {
+                    'total': 8,
+                    'current': 8,
+                    'offset': 0,
+                    'limit': 1000,
+                    'prev': null,
+                    'next': null,
+                },
+                'root': {
+                    'isPartial': false,
+                    'children': [
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'DESC': 'Central',
+                                },
+                                'name': 'Central',
+                                'id': 'h4;8D679D4B11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 5029366.25,
+                                    'fv': '$5,029,366',
+                                    'mi': 0,
+                                },
+                                'Standard Deviation of Revenue': {
+                                    'rv': 5614.4767803597,
+                                    'fv': '$5,614',
+                                    'mi': 1,
+                                },
+                                'Max Revenue': {
+                                    'rv': 45480,
+                                    'fv': '$45,480',
+                                    'mi': 2,
+                                },
+                                'Min Revenue': {
+                                    'rv': 205.05,
+                                    'fv': '$205',
+                                    'mi': 3,
+                                },
+                                'Count Distinct (Items Sold)': {
+                                    'rv': 360,
+                                    'fv': '360',
+                                    'mi': 4,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'DESC': 'Mid-Atlantic',
+                                },
+                                'name': 'Mid-Atlantic',
+                                'id': 'h2;8D679D4B11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 4452615.050000004,
+                                    'fv': '$4,452,615',
+                                    'mi': 0,
+                                },
+                                'Standard Deviation of Revenue': {
+                                    'rv': 3091.9888667382,
+                                    'fv': '$3,092',
+                                    'mi': 1,
+                                },
+                                'Max Revenue': {
+                                    'rv': 33050,
+                                    'fv': '$33,050',
+                                    'mi': 2,
+                                },
+                                'Min Revenue': {
+                                    'rv': 45.2,
+                                    'fv': '$45',
+                                    'mi': 3,
+                                },
+                                'Count Distinct (Items Sold)': {
+                                    'rv': 360,
+                                    'fv': '360',
+                                    'mi': 4,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'DESC': 'Northeast',
+                                },
+                                'name': 'Northeast',
+                                'id': 'h1;8D679D4B11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 8554414.549999997,
+                                    'fv': '$8,554,415',
+                                    'mi': 0,
+                                },
+                                'Standard Deviation of Revenue': {
+                                    'rv': 7452.7014645208,
+                                    'fv': '$7,453',
+                                    'mi': 1,
+                                },
+                                'Max Revenue': {
+                                    'rv': 64320,
+                                    'fv': '$64,320',
+                                    'mi': 2,
+                                },
+                                'Min Revenue': {
+                                    'rv': 61.35,
+                                    'fv': '$61',
+                                    'mi': 3,
+                                },
+                                'Count Distinct (Items Sold)': {
+                                    'rv': 360,
+                                    'fv': '360',
+                                    'mi': 4,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'DESC': 'Northwest',
+                                },
+                                'name': 'Northwest',
+                                'id': 'h6;8D679D4B11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 1761187.1999999997,
+                                    'fv': '$1,761,187',
+                                    'mi': 0,
+                                },
+                                'Standard Deviation of Revenue': {
+                                    'rv': 2646.8625699508,
+                                    'fv': '$2,647',
+                                    'mi': 1,
+                                },
+                                'Max Revenue': {
+                                    'rv': 30360,
+                                    'fv': '$30,360',
+                                    'mi': 2,
+                                },
+                                'Min Revenue': {
+                                    'rv': 131.55,
+                                    'fv': '$132',
+                                    'mi': 3,
+                                },
+                                'Count Distinct (Items Sold)': {
+                                    'rv': 360,
+                                    'fv': '360',
+                                    'mi': 4,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'DESC': 'South',
+                                },
+                                'name': 'South',
+                                'id': 'h5;8D679D4B11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 5389280.299999999,
+                                    'fv': '$5,389,280',
+                                    'mi': 0,
+                                },
+                                'Standard Deviation of Revenue': {
+                                    'rv': 7398.9820094164,
+                                    'fv': '$7,399',
+                                    'mi': 1,
+                                },
+                                'Max Revenue': {
+                                    'rv': 51500,
+                                    'fv': '$51,500',
+                                    'mi': 2,
+                                },
+                                'Min Revenue': {
+                                    'rv': 470.1,
+                                    'fv': '$470',
+                                    'mi': 3,
+                                },
+                                'Count Distinct (Items Sold)': {
+                                    'rv': 360,
+                                    'fv': '360',
+                                    'mi': 4,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'DESC': 'Southeast',
+                                },
+                                'name': 'Southeast',
+                                'id': 'h3;8D679D4B11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 2239951.0500000003,
+                                    'fv': '$2,239,951',
+                                    'mi': 0,
+                                },
+                                'Standard Deviation of Revenue': {
+                                    'rv': 2427.562126692,
+                                    'fv': '$2,428',
+                                    'mi': 1,
+                                },
+                                'Max Revenue': {
+                                    'rv': 23700,
+                                    'fv': '$23,700',
+                                    'mi': 2,
+                                },
+                                'Min Revenue': {
+                                    'rv': 155.55,
+                                    'fv': '$156',
+                                    'mi': 3,
+                                },
+                                'Count Distinct (Items Sold)': {
+                                    'rv': 360,
+                                    'fv': '360',
+                                    'mi': 4,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'DESC': 'Southwest',
+                                },
+                                'name': 'Southwest',
+                                'id': 'h7;8D679D4B11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 3694131.6999999983,
+                                    'fv': '$3,694,132',
+                                    'mi': 0,
+                                },
+                                'Standard Deviation of Revenue': {
+                                    'rv': 3401.4196094712,
+                                    'fv': '$3,401',
+                                    'mi': 1,
+                                },
+                                'Max Revenue': {
+                                    'rv': 33840,
+                                    'fv': '$33,840',
+                                    'mi': 2,
+                                },
+                                'Min Revenue': {
+                                    'rv': 113.1,
+                                    'fv': '$113',
+                                    'mi': 3,
+                                },
+                                'Count Distinct (Items Sold)': {
+                                    'rv': 360,
+                                    'fv': '360',
+                                    'mi': 4,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'DESC': 'Web',
+                                },
+                                'name': 'Web',
+                                'id': 'h12;8D679D4B11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 3902762.0500000026,
+                                    'fv': '$3,902,762',
+                                    'mi': 0,
+                                },
+                                'Standard Deviation of Revenue': {
+                                    'rv': 16037.0517947014,
+                                    'fv': '$16,037',
+                                    'mi': 1,
+                                },
+                                'Max Revenue': {
+                                    'rv': 102050,
+                                    'fv': '$102,050',
+                                    'mi': 2,
+                                },
+                                'Min Revenue': {
+                                    'rv': 1163.25,
+                                    'fv': '$1,163',
+                                    'mi': 3,
+                                },
+                                'Count Distinct (Items Sold)': {
+                                    'rv': 360,
+                                    'fv': '360',
+                                    'mi': 4,
+                                },
+                            },
+                        },
+                    ],
+                },
+            },
+        },
+    },
 ];
-export let mstrTutorial = [{
-    name: 'Business Roles',
-    id: '032A5E114A59D28267BDD8B6D9E58B22',
-    type: 8,
-    description:
-        'These folders contain reports that are appropriate for individuals in different organizational roles.',
-    subtype: 2048,
-    dateCreated: '2005-05-06T21:48:43.000+0000',
-    dateModified: '2018-10-04T09:01:48.000+0000',
-    version: '1FBD775411E8C7B477CB0080EF25D6D0',
-    acg: 255,
-    owner:
-    {
-        name: 'Administrator',
-        id: '54F3D26011D2896560009A8E67019608',
-    },
-},
-{
-    name: 'Documents and Scorecards',
-    id: 'F025A94B4C03B6DCEE0F5D9DA825DA67',
-    type: 8,
-    description: 'This folder contains several examples of dashboards.',
-    subtype: 2048,
-    dateCreated: '2007-01-13T22:39:22.000+0000',
-    dateModified: '2016-08-12T19:33:44.000+0000',
-    version: '97C25AEC4CD92391DD9AAEBEAB7ACA30',
-    acg: 255,
-    owner:
-    {
-        name: 'Administrator',
-        id: '54F3D26011D2896560009A8E67019608',
-    },
-},
-{
-    name: 'Enterprise Reporting Documents',
-    id: '92ADD0F84D07AC532AD03BA0F92A836B',
-    type: 8,
-    description:
-        'This folder contains various types of documents such as scorecards and dashboards, managed metrics reports, production and operational reports, invoices and statements, and business reports.',
-    subtype: 2048,
-    dateCreated: '2003-09-08T20:35:27.000+0000',
-    dateModified: '2016-08-12T19:33:44.000+0000',
-    version: '97C25AEC4CD92391DD9AAEBEAB7ACA30',
-    acg: 255,
-    owner:
-    {
-        name: 'Administrator',
-        id: '54F3D26011D2896560009A8E67019608',
-    },
-},
-{
-    name: 'Getting Started',
-    id: '7F16A4B811E58ED317D50080EFF554EA',
-    type: 8,
-    subtype: 2048,
-    dateCreated: '2016-02-02T16:46:17.000+0000',
-    dateModified: '2018-02-06T20:29:04.000+0000',
-    version: '5F5128C411E80B7C32DC0080EF758A60',
-    acg: 255,
-    owner:
-    {
-        name: 'Administrator',
-        id: '54F3D26011D2896560009A8E67019608',
-    },
-},
-{
-    name: 'MicroStrategy Platform Capabilities',
-    id: 'D64C532E4E7FBA74D29A7CA3576F39CF',
-    type: 8,
-    description:
-        'This folder contains examples of many of the sophisticated capabilities within the MicroStrategy platform.',
-    subtype: 2048,
-    dateCreated: '2006-05-23T08:55:20.000+0000',
-    dateModified: '2016-08-12T19:33:44.000+0000',
-    version: '97C25AEC4CD92391DD9AAEBEAB7ACA30',
-    acg: 255,
-    owner:
-    {
-        name: 'Administrator',
-        id: '54F3D26011D2896560009A8E67019608',
-    },
-},
-{
-    name: 'Sample Dashboards',
-    id: 'C6C5ECF0B571448A9C31C653AB1D5E51',
-    type: 8,
-    hidden: true,
-    subtype: 2048,
-    dateCreated: '2017-08-22T21:58:25.000+0000',
-    dateModified: '2018-01-29T21:13:19.000+0000',
-    version: '3A94209811E80539D63E0080EF757F7A',
-    acg: 255,
-    owner:
-    {
-        name: 'Administrator',
-        id: '54F3D26011D2896560009A8E67019608',
-    },
-},
-{
-    name: 'Sample Dossiers',
-    id: '12F7E26011E79D592D640080EFB5E3A2',
-    type: 8,
-    subtype: 2048,
-    dateCreated: '2017-09-19T16:39:15.000+0000',
-    dateModified: '2018-02-02T21:16:55.000+0000',
-    version: '653768BE11E8085EE8130080EFC5633C',
-    acg: 255,
-    owner:
-        { name: 'MSTR User', id: '7FC05A65473CE2FD845CE6A1D3F13233' },
-},
-{
-    name: 'Subject Areas',
-    id: '5B68C5AE433C728679340A91DC8F809C',
-    type: 8,
-    description:
-        'This folder contains reports that are categorized by topic. Topics include Customer Analysis, Enterprise Performance Management, Human Resource Analysis, Inventory and Supply Chain Analysis, Sales and Profitability Analysis, and Supplier Analysis.',
-    subtype: 2048,
-    dateCreated: '2006-05-22T15:42:06.000+0000',
-    dateModified: '2016-08-12T19:33:44.000+0000',
-    version: '97C25AEC4CD92391DD9AAEBEAB7ACA30',
-    acg: 255,
-    owner:
-    {
-        name: 'Administrator',
-        id: '54F3D26011D2896560009A8E67019608',
-    },
-},
-{
-    name: 'ComplexReport',
-    id: '3FC4A93A11E85FF62EB70080EFE55315',
-    type: 3,
-    subtype: 768,
-    dateCreated: '2018-05-25T08:33:07.000+0000',
-    dateModified: '2018-05-25T08:36:24.000+0000',
-    version: 'B55FC94A11E85FF62E390080EF15B316',
-    acg: 255,
-    viewMedia: 134217728,
-    owner:
-        { name: 'MSTR User', id: '7FC05A65473CE2FD845CE6A1D3F13233' },
-    certifiedInfo: { certified: false },
-},
-{
-    name: 'SimpleReport',
-    id: 'BD1E844211E85FF536AB0080EFB5F215',
-    type: 3,
-    subtype: 768,
-    dateCreated: '2018-05-25T08:29:28.000+0000',
-    dateModified: '2018-05-25T08:29:28.000+0000',
-    version: 'BD237A5611E85FF53EEF0080EFB5F215',
-    acg: 255,
-    viewMedia: 134217728,
-    owner:
-        { name: 'MSTR User', id: '7FC05A65473CE2FD845CE6A1D3F13233' },
-    certifiedInfo: { certified: false },
-},
-{
-    name: 'TestReport',
-    id: 'F9E139BE11E85E842B520080EFC5C210',
-    type: 3,
-    subtype: 768,
-    dateCreated: '2018-05-23T12:29:46.000+0000',
-    dateModified: '2018-05-23T12:29:46.000+0000',
-    version: 'F9E43BAA11E85E8446740080EFC5C210',
-    acg: 255,
-    viewMedia: 134217728,
-    owner:
-        { name: 'MSTR User', id: '7FC05A65473CE2FD845CE6A1D3F13233' },
-    certifiedInfo: { certified: false },
-},
-{
-    name: 'Tutorial Home',
-    id: 'D73B9F3411E5C9E00EE20080EFE55B9E',
-    type: 55,
-    subtype: 14081,
-    dateCreated: '2016-02-02T19:12:03.000+0000',
-    dateModified: '2018-02-06T20:29:07.000+0000',
-    version: '0E26EFBB405E7938497EE288C8ABE022',
-    acg: 255,
-    viewMedia: 134217845,
-    owner:
-    {
-        name: 'Administrator',
-        id: '54F3D26011D2896560009A8E67019608',
-    },
-    certifiedInfo: { certified: false },
-}];
+export const mstrTutorial = [{'acg': 255, 'dateCreated': '2018-12-19T09:59:11.000+0000', 'dateModified': '2018-12-19T13:25:39.000+0000', 'extType': 0, 'id': 'BBA0AE1A11E9037408660080EFE5E0E3', 'name': '-OG_TESTING', 'owner': {'id': '7FC05A65473CE2FD845CE6A1D3F13233', 'name': 'MSTR User'}, 'subtype': 2048, 'type': 8, 'version': '938FF1A211E9039100000080EFB57FE3'}, {'acg': 255, 'dateCreated': '2005-05-06T21:48:43.000+0000', 'dateModified': '2016-08-12T19:33:44.000+0000', 'description': 'These folders contain reports that are appropriate for individuals in different organizational roles.', 'extType': 0, 'id': '032A5E114A59D28267BDD8B6D9E58B22', 'name': 'Business Roles', 'owner': {'id': '54F3D26011D2896560009A8E67019608', 'name': 'Administrator'}, 'subtype': 2048, 'type': 8, 'version': '97C25AEC4CD92391DD9AAEBEAB7ACA30'}, {'acg': 255, 'dateCreated': '2007-01-13T22:39:22.000+0000', 'dateModified': '2016-08-12T19:33:44.000+0000', 'description': 'This folder contains several examples of dashboards.', 'extType': 0, 'id': 'F025A94B4C03B6DCEE0F5D9DA825DA67', 'name': 'Documents and Scorecards', 'owner': {'id': '54F3D26011D2896560009A8E67019608', 'name': 'Administrator'}, 'subtype': 2048, 'type': 8, 'version': '97C25AEC4CD92391DD9AAEBEAB7ACA30'}, {'acg': 255, 'dateCreated': '2003-09-08T20:35:27.000+0000', 'dateModified': '2016-08-12T19:33:44.000+0000', 'description': 'This folder contains various types of documents such as scorecards and dashboards, managed metrics reports, production and operational reports, invoices and statements, and business reports.', 'extType': 0, 'id': '92ADD0F84D07AC532AD03BA0F92A836B', 'name': 'Enterprise Reporting Documents', 'owner': {'id': '54F3D26011D2896560009A8E67019608', 'name': 'Administrator'}, 'subtype': 2048, 'type': 8, 'version': '97C25AEC4CD92391DD9AAEBEAB7ACA30'}, {'acg': 255, 'dateCreated': '2016-02-02T16:46:17.000+0000', 'dateModified': '2018-02-06T20:29:04.000+0000', 'extType': 0, 'id': '7F16A4B811E58ED317D50080EFF554EA', 'name': 'Getting Started', 'owner': {'id': '54F3D26011D2896560009A8E67019608', 'name': 'Administrator'}, 'subtype': 2048, 'type': 8, 'version': '5F5128C411E80B7C32DC0080EF758A60'}, {'acg': 255, 'dateCreated': '2018-12-19T10:56:43.000+0000', 'dateModified': '2018-12-19T11:06:17.000+0000', 'extType': 0, 'id': 'C54EB05811E9037C08660080EFB580E5', 'name': 'Kuba', 'owner': {'id': '7FC05A65473CE2FD845CE6A1D3F13233', 'name': 'MSTR User'}, 'subtype': 2048, 'type': 8, 'version': '1B74E08211E9037EE4C00080EF553FAA'}, {'acg': 255, 'dateCreated': '2006-05-23T08:55:20.000+0000', 'dateModified': '2016-08-12T19:33:44.000+0000', 'description': 'This folder contains examples of many of the sophisticated capabilities within the MicroStrategy platform.', 'extType': 0, 'id': 'D64C532E4E7FBA74D29A7CA3576F39CF', 'name': 'MicroStrategy Platform Capabilities', 'owner': {'id': '54F3D26011D2896560009A8E67019608', 'name': 'Administrator'}, 'subtype': 2048, 'type': 8, 'version': '97C25AEC4CD92391DD9AAEBEAB7ACA30'}, {'acg': 255, 'dateCreated': '2017-08-22T21:58:25.000+0000', 'dateModified': '2018-01-29T21:13:19.000+0000', 'extType': 0, 'hidden': true, 'id': 'C6C5ECF0B571448A9C31C653AB1D5E51', 'name': 'Sample Dashboards', 'owner': {'id': '54F3D26011D2896560009A8E67019608', 'name': 'Administrator'}, 'subtype': 2048, 'type': 8, 'version': '3A94209811E80539D63E0080EF757F7A'}, {'acg': 255, 'dateCreated': '2017-09-19T16:39:15.000+0000', 'dateModified': '2018-02-02T21:16:55.000+0000', 'extType': 0, 'id': '12F7E26011E79D592D640080EFB5E3A2', 'name': 'Sample Dossiers', 'owner': {'id': '7FC05A65473CE2FD845CE6A1D3F13233', 'name': 'MSTR User'}, 'subtype': 2048, 'type': 8, 'version': '653768BE11E8085EE8130080EFC5633C'}, {'acg': 255, 'dateCreated': '2006-05-22T15:42:06.000+0000', 'dateModified': '2016-08-12T19:33:44.000+0000', 'description': 'This folder contains reports that are categorized by topic. Topics include Customer Analysis, Enterprise Performance Management, Human Resource Analysis, Inventory and Supply Chain Analysis, Sales and Profitability Analysis, and Supplier Analysis.', 'extType': 0, 'id': '5B68C5AE433C728679340A91DC8F809C', 'name': 'Subject Areas', 'owner': {'id': '54F3D26011D2896560009A8E67019608', 'name': 'Administrator'}, 'subtype': 2048, 'type': 8, 'version': '97C25AEC4CD92391DD9AAEBEAB7ACA30'}, {'acg': 255, 'certifiedInfo': {'certified': false}, 'dateCreated': '2018-12-19T09:59:27.000+0000', 'dateModified': '2018-12-19T09:59:27.000+0000', 'extType': 1, 'id': 'C536EA7A11E903741E640080EF55BFE2', 'name': 'TEST REPORT 1', 'owner': {'id': '7FC05A65473CE2FD845CE6A1D3F13233', 'name': 'MSTR User'}, 'subtype': 768, 'type': 3, 'version': 'C5370B1811E90374E2BF0080EF553EA8', 'viewMedia': 134217728}, {'acg': 255, 'certifiedInfo': {'certified': false}, 'dateCreated': '2018-12-19T10:00:35.000+0000', 'dateModified': '2018-12-19T10:00:35.000+0000', 'extType': 1, 'id': 'EDBFC41C11E90374240C0080EF1541E6', 'name': 'TEST REPORT 2', 'owner': {'id': '7FC05A65473CE2FD845CE6A1D3F13233', 'name': 'MSTR User'}, 'subtype': 768, 'type': 3, 'version': 'EDBFEC6211E9037400000080EF15C0AD', 'viewMedia': 134217728}, {'acg': 255, 'certifiedInfo': {'certified': false}, 'dateCreated': '2018-12-19T10:04:48.000+0000', 'dateModified': '2018-12-19T10:04:48.000+0000', 'extType': 1, 'id': '84C2592411E903751D0E0080EF9540E5', 'name': 'TEST REPORT 3', 'owner': {'id': '7FC05A65473CE2FD845CE6A1D3F13233', 'name': 'MSTR User'}, 'subtype': 768, 'type': 3, 'version': '84C29A8811E9037500000080EF95BFAC', 'viewMedia': 134217728}, {'acg': 255, 'certifiedInfo': {'certified': false}, 'dateCreated': '2016-02-02T19:12:03.000+0000', 'dateModified': '2018-07-31T21:49:15.000+0000', 'extType': 0, 'id': 'D73B9F3411E5C9E00EE20080EFE55B9E', 'name': 'Tutorial Home', 'owner': {'id': '54F3D26011D2896560009A8E67019608', 'name': 'Administrator'}, 'subtype': 14081, 'type': 55, 'version': 'BCB0031C11E891C0895C0080EF2585AF', 'viewMedia': 134217845}];
 
-export let mstrTutorialFolder = [{ 'name': 'Ad hoc Reporting', 'id': '13557B804DF35080B1704698620187E1', 'type': 8, 'description': 'These subfolders contain examples of MicroStrategy\'s ad hoc reporting capabilities, which enable users to manipulate reports for ad hoc analysis.', 'subtype': 2048, 'dateCreated': '2006-09-08T13:17:07.000+0000', 'dateModified': '2016-08-12T19:33:43.000+0000', 'version': 'CB475907483A4E3508BE62B4170C4D86', 'acg': 255, 'owner': { 'name': 'Administrator', 'id': '54F3D26011D2896560009A8E67019608' } }, { 'name': 'Advanced Analytics', 'id': '4C0516A811D3E877C000B3B2D86C964F', 'type': 8, 'description': 'Contains reports demonstrating MicroStrategy\'s powerful analytical capabilities, including built-in financial functions and statistics as well as linear regression analysis.', 'subtype': 2048, 'dateCreated': '2001-01-02T20:43:19.000+0000', 'dateModified': '2016-08-12T19:33:43.000+0000', 'version': 'CB475907483A4E3508BE62B4170C4D86', 'acg': 255, 'owner': { 'name': 'Administrator', 'id': '54F3D26011D2896560009A8E67019608' } }, { 'name': 'Advanced Metrics', 'id': '61BA3B0049EAFB09D70FC7B50082C4F5', 'type': 8, 'description': 'Examples of different types of capabilities available via metrics in MicroStrategy.', 'subtype': 2048, 'dateCreated': '2006-05-23T09:42:44.000+0000', 'dateModified': '2016-08-12T19:33:43.000+0000', 'version': 'CB475907483A4E3508BE62B4170C4D86', 'acg': 255, 'owner': { 'name': 'Administrator', 'id': '54F3D26011D2896560009A8E67019608' } }, { 'name': 'Advanced Reporting Guide', 'id': '8D58748149E753BADB0B21986A01ACD1', 'type': 8, 'description': 'Contains the sample reports referenced in the Advanced Reporting Guide.', 'subtype': 2048, 'dateCreated': '2006-08-10T08:44:55.000+0000', 'dateModified': '2016-08-12T19:33:43.000+0000', 'version': 'CB475907483A4E3508BE62B4170C4D86', 'acg': 255, 'owner': { 'name': 'Administrator', 'id': '54F3D26011D2896560009A8E67019608' } }, { 'name': 'Caching', 'id': '73A63F02445A8FC103A9C89B7B0332AD', 'type': 8, 'description': 'Examples of a single report with caching enabled and disabled.', 'subtype': 2048, 'dateCreated': '2006-05-23T09:43:17.000+0000', 'dateModified': '2016-08-12T19:33:43.000+0000', 'version': 'CB475907483A4E3508BE62B4170C4D86', 'acg': 255, 'owner': { 'name': 'Administrator', 'id': '54F3D26011D2896560009A8E67019608' } }, { 'name': 'Custom Groups and Consolidations', 'id': '4D7A3DE34E110F7E6E6D3D97FBCFFC0C', 'type': 8, 'description': 'Examples of custom groups and consolidations, which are effectively used to create new attributes using existing attributes in the data warehouse.', 'subtype': 2048, 'dateCreated': '2006-05-23T09:41:39.000+0000', 'dateModified': '2016-08-12T19:33:43.000+0000', 'version': 'CB475907483A4E3508BE62B4170C4D86', 'acg': 255, 'owner': { 'name': 'Administrator', 'id': '54F3D26011D2896560009A8E67019608' } }, { 'name': 'Dossiers', 'id': '4EFB95604A52B8037A1BAEB47D136305', 'type': 8, 'subtype': 2048, 'dateCreated': '2015-10-13T21:33:23.000+0000', 'dateModified': '2017-09-19T16:43:42.000+0000', 'version': 'B1CA4A5E11E79D5914F80080EF35642C', 'acg': 255, 'owner': { 'name': 'Administrator', 'id': '54F3D26011D2896560009A8E67019608' } }, { 'name': 'Engine and Data Modeling', 'id': '5E027C5C4841D7D099EDA4B2769CD4DA', 'type': 8, 'description': 'Examples of Analytic and SQL Engine features such as Aggregate Awareness, Multipass SQL and Logical Views.', 'subtype': 2048, 'dateCreated': '2006-05-23T09:31:01.000+0000', 'dateModified': '2016-08-12T19:33:43.000+0000', 'version': 'CB475907483A4E3508BE62B4170C4D86', 'acg': 255, 'owner': { 'name': 'Administrator', 'id': '54F3D26011D2896560009A8E67019608' } }, { 'name': 'Extended Data Access', 'id': '58FEF6BF44F6A3AF2ADF65BC18ED3885', 'type': 8, 'description': 'Examples of reporting on data sources besides the main data warehouse, such as Excel and Text Files, via Freeform SQL and Query Builder.', 'subtype': 2048, 'dateCreated': '2006-05-23T09:34:06.000+0000', 'dateModified': '2016-08-12T19:33:43.000+0000', 'version': 'CB475907483A4E3508BE62B4170C4D86', 'acg': 255, 'owner': { 'name': 'Administrator', 'id': '54F3D26011D2896560009A8E67019608' } }, { 'name': 'Filters', 'id': 'D71D2FBB4C50B4AD0E0674B7F834279D', 'type': 8, 'description': 'Examples of the different types of filters available in MicroStrategy.', 'subtype': 2048, 'dateCreated': '2006-05-23T09:41:30.000+0000', 'dateModified': '2016-08-12T19:33:43.000+0000', 'version': 'CB475907483A4E3508BE62B4170C4D86', 'acg': 255, 'owner': { 'name': 'Administrator', 'id': '54F3D26011D2896560009A8E67019608' } }, { 'name': 'Graph Styles', 'id': '5CE619D64973E46639C911B65E566A8D', 'type': 8, 'description': 'Examples of the different graph styles available within MicroStrategy.', 'subtype': 2048, 'dateCreated': '2005-11-30T14:40:37.000+0000', 'dateModified': '2016-08-12T19:33:43.000+0000', 'version': 'CB475907483A4E3508BE62B4170C4D86', 'acg': 255, 'owner': { 'name': 'Administrator', 'id': '54F3D26011D2896560009A8E67019608' } }, { 'name': 'Intro BI Class', 'id': 'BAC4ACA240377E1E8246E79D66E586C5', 'type': 8, 'description': 'This folder contains objects used for the MicroStrategy class "An Introduction to Business Intelligence with MicroStrategy".', 'subtype': 2048, 'dateCreated': '2008-11-18T10:44:04.000+0000', 'dateModified': '2016-08-12T19:33:43.000+0000', 'version': 'CB475907483A4E3508BE62B4170C4D86', 'acg': 255, 'owner': { 'name': 'Administrator', 'id': '54F3D26011D2896560009A8E67019608' } }, { 'name': 'MicroStrategy Data Mining Services', 'id': '0D542348448B99AD53D40484577E7ED4', 'type': 8, 'description': 'Contains reports demonstrating MicroStrategy\'s powerful data mining functionality.', 'subtype': 2048, 'dateCreated': '2006-09-22T03:40:38.000+0000', 'dateModified': '2016-08-12T19:33:43.000+0000', 'version': 'CB475907483A4E3508BE62B4170C4D86', 'acg': 255, 'owner': { 'name': 'Administrator', 'id': '54F3D26011D2896560009A8E67019608' } }, { 'name': 'MicroStrategy Mobile', 'id': '5A95704D431A60D7EB90DDB7843FDBA8', 'type': 8, 'description': 'This folder contains reports used to demonstrate the functionality of MicroStrategy Mobile', 'subtype': 2048, 'dateCreated': '2007-07-06T15:40:08.000+0000', 'dateModified': '2016-08-12T19:33:43.000+0000', 'version': 'CB475907483A4E3508BE62B4170C4D86', 'acg': 255, 'owner': { 'name': 'Administrator', 'id': '54F3D26011D2896560009A8E67019608' } }, { 'name': 'MicroStrategy Multisource Option', 'id': 'BE089562406FCBC9A2D2B5A0A164629E', 'type': 8, 'description': 'This folder contains reports used to demonstrate the functionality of MicroStrategy Multisource Option.', 'subtype': 2048, 'dateCreated': '2009-02-16T10:25:36.000+0000', 'dateModified': '2016-08-12T19:33:43.000+0000', 'version': 'CB475907483A4E3508BE62B4170C4D86', 'acg': 255, 'owner': { 'name': 'Administrator', 'id': '54F3D26011D2896560009A8E67019608' } }, { 'name': 'MicroStrategy Narrowcast Server', 'id': '3E3ADD7D11D4BB3610004594316DE8A4', 'type': 8, 'description': 'Components Objects used to demostrate MicroStrategy Narrowcast Server capabilites. Use the Welcome Screen to access MicroStrategy Narrowcast Server demonstrations.', 'subtype': 2048, 'dateCreated': '2001-01-02T20:46:41.000+0000', 'dateModified': '2016-08-12T19:33:43.000+0000', 'version': 'CB475907483A4E3508BE62B4170C4D86', 'acg': 255, 'owner': { 'name': 'Administrator', 'id': '54F3D26011D2896560009A8E67019608' } }, { 'name': 'MicroStrategy Office', 'id': 'E05E69074C3F9FD1CED50A8B7EF36EF6', 'type': 8, 'description': 'Components Objects used to demostrate MicroStrategy Office capabilites. Use the Welcome Screen to access MicroStrategy Office demonstrations.', 'subtype': 2048, 'dateCreated': '2004-12-29T19:37:57.000+0000', 'dateModified': '2016-08-12T19:33:43.000+0000', 'version': 'CB475907483A4E3508BE62B4170C4D86', 'acg': 255, 'owner': { 'name': 'Administrator', 'id': '54F3D26011D2896560009A8E67019608' } }, { 'name': 'MicroStrategy OLAP Services', 'id': '632D66EF42224493F6C12F94F976610C', 'type': 8, 'description': 'Examples of different capabilities within MicroStrategy OLAP Services.', 'subtype': 2048, 'dateCreated': '2006-05-23T09:38:44.000+0000', 'dateModified': '2016-08-12T19:33:43.000+0000', 'version': 'CB475907483A4E3508BE62B4170C4D86', 'acg': 255, 'owner': { 'name': 'Administrator', 'id': '54F3D26011D2896560009A8E67019608' } }, { 'name': 'MicroStrategy Report Services', 'id': '983F6F874157B008177CA49690DDC837', 'type': 8, 'description': 'Examples of report services documents, categorized according to document type or specialized functionality.', 'subtype': 2048, 'dateCreated': '2006-05-23T09:31:49.000+0000', 'dateModified': '2016-08-12T19:33:43.000+0000', 'version': 'CB475907483A4E3508BE62B4170C4D86', 'acg': 255, 'owner': { 'name': 'Administrator', 'id': '54F3D26011D2896560009A8E67019608' } }, { 'name': 'MicroStrategy Repository Translation Wizard', 'id': '47EC24A649CAC840FCE3F2AE4AE08212', 'type': 8, 'description': 'This folder contains search objects used to extract translations using the MicroStrategy Repository Translation Wizard.', 'subtype': 2048, 'dateCreated': '2010-04-12T11:07:00.000+0000', 'dateModified': '2016-08-12T19:33:43.000+0000', 'version': 'CB475907483A4E3508BE62B4170C4D86', 'acg': 255, 'owner': { 'name': 'Administrator', 'id': '54F3D26011D2896560009A8E67019608' } }, { 'name': 'MicroStrategy SDK', 'id': 'F3BE21094BD559C84F7721A507E35030', 'type': 8, 'description': 'Components Objects used to demonstrate a simple MicroStrategy SDK application.', 'subtype': 2048, 'dateCreated': '2005-01-11T20:55:40.000+0000', 'dateModified': '2016-08-12T19:33:43.000+0000', 'version': 'CB475907483A4E3508BE62B4170C4D86', 'acg': 255, 'owner': { 'name': 'Administrator', 'id': '54F3D26011D2896560009A8E67019608' } }, { 'name': 'MicroStrategy Transaction Services', 'id': 'B219CE0E4AA4E63F0E48BC8FC9DFF8F2', 'type': 8, 'subtype': 2048, 'dateCreated': '2012-02-06T09:02:09.000+0000', 'dateModified': '2016-08-12T19:33:43.000+0000', 'version': 'CB475907483A4E3508BE62B4170C4D86', 'acg': 255, 'owner': { 'name': 'Administrator', 'id': '54F3D26011D2896560009A8E67019608' } }];
+export const mstrTutorialFolder = [
+    {
+        'name': 'Ad hoc Reporting',
+        'id': '13557B804DF35080B1704698620187E1',
+        'type': 8,
+        'description': 'These subfolders contain examples of MicroStrategy\'s ad hoc reporting capabilities, which enable users to manipulate reports for ad hoc analysis.',
+        'subtype': 2048,
+        'extType': 0,
+        'dateCreated': '2006-09-08T13:17:07.000+0000',
+        'dateModified': '2016-08-12T19:33:43.000+0000',
+        'version': 'CB475907483A4E3508BE62B4170C4D86',
+        'acg': 255,
+        'owner': {
+            'name': 'Administrator',
+            'id': '54F3D26011D2896560009A8E67019608',
+        },
+    },
+    {
+        'name': 'Advanced Analytics',
+        'id': '4C0516A811D3E877C000B3B2D86C964F',
+        'type': 8,
+        'description': 'Contains reports demonstrating MicroStrategy\'s powerful analytical capabilities, including built-in financial functions and statistics as well as linear regression analysis.',
+        'subtype': 2048,
+        'extType': 0,
+        'dateCreated': '2001-01-02T20:43:19.000+0000',
+        'dateModified': '2016-08-12T19:33:43.000+0000',
+        'version': 'CB475907483A4E3508BE62B4170C4D86',
+        'acg': 255,
+        'owner': {
+            'name': 'Administrator',
+            'id': '54F3D26011D2896560009A8E67019608',
+        },
+    },
+    {
+        'name': 'Advanced Metrics',
+        'id': '61BA3B0049EAFB09D70FC7B50082C4F5',
+        'type': 8,
+        'description': 'Examples of different types of capabilities available via metrics in MicroStrategy.',
+        'subtype': 2048,
+        'extType': 0,
+        'dateCreated': '2006-05-23T09:42:44.000+0000',
+        'dateModified': '2016-08-12T19:33:43.000+0000',
+        'version': 'CB475907483A4E3508BE62B4170C4D86',
+        'acg': 255,
+        'owner': {
+            'name': 'Administrator',
+            'id': '54F3D26011D2896560009A8E67019608',
+        },
+    },
+    {
+        'name': 'Advanced Reporting Guide',
+        'id': '8D58748149E753BADB0B21986A01ACD1',
+        'type': 8,
+        'description': 'Contains the sample reports referenced in the Advanced Reporting Guide.',
+        'subtype': 2048,
+        'extType': 0,
+        'dateCreated': '2006-08-10T08:44:55.000+0000',
+        'dateModified': '2016-08-12T19:33:43.000+0000',
+        'version': 'CB475907483A4E3508BE62B4170C4D86',
+        'acg': 255,
+        'owner': {
+            'name': 'Administrator',
+            'id': '54F3D26011D2896560009A8E67019608',
+        },
+    },
+    {
+        'name': 'Caching',
+        'id': '73A63F02445A8FC103A9C89B7B0332AD',
+        'type': 8,
+        'description': 'Examples of a single report with caching enabled and disabled.',
+        'subtype': 2048,
+        'extType': 0,
+        'dateCreated': '2006-05-23T09:43:17.000+0000',
+        'dateModified': '2016-08-12T19:33:43.000+0000',
+        'version': 'CB475907483A4E3508BE62B4170C4D86',
+        'acg': 255,
+        'owner': {
+            'name': 'Administrator',
+            'id': '54F3D26011D2896560009A8E67019608',
+        },
+    },
+    {
+        'name': 'Custom Groups and Consolidations',
+        'id': '4D7A3DE34E110F7E6E6D3D97FBCFFC0C',
+        'type': 8,
+        'description': 'Examples of custom groups and consolidations, which are effectively used to create new attributes using existing attributes in the data warehouse.',
+        'subtype': 2048,
+        'extType': 0,
+        'dateCreated': '2006-05-23T09:41:39.000+0000',
+        'dateModified': '2016-08-12T19:33:43.000+0000',
+        'version': 'CB475907483A4E3508BE62B4170C4D86',
+        'acg': 255,
+        'owner': {
+            'name': 'Administrator',
+            'id': '54F3D26011D2896560009A8E67019608',
+        },
+    },
+    {
+        'name': 'Dossiers',
+        'id': '4EFB95604A52B8037A1BAEB47D136305',
+        'type': 8,
+        'subtype': 2048,
+        'extType': 0,
+        'dateCreated': '2015-10-13T21:33:23.000+0000',
+        'dateModified': '2017-09-19T16:43:42.000+0000',
+        'version': 'B1CA4A5E11E79D5914F80080EF35642C',
+        'acg': 255,
+        'owner': {
+            'name': 'Administrator',
+            'id': '54F3D26011D2896560009A8E67019608',
+        },
+    },
+    {
+        'name': 'Engine and Data Modeling',
+        'id': '5E027C5C4841D7D099EDA4B2769CD4DA',
+        'type': 8,
+        'description': 'Examples of Analytic and SQL Engine features such as Aggregate Awareness, Multipass SQL and Logical Views.',
+        'subtype': 2048,
+        'extType': 0,
+        'dateCreated': '2006-05-23T09:31:01.000+0000',
+        'dateModified': '2016-08-12T19:33:43.000+0000',
+        'version': 'CB475907483A4E3508BE62B4170C4D86',
+        'acg': 255,
+        'owner': {
+            'name': 'Administrator',
+            'id': '54F3D26011D2896560009A8E67019608',
+        },
+    },
+    {
+        'name': 'Extended Data Access',
+        'id': '58FEF6BF44F6A3AF2ADF65BC18ED3885',
+        'type': 8,
+        'description': 'Examples of reporting on data sources besides the main data warehouse, such as Excel and Text Files, via Freeform SQL and Query Builder.',
+        'subtype': 2048,
+        'extType': 0,
+        'dateCreated': '2006-05-23T09:34:06.000+0000',
+        'dateModified': '2016-08-12T19:33:43.000+0000',
+        'version': 'CB475907483A4E3508BE62B4170C4D86',
+        'acg': 255,
+        'owner': {
+            'name': 'Administrator',
+            'id': '54F3D26011D2896560009A8E67019608',
+        },
+    },
+    {
+        'name': 'Filters',
+        'id': 'D71D2FBB4C50B4AD0E0674B7F834279D',
+        'type': 8,
+        'description': 'Examples of the different types of filters available in MicroStrategy.',
+        'subtype': 2048,
+        'extType': 0,
+        'dateCreated': '2006-05-23T09:41:30.000+0000',
+        'dateModified': '2016-08-12T19:33:43.000+0000',
+        'version': 'CB475907483A4E3508BE62B4170C4D86',
+        'acg': 255,
+        'owner': {
+            'name': 'Administrator',
+            'id': '54F3D26011D2896560009A8E67019608',
+        },
+    },
+    {
+        'name': 'Graph Styles',
+        'id': '5CE619D64973E46639C911B65E566A8D',
+        'type': 8,
+        'description': 'Examples of the different graph styles available within MicroStrategy.',
+        'subtype': 2048,
+        'extType': 0,
+        'dateCreated': '2005-11-30T14:40:37.000+0000',
+        'dateModified': '2016-08-12T19:33:43.000+0000',
+        'version': 'CB475907483A4E3508BE62B4170C4D86',
+        'acg': 255,
+        'owner': {
+            'name': 'Administrator',
+            'id': '54F3D26011D2896560009A8E67019608',
+        },
+    },
+    {
+        'name': 'Intro BI Class',
+        'id': 'BAC4ACA240377E1E8246E79D66E586C5',
+        'type': 8,
+        'description': 'This folder contains objects used for the MicroStrategy class "An Introduction to Business Intelligence with MicroStrategy".',
+        'subtype': 2048,
+        'extType': 0,
+        'dateCreated': '2008-11-18T10:44:04.000+0000',
+        'dateModified': '2016-08-12T19:33:43.000+0000',
+        'version': 'CB475907483A4E3508BE62B4170C4D86',
+        'acg': 255,
+        'owner': {
+            'name': 'Administrator',
+            'id': '54F3D26011D2896560009A8E67019608',
+        },
+    },
+    {
+        'name': 'MicroStrategy Data Mining Services',
+        'id': '0D542348448B99AD53D40484577E7ED4',
+        'type': 8,
+        'description': 'Contains reports demonstrating MicroStrategy\'s powerful data mining functionality.',
+        'subtype': 2048,
+        'extType': 0,
+        'dateCreated': '2006-09-22T03:40:38.000+0000',
+        'dateModified': '2016-08-12T19:33:43.000+0000',
+        'version': 'CB475907483A4E3508BE62B4170C4D86',
+        'acg': 255,
+        'owner': {
+            'name': 'Administrator',
+            'id': '54F3D26011D2896560009A8E67019608',
+        },
+    },
+    {
+        'name': 'MicroStrategy Mobile',
+        'id': '5A95704D431A60D7EB90DDB7843FDBA8',
+        'type': 8,
+        'description': 'This folder contains reports used to demonstrate the functionality of MicroStrategy Mobile',
+        'subtype': 2048,
+        'extType': 0,
+        'dateCreated': '2007-07-06T15:40:08.000+0000',
+        'dateModified': '2016-08-12T19:33:43.000+0000',
+        'version': 'CB475907483A4E3508BE62B4170C4D86',
+        'acg': 255,
+        'owner': {
+            'name': 'Administrator',
+            'id': '54F3D26011D2896560009A8E67019608',
+        },
+    },
+    {
+        'name': 'MicroStrategy Multisource Option',
+        'id': 'BE089562406FCBC9A2D2B5A0A164629E',
+        'type': 8,
+        'description': 'This folder contains reports used to demonstrate the functionality of MicroStrategy Multisource Option.',
+        'subtype': 2048,
+        'extType': 0,
+        'dateCreated': '2009-02-16T10:25:36.000+0000',
+        'dateModified': '2016-08-12T19:33:43.000+0000',
+        'version': 'CB475907483A4E3508BE62B4170C4D86',
+        'acg': 255,
+        'owner': {
+            'name': 'Administrator',
+            'id': '54F3D26011D2896560009A8E67019608',
+        },
+    },
+    {
+        'name': 'MicroStrategy Narrowcast Server',
+        'id': '3E3ADD7D11D4BB3610004594316DE8A4',
+        'type': 8,
+        'description': 'Components Objects used to demostrate MicroStrategy Narrowcast Server capabilites. Use the Welcome Screen to access MicroStrategy Narrowcast Server demonstrations.',
+        'subtype': 2048,
+        'extType': 0,
+        'dateCreated': '2001-01-02T20:46:41.000+0000',
+        'dateModified': '2016-08-12T19:33:43.000+0000',
+        'version': 'CB475907483A4E3508BE62B4170C4D86',
+        'acg': 255,
+        'owner': {
+            'name': 'Administrator',
+            'id': '54F3D26011D2896560009A8E67019608',
+        },
+    },
+    {
+        'name': 'MicroStrategy Office',
+        'id': 'E05E69074C3F9FD1CED50A8B7EF36EF6',
+        'type': 8,
+        'description': 'Components Objects used to demostrate MicroStrategy Office capabilites. Use the Welcome Screen to access MicroStrategy Office demonstrations.',
+        'subtype': 2048,
+        'extType': 0,
+        'dateCreated': '2004-12-29T19:37:57.000+0000',
+        'dateModified': '2016-08-12T19:33:43.000+0000',
+        'version': 'CB475907483A4E3508BE62B4170C4D86',
+        'acg': 255,
+        'owner': {
+            'name': 'Administrator',
+            'id': '54F3D26011D2896560009A8E67019608',
+        },
+    },
+    {
+        'name': 'MicroStrategy OLAP Services',
+        'id': '632D66EF42224493F6C12F94F976610C',
+        'type': 8,
+        'description': 'Examples of different capabilities within MicroStrategy OLAP Services.',
+        'subtype': 2048,
+        'extType': 0,
+        'dateCreated': '2006-05-23T09:38:44.000+0000',
+        'dateModified': '2016-08-12T19:33:43.000+0000',
+        'version': 'CB475907483A4E3508BE62B4170C4D86',
+        'acg': 255,
+        'owner': {
+            'name': 'Administrator',
+            'id': '54F3D26011D2896560009A8E67019608',
+        },
+    },
+    {
+        'name': 'MicroStrategy Report Services',
+        'id': '983F6F874157B008177CA49690DDC837',
+        'type': 8,
+        'description': 'Examples of report services documents, categorized according to document type or specialized functionality.',
+        'subtype': 2048,
+        'extType': 0,
+        'dateCreated': '2006-05-23T09:31:49.000+0000',
+        'dateModified': '2016-08-12T19:33:43.000+0000',
+        'version': 'CB475907483A4E3508BE62B4170C4D86',
+        'acg': 255,
+        'owner': {
+            'name': 'Administrator',
+            'id': '54F3D26011D2896560009A8E67019608',
+        },
+    },
+    {
+        'name': 'MicroStrategy Repository Translation Wizard',
+        'id': '47EC24A649CAC840FCE3F2AE4AE08212',
+        'type': 8,
+        'description': 'This folder contains search objects used to extract translations using the MicroStrategy Repository Translation Wizard.',
+        'subtype': 2048,
+        'extType': 0,
+        'dateCreated': '2010-04-12T11:07:00.000+0000',
+        'dateModified': '2016-08-12T19:33:43.000+0000',
+        'version': 'CB475907483A4E3508BE62B4170C4D86',
+        'acg': 255,
+        'owner': {
+            'name': 'Administrator',
+            'id': '54F3D26011D2896560009A8E67019608',
+        },
+    },
+    {
+        'name': 'MicroStrategy SDK',
+        'id': 'F3BE21094BD559C84F7721A507E35030',
+        'type': 8,
+        'description': 'Components Objects used to demonstrate a simple MicroStrategy SDK application.',
+        'subtype': 2048,
+        'extType': 0,
+        'dateCreated': '2005-01-11T20:55:40.000+0000',
+        'dateModified': '2016-08-12T19:33:43.000+0000',
+        'version': 'CB475907483A4E3508BE62B4170C4D86',
+        'acg': 255,
+        'owner': {
+            'name': 'Administrator',
+            'id': '54F3D26011D2896560009A8E67019608',
+        },
+    },
+    {
+        'name': 'MicroStrategy Transaction Services',
+        'id': 'B219CE0E4AA4E63F0E48BC8FC9DFF8F2',
+        'type': 8,
+        'subtype': 2048,
+        'extType': 0,
+        'dateCreated': '2012-02-06T09:02:09.000+0000',
+        'dateModified': '2016-08-12T19:33:43.000+0000',
+        'version': 'CB475907483A4E3508BE62B4170C4D86',
+        'acg': 255,
+        'owner': {
+            'name': 'Administrator',
+            'id': '54F3D26011D2896560009A8E67019608',
+        },
+    },
+];
