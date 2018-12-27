@@ -19,12 +19,18 @@ class SessionHelper {
             type: sessionProperties.actions.logOut,
         });
     }
-    login = (values) => {
+    saveLoginValues = (values) => {
         reduxStore.dispatch({
             type: sessionProperties.actions.logIn,
             username: values.username,
             envUrl: values.envUrl,
             isRememberMeOn: values.isRememberMeOn,
+        });
+    }
+    login = (authToken) => {
+        reduxStore.dispatch({
+            type: sessionProperties.actions.loggedIn,
+            authToken: authToken,
         });
     }
     getSession = () => {

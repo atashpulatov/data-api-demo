@@ -22,8 +22,7 @@ class ErrorService {
         console.error(`Error: ${error.response.status}`
             + ` (${error.response.statusMessage})`);
     };
-    handleError = (error) => { // TODO: display notifications
-        // sessionHelper.disableLoading();
+    handleError = (error) => {
         switch (error.constructor) {
             case EnvironmentNotFoundError:
                 message.error('404 - Environment was not found');

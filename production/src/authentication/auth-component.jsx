@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import './auth-component.css';
 import { authenticationService } from './auth-rest-service';
-import { sessionProperties } from '../storage/session-properties';
 import { reduxStore } from '../store';
 import { withNavigation } from '../navigation/with-navigation.jsx';
 import { sessionHelper } from '../storage/session-helper';
@@ -23,20 +22,16 @@ export class _Authenticate extends Component {
 
     onLoginUser = async (event) => {
         event.preventDefault();
+        const validateFields = this.props.form.validateFields;
         try {
-            await this.props.form.validateFields(async (err, values) => {
+            await validateFields(async (err, values) => {
                 if (!err) {
                     sessionHelper.enableLoading();
-                    sessionHelper.login(values);
+                    sessionHelper.saveLoginValues(values);
                     const authToken = await authenticationService.authenticate(
                         values.username, values.password,
                         values.envUrl, this.state.authMode);
-                    if (authToken !== undefined) {
-                        reduxStore.dispatch({
-                            type: sessionProperties.actions.loggedIn,
-                            authToken: authToken,
-                        });
-                    }
+                    sessionHelper.login(authToken);
                 }
             });
         } catch (error) {
