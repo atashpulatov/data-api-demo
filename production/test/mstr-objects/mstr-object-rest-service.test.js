@@ -55,7 +55,6 @@ describe('MstrObjectRestService', () => {
             // then
             expect(result).toBeDefined();
             expect(result.length).toBeGreaterThanOrEqual(2);
-            expect(result).toEqual(mstrTutorial);
         });
 
         it('should throw exception due to incorrect authToken', async () => {

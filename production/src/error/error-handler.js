@@ -8,7 +8,7 @@ import { RunOutsideOfficeError } from './run-outside-office-error.js';
 
 class ErrorService {
     errorRestFactory = (error) => {
-        if (!error.response) {
+        if (error.status === 404 || !error.response) {
             throw new EnvironmentNotFoundError();
         }
         switch (error.response.status) {
@@ -21,11 +21,9 @@ class ErrorService {
             case 500:
                 throw new InternalServerError();
         }
-        console.error(`Error: ${error.response.status}`
-            + ` (${error.response.statusMessage})`);
+        throw error;
     };
     errorOfficeFactory = (error) => {
-        console.log('in factory');
         switch (error.message) {
             case 'Excel is not defined':
                 throw new RunOutsideOfficeError();

@@ -21,7 +21,6 @@ export class _MenuBar extends Component {
                 + '&projectId=' + session.projectId,
                 { height: 62, width: 50, displayInIframe: true },
                 (asyncResult) => {
-                    console.log(asyncResult);
                     this.dialog = asyncResult.value;
                     this.dialog.addEventHandler(
                         Office.EventType.DialogMessageReceived,
