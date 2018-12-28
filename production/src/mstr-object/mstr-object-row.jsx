@@ -56,7 +56,6 @@ function onReportRowClick(onClick, report) {
             await onClick(report.id);
             notificationService.displayMessage('success', `Loaded report: ${report.name}`);
         } catch (error) {
-            console.error(error);
             errorService.handleOfficeError(error);
         } finally {
             sessionHelper.disableLoading();

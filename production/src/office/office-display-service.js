@@ -40,7 +40,6 @@ class OfficeDisplayService {
                 });
             }
         } catch (error) {
-            console.error(error);
             errorService.errorOfficeFactory(error);
         }
     }
