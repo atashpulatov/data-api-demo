@@ -24,6 +24,11 @@ class OfficeDisplayService {
             startCell = await officeApiHelper.getSelectedCell(excelContext);
         }
         const jsonData = await mstrObjectRestService.getObjectContent(objectId, body);
+        if (jsonData.result.data.root == null){
+            //report returned no data
+            sessionHelper.disableLoading();
+            return {success: false, message: 'No data returned by the report: ' + jsonData.name};
+        }
         const convertedReport = officeConverterService
             .getConvertedTable(jsonData);
         const newOfficeTableId = officeTableId || await officeApiHelper.findAvailableOfficeTableId(convertedReport.name, excelContext);
@@ -43,6 +48,7 @@ class OfficeDisplayService {
             });
         }
         sessionHelper.disableLoading();
+        return {success: true, message: 'Loaded report: ' + jsonData.name};
     }
 
     // TODO: move it to api helper?

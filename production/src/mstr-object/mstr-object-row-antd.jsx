@@ -28,8 +28,14 @@ export const ReportRow = ({ report, onClick, onFilterReport }) => (
         </Col>
         <Col
             onClick={async () => {
-                await onClick(report.id);
-                message.success(`Loaded report: ${report.name}`);
+                const _result = await onClick(report.id);
+                if (_result.success){
+                    message.success(_result.message);
+                }
+                else {
+                    message.warn(_result.message);
+                }
+                
             }}
             span={18}
             offset={1}
