@@ -1,4 +1,5 @@
 import { officeProperties } from '../office-properties';
+import { RunOutsideOfficeError } from '../../error/run-outside-office-error';
 
 class OfficeStoreService {
     preserveReport = (report) => {
@@ -21,7 +22,7 @@ class OfficeStoreService {
         const indexOfReport = reportProperties.findIndex((report) => {
             return (report.bindId === bindingId);
         });
-        reportProperties.splice(indexOfReport, 1);       
+        reportProperties.splice(indexOfReport, 1);
         settings.saveAsync();
     }
 
@@ -44,6 +45,11 @@ class OfficeStoreService {
     }
 
     getOfficeSettings = () => {
+        if (Office === undefined
+            || Office.context === undefined
+            || Office.context.document === undefined) {
+            throw new RunOutsideOfficeError();
+        }
         return Office.context.document.settings;
     }
 }

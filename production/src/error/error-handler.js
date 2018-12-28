@@ -5,9 +5,11 @@ import { InternalServerError } from './internal-server-error.js';
 import { sessionHelper } from '../storage/session-helper.js';
 import { message } from 'antd';
 import { notificationService } from '../notification/notification-service.js';
+import { RunOutsideOfficeError } from './run-outside-office-error.js';
 
 class ErrorService {
     errorFactory = (error) => {
+        
         if (!error.response || error.response.status === 404) {
             throw new EnvironmentNotFoundError();
         }
@@ -47,6 +49,15 @@ class ErrorService {
         switch (error.constructor) {
             case UnauthorizedError:
                 notificationService.displayMessage('error', 'Wrong username or password.');
+                break;
+            default:
+                this.handleError(error);
+        }
+    }
+    handleOfficeError = (error) => {
+        switch (error.constructor) {
+            case RunOutsideOfficeError:
+                notificationService.displayMessage('error', 'Please run plugin inside Office');
                 break;
             default:
                 this.handleError(error);
