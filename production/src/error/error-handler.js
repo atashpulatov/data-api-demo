@@ -5,6 +5,7 @@ import { InternalServerError } from './internal-server-error.js';
 import { sessionHelper } from '../storage/session-helper.js';
 import { notificationService } from '../notification/notification-service.js';
 import { RunOutsideOfficeError } from './run-outside-office-error.js';
+import { OverlappingTablesError } from './overlapping-tables-error';
 
 class ErrorService {
     errorRestFactory = (error) => {
@@ -24,10 +25,14 @@ class ErrorService {
         throw error;
     };
     errorOfficeFactory = (error) => {
+        console.log(error);
         switch (error.message) {
             case 'Excel is not defined':
-                throw new RunOutsideOfficeError();
+                throw new RunOutsideOfficeError(error.message);
+            case `A table can't overlap another table. `:
+                throw new OverlappingTablesError(error.message);
             default:
+                if (error.name === 'RichApi.Error') notificationService.displayMessage('error', error.message);
                 throw error;
         }
     }
@@ -64,6 +69,9 @@ class ErrorService {
         switch (error.constructor) {
             case RunOutsideOfficeError:
                 notificationService.displayMessage('error', 'Please run plugin inside Office');
+                break;
+            case OverlappingTablesError:
+                notificationService.displayMessage('error', error.message);
                 break;
             default:
                 this.handleError(error);
