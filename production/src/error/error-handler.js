@@ -3,28 +3,36 @@ import { UnauthorizedError } from './unauthorized-error.js';
 import { BadRequestError } from './bad-request-error.js';
 import { InternalServerError } from './internal-server-error.js';
 import { sessionHelper } from '../storage/session-helper.js';
-import { message } from 'antd';
 import { notificationService } from '../notification/notification-service.js';
 import { RunOutsideOfficeError } from './run-outside-office-error.js';
 
 class ErrorService {
-    errorFactory = (error) => {
-        
-        if (!error.response || error.response.status === 404) {
+    errorRestFactory = (error) => {
+        if (!error.response) {
             throw new EnvironmentNotFoundError();
         }
-        if (error.response.status === 400) {
-            throw new BadRequestError();
-        }
-        if (error.response.status === 401) {
-            throw new UnauthorizedError();
-        }
-        if (error.response.status === 500) {
-            throw new InternalServerError();
+        switch (error.response.status) {
+            case 404:
+                throw new EnvironmentNotFoundError();
+            case 400:
+                throw new BadRequestError();
+            case 401:
+                throw new UnauthorizedError();
+            case 500:
+                throw new InternalServerError();
         }
         console.error(`Error: ${error.response.status}`
             + ` (${error.response.statusMessage})`);
     };
+    errorOfficeFactory = (error) => {
+        console.log('in factory');
+        switch (error.message) {
+            case 'Excel is not defined':
+                throw new RunOutsideOfficeError();
+            default:
+                throw error;
+        }
+    }
     handleError = (error) => {
         switch (error.constructor) {
             case EnvironmentNotFoundError:

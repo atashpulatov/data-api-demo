@@ -11,7 +11,7 @@ class AuthenticationService {
                 return res.headers['x-mstr-authtoken'];
             })
             .catch((err) => {
-                errorService.errorFactory(err);
+                errorService.errorRestFactory(err);
             });
     }
 }

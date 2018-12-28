@@ -62,19 +62,12 @@ class OfficeApiHelper {
     }
 
     getExcelContext = async () => {
-        console.log('getting context');
-        if (Excel === undefined) {
-            throw new RunOutsideOfficeError();
-        }
         return await Excel.run(async (context) => {
             return context;
         });
     }
 
     getOfficeContext = async () => {
-        if (Office === undefined) {
-            throw new RunOutsideOfficeError();
-        }
         return await Office.context;
     }
 

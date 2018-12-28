@@ -4,6 +4,7 @@ import { officeConverterService } from './office-converter-service';
 import { reduxStore } from '../store';
 import { officeProperties } from './office-properties';
 import { officeStoreService } from './store/office-store-service';
+import { errorService } from '../error/error-handler';
 
 class OfficeDisplayService {
     constructor() {
@@ -39,7 +40,8 @@ class OfficeDisplayService {
                 });
             }
         } catch (error) {
-            //console.error(error);
+            console.error(error);
+            errorService.errorOfficeFactory(error);
         }
     }
 

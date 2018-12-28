@@ -11,14 +11,14 @@ import { notificationService } from '../../src/notification/notification-service
 jest.mock('../../src/storage/session-helper');
 
 describe('ErrorService', () => {
-    describe('errorFactory', () => {
+    describe('errorRestFactory', () => {
         it('should throw a BadRequestError due to response 400 code', () => {
             // given
             const response = { status: 400 };
             const error = { response };
             // when
             try {
-                errorService.errorFactory(error);
+                errorService.errorRestFactory(error);
                 // then
             } catch (errorThrown) {
                 expect(errorThrown).toBeInstanceOf(BadRequestError);
@@ -30,7 +30,7 @@ describe('ErrorService', () => {
             const error = { response };
             // when
             try {
-                errorService.errorFactory(error);
+                errorService.errorRestFactory(error);
                 // then
             } catch (errorThrown) {
                 expect(errorThrown).toBeInstanceOf(UnauthorizedError);
@@ -42,7 +42,7 @@ describe('ErrorService', () => {
             const error = { response };
             // when
             try {
-                errorService.errorFactory(error);
+                errorService.errorRestFactory(error);
                 // then
             } catch (errorThrown) {
                 expect(errorThrown).toBeInstanceOf(EnvironmentNotFoundError);
@@ -53,7 +53,7 @@ describe('ErrorService', () => {
             const error = {};
             // when
             try {
-                errorService.errorFactory(error);
+                errorService.errorRestFactory(error);
                 // then
             } catch (errorThrown) {
                 expect(errorThrown).toBeInstanceOf(EnvironmentNotFoundError);
@@ -65,7 +65,7 @@ describe('ErrorService', () => {
             const error = { response };
             // when
             try {
-                errorService.errorFactory(error);
+                errorService.errorRestFactory(error);
                 // then
             } catch (errorThrown) {
                 expect(errorThrown).toBeInstanceOf(InternalServerError);
