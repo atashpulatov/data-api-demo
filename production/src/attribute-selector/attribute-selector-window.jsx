@@ -11,7 +11,6 @@ import 'mstr-react-library/src/css/mstr-react.css';
 export class AttributeSelectorWindow extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             session: {
                 USE_PROXY: false,

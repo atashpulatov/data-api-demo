@@ -12,9 +12,9 @@ import { environment } from '../global-definitions';
 export class _MenuBar extends Component {
     runPopupNavigation = () => {
         const session = sessionHelper.getSession();
-        Excel.run(async (context) => {
+        // Excel.run(async (context) => {
             Office.context.ui.displayDialogAsync(
-                `${environment.scheme}://${environment.host}/popup.html`
+                `${environment.scheme}://${environment.host}:${environment.port}/popup.html`
                 + '?popupType=' + PopupTypeEnum.navigationTree
                 + '&envUrl=' + session.url
                 + '&token=' + session.authToken
@@ -27,8 +27,8 @@ export class _MenuBar extends Component {
                         // this.onMessageFromPopup);
                         () => { });
                 });
-            await context.sync();
-        });
+        //     await context.sync();
+        // });
     }
 
     render() {
