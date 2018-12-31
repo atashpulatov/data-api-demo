@@ -25,7 +25,6 @@ class ErrorService {
         throw error;
     };
     errorOfficeFactory = (error) => {
-        console.log(error);
         switch (error.message) {
             case 'Excel is not defined':
                 throw new RunOutsideOfficeError(error.message);

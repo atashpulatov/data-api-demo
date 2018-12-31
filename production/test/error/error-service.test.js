@@ -7,6 +7,7 @@ import { InternalServerError } from '../../src/error/internal-server-error';
 import { sessionHelper } from '../../src/storage/session-helper';
 import { notificationService } from '../../src/notification/notification-service';
 import { RunOutsideOfficeError } from '../../src/error/run-outside-office-error';
+import { OverlappingTablesError } from '../../src/error/overlapping-tables-error';
 /* eslint-enable */
 
 jest.mock('../../src/storage/session-helper');
@@ -15,11 +16,11 @@ describe('ErrorService', () => {
     describe('errorRestFactory', () => {
         it('should throw error if it is not being handled', () => {
             // given
-            const error = new Error();
+            const error = { response: {} };
             // when
             const throwingCall = () => errorService.errorRestFactory(error);
             // then
-            expect(throwingCall).toThrowError(Error);
+            expect(throwingCall).toThrowError();
         });
         it('should throw a BadRequestError due to response 400 code', () => {
             // given
@@ -149,7 +150,7 @@ describe('ErrorService', () => {
         });
     });
     describe('errorOfficeFactory', () => {
-        it('should throw RunOutsideOfficeError', () => {
+        it('should throw OverlappingTablesError', () => {
             // given
             const error = {
                 message: 'Excel is not defined',
@@ -158,6 +159,31 @@ describe('ErrorService', () => {
             const throwingCall = () => errorService.errorOfficeFactory(error);
             // then
             expect(throwingCall).toThrowError(RunOutsideOfficeError);
+        });
+        it('should throw OverlappingTablesError', () => {
+            // given
+            const error = {
+                message: `A table can't overlap another table. `,
+            };
+            // when
+            const throwingCall = () => errorService.errorOfficeFactory(error);
+            // then
+            expect(throwingCall).toThrowError(OverlappingTablesError);
+        });
+        it('should display message when we do not handle error', () => {
+            // given
+            const exampleMessage = 'This is some test message';
+            const error = {
+                name: 'RichApi.Error',
+                message: exampleMessage,
+            };
+            const spyMethod = jest.spyOn(notificationService, 'displayMessage');
+            // when
+            const throwingCall = () => errorService.errorOfficeFactory(error);
+            // then
+            expect(throwingCall).toThrowError();
+            expect(spyMethod).toBeCalled();
+            expect(spyMethod).toBeCalledWith('error', exampleMessage);
         });
         it('should throw same error if it is not expected error', () => {
             // given
@@ -178,6 +204,17 @@ describe('ErrorService', () => {
             // then
             expect(spyMethod).toBeCalled();
             expect(spyMethod).toBeCalledWith('error', 'Please run plugin inside Office');
+        });
+        it('should handle RunOutsideOfficeError', () => {
+            // given
+            const errorMessage = `A table can't overlap another table. `;
+            const error = new OverlappingTablesError(errorMessage);
+            const spyMethod = jest.spyOn(notificationService, 'displayMessage');
+            // when
+            errorService.handleOfficeError(error);
+            // then
+            expect(spyMethod).toBeCalled();
+            expect(spyMethod).toBeCalledWith('error', errorMessage);
         });
         it('should forward error that it does not handle to next method', () => {
             // given
