@@ -93,7 +93,4 @@ describe('office loaded file', () => {
         expect(onDeleteMocked).not.toBeCalled();
         expect(onRefreshMocked).not.toBeCalled();
     });
-    it.skip('should update list of files on redux state change', () => {
-        expect(false).toBeTruthy();
-    });
 });
