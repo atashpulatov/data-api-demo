@@ -32,6 +32,28 @@ export class NavigationTree extends Component {
         Office.context.ui.messageParent(JSON.stringify(updateObject));
     };
 
+    handleOk = () => {
+        const okObject = {
+            command: selectorProperties.commandOk,
+            chosenObject: this.state.chosenObjectId,
+        };
+        Office.context.ui.messageParent(JSON.stringify(okObject));
+    }
+
+    handleCancel = () => {
+        const cancelObject = {
+            command: selectorProperties.commandCancel,
+        };
+        Office.context.ui.messageParent(JSON.stringify(cancelObject));
+    }
+
+    // TODO: temporary solution
+    onObjectChosen = (id) => {
+        this.setState({
+            chosenObjectId: id,
+        })
+    }
+
     render() {
         return (
             <div
@@ -40,8 +62,12 @@ export class NavigationTree extends Component {
                     session={this.state.session}
                     triggerUpdate={this.state.triggerUpdate}
                     onTriggerUpdate={this.onTriggerUpdate}
+                    onObjectChosen={this.onObjectChosen}
                 />
-                <PopupButtons/>
+                <PopupButtons
+                    handleOk={this.handleOk}
+                    handleCancel={this.handleCancel}
+                />
             </div >
         );
     }

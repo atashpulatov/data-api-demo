@@ -7,6 +7,8 @@ import './menu-bar.css';
 import { PopupTypeEnum } from '../home/popup-type-enum';
 import { sessionHelper } from '../storage/session-helper';
 import { environment } from '../global-definitions';
+import { selectorProperties } from '../attribute-selector/selector-properties';
+import { officeDisplayService } from '../office/office-display-service';
 /* eslint-enable */
 
 export class _MenuBar extends Component {
@@ -25,10 +27,9 @@ export class _MenuBar extends Component {
                     this.dialog = asyncResult.value;
                     this.dialog.addEventHandler(
                         Office.EventType.DialogMessageReceived,
-                        // this.onMessageFromPopup);
-                        () => { });
+                        this.onMessageFromPopup);
+                    // () => { });
                 });
-
             await context.sync();
         });
 
@@ -48,6 +49,24 @@ export class _MenuBar extends Component {
 
         //     await context.sync();
         // });
+    }
+
+    onMessageFromPopup = (arg) => {
+        const message = arg.message
+        const response = JSON.parse(message);
+        switch (response.command) {
+            case selectorProperties.commandOk:
+                if (response.chosenObject) {
+                    officeDisplayService.printObject(response.chosenObject);
+                }
+                this.dialog.close();
+                break;
+            case selectorProperties.commandCancel:
+                this.dialog.close();
+                break;
+            default:
+                break;
+        }
     }
 
     render() {

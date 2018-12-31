@@ -84,7 +84,6 @@ export class _MstrObjects extends React.Component {
                         Office.EventType.DialogMessageReceived,
                         this.onMessageFromPopup);
                 });
-
             await context.sync();
         });
     }
