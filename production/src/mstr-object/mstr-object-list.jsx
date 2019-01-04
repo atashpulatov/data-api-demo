@@ -11,6 +11,7 @@ import { sessionHelper } from '../storage/session-helper';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { environment } from '../global-definitions';
 import { errorService } from '../error/error-handler.js';
+import { officeContext } from '../office/office-context.js';
 /* eslint-enable */
 
 const objectsTypesMap = {
@@ -81,9 +82,11 @@ export class _MstrObjects extends React.Component {
             popupReportId: reportId,
         })
         const session = sessionHelper.getSession();
-        Excel.run(async (context) => {
-            Office.context.ui.displayDialogAsync(
-                `${environment.scheme}://${environment.host}/popup.html`
+        const excelObject = officeContext.getExcel();
+        excelObject.run(async (context) => {
+            const officeObject = officeContext.getOffice();
+            officeObject.context.ui.displayDialogAsync(
+                `${environment.scheme}://${environment.host}:${environment.port}/popup.html`
                 + '?envUrl=' + session.url
                 + '&token=' + session.authToken
                 + '&projectId=' + session.projectId
@@ -92,10 +95,9 @@ export class _MstrObjects extends React.Component {
                 (asyncResult) => {
                     this.dialog = asyncResult.value;
                     this.dialog.addEventHandler(
-                        Office.EventType.DialogMessageReceived,
+                        officeObject.EventType.DialogMessageReceived,
                         this.onMessageFromPopup);
                 });
-
             await context.sync();
         });
     }

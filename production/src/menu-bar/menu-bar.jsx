@@ -7,15 +7,16 @@ import './menu-bar.css';
 import { PopupTypeEnum } from '../home/popup-type-enum';
 import { sessionHelper } from '../storage/session-helper';
 import { environment } from '../global-definitions';
-import { testService } from './test-service';
+import { officeContext } from '../office/office-context';
 /* eslint-enable */
 
 export class _MenuBar extends Component {
     runPopupNavigation = () => {
         const session = sessionHelper.getSession();
-        // Excel.run(async (context) => {
-            const officeDelivered = testService.getOffice();
-            officeDelivered.context.ui.displayDialogAsync(
+        const excelObject = officeContext.getExcel();
+        Excel.run(async (context) => {
+            const officeObject = officeContext.getOffice();
+            officeObject.context.ui.displayDialogAsync(
                 `${environment.scheme}://${environment.host}:${environment.port}/popup.html`
                 + '?popupType=' + PopupTypeEnum.navigationTree
                 + '&envUrl=' + session.url
@@ -25,12 +26,12 @@ export class _MenuBar extends Component {
                 (asyncResult) => {
                     this.dialog = asyncResult.value;
                     this.dialog.addEventHandler(
-                        officeDelivered.EventType.DialogMessageReceived,
+                        officeObject.EventType.DialogMessageReceived,
                         // this.onMessageFromPopup);
                         () => { });
                 });
-        //     await context.sync();
-        // });
+            await context.sync();
+        });
     }
 
     render() {
