@@ -8,6 +8,7 @@ import { sessionHelper } from '../storage/session-helper';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import { errorService } from '../error/error-handler';
 import { notificationService } from '../notification/notification-service';
+import {LibraryFrame} from './library-container.jsx';
 const FormItem = Form.Item;
 /* eslint-enable */
 
@@ -43,6 +44,31 @@ export class _Authenticate extends Component {
             }
         });
     }
+    
+    openLib = async () => {
+        this.setState({
+            libComponent: <LibraryFrame />,
+        });
+        // await Office.context.ui.displayDialogAsync('https://env-125323.customer.cloud.microstrategy.com/MicroStrategyLibrary/');
+    }
+
+    componentDidMount = async () => {
+        const cookieJar = document.cookie;
+        const splittedCookies = cookieJar.split(';');
+        const splittedCookiesJar = splittedCookies.map((cookie) => {
+            const slicedCookie = cookie.split('=');
+            return {
+                name: slicedCookie[0],
+                value: slicedCookie[1],
+            }
+        });
+        console.log(splittedCookiesJar);
+        const authToken = splittedCookiesJar.filter((cookie) => {
+            return cookie.name === ' iSession';
+        });
+        console.log(authToken);
+        sessionHelper.login(authToken[0].value);
+    }
 
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -53,6 +79,9 @@ export class _Authenticate extends Component {
                         Connect to MicroStrategy Environment
                     </h1>
                 </header>
+                <Button href='https://env-125323.customer.cloud.microstrategy.com/MicroStrategyLibrary' target='_blank'>Auth?</Button>
+                <Button href='/MicroStrategyLibrary/build/index.html'>
+                    App</Button>
                 <Form onSubmit={this.onLoginUser} className='login-form grid-container padding'>
                     <FormItem
                         label='Username'>
