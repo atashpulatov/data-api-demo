@@ -12,13 +12,15 @@ import {LibraryFrame} from './library-container.jsx';
 const FormItem = Form.Item;
 /* eslint-enable */
 
+const predefinedEnvUrl = 'https://env-125323.customer.cloud.microstrategy.com/MicroStrategyLibrary/api';
+
 export class _Authenticate extends Component {
     constructor(props) {
         super(props);
         this.stateFromRedux = reduxStore.getState().sessionReducer;
         this.state = {
             username: this.stateFromRedux.username || '',
-            envUrl: this.stateFromRedux.envUrl || '',
+            envUrl: this.stateFromRedux.envUrl || predefinedEnvUrl,
         };
     }
 
@@ -44,15 +46,14 @@ export class _Authenticate extends Component {
             }
         });
     }
-    
-    openLib = async () => {
-        this.setState({
-            libComponent: <LibraryFrame />,
-        });
-        // await Office.context.ui.displayDialogAsync('https://env-125323.customer.cloud.microstrategy.com/MicroStrategyLibrary/');
-    }
 
     componentDidMount = async () => {
+        const values = {
+            username: 'mstr',
+            envUrl: predefinedEnvUrl,
+            isRememberMeOn: false,
+        }
+        sessionHelper.saveLoginValues(values);
         const cookieJar = document.cookie;
         const splittedCookies = cookieJar.split(';');
         const splittedCookiesJar = splittedCookies.map((cookie) => {
@@ -66,8 +67,34 @@ export class _Authenticate extends Component {
         const authToken = splittedCookiesJar.filter((cookie) => {
             return cookie.name === ' iSession';
         });
-        console.log(authToken);
         sessionHelper.login(authToken[0].value);
+    }
+
+    componentDidUpdate = async () => {
+        const values = {
+            username: 'mstr',
+            envUrl: predefinedEnvUrl,
+            isRememberMeOn: false,
+        }
+        sessionHelper.saveLoginValues(values);
+        const cookieJar = document.cookie;
+        const splittedCookies = cookieJar.split(';');
+        const splittedCookiesJar = splittedCookies.map((cookie) => {
+            const slicedCookie = cookie.split('=');
+            return {
+                name: slicedCookie[0],
+                value: slicedCookie[1],
+            }
+        });
+        console.log(splittedCookiesJar);
+        const authToken = splittedCookiesJar.filter((cookie) => {
+            return cookie.name === ' iSession';
+        });
+        sessionHelper.login(authToken[0].value);
+    }
+
+    openLib = async () => {
+        await Office.context.ui.displayDialogAsync('https://env-125323.customer.cloud.microstrategy.com/MicroStrategyLibrary/');
     }
 
     render() {
@@ -79,7 +106,7 @@ export class _Authenticate extends Component {
                         Connect to MicroStrategy Environment
                     </h1>
                 </header>
-                <Button href='https://env-125323.customer.cloud.microstrategy.com/MicroStrategyLibrary' target='_blank'>Auth?</Button>
+                <Button onClick={this.openLib}>Auth?</Button>
                 <Button href='/MicroStrategyLibrary/build/index.html'>
                     App</Button>
                 <Form onSubmit={this.onLoginUser} className='login-form grid-container padding'>

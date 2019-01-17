@@ -35,9 +35,8 @@ export class _MenuBar extends Component {
     }
 
     render() {
-        return !this.props.project
-            ? null
-            : <div className='menu-bar-container'>
+        return (
+            <div className='menu-bar-container'>
                 <div className='menu-bar-nav-container'>
                     <Tooltip placement="bottomLeft" title='Back'>
                         <button
@@ -82,7 +81,8 @@ export class _MenuBar extends Component {
                         </button>
                     </Tooltip>
                 </div>
-            </div >;
+            </div >
+        )
     }
 };
 
