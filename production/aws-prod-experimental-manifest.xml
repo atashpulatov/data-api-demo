@@ -18,11 +18,11 @@
   <Description DefaultValue="New plugin to insert data from Microstrategy into Microsoft Office products."/>
 
   <!-- Icon for your add-in. Used on installation screens and the add-ins dialog. -->
-  <IconUrl DefaultValue="https://env-125323.customer.cloud.microstrategy.com/MicroStrategyLibrary/build/assets/mstr_logo.png" />
-  <HighResolutionIconUrl DefaultValue="https://env-125323.customer.cloud.microstrategy.com/MicroStrategyLibrary/build/assets/mstr_logo.png"/>
+  <IconUrl DefaultValue="https://env-125323.customer.cloud.microstrategy.com/experimental/assets/mstr_logo.png" />
+  <HighResolutionIconUrl DefaultValue="https://env-125323.customer.cloud.microstrategy.com/experimental/assets/mstr_logo.png"/>
 
   <!--If you plan to submit this add-in to the Office Store, uncomment the SupportUrl element below-->
-  <SupportUrl DefaultValue="https://env-125323.customer.cloud.microstrategy.com/MicroStrategyLibrary/build/index.html" />
+  <SupportUrl DefaultValue="https://env-125323.customer.cloud.microstrategy.com/experimental/index.html" />
 
   <!-- Domains that will be allowed when navigating. For example, if you use ShowTaskpane and then have an href link, navigation will only be allowed if the domain is on this list. -->
   <AppDomains>
@@ -37,7 +37,7 @@
     <Host Name="Workbook" />
   </Hosts>
   <DefaultSettings>
-    <SourceLocation DefaultValue="https://env-125323.customer.cloud.microstrategy.com/MicroStrategyLibrary/build/index.html" />
+    <SourceLocation DefaultValue="https://env-125323.customer.cloud.microstrategy.com/experimental/index.html" />
   </DefaultSettings>
   <!-- End TaskPane Mode integration.  -->
 
@@ -117,14 +117,14 @@
     <!-- You can use resources across hosts and form factors. -->
     <Resources>
       <bt:Images>
-        <bt:Image id="MSTR.tpicon_16x16" DefaultValue="https://env-125323.customer.cloud.microstrategy.com/MicroStrategyLibrary/build/assets/mstr_logo.png" />
-        <bt:Image id="MSTR.tpicon_32x32" DefaultValue="https://env-125323.customer.cloud.microstrategy.com/MicroStrategyLibrary/build/assets/mstr_logo.png" />
-        <bt:Image id="MSTR.tpicon_80x80" DefaultValue="https://env-125323.customer.cloud.microstrategy.com/MicroStrategyLibrary/build/assets/mstr_logo.png" />
+        <bt:Image id="MSTR.tpicon_16x16" DefaultValue="https://env-125323.customer.cloud.microstrategy.com/experimental/assets/mstr_logo.png" />
+        <bt:Image id="MSTR.tpicon_32x32" DefaultValue="https://env-125323.customer.cloud.microstrategy.com/experimental/assets/mstr_logo.png" />
+        <bt:Image id="MSTR.tpicon_80x80" DefaultValue="https://env-125323.customer.cloud.microstrategy.com/experimental/assets/mstr_logo.png" />
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="MSTR.Taskpane.Url" DefaultValue="https://env-125323.customer.cloud.microstrategy.com/MicroStrategyLibrary/build/index.html" />
+        <bt:Url id="MSTR.Taskpane.Url" DefaultValue="https://env-125323.customer.cloud.microstrategy.com/experimental/index.html" />
         <bt:Url id="MSTR.GetStarted.LearnMoreUrl" DefaultValue="https://go.microsoft.com/fwlink/?LinkId=276812" />
-        <bt:Url id="MSTR.DesktopFunctionFile.Url" DefaultValue="https://env-125323.customer.cloud.microstrategy.com/MicroStrategyLibrary/build/function-file/function-file.html" />
+        <bt:Url id="MSTR.DesktopFunctionFile.Url" DefaultValue="https://env-125323.customer.cloud.microstrategy.com/experimental/function-file/function-file.html" />
       </bt:Urls>
       <!-- ShortStrings max characters==125. -->
       <bt:ShortStrings>
