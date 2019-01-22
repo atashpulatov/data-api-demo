@@ -156,9 +156,9 @@ describe('ErrorService', () => {
                 message: 'Excel is not defined',
             };
             // when
-            const throwingCall = () => errorService.errorOfficeFactory(error);
+            const returnedError = errorService.errorOfficeFactory(error);
             // then
-            expect(throwingCall).toThrowError(RunOutsideOfficeError);
+            expect(returnedError).toBeInstanceOf(RunOutsideOfficeError);
         });
         it('should throw OverlappingTablesError', () => {
             // given
@@ -166,9 +166,9 @@ describe('ErrorService', () => {
                 message: `A table can't overlap another table. `,
             };
             // when
-            const throwingCall = () => errorService.errorOfficeFactory(error);
+            const returnedError = errorService.errorOfficeFactory(error);
             // then
-            expect(throwingCall).toThrowError(OverlappingTablesError);
+            expect(returnedError).toBeInstanceOf(OverlappingTablesError);
         });
         it('should display message when we do not handle error', () => {
             // given

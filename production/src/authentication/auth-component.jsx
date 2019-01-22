@@ -25,21 +25,22 @@ export class _Authenticate extends Component {
         event.preventDefault();
         const validateFields = this.props.form.validateFields;
         await validateFields(async (err, values) => {
-            if (!err) {
-                try {
-                    sessionHelper.enableLoading();
-                    sessionHelper.saveLoginValues(values);
-                    const authToken = await authenticationService.authenticate(
-                        values.username, values.password,
-                        values.envUrl, this.state.authMode);
-                    notificationService.displayMessage('success', 'Logged in');
-                    sessionHelper.login(authToken);
-                } catch (error) {
-                    errorService.handlePreAuthError(error);
-                }
-                finally {
-                    sessionHelper.disableLoading();
-                }
+            if (err) {
+                return;
+            }
+            try {
+                sessionHelper.enableLoading();
+                sessionHelper.saveLoginValues(values);
+                const authToken = await authenticationService.authenticate(
+                    values.username, values.password,
+                    values.envUrl, this.state.authMode);
+                notificationService.displayMessage('success', 'Logged in');
+                sessionHelper.login(authToken);
+            } catch (error) {
+                errorService.handlePreAuthError(error);
+            }
+            finally {
+                sessionHelper.disableLoading();
             }
         });
     }

@@ -17,9 +17,7 @@ class OfficeDisplayService {
     printObject = async (objectId, startCell, officeTableId, bindingId, body) => {
         try {
             const excelContext = await officeApiHelper.getExcelContext();
-            if (!startCell) {
-                startCell = await officeApiHelper.getSelectedCell(excelContext);
-            }
+            startCell = startCell || await officeApiHelper.getSelectedCell(excelContext);
             const jsonData = await mstrObjectRestService.getObjectContent(objectId, body);
             const convertedReport = officeConverterService
                 .getConvertedTable(jsonData);
@@ -40,7 +38,7 @@ class OfficeDisplayService {
                 });
             }
         } catch (error) {
-            errorService.errorOfficeFactory(error);
+            throw errorService.errorOfficeFactory(error);
         }
     }
 

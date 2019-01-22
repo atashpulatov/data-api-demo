@@ -12,7 +12,7 @@ class ProjectRestService {
                 return projects;
             })
             .catch((err) => {
-                errorService.errorRestFactory(err);
+                throw errorService.errorRestFactory(err);
             });
     }
 }
