@@ -232,7 +232,7 @@ describe('OfficeApiHelper', () => {
         expect(result.projectId).toBe(project.projectId);
         expect(result.username).toBe(username);
     });
-    it.only('should find proper office table id with only a-z characters', async () => {
+    it.only('should find proper office table id with only a-z characters', async () => { // FIXME: there is only... we have disabled rest of tests here. They needs to be fixed.
         // given
         const newReportName = 'New 333 Report 333';
         const mockLoad = () => { };

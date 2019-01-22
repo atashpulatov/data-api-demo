@@ -201,7 +201,7 @@ describe('sessionReducer', () => {
     it('should throw an error due to missing authToken', () => {
         // given
         // when
-        let wrongActionCall = () => {
+        const wrongActionCall = () => {
             sessionStore.dispatch({
                 type: sessionProperties.actions.loggedIn,
             });

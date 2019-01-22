@@ -1,4 +1,4 @@
-import { errorHandler } from '../error/error-handler.js';
+import { errorService } from '../error/error-handler.js';
 import { moduleProxy } from '../module-proxy.js';
 
 class AuthenticationService {
@@ -11,7 +11,7 @@ class AuthenticationService {
                 return res.headers['x-mstr-authtoken'];
             })
             .catch((err) => {
-                errorHandler(err);
+                throw errorService.errorRestFactory(err);
             });
     }
 }

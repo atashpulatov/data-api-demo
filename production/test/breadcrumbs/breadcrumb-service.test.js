@@ -69,4 +69,15 @@ describe('Breadcrumbs Service', () => {
         expect(breadcrumbs).toEqual(expectedArray);
         expect(breadcrumbs[0]).toEqual(givenProject);
     });
+    it('should dispatch action on navigateToDir', () => {
+        // given
+        const testId = 'someTestId';
+        const dispatchType = historyProperties.actions.goUpTo;
+        const spyDispatch = jest.spyOn(reduxStore, 'dispatch');
+        // when
+        breadcrumbsService.navigateToDir(testId);
+        // then
+        expect(spyDispatch).toBeCalled();
+        expect(spyDispatch).toBeCalledWith({ type: dispatchType, dirId: testId });
+    });
 });
