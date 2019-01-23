@@ -47,8 +47,7 @@ describe('AttributeSelectorWindow', () => {
             projectId: 'proId',
             reportId: 'repId',
         };
-
-        // when
+        
         const componentWrapper = mount(<AttributeSelectorWindow
             parsed={parsed} />);
 
@@ -60,6 +59,8 @@ describe('AttributeSelectorWindow', () => {
 
         const wrappedButtons = componentWrapper.find('Button');
         const wrappedOkButton = wrappedButtons.at(6);
+
+        // when
         await wrappedOkButton.simulate('click');
 
         // then
@@ -75,7 +76,6 @@ describe('AttributeSelectorWindow', () => {
             reportId: 'repId',
         };
 
-        // when
         const componentWrapper = mount(<AttributeSelectorWindow
             parsed={parsed} />);
 
@@ -86,6 +86,8 @@ describe('AttributeSelectorWindow', () => {
 
         const wrappedButtons = componentWrapper.find('Button');
         const wrappedOkButton = wrappedButtons.at(6);
+
+        // when
         await wrappedOkButton.simulate('click');
 
         // then
@@ -102,7 +104,6 @@ describe('AttributeSelectorWindow', () => {
             reportId: 'repId',
         };
 
-        // when
         const componentWrapper = mount(<AttributeSelectorWindow
             parsed={parsed} />);
 
@@ -113,6 +114,8 @@ describe('AttributeSelectorWindow', () => {
 
         const wrappedButtons = componentWrapper.find('Button');
         const wrappedOkButton = wrappedButtons.at(6);
+
+        // when
         await wrappedOkButton.simulate('click');
 
         // then
@@ -129,7 +132,6 @@ describe('AttributeSelectorWindow', () => {
             reportId: 'repId',
         };
 
-        // when
         const componentWrapper = mount(<AttributeSelectorWindow
             parsed={parsed} />);
 
@@ -139,6 +141,8 @@ describe('AttributeSelectorWindow', () => {
         componentWrapper.instance().forceUpdate();
 
         const wrappedCancelButton = wrappedButtons.at(5);
+
+        // when
         wrappedCancelButton.simulate('click');
 
         // then

@@ -45,8 +45,10 @@ export class AttributeSelectorWindow extends Component {
         Office.context.ui.messageParent(JSON.stringify(updateObject));
     };
 
-    //this method resets triggerUpdate property to false in order to allow re-pressing OK button
-    //should be called every time OK is pressed but selector popup should not close
+    /**
+     * resets triggerUpdate property to false in order to allow re-pressing OK button
+     * should be called every time OK is pressed but selector popup should not close
+     */
     resetTriggerUpdate = () => {
         this.setState({triggerUpdate: false, loading: false});
     };
