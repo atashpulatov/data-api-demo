@@ -18,6 +18,7 @@ class SessionHelper {
         reduxStore.dispatch({
             type: sessionProperties.actions.logOut,
         });
+        window.location.replace('/experimental/index.html');
     }
     saveLoginValues = (values) => {
         reduxStore.dispatch({

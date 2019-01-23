@@ -52,6 +52,7 @@ export class _Authenticate extends Component {
         const authToken = splittedCookiesJar.filter((cookie) => {
             return cookie.name === ' iSession';
         });
+        console.log(authToken);
         if(authToken[0]){
             sessionHelper.login(authToken[0].value);
         }
@@ -61,26 +62,15 @@ export class _Authenticate extends Component {
         this.mockedLoginFlow();
     }
 
-    componentDidUpdate = () => {
+    componentDidUpdate = async () => {
         this.mockedLoginFlow();
-    }
-
-    openLib = async () => {
-        await Office.context.ui.displayDialogAsync('https://env-125323.customer.cloud.microstrategy.com/MicroStrategyLibrary/');
     }
 
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
             <article>
-                <header>
-                    <h1 id='authenticate-message'>
-                        Connect to MicroStrategy Environment
-                    </h1>
-                </header>
-                <Button href='https://env-125323.customer.cloud.microstrategy.com/MicroStrategyLibrary/' target="_blank">Auth?</Button>
-                <Button href='/MicroStrategyLibrary/build/index.html'>
-                    App</Button>
+                
             </article>
         );
     }

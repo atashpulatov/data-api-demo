@@ -8,6 +8,8 @@ import { sessionHelper } from '../storage/session-helper';
 import { errorService } from '../error/error-handler.js';
 /* eslint-enable */
 
+const predefinedEnvUrl = 'https://env-125323.customer.cloud.microstrategy.com/MicroStrategyLibrary/api';
+
 export class _Projects extends Component {
     constructor(props) {
         super(props);
@@ -16,7 +18,39 @@ export class _Projects extends Component {
         };
     }
 
+    saveMockedLoginValues = () =>{
+        const values = {
+            username: 'mstr',
+            envUrl: predefinedEnvUrl,
+            isRememberMeOn: false,
+        }
+        sessionHelper.saveLoginValues(values);
+    }
+
+    getCookies = () =>{
+        console.log('sup');
+        const cookieJar = document.cookie;
+        const splittedCookies = cookieJar.split(';');
+        return splittedCookies.map((cookie) => {
+            const slicedCookie = cookie.split('=');
+            return {
+                name: slicedCookie[0],
+                value: slicedCookie[1],
+            }
+        });
+    }
+
     async componentDidMount() {
+        this.saveMockedLoginValues();
+        const splittedCookiesJar = this.getCookies();
+        console.log(splittedCookiesJar);
+        const authToken = splittedCookiesJar.filter((cookie) => {
+            return cookie.name === ' iSession';
+        });
+        console.log(authToken);
+        if(authToken[0]){
+            sessionHelper.login(authToken[0].value);
+        }
         try {
             sessionHelper.enableLoading();
             const projects = await projectListHelper.updateProjectList();
