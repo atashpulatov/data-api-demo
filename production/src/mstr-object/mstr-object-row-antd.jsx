@@ -27,16 +27,8 @@ export const ReportRow = ({ report, onClick, onFilterReport }) => (
             <MSTRIcon type='report' />
         </Col>
         <Col
-            onClick={async () => {
-                const _result = await onClick(report.id);
-                if (_result.success){
-                    message.success(_result.message);
-                }
-                else {
-                    message.warn(_result.message);
-                }
-                
-            }}
+            onClick={() => {
+                onReportRowClick(onClick, report)}}
             span={18}
             offset={1}
         >
@@ -55,3 +47,14 @@ export const ReportRow = ({ report, onClick, onFilterReport }) => (
         </Tooltip>
     </Row>
 );
+const onReportRowClick = async (onClick, report) => {
+    const _result = await onClick(report.id);
+    if (_result.success) {
+        message.success(_result.message);
+    }
+    else {
+        message.warn(_result.message);
+    }
+};
+
+
