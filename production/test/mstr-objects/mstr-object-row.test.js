@@ -2,7 +2,7 @@
 /* eslint-disable */
 import React from 'react';
 import { mount } from 'enzyme';
-import { DirectoryRow, ReportRow } from '../../src/mstr-object/mstr-object-row-antd';
+import { DirectoryRow, ReportRow } from '../../src/mstr-object/mstr-object-row';
 /* eslint-enable */
 
 describe('MstrObjectRow', () => {

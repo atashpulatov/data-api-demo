@@ -5,6 +5,6 @@ export const globalDefinitions = {
 
 export const environment = {
     scheme: 'https',
-    host: 'localhost',
+    host: 'env-125323.customer.cloud.microstrategy.com/build',
     port: '3000',
 };

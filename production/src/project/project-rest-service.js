@@ -1,4 +1,4 @@
-import { errorHandler } from '../error/error-handler';
+import { errorService } from '../error/error-handler';
 import { moduleProxy } from '../module-proxy';
 
 class ProjectRestService {
@@ -8,11 +8,11 @@ class ProjectRestService {
             .set('x-mstr-authtoken', authToken)
             .withCredentials()
             .then((res) => {
-                let projects = res.body;
+                const projects = res.body;
                 return projects;
             })
             .catch((err) => {
-                errorHandler(err);
+                throw errorService.errorRestFactory(err);
             });
     }
 }

@@ -139,14 +139,11 @@ describe('ProjectList', () => {
         const expectedProjectId = projects.projectsArray[0].id;
         const expectedProjectName = projects.projectsArray[0].name;
         const wrappedProvider = await mountAndReturn();
-
         const items = wrappedProvider.find('ul');
         const firstItem = items.find('Row').at(0);
         expect(reduxStore.getState().historyReducer.project).not.toBeDefined();
-
         // when
         firstItem.simulate('click');
-
         // then
         const savedProject = reduxStore.getState().historyReducer.project;
         expect(savedProject).toBeDefined();
@@ -191,4 +188,3 @@ async function mountAndReturn() {
     wrappedProvider.update();
     return wrappedProvider;
 }
-

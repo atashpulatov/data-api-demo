@@ -14,14 +14,14 @@ import { moduleProxy } from '../../src/module-proxy';
 /* eslint-enable */
 
 const correctLogin = 'mstr';
-const correctPassword = '';
+const correctPassword = '999U2nn1g7gY';
 const folderType = 7;
 const loginType = 1;
-const envURL = 'https://env-94174.customer.cloud.microstrategy.com/MicroStrategyLibrary/api';
+const envURL = 'https://env-125323.customer.cloud.microstrategy.com/MicroStrategyLibrary/api';
 const projectId = 'B7CA92F04B9FAE8D941C3E9B7E0CD754';
 const projectName = 'Microstrategy Tutorial';
 const folderId = 'D64C532E4E7FBA74D29A7CA3576F39CF';
-const objectId = '3FC4A93A11E85FF62EB70080EFE55315';
+const objectId = 'C536EA7A11E903741E640080EF55BFE2';
 
 describe('MstrObjectRestService', () => {
     let authToken;
@@ -55,7 +55,6 @@ describe('MstrObjectRestService', () => {
             // then
             expect(result).toBeDefined();
             expect(result.length).toBeGreaterThanOrEqual(2);
-            // expect(result).toEqual(mstrTutorial);    // FIXME: fix mocks
         });
 
         it('should throw exception due to incorrect authToken', async () => {
@@ -207,15 +206,16 @@ describe('MstrObjectRestService', () => {
                 projectName: projectName,
             });
         });
-        it('should return list of objects within project', async () => {
+        it('should return content of report', async () => {
             // given
+            const expectedReportName = 'TEST REPORT 1';
             // when
             const result = await mstrObjectRestService.getObjectContent(
                 objectId
             );
             // then
             expect(result).toBeDefined();
-            expect(result.name).toEqual(mockReports[2].name);
+            expect(result.name).toEqual(expectedReportName);
         });
 
         it('should throw exception due to incorrect authToken', async () => {

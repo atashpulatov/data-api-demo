@@ -1,10 +1,10 @@
 import { IncorrectInputTypeError } from './incorrect-input-type';
 import { reduxStore } from '../store';
 import { officeProperties } from './office-properties';
-import { globalDefinitions } from '../global-definitions';
-import { OfficeError } from './office-error';
-import { OfficeBindingError } from './office-error';
 import { officeStoreService } from './store/office-store-service';
+import { notificationService } from '../notification/notification-service';
+import { errorService } from '../error/error-handler';
+import { RunOutsideOfficeError } from '../error/run-outside-office-error';
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
@@ -12,8 +12,7 @@ const ASCII_CAPITAL_LETTER_INDEX = 65;
 const EXCEL_TABLE_NAME = 'table';
 
 class OfficeApiHelper {
-
-    getRange(headerCount, startCell) {
+    getRange = (headerCount, startCell) => {
         if (!Number.isInteger(headerCount)) {
             throw new IncorrectInputTypeError();
         }
@@ -32,7 +31,7 @@ class OfficeApiHelper {
         return `${startCell}:${endRange}${startCellArray[1]}`;
     }
 
-    handleOfficeApiException(error) {
+    handleOfficeApiException = (error) => {
         console.error('error: ' + error);
         if (error instanceof OfficeExtension.Error) {
             console.error('Debug info: ' + JSON.stringify(error.debugInfo));
@@ -41,7 +40,7 @@ class OfficeApiHelper {
         }
     }
 
-    lettersToNumber(letters) {
+    lettersToNumber = (letters) => {
         if (!letters.match(/^[A-Z]*[A-Z]$/)) {
             throw new IncorrectInputTypeError();
         }
@@ -56,23 +55,23 @@ class OfficeApiHelper {
         return await excelContext.sync();
     };
 
-    getBindingRange(context, bindingId) {
+    getBindingRange = (context, bindingId) => {
         return context.workbook.bindings
             .getItem(bindingId).getTable()
             .getRange();
     }
 
-    async getExcelContext() {
+    getExcelContext = async () => {
         return await Excel.run(async (context) => {
             return context;
         });
     }
 
-    async getOfficeContext() {
+    getOfficeContext = async () => {
         return await Office.context;
     }
 
-    async findAvailableOfficeTableId(excelContext) {
+    findAvailableOfficeTableId = async (excelContext) => {
         let nameExists = true;
         let tableIncrement = 0;
         const tableCollection = excelContext.workbook.tables;
@@ -99,24 +98,23 @@ class OfficeApiHelper {
         });
     };
 
-    getCurrentMstrContext() {
+    getCurrentMstrContext = () => {
         const envUrl = reduxStore.getState().sessionReducer.envUrl;
         const projectId = reduxStore.getState().historyReducer.project.projectId;
         const username = reduxStore.getState().sessionReducer.username;
         return { envUrl, projectId, username };
     }
 
-    formatTable(sheet) {
+    formatTable = (sheet) => {
         if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
             sheet.getUsedRange().format.autofitColumns();
             sheet.getUsedRange().format.autofitRows();
         } else {
-            message.warning(`Unable to format table.`);
+            notificationService.displayMessage('warning', `Unable to format table.`);
         }
     }
 
-    async getSelectedCell(context) {
-        // TODO: handle more than one cell selected
+    getSelectedCell = async (context) => {
         const selectedRangeStart = context.workbook.getSelectedRange();
         selectedRangeStart.load(officeProperties.officeAddress);
         await context.sync();
@@ -124,7 +122,7 @@ class OfficeApiHelper {
         return startCell;
     }
 
-    async bindNamedItem(namedItem, bindingId) {
+    bindNamedItem = async (namedItem, bindingId) => {
         return await Office.context.document.bindings.addFromNamedItemAsync(
             namedItem, 'table', { id: bindingId }, (result) => {
                 if (result.status == 'succeeded') {
