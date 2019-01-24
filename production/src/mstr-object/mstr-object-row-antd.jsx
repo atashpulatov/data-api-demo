@@ -8,7 +8,7 @@ export const DirectoryRow = ({ directory, onClick }) => (
     <Row
         type='flex'
         className='cursor-is-pointer row'
-        onClick={onDirectoryRowClick(onClick, directory)}>
+        onClick={() => onClick(directory.id, directory.name)}>
         <Col>
             <MSTRIcon type='folder-collapsed' />
         </Col>
@@ -27,7 +27,16 @@ export const ReportRow = ({ report, onClick, onFilterReport }) => (
             <MSTRIcon type='report' />
         </Col>
         <Col
-            onClick={onReportRowClick(onClick, report)}
+            onClick={async () => {
+                const _result = await onClick(report.id);
+                if (_result.success){
+                    message.success(_result.message);
+                }
+                else {
+                    message.warn(_result.message);
+                }
+                
+            }}
             span={18}
             offset={1}
         >
@@ -38,32 +47,11 @@ export const ReportRow = ({ report, onClick, onFilterReport }) => (
             title='Choose data'>
             <Col
                 offset={1}
-                onClick={onFilterClick(onFilterReport, report)}>
+                onClick={() => {
+                    onFilterReport(report.id);
+                }}>
                 <MSTRIcon type='filter' />
             </Col>
         </Tooltip>
     </Row>
 );
-function onFilterClick(onFilterReport, report) {
-    return () => {
-        onFilterReport(report.id);
-    };
-}
-
-function onDirectoryRowClick(onClick, directory) {
-    return () => onClick(directory.id, directory.name);
-}
-
-function onReportRowClick(onClick, report) {
-    return async () => {
-        debugger;
-        const _result = await onClick(report.id);
-        if (_result.success) {
-            message.success(_result.message);
-        }
-        else {
-            message.warn(_result.message);
-        }
-    };
-}
-
