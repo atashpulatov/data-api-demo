@@ -23,7 +23,6 @@ describe('OfficeDisplayService', () => {
     };
 
     beforeAll(() => {
-
         const getObjectContentSpy = jest.spyOn(mstrObjectRestService, 'getObjectContent')
             .mockResolvedValue(givenReport);
 
@@ -46,12 +45,13 @@ describe('OfficeDisplayService', () => {
             .mockReturnValue({
                 workbook: {
                     tables: {
-                        getItem: () => { return { delete: () => {}}},
-                    }
+                        getItem: () => {
+                            return { delete: () => { } };
+                        },
+                    },
                 },
-                sync: () => {},
+                sync: () => { },
             });
-
     });
 
     beforeEach(() => {
@@ -99,26 +99,27 @@ describe('OfficeDisplayService', () => {
     });
 
     it('should call deleteReport on office store service', async () => {
-            // given
-            officeStoreService.deleteReport = jest.fn();
-            const report = {
-                id: 'firstTestId',
-                name: 'firstTestName',
-                bindId: 'firstBindId',
-                tableId: 'firstTableId',
-                projectId: 'firstProjectId',
-                envUrl: 'firstEnvUrl',
-            };
-            officeDisplayService.addReportToStore(report);
-            // when            
-            const bindingId = reduxStore.getState().officeReducer.reportArray[0].id;
-            await officeDisplayService.removeReportFromExcel(bindingId);
-            // then
-            expect(officeStoreService.deleteReport).toBeCalled();
+        // given
+        officeStoreService.deleteReport = jest.fn();
+        const report = {
+            id: 'firstTestId',
+            name: 'firstTestName',
+            bindId: 'firstBindId',
+            tableId: 'firstTableId',
+            projectId: 'firstProjectId',
+            envUrl: 'firstEnvUrl',
+        };
+        officeDisplayService.addReportToStore(report);
+        // when
+        const bindingId = reduxStore.getState().officeReducer.reportArray[0].id;
+        await officeDisplayService.removeReportFromExcel(bindingId);
+        // then
+        expect(officeStoreService.deleteReport).toBeCalled();
     });
     describe('_insertDataIntoExcel', async () => {
         it('should return table husk with proper name and invoke required methods', async () => {
             // given
+            jest.spyOn(officeApiHelper, 'formatTable');
             const getActiveWorksheetMock = jest.fn();
             const mockedTable = {
                 getHeaderRowRange: jest.fn().mockReturnValue({
