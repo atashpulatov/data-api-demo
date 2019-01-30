@@ -16,7 +16,7 @@ export class _MenuBar extends Component {
         const session = sessionHelper.getSession();
         Excel.run(async (context) => {
             Office.context.ui.displayDialogAsync(
-                `${environment.scheme}://${environment.host}/popup.html`
+                `${environment.scheme}://${environment.host}:${environment.port}/popup.html`
                 + '?popupType=' + PopupTypeEnum.navigationTree
                 + '&envUrl=' + session.url
                 + '&token=' + session.authToken

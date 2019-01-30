@@ -83,7 +83,7 @@ export class _MstrObjects extends React.Component {
         const session = sessionHelper.getSession();
         Excel.run(async (context) => {
             Office.context.ui.displayDialogAsync(
-                `${environment.scheme}://${environment.host}/popup.html`
+                `${environment.scheme}://${environment.host}:${environment.port}/popup.html`
                 + '?envUrl=' + session.url
                 + '&token=' + session.authToken
                 + '&projectId=' + session.projectId
