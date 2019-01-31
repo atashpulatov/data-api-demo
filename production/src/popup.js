@@ -5,6 +5,8 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import * as queryString from 'query-string';
 import 'mstr-react-library/src/css/mstr-react.css';
 import { AttributeSelectorWindow } from './attribute-selector/attribute-selector-window';
+import { PopupTypeEnum } from './home/popup-type-enum';
+import { NavigationTree } from './navigation/navigation-tree';
 /* eslint-enable */
 
 const Office = window.Office;
@@ -31,6 +33,10 @@ export class Popup extends Component {
     if (!popupType) {
       return (
         <AttributeSelectorWindow parsed={propsToPass} />
+      );
+    } else if (popupType === PopupTypeEnum.navigationTree) {
+      return (
+        <NavigationTree parsed={propsToPass} />
       );
     }
   }

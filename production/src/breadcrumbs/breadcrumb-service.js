@@ -2,7 +2,7 @@ import { reduxStore } from '../store';
 import { historyProperties } from '../history/history-properties';
 
 class BreadcrumbsService {
-    getHistoryObjects() {
+    getHistoryObjects = () => {
         const historyObjects = [];
         const project = reduxStore.getState().historyReducer.project;
         if (!project || !Object.keys(project).length) {
@@ -18,7 +18,7 @@ class BreadcrumbsService {
         });
         return historyObjects;
     }
-    navigateToDir(dirId) {
+    navigateToDir = (dirId) => {
         reduxStore.dispatch({
             type: historyProperties.actions.goUpTo,
             dirId: dirId,

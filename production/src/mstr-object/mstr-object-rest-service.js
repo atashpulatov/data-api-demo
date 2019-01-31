@@ -1,4 +1,4 @@
-import { errorHandler } from '../error/error-handler';
+import { errorService } from '../error/error-handler';
 import { reduxStore } from '../store';
 import { moduleProxy } from '../module-proxy';
 
@@ -7,7 +7,6 @@ const sharedFolderIdType = 7;
 class MstrObjectRestService {
     async getProjectContent(envUrl, authToken, projectId,
         folderType = sharedFolderIdType) {
-        //
         const fullPath = `${envUrl}/folders/preDefined/${folderType}`;
         return await moduleProxy.request
             .get(fullPath)
@@ -18,7 +17,7 @@ class MstrObjectRestService {
                 return res.body;
             })
             .catch((err) => {
-                errorHandler(err);
+                throw errorService.errorRestFactory(err);
             });
     }
 
@@ -33,7 +32,7 @@ class MstrObjectRestService {
                 return res.body;
             })
             .catch((err) => {
-                errorHandler(err);
+                throw errorService.errorRestFactory(err);
             });
     }
 
@@ -48,7 +47,7 @@ class MstrObjectRestService {
                 return res.body.instanceId;
             })
             .catch((err) => {
-                errorHandler(err);
+                throw errorService.errorRestFactory(err);
             });
     }
 
@@ -69,7 +68,7 @@ class MstrObjectRestService {
                 return res.body;
             })
             .catch((err) => {
-                errorHandler(err);
+                throw errorService.errorRestFactory(err);
             });
     }
 };

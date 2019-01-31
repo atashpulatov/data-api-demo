@@ -2,6 +2,9 @@
 import React from 'react';
 import { Row, Col, message, Tooltip } from 'antd';
 import { MSTRIcon } from 'mstr-react-library';
+import { notificationService } from '../notification/notification-service';
+import { errorService } from '../error/error-handler';
+import { sessionHelper } from '../storage/session-helper';
 /* eslint-enable */
 
 export const DirectoryRow = ({ directory, onClick }) => (
@@ -47,14 +50,16 @@ export const ReportRow = ({ report, onClick, onFilterReport }) => (
         </Tooltip>
     </Row>
 );
-const onReportRowClick = async (onClick, report) => {
-    const _result = await onClick(report.id);
-    if (_result.success) {
-        message.success(_result.message);
-    }
-    else {
-        message.warn(_result.message);
-    }
-};
-
-
+function onReportRowClick(onClick, report) {
+    return async () => {
+        try {
+            sessionHelper.enableLoading();
+            await onClick(report.id);
+            notificationService.displayMessage('success', `Loaded report: ${report.name}`);
+        } catch (error) {
+            errorService.handleOfficeError(error);
+        } finally {
+            sessionHelper.disableLoading();
+        }
+    };
+}

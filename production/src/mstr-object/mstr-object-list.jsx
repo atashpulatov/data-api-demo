@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React from 'react';
-import { DirectoryRow, ReportRow } from './mstr-object-row-antd.jsx';
+import { DirectoryRow, ReportRow } from './mstr-object-row.jsx';
 import './mstr-object.css';
 import { officeDisplayService } from '../office/office-display-service';
 import { reduxStore } from '../store';
@@ -9,6 +9,8 @@ import { withNavigation } from '../navigation/with-navigation.jsx';
 import { mstrObjectListHelper } from './mstr-object-list-helper';
 import { sessionHelper } from '../storage/session-helper';
 import { selectorProperties } from '../attribute-selector/selector-properties';
+import { environment } from '../global-definitions';
+import { errorService } from '../error/error-handler.js';
 /* eslint-enable */
 
 const objectsTypesMap = {
@@ -30,27 +32,42 @@ export class _MstrObjects extends React.Component {
     }
 
     async componentDidMount() {
-        const dirArray = reduxStore.getState().historyReducer.directoryArray;
-        sessionHelper.enableLoading();
-        const data = await mstrObjectListHelper.fetchContent(dirArray);
-        this.setState({
-            mstrObjects: data,
-        });
-        sessionHelper.disableLoading();
-    }
-
-    async componentDidUpdate(prevProps, prevState) {
-        if (prevState.body !== this.state.body) {
-            this.printReportLocalized(this.state.popupReportId
-                , this.state.body);
-        }
-        const dirArray = reduxStore.getState().historyReducer.directoryArray;
-        const data = await mstrObjectListHelper.fetchContent(dirArray);
-        const arraysEqual = mstrObjectListHelper.compareMstrObjectArrays(this.state.mstrObjects, data);
-        if (!arraysEqual) {
+        try {
+            const dirArray = reduxStore.getState().historyReducer.directoryArray;
+            sessionHelper.enableLoading();
+            const data = await mstrObjectListHelper.fetchContent(dirArray);
             this.setState({
                 mstrObjects: data,
             });
+        } catch (error) {
+            errorService.handleError(error);
+        } finally {
+            sessionHelper.disableLoading();
+        }
+    }
+
+    async componentDidUpdate(prevProps, prevState) {
+        try {
+            if (prevState.body !== this.state.body) {
+                this.printReportLocalized(this.state.popupReportId
+                    , this.state.body);
+            }
+            const project = reduxStore.getState().historyReducer.project;
+            if (!project) {
+                sessionHelper.disableLoading();
+                return;
+            };
+            const dirArray = reduxStore.getState().historyReducer.directoryArray;
+            const data = await mstrObjectListHelper.fetchContent(dirArray);
+            const arraysEqual = mstrObjectListHelper.compareMstrObjectArrays(this.state.mstrObjects, data);
+            if (!arraysEqual) {
+                this.setState({
+                    mstrObjects: data,
+                });
+            }
+        } catch (error) {
+            errorService.handleError(error);
+        } finally {
             sessionHelper.disableLoading();
         }
     }
@@ -66,7 +83,7 @@ export class _MstrObjects extends React.Component {
         const session = sessionHelper.getSession();
         Excel.run(async (context) => {
             Office.context.ui.displayDialogAsync(
-                'https://localhost:3000/popup.html'
+                `${environment.scheme}://${environment.host}/popup.html`
                 + '?envUrl=' + session.url
                 + '&token=' + session.authToken
                 + '&projectId=' + session.projectId

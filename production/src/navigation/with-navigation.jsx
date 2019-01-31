@@ -24,7 +24,11 @@ export function withNavigation(WrappedComponent) {
             this.conditionallyRenavigate();
         }
 
-        componentDidUpdate() {
+        componentDidUpdate(prevProps) {
+            if (prevProps.authToken === this.props.authToken
+                && prevProps.project === this.props.project) {
+                return;
+            }
             this.conditionallyRenavigate();
         };
 
