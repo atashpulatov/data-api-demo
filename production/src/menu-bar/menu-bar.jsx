@@ -45,6 +45,7 @@ export class _MenuBar extends Component {
                 this.dialog.close();
                 break;
             default:
+                console.error(`Unknown message command: ${message.command}`);
                 break;
         }
     }
