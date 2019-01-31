@@ -1,5 +1,6 @@
 import { reduxStore } from '../store';
 import { sessionProperties } from './session-properties';
+import { authenticationService} from '../authentication/auth-rest-service';
 
 class SessionHelper {
     enableLoading = () => {
@@ -14,7 +15,10 @@ class SessionHelper {
             loading: false,
         });
     }
-    logout = () => {
+    logout = async () => {
+        const authToken = reduxStore.getState().sessionReducer.authToken;
+        const envUrl = reduxStore.getState().sessionReducer.envUrl;
+        await authenticationService.logout(envUrl, authToken);
         reduxStore.dispatch({
             type: sessionProperties.actions.logOut,
         });

@@ -69,7 +69,7 @@ export class _MenuBar extends Component {
                         <button
                             className='menu menu-options'
                             id='logOut'
-                            onClick={menuBarService.logOut}>
+                            onClick={sessionHelper.logout}>
                             <Icon type='logout' />
                         </button>
                     </Tooltip>

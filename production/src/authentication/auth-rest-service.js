@@ -14,6 +14,20 @@ class AuthenticationService {
                 errorService.errorRestFactory(err);
             });
     }
+    logout = async (envUrl, authToken) =>{
+        console.log('in logout');
+        console.log(authToken);
+        return await moduleProxy.request
+            .post(envUrl + '/auth/logout')
+            .set('x-mstr-authtoken', authToken)
+            .withCredentials()
+            .then((res) =>{
+                return;
+            })
+            .catch((err)=>{
+                errorService.errorRestFactory(err);
+            });
+    }
 }
 
 export const authenticationService = new AuthenticationService();
