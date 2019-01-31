@@ -7,6 +7,8 @@ import './menu-bar.css';
 import { PopupTypeEnum } from '../home/popup-type-enum';
 import { sessionHelper } from '../storage/session-helper';
 import { environment } from '../global-definitions';
+import { selectorProperties } from '../attribute-selector/selector-properties';
+import { officeDisplayService } from '../office/office-display-service';
 /* eslint-enable */
 
 export class _MenuBar extends Component {
@@ -14,21 +16,38 @@ export class _MenuBar extends Component {
         const session = sessionHelper.getSession();
         Excel.run(async (context) => {
             Office.context.ui.displayDialogAsync(
-                `${environment.scheme}://${environment.host}/popup.html`
+                `${environment.scheme}://${environment.host}:${environment.port}/popup.html`
                 + '?popupType=' + PopupTypeEnum.navigationTree
                 + '&envUrl=' + session.url
                 + '&token=' + session.authToken
                 + '&projectId=' + session.projectId,
-                { height: 62, width: 50, displayInIframe: true },
+                { height: 70, width: 75, displayInIframe: true },
                 (asyncResult) => {
                     this.dialog = asyncResult.value;
                     this.dialog.addEventHandler(
                         Office.EventType.DialogMessageReceived,
-                        // this.onMessageFromPopup);
-                        () => { });
+                        this.onMessageFromPopup);
                 });
             await context.sync();
         });
+    }
+
+    onMessageFromPopup = (arg) => {
+        const message = JSON.parse(arg.message);
+        switch (message.command) {
+            case selectorProperties.commandOk:
+                if (message.chosenObject) {
+                    officeDisplayService.printObject(message.chosenObject);
+                }
+                this.dialog.close();
+                break;
+            case selectorProperties.commandCancel:
+                this.dialog.close();
+                break;
+            default:
+                console.error(`Unknown message command: ${message.command}`);
+                break;
+        }
     }
 
     render() {

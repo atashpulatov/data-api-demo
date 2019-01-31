@@ -11,12 +11,12 @@ describe('NavigationTree', () => {
             envUrl: 'env',
             token: 'token',
             projectId: 'projectId',
-        }
+        };
         // when
         const wrappedComponent = mount(<NavigationTree parsed={parsed} />);
         // then
         expect(wrappedComponent.instance()).toBeDefined();
         expect(wrappedComponent.find('FolderTree').get(0)).toBeDefined();
-        expect(wrappedComponent.find('PopupButtons').length).toBe(0);
+        expect(wrappedComponent.find('PopupButtons').length).toBe(1);
     });
 });
