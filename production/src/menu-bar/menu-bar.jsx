@@ -27,19 +27,17 @@ export class _MenuBar extends Component {
                     this.dialog.addEventHandler(
                         Office.EventType.DialogMessageReceived,
                         this.onMessageFromPopup);
-                    // () => { });
                 });
             await context.sync();
         });
     }
 
     onMessageFromPopup = (arg) => {
-        const message = arg.message
-        const response = JSON.parse(message);
-        switch (response.command) {
+        const message = JSON.parse(arg.message);
+        switch (message.command) {
             case selectorProperties.commandOk:
-                if (response.chosenObject) {
-                    officeDisplayService.printObject(response.chosenObject);
+                if (message.chosenObject) {
+                    officeDisplayService.printObject(message.chosenObject);
                 }
                 this.dialog.close();
                 break;
