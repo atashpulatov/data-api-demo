@@ -19,6 +19,11 @@ class OfficeDisplayService {
             const excelContext = await officeApiHelper.getExcelContext();
             startCell = startCell || await officeApiHelper.getSelectedCell(excelContext);
             const jsonData = await mstrObjectRestService.getObjectContent(objectId, body);
+            if (jsonData && jsonData.result.data.root == null){
+                //report returned no data
+                sessionHelper.disableLoading();
+                return {success: false, message: 'No data returned by the report: ' + jsonData.name};
+            }
             const convertedReport = officeConverterService
                 .getConvertedTable(jsonData);
             const newOfficeTableId = officeTableId || await officeApiHelper.findAvailableOfficeTableId(excelContext);
@@ -37,6 +42,8 @@ class OfficeDisplayService {
                     envUrl,
                 });
             }
+            sessionHelper.disableLoading();
+            return {success: true, message: 'Loaded report: ' + jsonData.name};    
         } catch (error) {
             throw errorService.errorOfficeFactory(error);
         }

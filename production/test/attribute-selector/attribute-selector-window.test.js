@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import { AttributeSelectorWindow } from '../../src/attribute-selector/attribute-selector-window';
 import { AttributeSelector } from '../../src/attribute-selector/attribute-selector';
 /* eslint-enable */
@@ -37,5 +37,115 @@ describe('AttributeSelectorWindow', () => {
             .toEqual(parsed.projectId);
         expect(componentWrapper.state('reportId'))
             .toEqual(parsed.reportId);
+    });
+
+    it('should trigger onTriggerUpdate when OK is clicked and data is returned', async () => {
+        // given
+        const parsed = {
+            envUrl: 'url',
+            token: 'token',
+            projectId: 'proId',
+            reportId: 'repId',
+        };
+        
+        const componentWrapper = mount(<AttributeSelectorWindow
+            parsed={parsed} />);
+
+        const attributeMetricFilterWrapper = componentWrapper.find('AttributeMetricFilter');
+        attributeMetricFilterWrapper.instance().noDataSelected = jest.fn(() => false);
+        attributeMetricFilterWrapper.instance().checkIfEmptyData = jest.fn(() => false);
+
+        const spyMethod = jest.spyOn(componentWrapper.instance(), 'onTriggerUpdate');
+
+        const wrappedButtons = componentWrapper.find('Button');
+        const wrappedOkButton = wrappedButtons.at(6);
+
+        // when
+        await wrappedOkButton.simulate('click');
+
+        // then
+        expect(spyMethod).toBeCalled();
+    });
+
+    it('should NOT trigger onTriggerUpdate when Ok was clicked and no items are selected', async () => {
+        // given
+        const parsed = {
+            envUrl: 'url',
+            token: 'token',
+            projectId: 'proId',
+            reportId: 'repId',
+        };
+
+        const componentWrapper = mount(<AttributeSelectorWindow
+            parsed={parsed} />);
+
+        const attributeMetricFilterWrapper = componentWrapper.find('AttributeMetricFilter');
+        attributeMetricFilterWrapper.instance().noDataSelected = jest.fn(() => true);
+
+        const spyMethod = jest.spyOn(componentWrapper.instance(), 'onTriggerUpdate');
+
+        const wrappedButtons = componentWrapper.find('Button');
+        const wrappedOkButton = wrappedButtons.at(6);
+
+        // when
+        await wrappedOkButton.simulate('click');
+
+        // then
+        expect(spyMethod).not.toBeCalled();
+        expect(componentWrapper.instance().state.triggerUpdate).toEqual(false);
+    });
+
+    it('should NOT trigger onTriggerUpdate when Ok was clicked and all data is filtered out', async () => {
+        // given
+        const parsed = {
+            envUrl: 'url',
+            token: 'token',
+            projectId: 'proId',
+            reportId: 'repId',
+        };
+
+        const componentWrapper = mount(<AttributeSelectorWindow
+            parsed={parsed} />);
+
+        const attributeMetricFilterWrapper = componentWrapper.find('AttributeMetricFilter');
+        attributeMetricFilterWrapper.instance().checkIfEmptyData = jest.fn(() => false);
+
+        const spyMethod = jest.spyOn(componentWrapper.instance(), 'onTriggerUpdate');
+
+        const wrappedButtons = componentWrapper.find('Button');
+        const wrappedOkButton = wrappedButtons.at(6);
+
+        // when
+        await wrappedOkButton.simulate('click');
+
+        // then
+        expect(spyMethod).not.toBeCalled();
+        expect(componentWrapper.instance().state.triggerUpdate).toEqual(false);
+    });
+
+    it('should trigger handleCancel when Cancel was clicked', () => {
+        // given
+        const parsed = {
+            envUrl: 'url',
+            token: 'token',
+            projectId: 'proId',
+            reportId: 'repId',
+        };
+
+        const componentWrapper = mount(<AttributeSelectorWindow
+            parsed={parsed} />);
+
+        componentWrapper.instance().handleCancel = jest.fn();
+        const wrappedButtons = componentWrapper.find('Button');
+        const spyMethod = jest.spyOn(componentWrapper.instance(), 'handleCancel');
+        componentWrapper.instance().forceUpdate();
+
+        const wrappedCancelButton = wrappedButtons.at(5);
+
+        // when
+        wrappedCancelButton.simulate('click');
+
+        // then
+        expect(spyMethod).toBeCalled();
     });
 });

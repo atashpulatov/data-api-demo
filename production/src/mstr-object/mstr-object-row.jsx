@@ -30,7 +30,8 @@ export const ReportRow = ({ report, onClick, onFilterReport }) => (
             <MSTRIcon type='report' />
         </Col>
         <Col
-            onClick={onReportRowClick(onClick, report)}
+            onClick={() => {
+                onReportRowClick(onClick, report)}}
             span={18}
             offset={1}
         >
@@ -62,4 +63,3 @@ function onReportRowClick(onClick, report) {
         }
     };
 }
-

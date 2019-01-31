@@ -20,7 +20,9 @@ export class AttributeSelector extends Component {
                     triggerUpdate={this.props.triggerUpdate}
                     onTriggerUpdate={this.props.onTriggerUpdate}
                     withDataPreview
-                    reportId={this.props.reportId} />
+                    reportId={this.props.reportId}
+                    resetTriggerUpdate={this.props.resetTriggerUpdate}
+                />
             </ErrorBoundary>
         );
     }
