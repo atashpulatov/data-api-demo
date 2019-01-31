@@ -11,7 +11,7 @@ class AuthenticationService {
                 return res.headers['x-mstr-authtoken'];
             })
             .catch((err) => {
-                errorService.errorRestFactory(err);
+                throw errorService.errorRestFactory(err);
             });
     }
     logout = async (envUrl, authToken) =>{

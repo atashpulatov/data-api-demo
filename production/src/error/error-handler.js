@@ -10,26 +10,26 @@ import { OverlappingTablesError } from './overlapping-tables-error';
 class ErrorService {
     errorRestFactory = (error) => {
         if (error.status === 404 || !error.response) {
-            throw new EnvironmentNotFoundError();
+            return new EnvironmentNotFoundError();
         }
         switch (error.response.status) {
             case 404:
-                throw new EnvironmentNotFoundError();
+                return new EnvironmentNotFoundError();
             case 400:
-                throw new BadRequestError();
+                return new BadRequestError();
             case 401:
-                throw new UnauthorizedError();
+                return new UnauthorizedError();
             case 500:
-                throw new InternalServerError();
+                return new InternalServerError();
         }
         throw error;
     };
     errorOfficeFactory = (error) => {
         switch (error.message) {
             case 'Excel is not defined':
-                throw new RunOutsideOfficeError(error.message);
+                return new RunOutsideOfficeError(error.message);
             case `A table can't overlap another table. `:
-                throw new OverlappingTablesError(error.message);
+                return new OverlappingTablesError(error.message);
             default:
                 if (error.name === 'RichApi.Error') notificationService.displayMessage('error', error.message);
                 throw error;

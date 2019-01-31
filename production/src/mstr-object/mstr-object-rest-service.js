@@ -17,7 +17,7 @@ class MstrObjectRestService {
                 return res.body;
             })
             .catch((err) => {
-                errorService.errorRestFactory(err);
+                throw errorService.errorRestFactory(err);
             });
     }
 
@@ -32,7 +32,7 @@ class MstrObjectRestService {
                 return res.body;
             })
             .catch((err) => {
-                errorService.errorRestFactory(err);
+                throw errorService.errorRestFactory(err);
             });
     }
 
@@ -47,7 +47,7 @@ class MstrObjectRestService {
                 return res.body.instanceId;
             })
             .catch((err) => {
-                errorService.errorRestFactory(err);
+                throw errorService.errorRestFactory(err);
             });
     }
 
@@ -68,7 +68,7 @@ class MstrObjectRestService {
                 return res.body;
             })
             .catch((err) => {
-                errorService.errorRestFactory(err);
+                throw errorService.errorRestFactory(err);
             });
     }
 };

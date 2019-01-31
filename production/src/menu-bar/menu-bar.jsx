@@ -8,6 +8,8 @@ import { PopupTypeEnum } from '../home/popup-type-enum';
 import { sessionHelper } from '../storage/session-helper';
 import { environment } from '../global-definitions';
 import { officeContext } from '../office/office-context';
+import { selectorProperties } from '../attribute-selector/selector-properties';
+import { officeDisplayService } from '../office/office-display-service';
 /* eslint-enable */
 
 export class _MenuBar extends Component {
@@ -22,16 +24,33 @@ export class _MenuBar extends Component {
                 + '&envUrl=' + session.url
                 + '&token=' + session.authToken
                 + '&projectId=' + session.projectId,
-                { height: 62, width: 50, displayInIframe: true },
+                { height: 70, width: 75, displayInIframe: true },
                 (asyncResult) => {
                     this.dialog = asyncResult.value;
                     this.dialog.addEventHandler(
                         officeObject.EventType.DialogMessageReceived,
-                        // this.onMessageFromPopup);
-                        () => { });
+                        this.onMessageFromPopup);
                 });
             await context.sync();
         });
+    }
+
+    onMessageFromPopup = (arg) => {
+        const message = arg.message
+        const response = JSON.parse(message);
+        switch (response.command) {
+            case selectorProperties.commandOk:
+                if (response.chosenObject) {
+                    officeDisplayService.printObject(response.chosenObject);
+                }
+                this.dialog.close();
+                break;
+            case selectorProperties.commandCancel:
+                this.dialog.close();
+                break;
+            default:
+                break;
+        }
     }
 
     render() {
