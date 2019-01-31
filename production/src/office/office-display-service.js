@@ -5,6 +5,7 @@ import { reduxStore } from '../store';
 import { officeProperties } from './office-properties';
 import { officeStoreService } from './store/office-store-service';
 import { errorService } from '../error/error-handler';
+import { sessionHelper } from '../storage/session-helper';
 
 class OfficeDisplayService {
     constructor() {
@@ -42,7 +43,6 @@ class OfficeDisplayService {
                     envUrl,
                 });
             }
-            sessionHelper.disableLoading();
             return {success: true, message: 'Loaded report: ' + jsonData.name};    
         } catch (error) {
             throw errorService.errorOfficeFactory(error);

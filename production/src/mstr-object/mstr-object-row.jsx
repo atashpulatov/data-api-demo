@@ -50,16 +50,14 @@ export const ReportRow = ({ report, onClick, onFilterReport }) => (
         </Tooltip>
     </Row>
 );
-function onReportRowClick(onClick, report) {
-    return async () => {
-        try {
-            sessionHelper.enableLoading();
-            await onClick(report.id);
-            notificationService.displayMessage('success', `Loaded report: ${report.name}`);
-        } catch (error) {
-            errorService.handleOfficeError(error);
-        } finally {
-            sessionHelper.disableLoading();
-        }
-    };
+const onReportRowClick = async (onClick, report) => {
+    try {
+        sessionHelper.enableLoading();
+        await onClick(report.id);
+        notificationService.displayMessage('success', `Loaded report: ${report.name}`);
+    } catch (error) {
+        errorService.handleOfficeError(error);
+    } finally {
+        sessionHelper.disableLoading();
+    }
 }
