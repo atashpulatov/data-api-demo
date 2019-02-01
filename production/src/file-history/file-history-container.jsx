@@ -10,9 +10,8 @@ import './file-history.css';
 
 export class _FileHistoryContainer extends Component {
     render() {
-        return !this.props.project
-            ? null
-            : <div>
+        return (
+            <div>
                 <h3 style={{ textAlign: 'center' }}>Loaded files</h3>
                 <hr />
                 <List
@@ -33,7 +32,7 @@ export class _FileHistoryContainer extends Component {
                     )}
                 />
                 <hr />
-            </div>;
+            </div>);
     }
 }
 
