@@ -11,10 +11,7 @@ import { connect } from 'react-redux';
 import './home.css';
 import { Notifications } from '../notification/notifications.jsx';
 import { Authenticate } from '../authentication/auth-component.jsx';
-import { reduxStore } from '../store';
 import { sessionHelper } from '../storage/session-helper';
-import { errorService } from '../error/error-handler';
-import { notificationService } from '../notification/notification-service';
 import { Placeholder } from './placeholder.jsx';
 /* eslint-enable */
 
@@ -67,7 +64,6 @@ componentDidUpdate = () => {
 
   render() {
     return (
-      <Router>
         <div id='content'>
           <Notifications />
           <Header />
@@ -81,7 +77,6 @@ componentDidUpdate = () => {
           </Spin>
           <Footer />
         </div>
-      </Router>
     );
   }
 }
