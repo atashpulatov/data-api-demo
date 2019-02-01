@@ -4,54 +4,11 @@ import { menuBarService } from './menu-bar-service';
 import { connect } from 'react-redux';
 import { Icon, Tooltip } from 'antd';
 import './menu-bar.css';
-import { PopupTypeEnum } from '../home/popup-type-enum';
 import { sessionHelper } from '../storage/session-helper';
-import { environment } from '../global-definitions';
-import { officeContext } from '../office/office-context';
-import { selectorProperties } from '../attribute-selector/selector-properties';
-import { officeDisplayService } from '../office/office-display-service';
+import { popupController } from '../popup-controller';
 /* eslint-enable */
 
 export class _MenuBar extends Component {
-    runPopupNavigation = () => {
-        const session = sessionHelper.getSession();
-        const excelObject = officeContext.getExcel();
-        Excel.run(async (context) => {
-            const officeObject = officeContext.getOffice();
-            officeObject.context.ui.displayDialogAsync(
-                `${environment.scheme}://${environment.host}:${environment.port}/popup.html`
-                + '?popupType=' + PopupTypeEnum.navigationTree
-                + '&envUrl=' + session.url
-                + '&token=' + session.authToken
-                + '&projectId=' + session.projectId,
-                { height: 70, width: 75, displayInIframe: true },
-                (asyncResult) => {
-                    this.dialog = asyncResult.value;
-                    this.dialog.addEventHandler(
-                        officeObject.EventType.DialogMessageReceived,
-                        this.onMessageFromPopup);
-                });
-            await context.sync();
-        });
-    }
-
-    onMessageFromPopup = (arg) => {
-        const message = arg.message
-        const response = JSON.parse(message);
-        switch (response.command) {
-            case selectorProperties.commandOk:
-                if (response.chosenObject) {
-                    officeDisplayService.printObject(response.chosenObject);
-                }
-                this.dialog.close();
-                break;
-            case selectorProperties.commandCancel:
-                this.dialog.close();
-                break;
-            default:
-                break;
-        }
-    }
 
     render() {
         return (
@@ -80,7 +37,7 @@ export class _MenuBar extends Component {
                         <button
                             className='menu menu-options'
                             id='goPopup'
-                            onClick={this.runPopupNavigation}>
+                            onClick={popupController.runPopupNavigation}>
                             <Icon type='fullscreen' />
                         </button>
                     </Tooltip>
