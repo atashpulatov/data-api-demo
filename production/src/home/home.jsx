@@ -49,7 +49,7 @@ mockedLoginFlow = () => {
     });
     console.log(authToken);
     if (authToken[0]) {
-        sessionHelper.login(authToken[0].value);
+        sessionHelper.logIn(authToken[0].value);
     }
 }
 

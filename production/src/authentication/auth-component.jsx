@@ -36,7 +36,7 @@ export class _Authenticate extends Component {
                     values.username, values.password,
                     values.envUrl, this.state.authMode);
                 notificationService.displayMessage('success', 'Logged in');
-                sessionHelper.login(authToken);
+                sessionHelper.logIn(authToken);
             } catch (error) {
                 errorService.handlePreAuthError(error);
             }

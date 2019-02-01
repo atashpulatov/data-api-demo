@@ -1,51 +1,22 @@
 /* eslint-disable */
 import React, { Component } from 'react';
-import { menuBarService } from './menu-bar-service';
 import { connect } from 'react-redux';
 import { Icon, Tooltip } from 'antd';
 import './menu-bar.css';
 import { sessionHelper } from '../storage/session-helper';
-import { popupController } from '../popup-controller';
 /* eslint-enable */
 
 export class _MenuBar extends Component {
-
     render() {
         return (
             <div className='menu-bar-container'>
-                <div className='menu-bar-nav-container'>
-                    <Tooltip placement="bottomLeft" title='Back'>
-                        <button
-                            className='menu menu-nav'
-                            id='goBack'
-                            onClick={menuBarService.goUp}>
-                            <Icon type='left' />
-                        </button>
-                    </Tooltip>
-                    <Tooltip placement="bottom" title='Go top'>
-                        <button
-                            className='menu menu-nav'
-                            id='goTop'
-                            onClick={menuBarService.goProjects}>
-                            <Icon type='double-left' />
-                        </button>
-                    </Tooltip>
-                </div>
                 <div className='menu-bar-options-container'>
                     {/* TODO: temporary solution below */}
-                    <Tooltip placement="bottom" title='Go popup!'>
-                        <button
-                            className='menu menu-options'
-                            id='goPopup'
-                            onClick={popupController.runPopupNavigation}>
-                            <Icon type='fullscreen' />
-                        </button>
-                    </Tooltip>
                     <Tooltip placement="bottom" title='Log out'>
                         <button
                             className='menu menu-options'
                             id='logOut'
-                            onClick={sessionHelper.logout}>
+                            onClick={sessionHelper.logOut}>
                             <Icon type='logout' />
                         </button>
                     </Tooltip>
@@ -58,7 +29,7 @@ export class _MenuBar extends Component {
                     </Tooltip>
                 </div>
             </div >
-        )
+        );
     }
 };
 

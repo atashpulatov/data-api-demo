@@ -15,7 +15,7 @@ class SessionHelper {
             loading: false,
         });
     }
-    logout = async () => {
+    logOut = async () => {
         const authToken = reduxStore.getState().sessionReducer.authToken;
         const envUrl = reduxStore.getState().sessionReducer.envUrl;
         await authenticationService.logout(envUrl, authToken);
@@ -32,7 +32,7 @@ class SessionHelper {
             isRememberMeOn: values.isRememberMeOn,
         });
     }
-    login = (authToken) => {
+    logIn = (authToken) => {
         reduxStore.dispatch({
             type: sessionProperties.actions.loggedIn,
             authToken: authToken,
