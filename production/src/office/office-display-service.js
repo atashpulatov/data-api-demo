@@ -14,16 +14,16 @@ class OfficeDisplayService {
         this.refreshReport = this.refreshReport.bind(this);
     }
 
-    printObject = async (objectId, startCell, officeTableId, bindingId, body) => {
+    printObject = async (objectId, projectId, startCell, officeTableId, bindingId, body) => {
         try {
             const excelContext = await officeApiHelper.getExcelContext();
             startCell = startCell || await officeApiHelper.getSelectedCell(excelContext);
-            const jsonData = await mstrObjectRestService.getObjectContent(objectId, body);
+            const jsonData = await mstrObjectRestService.getObjectContent(objectId, projectId, body);
             const convertedReport = officeConverterService
                 .getConvertedTable(jsonData);
             const newOfficeTableId = officeTableId || await officeApiHelper.findAvailableOfficeTableId(excelContext);
             await this._insertDataIntoExcel(convertedReport, excelContext, startCell, newOfficeTableId);
-            const { envUrl, projectId } = officeApiHelper.getCurrentMstrContext();
+            const { envUrl } = officeApiHelper.getCurrentMstrContext();
             bindingId = bindingId || newOfficeTableId;
             await excelContext.sync();
             officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);

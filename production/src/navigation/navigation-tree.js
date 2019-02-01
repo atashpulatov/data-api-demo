@@ -17,7 +17,6 @@ export class NavigationTree extends Component {
                 USE_PROXY: false,
                 url: this.props.parsed.envUrl,
                 authToken: this.props.parsed.token,
-                projectId: this.props.parsed.projectId,
             },
             reportId: this.props.parsed.reportId,
             triggerUpdate: false,
@@ -36,6 +35,7 @@ export class NavigationTree extends Component {
         const okObject = {
             command: selectorProperties.commandOk,
             chosenObject: this.state.chosenObjectId,
+            chosenProject: this.state.chosenProjectId,
         };
         Office.context.ui.messageParent(JSON.stringify(okObject));
     }
@@ -48,10 +48,11 @@ export class NavigationTree extends Component {
     }
 
     // TODO: temporary solution
-    onObjectChosen = (id) => {
+    onObjectChosen = (objectId, projectId) => {
         this.setState({
-            chosenObjectId: id,
-        })
+            chosenObjectId: objectId,
+            chosenProjectId: projectId,
+        });
     }
 
     render() {

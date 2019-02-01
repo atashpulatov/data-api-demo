@@ -51,11 +51,10 @@ class MstrObjectRestService {
             });
     }
 
-    async getObjectContent(objectId, body) {
+    async getObjectContent(objectId, projectId, body) {
         const storeState = reduxStore.getState();
         const envUrl = storeState.sessionReducer.envUrl;
         const authToken = storeState.sessionReducer.authToken;
-        const projectId = storeState.historyReducer.project.projectId;
         let fullPath = `${envUrl}/reports/${objectId}/instances`;
         const reportInstance = await this._getInstanceId(fullPath, authToken, projectId, body);
         fullPath += `/${reportInstance}`;

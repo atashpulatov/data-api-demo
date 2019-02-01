@@ -100,9 +100,8 @@ class OfficeApiHelper {
 
     getCurrentMstrContext = () => {
         const envUrl = reduxStore.getState().sessionReducer.envUrl;
-        const projectId = reduxStore.getState().historyReducer.project.projectId;
         const username = reduxStore.getState().sessionReducer.username;
-        return { envUrl, projectId, username };
+        return { envUrl, username };
     }
 
     formatTable = (sheet) => {
