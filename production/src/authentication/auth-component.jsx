@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import './auth-component.css';
 import { authenticationService } from './auth-rest-service';
 import { reduxStore } from '../store';
-import { withNavigation } from '../navigation/with-navigation.jsx';
 import { sessionHelper } from '../storage/session-helper';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import { errorService } from '../error/error-handler';
@@ -22,48 +21,6 @@ export class _Authenticate extends Component {
             envUrl: this.stateFromRedux.envUrl || '',
         };
     }
-
-    saveMockedLoginValues = () => {
-        const values = {
-            username: 'mstr',
-            envUrl: predefinedEnvUrl,
-            isRememberMeOn: false,
-        }
-        sessionHelper.saveLoginValues(values);
-    }
-
-    getCookies = () => {
-        const cookieJar = document.cookie;
-        const splittedCookies = cookieJar.split(';');
-        return splittedCookies.map((cookie) => {
-            const slicedCookie = cookie.split('=');
-            return {
-                name: slicedCookie[0],
-                value: slicedCookie[1],
-            }
-        });
-    }
-
-    mockedLoginFlow = () => {
-        const splittedCookiesJar = this.getCookies();
-        console.log(splittedCookiesJar);
-        const authToken = splittedCookiesJar.filter((cookie) => {
-            return cookie.name === ' iSession';
-        });
-        console.log(authToken);
-        if (authToken[0]) {
-            sessionHelper.login(authToken[0].value);
-        }
-    }
-
-    // componentDidMount = () => {
-    //     this.saveMockedLoginValues();
-    //     this.mockedLoginFlow();
-    // }
-
-    // componentDidUpdate = async () => {
-    //     this.mockedLoginFlow();
-    // }
 
     onLoginUser = async (event) => {
         event.preventDefault();
