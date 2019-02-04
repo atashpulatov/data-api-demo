@@ -1,21 +1,21 @@
 /*eslint-disable */
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Route } from 'react-router-dom';
+import {BrowserRouter, Route} from 'react-router-dom';
 import * as queryString from 'query-string';
-import 'mstr-react-library/src/css/mstr-react.css';
-import { AttributeSelectorWindow } from './attribute-selector/attribute-selector-window';
-import { PopupTypeEnum } from './home/popup-type-enum';
-import { NavigationTree } from './navigation/navigation-tree';
+import 'mstr-react-library/assets/mstr-react.css';
+import {AttributeSelectorWindow} from './attribute-selector/attribute-selector-window';
+import {PopupTypeEnum} from './home/popup-type-enum';
+import {NavigationTree} from './navigation/navigation-tree';
 /* eslint-enable */
 
 const Office = window.Office;
 
 function officeInitialize() {
   Office.onReady()
-    .then(() => {
-      goReact();
-    });
+      .then(() => {
+        goReact();
+      });
 }
 
 export class Popup extends Component {
@@ -29,7 +29,7 @@ export class Popup extends Component {
   }
 
   render() {
-    const { popupType, ...propsToPass } = this.state.parsed;
+    const {popupType, ...propsToPass} = this.state.parsed;
     if (!popupType) {
       return (
         <AttributeSelectorWindow parsed={propsToPass} />
@@ -44,10 +44,10 @@ export class Popup extends Component {
 
 function goReact() {
   ReactDOM.render(
-    <BrowserRouter>
-      <Route path="/" component={Popup} />
-    </BrowserRouter>,
-    document.getElementById('popup')
+      <BrowserRouter>
+        <Route path="/" component={Popup} />
+      </BrowserRouter>,
+      document.getElementById('popup')
   );
 }
 
