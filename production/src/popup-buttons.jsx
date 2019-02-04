@@ -1,26 +1,17 @@
-
-/* eslint-disable */
 import React from 'react';
-import { Row, Col, Button } from 'antd';
-/* eslint-enable */
+import {Button} from 'antd';
+import './popup-buttons.css';
 
-export const PopupButtons = ({ handleOk, handleCancel }) => (
-    <Row
-        type='flex'
-        justify='end'
-        gutter={16}>
-        <Col>
-            <Button
-                onClick={handleCancel}>
-                Cancel
+export const PopupButtons = ({handleOk, handleCancel}) => (
+  <div className="popup-buttons">
+    <Button key="cancel" onClick={handleCancel}>
+      Cancel
     </Button>
-        </Col>
-        <Col>
-            <Button
-                type='primary'
-                onClick={handleOk}>
-                Ok
-      </Button>
-        </Col>
-    </Row >
+    <Button key="import" onClick={handleCancel}>
+      Import
+    </Button>
+    <Button key="submit" type="primary" onClick={handleCancel}>
+      Prepare Data
+    </Button>
+  </div>
 );

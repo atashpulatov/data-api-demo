@@ -1,0 +1,16 @@
+.popup-buttons {
+    padding: 10px;
+}
+
+.popup-buttons {
+    text-align: right;
+}
+
+.popup-buttons .ant-btn-primary {
+    background: rgba(28, 145, 220, 1);
+    margin-left:20px;
+}
+
+.popup-buttons .ant-btn:first-of-type {
+    float: left;
+}
