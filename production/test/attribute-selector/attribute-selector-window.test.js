@@ -52,7 +52,7 @@ describe('AttributeSelectorWindow', () => {
             parsed={parsed} />);
 
         const attributeMetricFilterWrapper = componentWrapper.find('AttributeMetricFilter');
-        attributeMetricFilterWrapper.instance().noDataSelected = jest.fn(() => false);
+        attributeMetricFilterWrapper.instance().noAttributesSelected = jest.fn(() => false);
         attributeMetricFilterWrapper.instance().checkIfEmptyData = jest.fn(() => false);
 
         const spyMethod = jest.spyOn(componentWrapper.instance(), 'onTriggerUpdate');
