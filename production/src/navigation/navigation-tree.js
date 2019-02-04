@@ -1,86 +1,71 @@
-import React,
-{
-  Component,
-}
-
-  from 'react';
+import React, {Component} from 'react';
 import '../index.css';
 import '../home/home.css';
-import {
-  selectorProperties,
-}
-
-  from '../attribute-selector/selector-properties';
-import {
-  PopupButtons,
-}
-
-  from '../popup-buttons.jsx';
+import {selectorProperties} from '../attribute-selector/selector-properties';
+import {PopupButtons} from '../popup-buttons.jsx';
 import 'mstr-react-library/src/css/mstr-react.css';
-import {
-  FolderBrowser,
-}
+import {FolderBrowser} from 'mstr-react-library';
 
-  from 'mstr-react-library';
 export class NavigationTree extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       session: {
-        USE_PROXY: false, url: this.props.parsed.envUrl, authToken: this.props.parsed.token,
-      },      
+        USE_PROXY: false,
+        url: this.props.parsed.envUrl,
+        authToken: this.props.parsed.token,
+      },
       reportId: this.props.parsed.reportId,
       triggerUpdate: false,
-    }
-    ;
+    };
   }
+
   onTriggerUpdate = (body) => {
     const updateObject = {
-      command: selectorProperties.commandOnUpdate, body,
-    }
-      ;
+      command: selectorProperties.commandOnUpdate,
+      body,
+    };
     Office.context.ui.messageParent(JSON.stringify(updateObject));
-  }
-    ;
+  };
+
   handleOk = () => {
     const okObject = {
-      command: selectorProperties.commandOk, chosenObject: this.state.chosenObjectId, chosenProject: this.state.chosenProjectId,
-    }
-      ;
+      command: selectorProperties.commandOk,
+      chosenObject: this.state.chosenObjectId,
+      chosenProject: this.state.chosenProjectId,
+    };
     Office.context.ui.messageParent(JSON.stringify(okObject));
   }
+
   handleCancel = () => {
     const cancelObject = {
       command: selectorProperties.commandCancel,
-    }
-      ;
+    };
     Office.context.ui.messageParent(JSON.stringify(cancelObject));
-  } // TODO: temporary solution
+  }
+
+  // TODO: temporary solution
   onObjectChosen = (objectId, projectId) => {
     this.setState({
-      chosenObjectId: objectId, chosenProjectId: projectId,
-    }
-    );
+      chosenObjectId: objectId,
+      chosenProjectId: projectId,
+    });
   }
+
   render() {
-    return (<FolderBrowser session={
-      this.state.session
-    }
-    triggerUpdate={
-      this.state.triggerUpdate
-    }
-    onTriggerUpdate={
-      this.onTriggerUpdate
-    }
-    onObjectChosen={
-      this.onObjectChosen
-    }
-    > <PopupButtons handleOk={
-        this.handleOk
-      }
-      handleCancel={
-        this.handleCancel
-      }
-      /> </FolderBrowser>);
+    return (
+      <FolderBrowser
+        session={this.state.session}
+        triggerUpdate={this.state.triggerUpdate}
+        onTriggerUpdate={this.onTriggerUpdate}
+        onObjectChosen={this.onObjectChosen}
+      >
+        <PopupButtons
+          handleOk={this.handleOk}
+          handleCancel={this.handleCancel}
+        />
+      </FolderBrowser>
+    );
   }
 }
