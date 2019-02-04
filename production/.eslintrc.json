@@ -1,15 +1,10 @@
 {
-    "extends": "google",
-    "plugins": [
-        "react"
+    "extends": [
+        "google",
+        "react-app"
     ],
     "parserOptions": {
-        "ecmaVersion": 2017,
-        "sourceType": "module",
-        "ecmaFeatures": {
-            "jsx": true,
-            "experimentalObjectRestSpread": true
-        }
+        "ecmaVersion": 8
     },
     "env": {
         "es6": true,
@@ -17,13 +12,15 @@
         "node": true,
         "mocha": true
     },
+    "globals": {
+        "Office": true
+    },
     "rules": {
-        "object-curly-spacing": "off",
-        "max-len": "warn",
-        "no-multi-str": "off",
-        "require-jsdoc": [
-            "off"
+        "max-len": [
+            "warn",
+            250
         ],
-        "indent": "off"
+        "no-multi-str": "off",
+        "require-jsdoc": "off"
     }
 }
