@@ -21,6 +21,7 @@
             250
         ],
         "no-multi-str": "off",
-        "require-jsdoc": "off"
+        "require-jsdoc": "off",
+        "no-invalid-this": "off"
     }
 }
