@@ -2463,6 +2463,1099 @@ export const mockReports = [
             },
         },
     },
+
+    {
+        'id': 'C536EA7A11E903741E640080EF55BFE2',
+        'name': 'TEST REPORT 1',
+        'status': 1,
+        'instanceId': '5FB8720E11E92953186E0080EFA53000',
+        'result': {
+            'definition': {
+                'attributes': [
+                    {
+                        'name': 'Customer',
+                        'id': '8D679D3C11D3E4981000E787EC6DE8A4',
+                        'type': 'Attribute',
+                        'forms': [
+                            {
+                                'id': '8D67A35B11D3E4981000E787EC6DE8A4',
+                                'name': 'Last Name',
+                                'dataType': 'Char',
+                                'baseFormType': 'Text',
+                            },
+                            {
+                                'id': '8D67A35F11D3E4981000E787EC6DE8A4',
+                                'name': 'First Name',
+                                'dataType': 'Char',
+                                'baseFormType': 'Text',
+                            },
+                            {
+                                'id': '45C11FA478E745FEA08D781CEA190FE5',
+                                'name': 'ID',
+                                'dataType': 'Real',
+                                'baseFormType': 'Number',
+                            },
+                        ],
+                    },
+                ],
+                'metrics': [
+                    {
+                        'name': 'Revenue',
+                        'id': '4C05177011D3E877C000B3B2D86C964F',
+                        'type': 'Metric',
+                        'min': 1567.6,
+                        'max': 8899,
+                        'numberFormatting': {
+                            'category': 1,
+                            'decimalPlaces': 0,
+                            'thousandSeparator': true,
+                            'currencySymbol': '$',
+                            'currencyPosition': 0,
+                            'formatString': '"$"#,##0',
+                            'negativeType': 1,
+                        },
+                    },
+                ],
+                'thresholds': [],
+                'sorting': [],
+            },
+            'data': {
+                'paging': {
+                    'total': 51,
+                    'current': 51,
+                    'offset': 0,
+                    'limit': 1000,
+                    'prev': null,
+                    'next': null,
+                },
+                'root': {
+                    'isPartial': false,
+                    'children': [
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Adams',
+                                    'First Name': 'Anne-Marie',
+                                    'ID': '2118',
+                                },
+                                'name': 'Adams Anne-Marie 2118',
+                                'id': 'h2118;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 5697.9,
+                                    'fv': '$5,698',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Biltucci',
+                                    'First Name': 'David',
+                                    'ID': '3523',
+                                },
+                                'name': 'Biltucci David 3523',
+                                'id': 'h3523;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 6236.9,
+                                    'fv': '$6,237',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Blum',
+                                    'First Name': 'Darrick',
+                                    'ID': '99',
+                                },
+                                'name': 'Blum Darrick 99',
+                                'id': 'h99;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 5313.25,
+                                    'fv': '$5,313',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Bossen',
+                                    'First Name': 'May',
+                                    'ID': '5166',
+                                },
+                                'name': 'Bossen May 5166',
+                                'id': 'h5166;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 1916,
+                                    'fv': '$1,916',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Bowyer',
+                                    'First Name': 'Buddy',
+                                    'ID': '1342',
+                                },
+                                'name': 'Bowyer Buddy 1342',
+                                'id': 'h1342;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 5258,
+                                    'fv': '$5,258',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Brattensborg',
+                                    'First Name': 'Vic',
+                                    'ID': '8949',
+                                },
+                                'name': 'Brattensborg Vic 8949',
+                                'id': 'h8949;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 3186.4,
+                                    'fv': '$3,186',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Buckner',
+                                    'First Name': 'Erling',
+                                    'ID': '6435',
+                                },
+                                'name': 'Buckner Erling 6435',
+                                'id': 'h6435;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 7534,
+                                    'fv': '$7,534',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Campillo',
+                                    'First Name': 'Ulyess',
+                                    'ID': '3258',
+                                },
+                                'name': 'Campillo Ulyess 3258',
+                                'id': 'h3258;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 4169,
+                                    'fv': '$4,169',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Conterno',
+                                    'First Name': 'Kipp',
+                                    'ID': '5740',
+                                },
+                                'name': 'Conterno Kipp 5740',
+                                'id': 'h5740;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 6463.7,
+                                    'fv': '$6,464',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Crum',
+                                    'First Name': 'Tralene',
+                                    'ID': '7274',
+                                },
+                                'name': 'Crum Tralene 7274',
+                                'id': 'h7274;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 4108.85,
+                                    'fv': '$4,109',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Demuth',
+                                    'First Name': 'Enar',
+                                    'ID': '7552',
+                                },
+                                'name': 'Demuth Enar 7552',
+                                'id': 'h7552;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 5168.75,
+                                    'fv': '$5,169',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Folz',
+                                    'First Name': 'Dinesh',
+                                    'ID': '8141',
+                                },
+                                'name': 'Folz Dinesh 8141',
+                                'id': 'h8141;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 6711.1,
+                                    'fv': '$6,711',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Fuller',
+                                    'First Name': 'Doreen',
+                                    'ID': '8036',
+                                },
+                                'name': 'Fuller Doreen 8036',
+                                'id': 'h8036;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 1920.15,
+                                    'fv': '$1,920',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Furrow',
+                                    'First Name': 'Van',
+                                    'ID': '3508',
+                                },
+                                'name': 'Furrow Van 3508',
+                                'id': 'h3508;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 6172,
+                                    'fv': '$6,172',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Gates',
+                                    'First Name': 'Ilan',
+                                    'ID': '1872',
+                                },
+                                'name': 'Gates Ilan 1872',
+                                'id': 'h1872;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 3719.4,
+                                    'fv': '$3,719',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'George',
+                                    'First Name': 'Mitch',
+                                    'ID': '3939',
+                                },
+                                'name': 'George Mitch 3939',
+                                'id': 'h3939;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 7756.7,
+                                    'fv': '$7,757',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Gordon',
+                                    'First Name': 'Wesley',
+                                    'ID': '7630',
+                                },
+                                'name': 'Gordon Wesley 7630',
+                                'id': 'h7630;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 3608,
+                                    'fv': '$3,608',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Gouveia',
+                                    'First Name': 'Gretton',
+                                    'ID': '6080',
+                                },
+                                'name': 'Gouveia Gretton 6080',
+                                'id': 'h6080;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 5924.6,
+                                    'fv': '$5,925',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Gulman',
+                                    'First Name': 'May',
+                                    'ID': '2727',
+                                },
+                                'name': 'Gulman May 2727',
+                                'id': 'h2727;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 8899,
+                                    'fv': '$8,899',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Haydon',
+                                    'First Name': 'Mark',
+                                    'ID': '1299',
+                                },
+                                'name': 'Haydon Mark 1299',
+                                'id': 'h1299;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 3962.1,
+                                    'fv': '$3,962',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Herrick',
+                                    'First Name': 'Allwyn',
+                                    'ID': '9598',
+                                },
+                                'name': 'Herrick Allwyn 9598',
+                                'id': 'h9598;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 5811.3,
+                                    'fv': '$5,811',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Hu',
+                                    'First Name': 'Gerald',
+                                    'ID': '5302',
+                                },
+                                'name': 'Hu Gerald 5302',
+                                'id': 'h5302;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 6507.5,
+                                    'fv': '$6,508',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Julius',
+                                    'First Name': 'Beatrice',
+                                    'ID': '6233',
+                                },
+                                'name': 'Julius Beatrice 6233',
+                                'id': 'h6233;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 2434.4,
+                                    'fv': '$2,434',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Kahn',
+                                    'First Name': 'Greg',
+                                    'ID': '1838',
+                                },
+                                'name': 'Kahn Greg 1838',
+                                'id': 'h1838;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 6646.25,
+                                    'fv': '$6,646',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Kisker',
+                                    'First Name': 'Doyle',
+                                    'ID': '3990',
+                                },
+                                'name': 'Kisker Doyle 3990',
+                                'id': 'h3990;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 2998,
+                                    'fv': '$2,998',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Kobi',
+                                    'First Name': 'Al',
+                                    'ID': '8427',
+                                },
+                                'name': 'Kobi Al 8427',
+                                'id': 'h8427;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 4833.8,
+                                    'fv': '$4,834',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Korpela',
+                                    'First Name': 'Eugene',
+                                    'ID': '4493',
+                                },
+                                'name': 'Korpela Eugene 4493',
+                                'id': 'h4493;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 5865.5,
+                                    'fv': '$5,866',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Kounovsky',
+                                    'First Name': 'Gloria',
+                                    'ID': '3155',
+                                },
+                                'name': 'Kounovsky Gloria 3155',
+                                'id': 'h3155;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 5084.95,
+                                    'fv': '$5,085',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Lawrence',
+                                    'First Name': 'Cyril',
+                                    'ID': '3485',
+                                },
+                                'name': 'Lawrence Cyril 3485',
+                                'id': 'h3485;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 1567.6,
+                                    'fv': '$1,568',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Lisker',
+                                    'First Name': 'Ola',
+                                    'ID': '7609',
+                                },
+                                'name': 'Lisker Ola 7609',
+                                'id': 'h7609;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 2306.3,
+                                    'fv': '$2,306',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Littleman',
+                                    'First Name': 'Kate',
+                                    'ID': '311',
+                                },
+                                'name': 'Littleman Kate 311',
+                                'id': 'h311;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 6546.7,
+                                    'fv': '$6,547',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Lutz',
+                                    'First Name': 'Chatherine',
+                                    'ID': '2583',
+                                },
+                                'name': 'Lutz Chatherine 2583',
+                                'id': 'h2583;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 7771,
+                                    'fv': '$7,771',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Main',
+                                    'First Name': 'Tyrone',
+                                    'ID': '9317',
+                                },
+                                'name': 'Main Tyrone 9317',
+                                'id': 'h9317;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 4169.9,
+                                    'fv': '$4,170',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Mcnabb',
+                                    'First Name': 'Sarah',
+                                    'ID': '3440',
+                                },
+                                'name': 'Mcnabb Sarah 3440',
+                                'id': 'h3440;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 6249.2,
+                                    'fv': '$6,249',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Paul',
+                                    'First Name': 'Fletch',
+                                    'ID': '3136',
+                                },
+                                'name': 'Paul Fletch 3136',
+                                'id': 'h3136;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 4131.7,
+                                    'fv': '$4,132',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Pirnat',
+                                    'First Name': 'Kellie',
+                                    'ID': '5124',
+                                },
+                                'name': 'Pirnat Kellie 5124',
+                                'id': 'h5124;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 5768.25,
+                                    'fv': '$5,768',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Pitcher',
+                                    'First Name': 'Derick',
+                                    'ID': '4561',
+                                },
+                                'name': 'Pitcher Derick 4561',
+                                'id': 'h4561;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 6465.6,
+                                    'fv': '$6,466',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Powell',
+                                    'First Name': 'Dino',
+                                    'ID': '3463',
+                                },
+                                'name': 'Powell Dino 3463',
+                                'id': 'h3463;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 5022,
+                                    'fv': '$5,022',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Rauch',
+                                    'First Name': 'Celeste',
+                                    'ID': '3322',
+                                },
+                                'name': 'Rauch Celeste 3322',
+                                'id': 'h3322;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 4125.4,
+                                    'fv': '$4,125',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Reedy',
+                                    'First Name': 'Doane',
+                                    'ID': '1383',
+                                },
+                                'name': 'Reedy Doane 1383',
+                                'id': 'h1383;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 3800,
+                                    'fv': '$3,800',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Scroggs',
+                                    'First Name': 'Daryle',
+                                    'ID': '2004',
+                                },
+                                'name': 'Scroggs Daryle 2004',
+                                'id': 'h2004;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 5477.15,
+                                    'fv': '$5,477',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Shea',
+                                    'First Name': 'Bruno',
+                                    'ID': '2651',
+                                },
+                                'name': 'Shea Bruno 2651',
+                                'id': 'h2651;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 5434.3,
+                                    'fv': '$5,434',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Shultz',
+                                    'First Name': 'Oriana',
+                                    'ID': '1720',
+                                },
+                                'name': 'Shultz Oriana 1720',
+                                'id': 'h1720;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 4074.6,
+                                    'fv': '$4,075',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Tengwall',
+                                    'First Name': 'Dell',
+                                    'ID': '9099',
+                                },
+                                'name': 'Tengwall Dell 9099',
+                                'id': 'h9099;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 4139.65,
+                                    'fv': '$4,140',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Thornton',
+                                    'First Name': 'Vashti',
+                                    'ID': '1703',
+                                },
+                                'name': 'Thornton Vashti 1703',
+                                'id': 'h1703;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 5469.3,
+                                    'fv': '$5,469',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Trusty',
+                                    'First Name': 'Berny',
+                                    'ID': '5789',
+                                },
+                                'name': 'Trusty Berny 5789',
+                                'id': 'h5789;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 4100.7,
+                                    'fv': '$4,101',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Valencia',
+                                    'First Name': 'Justine',
+                                    'ID': '6240',
+                                },
+                                'name': 'Valencia Justine 6240',
+                                'id': 'h6240;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 6300.15,
+                                    'fv': '$6,300',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Varga',
+                                    'First Name': 'Pradeep',
+                                    'ID': '6443',
+                                },
+                                'name': 'Varga Pradeep 6443',
+                                'id': 'h6443;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 5531.8,
+                                    'fv': '$5,532',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Vulgamora',
+                                    'First Name': 'Miriam',
+                                    'ID': '1358',
+                                },
+                                'name': 'Vulgamora Miriam 1358',
+                                'id': 'h1358;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 6586.5,
+                                    'fv': '$6,587',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Webb',
+                                    'First Name': 'Garnett',
+                                    'ID': '4782',
+                                },
+                                'name': 'Webb Garnett 4782',
+                                'id': 'h4782;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 4712.8,
+                                    'fv': '$4,713',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                        {
+                            'depth': 0,
+                            'element': {
+                                'attributeIndex': 0,
+                                'formValues': {
+                                    'Last Name': 'Wolin',
+                                    'First Name': 'Marian',
+                                    'ID': '4164',
+                                },
+                                'name': 'Wolin Marian 4164',
+                                'id': 'h4164;8D679D3C11D3E4981000E787EC6DE8A4',
+                            },
+                            'metrics': {
+                                'Revenue': {
+                                    'rv': 5416.3,
+                                    'fv': '$5,416',
+                                    'mi': 0,
+                                },
+                            },
+                        },
+                    ],
+                },
+            },
+        },
+    },
 ];
 export const mockBadReports = [
     {
@@ -3969,7 +5062,7 @@ export const mockBadReports = [
         },
     },
 ];
-export const mstrTutorial = [{'acg': 255, 'dateCreated': '2018-12-19T09:59:11.000+0000', 'dateModified': '2018-12-19T13:25:39.000+0000', 'extType': 0, 'id': 'BBA0AE1A11E9037408660080EFE5E0E3', 'name': '-OG_TESTING', 'owner': {'id': '7FC05A65473CE2FD845CE6A1D3F13233', 'name': 'MSTR User'}, 'subtype': 2048, 'type': 8, 'version': '938FF1A211E9039100000080EFB57FE3'}, {'acg': 255, 'dateCreated': '2005-05-06T21:48:43.000+0000', 'dateModified': '2016-08-12T19:33:44.000+0000', 'description': 'These folders contain reports that are appropriate for individuals in different organizational roles.', 'extType': 0, 'id': '032A5E114A59D28267BDD8B6D9E58B22', 'name': 'Business Roles', 'owner': {'id': '54F3D26011D2896560009A8E67019608', 'name': 'Administrator'}, 'subtype': 2048, 'type': 8, 'version': '97C25AEC4CD92391DD9AAEBEAB7ACA30'}, {'acg': 255, 'dateCreated': '2007-01-13T22:39:22.000+0000', 'dateModified': '2016-08-12T19:33:44.000+0000', 'description': 'This folder contains several examples of dashboards.', 'extType': 0, 'id': 'F025A94B4C03B6DCEE0F5D9DA825DA67', 'name': 'Documents and Scorecards', 'owner': {'id': '54F3D26011D2896560009A8E67019608', 'name': 'Administrator'}, 'subtype': 2048, 'type': 8, 'version': '97C25AEC4CD92391DD9AAEBEAB7ACA30'}, {'acg': 255, 'dateCreated': '2003-09-08T20:35:27.000+0000', 'dateModified': '2016-08-12T19:33:44.000+0000', 'description': 'This folder contains various types of documents such as scorecards and dashboards, managed metrics reports, production and operational reports, invoices and statements, and business reports.', 'extType': 0, 'id': '92ADD0F84D07AC532AD03BA0F92A836B', 'name': 'Enterprise Reporting Documents', 'owner': {'id': '54F3D26011D2896560009A8E67019608', 'name': 'Administrator'}, 'subtype': 2048, 'type': 8, 'version': '97C25AEC4CD92391DD9AAEBEAB7ACA30'}, {'acg': 255, 'dateCreated': '2016-02-02T16:46:17.000+0000', 'dateModified': '2018-02-06T20:29:04.000+0000', 'extType': 0, 'id': '7F16A4B811E58ED317D50080EFF554EA', 'name': 'Getting Started', 'owner': {'id': '54F3D26011D2896560009A8E67019608', 'name': 'Administrator'}, 'subtype': 2048, 'type': 8, 'version': '5F5128C411E80B7C32DC0080EF758A60'}, {'acg': 255, 'dateCreated': '2018-12-19T10:56:43.000+0000', 'dateModified': '2018-12-19T11:06:17.000+0000', 'extType': 0, 'id': 'C54EB05811E9037C08660080EFB580E5', 'name': 'Kuba', 'owner': {'id': '7FC05A65473CE2FD845CE6A1D3F13233', 'name': 'MSTR User'}, 'subtype': 2048, 'type': 8, 'version': '1B74E08211E9037EE4C00080EF553FAA'}, {'acg': 255, 'dateCreated': '2006-05-23T08:55:20.000+0000', 'dateModified': '2016-08-12T19:33:44.000+0000', 'description': 'This folder contains examples of many of the sophisticated capabilities within the MicroStrategy platform.', 'extType': 0, 'id': 'D64C532E4E7FBA74D29A7CA3576F39CF', 'name': 'MicroStrategy Platform Capabilities', 'owner': {'id': '54F3D26011D2896560009A8E67019608', 'name': 'Administrator'}, 'subtype': 2048, 'type': 8, 'version': '97C25AEC4CD92391DD9AAEBEAB7ACA30'}, {'acg': 255, 'dateCreated': '2017-08-22T21:58:25.000+0000', 'dateModified': '2018-01-29T21:13:19.000+0000', 'extType': 0, 'hidden': true, 'id': 'C6C5ECF0B571448A9C31C653AB1D5E51', 'name': 'Sample Dashboards', 'owner': {'id': '54F3D26011D2896560009A8E67019608', 'name': 'Administrator'}, 'subtype': 2048, 'type': 8, 'version': '3A94209811E80539D63E0080EF757F7A'}, {'acg': 255, 'dateCreated': '2017-09-19T16:39:15.000+0000', 'dateModified': '2018-02-02T21:16:55.000+0000', 'extType': 0, 'id': '12F7E26011E79D592D640080EFB5E3A2', 'name': 'Sample Dossiers', 'owner': {'id': '7FC05A65473CE2FD845CE6A1D3F13233', 'name': 'MSTR User'}, 'subtype': 2048, 'type': 8, 'version': '653768BE11E8085EE8130080EFC5633C'}, {'acg': 255, 'dateCreated': '2006-05-22T15:42:06.000+0000', 'dateModified': '2016-08-12T19:33:44.000+0000', 'description': 'This folder contains reports that are categorized by topic. Topics include Customer Analysis, Enterprise Performance Management, Human Resource Analysis, Inventory and Supply Chain Analysis, Sales and Profitability Analysis, and Supplier Analysis.', 'extType': 0, 'id': '5B68C5AE433C728679340A91DC8F809C', 'name': 'Subject Areas', 'owner': {'id': '54F3D26011D2896560009A8E67019608', 'name': 'Administrator'}, 'subtype': 2048, 'type': 8, 'version': '97C25AEC4CD92391DD9AAEBEAB7ACA30'}, {'acg': 255, 'certifiedInfo': {'certified': false}, 'dateCreated': '2018-12-19T09:59:27.000+0000', 'dateModified': '2018-12-19T09:59:27.000+0000', 'extType': 1, 'id': 'C536EA7A11E903741E640080EF55BFE2', 'name': 'TEST REPORT 1', 'owner': {'id': '7FC05A65473CE2FD845CE6A1D3F13233', 'name': 'MSTR User'}, 'subtype': 768, 'type': 3, 'version': 'C5370B1811E90374E2BF0080EF553EA8', 'viewMedia': 134217728}, {'acg': 255, 'certifiedInfo': {'certified': false}, 'dateCreated': '2018-12-19T10:00:35.000+0000', 'dateModified': '2018-12-19T10:00:35.000+0000', 'extType': 1, 'id': 'EDBFC41C11E90374240C0080EF1541E6', 'name': 'TEST REPORT 2', 'owner': {'id': '7FC05A65473CE2FD845CE6A1D3F13233', 'name': 'MSTR User'}, 'subtype': 768, 'type': 3, 'version': 'EDBFEC6211E9037400000080EF15C0AD', 'viewMedia': 134217728}, {'acg': 255, 'certifiedInfo': {'certified': false}, 'dateCreated': '2018-12-19T10:04:48.000+0000', 'dateModified': '2018-12-19T10:04:48.000+0000', 'extType': 1, 'id': '84C2592411E903751D0E0080EF9540E5', 'name': 'TEST REPORT 3', 'owner': {'id': '7FC05A65473CE2FD845CE6A1D3F13233', 'name': 'MSTR User'}, 'subtype': 768, 'type': 3, 'version': '84C29A8811E9037500000080EF95BFAC', 'viewMedia': 134217728}, {'acg': 255, 'certifiedInfo': {'certified': false}, 'dateCreated': '2016-02-02T19:12:03.000+0000', 'dateModified': '2018-07-31T21:49:15.000+0000', 'extType': 0, 'id': 'D73B9F3411E5C9E00EE20080EFE55B9E', 'name': 'Tutorial Home', 'owner': {'id': '54F3D26011D2896560009A8E67019608', 'name': 'Administrator'}, 'subtype': 14081, 'type': 55, 'version': 'BCB0031C11E891C0895C0080EF2585AF', 'viewMedia': 134217845}];
+export const mstrTutorial = [{ 'acg': 255, 'dateCreated': '2018-12-19T09:59:11.000+0000', 'dateModified': '2018-12-19T13:25:39.000+0000', 'extType': 0, 'id': 'BBA0AE1A11E9037408660080EFE5E0E3', 'name': '-OG_TESTING', 'owner': { 'id': '7FC05A65473CE2FD845CE6A1D3F13233', 'name': 'MSTR User' }, 'subtype': 2048, 'type': 8, 'version': '938FF1A211E9039100000080EFB57FE3' }, { 'acg': 255, 'dateCreated': '2005-05-06T21:48:43.000+0000', 'dateModified': '2016-08-12T19:33:44.000+0000', 'description': 'These folders contain reports that are appropriate for individuals in different organizational roles.', 'extType': 0, 'id': '032A5E114A59D28267BDD8B6D9E58B22', 'name': 'Business Roles', 'owner': { 'id': '54F3D26011D2896560009A8E67019608', 'name': 'Administrator' }, 'subtype': 2048, 'type': 8, 'version': '97C25AEC4CD92391DD9AAEBEAB7ACA30' }, { 'acg': 255, 'dateCreated': '2007-01-13T22:39:22.000+0000', 'dateModified': '2016-08-12T19:33:44.000+0000', 'description': 'This folder contains several examples of dashboards.', 'extType': 0, 'id': 'F025A94B4C03B6DCEE0F5D9DA825DA67', 'name': 'Documents and Scorecards', 'owner': { 'id': '54F3D26011D2896560009A8E67019608', 'name': 'Administrator' }, 'subtype': 2048, 'type': 8, 'version': '97C25AEC4CD92391DD9AAEBEAB7ACA30' }, { 'acg': 255, 'dateCreated': '2003-09-08T20:35:27.000+0000', 'dateModified': '2016-08-12T19:33:44.000+0000', 'description': 'This folder contains various types of documents such as scorecards and dashboards, managed metrics reports, production and operational reports, invoices and statements, and business reports.', 'extType': 0, 'id': '92ADD0F84D07AC532AD03BA0F92A836B', 'name': 'Enterprise Reporting Documents', 'owner': { 'id': '54F3D26011D2896560009A8E67019608', 'name': 'Administrator' }, 'subtype': 2048, 'type': 8, 'version': '97C25AEC4CD92391DD9AAEBEAB7ACA30' }, { 'acg': 255, 'dateCreated': '2016-02-02T16:46:17.000+0000', 'dateModified': '2018-02-06T20:29:04.000+0000', 'extType': 0, 'id': '7F16A4B811E58ED317D50080EFF554EA', 'name': 'Getting Started', 'owner': { 'id': '54F3D26011D2896560009A8E67019608', 'name': 'Administrator' }, 'subtype': 2048, 'type': 8, 'version': '5F5128C411E80B7C32DC0080EF758A60' }, { 'acg': 255, 'dateCreated': '2018-12-19T10:56:43.000+0000', 'dateModified': '2018-12-19T11:06:17.000+0000', 'extType': 0, 'id': 'C54EB05811E9037C08660080EFB580E5', 'name': 'Kuba', 'owner': { 'id': '7FC05A65473CE2FD845CE6A1D3F13233', 'name': 'MSTR User' }, 'subtype': 2048, 'type': 8, 'version': '1B74E08211E9037EE4C00080EF553FAA' }, { 'acg': 255, 'dateCreated': '2006-05-23T08:55:20.000+0000', 'dateModified': '2016-08-12T19:33:44.000+0000', 'description': 'This folder contains examples of many of the sophisticated capabilities within the MicroStrategy platform.', 'extType': 0, 'id': 'D64C532E4E7FBA74D29A7CA3576F39CF', 'name': 'MicroStrategy Platform Capabilities', 'owner': { 'id': '54F3D26011D2896560009A8E67019608', 'name': 'Administrator' }, 'subtype': 2048, 'type': 8, 'version': '97C25AEC4CD92391DD9AAEBEAB7ACA30' }, { 'acg': 255, 'dateCreated': '2017-08-22T21:58:25.000+0000', 'dateModified': '2018-01-29T21:13:19.000+0000', 'extType': 0, 'hidden': true, 'id': 'C6C5ECF0B571448A9C31C653AB1D5E51', 'name': 'Sample Dashboards', 'owner': { 'id': '54F3D26011D2896560009A8E67019608', 'name': 'Administrator' }, 'subtype': 2048, 'type': 8, 'version': '3A94209811E80539D63E0080EF757F7A' }, { 'acg': 255, 'dateCreated': '2017-09-19T16:39:15.000+0000', 'dateModified': '2018-02-02T21:16:55.000+0000', 'extType': 0, 'id': '12F7E26011E79D592D640080EFB5E3A2', 'name': 'Sample Dossiers', 'owner': { 'id': '7FC05A65473CE2FD845CE6A1D3F13233', 'name': 'MSTR User' }, 'subtype': 2048, 'type': 8, 'version': '653768BE11E8085EE8130080EFC5633C' }, { 'acg': 255, 'dateCreated': '2006-05-22T15:42:06.000+0000', 'dateModified': '2016-08-12T19:33:44.000+0000', 'description': 'This folder contains reports that are categorized by topic. Topics include Customer Analysis, Enterprise Performance Management, Human Resource Analysis, Inventory and Supply Chain Analysis, Sales and Profitability Analysis, and Supplier Analysis.', 'extType': 0, 'id': '5B68C5AE433C728679340A91DC8F809C', 'name': 'Subject Areas', 'owner': { 'id': '54F3D26011D2896560009A8E67019608', 'name': 'Administrator' }, 'subtype': 2048, 'type': 8, 'version': '97C25AEC4CD92391DD9AAEBEAB7ACA30' }, { 'acg': 255, 'certifiedInfo': { 'certified': false }, 'dateCreated': '2018-12-19T09:59:27.000+0000', 'dateModified': '2018-12-19T09:59:27.000+0000', 'extType': 1, 'id': 'C536EA7A11E903741E640080EF55BFE2', 'name': 'TEST REPORT 1', 'owner': { 'id': '7FC05A65473CE2FD845CE6A1D3F13233', 'name': 'MSTR User' }, 'subtype': 768, 'type': 3, 'version': 'C5370B1811E90374E2BF0080EF553EA8', 'viewMedia': 134217728 }, { 'acg': 255, 'certifiedInfo': { 'certified': false }, 'dateCreated': '2018-12-19T10:00:35.000+0000', 'dateModified': '2018-12-19T10:00:35.000+0000', 'extType': 1, 'id': 'EDBFC41C11E90374240C0080EF1541E6', 'name': 'TEST REPORT 2', 'owner': { 'id': '7FC05A65473CE2FD845CE6A1D3F13233', 'name': 'MSTR User' }, 'subtype': 768, 'type': 3, 'version': 'EDBFEC6211E9037400000080EF15C0AD', 'viewMedia': 134217728 }, { 'acg': 255, 'certifiedInfo': { 'certified': false }, 'dateCreated': '2018-12-19T10:04:48.000+0000', 'dateModified': '2018-12-19T10:04:48.000+0000', 'extType': 1, 'id': '84C2592411E903751D0E0080EF9540E5', 'name': 'TEST REPORT 3', 'owner': { 'id': '7FC05A65473CE2FD845CE6A1D3F13233', 'name': 'MSTR User' }, 'subtype': 768, 'type': 3, 'version': '84C29A8811E9037500000080EF95BFAC', 'viewMedia': 134217728 }, { 'acg': 255, 'certifiedInfo': { 'certified': false }, 'dateCreated': '2016-02-02T19:12:03.000+0000', 'dateModified': '2018-07-31T21:49:15.000+0000', 'extType': 0, 'id': 'D73B9F3411E5C9E00EE20080EFE55B9E', 'name': 'Tutorial Home', 'owner': { 'id': '54F3D26011D2896560009A8E67019608', 'name': 'Administrator' }, 'subtype': 14081, 'type': 55, 'version': 'BCB0031C11E891C0895C0080EF2585AF', 'viewMedia': 134217845 }];
 
 export const mstrTutorialFolder = [
     {

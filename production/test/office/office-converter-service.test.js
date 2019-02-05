@@ -7,7 +7,7 @@ import { officeConverterService } from '../../src/office/office-converter-servic
 describe('OfficeConverterService', () => {
     it('should convert simple report', () => {
         // given
-        let expectedReportPath = path.join(
+        const expectedReportPath = path.join(
             __dirname,
             '__expected__/expected-simple-report.js'
         );
@@ -21,7 +21,7 @@ describe('OfficeConverterService', () => {
 
     it('should convert test report', () => {
         // given
-        let expectedReportPath = path.join(
+        const expectedReportPath = path.join(
             __dirname,
             '__expected__/expected-test-report.js'
         );
@@ -35,7 +35,7 @@ describe('OfficeConverterService', () => {
 
     it('should convert complex report', () => {
         // given
-        let expectedReportPath = path.join(
+        const expectedReportPath = path.join(
             __dirname,
             '__expected__/expected-complex-report.js'
         );
@@ -49,7 +49,7 @@ describe('OfficeConverterService', () => {
 
     it('should convert same report thrice', () => {
         // given
-        let expectedReportPath = path.join(
+        const expectedReportPath = path.join(
             __dirname,
             '__expected__/expected-simple-report.js'
         );
@@ -60,6 +60,30 @@ describe('OfficeConverterService', () => {
         // then
         expect(result).toBeDefined();
         testHelper.expectPropertiesDefined(result);
+        testHelper.expectEqualsGivenReport(result, expectedReportPath);
+    });
+
+    it('should split forms of attribute when there are many', () => {
+        // given
+        const expectedReportPath = path.join(
+            __dirname,
+            '__expected__/expected-multiline-header-report.js'
+        );
+        // when
+        const result = officeConverterService.getConvertedTable(mockReports[3]);
+        // then
+        expect(result).toBeDefined();
+        testHelper.expectPropertiesDefined(result);
+        expect(result.headers).toContain('Customer Last Name');
+        expect(result.headers).toContain('Customer First Name');
+        expect(result.headers).toContain('Customer ID');
+
+        result.rows.forEach((row) => {
+            expect(row['Customer Last Name']).toBeDefined();
+            expect(row['Customer First Name']).toBeDefined();
+            expect(row['Customer ID']).toBeDefined();
+        });
+
         testHelper.expectEqualsGivenReport(result, expectedReportPath);
     });
 });
