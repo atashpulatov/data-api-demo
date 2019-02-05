@@ -3,7 +3,6 @@ import '../index.css';
 import '../home/home.css';
 import {selectorProperties} from '../attribute-selector/selector-properties';
 import {PopupButtons} from '../popup-buttons.jsx';
-import 'mstr-react-library/src/css/mstr-react.css';
 import {FolderBrowser} from 'mstr-react-library';
 
 export class NavigationTree extends Component {

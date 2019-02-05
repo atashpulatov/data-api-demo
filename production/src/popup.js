@@ -1,13 +1,10 @@
-/*eslint-disable */
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import {BrowserRouter, Route} from 'react-router-dom';
 import * as queryString from 'query-string';
-import 'mstr-react-library/assets/mstr-react.css';
 import {AttributeSelectorWindow} from './attribute-selector/attribute-selector-window';
 import {PopupTypeEnum} from './home/popup-type-enum';
 import {NavigationTree} from './navigation/navigation-tree';
-/* eslint-enable */
 
 const Office = window.Office;
 
