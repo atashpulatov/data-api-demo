@@ -85,3 +85,24 @@ hr {
     font-size: 14px;
     font-family: 'HelveticaNeue-light';
 }
+
+.ant-tabs.tabs-container .ant-tabs-nav .ant-tabs-tab {
+    margin: 0 6px;
+    padding: 12px 6px;
+    font-family: 'HelveticaNeue';
+    font-size: 14px;
+    color: #888888;
+}
+
+.ant-tabs.tabs-container .ant-tabs-tab.ant-tabs-tab-active {
+    color: #444649;
+}
+
+.tabs-container .ant-tabs-ink-bar {
+    height: 1.5px;
+    background-color: #1c91dc;
+}
+
+.tabs-container .ant-tabs-bar {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.10);
+}
