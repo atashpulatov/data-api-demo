@@ -65,3 +65,23 @@ hr {
     width: 40px;
     padding: 10px;
 }
+
+.get-started-container {
+    text-align: center;
+    padding: 60px 40px;
+    color: #4D5154;
+}
+
+.get-started-container h2 {
+    color: #4D5154;
+    font-family: 'HelveticaNeue-medium';
+    font-size: 20px;
+    padding: 24px 0;
+}
+
+.get-started-container p {
+    padding-bottom: 40px;
+    margin: 0;
+    font-size: 14px;
+    font-family: 'HelveticaNeue-light';
+}
