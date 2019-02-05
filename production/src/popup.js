@@ -5,6 +5,7 @@ import * as queryString from 'query-string';
 import {AttributeSelectorWindow} from './attribute-selector/attribute-selector-window';
 import {PopupTypeEnum} from './home/popup-type-enum';
 import {NavigationTree} from './navigation/navigation-tree';
+import './popup.css';
 
 const Office = window.Office;
 

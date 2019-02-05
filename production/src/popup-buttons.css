@@ -3,6 +3,12 @@
     text-align: right;
 }
 
+.popup-buttons .ant-btn {
+    height: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
 .popup-buttons .ant-btn:first-of-type {
     float: left;
 }
