@@ -1,11 +1,12 @@
-import React from 'react'; // eslint-disable-line no-unused-vars
-// import logo from '../../public/assets/mstr_logo.png';
+import React from 'react';
 import logo from './mstr_logo.png';
 
-export const Header = () => (
-    <header id='app-header'>
-        <img src={logo} id='header-image' />
-        <p id='header'>Microstrategy Office</p>
-    </header>
+export const Header = ({profileImage = logo, fullName = 'MicroStrategy User'}) => (
+  // GET /sessions/userInfo
+  // profileImage
+  // fullName
+  <header id='app-header'>
+    <img src={profileImage} alt='User profile' /><span className='header-name'>{fullName}</span>
+  </header>
 );
 
