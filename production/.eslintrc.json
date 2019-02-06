@@ -13,7 +13,8 @@
         "mocha": true
     },
     "globals": {
-        "Office": true
+        "Office": true,
+        "Excel": true,
     },
     "rules": {
         "max-len": [
