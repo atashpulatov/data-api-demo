@@ -7,22 +7,22 @@ import {Authenticate} from '../authentication/auth-component.jsx';
 import {Placeholder} from './placeholder.jsx';
 
 class PageBuilder {
-    getPage = (loading, authToken, reportArray) => {
-        console.log('getting page');
-        return (
-            <div id='content'>
-                <Notifications />
-                <Header />
-                {/* Logout button will be moved next to the username in the header */}
-                {/* {authToken && <MenuBar />} */}
-                {(reportArray && reportArray.length !== 0) && <FileHistoryContainer />}
-                {!(reportArray && reportArray.length !== 0) && <Placeholder />}
-                <Spin spinning={loading}>
-                    {!authToken && <Authenticate />}
-                </Spin>
-            </div>
-        );
-    }
+  getPage = (loading, authToken, reportArray) => {
+    console.log('getting page');
+    return (
+      <div id='content'>
+        <Notifications />
+        <Header authToken={authToken} />
+        {/* Logout button will be moved next to the username in the header */}
+        {/* {authToken && <MenuBar />} */}
+        {(reportArray && reportArray.length !== 0) && authToken && <FileHistoryContainer />}
+        {!(reportArray && reportArray.length !== 0) && authToken && <Placeholder />}
+        <Spin spinning={loading}>
+          {!authToken && <Authenticate />}
+        </Spin>
+      </div>
+    );
+  }
 }
 
 export const pageBuilder = new PageBuilder();

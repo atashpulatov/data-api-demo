@@ -106,3 +106,13 @@ hr {
 .tabs-container .ant-tabs-bar {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.10);
 }
+
+#logOut {
+    font-family: 'HelveticaNeue';
+    color: #888;
+    font-size: 12px;
+    margin-left: auto;
+    vertical-align: middle;
+    flex: auto 0 0;
+    align-self: center;
+}
