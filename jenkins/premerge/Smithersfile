@@ -1,0 +1,54 @@
+job 'stage-0-premerge' do
+  description 'the first stage in the pipeline
+designed to complete quickly, < 10 mins
+produces and publishes a versioned deployment package'
+
+  configure_common_items{}
+
+  assigned_node_number 1
+
+  assigned_node_string 'amazon_linux'
+
+  triggers do
+      pull_request_builder do
+        trigger_phrase "mstr-office-premerge-#{Environment.branch_name}.*"
+        commit_status_context "mstr-office-premerge"
+      end
+  end
+
+  builders do
+    bash do
+      script '#!/usr/bin/env bash
+set +xe
+
+export PATH=/usr/local/sbin:/usr/local/bin:$PATH
+
+export WORKSPACE_SETTING=aws_dev
+
+source .ecosystem
+
+
+rake test
+'
+    end
+  end
+
+  publishers do
+    # junit do
+    # end
+    #
+    # cobertura do
+    # end
+    #
+    # cucumber do
+    #   file_include_pattern 'prepush_test.json'
+    # end
+    #
+    # html do
+    #   report_name 'Vagrant Logs'
+    #   report_directory_path "deploy/vagrant/esxi/dev/logs"
+    #   index_file_name 'index.html'
+    # end
+  end
+
+end

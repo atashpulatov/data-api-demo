@@ -1,14 +1,40 @@
 require 'shell-helper'
 require 'common/version'
+require 'json'
 
 include ShellHelper::Shell
 
-desc "build project in #{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
+desc "build project in #{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/build"
 task :build do
-  good "Puts your build command here: #{__FILE__}:#{__LINE__}, for example mvn compile or grable build"
+  shell_command! "yarn install", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
+  shell_command! "yarn build", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
 end
 
-desc "package project in #{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
-task :package do
-  good "Puts your pacakge command here: #{__FILE__}:#{__LINE__}"
+task :clean do
+  FileUtils.rm_rf Dir.glob("#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/build/*")
+end
+
+desc "build project and run test, excluding packaging the build"
+task :test do
+  update_package_json()
+  shell_command! "yarn jest", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
+  shell_command! "yarn jest –coverage", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
+end
+
+
+def install_dependencies()
+  update_package_json()
+  shell_command! "yarn install", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
+end
+
+def update_package_json()
+  data = JSON.parse(File.read("#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/package.json"));
+  if data["dependencies"].key?("mstr-react-library")
+    repo = data["dependencies"]["mstr-react-library"].split("@github.microstrategy.com:")[1]
+    data["dependencies"]["mstr-react-library"] = "https://#{ENV['GITHUB_SVC_USER']}:#{ENV['GITHUB_SVC_PWD']}@github.microstrategy.com/#{repo}"
+  end
+
+  File.open("#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/package.json","w") do |f|
+    f.write(data.to_json)
+  end
 end

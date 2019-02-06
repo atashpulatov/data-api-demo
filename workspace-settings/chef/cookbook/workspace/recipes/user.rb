@@ -6,7 +6,6 @@
 include_recipe 'workspace::project'
 
 node.override[:extras][:project][:name] = "mstr-office"
-node.override[:extras][:project][:home] = "#{EXTRAS_WS_HOME}/Projects/microstrategy/Kiai/#{node[:extras][:project][:name]}"
 
 case node['platform']
 when 'windows'
@@ -37,5 +36,5 @@ when "mac_os_x"
 else
   #probably not
 end
-node.override[:virtualbox][:version]  = '5.0.20-106931'
+
 include_recipe 'virtualbox'
