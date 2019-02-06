@@ -1,6 +1,7 @@
 .popup-buttons {
-    padding: 14px;
+    padding: 14px 20px;
     text-align: right;
+    background-color: #fff;
 }
 
 .popup-buttons .ant-btn {
