@@ -11,7 +11,7 @@ class ErrorService {
     errorRestFactory = (error) => {
         if (error.status === 404 || !error.response) {
             return new EnvironmentNotFoundError();
-        }
+        }      
         switch (error.response.status) {
             case 404:
                 return new EnvironmentNotFoundError();

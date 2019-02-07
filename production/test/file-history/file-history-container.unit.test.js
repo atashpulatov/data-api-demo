@@ -5,13 +5,6 @@ import { _FileHistoryContainer } from '../../src/file-history/file-history-conta
 /* eslint-enable */
 
 describe('FileHistoryContainer', () => {
-    it('should not render any component when we are not inside a project', () => {
-        // given
-        // when
-        const wrappedComponent = mount(<_FileHistoryContainer />);
-        // then
-        expect(wrappedComponent.html()).toBeNull();
-    });
     it('should render component when we are insinde project', () => {
         // given
         // when

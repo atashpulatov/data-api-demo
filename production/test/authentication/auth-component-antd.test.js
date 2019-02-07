@@ -59,27 +59,4 @@ describe('AuthComponent', () => {
             }
         }, 100);
     });
-
-    it('should be wrapped w/ withNavigation HOC', () => {
-        // given
-        const history = {
-            push: jest.fn(),
-        };
-        // when
-        const wrappedProvider = mount(
-            <Provider store={reduxStore}>
-                <Authenticate history={history} />
-            </Provider>);
-        // then
-        const wrappedConnect = wrappedProvider.childAt(0);
-        const wrappedWithNavigation = wrappedConnect.childAt(0);
-        const wrappedComponentForm = wrappedWithNavigation.childAt(0);
-        const wrappedComponent = wrappedComponentForm.childAt(0);
-        expect(
-            wrappedComponent.type().prototype instanceof React.Component
-        ).toBeTruthy();
-        expect(
-            _Authenticate.prototype.isPrototypeOf(wrappedComponent.instance())
-        );
-    });
 });
