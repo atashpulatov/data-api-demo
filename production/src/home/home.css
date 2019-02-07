@@ -94,6 +94,10 @@ hr {
     color: #888888;
 }
 
+.ant-tabs.tabs-container .ant-tabs-nav .ant-tabs-tab:hover {
+    color: #444649;
+}
+
 .ant-tabs.tabs-container .ant-tabs-tab.ant-tabs-tab-active {
     color: #444649;
 }
