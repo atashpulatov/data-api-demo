@@ -211,7 +211,8 @@ describe('MstrObjectRestService', () => {
             const expectedReportName = 'TEST REPORT 1';
             // when
             const result = await mstrObjectRestService.getObjectContent(
-                objectId
+                objectId,
+                projectId
             );
             // then
             expect(result).toBeDefined();
@@ -227,7 +228,8 @@ describe('MstrObjectRestService', () => {
             });
             // when
             const result = mstrObjectRestService.getObjectContent(
-                objectId
+                objectId,
+                projectId
             );
             // then
             try {
@@ -243,7 +245,8 @@ describe('MstrObjectRestService', () => {
             const incorrectObjectId = 'abc123';
             // when
             const result = mstrObjectRestService.getObjectContent(
-                incorrectObjectId
+                incorrectObjectId,
+                projectId
             );
             // then
             try {
@@ -257,18 +260,14 @@ describe('MstrObjectRestService', () => {
         it('should throw error due to incorrect projectId', async () => {
             // given
             const wrongProjectId = 'incorrectProjectId';
-            reduxStore.dispatch({
-                type: historyProperties.actions.goInsideProject,
-                projectId: wrongProjectId,
-                projectName: projectName,
-            });
             const originalInstanceIdMethod = mstrObjectRestService._getInstanceId;
             mstrObjectRestService._getInstanceId = jest
                 .fn()
                 .mockResolvedValue('wrongInstanceId');
             // when
             const result = mstrObjectRestService.getObjectContent(
-                objectId
+                objectId,
+                wrongProjectId
             );
             // then
             try {

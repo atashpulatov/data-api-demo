@@ -130,23 +130,23 @@ describe('ErrorService', () => {
             // given
             const error = new UnauthorizedError();
             const spyMethod = jest.spyOn(notificationService, 'displayMessage');
-            const logoutMethod = sessionHelper.logout;
+            const logOutMethod = sessionHelper.logOut;
             // when
             errorService.handleError(error);
             // then
             expect(spyMethod).toBeCalled();
-            expect(logoutMethod).toBeCalled();
+            expect(logOutMethod).toBeCalled();
         });
         it('should logout on EnvironmentNotFound', () => {
             // given
             const error = new EnvironmentNotFoundError();
             const spyMethod = jest.spyOn(notificationService, 'displayMessage');
-            const logoutMethod = sessionHelper.logout;
+            const logOutMethod = sessionHelper.logOut;
             // when
             errorService.handleError(error);
             // then
             expect(spyMethod).toBeCalled();
-            expect(logoutMethod).toBeCalled();
+            expect(logOutMethod).toBeCalled();
         });
     });
     describe('errorOfficeFactory', () => {

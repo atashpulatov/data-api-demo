@@ -11,7 +11,6 @@ export class _MenuBar extends Component {
         return (
             <div className='menu-bar-container'>
                 <div className='menu-bar-options-container'>
-                    {/* TODO: temporary solution below */}
                     <Tooltip placement="bottom" title='Log out'>
                         <button
                             className='menu menu-options'

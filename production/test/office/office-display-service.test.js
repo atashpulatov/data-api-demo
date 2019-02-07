@@ -14,7 +14,6 @@ jest.mock('../../src/office/store/office-store-service');
 
 describe('OfficeDisplayService', () => {
     const givenReport = mockReports[0];
-    const startCell = 'D411';
     const excelTableNameMock = 'table';
 
     const mstrContext = {
@@ -23,16 +22,13 @@ describe('OfficeDisplayService', () => {
     };
 
     beforeAll(() => {
-        const getObjectContentSpy = jest.spyOn(mstrObjectRestService, 'getObjectContent')
+        jest.spyOn(mstrObjectRestService, 'getObjectContent')
             .mockResolvedValue(givenReport);
-
-        const findAvailableOfficeTableIdSpy = jest.spyOn(officeApiHelper, 'findAvailableOfficeTableId')
+        jest.spyOn(officeApiHelper, 'findAvailableOfficeTableId')
             .mockReturnValue(excelTableNameMock);
-
-        const getCurrentMstrContextSpy = jest.spyOn(officeApiHelper, 'getCurrentMstrContext')
+        jest.spyOn(officeApiHelper, 'getCurrentMstrContext')
             .mockReturnValue(mstrContext);
-
-        const getOfficeContextSpy = jest.spyOn(officeApiHelper, 'getOfficeContext')
+        jest.spyOn(officeApiHelper, 'getOfficeContext')
             .mockReturnValue({
                 document: {
                     bindings: {
@@ -40,8 +36,7 @@ describe('OfficeDisplayService', () => {
                     },
                 },
             });
-
-        const getExcelContextSpy = jest.spyOn(officeApiHelper, 'getExcelContext')
+        jest.spyOn(officeApiHelper, 'getExcelContext')
             .mockReturnValue({
                 workbook: {
                     tables: {
@@ -86,9 +81,11 @@ describe('OfficeDisplayService', () => {
         // given
         jest.spyOn(officeDisplayService, '_insertDataIntoExcel')
             .mockReturnValueOnce({});
+        jest.spyOn(officeApiHelper, 'getSelectedCell')
+            .mockReturnValueOnce({});
         const objectId = null;
         // when
-        await officeDisplayService.printObject(objectId, startCell);
+        await officeDisplayService.printObject(objectId, mstrContext.projectId);
         // then
         expect(officeStoreService.preserveReport).toBeCalled();
         expect(officeStoreService.preserveReport).toBeCalledWith({
