@@ -20,6 +20,7 @@ export class AttributeSelectorWindow extends Component {
                 projectId: this.props.parsed.projectId,
             },
             reportId: this.props.parsed.reportId,
+            reportSubtype: this.props.parsed.reportSubtype,
             triggerUpdate: false,
             loading: false,
         };
@@ -59,6 +60,7 @@ export class AttributeSelectorWindow extends Component {
                 <AttributeSelector
                     session={this.state.session}
                     reportId={this.state.reportId}
+                    reportSubtype={this.state.reportSubtype}
                     triggerUpdate={this.state.triggerUpdate}
                     onTriggerUpdate={this.onTriggerUpdate}
                     resetTriggerUpdate={this.resetTriggerUpdate}

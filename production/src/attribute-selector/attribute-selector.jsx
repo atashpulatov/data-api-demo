@@ -21,6 +21,7 @@ export class AttributeSelector extends Component {
                     onTriggerUpdate={this.props.onTriggerUpdate}
                     withDataPreview
                     reportId={this.props.reportId}
+                    reportSubtype={this.props.reportSubtype}
                     resetTriggerUpdate={this.props.resetTriggerUpdate}
                 />
             </ErrorBoundary>

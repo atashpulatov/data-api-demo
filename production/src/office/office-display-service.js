@@ -6,6 +6,7 @@ import { officeProperties } from './office-properties';
 import { officeStoreService } from './store/office-store-service';
 import { errorService } from '../error/error-handler';
 import { sessionHelper } from '../storage/session-helper';
+import { ReportSubtypes } from '../enums/ReportSubtypes';
 
 class OfficeDisplayService {
     constructor() {
@@ -15,15 +16,15 @@ class OfficeDisplayService {
         this.refreshReport = this.refreshReport.bind(this);
     }
 
-    printObject = async (objectId, startCell, officeTableId, bindingId, body) => {
+    printObject = async (objectId, isReport, startCell, officeTableId, bindingId, body) => {
         try {
             const excelContext = await officeApiHelper.getExcelContext();
             startCell = startCell || await officeApiHelper.getSelectedCell(excelContext);
-            const jsonData = await mstrObjectRestService.getObjectContent(objectId, body);
+            const jsonData = await mstrObjectRestService.getObjectContent(objectId, isReport, body);
             if (jsonData && jsonData.result.data.root == null){
                 //report returned no data
                 sessionHelper.disableLoading();
-                return {success: false, message: 'No data returned by the report: ' + jsonData.name};
+                return {type: 'warning', message: 'No data returned by the report: ' + jsonData.name};
             }
             const convertedReport = officeConverterService
                 .getConvertedTable(jsonData);
@@ -43,7 +44,7 @@ class OfficeDisplayService {
                     envUrl,
                 });
             }
-            return {success: true, message: 'Loaded report: ' + jsonData.name};    
+            return {type: 'success', message: 'Loaded report: ' + jsonData.name};    
         } catch (error) {
             throw errorService.errorOfficeFactory(error);
         }
@@ -93,7 +94,7 @@ class OfficeDisplayService {
         const startCell = range.address.split('!')[1].split(':')[0];
         const refreshReport = officeStoreService.getReportFromProperties(bindingId);
         await this.removeReportFromExcel(bindingId, isRefresh);
-        await this.printObject(refreshReport.id, startCell, bindingId, bindingId);
+        await this.printObject(refreshReport.id, true, startCell, bindingId, bindingId);
     }
 
     _insertDataIntoExcel = async (reportConvertedData, context, startCell, tableName) => {

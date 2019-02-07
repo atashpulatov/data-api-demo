@@ -63,7 +63,7 @@ describe('MstrObjectRow', () => {
             wrappedRow.prop('onClick')();
             // then
             expect(onClick).toBeCalled();
-            expect(onClick).toBeCalledWith(object.id);
+            expect(onClick).toBeCalledWith(object.id, true);
         });
     });
 });

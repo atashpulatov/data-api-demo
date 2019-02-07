@@ -19,6 +19,10 @@ const objectsTypesMap = {
     project: 55,
 };
 
+const reportSybtypesMap = {
+    cube: "779"
+};
+
 export class _MstrObjects extends React.Component {
     constructor(props) {
         super(props);
@@ -49,7 +53,7 @@ export class _MstrObjects extends React.Component {
     async componentDidUpdate(prevProps, prevState) {
         try {
             if (prevState.body !== this.state.body) {
-                this.printReportLocalized(this.state.popupReportId
+                this.printReportLocalized(this.state.popupReportId, this.state.isReport
                     , this.state.body);
             }
             const project = reduxStore.getState().historyReducer.project;
@@ -72,13 +76,14 @@ export class _MstrObjects extends React.Component {
         }
     }
 
-    printReportLocalized = (reportId, body) => {
-        officeDisplayService.printObject(reportId, null, null, null, body);
+    printReportLocalized = (reportId, isReport, body) => {
+        officeDisplayService.printObject(reportId, isReport, null, null, null, body);
     }
 
-    showPopup = (reportId) => {
+    showPopup = (reportId, reportSubtype) => {
         this.setState({
             popupReportId: reportId,
+            isReport: reportSubtype != reportSybtypesMap.cube
         })
         const session = sessionHelper.getSession();
         Excel.run(async (context) => {
@@ -87,7 +92,8 @@ export class _MstrObjects extends React.Component {
                 + '?envUrl=' + session.url
                 + '&token=' + session.authToken
                 + '&projectId=' + session.projectId
-                + '&reportId=' + reportId,
+                + '&reportId=' + reportId
+                + '&reportSubtype=' + reportSubtype,
                 { height: 62, width: 50, displayInIframe: true },
                 (asyncResult) => {
                     this.dialog = asyncResult.value;
