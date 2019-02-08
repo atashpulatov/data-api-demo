@@ -1,19 +1,22 @@
 import React from 'react';
-import {Button} from 'antd';
+import { Button } from 'antd';
 import './popup-buttons.css';
 
-export const PopupButtons = ({handleOk, handleCancel}) => (
+export const PopupButtons = ({ handleOk, handleSecondary, handleCancel }) => (
   <div className="popup-buttons popup-footer">
-    <Button key="back" onClick={handleCancel}>
+    <Button id="back" onClick={handleCancel}>
       Back
     </Button>
-    <Button key="import" onClick={handleOk}>
+    <Button id="import" onClick={handleOk}>
       Import
     </Button>
-    <Button key="prepare" type="primary" onClick={handleOk}>
-      Prepare Data
+    {
+      handleSecondary &&
+      <Button id="prepare" type="primary" onClick={handleSecondary}>
+        Prepare Data
     </Button>
-    <Button key="cancel" onClick={handleCancel}>
+    }
+    <Button id="cancel" onClick={handleCancel}>
       Cancel
     </Button>
   </div>

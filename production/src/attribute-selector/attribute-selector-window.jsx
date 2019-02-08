@@ -5,7 +5,6 @@ import '../home/home.css';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { AttributeSelector } from '../attribute-selector/attribute-selector.jsx';
 import { PopupButtons } from '../popup-buttons.jsx';
-import 'mstr-react-library/src/css/mstr-react.css';
 /* eslint-enable */
 
 export class AttributeSelectorWindow extends Component {

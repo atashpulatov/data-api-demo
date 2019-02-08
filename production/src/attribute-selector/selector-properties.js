@@ -8,6 +8,7 @@ export const selectorProperties = {
     reportId: 'reportId',
     triggerUpdate: 'triggerUpdate',
     commandOk: 'command_ok',
+    commandSecondary: 'command_secondary',
     commandCancel: 'command_cancel',
     commandOnUpdate: 'commandOnUpdate',
 };
