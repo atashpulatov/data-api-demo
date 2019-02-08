@@ -3,9 +3,15 @@ import React from 'react';
 import { NavigationTree } from '../../src/navigation/navigation-tree';
 import { shallow, mount } from 'enzyme';
 import { selectorProperties } from '../../src/attribute-selector/selector-properties';
+import { officeContext } from '../../src/office/office-context';
+import { PopupButtons } from '../../src/popup-buttons';
 /* eslint-enable */
 
 describe('NavigationTree', () => {
+    afterAll(() => {
+        jest.restoreAllMocks();
+    });
+
     it('should (full)render with props given', () => {
         // given
         const parsed = {
@@ -35,9 +41,37 @@ describe('NavigationTree', () => {
         expect(popupButtonsWrapped.exists('#prepare')).toBeTruthy();
     });
 
+    it('should call secondary action on prepare button clicked', () => {
+        // given
+        const parsed = {
+            envUrl: 'env',
+            token: 'token',
+            projectId: 'projectId',
+        };
+        const wrappedComponent = mount(<NavigationTree parsed={parsed} />);
+        const secondaryAction = jest.spyOn(wrappedComponent.instance(), 'handleSecondary')
+            .mockReturnValueOnce({});
+        wrappedComponent.update();
+        wrappedComponent.instance().forceUpdate();
+        const popupButtonsWrapped = wrappedComponent.find(PopupButtons)
+        const secondaryButton = popupButtonsWrapped.find('button')
+            .find('#prepare');
+        // when
+        secondaryButton.simulate('click');
+        // then
+        expect(secondaryAction).toBeCalled()
+    });
+
     it('should send proper message on secondary action', () => {
         // given
-        jest
+        const messageParent = jest.fn();
+        jest.spyOn(officeContext, 'getOffice').mockReturnValue({
+            context: {
+                ui: {
+                    messageParent: messageParent,
+                }
+            }
+        })
         const parsed = {
             envUrl: 'env',
             token: 'token',
@@ -45,14 +79,21 @@ describe('NavigationTree', () => {
         };
         const actionObject = {
             command: selectorProperties.commandSecondary,
-            chosenObject: this.state.chosenObjectId,
-            chosenProject: this.state.chosenProjectId,
+            chosenObject: 'objectId',
+            chosenProject: 'projectId',
         };
-        const wrappedComponent = mount(<NavigationTree parsed={parsed} />);
+        const wrappedComponent = shallow(<NavigationTree parsed={parsed} />);
+        wrappedComponent.instance()
+            .onObjectChosen(actionObject.chosenObject, actionObject.chosenProject)
         // when
         wrappedComponent.instance().handleSecondary();
         // then
-        const popupButtonsWrapped = wrappedComponent.find('PopupButtons');
-        expect(popupButtonsWrapped.exists('#prepare')).toBeTruthy();
+        expect(messageParent).toBeCalled()
+        const methodCallParamString = messageParent.mock.calls[0][0];
+        const methodCallParam = JSON.parse(methodCallParamString);
+        expect(methodCallParam.command).toEqual(actionObject.command);
+        expect(methodCallParam.chosenObject).toEqual(actionObject.chosenObject);
+        expect(methodCallParam.chosenProject)
+            .toEqual(actionObject.chosenProject);
     });
 });
