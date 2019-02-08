@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {AttributeMetricFilter, ErrorBoundary} from 'mstr-react-library';
+
 export class AttributeSelector extends Component {
   constructor(props) {
     super(props);
@@ -9,15 +10,17 @@ export class AttributeSelector extends Component {
   }
 
   render() {
+    const {reportId, title, session, triggerUpdate, onTriggerUpdate} = this.props;
     return (
       <ErrorBoundary>
         <AttributeMetricFilter
-          key={this.props.reportId}
-          session={this.props.session}
-          triggerUpdate={this.props.triggerUpdate}
-          onTriggerUpdate={this.props.onTriggerUpdate}
+          key={reportId}
+          title={title}
+          session={session}
+          triggerUpdate={triggerUpdate}
+          onTriggerUpdate={onTriggerUpdate}
           withDataPreview
-          reportId={this.props.reportId}
+          reportId={reportId}
           withFolderTree={false} />
       </ErrorBoundary>
     );

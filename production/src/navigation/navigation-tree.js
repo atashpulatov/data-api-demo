@@ -55,6 +55,7 @@ export class NavigationTree extends Component {
   render() {
     return (
       <FolderBrowser
+        title='Import a file'
         session={this.state.session}
         triggerUpdate={this.state.triggerUpdate}
         onTriggerUpdate={this.onTriggerUpdate}

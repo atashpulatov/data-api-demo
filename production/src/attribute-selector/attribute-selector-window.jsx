@@ -41,10 +41,9 @@ export class AttributeSelectorWindow extends Component {
 
   render() {
     return (
-      <div
-        className="attr-selector"
-        style={{padding: '20px'}}>
+      <div className="attr-selector">
         <AttributeSelector
+          title='Import a file > Access_Transaction'
           session={this.state.session}
           reportId={this.state.reportId}
           triggerUpdate={this.state.triggerUpdate}
