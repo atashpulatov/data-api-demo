@@ -57,13 +57,9 @@ class MstrObjectRestService {
         const authToken = storeState.sessionReducer.authToken;
         const projectId = storeState.historyReducer.project.projectId;
 
-        let fullPath = '';
-        if (isReport){
-            fullPath = `${envUrl}/reports/${objectId}/instances`;
-        }
-        else {
-            fullPath = `${envUrl}/cubes/${objectId}/instances`;
-        }        
+        const objectType = isReport?'reports':'cubes';
+        let fullPath = `${envUrl}/${objectType}/${objectId}/instances`;
+
         const reportInstance = await this._getInstanceId(fullPath, authToken, projectId, body);
         fullPath += `/${reportInstance}`;
         return await moduleProxy.request
