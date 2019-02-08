@@ -1,19 +1,19 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import {BrowserRouter, Route} from 'react-router-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
 import * as queryString from 'query-string';
-import {AttributeSelectorWindow} from './attribute-selector/attribute-selector-window';
-import {PopupTypeEnum} from './home/popup-type-enum';
-import {NavigationTree} from './navigation/navigation-tree';
+import { AttributeSelectorWindow } from './attribute-selector/attribute-selector-window';
+import { PopupTypeEnum } from './home/popup-type-enum';
+import { NavigationTree } from './navigation/navigation-tree';
 import './popup.css';
 
 const Office = window.Office;
 
 function officeInitialize() {
   Office.onReady()
-      .then(() => {
-        goReact();
-      });
+    .then(() => {
+      goReact();
+    });
 }
 
 export class Popup extends Component {
@@ -27,14 +27,23 @@ export class Popup extends Component {
   }
 
   render() {
-    const {popupType, ...propsToPass} = this.state.parsed;
+    const { popupType, ...propsToPass } = this.state.parsed;
     if (!popupType) {
       return (
         <AttributeSelectorWindow parsed={propsToPass} />
       );
     } else if (popupType === PopupTypeEnum.navigationTree) {
       return (
-        <NavigationTree parsed={propsToPass} />
+        <NavigationTree handlePrepare={(projectId, reportId) => {
+          this.setState({
+            parsed: {
+              ...this.state.parsed,
+              popupType: undefined,
+              projectId,
+              reportId
+            }
+          })
+        }} parsed={propsToPass} />
       );
     }
   }
@@ -42,10 +51,10 @@ export class Popup extends Component {
 
 function goReact() {
   ReactDOM.render(
-      <BrowserRouter>
-        <Route path="/" component={Popup} />
-      </BrowserRouter>,
-      document.getElementById('popup')
+    <BrowserRouter>
+      <Route path="/" component={Popup} />
+    </BrowserRouter>,
+    document.getElementById('popup')
   );
 }
 

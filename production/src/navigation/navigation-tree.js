@@ -39,13 +39,14 @@ export class NavigationTree extends Component {
   }
 
   handleSecondary = () => {
-    const actionObject = {
-      command: selectorProperties.commandSecondary,
-      chosenObject: this.state.chosenObjectId,
-      chosenProject: this.state.chosenProjectId,
-    };
-    officeContext.getOffice()
-      .context.ui.messageParent(JSON.stringify(actionObject));
+    this.props.handlePrepare(this.state.chosenProjectId, this.state.chosenObjectId);
+    // const actionObject = {
+    //   command: selectorProperties.commandSecondary,
+    //   chosenObject: this.state.chosenObjectId,
+    //   chosenProject: this.state.chosenProjectId,
+    // };
+    // officeContext.getOffice()
+    //   .context.ui.messageParent(JSON.stringify(actionObject));
   }
 
   handleCancel = () => {

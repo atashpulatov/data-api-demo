@@ -10,6 +10,7 @@ import { PopupButtons } from '../popup-buttons.jsx';
 export class AttributeSelectorWindow extends Component {
     constructor(props) {
         super(props);
+        debugger;
         this.state = {
             session: {
                 USE_PROXY: false,

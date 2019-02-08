@@ -5,10 +5,9 @@ import { officeDisplayService } from './office/office-display-service';
 import { PopupTypeEnum } from './home/popup-type-enum';
 import { sessionHelper } from './storage/session-helper';
 
-class PopupController{
+class PopupController {
     runPopupNavigation = () => {
         const session = sessionHelper.getSession();
-        const excelObject = officeContext.getExcel();
         Excel.run(async (context) => {
             const officeObject = officeContext.getOffice();
             officeObject.context.ui.displayDialogAsync(
@@ -27,7 +26,7 @@ class PopupController{
         });
     }
 
-    onMessageFromPopup = (dialog, arg) => {
+    onMessageFromPopup = async (dialog, arg) => {
         const message = arg.message
         const response = JSON.parse(message);
         switch (response.command) {
@@ -36,6 +35,34 @@ class PopupController{
                     officeDisplayService.printObject(response.chosenObject, response.chosenProject);
                 }
                 dialog.close();
+                break;
+            case selectorProperties.commandSecondary:
+                await dialog.close();
+
+                await setTimeout(2000);
+                debugger;
+                const session = sessionHelper.getSession();
+
+                this.runPopupNavigation();
+
+                // const test = environment.scheme;
+                // debugger;
+                // officeContext.getOffice().context.ui.displayDialogAsync(
+                //     `${environment.scheme}://${environment.host}:${environment.port}/popup.html`
+                //     + '?envUrl=' + session.url
+                //     + '&token=' + session.authToken
+                //     + '&projectId=' + response.chosenProject
+                //     + '&reportId=' + response.chosenObject,
+                //     { height: 62, width: 50, displayInIframe: true },
+                //     (asyncResult) => {
+                //         this.dialog = asyncResult.value;
+                //         this.dialog.addEventHandler(
+                //             officeContext.getOffice()
+                //                 .EventType.DialogMessageReceived,
+                //             this.onMessageFromPopup);
+                //     });
+                // await context.sync();
+                // });
                 break;
             case selectorProperties.commandCancel:
                 dialog.close();
