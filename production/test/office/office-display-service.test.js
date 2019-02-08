@@ -88,7 +88,7 @@ describe('OfficeDisplayService', () => {
             .mockReturnValueOnce({});
         const objectId = null;
         // when
-        await officeDisplayService.printObject(objectId, startCell);
+        await officeDisplayService.printObject(objectId, true, startCell);
         // then
         expect(officeStoreService.preserveReport).toBeCalled();
         expect(officeStoreService.preserveReport).toBeCalledWith({

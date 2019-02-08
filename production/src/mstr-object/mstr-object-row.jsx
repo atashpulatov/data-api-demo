@@ -5,6 +5,7 @@ import { MSTRIcon } from 'mstr-react-library';
 import { notificationService } from '../notification/notification-service';
 import { errorService } from '../error/error-handler';
 import { sessionHelper } from '../storage/session-helper';
+import { ReportSubtypes } from '../enums/ReportSubtypes';
 /* eslint-enable */
 
 export const DirectoryRow = ({ directory, onClick }) => (
@@ -43,7 +44,7 @@ export const ReportRow = ({ report, onClick, onFilterReport }) => (
             <Col
                 offset={1}
                 onClick={() => {
-                    onFilterReport(report.id);
+                    onFilterReport(report.id, report.subtype);
                 }}>
                 <MSTRIcon type='filter' />
             </Col>
@@ -53,8 +54,9 @@ export const ReportRow = ({ report, onClick, onFilterReport }) => (
 const onReportRowClick = async (onClick, report) => {
     try {
         sessionHelper.enableLoading();
-        await onClick(report.id);
-        notificationService.displayMessage('success', `Loaded report: ${report.name}`);
+        const isReport = report.subtype != ReportSubtypes.cube;
+        const result = await onClick(report.id, isReport);
+        notificationService.displayMessage(result.type, result.message);
     } catch (error) {
         errorService.handleOfficeError(error);
     } finally {

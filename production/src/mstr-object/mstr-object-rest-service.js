@@ -51,12 +51,15 @@ class MstrObjectRestService {
             });
     }
 
-    async getObjectContent(objectId, body) {
+    async getObjectContent(objectId, isReport=true, body) {
         const storeState = reduxStore.getState();
         const envUrl = storeState.sessionReducer.envUrl;
         const authToken = storeState.sessionReducer.authToken;
         const projectId = storeState.historyReducer.project.projectId;
-        let fullPath = `${envUrl}/reports/${objectId}/instances`;
+
+        const objectType = isReport?'reports':'cubes';
+        let fullPath = `${envUrl}/${objectType}/${objectId}/instances`;
+
         const reportInstance = await this._getInstanceId(fullPath, authToken, projectId, body);
         fullPath += `/${reportInstance}`;
         return await moduleProxy.request
