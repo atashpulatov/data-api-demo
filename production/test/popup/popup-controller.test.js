@@ -4,7 +4,7 @@ import { selectorProperties } from '../../src/attribute-selector/selector-proper
 import { popupController } from '../../src/popup-controller';
 import { officeContext } from '../../src/office/office-context';
 
-describe('PopupButtons', () => {
+describe('PopupController', () => {
     const oldDialog = {};
     const newDialog = {};
     const excelRun = jest.fn();
