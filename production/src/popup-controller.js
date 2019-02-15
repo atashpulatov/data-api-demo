@@ -8,8 +8,6 @@ import { sessionHelper } from './storage/session-helper';
 class PopupController {
   runPopupNavigation = () => {
     const session = sessionHelper.getSession();
-    const excelObject = officeContext.getExcel();
-    console.log(window.location);
     const url = `${window.location.protocol}//${window.location.host}/popup.html`;
     console.log(url);
     Excel.run(async (context) => {
@@ -30,8 +28,8 @@ class PopupController {
     });
   }
 
-  onMessageFromPopup = (dialog, arg) => {
-    const message = arg.message;
+  onMessageFromPopup = async (dialog, arg) => {
+    const message = arg.message
     const response = JSON.parse(message);
     switch (response.command) {
       case selectorProperties.commandOk:
@@ -39,6 +37,34 @@ class PopupController {
           officeDisplayService.printObject(response.chosenObject, response.chosenProject);
         }
         dialog.close();
+        break;
+      case selectorProperties.commandSecondary:
+        await dialog.close();
+
+        await setTimeout(2000);
+        debugger;
+        const session = sessionHelper.getSession();
+
+        this.runPopupNavigation();
+
+        // const test = environment.scheme;
+        // debugger;
+        // officeContext.getOffice().context.ui.displayDialogAsync(
+        //     `${environment.scheme}://${environment.host}:${environment.port}/popup.html`
+        //     + '?envUrl=' + session.url
+        //     + '&token=' + session.authToken
+        //     + '&projectId=' + response.chosenProject
+        //     + '&reportId=' + response.chosenObject,
+        //     { height: 62, width: 50, displayInIframe: true },
+        //     (asyncResult) => {
+        //         this.dialog = asyncResult.value;
+        //         this.dialog.addEventHandler(
+        //             officeContext.getOffice()
+        //                 .EventType.DialogMessageReceived,
+        //             this.onMessageFromPopup);
+        //     });
+        // await context.sync();
+        // });
         break;
       case selectorProperties.commandCancel:
         dialog.close();

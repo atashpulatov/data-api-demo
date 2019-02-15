@@ -1,9 +1,10 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import '../index.css';
 import '../home/home.css';
-import {selectorProperties} from '../attribute-selector/selector-properties';
-import {PopupButtons} from '../popup-buttons.jsx';
-import {FolderBrowser} from 'mstr-react-library';
+import { selectorProperties } from '../attribute-selector/selector-properties';
+import { PopupButtons } from '../popup-buttons.jsx';
+import { FolderBrowser } from 'mstr-react-library';
+import { officeContext } from '../office/office-context';
 
 export class NavigationTree extends Component {
   constructor(props) {
@@ -37,6 +38,17 @@ export class NavigationTree extends Component {
     Office.context.ui.messageParent(JSON.stringify(okObject));
   }
 
+  handleSecondary = () => {
+    this.props.handlePrepare(this.state.chosenProjectId, this.state.chosenObjectId);
+    // const actionObject = {
+    //   command: selectorProperties.commandSecondary,
+    //   chosenObject: this.state.chosenObjectId,
+    //   chosenProject: this.state.chosenProjectId,
+    // };
+    // officeContext.getOffice()
+    //   .context.ui.messageParent(JSON.stringify(actionObject));
+  }
+
   handleCancel = () => {
     const cancelObject = {
       command: selectorProperties.commandCancel,
@@ -63,6 +75,7 @@ export class NavigationTree extends Component {
       >
         <PopupButtons
           handleOk={this.handleOk}
+          handleSecondary={this.handleSecondary}
           handleCancel={this.handleCancel}
         />
       </FolderBrowser>
