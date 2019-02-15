@@ -8,6 +8,7 @@ import {PopupButtons} from '../popup-buttons.jsx';
 export class AttributeSelectorWindow extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       session: {
         USE_PROXY: false,
@@ -16,12 +17,14 @@ export class AttributeSelectorWindow extends Component {
         projectId: this.props.parsed.projectId,
       },
       reportId: this.props.parsed.reportId,
+      reportSubtype: this.props.parsed.reportSubtype,
       triggerUpdate: false,
+      loading: false,
     };
   }
 
   handleOk = () => {
-    this.setState({triggerUpdate: true});
+    this.setState({triggerUpdate: true, loading: true});
   }
 
   handleCancel = () => {
@@ -39,19 +42,32 @@ export class AttributeSelectorWindow extends Component {
     Office.context.ui.messageParent(JSON.stringify(updateObject));
   };
 
+  /**
+   * resets triggerUpdate property to false in order to allow re-pressing OK button
+   * should be called every time OK is pressed but selector popup should not close
+   */
+  resetTriggerUpdate = () => {
+    this.setState({triggerUpdate: false, loading: false});
+  };
+
   render() {
     return (
-      <div className="attr-selector">
+      <div
+        style={{padding: '20px'}}>
         <AttributeSelector
+          // TODO: logic for a title
           title='Import a file > Access_Transaction'
           session={this.state.session}
           reportId={this.state.reportId}
+          reportSubtype={this.state.reportSubtype}
           triggerUpdate={this.state.triggerUpdate}
           onTriggerUpdate={this.onTriggerUpdate}
+          resetTriggerUpdate={this.resetTriggerUpdate}
         />
         <PopupButtons
           handleOk={this.handleOk}
-          handleCancel={this.handleCancel} />
+          handleCancel={this.handleCancel}
+          loading={this.state.loading} />
       </div >
     );
   }

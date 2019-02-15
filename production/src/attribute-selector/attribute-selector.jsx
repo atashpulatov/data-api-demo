@@ -10,7 +10,7 @@ export class AttributeSelector extends Component {
   }
 
   render() {
-    const {reportId, title, session, triggerUpdate, onTriggerUpdate} = this.props;
+    const {reportId, title, session, triggerUpdate, onTriggerUpdate, reportSubtype, resetTriggerUpdate} = this.props;
     return (
       <ErrorBoundary>
         <AttributeMetricFilter
@@ -21,6 +21,8 @@ export class AttributeSelector extends Component {
           onTriggerUpdate={onTriggerUpdate}
           withDataPreview
           reportId={reportId}
+          reportSubtype={reportSubtype}
+          resetTriggerUpdate={resetTriggerUpdate}
           withFolderTree={false} />
       </ErrorBoundary>
     );

@@ -1,0 +1,56 @@
+DEPENDENCIES
+  chef_commons
+    git: https://github.microstrategy.com/ecosystem-cookbooks/chef_commons.git
+    revision: 2bfc28875ca15a3f40b432200d55da21722d3fc9
+    tag: 1.1.13
+  extras
+    git: https://github.microstrategy.com/ecosystem-cookbooks/extras.git
+    revision: 7d5ecf262424d0aac3543a73cff50cafa22b0c56
+    tag: 0.1.61
+  java
+  java-osx
+    git: https://github.microstrategy.com/ecosystem-cookbooks/java-osx.git
+    revision: 96d515084ccfdc0f2192755987dfeb9b0d24e692
+    tag: 0.1.1
+  java-windows
+    git: https://github.microstrategy.com/ecosystem-cookbooks/java-windows.git
+    revision: f3ca5c50a7474f465c2709eeb9588a572701957c
+    tag: 1.0.3
+  nodejs
+    git: https://github.microstrategy.com/ecosystem-cookbooks/nodejs.git
+    revision: 71257b073af0b9261e4f3635da76f50d2db72f0e
+    tag: 0.1.1
+  seven_zip (~> 2.0.0)
+  virtualbox
+    git: https://github.microstrategy.com/ecosystem-cookbooks/virtualbox.git
+    revision: 3f809e122c3f9b23c1500fcf3288fd44ac9f7ed0
+    tag: 0.8.11
+
+GRAPH
+  ark (4.0.0)
+    build-essential (>= 0.0.0)
+    seven_zip (>= 0.0.0)
+  build-essential (8.2.1)
+    mingw (>= 1.1)
+    seven_zip (>= 0.0.0)
+  chef_commons (1.1.13)
+    ark (>= 0.0.0)
+  dmg (4.1.1)
+  extras (0.1.61)
+    dmg (>= 0.0.0)
+  homebrew (5.0.8)
+  java (3.2.0)
+    homebrew (>= 0.0.0)
+    windows (>= 0.0.0)
+  java-osx (0.1.1)
+  java-windows (1.0.3)
+    windows (>= 0.0.0)
+  mingw (2.1.0)
+    seven_zip (>= 0.0.0)
+  nodejs (0.1.1)
+  seven_zip (2.0.2)
+    windows (>= 1.2.2)
+  virtualbox (0.8.11)
+    dmg (>= 0.0.0)
+    windows (>= 0.0.0)
+  windows (5.2.3)
