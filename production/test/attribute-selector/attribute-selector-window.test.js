@@ -3,6 +3,9 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { AttributeSelectorWindow } from '../../src/attribute-selector/attribute-selector-window';
 import { AttributeSelector } from '../../src/attribute-selector/attribute-selector';
+import { attributeSelectorHelpers } from '../../src/attribute-selector/attribute-selector-helpers';
+
+jest.mock('../../src/attribute-selector/attribute-selector-helpers');
 /* eslint-enable */
 
 describe('AttributeSelectorWindow', () => {
@@ -143,5 +146,27 @@ describe('AttributeSelectorWindow', () => {
 
     // then
     expect(spyMethod).toBeCalled();
+  });
+
+  it('should trigger attribute-selector-helpers: officeMessageParent when Cancel is clicked', () => {
+    // given
+    const parsed = {
+      envUrl: 'url',
+      token: 'token',
+      projectId: 'proId',
+      reportId: 'repId',
+    };
+
+    const componentWrapper = mount(<AttributeSelectorWindow
+      parsed={parsed} />);
+
+    const officeMessageParentSpy = jest.spyOn(attributeSelectorHelpers, 'officeMessageParent');
+    officeMessageParentSpy.mockClear();
+
+    // when
+    componentWrapper.instance().handleCancel();
+
+    // then
+    expect(officeMessageParentSpy).toHaveBeenCalledTimes(1);
   });
 });

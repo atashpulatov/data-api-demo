@@ -1,4 +1,4 @@
 #! /bin/bash
 yarn build
-cp -rf ./build/* ../ROOT/experimental/
-cp -rf ./build/* ../MicroStrategyLibrary/build/
+mkdir /opt/apache/tomcat/latest/webapps/ROOT/office-loader
+cp -rf ./build/* /opt/apache/tomcat/latest/webapps/ROOT/office-loader/

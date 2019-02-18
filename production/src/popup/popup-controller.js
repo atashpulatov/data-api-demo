@@ -1,29 +1,31 @@
-import { environment } from '../global-definitions';
-import { officeContext } from '../office/office-context';
-import { selectorProperties } from '../attribute-selector/selector-properties';
-import { officeDisplayService } from '../office/office-display-service';
-import { PopupTypeEnum } from '../home/popup-type-enum';
-import { sessionHelper } from '../storage/session-helper';
+import {environment} from '../global-definitions';
+import {officeContext} from '../office/office-context';
+import {selectorProperties} from '../attribute-selector/selector-properties';
+import {officeDisplayService} from '../office/office-display-service';
+import {PopupTypeEnum} from '../home/popup-type-enum';
+import {sessionHelper} from '../storage/session-helper';
 
 class PopupController {
   runPopupNavigation = () => {
     const session = sessionHelper.getSession();
-    const url = `${window.location.protocol}//${window.location.host}/popup.html`;
-    console.log(url);
-    officeContext.getExcel().run(async (context) => {
+    console.log(window.location);
+    const url = `${window.location.href}`;
+    const prepUrl = url.replace('index.html', 'popup.html');
+    console.log(prepUrl);
+    Excel.run(async (context) => {
       const officeObject = officeContext.getOffice();
       officeObject.context.ui.displayDialogAsync(
-        url
+          prepUrl
         + '?popupType=' + PopupTypeEnum.navigationTree
         + '&envUrl=' + session.url
         + '&token=' + session.authToken,
-        { height: 80, width: 80, displayInIframe: true },
-        (asyncResult) => {
-          const dialog = asyncResult.value;
-          dialog.addEventHandler(
-            officeObject.EventType.DialogMessageReceived,
-            this.onMessageFromPopup.bind(null, dialog));
-        });
+          {height: 80, width: 80, displayInIframe: true},
+          (asyncResult) => {
+            const dialog = asyncResult.value;
+            dialog.addEventHandler(
+                officeObject.EventType.DialogMessageReceived,
+                this.onMessageFromPopup.bind(null, dialog));
+          });
       await context.sync();
     });
   }
