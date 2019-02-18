@@ -18,7 +18,7 @@ export class _Home extends Component {
       isRememberMeOn: true,
     };
     sessionHelper.saveLoginValues(values);
-  }
+  };
 
   getCookiesToArray = () => {
     const cookieJar = document.cookie;
@@ -30,7 +30,7 @@ export class _Home extends Component {
         value: slicedCookie[1],
       };
     });
-  }
+  };
 
   saveTokenFromCookies = () => {
     const splittedCookiesJar = this.getCookiesToArray();
@@ -40,18 +40,18 @@ export class _Home extends Component {
     if (authToken[0]) {
       sessionHelper.logIn(authToken[0].value);
     }
-  }
+  };
 
   componentDidMount = async () => {
     await officeApiHelper.loadExistingReportBindingsExcel();
     this.saveMockedLoginValues();
     this.saveTokenFromCookies();
     sessionHelper.disableLoading();
-  }
+  };
 
   componentDidUpdate = () => {
     this.saveTokenFromCookies();
-  }
+  };
 
   render() {
     const { loading, authToken, reportArray } = this.props;

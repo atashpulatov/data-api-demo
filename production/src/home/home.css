@@ -34,20 +34,6 @@ hr {
     border-radius: 50%;
 }
 
-#app-footer {
-    background: #313435;
-    display: flex;
-    color: #fff;
-    width: 100%;
-    justify-content: flex-end;
-}
-
-#footer-text {
-    margin-right: 20px;
-    font-size: 12px;
-    font-weight: 100;
-}
-
 #app-main {
     background: #fff;
 }
