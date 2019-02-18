@@ -14,7 +14,6 @@ class PageBuilder {
         <Notifications />
         <Header authToken={authToken} />
         {/* Logout button will be moved next to the username in the header */}
-        {/* {authToken && <MenuBar />} */}
         {(reportArray && reportArray.length !== 0) && authToken && <FileHistoryContainer />}
         {!(reportArray && reportArray.length !== 0) && authToken && <Placeholder />}
         <Spin spinning={loading}>
