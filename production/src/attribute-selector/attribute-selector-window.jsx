@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import '../index.css';
 import '../home/home.css';
-import {selectorProperties} from '../attribute-selector/selector-properties';
+import {selectorProperties} from './selector-properties';
+import {attributeSelectorHelpers} from './attribute-selector-helpers';
 import {AttributeSelector} from '../attribute-selector/attribute-selector.jsx';
 import {PopupButtons} from '../popup-buttons.jsx';
 
@@ -27,19 +28,10 @@ export class AttributeSelectorWindow extends Component {
     this.setState({triggerUpdate: true, loading: true});
   };
 
-  handleCancel = () => {
-    const cancelObject = {
-      command: selectorProperties.commandCancel,
-    };
-    Office.context.ui.messageParent(JSON.stringify(cancelObject));
-  };
+  handleCancel = () => attributeSelectorHelpers.officeMessageParent(selectorProperties.commandCancel);
 
   onTriggerUpdate = (body) => {
-    const updateObject = {
-      command: selectorProperties.commandOnUpdate,
-      body,
-    };
-    Office.context.ui.messageParent(JSON.stringify(updateObject));
+    attributeSelectorHelpers.officeMessageParent(selectorProperties.commandOnUpdate, body);
   };
 
   /**
