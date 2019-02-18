@@ -3,7 +3,7 @@ import '../index.css';
 import '../home/home.css';
 import {selectorProperties} from '../attribute-selector/selector-properties';
 import {AttributeSelector} from '../attribute-selector/attribute-selector.jsx';
-import {PopupButtons} from '../popup-buttons.jsx';
+import {PopupButtons} from '../popup/popup-buttons.jsx';
 
 export class AttributeSelectorWindow extends Component {
   constructor(props) {
@@ -35,6 +35,9 @@ export class AttributeSelectorWindow extends Component {
   };
 
   onTriggerUpdate = (body) => {
+    debugger;
+    console.log(body);
+    
     const updateObject = {
       command: selectorProperties.commandOnUpdate,
       body,

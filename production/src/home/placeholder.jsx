@@ -1,7 +1,7 @@
 import React from 'react';
 import {sessionHelper} from '../storage/session-helper';
 import {Button, Tabs} from 'antd';
-import {popupController} from '../popup-controller';
+import {popupController} from '../popup/popup-controller';
 
 const TabPane = Tabs.TabPane;
 

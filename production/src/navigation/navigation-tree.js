@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import '../index.css';
 import '../home/home.css';
 import {selectorProperties} from '../attribute-selector/selector-properties';
-import {PopupButtons} from '../popup-buttons.jsx';
+import {PopupButtons} from '../popup/popup-buttons.jsx';
 import {FolderBrowser} from 'mstr-react-library';
 import {officeContext} from '../office/office-context';
 
@@ -39,7 +39,7 @@ export class NavigationTree extends Component {
   }
 
   handleSecondary = () => {
-    this.props.handlePrepare(this.state.chosenProjectId, this.state.chosenObjectId);
+    this.props.handlePrepare(this.state.chosenProjectId, this.state.chosenObjectId, this.state.chosenSubtype);
   }
 
   handleCancel = () => {
@@ -50,10 +50,11 @@ export class NavigationTree extends Component {
   }
 
   // TODO: temporary solution
-  onObjectChosen = (objectId, projectId) => {
+  onObjectChosen = (objectId, projectId, subtype) => {
     this.setState({
       chosenObjectId: objectId,
       chosenProjectId: projectId,
+      chosenSubtype: subtype,
     });
   }
 

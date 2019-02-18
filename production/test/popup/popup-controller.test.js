@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { selectorProperties } from '../../src/attribute-selector/selector-properties';
-import { popupController } from '../../src/popup-controller';
+import { popupController } from '../../src/popup/popup-controller';
 import { officeContext } from '../../src/office/office-context';
 
 describe('PopupController', () => {
@@ -42,11 +42,11 @@ describe('PopupController', () => {
         jest.restoreAllMocks();
     });
 
-    it('should close popup and call another when secondary action provided',
+    it('should handle update command from popup',
         async () => {
             // given
             const actionObject = {
-                command: selectorProperties.commandSecondary,
+                command: selectorProperties.commandOnUpdate,
                 chosenObject: 'objectId',
                 chosenProject: 'projectId',
             };

@@ -4,7 +4,7 @@ import {NavigationTree} from '../../src/navigation/navigation-tree';
 import {shallow, mount} from 'enzyme';
 import {selectorProperties} from '../../src/attribute-selector/selector-properties';
 import {officeContext} from '../../src/office/office-context';
-import {PopupButtons} from '../../src/popup-buttons';
+import {PopupButtons} from '../../src/popup/popup-buttons';
 /* eslint-enable */
 
 describe('NavigationTree', () => {
@@ -62,7 +62,7 @@ describe('NavigationTree', () => {
     expect(secondaryAction).toBeCalled();
   });
 
-  it('should send proper message on secondary action', () => {
+  it('should call proper method on secondary action', () => {
     // given
     const propsMethod = jest.fn();
     const parsed = {
@@ -74,14 +74,15 @@ describe('NavigationTree', () => {
       command: selectorProperties.commandSecondary,
       chosenObject: 'objectId',
       chosenProject: 'projectId',
+      chosenSubtype: 'subtype',
     };
     const wrappedComponent = shallow(<NavigationTree parsed={parsed} handlePrepare={propsMethod} />);
     wrappedComponent.instance()
-        .onObjectChosen(actionObject.chosenObject, actionObject.chosenProject);
+        .onObjectChosen(actionObject.chosenObject, actionObject.chosenProject, actionObject.chosenSubtype);
     // when
     wrappedComponent.instance().handleSecondary();
     // then
     expect(propsMethod).toBeCalled();
-    expect(propsMethod).toBeCalledWith(actionObject.chosenProject, actionObject.chosenObject);
+    expect(propsMethod).toBeCalledWith(actionObject.chosenProject, actionObject.chosenObject, actionObject.chosenSubtype);
   });
 });

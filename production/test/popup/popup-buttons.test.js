@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { PopupButtons } from "../../src/popup-buttons";
+import { PopupButtons } from "../../src/popup/popup-buttons";
 
 describe('PopupButtons', () => {
     it('should NOT display prepare data when secondary action NOT provided',
