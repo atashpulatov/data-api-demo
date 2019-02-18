@@ -22,7 +22,7 @@ class SessionHelper {
         reduxStore.dispatch({
             type: sessionProperties.actions.logOut,
         });
-        window.location.replace('/experimental/index.html');
+        window.location.replace('/office-loader/index.html');
     }
     saveLoginValues = (values) => {
         reduxStore.dispatch({

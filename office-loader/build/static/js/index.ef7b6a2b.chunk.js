@@ -1,2 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[0],[function(n,o,i){n.exports=i(1)},function(n,o){window.Office.onReady().then(function(){window.location.replace("/MicroStrategyLibrary/build/index.html")})}],[[0,1]]]);
-//# sourceMappingURL=index.ef7b6a2b.chunk.js.map

@@ -1,4 +1,3 @@
-import { environment } from './global-definitions';
 import { officeContext } from './office/office-context';
 import { selectorProperties } from './attribute-selector/selector-properties';
 import { officeDisplayService } from './office/office-display-service';
@@ -8,12 +7,14 @@ import { sessionHelper } from './storage/session-helper';
 class PopupController {
   runPopupNavigation = () => {
     const session = sessionHelper.getSession();
-    const url = `${window.location.protocol}//${window.location.host}/popup.html`;
-    console.log(url);
+    console.log(window.location);
+    const url = `${window.location.href}`;
+    const prepUrl = url.replace('index.html', 'popup.html');
+    console.log(prepUrl);
     Excel.run(async (context) => {
       const officeObject = officeContext.getOffice();
       officeObject.context.ui.displayDialogAsync(
-        url
+        prepUrl
         + '?popupType=' + PopupTypeEnum.navigationTree
         + '&envUrl=' + session.url
         + '&token=' + session.authToken,
@@ -29,7 +30,7 @@ class PopupController {
   }
 
   onMessageFromPopup = async (dialog, arg) => {
-    const message = arg.message
+    const message = arg.message;
     const response = JSON.parse(message);
     switch (response.command) {
       case selectorProperties.commandOk:
