@@ -25,14 +25,14 @@ export class AttributeSelectorWindow extends Component {
 
   handleOk = () => {
     this.setState({triggerUpdate: true, loading: true});
-  }
+  };
 
   handleCancel = () => {
     const cancelObject = {
       command: selectorProperties.commandCancel,
     };
     Office.context.ui.messageParent(JSON.stringify(cancelObject));
-  }
+  };
 
   onTriggerUpdate = (body) => {
     const updateObject = {
