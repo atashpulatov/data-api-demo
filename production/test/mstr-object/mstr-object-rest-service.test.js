@@ -2,7 +2,7 @@ import {authenticationService} from '../../src/authentication/auth-rest-service'
 import {mstrObjectRestService} from '../../src/mstr-object/mstr-object-rest-service';
 import superagent from 'superagent';
 
-import {mstrTutorial, mstrTutorialFolder, mockReports} from '../mockData';
+import {mstrTutorialFolder} from '../mockData';
 import {UnauthorizedError} from '../../src/error/unauthorized-error';
 import {InternalServerError} from '../../src/error/internal-server-error';
 import {BadRequestError} from '../../src/error/bad-request-error';
@@ -210,7 +210,7 @@ describe('MstrObjectRestService', () => {
       // when
       const result = await mstrObjectRestService.getObjectContent(
           objectId,
-          projectId
+          projectId,
       );
       // then
       expect(result).toBeDefined();

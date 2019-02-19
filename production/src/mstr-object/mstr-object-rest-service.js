@@ -3,6 +3,8 @@ import {reduxStore} from '../store';
 import {moduleProxy} from '../module-proxy';
 
 const sharedFolderIdType = 7;
+const REQUEST_LIMIT = 1000;
+const EXCEL_ROW_LIMIT = 1048576;
 
 class MstrObjectRestService {
   async getProjectContent(envUrl, authToken, projectId,
@@ -60,17 +62,44 @@ class MstrObjectRestService {
 
     const reportInstance = await this._getInstanceId(fullPath, authToken, projectId, body);
     fullPath += `/${reportInstance}`;
-    return await moduleProxy.request
-        .get(fullPath)
+    try {
+      return await this._getObjectContentPaginated(fullPath, authToken, projectId);
+    } catch (error) {
+      errorService.errorRestFactory(error);
+    }
+  }
+
+  _getObjectContentPaginated(fullPath, authToken, projectId) {
+    return new Promise((resolve, reject) => {
+      this._fetchObjectContent(fullPath, authToken, projectId, resolve, reject);
+    });
+  }
+
+  _fetchObjectContent(fullPath, authToken, projectId, resolve, reject, aggregatedData = {}, offset = 0, limit = REQUEST_LIMIT) {
+    return moduleProxy.request
+        .get(`${fullPath}?offset=${offset}&limit=${limit}`)
         .set('x-mstr-authtoken', authToken)
         .set('x-mstr-projectid', projectId)
         .withCredentials()
         .then((res) => {
-          return res.body;
+          const {current, total} = res.body.result.data.paging;
+          const fetchedRows = current + offset;
+          console.log(current, offset, total);
+          if (offset === 0) {
+            aggregatedData = res.body;
+          } else {
+            console.log(aggregatedData.result.data.root.children);
+            aggregatedData.result.data.root.children.push(...res.body.result.data.root.children);
+          }
+
+          if (fetchedRows >= total || fetchedRows >= EXCEL_ROW_LIMIT) {
+            resolve(aggregatedData);
+          } else {
+            offset += current;
+            this._fetchObjectContent(fullPath, authToken, projectId, resolve, reject, aggregatedData, offset, limit);
+          }
         })
-        .catch((err) => {
-          throw errorService.errorRestFactory(err);
-        });
+        .catch(reject);
   }
 };
 
