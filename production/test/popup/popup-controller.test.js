@@ -25,6 +25,7 @@ describe('PopupController', () => {
         const actionObject = {
           command: selectorProperties.commandOnUpdate,
           reportId: 'reportId',
+          projectId: 'projectId',
           reportSubtype: ReportSubtypes.cube,
           body: {},
         };
@@ -37,6 +38,10 @@ describe('PopupController', () => {
         // then
         expect(oldDialog.close).toBeCalled();
         expect(mockPrint).toBeCalled();
-        expect(mockPrint).toBeCalledWith(actionObject.reportId, false, null, null, null, actionObject.body);
+        expect(mockPrint).toBeCalledWith(actionObject.reportId,
+            actionObject.projectId,
+            false,
+            null, null, null,
+            actionObject.body);
       });
 });

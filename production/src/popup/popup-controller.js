@@ -1,8 +1,8 @@
-import { officeContext } from '../office/office-context';
-import { selectorProperties } from '../attribute-selector/selector-properties';
-import { officeDisplayService } from '../office/office-display-service';
-import { PopupTypeEnum } from '../home/popup-type-enum';
-import { sessionHelper } from '../storage/session-helper';
+import {officeContext} from '../office/office-context';
+import {selectorProperties} from '../attribute-selector/selector-properties';
+import {officeDisplayService} from '../office/office-display-service';
+import {PopupTypeEnum} from '../home/popup-type-enum';
+import {sessionHelper} from '../storage/session-helper';
 
 class PopupController {
   runPopupNavigation = () => {
@@ -21,17 +21,17 @@ class PopupController {
       Excel.run(async (context) => {
         const officeObject = officeContext.getOffice();
         officeObject.context.ui.displayDialogAsync(
-          splittedUrl[0]
+            splittedUrl[0]
           + '?popupType=' + PopupTypeEnum.navigationTree
           + '&envUrl=' + session.url
           + '&token=' + session.authToken,
-          { height: 80, width: 80, displayInIframe: true },
-          (asyncResult) => {
-            const dialog = asyncResult.value;
-            dialog.addEventHandler(
-              officeObject.EventType.DialogMessageReceived,
-              this.onMessageFromPopup.bind(null, dialog));
-          });
+            {height: 80, width: 80, displayInIframe: true},
+            (asyncResult) => {
+              const dialog = asyncResult.value;
+              dialog.addEventHandler(
+                  officeObject.EventType.DialogMessageReceived,
+                  this.onMessageFromPopup.bind(null, dialog));
+            });
         await context.sync();
       });
     } catch (error) {
@@ -51,9 +51,11 @@ class PopupController {
         break;
       case selectorProperties.commandOnUpdate:
         if (response.reportId
+          && response.projectId
           && response.reportSubtype
           && response.body) {
           officeDisplayService.printObject(response.reportId,
+              response.projectId,
               !response.reportSubtype,
               null, null, null,
               response.body);

@@ -153,6 +153,7 @@ describe('AttributeSelectorWindow', () => {
     expect(spyMethod).toBeCalled();
     expect(spyMethod).toBeCalledWith(selectorProperties.commandOnUpdate,
         parsed.reportId,
+        parsed.projectId,
         parsed.reportSubtype,
         {'requestedObjects': {}});
   });

@@ -30,9 +30,9 @@ export class AttributeSelectorWindow extends Component {
 
   handleCancel = () => attributeSelectorHelpers.officeMessageParent(selectorProperties.commandCancel);
 
-  onTriggerUpdate = (reportId, reportSubtype, body) => {
+  onTriggerUpdate = (reportId, projectId, reportSubtype, body) => {
     attributeSelectorHelpers.officeMessageParent(selectorProperties.commandOnUpdate,
-        reportId, reportSubtype, body);
+        reportId, projectId, reportSubtype, body);
   };
 
   /**
