@@ -5,6 +5,8 @@ import './home.css';
 import { sessionHelper } from '../storage/session-helper';
 import { pageBuilder } from './page-builder.js';
 import { officeApiHelper } from '../office/office-api-helper';
+import { reduxStore } from '../store';
+import { sessionProperties } from '../storage/session-properties';
 /* eslint-enable */
 
 const predefinedEnvUrl = 'https://env-125323.customer.cloud.microstrategy.com/MicroStrategyLibrary/api';
@@ -12,12 +14,24 @@ const predefinedEnvUrl = 'https://env-125323.customer.cloud.microstrategy.com/Mi
 export class _Home extends Component {
 
   saveMockedLoginValues = () => {
-    const values = {
-      username: 'mstr',
-      envUrl: predefinedEnvUrl,
-      isRememberMeOn: true,
-    };
-    sessionHelper.saveLoginValues(values);
+    console.log(window.location);
+    const token = reduxStore.getState().sessionReducer.authToken;
+    if (window.location.origin.search('localhost') !== -1) {
+      if (!token) {
+        reduxStore.dispatch({
+          type: sessionProperties.actions.logOut,
+        });
+        return;
+      }
+    } else {
+      const envUrl = `${window.location.origin}/MicroStrategyLibrary/api`;
+      const values = {
+        username: 'mstr',
+        envUrl,
+        isRememberMeOn: true,
+      };
+      sessionHelper.saveLoginValues(values);
+    }
   };
 
   getCookiesToArray = () => {
