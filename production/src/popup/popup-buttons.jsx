@@ -6,11 +6,10 @@ export const PopupButtons = ({handleOk, handleSecondary,
   handleCancel, loading}) => (
   <div className="popup-buttons popup-footer">
     <Button id="back" onClick={handleCancel}>
-        Back
+      Back
     </Button>
-    <Button id="import" onClick={handleOk}>
-        loading={loading}>
-                Import
+    <Button id="import" onClick={handleOk} loading={loading}>
+      Import
     </Button>
     {
       handleSecondary &&
@@ -21,7 +20,7 @@ export const PopupButtons = ({handleOk, handleSecondary,
         </Button>
     }
     <Button id="cancel" onClick={handleCancel}>
-        Cancel
+      Cancel
     </Button>
   </div>
 );

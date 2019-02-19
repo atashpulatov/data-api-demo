@@ -40,6 +40,17 @@ class PopupController {
         }
         dialog.close();
         break;
+      case selectorProperties.commandOnUpdate:
+        if (response.reportId
+          && response.reportSubtype
+          && response.body) {
+          officeDisplayService.printObject(response.reportId,
+              !response.reportSubtype,
+              null, null, null,
+              response.body);
+        }
+        dialog.close();
+        break;
       case selectorProperties.commandCancel:
         dialog.close();
         break;
