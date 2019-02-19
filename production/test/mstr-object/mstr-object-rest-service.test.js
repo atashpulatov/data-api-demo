@@ -216,6 +216,22 @@ describe('MstrObjectRestService', () => {
       expect(result).toBeDefined();
       expect(result.name).toEqual(expectedReportName);
     });
+    it('should return content by using pagination', async () => {
+      // given
+      const expectedReportName = 'TEST REPORT 1';
+      // when
+      const response = await mstrObjectRestService.getObjectContent(
+          objectId,
+          projectId,
+          true, // isReport
+          {}, // getInstanceId body
+          30 // Fetch n rows at a time
+      );
+      // then
+      expect(response).toBeDefined();
+      expect(response.name).toEqual(expectedReportName);
+      expect(response.result.data.root.children.length).toBeGreaterThanOrEqual(50);
+    });
 
     it('should throw exception due to incorrect authToken', async () => {
       // given

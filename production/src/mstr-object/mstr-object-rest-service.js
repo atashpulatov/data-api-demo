@@ -53,7 +53,7 @@ class MstrObjectRestService {
         });
   }
 
-  async getObjectContent(objectId, projectId, isReport = true, body) {
+  async getObjectContent(objectId, projectId, isReport = true, body = {}, limit = REQUEST_LIMIT) {
     const storeState = reduxStore.getState();
     const envUrl = storeState.sessionReducer.envUrl;
     const authToken = storeState.sessionReducer.authToken;
@@ -63,15 +63,15 @@ class MstrObjectRestService {
     const reportInstance = await this._getInstanceId(fullPath, authToken, projectId, body);
     fullPath += `/${reportInstance}`;
     try {
-      return await this._getObjectContentPaginated(fullPath, authToken, projectId);
+      return await this._getObjectContentPaginated(fullPath, authToken, projectId, limit);
     } catch (error) {
       errorService.errorRestFactory(error);
     }
   }
 
-  _getObjectContentPaginated(fullPath, authToken, projectId) {
+  _getObjectContentPaginated(fullPath, authToken, projectId, limit) {
     return new Promise((resolve, reject) => {
-      this._fetchObjectContent(fullPath, authToken, projectId, resolve, reject);
+      this._fetchObjectContent(fullPath, authToken, projectId, resolve, reject, {}, 0, limit);
     });
   }
 
@@ -84,11 +84,9 @@ class MstrObjectRestService {
         .then((res) => {
           const {current, total} = res.body.result.data.paging;
           const fetchedRows = current + offset;
-          console.log(current, offset, total);
           if (offset === 0) {
             aggregatedData = res.body;
           } else {
-            console.log(aggregatedData.result.data.root.children);
             aggregatedData.result.data.root.children.push(...res.body.result.data.root.children);
           }
 
