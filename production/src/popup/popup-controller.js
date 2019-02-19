@@ -1,33 +1,42 @@
-import {environment} from '../global-definitions';
-import {officeContext} from '../office/office-context';
-import {selectorProperties} from '../attribute-selector/selector-properties';
-import {officeDisplayService} from '../office/office-display-service';
-import {PopupTypeEnum} from '../home/popup-type-enum';
-import {sessionHelper} from '../storage/session-helper';
+import { officeContext } from '../office/office-context';
+import { selectorProperties } from '../attribute-selector/selector-properties';
+import { officeDisplayService } from '../office/office-display-service';
+import { PopupTypeEnum } from '../home/popup-type-enum';
+import { sessionHelper } from '../storage/session-helper';
 
 class PopupController {
   runPopupNavigation = () => {
     const session = sessionHelper.getSession();
     console.log(window.location);
-    const url = `${window.location.href}`;
-    const prepUrl = url.replace('index.html', 'popup.html');
-    console.log(prepUrl);
-    Excel.run(async (context) => {
-      const officeObject = officeContext.getOffice();
-      officeObject.context.ui.displayDialogAsync(
-          prepUrl
-        + '?popupType=' + PopupTypeEnum.navigationTree
-        + '&envUrl=' + session.url
-        + '&token=' + session.authToken,
-          {height: 80, width: 80, displayInIframe: true},
+    let url = `${window.location.href}`;
+    if (url.search('localhost') !== -1) {
+      console.log('in if');
+      url = `${window.location.origin}/popup.html`;
+    } else {
+      url = url.replace('index.html', 'popup.html');
+    }
+    const splittedUrl = url.split('?'); // we need to get rid of any query params
+    console.log(splittedUrl[0]);
+    try {
+      Excel.run(async (context) => {
+        const officeObject = officeContext.getOffice();
+        officeObject.context.ui.displayDialogAsync(
+          splittedUrl[0]
+          + '?popupType=' + PopupTypeEnum.navigationTree
+          + '&envUrl=' + session.url
+          + '&token=' + session.authToken,
+          { height: 80, width: 80, displayInIframe: true },
           (asyncResult) => {
             const dialog = asyncResult.value;
             dialog.addEventHandler(
-                officeObject.EventType.DialogMessageReceived,
-                this.onMessageFromPopup.bind(null, dialog));
+              officeObject.EventType.DialogMessageReceived,
+              this.onMessageFromPopup.bind(null, dialog));
           });
-      await context.sync();
-    });
+        await context.sync();
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   onMessageFromPopup = async (dialog, arg) => {
