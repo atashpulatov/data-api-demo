@@ -2,7 +2,7 @@ import {authenticationService} from '../../src/authentication/auth-rest-service'
 import {mstrObjectRestService} from '../../src/mstr-object/mstr-object-rest-service';
 import superagent from 'superagent';
 
-import {mstrTutorial, mstrTutorialFolder, mockReports} from '../mockData';
+import {mstrTutorialFolder} from '../mockData';
 import {UnauthorizedError} from '../../src/error/unauthorized-error';
 import {InternalServerError} from '../../src/error/internal-server-error';
 import {BadRequestError} from '../../src/error/bad-request-error';
@@ -210,11 +210,27 @@ describe('MstrObjectRestService', () => {
       // when
       const result = await mstrObjectRestService.getObjectContent(
           objectId,
-          projectId
+          projectId,
       );
       // then
       expect(result).toBeDefined();
       expect(result.name).toEqual(expectedReportName);
+    });
+    it('should return content by using pagination', async () => {
+      // given
+      const expectedReportName = 'TEST REPORT 1';
+      // when
+      const response = await mstrObjectRestService.getObjectContent(
+          objectId,
+          projectId,
+          true, // isReport
+          {}, // getInstanceId body
+          30 // Fetch n rows at a time
+      );
+      // then
+      expect(response).toBeDefined();
+      expect(response.name).toEqual(expectedReportName);
+      expect(response.result.data.root.children.length).toBeGreaterThanOrEqual(50);
     });
 
     it('should throw exception due to incorrect authToken', async () => {
