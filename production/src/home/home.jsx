@@ -9,8 +9,6 @@ import { reduxStore } from '../store';
 import { sessionProperties } from '../storage/session-properties';
 /* eslint-enable */
 
-const predefinedEnvUrl = 'https://env-125323.customer.cloud.microstrategy.com/MicroStrategyLibrary/api';
-
 export class _Home extends Component {
 
   saveMockedLoginValues = () => {
