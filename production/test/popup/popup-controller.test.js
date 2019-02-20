@@ -1,82 +1,74 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-import { selectorProperties } from '../../src/attribute-selector/selector-properties';
-import { popupController } from '../../src/popup/popup-controller';
-import { officeContext } from '../../src/office/office-context';
+import {shallow} from 'enzyme';
+import {selectorProperties} from '../../src/attribute-selector/selector-properties';
+import {popupController} from '../../src/popup/popup-controller';
+import {officeContext} from '../../src/office/office-context';
+import {ReportSubtypes} from '../../src/enums/ReportSubtypes';
+import {officeDisplayService} from '../../src/office/office-display-service';
+import {objectTypes} from 'mstr-react-library';
 
 describe('PopupController', () => {
-    const oldDialog = {};
-    const newDialog = {};
-    const excelRun = jest.fn();
+  const oldDialog = {};
+  const newDialog = {};
+  const excelRun = jest.fn();
 
-    beforeAll(() => {
-        // excelRun.mockImplementation(async (func) => {
-        //     console.log('this is crazy');
+  beforeAll(() => {
+    oldDialog.close = jest.fn();
+  });
 
-        //     await func({
-        //         sync: async () => { },
-        //     });
-        // })
-        jest.spyOn(officeContext, 'getExcel')
-            .mockReturnValue({
-                run: excelRun,
-            })
-        // jest.spyOn(officeContext, 'getOffice').mockReturnValue({
-        //     context: {
-        //         ui: {
-        //             displayDialogAsync: (par1, par2, parFunc) => {
-        //                 console.log('this one tooo');
+  afterAll(() => {
+    jest.restoreAllMocks();
+  });
 
-        //                 parFunc({
-        //                     value: newDialog,
-        //                 });
-        //             }
-        //         }
-        //     }
-        // })
-        oldDialog.close = jest.fn();
-        // newDialog.addEventHandler = jest.fn();
-    });
+  it('should handle update command from popup for cube',
+      async () => {
+        // given
+        const actionObject = {
+          command: selectorProperties.commandOnUpdate,
+          reportId: 'reportId',
+          projectId: 'projectId',
+          reportSubtype: objectTypes.getTypeValues('Cube').subtype,
+          body: {},
+        };
+        const arg = {
+          message: JSON.stringify(actionObject),
+        };
+        const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
+        // when
+        await popupController.onMessageFromPopup(oldDialog, arg);
+        // then
+        expect(oldDialog.close).toBeCalled();
+        expect(mockPrint).toBeCalled();
+        expect(mockPrint).toBeCalledWith(actionObject.reportId,
+            actionObject.projectId,
+            false,
+            null, null, null,
+            actionObject.body);
+      });
 
-    afterAll(() => {
-        jest.restoreAllMocks();
-    });
-
-    it('should handle update command from popup',
-        async () => {
-            // given
-            const actionObject = {
-                command: selectorProperties.commandOnUpdate,
-                chosenObject: 'objectId',
-                chosenProject: 'projectId',
-            };
-            const arg = {
-                message: JSON.stringify(actionObject),
-            }
-            // when
-            await popupController.onMessageFromPopup(oldDialog, arg);
-            // then
-            expect(oldDialog.close).toBeCalled();
-            expect(excelRun).toBeCalled();
-            const runParams = excelRun.mock.calls[0][0];
-            expect(typeof runParams).toEqual('function');
-            // expect(newDialog.addEventHandler).toBeCalled();
-        })
-
-    // Excel.run(async (context) => {
-    //     Office.context.ui.displayDialogAsync(
-    //         `${environment.scheme}://${environment.host}:${environment.port}/popup.html`
-    //         + '?envUrl=' + session.url
-    //         + '&token=' + session.authToken
-    //         + '&projectId=' + session.projectId
-    //         + '&reportId=' + reportId,
-    //         { height: 62, width: 50, displayInIframe: true },
-    //         (asyncResult) => {
-    //             this.dialog = asyncResult.value;
-    //             this.dialog.addEventHandler(
-    //                 Office.EventType.DialogMessageReceived,
-    //                 this.onMessageFromPopup);
-    //         });
-    //     await context.sync();
-    // });
+  it('should handle update command from popup for report',
+      async () => {
+      // given
+        const actionObject = {
+          command: selectorProperties.commandOnUpdate,
+          reportId: 'reportId',
+          projectId: 'projectId',
+          reportSubtype: objectTypes.getTypeValues('Report').subtype,
+          body: {},
+        };
+        const arg = {
+          message: JSON.stringify(actionObject),
+        };
+        const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
+        // when
+        await popupController.onMessageFromPopup(oldDialog, arg);
+        // then
+        expect(oldDialog.close).toBeCalled();
+        expect(mockPrint).toBeCalled();
+        expect(mockPrint).toBeCalledWith(actionObject.reportId,
+            actionObject.projectId,
+            true,
+            null, null, null,
+            actionObject.body);
+      });
 });
