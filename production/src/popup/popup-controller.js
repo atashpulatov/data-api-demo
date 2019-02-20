@@ -2,7 +2,8 @@ import {officeContext} from '../office/office-context';
 import {selectorProperties} from '../attribute-selector/selector-properties';
 import {officeDisplayService} from '../office/office-display-service';
 import {PopupTypeEnum} from '../home/popup-type-enum';
-import {sessionHelper} from '../storage/session-helper';
+import { sessionHelper } from '../storage/session-helper';
+import { objectTypes } from 'mstr-react-library';
 
 class PopupController {
   runPopupNavigation = () => {
@@ -56,7 +57,7 @@ class PopupController {
           && response.body) {
           officeDisplayService.printObject(response.reportId,
               response.projectId,
-              !response.reportSubtype,
+              response.reportSubtype === objectTypes.getTypeValues('Report').subtype,
               null, null, null,
               response.body);
         }
