@@ -15,7 +15,6 @@ export class _Authenticate extends Component {
     super(props);
     this.stateFromRedux = reduxStore.getState().sessionReducer;
     this.state = {
-      username: this.stateFromRedux.username || '',
       envUrl: this.stateFromRedux.envUrl || '',
     };
   }
@@ -34,6 +33,7 @@ export class _Authenticate extends Component {
           values.username, values.password,
           values.envUrl, this.state.authMode);
         notificationService.displayMessage('success', 'Logged in');
+        console.log('before saving authToken');
         sessionHelper.logIn(authToken);
       } catch (error) {
         errorService.handlePreAuthError(error);
@@ -56,7 +56,7 @@ export class _Authenticate extends Component {
           <FormItem
             label='Username'>
             {getFieldDecorator('username', {
-              initialValue: this.stateFromRedux.username || '',
+              initialValue: this.state.username || '',
               rules: [{ required: true, message: 'Please input your username!' }],
             })(
               <Input
@@ -80,7 +80,7 @@ export class _Authenticate extends Component {
           <FormItem
             label='Environment URL'>
             {getFieldDecorator('envUrl', {
-              initialValue: this.stateFromRedux.envUrl || '',
+              initialValue: this.state.envUrl || '',
               rules: [{ required: true, message: 'Please input environment URL!' }],
             })(
               <Input

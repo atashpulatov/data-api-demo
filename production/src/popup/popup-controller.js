@@ -7,16 +7,13 @@ import { sessionHelper } from '../storage/session-helper';
 class PopupController {
   runPopupNavigation = () => {
     const session = sessionHelper.getSession();
-    console.log(window.location);
     let url = `${window.location.href}`;
     if (url.search('localhost') !== -1) {
-      console.log('in if');
       url = `${window.location.origin}/popup.html`;
     } else {
       url = url.replace('index.html', 'popup.html');
     }
     const splittedUrl = url.split('?'); // we need to get rid of any query params
-    console.log(splittedUrl[0]);
     try {
       Excel.run(async (context) => {
         const officeObject = officeContext.getOffice();
