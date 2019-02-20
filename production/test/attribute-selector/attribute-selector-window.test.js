@@ -1,9 +1,10 @@
 /* eslint-disable */
 import React from 'react';
-import { shallow, mount } from 'enzyme';
-import { AttributeSelectorWindow } from '../../src/attribute-selector/attribute-selector-window';
-import { AttributeSelector } from '../../src/attribute-selector/attribute-selector';
-import { attributeSelectorHelpers } from '../../src/attribute-selector/attribute-selector-helpers';
+import {shallow, mount} from 'enzyme';
+import {AttributeSelectorWindow} from '../../src/attribute-selector/attribute-selector-window';
+import {AttributeSelector} from '../../src/attribute-selector/attribute-selector';
+import {attributeSelectorHelpers} from '../../src/attribute-selector/attribute-selector-helpers';
+import {selectorProperties} from '../../src/attribute-selector/selector-properties';
 
 jest.mock('../../src/attribute-selector/attribute-selector-helpers');
 /* eslint-enable */
@@ -121,6 +122,40 @@ describe('AttributeSelectorWindow', () => {
     // then
     expect(spyMethod).not.toBeCalled();
     expect(componentWrapper.instance().state.triggerUpdate).toEqual(false);
+  });
+
+  it('should trigger office message with proper params' +
+    ' when Import button is clicked and data is returned', async () => {
+    // given
+    const parsed = {
+      envUrl: 'url',
+      token: 'token',
+      projectId: 'proId',
+      reportId: 'repId',
+      reportSubtype: 'subtype',
+    };
+
+    const componentWrapper = mount(<AttributeSelectorWindow
+      parsed={parsed} />);
+
+    const attributeMetricFilterWrapper = componentWrapper.find('AttributeMetricFilter');
+    attributeMetricFilterWrapper.instance().noAttributesSelected = jest.fn(() => false);
+    attributeMetricFilterWrapper.instance().checkIfEmptyData = jest.fn(() => false);
+
+    const spyMethod = jest.spyOn(attributeSelectorHelpers, 'officeMessageParent');
+
+    const wrappedImportButton = componentWrapper.find('Button #import');
+
+    // when
+    await wrappedImportButton.simulate('click');
+
+    // then
+    expect(spyMethod).toBeCalled();
+    expect(spyMethod).toBeCalledWith(selectorProperties.commandOnUpdate,
+        parsed.reportId,
+        parsed.projectId,
+        parsed.reportSubtype,
+        {'requestedObjects': {}});
   });
 
   it('should trigger handleCancel when Cancel was clicked', () => {
