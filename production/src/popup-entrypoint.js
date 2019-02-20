@@ -1,3 +1,5 @@
+import 'core-js';
+import 'proxy-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {BrowserRouter, Route} from 'react-router-dom';
