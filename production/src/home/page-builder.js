@@ -15,6 +15,7 @@ class PageBuilder {
         <Header authToken={authToken} />
         {/* Logout button will be moved next to the username in the header */}
         {(reportArray && reportArray.length !== 0) && authToken && <FileHistoryContainer />}
+        {/* TODO: Shouldn't it be: {(!reportArray || !reportArray.length) && authToken */}
         {!(reportArray && reportArray.length !== 0) && authToken && <Placeholder />}
         <Spin spinning={loading}>
           {!authToken && <Authenticate />}
