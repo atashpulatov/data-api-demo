@@ -5,58 +5,57 @@ import { Authenticate, _Authenticate } from '../../src/authentication/auth-compo
 import { reduxStore } from '../../src/store';
 import { sessionProperties } from '../../src/storage/session-properties';
 import { authenticationService } from '../../src/authentication/auth-rest-service';
-import { Provider } from 'react-redux';
 /* eslint-enable */
 
 jest.mock('../../src/authentication/auth-rest-service');
 
 describe('AuthComponent', () => {
-    const location = {};
+  const location = {};
 
-    beforeAll(() => {
-        const origin = { pathname: '/' };
-        const state = { origin: origin };
-        location.state = state;
-    });
+  beforeAll(() => {
+    const origin = { pathname: '/' };
+    const state = { origin: origin };
+    location.state = state;
+  });
 
-    beforeEach(() => {
-        expect(reduxStore.getState().sessionReducer.authToken).toBeFalsy();
-    });
+  beforeEach(() => {
+    expect(reduxStore.getState().sessionReducer.authToken).toBeFalsy();
+  });
 
-    afterEach(() => {
-        reduxStore.dispatch({
-            type: sessionProperties.actions.logOut,
-        });
+  afterEach(() => {
+    reduxStore.dispatch({
+      type: sessionProperties.actions.logOut,
     });
+  });
 
-    it('should update redux state on login', (done) => {
-        // given
-        authenticationService.authenticate.mockResolvedValue('token');
-        const history = {
-            push: jest.fn(),
-        };
-        reduxStore.dispatch({
-            type: sessionProperties.actions.logIn,
-            username: 'user',
-            envUrl: 'env',
-            isRememberMeOn: true,
-        });
-        const component = mount(
-            <Provider store={reduxStore}>
-                <Authenticate history={history} />
-            </Provider>);
-        const form = component.find('form');
-        // when
-        form.simulate('submit');
-        // then
-        setTimeout(() => {
-            try {
-                expect(reduxStore.getState().sessionReducer.authToken)
-                    .toBeDefined();
-                done();
-            } catch (e) {
-                done.fail(e);
-            }
-        }, 100);
+  it('should update redux state on login', (done) => {
+    // given
+    authenticationService.authenticate.mockResolvedValue('token');
+    const history = {
+      push: jest.fn(),
+    };
+    reduxStore.dispatch({
+      type: sessionProperties.actions.logIn,
+      envUrl: 'env',
     });
+    const component = mount(<Authenticate history={history} />);
+    component.setState({
+      username: 'test',
+    });
+    component.instance().setState({ username: 'test' });
+    component.update();
+    console.log(component.instance().state);
+    const form = component.find('form');
+    // when
+    form.simulate('submit');
+    // then
+    setTimeout(() => {
+      try {
+        expect(reduxStore.getState().sessionReducer.authToken).toBeDefined();
+        done();
+      } catch (e) {
+        done.fail(e);
+      }
+    }, 100);
+  });
 });

@@ -24,7 +24,6 @@ describe('Home', () => {
         .mockImplementation( async () => null);
     sessionHelperSpy.mockClear();
     officeHelperSpy.mockClear();
-
     // when
     const componentWrapper = mount(
         <Provider store={reduxStore}>
@@ -49,14 +48,11 @@ describe('Home', () => {
     const sessionHelperSpy = jest.spyOn(sessionHelper, 'logIn');
     const componentWrapper = shallow(<_Home {...props} />);
     componentWrapper.instance().getCookiesToArray = () => [{name: ' iSession', value: 'token'}];
-
     // when
     componentWrapper.instance().saveTokenFromCookies();
-
     // then
     expect(sessionHelperSpy).toHaveBeenCalledWith('token');
   });
-
 
   it('should save tokens from cookies after update', () => {
     // given
@@ -68,10 +64,8 @@ describe('Home', () => {
     const componentWrapper = shallow(<_Home {...props} />);
     const saveTokenSpy = jest.spyOn(componentWrapper.instance(), 'saveTokenFromCookies');
     saveTokenSpy.mockClear();
-
     // when
     componentWrapper.setState({});
-
     // then
     expect(saveTokenSpy).toHaveBeenCalled();
   });
