@@ -28,9 +28,8 @@ describe('AuthComponent', () => {
     });
   });
 
-  it('should update redux state on login', (done) => {
+  it('onLoginUser should be triggered on submit', () => {
     // given
-    authenticationService.authenticate.mockResolvedValue('token');
     const history = {
       push: jest.fn(),
     };
@@ -38,24 +37,17 @@ describe('AuthComponent', () => {
       type: sessionProperties.actions.logIn,
       envUrl: 'env',
     });
-    const component = mount(<Authenticate history={history} />);
-    component.setState({
-      username: 'test',
-    });
-    component.instance().setState({ username: 'test' });
-    component.update();
-    console.log(component.instance().state);
-    const form = component.find('form');
+
+    const mockForm = {
+      getFieldDecorator: () => jest.fn(),
+      validateFields: () => jest.fn(),
+    };
+    const wrappedComponent = mount(<_Authenticate history={history} form={mockForm} />);
+    const onLoginUserSpy = jest.spyOn(wrappedComponent.instance(), 'onLoginUser').mockImplementation(() => { });
+    const form = wrappedComponent.find('Form').at(0);
     // when
-    form.simulate('submit');
+    form.instance().props.onSubmit();
     // then
-    setTimeout(() => {
-      try {
-        expect(reduxStore.getState().sessionReducer.authToken).toBeDefined();
-        done();
-      } catch (e) {
-        done.fail(e);
-      }
-    }, 100);
+    expect(onLoginUserSpy).toBeCalled();
   });
 });

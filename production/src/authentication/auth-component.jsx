@@ -1,12 +1,9 @@
 /* eslint-disable */
 import React, { Component } from 'react';
 import './auth-component.css';
-import { authenticationService } from './auth-rest-service';
 import { reduxStore } from '../store';
-import { sessionHelper } from '../storage/session-helper';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
-import { errorService } from '../error/error-handler';
-import { notificationService } from '../notification/notification-service';
+import { authenticationHelper } from './authentication-helper';
 const FormItem = Form.Item;
 /* eslint-enable */
 
@@ -22,25 +19,7 @@ export class _Authenticate extends Component {
   onLoginUser = async (event) => {
     event.preventDefault();
     const validateFields = this.props.form.validateFields;
-    await validateFields(async (err, values) => {
-      if (err) {
-        return;
-      }
-      try {
-        sessionHelper.enableLoading();
-        sessionHelper.saveLoginValues(values);
-        const authToken = await authenticationService.authenticate(
-          values.username, values.password,
-          values.envUrl, this.state.authMode);
-        notificationService.displayMessage('success', 'Logged in');
-        console.log('before saving authToken');
-        sessionHelper.logIn(authToken);
-      } catch (error) {
-        errorService.handlePreAuthError(error);
-      } finally {
-        sessionHelper.disableLoading();
-      }
-    });
+    await validateFields(async (err, values) => authenticationHelper.loginUser(err, values));
   }
 
   render() {
@@ -52,7 +31,7 @@ export class _Authenticate extends Component {
             Connect to MicroStrategy Environment
           </h1>
         </header>
-        <Form onSubmit={this.onLoginUser} className='login-form grid-container padding'>
+        <Form onSubmit={() => this.onLoginUser()} className='login-form grid-container padding'>
           <FormItem
             label='Username'>
             {getFieldDecorator('username', {
@@ -91,14 +70,6 @@ export class _Authenticate extends Component {
           </FormItem>
           <div
             className='centered-fields-container'>
-            <FormItem>
-              {getFieldDecorator('isRememberMeOn', {
-                valuePropName: 'checked',
-                initialValue: true,
-              })(
-                <Checkbox>Remember me</Checkbox>
-              )}
-            </FormItem>
             <FormItem>
               <Button type='primary' htmlType='submit' className='login-form-button'>
                 Log in

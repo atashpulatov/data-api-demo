@@ -8,7 +8,6 @@ import {Placeholder} from './placeholder.jsx';
 
 class PageBuilder {
   getPage = (loading, authToken, reportArray) => {
-    console.log('getting page');
     return (
       <div id='content'>
         <Notifications />
