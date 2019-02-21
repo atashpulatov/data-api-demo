@@ -52,7 +52,8 @@ class ErrorService {
                 notificationService.displayMessage('error', '500 - We were not able to handle your request');
                 break;
             default:
-                throw error;
+                notificationService.displayMessage('error', 'Unknown error');
+                break;
         }
     }
     handlePreAuthError = (error) => {

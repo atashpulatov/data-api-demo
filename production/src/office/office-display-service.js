@@ -6,6 +6,7 @@ import {officeProperties} from './office-properties';
 import {officeStoreService} from './store/office-store-service';
 import {sessionHelper} from '../storage/session-helper';
 import {notificationService} from '../notification/notification-service';
+import { errorService } from '../error/error-handler';
 
 class OfficeDisplayService {
   constructor() {
@@ -25,7 +26,7 @@ class OfficeDisplayService {
         if (jsonData && jsonData.result.data.root == null) {
           // report returned no data
           sessionHelper.disableLoading();
-          result = {type: 'warning', message: 'No data returned by the ' + objectType + ': ' + jsonData.name};
+          return {type: 'warning', message: 'No data returned by the ' + objectType + ': ' + jsonData.name};
         }
         const convertedReport = officeConverterService
             .getConvertedTable(jsonData);
@@ -45,12 +46,10 @@ class OfficeDisplayService {
             envUrl,
           });
         }
-        result = {type: 'success', message: 'Loaded ' + objectType + ': ' + jsonData.name};
+        return {type: 'success', message: 'Loaded ' + objectType + ': ' + jsonData.name};
       } catch (error) {
-        result = {type: 'warning', message: 'Error loading ' + objectType + ': ' + error.message};
-      } finally {
-        notificationService.displayMessage(result.type, result.message);
-      }      
+        errorService.handleError(error);
+      }     
     }
 
     // TODO: move it to api helper?
@@ -97,7 +96,10 @@ class OfficeDisplayService {
       const startCell = range.address.split('!')[1].split(':')[0];
       const refreshReport = officeStoreService.getReportFromProperties(bindingId);
       await this.removeReportFromExcel(bindingId, isRefresh);
-      await this.printObject(refreshReport.id, true, startCell, bindingId, bindingId);
+      const result = await this.printObject(refreshReport.id, true, startCell, bindingId, bindingId);
+      if (result){
+        notificationService.displayMessage(result.type, result.message);
+      }
     }
 
     _insertDataIntoExcel = async (reportConvertedData, context, startCell, tableName) => {
