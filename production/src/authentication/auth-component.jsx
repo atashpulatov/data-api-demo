@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './auth-component.css';
 import { reduxStore } from '../store';
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import { Form, Icon, Input, Button } from 'antd';
 import { authenticationHelper } from './authentication-helper';
 const FormItem = Form.Item;
 
@@ -58,7 +58,7 @@ export class _Authenticate extends Component {
             label='Environment URL'>
             {getFieldDecorator('envUrl', {
               initialValue: this.state.envUrl || '',
-              rules: [{ required: true, message: 'Please input environment URL!' }],
+              rules: [{ required: true, message: 'Please input environment URL!', type: 'url' }],
             })(
               <Input
                 prefix={

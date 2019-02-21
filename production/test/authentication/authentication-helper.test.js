@@ -9,15 +9,6 @@ jest.mock('../../src/notification/notification-service');
 jest.mock('../../src/authentication/auth-rest-service');
 jest.mock('../../src/storage/session-helper');
 
-// sessionHelper.enableLoading();
-// sessionHelper.saveLoginValues(values);
-// const authToken = await authenticationService
-//     .authenticate(
-//         values.username, values.password,
-//         values.envUrl, this.state.authMode);
-// notificationService.displayMessage('success', 'Logged in');
-// sessionHelper.logIn(authToken);
-
 describe('loginUser', () => {
   it('should return if error occured', () => {
     // given
@@ -65,20 +56,6 @@ describe('loginUser', () => {
         givenValues.password,
         givenValues.envUrl,
         1);
-  });
-  it('should display notification to user', () => {
-    // given
-    const givenError = undefined;
-    const givenValues = {
-      username: 'testUsername',
-      password: 'testPassword',
-      envUrl: 'testEnvUrl',
-    };
-    // when
-    authenticationHelper.loginUser(givenError, givenValues);
-    // then
-    expect(notificationService.displayMessage).toBeCalled();
-    expect(notificationService.displayMessage).toBeCalledWith('success', 'Logged in');
   });
   it('should save authToken', async () => {
     // given

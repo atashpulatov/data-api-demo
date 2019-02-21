@@ -1,6 +1,5 @@
 import {sessionHelper} from '../storage/session-helper';
 import {authenticationService} from './auth-rest-service';
-import {notificationService} from '../notification/notification-service';
 import {errorService} from '../error/error-handler';
 
 class AuthenticationHelper {
@@ -15,7 +14,6 @@ class AuthenticationHelper {
           .authenticate(
               values.username, values.password,
               values.envUrl, 1);
-      notificationService.displayMessage('success', 'Logged in');
       sessionHelper.logIn(authToken);
     } catch (error) {
       errorService.handlePreAuthError(error);
