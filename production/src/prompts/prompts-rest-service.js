@@ -25,7 +25,11 @@ class PromptsRestService {
         const projectId = storeState.historyReducer.project.projectId;
 
         let fullPath = `${envUrl}/reports/${reportId}/instances/${instanceId}/prompts`;
-        return this._getPrompts(fullPath, authToken, projectId);
+        try{
+            return this._getPrompts(fullPath, authToken, projectId);
+        } catch(error){
+            throw errorService.errorRestFactory(err);
+        }        
     }
 
     async getReportPrompts(reportId){
@@ -35,7 +39,11 @@ class PromptsRestService {
         const projectId = storeState.historyReducer.project.projectId;
 
         let fullPath = `${envUrl}/reports/${reportId}/prompts`;
-        return this._getPrompts(fullPath, authToken, projectId);
+        try{
+            return this._getPrompts(fullPath, authToken, projectId);
+        } catch(error){
+            throw errorService.errorRestFactory(err);
+        }     
     }
 };
 
