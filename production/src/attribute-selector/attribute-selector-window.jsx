@@ -30,6 +30,10 @@ export class AttributeSelectorWindow extends Component {
 
   handleCancel = () => attributeSelectorHelpers.officeMessageParent(selectorProperties.commandCancel);
 
+  handleBack = () => {
+    this.props.handleBack();
+  }
+
   onTriggerUpdate = (reportId, projectId, reportSubtype, body) => {
     attributeSelectorHelpers.officeMessageParent(selectorProperties.commandOnUpdate,
         reportId, projectId, reportSubtype, body);
@@ -58,6 +62,7 @@ export class AttributeSelectorWindow extends Component {
           resetTriggerUpdate={this.resetTriggerUpdate}
         />
         <PopupButtons
+          handleBack = {this.handleBack}
           handleOk={this.handleOk}
           handleCancel={this.handleCancel}
           loading={this.state.loading} />

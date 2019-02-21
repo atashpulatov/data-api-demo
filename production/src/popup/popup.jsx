@@ -23,10 +23,24 @@ export class Popup extends Component {
       },
     });
   };
+
+  handleBack = (projectId, reportId, reportSubtype) => {
+    console.log('-------handle back');
+    this.setState({
+      parsed: {
+        ...this.state.parsed,
+        popupType: 'navigation-tree',
+        projectId,
+        reportId,
+        reportSubtype,
+      },
+    });
+  };
+
   render() {
     const {popupType, ...propsToPass} = this.state.parsed;
     if (!popupType) {
-      return (<AttributeSelectorWindow parsed={propsToPass} />);
+      return (<AttributeSelectorWindow parsed={propsToPass} handleBack={this.handleBack} />);
     } else if (popupType === PopupTypeEnum.navigationTree) {
       return (<NavigationTree handlePrepare={this.handlePrepare} parsed={propsToPass} />);
     }

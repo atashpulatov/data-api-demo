@@ -3,11 +3,18 @@ import {Button} from 'antd';
 import './popup-buttons.css';
 
 export const PopupButtons = ({handleOk, handleSecondary,
-  handleCancel, loading}) => (
+  handleCancel, handleBack, loading}) => (
   <div className="popup-buttons popup-footer">
-    <Button id="back" onClick={handleCancel}>
-      Back
-    </Button>
+    {
+      !handleBack &&
+        <Button id="back" onClick={handleCancel}>
+          Back
+        </Button>}
+    {
+      handleBack &&
+        <Button id="back" onClick={handleBack}>
+          Back
+        </Button>}
     <Button id="import" onClick={handleOk} loading={loading}>
       Import
     </Button>
