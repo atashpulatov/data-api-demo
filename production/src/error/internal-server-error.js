@@ -1,1 +1,4 @@
-export class InternalServerError extends Error {};
+export class InternalServerError extends Error {
+    name = 'Internal Server Error';
+    message = 'Internal Server Error';    
+};

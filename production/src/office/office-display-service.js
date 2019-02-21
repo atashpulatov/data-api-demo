@@ -4,8 +4,8 @@ import {officeConverterService} from './office-converter-service';
 import {reduxStore} from '../store';
 import {officeProperties} from './office-properties';
 import {officeStoreService} from './store/office-store-service';
-import {errorService} from '../error/error-handler';
 import {sessionHelper} from '../storage/session-helper';
+import {notificationService} from '../notification/notification-service';
 
 class OfficeDisplayService {
   constructor() {
@@ -15,7 +15,9 @@ class OfficeDisplayService {
     this.refreshReport = this.refreshReport.bind(this);
   }
 
-    printObject = async (objectId, projectId, isReport, startCell, officeTableId, bindingId, body) => {
+    printObject = async (objectId, projectId, isReport = true, startCell, officeTableId, bindingId, body) => {
+      let result = '';
+      const objectType = isReport ? 'report' : 'cube';
       try {
         const excelContext = await officeApiHelper.getExcelContext();
         startCell = startCell || await officeApiHelper.getSelectedCell(excelContext);
@@ -23,7 +25,7 @@ class OfficeDisplayService {
         if (jsonData && jsonData.result.data.root == null) {
           // report returned no data
           sessionHelper.disableLoading();
-          return {type: 'warning', message: 'No data returned by the report: ' + jsonData.name};
+          result = {type: 'warning', message: 'No data returned by the ' + objectType + ': ' + jsonData.name};
         }
         const convertedReport = officeConverterService
             .getConvertedTable(jsonData);
@@ -43,10 +45,12 @@ class OfficeDisplayService {
             envUrl,
           });
         }
-        return {type: 'success', message: 'Loaded report: ' + jsonData.name};
+        result = {type: 'success', message: 'Loaded ' + objectType + ': ' + jsonData.name};
       } catch (error) {
-        throw errorService.errorOfficeFactory(error);
-      }
+        result = {type: 'warning', message: 'Error loading ' + objectType + ': ' + error.message};
+      } finally {
+        notificationService.displayMessage(result.type, result.message);
+      }      
     }
 
     // TODO: move it to api helper?

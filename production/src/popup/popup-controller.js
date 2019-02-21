@@ -45,17 +45,19 @@ class PopupController {
     const response = JSON.parse(message);
     switch (response.command) {
       case selectorProperties.commandOk:
+        dialog.close();
         if (response.chosenObject) {
-          officeDisplayService.printObject(response.chosenObject, response.chosenProject);
+          await officeDisplayService.printObject(response.chosenObject, response.chosenProject);          
         }
         dialog.close();
         break;
       case selectorProperties.commandOnUpdate:
+        
         if (response.reportId
           && response.projectId
           && response.reportSubtype
           && response.body) {
-          officeDisplayService.printObject(response.reportId,
+          await officeDisplayService.printObject(response.reportId,
               response.projectId,
               response.reportSubtype === objectTypes.getTypeValues('Report').subtype,
               null, null, null,
