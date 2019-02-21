@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
 import { connect } from 'react-redux';
 import './home.css';
@@ -6,7 +5,6 @@ import { sessionHelper } from '../storage/session-helper';
 import { pageBuilder } from './page-builder.js';
 import { officeApiHelper } from '../office/office-api-helper';
 import { homeHelper } from './home-helper';
-/* eslint-enable */
 
 export class _Home extends Component {
 

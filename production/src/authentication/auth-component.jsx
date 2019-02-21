@@ -1,11 +1,9 @@
-/* eslint-disable */
 import React, { Component } from 'react';
 import './auth-component.css';
 import { reduxStore } from '../store';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import { authenticationHelper } from './authentication-helper';
 const FormItem = Form.Item;
-/* eslint-enable */
 
 export class _Authenticate extends Component {
   constructor(props) {

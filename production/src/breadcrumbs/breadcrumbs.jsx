@@ -1,11 +1,9 @@
-/* eslint-disable */
 import React, { Component } from 'react';
 import { breadcrumbsService } from './breadcrumb-service';
 import { CustomBreadcrumb } from './breadcrumb.jsx';
 import { Breadcrumb } from 'antd';
 import './breadcrumbs.css';
 import { connect } from 'react-redux';
-/* eslint-enable */
 
 export class _Breadcrumbs extends Component {
     render() {
