@@ -86,4 +86,30 @@ describe('OfficeConverterService', () => {
 
     testHelper.expectEqualsGivenReport(result, expectedReportPath);
   });
+
+  it('should convert complex attributes report', () => {
+    // given
+    const expectedReportPath = path.join(
+        __dirname,
+        '__expected__/expected-complex-attributes-report.js'
+    );
+    // when
+    const result = officeConverterService.getConvertedTable(mockReports[4]);
+    // then
+    expect(result).toBeDefined();
+    testHelper.expectPropertiesDefined(result);
+    expect(result.headers).toContain('Category DESC');
+    expect(result.headers).toContain('Category ID');
+    expect(result.headers).toContain('Subcategory');
+    expect(result.headers).toContain('Units Received');
+
+    result.rows.forEach((row) => {
+      expect(row['Category DESC']).toBeDefined();
+      expect(row['Category ID']).toBeDefined();
+      expect(row['Subcategory']).toBeDefined();
+      expect(row['Units Received']).toBeDefined();
+    });
+
+    testHelper.expectEqualsGivenReport(result, expectedReportPath);
+  });
 });
