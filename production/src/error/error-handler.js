@@ -35,15 +35,19 @@ class ErrorService {
                 throw error;
         }
     }
-    handleError = (error) => {
+    handleError = (error, isLogout) => {
         switch (error.constructor) {
             case EnvironmentNotFoundError:
                 notificationService.displayMessage('error', '404 - Environment not found');
-                sessionHelper.logOut();
+                if (!isLogout){
+                    sessionHelper.logOut();
+                }
                 break;
             case UnauthorizedError:
                 notificationService.displayMessage('error', '401 - Unauthorized. Please log in.');
-                sessionHelper.logOut();
+                if (!isLogout){
+                    sessionHelper.logOut();
+                }
                 break;
             case BadRequestError:
                 notificationService.displayMessage('error', '400 - There has been a problem with your request');
@@ -64,6 +68,9 @@ class ErrorService {
             default:
                 this.handleError(error);
         }
+    }
+    handleLogoutError = (error) => {
+        this.handleError(error, true);
     }
     handleOfficeError = (error) => {
         switch (error.constructor) {

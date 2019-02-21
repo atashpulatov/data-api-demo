@@ -1,6 +1,7 @@
 import { reduxStore } from '../store';
 import { sessionProperties } from './session-properties';
 import { authenticationService} from '../authentication/auth-rest-service';
+import { errorService } from '../error/error-handler';
 
 class SessionHelper {
     enableLoading = () => {
@@ -18,11 +19,15 @@ class SessionHelper {
     logOut = async () => {
         const authToken = reduxStore.getState().sessionReducer.authToken;
         const envUrl = reduxStore.getState().sessionReducer.envUrl;
-        await authenticationService.logout(envUrl, authToken);
-        reduxStore.dispatch({
-            type: sessionProperties.actions.logOut,
-        });
-        window.location.replace('/office-loader/index.html');
+        try {
+            await authenticationService.logout(envUrl, authToken);
+            reduxStore.dispatch({
+                type: sessionProperties.actions.logOut,
+            });
+            window.location.replace('/office-loader/index.html');
+        } catch(error){
+            errorService.handleLogoutError(error);
+        }
     }
     saveLoginValues = (values) => {
         reduxStore.dispatch({
