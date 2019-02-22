@@ -46,7 +46,6 @@ class PopupController {
     const response = JSON.parse(message);
     switch (response.command) {
       case selectorProperties.commandOk:
-        dialog.close();
         if (response.chosenObject) {
           const result = await officeDisplayService.printObject(response.chosenObject, response.chosenProject);
           if (result){

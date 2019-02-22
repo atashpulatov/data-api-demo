@@ -17,7 +17,6 @@ class OfficeDisplayService {
   }
 
     printObject = async (objectId, projectId, isReport = true, startCell, officeTableId, bindingId, body) => {
-      let result = '';
       const objectType = isReport ? 'report' : 'cube';
       try {
         const excelContext = await officeApiHelper.getExcelContext();
