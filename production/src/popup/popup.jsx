@@ -25,7 +25,6 @@ export class Popup extends Component {
   };
 
   handleBack = (projectId, reportId, reportSubtype) => {
-    console.log('-------handle back');
     this.setState({
       parsed: {
         ...this.state.parsed,
