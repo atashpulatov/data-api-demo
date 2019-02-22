@@ -1,9 +1,7 @@
-/* eslint-disable */
 import React from 'react';
 import { Icon, Row, Col } from 'antd';
 import { MSTRIcon } from 'mstr-react-library';
 import { fileHistoryHelper } from './file-history-helper';
-/* eslint-enable */
 
 export const OfficeLoadedFile = ({ fileName, bindingId, onClick, onRefresh, onDelete }) => (
     <Row

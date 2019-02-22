@@ -1,9 +1,7 @@
-/* eslint-disable */
 import React from 'react';
 import './breadcrumbs.css';
 import { Breadcrumb } from 'antd';
 const BreadcrumbItem = Breadcrumb.Item;
-/* eslint-enable */
 
 export const CustomBreadcrumb = ({ object, onClick }) => (
     <BreadcrumbItem

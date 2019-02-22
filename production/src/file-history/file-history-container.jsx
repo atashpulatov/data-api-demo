@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { List } from 'antd';
@@ -6,7 +5,6 @@ import { OfficeLoadedFile } from './office-loaded-file.jsx';
 import { officeApiHelper } from '../office/office-api-helper';
 import { officeDisplayService } from '../office/office-display-service';
 import './file-history.css';
-/* eslint-enable */
 
 export class _FileHistoryContainer extends Component {
     render() {

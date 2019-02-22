@@ -19,16 +19,9 @@ function onLogIn(action, state) {
   if (!action.envUrl) {
     throw new SessionError('Missing EnvUrl.');
   }
-  if (!action.username) {
-    throw new SessionError('Missing Username.');
-  }
   return {
     ...state,
     envUrl: action.envUrl,
-    username: action.username,
-    isRememberMeOn: action.isRememberMeOn !== undefined
-      ? action.isRememberMeOn
-      : false,
   };
 }
 function onLogOut(action, state) {
