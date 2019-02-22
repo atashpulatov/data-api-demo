@@ -27,7 +27,7 @@ only when all regression tests are passing'
     end
   end
 
-  assigned_node_number 1
+  assigned_node_string 'amazon_linux'
 
   builders do
     bash do

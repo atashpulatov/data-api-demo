@@ -5,7 +5,6 @@ produces and publishes a versioned deployment package'
 
   configure_common_items{}
 
-  assigned_node_number 1
   assigned_node_string 'amazon_linux'
 
   triggers do
