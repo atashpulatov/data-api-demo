@@ -29,7 +29,7 @@ export class _Authenticate extends Component {
             Connect to MicroStrategy Environment
           </h1>
         </header>
-        <Form onSubmit={() => this.onLoginUser()} className='login-form grid-container padding'>
+        <Form onSubmit={(event) => this.onLoginUser(event)} className='login-form grid-container padding'>
           <FormItem
             label='Username'>
             {getFieldDecorator('username', {

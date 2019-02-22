@@ -37,7 +37,9 @@ describe('AuthComponent', () => {
       type: sessionProperties.actions.logIn,
       envUrl: 'env',
     });
-
+    const mockEvent = {
+      preventDefault: jest.fn(),
+    };
     const mockForm = {
       getFieldDecorator: () => jest.fn(),
       validateFields: () => jest.fn(),
@@ -46,8 +48,9 @@ describe('AuthComponent', () => {
     const onLoginUserSpy = jest.spyOn(wrappedComponent.instance(), 'onLoginUser').mockImplementation(() => { });
     const form = wrappedComponent.find('Form').at(0);
     // when
-    form.instance().props.onSubmit();
+    form.instance().props.onSubmit(mockEvent);
     // then
     expect(onLoginUserSpy).toBeCalled();
+    expect(onLoginUserSpy).toBeCalledWith(mockEvent);
   });
 });
