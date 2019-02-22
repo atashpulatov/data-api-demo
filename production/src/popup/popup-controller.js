@@ -2,9 +2,9 @@ import {officeContext} from '../office/office-context';
 import {selectorProperties} from '../attribute-selector/selector-properties';
 import {officeDisplayService} from '../office/office-display-service';
 import {PopupTypeEnum} from '../home/popup-type-enum';
-import { sessionHelper } from '../storage/session-helper';
-import { objectTypes } from 'mstr-react-library';
-import { notificationService } from '../notification/notification-service';
+import {sessionHelper} from '../storage/session-helper';
+import {objectTypes} from 'mstr-react-library';
+import {notificationService} from '../notification/notification-service';
 
 class PopupController {
   runPopupNavigation = () => {

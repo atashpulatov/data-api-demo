@@ -6,7 +6,7 @@ import {officeProperties} from './office-properties';
 import {officeStoreService} from './store/office-store-service';
 import {sessionHelper} from '../storage/session-helper';
 import {notificationService} from '../notification/notification-service';
-import { errorService } from '../error/error-handler';
+import {errorService} from '../error/error-handler';
 
 class OfficeDisplayService {
   constructor() {
@@ -25,7 +25,7 @@ class OfficeDisplayService {
         if (jsonData && jsonData.result.data.root == null) {
           // report returned no data
           sessionHelper.disableLoading();
-          return {type: 'warning', message: 'No data returned by the ' + objectType + ': ' + jsonData.name};
+          return {type: 'warning', message: 'No data returned by the {$objectType}: {$jsonData.name}'};
         }
         const convertedReport = officeConverterService
             .getConvertedTable(jsonData);
@@ -45,7 +45,7 @@ class OfficeDisplayService {
             envUrl,
           });
         }
-        return {type: 'success', message: 'Loaded ' + objectType + ': ' + jsonData.name};
+        return {type: 'success', message: 'Loaded ${objectType}: ${jsonData.name}'};
       } catch (error) {
         errorService.handleError(error);
       }     
