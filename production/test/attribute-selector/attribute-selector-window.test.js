@@ -183,6 +183,31 @@ describe('AttributeSelectorWindow', () => {
     expect(spyMethod).toBeCalled();
   });
 
+  it('should trigger handleBack when Back was clicked', () => {
+    // given
+    const parsed = {
+      envUrl: 'url',
+      token: 'token',
+      projectId: 'proId',
+      reportId: 'repId',
+    };
+
+    const componentWrapper = mount(<AttributeSelectorWindow
+      parsed={parsed} />);
+
+    componentWrapper.instance().handleBack = jest.fn();
+    const spyMethod = jest.spyOn(componentWrapper.instance(), 'handleBack');
+    componentWrapper.instance().forceUpdate();
+
+    const wrappedCancelButton = componentWrapper.find('Button #back');
+
+    // when
+    wrappedCancelButton.simulate('click');
+
+    // then
+    expect(spyMethod).toBeCalled();
+  });
+
   it('should trigger attribute-selector-helpers: officeMessageParent when Cancel is clicked', () => {
     // given
     const parsed = {

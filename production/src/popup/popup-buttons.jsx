@@ -7,7 +7,7 @@ export const PopupButtons = ({handleOk, handleSecondary,
   <div className="popup-buttons popup-footer">
     {
       !handleBack &&
-        <Button id="back" onClick={handleCancel}>
+        <Button id="backCancel" onClick={handleCancel}>
           Back
         </Button>}
     {
