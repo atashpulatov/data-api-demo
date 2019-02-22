@@ -2,6 +2,7 @@ import React from 'react';
 import logo from './mstr_logo.png';
 import { sessionHelper } from '../storage/session-helper';
 import { Button } from 'antd';
+import { errorService } from '../error/error-handler';
 
 
 export const Header = ({ profileImage = logo, fullName = 'MicroStrategy User', authToken }) => (
@@ -15,7 +16,11 @@ export const Header = ({ profileImage = logo, fullName = 'MicroStrategy User', a
 );
 
 function logout() {
-  sessionHelper.logOutRest();
-  sessionHelper.logOut();
-  sessionHelper.logOutRedirect();
+  try {
+    sessionHelper.logOutRest();
+    sessionHelper.logOut();
+    sessionHelper.logOutRedirect();
+  } catch (error) {
+    errorService.handleError(error);
+  }
 }

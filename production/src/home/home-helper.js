@@ -6,7 +6,7 @@ class HomeHelper {
     const token = reduxStore.getState().sessionReducer.authToken;
     const location = this.getWindowLocation();
     if (location.origin.search('localhost') !== -1) {
-      if (token === undefined || token === '') {
+      if (!token) {
         sessionHelper.logOut();
         return;
       }
