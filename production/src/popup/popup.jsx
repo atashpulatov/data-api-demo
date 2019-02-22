@@ -28,7 +28,7 @@ export class Popup extends Component {
     this.setState({
       parsed: {
         ...this.state.parsed,
-        popupType: 'navigation-tree',
+        popupType: PopupTypeEnum.navigationTree,
         projectId,
         reportId,
         reportSubtype,
