@@ -82,7 +82,34 @@
   ],
   "jest": {
     "collectCoverageFrom": [
-      "src/**/*.{js,jsx}"
+      "src/**/*.{js,jsx}",
+      "!src/error.jsx",
+      "!src/index.js",
+      "!src/popup-entrypoint.js",
+      "!src/serviceWorker.js",
+      "!src/office/office-api-helper.js",
+      "!src/office/office-context.js",
+      "!src/office/office-display-service.js",
+      "!src/authentication/auth-component.jsx",
+      "!src/authentication/auth-rest-service.js",
+      "!src/home/header.jsx",
+      "!src/navigation/navigation-tree.js",
+      "!src/office/store/office-store-service.js",
+      "!src/popup/popup-controller.js",
+      "!src/popup/popup.jsx",
+      "!src/project/project-list-helper.js",
+      "!src/storage/session-helper.js",
+      "!src/storage/unknown-property-error.js",
+
+      "!src/attribute-selector/attribute-selector-window.jsx",
+      "!src/breadcrumbs/breadcrumbs.jsx",
+      "!src/error/error-handler.js",
+      "!src/history/history-reducer.js",
+      "!src/home/home-helper.js",
+      "!src/mstr-object/mstr-object-rest-service.js",
+      "!src/office/office-converter-service.js",
+      "!src/prompts/prompts-rest-service.js",
+      "!src/storage/session-reducer.js"
     ],
     "resolver": "jest-pnp-resolver",
     "setupFiles": [
