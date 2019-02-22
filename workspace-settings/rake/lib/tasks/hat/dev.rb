@@ -31,7 +31,7 @@ def update_package_json()
   data = JSON.parse(File.read("#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/package.json"));
   if data["dependencies"].key?("mstr-react-library")
     repo = data["dependencies"]["mstr-react-library"].split("@github.microstrategy.com:")[1]
-    data["dependencies"]["mstr-react-library"] = "https://#{ENV['GITHUB_SVC_USER']}:#{ENV['GITHUB_SVC_PWD']}@github.microstrategy.com/#{repo}"
+    data["dependencies"]["mstr-react-library"] = "https://#{ENV['GITHUB_USER']}:#{ENV['GITHUB_PWD']}@github.microstrategy.com/#{repo}"
   end
 
   File.open("#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/package.json","w") do |f|
