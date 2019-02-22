@@ -2,8 +2,9 @@ import {officeContext} from '../office/office-context';
 import {selectorProperties} from '../attribute-selector/selector-properties';
 import {officeDisplayService} from '../office/office-display-service';
 import {PopupTypeEnum} from '../home/popup-type-enum';
-import { sessionHelper } from '../storage/session-helper';
-import { objectTypes } from 'mstr-react-library';
+import {sessionHelper} from '../storage/session-helper';
+import {objectTypes} from 'mstr-react-library';
+import {notificationService} from '../notification/notification-service';
 
 class PopupController {
   runPopupNavigation = () => {
@@ -43,20 +44,27 @@ class PopupController {
     switch (response.command) {
       case selectorProperties.commandOk:
         if (response.chosenObject) {
-          officeDisplayService.printObject(response.chosenObject, response.chosenProject);
+          const result = await officeDisplayService.printObject(response.chosenObject, response.chosenProject);
+          if (result){
+            notificationService.displayMessage(result.type, result.message);
+          }       
         }
         dialog.close();
         break;
       case selectorProperties.commandOnUpdate:
+        
         if (response.reportId
           && response.projectId
           && response.reportSubtype
           && response.body) {
-          officeDisplayService.printObject(response.reportId,
+          const result = await officeDisplayService.printObject(response.reportId,
               response.projectId,
               response.reportSubtype === objectTypes.getTypeValues('Report').subtype,
               null, null, null,
               response.body);
+          if (result){
+            notificationService.displayMessage(result.type, result.message);
+          }
         }
         dialog.close();
         break;

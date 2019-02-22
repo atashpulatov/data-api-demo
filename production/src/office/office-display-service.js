@@ -4,8 +4,9 @@ import {officeConverterService} from './office-converter-service';
 import {reduxStore} from '../store';
 import {officeProperties} from './office-properties';
 import {officeStoreService} from './store/office-store-service';
-import {errorService} from '../error/error-handler';
 import {sessionHelper} from '../storage/session-helper';
+import {notificationService} from '../notification/notification-service';
+import {errorService} from '../error/error-handler';
 
 class OfficeDisplayService {
   constructor() {
@@ -15,7 +16,8 @@ class OfficeDisplayService {
     this.refreshReport = this.refreshReport.bind(this);
   }
 
-    printObject = async (objectId, projectId, isReport, startCell, officeTableId, bindingId, body) => {
+    printObject = async (objectId, projectId, isReport = true, startCell, officeTableId, bindingId, body) => {
+      const objectType = isReport ? 'report' : 'cube';
       try {
         const excelContext = await officeApiHelper.getExcelContext();
         startCell = startCell || await officeApiHelper.getSelectedCell(excelContext);
@@ -23,7 +25,7 @@ class OfficeDisplayService {
         if (jsonData && jsonData.result.data.root == null) {
           // report returned no data
           sessionHelper.disableLoading();
-          return {type: 'warning', message: 'No data returned by the report: ' + jsonData.name};
+          return {type: 'warning', message: 'No data returned by the {$objectType}: {$jsonData.name}'};
         }
         const convertedReport = officeConverterService
             .getConvertedTable(jsonData);
@@ -43,10 +45,10 @@ class OfficeDisplayService {
             envUrl,
           });
         }
-        return {type: 'success', message: 'Loaded report: ' + jsonData.name};
+        return {type: 'success', message: 'Loaded ${objectType}: ${jsonData.name}'};
       } catch (error) {
-        throw errorService.errorOfficeFactory(error);
-      }
+        errorService.handleError(error);
+      }     
     }
 
     // TODO: move it to api helper?
@@ -93,7 +95,10 @@ class OfficeDisplayService {
       const startCell = range.address.split('!')[1].split(':')[0];
       const refreshReport = officeStoreService.getReportFromProperties(bindingId);
       await this.removeReportFromExcel(bindingId, isRefresh);
-      await this.printObject(refreshReport.id, true, startCell, bindingId, bindingId);
+      const result = await this.printObject(refreshReport.id, true, startCell, bindingId, bindingId);
+      if (result){
+        notificationService.displayMessage(result.type, result.message);
+      }
     }
 
     _insertDataIntoExcel = async (reportConvertedData, context, startCell, tableName) => {

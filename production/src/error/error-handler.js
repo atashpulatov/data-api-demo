@@ -35,15 +35,19 @@ class ErrorService {
         throw error;
     }
   }
-  handleError = (error) => {
+  handleError = (error, isLogout) => {
     switch (error.constructor) {
       case EnvironmentNotFoundError:
         notificationService.displayMessage('error', '404 - Environment not found');
-        this.fullLogOut();
+        if (!isLogout){
+            this.fullLogOut();
+        }        
         break;
       case UnauthorizedError:
         notificationService.displayMessage('error', '401 - Unauthorized. Please log in.');
-        this.fullLogOut();
+        if (!isLogout){
+            this.fullLogOut();
+        }  
         break;
       case BadRequestError:
         notificationService.displayMessage('error', '400 - There has been a problem with your request');
@@ -52,7 +56,8 @@ class ErrorService {
         notificationService.displayMessage('error', '500 - We were not able to handle your request');
         break;
       default:
-        throw error;
+        notificationService.displayMessage('error', 'Unknown error');
+        break;
     }
   }
   handlePreAuthError = (error) => {
@@ -63,6 +68,9 @@ class ErrorService {
       default:
         this.handleError(error);
     }
+  }
+  handleLogoutError = (error) => {
+    this.handleError(error, true);
   }
   handleOfficeError = (error) => {
     switch (error.constructor) {

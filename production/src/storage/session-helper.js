@@ -27,7 +27,7 @@ class SessionHelper {
     try {
       await authenticationService.logout(envUrl, authToken);
     } catch (error) {
-      throw errorService.errorRestFactory(error);
+      errorService.handleLogoutError(error);
     };
   }
   logOutRedirect = () => {

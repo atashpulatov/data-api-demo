@@ -49,7 +49,7 @@ class MstrObjectRestService {
           return res.body.instanceId;
         })
         .catch((err) => {
-          throw errorService.errorRestFactory(err);
+          throw err;
         });
   }
 
@@ -60,12 +60,13 @@ class MstrObjectRestService {
     const objectType = isReport ? 'reports' : 'cubes';
     let fullPath = `${envUrl}/${objectType}/${objectId}/instances`;
 
-    const reportInstance = await this._getInstanceId(fullPath, authToken, projectId, body);
-    fullPath += `/${reportInstance}`;
     try {
+      const reportInstance = await this._getInstanceId(fullPath, authToken, projectId, body);
+      fullPath += `/${reportInstance}`;
+    
       return await this._getObjectContentPaginated(fullPath, authToken, projectId, limit);
     } catch (error) {
-      errorService.errorRestFactory(error);
+      throw errorService.errorRestFactory(error);
     }
   }
 

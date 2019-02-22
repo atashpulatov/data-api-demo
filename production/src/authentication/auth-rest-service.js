@@ -23,7 +23,7 @@ class AuthenticationService {
           return;
         })
         .catch((err) => {
-          errorService.errorRestFactory(err);
+          throw errorService.errorRestFactory(err);
         });
   }
 }
