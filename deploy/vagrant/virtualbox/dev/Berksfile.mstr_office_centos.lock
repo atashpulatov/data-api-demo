@@ -1,0 +1,62 @@
+DEPENDENCIES
+  apache2 (~> 3.2.0)
+  bluepill (~> 2.4.3)
+  build-essential (= 2.3.1)
+  chef_commons
+    git: https://github.microstrategy.com/ecosystem-cookbooks/chef_commons.git
+    revision: 6302a61b03249234be41e55c9254871adb3bf41c
+    tag: 1.1.11
+  compat_resource (= 12.9.1)
+  dev_commons
+    git: https://github.microstrategy.com/ecosystem-cookbooks/dev_commons.git
+    revision: e278ffa6443bb35b0c6bfe6c0db49aaa92e1ca8b
+    tag: 1.0.5
+  java
+  ntp
+  selinux
+  timezone-ii
+  virtualbox
+    git: https://github.microstrategy.com/ecosystem-cookbooks/virtualbox.git
+    revision: 4863da33e5d5a7421595d0e23014bb04bedbd47d
+    tag: 0.7.4
+  yum_mirror
+    git: https://github.microstrategy.com/ecosystem-cookbooks/yum_mirror.git
+    revision: 289bf5cb9157f9437b31661bbee394c9a0d09819
+    tag: 1.0.11
+
+GRAPH
+  7-zip (1.0.2)
+    windows (>= 1.2.2)
+  apache2 (3.2.2)
+  ark (4.0.0)
+    build-essential (>= 0.0.0)
+    seven_zip (>= 0.0.0)
+  bluepill (2.4.3)
+    rsyslog (>= 2.0)
+  build-essential (2.3.1)
+    7-zip (>= 0.0.0)
+  chef_commons (1.1.11)
+    ark (>= 0.0.0)
+  compat_resource (12.9.1)
+  dev_commons (1.0.5)
+  dmg (4.1.1)
+  ec2 (0.9.0)
+  homebrew (5.0.8)
+  java (3.2.0)
+    homebrew (>= 0.0.0)
+    windows (>= 0.0.0)
+  ntp (3.6.2)
+  rsyslog (6.0.7)
+  selinux (2.1.1)
+  seven_zip (3.1.0)
+    windows (>= 0.0.0)
+  timezone-ii (0.2.0)
+  virtualbox (0.7.4)
+    dmg (>= 0.0.0)
+  windows (5.2.3)
+  yum (4.2.0)
+  yum_mirror (1.0.11)
+    apache2 (>= 0.0.0)
+    ec2 (>= 0.0.0)
+    selinux (>= 0.0.0)
+    yum (< 5.0.0)
