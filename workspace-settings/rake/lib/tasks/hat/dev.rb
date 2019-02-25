@@ -6,7 +6,7 @@ include ShellHelper::Shell
 
 desc "build project in #{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/build"
 task :build do
-  shell_command! "yarn install", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
+  install_dependencies()
   shell_command! "yarn build", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
 end
 
