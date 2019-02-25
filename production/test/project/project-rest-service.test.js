@@ -13,7 +13,7 @@ const correctPassword = '999U2nn1g7gY';
 const loginType = 1;
 const envURL = 'https://env-125323.customer.cloud.microstrategy.com/MicroStrategyLibrary/api';
 
-describe('ProjectsRestService', () => {
+describe.skip('ProjectsRestService', () => {
     const mockAgent = superagent.agent();
     beforeAll(() => {
         moduleProxy.request = mockAgent;

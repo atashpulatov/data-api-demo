@@ -107,6 +107,7 @@
       "!src/history/history-reducer.js",
       "!src/home/home-helper.js",
       "!src/mstr-object/mstr-object-rest-service.js",
+      "!src/project/project-rest-service.js",
       "!src/office/office-converter-service.js",
       "!src/prompts/prompts-rest-service.js",
       "!src/storage/session-reducer.js"
