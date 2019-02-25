@@ -50,7 +50,7 @@ describe('PageBuilder', () => {
     // given
 
     // when
-    const Page = () => pageBuilder.getPage(false, true, true);
+    const Page = () => pageBuilder.getPage(false, true, false);
     const wrappedComponent = mount(<Provider store={reduxStore}><Page /></Provider>);
 
     // then
