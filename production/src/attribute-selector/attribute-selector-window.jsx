@@ -36,7 +36,6 @@ export class AttributeSelectorWindow extends Component {
   };
 
   onTriggerUpdate = (reportId, projectId, reportSubtype, body) => {
-    console.log(JSON.stringify(body));
     attributeSelectorHelpers.officeMessageParent(selectorProperties.commandOnUpdate,
         reportId, projectId, reportSubtype, body);
   };
@@ -50,7 +49,6 @@ export class AttributeSelectorWindow extends Component {
   };
 
   attributesBeingSelected = (attributesSelected) => {
-    console.log(attributesSelected);
     this.setState({attributesSelected});
   };
 
