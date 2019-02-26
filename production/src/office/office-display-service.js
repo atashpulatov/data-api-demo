@@ -16,56 +16,58 @@ class OfficeDisplayService {
     this.refreshReport = this.refreshReport.bind(this);
   }
 
-    printObject = async (objectId, projectId, isReport = true, startCell, officeTableId, bindingId, body) => {
-      const objectType = isReport ? 'report' : 'cube';
-      try {
-        const excelContext = await officeApiHelper.getExcelContext();
-        startCell = startCell || await officeApiHelper.getSelectedCell(excelContext);
-        const jsonData = await mstrObjectRestService.getObjectContent(objectId, projectId, isReport, body);
-        if (jsonData && jsonData.result.data.root == null) {
-          // report returned no data
-          sessionHelper.disableLoading();
-          return {type: 'warning', message: `No data returned by the ${objectType}: ${jsonData.name}`};
-        }
-        const convertedReport = officeConverterService
-            .getConvertedTable(jsonData);
-        const newOfficeTableId = officeTableId || await officeApiHelper.findAvailableOfficeTableId(excelContext);
-        await this._insertDataIntoExcel(convertedReport, excelContext, startCell, newOfficeTableId);
-        const {envUrl} = officeApiHelper.getCurrentMstrContext();
-        bindingId = bindingId || newOfficeTableId;
-        await excelContext.sync();
-        officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
-        if (!officeTableId) {
-          await this.addReportToStore({
-            id: convertedReport.id,
-            name: convertedReport.name,
-            bindId: bindingId,
-            tableId: newOfficeTableId,
-            projectId,
-            envUrl,
-          });
-        }
-        return {type: 'success', message: `Loaded ${objectType}: ${jsonData.name}`};
-      } catch (error) {
-        errorService.handleError(error);
-      }     
+  printObject = async (objectId, projectId, isReport = true, startCell, officeTableId, bindingId, body, isRefresh) => {
+    const objectType = isReport ? 'report' : 'cube';
+    try {
+      const excelContext = await officeApiHelper.getExcelContext();
+      startCell = startCell || await officeApiHelper.getSelectedCell(excelContext);
+      const jsonData = await mstrObjectRestService.getObjectContent(objectId, projectId, isReport, body);
+      if (jsonData && jsonData.result.data.root == null) {
+        // report returned no data
+        sessionHelper.disableLoading();
+        return {type: 'warning', message: `No data returned by the ${objectType}: ${jsonData.name}`};
+      }
+      const convertedReport = officeConverterService
+          .getConvertedTable(jsonData);
+      const newOfficeTableId = officeTableId || await officeApiHelper.findAvailableOfficeTableId(excelContext);
+      await this._insertDataIntoExcel(convertedReport, excelContext, startCell, newOfficeTableId);
+      const {envUrl} = officeApiHelper.getCurrentMstrContext();
+      bindingId = bindingId || newOfficeTableId;
+      await excelContext.sync();
+      officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
+      if (!officeTableId && !isRefresh) {
+        await this.addReportToStore({
+          id: convertedReport.id,
+          name: convertedReport.name,
+          bindId: bindingId,
+          tableId: newOfficeTableId,
+          projectId,
+          envUrl,
+          body,
+        });
+      }
+      return !isRefresh && {type: 'success', message: `Loaded ${objectType}: ${jsonData.name}`};
+    } catch (error) {
+      errorService.handleError(error);
     }
+  }
 
-    // TODO: move it to api helper?
-    addReportToStore = (report) => {
-      reduxStore.dispatch({
-        type: officeProperties.actions.loadReport,
-        report: {
-          id: report.id,
-          name: report.name,
-          bindId: report.bindId,
-          tableId: report.tableId,
-          projectId: report.projectId,
-          envUrl: report.envUrl,
-        },
-      });
-      officeStoreService.preserveReport(report);
-    }
+  // TODO: move it to api helper?
+  addReportToStore = (report) => {
+    reduxStore.dispatch({
+      type: officeProperties.actions.loadReport,
+      report: {
+        id: report.id,
+        name: report.name,
+        bindId: report.bindId,
+        tableId: report.tableId,
+        projectId: report.projectId,
+        envUrl: report.envUrl,
+        body: report.body,
+      },
+    });
+    officeStoreService.preserveReport(report);
+  }
 
     removeReportFromExcel = async (bindingId, isRefresh) => {
       const officeContext = await officeApiHelper.getOfficeContext();
@@ -86,20 +88,20 @@ class OfficeDisplayService {
     }
 
     // TODO: we could filter data to display options related to current envUrl
-    refreshReport = async (bindingId) => {
-      const isRefresh = true;
-      const excelContext = await officeApiHelper.getExcelContext();
-      const range = officeApiHelper.getBindingRange(excelContext, bindingId);
-      range.load();
-      await excelContext.sync();
-      const startCell = range.address.split('!')[1].split(':')[0];
-      const refreshReport = officeStoreService.getReportFromProperties(bindingId);
-      await this.removeReportFromExcel(bindingId, isRefresh);
-      const result = await this.printObject(refreshReport.id, true, startCell, bindingId, bindingId);
-      if (result){
-        notificationService.displayMessage(result.type, result.message);
-      }
+  refreshReport = async (bindingId) => {
+    const isRefresh = true;
+    const excelContext = await officeApiHelper.getExcelContext();
+    const range = officeApiHelper.getBindingRange(excelContext, bindingId);
+    range.load();
+    await excelContext.sync();
+    const startCell = range.address.split('!')[1].split(':')[0];
+    const refreshReport = officeStoreService.getReportFromProperties(bindingId);
+    await this.removeReportFromExcel(bindingId, isRefresh);
+    const result = await this.printObject(refreshReport.id, refreshReport.projectId, true, startCell, refreshReport.tebleId, bindingId, refreshReport.body, true);
+    if (result) {
+      notificationService.displayMessage(result.type, result.message);
     }
+  }
 
     _insertDataIntoExcel = async (reportConvertedData, context, startCell, tableName) => {
       const hasHeaders = true;
