@@ -1,9 +1,10 @@
 import {errorService} from '../error/error-handler';
 import {reduxStore} from '../store';
 import {moduleProxy} from '../module-proxy';
+import {officeConverterService} from '../office/office-converter-service';
 
 const sharedFolderIdType = 7;
-const REQUEST_LIMIT = 1000;
+const REQUEST_LIMIT = 5000;
 const EXCEL_ROW_LIMIT = 1048576;
 
 class MstrObjectRestService {
@@ -63,7 +64,6 @@ class MstrObjectRestService {
     try {
       const reportInstance = await this._getInstanceId(fullPath, authToken, projectId, body);
       fullPath += `/${reportInstance}`;
-    
       return await this._getObjectContentPaginated(fullPath, authToken, projectId, limit);
     } catch (error) {
       throw errorService.errorRestFactory(error);
@@ -72,11 +72,11 @@ class MstrObjectRestService {
 
   _getObjectContentPaginated(fullPath, authToken, projectId, limit) {
     return new Promise((resolve, reject) => {
-      this._fetchObjectContent(fullPath, authToken, projectId, resolve, reject, {}, 0, limit);
+      this._fetchObjectContent(fullPath, authToken, projectId, resolve, reject, 0, limit);
     });
   }
 
-  _fetchObjectContent(fullPath, authToken, projectId, resolve, reject, aggregatedData = {}, offset = 0, limit = REQUEST_LIMIT) {
+  _fetchObjectContent(fullPath, authToken, projectId, resolve, reject, offset = 0, limit = REQUEST_LIMIT) {
     return moduleProxy.request
         .get(`${fullPath}?offset=${offset}&limit=${limit}`)
         .set('x-mstr-authtoken', authToken)
@@ -85,17 +85,18 @@ class MstrObjectRestService {
         .then((res) => {
           const {current, total} = res.body.result.data.paging;
           const fetchedRows = current + offset;
+          console.log(res.body);
           if (offset === 0) {
-            aggregatedData = res.body;
+            officeConverterService.createTable(res.body);
           } else {
-            aggregatedData.result.data.root.children.push(...res.body.result.data.root.children);
+            officeConverterService.appendRows(res.body);
           }
 
           if (fetchedRows >= total || fetchedRows >= EXCEL_ROW_LIMIT) {
-            resolve(aggregatedData);
+            resolve(officeConverterService.getConvertedTable());
           } else {
             offset += current;
-            this._fetchObjectContent(fullPath, authToken, projectId, resolve, reject, aggregatedData, offset, limit);
+            this._fetchObjectContent(fullPath, authToken, projectId, resolve, reject, offset, limit);
           }
         })
         .catch(reject);

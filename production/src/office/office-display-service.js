@@ -1,6 +1,5 @@
 import {officeApiHelper} from './office-api-helper';
 import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';
-import {officeConverterService} from './office-converter-service';
 import {reduxStore} from '../store';
 import {officeProperties} from './office-properties';
 import {officeStoreService} from './store/office-store-service';
@@ -21,24 +20,23 @@ class OfficeDisplayService {
     try {
       const excelContext = await officeApiHelper.getExcelContext();
       startCell = startCell || await officeApiHelper.getSelectedCell(excelContext);
-      const jsonData = await mstrObjectRestService.getObjectContent(objectId, projectId, isReport, body);
-      if (jsonData && jsonData.result.data.root == null) {
+      const officeTable = await mstrObjectRestService.getObjectContent(objectId, projectId, isReport, body);
+      console.log(officeTable);
+      if (!officeTable || (officeTable.rows && officeTable.rows.length === 0)) {
         // report returned no data
         sessionHelper.disableLoading();
-        return {type: 'warning', message: `No data returned by the ${objectType}: ${jsonData.name}`};
+        return {type: 'warning', message: `No data returned by the ${objectType}: ${officeTable.name}`};
       }
-      const convertedReport = officeConverterService
-          .getConvertedTable(jsonData);
       const newOfficeTableId = officeTableId || await officeApiHelper.findAvailableOfficeTableId(excelContext);
-      await this._insertDataIntoExcel(convertedReport, excelContext, startCell, newOfficeTableId);
+      await this._insertDataIntoExcel(officeTable, excelContext, startCell, newOfficeTableId);
       const {envUrl} = officeApiHelper.getCurrentMstrContext();
       bindingId = bindingId || newOfficeTableId;
       await excelContext.sync();
       officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
       if (!officeTableId && !isRefresh) {
         await this.addReportToStore({
-          id: convertedReport.id,
-          name: convertedReport.name,
+          id: officeTable.id,
+          name: officeTable.name,
           bindId: bindingId,
           tableId: newOfficeTableId,
           projectId,
@@ -46,8 +44,9 @@ class OfficeDisplayService {
           body,
         });
       }
-      return !isRefresh && {type: 'success', message: `Loaded ${objectType}: ${jsonData.name}`};
+      return !isRefresh && {type: 'success', message: `Loaded ${objectType}: ${officeTable.name}`};
     } catch (error) {
+      console.log(error);
       errorService.handleError(error);
     }
   }
@@ -69,25 +68,25 @@ class OfficeDisplayService {
     officeStoreService.preserveReport(report);
   }
 
-    removeReportFromExcel = async (bindingId, isRefresh) => {
-      const officeContext = await officeApiHelper.getOfficeContext();
-      await officeContext.document.bindings.releaseByIdAsync(bindingId, (asyncResult) => {
-        console.log('released binding');
+  removeReportFromExcel = async (bindingId, isRefresh) => {
+    const officeContext = await officeApiHelper.getOfficeContext();
+    await officeContext.document.bindings.releaseByIdAsync(bindingId, (asyncResult) => {
+      console.log('released binding');
+    });
+    const excelContext = await officeApiHelper.getExcelContext();
+    const tableObject = excelContext.workbook.tables.getItem(bindingId);
+    await tableObject.delete();
+    await excelContext.sync();
+    if (!isRefresh) {
+      reduxStore.dispatch({
+        type: officeProperties.actions.removeReport,
+        reportBindId: bindingId,
       });
-      const excelContext = await officeApiHelper.getExcelContext();
-      const tableObject = excelContext.workbook.tables.getItem(bindingId);
-      await tableObject.delete();
-      await excelContext.sync();
-      if (!isRefresh) {
-        reduxStore.dispatch({
-          type: officeProperties.actions.removeReport,
-          reportBindId: bindingId,
-        });
-        officeStoreService.deleteReport(bindingId);
-      }
+      officeStoreService.deleteReport(bindingId);
     }
+  }
 
-    // TODO: we could filter data to display options related to current envUrl
+  // TODO: we could filter data to display options related to current envUrl
   refreshReport = async (bindingId) => {
     const isRefresh = true;
     const excelContext = await officeApiHelper.getExcelContext();
@@ -97,33 +96,33 @@ class OfficeDisplayService {
     const startCell = range.address.split('!')[1].split(':')[0];
     const refreshReport = officeStoreService.getReportFromProperties(bindingId);
     await this.removeReportFromExcel(bindingId, isRefresh);
-    const result = await this.printObject(refreshReport.id, refreshReport.projectId, true, startCell, refreshReport.tebleId, bindingId, refreshReport.body, true);
+    const result = await this.printObject(refreshReport.id, refreshReport.projectId, true, startCell, refreshReport.tableId, bindingId, refreshReport.body, true);
     if (result) {
       notificationService.displayMessage(result.type, result.message);
     }
   }
 
-    _insertDataIntoExcel = async (reportConvertedData, context, startCell, tableName) => {
-      const hasHeaders = true;
-      const sheet = context.workbook.worksheets.getActiveWorksheet();
-      const range = officeApiHelper
-          .getRange(reportConvertedData.headers.length, startCell);
-      const mstrTable = sheet.tables.add(range, hasHeaders);
-      mstrTable.name = tableName;
-      mstrTable.getHeaderRowRange().values = [reportConvertedData.headers];
-      this._pushRows(reportConvertedData, mstrTable);
-      officeApiHelper.formatTable(sheet);
-      sheet.activate();
-      // tableBinding.onDataChanged.add(officeApiHelper.onBindingDataChanged);
-      return mstrTable;
-    }
+  _insertDataIntoExcel = async (reportConvertedData, context, startCell, tableName) => {
+    const hasHeaders = true;
+    const sheet = context.workbook.worksheets.getActiveWorksheet();
+    const range = officeApiHelper
+        .getRange(reportConvertedData.headers.length, startCell);
+    const mstrTable = sheet.tables.add(range, hasHeaders);
+    mstrTable.name = tableName;
+    mstrTable.getHeaderRowRange().values = [reportConvertedData.headers];
+    this._pushRows(reportConvertedData, mstrTable);
+    officeApiHelper.formatTable(sheet);
+    sheet.activate();
+    // tableBinding.onDataChanged.add(officeApiHelper.onBindingDataChanged);
+    return mstrTable;
+  }
 
-    _pushRows = (reportConvertedData, mstrTable) => {
-      const dataRows = reportConvertedData.rows
-          .map((item) => reportConvertedData.headers
-              .map((header) => item[header]));
-      mstrTable.rows.add(null, dataRows);
-    }
+  _pushRows = (reportConvertedData, mstrTable) => {
+    const dataRows = reportConvertedData.rows
+        .map((item) => reportConvertedData.headers
+            .map((header) => item[header]));
+    mstrTable.rows.add(null, dataRows);
+  }
 }
 
 export const officeDisplayService = new OfficeDisplayService();
