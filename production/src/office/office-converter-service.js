@@ -13,7 +13,7 @@ class OfficeConverterService {
 
   appendRows(jsonReport) {
     const newRows = this._getRows(jsonReport, this.headers);
-    this.rows.push(newRows);
+    this.rows.push(...newRows);
   }
 
   _getHeaders(jsonReport) {
