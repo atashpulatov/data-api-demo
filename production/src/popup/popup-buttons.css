@@ -17,3 +17,7 @@
 .popup-buttons .ant-btn.ant-btn-primary {
     margin: 0 14px;
 }
+
+.ant-btn:disabled {
+    opacity: 0.5;
+}

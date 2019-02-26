@@ -21,6 +21,7 @@ export class AttributeSelectorWindow extends Component {
       reportSubtype: this.props.parsed.reportSubtype,
       triggerUpdate: false,
       loading: false,
+      attributesSelected: false,
     };
   }
 
@@ -32,9 +33,10 @@ export class AttributeSelectorWindow extends Component {
 
   handleBack = () => {
     this.props.handleBack();
-  }
+  };
 
   onTriggerUpdate = (reportId, projectId, reportSubtype, body) => {
+    console.log(JSON.stringify(body));
     attributeSelectorHelpers.officeMessageParent(selectorProperties.commandOnUpdate,
         reportId, projectId, reportSubtype, body);
   };
@@ -47,6 +49,11 @@ export class AttributeSelectorWindow extends Component {
     this.setState({triggerUpdate: false, loading: false});
   };
 
+  attributesBeingSelected = (attributesSelected) => {
+    console.log(attributesSelected);
+    this.setState({attributesSelected});
+  };
+
   render() {
     return (
       <div
@@ -54,6 +61,7 @@ export class AttributeSelectorWindow extends Component {
         <AttributeSelector
           // TODO: logic for a title
           title='Import a file > Access_Transaction'
+          attributesSelectedChange={this.attributesBeingSelected}
           session={this.state.session}
           reportId={this.state.reportId}
           reportSubtype={this.state.reportSubtype}
@@ -62,6 +70,7 @@ export class AttributeSelectorWindow extends Component {
           resetTriggerUpdate={this.resetTriggerUpdate}
         />
         <PopupButtons
+          disableActiveActions={!this.state.attributesSelected}
           handleBack = {this.handleBack}
           handleOk={this.handleOk}
           handleCancel={this.handleCancel}
