@@ -85,7 +85,6 @@ class MstrObjectRestService {
         .then((res) => {
           const {current, total} = res.body.result.data.paging;
           const fetchedRows = current + offset;
-          console.log(res.body);
           if (offset === 0) {
             officeConverterService.createTable(res.body);
           } else {
