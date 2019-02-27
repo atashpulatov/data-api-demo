@@ -7,6 +7,8 @@ import {sessionHelper} from '../storage/session-helper';
 import {notificationService} from '../notification/notification-service';
 import {errorService} from '../error/error-handler';
 
+const EXCEL_PAGINATION = 5000;
+
 class OfficeDisplayService {
   constructor() {
     this.insertDataIntoExcel = this._insertDataIntoExcel.bind(this);
@@ -21,7 +23,6 @@ class OfficeDisplayService {
       const excelContext = await officeApiHelper.getExcelContext();
       startCell = startCell || await officeApiHelper.getSelectedCell(excelContext);
       const officeTable = await mstrObjectRestService.getObjectContent(objectId, projectId, isReport, body);
-      console.log(officeTable);
       if (!officeTable || (officeTable.rows && officeTable.rows.length === 0)) {
         // report returned no data
         sessionHelper.disableLoading();
@@ -46,7 +47,6 @@ class OfficeDisplayService {
       }
       return !isRefresh && {type: 'success', message: `Loaded ${objectType}: ${officeTable.name}`};
     } catch (error) {
-      console.log(error);
       errorService.handleError(error);
     }
   }
@@ -103,25 +103,44 @@ class OfficeDisplayService {
   }
 
   _insertDataIntoExcel = async (reportConvertedData, context, startCell, tableName) => {
-    const hasHeaders = true;
-    const sheet = context.workbook.worksheets.getActiveWorksheet();
-    const range = officeApiHelper
-        .getRange(reportConvertedData.headers.length, startCell);
-    const mstrTable = sheet.tables.add(range, hasHeaders);
-    mstrTable.name = tableName;
-    mstrTable.getHeaderRowRange().values = [reportConvertedData.headers];
-    this._pushRows(reportConvertedData, mstrTable);
-    officeApiHelper.formatTable(sheet);
-    sheet.activate();
-    // tableBinding.onDataChanged.add(officeApiHelper.onBindingDataChanged);
-    return mstrTable;
+    try {
+      context.workbook.application.suspendApiCalculationUntilNextSync();
+      const hasHeaders = true;
+      const sheet = context.workbook.worksheets.getActiveWorksheet();
+      const endRow = Math.min(EXCEL_PAGINATION, reportConvertedData.rows.length);
+
+      const range = officeApiHelper.getRange(reportConvertedData.headers.length, startCell, endRow);
+      const sheetRange = sheet.getRange(range);
+
+      const rowsData = this._getRowsArray(reportConvertedData);
+
+      sheetRange.values = [reportConvertedData.headers, ...rowsData.slice(0, endRow)];
+      const mstrTable = sheet.tables.add(range, hasHeaders);
+      mstrTable.name = tableName;
+      await context.sync();
+      await this.addRowsPagination(rowsData, endRow, mstrTable, context);
+      officeApiHelper.formatTable(sheet);
+      sheet.activate();
+    } catch (error) {
+      errorService.handleError(error);
+    }
   }
 
-  _pushRows = (reportConvertedData, mstrTable) => {
-    const dataRows = reportConvertedData.rows
+  _getRowsArray = (reportConvertedData) => {
+    return reportConvertedData.rows
         .map((item) => reportConvertedData.headers
             .map((header) => item[header]));
-    mstrTable.rows.add(null, dataRows);
+  }
+
+  _addRowsPagination = async (rowsData, endRow, mstrTable, context) => {
+    if (rowsData.length > endRow) {
+      const startIndex = endRow;
+      for (let i = startIndex; i < rowsData.length; i += EXCEL_PAGINATION) {
+        const endIndex = Math.min(rowsData.length, i + EXCEL_PAGINATION);
+        mstrTable.getDataBodyRange().getRowsBelow(Math.min(rowsData.length, EXCEL_PAGINATION)).values = rowsData.slice(i, endIndex);
+        await context.sync();
+      }
+    }
   }
 }
 
