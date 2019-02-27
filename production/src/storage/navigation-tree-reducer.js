@@ -1,4 +1,4 @@
-import {SELECT_FOLDER, SELECT_OBJECT, SET_DATA_SOURCE} from '../navigation/navigation-tree-actions';
+import {SELECT_FOLDER, SELECT_OBJECT, SET_DATA_SOURCE, START_IMPORT} from '../navigation/navigation-tree-actions';
 import {CLEAR_WINDOW} from '../popup/popup-actions';
 
 const initialState = {
@@ -7,6 +7,7 @@ const initialState = {
     chosenProjectId: null,
     chosenSubtype: null,
     dataSource: null,
+    loading: false,
 };
 
 export const navigationTree = (state = initialState, action) => {
@@ -30,6 +31,11 @@ export const navigationTree = (state = initialState, action) => {
         }
         case CLEAR_WINDOW: {
             return {...initialState};
+        }
+        case START_IMPORT: {
+            const newState = {...state};
+            newState.loading = true;
+            return newState;
         }
         default: {
             return state;

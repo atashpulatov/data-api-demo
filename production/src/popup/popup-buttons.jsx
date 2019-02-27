@@ -21,9 +21,8 @@ export const PopupButtons = ({handleOk, handleSecondary,
     {
       handleSecondary &&
         <Button id="prepare" type="primary"
-          disabled={disableActiveActions}
-          onClick={handleSecondary}
-          loading={loading}>
+          disabled={disableActiveActions || loading}
+          onClick={handleSecondary}>
           Prepare Data
         </Button>
     }
