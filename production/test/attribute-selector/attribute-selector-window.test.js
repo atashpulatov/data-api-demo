@@ -244,7 +244,6 @@ describe('AttributeSelectorWindow', () => {
     const componentWrapper = mount(<AttributeSelectorWindow parsed={parsed} />);
 
     const attributesBeingSelectedSpy = jest.spyOn(componentWrapper.instance(), 'attributesBeingSelected');
-    attributesBeingSelectedSpy.mockClear();
     expect(componentWrapper.instance().state.attributesSelected).toBeFalsy();
 
     // when
