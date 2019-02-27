@@ -18,6 +18,7 @@ describe('NavigationTree', () => {
       envUrl: 'env',
       token: 'token',
       projectId: 'projectId',
+
     };
     // when
     const wrappedComponent = mount(<NavigationTree parsed={parsed} />);
@@ -49,6 +50,7 @@ describe('NavigationTree', () => {
       projectId: 'projectId',
     };
     const wrappedComponent = mount(<NavigationTree parsed={parsed} />);
+    wrappedComponent.instance().setState({chosenObjectId: true});
     const secondaryAction = jest.spyOn(wrappedComponent.instance(), 'handleSecondary')
         .mockReturnValueOnce({});
     wrappedComponent.update();

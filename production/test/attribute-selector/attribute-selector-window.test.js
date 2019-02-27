@@ -54,6 +54,7 @@ describe('AttributeSelectorWindow', () => {
 
     const componentWrapper = mount(<AttributeSelectorWindow
       parsed={parsed} />);
+    componentWrapper.instance().attributesBeingSelected(true);
 
     const attributeMetricFilterWrapper = componentWrapper.find('AttributeMetricFilter');
     attributeMetricFilterWrapper.instance().noAttributesSelected = jest.fn(() => false);
@@ -137,6 +138,7 @@ describe('AttributeSelectorWindow', () => {
 
     const componentWrapper = mount(<AttributeSelectorWindow
       parsed={parsed} />);
+    componentWrapper.instance().attributesBeingSelected(true);
 
     const attributeMetricFilterWrapper = componentWrapper.find('AttributeMetricFilter');
     attributeMetricFilterWrapper.instance().noAttributesSelected = jest.fn(() => false);
@@ -228,5 +230,27 @@ describe('AttributeSelectorWindow', () => {
 
     // then
     expect(officeMessageParentSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('should change value of attributesSelected if attributesBeingSelected is being invoked', () => {
+    // given
+    const parsed = {
+      envUrl: 'url',
+      token: 'token',
+      projectId: 'proId',
+      reportId: 'repId',
+    };
+
+    const componentWrapper = mount(<AttributeSelectorWindow parsed={parsed} />);
+
+    const attributesBeingSelectedSpy = jest.spyOn(componentWrapper.instance(), 'attributesBeingSelected');
+    attributesBeingSelectedSpy.mockClear();
+    expect(componentWrapper.instance().state.attributesSelected).toBeFalsy();
+
+    // when
+    componentWrapper.instance().attributesBeingSelected(true);
+
+    // then
+    expect(componentWrapper.instance().state.attributesSelected).toBeTruthy();
   });
 });
