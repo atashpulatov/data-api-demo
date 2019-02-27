@@ -6699,7 +6699,7 @@ ms@^2.1.1:
 
 "mstr-react-library@https://ghb-readonly:daYtona500@github.microstrategy.com/pfilipp/mstr-react-library.git#1a94679d4":
   version "1.0.0"
-  resolved "https://:@github.microstrategy.com/pfilipp/mstr-react-library.git#28ddfa38e8cd1a2c268d9813d77214a70f222f7d"
+  resolved "https://ghb-readonly:daYtona500@github.microstrategy.com/pfilipp/mstr-react-library.git#28ddfa38e8cd1a2c268d9813d77214a70f222f7d"
   dependencies:
     antd "^3.10.1"
     superagent "^4.0.0"
