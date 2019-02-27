@@ -118,7 +118,7 @@ class OfficeDisplayService {
       const mstrTable = sheet.tables.add(range, hasHeaders);
       mstrTable.name = tableName;
       await context.sync();
-      await this.addRowsPagination(rowsData, endRow, mstrTable, context);
+      await this._addRowsPagination(rowsData, endRow, mstrTable, context);
       officeApiHelper.formatTable(sheet);
       sheet.activate();
     } catch (error) {
@@ -137,7 +137,7 @@ class OfficeDisplayService {
       const startIndex = endRow;
       for (let i = startIndex; i < rowsData.length; i += EXCEL_PAGINATION) {
         const endIndex = Math.min(rowsData.length, i + EXCEL_PAGINATION);
-        mstrTable.getDataBodyRange().getRowsBelow(Math.min(rowsData.length, EXCEL_PAGINATION)).values = rowsData.slice(i, endIndex);
+        mstrTable.getDataBodyRange().getRowsBelow(Math.min(rowsData.length - i, EXCEL_PAGINATION)).values = rowsData.slice(i, endIndex);
         await context.sync();
       }
     }
