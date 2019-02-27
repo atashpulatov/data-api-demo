@@ -18,7 +18,6 @@ describe('NavigationTree', () => {
       envUrl: 'env',
       token: 'token',
       projectId: 'projectId',
-
     };
     // when
     const wrappedComponent = mount(<NavigationTree parsed={parsed} />);
