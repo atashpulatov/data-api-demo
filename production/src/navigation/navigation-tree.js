@@ -60,11 +60,6 @@ export class _NavigationTree extends Component {
       chosenProjectId: projectId,
       chosenSubtype: subtype,
     });
-    this.setState({
-      chosenObjectId: objectId,
-      chosenProjectId: projectId,
-      chosenSubtype: subtype,
-    });
   };
 
   render() {
