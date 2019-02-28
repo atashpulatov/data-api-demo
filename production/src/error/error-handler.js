@@ -6,6 +6,7 @@ import { sessionHelper } from '../storage/session-helper.js';
 import { notificationService } from '../notification/notification-service.js';
 import { RunOutsideOfficeError } from './run-outside-office-error.js';
 import { OverlappingTablesError } from './overlapping-tables-error';
+import { GenericOfficeError } from './generic-office-error.js';
 
 class ErrorService {
   errorRestFactory = (error) => {
@@ -21,21 +22,35 @@ class ErrorService {
         return new UnauthorizedError();
       case 500:
         return new InternalServerError();
-    }
-    throw error;
-  };
-  errorOfficeFactory = (error) => {
-    console.error(error);
-    switch (error.message) {
-      case 'Excel is not defined':
-        return new RunOutsideOfficeError(error.message);
-      case `A table can't overlap another table. `:
-        return new OverlappingTablesError(error.message);
       default:
-        console.error(error);
-        if (error.name === 'RichApi.Error') notificationService.displayMessage('error', error.message);
-        throw error;
+        return error;
     }
+  };
+
+  // errorOfficeFactory = (error) => { // no transpiling errors
+  //   console.error(error);           // just forward message from error
+  //   switch (error.message) {        // add information that it's from microsoft
+  //     case 'Excel is not defined':
+  //       return new RunOutsideOfficeError(error.message);
+  //     case `A table can't overlap another table. `:
+  //       return new OverlappingTablesError(error.message);
+  //     default:
+  //       console.error(error);
+  //       if (error.name === 'RichApi.Error') notificationService.displayMessage('error', error.message);
+  //       else return error;
+  //   }
+  // }
+  errorOfficeFactory = (error) => {
+    if (error.name === 'RichApi.Error') {
+      switch (error.message) {
+        case 'Excel is not defined':
+          return new RunOutsideOfficeError(error.message);
+        case `A table can't overlap another table. `:
+          return new OverlappingTablesError(error.message);
+        default:
+          return new GenericOfficeError(error.message);
+      }
+    } else return error;
   }
   handleError = (error, isLogout) => {
     console.error(error);
@@ -81,7 +96,10 @@ class ErrorService {
         notificationService.displayMessage('error', 'Please run plugin inside Office');
         break;
       case OverlappingTablesError:
-        notificationService.displayMessage('error', error.message);
+        notificationService.displayMessage('error', `Excel returned error: ${error.message}`);
+        break;
+      case GenericOfficeError:
+        notificationService.displayMessage('error', `Excel returned error: ${error.message}`);
         break;
       default:
         this.handleError(error);

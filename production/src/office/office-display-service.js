@@ -12,34 +12,38 @@ class OfficeDisplayService {
   printObject = async (objectId, projectId, isReport = true, startCell, officeTableId, bindingId, body, isRefresh) => {
     const objectType = isReport ? 'report' : 'cube';
     try {
-      const excelContext = await officeApiHelper.getExcelContext();
-      startCell = startCell || await officeApiHelper.getSelectedCell(excelContext);
-      const jsonData = await mstrObjectRestService.getObjectContent(objectId, projectId, isReport, body);
-      if (jsonData && jsonData.result.data.root == null) {
-        // report returned no data
-        sessionHelper.disableLoading();
-        return { type: 'warning', message: `No data returned by the ${objectType}: ${jsonData.name}` };
-      }
-      const convertedReport = officeConverterService
-        .getConvertedTable(jsonData);
-      const newOfficeTableId = officeTableId || await officeApiHelper.findAvailableOfficeTableId(excelContext);
-      await this._insertDataIntoExcel(convertedReport, excelContext, startCell, newOfficeTableId);
-      const { envUrl } = officeApiHelper.getCurrentMstrContext();
-      bindingId = bindingId || newOfficeTableId;
-      await excelContext.sync();
-      officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
-      if (!officeTableId && !isRefresh) {
-        await this.addReportToStore({
-          id: convertedReport.id,
-          name: convertedReport.name,
-          bindId: bindingId,
-          tableId: newOfficeTableId,
-          projectId,
-          envUrl,
-          body,
-        });
-      }
-      return !isRefresh && { type: 'success', message: `Loaded ${objectType}: ${jsonData.name}` };
+      await Excel.run(async (excelContext) => {
+        // const excelContext = await officeApiHelper.getExcelContext();
+        // const officeContext = await officeApiHelper.getOfficeContext();
+        startCell = startCell || await officeApiHelper.getSelectedCell(excelContext);
+        const jsonData = await mstrObjectRestService.getObjectContent(objectId, projectId, isReport, body);
+        if (jsonData && jsonData.result.data.root == null) {
+          // report returned no data
+          sessionHelper.disableLoading();
+          return { type: 'warning', message: `No data returned by the ${objectType}: ${jsonData.name}` };
+        }
+        const convertedReport = officeConverterService
+          .getConvertedTable(jsonData);
+        const newOfficeTableId = officeTableId || await officeApiHelper.findAvailableOfficeTableId(excelContext);
+        await this._insertDataIntoExcel(convertedReport, excelContext, startCell, newOfficeTableId);
+        const { envUrl } = officeApiHelper.getCurrentMstrContext();
+        bindingId = bindingId || newOfficeTableId;
+        await excelContext.sync();
+        officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
+        if (!officeTableId && !isRefresh) {
+          await this.addReportToStore({
+            id: convertedReport.id,
+            name: convertedReport.name,
+            bindId: bindingId,
+            tableId: newOfficeTableId,
+            projectId,
+            envUrl,
+            body,
+          });
+        }
+        return !isRefresh && { type: 'success', message: `Loaded ${objectType}: ${jsonData.name}` };
+      })
+
     } catch (error) {
       throw errorService.errorOfficeFactory(error);
     }
