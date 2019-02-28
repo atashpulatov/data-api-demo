@@ -121,6 +121,7 @@ class OfficeDisplayService {
       await this._addRowsPagination(rowsData, endRow, mstrTable, context);
       officeApiHelper.formatTable(sheet);
       sheet.activate();
+      return mstrTable;
     } catch (error) {
       errorService.handleError(error);
     }
