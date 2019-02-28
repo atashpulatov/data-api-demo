@@ -10,12 +10,13 @@
     padding-right: 20px;
 }
 
-.popup-buttons .ant-btn:first-of-type {
+.popup-buttons #back {
     float: left;
+    margin-left: 0;
 }
 
-.popup-buttons .ant-btn.ant-btn-primary {
-    margin: 0 14px;
+.popup-buttons .ant-btn {
+    margin-left: 14px;
 }
 
 .ant-btn:disabled {
