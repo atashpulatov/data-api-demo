@@ -26,20 +26,6 @@ class ErrorService {
         return error;
     }
   };
-
-  // errorOfficeFactory = (error) => { // no transpiling errors
-  //   console.error(error);           // just forward message from error
-  //   switch (error.message) {        // add information that it's from microsoft
-  //     case 'Excel is not defined':
-  //       return new RunOutsideOfficeError(error.message);
-  //     case `A table can't overlap another table. `:
-  //       return new OverlappingTablesError(error.message);
-  //     default:
-  //       console.error(error);
-  //       if (error.name === 'RichApi.Error') notificationService.displayMessage('error', error.message);
-  //       else return error;
-  //   }
-  // }
   errorOfficeFactory = (error) => {
     if (error.name === 'RichApi.Error') {
       switch (error.message) {
@@ -53,6 +39,7 @@ class ErrorService {
     } else return error;
   }
   handleError = (error, isLogout) => {
+    const DEBUG_LOGGING = true;
     console.error(error);
     switch (error.constructor) {
       case EnvironmentNotFoundError:
@@ -74,7 +61,8 @@ class ErrorService {
         notificationService.displayMessage('error', '500 - We were not able to handle your request');
         break;
       default:
-        notificationService.displayMessage('error', 'Unknown error');
+        DEBUG_LOGGING ? notificationService.displayMessage('error', error.message)
+          : notificationService.displayMessage('error', 'Unknown error');
         break;
     }
   }
