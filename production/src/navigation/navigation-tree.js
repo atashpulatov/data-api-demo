@@ -68,6 +68,7 @@ export class NavigationTree extends Component {
         onObjectChosen={this.onObjectChosen}
       >
         <PopupButtons
+          disableActiveActions={!this.state.chosenObjectId}
           handleOk={this.handleOk}
           handleSecondary={this.handleSecondary}
           handleCancel={this.handleCancel}
