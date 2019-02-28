@@ -1,7 +1,7 @@
 import {SELECT_FOLDER, SELECT_OBJECT, SET_DATA_SOURCE, START_IMPORT} from '../navigation/navigation-tree-actions';
 import {CLEAR_WINDOW} from '../popup/popup-actions';
 
-const initialState = {
+export const initialState = {
     folder: null,
     chosenObjectId: null,
     chosenProjectId: null,
