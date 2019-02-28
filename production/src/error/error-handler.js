@@ -25,29 +25,32 @@ class ErrorService {
     throw error;
   };
   errorOfficeFactory = (error) => {
+    console.error(error);
     switch (error.message) {
       case 'Excel is not defined':
         return new RunOutsideOfficeError(error.message);
       case `A table can't overlap another table. `:
         return new OverlappingTablesError(error.message);
       default:
+        console.error(error);
         if (error.name === 'RichApi.Error') notificationService.displayMessage('error', error.message);
         throw error;
     }
   }
   handleError = (error, isLogout) => {
+    console.error(error);
     switch (error.constructor) {
       case EnvironmentNotFoundError:
         notificationService.displayMessage('error', '404 - Environment not found');
-        if (!isLogout){
-            this.fullLogOut();
-        }        
+        if (!isLogout) {
+          this.fullLogOut();
+        }
         break;
       case UnauthorizedError:
         notificationService.displayMessage('error', '401 - Unauthorized. Please log in.');
-        if (!isLogout){
-            this.fullLogOut();
-        }  
+        if (!isLogout) {
+          this.fullLogOut();
+        }
         break;
       case BadRequestError:
         notificationService.displayMessage('error', '400 - There has been a problem with your request');
