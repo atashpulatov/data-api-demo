@@ -28,7 +28,6 @@ class OfficeDisplayService {
         await this._insertDataIntoExcel(convertedReport, excelContext, startCell, newOfficeTableId);
         const { envUrl } = officeApiHelper.getCurrentMstrContext();
         bindingId = bindingId || newOfficeTableId;
-        await excelContext.sync();
         officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
         if (!officeTableId && !isRefresh) {
           await this.addReportToStore({
@@ -42,8 +41,7 @@ class OfficeDisplayService {
           });
         }
         return !isRefresh && { type: 'success', message: `Loaded ${objectType}: ${jsonData.name}` };
-      })
-
+      });
     } catch (error) {
       throw errorService.errorOfficeFactory(error);
     }
@@ -104,23 +102,28 @@ class OfficeDisplayService {
     const hasHeaders = true;
     const sheet = context.workbook.worksheets.getActiveWorksheet();
     const range = officeApiHelper
-      .getRange(reportConvertedData.headers.length, startCell);
+        .getRange(reportConvertedData.headers.length, startCell);
     const mstrTable = sheet.tables.add(range, hasHeaders);
-    console.log(mstrTable);
-    mstrTable.name = tableName;
-    mstrTable.getHeaderRowRange().values = [reportConvertedData.headers];
-    this._pushRows(reportConvertedData, mstrTable);
-    officeApiHelper.formatTable(sheet);
-    sheet.activate();
-    // tableBinding.onDataChanged.add(officeApiHelper.onBindingDataChanged);
-    return mstrTable;
+    try {
+      mstrTable.name = tableName;
+      mstrTable.getHeaderRowRange().values = [reportConvertedData.headers];
+      this._pushRows(reportConvertedData, mstrTable);
+      officeApiHelper.formatTable(sheet);
+      sheet.activate();
+      await context.sync();
+      return mstrTable;
+    } catch (error) {
+      mstrTable.delete();
+      context.sync();
+      throw error;
+    }
   }
 
   _pushRows = (reportConvertedData, mstrTable) => {
     const dataRows = reportConvertedData.rows
       .map((item) => reportConvertedData.headers
         .map((header) => item[header]));
-    console.log(mstrTable.rows.add(null, dataRows));
+    mstrTable.rows.add(null, dataRows);
   }
 }
 
