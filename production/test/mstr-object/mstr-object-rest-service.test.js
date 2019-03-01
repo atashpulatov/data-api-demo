@@ -230,7 +230,7 @@ describe('MstrObjectRestService', () => {
       // then
       expect(response).toBeDefined();
       expect(response.name).toEqual(expectedReportName);
-      expect(response.result.data.root.children.length).toBeGreaterThanOrEqual(50);
+      expect(response.rows.length).toBeGreaterThanOrEqual(50);
     });
 
     it('should throw exception due to incorrect authToken', async () => {
