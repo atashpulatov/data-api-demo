@@ -72,11 +72,12 @@ class MstrObjectRestService {
 
   _getObjectContentPaginated(fullPath, authToken, projectId, limit) {
     return new Promise((resolve, reject) => {
-      this._fetchObjectContent(fullPath, authToken, projectId, resolve, reject, 0, limit);
+      let mstrTable;
+      this._fetchObjectContent(fullPath, authToken, projectId, resolve, reject, 0, limit, mstrTable);
     });
   }
 
-  _fetchObjectContent(fullPath, authToken, projectId, resolve, reject, offset = 0, limit = REQUEST_LIMIT) {
+  _fetchObjectContent(fullPath, authToken, projectId, resolve, reject, offset = 0, limit = REQUEST_LIMIT, mstrTable) {
     return moduleProxy.request
         .get(`${fullPath}?offset=${offset}&limit=${limit}`)
         .set('x-mstr-authtoken', authToken)
@@ -86,16 +87,16 @@ class MstrObjectRestService {
           const {current, total} = res.body.result.data.paging;
           const fetchedRows = current + offset;
           if (offset === 0) {
-            officeConverterService.createTable(res.body);
+            mstrTable = officeConverterService.createTable(res.body);
           } else {
-            officeConverterService.appendRows(res.body);
+            mstrTable = officeConverterService.appendRows(mstrTable, res.body);
           }
 
           if (fetchedRows >= total || fetchedRows >= EXCEL_ROW_LIMIT) {
-            resolve(officeConverterService.getConvertedTable());
+            resolve(mstrTable);
           } else {
             offset += current;
-            this._fetchObjectContent(fullPath, authToken, projectId, resolve, reject, offset, limit);
+            this._fetchObjectContent(fullPath, authToken, projectId, resolve, reject, offset, limit, mstrTable);
           }
         })
         .catch(reject);
