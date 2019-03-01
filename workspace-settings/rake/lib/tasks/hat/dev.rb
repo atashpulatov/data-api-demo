@@ -18,11 +18,12 @@ desc "build project and run test, excluding packaging the build"
 task :test do
   install_dependencies()
   shell_command! "yarn jest", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
-  shell_command! "yarn jest –coverage", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
+  shell_command! "yarn jest --coverage", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
 end
 
 
 def install_dependencies()
+  shell_command! "rm -rf node_modules", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
   update_package_json()
   shell_command! "yarn install", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
 end

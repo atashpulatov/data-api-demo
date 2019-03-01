@@ -100,9 +100,8 @@ class OfficeApiHelper {
 
     getCurrentMstrContext = () => {
         const envUrl = reduxStore.getState().sessionReducer.envUrl;
-        const projectId = reduxStore.getState().historyReducer.project.projectId;
         const username = reduxStore.getState().sessionReducer.username;
-        return { envUrl, projectId, username };
+        return { envUrl, username };
     }
 
     formatTable = (sheet) => {
@@ -118,7 +117,8 @@ class OfficeApiHelper {
         const selectedRangeStart = context.workbook.getSelectedRange();
         selectedRangeStart.load(officeProperties.officeAddress);
         await context.sync();
-        const startCell = selectedRangeStart.address.split('!')[1].split(':')[0];
+        const startCell = selectedRangeStart.address
+            .split('!')[1].split(':')[0];
         return startCell;
     }
 

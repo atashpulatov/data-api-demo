@@ -1,42 +1,38 @@
-/* eslint-disable */
 import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
-import { Routes } from './routes.jsx';
-import { HashRouter as Router } from 'react-router-dom';
-import { Breadcrumbs } from '../breadcrumbs/breadcrumbs.jsx';
-import { Header } from './header.jsx';
-import { MenuBar } from '../menu-bar/menu-bar.jsx';
-import { Footer } from './footer.jsx';
-import { FileHistoryContainer } from '../file-history/file-history-container.jsx';
-import { Spin } from 'antd';
 import { connect } from 'react-redux';
 import './home.css';
-import { Notifications } from '../notification/notifications.jsx';
-/* eslint-enable */
+import { sessionHelper } from '../storage/session-helper';
+import { pageBuilder } from './page-builder.js';
+import { officeApiHelper } from '../office/office-api-helper';
+import { homeHelper } from './home-helper';
 
 export class _Home extends Component {
+
+  componentDidMount = async () => {
+    await officeApiHelper.loadExistingReportBindingsExcel();
+    homeHelper.saveLoginValues();
+    homeHelper.saveTokenFromCookies();
+    sessionHelper.disableLoading();
+  };
+
+  componentDidUpdate = () => {
+    homeHelper.saveTokenFromCookies();
+  };
+
   render() {
+    const { loading, authToken, reportArray } = this.props;
     return (
-      <Router>
-        <div id='content'>
-          <Notifications />
-          <Header />
-          <MenuBar />
-          <FileHistoryContainer />
-          <Breadcrumbs />
-          {/* TODO: create tests for spinner functionality */}
-          <Spin spinning={this.props.loading}>
-            <Routes />
-          </Spin>
-          <Footer />
-        </div>
-      </Router>
-    );
+      <div>
+        {pageBuilder.getPage(loading, authToken, reportArray)}
+      </div>);
   }
 }
 
 function mapStateToProps(state) {
   return {
     loading: state.sessionReducer.loading,
+    authToken: state.sessionReducer.authToken,
+    reportArray: state.officeReducer.reportArray,
   };
 }
 

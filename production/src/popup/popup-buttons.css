@@ -1,0 +1,19 @@
+.popup-buttons {
+    padding: 14px 20px;
+    text-align: right;
+    background-color: #fff;
+}
+
+.popup-buttons .ant-btn {
+    height: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.popup-buttons .ant-btn:first-of-type {
+    float: left;
+}
+
+.popup-buttons .ant-btn.ant-btn-primary {
+    margin: 0 14px;
+}

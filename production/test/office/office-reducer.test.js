@@ -63,6 +63,21 @@ describe('officeReducer', () => {
         expect(wrongDispatch).toThrowError('Missing report.id');
     });
 
+    it('should throw an error on missing report', () => {
+        // given
+        const report = undefined;
+        // when
+        const wrongDispatch = () => {
+            officeStore.dispatch({
+                type: officeProperties.actions.loadReport,
+                report,
+            });
+        };
+        // then
+        expect(wrongDispatch).toThrowError(OfficeError);
+        expect(wrongDispatch).toThrowError('Missing report');
+    });
+
     it('should throw an error on missing report.name', () => {
         // given
         const report = {
