@@ -31,7 +31,7 @@ class SessionHelper {
     };
   }
   logOutRedirect = () => {
-    window.location.replace('/office-loader/index.html');
+    window.location.replace('/mstr-office-loader/build/index.html');
   }
   saveLoginValues = (values) => {
     reduxStore.dispatch({

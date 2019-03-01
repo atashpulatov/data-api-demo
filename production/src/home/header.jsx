@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from './mstr_logo.png';
+import logo from './assets/mstr_logo.png';
 import { sessionHelper } from '../storage/session-helper';
 import { Button } from 'antd';
 import { errorService } from '../error/error-handler';
