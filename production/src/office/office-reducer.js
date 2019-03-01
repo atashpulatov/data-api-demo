@@ -73,9 +73,9 @@ function _checkReportData(report) {
     if (!report.name) {
         throw new OfficeError('Missing report.name');
     }
-    if (!report.bindId) {
-        throw new OfficeError('Missing report.bindId');
-    }
+    // if (!report.bindId) {
+    //     throw new OfficeError('Missing report.bindId');
+    // }
     if (!report.envUrl) {
         throw new OfficeError('Missing report.envUrl');
     }

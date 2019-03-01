@@ -45,16 +45,17 @@ class PopupController {
     try {
       switch (response.command) {
         case selectorProperties.commandOk:
-          dialog.close();
+          // dialog.close();
           if (response.chosenObject) {
             const result = await officeDisplayService.printObject(response.chosenObject, response.chosenProject);
             if (result) {
               notificationService.displayMessage(result.type, result.message);
             }
           }
+          dialog.close();
           break;
         case selectorProperties.commandOnUpdate:
-          dialog.close();
+          // dialog.close();
           if (response.reportId
             && response.projectId
             && response.reportSubtype
@@ -68,6 +69,7 @@ class PopupController {
               notificationService.displayMessage(result.type, result.message);
             }
           }
+          dialog.close();
           break;
         case selectorProperties.commandCancel:
           dialog.close();
@@ -78,6 +80,8 @@ class PopupController {
       }
     } catch (error) {
       errorService.handleOfficeError(error);
+    } finally {
+      dialog.close();
     }
   }
 };
