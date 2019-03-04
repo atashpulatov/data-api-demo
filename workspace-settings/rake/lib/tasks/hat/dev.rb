@@ -8,10 +8,14 @@ desc "build project in #{$WORKSPACE_SETTINGS[:paths][:project][:production][:hom
 task :build do
   install_dependencies()
   shell_command! "yarn build", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
+  shell_command! "zip -r office-#{Common::Version.application_version}.zip .", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/build"
+  shell_command! "zip -r #{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/build/office-loader-#{Common::Version.application_version}.zip .", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/office-loader/build"
 end
 
 task :clean do
-  FileUtils.rm_rf Dir.glob("#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/build/*")
+  build_dir = "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/build"
+  Dir.mkdir(build_dir) unless Dir.exist?(build_dir)
+  FileUtils.rm_rf Dir.glob("#{build_dir}/*")
 end
 
 desc "build project and run test, excluding packaging the build"
