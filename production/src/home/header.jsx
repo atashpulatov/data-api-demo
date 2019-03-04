@@ -1,19 +1,30 @@
 import React from 'react';
 import logo from './assets/mstr_logo.png';
-import { sessionHelper } from '../storage/session-helper';
-import { Button } from 'antd';
-import { errorService } from '../error/error-handler';
+import {sessionHelper} from '../storage/session-helper';
+import {Button} from 'antd';
+import {errorService} from '../error/error-handler';
+import {connect} from 'react-redux';
 
 
-export const Header = ({ profileImage = logo, fullName = 'MicroStrategy User', authToken }) => (
-  // GET /sessions/userInfo
-  // profileImage
-  // fullName
-  <header id='app-header'>
-    <img src={profileImage} alt='User profile' /><span className='header-name'>{fullName}</span>
-    <Button id='logOut' onClick={logout} size='small' hidden={!authToken}>Log out</Button>
-  </header>
-);
+export const _Header = (props) => {
+  const {userFullName, userInitials} = props;
+  return (
+    <header id='app-header'>
+      {userInitials !== logo ?
+        <span id='initials' alt='User profile'>{userInitials}</span> :
+        <img src={userInitials} alt='User profile' />}
+      <span className='header-name'>{userFullName}</span>
+      <Button id='logOut' onClick={logout} size='small'>Log out</Button>
+    </header >
+  );
+};
+
+function mapStateToProps(state) {
+  const {userFullName, userInitials} = state.sessionReducer;
+  return {userFullName, userInitials};
+};
+
+export const Header = connect(mapStateToProps)(_Header);
 
 function logout() {
   try {

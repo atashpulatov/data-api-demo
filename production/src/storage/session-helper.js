@@ -1,7 +1,8 @@
-import { reduxStore } from '../store';
-import { sessionProperties } from './session-properties';
-import { authenticationService } from '../authentication/auth-rest-service';
-import { errorService } from '../error/error-handler';
+import {reduxStore} from '../store';
+import {sessionProperties} from './session-properties';
+import {authenticationService} from '../authentication/auth-rest-service';
+import {errorService} from '../error/error-handler';
+import logo from '../home/assets/mstr_logo.png';
 
 class SessionHelper {
   enableLoading = () => {
@@ -57,6 +58,21 @@ class SessionHelper {
       projectId,
     };
     return session;
+  }
+  saveUserInfo = (values) => {
+    if (values) {
+      reduxStore.dispatch({
+        type: sessionProperties.actions.getUserInfo,
+        userFullName: values.fullName ? values.fullName : 'Microstrategy User',
+        userInitials: values.initials ? values.initials : logo,
+      });
+    } else {
+      reduxStore.dispatch({
+        type: sessionProperties.actions.getUserInfo,
+        userFullName: 'Microstrategy User',
+        userInitials: logo,
+      });
+    }
   }
 }
 

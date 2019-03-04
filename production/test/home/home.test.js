@@ -1,14 +1,14 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
-import { Provider } from 'react-redux';
-import { mount } from 'enzyme';
-import { Home, _Home } from '../../src/home/home.jsx';
-import { Header } from '../../src/home/header.jsx';
-import { sessionHelper } from '../../src/storage/session-helper';
-import { officeApiHelper } from '../../src/office/office-api-helper';
-import { reduxStore } from '../../src/store';
-import { homeHelper } from '../../src/home/home-helper.js';
-import { pageBuilder } from '../../src/home/page-builder.js';
+import {Provider} from 'react-redux';
+import {mount} from 'enzyme';
+import {Home, _Home} from '../../src/home/home.jsx';
+import {_Header} from '../../src/home/header.jsx';
+import {sessionHelper} from '../../src/storage/session-helper';
+import {officeApiHelper} from '../../src/office/office-api-helper';
+import {reduxStore} from '../../src/store';
+import {homeHelper} from '../../src/home/home-helper.js';
+import {pageBuilder} from '../../src/home/page-builder.js';
 
 jest.mock('../../src/storage/session-helper');
 jest.mock('../../src/office/office-api-helper');
@@ -19,8 +19,13 @@ jest.mock('../../src/home/home-helper');
 describe('Home', () => {
   it('should have header component with proper text', async () => {
     // given
+    const props = {
+      loading: false,
+      authToken: true,
+      reportArray: false,
+    };
     const tempPromise = Promise.resolve();
-    const headerWrapper = mount(<Header />);
+    const headerWrapper = mount(<_Header />);
     const sessionHelperSpy = jest.spyOn(sessionHelper, 'disableLoading');
     const officeHelperSpy = jest
         .spyOn(officeApiHelper, 'loadExistingReportBindingsExcel')
@@ -29,9 +34,9 @@ describe('Home', () => {
     officeHelperSpy.mockClear();
     // when
     const componentWrapper = mount(
-      <Provider store={reduxStore}>
-        <Home />
-      </Provider>
+        <Provider store={reduxStore}>
+          <Home {...props} />
+        </Provider>
     );
     // then
     setImmediate(() => tempPromise);
@@ -40,6 +45,26 @@ describe('Home', () => {
     expect(officeHelperSpy).toHaveBeenCalled();
     expect(sessionHelperSpy).toHaveBeenCalled();
   });
+
+  it('should properly set values', async () => {
+    // given
+
+    // when
+    const headerWrapper = mount(<_Header />);
+    // then
+    expect(headerWrapper.props('userInitials')).toBeTruthy();
+    expect(headerWrapper.props('userFullName')).toBeTruthy();
+  });
+
+  it('should correctly render elements', async () => {
+    // given
+
+    // when
+    const headerWrapper = mount(<_Header />);
+    // then
+    expect(headerWrapper.find('#app-header').children().length).toBe(3);
+  });
+
 
   it('should trigger saveLoginValues and saveTokenFromCookies on mount', () => {
     // given

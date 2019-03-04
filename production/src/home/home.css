@@ -52,6 +52,22 @@ hr {
     padding: 10px;
 }
 
+#app-header #initials {
+    height: 32px;
+    width: 32px;
+    border-radius: 50%;
+    font-size: 15px;
+    background: #b6b6b6;
+    color : white;
+    text-align: center;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none; 
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 .get-started-container {
     text-align: center;
     padding: 60px 40px;
