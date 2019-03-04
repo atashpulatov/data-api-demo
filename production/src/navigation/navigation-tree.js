@@ -64,6 +64,8 @@ export class _NavigationTree extends Component {
   };
 
   render() {
+    const {setDataSource, dataSource, chosenObjectId, chosenProjectId,
+      chosenSubtype, folder, selectFolder, loading} = this.props;
     return (
       <FolderBrowser
         title='Import a file'
@@ -71,19 +73,19 @@ export class _NavigationTree extends Component {
         triggerUpdate={this.state.triggerUpdate}
         onTriggerUpdate={this.onTriggerUpdate}
         onObjectChosen={this.onObjectChosen}
-        setDataSource={this.props.setDataSource}
-        dataSource={this.props.dataSource}
+        setDataSource={setDataSource}
+        dataSource={dataSource}
         chosenItem={{
-          objectId: this.props.chosenObjectId,
-          projectId: this.props.chosenProjectId,
-          subtype: this.props.chosenSubtype,
+          objectId: chosenObjectId,
+          projectId: chosenProjectId,
+          subtype: chosenSubtype,
         }}
-        chosenFolder={this.props.folder}
-        onChoseFolder={this.props.selectFolder}
+        chosenFolder={folder}
+        onChoseFolder={selectFolder}
       >
         <PopupButtons
-          loading={this.props.loading}
-          disableActiveActions={!this.props.chosenObjectId}
+          loading={loading}
+          disableActiveActions={!chosenObjectId}
           handleOk={this.handleOk}
           handleSecondary={this.handleSecondary}
           handleCancel={this.handleCancel}
