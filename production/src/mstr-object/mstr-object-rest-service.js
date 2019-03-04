@@ -72,12 +72,11 @@ class MstrObjectRestService {
 
   _getObjectContentPaginated(fullPath, authToken, projectId, limit) {
     return new Promise((resolve, reject) => {
-      let mstrTable;
-      this._fetchObjectContent(fullPath, authToken, projectId, resolve, reject, 0, limit, mstrTable);
+      this._fetchObjectContent(fullPath, authToken, projectId, resolve, reject, 0, limit);
     });
   }
 
-  _fetchObjectContent(fullPath, authToken, projectId, resolve, reject, offset = 0, limit = REQUEST_LIMIT, mstrTable) {
+  _fetchObjectContent(fullPath, authToken, projectId, resolve, reject, offset = 0, limit = REQUEST_LIMIT, mstrTable = {}) {
     return moduleProxy.request
         .get(`${fullPath}?offset=${offset}&limit=${limit}`)
         .set('x-mstr-authtoken', authToken)
