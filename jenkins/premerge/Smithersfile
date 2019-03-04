@@ -9,8 +9,8 @@ produces and publishes a versioned deployment package'
 
   triggers do
       pull_request_builder do
-        trigger_phrase "mstr-office-premerge-m2019_update"
-        commit_status_context "mstr-office-premerge"
+        trigger_phrase "mstr-office-premerge-#{Environment.branch_name}.*"
+        commit_status_context "mstr-office-premerge-#{Environment.branch_name}"
       end
   end
 
