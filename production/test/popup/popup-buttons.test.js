@@ -33,13 +33,13 @@ describe('PopupButtons', () => {
     expect(buttonsWrapped.exists('#back')).toBeTruthy();
   });
 
-  it('should display back button with cancel action when handleBack NOT provided', () => {
+  it('should NOT display back button with cancel action when handleBack NOT provided', () => {
     // given
     const handleBack = jest.fn();
     // when
     const buttonsWrapped = shallow(<PopupButtons />);
     // thenfix
-    expect(buttonsWrapped.exists('#backCancel')).toBeTruthy();
+    expect(buttonsWrapped.exists('#backCancel')).toBeFalsy();
   });
 
   it('should call secondary action when prepare data clicked', () => {
