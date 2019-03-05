@@ -10,10 +10,11 @@ export class AttributeSelector extends Component {
   }
 
   render() {
-    const {reportId, title, session, triggerUpdate, onTriggerUpdate, reportSubtype, resetTriggerUpdate} = this.props;
+    const {reportId, title, session, triggerUpdate, onTriggerUpdate, reportSubtype, resetTriggerUpdate, attributesSelectedChange} = this.props;
     return (
       <ErrorBoundary>
         <AttributeMetricFilter
+          attributesSelectedChange={attributesSelectedChange}
           key={reportId}
           title={title}
           session={session}
