@@ -6,6 +6,8 @@ import * as queryString from 'query-string';
 import {libraryErrorController} from 'mstr-react-library';
 import {officeContext} from '../office/office-context';
 import {selectorProperties} from '../attribute-selector/selector-properties';
+import {reduxStore} from '../store';
+import {Provider} from 'react-redux';
 
 export class Popup extends Component {
   constructor(props) {
@@ -50,12 +52,18 @@ export class Popup extends Component {
     officeContext.getOffice().context.ui.messageParent(JSON.stringify(messageObject));
   }
 
-  render() {
-    const {popupType, ...propsToPass} = this.state.parsed;
+  selectView(popupType, propsToPass) {
     if (!popupType) {
       return (<AttributeSelectorWindow parsed={propsToPass} handleBack={this.handleBack} />);
     } else if (popupType === PopupTypeEnum.navigationTree) {
       return (<NavigationTree handlePrepare={this.handlePrepare} parsed={propsToPass} />);
     }
+  }
+
+  render() {
+    const {popupType, ...propsToPass} = this.state.parsed;
+    return (<Provider store={reduxStore}>
+      {this.selectView(popupType, propsToPass)}
+    </Provider>);
   }
 }
