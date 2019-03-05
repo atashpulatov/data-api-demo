@@ -27,7 +27,8 @@ span.file-icons{
     color: #1C91DC;
 }
 
-.add-data-btn:hover {
+.add-data-btn:hover,
+.add-data-btn:focus {
     background: rgba(28,145,220,0.05);
     border: 1px solid #1C91DC;
     border-radius: 4px;
@@ -36,9 +37,6 @@ span.file-icons{
 
 .add-data-btn:focus {
     background: rgba(28,145,220,0.20);
-    border: 1px solid #1C91DC;
-    border-radius: 4px;
-    color: #1C91DC;
 }
 
 .cursor-is-pointer {
