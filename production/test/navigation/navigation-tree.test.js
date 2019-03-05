@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React from 'react';
-import {NavigationTree} from '../../src/navigation/navigation-tree';
+import {_NavigationTree} from '../../src/navigation/navigation-tree';
 import {shallow, mount} from 'enzyme';
 import {selectorProperties} from '../../src/attribute-selector/selector-properties';
 import {officeContext} from '../../src/office/office-context';
@@ -20,7 +20,7 @@ describe('NavigationTree', () => {
       projectId: 'projectId',
     };
     // when
-    const wrappedComponent = mount(<NavigationTree parsed={parsed} />);
+    const wrappedComponent = mount(<_NavigationTree parsed={parsed} />);
     // then
     expect(wrappedComponent.instance()).toBeDefined();
     expect(wrappedComponent.find('SmartFolders').get(0)).toBeDefined();
@@ -35,7 +35,7 @@ describe('NavigationTree', () => {
       projectId: 'projectId',
     };
     // when
-    const wrappedComponent = mount(<NavigationTree parsed={parsed} />);
+    const wrappedComponent = mount(<_NavigationTree parsed={parsed} />);
     // then
     const popupButtonsWrapped = wrappedComponent.find('PopupButtons');
     expect(popupButtonsWrapped.exists('#prepare')).toBeTruthy();
@@ -48,7 +48,9 @@ describe('NavigationTree', () => {
       token: 'token',
       projectId: 'projectId',
     };
-    const wrappedComponent = mount(<NavigationTree parsed={parsed} />);
+    const wrappedComponent = mount(<_NavigationTree
+      parsed={parsed}
+      chosenObjectId={true} />);
     const secondaryAction = jest.spyOn(wrappedComponent.instance(), 'handleSecondary')
         .mockReturnValueOnce({});
     wrappedComponent.update();
@@ -72,17 +74,19 @@ describe('NavigationTree', () => {
     };
     const actionObject = {
       command: selectorProperties.commandSecondary,
-      chosenObject: 'objectId',
-      chosenProject: 'projectId',
+      chosenObjectId: 'objectId',
+      chosenProjectId: 'projectId',
       chosenSubtype: 'subtype',
     };
-    const wrappedComponent = shallow(<NavigationTree parsed={parsed} handlePrepare={propsMethod} />);
-    wrappedComponent.instance()
-        .onObjectChosen(actionObject.chosenObject, actionObject.chosenProject, actionObject.chosenSubtype);
+    const wrappedComponent = shallow(<_NavigationTree
+      parsed={parsed}
+      handlePrepare={propsMethod}
+      {...actionObject}
+    />);
     // when
     wrappedComponent.instance().handleSecondary();
     // then
     expect(propsMethod).toBeCalled();
-    expect(propsMethod).toBeCalledWith(actionObject.chosenProject, actionObject.chosenObject, actionObject.chosenSubtype);
+    expect(propsMethod).toBeCalledWith(actionObject.chosenProjectId, actionObject.chosenObjectId, actionObject.chosenSubtype);
   });
 });

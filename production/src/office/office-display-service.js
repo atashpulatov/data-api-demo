@@ -109,7 +109,7 @@ class OfficeDisplayService {
     try {
       mstrTable.name = tableName;
       await context.sync();
-      await this._addRowsPagination(rowsData, endRow, mstrTable, context);
+      await this._addRowsSequentially(rowsData, endRow, mstrTable, context);
       officeApiHelper.formatTable(sheet);
       sheet.activate();
 
@@ -128,7 +128,7 @@ class OfficeDisplayService {
         .map((header) => item[header]));
   }
 
-  _addRowsPagination = async (rowsData, endRow, mstrTable, context) => {
+  _addRowsSequentially = async (rowsData, endRow, mstrTable, context) => {
     if (rowsData.length > endRow) {
       const startIndex = endRow;
       for (let i = startIndex; i < rowsData.length; i += EXCEL_PAGINATION) {

@@ -4,9 +4,10 @@ import '../home/home.css';
 import {selectorProperties} from '../attribute-selector/selector-properties';
 import {PopupButtons} from '../popup/popup-buttons.jsx';
 import {FolderBrowser} from 'mstr-react-library';
-import {officeContext} from '../office/office-context';
+import {connect} from 'react-redux';
+import {selectFolder, selectObject, setDataSource, startImport} from './navigation-tree-actions';
 
-export class NavigationTree extends Component {
+export class _NavigationTree extends Component {
   constructor(props) {
     super(props);
 
@@ -18,6 +19,9 @@ export class NavigationTree extends Component {
       },
       reportId: this.props.parsed.reportId,
       triggerUpdate: false,
+      chosenObjectId: this.props.chosenObjectId,
+      chosenProjectId: this.props.chosenProjectId,
+      chosenSubtype: this.props.chosenSubtype,
     };
   }
 
@@ -32,33 +36,36 @@ export class NavigationTree extends Component {
   handleOk = () => {
     const okObject = {
       command: selectorProperties.commandOk,
-      chosenObject: this.state.chosenObjectId,
-      chosenProject: this.state.chosenProjectId,
+      chosenObject: this.props.chosenObjectId,
+      chosenProject: this.props.chosenProjectId,
     };
+    this.props.startImport();
     Office.context.ui.messageParent(JSON.stringify(okObject));
-  }
+  };
 
   handleSecondary = () => {
-    this.props.handlePrepare(this.state.chosenProjectId, this.state.chosenObjectId, this.state.chosenSubtype);
-  }
+    this.props.handlePrepare(this.props.chosenProjectId, this.props.chosenObjectId, this.props.chosenSubtype);
+  };
 
   handleCancel = () => {
     const cancelObject = {
       command: selectorProperties.commandCancel,
     };
     Office.context.ui.messageParent(JSON.stringify(cancelObject));
-  }
+  };
 
   // TODO: temporary solution
   onObjectChosen = (objectId, projectId, subtype) => {
-    this.setState({
+    this.props.selectObject({
       chosenObjectId: objectId,
       chosenProjectId: projectId,
       chosenSubtype: subtype,
     });
-  }
+  };
 
   render() {
+    const {setDataSource, dataSource, chosenObjectId, chosenProjectId,
+      chosenSubtype, folder, selectFolder, loading} = this.props;
     return (
       <FolderBrowser
         title='Import a file'
@@ -66,8 +73,19 @@ export class NavigationTree extends Component {
         triggerUpdate={this.state.triggerUpdate}
         onTriggerUpdate={this.onTriggerUpdate}
         onObjectChosen={this.onObjectChosen}
+        setDataSource={setDataSource}
+        dataSource={dataSource}
+        chosenItem={{
+          objectId: chosenObjectId,
+          projectId: chosenProjectId,
+          subtype: chosenSubtype,
+        }}
+        chosenFolder={folder}
+        onChoseFolder={selectFolder}
       >
         <PopupButtons
+          loading={loading}
+          disableActiveActions={!chosenObjectId}
           handleOk={this.handleOk}
           handleSecondary={this.handleSecondary}
           handleCancel={this.handleCancel}
@@ -76,3 +94,18 @@ export class NavigationTree extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {...state.navigationTree};
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    selectObject: (data) => selectObject(dispatch)(data),
+    setDataSource: (data) => setDataSource(dispatch)(data),
+    selectFolder: (data) => selectFolder(dispatch)(data),
+    startImport: () => startImport(dispatch)(),
+  };
+};
+
+export const NavigationTree = connect(mapStateToProps, mapDispatchToProps)(_NavigationTree);

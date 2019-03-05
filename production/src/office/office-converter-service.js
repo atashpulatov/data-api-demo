@@ -1,19 +1,18 @@
 class OfficeConverterService {
   createTable(jsonReport) {
-    this.id = jsonReport.id;
-    this.name = jsonReport.name;
-    this.headers = this._getHeaders(jsonReport);
-    this.rows = this._getRows(jsonReport, this.headers);
+    const headers = this._getHeaders(jsonReport);
+    return {
+      id: jsonReport.id,
+      name: jsonReport.name,
+      headers,
+      rows: this._getRows(jsonReport, headers),
+    };
   }
 
-  getConvertedTable() {
-    const {id, name, headers, rows} = this;
-    return {id, name, headers, rows};
-  }
-
-  appendRows(jsonReport) {
-    const newRows = this._getRows(jsonReport, this.headers);
-    this.rows.push(...newRows);
+  appendRows(table, jsonReport) {
+    const newRows = this._getRows(jsonReport, table.headers);
+    table.rows.push(...newRows);
+    return table;
   }
 
   _getHeaders(jsonReport) {
