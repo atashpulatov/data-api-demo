@@ -2,25 +2,24 @@ import { sessionHelper } from '../../src/storage/session-helper';
 import { fileHistoryHelper } from '../../src/file-history/file-history-helper';
 import { notificationService } from '../../src/notification/notification-service';
 import { errorService } from '../../src/error/error-handler';
+import { reduxStore } from '../../src/store';
+import { officeProperties } from '../../src/office/office-properties';
 
 jest.mock('../../src/storage/session-helper');
 jest.mock('../../src/notification/notification-service');
 jest.mock('../../src/error/error-handler');
 
 describe('FileHistoryHelper', () => {
+    beforeAll(() => {
+        jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => { });
+})
+    afterEach(() => {
+        jest.resetAllMocks();
+    });
+    afterAll(() => {
+        jest.restoreAllMocks();
+    });
     describe('refreshReport', () => {
-        it('should enable loading on run and disable later', async () => {
-            // given
-            const enableLoadingMock = sessionHelper.enableLoading;
-            const disableLoadingMock = sessionHelper.disableLoading;
-            const mockedOnRefresh = jest.fn();
-            const testBindId = 'someBindingIt';
-            // when
-            await fileHistoryHelper.refreshReport(mockedOnRefresh, testBindId);
-            // then
-            expect(enableLoadingMock).toBeCalled();
-            expect(disableLoadingMock).toBeCalled();
-        });
         it('should call provided method', async () => {
             // given
             const mockedOnRefresh = jest.fn();
@@ -54,9 +53,25 @@ describe('FileHistoryHelper', () => {
             expect(mockedErrorHandler).toBeCalled();
             expect(mockedErrorHandler).toBeCalledWith(testError);
         });
+        it('should dispatch startLoadingReport action and finishLoadingReport later when refreshed', async () => {
+            // given
+            const mockedOnRefresh = jest.fn();
+            const testBindId = 'someBindingIt';
+            // when
+            await fileHistoryHelper.refreshReport(mockedOnRefresh, testBindId);
+            // then
+            expect(reduxStore.dispatch).toBeCalledWith({
+                type: officeProperties.actions.startLoadingReport,
+                reportBindId: testBindId,
+            });
+            expect(reduxStore.dispatch).toBeCalledWith({
+                type: officeProperties.actions.finishLoadingReport,
+                reportBindId: testBindId,
+            });
+        });
     });
     describe('deleteReport', () => {
-        it('should enable loading on run and disable later', async () => {
+        it('should enable loading on run and disable later when delete', async () => {
             // given
             const enableLoadingMock = sessionHelper.enableLoading;
             const disableLoadingMock = sessionHelper.disableLoading;

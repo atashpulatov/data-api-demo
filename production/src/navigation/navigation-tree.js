@@ -38,6 +38,7 @@ export class _NavigationTree extends Component {
       command: selectorProperties.commandOk,
       chosenObject: this.props.chosenObjectId,
       chosenProject: this.props.chosenProjectId,
+      chosenSubtype: this.props.chosenSubtype,
     };
     this.props.startImport();
     Office.context.ui.messageParent(JSON.stringify(okObject));
