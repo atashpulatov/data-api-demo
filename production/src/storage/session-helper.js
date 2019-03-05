@@ -31,7 +31,7 @@ class SessionHelper {
     };
   }
   logOutRedirect = () => {
-    window.location.replace('/MicroStrategyLibrary/office-loader/index.html');
+    window.location.replace('/MicroStrategyLibrary/static/office-loader/index.html');
   }
   saveLoginValues = (values) => {
     reduxStore.dispatch({
