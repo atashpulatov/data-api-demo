@@ -1,12 +1,14 @@
-import { EnvironmentNotFoundError } from './environment-not-found-error.js';
-import { UnauthorizedError } from './unauthorized-error.js';
-import { BadRequestError } from './bad-request-error.js';
-import { InternalServerError } from './internal-server-error.js';
-import { sessionHelper } from '../storage/session-helper.js';
-import { notificationService } from '../notification/notification-service.js';
-import { RunOutsideOfficeError } from './run-outside-office-error.js';
-import { OverlappingTablesError } from './overlapping-tables-error';
-import { GenericOfficeError } from './generic-office-error.js';
+import {EnvironmentNotFoundError} from './environment-not-found-error.js';
+import {UnauthorizedError} from './unauthorized-error.js';
+import {BadRequestError} from './bad-request-error.js';
+import {InternalServerError} from './internal-server-error.js';
+import {sessionHelper} from '../storage/session-helper.js';
+import {notificationService} from '../notification/notification-service.js';
+import {RunOutsideOfficeError} from './run-outside-office-error.js';
+import {OverlappingTablesError} from './overlapping-tables-error';
+import {GenericOfficeError} from './generic-office-error.js';
+
+const TIMEOUT = 2000;
 
 class ErrorService {
   errorRestFactory = (error) => {
@@ -43,22 +45,26 @@ class ErrorService {
     console.error(error);
     switch (error.constructor) {
       case EnvironmentNotFoundError:
-        notificationService.displayMessage('error', '404 - Environment not found');
+        notificationService.displayMessage('info', '404 - Environment not found');
         if (!isLogout) {
-          this.fullLogOut();
+          setTimeout(() => {
+            this.fullLogOut();
+          }, TIMEOUT);
         }
         break;
       case UnauthorizedError:
-        notificationService.displayMessage('error', '401 - Unauthorized. Please log in.');
+        notificationService.displayMessage('info', 'Your session has expired. Please log in.');
         if (!isLogout) {
-          this.fullLogOut();
+          setTimeout(() => {
+            this.fullLogOut();
+          }, TIMEOUT);
         }
         break;
       case BadRequestError:
         notificationService.displayMessage('error', '400 - There has been a problem with your request');
         break;
       case InternalServerError:
-        notificationService.displayMessage('error', '500 - We were not able to handle your request');
+        notificationService.displayMessage('warn', '500 - We were not able to handle your request');
         break;
       default:
         DEBUG_LOGGING ? notificationService.displayMessage('error', error.message)

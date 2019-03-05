@@ -1,13 +1,11 @@
-import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
-import { connect } from 'react-redux';
+import React, {Component} from 'react'; // eslint-disable-line no-unused-vars
+import {connect} from 'react-redux';
 import './home.css';
-import { sessionHelper } from '../storage/session-helper';
-import { pageBuilder } from './page-builder.js';
-import { officeApiHelper } from '../office/office-api-helper';
-import { homeHelper } from './home-helper';
-import { authenticationService } from '../authentication/auth-rest-service';
-import { errorService } from '../error/error-handler';
-import { reduxStore } from '../store';
+import {sessionHelper} from '../storage/session-helper';
+import {pageBuilder} from './page-builder.js';
+import {officeApiHelper} from '../office/office-api-helper';
+import {homeHelper} from './home-helper';
+import {authenticationHelper} from '../authentication/authentication-helper';
 
 export class _Home extends Component {
 
@@ -15,16 +13,16 @@ export class _Home extends Component {
     await officeApiHelper.loadExistingReportBindingsExcel();
     homeHelper.saveLoginValues();
     homeHelper.saveTokenFromCookies();
+    await authenticationHelper.validateAuthToken();
     sessionHelper.disableLoading();
   };
 
   componentDidUpdate = async () => {
     homeHelper.saveTokenFromCookies();
-    // await this.validateAuthToken();
   };
 
   render() {
-    const { loading, authToken, reportArray } = this.props;
+    const {loading, authToken, reportArray} = this.props;
     return (
       <div>
         {pageBuilder.getPage(loading, authToken, reportArray)}

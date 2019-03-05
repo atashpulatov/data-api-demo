@@ -7,6 +7,8 @@ import {Authenticate} from '../authentication/auth-component.jsx';
 import {Placeholder} from './placeholder.jsx';
 
 const TabPane = Tabs.TabPane;
+const URL = `${window.location.href}`;
+const IS_LOCALHOST = URL.includes('localhost');
 
 class PageBuilder {
   getPage = (loading, authToken, reportArray) => {
@@ -24,7 +26,7 @@ class PageBuilder {
             {(reportArray && reportArray.length !== 0) && authToken && <FileHistoryContainer />}
             {(!reportArray || !reportArray.length) && authToken && <Placeholder />}
             <Spin spinning={loading}>
-              {!authToken && <Authenticate />}
+              {!authToken && IS_LOCALHOST && <Authenticate />}
             </Spin>
           </TabPane>
         </Tabs>
