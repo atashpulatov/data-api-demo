@@ -1,18 +1,19 @@
-import React from 'react';
-import {shallow} from 'enzyme';
 import {selectorProperties} from '../../src/attribute-selector/selector-properties';
 import {popupController} from '../../src/popup/popup-controller';
-import {officeContext} from '../../src/office/office-context';
-import {ReportSubtypes} from '../../src/enums/ReportSubtypes';
 import {officeDisplayService} from '../../src/office/office-display-service';
 import {objectTypes} from 'mstr-react-library';
 import {errorService} from '../../src/error/error-handler';
+import {EnvironmentNotFoundError} from '../../src/error/environment-not-found-error';
 
 describe('PopupController', () => {
   const dialog = {};
 
   beforeAll(() => {
     dialog.close = jest.fn();
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   afterAll(() => {
@@ -84,10 +85,15 @@ describe('PopupController', () => {
       message: expectedMessage,
     };
 
-    jest.spyOn(errorService.handleError);
+    const handleErrorSpy = jest.spyOn(errorService, 'handleError')
+        .mockImplementationOnce(() => {});
     // when
     popupController.onMessageFromPopup(dialog, givenArg);
     // then
-    expect(false).toBeTruthy();
+    expect(handleErrorSpy).toBeCalled();
+    const handleErrorArgs = handleErrorSpy.mock.calls[0];
+    expect(handleErrorArgs[0].constructor).toBe(EnvironmentNotFoundError);
+    expect(handleErrorArgs[1]).toBe(false);
+    expect(dialog.close).toBeCalled();
   });
 });
