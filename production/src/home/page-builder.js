@@ -10,6 +10,7 @@ const TabPane = Tabs.TabPane;
 
 class PageBuilder {
   getPage = (loading, authToken, reportArray) => {
+    console.log(authToken);
     return (
       <div id='content'>
         <Notifications />

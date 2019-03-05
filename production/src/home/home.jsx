@@ -5,6 +5,9 @@ import { sessionHelper } from '../storage/session-helper';
 import { pageBuilder } from './page-builder.js';
 import { officeApiHelper } from '../office/office-api-helper';
 import { homeHelper } from './home-helper';
+import { authenticationService } from '../authentication/auth-rest-service';
+import { errorService } from '../error/error-handler';
+import { reduxStore } from '../store';
 
 export class _Home extends Component {
 
@@ -15,8 +18,9 @@ export class _Home extends Component {
     sessionHelper.disableLoading();
   };
 
-  componentDidUpdate = () => {
+  componentDidUpdate = async () => {
     homeHelper.saveTokenFromCookies();
+    // await this.validateAuthToken();
   };
 
   render() {
