@@ -1,7 +1,7 @@
-import { reduxStore } from '../store';
-import { sessionProperties } from './session-properties';
-import { authenticationService } from '../authentication/auth-rest-service';
-import { errorService } from '../error/error-handler';
+import {reduxStore} from '../store';
+import {sessionProperties} from './session-properties';
+import {authenticationService} from '../authentication/auth-rest-service';
+import {errorService} from '../error/error-handler';
 
 class SessionHelper {
   enableLoading = () => {
@@ -31,7 +31,7 @@ class SessionHelper {
     };
   }
   logOutRedirect = () => {
-    window.location.replace('/mstr-office-loader/build/index.html');
+    window.location.replace('/MicroStrategyLibrary/office-loader/index.html');
   }
   saveLoginValues = (values) => {
     reduxStore.dispatch({
