@@ -6,14 +6,13 @@ import {officeContext} from '../../src/office/office-context';
 import {ReportSubtypes} from '../../src/enums/ReportSubtypes';
 import {officeDisplayService} from '../../src/office/office-display-service';
 import {objectTypes} from 'mstr-react-library';
+import {errorService} from '../../src/error/error-handler';
 
 describe('PopupController', () => {
-  const oldDialog = {};
-  const newDialog = {};
-  const excelRun = jest.fn();
+  const dialog = {};
 
   beforeAll(() => {
-    oldDialog.close = jest.fn();
+    dialog.close = jest.fn();
   });
 
   afterAll(() => {
@@ -22,7 +21,7 @@ describe('PopupController', () => {
 
   it('should handle update command from popup for cube',
       async () => {
-        // given
+      // given
         const actionObject = {
           command: selectorProperties.commandOnUpdate,
           reportId: 'reportId',
@@ -35,9 +34,9 @@ describe('PopupController', () => {
         };
         const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
         // when
-        await popupController.onMessageFromPopup(oldDialog, arg);
+        await popupController.onMessageFromPopup(dialog, arg);
         // then
-        expect(oldDialog.close).toBeCalled();
+        expect(dialog.close).toBeCalled();
         expect(mockPrint).toBeCalled();
         expect(mockPrint).toBeCalledWith(actionObject.reportId,
             actionObject.projectId,
@@ -61,9 +60,9 @@ describe('PopupController', () => {
         };
         const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
         // when
-        await popupController.onMessageFromPopup(oldDialog, arg);
+        await popupController.onMessageFromPopup(dialog, arg);
         // then
-        expect(oldDialog.close).toBeCalled();
+        expect(dialog.close).toBeCalled();
         expect(mockPrint).toBeCalled();
         expect(mockPrint).toBeCalledWith(actionObject.reportId,
             actionObject.projectId,
@@ -71,4 +70,24 @@ describe('PopupController', () => {
             null, null, null,
             actionObject.body);
       });
+
+  it('should handle error command from popup', () => {
+    // given
+    const command = selectorProperties.commandError;
+    const error = {
+      response: {
+        status: 404,
+      },
+    };
+    const expectedMessage = JSON.stringify({command, error});
+    const givenArg = {
+      message: expectedMessage,
+    };
+
+    jest.spyOn(errorService.handleError);
+    // when
+    popupController.onMessageFromPopup(dialog, givenArg);
+    // then
+    expect(false).toBeTruthy();
+  });
 });
