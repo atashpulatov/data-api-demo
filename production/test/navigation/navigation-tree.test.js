@@ -78,7 +78,7 @@ describe('NavigationTree', () => {
       chosenObjectId: 'objectId',
       chosenProjectId: 'projectId',
       chosenSubtype: 'subtype',
-      chosenProjectName: 'Access_Transaction',
+      chosenProjectName: 'Prepare Data',
     };
     const wrappedComponent = shallow(<_NavigationTree
       parsed={parsed}
