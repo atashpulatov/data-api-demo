@@ -1,11 +1,12 @@
-import { officeApiHelper } from './office-api-helper';
-import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
-import { reduxStore } from '../store';
-import { officeProperties } from './office-properties';
-import { officeStoreService } from './store/office-store-service';
-import { sessionHelper } from '../storage/session-helper';
-import { notificationService } from '../notification/notification-service';
-import { errorService } from '../error/error-handler';
+import {officeApiHelper} from './office-api-helper';
+import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';
+import {reduxStore} from '../store';
+import {officeProperties} from './office-properties';
+import {officeStoreService} from './store/office-store-service';
+import {sessionHelper} from '../storage/session-helper';
+import {notificationService} from '../notification/notification-service';
+import {errorService} from '../error/error-handler';
+import {OutsideOfRangeError} from '../error/outside-of-range-error';
 
 const EXCEL_PAGINATION = 5000;
 
@@ -19,11 +20,11 @@ class OfficeDisplayService {
       if (!officeTable || (officeTable.rows && officeTable.rows.length === 0)) {
         // report returned no data
         sessionHelper.disableLoading();
-        return { type: 'warning', message: `No data returned by the ${objectType}: ${officeTable.name}` };
+        return {type: 'warning', message: `No data returned by the ${objectType}: ${officeTable.name}`};
       }
       const newOfficeTableId = officeTableId || await officeApiHelper.findAvailableOfficeTableId(excelContext);
       await this._insertDataIntoExcel(officeTable, excelContext, startCell, newOfficeTableId);
-      const { envUrl } = officeApiHelper.getCurrentMstrContext();
+      const {envUrl} = officeApiHelper.getCurrentMstrContext();
       bindingId = bindingId || newOfficeTableId;
       officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
       if (!officeTableId && !isRefresh) {
@@ -39,7 +40,7 @@ class OfficeDisplayService {
           objectType,
         });
       }
-      return !isRefresh && { type: 'success', message: `Loaded ${objectType}: ${officeTable.name}` };
+      return !isRefresh && {type: 'success', message: `Loaded ${objectType}: ${officeTable.name}`};
     } catch (error) {
       throw errorService.errorOfficeFactory(error);
     }
@@ -105,6 +106,8 @@ class OfficeDisplayService {
 
     const range = officeApiHelper.getRange(reportConvertedData.headers.length, startCell, endRow);
     const sheetRange = sheet.getRange(range);
+    context.trackedObjects.add(sheetRange);
+    await this._checkRangeValidity(context, sheetRange);
 
     const rowsData = this._getRowsArray(reportConvertedData);
 
@@ -126,10 +129,19 @@ class OfficeDisplayService {
     }
   }
 
+  _checkRangeValidity = async (context, excelRange) => {
+    // Pass true so only cells with values count as used
+    const usedDataRange = excelRange.getUsedRangeOrNullObject(true);
+    await context.sync();
+    if (!usedDataRange.isNullObject) {
+      throw new OutsideOfRangeError('The required data range in the worksheet is not empty');
+    }
+  }
+
   _getRowsArray = (reportConvertedData) => {
     return reportConvertedData.rows
-      .map((item) => reportConvertedData.headers
-        .map((header) => item[header]));
+        .map((item) => reportConvertedData.headers
+            .map((header) => item[header]));
   }
 
   _addRowsSequentially = async (rowsData, endRow, mstrTable, context) => {

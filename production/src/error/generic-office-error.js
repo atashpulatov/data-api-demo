@@ -1,1 +1,1 @@
-export class GenericOfficeError extends Error { };
+export class GenericOfficeError extends Error {};
