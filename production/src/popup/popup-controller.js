@@ -65,9 +65,12 @@ class PopupController {
     }
   }
 
-  async handleOkCommand(response, dialog) {
-    if (response.chosenObject) {
-      const result = await officeDisplayService.printObject(response.chosenObject, response.chosenProject);
+  handleUpdateCommand = async (response, dialog) => {
+    if (response.reportId
+      && response.projectId
+      && response.reportSubtype
+      && response.body) {
+      const result = await officeDisplayService.printObject(response.reportId, response.projectId, response.reportSubtype === objectTypes.getTypeValues('Report').subtype, null, null, null, response.body);
       if (result) {
         notificationService.displayMessage(result.type, result.message);
       }
@@ -75,12 +78,9 @@ class PopupController {
     dialog.close();
   }
 
-  async handleUpdateCommand(response, dialog) {
-    if (response.reportId
-      && response.projectId
-      && response.reportSubtype
-      && response.body) {
-      const result = await officeDisplayService.printObject(response.reportId, response.projectId, response.reportSubtype === objectTypes.getTypeValues('Report').subtype, null, null, null, response.body);
+  handleOkCommand = async (response, dialog) => {
+    if (response.chosenObject) {
+      const result = await officeDisplayService.printObject(response.chosenObject, response.chosenProject, response.reportSubtype === objectTypes.getTypeValues('Report').subtype);
       if (result) {
         notificationService.displayMessage(result.type, result.message);
       }
