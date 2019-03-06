@@ -33,18 +33,18 @@ class PopupController {
       Excel.run(async (context) => {
         const officeObject = officeContext.getOffice();
         officeObject.context.ui.displayDialogAsync(
-            splittedUrl[0]
+          splittedUrl[0]
           + '?popupType=' + PopupTypeEnum.navigationTree
           + '&envUrl=' + session.url
           + '&token=' + session.authToken,
-            {height: 80, width: 80, displayInIframe: true},
-            (asyncResult) => {
-              const dialog = asyncResult.value;
-              dialog.addEventHandler(
-                  officeObject.EventType.DialogMessageReceived,
-                  this.onMessageFromPopup.bind(null, dialog));
-              reduxStore.dispatch({type: CLEAR_WINDOW});
-            });
+          {height: 80, width: 80, displayInIframe: true},
+          (asyncResult) => {
+            const dialog = asyncResult.value;
+            dialog.addEventHandler(
+              officeObject.EventType.DialogMessageReceived,
+              this.onMessageFromPopup.bind(null, dialog));
+            reduxStore.dispatch({type: CLEAR_WINDOW});
+          });
         await context.sync();
       });
     } catch (error) {
@@ -58,35 +58,20 @@ class PopupController {
     try {
       switch (response.command) {
         case selectorProperties.commandOk:
-          if (response.chosenObject) {
-            const result = await officeDisplayService.printObject(response.chosenObject, response.chosenProject);
-            if (result) {
-              notificationService.displayMessage(result.type, result.message);
-            }
-          }
-          dialog.close();
+          await this.handleOkCommand(response, dialog);
           break;
         case selectorProperties.commandOnUpdate:
-          if (response.reportId
-            && response.projectId
-            && response.reportSubtype
-            && response.body) {
-            const result = await officeDisplayService.printObject(response.reportId,
-                response.projectId,
-                response.reportSubtype === objectTypes.getTypeValues('Report').subtype,
-                null, null, null,
-                response.body);
-            if (result) {
-              notificationService.displayMessage(result.type, result.message);
-            }
-          }
-          dialog.close();
+          await this.handleUpdateCommand(response, dialog);
           break;
         case selectorProperties.commandCancel:
           dialog.close();
           break;
-        default:
+        case selectorProperties.commandError:
+          const error = errorService.errorRestFactory(response.error);
+          errorService.handleError(error, false);
           dialog.close();
+          break;
+        default:
           break;
       }
     } catch (error) {
@@ -95,6 +80,29 @@ class PopupController {
     } finally {
       dialog.close();
     }
+  }
+
+  handleUpdateCommand = async (response, dialog) => {
+    if (response.reportId
+      && response.projectId
+      && response.reportSubtype
+      && response.body) {
+      const result = await officeDisplayService.printObject(response.reportId, response.projectId, response.reportSubtype === objectTypes.getTypeValues('Report').subtype, null, null, null, response.body);
+      if (result) {
+        notificationService.displayMessage(result.type, result.message);
+      }
+    }
+    dialog.close();
+  }
+
+  handleOkCommand = async (response, dialog) => {
+    if (response.chosenObject) {
+      const result = await officeDisplayService.printObject(response.chosenObject, response.chosenProject, response.chosenSubtype === objectTypes.getTypeValues('Report').subtype);
+      if (result) {
+        notificationService.displayMessage(result.type, result.message);
+      }
+    }
+    dialog.close();
   }
 }
 

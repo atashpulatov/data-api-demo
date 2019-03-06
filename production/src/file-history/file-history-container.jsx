@@ -26,6 +26,8 @@ export class _FileHistoryContainer extends Component {
               onClick={officeApiHelper.onBindingObjectClick}
               onDelete={officeDisplayService.removeReportFromExcel}
               onRefresh={officeDisplayService.refreshReport}
+              isLoading={report.isLoading}
+              objectType={report.objectType}
             />)
           )}
         />

@@ -15,17 +15,6 @@ describe('FileHistoryContainer', () => {
         // then
         expect(wrappedComponent.html()).not.toBeNull();
     });
-    it('should display heading with text "Loaded files"', () => {
-        // given
-        // when
-        const wrappedComponent = mount(
-            <_FileHistoryContainer
-                project={'testProject'} />
-        );
-        const wrappedHeader = wrappedComponent.find('h3');
-        // then
-        expect(wrappedHeader.html()).toContain('Loaded files');
-    });
     it('should display "No files loaded" when there are no files', () => {
         // given
         // when

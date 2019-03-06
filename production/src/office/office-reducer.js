@@ -11,6 +11,10 @@ export const officeReducer = (state = {}, action) => {
       return onRemoveReport(action, state);
     case officeProperties.actions.loadAllReports:
       return onLoadAllReports(action, state);
+    case officeProperties.actions.startLoadingReport:
+      return onStartLoadingReport(action, state);
+    case officeProperties.actions.finishLoadingReport:
+      return onFinishLoadingReport(action, state);
     default:
       break;
   }
@@ -22,8 +26,8 @@ function onLoadReport(action, state) {
   return {
     ...state,
     reportArray: state.reportArray
-      ? [...state.reportArray, action.report]
-      : [action.report],
+            ? [...state.reportArray, action.report]
+            : [action.report],
   };
 }
 
@@ -60,6 +64,29 @@ function onRemoveReport(action, state) {
       ...state.reportArray.slice(0, indexOfElement),
       ...state.reportArray.slice(indexOfElement + 1),
     ],
+  };
+}
+
+function onStartLoadingReport(action, state) {
+  return _toggleSetLoadingStatus(action, state, true);
+}
+
+function onFinishLoadingReport(action, state) {
+  return _toggleSetLoadingStatus(action, state, false);
+}
+
+function _toggleSetLoadingStatus(action, state, status) {
+  if (!action.reportBindId) {
+    throw new OfficeError('Missing reportBindId');
+  }
+  const indexOfElement = state.reportArray.findIndex((report) => {
+    return (report.bindId === action.reportBindId);
+  });
+  const newReportArray = [...state.reportArray];
+  newReportArray[indexOfElement].isLoading = status;
+  return {
+    ...state,
+    reportArray: newReportArray,
   };
 }
 

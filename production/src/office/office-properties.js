@@ -14,5 +14,7 @@ export const officeProperties = new Proxy({
         loadAllReports: 'OFFICE_LOAD_ALL_REPORTS',
         removeAllReports: 'OFFICE_REMOVE_ALL_REPORTS',
         removeReport: 'OFFICE_REMOVE_REPORT',
+        startLoadingReport: 'START_LOADING_REPORT',
+        finishLoadingReport: 'FINISH_LOADING_REPORT',
     },
 }, propsProxy);
