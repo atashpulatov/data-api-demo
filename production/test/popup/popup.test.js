@@ -1,10 +1,11 @@
 import React from 'react';
-import {shallow} from 'enzyme';
+import {shallow, mount} from 'enzyme';
 import {Popup} from '../../src/popup/popup.jsx';
 import {libraryErrorController} from 'mstr-react-library';
 import {officeContext} from '../../src/office/office-context.js';
 import {selectorProperties} from '../../src/attribute-selector/selector-properties.js';
 import {EnvironmentNotFoundError} from '../../src/error/environment-not-found-error.js';
+import {PopupTypeEnum} from '../../src/home/popup-type-enum.js';
 
 describe('Popup.js', () => {
   const messageParentMock = jest.fn();
@@ -79,5 +80,17 @@ describe('Popup.js', () => {
     expect(parsed.reportId).toEqual(givenRecord.reportId);
     expect(parsed.projectId).toEqual(givenRecord.projectId);
     expect(parsed.reportSubtype).toEqual(givenRecord.subtype);
+  });
+
+  it('should render loading page when proper type set', () => {
+    // given
+    const location = {
+      search: `popupType=${PopupTypeEnum.loadingPage}`,
+    };
+    // when
+    const popupWrapped = mount(<Popup location={location} />);
+    // then
+    expect(popupWrapped.find('LoadingPage').get(0)).toBeDefined();
+    expect(true).toBeFalsy();
   });
 });
