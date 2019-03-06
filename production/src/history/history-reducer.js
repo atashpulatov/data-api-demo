@@ -1,5 +1,6 @@
 import {HistoryError} from './history-error';
 import {historyProperties} from './history-properties';
+import {sessionProperties} from '../storage/session-properties';
 
 export const historyReducer = (state = {}, action) => {
   switch (action.type) {
@@ -12,8 +13,8 @@ export const historyReducer = (state = {}, action) => {
     case historyProperties.actions.goUpTo:
       return onGoUpTo(action, state);
     case historyProperties.actions.goToProjects:
-    // case sessionProperties.actions.logOut:
-    //   return eraseHistory(state);
+    case sessionProperties.actions.logOut:
+      return eraseHistory(state);
   }
   return state;
 };
