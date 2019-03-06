@@ -1,11 +1,11 @@
-import {officeApiHelper} from './office-api-helper';
+import {errorService} from '../error/error-handler';
 import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';
+import {notificationService} from '../notification/notification-service';
+import {sessionHelper} from '../storage/session-helper';
 import {reduxStore} from '../store';
+import {officeApiHelper} from './office-api-helper';
 import {officeProperties} from './office-properties';
 import {officeStoreService} from './store/office-store-service';
-import {sessionHelper} from '../storage/session-helper';
-import {notificationService} from '../notification/notification-service';
-import {errorService} from '../error/error-handler';
 
 const EXCEL_PAGINATION = 5000;
 
@@ -111,6 +111,7 @@ class OfficeDisplayService {
 
       const range = officeApiHelper.getRange(reportConvertedData.headers.length, startCell, endRow);
       const sheetRange = sheet.getRange(range);
+      await this._checkRangeValidity(context, sheetRange);
 
       const rowsData = this._getRowsArray(reportConvertedData);
 
@@ -123,7 +124,16 @@ class OfficeDisplayService {
       sheet.activate();
       return mstrTable;
     } catch (error) {
-      errorService.handleError(error);
+      throw error;
+    }
+  }
+
+  _checkRangeValidity = async (context, excelRange) => {
+    // Pass true so only cells with values count as used
+    const usedDataRange = excelRange.getUsedRangeOrNullObject(true);
+    await context.sync();
+    if (!usedDataRange.isNullObject) {
+      throw errorService.errorOfficeFactory('The required data range in the worksheet is not empty');
     }
   }
 

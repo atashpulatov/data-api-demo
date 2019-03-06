@@ -1,4 +1,5 @@
 import {IncorrectInputTypeError} from './incorrect-input-type';
+import {OutsideOfRangeError} from './outside-of-range-error';
 import {reduxStore} from '../store';
 import {officeProperties} from './office-properties';
 import {officeStoreService} from './store/office-store-service';
@@ -8,6 +9,8 @@ const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
 const ASCII_CAPITAL_LETTER_INDEX = 65;
 const EXCEL_TABLE_NAME = 'table';
+const EXCEL_ROW_LIMIT = 1048576;
+const EXCEL_COL_LIMIT = 16384;
 
 class OfficeApiHelper {
   getRange = (headerCount, startCell, rowCount = 0) => {
@@ -16,17 +19,22 @@ class OfficeApiHelper {
     }
     const startCellArray = startCell.split(/(\d+)/);
     headerCount += parseInt(this.lettersToNumber(startCellArray[0]) - 1);
-    let endRange = '';
+    const endColumnNum = headerCount;
+    let endColumn = '';
     for (let firstNumber = ALPHABET_RANGE_START,
       secondNumber = ALPHABET_RANGE_END;
       (headerCount -= firstNumber) >= 0;
       firstNumber = secondNumber, secondNumber *= ALPHABET_RANGE_END) {
-      endRange = String.fromCharCode(parseInt(
+      endColumn = String.fromCharCode(parseInt(
           (headerCount % secondNumber) / firstNumber)
         + ASCII_CAPITAL_LETTER_INDEX)
-        + endRange;
+        + endColumn;
     }
-    return `${startCell}:${endRange}${Number(startCellArray[1]) + rowCount}`;
+    const endRow = Number(startCellArray[1]) + rowCount;
+    if (endRow > EXCEL_ROW_LIMIT || endColumnNum > EXCEL_COL_LIMIT) {
+      throw new OutsideOfRangeError('The table you try to import exceeds the worksheet limits.');
+    }
+    return `${startCell}:${endColumn}${endRow}`;
   }
 
   handleOfficeApiException = (error) => {
