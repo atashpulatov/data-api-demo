@@ -47,15 +47,16 @@ class PopupController {
     switch (response.command) {
       case selectorProperties.commandOk:
         if (response.chosenObject) {
-          const result = await officeDisplayService.printObject(response.chosenObject, response.chosenProject);
-          if (result){
+          const result = await officeDisplayService.printObject(response.chosenObject,
+              response.chosenProject,
+              response.reportSubtype === objectTypes.getTypeValues('Report').subtype);
+          if (result) {
             notificationService.displayMessage(result.type, result.message);
           }
         }
         dialog.close();
         break;
       case selectorProperties.commandOnUpdate:
-
         if (response.reportId
           && response.projectId
           && response.reportSubtype
@@ -65,7 +66,7 @@ class PopupController {
               response.reportSubtype === objectTypes.getTypeValues('Report').subtype,
               null, null, null,
               response.body);
-          if (result){
+          if (result) {
             notificationService.displayMessage(result.type, result.message);
           }
         }

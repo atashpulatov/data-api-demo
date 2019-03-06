@@ -3,6 +3,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import { OfficeLoadedFile } from '../../src/file-history/office-loaded-file';
+import { reduxStore } from '../../src/store';
 /* eslint-enable */
 
 describe('office loaded file', () => {
@@ -32,25 +33,26 @@ describe('office loaded file', () => {
         // given
         // when
         const wrappedComponent = mount(<OfficeLoadedFile fileName='test' />);
-        const wrappedButtons = wrappedComponent.find('Icon');
+        const wrappedIcons = wrappedComponent.find('MSTRIcon');
         // then
-        const refreshButton = wrappedButtons.at(0);
-        expect(wrappedButtons.length).toBeGreaterThan(0);
-        expect(refreshButton.props().type).toEqual('redo');
-        const deleteButton = wrappedButtons.at(1);
-        expect(deleteButton.props().type).toEqual('delete');
+        const refreshButton = wrappedIcons.at(1);
+        expect(wrappedIcons.length).toBeGreaterThan(0);
+        expect(refreshButton.props().type).toEqual('refresh');
+        const deleteButton = wrappedIcons.at(2);
+        expect(deleteButton.props().type).toEqual('trash');
     });
     it('should invoke refresh method on button click', () => {
         // given
         const onRefreshMocked = jest.fn();
         const testBindingId = 'testBindingId';
+        jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => { });
         // when
         const wrappedComponent = mount(<OfficeLoadedFile
             bindingId={testBindingId}
             fileName='test'
             onRefresh={onRefreshMocked} />);
-        const buttonsContainer = wrappedComponent.childAt(0).find('Col');
-        const refreshButton = buttonsContainer.at(2);
+        const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
+        const refreshButton = wrappedIcons.at(1);
         refreshButton.props().onClick();
         // then
         expect(onRefreshMocked).toBeCalled();
@@ -65,8 +67,8 @@ describe('office loaded file', () => {
             bindingId={testBindingId}
             fileName='test'
             onDelete={onDeleteMocked} />);
-        const buttonsContainer = wrappedComponent.childAt(0).find('Col');
-        const deleteButton = buttonsContainer.at(3);
+        const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
+        const deleteButton = wrappedIcons.at(2);
         deleteButton.props().onClick();
         // then
         expect(onDeleteMocked).toBeCalled();
