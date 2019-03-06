@@ -11,9 +11,10 @@ export const _Header = (props) => {
   return (
     <header id='app-header'>
       <span id='profileImage'>
-        {userInitials !== logo ?
+        {userInitials !== null ?
           <span id='initials' alt='User profile'>{userInitials}</span> :
-          <img src={userInitials} alt='User profile' />}
+          <img src={logo} alt='User profile' />
+        /* TODO: When rest api returns profileImage use it as source*/}
       </span>
       <span className='header-name'>{userFullName}</span>
       <Button id='logOut' onClick={logout} size='small'>Log out</Button>
