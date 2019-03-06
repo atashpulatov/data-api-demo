@@ -134,7 +134,7 @@ class OfficeDisplayService {
     const usedDataRange = excelRange.getUsedRangeOrNullObject(true);
     await context.sync();
     if (!usedDataRange.isNullObject) {
-      throw errorService.errorOfficeFactory('The required data range in the worksheet is not empty');
+      throw errorService.errorOfficeFactory(Error('The required data range in the worksheet is not empty'));
     }
   }
 
