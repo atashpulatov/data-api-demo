@@ -43,6 +43,8 @@ class OfficeDisplayService {
           projectId,
           envUrl,
           body,
+          isLoading: false,
+          objectType,
         });
       }
       return !isRefresh && {type: 'success', message: `Loaded ${objectType}: ${officeTable.name}`};
@@ -63,6 +65,8 @@ class OfficeDisplayService {
         projectId: report.projectId,
         envUrl: report.envUrl,
         body: report.body,
+        isLoading: report.isLoading,
+        objectType: report.objectType,
       },
     });
     officeStoreService.preserveReport(report);

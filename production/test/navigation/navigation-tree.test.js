@@ -48,11 +48,11 @@ describe('NavigationTree', () => {
       token: 'token',
       projectId: 'projectId',
     };
-    const selectObjectMock = jest.fn();
+    const propsMethod = jest.fn();
     const wrappedComponent = mount(<_NavigationTree
-      selectObject={selectObjectMock}
       parsed={parsed}
-      chosenObjectId={true} />);
+      chosenObjectId={true}
+      selectObject={propsMethod}/>);
     const secondaryAction = jest.spyOn(wrappedComponent.instance(), 'handleSecondary')
         .mockReturnValueOnce({});
     wrappedComponent.update();
@@ -64,7 +64,6 @@ describe('NavigationTree', () => {
     secondaryButton.simulate('click');
     // then
     expect(secondaryAction).toBeCalled();
-    expect(selectObjectMock).toBeCalled();
   });
 
   it('should call proper method on secondary action', () => {
