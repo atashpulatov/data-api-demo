@@ -80,7 +80,7 @@ class PopupController {
 
   handleOkCommand = async (response, dialog) => {
     if (response.chosenObject) {
-      const result = await officeDisplayService.printObject(response.chosenObject, response.chosenProject, response.reportSubtype === objectTypes.getTypeValues('Report').subtype);
+      const result = await officeDisplayService.printObject(response.chosenObject, response.chosenProject, response.chosenSubtype === objectTypes.getTypeValues('Report').subtype);
       if (result) {
         notificationService.displayMessage(result.type, result.message);
       }
