@@ -55,39 +55,45 @@ class PopupController {
   onMessageFromPopup = async (dialog, arg) => {
     const message = arg.message;
     const response = JSON.parse(message);
-    switch (response.command) {
-      case selectorProperties.commandOk:
-        if (response.chosenObject) {
-          const result = await officeDisplayService.printObject(response.chosenObject, response.chosenProject);
-          if (result) {
-            notificationService.displayMessage(result.type, result.message);
+    try {
+      switch (response.command) {
+        case selectorProperties.commandOk:
+          if (response.chosenObject) {
+            const result = await officeDisplayService.printObject(response.chosenObject, response.chosenProject);
+            if (result) {
+              notificationService.displayMessage(result.type, result.message);
+            }
           }
-        }
-        dialog.close();
-        break;
-      case selectorProperties.commandOnUpdate:
-
-        if (response.reportId
-          && response.projectId
-          && response.reportSubtype
-          && response.body) {
-          const result = await officeDisplayService.printObject(response.reportId,
-              response.projectId,
-              response.reportSubtype === objectTypes.getTypeValues('Report').subtype,
-              null, null, null,
-              response.body);
-          if (result) {
-            notificationService.displayMessage(result.type, result.message);
+          dialog.close();
+          break;
+        case selectorProperties.commandOnUpdate:
+          if (response.reportId
+            && response.projectId
+            && response.reportSubtype
+            && response.body) {
+            const result = await officeDisplayService.printObject(response.reportId,
+                response.projectId,
+                response.reportSubtype === objectTypes.getTypeValues('Report').subtype,
+                null, null, null,
+                response.body);
+            if (result) {
+              notificationService.displayMessage(result.type, result.message);
+            }
           }
-        }
-        dialog.close();
-        break;
-      case selectorProperties.commandCancel:
-        dialog.close();
-        break;
-      default:
-        dialog.close();
-        break;
+          dialog.close();
+          break;
+        case selectorProperties.commandCancel:
+          dialog.close();
+          break;
+        default:
+          dialog.close();
+          break;
+      }
+    } catch (error) {
+      console.error(error.message);
+      errorService.handleOfficeError(error);
+    } finally {
+      dialog.close();
     }
   }
 }

@@ -5,7 +5,6 @@ import {sessionHelper} from '../storage/session-helper';
 import {pageBuilder} from './page-builder.js';
 import {officeApiHelper} from '../office/office-api-helper';
 import {homeHelper} from './home-helper';
-import {authenticationHelper} from '../authentication/authentication-helper';
 
 export class _Home extends Component {
 
@@ -13,7 +12,6 @@ export class _Home extends Component {
     await officeApiHelper.loadExistingReportBindingsExcel();
     homeHelper.saveLoginValues();
     homeHelper.saveTokenFromCookies();
-    await authenticationHelper.validateAuthToken();
     sessionHelper.disableLoading();
   };
 

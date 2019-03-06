@@ -100,7 +100,7 @@ class ErrorService {
     }
   }
 
-  fullLogOut() {
+  fullLogOut = () => {
     sessionHelper.logOutRest();
     sessionHelper.logOut();
     sessionHelper.logOutRedirect();
