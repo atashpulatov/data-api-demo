@@ -5,6 +5,8 @@ import {PopupTypeEnum} from '../home/popup-type-enum';
 import {sessionHelper} from '../storage/session-helper';
 import {objectTypes} from 'mstr-react-library';
 import {notificationService} from '../notification/notification-service';
+import {reduxStore} from '../store';
+import {CLEAR_WINDOW} from './popup-actions';
 
 class PopupController {
   runPopupNavigation = () => {
@@ -30,13 +32,14 @@ class PopupController {
               dialog.addEventHandler(
                   officeObject.EventType.DialogMessageReceived,
                   this.onMessageFromPopup.bind(null, dialog));
+              reduxStore.dispatch({type: CLEAR_WINDOW});
             });
         await context.sync();
       });
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   onMessageFromPopup = async (dialog, arg) => {
     const message = arg.message;
@@ -44,15 +47,16 @@ class PopupController {
     switch (response.command) {
       case selectorProperties.commandOk:
         if (response.chosenObject) {
-          const result = await officeDisplayService.printObject(response.chosenObject, response.chosenProject);
-          if (result){
+          const result = await officeDisplayService.printObject(response.chosenObject,
+              response.chosenProject,
+              response.reportSubtype === objectTypes.getTypeValues('Report').subtype);
+          if (result) {
             notificationService.displayMessage(result.type, result.message);
-          }       
+          }
         }
         dialog.close();
         break;
       case selectorProperties.commandOnUpdate:
-        
         if (response.reportId
           && response.projectId
           && response.reportSubtype
@@ -62,7 +66,7 @@ class PopupController {
               response.reportSubtype === objectTypes.getTypeValues('Report').subtype,
               null, null, null,
               response.body);
-          if (result){
+          if (result) {
             notificationService.displayMessage(result.type, result.message);
           }
         }
@@ -75,6 +79,6 @@ class PopupController {
         break;
     }
   }
-};
+}
 
 export const popupController = new PopupController();

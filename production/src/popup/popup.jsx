@@ -3,6 +3,8 @@ import {AttributeSelectorWindow} from '../attribute-selector/attribute-selector-
 import {PopupTypeEnum} from '../home/popup-type-enum';
 import {NavigationTree} from '../navigation/navigation-tree';
 import * as queryString from 'query-string';
+import {reduxStore} from '../store';
+import {Provider} from 'react-redux';
 
 export class Popup extends Component {
   constructor(props) {
@@ -36,12 +38,18 @@ export class Popup extends Component {
     });
   };
 
-  render() {
-    const {popupType, ...propsToPass} = this.state.parsed;
+  selectView(popupType, propsToPass) {
     if (!popupType) {
       return (<AttributeSelectorWindow parsed={propsToPass} handleBack={this.handleBack} />);
     } else if (popupType === PopupTypeEnum.navigationTree) {
       return (<NavigationTree handlePrepare={this.handlePrepare} parsed={propsToPass} />);
     }
+  }
+
+  render() {
+    const {popupType, ...propsToPass} = this.state.parsed;
+    return (<Provider store={reduxStore}>
+      {this.selectView(popupType, propsToPass)}
+    </Provider>);
   }
 }

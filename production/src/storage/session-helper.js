@@ -32,7 +32,7 @@ class SessionHelper {
     };
   }
   logOutRedirect = () => {
-    window.location.replace('/mstr-office-loader/build/index.html');
+    window.location.replace('/MicroStrategyLibrary/static/officeLoader/index.html');
   }
   saveLoginValues = (values) => {
     reduxStore.dispatch({

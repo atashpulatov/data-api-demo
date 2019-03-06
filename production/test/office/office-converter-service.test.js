@@ -1,18 +1,17 @@
-import React from 'react'; // eslint-disable-line no-unused-vars
 import path from 'path';
 import testHelper from '../test-helper';
 import {mockReports} from '../mockData';
 import {officeConverterService} from '../../src/office/office-converter-service';
 
 describe('OfficeConverterService', () => {
-  it('should convert simple report', () => {
+  it('should create a table', () => {
     // given
     const expectedReportPath = path.join(
         __dirname,
         '__expected__/expected-simple-report.js'
     );
     // when
-    const result = officeConverterService.getConvertedTable(mockReports[1]);
+    const result = officeConverterService.createTable(mockReports[1]);
     // then
     expect(result).toBeDefined();
     testHelper.expectPropertiesDefined(result);
@@ -26,7 +25,8 @@ describe('OfficeConverterService', () => {
         '__expected__/expected-test-report.js'
     );
     // when
-    const result = officeConverterService.getConvertedTable(mockReports[0]);
+    const result = officeConverterService.createTable(mockReports[0]);
+
     // then
     expect(result).toBeDefined();
     testHelper.expectPropertiesDefined(result);
@@ -40,7 +40,7 @@ describe('OfficeConverterService', () => {
         '__expected__/expected-complex-report.js'
     );
     // when
-    const result = officeConverterService.getConvertedTable(mockReports[2]);
+    const result = officeConverterService.createTable(mockReports[2]);
     // then
     expect(result).toBeDefined();
     testHelper.expectPropertiesDefined(result);
@@ -54,9 +54,9 @@ describe('OfficeConverterService', () => {
         '__expected__/expected-simple-report.js'
     );
     // when
-    officeConverterService.getConvertedTable(mockReports[1]);
-    officeConverterService.getConvertedTable(mockReports[1]);
-    const result = officeConverterService.getConvertedTable(mockReports[1]);
+    let result = officeConverterService.createTable(mockReports[1]);
+    result = officeConverterService.createTable(mockReports[1]);
+    result = officeConverterService.createTable(mockReports[1]);
     // then
     expect(result).toBeDefined();
     testHelper.expectPropertiesDefined(result);
@@ -70,7 +70,7 @@ describe('OfficeConverterService', () => {
         '__expected__/expected-multiline-header-report.js'
     );
     // when
-    const result = officeConverterService.getConvertedTable(mockReports[3]);
+    const result = officeConverterService.createTable(mockReports[3]);
     // then
     expect(result).toBeDefined();
     testHelper.expectPropertiesDefined(result);
@@ -94,7 +94,7 @@ describe('OfficeConverterService', () => {
         '__expected__/expected-complex-attributes-report.js'
     );
     // when
-    const result = officeConverterService.getConvertedTable(mockReports[4]);
+    const result = officeConverterService.createTable(mockReports[4]);
     // then
     expect(result).toBeDefined();
     testHelper.expectPropertiesDefined(result);

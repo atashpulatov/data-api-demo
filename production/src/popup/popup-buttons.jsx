@@ -6,11 +6,6 @@ export const PopupButtons = ({handleOk, handleSecondary,
   handleCancel, handleBack, loading, disableActiveActions}) => (
   <div className="popup-buttons popup-footer">
     {
-      !handleBack &&
-        <Button id="backCancel" onClick={handleCancel}>
-          Back
-        </Button>}
-    {
       handleBack &&
         <Button id="back" onClick={handleBack}>
           Back
@@ -21,9 +16,8 @@ export const PopupButtons = ({handleOk, handleSecondary,
     {
       handleSecondary &&
         <Button id="prepare" type="primary"
-          disabled={disableActiveActions}
-          onClick={handleSecondary}
-          loading={loading}>
+          disabled={disableActiveActions || loading}
+          onClick={handleSecondary}>
           Prepare Data
         </Button>
     }

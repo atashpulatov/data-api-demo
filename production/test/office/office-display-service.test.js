@@ -1,13 +1,10 @@
-/* eslint-disable */
-import { officeApiHelper } from '../../src/office/office-api-helper';
-import { officeContextMock } from './__mock__object__/OfficeContext';
-import { officeDisplayService } from '../../src/office/office-display-service';
-import { OfficeBindingError } from '../../src/office/office-error';
-import { reduxStore } from '../../src/store';
-import { mstrObjectRestService } from '../../src/mstr-object/mstr-object-rest-service';
-import { mockReports } from '../mockData';
-import { officeStoreService } from '../../src/office/store/office-store-service';
-/* eslint-enable */
+import {officeApiHelper} from '../../src/office/office-api-helper';
+import {officeContextMock} from './__mock__object__/OfficeContext';
+import {officeDisplayService} from '../../src/office/office-display-service';
+import {reduxStore} from '../../src/store';
+import {mstrObjectRestService} from '../../src/mstr-object/mstr-object-rest-service';
+import {mockReports} from '../mockData';
+import {officeStoreService} from '../../src/office/store/office-store-service';
 
 jest.mock('../../src/mstr-object/mstr-object-rest-service');
 jest.mock('../../src/office/store/office-store-service');
@@ -41,11 +38,11 @@ describe('OfficeDisplayService', () => {
           workbook: {
             tables: {
               getItem: () => {
-                return {delete: () => { }};
+                return {delete: () => {}};
               },
             },
           },
-          sync: () => { },
+          sync: () => {},
         });
   });
 
@@ -95,6 +92,8 @@ describe('OfficeDisplayService', () => {
       bindId: excelTableNameMock,
       envUrl: mstrContext.envUrl,
       projectId: mstrContext.projectId,
+      isLoading: false,
+      objectType: 'report',
     });
   });
 
@@ -130,6 +129,7 @@ describe('OfficeDisplayService', () => {
         tables: {
           add: jest.fn().mockReturnValue(mockedTable),
         },
+        getRange: jest.fn().mockReturnValue({value: []}),
         activate: jest.fn(),
       };
       const mockedPushRows = jest.fn();
@@ -138,13 +138,14 @@ describe('OfficeDisplayService', () => {
       officeDisplayService._formatTable = mockedFormatTable;
       getActiveWorksheetMock.mockReturnValue(mockedWorksheet);
       officeContextMock.workbook.worksheets.getActiveWorksheet = getActiveWorksheetMock;
+      officeContextMock.workbook.application = {suspendApiCalculationUntilNextSync: jest.fn()};
+      officeContextMock.sync = jest.fn();
       const startCell = 'A1';
       const reportName = 'someReportName';
       const reportConvertedData = {
         name: 'testName',
-        headers: {
-          length: 2,
-        },
+        headers: ['a', 'b'],
+        rows: [1, 2],
       };
       // when
       const result = await officeDisplayService._insertDataIntoExcel(reportConvertedData, officeContextMock, startCell, reportName);

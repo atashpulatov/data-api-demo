@@ -1,0 +1,1 @@
+export const CLEAR_WINDOW = 'POPUP_CLOSE_WINDOW';
