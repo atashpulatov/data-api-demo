@@ -41,7 +41,6 @@ class ErrorService {
     } else return error;
   }
   handleError = (error, isLogout) => {
-    const DEBUG_LOGGING = true;
     console.error(error);
     switch (error.constructor) {
       case EnvironmentNotFoundError:
@@ -67,8 +66,7 @@ class ErrorService {
         notificationService.displayMessage('warn', '500 - We were not able to handle your request');
         break;
       default:
-        DEBUG_LOGGING ? notificationService.displayMessage('error', error.message)
-          : notificationService.displayMessage('error', 'Unknown error');
+        notificationService.displayMessage('error', error.message || 'Unknown error');
         break;
     }
   }
