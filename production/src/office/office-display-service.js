@@ -111,6 +111,7 @@ class OfficeDisplayService {
 
       const range = officeApiHelper.getRange(reportConvertedData.headers.length, startCell, endRow);
       const sheetRange = sheet.getRange(range);
+      context.trackedObjects.add(sheetRange);
       await this._checkRangeValidity(context, sheetRange);
 
       const rowsData = this._getRowsArray(reportConvertedData);
