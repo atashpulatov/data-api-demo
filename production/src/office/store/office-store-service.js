@@ -14,8 +14,9 @@ class OfficeStoreService {
         envUrl: report.envUrl,
         body: report.body,
       });
+      settings.set(officeProperties.loadedReportProperties, reportProperties);
       settings.saveAsync();
-    }
+    };
 
     deleteReport = (bindingId) => {
       const settings = this.getOfficeSettings();
@@ -24,16 +25,16 @@ class OfficeStoreService {
         return (report.bindId === bindingId);
       });
       reportProperties.splice(indexOfReport, 1);
+      settings.set(officeProperties.loadedReportProperties, reportProperties);
       settings.saveAsync();
-    }
+    };
 
     getReportFromProperties = (bindingId) => {
       const reportProperties = this._getReportProperties();
-      const report = reportProperties.find((report) => {
+      return reportProperties.find((report) => {
         return report.bindId === bindingId;
       });
-      return report;
-    }
+    };
 
     _getReportProperties = () => {
       const settings = this.getOfficeSettings();
@@ -43,7 +44,7 @@ class OfficeStoreService {
         settings.saveAsync();
       }
       return settings.get(officeProperties.loadedReportProperties);
-    }
+    };
 
     getOfficeSettings = () => {
       if (Office === undefined
