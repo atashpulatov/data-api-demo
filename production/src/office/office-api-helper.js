@@ -1,5 +1,5 @@
 import {IncorrectInputTypeError} from './incorrect-input-type';
-import {OutsideOfRangeError} from './outside-of-range-error';
+import {OutsideOfRangeError} from '../error/outside-of-range-error';
 import {reduxStore} from '../store';
 import {officeProperties} from './office-properties';
 import {officeStoreService} from './store/office-store-service';

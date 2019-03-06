@@ -6,6 +6,7 @@ import {reduxStore} from '../store';
 import {officeApiHelper} from './office-api-helper';
 import {officeProperties} from './office-properties';
 import {officeStoreService} from './store/office-store-service';
+import {OutsideOfRangeError} from '../error/outside-of-range-error';
 
 const EXCEL_PAGINATION = 5000;
 
@@ -138,7 +139,7 @@ class OfficeDisplayService {
     const usedDataRange = excelRange.getUsedRangeOrNullObject(true);
     await context.sync();
     if (!usedDataRange.isNullObject) {
-      throw errorService.errorOfficeFactory(Error('The required data range in the worksheet is not empty'));
+      throw new OutsideOfRangeError('The required data range in the worksheet is not empty');
     }
   }
 

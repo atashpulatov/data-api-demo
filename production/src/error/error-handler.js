@@ -6,7 +6,9 @@ import {sessionHelper} from '../storage/session-helper.js';
 import {notificationService} from '../notification/notification-service.js';
 import {RunOutsideOfficeError} from './run-outside-office-error.js';
 import {OverlappingTablesError} from './overlapping-tables-error';
-import {OutsideOfRangeError} from '../office/outside-of-range-error.js';
+import {GenericOfficeError} from './generic-office-error.js';
+
+const TIMEOUT = 2000;
 
 class ErrorService {
   errorRestFactory = (error) => {
@@ -27,41 +29,46 @@ class ErrorService {
     }
   };
   errorOfficeFactory = (error) => {
-    console.log(error);
-    switch (error.message) {
-      case 'Excel is not defined':
-        return new RunOutsideOfficeError(error.message);
-      case `A table can't overlap another table. `:
-        return new OverlappingTablesError(error.message);
-      case 'The required data range in the worksheet is not empty':
-        return new OutsideOfRangeError(error.message);
-      default:
-        if (error.name === 'RichApi.Error') notificationService.displayMessage('error', error.message);
-        return error;
-    }
+    if (error.name === 'RichApi.Error') {
+      switch (error.message) {
+        case 'Excel is not defined':
+          return new RunOutsideOfficeError(error.message);
+        case `A table can't overlap another table. `:
+          return new OverlappingTablesError(error.message);
+        default:
+          return new GenericOfficeError(error.message);
+      }
+    } else return error;
   }
   handleError = (error, isLogout) => {
+    const DEBUG_LOGGING = true;
+    console.error(error);
     switch (error.constructor) {
       case EnvironmentNotFoundError:
-        notificationService.displayMessage('error', '404 - Environment not found');
+        notificationService.displayMessage('info', '404 - Environment not found');
         if (!isLogout) {
-          this.fullLogOut();
+          setTimeout(() => {
+            this.fullLogOut();
+          }, TIMEOUT);
         }
         break;
       case UnauthorizedError:
-        notificationService.displayMessage('error', '401 - Unauthorized. Please log in.');
+        notificationService.displayMessage('info', 'Your session has expired. Please log in.');
         if (!isLogout) {
-          this.fullLogOut();
+          setTimeout(() => {
+            this.fullLogOut();
+          }, TIMEOUT);
         }
         break;
       case BadRequestError:
         notificationService.displayMessage('error', '400 - There has been a problem with your request');
         break;
       case InternalServerError:
-        notificationService.displayMessage('error', '500 - We were not able to handle your request');
+        notificationService.displayMessage('warn', '500 - We were not able to handle your request');
         break;
       default:
-        notificationService.displayMessage('error', 'Unknown error');
+        DEBUG_LOGGING ? notificationService.displayMessage('error', error.message)
+          : notificationService.displayMessage('error', 'Unknown error');
         break;
     }
   }
@@ -83,7 +90,10 @@ class ErrorService {
         notificationService.displayMessage('error', 'Please run plugin inside Office');
         break;
       case OverlappingTablesError:
-        notificationService.displayMessage('error', error.message);
+        notificationService.displayMessage('error', `Excel returned error: ${error.message}`);
+        break;
+      case GenericOfficeError:
+        notificationService.displayMessage('error', `Excel returned error: ${error.message}`);
         break;
       default:
         this.handleError(error);
