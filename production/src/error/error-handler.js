@@ -22,7 +22,7 @@ class ErrorService {
       case 500:
         return new InternalServerError();
     }
-    throw error;
+    return error;
   };
   errorOfficeFactory = (error) => {
     switch (error.message) {

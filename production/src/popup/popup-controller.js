@@ -7,6 +7,7 @@ import {objectTypes} from 'mstr-react-library';
 import {notificationService} from '../notification/notification-service';
 import {reduxStore} from '../store';
 import {CLEAR_WINDOW} from './popup-actions';
+import {errorService} from '../error/error-handler';
 
 class PopupController {
   runPopupNavigation = () => {
@@ -46,38 +47,45 @@ class PopupController {
     const response = JSON.parse(message);
     switch (response.command) {
       case selectorProperties.commandOk:
-        if (response.chosenObject) {
-          const result = await officeDisplayService.printObject(response.chosenObject,
-              response.chosenProject,
-              response.reportSubtype === objectTypes.getTypeValues('Report').subtype);
-          if (result) {
-            notificationService.displayMessage(result.type, result.message);
-          }
-        }
-        dialog.close();
+        await this.handleOkCommand(response, dialog);
         break;
       case selectorProperties.commandOnUpdate:
-        if (response.reportId
-          && response.projectId
-          && response.reportSubtype
-          && response.body) {
-          const result = await officeDisplayService.printObject(response.reportId,
-              response.projectId,
-              response.reportSubtype === objectTypes.getTypeValues('Report').subtype,
-              null, null, null,
-              response.body);
-          if (result) {
-            notificationService.displayMessage(result.type, result.message);
-          }
-        }
-        dialog.close();
+        await this.handleUpdateCommand(response, dialog);
         break;
       case selectorProperties.commandCancel:
+        dialog.close();
+        break;
+      case selectorProperties.commandError:
+        const error = errorService.errorRestFactory(response.error);
+        errorService.handleError(error, false);
         dialog.close();
         break;
       default:
         break;
     }
+  }
+
+  handleUpdateCommand = async (response, dialog) => {
+    if (response.reportId
+      && response.projectId
+      && response.reportSubtype
+      && response.body) {
+      const result = await officeDisplayService.printObject(response.reportId, response.projectId, response.reportSubtype === objectTypes.getTypeValues('Report').subtype, null, null, null, response.body);
+      if (result) {
+        notificationService.displayMessage(result.type, result.message);
+      }
+    }
+    dialog.close();
+  }
+
+  handleOkCommand = async (response, dialog) => {
+    if (response.chosenObject) {
+      const result = await officeDisplayService.printObject(response.chosenObject, response.chosenProject, response.reportSubtype === objectTypes.getTypeValues('Report').subtype);
+      if (result) {
+        notificationService.displayMessage(result.type, result.message);
+      }
+    }
+    dialog.close();
   }
 }
 
