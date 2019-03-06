@@ -45,7 +45,8 @@ export class _NavigationTree extends Component {
   };
 
   handleSecondary = () => {
-    this.props.handlePrepare(this.props.chosenProjectId, this.props.chosenObjectId, this.props.chosenSubtype);
+    this.props.handlePrepare(this.props.chosenProjectId, this.props.chosenObjectId,
+        this.props.chosenSubtype, this.props.chosenProjectName);
   };
 
   handleCancel = () => {

@@ -11,6 +11,7 @@ describe('NavigationTree Reducer', () => {
         chosenObjectId: '1',
         chosenProjectId: '2',
         chosenSubtype: '3',
+        chosenProjectName: 'Access_Transaction',
       },
     };
 
@@ -36,6 +37,7 @@ describe('NavigationTree Reducer', () => {
       chosenObjectId: null,
       chosenProjectId: null,
       chosenSubtype: null,
+      chosenProjectName: 'Access_Transaction',
     });
   });
 
