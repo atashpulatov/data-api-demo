@@ -1,19 +1,18 @@
 import request from 'superagent';
+import {errorService} from '../error/error-handler';
 
 class UserRestService {
   getUserData = async (authToken, envUrl) => {
-    if (authToken && envUrl) {
-      return request
-          .get(`${envUrl}/sessions/userInfo`)
-          .set('x-mstr-authToken', authToken)
-          .withCredentials()
-          .then((res) => {
-            return res.body;
-          })
-          .catch((err) => {
-            console.error(err);
-          });
-    }
+    return request
+        .get(`${envUrl}/sessions/userInfo`)
+        .set('x-mstr-authToken', authToken)
+        .withCredentials()
+        .then((res) => {
+          return res.body;
+        })
+        .catch((err) => {
+          throw errorService.errorRestFactory(err);
+        });
   }
 }
 

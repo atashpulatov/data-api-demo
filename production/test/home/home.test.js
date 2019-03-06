@@ -17,6 +17,18 @@ jest.mock('../../src/home/home-helper');
 /* eslint-enable  */
 
 describe('Home', () => {
+  it('should render home component and its children', async () => {
+    // given
+    // when
+    const componentWrapper = mount(
+        <Provider store={reduxStore}>
+          <Home />
+        </Provider>
+    );
+    // then
+    expect(componentWrapper.children().length).toBeGreaterThan(0);
+  });
+
   it('should have header component with proper text', async () => {
     // given
     const props = {
@@ -25,7 +37,6 @@ describe('Home', () => {
       reportArray: false,
     };
     const tempPromise = Promise.resolve();
-    const headerWrapper = mount(<_Header />);
     const sessionHelperSpy = jest.spyOn(sessionHelper, 'disableLoading');
     const officeHelperSpy = jest
         .spyOn(officeApiHelper, 'loadExistingReportBindingsExcel')
@@ -35,18 +46,19 @@ describe('Home', () => {
     // when
     const componentWrapper = mount(
         <Provider store={reduxStore}>
-          <Home {...props} />
+          <_Home {...props} />
         </Provider>
     );
     // then
     setImmediate(() => tempPromise);
     await (tempPromise);
+    const headerWrapper = componentWrapper.find('#app-header');
     expect(componentWrapper.contains(headerWrapper.get(0))).toBe(true);
     expect(officeHelperSpy).toHaveBeenCalled();
     expect(sessionHelperSpy).toHaveBeenCalled();
   });
 
-  it('should properly set values', async () => {
+  it('should properly set header values', async () => {
     // given
 
     // when
@@ -56,13 +68,18 @@ describe('Home', () => {
     expect(headerWrapper.props('userFullName')).toBeTruthy();
   });
 
-  it('should correctly render elements', async () => {
+  it('should correctly render header elements', async () => {
     // given
 
     // when
     const headerWrapper = mount(<_Header />);
     // then
-    expect(headerWrapper.find('#app-header').children().length).toBe(3);
+    const imageWrapper = headerWrapper.find('#profileImage');
+    const nameWrapper = headerWrapper.find('.header-name');
+    const buttonWrapper = headerWrapper.find('#logOut');
+    expect(imageWrapper).toBeTruthy();
+    expect(nameWrapper).toBeTruthy();
+    expect(buttonWrapper).toBeTruthy();
   });
 
 
@@ -96,6 +113,6 @@ describe('Home', () => {
       authToken: 'new',
     });
     // then
-    expect(homeHelper.saveTokenFromCookies).toBeCalledTimes(3);
+    expect(homeHelper.saveTokenFromCookies).toBeCalledTimes(4);
   });
 });

@@ -10,9 +10,11 @@ export const _Header = (props) => {
   const {userFullName, userInitials} = props;
   return (
     <header id='app-header'>
-      {userInitials !== logo ?
-        <span id='initials' alt='User profile'>{userInitials}</span> :
-        <img src={userInitials} alt='User profile' />}
+      <span id='profileImage'>
+        {userInitials !== logo ?
+          <span id='initials' alt='User profile'>{userInitials}</span> :
+          <img src={userInitials} alt='User profile' />}
+      </span>
       <span className='header-name'>{userFullName}</span>
       <Button id='logOut' onClick={logout} size='small'>Log out</Button>
     </header >

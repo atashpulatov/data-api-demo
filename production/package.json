@@ -100,7 +100,6 @@
       "!src/project/project-list-helper.js",
       "!src/storage/session-helper.js",
       "!src/storage/unknown-property-error.js",
-
       "!src/attribute-selector/attribute-selector-window.jsx",
       "!src/breadcrumbs/breadcrumbs.jsx",
       "!src/error/error-handler.js",
@@ -108,6 +107,7 @@
       "!src/home/home-helper.js",
       "!src/mstr-object/mstr-object-rest-service.js",
       "!src/project/project-rest-service.js",
+      "!src/home/user-rest-service.js",
       "!src/office/office-converter-service.js",
       "!src/prompts/prompts-rest-service.js",
       "!src/storage/session-reducer.js"
