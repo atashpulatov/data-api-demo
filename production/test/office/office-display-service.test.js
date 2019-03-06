@@ -93,6 +93,8 @@ describe('OfficeDisplayService', () => {
       bindId: excelTableNameMock,
       envUrl: mstrContext.envUrl,
       projectId: mstrContext.projectId,
+      isLoading: false,
+      objectType: 'report',
     });
   });
 

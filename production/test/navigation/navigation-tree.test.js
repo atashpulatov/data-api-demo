@@ -48,9 +48,11 @@ describe('NavigationTree', () => {
       token: 'token',
       projectId: 'projectId',
     };
+    const propsMethod = jest.fn();
     const wrappedComponent = mount(<_NavigationTree
       parsed={parsed}
-      chosenObjectId={true} />);
+      chosenObjectId={true}
+      selectObject={propsMethod}/>);
     const secondaryAction = jest.spyOn(wrappedComponent.instance(), 'handleSecondary')
         .mockReturnValueOnce({});
     wrappedComponent.update();
