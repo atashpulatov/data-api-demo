@@ -1,6 +1,7 @@
 import {sessionHelper} from '../storage/session-helper';
 import {authenticationService} from './auth-rest-service';
 import {errorService} from '../error/error-handler';
+import {reduxStore} from '../store';
 import {userRestService} from '../home/user-rest-service';
 
 class AuthenticationHelper {
@@ -23,6 +24,13 @@ class AuthenticationHelper {
     } finally {
       sessionHelper.disableLoading();
     }
+  }
+
+  validateAuthToken = async () => {
+    const reduxStoreState = reduxStore.getState();
+    const authToken = reduxStoreState.sessionReducer.authToken;
+    const envUrl = reduxStoreState.sessionReducer.envUrl;
+    await authenticationService.getSessions(envUrl, authToken);
   }
 }
 
