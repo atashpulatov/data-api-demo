@@ -15,7 +15,7 @@ export class _Home extends Component {
     sessionHelper.disableLoading();
   };
 
-  componentDidUpdate = async () => {
+  componentDidUpdate = () => {
     homeHelper.saveTokenFromCookies();
   };
 

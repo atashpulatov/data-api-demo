@@ -12,7 +12,6 @@ const IS_LOCALHOST = URL.includes('localhost');
 
 class PageBuilder {
   getPage = (loading, authToken, reportArray) => {
-    console.log(authToken);
     return (
       <div id='content'>
         <Notifications />

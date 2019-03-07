@@ -27,8 +27,6 @@ class AuthenticationService {
         });
   }
   getSessions = async (envUrl, authToken) => {
-    console.log(envUrl);
-    console.log(authToken);
     return await moduleProxy.request
         .get(`${envUrl}/sessions/userInfo`)
         .set('x-mstr-authtoken', authToken)

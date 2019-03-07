@@ -38,7 +38,8 @@ class ErrorService {
         default:
           return new GenericOfficeError(error.message);
       }
-    } else return error;
+    }
+    return error;
   }
   handleError = (error, isLogout) => {
     console.error(error);
