@@ -6,6 +6,7 @@ import {officeStoreService} from './store/office-store-service';
 import {sessionHelper} from '../storage/session-helper';
 import {notificationService} from '../notification/notification-service';
 import {errorService} from '../error/error-handler';
+import {loadPending} from '../popup/popup-controller';
 
 const EXCEL_PAGINATION = 5000;
 
@@ -17,7 +18,9 @@ class OfficeDisplayService {
     this.refreshReport = this.refreshReport.bind(this);
   }
 
-  printObject = async (objectId, projectId, isReport = true, startCell, officeTableId, bindingId, body, isRefresh) => {
+  printObject = loadPending(this._printObject);
+
+  _printObject = async (objectId, projectId, isReport = true, startCell, officeTableId, bindingId, body, isRefresh) => {
     const objectType = isReport ? 'report' : 'cube';
     try {
       const excelContext = await officeApiHelper.getExcelContext();

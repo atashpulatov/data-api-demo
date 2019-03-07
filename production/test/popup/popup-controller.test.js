@@ -1,5 +1,5 @@
 import {selectorProperties} from '../../src/attribute-selector/selector-properties';
-import {popupController} from '../../src/popup/popup-controller';
+import {popupController, loadPending} from '../../src/popup/popup-controller';
 import {officeDisplayService} from '../../src/office/office-display-service';
 import {objectTypes} from 'mstr-react-library';
 import {errorService} from '../../src/error/error-handler';
@@ -25,7 +25,7 @@ describe('PopupController', () => {
     // given
     const popupType = PopupTypeEnum.navigationTree;
     const size = 80;
-    const runPopupSpy = jest.spyOn(popupController, 'runPopup').mockImplementationOnce(()=>{});
+    const runPopupSpy = jest.spyOn(popupController, 'runPopup').mockImplementationOnce(() => {});
     // when
     popupController.runPopupNavigation();
     // then
@@ -108,5 +108,18 @@ describe('PopupController', () => {
     expect(handleErrorArgs[0].constructor).toBe(EnvironmentNotFoundError);
     expect(handleErrorArgs[1]).toBe(false);
     expect(dialog.close).toBeCalled();
+  });
+
+  it('should call dialog and inside method when decorated method is called', async () => {
+    // given
+    const runPopupSpy = jest.spyOn(popupController, 'runPopup');
+    const methodInside = jest.fn();
+    const arg1 = 'arg1';
+    const arg2 = 'arg2';
+    // when
+    await loadPending(methodInside, 20, runPopupSpy)(arg1, arg2);
+    // then
+    expect(runPopupSpy).toBeCalled();
+    expect(methodInside).toBeCalledWith(arg1, arg2);
   });
 });

@@ -92,16 +92,15 @@ class PopupController {
     dialog.close();
   }
 
-  loadPending = (milliseconds = 500, ...args) => {
-    return function(target, propertyKey, descriptor) {
-      const originalMethod = descriptor.value;
-      descriptor.value = function() {
-        setTimeout(() => {
-          this.runPopup(PopupTypeEnum.loadingPage, 20);
-          originalMethod.apply(this, args);
-        }, milliseconds);
-      };
-      return descriptor;
+  _sleep = (ms) => {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  loadPending = (wrapped, milliseconds = 500) => {
+    return async (...args) => {
+      await this._sleep(milliseconds);
+      this.runPopup(PopupTypeEnum.loadingPage, 20);
+      return await wrapped.apply(this, args);
     };
   }
 }
