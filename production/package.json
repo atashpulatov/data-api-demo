@@ -35,7 +35,7 @@
     "jest-pnp-resolver": "1.0.1",
     "jest-resolve": "23.6.0",
     "mini-css-extract-plugin": "0.4.3",
-    "mstr-react-library": "ssh://git@github.microstrategy.com:pfilipp/mstr-react-library.git#4b53462f6c015c2fd4b05291ca534a93d63d567a",
+    "mstr-react-library": "ssh://git@github.microstrategy.com:pfilipp/mstr-react-library.git#62ea2bbed03f472ff55da7b430505913efa8ae85",
     "optimize-css-assets-webpack-plugin": "5.0.1",
     "pnp-webpack-plugin": "1.1.0",
     "postcss-flexbugs-fixes": "4.1.0",
@@ -100,7 +100,6 @@
       "!src/project/project-list-helper.js",
       "!src/storage/session-helper.js",
       "!src/storage/unknown-property-error.js",
-
       "!src/attribute-selector/attribute-selector-window.jsx",
       "!src/breadcrumbs/breadcrumbs.jsx",
       "!src/error/error-handler.js",
@@ -108,6 +107,7 @@
       "!src/home/home-helper.js",
       "!src/mstr-object/mstr-object-rest-service.js",
       "!src/project/project-rest-service.js",
+      "!src/home/user-rest-service.js",
       "!src/office/office-converter-service.js",
       "!src/prompts/prompts-rest-service.js",
       "!src/storage/session-reducer.js"

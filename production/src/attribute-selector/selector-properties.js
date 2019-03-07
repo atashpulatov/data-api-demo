@@ -11,4 +11,5 @@ export const selectorProperties = {
     commandSecondary: 'command_secondary',
     commandCancel: 'command_cancel',
     commandOnUpdate: 'commandOnUpdate',
+    commandError: 'commandError',
 };

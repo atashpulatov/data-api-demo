@@ -31,8 +31,12 @@ class SessionHelper {
     };
   }
   logOutRedirect = () => {
-    window.location.replace('/MicroStrategyLibrary/static/loader-mstr-office/index.html');
-  }
+    const currentPath = window.location.pathname;
+    const pathBeginning = currentPath.split('/apps/')[0];
+    const loginParams = 'source=addin-mstr-office';
+    window.location.replace(`${pathBeginning}/static/loader-mstr-office/index.html?${loginParams}`);
+  };
+
   saveLoginValues = (values) => {
     reduxStore.dispatch({
       type: sessionProperties.actions.logIn,
@@ -57,6 +61,21 @@ class SessionHelper {
       projectId,
     };
     return session;
+  }
+  saveUserInfo = (values) => {
+    if (values) {
+      reduxStore.dispatch({
+        type: sessionProperties.actions.getUserInfo,
+        userFullName: values.fullName ? values.fullName : 'Microstrategy User',
+        userInitials: values.initials ? values.initials : null,
+      });
+    } else {
+      reduxStore.dispatch({
+        type: sessionProperties.actions.getUserInfo,
+        userFullName: 'Microstrategy User',
+        userInitials: null,
+      });
+    }
   }
 }
 

@@ -93,7 +93,7 @@ cp mstr-office/production/office-react-manifest.xml ~/Library/Containers/com.mic
 ```
 
 Now you can run add-in using Insert -> My Add-ins. 
-Microstrategy Office Client should appear under Developer Add-ins.
+MicroStrategy for Office should appear under Developer Add-ins.
 You may be required to accept self-signed certificate in order to start add-in.
 
 Additional information can be found on [Microsoft page](https://docs.microsoft.com/en-us/office/dev/add-ins/testing/sideload-an-office-add-in-on-ipad-and-mac)
