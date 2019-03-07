@@ -11,6 +11,10 @@ import {errorService} from '../error/error-handler';
 
 class PopupController {
   runPopupNavigation = () => {
+    this.runPopup(PopupTypeEnum.navigationTree, 80);
+  };
+
+  runPopup = (popupType, size) => {
     const session = sessionHelper.getSession();
     let url = `${window.location.href}`;
     if (url.search('localhost') !== -1) {
@@ -24,10 +28,10 @@ class PopupController {
         const officeObject = officeContext.getOffice();
         officeObject.context.ui.displayDialogAsync(
             splittedUrl[0]
-          + '?popupType=' + PopupTypeEnum.navigationTree
+          + '?popupType=' + popupType
           + '&envUrl=' + session.url
           + '&token=' + session.authToken,
-            {height: 80, width: 80, displayInIframe: true},
+            {height: size, width: size, displayInIframe: true},
             (asyncResult) => {
               const dialog = asyncResult.value;
               dialog.addEventHandler(
@@ -87,6 +91,20 @@ class PopupController {
     }
     dialog.close();
   }
+
+  loadPending = (milliseconds = 500, ...args) => {
+    return function(target, propertyKey, descriptor) {
+      const originalMethod = descriptor.value;
+      descriptor.value = function() {
+        setTimeout(() => {
+          this.runPopup(PopupTypeEnum.loadingPage, 20);
+          originalMethod.apply(this, args);
+        }, milliseconds);
+      };
+      return descriptor;
+    };
+  }
 }
 
 export const popupController = new PopupController();
+export const loadPending = popupController.loadPending;

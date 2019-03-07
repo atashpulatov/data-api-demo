@@ -4,6 +4,7 @@ import {officeDisplayService} from '../../src/office/office-display-service';
 import {objectTypes} from 'mstr-react-library';
 import {errorService} from '../../src/error/error-handler';
 import {EnvironmentNotFoundError} from '../../src/error/environment-not-found-error';
+import {PopupTypeEnum} from '../../src/home/popup-type-enum';
 
 describe('PopupController', () => {
   const dialog = {};
@@ -18,6 +19,18 @@ describe('PopupController', () => {
 
   afterAll(() => {
     jest.restoreAllMocks();
+  });
+
+  it('should run popup with proper settings when called for navigation', () => {
+    // given
+    const popupType = PopupTypeEnum.navigationTree;
+    const size = 80;
+    const runPopupSpy = jest.spyOn(popupController, 'runPopup').mockImplementationOnce(()=>{});
+    // when
+    popupController.runPopupNavigation();
+    // then
+    expect(runPopupSpy).toBeCalled();
+    expect(runPopupSpy).toBeCalledWith(popupType, size);
   });
 
   it('should handle update command from popup for cube',
