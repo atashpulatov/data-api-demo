@@ -6,11 +6,19 @@ import spinner from './assets/small_loading.gif';
 const dialogStyle = {
   position: 'fixed',
   top: '50%',
+  color: '#444A50',
   transform: 'translateY(-50%)',
+  border: 'none',
+  textAlign: 'center',
+  maxWidth: '500px',
+  fontFamily: `"HelveticaNeue", "Helvetica Neue", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", sans-serif`,
 };
 
 const titleStyle = {
-
+  fontWeight: 'bold',
+  fontSize: '18px',
+  color: '#444649',
+  padding: '0.5em',
 };
 
 const loadingTextStyle = {
