@@ -33,7 +33,8 @@ class SessionHelper {
   logOutRedirect = () => {
     const currentPath = window.location.pathname;
     const pathBeginning = currentPath.split('/apps/')[0];
-    window.location.replace(`${pathBeginning}/static/loader-mstr-office/index.html`);
+    const loginParams = 'source=addin-mstr-office';
+    window.location.replace(`${pathBeginning}/static/loader-mstr-office/index.html?${loginParams}`);
   };
 
   saveLoginValues = (values) => {
