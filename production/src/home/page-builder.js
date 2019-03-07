@@ -13,20 +13,17 @@ class PageBuilder {
     return (
       <div id='content'>
         <Notifications />
-        {authToken && <Header />}
-
         {authToken ?
-          <Tabs defaultActiveKey="data" className="tabs-container">
-            {/* <TabPane tab="Environment" key="environment">
-              <div>TODO</div>
-              </TabPane> */}
-            <TabPane tab="Imported Data" key="data">
-              {(reportArray && reportArray.length !== 0) && <FileHistoryContainer />}
-              {(!reportArray || !reportArray.length) && <Placeholder />}
-
-            </TabPane>
-          </Tabs> :
-          <Spin spinning={loading}>
+          <div>
+            <Header />
+            <Tabs defaultActiveKey="data" className="tabs-container">
+              <TabPane tab="Imported Data" key="data">
+                {(reportArray && reportArray.length !== 0) && <FileHistoryContainer />}
+                {(!reportArray || !reportArray.length) && <Placeholder />}
+              </TabPane>
+            </Tabs>
+          </div> :
+          < Spin spinning={loading}>
             <Authenticate />
           </Spin>}
       </div>
