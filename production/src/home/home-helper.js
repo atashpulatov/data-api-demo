@@ -16,6 +16,7 @@ class HomeHelper {
         envUrl,
       };
       sessionHelper.saveLoginValues(values);
+      return values.envUrl;
     }
   };
 
@@ -37,6 +38,7 @@ class HomeHelper {
     const splittedCookiesJar = this.getParsedCookies();
     if (splittedCookiesJar.iSession) {
       sessionHelper.logIn(splittedCookiesJar.iSession);
+      return splittedCookiesJar.iSession;
     }
   };
 
