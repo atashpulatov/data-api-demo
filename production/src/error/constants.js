@@ -4,8 +4,8 @@ const withDefaultValue = (obj, defaultValue) => {
   });
 };
 
-export const GENERIC_SERVER_ERR = 'We are sorry but this object cannot be imported.';
-export const NOT_SUPPORTED_SERVER_ERR = 'We are sorry but this object cannot be imported. Objects with prompts, cross tabs, totals or subtotals are not supported in this version of the add-in.';
+export const GENERIC_SERVER_ERR = 'This object cannot be imported.';
+export const NOT_SUPPORTED_SERVER_ERR = 'This object cannot be imported. Objects with prompts, cross tabs, totals, or subtotals are not supported in this version of Office for MicroStrategy.';
 
 // temporarily we map all those codes to one message; may be changed in the future
 export const errorMessages = withDefaultValue({
