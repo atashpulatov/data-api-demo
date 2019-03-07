@@ -15,21 +15,22 @@ class PageBuilder {
     return (
       <div id='content'>
         <Notifications />
-        {(authToken && <Header />)}
-        {/* Logout button will be moved next to the username in the header */}
-        <Tabs defaultActiveKey="data" className="tabs-container">
-          {/* <TabPane tab="Environment" key="environment">
-            <div>TODO</div>
-          </TabPane> */}
-          <TabPane tab="Imported Data" key="data">
-            {(reportArray && reportArray.length !== 0) && authToken && <FileHistoryContainer />}
-            {(!reportArray || !reportArray.length) && authToken && <Placeholder />}
-            <Spin spinning={loading}>
-              {!authToken && IS_LOCALHOST && <Authenticate />}
+        {
+          authToken ?
+            <div>
+              <Header />
+              <Tabs defaultActiveKey="data" className="tabs-container">
+                <TabPane tab="Imported Data" key="data">
+                  {(reportArray && reportArray.length !== 0) && <FileHistoryContainer />}
+                  {(!reportArray || !reportArray.length) && <Placeholder />}
+                </TabPane>
+              </Tabs>
+            </div> :
+            < Spin spinning={loading}>
+              {IS_LOCALHOST && <Authenticate />}
             </Spin>
-          </TabPane>
-        </Tabs>
-      </div>
+        }
+      </div >
     );
   }
 }
