@@ -15,6 +15,7 @@ class OfficeStoreService {
         projectId: report.projectId,
         envUrl: report.envUrl,
         body: report.body,
+        objectType: report.objectType,
       });
       settings.saveAsync();
     } catch (error) {

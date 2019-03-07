@@ -17,7 +17,6 @@ export class AttributeSelectorWindow extends Component {
         authToken: this.props.parsed.token,
         projectId: this.props.parsed.projectId,
       },
-      reportId: this.props.parsed.reportId,
       reportSubtype: this.props.parsed.reportSubtype,
       triggerUpdate: false,
       loading: false,
@@ -58,10 +57,10 @@ export class AttributeSelectorWindow extends Component {
         style={{padding: '20px'}}>
         <AttributeSelector
           // TODO: logic for a title
-          title='Import a file > Access_Transaction'
+          title={`Import a file > ${this.props.parsed.reportName}`}
           attributesSelectedChange={this.attributesBeingSelected}
           session={this.state.session}
-          reportId={this.state.reportId}
+          reportId={this.props.parsed.reportId}
           reportSubtype={this.state.reportSubtype}
           triggerUpdate={this.state.triggerUpdate}
           onTriggerUpdate={this.onTriggerUpdate}
