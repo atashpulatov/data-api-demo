@@ -11,7 +11,7 @@ class HomeHelper {
         return;
       }
     } else {
-      const currentPath = window.location.pathname;
+      const currentPath = location.pathname;
       const pathBeginning = currentPath.split('/apps/')[0];
       const envUrl = `${location.origin}/${pathBeginning}/api`;
       const values = {
@@ -25,15 +25,15 @@ class HomeHelper {
   getParsedCookies = () => {
     const cookieJar = this.getDocumentCookie();
     return cookieJar.split(';')
-      .reduce((res, c) => {
-        const [key, val] = c.trim().split('=').map(decodeURIComponent);
-        const allNumbers = (str) => /^\d+$/.test(str);
-        try {
-          return Object.assign(res, {[key]: allNumbers(val) ? val : JSON.parse(val)});
-        } catch (e) {
-          return Object.assign(res, {[key]: val});
-        }
-      }, {});
+        .reduce((res, c) => {
+          const [key, val] = c.trim().split('=').map(decodeURIComponent);
+          const allNumbers = (str) => /^\d+$/.test(str);
+          try {
+            return Object.assign(res, {[key]: allNumbers(val) ? val : JSON.parse(val)});
+          } catch (e) {
+            return Object.assign(res, {[key]: val});
+          }
+        }, {});
   };
 
   saveTokenFromCookies = () => {
