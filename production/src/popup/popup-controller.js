@@ -64,12 +64,10 @@ class PopupController {
           await this.handleUpdateCommand(response, dialog);
           break;
         case selectorProperties.commandCancel:
-          dialog.close();
           break;
         case selectorProperties.commandError:
           const error = errorService.errorRestFactory(response.error);
           errorService.handleError(error, false);
-          dialog.close();
           break;
         default:
           break;
