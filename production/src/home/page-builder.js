@@ -13,7 +13,7 @@ class PageBuilder {
     return (
       <div id='content'>
         <Notifications />
-        <Header authToken={authToken} />
+        {(authToken && <Header />)}
         {/* Logout button will be moved next to the username in the header */}
         <Tabs defaultActiveKey="data" className="tabs-container">
           {/* <TabPane tab="Environment" key="environment">
