@@ -29,7 +29,7 @@ end
 def install_dependencies()
   shell_command! "rm -rf node_modules", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
   update_package_json()
-  shell_command! "yarn install --network-concurrency 8", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
+  shell_command! "yarn install --network-concurrency 4", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
 end
 
 def update_package_json()
