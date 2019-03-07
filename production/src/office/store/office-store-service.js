@@ -1,6 +1,6 @@
-import { officeProperties } from '../office-properties';
-import { RunOutsideOfficeError } from '../../error/run-outside-office-error';
-import { errorService } from '../../error/error-handler';
+import {officeProperties} from '../office-properties';
+import {RunOutsideOfficeError} from '../../error/run-outside-office-error';
+import {errorService} from '../../error/error-handler';
 
 class OfficeStoreService {
   preserveReport = (report) => {
@@ -17,6 +17,7 @@ class OfficeStoreService {
         body: report.body,
         objectType: report.objectType,
       });
+      settings.set(officeProperties.loadedReportProperties, reportProperties);
       settings.saveAsync();
     } catch (error) {
       errorService.handleOfficeError(error);
@@ -31,6 +32,7 @@ class OfficeStoreService {
         return (report.bindId === bindingId);
       });
       reportProperties.splice(indexOfReport, 1);
+      settings.set(officeProperties.loadedReportProperties, reportProperties);
       settings.saveAsync();
     } catch (error) {
       errorService.handleOfficeError(error);
@@ -39,11 +41,10 @@ class OfficeStoreService {
 
   getReportFromProperties = (bindingId) => {
     const reportProperties = this._getReportProperties();
-    const report = reportProperties.find((report) => {
+    return reportProperties.find((report) => {
       return report.bindId === bindingId;
     });
-    return report;
-  }
+  };
 
   _getReportProperties = () => {
     try {
@@ -57,7 +58,7 @@ class OfficeStoreService {
     } catch (error) {
       errorService.handleOfficeError(error);
     }
-  }
+  };
 
   getOfficeSettings = () => {
     if (Office === undefined
