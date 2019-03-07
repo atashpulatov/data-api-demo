@@ -2,11 +2,13 @@ import {EnvironmentNotFoundError} from './environment-not-found-error.js';
 import {UnauthorizedError} from './unauthorized-error.js';
 import {BadRequestError} from './bad-request-error.js';
 import {InternalServerError} from './internal-server-error.js';
+import {PromptedReportError} from './prompted-report-error';
 import {sessionHelper} from '../storage/session-helper.js';
 import {notificationService} from '../notification/notification-service.js';
 import {RunOutsideOfficeError} from './run-outside-office-error.js';
 import {OverlappingTablesError} from './overlapping-tables-error';
 import {GenericOfficeError} from './generic-office-error.js';
+import {errorMessages, NOT_SUPPORTED_SERVER_ERR} from './constants';
 
 const TIMEOUT = 2000;
 
@@ -14,6 +16,9 @@ class ErrorService {
   errorRestFactory = (error) => {
     if (error.status === 404 || !error.response) {
       return new EnvironmentNotFoundError();
+    }
+    if (error.status === 200) {
+      return new PromptedReportError();
     }
     switch (error.response.status) {
       case 404:
@@ -23,7 +28,7 @@ class ErrorService {
       case 401:
         return new UnauthorizedError();
       case 500:
-        return new InternalServerError();
+        return new InternalServerError(error.response ? error.response.body : {});
       default:
         return error;
     }
@@ -64,7 +69,10 @@ class ErrorService {
         notificationService.displayMessage('error', '400 - There has been a problem with your request');
         break;
       case InternalServerError:
-        notificationService.displayMessage('warn', '500 - We were not able to handle your request');
+        notificationService.displayMessage('error', errorMessages[error.iServerCode]);
+        break;
+      case PromptedReportError:
+        notificationService.displayMessage('error', NOT_SUPPORTED_SERVER_ERR);
         break;
       default:
         notificationService.displayMessage('error', error.message || 'Unknown error');
