@@ -64,7 +64,7 @@ describe('ErrorService', () => {
     });
     it('should throw a InternalServerError due to response 500 code', () => {
       // given
-      const response = {status: 500};
+      const response = {status: 500, body: {iServerCode: '-2147171501'}};
       const error = {response};
       // when
       const resultError = errorService.errorRestFactory(error);
@@ -105,13 +105,14 @@ describe('ErrorService', () => {
     });
     it('should display notification on InternalServerError', () => {
       // given
-      const error = new InternalServerError();
+      const error = new InternalServerError({iServerCode: '-2147171501'});
       const spyMethod = jest.spyOn(notificationService, 'displayMessage');
+      const NOT_SUPPORTED_SERVER_ERR = 'This object cannot be imported. Objects with prompts, cross tabs, totals, or subtotals are not supported in this version of Office for MicroStrategy.';
       // when
       errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('warn', '500 - We were not able to handle your request');
+      expect(spyMethod).toBeCalledWith('error', NOT_SUPPORTED_SERVER_ERR);
     });
     it('should logout on UnauthorizedError', () => {
       // given
