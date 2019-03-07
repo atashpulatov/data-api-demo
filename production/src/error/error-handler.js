@@ -14,11 +14,11 @@ const TIMEOUT = 2000;
 
 class ErrorService {
   errorRestFactory = (error) => {
-    if (error.status === 404 || !error.response) {
-      return new EnvironmentNotFoundError();
-    }
     if (error.status === 200) {
       return new PromptedReportError();
+    }
+    if (error.status === 404 || !error.response) {
+      return new EnvironmentNotFoundError();
     }
     switch (error.response.status) {
       case 404:
