@@ -38,13 +38,15 @@ export class _NavigationTree extends Component {
       command: selectorProperties.commandOk,
       chosenObject: this.props.chosenObjectId,
       chosenProject: this.props.chosenProjectId,
+      chosenSubtype: this.props.chosenSubtype,
     };
     this.props.startImport();
     Office.context.ui.messageParent(JSON.stringify(okObject));
   };
 
   handleSecondary = () => {
-    this.props.handlePrepare(this.props.chosenProjectId, this.props.chosenObjectId, this.props.chosenSubtype);
+    this.props.handlePrepare(this.props.chosenProjectId, this.props.chosenObjectId,
+        this.props.chosenSubtype, this.props.chosenProjectName);
   };
 
   handleCancel = () => {
@@ -83,6 +85,19 @@ export class _NavigationTree extends Component {
         chosenFolder={folder}
         onChoseFolder={selectFolder}
       >
+        {/* Temporary loading user action block */}
+        <div style={{
+          display: loading ? 'block' : 'none',
+          position: 'fixed',
+          top: '0',
+          left: '0',
+          height: '100vh',
+          width: '100vw',
+          zindex: '100',
+          backgroundColor: '#fff',
+          opacity: '0.5',
+        }}>
+        </div>
         <PopupButtons
           loading={loading}
           disableActiveActions={!chosenObjectId}

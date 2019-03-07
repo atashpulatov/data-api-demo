@@ -3,7 +3,6 @@ import React from 'react';
 import {_NavigationTree} from '../../src/navigation/navigation-tree';
 import {shallow, mount} from 'enzyme';
 import {selectorProperties} from '../../src/attribute-selector/selector-properties';
-import {officeContext} from '../../src/office/office-context';
 import {PopupButtons} from '../../src/popup/popup-buttons';
 /* eslint-enable */
 
@@ -48,9 +47,11 @@ describe('NavigationTree', () => {
       token: 'token',
       projectId: 'projectId',
     };
+    const propsMethod = jest.fn();
     const wrappedComponent = mount(<_NavigationTree
       parsed={parsed}
-      chosenObjectId={true} />);
+      chosenObjectId={true}
+      selectObject={propsMethod}/>);
     const secondaryAction = jest.spyOn(wrappedComponent.instance(), 'handleSecondary')
         .mockReturnValueOnce({});
     wrappedComponent.update();
@@ -77,6 +78,7 @@ describe('NavigationTree', () => {
       chosenObjectId: 'objectId',
       chosenProjectId: 'projectId',
       chosenSubtype: 'subtype',
+      chosenProjectName: 'Prepare Data',
     };
     const wrappedComponent = shallow(<_NavigationTree
       parsed={parsed}
@@ -87,6 +89,6 @@ describe('NavigationTree', () => {
     wrappedComponent.instance().handleSecondary();
     // then
     expect(propsMethod).toBeCalled();
-    expect(propsMethod).toBeCalledWith(actionObject.chosenProjectId, actionObject.chosenObjectId, actionObject.chosenSubtype);
+    expect(propsMethod).toBeCalledWith(actionObject.chosenProjectId, actionObject.chosenObjectId, actionObject.chosenSubtype, actionObject.chosenProjectName);
   });
 });

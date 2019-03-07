@@ -6776,9 +6776,9 @@ ms@^2.1.1:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.1.tgz#30a5864eb3ebb0a66f2ebe6d727af06a09d86e0a"
   integrity sha512-tgp+dl5cGk28utYktBsrFqA7HKgrhgPsg6Z/EfhWI4gl1Hwq8B/GmY/0oXZ6nF8hDVesS/FpnYaD/kOWhYQvyg==
 
-"mstr-react-library@ssh://git@github.microstrategy.com:pfilipp/mstr-react-library.git#1a94679d4":
+"mstr-react-library@ssh://git@github.microstrategy.com:pfilipp/mstr-react-library.git#3ec7864746dad76b9":
   version "1.0.0"
-  resolved "ssh://git@github.microstrategy.com:pfilipp/mstr-react-library.git#1a94679d4daa21ca5034bf1b6339708d8e5f7587"
+  resolved "ssh://git@github.microstrategy.com:pfilipp/mstr-react-library.git#3ec7864746dad76b990c57e9c6b454fad2588478"
   dependencies:
     antd "^3.13.1"
     superagent "^4.0.0"

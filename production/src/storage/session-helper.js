@@ -62,6 +62,21 @@ class SessionHelper {
     };
     return session;
   }
+  saveUserInfo = (values) => {
+    if (values) {
+      reduxStore.dispatch({
+        type: sessionProperties.actions.getUserInfo,
+        userFullName: values.fullName ? values.fullName : 'Microstrategy User',
+        userInitials: values.initials ? values.initials : null,
+      });
+    } else {
+      reduxStore.dispatch({
+        type: sessionProperties.actions.getUserInfo,
+        userFullName: 'Microstrategy User',
+        userInitials: null,
+      });
+    }
+  }
 }
 
 export const sessionHelper = new SessionHelper();

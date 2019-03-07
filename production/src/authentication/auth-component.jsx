@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import './auth-component.css';
-import { reduxStore } from '../store';
-import { Form, Icon, Input, Button } from 'antd';
-import { authenticationHelper } from './authentication-helper';
+import {reduxStore} from '../store';
+import {Form, Icon, Input, Button} from 'antd';
+import {authenticationHelper} from './authentication-helper';
 const FormItem = Form.Item;
 
 export class _Authenticate extends Component {
@@ -21,7 +21,7 @@ export class _Authenticate extends Component {
   }
 
   render() {
-    const { getFieldDecorator } = this.props.form;
+    const {getFieldDecorator} = this.props.form;
     return (
       <article>
         <header>
@@ -34,22 +34,22 @@ export class _Authenticate extends Component {
             label='Username'>
             {getFieldDecorator('username', {
               initialValue: this.state.username || '',
-              rules: [{ required: true, message: 'Please input your username!' }],
+              rules: [{required: true, message: 'Please input your username!'}],
             })(
               <Input
                 prefix={
-                  <Icon type='user' style={{ color: 'rgba(0,0,0,.25)' }} />}
+                  <Icon type='user' style={{color: 'rgba(0,0,0,.25)'}} />}
                 placeholder='Username' />
             )}
           </FormItem>
           <FormItem
             label='Password'>
             {getFieldDecorator('password', {
-              rules: [{ message: 'Please input your Password!' }],
+              rules: [{message: 'Please input your Password!'}],
             })(
               <Input
                 prefix={
-                  <Icon type='lock' style={{ color: 'rgba(0,0,0,.25)' }} />}
+                  <Icon type='lock' style={{color: 'rgba(0,0,0,.25)'}} />}
                 type='password'
                 placeholder='Password' />
             )}
@@ -58,11 +58,11 @@ export class _Authenticate extends Component {
             label='Environment URL'>
             {getFieldDecorator('envUrl', {
               initialValue: this.state.envUrl || '',
-              rules: [{ required: true, message: 'Please input environment URL!', type: 'url' }],
+              rules: [{required: true, message: 'Please input environment URL!', type: 'url'}],
             })(
               <Input
                 prefix={
-                  <Icon type='link' style={{ color: 'rgba(0,0,0,.25)' }} />}
+                  <Icon type='link' style={{color: 'rgba(0,0,0,.25)'}} />}
                 placeholder='environment URL' />
             )}
           </FormItem>

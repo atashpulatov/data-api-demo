@@ -27,7 +27,6 @@ describe('AttributeSelectorWindow', () => {
       envUrl: 'url',
       token: 'token',
       projectId: 'proId',
-      reportId: 'repId',
     };
     // when
     const componentWrapper = shallow(<AttributeSelectorWindow
@@ -39,8 +38,6 @@ describe('AttributeSelectorWindow', () => {
         .toEqual(parsed.token);
     expect(componentWrapper.state('session').projectId)
         .toEqual(parsed.projectId);
-    expect(componentWrapper.state('reportId'))
-        .toEqual(parsed.reportId);
   });
 
   it('should trigger onTriggerUpdate when Import button is clicked and data is returned', async () => {

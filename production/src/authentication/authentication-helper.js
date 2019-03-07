@@ -1,6 +1,8 @@
 import {sessionHelper} from '../storage/session-helper';
 import {authenticationService} from './auth-rest-service';
 import {errorService} from '../error/error-handler';
+import {reduxStore} from '../store';
+import {userRestService} from '../home/user-rest-service';
 
 class AuthenticationHelper {
   loginUser = async (err, values) => {
@@ -14,12 +16,21 @@ class AuthenticationHelper {
           .authenticate(
               values.username, values.password,
               values.envUrl, 1);
+      const userData = await userRestService.getUserData(authToken, values.envUrl);
+      sessionHelper.saveUserInfo(userData);
       sessionHelper.logIn(authToken);
     } catch (error) {
       errorService.handlePreAuthError(error);
     } finally {
       sessionHelper.disableLoading();
     }
+  }
+
+  validateAuthToken = async () => {
+    const reduxStoreState = reduxStore.getState();
+    const authToken = reduxStoreState.sessionReducer.authToken;
+    const envUrl = reduxStoreState.sessionReducer.envUrl;
+    await authenticationService.getSessions(envUrl, authToken);
   }
 }
 
