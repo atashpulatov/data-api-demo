@@ -6,9 +6,11 @@ import {mstrObjectRestService} from '../../src/mstr-object/mstr-object-rest-serv
 import {mockReports} from '../mockData';
 import {officeStoreService} from '../../src/office/store/office-store-service';
 import {OutsideOfRangeError} from '../../src/error/outside-of-range-error';
+import {authenticationHelper} from '../../src/authentication/authentication-helper';
 
 jest.mock('../../src/mstr-object/mstr-object-rest-service');
 jest.mock('../../src/office/store/office-store-service');
+jest.mock('../../src/authentication/authentication-helper');
 
 describe('OfficeDisplayService', () => {
   const givenReport = mockReports[0];
@@ -101,6 +103,7 @@ describe('OfficeDisplayService', () => {
   it('should call deleteReport on office store service', async () => {
     // given
     officeStoreService.deleteReport = jest.fn();
+    authenticationHelper.validateAuthToken = jest.fn().mockImplementation(() => {});
     const report = {
       id: 'firstTestId',
       name: 'firstTestName',
