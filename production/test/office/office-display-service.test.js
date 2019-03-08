@@ -120,6 +120,30 @@ describe('OfficeDisplayService', () => {
     expect(authenticationHelper.validateAuthToken).toBeCalled();
     expect(officeStoreService.deleteReport).toBeCalled();
   });
+
+  it('should not call deleteReport on office store service', async () => {
+    // given
+    officeStoreService.deleteReport = jest.fn();
+    authenticationHelper.validateAuthToken = jest.fn().mockImplementation(() => {
+      throw Error();
+    });
+    const report = {
+      id: 'firstTestId',
+      name: 'firstTestName',
+      bindId: 'firstBindId',
+      tableId: 'firstTableId',
+      projectId: 'firstProjectId',
+      envUrl: 'firstEnvUrl',
+    };
+    officeDisplayService.addReportToStore(report);
+    // when
+    const bindingId = reduxStore.getState().officeReducer.reportArray[0].id;
+    await officeDisplayService.removeReportFromExcel(bindingId);
+    // then
+    expect(authenticationHelper.validateAuthToken).toBeCalled();
+    expect(officeStoreService.deleteReport).not.toBeCalled();
+  });
+
   describe('_insertDataIntoExcel', async () => {
     it('should return table husk with proper name and invoke required methods', async () => {
       // given
