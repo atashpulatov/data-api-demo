@@ -78,12 +78,10 @@ class OfficeDisplayService {
         const tableObject = excelContext.workbook.tables.getItem(bindingId);
         await tableObject.delete();
         await excelContext.sync();
-        !isRefresh && this.removeReportFromStore(bindingId);
-        return true;
+        return !isRefresh && this.removeReportFromStore(bindingId);
       } catch (e) {
         if (e.message.includes('The requested resource doesn\'t exist.')) {
-          !isRefresh && this.removeReportFromStore(bindingId);
-          return true;
+          return !isRefresh && this.removeReportFromStore(bindingId);
         }
         throw e;
       }
@@ -98,6 +96,7 @@ class OfficeDisplayService {
       reportBindId: bindingId,
     });
     officeStoreService.deleteReport(bindingId);
+    return true;
   };
 
   // TODO: we could filter data to display options related to current envUrl
