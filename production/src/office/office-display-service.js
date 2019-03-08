@@ -7,6 +7,7 @@ import {sessionHelper} from '../storage/session-helper';
 import {notificationService} from '../notification/notification-service';
 import {errorService} from '../error/error-handler';
 import {OutsideOfRangeError} from '../error/outside-of-range-error';
+import {authenticationHelper} from '../authentication/authentication-helper';
 
 const EXCEL_PAGINATION = 5000;
 
@@ -66,6 +67,12 @@ class OfficeDisplayService {
   }
 
   removeReportFromExcel = async (bindingId, isRefresh) => {
+    try {
+      await authenticationHelper.validateAuthToken();
+    } catch (error) {
+      errorService.handleError(error);
+      return;
+    }
     const officeContext = await officeApiHelper.getOfficeContext();
     await officeContext.document.bindings.releaseByIdAsync(bindingId, (asyncResult) => {
       console.log('released binding');
