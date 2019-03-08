@@ -117,6 +117,7 @@ describe('OfficeDisplayService', () => {
     const bindingId = reduxStore.getState().officeReducer.reportArray[0].id;
     await officeDisplayService.removeReportFromExcel(bindingId);
     // then
+    expect(authenticationHelper.validateAuthToken).toBeCalled();
     expect(officeStoreService.deleteReport).toBeCalled();
   });
   describe('_insertDataIntoExcel', async () => {
