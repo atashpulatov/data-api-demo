@@ -69,25 +69,25 @@ class OfficeDisplayService {
   removeReportFromExcel = async (bindingId, isRefresh) => {
     try {
       await authenticationHelper.validateAuthToken();
+      const officeContext = await officeApiHelper.getOfficeContext();
+      await officeContext.document.bindings.releaseByIdAsync(bindingId, (asyncResult) => {
+        console.log('released binding');
+      });
+      const excelContext = await officeApiHelper.getExcelContext();
+      const tableObject = excelContext.workbook.tables.getItem(bindingId);
+      await tableObject.delete();
+      await excelContext.sync();
+      if (!isRefresh) {
+        reduxStore.dispatch({
+          type: officeProperties.actions.removeReport,
+          reportBindId: bindingId,
+        });
+        officeStoreService.deleteReport(bindingId);
+      }
     } catch (error) {
       return errorService.handleError(error);
     }
-    const officeContext = await officeApiHelper.getOfficeContext();
-    await officeContext.document.bindings.releaseByIdAsync(bindingId, (asyncResult) => {
-      console.log('released binding');
-    });
-    const excelContext = await officeApiHelper.getExcelContext();
-    const tableObject = excelContext.workbook.tables.getItem(bindingId);
-    await tableObject.delete();
-    await excelContext.sync();
-    if (!isRefresh) {
-      reduxStore.dispatch({
-        type: officeProperties.actions.removeReport,
-        reportBindId: bindingId,
-      });
-      officeStoreService.deleteReport(bindingId);
-    }
-  }
+  };
 
   // TODO: we could filter data to display options related to current envUrl
   refreshReport = async (bindingId) => {

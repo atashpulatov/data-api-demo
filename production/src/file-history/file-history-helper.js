@@ -3,10 +3,12 @@ import {notificationService} from '../notification/notification-service';
 import {errorService} from '../error/error-handler';
 import {officeProperties} from '../office/office-properties';
 import {reduxStore} from '../store';
+import {authenticationHelper} from '../authentication/authentication-helper';
 
 class FileHistoryHelper {
   refreshReport = async (onRefresh, bindingId) => {
     try {
+      await authenticationHelper.validateAuthToken();
       reduxStore.dispatch({
         type: officeProperties.actions.startLoadingReport,
         reportBindId: bindingId,
