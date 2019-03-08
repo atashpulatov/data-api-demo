@@ -12,9 +12,11 @@ const EXCEL_PAGINATION = 5000;
 
 class OfficeDisplayService {
   printObject = async (objectId, projectId, isReport = true, startCell, officeTableId, bindingId, body, isRefresh) => {
+    console.log('-----print');
     const objectType = isReport ? 'report' : 'cube';
     try {
       const excelContext = await officeApiHelper.getExcelContext();
+      console.log('-----print');
       startCell = startCell || await officeApiHelper.getSelectedCell(excelContext);
       const officeTable = await mstrObjectRestService.getObjectContent(objectId, projectId, isReport, body);
       if (!officeTable || (officeTable.rows && officeTable.rows.length === 0)) {
@@ -108,15 +110,13 @@ class OfficeDisplayService {
     const sheetRange = sheet.getRange(range);
     context.trackedObjects.add(sheetRange);
     await this._checkRangeValidity(context, sheetRange);
-
     const rowsData = this._getRowsArray(reportConvertedData);
 
-    sheetRange.values = [reportConvertedData.headers, ...rowsData.slice(0, endRow)];
     const mstrTable = sheet.tables.add(range, hasHeaders);
+    sheetRange.values = [reportConvertedData.headers, ...rowsData.slice(0, endRow)];
     try {
       mstrTable.name = tableName;
       await context.sync();
-      await this._addRowsSequentially(rowsData, endRow, mstrTable, context);
       officeApiHelper.formatTable(sheet);
       sheet.activate();
 
