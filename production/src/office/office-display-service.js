@@ -70,8 +70,7 @@ class OfficeDisplayService {
     try {
       await authenticationHelper.validateAuthToken();
     } catch (error) {
-      errorService.handleError(error);
-      return;
+      return errorService.handleError(error);
     }
     const officeContext = await officeApiHelper.getOfficeContext();
     await officeContext.document.bindings.releaseByIdAsync(bindingId, (asyncResult) => {
