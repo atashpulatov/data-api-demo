@@ -6,14 +6,15 @@ import {officeStoreService} from './store/office-store-service';
 import {sessionHelper} from '../storage/session-helper';
 import {notificationService} from '../notification/notification-service';
 import {errorService} from '../error/error-handler';
-import {loadPending} from '../popup/popup-controller';
+import {popupController} from '../popup/popup-controller';
 import {OutsideOfRangeError} from '../error/outside-of-range-error';
 import {authenticationHelper} from '../authentication/authentication-helper';
+import {PopupTypeEnum} from '../home/popup-type-enum';
 
 const EXCEL_PAGINATION = 5000;
 
 class OfficeDisplayService {
-  printObject = async (objectId, projectId, isReport = true, startCell, officeTableId, bindingId, body, isRefresh) => {
+  _printObject = async (objectId, projectId, isReport = true, startCell, officeTableId, bindingId, body, isRefresh) => {
     const objectType = isReport ? 'report' : 'cube';
     try {
       const excelContext = await officeApiHelper.getExcelContext();
@@ -46,6 +47,11 @@ class OfficeDisplayService {
     } catch (error) {
       throw errorService.errorOfficeFactory(error);
     }
+  }
+
+  printObject = async (...args) => {
+    popupController.runPopup(PopupTypeEnum.loadingPage, 30, 50);
+    return await this._printObject(...args);
   }
 
   // TODO: move it to api helper?

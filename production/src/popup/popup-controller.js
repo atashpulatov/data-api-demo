@@ -9,16 +9,18 @@ import {reduxStore} from '../store';
 import {CLEAR_WINDOW} from './popup-actions';
 import {errorService} from '../error/error-handler';
 import {authenticationHelper} from '../authentication/authentication-helper';
-
 const URL = `${window.location.href}`;
 const IS_LOCALHOST = URL.includes('localhost');
 
 class PopupController {
+  constructor() {
+    this.loadPending = this.loadPending.bind(this);
+  }
   runPopupNavigation = async () => {
-    await this.runPopup(PopupTypeEnum.navigationTree, 80);
+    await this.runPopup(PopupTypeEnum.navigationTree, 80, 80);
   };
 
-  runPopup = async (popupType, size) => {
+  runPopup = async (popupType, height, width) => {
     const session = sessionHelper.getSession();
     try {
       await authenticationHelper.validateAuthToken();
@@ -37,18 +39,18 @@ class PopupController {
       Excel.run(async (context) => {
         const officeObject = officeContext.getOffice();
         officeObject.context.ui.displayDialogAsync(
-            splittedUrl[0]
-          + '?popupType=' + PopupTypeEnum.navigationTree
+          splittedUrl[0]
+          + '?popupType=' + popupType
           + '&envUrl=' + session.url
           + '&token=' + session.authToken,
-            {height: size, width: size, displayInIframe: true},
-            (asyncResult) => {
-              const dialog = asyncResult.value;
-              dialog.addEventHandler(
-                  officeObject.EventType.DialogMessageReceived,
-                  this.onMessageFromPopup.bind(null, dialog));
-              reduxStore.dispatch({type: CLEAR_WINDOW});
-            });
+          {height, width, displayInIframe: true},
+          (asyncResult) => {
+            const dialog = asyncResult.value;
+            dialog.addEventHandler(
+              officeObject.EventType.DialogMessageReceived,
+              this.onMessageFromPopup.bind(null, dialog));
+            reduxStore.dispatch({type: CLEAR_WINDOW});
+          });
         await context.sync();
       });
     } catch (error) {
@@ -62,14 +64,18 @@ class PopupController {
     try {
       switch (response.command) {
         case selectorProperties.commandOk:
+          await dialog.close();
           await this.handleOkCommand(response, dialog);
           break;
         case selectorProperties.commandOnUpdate:
+          await dialog.close();
           await this.handleUpdateCommand(response, dialog);
           break;
         case selectorProperties.commandCancel:
+          await dialog.close();
           break;
         case selectorProperties.commandError:
+          await dialog.close();
           const error = errorService.errorRestFactory(response.error);
           errorService.handleError(error, false);
           break;
@@ -79,12 +85,10 @@ class PopupController {
     } catch (error) {
       console.error(error.message);
       errorService.handleOfficeError(error);
-    } finally {
-      dialog.close();
     }
   }
 
-  handleUpdateCommand = async (response, dialog) => {
+  handleUpdateCommand = async (response) => {
     if (response.reportId
       && response.projectId
       && response.reportSubtype
@@ -94,28 +98,21 @@ class PopupController {
         notificationService.displayMessage(result.type, result.message);
       }
     }
-    dialog.close();
   }
 
-  handleOkCommand = async (response, dialog) => {
+  handleOkCommand = async (response) => {
     if (response.chosenObject) {
       const result = await officeDisplayService.printObject(response.chosenObject, response.chosenProject, response.chosenSubtype === objectTypes.getTypeValues('Report').subtype);
       if (result) {
         notificationService.displayMessage(result.type, result.message);
       }
     }
-    dialog.close();
   }
 
-  _sleep = (ms) => {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-
-  loadPending = (wrapped, milliseconds = 500) => {
+  loadPending(wrapped) {
     return async (...args) => {
-      await this._sleep(milliseconds);
-      this.runPopup(PopupTypeEnum.loadingPage, 20);
-      return await wrapped.apply(this, args);
+      this.runPopup(PopupTypeEnum.loadingPage, 40);
+      return await wrapped(...args);
     };
   }
 }

@@ -30,7 +30,7 @@ describe('PopupController', () => {
     popupController.runPopupNavigation();
     // then
     expect(runPopupSpy).toBeCalled();
-    expect(runPopupSpy).toBeCalledWith(popupType, size);
+    expect(runPopupSpy).toBeCalledWith(popupType, size, size);
   });
 
   it('should handle update command from popup for cube',
@@ -108,18 +108,5 @@ describe('PopupController', () => {
     expect(handleErrorArgs[0].constructor).toBe(EnvironmentNotFoundError);
     expect(handleErrorArgs[1]).toBe(false);
     expect(dialog.close).toBeCalled();
-  });
-
-  it('should call dialog and inside method when decorated method is called', async () => {
-    // given
-    const runPopupSpy = jest.spyOn(popupController, 'runPopup');
-    const methodInside = jest.fn();
-    const arg1 = 'arg1';
-    const arg2 = 'arg2';
-    // when
-    await loadPending(methodInside, 20, runPopupSpy)(arg1, arg2);
-    // then
-    expect(runPopupSpy).toBeCalled();
-    expect(methodInside).toBeCalledWith(arg1, arg2);
   });
 });

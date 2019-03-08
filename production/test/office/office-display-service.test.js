@@ -7,6 +7,8 @@ import {mockReports} from '../mockData';
 import {officeStoreService} from '../../src/office/store/office-store-service';
 import {OutsideOfRangeError} from '../../src/error/outside-of-range-error';
 import {authenticationHelper} from '../../src/authentication/authentication-helper';
+import {popupController} from '../../src/popup/popup-controller';
+import {PopupTypeEnum} from '../../src/home/popup-type-enum';
 
 jest.mock('../../src/mstr-object/mstr-object-rest-service');
 jest.mock('../../src/office/store/office-store-service');
@@ -54,10 +56,21 @@ describe('OfficeDisplayService', () => {
   });
 
   afterAll(() => {
-    officeApiHelper.findAvailableOfficeTableId = originalFindAvailableTableName;
-    officeApiHelper.getCurrentMstrContext = originalMstrContext;
-
     jest.restoreAllMocks();
+  });
+
+  it('should open loading popup when printing object', async () => {
+    // given
+    const runPopupSpy = jest.spyOn(popupController, 'runPopup');
+    const printInside = jest.spyOn(officeDisplayService, '_printObject')
+        .mockImplementationOnce(() => {});
+    const arg1 = 'arg1';
+    const arg2 = 'arg2';
+    // when
+    await officeDisplayService.printObject(arg1, arg2);
+    // then
+    expect(runPopupSpy).toBeCalledWith(PopupTypeEnum.loadingPage, 30, 50);
+    expect(printInside).toBeCalledWith(arg1, arg2);
   });
 
   it('should add report to store', () => {
