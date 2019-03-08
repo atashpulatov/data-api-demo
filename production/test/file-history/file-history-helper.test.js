@@ -120,13 +120,23 @@ describe('FileHistoryHelper', () => {
     it('should display message on success', async () => {
       // given
       const mockedDisplayMessage = notificationService.displayMessage;
-      const mockedOnDelete = jest.fn();
+      const mockedOnDelete = jest.fn().mockImplementation(() => true);
       const testBindId = 'someBindingIt';
       // when
       await fileHistoryHelper.deleteReport(mockedOnDelete, testBindId);
       // then
       expect(mockedDisplayMessage).toBeCalled();
       expect(mockedDisplayMessage).toBeCalledWith('info', 'Report removed');
+    });
+    it('should not display message without success', async () => {
+      // given
+      const mockedDisplayMessage = notificationService.displayMessage;
+      const mockedOnDelete = jest.fn();
+      const testBindId = 'someBindingIt';
+      // when
+      await fileHistoryHelper.deleteReport(mockedOnDelete, testBindId);
+      // then
+      expect(mockedDisplayMessage).not.toBeCalled();
     });
     it('should trigger handleError on error', async () => {
       // given
