@@ -8,16 +8,26 @@ import {notificationService} from '../notification/notification-service';
 import {reduxStore} from '../store';
 import {CLEAR_WINDOW} from './popup-actions';
 import {errorService} from '../error/error-handler';
+import {authenticationHelper} from '../authentication/authentication-helper';
+
+const URL = `${window.location.href}`;
+const IS_LOCALHOST = URL.includes('localhost');
 
 class PopupController {
-  runPopupNavigation = () => {
-    this.runPopup(PopupTypeEnum.navigationTree, 80);
+  runPopupNavigation = async () => {
+    await this.runPopup(PopupTypeEnum.navigationTree, 80);
   };
 
-  runPopup = (popupType, size) => {
+  runPopup = async (popupType, size) => {
     const session = sessionHelper.getSession();
-    let url = `${window.location.href}`;
-    if (url.search('localhost') !== -1) {
+    try {
+      await authenticationHelper.validateAuthToken();
+    } catch (error) {
+      errorService.handleError(error);
+      return;
+    }
+    let url = URL;
+    if (IS_LOCALHOST) {
       url = `${window.location.origin}/popup.html`;
     } else {
       url = url.replace('index.html', 'popup.html');
@@ -28,7 +38,7 @@ class PopupController {
         const officeObject = officeContext.getOffice();
         officeObject.context.ui.displayDialogAsync(
             splittedUrl[0]
-          + '?popupType=' + popupType
+          + '?popupType=' + PopupTypeEnum.navigationTree
           + '&envUrl=' + session.url
           + '&token=' + session.authToken,
             {height: size, width: size, displayInIframe: true},
@@ -42,30 +52,35 @@ class PopupController {
         await context.sync();
       });
     } catch (error) {
-      console.error(error);
+      errorService.handleOfficeError(error);
     }
   };
 
   onMessageFromPopup = async (dialog, arg) => {
     const message = arg.message;
     const response = JSON.parse(message);
-    switch (response.command) {
-      case selectorProperties.commandOk:
-        await this.handleOkCommand(response, dialog);
-        break;
-      case selectorProperties.commandOnUpdate:
-        await this.handleUpdateCommand(response, dialog);
-        break;
-      case selectorProperties.commandCancel:
-        dialog.close();
-        break;
-      case selectorProperties.commandError:
-        const error = errorService.errorRestFactory(response.error);
-        errorService.handleError(error, false);
-        dialog.close();
-        break;
-      default:
-        break;
+    try {
+      switch (response.command) {
+        case selectorProperties.commandOk:
+          await this.handleOkCommand(response, dialog);
+          break;
+        case selectorProperties.commandOnUpdate:
+          await this.handleUpdateCommand(response, dialog);
+          break;
+        case selectorProperties.commandCancel:
+          break;
+        case selectorProperties.commandError:
+          const error = errorService.errorRestFactory(response.error);
+          errorService.handleError(error, false);
+          break;
+        default:
+          break;
+      }
+    } catch (error) {
+      console.error(error.message);
+      errorService.handleOfficeError(error);
+    } finally {
+      dialog.close();
     }
   }
 
@@ -84,7 +99,7 @@ class PopupController {
 
   handleOkCommand = async (response, dialog) => {
     if (response.chosenObject) {
-      const result = await officeDisplayService.printObject(response.chosenObject, response.chosenProject, response.reportSubtype === objectTypes.getTypeValues('Report').subtype);
+      const result = await officeDisplayService.printObject(response.chosenObject, response.chosenProject, response.chosenSubtype === objectTypes.getTypeValues('Report').subtype);
       if (result) {
         notificationService.displayMessage(result.type, result.message);
       }

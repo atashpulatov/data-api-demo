@@ -47,6 +47,9 @@ class MstrObjectRestService {
         .send(body)
         .withCredentials()
         .then((res) => {
+          if (res.status === 200 && res.body.status === 2) {
+            throw (res);
+          }
           return res.body.instanceId;
         })
         .catch((err) => {
