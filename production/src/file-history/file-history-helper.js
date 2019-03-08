@@ -28,8 +28,8 @@ class FileHistoryHelper {
   deleteReport = async (onDelete, bindingId) => {
     sessionHelper.enableLoading();
     try {
-      await onDelete(bindingId);
-      notificationService.displayMessage('info', 'Report removed');
+      const removed = await onDelete(bindingId);
+      removed && notificationService.displayMessage('info', 'Report removed');
     } catch (error) {
       errorService.handleError(error);
     } finally {

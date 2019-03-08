@@ -84,6 +84,7 @@ class OfficeDisplayService {
         });
         officeStoreService.deleteReport(bindingId);
       }
+      return true;
     } catch (error) {
       return errorService.handleError(error);
     }
