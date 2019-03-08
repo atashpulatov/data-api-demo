@@ -7,6 +7,7 @@ import {sessionHelper} from '../storage/session-helper';
 import {notificationService} from '../notification/notification-service';
 import {errorService} from '../error/error-handler';
 import {OutsideOfRangeError} from '../error/outside-of-range-error';
+import {authenticationHelper} from '../authentication/authentication-helper';
 
 const EXCEL_PAGINATION = 5000;
 
@@ -66,22 +67,28 @@ class OfficeDisplayService {
   }
 
   removeReportFromExcel = async (bindingId, isRefresh) => {
-    const officeContext = await officeApiHelper.getOfficeContext();
-    await officeContext.document.bindings.releaseByIdAsync(bindingId, (asyncResult) => {
-      console.log('released binding');
-    });
-    const excelContext = await officeApiHelper.getExcelContext();
-    const tableObject = excelContext.workbook.tables.getItem(bindingId);
-    await tableObject.delete();
-    await excelContext.sync();
-    if (!isRefresh) {
-      reduxStore.dispatch({
-        type: officeProperties.actions.removeReport,
-        reportBindId: bindingId,
+    try {
+      await authenticationHelper.validateAuthToken();
+      const officeContext = await officeApiHelper.getOfficeContext();
+      await officeContext.document.bindings.releaseByIdAsync(bindingId, (asyncResult) => {
+        console.log('released binding');
       });
-      officeStoreService.deleteReport(bindingId);
+      const excelContext = await officeApiHelper.getExcelContext();
+      const tableObject = excelContext.workbook.tables.getItem(bindingId);
+      await tableObject.delete();
+      await excelContext.sync();
+      if (!isRefresh) {
+        reduxStore.dispatch({
+          type: officeProperties.actions.removeReport,
+          reportBindId: bindingId,
+        });
+        officeStoreService.deleteReport(bindingId);
+      }
+      return true;
+    } catch (error) {
+      return errorService.handleError(error);
     }
-  }
+  };
 
   // TODO: we could filter data to display options related to current envUrl
   refreshReport = async (bindingId) => {
