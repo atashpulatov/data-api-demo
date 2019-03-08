@@ -11,6 +11,7 @@ export class AttributeSelector extends Component {
 
   render() {
     const {reportId, title, session, triggerUpdate, onTriggerUpdate, reportSubtype, resetTriggerUpdate, attributesSelectedChange} = this.props;
+    // console.log(this.props.openModal);
     return (
       <ErrorBoundary>
         <AttributeMetricFilter
@@ -24,7 +25,10 @@ export class AttributeSelector extends Component {
           reportId={reportId}
           reportSubtype={reportSubtype}
           resetTriggerUpdate={resetTriggerUpdate}
-          withFolderTree={false} />
+          withFolderTree={false}
+          openModal={this.props.openModal}
+          closeModal={this.props.closeModal} />
+
       </ErrorBoundary>
     );
   }

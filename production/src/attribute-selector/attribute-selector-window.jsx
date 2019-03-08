@@ -17,6 +17,7 @@ export class AttributeSelectorWindow extends Component {
         authToken: this.props.parsed.token,
         projectId: this.props.parsed.projectId,
       },
+      openModal: false,
       reportSubtype: this.props.parsed.reportSubtype,
       triggerUpdate: false,
       loading: false,
@@ -51,6 +52,14 @@ export class AttributeSelectorWindow extends Component {
     this.setState({attributesSelected});
   };
 
+  openModal = () => {
+    this.setState({openModal: true});
+  }
+
+  closeModal = () => {
+    this.setState({openModal: false});
+  }
+
   render() {
     return (
       <div
@@ -65,13 +74,17 @@ export class AttributeSelectorWindow extends Component {
           triggerUpdate={this.state.triggerUpdate}
           onTriggerUpdate={this.onTriggerUpdate}
           resetTriggerUpdate={this.resetTriggerUpdate}
+          openModal={this.state.openModal}
+          closeModal={this.closeModal}
         />
         <PopupButtons
           disableActiveActions={!this.state.attributesSelected}
-          handleBack = {this.handleBack}
+          handleBack={this.handleBack}
           handleOk={this.handleOk}
           handleCancel={this.handleCancel}
-          loading={this.state.loading} />
+          loading={this.state.loading}
+          onPreviewClick={this.openModal}
+        />
       </div >
     );
   }
