@@ -64,7 +64,7 @@ class OfficeDisplayService {
       },
     });
     officeStoreService.preserveReport(report);
-  }
+  };
 
   removeReportFromExcel = async (bindingId, isRefresh) => {
     try {
@@ -78,15 +78,10 @@ class OfficeDisplayService {
         const tableObject = excelContext.workbook.tables.getItem(bindingId);
         await tableObject.delete();
         await excelContext.sync();
+        !isRefresh && this.removeReportFromStore(bindingId);
       } catch (e) {
         if (e.message.includes('The requested resource doesn\'t exist.')) {
-          if (!isRefresh) {
-            reduxStore.dispatch({
-              type: officeProperties.actions.removeReport,
-              reportBindId: bindingId,
-            });
-            officeStoreService.deleteReport(bindingId);
-          }
+          !isRefresh && this.removeReportFromStore(bindingId);
           return true;
         }
         throw e;
@@ -94,6 +89,14 @@ class OfficeDisplayService {
     } catch (error) {
       return errorService.handleError(error);
     }
+  };
+
+  removeReportFromStore = (bindingId) => {
+    reduxStore.dispatch({
+      type: officeProperties.actions.removeReport,
+      reportBindId: bindingId,
+    });
+    officeStoreService.deleteReport(bindingId);
   };
 
   // TODO: we could filter data to display options related to current envUrl

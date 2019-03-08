@@ -52,7 +52,7 @@ describe('FileHistoryHelper', () => {
       // given
       const mockedDisplayMessage = notificationService.displayMessage;
       authenticationHelper.validateAuthToken = jest.fn().mockImplementation(() => {});
-      const mockedOnRefresh = jest.fn();
+      const mockedOnRefresh = jest.fn().mockImplementation(() => true);
       const testBindId = 'someBindingIt';
       // when
       await fileHistoryHelper.refreshReport(mockedOnRefresh, testBindId);
@@ -60,6 +60,18 @@ describe('FileHistoryHelper', () => {
       expect(mockedDisplayMessage).toBeCalled();
       expect(authenticationHelper.validateAuthToken).toBeCalled();
       expect(mockedDisplayMessage).toBeCalledWith('info', 'Report refreshed');
+    });
+    it('should not display message on fail', async () => {
+      // given
+      const mockedDisplayMessage = notificationService.displayMessage;
+      authenticationHelper.validateAuthToken = jest.fn().mockImplementation(() => {});
+      const mockedOnRefresh = jest.fn().mockImplementation(() => false);
+      const testBindId = 'someBindingIt';
+      // when
+      await fileHistoryHelper.refreshReport(mockedOnRefresh, testBindId);
+      // then
+      expect(mockedDisplayMessage).not.toBeCalled();
+      expect(authenticationHelper.validateAuthToken).toBeCalled();
     });
     it('should trigger handleError on error', async () => {
       // given
