@@ -79,6 +79,7 @@ class OfficeDisplayService {
         await tableObject.delete();
         await excelContext.sync();
         !isRefresh && this.removeReportFromStore(bindingId);
+        return true;
       } catch (e) {
         if (e.message.includes('The requested resource doesn\'t exist.')) {
           !isRefresh && this.removeReportFromStore(bindingId);
