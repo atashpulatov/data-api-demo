@@ -23,30 +23,30 @@ describe('OfficeDisplayService', () => {
 
   beforeAll(() => {
     jest.spyOn(mstrObjectRestService, 'getObjectContent')
-      .mockResolvedValue(givenReport);
+        .mockResolvedValue(givenReport);
     jest.spyOn(officeApiHelper, 'findAvailableOfficeTableId')
-      .mockReturnValue(excelTableNameMock);
+        .mockReturnValue(excelTableNameMock);
     jest.spyOn(officeApiHelper, 'getCurrentMstrContext')
-      .mockReturnValue(mstrContext);
+        .mockReturnValue(mstrContext);
     jest.spyOn(officeApiHelper, 'getOfficeContext')
-      .mockReturnValue({
-        document: {
-          bindings: {
-            releaseByIdAsync: jest.fn(),
-          },
-        },
-      });
-    jest.spyOn(officeApiHelper, 'getExcelContext')
-      .mockReturnValue({
-        workbook: {
-          tables: {
-            getItem: () => {
-              return {delete: () => {}};
+        .mockReturnValue({
+          document: {
+            bindings: {
+              releaseByIdAsync: jest.fn(),
             },
           },
-        },
-        sync: () => {},
-      });
+        });
+    jest.spyOn(officeApiHelper, 'getExcelContext')
+        .mockReturnValue({
+          workbook: {
+            tables: {
+              getItem: () => {
+                return {delete: () => {}};
+              },
+            },
+          },
+          sync: () => {},
+        });
   });
 
   beforeEach(() => {
@@ -80,9 +80,9 @@ describe('OfficeDisplayService', () => {
   it('should call preserveReport on office store service', async () => {
     // given
     jest.spyOn(officeDisplayService, '_insertDataIntoExcel')
-      .mockReturnValueOnce({});
+        .mockReturnValueOnce({});
     jest.spyOn(officeApiHelper, 'getSelectedCell')
-      .mockReturnValueOnce({});
+        .mockReturnValueOnce({});
     const objectId = null;
     // when
     await officeDisplayService.printObject(objectId, mstrContext.projectId, true);
