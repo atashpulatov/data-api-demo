@@ -13,7 +13,7 @@ class HomeHelper {
     } else {
       const currentPath = location.pathname;
       const pathBeginning = currentPath.split('/apps/')[0];
-      const envUrl = `${location.origin}/${pathBeginning}/api`;
+      const envUrl = `${location.origin}${pathBeginning}/api`;
       const values = {
         envUrl,
       };

@@ -6,9 +6,11 @@ import {mstrObjectRestService} from '../../src/mstr-object/mstr-object-rest-serv
 import {mockReports} from '../mockData';
 import {officeStoreService} from '../../src/office/store/office-store-service';
 import {OutsideOfRangeError} from '../../src/error/outside-of-range-error';
+import {authenticationHelper} from '../../src/authentication/authentication-helper';
 
 jest.mock('../../src/mstr-object/mstr-object-rest-service');
 jest.mock('../../src/office/store/office-store-service');
+jest.mock('../../src/authentication/authentication-helper');
 
 describe('OfficeDisplayService', () => {
   const givenReport = mockReports[0];
@@ -21,30 +23,30 @@ describe('OfficeDisplayService', () => {
 
   beforeAll(() => {
     jest.spyOn(mstrObjectRestService, 'getObjectContent')
-      .mockResolvedValue(givenReport);
+        .mockResolvedValue(givenReport);
     jest.spyOn(officeApiHelper, 'findAvailableOfficeTableId')
-      .mockReturnValue(excelTableNameMock);
+        .mockReturnValue(excelTableNameMock);
     jest.spyOn(officeApiHelper, 'getCurrentMstrContext')
-      .mockReturnValue(mstrContext);
+        .mockReturnValue(mstrContext);
     jest.spyOn(officeApiHelper, 'getOfficeContext')
-      .mockReturnValue({
-        document: {
-          bindings: {
-            releaseByIdAsync: jest.fn(),
-          },
-        },
-      });
-    jest.spyOn(officeApiHelper, 'getExcelContext')
-      .mockReturnValue({
-        workbook: {
-          tables: {
-            getItem: () => {
-              return {delete: () => {}};
+        .mockReturnValue({
+          document: {
+            bindings: {
+              releaseByIdAsync: jest.fn(),
             },
           },
-        },
-        sync: () => {},
-      });
+        });
+    jest.spyOn(officeApiHelper, 'getExcelContext')
+        .mockReturnValue({
+          workbook: {
+            tables: {
+              getItem: () => {
+                return {delete: () => {}};
+              },
+            },
+          },
+          sync: () => {},
+        });
   });
 
   beforeEach(() => {
@@ -78,9 +80,9 @@ describe('OfficeDisplayService', () => {
   it('should call preserveReport on office store service', async () => {
     // given
     jest.spyOn(officeDisplayService, '_insertDataIntoExcel')
-      .mockReturnValueOnce({});
+        .mockReturnValueOnce({});
     jest.spyOn(officeApiHelper, 'getSelectedCell')
-      .mockReturnValueOnce({});
+        .mockReturnValueOnce({});
     const objectId = null;
     // when
     await officeDisplayService.printObject(objectId, mstrContext.projectId, true);
@@ -101,6 +103,7 @@ describe('OfficeDisplayService', () => {
   it('should call deleteReport on office store service', async () => {
     // given
     officeStoreService.deleteReport = jest.fn();
+    authenticationHelper.validateAuthToken = jest.fn().mockImplementation(() => {});
     const report = {
       id: 'firstTestId',
       name: 'firstTestName',
@@ -114,8 +117,33 @@ describe('OfficeDisplayService', () => {
     const bindingId = reduxStore.getState().officeReducer.reportArray[0].id;
     await officeDisplayService.removeReportFromExcel(bindingId);
     // then
+    expect(authenticationHelper.validateAuthToken).toBeCalled();
     expect(officeStoreService.deleteReport).toBeCalled();
   });
+
+  it('should not call deleteReport on office store service', async () => {
+    // given
+    officeStoreService.deleteReport = jest.fn();
+    authenticationHelper.validateAuthToken = jest.fn().mockImplementation(() => {
+      throw Error();
+    });
+    const report = {
+      id: 'firstTestId',
+      name: 'firstTestName',
+      bindId: 'firstBindId',
+      tableId: 'firstTableId',
+      projectId: 'firstProjectId',
+      envUrl: 'firstEnvUrl',
+    };
+    officeDisplayService.addReportToStore(report);
+    // when
+    const bindingId = reduxStore.getState().officeReducer.reportArray[0].id;
+    await officeDisplayService.removeReportFromExcel(bindingId);
+    // then
+    expect(authenticationHelper.validateAuthToken).toBeCalled();
+    expect(officeStoreService.deleteReport).not.toBeCalled();
+  });
+
   describe('_insertDataIntoExcel', async () => {
     it('should return table husk with proper name and invoke required methods', async () => {
       // given
