@@ -1,4 +1,4 @@
-job 'stage-0-premerge' do
+job 'stage-1-dev' do
   description 'the first stage in the pipeline
 designed to complete quickly, < 10 mins
 produces and publishes a versioned deployment package'
@@ -8,10 +8,9 @@ produces and publishes a versioned deployment package'
   assigned_node_string 'amazon_linux'
 
   triggers do
-      pull_request_builder do
-        trigger_phrase "mstr-office-premerge-#{Environment.branch_name}.*"
-        commit_status_context "mstr-office-premerge-#{Environment.branch_name}"
-      end
+    scm_polling do
+      set_to_every_minute
+    end
   end
 
   builders do
@@ -25,7 +24,7 @@ export WORKSPACE_SETTING=aws_dev
 
 source .ecosystem
 
-rake test
+rake upload_plugins
 '
     end
   end
@@ -46,6 +45,12 @@ rake test
     #   report_directory_path "deploy/vagrant/esxi/dev/logs"
     #   index_file_name 'index.html'
     # end
+
+    parameterized_trigger do
+      job_short_names %w{
+        stage-2-regression-test
+      }
+    end
   end
 
 end

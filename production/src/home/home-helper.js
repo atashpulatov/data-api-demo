@@ -11,7 +11,9 @@ class HomeHelper {
         return;
       }
     } else {
-      const envUrl = `${location.origin}/MicroStrategyLibrary/api`;
+      const currentPath = location.pathname;
+      const pathBeginning = currentPath.split('/apps/')[0];
+      const envUrl = `${location.origin}/${pathBeginning}/api`;
       const values = {
         envUrl,
       };

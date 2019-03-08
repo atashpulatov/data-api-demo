@@ -31,8 +31,12 @@ class SessionHelper {
     };
   }
   logOutRedirect = () => {
-    window.location.replace('/MicroStrategyLibrary/static/officeLoader/index.html');
-  }
+    const currentPath = window.location.pathname;
+    const pathBeginning = currentPath.split('/apps/')[0];
+    const loginParams = 'source=addin-mstr-office';
+    window.location.replace(`${pathBeginning}/static/loader-mstr-office/index.html?${loginParams}`);
+  };
+
   saveLoginValues = (values) => {
     reduxStore.dispatch({
       type: sessionProperties.actions.logIn,
