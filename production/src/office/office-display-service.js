@@ -123,6 +123,7 @@ class OfficeDisplayService {
     try {
       mstrTable.name = tableName;
       await context.sync();
+      officeApiHelper.formatNumbers(mstrTable, sheet, reportConvertedData); 
       await this._addRowsSequentially(rowsData, endRow, mstrTable, context);
       officeApiHelper.formatTable(sheet);
       sheet.activate();

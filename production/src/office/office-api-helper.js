@@ -119,6 +119,67 @@ class OfficeApiHelper {
     }
   }
 
+  formatNumbers = async (table, sheet, reportConvertedData) => {
+    if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
+      let columnsCount = reportConvertedData.headers.length;
+      let rowsCount = reportConvertedData.rows.length;
+      const columns = table.columns;
+
+      for (let object of reportConvertedData.columnInformation) {
+        if (!object.isAttribute) {
+          const columnRange = columns.getItemAt(object.index).getHeaderRowRange().getRowsBelow(rowsCount);
+          let format = "";
+          
+          if (object.category == 9)
+            format = this._getNumberFormattingCategoryName(object);
+          else {
+            format = object.formatString;
+
+            if (format.indexOf('$') != -1) {
+              format = format.replace(/[$]/g, '\\$').replace(/["]/g, ''); //fix anoying $-sign currency replacemnt in Excel
+            }
+          }
+
+          columnRange.numberFormat = format;
+        }
+      }
+
+      await table.context.sync();
+
+    } else {
+      notificationService.displayMessage('warning', `Unable to format numbers.`);
+    }
+  }
+
+  _getNumberFormattingCategoryName = (metric) => {
+    switch (metric.category) {
+      case -2:
+        return 'Default';
+      case 9:
+        return 'General';
+      case 0:
+        return 'Fixed';
+      case 1:
+        return 'Currency';
+      case 2:
+        return 'Date';
+      case 3:
+        return 'Time';
+      case 4:
+        return 'Percentage';
+      case 5:
+        return 'Fraction';
+      case 6:
+        return 'Scientific';
+      case 7: //'Custom'
+        return metric.formatString;
+      case 8:
+        return 'Special';
+      default:
+        return 'General';
+    }
+  }
+
   getSelectedCell = async (context) => {
     const selectedRangeStart = context.workbook.getSelectedRange();
     selectedRangeStart.load(officeProperties.officeAddress);
