@@ -39,18 +39,19 @@ class PopupController {
       Excel.run(async (context) => {
         const officeObject = officeContext.getOffice();
         officeObject.context.ui.displayDialogAsync(
-          splittedUrl[0]
+            splittedUrl[0]
           + '?popupType=' + popupType
           + '&envUrl=' + session.url
           + '&token=' + session.authToken,
-          {height, width, displayInIframe: true},
-          (asyncResult) => {
-            const dialog = asyncResult.value;
-            dialog.addEventHandler(
-              officeObject.EventType.DialogMessageReceived,
-              this.onMessageFromPopup.bind(null, dialog));
-            reduxStore.dispatch({type: CLEAR_WINDOW});
-          });
+            {height, width, displayInIframe: true},
+            (asyncResult) => {
+              const dialog = asyncResult.value;
+              sessionHelper.setDialog(dialog);
+              dialog.addEventHandler(
+                  officeObject.EventType.DialogMessageReceived,
+                  this.onMessageFromPopup.bind(null, dialog));
+              reduxStore.dispatch({type: CLEAR_WINDOW});
+            });
         await context.sync();
       });
     } catch (error) {

@@ -22,7 +22,6 @@ class OfficeDisplayService {
       const officeTable = await mstrObjectRestService.getObjectContent(objectId, projectId, isReport, body);
       if (!officeTable || (officeTable.rows && officeTable.rows.length === 0)) {
         // report returned no data
-        sessionHelper.disableLoading();
         return {type: 'warning', message: `No data returned by the ${objectType}: ${officeTable.name}`};
       }
       const newOfficeTableId = officeTableId || await officeApiHelper.findAvailableOfficeTableId(excelContext);
@@ -46,6 +45,9 @@ class OfficeDisplayService {
       return !isRefresh && {type: 'success', message: `Loaded ${objectType}: ${officeTable.name}`};
     } catch (error) {
       throw errorService.errorOfficeFactory(error);
+    } finally {
+      const reduxStoreState = reduxStore.getState();
+      reduxStoreState.sessionReducer.dialog.close();
     }
   }
 
