@@ -13,8 +13,8 @@ class FileHistoryHelper {
         type: officeProperties.actions.startLoadingReport,
         reportBindId: bindingId,
       });
-      await onRefresh(bindingId);
-      notificationService.displayMessage('info', 'Report refreshed');
+      const refreshed = await onRefresh(bindingId);
+      refreshed && notificationService.displayMessage('info', 'Report refreshed');
     } catch (error) {
       errorService.handleError(error);
     } finally {
