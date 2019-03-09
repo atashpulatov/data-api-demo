@@ -80,7 +80,7 @@ class OfficeDisplayService {
         await excelContext.sync();
         return !isRefresh && this.removeReportFromStore(bindingId);
       } catch (e) {
-        if (e.message.includes('The requested resource doesn\'t exist.')) {
+        if (e.code === 'ItemNotFound') {
           return !isRefresh && this.removeReportFromStore(bindingId);
         }
         throw e;
@@ -116,7 +116,7 @@ class OfficeDisplayService {
       }
       return true;
     } catch (e) {
-      if (e.message.includes('The requested resource doesn\'t exist.')) {
+      if (e.code === 'ItemNotFound') {
         return notificationService.displayMessage('info', 'Data is not relevant anymore. You can delete it from the list');
       }
       throw e;
