@@ -7,7 +7,7 @@ import {authenticationHelper} from '../authentication/authentication-helper';
 
 const capitalize = (str) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
-}
+};
 
 class FileHistoryHelper {
   refreshReport = async (onRefresh, bindingId, objectType) => {
@@ -18,7 +18,7 @@ class FileHistoryHelper {
         reportBindId: bindingId,
       });
       await onRefresh(bindingId);
-      notificationService.displayMessage('info', `${capitalize(objectType)} refreshed`);
+      notificationService.displayMessage('success', `${capitalize(objectType)} refreshed`);
     } catch (error) {
       errorService.handleError(error);
     } finally {
@@ -33,7 +33,7 @@ class FileHistoryHelper {
     sessionHelper.enableLoading();
     try {
       const removed = await onDelete(bindingId);
-      removed && notificationService.displayMessage('info', `${capitalize(objectType)} removed`);
+      removed && notificationService.displayMessage('success', `${capitalize(objectType)} removed`);
     } catch (error) {
       errorService.handleError(error);
     } finally {
