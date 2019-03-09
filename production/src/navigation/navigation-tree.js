@@ -67,7 +67,7 @@ export class _NavigationTree extends Component {
 
   render() {
     const {setDataSource, dataSource, chosenObjectId, chosenProjectId,
-      chosenSubtype, folder, selectFolder, loading} = this.props;
+      chosenSubtype, folder, selectFolder, loading, handlePopupErrors} = this.props;
     return (
       <FolderBrowser
         title='Import a file'
@@ -84,6 +84,7 @@ export class _NavigationTree extends Component {
         }}
         chosenFolder={folder}
         onChoseFolder={selectFolder}
+        handlePopupErrors={handlePopupErrors}
       >
         {/* Temporary loading user action block */}
         <div style={{
