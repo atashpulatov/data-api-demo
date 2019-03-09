@@ -3,7 +3,6 @@ import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';
 import {reduxStore} from '../store';
 import {officeProperties} from './office-properties';
 import {officeStoreService} from './store/office-store-service';
-import {sessionHelper} from '../storage/session-helper';
 import {notificationService} from '../notification/notification-service';
 import {errorService} from '../error/error-handler';
 import {popupController} from '../popup/popup-controller';

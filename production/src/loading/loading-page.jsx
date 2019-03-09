@@ -1,8 +1,6 @@
 import React from 'react';
-import spinner from './assets/small_loading.gif';
+import {connect} from 'react-redux';
 import {LoadingText} from 'mstr-react-library';
-
-// TODO: Move {LoadingText} and styles to 'mstr-react-library';
 
 const dialogStyle = {
   position: 'fixed',
@@ -22,11 +20,20 @@ const titleStyle = {
   padding: '0.5em',
 };
 
-export const LoadingPage = ({title = 'Data Import'}) => {
+const _LoadingPage = ({title = 'Data Import'}) => {
   return (
     <dialog className='loading-page' style={dialogStyle}>
       <h1 style={titleStyle}>{title}</h1>
-      <LoadingText text='Downloading data...' />
+      <LoadingText text={'Downloading data...'} />
     </dialog>
   );
 };
+
+const mapStateToProps = (state) => {
+  // TODO: Add objectName
+  // We need to publish objectName to the store BEFORE opening the popup
+  // return {title: state.someReducer.objectName};
+  return {};
+};
+
+export const LoadingPage = connect(mapStateToProps)(_LoadingPage);
