@@ -12,14 +12,11 @@ const URL = `${window.location.href}`;
 const IS_LOCALHOST = URL.includes('localhost');
 
 class PopupController {
-  constructor() {
-    this.loadPending = this.loadPending.bind(this);
-  }
   runPopupNavigation = async () => {
     await this.runPopup(PopupTypeEnum.navigationTree, 80, 80);
   };
 
-  runPopup = async (popupType, height, width) => {
+  runPopup = async (popupType, height, width, objectName) => {
     const session = sessionHelper.getSession();
     try {
       await authenticationHelper.validateAuthToken();
@@ -105,9 +102,9 @@ class PopupController {
     }
   }
 
-  loadPending(wrapped) {
+  loadPending = (wrapped) => {
     return async (...args) => {
-      this.runPopup(PopupTypeEnum.loadingPage, 40);
+      this.runPopup(PopupTypeEnum.loadingPage, 10, 10);
       return await wrapped(...args);
     };
   }
