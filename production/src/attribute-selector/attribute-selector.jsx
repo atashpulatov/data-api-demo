@@ -24,7 +24,9 @@ export class AttributeSelector extends Component {
           reportId={reportId}
           reportSubtype={reportSubtype}
           resetTriggerUpdate={resetTriggerUpdate}
-          withFolderTree={false} />
+          withFolderTree={false}
+          openModal={this.props.openModal}
+          closeModal={this.props.closeModal} />
       </ErrorBoundary>
     );
   }
