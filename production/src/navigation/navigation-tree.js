@@ -22,6 +22,7 @@ export class _NavigationTree extends Component {
       chosenObjectId: this.props.chosenObjectId,
       chosenProjectId: this.props.chosenProjectId,
       chosenSubtype: this.props.chosenSubtype,
+      previewDisplay: false,
     };
   }
 
@@ -47,6 +48,7 @@ export class _NavigationTree extends Component {
   handleSecondary = () => {
     this.props.handlePrepare(this.props.chosenProjectId, this.props.chosenObjectId,
         this.props.chosenSubtype, this.props.chosenProjectName);
+    this.setState({previewDisplay: true});
   };
 
   handleCancel = () => {
@@ -105,6 +107,7 @@ export class _NavigationTree extends Component {
           handleOk={this.handleOk}
           handleSecondary={this.handleSecondary}
           handleCancel={this.handleCancel}
+          previewDisplay={this.state.previewDisplay}
         />
       </FolderBrowser>
     );

@@ -104,6 +104,37 @@ describe('OfficeDisplayService', () => {
     // given
     officeStoreService.deleteReport = jest.fn();
     authenticationHelper.validateAuthToken = jest.fn().mockImplementation(() => {});
+    officeApiHelper.getExcelContext = jest.fn().mockImplementation(() => {
+      return {
+        workbook: {
+          tables: {
+            getItem: () => ({delete: () => {}}),
+          },
+        },
+        sync: () => {},
+      };
+    });
+    const report = {
+      id: 'firstTestId',
+      name: 'firstTestName',
+      bindId: 'firstBindId',
+      tableId: 'firstTableId',
+      projectId: 'firstProjectId',
+      envUrl: 'firstEnvUrl',
+    };
+    officeDisplayService.addReportToStore(report);
+    // when
+    const bindingId = reduxStore.getState().officeReducer.reportArray[0].id;
+    await officeDisplayService.removeReportFromExcel(bindingId);
+    // then
+    expect(authenticationHelper.validateAuthToken).toBeCalled();
+    expect(officeStoreService.deleteReport).toBeCalled();
+  });
+
+  it('should not call deleteReport on office store service if there is no report', async () => {
+    // given
+    officeStoreService.deleteReport = jest.fn();
+    authenticationHelper.validateAuthToken = jest.fn().mockImplementation(() => {});
     const report = {
       id: 'firstTestId',
       name: 'firstTestName',

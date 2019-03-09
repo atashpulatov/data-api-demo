@@ -17,8 +17,8 @@ class FileHistoryHelper {
         type: officeProperties.actions.startLoadingReport,
         reportBindId: bindingId,
       });
-      await onRefresh(bindingId);
-      notificationService.displayMessage('success', `${capitalize(objectType)} refreshed`);
+      const refreshed = await onRefresh(bindingId);
+      refreshed && notificationService.displayMessage('success', `${capitalize(objectType)} refreshed`);
     } catch (error) {
       errorService.handleError(error);
     } finally {
