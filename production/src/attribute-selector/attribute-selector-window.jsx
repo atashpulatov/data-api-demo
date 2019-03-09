@@ -53,8 +53,7 @@ export class AttributeSelectorWindow extends Component {
 
   render() {
     return (
-      <div
-        style={{padding: '20px'}}>
+      <div>
         <AttributeSelector
           // TODO: logic for a title
           title={`Import a file > ${this.props.parsed.reportName}`}
@@ -68,7 +67,7 @@ export class AttributeSelectorWindow extends Component {
         />
         <PopupButtons
           disableActiveActions={!this.state.attributesSelected}
-          handleBack = {this.handleBack}
+          handleBack={this.handleBack}
           handleOk={this.handleOk}
           handleCancel={this.handleCancel}
           loading={this.state.loading} />

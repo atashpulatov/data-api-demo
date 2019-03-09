@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {notification, message} from 'antd';
 import {connect} from 'react-redux';
+import './Notifications.css';
 
 export class NotificationsWithoutRedux extends Component {
   constructor(props) {
@@ -10,34 +11,34 @@ export class NotificationsWithoutRedux extends Component {
       maxCount: 2,
     });
   }
-    componentDidUpdate = () => {
-      if (this.props.currentObject === 'message') {
-        this.displayMessage();
-      }
-      if (this.props.currentObject === 'notification') {
-        this.displayNotification();
-      }
+  componentDidUpdate = () => {
+    if (this.props.currentObject === 'message') {
+      this.displayMessage();
     }
+    if (this.props.currentObject === 'notification') {
+      this.displayNotification();
+    }
+  }
 
-    displayNotification = () => {
-      const {notificationType, title, content} = this.props;
-      notification[notificationType]({
-        message: title,
-        description: content,
-      });
-    }
+  displayNotification = () => {
+    const {notificationType, title, content} = this.props;
+    notification[notificationType]({
+      message: title,
+      description: content,
+    });
+  }
 
-    displayMessage = () => {
-      const {messageType, content} = this.props;
-      message[messageType](content);
-    }
+  displayMessage = () => {
+    const {messageType, content} = this.props;
+    message[messageType](content);
+  }
 
-    render() {
-      return (
-        <div>
-        </div>
-      );
-    }
+  render() {
+    return (
+      <div>
+      </div>
+    );
+  }
 };
 
 const mapStateToProps = (state) => {
