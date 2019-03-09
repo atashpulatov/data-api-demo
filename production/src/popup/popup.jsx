@@ -57,7 +57,7 @@ export class Popup extends Component {
     if (!popupType) {
       return (<AttributeSelectorWindow parsed={propsToPass} handleBack={this.handleBack} />);
     } else if (popupType === PopupTypeEnum.navigationTree) {
-      return (<NavigationTree handlePrepare={this.handlePrepare} parsed={propsToPass} />);
+      return (<NavigationTree handlePrepare={this.handlePrepare} parsed={propsToPass} handlePopupErrors={this.handlePopupErrors} />);
     } else if (popupType === PopupTypeEnum.loadingPage) {
       return (<LoadingPage />);
     }
