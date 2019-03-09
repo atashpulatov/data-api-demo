@@ -3,16 +3,17 @@ import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';
 import {reduxStore} from '../store';
 import {officeProperties} from './office-properties';
 import {officeStoreService} from './store/office-store-service';
-import {sessionHelper} from '../storage/session-helper';
 import {notificationService} from '../notification/notification-service';
 import {errorService} from '../error/error-handler';
+import {popupController} from '../popup/popup-controller';
 import {OutsideOfRangeError} from '../error/outside-of-range-error';
 import {authenticationHelper} from '../authentication/authentication-helper';
+import {PopupTypeEnum} from '../home/popup-type-enum';
 
 const EXCEL_PAGINATION = 5000;
 
 class OfficeDisplayService {
-  printObject = async (objectId, projectId, isReport = true, startCell, officeTableId, bindingId, body, isRefresh) => {
+  _printObject = async (objectId, projectId, isReport = true, startCell, officeTableId, bindingId, body, isRefresh) => {
     const objectType = isReport ? 'report' : 'dataset';
     try {
       const excelContext = await officeApiHelper.getExcelContext();
@@ -20,7 +21,6 @@ class OfficeDisplayService {
       const officeTable = await mstrObjectRestService.getObjectContent(objectId, projectId, isReport, body);
       if (!officeTable || (officeTable.rows && officeTable.rows.length === 0)) {
         // report returned no data
-        sessionHelper.disableLoading();
         return {type: 'warning', message: `No data returned by the ${objectType}: ${officeTable.name}`};
       }
       const newOfficeTableId = officeTableId || await officeApiHelper.findAvailableOfficeTableId(excelContext);
@@ -44,7 +44,15 @@ class OfficeDisplayService {
       return !isRefresh && {type: 'success', message: `Data loaded successfully`};
     } catch (error) {
       throw errorService.errorOfficeFactory(error);
+    } finally {
+      const reduxStoreState = reduxStore.getState();
+      reduxStoreState.sessionReducer.dialog.close();
     }
+  }
+
+  printObject = async (...args) => {
+    popupController.runPopup(PopupTypeEnum.loadingPage, 30, 50);
+    return await this._printObject(...args);
   }
 
   // TODO: move it to api helper?
@@ -140,7 +148,7 @@ class OfficeDisplayService {
     try {
       mstrTable.name = tableName;
       await context.sync();
-      officeApiHelper.formatNumbers(mstrTable, reportConvertedData); 
+      officeApiHelper.formatNumbers(mstrTable, reportConvertedData);
       await this._addRowsSequentially(rowsData, endRow, mstrTable, context);
       officeApiHelper.formatTable(sheet);
       sheet.activate();

@@ -8,6 +8,7 @@ import {officeContext} from '../office/office-context';
 import {selectorProperties} from '../attribute-selector/selector-properties';
 import {reduxStore} from '../store';
 import {Provider} from 'react-redux';
+import {LoadingPage} from '../loading/loading-page';
 
 export class Popup extends Component {
   constructor(props) {
@@ -16,7 +17,6 @@ export class Popup extends Component {
     this.state = {
       parsed,
     };
-
     libraryErrorController.initializeHttpErrorsHandling(this.handlePopupErrors);
   }
 
@@ -57,7 +57,9 @@ export class Popup extends Component {
     if (!popupType) {
       return (<AttributeSelectorWindow parsed={propsToPass} handleBack={this.handleBack} />);
     } else if (popupType === PopupTypeEnum.navigationTree) {
-      return (<NavigationTree handlePrepare={this.handlePrepare} parsed={propsToPass} handlePopupErrors={this.handlePopupErrors}/>);
+      return (<NavigationTree handlePrepare={this.handlePrepare} parsed={propsToPass} handlePopupErrors={this.handlePopupErrors} />);
+    } else if (popupType === PopupTypeEnum.loadingPage) {
+      return (<LoadingPage />);
     }
   }
 

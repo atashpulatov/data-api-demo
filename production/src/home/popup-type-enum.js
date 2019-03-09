@@ -5,4 +5,5 @@ export const PopupTypeEnum = new Proxy({
      * propertyAlias: propertyName,
      */
     navigationTree: 'navigation-tree',
+    loadingPage: 'loading-page',
 }, propsProxy);

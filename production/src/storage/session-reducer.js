@@ -13,6 +13,10 @@ export const sessionReducer = (state = {}, action) => {
       return onSetLoading(action, state);
     case sessionProperties.actions.getUserInfo:
       return onGetUserInfo(action, state);
+    case sessionProperties.actions.setDialog:
+      return onSetDialog(action, state);
+    default:
+      break;
   }
   return state;
 };
@@ -62,5 +66,12 @@ function onGetUserInfo(action, state) {
     ...state,
     userFullName: action.userFullName,
     userInitials: action.userInitials,
+  };
+}
+
+function onSetDialog(action, state) {
+  return {
+    ...state,
+    dialog: action.dialog,
   };
 }

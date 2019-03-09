@@ -77,6 +77,13 @@ class SessionHelper {
       });
     }
   }
+
+  setDialog = (dialog) => {
+    reduxStore.dispatch({
+      type: sessionProperties.actions.setDialog,
+      dialog,
+    });
+  }
 }
 
 export const sessionHelper = new SessionHelper();
