@@ -22,7 +22,14 @@ hr {
     width: 100%;
     padding: 20px;
     align-items: center;
+    animation-name: app-header-opacity;
+    animation-duration: 1s;
 }
+
+@keyframes app-header-opacity {
+    0% {opacity:0}
+    100% {opacity:1}
+  }
 
 #profileImage{
     font-family: 'HelveticaNeue';
