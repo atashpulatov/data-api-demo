@@ -13,7 +13,7 @@ const EXCEL_PAGINATION = 5000;
 
 class OfficeDisplayService {
   printObject = async (objectId, projectId, isReport = true, startCell, officeTableId, bindingId, body, isRefresh) => {
-    const objectType = isReport ? 'report' : 'cube';
+    const objectType = isReport ? 'report' : 'dataset';
     try {
       const excelContext = await officeApiHelper.getExcelContext();
       startCell = startCell || await officeApiHelper.getSelectedCell(excelContext);

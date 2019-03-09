@@ -5,8 +5,12 @@ import {officeProperties} from '../office/office-properties';
 import {reduxStore} from '../store';
 import {authenticationHelper} from '../authentication/authentication-helper';
 
+const capitalize = (str) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
 class FileHistoryHelper {
-  refreshReport = async (onRefresh, bindingId) => {
+  refreshReport = async (onRefresh, bindingId, objectType) => {
     try {
       await authenticationHelper.validateAuthToken();
       reduxStore.dispatch({
@@ -14,7 +18,7 @@ class FileHistoryHelper {
         reportBindId: bindingId,
       });
       await onRefresh(bindingId);
-      notificationService.displayMessage('info', 'Report refreshed');
+      notificationService.displayMessage('success', `${capitalize(objectType)} refreshed`);
     } catch (error) {
       errorService.handleError(error);
     } finally {
@@ -25,11 +29,11 @@ class FileHistoryHelper {
     }
   }
 
-  deleteReport = async (onDelete, bindingId) => {
+  deleteReport = async (onDelete, bindingId, objectType) => {
     sessionHelper.enableLoading();
     try {
       const removed = await onDelete(bindingId);
-      removed && notificationService.displayMessage('info', 'Report removed');
+      removed && notificationService.displayMessage('success', `${capitalize(objectType)} removed`);
     } catch (error) {
       errorService.handleError(error);
     } finally {
