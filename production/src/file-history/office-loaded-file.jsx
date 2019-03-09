@@ -17,13 +17,13 @@ export const OfficeLoadedFile = ({fileName, bindingId, onClick, onRefresh, onDel
     </Col>
     <Col span={1} offset={2}>
       <span
-        onClick={() => fileHistoryHelper.refreshReport(onRefresh, bindingId)}>
+        onClick={() => fileHistoryHelper.refreshReport(onRefresh, bindingId, objectType)}>
         {!isLoading ? <MSTRIcon type='refresh' /> : <img width='12px' height='12px' src={loadingSpinner} alt='Report loading icon' />}
       </span>
     </Col>
     <Col span={1} offset={1}>
       <span
-        onClick={() => fileHistoryHelper.deleteReport(onDelete, bindingId)}>
+        onClick={() => fileHistoryHelper.deleteReport(onDelete, bindingId, objectType)}>
         <MSTRIcon type='trash' />
       </span>
     </Col>
