@@ -72,47 +72,64 @@ class OfficeDisplayService {
       },
     });
     officeStoreService.preserveReport(report);
-  }
+  };
 
   removeReportFromExcel = async (bindingId, isRefresh) => {
     try {
       await authenticationHelper.validateAuthToken();
       const officeContext = await officeApiHelper.getOfficeContext();
-      await officeContext.document.bindings.releaseByIdAsync(bindingId, (asyncResult) => {
-        console.log('released binding');
-      });
-      const excelContext = await officeApiHelper.getExcelContext();
-      const tableObject = excelContext.workbook.tables.getItem(bindingId);
-      await tableObject.delete();
-      await excelContext.sync();
-      if (!isRefresh) {
-        reduxStore.dispatch({
-          type: officeProperties.actions.removeReport,
-          reportBindId: bindingId,
+      try {
+        await officeContext.document.bindings.releaseByIdAsync(bindingId, (asyncResult) => {
+          console.log('released binding');
         });
-        officeStoreService.deleteReport(bindingId);
+        const excelContext = await officeApiHelper.getExcelContext();
+        const tableObject = excelContext.workbook.tables.getItem(bindingId);
+        await tableObject.delete();
+        await excelContext.sync();
+        return !isRefresh && this.removeReportFromStore(bindingId);
+      } catch (e) {
+        if (e.code === 'ItemNotFound') {
+          return !isRefresh && this.removeReportFromStore(bindingId);
+        }
+        throw e;
       }
-      return true;
     } catch (error) {
       return errorService.handleError(error);
     }
+  };
+
+  removeReportFromStore = (bindingId) => {
+    reduxStore.dispatch({
+      type: officeProperties.actions.removeReport,
+      reportBindId: bindingId,
+    });
+    officeStoreService.deleteReport(bindingId);
+    return true;
   };
 
   // TODO: we could filter data to display options related to current envUrl
   refreshReport = async (bindingId) => {
     const isRefresh = true;
     const excelContext = await officeApiHelper.getExcelContext();
-    const range = officeApiHelper.getBindingRange(excelContext, bindingId);
-    range.load();
-    await excelContext.sync();
-    const startCell = range.address.split('!')[1].split(':')[0];
-    const refreshReport = officeStoreService.getReportFromProperties(bindingId);
-    await this.removeReportFromExcel(bindingId, isRefresh);
-    const result = await this.printObject(refreshReport.id, refreshReport.projectId, true, startCell, refreshReport.tableId, bindingId, refreshReport.body, true);
-    if (result) {
-      notificationService.displayMessage(result.type, result.message);
+    try {
+      const range = officeApiHelper.getBindingRange(excelContext, bindingId);
+      range.load();
+      await excelContext.sync();
+      const startCell = range.address.split('!')[1].split(':')[0];
+      const refreshReport = officeStoreService.getReportFromProperties(bindingId);
+      await this.removeReportFromExcel(bindingId, isRefresh);
+      const result = await this.printObject(refreshReport.id, refreshReport.projectId, true, startCell, refreshReport.tableId, bindingId, refreshReport.body, true);
+      if (result) {
+        notificationService.displayMessage(result.type, result.message);
+      }
+      return true;
+    } catch (e) {
+      if (e.code === 'ItemNotFound') {
+        return notificationService.displayMessage('info', 'Data is not relevant anymore. You can delete it from the list');
+      }
+      throw e;
     }
-  }
+  };
 
   _insertDataIntoExcel = async (reportConvertedData, context, startCell, tableName) => {
     const hasHeaders = true;
