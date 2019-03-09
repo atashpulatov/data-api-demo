@@ -30,9 +30,7 @@ class PopupController {
     }
     const splittedUrl = url.split('?'); // we need to get rid of any query params
     try {
-      Excel.run(async (context) => {
-        const officeObject = officeContext.getOffice();
-        officeObject.context.ui.displayDialogAsync(
+      Office.context.ui.displayDialogAsync(
           splittedUrl[0]
           + '?popupType=' + PopupTypeEnum.navigationTree
           + '&envUrl=' + session.url
@@ -41,12 +39,10 @@ class PopupController {
           (asyncResult) => {
             const dialog = asyncResult.value;
             dialog.addEventHandler(
-              officeObject.EventType.DialogMessageReceived,
-              this.onMessageFromPopup.bind(null, dialog));
+                Office.EventType.DialogMessageReceived,
+                this.onMessageFromPopup.bind(null, dialog));
             reduxStore.dispatch({type: CLEAR_WINDOW});
           });
-        await context.sync();
-      });
     } catch (error) {
       errorService.handleOfficeError(error);
     }

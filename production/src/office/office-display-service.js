@@ -7,12 +7,13 @@ import {sessionHelper} from '../storage/session-helper';
 import {notificationService} from '../notification/notification-service';
 import {errorService} from '../error/error-handler';
 import {OutsideOfRangeError} from '../error/outside-of-range-error';
+import {authenticationHelper} from '../authentication/authentication-helper';
 
 const EXCEL_PAGINATION = 5000;
 
 class OfficeDisplayService {
   printObject = async (objectId, projectId, isReport = true, startCell, officeTableId, bindingId, body, isRefresh) => {
-    const objectType = isReport ? 'report' : 'cube';
+    const objectType = isReport ? 'report' : 'dataset';
     try {
       const excelContext = await officeApiHelper.getExcelContext();
       startCell = startCell || await officeApiHelper.getSelectedCell(excelContext);
@@ -40,7 +41,7 @@ class OfficeDisplayService {
           objectType,
         });
       }
-      return !isRefresh && {type: 'success', message: `Loaded ${objectType}: ${officeTable.name}`};
+      return !isRefresh && {type: 'success', message: `Data loaded successfully`};
     } catch (error) {
       throw errorService.errorOfficeFactory(error);
     }
@@ -66,22 +67,28 @@ class OfficeDisplayService {
   }
 
   removeReportFromExcel = async (bindingId, isRefresh) => {
-    const officeContext = await officeApiHelper.getOfficeContext();
-    await officeContext.document.bindings.releaseByIdAsync(bindingId, (asyncResult) => {
-      console.log('released binding');
-    });
-    const excelContext = await officeApiHelper.getExcelContext();
-    const tableObject = excelContext.workbook.tables.getItem(bindingId);
-    await tableObject.delete();
-    await excelContext.sync();
-    if (!isRefresh) {
-      reduxStore.dispatch({
-        type: officeProperties.actions.removeReport,
-        reportBindId: bindingId,
+    try {
+      await authenticationHelper.validateAuthToken();
+      const officeContext = await officeApiHelper.getOfficeContext();
+      await officeContext.document.bindings.releaseByIdAsync(bindingId, (asyncResult) => {
+        console.log('released binding');
       });
-      officeStoreService.deleteReport(bindingId);
+      const excelContext = await officeApiHelper.getExcelContext();
+      const tableObject = excelContext.workbook.tables.getItem(bindingId);
+      await tableObject.delete();
+      await excelContext.sync();
+      if (!isRefresh) {
+        reduxStore.dispatch({
+          type: officeProperties.actions.removeReport,
+          reportBindId: bindingId,
+        });
+        officeStoreService.deleteReport(bindingId);
+      }
+      return true;
+    } catch (error) {
+      return errorService.handleError(error);
     }
-  }
+  };
 
   // TODO: we could filter data to display options related to current envUrl
   refreshReport = async (bindingId) => {
@@ -111,11 +118,12 @@ class OfficeDisplayService {
 
     const rowsData = this._getRowsArray(reportConvertedData);
 
-    sheetRange.values = [reportConvertedData.headers, ...rowsData.slice(0, endRow)];
     const mstrTable = sheet.tables.add(range, hasHeaders);
+    sheetRange.values = [reportConvertedData.headers, ...rowsData.slice(0, endRow)];
     try {
       mstrTable.name = tableName;
       await context.sync();
+      officeApiHelper.formatNumbers(mstrTable, reportConvertedData); 
       await this._addRowsSequentially(rowsData, endRow, mstrTable, context);
       officeApiHelper.formatTable(sheet);
       sheet.activate();
