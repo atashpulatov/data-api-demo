@@ -41,7 +41,7 @@ class OfficeDisplayService {
           objectType,
         });
       }
-      return !isRefresh && {type: 'success', message: `Loaded ${objectType}: ${officeTable.name}`};
+      return !isRefresh && {type: 'success', message: `Data loaded successfully`};
     } catch (error) {
       throw errorService.errorOfficeFactory(error);
     }

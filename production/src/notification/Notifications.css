@@ -1,0 +1,9 @@
+.ant-message-notice-content{
+    max-width: 100%;
+}
+.ant-message-custom-content{
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 85px;
+}
