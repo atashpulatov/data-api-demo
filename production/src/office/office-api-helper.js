@@ -1,9 +1,10 @@
-import {IncorrectInputTypeError} from './incorrect-input-type';
-import {OutsideOfRangeError} from '../error/outside-of-range-error';
-import {reduxStore} from '../store';
-import {officeProperties} from './office-properties';
-import {officeStoreService} from './store/office-store-service';
-import {notificationService} from '../notification/notification-service';
+import { IncorrectInputTypeError } from './incorrect-input-type';
+import { OutsideOfRangeError } from '../error/outside-of-range-error';
+import { reduxStore } from '../store';
+import { officeProperties } from './office-properties';
+import { officeStoreService } from './store/office-store-service';
+import { notificationService } from '../notification/notification-service';
+import { errorService } from '../error/error-handler';
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
@@ -26,7 +27,7 @@ class OfficeApiHelper {
       (headerCount -= firstNumber) >= 0;
       firstNumber = secondNumber, secondNumber *= ALPHABET_RANGE_END) {
       endColumn = String.fromCharCode(parseInt(
-          (headerCount % secondNumber) / firstNumber)
+        (headerCount % secondNumber) / firstNumber)
         + ASCII_CAPITAL_LETTER_INDEX)
         + endColumn;
     }
@@ -63,8 +64,8 @@ class OfficeApiHelper {
 
   getBindingRange = (context, bindingId) => {
     return context.workbook.bindings
-        .getItem(bindingId).getTable()
-        .getRange();
+      .getItem(bindingId).getTable()
+      .getRange();
   }
 
   getExcelContext = async () => {
@@ -107,7 +108,7 @@ class OfficeApiHelper {
   getCurrentMstrContext = () => {
     const envUrl = reduxStore.getState().sessionReducer.envUrl;
     const username = reduxStore.getState().sessionReducer.username;
-    return {envUrl, username};
+    return { envUrl, username };
   }
 
   formatTable = (sheet) => {
@@ -119,24 +120,87 @@ class OfficeApiHelper {
     }
   }
 
+  formatNumbers = async (table, reportConvertedData) => {
+    if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
+      try {
+        let columnsCount = reportConvertedData.headers.length;
+        let rowsCount = reportConvertedData.rows.length;
+        const columns = table.columns;
+
+        for (let object of reportConvertedData.columnInformation) {
+          if (!object.isAttribute) {
+            const columnRange = columns.getItemAt(object.index).getHeaderRowRange().getRowsBelow(rowsCount);
+            let format = "";
+
+            if (object.category == 9)
+              format = this._getNumberFormattingCategoryName(object);
+            else {
+              format = object.formatString;
+
+              if (format.indexOf('$') != -1) {
+                format = format.replace(/[$]/g, '\\$').replace(/["]/g, ''); //fix anoying $-sign currency replacemnt in Excel
+              }
+            }
+
+            columnRange.numberFormat = format;
+          }
+        }
+
+        await table.context.sync();
+
+      } catch (error) {
+        throw errorService.handleError(error);
+      }
+    }
+  }
+
+  _getNumberFormattingCategoryName = (metric) => {
+    switch (metric.category) {
+      case -2:
+        return 'Default';
+      case 9:
+        return 'General';
+      case 0:
+        return 'Fixed';
+      case 1:
+        return 'Currency';
+      case 2:
+        return 'Date';
+      case 3:
+        return 'Time';
+      case 4:
+        return 'Percentage';
+      case 5:
+        return 'Fraction';
+      case 6:
+        return 'Scientific';
+      case 7: //'Custom'
+        return metric.formatString;
+      case 8:
+        return 'Special';
+      default:
+        return 'General';
+    }
+  }
+
   getSelectedCell = async (context) => {
     const selectedRangeStart = context.workbook.getSelectedRange();
     selectedRangeStart.load(officeProperties.officeAddress);
     await context.sync();
     const startCell = selectedRangeStart.address
-        .split('!')[1].split(':')[0];
+      .split('!')[1].split(':')[0];
     return startCell;
   }
 
   bindNamedItem = async (namedItem, bindingId) => {
     return await Office.context.document.bindings.addFromNamedItemAsync(
-        namedItem, 'table', {id: bindingId}, (result) => {
-          if (result.status === 'succeeded') {
-            console.log('Added new binding with type: ' + result.value.type + ' and id: ' + result.value.id);
-          } else {
-            console.error('Error: ' + result.error.message);
-          }
-        });
+      namedItem, 'table', { id: bindingId }, (result) => {
+        if (result.status === 'succeeded') {
+          console.log('Added new binding with type: ' + result.value.type + ' and id: ' + result.value.id);
+        } else {
+          console.error('Error: ' + result.error.message);
+        }
+      });
   }
 }
 

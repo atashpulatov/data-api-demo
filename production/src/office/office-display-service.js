@@ -118,11 +118,12 @@ class OfficeDisplayService {
 
     const rowsData = this._getRowsArray(reportConvertedData);
 
-    sheetRange.values = [reportConvertedData.headers, ...rowsData.slice(0, endRow)];
     const mstrTable = sheet.tables.add(range, hasHeaders);
+    sheetRange.values = [reportConvertedData.headers, ...rowsData.slice(0, endRow)];
     try {
       mstrTable.name = tableName;
       await context.sync();
+      officeApiHelper.formatNumbers(mstrTable, reportConvertedData); 
       await this._addRowsSequentially(rowsData, endRow, mstrTable, context);
       officeApiHelper.formatTable(sheet);
       sheet.activate();
