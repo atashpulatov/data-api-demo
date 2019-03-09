@@ -17,7 +17,7 @@ task :upload_plugins=> [:clean, :build]  do
     artifact_ext:   "zip",
     version:        "#{Common::Version.application_version}",
     repository:     $WORKSPACE_SETTINGS[:nexus][:repos][:release],
-    artifact_path:  "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/build/office-loader-#{Common::Version.application_version}.zip"
+    artifact_path:  "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/office-loader/build/office-loader-#{Common::Version.application_version}.zip"
   )
 
   commit_hash_file = $WORKSPACE_SETTINGS[:paths][:project][:jenkins][:commit][:hash][:file]
