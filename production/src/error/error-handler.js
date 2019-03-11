@@ -68,10 +68,10 @@ class ErrorService {
         notificationService.displayMessage('error', '400 - There has been a problem with your request');
         break;
       case error instanceof InternalServerError:
-        notificationService.displayMessage('error', errorMessages[error.iServerCode]);
+        notificationService.displayMessage('warning', errorMessages[error.iServerCode]);
         break;
       case error instanceof PromptedReportError:
-        notificationService.displayMessage('error', NOT_SUPPORTED_SERVER_ERR);
+        notificationService.displayMessage('warning', NOT_SUPPORTED_SERVER_ERR);
         break;
       default:
         notificationService.displayMessage('error', error.message || 'Unknown error');
