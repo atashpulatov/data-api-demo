@@ -7,6 +7,9 @@ import {mockReports} from '../mockData';
 import {officeStoreService} from '../../src/office/store/office-store-service';
 import {OutsideOfRangeError} from '../../src/error/outside-of-range-error';
 import {authenticationHelper} from '../../src/authentication/authentication-helper';
+import {popupController} from '../../src/popup/popup-controller';
+import {PopupTypeEnum} from '../../src/home/popup-type-enum';
+import {sessionHelper} from '../../src/storage/session-helper';
 
 jest.mock('../../src/mstr-object/mstr-object-rest-service');
 jest.mock('../../src/office/store/office-store-service');
@@ -23,30 +26,30 @@ describe('OfficeDisplayService', () => {
 
   beforeAll(() => {
     jest.spyOn(mstrObjectRestService, 'getObjectContent')
-        .mockResolvedValue(givenReport);
+      .mockResolvedValue(givenReport);
     jest.spyOn(officeApiHelper, 'findAvailableOfficeTableId')
-        .mockReturnValue(excelTableNameMock);
+      .mockReturnValue(excelTableNameMock);
     jest.spyOn(officeApiHelper, 'getCurrentMstrContext')
-        .mockReturnValue(mstrContext);
+      .mockReturnValue(mstrContext);
     jest.spyOn(officeApiHelper, 'getOfficeContext')
-        .mockReturnValue({
-          document: {
-            bindings: {
-              releaseByIdAsync: jest.fn(),
-            },
+      .mockReturnValue({
+        document: {
+          bindings: {
+            releaseByIdAsync: jest.fn(),
           },
-        });
+        },
+      });
     jest.spyOn(officeApiHelper, 'getExcelContext')
-        .mockReturnValue({
-          workbook: {
-            tables: {
-              getItem: () => {
-                return {delete: () => {}};
-              },
+      .mockReturnValue({
+        workbook: {
+          tables: {
+            getItem: () => {
+              return {delete: () => {}};
             },
           },
-          sync: () => {},
-        });
+        },
+        sync: () => {},
+      });
   });
 
   beforeEach(() => {
@@ -54,10 +57,21 @@ describe('OfficeDisplayService', () => {
   });
 
   afterAll(() => {
-    officeApiHelper.findAvailableOfficeTableId = originalFindAvailableTableName;
-    officeApiHelper.getCurrentMstrContext = originalMstrContext;
-
     jest.restoreAllMocks();
+  });
+
+  it('should open loading popup when printing object', async () => {
+    // given
+    const runPopupSpy = jest.spyOn(popupController, 'runPopup');
+    const printInside = jest.spyOn(officeDisplayService, '_printObject')
+      .mockImplementationOnce(() => {});
+    const arg1 = 'arg1';
+    const arg2 = 'arg2';
+    // when
+    await officeDisplayService.printObject(arg1, arg2);
+    // then
+    expect(runPopupSpy).toBeCalledWith(PopupTypeEnum.loadingPage, 30, 50);
+    expect(printInside).toBeCalledWith(arg1, arg2);
   });
 
   it('should add report to store', () => {
@@ -79,10 +93,12 @@ describe('OfficeDisplayService', () => {
 
   it('should call preserveReport on office store service', async () => {
     // given
-    jest.spyOn(officeDisplayService, '_insertDataIntoExcel')
-        .mockReturnValueOnce({});
-    jest.spyOn(officeApiHelper, 'getSelectedCell')
-        .mockReturnValueOnce({});
+    jest.spyOn(officeDisplayService, '_insertDataIntoExcel').mockReturnValueOnce({});
+    jest.spyOn(officeApiHelper, 'getSelectedCell').mockReturnValueOnce({});
+    const mockDialog = {
+      close: () => {},
+    };
+    sessionHelper.setDialog(mockDialog);
     const objectId = null;
     // when
     await officeDisplayService.printObject(objectId, mstrContext.projectId, true);
@@ -101,6 +117,37 @@ describe('OfficeDisplayService', () => {
   });
 
   it('should call deleteReport on office store service', async () => {
+    // given
+    officeStoreService.deleteReport = jest.fn();
+    authenticationHelper.validateAuthToken = jest.fn().mockImplementation(() => {});
+    officeApiHelper.getExcelContext = jest.fn().mockImplementation(() => {
+      return {
+        workbook: {
+          tables: {
+            getItem: () => ({delete: () => {}}),
+          },
+        },
+        sync: () => {},
+      };
+    });
+    const report = {
+      id: 'firstTestId',
+      name: 'firstTestName',
+      bindId: 'firstBindId',
+      tableId: 'firstTableId',
+      projectId: 'firstProjectId',
+      envUrl: 'firstEnvUrl',
+    };
+    officeDisplayService.addReportToStore(report);
+    // when
+    const bindingId = reduxStore.getState().officeReducer.reportArray[0].id;
+    await officeDisplayService.removeReportFromExcel(bindingId);
+    // then
+    expect(authenticationHelper.validateAuthToken).toBeCalled();
+    expect(officeStoreService.deleteReport).toBeCalled();
+  });
+
+  it('should not call deleteReport on office store service if there is no report', async () => {
     // given
     officeStoreService.deleteReport = jest.fn();
     authenticationHelper.validateAuthToken = jest.fn().mockImplementation(() => {});

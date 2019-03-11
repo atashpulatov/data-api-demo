@@ -3,16 +3,17 @@ import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';
 import {reduxStore} from '../store';
 import {officeProperties} from './office-properties';
 import {officeStoreService} from './store/office-store-service';
-import {sessionHelper} from '../storage/session-helper';
 import {notificationService} from '../notification/notification-service';
 import {errorService} from '../error/error-handler';
+import {popupController} from '../popup/popup-controller';
 import {OutsideOfRangeError} from '../error/outside-of-range-error';
 import {authenticationHelper} from '../authentication/authentication-helper';
+import {PopupTypeEnum} from '../home/popup-type-enum';
 
 const EXCEL_PAGINATION = 5000;
 
 class OfficeDisplayService {
-  printObject = async (objectId, projectId, isReport = true, startCell, officeTableId, bindingId, body, isRefresh) => {
+  _printObject = async (objectId, projectId, isReport = true, startCell, officeTableId, bindingId, body, isRefresh) => {
     const objectType = isReport ? 'report' : 'dataset';
     try {
       const excelContext = await officeApiHelper.getExcelContext();
@@ -20,7 +21,6 @@ class OfficeDisplayService {
       const officeTable = await mstrObjectRestService.getObjectContent(objectId, projectId, isReport, body);
       if (!officeTable || (officeTable.rows && officeTable.rows.length === 0)) {
         // report returned no data
-        sessionHelper.disableLoading();
         return {type: 'warning', message: `No data returned by the ${objectType}: ${officeTable.name}`};
       }
       const newOfficeTableId = officeTableId || await officeApiHelper.findAvailableOfficeTableId(excelContext);
@@ -44,7 +44,15 @@ class OfficeDisplayService {
       return !isRefresh && {type: 'success', message: `Data loaded successfully`};
     } catch (error) {
       throw errorService.errorOfficeFactory(error);
+    } finally {
+      const reduxStoreState = reduxStore.getState();
+      reduxStoreState.sessionReducer.dialog.close();
     }
+  }
+
+  printObject = async (...args) => {
+    popupController.runPopup(PopupTypeEnum.loadingPage, 30, 50);
+    return await this._printObject(...args);
   }
 
   // TODO: move it to api helper?
@@ -64,47 +72,64 @@ class OfficeDisplayService {
       },
     });
     officeStoreService.preserveReport(report);
-  }
+  };
 
   removeReportFromExcel = async (bindingId, isRefresh) => {
     try {
       await authenticationHelper.validateAuthToken();
       const officeContext = await officeApiHelper.getOfficeContext();
-      await officeContext.document.bindings.releaseByIdAsync(bindingId, (asyncResult) => {
-        console.log('released binding');
-      });
-      const excelContext = await officeApiHelper.getExcelContext();
-      const tableObject = excelContext.workbook.tables.getItem(bindingId);
-      await tableObject.delete();
-      await excelContext.sync();
-      if (!isRefresh) {
-        reduxStore.dispatch({
-          type: officeProperties.actions.removeReport,
-          reportBindId: bindingId,
+      try {
+        await officeContext.document.bindings.releaseByIdAsync(bindingId, (asyncResult) => {
+          console.log('released binding');
         });
-        officeStoreService.deleteReport(bindingId);
+        const excelContext = await officeApiHelper.getExcelContext();
+        const tableObject = excelContext.workbook.tables.getItem(bindingId);
+        await tableObject.delete();
+        await excelContext.sync();
+        return !isRefresh && this.removeReportFromStore(bindingId);
+      } catch (e) {
+        if (e.code === 'ItemNotFound') {
+          return !isRefresh && this.removeReportFromStore(bindingId);
+        }
+        throw e;
       }
-      return true;
     } catch (error) {
       return errorService.handleError(error);
     }
+  };
+
+  removeReportFromStore = (bindingId) => {
+    reduxStore.dispatch({
+      type: officeProperties.actions.removeReport,
+      reportBindId: bindingId,
+    });
+    officeStoreService.deleteReport(bindingId);
+    return true;
   };
 
   // TODO: we could filter data to display options related to current envUrl
   refreshReport = async (bindingId) => {
     const isRefresh = true;
     const excelContext = await officeApiHelper.getExcelContext();
-    const range = officeApiHelper.getBindingRange(excelContext, bindingId);
-    range.load();
-    await excelContext.sync();
-    const startCell = range.address.split('!')[1].split(':')[0];
-    const refreshReport = officeStoreService.getReportFromProperties(bindingId);
-    await this.removeReportFromExcel(bindingId, isRefresh);
-    const result = await this.printObject(refreshReport.id, refreshReport.projectId, true, startCell, refreshReport.tableId, bindingId, refreshReport.body, true);
-    if (result) {
-      notificationService.displayMessage(result.type, result.message);
+    try {
+      const range = officeApiHelper.getBindingRange(excelContext, bindingId);
+      range.load();
+      await excelContext.sync();
+      const startCell = range.address.split('!')[1].split(':')[0];
+      const refreshReport = officeStoreService.getReportFromProperties(bindingId);
+      await this.removeReportFromExcel(bindingId, isRefresh);
+      const result = await this.printObject(refreshReport.id, refreshReport.projectId, true, startCell, refreshReport.tableId, bindingId, refreshReport.body, true);
+      if (result) {
+        notificationService.displayMessage(result.type, result.message);
+      }
+      return true;
+    } catch (e) {
+      if (e.code === 'ItemNotFound') {
+        return notificationService.displayMessage('info', 'Data is not relevant anymore. You can delete it from the list');
+      }
+      throw e;
     }
-  }
+  };
 
   _insertDataIntoExcel = async (reportConvertedData, context, startCell, tableName) => {
     const hasHeaders = true;
@@ -123,7 +148,7 @@ class OfficeDisplayService {
     try {
       mstrTable.name = tableName;
       await context.sync();
-      officeApiHelper.formatNumbers(mstrTable, reportConvertedData); 
+      officeApiHelper.formatNumbers(mstrTable, reportConvertedData);
       await this._addRowsSequentially(rowsData, endRow, mstrTable, context);
       officeApiHelper.formatTable(sheet);
       sheet.activate();

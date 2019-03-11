@@ -1,4 +1,3 @@
-import {officeContext} from '../office/office-context';
 import {selectorProperties} from '../attribute-selector/selector-properties';
 import {officeDisplayService} from '../office/office-display-service';
 import {PopupTypeEnum} from '../home/popup-type-enum';
@@ -9,12 +8,15 @@ import {reduxStore} from '../store';
 import {CLEAR_WINDOW} from './popup-actions';
 import {errorService} from '../error/error-handler';
 import {authenticationHelper} from '../authentication/authentication-helper';
-
 const URL = `${window.location.href}`;
 const IS_LOCALHOST = URL.includes('localhost');
 
 class PopupController {
   runPopupNavigation = async () => {
+    await this.runPopup(PopupTypeEnum.navigationTree, 80, 80);
+  };
+
+  runPopup = async (popupType, height, width, objectName) => {
     const session = sessionHelper.getSession();
     try {
       await authenticationHelper.validateAuthToken();
@@ -32,12 +34,13 @@ class PopupController {
     try {
       Office.context.ui.displayDialogAsync(
           splittedUrl[0]
-          + '?popupType=' + PopupTypeEnum.navigationTree
-          + '&envUrl=' + session.url
-          + '&token=' + session.authToken,
-          {height: 80, width: 80, displayInIframe: true},
+        + '?popupType=' + popupType
+        + '&envUrl=' + session.url
+        + '&token=' + session.authToken,
+          {height, width, displayInIframe: true},
           (asyncResult) => {
             const dialog = asyncResult.value;
+            sessionHelper.setDialog(dialog);
             dialog.addEventHandler(
                 Office.EventType.DialogMessageReceived,
                 this.onMessageFromPopup.bind(null, dialog));
@@ -54,14 +57,18 @@ class PopupController {
     try {
       switch (response.command) {
         case selectorProperties.commandOk:
+          await dialog.close();
           await this.handleOkCommand(response, dialog);
           break;
         case selectorProperties.commandOnUpdate:
+          await dialog.close();
           await this.handleUpdateCommand(response, dialog);
           break;
         case selectorProperties.commandCancel:
+          await dialog.close();
           break;
         case selectorProperties.commandError:
+          await dialog.close();
           const error = errorService.errorRestFactory(response.error);
           errorService.handleError(error, false);
           break;
@@ -71,12 +78,10 @@ class PopupController {
     } catch (error) {
       console.error(error.message);
       errorService.handleOfficeError(error);
-    } finally {
-      dialog.close();
     }
   }
 
-  handleUpdateCommand = async (response, dialog) => {
+  handleUpdateCommand = async (response) => {
     if (response.reportId
       && response.projectId
       && response.reportSubtype
@@ -86,18 +91,24 @@ class PopupController {
         notificationService.displayMessage(result.type, result.message);
       }
     }
-    dialog.close();
   }
 
-  handleOkCommand = async (response, dialog) => {
+  handleOkCommand = async (response) => {
     if (response.chosenObject) {
       const result = await officeDisplayService.printObject(response.chosenObject, response.chosenProject, response.chosenSubtype === objectTypes.getTypeValues('Report').subtype);
       if (result) {
         notificationService.displayMessage(result.type, result.message);
       }
     }
-    dialog.close();
+  }
+
+  loadPending = (wrapped) => {
+    return async (...args) => {
+      this.runPopup(PopupTypeEnum.loadingPage, 10, 10);
+      return await wrapped(...args);
+    };
   }
 }
 
 export const popupController = new PopupController();
+export const loadPending = popupController.loadPending;
