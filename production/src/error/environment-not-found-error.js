@@ -1,1 +1,2 @@
-export class EnvironmentNotFoundError extends Error {};
+export function EnvironmentNotFoundError() {};
+EnvironmentNotFoundError.prototype = new Error();

@@ -1,1 +1,2 @@
-export class UnauthorizedError extends Error {};
+export function UnauthorizedError() {};
+UnauthorizedError.prototype = new Error();
