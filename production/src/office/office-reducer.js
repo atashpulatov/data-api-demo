@@ -3,6 +3,8 @@ import {OfficeError} from './office-error';
 
 export const officeReducer = (state = {}, action) => {
   switch (action.type) {
+    case officeProperties.actions.preLoadReport:
+      return onPreLoadReport(action, state);
     case officeProperties.actions.loadReport:
       return onLoadReport(action, state);
     case officeProperties.actions.removeAllReports:
@@ -21,13 +23,20 @@ export const officeReducer = (state = {}, action) => {
   return state;
 };
 
+function onPreLoadReport(action, state) {
+  return {
+    ...state,
+    preLoadReport: action.preLoadReport,
+  };
+}
+
 function onLoadReport(action, state) {
   _checkReportData(action.report);
   return {
     ...state,
     reportArray: state.reportArray
-            ? [...state.reportArray, action.report]
-            : [action.report],
+      ? [...state.reportArray, action.report]
+      : [action.report],
   };
 }
 
