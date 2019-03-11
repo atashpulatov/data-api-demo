@@ -30,9 +30,9 @@ const _LoadingPage = ({title = 'Data Import'}) => {
 };
 
 const mapStateToProps = (state) => {
-  // TODO: Add objectName
-  // We need to publish objectName to the store BEFORE opening the popup
-  // return {title: state.someReducer.objectName};
+  // TODO: Add objectName. It doesn't work for now for some reason
+  // const object = state.officeReducer.preLoadReport;
+  // return {title: !!object ? object.name : undefined};
   return {};
 };
 
