@@ -9,8 +9,8 @@ const dialogStyle = {
   transform: 'translateY(-50%) translateY(-15px)',
   border: 'none',
   textAlign: 'center',
-  maxWidth: '500px',
   fontFamily: `"HelveticaNeue", "Helvetica Neue", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", sans-serif`,
+  width: '100%',
 };
 
 const titleStyle = {
