@@ -107,7 +107,7 @@ describe('ErrorService', () => {
       // given
       const error = new InternalServerError({iServerCode: '-2147171501'});
       const spyMethod = jest.spyOn(notificationService, 'displayMessage');
-      const NOT_SUPPORTED_SERVER_ERR = 'This object cannot be imported. Objects with prompts, cross tabs, totals, or subtotals are not supported in this version of Office for MicroStrategy.';
+      const NOT_SUPPORTED_SERVER_ERR = 'This object cannot be imported. Objects with prompts, cross tabs, totals, or subtotals are not supported in this version of MicroStrategy for Office.';
       // when
       errorService.handleError(error);
       // then

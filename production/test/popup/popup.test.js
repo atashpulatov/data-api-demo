@@ -4,7 +4,6 @@ import {Popup} from '../../src/popup/popup.jsx';
 import {libraryErrorController} from 'mstr-react-library';
 import {officeContext} from '../../src/office/office-context.js';
 import {selectorProperties} from '../../src/attribute-selector/selector-properties.js';
-import {EnvironmentNotFoundError} from '../../src/error/environment-not-found-error.js';
 import {PopupTypeEnum} from '../../src/home/popup-type-enum.js';
 
 describe('Popup.js', () => {
@@ -90,7 +89,6 @@ describe('Popup.js', () => {
     // when
     const popupWrapped = mount(<Popup location={location} />);
     // then
-    expect(popupWrapped.find('LoadingPage').get(0)).toBeDefined();
-    expect(true).toBeFalsy();
+    expect(popupWrapped.find('LoadingText').get(0)).toBeDefined();
   });
 });
