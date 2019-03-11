@@ -112,7 +112,7 @@ describe('ErrorService', () => {
       errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('error', NOT_SUPPORTED_SERVER_ERR);
+      expect(spyMethod).toBeCalledWith('warning', NOT_SUPPORTED_SERVER_ERR);
     });
     it('should logout on UnauthorizedError', () => {
       // given
