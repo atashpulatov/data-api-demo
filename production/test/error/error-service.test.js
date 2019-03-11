@@ -1,15 +1,12 @@
-/* eslint-disable  */
 import {errorService} from '../../src/error/error-handler';
 import {EnvironmentNotFoundError} from '../../src/error/environment-not-found-error';
 import {UnauthorizedError} from '../../src/error/unauthorized-error';
 import {BadRequestError} from '../../src/error/bad-request-error';
 import {InternalServerError} from '../../src/error/internal-server-error';
-import {sessionHelper} from '../../src/storage/session-helper';
 import {notificationService} from '../../src/notification/notification-service';
 import {RunOutsideOfficeError} from '../../src/error/run-outside-office-error';
 import {OverlappingTablesError} from '../../src/error/overlapping-tables-error';
 import {GenericOfficeError} from '../../src/error/generic-office-error';
-/* eslint-enable */
 
 jest.mock('../../src/storage/session-helper');
 jest.useFakeTimers();
@@ -192,7 +189,7 @@ describe('ErrorService', () => {
       expect(notificationSpy).toBeCalled();
       expect(notificationSpy).toBeCalledWith('error', 'Please run plugin inside Office');
     });
-    it('should handle RunOutsideOfficeError', () => {
+    it('should handle OverlappingTablesError', () => {
       // given
       const errorMessage = `A table can't overlap another table. `;
       const error = new OverlappingTablesError(errorMessage);
