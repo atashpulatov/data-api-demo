@@ -6,7 +6,7 @@ class OfficeConverterService {
       name: jsonReport.name,
       headers,
       rows: this._getRows(jsonReport, headers),
-      columnInformation: this._getcolumnInformation(jsonReport),
+      columnInformation: this._getColumnInformation(jsonReport),
     };
   }
 
@@ -97,7 +97,7 @@ class OfficeConverterService {
     return rows;
   }
 
-  _getcolumnInformation(jsonReport) {
+  _getColumnInformation(jsonReport) {
     const columnInformation = [];
     let index = 0;
 
