@@ -6,7 +6,7 @@ export const PopupButtons = ({handleOk, handleSecondary,
   handleCancel, handleBack, loading, disableActiveActions, onPreviewClick}) => {
   return (
     <div className="popup-buttons popup-footer">
-      {!handleSecondary && <Button id="data-preview" onClick={onPreviewClick}>
+      {!handleSecondary && <Button id="data-preview" onClick={onPreviewClick} disabled={disableActiveActions}>
         Data Preview
       </Button>}
       {
