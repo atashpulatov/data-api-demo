@@ -87,7 +87,10 @@ class OfficeConverterService {
 
   _getRows(jsonReport, headers) {
     let rows = [];
-    const data = jsonReport.result.data.root.children || [];
+    let data = [];
+    if (jsonReport.result.data.root) {
+      data = (jsonReport.result.data.root.children) || [];
+    }
     data.forEach((rootNode) => {
       rows = rows.concat(this._parseTreeToArray(rootNode, headers));
     });
