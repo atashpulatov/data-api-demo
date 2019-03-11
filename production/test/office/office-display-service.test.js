@@ -9,6 +9,7 @@ import {OutsideOfRangeError} from '../../src/error/outside-of-range-error';
 import {authenticationHelper} from '../../src/authentication/authentication-helper';
 import {popupController} from '../../src/popup/popup-controller';
 import {PopupTypeEnum} from '../../src/home/popup-type-enum';
+import {sessionHelper} from '../../src/storage/session-helper';
 
 jest.mock('../../src/mstr-object/mstr-object-rest-service');
 jest.mock('../../src/office/store/office-store-service');
@@ -25,30 +26,30 @@ describe('OfficeDisplayService', () => {
 
   beforeAll(() => {
     jest.spyOn(mstrObjectRestService, 'getObjectContent')
-        .mockResolvedValue(givenReport);
+      .mockResolvedValue(givenReport);
     jest.spyOn(officeApiHelper, 'findAvailableOfficeTableId')
-        .mockReturnValue(excelTableNameMock);
+      .mockReturnValue(excelTableNameMock);
     jest.spyOn(officeApiHelper, 'getCurrentMstrContext')
-        .mockReturnValue(mstrContext);
+      .mockReturnValue(mstrContext);
     jest.spyOn(officeApiHelper, 'getOfficeContext')
-        .mockReturnValue({
-          document: {
-            bindings: {
-              releaseByIdAsync: jest.fn(),
-            },
+      .mockReturnValue({
+        document: {
+          bindings: {
+            releaseByIdAsync: jest.fn(),
           },
-        });
+        },
+      });
     jest.spyOn(officeApiHelper, 'getExcelContext')
-        .mockReturnValue({
-          workbook: {
-            tables: {
-              getItem: () => {
-                return {delete: () => {}};
-              },
+      .mockReturnValue({
+        workbook: {
+          tables: {
+            getItem: () => {
+              return {delete: () => {}};
             },
           },
-          sync: () => {},
-        });
+        },
+        sync: () => {},
+      });
   });
 
   beforeEach(() => {
@@ -65,7 +66,7 @@ describe('OfficeDisplayService', () => {
     const getObjectInfoSpy = jest.spyOn(mstrObjectRestService, 'getObjectInfo').mockResolvedValue(givenBody);
     const runPopupSpy = jest.spyOn(popupController, 'runPopup');
     const printInside = jest.spyOn(officeDisplayService, '_printObject')
-        .mockImplementationOnce(() => {});
+      .mockImplementationOnce(() => {});
     const arg1 = 'arg1';
     const arg2 = 'arg2';
     const arg3 = 'arg2';
@@ -98,10 +99,12 @@ describe('OfficeDisplayService', () => {
 
   it('should call preserveReport on office store service', async () => {
     // given
-    jest.spyOn(officeDisplayService, '_insertDataIntoExcel')
-        .mockReturnValueOnce({});
-    jest.spyOn(officeApiHelper, 'getSelectedCell')
-        .mockReturnValueOnce({});
+    jest.spyOn(officeDisplayService, '_insertDataIntoExcel').mockReturnValueOnce({});
+    jest.spyOn(officeApiHelper, 'getSelectedCell').mockReturnValueOnce({});
+    const mockDialog = {
+      close: () => {},
+    };
+    sessionHelper.setDialog(mockDialog);
     const objectId = null;
     // when
     await officeDisplayService.printObject(objectId, mstrContext.projectId, true);

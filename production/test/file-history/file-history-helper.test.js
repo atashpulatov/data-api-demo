@@ -13,7 +13,7 @@ jest.mock('../../src/error/error-handler');
 
 describe('FileHistoryHelper', () => {
   beforeAll(() => {
-    jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => { });
+    jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => {});
   });
   afterEach(() => {
     jest.resetAllMocks();
@@ -54,12 +54,14 @@ describe('FileHistoryHelper', () => {
       authenticationHelper.validateAuthToken = jest.fn().mockImplementation(() => {});
       const mockedOnRefresh = jest.fn().mockImplementation(() => true);
       const testBindId = 'someBindingIt';
+      const objectType = 'object type';
+      const expectedObjectType = 'Object type';
       // when
-      await fileHistoryHelper.refreshReport(mockedOnRefresh, testBindId);
+      await fileHistoryHelper.refreshReport(mockedOnRefresh, testBindId, objectType);
       // then
       expect(mockedDisplayMessage).toBeCalled();
       expect(authenticationHelper.validateAuthToken).toBeCalled();
-      expect(mockedDisplayMessage).toBeCalledWith('info', 'Report refreshed');
+      expect(mockedDisplayMessage).toBeCalledWith('success', `${expectedObjectType} refreshed`);
     });
     it('should not display message on fail', async () => {
       // given
@@ -134,11 +136,13 @@ describe('FileHistoryHelper', () => {
       const mockedDisplayMessage = notificationService.displayMessage;
       const mockedOnDelete = jest.fn().mockImplementation(() => true);
       const testBindId = 'someBindingIt';
+      const objectType = 'object type';
+      const expectedObjectType = 'Object type';
       // when
-      await fileHistoryHelper.deleteReport(mockedOnDelete, testBindId);
+      await fileHistoryHelper.deleteReport(mockedOnDelete, testBindId, objectType);
       // then
       expect(mockedDisplayMessage).toBeCalled();
-      expect(mockedDisplayMessage).toBeCalledWith('info', 'Report removed');
+      expect(mockedDisplayMessage).toBeCalledWith('success', `${expectedObjectType} removed`);
     });
     it('should not display message without success', async () => {
       // given

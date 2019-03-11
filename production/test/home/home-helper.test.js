@@ -32,7 +32,7 @@ describe('HomeHelper', () => {
     it('prepare url and save it to store', () => {
       // given
       jest.spyOn(homeHelper, 'getWindowLocation').mockReturnValueOnce({
-        origin: 'https://some-env.microstrategy.com',
+        origin: 'https://some-env.microstrategy.com/',
         pathname: 'MicroStrategyLibrary/apps/addin-mstr-office/index.html?source=addin-mstr-office',
       });
       sessionHelper.logOut = jest.fn();
