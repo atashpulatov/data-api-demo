@@ -1,1 +1,3 @@
-export class OverlappingTablesError extends Error { };
+export function OverlappingTablesError() {};
+OverlappingTablesError.prototype = new Error();
+

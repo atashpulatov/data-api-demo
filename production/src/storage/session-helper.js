@@ -31,10 +31,14 @@ class SessionHelper {
     };
   }
   logOutRedirect = () => {
-    const currentPath = window.location.pathname;
-    const pathBeginning = currentPath.split('/apps/')[0];
-    const loginParams = 'source=addin-mstr-office';
-    window.location.replace(`${pathBeginning}/static/loader-mstr-office/index.html?${loginParams}`);
+    if (!window.location.origin.includes('localhost')) {
+      const currentPath = window.location.pathname;
+      const pathBeginning = currentPath.split('/apps/')[0];
+      const loginParams = 'source=addin-mstr-office';
+      window.location.replace(`${pathBeginning}/static/loader-mstr-office/index.html?${loginParams}`);
+    } else {
+      sessionHelper.disableLoading();
+    }
   };
 
   saveLoginValues = (values) => {

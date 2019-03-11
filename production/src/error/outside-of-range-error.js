@@ -1,1 +1,3 @@
-export class OutsideOfRangeError extends Error {};
+export function OutsideOfRangeError() {};
+OutsideOfRangeError.prototype = new Error();
+

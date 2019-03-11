@@ -1,1 +1,3 @@
-export class GenericOfficeError extends Error {};
+export function GenericOfficeError() {};
+GenericOfficeError.prototype = new Error();
+
