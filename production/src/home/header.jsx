@@ -8,33 +8,28 @@ import {userRestService} from './user-rest-service';
 
 
 export class _Header extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {userData: {}, class: ''};
-  }
-
   componentDidMount = async () => {
     const {envUrl, authToken} = this.props;
+    let userData = {};
     try {
-      this.setState({userData: await userRestService.getUserData(authToken, envUrl)});
+      userData = await userRestService.getUserData(authToken, envUrl);
     } catch (error) {
       errorService.handleError(error, true);
     }
-    sessionHelper.saveUserInfo(this.state.userData);
-    this.setState({class: 'gotUserData'});
+    sessionHelper.saveUserInfo(userData);
   }
 
   render() {
     const {userFullName, userInitials} = this.props;
     return (
       <header id='app-header'>
-        <span id='profileImage' className={this.state.class}>
+        <span id='profileImage' className={userFullName && 'got-user-data'}>
           {userInitials !== null ?
             <span id='initials' alt='User profile'>{userInitials}</span> :
             <img src={logo} alt='User profile' />
             /* TODO: When rest api returns profileImage use it as source*/}
         </span>
-        <span className={` ${this.state.class} header-name`}>{userFullName}</span>
+        <span className={` ${userFullName && 'got-user-data'} header-name`}>{userFullName}</span>
         <Button id='logOut' onClick={logout} size='small'>Log out</Button>
       </header >
     );

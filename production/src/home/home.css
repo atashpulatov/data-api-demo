@@ -24,7 +24,7 @@ hr {
     align-items: center;
 }
 
-.gotUserData{
+.got-user-data{
     transition: opacity 1.5s;
     opacity: 1 !important;
 }
