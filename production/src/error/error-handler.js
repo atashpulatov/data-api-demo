@@ -79,8 +79,8 @@ class ErrorService {
     }
   }
   handlePreAuthError = (error) => {
-    switch (error.constructor) {
-      case UnauthorizedError:
+    switch (true) {
+      case error instanceof UnauthorizedError:
         notificationService.displayMessage('error', 'Wrong username or password.');
         break;
       default:
@@ -91,14 +91,14 @@ class ErrorService {
     this.handleError(error, true);
   }
   handleOfficeError = (error) => {
-    switch (error.constructor) {
-      case RunOutsideOfficeError:
+    switch (true) {
+      case error instanceof RunOutsideOfficeError:
         notificationService.displayMessage('error', 'Please run plugin inside Office');
         break;
-      case OverlappingTablesError:
+      case error instanceof OverlappingTablesError:
         notificationService.displayMessage('error', `Excel returned error: ${error.message}`);
         break;
-      case GenericOfficeError:
+      case error instanceof GenericOfficeError:
         notificationService.displayMessage('error', `Excel returned error: ${error.message}`);
         break;
       default:

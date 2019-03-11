@@ -32,7 +32,7 @@ class AuthenticationService {
         .set('x-mstr-authtoken', authToken)
         .withCredentials()
         .then((res) => {
-          return;
+          return res;
         })
         .catch((err) => {
           throw errorService.errorRestFactory(err);
