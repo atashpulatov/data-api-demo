@@ -47,9 +47,8 @@ class ErrorService {
     return error;
   }
   handleError = (error, isLogout) => {
-    console.error(error);
-    switch (error.constructor) {
-      case EnvironmentNotFoundError:
+    switch (true) {
+      case error instanceof EnvironmentNotFoundError:
         notificationService.displayMessage('info', '404 - Environment not found');
         if (!isLogout) {
           setTimeout(() => {
@@ -57,7 +56,7 @@ class ErrorService {
           }, TIMEOUT);
         }
         break;
-      case UnauthorizedError:
+      case error instanceof UnauthorizedError:
         notificationService.displayMessage('info', 'Your session has expired. Please log in.');
         if (!isLogout) {
           setTimeout(() => {
@@ -65,13 +64,13 @@ class ErrorService {
           }, TIMEOUT);
         }
         break;
-      case BadRequestError:
+      case error instanceof BadRequestError:
         notificationService.displayMessage('error', '400 - There has been a problem with your request');
         break;
-      case InternalServerError:
+      case error instanceof InternalServerError:
         notificationService.displayMessage('error', errorMessages[error.iServerCode]);
         break;
-      case PromptedReportError:
+      case error instanceof PromptedReportError:
         notificationService.displayMessage('error', NOT_SUPPORTED_SERVER_ERR);
         break;
       default:

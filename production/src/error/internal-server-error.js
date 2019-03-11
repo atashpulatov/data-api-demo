@@ -1,6 +1,4 @@
-export class InternalServerError extends Error {
-  constructor(errorBody, ...params) {
-    super(...params);
-    this.iServerCode = errorBody.iServerCode;
-  }
+export function InternalServerError(errorBody) {
+  this.iServerCode = errorBody.iServerCode;
 };
+InternalServerError.prototype = new Error();
