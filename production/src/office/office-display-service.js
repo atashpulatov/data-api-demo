@@ -114,7 +114,7 @@ class OfficeDisplayService {
     const excelContext = await officeApiHelper.getExcelContext();
     try {
       const range = officeApiHelper.getBindingRange(excelContext, bindingId);
-      range.load();
+      range.load('address');
       await excelContext.sync();
       const startCell = range.address.split('!')[1].split(':')[0];
       const refreshReport = officeStoreService.getReportFromProperties(bindingId);
