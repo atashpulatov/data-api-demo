@@ -10,13 +10,17 @@ import {userRestService} from './user-rest-service';
 export class _Header extends Component {
   constructor(props) {
     super(props);
-    this.state = {class: ''};
+    this.state = {userData: {}, class: ''};
   }
 
   componentDidMount = async () => {
     const {envUrl, authToken} = this.props;
-    const userData = await userRestService.getUserData(authToken, envUrl);
-    sessionHelper.saveUserInfo(userData);
+    try {
+      this.setState({userData: await userRestService.getUserData(authToken, envUrl)});
+    } catch (error) {
+      errorService.handleError(error, true);
+    }
+    sessionHelper.saveUserInfo(this.state.userData);
     this.setState({class: 'gotUserData'});
   }
 

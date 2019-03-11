@@ -24,15 +24,9 @@ hr {
     align-items: center;
 }
 
-@keyframes app-header-opacity {
-    0% {opacity:0}
-    100% {opacity:1}
-  }
-
 .gotUserData{
+    transition: opacity 1.5s;
     opacity: 1 !important;
-    animation-name: app-header-opacity;
-    animation-duration: 1s;
 }
 
 #profileImage{
