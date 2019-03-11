@@ -1,3 +1,4 @@
+import uuid from 'uuid/v4';
 import { IncorrectInputTypeError } from './incorrect-input-type';
 import { OutsideOfRangeError } from '../error/outside-of-range-error';
 import { reduxStore } from '../store';
@@ -79,22 +80,7 @@ class OfficeApiHelper {
   }
 
   findAvailableOfficeTableId = async (excelContext) => {
-    let nameExists = true;
-    let tableIncrement = 0;
-    const tableCollection = excelContext.workbook.tables;
-    tableCollection.load();
-    await excelContext.sync();
-    while (nameExists) {
-      const existingTable = await tableCollection.getItemOrNullObject(`${EXCEL_TABLE_NAME}${tableIncrement}`);
-      existingTable.load();
-      await excelContext.sync();
-      if (!existingTable.isNull) {
-        tableIncrement++;
-      } else {
-        nameExists = false;
-      }
-    }
-    return EXCEL_TABLE_NAME + tableIncrement;
+    return EXCEL_TABLE_NAME + uuid().split('-').join('');
   }
 
   loadExistingReportBindingsExcel = async () => {
