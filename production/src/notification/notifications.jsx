@@ -8,7 +8,7 @@ export class NotificationsWithoutRedux extends Component {
     super(props);
     message.config({
       duration: 5,
-      maxCount: 2,
+      maxCount: 1,
     });
   }
   componentDidUpdate = () => {
