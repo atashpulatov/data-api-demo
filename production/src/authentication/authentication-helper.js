@@ -16,8 +16,6 @@ class AuthenticationHelper {
           .authenticate(
               values.username, values.password,
               values.envUrl, 1);
-      const userData = await userRestService.getUserData(authToken, values.envUrl);
-      sessionHelper.saveUserInfo(userData);
       sessionHelper.logIn(authToken);
     } catch (error) {
       errorService.handlePreAuthError(error);
@@ -26,11 +24,11 @@ class AuthenticationHelper {
     }
   }
 
-  validateAuthToken = async () => {
+  validateAuthToken = () => {
     const reduxStoreState = reduxStore.getState();
     const authToken = reduxStoreState.sessionReducer.authToken;
     const envUrl = reduxStoreState.sessionReducer.envUrl;
-    await authenticationService.getSessions(envUrl, authToken);
+    return authenticationService.getSessions(envUrl, authToken);
   }
 }
 
