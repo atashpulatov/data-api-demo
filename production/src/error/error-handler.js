@@ -9,6 +9,7 @@ import {RunOutsideOfficeError} from './run-outside-office-error.js';
 import {OverlappingTablesError} from './overlapping-tables-error';
 import {GenericOfficeError} from './generic-office-error.js';
 import {errorMessages, NOT_SUPPORTED_SERVER_ERR} from './constants';
+import {ConnectionBrokenError} from './connection-error.js';
 
 const TIMEOUT = 2000;
 
@@ -18,6 +19,9 @@ class ErrorService {
       return new PromptedReportError();
     }
     if (error.status === 404 || !error.response) {
+      if (error.message.includes('Possible causes: the network is offline,')) {
+        return new ConnectionBrokenError();
+      }
       return new EnvironmentNotFoundError();
     }
     switch (error.response.status) {
@@ -50,6 +54,15 @@ class ErrorService {
     switch (true) {
       case error instanceof EnvironmentNotFoundError:
         notificationService.displayMessage('info', '404 - Environment not found');
+        if (!isLogout) {
+          setTimeout(() => {
+            this.fullLogOut();
+          }, TIMEOUT);
+        }
+        break;
+      case error instanceof ConnectionBrokenError:
+        notificationService.displayMessage('warning', 'Environment is unreachable.'
+          + '\nPlease check your internet connection.');
         if (!isLogout) {
           setTimeout(() => {
             this.fullLogOut();
