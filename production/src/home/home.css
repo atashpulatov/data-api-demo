@@ -24,6 +24,11 @@ hr {
     align-items: center;
 }
 
+.got-user-data{
+    transition: opacity 1.5s;
+    opacity: 1 !important;
+}
+
 #profileImage{
     font-family: 'HelveticaNeue', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
     color: #888;
@@ -32,6 +37,7 @@ hr {
     flex: auto 0 0;
     align-self: center;
     order: 1;
+    opacity: 0;
 }
 
 #app-header .header-name {
@@ -42,6 +48,7 @@ hr {
     text-overflow: ellipsis;
     overflow: hidden;
     min-width:0;
+    opacity: 0;
     font-family: 'HelveticaNeue-medium', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 }
 
