@@ -114,7 +114,8 @@ class OfficeDisplayService {
   };
 
   // TODO: we could filter data to display options related to current envUrl
-  refreshReport = async (bindingId) => {
+  refreshReport = async (bindingId, objectType) => {
+    const isReport = objectType === 'report';
     const isRefresh = true;
     const excelContext = await officeApiHelper.getExcelContext();
     try {
@@ -124,7 +125,7 @@ class OfficeDisplayService {
       const startCell = range.address.split('!')[1].split(':')[0];
       const refreshReport = officeStoreService.getReportFromProperties(bindingId);
       await this.removeReportFromExcel(bindingId, isRefresh);
-      const result = await this.printObject(refreshReport.id, refreshReport.projectId, true, startCell, refreshReport.tableId, bindingId, refreshReport.body, true);
+      const result = await this.printObject(refreshReport.id, refreshReport.projectId, isReport, startCell, refreshReport.tableId, bindingId, refreshReport.body, true);
       if (result) {
         notificationService.displayMessage(result.type, result.message);
       }
