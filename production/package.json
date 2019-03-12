@@ -76,10 +76,12 @@
     "extends": "react-app"
   },
   "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
+    "defaults",
+    "> 1%",
+    "edge > 15",
+    "not ie < 11",
+    "not op_mini all",
+    "not dead"
   ],
   "jest": {
     "collectCoverageFrom": [
