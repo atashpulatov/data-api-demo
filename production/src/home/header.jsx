@@ -5,12 +5,14 @@ import {Button} from 'antd';
 import {errorService} from '../error/error-handler';
 import {connect} from 'react-redux';
 import {userRestService} from './user-rest-service';
+import {homeHelper} from './home-helper';
 
 
 export class _Header extends Component {
   componentDidMount = async () => {
-    const {envUrl, authToken} = this.props;
     let userData = {};
+    const envUrl = homeHelper.saveLoginValues();
+    const authToken = homeHelper.saveTokenFromCookies();
     try {
       userData = await userRestService.getUserData(authToken, envUrl);
     } catch (error) {
