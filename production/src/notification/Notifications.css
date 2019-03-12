@@ -7,15 +7,6 @@
     text-overflow: ellipsis;
     max-height: 85px;
 }
-
-.add-data-btn:hover,
-.add-data-btn:focus {
-    background: rgba(28,145,220,0.05);
-    border: 1px solid #1C91DC;
-    border-radius: 4px;
-    color: #1C91DC;
-}
-
 .ant-message-notice.move-up-leave.move-up-leave-active {
     overflow: hidden;
     -webkit-animation-name: MessageMoveOut;
