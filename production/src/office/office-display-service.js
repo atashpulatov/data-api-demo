@@ -52,7 +52,7 @@ class OfficeDisplayService {
   }
 
   printObject = async (...args) => {
-    popupController.runPopup(PopupTypeEnum.loadingPage, 30, 50);
+    popupController.runPopup(PopupTypeEnum.loadingPage, 30, 40);
     return await this._printObject(...args);
   }
 

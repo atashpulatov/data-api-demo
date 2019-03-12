@@ -104,7 +104,7 @@ class PopupController {
 
   loadPending = (wrapped) => {
     return async (...args) => {
-      this.runPopup(PopupTypeEnum.loadingPage, 10, 10);
+      this.runPopup(PopupTypeEnum.loadingPage, 30, 40);
       return await wrapped(...args);
     };
   }
