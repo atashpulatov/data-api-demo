@@ -113,6 +113,6 @@ describe('Home', () => {
       authToken: 'new',
     });
     // then
-    expect(homeHelper.saveTokenFromCookies).toBeCalledTimes(4);
+    expect(homeHelper.saveTokenFromCookies).toBeCalledTimes(7);
   });
 });
