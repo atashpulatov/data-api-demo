@@ -9,6 +9,7 @@ import {RunOutsideOfficeError} from './run-outside-office-error.js';
 import {OverlappingTablesError} from './overlapping-tables-error';
 import {GenericOfficeError} from './generic-office-error.js';
 import {errorMessages, NOT_SUPPORTED_SERVER_ERR} from './constants';
+import {OutsideOfRangeError} from './outside-of-range-error.js';
 
 const TIMEOUT = 2000;
 
@@ -73,6 +74,12 @@ class ErrorService {
       case error instanceof PromptedReportError:
         notificationService.displayMessage('warning', NOT_SUPPORTED_SERVER_ERR);
         break;
+      case error instanceof OutsideOfRangeError:
+        notificationService.displayMessage('warning', 'The table you try to import exceeds the worksheet limits.');
+        break;
+      case error instanceof OverlappingTablesError:
+        notificationService.displayMessage('warning', 'The table you try to import exceeds the worksheet limits.');
+        break;
       default:
         notificationService.displayMessage('error', error.message || 'Unknown error');
         break;
@@ -100,6 +107,9 @@ class ErrorService {
         break;
       case error instanceof GenericOfficeError:
         notificationService.displayMessage('error', `Excel returned error: ${error.message}`);
+        break;
+      case error instanceof OutsideOfRangeError:
+        notificationService.displayMessage('error', 'The table you try to import exceeds the worksheet limits.');
         break;
       default:
         this.handleError(error);
