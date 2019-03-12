@@ -7,7 +7,6 @@ import {officeApiHelper} from '../office/office-api-helper';
 import {homeHelper} from './home-helper';
 
 export class _Home extends Component {
-
   componentDidMount = async () => {
     await officeApiHelper.loadExistingReportBindingsExcel();
     homeHelper.saveLoginValues();
