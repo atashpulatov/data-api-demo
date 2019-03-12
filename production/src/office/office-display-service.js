@@ -51,9 +51,14 @@ class OfficeDisplayService {
     }
   }
 
-  printObject = async (...args) => {
-    popupController.runPopup(PopupTypeEnum.loadingPage, 30, 40);
-    return await this._printObject(...args);
+  printObject = async (objectId, projectId, isReport = true, ...args) => {
+    const objectInfo = await mstrObjectRestService.getObjectInfo(objectId, projectId, isReport);
+    reduxStore.dispatch({
+      type: officeProperties.actions.preLoadReport,
+      preLoadReport: objectInfo,
+    });
+    popupController.runPopup(PopupTypeEnum.loadingPage, 22, 24);
+    return await this._printObject(objectId, projectId, isReport, ...args);
   }
 
   // TODO: move it to api helper?
@@ -182,11 +187,12 @@ class OfficeDisplayService {
     if (rowsData.length > endRow) {
       const startIndex = endRow;
       for (let i = startIndex; i < rowsData.length; i += EXCEL_PAGINATION) {
+        await context.sync();
         context.workbook.application.suspendApiCalculationUntilNextSync();
         const endIndex = Math.min(rowsData.length, i + EXCEL_PAGINATION);
         mstrTable.getDataBodyRange().getRowsBelow(Math.min(rowsData.length - i, EXCEL_PAGINATION)).values = rowsData.slice(i, endIndex);
-        await context.sync();
       }
+      await context.sync();
     }
   }
 }

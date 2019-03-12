@@ -16,7 +16,7 @@ class PopupController {
     await this.runPopup(PopupTypeEnum.navigationTree, 80, 80);
   };
 
-  runPopup = async (popupType, height, width, objectName) => {
+  runPopup = async (popupType, height, width) => {
     const session = sessionHelper.getSession();
     try {
       await authenticationHelper.validateAuthToken();

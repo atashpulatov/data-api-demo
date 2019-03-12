@@ -57,6 +57,26 @@ class MstrObjectRestService {
         });
   }
 
+  async getObjectInfo(objectId, projectId, isReport = true) {
+    const storeState = reduxStore.getState();
+    const envUrl = storeState.sessionReducer.envUrl;
+    const authToken = storeState.sessionReducer.authToken;
+    const objectType = isReport ? 'reports' : 'cubes';
+    const fullPath = `${envUrl}/${objectType}/${objectId}`;
+
+    return await moduleProxy.request
+        .get(fullPath)
+        .set('x-mstr-authtoken', authToken)
+        .set('x-mstr-projectid', projectId)
+        .withCredentials()
+        .then((res) => {
+          return res.body;
+        })
+        .catch((err) => {
+          throw errorService.errorRestFactory(err);
+        });
+  };
+
   async getObjectContent(objectId, projectId, isReport = true, body = {}, limit = REQUEST_LIMIT) {
     const storeState = reduxStore.getState();
     const envUrl = storeState.sessionReducer.envUrl;

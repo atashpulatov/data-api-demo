@@ -62,16 +62,22 @@ describe('OfficeDisplayService', () => {
 
   it('should open loading popup when printing object', async () => {
     // given
+    const givenBody = {id: 'id', name: 'name'};
+    const getObjectInfoSpy = jest.spyOn(mstrObjectRestService, 'getObjectInfo').mockResolvedValue(givenBody);
     const runPopupSpy = jest.spyOn(popupController, 'runPopup');
     const printInside = jest.spyOn(officeDisplayService, '_printObject')
       .mockImplementationOnce(() => {});
     const arg1 = 'arg1';
     const arg2 = 'arg2';
+    const arg3 = 'arg2';
     // when
-    await officeDisplayService.printObject(arg1, arg2);
+    await officeDisplayService.printObject(arg1, arg2, arg3);
     // then
-    expect(runPopupSpy).toBeCalledWith(PopupTypeEnum.loadingPage, 30, 50);
-    expect(printInside).toBeCalledWith(arg1, arg2);
+    expect(getObjectInfoSpy).toBeCalledWith(arg1, arg2, arg3);
+    const preLoadReport = reduxStore.getState().officeReducer.preLoadReport;
+    expect(preLoadReport).toEqual(givenBody);
+    expect(runPopupSpy).toBeCalledWith(PopupTypeEnum.loadingPage, 22, 24);
+    expect(printInside).toBeCalledWith(arg1, arg2, arg3);
   });
 
   it('should add report to store', () => {

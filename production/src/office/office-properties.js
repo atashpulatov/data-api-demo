@@ -10,6 +10,7 @@ export const officeProperties = new Proxy({
     bindingItems: 'items',
     loadedReportProperties: 'reportProperties',
     actions: {
+        preLoadReport: 'PRE_OFFICE_LOAD_REPORT',
         loadReport: 'OFFICE_LOAD_REPORT',
         loadAllReports: 'OFFICE_LOAD_ALL_REPORTS',
         removeAllReports: 'OFFICE_REMOVE_ALL_REPORTS',
