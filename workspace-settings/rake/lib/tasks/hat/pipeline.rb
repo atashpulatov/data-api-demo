@@ -1,3 +1,5 @@
+require 'rally'
+
 Rake::Task[:upload].clear_prerequisites
 
 desc "upload plugins to nexus"
