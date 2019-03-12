@@ -1,1 +1,2 @@
-export class RunOutsideOfficeError extends Error { }
+export function RunOutsideOfficeError() {};
+RunOutsideOfficeError.prototype = new Error();

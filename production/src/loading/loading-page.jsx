@@ -9,8 +9,8 @@ const dialogStyle = {
   transform: 'translateY(-50%) translateY(-15px)',
   border: 'none',
   textAlign: 'center',
-  maxWidth: '500px',
   fontFamily: `"HelveticaNeue", "Helvetica Neue", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", sans-serif`,
+  width: '100%',
 };
 
 const titleStyle = {
@@ -30,9 +30,9 @@ const _LoadingPage = ({title = 'Data Import'}) => {
 };
 
 const mapStateToProps = (state) => {
-  // TODO: Add objectName
-  // We need to publish objectName to the store BEFORE opening the popup
-  // return {title: state.someReducer.objectName};
+  // TODO: Add objectName. It doesn't work for now for some reason
+  // const object = state.officeReducer.preLoadReport;
+  // return {title: !!object ? object.name : undefined};
   return {};
 };
 

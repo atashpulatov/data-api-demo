@@ -1,1 +1,3 @@
-export class PromptedReportError extends Error { };
+export function PromptedReportError() {};
+PromptedReportError.prototype = new Error();
+

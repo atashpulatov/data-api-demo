@@ -47,9 +47,8 @@ class ErrorService {
     return error;
   }
   handleError = (error, isLogout) => {
-    console.error(error);
-    switch (error.constructor) {
-      case EnvironmentNotFoundError:
+    switch (true) {
+      case error instanceof EnvironmentNotFoundError:
         notificationService.displayMessage('info', '404 - Environment not found');
         if (!isLogout) {
           setTimeout(() => {
@@ -57,7 +56,7 @@ class ErrorService {
           }, TIMEOUT);
         }
         break;
-      case UnauthorizedError:
+      case error instanceof UnauthorizedError:
         notificationService.displayMessage('info', 'Your session has expired. Please log in.');
         if (!isLogout) {
           setTimeout(() => {
@@ -65,14 +64,14 @@ class ErrorService {
           }, TIMEOUT);
         }
         break;
-      case BadRequestError:
+      case error instanceof BadRequestError:
         notificationService.displayMessage('error', '400 - There has been a problem with your request');
         break;
-      case InternalServerError:
-        notificationService.displayMessage('error', errorMessages[error.iServerCode]);
+      case error instanceof InternalServerError:
+        notificationService.displayMessage('warning', errorMessages[error.iServerCode]);
         break;
-      case PromptedReportError:
-        notificationService.displayMessage('error', NOT_SUPPORTED_SERVER_ERR);
+      case error instanceof PromptedReportError:
+        notificationService.displayMessage('warning', NOT_SUPPORTED_SERVER_ERR);
         break;
       default:
         notificationService.displayMessage('error', error.message || 'Unknown error');
@@ -80,8 +79,8 @@ class ErrorService {
     }
   }
   handlePreAuthError = (error) => {
-    switch (error.constructor) {
-      case UnauthorizedError:
+    switch (true) {
+      case error instanceof UnauthorizedError:
         notificationService.displayMessage('error', 'Wrong username or password.');
         break;
       default:
@@ -92,14 +91,14 @@ class ErrorService {
     this.handleError(error, true);
   }
   handleOfficeError = (error) => {
-    switch (error.constructor) {
-      case RunOutsideOfficeError:
+    switch (true) {
+      case error instanceof RunOutsideOfficeError:
         notificationService.displayMessage('error', 'Please run plugin inside Office');
         break;
-      case OverlappingTablesError:
+      case error instanceof OverlappingTablesError:
         notificationService.displayMessage('error', `Excel returned error: ${error.message}`);
         break;
-      case GenericOfficeError:
+      case error instanceof GenericOfficeError:
         notificationService.displayMessage('error', `Excel returned error: ${error.message}`);
         break;
       default:

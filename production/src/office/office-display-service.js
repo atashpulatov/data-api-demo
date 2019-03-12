@@ -9,6 +9,7 @@ import {popupController} from '../popup/popup-controller';
 import {OutsideOfRangeError} from '../error/outside-of-range-error';
 import {authenticationHelper} from '../authentication/authentication-helper';
 import {PopupTypeEnum} from '../home/popup-type-enum';
+import {NOT_SUPPORTED_NO_ATTRIBUTES} from '../error/constants';
 
 const EXCEL_PAGINATION = 5000;
 
@@ -21,7 +22,7 @@ class OfficeDisplayService {
       const officeTable = await mstrObjectRestService.getObjectContent(objectId, projectId, isReport, body);
       if (!officeTable || (officeTable.rows && officeTable.rows.length === 0)) {
         // report returned no data
-        return {type: 'warning', message: `No data returned by the ${objectType}: ${officeTable.name}`};
+        return {type: 'warning', message: NOT_SUPPORTED_NO_ATTRIBUTES};
       }
       const newOfficeTableId = officeTableId || await officeApiHelper.findAvailableOfficeTableId(excelContext);
       await this._insertDataIntoExcel(officeTable, excelContext, startCell, newOfficeTableId);
@@ -50,9 +51,14 @@ class OfficeDisplayService {
     }
   }
 
-  printObject = async (...args) => {
-    popupController.runPopup(PopupTypeEnum.loadingPage, 30, 50);
-    return await this._printObject(...args);
+  printObject = async (objectId, projectId, isReport = true, ...args) => {
+    const objectInfo = await mstrObjectRestService.getObjectInfo(objectId, projectId, isReport);
+    reduxStore.dispatch({
+      type: officeProperties.actions.preLoadReport,
+      preLoadReport: objectInfo,
+    });
+    popupController.runPopup(PopupTypeEnum.loadingPage, 22, 24);
+    return await this._printObject(objectId, projectId, isReport, ...args);
   }
 
   // TODO: move it to api helper?
@@ -113,7 +119,7 @@ class OfficeDisplayService {
     const excelContext = await officeApiHelper.getExcelContext();
     try {
       const range = officeApiHelper.getBindingRange(excelContext, bindingId);
-      range.load();
+      range.load('address');
       await excelContext.sync();
       const startCell = range.address.split('!')[1].split(':')[0];
       const refreshReport = officeStoreService.getReportFromProperties(bindingId);

@@ -1,1 +1,3 @@
-export class BadRequestError extends Error {};
+export function BadRequestError() {};
+BadRequestError.prototype = new Error();
+
