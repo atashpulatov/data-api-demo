@@ -24,11 +24,11 @@ class AuthenticationHelper {
     }
   }
 
-  validateAuthToken = async () => {
+  validateAuthToken = () => {
     const reduxStoreState = reduxStore.getState();
     const authToken = reduxStoreState.sessionReducer.authToken;
     const envUrl = reduxStoreState.sessionReducer.envUrl;
-    await authenticationService.getSessions(envUrl, authToken);
+    return authenticationService.getSessions(envUrl, authToken);
   }
 }
 

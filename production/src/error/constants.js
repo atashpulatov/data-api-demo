@@ -1,10 +1,11 @@
 const withDefaultValue = (obj, defaultValue) => {
   return new Proxy(obj, {
-    get: (target, name) => target[name]===undefined ? defaultValue : target[name],
+    get: (target, name) => target[name] === undefined ? defaultValue : target[name],
   });
 };
 
 export const GENERIC_SERVER_ERR = 'This object cannot be imported.';
+export const NOT_SUPPORTED_NO_ATTRIBUTES = 'This object cannot be imported. Objects without attributes are not supported in this version of MicroStrategy for Office.';
 export const NOT_SUPPORTED_SERVER_ERR = 'This object cannot be imported. Objects with prompts, cross tabs, totals, or subtotals are not supported in this version of MicroStrategy for Office.';
 
 // temporarily we map all those codes to one message; may be changed in the future

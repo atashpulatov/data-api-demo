@@ -6,7 +6,7 @@ class OfficeConverterService {
       name: jsonReport.name,
       headers,
       rows: this._getRows(jsonReport, headers),
-      columnInformation: this._getcolumnInformation(jsonReport)
+      columnInformation: this._getColumnInformation(jsonReport),
     };
   }
 
@@ -87,14 +87,17 @@ class OfficeConverterService {
 
   _getRows(jsonReport, headers) {
     let rows = [];
-    const data = jsonReport.result.data.root.children;
+    let data = [];
+    if (jsonReport.result.data.root) {
+      data = (jsonReport.result.data.root.children) || [];
+    }
     data.forEach((rootNode) => {
       rows = rows.concat(this._parseTreeToArray(rootNode, headers));
     });
     return rows;
   }
 
-  _getcolumnInformation(jsonReport) {
+  _getColumnInformation(jsonReport) {
     const columnInformation = [];
     let index = 0;
 
@@ -106,7 +109,7 @@ class OfficeConverterService {
         attributeId: attribute.id,
         formId: form.id,
         attributeName: attribute.name,
-        formName: form.name
+        formName: form.name,
       }));
     });
 
@@ -119,11 +122,11 @@ class OfficeConverterService {
         id: metric.id,
         name: metric.name,
         formatString: metric.numberFormatting.formatString,
-        category: metric.numberFormatting.category
+        category: metric.numberFormatting.category,
       });
     });
 
-    return columnInformation; 
+    return columnInformation;
   }
 }
 

@@ -240,9 +240,8 @@ describe('OfficeApiHelper', () => {
     // then
     expect(result.envUrl).toBe(envUrl);
   });
-  it('should find proper office table id with only a-z characters', async () => {
+  it('should find proper office table id with only a-z and number characters', async () => {
     // given
-    const newReportName = 'New 333 Report 333';
     const mockLoad = () => {};
     const context = {
       workbook: {
@@ -261,7 +260,7 @@ describe('OfficeApiHelper', () => {
     // when
     const parsedReportName = await officeApiHelper.findAvailableOfficeTableId(context);
     // then
-    expect(/^[a-zA-Z]+0$/.test(parsedReportName)).toBeTruthy();
+    expect(/^[a-zA-Z0-9]+$/.test(parsedReportName)).toBeTruthy();
   });
   describe.skip('createBindingId', () => {
     it('should return proper bindingId', () => {

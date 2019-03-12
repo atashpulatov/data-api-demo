@@ -9,6 +9,7 @@ import {popupController} from '../popup/popup-controller';
 import {OutsideOfRangeError} from '../error/outside-of-range-error';
 import {authenticationHelper} from '../authentication/authentication-helper';
 import {PopupTypeEnum} from '../home/popup-type-enum';
+import {NOT_SUPPORTED_NO_ATTRIBUTES} from '../error/constants';
 
 const EXCEL_PAGINATION = 5000;
 
@@ -21,7 +22,7 @@ class OfficeDisplayService {
       const officeTable = await mstrObjectRestService.getObjectContent(objectId, projectId, isReport, body);
       if (!officeTable || (officeTable.rows && officeTable.rows.length === 0)) {
         // report returned no data
-        return {type: 'warning', message: `No data returned by the ${objectType}: ${officeTable.name}`};
+        return {type: 'warning', message: NOT_SUPPORTED_NO_ATTRIBUTES};
       }
       const newOfficeTableId = officeTableId || await officeApiHelper.findAvailableOfficeTableId(excelContext);
       await this._insertDataIntoExcel(officeTable, excelContext, startCell, newOfficeTableId);
@@ -113,7 +114,7 @@ class OfficeDisplayService {
     const excelContext = await officeApiHelper.getExcelContext();
     try {
       const range = officeApiHelper.getBindingRange(excelContext, bindingId);
-      range.load();
+      range.load('address');
       await excelContext.sync();
       const startCell = range.address.split('!')[1].split(':')[0];
       const refreshReport = officeStoreService.getReportFromProperties(bindingId);
