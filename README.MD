@@ -2,6 +2,7 @@
 
 Connector between Microsoft Office applications and MicroStrategy products.
 
+
 ## Getting Started
 
 Currently only development version of the plugin is available. You will need to follow below steps to prepare your system and aquire the plugin.
