@@ -6,10 +6,10 @@ import {officeStoreService} from './store/office-store-service';
 import {notificationService} from '../notification/notification-service';
 import {errorService} from '../error/error-handler';
 import {popupController} from '../popup/popup-controller';
-import {OutsideOfRangeError} from '../error/outside-of-range-error';
 import {authenticationHelper} from '../authentication/authentication-helper';
 import {PopupTypeEnum} from '../home/popup-type-enum';
 import {NOT_SUPPORTED_NO_ATTRIBUTES} from '../error/constants';
+import {OverlappingTablesError} from '../error/overlapping-tables-error';
 
 const EXCEL_PAGINATION = 5000;
 
@@ -117,7 +117,8 @@ class OfficeDisplayService {
   };
 
   // TODO: we could filter data to display options related to current envUrl
-  refreshReport = async (bindingId) => {
+  refreshReport = async (bindingId, objectType) => {
+    const isReport = objectType === 'report';
     const isRefresh = true;
     const excelContext = await officeApiHelper.getExcelContext();
     try {
@@ -127,7 +128,7 @@ class OfficeDisplayService {
       const startCell = range.address.split('!')[1].split(':')[0];
       const refreshReport = officeStoreService.getReportFromProperties(bindingId);
       await this.removeReportFromExcel(bindingId, isRefresh);
-      const result = await this.printObject(refreshReport.id, refreshReport.projectId, true, startCell, refreshReport.tableId, bindingId, refreshReport.body, true);
+      const result = await this.printObject(refreshReport.id, refreshReport.projectId, isReport, startCell, refreshReport.tableId, bindingId, refreshReport.body, true);
       if (result) {
         notificationService.displayMessage(result.type, result.message);
       }
@@ -181,7 +182,7 @@ class OfficeDisplayService {
     const usedDataRange = excelRange.getUsedRangeOrNullObject(true);
     await context.sync();
     if (!usedDataRange.isNullObject) {
-      throw new OutsideOfRangeError('The required data range in the worksheet is not empty');
+      throw new OverlappingTablesError('The required data range in the worksheet is not empty');
     }
   }
 

@@ -175,7 +175,7 @@ class OfficeApiHelper {
         .split('!')[1].split(':')[0];
     return startCell;
   }
-
+  
   bindNamedItem = (namedItem, bindingId) => {
     return new Promise((resolve, reject) => Office.context.document.bindings.addFromNamedItemAsync(
         namedItem, 'table', {id: bindingId}, (result) => {
