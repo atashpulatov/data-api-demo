@@ -3,7 +3,6 @@ import {authenticationService} from '../../src/authentication/auth-rest-service'
 import {notificationService} from '../../src/notification/notification-service';
 import {errorService} from '../../src/error/error-handler';
 import {authenticationHelper} from '../../src/authentication/authentication-helper';
-import {userRestService} from '../../src/home/user-rest-service';
 
 jest.mock('../../src/error/error-handler');
 jest.mock('../../src/notification/notification-service');
@@ -67,14 +66,11 @@ describe('loginUser', () => {
       envUrl: 'testEnvUrl',
     };
     const givenAuthToken = 'someAuthToken';
-    const givenUserData = 'body';
     const authenticateMock = jest.spyOn(authenticationService, 'authenticate').mockResolvedValue(givenAuthToken);
-    const userDataMock = jest.spyOn(userRestService, 'getUserData').mockResolvedValue(givenUserData);
     // when
     await authenticationHelper.loginUser(givenError, givenValues);
     // then
     expect(authenticateMock).toBeCalled();
-    expect(userDataMock).toBeCalled();
     expect(sessionHelper.logIn).toBeCalled();
     expect(sessionHelper.logIn).toBeCalledWith(givenAuthToken);
     expect(sessionHelper.disableLoading).toBeCalled();
