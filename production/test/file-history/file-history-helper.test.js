@@ -27,12 +27,13 @@ describe('FileHistoryHelper', () => {
       const mockedOnRefresh = jest.fn();
       authenticationHelper.validateAuthToken = jest.fn().mockImplementation(() => {});
       const testBindId = 'someBindingIt';
+      const objectType = 'report';
       // when
-      await fileHistoryHelper.refreshReport(mockedOnRefresh, testBindId);
+      await fileHistoryHelper.refreshReport(mockedOnRefresh, testBindId, objectType);
       // then
       expect(mockedOnRefresh).toBeCalled();
       expect(authenticationHelper.validateAuthToken).toBeCalled();
-      expect(mockedOnRefresh).toBeCalledWith(testBindId);
+      expect(mockedOnRefresh).toBeCalledWith(testBindId, objectType);
     });
     it('should not call provided method in no action session', async () => {
       // given
