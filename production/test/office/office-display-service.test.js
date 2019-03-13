@@ -76,7 +76,7 @@ describe('OfficeDisplayService', () => {
     expect(getObjectInfoSpy).toBeCalledWith(arg1, arg2, arg3);
     const preLoadReport = reduxStore.getState().officeReducer.preLoadReport;
     expect(preLoadReport).toEqual(givenBody);
-    expect(runPopupSpy).toBeCalledWith(PopupTypeEnum.loadingPage, 22, 24);
+    expect(runPopupSpy).toBeCalledWith(PopupTypeEnum.loadingPage, 22, 28);
     expect(printInside).toBeCalledWith(arg1, arg2, arg3);
   });
 
