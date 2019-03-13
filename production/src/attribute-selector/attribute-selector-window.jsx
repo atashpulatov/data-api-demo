@@ -65,7 +65,7 @@ export class AttributeSelectorWindow extends Component {
       <div>
         <AttributeSelector
           // TODO: logic for a title
-          title={`Import a file > ${this.props.parsed.reportName}`}
+          title={`Import ${this.props.parsed.reportType} > ${this.props.parsed.reportName}`}
           attributesSelectedChange={this.attributesBeingSelected}
           session={this.state.session}
           reportId={this.props.parsed.reportId}
