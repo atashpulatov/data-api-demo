@@ -24,12 +24,12 @@ hr {
     align-items: center;
 }
 
-.got-user-data{
+.got-user-data {
     transition: opacity 1.5s;
     opacity: 1 !important;
 }
 
-#profileImage{
+#profileImage {
     font-family: 'HelveticaNeue', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
     color: #888;
     font-size: 12px;
@@ -43,11 +43,11 @@ hr {
 #app-header .header-name {
     padding-left: 13px;
     padding-right: 13px;
-    order:2;
-    line-height: normal;
+    order: 2;
+    line-height: 32px;
     text-overflow: ellipsis;
     overflow: hidden;
-    min-width:0;
+    min-width: 0;
     opacity: 0;
     font-family: 'HelveticaNeue-medium', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 }
@@ -63,15 +63,15 @@ hr {
 #app-header #initials {
     height: 32px;
     width: 32px;
-    min-width: 32px;
+    line-height: 32px;
     border-radius: 50%;
-    font-size: 15px;
+    font-size: 13px;
     background: #b6b6b6;
-    color : white;
+    color: white;
     text-align: center;
-    display: table-cell;
+    display: block;
     -webkit-touch-callout: none;
-    -webkit-user-select: none; 
+    -webkit-user-select: none;
     -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -143,13 +143,16 @@ hr {
     color: #444649;
 }
 
+.ant-tabs.tabs-container .ant-tabs-content {
+    padding: 11px;
+}
+
 .tabs-container .ant-tabs-ink-bar {
-    height: 1.5px;
+    height: 3px;
     background-color: #1c91dc;
 }
 
 .tabs-container .ant-tabs-bar {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.10);
+    margin: 0 0 5px 0;
 }
-
-

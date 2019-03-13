@@ -20,7 +20,7 @@ export class Popup extends Component {
     libraryErrorController.initializeHttpErrorsHandling(this.handlePopupErrors);
   }
 
-  handlePrepare = (projectId, reportId, reportSubtype, reportName) => {
+  handlePrepare = (projectId, reportId, reportSubtype, reportName, reportType) => {
     this.setState({
       parsed: {
         ...this.state.parsed,
@@ -29,6 +29,7 @@ export class Popup extends Component {
         reportId,
         reportSubtype,
         reportName,
+        reportType,
       },
     });
   };
