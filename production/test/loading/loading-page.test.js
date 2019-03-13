@@ -20,7 +20,7 @@ describe('Loading page', () => {
 
   it('should display default loading title', async () => {
     // given
-    const expectedTitle = 'Data Import';
+    const expectedTitle = 'Importing data...';
     // when
     const componentWrapper = mount(
         <Provider store={reduxStore}>
