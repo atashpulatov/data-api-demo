@@ -4,7 +4,6 @@ import {mount} from 'enzyme';
 import {sessionHelper} from '../../src/storage/session-helper';
 import {_Header} from '../../src/home/header.jsx';
 import React from 'react';
-// jest.mock('../../src/home/user-rest-service');
 
 const envURL = 'https://env-125323.customer.cloud.microstrategy.com/MicroStrategyLibrary/api';
 
@@ -14,10 +13,11 @@ describe('getUserData', () => {
     const givenUserData = 'body';
     const userDataMock = jest.spyOn(userRestService, 'getUserData').mockResolvedValueOnce(givenUserData);
     const sessionHelperSpy = jest.spyOn(sessionHelper, 'saveUserInfo');
+    const tempPromise = Promise.resolve();
     // when
     const headerWrapper = mount(<_Header />);
-    sessionHelper.saveUserInfo(userDataMock);
     // then
+    await (tempPromise);
     expect(userDataMock).toBeCalled();
     expect(sessionHelperSpy).toBeCalled();
   });
