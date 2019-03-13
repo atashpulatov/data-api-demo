@@ -20,11 +20,11 @@ const titleStyle = {
   padding: '0.5em',
 };
 
-const _LoadingPage = ({title = 'Data Import'}) => {
+const _LoadingPage = ({title = 'Importing data...'}) => {
   return (
     <dialog className='loading-page' style={dialogStyle}>
       <h1 style={titleStyle}>{title}</h1>
-      <LoadingText text={'Downloading data...'} />
+      <LoadingText text={'Please wait until the import is complete.'} />
     </dialog>
   );
 };
