@@ -60,7 +60,7 @@ class OfficeDisplayService {
       type: officeProperties.actions.preLoadReport,
       preLoadReport: objectInfo,
     });
-    popupController.runPopup(PopupTypeEnum.loadingPage, 22, 24);
+    popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
     return this._printObject(objectId, projectId, isReport, ...args);
   }
 
