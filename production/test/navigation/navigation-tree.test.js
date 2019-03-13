@@ -79,6 +79,7 @@ describe('NavigationTree', () => {
       chosenProjectId: 'projectId',
       chosenSubtype: 'subtype',
       chosenProjectName: 'Prepare Data',
+      chosenType: 'Data',
     };
     const wrappedComponent = shallow(<_NavigationTree
       parsed={parsed}
@@ -89,6 +90,7 @@ describe('NavigationTree', () => {
     wrappedComponent.instance().handleSecondary();
     // then
     expect(propsMethod).toBeCalled();
-    expect(propsMethod).toBeCalledWith(actionObject.chosenProjectId, actionObject.chosenObjectId, actionObject.chosenSubtype, actionObject.chosenProjectName);
+    expect(propsMethod).toBeCalledWith(actionObject.chosenProjectId, actionObject.chosenObjectId,
+        actionObject.chosenSubtype, actionObject.chosenProjectName, actionObject.chosenType);
   });
 });

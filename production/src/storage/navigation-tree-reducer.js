@@ -2,7 +2,7 @@ import {SELECT_FOLDER, SELECT_OBJECT, SET_DATA_SOURCE, START_IMPORT} from '../na
 import {CLEAR_WINDOW} from '../popup/popup-actions';
 
 const defaultProjectName = 'Prepare Data';
-const defaultType = 'data';
+const defaultType = 'Data';
 
 // TODO: use some global store, redux one probably will be the best choice, or maybe some const global value
 const supportedTypesArray = [
