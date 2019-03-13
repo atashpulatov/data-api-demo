@@ -20,7 +20,7 @@ class ErrorService {
       return new PromptedReportError();
     }
     if (error.status === 404 || !error.response) {
-      if (error.message.includes('Possible causes: the network is offline,')) {
+      if (error.message && error.message.includes('Possible causes: the network is offline,')) {
         return new ConnectionBrokenError();
       }
       return new EnvironmentNotFoundError();
