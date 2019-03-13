@@ -6,10 +6,10 @@ import {officeStoreService} from './store/office-store-service';
 import {notificationService} from '../notification/notification-service';
 import {errorService} from '../error/error-handler';
 import {popupController} from '../popup/popup-controller';
-import {OutsideOfRangeError} from '../error/outside-of-range-error';
 import {authenticationHelper} from '../authentication/authentication-helper';
 import {PopupTypeEnum} from '../home/popup-type-enum';
 import {NOT_SUPPORTED_NO_ATTRIBUTES} from '../error/constants';
+import {OverlappingTablesError} from '../error/overlapping-tables-error';
 
 const EXCEL_PAGINATION = 5000;
 
@@ -174,7 +174,7 @@ class OfficeDisplayService {
     const usedDataRange = excelRange.getUsedRangeOrNullObject(true);
     await context.sync();
     if (!usedDataRange.isNullObject) {
-      throw new OutsideOfRangeError('The required data range in the worksheet is not empty');
+      throw new OverlappingTablesError('The required data range in the worksheet is not empty');
     }
   }
 
