@@ -118,6 +118,7 @@ class OfficeDisplayService {
     const isRefresh = true;
     const excelContext = await officeApiHelper.getExcelContext();
     try {
+      await officeApiHelper.onBindingObjectClick(bindingId);
       const range = officeApiHelper.getBindingRange(excelContext, bindingId);
       range.load('address');
       await excelContext.sync();
