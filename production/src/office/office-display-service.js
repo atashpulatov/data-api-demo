@@ -145,23 +145,22 @@ class OfficeDisplayService {
     const hasHeaders = true;
     const sheet = context.workbook.worksheets.getActiveWorksheet();
     const endRow = Math.min(EXCEL_PAGINATION, reportConvertedData.rows.length);
-    const HEADER_END_ROW_INDEX=0;
+    const HEADER_END_ROW_INDEX = 0;
     const headerRange = officeApiHelper.getRange(reportConvertedData.headers.length, startCell, HEADER_END_ROW_INDEX);
 
-    const tableRange =officeApiHelper.getRange(reportConvertedData.headers.length, startCell, endRow);
+    const tableRange = officeApiHelper.getRange(reportConvertedData.headers.length, startCell, endRow);
     const sheetRange = sheet.getRange(tableRange);
     context.trackedObjects.add(sheetRange);
     await this._checkRangeValidity(context, sheetRange);
 
     const rowsData = this._getRowsArray(reportConvertedData);
-
     const mstrTable = sheet.tables.add(headerRange, hasHeaders);
-    mstrTable.load('name');
-    mstrTable.name = tableName;
-    mstrTable.getHeaderRowRange().values=[reportConvertedData.headers];
-    mstrTable.rows.add(null, rowsData.slice(0, endRow));
-    // sheetRange.values = [reportConvertedData.headers, ...rowsData.slice(0, endRow)];
+
     try {
+      mstrTable.load('name');
+      mstrTable.name = tableName;
+      mstrTable.getHeaderRowRange().values = [reportConvertedData.headers];
+      mstrTable.rows.add(null, rowsData.slice(0, endRow));
       await context.sync();
       officeApiHelper.formatNumbers(mstrTable, reportConvertedData);
       await this._addRowsSequentially(rowsData, endRow, mstrTable, context);
