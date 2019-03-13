@@ -101,6 +101,7 @@ describe('OfficeDisplayService', () => {
     // given
     jest.spyOn(officeDisplayService, '_insertDataIntoExcel').mockReturnValueOnce({});
     jest.spyOn(officeApiHelper, 'getSelectedCell').mockReturnValueOnce({});
+    jest.spyOn(officeApiHelper, 'bindNamedItem').mockReturnValueOnce({});
     const mockDialog = {
       close: () => {},
     };
@@ -206,6 +207,10 @@ describe('OfficeDisplayService', () => {
         getHeaderRowRange: jest.fn().mockReturnValue({
           values: [],
         }),
+        load: jest.fn(),
+        rows: {
+          add: jest.fn(),
+        },
       };
       const mockedWorksheet = {
         tables: {

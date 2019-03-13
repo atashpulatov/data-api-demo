@@ -24,11 +24,14 @@ class OfficeDisplayService {
         // report returned no data
         return {type: 'warning', message: NOT_SUPPORTED_NO_ATTRIBUTES};
       }
-      const newOfficeTableId = officeTableId || await officeApiHelper.findAvailableOfficeTableId(excelContext);
+      const newOfficeTableId = officeTableId || officeApiHelper.findAvailableOfficeTableId();
       await this._insertDataIntoExcel(officeTable, excelContext, startCell, newOfficeTableId);
+
       const {envUrl} = officeApiHelper.getCurrentMstrContext();
       bindingId = bindingId || newOfficeTableId;
-      officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
+
+      await officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
+
       if (!officeTableId && !isRefresh) {
         await this.addReportToStore({
           id: officeTable.id,
@@ -58,7 +61,7 @@ class OfficeDisplayService {
       preLoadReport: objectInfo,
     });
     popupController.runPopup(PopupTypeEnum.loadingPage, 22, 24);
-    return await this._printObject(objectId, projectId, isReport, ...args);
+    return this._printObject(objectId, projectId, isReport, ...args);
   }
 
   // TODO: move it to api helper?
@@ -142,29 +145,32 @@ class OfficeDisplayService {
     const hasHeaders = true;
     const sheet = context.workbook.worksheets.getActiveWorksheet();
     const endRow = Math.min(EXCEL_PAGINATION, reportConvertedData.rows.length);
+    const HEADER_END_ROW_INDEX = 0;
+    const headerRange = officeApiHelper.getRange(reportConvertedData.headers.length, startCell, HEADER_END_ROW_INDEX);
 
-    const range = officeApiHelper.getRange(reportConvertedData.headers.length, startCell, endRow);
-    const sheetRange = sheet.getRange(range);
+    const tableRange = officeApiHelper.getRange(reportConvertedData.headers.length, startCell, endRow);
+    const sheetRange = sheet.getRange(tableRange);
     context.trackedObjects.add(sheetRange);
     await this._checkRangeValidity(context, sheetRange);
 
     const rowsData = this._getRowsArray(reportConvertedData);
+    const mstrTable = sheet.tables.add(headerRange, hasHeaders);
 
-    const mstrTable = sheet.tables.add(range, hasHeaders);
-    sheetRange.values = [reportConvertedData.headers, ...rowsData.slice(0, endRow)];
     try {
+      mstrTable.load('name');
       mstrTable.name = tableName;
+      mstrTable.getHeaderRowRange().values = [reportConvertedData.headers];
+      mstrTable.rows.add(null, rowsData.slice(0, endRow));
       await context.sync();
       officeApiHelper.formatNumbers(mstrTable, reportConvertedData);
       await this._addRowsSequentially(rowsData, endRow, mstrTable, context);
       officeApiHelper.formatTable(sheet);
       sheet.activate();
-
       await context.sync();
       return mstrTable;
     } catch (error) {
       mstrTable.delete();
-      context.sync();
+      await context.sync();
       throw error;
     }
   }
@@ -191,7 +197,11 @@ class OfficeDisplayService {
         await context.sync();
         context.workbook.application.suspendApiCalculationUntilNextSync();
         const endIndex = Math.min(rowsData.length, i + EXCEL_PAGINATION);
-        mstrTable.getDataBodyRange().getRowsBelow(Math.min(rowsData.length - i, EXCEL_PAGINATION)).values = rowsData.slice(i, endIndex);
+        try {
+          mstrTable.getDataBodyRange().getRowsBelow(Math.min(rowsData.length - i, EXCEL_PAGINATION)).values = rowsData.slice(i, endIndex);
+        } catch (error) {
+          throw error;
+        }
       }
       await context.sync();
     }

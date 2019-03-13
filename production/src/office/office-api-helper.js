@@ -79,7 +79,7 @@ class OfficeApiHelper {
     return await Office.context;
   }
 
-  findAvailableOfficeTableId = async (excelContext) => {
+  findAvailableOfficeTableId = () => {
     return EXCEL_TABLE_NAME + uuid().split('-').join('');
   }
 
@@ -109,7 +109,6 @@ class OfficeApiHelper {
   formatNumbers = async (table, reportConvertedData) => {
     if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
       try {
-        const columnsCount = reportConvertedData.headers.length;
         const rowsCount = reportConvertedData.rows.length;
         const columns = table.columns;
 
@@ -177,15 +176,17 @@ class OfficeApiHelper {
     return startCell;
   }
 
-  bindNamedItem = async (namedItem, bindingId) => {
-    return await Office.context.document.bindings.addFromNamedItemAsync(
+  bindNamedItem = (namedItem, bindingId) => {
+    return new Promise((resolve, reject) => Office.context.document.bindings.addFromNamedItemAsync(
         namedItem, 'table', {id: bindingId}, (result) => {
           if (result.status === 'succeeded') {
             console.log('Added new binding with type: ' + result.value.type + ' and id: ' + result.value.id);
+            resolve();
           } else {
             console.error('Error: ' + result.error.message);
+            reject(result.error);
           }
-        });
+        }));
   }
 }
 
