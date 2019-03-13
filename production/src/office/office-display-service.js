@@ -192,19 +192,19 @@ class OfficeDisplayService {
   }
 
   _addRowsSequentially = async (rowsData, endRow, mstrTable, context) => {
-    if (rowsData.length > endRow) {
-      const startIndex = endRow;
-      for (let i = startIndex; i < rowsData.length; i += EXCEL_PAGINATION) {
-        await context.sync();
-        context.workbook.application.suspendApiCalculationUntilNextSync();
-        const endIndex = Math.min(rowsData.length, i + EXCEL_PAGINATION);
-        try {
+    try {
+      if (rowsData.length > endRow) {
+        const startIndex = endRow;
+        for (let i = startIndex; i < rowsData.length; i += EXCEL_PAGINATION) {
+          await context.sync();
+          context.workbook.application.suspendApiCalculationUntilNextSync();
+          const endIndex = Math.min(rowsData.length, i + EXCEL_PAGINATION);
           mstrTable.getDataBodyRange().getRowsBelow(Math.min(rowsData.length - i, EXCEL_PAGINATION)).values = rowsData.slice(i, endIndex);
-        } catch (error) {
-          throw error;
         }
+        await context.sync();
       }
-      await context.sync();
+    } catch (error) {
+      throw error;
     }
   }
 }
