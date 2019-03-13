@@ -79,7 +79,7 @@ class OfficeApiHelper {
     return await Office.context;
   }
 
-  findAvailableOfficeTableId = (excelContext) => {
+  findAvailableOfficeTableId = () => {
     return EXCEL_TABLE_NAME + uuid().split('-').join('');
   }
 

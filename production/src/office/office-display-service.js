@@ -24,7 +24,7 @@ class OfficeDisplayService {
         // report returned no data
         return {type: 'warning', message: NOT_SUPPORTED_NO_ATTRIBUTES};
       }
-      const newOfficeTableId = officeTableId || officeApiHelper.findAvailableOfficeTableId(excelContext);
+      const newOfficeTableId = officeTableId || officeApiHelper.findAvailableOfficeTableId();
       await this._insertDataIntoExcel(officeTable, excelContext, startCell, newOfficeTableId);
 
       const {envUrl} = officeApiHelper.getCurrentMstrContext();
@@ -170,7 +170,6 @@ class OfficeDisplayService {
       return mstrTable;
     } catch (error) {
       mstrTable.delete();
-      console.log(error);
       await context.sync();
       throw error;
     }
@@ -201,8 +200,7 @@ class OfficeDisplayService {
         try {
           mstrTable.getDataBodyRange().getRowsBelow(Math.min(rowsData.length - i, EXCEL_PAGINATION)).values = rowsData.slice(i, endIndex);
         } catch (error) {
-          // should this be re thrown ?
-          console.log(error);
+          throw error;
         }
       }
       await context.sync();
