@@ -47,7 +47,7 @@ export class _NavigationTree extends Component {
 
   handleSecondary = () => {
     this.props.handlePrepare(this.props.chosenProjectId, this.props.chosenObjectId,
-        this.props.chosenSubtype, this.props.chosenProjectName);
+        this.props.chosenSubtype, this.props.chosenProjectName, this.props.chosenType);
     this.setState({previewDisplay: true});
   };
 
@@ -72,7 +72,7 @@ export class _NavigationTree extends Component {
       chosenSubtype, folder, selectFolder, loading, handlePopupErrors} = this.props;
     return (
       <FolderBrowser
-        title='Import a file'
+        title='Import data'
         session={this.state.session}
         triggerUpdate={this.state.triggerUpdate}
         onTriggerUpdate={this.onTriggerUpdate}
