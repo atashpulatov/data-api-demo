@@ -1,4 +1,5 @@
 import {errorService} from '../error/error-handler';
+import {OutsideOfRangeError} from '../error/outside-of-range-error';
 import {reduxStore} from '../store';
 import {moduleProxy} from '../module-proxy';
 import {officeConverterService} from '../office/office-converter-service';
@@ -6,6 +7,7 @@ import {officeConverterService} from '../office/office-converter-service';
 const sharedFolderIdType = 7;
 const REQUEST_LIMIT = 5000;
 const EXCEL_ROW_LIMIT = 1048576;
+const EXCEL_COLUMN_LIMIT = 16384;
 
 class MstrObjectRestService {
   async getProjectContent(envUrl, authToken, projectId,
@@ -89,7 +91,11 @@ class MstrObjectRestService {
       fullPath += `/${reportInstance}`;
       return await this._getObjectContentPaginated(fullPath, authToken, projectId, limit);
     } catch (error) {
-      throw errorService.errorRestFactory(error);
+      if (error instanceof OutsideOfRangeError) {
+        throw error;
+      } else {
+        throw errorService.errorRestFactory(error);
+      }
     }
   }
 
@@ -110,6 +116,7 @@ class MstrObjectRestService {
           const fetchedRows = current + offset;
           if (offset === 0) {
             mstrTable = officeConverterService.createTable(res.body);
+            this._checkTableDimensions(total, mstrTable.rows.length);
           } else {
             mstrTable = officeConverterService.appendRows(mstrTable, res.body);
           }
@@ -122,6 +129,12 @@ class MstrObjectRestService {
           }
         })
         .catch(reject);
+  }
+
+  _checkTableDimensions(rows, columns) {
+    if (rows >= EXCEL_ROW_LIMIT || columns >= EXCEL_COLUMN_LIMIT) {
+      throw new OutsideOfRangeError();
+    }
   }
 };
 

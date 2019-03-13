@@ -5,12 +5,16 @@ import {Button} from 'antd';
 import {errorService} from '../error/error-handler';
 import {connect} from 'react-redux';
 import {userRestService} from './user-rest-service';
+import {homeHelper} from './home-helper';
 
 
 export class _Header extends Component {
   componentDidMount = async () => {
-    const {envUrl, authToken} = this.props;
     let userData = {};
+    const URL = `${window.location.href}`;
+    const IS_LOCALHOST = URL.includes('localhost');
+    const envUrl = IS_LOCALHOST ? this.props.envUrl : homeHelper.saveLoginValues();
+    const authToken = IS_LOCALHOST ? this.props.authToken : homeHelper.saveTokenFromCookies();
     try {
       userData = await userRestService.getUserData(authToken, envUrl);
     } catch (error) {

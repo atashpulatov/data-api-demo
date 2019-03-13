@@ -6,10 +6,10 @@ import {officeStoreService} from './store/office-store-service';
 import {notificationService} from '../notification/notification-service';
 import {errorService} from '../error/error-handler';
 import {popupController} from '../popup/popup-controller';
-import {OutsideOfRangeError} from '../error/outside-of-range-error';
 import {authenticationHelper} from '../authentication/authentication-helper';
 import {PopupTypeEnum} from '../home/popup-type-enum';
 import {NOT_SUPPORTED_NO_ATTRIBUTES} from '../error/constants';
+import {OverlappingTablesError} from '../error/overlapping-tables-error';
 
 const EXCEL_PAGINATION = 5000;
 
@@ -24,11 +24,14 @@ class OfficeDisplayService {
         // report returned no data
         return {type: 'warning', message: NOT_SUPPORTED_NO_ATTRIBUTES};
       }
-      const newOfficeTableId = officeTableId || await officeApiHelper.findAvailableOfficeTableId(excelContext);
+      const newOfficeTableId = officeTableId || officeApiHelper.findAvailableOfficeTableId();
       await this._insertDataIntoExcel(officeTable, excelContext, startCell, newOfficeTableId);
+
       const {envUrl} = officeApiHelper.getCurrentMstrContext();
       bindingId = bindingId || newOfficeTableId;
-      officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
+
+      await officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
+
       if (!officeTableId && !isRefresh) {
         await this.addReportToStore({
           id: officeTable.id,
@@ -58,7 +61,7 @@ class OfficeDisplayService {
       preLoadReport: objectInfo,
     });
     popupController.runPopup(PopupTypeEnum.loadingPage, 22, 24);
-    return await this._printObject(objectId, projectId, isReport, ...args);
+    return this._printObject(objectId, projectId, isReport, ...args);
   }
 
   // TODO: move it to api helper?
@@ -114,7 +117,8 @@ class OfficeDisplayService {
   };
 
   // TODO: we could filter data to display options related to current envUrl
-  refreshReport = async (bindingId) => {
+  refreshReport = async (bindingId, objectType) => {
+    const isReport = objectType === 'report';
     const isRefresh = true;
     const excelContext = await officeApiHelper.getExcelContext();
     try {
@@ -125,7 +129,7 @@ class OfficeDisplayService {
       const startCell = range.address.split('!')[1].split(':')[0];
       const refreshReport = officeStoreService.getReportFromProperties(bindingId);
       await this.removeReportFromExcel(bindingId, isRefresh);
-      const result = await this.printObject(refreshReport.id, refreshReport.projectId, true, startCell, refreshReport.tableId, bindingId, refreshReport.body, true);
+      const result = await this.printObject(refreshReport.id, refreshReport.projectId, isReport, startCell, refreshReport.tableId, bindingId, refreshReport.body, true);
       if (result) {
         notificationService.displayMessage(result.type, result.message);
       }
@@ -142,29 +146,32 @@ class OfficeDisplayService {
     const hasHeaders = true;
     const sheet = context.workbook.worksheets.getActiveWorksheet();
     const endRow = Math.min(EXCEL_PAGINATION, reportConvertedData.rows.length);
+    const HEADER_END_ROW_INDEX = 0;
+    const headerRange = officeApiHelper.getRange(reportConvertedData.headers.length, startCell, HEADER_END_ROW_INDEX);
 
-    const range = officeApiHelper.getRange(reportConvertedData.headers.length, startCell, endRow);
-    const sheetRange = sheet.getRange(range);
+    const tableRange = officeApiHelper.getRange(reportConvertedData.headers.length, startCell, endRow);
+    const sheetRange = sheet.getRange(tableRange);
     context.trackedObjects.add(sheetRange);
     await this._checkRangeValidity(context, sheetRange);
 
     const rowsData = this._getRowsArray(reportConvertedData);
+    const mstrTable = sheet.tables.add(headerRange, hasHeaders);
 
-    const mstrTable = sheet.tables.add(range, hasHeaders);
-    sheetRange.values = [reportConvertedData.headers, ...rowsData.slice(0, endRow)];
     try {
+      mstrTable.load('name');
       mstrTable.name = tableName;
+      mstrTable.getHeaderRowRange().values = [reportConvertedData.headers];
+      mstrTable.rows.add(null, rowsData.slice(0, endRow));
       await context.sync();
       officeApiHelper.formatNumbers(mstrTable, reportConvertedData);
       await this._addRowsSequentially(rowsData, endRow, mstrTable, context);
       officeApiHelper.formatTable(sheet);
       sheet.activate();
-
       await context.sync();
       return mstrTable;
     } catch (error) {
       mstrTable.delete();
-      context.sync();
+      await context.sync();
       throw error;
     }
   }
@@ -174,7 +181,7 @@ class OfficeDisplayService {
     const usedDataRange = excelRange.getUsedRangeOrNullObject(true);
     await context.sync();
     if (!usedDataRange.isNullObject) {
-      throw new OutsideOfRangeError('The required data range in the worksheet is not empty');
+      throw new OverlappingTablesError('The required data range in the worksheet is not empty');
     }
   }
 
@@ -191,7 +198,11 @@ class OfficeDisplayService {
         await context.sync();
         context.workbook.application.suspendApiCalculationUntilNextSync();
         const endIndex = Math.min(rowsData.length, i + EXCEL_PAGINATION);
-        mstrTable.getDataBodyRange().getRowsBelow(Math.min(rowsData.length - i, EXCEL_PAGINATION)).values = rowsData.slice(i, endIndex);
+        try {
+          mstrTable.getDataBodyRange().getRowsBelow(Math.min(rowsData.length - i, EXCEL_PAGINATION)).values = rowsData.slice(i, endIndex);
+        } catch (error) {
+          throw error;
+        }
       }
       await context.sync();
     }

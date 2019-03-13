@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React from 'react';
 import {Provider} from 'react-redux';
 import {mount} from 'enzyme';
@@ -14,9 +13,12 @@ jest.mock('../../src/storage/session-helper');
 jest.mock('../../src/office/office-api-helper');
 jest.mock('../../src/home/home-helper');
 
-/* eslint-enable  */
 
 describe('Home', () => {
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
   it('should render home component and its children', async () => {
     // given
     // when
@@ -83,7 +85,7 @@ describe('Home', () => {
   });
 
 
-  it('should trigger saveLoginValues and saveTokenFromCookies on mount', () => {
+  it('should trigger saveLoginValues and saveTokenFromCookies on mount', async () => {
     // given
     const props = {
       loading: false,
@@ -91,9 +93,11 @@ describe('Home', () => {
       reportArray: false,
     };
     jest.spyOn(pageBuilder, 'getPage').mockReturnValueOnce(null);
+    const tempPromise = Promise.resolve();
     // when
     const wrappedComponent = mount(<_Home {...props} />);
     // then
+    await (tempPromise);
     expect(homeHelper.saveLoginValues).toBeCalled();
     expect(homeHelper.saveTokenFromCookies).toBeCalled();
   });
@@ -105,14 +109,17 @@ describe('Home', () => {
       authToken: false,
       reportArray: false,
     };
-    jest.spyOn(pageBuilder, 'getPage').mockReturnValue(null);
-    const wrappedComponent = mount(<_Home {...props} />);
+    const wrappedComponent = mount(
+        <Provider store={reduxStore}>
+          <_Home {...props} />
+        </Provider>
+    );
     // when
     wrappedComponent.setProps({
       ...props,
       authToken: 'new',
     });
     // then
-    expect(homeHelper.saveTokenFromCookies).toBeCalledTimes(4);
+    expect(homeHelper.saveTokenFromCookies).toBeCalled();
   });
 });
