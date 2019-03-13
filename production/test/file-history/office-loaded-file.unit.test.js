@@ -10,7 +10,7 @@ describe('office loaded file', () => {
     // when
     const wrappedComponent = mount(<OfficeLoadedFile fileName='test' />);
     // then
-    expect(wrappedComponent.find('Row').hasClass('cursor-is-pointer')).toBeTruthy();
+    expect(wrappedComponent.find('Row').hasClass('file-history-container')).toBeTruthy();
     expect(wrappedComponent.html()).toContain('test');
   });
   it('should invoke select method on report name click', () => {
@@ -44,7 +44,7 @@ describe('office loaded file', () => {
     const onRefreshMocked = jest.fn();
     const testBindingId = 'testBindingId';
     jest.spyOn(fileHistoryHelper, 'refreshReport').mockImplementation((func) => func(testBindingId));
-    jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => { });
+    jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => {});
     // when
     const wrappedComponent = mount(<OfficeLoadedFile
       bindingId={testBindingId}

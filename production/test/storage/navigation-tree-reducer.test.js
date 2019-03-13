@@ -12,6 +12,7 @@ describe('NavigationTree Reducer', () => {
         chosenProjectId: '2',
         chosenSubtype: '3',
         chosenProjectName: 'Prepare Data',
+        chosenType: 'Data',
       },
     };
 
@@ -35,7 +36,7 @@ describe('NavigationTree Reducer', () => {
     };
 
     // when
-    const newState = navigationTree({dataSource: [{application: '2', key: '1', name: 'name'}]}, action);
+    const newState = navigationTree({dataSource: [{projectId: '2', key: '1', name: 'name'}]}, action);
 
     // then
     expect(newState.chosenProjectName).toEqual('name');
@@ -57,6 +58,25 @@ describe('NavigationTree Reducer', () => {
 
     // then
     expect(newState.chosenProjectName).toEqual('Prepare Data');
+    expect(newState.chosenType).toEqual('Data');
+  });
+
+  it('should return new chosen state in case of SELECT_OBJECT action with proper datasource', () => {
+    // given
+    const action = {
+      type: SELECT_OBJECT,
+      data: {
+        chosenObjectId: '1',
+        chosenProjectId: '2',
+        chosenSubtype: 768,
+      },
+    };
+
+    // when
+    const newState = navigationTree({dataSource: [{}]}, action);
+
+    // then
+    expect(newState.chosenType).toEqual('Report');
   });
 
   it('should return new proper state in case of SELECT_OBJECT action without proper data', () => {
@@ -75,6 +95,7 @@ describe('NavigationTree Reducer', () => {
       chosenProjectId: null,
       chosenSubtype: null,
       chosenProjectName: 'Prepare Data',
+      chosenType: 'Data',
     });
   });
 
