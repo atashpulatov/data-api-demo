@@ -85,8 +85,7 @@ describe('PopupController', () => {
             actionObject.body);
       });
 
-  // TODO: Fix
-  it.skip('should handle error command from popup', () => {
+  it('should handle error command from popup', async () => {
     // given
     const command = selectorProperties.commandError;
     const error = {
@@ -99,14 +98,13 @@ describe('PopupController', () => {
       message: expectedMessage,
     };
 
-    const handleErrorSpy = jest.spyOn(errorService, 'handleError')
-        .mockImplementationOnce(() => {});
+    const handleErrorSpy = jest.spyOn(errorService, 'handleError');
     // when
-    popupController.onMessageFromPopup(dialog, givenArg);
+    await popupController.onMessageFromPopup(dialog, givenArg);
     // then
     expect(handleErrorSpy).toBeCalled();
     const handleErrorArgs = handleErrorSpy.mock.calls[0];
-    expect(handleErrorArgs[0].constructor).toBe(EnvironmentNotFoundError);
+    expect(handleErrorArgs[0]).toBeInstanceOf(EnvironmentNotFoundError);
     expect(handleErrorArgs[1]).toBe(false);
     expect(dialog.close).toBeCalled();
   });

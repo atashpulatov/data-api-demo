@@ -7,6 +7,7 @@ const withDefaultValue = (obj, defaultValue) => {
 export const GENERIC_SERVER_ERR = 'This object cannot be imported.';
 export const NOT_SUPPORTED_NO_ATTRIBUTES = 'This object cannot be imported. Objects without attributes are not supported in this version of MicroStrategy for Office.';
 export const NOT_SUPPORTED_SERVER_ERR = 'This object cannot be imported. Objects with prompts, cross tabs, totals, or subtotals are not supported in this version of MicroStrategy for Office.';
+export const NOT_PUBLISHED_CUBE = 'This object cannot be imported. The Intelligent Cube is not published.';
 
 // temporarily we map all those codes to one message; may be changed in the future
 export const errorMessages = withDefaultValue({
@@ -14,5 +15,6 @@ export const errorMessages = withDefaultValue({
   '-2147171502': NOT_SUPPORTED_SERVER_ERR,
   '-2147171503': NOT_SUPPORTED_SERVER_ERR,
   '-2147171504': NOT_SUPPORTED_SERVER_ERR,
+  '-2147072488': NOT_PUBLISHED_CUBE,
 }, GENERIC_SERVER_ERR);
 

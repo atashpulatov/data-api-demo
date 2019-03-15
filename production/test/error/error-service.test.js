@@ -7,6 +7,7 @@ import {notificationService} from '../../src/notification/notification-service';
 import {RunOutsideOfficeError} from '../../src/error/run-outside-office-error';
 import {OverlappingTablesError} from '../../src/error/overlapping-tables-error';
 import {GenericOfficeError} from '../../src/error/generic-office-error';
+import {NOT_PUBLISHED_CUBE, NOT_SUPPORTED_SERVER_ERR} from '../../src/error/constants';
 
 jest.mock('../../src/storage/session-helper');
 jest.useFakeTimers();
@@ -104,12 +105,21 @@ describe('ErrorService', () => {
       // given
       const error = new InternalServerError({iServerCode: '-2147171501'});
       const spyMethod = jest.spyOn(notificationService, 'displayMessage');
-      const NOT_SUPPORTED_SERVER_ERR = 'This object cannot be imported. Objects with prompts, cross tabs, totals, or subtotals are not supported in this version of MicroStrategy for Office.';
       // when
       errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
       expect(spyMethod).toBeCalledWith('warning', NOT_SUPPORTED_SERVER_ERR);
+    });
+    it('should display notification on not published cubes', () => {
+      // given
+      const error = new InternalServerError({iServerCode: '-2147072488'});
+      const spyMethod = jest.spyOn(notificationService, 'displayMessage');
+      // when
+      errorService.handleError(error);
+      // then
+      expect(spyMethod).toBeCalled();
+      expect(spyMethod).toBeCalledWith('warning', NOT_PUBLISHED_CUBE);
     });
     it('should logout on UnauthorizedError', () => {
       // given
@@ -135,7 +145,7 @@ describe('ErrorService', () => {
     });
   });
   describe('errorOfficeFactory', () => {
-    it('should throw OverlappingTablesError', () => {
+    it('should throw RunOutsideOfficeError', () => {
       // given
       const error = {
         name: 'RichApi.Error',
