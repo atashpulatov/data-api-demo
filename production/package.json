@@ -35,7 +35,7 @@
     "jest-pnp-resolver": "1.0.1",
     "jest-resolve": "23.6.0",
     "mini-css-extract-plugin": "0.4.3",
-    "mstr-react-library": "ssh://git@github.microstrategy.com:pfilipp/mstr-react-library.git#8ea7bfb8649c4c0a0702b81ed559b3a1ffb34125",
+    "mstr-react-library": "ssh://git@github.microstrategy.com:pfilipp/mstr-react-library.git#93ec9a9589d1b9d405ac35a357a847aac5681548",
     "optimize-css-assets-webpack-plugin": "5.0.1",
     "pnp-webpack-plugin": "1.1.0",
     "postcss-flexbugs-fixes": "4.1.0",
