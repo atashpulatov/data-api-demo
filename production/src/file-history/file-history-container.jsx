@@ -34,7 +34,7 @@ export class _FileHistoryContainer extends Component {
             />)
           )}
         />
-      </div >);
+      </div>);
   }
 }
 
