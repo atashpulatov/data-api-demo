@@ -15,10 +15,12 @@ export class _FileHistoryContainer extends Component {
         <List
           className='ant-list-header-override'
           size='small'
+          // TODO: Remove when supporting simultaneous datasets refresh
+          loading={{indicator: <span></span>, spinning: !!this.props.reportArray.find((e) => e.isLoading)}}
           locale={{emptyText: 'No files loaded.'}}
           dataSource={this.props.reportArray
-                        ? this.props.reportArray
-                        : []}
+            ? this.props.reportArray
+            : []}
           renderItem={(report) => (
             (<OfficeLoadedFile
               fileName={report.name}
