@@ -9,16 +9,19 @@ import './file-history.css';
 
 export class _FileHistoryContainer extends Component {
   render() {
+    const {reportArray} = this.props;
     return (
       <div>
         <Button className="add-data-btn" onClick={popupController.runPopupNavigation}>Add Data</Button>
         <List
           className='ant-list-header-override'
           size='small'
+          // TODO: Remove when supporting simultaneous dataset refresh
+          loading={{indicator: <span></span>, spinning: reportArray && !!reportArray.find((e) => e.isLoading)}}
           locale={{emptyText: 'No files loaded.'}}
-          dataSource={this.props.reportArray
-                        ? this.props.reportArray
-                        : []}
+          dataSource={reportArray
+            ? reportArray
+            : []}
           renderItem={(report) => (
             (<OfficeLoadedFile
               fileName={report.name}
