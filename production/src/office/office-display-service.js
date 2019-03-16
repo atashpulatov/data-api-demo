@@ -93,6 +93,7 @@ class OfficeDisplayService {
         });
         const excelContext = await officeApiHelper.getExcelContext();
         const tableObject = excelContext.workbook.tables.getItem(bindingId);
+        await tableObject.clearFilters();
         await tableObject.delete();
         await excelContext.sync();
         return !isRefresh && this.removeReportFromStore(bindingId);
