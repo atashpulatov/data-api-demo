@@ -44,7 +44,10 @@ describe('OfficeDisplayService', () => {
           workbook: {
             tables: {
               getItem: () => {
-                return {delete: () => {}};
+                return {
+                  delete: () => {},
+                  clearFilters: () => {},
+                };
               },
             },
           },
@@ -131,7 +134,10 @@ describe('OfficeDisplayService', () => {
       return {
         workbook: {
           tables: {
-            getItem: () => ({delete: () => {}}),
+            getItem: () => ({
+              delete: () => {},
+              clearFilters: () => {},
+            }),
           },
         },
         sync: () => {},
