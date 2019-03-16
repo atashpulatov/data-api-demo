@@ -213,9 +213,13 @@ describe('OfficeDisplayService', () => {
         getHeaderRowRange: jest.fn().mockReturnValue({
           values: [],
         }),
+        getDataBodyRange: jest.fn().mockReturnValue({
+          values: [],
+        }),
         load: jest.fn(),
         rows: {
           add: jest.fn(),
+          clearFilters: jest.fn(),
         },
       };
       const mockedWorksheet = {
