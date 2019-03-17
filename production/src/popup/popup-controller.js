@@ -45,6 +45,11 @@ class PopupController {
                 Office.EventType.DialogMessageReceived,
                 this.onMessageFromPopup.bind(null, dialog));
             reduxStore.dispatch({type: CLEAR_WINDOW});
+            dialog.addEventHandler(
+            // Event received on dialog close
+                Office.EventType.DialogEventReceived, (event) => {
+                  console.log(event);
+                });
           });
     } catch (error) {
       errorService.handleOfficeError(error);

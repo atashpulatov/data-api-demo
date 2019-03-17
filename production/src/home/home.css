@@ -135,6 +135,15 @@ hr {
     color: #888888;
 }
 
+.ant-tabs.tabs-container .ant-spin-blur {
+    opacity: 1;
+    cursor: progress;
+}
+
+.ant-tabs.tabs-container .ant-spin-blur::after {
+    opacity: 0.1;
+}
+
 .ant-tabs.tabs-container .ant-tabs-nav .ant-tabs-tab:hover {
     color: #444649;
 }

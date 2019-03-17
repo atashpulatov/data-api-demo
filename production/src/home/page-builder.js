@@ -11,18 +11,18 @@ const URL = `${window.location.href}`;
 const IS_LOCALHOST = URL.includes('localhost');
 
 class PageBuilder {
-  getPage = (loading, authToken, reportArray) => {
+  getPage = (loading, loadingReport, authToken, reportArray) => {
     return (
       <div id='content'>
         <Notifications />
         {
           authToken ?
             <div>
-              <Header />
+              <Header loading={loadingReport} />
               <Tabs defaultActiveKey="data" className="tabs-container">
                 <TabPane tab="Imported Data" key="data">
-                  {(reportArray && reportArray.length !== 0) && <FileHistoryContainer />}
-                  {(!reportArray || !reportArray.length) && <Placeholder />}
+                  {(reportArray && reportArray.length !== 0) && <FileHistoryContainer loading={loadingReport} />}
+                  {(!reportArray || !reportArray.length) && <Placeholder loading={loadingReport} />}
                 </TabPane>
               </Tabs>
             </div> :

@@ -95,6 +95,7 @@ function _toggleSetLoadingStatus(action, state, status) {
   newReportArray[indexOfElement].isLoading = status;
   return {
     ...state,
+    loading: status,
     reportArray: newReportArray,
   };
 }

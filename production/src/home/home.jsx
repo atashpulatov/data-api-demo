@@ -19,17 +19,15 @@ export class _Home extends Component {
   };
 
   render() {
-    const {loading, authToken, reportArray} = this.props;
-    return (
-      <div>
-        {pageBuilder.getPage(loading, authToken, reportArray)}
-      </div>);
+    const {loading, loadingReport, authToken, reportArray} = this.props;
+    return pageBuilder.getPage(loading, loadingReport, authToken, reportArray);
   }
 }
 
 function mapStateToProps(state) {
   return {
     loading: state.sessionReducer.loading,
+    loadingReport: state.officeReducer.loading,
     authToken: state.sessionReducer.authToken,
     reportArray: state.officeReducer.reportArray,
   };
