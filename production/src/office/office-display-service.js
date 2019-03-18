@@ -50,6 +50,7 @@ class OfficeDisplayService {
       throw errorService.errorOfficeFactory(error);
     } finally {
       const reduxStoreState = reduxStore.getState();
+      reduxStore.dispatch({type: officeProperties.actions.popupHidden});
       reduxStoreState.sessionReducer.dialog.close();
     }
   }

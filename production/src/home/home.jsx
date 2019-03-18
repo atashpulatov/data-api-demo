@@ -27,7 +27,7 @@ export class _Home extends Component {
 function mapStateToProps(state) {
   return {
     loading: state.sessionReducer.loading,
-    loadingReport: state.officeReducer.loading,
+    loadingReport: state.officeReducer.loading || state.officeReducer.popupOpen,
     authToken: state.sessionReducer.authToken,
     reportArray: state.officeReducer.reportArray,
   };
