@@ -7,6 +7,9 @@ import {notificationService} from '../../src/notification/notification-service';
 import {RunOutsideOfficeError} from '../../src/error/run-outside-office-error';
 import {OverlappingTablesError} from '../../src/error/overlapping-tables-error';
 import {GenericOfficeError} from '../../src/error/generic-office-error';
+import {OutsideOfRangeError} from '../../src/error/outside-of-range-error';
+import {ConnectionBrokenError} from '../../src/error/connection-error';
+import {PromptedReportError} from '../../src/error/prompted-report-error';
 import {NOT_PUBLISHED_CUBE, NOT_SUPPORTED_SERVER_ERR, NOT_IN_METADATA} from '../../src/error/constants';
 
 jest.mock('../../src/storage/session-helper');
@@ -100,6 +103,24 @@ describe('ErrorService', () => {
       // then
       expect(spyMethod).toBeCalled();
       expect(spyMethod).toBeCalledWith('error', '400 - There has been a problem with your request');
+    });
+    it('should display notification on OutsideOfRangeError ', () => {
+      // given
+      const error = new OutsideOfRangeError();
+      const spyMethod = jest.spyOn(notificationService, 'displayMessage');
+      // when
+      errorService.handleError(error);
+      // then
+      expect(spyMethod).toBeCalled();
+    });
+    it('should display notification on InternalServerError with no error body', () => {
+      // given
+      const error = new InternalServerError();
+      const spyMethod = jest.spyOn(notificationService, 'displayMessage');
+      // when
+      errorService.handleError(error);
+      // then
+      expect(spyMethod).toBeCalled();
     });
     it('should display notification on InternalServerError', () => {
       // given
@@ -253,6 +274,26 @@ describe('ErrorService', () => {
       // then
       expect(errorService.handleError).toBeCalled();
       errorService.handleError = originalMethod;
+    });
+    it('should display notification on ConnectionBrokenError', () => {
+      // given
+      const error = new ConnectionBrokenError();
+      const spyMethod = jest.spyOn(notificationService, 'displayMessage');
+      // when
+      errorService.handleError(error);
+      // then
+      expect(spyMethod).toBeCalled();
+      expect(spyMethod).toBeCalledWith('warning', 'Environment is unreachable.' + '\nPlease check your internet connection.');
+    });
+    it('should display notification on PromptedReportError', () => {
+      // given
+      const error = new PromptedReportError();
+      const spyMethod = jest.spyOn(notificationService, 'displayMessage');
+      // when
+      errorService.handleError(error);
+      // then
+      expect(spyMethod).toBeCalled();
+      expect(spyMethod).toBeCalledWith('warning', NOT_SUPPORTED_SERVER_ERR);
     });
   });
 });
