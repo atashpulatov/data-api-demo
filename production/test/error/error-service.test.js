@@ -7,7 +7,12 @@ import {notificationService} from '../../src/notification/notification-service';
 import {RunOutsideOfficeError} from '../../src/error/run-outside-office-error';
 import {OverlappingTablesError} from '../../src/error/overlapping-tables-error';
 import {GenericOfficeError} from '../../src/error/generic-office-error';
-import {NOT_PUBLISHED_CUBE, NOT_SUPPORTED_SERVER_ERR, NOT_IN_METADATA} from '../../src/error/constants';
+import {
+  NOT_PUBLISHED_CUBE,
+  NOT_SUPPORTED_SERVER_ERR,
+  NOT_IN_METADATA,
+  PROJECT_ROW_LIMIT,
+} from '../../src/error/constants';
 
 jest.mock('../../src/storage/session-helper');
 jest.useFakeTimers();
@@ -110,6 +115,16 @@ describe('ErrorService', () => {
       // then
       expect(spyMethod).toBeCalled();
       expect(spyMethod).toBeCalledWith('warning', NOT_SUPPORTED_SERVER_ERR);
+    });
+    it('should display notification on exceeding row limits', () => {
+      // given
+      const error = new InternalServerError({iServerCode: '-2147205488'});
+      const spyMethod = jest.spyOn(notificationService, 'displayMessage');
+      // when
+      errorService.handleError(error);
+      // then
+      expect(spyMethod).toBeCalled();
+      expect(spyMethod).toBeCalledWith('warning', PROJECT_ROW_LIMIT);
     });
     it('should display notification on not published cubes', () => {
       // given
