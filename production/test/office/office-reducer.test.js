@@ -328,4 +328,66 @@ describe('officeReducer', () => {
     expect(wrongDispatch).toThrowError('Missing report.id');
     reportArrayMock[1].id = originalId;
   });
+  it('should throw an error on missing reportBindId', () => {
+    // given
+    const action = {
+      type: officeProperties.actions.startLoadingReport,
+    };
+    // when
+    const wrongDispatch = () => {
+      officeStore.dispatch(action);
+    };
+    // then
+    expect(wrongDispatch).toThrowError(OfficeError);
+    expect(wrongDispatch).toThrowError('Missing reportBindId');
+  });
+
+  it('should set true loading status on for proper reports', () => {
+    // given
+    const givenBindId = 'testId';
+    const givenReport = {
+      id: 'id',
+      name: 'name',
+      envUrl: 'url',
+      projectId: 'proId',
+      bindId: givenBindId,
+      isLoading: false,
+    };
+    officeStore.dispatch({
+      type: officeProperties.actions.loadReport,
+      report: givenReport,
+    });
+    const action = {
+      type: officeProperties.actions.startLoadingReport,
+      reportBindId: givenBindId,
+    };
+    // when
+    officeStore.dispatch(action);
+    // then
+    expect(givenReport.isLoading).toBeTruthy();
+  });
+  it('should set false loading status for proper reports', () => {
+    // given
+    const givenBindId = 'testId';
+    const givenReport = {
+      id: 'id',
+      name: 'name',
+      envUrl: 'url',
+      projectId: 'proId',
+      bindId: givenBindId,
+      isLoading: true,
+    };
+    officeStore.dispatch({
+      type: officeProperties.actions.loadReport,
+      report: givenReport,
+    });
+    const action = {
+      type: officeProperties.actions.finishLoadingReport,
+      reportBindId: givenBindId,
+    };
+    // when
+    officeStore.dispatch(action);
+    // then
+    expect(givenReport.isLoading).toBeFalsy();
+  });
 });
