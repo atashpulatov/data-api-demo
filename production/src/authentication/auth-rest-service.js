@@ -26,6 +26,18 @@ class AuthenticationService {
           throw errorService.errorRestFactory(err);
         });
   }
+  getSessions = async (envUrl, authToken) => {
+    return await moduleProxy.request
+        .get(`${envUrl}/sessions/userInfo`)
+        .set('x-mstr-authtoken', authToken)
+        .withCredentials()
+        .then((res) => {
+          return res;
+        })
+        .catch((err) => {
+          throw errorService.errorRestFactory(err);
+        });
+  }
 }
 
 export const authenticationService = new AuthenticationService();

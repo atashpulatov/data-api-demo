@@ -1,0 +1,36 @@
+.ant-message-notice-content{
+    max-width: 100%;
+}
+.ant-message-custom-content{
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 85px;
+}
+.ant-message-notice.move-up-leave.move-up-leave-active {
+    overflow: hidden;
+    -webkit-animation-name: MessageMoveOut;
+            animation-name: MessageMoveOut;
+    -webkit-animation-duration: 0.3s;
+            animation-duration: 0.3s;
+  }
+  @-webkit-keyframes MessageMoveOut {
+    0% {
+      max-height: 150px;
+      opacity: 1;
+    }
+    100% {
+      max-height: 0;
+      opacity: 0;
+    }
+  }
+  @keyframes MessageMoveOut {
+    0% {
+      max-height: 150px;
+      opacity: 1;
+    }
+    100% {
+      max-height: 0;
+      opacity: 0;
+    }
+  }

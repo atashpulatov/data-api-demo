@@ -1,5 +1,5 @@
-import { sessionProperties } from './session-properties';
-import { SessionError } from './session-error';
+import {sessionProperties} from './session-properties';
+import {SessionError} from './session-error';
 
 export const sessionReducer = (state = {}, action) => {
   switch (action.type) {
@@ -11,6 +11,12 @@ export const sessionReducer = (state = {}, action) => {
       return onLoggedIn(action, state);
     case sessionProperties.actions.setLoading:
       return onSetLoading(action, state);
+    case sessionProperties.actions.getUserInfo:
+      return onGetUserInfo(action, state);
+    case sessionProperties.actions.setDialog:
+      return onSetDialog(action, state);
+    default:
+      break;
   }
   return state;
 };
@@ -29,6 +35,8 @@ function onLogOut(action, state) {
     return {
       ...state,
       authToken: undefined,
+      userFullName: undefined,
+      userInitials: undefined,
     };
   }
   return {};
@@ -51,5 +59,19 @@ function onSetLoading(action, state) {
   return {
     ...state,
     loading: action.loading,
+  };
+}
+function onGetUserInfo(action, state) {
+  return {
+    ...state,
+    userFullName: action.userFullName,
+    userInitials: action.userInitials,
+  };
+}
+
+function onSetDialog(action, state) {
+  return {
+    ...state,
+    dialog: action.dialog,
   };
 }

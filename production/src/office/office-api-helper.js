@@ -1,13 +1,18 @@
+import uuid from 'uuid/v4';
 import {IncorrectInputTypeError} from './incorrect-input-type';
+import {OutsideOfRangeError} from '../error/outside-of-range-error';
 import {reduxStore} from '../store';
 import {officeProperties} from './office-properties';
 import {officeStoreService} from './store/office-store-service';
 import {notificationService} from '../notification/notification-service';
+import {errorService} from '../error/error-handler';
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
 const ASCII_CAPITAL_LETTER_INDEX = 65;
 const EXCEL_TABLE_NAME = 'table';
+const EXCEL_ROW_LIMIT = 1048576;
+const EXCEL_COL_LIMIT = 16384;
 
 class OfficeApiHelper {
   getRange = (headerCount, startCell, rowCount = 0) => {
@@ -16,17 +21,22 @@ class OfficeApiHelper {
     }
     const startCellArray = startCell.split(/(\d+)/);
     headerCount += parseInt(this.lettersToNumber(startCellArray[0]) - 1);
-    let endRange = '';
+    const endColumnNum = headerCount;
+    let endColumn = '';
     for (let firstNumber = ALPHABET_RANGE_START,
       secondNumber = ALPHABET_RANGE_END;
       (headerCount -= firstNumber) >= 0;
       firstNumber = secondNumber, secondNumber *= ALPHABET_RANGE_END) {
-      endRange = String.fromCharCode(parseInt(
+      endColumn = String.fromCharCode(parseInt(
           (headerCount % secondNumber) / firstNumber)
         + ASCII_CAPITAL_LETTER_INDEX)
-        + endRange;
+        + endColumn;
     }
-    return `${startCell}:${endRange}${Number(startCellArray[1]) + rowCount}`;
+    const endRow = Number(startCellArray[1]) + rowCount;
+    if (endRow > EXCEL_ROW_LIMIT || endColumnNum > EXCEL_COL_LIMIT) {
+      throw new OutsideOfRangeError('The table you try to import exceeds the worksheet limits.');
+    }
+    return `${startCell}:${endColumn}${endRow}`;
   }
 
   handleOfficeApiException = (error) => {
@@ -69,23 +79,8 @@ class OfficeApiHelper {
     return await Office.context;
   }
 
-  findAvailableOfficeTableId = async (excelContext) => {
-    let nameExists = true;
-    let tableIncrement = 0;
-    const tableCollection = excelContext.workbook.tables;
-    tableCollection.load();
-    await excelContext.sync();
-    while (nameExists) {
-      const existingTable = await tableCollection.getItemOrNullObject(`${EXCEL_TABLE_NAME}${tableIncrement}`);
-      existingTable.load();
-      await excelContext.sync();
-      if (!existingTable.isNull) {
-        tableIncrement++;
-      } else {
-        nameExists = false;
-      }
-    }
-    return EXCEL_TABLE_NAME + tableIncrement;
+  findAvailableOfficeTableId = () => {
+    return EXCEL_TABLE_NAME + uuid().split('-').join('');
   }
 
   loadExistingReportBindingsExcel = async () => {
@@ -111,6 +106,67 @@ class OfficeApiHelper {
     }
   }
 
+  formatNumbers = async (table, reportConvertedData) => {
+    if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
+      try {
+        const rowsCount = reportConvertedData.rows.length;
+        const columns = table.columns;
+
+        for (const object of reportConvertedData.columnInformation) {
+          if (!object.isAttribute) {
+            const columnRange = columns.getItemAt(object.index).getHeaderRowRange().getRowsBelow(rowsCount);
+            let format = '';
+
+            if (object.category == 9) {
+              format = this._getNumberFormattingCategoryName(object);
+            } else {
+              format = object.formatString;
+
+              if (format.indexOf('$') != -1) {
+                format = format.replace(/[$]/g, '\\$').replace(/["]/g, ''); // fix anoying $-sign currency replacemnt in Excel
+              }
+            }
+
+            columnRange.numberFormat = format;
+          }
+        }
+
+        await table.context.sync();
+      } catch (error) {
+        throw errorService.handleError(error);
+      }
+    }
+  }
+
+  _getNumberFormattingCategoryName = (metric) => {
+    switch (metric.category) {
+      case -2:
+        return 'Default';
+      case 9:
+        return 'General';
+      case 0:
+        return 'Fixed';
+      case 1:
+        return 'Currency';
+      case 2:
+        return 'Date';
+      case 3:
+        return 'Time';
+      case 4:
+        return 'Percentage';
+      case 5:
+        return 'Fraction';
+      case 6:
+        return 'Scientific';
+      case 7: // 'Custom'
+        return metric.formatString;
+      case 8:
+        return 'Special';
+      default:
+        return 'General';
+    }
+  }
+
   getSelectedCell = async (context) => {
     const selectedRangeStart = context.workbook.getSelectedRange();
     selectedRangeStart.load(officeProperties.officeAddress);
@@ -120,15 +176,17 @@ class OfficeApiHelper {
     return startCell;
   }
 
-  bindNamedItem = async (namedItem, bindingId) => {
-    return await Office.context.document.bindings.addFromNamedItemAsync(
+  bindNamedItem = (namedItem, bindingId) => {
+    return new Promise((resolve, reject) => Office.context.document.bindings.addFromNamedItemAsync(
         namedItem, 'table', {id: bindingId}, (result) => {
           if (result.status === 'succeeded') {
             console.log('Added new binding with type: ' + result.value.type + ' and id: ' + result.value.id);
+            resolve();
           } else {
             console.error('Error: ' + result.error.message);
+            reject(result.error);
           }
-        });
+        }));
   }
 }
 

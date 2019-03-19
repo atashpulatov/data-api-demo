@@ -35,7 +35,7 @@
     "jest-pnp-resolver": "1.0.1",
     "jest-resolve": "23.6.0",
     "mini-css-extract-plugin": "0.4.3",
-    "mstr-react-library": "ssh://git@github.microstrategy.com:pfilipp/mstr-react-library.git#4b53462f6c015c2fd4b05291ca534a93d63d567a",
+    "mstr-react-library": "ssh://git@github.microstrategy.com:pfilipp/mstr-react-library.git#db3cd36614ee2d4b1349a0d9dc44e622f0c4e38f",
     "optimize-css-assets-webpack-plugin": "5.0.1",
     "pnp-webpack-plugin": "1.1.0",
     "postcss-flexbugs-fixes": "4.1.0",
@@ -60,6 +60,7 @@
     "superagent": "^4.0.0-beta.5",
     "terser-webpack-plugin": "1.1.0",
     "url-loader": "1.1.1",
+    "uuid": "^3.3.2",
     "webpack": "4.19.1",
     "webpack-dev-server": "3.1.9",
     "webpack-manifest-plugin": "2.0.4",
@@ -75,10 +76,12 @@
     "extends": "react-app"
   },
   "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
+    "defaults",
+    "> 1%",
+    "edge > 15",
+    "not ie < 11",
+    "not op_mini all",
+    "not dead"
   ],
   "jest": {
     "collectCoverageFrom": [
@@ -100,7 +103,6 @@
       "!src/project/project-list-helper.js",
       "!src/storage/session-helper.js",
       "!src/storage/unknown-property-error.js",
-
       "!src/attribute-selector/attribute-selector-window.jsx",
       "!src/breadcrumbs/breadcrumbs.jsx",
       "!src/error/error-handler.js",
@@ -108,6 +110,7 @@
       "!src/home/home-helper.js",
       "!src/mstr-object/mstr-object-rest-service.js",
       "!src/project/project-rest-service.js",
+      "!src/home/user-rest-service.js",
       "!src/office/office-converter-service.js",
       "!src/prompts/prompts-rest-service.js",
       "!src/storage/session-reducer.js"

@@ -1,8 +1,8 @@
-import { sessionHelper } from '../../src/storage/session-helper';
-import { authenticationService } from '../../src/authentication/auth-rest-service';
-import { notificationService } from '../../src/notification/notification-service';
-import { errorService } from '../../src/error/error-handler';
-import { authenticationHelper } from '../../src/authentication/authentication-helper';
+import {sessionHelper} from '../../src/storage/session-helper';
+import {authenticationService} from '../../src/authentication/auth-rest-service';
+import {notificationService} from '../../src/notification/notification-service';
+import {errorService} from '../../src/error/error-handler';
+import {authenticationHelper} from '../../src/authentication/authentication-helper';
 
 jest.mock('../../src/error/error-handler');
 jest.mock('../../src/notification/notification-service');
@@ -51,11 +51,11 @@ describe('loginUser', () => {
     // then
     expect(authenticationService.authenticate).toBeCalled();
     expect(authenticationService.authenticate)
-      .toBeCalledWith(
-        givenValues.username,
-        givenValues.password,
-        givenValues.envUrl,
-        1);
+        .toBeCalledWith(
+            givenValues.username,
+            givenValues.password,
+            givenValues.envUrl,
+            1);
   });
   it('should save authToken', async () => {
     // given

@@ -17,7 +17,7 @@ export class AttributeSelectorWindow extends Component {
         authToken: this.props.parsed.token,
         projectId: this.props.parsed.projectId,
       },
-      reportId: this.props.parsed.reportId,
+      openModal: false,
       reportSubtype: this.props.parsed.reportSubtype,
       triggerUpdate: false,
       loading: false,
@@ -52,27 +52,38 @@ export class AttributeSelectorWindow extends Component {
     this.setState({attributesSelected});
   };
 
+  openModal = () => {
+    this.setState({openModal: true});
+  }
+
+  closeModal = () => {
+    this.setState({openModal: false});
+  }
+
   render() {
     return (
-      <div
-        style={{padding: '20px'}}>
+      <div>
         <AttributeSelector
           // TODO: logic for a title
-          title='Import a file > Access_Transaction'
+          title={`Import ${this.props.parsed.reportType} > ${this.props.parsed.reportName}`}
           attributesSelectedChange={this.attributesBeingSelected}
           session={this.state.session}
-          reportId={this.state.reportId}
+          reportId={this.props.parsed.reportId}
           reportSubtype={this.state.reportSubtype}
           triggerUpdate={this.state.triggerUpdate}
           onTriggerUpdate={this.onTriggerUpdate}
           resetTriggerUpdate={this.resetTriggerUpdate}
+          openModal={this.state.openModal}
+          closeModal={this.closeModal}
         />
         <PopupButtons
           disableActiveActions={!this.state.attributesSelected}
-          handleBack = {this.handleBack}
+          handleBack={this.handleBack}
           handleOk={this.handleOk}
           handleCancel={this.handleCancel}
-          loading={this.state.loading} />
+          loading={this.state.loading}
+          onPreviewClick={this.openModal}
+        />
       </div >
     );
   }
