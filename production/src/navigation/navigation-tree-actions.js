@@ -40,7 +40,6 @@ export function startImport(dispatch) {
 
 export function startLoading(dispatch) {
   return () => {
-    console.log('magic - super');
     dispatch({type: officeProperties.actions.startLoading});
   };
 }
