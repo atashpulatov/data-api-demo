@@ -20,7 +20,7 @@ export class _Home extends Component {
 
   render() {
     const {loading, loadingReport, authToken, reportArray, popupOpen} = this.props;
-    return pageBuilder.getPage(loading, loadingReport, authToken, reportArray, popupOpen);
+    return (<div>{pageBuilder.getPage(loading, loadingReport, authToken, reportArray, popupOpen)}</div>);
   }
 }
 

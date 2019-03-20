@@ -82,10 +82,9 @@ function onLoadAllReports(action, state) {
 }
 
 function onRemoveAllReports(action, state) {
-  return {
-    ...state,
-    reportArray: undefined,
-  };
+  const newState = {...state};
+  delete newState.reportArray;
+  return newState;
 }
 
 function onRemoveReport(action, state) {

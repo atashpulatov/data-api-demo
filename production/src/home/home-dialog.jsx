@@ -1,11 +1,11 @@
 import React from 'react';
 
-export const HomeDialog = ({show, text}) => {
+export const HomeDialog = ({show = false, text}) => {
   return (
-    <div className="dialog-container" style={{
-      display: show ? 'block' : 'none',
-    }}>
-      <div>{text}</div>
-    </div>
+    show ?
+      <div className="dialog-container">
+        <div>{text}</div>
+      </div>
+      : null
   );
 };

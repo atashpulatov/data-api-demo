@@ -12,7 +12,7 @@ describe('PageBuilder', () => {
     // given
 
     // when
-    const Page = () => pageBuilder.getPage(false, false, false);
+    const Page = () => pageBuilder.getPage(false, false, false, false);
     const wrappedComponent = mount(<Provider store={reduxStore}><Page /></Provider>);
 
     // then
@@ -26,7 +26,7 @@ describe('PageBuilder', () => {
     // given
 
     // when
-    const Page = () => pageBuilder.getPage(false, true, false);
+    const Page = () => pageBuilder.getPage(false, false, true, false);
     const wrappedComponent = mount(<Provider store={reduxStore}><Page /></Provider>);
 
     // then
@@ -38,7 +38,7 @@ describe('PageBuilder', () => {
     // given
 
     // when
-    const Page = () => pageBuilder.getPage(false, false, true);
+    const Page = () => pageBuilder.getPage(false, false, false, true);
     const wrappedComponent = mount(<Provider store={reduxStore}><Page /></Provider>);
 
     // then
@@ -50,7 +50,7 @@ describe('PageBuilder', () => {
     // given
 
     // when
-    const Page = () => pageBuilder.getPage(false, true, false);
+    const Page = () => pageBuilder.getPage(false, false, true, false);
     const wrappedComponent = mount(<Provider store={reduxStore}><Page /></Provider>);
 
     // then
@@ -62,11 +62,57 @@ describe('PageBuilder', () => {
     // given
 
     // when
-    const Page = () => pageBuilder.getPage(false, true, [{}]);
+    const Page = () => pageBuilder.getPage(false, false, true, [{}]);
     const wrappedComponent = mount(<Provider store={reduxStore}><Page /></Provider>);
 
     // then
     expect(wrappedComponent.find('_FileHistoryContainer').get(0)).toBeDefined();
     expect(wrappedComponent.find('Placeholder').get(0)).toBeUndefined();
+  });
+  it('should return page with a home dialog component when the popup is open', () => {
+    // given
+
+    // when
+    const Page = () => pageBuilder.getPage(false, false, true, [{}], true);
+    const wrappedComponent = mount(<Provider store={reduxStore}><Page /></Provider>);
+
+    // then
+    expect(wrappedComponent.find('_FileHistoryContainer').get(0)).toBeDefined();
+    expect(wrappedComponent.find('.dialog-container').get(0)).toBeDefined();
+  });
+  it('should disable logout and add data buttons while loading a report', () => {
+    // given
+
+    // when
+    const Page = () => pageBuilder.getPage(false, true, true, [{}], false);
+    const wrappedComponent = mount(<Provider store={reduxStore}><Page /></Provider>);
+
+    // then
+    expect(wrappedComponent.find('_FileHistoryContainer').get(0)).toBeDefined();
+    expect(wrappedComponent.find('.ant-btn[disabled]')).toHaveLength(2);
+  });
+  it('should disable logout and add data buttons while a popup is open', () => {
+    // given
+
+    // when
+    const Page = () => pageBuilder.getPage(false, false, true, [{}], true);
+    const wrappedComponent = mount(<Provider store={reduxStore}><Page /></Provider>);
+
+    // then
+    expect(wrappedComponent.find('_FileHistoryContainer').get(0)).toBeDefined();
+    expect(wrappedComponent.find('.dialog-container').get(0)).toBeDefined();
+    expect(wrappedComponent.find('.ant-btn[disabled]')).toHaveLength(2);
+  });
+  it('should disable logout and add data buttons while a popup is open and a report is loading', () => {
+    // given
+
+    // when
+    const Page = () => pageBuilder.getPage(false, true, true, [{}], true);
+    const wrappedComponent = mount(<Provider store={reduxStore}><Page /></Provider>);
+
+    // then
+    expect(wrappedComponent.find('_FileHistoryContainer').get(0)).toBeDefined();
+    expect(wrappedComponent.find('.dialog-container').get(0)).toBeDefined();
+    expect(wrappedComponent.find('.ant-btn[disabled]')).toHaveLength(2);
   });
 });
