@@ -12,11 +12,11 @@ export class OfficeLoadedFile extends React.Component {
     };
   }
 
-  deleteAction() {
+  deleteAction = () => {
     const {onDelete, bindingId, objectType} = this.props;
     fileHistoryHelper.deleteReport(onDelete, bindingId, objectType);
     this.setState({allowDeleteClick: false});
-  }
+  };
 
   render() {
     const {fileName, bindingId, onClick, onRefresh, isLoading, objectType} = this.props;
