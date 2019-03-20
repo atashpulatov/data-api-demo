@@ -95,7 +95,7 @@ class PopupController {
 
   handleOkCommand = async (response) => {
     if (response.chosenObject) {
-      const result = await officeDisplayService.printObject(response.chosenObject, response.chosenProject, response.chosenSubtype === objectTypes.getTypeValues('Report').subtype);
+      const result = await officeDisplayService.printObject(response.chosenObject, response.chosenProject, objectTypes.getTypeDescription(3, response.chosenSubtype) === 'Report');
       if (result) {
         notificationService.displayMessage(result.type, result.message);
       }
