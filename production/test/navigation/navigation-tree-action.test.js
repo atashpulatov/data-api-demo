@@ -6,7 +6,7 @@ describe('NavigationTree Actions', () => {
     const listener = jest.fn();
 
     // when
-    actions.selectObject(listener)(true);
+    actions.selectObject(true)(listener);
 
     // then
     expect(listener).toHaveBeenCalledWith({type: actions.SELECT_OBJECT, data: true});
@@ -17,7 +17,7 @@ describe('NavigationTree Actions', () => {
     const listener = jest.fn();
 
     // when
-    actions.setDataSource(listener)(true);
+    actions.setDataSource(true)(listener);
 
     // then
     expect(listener).toHaveBeenCalledWith({type: actions.SET_DATA_SOURCE, data: true});
@@ -28,7 +28,7 @@ describe('NavigationTree Actions', () => {
     const listener = jest.fn();
 
     // when
-    actions.selectFolder(listener)(true);
+    actions.selectFolder(true)(listener);
 
     // then
     expect(listener).toHaveBeenCalledWith({type: actions.SELECT_FOLDER, data: true});
@@ -39,7 +39,7 @@ describe('NavigationTree Actions', () => {
     const listener = jest.fn();
 
     // when
-    actions.startImport(listener)(true);
+    actions.startImport(true)(listener);
 
     // then
     expect(listener).toHaveBeenCalledWith({type: actions.START_IMPORT});
