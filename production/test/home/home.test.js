@@ -60,31 +60,6 @@ describe('Home', () => {
     expect(sessionHelperSpy).toHaveBeenCalled();
   });
 
-  it('should properly set header values', async () => {
-    // given
-
-    // when
-    const headerWrapper = mount(<_Header />);
-    // then
-    expect(headerWrapper.props('userInitials')).toBeTruthy();
-    expect(headerWrapper.props('userFullName')).toBeTruthy();
-  });
-
-  it('should correctly render header elements', async () => {
-    // given
-
-    // when
-    const headerWrapper = mount(<_Header />);
-    // then
-    const imageWrapper = headerWrapper.find('#profileImage');
-    const nameWrapper = headerWrapper.find('.header-name');
-    const buttonWrapper = headerWrapper.find('#logOut');
-    expect(imageWrapper).toBeTruthy();
-    expect(nameWrapper).toBeTruthy();
-    expect(buttonWrapper).toBeTruthy();
-  });
-
-
   it('should trigger saveLoginValues and saveTokenFromCookies on mount', async () => {
     // given
     const props = {
@@ -121,5 +96,81 @@ describe('Home', () => {
     });
     // then
     expect(homeHelper.saveTokenFromCookies).toBeCalled();
+  });
+  describe('Header', () => {
+    afterEach(() => {
+      jest.resetAllMocks();
+    });
+    it('should properly set header values', async () => {
+      // given
+      // when
+      const headerWrapper = mount(<_Header />);
+      // then
+      expect(headerWrapper.props('userInitials')).toBeTruthy();
+      expect(headerWrapper.props('userFullName')).toBeTruthy();
+    });
+    it('should properly set header values on localhost', async () => {
+      // given
+      // when
+      const homeWrapper = mount(
+          <Provider store={reduxStore}>
+            <Home />
+          </Provider>
+      );
+      const headerWrapper = mount(<_Header />);
+      // then
+      expect(headerWrapper.props('userInitials')).toBeTruthy();
+      expect(headerWrapper.props('userFullName')).toBeTruthy();
+    });
+
+    it('should properly set header values on localhost2', async () => {
+      // given
+      global.window = {location: {pathname: null}};
+      // when
+      const headerWrapper = mount(<_Header />);
+      // then
+      expect(headerWrapper.props('userInitials')).toBeTruthy();
+      expect(headerWrapper.props('userFullName')).toBeTruthy();
+    });
+
+    it('should correctly render header elements', async () => {
+      // given
+
+      // when
+      const headerWrapper = mount(<_Header />);
+      // then
+      const imageWrapper = headerWrapper.find('#profileImage');
+      const nameWrapper = headerWrapper.find('.header-name');
+      const buttonWrapper = headerWrapper.find('#logOut');
+      expect(imageWrapper).toBeTruthy();
+      expect(nameWrapper).toBeTruthy();
+      expect(buttonWrapper).toBeTruthy();
+    });
+    it('should log out on button click', async () => {
+      // given
+      const logOutRestSpy = jest.spyOn(sessionHelper, 'logOutRest');
+      const logOutSpy = jest.spyOn(sessionHelper, 'logOut');
+      const logOutRedirectSpy = jest.spyOn(sessionHelper, 'logOutRedirect');
+      // when
+      const headerWrapper = mount(<_Header />);
+      const buttonWrapper = headerWrapper.find('#logOut').at(0);
+      buttonWrapper.simulate('click');
+      // then
+      expect(logOutRestSpy).toBeCalled();
+      expect(logOutSpy).toBeCalled();
+      expect(logOutRedirectSpy).toBeCalled();
+    });
+    it('should handle error on logout', async () => {
+      // given
+      const logOutRestSpy = jest.spyOn(sessionHelper, 'logOutRest').mockImplementation(() => {
+        throw new Error();
+      });
+      // when
+      const headerWrapper = mount(<_Header />);
+      const buttonWrapper = headerWrapper.find('#logOut').at(0);
+      buttonWrapper.simulate('click');
+      // then
+      expect(logOutRestSpy).toThrowError();
+    });
   });
 });
