@@ -59,17 +59,19 @@ export class _NavigationTree extends Component {
   };
 
   // TODO: temporary solution
-  onObjectChosen = (objectId, projectId, subtype) => {
+  onObjectChosen = (objectId, projectId, subtype, scrollPosition, pageSize) => {
     this.props.selectObject({
       chosenObjectId: objectId,
       chosenProjectId: projectId,
       chosenSubtype: subtype,
+      scrollPosition,
+      pageSize,
     });
   };
 
   render() {
-    const {setDataSource, dataSource, chosenObjectId, chosenProjectId,
-      chosenSubtype, folder, selectFolder, loading, handlePopupErrors} = this.props;
+    const {setDataSource, dataSource, chosenObjectId, chosenProjectId, pageSize,
+      chosenSubtype, folder, selectFolder, loading, handlePopupErrors, scrollPosition} = this.props;
     return (
       <FolderBrowser
         title='Import data'
@@ -84,6 +86,8 @@ export class _NavigationTree extends Component {
           projectId: chosenProjectId,
           subtype: chosenSubtype,
         }}
+        scrollPosition={scrollPosition}
+        pageSize={pageSize}
         chosenFolder={folder}
         onChoseFolder={selectFolder}
         handlePopupErrors={handlePopupErrors}
