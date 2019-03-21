@@ -122,13 +122,11 @@ const mapStateToProps = (state) => {
   return {...state.navigationTree};
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    selectObject: (data) => selectObject(dispatch)(data),
-    setDataSource: (data) => setDataSource(dispatch)(data),
-    selectFolder: (data) => selectFolder(dispatch)(data),
-    startImport: () => startImport(dispatch)(),
-  };
+const mapDispatchToProps = {
+  selectObject,
+  setDataSource,
+  selectFolder,
+  startImport,
 };
 
 export const NavigationTree = connect(mapStateToProps, mapDispatchToProps)(_NavigationTree);
