@@ -122,17 +122,6 @@ describe('Home', () => {
       expect(headerWrapper.props('userInitials')).toBeTruthy();
       expect(headerWrapper.props('userFullName')).toBeTruthy();
     });
-
-    it('should properly set header values on localhost2', async () => {
-      // given
-      global.window = {location: {pathname: null}};
-      // when
-      const headerWrapper = mount(<_Header />);
-      // then
-      expect(headerWrapper.props('userInitials')).toBeTruthy();
-      expect(headerWrapper.props('userFullName')).toBeTruthy();
-    });
-
     it('should correctly render header elements', async () => {
       // given
 
