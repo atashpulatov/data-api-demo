@@ -190,11 +190,10 @@ describe('AttributeSelectorWindow', () => {
       projectId: 'proId',
       reportId: 'repId',
     };
+    const handleBack = jest.fn();
 
     const componentWrapper = mount(<AttributeSelectorWindow
-      parsed={parsed} />);
-
-    componentWrapper.instance().handleBack = jest.fn();
+      parsed={parsed} handleBack={handleBack} />);
     const spyMethod = jest.spyOn(componentWrapper.instance(), 'handleBack');
     componentWrapper.instance().forceUpdate();
 
@@ -248,5 +247,59 @@ describe('AttributeSelectorWindow', () => {
 
     // then
     expect(componentWrapper.instance().state.attributesSelected).toBeTruthy();
+  });
+  it('should change values if resetTriggerUpdate is being invoked', () => {
+    // given
+    const parsed = {
+      envUrl: 'url',
+      token: 'token',
+      projectId: 'proId',
+      reportId: 'repId',
+    };
+
+    const componentWrapper = mount(<AttributeSelectorWindow parsed={parsed} />);
+
+    const resetTriggerUpdateSpy = jest.spyOn(componentWrapper.instance(), 'resetTriggerUpdate');
+
+    // when
+    componentWrapper.instance().resetTriggerUpdate();
+    // then
+    expect(componentWrapper.instance().state.triggerUpdate).toBeFalsy();
+    expect(componentWrapper.instance().state.loading).toBeFalsy();
+  });
+  it('should change value of openModal if openModal is being invoked', () => {
+    // given
+    const parsed = {
+      envUrl: 'url',
+      token: 'token',
+      projectId: 'proId',
+      reportId: 'repId',
+    };
+
+    const componentWrapper = shallow(<AttributeSelectorWindow parsed={parsed} />);
+    const openModalSpy = jest.spyOn(componentWrapper.instance(), 'openModal');
+
+    // when
+    componentWrapper.instance().openModal();
+    // then
+    expect(componentWrapper.instance().state.openModal).toBeTruthy();
+  });
+  it('should change value of openModal if closeModal is being invoked', () => {
+    // given
+    const parsed = {
+      envUrl: 'url',
+      token: 'token',
+      projectId: 'proId',
+      reportId: 'repId',
+    };
+
+    const componentWrapper = mount(<AttributeSelectorWindow parsed={parsed} />);
+    const attributesBeingSelectedSpy = jest.spyOn(componentWrapper.instance(), 'closeModal');
+
+    // when
+    componentWrapper.instance().closeModal();
+
+    // then
+    expect(componentWrapper.instance().state.openModal).toBeFalsy();
   });
 });
