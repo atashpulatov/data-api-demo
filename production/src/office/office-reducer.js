@@ -23,6 +23,8 @@ export const officeReducer = (state = {loading: false}, action) => {
       return onPopupHidden(state);
     case officeProperties.actions.startLoading:
       return onStartLoading(state);
+    case officeProperties.actions.stopLoading:
+      return onStopLoading(state);
     default:
       break;
   }
@@ -33,6 +35,12 @@ function onStartLoading(state) {
   return {
     ...state,
     loading: true,
+  };
+}
+function onStopLoading(state) {
+  return {
+    ...state,
+    loading: false,
   };
 }
 

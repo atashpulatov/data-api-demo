@@ -51,6 +51,7 @@ class OfficeDisplayService {
     } finally {
       const reduxStoreState = reduxStore.getState();
       reduxStore.dispatch({type: officeProperties.actions.popupHidden});
+      reduxStore.dispatch({type: officeProperties.actions.stopLoading});
       reduxStoreState.sessionReducer.dialog.close();
     }
   }
