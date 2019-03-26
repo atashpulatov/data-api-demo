@@ -89,7 +89,7 @@ export class _NavigationTree extends Component {
         handlePopupErrors={handlePopupErrors}
       >
         {/* Temporary loading user action block */}
-        <div style={{
+        <div id="action-block" style={{
           display: loading ? 'block' : 'none',
           position: 'fixed',
           top: '0',
@@ -114,11 +114,11 @@ export class _NavigationTree extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
+export const mapStateToProps = (state) => {
   return {...state.navigationTree};
 };
 
-const mapDispatchToProps = (dispatch) => {
+export const mapDispatchToProps = (dispatch) => {
   return {
     selectObject: (data) => selectObject(dispatch)(data),
     setDataSource: (data) => setDataSource(dispatch)(data),
