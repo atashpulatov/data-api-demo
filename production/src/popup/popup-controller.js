@@ -64,9 +64,7 @@ class PopupController {
     const message = arg.message;
     const response = JSON.parse(message);
     try {
-      try {
-        await dialog.close();
-      } catch (e) {}
+      await this.closeDialog(dialog);
       switch (response.command) {
         case selectorProperties.commandOk:
 
@@ -119,6 +117,14 @@ class PopupController {
       this.runPopup(PopupTypeEnum.loadingPage, 30, 40);
       return await wrapped(...args);
     };
+  }
+
+  closeDialog = (dialog) => {
+    try {
+      return dialog.close();
+    } catch (e) {
+      console.log('Attempted to close an already closed dialog');
+    }
   }
 }
 
