@@ -1,21 +1,25 @@
-import { propsProxy } from '../home/enum-props-proxy';
+import {propsProxy} from '../home/enum-props-proxy';
 
 export const officeProperties = new Proxy({
-    /**
-     * propertyAlias: propertyName,
-     */
-    reportArray: 'mstr-loaded-reports-array',
-    officeAddress: 'address',
-    workbookBindings: 'bindings',
-    bindingItems: 'items',
-    loadedReportProperties: 'reportProperties',
-    actions: {
-        preLoadReport: 'PRE_OFFICE_LOAD_REPORT',
-        loadReport: 'OFFICE_LOAD_REPORT',
-        loadAllReports: 'OFFICE_LOAD_ALL_REPORTS',
-        removeAllReports: 'OFFICE_REMOVE_ALL_REPORTS',
-        removeReport: 'OFFICE_REMOVE_REPORT',
-        startLoadingReport: 'START_LOADING_REPORT',
-        finishLoadingReport: 'FINISH_LOADING_REPORT',
-    },
+  /**
+       * propertyAlias: propertyName,
+       */
+  reportArray: 'mstr-loaded-reports-array',
+  officeAddress: 'address',
+  workbookBindings: 'bindings',
+  bindingItems: 'items',
+  loadedReportProperties: 'reportProperties',
+  actions: {
+    preLoadReport: 'PRE_OFFICE_LOAD_REPORT',
+    loadReport: 'OFFICE_LOAD_REPORT',
+    loadAllReports: 'OFFICE_LOAD_ALL_REPORTS',
+    removeAllReports: 'OFFICE_REMOVE_ALL_REPORTS',
+    removeReport: 'OFFICE_REMOVE_REPORT',
+    startLoadingReport: 'START_LOADING_REPORT',
+    finishLoadingReport: 'FINISH_LOADING_REPORT',
+    popupShown: 'POPUP_OPEN',
+    popupHidden: 'POPUP_HIDDEN',
+    startLoading: 'START_LOADING',
+    stopLoading: 'STOP_LOADING',
+  },
 }, propsProxy);
