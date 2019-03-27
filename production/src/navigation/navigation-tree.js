@@ -5,7 +5,7 @@ import {selectorProperties} from '../attribute-selector/selector-properties';
 import {PopupButtons} from '../popup/popup-buttons.jsx';
 import {FolderBrowser} from 'mstr-react-library';
 import {connect} from 'react-redux';
-import {selectFolder, selectObject, setDataSource, startImport} from './navigation-tree-actions';
+import {selectFolder, selectObject, setDataSource, startImport, startLoading} from './navigation-tree-actions';
 
 export class _NavigationTree extends Component {
   constructor(props) {
@@ -41,6 +41,7 @@ export class _NavigationTree extends Component {
       chosenProject: this.props.chosenProjectId,
       chosenSubtype: this.props.chosenSubtype,
     };
+    this.props.startLoading();
     this.props.startImport();
     Office.context.ui.messageParent(JSON.stringify(okObject));
   };
@@ -124,6 +125,7 @@ const mapDispatchToProps = (dispatch) => {
     setDataSource: (data) => setDataSource(dispatch)(data),
     selectFolder: (data) => selectFolder(dispatch)(data),
     startImport: () => startImport(dispatch)(),
+    startLoading: () => startLoading(dispatch)(),
   };
 };
 

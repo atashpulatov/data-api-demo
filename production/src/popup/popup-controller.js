@@ -8,6 +8,7 @@ import {reduxStore} from '../store';
 import {CLEAR_WINDOW} from './popup-actions';
 import {errorService} from '../error/error-handler';
 import {authenticationHelper} from '../authentication/authentication-helper';
+import {officeProperties} from '../office/office-properties';
 const URL = `${window.location.href}`;
 const IS_LOCALHOST = URL.includes('localhost');
 
@@ -45,6 +46,14 @@ class PopupController {
                 Office.EventType.DialogMessageReceived,
                 this.onMessageFromPopup.bind(null, dialog));
             reduxStore.dispatch({type: CLEAR_WINDOW});
+            dialog.addEventHandler(
+            // Event received on dialog close
+                Office.EventType.DialogEventReceived, (event) => {
+                  reduxStore.dispatch({type: officeProperties.actions.popupHidden});
+                  console.log(event);
+                });
+
+            reduxStore.dispatch({type: officeProperties.actions.popupShown});
           });
     } catch (error) {
       errorService.handleOfficeError(error);
@@ -55,20 +64,18 @@ class PopupController {
     const message = arg.message;
     const response = JSON.parse(message);
     try {
+      await this.closeDialog(dialog);
       switch (response.command) {
         case selectorProperties.commandOk:
-          await dialog.close();
+
           await this.handleOkCommand(response, dialog);
           break;
         case selectorProperties.commandOnUpdate:
-          await dialog.close();
           await this.handleUpdateCommand(response, dialog);
           break;
         case selectorProperties.commandCancel:
-          await dialog.close();
           break;
         case selectorProperties.commandError:
-          await dialog.close();
           const error = errorService.errorRestFactory(response.error);
           errorService.handleError(error, false);
           break;
@@ -78,6 +85,8 @@ class PopupController {
     } catch (error) {
       console.error(error.message);
       errorService.handleOfficeError(error);
+    } finally {
+      reduxStore.dispatch({type: officeProperties.actions.popupHidden});
     }
   }
 
@@ -95,6 +104,7 @@ class PopupController {
 
   handleOkCommand = async (response) => {
     if (response.chosenObject) {
+      reduxStore.dispatch({type: officeProperties.actions.startLoading});
       const result = await officeDisplayService.printObject(response.chosenObject, response.chosenProject, response.chosenSubtype === objectTypes.getTypeValues('Report').subtype);
       if (result) {
         notificationService.displayMessage(result.type, result.message);
@@ -107,6 +117,14 @@ class PopupController {
       this.runPopup(PopupTypeEnum.loadingPage, 30, 40);
       return await wrapped(...args);
     };
+  }
+
+  closeDialog = (dialog) => {
+    try {
+      return dialog.close();
+    } catch (e) {
+      console.log('Attempted to close an already closed dialog');
+    }
   }
 }
 
