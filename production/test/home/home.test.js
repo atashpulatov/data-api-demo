@@ -89,6 +89,7 @@ describe('Home', () => {
     // given
     const props = {
       loading: false,
+      loadingReport: false,
       authToken: false,
       reportArray: false,
     };
@@ -106,8 +107,10 @@ describe('Home', () => {
     // given
     const props = {
       loading: false,
+      loadingReport: false,
       authToken: false,
       reportArray: false,
+
     };
     const wrappedComponent = mount(
         <Provider store={reduxStore}>
