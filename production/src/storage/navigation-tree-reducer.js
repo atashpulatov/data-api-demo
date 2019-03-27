@@ -60,8 +60,18 @@ export const navigationTree = (state = initialState, action) => {
       return newState;
     }
     case SELECT_FOLDER: {
+      if (state.folder === data) {
+        return state;
+      }
       const newState = {...state};
       newState.folder = data;
+      newState.chosenObjectId = null;
+      newState.chosenProjectId = null;
+      newState.chosenSubtype = null;
+      newState.chosenProjectName = defaultProjectName;
+      newState.chosenType = defaultType;
+      newState.scrollPosition = null;
+      newState.pageSize = null;
       return newState;
     }
     case CLEAR_WINDOW: {
