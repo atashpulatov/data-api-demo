@@ -31,7 +31,7 @@ class PageBuilder {
               {IS_LOCALHOST && <Authenticate />}
             </Spin>
         }
-        <HomeDialog show={popupOpen} text='The dialog is open, please close it to continue' />
+        <HomeDialog show={popupOpen} text='A MicroStrategy for Office Add-in dialog is open.' />
       </div >
     );
   }
