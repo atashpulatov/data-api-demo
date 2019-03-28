@@ -1,9 +1,7 @@
-/* eslint-disable */
 import {createStore} from 'redux';
 import {officeReducer} from '../../src/office/office-reducer';
 import {officeProperties} from '../../src/office/office-properties';
 import {OfficeError} from '../../src/office/office-error';
-/* eslint-enable */
 
 describe('officeReducer', () => {
   const officeStore = createStore(officeReducer);
@@ -34,7 +32,7 @@ describe('officeReducer', () => {
 
   beforeEach(() => {
     // default state should be empty
-    expect(officeStore.getState()).toEqual({});
+    expect(officeStore.getState()).toEqual({loading: false});
   });
 
   afterEach(() => {
@@ -328,66 +326,22 @@ describe('officeReducer', () => {
     expect(wrongDispatch).toThrowError('Missing report.id');
     reportArrayMock[1].id = originalId;
   });
-  it('should throw an error on missing reportBindId', () => {
+  it('should set popupOpen to true onPopupShown', () => {
     // given
-    const action = {
-      type: officeProperties.actions.startLoadingReport,
-    };
+    const prevState = {popupOpen: false};
+    const action = {type: officeProperties.actions.popupShown};
     // when
-    const wrongDispatch = () => {
-      officeStore.dispatch(action);
-    };
+    const newState = officeReducer(prevState, action);
     // then
-    expect(wrongDispatch).toThrowError(OfficeError);
-    expect(wrongDispatch).toThrowError('Missing reportBindId');
+    expect(newState.popupOpen).toBe(true);
   });
-
-  it('should set true loading status on for proper reports', () => {
+  it('should set popupOpen to false onPopupHidden', () => {
     // given
-    const givenBindId = 'testId';
-    const givenReport = {
-      id: 'id',
-      name: 'name',
-      envUrl: 'url',
-      projectId: 'proId',
-      bindId: givenBindId,
-      isLoading: false,
-    };
-    officeStore.dispatch({
-      type: officeProperties.actions.loadReport,
-      report: givenReport,
-    });
-    const action = {
-      type: officeProperties.actions.startLoadingReport,
-      reportBindId: givenBindId,
-    };
+    const prevState = {popupOpen: true};
+    const action = {type: officeProperties.actions.popupHidden};
     // when
-    officeStore.dispatch(action);
+    const newState = officeReducer(prevState, action);
     // then
-    expect(givenReport.isLoading).toBeTruthy();
-  });
-  it('should set false loading status for proper reports', () => {
-    // given
-    const givenBindId = 'testId';
-    const givenReport = {
-      id: 'id',
-      name: 'name',
-      envUrl: 'url',
-      projectId: 'proId',
-      bindId: givenBindId,
-      isLoading: true,
-    };
-    officeStore.dispatch({
-      type: officeProperties.actions.loadReport,
-      report: givenReport,
-    });
-    const action = {
-      type: officeProperties.actions.finishLoadingReport,
-      reportBindId: givenBindId,
-    };
-    // when
-    officeStore.dispatch(action);
-    // then
-    expect(givenReport.isLoading).toBeFalsy();
+    expect(newState.popupOpen).toBe(false);
   });
 });

@@ -22,3 +22,7 @@
 .ant-btn:disabled {
     opacity: 0.5;
 }
+
+#data-preview:focus:not(:hover) {
+    background-color: white;
+}

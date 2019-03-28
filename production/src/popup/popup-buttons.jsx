@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Modal} from 'antd';
+import {Button} from 'antd';
 import './popup-buttons.css';
 
 export const PopupButtons = ({handleOk, handleSecondary,
@@ -15,7 +15,7 @@ export const PopupButtons = ({handleOk, handleSecondary,
           Back
         </Button>
       }
-      <Button id="import" onClick={handleOk} loading={loading} disabled={disableActiveActions}>
+      <Button id="import" type={!handleSecondary ? 'primary' : ''} onClick={handleOk} loading={loading} disabled={disableActiveActions}>
         Import
       </Button>
       {

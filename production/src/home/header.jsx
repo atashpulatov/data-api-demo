@@ -23,7 +23,7 @@ export class _Header extends Component {
   }
 
   render() {
-    const {userFullName, userInitials} = this.props;
+    const {userFullName, userInitials, loading} = this.props;
     return (
       <header id='app-header'>
         <span id='profileImage' className={userFullName && 'got-user-data'}>
@@ -33,7 +33,7 @@ export class _Header extends Component {
             /* TODO: When rest api returns profileImage use it as source*/}
         </span>
         <span className={` ${userFullName && 'got-user-data'} header-name`}>{userFullName}</span>
-        <Button id='logOut' onClick={logout} size='small'>Log out</Button>
+        <Button id='logOut' onClick={logout} size='small' disabled={loading}>Log out</Button>
       </header >
     );
   };
@@ -46,9 +46,9 @@ function mapStateToProps(state) {
 
 export const Header = connect(mapStateToProps)(_Header);
 
-function logout() {
+async function logout() {
   try {
-    sessionHelper.logOutRest();
+    await sessionHelper.logOutRest();
     sessionHelper.logOut();
     sessionHelper.logOutRedirect();
   } catch (error) {
