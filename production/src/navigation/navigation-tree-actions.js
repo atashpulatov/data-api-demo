@@ -30,8 +30,6 @@ export function startImport() {
   return (dispatch) => dispatch({type: START_IMPORT});
 }
 
-export function startLoading(dispatch) {
-  return () => {
-    dispatch({type: officeProperties.actions.startLoading});
-  };
+export function startLoading() {
+  return (dispatch) => dispatch({type: officeProperties.actions.startLoading});
 }
