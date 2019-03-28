@@ -16,6 +16,7 @@ describe('getUserData', () => {
     const tempPromise = Promise.resolve();
     // when
     const headerWrapper = mount(<_Header />);
+    await headerWrapper.instance().componentDidMount();
     // then
     await (tempPromise);
     expect(userDataMock).toBeCalled();
