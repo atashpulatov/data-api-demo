@@ -1,3 +1,5 @@
+import {officeProperties} from '../office/office-properties';
+
 export const SELECT_OBJECT = 'NAV_TREE_SELECT_OBJECT';
 export const SET_DATA_SOURCE = 'NAV_TREE_SET_DATA_SOURCE';
 export const SELECT_FOLDER = 'NAV_TREE_SELECT_FOLDER';
@@ -26,4 +28,10 @@ export function selectFolder(data) {
 
 export function startImport() {
   return (dispatch) => dispatch({type: START_IMPORT});
+}
+
+export function startLoading(dispatch) {
+  return () => {
+    dispatch({type: officeProperties.actions.startLoading});
+  };
 }

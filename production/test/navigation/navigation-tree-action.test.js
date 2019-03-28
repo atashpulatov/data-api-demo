@@ -1,4 +1,5 @@
 import * as actions from '../../src/navigation/navigation-tree-actions';
+import {officeProperties} from '../../src/office/office-properties';
 
 describe('NavigationTree Actions', () => {
   it('should dispatch proper selectObject action', () => {
@@ -43,5 +44,15 @@ describe('NavigationTree Actions', () => {
 
     // then
     expect(listener).toHaveBeenCalledWith({type: actions.START_IMPORT});
+  });
+  it('should dispatch proper startLoading action', () => {
+    // given
+    const listener = jest.fn();
+
+    // when
+    actions.startLoading(listener)(true);
+
+    // then
+    expect(listener).toHaveBeenCalledWith({type: officeProperties.actions.startLoading});
   });
 });
