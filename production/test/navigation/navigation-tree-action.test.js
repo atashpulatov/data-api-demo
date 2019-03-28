@@ -50,7 +50,7 @@ describe('NavigationTree Actions', () => {
     const listener = jest.fn();
 
     // when
-    actions.startLoading(listener)(true);
+    actions.startLoading(true)(listener);
 
     // then
     expect(listener).toHaveBeenCalledWith({type: officeProperties.actions.startLoading});
