@@ -7,6 +7,7 @@ import {navigationTree} from './storage/navigation-tree-reducer';
 import {composeWithDevTools} from 'redux-devtools-extension';
 import {officeReducer} from './office/office-reducer';
 import {notificationReducer} from './notification/reducer';
+import thunk from 'redux-thunk';
 
 const rootReducer = combineReducers({
   sessionReducer,
@@ -25,6 +26,6 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const reduxStore = createStore(
     persistedReducer,
-    composeWithDevTools(applyMiddleware())
+    composeWithDevTools(applyMiddleware(thunk))
 );
 export const reduxPersistor = persistStore(reduxStore);

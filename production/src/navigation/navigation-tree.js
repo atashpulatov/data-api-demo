@@ -60,17 +60,19 @@ export class _NavigationTree extends Component {
   };
 
   // TODO: temporary solution
-  onObjectChosen = (objectId, projectId, subtype) => {
+  onObjectChosen = (objectId, projectId, subtype, scrollPosition, pageSize) => {
     this.props.selectObject({
       chosenObjectId: objectId,
       chosenProjectId: projectId,
       chosenSubtype: subtype,
+      scrollPosition,
+      pageSize,
     });
   };
 
   render() {
-    const {setDataSource, dataSource, chosenObjectId, chosenProjectId,
-      chosenSubtype, folder, selectFolder, loading, handlePopupErrors} = this.props;
+    const {setDataSource, dataSource, chosenObjectId, chosenProjectId, pageSize,
+      chosenSubtype, folder, selectFolder, loading, handlePopupErrors, scrollPosition} = this.props;
     return (
       <FolderBrowser
         title='Import data'
@@ -85,6 +87,8 @@ export class _NavigationTree extends Component {
           projectId: chosenProjectId,
           subtype: chosenSubtype,
         }}
+        scrollPosition={scrollPosition}
+        pageSize={pageSize}
         chosenFolder={folder}
         onChoseFolder={selectFolder}
         handlePopupErrors={handlePopupErrors}
@@ -119,14 +123,12 @@ export const mapStateToProps = (state) => {
   return {...state.navigationTree};
 };
 
-export const mapDispatchToProps = (dispatch) => {
-  return {
-    selectObject: (data) => selectObject(dispatch)(data),
-    setDataSource: (data) => setDataSource(dispatch)(data),
-    selectFolder: (data) => selectFolder(dispatch)(data),
-    startImport: () => startImport(dispatch)(),
-    startLoading: () => startLoading(dispatch)(),
-  };
+const mapDispatchToProps = {
+  selectObject,
+  setDataSource,
+  selectFolder,
+  startImport,
+  startLoading,
 };
 
 export const NavigationTree = connect(mapStateToProps, mapDispatchToProps)(_NavigationTree);
