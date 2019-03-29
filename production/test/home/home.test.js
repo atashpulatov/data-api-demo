@@ -23,9 +23,9 @@ describe('Home', () => {
     // given
     // when
     const componentWrapper = mount(
-        <Provider store={reduxStore}>
-          <Home />
-        </Provider>
+      <Provider store={reduxStore}>
+        <Home />
+      </Provider>
     );
     // then
     expect(componentWrapper.children().length).toBeGreaterThan(0);
@@ -41,15 +41,15 @@ describe('Home', () => {
     const tempPromise = Promise.resolve();
     const sessionHelperSpy = jest.spyOn(sessionHelper, 'disableLoading');
     const officeHelperSpy = jest
-        .spyOn(officeApiHelper, 'loadExistingReportBindingsExcel')
-        .mockImplementation(async () => null);
+      .spyOn(officeApiHelper, 'loadExistingReportBindingsExcel')
+      .mockImplementation(async () => null);
     sessionHelperSpy.mockClear();
     officeHelperSpy.mockClear();
     // when
     const componentWrapper = mount(
-        <Provider store={reduxStore}>
-          <_Home {...props} />
-        </Provider>
+      <Provider store={reduxStore}>
+        <_Home {...props} />
+      </Provider>
     );
     // then
     setImmediate(() => tempPromise);
@@ -88,9 +88,9 @@ describe('Home', () => {
 
     };
     const wrappedComponent = mount(
-        <Provider store={reduxStore}>
-          <_Home {...props} />
-        </Provider>
+      <Provider store={reduxStore}>
+        <_Home {...props} />
+      </Provider>
     );
     // when
     wrappedComponent.setProps({
@@ -116,9 +116,9 @@ describe('Home', () => {
       // given
       // when
       const homeWrapper = mount(
-          <Provider store={reduxStore}>
-            <Home />
-          </Provider>
+        <Provider store={reduxStore}>
+          <Home />
+        </Provider>
       );
       const headerWrapper = mount(<_Header />);
       // then
@@ -140,6 +140,7 @@ describe('Home', () => {
     });
     it('should log out on button click', async () => {
       // given
+      const tempPromise = Promise.resolve();
       const logOutRestSpy = jest.spyOn(sessionHelper, 'logOutRest');
       const logOutSpy = jest.spyOn(sessionHelper, 'logOut');
       const logOutRedirectSpy = jest.spyOn(sessionHelper, 'logOutRedirect');
@@ -148,6 +149,7 @@ describe('Home', () => {
       const buttonWrapper = headerWrapper.find('#logOut').at(0);
       buttonWrapper.simulate('click');
       // then
+      await (tempPromise);
       expect(logOutRestSpy).toBeCalled();
       expect(logOutSpy).toBeCalled();
       expect(logOutRedirectSpy).toBeCalled();
