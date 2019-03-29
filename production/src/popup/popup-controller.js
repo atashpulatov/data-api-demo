@@ -87,6 +87,7 @@ class PopupController {
       errorService.handleOfficeError(error);
     } finally {
       reduxStore.dispatch({type: officeProperties.actions.popupHidden});
+      reduxStore.dispatch({type: officeProperties.actions.stopLoading});
     }
   }
 
