@@ -27,6 +27,8 @@ export const initialState = {
   chosenType: defaultType,
   dataSource: null,
   loading: false,
+  scrollPosition: null,
+  pageSize: null,
 };
 
 function getProjectName(projects, projectId, objectId) {
@@ -52,6 +54,8 @@ export const navigationTree = (state = initialState, action) => {
       newState.chosenSubtype = data.chosenSubtype || null;
       newState.chosenProjectName = getProjectName(state.dataSource, data.chosenProjectId, data.chosenObjectId);
       newState.chosenType = getType(data.chosenSubtype);
+      newState.scrollPosition = data.scrollPosition;
+      newState.pageSize = data.pageSize;
       return newState;
     }
     case SET_DATA_SOURCE: {
