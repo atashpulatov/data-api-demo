@@ -79,6 +79,11 @@ class OfficeApiHelper {
     return await Office.context;
   }
 
+  getExcelSessionStatus = async () => {
+    // ToDo find better way to check session status
+    return await (this.getExcelContext() ? true : false);
+  }
+
   findAvailableOfficeTableId = () => {
     return EXCEL_TABLE_NAME + uuid().split('-').join('');
   }
