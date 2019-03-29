@@ -14,18 +14,31 @@ import {OverlappingTablesError} from '../error/overlapping-tables-error';
 const EXCEL_PAGINATION = 5000;
 
 class OfficeDisplayService {
-  _printObject = async (objectId, projectId, isReport = true, startCell, officeTableId, bindingId, body, isRefresh) => {
-    const objectType = isReport ? 'report' : 'dataset';
+  _printObject = async (objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh) => {
     try {
+      // Get excel context and initial cell
       const excelContext = await officeApiHelper.getExcelContext();
-      startCell = startCell || await officeApiHelper.getSelectedCell(excelContext);
-      const officeTable = await mstrObjectRestService.getObjectContent(objectId, projectId, isReport, body);
-      if (!officeTable || (officeTable.rows && officeTable.rows.length === 0)) {
-        // report returned no data
+      const startCell = selectedCell || await officeApiHelper.getSelectedCell(excelContext);
+
+      // Get mstr instance definition
+      const objectType = isReport ? 'report' : 'dataset';
+      const instanceDefinition = await mstrObjectRestService.getInstanceDefinition(objectId, projectId, isReport);
+      console.log(instanceDefinition);
+
+      // Check if instance returned data
+      if (!instanceDefinition || instanceDefinition.rows === 0) {
         return {type: 'warning', message: NOT_SUPPORTED_NO_ATTRIBUTES};
       }
+
+      // Create empty table
       const newOfficeTableId = officeTableId || officeApiHelper.findAvailableOfficeTableId();
-      await this._insertDataIntoExcel(officeTable, excelContext, startCell, newOfficeTableId);
+      // TODO: Add logic to get table if isRefresh
+      const officeTable = await this._createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId);
+
+      // Fetch, convert and insert in chain of promises
+      const connectionData = {objectId, projectId, isReport, body};
+      const officeData = {officeTable, excelContext, startCell, newOfficeTableId};
+      await this._fetchInsertDataIntoExcel(connectionData, officeData);
 
       const {envUrl} = officeApiHelper.getCurrentMstrContext();
       bindingId = bindingId || newOfficeTableId;
@@ -47,6 +60,7 @@ class OfficeDisplayService {
       }
       return !isRefresh && {type: 'success', message: `Data loaded successfully`};
     } catch (error) {
+      console.log(error);
       throw errorService.errorOfficeFactory(error);
     } finally {
       const reduxStoreState = reduxStore.getState();
@@ -145,6 +159,15 @@ class OfficeDisplayService {
     }
   };
 
+  _fetchInsertDataIntoExcel(connectionData, officeData) {
+    // TODO: Continue here
+  }
+
+  _appendRowsToTable(officeContext, officeTable, rowsData) {
+    officeTable.getDataBodyRange().values = rowsData;
+    return officeContext.sync();
+  }
+
   _insertDataIntoExcel = async (reportConvertedData, context, startCell, tableName) => {
     const hasHeaders = true;
     const sheet = context.workbook.worksheets.getActiveWorksheet();
@@ -174,6 +197,29 @@ class OfficeDisplayService {
       return mstrTable;
     } catch (error) {
       mstrTable.delete();
+      await context.sync();
+      throw error;
+    }
+  }
+
+  _createOfficeTable = async (instanceDefinition, context, startCell, tableName) => {
+    const hasHeaders = true;
+    const {rows, columns, mstrTable} = instanceDefinition;
+    const sheet = context.workbook.worksheets.getActiveWorksheet();
+    const tableRange = officeApiHelper.getRange(columns, startCell, rows);
+    const sheetRange = sheet.getRange(tableRange);
+    await this._checkRangeValidity(context, sheetRange);
+
+    const excelTable = sheet.tables.add(tableRange, hasHeaders);
+    try {
+      excelTable.load('name');
+      excelTable.name = tableName;
+      excelTable.getHeaderRowRange().values = [mstrTable.headers];
+      sheet.activate();
+      await context.sync();
+      return mstrTable;
+    } catch (error) {
+      excelTable.delete();
       await context.sync();
       throw error;
     }

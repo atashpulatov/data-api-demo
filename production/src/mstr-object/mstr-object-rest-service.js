@@ -59,6 +59,27 @@ class MstrObjectRestService {
         });
   }
 
+  async _getInstanceDefinition(fullPath, authToken, projectId, body) {
+    return await moduleProxy.request
+        .post(fullPath)
+        .set('x-mstr-authtoken', authToken)
+        .set('x-mstr-projectid', projectId)
+        .send(body)
+        .withCredentials()
+        .then((res) => {
+          if (res.status === 200 && res.body.status === 2) {
+            throw (res);
+          }
+          const {total} = res.body.result.data.paging;
+          const mstrTable = officeConverterService.createTable(res.body);
+          const {rows, columns} = this._checkTableDimensions(total, mstrTable.headers.length);
+          return {rows, columns, mstrTable};
+        })
+        .catch((err) => {
+          throw err;
+        });
+  }
+
   async getObjectInfo(objectId, projectId, isReport = true) {
     const storeState = reduxStore.getState();
     const envUrl = storeState.sessionReducer.envUrl;
@@ -99,6 +120,20 @@ class MstrObjectRestService {
     }
   }
 
+  getInstanceDefinition(objectId, projectId, isReport = true, body = {}, limit = 0) {
+    const storeState = reduxStore.getState();
+    const envUrl = storeState.sessionReducer.envUrl;
+    const authToken = storeState.sessionReducer.authToken;
+    const objectType = isReport ? 'reports' : 'cubes';
+    const fullPath = `${envUrl}/${objectType}/${objectId}/instances?limit=${limit}`;
+
+    try {
+      return this._getInstanceDefinition(fullPath, authToken, projectId, body);
+    } catch (error) {
+      throw errorService.errorRestFactory(error);
+    }
+  }
+
   _getObjectContentPaginated(fullPath, authToken, projectId, limit) {
     return new Promise((resolve, reject) => {
       this._fetchObjectContent(fullPath, authToken, projectId, resolve, reject, 0, limit);
@@ -116,7 +151,7 @@ class MstrObjectRestService {
           const fetchedRows = current + offset;
           if (offset === 0) {
             mstrTable = officeConverterService.createTable(res.body);
-            this._checkTableDimensions(total, mstrTable.rows.length);
+            this._checkTableDimensions(total, mstrTable.headers.length);
           } else {
             mstrTable = officeConverterService.appendRows(mstrTable, res.body);
           }
@@ -135,6 +170,7 @@ class MstrObjectRestService {
     if (rows >= EXCEL_ROW_LIMIT || columns >= EXCEL_COLUMN_LIMIT) {
       throw new OutsideOfRangeError();
     }
+    return {rows, columns};
   }
 };
 
