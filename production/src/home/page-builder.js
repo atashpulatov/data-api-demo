@@ -21,7 +21,7 @@ class PageBuilder {
             <div>
               <Header loading={loadingReport} />
               <Tabs defaultActiveKey="data" className="tabs-container">
-                <TabPane id="imported-data-tab" tab="Imported Data" key="data">
+                <TabPane tab="Imported Data" key="data">
                   {(reportArray && reportArray.length !== 0) && <FileHistoryContainer loading={loadingReport} />}
                   {(!reportArray || !reportArray.length) && <Placeholder loading={loadingReport} />}
                 </TabPane>
