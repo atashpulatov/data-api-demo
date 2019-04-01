@@ -5,7 +5,7 @@ import {moduleProxy} from '../module-proxy';
 import {officeConverterService} from '../office/office-converter-service';
 
 const sharedFolderIdType = 7;
-const REQUEST_LIMIT = 5000;
+export const REQUEST_LIMIT = 5000;
 const EXCEL_ROW_LIMIT = 1048576;
 const EXCEL_COLUMN_LIMIT = 16384;
 
@@ -71,9 +71,10 @@ class MstrObjectRestService {
             throw (res);
           }
           const {total} = res.body.result.data.paging;
+          const {instanceId} = res.body;
           const mstrTable = officeConverterService.createTable(res.body);
           const {rows, columns} = this._checkTableDimensions(total, mstrTable.headers.length);
-          return {rows, columns, mstrTable};
+          return {instanceId, rows, columns, mstrTable};
         })
         .catch((err) => {
           throw err;
@@ -120,7 +121,7 @@ class MstrObjectRestService {
     }
   }
 
-  getInstanceDefinition(objectId, projectId, isReport = true, body = {}, limit = 0) {
+  getInstanceDefinition(objectId, projectId, isReport = true, body = {}, limit = 1) {
     const storeState = reduxStore.getState();
     const envUrl = storeState.sessionReducer.envUrl;
     const authToken = storeState.sessionReducer.authToken;
@@ -134,36 +135,16 @@ class MstrObjectRestService {
     }
   }
 
-  _getObjectContentPaginated(fullPath, authToken, projectId, limit) {
-    return new Promise((resolve, reject) => {
-      this._fetchObjectContent(fullPath, authToken, projectId, resolve, reject, 0, limit);
-    });
+  getObjectContentGenerator(instanceDefinition, objectId, projectId, isReport, body, limit = REQUEST_LIMIT) {
+    return fetchContentGenerator(instanceDefinition, objectId, projectId, isReport, body, limit);
   }
 
-  _fetchObjectContent(fullPath, authToken, projectId, resolve, reject, offset = 0, limit = REQUEST_LIMIT, mstrTable = {}) {
+  fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = REQUEST_LIMIT) {
     return moduleProxy.request
         .get(`${fullPath}?offset=${offset}&limit=${limit}`)
         .set('x-mstr-authtoken', authToken)
         .set('x-mstr-projectid', projectId)
-        .withCredentials()
-        .then((res) => {
-          const {current, total} = res.body.result.data.paging;
-          const fetchedRows = current + offset;
-          if (offset === 0) {
-            mstrTable = officeConverterService.createTable(res.body);
-            this._checkTableDimensions(total, mstrTable.headers.length);
-          } else {
-            mstrTable = officeConverterService.appendRows(mstrTable, res.body);
-          }
-
-          if (fetchedRows >= total || fetchedRows >= EXCEL_ROW_LIMIT) {
-            resolve(mstrTable);
-          } else {
-            offset += current;
-            this._fetchObjectContent(fullPath, authToken, projectId, resolve, reject, offset, limit, mstrTable);
-          }
-        })
-        .catch(reject);
+        .withCredentials();
   }
 
   _checkTableDimensions(rows, columns) {
@@ -174,5 +155,32 @@ class MstrObjectRestService {
   }
 };
 
+async function* fetchContentGenerator(instanceDefinition, objectId, projectId, isReport, body, limit) {
+  try {
+    const totalRows = instanceDefinition.rows;
+    const {instanceId, mstrTable} = instanceDefinition;
+
+    const storeState = reduxStore.getState();
+    const envUrl = storeState.sessionReducer.envUrl;
+    const authToken = storeState.sessionReducer.authToken;
+    const objectType = isReport ? 'reports' : 'cubes';
+    const fullPath = `${envUrl}/${objectType}/${objectId}/instances/${instanceId}`;
+    let fetchedRows = 0;
+    let offset = 0;
+
+    while (fetchedRows < totalRows && fetchedRows < EXCEL_ROW_LIMIT) {
+      console.log(fetchedRows, totalRows);
+      // const mstrObjectRestService = new MstrObjectRestService();
+      const response = await mstrObjectRestService.fetchObjectContent(fullPath, authToken, projectId, offset, limit);
+      const {current} = response.body.result.data.paging;
+      fetchedRows = current + offset;
+      offset += current;
+      yield officeConverterService.getRows(response.body, mstrTable.headers);
+    }
+  } catch (error) {
+    console.log(error);
+    throw errorService.errorRestFactory(error);
+  }
+}
 
 export const mstrObjectRestService = new MstrObjectRestService();
