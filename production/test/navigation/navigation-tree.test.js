@@ -163,15 +163,19 @@ describe('NavigationTree', () => {
       chosenSubtype: 'subtype',
     };
     const mockStartImport = jest.fn();
+    const mockStartloading = jest.fn();
     const mockMessageParent = jest.spyOn(Office.context.ui, 'messageParent');
     const wrappedComponent = shallow(<_NavigationTree
       parsed={parsed}
       startImport={mockStartImport}
+      startLoading={mockStartloading}
       {...actionObject}
     />);
     // when
     wrappedComponent.instance().handleOk();
     // then
+    expect(mockStartloading).toHaveBeenCalled();
+    expect(mockStartImport).toHaveBeenCalled();
     expect(mockMessageParent).toHaveBeenCalledWith(JSON.stringify(resultAction));
   });
 
@@ -195,45 +199,6 @@ describe('NavigationTree', () => {
     wrappedComponent.instance().onTriggerUpdate(body);
     // then
     expect(mockMessageParent).toHaveBeenCalledWith(JSON.stringify(resultAction));
-  });
-
-  it('should send proper action when selectObject is called', () => {
-    // given
-    const dispatch = jest.fn();
-    const data = {};
-    // when
-    mapDispatchToProps(dispatch).selectObject(data);
-    // then
-    expect(dispatch).toHaveBeenCalledWith({type: SELECT_OBJECT, data: {}});
-  });
-
-  it('should send proper action when setDataSource is called', () => {
-    // given
-    const dispatch = jest.fn();
-    const data = {};
-    // when
-    mapDispatchToProps(dispatch).setDataSource(data);
-    // then
-    expect(dispatch).toHaveBeenCalledWith({type: SET_DATA_SOURCE, data: {}});
-  });
-
-  it('should send proper action when selectFolder is called', () => {
-    // given
-    const dispatch = jest.fn();
-    const data = {};
-    // when
-    mapDispatchToProps(dispatch).selectFolder(data);
-    // then
-    expect(dispatch).toHaveBeenCalledWith({type: SELECT_FOLDER, data: {}});
-  });
-
-  it('should send proper action when startImport is called', () => {
-    // given
-    const dispatch = jest.fn();
-    // when
-    mapDispatchToProps(dispatch).startImport();
-    // then
-    expect(dispatch).toHaveBeenCalledWith({type: START_IMPORT});
   });
 
   it('should take data from state wwew', () => {
