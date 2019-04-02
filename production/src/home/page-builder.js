@@ -6,13 +6,14 @@ import {Notifications} from '../notification/notifications.jsx';
 import {Authenticate} from '../authentication/auth-component.jsx';
 import {Placeholder} from './placeholder.jsx';
 import {HomeDialog} from './home-dialog';
+import {withTranslation} from 'react-i18next';
 
 const TabPane = Tabs.TabPane;
 const URL = `${window.location.href}`;
 const IS_LOCALHOST = URL.includes('localhost');
 
 class PageBuilder {
-  getPage = (loading, loadingReport, authToken, reportArray, popupOpen) => {
+  getPage = ((loading, loadingReport, authToken, reportArray, popupOpen, t) => {
     return (
       <div id='content'>
         <Notifications />
@@ -21,7 +22,7 @@ class PageBuilder {
             <div>
               <Header loading={loadingReport} />
               <Tabs defaultActiveKey="data" className="tabs-container">
-                <TabPane tab="Imported Data" key="data">
+                <TabPane tab={t('Imported Data')} key="data">
                   {(reportArray && reportArray.length !== 0) && <FileHistoryContainer loading={loadingReport} />}
                   {(!reportArray || !reportArray.length) && <Placeholder loading={loadingReport} />}
                 </TabPane>
@@ -31,10 +32,10 @@ class PageBuilder {
               {IS_LOCALHOST && <Authenticate />}
             </Spin>
         }
-        <HomeDialog show={popupOpen} text='A MicroStrategy for Office Add&#8209;in dialog is open.' />
+        <HomeDialog show={popupOpen} text={t('A MicroStrategy for Office Add-in dialog is open')} />
       </div >
     );
-  }
+  });
 }
 
 export const pageBuilder = new PageBuilder();

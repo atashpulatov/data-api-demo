@@ -6,13 +6,14 @@ import {officeApiHelper} from '../office/office-api-helper';
 import {officeDisplayService} from '../office/office-display-service';
 import {popupController} from '../popup/popup-controller';
 import './file-history.css';
+import {withTranslation} from 'react-i18next';
 
 export class _FileHistoryContainer extends Component {
   render() {
-    const {reportArray, loading} = this.props;
+    const {reportArray, loading, t} = this.props;
     return (
       <div>
-        <Button className="add-data-btn" onClick={popupController.runPopupNavigation} disabled={loading}>Add Data</Button>
+        <Button className="add-data-btn" onClick={popupController.runPopupNavigation} disabled={loading}>{t('Add Data')}</Button>
         <List
           className='ant-list-header-override'
           size='small'
@@ -45,4 +46,4 @@ function mapStateToProps(state) {
   };
 }
 
-export const FileHistoryContainer = connect(mapStateToProps)(_FileHistoryContainer);
+export const FileHistoryContainer = connect(mapStateToProps)(withTranslation('common')(_FileHistoryContainer));

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {notification, message} from 'antd';
 import {connect} from 'react-redux';
 import './Notifications.css';
+import {withTranslation} from 'react-i18next';
 
 export class NotificationsWithoutRedux extends Component {
   constructor(props) {
@@ -18,20 +19,20 @@ export class NotificationsWithoutRedux extends Component {
     if (this.props.currentObject === 'notification') {
       this.displayNotification();
     }
-  }
+  };
 
   displayNotification = () => {
-    const {notificationType, title, content} = this.props;
+    const {notificationType, title, content, t} = this.props;
     notification[notificationType]({
-      message: title,
-      description: content,
+      message: t(title),
+      description: t(content),
     });
-  }
+  };
 
   displayMessage = () => {
-    const {messageType, content} = this.props;
-    message[messageType](content);
-  }
+    const {messageType, content, t} = this.props;
+    message[messageType](t(content));
+  };
 
   render() {
     return (
@@ -39,7 +40,7 @@ export class NotificationsWithoutRedux extends Component {
       </div>
     );
   }
-};
+}
 
 const mapStateToProps = (state) => {
   return {
@@ -52,4 +53,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export const Notifications = new connect(mapStateToProps)(NotificationsWithoutRedux);
+export const Notifications = connect(mapStateToProps)(withTranslation('notifications')(NotificationsWithoutRedux));

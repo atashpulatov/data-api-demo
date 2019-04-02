@@ -37,6 +37,7 @@ function onLogOut(action, state) {
       authToken: undefined,
       userFullName: undefined,
       userInitials: undefined,
+      userLocale: null,
     };
   }
   return {};
@@ -66,6 +67,7 @@ function onGetUserInfo(action, state) {
     ...state,
     userFullName: action.userFullName,
     userInitials: action.userInitials,
+    userLocale: action.userLocale,
   };
 }
 

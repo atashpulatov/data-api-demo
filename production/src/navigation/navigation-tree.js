@@ -6,6 +6,7 @@ import {PopupButtons} from '../popup/popup-buttons.jsx';
 import {FolderBrowser} from 'mstr-react-library';
 import {connect} from 'react-redux';
 import {selectFolder, selectObject, setDataSource, startImport, startLoading} from './navigation-tree-actions';
+import {withTranslation} from 'react-i18next';
 
 export class _NavigationTree extends Component {
   constructor(props) {
@@ -72,7 +73,7 @@ export class _NavigationTree extends Component {
 
   render() {
     const {setDataSource, dataSource, chosenObjectId, chosenProjectId, pageSize,
-      chosenSubtype, folder, selectFolder, loading, handlePopupErrors, scrollPosition} = this.props;
+      chosenSubtype, folder, selectFolder, loading, handlePopupErrors, scrollPosition, t} = this.props;
     return (
       <FolderBrowser
         title='Import data'
@@ -92,6 +93,7 @@ export class _NavigationTree extends Component {
         chosenFolder={folder}
         onChoseFolder={selectFolder}
         handlePopupErrors={handlePopupErrors}
+        t={t}
       >
         {/* Temporary loading user action block */}
         <div style={{
@@ -131,4 +133,4 @@ const mapDispatchToProps = {
   startLoading,
 };
 
-export const NavigationTree = connect(mapStateToProps, mapDispatchToProps)(_NavigationTree);
+export const NavigationTree = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_NavigationTree));

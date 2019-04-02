@@ -1,34 +1,37 @@
 import React from 'react';
 import {Button} from 'antd';
 import './popup-buttons.css';
+import {withTranslation} from 'react-i18next';
 
-export const PopupButtons = ({handleOk, handleSecondary,
-  handleCancel, handleBack, loading, disableActiveActions, onPreviewClick}) => {
+export const _PopupButtons = ({handleOk, handleSecondary,
+  handleCancel, handleBack, loading, disableActiveActions, onPreviewClick, t}) => {
   return (
     <div className="popup-buttons popup-footer">
       {!handleSecondary && <Button id="data-preview" onClick={onPreviewClick} disabled={disableActiveActions}>
-        Data Preview
+        {t('Data Preview')}
       </Button>}
       {
         handleBack &&
         <Button id="back" onClick={handleBack}>
-          Back
+          {t('Back')}
         </Button>
       }
       <Button id="import" type={!handleSecondary ? 'primary' : ''} onClick={handleOk} loading={loading} disabled={disableActiveActions}>
-        Import
+        {t('Import')}
       </Button>
       {
         handleSecondary &&
         <Button id="prepare" type="primary"
           disabled={disableActiveActions || loading}
           onClick={handleSecondary}>
-          Prepare Data
+          {t('Prepare Data')}
         </Button>
       }
       <Button id="cancel" onClick={handleCancel}>
-        Cancel
+        {t('Cancel')}
       </Button>
     </div >
   );
 };
+
+export const PopupButtons = withTranslation('common')(_PopupButtons);

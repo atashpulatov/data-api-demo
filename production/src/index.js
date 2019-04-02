@@ -3,6 +3,8 @@ import 'proxy-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Home} from './home/home.jsx';
+import i18next from './i18n';
+import {I18nextProvider} from 'react-i18next';
 // import * as serviceWorker from './serviceWorker';
 import {reduxStore, reduxPersistor} from './store';
 import {Provider} from 'react-redux';
@@ -21,7 +23,9 @@ function goReact() {
   ReactDOM.render(
       <Provider store={reduxStore}>
         <PersistGate persistor={reduxPersistor}>
-          <Home loading={false} />
+          <I18nextProvider>
+            <Home loading={false} />
+          </I18nextProvider>
         </PersistGate>
       </Provider>
       , document.getElementById('root')

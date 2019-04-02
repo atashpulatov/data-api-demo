@@ -2,6 +2,7 @@ import {reduxStore} from '../store';
 import {sessionProperties} from './session-properties';
 import {authenticationService} from '../authentication/auth-rest-service';
 import {errorService} from '../error/error-handler';
+import i18next from '../i18n';
 
 class SessionHelper {
   enableLoading = () => {
@@ -68,16 +69,19 @@ class SessionHelper {
   }
   saveUserInfo = (values) => {
     if (values) {
+      i18next.changeLanguage(values.locale || 'en');
       reduxStore.dispatch({
         type: sessionProperties.actions.getUserInfo,
         userFullName: values.fullName ? values.fullName : 'Microstrategy User',
         userInitials: values.initials ? values.initials : null,
+        userLocale: values.locale || 'en',
       });
     } else {
       reduxStore.dispatch({
         type: sessionProperties.actions.getUserInfo,
         userFullName: 'Microstrategy User',
         userInitials: null,
+        userLocale: 'en',
       });
     }
   }
