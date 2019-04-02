@@ -5,6 +5,7 @@ import {objectTypes} from 'mstr-react-library';
 import {errorService} from '../../src/error/error-handler';
 import {EnvironmentNotFoundError} from '../../src/error/environment-not-found-error';
 import {PopupTypeEnum} from '../../src/home/popup-type-enum';
+import {officeApiHelper} from '../../src/office/office-api-helper';
 
 describe('PopupController', () => {
   const dialog = {};
@@ -46,6 +47,7 @@ describe('PopupController', () => {
         const arg = {
           message: JSON.stringify(actionObject),
         };
+        officeApiHelper.getOfficeSessionStatus = jest.fn();
         const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
         // when
         await popupController.onMessageFromPopup(dialog, arg);
@@ -72,6 +74,7 @@ describe('PopupController', () => {
         const arg = {
           message: JSON.stringify(actionObject),
         };
+        officeApiHelper.getOfficeSessionStatus = jest.fn();
         const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
         // when
         await popupController.onMessageFromPopup(dialog, arg);
@@ -97,7 +100,7 @@ describe('PopupController', () => {
     const givenArg = {
       message: expectedMessage,
     };
-
+    officeApiHelper.getOfficeSessionStatus = jest.fn();
     const handleErrorSpy = jest.spyOn(errorService, 'handleError');
     // when
     await popupController.onMessageFromPopup(dialog, givenArg);
