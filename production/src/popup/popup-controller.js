@@ -34,6 +34,7 @@ class PopupController {
     }
     const splittedUrl = url.split('?'); // we need to get rid of any query params
     try {
+      await officeApiHelper.getExcelSessionStatus();
       Office.context.ui.displayDialogAsync(
           splittedUrl[0]
         + '?popupType=' + popupType
