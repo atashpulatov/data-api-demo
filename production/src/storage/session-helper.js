@@ -2,6 +2,7 @@ import {reduxStore} from '../store';
 import {sessionProperties} from './session-properties';
 import {authenticationService} from '../authentication/auth-rest-service';
 import {errorService} from '../error/error-handler';
+import {homeHelper} from '../home/home-helper';
 
 class SessionHelper {
   enableLoading = () => {
@@ -31,23 +32,29 @@ class SessionHelper {
     };
   }
   logOutRedirect = () => {
-    if (!window.location.origin.includes('localhost')) {
+    const windowLocation = {origin: homeHelper.getWindowLocation()};
+    if (!windowLocation.origin.includes('localhost')) {
       const currentPath = window.location.pathname;
       const pathBeginning = currentPath.split('/apps/')[0];
       const loginParams = 'source=addin-mstr-office';
-      window.location.replace(`${pathBeginning}/static/loader-mstr-office/index.html?${loginParams}`);
+      this.replaceWindowLocation(pathBeginning, loginParams);
     } else {
       sessionHelper.disableLoading();
     }
   };
+  replaceWindowLocation = (pathBeginning, loginParams) => {
+    window.location.replace(`${pathBeginning}/static/loader-mstr-office/index.html?${loginParams}`);
+  }
 
   saveLoginValues = (values) => {
+    console.log('values:', values);
     reduxStore.dispatch({
       type: sessionProperties.actions.logIn,
       envUrl: values.envUrl,
     });
   }
   logIn = (authToken) => {
+    console.log('authToken:', authToken);
     reduxStore.dispatch({
       type: sessionProperties.actions.loggedIn,
       authToken: authToken,
@@ -67,19 +74,11 @@ class SessionHelper {
     return session;
   }
   saveUserInfo = (values) => {
-    if (values) {
-      reduxStore.dispatch({
-        type: sessionProperties.actions.getUserInfo,
-        userFullName: values.fullName ? values.fullName : 'Microstrategy User',
-        userInitials: values.initials ? values.initials : null,
-      });
-    } else {
-      reduxStore.dispatch({
-        type: sessionProperties.actions.getUserInfo,
-        userFullName: 'Microstrategy User',
-        userInitials: null,
-      });
-    }
+    reduxStore.dispatch({
+      type: sessionProperties.actions.getUserInfo,
+      userFullName: values.fullName ? values.fullName : 'Microstrategy User',
+      userInitials: values.initials ? values.initials : null,
+    });
   }
 
   setDialog = (dialog) => {
