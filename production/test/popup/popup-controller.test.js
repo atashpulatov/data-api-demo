@@ -37,6 +37,7 @@ describe('PopupController', () => {
   it('should handle update command from popup for cube',
       async () => {
       // given
+        officeApiHelper.getExcelSessionStatus = jest.fn();
         const actionObject = {
           command: selectorProperties.commandOnUpdate,
           reportId: 'reportId',
@@ -64,6 +65,7 @@ describe('PopupController', () => {
   it('should handle update command from popup for report',
       async () => {
       // given
+        officeApiHelper.getExcelSessionStatus = jest.fn();
         const actionObject = {
           command: selectorProperties.commandOnUpdate,
           reportId: 'reportId',
@@ -90,6 +92,7 @@ describe('PopupController', () => {
 
   it('should handle error command from popup', async () => {
     // given
+    officeApiHelper.getExcelSessionStatus = jest.fn();
     const command = selectorProperties.commandError;
     const error = {
       response: {
