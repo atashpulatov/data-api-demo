@@ -1,5 +1,5 @@
 import {officeApiHelper} from './office-api-helper';
-import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';
+import {mstrObjectRestService, DATA_LIMIT} from '../mstr-object/mstr-object-rest-service';
 import {reduxStore} from '../store';
 import {officeProperties} from './office-properties';
 import {officeStoreService} from './store/office-store-service';
@@ -11,19 +11,35 @@ import {PopupTypeEnum} from '../home/popup-type-enum';
 import {NOT_SUPPORTED_NO_ATTRIBUTES} from '../error/constants';
 import {OverlappingTablesError} from '../error/overlapping-tables-error';
 
-const EXCEL_PAGINATION = 5000;
+const DEBUG = true;
+
 
 class OfficeDisplayService {
+  printObject = async (objectId, projectId, isReport = true, ...args) => {
+    const objectInfo = await mstrObjectRestService.getObjectInfo(objectId, projectId, isReport);
+    reduxStore.dispatch({
+      type: officeProperties.actions.preLoadReport,
+      preLoadReport: objectInfo,
+    });
+    popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
+    return this._printObject(objectId, projectId, isReport, ...args);
+  }
+
   _printObject = async (objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh) => {
     try {
       // Get excel context and initial cell
+      DEBUG && console.groupCollapsed('Importing data performance');
+      DEBUG && console.time('Total');
+      DEBUG && console.time('Init excel');
       const excelContext = await officeApiHelper.getExcelContext();
       const startCell = selectedCell || await officeApiHelper.getSelectedCell(excelContext);
+      DEBUG && console.timeEnd('Init excel');
 
       // Get mstr instance definition
+      DEBUG && console.time('Instance definition');
       const objectType = isReport ? 'report' : 'dataset';
       const instanceDefinition = await mstrObjectRestService.getInstanceDefinition(objectId, projectId, isReport);
-      console.log(instanceDefinition);
+      DEBUG && console.timeEnd('Instance definition');
 
       // Check if instance returned data
       if (!instanceDefinition || instanceDefinition.rows === 0) {
@@ -31,14 +47,19 @@ class OfficeDisplayService {
       }
 
       // Create empty table
+      DEBUG && console.time('Create empty table');
       const newOfficeTableId = officeTableId || officeApiHelper.findAvailableOfficeTableId();
       // TODO: Add logic to get table if isRefresh
       const officeTable = await this._createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId);
+      DEBUG && console.timeEnd('Create empty table');
 
-      // Fetch, convert and insert in chain of promises
+      // Fetch, convert and insert with promise generator
+      DEBUG && console.time('Fetch and insert into excel');
       const connectionData = {objectId, projectId, isReport, body};
       const officeData = {officeTable, excelContext, startCell, newOfficeTableId};
-      await this._fetchInsertDataIntoExcel(connectionData, officeData);
+      await this._fetchInsertDataIntoExcel(connectionData, officeData, instanceDefinition);
+      DEBUG && console.timeEnd('Fetch and insert into excel');
+      DEBUG && console.timeEnd('Total');
 
       const {envUrl} = officeApiHelper.getCurrentMstrContext();
       bindingId = bindingId || newOfficeTableId;
@@ -48,7 +69,7 @@ class OfficeDisplayService {
       if (!officeTableId && !isRefresh) {
         await this.addReportToStore({
           id: officeTable.id,
-          name: officeTable.name,
+          name: instanceDefinition.mstrTable.name,
           bindId: bindingId,
           tableId: newOfficeTableId,
           projectId,
@@ -60,24 +81,15 @@ class OfficeDisplayService {
       }
       return !isRefresh && {type: 'success', message: `Data loaded successfully`};
     } catch (error) {
-      console.log(error);
+      DEBUG && console.log(error);
       throw errorService.errorOfficeFactory(error);
     } finally {
+      DEBUG && console.groupEnd();
       const reduxStoreState = reduxStore.getState();
       reduxStore.dispatch({type: officeProperties.actions.popupHidden});
       reduxStore.dispatch({type: officeProperties.actions.stopLoading});
       reduxStoreState.sessionReducer.dialog.close();
     }
-  }
-
-  printObject = async (objectId, projectId, isReport = true, ...args) => {
-    const objectInfo = await mstrObjectRestService.getObjectInfo(objectId, projectId, isReport);
-    reduxStore.dispatch({
-      type: officeProperties.actions.preLoadReport,
-      preLoadReport: objectInfo,
-    });
-    popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
-    return this._printObject(objectId, projectId, isReport, ...args);
   }
 
   // TODO: move it to api helper?
@@ -99,13 +111,22 @@ class OfficeDisplayService {
     officeStoreService.preserveReport(report);
   };
 
+  removeReportFromStore = (bindingId) => {
+    reduxStore.dispatch({
+      type: officeProperties.actions.removeReport,
+      reportBindId: bindingId,
+    });
+    officeStoreService.deleteReport(bindingId);
+    return true;
+  };
+
   removeReportFromExcel = async (bindingId, isRefresh) => {
     try {
       await authenticationHelper.validateAuthToken();
       const officeContext = await officeApiHelper.getOfficeContext();
       try {
         await officeContext.document.bindings.releaseByIdAsync(bindingId, (asyncResult) => {
-          console.log('released binding');
+          DEBUG && console.log('released binding');
         });
         const excelContext = await officeApiHelper.getExcelContext();
         const tableObject = excelContext.workbook.tables.getItem(bindingId);
@@ -122,15 +143,6 @@ class OfficeDisplayService {
     } catch (error) {
       return errorService.handleError(error);
     }
-  };
-
-  removeReportFromStore = (bindingId) => {
-    reduxStore.dispatch({
-      type: officeProperties.actions.removeReport,
-      reportBindId: bindingId,
-    });
-    officeStoreService.deleteReport(bindingId);
-    return true;
   };
 
   // TODO: we could filter data to display options related to current envUrl
@@ -159,50 +171,7 @@ class OfficeDisplayService {
     }
   };
 
-  _fetchInsertDataIntoExcel(connectionData, officeData) {
-    // TODO: Continue here
-  }
-
-  _appendRowsToTable(officeContext, officeTable, rowsData) {
-    officeTable.getDataBodyRange().values = rowsData;
-    return officeContext.sync();
-  }
-
-  _insertDataIntoExcel = async (reportConvertedData, context, startCell, tableName) => {
-    const hasHeaders = true;
-    const sheet = context.workbook.worksheets.getActiveWorksheet();
-    const endRow = Math.min(EXCEL_PAGINATION, reportConvertedData.rows.length);
-    const HEADER_END_ROW_INDEX = 0;
-    officeApiHelper.getRange(reportConvertedData.headers.length, startCell, HEADER_END_ROW_INDEX);
-
-    const tableRange = officeApiHelper.getRange(reportConvertedData.headers.length, startCell, endRow);
-    const sheetRange = sheet.getRange(tableRange);
-    context.trackedObjects.add(sheetRange);
-    await this._checkRangeValidity(context, sheetRange);
-
-    const rowsData = this._getRowsArray(reportConvertedData);
-    const mstrTable = sheet.tables.add(tableRange, hasHeaders);
-
-    try {
-      mstrTable.load('name');
-      mstrTable.name = tableName;
-      mstrTable.getHeaderRowRange().values = [reportConvertedData.headers];
-      mstrTable.getDataBodyRange().values = rowsData.slice(0, endRow);
-      await context.sync();
-      officeApiHelper.formatNumbers(mstrTable, reportConvertedData);
-      await this._addRowsSequentially(rowsData, endRow, mstrTable, context);
-      officeApiHelper.formatTable(sheet);
-      sheet.activate();
-      await context.sync();
-      return mstrTable;
-    } catch (error) {
-      mstrTable.delete();
-      await context.sync();
-      throw error;
-    }
-  }
-
-  _createOfficeTable = async (instanceDefinition, context, startCell, tableName) => {
+  _createOfficeTable = async (instanceDefinition, context, startCell, officeTableId) => {
     const hasHeaders = true;
     const {rows, columns, mstrTable} = instanceDefinition;
     const sheet = context.workbook.worksheets.getActiveWorksheet();
@@ -210,19 +179,53 @@ class OfficeDisplayService {
     const sheetRange = sheet.getRange(tableRange);
     await this._checkRangeValidity(context, sheetRange);
 
-    const excelTable = sheet.tables.add(tableRange, hasHeaders);
+    const officeTable = sheet.tables.add(tableRange, hasHeaders);
     try {
-      excelTable.load('name');
-      excelTable.name = tableName;
-      excelTable.getHeaderRowRange().values = [mstrTable.headers];
+      officeTable.load('name');
+      officeTable.name = officeTableId;
+      officeTable.getHeaderRowRange().values = [mstrTable.headers];
       sheet.activate();
       await context.sync();
-      return mstrTable;
+      return officeTable;
     } catch (error) {
-      excelTable.delete();
+      officeTable.delete();
       await context.sync();
       throw error;
     }
+  }
+
+  async _fetchInsertDataIntoExcel(connectionData, officeData, instanceDefinition) {
+    try {
+      const {objectId, projectId, isReport, body} = connectionData;
+      const {excelContext, officeTable} = officeData;
+      const {mstrTable, columns, rows} = instanceDefinition;
+      const {headers} = mstrTable;
+      const limit = Math.floor(DATA_LIMIT / columns);
+      const rowGenerator = mstrObjectRestService.getObjectContentGenerator(instanceDefinition, objectId, projectId, isReport, body, limit);
+      let rowIndex = 0;
+      const contextPromises = [];
+      for await (const row of rowGenerator) {
+        DEBUG && console.groupCollapsed(`Importing rows: ${rowIndex} to ${Math.min(rowIndex + limit, rows)}`);
+        DEBUG && console.timeEnd('Fetch data');
+        DEBUG && console.time('Append rows');
+        const excelRows = this._getRowsArray(row, headers);
+        this._appendRowsToTable(officeTable, excelRows, rowIndex);
+        rowIndex += row.length;
+        DEBUG && console.timeEnd('Append rows');
+        contextPromises.push(excelContext.sync());
+        DEBUG && console.time('Fetch data');
+        DEBUG && console.groupEnd();
+      };
+      DEBUG && console.time('Context sync');
+      await Promise.all(contextPromises);
+      DEBUG && console.timeEnd('Context sync');
+    } catch (error) {
+      DEBUG && console.log(error);
+    }
+  }
+
+  _appendRowsToTable(officeTable, excelRows, rowIndex) {
+    officeTable.getHeaderRowRange().getRowsBelow(excelRows.length).getOffsetRange(rowIndex, 0).values = excelRows;
   }
 
   _checkRangeValidity = async (context, excelRange) => {
@@ -234,27 +237,10 @@ class OfficeDisplayService {
     }
   }
 
-  _getRowsArray = (reportConvertedData) => {
-    return reportConvertedData.rows
-        .map((item) => reportConvertedData.headers
-            .map((header) => item[header]));
-  }
-
-  _addRowsSequentially = async (rowsData, endRow, mstrTable, context) => {
-    try {
-      if (rowsData.length > endRow) {
-        const startIndex = endRow;
-        for (let i = startIndex; i < rowsData.length; i += EXCEL_PAGINATION) {
-          await context.sync();
-          context.workbook.application.suspendApiCalculationUntilNextSync();
-          const endIndex = Math.min(rowsData.length, i + EXCEL_PAGINATION);
-          mstrTable.getDataBodyRange().getRowsBelow(Math.min(rowsData.length - i, EXCEL_PAGINATION)).values = rowsData.slice(i, endIndex);
-        }
-        await context.sync();
-      }
-    } catch (error) {
-      throw error;
-    }
+  _getRowsArray = (rows, headers) => {
+    return rows
+      .map((item) => headers
+        .map((header) => item[header]));
   }
 }
 

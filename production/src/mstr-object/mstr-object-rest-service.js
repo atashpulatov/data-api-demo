@@ -5,7 +5,7 @@ import {moduleProxy} from '../module-proxy';
 import {officeConverterService} from '../office/office-converter-service';
 
 const sharedFolderIdType = 7;
-export const REQUEST_LIMIT = 5000;
+export const DATA_LIMIT = 200000;
 const EXCEL_ROW_LIMIT = 1048576;
 const EXCEL_COLUMN_LIMIT = 16384;
 
@@ -101,7 +101,7 @@ class MstrObjectRestService {
         });
   };
 
-  async getObjectContent(objectId, projectId, isReport = true, body = {}, limit = REQUEST_LIMIT) {
+  async getObjectContent(objectId, projectId, isReport = true, body = {}, limit = DATA_LIMIT) {
     const storeState = reduxStore.getState();
     const envUrl = storeState.sessionReducer.envUrl;
     const authToken = storeState.sessionReducer.authToken;
@@ -135,11 +135,11 @@ class MstrObjectRestService {
     }
   }
 
-  getObjectContentGenerator(instanceDefinition, objectId, projectId, isReport, body, limit = REQUEST_LIMIT) {
+  getObjectContentGenerator(instanceDefinition, objectId, projectId, isReport, body, limit = DATA_LIMIT) {
     return fetchContentGenerator(instanceDefinition, objectId, projectId, isReport, body, limit);
   }
 
-  fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = REQUEST_LIMIT) {
+  fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = DATA_LIMIT) {
     return moduleProxy.request
         .get(`${fullPath}?offset=${offset}&limit=${limit}`)
         .set('x-mstr-authtoken', authToken)
@@ -169,8 +169,6 @@ async function* fetchContentGenerator(instanceDefinition, objectId, projectId, i
     let offset = 0;
 
     while (fetchedRows < totalRows && fetchedRows < EXCEL_ROW_LIMIT) {
-      console.log(fetchedRows, totalRows);
-      // const mstrObjectRestService = new MstrObjectRestService();
       const response = await mstrObjectRestService.fetchObjectContent(fullPath, authToken, projectId, offset, limit);
       const {current} = response.body.result.data.paging;
       fetchedRows = current + offset;
