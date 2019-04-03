@@ -204,6 +204,7 @@ class OfficeDisplayService {
       const rowGenerator = mstrObjectRestService.getObjectContentGenerator(instanceDefinition, objectId, projectId, isReport, body, limit);
       let rowIndex = 0;
       const contextPromises = [];
+      DEBUG && console.time('Fetch data');
       for await (const row of rowGenerator) {
         DEBUG && console.groupCollapsed(`Importing rows: ${rowIndex} to ${Math.min(rowIndex + limit, rows)}`);
         DEBUG && console.timeEnd('Fetch data');
@@ -216,9 +217,16 @@ class OfficeDisplayService {
         DEBUG && console.time('Fetch data');
         DEBUG && console.groupEnd();
       };
+
       DEBUG && console.time('Context sync');
       await Promise.all(contextPromises);
       DEBUG && console.timeEnd('Context sync');
+
+      DEBUG && console.time('Apply formatting');
+      officeApiHelper.formatNumbers(officeTable, mstrTable);
+      officeApiHelper.formatTable(officeTable);
+      await excelContext.sync();
+      DEBUG && console.timeEnd('Apply formatting');
     } catch (error) {
       DEBUG && console.log(error);
     }
@@ -239,8 +247,8 @@ class OfficeDisplayService {
 
   _getRowsArray = (rows, headers) => {
     return rows
-      .map((item) => headers
-        .map((header) => item[header]));
+        .map((item) => headers
+            .map((header) => item[header]));
   }
 }
 

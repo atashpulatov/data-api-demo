@@ -104,8 +104,8 @@ class OfficeApiHelper {
 
   formatTable = (sheet) => {
     if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
-      sheet.getUsedRange().format.autofitColumns();
-      sheet.getUsedRange().format.autofitRows();
+      sheet.getRange().format.autofitColumns();
+      sheet.getRange().format.autofitRows();
     } else {
       notificationService.displayMessage('warning', `Unable to format table.`);
     }
@@ -127,7 +127,7 @@ class OfficeApiHelper {
             } else {
               format = object.formatString;
 
-              if (format.indexOf('$') != -1) {
+              if (format.indexOf('$') !== -1) {
                 format = format.replace(/[$]/g, '\\$').replace(/["]/g, ''); // fix anoying $-sign currency replacemnt in Excel
               }
             }

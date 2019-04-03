@@ -5,6 +5,7 @@ import {moduleProxy} from '../module-proxy';
 import {officeConverterService} from '../office/office-converter-service';
 
 const sharedFolderIdType = 7;
+// 200000 is around 1mb of MSTR JSON response
 export const DATA_LIMIT = 200000;
 const EXCEL_ROW_LIMIT = 1048576;
 const EXCEL_COLUMN_LIMIT = 16384;
