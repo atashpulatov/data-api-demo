@@ -46,12 +46,18 @@ class OfficeDisplayService {
         return {type: 'warning', message: NOT_SUPPORTED_NO_ATTRIBUTES};
       }
 
-      // Create empty table
-      DEBUG && console.time('Create empty table');
+      // TODO: If isRefresh check if new instance definition is same as before
+
+      // Create or get table
+      DEBUG && console.time('Create or get table');
       const newOfficeTableId = officeTableId || officeApiHelper.findAvailableOfficeTableId();
-      // TODO: Add logic to get table if isRefresh
-      const officeTable = await this._createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId);
-      DEBUG && console.timeEnd('Create empty table');
+      let officeTable;
+      if (isRefresh) {
+        officeTable = await officeApiHelper.getTable(excelContext, bindingId);
+      } else {
+        officeTable = await this._createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId);
+      }
+      DEBUG && console.timeEnd('Create or get table');
 
       // Fetch, convert and insert with promise generator
       DEBUG && console.time('Fetch and insert into excel');
@@ -68,7 +74,7 @@ class OfficeDisplayService {
 
       if (!officeTableId && !isRefresh) {
         await this.addReportToStore({
-          id: officeTable.id,
+          id: instanceDefinition.mstrTable.id,
           name: instanceDefinition.mstrTable.name,
           bindId: bindingId,
           tableId: newOfficeTableId,
@@ -145,20 +151,11 @@ class OfficeDisplayService {
     }
   };
 
-  // TODO: we could filter data to display options related to current envUrl
   refreshReport = async (bindingId, objectType) => {
-    const isReport = objectType === 'report';
-    const isRefresh = true;
-    const excelContext = await officeApiHelper.getExcelContext();
     try {
-      await officeApiHelper.onBindingObjectClick(bindingId);
-      const range = officeApiHelper.getBindingRange(excelContext, bindingId);
-      range.load('address');
-      await excelContext.sync();
-      const startCell = range.address.split('!')[1].split(':')[0];
+      const isReport = objectType === 'report';
       const refreshReport = officeStoreService.getReportFromProperties(bindingId);
-      await this.removeReportFromExcel(bindingId, isRefresh);
-      const result = await this.printObject(refreshReport.id, refreshReport.projectId, isReport, startCell, refreshReport.tableId, bindingId, refreshReport.body, true);
+      const result = await this.printObject(refreshReport.id, refreshReport.projectId, isReport, true, refreshReport.tableId, bindingId, refreshReport.body, true);
       if (result) {
         notificationService.displayMessage(result.type, result.message);
       }
@@ -223,8 +220,8 @@ class OfficeDisplayService {
       DEBUG && console.timeEnd('Context sync');
 
       DEBUG && console.time('Apply formatting');
-      officeApiHelper.formatNumbers(officeTable, mstrTable);
-      officeApiHelper.formatTable(officeTable);
+      await officeApiHelper.formatTable(officeTable);
+      await officeApiHelper.formatNumbers(officeTable, mstrTable);
       await excelContext.sync();
       DEBUG && console.timeEnd('Apply formatting');
     } catch (error) {

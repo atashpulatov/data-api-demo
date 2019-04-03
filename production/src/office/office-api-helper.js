@@ -69,6 +69,11 @@ class OfficeApiHelper {
         .getRange();
   }
 
+  getTable = (context, bindingId) => {
+    return context.workbook.bindings
+        .getItem(bindingId).getTable();
+  }
+
   getExcelContext = async () => {
     return await Excel.run(async (context) => {
       return context;
@@ -111,7 +116,7 @@ class OfficeApiHelper {
     }
   }
 
-  formatNumbers = async (table, reportConvertedData) => {
+  formatNumbers = (table, reportConvertedData) => {
     if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
       try {
         const rowsCount = reportConvertedData.rows.length;
@@ -136,7 +141,7 @@ class OfficeApiHelper {
           }
         }
 
-        await table.context.sync();
+        return table.context.sync();
       } catch (error) {
         throw errorService.handleError(error);
       }
