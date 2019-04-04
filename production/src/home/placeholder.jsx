@@ -12,7 +12,7 @@ export const _Placeholder = ({loading, t}) => {
       <img width='189px' height='108px' src={folderArt} alt={t('Office Add-in logo')} />
       <h2>{t('Let\'s get started')}</h2>
       <p>{t('You haven\'t imported any report or dataset yet. Let\'s import data to start!')}</p>
-      <Button type='primary' onClick={popupController.runPopupNavigation} disabled={loading}>{t('Import Data')}</Button>
+      <Button id='import-data-placeholder' type='primary' onClick={popupController.runPopupNavigation} disabled={loading}>{t('Import Data')}</Button>
     </div>
   );
 };

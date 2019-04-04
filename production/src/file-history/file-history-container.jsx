@@ -13,7 +13,7 @@ export class _FileHistoryContainer extends Component {
     const {reportArray, loading, t} = this.props;
     return (
       <div>
-        <Button className="add-data-btn" onClick={popupController.runPopupNavigation} disabled={loading}>{t('Add Data')}</Button>
+        <Button id="add-data-btn-container" className="add-data-btn" onClick={popupController.runPopupNavigation} disabled={loading}>{t('Add Data')}</Button>
         <List
           className='ant-list-header-override'
           size='small'

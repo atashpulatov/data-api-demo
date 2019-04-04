@@ -112,4 +112,40 @@ describe('OfficeConverterService', () => {
 
     testHelper.expectEqualsGivenReport(result, expectedReportPath);
   });
+
+  it('should convert no attributes report', () => {
+    // given
+    const expectedReportPath = path.join(
+        __dirname,
+        '__expected__/no-attributes-report.js'
+    );
+    // when
+    const result = officeConverterService.createTable(mockReports[5]);
+    // then
+    expect(result).toBeDefined();
+    testHelper.expectPropertiesDefined(result);
+    expect(result.headers).toContain('Cost');
+    expect(result.headers).toContain('Profit');
+    expect(result.rows.length).toEqual(0);
+    testHelper.expectEqualsGivenReport(result, expectedReportPath);
+  });
+
+  it('should convert all filtered out report', () => {
+    // given
+    const expectedReportPath = path.join(
+        __dirname,
+        '__expected__/all-filtered-out-report.js'
+    );
+    // when
+    const result = officeConverterService.createTable(mockReports[6]);
+    // then
+    expect(result).toBeDefined();
+    testHelper.expectPropertiesDefined(result);
+    expect(result.headers).toContain('Region');
+    expect(result.headers).toContain('Call Center');
+    expect(result.headers).toContain('Revenue');
+    expect(result.headers).toContain('Cost');
+    expect(result.rows.length).toEqual(0);
+    testHelper.expectEqualsGivenReport(result, expectedReportPath);
+  });
 });

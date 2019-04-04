@@ -6780,9 +6780,9 @@ ms@^2.1.1:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.1.tgz#30a5864eb3ebb0a66f2ebe6d727af06a09d86e0a"
   integrity sha512-tgp+dl5cGk28utYktBsrFqA7HKgrhgPsg6Z/EfhWI4gl1Hwq8B/GmY/0oXZ6nF8hDVesS/FpnYaD/kOWhYQvyg==
 
-"mstr-react-library@ssh://git@github.microstrategy.com:Tech/mstr-react-library.git#cfa2b1f94a95ea9f233026a67678e57de82eabe5":
+"mstr-react-library@ssh://git@github.microstrategy.com:Tech/mstr-react-library.git#69939cd626f82a64383789e7a1c90b4e1a4ea5c0":
   version "1.0.0"
-  resolved "ssh://git@github.microstrategy.com:Tech/mstr-react-library.git#cfa2b1f94a95ea9f233026a67678e57de82eabe5"
+  resolved "ssh://git@github.microstrategy.com:Tech/mstr-react-library.git#69939cd626f82a64383789e7a1c90b4e1a4ea5c0"
   dependencies:
     antd "^3.13.1"
     react-virtualized "^9.21.0"

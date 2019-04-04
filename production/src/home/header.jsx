@@ -12,8 +12,7 @@ import {withTranslation} from 'react-i18next';
 export class _Header extends Component {
   componentDidMount = async () => {
     let userData = {};
-    const URL = `${window.location.href}`;
-    const IS_LOCALHOST = URL.includes('localhost');
+    const IS_LOCALHOST = this.props.IS_LOCALHOST;
     const envUrl = IS_LOCALHOST ? this.props.envUrl : homeHelper.saveLoginValues();
     const authToken = IS_LOCALHOST ? this.props.authToken : homeHelper.saveTokenFromCookies();
     try {

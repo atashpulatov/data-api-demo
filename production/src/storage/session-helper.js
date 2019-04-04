@@ -3,6 +3,7 @@ import {sessionProperties} from './session-properties';
 import {authenticationService} from '../authentication/auth-rest-service';
 import {errorService} from '../error/error-handler';
 import i18next from '../i18n';
+import {homeHelper} from '../home/home-helper';
 
 class SessionHelper {
   enableLoading = () => {
@@ -32,15 +33,19 @@ class SessionHelper {
     };
   }
   logOutRedirect = () => {
-    if (!window.location.origin.includes('localhost')) {
+    const {origin} = homeHelper.getWindowLocation();
+    if (!origin.includes('localhost')) {
       const currentPath = window.location.pathname;
       const pathBeginning = currentPath.split('/apps/')[0];
       const loginParams = 'source=addin-mstr-office';
-      window.location.replace(`${pathBeginning}/static/loader-mstr-office/index.html?${loginParams}`);
+      this.replaceWindowLocation(pathBeginning, loginParams);
     } else {
       sessionHelper.disableLoading();
     }
   };
+  replaceWindowLocation = (pathBeginning, loginParams) => {
+    window.location.replace(`${pathBeginning}/static/loader-mstr-office/index.html?${loginParams}`);
+  }
 
   saveLoginValues = (values) => {
     reduxStore.dispatch({
@@ -68,22 +73,13 @@ class SessionHelper {
     return session;
   }
   saveUserInfo = (values) => {
-    if (values) {
-      i18next.changeLanguage(values.locale || 'en');
-      reduxStore.dispatch({
-        type: sessionProperties.actions.getUserInfo,
-        userFullName: values.fullName ? values.fullName : 'Microstrategy User',
-        userInitials: values.initials ? values.initials : null,
-        userLocale: values.locale || 'en',
-      });
-    } else {
-      reduxStore.dispatch({
-        type: sessionProperties.actions.getUserInfo,
-        userFullName: 'Microstrategy User',
-        userInitials: null,
-        userLocale: 'en',
-      });
-    }
+    i18next.changeLanguage(values.locale || 'en');
+    reduxStore.dispatch({
+      type: sessionProperties.actions.getUserInfo,
+      userFullName: values.fullName ? values.fullName : 'Microstrategy User',
+      userInitials: values.initials ? values.initials : null,
+      userLocale: values.locale || 'en',
+    });
   }
 
   setDialog = (dialog) => {
