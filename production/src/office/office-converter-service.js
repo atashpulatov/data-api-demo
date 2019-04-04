@@ -42,6 +42,7 @@ class OfficeConverterService {
         const formValues = node.element.formValues;
         let attributeFormsCount = 0;
         for (const key in formValues) {
+          /* istanbul ignore else */
           if (formValues.hasOwnProperty(key)) {
             attributeFormsCount++;
           }
@@ -50,6 +51,7 @@ class OfficeConverterService {
             level + attributeFormsCount);
         childRows = childRows.map((childRow) => {
           for (const key in formValues) {
+            /* istanbul ignore else */
             if (formValues.hasOwnProperty(key)) {
               childRow[headers[level]] = formValues[key];
               level++;
@@ -70,6 +72,7 @@ class OfficeConverterService {
     const formValues = node.element.formValues;
     let level = 0;
     for (const key in formValues) {
+      /* istanbul ignore else */
       if (formValues.hasOwnProperty(key)) {
         row[headers[level]] = formValues[key];
         level++;
@@ -78,6 +81,7 @@ class OfficeConverterService {
 
     const metrics = node.metrics;
     for (const property in metrics) {
+      /* istanbul ignore else */
       if (metrics.hasOwnProperty(property)) {
         row[property] = metrics[property].rv;
       }

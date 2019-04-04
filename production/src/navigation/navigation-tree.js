@@ -99,7 +99,7 @@ export class _NavigationTree extends Component {
         onScrollUpdated={updateScroll}
       >
         {/* Temporary loading user action block */}
-        <div style={{
+        <div id="action-block" style={{
           display: loading ? 'block' : 'none',
           position: 'fixed',
           top: '0',
@@ -124,7 +124,7 @@ export class _NavigationTree extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
+export const mapStateToProps = (state) => {
   return {...state.navigationTree};
 };
 
