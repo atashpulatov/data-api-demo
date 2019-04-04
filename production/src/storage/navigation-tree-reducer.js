@@ -1,4 +1,4 @@
-import {SELECT_FOLDER, SELECT_OBJECT, SET_DATA_SOURCE, START_IMPORT} from '../navigation/navigation-tree-actions';
+import {SELECT_FOLDER, SELECT_OBJECT, SET_DATA_SOURCE, START_IMPORT, CHANGE_SORTING, CHANGE_SEARCHING, UPDATE_SCROLL, UPDATE_SIZE} from '../navigation/navigation-tree-actions';
 import {CLEAR_WINDOW} from '../popup/popup-actions';
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
@@ -29,6 +29,11 @@ export const initialState = {
   loading: false,
   scrollPosition: null,
   pageSize: null,
+  sorter: {
+    columnKey: 'dateModified',
+    order: 'descend',
+  },
+  searchText: '',
 };
 
 function getProjectName(projects, projectId, objectId) {
@@ -54,8 +59,16 @@ export const navigationTree = (state = initialState, action) => {
       newState.chosenSubtype = data.chosenSubtype || null;
       newState.chosenProjectName = getProjectName(state.dataSource, data.chosenProjectId, data.chosenObjectId);
       newState.chosenType = getType(data.chosenSubtype);
-      newState.scrollPosition = data.scrollPosition;
-      newState.pageSize = data.pageSize;
+      return newState;
+    }
+    case UPDATE_SCROLL: {
+      const newState = {...state};
+      newState.scrollPosition = data;
+      return newState;
+    }
+    case UPDATE_SIZE: {
+      const newState = {...state};
+      newState.pageSize = data;
       return newState;
     }
     case SET_DATA_SOURCE: {
@@ -84,6 +97,16 @@ export const navigationTree = (state = initialState, action) => {
     case START_IMPORT: {
       const newState = {...state};
       newState.loading = true;
+      return newState;
+    }
+    case CHANGE_SORTING: {
+      const newState = {...state};
+      newState.sorter = data;
+      return newState;
+    }
+    case CHANGE_SEARCHING: {
+      const newState = {...state};
+      newState.searchText = data;
       return newState;
     }
     default: {

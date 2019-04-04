@@ -1,4 +1,5 @@
-import {SELECT_FOLDER, SELECT_OBJECT, SET_DATA_SOURCE, START_IMPORT} from '../../src/navigation/navigation-tree-actions';
+import {SELECT_FOLDER, SELECT_OBJECT, SET_DATA_SOURCE, START_IMPORT, UPDATE_SCROLL, UPDATE_SIZE,
+  CHANGE_SEARCHING, CHANGE_SORTING} from '../../src/navigation/navigation-tree-actions';
 import {navigationTree, initialState, DEFAULT_TYPE, DEFAULT_PROJECT_NAME} from '../../src/storage/navigation-tree-reducer';
 import {CLEAR_WINDOW} from '../../src/popup/popup-actions';
 
@@ -147,7 +148,7 @@ describe('NavigationTree Reducer', () => {
     expect(newState.loading).toBeTruthy();
   });
 
-  it('should return new proper state in case of START_IMPORT action', () => {
+  it('should return new proper state in case of CLEAR_WINDOW action', () => {
     // given
     const action = {
       type: CLEAR_WINDOW,
@@ -158,5 +159,61 @@ describe('NavigationTree Reducer', () => {
 
     // then
     expect(newState).toEqual(initialState);
+  });
+
+  it('should return new proper state in case of CHANGE_SORTING action', () => {
+    // given
+    const action = {
+      type: CHANGE_SORTING,
+      data: 'mock',
+    };
+
+    // when
+    const newState = navigationTree({}, action);
+
+    // then
+    expect(newState.sorter).toEqual(action.data);
+  });
+
+  it('should return new proper state in case of CHANGE_SEARCHING action', () => {
+    // given
+    const action = {
+      type: CHANGE_SEARCHING,
+      data: 'mock',
+    };
+
+    // when
+    const newState = navigationTree({}, action);
+
+    // then
+    expect(newState.searchText).toEqual(action.data);
+  });
+
+  it('should return new proper state in case of UPDATE_SIZE action', () => {
+    // given
+    const action = {
+      type: UPDATE_SIZE,
+      data: 'mock',
+    };
+
+    // when
+    const newState = navigationTree({}, action);
+
+    // then
+    expect(newState.pageSize).toEqual(action.data);
+  });
+
+  it('should return new proper state in case of UPDATE_SCROLL action', () => {
+    // given
+    const action = {
+      type: UPDATE_SCROLL,
+      data: 'mock',
+    };
+
+    // when
+    const newState = navigationTree({}, action);
+
+    // then
+    expect(newState.scrollPosition).toEqual(action.data);
   });
 });
