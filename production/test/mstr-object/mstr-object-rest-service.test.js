@@ -186,7 +186,7 @@ describe('MstrObjectRestService', () => {
       expect(result).rejects.toThrow();
     });
   });
-  describe('getObjectContent', () => {
+  describe('getInstanceDefinition', () => {
     beforeEach(() => {
       reduxStore.dispatch({
         type: sessionProperties.actions.logIn,
@@ -204,33 +204,21 @@ describe('MstrObjectRestService', () => {
         projectName: projectName,
       });
     });
-    it('should return content of report', async () => {
+    it('should return definition of report', async () => {
       // given
       const expectedReportName = 'TEST REPORT 1';
+      const expectedReportRows = 51;
+      const expectedReportCols = 4;
       // when
-      const result = await mstrObjectRestService.getObjectContent(
+      const result = await mstrObjectRestService.getInstanceDefinition(
           objectId,
           projectId,
       );
       // then
-      expect(result).toBeDefined();
-      expect(result.name).toEqual(expectedReportName);
-    });
-    it('should return content by using pagination', async () => {
-      // given
-      const expectedReportName = 'TEST REPORT 1';
-      // when
-      const result = await mstrObjectRestService.getObjectContent(
-          objectId,
-          projectId,
-          true, // isReport
-          {}, // getInstanceId body
-          30 // Fetch n rows at a time
-      );
-      // then
-      expect(result).toBeDefined();
-      expect(result.name).toEqual(expectedReportName);
-      expect(result.rows.length).toBeGreaterThanOrEqual(50);
+      expect(result.instanceId).toBeDefined();
+      expect(result.rows).toEqual(expectedReportRows);
+      expect(result.columns).toEqual(expectedReportCols);
+      expect(result.mstrTable.name).toEqual(expectedReportName);
     });
 
     it('should throw exception due to incorrect authToken', async () => {
@@ -241,7 +229,7 @@ describe('MstrObjectRestService', () => {
         authToken: wrongAuthToken,
       });
       // when
-      const result = mstrObjectRestService.getObjectContent(
+      const result = mstrObjectRestService.getInstanceDefinition(
           objectId,
           projectId
       );
@@ -258,7 +246,7 @@ describe('MstrObjectRestService', () => {
       // given
       const incorrectObjectId = 'abc123';
       // when
-      const result = mstrObjectRestService.getObjectContent(
+      const result = mstrObjectRestService.getInstanceDefinition(
           incorrectObjectId,
           projectId
       );
@@ -274,12 +262,8 @@ describe('MstrObjectRestService', () => {
     it('should throw error due to incorrect projectId', async () => {
       // given
       const wrongProjectId = 'incorrectProjectId';
-      const originalInstanceIdMethod = mstrObjectRestService._getInstanceId;
-      mstrObjectRestService._getInstanceId = jest
-          .fn()
-          .mockResolvedValue('wrongInstanceId');
       // when
-      const result = mstrObjectRestService.getObjectContent(
+      const result = mstrObjectRestService.getInstanceDefinition(
           objectId,
           wrongProjectId
       );
@@ -289,9 +273,7 @@ describe('MstrObjectRestService', () => {
       } catch (error) {
         expect(error).toBeInstanceOf(BadRequestError);
       }
-      expect(mstrObjectRestService._getInstanceId).toBeCalled();
       expect(result).rejects.toThrow();
-      mstrObjectRestService._getInstanceId = originalInstanceIdMethod;
     });
   });
 });

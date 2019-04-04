@@ -76,9 +76,6 @@ class MstrObjectRestService {
           const mstrTable = officeConverterService.createTable(res.body);
           const {rows, columns} = this._checkTableDimensions(total, mstrTable.headers.length);
           return {instanceId, rows, columns, mstrTable};
-        })
-        .catch((err) => {
-          throw err;
         });
   }
 
@@ -102,27 +99,7 @@ class MstrObjectRestService {
         });
   };
 
-  async getObjectContent(objectId, projectId, isReport = true, body = {}, limit = DATA_LIMIT) {
-    const storeState = reduxStore.getState();
-    const envUrl = storeState.sessionReducer.envUrl;
-    const authToken = storeState.sessionReducer.authToken;
-    const objectType = isReport ? 'reports' : 'cubes';
-    let fullPath = `${envUrl}/${objectType}/${objectId}/instances`;
-
-    try {
-      const reportInstance = await this._getInstanceId(fullPath, authToken, projectId, body);
-      fullPath += `/${reportInstance}`;
-      return await this._getObjectContentPaginated(fullPath, authToken, projectId, limit);
-    } catch (error) {
-      if (error instanceof OutsideOfRangeError) {
-        throw error;
-      } else {
-        throw errorService.errorRestFactory(error);
-      }
-    }
-  }
-
-  getInstanceDefinition(objectId, projectId, isReport = true, body = {}, limit = 1) {
+  async getInstanceDefinition(objectId, projectId, isReport = true, body = {}, limit = 1) {
     const storeState = reduxStore.getState();
     const envUrl = storeState.sessionReducer.envUrl;
     const authToken = storeState.sessionReducer.authToken;
@@ -130,7 +107,7 @@ class MstrObjectRestService {
     const fullPath = `${envUrl}/${objectType}/${objectId}/instances?limit=${limit}`;
 
     try {
-      return this._getInstanceDefinition(fullPath, authToken, projectId, body);
+      return await this._getInstanceDefinition(fullPath, authToken, projectId, body);
     } catch (error) {
       throw errorService.errorRestFactory(error);
     }
