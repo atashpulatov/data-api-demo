@@ -65,8 +65,7 @@ class ErrorService {
         }
         break;
       case error instanceof ConnectionBrokenError:
-        notificationService.displayMessage('warning', 'Environment is unreachable.'
-          + '\nPlease check your internet connection.');
+        notificationService.displayMessage('warning', 'Environment is unreachable. Please check your internet connection.');
         if (!isLogout) {
           setTimeout(() => {
             this.fullLogOut();

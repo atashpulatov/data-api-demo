@@ -32,5 +32,8 @@
   "(All)": "(Всі)",
   "Table Preview": "Попередній перегляд",
   "Close Preview": "Закрити",
-  "Table preview displays 10 rows of data only.": "Попередній перегляд показує лиш 10 рядків"
+  "Table preview displays 10 rows of data only.": "Попередній перегляд показує лиш 10 рядків",
+  "No files loaded.": "",
+  "Report loading icon": "",
+  "Please wait until the import is complete.": ""
 }

@@ -19,7 +19,7 @@ export class _FileHistoryContainer extends Component {
           size='small'
           // TODO: Remove when supporting simultaneous dataset refresh
           loading={{indicator: <span></span>, spinning: reportArray && !!loading}}
-          locale={{emptyText: 'No files loaded.'}}
+          locale={{emptyText: t('No files loaded.')}}
           dataSource={reportArray
             ? reportArray
             : []}
