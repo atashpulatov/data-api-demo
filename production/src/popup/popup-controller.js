@@ -86,7 +86,7 @@ class PopupController {
       && response.projectId
       && response.reportSubtype
       && response.body) {
-      const result = await officeDisplayService.printObject(response.reportId, response.projectId, response.reportSubtype === objectTypes.getTypeValues('Report').subtype, null, null, null, response.body);
+      const result = await officeDisplayService.printObject(response.reportId, response.projectId, objectTypes.getTypeDescription(3, response.reportSubtype) === 'Report', null, null, null, response.body);
       if (result) {
         notificationService.displayMessage(result.type, result.message);
       }
