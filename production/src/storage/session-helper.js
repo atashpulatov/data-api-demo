@@ -32,8 +32,8 @@ class SessionHelper {
     };
   }
   logOutRedirect = () => {
-    const windowLocation = {origin: homeHelper.getWindowLocation()};
-    if (!windowLocation.origin.includes('localhost')) {
+    const {origin} = homeHelper.getWindowLocation();
+    if (!origin.includes('localhost')) {
       const currentPath = window.location.pathname;
       const pathBeginning = currentPath.split('/apps/')[0];
       const loginParams = 'source=addin-mstr-office';
@@ -47,14 +47,12 @@ class SessionHelper {
   }
 
   saveLoginValues = (values) => {
-    console.log('values:', values);
     reduxStore.dispatch({
       type: sessionProperties.actions.logIn,
       envUrl: values.envUrl,
     });
   }
   logIn = (authToken) => {
-    console.log('authToken:', authToken);
     reduxStore.dispatch({
       type: sessionProperties.actions.loggedIn,
       authToken: authToken,
