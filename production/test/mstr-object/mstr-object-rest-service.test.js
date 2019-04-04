@@ -10,6 +10,7 @@ import {sessionProperties} from '../../src/storage/session-properties';
 import {reduxStore} from '../../src/store';
 import {historyProperties} from '../../src/history/history-properties';
 import {moduleProxy} from '../../src/module-proxy';
+import {officeConverterService} from '../../src/office/office-converter-service';
 
 const correctLogin = 'mstr';
 const correctPassword = '999U2nn1g7gY';
@@ -20,6 +21,7 @@ const projectId = 'B7CA92F04B9FAE8D941C3E9B7E0CD754';
 const projectName = 'Microstrategy Tutorial';
 const folderId = 'D64C532E4E7FBA74D29A7CA3576F39CF';
 const objectId = 'C536EA7A11E903741E640080EF55BFE2';
+const mockInstanceDefinition = {rows: 50, instanceId: 'ABC', mstrTable: {headers: []}};
 
 describe('MstrObjectRestService', () => {
   let authToken;
@@ -274,6 +276,76 @@ describe('MstrObjectRestService', () => {
         expect(error).toBeInstanceOf(BadRequestError);
       }
       expect(result).rejects.toThrow();
+    });
+  });
+  describe('getObjectContentGenerator', () => {
+    beforeEach(async () => {
+      reduxStore.dispatch({
+        type: sessionProperties.actions.logIn,
+        username: correctLogin,
+        envUrl: envURL,
+        isRememberMeOn: false,
+      });
+      reduxStore.dispatch({
+        type: sessionProperties.actions.loggedIn,
+        authToken: authToken,
+      });
+      reduxStore.dispatch({
+        type: historyProperties.actions.goInsideProject,
+        projectId: projectId,
+        projectName: projectName,
+      });
+
+      jest.spyOn(mstrObjectRestService, '_fetchObjectContent').mockImplementation(() => {
+        return {body: {result: {data: {paging: 50}}}};
+      });
+    });
+    it('should return an async generator', async () => {
+      // given
+      const instanceDefinition = mockInstanceDefinition;
+      // when
+      const generator = mstrObjectRestService.getObjectContentGenerator(instanceDefinition, objectId, projectId, true, {});
+
+      // then
+      expect(generator).toBeDefined();
+      expect(generator.constructor.name).toBe('AsyncGenerator');
+    });
+
+    it('should throw error due to incorrect objectId', async () => {
+      // given
+      const incorrectObjectId = 'abc123';
+      const instanceDefinition = mockInstanceDefinition;
+      // when
+      const generator = mstrObjectRestService.getObjectContentGenerator(instanceDefinition, incorrectObjectId, projectId, true, {});
+      const result = generator.next().value;
+      // then
+      try {
+        await result;
+      } catch (error) {
+        expect(error).toBeInstanceOf(BadRequestError);
+      }
+    });
+
+    it('should return an iterable promise object', async () => {
+      // given
+      const instanceDefinition = mockInstanceDefinition;
+      const limit = 10;
+      let current = -limit;
+      jest.spyOn(mstrObjectRestService, '_fetchObjectContent').mockImplementation(() => {
+        current += limit;
+        return {body: {result: {data: {paging: {current}}}}};
+      });
+      jest.spyOn(officeConverterService, 'getRows').mockImplementation(() => {
+        return current;
+      });
+      // when
+      const generator = mstrObjectRestService.getObjectContentGenerator(instanceDefinition, objectId, projectId, true, {}, limit);
+      const mockFn = jest.fn();
+      // then
+      for await (const row of generator) {
+        mockFn(row);
+      }
+      expect(mockFn.mock.calls.length).toBeGreaterThan(1);
     });
   });
 });

@@ -117,7 +117,7 @@ class MstrObjectRestService {
     return fetchContentGenerator(instanceDefinition, objectId, projectId, isReport, body, limit);
   }
 
-  fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = DATA_LIMIT) {
+  _fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = -1) {
     return moduleProxy.request
         .get(`${fullPath}?offset=${offset}&limit=${limit}`)
         .set('x-mstr-authtoken', authToken)
@@ -147,7 +147,7 @@ async function* fetchContentGenerator(instanceDefinition, objectId, projectId, i
     let offset = 0;
 
     while (fetchedRows < totalRows && fetchedRows < EXCEL_ROW_LIMIT) {
-      const response = await mstrObjectRestService.fetchObjectContent(fullPath, authToken, projectId, offset, limit);
+      const response = await mstrObjectRestService._fetchObjectContent(fullPath, authToken, projectId, offset, limit);
       const {current} = response.body.result.data.paging;
       fetchedRows = current + offset;
       offset += current;
