@@ -13,6 +13,30 @@ describe('office loaded file', () => {
     expect(wrappedComponent.find('Row').hasClass('file-history-container')).toBeTruthy();
     expect(wrappedComponent.html()).toContain('test');
   });
+  it('should display dataset type icon', () => {
+    // given
+
+    // when
+    const wrappedComponent = mount(<OfficeLoadedFile objectType='test' />);
+    const wrappedIcons = wrappedComponent.find('MSTRIcon');
+    const wrappedCol = wrappedComponent.find('Col');
+    // then
+    expect(wrappedCol.at(0).contains(wrappedIcons.get(0))).toBe(true);
+    expect(wrappedIcons.at(0).prop('type')).toBe('dataset');
+  });
+
+  it('should display report type icon', () => {
+    // given
+
+    // when
+    const wrappedComponent = mount(<OfficeLoadedFile objectType='report' />);
+    const wrappedIcons = wrappedComponent.find('MSTRIcon');
+    const wrappedCol = wrappedComponent.find('Col');
+    // then
+    expect(wrappedCol.at(0).contains(wrappedIcons.get(0))).toBe(true);
+    expect(wrappedIcons.at(0).prop('type')).toBe('report');
+  });
+
   it('should invoke select method on report name click', () => {
     // given
     const onClickMocked = jest.fn();
@@ -49,13 +73,23 @@ describe('office loaded file', () => {
     const wrappedComponent = mount(<OfficeLoadedFile
       bindingId={testBindingId}
       fileName='test'
-      onRefresh={onRefreshMocked} />);
+      onRefresh={onRefreshMocked}
+      isLoading={false} />);
     const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
     const refreshButton = wrappedIcons.at(1);
     refreshButton.props().onClick();
     // then
     expect(onRefreshMocked).toBeCalled();
     expect(onRefreshMocked).toBeCalledWith(testBindingId);
+  });
+  it('should display spinner when report is refreshing', () => {
+    // given
+    // when
+    const wrappedComponent = mount(<OfficeLoadedFile
+      isLoading={true} />);
+    const wrappedSpinner = wrappedComponent.find('img');
+    // then
+    expect(wrappedSpinner).toBeTruthy();
   });
   it('should invoke delete method on button click', () => {
     // given

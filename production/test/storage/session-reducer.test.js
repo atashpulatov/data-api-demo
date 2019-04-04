@@ -1,9 +1,8 @@
-/* eslint-disable */
-import { createStore } from 'redux';
-import { sessionReducer } from '../../src/storage/session-reducer';
-import { sessionProperties } from '../../src/storage/session-properties';
-import { SessionError } from '../../src/storage/session-error';
-/* eslint-enable */
+import {createStore} from 'redux';
+import {sessionReducer} from '../../src/storage/session-reducer';
+import {sessionProperties} from '../../src/storage/session-properties';
+import {SessionError} from '../../src/storage/session-error';
+import {isUndefined} from 'util';
 
 describe('sessionReducer', () => {
   const sessionStore = createStore(sessionReducer);
@@ -74,6 +73,23 @@ describe('sessionReducer', () => {
     const sessionStoreState = sessionStore.getState();
     const envUrl = sessionStoreState.envUrl;
     expect(envUrl).toBe(givenEnvUrl);
+  });
+
+  it('should remove data on logout', () => {
+    // given
+    const rememberMe = true;
+    const givenToken = 'token';
+    const givenFullName = 'Name';
+    const givenInitials = 'Initials';
+    const state = {isRememberMeOn: rememberMe, authToken: givenToken, userFullName: givenFullName, userInitials: givenInitials};
+    const action = {type: sessionProperties.actions.logOut};
+    // const spyLogOut = jest.spyOn(sessionReducer, 'onLogOut');
+    // when
+    const newState = sessionReducer(state, action);
+    // then
+    expect(newState.userFullName).toBe(undefined);
+    expect(newState.userInitials).toBe(undefined);
+    expect(newState.authToken).toBe(undefined);
   });
 
   it('should throw an error due to missing envUrl', () => {

@@ -3558,6 +3558,164 @@ export const mockReports = [
   },
 
   {'id': '1D94908011E9343200690080EF95E8E9', 'name': '13_report_with_showing_id(OFF)', 'status': 1, 'instanceId': '7C36BB4411E935C362760080EF6588E9', 'result': {'definition': {'attributes': [{'name': 'Category', 'id': '8D679D3711D3E4981000E787EC6DE8A4', 'type': 'Attribute', 'forms': [{'id': 'CCFBE2A5EADB4F50941FB879CCF1721C', 'name': 'DESC', 'dataType': 'Char', 'baseFormType': 'Text'}, {'id': '45C11FA478E745FEA08D781CEA190FE5', 'name': 'ID', 'dataType': 'Real', 'baseFormType': 'Number'}]}, {'name': 'Subcategory', 'id': '8D679D4F11D3E4981000E787EC6DE8A4', 'type': 'Attribute', 'forms': [{'id': 'CCFBE2A5EADB4F50941FB879CCF1721C', 'name': 'DESC', 'dataType': 'Char', 'baseFormType': 'Text'}]}], 'metrics': [{'name': 'Units Received', 'id': '4C05185811D3E877C000B3B2D86C964F', 'type': 'Metric', 'min': 11460, 'max': 54445, 'numberFormatting': {'category': 0, 'decimalPlaces': 0, 'formatString': '#,##0', 'negativeType': 1}}], 'thresholds': [], 'sorting': []}, 'data': {'paging': {'total': 24, 'current': 24, 'offset': 0, 'limit': 1000, 'prev': null, 'next': null}, 'root': {'isPartial': false, 'children': [{'depth': 0, 'element': {'attributeIndex': 0, 'formValues': {'DESC': 'Books', 'ID': '1'}, 'name': 'Books 1', 'id': 'h1;8D679D3711D3E4981000E787EC6DE8A4'}, 'isPartial': false, 'children': [{'depth': 1, 'element': {'attributeIndex': 1, 'formValues': {'DESC': 'Art & Architecture'}, 'name': 'Art & Architecture', 'id': 'h11;8D679D4F11D3E4981000E787EC6DE8A4'}, 'metrics': {'Units Received': {'rv': 28753, 'fv': '28,753', 'mi': 0}}}, {'depth': 1, 'element': {'attributeIndex': 1, 'formValues': {'DESC': 'Business'}, 'name': 'Business', 'id': 'h12;8D679D4F11D3E4981000E787EC6DE8A4'}, 'metrics': {'Units Received': {'rv': 28405, 'fv': '28,405', 'mi': 0}}}, {'depth': 1, 'element': {'attributeIndex': 1, 'formValues': {'DESC': 'Literature'}, 'name': 'Literature', 'id': 'h13;8D679D4F11D3E4981000E787EC6DE8A4'}, 'metrics': {'Units Received': {'rv': 38859, 'fv': '38,859', 'mi': 0}}}, {'depth': 1, 'element': {'attributeIndex': 1, 'formValues': {'DESC': 'Books - Miscellaneous'}, 'name': 'Books - Miscellaneous', 'id': 'h14;8D679D4F11D3E4981000E787EC6DE8A4'}, 'metrics': {'Units Received': {'rv': 38666, 'fv': '38,666', 'mi': 0}}}, {'depth': 1, 'element': {'attributeIndex': 1, 'formValues': {'DESC': 'Science & Technology'}, 'name': 'Science & Technology', 'id': 'h15;8D679D4F11D3E4981000E787EC6DE8A4'}, 'metrics': {'Units Received': {'rv': 25141, 'fv': '25,141', 'mi': 0}}}, {'depth': 1, 'element': {'attributeIndex': 1, 'formValues': {'DESC': 'Sports & Health'}, 'name': 'Sports & Health', 'id': 'h16;8D679D4F11D3E4981000E787EC6DE8A4'}, 'metrics': {'Units Received': {'rv': 26945, 'fv': '26,945', 'mi': 0}}}]}, {'depth': 0, 'element': {'attributeIndex': 0, 'formValues': {'DESC': 'Electronics', 'ID': '2'}, 'name': 'Electronics 2', 'id': 'h2;8D679D3711D3E4981000E787EC6DE8A4'}, 'isPartial': false, 'children': [{'depth': 1, 'element': {'attributeIndex': 1, 'formValues': {'DESC': 'Audio Equipment'}, 'name': 'Audio Equipment', 'id': 'h21;8D679D4F11D3E4981000E787EC6DE8A4'}, 'metrics': {'Units Received': {'rv': 15615, 'fv': '15,615', 'mi': 0}}}, {'depth': 1, 'element': {'attributeIndex': 1, 'formValues': {'DESC': 'Cameras'}, 'name': 'Cameras', 'id': 'h22;8D679D4F11D3E4981000E787EC6DE8A4'}, 'metrics': {'Units Received': {'rv': 11460, 'fv': '11,460', 'mi': 0}}}, {'depth': 1, 'element': {'attributeIndex': 1, 'formValues': {'DESC': 'Computers'}, 'name': 'Computers', 'id': 'h23;8D679D4F11D3E4981000E787EC6DE8A4'}, 'metrics': {'Units Received': {'rv': 16700, 'fv': '16,700', 'mi': 0}}}, {'depth': 1, 'element': {'attributeIndex': 1, 'formValues': {'DESC': 'Electronics - Miscellaneous'}, 'name': 'Electronics - Miscellaneous', 'id': 'h24;8D679D4F11D3E4981000E787EC6DE8A4'}, 'metrics': {'Units Received': {'rv': 13310, 'fv': '13,310', 'mi': 0}}}, {'depth': 1, 'element': {'attributeIndex': 1, 'formValues': {'DESC': 'TV\'s'}, 'name': 'TV\'s', 'id': 'h25;8D679D4F11D3E4981000E787EC6DE8A4'}, 'metrics': {'Units Received': {'rv': 15275, 'fv': '15,275', 'mi': 0}}}, {'depth': 1, 'element': {'attributeIndex': 1, 'formValues': {'DESC': 'Video Equipment'}, 'name': 'Video Equipment', 'id': 'h26;8D679D4F11D3E4981000E787EC6DE8A4'}, 'metrics': {'Units Received': {'rv': 11500, 'fv': '11,500', 'mi': 0}}}]}, {'depth': 0, 'element': {'attributeIndex': 0, 'formValues': {'DESC': 'Movies', 'ID': '3'}, 'name': 'Movies 3', 'id': 'h3;8D679D3711D3E4981000E787EC6DE8A4'}, 'isPartial': false, 'children': [{'depth': 1, 'element': {'attributeIndex': 1, 'formValues': {'DESC': 'Action'}, 'name': 'Action', 'id': 'h31;8D679D4F11D3E4981000E787EC6DE8A4'}, 'metrics': {'Units Received': {'rv': 49435, 'fv': '49,435', 'mi': 0}}}, {'depth': 1, 'element': {'attributeIndex': 1, 'formValues': {'DESC': 'Comedy'}, 'name': 'Comedy', 'id': 'h32;8D679D4F11D3E4981000E787EC6DE8A4'}, 'metrics': {'Units Received': {'rv': 52925, 'fv': '52,925', 'mi': 0}}}, {'depth': 1, 'element': {'attributeIndex': 1, 'formValues': {'DESC': 'Drama'}, 'name': 'Drama', 'id': 'h33;8D679D4F11D3E4981000E787EC6DE8A4'}, 'metrics': {'Units Received': {'rv': 46600, 'fv': '46,600', 'mi': 0}}}, {'depth': 1, 'element': {'attributeIndex': 1, 'formValues': {'DESC': 'Horror'}, 'name': 'Horror', 'id': 'h34;8D679D4F11D3E4981000E787EC6DE8A4'}, 'metrics': {'Units Received': {'rv': 50895, 'fv': '50,895', 'mi': 0}}}, {'depth': 1, 'element': {'attributeIndex': 1, 'formValues': {'DESC': 'Kids / Family'}, 'name': 'Kids / Family', 'id': 'h35;8D679D4F11D3E4981000E787EC6DE8A4'}, 'metrics': {'Units Received': {'rv': 46655, 'fv': '46,655', 'mi': 0}}}, {'depth': 1, 'element': {'attributeIndex': 1, 'formValues': {'DESC': 'Special Interests'}, 'name': 'Special Interests', 'id': 'h36;8D679D4F11D3E4981000E787EC6DE8A4'}, 'metrics': {'Units Received': {'rv': 39370, 'fv': '39,370', 'mi': 0}}}]}, {'depth': 0, 'element': {'attributeIndex': 0, 'formValues': {'DESC': 'Music', 'ID': '4'}, 'name': 'Music 4', 'id': 'h4;8D679D3711D3E4981000E787EC6DE8A4'}, 'isPartial': false, 'children': [{'depth': 1, 'element': {'attributeIndex': 1, 'formValues': {'DESC': 'Alternative'}, 'name': 'Alternative', 'id': 'h41;8D679D4F11D3E4981000E787EC6DE8A4'}, 'metrics': {'Units Received': {'rv': 54445, 'fv': '54,445', 'mi': 0}}}, {'depth': 1, 'element': {'attributeIndex': 1, 'formValues': {'DESC': 'Country'}, 'name': 'Country', 'id': 'h42;8D679D4F11D3E4981000E787EC6DE8A4'}, 'metrics': {'Units Received': {'rv': 52810, 'fv': '52,810', 'mi': 0}}}, {'depth': 1, 'element': {'attributeIndex': 1, 'formValues': {'DESC': 'Music - Miscellaneous'}, 'name': 'Music - Miscellaneous', 'id': 'h43;8D679D4F11D3E4981000E787EC6DE8A4'}, 'metrics': {'Units Received': {'rv': 37035, 'fv': '37,035', 'mi': 0}}}, {'depth': 1, 'element': {'attributeIndex': 1, 'formValues': {'DESC': 'Pop'}, 'name': 'Pop', 'id': 'h44;8D679D4F11D3E4981000E787EC6DE8A4'}, 'metrics': {'Units Received': {'rv': 48730, 'fv': '48,730', 'mi': 0}}}, {'depth': 1, 'element': {'attributeIndex': 1, 'formValues': {'DESC': 'Rock'}, 'name': 'Rock', 'id': 'h45;8D679D4F11D3E4981000E787EC6DE8A4'}, 'metrics': {'Units Received': {'rv': 51715, 'fv': '51,715', 'mi': 0}}}, {'depth': 1, 'element': {'attributeIndex': 1, 'formValues': {'DESC': 'Soul / R&B'}, 'name': 'Soul / R&B', 'id': 'h46;8D679D4F11D3E4981000E787EC6DE8A4'}, 'metrics': {'Units Received': {'rv': 32270, 'fv': '32,270', 'mi': 0}}}]}]}}}},
+
+  {
+    'id': '25F259BA11E94B25A45E0080EF251ED2',
+    'name': 'No attributes report',
+    'status': 1,
+    'instanceId': 'D803FDCE11E94BE916D30080EF85455B',
+    'result': {
+      'definition': {
+        'attributes': [],
+        'metrics': [
+          {
+            'name': 'Cost',
+            'id': '7FD5B69611D5AC76C000D98A4CC5F24F',
+            'type': 'Metric',
+            'min': 29730084.52039946,
+            'max': 29730084.52039946,
+            'numberFormatting': {
+              'category': 1,
+              'decimalPlaces': 0,
+              'thousandSeparator': true,
+              'currencySymbol': '$',
+              'currencyPosition': 0,
+              'formatString': '"$"#,##0',
+              'negativeType': 1,
+            },
+          },
+          {
+            'name': 'Profit',
+            'id': '4C051DB611D3E877C000B3B2D86C964F',
+            'type': 'Metric',
+            'min': 5293623.629600862,
+            'max': 5293623.629600862,
+            'numberFormatting': {
+              'category': 1,
+              'decimalPlaces': 0,
+              'thousandSeparator': true,
+              'currencySymbol': '$',
+              'currencyPosition': 0,
+              'formatString': '"$"#,##0;("$"#,##0)',
+              'negativeType': 3,
+            },
+          },
+        ],
+        'thresholds': [],
+        'sorting': [],
+      },
+      'data': {
+        'paging': {
+          'total': 1,
+          'current': 1,
+          'offset': 0,
+          'limit': 5000,
+          'prev': null,
+          'next': null,
+        },
+        'root': {
+          'metrics': {
+            'Cost': {
+              'rv': 29730084.52039946,
+              'fv': '$29,730,085',
+              'mi': 0,
+            },
+            'Profit': {
+              'rv': 5293623.629600862,
+              'fv': '$5,293,624',
+              'mi': 1,
+            },
+          },
+        },
+      },
+    },
+  },
+
+  {
+    'id': 'B570032611E94B25B9810080EF95B252',
+    'name': 'All data filtered Report',
+    'status': 1,
+    'instanceId': 'AEA0B8A911E94BEB16D30080EF45C55B',
+    'result': {
+      'definition': {
+        'attributes': [
+          {
+            'name': 'Region',
+            'id': '8D679D4B11D3E4981000E787EC6DE8A4',
+            'type': 'Attribute',
+            'forms': [
+              {
+                'id': 'CCFBE2A5EADB4F50941FB879CCF1721C',
+                'name': 'DESC',
+                'dataType': 'Char',
+                'baseFormType': 'Text',
+              },
+            ],
+          },
+          {
+            'name': 'Call Center',
+            'id': '8D679D3511D3E4981000E787EC6DE8A4',
+            'type': 'Attribute',
+            'forms': [
+              {
+                'id': 'CCFBE2A5EADB4F50941FB879CCF1721C',
+                'name': 'DESC',
+                'dataType': 'Char',
+                'baseFormType': 'Text',
+              },
+            ],
+          },
+        ],
+        'metrics': [
+          {
+            'name': 'Revenue',
+            'id': '4C05177011D3E877C000B3B2D86C964F',
+            'type': 'Metric',
+            'min': '',
+            'max': '',
+            'numberFormatting': {
+              'category': 1,
+              'decimalPlaces': 0,
+              'thousandSeparator': true,
+              'currencySymbol': '$',
+              'currencyPosition': 0,
+              'formatString': '"$"#,##0',
+              'negativeType': 1,
+            },
+          },
+          {
+            'name': 'Cost',
+            'id': '7FD5B69611D5AC76C000D98A4CC5F24F',
+            'type': 'Metric',
+            'min': '',
+            'max': '',
+            'numberFormatting': {
+              'category': 1,
+              'decimalPlaces': 0,
+              'thousandSeparator': true,
+              'currencySymbol': '$',
+              'currencyPosition': 0,
+              'formatString': '"$"#,##0',
+              'negativeType': 1,
+            },
+          },
+        ],
+        'thresholds': [],
+        'sorting': [],
+      },
+      'data': {
+        'paging': {
+          'total': 0,
+          'current': 0,
+          'offset': 0,
+          'limit': 5000,
+          'prev': null,
+          'next': null,
+        },
+        'root': null,
+      },
+    },
+  },
 ];
 export const mockBadReports = [
   {
