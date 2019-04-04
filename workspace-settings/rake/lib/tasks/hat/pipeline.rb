@@ -1,4 +1,5 @@
 require 'rally'
+require 'dependencies_db'
 
 Rake::Task[:upload].clear_prerequisites
 
@@ -60,4 +61,10 @@ def post_build_info_to_rally()
     ensure
     end
   end
+end
+
+task :update_dep_db_from_file do
+  client = DependenciesDB.new
+  client.update_dependencies_from_file('json')
+  client.update_dependencies_table
 end
