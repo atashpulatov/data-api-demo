@@ -1,5 +1,5 @@
 import {SELECT_FOLDER, SELECT_OBJECT, SET_DATA_SOURCE, START_IMPORT} from '../../src/navigation/navigation-tree-actions';
-import {navigationTree, initialState} from '../../src/storage/navigation-tree-reducer';
+import {navigationTree, initialState, DEFAULT_TYPE, DEFAULT_PROJECT_NAME} from '../../src/storage/navigation-tree-reducer';
 import {CLEAR_WINDOW} from '../../src/popup/popup-actions';
 
 describe('NavigationTree Reducer', () => {
@@ -111,6 +111,13 @@ describe('NavigationTree Reducer', () => {
 
     // then
     expect(newState.folder).toEqual(action.data);
+    expect(newState.chosenObjectId).toEqual(null);
+    expect(newState.chosenProjectId).toEqual(null);
+    expect(newState.chosenSubtype).toEqual(null);
+    expect(newState.scrollPosition).toEqual(null);
+    expect(newState.pageSize).toEqual(null);
+    expect(newState.chosenProjectName).toEqual(DEFAULT_PROJECT_NAME);
+    expect(newState.chosenType).toEqual(DEFAULT_TYPE);
   });
 
   it('should return new proper state in case of SET_DATA_SOURCE action', () => {

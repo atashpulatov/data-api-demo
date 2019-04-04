@@ -1,8 +1,8 @@
 import {SELECT_FOLDER, SELECT_OBJECT, SET_DATA_SOURCE, START_IMPORT} from '../navigation/navigation-tree-actions';
 import {CLEAR_WINDOW} from '../popup/popup-actions';
 
-const defaultProjectName = 'Prepare Data';
-const defaultType = 'Data';
+export const DEFAULT_PROJECT_NAME = 'Prepare Data';
+export const DEFAULT_TYPE = 'Data';
 
 // TODO: use some global store, redux one probably will be the best choice, or maybe some const global value
 const supportedTypesArray = [
@@ -23,8 +23,8 @@ export const initialState = {
   chosenObjectId: null,
   chosenProjectId: null,
   chosenSubtype: null,
-  chosenProjectName: defaultProjectName,
-  chosenType: defaultType,
+  chosenProjectName: DEFAULT_PROJECT_NAME,
+  chosenType: DEFAULT_TYPE,
   dataSource: null,
   loading: false,
   scrollPosition: null,
@@ -33,15 +33,15 @@ export const initialState = {
 
 function getProjectName(projects, projectId, objectId) {
   if (!projects || !projects.length) {
-    return defaultProjectName;
+    return DEFAULT_PROJECT_NAME;
   }
   const selectedObject = projects.find((item) => item.projectId === projectId && item.key === objectId);
-  return selectedObject ? selectedObject.name : defaultProjectName;
+  return selectedObject ? selectedObject.name : DEFAULT_PROJECT_NAME;
 }
 
 function getType(subtype) {
   const selectedType = supportedTypesArray.find((item) => item.subtype.includes(subtype));
-  return selectedType ? selectedType.name : defaultType;
+  return selectedType ? selectedType.name : DEFAULT_TYPE;
 }
 
 export const navigationTree = (state = initialState, action) => {
@@ -64,8 +64,18 @@ export const navigationTree = (state = initialState, action) => {
       return newState;
     }
     case SELECT_FOLDER: {
+      if (state.folder === data) {
+        return state;
+      }
       const newState = {...state};
       newState.folder = data;
+      newState.chosenObjectId = null;
+      newState.chosenProjectId = null;
+      newState.chosenSubtype = null;
+      newState.chosenProjectName = DEFAULT_PROJECT_NAME;
+      newState.chosenType = DEFAULT_TYPE;
+      newState.scrollPosition = null;
+      newState.pageSize = null;
       return newState;
     }
     case CLEAR_WINDOW: {
