@@ -7,7 +7,16 @@ import {notificationService} from '../../src/notification/notification-service';
 import {RunOutsideOfficeError} from '../../src/error/run-outside-office-error';
 import {OverlappingTablesError} from '../../src/error/overlapping-tables-error';
 import {GenericOfficeError} from '../../src/error/generic-office-error';
-import {NOT_PUBLISHED_CUBE, NOT_SUPPORTED_SERVER_ERR, NOT_IN_METADATA} from '../../src/error/constants';
+import {OutsideOfRangeError} from '../../src/error/outside-of-range-error';
+import {ConnectionBrokenError} from '../../src/error/connection-error';
+import {PromptedReportError} from '../../src/error/prompted-report-error';
+import {sessionHelper} from '../../src/storage/session-helper';
+import {
+  NOT_PUBLISHED_CUBE,
+  NOT_SUPPORTED_SERVER_ERR,
+  NOT_IN_METADATA,
+  PROJECT_ROW_LIMIT,
+} from '../../src/error/constants';
 
 jest.mock('../../src/storage/session-helper');
 jest.useFakeTimers();
@@ -21,6 +30,34 @@ describe('ErrorService', () => {
       const result = errorService.errorRestFactory(error);
       // then
       expect(result).toBe(error);
+    });
+    it('should throw an PromptedReportError', () => {
+      // given
+      const error = {status: 200};
+      // when
+      const resultError = errorService.errorRestFactory(error);
+      // then
+      expect(resultError).toBeInstanceOf(PromptedReportError);
+    });
+    it('should throw an InternalServerError due to response 404 code', () => {
+      // given
+      const response = {body: {iServerCode: '-2147171501'}};
+      const error = {status: 404, response: response};
+      // when
+      const resultError = errorService.errorRestFactory(error);
+      // then
+      expect(resultError).toBeInstanceOf(InternalServerError);
+    });
+
+    it('should throw an ConnectionBrokenError due to response 404 code', () => {
+      // given
+      const error = {
+        message: 'Possible causes: the network is offline,',
+      };
+      // when
+      const resultError = errorService.errorRestFactory(error);
+      // then
+      expect(resultError).toBeInstanceOf(ConnectionBrokenError);
     });
     it('should throw a BadRequestError due to response 400 code', () => {
       // given
@@ -69,29 +106,57 @@ describe('ErrorService', () => {
       // then
       expect(resultError).toBeInstanceOf(InternalServerError);
     });
+    it('should throw a InternalServerError due to status 500 code', () => {
+      // given
+      const response = {status: 500};
+      const error = {response};
+      // when
+      const resultError = errorService.errorRestFactory(error);
+      // then
+      expect(resultError).toBeInstanceOf(InternalServerError);
+    });
   });
   describe('handleRestError', () => {
     it('should display notification on EnvironmentNotFoundError', () => {
       // given
       const error = new EnvironmentNotFoundError();
       const spyMethod = jest.spyOn(notificationService, 'displayMessage');
+      const spyLogOut = jest.spyOn(errorService, 'fullLogOut');
       // when
-      errorService.handleError(error);
+      errorService.handleError(error, false);
+      jest.advanceTimersByTime(2000);
       // then
       expect(spyMethod).toBeCalled();
       expect(spyMethod).toBeCalledWith('info', '404 - Environment not found');
+      expect(spyLogOut).toBeCalled();
     });
-    it('should display notification on UnauthorizedError', () => {
+    it('should display notification and logout on UnauthorizedError', () => {
       // given
       const error = new UnauthorizedError();
       const spyMethod = jest.spyOn(notificationService, 'displayMessage');
+      const spyLogOut = jest.spyOn(errorService, 'fullLogOut');
       // when
-      errorService.handleError(error);
+      errorService.handleError(error, false);
+      jest.advanceTimersByTime(2000);
       // then
       expect(spyMethod).toBeCalled();
       expect(spyMethod).toBeCalledWith('info', 'Your session has expired. Please log in.');
+      expect(spyLogOut).toBeCalled();
     });
-    it('should display notification on BadRequestError', () => {
+    it('should display notification and logout on ConnectionBrokenError', () => {
+      // given
+      const error = new ConnectionBrokenError();
+      const spyMethod = jest.spyOn(notificationService, 'displayMessage');
+      const spyLogOut = jest.spyOn(errorService, 'fullLogOut');
+      // when
+      errorService.handleError(error, false);
+      jest.advanceTimersByTime(2000);
+      // then
+      expect(spyMethod).toBeCalled();
+      expect(spyMethod).toBeCalledWith('warning', 'Environment is unreachable.' + '\nPlease check your internet connection.');
+      expect(spyLogOut).toBeCalled();
+    });
+    it('should display notification and logout on BadRequestError', () => {
       // given
       const error = new BadRequestError();
       const spyMethod = jest.spyOn(notificationService, 'displayMessage');
@@ -100,6 +165,54 @@ describe('ErrorService', () => {
       // then
       expect(spyMethod).toBeCalled();
       expect(spyMethod).toBeCalledWith('error', '400 - There has been a problem with your request');
+    });
+    it('should display notification on UnauthorizedError', () => {
+      // given
+      const error = new UnauthorizedError();
+      const spyMethod = jest.spyOn(notificationService, 'displayMessage');
+      // when
+      errorService.handleError(error, true);
+      // then
+      expect(spyMethod).toBeCalled();
+      expect(spyMethod).toBeCalledWith('info', 'Your session has expired. Please log in.');
+    });
+    it('should display notification on ConnectionBrokenError', () => {
+      // given
+      const error = new ConnectionBrokenError();
+      const spyMethod = jest.spyOn(notificationService, 'displayMessage');
+      // when
+      errorService.handleError(error, true);
+      // then
+      expect(spyMethod).toBeCalled();
+      expect(spyMethod).toBeCalledWith('warning', 'Environment is unreachable.' + '\nPlease check your internet connection.');
+    });
+    it('should display notification on BadRequestError', () => {
+      // given
+      const error = new BadRequestError();
+      const spyMethod = jest.spyOn(notificationService, 'displayMessage');
+      // when
+      errorService.handleError(error, true);
+      // then
+      expect(spyMethod).toBeCalled();
+      expect(spyMethod).toBeCalledWith('error', '400 - There has been a problem with your request');
+    });
+    it('should display notification on OutsideOfRangeError ', () => {
+      // given
+      const error = new OutsideOfRangeError();
+      const spyMethod = jest.spyOn(notificationService, 'displayMessage');
+      // when
+      errorService.handleError(error);
+      // then
+      expect(spyMethod).toBeCalled();
+    });
+    it('should display notification on InternalServerError with no error body', () => {
+      // given
+      const error = new InternalServerError();
+      const spyMethod = jest.spyOn(notificationService, 'displayMessage');
+      // when
+      errorService.handleError(error);
+      // then
+      expect(spyMethod).toBeCalled();
     });
     it('should display notification on InternalServerError', () => {
       // given
@@ -110,6 +223,16 @@ describe('ErrorService', () => {
       // then
       expect(spyMethod).toBeCalled();
       expect(spyMethod).toBeCalledWith('warning', NOT_SUPPORTED_SERVER_ERR);
+    });
+    it('should display notification on exceeding row limits', () => {
+      // given
+      const error = new InternalServerError({iServerCode: '-2147205488'});
+      const spyMethod = jest.spyOn(notificationService, 'displayMessage');
+      // when
+      errorService.handleError(error);
+      // then
+      expect(spyMethod).toBeCalled();
+      expect(spyMethod).toBeCalledWith('warning', PROJECT_ROW_LIMIT);
     });
     it('should display notification on not published cubes', () => {
       // given
@@ -152,6 +275,26 @@ describe('ErrorService', () => {
       expect(spyMethod).toBeCalled();
       expect(setTimeout).toBeCalled();
       expect(setTimeout).toBeCalledWith(expect.any(Function), 2000);
+    });
+    it('should display notification on PromptedReportError', () => {
+      // given
+      const error = new PromptedReportError();
+      const spyMethod = jest.spyOn(notificationService, 'displayMessage');
+      // when
+      errorService.handleError(error);
+      // then
+      expect(spyMethod).toBeCalled();
+      expect(spyMethod).toBeCalledWith('warning', NOT_SUPPORTED_SERVER_ERR);
+    });
+    it('should handle OverlappingTablesError', () => {
+      // given
+      const error = new OverlappingTablesError();
+      const notificationSpy = jest.spyOn(notificationService, 'displayMessage');
+      // when
+      errorService.handleError(error);
+      // then
+      expect(notificationSpy).toBeCalled();
+      expect(notificationSpy).toBeCalledWith('warning', `The table you try to import exceeds the worksheet limits.`);
     });
   });
   describe('errorOfficeFactory', () => {
@@ -220,6 +363,27 @@ describe('ErrorService', () => {
       expect(notificationSpy).toBeCalled();
       expect(notificationSpy).toBeCalledWith('error', `Excel returned error: ${errorMessage}`);
     });
+    it('should handle GenericOfficeError', () => {
+      // given
+      const errorMessage = `A table can't overlap another table. `;
+      const error = new GenericOfficeError(errorMessage);
+      const notificationSpy = jest.spyOn(notificationService, 'displayMessage');
+      // when
+      errorService.handleOfficeError(error);
+      // then
+      expect(notificationSpy).toBeCalled();
+      expect(notificationSpy).toBeCalledWith('error', `Excel returned error: ${errorMessage}`);
+    });
+    it('should handle OutsideOfRangeError', () => {
+      // given
+      const error = new OutsideOfRangeError();
+      const notificationSpy = jest.spyOn(notificationService, 'displayMessage');
+      // when
+      errorService.handleOfficeError(error);
+      // then
+      expect(notificationSpy).toBeCalled();
+      expect(notificationSpy).toBeCalledWith('error', `The table you try to import exceeds the worksheet limits.`);
+    });
     it('should forward error that it does not handle to next method', () => {
       // given
       const error = {constructor: () => {}};
@@ -253,6 +417,31 @@ describe('ErrorService', () => {
       // then
       expect(errorService.handleError).toBeCalled();
       errorService.handleError = originalMethod;
+    });
+  });
+  describe('logout', () => {
+    it('should call fullLogout', () => {
+      // given
+      const fullLogOutSpy = jest.spyOn(errorService, 'fullLogOut');
+      const logOutRestSpy = jest.spyOn(sessionHelper, 'logOutRest');
+      const logOutSpy = jest.spyOn(sessionHelper, 'logOut');
+      const logOutRedirectSpy = jest.spyOn(sessionHelper, 'logOutRedirect');
+      // when
+      errorService.fullLogOut();
+      // then
+      expect(fullLogOutSpy).toBeCalled();
+      expect(logOutRestSpy).toBeCalled();
+      expect(logOutSpy).toBeCalled();
+      expect(logOutRedirectSpy).toBeCalled();
+    });
+    it('should handle LogoutError', () => {
+      // given
+      const error = {message: 'error'};
+      const fullLogOutSpy = jest.spyOn(errorService, 'handleError');
+      // when
+      errorService.handleLogoutError(error);
+      // then
+      expect(fullLogOutSpy).toBeCalled();
     });
   });
 });

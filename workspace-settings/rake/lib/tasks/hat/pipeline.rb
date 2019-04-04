@@ -1,3 +1,6 @@
+require 'rally'
+require 'dependencies_db'
+
 Rake::Task[:upload].clear_prerequisites
 
 desc "upload plugins to nexus"
@@ -45,4 +48,23 @@ task :upload_plugins=> [:clean, :build]  do
     repository:     $WORKSPACE_SETTINGS[:nexus][:repos][:manifest],
     artifact_path:  commit_hash_file
   )
+
+  post_build_info_to_rally()
+end
+
+def post_build_info_to_rally()
+  if ENV['USER'] == 'jenkins' then
+    begin
+      Rally.update_rally_based_on_change
+    rescue
+      puts "[warning] update rally error."
+    ensure
+    end
+  end
+end
+
+task :update_dep_db_from_file do
+  client = DependenciesDB.new
+  client.update_dependencies_from_file('json')
+  client.update_dependencies_table
 end

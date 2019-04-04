@@ -97,4 +97,12 @@ describe('loginUser', () => {
     expect(errorService.handlePreAuthError).toBeCalledWith(testError);
     expect(sessionHelper.disableLoading).toBeCalled();
   });
+  it('should call getSession on validating token', async () => {
+    // given
+    const authenticateMock = jest.spyOn(authenticationService, 'getSessions');
+    // when
+    authenticationHelper.validateAuthToken();
+    // then
+    expect(authenticateMock).toBeCalled();
+  });
 });

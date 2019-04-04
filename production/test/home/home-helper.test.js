@@ -98,5 +98,22 @@ describe('HomeHelper', () => {
       expect(sessionHelper.logIn).toBeCalled();
       expect(sessionHelper.logIn).toBeCalledWith(cookieJarWithoutToken.iSession);
     });
+    it('should return window location', () => {
+      // given
+      const locationHelper = jest.spyOn(homeHelper, 'getWindowLocation');
+      // when
+      const location = homeHelper.getWindowLocation();
+      // then
+      expect(locationHelper).toBeCalled();
+      expect(location).toBeTruthy();
+    });
+    it('should return document cookie', () => {
+      // given
+      const cookieHelper = jest.spyOn(homeHelper, 'getDocumentCookie');
+      // when
+      homeHelper.getDocumentCookie();
+      // then
+      expect(cookieHelper).toBeCalled();
+    });
   });
 });

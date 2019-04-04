@@ -1,6 +1,8 @@
-# Mstr Office Client
+# Microstrategy for Office
 
 Connector between Microsoft Office applications and MicroStrategy products.
+
+
 
 ## Getting Started
 

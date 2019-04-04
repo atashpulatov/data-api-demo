@@ -1,4 +1,5 @@
 import * as actions from '../../src/navigation/navigation-tree-actions';
+import {officeProperties} from '../../src/office/office-properties';
 
 describe('NavigationTree Actions', () => {
   it('should dispatch proper selectObject action', () => {
@@ -6,7 +7,7 @@ describe('NavigationTree Actions', () => {
     const listener = jest.fn();
 
     // when
-    actions.selectObject(listener)(true);
+    actions.selectObject(true)(listener);
 
     // then
     expect(listener).toHaveBeenCalledWith({type: actions.SELECT_OBJECT, data: true});
@@ -17,7 +18,7 @@ describe('NavigationTree Actions', () => {
     const listener = jest.fn();
 
     // when
-    actions.setDataSource(listener)(true);
+    actions.setDataSource(true)(listener);
 
     // then
     expect(listener).toHaveBeenCalledWith({type: actions.SET_DATA_SOURCE, data: true});
@@ -28,7 +29,7 @@ describe('NavigationTree Actions', () => {
     const listener = jest.fn();
 
     // when
-    actions.selectFolder(listener)(true);
+    actions.selectFolder(true)(listener);
 
     // then
     expect(listener).toHaveBeenCalledWith({type: actions.SELECT_FOLDER, data: true});
@@ -39,9 +40,59 @@ describe('NavigationTree Actions', () => {
     const listener = jest.fn();
 
     // when
-    actions.startImport(listener)(true);
+    actions.startImport(true)(listener);
 
     // then
     expect(listener).toHaveBeenCalledWith({type: actions.START_IMPORT});
+  });
+  it('should dispatch proper startLoading action', () => {
+    // given
+    const listener = jest.fn();
+
+    // when
+    actions.startLoading(true)(listener);
+
+    // then
+    expect(listener).toHaveBeenCalledWith({type: officeProperties.actions.startLoading});
+  });
+  it('should dispatch proper changeSorting action', () => {
+    // given
+    const listener = jest.fn();
+
+    // when
+    actions.changeSorting(true)(listener);
+
+    // then
+    expect(listener).toHaveBeenCalledWith({type: actions.CHANGE_SORTING, data: true});
+  });
+  it('should dispatch proper changeSearching action', () => {
+    // given
+    const listener = jest.fn();
+
+    // when
+    actions.changeSearching(true)(listener);
+
+    // then
+    expect(listener).toHaveBeenCalledWith({type: actions.CHANGE_SEARCHING, data: true});
+  });
+  it('should dispatch proper updateScroll action', () => {
+    // given
+    const listener = jest.fn();
+
+    // when
+    actions.updateScroll(true)(listener);
+
+    // then
+    expect(listener).toHaveBeenCalledWith({type: actions.UPDATE_SCROLL, data: true});
+  });
+  it('should dispatch proper updateSize action', () => {
+    // given
+    const listener = jest.fn();
+
+    // when
+    actions.updateSize(true)(listener);
+
+    // then
+    expect(listener).toHaveBeenCalledWith({type: actions.UPDATE_SIZE, data: true});
   });
 });

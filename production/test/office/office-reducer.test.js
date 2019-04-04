@@ -1,9 +1,7 @@
-/* eslint-disable */
 import {createStore} from 'redux';
 import {officeReducer} from '../../src/office/office-reducer';
 import {officeProperties} from '../../src/office/office-properties';
 import {OfficeError} from '../../src/office/office-error';
-/* eslint-enable */
 
 describe('officeReducer', () => {
   const officeStore = createStore(officeReducer);
@@ -34,7 +32,7 @@ describe('officeReducer', () => {
 
   beforeEach(() => {
     // default state should be empty
-    expect(officeStore.getState()).toEqual({});
+    expect(officeStore.getState()).toEqual({loading: false});
   });
 
   afterEach(() => {
@@ -327,5 +325,23 @@ describe('officeReducer', () => {
     expect(wrongDispatch).toThrowError(OfficeError);
     expect(wrongDispatch).toThrowError('Missing report.id');
     reportArrayMock[1].id = originalId;
+  });
+  it('should set popupOpen to true onPopupShown', () => {
+    // given
+    const prevState = {popupOpen: false};
+    const action = {type: officeProperties.actions.popupShown};
+    // when
+    const newState = officeReducer(prevState, action);
+    // then
+    expect(newState.popupOpen).toBe(true);
+  });
+  it('should set popupOpen to false onPopupHidden', () => {
+    // given
+    const prevState = {popupOpen: true};
+    const action = {type: officeProperties.actions.popupHidden};
+    // when
+    const newState = officeReducer(prevState, action);
+    // then
+    expect(newState.popupOpen).toBe(false);
   });
 });

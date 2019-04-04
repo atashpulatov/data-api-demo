@@ -28,7 +28,7 @@ class OfficeApiHelper {
       (headerCount -= firstNumber) >= 0;
       firstNumber = secondNumber, secondNumber *= ALPHABET_RANGE_END) {
       endColumn = String.fromCharCode(parseInt(
-          (headerCount % secondNumber) / firstNumber)
+        (headerCount % secondNumber) / firstNumber)
         + ASCII_CAPITAL_LETTER_INDEX)
         + endColumn;
     }
@@ -65,8 +65,8 @@ class OfficeApiHelper {
 
   getBindingRange = (context, bindingId) => {
     return context.workbook.bindings
-        .getItem(bindingId).getTable()
-        .getRange();
+      .getItem(bindingId).getTable()
+      .getRange();
   }
 
   getExcelContext = async () => {
@@ -77,6 +77,11 @@ class OfficeApiHelper {
 
   getOfficeContext = async () => {
     return await Office.context;
+  }
+
+  getExcelSessionStatus = async () => {
+    // ToDo find better way to check session status
+    return await this.getExcelContext() ? true : false;
   }
 
   findAvailableOfficeTableId = () => {
@@ -172,21 +177,21 @@ class OfficeApiHelper {
     selectedRangeStart.load(officeProperties.officeAddress);
     await context.sync();
     const startCell = selectedRangeStart.address
-        .split('!')[1].split(':')[0];
+      .split('!')[1].split(':')[0];
     return startCell;
   }
 
   bindNamedItem = (namedItem, bindingId) => {
     return new Promise((resolve, reject) => Office.context.document.bindings.addFromNamedItemAsync(
-        namedItem, 'table', {id: bindingId}, (result) => {
-          if (result.status === 'succeeded') {
-            console.log('Added new binding with type: ' + result.value.type + ' and id: ' + result.value.id);
-            resolve();
-          } else {
-            console.error('Error: ' + result.error.message);
-            reject(result.error);
-          }
-        }));
+      namedItem, 'table', {id: bindingId}, (result) => {
+        if (result.status === 'succeeded') {
+          console.log('Added new binding with type: ' + result.value.type + ' and id: ' + result.value.id);
+          resolve();
+        } else {
+          console.error('Error: ' + result.error.message);
+          reject(result.error);
+        }
+      }));
   }
 }
 

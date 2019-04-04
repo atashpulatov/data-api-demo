@@ -5,7 +5,7 @@ import {selectorProperties} from '../attribute-selector/selector-properties';
 import {PopupButtons} from '../popup/popup-buttons.jsx';
 import {FolderBrowser} from 'mstr-react-library';
 import {connect} from 'react-redux';
-import {selectFolder, selectObject, setDataSource, startImport} from './navigation-tree-actions';
+import {actions} from './navigation-tree-actions';
 
 export class _NavigationTree extends Component {
   constructor(props) {
@@ -41,6 +41,7 @@ export class _NavigationTree extends Component {
       chosenProject: this.props.chosenProjectId,
       chosenSubtype: this.props.chosenSubtype,
     };
+    this.props.startLoading();
     this.props.startImport();
     Office.context.ui.messageParent(JSON.stringify(okObject));
   };
@@ -68,10 +69,15 @@ export class _NavigationTree extends Component {
   };
 
   render() {
-    const {setDataSource, dataSource, chosenObjectId, chosenProjectId,
-      chosenSubtype, folder, selectFolder, loading, handlePopupErrors} = this.props;
+    const {setDataSource, dataSource, chosenObjectId, chosenProjectId, pageSize, changeSearching, changeSorting,
+      chosenSubtype, folder, selectFolder, loading, handlePopupErrors, scrollPosition, searchText, sorter,
+      updateScroll, updateSize} = this.props;
     return (
       <FolderBrowser
+        onSorterChange={changeSorting}
+        onSearchChange={changeSearching}
+        searchText={searchText}
+        sorter={sorter}
         title='Import data'
         session={this.state.session}
         triggerUpdate={this.state.triggerUpdate}
@@ -84,12 +90,16 @@ export class _NavigationTree extends Component {
           projectId: chosenProjectId,
           subtype: chosenSubtype,
         }}
+        scrollPosition={scrollPosition}
+        pageSize={pageSize}
         chosenFolder={folder}
         onChoseFolder={selectFolder}
         handlePopupErrors={handlePopupErrors}
+        onSizeUpdated={updateSize}
+        onScrollUpdated={updateScroll}
       >
         {/* Temporary loading user action block */}
-        <div style={{
+        <div id="action-block" style={{
           display: loading ? 'block' : 'none',
           position: 'fixed',
           top: '0',
@@ -114,17 +124,8 @@ export class _NavigationTree extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
+export const mapStateToProps = (state) => {
   return {...state.navigationTree};
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    selectObject: (data) => selectObject(dispatch)(data),
-    setDataSource: (data) => setDataSource(dispatch)(data),
-    selectFolder: (data) => selectFolder(dispatch)(data),
-    startImport: () => startImport(dispatch)(),
-  };
-};
-
-export const NavigationTree = connect(mapStateToProps, mapDispatchToProps)(_NavigationTree);
+export const NavigationTree = connect(mapStateToProps, actions)(_NavigationTree);
