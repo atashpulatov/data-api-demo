@@ -11,7 +11,7 @@ export const Placeholder = ({loading}) => {
       <img width='189px' height='108px' src={folderArt} alt='Office Add-in logo' />
       <h2>Let's get started</h2>
       <p>You haven’t imported any report or dataset yet. Let’s import data to start!</p>
-      <Button type='primary' onClick={popupController.runPopupNavigation} disabled={loading}>Import Data</Button>
+      <Button id='import-data-placeholder' type='primary' onClick={popupController.runPopupNavigation} disabled={loading}>Import Data</Button>
     </div>
   );
 };

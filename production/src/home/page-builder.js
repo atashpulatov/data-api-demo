@@ -19,7 +19,7 @@ class PageBuilder {
         {
           authToken ?
             <div>
-              <Header loading={loadingReport} />
+              <Header IS_LOCALHOST={IS_LOCALHOST} loading={loadingReport} />
               <Tabs defaultActiveKey="data" className="tabs-container">
                 <TabPane tab="Imported Data" key="data">
                   {(reportArray && reportArray.length !== 0) && <FileHistoryContainer loading={loadingReport} />}

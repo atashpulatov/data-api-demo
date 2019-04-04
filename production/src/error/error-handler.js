@@ -20,8 +20,8 @@ class ErrorService {
       return new PromptedReportError();
     }
     if (error.status === 404 || !error.response) {
-      if (!!error.response && !!error.response.body) {
-        return new InternalServerError(error.response ? error.response.body : {});
+      if (error.response && error.response.body) {
+        return new InternalServerError(error.response.body);
       }
       if (error.message && error.message.includes('Possible causes: the network is offline,')) {
         return new ConnectionBrokenError();
@@ -36,7 +36,7 @@ class ErrorService {
       case 401:
         return new UnauthorizedError();
       case 500:
-        return new InternalServerError(error.response ? error.response.body : {});
+        return new InternalServerError(error.response.body ? error.response.body : {});
       default:
         return error;
     }

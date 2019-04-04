@@ -9,6 +9,7 @@ import {CLEAR_WINDOW} from './popup-actions';
 import {errorService} from '../error/error-handler';
 import {authenticationHelper} from '../authentication/authentication-helper';
 import {officeProperties} from '../office/office-properties';
+import {officeApiHelper} from '../office/office-api-helper';
 const URL = `${window.location.href}`;
 const IS_LOCALHOST = URL.includes('localhost');
 
@@ -33,6 +34,7 @@ class PopupController {
     }
     const splittedUrl = url.split('?'); // we need to get rid of any query params
     try {
+      await officeApiHelper.getExcelSessionStatus();
       Office.context.ui.displayDialogAsync(
           splittedUrl[0]
         + '?popupType=' + popupType
@@ -65,9 +67,9 @@ class PopupController {
     const response = JSON.parse(message);
     try {
       await this.closeDialog(dialog);
+      await officeApiHelper.getExcelSessionStatus(); // checking excel session status
       switch (response.command) {
         case selectorProperties.commandOk:
-
           await this.handleOkCommand(response, dialog);
           break;
         case selectorProperties.commandOnUpdate:
@@ -87,6 +89,7 @@ class PopupController {
       errorService.handleOfficeError(error);
     } finally {
       reduxStore.dispatch({type: officeProperties.actions.popupHidden});
+      reduxStore.dispatch({type: officeProperties.actions.stopLoading});
     }
   }
 

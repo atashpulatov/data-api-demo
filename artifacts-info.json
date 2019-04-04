@@ -1,0 +1,14 @@
+{
+  "main": {
+    "office.zip": {
+      "repository": "mstr-office",
+      "extension": "zip"
+    },
+    "office-loader.zip": {
+      "repository": "mstr-office",
+      "extension": "zip"
+    }
+  },
+  "dependencies": {
+  }
+}
