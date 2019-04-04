@@ -1,9 +1,7 @@
-/* eslint-disable */
 import {navigationService} from '../../src/navigation/navigation-service';
 import {historyProperties} from '../../src/history/history-properties';
 import {sessionProperties} from '../../src/storage/session-properties';
 import {reduxStore} from '../../src/store';
-/* eslint-enable */
 
 describe('NavigatorService', () => {
   beforeAll(() => {

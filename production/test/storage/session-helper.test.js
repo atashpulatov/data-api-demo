@@ -1,4 +1,3 @@
-/* eslint-disable */
 import {createStore} from 'redux';
 import {sessionReducer} from '../../src/storage/session-reducer';
 import {sessionProperties} from '../../src/storage/session-properties';
@@ -7,7 +6,6 @@ import {errorService} from '../../src/error/error-handler';
 import {authenticationService} from '../../src/authentication/auth-rest-service';
 import {homeHelper} from '../../src/home/home-helper';
 import {reduxStore} from '../../src/store';
-/* eslint-enable */
 
 describe('sessionHelper', () => {
   const sessionStore = createStore(sessionReducer);

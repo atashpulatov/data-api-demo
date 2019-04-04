@@ -1,11 +1,9 @@
-/* eslint-disable */
 import React from 'react';
 import {mount} from 'enzyme';
 import {Authenticate, _Authenticate} from '../../src/authentication/auth-component.jsx';
 import {reduxStore} from '../../src/store';
 import {sessionProperties} from '../../src/storage/session-properties';
 import {authenticationService} from '../../src/authentication/auth-rest-service';
-/* eslint-enable */
 
 jest.mock('../../src/authentication/auth-rest-service');
 

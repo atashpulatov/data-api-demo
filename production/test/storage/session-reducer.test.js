@@ -1,10 +1,8 @@
-/* eslint-disable */
 import {createStore} from 'redux';
 import {sessionReducer} from '../../src/storage/session-reducer';
 import {sessionProperties} from '../../src/storage/session-properties';
 import {SessionError} from '../../src/storage/session-error';
 import {isUndefined} from 'util';
-/* eslint-enable */
 
 describe('sessionReducer', () => {
   const sessionStore = createStore(sessionReducer);
