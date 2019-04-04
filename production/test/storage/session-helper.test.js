@@ -33,7 +33,7 @@ describe('sessionHelper', () => {
   });
   it('should call redirect logOutRedirect', async () => {
     // given
-    homeHelper.getWindowLocation = jest.fn().mockReturnValueOnce('url');
+    homeHelper.getWindowLocation = jest.fn().mockReturnValueOnce({origin: 'origin'});
     sessionHelper.replaceWindowLocation = jest.fn();
     const replaceHelper = jest.spyOn(sessionHelper, 'replaceWindowLocation');
     // when
@@ -44,7 +44,7 @@ describe('sessionHelper', () => {
   it('should disable loading for localhost in logOutRedirect', async () => {
     // given
     const loadingHelper = jest.spyOn(sessionHelper, 'disableLoading');
-    homeHelper.getWindowLocation = jest.fn().mockReturnValueOnce('localhost');
+    homeHelper.getWindowLocation = jest.fn().mockReturnValueOnce({origin: 'localhost'});
 
     // when
     sessionHelper.logOutRedirect();
