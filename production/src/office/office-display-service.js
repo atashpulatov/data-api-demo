@@ -48,7 +48,7 @@ class OfficeDisplayService {
 
       // TODO: If isRefresh check if new instance definition is same as before
 
-      // Create or get table
+      // Create or get table id
       DEBUG && console.time('Create or get table');
       const newOfficeTableId = officeTableId || officeApiHelper.findAvailableOfficeTableId();
       let officeTable;
@@ -63,8 +63,17 @@ class OfficeDisplayService {
       DEBUG && console.time('Fetch and insert into excel');
       const connectionData = {objectId, projectId, isReport, body};
       const officeData = {officeTable, excelContext, startCell, newOfficeTableId};
-      await this._fetchInsertDataIntoExcel(connectionData, officeData, instanceDefinition);
-      DEBUG && console.timeEnd('Fetch and insert into excel');
+      officeTable = await this._fetchInsertDataIntoExcel(connectionData, officeData, instanceDefinition, isRefresh);
+
+      // Apply formatting
+      if (!isRefresh) {
+        DEBUG && console.time('Apply formatting');
+        await officeApiHelper.formatTable(officeTable);
+        await officeApiHelper.formatNumbers(officeTable, instanceDefinition.mstrTable);
+        await excelContext.sync();
+        DEBUG && console.timeEnd('Apply formatting');
+      }
+
       DEBUG && console.timeEnd('Total');
 
       const {envUrl} = officeApiHelper.getCurrentMstrContext();
@@ -73,7 +82,7 @@ class OfficeDisplayService {
       await officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
 
       if (!officeTableId && !isRefresh) {
-        await this.addReportToStore({
+        this.addReportToStore({
           id: instanceDefinition.mstrTable.id,
           name: instanceDefinition.mstrTable.name,
           bindId: bindingId,
@@ -100,6 +109,7 @@ class OfficeDisplayService {
 
   // TODO: move it to api helper?
   addReportToStore = (report) => {
+    console.log(report);
     reduxStore.dispatch({
       type: officeProperties.actions.loadReport,
       report: {
@@ -214,18 +224,14 @@ class OfficeDisplayService {
         DEBUG && console.time('Fetch data');
         DEBUG && console.groupEnd();
       };
-
+      DEBUG && console.timeEnd('Fetch and insert into excel');
       DEBUG && console.time('Context sync');
       await Promise.all(contextPromises);
       DEBUG && console.timeEnd('Context sync');
-
-      DEBUG && console.time('Apply formatting');
-      await officeApiHelper.formatTable(officeTable);
-      await officeApiHelper.formatNumbers(officeTable, mstrTable);
-      await excelContext.sync();
-      DEBUG && console.timeEnd('Apply formatting');
+      return officeTable;
     } catch (error) {
-      DEBUG && console.log(error);
+      console.log(error);
+      throw error;
     }
   }
 
