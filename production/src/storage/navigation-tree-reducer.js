@@ -89,6 +89,11 @@ export const navigationTree = (state = initialState, action) => {
       newState.chosenType = DEFAULT_TYPE;
       newState.scrollPosition = null;
       newState.pageSize = null;
+      newState.sorter = {
+        columnKey: 'dateModified',
+        order: 'descend',
+      };
+      newState.searchText = '';
       return newState;
     }
     case CLEAR_WINDOW: {
