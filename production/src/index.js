@@ -33,7 +33,7 @@ function goReact() {
  * This should prevent navigating back to login page via browser 'Back' button
  */
 function disableBackNavigation(count) {
-  if (count > 0){
+  if (count){
     window.setTimeout(function () {
       window.location.hash = count;
       disableBackNavigation(count-1);
