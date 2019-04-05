@@ -9,7 +9,7 @@ const supportedTypesArray = [
   {
     name: 'Report',
     type: 3,
-    subtype: [768],
+    subtype: [768, 769, 774], //DssXmlSubTypeReportGrid, DssXmlSubTypeReportGraph, DssXmlSubTypeReportGridAndGraph
   },
   {
     name: 'Dataset',
