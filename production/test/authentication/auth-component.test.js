@@ -1,11 +1,9 @@
-/* eslint-disable */
 import React from 'react';
-import { mount } from 'enzyme';
-import { Authenticate, _Authenticate } from '../../src/authentication/auth-component.jsx';
-import { reduxStore } from '../../src/store';
-import { sessionProperties } from '../../src/storage/session-properties';
-import { authenticationService } from '../../src/authentication/auth-rest-service';
-/* eslint-enable */
+import {mount} from 'enzyme';
+import {Authenticate, _Authenticate} from '../../src/authentication/auth-component.jsx';
+import {reduxStore} from '../../src/store';
+import {sessionProperties} from '../../src/storage/session-properties';
+import {authenticationService} from '../../src/authentication/auth-rest-service';
 
 jest.mock('../../src/authentication/auth-rest-service');
 
@@ -13,8 +11,8 @@ describe('AuthComponent', () => {
   const location = {};
 
   beforeAll(() => {
-    const origin = { pathname: '/' };
-    const state = { origin: origin };
+    const origin = {pathname: '/'};
+    const state = {origin: origin};
     location.state = state;
   });
 
@@ -45,7 +43,7 @@ describe('AuthComponent', () => {
       validateFields: () => jest.fn(),
     };
     const wrappedComponent = mount(<_Authenticate history={history} form={mockForm} />);
-    const onLoginUserSpy = jest.spyOn(wrappedComponent.instance(), 'onLoginUser').mockImplementation(() => { });
+    const onLoginUserSpy = jest.spyOn(wrappedComponent.instance(), 'onLoginUser');
     const form = wrappedComponent.find('Form').at(0);
     // when
     form.instance().props.onSubmit(mockEvent);
