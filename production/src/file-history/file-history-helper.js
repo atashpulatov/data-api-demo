@@ -10,7 +10,7 @@ const capitalize = (str) => {
 };
 
 class FileHistoryHelper {
-  refreshReport = async (onRefresh, bindingId, objectType) => {
+  refreshReport = async (onRefresh, bindingId, objectType, callback = () => {}) => {
     try {
       await authenticationHelper.validateAuthToken();
       reduxStore.dispatch({
@@ -26,6 +26,7 @@ class FileHistoryHelper {
         type: officeProperties.actions.finishLoadingReport,
         reportBindId: bindingId,
       });
+      callback();
     }
   }
 

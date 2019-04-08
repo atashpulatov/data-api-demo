@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {List, Button} from 'antd';
+import {Button} from 'antd';
 import {OfficeLoadedFile} from './office-loaded-file.jsx';
 import {officeApiHelper} from '../office/office-api-helper';
 import {officeDisplayService} from '../office/office-display-service';
 import {popupController} from '../popup/popup-controller';
+import {LoadingText} from 'mstr-react-library';
 import './file-history.css';
 
 export class _FileHistoryContainer extends Component {
@@ -12,28 +13,19 @@ export class _FileHistoryContainer extends Component {
     const {reportArray, loading} = this.props;
     return (
       <div>
-        <Button id="add-data-btn-container" className="add-data-btn" onClick={popupController.runPopupNavigation} disabled={loading}>Add Data</Button>
-        <List
-          className='ant-list-header-override'
-          size='small'
-          // TODO: Remove when supporting simultaneous dataset refresh
-          loading={{indicator: <span></span>, spinning: reportArray && !!loading}}
-          locale={{emptyText: 'No files loaded.'}}
-          dataSource={reportArray
-            ? reportArray
-            : []}
-          renderItem={(report) => (
-            (<OfficeLoadedFile
-              fileName={report.name}
-              bindingId={report.bindId}
-              onClick={officeApiHelper.onBindingObjectClick}
-              onDelete={officeDisplayService.removeReportFromExcel}
-              onRefresh={officeDisplayService.refreshReport}
-              isLoading={report.isLoading}
-              objectType={report.objectType}
-            />)
-          )}
-        />
+        <Button id="add-data-btn-container" className="add-data-btn" onClick={popupController.runPopupNavigation}
+          disabled={loading}>Add Data</Button>
+        {reportArray.length ? <list>
+          {reportArray.map((report) => <OfficeLoadedFile
+            key={report.bindId}
+            fileName={report.name}
+            bindingId={report.bindId}
+            onClick={officeApiHelper.onBindingObjectClick}
+            onDelete={officeDisplayService.removeReportFromExcel}
+            onRefresh={officeDisplayService.refreshReport}
+            isLoading={report.isLoading}
+            objectType={report.objectType}/>)}
+        </list> : <LoadingText text={'No files loaded.'}/>}
       </div>);
   }
 }
