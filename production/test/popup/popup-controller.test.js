@@ -5,6 +5,7 @@ import {objectTypes} from 'mstr-react-library';
 import {errorService} from '../../src/error/error-handler';
 import {EnvironmentNotFoundError} from '../../src/error/environment-not-found-error';
 import {PopupTypeEnum} from '../../src/home/popup-type-enum';
+import {officeApiHelper} from '../../src/office/office-api-helper';
 
 describe('PopupController', () => {
   const dialog = {};
@@ -36,6 +37,7 @@ describe('PopupController', () => {
   it('should handle update command from popup for cube',
       async () => {
       // given
+        officeApiHelper.getExcelSessionStatus = jest.fn();
         const actionObject = {
           command: selectorProperties.commandOnUpdate,
           reportId: 'reportId',
@@ -46,6 +48,7 @@ describe('PopupController', () => {
         const arg = {
           message: JSON.stringify(actionObject),
         };
+        officeApiHelper.getOfficeSessionStatus = jest.fn();
         const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
         // when
         await popupController.onMessageFromPopup(dialog, arg);
@@ -62,6 +65,7 @@ describe('PopupController', () => {
   it('should handle update command from popup for report',
       async () => {
       // given
+        officeApiHelper.getExcelSessionStatus = jest.fn();
         const actionObject = {
           command: selectorProperties.commandOnUpdate,
           reportId: 'reportId',
@@ -72,6 +76,7 @@ describe('PopupController', () => {
         const arg = {
           message: JSON.stringify(actionObject),
         };
+        officeApiHelper.getOfficeSessionStatus = jest.fn();
         const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
         // when
         await popupController.onMessageFromPopup(dialog, arg);
@@ -87,6 +92,7 @@ describe('PopupController', () => {
 
   it('should handle error command from popup', async () => {
     // given
+    officeApiHelper.getExcelSessionStatus = jest.fn();
     const command = selectorProperties.commandError;
     const error = {
       response: {
@@ -97,7 +103,7 @@ describe('PopupController', () => {
     const givenArg = {
       message: expectedMessage,
     };
-
+    officeApiHelper.getOfficeSessionStatus = jest.fn();
     const handleErrorSpy = jest.spyOn(errorService, 'handleError');
     // when
     await popupController.onMessageFromPopup(dialog, givenArg);

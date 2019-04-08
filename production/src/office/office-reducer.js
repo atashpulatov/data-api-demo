@@ -1,7 +1,7 @@
 import {officeProperties} from './office-properties';
 import {OfficeError} from './office-error';
 
-export const officeReducer = (state = {}, action) => {
+export const officeReducer = (state = {loading: false}, action) => {
   switch (action.type) {
     case officeProperties.actions.preLoadReport:
       return onPreLoadReport(action, state);
@@ -17,11 +17,46 @@ export const officeReducer = (state = {}, action) => {
       return onStartLoadingReport(action, state);
     case officeProperties.actions.finishLoadingReport:
       return onFinishLoadingReport(action, state);
+    case officeProperties.actions.popupShown:
+      return onPopupShown(state);
+    case officeProperties.actions.popupHidden:
+      return onPopupHidden(state);
+    case officeProperties.actions.startLoading:
+      return onStartLoading(state);
+    case officeProperties.actions.stopLoading:
+      return onStopLoading(state);
     default:
       break;
   }
   return state;
 };
+
+function onStartLoading(state) {
+  return {
+    ...state,
+    loading: true,
+  };
+}
+function onStopLoading(state) {
+  return {
+    ...state,
+    loading: false,
+  };
+}
+
+function onPopupShown(state) {
+  return {
+    ...state,
+    popupOpen: true,
+  };
+}
+
+function onPopupHidden(state) {
+  return {
+    ...state,
+    popupOpen: false,
+  };
+}
 
 function onPreLoadReport(action, state) {
   return {
@@ -34,6 +69,7 @@ function onLoadReport(action, state) {
   _checkReportData(action.report);
   return {
     ...state,
+    loading: false,
     reportArray: state.reportArray
       ? [...state.reportArray, action.report]
       : [action.report],
@@ -54,10 +90,9 @@ function onLoadAllReports(action, state) {
 }
 
 function onRemoveAllReports(action, state) {
-  return {
-    ...state,
-    reportArray: undefined,
-  };
+  const newState = {...state};
+  delete newState.reportArray;
+  return newState;
 }
 
 function onRemoveReport(action, state) {
@@ -95,6 +130,7 @@ function _toggleSetLoadingStatus(action, state, status) {
   newReportArray[indexOfElement].isLoading = status;
   return {
     ...state,
+    loading: status,
     reportArray: newReportArray,
   };
 }

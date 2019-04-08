@@ -9,15 +9,15 @@ import './file-history.css';
 
 export class _FileHistoryContainer extends Component {
   render() {
-    const {reportArray} = this.props;
+    const {reportArray, loading} = this.props;
     return (
       <div>
-        <Button className="add-data-btn" onClick={popupController.runPopupNavigation}>Add Data</Button>
+        <Button id="add-data-btn-container" className="add-data-btn" onClick={popupController.runPopupNavigation} disabled={loading}>Add Data</Button>
         <List
           className='ant-list-header-override'
           size='small'
           // TODO: Remove when supporting simultaneous dataset refresh
-          loading={{indicator: <span></span>, spinning: reportArray && !!reportArray.find((e) => e.isLoading)}}
+          loading={{indicator: <span></span>, spinning: reportArray && !!loading}}
           locale={{emptyText: 'No files loaded.'}}
           dataSource={reportArray
             ? reportArray

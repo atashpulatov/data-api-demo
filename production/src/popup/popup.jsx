@@ -62,6 +62,7 @@ export class Popup extends Component {
     } else if (popupType === PopupTypeEnum.loadingPage) {
       return (<LoadingPage />);
     }
+    return (<></>);
   }
 
   render() {

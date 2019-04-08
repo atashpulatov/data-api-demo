@@ -81,6 +81,30 @@ describe('Popup.js', () => {
     expect(parsed.reportSubtype).toEqual(givenRecord.subtype);
   });
 
+  it('should set projectId, reportId and subtype on handleBack', () => {
+    // given
+    const location = {
+      search: {},
+    };
+    const givenRecord = {
+      reportId: 'reportId',
+      projectId: 'projectId',
+      subtype: 'subtype',
+    };
+    const popupWrapped = shallow(<Popup location={location} />);
+    // when
+    popupWrapped.instance().handleBack(
+        givenRecord.projectId,
+        givenRecord.reportId,
+        givenRecord.subtype
+    );
+    // then
+    const parsed = popupWrapped.state().parsed;
+    expect(parsed.reportId).toEqual(givenRecord.reportId);
+    expect(parsed.projectId).toEqual(givenRecord.projectId);
+    expect(parsed.reportSubtype).toEqual(givenRecord.subtype);
+  });
+
   it('should render loading page when proper type set', () => {
     // given
     const location = {
@@ -90,5 +114,16 @@ describe('Popup.js', () => {
     const popupWrapped = mount(<Popup location={location} />);
     // then
     expect(popupWrapped.find('LoadingText').get(0)).toBeDefined();
+  });
+  it('should render nothing with incorrect type', () => {
+    // given
+    const location = {
+      search: `popupType=wrongType`,
+    };
+    // when
+    const popupWrapped = mount(<Popup location={location} />);
+    // then
+
+    expect(popupWrapped.children().children().length).toBe(0);
   });
 });
