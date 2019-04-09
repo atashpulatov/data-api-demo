@@ -5,6 +5,7 @@ import {shallow, mount} from 'enzyme';
 import {selectorProperties} from '../../src/attribute-selector/selector-properties';
 import {PopupButtons} from '../../src/popup/popup-buttons';
 import {Office} from '../mockOffice';
+import {mstrObjectRestService} from '../../src/mstr-object/mstr-object-rest-service';
 
 describe('NavigationTree', () => {
   afterAll(() => {
@@ -81,12 +82,12 @@ describe('NavigationTree', () => {
       chosenObjectId={true}
       selectObject={propsMethod} />);
     const secondaryAction = jest.spyOn(wrappedComponent.instance(), 'handleSecondary')
-      .mockReturnValueOnce({});
+        .mockReturnValueOnce({});
     wrappedComponent.update();
     wrappedComponent.instance().forceUpdate();
     const popupButtonsWrapped = wrappedComponent.find(PopupButtons);
     const secondaryButton = popupButtonsWrapped.find('button')
-      .find('#prepare');
+        .find('#prepare');
     // when
     secondaryButton.simulate('click');
     // then
@@ -119,7 +120,7 @@ describe('NavigationTree', () => {
     // then
     expect(propsMethod).toBeCalled();
     expect(propsMethod).toBeCalledWith(actionObject.chosenProjectId, actionObject.chosenObjectId,
-      actionObject.chosenSubtype, actionObject.chosenProjectName, actionObject.chosenType);
+        actionObject.chosenSubtype, actionObject.chosenProjectName, actionObject.chosenType);
     expect(wrappedComponent.state('previewDisplay')).toEqual(true);
   });
 
@@ -210,31 +211,32 @@ describe('NavigationTree', () => {
     expect(mapStateToProps(initialState)).toEqual(initialState.navigationTree);
   });
 
-  it('should disable buttons until instance id obtained', () => {
+  it('should disable buttons until instance id obtained', async () => {
     // given
     const givenObjectId = 'objectId';
     const givenProjectId = 'projectId';
     const givenSubtype = 'subtype';
-    const givenIsPrompted = true;
+    const givenIsPrompted = 'customPromptAnswer';
     const selectObject = jest.fn();
-    const isPromptedResponse = jest.spyOn();
+    const isPromptedResponse = jest.spyOn(mstrObjectRestService, 'isPrompted')
+        .mockImplementationOnce(async () => givenIsPrompted);
     const wrappedComponent = shallow(<_NavigationTree selectObject={selectObject} parsed={{}} />);
     // when
-    wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype);
+    await wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype);
     // then
+    expect(isPromptedResponse).toBeCalledWith(givenObjectId);
     expect(selectObject).toBeCalledTimes(2);
-    expect(selectObject).toBeCalledWith({
+    expect(selectObject.mock.calls[0][0]).toEqual({
       chosenObjectId: undefined,
       chosenProjectId: undefined,
       chosenSubtype: undefined,
       isPrompted: undefined,
     });
-    expect(selectObject).toBeCalledWith({
+    expect(selectObject.mock.calls[1][0]).toEqual({
       chosenObjectId: givenObjectId,
       chosenProjectId: givenProjectId,
       chosenSubtype: givenSubtype,
       isPrompted: givenIsPrompted,
     });
-    expect(true).toBeFalsy();
   });
 });
