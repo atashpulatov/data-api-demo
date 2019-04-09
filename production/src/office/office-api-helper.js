@@ -69,6 +69,11 @@ class OfficeApiHelper {
       .getRange();
   }
 
+  getTable = (context, bindingId) => {
+    return context.workbook.bindings
+        .getItem(bindingId).getTable();
+  }
+
   getExcelContext = async () => {
     return await Excel.run(async (context) => {
       return context;
@@ -104,14 +109,14 @@ class OfficeApiHelper {
 
   formatTable = (sheet) => {
     if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
-      sheet.getUsedRange().format.autofitColumns();
-      sheet.getUsedRange().format.autofitRows();
+      sheet.getRange().format.autofitColumns();
+      sheet.getRange().format.autofitRows();
     } else {
       notificationService.displayMessage('warning', `Unable to format table.`);
     }
   }
 
-  formatNumbers = async (table, reportConvertedData) => {
+  formatNumbers = (table, reportConvertedData) => {
     if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
       try {
         const rowsCount = reportConvertedData.rows.length;
@@ -127,7 +132,7 @@ class OfficeApiHelper {
             } else {
               format = object.formatString;
 
-              if (format.indexOf('$') != -1) {
+              if (format.indexOf('$') !== -1) {
                 format = format.replace(/[$]/g, '\\$').replace(/["]/g, ''); // fix anoying $-sign currency replacemnt in Excel
               }
             }
@@ -136,7 +141,7 @@ class OfficeApiHelper {
           }
         }
 
-        await table.context.sync();
+        return table.context.sync();
       } catch (error) {
         throw errorService.handleError(error);
       }
