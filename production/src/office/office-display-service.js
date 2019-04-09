@@ -193,8 +193,9 @@ class OfficeDisplayService {
   async _applyFormatting(isRefresh, officeTable, instanceDefinition, excelContext) {
     console.time('Apply formatting');
     if (!isRefresh) {
-      await officeApiHelper.formatTable(officeTable);
-      await officeApiHelper.formatNumbers(officeTable, instanceDefinition.mstrTable);
+      officeApiHelper.formatNumbers(officeTable, instanceDefinition.mstrTable);
+      await excelContext.sync();
+      officeApiHelper.formatTable(officeTable);
       await excelContext.sync();
     }
     console.timeEnd('Apply formatting');
