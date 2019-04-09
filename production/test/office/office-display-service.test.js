@@ -10,6 +10,7 @@ import {popupController} from '../../src/popup/popup-controller';
 import {PopupTypeEnum} from '../../src/home/popup-type-enum';
 import {sessionHelper} from '../../src/storage/session-helper';
 import {OverlappingTablesError} from '../../src/error/overlapping-tables-error';
+import {officeConverterService} from '../../src/office/office-converter-service';
 
 jest.mock('../../src/mstr-object/mstr-object-rest-service');
 jest.mock('../../src/office/store/office-store-service');
@@ -25,7 +26,8 @@ describe('OfficeDisplayService', () => {
   };
 
   beforeAll(() => {
-    jest.spyOn(mstrObjectRestService, 'getObjectContent')
+    givenReport.mstrTable = officeConverterService.createTable(givenReport);
+    jest.spyOn(mstrObjectRestService, 'getInstanceDefinition')
         .mockResolvedValue(givenReport);
     jest.spyOn(officeApiHelper, 'findAvailableOfficeTableId')
         .mockReturnValue(excelTableNameMock);
@@ -47,6 +49,16 @@ describe('OfficeDisplayService', () => {
                 return {
                   delete: () => {},
                   clearFilters: () => {},
+                };
+              },
+            },
+            worksheets: {
+              getActiveWorksheet: () => {},
+            },
+            bindings: {
+              getItem: () => {
+                return {
+                  getTable: () => {},
                 };
               },
             },
@@ -102,16 +114,20 @@ describe('OfficeDisplayService', () => {
 
   it('should call preserveReport on office store service', async () => {
     // given
-    jest.spyOn(officeDisplayService, '_insertDataIntoExcel').mockReturnValueOnce({});
+    jest.spyOn(officeDisplayService, '_fetchInsertDataIntoExcel').mockReturnValueOnce({});
+    jest.spyOn(officeDisplayService, '_createOfficeTable').mockReturnValueOnce({});
     jest.spyOn(officeApiHelper, 'getSelectedCell').mockReturnValueOnce({});
     jest.spyOn(officeApiHelper, 'bindNamedItem').mockReturnValueOnce({});
+    jest.spyOn(officeApiHelper, 'formatTable').mockReturnValueOnce({});
+    jest.spyOn(officeApiHelper, 'formatNumbers').mockReturnValueOnce({});
+
     const mockDialog = {
       close: () => {},
     };
     sessionHelper.setDialog(mockDialog);
     const objectId = null;
     // when
-    await officeDisplayService.printObject(objectId, mstrContext.projectId, true);
+    await officeDisplayService.printObject(objectId, mstrContext.projectId, true, 'A1');
     // then
     expect(officeStoreService.preserveReport).toBeCalled();
     expect(officeStoreService.preserveReport).toBeCalledWith({
@@ -204,11 +220,9 @@ describe('OfficeDisplayService', () => {
     expect(officeStoreService.deleteReport).not.toBeCalled();
   });
 
-  describe('_insertDataIntoExcel', async () => {
-    it('should return table husk with proper name and invoke required methods', async () => {
+  describe('_createOfficeTable', async () => {
+    it('should return officeTable proper name and invoke required methods', async () => {
       // given
-      jest.spyOn(officeApiHelper, 'formatTable').mockReturnValue({});
-      const getActiveWorksheetMock = jest.fn();
       const mockedTable = {
         getHeaderRowRange: jest.fn().mockReturnValue({
           values: [],
@@ -227,75 +241,26 @@ describe('OfficeDisplayService', () => {
           add: jest.fn().mockReturnValue(mockedTable),
         },
         getRange: jest.fn().mockReturnValue({
-          value: [],
+          value: 'A1:B5',
           getUsedRangeOrNullObject: jest.fn().mockReturnValue({isNullObject: true}),
         }),
         activate: jest.fn(),
       };
-      const mockedPushRows = jest.fn();
-      officeDisplayService._pushRows = mockedPushRows;
-      const mockedFormatTable = jest.fn();
-      officeDisplayService._formatTable = mockedFormatTable;
+      jest.spyOn(officeDisplayService, '_checkRangeValidity').mockReturnValueOnce({});
+      jest.spyOn(officeApiHelper, 'getRange').mockReturnValueOnce('A1:B5');
+
+      const getActiveWorksheetMock = jest.fn();
       getActiveWorksheetMock.mockReturnValue(mockedWorksheet);
       officeContextMock.workbook.worksheets.getActiveWorksheet = getActiveWorksheetMock;
-      officeContextMock.workbook.application = {suspendApiCalculationUntilNextSync: jest.fn()};
       officeContextMock.sync = jest.fn();
       officeContextMock.trackedObjects = {add: jest.fn()};
       const startCell = 'A1';
       const reportName = 'someReportName';
-      const reportConvertedData = {
-        name: 'testName',
-        headers: ['a', 'b'],
-        rows: [1, 2],
-      };
       // when
-      const result = await officeDisplayService._insertDataIntoExcel(reportConvertedData, officeContextMock, startCell, reportName);
+      const result = await officeDisplayService._createOfficeTable(givenReport, officeContextMock, startCell, reportName);
       // then
       expect(getActiveWorksheetMock).toBeCalled();
       expect(result.name).toEqual(reportName);
-    });
-    it('should return error when data range is not empty', async () => {
-      // given
-      jest.spyOn(officeApiHelper, 'formatTable').mockReturnValue({});
-      const getActiveWorksheetMock = jest.fn();
-      const mockedTable = {
-        getHeaderRowRange: jest.fn().mockReturnValue({
-          values: [],
-        }),
-      };
-      const mockedWorksheet = {
-        tables: {
-          add: jest.fn().mockReturnValue(mockedTable),
-        },
-        getRange: jest.fn().mockReturnValue({
-          value: [],
-          getUsedRangeOrNullObject: jest.fn().mockReturnValue({isNullObject: null}),
-        }),
-        activate: jest.fn(),
-      };
-      const mockedPushRows = jest.fn();
-      officeDisplayService._pushRows = mockedPushRows;
-      const mockedFormatTable = jest.fn();
-      officeDisplayService._formatTable = mockedFormatTable;
-      getActiveWorksheetMock.mockReturnValue(mockedWorksheet);
-      officeContextMock.workbook.worksheets.getActiveWorksheet = getActiveWorksheetMock;
-      officeContextMock.workbook.application = {suspendApiCalculationUntilNextSync: jest.fn()};
-      officeContextMock.sync = jest.fn();
-      officeContextMock.trackedObjects = {add: jest.fn()};
-      const startCell = 'A1';
-      const reportName = 'someReportName';
-      const reportConvertedData = {
-        name: 'testName',
-        headers: ['a', 'b'],
-        rows: [1, 2],
-      };
-      try {
-        // when
-        await officeDisplayService._insertDataIntoExcel(reportConvertedData, officeContextMock, startCell, reportName);
-      } catch (error) {
-        // then
-        expect(error).toBeInstanceOf(OverlappingTablesError);
-      }
     });
   });
   describe('_checkRangeValidity', async () => {
@@ -338,6 +303,19 @@ describe('OfficeDisplayService', () => {
       }
     });
   });
+  describe('_FetchInsertDataIntoExcel', () => {
+    it('should call getObjectGenerator', () => {
+      // given
+      const mockConnectionData = {objectId: 'objectId', projectId: 'projectId', isReport: true, body: {}};
+      const mockOfficeData = {excelContext: {}, officeTable: {}};
+      const mockGetObjectContentGenerator = jest.spyOn(mstrObjectRestService, 'getObjectContentGenerator').mockReturnValueOnce([]);
+      // when
+      officeDisplayService._fetchInsertDataIntoExcel(mockConnectionData, mockOfficeData, givenReport);
+      // then
+      expect(mockGetObjectContentGenerator).toBeCalled();
+    });
+  });
+
   describe.skip('delete report', () => {
     it('should fail', () => {
       // given
@@ -345,11 +323,11 @@ describe('OfficeDisplayService', () => {
       // then
       expect(false).toBeTruthy();
     });
-  });
-  it.skip('it should fail', () => {
-    // given
-    // when
-    expect(false).toBeTruthy();
-    // then
+    it.skip('it should fail', () => {
+      // given
+      // when
+      expect(false).toBeTruthy();
+      // then
+    });
   });
 });

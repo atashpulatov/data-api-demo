@@ -14,7 +14,8 @@
     },
     "globals": {
         "Office": true,
-        "Excel": true
+        "Excel": true,
+        "OfficeExtension": true
     },
     "rules": {
         "max-len": [
