@@ -6,6 +6,7 @@ import {PopupButtons} from '../popup/popup-buttons.jsx';
 import {FolderBrowser} from 'mstr-react-library';
 import {connect} from 'react-redux';
 import {actions} from './navigation-tree-actions';
+import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';
 
 export class _NavigationTree extends Component {
   constructor(props) {
@@ -61,6 +62,15 @@ export class _NavigationTree extends Component {
 
   // TODO: temporary solution
   onObjectChosen = (objectId, projectId, subtype) => {
+    this.props.selectObject({
+      chosenObjectId: undefined,
+      chosenProjectId: undefined,
+      chosenSubtype: undefined,
+      isPrompted: undefined,
+    });
+
+    const isPrompted = mstrObjectRestService.isPrompted(objectId);
+    
     this.props.selectObject({
       chosenObjectId: objectId,
       chosenProjectId: projectId,

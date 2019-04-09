@@ -1,5 +1,5 @@
 import React from 'react';
-import {_NavigationTree, mapStateToProps, mapDispatchToProps} from '../../src/navigation/navigation-tree';
+import {_NavigationTree, mapStateToProps, mapDispatchToProps, NavigationTree} from '../../src/navigation/navigation-tree';
 import {SELECT_OBJECT, SET_DATA_SOURCE, SELECT_FOLDER, START_IMPORT} from '../../src/navigation/navigation-tree-actions';
 import {shallow, mount} from 'enzyme';
 import {selectorProperties} from '../../src/attribute-selector/selector-properties';
@@ -79,14 +79,14 @@ describe('NavigationTree', () => {
     const wrappedComponent = mount(<_NavigationTree
       parsed={parsed}
       chosenObjectId={true}
-      selectObject={propsMethod}/>);
+      selectObject={propsMethod} />);
     const secondaryAction = jest.spyOn(wrappedComponent.instance(), 'handleSecondary')
-        .mockReturnValueOnce({});
+      .mockReturnValueOnce({});
     wrappedComponent.update();
     wrappedComponent.instance().forceUpdate();
     const popupButtonsWrapped = wrappedComponent.find(PopupButtons);
     const secondaryButton = popupButtonsWrapped.find('button')
-        .find('#prepare');
+      .find('#prepare');
     // when
     secondaryButton.simulate('click');
     // then
@@ -119,7 +119,7 @@ describe('NavigationTree', () => {
     // then
     expect(propsMethod).toBeCalled();
     expect(propsMethod).toBeCalledWith(actionObject.chosenProjectId, actionObject.chosenObjectId,
-        actionObject.chosenSubtype, actionObject.chosenProjectName, actionObject.chosenType);
+      actionObject.chosenSubtype, actionObject.chosenProjectName, actionObject.chosenType);
     expect(wrappedComponent.state('previewDisplay')).toEqual(true);
   });
 
@@ -208,5 +208,33 @@ describe('NavigationTree', () => {
     };
     // then
     expect(mapStateToProps(initialState)).toEqual(initialState.navigationTree);
+  });
+
+  it('should disable buttons until instance id obtained', () => {
+    // given
+    const givenObjectId = 'objectId';
+    const givenProjectId = 'projectId';
+    const givenSubtype = 'subtype';
+    const givenIsPrompted = true;
+    const selectObject = jest.fn();
+    const isPromptedResponse = jest.spyOn();
+    const wrappedComponent = shallow(<_NavigationTree selectObject={selectObject} parsed={{}} />);
+    // when
+    wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype);
+    // then
+    expect(selectObject).toBeCalledTimes(2);
+    expect(selectObject).toBeCalledWith({
+      chosenObjectId: undefined,
+      chosenProjectId: undefined,
+      chosenSubtype: undefined,
+      isPrompted: undefined,
+    });
+    expect(selectObject).toBeCalledWith({
+      chosenObjectId: givenObjectId,
+      chosenProjectId: givenProjectId,
+      chosenSubtype: givenSubtype,
+      isPrompted: givenIsPrompted,
+    });
+    expect(true).toBeFalsy();
   });
 });
