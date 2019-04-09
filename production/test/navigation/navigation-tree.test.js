@@ -144,40 +144,58 @@ describe('NavigationTree', () => {
     expect(office).toHaveBeenCalledWith(JSON.stringify(resultAction));
   });
 
-  it('should call proper method on import action', () => {
+  // it('should call proper method on import action', () => {
+  //   // given
+  //   const parsed = {
+  //     envUrl: 'env',
+  //     token: 'token',
+  //     projectId: 'projectId',
+  //   };
+  //   const actionObject = {
+  //     command: selectorProperties.commandOk,
+  //     chosenObjectId: 'objectId',
+  //     chosenProjectId: 'projectId',
+  //     chosenSubtype: 'subtype',
+  //   };
+  //   const resultAction = {
+  //     command: selectorProperties.commandOk,
+  //     chosenObject: 'objectId',
+  //     chosenProject: 'projectId',
+  //     chosenSubtype: 'subtype',
+  //   };
+  //   const mockStartImport = jest.fn();
+  //   const mockStartloading = jest.fn();
+  //   const mockMessageParent = jest.spyOn(Office.context.ui, 'messageParent');
+  //   const wrappedComponent = shallow(<_NavigationTree
+  //     parsed={parsed}
+  //     startImport={mockStartImport}
+  //     startLoading={mockStartloading}
+  //     {...actionObject}
+  //   />);
+  //   // when
+  //   wrappedComponent.instance().handleOk();
+  //   // then
+  //   expect(mockStartloading).toHaveBeenCalled();
+  //   expect(mockStartImport).toHaveBeenCalled();
+  //   expect(mockMessageParent).toHaveBeenCalledWith(JSON.stringify(resultAction));
+  // });
+
+  it('should call proper method on request import', () => {
     // given
     const parsed = {
       envUrl: 'env',
       token: 'token',
       projectId: 'projectId',
     };
-    const actionObject = {
-      command: selectorProperties.commandOk,
-      chosenObjectId: 'objectId',
-      chosenProjectId: 'projectId',
-      chosenSubtype: 'subtype',
-    };
-    const resultAction = {
-      command: selectorProperties.commandOk,
-      chosenObject: 'objectId',
-      chosenProject: 'projectId',
-      chosenSubtype: 'subtype',
-    };
-    const mockStartImport = jest.fn();
-    const mockStartloading = jest.fn();
-    const mockMessageParent = jest.spyOn(Office.context.ui, 'messageParent');
+    const mockRequestImport = jest.fn();
     const wrappedComponent = shallow(<_NavigationTree
       parsed={parsed}
-      startImport={mockStartImport}
-      startLoading={mockStartloading}
-      {...actionObject}
+      requestImport={mockRequestImport}
     />);
     // when
     wrappedComponent.instance().handleOk();
     // then
-    expect(mockStartloading).toHaveBeenCalled();
-    expect(mockStartImport).toHaveBeenCalled();
-    expect(mockMessageParent).toHaveBeenCalledWith(JSON.stringify(resultAction));
+    expect(mockRequestImport).toHaveBeenCalled();
   });
 
   it('should call proper method on trigger update', () => {

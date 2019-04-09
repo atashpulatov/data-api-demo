@@ -95,4 +95,15 @@ describe('NavigationTree Actions', () => {
     // then
     expect(listener).toHaveBeenCalledWith({type: actions.UPDATE_SIZE, data: true});
   });
+
+  it('should dispatch proper requestImport action', () => {
+    // given
+    const listener = jest.fn();
+
+    // when
+    actions.requestImport()(listener);
+
+    // then
+    expect(listener).toHaveBeenCalledWith({type: actions.REQUEST_IMPORT});
+  });
 });

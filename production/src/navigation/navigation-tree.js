@@ -36,15 +36,16 @@ export class _NavigationTree extends Component {
   };
 
   handleOk = () => {
-    const okObject = {
-      command: selectorProperties.commandOk,
-      chosenObject: this.props.chosenObjectId,
-      chosenProject: this.props.chosenProjectId,
-      chosenSubtype: this.props.chosenSubtype,
-    };
-    this.props.startLoading();
-    this.props.startImport();
-    Office.context.ui.messageParent(JSON.stringify(okObject));
+    // const okObject = {
+    //   command: selectorProperties.commandOk,
+    //   chosenObject: this.props.chosenObjectId,
+    //   chosenProject: this.props.chosenProjectId,
+    //   chosenSubtype: this.props.chosenSubtype,
+    // };
+    // this.props.startLoading();
+    // this.props.startImport();
+    // Office.context.ui.messageParent(JSON.stringify(okObject));
+    this.props.requestImport();
   };
 
   handleSecondary = () => {

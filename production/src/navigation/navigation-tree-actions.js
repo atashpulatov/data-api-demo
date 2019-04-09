@@ -3,6 +3,7 @@ import {officeProperties} from '../office/office-properties';
 export const SELECT_OBJECT = 'NAV_TREE_SELECT_OBJECT';
 export const SET_DATA_SOURCE = 'NAV_TREE_SET_DATA_SOURCE';
 export const SELECT_FOLDER = 'NAV_TREE_SELECT_FOLDER';
+export const REQUEST_IMPORT = 'REQUEST_IMPORT';
 export const START_IMPORT = 'NAV_TREE_START_IMPORT';
 export const CHANGE_SORTING = 'NAV_TREE_CHANGE_SORTING';
 export const CHANGE_SEARCHING = 'NAV_TREE_CHANGE_SEARCHING';
@@ -30,6 +31,10 @@ export function selectFolder(data) {
   });
 }
 
+export function requestImport(data) {
+  return (dispatch) => dispatch({type: REQUEST_IMPORT});
+}
+
 export function startImport() {
   return (dispatch) => dispatch({type: START_IMPORT});
 }
@@ -55,5 +60,5 @@ export function updateSize(data) {
 }
 
 export const actions = {
-  selectFolder, selectObject, setDataSource, startImport, startLoading, changeSearching, changeSorting, updateScroll, updateSize,
+  selectFolder, selectObject, setDataSource, requestImport, startImport, startLoading, changeSearching, changeSorting, updateScroll, updateSize,
 };
