@@ -63,6 +63,35 @@ describe('office loaded file', () => {
     const deleteButton = wrappedIcons.at(2);
     expect(deleteButton.props().type).toEqual('trash');
   });
+  it('refresh method should not do anything if it\'s loading state', () => {
+    // given
+    const refreshMock = jest.spyOn(fileHistoryHelper, 'refreshReport');
+    // when
+    const wrappedComponent = mount(<OfficeLoadedFile
+      bindingId={''}
+      fileName='test'
+      onRefresh={() => {}}
+      isLoading={true} />);
+    const refreshFunction = wrappedComponent.instance().refreshAction;
+    refreshFunction();
+    // then
+    expect(refreshMock).not.toBeCalled();
+  });
+  it('refresh method should call history-helper if it\'s not loading state', () => {
+    // given
+    const refreshMock = jest.spyOn(fileHistoryHelper, 'refreshReport');
+    // when
+    const wrappedComponent = mount(<OfficeLoadedFile
+      bindingId={''}
+      fileName='test'
+      onRefresh={() => {}}
+      isLoading={false} />);
+    const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
+    const refreshButton = wrappedIcons.at(1);
+    refreshButton.props().onClick();
+    // then
+    expect(refreshMock).toBeCalled();
+  });
   it('should invoke refresh method on button click', () => {
     // given
     const onRefreshMocked = jest.fn();

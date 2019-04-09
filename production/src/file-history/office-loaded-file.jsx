@@ -21,9 +21,10 @@ export class OfficeLoadedFile extends React.Component {
   refreshAction = () => {
     const {isLoading, onRefresh, bindingId, objectType} = this.props;
     if (!isLoading) {
-      this.setState({allowRefreshClick: false},
-          () => fileHistoryHelper.refreshReport(onRefresh, bindingId, objectType,
-              () => this.setState({allowRefreshClick: true})));
+      this.setState({allowRefreshClick: false}, async () => {
+        await fileHistoryHelper.refreshReport(onRefresh, bindingId, objectType);
+        this.setState({allowRefreshClick: true});
+      });
     }
   };
 

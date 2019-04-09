@@ -5567,8 +5567,8 @@ export const mstrTutorialFolder = [
     'subtype': 2048,
     'extType': 0,
     'dateCreated': '2012-02-06T09:02:09.000+0000',
-    'dateModified': '2016-08-12T19:33:43.000+0000',
-    'version': 'CB475907483A4E3508BE62B4170C4D86',
+    'dateModified': '2019-04-08T11:22:29.000+0000',
+    'version': '985BBD2811E959F09DEA0080EF65C15D',
     'acg': 255,
     'owner': {
       'name': 'Administrator',

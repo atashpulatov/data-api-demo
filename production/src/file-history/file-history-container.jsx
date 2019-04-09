@@ -5,7 +5,6 @@ import {OfficeLoadedFile} from './office-loaded-file.jsx';
 import {officeApiHelper} from '../office/office-api-helper';
 import {officeDisplayService} from '../office/office-display-service';
 import {popupController} from '../popup/popup-controller';
-import {LoadingText} from 'mstr-react-library';
 import './file-history.css';
 
 export class _FileHistoryContainer extends Component {
@@ -15,7 +14,7 @@ export class _FileHistoryContainer extends Component {
       <div>
         <Button id="add-data-btn-container" className="add-data-btn" onClick={popupController.runPopupNavigation}
           disabled={loading}>Add Data</Button>
-        {reportArray.length ? <list>
+        <div>
           {reportArray.map((report) => <OfficeLoadedFile
             key={report.bindId}
             fileName={report.name}
@@ -25,7 +24,7 @@ export class _FileHistoryContainer extends Component {
             onRefresh={officeDisplayService.refreshReport}
             isLoading={report.isLoading}
             objectType={report.objectType}/>)}
-        </list> : <LoadingText text={'No files loaded.'}/>}
+        </div>
       </div>);
   }
 }
@@ -36,5 +35,9 @@ function mapStateToProps(state) {
     project: state.historyReducer.project,
   };
 }
+
+_FileHistoryContainer.defaultProps = {
+  reportArray: [],
+};
 
 export const FileHistoryContainer = connect(mapStateToProps)(_FileHistoryContainer);
