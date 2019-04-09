@@ -5,13 +5,13 @@ class OfficeConverterService {
       id: jsonReport.id,
       name: jsonReport.name,
       headers,
-      rows: this._getRows(jsonReport, headers),
+      rows: this.getRows(jsonReport, headers),
       columnInformation: this._getColumnInformation(jsonReport),
     };
   }
 
   appendRows(table, jsonReport) {
-    const newRows = this._getRows(jsonReport, table.headers);
+    const newRows = this.getRows(jsonReport, table.headers);
     table.rows.push(...newRows);
     return table;
   }
@@ -89,7 +89,7 @@ class OfficeConverterService {
     return row;
   }
 
-  _getRows(jsonReport, headers) {
+  getRows(jsonReport, headers) {
     let rows = [];
     let data = [];
     if (jsonReport.result.data.root) {
