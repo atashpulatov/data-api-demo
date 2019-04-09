@@ -20,8 +20,8 @@ function canSaveCookies() {
   const TEMP_COOKIE = 'content_security_check=true';
   try {
     document.cookie = TEMP_COOKIE;
-    return document.cookie.includes(TEMP_COOKIE);
-  } catch{
+    return document.cookie.indexOf(TEMP_COOKIE) !== -1;
+  } catch {
     return false;
   }
 }
