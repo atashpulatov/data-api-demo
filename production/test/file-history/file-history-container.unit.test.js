@@ -15,16 +15,6 @@ describe('FileHistoryContainer', () => {
     // then
     expect(wrappedComponent.html()).not.toBeNull();
   });
-  it('should display "No files loaded" when there are no files', () => {
-    // given
-    // when
-    const wrappedComponent = mount(
-        <_FileHistoryContainer
-          project={'testProject'} />
-    );
-    // then
-    expect(wrappedComponent.html()).toContain('No files loaded.');
-  });
   it('should display list of files when there are files', () => {
     // given
     const mockFiles = createMockFilesArray();

@@ -27,7 +27,7 @@ class FileHistoryHelper {
         reportBindId: bindingId,
       });
     }
-  }
+  };
 
   deleteReport = async (onDelete, bindingId, objectType) => {
     sessionHelper.enableLoading();

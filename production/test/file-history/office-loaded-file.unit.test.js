@@ -13,6 +13,14 @@ describe('office loaded file', () => {
     expect(wrappedComponent.find('Row').hasClass('file-history-container')).toBeTruthy();
     expect(wrappedComponent.html()).toContain('test');
   });
+  it('should call componentWillUnmount provided file name', () => {
+    // given
+    // when
+    const wrappedComponent = mount(<OfficeLoadedFile fileName='test' />);
+    wrappedComponent.instance().componentWillUnmount();
+    // then
+    expect(wrappedComponent.instance()._ismounted).toBeFalsy();
+  });
   it('should display dataset type icon', () => {
     // given
 
@@ -62,6 +70,35 @@ describe('office loaded file', () => {
     expect(refreshButton.props().type).toEqual('refresh');
     const deleteButton = wrappedIcons.at(2);
     expect(deleteButton.props().type).toEqual('trash');
+  });
+  it('refresh method should not do anything if it\'s loading state', () => {
+    // given
+    const refreshMock = jest.spyOn(fileHistoryHelper, 'refreshReport');
+    // when
+    const wrappedComponent = mount(<OfficeLoadedFile
+      bindingId={''}
+      fileName='test'
+      onRefresh={() => {}}
+      isLoading={true} />);
+    const refreshFunction = wrappedComponent.instance().refreshAction;
+    refreshFunction();
+    // then
+    expect(refreshMock).not.toBeCalled();
+  });
+  it('refresh method should call history-helper if it\'s not loading state', () => {
+    // given
+    const refreshMock = jest.spyOn(fileHistoryHelper, 'refreshReport');
+    // when
+    const wrappedComponent = mount(<OfficeLoadedFile
+      bindingId={''}
+      fileName='test'
+      onRefresh={() => {}}
+      isLoading={false} />);
+    const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
+    const refreshButton = wrappedIcons.at(1);
+    refreshButton.props().onClick();
+    // then
+    expect(refreshMock).toBeCalled();
   });
   it('should invoke refresh method on button click', () => {
     // given

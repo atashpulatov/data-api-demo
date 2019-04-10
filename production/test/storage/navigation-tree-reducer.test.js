@@ -121,6 +121,21 @@ describe('NavigationTree Reducer', () => {
     expect(newState.chosenType).toEqual(DEFAULT_TYPE);
   });
 
+  it('should return old state in case of SELECT_FOLDER action and the same selected folder', () => {
+    // given
+    const oldState = {folder: 'mock'};
+    const action = {
+      type: SELECT_FOLDER,
+      data: 'mock',
+    };
+
+    // when
+    const newState = navigationTree(oldState, action);
+
+    // then
+    expect(newState).toEqual(oldState);
+  });
+
   it('should return new proper state in case of SET_DATA_SOURCE action', () => {
     // given
     const action = {
