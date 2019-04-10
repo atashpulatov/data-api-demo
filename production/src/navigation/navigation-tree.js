@@ -6,6 +6,7 @@ import {PopupButtons} from '../popup/popup-buttons.jsx';
 import {FolderBrowser} from 'mstr-react-library';
 import {connect} from 'react-redux';
 import {actions} from './navigation-tree-actions';
+import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';
 
 export class _NavigationTree extends Component {
   constructor(props) {
@@ -35,15 +36,16 @@ export class _NavigationTree extends Component {
   };
 
   handleOk = () => {
-    const okObject = {
-      command: selectorProperties.commandOk,
-      chosenObject: this.props.chosenObjectId,
-      chosenProject: this.props.chosenProjectId,
-      chosenSubtype: this.props.chosenSubtype,
-    };
-    this.props.startLoading();
-    this.props.startImport();
-    Office.context.ui.messageParent(JSON.stringify(okObject));
+    // const okObject = {
+    //   command: selectorProperties.commandOk,
+    //   chosenObject: this.props.chosenObjectId,
+    //   chosenProject: this.props.chosenProjectId,
+    //   chosenSubtype: this.props.chosenSubtype,
+    // };
+    // this.props.startLoading();
+    // this.props.startImport();
+    // Office.context.ui.messageParent(JSON.stringify(okObject));
+    this.props.requestImport();
   };
 
   handleSecondary = () => {
@@ -60,11 +62,21 @@ export class _NavigationTree extends Component {
   };
 
   // TODO: temporary solution
-  onObjectChosen = (objectId, projectId, subtype) => {
+  onObjectChosen = async (objectId, projectId, subtype) => {
+    this.props.selectObject({
+      chosenObjectId: undefined,
+      chosenProjectId: undefined,
+      chosenSubtype: undefined,
+      isPrompted: undefined,
+    });
+
+    const isPrompted = await mstrObjectRestService.isPrompted(objectId);
+
     this.props.selectObject({
       chosenObjectId: objectId,
       chosenProjectId: projectId,
       chosenSubtype: subtype,
+      isPrompted,
     });
   };
 

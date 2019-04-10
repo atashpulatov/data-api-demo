@@ -131,6 +131,23 @@ class MstrObjectRestService {
     }
     return {rows, columns};
   }
+
+  async isPrompted(objectId) {
+    const storeState = reduxStore.getState();
+    const envUrl = storeState.sessionReducer.envUrl;
+    const authToken = storeState.sessionReducer.authToken;
+    const fullPath = `${envUrl}/instances/reports/${objectId}/prompts`;
+    return await moduleProxy.request
+        .get(fullPath)
+        .set('x-mstr-authtoken', authToken)
+        .withCredentials()
+        .then((res) => {
+          return res.body && res.body !== [];
+        })
+        .catch((err) => {
+          throw errorService.errorRestFactory(err);
+        });
+  };
 };
 
 async function* fetchContentGenerator(instanceDefinition, objectId, projectId, isReport, body, limit) {

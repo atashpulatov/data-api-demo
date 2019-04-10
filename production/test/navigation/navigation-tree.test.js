@@ -1,10 +1,11 @@
 import React from 'react';
-import {_NavigationTree, mapStateToProps, mapDispatchToProps} from '../../src/navigation/navigation-tree';
+import {_NavigationTree, mapStateToProps, mapDispatchToProps, NavigationTree} from '../../src/navigation/navigation-tree';
 import {SELECT_OBJECT, SET_DATA_SOURCE, SELECT_FOLDER, START_IMPORT} from '../../src/navigation/navigation-tree-actions';
 import {shallow, mount} from 'enzyme';
 import {selectorProperties} from '../../src/attribute-selector/selector-properties';
 import {PopupButtons} from '../../src/popup/popup-buttons';
 import {Office} from '../mockOffice';
+import {mstrObjectRestService} from '../../src/mstr-object/mstr-object-rest-service';
 
 describe('NavigationTree', () => {
   afterAll(() => {
@@ -79,7 +80,7 @@ describe('NavigationTree', () => {
     const wrappedComponent = mount(<_NavigationTree
       parsed={parsed}
       chosenObjectId={true}
-      selectObject={propsMethod}/>);
+      selectObject={propsMethod} />);
     const secondaryAction = jest.spyOn(wrappedComponent.instance(), 'handleSecondary')
         .mockReturnValueOnce({});
     wrappedComponent.update();
@@ -143,40 +144,58 @@ describe('NavigationTree', () => {
     expect(office).toHaveBeenCalledWith(JSON.stringify(resultAction));
   });
 
-  it('should call proper method on import action', () => {
+  // it('should call proper method on import action', () => {
+  //   // given
+  //   const parsed = {
+  //     envUrl: 'env',
+  //     token: 'token',
+  //     projectId: 'projectId',
+  //   };
+  //   const actionObject = {
+  //     command: selectorProperties.commandOk,
+  //     chosenObjectId: 'objectId',
+  //     chosenProjectId: 'projectId',
+  //     chosenSubtype: 'subtype',
+  //   };
+  //   const resultAction = {
+  //     command: selectorProperties.commandOk,
+  //     chosenObject: 'objectId',
+  //     chosenProject: 'projectId',
+  //     chosenSubtype: 'subtype',
+  //   };
+  //   const mockStartImport = jest.fn();
+  //   const mockStartloading = jest.fn();
+  //   const mockMessageParent = jest.spyOn(Office.context.ui, 'messageParent');
+  //   const wrappedComponent = shallow(<_NavigationTree
+  //     parsed={parsed}
+  //     startImport={mockStartImport}
+  //     startLoading={mockStartloading}
+  //     {...actionObject}
+  //   />);
+  //   // when
+  //   wrappedComponent.instance().handleOk();
+  //   // then
+  //   expect(mockStartloading).toHaveBeenCalled();
+  //   expect(mockStartImport).toHaveBeenCalled();
+  //   expect(mockMessageParent).toHaveBeenCalledWith(JSON.stringify(resultAction));
+  // });
+
+  it('should call proper method on request import', () => {
     // given
     const parsed = {
       envUrl: 'env',
       token: 'token',
       projectId: 'projectId',
     };
-    const actionObject = {
-      command: selectorProperties.commandOk,
-      chosenObjectId: 'objectId',
-      chosenProjectId: 'projectId',
-      chosenSubtype: 'subtype',
-    };
-    const resultAction = {
-      command: selectorProperties.commandOk,
-      chosenObject: 'objectId',
-      chosenProject: 'projectId',
-      chosenSubtype: 'subtype',
-    };
-    const mockStartImport = jest.fn();
-    const mockStartloading = jest.fn();
-    const mockMessageParent = jest.spyOn(Office.context.ui, 'messageParent');
+    const mockRequestImport = jest.fn();
     const wrappedComponent = shallow(<_NavigationTree
       parsed={parsed}
-      startImport={mockStartImport}
-      startLoading={mockStartloading}
-      {...actionObject}
+      requestImport={mockRequestImport}
     />);
     // when
     wrappedComponent.instance().handleOk();
     // then
-    expect(mockStartloading).toHaveBeenCalled();
-    expect(mockStartImport).toHaveBeenCalled();
-    expect(mockMessageParent).toHaveBeenCalledWith(JSON.stringify(resultAction));
+    expect(mockRequestImport).toHaveBeenCalled();
   });
 
   it('should call proper method on trigger update', () => {
@@ -208,5 +227,34 @@ describe('NavigationTree', () => {
     };
     // then
     expect(mapStateToProps(initialState)).toEqual(initialState.navigationTree);
+  });
+
+  it('should disable buttons until instance id obtained', async () => {
+    // given
+    const givenObjectId = 'objectId';
+    const givenProjectId = 'projectId';
+    const givenSubtype = 'subtype';
+    const givenIsPrompted = 'customPromptAnswer';
+    const selectObject = jest.fn();
+    const isPromptedResponse = jest.spyOn(mstrObjectRestService, 'isPrompted')
+        .mockImplementationOnce(async () => givenIsPrompted);
+    const wrappedComponent = shallow(<_NavigationTree selectObject={selectObject} parsed={{}} />);
+    // when
+    await wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype);
+    // then
+    expect(isPromptedResponse).toBeCalledWith(givenObjectId);
+    expect(selectObject).toBeCalledTimes(2);
+    expect(selectObject.mock.calls[0][0]).toEqual({
+      chosenObjectId: undefined,
+      chosenProjectId: undefined,
+      chosenSubtype: undefined,
+      isPrompted: undefined,
+    });
+    expect(selectObject.mock.calls[1][0]).toEqual({
+      chosenObjectId: givenObjectId,
+      chosenProjectId: givenProjectId,
+      chosenSubtype: givenSubtype,
+      isPrompted: givenIsPrompted,
+    });
   });
 });
