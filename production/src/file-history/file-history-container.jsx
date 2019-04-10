@@ -7,7 +7,7 @@ import {officeDisplayService} from '../office/office-display-service';
 import {popupController} from '../popup/popup-controller';
 import './file-history.css';
 
-export function _FileHistoryContainer({reportArray, loading}) {
+export const _FileHistoryContainer = ({reportArray = [], loading}) => {
   return (<div>
     <Button id="add-data-btn-container" className="add-data-btn" onClick={popupController.runPopupNavigation}
       disabled={loading}>Add Data</Button>
@@ -23,10 +23,6 @@ export function _FileHistoryContainer({reportArray, loading}) {
         objectType={report.objectType}/>)}
     </div>
   </div>);
-}
-
-_FileHistoryContainer.defaultProps = {
-  reportArray: [],
 };
 
 function mapStateToProps(state) {
