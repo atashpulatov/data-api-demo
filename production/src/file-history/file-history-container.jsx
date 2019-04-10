@@ -7,27 +7,27 @@ import {officeDisplayService} from '../office/office-display-service';
 import {popupController} from '../popup/popup-controller';
 import './file-history.css';
 
-export class _FileHistoryContainer extends Component {
-  render() {
-    const {reportArray, loading} = this.props;
-    return (
-      <div>
-        <Button id="add-data-btn-container" className="add-data-btn" onClick={popupController.runPopupNavigation}
-          disabled={loading}>Add Data</Button>
-        <div>
-          {reportArray.map((report) => <OfficeLoadedFile
-            key={report.bindId}
-            fileName={report.name}
-            bindingId={report.bindId}
-            onClick={officeApiHelper.onBindingObjectClick}
-            onDelete={officeDisplayService.removeReportFromExcel}
-            onRefresh={officeDisplayService.refreshReport}
-            isLoading={report.isLoading}
-            objectType={report.objectType}/>)}
-        </div>
-      </div>);
-  }
+export function _FileHistoryContainer({reportArray, loading}) {
+  return (<div>
+    <Button id="add-data-btn-container" className="add-data-btn" onClick={popupController.runPopupNavigation}
+      disabled={loading}>Add Data</Button>
+    <div>
+      {reportArray.map((report) => <OfficeLoadedFile
+        key={report.bindId}
+        fileName={report.name}
+        bindingId={report.bindId}
+        onClick={officeApiHelper.onBindingObjectClick}
+        onDelete={officeDisplayService.removeReportFromExcel}
+        onRefresh={officeDisplayService.refreshReport}
+        isLoading={report.isLoading}
+        objectType={report.objectType}/>)}
+    </div>
+  </div>);
 }
+
+_FileHistoryContainer.defaultProps = {
+  reportArray: [],
+};
 
 function mapStateToProps(state) {
   return {
@@ -35,9 +35,5 @@ function mapStateToProps(state) {
     project: state.historyReducer.project,
   };
 }
-
-_FileHistoryContainer.defaultProps = {
-  reportArray: [],
-};
 
 export const FileHistoryContainer = connect(mapStateToProps)(_FileHistoryContainer);

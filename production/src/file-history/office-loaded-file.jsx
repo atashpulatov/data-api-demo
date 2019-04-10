@@ -13,9 +13,20 @@ export class OfficeLoadedFile extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this._ismounted = true;
+  }
+
+  componentWillUnmount() {
+    this._ismounted = false;
+  }
+
   deleteAction = () => {
     const {onDelete, bindingId, objectType} = this.props;
-    this.setState({allowDeleteClick: false}, () => fileHistoryHelper.deleteReport(onDelete, bindingId, objectType));
+    this.setState({allowDeleteClick: false}, async () => {
+      await fileHistoryHelper.deleteReport(onDelete, bindingId, objectType);
+      this._ismounted && this.setState({allowDeleteClick: true});
+    });
   };
 
   refreshAction = () => {

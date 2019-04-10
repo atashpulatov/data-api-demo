@@ -13,6 +13,14 @@ describe('office loaded file', () => {
     expect(wrappedComponent.find('Row').hasClass('file-history-container')).toBeTruthy();
     expect(wrappedComponent.html()).toContain('test');
   });
+  it('should call componentWillUnmount provided file name', () => {
+    // given
+    // when
+    const wrappedComponent = mount(<OfficeLoadedFile fileName='test' />);
+    wrappedComponent.instance().componentWillUnmount();
+    // then
+    expect(wrappedComponent.instance()._ismounted).toBeFalsy();
+  });
   it('should display dataset type icon', () => {
     // given
 
