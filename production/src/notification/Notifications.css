@@ -1,36 +1,80 @@
-.ant-message-notice-content{
+.ant-message-notice-content {
     max-width: 100%;
 }
-.ant-message-custom-content{
+
+.ant-message-custom-content {
     max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     max-height: 85px;
 }
+
+.ant-notification {
+    right: -7px !important;
+}
+
+.ant-notification-notice-message {
+    display: none;
+}
+
+.ant-notification-notice {
+    padding: 12px;
+}
+
+.ant-notification-notice-with-icon .ant-notification-notice-description {
+    margin: -26px 0 0 25px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: 'HelveticaNeue-medium', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+}
+
+.ant-notification-notice-with-icon {
+    width: 100%;
+    align-items: center;
+}
+
+.ant-notification-notice-icon {
+    font-size: 18px;
+    margin-top: 5px;
+}
+
+.ant-notification-notice-btn {
+    font-family: 'HelveticaNeue', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    margin: 5px 45% 0 45%;
+}
+
+.ant-notification-notice-close {
+    display: none;
+}
+
 .ant-message-notice.move-up-leave.move-up-leave-active {
     overflow: hidden;
     -webkit-animation-name: MessageMoveOut;
-            animation-name: MessageMoveOut;
+    animation-name: MessageMoveOut;
     -webkit-animation-duration: 0.3s;
-            animation-duration: 0.3s;
-  }
-  @-webkit-keyframes MessageMoveOut {
+    animation-duration: 0.3s;
+}
+
+@-webkit-keyframes MessageMoveOut {
     0% {
-      max-height: 150px;
-      opacity: 1;
+        max-height: 150px;
+        opacity: 1;
     }
+
     100% {
-      max-height: 0;
-      opacity: 0;
+        max-height: 0;
+        opacity: 0;
     }
-  }
-  @keyframes MessageMoveOut {
+}
+
+@keyframes MessageMoveOut {
     0% {
-      max-height: 150px;
-      opacity: 1;
+        max-height: 150px;
+        opacity: 1;
     }
+
     100% {
-      max-height: 0;
-      opacity: 0;
+        max-height: 0;
+        opacity: 0;
     }
-  }
+}
