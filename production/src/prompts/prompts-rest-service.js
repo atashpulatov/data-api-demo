@@ -32,11 +32,11 @@ class PromptsRestService {
         }        
     }
 
-    async getReportPrompts(reportId){
+    async getReportPrompts(reportId, projectId){
         const storeState = reduxStore.getState();
         const envUrl = storeState.sessionReducer.envUrl;
         const authToken = storeState.sessionReducer.authToken;
-        const projectId = storeState.historyReducer.project.projectId;
+        //const projectId = storeState.historyReducer.project.projectId;
 
         let fullPath = `${envUrl}/reports/${reportId}/prompts`;
         try{

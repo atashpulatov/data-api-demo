@@ -9,6 +9,7 @@ import {selectorProperties} from '../attribute-selector/selector-properties';
 import {reduxStore} from '../store';
 import {Provider} from 'react-redux';
 import {LoadingPage} from '../loading/loading-page';
+import { PromptsWindow } from '../prompts/promptsWindow';
 
 export class Popup extends Component {
   constructor(props) {
@@ -56,7 +57,8 @@ export class Popup extends Component {
 
   selectView(popupType, propsToPass) {
     if (!popupType) {
-      return (<AttributeSelectorWindow parsed={propsToPass} handleBack={this.handleBack} />);
+      //return (<AttributeSelectorWindow parsed={propsToPass} handleBack={this.handleBack} />);
+      return (<PromptsWindow parsed={propsToPass}/>);
     } else if (popupType === PopupTypeEnum.navigationTree) {
       return (<NavigationTree handlePrepare={this.handlePrepare} parsed={propsToPass} handlePopupErrors={this.handlePopupErrors} />);
     } else if (popupType === PopupTypeEnum.loadingPage) {

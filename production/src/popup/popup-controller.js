@@ -27,11 +27,11 @@ class PopupController {
       return;
     }
     let url = URL;
-    if (IS_LOCALHOST) {
-      url = `${window.location.origin}/popup.html`;
-    } else {
+    //if (IS_LOCALHOST) {
+      //url = `${window.location.origin}/popup.html`;
+    //} else {
       url = url.replace('index.html', 'popup.html');
-    }
+    //}
     const splittedUrl = url.split('?'); // we need to get rid of any query params
     try {
       await officeApiHelper.getExcelSessionStatus();
