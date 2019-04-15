@@ -2,9 +2,11 @@ import React from 'react';
 import {shallow, mount} from 'enzyme';
 import {Popup} from '../../src/popup/popup.jsx';
 import {libraryErrorController} from 'mstr-react-library';
+import {Office} from '../mockOffice';
 import {officeContext} from '../../src/office/office-context.js';
 import {selectorProperties} from '../../src/attribute-selector/selector-properties.js';
 import {PopupTypeEnum} from '../../src/home/popup-type-enum.js';
+import TouchFeedback from 'rmc-feedback';
 
 describe('Popup.js', () => {
   const messageParentMock = jest.fn();
@@ -123,7 +125,39 @@ describe('Popup.js', () => {
     // when
     const popupWrapped = mount(<Popup location={location} />);
     // then
-
-    expect(popupWrapped.children().children().length).toBe(0);
+    expect(popupWrapped.children().children().children().length).toBe(0);
   });
+
+  // it('should handle request import when not prompted', () => {
+  //   // given
+  //   const location = {
+  //     search: {},
+  //   };
+  //   const actionObject = {
+  //     chosenObjectId: 'objectId',
+  //     chosenProjectId: 'projectId',
+  //     chosenSubtype: 'subtype',
+  //   };
+  //   const resultAction = {
+  //     command: selectorProperties.commandOk,
+  //     chosenObject: 'objectId',
+  //     chosenProject: 'projectId',
+  //     chosenSubtype: 'subtype',
+  //   };
+  //   const mockStartImport = jest.fn();
+  //   const mockStartloading = jest.fn();
+  //   const mockMessageParent = jest.spyOn(Office.context.ui, 'messageParent');
+  //   // when
+  //   const popupWrapped = mount(<Popup
+  //     location={location}
+  //     requestImport={true}
+  //     startImport={mockStartImport}
+  //     startLoading={mockStartloading}
+  //     {...actionObject} />);
+  //   // then
+  //   expect(mockStartloading).toHaveBeenCalled();
+  //   expect(mockStartImport).toHaveBeenCalled();
+  //   expect(mockMessageParent).toHaveBeenCalledWith(JSON.stringify(resultAction));
+  //   expect(true).toBeFalsy();
+  // });
 });
