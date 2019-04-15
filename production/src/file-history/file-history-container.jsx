@@ -11,7 +11,6 @@ import {startRefreshingAll, stopRefreshingAll} from '../popup/popup-actions';
 
 import './file-history.css';
 
-// <<<<<<< Updated upstream
 export const _FileHistoryContainer = ({reportArray = [], loading, refreshingAll, refreshAll}) => {
   const onRefreshAll = async () => {
     startRefreshingAll();

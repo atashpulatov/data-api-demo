@@ -163,6 +163,7 @@ class OfficeDisplayService {
         return [...results, err];
       }
     }, Promise.resolve([])).then(() => {
+      // TODO: results will be handled here in the future
     });
   }
 

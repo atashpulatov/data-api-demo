@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { mount } from 'enzyme';
 import React from 'react';
-import { _FileHistoryContainer, FileHistoryContainer } from '../../src/file-history/file-history-container';
+import { _FileHistoryContainer } from '../../src/file-history/file-history-container';
 /* eslint-enable */
 
 describe('FileHistoryContainer', () => {
