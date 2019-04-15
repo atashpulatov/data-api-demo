@@ -19,8 +19,10 @@ class FileHistoryHelper {
       });
       const refreshed = await onRefresh(bindingId, objectType);
       refreshed && notificationService.displayMessage('success', `${capitalize(objectType)} refreshed`);
+      return refreshed;
     } catch (error) {
       errorService.handleError(error);
+      return error;
     } finally {
       reduxStore.dispatch({
         type: officeProperties.actions.finishLoadingReport,

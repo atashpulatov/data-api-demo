@@ -5,12 +5,29 @@ import {OfficeLoadedFile} from './office-loaded-file.jsx';
 import {officeApiHelper} from '../office/office-api-helper';
 import {officeDisplayService} from '../office/office-display-service';
 import {popupController} from '../popup/popup-controller';
+import {MSTRIcon} from 'mstr-react-library';
+import loadingSpinner from './assets/report_loading_spinner.gif';
+import {startRefreshingAll, stopRefreshingAll} from '../popup/popup-actions';
+
 import './file-history.css';
 
-export const _FileHistoryContainer = ({reportArray = [], loading}) => {
+// <<<<<<< Updated upstream
+export const _FileHistoryContainer = ({reportArray = [], loading, refreshingAll, refreshAll}) => {
+  const onRefreshAll = async () => {
+    startRefreshingAll();
+    await refreshAll(reportArray);
+    stopRefreshingAll();
+  };
+
   return (<div>
     <Button id="add-data-btn-container" className="add-data-btn" onClick={popupController.runPopupNavigation}
       disabled={loading}>Add Data</Button>
+    <span className="refresh-button-container">
+      <Button className="refresh-all-btn" style={{float: 'right'}} onClick={onRefreshAll} disabled={loading}>
+        {!refreshingAll ? <MSTRIcon type='refresh' /> : <img width='12px' height='12px' src={loadingSpinner} alt='Report loading icon' />}
+        <span className="refresh-all-label">Refresh All</span>
+      </Button>
+    </span>
     <div>
       {reportArray.map((report) => <OfficeLoadedFile
         key={report.bindId}
@@ -29,7 +46,13 @@ function mapStateToProps(state) {
   return {
     reportArray: state.officeReducer.reportArray,
     project: state.historyReducer.project,
+    refreshingAll: state.popupReducer.refreshingAll,
   };
 }
 
-export const FileHistoryContainer = connect(mapStateToProps)(_FileHistoryContainer);
+const mapDispatchToProps = {
+  startRefreshingAll,
+  stopRefreshingAll,
+};
+
+export const FileHistoryContainer = connect(mapStateToProps, mapDispatchToProps)(_FileHistoryContainer);

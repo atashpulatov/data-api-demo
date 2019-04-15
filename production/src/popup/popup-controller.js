@@ -10,6 +10,7 @@ import {errorService} from '../error/error-handler';
 import {authenticationHelper} from '../authentication/authentication-helper';
 import {officeProperties} from '../office/office-properties';
 import {officeApiHelper} from '../office/office-api-helper';
+import {START_REPORT_LOADING, STOP_REPORT_LOADING} from './popup-actions';
 const URL = `${window.location.href}`;
 const IS_LOCALHOST = URL.includes('localhost');
 
@@ -97,21 +98,26 @@ class PopupController {
     if (response.reportId
       && response.projectId
       && response.reportSubtype
-      && response.body) {
+      && response.body
+      && response.reportName) {
+      reduxStore.dispatch({type: START_REPORT_LOADING, data: response.reportName});
       const result = await officeDisplayService.printObject(response.reportId, response.projectId, objectTypes.getTypeDescription(3, response.reportSubtype) === 'Report', null, null, null, response.body);
       if (result) {
         notificationService.displayMessage(result.type, result.message);
       }
+      reduxStore.dispatch({type: STOP_REPORT_LOADING});
     }
   }
 
   handleOkCommand = async (response) => {
     if (response.chosenObject) {
       reduxStore.dispatch({type: officeProperties.actions.startLoading});
+      reduxStore.dispatch({type: START_REPORT_LOADING, data: response.reportName});
       const result = await officeDisplayService.printObject(response.chosenObject, response.chosenProject, objectTypes.getTypeDescription(3, response.chosenSubtype) === 'Report');
       if (result) {
         notificationService.displayMessage(result.type, result.message);
       }
+      reduxStore.dispatch({type: STOP_REPORT_LOADING});
     }
   }
 

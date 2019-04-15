@@ -201,12 +201,33 @@ describe('NavigationTree', () => {
     expect(mockMessageParent).toHaveBeenCalledWith(JSON.stringify(resultAction));
   });
 
-  it('should take data from state wwew', () => {
+  it('should take proper data from state for name defined', () => {
     // given
     const initialState = {
       navigationTree: {},
+      officeReducer: {
+        preLoadReport: {
+          name: 'Some name',
+        },
+      },
     };
     // then
-    expect(mapStateToProps(initialState)).toEqual(initialState.navigationTree);
+    expect(mapStateToProps(initialState)).toEqual({
+      ...initialState.navigationTree,
+      title: initialState.officeReducer.preLoadReport.name,
+    });
+  });
+
+  it('should take proper data from state for name NOT defined', () => {
+    // given
+    const initialState = {
+      navigationTree: {},
+      officeReducer: {},
+    };
+    // then
+    expect(mapStateToProps(initialState)).toEqual({
+      ...initialState.navigationTree,
+      title: undefined,
+    });
   });
 });

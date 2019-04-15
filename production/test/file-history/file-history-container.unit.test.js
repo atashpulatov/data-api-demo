@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { mount } from 'enzyme';
 import React from 'react';
-import { _FileHistoryContainer } from '../../src/file-history/file-history-container';
+import { _FileHistoryContainer, FileHistoryContainer } from '../../src/file-history/file-history-container';
 /* eslint-enable */
 
 describe('FileHistoryContainer', () => {
@@ -28,6 +28,61 @@ describe('FileHistoryContainer', () => {
     // then
     expect(wrappedComponent.html()).not.toContain('No files loaded.');
     expect(wrappedListElements.length).toEqual(mockFiles.length);
+  });
+  it('should display refresh icon when refreshAll flag is false', () => {
+    // given
+    const refreshingAll = false;
+    // when
+    const wrappedComponent = mount(
+        < _FileHistoryContainer
+          project={'testProject'}
+          refreshingAll={refreshingAll}/>);
+    // then
+    expect(wrappedComponent.exists('Button .refresh-all-btn MSTRIcon')).toBeTruthy();
+  });
+  it('should display refresh all spinner when refreshAll flag is true', () => {
+    // given
+    const refreshingAll = true;
+    // when
+    const wrappedComponent = mount(
+        < _FileHistoryContainer
+          project={'testProject'}
+          refreshingAll={refreshingAll}/>);
+    // then
+    expect(wrappedComponent.exists('Button .refresh-all-btn img')).toBeTruthy();
+  });
+  it('should run onRefreshAll when refreshAll is clicked', () => {
+    // given
+    const wrappedComponent = mount(
+        < _FileHistoryContainer
+          project={'testProject'} />);
+    const refreshAll = jest.spyOn(wrappedComponent.instance(), 'onRefreshAll')
+        .mockReturnValueOnce({});
+    wrappedComponent.instance().forceUpdate();
+    const refreshButton = wrappedComponent.find('Button .refresh-all-btn');
+    // when
+    refreshButton.simulate('click');
+    // then
+    expect(refreshAll).toBeCalled();
+  });
+  it('should run proper methods inside onRefreshAll method ', async () => {
+    // given
+    const startRefreshingAllMock = jest.fn();
+    const refreshAllMock = jest.fn();
+    const stopRefreshingAllMock = jest.fn();
+    const wrappedComponent = mount(
+        < _FileHistoryContainer
+          project={'testProject'}
+          startRefreshingAll={startRefreshingAllMock}
+          refreshAll={refreshAllMock}
+          stopRefreshingAll={stopRefreshingAllMock}/>);
+    const refreshButton = wrappedComponent.find('Button .refresh-all-btn');
+    // when
+    refreshButton.simulate('click');
+    // then
+    expect(startRefreshingAllMock).toBeCalled();
+    await expect(refreshAllMock).toBeCalled();
+    expect(stopRefreshingAllMock).toBeCalled();
   });
 });
 

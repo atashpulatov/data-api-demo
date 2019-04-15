@@ -10,6 +10,8 @@ import {authenticationHelper} from '../authentication/authentication-helper';
 import {PopupTypeEnum} from '../home/popup-type-enum';
 import {NOT_SUPPORTED_NO_ATTRIBUTES} from '../error/constants';
 import {OverlappingTablesError} from '../error/overlapping-tables-error';
+import {fileHistoryHelper} from '../file-history/file-history-helper';
+import {START_REPORT_LOADING, STOP_REPORT_LOADING} from '../popup/popup-actions';
 
 class OfficeDisplayService {
   printObject = async (objectId, projectId, isReport = true, ...args) => {
@@ -131,10 +133,17 @@ class OfficeDisplayService {
     try {
       const isReport = objectType === 'report';
       const refreshReport = officeStoreService.getReportFromProperties(bindingId);
+      reduxStore.dispatch({
+        type: START_REPORT_LOADING,
+        data: refreshReport.name,
+      });
       const result = await this.printObject(refreshReport.id, refreshReport.projectId, isReport, true, refreshReport.tableId, bindingId, refreshReport.body, true);
       if (result) {
         notificationService.displayMessage(result.type, result.message);
       }
+      reduxStore.dispatch({
+        type: STOP_REPORT_LOADING,
+      });
       return true;
     } catch (e) {
       if (e.code === 'ItemNotFound') {
@@ -143,6 +152,19 @@ class OfficeDisplayService {
       throw e;
     }
   };
+
+  refreshAll = async (reports) => {
+    return reports.reduce(async (acc, report) => {
+      const results = await acc;
+      try {
+        const refreshResult = await fileHistoryHelper.refreshReport(this.refreshReport, report.bindId, report.objectType);
+        return [...results, refreshResult];
+      } catch (err) {
+        return [...results, err];
+      }
+    }, Promise.resolve([])).then(() => {
+    });
+  }
 
   _createOfficeTable = async (instanceDefinition, context, startCell, officeTableId) => {
     const hasHeaders = true;

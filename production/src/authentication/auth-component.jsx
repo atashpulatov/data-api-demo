@@ -3,6 +3,8 @@ import './auth-component.css';
 import {reduxStore} from '../store';
 import {Form, Icon, Input, Button} from 'antd';
 import {authenticationHelper} from './authentication-helper';
+import {connect} from 'react-redux';
+import {resetState} from '../popup/popup-actions';
 const FormItem = Form.Item;
 
 export class _Authenticate extends Component {
@@ -12,6 +14,7 @@ export class _Authenticate extends Component {
     this.state = {
       envUrl: this.stateFromRedux.envUrl || '',
     };
+    this.props.resetState();
   }
 
   onLoginUser = async (event) => {
@@ -36,10 +39,10 @@ export class _Authenticate extends Component {
               initialValue: this.state.username || '',
               rules: [{required: true, message: 'Please input your username!'}],
             })(
-              <Input
-                prefix={
-                  <Icon type='user' style={{color: 'rgba(0,0,0,.25)'}} />}
-                placeholder='Username' />
+                <Input
+                  prefix={
+                    <Icon type='user' style={{color: 'rgba(0,0,0,.25)'}} />}
+                  placeholder='Username' />
             )}
           </FormItem>
           <FormItem
@@ -47,11 +50,11 @@ export class _Authenticate extends Component {
             {getFieldDecorator('password', {
               rules: [{message: 'Please input your Password!'}],
             })(
-              <Input
-                prefix={
-                  <Icon type='lock' style={{color: 'rgba(0,0,0,.25)'}} />}
-                type='password'
-                placeholder='Password' />
+                <Input
+                  prefix={
+                    <Icon type='lock' style={{color: 'rgba(0,0,0,.25)'}} />}
+                  type='password'
+                  placeholder='Password' />
             )}
           </FormItem>
           <FormItem
@@ -60,10 +63,10 @@ export class _Authenticate extends Component {
               initialValue: this.state.envUrl || '',
               rules: [{required: true, message: 'Please input environment URL!', type: 'url'}],
             })(
-              <Input
-                prefix={
-                  <Icon type='link' style={{color: 'rgba(0,0,0,.25)'}} />}
-                placeholder='environment URL' />
+                <Input
+                  prefix={
+                    <Icon type='link' style={{color: 'rgba(0,0,0,.25)'}} />}
+                  placeholder='environment URL' />
             )}
           </FormItem>
           <div
@@ -80,4 +83,8 @@ export class _Authenticate extends Component {
   }
 }
 
-export const Authenticate = Form.create()(_Authenticate);
+const mapDispatchToProps = {
+  resetState,
+};
+
+export const Authenticate = connect(null, mapDispatchToProps)(Form.create()(_Authenticate));
