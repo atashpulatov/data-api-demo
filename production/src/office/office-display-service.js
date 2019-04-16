@@ -316,10 +316,7 @@ class OfficeDisplayService {
     tableColumns.load('count');
     await context.sync();
     const tableColumnsCount = tableColumns.count;
-    if (columns === tableColumnsCount) {
-      return false;
-    }
-    return true;
+    return columns !== tableColumnsCount;
   }
 
   _checkRangeValidity = async (context, excelRange) => {

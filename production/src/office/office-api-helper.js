@@ -183,7 +183,7 @@ class OfficeApiHelper {
   }
 
   getStartCell = (excelAdress) => {
-    return excelAdress.match(/!(?<cell>\w+\d+)(:|$)/).groups.cell;
+    return excelAdress.match(/!(\w+\d+)(:|$)/)[1];
   }
 
   bindNamedItem = (namedItem, bindingId) => {
