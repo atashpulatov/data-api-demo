@@ -37,7 +37,7 @@ class OfficeDisplayService {
 
       // Get mstr instance definition
       console.time('Instance definition');
-      const instanceDefinition = await mstrObjectRestService.getInstanceDefinition(objectId, projectId, isReport);
+      const instanceDefinition = await mstrObjectRestService.getInstanceDefinition(objectId, projectId, isReport, body);
       console.timeEnd('Instance definition');
 
       // Check if instance returned data
