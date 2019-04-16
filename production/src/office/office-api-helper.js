@@ -178,9 +178,12 @@ class OfficeApiHelper {
     const selectedRangeStart = context.workbook.getSelectedRange();
     selectedRangeStart.load(officeProperties.officeAddress);
     await context.sync();
-    const startCell = selectedRangeStart.address
-        .split('!')[1].split(':')[0];
+    const startCell = this.getStartCell(selectedRangeStart.address);
     return startCell;
+  }
+
+  getStartCell = (excelAdress) => {
+    return excelAdress.match(/!(?<cell>\w+\d+)(:|$)/).groups.cell;
   }
 
   bindNamedItem = (namedItem, bindingId) => {

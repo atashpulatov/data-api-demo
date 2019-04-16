@@ -183,14 +183,14 @@ class OfficeDisplayService {
   }
 
   async _updateRows(prevOfficeTable, context, rows) {
-    const prevRange = prevOfficeTable.getDataBodyRange().load('rowCount');
+    const tableRows = prevOfficeTable.rows;
+    tableRows.load('count');
     await context.sync();
-    const tableRowCount = prevRange.rowCount;
+    const tableRowCount = tableRows.count;
     // Delete extra rows if new report is smaller
     if (rows < tableRowCount) {
       prevOfficeTable.getRange().getRow(rows + 1).getResizedRange(tableRowCount - rows, 0).clear();
       await context.sync();
-      const tableRows = prevOfficeTable.rows;
       tableRows.load('items');
       await context.sync();
       const rowsToRemove = tableRows.items;
@@ -250,7 +250,19 @@ class OfficeDisplayService {
 
     if (isRefresh) {
       const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindingId);
-      officeTable = await this._updateOfficeTable(instanceDefinition, excelContext, prevOfficeTable);
+      const tableColumnsChanged = await this._checkColumnsChange(prevOfficeTable, excelContext, instanceDefinition);
+      if (tableColumnsChanged) {
+        console.log('Instance definition changed, creating new table');
+        const headerCell = prevOfficeTable.getHeaderRowRange().getCell(0, 0);
+        headerCell.load('address');
+        await excelContext.sync();
+        const startCell = officeApiHelper.getStartCell(headerCell.address);
+        prevOfficeTable.delete();
+        await excelContext.sync();
+        officeTable = await this._createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId);
+      } else {
+        officeTable = await this._updateOfficeTable(instanceDefinition, excelContext, prevOfficeTable);
+      }
     } else {
       officeTable = await this._createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId);
     }
@@ -294,6 +306,18 @@ class OfficeDisplayService {
 
   _appendRowsToTable(officeTable, excelRows, rowIndex) {
     officeTable.getHeaderRowRange().getRowsBelow(excelRows.length).getOffsetRange(rowIndex, 0).values = excelRows;
+  }
+
+  _checkColumnsChange = async (prevOfficeTable, context, instanceDefinition) => {
+    const {columns} = instanceDefinition;
+    const tableColumns = prevOfficeTable.columns;
+    tableColumns.load('count');
+    await context.sync();
+    const tableColumnsCount = tableColumns.count;
+    if (columns === tableColumnsCount) {
+      return false;
+    }
+    return true;
   }
 
   _checkRangeValidity = async (context, excelRange) => {
