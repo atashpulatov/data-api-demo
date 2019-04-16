@@ -6,7 +6,6 @@ import {Notifications} from '../notification/notifications.jsx';
 import {Authenticate} from '../authentication/auth-component.jsx';
 import {Placeholder} from './placeholder.jsx';
 import {HomeDialog} from './home-dialog';
-import {officeDisplayService} from '../office/office-display-service';
 
 const TabPane = Tabs.TabPane;
 const URL = `${window.location.href}`;
@@ -25,7 +24,6 @@ class PageBuilder {
                 <TabPane tab="Imported Data" key="data">
                   {(reportArray && reportArray.length !== 0) && <FileHistoryContainer
                     loading={loadingReport}
-                    refreshAll={officeDisplayService.refreshAll}
                   />}
                   {(!reportArray || !reportArray.length) && <Placeholder loading={loadingReport} />}
                 </TabPane>

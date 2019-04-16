@@ -10,10 +10,6 @@ const FormItem = Form.Item;
 export class _Authenticate extends Component {
   constructor(props) {
     super(props);
-    this.stateFromRedux = reduxStore.getState().sessionReducer;
-    this.state = {
-      envUrl: this.stateFromRedux.envUrl || '',
-    };
     this.props.resetState();
   }
 
@@ -36,7 +32,6 @@ export class _Authenticate extends Component {
           <FormItem
             label='Username'>
             {getFieldDecorator('username', {
-              initialValue: this.state.username || '',
               rules: [{required: true, message: 'Please input your username!'}],
             })(
                 <Input
@@ -60,7 +55,7 @@ export class _Authenticate extends Component {
           <FormItem
             label='Environment URL'>
             {getFieldDecorator('envUrl', {
-              initialValue: this.state.envUrl || '',
+              initialValue: this.props.envUrl || '',
               rules: [{required: true, message: 'Please input environment URL!', type: 'url'}],
             })(
                 <Input
@@ -83,8 +78,14 @@ export class _Authenticate extends Component {
   }
 }
 
+function mapStateToProps(state) {
+  return {
+    envUrl: state.sessionReducer.envUrl,
+  };
+}
+
 const mapDispatchToProps = {
   resetState,
 };
 
-export const Authenticate = connect(null, mapDispatchToProps)(Form.create()(_Authenticate));
+export const Authenticate = connect(mapStateToProps, mapDispatchToProps)(Form.create()(_Authenticate));

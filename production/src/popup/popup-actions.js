@@ -1,3 +1,5 @@
+import {officeDisplayService} from '../office/office-display-service';
+
 export const CLEAR_WINDOW = 'POPUP_CLOSE_WINDOW';
 export const START_REFRESHING_ALL_REPORTS = 'START_REFRESHING_ALL_REPORTS';
 export const STOP_REFRESHING_ALL_REPORTS = 'STOP_REFRESHING_ALL_REPORTS';
@@ -5,16 +7,16 @@ export const START_REPORT_LOADING = 'START_REPORT_LOADING';
 export const STOP_REPORT_LOADING = 'STOP_REPORT_LOADING';
 export const RESET_STATE = 'RESET_STATE';
 
-export function startRefreshingAll() {
-  return (dispatch) => dispatch({
-    type: START_REFRESHING_ALL_REPORTS,
-  });
-}
-
-export function stopRefreshingAll() {
-  return (dispatch) => dispatch({
-    type: STOP_REFRESHING_ALL_REPORTS,
-  });
+export function refreshAll(reportArray) {
+  return async (dispatch) => {
+    dispatch({
+      type: START_REFRESHING_ALL_REPORTS,
+    });
+    await officeDisplayService.refreshAll(reportArray);
+    dispatch({
+      type: STOP_REFRESHING_ALL_REPORTS,
+    });
+  };
 }
 
 export function startReportLoading(data) {
@@ -37,8 +39,7 @@ export function resetState() {
 }
 
 export const actions = {
-  startRefreshingAll,
-  stopRefreshingAll,
+  refreshAll,
   startReportLoading,
   stopReportLoading,
   resetState,

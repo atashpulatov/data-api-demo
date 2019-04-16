@@ -157,7 +157,7 @@ class OfficeDisplayService {
     return reports.reduce(async (acc, report) => {
       const results = await acc;
       try {
-        const refreshResult = await fileHistoryHelper.refreshReport(this.refreshReport, report.bindId, report.objectType);
+        const refreshResult = await fileHistoryHelper.refreshReport(this.refreshReport, report.bindId, report.objectType, true);
         return [...results, refreshResult];
       } catch (err) {
         return [...results, err];

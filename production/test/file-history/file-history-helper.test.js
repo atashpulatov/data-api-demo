@@ -76,6 +76,18 @@ describe('FileHistoryHelper', () => {
       expect(mockedDisplayMessage).not.toBeCalled();
       expect(authenticationHelper.validateAuthToken).toBeCalled();
     });
+    it('should NOT display message when refreshAll flag is true', async () => {
+      // given
+      const mockedDisplayMessage = notificationService.displayMessage;
+      authenticationHelper.validateAuthToken = jest.fn().mockImplementation(() => {});
+      const mockedOnRefresh = jest.fn().mockImplementation(() => true);
+      const testBindId = 'someBindingIt';
+      // when
+      await fileHistoryHelper.refreshReport(mockedOnRefresh, testBindId, 'report', true);
+      // then
+      expect(mockedDisplayMessage).not.toBeCalled();
+      expect(authenticationHelper.validateAuthToken).toBeCalled();
+    });
     it('should trigger handleError on error', async () => {
       // given
       const testError = new Error('Some error');
@@ -89,6 +101,19 @@ describe('FileHistoryHelper', () => {
       expect(mockedErrorHandler).toBeCalled();
       expect(authenticationHelper.validateAuthToken).toBeCalled();
       expect(mockedErrorHandler).toBeCalledWith(testError);
+    });
+    it('should NOT trigger handleError if refreshAll flag is true', async () => {
+      // given
+      const testError = new Error('Some error');
+      authenticationHelper.validateAuthToken = jest.fn().mockImplementation(() => {});
+      const mockedOnRefresh = jest.fn().mockRejectedValue(testError);
+      const testBindId = 'someBindingIt';
+      const mockedErrorHandler = errorService.handleError;
+      // when
+      await fileHistoryHelper.refreshReport(mockedOnRefresh, testBindId, 'report', true);
+      // then
+      expect(mockedErrorHandler).not.toBeCalled();
+      expect(authenticationHelper.validateAuthToken).toBeCalled();
     });
     it('should dispatch startLoadingReport action and finishLoadingReport later when refreshed', async () => {
       // given

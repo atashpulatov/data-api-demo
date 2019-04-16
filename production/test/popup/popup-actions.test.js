@@ -1,21 +1,24 @@
 import * as actions from '../../src/popup/popup-actions';
+import {officeDisplayService} from '../../src/office/office-display-service';
 
 describe('Popup actions', () => {
-  it('should dispatch proper startRefreshingAll action', () => {
+  it('should dispatch proper refreshAll action', async () => {
     // given
     const listener = jest.fn();
+    const refreshAllMock = jest.spyOn(officeDisplayService, 'refreshAll').mockImplementation(() => { });
+    const reportArray = {
+      report1: {
+
+      },
+      report2: {
+
+      },
+    };
     // when
-    actions.startRefreshingAll(true)(listener);
+    await actions.refreshAll(reportArray)(listener);
     // then
     expect(listener).toHaveBeenCalledWith({type: actions.START_REFRESHING_ALL_REPORTS});
-  });
-
-  it('should dispatch proper stopRefreshingAll action', () => {
-    // given
-    const listener = jest.fn();
-    // when
-    actions.stopRefreshingAll(true)(listener);
-    // then
+    expect(refreshAllMock).toBeCalledWith(reportArray);
     expect(listener).toHaveBeenCalledWith({type: actions.STOP_REFRESHING_ALL_REPORTS});
   });
 

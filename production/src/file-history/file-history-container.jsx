@@ -7,22 +7,16 @@ import {officeDisplayService} from '../office/office-display-service';
 import {popupController} from '../popup/popup-controller';
 import {MSTRIcon} from 'mstr-react-library';
 import loadingSpinner from './assets/report_loading_spinner.gif';
-import {startRefreshingAll, stopRefreshingAll} from '../popup/popup-actions';
+import {refreshAll} from '../popup/popup-actions';
 
 import './file-history.css';
 
 export const _FileHistoryContainer = ({reportArray = [], loading, refreshingAll, refreshAll}) => {
-  const onRefreshAll = async () => {
-    startRefreshingAll();
-    await refreshAll(reportArray);
-    stopRefreshingAll();
-  };
-
   return (<div>
     <Button id="add-data-btn-container" className="add-data-btn" onClick={popupController.runPopupNavigation}
       disabled={loading}>Add Data</Button>
     <span className="refresh-button-container">
-      <Button className="refresh-all-btn" style={{float: 'right'}} onClick={onRefreshAll} disabled={loading}>
+      <Button className="refresh-all-btn" style={{float: 'right'}} onClick={() => refreshAll(reportArray)} disabled={loading}>
         {!refreshingAll ? <MSTRIcon type='refresh' /> : <img width='12px' height='12px' src={loadingSpinner} alt='Report loading icon' />}
         <span className="refresh-all-label">Refresh All</span>
       </Button>
@@ -50,8 +44,7 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-  startRefreshingAll,
-  stopRefreshingAll,
+  refreshAll,
 };
 
 export const FileHistoryContainer = connect(mapStateToProps, mapDispatchToProps)(_FileHistoryContainer);

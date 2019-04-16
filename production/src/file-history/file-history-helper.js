@@ -10,7 +10,7 @@ const capitalize = (str) => {
 };
 
 class FileHistoryHelper {
-  refreshReport = async (onRefresh, bindingId, objectType) => {
+  refreshReport = async (onRefresh, bindingId, objectType, refreshAll = false) => {
     try {
       await authenticationHelper.validateAuthToken();
       reduxStore.dispatch({
@@ -18,11 +18,9 @@ class FileHistoryHelper {
         reportBindId: bindingId,
       });
       const refreshed = await onRefresh(bindingId, objectType);
-      refreshed && notificationService.displayMessage('success', `${capitalize(objectType)} refreshed`);
-      return refreshed;
+      return (refreshAll && refreshed) || notificationService.displayMessage('success', `${capitalize(objectType)} refreshed`);
     } catch (error) {
-      errorService.handleError(error);
-      return error;
+      return (refreshAll && error) || errorService.handleError(error);
     } finally {
       reduxStore.dispatch({
         type: officeProperties.actions.finishLoadingReport,
