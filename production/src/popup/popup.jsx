@@ -55,17 +55,6 @@ export class Popup extends Component {
     officeContext.getOffice().context.ui.messageParent(JSON.stringify(messageObject));
   }
 
-  selectView(popupType, propsToPass) {
-    if (!popupType) {
-      return (<AttributeSelectorWindow parsed={propsToPass} handleBack={this.handleBack} />);
-    } else if (popupType === PopupTypeEnum.navigationTree) {
-      return (<NavigationTree handlePrepare={this.handlePrepare} parsed={propsToPass} handlePopupErrors={this.handlePopupErrors} />);
-    } else if (popupType === PopupTypeEnum.loadingPage) {
-      return (<LoadingPage />);
-    }
-    return (<></>);
-  }
-
   render() {
     const {popupType, ...propsToPass} = this.state.parsed;
     const methods = {

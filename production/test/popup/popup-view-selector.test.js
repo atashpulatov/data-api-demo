@@ -2,7 +2,7 @@ import React from 'react';
 import {shallow, mount} from 'enzyme';
 import {Office} from '../mockOffice';
 import {selectorProperties} from '../../src/attribute-selector/selector-properties';
-import {PopupViewSelector} from '../../src/popup/popup-view-selector';
+import {_PopupViewSelector} from '../../src/popup/popup-view-selector';
 
 describe('PopupViewSelector', () => {
   it('should handle request import when not prompted', () => {
@@ -10,32 +10,31 @@ describe('PopupViewSelector', () => {
     const location = {
       search: {},
     };
-    const actionObject = {
-      chosenObjectId: 'objectId',
-      chosenProjectId: 'projectId',
-      chosenSubtype: 'subtype',
-    };
     const resultAction = {
       command: selectorProperties.commandOk,
       chosenObject: 'objectId',
       chosenProject: 'projectId',
       chosenSubtype: 'subtype',
     };
-    const mockStartImport = jest.fn();
-    const mockStartloading = jest.fn();
+    const reduxMethods = {
+      startImport: jest.fn(),
+      startLoading: jest.fn(),
+    };
     const mockMessageParent = jest.spyOn(Office.context.ui, 'messageParent');
     // when
-    const popupWrapped = shallow(<PopupViewSelector
+    // eslint-disable-next-line react/jsx-pascal-case
+    shallow(<_PopupViewSelector
       location={location}
-      requestImport={true}
-      startImport={mockStartImport}
-      startLoading={mockStartloading}
+      importRequested={true}
+      {...reduxMethods}
+      {...resultAction}
       methods={{}}
-      {...actionObject} />);
+      chosenObjectId={resultAction.chosenObject}
+      chosenProjectId={resultAction.chosenProject}
+    />);
     // then
-    expect(mockStartloading).toHaveBeenCalled();
-    expect(mockStartImport).toHaveBeenCalled();
+    expect(reduxMethods.startLoading).toHaveBeenCalled();
+    expect(reduxMethods.startImport).toHaveBeenCalled();
     expect(mockMessageParent).toHaveBeenCalledWith(JSON.stringify(resultAction));
-    expect(true).toBeFalsy();
   });
 });
