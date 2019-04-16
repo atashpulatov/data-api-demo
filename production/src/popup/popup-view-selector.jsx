@@ -6,11 +6,17 @@ import {PopupTypeEnum} from '../home/popup-type-enum';
 import {NavigationTree} from '../navigation/navigation-tree';
 import {LoadingPage} from '../loading/loading-page';
 import {selectorProperties} from '../attribute-selector/selector-properties';
+import {PromptsWindow} from '../prompts/prompts-window';
 
 export const _PopupViewSelector = (props) => {
-  const {popupType, propsToPass, methods, importRequested} = props;
+  let popupType = props.popupType;
+  const {propsToPass, methods, importRequested} = props;
   if (importRequested) {
-    proceedToImport(props);
+    if (props.isPrompted) {
+      popupType = PopupTypeEnum.promptsWindow;
+    } else {
+      proceedToImport(props);
+    }
   }
   if (!popupType) {
     return <AttributeSelectorWindow parsed={propsToPass} handleBack={methods.handleBack} />;
@@ -18,6 +24,8 @@ export const _PopupViewSelector = (props) => {
     return <NavigationTree handlePrepare={methods.handlePrepare} parsed={propsToPass} handlePopupErrors={methods.handlePopupErrors} />;
   } else if (popupType === PopupTypeEnum.loadingPage) {
     return <LoadingPage />;
+  } else if (popupType === PopupTypeEnum.promptsWindow) {
+    return <PromptsWindow />;
   }
   return <></>;
 };
