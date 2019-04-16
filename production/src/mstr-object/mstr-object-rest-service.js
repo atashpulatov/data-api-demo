@@ -132,14 +132,15 @@ class MstrObjectRestService {
     return {rows, columns};
   }
 
-  async isPrompted(objectId) {
+  async isPrompted(objectId, projectId) {
     const storeState = reduxStore.getState();
     const envUrl = storeState.sessionReducer.envUrl;
     const authToken = storeState.sessionReducer.authToken;
-    const fullPath = `${envUrl}/instances/reports/${objectId}/prompts`;
+    const fullPath = `${envUrl}/reports/${objectId}/prompts`;
     return await moduleProxy.request
         .get(fullPath)
         .set('x-mstr-authtoken', authToken)
+        .set('X-MSTR-ProjectID', projectId)
         .withCredentials()
         .then((res) => {
           return res.body && res.body !== [];

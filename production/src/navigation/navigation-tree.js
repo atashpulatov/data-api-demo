@@ -61,7 +61,7 @@ export class _NavigationTree extends Component {
       isPrompted: undefined,
     });
 
-    const isPrompted = await mstrObjectRestService.isPrompted(objectId);
+    const isPrompted = await mstrObjectRestService.isPrompted(objectId, projectId);
 
     this.props.selectObject({
       chosenObjectId: objectId,
