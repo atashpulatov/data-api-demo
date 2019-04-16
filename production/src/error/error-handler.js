@@ -57,7 +57,7 @@ class ErrorService {
   handleError = (error, isLogout) => {
     switch (true) {
       case error instanceof EnvironmentNotFoundError:
-        notificationService.displayMessage('info', '404 - Environment not found');
+        notificationService.displayNotification('warning', '404 - Environment not found');
         if (!isLogout) {
           setTimeout(() => {
             this.fullLogOut();
@@ -74,7 +74,7 @@ class ErrorService {
         }
         break;
       case error instanceof UnauthorizedError:
-        notificationService.displayMessage('info', 'Your session has expired. Please log in.');
+        notificationService.displayNotification('info', 'Your session has expired.\nPlease log in.');
         if (!isLogout) {
           setTimeout(() => {
             this.fullLogOut();
@@ -82,7 +82,7 @@ class ErrorService {
         }
         break;
       case error instanceof BadRequestError:
-        notificationService.displayNotification('error', '400 - There has been a problem with your request');
+        notificationService.displayNotification('warning', '400 - There has been a problem with your request');
         break;
       case error instanceof InternalServerError:
         notificationService.displayNotification('warning', errorMessages[error.iServerCode]);
@@ -97,7 +97,7 @@ class ErrorService {
         notificationService.displayNotification('warning', 'The table you try to import exceeds the worksheet limits.');
         break;
       default:
-        notificationService.displayNotification('error', error.message || 'Unknown error');
+        notificationService.displayNotification('warning', error.message || 'Unknown error');
         break;
     }
   }
@@ -116,16 +116,16 @@ class ErrorService {
   handleOfficeError = (error) => {
     switch (true) {
       case error instanceof RunOutsideOfficeError:
-        notificationService.displayNotification('error', 'Please run plugin inside Office');
+        notificationService.displayNotification('warning', 'Please run plugin inside Office');
         break;
       case error instanceof OverlappingTablesError:
-        notificationService.displayNotification('error', `Excel returned error: ${error.message}`);
+        notificationService.displayNotification('warning', `Excel returned error: ${error.message}`);
         break;
       case error instanceof GenericOfficeError:
-        notificationService.displayNotification('error', `Excel returned error: ${error.message}`);
+        notificationService.displayNotification('warning', `Excel returned error: ${error.message}`);
         break;
       case error instanceof OutsideOfRangeError:
-        notificationService.displayNotification('error', 'The table you try to import exceeds the worksheet limits.');
+        notificationService.displayNotification('warning', 'The table you try to import exceeds the worksheet limits.');
         break;
       default:
         this.handleError(error);

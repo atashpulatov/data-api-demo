@@ -8,11 +8,10 @@ export class NotificationsWithoutRedux extends Component {
     super(props);
     message.config({
       duration: 5,
-      maxCount: 1,
+      maxCount: 3,
     });
     notification.config({
       duration: 0,
-      maxCount: 1,
     });
   }
   componentDidUpdate = () => {
@@ -29,9 +28,12 @@ export class NotificationsWithoutRedux extends Component {
     let icon;
     const key = `open${Date.now()}`;
     const btn = <Button type="primary" size="small" onClick={() => notification.close(key)} >OK</Button>;
+    notification.config({
+      duration: 0,
+    });
     switch (notificationType) {
       case 'warning':
-        icon = <Icon type="exclamation-circle" theme="filled" style={{color: '#faad14'}} />;
+        icon = <Icon type="warning" theme="filled" style={{color: '#faad14'}} />;
         break;
       case 'error':
         icon = <Icon type="close-circle" theme="filled" style={{color: '#f5222d'}} />;
@@ -41,6 +43,9 @@ export class NotificationsWithoutRedux extends Component {
         break;
       case 'success':
         icon = <Icon type="check-circle" theme="filled" style={{color: '#52c41a'}} />;
+        notification.config({
+          duration: 5,
+        });
         break;
       default:
         break;
@@ -49,7 +54,7 @@ export class NotificationsWithoutRedux extends Component {
       message: title,
       description: content,
       icon,
-      btn,
+      btn: notificationType !== 'success' ? btn : null,
       key,
     });
   }
