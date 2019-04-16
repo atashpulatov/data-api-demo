@@ -48,7 +48,7 @@ class OfficeDisplayService {
       // TODO: If isRefresh check if new instance definition is same as before
 
       // Create or update table
-      let {officeTable, newOfficeTableId} = await this._getOfficeTable(officeTableId, isRefresh, excelContext, bindingId, instanceDefinition, startCell);
+      let {officeTable, newOfficeTableId, shouldFormat} = await this._getOfficeTable(officeTableId, isRefresh, excelContext, bindingId, instanceDefinition, startCell);
 
       // Fetch, convert and insert with promise generator
       console.time('Fetch and insert into excel');
@@ -56,8 +56,10 @@ class OfficeDisplayService {
       const officeData = {officeTable, excelContext, startCell, newOfficeTableId};
       officeTable = await this._fetchInsertDataIntoExcel(connectionData, officeData, instanceDefinition, isRefresh);
 
-      // Apply formatting
-      await this._applyFormatting(isRefresh, officeTable, instanceDefinition, excelContext);
+      // Apply formatting when table was created
+      if (shouldFormat) {
+        await this._applyFormatting(officeTable, instanceDefinition, excelContext);
+      }
 
       // Save to store
       bindingId = bindingId || newOfficeTableId;
@@ -226,15 +228,13 @@ class OfficeDisplayService {
     }
   }
 
-  async _applyFormatting(isRefresh, officeTable, instanceDefinition, excelContext) {
+  async _applyFormatting(officeTable, instanceDefinition, excelContext) {
     try {
       console.time('Apply formatting');
-      if (!isRefresh) {
-        officeApiHelper.formatNumbers(officeTable, instanceDefinition.mstrTable);
-        await excelContext.sync();
-        officeApiHelper.formatTable(officeTable);
-        await excelContext.sync();
-      }
+      officeApiHelper.formatNumbers(officeTable, instanceDefinition.mstrTable);
+      await excelContext.sync();
+      officeApiHelper.formatTable(officeTable);
+      await excelContext.sync();
     } catch (error) {
       // TODO: Inform the user?
       console.log('Cannot apply formatting, skipping');
@@ -247,6 +247,7 @@ class OfficeDisplayService {
     console.time('Create or get table');
     const newOfficeTableId = officeTableId || officeApiHelper.findAvailableOfficeTableId();
     let officeTable;
+    let shouldFormat = true;
 
     if (isRefresh) {
       const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindingId);
@@ -261,13 +262,14 @@ class OfficeDisplayService {
         await excelContext.sync();
         officeTable = await this._createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId);
       } else {
+        shouldFormat = false;
         officeTable = await this._updateOfficeTable(instanceDefinition, excelContext, prevOfficeTable);
       }
     } else {
       officeTable = await this._createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId);
     }
     console.timeEnd('Create or get table');
-    return {officeTable, newOfficeTableId};
+    return {officeTable, newOfficeTableId, shouldFormat};
   }
 
   async _fetchInsertDataIntoExcel(connectionData, officeData, instanceDefinition) {
