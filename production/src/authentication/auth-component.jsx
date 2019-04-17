@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './auth-component.css';
 import {reduxStore} from '../store';
-import {Form, Icon, Input, Button} from 'antd';
+import {Form, Icon, Input, Button, Checkbox} from 'antd';
 import {authenticationHelper} from './authentication-helper';
 const FormItem = Form.Item;
 
@@ -63,6 +63,14 @@ export class _Authenticate extends Component {
                   prefix={
                     <Icon type='link' style={{color: 'rgba(0,0,0,.25)'}} />}
                   placeholder='environment URL' />
+            )}
+          </FormItem>
+          <FormItem>
+            {getFieldDecorator('isRememberMeOn', {
+              valuePropName: 'checked',
+              initialValue: this.state.isRememberMeOn || false,
+            })(
+                <Checkbox>Remember Me</Checkbox>
             )}
           </FormItem>
           <div

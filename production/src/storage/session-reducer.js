@@ -35,9 +35,9 @@ function onLogOut(action, state) {
   if (state.isRememberMeOn) {
     return {
       ...state,
-      authToken: undefined,
-      userFullName: undefined,
-      userInitials: undefined,
+      authToken: false,
+      userFullName: null,
+      userInitials: null,
     };
   }
   return {};
