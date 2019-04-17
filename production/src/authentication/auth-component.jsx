@@ -9,9 +9,7 @@ export class _Authenticate extends Component {
   constructor(props) {
     super(props);
     this.stateFromRedux = reduxStore.getState().sessionReducer;
-    this.state = {
-      envUrl: this.stateFromRedux.envUrl || '',
-    };
+    this.state = {...this.stateFromRedux};
   }
 
   onLoginUser = async (event) => {
@@ -36,22 +34,23 @@ export class _Authenticate extends Component {
               initialValue: this.state.username || '',
               rules: [{required: true, message: 'Please input your username!'}],
             })(
-              <Input
-                prefix={
-                  <Icon type='user' style={{color: 'rgba(0,0,0,.25)'}} />}
-                placeholder='Username' />
+                <Input
+                  prefix={
+                    <Icon type='user' style={{color: 'rgba(0,0,0,.25)'}} />}
+                  placeholder='Username' />
             )}
           </FormItem>
           <FormItem
             label='Password'>
             {getFieldDecorator('password', {
+              initialValue: this.state.password || '',
               rules: [{message: 'Please input your Password!'}],
             })(
-              <Input
-                prefix={
-                  <Icon type='lock' style={{color: 'rgba(0,0,0,.25)'}} />}
-                type='password'
-                placeholder='Password' />
+                <Input
+                  prefix={
+                    <Icon type='lock' style={{color: 'rgba(0,0,0,.25)'}} />}
+                  type='password'
+                  placeholder='Password' />
             )}
           </FormItem>
           <FormItem
@@ -60,10 +59,10 @@ export class _Authenticate extends Component {
               initialValue: this.state.envUrl || '',
               rules: [{required: true, message: 'Please input environment URL!', type: 'url'}],
             })(
-              <Input
-                prefix={
-                  <Icon type='link' style={{color: 'rgba(0,0,0,.25)'}} />}
-                placeholder='environment URL' />
+                <Input
+                  prefix={
+                    <Icon type='link' style={{color: 'rgba(0,0,0,.25)'}} />}
+                  placeholder='environment URL' />
             )}
           </FormItem>
           <div

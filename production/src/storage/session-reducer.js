@@ -22,12 +22,13 @@ export const sessionReducer = (state = {}, action) => {
 };
 
 function onLogIn(action, state) {
-  if (!action.envUrl) {
+  const {values} = action;
+  if (!values.envUrl) {
     throw new SessionError('Missing EnvUrl.');
   }
   return {
     ...state,
-    envUrl: action.envUrl,
+    ...values,
   };
 }
 function onLogOut(action, state) {
