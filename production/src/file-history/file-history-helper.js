@@ -18,7 +18,7 @@ class FileHistoryHelper {
         reportBindId: bindingId,
       });
       const refreshed = await onRefresh(bindingId, objectType);
-      refreshed && notificationService.displayMessage('success', `${capitalize(objectType)} refreshed`);
+      refreshed && notificationService.displayNotification('success', `${capitalize(objectType)} refreshed`);
     } catch (error) {
       errorService.handleError(error);
     } finally {
@@ -33,7 +33,7 @@ class FileHistoryHelper {
     sessionHelper.enableLoading();
     try {
       const removed = await onDelete(bindingId);
-      removed && notificationService.displayMessage('success', `${capitalize(objectType)} removed`);
+      removed && notificationService.displayNotification('success', `${capitalize(objectType)} removed`);
     } catch (error) {
       errorService.handleError(error);
     } finally {

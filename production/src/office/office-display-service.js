@@ -41,7 +41,7 @@ class OfficeDisplayService {
       console.timeEnd('Instance definition');
 
       // Check if instance returned data
-      if (!instanceDefinition || instanceDefinition.rows === 0) {
+      if (!instanceDefinition || instanceDefinition.mstrTable.rows.length === 0) {
         return {type: 'warning', message: NOT_SUPPORTED_NO_ATTRIBUTES};
       }
 
@@ -133,12 +133,12 @@ class OfficeDisplayService {
       const refreshReport = officeStoreService.getReportFromProperties(bindingId);
       const result = await this.printObject(refreshReport.id, refreshReport.projectId, isReport, true, refreshReport.tableId, bindingId, refreshReport.body, true);
       if (result) {
-        notificationService.displayMessage(result.type, result.message);
+        notificationService.displayNotification(result.type, result.message);
       }
       return true;
     } catch (e) {
       if (e.code === 'ItemNotFound') {
-        return notificationService.displayMessage('info', 'Data is not relevant anymore. You can delete it from the list');
+        return notificationService.displayNotification('info', 'Data is not relevant anymore. You can delete it from the list');
       }
       throw e;
     }
