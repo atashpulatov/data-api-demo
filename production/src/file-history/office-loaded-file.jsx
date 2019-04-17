@@ -49,6 +49,7 @@ export class OfficeLoadedFile extends React.Component {
         type="flex"
         justify="center"
         role="listitem"
+        tabIndex="0"
         onClick={() => onClick(bindingId)}>
         <Col span={2}>
           {objectType === 'report' ? <MSTRIcon type='report' /> : <MSTRIcon type='dataset' />}
