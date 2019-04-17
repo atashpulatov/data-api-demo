@@ -23,6 +23,10 @@ class OfficeDisplayService {
   }
 
   _printObject = async (objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh) => {
+    let officeTable;
+    let newOfficeTableId;
+    let shouldFormat;
+    let excelContext;
     try {
       const objectType = isReport ? 'report' : 'dataset';
       const {envUrl} = officeApiHelper.getCurrentMstrContext();
@@ -31,7 +35,7 @@ class OfficeDisplayService {
       console.groupCollapsed('Importing data performance');
       console.time('Total');
       console.time('Init excel');
-      const excelContext = await officeApiHelper.getExcelContext();
+      excelContext = await officeApiHelper.getExcelContext();
       const startCell = selectedCell || await officeApiHelper.getSelectedCell(excelContext);
       console.timeEnd('Init excel');
 
@@ -48,7 +52,7 @@ class OfficeDisplayService {
       // TODO: If isRefresh check if new instance definition is same as before
 
       // Create or update table
-      let {officeTable, newOfficeTableId, shouldFormat} = await this._getOfficeTable(officeTableId, isRefresh, excelContext, bindingId, instanceDefinition, startCell);
+      ({officeTable, newOfficeTableId, shouldFormat} = await this._getOfficeTable(officeTableId, isRefresh, excelContext, bindingId, instanceDefinition, startCell));
 
       // Fetch, convert and insert with promise generator
       console.time('Fetch and insert into excel');
@@ -69,10 +73,14 @@ class OfficeDisplayService {
       console.timeEnd('Total');
       return !isRefresh && {type: 'success', message: `Data loaded successfully`};
     } catch (error) {
+      if (officeTable && !isRefresh) {
+        officeTable.delete();
+      }
       throw errorService.errorOfficeFactory(error);
     } finally {
-      console.groupEnd();
+      excelContext.sync();
       this._dispatchPrintFinish();
+      console.groupEnd();
     }
   }
 
