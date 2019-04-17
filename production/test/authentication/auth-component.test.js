@@ -33,7 +33,9 @@ describe('AuthComponent', () => {
     };
     reduxStore.dispatch({
       type: sessionProperties.actions.logIn,
-      envUrl: 'env',
+      values: {
+        envUrl: 'env',
+      },
     });
     const mockEvent = {
       preventDefault: jest.fn(),
