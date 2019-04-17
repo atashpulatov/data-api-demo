@@ -4,6 +4,8 @@ import '../index.css';
 import '../home/home.css';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { PopupButtons } from '../popup/popup-buttons';
+import { MutationObserver, WatchForChildrenRemoval, WatchForChildrenAddition } from 'react-mutation-observer';
+import { PromptsContainer } from './PromptsContainer';
 /* eslint-enable */
 
 export class PromptsWindow extends Component {
@@ -31,12 +33,12 @@ export class PromptsWindow extends Component {
         this.outerCont = React.createRef();
     }
 
-    loadEmbeddedDossier = () => {
+    loadEmbeddedDossier = async (container) => {
         const { authToken, projectId } = this.state.session;
-        const container = this.container.current;
+        //const container = this.container.current;
         const url = `https://localhost:8443/consume/app/${projectId}/${this.state.reportId}`;
         const CustomAuthenticationType = microstrategy.dossier.CustomAuthenticationType;
-        microstrategy.dossier.create({
+        const dossierPageState = await microstrategy.dossier.create({
             url: url,
             enableCustomAuthentication: true,
             customAuthenticationType: CustomAuthenticationType.AUTH_TOKEN,
@@ -46,7 +48,10 @@ export class PromptsWindow extends Component {
                 return Promise.resolve(authToken);
             },
             placeholder: container
-        }).then((dossierPageState) => {
+        });
+        console.log(dossierPageState);
+        
+        /*.then((dossierPageState) => {
             // TODO: Check if there is a better api call for the currentPageKey
             const currentPageKey = dossierPageState.children[0].getCurrentPage().nodeKey;
             
@@ -59,7 +64,8 @@ export class PromptsWindow extends Component {
                 dossierInstanceId,
                 docId
             });
-        })
+        });*/
+        
     }
 
     handleOk = () => {
@@ -90,8 +96,24 @@ export class PromptsWindow extends Component {
         Office.context.ui.messageParent(JSON.stringify(updateObject));
     };
 
-    componentDidMount(){
-        this.loadEmbeddedDossier();
+    /**
+     * This function applies an external css file to a document 
+     */
+    applyStyle = (_document, styleSheetLocation) => {
+        console.log('applyStyle');
+        const cssLink = document.createElement('link');
+        cssLink.href = styleSheetLocation;
+        cssLink.rel = 'stylesheet';
+        cssLink.type = 'text/css';
+        if (_document){
+            _document.head.appendChild(cssLink);
+        }
+    }
+
+    componentDidMount = async () => {
+        //console.log('parent');
+        //await this.loadEmbeddedDossier();
+        //this.applyStyle();
     }
 
     /**
@@ -102,15 +124,48 @@ export class PromptsWindow extends Component {
         this.setState({ triggerUpdate: false, loading: false });
     };
 
+    /**
+     * This function returns false if a document is login page and true otherwise
+     */
+    isLoginPage = (document) => document.URL.includes('embeddedLogin.jsp');
+
+    /**
+     * This function is called after a child (iframe) is added into mbedded dossier container
+     */
+    onIframeLoad = (container) => {
+        console.log('onIframeLoad');
+        if (container.child && container.child.nodeName === 'IFRAME'){
+            const iframe = container.child;
+            //iframe.onloadOrg = iframe.onload;
+            iframe.addEventListener('load', () => {
+                console.log('iframe loaded');
+                const embeddedDocument = iframe.contentDocument;
+                if (!this.isLoginPage(embeddedDocument)){
+                    const cssLocation = window.location.href
+                        .substring(0, window.location.href.indexOf('?'))
+                        .replace('popup.html', 'promptsWindow.css');
+                    this.applyStyle(embeddedDocument, cssLocation);
+                }
+            });
+            //const promptsPage = container.child.contentDocument;
+            //console.log(promptsPage);
+        }
+    };
+
     render() {
         return (
             <div
                 style={{ position: 'relative' }}
                 ref={this.outerCont}
             >
-                <div ref={this.container} className="awesome"></div>
+                <WatchForChildrenAddition 
+                    onAddition={this.onIframeLoad.bind(this)}>
+                    <PromptsContainer 
+                        postMount = {this.loadEmbeddedDossier}
+                    />
+                </WatchForChildrenAddition>
+                
                 <div style={{ position: 'absolute', bottom: '0'}}>
-                <div>Prompts Window Placeholder</div>
                 <PopupButtons
                     handleOk={this.handleOk}
                     handleCancel={this.handleCancel}
