@@ -23,7 +23,6 @@ export class OfficeLoadedFile extends React.Component {
 
   deleteAction = (e) => {
     e.stopPropagation();
-    e.target.blur();
     const {onDelete, bindingId, objectType} = this.props;
     this.setState({allowDeleteClick: false}, async () => {
       await fileHistoryHelper.deleteReport(onDelete, bindingId, objectType);
@@ -33,7 +32,6 @@ export class OfficeLoadedFile extends React.Component {
 
   refreshAction = (e) => {
     e.stopPropagation();
-    e.target.blur();
     const {isLoading, onRefresh, bindingId, objectType} = this.props;
     if (!isLoading) {
       this.setState({allowRefreshClick: false}, async () => {
