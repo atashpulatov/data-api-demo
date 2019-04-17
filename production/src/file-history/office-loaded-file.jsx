@@ -43,21 +43,15 @@ export class OfficeLoadedFile extends React.Component {
     }
   };
 
-  onClick = (e, bindingId) => {
-    e.target.blur();
-    this.props.onClick(bindingId);
-  }
-
   render() {
-    const {fileName, bindingId, isLoading, objectType} = this.props;
+    const {fileName, bindingId, onClick, isLoading, objectType} = this.props;
     return (
       <Row
         className="file-history-container"
         type="flex"
         justify="center"
-        role="button"
-        tabIndex="0"
-        onClick={(e) => this.onClick(e, bindingId)}>
+        role="listitem"
+        onClick={() => onClick(bindingId)}>
         <Col span={2}>
           {objectType === 'report' ? <MSTRIcon type='report' /> : <MSTRIcon type='dataset' />}
         </Col>
