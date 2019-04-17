@@ -51,7 +51,7 @@ describe('FileHistoryHelper', () => {
     });
     it('should display message on success', async () => {
       // given
-      const mockedDisplayMessage = notificationService.displayMessage;
+      const mockedDisplayMessage = notificationService.displayNotification;
       authenticationHelper.validateAuthToken = jest.fn().mockImplementation(() => {});
       const mockedOnRefresh = jest.fn().mockImplementation(() => true);
       const testBindId = 'someBindingIt';
@@ -66,7 +66,7 @@ describe('FileHistoryHelper', () => {
     });
     it('should not display message on fail', async () => {
       // given
-      const mockedDisplayMessage = notificationService.displayMessage;
+      const mockedDisplayMessage = notificationService.displayNotification;
       authenticationHelper.validateAuthToken = jest.fn().mockImplementation(() => {});
       const mockedOnRefresh = jest.fn().mockImplementation(() => false);
       const testBindId = 'someBindingIt';
@@ -134,7 +134,7 @@ describe('FileHistoryHelper', () => {
     });
     it('should display message on success', async () => {
       // given
-      const mockedDisplayMessage = notificationService.displayMessage;
+      const mockedDisplayMessage = notificationService.displayNotification;
       const mockedOnDelete = jest.fn().mockImplementation(() => true);
       const testBindId = 'someBindingIt';
       const objectType = 'object type';
@@ -147,7 +147,7 @@ describe('FileHistoryHelper', () => {
     });
     it('should not display message without success', async () => {
       // given
-      const mockedDisplayMessage = notificationService.displayMessage;
+      const mockedDisplayMessage = notificationService.displayNotification;
       const mockedOnDelete = jest.fn();
       const testBindId = 'someBindingIt';
       // when

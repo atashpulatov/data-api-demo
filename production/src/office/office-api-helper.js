@@ -111,7 +111,7 @@ class OfficeApiHelper {
     if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
       sheet.getRange().format.autofitColumns();
     } else {
-      notificationService.displayMessage('warning', `Unable to format table.`);
+      notificationService.displayNotification('warning', `Unable to format table.`);
     }
   }
 
