@@ -2,9 +2,12 @@ import React from 'react';
 import {shallow, mount} from 'enzyme';
 import {Popup} from '../../src/popup/popup.jsx';
 import {libraryErrorController} from 'mstr-react-library';
+import {Office} from '../mockOffice';
 import {officeContext} from '../../src/office/office-context.js';
 import {selectorProperties} from '../../src/attribute-selector/selector-properties.js';
 import {PopupTypeEnum} from '../../src/home/popup-type-enum.js';
+import TouchFeedback from 'rmc-feedback';
+import {_PopupViewSelector} from '../../src/popup/popup-view-selector.jsx';
 
 describe('Popup.js', () => {
   const messageParentMock = jest.fn();
@@ -123,7 +126,7 @@ describe('Popup.js', () => {
     // when
     const popupWrapped = mount(<Popup location={location} />);
     // then
-
-    expect(popupWrapped.children().children().length).toBe(0);
+    const popupSelector = popupWrapped.find(_PopupViewSelector);
+    expect(popupSelector.children().length).toBe(0);
   });
 });

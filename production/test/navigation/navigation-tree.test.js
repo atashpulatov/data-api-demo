@@ -242,7 +242,7 @@ describe('NavigationTree', () => {
     // when
     await wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype);
     // then
-    expect(isPromptedResponse).toBeCalledWith(givenObjectId);
+    expect(isPromptedResponse).toBeCalledWith(givenObjectId, givenProjectId);
     expect(selectObject).toBeCalledTimes(2);
     expect(selectObject.mock.calls[0][0]).toEqual({
       chosenObjectId: undefined,

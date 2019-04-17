@@ -3,7 +3,6 @@ import {OutsideOfRangeError} from '../error/outside-of-range-error';
 import {reduxStore} from '../store';
 import {moduleProxy} from '../module-proxy';
 import {officeConverterService} from '../office/office-converter-service';
-import { promptsRestService } from '../prompts/prompts-rest-service';
 
 const sharedFolderIdType = 7;
 // 200000 is around 1mb of MSTR JSON response
@@ -134,22 +133,21 @@ class MstrObjectRestService {
   }
 
   async isPrompted(objectId, projectId) {
-    const prompts = await promptsRestService.getReportPrompts(objectId, projectId);
-    return prompts.length > 0;
-    // const storeState = reduxStore.getState();
-    // const envUrl = storeState.sessionReducer.envUrl;
-    // const authToken = storeState.sessionReducer.authToken;
-    // const fullPath = `${envUrl}/reports/${objectId}/prompts`;
-    // return await moduleProxy.request
-    //     .get(fullPath)
-    //     .set('x-mstr-authtoken', authToken)
-    //     .withCredentials()
-    //     .then((res) => {
-    //       return res.body && res.body !== [];
-    //     })
-    //     .catch((err) => {
-    //       throw errorService.errorRestFactory(err);
-    //     });
+    const storeState = reduxStore.getState();
+    const envUrl = storeState.sessionReducer.envUrl;
+    const authToken = storeState.sessionReducer.authToken;
+    const fullPath = `${envUrl}/reports/${objectId}/prompts`;
+    return await moduleProxy.request
+        .get(fullPath)
+        .set('x-mstr-authtoken', authToken)
+        .set('X-MSTR-ProjectID', projectId)
+        .withCredentials()
+        .then((res) => {
+          return res.body && res.body !== [];
+        })
+        .catch((err) => {
+          throw errorService.errorRestFactory(err);
+        });
   };
 };
 
