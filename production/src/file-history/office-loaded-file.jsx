@@ -21,7 +21,9 @@ export class OfficeLoadedFile extends React.Component {
     this._ismounted = false;
   }
 
-  deleteAction = () => {
+  deleteAction = (e) => {
+    e.stopPropagation();
+    e.target.blur();
     const {onDelete, bindingId, objectType} = this.props;
     this.setState({allowDeleteClick: false}, async () => {
       await fileHistoryHelper.deleteReport(onDelete, bindingId, objectType);
@@ -29,7 +31,9 @@ export class OfficeLoadedFile extends React.Component {
     });
   };
 
-  refreshAction = () => {
+  refreshAction = (e) => {
+    e.stopPropagation();
+    e.target.blur();
     const {isLoading, onRefresh, bindingId, objectType} = this.props;
     if (!isLoading) {
       this.setState({allowRefreshClick: false}, async () => {
@@ -39,30 +43,38 @@ export class OfficeLoadedFile extends React.Component {
     }
   };
 
+  onClick = (e, bindingId) => {
+    e.target.blur();
+    this.props.onClick(bindingId);
+  }
+
   render() {
-    const {fileName, bindingId, onClick, isLoading, objectType} = this.props;
+    const {fileName, bindingId, isLoading, objectType} = this.props;
     return (
       <Row
         className="file-history-container"
         type="flex"
-        justify="center">
+        justify="center"
+        role="button"
+        tabIndex="0"
+        onClick={(e) => this.onClick(e, bindingId)}>
         <Col span={2}>
-          {objectType === 'report' ? <MSTRIcon type='report'/> : <MSTRIcon type='dataset'/>}
+          {objectType === 'report' ? <MSTRIcon type='report' /> : <MSTRIcon type='dataset' />}
         </Col>
-        <Col span={14} title={`${fileName}`} className="report-title" onClick={() => onClick(bindingId)}>
+        <Col span={14} title={`${fileName}`} className="report-title">
           {fileName}
         </Col>
         <Col span={1} offset={2}>
           <span className="loading-button-container"
-            onClick={() => this.state.allowRefreshClick && this.refreshAction()}>
-            {!isLoading ? <MSTRIcon type='refresh'/> :
-                <img width='12px' height='12px' src={loadingSpinner} alt='Report loading icon'/>}
+            onClick={(e) => this.state.allowRefreshClick && this.refreshAction(e)}>
+            {!isLoading ? <MSTRIcon type='refresh' /> :
+              <img width='12px' height='12px' src={loadingSpinner} alt='Report loading icon' />}
           </span>
         </Col>
         <Col span={1} offset={1}>
           <span
-            onClick={() => this.state.allowDeleteClick && this.deleteAction()}>
-            <MSTRIcon type='trash'/>
+            onClick={(e) => this.state.allowDeleteClick && this.deleteAction(e)}>
+            <MSTRIcon type='trash' />
           </span>
         </Col>
       </Row>
