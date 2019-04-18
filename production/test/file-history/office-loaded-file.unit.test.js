@@ -71,53 +71,63 @@ describe('office loaded file', () => {
     const deleteButton = wrappedIcons.at(2);
     expect(deleteButton.props().type).toEqual('trash');
   });
-  it('refresh method should not do anything if it\'s loading state', () => {
+  it('refresh method should not do anything if in loading state', () => {
     // given
-    const refreshMock = jest.spyOn(fileHistoryHelper, 'refreshReport');
+    const onRefreshMock = jest.fn();
     // when
     const wrappedComponent = mount(<OfficeLoadedFile
       bindingId={''}
       fileName='test'
-      onRefresh={() => {}}
+      onRefresh={onRefreshMock}
       isLoading={true} />);
     const refreshFunction = wrappedComponent.instance().refreshAction;
     refreshFunction();
     // then
-    expect(refreshMock).not.toBeCalled();
+    expect(onRefreshMock).not.toBeCalled();
   });
-  it('refresh method should call history-helper if it\'s not loading state', () => {
+  it('refresh method should run onRefresh method', () => {
     // given
-    const refreshMock = jest.spyOn(fileHistoryHelper, 'refreshReport');
+    const onRefreshMock = jest.fn();
     // when
     const wrappedComponent = mount(<OfficeLoadedFile
       bindingId={''}
       fileName='test'
-      onRefresh={() => {}}
+      onRefresh={onRefreshMock}
       isLoading={false} />);
-    const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
-    const refreshButton = wrappedIcons.at(1);
-    refreshButton.props().onClick();
+    const refreshFunction = wrappedComponent.instance().refreshAction;
+    refreshFunction();
     // then
-    expect(refreshMock).toBeCalled();
+    expect(onRefreshMock).toBeCalled();
   });
-  it('should invoke refresh method on button click', () => {
+  it('refresh action should NOT run onRefresh when allowRefreshClick is false', () => {
     // given
-    const onRefreshMocked = jest.fn();
-    const testBindingId = 'testBindingId';
-    jest.spyOn(fileHistoryHelper, 'refreshReport').mockImplementation((func) => func(testBindingId));
-    jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => {});
+    const onRefreshMock = jest.fn();
     // when
     const wrappedComponent = mount(<OfficeLoadedFile
-      bindingId={testBindingId}
+      bindingId={''}
       fileName='test'
-      onRefresh={onRefreshMocked}
+      onRefresh={onRefreshMock}
       isLoading={false} />);
-    const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
-    const refreshButton = wrappedIcons.at(1);
-    refreshButton.props().onClick();
+    wrappedComponent.setState({allowRefreshClick: false});
+    const buttonRefresh = wrappedComponent.find('.loading-button-container');
+    buttonRefresh.simulate('click');
     // then
-    expect(onRefreshMocked).toBeCalled();
-    expect(onRefreshMocked).toBeCalledWith(testBindingId);
+    expect(onRefreshMock).not.toBeCalled();
+  });
+  it('refresh action should NOT run onRefresh when allowRefreshClick is false', () => {
+    // given
+    const onRefreshMock = jest.fn();
+    // when
+    const wrappedComponent = mount(<OfficeLoadedFile
+      bindingId={''}
+      fileName='test'
+      onRefresh={onRefreshMock}
+      isLoading={false} />);
+    wrappedComponent.setState({allowRefreshClick: true});
+    const buttonRefresh = wrappedComponent.find('.loading-button-container');
+    buttonRefresh.simulate('click');
+    // then
+    expect(onRefreshMock).toBeCalled();
   });
   it('should display spinner when report is refreshing', () => {
     // given

@@ -26,13 +26,13 @@ const _LoadingPage = ({name}) => {
   return (
     <dialog className='loading-page' style={dialogStyle}>
       <h1 style={titleStyle}>{`Importing ${displayName}`}</h1>
-      <LoadingText text={`Please wait until the import is complete.`} />
+      <LoadingText text={'Please wait until the import is complete.'} />
     </dialog>
   );
 };
 
-const mapStateToProps = (state) => {
-  return {name: state.popupReducer.refreshingReport};
+const mapStateToProps = ({popupReducer}) => {
+  return {name: popupReducer.refreshingReport};
 };
 
 export const LoadingPage = connect(mapStateToProps)(_LoadingPage);

@@ -125,9 +125,12 @@ export class _NavigationTree extends Component {
   }
 }
 
-export const mapStateToProps = (state) => {
-  const object = state.officeReducer.preLoadReport;
-  return {...state.navigationTree, title: !!object ? object.name : undefined};
+export const mapStateToProps = ({officeReducer, navigationTree}) => {
+  const object = officeReducer.preLoadReport;
+  return {
+    ...navigationTree,
+    title: !!object ? object.name : undefined,
+  };
 };
 
 export const NavigationTree = connect(mapStateToProps, actions)(_NavigationTree);

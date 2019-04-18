@@ -33,7 +33,7 @@ export class OfficeLoadedFile extends React.Component {
     const {isLoading, onRefresh, bindingId, objectType} = this.props;
     if (!isLoading) {
       this.setState({allowRefreshClick: false}, async () => {
-        await fileHistoryHelper.refreshReport(onRefresh, bindingId, objectType);
+        await onRefresh(bindingId, objectType, false);
         this.setState({allowRefreshClick: true});
       });
     }
