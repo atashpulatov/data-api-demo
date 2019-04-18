@@ -125,7 +125,7 @@ class OfficeApiHelper {
             const columnRange = columns.getItemAt(object.index).getDataBodyRange();
             let format = '';
 
-            if (object.category === 9) {
+            if (object.category == 9) {
               format = this._getNumberFormattingCategoryName(object);
             } else {
               format = object.formatString;
