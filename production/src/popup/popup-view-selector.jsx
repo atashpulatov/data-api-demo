@@ -12,10 +12,12 @@ export const _PopupViewSelector = (props) => {
   let popupType = props.popupType;
   const {propsToPass, methods, importRequested} = props;
   if (importRequested) {
-    if (props.isPrompted) {
-      popupType = PopupTypeEnum.promptsWindow;
-    } else {
+    if (!props.isPrompted) {
       proceedToImport(props);
+    } else if (!!props.instanceId) {
+      proceedToImport(props);
+    } else {
+      popupType = PopupTypeEnum.promptsWindow;
     }
   }
   if (!popupType) {
@@ -36,6 +38,8 @@ function proceedToImport(props) {
     chosenObject: props.chosenObjectId,
     chosenProject: props.chosenProjectId,
     chosenSubtype: props.chosenSubtype,
+    isPrompted: props.isPrompted,
+    instanceId: props.instanceId,
   };
   props.startLoading();
   props.startImport();

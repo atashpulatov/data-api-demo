@@ -44,30 +44,59 @@ describe('PopupViewSelector', () => {
     const location = {
       search: {},
     };
-    const resultAction = {
-      command: selectorProperties.commandOk,
-      chosenObject: 'objectId',
-      chosenProject: 'projectId',
-      chosenSubtype: 'subtype',
-    };
-    const reduxMethods = {
+    const propsToPass = {
+      chosenObjectId: 'objectId',
+      chosenProjectId: 'projectId',
       startImport: jest.fn(),
       startLoading: jest.fn(),
+      importRequested: true,
+      isPrompted: true,
     };
-    const mockMessageParent = jest.spyOn(Office.context.ui, 'messageParent');
     // when
     // eslint-disable-next-line react/jsx-pascal-case
     const selectorWrapped = shallow(<_PopupViewSelector
       location={location}
-      importRequested={true}
-      {...reduxMethods}
-      {...resultAction}
+      {...propsToPass}
       methods={{}}
-      chosenObjectId={resultAction.chosenObject}
-      chosenProjectId={resultAction.chosenProject}
-      isPrompted={true}
     />);
     // then
     expect(selectorWrapped.find(PromptsWindow).get(0)).toBeTruthy();
+  });
+
+  it('should handle request import when prompted and got instance id', () => {
+    // given
+    const location = {
+      search: {},
+    };
+    const propsToPass = {
+      chosenObjectId: 'objectId',
+      chosenProjectId: 'projectId',
+      chosenSubtype: 'subtype',
+      startImport: jest.fn(),
+      startLoading: jest.fn(),
+      importRequested: true,
+      isPrompted: true,
+      instanceId: 'instanceId',
+    };
+    const resultAction = {
+      command: selectorProperties.commandOk,
+      chosenObject: propsToPass.chosenObjectId,
+      chosenProject: propsToPass.chosenProjectId,
+      chosenSubtype: propsToPass.chosenSubtype,
+      isPrompted: propsToPass.isPrompted,
+      instanceId: propsToPass.instanceId,
+    };
+    const mockMessageParent = jest.spyOn(Office.context.ui, 'messageParent');
+    // when
+    // eslint-disable-next-line react/jsx-pascal-case
+    shallow(<_PopupViewSelector
+      location={location}
+      {...propsToPass}
+      methods={{}}
+    />);
+    // then
+    expect(propsToPass.startLoading).toHaveBeenCalled();
+    expect(propsToPass.startImport).toHaveBeenCalled();
+    expect(mockMessageParent).toHaveBeenCalledWith(JSON.stringify(resultAction));
   });
 });
