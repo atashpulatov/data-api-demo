@@ -14,6 +14,8 @@ export const _PopupViewSelector = (props) => {
   if (importRequested) {
     if (props.isPrompted) {
       popupType = PopupTypeEnum.promptsWindow;
+      propsToPass.projectId = props.chosenProjectId;
+      propsToPass.reportId = props.chosenObjectId;
     } else {
       proceedToImport(props);
     }
@@ -25,7 +27,7 @@ export const _PopupViewSelector = (props) => {
   } else if (popupType === PopupTypeEnum.loadingPage) {
     return <LoadingPage />;
   } else if (popupType === PopupTypeEnum.promptsWindow) {
-    return <PromptsWindow />;
+    return <PromptsWindow parsed={propsToPass} handleBack={methods.handleBack}/>;
   }
   return <></>;
 };
