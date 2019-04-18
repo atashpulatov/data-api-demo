@@ -1,9 +1,8 @@
-/* eslint-disable */
-import { mount } from 'enzyme';
+import {mount} from 'enzyme';
 import React from 'react';
-import { _FileHistoryContainer } from '../../src/file-history/file-history-container';
-import { reduxStore } from '../../src/store';
-/* eslint-enable */
+import {Provider} from 'react-redux';
+import {reduxStore} from '../../src/store';
+import {_FileHistoryContainer} from '../../src/file-history/file-history-container';
 
 describe('FileHistoryContainer', () => {
   it('should render component when we are insinde project', () => {
@@ -11,9 +10,11 @@ describe('FileHistoryContainer', () => {
     const mockReportArray = createMockFilesArray();
     // when
     const wrappedComponent = mount(
-        <_FileHistoryContainer
-          project={'testProject'}
-          reportArray={mockReportArray}/>
+        <Provider store={reduxStore}>
+          <_FileHistoryContainer
+            project={'testProject'}
+            reportArray={mockReportArray} />
+        </Provider>
     );
     // then
     expect(wrappedComponent.html()).not.toBeNull();
@@ -23,9 +24,11 @@ describe('FileHistoryContainer', () => {
     const mockFiles = createMockFilesArray();
     // when
     const wrappedComponent = mount(
-        <_FileHistoryContainer
-          reportArray={mockFiles}
-          project={'testProject'} />
+        <Provider store={reduxStore}>
+          <_FileHistoryContainer
+            reportArray={mockFiles}
+            project={'testProject'} />
+        </Provider>
     );
     const wrappedListElements = wrappedComponent.find('Row');
     // then
@@ -38,10 +41,12 @@ describe('FileHistoryContainer', () => {
     const mockReportArray = createMockFilesArray();
     // when
     const wrappedComponent = mount(
-        < _FileHistoryContainer
-          project={'testProject'}
-          refreshingAll={refreshingAll}
-          reportArray={mockReportArray}/>);
+        <Provider store={reduxStore}>
+          < _FileHistoryContainer
+            project={'testProject'}
+            refreshingAll={refreshingAll}
+            reportArray={mockReportArray} />
+        </Provider>);
     // then
     expect(wrappedComponent.exists('Button .refresh-all-btn MSTRIcon')).toBeTruthy();
   });
@@ -51,10 +56,12 @@ describe('FileHistoryContainer', () => {
     const mockReportArray = createMockFilesArray();
     // when
     const wrappedComponent = mount(
-        < _FileHistoryContainer
-          project={'testProject'}
-          refreshingAll={refreshingAll}
-          reportArray={mockReportArray}/>);
+        <Provider store={reduxStore}>
+          < _FileHistoryContainer
+            project={'testProject'}
+            refreshingAll={refreshingAll}
+            reportArray={mockReportArray} />
+        </Provider>);
     // then
     expect(wrappedComponent.exists('Button .refresh-all-btn img')).toBeTruthy();
   });
@@ -63,10 +70,12 @@ describe('FileHistoryContainer', () => {
     const refreshAllmock = jest.fn();
     const mockReportArray = createMockFilesArray();
     const wrappedComponent = mount(
-        < _FileHistoryContainer
-          project={'testProject'}
-          reportArray={mockReportArray}
-          refreshAll={refreshAllmock}/>);
+        <Provider store={reduxStore}>
+          < _FileHistoryContainer
+            project={'testProject'}
+            reportArray={mockReportArray}
+            refreshAll={refreshAllmock} />
+        </Provider>);
     const refreshButton = wrappedComponent.find('Button .refresh-all-btn');
     // when
     refreshButton.simulate('click');

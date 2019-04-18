@@ -28,6 +28,7 @@ export const _FileHistoryContainer = ({reportArray = [], loading, refreshingAll,
         bindingId={report.bindId}
         onClick={officeApiHelper.onBindingObjectClick}
         onDelete={officeDisplayService.removeReportFromExcel}
+        refreshReport={refreshReport}
         isLoading={report.isLoading}
         objectType={report.objectType}/>)}
     </div>

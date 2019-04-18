@@ -1,6 +1,6 @@
 import React from 'react';
 import {mount} from 'enzyme';
-import {OfficeLoadedFile} from '../../src/file-history/office-loaded-file';
+import {_OfficeLoadedFile} from '../../src/file-history/office-loaded-file';
 import {fileHistoryHelper} from '../../src/file-history/file-history-helper';
 import {reduxStore} from '../../src/store';
 
@@ -8,7 +8,7 @@ describe('office loaded file', () => {
   it('should display provided file name', () => {
     // given
     // when
-    const wrappedComponent = mount(<OfficeLoadedFile fileName='test' />);
+    const wrappedComponent = mount(<_OfficeLoadedFile fileName='test' />);
     // then
     expect(wrappedComponent.find('Row').hasClass('file-history-container')).toBeTruthy();
     expect(wrappedComponent.html()).toContain('test');
@@ -16,7 +16,7 @@ describe('office loaded file', () => {
   it('should call componentWillUnmount provided file name', () => {
     // given
     // when
-    const wrappedComponent = mount(<OfficeLoadedFile fileName='test' />);
+    const wrappedComponent = mount(<_OfficeLoadedFile fileName='test' />);
     wrappedComponent.instance().componentWillUnmount();
     // then
     expect(wrappedComponent.instance()._ismounted).toBeFalsy();
@@ -25,7 +25,7 @@ describe('office loaded file', () => {
     // given
 
     // when
-    const wrappedComponent = mount(<OfficeLoadedFile objectType='test' />);
+    const wrappedComponent = mount(<_OfficeLoadedFile objectType='test' />);
     const wrappedIcons = wrappedComponent.find('MSTRIcon');
     const wrappedCol = wrappedComponent.find('Col');
     // then
@@ -37,7 +37,7 @@ describe('office loaded file', () => {
     // given
 
     // when
-    const wrappedComponent = mount(<OfficeLoadedFile objectType='report' />);
+    const wrappedComponent = mount(<_OfficeLoadedFile objectType='report' />);
     const wrappedIcons = wrappedComponent.find('MSTRIcon');
     const wrappedCol = wrappedComponent.find('Col');
     // then
@@ -49,7 +49,7 @@ describe('office loaded file', () => {
     // given
     const onClickMocked = jest.fn();
     const testBindingId = 'testBindingId';
-    const wrappedComponent = mount(<OfficeLoadedFile
+    const wrappedComponent = mount(<_OfficeLoadedFile
       bindingId={testBindingId}
       onClick={onClickMocked}
       fileName='test' />);
@@ -62,7 +62,7 @@ describe('office loaded file', () => {
   it('should display delete and refresh buttons', () => {
     // given
     // when
-    const wrappedComponent = mount(<OfficeLoadedFile fileName='test' />);
+    const wrappedComponent = mount(<_OfficeLoadedFile fileName='test' />);
     const wrappedIcons = wrappedComponent.find('MSTRIcon');
     // then
     const refreshButton = wrappedIcons.at(1);
@@ -75,10 +75,10 @@ describe('office loaded file', () => {
     // given
     const onRefreshMock = jest.fn();
     // when
-    const wrappedComponent = mount(<OfficeLoadedFile
+    const wrappedComponent = mount(<_OfficeLoadedFile
       bindingId={''}
       fileName='test'
-      onRefresh={onRefreshMock}
+      refreshReport={onRefreshMock}
       isLoading={true} />);
     const refreshFunction = wrappedComponent.instance().refreshAction;
     refreshFunction();
@@ -89,10 +89,10 @@ describe('office loaded file', () => {
     // given
     const onRefreshMock = jest.fn();
     // when
-    const wrappedComponent = mount(<OfficeLoadedFile
+    const wrappedComponent = mount(<_OfficeLoadedFile
       bindingId={''}
       fileName='test'
-      onRefresh={onRefreshMock}
+      refreshReport={onRefreshMock}
       isLoading={false} />);
     const refreshFunction = wrappedComponent.instance().refreshAction;
     refreshFunction();
@@ -103,10 +103,10 @@ describe('office loaded file', () => {
     // given
     const onRefreshMock = jest.fn();
     // when
-    const wrappedComponent = mount(<OfficeLoadedFile
+    const wrappedComponent = mount(<_OfficeLoadedFile
       bindingId={''}
       fileName='test'
-      onRefresh={onRefreshMock}
+      refreshReport={onRefreshMock}
       isLoading={false} />);
     wrappedComponent.setState({allowRefreshClick: false});
     const buttonRefresh = wrappedComponent.find('.loading-button-container');
@@ -114,14 +114,14 @@ describe('office loaded file', () => {
     // then
     expect(onRefreshMock).not.toBeCalled();
   });
-  it('refresh action should NOT run onRefresh when allowRefreshClick is false', () => {
+  it('refresh action should run onRefresh when allowRefreshClick is true', () => {
     // given
     const onRefreshMock = jest.fn();
     // when
-    const wrappedComponent = mount(<OfficeLoadedFile
+    const wrappedComponent = mount(<_OfficeLoadedFile
       bindingId={''}
       fileName='test'
-      onRefresh={onRefreshMock}
+      refreshReport={onRefreshMock}
       isLoading={false} />);
     wrappedComponent.setState({allowRefreshClick: true});
     const buttonRefresh = wrappedComponent.find('.loading-button-container');
@@ -132,7 +132,7 @@ describe('office loaded file', () => {
   it('should display spinner when report is refreshing', () => {
     // given
     // when
-    const wrappedComponent = mount(<OfficeLoadedFile
+    const wrappedComponent = mount(<_OfficeLoadedFile
       isLoading={true} />);
     const wrappedSpinner = wrappedComponent.find('img');
     // then
@@ -143,7 +143,7 @@ describe('office loaded file', () => {
     const onDeleteMocked = jest.fn();
     const testBindingId = 'testBindingId';
     // when
-    const wrappedComponent = mount(<OfficeLoadedFile
+    const wrappedComponent = mount(<_OfficeLoadedFile
       bindingId={testBindingId}
       fileName='test'
       onDelete={onDeleteMocked} />);
@@ -161,11 +161,11 @@ describe('office loaded file', () => {
     const onRefreshMocked = jest.fn();
     const testBindingId = 'testBindingId';
     // when
-    const wrappedComponent = mount(<OfficeLoadedFile
+    const wrappedComponent = mount(<_OfficeLoadedFile
       bindingId={testBindingId}
       onClick={onClickMocked}
       fileName='test'
-      onRefresh={onRefreshMocked}
+      refreshReport={onRefreshMocked}
       onDelete={onDeleteMocked} />);
     const textWrapper = wrappedComponent.childAt(0).find('Col').at(1);
     textWrapper.props().onClick();

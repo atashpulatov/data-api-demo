@@ -6,7 +6,7 @@ import {fileHistoryHelper} from './file-history-helper';
 import loadingSpinner from './assets/report_loading_spinner.gif';
 import {refreshReport} from '../popup/popup-actions';
 
-class _OfficeLoadedFile extends React.Component {
+export class _OfficeLoadedFile extends React.Component {
   constructor() {
     super();
     this.state = {
