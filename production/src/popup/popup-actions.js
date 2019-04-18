@@ -39,7 +39,6 @@ export function refreshAll(reportArray) {
 }
 
 export function refreshReport(bindingId, objectType, refreshAll = false) {
-  console.log('---in refresh report');
   return async (dispatch) => {
     let result;
     try {
