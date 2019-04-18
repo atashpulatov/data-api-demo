@@ -98,7 +98,14 @@ class PopupController {
       && response.projectId
       && response.reportSubtype
       && response.body) {
-      const result = await officeDisplayService.printObject(response.reportId, response.projectId, objectTypes.getTypeDescription(3, response.reportSubtype) === 'Report', null, null, null, response.body);
+      // TODO: this call should be refactored to have less parameters. for example with some object wrapper
+      const result = await officeDisplayService.printObject(
+          response.reportId,
+          response.projectId,
+          objectTypes.getTypeDescription(3, response.reportSubtype) === 'Report',
+          response.instanceId,
+          null, null, null,
+          response.body);
       if (result) {
         notificationService.displayMessage(result.type, result.message);
       }
@@ -108,7 +115,11 @@ class PopupController {
   handleOkCommand = async (response) => {
     if (response.chosenObject) {
       reduxStore.dispatch({type: officeProperties.actions.startLoading});
-      const result = await officeDisplayService.printObject(response.chosenObject, response.chosenProject, objectTypes.getTypeDescription(3, response.chosenSubtype) === 'Report');
+      const result = await officeDisplayService.printObject(
+          response.chosenObject,
+          response.chosenProject,
+          objectTypes.getTypeDescription(3, response.chosenSubtype) === 'Report',
+          response.instanceId);
       if (result) {
         notificationService.displayMessage(result.type, result.message);
       }

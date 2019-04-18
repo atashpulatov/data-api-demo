@@ -34,6 +34,74 @@ describe('PopupController', () => {
     expect(runPopupSpy).toBeCalledWith(popupType, size, size);
   });
 
+  it('should handle ok command from popup for report WITHOUT instance id',
+      async () => {
+      // given
+        officeApiHelper.getExcelSessionStatus = jest.fn();
+        const reportData = {
+          objectId: 'objectId',
+          projectId: 'projectId',
+          isReport: true,
+        };
+        const actionObject = {
+          command: selectorProperties.commandOk,
+          chosenObject: reportData.objectId,
+          chosenProject: reportData.projectId,
+          chosenSubtype: objectTypes.getTypeValues('Report').subtype,
+        };
+        const arg = {
+          message: JSON.stringify(actionObject),
+        };
+        officeApiHelper.getOfficeSessionStatus = jest.fn();
+        const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
+        // when
+        await popupController.onMessageFromPopup(dialog, arg);
+        // then
+        expect(dialog.close).toBeCalled();
+        expect(mockPrint).toBeCalled();
+        expect(mockPrint).toBeCalledWith(
+            reportData.objectId,
+            reportData.projectId,
+            true,
+            undefined,
+        );
+      });
+
+  it('should handle ok command from popup for report with instance id',
+      async () => {
+      // given
+        officeApiHelper.getExcelSessionStatus = jest.fn();
+        const reportData = {
+          objectId: 'objectId',
+          projectId: 'projectId',
+          isReport: true,
+          instanceId: 'instanceId',
+        };
+        const actionObject = {
+          command: selectorProperties.commandOk,
+          chosenObject: reportData.objectId,
+          chosenProject: reportData.projectId,
+          instanceId: reportData.instanceId,
+          chosenSubtype: objectTypes.getTypeValues('Report').subtype,
+        };
+        const arg = {
+          message: JSON.stringify(actionObject),
+        };
+        officeApiHelper.getOfficeSessionStatus = jest.fn();
+        const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
+        // when
+        await popupController.onMessageFromPopup(dialog, arg);
+        // then
+        expect(dialog.close).toBeCalled();
+        expect(mockPrint).toBeCalled();
+        expect(mockPrint).toBeCalledWith(
+            reportData.objectId,
+            reportData.projectId,
+            true,
+            reportData.instanceId,
+        );
+      });
+
   it('should handle update command from popup for cube',
       async () => {
       // given
@@ -58,11 +126,12 @@ describe('PopupController', () => {
         expect(mockPrint).toBeCalledWith(actionObject.reportId,
             actionObject.projectId,
             false,
+            undefined,
             null, null, null,
             actionObject.body);
       });
 
-  it('should handle update command from popup for report',
+  it('should handle update command from popup for report WITHOUT instance id',
       async () => {
       // given
         officeApiHelper.getExcelSessionStatus = jest.fn();
@@ -86,6 +155,37 @@ describe('PopupController', () => {
         expect(mockPrint).toBeCalledWith(actionObject.reportId,
             actionObject.projectId,
             true,
+            undefined,
+            null, null, null,
+            actionObject.body);
+      });
+
+  it('should handle update command from popup for report with instance id',
+      async () => {
+      // given
+        officeApiHelper.getExcelSessionStatus = jest.fn();
+        const actionObject = {
+          command: selectorProperties.commandOnUpdate,
+          reportId: 'reportId',
+          projectId: 'projectId',
+          instanceId: 'instanceId',
+          reportSubtype: objectTypes.getTypeValues('Report').subtype,
+          body: {},
+        };
+        const arg = {
+          message: JSON.stringify(actionObject),
+        };
+        officeApiHelper.getOfficeSessionStatus = jest.fn();
+        const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
+        // when
+        await popupController.onMessageFromPopup(dialog, arg);
+        // then
+        expect(dialog.close).toBeCalled();
+        expect(mockPrint).toBeCalled();
+        expect(mockPrint).toBeCalledWith(actionObject.reportId,
+            actionObject.projectId,
+            true,
+            actionObject.instanceId,
             null, null, null,
             actionObject.body);
       });
