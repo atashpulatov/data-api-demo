@@ -7,11 +7,11 @@ import {officeDisplayService} from '../office/office-display-service';
 import {popupController} from '../popup/popup-controller';
 import {MSTRIcon} from 'mstr-react-library';
 import loadingSpinner from './assets/report_loading_spinner.gif';
-import {refreshAll, refreshReport} from '../popup/popup-actions';
+import {refreshAll} from '../popup/popup-actions';
 
 import './file-history.css';
 
-export const _FileHistoryContainer = ({reportArray = [], loading, refreshingAll, refreshAll, refreshReport}) => {
+export const _FileHistoryContainer = ({reportArray = [], loading, refreshingAll, refreshAll}) => {
   return (<div>
     <Button id="add-data-btn-container" className="add-data-btn" onClick={popupController.runPopupNavigation}
       disabled={loading}>Add Data</Button>
@@ -28,7 +28,6 @@ export const _FileHistoryContainer = ({reportArray = [], loading, refreshingAll,
         bindingId={report.bindId}
         onClick={officeApiHelper.onBindingObjectClick}
         onDelete={officeDisplayService.removeReportFromExcel}
-        refreshReport={refreshReport}
         isLoading={report.isLoading}
         objectType={report.objectType}/>)}
     </div>
@@ -45,7 +44,6 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = {
   refreshAll,
-  refreshReport,
 };
 
 export const FileHistoryContainer = connect(mapStateToProps, mapDispatchToProps)(_FileHistoryContainer);
