@@ -32,7 +32,7 @@ export function selectFolder(data) {
 }
 
 export function requestImport(data) {
-  return (dispatch) => dispatch({type: REQUEST_IMPORT});
+  return (dispatch) => dispatch({type: REQUEST_IMPORT, data});
 }
 
 export function startImport() {
