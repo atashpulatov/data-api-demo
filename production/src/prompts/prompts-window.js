@@ -33,7 +33,7 @@ export class _PromptsWindow extends Component {
 
         this.container = React.createRef();
         this.outerCont = React.createRef();
-    }    
+    }
 
     loadEmbeddedDossier = async (container) => {
         if (!this.state.loading){
@@ -57,7 +57,7 @@ export class _PromptsWindow extends Component {
         }).then((dossierPageState) => {
             // TODO: Check if there is a better api call for the currentPageKey
             //const currentPageKey = dossierPageState.children[0].getCurrentPage().nodeKey;
-            
+
             //const docId = dossierPageState.getDocId();
             const dossierInstanceId = dossierPageState.getDossierInstanceId()
 
@@ -66,27 +66,31 @@ export class _PromptsWindow extends Component {
             }
 
             this.props.requestImport(data);
-        });     
+        });
     }
 
     /**
      * This should run the embedded dossier and pass instance ID to the plugin
      */
     handleRun = () => {
-        this.setState({ triggerUpdate: true, loading: true });
-        const okObject = {
-            command: selectorProperties.commandOk,
-            // body,
-            instanceId: this.state.dossierInstanceId,
-            objectId: this.state.reportId,
-            docId: this.state.docId,
-            currentPageKey: this.state.currentPageKey
-        };
-        Office.context.ui.messageParent(JSON.stringify(okObject));
+        if (this.embeddedDocument) {
+            const runButton = this.embeddedDocument.getElementsByClassName('mstrPromptEditorButtonRun')[0];
+            runButton && runButton.click();
+        }
+        // this.setState({ triggerUpdate: true, loading: true });
+        // const okObject = {
+        //     command: selectorProperties.commandOk,
+        //     // body,
+        //     instanceId: this.state.dossierInstanceId,
+        //     objectId: this.state.reportId,
+        //     docId: this.state.docId,
+        //     currentPageKey: this.state.currentPageKey
+        // };
+        // Office.context.ui.messageParent(JSON.stringify(okObject));
     }
 
     /**
-     * This function applies an external css file to a document 
+     * This function applies an external css file to a document
      */
     applyStyle = (_document, styleSheetLocation) => {
         console.log('applyStyle');
@@ -115,6 +119,7 @@ export class _PromptsWindow extends Component {
             iframe.addEventListener('load', () => {
                 console.log('iframe loaded');
                 const embeddedDocument = iframe.contentDocument;
+                this.embeddedDocument = embeddedDocument;
                 if (!this.isLoginPage(embeddedDocument)){
                     const cssLocation = window.location.href
                         .substring(0, window.location.href.indexOf('?'))
@@ -133,13 +138,13 @@ export class _PromptsWindow extends Component {
                 style={{ position: 'relative' }}
                 ref={this.outerCont}
             >
-                <WatchForChildrenAddition 
+                <WatchForChildrenAddition
                     onAddition={this.onIframeLoad.bind(this)}>
-                    <PromptsContainer 
+                    <PromptsContainer
                         postMount = {this.loadEmbeddedDossier}
                     />
                 </WatchForChildrenAddition>
-                
+
                 <div style={{ position: 'absolute', bottom: '0'}}>
                 <PromptWindowButtons
                     handleRun={this.handleRun}
