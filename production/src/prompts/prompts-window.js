@@ -147,8 +147,7 @@ export class _PromptsWindow extends Component {
 
                 <div style={{ position: 'absolute', bottom: '0'}}>
                 <PromptWindowButtons
-                    handleRun={this.handleRun}
-                    handleCancel={this.props.handleBack} />
+                    handleRun={this.handleRun} />
                 </div>
             </div>
         );
