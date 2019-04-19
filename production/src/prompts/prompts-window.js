@@ -55,23 +55,17 @@ export class _PromptsWindow extends Component {
             },
             placeholder: container
         }).then((dossierPageState) => {
-            console.log(dossierPageState);
             // TODO: Check if there is a better api call for the currentPageKey
-            const currentPageKey = dossierPageState.children[0].getCurrentPage().nodeKey;
+            //const currentPageKey = dossierPageState.children[0].getCurrentPage().nodeKey;
             
-            const docId = dossierPageState.getDocId();
+            //const docId = dossierPageState.getDocId();
             const dossierInstanceId = dossierPageState.getDossierInstanceId()
 
-            console.log(dossierInstanceId);
+            const data = {
+                instanceId: dossierInstanceId
+            }
 
-            console.log(this.props);
-
-            this.setState({
-                loading: false,
-                currentPageKey,
-                dossierInstanceId,
-                docId
-            });
+            this.props.requestImport(data);
         });     
     }
 
@@ -89,16 +83,6 @@ export class _PromptsWindow extends Component {
             currentPageKey: this.state.currentPageKey
         };
         Office.context.ui.messageParent(JSON.stringify(okObject));
-    }
-
-    /**
-     * TODO: This should take us back to navigation tree
-     */
-    handleCancel = () => {
-        const cancelObject = {
-            command: selectorProperties.commandCancel,
-        };
-        Office.context.ui.messageParent(JSON.stringify(cancelObject));
     }
 
     /**
@@ -159,7 +143,7 @@ export class _PromptsWindow extends Component {
                 <div style={{ position: 'absolute', bottom: '0'}}>
                 <PromptWindowButtons
                     handleRun={this.handleRun}
-                    handleCancel={this.handleCancel} />
+                    handleCancel={this.props.handleBack} />
                 </div>
             </div>
         );

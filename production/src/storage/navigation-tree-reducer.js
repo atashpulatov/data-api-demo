@@ -103,7 +103,9 @@ export const navigationTree = (state = initialState, action) => {
     case REQUEST_IMPORT: {
       const newState = {...state};
       newState.importRequested = true;
-      newState.instanceId = data.instanceId;
+      if (data){
+        newState.instanceId = data.instanceId;
+      }      
       return newState;
     }
     case START_IMPORT: {
