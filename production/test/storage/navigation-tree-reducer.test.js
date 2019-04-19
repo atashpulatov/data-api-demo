@@ -1,6 +1,6 @@
 import {
   SELECT_FOLDER, SELECT_OBJECT, SET_DATA_SOURCE, START_IMPORT, UPDATE_SCROLL, UPDATE_SIZE,
-  CHANGE_SEARCHING, CHANGE_SORTING, REQUEST_IMPORT,
+  CHANGE_SEARCHING, CHANGE_SORTING, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT
 } from '../../src/navigation/navigation-tree-actions';
 import {navigationTree, initialState, DEFAULT_TYPE, DEFAULT_PROJECT_NAME} from '../../src/storage/navigation-tree-reducer';
 import {CLEAR_WINDOW} from '../../src/popup/popup-actions';
@@ -204,6 +204,19 @@ describe('NavigationTree Reducer', () => {
     // given
     const action = {
       type: CLEAR_WINDOW,
+    };
+
+    // when
+    const newState = navigationTree({}, action);
+
+    // then
+    expect(newState.importRequested).toBeFalsy();
+  });
+
+  it('should return new proper state in case of CANCEL_REQUEST_IMPORT action', () => {
+    // given
+    const action = {
+      type: CANCEL_REQUEST_IMPORT,
     };
 
     // when
