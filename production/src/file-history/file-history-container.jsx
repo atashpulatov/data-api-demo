@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {connect} from 'react-redux';
 import {Button} from 'antd';
 import {OfficeLoadedFile} from './office-loaded-file.jsx';
@@ -21,7 +21,7 @@ export const _FileHistoryContainer = ({reportArray = [], loading, refreshingAll,
         <span className="refresh-all-label">Refresh All</span>
       </Button>
     </span>
-    <div>
+    <div role="list">
       {reportArray.map((report) => <OfficeLoadedFile
         key={report.bindId}
         fileName={report.name}
@@ -29,7 +29,7 @@ export const _FileHistoryContainer = ({reportArray = [], loading, refreshingAll,
         onClick={officeApiHelper.onBindingObjectClick}
         onDelete={officeDisplayService.removeReportFromExcel}
         isLoading={report.isLoading}
-        objectType={report.objectType}/>)}
+        objectType={report.objectType} />)}
     </div>
   </div>);
 };

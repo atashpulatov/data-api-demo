@@ -70,6 +70,15 @@ span.file-icons {
     padding-bottom: 16px;
 }
 
+.file-history-container:hover {
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.50);
+}
+
+.file-history-container:focus {
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.20);
+    outline: 1px solid #1C91DC;
+}
+
 .report-title {
     white-space: nowrap;
     overflow: hidden;
