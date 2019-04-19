@@ -22,7 +22,7 @@ class OfficeDisplayService {
     return this._printObject(objectId, projectId, isReport, ...args);
   }
 
-  _printObject = async (objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh) => {
+  _printObject = async (objectId, projectId, isReport = true, instanceId, selectedCell, officeTableId, bindingId, body, isRefresh) => {
     try {
       const objectType = isReport ? 'report' : 'dataset';
       const {envUrl} = officeApiHelper.getCurrentMstrContext();
@@ -131,7 +131,7 @@ class OfficeDisplayService {
     try {
       const isReport = objectType === 'report';
       const refreshReport = officeStoreService.getReportFromProperties(bindingId);
-      const result = await this.printObject(refreshReport.id, refreshReport.projectId, isReport, true, refreshReport.tableId, bindingId, refreshReport.body, true);
+      const result = await this.printObject(refreshReport.id, refreshReport.projectId, isReport, null, true, refreshReport.tableId, bindingId, refreshReport.body, true);
       if (result) {
         notificationService.displayMessage(result.type, result.message);
       }

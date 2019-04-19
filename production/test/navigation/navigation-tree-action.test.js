@@ -99,11 +99,12 @@ describe('NavigationTree Actions', () => {
   it('should dispatch proper requestImport action', () => {
     // given
     const listener = jest.fn();
+    const data = 'whatever';
 
     // when
-    actions.requestImport()(listener);
+    actions.requestImport(data)(listener);
 
     // then
-    expect(listener).toHaveBeenCalledWith({type: actions.REQUEST_IMPORT});
+    expect(listener).toHaveBeenCalledWith({type: actions.REQUEST_IMPORT, data});
   });
 });
