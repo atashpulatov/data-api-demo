@@ -12,7 +12,7 @@ import {refreshAll} from '../popup/popup-actions';
 import './file-history.css';
 
 export const _FileHistoryContainer = ({reportArray = [], loading, refreshingAll, refreshAll}) => {
-  return (<div>
+  return (<React.Fragment>
     <Button id="add-data-btn-container" className="add-data-btn" onClick={popupController.runPopupNavigation}
       disabled={loading}>Add Data</Button>
     <span className="refresh-button-container">
@@ -21,7 +21,7 @@ export const _FileHistoryContainer = ({reportArray = [], loading, refreshingAll,
         <span className="refresh-all-label">Refresh All</span>
       </Button>
     </span>
-    <div role="list">
+    <div role="list" className='tables-container'>
       {reportArray.map((report) => <OfficeLoadedFile
         key={report.bindId}
         fileName={report.name}
@@ -31,7 +31,7 @@ export const _FileHistoryContainer = ({reportArray = [], loading, refreshingAll,
         isLoading={report.isLoading}
         objectType={report.objectType} />)}
     </div>
-  </div>);
+  </React.Fragment>);
 };
 
 function mapStateToProps(state) {
