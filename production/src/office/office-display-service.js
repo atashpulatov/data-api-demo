@@ -22,6 +22,10 @@ class OfficeDisplayService {
   }
 
   _printObject = async (objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh) => {
+    let officeTable;
+    let newOfficeTableId;
+    let shouldFormat;
+    let excelContext;
     try {
       const objectType = isReport ? 'report' : 'dataset';
       const {envUrl} = officeApiHelper.getCurrentMstrContext();
@@ -30,13 +34,13 @@ class OfficeDisplayService {
       console.groupCollapsed('Importing data performance');
       console.time('Total');
       console.time('Init excel');
-      const excelContext = await officeApiHelper.getExcelContext();
+      excelContext = await officeApiHelper.getExcelContext();
       const startCell = selectedCell || await officeApiHelper.getSelectedCell(excelContext);
       console.timeEnd('Init excel');
 
       // Get mstr instance definition
       console.time('Instance definition');
-      const instanceDefinition = await mstrObjectRestService.getInstanceDefinition(objectId, projectId, isReport);
+      const instanceDefinition = await mstrObjectRestService.getInstanceDefinition(objectId, projectId, isReport, body);
       console.timeEnd('Instance definition');
 
       // Check if instance returned data
@@ -46,8 +50,8 @@ class OfficeDisplayService {
 
       // TODO: If isRefresh check if new instance definition is same as before
 
-      // Create or get table id
-      let {officeTable, newOfficeTableId} = await this._getOfficeTable(officeTableId, isRefresh, excelContext, bindingId, instanceDefinition, startCell);
+      // Create or update table
+      ({officeTable, newOfficeTableId, shouldFormat} = await this._getOfficeTable(officeTableId, isRefresh, excelContext, bindingId, instanceDefinition, startCell));
 
       // Fetch, convert and insert with promise generator
       console.time('Fetch and insert into excel');
@@ -55,8 +59,10 @@ class OfficeDisplayService {
       const officeData = {officeTable, excelContext, startCell, newOfficeTableId};
       officeTable = await this._fetchInsertDataIntoExcel(connectionData, officeData, instanceDefinition, isRefresh);
 
-      // Apply formatting
-      await this._applyFormatting(isRefresh, officeTable, instanceDefinition, excelContext);
+      // Apply formatting when table was created
+      if (shouldFormat) {
+        await this._applyFormatting(officeTable, instanceDefinition, excelContext);
+      }
 
       // Save to store
       bindingId = bindingId || newOfficeTableId;
@@ -66,10 +72,14 @@ class OfficeDisplayService {
       console.timeEnd('Total');
       return !isRefresh && {type: 'success', message: `Data loaded successfully`};
     } catch (error) {
+      if (officeTable && !isRefresh) {
+        officeTable.delete();
+      }
       throw errorService.errorOfficeFactory(error);
     } finally {
-      console.groupEnd();
+      excelContext.sync();
       this._dispatchPrintFinish();
+      console.groupEnd();
     }
   }
 
@@ -149,6 +159,42 @@ class OfficeDisplayService {
     }
   }
 
+  _updateOfficeTable = async (instanceDefinition, context, prevOfficeTable) => {
+    try {
+      const {rows, mstrTable} = instanceDefinition;
+      prevOfficeTable.clearFilters();
+      prevOfficeTable.sort.clear();
+      prevOfficeTable.getHeaderRowRange().values = [mstrTable.headers];
+      await context.sync();
+      await this._updateRows(prevOfficeTable, context, rows);
+      return prevOfficeTable;
+    } catch (error) {
+      await context.sync();
+      throw error;
+    }
+  }
+
+  async _updateRows(prevOfficeTable, context, rows) {
+    const tableRows = prevOfficeTable.rows;
+    tableRows.load('count');
+    await context.sync();
+    const tableRowCount = tableRows.count;
+    // Delete extra rows if new report is smaller
+    if (rows < tableRowCount) {
+      prevOfficeTable.getRange().getRow(rows + 1).getResizedRange(tableRowCount - rows, 0).clear();
+      await context.sync();
+      tableRows.load('items');
+      await context.sync();
+      const rowsToRemove = tableRows.items;
+      for (let i = tableRowCount - 1; i >= rows; i--) {
+        rowsToRemove[i].delete();
+        if (i === rows || i % 500 === 0) {
+          await context.sync();
+        }
+      }
+    }
+  }
+
   _dispatchPrintFinish() {
     const reduxStoreState = reduxStore.getState();
     reduxStore.dispatch({type: officeProperties.actions.popupHidden});
@@ -172,28 +218,48 @@ class OfficeDisplayService {
     }
   }
 
-  async _applyFormatting(isRefresh, officeTable, instanceDefinition, excelContext) {
-    console.time('Apply formatting');
-    if (!isRefresh) {
+  async _applyFormatting(officeTable, instanceDefinition, excelContext) {
+    try {
+      console.time('Apply formatting');
       officeApiHelper.formatNumbers(officeTable, instanceDefinition.mstrTable);
       await excelContext.sync();
       officeApiHelper.formatTable(officeTable);
       await excelContext.sync();
+    } catch (error) {
+      // TODO: Inform the user?
+      console.log('Cannot apply formatting, skipping');
+    } finally {
+      console.timeEnd('Apply formatting');
     }
-    console.timeEnd('Apply formatting');
   }
 
   async _getOfficeTable(officeTableId, isRefresh, excelContext, bindingId, instanceDefinition, startCell) {
     console.time('Create or get table');
     const newOfficeTableId = officeTableId || officeApiHelper.findAvailableOfficeTableId();
     let officeTable;
+    let shouldFormat = true;
+
     if (isRefresh) {
-      officeTable = await officeApiHelper.getTable(excelContext, bindingId);
+      const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindingId);
+      const tableColumnsChanged = await this._checkColumnsChange(prevOfficeTable, excelContext, instanceDefinition);
+      if (tableColumnsChanged) {
+        console.log('Instance definition changed, creating new table');
+        const headerCell = prevOfficeTable.getHeaderRowRange().getCell(0, 0);
+        headerCell.load('address');
+        await excelContext.sync();
+        const startCell = officeApiHelper.getStartCell(headerCell.address);
+        prevOfficeTable.delete();
+        await excelContext.sync();
+        officeTable = await this._createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId);
+      } else {
+        shouldFormat = false;
+        officeTable = await this._updateOfficeTable(instanceDefinition, excelContext, prevOfficeTable);
+      }
     } else {
       officeTable = await this._createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId);
     }
     console.timeEnd('Create or get table');
-    return {officeTable, newOfficeTableId};
+    return {officeTable, newOfficeTableId, shouldFormat};
   }
 
   async _fetchInsertDataIntoExcel(connectionData, officeData, instanceDefinition) {
@@ -234,6 +300,15 @@ class OfficeDisplayService {
     officeTable.getHeaderRowRange().getRowsBelow(excelRows.length).getOffsetRange(rowIndex, 0).values = excelRows;
   }
 
+  _checkColumnsChange = async (prevOfficeTable, context, instanceDefinition) => {
+    const {columns} = instanceDefinition;
+    const tableColumns = prevOfficeTable.columns;
+    tableColumns.load('count');
+    await context.sync();
+    const tableColumnsCount = tableColumns.count;
+    return columns !== tableColumnsCount;
+  }
+
   _checkRangeValidity = async (context, excelRange) => {
     // Pass true so only cells with values count as used
     const usedDataRange = excelRange.getUsedRangeOrNullObject(true);
@@ -244,9 +319,7 @@ class OfficeDisplayService {
   }
 
   _getRowsArray = (rows, headers) => {
-    return rows
-        .map((item) => headers
-            .map((header) => item[header]));
+    return rows.map((item) => headers.map((header) => item[header]));
   }
 }
 
