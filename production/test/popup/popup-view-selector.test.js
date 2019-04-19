@@ -4,7 +4,6 @@ import {Office} from '../mockOffice';
 import {selectorProperties} from '../../src/attribute-selector/selector-properties';
 import {_PopupViewSelector} from '../../src/popup/popup-view-selector';
 import {PromptsWindow} from '../../src/prompts/prompts-window';
-import {PopupTypeEnum} from "../../src/home/popup-type-enum";
 
 describe('PopupViewSelector', () => {
   it('should handle request import when not prompted', () => {
