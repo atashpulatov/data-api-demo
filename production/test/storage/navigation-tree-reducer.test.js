@@ -210,7 +210,7 @@ describe('NavigationTree Reducer', () => {
     const newState = navigationTree({}, action);
 
     // then
-    expect(newState.importRequested).toBeFalsy();
+    expect(newState).toEqual(initialState);
   });
 
   it('should return new proper state in case of CANCEL_REQUEST_IMPORT action', () => {
@@ -220,10 +220,10 @@ describe('NavigationTree Reducer', () => {
     };
 
     // when
-    const newState = navigationTree({}, action);
+    const newState = navigationTree({importRequested: true}, action);
 
     // then
-    expect(newState).toEqual(initialState);
+    expect(newState.importRequested).toBeFalsy();
   });
 
   it('should return new proper state in case of CHANGE_SORTING action', () => {
