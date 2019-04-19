@@ -13,6 +13,7 @@ const dialogStyle = {
   width: '100%',
 };
 
+
 const titleStyle = {
   fontWeight: 'bold',
   fontSize: '18px',
@@ -20,20 +21,18 @@ const titleStyle = {
   padding: '0.5em',
 };
 
-const _LoadingPage = ({title = 'Importing data...'}) => {
+const _LoadingPage = ({name}) => {
+  const displayName = name || 'data';
   return (
     <dialog className='loading-page' style={dialogStyle}>
-      <h1 style={titleStyle}>{title}</h1>
+      <h1 style={titleStyle}>{`Importing ${displayName}`}</h1>
       <LoadingText text={'Please wait until the import is complete.'} />
     </dialog>
   );
 };
 
-const mapStateToProps = (state) => {
-  // TODO: Add objectName. It doesn't work for now for some reason
-  // const object = state.officeReducer.preLoadReport;
-  // return {title: !!object ? object.name : undefined};
-  return {};
+const mapStateToProps = ({popupReducer}) => {
+  return {name: popupReducer.refreshingReport};
 };
 
 export const LoadingPage = connect(mapStateToProps)(_LoadingPage);

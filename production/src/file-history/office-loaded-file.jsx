@@ -1,10 +1,12 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import {Row, Col} from 'antd';
 import {MSTRIcon} from 'mstr-react-library';
 import {fileHistoryHelper} from './file-history-helper';
 import loadingSpinner from './assets/report_loading_spinner.gif';
+import {refreshReport} from '../popup/popup-actions';
 
-export class OfficeLoadedFile extends React.Component {
+export class _OfficeLoadedFile extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -32,10 +34,10 @@ export class OfficeLoadedFile extends React.Component {
 
   refreshAction = (e) => {
     e.stopPropagation();
-    const {isLoading, onRefresh, bindingId, objectType} = this.props;
+    const {isLoading, bindingId, objectType, refreshReport} = this.props;
     if (!isLoading) {
       this.setState({allowRefreshClick: false}, async () => {
-        await fileHistoryHelper.refreshReport(onRefresh, bindingId, objectType);
+        await refreshReport(bindingId, objectType, false);
         this.setState({allowRefreshClick: true});
       });
     }
@@ -74,4 +76,10 @@ export class OfficeLoadedFile extends React.Component {
     );
   }
 }
+
+const mapDispatchToProps = {
+  refreshReport,
+};
+
+export const OfficeLoadedFile = connect(null, mapDispatchToProps)(_OfficeLoadedFile);
 

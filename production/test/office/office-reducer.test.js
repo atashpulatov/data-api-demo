@@ -344,4 +344,55 @@ describe('officeReducer', () => {
     // then
     expect(newState.popupOpen).toBe(false);
   });
+  it('should dispatch proper action when startLoading', () => {
+    // given
+    const prevState = {loading: false};
+    const action = {type: officeProperties.actions.startLoading};
+    // when
+    const newState = officeReducer(prevState, action);
+    // then
+    expect(newState.loading).toBe(true);
+  });
+  it('should dispatch proper action when onStartLoadingReport', () => {
+    // given
+    const prevState = {reportArray: [...reportArrayMock], loading: false};
+    const action = {type: officeProperties.actions.startLoadingReport, reportBindId: 'secondBindId'};
+    // when
+    const newState = officeReducer(prevState, action);
+    // then
+    expect(newState.loading).toBe(true);
+    expect(newState.reportArray[1].isLoading).toBe(true);
+  });
+  it('should throw when onStartLoadingReport for empty reportBindId', () => {
+    // given
+    const prevState = {reportArray: [...reportArrayMock], loading: false};
+    const action = {type: officeProperties.actions.startLoadingReport};
+    // when
+    const newState = () => {
+      officeReducer(prevState, action);
+    };
+    // then
+    expect(newState).toThrowError('Missing reportBindId');
+  });
+  it('should dispatch proper action when onFinishLoadingReport', () => {
+    // given
+    const prevState = {reportArray: [...reportArrayMock], loading: true};
+    const action = {type: officeProperties.actions.finishLoadingReport, reportBindId: 'secondBindId'};
+    // when
+    const newState = officeReducer(prevState, action);
+    // then
+    expect(newState.loading).toBe(false);
+    expect(newState.reportArray[1].isLoading).toBe(false);
+  });
+  it('should throw when onFinishLoadingReport for empty reportBindId', () => {
+    // given
+    const prevState = {reportArray: [...reportArrayMock], loading: true};
+    const action = {type: officeProperties.actions.startLoadingReport};
+    // when
+    const newState = () => {
+      officeReducer(prevState, action);
+    };
+    // then
+    expect(newState).toThrowError('Missing reportBindId');
+  });
 });

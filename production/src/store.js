@@ -7,6 +7,7 @@ import {navigationTree} from './storage/navigation-tree-reducer';
 import {composeWithDevTools} from 'redux-devtools-extension';
 import {officeReducer} from './office/office-reducer';
 import {notificationReducer} from './notification/reducer';
+import {popupReducer} from './popup/popup-reducer';
 import thunk from 'redux-thunk';
 
 const rootReducer = combineReducers({
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   officeReducer,
   notificationReducer,
   navigationTree,
+  popupReducer,
 });
 
 const persistConfig = {

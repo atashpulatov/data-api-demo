@@ -3,7 +3,6 @@ import {mstrObjectRestService, DATA_LIMIT} from '../mstr-object/mstr-object-rest
 import {reduxStore} from '../store';
 import {officeProperties} from './office-properties';
 import {officeStoreService} from './store/office-store-service';
-import {notificationService} from '../notification/notification-service';
 import {errorService} from '../error/error-handler';
 import {popupController} from '../popup/popup-controller';
 import {authenticationHelper} from '../authentication/authentication-helper';
@@ -134,23 +133,6 @@ class OfficeDisplayService {
       }
     } catch (error) {
       return errorService.handleError(error);
-    }
-  };
-
-  refreshReport = async (bindingId, objectType) => {
-    try {
-      const isReport = objectType === 'report';
-      const refreshReport = officeStoreService.getReportFromProperties(bindingId);
-      const result = await this.printObject(refreshReport.id, refreshReport.projectId, isReport, true, refreshReport.tableId, bindingId, refreshReport.body, true);
-      if (result) {
-        notificationService.displayNotification(result.type, result.message);
-      }
-      return true;
-    } catch (e) {
-      if (e.code === 'ItemNotFound') {
-        return notificationService.displayNotification('info', 'Data is not relevant anymore. You can delete it from the list');
-      }
-      throw e;
     }
   };
 
