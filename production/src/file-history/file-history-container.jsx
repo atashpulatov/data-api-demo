@@ -12,7 +12,7 @@ export const _FileHistoryContainer = ({reportArray = [], loading}) => {
     <React.Fragment>
       <Button id="add-data-btn-container" className="add-data-btn" onClick={popupController.runPopupNavigation}
         disabled={loading}>Add Data</Button>
-      <div className='tables-container'>
+      <div role="list" className='tables-container'>
         {reportArray.map((report) => <OfficeLoadedFile
           key={report.bindId}
           fileName={report.name}
