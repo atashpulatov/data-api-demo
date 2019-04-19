@@ -98,7 +98,7 @@ class PopupController {
       && response.projectId
       && response.reportSubtype
       && response.body) {
-      const result = await officeDisplayService.printObject(response.reportId, response.projectId, objectTypes.getTypeDescription(3, response.reportSubtype) === 'Report', null, null, null, response.body);
+      const result = await officeDisplayService.printObject(response.instanceId, response.reportId, response.projectId, objectTypes.getTypeDescription(3, response.reportSubtype) === 'Report', null, null, null, response.body);
       if (result) {
         notificationService.displayNotification(result.type, result.message);
       }
@@ -108,7 +108,7 @@ class PopupController {
   handleOkCommand = async (response) => {
     if (response.chosenObject) {
       reduxStore.dispatch({type: officeProperties.actions.startLoading});
-      const result = await officeDisplayService.printObject(response.chosenObject, response.chosenProject, objectTypes.getTypeDescription(3, response.chosenSubtype) === 'Report');
+      const result = await officeDisplayService.printObject(response.instanceId, response.chosenObject, response.chosenProject, objectTypes.getTypeDescription(3, response.chosenSubtype) === 'Report');
       if (result) {
         notificationService.displayNotification(result.type, result.message);
       }
