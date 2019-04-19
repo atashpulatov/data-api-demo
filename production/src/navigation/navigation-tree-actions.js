@@ -9,6 +9,7 @@ export const CHANGE_SORTING = 'NAV_TREE_CHANGE_SORTING';
 export const CHANGE_SEARCHING = 'NAV_TREE_CHANGE_SEARCHING';
 export const UPDATE_SCROLL = 'NAV_TREE_UPDATE_SCROLL';
 export const UPDATE_SIZE = 'NAV_TREE_UPDATE_SIZE';
+export const CANCEL_REQUEST_IMPORT = 'CANCEL_REQUEST_IMPORT';
 
 export function selectObject(data) {
   return (dispatch) => dispatch({
@@ -33,6 +34,10 @@ export function selectFolder(data) {
 
 export function requestImport(data) {
   return (dispatch) => dispatch({type: REQUEST_IMPORT, data});
+}
+
+export function cancelImportRequest() {
+  return (dispatch) => dispatch({type: CANCEL_REQUEST_IMPORT});
 }
 
 export function startImport() {
