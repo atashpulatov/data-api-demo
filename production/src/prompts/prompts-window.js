@@ -6,9 +6,11 @@ import { selectorProperties } from '../attribute-selector/selector-properties';
 import { WatchForChildrenAddition } from 'react-mutation-observer';
 import { PromptsContainer } from './prompts-container';
 import { PromptWindowButtons } from './prompts-window-buttons';
+import { actions } from '../navigation/navigation-tree-actions';
+import { connect } from 'react-redux';
 /* eslint-enable */
 
-export class PromptsWindow extends Component {
+export class _PromptsWindow extends Component {
     constructor(props) {
         super(props);
 
@@ -31,9 +33,12 @@ export class PromptsWindow extends Component {
 
         this.container = React.createRef();
         this.outerCont = React.createRef();
-    }
+    }    
 
     loadEmbeddedDossier = async (container) => {
+        if (!this.state.loading){
+            return;
+        }
         const { authToken, projectId } = this.state.session;
         //const container = this.container.current;
         const url = `https://localhost:8443/consume/app/${projectId}/${this.state.reportId}`;
@@ -58,6 +63,8 @@ export class PromptsWindow extends Component {
             const dossierInstanceId = dossierPageState.getDossierInstanceId()
 
             console.log(dossierInstanceId);
+
+            console.log(this.props);
 
             this.setState({
                 loading: false,
@@ -156,5 +163,12 @@ export class PromptsWindow extends Component {
                 </div>
             </div>
         );
-    }
+    };
 }
+
+export const mapStateToProps = (state) => {
+    return {...state.promptsPopup};
+};
+
+export const PromptsWindow = connect(mapStateToProps, actions)(_PromptsWindow);
+
