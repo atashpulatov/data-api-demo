@@ -40,6 +40,7 @@ export class _NavigationTree extends Component {
       chosenObject: this.props.chosenObjectId,
       chosenProject: this.props.chosenProjectId,
       chosenSubtype: this.props.chosenSubtype,
+      reportName: this.props.chosenProjectName,
     };
     this.props.startLoading();
     this.props.startImport();
@@ -124,8 +125,12 @@ export class _NavigationTree extends Component {
   }
 }
 
-export const mapStateToProps = (state) => {
-  return {...state.navigationTree};
+export const mapStateToProps = ({officeReducer, navigationTree}) => {
+  const object = officeReducer.preLoadReport;
+  return {
+    ...navigationTree,
+    title: !!object ? object.name : undefined,
+  };
 };
 
 export const NavigationTree = connect(mapStateToProps, actions)(_NavigationTree);

@@ -44,6 +44,7 @@ describe('PopupController', () => {
           projectId: 'projectId',
           reportSubtype: objectTypes.getTypeValues('Cube').subtype,
           body: {},
+          reportName: 'testName',
         };
         const arg = {
           message: JSON.stringify(actionObject),
@@ -74,6 +75,7 @@ describe('PopupController', () => {
           projectId: 'projectId',
           reportSubtype: objectTypes.getTypeValues('Report').subtype,
           body: {},
+          reportName: 'testName',
         };
         const arg = {
           message: JSON.stringify(actionObject),
