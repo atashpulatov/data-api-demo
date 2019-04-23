@@ -1,10 +1,12 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import {Row, Col} from 'antd';
 import {MSTRIcon} from 'mstr-react-library';
 import {fileHistoryHelper} from './file-history-helper';
 import loadingSpinner from './assets/report_loading_spinner.gif';
+import {refreshReport} from '../popup/popup-actions';
 
-export class OfficeLoadedFile extends React.Component {
+export class _OfficeLoadedFile extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -21,7 +23,8 @@ export class OfficeLoadedFile extends React.Component {
     this._ismounted = false;
   }
 
-  deleteAction = () => {
+  deleteAction = (e) => {
+    e.stopPropagation();
     const {onDelete, bindingId, objectType} = this.props;
     this.setState({allowDeleteClick: false}, async () => {
       await fileHistoryHelper.deleteReport(onDelete, bindingId, objectType);
@@ -29,11 +32,12 @@ export class OfficeLoadedFile extends React.Component {
     });
   };
 
-  refreshAction = () => {
-    const {isLoading, onRefresh, bindingId, objectType} = this.props;
+  refreshAction = (e) => {
+    e.stopPropagation();
+    const {isLoading, bindingId, objectType, refreshReport} = this.props;
     if (!isLoading) {
       this.setState({allowRefreshClick: false}, async () => {
-        await fileHistoryHelper.refreshReport(onRefresh, bindingId, objectType);
+        await refreshReport(bindingId, objectType, false);
         this.setState({allowRefreshClick: true});
       });
     }
@@ -45,28 +49,37 @@ export class OfficeLoadedFile extends React.Component {
       <Row
         className="file-history-container"
         type="flex"
-        justify="center">
+        justify="center"
+        role="listitem"
+        tabIndex="0"
+        onClick={() => onClick(bindingId)}>
         <Col span={2}>
-          {objectType === 'report' ? <MSTRIcon type='report'/> : <MSTRIcon type='dataset'/>}
+          {objectType === 'report' ? <MSTRIcon type='report' /> : <MSTRIcon type='dataset' />}
         </Col>
-        <Col span={14} title={`${fileName}`} className="report-title" onClick={() => onClick(bindingId)}>
+        <Col span={14} title={`${fileName}`} className="report-title">
           {fileName}
         </Col>
         <Col span={1} offset={2}>
           <span className="loading-button-container"
-            onClick={() => this.state.allowRefreshClick && this.refreshAction()}>
-            {!isLoading ? <MSTRIcon type='refresh'/> :
-                <img width='12px' height='12px' src={loadingSpinner} alt='Report loading icon'/>}
+            onClick={(e) => this.state.allowRefreshClick && this.refreshAction(e)}>
+            {!isLoading ? <MSTRIcon type='refresh' /> :
+              <img width='12px' height='12px' src={loadingSpinner} alt='Report loading icon' />}
           </span>
         </Col>
         <Col span={1} offset={1}>
           <span
-            onClick={() => this.state.allowDeleteClick && this.deleteAction()}>
-            <MSTRIcon type='trash'/>
+            onClick={(e) => this.state.allowDeleteClick && this.deleteAction(e)}>
+            <MSTRIcon type='trash' />
           </span>
         </Col>
       </Row>
     );
   }
 }
+
+const mapDispatchToProps = {
+  refreshReport,
+};
+
+export const OfficeLoadedFile = connect(null, mapDispatchToProps)(_OfficeLoadedFile);
 

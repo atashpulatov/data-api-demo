@@ -57,7 +57,7 @@ class ErrorService {
   handleError = (error, isLogout) => {
     switch (true) {
       case error instanceof EnvironmentNotFoundError:
-        notificationService.displayMessage('info', '404 - Environment not found');
+        notificationService.displayNotification('warning', '404 - Environment not found');
         if (!isLogout) {
           setTimeout(() => {
             this.fullLogOut();
@@ -65,7 +65,7 @@ class ErrorService {
         }
         break;
       case error instanceof ConnectionBrokenError:
-        notificationService.displayMessage('warning', 'Environment is unreachable.'
+        notificationService.displayNotification('warning', 'Environment is unreachable.'
           + '\nPlease check your internet connection.');
         if (!isLogout) {
           setTimeout(() => {
@@ -74,7 +74,7 @@ class ErrorService {
         }
         break;
       case error instanceof UnauthorizedError:
-        notificationService.displayMessage('info', 'Your session has expired. Please log in.');
+        notificationService.displayNotification('info', 'Your session has expired.\nPlease log in.');
         if (!isLogout) {
           setTimeout(() => {
             this.fullLogOut();
@@ -82,29 +82,29 @@ class ErrorService {
         }
         break;
       case error instanceof BadRequestError:
-        notificationService.displayMessage('error', '400 - There has been a problem with your request');
+        notificationService.displayNotification('warning', '400 - There has been a problem with your request');
         break;
       case error instanceof InternalServerError:
-        notificationService.displayMessage('warning', errorMessages[error.iServerCode]);
+        notificationService.displayNotification('warning', errorMessages[error.iServerCode]);
         break;
       case error instanceof PromptedReportError:
-        notificationService.displayMessage('warning', NOT_SUPPORTED_SERVER_ERR);
+        notificationService.displayNotification('warning', NOT_SUPPORTED_SERVER_ERR);
         break;
       case error instanceof OutsideOfRangeError:
-        notificationService.displayMessage('warning', 'The table you try to import exceeds the worksheet limits.');
+        notificationService.displayNotification('warning', 'The table you try to import exceeds the worksheet limits.');
         break;
       case error instanceof OverlappingTablesError:
-        notificationService.displayMessage('warning', 'The table you try to import exceeds the worksheet limits.');
+        notificationService.displayNotification('warning', 'The table you try to import exceeds the worksheet limits.');
         break;
       default:
-        notificationService.displayMessage('error', error.message || 'Unknown error');
+        notificationService.displayNotification('warning', error.message || 'Unknown error');
         break;
     }
   }
   handlePreAuthError = (error) => {
     switch (true) {
       case error instanceof UnauthorizedError:
-        notificationService.displayMessage('error', 'Wrong username or password.');
+        notificationService.displayNotification('error', 'Wrong username or password.');
         break;
       default:
         this.handleError(error);
@@ -116,16 +116,16 @@ class ErrorService {
   handleOfficeError = (error) => {
     switch (true) {
       case error instanceof RunOutsideOfficeError:
-        notificationService.displayMessage('error', 'Please run plugin inside Office');
+        notificationService.displayNotification('warning', 'Please run plugin inside Office');
         break;
       case error instanceof OverlappingTablesError:
-        notificationService.displayMessage('error', `Excel returned error: ${error.message}`);
+        notificationService.displayNotification('warning', `Excel returned error: ${error.message}`);
         break;
       case error instanceof GenericOfficeError:
-        notificationService.displayMessage('error', `Excel returned error: ${error.message}`);
+        notificationService.displayNotification('warning', `Excel returned error: ${error.message}`);
         break;
       case error instanceof OutsideOfRangeError:
-        notificationService.displayMessage('error', 'The table you try to import exceeds the worksheet limits.');
+        notificationService.displayNotification('warning', 'The table you try to import exceeds the worksheet limits.');
         break;
       default:
         this.handleError(error);
