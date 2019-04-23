@@ -21,15 +21,11 @@ class OfficeDisplayService {
     return this._printObject(instanceId, objectId, projectId, isReport, selectedCell, officeTableId, bindingId, body, isRefresh);
   }
 
-<<<<<<< HEAD
-  _printObject = async (objectId, projectId, isReport = true, instanceId, selectedCell, officeTableId, bindingId, body, isRefresh) => {
-=======
   _printObject = async (instanceId, objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh) => {
     let officeTable;
     let newOfficeTableId;
     let shouldFormat;
     let excelContext;
->>>>>>> 70d700ec4fcf405cf85de53eee4cc3e4d0c89ce1
     try {
       const objectType = isReport ? 'report' : 'dataset';
       const {envUrl} = officeApiHelper.getCurrentMstrContext();
@@ -140,26 +136,6 @@ class OfficeDisplayService {
     }
   };
 
-<<<<<<< HEAD
-  refreshReport = async (bindingId, objectType) => {
-    try {
-      const isReport = objectType === 'report';
-      const refreshReport = officeStoreService.getReportFromProperties(bindingId);
-      const result = await this.printObject(refreshReport.id, refreshReport.projectId, isReport, null, true, refreshReport.tableId, bindingId, refreshReport.body, true);
-      if (result) {
-        notificationService.displayMessage(result.type, result.message);
-      }
-      return true;
-    } catch (e) {
-      if (e.code === 'ItemNotFound') {
-        return notificationService.displayMessage('info', 'Data is not relevant anymore. You can delete it from the list');
-      }
-      throw e;
-    }
-  };
-
-=======
->>>>>>> 70d700ec4fcf405cf85de53eee4cc3e4d0c89ce1
   _createOfficeTable = async (instanceDefinition, context, startCell, officeTableId) => {
     const hasHeaders = true;
     const {rows, columns, mstrTable} = instanceDefinition;

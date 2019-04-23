@@ -36,20 +36,7 @@ export class _NavigationTree extends Component {
   };
 
   handleOk = () => {
-<<<<<<< HEAD
     this.props.requestImport();
-=======
-    const okObject = {
-      command: selectorProperties.commandOk,
-      chosenObject: this.props.chosenObjectId,
-      chosenProject: this.props.chosenProjectId,
-      chosenSubtype: this.props.chosenSubtype,
-      reportName: this.props.chosenProjectName,
-    };
-    this.props.startLoading();
-    this.props.startImport();
-    Office.context.ui.messageParent(JSON.stringify(okObject));
->>>>>>> 70d700ec4fcf405cf85de53eee4cc3e4d0c89ce1
   };
 
   handleSecondary = () => {
