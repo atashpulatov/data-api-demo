@@ -160,6 +160,7 @@ describe('NavigationTree Reducer', () => {
     // given
     const action = {
       type: REQUEST_IMPORT,
+      data: {},
     };
 
     // when

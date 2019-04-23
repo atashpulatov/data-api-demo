@@ -155,8 +155,9 @@ describe('PopupController', () => {
         // then
         expect(dialog.close).toBeCalled();
         expect(mockPrint).toBeCalled();
-        expect(mockPrint).toBeCalledWith(actionObject.reportId,
+        expect(mockPrint).toBeCalledWith(
             undefined,
+            actionObject.reportId,
             actionObject.projectId,
             true,
             null, null, null,
