@@ -19,7 +19,7 @@ describe('loginUser', () => {
     expect(sessionHelper.enableLoading).not.toBeCalled();
     expect(sessionHelper.saveLoginValues).not.toBeCalled();
     expect(authenticationService.authenticate).not.toBeCalled();
-    expect(notificationService.displayMessage).not.toBeCalled();
+    expect(notificationService.displayNotification).not.toBeCalled();
     expect(sessionHelper.logIn).not.toBeCalled();
     expect(errorService.handlePreAuthError).not.toBeCalled();
     expect(sessionHelper.disableLoading).not.toBeCalled();
