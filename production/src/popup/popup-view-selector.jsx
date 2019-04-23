@@ -29,7 +29,7 @@ export const _PopupViewSelector = (props) => {
   } else if (popupType === PopupTypeEnum.loadingPage) {
     return <LoadingPage />;
   } else if (popupType === PopupTypeEnum.promptsWindow) {
-    return <PromptsWindow parsed={propsToPass} handleBack={methods.handleBack}/>;
+    return <PromptsWindow parsed={propsToPass} />;
   }
   return <></>;
 };
