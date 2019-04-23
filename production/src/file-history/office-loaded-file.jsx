@@ -5,6 +5,7 @@ import {MSTRIcon} from 'mstr-react-library';
 import {fileHistoryHelper} from './file-history-helper';
 import loadingSpinner from './assets/report_loading_spinner.gif';
 import {refreshReport} from '../popup/popup-actions';
+import RenameInput from './file-history-rename-input';
 
 export class _OfficeLoadedFile extends React.Component {
   constructor() {
@@ -57,7 +58,7 @@ export class _OfficeLoadedFile extends React.Component {
           {objectType === 'report' ? <MSTRIcon type='report' /> : <MSTRIcon type='dataset' />}
         </Col>
         <Col span={14} title={`${fileName}`} className="report-title">
-          {fileName}
+          <RenameInput bindingId={bindingId} fileName={fileName} />
         </Col>
         <Col span={1} offset={2}>
           <span className="loading-button-container"
