@@ -11,17 +11,17 @@ import {NOT_SUPPORTED_NO_ATTRIBUTES} from '../error/constants';
 import {OverlappingTablesError} from '../error/overlapping-tables-error';
 
 class OfficeDisplayService {
-  printObject = async (objectId, projectId, isReport = true, ...args) => {
+  printObject = async (instanceId = '', objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh) => {
     const objectInfo = await mstrObjectRestService.getObjectInfo(objectId, projectId, isReport);
     reduxStore.dispatch({
       type: officeProperties.actions.preLoadReport,
       preLoadReport: objectInfo,
     });
     popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
-    return this._printObject(objectId, projectId, isReport, ...args);
+    return this._printObject(instanceId, objectId, projectId, isReport, selectedCell, officeTableId, bindingId, body, isRefresh);
   }
 
-  _printObject = async (objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh) => {
+  _printObject = async (instanceId, objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh) => {
     let officeTable;
     let newOfficeTableId;
     let shouldFormat;
@@ -40,7 +40,7 @@ class OfficeDisplayService {
 
       // Get mstr instance definition
       console.time('Instance definition');
-      const instanceDefinition = await mstrObjectRestService.getInstanceDefinition(objectId, projectId, isReport, body);
+      const instanceDefinition = await mstrObjectRestService.getInstanceDefinition(instanceId, objectId, projectId, isReport, body);
       console.timeEnd('Instance definition');
 
       // Check if instance returned data

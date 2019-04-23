@@ -1,5 +1,5 @@
 import {selectorProperties} from '../../src/attribute-selector/selector-properties';
-import {popupController, loadPending} from '../../src/popup/popup-controller';
+import {popupController} from '../../src/popup/popup-controller';
 import {officeDisplayService} from '../../src/office/office-display-service';
 import {objectTypes} from 'mstr-react-library';
 import {errorService} from '../../src/error/error-handler';
@@ -56,7 +56,9 @@ describe('PopupController', () => {
         // then
         expect(dialog.close).toBeCalled();
         expect(mockPrint).toBeCalled();
-        expect(mockPrint).toBeCalledWith(actionObject.reportId,
+        expect(mockPrint).toBeCalledWith(
+            undefined,
+            actionObject.reportId,
             actionObject.projectId,
             false,
             null, null, null,
@@ -85,7 +87,9 @@ describe('PopupController', () => {
         // then
         expect(dialog.close).toBeCalled();
         expect(mockPrint).toBeCalled();
-        expect(mockPrint).toBeCalledWith(actionObject.reportId,
+        expect(mockPrint).toBeCalledWith(
+            undefined,
+            actionObject.reportId,
             actionObject.projectId,
             true,
             null, null, null,

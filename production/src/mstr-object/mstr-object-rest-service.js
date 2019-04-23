@@ -71,12 +71,31 @@ class MstrObjectRestService {
           if (res.status === 200 && res.body.status === 2) {
             throw (res);
           }
-          const {total} = res.body.result.data.paging;
-          const {instanceId} = res.body;
-          const mstrTable = officeConverterService.createTable(res.body);
-          const {rows, columns} = this._checkTableDimensions(total, mstrTable.headers.length);
-          return {instanceId, rows, columns, mstrTable};
+          return this._parseInstanceDefinition(res);
         });
+  }
+
+  async _getExistingInstanceDefinition(fullPath, authToken, projectId, body) {
+    return await moduleProxy.request
+        .get(fullPath)
+        .set('x-mstr-authtoken', authToken)
+        .set('x-mstr-projectid', projectId)
+        .send(body)
+        .withCredentials()
+        .then((res) => {
+          if (res.status === 200 && res.body.status === 2) {
+            throw (res);
+          }
+          return this._parseInstanceDefinition(res);
+        });
+  }
+
+  _parseInstanceDefinition(res) {
+    const {total} = res.body.result.data.paging;
+    const {instanceId} = res.body;
+    const mstrTable = officeConverterService.createTable(res.body);
+    const {rows, columns} = this._checkTableDimensions(total, mstrTable.headers.length);
+    return {instanceId, rows, columns, mstrTable};
   }
 
   async getObjectInfo(objectId, projectId, isReport = true) {
@@ -99,14 +118,18 @@ class MstrObjectRestService {
         });
   };
 
-  async getInstanceDefinition(objectId, projectId, isReport = true, body = {}, limit = 1) {
+  async getInstanceDefinition(instanceId = '', objectId, projectId, isReport = true, body = {}, limit = 1) {
     const storeState = reduxStore.getState();
     const envUrl = storeState.sessionReducer.envUrl;
     const authToken = storeState.sessionReducer.authToken;
     const objectType = isReport ? 'reports' : 'cubes';
-    const fullPath = `${envUrl}/${objectType}/${objectId}/instances?limit=${limit}`;
+    const instancePath = instanceId ? `/${instanceId}` : '';
+    const fullPath = `${envUrl}/${objectType}/${objectId}/instances${instancePath}?limit=${limit}`;
 
     try {
+      if (instanceId) {
+        return await this._getExistingInstanceDefinition(fullPath, authToken, projectId, body);
+      }
       return await this._getInstanceDefinition(fullPath, authToken, projectId, body);
     } catch (error) {
       throw errorService.errorRestFactory(error);
