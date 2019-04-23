@@ -21,5 +21,7 @@ export const officeProperties = new Proxy({
     popupHidden: 'POPUP_HIDDEN',
     startLoading: 'START_LOADING',
     stopLoading: 'STOP_LOADING',
+    startRefreshingAll: 'START_REFRESHING_ALL',
+    stopRefreshingAll: 'STOP_REFRESHING_ALL',
   },
 }, propsProxy);

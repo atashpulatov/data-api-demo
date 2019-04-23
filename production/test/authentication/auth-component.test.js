@@ -44,7 +44,8 @@ describe('AuthComponent', () => {
       getFieldDecorator: () => jest.fn(),
       validateFields: () => jest.fn(),
     };
-    const wrappedComponent = mount(<_Authenticate history={history} form={mockForm} />);
+    const mockMapping = jest.fn();
+    const wrappedComponent = mount(<_Authenticate history={history} form={mockForm} resetState={mockMapping} />);
     const onLoginUserSpy = jest.spyOn(wrappedComponent.instance(), 'onLoginUser');
     const form = wrappedComponent.find('Form').at(0);
     // when
@@ -52,5 +53,6 @@ describe('AuthComponent', () => {
     // then
     expect(onLoginUserSpy).toBeCalled();
     expect(onLoginUserSpy).toBeCalledWith(mockEvent);
+    expect(mockMapping).toBeCalled();
   });
 });

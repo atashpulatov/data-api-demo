@@ -3,7 +3,6 @@ import {mstrObjectRestService, DATA_LIMIT} from '../mstr-object/mstr-object-rest
 import {reduxStore} from '../store';
 import {officeProperties} from './office-properties';
 import {officeStoreService} from './store/office-store-service';
-import {notificationService} from '../notification/notification-service';
 import {errorService} from '../error/error-handler';
 import {popupController} from '../popup/popup-controller';
 import {authenticationHelper} from '../authentication/authentication-helper';
@@ -23,6 +22,10 @@ class OfficeDisplayService {
   }
 
   _printObject = async (objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh) => {
+    let officeTable;
+    let newOfficeTableId;
+    let shouldFormat;
+    let excelContext;
     try {
       const objectType = isReport ? 'report' : 'dataset';
       const {envUrl} = officeApiHelper.getCurrentMstrContext();
@@ -31,7 +34,7 @@ class OfficeDisplayService {
       console.groupCollapsed('Importing data performance');
       console.time('Total');
       console.time('Init excel');
-      const excelContext = await officeApiHelper.getExcelContext();
+      excelContext = await officeApiHelper.getExcelContext();
       const startCell = selectedCell || await officeApiHelper.getSelectedCell(excelContext);
       console.timeEnd('Init excel');
 
@@ -48,7 +51,7 @@ class OfficeDisplayService {
       // TODO: If isRefresh check if new instance definition is same as before
 
       // Create or update table
-      let {officeTable, newOfficeTableId, shouldFormat} = await this._getOfficeTable(officeTableId, isRefresh, excelContext, bindingId, instanceDefinition, startCell);
+      ({officeTable, newOfficeTableId, shouldFormat} = await this._getOfficeTable(officeTableId, isRefresh, excelContext, bindingId, instanceDefinition, startCell));
 
       // Fetch, convert and insert with promise generator
       console.time('Fetch and insert into excel');
@@ -69,10 +72,14 @@ class OfficeDisplayService {
       console.timeEnd('Total');
       return !isRefresh && {type: 'success', message: `Data loaded successfully`};
     } catch (error) {
+      if (officeTable && !isRefresh) {
+        officeTable.delete();
+      }
       throw errorService.errorOfficeFactory(error);
     } finally {
-      console.groupEnd();
+      excelContext.sync();
       this._dispatchPrintFinish();
+      console.groupEnd();
     }
   }
 
@@ -126,23 +133,6 @@ class OfficeDisplayService {
       }
     } catch (error) {
       return errorService.handleError(error);
-    }
-  };
-
-  refreshReport = async (bindingId, objectType) => {
-    try {
-      const isReport = objectType === 'report';
-      const refreshReport = officeStoreService.getReportFromProperties(bindingId);
-      const result = await this.printObject(refreshReport.id, refreshReport.projectId, isReport, true, refreshReport.tableId, bindingId, refreshReport.body, true);
-      if (result) {
-        notificationService.displayNotification(result.type, result.message);
-      }
-      return true;
-    } catch (e) {
-      if (e.code === 'ItemNotFound') {
-        return notificationService.displayNotification('info', 'Data is not relevant anymore. You can delete it from the list');
-      }
-      throw e;
     }
   };
 

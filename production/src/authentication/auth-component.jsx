@@ -1,15 +1,15 @@
 import React, {Component} from 'react';
 import './auth-component.css';
-import {reduxStore} from '../store';
 import {Form, Icon, Input, Button, Checkbox} from 'antd';
 import {authenticationHelper} from './authentication-helper';
+import {connect} from 'react-redux';
+import {resetState} from '../popup/popup-actions';
 const FormItem = Form.Item;
 
 export class _Authenticate extends Component {
   constructor(props) {
     super(props);
-    this.stateFromRedux = reduxStore.getState().sessionReducer;
-    this.state = {...this.stateFromRedux};
+    this.props.resetState();
   }
 
   onLoginUser = async (event) => {
@@ -19,7 +19,8 @@ export class _Authenticate extends Component {
   }
 
   render() {
-    const {getFieldDecorator} = this.props.form;
+    const {session, form} = this.props;
+    const {getFieldDecorator} = form;
     return (
       <article>
         <header>
@@ -31,7 +32,7 @@ export class _Authenticate extends Component {
           <FormItem
             label='Username'>
             {getFieldDecorator('username', {
-              initialValue: this.state.username || '',
+              initialValue: session.username,
               rules: [{required: true, message: 'Please input your username!'}],
             })(
                 <Input
@@ -43,7 +44,7 @@ export class _Authenticate extends Component {
           <FormItem
             label='Password'>
             {getFieldDecorator('password', {
-              initialValue: this.state.password || '',
+              initialValue: session.password || '',
               rules: [{message: 'Please input your Password!'}],
             })(
                 <Input
@@ -56,7 +57,7 @@ export class _Authenticate extends Component {
           <FormItem
             label='Environment URL'>
             {getFieldDecorator('envUrl', {
-              initialValue: this.state.envUrl || '',
+              initialValue: session.envUrl || '',
               rules: [{required: true, message: 'Please input environment URL!', type: 'url'}],
             })(
                 <Input
@@ -68,7 +69,7 @@ export class _Authenticate extends Component {
           <FormItem>
             {getFieldDecorator('isRememberMeOn', {
               valuePropName: 'checked',
-              initialValue: this.state.isRememberMeOn || false,
+              initialValue: session.isRememberMeOn || false,
             })(
                 <Checkbox>Remember Me</Checkbox>
             )}
@@ -87,4 +88,14 @@ export class _Authenticate extends Component {
   }
 }
 
-export const Authenticate = Form.create()(_Authenticate);
+function mapStateToProps(state) {
+  return {
+    session: state.sessionReducer,
+  };
+}
+
+const mapDispatchToProps = {
+  resetState,
+};
+
+export const Authenticate = connect(mapStateToProps, mapDispatchToProps)(Form.create()(_Authenticate));

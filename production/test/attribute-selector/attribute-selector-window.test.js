@@ -131,6 +131,7 @@ describe('AttributeSelectorWindow', () => {
       projectId: 'proId',
       reportId: 'repId',
       reportSubtype: 'subtype',
+      reportName: 'Test name',
     };
 
     const componentWrapper = mount(<AttributeSelectorWindow
@@ -154,7 +155,8 @@ describe('AttributeSelectorWindow', () => {
         parsed.reportId,
         parsed.projectId,
         parsed.reportSubtype,
-        {'requestedObjects': {}});
+        {'requestedObjects': {}},
+        parsed.reportName);
   });
 
   it('should trigger handleCancel when Cancel was clicked', () => {
