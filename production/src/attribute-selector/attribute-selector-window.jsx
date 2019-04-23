@@ -35,9 +35,9 @@ export class AttributeSelectorWindow extends Component {
     this.props.handleBack();
   };
 
-  onTriggerUpdate = (reportId, projectId, reportSubtype, body) => {
+  onTriggerUpdate = (reportId, projectId, reportSubtype, body, reportName = this.props.parsed.reportName) => {
     attributeSelectorHelpers.officeMessageParent(selectorProperties.commandOnUpdate,
-        reportId, projectId, reportSubtype, body);
+        reportId, projectId, reportSubtype, body, reportName);
   };
 
   /**

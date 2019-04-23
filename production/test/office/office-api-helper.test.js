@@ -447,6 +447,32 @@ describe('OfficeApiHelper', () => {
       expect(mockSync).toBeCalled();
     });
   });
+  describe('getStartCell', () => {
+    it('should return starting cell from range address(single cell)', async () => {
+      // given
+      const range = 'Sheet1!A12';
+      // when
+      const result = officeApiHelper.getStartCell(range);
+      // then
+      expect(result).toEqual('A12');
+    });
+    it('should return starting cell from range address(multiple cells)', async () => {
+      // given
+      const range = 'Sheet1!ABC12:BDE15';
+      // when
+      const result = officeApiHelper.getStartCell(range);
+      // then
+      expect(result).toEqual('ABC12');
+    });
+    it('should return starting cell with sheet name including !', async () => {
+      // given
+      const range = 'No!Sheet1!ABC12:BDE15';
+      // when
+      const result = officeApiHelper.getStartCell(range);
+      // then
+      expect(result).toEqual('ABC12');
+    });
+  });
   describe.skip('loadExistingReportBingings', () => {
     it('should not load anything due to empty bindings', async () => {
       // given

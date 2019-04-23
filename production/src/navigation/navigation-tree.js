@@ -36,7 +36,20 @@ export class _NavigationTree extends Component {
   };
 
   handleOk = () => {
+<<<<<<< HEAD
     this.props.requestImport();
+=======
+    const okObject = {
+      command: selectorProperties.commandOk,
+      chosenObject: this.props.chosenObjectId,
+      chosenProject: this.props.chosenProjectId,
+      chosenSubtype: this.props.chosenSubtype,
+      reportName: this.props.chosenProjectName,
+    };
+    this.props.startLoading();
+    this.props.startImport();
+    Office.context.ui.messageParent(JSON.stringify(okObject));
+>>>>>>> 70d700ec4fcf405cf85de53eee4cc3e4d0c89ce1
   };
 
   handleSecondary = () => {
@@ -127,8 +140,12 @@ export class _NavigationTree extends Component {
   }
 }
 
-export const mapStateToProps = (state) => {
-  return {...state.navigationTree};
+export const mapStateToProps = ({officeReducer, navigationTree}) => {
+  const object = officeReducer.preLoadReport;
+  return {
+    ...navigationTree,
+    title: !!object ? object.name : undefined,
+  };
 };
 
 export const NavigationTree = connect(mapStateToProps, actions)(_NavigationTree);

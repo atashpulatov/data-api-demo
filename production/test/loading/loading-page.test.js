@@ -3,6 +3,7 @@ import {Provider} from 'react-redux';
 import {mount} from 'enzyme';
 import {reduxStore} from '../../src/store';
 import {LoadingPage} from '../../src/loading/loading-page';
+import {START_REPORT_LOADING} from '../../src/popup/popup-actions';
 
 
 describe('Loading page', () => {
@@ -20,7 +21,7 @@ describe('Loading page', () => {
 
   it('should display default loading title', async () => {
     // given
-    const expectedTitle = 'Importing data...';
+    const expectedTitle = 'Importing data';
     // when
     const componentWrapper = mount(
         <Provider store={reduxStore}>
@@ -32,13 +33,17 @@ describe('Loading page', () => {
     expect(componentWrapper.contains(headerWrapper.get(0))).toBe(true);
     expect(headerWrapper.text()).toContain(expectedTitle);
   });
-  it('should display loading title from props', async () => {
+  it('should display current loading title from redux state', async () => {
     // given
     const mockedTitle = 'Some report name';
+    reduxStore.dispatch({
+      type: START_REPORT_LOADING,
+      data: mockedTitle,
+    });
     // when
     const componentWrapper = mount(
         <Provider store={reduxStore}>
-          <LoadingPage title={mockedTitle} />
+          <LoadingPage name={mockedTitle} />
         </Provider>
     );
     // then

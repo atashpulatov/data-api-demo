@@ -107,23 +107,22 @@ class OfficeApiHelper {
     return {envUrl, username};
   }
 
-  formatTable = (sheet) => {
+  formatTable = (table) => {
     if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
-      sheet.getRange().format.autofitColumns();
+      table.getRange().format.autofitColumns();
     } else {
-      notificationService.displayMessage('warning', `Unable to format table.`);
+      notificationService.displayNotification('warning', `Unable to format table.`);
     }
   }
 
   formatNumbers = (table, reportConvertedData) => {
     if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
       try {
-        const rowsCount = reportConvertedData.rows.length;
         const columns = table.columns;
 
         for (const object of reportConvertedData.columnInformation) {
           if (!object.isAttribute) {
-            const columnRange = columns.getItemAt(object.index).getHeaderRowRange().getRowsBelow(rowsCount);
+            const columnRange = columns.getItemAt(object.index).getDataBodyRange();
             let format = '';
 
             if (object.category == 9) {
@@ -132,10 +131,10 @@ class OfficeApiHelper {
               format = object.formatString;
 
               if (format.indexOf('$') !== -1) {
-                format = format.replace(/[$]/g, '\\$').replace(/["]/g, ''); // fix anoying $-sign currency replacemnt in Excel
+                // Normalizing formatString from MicroStrategy when locale codes are used [$-\d+]
+                format = format.replace(/\[\$-/g, '[$$$$-').replace(/\$/g, '\\$').replace(/\\\$\\\$/g, '$').replace(/"/g, '');
               }
             }
-
             columnRange.numberFormat = format;
           }
         }
@@ -178,9 +177,12 @@ class OfficeApiHelper {
     const selectedRangeStart = context.workbook.getSelectedRange();
     selectedRangeStart.load(officeProperties.officeAddress);
     await context.sync();
-    const startCell = selectedRangeStart.address
-        .split('!')[1].split(':')[0];
+    const startCell = this.getStartCell(selectedRangeStart.address);
     return startCell;
+  }
+
+  getStartCell = (excelAdress) => {
+    return excelAdress.match(/!(\w+\d+)(:|$)/)[1];
   }
 
   bindNamedItem = (namedItem, bindingId) => {

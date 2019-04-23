@@ -104,15 +104,17 @@ describe('OfficeDisplayService', () => {
         .mockImplementationOnce(() => {});
     const arg1 = 'arg1';
     const arg2 = 'arg2';
-    const arg3 = 'arg2';
+    const arg3 = 'arg3';
+    const arg4 = 'arg4';
+    const arg5 = Array(5).fill(undefined);
     // when
-    await officeDisplayService.printObject(arg1, arg2, arg3);
+    await officeDisplayService.printObject(arg1, arg2, arg3, arg4);
     // then
-    expect(getObjectInfoSpy).toBeCalledWith(arg1, arg2, arg3);
+    expect(getObjectInfoSpy).toBeCalledWith(arg2, arg3, arg4);
     const preLoadReport = reduxStore.getState().officeReducer.preLoadReport;
     expect(preLoadReport).toEqual(givenBody);
     expect(runPopupSpy).toBeCalledWith(PopupTypeEnum.loadingPage, 22, 28);
-    expect(printInside).toBeCalledWith(arg1, arg2, arg3);
+    expect(printInside).toBeCalledWith(arg1, arg2, arg3, arg4, ...arg5);
   });
 
   it('should add report to store', () => {
@@ -145,9 +147,10 @@ describe('OfficeDisplayService', () => {
       close: () => {},
     };
     sessionHelper.setDialog(mockDialog);
+    const instanceId = null;
     const objectId = null;
     // when
-    await officeDisplayService.printObject(objectId, mstrContext.projectId, true, 'A1');
+    await officeDisplayService.printObject(instanceId, objectId, mstrContext.projectId, true, 'A1');
     // then
     expect(officeStoreService.preserveReport).toBeCalled();
     expect(officeStoreService.preserveReport).toBeCalledWith({

@@ -1,5 +1,5 @@
 import {selectorProperties} from '../../src/attribute-selector/selector-properties';
-import {popupController, loadPending} from '../../src/popup/popup-controller';
+import {popupController} from '../../src/popup/popup-controller';
 import {officeDisplayService} from '../../src/office/office-display-service';
 import {objectTypes} from 'mstr-react-library';
 import {errorService} from '../../src/error/error-handler';
@@ -112,6 +112,7 @@ describe('PopupController', () => {
           projectId: 'projectId',
           reportSubtype: objectTypes.getTypeValues('Cube').subtype,
           body: {},
+          reportName: 'testName',
         };
         const arg = {
           message: JSON.stringify(actionObject),
@@ -123,7 +124,9 @@ describe('PopupController', () => {
         // then
         expect(dialog.close).toBeCalled();
         expect(mockPrint).toBeCalled();
-        expect(mockPrint).toBeCalledWith(actionObject.reportId,
+        expect(mockPrint).toBeCalledWith(
+            undefined,
+            actionObject.reportId,
             actionObject.projectId,
             false,
             undefined,
@@ -171,6 +174,7 @@ describe('PopupController', () => {
           instanceId: 'instanceId',
           reportSubtype: objectTypes.getTypeValues('Report').subtype,
           body: {},
+          reportName: 'testName',
         };
         const arg = {
           message: JSON.stringify(actionObject),
@@ -182,7 +186,9 @@ describe('PopupController', () => {
         // then
         expect(dialog.close).toBeCalled();
         expect(mockPrint).toBeCalled();
-        expect(mockPrint).toBeCalledWith(actionObject.reportId,
+        expect(mockPrint).toBeCalledWith(
+            undefined,
+            actionObject.reportId,
             actionObject.projectId,
             true,
             actionObject.instanceId,

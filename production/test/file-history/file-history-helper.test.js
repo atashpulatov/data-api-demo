@@ -21,94 +21,6 @@ describe('FileHistoryHelper', () => {
   afterAll(() => {
     jest.restoreAllMocks();
   });
-  describe('refreshReport', () => {
-    it('should call provided method', async () => {
-      // given
-      const mockedOnRefresh = jest.fn();
-      authenticationHelper.validateAuthToken = jest.fn().mockImplementation(() => {});
-      const testBindId = 'someBindingIt';
-      const objectType = 'report';
-      // when
-      await fileHistoryHelper.refreshReport(mockedOnRefresh, testBindId, objectType);
-      // then
-      expect(mockedOnRefresh).toBeCalled();
-      expect(authenticationHelper.validateAuthToken).toBeCalled();
-      expect(mockedOnRefresh).toBeCalledWith(testBindId, objectType);
-    });
-    it('should not call provided method in no action session', async () => {
-      // given
-      const mockedOnRefresh = jest.fn();
-      authenticationHelper.validateAuthToken = jest.fn().mockImplementation(() => {
-        throw Error();
-      });
-      const testBindId = 'someBindingIt';
-      // when
-      await fileHistoryHelper.refreshReport(mockedOnRefresh, testBindId);
-      // then
-      expect(mockedOnRefresh).not.toBeCalled();
-      expect(authenticationHelper.validateAuthToken).toBeCalled();
-      expect(mockedOnRefresh).not.toBeCalledWith(testBindId);
-    });
-    it('should display message on success', async () => {
-      // given
-      const mockedDisplayMessage = notificationService.displayMessage;
-      authenticationHelper.validateAuthToken = jest.fn().mockImplementation(() => {});
-      const mockedOnRefresh = jest.fn().mockImplementation(() => true);
-      const testBindId = 'someBindingIt';
-      const objectType = 'object type';
-      const expectedObjectType = 'Object type';
-      // when
-      await fileHistoryHelper.refreshReport(mockedOnRefresh, testBindId, objectType);
-      // then
-      expect(mockedDisplayMessage).toBeCalled();
-      expect(authenticationHelper.validateAuthToken).toBeCalled();
-      expect(mockedDisplayMessage).toBeCalledWith('success', `${expectedObjectType} refreshed`);
-    });
-    it('should not display message on fail', async () => {
-      // given
-      const mockedDisplayMessage = notificationService.displayMessage;
-      authenticationHelper.validateAuthToken = jest.fn().mockImplementation(() => {});
-      const mockedOnRefresh = jest.fn().mockImplementation(() => false);
-      const testBindId = 'someBindingIt';
-      // when
-      await fileHistoryHelper.refreshReport(mockedOnRefresh, testBindId);
-      // then
-      expect(mockedDisplayMessage).not.toBeCalled();
-      expect(authenticationHelper.validateAuthToken).toBeCalled();
-    });
-    it('should trigger handleError on error', async () => {
-      // given
-      const testError = new Error('Some error');
-      authenticationHelper.validateAuthToken = jest.fn().mockImplementation(() => {});
-      const mockedOnRefresh = jest.fn().mockRejectedValue(testError);
-      const testBindId = 'someBindingIt';
-      const mockedErrorHandler = errorService.handleError;
-      // when
-      await fileHistoryHelper.refreshReport(mockedOnRefresh, testBindId);
-      // then
-      expect(mockedErrorHandler).toBeCalled();
-      expect(authenticationHelper.validateAuthToken).toBeCalled();
-      expect(mockedErrorHandler).toBeCalledWith(testError);
-    });
-    it('should dispatch startLoadingReport action and finishLoadingReport later when refreshed', async () => {
-      // given
-      const mockedOnRefresh = jest.fn();
-      authenticationHelper.validateAuthToken = jest.fn().mockImplementation(() => {});
-      const testBindId = 'someBindingIt';
-      // when
-      await fileHistoryHelper.refreshReport(mockedOnRefresh, testBindId);
-      // then
-      expect(authenticationHelper.validateAuthToken).toBeCalled();
-      expect(reduxStore.dispatch).toBeCalledWith({
-        type: officeProperties.actions.startLoadingReport,
-        reportBindId: testBindId,
-      });
-      expect(reduxStore.dispatch).toBeCalledWith({
-        type: officeProperties.actions.finishLoadingReport,
-        reportBindId: testBindId,
-      });
-    });
-  });
   describe('deleteReport', () => {
     it('should enable loading on run and disable later when delete', async () => {
       // given
@@ -134,7 +46,7 @@ describe('FileHistoryHelper', () => {
     });
     it('should display message on success', async () => {
       // given
-      const mockedDisplayMessage = notificationService.displayMessage;
+      const mockedDisplayMessage = notificationService.displayNotification;
       const mockedOnDelete = jest.fn().mockImplementation(() => true);
       const testBindId = 'someBindingIt';
       const objectType = 'object type';
@@ -147,7 +59,7 @@ describe('FileHistoryHelper', () => {
     });
     it('should not display message without success', async () => {
       // given
-      const mockedDisplayMessage = notificationService.displayMessage;
+      const mockedDisplayMessage = notificationService.displayNotification;
       const mockedOnDelete = jest.fn();
       const testBindId = 'someBindingIt';
       // when
