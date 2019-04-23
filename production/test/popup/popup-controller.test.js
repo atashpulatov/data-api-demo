@@ -60,10 +60,10 @@ describe('PopupController', () => {
         expect(dialog.close).toBeCalled();
         expect(mockPrint).toBeCalled();
         expect(mockPrint).toBeCalledWith(
+            undefined,
             reportData.objectId,
             reportData.projectId,
             true,
-            undefined,
         );
       });
 
@@ -95,10 +95,10 @@ describe('PopupController', () => {
         expect(dialog.close).toBeCalled();
         expect(mockPrint).toBeCalled();
         expect(mockPrint).toBeCalledWith(
+            reportData.instanceId,
             reportData.objectId,
             reportData.projectId,
             true,
-            reportData.instanceId,
         );
       });
 
@@ -129,7 +129,6 @@ describe('PopupController', () => {
             actionObject.reportId,
             actionObject.projectId,
             false,
-            undefined,
             null, null, null,
             actionObject.body);
       });
@@ -139,6 +138,7 @@ describe('PopupController', () => {
       // given
         officeApiHelper.getExcelSessionStatus = jest.fn();
         const actionObject = {
+          reportName: 'name',
           command: selectorProperties.commandOnUpdate,
           reportId: 'reportId',
           projectId: 'projectId',
@@ -156,9 +156,9 @@ describe('PopupController', () => {
         expect(dialog.close).toBeCalled();
         expect(mockPrint).toBeCalled();
         expect(mockPrint).toBeCalledWith(actionObject.reportId,
+            undefined,
             actionObject.projectId,
             true,
-            undefined,
             null, null, null,
             actionObject.body);
       });
@@ -187,11 +187,10 @@ describe('PopupController', () => {
         expect(dialog.close).toBeCalled();
         expect(mockPrint).toBeCalled();
         expect(mockPrint).toBeCalledWith(
-            undefined,
+            actionObject.instanceId,
             actionObject.reportId,
             actionObject.projectId,
             true,
-            actionObject.instanceId,
             null, null, null,
             actionObject.body);
       });
