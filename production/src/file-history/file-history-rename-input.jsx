@@ -4,26 +4,20 @@ import {officeStoreService} from '../office/store/office-store-service';
 
 const renameReport = (bindId, defaultName, target) => {
   const newName = target.value;
-  if (newName) {
-    officeStoreService.renameReport(bindId, newName);
-  } else {
-    return setValueAsync(target, defaultName);
-  }
+  newName ? officeStoreService.renameReport(bindId, newName) : setValueAsync(target, defaultName);
 };
 
-const setValueAsync = (target, defaultName) => new Promise((resolve) => {
+const setValueAsync = (target, defaultName) => {
   setTimeout(() => {
     target.value = defaultName;
-    resolve(defaultName);
-  }, 50);
-});
+  }, 100);
+};
 
-const selectTextAsync = (id) => new Promise((resolve) => {
+const selectTextAsync = (id) => {
   setTimeout(() => {
     document.getElementById(id).select();
-    resolve();
-  }, 50);
-});
+  }, 100);
+};
 
 const RenameInput = ({fileName, bindingId}) => {
   const [editable, setEditable] = useState(false);
