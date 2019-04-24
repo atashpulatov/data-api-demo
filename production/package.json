@@ -92,7 +92,6 @@
       "!src/index.js",
       "!src/popup-entrypoint.js",
       "!src/serviceWorker.js",
-      "!src/file-history/file-history-rename-input.jsx",
       "!src/office/office-api-helper.js",
       "!src/office/office-context.js",
       "!src/office/office-display-service.js",

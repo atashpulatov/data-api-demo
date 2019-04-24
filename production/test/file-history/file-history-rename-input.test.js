@@ -1,44 +1,24 @@
 import React from 'react';
 import {shallow} from 'enzyme';
 // TODO: Below import
-import {RenameInput, setValueAsync, selectTextAsync, renameReport} from '../../src/file-history/file-history-rename-input';
+import RenameInput from '../../src/file-history/file-history-rename-input';
 import {officeStoreService} from '../../src/office/store/office-store-service';
 
 
-describe.skip('File history rename input', () => {
+describe('File history rename input', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
   it('should render an input element with defined name', () => {
     // given
     const givenFileName = 'name';
+    const bindingId = 'id123';
     // when
-    const wrappedComponent = shallow(<RenameInput fileName={givenFileName} />);
+    const wrappedComponent = shallow(<RenameInput fileName={givenFileName} bindingId={bindingId} />);
 
     // then
     expect(wrappedComponent).toBeDefined();
-    expect(wrappedComponent.exists(`#input-${givenFileName}`)).toBeTruthy();
-  });
-  it('should set input value async', async () => {
-    // given
-    const givenText = 'name';
-    const target = {};
-    // when
-    await setValueAsync(target, givenText);
-    // then
-    expect(target.value).toBe(givenText);
-  });
-  it('should select text async', async () => {
-    // given
-    const givenId = 'id123';
-    const mockSelect = jest.fn();
-    jest.spyOn(document, 'getElementById').mockImplementation(() => {
-      return {select: mockSelect};
-    });
-    // when
-    await selectTextAsync(givenId);
-    // then
-    expect(mockSelect).toHaveBeenCalled();
+    expect(wrappedComponent.exists(`#input-${bindingId}`)).toBeTruthy();
   });
   it('rename report should call officeStoreService.renameReport method when filename is given', () => {
     // given
@@ -47,33 +27,58 @@ describe.skip('File history rename input', () => {
     const target = {value: givenFileName};
     const mockOfficeService = jest.spyOn(officeStoreService, 'renameReport');
     // when
-    renameReport(givenId, givenFileName, target);
+    const wrappedComponent = shallow(<RenameInput fileName={givenFileName} bindingId={givenId} />);
+    wrappedComponent.instance().renameReport({target});
     // then
     expect(mockOfficeService).toHaveBeenCalled();
   });
-  it('rename report should call setValueAsync when filename is empty', async () => {
+  it('should update editable state on doubleclick', () => {
     // given
-    const defaultName = 'cola';
-    const givenId = 'id123';
-    const target = {value: ''};
-    // when
-    await renameReport(givenId, defaultName, target);
-    // then
-    expect(target.value).toBe(defaultName);
-  });
-  it.skip('hook should update editable state', async () => {
-    // given
-    const mockSetState = jest.fn();
-    jest.mock('react', () => ({
-      useState: (initial) => [initial, mockSetState],
-    }));
-    const givenFileName = 'cola';
+    const givenFileName = 'name';
     const givenId = 'id123';
     // when
     const wrappedComponent = shallow(<RenameInput fileName={givenFileName} bindingId={givenId} />);
-    // TODO: How to test double click?
     wrappedComponent.simulate('dblclick');
     // then
-    expect(mockSetState).toHaveBeenCalled();
+    expect(wrappedComponent.state().editable).toBeTruthy();
+  });
+  it('should update value state when onChange is called', () => {
+    // given
+    const givenFileName = 'name';
+    const newFileName = 'newName';
+    const givenId = 'id123';
+    const event = {target: {value: newFileName}};
+    // when
+    const wrappedComponent = shallow(<RenameInput fileName={givenFileName} bindingId={givenId} />);
+    wrappedComponent.instance().handleChange(event);
+    // then
+    expect(wrappedComponent.state().value).toEqual(newFileName);
+  });
+  it('should update state on setEditable', () => {
+    // given
+    const givenFileName = 'name';
+    const givenId = 'id123';
+    // when
+    const wrappedComponent = shallow(<RenameInput fileName={givenFileName} bindingId={givenId} />);
+    // then
+    wrappedComponent.instance().setEditable(true);
+    expect(wrappedComponent.state().editable).toEqual(true);
+    wrappedComponent.instance().setEditable(false);
+    expect(wrappedComponent.state().editable).toEqual(false);
+  });
+  it('should select text async', () => {
+    // given
+    const givenFileName = 'name';
+    const givenId = 'id123';
+    const mockDocument = jest.spyOn(document, 'getElementById').mockImplementation(() => {
+      return {select: jest.fn()};
+    });
+    // when
+    const wrappedComponent = shallow(<RenameInput fileName={givenFileName} bindingId={givenId} />);
+    wrappedComponent.instance().selectTextAsync();
+    // then
+    setTimeout(() => {
+      expect(mockDocument).toHaveBeenCalled();
+    }, 150);
   });
 });
