@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import './auth-component.css';
-import {reduxStore} from '../store';
-import {Form, Icon, Input, Button} from 'antd';
+import {Form, Icon, Input, Button, Checkbox} from 'antd';
 import {authenticationHelper} from './authentication-helper';
 import {connect} from 'react-redux';
 import {resetState} from '../popup/popup-actions';
@@ -20,7 +19,8 @@ export class _Authenticate extends Component {
   }
 
   render() {
-    const {getFieldDecorator} = this.props.form;
+    const {session, form} = this.props;
+    const {getFieldDecorator} = form;
     return (
       <article>
         <header>
@@ -32,6 +32,7 @@ export class _Authenticate extends Component {
           <FormItem
             label='Username'>
             {getFieldDecorator('username', {
+              initialValue: session.username,
               rules: [{required: true, message: 'Please input your username!'}],
             })(
                 <Input
@@ -43,6 +44,7 @@ export class _Authenticate extends Component {
           <FormItem
             label='Password'>
             {getFieldDecorator('password', {
+              initialValue: session.password || '',
               rules: [{message: 'Please input your Password!'}],
             })(
                 <Input
@@ -55,13 +57,21 @@ export class _Authenticate extends Component {
           <FormItem
             label='Environment URL'>
             {getFieldDecorator('envUrl', {
-              initialValue: this.props.envUrl || '',
+              initialValue: session.envUrl || '',
               rules: [{required: true, message: 'Please input environment URL!', type: 'url'}],
             })(
                 <Input
                   prefix={
                     <Icon type='link' style={{color: 'rgba(0,0,0,.25)'}} />}
                   placeholder='environment URL' />
+            )}
+          </FormItem>
+          <FormItem>
+            {getFieldDecorator('isRememberMeOn', {
+              valuePropName: 'checked',
+              initialValue: session.isRememberMeOn || false,
+            })(
+                <Checkbox>Remember Me</Checkbox>
             )}
           </FormItem>
           <div
@@ -80,7 +90,7 @@ export class _Authenticate extends Component {
 
 function mapStateToProps(state) {
   return {
-    envUrl: state.sessionReducer.envUrl,
+    session: state.sessionReducer,
   };
 }
 

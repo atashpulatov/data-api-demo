@@ -57,6 +57,7 @@ describe('PopupViewSelector', () => {
     const selectorWrapped = shallow(<_PopupViewSelector
       location={location}
       {...propsToPass}
+      propsToPass={propsToPass}
       methods={{}}
     />);
     // then

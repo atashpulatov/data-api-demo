@@ -18,6 +18,8 @@ export const _PopupViewSelector = (props) => {
       proceedToImport(props);
     } else {
       popupType = PopupTypeEnum.promptsWindow;
+      propsToPass.projectId = props.chosenProjectId;
+      propsToPass.reportId = props.chosenObjectId;
     }
   }
   if (!popupType) {
@@ -27,7 +29,7 @@ export const _PopupViewSelector = (props) => {
   } else if (popupType === PopupTypeEnum.loadingPage) {
     return <LoadingPage />;
   } else if (popupType === PopupTypeEnum.promptsWindow) {
-    return <PromptsWindow />;
+    return <PromptsWindow parsed={propsToPass} />;
   }
   return <></>;
 };

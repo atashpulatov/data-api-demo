@@ -1,33 +1,49 @@
 import React from 'react';
 import {_NavigationTree, mapStateToProps, mapDispatchToProps, NavigationTree} from '../../src/navigation/navigation-tree';
 import {SELECT_OBJECT, SET_DATA_SOURCE, SELECT_FOLDER, START_IMPORT} from '../../src/navigation/navigation-tree-actions';
-import {shallow, mount} from 'enzyme';
+import {shallow, mount, render} from 'enzyme';
 import {selectorProperties} from '../../src/attribute-selector/selector-properties';
 import {PopupButtons} from '../../src/popup/popup-buttons';
 import {Office} from '../mockOffice';
 import {mstrObjectRestService} from '../../src/mstr-object/mstr-object-rest-service';
+import { _PromptsWindow } from '../../src/prompts/prompts-window';
 
 describe('NavigationTree', () => {
   afterAll(() => {
     jest.restoreAllMocks();
   });
 
-  it('should (full)render with props given', () => {
+  it('should render with props given', () => {
     // given
     const parsed = {
       envUrl: 'env',
       token: 'token',
       projectId: 'projectId',
+      reportId: 'reportId'
     };
     // when
-    const wrappedComponent = mount(<_NavigationTree parsed={parsed} />);
+    const wrappedComponent = mount(<_PromptsWindow parsed={parsed} />);
     // then
     expect(wrappedComponent.instance()).toBeDefined();
-    expect(wrappedComponent.find('SmartFolders').get(0)).toBeDefined();
-    expect(wrappedComponent.find('PopupButtons').length).toBe(1);
+    expect(wrappedComponent.find('PromptsContainer').get(0)).toBeDefined();
+    expect(wrappedComponent.find('PromptWindowButtons').length).toBe(1);
   });
 
-  it('should have buttons with secondary action', () => {
+  /*it('should load embedded iframe from library', () => {
+    // given
+    const parsed = {
+      envUrl: 'env',
+      token: 'token',
+      projectId: 'projectId',
+      reportId: 'reportId'
+    };
+    // when
+    const wrappedComponent = mount(<_PromptsWindow parsed={parsed} />);
+    const spyMethod = jest.spyOn(wrappedComponent.instance(), 'onIframeLoad');
+    // then
+    expect(spyMethod).toBeCalled()
+  })*/
+  /*it('should have buttons with secondary action', () => {
     // given
     const parsed = {
       envUrl: 'env',
@@ -220,34 +236,13 @@ describe('NavigationTree', () => {
     expect(mockMessageParent).toHaveBeenCalledWith(JSON.stringify(resultAction));
   });
 
-  it('should take proper data from state for name defined', () => {
+  it('should take data from state wwew', () => {
     // given
     const initialState = {
       navigationTree: {},
-      officeReducer: {
-        preLoadReport: {
-          name: 'Some name',
-        },
-      },
     };
     // then
-    expect(mapStateToProps(initialState)).toEqual({
-      ...initialState.navigationTree,
-      title: initialState.officeReducer.preLoadReport.name,
-    });
-  });
-
-  it('should take proper data from state for name NOT defined', () => {
-    // given
-    const initialState = {
-      navigationTree: {},
-      officeReducer: {},
-    };
-    // then
-    expect(mapStateToProps(initialState)).toEqual({
-      ...initialState.navigationTree,
-      title: undefined,
-    });
+    expect(mapStateToProps(initialState)).toEqual(initialState.navigationTree);
   });
 
   it('should disable buttons until instance id obtained', async () => {
@@ -264,18 +259,18 @@ describe('NavigationTree', () => {
     await wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype);
     // then
     expect(isPromptedResponse).toBeCalledWith(givenObjectId, givenProjectId);
-    expect(selectObject).toBeCalledTimes(1);
-    // expect(selectObject.mock.calls[0][0]).toEqual({
-    //   chosenObjectId: undefined,
-    //   chosenProjectId: undefined,
-    //   chosenSubtype: undefined,
-    //   isPrompted: undefined,
-    // });
+    expect(selectObject).toBeCalledTimes(2);
     expect(selectObject.mock.calls[0][0]).toEqual({
+      chosenObjectId: undefined,
+      chosenProjectId: undefined,
+      chosenSubtype: undefined,
+      isPrompted: undefined,
+    });
+    expect(selectObject.mock.calls[1][0]).toEqual({
       chosenObjectId: givenObjectId,
       chosenProjectId: givenProjectId,
       chosenSubtype: givenSubtype,
       isPrompted: givenIsPrompted,
     });
-  });
+  });*/
 });

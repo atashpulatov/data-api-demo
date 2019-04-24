@@ -1,0 +1,15 @@
+.promptEditor-overlay {
+    background: transparent !important;
+}
+.mstrdossierPromptEditor {
+    width: 100% !important;
+    margin-left: 0px !important;
+    top: 0px !important;
+    left: 0px !important;
+}
+.icon-close {
+    display: none !important;
+}
+.mstrPromptEditorButtons {
+    display: none !important;
+}

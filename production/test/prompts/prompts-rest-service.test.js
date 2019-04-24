@@ -1,13 +1,13 @@
 /* eslint-disable */
-import { authenticationService } from '../../src/authentication/auth-rest-service';
+import {authenticationService} from '../../src/authentication/auth-rest-service';
 import superagent from 'superagent';
-import { moduleProxy } from '../../src/module-proxy';
-import { promptsRestService } from '../../src/prompts/prompts-rest-service';
-import { reduxStore } from '../../src/store';
-import { sessionProperties } from '../../src/storage/session-properties';
-import { historyProperties } from '../../src/history/history-properties';
-import { promptDef } from './mock-prompt-definitions';
-import { mstrObjectRestService } from '../../src/mstr-object/mstr-object-rest-service';
+import {moduleProxy} from '../../src/module-proxy';
+import {promptsRestService} from '../../src/prompts/prompts-rest-service';
+import {reduxStore} from '../../src/store';
+import {sessionProperties} from '../../src/storage/session-properties';
+import {historyProperties} from '../../src/history/history-properties';
+import {promptDef} from './mock-prompt-definitions';
+import {mstrObjectRestService} from '../../src/mstr-object/mstr-object-rest-service';
 /* eslint-enable */
 
 const login = 'mstr';
@@ -37,9 +37,11 @@ describe('PromptsRestService', () => {
 
     reduxStore.dispatch({
       type: sessionProperties.actions.logIn,
-      username: login,
-      envUrl: envURL,
-      isRememberMeOn: false,
+      values: {
+        username: login,
+        envUrl: envURL,
+        isRememberMeOn: false,
+      },
     });
     reduxStore.dispatch({
       type: sessionProperties.actions.loggedIn,
