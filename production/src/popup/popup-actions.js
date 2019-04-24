@@ -54,7 +54,9 @@ export function refreshReport(bindingId, objectType, refreshAll = false) {
         type: START_REPORT_LOADING,
         data: refreshReport.name,
       });
-      result = await officeDisplayService.printObject(refreshReport.id, refreshReport.projectId, isReport, true, refreshReport.tableId, bindingId, refreshReport.body, true);
+      // InstanceId should be passed in the case of prompted reports, null since it's not supported
+      const instanceId = null;
+      result = await officeDisplayService.printObject(instanceId, refreshReport.id, refreshReport.projectId, isReport, true, refreshReport.tableId, bindingId, refreshReport.body, true);
       return (refreshAll && !result) || notificationService.displayNotification('success', `${capitalize(objectType)} refreshed`);
     } catch (error) {
       if (error.code === 'ItemNotFound') {
