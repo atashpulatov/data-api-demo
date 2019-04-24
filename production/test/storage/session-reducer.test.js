@@ -16,7 +16,10 @@ describe('sessionReducer', () => {
     const givenEnvUrl = 'someEnvUrl';
     sessionStore.dispatch({
       type: sessionProperties.actions.logIn,
-      envUrl: givenEnvUrl,
+      values: {
+        envUrl: givenEnvUrl,
+        isRememberMeOn: false,
+      },
     });
     sessionStore.dispatch({
       type: sessionProperties.actions.logOut,
@@ -67,7 +70,7 @@ describe('sessionReducer', () => {
     // when
     sessionStore.dispatch({
       type: sessionProperties.actions.logIn,
-      envUrl: givenEnvUrl,
+      values: {envUrl: givenEnvUrl},
     });
     // then
     const sessionStoreState = sessionStore.getState();
@@ -87,9 +90,9 @@ describe('sessionReducer', () => {
     // when
     const newState = sessionReducer(state, action);
     // then
-    expect(newState.userFullName).toBe(undefined);
-    expect(newState.userInitials).toBe(undefined);
-    expect(newState.authToken).toBe(undefined);
+    expect(newState.userFullName).toBe(null);
+    expect(newState.userInitials).toBe(null);
+    expect(newState.authToken).toBe(false);
   });
 
   it('should throw an error due to missing envUrl', () => {
@@ -99,8 +102,10 @@ describe('sessionReducer', () => {
     const wrongActionCall = () => {
       sessionStore.dispatch({
         type: sessionProperties.actions.logIn,
-        username: givenUsername,
-        isRememberMeOn: givenRememberMeFlag,
+        values: {
+          username: givenUsername,
+          isRememberMeOn: givenRememberMeFlag,
+        },
       });
     };
     // then
