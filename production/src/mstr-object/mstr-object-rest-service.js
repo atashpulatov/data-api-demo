@@ -118,18 +118,21 @@ class MstrObjectRestService {
         });
   };
 
-  getInstanceDefinition(instanceId = '', objectId, projectId, isReport = true, body = {}, limit = 1) {
+  async getInstanceDefinition(instanceId = '', objectId, projectId, isReport = true, body = {}, limit = 1) {
     const storeState = reduxStore.getState();
     const envUrl = storeState.sessionReducer.envUrl;
     const authToken = storeState.sessionReducer.authToken;
     const objectType = isReport ? 'reports' : 'cubes';
     const instancePath = instanceId ? `/${instanceId}` : '';
     const fullPath = `${envUrl}/${objectType}/${objectId}/instances${instancePath}?limit=${limit}`;
-
-    if (instanceId) {
-      return this._getExistingInstanceDefinition(fullPath, authToken, projectId, body);
+    try {
+      if (instanceId) {
+        return await this._getExistingInstanceDefinition(fullPath, authToken, projectId, body);
+      }
+      return await this._getInstanceDefinition(fullPath, authToken, projectId, body);
+    } catch (error) {
+      throw error instanceof OutsideOfRangeError ? error : errorService.errorRestFactory(error);
     }
-    return this._getInstanceDefinition(fullPath, authToken, projectId, body);
   }
 
   getObjectContentGenerator(instanceDefinition, objectId, projectId, isReport, body, limit = DATA_LIMIT) {
