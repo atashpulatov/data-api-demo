@@ -226,9 +226,11 @@ describe('OfficeApiHelper', () => {
     const username = 'testusername';
     reduxStore.dispatch({
       type: sessionProperties.actions.logIn,
-      username,
-      envUrl,
-      password: '',
+      values: {
+        username,
+        envUrl,
+        password: '',
+      },
     });
     reduxStore.dispatch({
       type: historyProperties.actions.goInsideProject,
