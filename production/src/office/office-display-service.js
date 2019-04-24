@@ -18,7 +18,9 @@ class OfficeDisplayService {
       preLoadReport: objectInfo,
     });
     popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
-    return this._printObject(objectId, projectId, isReport, ...args);
+    const result = await this._printObject(objectId, projectId, isReport, ...args);
+    this._dispatchPrintFinish();
+    return result;
   }
 
   _printObject = async (objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh) => {
@@ -78,7 +80,7 @@ class OfficeDisplayService {
       throw errorService.errorOfficeFactory(error);
     } finally {
       excelContext.sync();
-      this._dispatchPrintFinish();
+      // this._dispatchPrintFinish();
       console.groupEnd();
     }
   }
