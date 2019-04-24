@@ -166,7 +166,7 @@ class MstrObjectRestService {
         .set('X-MSTR-ProjectID', projectId)
         .withCredentials()
         .then((res) => {
-          return res.body && res.body !== [];
+          return res.body && res.body.length;
         })
         .catch((err) => {
           throw errorService.errorRestFactory(err);
