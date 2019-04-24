@@ -14,7 +14,7 @@ export const _PopupViewSelector = (props) => {
   if (importRequested) {
     if (!props.isPrompted) {
       proceedToImport(props);
-    } else if (!!props.instanceId) {
+    } else if ( !!props.dossierData && !!props.dossierData.instanceId) {
       proceedToImport(props);
     } else {
       popupType = PopupTypeEnum.promptsWindow;
@@ -41,7 +41,7 @@ function proceedToImport(props) {
     chosenProject: props.chosenProjectId,
     chosenSubtype: props.chosenSubtype,
     isPrompted: props.isPrompted,
-    instanceId: props.instanceId,
+    dossierData: props.dossierData,
   };
   props.startLoading();
   props.startImport();
