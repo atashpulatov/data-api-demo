@@ -75,7 +75,7 @@ class MstrObjectRestService {
         });
   }
 
-  async _getExistingInstanceDefinition(fullPath, authToken, projectId, body) {
+  async _getDossierInstanceDefinition(fullPath, authToken, projectId, body) {
     return await moduleProxy.request
         .get(fullPath)
         .set('x-mstr-authtoken', authToken)
@@ -118,25 +118,24 @@ class MstrObjectRestService {
         });
   };
 
-  async getInstanceDefinition(instanceId = '', objectId, projectId, isReport = true, body = {}, limit = 1) {
-    const storeState = reduxStore.getState();
-    const envUrl = storeState.sessionReducer.envUrl;
-    const authToken = storeState.sessionReducer.authToken;
-    const objectType = isReport ? 'reports' : 'cubes';
-    const instancePath = instanceId ? `/${instanceId}` : '';
-    const fullPath = `${envUrl}/${objectType}/${objectId}/instances${instancePath}?limit=${limit}`;
+  async getInstanceDefinition(objectId, projectId, isReport = true, dossierData, body = {}, limit = 1) {
     try {
-      if (instanceId) {
-        return await this._getExistingInstanceDefinition(fullPath, authToken, projectId, body);
+      const storeState = reduxStore.getState();
+      const envUrl = storeState.sessionReducer.envUrl;
+      const authToken = storeState.sessionReducer.authToken;
+      const fullPath = this._getFullPath(dossierData, envUrl, limit, isReport, objectId);
+      if (dossierData) {
+        return await this._getDossierInstanceDefinition(fullPath, authToken, projectId, body);
+      } else {
+        return await this._getInstanceDefinition(fullPath, authToken, projectId, body);
       }
-      return await this._getInstanceDefinition(fullPath, authToken, projectId, body);
     } catch (error) {
       throw error instanceof OutsideOfRangeError ? error : errorService.errorRestFactory(error);
     }
   }
 
-  getObjectContentGenerator(instanceDefinition, objectId, projectId, isReport, body, limit = DATA_LIMIT) {
-    return fetchContentGenerator(instanceDefinition, objectId, projectId, isReport, body, limit);
+  getObjectContentGenerator(instanceDefinition, objectId, projectId, isReport, dossierData, body, limit = DATA_LIMIT) {
+    return fetchContentGenerator(instanceDefinition, objectId, projectId, isReport, dossierData, body, limit);
   }
 
   _fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = -1) {
@@ -152,6 +151,21 @@ class MstrObjectRestService {
       throw new OutsideOfRangeError();
     }
     return {rows, columns};
+  }
+
+  _getFullPath(dossierData, envUrl, limit, isReport, objectId, instanceId) {
+    let path = '';
+    if (dossierData) {
+      const {dossierId, instanceId, chapterKey, vizualizationKey} = dossierData;
+      path = `${envUrl}/dossiers/${dossierId}/instances/${instanceId}/chapters/${chapterKey}/visualizations/${vizualizationKey}`;
+    } else {
+      const objectType = isReport ? 'reports' : 'cubes';
+      path = `${envUrl}/${objectType}/${objectId}/instances`;
+      path += instanceId ? `/${instanceId}` : '';
+    }
+    path += limit ? `?limit=${limit}` : '';
+    console.log(path);
+    return path;
   }
 
   async isPrompted(objectId, projectId) {
@@ -173,7 +187,7 @@ class MstrObjectRestService {
   };
 };
 
-async function* fetchContentGenerator(instanceDefinition, objectId, projectId, isReport, body, limit) {
+async function* fetchContentGenerator(instanceDefinition, objectId, projectId, isReport, dossierData, body, limit) {
   try {
     const totalRows = instanceDefinition.rows;
     const {instanceId, mstrTable} = instanceDefinition;
@@ -181,8 +195,7 @@ async function* fetchContentGenerator(instanceDefinition, objectId, projectId, i
     const storeState = reduxStore.getState();
     const envUrl = storeState.sessionReducer.envUrl;
     const authToken = storeState.sessionReducer.authToken;
-    const objectType = isReport ? 'reports' : 'cubes';
-    const fullPath = `${envUrl}/${objectType}/${objectId}/instances/${instanceId}`;
+    const fullPath = mstrObjectRestService._getFullPath(dossierData, envUrl, false, isReport, objectId, instanceId);
     let fetchedRows = 0;
     let offset = 0;
 
