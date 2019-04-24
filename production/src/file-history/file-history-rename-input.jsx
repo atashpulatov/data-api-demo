@@ -26,8 +26,9 @@ const RenameInput = ({fileName, bindingId}) => {
       if (!editable) selectTextAsync(`input-${fileName}`);
       setEditable(!editable);
     }}>
-      <Input type="text"
+      <Input type='text'
         className='rename-input'
+        maxLength={255}
         id={`input-${fileName}`}
         defaultValue={fileName}
         disabled={!editable}
