@@ -125,14 +125,13 @@ class MstrObjectRestService {
     const objectType = isReport ? 'reports' : 'cubes';
     const instancePath = instanceId ? `/${instanceId}` : '';
     const fullPath = `${envUrl}/${objectType}/${objectId}/instances${instancePath}?limit=${limit}`;
-
     try {
       if (instanceId) {
         return await this._getExistingInstanceDefinition(fullPath, authToken, projectId, body);
       }
       return await this._getInstanceDefinition(fullPath, authToken, projectId, body);
     } catch (error) {
-      throw errorService.errorRestFactory(error);
+      throw error instanceof OutsideOfRangeError ? error : errorService.errorRestFactory(error);
     }
   }
 
