@@ -23,13 +23,13 @@ const RenameInput = ({fileName, bindingId}) => {
   const [editable, setEditable] = useState(false);
   return (
     <div onDoubleClick={() => {
-      if (!editable) selectTextAsync(`input-${fileName}`);
+      if (!editable) selectTextAsync(`input-${bindingId}`);
       setEditable(!editable);
     }}>
       <Input type='text'
         className='rename-input'
         maxLength={255}
-        id={`input-${fileName}`}
+        id={`input-${bindingId}`}
         defaultValue={fileName}
         disabled={!editable}
         onBlur={(e) => renameReport(bindingId, fileName, e.target) || setEditable(false)}
