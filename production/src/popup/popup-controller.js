@@ -86,7 +86,7 @@ class PopupController {
           break;
       }
     } catch (error) {
-      console.error(error.message);
+      console.error(error);
       errorService.handleOfficeError(error);
     } finally {
       reduxStore.dispatch({type: officeProperties.actions.popupHidden});

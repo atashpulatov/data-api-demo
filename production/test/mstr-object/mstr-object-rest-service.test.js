@@ -193,9 +193,11 @@ describe('MstrObjectRestService', () => {
     beforeEach(() => {
       reduxStore.dispatch({
         type: sessionProperties.actions.logIn,
-        username: correctLogin,
-        envUrl: envURL,
-        isRememberMeOn: false,
+        values: {
+          username: correctLogin,
+          envUrl: envURL,
+          isRememberMeOn: false,
+        },
       });
       reduxStore.dispatch({
         type: sessionProperties.actions.loggedIn,
@@ -327,9 +329,11 @@ describe('MstrObjectRestService', () => {
     beforeEach(async () => {
       reduxStore.dispatch({
         type: sessionProperties.actions.logIn,
-        username: correctLogin,
-        envUrl: envURL,
-        isRememberMeOn: false,
+        values: {
+          username: correctLogin,
+          envUrl: envURL,
+          isRememberMeOn: false,
+        },
       });
       reduxStore.dispatch({
         type: sessionProperties.actions.loggedIn,
