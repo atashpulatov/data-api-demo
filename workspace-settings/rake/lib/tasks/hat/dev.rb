@@ -37,19 +37,6 @@ end
 def install_dependencies()
   shell_command! "rm -rf node_modules", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
   shell_command! "rm -rf node_modules", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/office-loader"
-  update_package_json()
   shell_command! "yarn install --network-concurrency 1", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
   shell_command! "yarn install --network-concurrency 1", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/office-loader"
-end
-
-def update_package_json()
-  data = JSON.parse(File.read("#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/package.json"));
-  if data["dependencies"].key?("mstr-react-library")
-    repo = data["dependencies"]["mstr-react-library"].split("@github.microstrategy.com:")[1]
-    data["dependencies"]["mstr-react-library"] = "https://#{ENV['GITHUB_USER']}:#{ENV['GITHUB_PWD']}@github.microstrategy.com/#{repo}"
-  end
-
-  File.open("#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/package.json","w") do |f|
-    f.write(data.to_json)
-  end
 end
