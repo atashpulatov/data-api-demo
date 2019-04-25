@@ -4,15 +4,15 @@ import {LoadingText} from 'mstr-react-library';
 import {selectorProperties} from '../attribute-selector/selector-properties';
 import {Button, Tooltip} from 'antd';
 import {MSTRIcon} from 'mstr-react-library';
-import uuid from 'uuid/v4';
 
 import './refresh-all-page.css';
 
 const dialogStyle = {
-  position: 'fixed',
-  top: '50%',
+  height: '100%',
+  //   position: 'fixed',
+  //   top: '50%',
   color: '#444A50',
-  transform: 'translateY(-50%) translateY(-15px)',
+  transform: 'translateY(-50%) translateY(-25px)',
   border: 'none',
   textAlign: 'center',
   fontFamily: `"HelveticaNeue", "Helvetica Neue", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", sans-serif`,
@@ -78,28 +78,37 @@ export class _RefreshAllPage extends Component {
     render() {
       console.log('results in render', this.state.results[0].key);
       const displayName = this.state.name || 'data';
-      return (<dialog className='loading-page' style={dialogStyle}>
-        {!this.state.finished
-            ?
-            <div>
-              <h1 style={titleStyle}>{`${displayName} (${this.state.currentNumber}/${this.state.allNumber})`}</h1>
-              <LoadingText text={'Loading data...'} />
-            </div>
-            :
-             <span>Refresh done!</span>}
+      return (<dialog className='refreshing-page' style={dialogStyle}>
+        <div className="refresh-title">Refresh All Data</div>
+        <div className="refresh-header">
+          {!this.state.finished
+                ?
+                <div>
+                  <h1 style={titleStyle}>{`${displayName} (${this.state.currentNumber}/${this.state.allNumber})`}</h1>
+                  <LoadingText text={'Loading data...'} />
+                </div>
+                :
+                 <span className="finished-header">Refresh done!</span>}
+        </div>
         <div className='results-container'>
-          {this.state.results ?
-                this.state.results.map((res) => <Tooltip title={res.result} key={res.key}>
-                  <div className="result-container">
-                    <span>{this.setIcon(res.isError)}</span> <span>{res.name}</span>
-                  </div></Tooltip>) : null}
+          {this.state.results
+                  ?
+                  this.state.results.map((res) =>
+                    <div className="result-container">
+                      <Tooltip title={res.result} overlayClassName="refresh-tooltip" key={res.key}>
+                        <span className="result-icon">{this.setIcon(res.isError)}</span>
+                      </Tooltip>
+                      <span className="report-name">{res.name}</span>
+                    </div>)
+
+                  :
+                  null}
         </div>
         <Button id="prepare" type="primary"
           className={ !this.state.finished ? 'hidden' : ''}
           onClick={this.finished}>
           Ok
         </Button>
-        {/* {this.state.finished ? <button onClick={this.finished}>Ok</button> : null} */}
       </dialog>);
     }
 };

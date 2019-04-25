@@ -1,12 +1,51 @@
+.refreshing-page {
+    padding-right: 30px;
+    padding-left: 30px;
+}
+
 .results-container {
     overflow: auto;
     padding-top: 10px;
-    padding-right: 30px;
-    padding-left: 30px;
-    max-height: 105px;
+    /* padding-right: 30px;
+    padding-left: 30px; */
+    padding-bottom: 40px;
+    max-height: 200px;
 }
 
 .result-container {
     text-align: left;
     padding-bottom: 10px;
+}
+
+.result-icon {
+    display: inline-block;
+    min-width: 20px;
+}
+
+.refresh-header {
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    font-size: 18px;
+    align-items: center
+}
+
+.finished-header {
+    font-size: 24px;
+}
+
+.refresh-tooltip {
+    color: #444649 ;
+}
+
+.report-name {
+    padding-left: 10px;
+}
+
+.refresh-title {
+    font-size: 18px;
+    color: #333333;
+    font-family: HelveticaNeue-Medium;
+    text-align: left;
+    padding-top: 20px;
 }

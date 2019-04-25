@@ -55,52 +55,21 @@ class ErrorService {
     return error;
   }
   handleError = (error, isLogout) => {
-    switch (true) {
-      case error instanceof EnvironmentNotFoundError:
-        notificationService.displayNotification('warning', '404 - Environment not found');
-        if (!isLogout) {
-          setTimeout(() => {
-            this.fullLogOut();
-          }, TIMEOUT);
-        }
-        break;
-      case error instanceof ConnectionBrokenError:
-        notificationService.displayNotification('warning', 'Environment is unreachable.'
-          + '\nPlease check your internet connection.');
-        if (!isLogout) {
-          setTimeout(() => {
-            this.fullLogOut();
-          }, TIMEOUT);
-        }
-        break;
-      case error instanceof UnauthorizedError:
-        notificationService.displayNotification('info', 'Your session has expired.\nPlease log in.');
-        if (!isLogout) {
-          setTimeout(() => {
-            this.fullLogOut();
-          }, TIMEOUT);
-        }
-        break;
-      case error instanceof BadRequestError:
-        notificationService.displayNotification('warning', '400 - There has been a problem with your request');
-        break;
-      case error instanceof InternalServerError:
-        notificationService.displayNotification('warning', errorMessages[error.iServerCode]);
-        break;
-      case error instanceof PromptedReportError:
-        notificationService.displayNotification('warning', NOT_SUPPORTED_SERVER_ERR);
-        break;
-      case error instanceof OutsideOfRangeError:
-        notificationService.displayNotification('warning', 'The table you try to import exceeds the worksheet limits.');
-        break;
-      case error instanceof OverlappingTablesError:
-        notificationService.displayNotification('warning', 'The table you try to import exceeds the worksheet limits.');
-        break;
-      default:
-        notificationService.displayNotification('warning', error.message || 'Unknown error');
-        break;
+    const message = this.getErrorMessage(error);
+    notificationService.displayNotification('warning', message);
+    if (
+      error instanceof EnvironmentNotFoundError
+      || error instanceof ConnectionBrokenError
+      || error instanceof UnauthorizedError) {
+      if (!isLogout) {
+        setTimeout(() => {
+          this.fullLogOut();
+        }, TIMEOUT);
+      }
     }
   }
+
+
   handlePreAuthError = (error) => {
     switch (true) {
       case error instanceof UnauthorizedError:
@@ -136,6 +105,30 @@ class ErrorService {
     sessionHelper.logOutRest();
     sessionHelper.logOut();
     sessionHelper.logOutRedirect();
+  }
+
+  getErrorMessage = (error) => {
+    switch (true) {
+      case error instanceof EnvironmentNotFoundError:
+        return '404 - Environment not found';
+      case error instanceof ConnectionBrokenError:
+        return 'Environment is unreachable.'
+          + '\nPlease check your internet connection.';
+      case error instanceof UnauthorizedError:
+        return 'Your session has expired.\nPlease log in.';
+      case error instanceof BadRequestError:
+        return '400 - There has been a problem with your request';
+      case error instanceof InternalServerError:
+        return errorMessages[error.iServerCode];
+      case error instanceof PromptedReportError:
+        return NOT_SUPPORTED_SERVER_ERR;
+      case error instanceof OutsideOfRangeError:
+        return 'The table you try to import exceeds the worksheet limits.';
+      case error instanceof OverlappingTablesError:
+        return 'The table you try to import exceeds the worksheet limits.';
+      default:
+        return error.message || 'Unknown error';
+    }
   }
 }
 
