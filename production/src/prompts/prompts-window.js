@@ -41,11 +41,11 @@ export class _PromptsWindow extends Component {
         }
 
         const { authToken, projectId } = this.state.session;
-        //const container = this.container.current;
+        const libraryUrl = this.state.session.url.replace('api', 'app');
+
         let msgRouter = null;
         let _promptedAnswers = null;
         const promptAnsweredHandler = function(promptAnswers) {
-            console.log("called prompt answers", promptAnswers);
             if (!promptAnswers) {
                 return;
             }
@@ -54,12 +54,11 @@ export class _PromptsWindow extends Component {
             } else {
                 _promptedAnswers = [promptAnswers];
             }
-            console.log('prompted answers are now(from plugin)', _promptedAnswers)
         };
-        const url = `https://localhost:8443/consume/app/${projectId}/${this.state.reportId}`;
+        const url = `${libraryUrl}/${projectId}/${this.state.reportId}`;
         const CustomAuthenticationType = microstrategy.dossier.CustomAuthenticationType;
         const EventType = microstrategy.dossier.EventType;
-        console.log('Calling microstrategy.dossier.create');
+
         microstrategy.dossier
           .create({
             url: url,
@@ -67,7 +66,7 @@ export class _PromptsWindow extends Component {
             customAuthenticationType:
               CustomAuthenticationType.AUTH_TOKEN,
             enableResponsive: true,
-            // Following function is our default implementation, user could provide his/her own implementation
+
             getLoginToken: function() {
               return Promise.resolve(authToken);
             },
@@ -95,8 +94,6 @@ export class _PromptsWindow extends Component {
                 visualizationKey: visuzalisations[0].key
             };
 
-            console.log(JSON.stringify(_promptedAnswers));
-
             msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, promptAnsweredHandler);
 
             this.props.requestImport({dossierData});
@@ -111,16 +108,6 @@ export class _PromptsWindow extends Component {
             const runButton = this.embeddedDocument.getElementsByClassName('mstrPromptEditorButtonRun')[0];
             runButton && runButton.click();
         }
-        // this.setState({ triggerUpdate: true, loading: true });
-        // const okObject = {
-        //     command: selectorProperties.commandOk,
-        //     // body,
-        //     instanceId: this.state.dossierInstanceId,
-        //     objectId: this.state.reportId,
-        //     docId: this.state.docId,
-        //     currentPageKey: this.state.currentPageKey
-        // };
-        // Office.context.ui.messageParent(JSON.stringify(okObject));
     }
 
     /**
@@ -161,8 +148,6 @@ export class _PromptsWindow extends Component {
                     this.applyStyle(embeddedDocument, cssLocation);
                 }
             });
-            //const promptsPage = container.child.contentDocument;
-            //console.log(promptsPage);
         }
     };
 
