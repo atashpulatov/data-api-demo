@@ -87,12 +87,12 @@ describe('OfficeDisplayService', () => {
     jest.spyOn(officeDisplayService, '_fetchInsertDataIntoExcel').mockImplementationOnce(() => {});
     const arg1 = 'arg1';
     const arg2 = 'arg2';
-    const arg3 = 'arg2';
+    const arg3 = false;
     // when
     await officeDisplayService._printObject(arg1, arg2, arg3);
     // then
     expect(getObjectInfoSpy).toBeCalled();
-    expect(getObjectInfoSpy).toBeCalledWith(arg1, arg2, arg3, true, undefined);
+    expect(getObjectInfoSpy).toBeCalledWith(arg1, arg2, arg3, undefined, undefined);
   });
 
   it('should open loading popup when printing object', async () => {
@@ -100,13 +100,12 @@ describe('OfficeDisplayService', () => {
     const givenBody = {id: 'id', name: 'name'};
     const getObjectInfoSpy = jest.spyOn(mstrObjectRestService, 'getObjectInfo').mockResolvedValue(givenBody);
     const runPopupSpy = jest.spyOn(popupController, 'runPopup');
-    const printInside = jest.spyOn(officeDisplayService, '_printObject')
-        .mockImplementationOnce(() => {});
-    const arg1 = 'arg1';
+    const printInside = jest.spyOn(officeDisplayService, '_printObject').mockImplementationOnce(() => {});
+    const arg1 = null;
     const arg2 = 'arg2';
     const arg3 = 'arg3';
     const arg4 = 'arg4';
-    const arg5 = Array(5).fill(undefined);
+    const arg5 = Array(4).fill(undefined);
     // when
     await officeDisplayService.printObject(arg1, arg2, arg3, arg4);
     // then
@@ -114,7 +113,7 @@ describe('OfficeDisplayService', () => {
     const preLoadReport = reduxStore.getState().officeReducer.preLoadReport;
     expect(preLoadReport).toEqual(givenBody);
     expect(runPopupSpy).toBeCalledWith(PopupTypeEnum.loadingPage, 22, 28);
-    expect(printInside).toBeCalledWith(arg1, arg2, arg3, arg4, ...arg5);
+    expect(printInside).toBeCalledWith(arg2, arg3, arg4, ...arg5, null, undefined);
   });
 
   it('should add report to store', () => {
