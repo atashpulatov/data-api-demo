@@ -17,7 +17,8 @@ const envURL = 'https://env-125323.customer.cloud.microstrategy.com/MicroStrateg
 const projectId = 'B7CA92F04B9FAE8D941C3E9B7E0CD754';
 const projectName = 'MicroStrategy Tutorial';
 
-describe('PromptsRestService', () => {
+// currently we don't use this class
+describe.skip('PromptsRestService', () => {
   let authToken;
   const mockAgent = superagent.agent();
   beforeAll(() => {

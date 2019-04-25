@@ -99,7 +99,8 @@
       "!src/office/store/office-store-service.js",
       "!src/storage/session-helper.js",
       "!src/popup/popup-controller.js",
-      "!src/breadcrumbs/breadcrumbs.jsx"
+      "!src/breadcrumbs/breadcrumbs.jsx",
+      "!src/prompts/prompts-rest-service.jsx"
     ],
     "resolver": "jest-pnp-resolver",
     "setupFiles": [
