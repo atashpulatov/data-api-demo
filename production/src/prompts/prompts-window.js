@@ -39,33 +39,65 @@ export class _PromptsWindow extends Component {
         if (!this.state.loading){
             return;
         }
+
         const { authToken, projectId } = this.state.session;
         //const container = this.container.current;
+        let msgRouter = null;
+        let _promptedAnswers = null;
+        const promptAnsweredHandler = function(promptAnswers) {
+            console.log("called prompt answers", promptAnswers);
+            if (!promptAnswers) {
+                return;
+            }
+            if (_promptedAnswers) {
+                _promptedAnswers.push(promptAnswers);
+            } else {
+                _promptedAnswers = [promptAnswers];
+            }
+            console.log('prompted answers are now(from plugin)', _promptedAnswers)
+        };
         const url = `https://localhost:8443/consume/app/${projectId}/${this.state.reportId}`;
         const CustomAuthenticationType = microstrategy.dossier.CustomAuthenticationType;
-
-        microstrategy.dossier.create({
+        const EventType = microstrategy.dossier.EventType;
+        console.log('Calling microstrategy.dossier.create');
+        microstrategy.dossier
+          .create({
             url: url,
             enableCustomAuthentication: true,
-            customAuthenticationType: CustomAuthenticationType.AUTH_TOKEN,
+            customAuthenticationType:
+              CustomAuthenticationType.AUTH_TOKEN,
             enableResponsive: true,
             // Following function is our default implementation, user could provide his/her own implementation
-            getLoginToken: function () {
-                return Promise.resolve(authToken);
+            getLoginToken: function() {
+              return Promise.resolve(authToken);
             },
-            placeholder: container
-        }).then((dossierPageState) => {
-            // TODO: Check if there is a better api call for the currentPageKey
-            //const currentPageKey = dossierPageState.children[0].getCurrentPage().nodeKey;
-
-            //const docId = dossierPageState.getDocId();
-            const dossierInstanceId = dossierPageState.getDossierInstanceId()
-
-            const data = {
-                instanceId: dossierInstanceId
+            placeholder: container,
+            onMsgRouterReadyHandler: ({MsgRouter}) => {
+            
+                msgRouter = MsgRouter;
+                msgRouter.registerEventHandler(
+                  EventType.ON_PROMPT_ANSWERED,
+                  promptAnsweredHandler
+                );
+                // We should remember to unregister this handler once the page loads
             }
+          })
+          .then(async dossierPage => {
+            const chapter = await dossierPage.getCurrentChapter();
+            const docId = await dossierPage.getDossierId();
+            const dossierInstanceId = await dossierPage.getDossierInstanceId();
+            const visuzalisations  = await dossierPage.getCurrentPageVisualizationList();
 
-            this.props.requestImport(data);
+            const dossierData = {
+                chapterKey: chapter.nodeKey,
+                dossierId: docId,
+                instanceId: dossierInstanceId,
+                visualizationKey: visuzalisations[0].key
+            };
+
+            msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, promptAnsweredHandler);
+
+            this.props.requestImport(dossierData);
         });
     }
 
