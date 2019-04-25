@@ -37,7 +37,7 @@ export const _PopupViewSelector = (props) => {
 function proceedToImport(props) {
   const dossierData = {
     ...props.dossierData,
-    reportName: props.chosenObjectName,
+    reportName: props.chosenProjectName,
   };
   const okObject = {
     command: selectorProperties.commandOk,
