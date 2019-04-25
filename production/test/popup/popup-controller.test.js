@@ -67,7 +67,7 @@ describe('PopupController', () => {
         );
       });
 
-  it('should handle ok command from popup for report with instance id',
+  it('should handle ok command from popup for report with dossier data',
       async () => {
       // given
         officeApiHelper.getExcelSessionStatus = jest.fn();
@@ -75,13 +75,16 @@ describe('PopupController', () => {
           objectId: 'objectId',
           projectId: 'projectId',
           isReport: true,
-          instanceId: 'instanceId',
+          dossierData: {
+            instanceId: 'instanceId',
+            whatever: 'whatever',
+          },
         };
         const actionObject = {
           command: selectorProperties.commandOk,
           chosenObject: reportData.objectId,
           chosenProject: reportData.projectId,
-          instanceId: reportData.instanceId,
+          dossierData: reportData.dossierData,
           chosenSubtype: objectTypes.getTypeValues('Report').subtype,
         };
         const arg = {
@@ -95,7 +98,7 @@ describe('PopupController', () => {
         expect(dialog.close).toBeCalled();
         expect(mockPrint).toBeCalled();
         expect(mockPrint).toBeCalledWith(
-            reportData.instanceId,
+            reportData.dossierData,
             reportData.objectId,
             reportData.projectId,
             true,
@@ -164,7 +167,7 @@ describe('PopupController', () => {
             actionObject.body);
       });
 
-  it('should handle update command from popup for report with instance id',
+  it('should handle update command from popup for report with dossier data',
       async () => {
       // given
         officeApiHelper.getExcelSessionStatus = jest.fn();
@@ -172,7 +175,10 @@ describe('PopupController', () => {
           command: selectorProperties.commandOnUpdate,
           reportId: 'reportId',
           projectId: 'projectId',
-          instanceId: 'instanceId',
+          dossierData: {
+            instanceId: 'instanceId',
+            whatever: 'whatever',
+          },
           reportSubtype: objectTypes.getTypeValues('Report').subtype,
           body: {},
           reportName: 'testName',
@@ -188,7 +194,7 @@ describe('PopupController', () => {
         expect(dialog.close).toBeCalled();
         expect(mockPrint).toBeCalled();
         expect(mockPrint).toBeCalledWith(
-            actionObject.instanceId,
+            actionObject.dossierData,
             actionObject.reportId,
             actionObject.projectId,
             true,

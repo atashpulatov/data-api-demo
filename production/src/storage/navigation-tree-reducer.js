@@ -26,6 +26,7 @@ export const initialState = {
   chosenSubtype: null,
   chosenProjectName: DEFAULT_PROJECT_NAME,
   chosenType: DEFAULT_TYPE,
+  isPrompted: false,
   dataSource: null,
   loading: false,
   scrollPosition: null,
@@ -35,6 +36,8 @@ export const initialState = {
     order: 'descend',
   },
   searchText: '',
+  importRequested: false,
+  instanceId: null,
 };
 
 function getProjectName(projects, projectId, objectId) {

@@ -1,5 +1,5 @@
 import React from 'react';
-import {_NavigationTree, mapStateToProps, mapDispatchToProps, NavigationTree} from '../../src/navigation/navigation-tree';
+import {_NavigationTree, mapStateToProps, mapDispatchToProps} from '../../src/navigation/navigation-tree';
 import {SELECT_OBJECT, SET_DATA_SOURCE, SELECT_FOLDER, START_IMPORT} from '../../src/navigation/navigation-tree-actions';
 import {shallow, mount} from 'enzyme';
 import {selectorProperties} from '../../src/attribute-selector/selector-properties';
@@ -12,7 +12,7 @@ describe('NavigationTree', () => {
     jest.restoreAllMocks();
   });
 
-  it('should (full)render with props given', () => {
+  it('should render with props given', () => {
     // given
     const parsed = {
       envUrl: 'env',
@@ -20,78 +20,10 @@ describe('NavigationTree', () => {
       projectId: 'projectId',
     };
     // when
-    const wrappedComponent = mount(<_NavigationTree parsed={parsed} />);
+    const wrappedComponent = shallow(<_NavigationTree parsed={parsed} />);
     // then
     expect(wrappedComponent.instance()).toBeDefined();
-    expect(wrappedComponent.find('SmartFolders').get(0)).toBeDefined();
-    expect(wrappedComponent.find('PopupButtons').length).toBe(1);
-  });
-
-  it('should have buttons with secondary action', () => {
-    // given
-    const parsed = {
-      envUrl: 'env',
-      token: 'token',
-      projectId: 'projectId',
-    };
-    // when
-    const wrappedComponent = mount(<_NavigationTree parsed={parsed} />);
-    const popupButtonsWrapped = wrappedComponent.find('PopupButtons');
-    // then
-    expect(popupButtonsWrapped.exists('#prepare')).toBeTruthy();
-  });
-
-  it('should block interaction when loading flag is true', () => {
-    // given
-    const parsed = {
-      envUrl: 'env',
-      token: 'token',
-      projectId: 'projectId',
-    };
-    // when
-    const wrappedComponent = mount(<_NavigationTree parsed={parsed} loading={true} />);
-    const actionBlock = wrappedComponent.find('#action-block');
-    // then
-    expect(actionBlock.prop('style')).toHaveProperty('display', 'block');
-  });
-
-  it('should NOT block interaction when loading flag is false', () => {
-    // given
-    const parsed = {
-      envUrl: 'env',
-      token: 'token',
-      projectId: 'projectId',
-    };
-    // when
-    const wrappedComponent = mount(<_NavigationTree parsed={parsed} loading={false} />);
-    const actionBlock = wrappedComponent.find('#action-block');
-    // then
-    expect(actionBlock.prop('style')).toHaveProperty('display', 'none');
-  });
-
-  it('should call secondary action on prepare button clicked', () => {
-    // given
-    const parsed = {
-      envUrl: 'env',
-      token: 'token',
-      projectId: 'projectId',
-    };
-    const propsMethod = jest.fn();
-    const wrappedComponent = mount(<_NavigationTree
-      parsed={parsed}
-      chosenObjectId={true}
-      selectObject={propsMethod} />);
-    const secondaryAction = jest.spyOn(wrappedComponent.instance(), 'handleSecondary')
-        .mockReturnValueOnce({});
-    wrappedComponent.update();
-    wrappedComponent.instance().forceUpdate();
-    const popupButtonsWrapped = wrappedComponent.find(PopupButtons);
-    const secondaryButton = popupButtonsWrapped.find('button')
-        .find('#prepare');
-    // when
-    secondaryButton.simulate('click');
-    // then
-    expect(secondaryAction).toBeCalled();
+    expect(wrappedComponent.find('FolderBrowser').get(0)).toBeDefined();
   });
 
   it('should call proper method on secondary action', () => {
@@ -110,11 +42,12 @@ describe('NavigationTree', () => {
       chosenProjectName: 'Prepare Data',
       chosenType: 'Data',
     };
-    const wrappedComponent = shallow(<_NavigationTree
-      parsed={parsed}
-      handlePrepare={propsMethod}
-      {...actionObject}
-    />);
+    const wrappedComponent = shallow(
+        <_NavigationTree
+          parsed={parsed}
+          handlePrepare={propsMethod}
+          {...actionObject}
+        />);
     // when
     wrappedComponent.instance().handleSecondary();
     // then
@@ -143,42 +76,6 @@ describe('NavigationTree', () => {
     // then
     expect(office).toHaveBeenCalledWith(JSON.stringify(resultAction));
   });
-
-  // it('should call proper method on import action', () => {
-  //   // given
-  //   const parsed = {
-  //     envUrl: 'env',
-  //     token: 'token',
-  //     projectId: 'projectId',
-  //   };
-  //   const actionObject = {
-  //     command: selectorProperties.commandOk,
-  //     chosenObjectId: 'objectId',
-  //     chosenProjectId: 'projectId',
-  //     chosenSubtype: 'subtype',
-  //   };
-  //   const resultAction = {
-  //     command: selectorProperties.commandOk,
-  //     chosenObject: 'objectId',
-  //     chosenProject: 'projectId',
-  //     chosenSubtype: 'subtype',
-  //   };
-  //   const mockStartImport = jest.fn();
-  //   const mockStartloading = jest.fn();
-  //   const mockMessageParent = jest.spyOn(Office.context.ui, 'messageParent');
-  //   const wrappedComponent = shallow(<_NavigationTree
-  //     parsed={parsed}
-  //     startImport={mockStartImport}
-  //     startLoading={mockStartloading}
-  //     {...actionObject}
-  //   />);
-  //   // when
-  //   wrappedComponent.instance().handleOk();
-  //   // then
-  //   expect(mockStartloading).toHaveBeenCalled();
-  //   expect(mockStartImport).toHaveBeenCalled();
-  //   expect(mockMessageParent).toHaveBeenCalledWith(JSON.stringify(resultAction));
-  // });
 
   it('should call proper method on request import', () => {
     // given

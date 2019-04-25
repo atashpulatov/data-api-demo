@@ -64,7 +64,7 @@ describe('PopupViewSelector', () => {
     expect(selectorWrapped.find(PromptsWindow).get(0)).toBeTruthy();
   });
 
-  it('should handle request import when prompted and got instance id', () => {
+  it('should handle request import when prompted and got dossierData', () => {
     // given
     const location = {
       search: {},
@@ -77,7 +77,10 @@ describe('PopupViewSelector', () => {
       startLoading: jest.fn(),
       importRequested: true,
       isPrompted: true,
-      instanceId: 'instanceId',
+      dossierData: {
+        instanceId: 'instanceId',
+        whatever: 'whatever',
+      },
     };
     const resultAction = {
       command: selectorProperties.commandOk,
@@ -85,7 +88,7 @@ describe('PopupViewSelector', () => {
       chosenProject: propsToPass.chosenProjectId,
       chosenSubtype: propsToPass.chosenSubtype,
       isPrompted: propsToPass.isPrompted,
-      instanceId: propsToPass.instanceId,
+      dossierData: propsToPass.dossierData,
     };
     const mockMessageParent = jest.spyOn(Office.context.ui, 'messageParent');
     // when
