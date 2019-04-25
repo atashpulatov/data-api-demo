@@ -125,12 +125,10 @@ class MstrObjectRestService {
       const authToken = storeState.sessionReducer.authToken;
       const fullPath = this._getFullPath(dossierData, envUrl, limit, isReport, objectId);
       if (dossierData) {
-        const reportDefinition = await this._getInstanceDefinition(fullPath, authToken, projectId, body);
-        const definitionFromDossier = await this._getDossierInstanceDefinition(fullPath, authToken, projectId, body);
-        return {
-          ...reportDefinition,
-          ...definitionFromDossier,
-        };
+        const instanceDefinition = await this._getDossierInstanceDefinition(fullPath, authToken, projectId, body);
+        instanceDefinition.mstrTable.id = objectId;
+        instanceDefinition.mstrTable.name = dossierData.reportName;
+        return instanceDefinition;
       } else {
         return await this._getInstanceDefinition(fullPath, authToken, projectId, body);
       }
