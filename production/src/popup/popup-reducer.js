@@ -31,7 +31,6 @@ export const popupReducer = (state = initialState, action) => {
       return {
         ...state,
         refreshingReport: data.name,
-        index: data.index,
       };
     }
     case STOP_REPORT_LOADING: {

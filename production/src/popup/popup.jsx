@@ -9,6 +9,7 @@ import {selectorProperties} from '../attribute-selector/selector-properties';
 import {reduxStore} from '../store';
 import {Provider} from 'react-redux';
 import {LoadingPage} from '../loading/loading-page';
+import {RefreshAllPage} from '../loading/refresh-all-page';
 
 export class Popup extends Component {
   constructor(props) {
@@ -61,6 +62,8 @@ export class Popup extends Component {
       return (<NavigationTree handlePrepare={this.handlePrepare} parsed={propsToPass} handlePopupErrors={this.handlePopupErrors} />);
     } else if (popupType === PopupTypeEnum.loadingPage) {
       return (<LoadingPage />);
+    } else if (popupType === PopupTypeEnum.refreshAllPage) {
+      return (<RefreshAllPage />);
     }
     return (<></>);
   }

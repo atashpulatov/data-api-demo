@@ -24,6 +24,7 @@ class OfficeDisplayService {
   }
 
   _printObject = async (objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh) => {
+    console.log('----in print object');
     let officeTable;
     let newOfficeTableId;
     let shouldFormat;

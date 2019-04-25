@@ -1,0 +1,12 @@
+.results-container {
+    overflow: auto;
+    padding-top: 10px;
+    padding-right: 30px;
+    padding-left: 30px;
+    max-height: 105px;
+}
+
+.result-container {
+    text-align: left;
+    padding-bottom: 10px;
+}
