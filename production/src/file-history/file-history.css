@@ -101,7 +101,7 @@ span.file-icons {
     -ms-appearance: none;
     -o-appearance: none;
     appearance: none;
-    height: 14px;
+    height: 18px;
     padding: 1px;
     line-height: 1;
     border: none;
@@ -129,4 +129,18 @@ span.file-icons {
 .ant-input.rename-input:focus,
 .ant-input.rename-input:hover {
     box-shadow: none;
+}
+
+.ant-input.rename-input[disabled]:hover {
+    background-color: #EBEBEB;
+}
+
+.ant-dropdown .ant-dropdown-menu-item {
+    width: 156px;
+    padding: 4px 22px;
+    line-height: 20px;
+}
+
+.ant-dropdown .ant-dropdown-menu-item:hover {
+    background-color: #e9eaea;
 }
