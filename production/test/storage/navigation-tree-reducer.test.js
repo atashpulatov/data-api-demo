@@ -170,7 +170,8 @@ describe('NavigationTree Reducer', () => {
     expect(newState.importRequested).toBe(true);
   });
 
-  it('should set request import flag and instance on REQUEST_IMPORT action', () => {
+  // TODO: once we have workflow with report instance id this may be needed
+  it.skip('should set request import flag and instance on REQUEST_IMPORT action', () => {
     // given
     const action = {
       type: REQUEST_IMPORT,
@@ -185,6 +186,23 @@ describe('NavigationTree Reducer', () => {
     // then
     expect(newState.importRequested).toBe(true);
     expect(newState.instanceId).toBe(action.data.instanceId);
+  });
+
+  it('should set request import flag and dossier data on REQUEST_IMPORT action', () => {
+    // given
+    const action = {
+      type: REQUEST_IMPORT,
+      data: {
+        dossierData: 'whatever',
+      },
+    };
+
+    // when
+    const newState = navigationTree({}, action);
+
+    // then
+    expect(newState.importRequested).toBe(true);
+    expect(newState.dossierData).toBe(action.data.dossierData);
   });
 
   it('should return new proper state in case of START_IMPORT action', () => {

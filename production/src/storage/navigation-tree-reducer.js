@@ -37,7 +37,7 @@ export const initialState = {
   },
   searchText: '',
   importRequested: false,
-  instanceId: null,
+  dossierData: null,
 };
 
 function getProjectName(projects, projectId, objectId) {
@@ -108,7 +108,7 @@ export const navigationTree = (state = initialState, action) => {
       const newState = {...state};
       newState.importRequested = true;
       if (data) {
-        newState.instanceId = data.instanceId;
+        newState.dossierData = data.dossierData;
       }
       return newState;
     }
