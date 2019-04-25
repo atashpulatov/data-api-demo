@@ -1,5 +1,7 @@
 /* eslint-disable */
 import React from 'react';
+import {Provider} from 'react-redux';
+import {reduxStore} from '../../src/store';
 import {shallow, mount} from 'enzyme';
 import {AttributeSelectorWindow} from '../../src/attribute-selector/attribute-selector-window';
 import {AttributeSelector} from '../../src/attribute-selector/attribute-selector';
@@ -49,7 +51,7 @@ describe('AttributeSelectorWindow', () => {
       reportId: 'repId',
     };
 
-    const componentWrapper = mount(<AttributeSelectorWindow
+    const componentWrapper = shallow(<AttributeSelectorWindow
       parsed={parsed} />);
     componentWrapper.instance().attributesBeingSelected(true);
 
@@ -77,7 +79,7 @@ describe('AttributeSelectorWindow', () => {
       reportId: 'repId',
     };
 
-    const componentWrapper = mount(<AttributeSelectorWindow
+    const componentWrapper = shallow(<AttributeSelectorWindow
       parsed={parsed} />);
 
     const attributeMetricFilterWrapper = componentWrapper.find('AttributeMetricFilter');
@@ -104,7 +106,7 @@ describe('AttributeSelectorWindow', () => {
       reportId: 'repId',
     };
 
-    const componentWrapper = mount(<AttributeSelectorWindow
+    const componentWrapper = shallow(<AttributeSelectorWindow
       parsed={parsed} />);
 
     const attributeMetricFilterWrapper = componentWrapper.find('AttributeMetricFilter');
@@ -134,7 +136,7 @@ describe('AttributeSelectorWindow', () => {
       reportName: 'Test name',
     };
 
-    const componentWrapper = mount(<AttributeSelectorWindow
+    const componentWrapper = shallow(<AttributeSelectorWindow
       parsed={parsed} />);
     componentWrapper.instance().attributesBeingSelected(true);
 
@@ -168,12 +170,12 @@ describe('AttributeSelectorWindow', () => {
       reportId: 'repId',
     };
 
-    const componentWrapper = mount(<AttributeSelectorWindow
-      parsed={parsed} />);
-
-    componentWrapper.instance().handleCancel = jest.fn();
-    const spyMethod = jest.spyOn(componentWrapper.instance(), 'handleCancel');
-    componentWrapper.instance().forceUpdate();
+    const componentWrapper = mount(
+        <Provider store={reduxStore}>
+          <AttributeSelectorWindow
+            parsed={parsed} />
+        </Provider>);
+    const spyMethod = jest.spyOn(attributeSelectorHelpers, 'officeMessageParent');
 
     const wrappedCancelButton = componentWrapper.find('Button #cancel');
 
@@ -194,10 +196,10 @@ describe('AttributeSelectorWindow', () => {
     };
     const handleBack = jest.fn();
 
-    const componentWrapper = mount(<AttributeSelectorWindow
-      parsed={parsed} handleBack={handleBack} />);
-    const spyMethod = jest.spyOn(componentWrapper.instance(), 'handleBack');
-    componentWrapper.instance().forceUpdate();
+    const componentWrapper = mount(
+        <Provider store={reduxStore}><AttributeSelectorWindow
+          parsed={parsed} handleBack={handleBack} />
+        </Provider>);
 
     const wrappedCancelButton = componentWrapper.find('Button #back');
 
@@ -205,7 +207,7 @@ describe('AttributeSelectorWindow', () => {
     wrappedCancelButton.simulate('click');
 
     // then
-    expect(spyMethod).toBeCalled();
+    expect(handleBack).toBeCalled();
   });
 
   it('should trigger attribute-selector-helpers: officeMessageParent when Cancel is clicked', () => {
@@ -217,7 +219,7 @@ describe('AttributeSelectorWindow', () => {
       reportId: 'repId',
     };
 
-    const componentWrapper = mount(<AttributeSelectorWindow
+    const componentWrapper = shallow(<AttributeSelectorWindow
       parsed={parsed} />);
 
     const officeMessageParentSpy = jest.spyOn(attributeSelectorHelpers, 'officeMessageParent');
@@ -239,7 +241,7 @@ describe('AttributeSelectorWindow', () => {
       reportId: 'repId',
     };
 
-    const componentWrapper = mount(<AttributeSelectorWindow parsed={parsed} />);
+    const componentWrapper = shallow(<AttributeSelectorWindow parsed={parsed} />);
 
     const attributesBeingSelectedSpy = jest.spyOn(componentWrapper.instance(), 'attributesBeingSelected');
     expect(componentWrapper.instance().state.attributesSelected).toBeFalsy();
@@ -259,7 +261,7 @@ describe('AttributeSelectorWindow', () => {
       reportId: 'repId',
     };
 
-    const componentWrapper = mount(<AttributeSelectorWindow parsed={parsed} />);
+    const componentWrapper = shallow(<AttributeSelectorWindow parsed={parsed} />);
 
     const resetTriggerUpdateSpy = jest.spyOn(componentWrapper.instance(), 'resetTriggerUpdate');
 
@@ -295,7 +297,7 @@ describe('AttributeSelectorWindow', () => {
       reportId: 'repId',
     };
 
-    const componentWrapper = mount(<AttributeSelectorWindow parsed={parsed} />);
+    const componentWrapper = shallow(<AttributeSelectorWindow parsed={parsed} />);
     const attributesBeingSelectedSpy = jest.spyOn(componentWrapper.instance(), 'closeModal');
 
     // when
