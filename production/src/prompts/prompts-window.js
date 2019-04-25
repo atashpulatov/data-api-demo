@@ -95,9 +95,11 @@ export class _PromptsWindow extends Component {
                 visualizationKey: visuzalisations[0].key
             };
 
+            console.log(JSON.stringify(_promptedAnswers));
+
             msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, promptAnsweredHandler);
 
-            this.props.requestImport(dossierData);
+            this.props.requestImport({dossierData});
         });
     }
 

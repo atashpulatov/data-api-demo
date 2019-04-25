@@ -156,8 +156,8 @@ class MstrObjectRestService {
   _getFullPath(dossierData, envUrl, limit, isReport, objectId, instanceId) {
     let path = '';
     if (dossierData) {
-      const {dossierId, instanceId, chapterKey, vizualizationKey} = dossierData;
-      path = `${envUrl}/dossiers/${dossierId}/instances/${instanceId}/chapters/${chapterKey}/visualizations/${vizualizationKey}`;
+      const {dossierId, instanceId, chapterKey, visualizationKey} = dossierData;
+      path = `${envUrl}/dossiers/${dossierId}/instances/${instanceId}/chapters/${chapterKey}/visualizations/${visualizationKey}`;
     } else {
       const objectType = isReport ? 'reports' : 'cubes';
       path = `${envUrl}/${objectType}/${objectId}/instances`;
