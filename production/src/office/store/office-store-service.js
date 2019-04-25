@@ -1,4 +1,5 @@
 import {officeProperties} from '../office-properties';
+import {officeApiHelper} from '../../office/office-api-helper';
 import {RunOutsideOfficeError} from '../../error/run-outside-office-error';
 import {errorService} from '../../error/error-handler';
 
@@ -23,6 +24,23 @@ class OfficeStoreService {
       errorService.handleOfficeError(error);
     }
   }
+
+  renameReport = async (bindId, newName) => {
+    try {
+      const settings = this.getOfficeSettings();
+      const reportProperties = this._getReportProperties();
+      const indexOfReport = reportProperties.findIndex((oldReport) => {
+        return (oldReport.bindId === bindId);
+      });
+      reportProperties[indexOfReport].name = newName;
+      settings.set(officeProperties.loadedReportProperties, reportProperties);
+      await settings.saveAsync();
+      await officeApiHelper.loadExistingReportBindingsExcel();
+    } catch (error) {
+      errorService.handleOfficeError(error);
+    }
+  }
+
 
   deleteReport = (bindingId) => {
     try {
