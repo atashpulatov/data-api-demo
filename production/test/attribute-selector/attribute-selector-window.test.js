@@ -42,7 +42,7 @@ describe('AttributeSelectorWindow', () => {
         .toEqual(parsed.projectId);
   });
 
-  it('should trigger onTriggerUpdate when Import button is clicked and data is returned', async () => {
+  it('should call setState if handleOk is called', () => {
     // given
     const parsed = {
       envUrl: 'url',
@@ -51,114 +51,54 @@ describe('AttributeSelectorWindow', () => {
       reportId: 'repId',
     };
 
-    const componentWrapper = shallow(<AttributeSelectorWindow
-      parsed={parsed} />);
-    componentWrapper.instance().attributesBeingSelected(true);
-
-    const attributeMetricFilterWrapper = componentWrapper.find('AttributeMetricFilter');
-    attributeMetricFilterWrapper.instance().noAttributesSelected = jest.fn(() => false);
-    attributeMetricFilterWrapper.instance().checkIfEmptyData = jest.fn(() => false);
-
-    const spyMethod = jest.spyOn(componentWrapper.instance(), 'onTriggerUpdate');
-
-    const wrappedImportButton = componentWrapper.find('Button #import');
+    const componentWrapper = shallow(<AttributeSelectorWindow parsed={parsed} />);
+    const spyMethod = jest.spyOn(componentWrapper.instance(), 'setState');
 
     // when
-    await wrappedImportButton.simulate('click');
+    componentWrapper.instance().handleOk();
 
     // then
-    expect(spyMethod).toBeCalled();
+    expect(spyMethod).toHaveBeenCalledWith({triggerUpdate: true, loading: true});
   });
 
-  it('should NOT trigger onTriggerUpdate when Import button was clicked and no items are selected', async () => {
+  it('should call attributeSelectorHelpers.officeMessageParent if onTriggerUpdate is called without report name', () => {
     // given
     const parsed = {
       envUrl: 'url',
       token: 'token',
       projectId: 'proId',
       reportId: 'repId',
+      reportName: '55',
     };
 
-    const componentWrapper = shallow(<AttributeSelectorWindow
-      parsed={parsed} />);
-
-    const attributeMetricFilterWrapper = componentWrapper.find('AttributeMetricFilter');
-    attributeMetricFilterWrapper.instance().noDataSelected = jest.fn(() => true);
-
-    const spyMethod = jest.spyOn(componentWrapper.instance(), 'onTriggerUpdate');
-
-    const wrappedImportButton = componentWrapper.find('Button #import');
-
-    // when
-    await wrappedImportButton.simulate('click');
-
-    // then
-    expect(spyMethod).not.toBeCalled();
-    expect(componentWrapper.instance().state.triggerUpdate).toEqual(false);
-  });
-
-  it('should NOT trigger onTriggerUpdate when Import button was clicked and all data is filtered out', async () => {
-    // given
-    const parsed = {
-      envUrl: 'url',
-      token: 'token',
-      projectId: 'proId',
-      reportId: 'repId',
-    };
-
-    const componentWrapper = shallow(<AttributeSelectorWindow
-      parsed={parsed} />);
-
-    const attributeMetricFilterWrapper = componentWrapper.find('AttributeMetricFilter');
-    attributeMetricFilterWrapper.instance().checkIfEmptyData = jest.fn(() => false);
-
-    const spyMethod = jest.spyOn(componentWrapper.instance(), 'onTriggerUpdate');
-
-    const wrappedImportButton = componentWrapper.find('Button #import');
-
-    // when
-    await wrappedImportButton.simulate('click');
-
-    // then
-    expect(spyMethod).not.toBeCalled();
-    expect(componentWrapper.instance().state.triggerUpdate).toEqual(false);
-  });
-
-  it('should trigger office message with proper params' +
-    ' when Import button is clicked and data is returned', async () => {
-    // given
-    const parsed = {
-      envUrl: 'url',
-      token: 'token',
-      projectId: 'proId',
-      reportId: 'repId',
-      reportSubtype: 'subtype',
-      reportName: 'Test name',
-    };
-
-    const componentWrapper = shallow(<AttributeSelectorWindow
-      parsed={parsed} />);
-    componentWrapper.instance().attributesBeingSelected(true);
-
-    const attributeMetricFilterWrapper = componentWrapper.find('AttributeMetricFilter');
-    attributeMetricFilterWrapper.instance().noAttributesSelected = jest.fn(() => false);
-    attributeMetricFilterWrapper.instance().checkIfEmptyData = jest.fn(() => false);
-
+    const componentWrapper = shallow(<AttributeSelectorWindow parsed={parsed} />);
     const spyMethod = jest.spyOn(attributeSelectorHelpers, 'officeMessageParent');
 
-    const wrappedImportButton = componentWrapper.find('Button #import');
-
     // when
-    await wrappedImportButton.simulate('click');
+    componentWrapper.instance().onTriggerUpdate(1, 2, 3, 4);
 
     // then
-    expect(spyMethod).toBeCalled();
-    expect(spyMethod).toBeCalledWith(selectorProperties.commandOnUpdate,
-        parsed.reportId,
-        parsed.projectId,
-        parsed.reportSubtype,
-        {'requestedObjects': {}},
-        parsed.reportName);
+    expect(spyMethod).toHaveBeenCalledWith(selectorProperties.commandOnUpdate, 1, 2, 3, 4, parsed.reportName);
+  });
+
+  it('should call attributeSelectorHelpers.officeMessageParent if onTriggerUpdate is called with report name', () => {
+    // given
+    const parsed = {
+      envUrl: 'url',
+      token: 'token',
+      projectId: 'proId',
+      reportId: 'repId',
+      reportName: '55',
+    };
+
+    const componentWrapper = shallow(<AttributeSelectorWindow parsed={parsed} />);
+    const spyMethod = jest.spyOn(attributeSelectorHelpers, 'officeMessageParent');
+
+    // when
+    componentWrapper.instance().onTriggerUpdate(1, 2, 3, 4, 5);
+
+    // then
+    expect(spyMethod).toHaveBeenCalledWith(selectorProperties.commandOnUpdate, 1, 2, 3, 4, 5);
   });
 
   it('should trigger handleCancel when Cancel was clicked', () => {
