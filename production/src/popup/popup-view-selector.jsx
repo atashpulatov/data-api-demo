@@ -31,6 +31,7 @@ export const _PopupViewSelector = (props) => {
   } else if (popupType === PopupTypeEnum.promptsWindow) {
     return <PromptsWindow parsed={propsToPass} />;
   }
+  // TODO: do some error handling here
   return <></>;
 };
 
