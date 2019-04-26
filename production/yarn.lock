@@ -6790,7 +6790,6 @@ ms@^2.1.1:
 mstr-react-library@1.0.0:
   version "1.0.0"
   resolved "http://nexus.internal.microstrategy.com:8081/repository/npm-private/mstr-react-library/-/mstr-react-library-1.0.0.tgz#6767366d7ee225a64b53c1040fb350a75fe0a5b1"
-  integrity sha512-OP2FTh80J5YK9j9VffC/TDXR4zIpngC9x4odQaBxnL6hXFZWxOw9BRRBaf7M0IC6u15jvunFCzDP6linRgeHyw==
   dependencies:
     antd "^3.13.1"
     react-virtualized "^9.21.0"
