@@ -22,21 +22,22 @@ export const sessionReducer = (state = {}, action) => {
 };
 
 function onLogIn(action, state) {
-  if (!action.envUrl) {
+  const {values} = action;
+  if (!values || !values.envUrl) {
     throw new SessionError('Missing EnvUrl.');
   }
   return {
     ...state,
-    envUrl: action.envUrl,
+    ...values,
   };
 }
 function onLogOut(action, state) {
   if (state.isRememberMeOn) {
     return {
       ...state,
-      authToken: undefined,
-      userFullName: undefined,
-      userInitials: undefined,
+      authToken: false,
+      userFullName: null,
+      userInitials: null,
     };
   }
   return {};

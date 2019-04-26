@@ -1,5 +1,5 @@
 import {selectorProperties} from '../../src/attribute-selector/selector-properties';
-import {popupController, loadPending} from '../../src/popup/popup-controller';
+import {popupController} from '../../src/popup/popup-controller';
 import {officeDisplayService} from '../../src/office/office-display-service';
 import {objectTypes} from 'mstr-react-library';
 import {errorService} from '../../src/error/error-handler';
@@ -34,6 +34,77 @@ describe('PopupController', () => {
     expect(runPopupSpy).toBeCalledWith(popupType, size, size);
   });
 
+  it('should handle ok command from popup for report WITHOUT instance id',
+      async () => {
+      // given
+        officeApiHelper.getExcelSessionStatus = jest.fn();
+        const reportData = {
+          objectId: 'objectId',
+          projectId: 'projectId',
+          isReport: true,
+        };
+        const actionObject = {
+          command: selectorProperties.commandOk,
+          chosenObject: reportData.objectId,
+          chosenProject: reportData.projectId,
+          chosenSubtype: objectTypes.getTypeValues('Report').subtype,
+        };
+        const arg = {
+          message: JSON.stringify(actionObject),
+        };
+        officeApiHelper.getOfficeSessionStatus = jest.fn();
+        const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
+        // when
+        await popupController.onMessageFromPopup(dialog, arg);
+        // then
+        expect(dialog.close).toBeCalled();
+        expect(mockPrint).toBeCalled();
+        expect(mockPrint).toBeCalledWith(
+            undefined,
+            reportData.objectId,
+            reportData.projectId,
+            true,
+        );
+      });
+
+  it('should handle ok command from popup for report with dossier data',
+      async () => {
+      // given
+        officeApiHelper.getExcelSessionStatus = jest.fn();
+        const reportData = {
+          objectId: 'objectId',
+          projectId: 'projectId',
+          isReport: true,
+          dossierData: {
+            instanceId: 'instanceId',
+            whatever: 'whatever',
+          },
+        };
+        const actionObject = {
+          command: selectorProperties.commandOk,
+          chosenObject: reportData.objectId,
+          chosenProject: reportData.projectId,
+          dossierData: reportData.dossierData,
+          chosenSubtype: objectTypes.getTypeValues('Report').subtype,
+        };
+        const arg = {
+          message: JSON.stringify(actionObject),
+        };
+        officeApiHelper.getOfficeSessionStatus = jest.fn();
+        const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
+        // when
+        await popupController.onMessageFromPopup(dialog, arg);
+        // then
+        expect(dialog.close).toBeCalled();
+        expect(mockPrint).toBeCalled();
+        expect(mockPrint).toBeCalledWith(
+            reportData.dossierData,
+            reportData.objectId,
+            reportData.projectId,
+            true,
+        );
+      });
+
   it('should handle update command from popup for cube',
       async () => {
       // given
@@ -56,14 +127,47 @@ describe('PopupController', () => {
         // then
         expect(dialog.close).toBeCalled();
         expect(mockPrint).toBeCalled();
-        expect(mockPrint).toBeCalledWith(actionObject.reportId,
+        expect(mockPrint).toBeCalledWith(
+            undefined,
+            actionObject.reportId,
             actionObject.projectId,
             false,
             null, null, null,
             actionObject.body);
       });
 
-  it('should handle update command from popup for report',
+  it('should handle update command from popup for report WITHOUT instance id',
+      async () => {
+      // given
+        officeApiHelper.getExcelSessionStatus = jest.fn();
+        const actionObject = {
+          reportName: 'name',
+          command: selectorProperties.commandOnUpdate,
+          reportId: 'reportId',
+          projectId: 'projectId',
+          reportSubtype: objectTypes.getTypeValues('Report').subtype,
+          body: {},
+        };
+        const arg = {
+          message: JSON.stringify(actionObject),
+        };
+        officeApiHelper.getOfficeSessionStatus = jest.fn();
+        const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
+        // when
+        await popupController.onMessageFromPopup(dialog, arg);
+        // then
+        expect(dialog.close).toBeCalled();
+        expect(mockPrint).toBeCalled();
+        expect(mockPrint).toBeCalledWith(
+            undefined,
+            actionObject.reportId,
+            actionObject.projectId,
+            true,
+            null, null, null,
+            actionObject.body);
+      });
+
+  it('should handle update command from popup for report with dossier data',
       async () => {
       // given
         officeApiHelper.getExcelSessionStatus = jest.fn();
@@ -71,6 +175,10 @@ describe('PopupController', () => {
           command: selectorProperties.commandOnUpdate,
           reportId: 'reportId',
           projectId: 'projectId',
+          dossierData: {
+            instanceId: 'instanceId',
+            whatever: 'whatever',
+          },
           reportSubtype: objectTypes.getTypeValues('Report').subtype,
           body: {},
           reportName: 'testName',
@@ -85,7 +193,9 @@ describe('PopupController', () => {
         // then
         expect(dialog.close).toBeCalled();
         expect(mockPrint).toBeCalled();
-        expect(mockPrint).toBeCalledWith(actionObject.reportId,
+        expect(mockPrint).toBeCalledWith(
+            actionObject.dossierData,
+            actionObject.reportId,
             actionObject.projectId,
             true,
             null, null, null,

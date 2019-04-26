@@ -72,7 +72,7 @@ describe('sessionHelper', () => {
     sessionHelper.saveLoginValues(givenValues);
 
     // then
-    expect(dispatchSpy).toHaveBeenCalledWith({type: sessionProperties.actions.logIn, envUrl: givenValues.envUrl});
+    expect(dispatchSpy).toHaveBeenCalledWith({type: sessionProperties.actions.logIn, values: {envUrl: givenValues.envUrl}});
   });
 });
 

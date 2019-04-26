@@ -28,11 +28,11 @@ class PopupController {
       return;
     }
     let url = URL;
-    if (IS_LOCALHOST) {
-      url = `${window.location.origin}/popup.html`;
-    } else {
+    //if (IS_LOCALHOST) {
+      //url = `${window.location.origin}/popup.html`;
+    //} else {
       url = url.replace('index.html', 'popup.html');
-    }
+    //}
     const splittedUrl = url.split('?'); // we need to get rid of any query params
     try {
       await officeApiHelper.getExcelSessionStatus();
@@ -87,7 +87,7 @@ class PopupController {
           break;
       }
     } catch (error) {
-      console.error(error.message);
+      console.error(error);
       errorService.handleOfficeError(error);
     } finally {
       reduxStore.dispatch({type: officeProperties.actions.popupHidden});
@@ -102,7 +102,7 @@ class PopupController {
       && response.body
       && response.reportName) {
       reduxStore.dispatch({type: START_REPORT_LOADING, data: response.reportName});
-      const result = await officeDisplayService.printObject(response.reportId, response.projectId, objectTypes.getTypeDescription(3, response.reportSubtype) === 'Report', null, null, null, response.body);
+      const result = await officeDisplayService.printObject(response.dossierData, response.reportId, response.projectId, objectTypes.getTypeDescription(3, response.reportSubtype) === 'Report', null, null, null, response.body);
       if (result) {
         notificationService.displayNotification(result.type, result.message);
       }
@@ -114,7 +114,7 @@ class PopupController {
     if (response.chosenObject) {
       reduxStore.dispatch({type: officeProperties.actions.startLoading});
       reduxStore.dispatch({type: START_REPORT_LOADING, data: response.reportName});
-      const result = await officeDisplayService.printObject(response.chosenObject, response.chosenProject, objectTypes.getTypeDescription(3, response.chosenSubtype) === 'Report');
+      const result = await officeDisplayService.printObject(response.dossierData, response.chosenObject, response.chosenProject, objectTypes.getTypeDescription(3, response.chosenSubtype) === 'Report');
       if (result) {
         notificationService.displayNotification(result.type, result.message);
       }

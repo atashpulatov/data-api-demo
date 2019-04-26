@@ -71,12 +71,31 @@ class MstrObjectRestService {
           if (res.status === 200 && res.body.status === 2) {
             throw (res);
           }
-          const {total} = res.body.result.data.paging;
-          const {instanceId} = res.body;
-          const mstrTable = officeConverterService.createTable(res.body);
-          const {rows, columns} = this._checkTableDimensions(total, mstrTable.headers.length);
-          return {instanceId, rows, columns, mstrTable};
+          return this._parseInstanceDefinition(res);
         });
+  }
+
+  async _getDossierInstanceDefinition(fullPath, authToken, projectId, body) {
+    return await moduleProxy.request
+        .get(fullPath)
+        .set('x-mstr-authtoken', authToken)
+        .set('x-mstr-projectid', projectId)
+        .send(body)
+        .withCredentials()
+        .then((res) => {
+          if (res.status === 200 && res.body.status === 2) {
+            throw (res);
+          }
+          return this._parseInstanceDefinition(res);
+        });
+  }
+
+  _parseInstanceDefinition(res) {
+    const {total} = res.body.result.data.paging;
+    const {instanceId} = res.body;
+    const mstrTable = officeConverterService.createTable(res.body);
+    const {rows, columns} = this._checkTableDimensions(total, mstrTable.headers.length);
+    return {instanceId, rows, columns, mstrTable};
   }
 
   async getObjectInfo(objectId, projectId, isReport = true) {
@@ -99,22 +118,26 @@ class MstrObjectRestService {
         });
   };
 
-  async getInstanceDefinition(objectId, projectId, isReport = true, body = {}, limit = 1) {
-    const storeState = reduxStore.getState();
-    const envUrl = storeState.sessionReducer.envUrl;
-    const authToken = storeState.sessionReducer.authToken;
-    const objectType = isReport ? 'reports' : 'cubes';
-    const fullPath = `${envUrl}/${objectType}/${objectId}/instances?limit=${limit}`;
-
+  async getInstanceDefinition(objectId, projectId, isReport = true, dossierData, body = {}, limit = 1) {
     try {
+      const storeState = reduxStore.getState();
+      const envUrl = storeState.sessionReducer.envUrl;
+      const authToken = storeState.sessionReducer.authToken;
+      const fullPath = this._getFullPath(dossierData, envUrl, limit, isReport, objectId);
+      if (dossierData) {
+        const instanceDefinition = await this._getDossierInstanceDefinition(fullPath, authToken, projectId, body);
+        instanceDefinition.mstrTable.id = objectId;
+        instanceDefinition.mstrTable.name = dossierData.reportName;
+        return instanceDefinition;
+      }
       return await this._getInstanceDefinition(fullPath, authToken, projectId, body);
     } catch (error) {
-      throw errorService.errorRestFactory(error);
+      throw error instanceof OutsideOfRangeError ? error : errorService.errorRestFactory(error);
     }
   }
 
-  getObjectContentGenerator(instanceDefinition, objectId, projectId, isReport, body, limit = DATA_LIMIT) {
-    return fetchContentGenerator(instanceDefinition, objectId, projectId, isReport, body, limit);
+  getObjectContentGenerator(instanceDefinition, objectId, projectId, isReport, dossierData, body, limit = DATA_LIMIT) {
+    return fetchContentGenerator(instanceDefinition, objectId, projectId, isReport, dossierData, body, limit);
   }
 
   _fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = -1) {
@@ -131,9 +154,42 @@ class MstrObjectRestService {
     }
     return {rows, columns};
   }
+
+  _getFullPath(dossierData, envUrl, limit, isReport, objectId, instanceId) {
+    let path;
+    if (dossierData) {
+      const {dossierId, instanceId, chapterKey, visualizationKey} = dossierData;
+      path = `${envUrl}/dossiers/${dossierId}/instances/${instanceId}/chapters/${chapterKey}/visualizations/${visualizationKey}`;
+    } else {
+      const objectType = isReport ? 'reports' : 'cubes';
+      path = `${envUrl}/${objectType}/${objectId}/instances`;
+      path += instanceId ? `/${instanceId}` : '';
+    }
+    path += limit ? `?limit=${limit}` : '';
+    console.log(path);
+    return path;
+  }
+
+  async isPrompted(objectId, projectId) {
+    const storeState = reduxStore.getState();
+    const envUrl = storeState.sessionReducer.envUrl;
+    const authToken = storeState.sessionReducer.authToken;
+    const fullPath = `${envUrl}/reports/${objectId}/prompts`;
+    return await moduleProxy.request
+        .get(fullPath)
+        .set('x-mstr-authtoken', authToken)
+        .set('X-MSTR-ProjectID', projectId)
+        .withCredentials()
+        .then((res) => {
+          return res.body && res.body.length;
+        })
+        .catch((err) => {
+          throw errorService.errorRestFactory(err);
+        });
+  };
 };
 
-async function* fetchContentGenerator(instanceDefinition, objectId, projectId, isReport, body, limit) {
+async function* fetchContentGenerator(instanceDefinition, objectId, projectId, isReport, dossierData, body, limit) {
   try {
     const totalRows = instanceDefinition.rows;
     const {instanceId, mstrTable} = instanceDefinition;
@@ -141,8 +197,7 @@ async function* fetchContentGenerator(instanceDefinition, objectId, projectId, i
     const storeState = reduxStore.getState();
     const envUrl = storeState.sessionReducer.envUrl;
     const authToken = storeState.sessionReducer.authToken;
-    const objectType = isReport ? 'reports' : 'cubes';
-    const fullPath = `${envUrl}/${objectType}/${objectId}/instances/${instanceId}`;
+    const fullPath = mstrObjectRestService._getFullPath(dossierData, envUrl, false, isReport, objectId, instanceId);
     let fetchedRows = 0;
     let offset = 0;
 

@@ -5,6 +5,7 @@ import {MSTRIcon} from 'mstr-react-library';
 import {fileHistoryHelper} from './file-history-helper';
 import loadingSpinner from './assets/report_loading_spinner.gif';
 import {refreshReport} from '../popup/popup-actions';
+import RenameInput from './file-history-rename-input';
 
 export class _OfficeLoadedFile extends React.Component {
   constructor() {
@@ -57,10 +58,10 @@ export class _OfficeLoadedFile extends React.Component {
           {objectType === 'report' ? <MSTRIcon type='report' /> : <MSTRIcon type='dataset' />}
         </Col>
         <Col span={14} title={`${fileName}`} className="report-title">
-          {fileName}
+          <RenameInput bindingId={bindingId} fileName={fileName} />
         </Col>
         <Col span={1} offset={2}>
-          <span className="loading-button-container"
+          <span className="loading-button-container" title="Refresh Data"
             onClick={(e) => this.state.allowRefreshClick && this.refreshAction(e)}>
             {!isLoading ? <MSTRIcon type='refresh' /> :
               <img width='12px' height='12px' src={loadingSpinner} alt='Report loading icon' />}
@@ -68,6 +69,7 @@ export class _OfficeLoadedFile extends React.Component {
         </Col>
         <Col span={1} offset={1}>
           <span
+            title="Remove Data from Workbook"
             onClick={(e) => this.state.allowDeleteClick && this.deleteAction(e)}>
             <MSTRIcon type='trash' />
           </span>

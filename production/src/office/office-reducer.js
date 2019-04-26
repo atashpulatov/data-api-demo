@@ -85,7 +85,7 @@ function onLoadAllReports(action, state) {
   });
   return {
     ...state,
-    reportArray: action.reportArray,
+    reportArray: [...action.reportArray],
   };
 }
 

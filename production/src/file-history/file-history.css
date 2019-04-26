@@ -95,3 +95,53 @@ span.file-icons {
 .loading-button-container>img {
     vertical-align: baseline;
 }
+
+.ant-input.rename-input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    -o-appearance: none;
+    appearance: none;
+    height: 18px;
+    padding: 1px;
+    line-height: 1;
+    border: none;
+    outline: none;
+}
+
+.ant-input.rename-input:disabled {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    -o-appearance: none;
+    appearance: none;
+    color: rgba(0, 0, 0, 0.65);
+    border: none;
+    background-color: #fff;
+    text-overflow: ellipsis;
+    cursor: default;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.ant-input.rename-input:focus,
+.ant-input.rename-input:hover {
+    box-shadow: none;
+}
+
+.ant-input.rename-input[disabled]:hover {
+    background-color: #EBEBEB;
+}
+
+.ant-dropdown .ant-dropdown-menu-item {
+    width: 156px;
+    padding: 4px 22px;
+    line-height: 20px;
+}
+
+.ant-dropdown .ant-dropdown-menu-item:hover {
+    background-color: #e9eaea;
+}

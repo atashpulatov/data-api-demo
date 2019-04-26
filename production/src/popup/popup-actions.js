@@ -48,7 +48,6 @@ export function refreshAll(reportArray) {
 }
 
 export function refreshReport(bindingId, objectType, refreshAll = false, index) {
-  const refresh = refreshAll ? officeDisplayService._printObject : officeDisplayService.printObject;
   return async (dispatch) => {
     try {
       await authenticationHelper.validateAuthToken();
@@ -67,7 +66,9 @@ export function refreshReport(bindingId, objectType, refreshAll = false, index) 
         localStorage.setItem('currentName', refreshReport.name);
         localStorage.setItem('currentNumber', index + 1);
       }
-      await refresh(refreshReport.id, refreshReport.projectId, isReport, true, refreshReport.tableId, bindingId, refreshReport.body, true);
+      const instanceId = null;
+      // TODO: Pass refreshAll and skip opening dialog
+      await officeDisplayService.printObject(instanceId, refreshReport.id, refreshReport.projectId, isReport, true, refreshReport.tableId, bindingId, refreshReport.body, true);
       if (!!refreshAll) {
         const fromStorage = JSON.parse(localStorage.getItem('results'));
         fromStorage[index].result = 'ok';

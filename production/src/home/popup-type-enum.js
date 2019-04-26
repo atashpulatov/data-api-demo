@@ -7,4 +7,5 @@ export const PopupTypeEnum = new Proxy({
   navigationTree: 'navigation-tree',
   loadingPage: 'loading-page',
   refreshAllPage: 'refresh-all-page',
+  promptsWindow: 'prompts-window',
 }, propsProxy);

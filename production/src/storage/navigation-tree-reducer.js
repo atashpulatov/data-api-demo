@@ -1,4 +1,5 @@
-import {SELECT_FOLDER, SELECT_OBJECT, SET_DATA_SOURCE, START_IMPORT, CHANGE_SORTING, CHANGE_SEARCHING, UPDATE_SCROLL, UPDATE_SIZE} from '../navigation/navigation-tree-actions';
+import {SELECT_FOLDER, SELECT_OBJECT, SET_DATA_SOURCE, START_IMPORT, CHANGE_SORTING, CHANGE_SEARCHING, UPDATE_SCROLL,
+  UPDATE_SIZE, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT} from '../navigation/navigation-tree-actions';
 import {CLEAR_WINDOW} from '../popup/popup-actions';
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
@@ -25,6 +26,7 @@ export const initialState = {
   chosenSubtype: null,
   chosenProjectName: DEFAULT_PROJECT_NAME,
   chosenType: DEFAULT_TYPE,
+  isPrompted: false,
   dataSource: null,
   loading: false,
   scrollPosition: null,
@@ -34,6 +36,8 @@ export const initialState = {
     order: 'descend',
   },
   searchText: '',
+  importRequested: false,
+  dossierData: null,
 };
 
 function getProjectName(projects, projectId, objectId) {
@@ -59,6 +63,7 @@ export const navigationTree = (state = initialState, action) => {
       newState.chosenSubtype = data.chosenSubtype || null;
       newState.chosenProjectName = getProjectName(state.dataSource, data.chosenProjectId, data.chosenObjectId);
       newState.chosenType = getType(data.chosenSubtype);
+      newState.isPrompted = !!data.isPrompted;
       return newState;
     }
     case UPDATE_SCROLL: {
@@ -99,8 +104,22 @@ export const navigationTree = (state = initialState, action) => {
     case CLEAR_WINDOW: {
       return {...initialState};
     }
+    case REQUEST_IMPORT: {
+      const newState = {...state};
+      newState.importRequested = true;
+      if (data) {
+        newState.dossierData = data.dossierData;
+      }
+      return newState;
+    }
+    case CANCEL_REQUEST_IMPORT: {
+      const newState = {...state};
+      newState.importRequested = false;
+      return newState;
+    }
     case START_IMPORT: {
       const newState = {...state};
+      newState.importRequested = false;
       newState.loading = true;
       return newState;
     }

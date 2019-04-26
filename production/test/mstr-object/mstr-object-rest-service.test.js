@@ -19,8 +19,11 @@ const loginType = 1;
 const envURL = 'https://env-125323.customer.cloud.microstrategy.com/MicroStrategyLibrary/api';
 const projectId = 'B7CA92F04B9FAE8D941C3E9B7E0CD754';
 const projectName = 'Microstrategy Tutorial';
+const instanceId = '';
+const isReport = false;
 const folderId = 'D64C532E4E7FBA74D29A7CA3576F39CF';
 const objectId = 'C536EA7A11E903741E640080EF55BFE2';
+const dossierData = {dossierId: 'dossierId', instanceId: 'iId', chapterKey: 'ckey', visualizationKey: 'vkey'};
 const mockInstanceDefinition = {rows: 50, instanceId: 'ABC', mstrTable: {headers: []}};
 
 describe('MstrObjectRestService', () => {
@@ -192,9 +195,11 @@ describe('MstrObjectRestService', () => {
     beforeEach(() => {
       reduxStore.dispatch({
         type: sessionProperties.actions.logIn,
-        username: correctLogin,
-        envUrl: envURL,
-        isRememberMeOn: false,
+        values: {
+          username: correctLogin,
+          envUrl: envURL,
+          isRememberMeOn: false,
+        },
       });
       reduxStore.dispatch({
         type: sessionProperties.actions.loggedIn,
@@ -211,13 +216,36 @@ describe('MstrObjectRestService', () => {
       const expectedReportName = 'TEST REPORT 1';
       const expectedReportRows = 51;
       const expectedReportCols = 4;
+      const dossierData = null;
+      const isReport = true;
       // when
       const result = await mstrObjectRestService.getInstanceDefinition(
           objectId,
           projectId,
+          isReport,
+          dossierData
       );
       // then
       expect(result.instanceId).toBeDefined();
+      expect(result.rows).toEqual(expectedReportRows);
+      expect(result.columns).toEqual(expectedReportCols);
+      expect(result.mstrTable.name).toEqual(expectedReportName);
+    });
+    it.skip('should return existing definition of dossier', async () => {
+      // TODO: Create dossier for testing and update dossierData object
+      // given
+      const expectedReportName = 'TEST REPORT 1';
+      const expectedReportRows = 51;
+      const expectedReportCols = 4;
+      // when
+      const result = await mstrObjectRestService.getInstanceDefinition(
+          objectId,
+          projectId,
+          isReport,
+          dossierData
+      );
+      // then
+      expect(result.instanceId).toEqual(instanceId);
       expect(result.rows).toEqual(expectedReportRows);
       expect(result.columns).toEqual(expectedReportCols);
       expect(result.mstrTable.name).toEqual(expectedReportName);
@@ -233,7 +261,9 @@ describe('MstrObjectRestService', () => {
       // when
       const result = mstrObjectRestService.getInstanceDefinition(
           objectId,
-          projectId
+          projectId,
+          isReport,
+          dossierData
       );
       // then
       try {
@@ -250,7 +280,28 @@ describe('MstrObjectRestService', () => {
       // when
       const result = mstrObjectRestService.getInstanceDefinition(
           incorrectObjectId,
-          projectId
+          projectId,
+          isReport,
+          dossierData
+      );
+      // then
+      try {
+        await result;
+      } catch (error) {
+        expect(error).toBeInstanceOf(BadRequestError);
+      }
+      expect(result).rejects.toThrow();
+    });
+
+    it('should throw error due to incorrect instanceId', async () => {
+      // given
+      const incorrectDossierData = 'abc123';
+      // when
+      const result = mstrObjectRestService.getInstanceDefinition(
+          objectId,
+          projectId,
+          isReport,
+          incorrectDossierData,
       );
       // then
       try {
@@ -267,7 +318,9 @@ describe('MstrObjectRestService', () => {
       // when
       const result = mstrObjectRestService.getInstanceDefinition(
           objectId,
-          wrongProjectId
+          wrongProjectId,
+          isReport,
+          dossierData,
       );
       // then
       try {
@@ -282,9 +335,11 @@ describe('MstrObjectRestService', () => {
     beforeEach(async () => {
       reduxStore.dispatch({
         type: sessionProperties.actions.logIn,
-        username: correctLogin,
-        envUrl: envURL,
-        isRememberMeOn: false,
+        values: {
+          username: correctLogin,
+          envUrl: envURL,
+          isRememberMeOn: false,
+        },
       });
       reduxStore.dispatch({
         type: sessionProperties.actions.loggedIn,
