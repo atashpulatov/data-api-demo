@@ -35,10 +35,6 @@ export class _NavigationTree extends Component {
     Office.context.ui.messageParent(JSON.stringify(updateObject));
   };
 
-  handleOk = () => {
-    this.props.requestImport();
-  };
-
   handleSecondary = () => {
     this.props.handlePrepare(this.props.chosenProjectId, this.props.chosenObjectId,
         this.props.chosenSubtype, this.props.chosenProjectName, this.props.chosenType);
@@ -74,7 +70,7 @@ export class _NavigationTree extends Component {
   render() {
     const {setDataSource, dataSource, chosenObjectId, chosenProjectId, pageSize, changeSearching, changeSorting,
       chosenSubtype, folder, selectFolder, loading, handlePopupErrors, scrollPosition, searchText, sorter,
-      updateScroll, updateSize} = this.props;
+      updateScroll, updateSize, requestImport} = this.props;
     return (
       <FolderBrowser
         onSorterChange={changeSorting}
@@ -117,7 +113,7 @@ export class _NavigationTree extends Component {
         <PopupButtons
           loading={loading}
           disableActiveActions={!chosenObjectId}
-          handleOk={this.handleOk}
+          handleOk={requestImport}
           handleSecondary={this.handleSecondary}
           handleCancel={this.handleCancel}
           previewDisplay={this.state.previewDisplay}
