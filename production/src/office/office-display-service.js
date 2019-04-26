@@ -21,7 +21,7 @@ class OfficeDisplayService {
       popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
     }
     const result = await this._printObject(objectId, projectId, isReport, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body);
-    this._dispatchPrintFinish();
+    !isRefreshAll && this._dispatchPrintFinish();
     return result;
   }
 
