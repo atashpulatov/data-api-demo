@@ -6,7 +6,6 @@
 .results-container {
     overflow: auto;
     padding-top: 10px;
-    padding-bottom: 40px;
     max-height: 200px;
 }
 

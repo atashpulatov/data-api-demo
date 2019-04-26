@@ -95,7 +95,6 @@ export class _RefreshAllPage extends Component {
   }
 
   render() {
-    console.log('results in render', this.state.results[0].key);
     const displayName = this.state.name || 'data';
     return (<dialog className='refreshing-page' style={dialogStyle}>
       <div className="refresh-title">Refresh All Data</div>
