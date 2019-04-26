@@ -4,8 +4,29 @@ import {Office} from '../mockOffice';
 import {selectorProperties} from '../../src/attribute-selector/selector-properties';
 import {_PopupViewSelector} from '../../src/popup/popup-view-selector';
 import {PromptsWindow} from '../../src/prompts/prompts-window';
+import {PopupTypeEnum} from '../../src/home/popup-type-enum';
+import {NavigationTree} from '../../src/navigation/navigation-tree';
 
 describe('PopupViewSelector', () => {
+  it('should render navigation tree when requested', () => {
+    // // given
+    const location = {
+      search: {},
+    };
+    const props = {
+      popupType: PopupTypeEnum.navigationTree,
+    };
+    // when
+    // eslint-disable-next-line react/jsx-pascal-case
+    const componentWrapper = shallow(<_PopupViewSelector
+      location={location}
+      {...props}
+      methods={{}}
+    />);
+    // then
+    expect(componentWrapper.find(NavigationTree).get(0)).toBeDefined();
+  });
+
   it('should handle request import when not prompted', () => {
     // given
     const location = {
