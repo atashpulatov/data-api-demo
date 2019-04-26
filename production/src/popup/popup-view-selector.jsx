@@ -35,18 +35,19 @@ export const _PopupViewSelector = (props) => {
 };
 
 function proceedToImport(props) {
-  const dossierData = {
-    ...props.dossierData,
-    reportName: props.chosenProjectName,
-  };
   const okObject = {
     command: selectorProperties.commandOk,
     chosenObject: props.chosenObjectId,
     chosenProject: props.chosenProjectId,
     chosenSubtype: props.chosenSubtype,
     isPrompted: props.isPrompted,
-    dossierData,
   };
+  if (!!props.dossierData) {
+    okObject.dossierData = {
+      ...props.dossierData,
+      reportName: props.chosenProjectName,
+    };
+  }
   props.startLoading();
   props.startImport();
   Office.context.ui.messageParent(JSON.stringify(okObject));
