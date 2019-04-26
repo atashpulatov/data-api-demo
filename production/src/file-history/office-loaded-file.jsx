@@ -61,7 +61,7 @@ export class _OfficeLoadedFile extends React.Component {
           <RenameInput bindingId={bindingId} fileName={fileName} />
         </Col>
         <Col span={1} offset={2}>
-          <span className="loading-button-container"
+          <span className="loading-button-container" title="Refresh Data"
             onClick={(e) => this.state.allowRefreshClick && this.refreshAction(e)}>
             {!isLoading ? <MSTRIcon type='refresh' /> :
               <img width='12px' height='12px' src={loadingSpinner} alt='Report loading icon' />}
@@ -69,6 +69,7 @@ export class _OfficeLoadedFile extends React.Component {
         </Col>
         <Col span={1} offset={1}>
           <span
+            title="Remove Data from Workbook"
             onClick={(e) => this.state.allowDeleteClick && this.deleteAction(e)}>
             <MSTRIcon type='trash' />
           </span>
