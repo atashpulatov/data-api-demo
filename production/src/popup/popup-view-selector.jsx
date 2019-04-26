@@ -7,6 +7,7 @@ import {NavigationTree} from '../navigation/navigation-tree';
 import {LoadingPage} from '../loading/loading-page';
 import {selectorProperties} from '../attribute-selector/selector-properties';
 import {PromptsWindow} from '../prompts/prompts-window';
+import {RefreshAllPage} from '../loading/refresh-all-page';
 
 export const _PopupViewSelector = (props) => {
   let popupType = props.popupType;
@@ -28,6 +29,8 @@ export const _PopupViewSelector = (props) => {
     return <NavigationTree handlePrepare={methods.handlePrepare} parsed={propsToPass} handlePopupErrors={methods.handlePopupErrors} />;
   } else if (popupType === PopupTypeEnum.loadingPage) {
     return <LoadingPage />;
+  } else if (popupType === PopupTypeEnum.refreshAllPage) {
+    return <RefreshAllPage />;
   } else if (popupType === PopupTypeEnum.promptsWindow) {
     return <PromptsWindow parsed={propsToPass} />;
   }
