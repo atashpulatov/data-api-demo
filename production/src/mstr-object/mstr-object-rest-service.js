@@ -129,9 +129,8 @@ class MstrObjectRestService {
         instanceDefinition.mstrTable.id = objectId;
         instanceDefinition.mstrTable.name = dossierData.reportName;
         return instanceDefinition;
-      } else {
-        return await this._getInstanceDefinition(fullPath, authToken, projectId, body);
       }
+      return await this._getInstanceDefinition(fullPath, authToken, projectId, body);
     } catch (error) {
       throw error instanceof OutsideOfRangeError ? error : errorService.errorRestFactory(error);
     }
@@ -157,7 +156,7 @@ class MstrObjectRestService {
   }
 
   _getFullPath(dossierData, envUrl, limit, isReport, objectId, instanceId) {
-    let path = '';
+    let path;
     if (dossierData) {
       const {dossierId, instanceId, chapterKey, visualizationKey} = dossierData;
       path = `${envUrl}/dossiers/${dossierId}/instances/${instanceId}/chapters/${chapterKey}/visualizations/${visualizationKey}`;
