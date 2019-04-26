@@ -68,8 +68,8 @@ export function refreshReport(bindingId, objectType, isRefreshAll = false, index
         localStorage.setItem('currentNumber', index + 1);
       }
       const instanceId = null;
-      // TODO: Pass refreshAll and skip opening dialog
-      await officeDisplayService.printObject(instanceId, refreshReport.id, refreshReport.projectId, isReport, true, refreshReport.tableId, bindingId, refreshReport.body, true, isRefreshAll);
+      // TODO: Pass proper isPrompted value
+      await officeDisplayService.printObject(instanceId, refreshReport.id, refreshReport.projectId, isReport, true, refreshReport.tableId, bindingId, refreshReport.body, true, false, isRefreshAll);
       if (isRefreshAll) {
         const fromStorage = JSON.parse(localStorage.getItem('results'));
         fromStorage[index].result = 'ok';
