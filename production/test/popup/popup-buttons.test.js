@@ -1,6 +1,6 @@
 import React from 'react';
 import {shallow} from 'enzyme';
-import {PopupButtons} from '../../src/popup/popup-buttons';
+import {_PopupButtons} from '../../src/popup/popup-buttons';
 
 describe('PopupButtons', () => {
   it('should NOT display prepare data when secondary action NOT provided',
@@ -8,7 +8,7 @@ describe('PopupButtons', () => {
         // given
         const secondaryAction = jest.fn();
         // when
-        const buttonsWrapped = shallow(<PopupButtons />);
+        const buttonsWrapped = shallow(<_PopupButtons />);
         // then
         expect(buttonsWrapped.exists('#prepare')).not.toBeTruthy();
       });
@@ -17,7 +17,7 @@ describe('PopupButtons', () => {
     // given
     const secondaryAction = jest.fn();
     // when
-    const buttonsWrapped = shallow(<PopupButtons
+    const buttonsWrapped = shallow(<_PopupButtons
       handleSecondary={secondaryAction} />);
     // thenfix
     expect(buttonsWrapped.exists('#prepare')).toBeTruthy();
@@ -27,7 +27,7 @@ describe('PopupButtons', () => {
     // given
     const handleBack = jest.fn();
     // when
-    const buttonsWrapped = shallow(<PopupButtons
+    const buttonsWrapped = shallow(<_PopupButtons
       handleBack={handleBack} />);
     // thenfix
     expect(buttonsWrapped.exists('#back')).toBeTruthy();
@@ -37,7 +37,7 @@ describe('PopupButtons', () => {
     // given
     const handleBack = jest.fn();
     // when
-    const buttonsWrapped = shallow(<PopupButtons />);
+    const buttonsWrapped = shallow(<_PopupButtons />);
     // thenfix
     expect(buttonsWrapped.exists('#backCancel')).toBeFalsy();
   });
@@ -45,7 +45,7 @@ describe('PopupButtons', () => {
   it('should call secondary action when prepare data clicked', () => {
     // given
     const secondaryAction = jest.fn();
-    const buttonsWrapped = shallow(<PopupButtons
+    const buttonsWrapped = shallow(<_PopupButtons
       handleSecondary={secondaryAction} />);
     const secondaryButton = buttonsWrapped.find('#prepare');
     // when

@@ -1,5 +1,7 @@
-import {SELECT_FOLDER, SELECT_OBJECT, SET_DATA_SOURCE, START_IMPORT, UPDATE_SCROLL, UPDATE_SIZE,
-  CHANGE_SEARCHING, CHANGE_SORTING} from '../../src/navigation/navigation-tree-actions';
+import {
+  SELECT_FOLDER, SELECT_OBJECT, SET_DATA_SOURCE, START_IMPORT, UPDATE_SCROLL, UPDATE_SIZE,
+  CHANGE_SEARCHING, CHANGE_SORTING, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT
+} from '../../src/navigation/navigation-tree-actions';
 import {navigationTree, initialState, DEFAULT_TYPE, DEFAULT_PROJECT_NAME} from '../../src/storage/navigation-tree-reducer';
 import {CLEAR_WINDOW} from '../../src/popup/popup-actions';
 
@@ -14,6 +16,7 @@ describe('NavigationTree Reducer', () => {
         chosenSubtype: '3',
         chosenProjectName: 'Prepare Data',
         chosenType: 'Data',
+        isPrompted: false,
       },
     };
 
@@ -70,6 +73,7 @@ describe('NavigationTree Reducer', () => {
         chosenObjectId: '1',
         chosenProjectId: '2',
         chosenSubtype: 768,
+        isPrompted: true,
       },
     };
 
@@ -78,6 +82,7 @@ describe('NavigationTree Reducer', () => {
 
     // then
     expect(newState.chosenType).toEqual('Report');
+    expect(newState.isPrompted).toBe(true);
   });
 
   it('should return new proper state in case of SELECT_OBJECT action without proper data', () => {
@@ -97,6 +102,7 @@ describe('NavigationTree Reducer', () => {
       chosenSubtype: null,
       chosenProjectName: 'Prepare Data',
       chosenType: 'Data',
+      isPrompted: false,
     });
   });
 
@@ -150,6 +156,55 @@ describe('NavigationTree Reducer', () => {
     expect(newState.dataSource).toEqual(action.data);
   });
 
+  it('should set request import flag within state on REQUEST_IMPORT action', () => {
+    // given
+    const action = {
+      type: REQUEST_IMPORT,
+      data: {},
+    };
+
+    // when
+    const newState = navigationTree({}, action);
+
+    // then
+    expect(newState.importRequested).toBe(true);
+  });
+
+  // TODO: once we have workflow with report instance id this may be needed
+  it.skip('should set request import flag and instance on REQUEST_IMPORT action', () => {
+    // given
+    const action = {
+      type: REQUEST_IMPORT,
+      data: {
+        instanceId: 'instance',
+      },
+    };
+
+    // when
+    const newState = navigationTree({}, action);
+
+    // then
+    expect(newState.importRequested).toBe(true);
+    expect(newState.instanceId).toBe(action.data.instanceId);
+  });
+
+  it('should set request import flag and dossier data on REQUEST_IMPORT action', () => {
+    // given
+    const action = {
+      type: REQUEST_IMPORT,
+      data: {
+        dossierData: 'whatever',
+      },
+    };
+
+    // when
+    const newState = navigationTree({}, action);
+
+    // then
+    expect(newState.importRequested).toBe(true);
+    expect(newState.dossierData).toBe(action.data.dossierData);
+  });
+
   it('should return new proper state in case of START_IMPORT action', () => {
     // given
     const action = {
@@ -161,6 +216,7 @@ describe('NavigationTree Reducer', () => {
 
     // then
     expect(newState.loading).toBeTruthy();
+    expect(newState.importRequested).toBe(false);
   });
 
   it('should return new proper state in case of CLEAR_WINDOW action', () => {
@@ -174,6 +230,19 @@ describe('NavigationTree Reducer', () => {
 
     // then
     expect(newState).toEqual(initialState);
+  });
+
+  it('should return new proper state in case of CANCEL_REQUEST_IMPORT action', () => {
+    // given
+    const action = {
+      type: CANCEL_REQUEST_IMPORT,
+    };
+
+    // when
+    const newState = navigationTree({importRequested: true}, action);
+
+    // then
+    expect(newState.importRequested).toBeFalsy();
   });
 
   it('should return new proper state in case of CHANGE_SORTING action', () => {

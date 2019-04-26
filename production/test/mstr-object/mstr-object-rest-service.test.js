@@ -20,8 +20,10 @@ const envURL = 'https://env-125323.customer.cloud.microstrategy.com/MicroStrateg
 const projectId = 'B7CA92F04B9FAE8D941C3E9B7E0CD754';
 const projectName = 'Microstrategy Tutorial';
 const instanceId = '';
+const isReport = false;
 const folderId = 'D64C532E4E7FBA74D29A7CA3576F39CF';
 const objectId = 'C536EA7A11E903741E640080EF55BFE2';
+const dossierData = {dossierId: 'dossierId', instanceId: 'iId', chapterKey: 'ckey', visualizationKey: 'vkey'};
 const mockInstanceDefinition = {rows: 50, instanceId: 'ABC', mstrTable: {headers: []}};
 
 describe('MstrObjectRestService', () => {
@@ -214,11 +216,14 @@ describe('MstrObjectRestService', () => {
       const expectedReportName = 'TEST REPORT 1';
       const expectedReportRows = 51;
       const expectedReportCols = 4;
+      const dossierData = null;
+      const isReport = true;
       // when
       const result = await mstrObjectRestService.getInstanceDefinition(
-          instanceId,
           objectId,
           projectId,
+          isReport,
+          dossierData
       );
       // then
       expect(result.instanceId).toBeDefined();
@@ -226,21 +231,18 @@ describe('MstrObjectRestService', () => {
       expect(result.columns).toEqual(expectedReportCols);
       expect(result.mstrTable.name).toEqual(expectedReportName);
     });
-    it('should return existing definition of report', async () => {
+    it.skip('should return existing definition of dossier', async () => {
+      // TODO: Create dossier for testing and update dossierData object
       // given
       const expectedReportName = 'TEST REPORT 1';
       const expectedReportRows = 51;
       const expectedReportCols = 4;
-      const {instanceId} = await mstrObjectRestService.getInstanceDefinition(
-          '',
-          objectId,
-          projectId,
-      );
       // when
       const result = await mstrObjectRestService.getInstanceDefinition(
-          instanceId,
           objectId,
           projectId,
+          isReport,
+          dossierData
       );
       // then
       expect(result.instanceId).toEqual(instanceId);
@@ -258,9 +260,10 @@ describe('MstrObjectRestService', () => {
       });
       // when
       const result = mstrObjectRestService.getInstanceDefinition(
-          instanceId,
           objectId,
-          projectId
+          projectId,
+          isReport,
+          dossierData
       );
       // then
       try {
@@ -276,9 +279,10 @@ describe('MstrObjectRestService', () => {
       const incorrectObjectId = 'abc123';
       // when
       const result = mstrObjectRestService.getInstanceDefinition(
-          instanceId,
           incorrectObjectId,
-          projectId
+          projectId,
+          isReport,
+          dossierData
       );
       // then
       try {
@@ -291,12 +295,13 @@ describe('MstrObjectRestService', () => {
 
     it('should throw error due to incorrect instanceId', async () => {
       // given
-      const incorrectInstanceId = 'abc123';
+      const incorrectDossierData = 'abc123';
       // when
       const result = mstrObjectRestService.getInstanceDefinition(
-          incorrectInstanceId,
           objectId,
-          projectId
+          projectId,
+          isReport,
+          incorrectDossierData,
       );
       // then
       try {
@@ -312,9 +317,10 @@ describe('MstrObjectRestService', () => {
       const wrongProjectId = 'incorrectProjectId';
       // when
       const result = mstrObjectRestService.getInstanceDefinition(
-          instanceId,
           objectId,
-          wrongProjectId
+          wrongProjectId,
+          isReport,
+          dossierData,
       );
       // then
       try {

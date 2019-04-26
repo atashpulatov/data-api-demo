@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" 
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-  xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0" 
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
   xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="TaskPaneApp">
 
   <!-- Begin Basic Settings: Add-in metadata, used for all versions of Office unless override provided. -->
@@ -18,11 +18,11 @@
   <Description DefaultValue="New plugin to insert data from Microstrategy into Microsoft Office products."/>
 
   <!-- Icon for your add-in. Used on installation screens and the add-ins dialog. -->
-  <IconUrl DefaultValue="https://localhost:3000/assets/mstr_logo_32.png" />
-  <HighResolutionIconUrl DefaultValue="https://localhost:3000/assets/mstr_logo_512.png"/>
+  <IconUrl DefaultValue="https://localhost:8443/consume/plugin/assets/mstr_logo_32.png" />
+  <HighResolutionIconUrl DefaultValue="https://localhost:8443/consume/plugin/assets/mstr_logo_512.png"/>
 
   <!--If you plan to submit this add-in to the Office Store, uncomment the SupportUrl element below-->
-  <SupportUrl DefaultValue="https://localhost:3000/index.html" />
+  <SupportUrl DefaultValue="https://localhost:8443/consume/plugin/index.html" />
 
   <!-- Domains that will be allowed when navigating. For example, if you use ShowTaskpane and then have an href link, navigation will only be allowed if the domain is on this list. -->
   <AppDomains>
@@ -37,7 +37,7 @@
     <Host Name="Workbook" />
   </Hosts>
   <DefaultSettings>
-    <SourceLocation DefaultValue="https://localhost:3000/index.html" />
+    <SourceLocation DefaultValue="https://localhost:8443/consume/plugin/index.html" />
   </DefaultSettings>
   <!-- End TaskPane Mode integration.  -->
 
@@ -117,14 +117,14 @@
     <!-- You can use resources across hosts and form factors. -->
     <Resources>
       <bt:Images>
-        <bt:Image id="MSTR.tpicon_16x16" DefaultValue="https://localhost:3000/assets/mstr_logo_16.png" />
-        <bt:Image id="MSTR.tpicon_32x32" DefaultValue="https://localhost:3000/assets/mstr_logo_32.png" />
-        <bt:Image id="MSTR.tpicon_80x80" DefaultValue="https://localhost:3000/assets/mstr_logo_80.png" />
+        <bt:Image id="MSTR.tpicon_16x16" DefaultValue="https://localhost:8443/consume/plugin/assets/mstr_logo_16.png" />
+        <bt:Image id="MSTR.tpicon_32x32" DefaultValue="https://localhost:8443/consume/plugin/assets/mstr_logo_32.png" />
+        <bt:Image id="MSTR.tpicon_80x80" DefaultValue="https://localhost:8443/consume/plugin/assets/mstr_logo_80.png" />
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="MSTR.Taskpane.Url" DefaultValue="https://localhost:3000/index.html" />
+        <bt:Url id="MSTR.Taskpane.Url" DefaultValue="https://localhost:8443/consume/plugin/index.html" />
         <bt:Url id="MSTR.GetStarted.LearnMoreUrl" DefaultValue="https://go.microsoft.com/fwlink/?LinkId=276812" />
-        <bt:Url id="MSTR.DesktopFunctionFile.Url" DefaultValue="https://localhost:3000/function-file/function-file.html" />
+        <bt:Url id="MSTR.DesktopFunctionFile.Url" DefaultValue="https://localhost:8443/consume/plugin/function-file/function-file.html" />
       </bt:Urls>
       <!-- ShortStrings max characters==125. -->
       <bt:ShortStrings>
