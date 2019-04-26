@@ -32,7 +32,7 @@ export const _PopupViewSelector = (props) => {
     return <PromptsWindow parsed={propsToPass} />;
   }
   // TODO: do some error handling here
-  return <></>;
+  return null;
 };
 
 function proceedToImport(props) {

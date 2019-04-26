@@ -163,10 +163,10 @@ describe('NavigationTree', () => {
     expect(isPromptedResponse).toBeCalledWith(givenObjectId, givenProjectId);
     expect(selectObject).toBeCalledTimes(2);
     expect(selectObject.mock.calls[0][0]).toEqual({
-      chosenObjectId: undefined,
-      chosenProjectId: undefined,
-      chosenSubtype: undefined,
-      isPrompted: undefined,
+      chosenObjectId: null,
+      chosenProjectId: null,
+      chosenSubtype: null,
+      isPrompted: null,
     });
     expect(selectObject.mock.calls[1][0]).toEqual({
       chosenObjectId: givenObjectId,
