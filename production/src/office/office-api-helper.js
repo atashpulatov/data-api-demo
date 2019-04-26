@@ -57,16 +57,24 @@ class OfficeApiHelper {
   }
 
   onBindingObjectClick = async (bindingId) => {
-    const excelContext = await this.getExcelContext();
-    const tableRange = this.getBindingRange(excelContext, bindingId);
-    tableRange.select();
-    return await excelContext.sync();
+    try {
+      const excelContext = await this.getExcelContext();
+      const tableRange = this.getBindingRange(excelContext, bindingId);
+      tableRange.select();
+      return await excelContext.sync();
+    } catch (error) {
+      errorService.handleOfficeError(error);
+    }
   };
 
   getBindingRange = (context, bindingId) => {
-    return context.workbook.bindings
-        .getItem(bindingId).getTable()
-        .getRange();
+    try {
+      return context.workbook.bindings
+          .getItem(bindingId).getTable()
+          .getRange();
+    } catch (error) {
+      throw errorService.errorOfficeFactory(error);
+    }
   }
 
   getTable = (context, bindingId) => {

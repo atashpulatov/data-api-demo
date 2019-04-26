@@ -11,17 +11,17 @@ import {NOT_SUPPORTED_NO_ATTRIBUTES} from '../error/constants';
 import {OverlappingTablesError} from '../error/overlapping-tables-error';
 
 class OfficeDisplayService {
-  printObject = async (instanceId = '', objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh) => {
+  printObject = async (dossierData, objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh, isPrompted) => {
     const objectInfo = await mstrObjectRestService.getObjectInfo(objectId, projectId, isReport);
     reduxStore.dispatch({
       type: officeProperties.actions.preLoadReport,
       preLoadReport: objectInfo,
     });
     popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
-    return this._printObject(instanceId, objectId, projectId, isReport, selectedCell, officeTableId, bindingId, body, isRefresh);
+    return this._printObject(objectId, projectId, isReport, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body, isPrompted);
   }
 
-  _printObject = async (instanceId, objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh) => {
+  _printObject = async (objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body, isPrompted) => {
     let officeTable;
     let newOfficeTableId;
     let shouldFormat;
@@ -40,7 +40,7 @@ class OfficeDisplayService {
 
       // Get mstr instance definition
       console.time('Instance definition');
-      const instanceDefinition = await mstrObjectRestService.getInstanceDefinition(instanceId, objectId, projectId, isReport, body);
+      const instanceDefinition = await mstrObjectRestService.getInstanceDefinition(objectId, projectId, isReport, dossierData, body);
       console.timeEnd('Instance definition');
 
       // Check if instance returned data
@@ -55,7 +55,7 @@ class OfficeDisplayService {
 
       // Fetch, convert and insert with promise generator
       console.time('Fetch and insert into excel');
-      const connectionData = {objectId, projectId, isReport, body};
+      const connectionData = {objectId, projectId, dossierData, isReport, body};
       const officeData = {officeTable, excelContext, startCell, newOfficeTableId};
       officeTable = await this._fetchInsertDataIntoExcel(connectionData, officeData, instanceDefinition, isRefresh);
 
@@ -67,7 +67,7 @@ class OfficeDisplayService {
       // Save to store
       bindingId = bindingId || newOfficeTableId;
       await officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
-      this._addToStore(officeTableId, isRefresh, instanceDefinition, bindingId, newOfficeTableId, projectId, envUrl, body, objectType);
+      this._addToStore(officeTableId, isRefresh, instanceDefinition, bindingId, newOfficeTableId, projectId, envUrl, body, objectType, isPrompted);
 
       console.timeEnd('Total');
       return !isRefresh && {type: 'success', message: `Data loaded successfully`};
@@ -97,6 +97,7 @@ class OfficeDisplayService {
         body: report.body,
         isLoading: report.isLoading,
         objectType: report.objectType,
+        isPrompted: report.isPrompted,
       },
     });
     officeStoreService.preserveReport(report);
@@ -202,7 +203,7 @@ class OfficeDisplayService {
     reduxStoreState.sessionReducer.dialog.close();
   }
 
-  _addToStore(officeTableId, isRefresh, instanceDefinition, bindingId, newOfficeTableId, projectId, envUrl, body, objectType) {
+  _addToStore(officeTableId, isRefresh, instanceDefinition, bindingId, newOfficeTableId, projectId, envUrl, body, objectType, isPrompted) {
     if (!officeTableId && !isRefresh) {
       this.addReportToStore({
         id: instanceDefinition.mstrTable.id,
@@ -214,6 +215,7 @@ class OfficeDisplayService {
         body,
         isLoading: false,
         objectType,
+        isPrompted,
       });
     }
   }
@@ -264,12 +266,12 @@ class OfficeDisplayService {
 
   async _fetchInsertDataIntoExcel(connectionData, officeData, instanceDefinition) {
     try {
-      const {objectId, projectId, isReport, body} = connectionData;
+      const {objectId, projectId, dossierData, isReport, body} = connectionData;
       const {excelContext, officeTable} = officeData;
       const {mstrTable, columns, rows} = instanceDefinition;
       const {headers} = mstrTable;
       const limit = Math.floor(DATA_LIMIT / columns);
-      const rowGenerator = mstrObjectRestService.getObjectContentGenerator(instanceDefinition, objectId, projectId, isReport, body, limit);
+      const rowGenerator = mstrObjectRestService.getObjectContentGenerator(instanceDefinition, objectId, projectId, isReport, dossierData, body, limit);
       let rowIndex = 0;
       const contextPromises = [];
       console.time('Fetch data');
