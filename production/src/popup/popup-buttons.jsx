@@ -38,5 +38,4 @@ function mapStateToProps({navigationTree}) {
   return {isPrompted: navigationTree.isPrompted};
 }
 
-
 export const PopupButtons = connect(mapStateToProps)(_PopupButtons);
