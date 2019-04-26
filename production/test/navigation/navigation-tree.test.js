@@ -77,24 +77,6 @@ describe('NavigationTree', () => {
     expect(office).toHaveBeenCalledWith(JSON.stringify(resultAction));
   });
 
-  it('should call proper method on request import', () => {
-    // given
-    const parsed = {
-      envUrl: 'env',
-      token: 'token',
-      projectId: 'projectId',
-    };
-    const mockRequestImport = jest.fn();
-    const wrappedComponent = shallow(<_NavigationTree
-      parsed={parsed}
-      requestImport={mockRequestImport}
-    />);
-    // when
-    wrappedComponent.instance().handleOk();
-    // then
-    expect(mockRequestImport).toHaveBeenCalled();
-  });
-
   it('should call proper method on trigger update', () => {
     // given
     const parsed = {
