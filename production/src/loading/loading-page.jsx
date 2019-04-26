@@ -6,8 +6,8 @@ import './loading-page.css';
 const _LoadingPage = ({name}) => {
   const displayName = name || 'data';
   return (
-    <dialog class='loading-page loading-dialog' >
-      <h1 title={displayName} class='loading-title'>{`Importing ${displayName}`}</h1>
+    <dialog className='loading-page loading-dialog' >
+      <h1 title={displayName} className='loading-title'>{`Importing ${displayName}`}</h1>
       <LoadingText text={'Please wait until the import is complete.'} />
     </dialog>
   );
