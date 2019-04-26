@@ -11,7 +11,7 @@ import {NOT_SUPPORTED_NO_ATTRIBUTES} from '../error/constants';
 import {OverlappingTablesError} from '../error/overlapping-tables-error';
 
 class OfficeDisplayService {
-  printObject = async (dossierData, objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh, isRefreshAll = false) => {
+  printObject = async (dossierData, objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh, isPrompted, isRefreshAll = false) => {
     if (!isRefreshAll) {
       const objectInfo = await mstrObjectRestService.getObjectInfo(objectId, projectId, isReport);
       reduxStore.dispatch({
@@ -20,12 +20,12 @@ class OfficeDisplayService {
       });
       popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
     }
-    const result = await this._printObject(objectId, projectId, isReport, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body);
+    const result = await this._printObject(objectId, projectId, isReport, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body, isPrompted);
     !isRefreshAll && this._dispatchPrintFinish();
     return result;
   }
 
-  _printObject = async (objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body) => {
+  _printObject = async (objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body, isPrompted) => {
     let officeTable;
     let newOfficeTableId;
     let shouldFormat;
@@ -71,7 +71,7 @@ class OfficeDisplayService {
       // Save to store
       bindingId = bindingId || newOfficeTableId;
       await officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
-      this._addToStore(officeTableId, isRefresh, instanceDefinition, bindingId, newOfficeTableId, projectId, envUrl, body, objectType);
+      this._addToStore(officeTableId, isRefresh, instanceDefinition, bindingId, newOfficeTableId, projectId, envUrl, body, objectType, isPrompted);
 
       console.timeEnd('Total');
       return !isRefresh && {type: 'success', message: `Data loaded successfully`};
@@ -101,6 +101,7 @@ class OfficeDisplayService {
         body: report.body,
         isLoading: report.isLoading,
         objectType: report.objectType,
+        isPrompted: report.isPrompted,
       },
     });
     officeStoreService.preserveReport(report);
@@ -206,7 +207,7 @@ class OfficeDisplayService {
     reduxStoreState.sessionReducer.dialog.close();
   }
 
-  _addToStore(officeTableId, isRefresh, instanceDefinition, bindingId, newOfficeTableId, projectId, envUrl, body, objectType) {
+  _addToStore(officeTableId, isRefresh, instanceDefinition, bindingId, newOfficeTableId, projectId, envUrl, body, objectType, isPrompted) {
     if (!officeTableId && !isRefresh) {
       this.addReportToStore({
         id: instanceDefinition.mstrTable.id,
@@ -218,6 +219,7 @@ class OfficeDisplayService {
         body,
         isLoading: false,
         objectType,
+        isPrompted,
       });
     }
   }
