@@ -2,15 +2,16 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {LoadingText} from 'mstr-react-library';
 import {selectorProperties} from '../attribute-selector/selector-properties';
-import {Button, Tooltip} from 'antd';
+import {Button, Popover} from 'antd';
 import {MSTRIcon} from 'mstr-react-library';
+import warningIcon from './assets/icon_conflict.svg';
 
 import './refresh-all-page.css';
 
 const dialogStyle = {
   height: '100%',
-  //   position: 'fixed',
-  //   top: '50%',
+  position: 'fixed',
+  top: '50%',
   color: '#444A50',
   transform: 'translateY(-50%) translateY(-25px)',
   border: 'none',
@@ -65,23 +66,41 @@ export class _RefreshAllPage extends Component {
     Office.context.ui.messageParent(JSON.stringify(okObject));
   }
 
-    setIcon = (result) => {
-      if (result === false) {
+    setIcon = (isError) => {
+      if (isError === true) {
         return <MSTRIcon type='refresh-success' />;
-      } else if (result === true) {
-        return <MSTRIcon type='refresh-fail' />;
+      } else if (isError === false) {
+        return <img width='17px' height='17px' src={warningIcon} alt='Refresh failed icon' />;
       } else {
         return;
       }
     }
 
-    render() {
-      console.log('results in render', this.state.results[0].key);
-      const displayName = this.state.name || 'data';
-      return (<dialog className='refreshing-page' style={dialogStyle}>
-        <div className="refresh-title">Refresh All Data</div>
-        <div className="refresh-header">
-          {!this.state.finished
+  getTooltipContent = (refreshData) => {
+    return (
+      <div className="tooltip-content">
+        <div className="tooltip-header">
+          <span className="tooltip-header-icon"><img width='14px' height='14px' src={warningIcon} alt='Refresh failed icon' /></span>
+          {/* <div className="tooltip-message-header"> */}
+          <span>{refreshData.name} could not be refreshed.</span>
+          {/* </div> */}
+        </div>
+        <div className="tooltip-message">
+          <div className="tooltip-message-text">
+            <span>{refreshData.result} qwekjhwqe qw eewriwerhj weriwejr werweij rweir jwe</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  render() {
+    console.log('results in render', this.state.results[0].key);
+    const displayName = this.state.name || 'data';
+    return (<dialog className='refreshing-page' style={dialogStyle}>
+      <div className="refresh-title">Refresh All Data</div>
+      <div className="refresh-header">
+        {!this.state.finished
                 ?
                 <div>
                   <h1 style={titleStyle}>{`${displayName} (${this.state.currentNumber}/${this.state.allNumber})`}</h1>
@@ -89,28 +108,29 @@ export class _RefreshAllPage extends Component {
                 </div>
                 :
                  <span className="finished-header">Refresh done!</span>}
-        </div>
-        <div className='results-container'>
-          {this.state.results
+      </div>
+      <div className='results-container'>
+        {this.state.results
                   ?
                   this.state.results.map((res) =>
                     <div className="result-container">
-                      <Tooltip title={res.result} overlayClassName="refresh-tooltip" key={res.key}>
+                      <Popover overlayClassName="tooltip-card" placement="topLeft" content={this.getTooltipContent(res)} key={res.key}>
                         <span className="result-icon">{this.setIcon(res.isError)}</span>
-                      </Tooltip>
+                      </Popover>
                       <span className="report-name">{res.name}</span>
                     </div>)
 
                   :
                   null}
-        </div>
-        <Button id="prepare" type="primary"
-          className={ !this.state.finished ? 'hidden' : ''}
-          onClick={this.finished}>
+      </div>
+      { // TODO: Find a way to make button ok work properly
+        /* <Button id="prepare" type="primary"
+        className={ !this.state.finished ? 'hidden' : ''}
+        onClick={this.finished}>
           Ok
-        </Button>
-      </dialog>);
-    }
+      </Button> */}
+    </dialog>);
+  }
 };
 
 const mapStateToProps = ({popupReducer}) => {

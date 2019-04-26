@@ -6,20 +6,23 @@
 .results-container {
     overflow: auto;
     padding-top: 10px;
-    /* padding-right: 30px;
-    padding-left: 30px; */
     padding-bottom: 40px;
     max-height: 200px;
 }
 
 .result-container {
-    text-align: left;
+    display: flex;
+    align-items: center;
     padding-bottom: 10px;
 }
 
 .result-icon {
-    display: inline-block;
+    display: inline-flex;
     min-width: 20px;
+}
+
+.report-name {
+    display: inline-flex;
 }
 
 .refresh-header {
@@ -48,4 +51,40 @@
     font-family: HelveticaNeue-Medium;
     text-align: left;
     padding-top: 20px;
+}
+
+.tooltip-card {
+    border-radius: 0px;
+}
+
+.ant-popover-inner-content {
+    padding: 5px 8px;
+}
+
+.tooltip-content {
+    max-width: 250px;
+    font-size: 12px;
+    font-family: "HelveticaNeue", "Helvetica Neue", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", sans-serif;
+    color: rgb(68, 74, 80);
+}
+
+.tooltip-message {
+    padding-left: 19px;
+}
+
+.tooltip-header-icon {
+    padding-right: 5px;
+    vertical-align: text-bottom;
+}
+
+.tooltip-message-header {
+    font-weight: 500;
+}
+
+.tooltip-message-text {
+    color: rgba(0, 0, 0, 0.65);
+}
+
+.tooltip-header-message {
+    display: inline-block;
 }
