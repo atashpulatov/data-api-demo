@@ -45,7 +45,7 @@ export class _OfficeLoadedFile extends React.Component {
   };
 
   render() {
-    const {fileName, bindingId, onClick, isLoading, objectType} = this.props;
+    const {fileName, bindingId, onClick, isLoading, objectType, isPrompted} = this.props;
     return (
       <Row
         className="file-history-container"
@@ -61,11 +61,11 @@ export class _OfficeLoadedFile extends React.Component {
           <RenameInput bindingId={bindingId} fileName={fileName} />
         </Col>
         <Col span={1} offset={2}>
-          <span className="loading-button-container" title="Refresh Data"
+          {!isPrompted && <span className="loading-button-container" title="Refresh Data"
             onClick={(e) => this.state.allowRefreshClick && this.refreshAction(e)}>
             {!isLoading ? <MSTRIcon type='refresh' /> :
               <img width='12px' height='12px' src={loadingSpinner} alt='Report loading icon' />}
-          </span>
+          </span>}
         </Col>
         <Col span={1} offset={1}>
           <span

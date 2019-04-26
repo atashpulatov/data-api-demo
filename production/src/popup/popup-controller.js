@@ -113,7 +113,8 @@ class PopupController {
     if (response.chosenObject) {
       reduxStore.dispatch({type: officeProperties.actions.startLoading});
       reduxStore.dispatch({type: START_REPORT_LOADING, data: response.reportName});
-      const result = await officeDisplayService.printObject(response.dossierData, response.chosenObject, response.chosenProject, objectTypes.getTypeDescription(3, response.chosenSubtype) === 'Report');
+      const result = await officeDisplayService.printObject(response.dossierData, response.chosenObject, response.chosenProject,
+          objectTypes.getTypeDescription(3, response.chosenSubtype) === 'Report', null, null, null, null, null, response.isPrompted);
       if (result) {
         notificationService.displayNotification(result.type, result.message);
       }

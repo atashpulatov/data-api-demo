@@ -23,6 +23,7 @@ export const _FileHistoryContainer = ({reportArray = [], loading, refreshingAll,
     </span>
     <div role="list" className='tables-container'>
       {reportArray.map((report) => <OfficeLoadedFile
+        isPrompted={report.isPrompted}
         key={report.bindId}
         fileName={report.name}
         bindingId={report.bindId}
