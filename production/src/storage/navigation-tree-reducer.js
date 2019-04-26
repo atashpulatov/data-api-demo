@@ -63,7 +63,7 @@ export const navigationTree = (state = initialState, action) => {
       newState.chosenSubtype = data.chosenSubtype || null;
       newState.chosenProjectName = getProjectName(state.dataSource, data.chosenProjectId, data.chosenObjectId);
       newState.chosenType = getType(data.chosenSubtype);
-      newState.isPrompted = data.isPrompted || false;
+      newState.isPrompted = !!data.isPrompted;
       return newState;
     }
     case UPDATE_SCROLL: {
