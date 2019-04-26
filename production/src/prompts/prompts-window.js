@@ -1,14 +1,12 @@
-/* eslint-disable */
 import React, { Component } from 'react';
 import '../index.css';
 import '../home/home.css';
-import { selectorProperties } from '../attribute-selector/selector-properties';
 import { WatchForChildrenAddition } from 'react-mutation-observer';
 import { PromptsContainer } from './prompts-container';
 import { PromptWindowButtons } from './prompts-window-buttons';
 import { actions } from '../navigation/navigation-tree-actions';
 import { connect } from 'react-redux';
-/* eslint-enable */
+import { _PopupButtons } from '../popup/popup-buttons';
 
 export class _PromptsWindow extends Component {
     constructor(props) {
@@ -35,7 +33,7 @@ export class _PromptsWindow extends Component {
         this.outerCont = React.createRef();
     }
 
-    loadEmbeddedDossier = async (container) => {
+    loadEmbeddedDossier = (container) => {
         if (!this.state.loading){
             return;
         }
@@ -142,9 +140,8 @@ export class _PromptsWindow extends Component {
                 const embeddedDocument = iframe.contentDocument;
                 this.embeddedDocument = embeddedDocument;
                 if (!this.isLoginPage(embeddedDocument)){
-                    const cssLocation = window.location.href
-                        .substring(0, window.location.href.indexOf('?'))
-                        .replace('popup.html', 'promptsWindow.css');
+                    const cssLocation = window.location.origin 
+                        + window.location.pathname.replace('popup.html', 'promptsWindow.css');
                     this.applyStyle(embeddedDocument, cssLocation);
                 }
             });
