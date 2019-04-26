@@ -67,9 +67,9 @@ export class _RefreshAllPage extends Component {
   }
 
     setIcon = (isError) => {
-      if (isError === true) {
+      if (isError === false) {
         return <MSTRIcon type='refresh-success' />;
-      } else if (isError === false) {
+      } else if (isError === true) {
         return <img width='17px' height='17px' src={warningIcon} alt='Refresh failed icon' />;
       } else {
         return;
@@ -81,14 +81,10 @@ export class _RefreshAllPage extends Component {
       <div className="tooltip-content">
         <div className="tooltip-header">
           <span className="tooltip-header-icon"><img width='14px' height='14px' src={warningIcon} alt='Refresh failed icon' /></span>
-          {/* <div className="tooltip-message-header"> */}
-          <span>{refreshData.name} could not be refreshed.</span>
-          {/* </div> */}
         </div>
         <div className="tooltip-message">
-          <div className="tooltip-message-text">
-            <span>{refreshData.result} qwekjhwqe qw eewriwerhj weriwejr werweij rweir jwe</span>
-          </div>
+          <div className="tooltip-message-title">{refreshData.name} could not be refreshed.</div>
+          <div className="tooltip-message-text">{refreshData.result}</div>
         </div>
       </div>
     );

@@ -37,7 +37,7 @@
 }
 
 .refresh-tooltip {
-    color: #444649 ;
+    color: #444649;
 }
 
 .report-name {
@@ -67,23 +67,27 @@
     color: rgb(68, 74, 80);
 }
 
+.tooltip-header,
 .tooltip-message {
-    padding-left: 19px;
+    vertical-align: top;
+    display: inline-block;
 }
 
-.tooltip-header-icon {
-    padding-right: 5px;
-    vertical-align: text-bottom;
+.tooltip-header {
+    width: 18px;
+    margin: 0 8px;
 }
 
-.tooltip-message-header {
-    font-weight: 500;
+.tooltip-message {
+    width: calc(100% - 34px);
+}
+
+.tooltip-message-title {
+    font-weight: bold;
+    color: #444649;
+
 }
 
 .tooltip-message-text {
     color: rgba(0, 0, 0, 0.65);
-}
-
-.tooltip-header-message {
-    display: inline-block;
 }
