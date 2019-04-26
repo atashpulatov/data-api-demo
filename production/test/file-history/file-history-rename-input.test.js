@@ -1,6 +1,5 @@
 import React from 'react';
-import {shallow} from 'enzyme';
-// TODO: Below import
+import {shallow, mount} from 'enzyme';
 import RenameInput from '../../src/file-history/file-history-rename-input';
 import {officeStoreService} from '../../src/office/store/office-store-service';
 
@@ -38,9 +37,19 @@ describe('File history rename input', () => {
     const givenId = 'id123';
     // when
     const wrappedComponent = shallow(<RenameInput fileName={givenFileName} bindingId={givenId} />);
-    wrappedComponent.simulate('dblclick');
+    wrappedComponent.find('div').simulate('dblclick', {});
     // then
     expect(wrappedComponent.state().editable).toBeTruthy();
+  });
+  it('should show contextual menu on right click', () => {
+    // given
+    const givenFileName = 'name';
+    const givenId = 'id123';
+    // when
+    const wrappedComponent = mount(<RenameInput fileName={givenFileName} bindingId={givenId} />);
+    wrappedComponent.simulate('contextmenu', {});
+    // then
+    expect(wrappedComponent.exists('.ant-dropdown.ant-dropdown-hidden')).toBeFalsy();
   });
   it('should update value state when onChange is called', () => {
     // given
@@ -65,6 +74,17 @@ describe('File history rename input', () => {
     expect(wrappedComponent.state().editable).toEqual(true);
     wrappedComponent.instance().setEditable(false);
     expect(wrappedComponent.state().editable).toEqual(false);
+  });
+  it('should set editable and select text on enableEdit', () => {
+    // given
+    const givenFileName = 'name';
+    const givenId = 'id123';
+    const event = {domEvent: {stopPropagation: jest.fn()}};
+    // when
+    const wrappedComponent = shallow(<RenameInput fileName={givenFileName} bindingId={givenId} />);
+    wrappedComponent.instance().enableEdit(event);
+    // then
+    expect(wrappedComponent.state().editable).toEqual(true);
   });
   it('should select text async', () => {
     // given
