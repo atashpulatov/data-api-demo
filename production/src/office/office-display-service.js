@@ -82,7 +82,6 @@ class OfficeDisplayService {
       throw errorService.errorOfficeFactory(error);
     } finally {
       excelContext.sync();
-      // this._dispatchPrintFinish();
       console.groupEnd();
     }
   }

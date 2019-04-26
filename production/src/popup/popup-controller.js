@@ -64,7 +64,6 @@ class PopupController {
   };
 
   onMessageFromPopup = async (dialog, arg) => {
-    console.log('in message from popup', arg);
     const message = arg.message;
     const response = JSON.parse(message);
     try {
