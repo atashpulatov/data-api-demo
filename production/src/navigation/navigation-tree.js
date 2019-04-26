@@ -55,10 +55,10 @@ export class _NavigationTree extends Component {
   // TODO: temporary solution
   onObjectChosen = async (objectId, projectId, subtype) => {
     this.props.selectObject({
-      chosenObjectId: undefined,
-      chosenProjectId: undefined,
-      chosenSubtype: undefined,
-      isPrompted: undefined,
+      chosenObjectId: null,
+      chosenProjectId: null,
+      chosenSubtype: null,
+      isPrompted: null,
     });
 
     const isPrompted = await mstrObjectRestService.isPrompted(objectId, projectId);
