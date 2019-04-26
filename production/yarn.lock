@@ -6812,6 +6812,7 @@ ms@^2.1.1:
 "mstr-react-library@ssh://git@github.microstrategy.com:tech/mstr-react-library.git#fb0b1b2876ca67f02541e5b943381f41b7949aed":
   version "1.0.0"
   resolved "ssh://git@github.microstrategy.com:tech/mstr-react-library.git#fb0b1b2876ca67f02541e5b943381f41b7949aed"
+  
   dependencies:
     antd "^3.13.1"
     react-virtualized "^9.21.0"

@@ -113,7 +113,7 @@ describe('OfficeDisplayService', () => {
     const preLoadReport = reduxStore.getState().officeReducer.preLoadReport;
     expect(preLoadReport).toEqual(givenBody);
     expect(runPopupSpy).toBeCalledWith(PopupTypeEnum.loadingPage, 22, 28);
-    expect(printInside).toBeCalledWith(arg2, arg3, arg4, ...arg5, null, undefined);
+    expect(printInside).toBeCalledWith(arg2, arg3, arg4, ...arg5, null, undefined, undefined);
   });
 
   it('should add report to store', () => {
