@@ -11,13 +11,15 @@ import {NOT_SUPPORTED_NO_ATTRIBUTES} from '../error/constants';
 import {OverlappingTablesError} from '../error/overlapping-tables-error';
 
 class OfficeDisplayService {
-  printObject = async (dossierData, objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh) => {
-    const objectInfo = await mstrObjectRestService.getObjectInfo(objectId, projectId, isReport);
-    reduxStore.dispatch({
-      type: officeProperties.actions.preLoadReport,
-      preLoadReport: objectInfo,
-    });
-    popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
+  printObject = async (dossierData, objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh, isRefreshAll = false) => {
+    if (!isRefreshAll) {
+      const objectInfo = await mstrObjectRestService.getObjectInfo(objectId, projectId, isReport);
+      reduxStore.dispatch({
+        type: officeProperties.actions.preLoadReport,
+        preLoadReport: objectInfo,
+      });
+      popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
+    }
     const result = await this._printObject(objectId, projectId, isReport, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body);
     this._dispatchPrintFinish();
     return result;

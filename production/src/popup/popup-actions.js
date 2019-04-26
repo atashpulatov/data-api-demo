@@ -47,7 +47,7 @@ export function refreshAll(reportArray) {
   };
 }
 
-export function refreshReport(bindingId, objectType, refreshAll = false, index) {
+export function refreshReport(bindingId, objectType, isRefreshAll = false, index) {
   return async (dispatch) => {
     try {
       await authenticationHelper.validateAuthToken();
@@ -62,14 +62,14 @@ export function refreshReport(bindingId, objectType, refreshAll = false, index) 
         type: START_REPORT_LOADING,
         data: {name: refreshReport.name},
       });
-      if (!!refreshAll) {
+      if (isRefreshAll) {
         localStorage.setItem('currentName', refreshReport.name);
         localStorage.setItem('currentNumber', index + 1);
       }
       const instanceId = null;
       // TODO: Pass refreshAll and skip opening dialog
-      await officeDisplayService.printObject(instanceId, refreshReport.id, refreshReport.projectId, isReport, true, refreshReport.tableId, bindingId, refreshReport.body, true);
-      if (!!refreshAll) {
+      await officeDisplayService.printObject(instanceId, refreshReport.id, refreshReport.projectId, isReport, true, refreshReport.tableId, bindingId, refreshReport.body, true, isRefreshAll);
+      if (isRefreshAll) {
         const fromStorage = JSON.parse(localStorage.getItem('results'));
         fromStorage[index].result = 'ok';
         fromStorage[index].isError = false;
@@ -77,7 +77,7 @@ export function refreshReport(bindingId, objectType, refreshAll = false, index) 
       }
       return notificationService.displayNotification('success', `${capitalize(objectType)} refreshed`);
     } catch (error) {
-      if (!!refreshAll) {
+      if (isRefreshAll) {
         const fromStorage = JSON.parse(localStorage.getItem('results'));
         const restError = errorService.errorRestFactory(error);
         const errorMessage = errorService.getErrorMessage(restError);
