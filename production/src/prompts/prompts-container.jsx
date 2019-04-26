@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
 export class PromptsContainer extends Component {
-    constructor(props){
-        super(props);
+    constructor(){
+        super();
         this.container = React.createRef();
     }
 

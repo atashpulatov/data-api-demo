@@ -81,7 +81,7 @@ export class _PromptsWindow extends Component {
                 // We should remember to unregister this handler once the page loads
             }
           })
-          .then(async dossierPage => {
+          .then(async (dossierPage) => {
             const chapter = await dossierPage.getCurrentChapter();
             const docId = await dossierPage.getDossierId();
             const dossierInstanceId = await dossierPage.getDossierInstanceId();
