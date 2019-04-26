@@ -96,7 +96,6 @@ class PopupController {
   }
 
   handleUpdateCommand = async (response) => {
-    console.log('in update', response.reportName);
     if (response.reportId
       && response.projectId
       && response.reportSubtype
