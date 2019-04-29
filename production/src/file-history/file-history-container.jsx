@@ -18,7 +18,6 @@ export const _FileHistoryContainer = ({reportArray = [], loading, refreshingAll,
     <span className="refresh-button-container">
       <Button className="refresh-all-btn" style={{float: 'right'}} onClick={() => refreshAll(reportArray)} disabled={loading}>
         {!refreshingAll ? <MSTRIcon type='refresh' /> : <img width='12px' height='12px' src={loadingSpinner} alt='Report loading icon' />}
-        <span className="refresh-all-label">Refresh All</span>
       </Button>
     </span>
     <div role="list" className='tables-container'>
