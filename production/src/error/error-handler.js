@@ -112,27 +112,32 @@ class ErrorService {
   }
 
   getErrorMessage = (error) => {
-    switch (true) {
-      case error instanceof EnvironmentNotFoundError:
-        return '404 - Environment not found';
-      case error instanceof ConnectionBrokenError:
-        return 'Environment is unreachable.'
-          + '\nPlease check your internet connection.';
-      case error instanceof UnauthorizedError:
-        return 'Your session has expired.\nPlease log in.';
-      case error instanceof BadRequestError:
-        return '400 - There has been a problem with your request';
-      case error instanceof InternalServerError:
-        return errorMessages[error.iServerCode];
-      case error instanceof PromptedReportError:
-        return NOT_SUPPORTED_SERVER_ERR;
-      case error instanceof OutsideOfRangeError:
-        return 'The table you try to import exceeds the worksheet limits.';
-      case error instanceof OverlappingTablesError:
-        return 'The table you try to import exceeds the worksheet limits.';
-      default:
-        return error.message || 'Unknown error';
+    if (error instanceof EnvironmentNotFoundError) {
+      return '404 - Environment not found';
+    };
+    if (error instanceof ConnectionBrokenError) {
+      return 'Environment is unreachable.'
+        + '\nPlease check your internet connection.';
+    };
+    if (error instanceof UnauthorizedError) {
+      return 'Your session has expired.\nPlease log in.';
+    };
+    if (error instanceof BadRequestError) {
+      return '400 - There has been a problem with your request';
+    };
+    if (error instanceof InternalServerError) {
+      return errorMessages[error.iServerCode];
+    };
+    if (error instanceof PromptedReportError) {
+      return NOT_SUPPORTED_SERVER_ERR;
+    };
+    if (error instanceof OutsideOfRangeError) {
+      return 'The table you try to import exceeds the worksheet limits.';
     }
+    if (error instanceof OverlappingTablesError) {
+      return 'The table you try to import exceeds the worksheet limits.';
+    }
+    return error.message || 'Unknown error';
   }
 }
 

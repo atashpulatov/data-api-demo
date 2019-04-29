@@ -112,16 +112,13 @@ export class _RefreshAllPage extends Component {
                  <span className="finished-header">Refresh done!</span>}
       </div>
       <div className='results-container'>
-        {this.state.results
-                  ?
-                  this.state.results.map((res) =>
-                    <div className="result-container" key={res.key}>
-                      {this.getIcon(res)}
-                      <span className="report-name">{res.name}</span>
-                    </div>)
-
-                  :
-                  null}
+        {this.state.results &&
+          this.state.results.map((res) =>
+            <div className="result-container" key={res.key}>
+              {this.getIcon(res)}
+              <span className="report-name">{res.name}</span>
+            </div>)
+        }
       </div>
       { // TODO: Find a way to make button ok work properly
         /* <Button id="prepare" type="primary"
