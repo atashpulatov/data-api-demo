@@ -11,29 +11,52 @@ import {refreshAll} from '../popup/popup-actions';
 
 import './file-history.css';
 
-export const _FileHistoryContainer = ({reportArray = [], loading, refreshingAll, refreshAll}) => {
-  return (<React.Fragment>
-    <Button id="add-data-btn-container" className="add-data-btn" onClick={popupController.runPopupNavigation}
-      disabled={loading}>Add Data</Button>
-    <span className="refresh-button-container">
-      <Button className="refresh-all-btn" style={{float: 'right'}} onClick={() => refreshAll(reportArray)} disabled={loading}>
-        {!refreshingAll ? <MSTRIcon type='refresh' /> : <img width='12px' height='12px' src={loadingSpinner} alt='Report loading icon' />}
-        <span className="refresh-all-label">Refresh All</span>
-      </Button>
-    </span>
-    <div role="list" className='tables-container'>
-      {reportArray.map((report) => <OfficeLoadedFile
-        isPrompted={report.isPrompted}
-        key={report.bindId}
-        fileName={report.name}
-        bindingId={report.bindId}
-        onClick={officeApiHelper.onBindingObjectClick}
-        onDelete={officeDisplayService.removeReportFromExcel}
-        isLoading={report.isLoading}
-        objectType={report.objectType} />)}
-    </div>
-  </React.Fragment>);
-};
+export class _FileHistoryContainer extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      allowAddDataClick: true,
+    };
+  }
+  componentDidMount() {
+    this._ismounted = true;
+  }
+
+  componentWillUnmount() {
+    this._ismounted = false;
+  }
+  addDataAction = () => {
+    this.setState({allowAddDataClick: false}, async () => {
+      await popupController.runPopupNavigation();
+      this._ismounted && this.setState({allowAddDataClick: true});
+    });
+  };
+
+  render() {
+    const {reportArray, loading, refreshingAll, refreshAll} = this.props;
+    return (<React.Fragment >
+      <Button id="add-data-btn-container" className="add-data-btn" onClick={() => this.state.allowAddDataClick && this.addDataAction()}
+        disabled={loading}>Add Data</Button>
+      <span className="refresh-button-container">
+        <Button className="refresh-all-btn" style={{float: 'right'}} onClick={() => refreshAll(reportArray)} disabled={loading}>
+          {!refreshingAll ? <MSTRIcon type='refresh' /> : <img width='12px' height='12px' src={loadingSpinner} alt='Report loading icon' />}
+          <span className="refresh-all-label">Refresh All</span>
+        </Button>
+      </span>
+      <div role="list" className='tables-container'>
+        {reportArray.map((report) => <OfficeLoadedFile
+          isPrompted={report.isPrompted}
+          key={report.bindId}
+          fileName={report.name}
+          bindingId={report.bindId}
+          onClick={officeApiHelper.onBindingObjectClick}
+          onDelete={officeDisplayService.removeReportFromExcel}
+          isLoading={report.isLoading}
+          objectType={report.objectType} />)}
+      </div>
+    </React.Fragment>);
+  };
+}
 
 function mapStateToProps(state) {
   return {
