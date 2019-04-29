@@ -1,5 +1,5 @@
 import React from 'react';
-import {Placeholder} from '../../src/home/placeholder';
+import {_Placeholder} from '../../src/home/placeholder';
 import {sessionHelper} from '../../src/storage/session-helper';
 import {shallow} from 'enzyme';
 jest.mock('../../src/storage/session-helper');
@@ -11,7 +11,7 @@ describe('Placeholder', () => {
     sessionHelperSpy.mockClear();
 
     // when
-    const wrappedComponent = shallow(<Placeholder />);
+    const wrappedComponent = shallow(<_Placeholder />);
 
     // then
     expect(wrappedComponent).toBeDefined();

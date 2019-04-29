@@ -4,38 +4,18 @@ import {Button} from 'antd';
 import {OfficeLoadedFile} from './office-loaded-file.jsx';
 import {officeApiHelper} from '../office/office-api-helper';
 import {officeDisplayService} from '../office/office-display-service';
-import {popupController} from '../popup/popup-controller';
 import {MSTRIcon} from 'mstr-react-library';
 import loadingSpinner from './assets/report_loading_spinner.gif';
 import {refreshAll} from '../popup/popup-actions';
+import {fileHistoryContainerHOC} from './file-history-container-HOC.jsx';
 
 import './file-history.css';
 
 export class _FileHistoryContainer extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      allowAddDataClick: true,
-    };
-  }
-  componentDidMount() {
-    this._ismounted = true;
-  }
-
-  componentWillUnmount() {
-    this._ismounted = false;
-  }
-  addDataAction = () => {
-    this.setState({allowAddDataClick: false}, async () => {
-      await popupController.runPopupNavigation();
-      this._ismounted && this.setState({allowAddDataClick: true});
-    });
-  };
-
   render() {
-    const {reportArray, loading, refreshingAll, refreshAll} = this.props;
+    const {reportArray = [], loading, refreshingAll, refreshAll} = this.props;
     return (<React.Fragment >
-      <Button id="add-data-btn-container" className="add-data-btn" onClick={() => this.state.allowAddDataClick && this.addDataAction()}
+      <Button id="add-data-btn-container" className="add-data-btn" onClick={() => this.props.addDataAction()}
         disabled={loading}>Add Data</Button>
       <span className="refresh-button-container">
         <Button className="refresh-all-btn" style={{float: 'right'}} onClick={() => refreshAll(reportArray)} disabled={loading}>
@@ -70,4 +50,6 @@ const mapDispatchToProps = {
   refreshAll,
 };
 
-export const FileHistoryContainer = connect(mapStateToProps, mapDispatchToProps)(_FileHistoryContainer);
+const WrappedFileHistoryContainer = fileHistoryContainerHOC(_FileHistoryContainer);
+
+export const FileHistoryContainer = connect(mapStateToProps, mapDispatchToProps)(WrappedFileHistoryContainer);
