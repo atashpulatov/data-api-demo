@@ -53,7 +53,7 @@ export class _RefreshAllPage extends Component {
           results: [...results],
           finished: finished,
         });
-      } catch {
+      } catch (e) {
         return;
       }
     });
