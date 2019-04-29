@@ -29,8 +29,8 @@ const titleStyle = {
 };
 
 export class _RefreshAllPage extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       name: JSON.parse(localStorage.getItem('results'))[0].name,
       currentNumber: 1,
@@ -41,16 +41,21 @@ export class _RefreshAllPage extends Component {
   }
   componentDidMount() {
     window.addEventListener('storage', (e) => {
-      const results = JSON.parse(localStorage.getItem('results'));
-      const name = localStorage.getItem('currentName');
-      const currentNumber = JSON.parse(localStorage.getItem('currentNumber'));
-      const finished = JSON.parse(localStorage.getItem('finished'));
-      this.setState({
-        name: name,
-        currentNumber: currentNumber,
-        results: [...results],
-        finished: finished,
-      });
+      try {
+        const results = JSON.parse(localStorage.getItem('results'));
+        const name = localStorage.getItem('currentName');
+        const currentNumber = JSON.parse(localStorage.getItem('currentNumber'));
+        const finished = JSON.parse(localStorage.getItem('finished'));
+
+        this.setState({
+          name: name,
+          currentNumber: currentNumber,
+          results: [...results],
+          finished: finished,
+        });
+      } catch {
+        return;
+      }
     });
   }
 
@@ -66,15 +71,17 @@ export class _RefreshAllPage extends Component {
     Office.context.ui.messageParent(JSON.stringify(okObject));
   }
 
-    setIcon = (isError) => {
-      if (isError === false) {
-        return <MSTRIcon type='refresh-success' />;
-      } else if (isError === true) {
-        return <img width='17px' height='17px' src={warningIcon} alt='Refresh failed icon' />;
-      } else {
-        return;
-      }
+  getIcon = (res) => {
+    if (res.isError === false) {
+      return <span className="result-icon"><MSTRIcon type='refresh-success' /></span>;
     }
+    if (res.isError === true) {
+      return (<Popover overlayClassName="tooltip-card" placement="topLeft" content={this.getTooltipContent(res)}>
+        <span className="result-icon"><img width='17px' height='17px' src={warningIcon} alt='Refresh failed icon' /></span>
+      </Popover>);
+    }
+    return;
+  }
 
   getTooltipContent = (refreshData) => {
     return (
@@ -108,10 +115,8 @@ export class _RefreshAllPage extends Component {
         {this.state.results
                   ?
                   this.state.results.map((res) =>
-                    <div className="result-container">
-                      <Popover overlayClassName="tooltip-card" placement="topLeft" content={this.getTooltipContent(res)} key={res.key}>
-                        <span className="result-icon">{this.setIcon(res.isError)}</span>
-                      </Popover>
+                    <div className="result-container" key={res.key}>
+                      {this.getIcon(res)}
                       <span className="report-name">{res.name}</span>
                     </div>)
 

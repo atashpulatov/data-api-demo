@@ -25,13 +25,17 @@ export const _PopupViewSelector = (props) => {
   }
   if (!popupType) {
     return <AttributeSelectorWindow parsed={propsToPass} handleBack={methods.handleBack} />;
-  } else if (popupType === PopupTypeEnum.navigationTree) {
+  }
+  if (popupType === PopupTypeEnum.navigationTree) {
     return <NavigationTree handlePrepare={methods.handlePrepare} parsed={propsToPass} handlePopupErrors={methods.handlePopupErrors} />;
-  } else if (popupType === PopupTypeEnum.loadingPage) {
+  }
+  if (popupType === PopupTypeEnum.loadingPage) {
     return <LoadingPage />;
-  } else if (popupType === PopupTypeEnum.refreshAllPage) {
+  }
+  if (popupType === PopupTypeEnum.refreshAllPage) {
     return <RefreshAllPage />;
-  } else if (popupType === PopupTypeEnum.promptsWindow) {
+  }
+  if (popupType === PopupTypeEnum.promptsWindow) {
     return <PromptsWindow parsed={propsToPass} />;
   }
   // TODO: do some error handling here
