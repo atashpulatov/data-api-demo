@@ -24,10 +24,10 @@ export function refreshAll(reportArray) {
     dispatch({
       type: START_REFRESHING_ALL_REPORTS,
     });
-    const test = reportArray.map((report) => {
+    const refreshReportsData = reportArray.map((report) => {
       return {key: report.bindId, name: report.name, result: false, isError: null};
     });
-    localStorage.setItem('results', JSON.stringify(test));
+    localStorage.setItem('results', JSON.stringify(refreshReportsData));
     localStorage.setItem('allNumber', reportArray.length);
     localStorage.setItem('finished', JSON.stringify(false));
     const popupHeight = Math.floor(((220 + (reportArray.length * 30)) / (window.innerHeight + 200)) * 100);
