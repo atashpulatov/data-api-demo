@@ -48,7 +48,7 @@ describe('OfficeStoreService', () => {
     const givenBindingId = 'testBindId1';
     const givenName = 'testName';
     // when
-    officeStoreService.renameReport(givenBindingId, givenName);
+    officeStoreService.preserveReportValue(givenBindingId, 'name', givenName);
     // then
     expect(settings.saveAsync).toBeCalled();
   });

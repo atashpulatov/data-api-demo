@@ -17,7 +17,7 @@ export default class RenameInput extends React.Component {
     const newName = target.value || fileName;
     this.setState({value: newName});
     this.setEditable(false);
-    if (newName && bindingId) officeStoreService.renameReport(bindingId, newName);
+    if (newName && bindingId) officeStoreService.preserveReportValue(bindingId, 'name', newName);
   };
 
   selectTextAsync = (id) => {

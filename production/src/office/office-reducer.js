@@ -1,5 +1,6 @@
 import {officeProperties} from './office-properties';
 import {OfficeError} from './office-error';
+import {officeStoreService} from './store/office-store-service';
 
 export const officeReducer = (state = {loading: false}, action) => {
   switch (action.type) {
@@ -128,6 +129,11 @@ function _toggleSetLoadingStatus(action, state, status) {
   });
   const newReportArray = [...state.reportArray];
   newReportArray[indexOfElement].isLoading = status;
+  if (status === false) {
+    const currentDate = new Date().toLocaleString();
+    newReportArray[indexOfElement].refreshDate = currentDate;
+    officeStoreService.preserveReportValue(state.reportArray[indexOfElement].bindId, 'refreshDate', currentDate);
+  }
   return {
     ...state,
     loading: status,

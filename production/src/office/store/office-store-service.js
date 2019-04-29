@@ -26,14 +26,16 @@ class OfficeStoreService {
     }
   }
 
-  renameReport = async (bindId, newName) => {
+  preserveReportValue = async (bindId, key, value) => {
     try {
       const settings = this.getOfficeSettings();
       const reportProperties = this._getReportProperties();
       const indexOfReport = reportProperties.findIndex((oldReport) => {
         return (oldReport.bindId === bindId);
       });
-      reportProperties[indexOfReport].name = newName;
+      if (reportProperties[indexOfReport][key]) {
+        reportProperties[indexOfReport][key] = value;
+      }
       settings.set(officeProperties.loadedReportProperties, reportProperties);
       await settings.saveAsync();
       await officeApiHelper.loadExistingReportBindingsExcel();
@@ -41,7 +43,6 @@ class OfficeStoreService {
       errorService.handleOfficeError(error);
     }
   }
-
 
   deleteReport = (bindingId) => {
     try {

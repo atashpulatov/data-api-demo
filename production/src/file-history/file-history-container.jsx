@@ -29,7 +29,8 @@ export const _FileHistoryContainer = ({reportArray = [], loading, refreshingAll,
         onClick={officeApiHelper.onBindingObjectClick}
         onDelete={officeDisplayService.removeReportFromExcel}
         isLoading={report.isLoading}
-        objectType={report.objectType} />)}
+        objectType={report.objectType}
+        refreshDate={report.refreshDate}/>)}
     </div>
   </React.Fragment>);
 };
