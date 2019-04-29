@@ -4,6 +4,8 @@ import {notificationService} from '../notification/notification-service';
 import {authenticationHelper} from '../authentication/authentication-helper';
 import {officeProperties} from '../office/office-properties';
 import {errorService} from '../error/error-handler';
+import {popupController} from '../popup/popup-controller';
+import {PopupTypeEnum} from '../home/popup-type-enum';
 
 export const CLEAR_WINDOW = 'POPUP_CLOSE_WINDOW';
 export const START_REFRESHING_ALL_REPORTS = 'START_REFRESHING_ALL_REPORTS';
@@ -11,6 +13,7 @@ export const STOP_REFRESHING_ALL_REPORTS = 'STOP_REFRESHING_ALL_REPORTS';
 export const START_REPORT_LOADING = 'START_REPORT_LOADING';
 export const STOP_REPORT_LOADING = 'STOP_REPORT_LOADING';
 export const RESET_STATE = 'RESET_STATE';
+// export const PRELOAD = 'PRELOAD';
 
 const capitalize = (str) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -21,26 +24,32 @@ export function refreshAll(reportArray) {
     dispatch({
       type: START_REFRESHING_ALL_REPORTS,
     });
-    const results = await reportArray.reduce(async (acc, report) => {
-      const results = await acc;
-      try {
-        const refreshResult = await refreshReport(report.bindId, report.objectType, true)(dispatch);
-        return [...results, refreshResult];
-      } catch (err) {
-        return [...results, err];
+    const refreshReportsData = reportArray.map((report) => {
+      return {key: report.bindId, name: report.name, result: false, isError: null};
+    });
+    localStorage.setItem('results', JSON.stringify(refreshReportsData));
+    localStorage.setItem('allNumber', reportArray.length);
+    localStorage.setItem('finished', JSON.stringify(false));
+    const popupHeight = Math.floor(((220 + (reportArray.length * 30)) / (window.innerHeight + 200)) * 100);
+    await popupController.runPopup(PopupTypeEnum.refreshAllPage, popupHeight, 28);
+    for (const [index, report] of reportArray.entries()) {
+      await refreshReport(report.bindId, report.objectType, true, index, reportArray.length)(dispatch);
+      if (index === reportArray.length - 1) {
+        localStorage.setItem('finished', JSON.stringify(true));
       }
-    }, Promise.resolve([]));
+    }
     // TODO: results will be handled in future
-    console.log('results', results);
     dispatch({
       type: STOP_REFRESHING_ALL_REPORTS,
+    });
+    dispatch({
+      type: RESET_STATE,
     });
   };
 }
 
-export function refreshReport(bindingId, objectType, refreshAll = false) {
+export function refreshReport(bindingId, objectType, isRefreshAll = false, index) {
   return async (dispatch) => {
-    let result;
     try {
       await authenticationHelper.validateAuthToken();
       // TODO: these two actions should be merged into one in the future
@@ -52,17 +61,35 @@ export function refreshReport(bindingId, objectType, refreshAll = false) {
       const refreshReport = officeStoreService.getReportFromProperties(bindingId);
       dispatch({
         type: START_REPORT_LOADING,
-        data: refreshReport.name,
+        data: {name: refreshReport.name},
       });
-      // InstanceId should be passed in the case of prompted reports, null since it's not supported
+      if (isRefreshAll) {
+        localStorage.setItem('currentName', refreshReport.name);
+        localStorage.setItem('currentNumber', index + 1);
+      }
       const instanceId = null;
-      result = await officeDisplayService.printObject(instanceId, refreshReport.id, refreshReport.projectId, isReport, true, refreshReport.tableId, bindingId, refreshReport.body, true);
-      return (refreshAll && !result) || notificationService.displayNotification('success', `${capitalize(objectType)} refreshed`);
+      // TODO: Pass proper isPrompted value
+      await officeDisplayService.printObject(instanceId, refreshReport.id, refreshReport.projectId, isReport, true, refreshReport.tableId, bindingId, refreshReport.body, true, false, isRefreshAll);
+      if (isRefreshAll) {
+        const fromStorage = JSON.parse(localStorage.getItem('results'));
+        fromStorage[index].result = 'ok';
+        fromStorage[index].isError = false;
+        return localStorage.setItem('results', JSON.stringify(fromStorage));
+      }
+      return notificationService.displayNotification('success', `${capitalize(objectType)} refreshed`);
     } catch (error) {
+      if (isRefreshAll) {
+        const fromStorage = JSON.parse(localStorage.getItem('results'));
+        const restError = errorService.errorRestFactory(error);
+        const errorMessage = errorService.getErrorMessage(restError);
+        fromStorage[index].result = errorMessage;
+        fromStorage[index].isError = true;
+        return localStorage.setItem('results', JSON.stringify(fromStorage));
+      }
       if (error.code === 'ItemNotFound') {
         return notificationService.displayNotification('info', 'Data is not relevant anymore. You can delete it from the list');
       }
-      return (refreshAll && error) || errorService.handleError(error);
+      return errorService.handleError(error);
     } finally {
       // TODO: these two actions should be merged into one in the future
       dispatch({

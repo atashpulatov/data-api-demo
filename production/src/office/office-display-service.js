@@ -11,14 +11,18 @@ import {NOT_SUPPORTED_NO_ATTRIBUTES} from '../error/constants';
 import {OverlappingTablesError} from '../error/overlapping-tables-error';
 
 class OfficeDisplayService {
-  printObject = async (dossierData, objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh, isPrompted) => {
-    const objectInfo = await mstrObjectRestService.getObjectInfo(objectId, projectId, isReport);
-    reduxStore.dispatch({
-      type: officeProperties.actions.preLoadReport,
-      preLoadReport: objectInfo,
-    });
-    popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
-    return this._printObject(objectId, projectId, isReport, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body, isPrompted);
+  printObject = async (dossierData, objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh, isPrompted, isRefreshAll = false) => {
+    if (!isRefreshAll) {
+      const objectInfo = await mstrObjectRestService.getObjectInfo(objectId, projectId, isReport);
+      reduxStore.dispatch({
+        type: officeProperties.actions.preLoadReport,
+        preLoadReport: objectInfo,
+      });
+      popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
+    }
+    const result = await this._printObject(objectId, projectId, isReport, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body, isPrompted);
+    !isRefreshAll && this._dispatchPrintFinish();
+    return result;
   }
 
   _printObject = async (objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body, isPrompted) => {
@@ -78,7 +82,6 @@ class OfficeDisplayService {
       throw errorService.errorOfficeFactory(error);
     } finally {
       excelContext.sync();
-      this._dispatchPrintFinish();
       console.groupEnd();
     }
   }

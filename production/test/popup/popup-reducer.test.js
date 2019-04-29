@@ -35,7 +35,9 @@ describe('Popup Reducer', () => {
     // given
     const action = {
       type: START_REPORT_LOADING,
-      data: 'testReport',
+      data: {
+        name: 'testReport',
+      },
     };
     // when
     const newState = popupReducer(initialState, action);

@@ -1,14 +1,11 @@
 import React, {Component} from 'react';
-import {AttributeSelectorWindow} from '../attribute-selector/attribute-selector-window';
 import {PopupTypeEnum} from '../home/popup-type-enum';
-import {NavigationTree} from '../navigation/navigation-tree';
 import * as queryString from 'query-string';
 import {libraryErrorController} from 'mstr-react-library';
 import {officeContext} from '../office/office-context';
 import {selectorProperties} from '../attribute-selector/selector-properties';
 import {reduxStore} from '../store';
 import {Provider} from 'react-redux';
-import {LoadingPage} from '../loading/loading-page';
 import {PopupViewSelector} from './popup-view-selector';
 
 export class Popup extends Component {

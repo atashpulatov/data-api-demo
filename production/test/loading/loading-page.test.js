@@ -38,7 +38,9 @@ describe('Loading page', () => {
     const mockedTitle = 'Some report name';
     reduxStore.dispatch({
       type: START_REPORT_LOADING,
-      data: mockedTitle,
+      data: {
+        name: mockedTitle,
+      },
     });
     // when
     const componentWrapper = mount(
