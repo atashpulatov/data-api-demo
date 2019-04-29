@@ -56,7 +56,11 @@ class ErrorService {
   }
   handleError = (error, isLogout) => {
     const message = this.getErrorMessage(error);
-    notificationService.displayNotification('warning', message);
+    if (error instanceof UnauthorizedError) {
+      notificationService.displayNotification('info', message);
+    } else {
+      notificationService.displayNotification('warning', message);
+    }
     if (
       error instanceof EnvironmentNotFoundError
       || error instanceof ConnectionBrokenError
