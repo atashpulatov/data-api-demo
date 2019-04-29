@@ -26,6 +26,9 @@ const titleStyle = {
   fontSize: '18px',
   color: '#444649',
   padding: '0.5em',
+  textOverflow: 'ellipsis',
+  overflow: 'hidden',
+  whiteSpace: 'nowrap',
 };
 
 export class _RefreshAllPage extends Component {
@@ -103,20 +106,20 @@ export class _RefreshAllPage extends Component {
       <div className="refresh-title">Refresh All Data</div>
       <div className="refresh-header">
         {!this.state.finished
-                ?
-                <div>
-                  <h1 style={titleStyle}>{`${displayName} (${this.state.currentNumber}/${this.state.allNumber})`}</h1>
-                  <LoadingText text={'Loading data...'} />
-                </div>
-                :
-                 <span className="finished-header">Refresh done!</span>}
+          ?
+          <div className="refresh-progress" >
+            <h1 style={titleStyle}>{`${displayName} (${this.state.currentNumber}/${this.state.allNumber})`}</h1>
+            <LoadingText text={'Loading data...'} />
+          </div>
+          :
+          <span className="finished-header">Refresh done!</span>}
       </div>
       <div className='results-container'>
         {this.state.results &&
           this.state.results.map((res) =>
             <div className="result-container" key={res.key}>
               {this.getIcon(res)}
-              <span className="report-name">{res.name}</span>
+              <span title={res.name} className="report-name">{res.name}</span>
             </div>)
         }
       </div>

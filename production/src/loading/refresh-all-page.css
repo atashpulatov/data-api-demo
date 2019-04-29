@@ -36,12 +36,21 @@
     font-size: 24px;
 }
 
+.refresh-progress {
+    max-width: 100%;
+}
+
 .refresh-tooltip {
     color: #444649;
 }
 
 .report-name {
     padding-left: 10px;
+    display: block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 100%;
 }
 
 .refresh-title {
