@@ -8,29 +8,6 @@ import warningIcon from './assets/icon_conflict.svg';
 
 import './refresh-all-page.css';
 
-const dialogStyle = {
-  height: '100%',
-  position: 'fixed',
-  top: '50%',
-  color: '#444A50',
-  transform: 'translateY(-50%) translateY(-25px)',
-  border: 'none',
-  textAlign: 'center',
-  fontFamily: `"HelveticaNeue", "Helvetica Neue", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", sans-serif`,
-  width: '100%',
-};
-
-
-const titleStyle = {
-  fontWeight: 'bold',
-  fontSize: '18px',
-  color: '#444649',
-  padding: '0.5em',
-  textOverflow: 'ellipsis',
-  overflow: 'hidden',
-  whiteSpace: 'nowrap',
-};
-
 export class _RefreshAllPage extends Component {
   constructor() {
     super();
@@ -83,7 +60,7 @@ export class _RefreshAllPage extends Component {
         <span className="result-icon"><img width='17px' height='17px' src={warningIcon} alt='Refresh failed icon' /></span>
       </Popover>);
     }
-    return;
+    return <span className="result-icon"></span>;
   }
 
   getTooltipContent = (refreshData) => {
@@ -102,13 +79,14 @@ export class _RefreshAllPage extends Component {
 
   render() {
     const displayName = this.state.name || 'data';
-    return (<dialog className='refreshing-page' style={dialogStyle}>
+    return (<dialog className='refreshing-page dialogStyle'>
       <div className="refresh-title">Refresh All Data</div>
       <div className="refresh-header">
         {!this.state.finished
           ?
-          <div className="refresh-progress" >
-            <h1 style={titleStyle}>{`${displayName} (${this.state.currentNumber}/${this.state.allNumber})`}</h1>
+          <div className='refresh-progress'>
+            <h1 title={displayName} className={'titleStyle'}>{`${displayName}`}</h1>
+            <h1 className={'progressStyle'}>{` (${this.state.currentNumber}/${this.state.allNumber})`}</h1>
             <LoadingText text={'Loading data...'} />
           </div>
           :
