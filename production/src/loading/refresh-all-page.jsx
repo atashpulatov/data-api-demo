@@ -90,7 +90,7 @@ export class _RefreshAllPage extends Component {
             <LoadingText text={'Loading data...'} />
           </div>
           :
-          <span className="finished-header">Refresh done!</span>}
+          <span className="finished-header">Refreshing complete!</span>}
       </div>
       <div className='results-container'>
         {this.state.results &&
