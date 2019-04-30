@@ -20,10 +20,6 @@
     min-width: 20px;
 }
 
-.report-name {
-    display: inline-flex;
-}
-
 .refresh-header {
     height: 100px;
     display: flex;
@@ -36,12 +32,64 @@
     font-size: 24px;
 }
 
+.refresh-progress {
+    max-width: 100%;
+    white-space: nowrap;
+}
+
 .refresh-tooltip {
     color: #444649;
 }
 
+.dialogStyle {
+    height: 100%;
+    position: fixed;
+    top: 50%;
+    color: #444A50;
+    transform: translateY(-50%) translateY(-25px);
+    border: none;
+    text-align: center;
+    font-family: "HelveticaNeue", "Helvetica Neue", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", sans-serif;
+    width: 100%;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.titleStyle {
+    font-weight: bold;
+    font-size: 18px;
+    color: #444649;
+    padding: 0.5em;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    max-width: 75%;
+}
+
+.progressStyle {
+    font-weight: bold;
+    font-size: 18px;
+    color: #444649;
+    padding: 0.5em;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+}
+
 .report-name {
+    display: inline-flex;
     padding-left: 10px;
+    display: block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 100%;
 }
 
 .refresh-title {

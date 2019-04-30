@@ -24,7 +24,7 @@ describe('File history rename input', () => {
     const givenFileName = 'name';
     const givenId = 'id123';
     const target = {value: givenFileName};
-    const mockOfficeService = jest.spyOn(officeStoreService, 'renameReport');
+    const mockOfficeService = jest.spyOn(officeStoreService, 'preserveReportValue');
     // when
     const wrappedComponent = shallow(<RenameInput fileName={givenFileName} bindingId={givenId} />);
     wrappedComponent.instance().renameReport({target});
