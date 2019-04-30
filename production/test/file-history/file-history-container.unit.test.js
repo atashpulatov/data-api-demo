@@ -2,7 +2,9 @@ import {mount} from 'enzyme';
 import React from 'react';
 import {Provider} from 'react-redux';
 import {reduxStore} from '../../src/store';
-import {_FileHistoryContainer} from '../../src/file-history/file-history-container';
+import {_FileHistoryContainer, FileHistoryContainer} from '../../src/file-history/file-history-container';
+import {sessionHelper} from '../../src/storage/session-helper';
+import {popupController} from '../../src/popup/popup-controller';
 
 describe('FileHistoryContainer', () => {
   it('should render component when we are insinde project', () => {
@@ -81,6 +83,45 @@ describe('FileHistoryContainer', () => {
     refreshButton.simulate('click');
     // then
     expect(refreshAllmock).toBeCalled();
+  });
+
+  it('should open popup on button click', () => {
+    // given
+    const refreshAllmock = jest.fn();
+    const mockReportArray = createMockFilesArray();
+    const sessionHelperSpy = jest.spyOn(sessionHelper, 'disableLoading');
+    sessionHelperSpy.mockClear();
+    const clickSpy = jest.spyOn(popupController, 'runPopupNavigation');
+    const wrappedComponent = mount(
+        <Provider store={reduxStore}>
+          < FileHistoryContainer
+            project={'testProject'}
+            reportArray={mockReportArray}
+            refreshAll={refreshAllmock} />
+        </Provider>);
+    const wrappedButton = wrappedComponent.find('#add-data-btn-container').at(0);
+
+    // when
+    wrappedButton.simulate('click');
+    // then
+    expect(wrappedButton).toBeDefined();
+    expect(clickSpy).toHaveBeenCalled();
+  });
+
+  it('should call componentWillUnmount ', () => {
+    // given
+    // when
+    const wrappedComponent = mount(
+        <Provider store={reduxStore}>
+          < FileHistoryContainer />
+        </Provider>);
+
+    const tmp = wrappedComponent.instance();
+    wrappedComponent.unmount();
+    // then
+    expect(tmp).toBeTruthy();
+
+    expect(tmp._ismounted).toBeFalsy();
   });
 });
 
