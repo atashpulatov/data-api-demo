@@ -19,7 +19,11 @@ class ErrorService {
     if (error.status === 200) {
       return new PromptedReportError();
     }
-    if (error.status === 404 || !error.response) {
+    const isOfficeError = error instanceof RunOutsideOfficeError
+      || error instanceof OverlappingTablesError
+      || error instanceof GenericOfficeError
+      || error instanceof OutsideOfRangeError;
+    if (error.status === 404 || (!error.response && !isOfficeError)) {
       if (error.response && error.response.body) {
         return new InternalServerError(error.response.body);
       }
@@ -28,18 +32,21 @@ class ErrorService {
       }
       return new EnvironmentNotFoundError();
     }
-    switch (error.response.status) {
-      case 404:
-        return new EnvironmentNotFoundError();
-      case 400:
-        return new BadRequestError();
-      case 401:
-        return new UnauthorizedError();
-      case 500:
-        return new InternalServerError(error.response.body ? error.response.body : {});
-      default:
-        return error;
+    if (!!error.response) {
+      switch (error.response.status) {
+        case 404:
+          return new EnvironmentNotFoundError();
+        case 400:
+          return new BadRequestError();
+        case 401:
+          return new UnauthorizedError();
+        case 500:
+          return new InternalServerError(error.response.body ? error.response.body : {});
+        default:
+          return error;
+      }
     }
+    return error;
   };
   errorOfficeFactory = (error) => {
     if (error.name === 'RichApi.Error') {
@@ -136,6 +143,12 @@ class ErrorService {
     }
     if (error instanceof OverlappingTablesError) {
       return 'The table you try to import exceeds the worksheet limits.';
+    }
+    if (error instanceof RunOutsideOfficeError) {
+      return 'Please run plugin inside Office';
+    }
+    if (error instanceof GenericOfficeError) {
+      return `Excel returned error: ${error.message}`;
     }
     return error.message || 'Unknown error';
   }
