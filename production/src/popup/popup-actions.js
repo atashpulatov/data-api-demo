@@ -85,7 +85,6 @@ export function refreshReport(bindingId, objectType, isRefreshAll = false, index
       }
       return notificationService.displayNotification('success', `${capitalize(objectType)} refreshed`);
     } catch (error) {
-      console.log('error:', error);
       dispatch({
         type: officeProperties.actions.finishLoadingReport,
         reportBindId: bindingId,
