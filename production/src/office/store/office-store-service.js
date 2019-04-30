@@ -33,9 +33,7 @@ class OfficeStoreService {
       const indexOfReport = reportProperties.findIndex((oldReport) => {
         return (oldReport.bindId === bindId);
       });
-      if (reportProperties[indexOfReport][key]) {
-        reportProperties[indexOfReport][key] = value;
-      }
+      reportProperties[indexOfReport][key] = value;
       settings.set(officeProperties.loadedReportProperties, reportProperties);
       await settings.saveAsync();
       await officeApiHelper.loadExistingReportBindingsExcel();

@@ -74,6 +74,10 @@ class OfficeDisplayService {
       this._addToStore(officeTableId, isRefresh, instanceDefinition, bindingId, newOfficeTableId, projectId, envUrl, body, objectType, isPrompted);
 
       console.timeEnd('Total');
+      reduxStore.dispatch({
+        type: officeProperties.actions.finishLoadingReport,
+        reportBindId: bindingId,
+      });
       return !isRefresh && {type: 'success', message: `Data loaded successfully`};
     } catch (error) {
       if (officeTable && !isRefresh) {

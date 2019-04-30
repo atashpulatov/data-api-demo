@@ -70,6 +70,11 @@ export function refreshReport(bindingId, objectType, isRefreshAll = false, index
       const instanceId = null;
       // TODO: Pass proper isPrompted value
       await officeDisplayService.printObject(instanceId, refreshReport.id, refreshReport.projectId, isReport, true, refreshReport.tableId, bindingId, refreshReport.body, true, false, isRefreshAll);
+      dispatch({
+        type: officeProperties.actions.finishLoadingReport,
+        reportBindId: bindingId,
+        isError: false,
+      });
       if (isRefreshAll) {
         const fromStorage = JSON.parse(localStorage.getItem('results'));
         fromStorage[index].result = 'ok';
@@ -78,6 +83,11 @@ export function refreshReport(bindingId, objectType, isRefreshAll = false, index
       }
       return notificationService.displayNotification('success', `${capitalize(objectType)} refreshed`);
     } catch (error) {
+      dispatch({
+        type: officeProperties.actions.finishLoadingReport,
+        reportBindId: bindingId,
+        isError: true,
+      });
       if (isRefreshAll) {
         const fromStorage = JSON.parse(localStorage.getItem('results'));
         const restError = errorService.errorRestFactory(error);
@@ -94,10 +104,6 @@ export function refreshReport(bindingId, objectType, isRefreshAll = false, index
       // TODO: these two actions should be merged into one in the future
       dispatch({
         type: STOP_REPORT_LOADING,
-      });
-      dispatch({
-        type: officeProperties.actions.finishLoadingReport,
-        reportBindId: bindingId,
       });
     }
   };
