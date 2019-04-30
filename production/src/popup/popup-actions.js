@@ -6,6 +6,7 @@ import {officeProperties} from '../office/office-properties';
 import {errorService} from '../error/error-handler';
 import {popupController} from '../popup/popup-controller';
 import {PopupTypeEnum} from '../home/popup-type-enum';
+import {officeApiHelper} from '../office/office-api-helper';
 
 export const CLEAR_WINDOW = 'POPUP_CLOSE_WINDOW';
 export const START_REFRESHING_ALL_REPORTS = 'START_REFRESHING_ALL_REPORTS';
@@ -51,6 +52,7 @@ export function refreshAll(reportArray) {
 export function refreshReport(bindingId, objectType, isRefreshAll = false, index) {
   return async (dispatch) => {
     try {
+      await officeApiHelper.getExcelSessionStatus();
       await authenticationHelper.validateAuthToken();
       // TODO: these two actions should be merged into one in the future
       dispatch({
@@ -83,6 +85,7 @@ export function refreshReport(bindingId, objectType, isRefreshAll = false, index
       }
       return notificationService.displayNotification('success', `${capitalize(objectType)} refreshed`);
     } catch (error) {
+      console.log('error:', error);
       dispatch({
         type: officeProperties.actions.finishLoadingReport,
         reportBindId: bindingId,
