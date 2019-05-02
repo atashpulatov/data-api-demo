@@ -21,8 +21,7 @@ class OfficeDisplayService {
       popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
     }
     try {
-      const result = await this._printObject(objectId, projectId, isReport, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body, isPrompted);
-      return result;
+      return await this._printObject(objectId, projectId, isReport, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body, isPrompted);
     } catch (error) {
       throw error;
     } finally {
