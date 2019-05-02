@@ -92,7 +92,7 @@ export function refreshReport(bindingId, objectType, isRefreshAll = false, index
       });
       if (isRefreshAll) {
         const fromStorage = JSON.parse(localStorage.getItem('results'));
-        const restError = errorService.errorRestFactory(error);
+        const restError = errorService.errorOfficeFactory(error);
         const errorMessage = errorService.getErrorMessage(restError);
         fromStorage[index].result = errorMessage;
         fromStorage[index].isError = true;
