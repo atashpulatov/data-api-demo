@@ -20,9 +20,14 @@ class OfficeDisplayService {
       });
       popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
     }
-    const result = await this._printObject(objectId, projectId, isReport, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body, isPrompted);
-    !isRefreshAll && this._dispatchPrintFinish();
-    return result;
+    try {
+      const result = await this._printObject(objectId, projectId, isReport, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body, isPrompted);
+      return result;
+    } catch (error) {
+      throw error;
+    } finally {
+      !isRefreshAll && this._dispatchPrintFinish();
+    }
   }
 
   _printObject = async (objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body, isPrompted) => {
