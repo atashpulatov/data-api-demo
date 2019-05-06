@@ -29,6 +29,8 @@ module Smithers
 
           publishers do
             set_build_name_and_meta_data{}
+            logstash do
+            end
 
             mailer do
               recipients 'distro@microstrategy.com'
