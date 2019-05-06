@@ -31,7 +31,7 @@ export function refreshAll(reportArray) {
     localStorage.setItem('results', JSON.stringify(refreshReportsData));
     localStorage.setItem('allNumber', reportArray.length);
     localStorage.setItem('finished', JSON.stringify(false));
-    const reportsListLength = reportArray.length % 10;
+    const reportsListLength = reportArray.length > 10 ? 10 : reportArray.length;
     const popupHeight = Math.floor(((220 + (reportsListLength * 30)) / (window.innerHeight + 200)) * 100);
     await popupController.runPopup(PopupTypeEnum.refreshAllPage, popupHeight, 28);
     for (const [index, report] of reportArray.entries()) {
