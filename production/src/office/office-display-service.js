@@ -7,7 +7,7 @@ import {errorService} from '../error/error-handler';
 import {popupController} from '../popup/popup-controller';
 import {authenticationHelper} from '../authentication/authentication-helper';
 import {PopupTypeEnum} from '../home/popup-type-enum';
-import {NOT_SUPPORTED_NO_ATTRIBUTES} from '../error/constants';
+import {NOT_SUPPORTED_NO_ATTRIBUTES, ALL_DATA_FILTERED_OUT} from '../error/constants';
 import {OverlappingTablesError} from '../error/overlapping-tables-error';
 
 class OfficeDisplayService {
@@ -49,7 +49,9 @@ class OfficeDisplayService {
 
       // Check if instance returned data
       if (!instanceDefinition || instanceDefinition.mstrTable.rows.length === 0) {
-        return {type: 'warning', message: NOT_SUPPORTED_NO_ATTRIBUTES};
+        return !!isPrompted
+        ? {type: 'warning', message: ALL_DATA_FILTERED_OUT}
+        : {type: 'warning', message: NOT_SUPPORTED_NO_ATTRIBUTES};
       }
 
       // TODO: If isRefresh check if new instance definition is same as before
