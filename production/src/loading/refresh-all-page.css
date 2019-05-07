@@ -133,7 +133,8 @@
 .tooltip-message-title {
     font-weight: bold;
     color: #444649;
-
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .tooltip-message-text {
