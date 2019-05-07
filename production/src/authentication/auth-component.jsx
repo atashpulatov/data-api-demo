@@ -9,6 +9,7 @@ const FormItem = Form.Item;
 export class _Authenticate extends Component {
   constructor(props) {
     super(props);
+    localStorage.removeItem('refreshData');
     this.props.resetState();
   }
 
