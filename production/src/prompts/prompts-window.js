@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import '../index.css';
 import '../home/home.css';
-import { WatchForChildrenAddition } from 'react-mutation-observer';
 import { PromptsContainer } from './prompts-container';
 import { PromptWindowButtons } from './prompts-window-buttons';
 import { actions } from '../navigation/navigation-tree-actions';
@@ -112,7 +111,6 @@ export class _PromptsWindow extends Component {
      * This function applies an external css file to a document
      */
     applyStyle = (_document, styleSheetLocation) => {
-        console.log('applyStyle');
         const cssLink = document.createElement('link');
         cssLink.href = styleSheetLocation;
         cssLink.rel = 'stylesheet';
@@ -130,23 +128,41 @@ export class _PromptsWindow extends Component {
     /**
      * This function is called after a child (iframe) is added into mbedded dossier container
      */
-    onIframeLoad = (container) => {
-        console.log('onIframeLoad');
-        if (container.child && container.child.nodeName === 'IFRAME'){
-            const iframe = container.child;
-            //iframe.onloadOrg = iframe.onload;
-            iframe.addEventListener('load', () => {
-                console.log('iframe loaded');
-                const embeddedDocument = iframe.contentDocument;
-                this.embeddedDocument = embeddedDocument;
-                if (!this.isLoginPage(embeddedDocument)){
-                    const cssLocation = window.location.origin 
-                        + window.location.pathname.replace('popup.html', 'promptsWindow.css');
-                    this.applyStyle(embeddedDocument, cssLocation);
-                }
-            });
-        }
+    onIframeLoad = (iframe) => {
+        iframe.addEventListener('load', () => {
+            const embeddedDocument = iframe.contentDocument;
+            this.embeddedDocument = embeddedDocument;
+            if (!this.isLoginPage(embeddedDocument)) {
+                const cssLocation = window.location.origin
+                    + window.location.pathname.replace('popup.html', 'promptsWindow.css');
+                this.applyStyle(embeddedDocument, cssLocation);
+            }
+        });
     };
+
+    onPromptsContainerMount = (container) => {
+        this.watchForIframeAddition(container, this.onIframeLoad);
+        this.loadEmbeddedDossier(container);
+    };
+
+    /**
+     * Watches container for child addition and runs callback in case an iframe was added
+     * @param {*} container 
+     * @param {*} callback 
+     */
+    watchForIframeAddition(container, callback) {
+        var config = { childList: true };
+        var onMutation = (mutationList) => {
+            for (var mutation of mutationList) {
+                if (mutation.addedNodes && mutation.addedNodes.length && mutation.addedNodes[0].nodeName === 'IFRAME') {
+                    var iframe = mutation.addedNodes[0];
+                    callback(iframe);
+                }
+            }
+        };
+        var observer = new MutationObserver(onMutation);
+        observer.observe(container, config);
+    }
 
     render() {
         return (
@@ -154,16 +170,13 @@ export class _PromptsWindow extends Component {
                 style={{ position: 'relative' }}
                 ref={this.outerCont}
             >
-                <WatchForChildrenAddition
-                    onAddition={this.onIframeLoad.bind(this)}>
-                    <PromptsContainer
-                        postMount = {this.loadEmbeddedDossier}
-                    />
-                </WatchForChildrenAddition>
+                <PromptsContainer
+                    postMount={this.onPromptsContainerMount}
+                />
 
-                <div style={{ position: 'absolute', bottom: '0'}}>
-                <PromptWindowButtons
-                    handleRun={this.handleRun} />
+                <div style={{ position: 'absolute', bottom: '0' }}>
+                    <PromptWindowButtons
+                        handleRun={this.handleRun} />
                 </div>
             </div>
         );
