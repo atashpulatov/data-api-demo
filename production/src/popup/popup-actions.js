@@ -31,7 +31,8 @@ export function refreshAll(reportArray) {
     localStorage.setItem('results', JSON.stringify(refreshReportsData));
     localStorage.setItem('allNumber', reportArray.length);
     localStorage.setItem('finished', JSON.stringify(false));
-    const popupHeight = Math.floor(((220 + (reportArray.length * 30)) / (window.innerHeight + 200)) * 100);
+    const reportsListLength = reportArray.length > 10 ? 10 : reportArray.length;
+    const popupHeight = Math.floor(((220 + (reportsListLength * 30)) / (window.innerHeight + 200)) * 100);
     await popupController.runPopup(PopupTypeEnum.refreshAllPage, popupHeight, 28);
     for (const [index, report] of reportArray.entries()) {
       await refreshReport(report.bindId, report.objectType, true, index, reportArray.length)(dispatch);
@@ -92,8 +93,8 @@ export function refreshReport(bindingId, objectType, isRefreshAll = false, index
       });
       if (isRefreshAll) {
         const fromStorage = JSON.parse(localStorage.getItem('results'));
-        const restError = errorService.errorRestFactory(error);
-        const errorMessage = errorService.getErrorMessage(restError);
+        const officeError = errorService.errorOfficeFactory(error);
+        const errorMessage = errorService.getErrorMessage(officeError);
         fromStorage[index].result = errorMessage;
         fromStorage[index].isError = true;
         return localStorage.setItem('results', JSON.stringify(fromStorage));
