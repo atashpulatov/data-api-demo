@@ -5,6 +5,7 @@ const withDefaultValue = (obj, defaultValue) => {
 };
 
 export const GENERIC_SERVER_ERR = 'This object cannot be imported.';
+export const ALL_DATA_FILTERED_OUT = 'No data returned for this view. This might be because the applied prompt excludes all data.';
 export const NOT_SUPPORTED_NO_ATTRIBUTES = 'This object cannot be imported. Objects without attributes are not supported in this version of MicroStrategy for Office.';
 export const NOT_SUPPORTED_SERVER_ERR = 'This object cannot be imported. Objects with cross tabs, totals, or subtotals are not supported in this version of MicroStrategy for Office.';
 export const NOT_SUPPORTED_PROMPTS_REFRESH = 'Objects with prompts cannot be refreshed in this version of MicroStrategy for Office.';
