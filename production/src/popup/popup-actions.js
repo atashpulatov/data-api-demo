@@ -71,7 +71,10 @@ export function refreshReport(bindingId, objectType, isRefreshAll = false, index
       }
       const instanceId = null;
       // TODO: Pass proper isPrompted value
-      await officeDisplayService.printObject(instanceId, refreshReport.id, refreshReport.projectId, isReport, true, refreshReport.tableId, bindingId, refreshReport.body, true, false, isRefreshAll);
+      const result = await officeDisplayService.printObject(instanceId, refreshReport.id, refreshReport.projectId, isReport, true, refreshReport.tableId, bindingId, refreshReport.body, true, false, isRefreshAll);
+      if (result.type !== 'success') {
+        throw new Error(result.message);
+      }
       dispatch({
         type: officeProperties.actions.finishLoadingReport,
         reportBindId: bindingId,

@@ -54,8 +54,8 @@ class OfficeDisplayService {
       // Check if instance returned data
       if (!instanceDefinition || instanceDefinition.mstrTable.rows.length === 0) {
         return !!isPrompted
-        ? {type: 'warning', message: ALL_DATA_FILTERED_OUT}
-        : {type: 'warning', message: NOT_SUPPORTED_NO_ATTRIBUTES};
+          ? {type: 'warning', message: ALL_DATA_FILTERED_OUT}
+          : {type: 'warning', message: NOT_SUPPORTED_NO_ATTRIBUTES};
       }
 
       // TODO: If isRefresh check if new instance definition is same as before
