@@ -98,12 +98,32 @@ class MstrObjectRestService {
     return {instanceId, rows, columns, mstrTable};
   }
 
-  async getObjectInfo(objectId, projectId, isReport = true) {
+  async getObjectDefinition(objectId, projectId, isReport = true) {
     const storeState = reduxStore.getState();
     const envUrl = storeState.sessionReducer.envUrl;
     const authToken = storeState.sessionReducer.authToken;
     const objectType = isReport ? 'reports' : 'cubes';
     const fullPath = `${envUrl}/${objectType}/${objectId}`;
+
+    return await moduleProxy.request
+        .get(fullPath)
+        .set('x-mstr-authtoken', authToken)
+        .set('x-mstr-projectid', projectId)
+        .withCredentials()
+        .then((res) => {
+          return res.body;
+        })
+        .catch((err) => {
+          throw errorService.errorRestFactory(err);
+        });
+  };
+
+  async getObjectInfo(objectId, projectId, isReport = true) {
+    const storeState = reduxStore.getState();
+    const envUrl = storeState.sessionReducer.envUrl;
+    const authToken = storeState.sessionReducer.authToken;
+    const objectType = isReport ? '3' : '3'; //reports have the same type as cubes
+    const fullPath = `${envUrl}/objects/${objectId}?type=${objectType}`;
 
     return await moduleProxy.request
         .get(fullPath)

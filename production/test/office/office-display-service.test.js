@@ -77,7 +77,7 @@ describe('OfficeDisplayService', () => {
 
   it('should create instance when no instance id provided', async () => {
     // given
-    const getObjectInfoSpy = jest.spyOn(mstrObjectRestService, 'getInstanceDefinition');
+    const getObjectDefinitionSpy = jest.spyOn(mstrObjectRestService, 'getInstanceDefinition');
     jest.spyOn(officeApiHelper, 'getSelectedCell').mockImplementationOnce(() => {});
     jest.spyOn(officeApiHelper, 'formatNumbers').mockImplementationOnce(() => {});
     jest.spyOn(officeApiHelper, 'formatTable').mockImplementationOnce(() => {});
@@ -91,14 +91,14 @@ describe('OfficeDisplayService', () => {
     // when
     await officeDisplayService._printObject(arg1, arg2, arg3);
     // then
-    expect(getObjectInfoSpy).toBeCalled();
-    expect(getObjectInfoSpy).toBeCalledWith(arg1, arg2, arg3, undefined, undefined);
+    expect(getObjectDefinitionSpy).toBeCalled();
+    expect(getObjectDefinitionSpy).toBeCalledWith(arg1, arg2, arg3, undefined, undefined);
   });
 
   it('should open loading popup when printing object', async () => {
     // given
     const givenBody = {id: 'id', name: 'name'};
-    const getObjectInfoSpy = jest.spyOn(mstrObjectRestService, 'getObjectInfo').mockResolvedValue(givenBody);
+    const getObjectDefinitionSpy = jest.spyOn(mstrObjectRestService, 'getObjectDefinition').mockResolvedValue(givenBody);
     const runPopupSpy = jest.spyOn(popupController, 'runPopup');
     const printInside = jest.spyOn(officeDisplayService, '_printObject').mockImplementationOnce(() => {});
     const arg1 = null;
@@ -109,7 +109,7 @@ describe('OfficeDisplayService', () => {
     // when
     await officeDisplayService.printObject(arg1, arg2, arg3, arg4);
     // then
-    expect(getObjectInfoSpy).toBeCalledWith(arg2, arg3, arg4);
+    expect(getObjectDefinitionSpy).toBeCalledWith(arg2, arg3, arg4);
     const preLoadReport = reduxStore.getState().officeReducer.preLoadReport;
     expect(preLoadReport).toEqual(givenBody);
     expect(runPopupSpy).toBeCalledWith(PopupTypeEnum.loadingPage, 22, 28);

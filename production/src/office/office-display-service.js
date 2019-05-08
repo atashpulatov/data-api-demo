@@ -13,7 +13,11 @@ import {OverlappingTablesError} from '../error/overlapping-tables-error';
 class OfficeDisplayService {
   printObject = async (dossierData, objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh, isPrompted, isRefreshAll = false) => {
     if (!isRefreshAll) {
-      const objectInfo = await mstrObjectRestService.getObjectInfo(objectId, projectId, isReport);
+      if (isPrompted) {
+        const objectInfo = await mstrObjectRestService.getObjectInfo(objectId, projectId, isReport);
+      } else {
+        const objectInfo = await mstrObjectRestService.getObjectDefinition(objectId, projectId, isReport);
+      }
       reduxStore.dispatch({
         type: officeProperties.actions.preLoadReport,
         preLoadReport: objectInfo,
