@@ -33,7 +33,7 @@
 }
 
 .refresh-progress {
-    max-width: 100%;
+    width: 100vw;
     white-space: nowrap;
 }
 
@@ -95,8 +95,8 @@
 .refresh-title {
     font-size: 18px;
     color: #333333;
-    font-family: HelveticaNeue-Medium;
     text-align: left;
+    font-weight: bold;
     padding-top: 20px;
 }
 
