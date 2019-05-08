@@ -69,7 +69,7 @@ function proceedToImport(props) {
 function mapStateToProps(state) {
   return {
     ...state.navigationTree,
-    authtoken: state.sessionReducer.authToken,
+    authToken: state.sessionReducer.authToken,
   };
 };
 
