@@ -39,8 +39,7 @@ class PopupController {
       Office.context.ui.displayDialogAsync(
           splittedUrl[0]
         + '?popupType=' + popupType
-        + '&envUrl=' + session.url
-        + '&token=' + session.authToken,
+        + '&envUrl=' + session.url,
           {height, width, displayInIframe: true},
           (asyncResult) => {
             const dialog = asyncResult.value;
