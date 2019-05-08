@@ -22,23 +22,20 @@ const capitalize = (str) => {
 
 export function refreshAll(reportArray) {
   return async (dispatch) => {
+    localStorage.removeItem('refreshData');
     dispatch({
       type: START_REFRESHING_ALL_REPORTS,
     });
     const refreshReportsData = reportArray.map((report) => {
       return {key: report.bindId, name: report.name, result: false, isError: null};
     });
-    localStorage.setItem('results', JSON.stringify(refreshReportsData));
-    localStorage.setItem('allNumber', reportArray.length);
-    localStorage.setItem('finished', JSON.stringify(false));
+    const refreshData = {data: refreshReportsData, allNumber: reportArray.length, finished: false, currentNumber: 1};
+    localStorage.setItem('refreshData', JSON.stringify(refreshData));
     const reportsListLength = reportArray.length > 10 ? 10 : reportArray.length;
     const popupHeight = Math.floor(((220 + (reportsListLength * 30)) / (window.innerHeight + 200)) * 100);
     await popupController.runPopup(PopupTypeEnum.refreshAllPage, popupHeight, 28);
     for (const [index, report] of reportArray.entries()) {
       await refreshReport(report.bindId, report.objectType, true, index, reportArray.length)(dispatch);
-      if (index === reportArray.length - 1) {
-        localStorage.setItem('finished', JSON.stringify(true));
-      }
     }
     // TODO: results will be handled in future
     dispatch({
@@ -50,7 +47,7 @@ export function refreshAll(reportArray) {
   };
 }
 
-export function refreshReport(bindingId, objectType, isRefreshAll = false, index) {
+export function refreshReport(bindingId, objectType, isRefreshAll = false, index, length) {
   return async (dispatch) => {
     try {
       await officeApiHelper.getExcelSessionStatus();
@@ -67,8 +64,10 @@ export function refreshReport(bindingId, objectType, isRefreshAll = false, index
         data: {name: refreshReport.name},
       });
       if (isRefreshAll) {
-        localStorage.setItem('currentName', refreshReport.name);
-        localStorage.setItem('currentNumber', index + 1);
+        const fromStorage = JSON.parse(localStorage.getItem('refreshData'));
+        fromStorage.currentName = refreshReport.name;
+        fromStorage.currentNumber = index + 1;
+        localStorage.setItem('refreshData', JSON.stringify(fromStorage));
       }
       const instanceId = null;
       // TODO: Pass proper isPrompted value
@@ -79,10 +78,13 @@ export function refreshReport(bindingId, objectType, isRefreshAll = false, index
         isError: false,
       });
       if (isRefreshAll) {
-        const fromStorage = JSON.parse(localStorage.getItem('results'));
-        fromStorage[index].result = 'ok';
-        fromStorage[index].isError = false;
-        return localStorage.setItem('results', JSON.stringify(fromStorage));
+        const fromStorage = JSON.parse(localStorage.getItem('refreshData'));
+        fromStorage.data[index].result = 'ok';
+        fromStorage.data[index].isError = false;
+        if (index === length - 1) {
+          fromStorage.finished = true;
+        }
+        localStorage.setItem('refreshData', JSON.stringify(fromStorage));
       }
       return notificationService.displayNotification('success', `${capitalize(objectType)} refreshed`);
     } catch (error) {
@@ -92,12 +94,15 @@ export function refreshReport(bindingId, objectType, isRefreshAll = false, index
         isError: true,
       });
       if (isRefreshAll) {
-        const fromStorage = JSON.parse(localStorage.getItem('results'));
+        const fromStorage = JSON.parse(localStorage.getItem('refreshData'));
         const officeError = errorService.errorOfficeFactory(error);
         const errorMessage = errorService.getErrorMessage(officeError);
-        fromStorage[index].result = errorMessage;
-        fromStorage[index].isError = true;
-        return localStorage.setItem('results', JSON.stringify(fromStorage));
+        fromStorage.data[index].result = errorMessage;
+        fromStorage.data[index].isError = true;
+        if (index === length - 1) {
+          fromStorage.finished = true;
+        }
+        return localStorage.setItem('refreshData', JSON.stringify(fromStorage));
       }
       if (error.code === 'ItemNotFound') {
         return notificationService.displayNotification('info', 'Data is not relevant anymore. You can delete it from the list');
