@@ -122,7 +122,7 @@ class MstrObjectRestService {
     const storeState = reduxStore.getState();
     const envUrl = storeState.sessionReducer.envUrl;
     const authToken = storeState.sessionReducer.authToken;
-    const objectType = isReport ? '3' : '3'; //reports have the same type as cubes
+    const objectType = '3'; //both reports and cubes are of type 3
     const fullPath = `${envUrl}/objects/${objectId}?type=${objectType}`;
 
     return await moduleProxy.request
