@@ -87,7 +87,7 @@ export function refreshReport(bindingId, objectType, isRefreshAll = false, index
         if (index === length - 1) {
           fromStorage.finished = true;
         }
-        localStorage.setItem('refreshData', JSON.stringify(fromStorage));
+        return localStorage.setItem('refreshData', JSON.stringify(fromStorage));
       }
       return notificationService.displayNotification('success', `${capitalize(objectType)} refreshed`);
     } catch (error) {

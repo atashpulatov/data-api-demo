@@ -8,7 +8,7 @@ import {notificationService} from '../notification/notification-service.js';
 import {RunOutsideOfficeError} from './run-outside-office-error.js';
 import {OverlappingTablesError} from './overlapping-tables-error';
 import {GenericOfficeError} from './generic-office-error.js';
-import {errorMessages, NOT_SUPPORTED_SERVER_ERR} from './constants';
+import {errorMessages, NOT_SUPPORTED_PROMPTS_REFRESH} from './constants';
 import {ConnectionBrokenError} from './connection-error.js';
 import {OutsideOfRangeError} from './outside-of-range-error.js';
 
@@ -136,7 +136,7 @@ class ErrorService {
       return errorMessages[error.iServerCode];
     };
     if (error instanceof PromptedReportError) {
-      return NOT_SUPPORTED_SERVER_ERR;
+      return NOT_SUPPORTED_PROMPTS_REFRESH;
     };
     if (error instanceof OutsideOfRangeError) {
       return 'The table you try to import exceeds the worksheet limits.';
