@@ -11,27 +11,41 @@ import './refresh-all-page.css';
 export class _RefreshAllPage extends Component {
   constructor() {
     super();
+    const fromStorage = JSON.parse(localStorage.getItem('refreshData'));
     this.state = {
-      name: JSON.parse(localStorage.getItem('results'))[0].name,
+      name: fromStorage.data[0].name,
       currentNumber: 1,
-      allNumber: JSON.parse(localStorage.getItem('allNumber')),
-      results: JSON.parse(localStorage.getItem('results')),
+      allNumber: fromStorage.allNumber,
+      results: fromStorage.data,
       finished: false,
     };
   }
   componentDidMount() {
+    // in IE we get local storage each 500ms as event listener doesn't work
+    const ua = window.navigator.userAgent;
+    if (ua.indexOf('MSIE ') > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+      this.intervalId = setInterval(() => {
+        try {
+          const fromStorage = JSON.parse(localStorage.getItem('refreshData'));
+          this.setState({
+            name: fromStorage.currentName,
+            currentNumber: fromStorage.currentNumber,
+            results: [...fromStorage.data],
+            finished: fromStorage.finished,
+          });
+        } catch (e) {
+          console.error(e);
+        }
+      }, 500);
+    }
     window.addEventListener('storage', (e) => {
       try {
-        const results = JSON.parse(localStorage.getItem('results'));
-        const name = localStorage.getItem('currentName');
-        const currentNumber = JSON.parse(localStorage.getItem('currentNumber'));
-        const finished = JSON.parse(localStorage.getItem('finished'));
-
+        const fromStorage = JSON.parse(localStorage.getItem('refreshData'));
         this.setState({
-          name: name,
-          currentNumber: currentNumber,
-          results: [...results],
-          finished: finished,
+          name: fromStorage.currentName,
+          currentNumber: fromStorage.currentNumber,
+          results: [...fromStorage.data],
+          finished: fromStorage.finished,
         });
       } catch (e) {
         return;
@@ -39,12 +53,12 @@ export class _RefreshAllPage extends Component {
     });
   }
 
+  componentWillUnmount() {
+    clearInterval(this.intervalId);
+  }
+
   finished = () => {
-    localStorage.removeItem('results');
-    localStorage.removeItem('currentName');
-    localStorage.removeItem('currentNumber');
-    localStorage.removeItem('allNumber');
-    localStorage.removeItem('finished');
+    localStorage.removeItem('refreshData');
     const okObject = {
       command: selectorProperties.commandOk,
     };
