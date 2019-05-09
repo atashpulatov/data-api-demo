@@ -133,7 +133,7 @@ class OfficeApiHelper {
             const columnRange = columns.getItemAt(object.index).getDataBodyRange();
             let format = '';
 
-            if (object.category == 9) {
+            if (object.category === 9) {
               format = this._getNumberFormattingCategoryName(object);
             } else {
               format = object.formatString;
@@ -142,6 +142,9 @@ class OfficeApiHelper {
                 // Normalizing formatString from MicroStrategy when locale codes are used [$-\d+]
                 format = format.replace(/\[\$-/g, '[$$$$-').replace(/\$/g, '\\$').replace(/\\\$\\\$/g, '$').replace(/"/g, '');
               }
+
+              // for fractions set General format
+              object.formatString.match(/# \?+?\/\?+?/) && (format = 'General');
             }
             columnRange.numberFormat = format;
           }
