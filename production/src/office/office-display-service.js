@@ -18,7 +18,7 @@ class OfficeDisplayService {
         type: officeProperties.actions.preLoadReport,
         preLoadReport: objectInfo,
       });
-      popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
+      await popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
     }
     try {
       return await this._printObject(objectId, projectId, isReport, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body, isPrompted);
@@ -210,6 +210,7 @@ class OfficeDisplayService {
     const reduxStoreState = reduxStore.getState();
     reduxStore.dispatch({type: officeProperties.actions.popupHidden});
     reduxStore.dispatch({type: officeProperties.actions.stopLoading});
+    console.log('redux state dialog object', reduxStoreState.sessionReducer.dialog);
     reduxStoreState.sessionReducer.dialog.close();
   }
 
