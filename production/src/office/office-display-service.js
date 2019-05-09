@@ -53,9 +53,7 @@ class OfficeDisplayService {
 
       // Check if instance returned data
       if (!instanceDefinition || instanceDefinition.mstrTable.rows.length === 0) {
-        return !!isPrompted
-          ? {type: 'warning', message: ALL_DATA_FILTERED_OUT}
-          : {type: 'warning', message: NOT_SUPPORTED_NO_ATTRIBUTES};
+        return {type: 'warning', message: !!isPrompted ? ALL_DATA_FILTERED_OUT : NOT_SUPPORTED_NO_ATTRIBUTES};
       }
 
       // TODO: If isRefresh check if new instance definition is same as before
@@ -167,7 +165,6 @@ class OfficeDisplayService {
       await context.sync();
       return officeTable;
     } catch (error) {
-      officeTable.delete();
       await context.sync();
       throw error;
     }
