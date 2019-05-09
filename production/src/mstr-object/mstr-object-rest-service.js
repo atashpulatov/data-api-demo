@@ -9,6 +9,7 @@ const sharedFolderIdType = 7;
 export const DATA_LIMIT = 200000;
 const EXCEL_ROW_LIMIT = 1048576;
 const EXCEL_COLUMN_LIMIT = 16384;
+const OBJECT_TYPE = '3'; //both reports and cubes are of type 3
 
 class MstrObjectRestService {
   async getProjectContent(envUrl, authToken, projectId,
@@ -122,8 +123,7 @@ class MstrObjectRestService {
     const storeState = reduxStore.getState();
     const envUrl = storeState.sessionReducer.envUrl;
     const authToken = storeState.sessionReducer.authToken;
-    const objectType = '3'; //both reports and cubes are of type 3
-    const fullPath = `${envUrl}/objects/${objectId}?type=${objectType}`;
+    const fullPath = `${envUrl}/objects/${objectId}?type=${OBJECT_TYPE}`;
 
     return await moduleProxy.request
         .get(fullPath)
