@@ -124,4 +124,26 @@ describe('PopupViewSelector', () => {
     expect(propsToPass.startImport).toHaveBeenCalled();
     expect(mockMessageParent).toHaveBeenCalledWith(JSON.stringify(resultAction));
   });
+
+  it('should pass authToken', () => {
+    // // given
+    const location = {
+      search: {},
+    };
+    const props = {
+      popupType: PopupTypeEnum.navigationTree,
+      propsToPass: {},
+      authToken: 'token',
+    };
+    // when
+    // eslint-disable-next-line react/jsx-pascal-case
+    const componentWrapper = shallow(<_PopupViewSelector
+      location={location}
+      {...props}
+      methods={{}}
+    />);
+    // then
+    const wrappedNavTree = componentWrapper.find(NavigationTree).at(0);
+    expect(wrappedNavTree.prop('parsed')).toEqual({token: props.authToken});
+  });
 });
