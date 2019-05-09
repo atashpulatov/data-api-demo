@@ -84,7 +84,7 @@ class OfficeDisplayService {
         type: officeProperties.actions.finishLoadingReport,
         reportBindId: bindingId,
       });
-      return !isRefresh && {type: 'success', message: `Data loaded successfully`};
+      return {type: 'success', message: `Data loaded successfully`};
     } catch (error) {
       if (officeTable && !isRefresh) {
         officeTable.delete();
