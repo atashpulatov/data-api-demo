@@ -16,12 +16,17 @@ import {
   NOT_SUPPORTED_SERVER_ERR,
   NOT_IN_METADATA,
   PROJECT_ROW_LIMIT,
+  NOT_SUPPORTED_PROMPTS_REFRESH,
 } from '../../src/error/constants';
 
 jest.mock('../../src/storage/session-helper');
 jest.useFakeTimers();
 
 describe('ErrorService', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe('errorRestFactory', () => {
     it('should return the same error if not handled', () => {
       // given
@@ -284,7 +289,7 @@ describe('ErrorService', () => {
       errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('warning', NOT_SUPPORTED_SERVER_ERR);
+      expect(spyMethod).toBeCalledWith('warning', NOT_SUPPORTED_PROMPTS_REFRESH);
     });
     it('should handle OverlappingTablesError', () => {
       // given
