@@ -9,6 +9,7 @@ const sharedFolderIdType = 7;
 export const DATA_LIMIT = 200000;
 const EXCEL_ROW_LIMIT = 1048576;
 const EXCEL_COLUMN_LIMIT = 16384;
+const OBJECT_TYPE = '3'; //both reports and cubes are of type 3
 
 class MstrObjectRestService {
   async getProjectContent(envUrl, authToken, projectId,
@@ -98,12 +99,31 @@ class MstrObjectRestService {
     return {instanceId, rows, columns, mstrTable};
   }
 
-  async getObjectInfo(objectId, projectId, isReport = true) {
+  async getObjectDefinition(objectId, projectId, isReport = true) {
     const storeState = reduxStore.getState();
     const envUrl = storeState.sessionReducer.envUrl;
     const authToken = storeState.sessionReducer.authToken;
     const objectType = isReport ? 'reports' : 'cubes';
     const fullPath = `${envUrl}/${objectType}/${objectId}`;
+
+    return await moduleProxy.request
+        .get(fullPath)
+        .set('x-mstr-authtoken', authToken)
+        .set('x-mstr-projectid', projectId)
+        .withCredentials()
+        .then((res) => {
+          return res.body;
+        })
+        .catch((err) => {
+          throw errorService.errorRestFactory(err);
+        });
+  };
+
+  async getObjectInfo(objectId, projectId, isReport = true) {
+    const storeState = reduxStore.getState();
+    const envUrl = storeState.sessionReducer.envUrl;
+    const authToken = storeState.sessionReducer.authToken;
+    const fullPath = `${envUrl}/objects/${objectId}?type=${OBJECT_TYPE}`;
 
     return await moduleProxy.request
         .get(fullPath)

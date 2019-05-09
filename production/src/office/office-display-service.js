@@ -13,7 +13,7 @@ import {OverlappingTablesError} from '../error/overlapping-tables-error';
 class OfficeDisplayService {
   printObject = async (dossierData, objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh, isPrompted, isRefreshAll = false) => {
     if (!isRefreshAll) {
-      const objectInfo = await mstrObjectRestService.getObjectInfo(objectId, projectId, isReport);
+      const objectInfo = !!isPrompted ? await mstrObjectRestService.getObjectInfo(objectId, projectId, isReport) : await mstrObjectRestService.getObjectDefinition(objectId, projectId, isReport);
       reduxStore.dispatch({
         type: officeProperties.actions.preLoadReport,
         preLoadReport: objectInfo,
@@ -53,9 +53,7 @@ class OfficeDisplayService {
 
       // Check if instance returned data
       if (!instanceDefinition || instanceDefinition.mstrTable.rows.length === 0) {
-        return !!isPrompted
-          ? {type: 'warning', message: ALL_DATA_FILTERED_OUT}
-          : {type: 'warning', message: NOT_SUPPORTED_NO_ATTRIBUTES};
+        return {type: 'warning', message: !!isPrompted ? ALL_DATA_FILTERED_OUT : NOT_SUPPORTED_NO_ATTRIBUTES};
       }
 
       // TODO: If isRefresh check if new instance definition is same as before
@@ -84,7 +82,7 @@ class OfficeDisplayService {
         type: officeProperties.actions.finishLoadingReport,
         reportBindId: bindingId,
       });
-      return !isRefresh && {type: 'success', message: `Data loaded successfully`};
+      return {type: 'success', message: `Data loaded successfully`};
     } catch (error) {
       if (officeTable && !isRefresh) {
         officeTable.delete();
@@ -167,7 +165,6 @@ class OfficeDisplayService {
       await context.sync();
       return officeTable;
     } catch (error) {
-      officeTable.delete();
       await context.sync();
       throw error;
     }
