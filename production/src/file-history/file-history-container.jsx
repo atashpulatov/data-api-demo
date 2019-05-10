@@ -12,13 +12,35 @@ import {fileHistoryContainerHOC} from './file-history-container-HOC.jsx';
 import './file-history.css';
 
 export class _FileHistoryContainer extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      allowRefreshAllClick: true,
+    };
+  }
+
+  componentDidMount() {
+    this._ismounted = true;
+  }
+
+  componentWillUnmount() {
+    this._ismounted = false;
+  }
+
+  refreshAllAction = (reportArray, refreshAll) => {
+    this.state.allowRefreshAllClick && this.setState({allowRefreshAllClick: false}, async () => {
+      await refreshAll(reportArray);
+      this._ismounted && this.setState({allowRefreshAllClick: true});
+    });
+  };
+
   render() {
     const {reportArray = [], loading, refreshingAll, refreshAll} = this.props;
     return (<React.Fragment >
       <Button id="add-data-btn-container" className="add-data-btn" onClick={() => this.props.addDataAction()}
         disabled={loading}>Add Data</Button>
       <span className="refresh-button-container">
-        <Button className="refresh-all-btn" title="Refresh All Data" style={{float: 'right'}} onClick={() => refreshAll(reportArray)} disabled={loading}>
+        <Button className="refresh-all-btn" title="Refresh All Data" style={{float: 'right'}} onClick={() => this.refreshAllAction(reportArray, refreshAll)} disabled={loading}>
           {!refreshingAll ? <MSTRIcon type='refresh' /> : <img width='12px' height='12px' src={loadingSpinner} alt='Report loading icon' />}
         </Button>
       </span>
