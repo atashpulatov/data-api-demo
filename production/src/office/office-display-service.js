@@ -18,7 +18,7 @@ class OfficeDisplayService {
         type: officeProperties.actions.preLoadReport,
         preLoadReport: objectInfo,
       });
-      popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
+      await popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
     }
     try {
       return await this._printObject(objectId, projectId, isReport, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body, isPrompted);
