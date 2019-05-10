@@ -44,7 +44,8 @@ class AuthenticationService {
   getOfficePrivilege = async (envUrl, iSession) => {
     try {
       const response = await this._fetchPrivilegeById(OFFICE_PRIVILEGE_ID, envUrl, iSession);
-      return response && response.isUserLevelAllowed;
+      // Only return false if isUserLevelAllowed exists and is false
+      return response ? response.isUserLevelAllowed === true : true;
     } catch (error) {
       console.error(error);
       // In case of errors skip privilege check (not supported environments)
