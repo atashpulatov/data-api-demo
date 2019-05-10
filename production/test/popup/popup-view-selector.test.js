@@ -15,6 +15,8 @@ describe('PopupViewSelector', () => {
     };
     const props = {
       popupType: PopupTypeEnum.navigationTree,
+      propsToPass: {},
+      authToken: 'token',
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
@@ -68,6 +70,7 @@ describe('PopupViewSelector', () => {
     const propsToPass = {
       chosenObjectId: 'objectId',
       chosenProjectId: 'projectId',
+      authToken: 'token',
       startImport: jest.fn(),
       startLoading: jest.fn(),
       importRequested: true,
@@ -125,7 +128,7 @@ describe('PopupViewSelector', () => {
     expect(mockMessageParent).toHaveBeenCalledWith(JSON.stringify(resultAction));
   });
 
-  it('should pass authToken', ()=>{
+  it('should pass authToken', () => {
     // given
     const location = {
       search: {},
@@ -162,7 +165,7 @@ describe('PopupViewSelector', () => {
       location={location}
       {...props}
       methods={{}}
-    />);    
+    />);
     // then
     const componentInstance = componentWrapper.get(0);
     expect(componentInstance).toBe(null);
