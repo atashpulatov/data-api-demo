@@ -18,6 +18,15 @@ export class _FileHistoryContainer extends React.Component {
       allowRefreshAllClick: true,
     };
   }
+
+  componentDidMount() {
+    this._ismounted = true;
+  }
+
+  componentWillUnmount() {
+    this._ismounted = false;
+  }
+
   refreshAllAction = (reportArray, refreshAll) => {
     this.state.allowRefreshAllClick && this.setState({allowRefreshAllClick: false}, async () => {
       await refreshAll(reportArray);
