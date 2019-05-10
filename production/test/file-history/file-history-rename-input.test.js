@@ -38,7 +38,7 @@ describe('File history rename input', () => {
     const givenId = 'id123';
     // when
     const wrappedComponent = shallow(<RenameInput fileName={givenFileName} bindingId={givenId} />);
-    wrappedComponent.find('div').get(1).simulate('dblclick', {});
+    wrappedComponent.find('div').first().simulate('dblclick', {});
     // then
     expect(wrappedComponent.state().editable).toBeTruthy();
   });
