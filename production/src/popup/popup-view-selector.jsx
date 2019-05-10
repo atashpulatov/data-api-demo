@@ -36,7 +36,6 @@ function renderProperComponent(popupType, methods, propsToPass) {
     return <AttributeSelectorWindow parsed={propsToPass} handleBack={methods.handleBack} />;
   }
   if (popupType === PopupTypeEnum.navigationTree) {
-    debugger;
     return <NavigationTree handlePrepare={methods.handlePrepare} parsed={propsToPass} handlePopupErrors={methods.handlePopupErrors} />;
   }
   if (popupType === PopupTypeEnum.loadingPage) {
