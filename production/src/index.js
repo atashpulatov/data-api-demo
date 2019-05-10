@@ -8,12 +8,27 @@ import {reduxStore, reduxPersistor} from './store';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/lib/integration/react';
 import './index.css';
+import {authenticationService} from './authentication/auth-rest-service.js';
+import {homeHelper} from './home/home-helper.js';
+
 const Office = window.Office;
 
 function officeInitialize() {
   Office.onReady()
-      .then(() => {
-        goReact();
+      .then(async () => {
+        const envUrl = window.location.pathname.split('/apps/')[0];
+        const {iSession} = homeHelper.getParsedCookies();
+        const canUseOffice = await authenticationService.getOfficePrivilege(envUrl + '/api', iSession);
+        if (canUseOffice) {
+          goReact();
+        } else {
+          try {
+            await authenticationService.logout(envUrl + '/api', iSession);
+            window.location.replace(`${envUrl}/static/loader-mstr-office/no-privilege.html`);
+          } catch (error) {
+            window.location.reload();
+          }
+        }
       });
 }
 
@@ -33,10 +48,10 @@ function goReact() {
  * This should prevent navigating back to login page via browser 'Back' button
  */
 function disableBackNavigation(count) {
-  if (count){
-    window.setTimeout(function () {
+  if (count) {
+    window.setTimeout(function() {
       window.location.hash = count;
-      disableBackNavigation(count-1);
+      disableBackNavigation(count - 1);
     }, 50);
   }
 };
