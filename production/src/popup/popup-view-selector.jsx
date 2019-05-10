@@ -23,7 +23,11 @@ export const _PopupViewSelector = (props) => {
       propsToPass.reportId = props.chosenObjectId;
     }
   }
-  !!props.authToken && (propsToPass.token = props.authToken);
+  if (!props.authToken || !propsToPass) {
+    console.log('Waiting for token to be passed');
+    return null;
+  }
+  propsToPass.token = props.authToken;
   return renderProperComponent(popupType, methods, propsToPass);
 };
 

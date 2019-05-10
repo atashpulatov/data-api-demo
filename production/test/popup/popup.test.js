@@ -7,7 +7,7 @@ import {officeContext} from '../../src/office/office-context.js';
 import {selectorProperties} from '../../src/attribute-selector/selector-properties.js';
 import {PopupTypeEnum} from '../../src/home/popup-type-enum.js';
 import TouchFeedback from 'rmc-feedback';
-import {_PopupViewSelector} from '../../src/popup/popup-view-selector.jsx';
+import {_PopupViewSelector, PopupViewSelector} from '../../src/popup/popup-view-selector.jsx';
 
 describe('Popup.js', () => {
   const messageParentMock = jest.fn();
@@ -108,16 +108,18 @@ describe('Popup.js', () => {
     expect(parsed.reportSubtype).toEqual(givenRecord.subtype);
   });
 
-  it('should render loading page when proper type set', () => {
+  it('should pass popupType on', () => {
     // given
     const location = {
       search: `popupType=${PopupTypeEnum.loadingPage}`,
     };
     // when
-    const popupWrapped = mount(<Popup location={location} />);
+    const popupWrapped = shallow(<Popup location={location} />);
     // then
-    expect(popupWrapped.find('LoadingText').get(0)).toBeDefined();
+    const viewSelectorWrapped = popupWrapped.find(PopupViewSelector);
+    expect(viewSelectorWrapped.prop('popupType')).toEqual(PopupTypeEnum.loadingPage);
   });
+
   it('should render nothing with incorrect type', () => {
     // given
     const location = {
