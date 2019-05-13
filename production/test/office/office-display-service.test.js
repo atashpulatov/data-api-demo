@@ -11,6 +11,7 @@ import {PopupTypeEnum} from '../../src/home/popup-type-enum';
 import {sessionHelper} from '../../src/storage/session-helper';
 import {OverlappingTablesError} from '../../src/error/overlapping-tables-error';
 import {officeConverterService} from '../../src/office/office-converter-service';
+import {ALL_DATA_FILTERED_OUT} from '../../src/error/constants';
 
 jest.mock('../../src/mstr-object/mstr-object-rest-service');
 jest.mock('../../src/office/store/office-store-service');
@@ -27,8 +28,7 @@ describe('OfficeDisplayService', () => {
 
   beforeAll(() => {
     givenReport.mstrTable = officeConverterService.createTable(givenReport);
-    jest.spyOn(mstrObjectRestService, 'getInstanceDefinition')
-        .mockResolvedValue(givenReport);
+
     jest.spyOn(officeApiHelper, 'findAvailableOfficeTableId')
         .mockReturnValue(excelTableNameMock);
     jest.spyOn(officeApiHelper, 'getCurrentMstrContext')
@@ -68,6 +68,18 @@ describe('OfficeDisplayService', () => {
   });
 
   beforeEach(() => {
+    const changedMock = jest.spyOn(mstrObjectRestService, 'getInstanceDefinition').mockResolvedValue({
+      mstrTable: {
+        rows: [],
+      },
+    });
+    changedMock.mockRestore();
+
+    jest.spyOn(mstrObjectRestService, 'getInstanceDefinition')
+        .mockResolvedValue(givenReport);
+  });
+
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
@@ -77,7 +89,7 @@ describe('OfficeDisplayService', () => {
 
   it('should create instance when no instance id provided', async () => {
     // given
-    const getObjectInfoSpy = jest.spyOn(mstrObjectRestService, 'getInstanceDefinition');
+    const getObjectDefinitionSpy = jest.spyOn(mstrObjectRestService, 'getInstanceDefinition');
     jest.spyOn(officeApiHelper, 'getSelectedCell').mockImplementationOnce(() => {});
     jest.spyOn(officeApiHelper, 'formatNumbers').mockImplementationOnce(() => {});
     jest.spyOn(officeApiHelper, 'formatTable').mockImplementationOnce(() => {});
@@ -91,14 +103,14 @@ describe('OfficeDisplayService', () => {
     // when
     await officeDisplayService._printObject(arg1, arg2, arg3);
     // then
-    expect(getObjectInfoSpy).toBeCalled();
-    expect(getObjectInfoSpy).toBeCalledWith(arg1, arg2, arg3, undefined, undefined);
+    expect(getObjectDefinitionSpy).toBeCalled();
+    expect(getObjectDefinitionSpy).toBeCalledWith(arg1, arg2, arg3, undefined, undefined);
   });
 
   it('should open loading popup when printing object', async () => {
     // given
     const givenBody = {id: 'id', name: 'name'};
-    const getObjectInfoSpy = jest.spyOn(mstrObjectRestService, 'getObjectInfo').mockResolvedValue(givenBody);
+    const getObjectDefinitionSpy = jest.spyOn(mstrObjectRestService, 'getObjectDefinition').mockResolvedValue(givenBody);
     const runPopupSpy = jest.spyOn(popupController, 'runPopup');
     const printInside = jest.spyOn(officeDisplayService, '_printObject').mockImplementationOnce(() => {});
     const arg1 = null;
@@ -109,7 +121,7 @@ describe('OfficeDisplayService', () => {
     // when
     await officeDisplayService.printObject(arg1, arg2, arg3, arg4);
     // then
-    expect(getObjectInfoSpy).toBeCalledWith(arg2, arg3, arg4);
+    expect(getObjectDefinitionSpy).toBeCalledWith(arg2, arg3, arg4);
     const preLoadReport = reduxStore.getState().officeReducer.preLoadReport;
     expect(preLoadReport).toEqual(givenBody);
     expect(runPopupSpy).toBeCalledWith(PopupTypeEnum.loadingPage, 22, 28);
@@ -350,6 +362,32 @@ describe('OfficeDisplayService', () => {
       // when
       expect(false).toBeTruthy();
       // then
+    });
+  });
+
+  it('should print proper warning message when empty prompted report', async () => {
+    const changedMock = jest.spyOn(mstrObjectRestService, 'getInstanceDefinition').mockResolvedValue({
+      mstrTable: {
+        rows: [],
+      },
+    });
+    jest.spyOn(officeApiHelper, 'getSelectedCell').mockImplementationOnce(() => {});
+    jest.spyOn(officeApiHelper, 'formatNumbers').mockImplementationOnce(() => {});
+    jest.spyOn(officeApiHelper, 'formatTable').mockImplementationOnce(() => {});
+    jest.spyOn(officeApiHelper, 'bindNamedItem').mockImplementationOnce(() => {});
+    jest.spyOn(officeDisplayService, '_dispatchPrintFinish').mockImplementationOnce(() => {});
+    jest.spyOn(officeDisplayService, '_createOfficeTable').mockImplementationOnce(() => {});
+    jest.spyOn(officeDisplayService, '_fetchInsertDataIntoExcel').mockImplementationOnce(() => {});
+    const arg1 = 'arg1';
+    const arg2 = 'arg2';
+    const arg3 = false;
+    // when
+    const resultMessage = await officeDisplayService._printObject(arg1, arg2, arg3, null, null, null, null, null, null, true);
+    // then
+    expect(resultMessage).toBeDefined();
+    expect(resultMessage).toEqual({
+      message: ALL_DATA_FILTERED_OUT,
+      type: 'warning',
     });
   });
 });

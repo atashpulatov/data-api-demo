@@ -15,7 +15,7 @@ export const _PopupViewSelector = (props) => {
   if (importRequested) {
     if (!props.isPrompted) {
       proceedToImport(props);
-    } else if ( !!props.dossierData && !!props.dossierData.instanceId) {
+    } else if (!!props.dossierData && !!props.dossierData.instanceId) {
       proceedToImport(props);
     } else {
       popupType = PopupTypeEnum.promptsWindow;
@@ -23,6 +23,15 @@ export const _PopupViewSelector = (props) => {
       propsToPass.reportId = props.chosenObjectId;
     }
   }
+  if (!props.authToken || !propsToPass) {
+    console.log('Waiting for token to be passed');
+    return null;
+  }
+  propsToPass.token = props.authToken;
+  return renderProperComponent(popupType, methods, propsToPass);
+};
+
+function renderProperComponent(popupType, methods, propsToPass) {
   if (!popupType) {
     return <AttributeSelectorWindow parsed={propsToPass} handleBack={methods.handleBack} />;
   }
@@ -40,7 +49,7 @@ export const _PopupViewSelector = (props) => {
   }
   // TODO: do some error handling here
   return null;
-};
+}
 
 function proceedToImport(props) {
   const okObject = {
@@ -62,7 +71,10 @@ function proceedToImport(props) {
 }
 
 function mapStateToProps(state) {
-  return {...state.navigationTree};
+  return {
+    ...state.navigationTree,
+    authToken: state.sessionReducer.authToken,
+  };
 };
 
 export const PopupViewSelector = connect(mapStateToProps, actions)(_PopupViewSelector);

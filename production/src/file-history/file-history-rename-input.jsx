@@ -62,7 +62,7 @@ export default class RenameInput extends React.Component {
       </Menu>);
     return (
       <Dropdown overlay={menu} trigger={['contextMenu']}>
-        <div onDoubleClick={this.enableEdit}>
+        <div onDoubleClick={this.enableEdit} style={{position: 'relative'}}>
           <Input type='text'
             className='rename-input'
             maxLength={255}
@@ -73,6 +73,13 @@ export default class RenameInput extends React.Component {
             onChange={this.handleChange}
             onBlur={this.renameReport}
             onPressEnter={this.renameReport} />
+          <div
+            style={{
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+              top: '0px',
+              zIndex: editable ? -1 : 1}}/>
         </div >
       </Dropdown>
     );
