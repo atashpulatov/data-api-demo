@@ -13,6 +13,17 @@ describe('NavigationTree Actions', () => {
     expect(listener).toHaveBeenCalledWith({type: actions.SELECT_OBJECT, data: true});
   });
 
+  it('should dispatch proper cancelImportRequest action', () => {
+    // given
+    const listener = jest.fn();
+
+    // when
+    actions.cancelImportRequest()(listener);
+
+    // then
+    expect(listener).toHaveBeenCalledWith({type: actions.CANCEL_REQUEST_IMPORT});
+  });
+
   it('should dispatch proper setDataSource action', () => {
     // given
     const listener = jest.fn();
@@ -94,5 +105,17 @@ describe('NavigationTree Actions', () => {
 
     // then
     expect(listener).toHaveBeenCalledWith({type: actions.UPDATE_SIZE, data: true});
+  });
+
+  it('should dispatch proper requestImport action', () => {
+    // given
+    const listener = jest.fn();
+    const data = 'whatever';
+
+    // when
+    actions.requestImport(data)(listener);
+
+    // then
+    expect(listener).toHaveBeenCalledWith({type: actions.REQUEST_IMPORT, data});
   });
 });

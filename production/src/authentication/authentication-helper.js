@@ -2,7 +2,6 @@ import {sessionHelper} from '../storage/session-helper';
 import {authenticationService} from './auth-rest-service';
 import {errorService} from '../error/error-handler';
 import {reduxStore} from '../store';
-import {userRestService} from '../home/user-rest-service';
 
 class AuthenticationHelper {
   loginUser = async (err, values) => {

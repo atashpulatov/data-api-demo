@@ -35,7 +35,7 @@
     "jest-pnp-resolver": "1.0.1",
     "jest-resolve": "23.6.0",
     "mini-css-extract-plugin": "0.4.3",
-    "mstr-react-library": "ssh://git@github.microstrategy.com:tech/mstr-react-library.git#d7d749a62ff62664fe888537d3e9541becfcb138",
+    "mstr-react-library": "ssh://git@github.microstrategy.com:tech/mstr-react-library.git#f43cbceb617a3fcca0e0f3193788c9772c1751b9",
     "optimize-css-assets-webpack-plugin": "5.0.1",
     "pnp-webpack-plugin": "1.1.0",
     "postcss-flexbugs-fixes": "4.1.0",
@@ -48,6 +48,7 @@
     "react-app-polyfill": "^0.1.3",
     "react-dev-utils": "^6.0.4",
     "react-dom": "^16.5.2",
+    "react-mutation-observer": "^1.1.0",
     "react-redux": "^5.0.7",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
@@ -98,7 +99,8 @@
       "!src/office/store/office-store-service.js",
       "!src/storage/session-helper.js",
       "!src/popup/popup-controller.js",
-      "!src/breadcrumbs/breadcrumbs.jsx"
+      "!src/breadcrumbs/breadcrumbs.jsx",
+      "!src/prompts/prompts-rest-service.jsx"
     ],
     "resolver": "jest-pnp-resolver",
     "setupFiles": [
