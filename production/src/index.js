@@ -15,20 +15,22 @@ const Office = window.Office;
 
 function officeInitialize() {
   Office.onReady()
-      .then(async () => {
+      .then(() => {
         const envUrl = window.location.pathname.split('/apps/')[0];
         const {iSession} = homeHelper.getParsedCookies();
-        const canUseOffice = await authenticationService.getOfficePrivilege(envUrl + '/api', iSession);
-        if (canUseOffice) {
-          goReact();
-        } else {
-          try {
-            await authenticationService.logout(envUrl + '/api', iSession);
-            window.location.replace(`${envUrl}/static/loader-mstr-office/no-privilege.html`);
-          } catch (error) {
-            window.location.reload();
-          }
-        }
+        authenticationService.getOfficePrivilege(envUrl + '/api', iSession)
+            .then((canUseOffice) => {
+              if (canUseOffice) {
+              } else {
+                try {
+                  authenticationService.logout(envUrl + '/api', iSession);
+                  window.location.replace(`${envUrl}/static/loader-mstr-office/no-privilege.html`);
+                } catch (error) {
+                  // Ignore error
+                }
+              }
+            });
+        goReact();
       });
 }
 
