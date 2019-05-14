@@ -37,9 +37,9 @@ span.file-icons {
     background: rgba(28, 145, 220, 0.20);
 }
 
-.refresh-all-btn,
-.refresh-all-btn:hover,
-.refresh-all-btn:focus {
+.ant-btn.refresh-all-btn,
+.ant-btn.refresh-all-btn:hover,
+.ant-btn.refresh-all-btn:focus {
     float: right;
     background: #FFFFFF;
     box-shadow: 0 0;
