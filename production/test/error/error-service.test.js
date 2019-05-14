@@ -124,7 +124,7 @@ describe('ErrorService', () => {
   describe('handleRestError', () => {
     it('should display notification on EnvironmentNotFoundError', () => {
       // given
-      const error = new EnvironmentNotFoundError({});
+      const error = new EnvironmentNotFoundError();
       const spyMethod = jest.spyOn(notificationService, 'displayNotification');
       const spyLogOut = jest.spyOn(errorService, 'fullLogOut');
       // when
@@ -137,7 +137,7 @@ describe('ErrorService', () => {
     });
     it('should display notification and logout on UnauthorizedError', () => {
       // given
-      const error = new UnauthorizedError({});
+      const error = new UnauthorizedError();
       const spyMethod = jest.spyOn(notificationService, 'displayNotification');
       const spyLogOut = jest.spyOn(errorService, 'fullLogOut');
       // when
@@ -150,7 +150,7 @@ describe('ErrorService', () => {
     });
     it('should display notification and logout on ConnectionBrokenError', () => {
       // given
-      const error = new ConnectionBrokenError({});
+      const error = new ConnectionBrokenError();
       const spyMethod = jest.spyOn(notificationService, 'displayNotification');
       const spyLogOut = jest.spyOn(errorService, 'fullLogOut');
       // when
@@ -163,7 +163,7 @@ describe('ErrorService', () => {
     });
     it('should display notification and logout on BadRequestError', () => {
       // given
-      const error = new BadRequestError({});
+      const error = new BadRequestError();
       const spyMethod = jest.spyOn(notificationService, 'displayNotification');
       // when
       errorService.handleError(error);
@@ -173,7 +173,7 @@ describe('ErrorService', () => {
     });
     it('should display notification on UnauthorizedError', () => {
       // given
-      const error = new UnauthorizedError({});
+      const error = new UnauthorizedError();
       const spyMethod = jest.spyOn(notificationService, 'displayNotification');
       // when
       errorService.handleError(error, true);
@@ -183,7 +183,7 @@ describe('ErrorService', () => {
     });
     it('should display notification on ConnectionBrokenError', () => {
       // given
-      const error = new ConnectionBrokenError({});
+      const error = new ConnectionBrokenError();
       const spyMethod = jest.spyOn(notificationService, 'displayNotification');
       // when
       errorService.handleError(error, true);
@@ -193,7 +193,7 @@ describe('ErrorService', () => {
     });
     it('should display notification on BadRequestError', () => {
       // given
-      const error = new BadRequestError({});
+      const error = new BadRequestError();
       const spyMethod = jest.spyOn(notificationService, 'displayNotification');
       // when
       errorService.handleError(error, true);
@@ -203,7 +203,7 @@ describe('ErrorService', () => {
     });
     it('should display notification on OutsideOfRangeError ', () => {
       // given
-      const error = new OutsideOfRangeError({});
+      const error = new OutsideOfRangeError();
       const spyMethod = jest.spyOn(notificationService, 'displayNotification');
       // when
       errorService.handleError(error);
@@ -212,7 +212,7 @@ describe('ErrorService', () => {
     });
     it('should display notification on InternalServerError with no error body', () => {
       // given
-      const error = new InternalServerError({});
+      const error = new InternalServerError();
       const spyMethod = jest.spyOn(notificationService, 'displayNotification');
       // when
       errorService.handleError(error);
@@ -261,7 +261,7 @@ describe('ErrorService', () => {
     });
     it('should logout on UnauthorizedError', () => {
       // given
-      const error = new UnauthorizedError({});
+      const error = new UnauthorizedError();
       const spyMethod = jest.spyOn(notificationService, 'displayNotification');
       // when
       errorService.handleError(error);
@@ -272,7 +272,7 @@ describe('ErrorService', () => {
     });
     it('should logout on EnvironmentNotFound', () => {
       // given
-      const error = new EnvironmentNotFoundError({});
+      const error = new EnvironmentNotFoundError();
       const spyMethod = jest.spyOn(notificationService, 'displayNotification');
       // when
       errorService.handleError(error);
@@ -283,7 +283,7 @@ describe('ErrorService', () => {
     });
     it('should display notification on PromptedReportError', () => {
       // given
-      const error = new PromptedReportError({});
+      const error = new PromptedReportError();
       const spyMethod = jest.spyOn(notificationService, 'displayNotification');
       // when
       errorService.handleError(error);
@@ -404,7 +404,7 @@ describe('ErrorService', () => {
   describe('handlePreAuthError', () => {
     it('should handle Unauthorized for login', () => {
       // given
-      const error = new UnauthorizedError({});
+      const error = new UnauthorizedError();
       const spyMethod = jest.spyOn(notificationService, 'displayNotification');
       // when
       errorService.handlePreAuthError(error);

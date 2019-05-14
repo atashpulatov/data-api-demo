@@ -1,7 +1,7 @@
-export function PromptedReportError(error) {
-  this.status = error.status || null;
-  this.response = error.response || null;
-  this.message = error.message || null;
+export function PromptedReportError(error = {}) {
+  this.status = error.status;
+  this.response = error.response;
+  this.message = error.message;
 };
 PromptedReportError.prototype = new Error();
 
