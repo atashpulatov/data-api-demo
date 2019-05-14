@@ -20,8 +20,7 @@ function officeInitialize() {
         const {iSession} = homeHelper.getParsedCookies();
         authenticationService.getOfficePrivilege(envUrl + '/api', iSession)
             .then((canUseOffice) => {
-              if (canUseOffice) {
-              } else {
+              if (!canUseOffice) {
                 try {
                   authenticationService.logout(envUrl + '/api', iSession);
                   window.location.replace(`${envUrl}/static/loader-mstr-office/no-privilege.html`);
