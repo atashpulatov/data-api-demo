@@ -1,9 +1,8 @@
 import React from 'react';
 import {mount} from 'enzyme';
-import {Authenticate, _Authenticate} from '../../src/authentication/auth-component.jsx';
+import {_Authenticate} from '../../src/authentication/auth-component.jsx';
 import {reduxStore} from '../../src/store';
 import {sessionProperties} from '../../src/storage/session-properties';
-import {authenticationService} from '../../src/authentication/auth-rest-service';
 
 jest.mock('../../src/authentication/auth-rest-service');
 
@@ -33,8 +32,15 @@ describe('AuthComponent', () => {
     };
     reduxStore.dispatch({
       type: sessionProperties.actions.logIn,
-      envUrl: 'env',
+      values: {
+        username: 'mstr',
+        envUrl: 'env',
+      },
     });
+    const mockSession = {
+      username: 'mstr',
+      envUrl: 'env',
+    };
     const mockEvent = {
       preventDefault: jest.fn(),
     };
@@ -42,7 +48,8 @@ describe('AuthComponent', () => {
       getFieldDecorator: () => jest.fn(),
       validateFields: () => jest.fn(),
     };
-    const wrappedComponent = mount(<_Authenticate history={history} form={mockForm} />);
+    const mockMapping = jest.fn();
+    const wrappedComponent = mount(<_Authenticate history={history} session={mockSession} form={mockForm} resetState={mockMapping} />);
     const onLoginUserSpy = jest.spyOn(wrappedComponent.instance(), 'onLoginUser');
     const form = wrappedComponent.find('Form').at(0);
     // when
@@ -50,5 +57,6 @@ describe('AuthComponent', () => {
     // then
     expect(onLoginUserSpy).toBeCalled();
     expect(onLoginUserSpy).toBeCalledWith(mockEvent);
+    expect(mockMapping).toBeCalled();
   });
 });

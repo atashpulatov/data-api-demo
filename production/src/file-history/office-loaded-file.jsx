@@ -1,50 +1,88 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import {Row, Col} from 'antd';
 import {MSTRIcon} from 'mstr-react-library';
 import {fileHistoryHelper} from './file-history-helper';
 import loadingSpinner from './assets/report_loading_spinner.gif';
+import {refreshReport} from '../popup/popup-actions';
+import RenameInput from './file-history-rename-input';
 
-export class OfficeLoadedFile extends React.Component {
+export class _OfficeLoadedFile extends React.Component {
   constructor() {
     super();
     this.state = {
       allowDeleteClick: true,
+      allowRefreshClick: true,
     };
   }
 
-  deleteAction = () => {
+  componentDidMount() {
+    this._ismounted = true;
+  }
+
+  componentWillUnmount() {
+    this._ismounted = false;
+  }
+
+  deleteAction = (e) => {
+    e.stopPropagation();
     const {onDelete, bindingId, objectType} = this.props;
-    fileHistoryHelper.deleteReport(onDelete, bindingId, objectType);
-    this.setState({allowDeleteClick: false});
+    this.setState({allowDeleteClick: false}, async () => {
+      await fileHistoryHelper.deleteReport(onDelete, bindingId, objectType);
+      this._ismounted && this.setState({allowDeleteClick: true});
+    });
+  };
+
+  refreshAction = (e) => {
+    e.stopPropagation();
+    const {isLoading, bindingId, objectType, refreshReport} = this.props;
+    if (!isLoading) {
+      this.setState({allowRefreshClick: false}, async () => {
+        await refreshReport(bindingId, objectType, false);
+        this.setState({allowRefreshClick: true});
+      });
+    }
   };
 
   render() {
-    const {fileName, bindingId, onClick, onRefresh, isLoading, objectType} = this.props;
+    const {fileName, bindingId, onClick, isLoading, objectType, isPrompted, refreshDate} = this.props;
     return (
       <Row
         className="file-history-container"
         type="flex"
-        justify="center">
+        justify="center"
+        role="listitem"
+        tabIndex="0"
+        onClick={() => onClick(bindingId)}>
         <Col span={2}>
           {objectType === 'report' ? <MSTRIcon type='report' /> : <MSTRIcon type='dataset' />}
         </Col>
-        <Col span={14} title={`${fileName}`} className="report-title" onClick={() => onClick(bindingId)}>
-          {fileName}
+        <Col span={14} title={`${fileName}`} className="report-title">
+          <RenameInput bindingId={bindingId} fileName={fileName} />
+          <div className="additional-data">{refreshDate}</div>
         </Col>
         <Col span={1} offset={2}>
-          <span className="loading-button-container"
-            onClick={!isLoading ? () => fileHistoryHelper.refreshReport(onRefresh, bindingId, objectType) : null}>
-            {!isLoading ? <MSTRIcon type='refresh' /> : <img width='12px' height='12px' src={loadingSpinner} alt='Report loading icon' />}
-          </span>
+          {!isPrompted && <span className="loading-button-container" title="Refresh Data"
+            onClick={(e) => this.state.allowRefreshClick && this.refreshAction(e)}>
+            {!isLoading ? <MSTRIcon type='refresh' /> :
+              <img width='12px' height='12px' src={loadingSpinner} alt='Report loading icon' />}
+          </span>}
         </Col>
         <Col span={1} offset={1}>
           <span
-            onClick={() => this.state.allowDeleteClick && this.deleteAction()}>
+            title="Remove Data from Workbook"
+            onClick={(e) => this.state.allowDeleteClick && this.deleteAction(e)}>
             <MSTRIcon type='trash' />
           </span>
         </Col>
-      </Row >
+      </Row>
     );
   }
 }
+
+const mapDispatchToProps = {
+  refreshReport,
+};
+
+export const OfficeLoadedFile = connect(null, mapDispatchToProps)(_OfficeLoadedFile);
 

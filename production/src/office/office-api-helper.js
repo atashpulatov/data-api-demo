@@ -28,7 +28,7 @@ class OfficeApiHelper {
       (headerCount -= firstNumber) >= 0;
       firstNumber = secondNumber, secondNumber *= ALPHABET_RANGE_END) {
       endColumn = String.fromCharCode(parseInt(
-        (headerCount % secondNumber) / firstNumber)
+          (headerCount % secondNumber) / firstNumber)
         + ASCII_CAPITAL_LETTER_INDEX)
         + endColumn;
     }
@@ -57,16 +57,29 @@ class OfficeApiHelper {
   }
 
   onBindingObjectClick = async (bindingId) => {
-    const excelContext = await this.getExcelContext();
-    const tableRange = this.getBindingRange(excelContext, bindingId);
-    tableRange.select();
-    return await excelContext.sync();
+    try {
+      const excelContext = await this.getExcelContext();
+      const tableRange = this.getBindingRange(excelContext, bindingId);
+      tableRange.select();
+      return await excelContext.sync();
+    } catch (error) {
+      errorService.handleOfficeError(error);
+    }
   };
 
   getBindingRange = (context, bindingId) => {
+    try {
+      return context.workbook.bindings
+          .getItem(bindingId).getTable()
+          .getRange();
+    } catch (error) {
+      throw errorService.errorOfficeFactory(error);
+    }
+  }
+
+  getTable = (context, bindingId) => {
     return context.workbook.bindings
-      .getItem(bindingId).getTable()
-      .getRange();
+        .getItem(bindingId).getTable();
   }
 
   getExcelContext = async () => {
@@ -102,41 +115,40 @@ class OfficeApiHelper {
     return {envUrl, username};
   }
 
-  formatTable = (sheet) => {
+  formatTable = (table) => {
     if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
-      sheet.getUsedRange().format.autofitColumns();
-      sheet.getUsedRange().format.autofitRows();
+      table.getRange().format.autofitColumns();
     } else {
-      notificationService.displayMessage('warning', `Unable to format table.`);
+      notificationService.displayNotification('warning', `Unable to format table.`);
     }
   }
 
-  formatNumbers = async (table, reportConvertedData) => {
+  formatNumbers = (table, reportConvertedData) => {
     if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
       try {
-        const rowsCount = reportConvertedData.rows.length;
         const columns = table.columns;
 
         for (const object of reportConvertedData.columnInformation) {
           if (!object.isAttribute) {
-            const columnRange = columns.getItemAt(object.index).getHeaderRowRange().getRowsBelow(rowsCount);
+            const columnRange = columns.getItemAt(object.index).getDataBodyRange();
             let format = '';
 
-            if (object.category == 9) {
+            if (object.category === 9) {
               format = this._getNumberFormattingCategoryName(object);
             } else {
               format = object.formatString;
 
-              if (format.indexOf('$') != -1) {
-                format = format.replace(/[$]/g, '\\$').replace(/["]/g, ''); // fix anoying $-sign currency replacemnt in Excel
+              if (format.indexOf('$') !== -1) {
+                // Normalizing formatString from MicroStrategy when locale codes are used [$-\d+]
+                format = format.replace(/\[\$-/g, '[$$$$-').replace(/\$/g, '\\$').replace(/\\\$\\\$/g, '$').replace(/"/g, '');
               }
-            }
 
+              // for fractions set General format
+              object.formatString.match(/# \?+?\/\?+?/) && (format = 'General');
+            }
             columnRange.numberFormat = format;
           }
         }
-
-        await table.context.sync();
       } catch (error) {
         throw errorService.handleError(error);
       }
@@ -176,22 +188,25 @@ class OfficeApiHelper {
     const selectedRangeStart = context.workbook.getSelectedRange();
     selectedRangeStart.load(officeProperties.officeAddress);
     await context.sync();
-    const startCell = selectedRangeStart.address
-      .split('!')[1].split(':')[0];
+    const startCell = this.getStartCell(selectedRangeStart.address);
     return startCell;
+  }
+
+  getStartCell = (excelAdress) => {
+    return excelAdress.match(/!(\w+\d+)(:|$)/)[1];
   }
 
   bindNamedItem = (namedItem, bindingId) => {
     return new Promise((resolve, reject) => Office.context.document.bindings.addFromNamedItemAsync(
-      namedItem, 'table', {id: bindingId}, (result) => {
-        if (result.status === 'succeeded') {
-          console.log('Added new binding with type: ' + result.value.type + ' and id: ' + result.value.id);
-          resolve();
-        } else {
-          console.error('Error: ' + result.error.message);
-          reject(result.error);
-        }
-      }));
+        namedItem, 'table', {id: bindingId}, (result) => {
+          if (result.status === 'succeeded') {
+            console.log('Added new binding with type: ' + result.value.type + ' and id: ' + result.value.id);
+            resolve();
+          } else {
+            console.error('Error: ' + result.error.message);
+            reject(result.error);
+          }
+        }));
   }
 }
 

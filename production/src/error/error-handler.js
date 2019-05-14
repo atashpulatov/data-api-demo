@@ -8,7 +8,7 @@ import {notificationService} from '../notification/notification-service.js';
 import {RunOutsideOfficeError} from './run-outside-office-error.js';
 import {OverlappingTablesError} from './overlapping-tables-error';
 import {GenericOfficeError} from './generic-office-error.js';
-import {errorMessages, NOT_SUPPORTED_SERVER_ERR} from './constants';
+import {errorMessages, NOT_SUPPORTED_PROMPTS_REFRESH} from './constants';
 import {ConnectionBrokenError} from './connection-error.js';
 import {OutsideOfRangeError} from './outside-of-range-error.js';
 
@@ -19,7 +19,11 @@ class ErrorService {
     if (error.status === 200) {
       return new PromptedReportError();
     }
-    if (error.status === 404 || !error.response) {
+    const isOfficeError = error instanceof RunOutsideOfficeError
+      || error instanceof OverlappingTablesError
+      || error instanceof GenericOfficeError
+      || error instanceof OutsideOfRangeError;
+    if (error.status === 404 || (!error.response && !isOfficeError)) {
       if (error.response && error.response.body) {
         return new InternalServerError(error.response.body);
       }
@@ -28,18 +32,21 @@ class ErrorService {
       }
       return new EnvironmentNotFoundError();
     }
-    switch (error.response.status) {
-      case 404:
-        return new EnvironmentNotFoundError();
-      case 400:
-        return new BadRequestError();
-      case 401:
-        return new UnauthorizedError();
-      case 500:
-        return new InternalServerError(error.response.body ? error.response.body : {});
-      default:
-        return error;
+    if (!!error.response) {
+      switch (error.response.status) {
+        case 404:
+          return new EnvironmentNotFoundError();
+        case 400:
+          return new BadRequestError();
+        case 401:
+          return new UnauthorizedError();
+        case 500:
+          return new InternalServerError(error.response.body ? error.response.body : {});
+        default:
+          return error;
+      }
     }
+    return error;
   };
   errorOfficeFactory = (error) => {
     if (error.name === 'RichApi.Error') {
@@ -55,56 +62,29 @@ class ErrorService {
     return error;
   }
   handleError = (error, isLogout) => {
-    switch (true) {
-      case error instanceof EnvironmentNotFoundError:
-        notificationService.displayMessage('info', '404 - Environment not found');
-        if (!isLogout) {
-          setTimeout(() => {
-            this.fullLogOut();
-          }, TIMEOUT);
-        }
-        break;
-      case error instanceof ConnectionBrokenError:
-        notificationService.displayMessage('warning', 'Environment is unreachable.'
-          + '\nPlease check your internet connection.');
-        if (!isLogout) {
-          setTimeout(() => {
-            this.fullLogOut();
-          }, TIMEOUT);
-        }
-        break;
-      case error instanceof UnauthorizedError:
-        notificationService.displayMessage('info', 'Your session has expired. Please log in.');
-        if (!isLogout) {
-          setTimeout(() => {
-            this.fullLogOut();
-          }, TIMEOUT);
-        }
-        break;
-      case error instanceof BadRequestError:
-        notificationService.displayMessage('error', '400 - There has been a problem with your request');
-        break;
-      case error instanceof InternalServerError:
-        notificationService.displayMessage('warning', errorMessages[error.iServerCode]);
-        break;
-      case error instanceof PromptedReportError:
-        notificationService.displayMessage('warning', NOT_SUPPORTED_SERVER_ERR);
-        break;
-      case error instanceof OutsideOfRangeError:
-        notificationService.displayMessage('warning', 'The table you try to import exceeds the worksheet limits.');
-        break;
-      case error instanceof OverlappingTablesError:
-        notificationService.displayMessage('warning', 'The table you try to import exceeds the worksheet limits.');
-        break;
-      default:
-        notificationService.displayMessage('error', error.message || 'Unknown error');
-        break;
+    const message = this.getErrorMessage(error);
+    if (error instanceof UnauthorizedError) {
+      notificationService.displayNotification('info', message);
+    } else {
+      notificationService.displayNotification('warning', message);
+    }
+    if (
+      error instanceof EnvironmentNotFoundError
+      || error instanceof ConnectionBrokenError
+      || error instanceof UnauthorizedError) {
+      if (!isLogout) {
+        setTimeout(() => {
+          this.fullLogOut();
+        }, TIMEOUT);
+      }
     }
   }
+
+
   handlePreAuthError = (error) => {
     switch (true) {
       case error instanceof UnauthorizedError:
-        notificationService.displayMessage('error', 'Wrong username or password.');
+        notificationService.displayNotification('error', 'Wrong username or password.');
         break;
       default:
         this.handleError(error);
@@ -116,16 +96,16 @@ class ErrorService {
   handleOfficeError = (error) => {
     switch (true) {
       case error instanceof RunOutsideOfficeError:
-        notificationService.displayMessage('error', 'Please run plugin inside Office');
+        notificationService.displayNotification('warning', 'Please run plugin inside Office');
         break;
       case error instanceof OverlappingTablesError:
-        notificationService.displayMessage('error', `Excel returned error: ${error.message}`);
+        notificationService.displayNotification('warning', `Excel returned error: ${error.message}`);
         break;
       case error instanceof GenericOfficeError:
-        notificationService.displayMessage('error', `Excel returned error: ${error.message}`);
+        notificationService.displayNotification('warning', `Excel returned error: ${error.message}`);
         break;
       case error instanceof OutsideOfRangeError:
-        notificationService.displayMessage('error', 'The table you try to import exceeds the worksheet limits.');
+        notificationService.displayNotification('warning', 'The table you try to import exceeds the worksheet limits.');
         break;
       default:
         this.handleError(error);
@@ -136,6 +116,41 @@ class ErrorService {
     sessionHelper.logOutRest();
     sessionHelper.logOut();
     sessionHelper.logOutRedirect();
+  }
+
+  getErrorMessage = (error) => {
+    if (error instanceof EnvironmentNotFoundError) {
+      return '404 - Environment not found';
+    };
+    if (error instanceof ConnectionBrokenError) {
+      return 'Environment is unreachable.'
+        + '\nPlease check your internet connection.';
+    };
+    if (error instanceof UnauthorizedError) {
+      return 'Your session has expired.\nPlease log in.';
+    };
+    if (error instanceof BadRequestError) {
+      return '400 - There has been a problem with your request';
+    };
+    if (error instanceof InternalServerError) {
+      return errorMessages[error.iServerCode];
+    };
+    if (error instanceof PromptedReportError) {
+      return NOT_SUPPORTED_PROMPTS_REFRESH;
+    };
+    if (error instanceof OutsideOfRangeError) {
+      return 'The table you try to import exceeds the worksheet limits.';
+    }
+    if (error instanceof OverlappingTablesError) {
+      return 'The table you try to import exceeds the worksheet limits.';
+    }
+    if (error instanceof RunOutsideOfficeError) {
+      return 'Please run plugin inside Office';
+    }
+    if (error instanceof GenericOfficeError) {
+      return `Excel returned error: ${error.message}`;
+    }
+    return error.message || 'Unknown error';
   }
 }
 

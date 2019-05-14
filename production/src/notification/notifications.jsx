@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {notification, message} from 'antd';
+import {notification, message, Icon, Button} from 'antd';
 import {connect} from 'react-redux';
 import './Notifications.css';
 
@@ -8,7 +8,10 @@ export class NotificationsWithoutRedux extends Component {
     super(props);
     message.config({
       duration: 5,
-      maxCount: 1,
+      maxCount: 3,
+    });
+    notification.config({
+      duration: 0,
     });
   }
   componentDidUpdate = () => {
@@ -22,9 +25,42 @@ export class NotificationsWithoutRedux extends Component {
 
   displayNotification = () => {
     const {notificationType, title, content} = this.props;
-    notification[notificationType]({
+    let icon;
+    const key = `open${Date.now()}`;
+    let btn = <Button type="primary" size="small" onClick={() => notification.close(key)} >OK</Button>;
+    notification.config({
+      duration: 0,
+    });
+    switch (notificationType) {
+      case 'warning':
+        icon = <Icon type="warning" theme="filled" style={{color: '#faad14'}} />;
+        break;
+      case 'error':
+        icon = <Icon type="close-circle" theme="filled" style={{color: '#f5222d'}} />;
+        break;
+      case 'info':
+        icon = <Icon type="info-circle" theme="filled" style={{color: '#1890ff'}} />;
+        notification.config({
+          duration: 5,
+        });
+        btn = null;
+        break;
+      case 'success':
+        icon = <Icon type="check-circle" theme="filled" style={{color: '#52c41a'}} />;
+        notification.config({
+          duration: 5,
+        });
+        btn = null;
+        break;
+      default:
+        break;
+    }
+    notification.open({
       message: title,
       description: content,
+      icon,
+      btn: btn,
+      key,
     });
   }
 

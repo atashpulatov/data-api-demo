@@ -17,7 +17,7 @@ describe('PageBuilder', () => {
 
     // then
     expect(wrappedComponent.find('_FileHistoryContainer').get(0)).toBeUndefined();
-    expect(wrappedComponent.find('Placeholder').get(0)).toBeUndefined();
+    expect(wrappedComponent.find('_Placeholder').get(0)).toBeUndefined();
     expect(wrappedComponent.find('Spin').get(0)).toBeDefined();
     expect(wrappedComponent.find('Spin').props().children).toBeDefined();
   });
@@ -31,7 +31,7 @@ describe('PageBuilder', () => {
 
     // then
     expect(wrappedComponent.find('_FileHistoryContainer').get(0)).toBeUndefined();
-    expect(wrappedComponent.find('Placeholder').get(0)).toBeDefined();
+    expect(wrappedComponent.find('_Placeholder').get(0)).toBeDefined();
   });
 
   it('should return page with two children as false because of non-existing auth token', () => {
@@ -43,7 +43,7 @@ describe('PageBuilder', () => {
 
     // then
     expect(wrappedComponent.find('_FileHistoryContainer').get(0)).toBeUndefined();
-    expect(wrappedComponent.find('Placeholder').get(0)).toBeUndefined();
+    expect(wrappedComponent.find('_Placeholder').get(0)).toBeUndefined();
   });
 
   it('should return page with one false element and Placeholder element should be defined if report is not an array', () => {
@@ -55,7 +55,7 @@ describe('PageBuilder', () => {
 
     // then
     expect(wrappedComponent.find('_FileHistoryContainer').get(0)).toBeUndefined();
-    expect(wrappedComponent.find('Placeholder').get(0)).toBeDefined();
+    expect(wrappedComponent.find('_Placeholder').get(0)).toBeDefined();
   });
 
   it('should return page with one false element and 3th element should be defined if there is some reports', () => {
@@ -67,7 +67,7 @@ describe('PageBuilder', () => {
 
     // then
     expect(wrappedComponent.find('_FileHistoryContainer').get(0)).toBeDefined();
-    expect(wrappedComponent.find('Placeholder').get(0)).toBeUndefined();
+    expect(wrappedComponent.find('_Placeholder').get(0)).toBeUndefined();
   });
   it('should return page with a home dialog component when the popup is open', () => {
     // given
@@ -89,7 +89,7 @@ describe('PageBuilder', () => {
 
     // then
     expect(wrappedComponent.find('_FileHistoryContainer').get(0)).toBeDefined();
-    expect(wrappedComponent.find('.ant-btn[disabled]')).toHaveLength(2);
+    expect(wrappedComponent.find('.ant-btn[disabled]')).toHaveLength(3);
   });
   it('should disable logout and add data buttons while a popup is open', () => {
     // given
@@ -101,7 +101,7 @@ describe('PageBuilder', () => {
     // then
     expect(wrappedComponent.find('_FileHistoryContainer').get(0)).toBeDefined();
     expect(wrappedComponent.find('.dialog-container').get(0)).toBeDefined();
-    expect(wrappedComponent.find('.ant-btn[disabled]')).toHaveLength(2);
+    expect(wrappedComponent.find('.ant-btn[disabled]')).toHaveLength(3);
   });
   it('should disable logout and add data buttons while a popup is open and a report is loading', () => {
     // given
@@ -113,6 +113,6 @@ describe('PageBuilder', () => {
     // then
     expect(wrappedComponent.find('_FileHistoryContainer').get(0)).toBeDefined();
     expect(wrappedComponent.find('.dialog-container').get(0)).toBeDefined();
-    expect(wrappedComponent.find('.ant-btn[disabled]')).toHaveLength(2);
+    expect(wrappedComponent.find('.ant-btn[disabled]')).toHaveLength(3);
   });
 });

@@ -5,9 +5,11 @@ import {moduleProxy} from '../module-proxy';
 import {officeConverterService} from '../office/office-converter-service';
 
 const sharedFolderIdType = 7;
-const REQUEST_LIMIT = 5000;
+// 200000 is around 1mb of MSTR JSON response
+export const DATA_LIMIT = 200000;
 const EXCEL_ROW_LIMIT = 1048576;
 const EXCEL_COLUMN_LIMIT = 16384;
+const OBJECT_TYPE = '3'; //both reports and cubes are of type 3
 
 class MstrObjectRestService {
   async getProjectContent(envUrl, authToken, projectId,
@@ -59,7 +61,45 @@ class MstrObjectRestService {
         });
   }
 
-  async getObjectInfo(objectId, projectId, isReport = true) {
+  async _getInstanceDefinition(fullPath, authToken, projectId, body) {
+    return await moduleProxy.request
+        .post(fullPath)
+        .set('x-mstr-authtoken', authToken)
+        .set('x-mstr-projectid', projectId)
+        .send(body)
+        .withCredentials()
+        .then((res) => {
+          if (res.status === 200 && res.body.status === 2) {
+            throw (res);
+          }
+          return this._parseInstanceDefinition(res);
+        });
+  }
+
+  async _getDossierInstanceDefinition(fullPath, authToken, projectId, body) {
+    return await moduleProxy.request
+        .get(fullPath)
+        .set('x-mstr-authtoken', authToken)
+        .set('x-mstr-projectid', projectId)
+        .send(body)
+        .withCredentials()
+        .then((res) => {
+          if (res.status === 200 && res.body.status === 2) {
+            throw (res);
+          }
+          return this._parseInstanceDefinition(res);
+        });
+  }
+
+  _parseInstanceDefinition(res) {
+    const {total} = res.body.result.data.paging;
+    const {instanceId} = res.body;
+    const mstrTable = officeConverterService.createTable(res.body);
+    const {rows, columns} = this._checkTableDimensions(total, mstrTable.headers.length);
+    return {instanceId, rows, columns, mstrTable};
+  }
+
+  async getObjectDefinition(objectId, projectId, isReport = true) {
     const storeState = reduxStore.getState();
     const envUrl = storeState.sessionReducer.envUrl;
     const authToken = storeState.sessionReducer.authToken;
@@ -79,64 +119,119 @@ class MstrObjectRestService {
         });
   };
 
-  async getObjectContent(objectId, projectId, isReport = true, body = {}, limit = REQUEST_LIMIT) {
+  async getObjectInfo(objectId, projectId, isReport = true) {
     const storeState = reduxStore.getState();
     const envUrl = storeState.sessionReducer.envUrl;
     const authToken = storeState.sessionReducer.authToken;
-    const objectType = isReport ? 'reports' : 'cubes';
-    let fullPath = `${envUrl}/${objectType}/${objectId}/instances`;
+    const fullPath = `${envUrl}/objects/${objectId}?type=${OBJECT_TYPE}`;
 
-    try {
-      const reportInstance = await this._getInstanceId(fullPath, authToken, projectId, body);
-      fullPath += `/${reportInstance}`;
-      return await this._getObjectContentPaginated(fullPath, authToken, projectId, limit);
-    } catch (error) {
-      if (error instanceof OutsideOfRangeError) {
-        throw error;
-      } else {
-        throw errorService.errorRestFactory(error);
-      }
-    }
-  }
-
-  _getObjectContentPaginated(fullPath, authToken, projectId, limit) {
-    return new Promise((resolve, reject) => {
-      this._fetchObjectContent(fullPath, authToken, projectId, resolve, reject, 0, limit);
-    });
-  }
-
-  _fetchObjectContent(fullPath, authToken, projectId, resolve, reject, offset = 0, limit = REQUEST_LIMIT, mstrTable = {}) {
-    return moduleProxy.request
-        .get(`${fullPath}?offset=${offset}&limit=${limit}`)
+    return await moduleProxy.request
+        .get(fullPath)
         .set('x-mstr-authtoken', authToken)
         .set('x-mstr-projectid', projectId)
         .withCredentials()
         .then((res) => {
-          const {current, total} = res.body.result.data.paging;
-          const fetchedRows = current + offset;
-          if (offset === 0) {
-            mstrTable = officeConverterService.createTable(res.body);
-            this._checkTableDimensions(total, mstrTable.rows.length);
-          } else {
-            mstrTable = officeConverterService.appendRows(mstrTable, res.body);
-          }
-
-          if (fetchedRows >= total || fetchedRows >= EXCEL_ROW_LIMIT) {
-            resolve(mstrTable);
-          } else {
-            offset += current;
-            this._fetchObjectContent(fullPath, authToken, projectId, resolve, reject, offset, limit, mstrTable);
-          }
+          return res.body;
         })
-        .catch(reject);
+        .catch((err) => {
+          throw errorService.errorRestFactory(err);
+        });
+  };
+
+  async getInstanceDefinition(objectId, projectId, isReport = true, dossierData, body = {}, limit = 1) {
+    try {
+      const storeState = reduxStore.getState();
+      const envUrl = storeState.sessionReducer.envUrl;
+      const authToken = storeState.sessionReducer.authToken;
+      const fullPath = this._getFullPath(dossierData, envUrl, limit, isReport, objectId);
+      if (dossierData) {
+        const instanceDefinition = await this._getDossierInstanceDefinition(fullPath, authToken, projectId, body);
+        instanceDefinition.mstrTable.id = objectId;
+        instanceDefinition.mstrTable.name = dossierData.reportName;
+        return instanceDefinition;
+      }
+      return await this._getInstanceDefinition(fullPath, authToken, projectId, body);
+    } catch (error) {
+      throw error instanceof OutsideOfRangeError ? error : errorService.errorRestFactory(error);
+    }
+  }
+
+  getObjectContentGenerator(instanceDefinition, objectId, projectId, isReport, dossierData, body, limit = DATA_LIMIT) {
+    return fetchContentGenerator(instanceDefinition, objectId, projectId, isReport, dossierData, body, limit);
+  }
+
+  _fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = -1) {
+    return moduleProxy.request
+        .get(`${fullPath}?offset=${offset}&limit=${limit}`)
+        .set('x-mstr-authtoken', authToken)
+        .set('x-mstr-projectid', projectId)
+        .withCredentials();
   }
 
   _checkTableDimensions(rows, columns) {
     if (rows >= EXCEL_ROW_LIMIT || columns >= EXCEL_COLUMN_LIMIT) {
       throw new OutsideOfRangeError();
     }
+    return {rows, columns};
   }
+
+  _getFullPath(dossierData, envUrl, limit, isReport, objectId, instanceId) {
+    let path;
+    if (dossierData) {
+      const {dossierId, instanceId, chapterKey, visualizationKey} = dossierData;
+      path = `${envUrl}/dossiers/${dossierId}/instances/${instanceId}/chapters/${chapterKey}/visualizations/${visualizationKey}`;
+    } else {
+      const objectType = isReport ? 'reports' : 'cubes';
+      path = `${envUrl}/${objectType}/${objectId}/instances`;
+      path += instanceId ? `/${instanceId}` : '';
+    }
+    path += limit ? `?limit=${limit}` : '';
+    console.log(path);
+    return path;
+  }
+
+  async isPrompted(objectId, projectId) {
+    const storeState = reduxStore.getState();
+    const envUrl = storeState.sessionReducer.envUrl;
+    const authToken = storeState.sessionReducer.authToken;
+    const fullPath = `${envUrl}/reports/${objectId}/prompts`;
+    return await moduleProxy.request
+        .get(fullPath)
+        .set('x-mstr-authtoken', authToken)
+        .set('X-MSTR-ProjectID', projectId)
+        .withCredentials()
+        .then((res) => {
+          return res.body && res.body.length;
+        })
+        .catch((err) => {
+          throw errorService.errorRestFactory(err);
+        });
+  };
 };
 
+async function* fetchContentGenerator(instanceDefinition, objectId, projectId, isReport, dossierData, body, limit) {
+  try {
+    const totalRows = instanceDefinition.rows;
+    const {instanceId, mstrTable} = instanceDefinition;
+
+    const storeState = reduxStore.getState();
+    const envUrl = storeState.sessionReducer.envUrl;
+    const authToken = storeState.sessionReducer.authToken;
+    const fullPath = mstrObjectRestService._getFullPath(dossierData, envUrl, false, isReport, objectId, instanceId);
+    let fetchedRows = 0;
+    let offset = 0;
+
+    while (fetchedRows < totalRows && fetchedRows < EXCEL_ROW_LIMIT) {
+      const response = await mstrObjectRestService._fetchObjectContent(fullPath, authToken, projectId, offset, limit);
+      const {current} = response.body.result.data.paging;
+      fetchedRows = current + offset;
+      offset += current;
+      yield officeConverterService.getRows(response.body, mstrTable.headers);
+    }
+  } catch (error) {
+    console.log(error);
+    throw errorService.errorRestFactory(error);
+  }
+}
 
 export const mstrObjectRestService = new MstrObjectRestService();

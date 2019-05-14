@@ -37,6 +37,31 @@ span.file-icons {
     background: rgba(28, 145, 220, 0.20);
 }
 
+.ant-btn.refresh-all-btn,
+.ant-btn.refresh-all-btn:hover,
+.ant-btn.refresh-all-btn:focus {
+    float: right;
+    background: #FFFFFF;
+    box-shadow: 0 0;
+    width: 98px;
+    height: 25px;
+    border: none;
+    margin-bottom: 16px;
+    font-size: 12px;
+    color: #1C91DC;
+    padding-right: 20px;
+}
+
+.refresh-all-btn .mstr-icon,
+.refresh-all-btn img {
+    margin-right: 5px;
+    vertical-align: sub;
+}
+
+.refresh-all-label {
+    vertical-align: text-top;
+}
+
 .file-history-container {
     background: #FFFFFF;
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.20);
@@ -44,6 +69,15 @@ span.file-icons {
     margin-bottom: 10px;
     padding-top: 16px;
     padding-bottom: 16px;
+}
+
+.file-history-container:hover {
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.50);
+}
+
+.file-history-container:focus {
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.20);
+    outline: 1px solid #1C91DC;
 }
 
 .report-title {
@@ -60,4 +94,63 @@ span.file-icons {
 
 .loading-button-container>img {
     vertical-align: baseline;
+}
+
+.ant-input.rename-input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    -o-appearance: none;
+    appearance: none;
+    height: 18px;
+    padding: 1px;
+    line-height: 1;
+    border: none;
+    outline: none;
+}
+
+.ant-input.rename-input:disabled {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    -o-appearance: none;
+    appearance: none;
+    color: rgba(0, 0, 0, 0.65);
+    border: none;
+    background-color: #fff;
+    text-overflow: ellipsis;
+    cursor: default;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: HelveticaNeue, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+}
+
+.ant-input.rename-input:focus,
+.ant-input.rename-input:hover {
+    box-shadow: none;
+}
+
+.ant-input.rename-input[disabled]:hover {
+    background-color: #EBEBEB;
+}
+
+.ant-dropdown .ant-dropdown-menu-item {
+    width: 156px;
+    padding: 4px 22px;
+    line-height: 20px;
+}
+
+.ant-dropdown .ant-dropdown-menu-item:hover {
+    background-color: #e9eaea;
+}
+
+.additional-data {
+    padding: 0 2px;
+    font-size: 12px;
+    color: #888888;
 }
