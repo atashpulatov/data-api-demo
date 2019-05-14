@@ -50,21 +50,23 @@ export class _NavigationTree extends Component {
 
   // TODO: temporary solution
   onObjectChosen = async (objectId, projectId, subtype) => {
-    this.props.selectObject({
-      chosenObjectId: null,
-      chosenProjectId: null,
-      chosenSubtype: null,
-      isPrompted: null,
-    });
-
-    const isPrompted = await mstrObjectRestService.isPrompted(objectId, projectId);
-
-    this.props.selectObject({
-      chosenObjectId: objectId,
-      chosenProjectId: projectId,
-      chosenSubtype: subtype,
-      isPrompted,
-    });
+    try {
+      this.props.selectObject({
+        chosenObjectId: null,
+        chosenProjectId: null,
+        chosenSubtype: null,
+        isPrompted: null,
+      });
+      const isPrompted = await mstrObjectRestService.isPrompted(objectId, projectId);
+      this.props.selectObject({
+        chosenObjectId: objectId,
+        chosenProjectId: projectId,
+        chosenSubtype: subtype,
+        isPrompted,
+      });
+    } catch (err) {
+      this.props.handlePopupErrors(err);
+    }
   };
 
   render() {
