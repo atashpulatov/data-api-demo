@@ -45,7 +45,11 @@ class AuthenticationService {
     try {
       const response = await this._fetchPrivilegeById(OFFICE_PRIVILEGE_ID, envUrl, iSession);
       // Only return false if isUserLevelAllowed exists and is false
-      return response ? response.isUserLevelAllowed === true : true;
+      if (!response) return true;
+      if (response.isUserLevelAllowed === false) {
+        if (response.projects.find((project) => project.isAllowed === true)) return true;
+      }
+      return response.isUserLevelAllowed === true;
     } catch (error) {
       console.error(error);
       // In case of errors skip privilege check (not supported environments)
