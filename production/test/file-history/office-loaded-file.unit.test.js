@@ -2,6 +2,7 @@ import React from 'react';
 import {mount} from 'enzyme';
 import {_OfficeLoadedFile} from '../../src/file-history/office-loaded-file';
 import {reduxStore} from '../../src/store';
+import {fileHistoryHelper} from '../../src/file-history/file-history-helper';
 
 describe('office loaded file', () => {
   it('should display provided file name', () => {
@@ -162,12 +163,33 @@ describe('office loaded file', () => {
       bindingId={testBindingId}
       fileName='test'
       onDelete={onDeleteMocked} />);
+    wrappedComponent.setState({allowDeleteClick: true});
     const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
     const deleteButton = wrappedIcons.at(2);
     deleteButton.props().onClick(mockEvent);
     // then
     expect(onDeleteMocked).toBeCalled();
     expect(onDeleteMocked).toBeCalledWith(testBindingId);
+  });
+  it('should NOT invoke delete method on button click if allowDeleteClick is false', () => {
+    // given
+    fileHistoryHelper.deleteReport = jest.fn();
+    const mockEvent = {stopPropagation: jest.fn()};
+    const testBindingId = 'testBindingId';
+    const objectType = 'report';
+    jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => {});
+    // when
+    const wrappedComponent = mount(<_OfficeLoadedFile
+      bindingId={testBindingId}
+      objectType={objectType}
+      fileName='test'
+      isLoading={false} />);
+    wrappedComponent.setState({allowDeleteClick: false});
+    const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
+    const deleteButton = wrappedIcons.at(2);
+    deleteButton.props().onClick(mockEvent);
+    // then
+    expect(fileHistoryHelper.deleteReport).not.toBeCalled();
   });
   it('should invoke ONLY select method on button click', () => {
     // given
