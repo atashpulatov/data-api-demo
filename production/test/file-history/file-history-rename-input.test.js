@@ -2,6 +2,7 @@ import React from 'react';
 import {shallow, mount} from 'enzyme';
 import RenameInput from '../../src/file-history/file-history-rename-input';
 import {officeStoreService} from '../../src/office/store/office-store-service';
+import {get} from 'enzyme/build/configuration';
 
 
 describe('File history rename input', () => {
@@ -24,7 +25,7 @@ describe('File history rename input', () => {
     const givenFileName = 'name';
     const givenId = 'id123';
     const target = {value: givenFileName};
-    const mockOfficeService = jest.spyOn(officeStoreService, 'renameReport');
+    const mockOfficeService = jest.spyOn(officeStoreService, 'preserveReportValue');
     // when
     const wrappedComponent = shallow(<RenameInput fileName={givenFileName} bindingId={givenId} />);
     wrappedComponent.instance().renameReport({target});
@@ -37,7 +38,7 @@ describe('File history rename input', () => {
     const givenId = 'id123';
     // when
     const wrappedComponent = shallow(<RenameInput fileName={givenFileName} bindingId={givenId} />);
-    wrappedComponent.find('div').simulate('dblclick', {});
+    wrappedComponent.find('div').first().simulate('dblclick', {});
     // then
     expect(wrappedComponent.state().editable).toBeTruthy();
   });

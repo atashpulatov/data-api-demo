@@ -9,6 +9,7 @@ import {
 export const initialState = {
   refreshingAll: undefined,
   refreshingReport: '',
+  info: {},
 };
 
 export const popupReducer = (state = initialState, action) => {
@@ -29,7 +30,7 @@ export const popupReducer = (state = initialState, action) => {
     case START_REPORT_LOADING: {
       return {
         ...state,
-        refreshingReport: data,
+        refreshingReport: data.name,
       };
     }
     case STOP_REPORT_LOADING: {

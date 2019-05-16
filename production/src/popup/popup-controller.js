@@ -28,19 +28,18 @@ class PopupController {
       return;
     }
     let url = URL;
-    //if (IS_LOCALHOST) {
-      //url = `${window.location.origin}/popup.html`;
-    //} else {
-      url = url.replace('index.html', 'popup.html');
-    //}
+    // if (IS_LOCALHOST) {
+    // url = `${window.location.origin}/popup.html`;
+    // } else {
+    url = url.replace('index.html', 'popup.html');
+    // }
     const splittedUrl = url.split('?'); // we need to get rid of any query params
     try {
       await officeApiHelper.getExcelSessionStatus();
       Office.context.ui.displayDialogAsync(
           splittedUrl[0]
         + '?popupType=' + popupType
-        + '&envUrl=' + session.url
-        + '&token=' + session.authToken,
+        + '&envUrl=' + session.url,
           {height, width, displayInIframe: true},
           (asyncResult) => {
             const dialog = asyncResult.value;
@@ -100,7 +99,7 @@ class PopupController {
       && response.reportSubtype
       && response.body
       && response.reportName) {
-      reduxStore.dispatch({type: START_REPORT_LOADING, data: response.reportName});
+      reduxStore.dispatch({type: START_REPORT_LOADING, data: {name: response.reportName}});
       const result = await officeDisplayService.printObject(response.dossierData, response.reportId, response.projectId, objectTypes.getTypeDescription(3, response.reportSubtype) === 'Report', null, null, null, response.body);
       if (result) {
         notificationService.displayNotification(result.type, result.message);
@@ -112,9 +111,8 @@ class PopupController {
   handleOkCommand = async (response) => {
     if (response.chosenObject) {
       reduxStore.dispatch({type: officeProperties.actions.startLoading});
-      reduxStore.dispatch({type: START_REPORT_LOADING, data: response.reportName});
-      const result = await officeDisplayService.printObject(response.dossierData, response.chosenObject, response.chosenProject,
-          objectTypes.getTypeDescription(3, response.chosenSubtype) === 'Report', null, null, null, null, null, response.isPrompted);
+      reduxStore.dispatch({type: START_REPORT_LOADING, data: {name: response.reportName}});
+      const result = await officeDisplayService.printObject(response.dossierData, response.chosenObject, response.chosenProject, objectTypes.getTypeDescription(3, response.chosenSubtype) === 'Report', null, null, null, null, null, response.isPrompted);
       if (result) {
         notificationService.displayNotification(result.type, result.message);
       }
