@@ -8,7 +8,7 @@ import warningIcon from './assets/icon_conflict.svg';
 
 import './refresh-all-page.css';
 
-export class _RefreshAllPage extends Component {
+export class RefreshAllPage extends Component {
   constructor() {
     super();
     const fromStorage = JSON.parse(localStorage.getItem('refreshData'));
@@ -125,10 +125,10 @@ export class _RefreshAllPage extends Component {
   }
 };
 
-const mapStateToProps = ({popupReducer}) => {
-  return {
-    name: popupReducer.refreshingReport,
-  };
-};
+// const mapStateToProps = ({popupReducer}) => {
+//   return {
+//     name: popupReducer.refreshingReport,
+//   };
+// };
 
-export const RefreshAllPage = connect(mapStateToProps)(_RefreshAllPage);
+// export const RefreshAllPage = connect(mapStateToProps)(_RefreshAllPage);

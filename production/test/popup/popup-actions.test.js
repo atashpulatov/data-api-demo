@@ -1,32 +1,76 @@
 import * as actions from '../../src/popup/popup-actions';
+import {popupHelper} from '../../src/popup/popup-helper';
+import {officeApiHelper} from '../../src/office/office-api-helper';
 import {authenticationHelper} from '../../src/authentication/authentication-helper';
+import {reduxStore} from '../../src/store';
 
 describe('Popup actions', () => {
-  it('should dispatch proper startReportLoading action', () => {
-    // given
-    const listener = jest.fn();
-    // when
-    actions.startReportLoading('testReport')(listener);
-    // then
-    expect(listener).toHaveBeenCalledWith({refreshingReport: 'testReport', type: actions.START_REPORT_LOADING});
+  afterEach(() => {
+    jest.clearAllMocks();
   });
-
-  it('should dispatch proper stopReportLoading action', () => {
-    // given
-    const listener = jest.fn();
-    // when
-    actions.stopReportLoading(true)(listener);
-    // then
-    expect(listener).toHaveBeenCalledWith({type: actions.STOP_REPORT_LOADING});
+  describe('refreshReportsArray', () => {
+    it('should call proper methods', async () => {
+      const mockRedux = jest.spyOn(reduxStore, 'dispatch');
+      const mockGetExcelSession = jest.spyOn(officeApiHelper, 'getExcelSessionStatus').mockImplementation(() => { });
+      const mockValidateToken = jest.spyOn(authenticationHelper, 'validateAuthToken').mockImplementation(() => { });
+      const mockPrepareData = jest.spyOn(popupHelper, 'storagePrepareRefreshAllData').mockImplementation(() => { });
+      const mockRunPopup = jest.spyOn(popupHelper, 'runRefreshAllPopup').mockImplementation(() => { });
+      const mockPrintReport = jest.spyOn(popupHelper, 'printRefreshedReport').mockImplementation(() => { });
+      // given
+      const listener = jest.fn();
+      const reportArray = [{
+        bindId: 'testBinding1',
+        objectType: 'report',
+        name: 'testNamne1',
+      },
+      {
+        bindId: 'testBinding2',
+        objectType: 'report',
+        name: 'testNamne2',
+      }];
+      // when
+      await actions.refreshReportsArray(reportArray, true)(listener);
+      // then
+      expect(mockGetExcelSession).toHaveBeenCalled();
+      expect(mockValidateToken).toHaveBeenCalled();
+      expect(mockPrepareData).toHaveBeenCalledWith(reportArray);
+      expect(mockRunPopup).toHaveBeenCalledWith(reportArray);
+      expect(mockRedux).toHaveBeenCalledWith({});
+      expect(mockPrintReport).toHaveBeenCalledTimes(2);
+    });
+    it('should NOT call some methods when isRefreshAll is false', async () => {
+      const mockGetExcelSession = jest.spyOn(officeApiHelper, 'getExcelSessionStatus').mockImplementation(() => { });
+      const mockValidateToken = jest.spyOn(authenticationHelper, 'validateAuthToken').mockImplementation(() => { });
+      const mockPrepareData = jest.spyOn(popupHelper, 'storagePrepareRefreshAllData').mockImplementation(() => { });
+      const mockRunPopup = jest.spyOn(popupHelper, 'runRefreshAllPopup').mockImplementation(() => { });
+      const mockPrintReport = jest.spyOn(popupHelper, 'printRefreshedReport').mockImplementation(() => { });
+      // given
+      const listener = jest.fn();
+      const reportArray = [
+        {
+          bindId: 'testBinding1',
+          objectType: 'report',
+          name: 'testNamne1',
+        },
+      ];
+      // when
+      await actions.refreshReportsArray(reportArray, false)(listener);
+      // then
+      expect(mockGetExcelSession).toHaveBeenCalled();
+      expect(mockValidateToken).toHaveBeenCalled();
+      expect(mockPrepareData).not.toHaveBeenCalledWith();
+      expect(mockRunPopup).not.toHaveBeenCalledWith();
+      expect(mockPrintReport).toHaveBeenCalledTimes(1);
+    });
   });
-
-  it('should dispatch proper resetState action', () => {
-    // given
-    const listener = jest.fn();
-    // when
-    actions.resetState(true)(listener);
-    // then
-    expect(listener).toHaveBeenCalledWith({type: actions.RESET_STATE});
+  describe('resetState', () => {
+    it('should dispatch proper resetState action', () => {
+      // given
+      const listener = jest.fn();
+      // when
+      actions.resetState(true)(listener);
+      // then
+      expect(listener).toHaveBeenCalledWith({type: actions.RESET_STATE});
+    });
   });
-})
-;
+});

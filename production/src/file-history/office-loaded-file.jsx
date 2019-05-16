@@ -4,7 +4,7 @@ import {Row, Col} from 'antd';
 import {MSTRIcon} from 'mstr-react-library';
 import {fileHistoryHelper} from './file-history-helper';
 import loadingSpinner from './assets/report_loading_spinner.gif';
-import {refreshReport} from '../popup/popup-actions';
+import {refreshReportsArray} from '../popup/popup-actions';
 import RenameInput from './file-history-rename-input';
 
 export class _OfficeLoadedFile extends React.Component {
@@ -35,10 +35,11 @@ export class _OfficeLoadedFile extends React.Component {
 
   refreshAction = (e) => {
     e.stopPropagation();
-    const {isLoading, bindingId, objectType, refreshReport} = this.props;
+    const {isLoading, bindingId, objectType, refreshReportsArray} = this.props;
     if (!isLoading) {
       this.setState({allowRefreshClick: false}, async () => {
-        await refreshReport(bindingId, objectType, false);
+        // await refreshReport(bindingId, objectType, false);
+        await refreshReportsArray([{bindId: bindingId, objectType}], false);
         this.setState({allowRefreshClick: true});
       });
     }
@@ -81,7 +82,7 @@ export class _OfficeLoadedFile extends React.Component {
 }
 
 const mapDispatchToProps = {
-  refreshReport,
+  refreshReportsArray,
 };
 
 export const OfficeLoadedFile = connect(null, mapDispatchToProps)(_OfficeLoadedFile);

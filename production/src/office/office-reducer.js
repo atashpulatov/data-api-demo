@@ -138,6 +138,7 @@ function _toggleSetLoadingStatus(action, state, status) {
     ...state,
     loading: status,
     reportArray: newReportArray,
+    isRefreshAll: action.isRefreshAll,
   };
 }
 

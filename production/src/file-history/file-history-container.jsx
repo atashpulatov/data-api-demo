@@ -6,7 +6,7 @@ import {officeApiHelper} from '../office/office-api-helper';
 import {officeDisplayService} from '../office/office-display-service';
 import {MSTRIcon} from 'mstr-react-library';
 import loadingSpinner from './assets/report_loading_spinner.gif';
-import {refreshAll} from '../popup/popup-actions';
+import {refreshReportsArray} from '../popup/popup-actions';
 import {fileHistoryContainerHOC} from './file-history-container-HOC.jsx';
 
 import './file-history.css';
@@ -29,18 +29,18 @@ export class _FileHistoryContainer extends React.Component {
 
   refreshAllAction = (reportArray, refreshAll) => {
     this.state.allowRefreshAllClick && this.setState({allowRefreshAllClick: false}, async () => {
-      await refreshAll(reportArray);
+      await refreshAll(reportArray, true);
       this._ismounted && this.setState({allowRefreshAllClick: true});
     });
   };
 
   render() {
-    const {reportArray = [], loading, refreshingAll, refreshAll} = this.props;
+    const {reportArray = [], loading, refreshingAll, refreshReportsArray} = this.props;
     return (<React.Fragment >
       <Button id="add-data-btn-container" className="add-data-btn" onClick={() => this.props.addDataAction()}
         disabled={loading}>Add Data</Button>
       <span className="refresh-button-container">
-        <Button className="refresh-all-btn" title="Refresh All Data" style={{float: 'right'}} onClick={() => this.refreshAllAction(reportArray, refreshAll)} disabled={loading}>
+        <Button className="refresh-all-btn" title="Refresh All Data" style={{float: 'right'}} onClick={() => this.refreshAllAction(reportArray, refreshReportsArray)} disabled={loading}>
           {!refreshingAll ? <MSTRIcon type='refresh' /> : <img width='12px' height='12px' src={loadingSpinner} alt='Report loading icon' />}
         </Button>
       </span>
@@ -64,12 +64,12 @@ function mapStateToProps(state) {
   return {
     reportArray: state.officeReducer.reportArray,
     project: state.historyReducer.project,
-    refreshingAll: state.popupReducer.refreshingAll,
+    refreshingAll: state.officeReducer.isRefreshAll,
   };
 }
 
 const mapDispatchToProps = {
-  refreshAll,
+  refreshReportsArray,
 };
 
 const WrappedFileHistoryContainer = fileHistoryContainerHOC(_FileHistoryContainer);

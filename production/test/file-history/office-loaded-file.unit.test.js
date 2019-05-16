@@ -93,7 +93,7 @@ describe('office loaded file', () => {
     const wrappedComponent = mount(<_OfficeLoadedFile
       bindingId={''}
       fileName='test'
-      refreshReport={onRefreshMock}
+      refreshReportsArray={onRefreshMock}
       isLoading={false} />);
     const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
     const refreshButton = wrappedIcons.at(1);
@@ -113,14 +113,14 @@ describe('office loaded file', () => {
       bindingId={testBindingId}
       objectType={objectType}
       fileName='test'
-      refreshReport={onRefreshMocked}
+      refreshReportsArray={onRefreshMocked}
       isLoading={false} />);
     const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
     const refreshButton = wrappedIcons.at(1);
     refreshButton.props().onClick(mockEvent);
     // then
     expect(onRefreshMocked).toBeCalled();
-    expect(onRefreshMocked).toBeCalledWith(testBindingId, objectType, false);
+    expect(onRefreshMocked).toBeCalledWith([{bindId: testBindingId, objectType}], false);
   });
   it('should NOT invoke refresh method on button click if allowRefreshClick is false', () => {
     // given
