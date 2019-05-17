@@ -50,6 +50,11 @@
     background-color: #45a1e0;
 }
 
+.accept-button a {
+    text-decoration: none;
+    color: #fff;
+}
+
 .cookie-check-container .title {
     margin-top: 20px;
     padding: 10%;
