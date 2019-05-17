@@ -26,6 +26,9 @@ export class _OfficeLoadedFile extends React.Component {
 
   deleteAction = (e) => {
     e.stopPropagation();
+    if (!this.state.allowDeleteClick) {
+      return;
+    }
     const {onDelete, bindingId, objectType} = this.props;
     this.setState({allowDeleteClick: false}, async () => {
       await fileHistoryHelper.deleteReport(onDelete, bindingId, objectType);
@@ -35,6 +38,9 @@ export class _OfficeLoadedFile extends React.Component {
 
   refreshAction = (e) => {
     e.stopPropagation();
+    if (!this.state.allowRefreshClick) {
+      return;
+    }
     const {isLoading, bindingId, objectType, refreshReport} = this.props;
     if (!isLoading) {
       this.setState({allowRefreshClick: false}, async () => {
@@ -63,7 +69,7 @@ export class _OfficeLoadedFile extends React.Component {
         </Col>
         <Col span={1} offset={2}>
           {!isPrompted && <span className="loading-button-container" title="Refresh Data"
-            onClick={(e) => this.state.allowRefreshClick && this.refreshAction(e)}>
+            onClick={this.refreshAction}>
             {!isLoading ? <MSTRIcon type='refresh' /> :
               <img width='12px' height='12px' src={loadingSpinner} alt='Report loading icon' />}
           </span>}
@@ -71,7 +77,7 @@ export class _OfficeLoadedFile extends React.Component {
         <Col span={1} offset={1}>
           <span
             title="Remove Data from Workbook"
-            onClick={(e) => this.state.allowDeleteClick && this.deleteAction(e)}>
+            onClick={this.deleteAction}>
             <MSTRIcon type='trash' />
           </span>
         </Col>
