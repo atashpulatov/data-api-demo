@@ -17,7 +17,7 @@ const TIMEOUT = 2000;
 class ErrorService {
   errorRestFactory = (error) => {
     if (error.status === 200) {
-      return new PromptedReportError();
+      return new PromptedReportError(error);
     }
     const isOfficeError = error instanceof RunOutsideOfficeError
       || error instanceof OverlappingTablesError
@@ -28,18 +28,18 @@ class ErrorService {
         return new InternalServerError(error.response.body);
       }
       if (error.message && error.message.includes('Possible causes: the network is offline,')) {
-        return new ConnectionBrokenError();
+        return new ConnectionBrokenError(error);
       }
-      return new EnvironmentNotFoundError();
+      return new EnvironmentNotFoundError(error);
     }
     if (!!error.response) {
       switch (error.response.status) {
         case 404:
-          return new EnvironmentNotFoundError();
+          return new EnvironmentNotFoundError(error);
         case 400:
-          return new BadRequestError();
+          return new BadRequestError(error);
         case 401:
-          return new UnauthorizedError();
+          return new UnauthorizedError(error);
         case 500:
           return new InternalServerError(error.response.body ? error.response.body : {});
         default:
