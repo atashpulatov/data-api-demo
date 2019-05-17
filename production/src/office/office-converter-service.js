@@ -10,12 +10,6 @@ class OfficeConverterService {
     };
   }
 
-  appendRows(table, jsonReport) {
-    const newRows = this.getRows(jsonReport, table.headers);
-    table.rows.push(...newRows);
-    return table;
-  }
-
   _getHeaders(jsonReport) {
     const headers = [];
     const attributes = jsonReport.result.definition.attributes;

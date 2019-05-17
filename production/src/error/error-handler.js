@@ -94,18 +94,19 @@ class ErrorService {
     this.handleError(error, true);
   }
   handleOfficeError = (error) => {
+    const message = this.getErrorMessage(error);
     switch (true) {
       case error instanceof RunOutsideOfficeError:
-        notificationService.displayNotification('warning', 'Please run plugin inside Office');
+        notificationService.displayNotification('warning', message);
         break;
       case error instanceof OverlappingTablesError:
-        notificationService.displayNotification('warning', `Excel returned error: ${error.message}`);
+        notificationService.displayNotification('warning', message);
         break;
       case error instanceof GenericOfficeError:
-        notificationService.displayNotification('warning', `Excel returned error: ${error.message}`);
+        notificationService.displayNotification('warning', message);
         break;
       case error instanceof OutsideOfRangeError:
-        notificationService.displayNotification('warning', 'The table you try to import exceeds the worksheet limits.');
+        notificationService.displayNotification('warning', message);
         break;
       default:
         this.handleError(error);
@@ -142,7 +143,7 @@ class ErrorService {
       return 'The table you try to import exceeds the worksheet limits.';
     }
     if (error instanceof OverlappingTablesError) {
-      return 'The table you try to import exceeds the worksheet limits.';
+      return 'A table can\'t overlap another table.';
     }
     if (error instanceof RunOutsideOfficeError) {
       return 'Please run plugin inside Office';
