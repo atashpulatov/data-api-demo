@@ -178,7 +178,7 @@ describe('office loaded file', () => {
     const testBindingId = 'testBindingId';
     const objectType = 'report';
     jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => {});
-    // when
+
     const wrappedComponent = mount(<_OfficeLoadedFile
       bindingId={testBindingId}
       objectType={objectType}
@@ -187,6 +187,7 @@ describe('office loaded file', () => {
     wrappedComponent.setState({allowDeleteClick: false});
     const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
     const deleteButton = wrappedIcons.at(2);
+    // when
     deleteButton.props().onClick(mockEvent);
     // then
     expect(fileHistoryHelper.deleteReport).not.toBeCalled();
