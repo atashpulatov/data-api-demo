@@ -57,13 +57,14 @@ export class RefreshAllPage extends Component {
     clearInterval(this.intervalId);
   }
 
-  finished = () => {
-    localStorage.removeItem('refreshData');
-    const okObject = {
-      command: selectorProperties.commandOk,
-    };
-    Office.context.ui.messageParent(JSON.stringify(okObject));
-  }
+  // TODO: This will be used when button Ok will be added
+  // finished = () => {
+  //   localStorage.removeItem('refreshData');
+  //   const okObject = {
+  //     command: selectorProperties.commandOk,
+  //   };
+  //   Office.context.ui.messageParent(JSON.stringify(okObject));
+  // }
 
   getIcon = (res) => {
     if (res.isError === false) {
@@ -124,11 +125,3 @@ export class RefreshAllPage extends Component {
     </dialog>);
   }
 };
-
-// const mapStateToProps = ({popupReducer}) => {
-//   return {
-//     name: popupReducer.refreshingReport,
-//   };
-// };
-
-// export const RefreshAllPage = connect(mapStateToProps)(_RefreshAllPage);
