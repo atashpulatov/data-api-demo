@@ -41,7 +41,7 @@ export class _OfficeLoadedFile extends React.Component {
     if (!this.state.allowRefreshClick) {
       return;
     }
-    const {isLoading, bindingId, objectType, refreshReport} = this.props;
+    const {isLoading, bindingId, objectType, refreshReportsArray} = this.props;
     if (!isLoading) {
       this.setState({allowRefreshClick: false}, async () => {
         // await refreshReport(bindingId, objectType, false);
