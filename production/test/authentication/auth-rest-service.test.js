@@ -1,11 +1,9 @@
-/* eslint-disable */
-import { authenticationService } from '../../src/authentication/auth-rest-service';
-import { UnauthorizedError } from '../../src/error/unauthorized-error';
-import { EnvironmentNotFoundError } from '../../src/error/environment-not-found-error';
-import { moduleProxy } from '../../src/module-proxy';
+import {authenticationService} from '../../src/authentication/auth-rest-service';
+import {UnauthorizedError} from '../../src/error/unauthorized-error';
+import {EnvironmentNotFoundError} from '../../src/error/environment-not-found-error';
+import {moduleProxy} from '../../src/module-proxy';
 import request from 'superagent';
-import { errorService } from '../../src/error/error-handler';
-/* eslint-enable */
+import {errorService} from '../../src/error/error-handler';
 
 const correctLogin = 'mstr';
 const correctPassword = '999U2nn1g7gY';
@@ -28,10 +26,10 @@ describe('AuthRestService', () => {
       // given
       // when
       const authToken = await authenticationService.authenticate(
-        correctLogin,
-        correctPassword,
-        envURL,
-        authType);
+          correctLogin,
+          correctPassword,
+          envURL,
+          authType);
       // then
       expect(authToken).toBeDefined();
       expect(authToken).toBeTruthy();
@@ -41,10 +39,10 @@ describe('AuthRestService', () => {
       const incorrectLogin = 'mst';
       // when
       const authToken = authenticationService.authenticate(
-        incorrectLogin,
-        correctPassword,
-        envURL,
-        authType);
+          incorrectLogin,
+          correctPassword,
+          envURL,
+          authType);
       // then
       try {
         await authToken;
@@ -58,10 +56,10 @@ describe('AuthRestService', () => {
       const incorrectPassword = 'wrongPass';
       // when
       const authToken = authenticationService.authenticate(
-        correctLogin,
-        incorrectPassword,
-        envURL,
-        authType);
+          correctLogin,
+          incorrectPassword,
+          envURL,
+          authType);
       // then
       try {
         await authToken;
@@ -75,10 +73,10 @@ describe('AuthRestService', () => {
       const incorrectAuthType = 122;
       // when
       const authToken = authenticationService.authenticate(
-        correctLogin,
-        correctPassword,
-        envURL,
-        incorrectAuthType);
+          correctLogin,
+          correctPassword,
+          envURL,
+          incorrectAuthType);
       // then
       try {
         await authToken;
@@ -92,10 +90,10 @@ describe('AuthRestService', () => {
       const incorrectUrl = 'https://env-94174.customer.cloud.microstrategy.com/incorecturl';
       // when
       const authToken = authenticationService.authenticate(
-        correctLogin,
-        correctPassword,
-        incorrectUrl,
-        authType);
+          correctLogin,
+          correctPassword,
+          incorrectUrl,
+          authType);
       // then
       try {
         await authToken;
@@ -109,10 +107,10 @@ describe('AuthRestService', () => {
       const nonExistingDomainUrl = 'https://www.domainwhichshouldnotexist.com.pl';
       // when
       const authToken = authenticationService.authenticate(
-        correctLogin,
-        correctPassword,
-        nonExistingDomainUrl,
-        authType);
+          correctLogin,
+          correctPassword,
+          nonExistingDomainUrl,
+          authType);
       // then
       try {
         await authToken;
@@ -120,6 +118,30 @@ describe('AuthRestService', () => {
         expect(error).toBeInstanceOf(EnvironmentNotFoundError);
       };
       expect(authToken).rejects.toThrow();
+    });
+    // Office privilege only exists in >11.1.0200
+    it.skip('should return office privilege when called', async () => {
+      // given
+      const authToken = await authenticationService.authenticate(
+          correctLogin,
+          correctPassword,
+          envURL,
+          authType);
+      // when
+      const canUseOffice = await authenticationService.getOfficePrivilege(envURL, authToken);
+      // then
+      expect(canUseOffice).toBeDefined();
+      expect(canUseOffice).toBeInstanceOf(Boolean);
+    });
+    it('should return office privilege true when error or not supported', async () => {
+      // given
+      const envUrl = 'incorrectURL';
+      const authToken = 'incorrectAuthToken';
+      // when
+      const canUseOffice = await authenticationService.getOfficePrivilege(envUrl, authToken);
+      // then
+      expect(canUseOffice).toBeDefined();
+      expect(canUseOffice).toBeTruthy();
     });
   });
 });
