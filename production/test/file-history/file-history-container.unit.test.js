@@ -77,7 +77,7 @@ describe('FileHistoryContainer', () => {
           < _FileHistoryContainer
             project={'testProject'}
             reportArray={mockReportArray}
-            refreshAll={refreshAllmock} />
+            refreshReportsArray={refreshAllmock} />
         </Provider>);
     const refreshButton = wrappedComponent.find('Button .refresh-all-btn');
     // when
@@ -94,7 +94,7 @@ describe('FileHistoryContainer', () => {
         <_FileHistoryContainer
           project={'testProject'}
           reportArray={mockReportArray}
-          refreshAll={() => {}} />);
+          refreshReportsArray={jest.fn()} />);
     wrappedComponent.instance()._ismounted = false;
     wrappedComponent.instance().setState = jest.fn((obj, callback) => setStateCallBack = callback || (() => {}));
     const refreshButton = wrappedComponent.find('Button .refresh-all-btn');
