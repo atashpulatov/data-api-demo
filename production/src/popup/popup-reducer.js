@@ -5,9 +5,7 @@ import {
 } from './popup-actions';
 
 export const initialState = {
-  refreshingAll: null,
   refreshingReport: '',
-  info: {},
 };
 
 export const popupReducer = (state = initialState, action) => {
