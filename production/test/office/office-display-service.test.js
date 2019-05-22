@@ -296,6 +296,50 @@ describe('OfficeDisplayService', () => {
       expect(getActiveWorksheetMock).toBeCalled();
       expect(result.name).toEqual(reportName);
     });
+    it('should delete prevOfficeTable on refresh if table definition changed', async () => {
+      // given
+      const mockedTable = {
+        getHeaderRowRange: jest.fn().mockReturnValue({
+          values: [],
+        }),
+        getDataBodyRange: jest.fn().mockReturnValue({
+          values: [],
+        }),
+        load: jest.fn(),
+        rows: {
+          add: jest.fn(),
+          clearFilters: jest.fn(),
+        },
+      };
+      const mockedPrevTable = {
+        delete: jest.fn(),
+      };
+      const mockedWorksheet = {
+        tables: {
+          add: jest.fn().mockReturnValue(mockedTable),
+        },
+        getRange: jest.fn().mockReturnValue({
+          value: 'A1:B5',
+          getUsedRangeOrNullObject: jest.fn().mockReturnValue({isNullObject: true}),
+        }),
+        activate: jest.fn(),
+      };
+      jest.spyOn(officeDisplayService, '_checkRangeValidity').mockReturnValueOnce({});
+      jest.spyOn(officeApiHelper, 'getRange').mockReturnValueOnce('A1:B5');
+
+      const getActiveWorksheetMock = jest.fn();
+      getActiveWorksheetMock.mockReturnValue(mockedWorksheet);
+      officeContextMock.workbook.worksheets.getActiveWorksheet = getActiveWorksheetMock;
+      officeContextMock.sync = jest.fn();
+      officeContextMock.trackedObjects = {add: jest.fn()};
+      const startCell = 'A1';
+      const reportName = 'someReportName';
+      // when
+      const result = await officeDisplayService._createOfficeTable(givenReport, officeContextMock, startCell, reportName, mockedPrevTable);
+      // then
+      expect(mockedPrevTable.delete).toBeCalled();
+      expect(result.name).toEqual(reportName);
+    });
   });
   describe('_checkRangeValidity', async () => {
     it('should return null when data range is empty', async () => {
