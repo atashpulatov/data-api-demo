@@ -12,7 +12,6 @@ import {officeProperties} from '../office/office-properties';
 import {officeApiHelper} from '../office/office-api-helper';
 import {START_REPORT_LOADING, STOP_REPORT_LOADING} from './popup-actions';
 const URL = `${window.location.href}`;
-const IS_LOCALHOST = URL.includes('localhost');
 
 class PopupController {
   runPopupNavigation = async () => {
@@ -112,7 +111,8 @@ class PopupController {
     if (response.chosenObject) {
       reduxStore.dispatch({type: officeProperties.actions.startLoading});
       reduxStore.dispatch({type: START_REPORT_LOADING, data: {name: response.reportName}});
-      const result = await officeDisplayService.printObject(response.dossierData, response.chosenObject, response.chosenProject, objectTypes.getTypeDescription(3, response.chosenSubtype) === 'Report', null, null, null, null, null, response.isPrompted);
+      const result =
+        await officeDisplayService.printObject(response.dossierData, response.chosenObject, response.chosenProject, objectTypes.getTypeDescription(3, response.chosenSubtype) === 'Report', null, null, null, null, null, response.isPrompted, false, response.promptAnswers);
       if (result) {
         notificationService.displayNotification(result.type, result.message);
       }
