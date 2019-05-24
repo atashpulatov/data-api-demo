@@ -324,4 +324,3 @@ __pycache__/
 *bundle.js
 coverage/
 **/lost+found/
-production/office-react-manifest-tomcat.xml
