@@ -34,9 +34,21 @@ export class _FileHistoryContainer extends React.Component {
     });
   };
 
+  clearAll = async () => {
+    const excelContext = await officeApiHelper.getExcelContext();
+    // e.stopPropagation();
+    this.props.reportArray.forEach((report) => {
+      console.log('in foreach', report);
+      const tableObject = excelContext.workbook.tables.getItem(report.bindId);
+      const tableRange = tableObject.getDataBodyRange();
+      tableRange.clear(Excel.ClearApplyTo.contents);
+    });
+    await excelContext.sync();
+  }
   render() {
     const {reportArray = [], loading, refreshingAll, refreshReportsArray} = this.props;
     return (<React.Fragment >
+      <Button onClick={this.clearAll}>Secure</Button>
       <Button id="add-data-btn-container" className="add-data-btn" onClick={() => this.props.addDataAction()}
         disabled={loading}>Add Data</Button>
       <span className="refresh-button-container">

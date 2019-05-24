@@ -68,11 +68,13 @@ class OfficeStoreService {
   _getReportProperties = () => {
     try {
       const settings = this.getOfficeSettings();
+      console.log('settings:', settings);
       if (!(settings.get(officeProperties.loadedReportProperties))) {
         const reportProperties = [];
         settings.set(officeProperties.loadedReportProperties, reportProperties);
         settings.saveAsync();
       }
+      console.log('settings.get(officeProperties.loadedReportProperties):', settings.get(officeProperties.loadedReportProperties));
       return settings.get(officeProperties.loadedReportProperties);
     } catch (error) {
       errorService.handleOfficeError(error);

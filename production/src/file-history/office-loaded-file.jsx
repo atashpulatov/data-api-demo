@@ -6,6 +6,7 @@ import {fileHistoryHelper} from './file-history-helper';
 import loadingSpinner from './assets/report_loading_spinner.gif';
 import {refreshReportsArray} from '../popup/popup-actions';
 import RenameInput from './file-history-rename-input';
+import {officeApiHelper} from '../office/office-api-helper';
 
 export class _OfficeLoadedFile extends React.Component {
   constructor() {
@@ -51,6 +52,18 @@ export class _OfficeLoadedFile extends React.Component {
     }
   };
 
+  clearAction = async (e) => {
+    e.stopPropagation();
+    const {bindingId, objectType, refreshReportsArray} = this.props;
+    const officeContext = await officeApiHelper.getOfficeContext();
+    const excelContext = await officeApiHelper.getExcelContext();
+    const tableObject = excelContext.workbook.tables.getItem(bindingId);
+    const tableRange = tableObject.getDataBodyRange();
+    tableRange.clear(Excel.ClearApplyTo.contents);
+    // tableRange.clear();
+    await excelContext.sync();
+  }
+
   render() {
     const {fileName, bindingId, onClick, isLoading, objectType, isPrompted, refreshDate} = this.props;
     return (
@@ -79,6 +92,13 @@ export class _OfficeLoadedFile extends React.Component {
           <span
             title="Remove Data from Workbook"
             onClick={this.deleteAction}>
+            <MSTRIcon type='trash' />
+          </span>
+        </Col>
+        <Col>
+          <span
+            title="Remove Data from Workbook"
+            onClick={this.clearAction}>
             <MSTRIcon type='trash' />
           </span>
         </Col>
