@@ -160,7 +160,7 @@ class OfficeDisplayService {
       const addedColumns = Math.max(0, columns - prevOfficeTable.columns.count);
       const addedRows = Math.max(0, rows - prevOfficeTable.rows.count);
 
-      if (addedRows) {
+      if (addedColumns) {
         const rightRange = prevOfficeTable.getRange().getColumnsAfter(addedColumns);
         await this._checkRangeValidity(context, rightRange);
       }
