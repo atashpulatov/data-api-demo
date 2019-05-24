@@ -7,7 +7,7 @@ import {errorService} from '../error/error-handler';
 import {popupController} from '../popup/popup-controller';
 import {authenticationHelper} from '../authentication/authentication-helper';
 import {PopupTypeEnum} from '../home/popup-type-enum';
-import {NOT_SUPPORTED_NO_ATTRIBUTES, ALL_DATA_FILTERED_OUT} from '../error/constants';
+import {NOT_SUPPORTED_NO_ATTRIBUTES, ALL_DATA_FILTERED_OUT, TABLE_OVERLAP} from '../error/constants';
 import {OverlappingTablesError} from '../error/overlapping-tables-error';
 
 class OfficeDisplayService {
@@ -149,13 +149,17 @@ class OfficeDisplayService {
     }
   };
 
-  _createOfficeTable = async (instanceDefinition, context, startCell, officeTableId) => {
+  _createOfficeTable = async (instanceDefinition, context, startCell, officeTableId, prevOfficeTable) => {
     const hasHeaders = true;
     const {rows, columns, mstrTable} = instanceDefinition;
     const sheet = context.workbook.worksheets.getActiveWorksheet();
     const tableRange = officeApiHelper.getRange(columns, startCell, rows);
     const sheetRange = sheet.getRange(tableRange);
     await this._checkRangeValidity(context, sheetRange);
+    if (prevOfficeTable) {
+      prevOfficeTable.delete();
+      await context.sync();
+    }
 
     const officeTable = sheet.tables.add(tableRange, hasHeaders);
     try {
@@ -262,9 +266,8 @@ class OfficeDisplayService {
         headerCell.load('address');
         await excelContext.sync();
         const startCell = officeApiHelper.getStartCell(headerCell.address);
-        prevOfficeTable.delete();
         await excelContext.sync();
-        officeTable = await this._createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId);
+        officeTable = await this._createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId, prevOfficeTable);
       } else {
         shouldFormat = false;
         officeTable = await this._updateOfficeTable(instanceDefinition, excelContext, prevOfficeTable);
@@ -328,7 +331,7 @@ class OfficeDisplayService {
     const usedDataRange = excelRange.getUsedRangeOrNullObject(true);
     await context.sync();
     if (!usedDataRange.isNullObject) {
-      throw new OverlappingTablesError('The required data range in the worksheet is not empty');
+      throw new OverlappingTablesError(TABLE_OVERLAP);
     }
   }
 

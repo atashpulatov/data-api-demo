@@ -8,7 +8,7 @@ import {notificationService} from '../notification/notification-service.js';
 import {RunOutsideOfficeError} from './run-outside-office-error.js';
 import {OverlappingTablesError} from './overlapping-tables-error';
 import {GenericOfficeError} from './generic-office-error.js';
-import {errorMessages, NOT_SUPPORTED_PROMPTS_REFRESH} from './constants';
+import {errorMessages, NOT_SUPPORTED_PROMPTS_REFRESH, TABLE_OVERLAP} from './constants';
 import {ConnectionBrokenError} from './connection-error.js';
 import {OutsideOfRangeError} from './outside-of-range-error.js';
 
@@ -54,7 +54,7 @@ class ErrorService {
         case 'Excel is not defined':
           return new RunOutsideOfficeError(error.message);
         case `A table can't overlap another table. `:
-          return new OverlappingTablesError(error.message);
+          return new OverlappingTablesError(TABLE_OVERLAP);
         default:
           return new GenericOfficeError(error.message);
       }
@@ -143,7 +143,7 @@ class ErrorService {
       return 'The table you try to import exceeds the worksheet limits.';
     }
     if (error instanceof OverlappingTablesError) {
-      return 'A table can\'t overlap another table.';
+      return TABLE_OVERLAP;
     }
     if (error instanceof RunOutsideOfficeError) {
       return 'Please run plugin inside Office';

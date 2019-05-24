@@ -17,6 +17,7 @@ import {
   NOT_IN_METADATA,
   PROJECT_ROW_LIMIT,
   NOT_SUPPORTED_PROMPTS_REFRESH,
+  TABLE_OVERLAP,
 } from '../../src/error/constants';
 
 jest.mock('../../src/storage/session-helper');
@@ -307,7 +308,7 @@ describe('ErrorService', () => {
       errorService.handleError(error);
       // then
       expect(notificationSpy).toBeCalled();
-      expect(notificationSpy).toBeCalledWith('warning', `A table can't overlap another table.`);
+      expect(notificationSpy).toBeCalledWith('warning', TABLE_OVERLAP);
     });
   });
   describe('errorOfficeFactory', () => {
@@ -374,7 +375,7 @@ describe('ErrorService', () => {
       errorService.handleOfficeError(error);
       // then
       expect(notificationSpy).toBeCalled();
-      expect(notificationSpy).toBeCalledWith('warning', errorMessage);
+      expect(notificationSpy).toBeCalledWith('warning', TABLE_OVERLAP);
     });
     it('should handle GenericOfficeError', () => {
       // given
