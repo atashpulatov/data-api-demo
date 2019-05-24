@@ -154,10 +154,26 @@ class OfficeDisplayService {
     const sheet = context.workbook.worksheets.getActiveWorksheet();
     const tableRange = officeApiHelper.getRange(columns, startCell, rows);
     const sheetRange = sheet.getRange(tableRange);
-    await this._checkRangeValidity(context, sheetRange);
     if (prevOfficeTable) {
+      prevOfficeTable.rows.load('count');
+      await context.sync();
+      const addedColumns = Math.max(0, columns - prevOfficeTable.columns.count);
+      const addedRows = Math.max(0, rows - prevOfficeTable.rows.count);
+
+      if (addedRows) {
+        const rightRange = prevOfficeTable.getRange().getColumnsAfter(addedColumns);
+        await this._checkRangeValidity(context, rightRange);
+      }
+
+      if (addedRows) {
+        const bottomRange = prevOfficeTable.getRange().getRowsBelow(addedRows).getResizedRange(0, addedColumns);
+        await this._checkRangeValidity(context, bottomRange);
+      }
+
       prevOfficeTable.delete();
       await context.sync();
+    } else {
+      await this._checkRangeValidity(context, sheetRange);
     }
 
     const officeTable = sheet.tables.add(tableRange, hasHeaders);
