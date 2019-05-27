@@ -9,7 +9,6 @@ import {actions} from './navigation-tree-actions';
 import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';
 import {message} from 'antd';
 import {EMPTY_REPORT} from '../error/constants';
-import {lchmod} from 'fs';
 
 export class _NavigationTree extends Component {
   constructor(props) {
