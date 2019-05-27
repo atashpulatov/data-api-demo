@@ -9,6 +9,7 @@ import {actions} from './navigation-tree-actions';
 import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';
 import {message} from 'antd';
 import {EMPTY_REPORT} from '../error/constants';
+import {lchmod} from 'fs';
 
 export class _NavigationTree extends Component {
   constructor(props) {
@@ -39,7 +40,7 @@ export class _NavigationTree extends Component {
 
   handleSecondary = async () => {
     try {
-      const response = await mstrObjectRestService.getInstanceDefinition(this.props.chosenObjectId, this.props.chosenProjectId, this.chosenSubtype);
+      const response = await mstrObjectRestService.getInstanceDefinition(this.props.chosenObjectId, this.props.chosenProjectId, this.props.chosenSubtype);
       if (response && response.rows === 0) {
         return message.warning(EMPTY_REPORT);
       }
