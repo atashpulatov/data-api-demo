@@ -160,7 +160,9 @@ hr {
 .ant-tabs.tabs-container .ant-tabs-content {
     padding: 11px;
     height: calc(100% - 44px);
-    overflow: auto;
+    display: block;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .tabs-container .ant-tabs-ink-bar {
