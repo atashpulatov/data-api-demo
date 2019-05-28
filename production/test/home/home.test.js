@@ -23,9 +23,9 @@ describe('Home', () => {
     // given
     // when
     const componentWrapper = mount(
-      <Provider store={reduxStore}>
-        <Home />
-      </Provider>
+        <Provider store={reduxStore}>
+          <Home />
+        </Provider>
     );
     // then
     expect(componentWrapper.children().length).toBeGreaterThan(0);
@@ -41,15 +41,15 @@ describe('Home', () => {
     const tempPromise = Promise.resolve();
     const sessionHelperSpy = jest.spyOn(sessionHelper, 'disableLoading');
     const officeHelperSpy = jest
-      .spyOn(officeApiHelper, 'loadExistingReportBindingsExcel')
-      .mockImplementation(async () => null);
+        .spyOn(officeApiHelper, 'loadExistingReportBindingsExcel')
+        .mockImplementation(async () => null);
     sessionHelperSpy.mockClear();
     officeHelperSpy.mockClear();
     // when
     const componentWrapper = mount(
-      <Provider store={reduxStore}>
-        <_Home {...props} />
-      </Provider>
+        <Provider store={reduxStore}>
+          <_Home {...props} />
+        </Provider>
     );
     // then
     setImmediate(() => tempPromise);
@@ -88,9 +88,9 @@ describe('Home', () => {
 
     };
     const wrappedComponent = mount(
-      <Provider store={reduxStore}>
-        <_Home {...props} />
-      </Provider>
+        <Provider store={reduxStore}>
+          <_Home {...props} />
+        </Provider>
     );
     // when
     wrappedComponent.setProps({
@@ -116,9 +116,9 @@ describe('Home', () => {
       // given
       // when
       const homeWrapper = mount(
-        <Provider store={reduxStore}>
-          <Home />
-        </Provider>
+          <Provider store={reduxStore}>
+            <Home />
+          </Provider>
       );
       const headerWrapper = mount(<_Header />);
       // then
@@ -138,6 +138,27 @@ describe('Home', () => {
       expect(nameWrapper).toBeTruthy();
       expect(buttonWrapper).toBeTruthy();
     });
+    it('should correctly render profile-image in header', async () => {
+      // given
+
+      // when
+      const headerWrapper = mount(<_Header />);
+      headerWrapper.setProps({userInitials: null});
+      // then
+      const imageWrapper = headerWrapper.find('#profile-image');
+      expect(imageWrapper).toBeTruthy();
+    });
+    it('should correctly render Initials in header', async () => {
+      // given
+
+      // when
+      const headerWrapper = mount(<_Header />);
+      headerWrapper.setProps({userInitials: 'n'});
+      // then
+      const imageWrapper = headerWrapper.find('#initials');
+      expect(imageWrapper).toBeTruthy();
+    });
+
     it('should log out on button click', async () => {
       // given
       const tempPromise = Promise.resolve();
