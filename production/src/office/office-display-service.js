@@ -148,17 +148,44 @@ class OfficeDisplayService {
       return errorService.handleError(error);
     }
   };
-
+  /**
+   * Creates an office table if it's a new import or if the number of columns of an existing table changes.
+   * If we are refreshing a table and the new definiton range is not empty we keep the original table.
+   *
+   * @param {Object} instanceDefinition
+   * @param {Object} context ExcelContext
+   * @param {string} startCell  Top left corner cell
+   * @param {string} officeTableId Excel Binding ID
+   * @param {Object} prevOfficeTable Previous office table to refresh
+   *
+   * @memberof OfficeDisplayService
+   */
   _createOfficeTable = async (instanceDefinition, context, startCell, officeTableId, prevOfficeTable) => {
     const hasHeaders = true;
     const {rows, columns, mstrTable} = instanceDefinition;
     const sheet = context.workbook.worksheets.getActiveWorksheet();
     const tableRange = officeApiHelper.getRange(columns, startCell, rows);
     const sheetRange = sheet.getRange(tableRange);
-    await this._checkRangeValidity(context, sheetRange);
     if (prevOfficeTable) {
+      prevOfficeTable.rows.load('count');
+      await context.sync();
+      const addedColumns = Math.max(0, columns - prevOfficeTable.columns.count);
+      const addedRows = Math.max(0, rows - prevOfficeTable.rows.count);
+
+      if (addedColumns) {
+        const rightRange = prevOfficeTable.getRange().getColumnsAfter(addedColumns);
+        await this._checkRangeValidity(context, rightRange);
+      }
+
+      if (addedRows) {
+        const bottomRange = prevOfficeTable.getRange().getRowsBelow(addedRows).getResizedRange(0, addedColumns);
+        await this._checkRangeValidity(context, bottomRange);
+      }
+
       prevOfficeTable.delete();
       await context.sync();
+    } else {
+      await this._checkRangeValidity(context, sheetRange);
     }
 
     const officeTable = sheet.tables.add(tableRange, hasHeaders);

@@ -301,7 +301,7 @@ describe('OfficeDisplayService', () => {
       expect(getActiveWorksheetMock).toBeCalled();
       expect(result.name).toEqual(reportName);
     });
-    it('should delete prevOfficeTable on refresh if table definition changed', async () => {
+    it('should delete prevOfficeTable on refresh if table definition changed and range is available', async () => {
       // given
       const mockedTable = {
         getHeaderRowRange: jest.fn().mockReturnValue({
@@ -318,6 +318,8 @@ describe('OfficeDisplayService', () => {
       };
       const mockedPrevTable = {
         delete: jest.fn(),
+        rows: {count: 1, load: jest.fn()},
+        columns: {count: 1},
       };
       const mockedWorksheet = {
         tables: {
@@ -349,6 +351,7 @@ describe('OfficeDisplayService', () => {
   describe('_checkRangeValidity', async () => {
     it('should return null when data range is empty', async () => {
       // given
+      jest.spyOn(officeDisplayService, '_checkRangeValidity').mockRestore();
       const mockedWorksheet = {
         getRange: jest.fn().mockReturnValue({
           value: [],
