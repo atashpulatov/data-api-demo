@@ -10,6 +10,8 @@ import {PopupTypeEnum} from '../home/popup-type-enum';
 import {NOT_SUPPORTED_NO_ATTRIBUTES, ALL_DATA_FILTERED_OUT, TABLE_OVERLAP} from '../error/constants';
 import {OverlappingTablesError} from '../error/overlapping-tables-error';
 
+const ERR_POPUP_CLOSED = 'Function close call failed, error code: 12006.';
+
 class OfficeDisplayService {
   printObject = async (dossierData, objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh, isPrompted, isRefreshAll = false) => {
     if (!isRefreshAll) {
@@ -245,7 +247,7 @@ class OfficeDisplayService {
       reduxStoreState.sessionReducer.dialog.close();
     } catch (err) {
       // swallow error from office if dialog has been closed by user
-      if (err !== 'Function close call failed, error code: 12006.') {
+      if (err !== ERR_POPUP_CLOSED) {
         throw err;
       }
     }
