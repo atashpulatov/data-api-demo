@@ -17,6 +17,7 @@ export class _Header extends Component {
     const authToken = IS_LOCALHOST ? this.props.authToken : homeHelper.saveTokenFromCookies();
     try {
       userData = await userRestService.getUserData(authToken, envUrl);
+      userData.locale = 'ua';
     } catch (error) {
       errorService.handleError(error, !IS_LOCALHOST);
     }
@@ -39,6 +40,10 @@ export class _Header extends Component {
     );
   };
 }
+
+_Header.defaultProps = {
+  t: (text) => text,
+};
 
 function mapStateToProps(state) {
   const {userFullName, userInitials, envUrl, authToken} = state.sessionReducer;

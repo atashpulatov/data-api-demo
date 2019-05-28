@@ -61,6 +61,10 @@ export class _FileHistoryContainer extends React.Component {
   };
 }
 
+_FileHistoryContainer.defaultProps = {
+  t: (text) => text,
+};
+
 function mapStateToProps(state) {
   return {
     reportArray: state.officeReducer.reportArray,

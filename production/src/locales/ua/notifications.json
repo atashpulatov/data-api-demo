@@ -8,7 +8,8 @@
   "Excel is not defined": "Excel контекст відсутній",
   "A table can't overlap another table. ": "Таблиця не може пересікатись з іншою таблицею",
   "404 - Environment not found": "",
-  "Environment is unreachable. Please check your internet connection.": "",
+  "Environment is unreachable. Please check your internet connection.": "Віддалений сервер недоступний. Перевірте ваше мережеве підключення",
+  "Your Office Online session has expired or is invalid. To continue, refresh the page.": "Ваша сесія в Office Online закінчилась. Для продовження, перезавантажте сторінку.",
   "Your session has expired. Please log in.": "",
   "400 - There has been a problem with your request": "",
   "The table you try to import exceeds the worksheet limits.": "",
@@ -38,5 +39,5 @@
   "Missing report.projectId": "",
   "Missing AuthToken.": "",
   "Missing loading": "",
-  "Report removed": "Репорт видалено"
+  "Report removed": "Звіт видалено"
 }

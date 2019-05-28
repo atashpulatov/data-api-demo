@@ -33,7 +33,7 @@
   "Table Preview": "Попередній перегляд",
   "Close Preview": "Закрити",
   "Table preview displays 10 rows of data only.": "Попередній перегляд показує лиш 10 рядків",
-  "No files loaded.": "",
-  "Report loading icon": "",
-  "Please wait until the import is complete.": ""
+  "No files loaded.": "Немає завантажених файлів",
+  "Report loading icon": "Завантаження звіту",
+  "Please wait until the import is complete.": "Будь ласка, зачекайте поки завантаження звіту завершиться"
 }
