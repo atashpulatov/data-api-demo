@@ -1,0 +1,142 @@
+.refreshing-page {
+    padding-right: 30px;
+    padding-left: 30px;
+}
+
+.results-container {
+    overflow: auto;
+    padding-top: 10px;
+    height: calc(100% - 150px);
+}
+
+.result-container {
+    display: flex;
+    align-items: center;
+    padding-bottom: 10px;
+}
+
+.result-icon {
+    display: inline-flex;
+    min-width: 20px;
+}
+
+.refresh-header {
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    font-size: 18px;
+    align-items: center
+}
+
+.finished-header {
+    font-size: 24px;
+}
+
+.refresh-progress {
+    width: 100vw;
+    white-space: nowrap;
+}
+
+.refresh-tooltip {
+    color: #444649;
+}
+
+.dialogStyle {
+    height: 100%;
+    position: fixed;
+    top: 50%;
+    color: #444A50;
+    transform: translateY(-50%) translateY(-25px);
+    border: none;
+    text-align: center;
+    font-family: "HelveticaNeue", "Helvetica Neue", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", sans-serif;
+    width: 100%;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.titleStyle {
+    font-weight: bold;
+    font-size: 18px;
+    color: #444649;
+    padding: 0.5em;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    max-width: 75%;
+}
+
+.progressStyle {
+    font-weight: bold;
+    font-size: 18px;
+    color: #444649;
+    padding: 0.5em;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+.report-name {
+    display: inline-flex;
+    padding-left: 10px;
+    display: block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+.refresh-title {
+    font-size: 18px;
+    color: #333333;
+    text-align: left;
+    font-weight: bold;
+    padding-top: 20px;
+}
+
+.tooltip-card {
+    border-radius: 0px;
+}
+
+.ant-popover-inner-content {
+    padding: 5px 8px;
+}
+
+.tooltip-content {
+    max-width: 250px;
+    font-size: 12px;
+    font-family: "HelveticaNeue", "Helvetica Neue", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", sans-serif;
+    color: rgb(68, 74, 80);
+}
+
+.tooltip-header,
+.tooltip-message {
+    vertical-align: top;
+    display: inline-block;
+}
+
+.tooltip-header {
+    width: 18px;
+    margin: 0 8px;
+}
+
+.tooltip-message {
+    width: calc(100% - 34px);
+}
+
+.tooltip-message-title {
+    font-weight: bold;
+    color: #444649;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.tooltip-message-text {
+    color: rgba(0, 0, 0, 0.65);
+}

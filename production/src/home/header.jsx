@@ -18,7 +18,7 @@ export class _Header extends Component {
     try {
       userData = await userRestService.getUserData(authToken, envUrl);
     } catch (error) {
-      errorService.handleError(error, true);
+      errorService.handleError(error, !IS_LOCALHOST);
     }
     sessionHelper.saveUserInfo(userData);
   };

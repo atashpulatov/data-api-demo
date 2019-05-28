@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
-import {AttributeSelectorWindow} from '../attribute-selector/attribute-selector-window';
 import {PopupTypeEnum} from '../home/popup-type-enum';
-import {NavigationTree} from '../navigation/navigation-tree';
 import * as queryString from 'query-string';
 import {libraryErrorController} from 'mstr-react-library';
 import {officeContext} from '../office/office-context';
 import {selectorProperties} from '../attribute-selector/selector-properties';
 import {reduxStore} from '../store';
 import {Provider} from 'react-redux';
+import {PopupViewSelector} from './popup-view-selector';
 import {LoadingPage} from '../loading/loading-page';
 import {I18nextProvider} from 'react-i18next';
 import i18next from '../i18n';
@@ -56,23 +55,17 @@ export class Popup extends Component {
     officeContext.getOffice().context.ui.messageParent(JSON.stringify(messageObject));
   };
 
-  selectView(popupType, propsToPass) {
-    if (!popupType) {
-      return (<AttributeSelectorWindow parsed={propsToPass} handleBack={this.handleBack}/>);
-    } else if (popupType === PopupTypeEnum.navigationTree) {
-      return (<NavigationTree handlePrepare={this.handlePrepare} parsed={propsToPass} handlePopupErrors={this.handlePopupErrors}/>);
-    } else if (popupType === PopupTypeEnum.loadingPage) {
-      return (<LoadingPage/>);
-    }
-    return (<></>);
-  }
-
   render() {
     const {popupType, ...propsToPass} = this.state.parsed;
+    const methods = {
+      handlePrepare: this.handlePrepare,
+      handleBack: this.handleBack,
+      handlePopupErrors: this.handlePopupErrors,
+    };
     i18next.changeLanguage(reduxStore.getState().sessionReducer.userLocale);
     return (<Provider store={reduxStore}>
       <I18nextProvider>
-        {this.selectView(popupType, propsToPass)}
+        <PopupViewSelector popupType={popupType} propsToPass={propsToPass} methods={methods} />
       </I18nextProvider>
     </Provider>);
   }

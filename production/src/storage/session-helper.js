@@ -50,7 +50,7 @@ class SessionHelper {
   saveLoginValues = (values) => {
     reduxStore.dispatch({
       type: sessionProperties.actions.logIn,
-      envUrl: values.envUrl,
+      values: values,
     });
   }
   logIn = (authToken) => {

@@ -6,6 +6,7 @@ import {PopupButtons} from '../popup/popup-buttons.jsx';
 import {FolderBrowser} from 'mstr-react-library';
 import {connect} from 'react-redux';
 import {actions} from './navigation-tree-actions';
+import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';
 import {withTranslation} from 'react-i18next';
 
 export class _NavigationTree extends Component {
@@ -35,18 +36,6 @@ export class _NavigationTree extends Component {
     Office.context.ui.messageParent(JSON.stringify(updateObject));
   };
 
-  handleOk = () => {
-    const okObject = {
-      command: selectorProperties.commandOk,
-      chosenObject: this.props.chosenObjectId,
-      chosenProject: this.props.chosenProjectId,
-      chosenSubtype: this.props.chosenSubtype,
-    };
-    this.props.startLoading();
-    this.props.startImport();
-    Office.context.ui.messageParent(JSON.stringify(okObject));
-  };
-
   handleSecondary = () => {
     this.props.handlePrepare(this.props.chosenProjectId, this.props.chosenObjectId,
         this.props.chosenSubtype, this.props.chosenProjectName, this.props.chosenType);
@@ -61,18 +50,30 @@ export class _NavigationTree extends Component {
   };
 
   // TODO: temporary solution
-  onObjectChosen = (objectId, projectId, subtype) => {
-    this.props.selectObject({
-      chosenObjectId: objectId,
-      chosenProjectId: projectId,
-      chosenSubtype: subtype,
-    });
+  onObjectChosen = async (objectId, projectId, subtype) => {
+    try {
+      this.props.selectObject({
+        chosenObjectId: null,
+        chosenProjectId: null,
+        chosenSubtype: null,
+        isPrompted: null,
+      });
+      const isPrompted = await mstrObjectRestService.isPrompted(objectId, projectId);
+      this.props.selectObject({
+        chosenObjectId: objectId,
+        chosenProjectId: projectId,
+        chosenSubtype: subtype,
+        isPrompted,
+      });
+    } catch (err) {
+      this.props.handlePopupErrors(err);
+    }
   };
 
   render() {
     const {setDataSource, dataSource, chosenObjectId, chosenProjectId, pageSize, changeSearching, changeSorting,
-      chosenSubtype, folder, selectFolder, loading, handlePopupErrors, scrollPosition, searchText, sorter, t,
-      updateScroll, updateSize} = this.props;
+      chosenSubtype, folder, selectFolder, loading, handlePopupErrors, scrollPosition, searchText, sorter,
+      updateScroll, updateSize, requestImport, t} = this.props;
     return (
       <FolderBrowser
         onSorterChange={changeSorting}
@@ -116,7 +117,7 @@ export class _NavigationTree extends Component {
         <PopupButtons
           loading={loading}
           disableActiveActions={!chosenObjectId}
-          handleOk={this.handleOk}
+          handleOk={requestImport}
           handleSecondary={this.handleSecondary}
           handleCancel={this.handleCancel}
           previewDisplay={this.state.previewDisplay}
@@ -126,8 +127,12 @@ export class _NavigationTree extends Component {
   }
 }
 
-export const mapStateToProps = (state) => {
-  return {...state.navigationTree};
+export const mapStateToProps = ({officeReducer, navigationTree}) => {
+  const object = officeReducer.preLoadReport;
+  return {
+    ...navigationTree,
+    title: !!object ? object.name : undefined,
+  };
 };
 
 export const NavigationTree = connect(mapStateToProps, actions)(withTranslation('common')(_NavigationTree));

@@ -3,26 +3,37 @@ import {mstrObjectRestService, DATA_LIMIT} from '../mstr-object/mstr-object-rest
 import {reduxStore} from '../store';
 import {officeProperties} from './office-properties';
 import {officeStoreService} from './store/office-store-service';
-import {notificationService} from '../notification/notification-service';
 import {errorService} from '../error/error-handler';
 import {popupController} from '../popup/popup-controller';
 import {authenticationHelper} from '../authentication/authentication-helper';
 import {PopupTypeEnum} from '../home/popup-type-enum';
-import {NOT_SUPPORTED_NO_ATTRIBUTES} from '../error/constants';
+import {NOT_SUPPORTED_NO_ATTRIBUTES, ALL_DATA_FILTERED_OUT, TABLE_OVERLAP} from '../error/constants';
 import {OverlappingTablesError} from '../error/overlapping-tables-error';
 
 class OfficeDisplayService {
-  printObject = async (objectId, projectId, isReport = true, ...args) => {
-    const objectInfo = await mstrObjectRestService.getObjectInfo(objectId, projectId, isReport);
-    reduxStore.dispatch({
-      type: officeProperties.actions.preLoadReport,
-      preLoadReport: objectInfo,
-    });
-    popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
-    return this._printObject(objectId, projectId, isReport, ...args);
+  printObject = async (dossierData, objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh, isPrompted, isRefreshAll = false) => {
+    if (!isRefreshAll) {
+      const objectInfo = !!isPrompted ? await mstrObjectRestService.getObjectInfo(objectId, projectId, isReport) : await mstrObjectRestService.getObjectDefinition(objectId, projectId, isReport);
+      reduxStore.dispatch({
+        type: officeProperties.actions.preLoadReport,
+        preLoadReport: objectInfo,
+      });
+      await popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
+    }
+    try {
+      return await this._printObject(objectId, projectId, isReport, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body, isPrompted);
+    } catch (error) {
+      throw error;
+    } finally {
+      !isRefreshAll && this._dispatchPrintFinish();
+    }
   }
 
-  _printObject = async (objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh) => {
+  _printObject = async (objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body, isPrompted) => {
+    let officeTable;
+    let newOfficeTableId;
+    let shouldFormat;
+    let excelContext;
     try {
       const objectType = isReport ? 'report' : 'dataset';
       const {envUrl} = officeApiHelper.getCurrentMstrContext();
@@ -31,46 +42,55 @@ class OfficeDisplayService {
       console.groupCollapsed('Importing data performance');
       console.time('Total');
       console.time('Init excel');
-      const excelContext = await officeApiHelper.getExcelContext();
+      excelContext = await officeApiHelper.getExcelContext();
       const startCell = selectedCell || await officeApiHelper.getSelectedCell(excelContext);
       console.timeEnd('Init excel');
 
       // Get mstr instance definition
       console.time('Instance definition');
-      const instanceDefinition = await mstrObjectRestService.getInstanceDefinition(objectId, projectId, isReport);
+      const instanceDefinition = await mstrObjectRestService.getInstanceDefinition(objectId, projectId, isReport, dossierData, body);
       console.timeEnd('Instance definition');
 
       // Check if instance returned data
-      if (!instanceDefinition || instanceDefinition.rows === 0) {
-        return {type: 'warning', message: NOT_SUPPORTED_NO_ATTRIBUTES};
+      if (!instanceDefinition || instanceDefinition.mstrTable.rows.length === 0) {
+        return {type: 'warning', message: !!isPrompted ? ALL_DATA_FILTERED_OUT : NOT_SUPPORTED_NO_ATTRIBUTES};
       }
 
       // TODO: If isRefresh check if new instance definition is same as before
 
-      // Create or get table id
-      let {officeTable, newOfficeTableId} = await this._getOfficeTable(officeTableId, isRefresh, excelContext, bindingId, instanceDefinition, startCell);
+      // Create or update table
+      ({officeTable, newOfficeTableId, shouldFormat} = await this._getOfficeTable(officeTableId, isRefresh, excelContext, bindingId, instanceDefinition, startCell));
 
       // Fetch, convert and insert with promise generator
       console.time('Fetch and insert into excel');
-      const connectionData = {objectId, projectId, isReport, body};
+      const connectionData = {objectId, projectId, dossierData, isReport, body};
       const officeData = {officeTable, excelContext, startCell, newOfficeTableId};
       officeTable = await this._fetchInsertDataIntoExcel(connectionData, officeData, instanceDefinition, isRefresh);
 
-      // Apply formatting
-      await this._applyFormatting(isRefresh, officeTable, instanceDefinition, excelContext);
+      // Apply formatting when table was created
+      if (shouldFormat) {
+        await this._applyFormatting(officeTable, instanceDefinition, excelContext);
+      }
 
       // Save to store
       bindingId = bindingId || newOfficeTableId;
       await officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
-      this._addToStore(officeTableId, isRefresh, instanceDefinition, bindingId, newOfficeTableId, projectId, envUrl, body, objectType);
+      this._addToStore(officeTableId, isRefresh, instanceDefinition, bindingId, newOfficeTableId, projectId, envUrl, body, objectType, isPrompted);
 
       console.timeEnd('Total');
-      return !isRefresh && {type: 'success', message: `Data loaded successfully`};
+      reduxStore.dispatch({
+        type: officeProperties.actions.finishLoadingReport,
+        reportBindId: bindingId,
+      });
+      return {type: 'success', message: `Data loaded successfully`};
     } catch (error) {
+      if (officeTable && !isRefresh) {
+        officeTable.delete();
+      }
       throw errorService.errorOfficeFactory(error);
     } finally {
+      excelContext.sync();
       console.groupEnd();
-      this._dispatchPrintFinish();
     }
   }
 
@@ -88,6 +108,7 @@ class OfficeDisplayService {
         body: report.body,
         isLoading: report.isLoading,
         objectType: report.objectType,
+        isPrompted: report.isPrompted,
       },
     });
     officeStoreService.preserveReport(report);
@@ -126,31 +147,45 @@ class OfficeDisplayService {
       return errorService.handleError(error);
     }
   };
-
-  refreshReport = async (bindingId, objectType) => {
-    try {
-      const isReport = objectType === 'report';
-      const refreshReport = officeStoreService.getReportFromProperties(bindingId);
-      const result = await this.printObject(refreshReport.id, refreshReport.projectId, isReport, true, refreshReport.tableId, bindingId, refreshReport.body, true);
-      if (result) {
-        notificationService.displayMessage(result.type, result.message);
-      }
-      return true;
-    } catch (e) {
-      if (e.code === 'ItemNotFound') {
-        return notificationService.displayMessage('info', 'Data is not relevant anymore. You can delete it from the list');
-      }
-      throw e;
-    }
-  };
-
-  _createOfficeTable = async (instanceDefinition, context, startCell, officeTableId) => {
+  /**
+   * Creates an office table if it's a new import or if the number of columns of an existing table changes.
+   * If we are refreshing a table and the new definiton range is not empty we keep the original table.
+   *
+   * @param {Object} instanceDefinition
+   * @param {Object} context ExcelContext
+   * @param {string} startCell  Top left corner cell
+   * @param {string} officeTableId Excel Binding ID
+   * @param {Object} prevOfficeTable Previous office table to refresh
+   *
+   * @memberof OfficeDisplayService
+   */
+  _createOfficeTable = async (instanceDefinition, context, startCell, officeTableId, prevOfficeTable) => {
     const hasHeaders = true;
     const {rows, columns, mstrTable} = instanceDefinition;
     const sheet = context.workbook.worksheets.getActiveWorksheet();
     const tableRange = officeApiHelper.getRange(columns, startCell, rows);
     const sheetRange = sheet.getRange(tableRange);
-    await this._checkRangeValidity(context, sheetRange);
+    if (prevOfficeTable) {
+      prevOfficeTable.rows.load('count');
+      await context.sync();
+      const addedColumns = Math.max(0, columns - prevOfficeTable.columns.count);
+      const addedRows = Math.max(0, rows - prevOfficeTable.rows.count);
+
+      if (addedColumns) {
+        const rightRange = prevOfficeTable.getRange().getColumnsAfter(addedColumns);
+        await this._checkRangeValidity(context, rightRange);
+      }
+
+      if (addedRows) {
+        const bottomRange = prevOfficeTable.getRange().getRowsBelow(addedRows).getResizedRange(0, addedColumns);
+        await this._checkRangeValidity(context, bottomRange);
+      }
+
+      prevOfficeTable.delete();
+      await context.sync();
+    } else {
+      await this._checkRangeValidity(context, sheetRange);
+    }
 
     const officeTable = sheet.tables.add(tableRange, hasHeaders);
     try {
@@ -161,9 +196,44 @@ class OfficeDisplayService {
       await context.sync();
       return officeTable;
     } catch (error) {
-      officeTable.delete();
       await context.sync();
       throw error;
+    }
+  }
+
+  _updateOfficeTable = async (instanceDefinition, context, prevOfficeTable) => {
+    try {
+      const {rows, mstrTable} = instanceDefinition;
+      prevOfficeTable.clearFilters();
+      prevOfficeTable.sort.clear();
+      prevOfficeTable.getHeaderRowRange().values = [mstrTable.headers];
+      await context.sync();
+      await this._updateRows(prevOfficeTable, context, rows);
+      return prevOfficeTable;
+    } catch (error) {
+      await context.sync();
+      throw error;
+    }
+  }
+
+  async _updateRows(prevOfficeTable, context, rows) {
+    const tableRows = prevOfficeTable.rows;
+    tableRows.load('count');
+    await context.sync();
+    const tableRowCount = tableRows.count;
+    // Delete extra rows if new report is smaller
+    if (rows < tableRowCount) {
+      prevOfficeTable.getRange().getRow(rows + 1).getResizedRange(tableRowCount - rows, 0).clear();
+      await context.sync();
+      tableRows.load('items');
+      await context.sync();
+      const rowsToRemove = tableRows.items;
+      for (let i = tableRowCount - 1; i >= rows; i--) {
+        rowsToRemove[i].delete();
+        if (i === rows || i % 500 === 0) {
+          await context.sync();
+        }
+      }
     }
   }
 
@@ -174,7 +244,7 @@ class OfficeDisplayService {
     reduxStoreState.sessionReducer.dialog.close();
   }
 
-  _addToStore(officeTableId, isRefresh, instanceDefinition, bindingId, newOfficeTableId, projectId, envUrl, body, objectType) {
+  _addToStore(officeTableId, isRefresh, instanceDefinition, bindingId, newOfficeTableId, projectId, envUrl, body, objectType, isPrompted) {
     if (!officeTableId && !isRefresh) {
       this.addReportToStore({
         id: instanceDefinition.mstrTable.id,
@@ -186,42 +256,62 @@ class OfficeDisplayService {
         body,
         isLoading: false,
         objectType,
+        isPrompted,
       });
     }
   }
 
-  async _applyFormatting(isRefresh, officeTable, instanceDefinition, excelContext) {
-    console.time('Apply formatting');
-    if (!isRefresh) {
+  async _applyFormatting(officeTable, instanceDefinition, excelContext) {
+    try {
+      console.time('Apply formatting');
       officeApiHelper.formatNumbers(officeTable, instanceDefinition.mstrTable);
       await excelContext.sync();
       officeApiHelper.formatTable(officeTable);
       await excelContext.sync();
+    } catch (error) {
+      // TODO: Inform the user?
+      console.log('Cannot apply formatting, skipping');
+    } finally {
+      console.timeEnd('Apply formatting');
     }
-    console.timeEnd('Apply formatting');
   }
 
   async _getOfficeTable(officeTableId, isRefresh, excelContext, bindingId, instanceDefinition, startCell) {
     console.time('Create or get table');
     const newOfficeTableId = officeTableId || officeApiHelper.findAvailableOfficeTableId();
     let officeTable;
+    let shouldFormat = true;
+
     if (isRefresh) {
-      officeTable = await officeApiHelper.getTable(excelContext, bindingId);
+      const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindingId);
+      const tableColumnsChanged = await this._checkColumnsChange(prevOfficeTable, excelContext, instanceDefinition);
+      if (tableColumnsChanged) {
+        console.log('Instance definition changed, creating new table');
+        const headerCell = prevOfficeTable.getHeaderRowRange().getCell(0, 0);
+        headerCell.load('address');
+        await excelContext.sync();
+        const startCell = officeApiHelper.getStartCell(headerCell.address);
+        await excelContext.sync();
+        officeTable = await this._createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId, prevOfficeTable);
+      } else {
+        shouldFormat = false;
+        officeTable = await this._updateOfficeTable(instanceDefinition, excelContext, prevOfficeTable);
+      }
     } else {
       officeTable = await this._createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId);
     }
     console.timeEnd('Create or get table');
-    return {officeTable, newOfficeTableId};
+    return {officeTable, newOfficeTableId, shouldFormat};
   }
 
   async _fetchInsertDataIntoExcel(connectionData, officeData, instanceDefinition) {
     try {
-      const {objectId, projectId, isReport, body} = connectionData;
+      const {objectId, projectId, dossierData, isReport, body} = connectionData;
       const {excelContext, officeTable} = officeData;
       const {mstrTable, columns, rows} = instanceDefinition;
       const {headers} = mstrTable;
       const limit = Math.floor(DATA_LIMIT / columns);
-      const rowGenerator = mstrObjectRestService.getObjectContentGenerator(instanceDefinition, objectId, projectId, isReport, body, limit);
+      const rowGenerator = mstrObjectRestService.getObjectContentGenerator(instanceDefinition, objectId, projectId, isReport, dossierData, body, limit);
       let rowIndex = 0;
       const contextPromises = [];
       console.time('Fetch data');
@@ -252,19 +342,26 @@ class OfficeDisplayService {
     officeTable.getHeaderRowRange().getRowsBelow(excelRows.length).getOffsetRange(rowIndex, 0).values = excelRows;
   }
 
+  _checkColumnsChange = async (prevOfficeTable, context, instanceDefinition) => {
+    const {columns} = instanceDefinition;
+    const tableColumns = prevOfficeTable.columns;
+    tableColumns.load('count');
+    await context.sync();
+    const tableColumnsCount = tableColumns.count;
+    return columns !== tableColumnsCount;
+  }
+
   _checkRangeValidity = async (context, excelRange) => {
     // Pass true so only cells with values count as used
     const usedDataRange = excelRange.getUsedRangeOrNullObject(true);
     await context.sync();
     if (!usedDataRange.isNullObject) {
-      throw new OverlappingTablesError('The required data range in the worksheet is not empty');
+      throw new OverlappingTablesError(TABLE_OVERLAP);
     }
   }
 
   _getRowsArray = (rows, headers) => {
-    return rows
-        .map((item) => headers
-            .map((header) => item[header]));
+    return rows.map((item) => headers.map((header) => item[header]));
   }
 }
 

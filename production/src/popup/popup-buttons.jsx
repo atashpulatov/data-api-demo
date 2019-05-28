@@ -2,9 +2,10 @@ import React from 'react';
 import {Button} from 'antd';
 import './popup-buttons.css';
 import {withTranslation} from 'react-i18next';
+import {connect} from 'react-redux';
 
 export const _PopupButtons = ({handleOk, handleSecondary,
-  handleCancel, handleBack, loading, disableActiveActions, onPreviewClick, t}) => {
+  handleCancel, handleBack, loading, disableActiveActions, onPreviewClick, isPrompted, t}) => {
   return (
     <div className="popup-buttons popup-footer">
       {!handleSecondary && <Button id="data-preview" onClick={onPreviewClick} disabled={disableActiveActions}>
@@ -22,7 +23,7 @@ export const _PopupButtons = ({handleOk, handleSecondary,
       {
         handleSecondary &&
         <Button id="prepare" type="primary"
-          disabled={disableActiveActions || loading}
+          disabled={disableActiveActions || loading || isPrompted}
           onClick={handleSecondary}>
           {t('Prepare Data')}
         </Button>
@@ -34,4 +35,8 @@ export const _PopupButtons = ({handleOk, handleSecondary,
   );
 };
 
-export const PopupButtons = withTranslation('common')(_PopupButtons);
+function mapStateToProps({navigationTree}) {
+  return {isPrompted: navigationTree.isPrompted};
+}
+
+export const PopupButtons = connect(mapStateToProps)(withTranslation('common')(_PopupButtons));

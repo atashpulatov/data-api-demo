@@ -23,7 +23,9 @@ class PageBuilder {
               <Header IS_LOCALHOST={IS_LOCALHOST} loading={loadingReport} />
               <Tabs defaultActiveKey="data" className="tabs-container">
                 <TabPane tab={t('Imported Data')} key="data">
-                  {(reportArray && reportArray.length !== 0) && <FileHistoryContainer loading={loadingReport} />}
+                  {(reportArray && reportArray.length !== 0) && <FileHistoryContainer
+                    loading={loadingReport}
+                  />}
                   {(!reportArray || !reportArray.length) && <Placeholder loading={loadingReport} />}
                 </TabPane>
               </Tabs>

@@ -64,9 +64,11 @@ describe('NavigatorService', () => {
     try {
       reduxStore.dispatch({
         type: sessionProperties.actions.logIn,
-        username: 'usr',
-        envUrl: 'env',
-        isRememberMeOn: true,
+        values: {
+          username: 'usr',
+          envUrl: 'env',
+          isRememberMeOn: true,
+        },
       });
       reduxStore.dispatch({
         type: sessionProperties.actions.loggedIn,
@@ -93,9 +95,11 @@ describe('NavigatorService', () => {
         try {
           reduxStore.dispatch({
             type: sessionProperties.actions.logIn,
-            username: 'usr',
-            envUrl: 'env',
-            isRememberMeOn: true,
+            values: {
+              username: 'usr',
+              envUrl: 'env',
+              isRememberMeOn: true,
+            },
           });
           reduxStore.dispatch({
             type: sessionProperties.actions.loggedIn,

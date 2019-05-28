@@ -1,4 +1,5 @@
 import {officeProperties} from '../office-properties';
+import {officeApiHelper} from '../../office/office-api-helper';
 import {RunOutsideOfficeError} from '../../error/run-outside-office-error';
 import {errorService} from '../../error/error-handler';
 
@@ -16,9 +17,26 @@ class OfficeStoreService {
         envUrl: report.envUrl,
         body: report.body,
         objectType: report.objectType,
+        isPrompted: report.isPrompted,
       });
       settings.set(officeProperties.loadedReportProperties, reportProperties);
       settings.saveAsync();
+    } catch (error) {
+      errorService.handleOfficeError(error);
+    }
+  }
+
+  preserveReportValue = async (bindId, key, value) => {
+    try {
+      const settings = this.getOfficeSettings();
+      const reportProperties = this._getReportProperties();
+      const indexOfReport = reportProperties.findIndex((oldReport) => {
+        return (oldReport.bindId === bindId);
+      });
+      reportProperties[indexOfReport][key] = value;
+      settings.set(officeProperties.loadedReportProperties, reportProperties);
+      await settings.saveAsync();
+      await officeApiHelper.loadExistingReportBindingsExcel();
     } catch (error) {
       errorService.handleOfficeError(error);
     }
