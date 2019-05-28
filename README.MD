@@ -110,10 +110,10 @@ yarn test
 
 Currently we do not support production builds.
 
-## Manually uploading addin ro AWS instance and uploading the test data
+## Manually uploading addin to AWS instance and uploading the test data
 
 ### Get Office addin and Office addin loader from Nexus at link:
-1. Go to http://nexus.internal.microstrategy.com/#browse/browse:releases:com%2Fmicrostrategy
+1. go to http://nexus.internal.microstrategy.com/#browse/browse:releases:com%2Fmicrostrategy
 2. choose a branch folder (e.g. “m2019-update”)
 3. get addin
     1. find folder “office”
@@ -129,11 +129,11 @@ Currently we do not support production builds.
 ### Upload office addin and addin loader to the env
 1. connect to the developer instance of the env
 2. copy the addin and addin loader downloaded from Nexus to the env and extract them
-3. Open WinSCP
+3. open WinSCP
 4. connect to Intelligence Server Instance 
     1. in “Host Name” field input IP found at the main MSTR AWS Console under “Essential Connections”: “Intelligence Server Address”
-    2. Port number: 22
-    3. User name and password fields input credentials from the “Welcome to MicroStrategy on AWS” email
+    2. port number: 22
+    3. user name and password fields input credentials from the “Welcome to MicroStrategy on AWS” email
     4. click “Save”button
     5. click “Login” button
 5. upload the addin
@@ -155,10 +155,10 @@ Currently we do not support production builds.
 
 ## For testing only
 ### Upload test data to env
-1. Download test data zip from: https://share.microstrategy.com/link/p9edxlAMnk0pjd06ekRmOa
+1. download test data zip from: https://share.microstrategy.com/link/p9edxlAMnk0pjd06ekRmOa
 2. copy over the zip to the env 
 3. open up Object Manager
-    1. Open Project Source select “MicroStrategy on AWS I-Server”
+    1. open Project Source select “MicroStrategy on AWS I-Server”
     2. click “Open”
     3. login with the credentials from:”Welcome to MicroStrategy on AWS” email
     4. click on “MicroStrategy Tutorial” project
@@ -181,7 +181,7 @@ Currently we do not support production builds.
         3. find the folder on the right panel with the same name as on the left and open it
         4. copy all files from the folder on the left to the one on the right
         5. click Shift + Yes to replace all when prompted
-5. Restart the Intelligence Server
+5. restart the Intelligence Server
     1. in the MicroStrategy Cloud Console find the instance you working on and click “+” symbol
     2. click “Server”
     3. in the “Server Instance” GUI node click “Reboot” button
