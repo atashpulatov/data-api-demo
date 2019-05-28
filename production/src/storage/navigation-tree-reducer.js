@@ -10,7 +10,7 @@ const supportedTypesArray = [
   {
     name: 'Report',
     type: 3,
-    subtype: [768, 769, 774], //DssXmlSubTypeReportGrid, DssXmlSubTypeReportGraph, DssXmlSubTypeReportGridAndGraph
+    subtype: [768, 769, 774], // DssXmlSubTypeReportGrid, DssXmlSubTypeReportGraph, DssXmlSubTypeReportGridAndGraph
   },
   {
     name: 'Dataset',
@@ -38,6 +38,7 @@ export const initialState = {
   searchText: '',
   importRequested: false,
   dossierData: null,
+  promptAnswers: null,
 };
 
 function getProjectName(projects, projectId, objectId) {
@@ -108,6 +109,7 @@ export const navigationTree = (state = initialState, action) => {
       const newState = {...state};
       newState.importRequested = true;
       if (data) {
+        newState.promptAnswers = data.promptAnswers;
         newState.dossierData = data.dossierData;
       }
       return newState;
