@@ -19,7 +19,7 @@ export class _Header extends Component {
     } catch (error) {
       errorService.handleError(error, !IS_LOCALHOST);
     }
-    sessionHelper.saveUserInfo(userData);
+    !this.props.userFullName && sessionHelper.saveUserInfo(userData);
   }
 
   render() {
@@ -29,7 +29,7 @@ export class _Header extends Component {
         <span id='profileImage' className={userFullName && 'got-user-data'}>
           {userInitials !== null ?
             <span id='initials' alt='User profile'>{userInitials}</span> :
-            <img src={logo} alt='User profile' />
+            <img id='profile-image' src={logo} alt='User profile' />
             /* TODO: When rest api returns profileImage use it as source*/}
         </span>
         <span className={` ${userFullName && 'got-user-data'} header-name`}>{userFullName}</span>
