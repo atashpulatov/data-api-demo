@@ -238,10 +238,17 @@ class OfficeDisplayService {
   }
 
   _dispatchPrintFinish() {
-    const reduxStoreState = reduxStore.getState();
-    reduxStore.dispatch({type: officeProperties.actions.popupHidden});
-    reduxStore.dispatch({type: officeProperties.actions.stopLoading});
-    reduxStoreState.sessionReducer.dialog.close();
+    try {
+      const reduxStoreState = reduxStore.getState();
+      reduxStore.dispatch({type: officeProperties.actions.popupHidden});
+      reduxStore.dispatch({type: officeProperties.actions.stopLoading});
+      reduxStoreState.sessionReducer.dialog.close();
+    } catch (err) {
+      // swallow error from office if dialog has been closed by user
+      if (err !== 'Function close call failed, error code: 12006.') {
+        throw err;
+      }
+    }
   }
 
   _addToStore(officeTableId, isRefresh, instanceDefinition, bindingId, newOfficeTableId, projectId, envUrl, body, objectType, isPrompted) {
