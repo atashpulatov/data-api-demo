@@ -6,7 +6,6 @@ import {Notifications} from '../notification/notifications.jsx';
 import {Authenticate} from '../authentication/auth-component.jsx';
 import {Placeholder} from './placeholder.jsx';
 import {HomeDialog} from './home-dialog';
-import {withTranslation} from 'react-i18next';
 
 const TabPane = Tabs.TabPane;
 const URL = `${window.location.href}`;

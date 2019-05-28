@@ -64,9 +64,7 @@ export class Popup extends Component {
     };
     i18next.changeLanguage(reduxStore.getState().sessionReducer.userLocale);
     return (<Provider store={reduxStore}>
-      <I18nextProvider>
-        <PopupViewSelector popupType={popupType} propsToPass={propsToPass} methods={methods} />
-      </I18nextProvider>
+      <PopupViewSelector popupType={popupType} propsToPass={propsToPass} methods={methods} />
     </Provider>);
   }
 }

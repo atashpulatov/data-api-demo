@@ -5,7 +5,7 @@ import {withTranslation} from 'react-i18next';
 import {connect} from 'react-redux';
 
 export const _PopupButtons = ({handleOk, handleSecondary,
-  handleCancel, handleBack, loading, disableActiveActions, onPreviewClick, isPrompted, t}) => {
+  handleCancel, handleBack, loading, disableActiveActions, onPreviewClick, isPrompted, t = (text) => text}) => {
   return (
     <div className="popup-buttons popup-footer">
       {!handleSecondary && <Button id="data-preview" onClick={onPreviewClick} disabled={disableActiveActions}>
