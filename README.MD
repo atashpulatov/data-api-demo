@@ -110,6 +110,82 @@ yarn test
 
 Currently we do not support production builds.
 
+## Manually uploading addin ro AWS instance and uploading the test data
+
+### Get Office addin and Office addin loader from Nexus at link:
+1. Go to http://nexus.internal.microstrategy.com/#browse/browse:releases:com%2Fmicrostrategy
+2. choose a branch folder (e.g. “m2019-update”)
+3. get addin
+    1. find folder “office”
+    2. choose a version folder (e.g. “11.1.3.1050”)
+    3. click file ending in “.zip”
+    4. download link for plugin is on the pain to the right under “Path”
+4. get addin loader
+    1. find folder “office-loader”
+    2. choose a version folder (e.g. “11.1.3.1050”)
+    3. click file ending in “.zip”
+    4. download link for plugin is on the pain to the right under “Path”
+
+### Upload office addin and addin loader to the env
+1. connect to the developer instance of the env
+2. copy the addin and addin loader downloaded from Nexus to the env and extract them
+3. Open WinSCP
+4. connect to Intelligence Server Instance 
+    1. in “Host Name” field input IP found at the main MSTR AWS Console under “Essential Connections”: “Intelligence Server Address”
+    2. Port number: 22
+    3. User name and password fields input credentials from the “Welcome to MicroStrategy on AWS” email
+    4. click “Save”button
+    5. click “Login” button
+5. upload the addin
+    1. on the right panel go to path:”/opt/apache/tomcat/latest/webapps/MicroStrategyLibrary/apps/addin-mstr-office“
+    2. on the left panel open up the unzipped addin folder
+    3. select all files on the left and copy them to the right
+    4. on the replace prompt Shift + click “Yes” button
+6. upload the addin loader
+    1. on the right panel go to path:”/opt/apache/tomcat/latest/webapps/MicroStrategyLibrary/static/loader-mstr-office“
+    2. on the left panel open up the unzipped addin loader folder
+    3. select all files on the left and copy them to the right
+    4. on the replace prompt Shift + click “Yes” button
+7. restart the “Web/Mobile/Library” Server (you must be the owner of the env and if you will also be uploading the test data to the env, then wait until you’ve completed that as well and just restart then)
+    1. in the MicroStrategy Cloud Console find the instance you’re working on and click the “+” symbol
+    2. click “Server”
+    3. click “Server Instance”
+    4. next to “Web/Mobile/Library” under “Actions” click the 3 dots
+    5. click “Restart”
+
+## For testing only
+### Upload test data to env
+1. Download test data zip from: https://share.microstrategy.com/link/p9edxlAMnk0pjd06ekRmOa
+2. copy over the zip to the env 
+3. open up Object Manager
+    1. Open Project Source select “MicroStrategy on AWS I-Server”
+    2. click “Open”
+    3. login with the credentials from:”Welcome to MicroStrategy on AWS” email
+    4. click on “MicroStrategy Tutorial” project
+    5. under “Tools” press “Import Package…”
+    6. in the new prompt click the “…” button
+    7. find the test objects unzipped folder and select “ProjectPackage with all test objects.mmp”
+    8. click “Proceed” button
+4. open WinSCP
+    1. click login (if first time login see “Upload office addin and addin loader to the Env”)
+    2. on the right open up “opt/mstr/MicroStrategy/IntelligenceServer“
+    3. for Cubes
+        1. continue on the right panel to “/Cube/cloud_10s”
+        2. in the left panel open up the “Cube” folder in the unzipped “test objects” folder
+        3. find the folder on the right panel with the same name as on the left and open it
+        4. copy all files from the folder on the left to the one on the right
+        5. click Shift + Yes to replace all when prompted
+    4. for Caches
+        1. continue on the right panel to “/Caches/cloud_10s”
+        2. in the left panel open up the “Caches” folder in the unzipped “test objects” folder
+        3. find the folder on the right panel with the same name as on the left and open it
+        4. copy all files from the folder on the left to the one on the right
+        5. click Shift + Yes to replace all when prompted
+5. Restart the Intelligence Server
+    1. in the MicroStrategy Cloud Console find the instance you working on and click “+” symbol
+    2. click “Server”
+    3. in the “Server Instance” GUI node click “Reboot” button
+
 ## Built With
 
 * [React](https://reactjs.org/)
