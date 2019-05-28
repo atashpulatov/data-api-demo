@@ -7,10 +7,8 @@ import {errorService} from '../error/error-handler';
 import {popupController} from '../popup/popup-controller';
 import {authenticationHelper} from '../authentication/authentication-helper';
 import {PopupTypeEnum} from '../home/popup-type-enum';
-import {NOT_SUPPORTED_NO_ATTRIBUTES, ALL_DATA_FILTERED_OUT, TABLE_OVERLAP} from '../error/constants';
+import {NOT_SUPPORTED_NO_ATTRIBUTES, ALL_DATA_FILTERED_OUT, TABLE_OVERLAP, ERROR_POPUP_CLOSED} from '../error/constants';
 import {OverlappingTablesError} from '../error/overlapping-tables-error';
-
-const ERR_POPUP_CLOSED = 'Function close call failed, error code: 12006.';
 
 class OfficeDisplayService {
   printObject = async (dossierData, objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh, isPrompted, isRefreshAll = false) => {
@@ -239,15 +237,20 @@ class OfficeDisplayService {
     }
   }
 
+  /**
+   * Function closes popup; used when  importing report
+   * it swallows error from office if dialog has been closed by user
+   *
+   * @memberof OfficeDisplayService
+   */
   _dispatchPrintFinish() {
+    const reduxStoreState = reduxStore.getState();
+    reduxStore.dispatch({type: officeProperties.actions.popupHidden});
+    reduxStore.dispatch({type: officeProperties.actions.stopLoading});
     try {
-      const reduxStoreState = reduxStore.getState();
-      reduxStore.dispatch({type: officeProperties.actions.popupHidden});
-      reduxStore.dispatch({type: officeProperties.actions.stopLoading});
       reduxStoreState.sessionReducer.dialog.close();
     } catch (err) {
-      // swallow error from office if dialog has been closed by user
-      if (err !== ERR_POPUP_CLOSED) {
+      if (err !== ERROR_POPUP_CLOSED) {
         throw err;
       }
     }
