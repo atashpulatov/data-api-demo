@@ -7,7 +7,7 @@ import {errorService} from '../error/error-handler';
 import {popupController} from '../popup/popup-controller';
 import {authenticationHelper} from '../authentication/authentication-helper';
 import {PopupTypeEnum} from '../home/popup-type-enum';
-import {NOT_SUPPORTED_NO_ATTRIBUTES, ALL_DATA_FILTERED_OUT, TABLE_OVERLAP} from '../error/constants';
+import {NOT_SUPPORTED_NO_ATTRIBUTES, ALL_DATA_FILTERED_OUT, TABLE_OVERLAP, ERROR_POPUP_CLOSED} from '../error/constants';
 import {OverlappingTablesError} from '../error/overlapping-tables-error';
 
 class OfficeDisplayService {
@@ -238,11 +238,23 @@ class OfficeDisplayService {
     }
   }
 
+  /**
+   * Function closes popup; used when  importing report
+   * it swallows error from office if dialog has been closed by user
+   *
+   * @memberof OfficeDisplayService
+   */
   _dispatchPrintFinish() {
     const reduxStoreState = reduxStore.getState();
     reduxStore.dispatch({type: officeProperties.actions.popupHidden});
     reduxStore.dispatch({type: officeProperties.actions.stopLoading});
-    reduxStoreState.sessionReducer.dialog.close();
+    try {
+      reduxStoreState.sessionReducer.dialog.close();
+    } catch (err) {
+      if (err !== ERROR_POPUP_CLOSED) {
+        throw err;
+      }
+    }
   }
 
   _addToStore(officeTableId, isRefresh, instanceDefinition, bindingId, newOfficeTableId, projectId, envUrl, body, objectType, isPrompted, promptAnswers) {

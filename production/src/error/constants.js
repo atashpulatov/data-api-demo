@@ -14,6 +14,7 @@ export const NOT_PUBLISHED_CUBE = 'This object cannot be imported. The Intellige
 export const NOT_IN_METADATA = 'The object does not exist in the metadata.';
 export const PROJECT_ROW_LIMIT = 'The object exceeds project rows limitation';
 export const TABLE_OVERLAP = 'The required data range in the worksheet is not empty.';
+export const ERROR_POPUP_CLOSED = 'Function close call failed, error code: 12006.';
 
 // temporarily we map all those codes to one message; may be changed in the future
 export const errorMessages = withDefaultValue({
