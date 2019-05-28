@@ -7,6 +7,8 @@ import {FolderBrowser} from 'mstr-react-library';
 import {connect} from 'react-redux';
 import {actions} from './navigation-tree-actions';
 import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';
+import {message} from 'antd';
+import {EMPTY_REPORT} from '../error/constants';
 
 export class _NavigationTree extends Component {
   constructor(props) {
@@ -35,10 +37,18 @@ export class _NavigationTree extends Component {
     Office.context.ui.messageParent(JSON.stringify(updateObject));
   };
 
-  handleSecondary = () => {
-    this.props.handlePrepare(this.props.chosenProjectId, this.props.chosenObjectId,
-        this.props.chosenSubtype, this.props.chosenProjectName, this.props.chosenType);
-    this.setState({previewDisplay: true});
+  handleSecondary = async () => {
+    try {
+      const response = await mstrObjectRestService.getInstanceDefinition(this.props.chosenObjectId, this.props.chosenProjectId, this.props.chosenSubtype);
+      if (response && response.rows === 0) {
+        return message.warning(EMPTY_REPORT);
+      }
+      this.props.handlePrepare(this.props.chosenProjectId, this.props.chosenObjectId,
+          this.props.chosenSubtype, this.props.chosenProjectName, this.props.chosenType);
+      this.setState({previewDisplay: true});
+    } catch (err) {
+      this.props.handlePopupErrors(err);
+    }
   };
 
   handleCancel = () => {
