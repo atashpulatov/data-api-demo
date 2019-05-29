@@ -36,7 +36,8 @@
   "No files loaded.": "Немає завантажених файлів",
   "Report loading icon": "Завантаження звіту",
   "Please wait until the import is complete.": "Будь ласка, зачекайте поки завантаження звіту завершиться",
-  "Refresh All Data": "Оновити всі дані",
+  "Refresh All Data": "Оновлення всіх даних",
   "Refresh Data": "Оновити дані",
-  "Remove Data from Workbook": "Видалити дані"
+  "Remove Data from Workbook": "Видалити дані",
+  "Refreshing complete!": "Оновлення завершено!"
 }
