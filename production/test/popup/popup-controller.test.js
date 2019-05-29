@@ -64,7 +64,7 @@ describe('PopupController', () => {
             reportData.objectId,
             reportData.projectId,
             true,
-            null, null, null, null, null, undefined);
+            null, null, null, null, null, undefined, false, undefined);
       });
 
   it('should handle ok command from popup for report with dossier data',
@@ -102,7 +102,7 @@ describe('PopupController', () => {
             reportData.objectId,
             reportData.projectId,
             true,
-            null, null, null, null, null, undefined);
+            null, null, null, null, null, undefined, false, undefined);
       });
 
   it('should handle update command from popup for cube',
