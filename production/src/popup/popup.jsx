@@ -22,7 +22,7 @@ export class Popup extends Component {
     this.setState({
       parsed: {
         ...this.state.parsed,
-        popupType: undefined,
+        popupType: PopupTypeEnum.dataPreparation,
         projectId,
         reportId,
         reportSubtype,

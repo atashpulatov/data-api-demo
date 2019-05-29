@@ -12,6 +12,7 @@ import {RefreshAllPage} from '../loading/refresh-all-page';
 export const _PopupViewSelector = (props) => {
   let popupType = props.popupType;
   const {propsToPass, methods, importRequested} = props;
+  debugger;
   if (importRequested) {
     if (!props.isPrompted) {
       proceedToImport(props);
@@ -32,7 +33,7 @@ export const _PopupViewSelector = (props) => {
 };
 
 function renderProperComponent(popupType, methods, propsToPass) {
-  if (!popupType) {
+  if (popupType === PopupTypeEnum.dataPreparation) {
     return <AttributeSelectorWindow parsed={propsToPass} handleBack={methods.handleBack} />;
   }
   if (popupType === PopupTypeEnum.navigationTree) {

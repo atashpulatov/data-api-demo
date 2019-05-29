@@ -82,6 +82,7 @@ describe('Popup.js', () => {
     expect(parsed.reportId).toEqual(givenRecord.reportId);
     expect(parsed.projectId).toEqual(givenRecord.projectId);
     expect(parsed.reportSubtype).toEqual(givenRecord.subtype);
+    expect(parsed.popupType).toEqual(PopupTypeEnum.dataPreparation);
   });
 
   it('should set projectId, reportId and subtype on handleBack', () => {

@@ -5,6 +5,13 @@ import {authenticationHelper} from '../../src/authentication/authentication-help
 import {reduxStore} from '../../src/store';
 import {UnauthorizedError} from '../../src/error/unauthorized-error';
 import {officeProperties} from '../../src/office/office-properties';
+import {officeStoreService} from '../../src/office/store/office-store-service';
+import {popupController} from '../../src/popup/popup-controller';
+
+jest.mock('../../src/office/office-api-helper');
+jest.mock('../../src/authentication/authentication-helper');
+jest.mock('../../src/office/store/office-store-service');
+jest.mock('../../src/popup/popup-controller');
 
 describe('Popup actions', () => {
   afterEach(() => {
@@ -33,7 +40,7 @@ describe('Popup actions', () => {
       // when
       await actions.refreshReportsArray(reportArray, isRefreshAll)(listener);
       // then
-      expect( officeApiHelper.getExcelSessionStatus).toHaveBeenCalled();
+      expect(officeApiHelper.getExcelSessionStatus).toHaveBeenCalled();
       expect(authenticationHelper.validateAuthToken).toHaveBeenCalled();
       expect(popupHelper.storagePrepareRefreshAllData).toHaveBeenCalledWith(reportArray);
       expect(popupHelper.runRefreshAllPopup).toHaveBeenCalledWith(reportArray);
@@ -110,5 +117,22 @@ describe('Popup actions', () => {
       // then
       expect(listener).toHaveBeenCalledWith({type: actions.RESET_STATE});
     });
+  });
+
+  it('should do certain operations when edit action called', async () => {
+    // given
+    const bindingId = 'bindingId';
+    const returnedValue = 'returnFromSettings';
+    officeStoreService.getReportFromProperties.mockReturnValue(returnedValue);
+    const listener = jest.fn();
+    // when
+    await actions.callForEdit(bindingId)(listener);
+    // then
+    expect(officeApiHelper.getExcelSessionStatus).toBeCalled();
+    expect(authenticationHelper.validateAuthToken).toBeCalled();
+    expect(officeStoreService.getReportFromProperties).toBeCalledWith(bindingId);
+    expect(listener).toHaveBeenCalledWith({type: actions.SET_REPORT_N_FILTERS, editedReport: returnedValue});
+    expect(popupController.runPopupDataPreparation).toBeCalled();
+    expect(true).toBeFalsy();
   });
 });

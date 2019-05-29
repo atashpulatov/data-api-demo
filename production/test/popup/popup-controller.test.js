@@ -34,6 +34,18 @@ describe('PopupController', () => {
     expect(runPopupSpy).toBeCalledWith(popupType, size, size);
   });
 
+  it('should run popup with proper settings when called for data preparation', () => {
+    // given
+    const popupType = PopupTypeEnum.dataPreparation;
+    const size = 80;
+    const runPopupSpy = jest.spyOn(popupController, 'runPopup').mockImplementationOnce(() => {});
+    // when
+    popupController.runPopupDataPreparation();
+    // then
+    expect(runPopupSpy).toBeCalled();
+    expect(runPopupSpy).toBeCalledWith(popupType, size, size);
+  });
+
   it('should handle ok command from popup for report WITHOUT instance id',
       async () => {
       // given
