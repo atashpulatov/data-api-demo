@@ -17,11 +17,10 @@ export class _Header extends Component {
     const authToken = IS_LOCALHOST ? this.props.authToken : homeHelper.saveTokenFromCookies();
     try {
       userData = await userRestService.getUserData(authToken, envUrl);
-      userData.locale = 'ua';
     } catch (error) {
       errorService.handleError(error, !IS_LOCALHOST);
     }
-    sessionHelper.saveUserInfo(userData);
+    !this.props.userFullName && sessionHelper.saveUserInfo(userData);
   };
 
   render() {
@@ -31,7 +30,7 @@ export class _Header extends Component {
         <span id='profileImage' className={userFullName && 'got-user-data'}>
           {userInitials !== null ?
             <span id='initials' alt={t('User profile')}>{userInitials}</span> :
-            <img src={logo} alt={t('User profile')} />
+            <img id='profile-image' src={logo} alt={t('User profile')} />
             /* TODO: When rest api returns profileImage use it as source*/}
         </span>
         <span className={` ${userFullName && 'got-user-data'} header-name`}>{userFullName}</span>

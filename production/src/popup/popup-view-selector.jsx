@@ -58,6 +58,7 @@ function proceedToImport(props) {
     chosenProject: props.chosenProjectId,
     chosenSubtype: props.chosenSubtype,
     isPrompted: props.isPrompted,
+    promptAnswers: props.promptAnswers,
   };
   if (!!props.dossierData) {
     okObject.dossierData = {

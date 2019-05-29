@@ -7,11 +7,11 @@ import {errorService} from '../error/error-handler';
 import {popupController} from '../popup/popup-controller';
 import {authenticationHelper} from '../authentication/authentication-helper';
 import {PopupTypeEnum} from '../home/popup-type-enum';
-import {NOT_SUPPORTED_NO_ATTRIBUTES, ALL_DATA_FILTERED_OUT, TABLE_OVERLAP} from '../error/constants';
+import {NOT_SUPPORTED_NO_ATTRIBUTES, ALL_DATA_FILTERED_OUT, TABLE_OVERLAP, ERROR_POPUP_CLOSED} from '../error/constants';
 import {OverlappingTablesError} from '../error/overlapping-tables-error';
 
 class OfficeDisplayService {
-  printObject = async (dossierData, objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh, isPrompted, isRefreshAll = false) => {
+  printObject = async (dossierData, objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh, isPrompted, isRefreshAll = false, promptAnswers = undefined) => {
     if (!isRefreshAll) {
       const objectInfo = !!isPrompted ? await mstrObjectRestService.getObjectInfo(objectId, projectId, isReport) : await mstrObjectRestService.getObjectDefinition(objectId, projectId, isReport);
       reduxStore.dispatch({
@@ -21,7 +21,7 @@ class OfficeDisplayService {
       await popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
     }
     try {
-      return await this._printObject(objectId, projectId, isReport, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body, isPrompted);
+      return await this._printObject(objectId, projectId, isReport, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body, isPrompted, promptAnswers);
     } catch (error) {
       throw error;
     } finally {
@@ -29,7 +29,7 @@ class OfficeDisplayService {
     }
   }
 
-  _printObject = async (objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body, isPrompted) => {
+  _printObject = async (objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body, isPrompted, promptAnswers) => {
     let officeTable;
     let newOfficeTableId;
     let shouldFormat;
@@ -75,7 +75,7 @@ class OfficeDisplayService {
       // Save to store
       bindingId = bindingId || newOfficeTableId;
       await officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
-      this._addToStore(officeTableId, isRefresh, instanceDefinition, bindingId, newOfficeTableId, projectId, envUrl, body, objectType, isPrompted);
+      this._addToStore(officeTableId, isRefresh, instanceDefinition, bindingId, newOfficeTableId, projectId, envUrl, body, objectType, isPrompted, promptAnswers);
 
       console.timeEnd('Total');
       reduxStore.dispatch({
@@ -109,6 +109,7 @@ class OfficeDisplayService {
         isLoading: report.isLoading,
         objectType: report.objectType,
         isPrompted: report.isPrompted,
+        promptAnswers: report.promptAnswers,
       },
     });
     officeStoreService.preserveReport(report);
@@ -237,14 +238,26 @@ class OfficeDisplayService {
     }
   }
 
+  /**
+   * Function closes popup; used when  importing report
+   * it swallows error from office if dialog has been closed by user
+   *
+   * @memberof OfficeDisplayService
+   */
   _dispatchPrintFinish() {
     const reduxStoreState = reduxStore.getState();
     reduxStore.dispatch({type: officeProperties.actions.popupHidden});
     reduxStore.dispatch({type: officeProperties.actions.stopLoading});
-    reduxStoreState.sessionReducer.dialog.close();
+    try {
+      reduxStoreState.sessionReducer.dialog.close();
+    } catch (err) {
+      if (err !== ERROR_POPUP_CLOSED) {
+        throw err;
+      }
+    }
   }
 
-  _addToStore(officeTableId, isRefresh, instanceDefinition, bindingId, newOfficeTableId, projectId, envUrl, body, objectType, isPrompted) {
+  _addToStore(officeTableId, isRefresh, instanceDefinition, bindingId, newOfficeTableId, projectId, envUrl, body, objectType, isPrompted, promptAnswers) {
     if (!officeTableId && !isRefresh) {
       this.addReportToStore({
         id: instanceDefinition.mstrTable.id,
@@ -257,6 +270,7 @@ class OfficeDisplayService {
         isLoading: false,
         objectType,
         isPrompted,
+        promptAnswers,
       });
     }
   }

@@ -118,6 +118,11 @@ describe('OfficeDisplayService', () => {
     const arg3 = 'arg3';
     const arg4 = 'arg4';
     const arg5 = Array(4).fill(undefined);
+
+    const mockDialog = {
+      close: () => {},
+    };
+    sessionHelper.setDialog(mockDialog);
     // when
     await officeDisplayService.printObject(arg1, arg2, arg3, arg4);
     // then
@@ -125,7 +130,7 @@ describe('OfficeDisplayService', () => {
     const preLoadReport = reduxStore.getState().officeReducer.preLoadReport;
     expect(preLoadReport).toEqual(givenBody);
     expect(runPopupSpy).toBeCalledWith(PopupTypeEnum.loadingPage, 22, 28);
-    expect(printInside).toBeCalledWith(arg2, arg3, arg4, ...arg5, null, undefined, undefined);
+    expect(printInside).toBeCalledWith(arg2, arg3, arg4, ...arg5, null, undefined, undefined, undefined);
   });
 
   it('should add report to store', () => {
