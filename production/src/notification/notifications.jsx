@@ -28,7 +28,7 @@ export class NotificationsWithoutRedux extends Component {
     const {notificationType, title, content, t} = this.props;
     let icon;
     const key = `open${Date.now()}`;
-    let btn = <Button type="primary" size="small" onClick={() => notification.close(key)} >OK</Button>;
+    let btn = <Button type="primary" size="small" onClick={() => notification.close(key)} >{t('OK')}</Button>;
     notification.config({
       duration: 0,
     });

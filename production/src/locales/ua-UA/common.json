@@ -20,7 +20,7 @@
   "Import data": "Імпортувати дані",
   "Search objects...": "Шукати об'єкти",
   "Loading Data.": "Завантаження даних",
-  "Reports": "Репорти",
+  "Reports": "Звіти",
   "Datasets": "Датасети",
   "Import Report": "Імпортувати Репорт",
   "Import Dataset": "Імпортувати Датасет",
@@ -39,5 +39,6 @@
   "Refresh All Data": "Оновлення всіх даних",
   "Refresh Data": "Оновити дані",
   "Remove Data from Workbook": "Видалити дані",
-  "Refreshing complete!": "Оновлення завершено!"
+  "Refreshing complete!": "Оновлення завершено!",
+  "OK": "ОК"
 }

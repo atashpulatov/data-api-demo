@@ -73,12 +73,12 @@ class SessionHelper {
     return session;
   }
   saveUserInfo = (values) => {
-    i18next.changeLanguage(values.locale || 'en');
+    i18next.changeLanguage(values.locale || 'en-US');
     reduxStore.dispatch({
       type: sessionProperties.actions.getUserInfo,
       userFullName: values.fullName ? values.fullName : 'Microstrategy User',
       userInitials: values.initials ? values.initials : null,
-      userLocale: values.locale || 'en',
+      userLocale: values.locale || 'en-US',
     });
   }
 

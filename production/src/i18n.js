@@ -1,27 +1,26 @@
 import i18n from 'i18next';
 import {initReactI18next} from 'react-i18next';
-import uaCommon from './locales/ua/common';
-import uaNotifications from './locales/ua/notifications';
-import enCommon from './locales/en/common';
-import enNotifications from './locales/en/notifications';
-
+import uaCommon from './locales/ua-UA/common';
+import uaNotifications from './locales/ua-UA/notifications';
+import enCommon from './locales/en-US/common';
+import enNotifications from './locales/en-US/notifications';
 
 i18n
     .use(initReactI18next) // passes i18n down to react-i18next
     .init({
       resources: {
-        ua: {
+        'ua-UA': {
           common: uaCommon,
           notifications: uaNotifications,
         },
-        en: {
+        'en-US': {
           common: enCommon,
           notifications: enNotifications,
         },
       },
       saveMissing: true,
       saveMissingTo: 'all',
-      lng: 'en',
+      lng: Office.context.displayLanguage,
       keySeparator: false, // we do not use keys in form messages.welcome
 
       interpolation: {
