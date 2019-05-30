@@ -1,7 +1,6 @@
 import React from 'react';
-import {Input, Dropdown, Menu} from 'antd';
+import {Input, Dropdown, Menu, Popover} from 'antd';
 import {officeStoreService} from '../office/store/office-store-service';
-
 
 export default class RenameInput extends React.Component {
   constructor(props) {
@@ -61,27 +60,29 @@ export default class RenameInput extends React.Component {
         <Menu.Item key="rename" onClick={this.enableEdit}>Rename</Menu.Item>
       </Menu>);
     return (
-      <Dropdown overlay={menu} trigger={['contextMenu']}>
-        <div onDoubleClick={this.enableEdit} style={{position: 'relative'}}>
-          <Input type='text'
-            className='rename-input'
-            maxLength={255}
-            id={`input-${bindingId}`}
-            defaultValue={fileName}
-            value={value}
-            disabled={!editable}
-            onChange={this.handleChange}
-            onBlur={this.renameReport}
-            onPressEnter={this.renameReport} />
-          <div
-            style={{
-              position: 'absolute',
-              width: '100%',
-              height: '100%',
-              top: '0px',
-              zIndex: editable ? -1 : 1}}/>
-        </div >
-      </Dropdown>
+      <Popover overlayClassName={`${editable ? 'hidden' : ''}`} placement="bottom" content={value} mouseEnterDelay={1}>
+        <Dropdown overlay={menu} trigger={['contextMenu']}>
+          <div onDoubleClick={this.enableEdit} style={{position: 'relative'}}>
+            <Input type='text'
+              className='rename-input'
+              maxLength={255}
+              id={`input-${bindingId}`}
+              defaultValue={fileName}
+              value={value}
+              disabled={!editable}
+              onChange={this.handleChange}
+              onBlur={this.renameReport}
+              onPressEnter={this.renameReport} />
+            <div
+              style={{
+                position: 'absolute',
+                width: '100%',
+                height: '100%',
+                top: '0px',
+                zIndex: editable ? -1 : 1}}/>
+          </div >
+        </Dropdown>
+      </Popover>
     );
   }
 }

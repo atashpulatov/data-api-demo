@@ -12,3 +12,26 @@ body {
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
+
+.ant-popover-inner-content {
+    max-width: 280px;
+    padding: 8px;
+    background-color: #404040;
+    color: white;
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: "HelveticaNeue", "Helvetica Neue", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", sans-serif;
+    overflow-wrap: break-word;
+}
+
+.ant-popover-placement-bottom > .ant-popover-content > .ant-popover-arrow,
+.ant-popover-placement-bottomRight > .ant-popover-content > .ant-popover-arrow {
+    border-top-color: #404040;
+    border-bottom-color: #404040;
+    border-left-color: #404040;
+    border-right-color: #404040;
+}
+
+.hidden {
+    display: none;
+}
