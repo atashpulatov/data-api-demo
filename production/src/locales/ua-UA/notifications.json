@@ -29,7 +29,7 @@
   "Unable to format table.": "Не можливо відформатувати таблицю",
   "Data loaded successfully": "Дані успішно завантажені",
   "Data is not relevant anymore. You can delete it from the list": "Дані не відповідають дійсності. Ви можете видалити їх зі списку",
-  "Excel returned error: The required data range in the worksheet is not empty": "Необхідне місце для таблиці вже зайнято",
+  "Excel returned error:": "Помилка Excel:",
   "Missing reportArray": "Відсутній reportArray",
   "Missing reportBindId": "Відсутній reportBindId",
   "Missing report": "Відсутній report",
@@ -40,5 +40,10 @@
   "Missing AuthToken.": "Відсутній AuthToken",
   "Missing loading": "Відсутній loading",
   "Report removed": "Звіт видалено",
-  "Report refreshed": "Звіт оновлено"
+  "Report refreshed": "Звіт оновлено",
+  "Data could not be loaded. Please try again.": "",
+  "Please, wait until loading is done": "",
+  "Do you want to delete imported data from the sheet?": "",
+  "Data deleted successfully.": ""
+
 }
