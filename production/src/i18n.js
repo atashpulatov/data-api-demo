@@ -20,7 +20,7 @@ i18n
       },
       saveMissing: true,
       saveMissingTo: 'all',
-      lng: Office.context.displayLanguage,
+      lng: 'en-US',
       keySeparator: false, // we do not use keys in form messages.welcome
 
       interpolation: {

@@ -2,7 +2,6 @@ import {reduxStore} from '../store';
 import {sessionProperties} from './session-properties';
 import {authenticationService} from '../authentication/auth-rest-service';
 import {errorService} from '../error/error-handler';
-import i18next from '../i18n';
 import {homeHelper} from '../home/home-helper';
 
 class SessionHelper {
@@ -73,7 +72,6 @@ class SessionHelper {
     return session;
   }
   saveUserInfo = (values) => {
-    i18next.changeLanguage(values.locale || 'en-US');
     reduxStore.dispatch({
       type: sessionProperties.actions.getUserInfo,
       userFullName: values.fullName ? values.fullName : 'Microstrategy User',

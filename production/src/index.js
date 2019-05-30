@@ -9,6 +9,7 @@ import {PersistGate} from 'redux-persist/lib/integration/react';
 import './index.css';
 import {authenticationService} from './authentication/auth-rest-service.js';
 import {homeHelper} from './home/home-helper.js';
+import i18next from './i18n';
 
 const Office = window.Office;
 
@@ -33,6 +34,7 @@ function officeInitialize() {
 }
 
 function goReact() {
+  i18next.changeLanguage(Office.context.displayLanguage);
   ReactDOM.render(
       <Provider store={reduxStore}>
         <PersistGate persistor={reduxPersistor}>
@@ -46,6 +48,7 @@ function goReact() {
 /**
  * This function adds a # value to iframe URL and modifies it n times
  * This should prevent navigating back to login page via browser 'Back' button
+ * @param {number} count Amount of attempts
  */
 function disableBackNavigation(count) {
   if (count) {
@@ -54,7 +57,7 @@ function disableBackNavigation(count) {
       disableBackNavigation(count - 1);
     }, 50);
   }
-};
+}
 
 // goReact();
 disableBackNavigation(10);
