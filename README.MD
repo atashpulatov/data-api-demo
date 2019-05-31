@@ -119,12 +119,12 @@ Currently we do not support production builds.
     1. find folder “office”
     2. choose a version folder (e.g. “11.1.3.1050”)
     3. click file ending in “.zip”
-    4. download link for plugin is on the pain to the right under “Path”
+    4. download link for plugin is on the pane to the right under “Path”
 4. get addin loader:
     1. find folder “office-loader”
     2. choose a version folder (e.g. “11.1.3.1050”)
     3. click file ending in “.zip”
-    4. download link for plugin is on the pain to the right under “Path”
+    4. download link for plugin is on the pane to the right under “Path”
 
 ### Upload office addin and addin loader to the env
 1. connect to the remote desktop of the env
