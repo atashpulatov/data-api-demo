@@ -41,5 +41,6 @@
   "Remove Data from Workbook": "Видалити дані",
   "Refreshing complete!": "Оновлення завершено!",
   "OK": "ОК",
-  "No data": ""
+  "No data": "",
+  "refreshed_date": "DD.MM.YYYY "
 }
