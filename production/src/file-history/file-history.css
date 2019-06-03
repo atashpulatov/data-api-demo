@@ -105,6 +105,8 @@ span.file-icons {
     height: 18px;
     padding: 1px;
     line-height: 1;
+    font-size: 14px;
+    font-weight: 600;
     border: none;
     outline: none;
 }
@@ -140,10 +142,14 @@ span.file-icons {
 .ant-input.rename-input:focus,
 .ant-input.rename-input:hover {
     box-shadow: none;
+    transition: .3s;
+    font-size: 13px;
+    font-weight: 400;
 }
 
 .rename-container:hover {
     background-color: #EBEBEB; 
+    transition: background-color .4s;
 }
 
 .ant-dropdown .ant-dropdown-menu-item {

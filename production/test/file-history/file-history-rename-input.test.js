@@ -9,7 +9,7 @@ describe('File history rename input', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
-  it('should render an input element with defined name', () => {
+  it('should render a div element with defined name', () => {
     // given
     const givenFileName = 'name';
     const bindingId = 'id123';
@@ -18,7 +18,7 @@ describe('File history rename input', () => {
 
     // then
     expect(wrappedComponent).toBeDefined();
-    expect(wrappedComponent.exists(`#input-${bindingId}`)).toBeTruthy();
+    expect(wrappedComponent.exists(`#rename-container-${bindingId}`)).toBeTruthy();
   });
   it('rename report should call officeStoreService.renameReport method when filename is given', () => {
     // given
@@ -101,5 +101,17 @@ describe('File history rename input', () => {
     setTimeout(() => {
       expect(mockDocument).toHaveBeenCalled();
     }, 150);
+  });
+  it('should render an input element on doubleclick', () => {
+    // given
+    const givenFileName = 'name';
+    const givenId = 'id123';
+
+    // when
+    const wrappedComponent = shallow(<RenameInput fileName={givenFileName} bindingId={givenId} />);
+    wrappedComponent.find('div').first().simulate('dblclick', {});
+    // then
+    expect(wrappedComponent).toBeDefined();
+    expect(wrappedComponent.exists(`#input-${givenId}`)).toBeTruthy();
   });
 });
