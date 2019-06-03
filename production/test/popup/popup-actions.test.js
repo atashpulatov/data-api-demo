@@ -133,6 +133,5 @@ describe('Popup actions', () => {
     expect(officeStoreService.getReportFromProperties).toBeCalledWith(bindingId);
     expect(listener).toHaveBeenCalledWith({type: actions.SET_REPORT_N_FILTERS, editedReport: returnedValue});
     expect(popupController.runPopupDataPreparation).toBeCalled();
-    expect(true).toBeFalsy();
   });
 });
