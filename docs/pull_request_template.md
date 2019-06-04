@@ -11,7 +11,7 @@ _Please give a brief description on what the pull request is about. If it is a d
 
 ## Checklist
 - [ ] At least one of the commits have Rally US/DE
-- [ ] The PR has an assignee, label and at code reviewers
+- [ ] The PR has an assignee, label and code reviewers
 - [ ] My code follows guidelines and passes the linter check
 - [ ] I have commented my code, particularly in hard-to-understand areas
 - [ ] I have added tests that prove my fix is effective or that my feature works
