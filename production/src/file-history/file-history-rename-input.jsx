@@ -42,6 +42,22 @@ export default class RenameInput extends React.Component {
     this.setEditable(true);
   }
 
+  getNameContainer(editable, bindingId, fileName, value) {
+    if (editable) {
+      return <Input
+        type='text'
+        className='rename-input'
+        maxLength={255}
+        id={`input-${bindingId}`}
+        defaultValue={fileName}
+        value={value}
+        onChange={this.handleChange}
+        onBlur={this.renameReport}
+        onPressEnter={this.renameReport} />;
+    }
+    return <div className='rename-container' id={`rename-container-${bindingId}`}>{value}</div>;
+  }
+
   copyValue = /* istanbul ignore next */ (e) => {
     e.domEvent.stopPropagation();
     const text = document.createElement('textarea');
@@ -55,22 +71,7 @@ export default class RenameInput extends React.Component {
   render() {
     const {editable, value} = this.state;
     const {fileName, bindingId} = this.props;
-    let objectNameContainer = <div className='rename-container'
-      id={`rename-container-${bindingId}`}>
-      {value}
-    </div>;
-    if (editable) {
-      objectNameContainer = <Input type='text'
-        className='rename-input'
-        maxLength={255}
-        id={`input-${bindingId}`}
-        defaultValue={fileName}
-        value={value}
-        onChange={this.handleChange}
-        onBlur={this.renameReport}
-        onPressEnter={this.renameReport}
-      />;
-    }
+    const nameContainer = this.getNameContainer(editable, bindingId, fileName, value);
     const menu = (
       <Menu>
         <Menu.Item key="copy" onClick={this.copyValue}>Copy</Menu.Item>
@@ -79,7 +80,7 @@ export default class RenameInput extends React.Component {
     return (
       <Dropdown overlay={menu} trigger={['contextMenu']}>
         <div onDoubleClick={this.enableEdit} style={{position: 'relative'}}>
-          {objectNameContainer}
+          {nameContainer}
         </div >
       </Dropdown>
     );

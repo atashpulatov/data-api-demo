@@ -106,9 +106,8 @@ describe('File history rename input', () => {
     // given
     const givenFileName = 'name';
     const givenId = 'id123';
-
-    // when
     const wrappedComponent = shallow(<RenameInput fileName={givenFileName} bindingId={givenId} />);
+    // when
     wrappedComponent.find('div').first().simulate('dblclick', {});
     // then
     expect(wrappedComponent).toBeDefined();
