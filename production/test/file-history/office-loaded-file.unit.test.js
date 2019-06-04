@@ -8,7 +8,7 @@ describe('office loaded file', () => {
   it('should display provided file name', () => {
     // given
     // when
-    const wrappedComponent = mount(<_OfficeLoadedFile fileName='test' />);
+    const wrappedComponent = mount(<_OfficeLoadedFile fileName='test' refreshDate={new Date()}/>);
     // then
     expect(wrappedComponent.find('Row').hasClass('file-history-container')).toBeTruthy();
     expect(wrappedComponent.html()).toContain('test');
@@ -16,7 +16,7 @@ describe('office loaded file', () => {
   it('should call componentWillUnmount provided file name', () => {
     // given
     // when
-    const wrappedComponent = mount(<_OfficeLoadedFile fileName='test' />);
+    const wrappedComponent = mount(<_OfficeLoadedFile fileName='test' refreshDate={new Date()} />);
     wrappedComponent.instance().componentWillUnmount();
     // then
     expect(wrappedComponent.instance()._ismounted).toBeFalsy();
@@ -25,7 +25,7 @@ describe('office loaded file', () => {
     // given
 
     // when
-    const wrappedComponent = mount(<_OfficeLoadedFile objectType='test' />);
+    const wrappedComponent = mount(<_OfficeLoadedFile objectType='test' refreshDate={new Date()} />);
     const wrappedIcons = wrappedComponent.find('MSTRIcon');
     const wrappedCol = wrappedComponent.find('Col');
     // then
@@ -37,7 +37,7 @@ describe('office loaded file', () => {
     // given
 
     // when
-    const wrappedComponent = mount(<_OfficeLoadedFile objectType='report' />);
+    const wrappedComponent = mount(<_OfficeLoadedFile objectType='report' refreshDate={new Date()} />);
     const wrappedIcons = wrappedComponent.find('MSTRIcon');
     const wrappedCol = wrappedComponent.find('Col');
     // then
@@ -50,6 +50,7 @@ describe('office loaded file', () => {
     const onClickMocked = jest.fn();
     const testBindingId = 'testBindingId';
     const wrappedComponent = mount(<_OfficeLoadedFile
+      refreshDate={new Date()}
       bindingId={testBindingId}
       onClick={onClickMocked}
       fileName='test' />);
@@ -62,7 +63,7 @@ describe('office loaded file', () => {
   it('should display delete and refresh buttons', () => {
     // given
     // when
-    const wrappedComponent = mount(<_OfficeLoadedFile fileName='test' />);
+    const wrappedComponent = mount(<_OfficeLoadedFile fileName='test' refreshDate={new Date()} />);
     const wrappedIcons = wrappedComponent.find('MSTRIcon');
     // then
     const refreshButton = wrappedIcons.at(1);
@@ -77,6 +78,7 @@ describe('office loaded file', () => {
     const mockEvent = {stopPropagation: jest.fn()};
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
+      refreshDate={new Date()}
       bindingId={''}
       fileName='test'
       refreshReport={onRefreshMock}
@@ -92,6 +94,7 @@ describe('office loaded file', () => {
     const mockEvent = {stopPropagation: jest.fn()};
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
+      refreshDate={new Date()}
       bindingId={''}
       fileName='test'
       refreshReportsArray={onRefreshMock}
@@ -111,6 +114,7 @@ describe('office loaded file', () => {
     jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => {});
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
+      refreshDate={new Date()}
       bindingId={testBindingId}
       objectType={objectType}
       fileName='test'
@@ -132,6 +136,7 @@ describe('office loaded file', () => {
     jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => {});
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
+      refreshDate={new Date()}
       bindingId={testBindingId}
       objectType={objectType}
       fileName='test'
@@ -148,6 +153,7 @@ describe('office loaded file', () => {
     // given
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
+      refreshDate={new Date()}
       isLoading={true} />);
     const wrappedSpinner = wrappedComponent.find('img');
     // then
@@ -160,6 +166,7 @@ describe('office loaded file', () => {
     const mockEvent = {stopPropagation: jest.fn()};
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
+      refreshDate={new Date()}
       bindingId={testBindingId}
       fileName='test'
       onDelete={onDeleteMocked} />);
@@ -180,6 +187,7 @@ describe('office loaded file', () => {
     jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => {});
 
     const wrappedComponent = mount(<_OfficeLoadedFile
+      refreshDate={new Date()}
       bindingId={testBindingId}
       objectType={objectType}
       fileName='test'
@@ -201,6 +209,7 @@ describe('office loaded file', () => {
     const testBindingId = 'testBindingId';
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
+      refreshDate={new Date()}
       bindingId={testBindingId}
       onClick={onClickMocked}
       fileName='test'
