@@ -6809,10 +6809,10 @@ ms@^2.1.1:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.1.tgz#30a5864eb3ebb0a66f2ebe6d727af06a09d86e0a"
   integrity sha512-tgp+dl5cGk28utYktBsrFqA7HKgrhgPsg6Z/EfhWI4gl1Hwq8B/GmY/0oXZ6nF8hDVesS/FpnYaD/kOWhYQvyg==
 
-mstr-react-library@1.1.0:
-  version "1.1.0"
-  resolved "http://nexus.internal.microstrategy.com:8081/repository/npm-group/mstr-react-library/-/mstr-react-library-1.1.0.tgz#67cd8d8328f3975e12c44eba35f9eea0d4048efa"
-  integrity sha512-SP185gT4bvqOGdjmmeeTKcYfbevCAuun950bnMyNgfofnLLAyLP5+58HbwvNqpltcLdytU7aCS6hwWgZBcOXyg==
+mstr-react-library@1.1.2:
+  version "1.1.2"
+  resolved "http://nexus.internal.microstrategy.com:8081/repository/npm-group/mstr-react-library/-/mstr-react-library-1.1.2.tgz#8f34f8dfbe93fbb4f0de9be19eb2db0f6399aa20"
+  integrity sha512-EF+ahGG1oysfX8/Qx9QT7CYJTwUpsxkh8YXU5V5tEMFdnBrbfOkRObFkc/pN+5mDGvRPpiUZSzf+zvaE17la3g==
   dependencies:
     antd "^3.13.1"
     react-virtualized "^9.21.0"
