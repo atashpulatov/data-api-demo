@@ -60,7 +60,7 @@ export default class RenameInput extends React.Component {
         <Menu.Item key="rename" onClick={this.enableEdit}>Rename</Menu.Item>
       </Menu>);
     return (
-      <Popover overlayClassName={`${editable ? 'hidden' : ''}`} placement="bottom" content={value} mouseEnterDelay={1}>
+      <Popover overlayClassName={`${editable ? 'hidden' : ''}`} placement="bottomLeft" content={value} mouseEnterDelay={1}>
         <Dropdown overlay={menu} trigger={['contextMenu']}>
           <div onDoubleClick={this.enableEdit} style={{position: 'relative'}}>
             <Input type='text'

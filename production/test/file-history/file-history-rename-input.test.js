@@ -2,7 +2,7 @@ import React from 'react';
 import {shallow, mount} from 'enzyme';
 import RenameInput from '../../src/file-history/file-history-rename-input';
 import {officeStoreService} from '../../src/office/store/office-store-service';
-import {get} from 'enzyme/build/configuration';
+import {Popover} from 'antd';
 
 
 describe('File history rename input', () => {
@@ -101,5 +101,14 @@ describe('File history rename input', () => {
     setTimeout(() => {
       expect(mockDocument).toHaveBeenCalled();
     }, 150);
+  });
+  it('should contain popover', () => {
+    // given
+    const givenFileName = 'name';
+    const givenId = 'id123';
+    // when
+    const wrappedComponent = mount(<RenameInput fileName={givenFileName} bindingId={givenId} />);
+    // then
+    expect(wrappedComponent.find(Popover)).toHaveLength(1);
   });
 });

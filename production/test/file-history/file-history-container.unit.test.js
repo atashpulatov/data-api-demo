@@ -6,6 +6,7 @@ import {_FileHistoryContainer, FileHistoryContainer} from '../../src/file-histor
 import {sessionHelper} from '../../src/storage/session-helper';
 import {popupController} from '../../src/popup/popup-controller';
 import * as LoadedFilesConstans from '../../src/file-history/office-loaded-file.jsx';
+import {Popover} from 'antd';
 
 describe('FileHistoryContainer', () => {
   it('should render component when we are insinde project', () => {
@@ -142,6 +143,22 @@ describe('FileHistoryContainer', () => {
     expect(tmp).toBeTruthy();
 
     expect(tmp._ismounted).toBeFalsy();
+  });
+
+  it('should contain popover', () => {
+    // given
+    const refreshingAll = true;
+    const mockReportArray = createMockFilesArray();
+    // when
+    const wrappedComponent = mount(
+        <Provider store={reduxStore}>
+          < _FileHistoryContainer
+            project={'testProject'}
+            refreshingAll={refreshingAll}
+            reportArray={mockReportArray} />
+        </Provider>);
+    // then
+    expect(wrappedComponent.find(Popover)).toHaveLength(1);
   });
 });
 
