@@ -1,7 +1,6 @@
 import React from 'react';
-import {Input, Dropdown, Menu} from 'antd';
+import {Input, Dropdown, Menu, Popover} from 'antd';
 import {officeStoreService} from '../office/store/office-store-service';
-
 
 export default class RenameInput extends React.Component {
   constructor(props) {
@@ -42,6 +41,22 @@ export default class RenameInput extends React.Component {
     this.setEditable(true);
   }
 
+  getNameContainer(editable, bindingId, fileName, value) {
+    if (editable) {
+      return <Input
+        type='text'
+        className='rename-input'
+        maxLength={255}
+        id={`input-${bindingId}`}
+        defaultValue={fileName}
+        value={value}
+        onChange={this.handleChange}
+        onBlur={this.renameReport}
+        onPressEnter={this.renameReport} />;
+    }
+    return <div className='rename-container' id={`rename-container-${bindingId}`}>{value}</div>;
+  }
+
   copyValue = /* istanbul ignore next */ (e) => {
     e.domEvent.stopPropagation();
     const text = document.createElement('textarea');
@@ -55,33 +70,20 @@ export default class RenameInput extends React.Component {
   render() {
     const {editable, value} = this.state;
     const {fileName, bindingId} = this.props;
+    const nameContainer = this.getNameContainer(editable, bindingId, fileName, value);
     const menu = (
       <Menu>
         <Menu.Item key="copy" onClick={this.copyValue}>Copy</Menu.Item>
         <Menu.Item key="rename" onClick={this.enableEdit}>Rename</Menu.Item>
       </Menu>);
     return (
-      <Dropdown overlay={menu} trigger={['contextMenu']}>
-        <div onDoubleClick={this.enableEdit} style={{position: 'relative'}}>
-          <Input type='text'
-            className='rename-input'
-            maxLength={255}
-            id={`input-${bindingId}`}
-            defaultValue={fileName}
-            value={value}
-            disabled={!editable}
-            onChange={this.handleChange}
-            onBlur={this.renameReport}
-            onPressEnter={this.renameReport} />
-          <div
-            style={{
-              position: 'absolute',
-              width: '100%',
-              height: '100%',
-              top: '0px',
-              zIndex: editable ? -1 : 1}}/>
-        </div >
-      </Dropdown>
+      <Popover overlayClassName={`${editable ? 'hidden' : ''}`} placement="bottomLeft" content={value} mouseEnterDelay={1}>
+        <Dropdown overlay={menu} trigger={['contextMenu']}>
+          <div onDoubleClick={this.enableEdit} style={{position: 'relative'}}>
+            {nameContainer}
+          </div >
+        </Dropdown>
+      </Popover>
     );
   }
 }

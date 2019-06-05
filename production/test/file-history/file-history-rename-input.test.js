@@ -2,14 +2,14 @@ import React from 'react';
 import {shallow, mount} from 'enzyme';
 import RenameInput from '../../src/file-history/file-history-rename-input';
 import {officeStoreService} from '../../src/office/store/office-store-service';
-import {get} from 'enzyme/build/configuration';
+import {Popover} from 'antd';
 
 
 describe('File history rename input', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
-  it('should render an input element with defined name', () => {
+  it('should render a div element with defined name', () => {
     // given
     const givenFileName = 'name';
     const bindingId = 'id123';
@@ -18,7 +18,7 @@ describe('File history rename input', () => {
 
     // then
     expect(wrappedComponent).toBeDefined();
-    expect(wrappedComponent.exists(`#input-${bindingId}`)).toBeTruthy();
+    expect(wrappedComponent.exists(`#rename-container-${bindingId}`)).toBeTruthy();
   });
   it('rename report should call officeStoreService.renameReport method when filename is given', () => {
     // given
@@ -101,5 +101,25 @@ describe('File history rename input', () => {
     setTimeout(() => {
       expect(mockDocument).toHaveBeenCalled();
     }, 150);
+  });
+  it('should contain popover', () => {
+    // given
+    const givenFileName = 'name';
+    const givenId = 'id123';
+    // when
+    const wrappedComponent = mount(<RenameInput fileName={givenFileName} bindingId={givenId} />);
+    // then
+    expect(wrappedComponent.find(Popover)).toHaveLength(1);
+  });
+  it('should render an input element on doubleclick', () => {
+    // given
+    const givenFileName = 'name';
+    const givenId = 'id123';
+    const wrappedComponent = shallow(<RenameInput fileName={givenFileName} bindingId={givenId} />);
+    // when
+    wrappedComponent.find('div').first().simulate('dblclick', {});
+    // then
+    expect(wrappedComponent).toBeDefined();
+    expect(wrappedComponent.exists(`#input-${givenId}`)).toBeTruthy();
   });
 });
