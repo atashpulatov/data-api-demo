@@ -110,6 +110,7 @@ describe('File history rename input', () => {
     const wrappedComponent = mount(<RenameInput fileName={givenFileName} bindingId={givenId} />);
     // then
     expect(wrappedComponent.find(Popover)).toHaveLength(1);
+  });
   it('should render an input element on doubleclick', () => {
     // given
     const givenFileName = 'name';
