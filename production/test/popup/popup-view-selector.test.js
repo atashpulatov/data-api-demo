@@ -51,6 +51,29 @@ describe('PopupViewSelector', () => {
     expect(componentWrapper.find(AttributeSelectorWindow).get(0)).toBeDefined();
   });
 
+  it('should render AttributeSelectorWindow with edit mode when requested', () => {
+    // given
+    const location = {
+      search: {},
+    };
+    const props = {
+      popupType: PopupTypeEnum.editFilters,
+      propsToPass: {},
+      authToken: 'token',
+    };
+    // when
+    // eslint-disable-next-line react/jsx-pascal-case
+    const componentWrapper = shallow(<_PopupViewSelector
+      location={location}
+      {...props}
+      methods={{}}
+    />);
+    // then
+    const attributeSelectorWrapped = componentWrapper.find(AttributeSelectorWindow);
+    expect(attributeSelectorWrapped.get(0)).toBeDefined();
+    expect(true).toBeFalsy();
+  });
+
   it('should handle request import when not prompted', () => {
     // given
     const location = {
@@ -169,7 +192,7 @@ describe('PopupViewSelector', () => {
     />);
     // then
     const wrappedNavTree = componentWrapper.find(NavigationTree).at(0);
-    expect(wrappedNavTree.prop('parsed')).toEqual({token: props.authToken});
+    expect(wrappedNavTree.prop('mstrData')).toEqual({token: props.authToken});
   });
 
   it('should render not conent when no token provided', () => {

@@ -34,10 +34,13 @@ export const _PopupViewSelector = (props) => {
 
 function renderProperComponent(popupType, methods, propsToPass) {
   if (popupType === PopupTypeEnum.dataPreparation) {
-    return <AttributeSelectorWindow parsed={propsToPass} handleBack={methods.handleBack} />;
+    return <AttributeSelectorWindow mstrData={propsToPass} handleBack={methods.handleBack} />;
+  }
+  if (popupType === PopupTypeEnum.editFilters) {
+    return <AttributeSelectorWindow mstrData={propsToPass} handleBack={methods.handleBack} />;
   }
   if (popupType === PopupTypeEnum.navigationTree) {
-    return <NavigationTree handlePrepare={methods.handlePrepare} parsed={propsToPass} handlePopupErrors={methods.handlePopupErrors} />;
+    return <NavigationTree handlePrepare={methods.handlePrepare} mstrData={propsToPass} handlePopupErrors={methods.handlePopupErrors} />;
   }
   if (popupType === PopupTypeEnum.loadingPage) {
     return <LoadingPage />;
@@ -46,7 +49,7 @@ function renderProperComponent(popupType, methods, propsToPass) {
     return <RefreshAllPage />;
   }
   if (popupType === PopupTypeEnum.promptsWindow) {
-    return <PromptsWindow parsed={propsToPass} />;
+    return <PromptsWindow mstrData={propsToPass} />;
   }
   // TODO: do some error handling here
   return null;

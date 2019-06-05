@@ -17,10 +17,10 @@ export class _NavigationTree extends Component {
     this.state = {
       session: {
         USE_PROXY: false,
-        url: this.props.parsed.envUrl,
-        authToken: this.props.parsed.token,
+        url: this.props.mstrData.envUrl,
+        authToken: this.props.mstrData.token,
       },
-      reportId: this.props.parsed.reportId,
+      reportId: this.props.mstrData.reportId,
       triggerUpdate: false,
       chosenObjectId: this.props.chosenObjectId,
       chosenProjectId: this.props.chosenProjectId,

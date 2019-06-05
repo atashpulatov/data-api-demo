@@ -20,7 +20,7 @@ export function callForEdit(bindingId) {
       type: SET_REPORT_N_FILTERS,
       editedReport,
     });
-    popupController.runPopupDataPreparation();
+    popupController.runEditFiltersPopup();
   };
 };
 

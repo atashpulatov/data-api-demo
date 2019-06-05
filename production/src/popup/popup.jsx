@@ -11,17 +11,17 @@ import {PopupViewSelector} from './popup-view-selector';
 export class Popup extends Component {
   constructor(props) {
     super(props);
-    const parsed = queryString.parse(this.props.location.search);
+    const mstrData = queryString.parse(this.props.location.search);
     this.state = {
-      parsed,
+      mstrData,
     };
     libraryErrorController.initializeHttpErrorsHandling(this.handlePopupErrors);
   }
 
   handlePrepare = (projectId, reportId, reportSubtype, reportName, reportType) => {
     this.setState({
-      parsed: {
-        ...this.state.parsed,
+      mstrData: {
+        ...this.state.mstrData,
         popupType: PopupTypeEnum.dataPreparation,
         projectId,
         reportId,
@@ -34,8 +34,8 @@ export class Popup extends Component {
 
   handleBack = (projectId, reportId, reportSubtype) => {
     this.setState({
-      parsed: {
-        ...this.state.parsed,
+      mstrData: {
+        ...this.state.mstrData,
         popupType: PopupTypeEnum.navigationTree,
         projectId,
         reportId,
@@ -53,7 +53,7 @@ export class Popup extends Component {
   }
 
   render() {
-    const {popupType, ...propsToPass} = this.state.parsed;
+    const {popupType, ...propsToPass} = this.state.mstrData;
     const methods = {
       handlePrepare: this.handlePrepare,
       handleBack: this.handleBack,

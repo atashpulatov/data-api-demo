@@ -78,11 +78,11 @@ describe('Popup.js', () => {
         givenRecord.subtype
     );
     // then
-    const parsed = popupWrapped.state().parsed;
-    expect(parsed.reportId).toEqual(givenRecord.reportId);
-    expect(parsed.projectId).toEqual(givenRecord.projectId);
-    expect(parsed.reportSubtype).toEqual(givenRecord.subtype);
-    expect(parsed.popupType).toEqual(PopupTypeEnum.dataPreparation);
+    const mstrData = popupWrapped.state().mstrData;
+    expect(mstrData.reportId).toEqual(givenRecord.reportId);
+    expect(mstrData.projectId).toEqual(givenRecord.projectId);
+    expect(mstrData.reportSubtype).toEqual(givenRecord.subtype);
+    expect(mstrData.popupType).toEqual(PopupTypeEnum.dataPreparation);
   });
 
   it('should set projectId, reportId and subtype on handleBack', () => {
@@ -103,10 +103,10 @@ describe('Popup.js', () => {
         givenRecord.subtype
     );
     // then
-    const parsed = popupWrapped.state().parsed;
-    expect(parsed.reportId).toEqual(givenRecord.reportId);
-    expect(parsed.projectId).toEqual(givenRecord.projectId);
-    expect(parsed.reportSubtype).toEqual(givenRecord.subtype);
+    const mstrData = popupWrapped.state().mstrData;
+    expect(mstrData.reportId).toEqual(givenRecord.reportId);
+    expect(mstrData.projectId).toEqual(givenRecord.projectId);
+    expect(mstrData.reportSubtype).toEqual(givenRecord.subtype);
   });
 
   it('should pass popupType on', () => {

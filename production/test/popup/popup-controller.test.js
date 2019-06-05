@@ -36,11 +36,11 @@ describe('PopupController', () => {
 
   it('should run popup with proper settings when called for data preparation', () => {
     // given
-    const popupType = PopupTypeEnum.dataPreparation;
+    const popupType = PopupTypeEnum.editFilters;
     const size = 80;
     const runPopupSpy = jest.spyOn(popupController, 'runPopup').mockImplementationOnce(() => {});
     // when
-    popupController.runPopupDataPreparation();
+    popupController.runEditFiltersPopup();
     // then
     expect(runPopupSpy).toBeCalled();
     expect(runPopupSpy).toBeCalledWith(popupType, size, size);

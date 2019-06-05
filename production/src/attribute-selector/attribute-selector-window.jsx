@@ -13,12 +13,12 @@ export class AttributeSelectorWindow extends Component {
     this.state = {
       session: {
         USE_PROXY: false,
-        url: this.props.parsed.envUrl,
-        authToken: this.props.parsed.token,
-        projectId: this.props.parsed.projectId,
+        url: this.props.mstrData.envUrl,
+        authToken: this.props.mstrData.token,
+        projectId: this.props.mstrData.projectId,
       },
       openModal: false,
-      reportSubtype: this.props.parsed.reportSubtype,
+      reportSubtype: this.props.mstrData.reportSubtype,
       triggerUpdate: false,
       loading: false,
       attributesSelected: false,
@@ -35,7 +35,7 @@ export class AttributeSelectorWindow extends Component {
     this.props.handleBack();
   };
 
-  onTriggerUpdate = (reportId, projectId, reportSubtype, body, reportName = this.props.parsed.reportName) => {
+  onTriggerUpdate = (reportId, projectId, reportSubtype, body, reportName = this.props.mstrData.reportName) => {
     attributeSelectorHelpers.officeMessageParent(selectorProperties.commandOnUpdate,
         reportId, projectId, reportSubtype, body, reportName);
   };
@@ -65,10 +65,10 @@ export class AttributeSelectorWindow extends Component {
       <div>
         <AttributeSelector
           // TODO: logic for a title
-          title={`Import ${this.props.parsed.reportType} > ${this.props.parsed.reportName}`}
+          title={`Import ${this.props.mstrData.reportType} > ${this.props.mstrData.reportName}`}
           attributesSelectedChange={this.attributesBeingSelected}
           session={this.state.session}
-          reportId={this.props.parsed.reportId}
+          reportId={this.props.mstrData.reportId}
           reportSubtype={this.state.reportSubtype}
           triggerUpdate={this.state.triggerUpdate}
           onTriggerUpdate={this.onTriggerUpdate}

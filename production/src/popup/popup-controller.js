@@ -18,8 +18,8 @@ class PopupController {
     await this.runPopup(PopupTypeEnum.navigationTree, 80, 80);
   };
 
-  runPopupDataPreparation = async () => {
-    await this.runPopup(PopupTypeEnum.dataPreparation, 80, 80);
+  runEditFiltersPopup = async () => {
+    await this.runPopup(PopupTypeEnum.editFilters, 80, 80);
   };
 
   runPopup = async (popupType, height, width) => {
