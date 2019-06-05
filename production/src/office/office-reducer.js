@@ -26,6 +26,8 @@ export const officeReducer = (state = {loading: false}, action) => {
       return onStartLoading(state);
     case officeProperties.actions.stopLoading:
       return onStopLoading(state);
+    case officeProperties.actions.toggleSecuredFlag:
+      return toggleSecuredFlag(action, state);
     default:
       break;
   }
@@ -139,6 +141,13 @@ function _toggleSetLoadingStatus(action, state, status) {
     loading: status,
     reportArray: newReportArray,
     isRefreshAll: action.isRefreshAll,
+  };
+}
+
+function toggleSecuredFlag(action, state) {
+  return {
+    ...state,
+    isSecured: action.isSecured,
   };
 }
 

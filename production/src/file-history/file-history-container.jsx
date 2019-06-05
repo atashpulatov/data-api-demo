@@ -8,12 +8,17 @@ import {MSTRIcon} from 'mstr-react-library';
 import loadingSpinner from './assets/report_loading_spinner.gif';
 import {refreshReportsArray} from '../popup/popup-actions';
 import {fileHistoryContainerHOC} from './file-history-container-HOC.jsx';
+import {officeStoreService} from '../office/store/office-store-service';
+import {toggleStoreSecuredFlag} from '../office/office-actions';
 
 import './file-history.css';
 
 export class _FileHistoryContainer extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    if (officeStoreService.isFileSecured()) {
+      this.props.toggleStoreSecuredFlag(true);
+    }
     this.state = {
       allowRefreshAllClick: true,
     };
@@ -34,23 +39,45 @@ export class _FileHistoryContainer extends React.Component {
     });
   };
 
-  clearAll = async () => {
+  secureData = async () => {
     const excelContext = await officeApiHelper.getExcelContext();
-    // e.stopPropagation();
     this.props.reportArray.forEach((report) => {
-      console.log('in foreach', report);
       const tableObject = excelContext.workbook.tables.getItem(report.bindId);
       const tableRange = tableObject.getDataBodyRange();
       tableRange.clear(Excel.ClearApplyTo.contents);
     });
+    this.toggleSecured(true);
     await excelContext.sync();
   }
+
+  showData = (reportArray, refreshAll) => {
+    this.refreshAllAction(reportArray, refreshAll);
+    this.toggleSecured(false);
+  }
+
+  toggleSecured = (isSecured) => {
+    officeStoreService.toggleFileSecuredFlag(isSecured);
+    this.props.toggleStoreSecuredFlag(isSecured);
+  }
+
   render() {
-    const {reportArray = [], loading, refreshingAll, refreshReportsArray} = this.props;
+    const {reportArray = [], loading, refreshingAll, refreshReportsArray, isSecured} = this.props;
     return (<React.Fragment >
-      <Button onClick={this.clearAll}>Secure</Button>
+      {isSecured &&
+        <div className="secured-screen-container">
+          <div>
+            <div>File is secured</div>
+            <Button onClick={() => this.showData(reportArray, refreshReportsArray)}>Show Data</Button>
+          </div>
+        </div>
+      }
       <Button id="add-data-btn-container" className="add-data-btn" onClick={() => this.props.addDataAction()}
         disabled={loading}>Add Data</Button>
+      <span>
+        <Button className="refresh-all-btn" style={{float: 'right'}} onClick={this.secureData}>
+          Secure
+        </Button>
+      </span>
       <span className="refresh-button-container">
         <Button className="refresh-all-btn" title="Refresh All Data" style={{float: 'right'}} onClick={() => this.refreshAllAction(reportArray, refreshReportsArray)} disabled={loading}>
           {!refreshingAll ? <MSTRIcon type='refresh' /> : <img width='12px' height='12px' src={loadingSpinner} alt='Report loading icon' />}
@@ -72,16 +99,18 @@ export class _FileHistoryContainer extends React.Component {
   };
 }
 
-function mapStateToProps(state) {
+function mapStateToProps({officeReducer, historyReducer}) {
   return {
-    reportArray: state.officeReducer.reportArray,
-    project: state.historyReducer.project,
-    refreshingAll: state.officeReducer.isRefreshAll,
+    reportArray: officeReducer.reportArray,
+    project: historyReducer.project,
+    refreshingAll: officeReducer.isRefreshAll,
+    isSecured: officeReducer.isSecured,
   };
 }
 
 const mapDispatchToProps = {
   refreshReportsArray,
+  toggleStoreSecuredFlag,
 };
 
 const WrappedFileHistoryContainer = fileHistoryContainerHOC(_FileHistoryContainer);

@@ -68,13 +68,11 @@ class OfficeStoreService {
   _getReportProperties = () => {
     try {
       const settings = this.getOfficeSettings();
-      console.log('settings:', settings);
       if (!(settings.get(officeProperties.loadedReportProperties))) {
         const reportProperties = [];
         settings.set(officeProperties.loadedReportProperties, reportProperties);
         settings.saveAsync();
       }
-      console.log('settings.get(officeProperties.loadedReportProperties):', settings.get(officeProperties.loadedReportProperties));
       return settings.get(officeProperties.loadedReportProperties);
     } catch (error) {
       errorService.handleOfficeError(error);
@@ -88,6 +86,17 @@ class OfficeStoreService {
       throw new RunOutsideOfficeError();
     }
     return Office.context.document.settings;
+  }
+
+  toggleFileSecuredFlag = (value) => {
+    const settings = this.getOfficeSettings();
+    settings.set(officeProperties.isSecured, value);
+    settings.saveAsync();
+  }
+
+  isFileSecured = () => {
+    const settings = this.getOfficeSettings();
+    return settings.get(officeProperties.isSecured);
   }
 }
 

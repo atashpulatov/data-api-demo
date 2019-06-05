@@ -65,9 +65,6 @@ class OfficeDisplayService {
       console.time('Fetch and insert into excel');
       const connectionData = {objectId, projectId, dossierData, isReport, body};
       const officeData = {officeTable, excelContext, startCell, newOfficeTableId};
-      console.log('------connection data', connectionData);
-      console.log('------officeData', officeData);
-      console.log('---------instanceDef', instanceDefinition);
       officeTable = await this._fetchInsertDataIntoExcel(connectionData, officeData, instanceDefinition, isRefresh);
 
       // Apply formatting when table was created
