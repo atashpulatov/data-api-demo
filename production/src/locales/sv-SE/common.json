@@ -101,5 +101,7 @@
   "Data could not be loaded. Please try again.": "Data kunde inte läsas in. Försök igen.",
   "Please, wait until loading is done": "Vänta tills inläsningen är klar",
   "Do you want to delete imported data from the sheet?": "Vill du ta bort importerade data från bladet?",
-  "Data deleted successfully.": "Data har tagits bort."
+  "Data deleted successfully.": "Data har tagits bort.",
+  "Cannot load preview data": "Det går inte att lösa in förhandsgranskningsdata",
+  "No data selected": "Inga data valda"
 }

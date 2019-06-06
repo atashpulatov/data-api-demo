@@ -101,5 +101,7 @@
   "Data could not be loaded. Please try again.": "Gegevens konden niet geladen worden. Probeer het opnieuw.",
   "Please, wait until loading is done": "Wacht tot het laden gereed is",
   "Do you want to delete imported data from the sheet?": "Wilt u geïmporteerde gegevens verwijderen uit het blad?",
-  "Data deleted successfully.": "Gegevens zijn verwijderd."
+  "Data deleted successfully.": "Gegevens zijn verwijderd.",
+  "Cannot load preview data": "Gegevens van het weergavevoorbeeld kunnen niet geladen worden",
+  "No data selected": "Geen gegevens geselecteerd"
 }

@@ -101,5 +101,7 @@
   "Data could not be loaded. Please try again.": "Não foi possível carregar dados. Tente novamente.",
   "Please, wait until loading is done": "Aguarde a conclusão do carregamento",
   "Do you want to delete imported data from the sheet?": "Você deseja excluir dados importados da planilha?",
-  "Data deleted successfully.": "Dados excluídos com êxito."
+  "Data deleted successfully.": "Dados excluídos com êxito.",
+  "Cannot load preview data": "Não é possível carregar dados de visualização",
+  "No data selected": "Nenhum dado selecionado"
 }

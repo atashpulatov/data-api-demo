@@ -101,5 +101,7 @@
   "Data could not be loaded. Please try again.": "データをロードできませんでした。再試行してください。",
   "Please, wait until loading is done": "ロード処理が終わるまでお待ちください。",
   "Do you want to delete imported data from the sheet?": "インポートしたデータをシートから削除しますか?",
-  "Data deleted successfully.": "データを正常に削除しました。"
+  "Data deleted successfully.": "データを正常に削除しました。",
+  "Cannot load preview data": "プレビュー データをロードできません",
+  "No data selected": "データが選択されていません"
 }

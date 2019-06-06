@@ -100,5 +100,7 @@
   "Data could not be loaded. Please try again.": "Dataene kunne ikke indlæses. Prøv igen.",
   "Please, wait until loading is done": "Vent til indlæsningen er færdig",
   "Do you want to delete imported data from the sheet?": "Vil du slette importerede data fra regnearket?",
-  "Data deleted successfully.": "Dataene blev slettet."
+  "Data deleted successfully.": "Dataene blev slettet.",
+  "Cannot load preview data": "Kan ikke indlæse dataeksempel",
+  "No data selected": "Der er ikke valgt nogen data"
 }
