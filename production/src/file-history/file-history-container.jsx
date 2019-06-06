@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {Button} from 'antd';
+import {Button, Popover} from 'antd';
 import {OfficeLoadedFile} from './office-loaded-file.jsx';
 import {officeApiHelper} from '../office/office-api-helper';
 import {officeDisplayService} from '../office/office-display-service';
@@ -84,9 +84,11 @@ export class _FileHistoryContainer extends React.Component {
         </Button>
       </span>
       <span className="refresh-button-container">
-        <Button className="refresh-all-btn" title="Refresh All Data" style={{float: 'right'}} onClick={() => this.refreshAllAction(reportArray, refreshReportsArray)} disabled={loading}>
-          {!refreshingAll ? <MSTRIcon type='refresh' /> : <img width='12px' height='12px' src={loadingSpinner} alt='Report loading icon' />}
-        </Button>
+        <Popover placement="bottom" content='Refresh All Data' mouseEnterDelay={1}>
+          <Button className="refresh-all-btn" style={{float: 'right'}} onClick={() => this.refreshAllAction(reportArray, refreshReportsArray)} disabled={loading}>
+            {!refreshingAll ? <MSTRIcon type='refresh' /> : <img width='12px' height='12px' src={loadingSpinner} alt='Report loading icon' />}
+          </Button>
+        </Popover>
       </span>
       <div role="list" className='tables-container'>
         {reportArray.map((report) => <OfficeLoadedFile
