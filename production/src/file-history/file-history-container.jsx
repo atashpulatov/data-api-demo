@@ -44,9 +44,7 @@ export class _FileHistoryContainer extends React.Component {
     try {
       const excelContext = await officeApiHelper.getExcelContext();
       this.props.reportArray.forEach((report) => {
-        const tableObject = excelContext.workbook.tables.getItem(report.bindId);
-        const tableRange = tableObject.getDataBodyRange();
-        tableRange.clear(Excel.ClearApplyTo.contents);
+        officeApiHelper.deleteObjectTableBody(excelContext, report);
       });
       this.toggleSecured(true);
       await excelContext.sync();
@@ -68,27 +66,29 @@ export class _FileHistoryContainer extends React.Component {
   render() {
     const {reportArray = [], loading, refreshingAll, refreshReportsArray, isSecured} = this.props;
     return (<React.Fragment >
-      {isSecured &&
+      {// TODO: Lock screen will be prepared and styled later in separate US
+        isSecured &&
         <div className="secured-screen-container">
           <div>
             <div>File is secured</div>
-            <Button onClick={() => this.showData(reportArray, refreshReportsArray)}>Show Data</Button>
+            <Button className="show-data-btn" onClick={() => this.showData(reportArray, refreshReportsArray)}>Show Data</Button>
           </div>
         </div>
       }
       <Button id="add-data-btn-container" className="add-data-btn" onClick={() => this.props.addDataAction()}
         disabled={loading}>Add Data</Button>
-      <span>
-        <Button className="refresh-all-btn" style={{float: 'right'}} onClick={this.secureData}>
-          Secure
-        </Button>
-      </span>
       <span className="refresh-button-container">
         <Popover placement="bottom" content='Refresh All Data' mouseEnterDelay={1}>
           <Button className="refresh-all-btn" style={{float: 'right'}} onClick={() => this.refreshAllAction(reportArray, refreshReportsArray)} disabled={loading}>
             {!refreshingAll ? <MSTRIcon type='refresh' /> : <img width='12px' height='12px' src={loadingSpinner} alt='Report loading icon' />}
           </Button>
         </Popover>
+      </span>
+      {/* TODO: a proper button will be added in separate US */}
+      <span>
+        <Button className="secure-btn" style={{float: 'right'}} onClick={this.secureData}>
+          Secure
+        </Button>
       </span>
       <div role="list" className='tables-container'>
         {reportArray.map((report) => <OfficeLoadedFile
