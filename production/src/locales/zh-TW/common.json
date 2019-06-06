@@ -94,7 +94,7 @@
   "Unable to format table.": "無法格式化資料表。",
   "Data loaded successfully": "資料載入成功",
   "Data is not relevant anymore. You can delete it from the list": "資料已不再相關。您可以從清單中刪除",
-  "Excel returned error:": "Excel 回傳錯誤：",
+  "Excel returned error": "Excel 回傳錯誤：",
   "Missing reportArray": "遺失報表陣列",
   "Missing reportBindId": "遺失報表繫結 ID",
   "Missing report": "遺失報表",

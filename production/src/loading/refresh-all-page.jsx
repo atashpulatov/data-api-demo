@@ -80,6 +80,8 @@ export class _RefreshAllPage extends Component {
   }
 
   getTooltipContent = (refreshData) => {
+    const excel = 'Excel returned error';
+    const {t} = this.props;
     return (
       <div className="tooltip-content">
         <div className="tooltip-header">
@@ -87,7 +89,7 @@ export class _RefreshAllPage extends Component {
         </div>
         <div className="tooltip-message">
           <div className="tooltip-message-title">{this.props.t('Report could not be refreshed', {report: refreshData.name})}</div>
-          <div className="tooltip-message-text">{refreshData.result}</div>
+          <div className="tooltip-message-text">{refreshData.result.includes(excel) ? `${t(excel)}: ${refreshData.result.split(':')[1]}` : t(refreshData.result)}</div>
         </div>
       </div>
     );

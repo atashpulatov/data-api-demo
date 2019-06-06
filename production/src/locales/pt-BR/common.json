@@ -87,7 +87,7 @@
   "Unable to format table.": "Não foi possível formatar a tabela.",
   "Data loaded successfully": "Dados carregados com êxito",
   "Data is not relevant anymore. You can delete it from the list": "Os dados não são mais relevantes. Você pode excluí-los da lista",
-  "Excel returned error:": "O Excel retornou um erro:",
+  "Excel returned error": "O Excel retornou um erro:",
   "Missing reportArray": "reportArray ausente",
   "Missing reportBindId": "reportBindId ausente",
   "Missing report": "report ausente",

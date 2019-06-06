@@ -87,7 +87,7 @@
   "Unable to format table.": "Kan tabel niet opmaken.",
   "Data loaded successfully": "Gegevens zijn geladen",
   "Data is not relevant anymore. You can delete it from the list": "Gegevens zijn niet langer relevant. U kunt deze verwijderen uit de lijst",
-  "Excel returned error:": "Excel heeft een fout gegeven:",
+  "Excel returned error": "Excel heeft een fout gegeven:",
   "Missing reportArray": "Ontbrekende reportArray",
   "Missing reportBindId": "Ontbrekende reportBindId",
   "Missing report": "Ontbrekend rapport",

@@ -87,7 +87,7 @@
   "Unable to format table.": "テーブルの書式設定ができません。",
   "Data loaded successfully": "データを正常にロードしました。",
   "Data is not relevant anymore. You can delete it from the list": "データは無関係になりました。リストから削除しても構いません。",
-  "Excel returned error:": "Excel がエラーを返しています：",
+  "Excel returned error": "Excel がエラーを返しています：",
   "Missing reportArray": "reportArray が欠落",
   "Missing reportBindId": "reportBindId が欠落",
   "Missing report": "report が欠落",

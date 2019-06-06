@@ -87,7 +87,7 @@
   "Unable to format table.": "Det går inte att formatera tabellen.",
   "Data loaded successfully": "Datainläsningen har genomförts",
   "Data is not relevant anymore. You can delete it from the list": "Datan är inte relevant längre. Du kan ta bort det från listan",
-  "Excel returned error:": "Excel returnerade fel:",
+  "Excel returned error": "Excel returnerade fel:",
   "Missing reportArray": "reportArray saknas",
   "Missing reportBindId": "reportBindId saknas",
   "Missing report": "report saknas",
