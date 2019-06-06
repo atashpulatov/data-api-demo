@@ -3,6 +3,7 @@ import {mount} from 'enzyme';
 import {_OfficeLoadedFile} from '../../src/file-history/office-loaded-file';
 import {reduxStore} from '../../src/store';
 import {fileHistoryHelper} from '../../src/file-history/file-history-helper';
+import {Popover} from 'antd';
 
 describe('office loaded file', () => {
   it('should display provided file name', () => {
@@ -222,5 +223,12 @@ describe('office loaded file', () => {
     expect(onClickMocked).toBeCalledWith(testBindingId);
     expect(onDeleteMocked).not.toBeCalled();
     expect(onRefreshMocked).not.toBeCalled();
+  });
+  it('should contain one popover', () => {
+    // given
+    // when
+    const wrappedComponent = mount(<_OfficeLoadedFile fileName='test' />);
+    // then
+    expect(wrappedComponent.find(Popover)).toHaveLength(3);
   });
 });

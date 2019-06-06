@@ -1,8 +1,7 @@
 import React from 'react';
-import {Input, Dropdown, Menu} from 'antd';
+import {Input, Dropdown, Menu, Popover} from 'antd';
 import {officeStoreService} from '../office/store/office-store-service';
 import {withTranslation} from 'react-i18next';
-
 
 export class _RenameInput extends React.Component {
   constructor(props) {
@@ -83,11 +82,13 @@ export class _RenameInput extends React.Component {
         <Menu.Item key="rename" onClick={this.enableEdit}>{t('Rename')}</Menu.Item>
       </Menu>);
     return (
-      <Dropdown overlay={menu} trigger={['contextMenu']}>
-        <div onDoubleClick={this.enableEdit} style={{position: 'relative'}}>
-          {nameContainer}
-        </div >
-      </Dropdown>
+      <Popover overlayClassName={`${editable ? 'hidden' : ''}`} placement="bottomLeft" content={value} mouseEnterDelay={1}>
+        <Dropdown overlay={menu} trigger={['contextMenu']}>
+          <div onDoubleClick={this.enableEdit} style={{position: 'relative'}}>
+            {nameContainer}
+          </div >
+        </Dropdown>
+      </Popover>
     );
   }
 }

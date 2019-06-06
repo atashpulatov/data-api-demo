@@ -251,7 +251,7 @@ class OfficeDisplayService {
     try {
       reduxStoreState.sessionReducer.dialog.close();
     } catch (err) {
-      if (err !== ERROR_POPUP_CLOSED) {
+      if (!err.includes(ERROR_POPUP_CLOSED)) {
         throw err;
       }
     }
