@@ -34,7 +34,8 @@ function officeInitialize() {
 }
 
 function goReact() {
-  i18next.changeLanguage(Office.context.displayLanguage);
+  // i18next.changeLanguage(Office.context.displayLanguage);
+  i18next.changeLanguage('ja-JP');
   ReactDOM.render(
       <Provider store={reduxStore}>
         <PersistGate persistor={reduxPersistor}>

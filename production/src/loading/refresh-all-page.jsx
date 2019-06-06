@@ -86,7 +86,7 @@ export class _RefreshAllPage extends Component {
           <span className="tooltip-header-icon"><img width='14px' height='14px' src={warningIcon} alt='Refresh failed icon' /></span>
         </div>
         <div className="tooltip-message">
-          <div className="tooltip-message-title">{refreshData.name} could not be refreshed.</div>
+          <div className="tooltip-message-title">{this.props.t('Report could not be refreshed', {report: refreshData.name})}</div>
           <div className="tooltip-message-text">{refreshData.result}</div>
         </div>
       </div>
@@ -104,7 +104,7 @@ export class _RefreshAllPage extends Component {
           <div className='refresh-progress'>
             <h1 title={displayName} className={'titleStyle'}>{`${displayName}`}</h1>
             <h1 className={'progressStyle'}>{` (${this.state.currentNumber}/${this.state.allNumber})`}</h1>
-            <LoadingText text={'Loading data...'} />
+            <LoadingText text={t('Loading data...')} />
           </div>
           :
           <span className="finished-header">{t('Refreshing complete!')}</span>}
@@ -126,7 +126,7 @@ export class _RefreshAllPage extends Component {
       </Button> */}
     </dialog>);
   }
-}
+};
 
 _RefreshAllPage.defaultProps = {
   t: (text) => text,

@@ -8,7 +8,6 @@ import {userRestService} from './user-rest-service';
 import {homeHelper} from './home-helper';
 import {withTranslation} from 'react-i18next';
 
-
 export class _Header extends Component {
   componentDidMount = async () => {
     let userData = {};

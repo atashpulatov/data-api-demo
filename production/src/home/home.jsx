@@ -35,4 +35,8 @@ function mapStateToProps(state) {
   };
 }
 
+_Home.defaultProps = {
+  t: (text) => text,
+};
+
 export const Home = connect(mapStateToProps)(withTranslation('common')(_Home));

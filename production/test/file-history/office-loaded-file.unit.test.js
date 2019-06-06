@@ -111,6 +111,7 @@ describe('office loaded file', () => {
     const mockEvent = {stopPropagation: jest.fn()};
     const testBindingId = 'testBindingId';
     const objectType = 'report';
+    const t = () => {};
     jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => {});
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
@@ -119,13 +120,14 @@ describe('office loaded file', () => {
       objectType={objectType}
       fileName='test'
       refreshReportsArray={onRefreshMocked}
-      isLoading={false} />);
+      isLoading={false}
+      t={t} />);
     const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
     const refreshButton = wrappedIcons.at(1);
     refreshButton.props().onClick(mockEvent);
     // then
     expect(onRefreshMocked).toBeCalled();
-    expect(onRefreshMocked).toBeCalledWith([{bindId: testBindingId, objectType}], false);
+    expect(onRefreshMocked).toBeCalledWith([{bindId: testBindingId, objectType}], false, t);
   });
   it('should NOT invoke refresh method on button click if allowRefreshClick is false', () => {
     // given

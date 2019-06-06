@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {AttributeMetricFilter, ErrorBoundary} from 'mstr-react-library';
 import {withTranslation} from 'react-i18next';
 
-class _AttributeSelector extends Component {
+export class _AttributeSelector extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -11,7 +11,7 @@ class _AttributeSelector extends Component {
   }
 
   render() {
-    const {reportId, title, session, triggerUpdate, onTriggerUpdate, reportSubtype, resetTriggerUpdate, attributesSelectedChange, t} = this.props;
+    const {reportId, title, session, triggerUpdate, onTriggerUpdate, reportSubtype, resetTriggerUpdate,attributesSelectedChange, t} = this.props;
     return (
       <ErrorBoundary>
         <AttributeMetricFilter
@@ -33,5 +33,9 @@ class _AttributeSelector extends Component {
     );
   }
 }
+
+_AttributeSelector.defaultProps = {
+  t: (text) => text,
+};
 
 export const AttributeSelector = withTranslation('common')(_AttributeSelector);

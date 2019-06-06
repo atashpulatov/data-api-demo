@@ -67,8 +67,8 @@ export class NotificationsWithoutRedux extends Component {
 
   displayMessage = () => {
     const {messageType, content, t} = this.props;
-    message[messageType](t(content));
-  };
+    message[messageType](content.includes('Excel returned error') ? `${t('Excel returned error')}: ${content.split(':')[1]}` : t(content));
+  }
 
   render() {
     return (
@@ -89,4 +89,8 @@ const mapStateToProps = (state) => {
   };
 };
 
-export const Notifications = connect(mapStateToProps)(withTranslation('notifications')(NotificationsWithoutRedux));
+NotificationsWithoutRedux.defaultProps = {
+  t: (text) => text,
+};
+
+export const Notifications = connect(mapStateToProps)(withTranslation('common')(NotificationsWithoutRedux));

@@ -137,6 +137,10 @@ export class _NavigationTree extends Component {
   }
 }
 
+_NavigationTree.defaultProps = {
+  t: (text) => text,
+};
+
 export const mapStateToProps = ({officeReducer, navigationTree}) => {
   const object = officeReducer.preLoadReport;
   return {

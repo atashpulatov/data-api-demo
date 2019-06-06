@@ -76,7 +76,6 @@ class SessionHelper {
       type: sessionProperties.actions.getUserInfo,
       userFullName: values.fullName ? values.fullName : 'Microstrategy User',
       userInitials: values.initials ? values.initials : null,
-      userLocale: values.locale || 'en-US',
     });
   }
 
