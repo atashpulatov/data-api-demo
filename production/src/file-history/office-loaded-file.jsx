@@ -6,7 +6,6 @@ import {fileHistoryHelper} from './file-history-helper';
 import loadingSpinner from './assets/report_loading_spinner.gif';
 import {refreshReportsArray} from '../popup/popup-actions';
 import RenameInput from './file-history-rename-input';
-import {officeApiHelper} from '../office/office-api-helper';
 
 export class _OfficeLoadedFile extends React.Component {
   constructor() {
