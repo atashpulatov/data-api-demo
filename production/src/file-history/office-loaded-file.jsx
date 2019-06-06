@@ -67,7 +67,7 @@ export class _OfficeLoadedFile extends React.Component {
         </Col>
         <Col span={14} title={`${fileName}`} className="report-title">
           <RenameInput bindingId={bindingId} fileName={fileName} />
-          <div className="additional-data">{refreshDate.toLocaleString()}</div>
+          <div className="additional-data">{t('refreshed_date', {date: refreshDate})}</div>
         </Col>
         <Col span={1} offset={2}>
           {!isPrompted && <span className="loading-button-container" title={t('Refresh Data')}

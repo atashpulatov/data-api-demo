@@ -1,4 +1,5 @@
 {
+  "refreshed_date": "{{date, YYYY/M/D ah:mm}}",
   "Let's get started": "開始使用",
   "You haven't imported any report or dataset yet. Let's import data to start!": "您尚未匯入任何報表或資料集。開始匯入資料！",
   "Office Add-in logo": "Office 增益集標誌",

@@ -1,4 +1,5 @@
 {
+  "refreshed_date": "{{date, YYYY-MM-DD HH.mm}}",
   "Let's get started": "Låt oss köra igång",
   "You haven't imported any report or dataset yet. Let's import data to start!": "Du har inte importerat någon rapport eller datauppsättning ännu. Låt oss importera data för att komma igång!",
   "Office Add-in logo": "Office Add-in-logotyp",
