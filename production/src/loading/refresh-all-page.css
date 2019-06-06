@@ -49,7 +49,6 @@
     transform: translateY(-50%) translateY(-25px);
     border: none;
     text-align: center;
-    font-family: "HelveticaNeue", "Helvetica Neue", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", sans-serif;
     width: 100%;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -111,7 +110,6 @@
 .tooltip-content {
     max-width: 250px;
     font-size: 12px;
-    font-family: "HelveticaNeue", "Helvetica Neue", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", sans-serif;
     color: rgb(68, 74, 80);
 }
 
