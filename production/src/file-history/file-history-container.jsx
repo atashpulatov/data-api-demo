@@ -10,6 +10,7 @@ import {refreshReportsArray} from '../popup/popup-actions';
 import {fileHistoryContainerHOC} from './file-history-container-HOC.jsx';
 import {officeStoreService} from '../office/store/office-store-service';
 import {toggleStoreSecuredFlag} from '../office/office-actions';
+import {errorService} from '../error/error-handler.js';
 
 import './file-history.css';
 
@@ -40,14 +41,18 @@ export class _FileHistoryContainer extends React.Component {
   };
 
   secureData = async () => {
-    const excelContext = await officeApiHelper.getExcelContext();
-    this.props.reportArray.forEach((report) => {
-      const tableObject = excelContext.workbook.tables.getItem(report.bindId);
-      const tableRange = tableObject.getDataBodyRange();
-      tableRange.clear(Excel.ClearApplyTo.contents);
-    });
-    this.toggleSecured(true);
-    await excelContext.sync();
+    try {
+      const excelContext = await officeApiHelper.getExcelContext();
+      this.props.reportArray.forEach((report) => {
+        const tableObject = excelContext.workbook.tables.getItem(report.bindId);
+        const tableRange = tableObject.getDataBodyRange();
+        tableRange.clear(Excel.ClearApplyTo.contents);
+      });
+      this.toggleSecured(true);
+      await excelContext.sync();
+    } catch (error) {
+      errorService.handleOfficeError(error);
+    }
   }
 
   showData = (reportArray, refreshAll) => {

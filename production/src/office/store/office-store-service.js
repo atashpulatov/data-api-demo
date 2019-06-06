@@ -89,14 +89,22 @@ class OfficeStoreService {
   }
 
   toggleFileSecuredFlag = (value) => {
-    const settings = this.getOfficeSettings();
-    settings.set(officeProperties.isSecured, value);
-    settings.saveAsync();
+    try {
+      const settings = this.getOfficeSettings();
+      settings.set(officeProperties.isSecured, value);
+      settings.saveAsync();
+    } catch (error) {
+      errorService.handleOfficeError(error);
+    }
   }
 
   isFileSecured = () => {
-    const settings = this.getOfficeSettings();
-    return settings.get(officeProperties.isSecured);
+    try {
+      const settings = this.getOfficeSettings();
+      return settings.get(officeProperties.isSecured);
+    } catch (error) {
+      errorService.handleOfficeError(error);
+    }
   }
 }
 
