@@ -1,5 +1,3 @@
-@import '~antd/dist/antd.css';
-
 hr {
     margin-left: 20px;
     margin-right: 20px;
@@ -31,7 +29,6 @@ hr {
 }
 
 #profileImage {
-    font-family: 'HelveticaNeue', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
     color: #888;
     font-size: 12px;
     vertical-align: middle;
@@ -50,7 +47,7 @@ hr {
     overflow: hidden;
     min-width: 0;
     opacity: 0;
-    font-family: 'HelveticaNeue-medium', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    font-weight: 500;
 }
 
 #app-header img {
@@ -80,7 +77,6 @@ hr {
 }
 
 #logOut {
-    font-family: 'HelveticaNeue', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
     color: #888;
     font-size: 12px;
     margin-left: auto;
@@ -116,7 +112,7 @@ hr {
 
 .get-started-container h2 {
     color: #4D5154;
-    font-family: 'HelveticaNeue-medium', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    font-weight: 500;
     font-size: 20px;
     padding: 24px 0;
 }
@@ -125,7 +121,7 @@ hr {
     padding-bottom: 40px;
     margin: 0;
     font-size: 14px;
-    font-family: 'HelveticaNeue-light', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    font-weight: 300;
 }
 
 .ant-tabs {
@@ -135,7 +131,6 @@ hr {
 .ant-tabs.tabs-container .ant-tabs-nav .ant-tabs-tab {
     margin: 0 6px;
     padding: 12px 6px;
-    font-family: 'HelveticaNeue', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
     font-size: 14px;
     color: #888888;
 }
