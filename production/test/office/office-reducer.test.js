@@ -403,10 +403,8 @@ describe('officeReducer', () => {
       type: officeProperties.actions.toggleSecuredFlag,
       isSecured: true,
     };
-
     // when
     const newState = officeReducer(oldState, action);
-
     // then
     expect(newState).toEqual({isSecured: true});
   });
