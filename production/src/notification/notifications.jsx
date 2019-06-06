@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {notification, message, Icon, Button} from 'antd';
 import {connect} from 'react-redux';
 import './Notifications.css';
+import {withTranslation} from 'react-i18next';
 
 export class NotificationsWithoutRedux extends Component {
   constructor(props) {
@@ -21,13 +22,13 @@ export class NotificationsWithoutRedux extends Component {
     if (this.props.currentObject === 'notification') {
       this.displayNotification();
     }
-  }
+  };
 
   displayNotification = () => {
-    const {notificationType, title, content} = this.props;
+    const {notificationType, title, content, t} = this.props;
     let icon;
     const key = `open${Date.now()}`;
-    let btn = <Button type="primary" size="small" onClick={() => notification.close(key)} >OK</Button>;
+    let btn = <Button type="primary" size="small" onClick={() => notification.close(key)} >{t('OK')}</Button>;
     notification.config({
       duration: 0,
     });
@@ -56,18 +57,18 @@ export class NotificationsWithoutRedux extends Component {
         break;
     }
     notification.open({
-      message: title,
-      description: content,
+      message: t(title),
+      description: t(content),
       icon,
       btn: btn,
       key,
     });
-  }
+  };
 
   displayMessage = () => {
-    const {messageType, content} = this.props;
-    message[messageType](content);
-  }
+    const {messageType, content, t} = this.props;
+    message[messageType](t(content));
+  };
 
   render() {
     return (
@@ -75,7 +76,7 @@ export class NotificationsWithoutRedux extends Component {
       </div>
     );
   }
-};
+}
 
 const mapStateToProps = (state) => {
   return {
@@ -88,4 +89,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export const Notifications = new connect(mapStateToProps)(NotificationsWithoutRedux);
+export const Notifications = connect(mapStateToProps)(withTranslation('notifications')(NotificationsWithoutRedux));
