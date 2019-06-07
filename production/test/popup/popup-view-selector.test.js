@@ -2,7 +2,7 @@ import React from 'react';
 import {shallow, mount} from 'enzyme';
 import {Office} from '../mockOffice';
 import {selectorProperties} from '../../src/attribute-selector/selector-properties';
-import {_PopupViewSelector} from '../../src/popup/popup-view-selector';
+import {_PopupViewSelector, mapStateToProps} from '../../src/popup/popup-view-selector';
 import {PromptsWindow} from '../../src/prompts/prompts-window';
 import {PopupTypeEnum} from '../../src/home/popup-type-enum';
 import {NavigationTree} from '../../src/navigation/navigation-tree';
@@ -58,7 +58,12 @@ describe('PopupViewSelector', () => {
     };
     const props = {
       popupType: PopupTypeEnum.editFilters,
-      propsToPass: {},
+      propsToPass: {
+        passedProps: 'passedProps',
+      },
+      editedReport: {
+        reportContent: 'reportToEdit',
+      },
       authToken: 'token',
     };
     // when
@@ -71,7 +76,12 @@ describe('PopupViewSelector', () => {
     // then
     const attributeSelectorWrapped = componentWrapper.find(AttributeSelectorWindow);
     expect(attributeSelectorWrapped.get(0)).toBeDefined();
-    expect(true).toBeFalsy();
+    expect(attributeSelectorWrapped.at(0).prop('mstrData'))
+        .toEqual({
+          ...props.propsToPass,
+          ...props.editedReport,
+          token: props.authToken,
+        });
   });
 
   it('should handle request import when not prompted', () => {
@@ -214,5 +224,45 @@ describe('PopupViewSelector', () => {
     // then
     const componentInstance = componentWrapper.get(0);
     expect(componentInstance).toBe(null);
+  });
+
+  describe('PopupViewConnected', () => {
+    const attributeId = 'ACF673EC11E9554D08E20080EF651EBC';
+    const metricId = 'ACF6987211E9554D08EE0080EF651EBC';
+    const filterValue = 'ACF66B9A11E9554D08E20080EF651EBC:North America';
+    // eslint-disable-next-line max-len
+    const reportBody = {'requestedObjects': {'attributes': [{'id': attributeId}], 'metrics': [{'id': metricId}]}, 'viewFilter': {'operator': 'In', 'operands': [{'type': 'attribute', 'id': 'ACF66B9A11E9554D08E20080EF651EBC'}, {'type': 'elements', 'elements': [{'id': filterValue}]}]}};
+
+    it('should parse edited report properties', () => {
+      // given
+      const reportInRedux = {
+        id: 'reportId',
+        projectId: 'projectId',
+        name: 'reportName',
+        objectType: 'reportType',
+        body: reportBody,
+      };
+      const reduxState = {
+        navigationTree: {},
+        sessionReducer: {
+          authToken: 'token',
+        },
+        popupReducer: {
+          ...reportInRedux,
+        },
+      };
+      // when
+      const {editedReport} = mapStateToProps(reduxState);
+      // then
+      expect(editedReport.projectId).toEqual(reportInRedux.projectId);
+      expect(editedReport.reportSubtype).toEqual(reportInRedux.objectType);
+      expect(editedReport.reportName).toEqual(reportInRedux.name);
+      expect(editedReport.reportType).toEqual(reportInRedux.objectType);
+      expect(editedReport.reportId).toEqual(reportInRedux.id);
+
+      expect(editedReport.selectedAttributes).toEqual([attributeId]);
+      expect(editedReport.selectedMetrics).toEqual([metricId]);
+      expect(editedReport.selectedFilters).toEqual([filterValue]);
+    });
   });
 });

@@ -16,6 +16,7 @@ export function callForEdit(bindingId) {
   return async (dispatch) => {
     await Promise.all([officeApiHelper.getExcelSessionStatus(), authenticationHelper.validateAuthToken()]);
     const editedReport = officeStoreService.getReportFromProperties(bindingId);
+    console.log(editedReport);
     dispatch({
       type: SET_REPORT_N_FILTERS,
       editedReport,

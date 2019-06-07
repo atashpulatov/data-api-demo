@@ -11,8 +11,7 @@ import {RefreshAllPage} from '../loading/refresh-all-page';
 
 export const _PopupViewSelector = (props) => {
   let popupType = props.popupType;
-  const {propsToPass, methods, importRequested} = props;
-  debugger;
+  const {propsToPass, methods, importRequested, editedReport} = props;
   if (importRequested) {
     if (!props.isPrompted) {
       proceedToImport(props);
@@ -29,15 +28,19 @@ export const _PopupViewSelector = (props) => {
     return null;
   }
   propsToPass.token = props.authToken;
-  return renderProperComponent(popupType, methods, propsToPass);
+  return renderProperComponent(popupType, methods, propsToPass, editedReport);
 };
 
-function renderProperComponent(popupType, methods, propsToPass) {
+function renderProperComponent(popupType, methods, propsToPass, editedReport) {
   if (popupType === PopupTypeEnum.dataPreparation) {
     return <AttributeSelectorWindow mstrData={propsToPass} handleBack={methods.handleBack} />;
   }
   if (popupType === PopupTypeEnum.editFilters) {
-    return <AttributeSelectorWindow mstrData={propsToPass} handleBack={methods.handleBack} />;
+    const mstrData = {
+      ...propsToPass,
+      ...editedReport,
+    };
+    return <AttributeSelectorWindow mstrData={mstrData} handleBack={methods.handleBack} />;
   }
   if (popupType === PopupTypeEnum.navigationTree) {
     return <NavigationTree handlePrepare={methods.handlePrepare} mstrData={propsToPass} handlePopupErrors={methods.handlePopupErrors} />;
@@ -75,10 +78,23 @@ function proceedToImport(props) {
   Office.context.ui.messageParent(JSON.stringify(okObject));
 }
 
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
+  const popupState = state.popupReducer;
+  debugger;
+  const editedReport = {
+    reportId: popupState.id,
+    projectId: popupState.projectId,
+    reportName: popupState.name,
+    reportType: popupState.objectType,
+    reportSubtype: popupState.objectType,
+    selectedAttributes: popupState.body && popupState.body.requestedObjects.attributes.map((attr) => attr.id),
+    selectedMetrics: popupState.body && popupState.body.requestedObjects.metrics.map((mtrc) => mtrc.id),
+    selectedFilters: popupState.body && popupState.body.viewFilter.operands[1].elements.map((elem) => elem.id),
+  };
   return {
     ...state.navigationTree,
     authToken: state.sessionReducer.authToken,
+    editedReport,
   };
 };
 
