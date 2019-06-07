@@ -79,7 +79,7 @@ export class _FileHistoryContainer extends React.Component {
         disabled={loading}>Add Data</Button>
       <span className="refresh-button-container">
         <Popover placement="bottom" content='Refresh All Data' mouseEnterDelay={1}>
-          <Button className="refresh-all-btn" style={{float: 'right'}} onClick={() => this.refreshAllAction(reportArray, refreshReportsArray)} disabled={loading}>
+          <Button id="refresh-all-btn" className="refresh-all-btn" style={{float: 'right'}} onClick={() => this.refreshAllAction(reportArray, refreshReportsArray)} disabled={loading}>
             {!refreshingAll ? <MSTRIcon type='refresh' /> : <img width='12px' height='12px' src={loadingSpinner} alt='Report loading icon' />}
           </Button>
         </Popover>
