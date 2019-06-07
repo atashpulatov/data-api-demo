@@ -60,8 +60,7 @@ export class Popup extends Component {
       handleBack: this.handleBack,
       handlePopupErrors: this.handlePopupErrors,
     };
-    // i18next.changeLanguage(Office.context.displayLanguage);
-    i18next.changeLanguage('zh-CN');
+    i18next.changeLanguage(Office.context.displayLanguage);
     return (<Provider store={reduxStore}>
       <PopupViewSelector popupType={popupType} propsToPass={propsToPass} methods={methods} />
     </Provider>);
