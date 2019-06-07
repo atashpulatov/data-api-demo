@@ -10,19 +10,20 @@ export class AttributeSelector extends Component {
   }
 
   render() {
-    const {reportId, title, session, triggerUpdate, onTriggerUpdate, reportSubtype, resetTriggerUpdate, attributesSelectedChange} = this.props;
+    const {title, session,
+      triggerUpdate, onTriggerUpdate, mstrData,
+      resetTriggerUpdate, attributesSelectedChange} = this.props;
     return (
       <ErrorBoundary>
         <AttributeMetricFilter
           attributesSelectedChange={attributesSelectedChange}
-          key={reportId}
+          key={mstrData.reportId}
           title={title}
           session={session}
+          mstrData={mstrData}
           triggerUpdate={triggerUpdate}
           onTriggerUpdate={onTriggerUpdate}
           withDataPreview
-          reportId={reportId}
-          reportSubtype={reportSubtype}
           resetTriggerUpdate={resetTriggerUpdate}
           withFolderTree={false}
           openModal={this.props.openModal}

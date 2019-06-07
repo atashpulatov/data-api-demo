@@ -23,23 +23,29 @@ describe('AttributeSelectorWindow', () => {
     expect(selectorWrapper.get(0)).toBeDefined();
   });
 
-  it('should parse props correctly', () => {
+  it('should pass mstr data', () => {
     // given
     const mstrData = {
+      reportId: 'id',
       envUrl: 'url',
-      token: 'token',
+      authToken: 'token',
       projectId: 'proId',
+      reportSubtype: 'subtype',
     };
     // when
     const componentWrapper = shallow(<AttributeSelectorWindow
       mstrData={mstrData} />);
     // then
-    expect(componentWrapper.state('session').url)
-        .toEqual(mstrData.envUrl);
-    expect(componentWrapper.state('session').authToken)
-        .toEqual(mstrData.token);
-    expect(componentWrapper.state('session').projectId)
-        .toEqual(mstrData.projectId);
+    const selectorWrapped = componentWrapper.find(AttributeSelector).at(0);
+    expect(selectorWrapped.prop('mstrData')).toEqual(mstrData);
+    expect(selectorWrapped.prop('session')).toEqual({
+      USE_PROXY: false,
+      url: mstrData.envUrl,
+      authToken: mstrData.authToken,
+      projectId: mstrData.projectId,
+    });
+    expect(selectorWrapped.prop('reportId')).not.toBeDefined();
+    expect(selectorWrapped.prop('reportSubtype')).not.toBeDefined();
   });
 
   it('should call setState if handleOk is called', () => {
@@ -111,10 +117,10 @@ describe('AttributeSelectorWindow', () => {
     };
 
     const componentWrapper = mount(
-        <Provider store={reduxStore}>
-          <AttributeSelectorWindow
-            mstrData={mstrData} />
-        </Provider>);
+      <Provider store={reduxStore}>
+        <AttributeSelectorWindow
+          mstrData={mstrData} />
+      </Provider>);
     const spyMethod = jest.spyOn(attributeSelectorHelpers, 'officeMessageParent');
 
     const wrappedCancelButton = componentWrapper.find('Button #cancel');
@@ -137,9 +143,9 @@ describe('AttributeSelectorWindow', () => {
     const handleBack = jest.fn();
 
     const componentWrapper = mount(
-        <Provider store={reduxStore}><AttributeSelectorWindow
-          mstrData={mstrData} handleBack={handleBack} />
-        </Provider>);
+      <Provider store={reduxStore}><AttributeSelectorWindow
+        mstrData={mstrData} handleBack={handleBack} />
+      </Provider>);
 
     const wrappedCancelButton = componentWrapper.find('Button #back');
 

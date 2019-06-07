@@ -14,11 +14,10 @@ export class AttributeSelectorWindow extends Component {
       session: {
         USE_PROXY: false,
         url: this.props.mstrData.envUrl,
-        authToken: this.props.mstrData.token,
+        authToken: this.props.mstrData.authToken,
         projectId: this.props.mstrData.projectId,
       },
       openModal: false,
-      reportSubtype: this.props.mstrData.reportSubtype,
       triggerUpdate: false,
       loading: false,
       attributesSelected: false,
@@ -67,9 +66,8 @@ export class AttributeSelectorWindow extends Component {
           // TODO: logic for a title
           title={`Import ${this.props.mstrData.reportType} > ${this.props.mstrData.reportName}`}
           attributesSelectedChange={this.attributesBeingSelected}
+          mstrData={this.props.mstrData}
           session={this.state.session}
-          reportId={this.props.mstrData.reportId}
-          reportSubtype={this.state.reportSubtype}
           triggerUpdate={this.state.triggerUpdate}
           onTriggerUpdate={this.onTriggerUpdate}
           resetTriggerUpdate={this.resetTriggerUpdate}
