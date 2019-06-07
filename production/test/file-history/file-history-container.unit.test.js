@@ -320,7 +320,10 @@ describe('FileHistoryContainer', () => {
   });
   it('should call proper methods in secureData method', async () => {
     // given
-    const mockgetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => { });
+    const context = {sync: jest.fn()};
+    const mockgetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => {
+      return context;
+    });
     const mockDeleteBody = jest.spyOn(officeApiHelper, 'deleteObjectTableBody').mockImplementation(() => { });
     const refreshAllmock = jest.fn();
     const mockReportArray = createMockFilesArray();
@@ -342,6 +345,7 @@ describe('FileHistoryContainer', () => {
     // then
     await expect(mockgetContext).toBeCalled();
     expect(mockDeleteBody).toHaveBeenCalledTimes(6);
+    await expect(context.sync).toBeCalled();
     expect(mockToggle).toBeCalled();
   });
 });
