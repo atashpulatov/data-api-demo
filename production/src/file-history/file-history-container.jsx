@@ -18,7 +18,7 @@ export class _FileHistoryContainer extends React.Component {
   constructor(props) {
     super(props);
     if (officeStoreService.isFileSecured()) {
-      this.props.toggleStoreSecuredFlag(true);
+      props.toggleStoreSecuredFlag(true);
     }
     this.state = {
       allowRefreshAllClick: true,
@@ -46,8 +46,8 @@ export class _FileHistoryContainer extends React.Component {
       this.props.reportArray.forEach((report) => {
         officeApiHelper.deleteObjectTableBody(excelContext, report);
       });
-      this.toggleSecured(true);
       await excelContext.sync();
+      this.toggleSecured(true);
     } catch (error) {
       errorService.handleOfficeError(error);
     }
