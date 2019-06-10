@@ -354,6 +354,7 @@ const createMockFilesArray = () => {
   const mockArray = [];
   for (let i = 0; i < 6; i++) {
     mockArray.push({
+      refreshDate: new Date(),
       id: 'mockId_' + i,
       name: 'mockName_' + i,
       bindId: 'mockBindId_' + i,

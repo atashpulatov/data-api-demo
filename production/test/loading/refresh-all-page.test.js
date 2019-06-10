@@ -1,6 +1,6 @@
 import React from 'react';
 import {mount} from 'enzyme';
-import {RefreshAllPage} from '../../src/loading/refresh-all-page';
+import {_RefreshAllPage} from '../../src/loading/refresh-all-page';
 
 const refreshData = {
   data: [
@@ -32,7 +32,7 @@ describe('RefreshAllPage', () => {
       return JSON.stringify(refreshData);
     });
     // when
-    const wrappedComponent = mount(<RefreshAllPage />);
+    const wrappedComponent = mount(<_RefreshAllPage />);
     // then
     expect(wrappedComponent.instance()).toBeDefined();
     expect(mockStorageGetItem).toHaveBeenCalled();
@@ -66,7 +66,7 @@ describe('RefreshAllPage', () => {
       return JSON.stringify(refreshData);
     });
     // when
-    const wrappedComponent = mount(<RefreshAllPage />);
+    const wrappedComponent = mount(<_RefreshAllPage />);
     const wrappedResultsList = wrappedComponent.find('.result-container');
     const wrappedSuccessIcon = wrappedComponent.find('[type="refresh-success"]');
     const wrappedPopover = wrappedComponent.find('Popover');
@@ -88,7 +88,7 @@ describe('RefreshAllPage', () => {
       map[event] = cb;
     });
     // when
-    const wrappedComponent = mount(<RefreshAllPage />);
+    const wrappedComponent = mount(<_RefreshAllPage />);
     map.storage({newValue: 'refreshData'});
     // then
     expect(wrappedComponent.instance()).toBeDefined();
@@ -107,7 +107,7 @@ describe('RefreshAllPage', () => {
       }),
     });
     // when
-    const wrappedComponent = mount(<RefreshAllPage />);
+    const wrappedComponent = mount(<_RefreshAllPage />);
     jest.advanceTimersByTime(500);
     // then
     expect(wrappedComponent.instance()).toBeDefined();
@@ -121,7 +121,7 @@ describe('RefreshAllPage', () => {
     });
     const mockClearInterval = jest.spyOn(window, 'clearInterval');
     // when
-    const wrappedComponent = mount(<RefreshAllPage />);
+    const wrappedComponent = mount(<_RefreshAllPage />);
     // then
     expect(wrappedComponent.instance()).toBeDefined();
     wrappedComponent.unmount();

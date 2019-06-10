@@ -132,7 +132,7 @@ function _toggleSetLoadingStatus(action, state, status) {
   const newReportArray = [...state.reportArray];
   newReportArray[indexOfElement].isLoading = status;
   if (!status && !action.isError) {
-    const currentDate = new Date().toLocaleString();
+    const currentDate = new Date();
     newReportArray[indexOfElement].refreshDate = currentDate;
     officeStoreService.preserveReportValue(state.reportArray[indexOfElement].bindId, 'refreshDate', currentDate);
   }

@@ -13,6 +13,7 @@ import {toggleStoreSecuredFlag} from '../office/office-actions';
 import {errorService} from '../error/error-handler.js';
 
 import './file-history.css';
+import {withTranslation} from 'react-i18next';
 
 export class _FileHistoryContainer extends React.Component {
   constructor(props) {
@@ -64,7 +65,7 @@ export class _FileHistoryContainer extends React.Component {
   }
 
   render() {
-    const {reportArray = [], loading, refreshingAll, refreshReportsArray, isSecured} = this.props;
+    const {reportArray = [], loading, refreshingAll, refreshReportsArray, isSecured, t} = this.props;
     return (<React.Fragment >
       {// TODO: Lock screen will be prepared and styled later in separate US
         isSecured &&
@@ -76,11 +77,11 @@ export class _FileHistoryContainer extends React.Component {
         </div>
       }
       <Button id="add-data-btn-container" className="add-data-btn" onClick={() => this.props.addDataAction()}
-        disabled={loading}>Add Data</Button>
+        disabled={loading}>{t('Add Data')}</Button>
       <span className="refresh-button-container">
-        <Popover placement="bottom" content='Refresh All Data' mouseEnterDelay={1}>
+        <Popover placement="bottom" content={t('Refresh All Data')} mouseEnterDelay={1}>
           <Button id="refresh-all-btn" className="refresh-all-btn" style={{float: 'right'}} onClick={() => this.refreshAllAction(reportArray, refreshReportsArray)} disabled={loading}>
-            {!refreshingAll ? <MSTRIcon type='refresh' /> : <img width='12px' height='12px' src={loadingSpinner} alt='Report loading icon' />}
+            {!refreshingAll ? <MSTRIcon type='refresh' /> : <img width='12px' height='12px' src={loadingSpinner} alt={t('Report loading icon')} />}
           </Button>
         </Popover>
       </span>
@@ -106,6 +107,10 @@ export class _FileHistoryContainer extends React.Component {
   };
 }
 
+_FileHistoryContainer.defaultProps = {
+  t: (text) => text,
+};
+
 function mapStateToProps({officeReducer, historyReducer}) {
   return {
     reportArray: officeReducer.reportArray,
@@ -122,4 +127,4 @@ const mapDispatchToProps = {
 
 const WrappedFileHistoryContainer = fileHistoryContainerHOC(_FileHistoryContainer);
 
-export const FileHistoryContainer = connect(mapStateToProps, mapDispatchToProps)(WrappedFileHistoryContainer);
+export const FileHistoryContainer = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(WrappedFileHistoryContainer));
