@@ -107,7 +107,7 @@ describe('File history rename input', () => {
     const givenFileName = 'name';
     const givenId = 'id123';
     // when
-    const wrappedComponent = mount(<RenameInput fileName={givenFileName} bindingId={givenId} />);
+    const wrappedComponent = mount(<_RenameInput fileName={givenFileName} bindingId={givenId} />);
     // then
     expect(wrappedComponent.find(Popover)).toHaveLength(1);
   });
