@@ -39,7 +39,8 @@ span.file-icons {
 
 .ant-btn.refresh-all-btn,
 .ant-btn.refresh-all-btn:hover,
-.ant-btn.refresh-all-btn:focus {
+.ant-btn.refresh-all-btn:focus,
+.refresh-all-btn .ant-btn {
     float: right;
     background: #FFFFFF;
     box-shadow: 0 0;
