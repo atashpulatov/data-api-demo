@@ -1,6 +1,6 @@
 import React from 'react';
 import {shallow, mount} from 'enzyme';
-import RenameInput from '../../src/file-history/file-history-rename-input';
+import {_RenameInput} from '../../src/file-history/file-history-rename-input';
 import {officeStoreService} from '../../src/office/store/office-store-service';
 import {Popover} from 'antd';
 
@@ -14,7 +14,7 @@ describe('File history rename input', () => {
     const givenFileName = 'name';
     const bindingId = 'id123';
     // when
-    const wrappedComponent = shallow(<RenameInput fileName={givenFileName} bindingId={bindingId} />);
+    const wrappedComponent = shallow(<_RenameInput fileName={givenFileName} bindingId={bindingId} />);
 
     // then
     expect(wrappedComponent).toBeDefined();
@@ -27,7 +27,7 @@ describe('File history rename input', () => {
     const target = {value: givenFileName};
     const mockOfficeService = jest.spyOn(officeStoreService, 'preserveReportValue');
     // when
-    const wrappedComponent = shallow(<RenameInput fileName={givenFileName} bindingId={givenId} />);
+    const wrappedComponent = shallow(<_RenameInput fileName={givenFileName} bindingId={givenId} />);
     wrappedComponent.instance().renameReport({target});
     // then
     expect(mockOfficeService).toHaveBeenCalled();
@@ -37,7 +37,7 @@ describe('File history rename input', () => {
     const givenFileName = 'name';
     const givenId = 'id123';
     // when
-    const wrappedComponent = shallow(<RenameInput fileName={givenFileName} bindingId={givenId} />);
+    const wrappedComponent = shallow(<_RenameInput fileName={givenFileName} bindingId={givenId} />);
     wrappedComponent.find('div').first().simulate('dblclick', {});
     // then
     expect(wrappedComponent.state().editable).toBeTruthy();
@@ -47,7 +47,7 @@ describe('File history rename input', () => {
     const givenFileName = 'name';
     const givenId = 'id123';
     // when
-    const wrappedComponent = mount(<RenameInput fileName={givenFileName} bindingId={givenId} />);
+    const wrappedComponent = mount(<_RenameInput fileName={givenFileName} bindingId={givenId} />);
     wrappedComponent.simulate('contextmenu', {});
     // then
     expect(wrappedComponent.exists('.ant-dropdown.ant-dropdown-hidden')).toBeFalsy();
@@ -59,7 +59,7 @@ describe('File history rename input', () => {
     const givenId = 'id123';
     const event = {target: {value: newFileName}};
     // when
-    const wrappedComponent = shallow(<RenameInput fileName={givenFileName} bindingId={givenId} />);
+    const wrappedComponent = shallow(<_RenameInput fileName={givenFileName} bindingId={givenId} />);
     wrappedComponent.instance().handleChange(event);
     // then
     expect(wrappedComponent.state().value).toEqual(newFileName);
@@ -69,7 +69,7 @@ describe('File history rename input', () => {
     const givenFileName = 'name';
     const givenId = 'id123';
     // when
-    const wrappedComponent = shallow(<RenameInput fileName={givenFileName} bindingId={givenId} />);
+    const wrappedComponent = shallow(<_RenameInput fileName={givenFileName} bindingId={givenId} />);
     // then
     wrappedComponent.instance().setEditable(true);
     expect(wrappedComponent.state().editable).toEqual(true);
@@ -82,7 +82,7 @@ describe('File history rename input', () => {
     const givenId = 'id123';
     const event = {domEvent: {stopPropagation: jest.fn()}};
     // when
-    const wrappedComponent = shallow(<RenameInput fileName={givenFileName} bindingId={givenId} />);
+    const wrappedComponent = shallow(<_RenameInput fileName={givenFileName} bindingId={givenId} />);
     wrappedComponent.instance().enableEdit(event);
     // then
     expect(wrappedComponent.state().editable).toEqual(true);
@@ -95,7 +95,7 @@ describe('File history rename input', () => {
       return {select: jest.fn()};
     });
     // when
-    const wrappedComponent = shallow(<RenameInput fileName={givenFileName} bindingId={givenId} />);
+    const wrappedComponent = shallow(<_RenameInput fileName={givenFileName} bindingId={givenId} />);
     wrappedComponent.instance().selectTextAsync();
     // then
     setTimeout(() => {
@@ -107,7 +107,7 @@ describe('File history rename input', () => {
     const givenFileName = 'name';
     const givenId = 'id123';
     // when
-    const wrappedComponent = mount(<RenameInput fileName={givenFileName} bindingId={givenId} />);
+    const wrappedComponent = mount(<_RenameInput fileName={givenFileName} bindingId={givenId} />);
     // then
     expect(wrappedComponent.find(Popover)).toHaveLength(1);
   });
@@ -115,7 +115,7 @@ describe('File history rename input', () => {
     // given
     const givenFileName = 'name';
     const givenId = 'id123';
-    const wrappedComponent = shallow(<RenameInput fileName={givenFileName} bindingId={givenId} />);
+    const wrappedComponent = shallow(<_RenameInput fileName={givenFileName} bindingId={givenId} />);
     // when
     wrappedComponent.find('div').first().simulate('dblclick', {});
     // then

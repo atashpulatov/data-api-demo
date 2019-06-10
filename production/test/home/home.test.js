@@ -37,6 +37,7 @@ describe('Home', () => {
       loading: false,
       authToken: true,
       reportArray: false,
+      t: (text) => text,
     };
     const tempPromise = Promise.resolve();
     const sessionHelperSpy = jest.spyOn(sessionHelper, 'disableLoading');
