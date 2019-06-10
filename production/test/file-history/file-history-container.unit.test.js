@@ -7,6 +7,8 @@ import {sessionHelper} from '../../src/storage/session-helper';
 import {popupController} from '../../src/popup/popup-controller';
 import * as LoadedFilesConstans from '../../src/file-history/office-loaded-file.jsx';
 import {Popover} from 'antd';
+import {officeStoreService} from '../../src/office/store/office-store-service';
+import {officeApiHelper} from '../../src/office/office-api-helper';
 
 describe('FileHistoryContainer', () => {
   it('should render component when we are insinde project', () => {
@@ -159,6 +161,192 @@ describe('FileHistoryContainer', () => {
         </Provider>);
     // then
     expect(wrappedComponent.find(Popover)).toHaveLength(1);
+  });
+
+  it('should run secureData when Secure button is clicked', () => {
+    // given
+    const refreshAllmock = jest.fn();
+    const mockReportArray = createMockFilesArray();
+    const mockRefreshReportArray = jest.fn();
+    const mockToggleSecured = jest.fn();
+    const wrappedComponent = mount(
+        < _FileHistoryContainer
+          project={'testProject'}
+          refreshingAll={refreshAllmock}
+          reportArray={mockReportArray}
+          isSecured={true}
+          refreshReportsArray={mockRefreshReportArray}
+          toggleStoreSecuredFlag={mockToggleSecured}/>);
+    const mockSecure = jest.spyOn(wrappedComponent.instance(), 'secureData');
+    wrappedComponent.instance().forceUpdate();
+    const secureButton = wrappedComponent.find('Button .secure-btn');
+    // when
+    secureButton.simulate('click');
+    // then
+    expect(mockSecure).toBeCalled();
+  });
+
+  it('should NOT render lock screen if isSecured flag is set to false', () => {
+    // given
+    const refreshAllmock = jest.fn();
+    const mockReportArray = createMockFilesArray();
+    const mockRefreshReportArray = jest.fn();
+    const mockToggleSecured = jest.fn();
+    const wrappedComponent = mount(
+        < _FileHistoryContainer
+          project={'testProject'}
+          refreshingAll={refreshAllmock}
+          reportArray={mockReportArray}
+          isSecured={false}
+          refreshReportsArray={mockRefreshReportArray}
+          toggleStoreSecuredFlag={mockToggleSecured}
+        />);
+    // when
+    const secureContainer = wrappedComponent.find('.secured-screen-container');
+    // then
+    expect(secureContainer.length).toBe(0);
+  });
+
+  it('should render lock screen if isSecured flag is set to false', () => {
+    // given
+    const refreshAllmock = jest.fn();
+    const mockReportArray = createMockFilesArray();
+    const mockRefreshReportArray = jest.fn();
+    const mockToggleSecured = jest.fn();
+    const wrappedComponent = mount(
+        < _FileHistoryContainer
+          project={'testProject'}
+          refreshingAll={refreshAllmock}
+          reportArray={mockReportArray}
+          isSecured={true}
+          refreshReportsArray={mockRefreshReportArray}
+          toggleStoreSecuredFlag={mockToggleSecured}
+        />);
+    // when
+    const secureContainer = wrappedComponent.find('.secured-screen-container');
+    // then
+    expect(secureContainer.length).toBe(1);
+  });
+
+  it('should call showData method when show data button is clicked', () => {
+    // given
+    const refreshAllmock = jest.fn();
+    const mockReportArray = createMockFilesArray();
+    const mockRefreshReportArray = jest.fn();
+    const mockToggleSecured = jest.fn();
+    const wrappedComponent = mount(
+        < _FileHistoryContainer
+          project={'testProject'}
+          refreshingAll={refreshAllmock}
+          reportArray={mockReportArray}
+          isSecured={true}
+          refreshReportsArray={mockRefreshReportArray}
+          toggleStoreSecuredFlag={mockToggleSecured}
+        />);
+    const mockShowData = jest.spyOn(wrappedComponent.instance(), 'showData');
+    wrappedComponent.instance().forceUpdate();
+    const secureDataButton = wrappedComponent.find('Button .show-data-btn');
+    // when
+    secureDataButton.simulate('click');
+    // then
+    expect(mockShowData).toBeCalled();
+  });
+  it('should call proper functions in showData method', () => {
+    // given
+    const refreshAllmock = jest.fn();
+    const mockReportArray = createMockFilesArray();
+    const mockRefreshReportArray = jest.fn();
+    const mockToggleSecured = jest.fn();
+    const wrappedComponent = mount(
+        < _FileHistoryContainer
+          project={'testProject'}
+          refreshingAll={refreshAllmock}
+          reportArray={mockReportArray}
+          isSecured={true}
+          refreshReportsArray={mockRefreshReportArray}
+          toggleStoreSecuredFlag={mockToggleSecured}
+        />);
+    const mockRefreshAll = jest.spyOn(wrappedComponent.instance(), 'refreshAllAction');
+    const mockToggle = jest.spyOn(wrappedComponent.instance(), 'toggleSecured');
+    wrappedComponent.instance().forceUpdate();
+    // when
+    wrappedComponent.instance().showData();
+    // then
+    expect(mockRefreshAll).toBeCalled();
+    expect(mockToggle).toBeCalled();
+  });
+  it('should call toggle secure flags in office settings and office store', () => {
+    // given
+    const refreshAllmock = jest.fn();
+    const mockReportArray = createMockFilesArray();
+    const mockRefreshReportArray = jest.fn();
+    const mockToggleSecured = jest.fn();
+    const wrappedComponent = mount(
+        < _FileHistoryContainer
+          project={'testProject'}
+          refreshingAll={refreshAllmock}
+          reportArray={mockReportArray}
+          isSecured={true}
+          refreshReportsArray={mockRefreshReportArray}
+          toggleStoreSecuredFlag={mockToggleSecured}
+        />);
+    const mockToggleStoreFlag = jest.spyOn(officeStoreService, 'toggleFileSecuredFlag');
+    wrappedComponent.instance().forceUpdate();
+    // when
+    wrappedComponent.instance().toggleSecured();
+    // then
+    expect(mockToggleSecured).toBeCalled();
+    expect(mockToggleStoreFlag).toBeCalled();
+  });
+  it('should call toggle store secure flag in constructor if office flag is set to true', () => {
+    // given
+    const mockToggleStoreFlag = jest.spyOn(officeStoreService, 'isFileSecured').mockImplementation(() => true);
+    const refreshAllmock = jest.fn();
+    const mockReportArray = createMockFilesArray();
+    const mockRefreshReportArray = jest.fn();
+    const mockToggleSecured = jest.fn();
+    // when
+    const wrappedComponent = mount(
+        < _FileHistoryContainer
+          project={'testProject'}
+          refreshingAll={refreshAllmock}
+          reportArray={mockReportArray}
+          isSecured={true}
+          refreshReportsArray={mockRefreshReportArray}
+          toggleStoreSecuredFlag={mockToggleSecured}
+        />);
+    // then
+    expect(mockToggleSecured).toBeCalledWith(true);
+  });
+  it('should call proper methods in secureData method', async () => {
+    // given
+    const context = {sync: jest.fn()};
+    const mockgetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => {
+      return context;
+    });
+    const mockDeleteBody = jest.spyOn(officeApiHelper, 'deleteObjectTableBody').mockImplementation(() => { });
+    const refreshAllmock = jest.fn();
+    const mockReportArray = createMockFilesArray();
+    const mockRefreshReportArray = jest.fn();
+    const mockToggleSecured = jest.fn();
+    const wrappedComponent = mount(
+        < _FileHistoryContainer
+          project={'testProject'}
+          refreshingAll={refreshAllmock}
+          reportArray={mockReportArray}
+          isSecured={true}
+          refreshReportsArray={mockRefreshReportArray}
+          toggleStoreSecuredFlag={mockToggleSecured}
+        />);
+    const mockToggle = jest.spyOn(wrappedComponent.instance(), 'toggleSecured');
+    wrappedComponent.instance().forceUpdate();
+    // when
+    wrappedComponent.instance().secureData();
+    // then
+    await expect(mockgetContext).toBeCalled();
+    expect(mockDeleteBody).toHaveBeenCalledTimes(6);
+    await expect(context.sync).toBeCalled();
+    expect(mockToggle).toBeCalled();
   });
 });
 

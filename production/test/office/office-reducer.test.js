@@ -395,4 +395,17 @@ describe('officeReducer', () => {
     // then
     expect(newState).toThrowError('Missing reportBindId');
   });
+
+  it('should return new proper state in case of toggleSecuredFlag action', () => {
+    // given
+    const oldState = {isSecured: false};
+    const action = {
+      type: officeProperties.actions.toggleSecuredFlag,
+      isSecured: true,
+    };
+    // when
+    const newState = officeReducer(oldState, action);
+    // then
+    expect(newState).toEqual({isSecured: true});
+  });
 });
