@@ -1,8 +1,9 @@
 import React from 'react';
 import {Input, Dropdown, Menu, Popover} from 'antd';
 import {officeStoreService} from '../office/store/office-store-service';
+import {withTranslation} from 'react-i18next';
 
-export default class RenameInput extends React.Component {
+export class _RenameInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -10,6 +11,10 @@ export default class RenameInput extends React.Component {
       value: props.fileName,
     };
   }
+
+  static defaultProps = {
+    t: (text) => text,
+  };
 
   renameReport = /* istanbul ignore next */ ({target}) => {
     const {bindingId, fileName} = this.props;
@@ -69,12 +74,12 @@ export default class RenameInput extends React.Component {
 
   render() {
     const {editable, value} = this.state;
-    const {fileName, bindingId} = this.props;
+    const {fileName, bindingId, t} = this.props;
     const nameContainer = this.getNameContainer(editable, bindingId, fileName, value);
     const menu = (
       <Menu>
-        <Menu.Item key="copy" onClick={this.copyValue}>Copy</Menu.Item>
-        <Menu.Item key="rename" onClick={this.enableEdit}>Rename</Menu.Item>
+        <Menu.Item key="copy" onClick={this.copyValue}>{t('Copy')}</Menu.Item>
+        <Menu.Item key="rename" onClick={this.enableEdit}>{t('Rename')}</Menu.Item>
       </Menu>);
     return (
       <Popover overlayClassName={`${editable ? 'hidden' : ''}`} placement="bottomLeft" content={value} mouseEnterDelay={1}>
@@ -87,3 +92,5 @@ export default class RenameInput extends React.Component {
     );
   }
 }
+
+export default withTranslation('common')(_RenameInput);
