@@ -28,7 +28,7 @@ describe('AttributeSelectorWindow', () => {
     const mstrData = {
       reportId: 'id',
       envUrl: 'url',
-      authToken: 'token',
+      token: 'token',
       projectId: 'proId',
       reportSubtype: 'subtype',
     };
@@ -41,7 +41,7 @@ describe('AttributeSelectorWindow', () => {
     expect(selectorWrapped.prop('session')).toEqual({
       USE_PROXY: false,
       url: mstrData.envUrl,
-      authToken: mstrData.authToken,
+      authToken: mstrData.token,
       projectId: mstrData.projectId,
     });
     expect(selectorWrapped.prop('reportId')).not.toBeDefined();

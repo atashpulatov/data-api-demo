@@ -14,7 +14,7 @@ export class AttributeSelectorWindow extends Component {
       session: {
         USE_PROXY: false,
         url: this.props.mstrData.envUrl,
-        authToken: this.props.mstrData.authToken,
+        authToken: this.props.mstrData.token,
         projectId: this.props.mstrData.projectId,
       },
       openModal: false,

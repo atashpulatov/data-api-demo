@@ -239,7 +239,7 @@ describe('PopupViewSelector', () => {
         id: 'reportId',
         projectId: 'projectId',
         name: 'reportName',
-        objectType: 'reportType',
+        objectType: 'report',
         body: reportBody,
       };
       const reduxState = {
@@ -248,14 +248,14 @@ describe('PopupViewSelector', () => {
           authToken: 'token',
         },
         popupReducer: {
-          ...reportInRedux,
+          editedReport: reportInRedux,
         },
       };
       // when
       const {editedReport} = mapStateToProps(reduxState);
       // then
       expect(editedReport.projectId).toEqual(reportInRedux.projectId);
-      expect(editedReport.reportSubtype).toEqual(reportInRedux.objectType);
+      expect(editedReport.reportSubtype).toEqual(768);
       expect(editedReport.reportName).toEqual(reportInRedux.name);
       expect(editedReport.reportType).toEqual(reportInRedux.objectType);
       expect(editedReport.reportId).toEqual(reportInRedux.id);

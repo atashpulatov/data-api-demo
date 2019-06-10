@@ -79,14 +79,15 @@ function proceedToImport(props) {
 }
 
 export function mapStateToProps(state) {
-  const popupState = state.popupReducer;
-  debugger;
-  const editedReport = {
+  const popupState = state.popupReducer.editedReport;
+  const editedReport = !!popupState && {
     reportId: popupState.id,
     projectId: popupState.projectId,
     reportName: popupState.name,
     reportType: popupState.objectType,
-    reportSubtype: popupState.objectType,
+    reportSubtype: popupState.objectType === 'report'
+      ? 768
+      : null,
     selectedAttributes: popupState.body && popupState.body.requestedObjects.attributes.map((attr) => attr.id),
     selectedMetrics: popupState.body && popupState.body.requestedObjects.metrics.map((mtrc) => mtrc.id),
     selectedFilters: popupState.body && popupState.body.viewFilter.operands[1].elements.map((elem) => elem.id),
