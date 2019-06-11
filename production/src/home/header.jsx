@@ -7,7 +7,10 @@ import {connect} from 'react-redux';
 import {userRestService} from './user-rest-service';
 import {homeHelper} from './home-helper';
 import {withTranslation} from 'react-i18next';
-
+import {officeStoreService} from '../office/store/office-store-service';
+import {officeApiHelper} from '../office/office-api-helper';
+import {toggleStoreSecuredFlag} from '../office/office-actions';
+import {MSTRIcon} from 'mstr-react-library';
 export class _Header extends Component {
   componentDidMount = async () => {
     let userData = {};
@@ -22,8 +25,26 @@ export class _Header extends Component {
     !this.props.userFullName && sessionHelper.saveUserInfo(userData);
   };
 
+  secureData = async () => {
+    try {
+      const excelContext = await officeApiHelper.getExcelContext();
+      this.props.reportArray.forEach((report) => {
+        officeApiHelper.deleteObjectTableBody(excelContext, report);
+      });
+      await excelContext.sync();
+      this.toggleSecured(true);
+    } catch (error) {
+      errorService.handleOfficeError(error);
+    }
+  }
+
+  toggleSecured = (isSecured) => {
+    officeStoreService.toggleFileSecuredFlag(isSecured);
+    this.props.toggleStoreSecuredFlag(isSecured);
+  }
+
   render() {
-    const {userFullName, userInitials, loading, t} = this.props;
+    const {userFullName, userInitials, loading, isSecured, t} = this.props;
     return (
       <header id='app-header'>
         <span id='profileImage' className={userFullName && 'got-user-data'}>
@@ -33,7 +54,12 @@ export class _Header extends Component {
             /* TODO: When rest api returns profileImage use it as source*/}
         </span>
         <span className={` ${userFullName && 'got-user-data'} header-name`}>{userFullName}</span>
-        <Button id='logOut' onClick={logout} size='small' disabled={loading}>{t('Log out')}</Button>
+        <Button className="secure-btn" disabled={isSecured} size='small' style={{float: 'right'}} onClick={this.secureData}>
+          {isSecured ? <MSTRIcon type='secure-access-inactive' /> : <MSTRIcon type='secure-access-active' />}
+        </Button>
+        <Button id='logOut' onClick={logout} size='small' disabled={loading}>
+          {t('Log out')}
+        </Button>
       </header >
     );
   };
@@ -45,10 +71,15 @@ _Header.defaultProps = {
 
 function mapStateToProps(state) {
   const {userFullName, userInitials, envUrl, authToken} = state.sessionReducer;
-  return {userFullName, userInitials, envUrl, authToken};
+  const {reportArray, isSecured} = state.officeReducer;
+  return {userFullName, userInitials, envUrl, authToken, reportArray, isSecured};
 };
 
-export const Header = connect(mapStateToProps)(withTranslation('common')(_Header));
+const mapDispatchToProps = {
+  toggleStoreSecuredFlag,
+};
+
+export const Header = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_Header));
 
 async function logout() {
   try {

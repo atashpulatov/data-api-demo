@@ -11,6 +11,7 @@ import {fileHistoryContainerHOC} from './file-history-container-HOC.jsx';
 import {officeStoreService} from '../office/store/office-store-service';
 import {toggleStoreSecuredFlag} from '../office/office-actions';
 import {errorService} from '../error/error-handler.js';
+import restrictedArt from './assets/art_restricted_access_blue.svg';
 
 import './file-history.css';
 import {withTranslation} from 'react-i18next';
@@ -67,12 +68,14 @@ export class _FileHistoryContainer extends React.Component {
   render() {
     const {reportArray = [], loading, refreshingAll, refreshReportsArray, isSecured, t} = this.props;
     return (<React.Fragment >
-      {// TODO: Lock screen will be prepared and styled later in separate US
+      {
         isSecured &&
         <div className="secured-screen-container">
           <div>
-            <div>File is secured</div>
-            <Button className="show-data-btn" onClick={() => this.showData(reportArray, refreshReportsArray)}>Show Data</Button>
+            <img width='189px' height='108px' src={restrictedArt} />
+            <div className="secured-header" >Restricted Access!</div>
+            <p className="secured-info">MicroStrategy data has been cleared from the workbook to protect sensitive information. Click ‘View Data’ to import it again.</p>
+            <Button type="primary" className="show-data-btn" onClick={() => this.showData(reportArray, refreshReportsArray)}>View Data</Button>
           </div>
         </div>
       }
@@ -84,12 +87,6 @@ export class _FileHistoryContainer extends React.Component {
             {!refreshingAll ? <MSTRIcon type='refresh' /> : <img width='12px' height='12px' src={loadingSpinner} alt={t('Report loading icon')} />}
           </Button>
         </Popover>
-      </span>
-      {/* TODO: a proper button will be added in separate US */}
-      <span>
-        <Button className="secure-btn" style={{float: 'right'}} onClick={this.secureData}>
-          Secure
-        </Button>
       </span>
       <div role="list" className='tables-container'>
         {reportArray.map((report) => <OfficeLoadedFile

@@ -83,7 +83,7 @@ hr {
     vertical-align: middle;
     flex: auto 0 0;
     align-self: center;
-    order: 3;
+    order: 4;
 }
 
 #app-main {
@@ -199,4 +199,35 @@ hr {
     width: 70%;
     transform: translate(-50%, -50%);
     border: 1px solid #ccc;
+}
+
+#app-header .secure-btn,
+#app-header .settings-btn {
+    margin-left: auto;
+    vertical-align: middle;
+    flex: auto 0 0;
+    align-self: center;
+    order: 3;
+    background: #FFFFFF;
+    box-shadow: 0 0;
+    border: none;
+    padding: 0 0;
+}
+
+#app-header .secure-btn img {
+    height: 18px;
+    width: 18px;
+}
+
+#app-header .settings-btn img  {
+    height: 20px;
+    width: 20px;
+}
+
+#app-header .settings-btn {
+    margin-left: 0;
+}
+
+#app-header .secure-btn {
+    position: relative;
 }
