@@ -87,6 +87,25 @@ class OfficeStoreService {
     }
     return Office.context.document.settings;
   }
+
+  toggleFileSecuredFlag = (value) => {
+    try {
+      const settings = this.getOfficeSettings();
+      settings.set(officeProperties.isSecured, value);
+      settings.saveAsync();
+    } catch (error) {
+      errorService.handleOfficeError(error);
+    }
+  }
+
+  isFileSecured = () => {
+    try {
+      const settings = this.getOfficeSettings();
+      return settings.get(officeProperties.isSecured);
+    } catch (error) {
+      errorService.handleOfficeError(error);
+    }
+  }
 }
 
 export const officeStoreService = new OfficeStoreService();
