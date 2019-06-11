@@ -84,7 +84,9 @@ function translate() {
       cookiedAreNeededHeader.innerText = noCookiesTranslations[locale];
       cookiedAcceptButton.innerText = enableButtonTranslations[locale];
     };
-  } catch (e) {console.log(e)}
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 function acceptCookies() {
