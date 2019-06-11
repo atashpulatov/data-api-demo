@@ -84,7 +84,7 @@
                 if (!!dontHaveAccessTranslations[locale]) {
                     var tryAgainSpan = document.getElementById('accept-cookies-btn');
                     var dontHaveAccessHeader = document.getElementById('dont-have-access-header');
-                    dontHaveAccessHeader.innerHTML = dontHaveAccessTranslations[locale];
+                    dontHaveAccessHeader.innerText = dontHaveAccessTranslations[locale];
                     tryAgainSpan.innerText = tryAgainTranslations[locale];
                 };
             } catch (e) {console.log(e)}
