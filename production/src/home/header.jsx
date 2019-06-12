@@ -44,7 +44,7 @@ export class _Header extends Component {
   }
 
   render() {
-    const {userFullName, userInitials, loading, isSecured, t} = this.props;
+    const {userFullName, userInitials, loading, isSecured, reportArray, t} = this.props;
     return (
       <header id='app-header'>
         <span id='profileImage' className={userFullName && 'got-user-data'}>
@@ -55,7 +55,8 @@ export class _Header extends Component {
         </span>
         <span className={` ${userFullName && 'got-user-data'} header-name`}>{userFullName}</span>
         <Button className="secure-btn" disabled={isSecured} size='small' style={{float: 'right'}} onClick={this.secureData}>
-          {isSecured ? <MSTRIcon type='secure-access-inactive' /> : <MSTRIcon type='secure-access-active' />}
+          {(reportArray && reportArray.length > 0) ? (isSecured ? <MSTRIcon type='secure-access-inactive' /> : <MSTRIcon type='secure-access-active' />) : ''}
+          {/* {isSecured ? <MSTRIcon type='secure-access-inactive' /> : <MSTRIcon type='secure-access-active' />} */}
         </Button>
         <Button id='logOut' onClick={logout} size='small' disabled={loading}>
           {t('Log out')}

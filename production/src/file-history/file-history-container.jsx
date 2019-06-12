@@ -55,8 +55,9 @@ export class _FileHistoryContainer extends React.Component {
     }
   }
 
-  showData = (reportArray, refreshAll) => {
-    this.refreshAllAction(reportArray, refreshAll);
+  showData = () => {
+    const {reportArray, refreshReportsArray} = this.props;
+    this.refreshAllAction(reportArray, refreshReportsArray);
     this.toggleSecured(false);
   }
 
@@ -71,12 +72,10 @@ export class _FileHistoryContainer extends React.Component {
       {
         isSecured &&
         <div className="secured-screen-container">
-          <div>
-            <img width='189px' height='108px' src={restrictedArt} />
-            <div className="secured-header" >Restricted Access!</div>
-            <p className="secured-info">MicroStrategy data has been cleared from the workbook to protect sensitive information. Click ‘View Data’ to import it again.</p>
-            <Button type="primary" className="show-data-btn" onClick={() => this.showData(reportArray, refreshReportsArray)}>View Data</Button>
-          </div>
+          <img src={restrictedArt} />
+          <div className="secured-header" >Restricted Access!</div>
+          <p className="secured-info">MicroStrategy data has been cleared from the workbook to protect sensitive information. Click ‘View Data’ to import it again.</p>
+          <Button type="primary" className="show-data-btn" onClick={this.showData}>View Data</Button>
         </div>
       }
       <Button id="add-data-btn-container" className="add-data-btn" onClick={() => this.props.addDataAction()}
