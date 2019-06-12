@@ -79,7 +79,7 @@ hr {
 #logOut {
     color: #888;
     font-size: 12px;
-    margin-left: auto;
+    margin-left: 10px;
     vertical-align: middle;
     flex: auto 0 0;
     align-self: center;
