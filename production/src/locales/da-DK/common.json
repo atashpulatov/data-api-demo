@@ -86,7 +86,7 @@
   "Unable to format table.": "Tabellen kan ikke formateres.",
   "Data loaded successfully": "Data indlæst",
   "Data is not relevant anymore. You can delete it from the list": "Data er ikke længere relevante Du kan slette dem på listen",
-  "Excel returned error": "Excel returnerede en fejl:",
+  "Excel returned error": "Excel returnerede en fejl",
   "Missing reportArray": "Manglende rapportmatrix",
   "Missing reportBindId": "Manglende rapportbind-id",
   "Missing report": "Manglende rapport",
@@ -103,5 +103,13 @@
   "Do you want to delete imported data from the sheet?": "Vil du slette importerede data fra regnearket?",
   "Data deleted successfully.": "Dataene blev slettet.",
   "Cannot load preview data": "Kan ikke indlæse dataeksempel",
-  "No data selected": "Der er ikke valgt nogen data"
+  "No data selected": "Der er ikke valgt nogen data",
+  "Report could not be refreshed": "{{report}} kunne ikke opdateres",
+  "Objects with prompts cannot be refreshed in this version of MicroStrategy for Office.": "Objekter med prompter kan ikke opdateres i denne version af MicroStrategy til Office",
+  "This object cannot be imported. Objects with cross tabs, totals, or subtotals are not supported in this version of MicroStrategy for Office.": "Dette objekt kan ikke importeres. Objekter med krydstabeller, totaler eller subtotaler understøttes ikke i denne version af MicroStrategy til Office",
+  "This object cannot be imported. Either you do not have necessary permissions to view it, or it is empty.": "Dette objekt kan ikke importeres. Enten har du ikke de nødvendige tilladelser til at se det, eller det er tomt",
+  "No data returned for this view. This might be because the applied prompt excludes all data.": "Der blev ikke returneret data for denne visning. Dette kan skyldes, at den anvendte prompt udelukker alle data",
+  "The required data range in the worksheet is not empty": "Det nødvendige dataområde i regnearket er ikke tomt",
+  "Copy": "Kopiér",
+  "Rename": "Omdøb"
 }

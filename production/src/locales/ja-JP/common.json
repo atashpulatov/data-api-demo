@@ -87,7 +87,7 @@
   "Unable to format table.": "テーブルの書式設定ができません。",
   "Data loaded successfully": "データを正常にロードしました。",
   "Data is not relevant anymore. You can delete it from the list": "データは無関係になりました。リストから削除しても構いません。",
-  "Excel returned error": "Excel がエラーを返しています：",
+  "Excel returned error": "Excel がエラーを返しています",
   "Missing reportArray": "reportArray が欠落",
   "Missing reportBindId": "reportBindId が欠落",
   "Missing report": "report が欠落",
@@ -104,5 +104,13 @@
   "Do you want to delete imported data from the sheet?": "インポートしたデータをシートから削除しますか?",
   "Data deleted successfully.": "データを正常に削除しました。",
   "Cannot load preview data": "プレビュー データをロードできません",
-  "No data selected": "データが選択されていません"
+  "No data selected": "データが選択されていません",
+  "Report could not be refreshed": "{{report}} を更新できませんでした",
+  "Objects with prompts cannot be refreshed in this version of MicroStrategy for Office.": "プロンプトがあるオブジェクトは、この版の MicroStrategy for Office では更新できません",
+  "This object cannot be imported. Objects with cross tabs, totals, or subtotals are not supported in this version of MicroStrategy for Office.": "このオブジェクトはインポートできません。クロス集計表、合計、小計があるオブジェクトは、この版の MicroStrategy for Office ではサポートされていません",
+  "This object cannot be imported. Either you do not have necessary permissions to view it, or it is empty.": "このオブジェクトはインポートできません。表示に必要な権限がないか、または中身が空です",
+  "No data returned for this view. This might be because the applied prompt excludes all data.": "このビューに返されるデータはありません。原因として、プロンプトを適用した結果、データがすべて除外されたことが考えられます",
+  "The required data range in the worksheet is not empty": "ワークシート中、必要なデータの範囲が空ではありません",
+  "Copy": "コピー",
+  "Rename": "名前の変更"
 }

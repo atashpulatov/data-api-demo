@@ -87,7 +87,7 @@
   "Unable to format table.": "Não foi possível formatar a tabela.",
   "Data loaded successfully": "Dados carregados com êxito",
   "Data is not relevant anymore. You can delete it from the list": "Os dados não são mais relevantes. Você pode excluí-los da lista",
-  "Excel returned error": "O Excel retornou um erro:",
+  "Excel returned error": "O Excel retornou um erro",
   "Missing reportArray": "reportArray ausente",
   "Missing reportBindId": "reportBindId ausente",
   "Missing report": "report ausente",
@@ -104,5 +104,13 @@
   "Do you want to delete imported data from the sheet?": "Você deseja excluir dados importados da planilha?",
   "Data deleted successfully.": "Dados excluídos com êxito.",
   "Cannot load preview data": "Não é possível carregar dados de visualização",
-  "No data selected": "Nenhum dado selecionado"
+  "No data selected": "Nenhum dado selecionado",
+  "Report could not be refreshed": "Não foi possível atualizar {{report}}",
+  "Objects with prompts cannot be refreshed in this version of MicroStrategy for Office.": "Não é possível atualizar os objetos com prompts nesta versão do MicroStrategy for Office",
+  "This object cannot be imported. Objects with cross tabs, totals, or subtotals are not supported in this version of MicroStrategy for Office.": "Não é possível importar este objeto. Esta versão do MicroStrategy for Office não tem suporte para objetos com tabelas cruzadas, totais ou subtotais",
+  "This object cannot be imported. Either you do not have necessary permissions to view it, or it is empty.": "Não é possível importar este objeto. Você não tem as permissões necessárias para visualizá-lo ou ele está vazio",
+  "No data returned for this view. This might be because the applied prompt excludes all data.": "Nenhum dado devolvido para essa exibição. Isso pode ser porque o prompt aplicado exclui todos os dados",
+  "The required data range in the worksheet is not empty": "O intervalo de dados obrigatório na planilha está vazio",
+  "Copy": "Copiar",
+  "Rename": "Renomear"
 }

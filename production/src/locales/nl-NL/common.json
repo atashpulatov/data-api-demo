@@ -87,7 +87,7 @@
   "Unable to format table.": "Kan tabel niet opmaken.",
   "Data loaded successfully": "Gegevens zijn geladen",
   "Data is not relevant anymore. You can delete it from the list": "Gegevens zijn niet langer relevant. U kunt deze verwijderen uit de lijst",
-  "Excel returned error": "Excel heeft een fout gegeven:",
+  "Excel returned error": "Excel heeft een fout gegeven",
   "Missing reportArray": "Ontbrekende reportArray",
   "Missing reportBindId": "Ontbrekende reportBindId",
   "Missing report": "Ontbrekend rapport",
@@ -104,5 +104,13 @@
   "Do you want to delete imported data from the sheet?": "Wilt u geïmporteerde gegevens verwijderen uit het blad?",
   "Data deleted successfully.": "Gegevens zijn verwijderd.",
   "Cannot load preview data": "Gegevens van het weergavevoorbeeld kunnen niet geladen worden",
-  "No data selected": "Geen gegevens geselecteerd"
+  "No data selected": "Geen gegevens geselecteerd",
+  "Report could not be refreshed": "{{report}} kon niet vernieuwd worden",
+  "Objects with prompts cannot be refreshed in this version of MicroStrategy for Office.": "Objecten met prompts kunnen niet vernieuwd worden in deze versie van MicroStrategy for Office",
+  "This object cannot be imported. Objects with cross tabs, totals, or subtotals are not supported in this version of MicroStrategy for Office.": "Dit object kan niet geïmporteerd worden. Objecten met kruistabellen, totalen of subtotalen worden niet ondersteund in deze versie van MicroStrategy for Office",
+  "This object cannot be imported. Either you do not have necessary permissions to view it, or it is empty.": "Dit object kan niet geïmporteerd worden. U hebt niet de vereiste toestemming om het te bekijken of het is leeg",
+  "No data returned for this view. This might be because the applied prompt excludes all data.": "Geen gegevens geretourneerd voor deze weergave. Dit kan zijn omdat de toegepaste prompt alle gegevens uitsluit",
+  "The required data range in the worksheet is not empty": "Het vereiste gegevensbereik in de werkmap is niet leeg",
+  "Copy": "Kopiëren",
+  "Rename": "Naam wijzigen"
 }
