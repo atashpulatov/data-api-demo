@@ -42,7 +42,6 @@ export class _Header extends Component {
     const {reportArray, isSecured, t} = this.props;
     if (reportArray && reportArray.length > 0) {
       return (
-        // TODO: get tooltip text from MM
         <Popover placement="bottom" content={t('Secure data')} mouseEnterDelay={1}>
           <Button className="secure-btn" disabled={isSecured} size='small' onClick={this.secureData}>
             {isSecured
@@ -67,7 +66,7 @@ export class _Header extends Component {
           </span>
           <span className={` ${userFullName && 'got-user-data'} header-name`}>{userFullName}</span>
         </div>
-        <div>
+        <div className="header-buttons">
           {this.getSecureButton()}
           <Button id='logOut' onClick={logout} size='small' disabled={loading}>
             {t('Log out')}
