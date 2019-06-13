@@ -228,10 +228,13 @@ describe('PopupViewSelector', () => {
 
   describe('PopupViewConnected', () => {
     const attributeId = 'ACF673EC11E9554D08E20080EF651EBC';
-    const metricId = 'ACF6987211E9554D08EE0080EF651EBC';
-    const filterValue = 'ACF66B9A11E9554D08E20080EF651EBC:North America';
+    const metricId = 'ACF6AF8811E9554D08EE0080EF651EBC';
+    const filterValue = {'ACF66B9A11E9554D08E20080EF651EBC': [
+      'ACF66B9A11E9554D08E20080EF651EBC:Europe',
+      'ACF66B9A11E9554D08E20080EF651EBC:North America',
+    ]};
     // eslint-disable-next-line max-len
-    const reportBody = {'requestedObjects': {'attributes': [{'id': attributeId}], 'metrics': [{'id': metricId}]}, 'viewFilter': {'operator': 'In', 'operands': [{'type': 'attribute', 'id': 'ACF66B9A11E9554D08E20080EF651EBC'}, {'type': 'elements', 'elements': [{'id': filterValue}]}]}};
+    const reportBody = {'requestedObjects': {'attributes': [{'id': attributeId}], 'metrics': [{'id': metricId}]}, 'viewFilter': {'operator': 'In', 'operands': [{'type': 'attribute', 'id': 'ACF66B9A11E9554D08E20080EF651EBC'}, {'type': 'elements', 'elements': [{'id': 'ACF66B9A11E9554D08E20080EF651EBC:Europe'}, {'id': 'ACF66B9A11E9554D08E20080EF651EBC:North America'}]}]}};
 
     it('should parse edited report properties', () => {
       // given
@@ -262,7 +265,7 @@ describe('PopupViewSelector', () => {
 
       expect(editedReport.selectedAttributes).toEqual([attributeId]);
       expect(editedReport.selectedMetrics).toEqual([metricId]);
-      expect(editedReport.selectedFilters).toEqual([filterValue]);
+      expect(editedReport.selectedFilters).toEqual(filterValue);
     });
   });
 });

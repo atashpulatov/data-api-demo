@@ -80,7 +80,17 @@ function proceedToImport(props) {
 
 export function mapStateToProps(state) {
   const popupState = state.popupReducer.editedReport;
-  const editedReport = !!popupState && {
+  return {
+    ...state.navigationTree,
+    authToken: state.sessionReducer.authToken,
+    editedReport: parsePopupState(popupState),
+  };
+};
+
+export const PopupViewSelector = connect(mapStateToProps, actions)(_PopupViewSelector);
+
+function parsePopupState(popupState) {
+  return !!popupState && {
     reportId: popupState.id,
     projectId: popupState.projectId,
     reportName: popupState.name,
@@ -90,14 +100,14 @@ export function mapStateToProps(state) {
       : null,
     selectedAttributes: popupState.body && popupState.body.requestedObjects.attributes.map((attr) => attr.id),
     selectedMetrics: popupState.body && popupState.body.requestedObjects.metrics.map((mtrc) => mtrc.id),
-    selectedFilters: popupState.body && popupState.body.viewFilter.operands[1].elements.map((elem) => elem.id),
+    selectedFilters: popupState.body && popupState.body.viewFilter.operands[1].elements.map((elem) => elem.id)
+        .reduce((filters, elem) => {
+          const attrId = elem.split(':')[0];
+          filters[attrId] = !filters[attrId]
+          ? [elem]
+          : [...filters[attrId], elem];
+          return filters;
+        }, {}),
   };
-  return {
-    ...state.navigationTree,
-    authToken: state.sessionReducer.authToken,
-    editedReport,
-  };
-};
-
-export const PopupViewSelector = connect(mapStateToProps, actions)(_PopupViewSelector);
+}
 
