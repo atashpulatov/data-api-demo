@@ -42,9 +42,9 @@ export class _FileHistoryContainer extends React.Component {
   };
 
   showData = () => {
-    const {reportArray, refreshReportsArray} = this.props;
+    const {reportArray, refreshReportsArray, toggleSecuredFlag} = this.props;
     this.refreshAllAction(reportArray, refreshReportsArray);
-    this.props.toggleSecuredFlag(false);
+    toggleSecuredFlag(false);
   }
 
   render() {
@@ -55,7 +55,7 @@ export class _FileHistoryContainer extends React.Component {
         <div className="secured-screen-container">
           <img src={restrictedArt} alt={t('Refresh')}/>
           <div className="secured-header">{t('Data Cleared!')}</div>
-          <p className="secured-info">{t('MicroStrategy data has been removed from the workbook. Click ‘Refresh’ to import it again.')}</p>
+          <p className="secured-info">{t(`MicroStrategy data has been removed from the workbook. Click 'Refresh' to import it again.`)}</p>
           <Button type="primary" className="show-data-btn" onClick={this.showData}>{t('View Data')}</Button>
         </div>
       }

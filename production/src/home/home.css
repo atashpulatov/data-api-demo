@@ -82,7 +82,6 @@ hr {
     font-size: 12px;
     margin-left: 10px;
     vertical-align: inherit;
-    flex: auto 0 0;
     align-self: center;
     order: 4;
 }

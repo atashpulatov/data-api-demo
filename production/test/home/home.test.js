@@ -218,7 +218,6 @@ describe('Home', () => {
             isSecured={false}
             toggleSecuredFlag={mockToggleSecured}
           />);
-      // const mockToggle = jest.spyOn(wrappedComponent.instance(), 'toggleSecuredFlag');
       wrappedComponent.instance().forceUpdate();
       // when
       wrappedComponent.instance().secureData();
