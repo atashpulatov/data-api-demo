@@ -113,5 +113,10 @@
   "This object cannot be imported. Objects with cross tabs, totals, or subtotals are not supported in this version of MicroStrategy for Office.": "This object cannot be imported. Objects with cross tabs, totals, or subtotals are not supported in this version of MicroStrategy for Office",
   "This object cannot be imported. Either you do not have necessary permissions to view it, or it is empty.": "This object cannot be imported. Either you do not have necessary permissions to view it, or it is empty",
   "No data returned for this view. This might be because the applied prompt excludes all data.": "No data returned for this view. This might be because the applied prompt excludes all data",
-  "The required data range in the worksheet is not empty": "The required data range in the worksheet is not empty"
+  "The required data range in the worksheet is not empty": "The required data range in the worksheet is not empty",
+  "Refresh": "Refresh",
+  "Data Cleared!": "Data Cleared!",
+  "MicroStrategy data has been removed from the workbook. Click ‘Refresh’ to import it again.": "MicroStrategy data has been removed from the workbook. Click ‘Refresh’ to import it again.",
+  "View Data": "View Data",
+  "Secure data": "Secure data"
 }

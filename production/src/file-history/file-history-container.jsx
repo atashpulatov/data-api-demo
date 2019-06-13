@@ -9,8 +9,7 @@ import loadingSpinner from './assets/report_loading_spinner.gif';
 import {refreshReportsArray} from '../popup/popup-actions';
 import {fileHistoryContainerHOC} from './file-history-container-HOC.jsx';
 import {officeStoreService} from '../office/store/office-store-service';
-import {toggleStoreSecuredFlag} from '../office/office-actions';
-import {errorService} from '../error/error-handler.js';
+import {toggleSecuredFlag} from '../office/office-actions';
 import restrictedArt from './assets/art_restricted_access_blue.svg';
 
 import './file-history.css';
@@ -20,7 +19,7 @@ export class _FileHistoryContainer extends React.Component {
   constructor(props) {
     super(props);
     if (officeStoreService.isFileSecured()) {
-      props.toggleStoreSecuredFlag(true);
+      props.toggleSecuredFlag(true);
     }
     this.state = {
       allowRefreshAllClick: true,
@@ -42,28 +41,10 @@ export class _FileHistoryContainer extends React.Component {
     });
   };
 
-  secureData = async () => {
-    try {
-      const excelContext = await officeApiHelper.getExcelContext();
-      this.props.reportArray.forEach((report) => {
-        officeApiHelper.deleteObjectTableBody(excelContext, report);
-      });
-      await excelContext.sync();
-      this.toggleSecured(true);
-    } catch (error) {
-      errorService.handleOfficeError(error);
-    }
-  }
-
   showData = () => {
     const {reportArray, refreshReportsArray} = this.props;
     this.refreshAllAction(reportArray, refreshReportsArray);
-    this.toggleSecured(false);
-  }
-
-  toggleSecured = (isSecured) => {
-    officeStoreService.toggleFileSecuredFlag(isSecured);
-    this.props.toggleStoreSecuredFlag(isSecured);
+    this.props.toggleSecuredFlag(false);
   }
 
   render() {
@@ -72,10 +53,10 @@ export class _FileHistoryContainer extends React.Component {
       {
         isSecured &&
         <div className="secured-screen-container">
-          <img src={restrictedArt} />
-          <div className="secured-header" >Restricted Access!</div>
-          <p className="secured-info">MicroStrategy data has been cleared from the workbook to protect sensitive information. Click ‘View Data’ to import it again.</p>
-          <Button type="primary" className="show-data-btn" onClick={this.showData}>View Data</Button>
+          <img src={restrictedArt} alt={t('Refresh')}/>
+          <div className="secured-header">{t('Data Cleared!')}</div>
+          <p className="secured-info">{t('MicroStrategy data has been removed from the workbook. Click ‘Refresh’ to import it again.')}</p>
+          <Button type="primary" className="show-data-btn" onClick={this.showData}>{t('View Data')}</Button>
         </div>
       }
       <Button id="add-data-btn-container" className="add-data-btn" onClick={() => this.props.addDataAction()}
@@ -118,7 +99,7 @@ function mapStateToProps({officeReducer, historyReducer}) {
 
 const mapDispatchToProps = {
   refreshReportsArray,
-  toggleStoreSecuredFlag,
+  toggleSecuredFlag,
 };
 
 const WrappedFileHistoryContainer = fileHistoryContainerHOC(_FileHistoryContainer);

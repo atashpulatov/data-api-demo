@@ -1,16 +1,16 @@
 import React, {Component} from 'react';
 import logo from './assets/mstr_logo.png';
 import {sessionHelper} from '../storage/session-helper';
-import {Button} from 'antd';
+import {Button, Popover} from 'antd';
 import {errorService} from '../error/error-handler';
 import {connect} from 'react-redux';
 import {userRestService} from './user-rest-service';
 import {homeHelper} from './home-helper';
 import {withTranslation} from 'react-i18next';
-import {officeStoreService} from '../office/store/office-store-service';
 import {officeApiHelper} from '../office/office-api-helper';
-import {toggleStoreSecuredFlag} from '../office/office-actions';
+import {toggleSecuredFlag} from '../office/office-actions';
 import {MSTRIcon} from 'mstr-react-library';
+
 export class _Header extends Component {
   componentDidMount = async () => {
     let userData = {};
@@ -32,35 +32,47 @@ export class _Header extends Component {
         officeApiHelper.deleteObjectTableBody(excelContext, report);
       });
       await excelContext.sync();
-      this.toggleSecured(true);
+      this.props.toggleSecuredFlag(true);
     } catch (error) {
       errorService.handleOfficeError(error);
     }
   }
 
-  toggleSecured = (isSecured) => {
-    officeStoreService.toggleFileSecuredFlag(isSecured);
-    this.props.toggleStoreSecuredFlag(isSecured);
+  getSecureButton = () => {
+    const {reportArray, isSecured, t} = this.props;
+    if (reportArray && reportArray.length > 0) {
+      return (
+        // TODO: get tooltip text from MM
+        <Popover placement="bottom" content={t('Secure data')} mouseEnterDelay={1}>
+          <Button className="secure-btn" disabled={isSecured} size='small' onClick={this.secureData}>
+            {isSecured
+            ? <MSTRIcon type='secure-access-inactive' />
+            : <MSTRIcon type='secure-access-active' />}
+          </Button>
+        </Popover>
+      );
+    }
   }
 
   render() {
-    const {userFullName, userInitials, loading, isSecured, reportArray, t} = this.props;
+    const {userFullName, userInitials, loading, t} = this.props;
     return (
       <header id='app-header'>
-        <span id='profileImage' className={userFullName && 'got-user-data'}>
-          {userInitials !== null ?
-            <span id='initials' alt={t('User profile')}>{userInitials}</span> :
-            <img id='profile-image' src={logo} alt={t('User profile')} />
-            /* TODO: When rest api returns profileImage use it as source*/}
-        </span>
-        <span className={` ${userFullName && 'got-user-data'} header-name`}>{userFullName}</span>
-        <Button className="secure-btn" disabled={isSecured} size='small' style={{float: 'right'}} onClick={this.secureData}>
-          {(reportArray && reportArray.length > 0) ? (isSecured ? <MSTRIcon type='secure-access-inactive' /> : <MSTRIcon type='secure-access-active' />) : ''}
-          {/* {isSecured ? <MSTRIcon type='secure-access-inactive' /> : <MSTRIcon type='secure-access-active' />} */}
-        </Button>
-        <Button id='logOut' onClick={logout} size='small' disabled={loading}>
-          {t('Log out')}
-        </Button>
+        <div className="user-data">
+          <span id='profileImage' className={userFullName && 'got-user-data'}>
+            {userInitials !== null ?
+              <span id='initials' alt={t('User profile')}>{userInitials}</span> :
+              <img id='profile-image' src={logo} alt={t('User profile')} />
+              /* TODO: When rest api returns profileImage use it as source */}
+          </span>
+          <span className={` ${userFullName && 'got-user-data'} header-name`}>{userFullName}</span>
+        </div>
+        <div>
+          {this.getSecureButton()}
+          <Button id='logOut' onClick={logout} size='small' disabled={loading}>
+            {t('Log out')}
+          </Button>
+        </div>
       </header >
     );
   };
@@ -77,7 +89,7 @@ function mapStateToProps(state) {
 };
 
 const mapDispatchToProps = {
-  toggleStoreSecuredFlag,
+  toggleSecuredFlag,
 };
 
 export const Header = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_Header));
