@@ -122,16 +122,17 @@ describe('Popup actions', () => {
   it('should do certain operations when edit action called', async () => {
     // given
     const bindingId = 'bindingId';
+    const report = {bindId: bindingId, objectType: 'whatever'};
     const returnedValue = 'returnFromSettings';
     officeStoreService.getReportFromProperties.mockReturnValue(returnedValue);
     const listener = jest.fn();
     // when
-    await actions.callForEdit(bindingId)(listener);
+    await actions.callForEdit(report)(listener);
     // then
     expect(officeApiHelper.getExcelSessionStatus).toBeCalled();
     expect(authenticationHelper.validateAuthToken).toBeCalled();
     expect(officeStoreService.getReportFromProperties).toBeCalledWith(bindingId);
     expect(listener).toHaveBeenCalledWith({type: actions.SET_REPORT_N_FILTERS, editedReport: returnedValue});
-    expect(popupController.runEditFiltersPopup).toBeCalled();
+    expect(popupController.runEditFiltersPopup).toBeCalledWith(report);
   });
 });

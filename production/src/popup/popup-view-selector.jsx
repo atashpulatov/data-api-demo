@@ -100,14 +100,15 @@ function parsePopupState(popupState) {
       : null,
     selectedAttributes: popupState.body && popupState.body.requestedObjects.attributes.map((attr) => attr.id),
     selectedMetrics: popupState.body && popupState.body.requestedObjects.metrics.map((mtrc) => mtrc.id),
-    selectedFilters: popupState.body && popupState.body.viewFilter.operands[1].elements.map((elem) => elem.id)
-        .reduce((filters, elem) => {
-          const attrId = elem.split(':')[0];
-          filters[attrId] = !filters[attrId]
-          ? [elem]
-          : [...filters[attrId], elem];
-          return filters;
-        }, {}),
+    selectedFilters: popupState.body && popupState.body.viewFilter
+      && popupState.body.viewFilter.operands[1].elements.map((elem) => elem.id)
+          .reduce((filters, elem) => {
+            const attrId = elem.split(':')[0];
+            filters[attrId] = !filters[attrId]
+            ? [elem]
+            : [...filters[attrId], elem];
+            return filters;
+          }, {}),
   };
 }
 

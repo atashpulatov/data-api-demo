@@ -267,5 +267,40 @@ describe('PopupViewSelector', () => {
       expect(editedReport.selectedMetrics).toEqual([metricId]);
       expect(editedReport.selectedFilters).toEqual(filterValue);
     });
+
+    it('should parse edited report properties without filters', () => {
+      // given
+      const reportInRedux = {
+        id: 'reportId',
+        projectId: 'projectId',
+        name: 'reportName',
+        objectType: 'report',
+        body: {
+          ...reportBody,
+          viewFilter: null,
+        },
+      };
+      const reduxState = {
+        navigationTree: {},
+        sessionReducer: {
+          authToken: 'token',
+        },
+        popupReducer: {
+          editedReport: reportInRedux,
+        },
+      };
+      // when
+      const {editedReport} = mapStateToProps(reduxState);
+      // then
+      expect(editedReport.projectId).toEqual(reportInRedux.projectId);
+      expect(editedReport.reportSubtype).toEqual(768);
+      expect(editedReport.reportName).toEqual(reportInRedux.name);
+      expect(editedReport.reportType).toEqual(reportInRedux.objectType);
+      expect(editedReport.reportId).toEqual(reportInRedux.id);
+
+      expect(editedReport.selectedAttributes).toEqual([attributeId]);
+      expect(editedReport.selectedMetrics).toEqual([metricId]);
+      expect(editedReport.selectedFilters).toBe(null);
+    });
   });
 });

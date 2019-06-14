@@ -34,16 +34,17 @@ describe('PopupController', () => {
     expect(runPopupSpy).toBeCalledWith(popupType, size, size);
   });
 
-  it('should run popup with proper settings when called for data preparation', () => {
+  it('should run edit popup with proper settings', () => {
     // given
+    const reportParams = 'reportData';
     const popupType = PopupTypeEnum.editFilters;
     const size = 80;
     const runPopupSpy = jest.spyOn(popupController, 'runPopup').mockImplementationOnce(() => {});
     // when
-    popupController.runEditFiltersPopup();
+    popupController.runEditFiltersPopup(reportParams);
     // then
     expect(runPopupSpy).toBeCalled();
-    expect(runPopupSpy).toBeCalledWith(popupType, size, size);
+    expect(runPopupSpy).toBeCalledWith(popupType, size, size, reportParams);
   });
 
   it('should handle ok command from popup for report WITHOUT instance id',
@@ -67,7 +68,7 @@ describe('PopupController', () => {
         officeApiHelper.getOfficeSessionStatus = jest.fn();
         const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
         // when
-        await popupController.onMessageFromPopup(dialog, arg);
+        await popupController.onMessageFromPopup(dialog, null, arg);
         // then
         expect(dialog.close).toBeCalled();
         expect(mockPrint).toBeCalled();
@@ -105,7 +106,7 @@ describe('PopupController', () => {
         officeApiHelper.getOfficeSessionStatus = jest.fn();
         const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
         // when
-        await popupController.onMessageFromPopup(dialog, arg);
+        await popupController.onMessageFromPopup(dialog, null, arg);
         // then
         expect(dialog.close).toBeCalled();
         expect(mockPrint).toBeCalled();
@@ -135,7 +136,7 @@ describe('PopupController', () => {
         officeApiHelper.getOfficeSessionStatus = jest.fn();
         const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
         // when
-        await popupController.onMessageFromPopup(dialog, arg);
+        await popupController.onMessageFromPopup(dialog, null, arg);
         // then
         expect(dialog.close).toBeCalled();
         expect(mockPrint).toBeCalled();
@@ -166,7 +167,7 @@ describe('PopupController', () => {
         officeApiHelper.getOfficeSessionStatus = jest.fn();
         const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
         // when
-        await popupController.onMessageFromPopup(dialog, arg);
+        await popupController.onMessageFromPopup(dialog, null, arg);
         // then
         expect(dialog.close).toBeCalled();
         expect(mockPrint).toBeCalled();
@@ -201,7 +202,7 @@ describe('PopupController', () => {
         officeApiHelper.getOfficeSessionStatus = jest.fn();
         const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
         // when
-        await popupController.onMessageFromPopup(dialog, arg);
+        await popupController.onMessageFromPopup(dialog, null, arg);
         // then
         expect(dialog.close).toBeCalled();
         expect(mockPrint).toBeCalled();
@@ -230,7 +231,7 @@ describe('PopupController', () => {
     officeApiHelper.getOfficeSessionStatus = jest.fn();
     const handleErrorSpy = jest.spyOn(errorService, 'handleError');
     // when
-    await popupController.onMessageFromPopup(dialog, givenArg);
+    await popupController.onMessageFromPopup(dialog, null, givenArg);
     // then
     expect(handleErrorSpy).toBeCalled();
     const handleErrorArgs = handleErrorSpy.mock.calls[0];

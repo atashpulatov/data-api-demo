@@ -12,16 +12,16 @@ export const RESET_STATE = 'RESET_STATE';
 export const SET_REPORT_N_FILTERS = 'SET_REPORT_N_FILTERS';
 // export const PRELOAD = 'PRELOAD';
 
-export function callForEdit(bindingId) {
+export function callForEdit(reportParams) {
   return async (dispatch) => {
     await Promise.all([officeApiHelper.getExcelSessionStatus(), authenticationHelper.validateAuthToken()]);
-    const editedReport = officeStoreService.getReportFromProperties(bindingId);
+    const editedReport = officeStoreService.getReportFromProperties(reportParams.bindId);
     console.log(editedReport);
     dispatch({
       type: SET_REPORT_N_FILTERS,
       editedReport,
     });
-    popupController.runEditFiltersPopup();
+    popupController.runEditFiltersPopup(reportParams);
   };
 };
 
