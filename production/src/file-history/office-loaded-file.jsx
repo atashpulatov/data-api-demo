@@ -4,7 +4,7 @@ import {Row, Col, Popover} from 'antd';
 import {MSTRIcon} from 'mstr-react-library';
 import {fileHistoryHelper} from './file-history-helper';
 import loadingSpinner from './assets/report_loading_spinner.gif';
-import {refreshReportsArray} from '../popup/popup-actions';
+import {refreshReportsArray, callForEdit} from '../popup/popup-actions';
 import RenameInput from './file-history-rename-input';
 import {withTranslation} from 'react-i18next';
 
@@ -35,6 +35,20 @@ export class _OfficeLoadedFile extends React.Component {
       await fileHistoryHelper.deleteReport(onDelete, bindingId, objectType);
       this._ismounted && this.setState({allowDeleteClick: true});
     });
+  };
+
+  editAction = (e) => {
+    e.stopPropagation();
+    if (!this.state.allowRefreshClick) {
+      return;
+    }
+    const {isLoading, bindingId, objectType, callForEdit} = this.props;
+    if (!isLoading) {
+      this.setState({allowRefreshClick: false}, async () => {
+        await callForEdit({bindId: bindingId, objectType});
+        this.setState({allowRefreshClick: true});
+      });
+    }
   };
 
   refreshAction = (e) => {
@@ -70,6 +84,15 @@ export class _OfficeLoadedFile extends React.Component {
           <div className="additional-data">{t('refreshed_date', {date: refreshDate})}</div>
         </Col>
         <Col span={1} offset={2}>
+          <Popover placement="bottom" content={t('Edit Data')} mouseEnterDelay={1}>
+            {!isPrompted && <span className="loading-button-container"
+              onClick={this.editAction}>
+              {!isLoading ? <MSTRIcon type='edit' /> :
+              <img width='12px' height='12px' src={loadingSpinner} alt={t('Report loading icon')} />}
+            </span>}
+          </Popover>
+        </Col>
+        <Col span={1} offset={1}>
           <Popover placement="bottom" content={t('Refresh Data')} mouseEnterDelay={1}>
             {!isPrompted && <span className="loading-button-container"
               onClick={this.refreshAction}>
@@ -97,6 +120,7 @@ _OfficeLoadedFile.defaultProps = {
 
 const mapDispatchToProps = {
   refreshReportsArray,
+  callForEdit,
 };
 
 export const OfficeLoadedFile = connect(null, mapDispatchToProps)(withTranslation('common')(_OfficeLoadedFile));

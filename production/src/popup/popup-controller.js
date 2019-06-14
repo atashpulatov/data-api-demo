@@ -5,7 +5,7 @@ import {sessionHelper} from '../storage/session-helper';
 import {objectTypes} from 'mstr-react-library';
 import {notificationService} from '../notification/notification-service';
 import {reduxStore} from '../store';
-import {CLEAR_WINDOW, refreshReportsArray2} from './popup-actions';
+import {CLEAR_WINDOW, refreshReportsArray} from './popup-actions';
 import {errorService} from '../error/error-handler';
 import {authenticationHelper} from '../authentication/authentication-helper';
 import {officeProperties} from '../office/office-properties';
@@ -74,13 +74,11 @@ class PopupController {
       await officeApiHelper.getExcelSessionStatus(); // checking excel session status
       switch (response.command) {
         case selectorProperties.commandOk:
-          debugger;
           if (!reportParams) {
             await this.handleOkCommand(response, reportParams);
           } else {
-            debugger;
             await officeStoreService.preserveReportValue(reportParams.bindId, 'body', response.body);
-            await refreshReportsArray2([reportParams], false)(reduxStore.dispatch);
+            await refreshReportsArray([reportParams], false)(reduxStore.dispatch);
           }
           break;
         case selectorProperties.commandOnUpdate:
@@ -89,8 +87,7 @@ class PopupController {
           } else {
             await officeStoreService.preserveReportValue(reportParams.bindId, 'body', response.body);
             console.log(reportParams);
-            debugger;
-            await refreshReportsArray2([reportParams], false)(reduxStore.dispatch);
+            await refreshReportsArray([reportParams], false)(reduxStore.dispatch);
           }
           break;
         case selectorProperties.commandCancel:

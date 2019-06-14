@@ -87,6 +87,7 @@ span.file-icons {
     text-overflow: ellipsis;
 }
 
+.mstr-icon.edit,
 .mstr-icon.refresh,
 .mstr-icon.trash {
     cursor: pointer;

@@ -73,6 +73,7 @@ describe('office loaded file', () => {
     const deleteButton = wrappedIcons.at(2);
     expect(deleteButton.props().type).toEqual('trash');
   });
+  
   it('refresh method should not do anything if in loading state', () => {
     // given
     const onRefreshMock = jest.fn();
