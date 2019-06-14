@@ -42,17 +42,6 @@ describe('Normalized JSON Handler', () => {
     // then
     expect(elements).toEqual(expectedElements);
   });
-  it('should map indices to elements', () => {
-    // given
-    const {definition} = response;
-    const axis = 'columns';
-    const elementIndices = [0];
-    const expectedElements = [{'formValues': ['BWI', '1'], 'id': 'h1;1D5F4A7811E97722F1050080EF65506C', 'value': ['BWI', '1']}];
-    // when
-    const elements = jsonHandler.mapElementIndicesToElements(definition, axis, elementIndices);
-    // then
-    expect(elements).toEqual(expectedElements);
-  });
   it('should render tabular data', () => {
     // given
     const {definition, data} = response;
@@ -76,25 +65,26 @@ describe('Normalized JSON Handler', () => {
     // then
     expect(tabular).toEqual(expectedId);
   });
-
   it('should render column headers', () => {
     // given
     const {definition, data} = response;
     const {headers} = data;
+    const axis = 'columns';
     const expectedHeaders = [
       ['BWI', 'BWI', 'BWI', 'DCA', 'DCA', 'DCA'],
       ['Flights Delayed', 'Avg Delay (min)', 'On-Time', 'Flights Delayed', 'Avg Delay (min)', 'On-Time'],
     ];
+    const onElement = (e) => e.value[0];
     // when
-    const colHeaders = jsonHandler.renderColumnHeaders(definition, headers);
+    const colHeaders = jsonHandler.renderHeaders(definition, axis, headers, onElement);
     // then
     expect(colHeaders).toEqual(expectedHeaders);
   });
-
   it('should render row headers', () => {
     // given
     const {definition, data} = response;
     const {headers} = data;
+    const axis = 'rows';
     const expectedHeaders = [
       ['2009', 'January'],
       ['2009', 'February'],
@@ -104,10 +94,20 @@ describe('Normalized JSON Handler', () => {
       ['2010', 'February'],
       ['2010', 'March'],
       ['2010', 'Total']];
+    const onElement = (e) => e.value[0];
     // when
-    const colHeaders = jsonHandler.renderRowHeaders(definition, headers);
+    const colHeaders = jsonHandler.renderHeaders(definition, axis, headers, onElement);
     // then
     expect(colHeaders).toEqual(expectedHeaders);
+  });
+  it('should transpose 2D arrays', () => {
+    // given
+    const matrix = [[0, 1], [2, 3], [4, 5]];
+    const expectedMatrix = [[0, 2, 4], [1, 3, 5]];
+    // when
+    const transposedMatrix = jsonHandler._transposeMatrix(matrix);
+    // then
+    expect(transposedMatrix).toEqual(expectedMatrix);
   });
 });
 

@@ -32,7 +32,7 @@ class NormalizedJsonHandler {
    * @param {string} axis - 'rows' or 'columns'
    * @param {number} elementIndices - Array index that corresponds to an attribue element
    * @memberof NormalizedJsonHandler
-   * @return {array}
+   * @return {Array}
    */
   mapElementIndicesToElements = (definition, axis, elementIndices) => {
     return elementIndices.map((elementIndex, attributeIndex) =>
@@ -41,7 +41,6 @@ class NormalizedJsonHandler {
   };
 
   /**
-   *
    * Creates a 2D Array with row attribute headers and metric values
    *
    * @param {Object} definition - Dataset definition
@@ -67,44 +66,24 @@ class NormalizedJsonHandler {
       );
     });
   };
-  /**
-   * Creates a 2D Array for row headers
-   *
-   * @param {Object} definition - Dataset definition
-   * @param {Object} headers - Response data object
-   *
-   * @memberof NormalizedJsonHandler
-   * @return {Array}
-   */
-  renderRowHeaders = (definition, headers) => {
-    return headers.rows.map((array) => {
-      return array.map((arrayItem, arrayItemIndex) => {
-        return definition.grid.rows[arrayItemIndex].elements[arrayItem].formValues[0];
-      });
-    });
-  }
 
   /**
-   * Creates a 2D Array for column headers
+   * Creates a 2D array with the crosstabs headers
    *
    * @param {Object} definition - Dataset definition
-   * @param {Object} headers - Response data object
+   * @param {string} axis - 'rows' or 'columns'
+   * @param {Array} headers - header data from response
+   * @param {function} onElement - Callback function to process elements
    *
    * @memberof NormalizedJsonHandler
    * @return {Array}
    */
-  renderColumnHeaders = (definition, headers) => {
-    const firstItemsArray = [];
-    const secondItemsArray = [];
-    const result = [];
-    headers.columns.forEach((pair) => {
-      firstItemsArray.push(pair[0]);
-      secondItemsArray.push(pair[1]);
+  renderHeaders = (definition, axis, headers, onElement) => {
+    const matrix = headers[axis].map((headerCells) => {
+      const axisElements = this.mapElementIndicesToElements(definition, axis, headerCells);
+      return axisElements.map((e, axisIndex, elementIndex) => onElement(e, axisIndex, elementIndex));
     });
-    const firstResult = firstItemsArray.map((elem) => definition.grid.columns[0].elements[elem].formValues[0]);
-    const secondResult = secondItemsArray.map((elem) => definition.grid.columns[1].elements[elem].name);
-    result.push(firstResult, secondResult);
-    return result;
+    return axis === 'columns' ? this._transposeMatrix(matrix) : matrix;
   }
 
   /**
@@ -127,7 +106,8 @@ class NormalizedJsonHandler {
 
   /**
    * For keep-only/exclude on a metric value cell
-   * @param {array} headers - Array with row and column header index
+   *
+   * @param {Array} headers - Array with row and column header index
    * @param {number} mvZoneRowIndex - Metric value row index
    * @param {number} mvZoneColumnIndex - Metric value column index
    *
@@ -139,6 +119,16 @@ class NormalizedJsonHandler {
     const columnHeader = headers.columns[mvZoneColumnIndex];
     return (rowHeader.concat(columnHeader)).map((element) => element.id);
   }
+
+  /**
+   * Tranpose a matrix (2D array)
+   *
+   * @param {Array} matrix - 2D Array
+   *
+   * @memberof NormalizedJsonHandler
+   * @return {Array} - Transposed 2D array
+   */
+  _transposeMatrix = (matrix) => matrix[0].map((_, col) => matrix.map((row) => row[col]));
 }
 
 export default new NormalizedJsonHandler();
