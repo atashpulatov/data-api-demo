@@ -113,5 +113,12 @@
     "This object cannot be imported. Objects with cross tabs, totals, or subtotals are not supported in this version of MicroStrategy for Office.": "无法导入此对象。现版本的MicroStrategy for Office 不支持带有提示，交叉表，或小计的对象",
     "This object cannot be imported. Either you do not have necessary permissions to view it, or it is empty.": "无法导入此对象。您没有查看的权限或者对象为空",
     "No data returned for this view. This might be because the applied prompt excludes all data.": "此视图没有返回的数据。可能是应用的提示排除了所有数据",
-    "The required data range in the worksheet is not empty": "工作簿中所需的数据范围不为空"
+    "The required data range in the worksheet is not empty": "工作簿中所需的数据范围不为空",
+    "The selected filter excludes all data": "选择的筛选器排除了所有数据。",
+    "Dataset removed": "数据集已移除",
+    "Dataset refreshed": "数据集已刷新",
+    "The object binding is no longer valid due to previous updates.": "由于之前的更新，此对象绑定失效。",
+    "The object cannot be imported. Either you do not have necessary permissions to view it, or it is empty.": "无法导入此对象。您没有查看的权限或者对象为空。",
+    "The required data range in the worksheet is not empty.": "工作簿中所需的数据范围不为空。",
+    "MicroStrategy Office Client loaded. Click Import Data on the Home tab to start plugin. Login to Environment to start browsing documents.": "MicroStrategy Office 客户端已加载。在“开始”选项卡中单击“导入数据”，启动插件。登录环境，开始浏览文档。"
 }
