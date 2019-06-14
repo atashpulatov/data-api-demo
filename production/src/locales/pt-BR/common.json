@@ -112,5 +112,12 @@
   "No data returned for this view. This might be because the applied prompt excludes all data.": "Nenhum dado devolvido para essa exibição. Isso pode ser porque o prompt aplicado exclui todos os dados",
   "The required data range in the worksheet is not empty": "O intervalo de dados obrigatório na planilha está vazio",
   "Copy": "Copiar",
-  "Rename": "Renomear"
+  "Rename": "Renomear",
+  "The selected filter excludes all data": "O filtro selecionado exclui todos os dados",
+  "Dataset removed": "Conjunto de dados removido",
+  "Dataset refreshed": "Conjunto de dados atualizado",
+  "The object binding is no longer valid due to previous updates.": "A vinculação de objeto não é mais válida em razão de atualizações anteriores",
+  "The object cannot be imported. Either you do not have necessary permissions to view it, or it is empty.": "Não é possível importar o objeto. Você não tem as permissões necessárias para visualizá-lo ou ele está vazio.",
+  "The required data range in the worksheet is not empty.": "O intervalo de dados obrigatório na planilha não está vazio",
+  "MicroStrategy Office Client loaded. Click Import Data on the Home tab to start plugin. Login to Environment to start browsing documents.": "Cliente Office do MicroStrategy carregado. Clique em Importar Dados na guia Início para iniciar o plug-in. Faça login em Ambiente para começar a procurar documentos"
 }

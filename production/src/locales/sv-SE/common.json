@@ -112,5 +112,12 @@
   "No data returned for this view. This might be because the applied prompt excludes all data.": "Inga data returnerades för den här vyn. Det kan bero på att den prompt som används exkluderar alla data",
   "The required data range in the worksheet is not empty": "Fordrat dataintervall i arbetsbladet är inte tomt",
   "Copy": "Kopiera",
-  "Rename": "Byt namn"
+  "Rename": "Byt namn",
+  "The selected filter excludes all data": "Valt filter exkluderar alla data",
+  "Dataset removed": "Datauppsättning borttagen",
+  "Dataset refreshed": "Datauppsättning uppdaterad",
+  "The object binding is no longer valid due to previous updates.": "Objektsbindningen är inte längre giltig på grund av föregående uppdateringar",
+  "The object cannot be imported. Either you do not have necessary permissions to view it, or it is empty.": "Objektet kan inte importeras. Antingen har du inte nödvändiga tillstånd för att visa det, eller så är det tomt.",
+  "The required data range in the worksheet is not empty.": "Fordrat dataintervall i arbetsbladet är inte tomt",
+  "MicroStrategy Office Client loaded. Click Import Data on the Home tab to start plugin. Login to Environment to start browsing documents.": "MicroStrategy Office Client inläst. Klicka på importera data på hemfliken för att starta tillägget. Logga in på miljön för att börja navigera bland dokument."
 }

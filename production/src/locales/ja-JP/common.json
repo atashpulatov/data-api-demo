@@ -112,5 +112,12 @@
   "No data returned for this view. This might be because the applied prompt excludes all data.": "このビューに返されるデータはありません。原因として、プロンプトを適用した結果、データがすべて除外されたことが考えられます",
   "The required data range in the worksheet is not empty": "ワークシート中、必要なデータの範囲が空ではありません",
   "Copy": "コピー",
-  "Rename": "名前の変更"
+  "Rename": "名前の変更",
+  "The selected filter excludes all data": "選択したフィルタはすべてのデータを排除します",
+  "Dataset removed": "データセット削除データセット:サクジョ",
+  "Dataset refreshed": "データセットリフレッシュ",
+  "The object binding is no longer valid due to previous updates.": "以前のアップデートによってオブジェクト バインディングは無効です。",
+  "The object cannot be imported. Either you do not have necessary permissions to view it, or it is empty.": "このオブジェクトはインポートできません。表示に必要な権限がないか、または中身が空です。",
+  "The required data range in the worksheet is not empty.": "ワークシート中、必要なデータの範囲が空ではありません。",
+  "MicroStrategy Office Client loaded. Click Import Data on the Home tab to start plugin. Login to Environment to start browsing documents.": "MicroStrategy Office クライアント ハードウェア。[Home]タブの[Import Data]をクリックするとプラグインを開始します。Environmentにログインしてドキュメントの閲覧を開始します。"
 }
