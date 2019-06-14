@@ -4,6 +4,7 @@ import {Form, Icon, Input, Button, Checkbox} from 'antd';
 import {authenticationHelper} from './authentication-helper';
 import {connect} from 'react-redux';
 import {resetState} from '../popup/popup-actions';
+import {withTranslation} from 'react-i18next';
 const FormItem = Form.Item;
 
 export class _Authenticate extends Component {
@@ -20,51 +21,51 @@ export class _Authenticate extends Component {
   }
 
   render() {
-    const {session, form} = this.props;
+    const {session, form, t} = this.props;
     const {getFieldDecorator} = form;
     return (
       <article>
         <header>
           <h1 id='authenticate-message'>
-            Connect to MicroStrategy Environment
+            {t('Connect to MicroStrategy Environment')}
           </h1>
         </header>
         <Form onSubmit={(event) => this.onLoginUser(event)} className='login-form grid-container padding'>
           <FormItem
-            label='Username'>
+            label={t('Username')}>
             {getFieldDecorator('username', {
               initialValue: session.username,
-              rules: [{required: true, message: 'Please input your username!'}],
+              rules: [{required: true, message: t('Please input your username!')}],
             })(
                 <Input
                   prefix={
                     <Icon type='user' style={{color: 'rgba(0,0,0,.25)'}} />}
-                  placeholder='Username' />
+                  placeholder={t('Username')} />
             )}
           </FormItem>
           <FormItem
-            label='Password'>
+            label={t('Password')}>
             {getFieldDecorator('password', {
               initialValue: session.password || '',
-              rules: [{message: 'Please input your Password!'}],
+              rules: [{message: t('Please input your Password!')}],
             })(
                 <Input
                   prefix={
                     <Icon type='lock' style={{color: 'rgba(0,0,0,.25)'}} />}
                   type='password'
-                  placeholder='Password' />
+                  placeholder={t('Password')} />
             )}
           </FormItem>
           <FormItem
-            label='Environment URL'>
+            label={t('Environment URL')}>
             {getFieldDecorator('envUrl', {
               initialValue: session.envUrl || '',
-              rules: [{required: true, message: 'Please input environment URL!', type: 'url'}],
+              rules: [{required: true, message: t('Please input environment URL!'), type: 'url'}],
             })(
                 <Input
                   prefix={
                     <Icon type='link' style={{color: 'rgba(0,0,0,.25)'}} />}
-                  placeholder='environment URL' />
+                  placeholder={t('environment URL')} />
             )}
           </FormItem>
           <FormItem>
@@ -72,14 +73,14 @@ export class _Authenticate extends Component {
               valuePropName: 'checked',
               initialValue: session.isRememberMeOn || false,
             })(
-                <Checkbox>Remember Me</Checkbox>
+                <Checkbox>{t('Remember Me')}</Checkbox>
             )}
           </FormItem>
           <div
             className='centered-fields-container'>
             <FormItem>
               <Button type='primary' htmlType='submit' className='login-form-button'>
-                Log in
+                {t('Log in')}
               </Button>
             </FormItem>
           </div>
@@ -88,6 +89,10 @@ export class _Authenticate extends Component {
     );
   }
 }
+
+_Authenticate.defaultProps = {
+  t: (text) => text,
+};
 
 function mapStateToProps(state) {
   return {
@@ -99,4 +104,4 @@ const mapDispatchToProps = {
   resetState,
 };
 
-export const Authenticate = connect(mapStateToProps, mapDispatchToProps)(Form.create()(_Authenticate));
+export const Authenticate = connect(mapStateToProps, mapDispatchToProps)(Form.create()(withTranslation('common')(_Authenticate)));

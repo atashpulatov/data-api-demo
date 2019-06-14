@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {Button} from 'antd';
+import {Button, Popover} from 'antd';
 import {OfficeLoadedFile} from './office-loaded-file.jsx';
 import {officeApiHelper} from '../office/office-api-helper';
 import {officeDisplayService} from '../office/office-display-service';
@@ -8,12 +8,19 @@ import {MSTRIcon} from 'mstr-react-library';
 import loadingSpinner from './assets/report_loading_spinner.gif';
 import {refreshReportsArray} from '../popup/popup-actions';
 import {fileHistoryContainerHOC} from './file-history-container-HOC.jsx';
+import {officeStoreService} from '../office/store/office-store-service';
+import {toggleStoreSecuredFlag} from '../office/office-actions';
+import {errorService} from '../error/error-handler.js';
 
 import './file-history.css';
+import {withTranslation} from 'react-i18next';
 
 export class _FileHistoryContainer extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    if (officeStoreService.isFileSecured()) {
+      props.toggleStoreSecuredFlag(true);
+    }
     this.state = {
       allowRefreshAllClick: true,
     };
@@ -34,14 +41,54 @@ export class _FileHistoryContainer extends React.Component {
     });
   };
 
+  secureData = async () => {
+    try {
+      const excelContext = await officeApiHelper.getExcelContext();
+      this.props.reportArray.forEach((report) => {
+        officeApiHelper.deleteObjectTableBody(excelContext, report);
+      });
+      await excelContext.sync();
+      this.toggleSecured(true);
+    } catch (error) {
+      errorService.handleOfficeError(error);
+    }
+  }
+
+  showData = (reportArray, refreshAll) => {
+    this.refreshAllAction(reportArray, refreshAll);
+    this.toggleSecured(false);
+  }
+
+  toggleSecured = (isSecured) => {
+    officeStoreService.toggleFileSecuredFlag(isSecured);
+    this.props.toggleStoreSecuredFlag(isSecured);
+  }
+
   render() {
-    const {reportArray = [], loading, refreshingAll, refreshReportsArray} = this.props;
+    const {reportArray = [], loading, refreshingAll, refreshReportsArray, isSecured, t} = this.props;
     return (<React.Fragment >
+      {// TODO: Lock screen will be prepared and styled later in separate US
+        isSecured &&
+        <div className="secured-screen-container">
+          <div>
+            <div>File is secured</div>
+            <Button className="show-data-btn" onClick={() => this.showData(reportArray, refreshReportsArray)}>Show Data</Button>
+          </div>
+        </div>
+      }
       <Button id="add-data-btn-container" className="add-data-btn" onClick={() => this.props.addDataAction()}
-        disabled={loading}>Add Data</Button>
+        disabled={loading}>{t('Add Data')}</Button>
       <span className="refresh-button-container">
-        <Button className="refresh-all-btn" title="Refresh All Data" style={{float: 'right'}} onClick={() => this.refreshAllAction(reportArray, refreshReportsArray)} disabled={loading}>
-          {!refreshingAll ? <MSTRIcon type='refresh' /> : <img width='12px' height='12px' src={loadingSpinner} alt='Report loading icon' />}
+        <Popover placement="bottom" content={t('Refresh All Data')} mouseEnterDelay={1}>
+          <Button id="refresh-all-btn" className="refresh-all-btn" style={{float: 'right'}} onClick={() => this.refreshAllAction(reportArray, refreshReportsArray)} disabled={loading}>
+            {!refreshingAll ? <MSTRIcon type='refresh' /> : <img width='12px' height='12px' src={loadingSpinner} alt={t('Report loading icon')} />}
+          </Button>
+        </Popover>
+      </span>
+      {/* TODO: a proper button will be added in separate US */}
+      <span>
+        <Button className="secure-btn" style={{float: 'right'}} onClick={this.secureData}>
+          Secure
         </Button>
       </span>
       <div role="list" className='tables-container'>
@@ -60,18 +107,24 @@ export class _FileHistoryContainer extends React.Component {
   };
 }
 
-function mapStateToProps(state) {
+_FileHistoryContainer.defaultProps = {
+  t: (text) => text,
+};
+
+function mapStateToProps({officeReducer, historyReducer}) {
   return {
-    reportArray: state.officeReducer.reportArray,
-    project: state.historyReducer.project,
-    refreshingAll: state.officeReducer.isRefreshAll,
+    reportArray: officeReducer.reportArray,
+    project: historyReducer.project,
+    refreshingAll: officeReducer.isRefreshAll,
+    isSecured: officeReducer.isSecured,
   };
 }
 
 const mapDispatchToProps = {
   refreshReportsArray,
+  toggleStoreSecuredFlag,
 };
 
 const WrappedFileHistoryContainer = fileHistoryContainerHOC(_FileHistoryContainer);
 
-export const FileHistoryContainer = connect(mapStateToProps, mapDispatchToProps)(WrappedFileHistoryContainer);
+export const FileHistoryContainer = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(WrappedFileHistoryContainer));

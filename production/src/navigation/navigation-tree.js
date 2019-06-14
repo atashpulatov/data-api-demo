@@ -7,6 +7,7 @@ import {FolderBrowser} from 'mstr-react-library';
 import {connect} from 'react-redux';
 import {actions} from './navigation-tree-actions';
 import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';
+import {withTranslation} from 'react-i18next';
 import {message} from 'antd';
 import {EMPTY_REPORT} from '../error/constants';
 
@@ -82,7 +83,7 @@ export class _NavigationTree extends Component {
   render() {
     const {setDataSource, dataSource, chosenObjectId, chosenProjectId, pageSize, changeSearching, changeSorting,
       chosenSubtype, folder, selectFolder, loading, handlePopupErrors, scrollPosition, searchText, sorter,
-      updateScroll, updateSize, requestImport} = this.props;
+      updateScroll, updateSize, requestImport, t} = this.props;
     return (
       <FolderBrowser
         onSorterChange={changeSorting}
@@ -108,6 +109,7 @@ export class _NavigationTree extends Component {
         handlePopupErrors={handlePopupErrors}
         onSizeUpdated={updateSize}
         onScrollUpdated={updateScroll}
+        t={t}
       >
         {/* Temporary loading user action block */}
         <div id="action-block" style={{
@@ -135,6 +137,10 @@ export class _NavigationTree extends Component {
   }
 }
 
+_NavigationTree.defaultProps = {
+  t: (text) => text,
+};
+
 export const mapStateToProps = ({officeReducer, navigationTree}) => {
   const object = officeReducer.preLoadReport;
   return {
@@ -143,4 +149,4 @@ export const mapStateToProps = ({officeReducer, navigationTree}) => {
   };
 };
 
-export const NavigationTree = connect(mapStateToProps, actions)(_NavigationTree);
+export const NavigationTree = connect(mapStateToProps, actions)(withTranslation('common')(_NavigationTree));

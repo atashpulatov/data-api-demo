@@ -7,6 +7,7 @@ import {selectorProperties} from '../attribute-selector/selector-properties';
 import {reduxStore} from '../store';
 import {Provider} from 'react-redux';
 import {PopupViewSelector} from './popup-view-selector';
+import i18next from '../i18n';
 
 export class Popup extends Component {
   constructor(props) {
@@ -50,7 +51,7 @@ export class Popup extends Component {
       error,
     };
     officeContext.getOffice().context.ui.messageParent(JSON.stringify(messageObject));
-  }
+  };
 
   render() {
     const {popupType, ...propsToPass} = this.state.mstrData;
@@ -59,6 +60,7 @@ export class Popup extends Component {
       handleBack: this.handleBack,
       handlePopupErrors: this.handlePopupErrors,
     };
+    i18next.changeLanguage(Office.context.displayLanguage);
     return (<Provider store={reduxStore}>
       <PopupViewSelector popupType={popupType} propsToPass={propsToPass} methods={methods} />
     </Provider>);
