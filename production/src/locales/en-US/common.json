@@ -120,5 +120,10 @@
   "The object binding is no longer valid due to previous updates.": "The object binding is no longer valid due to previous updates",
   "The object cannot be imported. Either you do not have necessary permissions to view it, or it is empty.": "The object cannot be imported. Either you do not have necessary permissions to view it, or it is empty",
   "The required data range in the worksheet is not empty.": "The required data range in the worksheet is not empty",
-  "MicroStrategy Office Client loaded. Click Import Data on the Home tab to start plugin. Login to Environment to start browsing documents.": "MicroStrategy Office Client loaded. Click Import Data on the Home tab to start plugin. Login to Environment to start browsing documents"
+  "MicroStrategy Office Client loaded. Click Import Data on the Home tab to start plugin. Login to Environment to start browsing documents.": "MicroStrategy Office Client loaded. Click Import Data on the Home tab to start plugin. Login to Environment to start browsing documents",
+  "Refresh": "Refresh",
+  "Data Cleared!": "Data Cleared!",
+  "MicroStrategy data has been removed from the workbook. Click ‘Refresh’ to import it again.": "MicroStrategy data has been removed from the workbook. Click ‘Refresh’ to import it again.",
+  "View Data": "View Data",
+  "Secure data": "Secure data"
 }
