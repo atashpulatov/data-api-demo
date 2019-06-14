@@ -23,8 +23,9 @@ export PATH=/usr/local/sbin:/usr/local/bin:$PATH
 export WORKSPACE_SETTING=aws_dev
 
 source .ecosystem
-
+export HATS=$HATS:rallytask
 rake upload_plugins update_dep_db_from_file
+rake update_ready_for_pr
 '
     end
   end
