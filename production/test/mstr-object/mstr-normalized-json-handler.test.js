@@ -80,17 +80,13 @@ describe('Normalized JSON Handler', () => {
   it('should render column headers', () => {
     // given
     const {definition, data} = response;
-    const axis = 'columns';
     const {headers} = data;
     const expectedHeaders = [
-      ['BWI', 'Flight Delayed'],
-      ['BWI', 'Avg Delay (min)'],
-      ['BWI', 'On-Time'],
-      ['DCA', 'Flight Delayed'],
-      ['DCA', 'Avg Delay (min)'],
-      ['DCA', 'On-Time']];
+      ['BWI', 'BWI', 'BWI', 'DCA', 'DCA', 'DCA'],
+      ['Flights Delayed', 'Avg Delay (min)', 'On-Time', 'Flights Delayed', 'Avg Delay (min)', 'On-Time'],
+    ];
     // when
-    const colHeaders = jsonHandler.renderHeaders(definition, axis, headers);
+    const colHeaders = jsonHandler.renderColumnHeaders(definition, headers);
     // then
     expect(colHeaders).toEqual(expectedHeaders);
   });
@@ -98,7 +94,6 @@ describe('Normalized JSON Handler', () => {
   it('should render row headers', () => {
     // given
     const {definition, data} = response;
-    const axis = 'rows';
     const {headers} = data;
     const expectedHeaders = [
       ['2009', 'January'],
@@ -108,10 +103,9 @@ describe('Normalized JSON Handler', () => {
       ['2010', 'January'],
       ['2010', 'February'],
       ['2010', 'March'],
-      ['2010', 'Total'],
-    ];
+      ['2010', 'Total']];
     // when
-    const colHeaders = jsonHandler.renderHeaders(definition, axis, headers);
+    const colHeaders = jsonHandler.renderRowHeaders(definition, headers);
     // then
     expect(colHeaders).toEqual(expectedHeaders);
   });

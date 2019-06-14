@@ -67,6 +67,45 @@ class NormalizedJsonHandler {
       );
     });
   };
+  /**
+   * Creates a 2D Array for row headers
+   *
+   * @param {Object} definition - Dataset definition
+   * @param {Object} headers - Response data object
+   *
+   * @memberof NormalizedJsonHandler
+   * @return {Array}
+   */
+  renderRowHeaders = (definition, headers) => {
+    return headers.rows.map((array) => {
+      return array.map((arrayItem, arrayItemIndex) => {
+        return definition.grid.rows[arrayItemIndex].elements[arrayItem].formValues[0];
+      });
+    });
+  }
+
+  /**
+   * Creates a 2D Array for column headers
+   *
+   * @param {Object} definition - Dataset definition
+   * @param {Object} headers - Response data object
+   *
+   * @memberof NormalizedJsonHandler
+   * @return {Array}
+   */
+  renderColumnHeaders = (definition, headers) => {
+    const firstItemsArray = [];
+    const secondItemsArray = [];
+    const result = [];
+    headers.columns.forEach((pair) => {
+      firstItemsArray.push(pair[0]);
+      secondItemsArray.push(pair[1]);
+    });
+    const firstResult = firstItemsArray.map((elem) => definition.grid.columns[0].elements[elem].formValues[0]);
+    const secondResult = secondItemsArray.map((elem) => definition.grid.columns[1].elements[elem].name);
+    result.push(firstResult, secondResult);
+    return result;
+  }
 
   /**
    * For keep-only/exclude on an attribute cell
