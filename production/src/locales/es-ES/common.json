@@ -113,5 +113,12 @@
   "This object cannot be imported. Objects with cross tabs, totals, or subtotals are not supported in this version of MicroStrategy for Office.": "Este objeto no puede importarse. Los objetos con tablas cruzadas, totales o subtotales no se admiten en esta versión de MicroStrategy para Office",
   "This object cannot be imported. Either you do not have necessary permissions to view it, or it is empty.": "Este objeto no puede importarse. No tiene los permisos necesarios para visualizarlo o el objeto está vacío",
   "No data returned for this view. This might be because the applied prompt excludes all data.": "No se han devuelto datos para esta vista. Esto puede deberse a que la selección dinámica aplicada excluye todos los datos",
-  "The required data range in the worksheet is not empty": "El rango de datos requerido no está vacío en la hoja de cálculo"
+  "The required data range in the worksheet is not empty": "El rango de datos requerido no está vacío en la hoja de cálculo",
+  "The selected filter excludes all data": "El filtro seleccionado excluye todos los datos",
+  "Dataset removed": "Conjunto de datos eliminado",
+  "Dataset refreshed": "Conjunto de datos actualizado",
+  "The object binding is no longer valid due to previous updates.": "El enlace de objeto ya no es válido debido a actualizaciones anteriores",
+  "The object cannot be imported. Either you do not have necessary permissions to view it, or it is empty.": "Este objeto no puede importarse. No tiene los permisos necesarios para visualizarlo o el objeto está vacío",
+  "The required data range in the worksheet is not empty.": "El rango de datos requerido no está vacío en la hoja de cálculo",
+  "MicroStrategy Office Client loaded. Click Import Data on the Home tab to start plugin. Login to Environment to start browsing documents.": "Cliente de MicroStrategy Office cargado. Haga clic en Importar datos en la pestaña Inicio para iniciar el complemento. Inicie sesión en el Entorno para empezar a examinar los documentos"
 }

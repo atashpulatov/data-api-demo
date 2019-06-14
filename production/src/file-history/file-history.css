@@ -133,7 +133,7 @@ span.file-icons {
     -ms-user-select: none;
     user-select: none;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .ant-dropdown-trigger {
@@ -174,20 +174,31 @@ span.file-icons {
     height: 100vh;
     width: 100vw;
     position: fixed;
-    text-align: center;
     top: 60px;
     left: 0;
-    background-color: rgba(255, 255, 255, 0.7);
+    padding: 130px 30px 0 30px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.8);
 }
 
-.secured-screen-container>div {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    padding: 22px;
-    border-radius: 4px;
-    background-color: #fff;
-    width: 70%;
-    transform: translate(-50%, -50%);
-    border: 1px solid #ccc;
+.secured-header,
+.secured-info {
+    color: #4D5154;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.secured-header {
+    padding: 20px 0;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.secured-info {
+    padding-bottom: 30px;
+    font-size: 14px;
+    font-weight: 300;
+}
+
+.show-data-btn {
+    width: 125px;
 }
