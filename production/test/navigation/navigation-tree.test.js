@@ -16,13 +16,13 @@ describe('NavigationTree', () => {
 
   it('should render with props given', () => {
     // given
-    const parsed = {
+    const mstrData = {
       envUrl: 'env',
       token: 'token',
       projectId: 'projectId',
     };
     // when
-    const wrappedComponent = shallow(<_NavigationTree parsed={parsed} />);
+    const wrappedComponent = shallow(<_NavigationTree mstrData={mstrData} />);
     // then
     expect(wrappedComponent.instance()).toBeDefined();
     expect(wrappedComponent.find('FolderBrowser').get(0)).toBeDefined();
@@ -31,7 +31,7 @@ describe('NavigationTree', () => {
   it('should call proper method on secondary action', async () => {
     // given
     const propsMethod = jest.fn();
-    const parsed = {
+    const mstrData = {
       envUrl: 'env',
       token: 'token',
       projectId: 'projectId',
@@ -51,7 +51,7 @@ describe('NavigationTree', () => {
     });
     const wrappedComponent = shallow(
         <_NavigationTree
-          parsed={parsed}
+          mstrData={mstrData}
           handlePrepare={propsMethod}
           {...actionObject}
         />);
@@ -68,7 +68,7 @@ describe('NavigationTree', () => {
   it('should display warning when trying to prepare empty report', async () => {
     // given
     const propsMethod = jest.fn();
-    const parsed = {
+    const mstrData = {
       envUrl: 'env',
       token: 'token',
       projectId: 'projectId',
@@ -89,7 +89,7 @@ describe('NavigationTree', () => {
     message.warning = jest.fn();
     const wrappedComponent = shallow(
         <_NavigationTree
-          parsed={parsed}
+          mstrData={mstrData}
           handlePrepare={propsMethod}
           {...actionObject}
         />);
@@ -103,7 +103,7 @@ describe('NavigationTree', () => {
 
   it('should call proper method on cancel action', () => {
     // given
-    const parsed = {
+    const mstrData = {
       envUrl: 'env',
       token: 'token',
       projectId: 'projectId',
@@ -113,7 +113,7 @@ describe('NavigationTree', () => {
     };
     const office = jest.spyOn(Office.context.ui, 'messageParent');
     const wrappedComponent = shallow(<_NavigationTree
-      parsed={parsed}
+      mstrData={mstrData}
     />);
     // when
     wrappedComponent.instance().handleCancel();
@@ -123,7 +123,7 @@ describe('NavigationTree', () => {
 
   it('should call proper method on trigger update', () => {
     // given
-    const parsed = {
+    const mstrData = {
       envUrl: 'env',
       token: 'token',
       projectId: 'projectId',
@@ -135,7 +135,7 @@ describe('NavigationTree', () => {
     };
     const mockMessageParent = jest.spyOn(Office.context.ui, 'messageParent');
     const wrappedComponent = shallow(<_NavigationTree
-      parsed={parsed}
+      mstrData={mstrData}
     />);
     // when
     wrappedComponent.instance().onTriggerUpdate(body);
@@ -182,7 +182,7 @@ describe('NavigationTree', () => {
     const selectObject = jest.fn();
     const isPromptedResponse = jest.spyOn(mstrObjectRestService, 'isPrompted')
         .mockImplementationOnce(async () => givenIsPrompted);
-    const wrappedComponent = shallow(<_NavigationTree selectObject={selectObject} parsed={{}} />);
+    const wrappedComponent = shallow(<_NavigationTree selectObject={selectObject} mstrData={{}} />);
     // when
     await wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype);
     // then
