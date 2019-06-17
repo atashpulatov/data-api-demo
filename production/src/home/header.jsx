@@ -10,8 +10,15 @@ import {withTranslation} from 'react-i18next';
 import {officeApiHelper} from '../office/office-api-helper';
 import {toggleSecuredFlag} from '../office/office-actions';
 import {MSTRIcon} from 'mstr-react-library';
+import settingsIcon from './assets/settings-icon.svg';
+import mstrLogo from './assets/mstr_logo.png';
+
 
 export class _Header extends Component {
+  constructor() {
+    super();
+    this.state = {isSettings: false};
+  }
   componentDidMount = async () => {
     let userData = {};
     const IS_LOCALHOST = this.props.IS_LOCALHOST;
@@ -23,7 +30,28 @@ export class _Header extends Component {
       errorService.handleError(error, !IS_LOCALHOST);
     }
     !this.props.userFullName && sessionHelper.saveUserInfo(userData);
+    // clicking anywhere closes menu
+    document.addEventListener('click', (e) => {
+      e.domEvent && e.domEvent.stopPropagation();
+      if (this.state.isSettings && !e.target.classList.contains('settings-btn')) {
+        this.setState({...this.state, isSettings: false});
+      }
+    });
+    // ESC key closes settings menu
+    document.addEventListener('keyup', (e) => {
+      e.domEvent && e.domEvent.stopPropagation();
+      if (e.keyCode === 27 && this.state.isSettings) {
+        this.setState({...this.state, isSettings: false});
+      }
+    });
   };
+
+  showSettings = () => {
+    if (!this.state.isSettings) {
+      return this.setState({...this.state, isSettings: true});
+    }
+    return this.setState({...this.state, isSettings: false});
+  }
 
   secureData = async () => {
     try {
@@ -53,24 +81,49 @@ export class _Header extends Component {
     }
   }
 
-  render() {
+  getSettingsMenu = () => {
     const {userFullName, userInitials, loading, t} = this.props;
+    return (this.state.isSettings &&
+      <ul className="settings-list">
+        <li>
+          {userInitials !== null ?
+          <span id='initials' alt={t('User profile')}>{userInitials}</span> :
+          <img id='profile-image' src={logo} alt={t('User profile')} />
+          /* TODO: When rest api returns profileImage use it as source */}
+          <span className="user-name">{userFullName}</span>
+        </li>
+        <li><a href='https://google.pl' target="_blank">Privacy Policy</a></li>
+        <li>Terms of Use</li>
+        <li>Help</li>
+        <li className="settings-version">Version 11.1.0200.996</li>
+        <li>
+          <div className="contact-us">
+            <span>Contact Us</span>
+          </div>
+          <div className="logout-btn">
+            <Button size='small' onClick={logout} disabled={loading}>
+              {t('Logout')}
+            </Button>
+          </div>
+        </li>
+      </ul>);
+  }
+
+  render() {
+    const {t} = this.props;
     return (
       <header id='app-header'>
-        <div className="user-data">
-          <span id='profileImage' className={userFullName && 'got-user-data'}>
-            {userInitials !== null ?
-              <span id='initials' alt={t('User profile')}>{userInitials}</span> :
-              <img id='profile-image' src={logo} alt={t('User profile')} />
-              /* TODO: When rest api returns profileImage use it as source */}
+        <div className="mstr-logo">
+          <span id='profileImage'>
+            <img src={mstrLogo} />
           </span>
-          <span className={` ${userFullName && 'got-user-data'} header-name`}>{userFullName}</span>
         </div>
         <div className="header-buttons">
           {this.getSecureButton()}
-          <Button id='logOut' onClick={logout} size='small' disabled={loading}>
-            {t('Log out')}
+          <Button className="settings-btn" onClick={this.showSettings}>
+            <MSTRIcon type="settings" />
           </Button>
+          {this.getSettingsMenu()}
         </div>
       </header >
     );

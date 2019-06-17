@@ -24,33 +24,6 @@ hr {
     align-items: center;
 }
 
-.got-user-data {
-    transition: opacity 1.5s;
-    opacity: 1 !important;
-}
-
-#profileImage {
-    color: #888;
-    font-size: 12px;
-    vertical-align: middle;
-    flex: auto 0 0;
-    align-self: center;
-    order: 1;
-    opacity: 0;
-}
-
-#app-header .header-name {
-    padding-left: 13px;
-    padding-right: 13px;
-    order: 2;
-    line-height: 32px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    min-width: 0;
-    opacity: 0;
-    font-weight: 500;
-}
-
 #app-header img {
     height: 32px;
     width: 32px;
@@ -60,12 +33,12 @@ hr {
 }
 
 #app-header #initials {
-    height: 32px;
-    width: 32px;
-    line-height: 32px;
+    height: 28px;
+    width: 28px;
+    line-height: 28px;
     border-radius: 50%;
     font-size: 13px;
-    background: #b6b6b6;
+    background: #e4e4e4;
     color: white;
     text-align: center;
     display: inline-block;
@@ -75,15 +48,6 @@ hr {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-}
-
-#logOut {
-    color: #888;
-    font-size: 12px;
-    margin-left: 10px;
-    vertical-align: inherit;
-    align-self: center;
-    order: 4;
 }
 
 #app-main {
@@ -202,23 +166,101 @@ hr {
     border: 1px solid #ccc;
 }
 
+/* application header buttons */
+
 #app-header .secure-btn,
-#app-header .secure-btn .ant-btn:disabled {
+#app-header .secure-btn .ant-btn:disabled,
+#app-header .settings-btn,
+#app-header .settings-btn .ant-btn:disabled {
     vertical-align: middle;
-    flex: auto 0 0;
     align-self: center;
-    order: 3;
     background: #FFFFFF;
     box-shadow: 0 0;
     border: none;
     padding: 0;
 }
 
-#app-header .secure-btn img {
-    height: 18px;
-    width: 18px;
+#app-header .settings-btn,
+#app-header .settings-btn .ant-btn:disabled {
+    margin-left: 15px;
 }
 
-.user-data {
-    width: calc(100vw - 140px);
+#app-header .secure-btn svg {
+    vertical-align: text-top;
+}
+
+#app-header .mstr-icon.settings svg {
+    max-width: 22px;
+    max-height: 22px;
+}
+
+.header-buttons {
+    position: relative;
+}
+
+/* settings context menu */
+
+.settings-list {
+    position: absolute;
+    left: -175px;
+    top: 20px;
+    z-index: 999;
+    width: 200px;
+	margin: 0;
+    padding: 10px;
+    list-style: none;
+	background: #fff;
+    color: #3F4042;
+    box-shadow: 0 2px 6px 0 rgba(0,0,0,0.20);
+    border-radius: 2px;
+}
+
+.settings-list li {
+    padding: 2px;
+    font-size: 12px;
+}
+
+.settings-list li a {
+    color: #3F4042;
+}
+
+.settings-list li:first-child {
+    font-weight: 500;
+    border-bottom: solid 1px #e4e4e4;
+}
+
+#app-header .user-name {
+    margin-left: 10px;
+    padding-left: 13px;
+    padding-right: 13px;
+    line-height: 32px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.settings-list .settings-version {
+    color: #1c91dc;
+    font-weight: 300;
+    font-size: 10px;
+    text-align: center;
+}
+
+.settings-list li:last-child {
+    display: flex;
+    justify-content: space-between;
+}
+
+.settings-list li:last-child .contact-us {
+    color: #A4A4A4;
+    font-weight: 500;
+    font-size: 10px;
+}
+
+#app-header .logout-btn .ant-btn {
+    width: 70px;
+    height: 20px;
+    border: 1px solid #3F4042;
+    border-radius: 2px;
+    color: #3F4042;
+    font-size: 10px;
 }
