@@ -15,11 +15,11 @@ export class _PromptsWindow extends Component {
     this.state = {
       session: {
         USE_PROXY: false,
-        url: this.props.parsed.envUrl,
-        authToken: this.props.parsed.token,
-        projectId: this.props.parsed.projectId,
+        url: this.props.mstrData.envUrl,
+        authToken: this.props.mstrData.token,
+        projectId: this.props.mstrData.projectId,
       },
-      reportId: this.props.parsed.reportId,
+      reportId: this.props.mstrData.reportId,
       triggerUpdate: false,
       loading: true,
       currentPageKey: '',

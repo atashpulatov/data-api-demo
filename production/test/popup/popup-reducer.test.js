@@ -2,6 +2,7 @@ import {
   START_REPORT_LOADING,
   STOP_REPORT_LOADING,
   RESET_STATE,
+  SET_REPORT_N_FILTERS,
 } from '../../src/popup/popup-actions';
 
 import {initialState, popupReducer} from '../../src/popup/popup-reducer';
@@ -42,5 +43,17 @@ describe('Popup Reducer', () => {
     // then
     expect(newState).toEqual({...initialState});
   });
-})
-;
+
+  it('should return proper state in case of SET_REPORT_N_FILTERS action', () => {
+    // given
+    const editedReport = 'editedReport';
+    const action = {
+      type: SET_REPORT_N_FILTERS,
+      editedReport,
+    };
+    // when
+    const newState = popupReducer(initialState, action);
+    // then
+    expect(newState).toEqual({editedReport});
+  });
+});
