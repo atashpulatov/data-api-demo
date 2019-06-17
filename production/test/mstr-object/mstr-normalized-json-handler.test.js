@@ -65,6 +65,17 @@ describe('Normalized JSON Handler', () => {
     // then
     expect(tabular).toEqual(expectedId);
   });
+  it('should render metric values', () => {
+    // given
+    const {data} = response;
+    const {metricValues} = data;
+    const onMetric = ({rv}) => rv;
+    const expectedFirstRow = [3139, 17046.02, 4543, 2406, 20915.41, 3449];
+    // when
+    const rows = jsonHandler.renderRows(metricValues, onMetric);
+    // then
+    expect(rows[0]).toEqual(expectedFirstRow);
+  });
   it('should render column headers', () => {
     // given
     const {definition, data} = response;

@@ -87,6 +87,20 @@ class NormalizedJsonHandler {
   }
 
   /**
+   * Creates an array with the metric values. We pass a function to pick the object key onElement.
+   * e.g., onElement = (value) => value.rv;
+   *
+   * @param {Array} metricValues - array of metric values
+   * @param {function} onElement - Callback function to process elements
+   *
+   * @memberof NormalizedJsonHandler
+   * @return {Array}
+   */
+  renderRows = (metricValues, onElement) => {
+    return metricValues.map((row) => row.map(onElement));
+  }
+
+  /**
    * For keep-only/exclude on an attribute cell
    *
    * @param {Object} definition - Dataset definition
