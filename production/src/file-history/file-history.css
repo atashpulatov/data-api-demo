@@ -95,6 +95,8 @@ span.file-icons {
 
 .loading-button-container>img {
     vertical-align: baseline;
+    position: relative;
+    left: 2px;
 }
 
 .ant-input.rename-input {
