@@ -46,7 +46,6 @@ class PopupHelper {
 
     printRefreshedReport = async (bindingId, objectType, length, index, isRefreshAll) => {
       const refreshReport = officeStoreService.getReportFromProperties(bindingId);
-      console.log({refreshReport});
       isRefreshAll && this.storageReportRefreshStart(refreshReport, index);
       const isReport = objectType === 'report';
       const instanceId = null;
