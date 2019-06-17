@@ -67,10 +67,10 @@ describe('office loaded file', () => {
     const wrappedComponent = mount(<_OfficeLoadedFile fileName='test' refreshDate={new Date()} />);
     const wrappedIcons = wrappedComponent.find('MSTRIcon');
     // then
-    const refreshButton = wrappedIcons.at(1);
+    const refreshButton = wrappedIcons.at(2);
     expect(wrappedIcons.length).toBeGreaterThan(0);
     expect(refreshButton.props().type).toEqual('refresh');
-    const deleteButton = wrappedIcons.at(2);
+    const deleteButton = wrappedIcons.at(3);
     expect(deleteButton.props().type).toEqual('trash');
   });
   
@@ -102,7 +102,7 @@ describe('office loaded file', () => {
       refreshReportsArray={onRefreshMock}
       isLoading={false} />);
     const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
-    const refreshButton = wrappedIcons.at(1);
+    const refreshButton = wrappedIcons.at(2);
     refreshButton.props().onClick(mockEvent);
     // then
     expect(onRefreshMock).toBeCalled();
@@ -123,7 +123,7 @@ describe('office loaded file', () => {
       refreshReportsArray={onRefreshMocked}
       isLoading={false} />);
     const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
-    const refreshButton = wrappedIcons.at(1);
+    const refreshButton = wrappedIcons.at(2);
     refreshButton.props().onClick(mockEvent);
     // then
     expect(onRefreshMocked).toBeCalled();
@@ -174,7 +174,7 @@ describe('office loaded file', () => {
       onDelete={onDeleteMocked} />);
     wrappedComponent.setState({allowDeleteClick: true});
     const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
-    const deleteButton = wrappedIcons.at(2);
+    const deleteButton = wrappedIcons.at(3);
     deleteButton.props().onClick(mockEvent);
     // then
     expect(onDeleteMocked).toBeCalled();
@@ -196,7 +196,7 @@ describe('office loaded file', () => {
       isLoading={false} />);
     wrappedComponent.setState({allowDeleteClick: false});
     const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
-    const deleteButton = wrappedIcons.at(2);
+    const deleteButton = wrappedIcons.at(3);
     // when
     deleteButton.props().onClick(mockEvent);
     // then
@@ -230,6 +230,6 @@ describe('office loaded file', () => {
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile fileName='test' />);
     // then
-    expect(wrappedComponent.find(Popover)).toHaveLength(3);
+    expect(wrappedComponent.find(Popover)).toHaveLength(4);
   });
 });
