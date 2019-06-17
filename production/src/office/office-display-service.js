@@ -158,7 +158,7 @@ class OfficeDisplayService {
    * @param {string} officeTableId Excel Binding ID
    * @param {Object} prevOfficeTable Previous office table to refresh
    *
-   * @memberof OfficeDisplayService
+   * @memberOf OfficeDisplayService
    */
   _createOfficeTable = async (instanceDefinition, context, startCell, officeTableId, prevOfficeTable) => {
     const hasHeaders = true;
@@ -242,7 +242,7 @@ class OfficeDisplayService {
    * Function closes popup; used when  importing report
    * it swallows error from office if dialog has been closed by user
    *
-   * @memberof OfficeDisplayService
+   * @memberOf OfficeDisplayService
    */
   _dispatchPrintFinish() {
     const reduxStoreState = reduxStore.getState();

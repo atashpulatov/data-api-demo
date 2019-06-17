@@ -208,6 +208,12 @@ class OfficeApiHelper {
           }
         }));
   }
+
+  deleteObjectTableBody = (context, object) => {
+    const tableObject = context.workbook.tables.getItem(object.bindId);
+    const tableRange = tableObject.getDataBodyRange();
+    tableRange.clear(Excel.ClearApplyTo.contents);
+  }
 }
 
 export const officeApiHelper = new OfficeApiHelper();

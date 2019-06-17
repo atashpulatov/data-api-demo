@@ -6,6 +6,7 @@ import {fileHistoryHelper} from './file-history-helper';
 import loadingSpinner from './assets/report_loading_spinner.gif';
 import {refreshReportsArray} from '../popup/popup-actions';
 import RenameInput from './file-history-rename-input';
+import {withTranslation} from 'react-i18next';
 
 export class _OfficeLoadedFile extends React.Component {
   constructor() {
@@ -52,7 +53,7 @@ export class _OfficeLoadedFile extends React.Component {
   };
 
   render() {
-    const {fileName, bindingId, onClick, isLoading, objectType, isPrompted, refreshDate} = this.props;
+    const {fileName, bindingId, onClick, isLoading, objectType, isPrompted, refreshDate, t} = this.props;
     return (
       <Row
         className="file-history-container"
@@ -66,19 +67,19 @@ export class _OfficeLoadedFile extends React.Component {
         </Col>
         <Col span={14} className="report-title">
           <RenameInput bindingId={bindingId} fileName={fileName} />
-          <div className="additional-data">{refreshDate}</div>
+          <div className="additional-data">{t('refreshed_date', {date: refreshDate})}</div>
         </Col>
         <Col span={1} offset={2}>
-          <Popover placement="bottom" content='Refresh Data' mouseEnterDelay={1}>
+          <Popover placement="bottom" content={t('Refresh Data')} mouseEnterDelay={1}>
             {!isPrompted && <span className="loading-button-container"
               onClick={this.refreshAction}>
               {!isLoading ? <MSTRIcon type='refresh' /> :
-              <img width='12px' height='12px' src={loadingSpinner} alt='Report loading icon' />}
+              <img width='12px' height='12px' src={loadingSpinner} alt={t('Report loading icon')} />}
             </span>}
           </Popover>
         </Col>
         <Col span={1} offset={1}>
-          <Popover placement="bottomRight" content='Remove Data from Workbook' mouseEnterDelay={1} arrowPointAtCenter="true">
+          <Popover placement="bottomRight" content={t('Remove Data from Workbook')} mouseEnterDelay={1} arrowPointAtCenter="true">
             <span
               onClick={this.deleteAction}>
               <MSTRIcon type='trash' />
@@ -90,9 +91,13 @@ export class _OfficeLoadedFile extends React.Component {
   }
 }
 
+_OfficeLoadedFile.defaultProps = {
+  t: (text) => text,
+};
+
 const mapDispatchToProps = {
   refreshReportsArray,
 };
 
-export const OfficeLoadedFile = connect(null, mapDispatchToProps)(_OfficeLoadedFile);
+export const OfficeLoadedFile = connect(null, mapDispatchToProps)(withTranslation('common')(_OfficeLoadedFile));
 

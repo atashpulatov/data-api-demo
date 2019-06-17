@@ -18,7 +18,7 @@ span.file-icons {
     background: #FFFFFF;
     border: 1px solid #1C91DC;
     border-radius: 4px;
-    width: 88px;
+    max-width: 70%;
     height: 25px;
     margin-bottom: 16px;
     font-size: 12px;
@@ -39,7 +39,8 @@ span.file-icons {
 
 .ant-btn.refresh-all-btn,
 .ant-btn.refresh-all-btn:hover,
-.ant-btn.refresh-all-btn:focus {
+.ant-btn.refresh-all-btn:focus,
+.refresh-all-btn .ant-btn {
     float: right;
     background: #FFFFFF;
     box-shadow: 0 0;
@@ -131,8 +132,7 @@ span.file-icons {
     -ms-user-select: none;
     user-select: none;
     font-size: 14px;
-    font-weight: 600;
-    font-family: HelveticaNeue, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    font-weight: 500;
 }
 
 .ant-dropdown-trigger {
@@ -148,7 +148,7 @@ span.file-icons {
 }
 
 .rename-container:hover {
-    background-color: #EBEBEB; 
+    background-color: #EBEBEB;
     transition: background-color .4s;
 }
 
@@ -166,4 +166,38 @@ span.file-icons {
     padding: 0 2px;
     font-size: 12px;
     color: #888888;
+}
+
+.secured-screen-container {
+    z-index: 10;
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    padding: 130px 30px 0 30px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.secured-header,
+.secured-info {
+    color: #4D5154;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.secured-header {
+    padding: 20px 0;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.secured-info {
+    padding-bottom: 30px;
+    font-size: 14px;
+    font-weight: 300;
+}
+
+.show-data-btn {
+    width: 125px;
 }

@@ -8,12 +8,19 @@ import {MSTRIcon} from 'mstr-react-library';
 import loadingSpinner from './assets/report_loading_spinner.gif';
 import {refreshReportsArray} from '../popup/popup-actions';
 import {fileHistoryContainerHOC} from './file-history-container-HOC.jsx';
+import {officeStoreService} from '../office/store/office-store-service';
+import {toggleSecuredFlag} from '../office/office-actions';
+import restrictedArt from './assets/art_restricted_access_blue.svg';
 
 import './file-history.css';
+import {withTranslation} from 'react-i18next';
 
 export class _FileHistoryContainer extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    if (officeStoreService.isFileSecured()) {
+      props.toggleSecuredFlag(true);
+    }
     this.state = {
       allowRefreshAllClick: true,
     };
@@ -34,15 +41,30 @@ export class _FileHistoryContainer extends React.Component {
     });
   };
 
+  showData = () => {
+    const {reportArray, refreshReportsArray, toggleSecuredFlag} = this.props;
+    this.refreshAllAction(reportArray, refreshReportsArray);
+    toggleSecuredFlag(false);
+  }
+
   render() {
-    const {reportArray = [], loading, refreshingAll, refreshReportsArray} = this.props;
+    const {reportArray = [], loading, refreshingAll, refreshReportsArray, isSecured, t} = this.props;
     return (<React.Fragment >
+      {
+        isSecured &&
+        <div className="secured-screen-container">
+          <img src={restrictedArt} alt={t('Refresh')}/>
+          <div className="secured-header">{t('Data Cleared!')}</div>
+          <p className="secured-info">{t(`MicroStrategy data has been removed from the workbook. Click 'Refresh' to import it again.`)}</p>
+          <Button type="primary" className="show-data-btn" onClick={this.showData}>{t('View Data')}</Button>
+        </div>
+      }
       <Button id="add-data-btn-container" className="add-data-btn" onClick={() => this.props.addDataAction()}
-        disabled={loading}>Add Data</Button>
+        disabled={loading}>{t('Add Data')}</Button>
       <span className="refresh-button-container">
-        <Popover placement="bottom" content='Refresh All Data' mouseEnterDelay={1}>
-          <Button className="refresh-all-btn" style={{float: 'right'}} onClick={() => this.refreshAllAction(reportArray, refreshReportsArray)} disabled={loading}>
-            {!refreshingAll ? <MSTRIcon type='refresh' /> : <img width='12px' height='12px' src={loadingSpinner} alt='Report loading icon' />}
+        <Popover placement="bottom" content={t('Refresh All Data')} mouseEnterDelay={1}>
+          <Button id="refresh-all-btn" className="refresh-all-btn" style={{float: 'right'}} onClick={() => this.refreshAllAction(reportArray, refreshReportsArray)} disabled={loading}>
+            {!refreshingAll ? <MSTRIcon type='refresh' /> : <img width='12px' height='12px' src={loadingSpinner} alt={t('Report loading icon')} />}
           </Button>
         </Popover>
       </span>
@@ -62,18 +84,24 @@ export class _FileHistoryContainer extends React.Component {
   };
 }
 
-function mapStateToProps(state) {
+_FileHistoryContainer.defaultProps = {
+  t: (text) => text,
+};
+
+function mapStateToProps({officeReducer, historyReducer}) {
   return {
-    reportArray: state.officeReducer.reportArray,
-    project: state.historyReducer.project,
-    refreshingAll: state.officeReducer.isRefreshAll,
+    reportArray: officeReducer.reportArray,
+    project: historyReducer.project,
+    refreshingAll: officeReducer.isRefreshAll,
+    isSecured: officeReducer.isSecured,
   };
 }
 
 const mapDispatchToProps = {
   refreshReportsArray,
+  toggleSecuredFlag,
 };
 
 const WrappedFileHistoryContainer = fileHistoryContainerHOC(_FileHistoryContainer);
 
-export const FileHistoryContainer = connect(mapStateToProps, mapDispatchToProps)(WrappedFileHistoryContainer);
+export const FileHistoryContainer = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(WrappedFileHistoryContainer));
