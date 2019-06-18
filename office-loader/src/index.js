@@ -6,6 +6,7 @@ let popup = null;
 function officeInitialize() {
   Office.onReady()
     .then(() => {
+      translate();
       if (!canSaveCookies()) {
         showCookieWarning();
       } else {
@@ -110,6 +111,81 @@ function canSaveCookies() {
 
 function acceptCookies() {
   window.open('cookie-helper.html', 'mstr_helper', "width=1px,height=1px");
+}
+
+function translate() {
+  const cookiesNotNeededTranslations = {
+    'en-US': 'Loading...',
+    'de-DE': 'Ladevorgang läuft...',
+    'zh-CN': '正在加载...',
+    'es-ES': 'Cargando...',
+    'fr-FR': 'Chargement...',
+    'it-IT': 'Caricamento in corso...',
+    'zh-TW': '載入中...',
+    'ko-KR': '로딩 중...',
+    'pt-BR': 'Carregando...',
+    'nl-NL': 'Laden...',
+    'sv-SE': 'Läser in ...',
+    'ja-JP': 'ロード中...',
+    'da-DK': 'Indlæser...'
+  }
+  const noCookiesTranslations = {
+    'en-US': 'Please enable cookies to start using the add-in',
+    'de-DE': 'Aktivieren Sie Cookies, um das Add-in zu verwenden',
+    'zh-CN': '请启用 Cookies 以使用加载项',
+    'es-ES': 'Habilite las cookies para empezar a usar el complemento',
+    'fr-FR': 'Veuillez activer les cookies pour pouvoir utiliser le complément',
+    'it-IT': 'Per cominciare a utilizzare il componente aggiuntivo è necessario abilitare i cookie',
+    'zh-TW': '請啟用 Cookie 以開始使用增益集',
+    'ko-KR': '추가 기능을 사용하려면 쿠키를 활성화하십시오',
+    'pt-BR': 'Ative os cookies para começar a usar o suplemento',
+    'nl-NL': 'Schakel cookies in om de invoegtoepassing te gebruiken',
+    'sv-SE': 'Aktivera cookies för att börja använda tillägget',
+    'ja-JP': 'アドインを使用するには cookie を有効にする必要があります',
+    'da-DK': 'Aktivér cookies for at starte denne add-in'
+  }
+  const enableButtonTranslations = {
+    'en-US': 'Enable',
+    'de-DE': 'Aktivieren',
+    'zh-CN': '启用',
+    'es-ES': 'Habilitar',
+    'fr-FR': 'Activer',
+    'it-IT': 'Abilita',
+    'zh-TW': '啟用',
+    'ko-KR': '활성화',
+    'pt-BR': 'Permitir',
+    'nl-NL': 'Inschakelen',
+    'sv-SE': 'Aktivera',
+    'ja-JP': '有効化',
+    'da-DK': 'Aktiver'
+  }
+  var loginTranslations = {
+    'en-US': 'Log in',
+    'de-DE': 'Anmelden',
+    'zh-CN': '登录',
+    'es-ES': 'Iniciar sesión',
+    'fr-FR': 'Connexion',
+    'it-IT': 'Accedi',
+    'zh-TW': '登入',
+    'ko-KR': '로그인',
+    'pt-BR': 'Fazer login',
+    'nl-NL': 'Inloggen',
+    'sv-SE': 'Logga in',
+    'ja-JP': 'ログイン',
+    'da-DK': 'Log på'
+  }
+  try {
+    const locale = Office.context.displayLanguage || navigator.language;
+
+    if (!!cookiesNotNeededTranslations[locale]) {
+      noCookiesHeader.innerText = noCookiesTranslations[locale];
+      enableSpan.innerText = enableButtonTranslations[locale];
+      loadingSpan.innerText = cookiesNotNeededTranslations[locale];
+      logingSpan.innerText = loginTranslations[locale];
+    };
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 officeInitialize();
