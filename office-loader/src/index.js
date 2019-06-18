@@ -1,3 +1,6 @@
+import 'core-js';
+import 'whatwg-fetch';
+
 const Office = window.Office;
 const OFFICE_PRIVILEGE_ID = '273';
 const libraryUrl = getLibraryUrl();
@@ -55,14 +58,16 @@ function verifyToken(libraryUrl) {
 
 function openAuthDialog(url) {
   const popupUrl = `${url}/apps/addin-mstr-office/index.html?source=addin-mstr-office`;
-  openPopup(popupUrl);
+  const isPCDesktop = Office.context ? Office.context.platform === Office.PlatformType.PC : false;
+  isPCDesktop ? openOfficeDialog(popupUrl) : openPopup(popupUrl);
+
   const listenAuthToken = () => {
     verifyToken(url).then(valid => {
       if (valid) {
         popup.close();
         goToReact(url);
       } else {
-        !popup.closed && setTimeout(listenAuthToken, 2000)
+        !popup.closed && setTimeout(listenAuthToken, 1000)
       }
     }).catch((e) => {
       console.log(e);
@@ -78,6 +83,37 @@ function openPopup(url) {
   } else {
     popup.focus();
   };
+  return popup;
+}
+
+function openOfficeDialog(url) {
+  let dialog;
+  Office.context.ui.displayDialogAsync(url, {height: 80, width: 50},
+    function(asyncResult) {
+      dialog = asyncResult.value;
+      dialog.addEventHandler(Office.EventType.DialogMessageReceived, processDialogEvent);
+      popup = dialog;
+      popup.closed = false;
+    }
+  );
+}
+
+function processDialogEvent(arg) {
+  switch (arg.error) {
+    case 12002:
+      console.log('The dialog box has been directed to a page that it cannot find or load, or the URL syntax is invalid.');
+      break;
+    case 12003:
+      console.log('The dialog box has been directed to a URL with the HTTP protocol. HTTPS is required.');
+      break;
+    case 12006:
+      console.log('Dialog closed.');
+      popup.closed = true;
+      break;
+    default:
+      console.log('Unknown error in dialog box.');
+      break;
+  }
 }
 
 function getCookie(win) {
