@@ -181,7 +181,7 @@ function translate() {
       noCookiesHeader.innerText = noCookiesTranslations[locale];
       enableSpan.innerText = enableButtonTranslations[locale];
       loadingSpan.innerText = cookiesNotNeededTranslations[locale];
-      logingSpan.innerText = loginTranslations[locale];
+      loginSpan.innerText = loginTranslations[locale];
     };
   } catch (e) {
     console.log(e)
