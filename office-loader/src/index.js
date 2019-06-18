@@ -58,8 +58,8 @@ function verifyToken(libraryUrl) {
 
 function openAuthDialog(url) {
   const popupUrl = `${url}/apps/addin-mstr-office/index.html?source=addin-mstr-office`;
-  const isPCDesktop = Office.context ? Office.context.platform === Office.PlatformType.PC : false;
-  isPCDesktop ? openOfficeDialog(popupUrl) : openPopup(popupUrl);
+  const isOfficeOnline = Office.context ? Office.context.platform === Office.PlatformType.OfficeOnline : false;
+  isOfficeOnline ? openPopup(popupUrl) : openOfficeDialog(popupUrl);
 
   const listenAuthToken = () => {
     verifyToken(url).then(valid => {
