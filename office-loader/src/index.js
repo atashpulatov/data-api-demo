@@ -49,16 +49,13 @@ function getLibraryUrl() {
 function verifyToken(libraryUrl) {
   const url = libraryUrl + '/api/sessions/privileges/' + OFFICE_PRIVILEGE_ID;
   const token = getCookie(window);
-  const headers = {
-    'X-MSTR-AuthToken': token
-  };
+  const headers = {'X-MSTR-AuthToken': token};
   return fetch(url, {credentials: 'include', headers}).then((res) => res.ok);
 }
 
 function openAuthDialog(url) {
   const popupUrl = `${url}/apps/addin-mstr-office/index.html?source=addin-mstr-office`;
   openPopup(popupUrl);
-  // Clear old session cookie
   const listenAuthToken = () => {
     verifyToken(url).then(valid => {
       if (valid) {
@@ -174,9 +171,9 @@ function translate() {
     'ja-JP': 'ログイン',
     'da-DK': 'Log på'
   }
+
   try {
     const locale = Office.context.displayLanguage || navigator.language;
-
     if (!!cookiesNotNeededTranslations[locale]) {
       noCookiesHeader.innerText = noCookiesTranslations[locale];
       enableSpan.innerText = enableButtonTranslations[locale];
