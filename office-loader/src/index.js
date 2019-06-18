@@ -7,26 +7,14 @@ function officeInitialize() {
   Office.onReady()
     .then(() => {
       translate();
-      if (!canSaveCookies()) {
-        showCookieWarning();
-      } else {
-        startAuthentication();
-      }
+      return canSaveCookies() ? startAuthentication() : showCookieWarning();
     });
 }
 
 function startAuthentication() {
-  verifyToken(libraryUrl).then(valid => {
-    if (valid) {
-      goToReact(libraryUrl);
-    }
-    else {
-      showLoginBtn();
-    }
-  }).catch((e) => {
-    console.log(e);
-    showLoginBtn();
-  });
+  verifyToken(libraryUrl)
+    .then(valid => valid ? goToReact(libraryUrl) : showLoginBtn())
+    .catch((e) => console.log(e) || showLoginBtn());
 }
 
 function onLoginClick() {
@@ -50,24 +38,21 @@ function verifyToken(libraryUrl) {
   const url = libraryUrl + '/api/sessions/privileges/' + OFFICE_PRIVILEGE_ID;
   const token = getCookie(window);
   const headers = {'X-MSTR-AuthToken': token};
-  return fetch(url, {credentials: 'include', headers}).then((res) => res.ok);
+  return fetch(url, {credentials: 'include', headers});
 }
 
 function openAuthDialog(url) {
   const popupUrl = `${url}/apps/addin-mstr-office/index.html?source=addin-mstr-office`;
   openPopup(popupUrl);
   const listenAuthToken = () => {
-    verifyToken(url).then(valid => {
-      if (valid) {
+    verifyToken(url).then((res) => {
+      if (res.ok) {
         popup.close();
         goToReact(url);
       } else {
         !popup.closed && setTimeout(listenAuthToken, 2000)
       }
-    }).catch((e) => {
-      console.log(e);
-      popup.close();
-    });
+    }).catch((e) => console.log(e) || popup.close());
   }
   listenAuthToken();
 }
@@ -101,7 +86,7 @@ function canSaveCookies() {
   try {
     document.cookie = TEMP_COOKIE;
     return document.cookie.indexOf(TEMP_COOKIE) !== -1;
-  } catch {
+  } catch (e) {
     return false;
   }
 }
