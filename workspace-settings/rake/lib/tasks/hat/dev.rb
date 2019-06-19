@@ -57,8 +57,8 @@ end
 
 desc "debug rake task"
 task :debug do
-  # generate_comparison_report_markdown
-  publish_to_pull_request_page
+  generate_comparison_report_markdown
+  # publish_to_pull_request_page
 end
 
 def run_test(working_dir)
@@ -158,17 +158,40 @@ def generate_comparison_report_markdown
 end
 
 def write_row_to_compare_table(mf, name, node)
-  base_stmts = get_ratio(node["base_metric"],"cov_stat","total_stat")
-  current_stmts = get_ratio(node["current_metric"],"cov_stat","total_stat")
-  base_branch = get_ratio(node["base_metric"],"cov_branch","total_branch")
-  current_branch = get_ratio(node["current_metric"],"cov_branch","total_branch")
-  base_func = get_ratio(node["base_metric"],"cov_func","total_func")
-  current_func  = get_ratio(node["current_metric"],"cov_func","total_func")
-  base_line = get_ratio(node["base_metric"],"cov_lines","total_lines")
-  current_line = get_ratio(node["current_metric"],"cov_lines","total_lines")
+  contains_diff = false
+  base_stmts = [get_ratio(node["base_metric"],"cov_stat","total_stat")]
+  current_stmts = [get_ratio(node["current_metric"],"cov_stat","total_stat")]
+  base_branch = [get_ratio(node["base_metric"],"cov_branch","total_branch")]
+  current_branch = [get_ratio(node["current_metric"],"cov_branch","total_branch")]
+  base_func = [get_ratio(node["base_metric"],"cov_func","total_func")]
+  current_func  = [get_ratio(node["current_metric"],"cov_func","total_func")]
+  base_line = [get_ratio(node["base_metric"],"cov_lines","total_lines")]
+  current_line = [get_ratio(node["current_metric"],"cov_lines","total_lines")]
   base_uncover = get_uncover(node["base_metric"])
   current_uncover = get_uncover(node["current_metric"])
-  mf.write("<tr><td>#{name}</td><td>#{base_stmts}</td><td>#{current_stmts}</td>  <td>#{base_branch}</td><td>#{current_branch}</td>  <td>#{base_func}</td><td>#{current_func}</td>  <td>#{base_line}</td><td>#{current_line}</td>  <td>#{base_uncover}</td><td>#{current_uncover}</td></tr>")
+  contains_diff = contains_diff || compare_ratio(base_stmts, current_stmts) || compare_ratio(base_branch,current_branch) || compare_ratio(base_func,current_func) || compare_ratio(base_line,current_line)
+  if contains_diff
+    mf.write("<tr><td>#{name}</td><td>#{base_stmts[0]}</td><td>#{current_stmts[0]}</td>  <td>#{base_branch[0]}</td><td>#{current_branch[0]}</td>  <td>#{base_func[0]}</td><td>#{current_func[0]}</td>  <td>#{base_line[0]}</td><td>#{current_line[0]}</td>  <td>#{base_uncover}</td><td>#{current_uncover}</td></tr>")
+  end
+end
+#a tricky way for reference parameter
+def compare_ratio(base, current)
+  if base[0] == current[0]
+    return false
+  end
+  if base[0] == "N/A" or current[0]=="N/A"
+    return true
+  end
+  base_f = base[0].to_f
+  current_f = current[0].to_f
+  if current_f > base_f
+    current[0]+="↑"
+  else
+    current[0]+="↓"
+  end
+  puts current[0]
+  return true
+  
 end
 def get_uncover(node)
   if node.nil?
