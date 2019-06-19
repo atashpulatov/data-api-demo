@@ -49,7 +49,6 @@
     transform: translateY(-50%) translateY(-25px);
     border: none;
     text-align: center;
-    font-family: "HelveticaNeue", "Helvetica Neue", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", sans-serif;
     width: 100%;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -60,7 +59,7 @@
 }
 
 .titleStyle {
-    font-weight: bold;
+    font-weight: 500;
     font-size: 18px;
     color: #444649;
     padding: 0.5em;
@@ -72,7 +71,7 @@
 }
 
 .progressStyle {
-    font-weight: bold;
+    font-weight: 500;
     font-size: 18px;
     color: #444649;
     padding: 0.5em;
@@ -94,9 +93,9 @@
 
 .refresh-title {
     font-size: 18px;
+    font-weight: 500;
     color: #333333;
     text-align: left;
-    font-weight: bold;
     padding-top: 20px;
 }
 
@@ -111,7 +110,6 @@
 .tooltip-content {
     max-width: 250px;
     font-size: 12px;
-    font-family: "HelveticaNeue", "Helvetica Neue", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", sans-serif;
     color: rgb(68, 74, 80);
 }
 

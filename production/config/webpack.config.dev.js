@@ -1,5 +1,3 @@
-'use strict';
-
 const path = require('path');
 const webpack = require('webpack');
 const PnpWebpackPlugin = require('pnp-webpack-plugin');
@@ -41,6 +39,12 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
     {
       loader: require.resolve('css-loader'),
       options: cssOptions,
+    },
+    {
+      loader: require.resolve('less-loader'),
+      options: {
+        javascriptEnabled: true,
+      },
     },
     {
       // Options for PostCSS as we reference these options twice
@@ -124,7 +128,7 @@ module.exports = {
     // This is the URL that app is served from. We use "/" in development.
     publicPath: publicPath,
     // Point sourcemap entries to original disk location (format as URL on Windows)
-    devtoolModuleFilenameTemplate: info =>
+    devtoolModuleFilenameTemplate: (info) =>
       path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
   },
   optimization: {
@@ -145,8 +149,8 @@ module.exports = {
     // if there are any conflicts. This matches Node resolution mechanism.
     // https://github.com/facebook/create-react-app/issues/253
     modules: ['node_modules'].concat(
-      // It is guaranteed to exist because we tweak it in `env.js`
-      process.env.NODE_PATH.split(path.delimiter).filter(Boolean)
+        // It is guaranteed to exist because we tweak it in `env.js`
+        process.env.NODE_PATH.split(path.delimiter).filter(Boolean)
     ),
     // These are the reasonable defaults supported by the Node ecosystem.
     // We also include JSX as a common component filename extension to support
@@ -183,7 +187,7 @@ module.exports = {
     strictExportPresence: true,
     rules: [
       // Disable require.ensure as it's not a standard language feature.
-      { parser: { requireEnsure: false } },
+      {parser: {requireEnsure: false}},
 
       // First, run the linter.
       // It's important to do this before Babel processes the JS.
@@ -226,7 +230,7 @@ module.exports = {
             loader: require.resolve('babel-loader'),
             options: {
               customize: require.resolve(
-                'babel-preset-react-app/webpack-overrides'
+                  'babel-preset-react-app/webpack-overrides'
               ),
 
               plugins: [
@@ -262,7 +266,7 @@ module.exports = {
               presets: [
                 [
                   require.resolve('babel-preset-react-app/dependencies'),
-                  { helpers: true },
+                  {helpers: true},
                 ],
               ],
               cacheDirectory: true,
@@ -307,19 +311,19 @@ module.exports = {
           {
             test: sassRegex,
             exclude: sassModuleRegex,
-            use: getStyleLoaders({ importLoaders: 2 }, 'sass-loader'),
+            use: getStyleLoaders({importLoaders: 2}, 'sass-loader'),
           },
           // Adds support for CSS Modules, but using SASS
           // using the extension .module.scss or .module.sass
           {
             test: sassModuleRegex,
             use: getStyleLoaders(
-              {
-                importLoaders: 2,
-                modules: true,
-                getLocalIdent: getCSSModuleLocalIdent,
-              },
-              'sass-loader'
+                {
+                  importLoaders: 2,
+                  modules: true,
+                  getLocalIdent: getCSSModuleLocalIdent,
+                },
+                'sass-loader'
             ),
           },
           // "file" loader makes sure those assets get served by WebpackDevServer.
@@ -348,13 +352,13 @@ module.exports = {
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
       inject: true,
-      chunks: ["index"],
+      chunks: ['index'],
       template: paths.appHtml,
       filename: 'index.html',
     }),
     new HtmlWebpackPlugin({
       inject: true,
-      chunks: ["popup"],
+      chunks: ['popup'],
       template: paths.appPopupHtml,
       filename: 'popup.html',
     }),

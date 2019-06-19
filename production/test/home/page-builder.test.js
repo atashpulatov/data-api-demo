@@ -12,7 +12,7 @@ describe('PageBuilder', () => {
     // given
 
     // when
-    const Page = () => pageBuilder.getPage(false, false, false, false);
+    const Page = () => pageBuilder.getPage(false, false, false, false, false, (text) => text);
     const wrappedComponent = mount(<Provider store={reduxStore}><Page /></Provider>);
 
     // then
@@ -26,7 +26,7 @@ describe('PageBuilder', () => {
     // given
 
     // when
-    const Page = () => pageBuilder.getPage(false, false, true, false);
+    const Page = () => pageBuilder.getPage(false, false, true, false, false, (text) => text);
     const wrappedComponent = mount(<Provider store={reduxStore}><Page /></Provider>);
 
     // then
@@ -38,7 +38,7 @@ describe('PageBuilder', () => {
     // given
 
     // when
-    const Page = () => pageBuilder.getPage(false, false, false, true);
+    const Page = () => pageBuilder.getPage(false, false, false, true, false, (text) => text);
     const wrappedComponent = mount(<Provider store={reduxStore}><Page /></Provider>);
 
     // then
@@ -50,7 +50,7 @@ describe('PageBuilder', () => {
     // given
 
     // when
-    const Page = () => pageBuilder.getPage(false, false, true, false);
+    const Page = () => pageBuilder.getPage(false, false, true, false, false, (text) => text);
     const wrappedComponent = mount(<Provider store={reduxStore}><Page /></Provider>);
 
     // then
@@ -62,7 +62,7 @@ describe('PageBuilder', () => {
     // given
 
     // when
-    const Page = () => pageBuilder.getPage(false, false, true, [{}]);
+    const Page = () => pageBuilder.getPage(false, false, true, [{}], false, (text) => text);
     const wrappedComponent = mount(<Provider store={reduxStore}><Page /></Provider>);
 
     // then
@@ -73,7 +73,7 @@ describe('PageBuilder', () => {
     // given
 
     // when
-    const Page = () => pageBuilder.getPage(false, false, true, [{}], true);
+    const Page = () => pageBuilder.getPage(false, false, true, [{}], true, (text) => text);
     const wrappedComponent = mount(<Provider store={reduxStore}><Page /></Provider>);
 
     // then
@@ -84,7 +84,7 @@ describe('PageBuilder', () => {
     // given
 
     // when
-    const Page = () => pageBuilder.getPage(false, true, true, [{}], false);
+    const Page = () => pageBuilder.getPage(false, true, true, [{}], false, (text) => text);
     const wrappedComponent = mount(<Provider store={reduxStore}><Page /></Provider>);
 
     // then
@@ -95,7 +95,7 @@ describe('PageBuilder', () => {
     // given
 
     // when
-    const Page = () => pageBuilder.getPage(false, false, true, [{}], true);
+    const Page = () => pageBuilder.getPage(false, false, true, [{}], true, (text) => text);
     const wrappedComponent = mount(<Provider store={reduxStore}><Page /></Provider>);
 
     // then
@@ -107,7 +107,7 @@ describe('PageBuilder', () => {
     // given
 
     // when
-    const Page = () => pageBuilder.getPage(false, true, true, [{}], true);
+    const Page = () => pageBuilder.getPage(false, true, true, [{}], true, (text) => text);
     const wrappedComponent = mount(<Provider store={reduxStore}><Page /></Provider>);
 
     // then

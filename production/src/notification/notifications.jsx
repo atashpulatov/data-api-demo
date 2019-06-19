@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {notification, message, Icon, Button} from 'antd';
 import {connect} from 'react-redux';
 import './Notifications.css';
+import {withTranslation} from 'react-i18next';
 
 export class NotificationsWithoutRedux extends Component {
   constructor(props) {
@@ -21,13 +22,13 @@ export class NotificationsWithoutRedux extends Component {
     if (this.props.currentObject === 'notification') {
       this.displayNotification();
     }
-  }
+  };
 
   displayNotification = () => {
-    const {notificationType, title, content} = this.props;
+    const {notificationType, title, content, t} = this.props;
     let icon;
     const key = `open${Date.now()}`;
-    let btn = <Button type="primary" size="small" onClick={() => notification.close(key)} >OK</Button>;
+    let btn = <Button type="primary" size="small" onClick={() => notification.close(key)} >{t('OK')}</Button>;
     notification.config({
       duration: 0,
     });
@@ -48,7 +49,7 @@ export class NotificationsWithoutRedux extends Component {
       case 'success':
         icon = <Icon type="check-circle" theme="filled" style={{color: '#52c41a'}} />;
         notification.config({
-          duration: 5,
+          duration: 2,
         });
         btn = null;
         break;
@@ -56,18 +57,20 @@ export class NotificationsWithoutRedux extends Component {
         break;
     }
     notification.open({
-      message: title,
-      description: content,
+      message: t(title),
+      description: this.translateContent(content, t),
       icon,
       btn: btn,
       key,
     });
-  }
+  };
+
+  translateContent = (content, t) => content.includes('Excel returned error') ? `${t('Excel returned error')}: ${content.split(':')[1]}` : t(content);
 
   displayMessage = () => {
-    const {messageType, content} = this.props;
-    message[messageType](content);
-  }
+    const {messageType, content, t} = this.props;
+    message[messageType](this.translateContent(content, t));
+  };
 
   render() {
     return (
@@ -75,7 +78,7 @@ export class NotificationsWithoutRedux extends Component {
       </div>
     );
   }
-};
+}
 
 const mapStateToProps = (state) => {
   return {
@@ -88,4 +91,8 @@ const mapStateToProps = (state) => {
   };
 };
 
-export const Notifications = new connect(mapStateToProps)(NotificationsWithoutRedux);
+NotificationsWithoutRedux.defaultProps = {
+  t: (text) => text,
+};
+
+export const Notifications = connect(mapStateToProps)(withTranslation('common')(NotificationsWithoutRedux));

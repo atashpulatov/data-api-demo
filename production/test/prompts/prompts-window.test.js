@@ -9,14 +9,14 @@ describe('NavigationTree', () => {
 
   it.skip('should render with props given', () => {
     // given
-    const parsed = {
+    const mstrData = {
       envUrl: 'env',
       token: 'token',
       projectId: 'projectId',
       reportId: 'reportId',
     };
     // when
-    const wrappedComponent = mount(<_PromptsWindow parsed={parsed} />);
+    const wrappedComponent = mount(<_PromptsWindow mstrData={mstrData} />);
     // then
     expect(wrappedComponent.instance()).toBeDefined();
     expect(wrappedComponent.find('PromptsContainer').get(0)).toBeDefined();

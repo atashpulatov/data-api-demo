@@ -14,44 +14,50 @@ jest.mock('../../src/attribute-selector/attribute-selector-helpers');
 describe('AttributeSelectorWindow', () => {
   it('should contain attribute selector', () => {
     // given
-    const parsed = {};
+    const mstrData = {};
     // when
     const componentWrapper = shallow(<AttributeSelectorWindow
-      parsed={parsed} />);
+      mstrData={mstrData} />);
     // then
     const selectorWrapper = componentWrapper.find(AttributeSelector);
     expect(selectorWrapper.get(0)).toBeDefined();
   });
 
-  it('should parse props correctly', () => {
+  it('should pass mstr data', () => {
     // given
-    const parsed = {
+    const mstrData = {
+      reportId: 'id',
       envUrl: 'url',
       token: 'token',
       projectId: 'proId',
+      reportSubtype: 'subtype',
     };
     // when
     const componentWrapper = shallow(<AttributeSelectorWindow
-      parsed={parsed} />);
+      mstrData={mstrData} />);
     // then
-    expect(componentWrapper.state('session').url)
-        .toEqual(parsed.envUrl);
-    expect(componentWrapper.state('session').authToken)
-        .toEqual(parsed.token);
-    expect(componentWrapper.state('session').projectId)
-        .toEqual(parsed.projectId);
+    const selectorWrapped = componentWrapper.find(AttributeSelector).at(0);
+    expect(selectorWrapped.prop('mstrData')).toEqual(mstrData);
+    expect(selectorWrapped.prop('session')).toEqual({
+      USE_PROXY: false,
+      url: mstrData.envUrl,
+      authToken: mstrData.token,
+      projectId: mstrData.projectId,
+    });
+    expect(selectorWrapped.prop('reportId')).not.toBeDefined();
+    expect(selectorWrapped.prop('reportSubtype')).not.toBeDefined();
   });
 
   it('should call setState if handleOk is called', () => {
     // given
-    const parsed = {
+    const mstrData = {
       envUrl: 'url',
       token: 'token',
       projectId: 'proId',
       reportId: 'repId',
     };
 
-    const componentWrapper = shallow(<AttributeSelectorWindow parsed={parsed} />);
+    const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
     const spyMethod = jest.spyOn(componentWrapper.instance(), 'setState');
 
     // when
@@ -63,7 +69,7 @@ describe('AttributeSelectorWindow', () => {
 
   it('should call attributeSelectorHelpers.officeMessageParent if onTriggerUpdate is called without report name', () => {
     // given
-    const parsed = {
+    const mstrData = {
       envUrl: 'url',
       token: 'token',
       projectId: 'proId',
@@ -71,19 +77,19 @@ describe('AttributeSelectorWindow', () => {
       reportName: '55',
     };
 
-    const componentWrapper = shallow(<AttributeSelectorWindow parsed={parsed} />);
+    const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
     const spyMethod = jest.spyOn(attributeSelectorHelpers, 'officeMessageParent');
 
     // when
     componentWrapper.instance().onTriggerUpdate(1, 2, 3, 4);
 
     // then
-    expect(spyMethod).toHaveBeenCalledWith(selectorProperties.commandOnUpdate, 1, 2, 3, 4, parsed.reportName);
+    expect(spyMethod).toHaveBeenCalledWith(selectorProperties.commandOnUpdate, 1, 2, 3, 4, mstrData.reportName);
   });
 
   it('should call attributeSelectorHelpers.officeMessageParent if onTriggerUpdate is called with report name', () => {
     // given
-    const parsed = {
+    const mstrData = {
       envUrl: 'url',
       token: 'token',
       projectId: 'proId',
@@ -91,7 +97,7 @@ describe('AttributeSelectorWindow', () => {
       reportName: '55',
     };
 
-    const componentWrapper = shallow(<AttributeSelectorWindow parsed={parsed} />);
+    const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
     const spyMethod = jest.spyOn(attributeSelectorHelpers, 'officeMessageParent');
 
     // when
@@ -103,7 +109,7 @@ describe('AttributeSelectorWindow', () => {
 
   it('should trigger handleCancel when Cancel was clicked', () => {
     // given
-    const parsed = {
+    const mstrData = {
       envUrl: 'url',
       token: 'token',
       projectId: 'proId',
@@ -111,10 +117,10 @@ describe('AttributeSelectorWindow', () => {
     };
 
     const componentWrapper = mount(
-        <Provider store={reduxStore}>
-          <AttributeSelectorWindow
-            parsed={parsed} />
-        </Provider>);
+      <Provider store={reduxStore}>
+        <AttributeSelectorWindow
+          mstrData={mstrData} />
+      </Provider>);
     const spyMethod = jest.spyOn(attributeSelectorHelpers, 'officeMessageParent');
 
     const wrappedCancelButton = componentWrapper.find('Button #cancel');
@@ -128,7 +134,7 @@ describe('AttributeSelectorWindow', () => {
 
   it('should trigger handleBack when Back was clicked', () => {
     // given
-    const parsed = {
+    const mstrData = {
       envUrl: 'url',
       token: 'token',
       projectId: 'proId',
@@ -137,9 +143,9 @@ describe('AttributeSelectorWindow', () => {
     const handleBack = jest.fn();
 
     const componentWrapper = mount(
-        <Provider store={reduxStore}><AttributeSelectorWindow
-          parsed={parsed} handleBack={handleBack} />
-        </Provider>);
+      <Provider store={reduxStore}><AttributeSelectorWindow
+        mstrData={mstrData} handleBack={handleBack} />
+      </Provider>);
 
     const wrappedCancelButton = componentWrapper.find('Button #back');
 
@@ -152,7 +158,7 @@ describe('AttributeSelectorWindow', () => {
 
   it('should trigger attribute-selector-helpers: officeMessageParent when Cancel is clicked', () => {
     // given
-    const parsed = {
+    const mstrData = {
       envUrl: 'url',
       token: 'token',
       projectId: 'proId',
@@ -160,7 +166,7 @@ describe('AttributeSelectorWindow', () => {
     };
 
     const componentWrapper = shallow(<AttributeSelectorWindow
-      parsed={parsed} />);
+      mstrData={mstrData} />);
 
     const officeMessageParentSpy = jest.spyOn(attributeSelectorHelpers, 'officeMessageParent');
     officeMessageParentSpy.mockClear();
@@ -174,14 +180,14 @@ describe('AttributeSelectorWindow', () => {
 
   it('should change value of attributesSelected if attributesBeingSelected is being invoked', () => {
     // given
-    const parsed = {
+    const mstrData = {
       envUrl: 'url',
       token: 'token',
       projectId: 'proId',
       reportId: 'repId',
     };
 
-    const componentWrapper = shallow(<AttributeSelectorWindow parsed={parsed} />);
+    const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
 
     const attributesBeingSelectedSpy = jest.spyOn(componentWrapper.instance(), 'attributesBeingSelected');
     expect(componentWrapper.instance().state.attributesSelected).toBeFalsy();
@@ -194,14 +200,14 @@ describe('AttributeSelectorWindow', () => {
   });
   it('should change values if resetTriggerUpdate is being invoked', () => {
     // given
-    const parsed = {
+    const mstrData = {
       envUrl: 'url',
       token: 'token',
       projectId: 'proId',
       reportId: 'repId',
     };
 
-    const componentWrapper = shallow(<AttributeSelectorWindow parsed={parsed} />);
+    const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
 
     const resetTriggerUpdateSpy = jest.spyOn(componentWrapper.instance(), 'resetTriggerUpdate');
 
@@ -213,14 +219,14 @@ describe('AttributeSelectorWindow', () => {
   });
   it('should change value of openModal if openModal is being invoked', () => {
     // given
-    const parsed = {
+    const mstrData = {
       envUrl: 'url',
       token: 'token',
       projectId: 'proId',
       reportId: 'repId',
     };
 
-    const componentWrapper = shallow(<AttributeSelectorWindow parsed={parsed} />);
+    const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
     const openModalSpy = jest.spyOn(componentWrapper.instance(), 'openModal');
 
     // when
@@ -230,14 +236,14 @@ describe('AttributeSelectorWindow', () => {
   });
   it('should change value of openModal if closeModal is being invoked', () => {
     // given
-    const parsed = {
+    const mstrData = {
       envUrl: 'url',
       token: 'token',
       projectId: 'proId',
       reportId: 'repId',
     };
 
-    const componentWrapper = shallow(<AttributeSelectorWindow parsed={parsed} />);
+    const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
     const attributesBeingSelectedSpy = jest.spyOn(componentWrapper.instance(), 'closeModal');
 
     // when
