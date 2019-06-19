@@ -10,7 +10,6 @@ import {withTranslation} from 'react-i18next';
 import {officeApiHelper} from '../office/office-api-helper';
 import {toggleSecuredFlag} from '../office/office-actions';
 import {MSTRIcon} from 'mstr-react-library';
-import settingsIcon from './assets/settings-icon.svg';
 import mstrLogo from './assets/mstr_logo.png';
 
 
@@ -92,7 +91,7 @@ export class _Header extends Component {
           /* TODO: When rest api returns profileImage use it as source */}
           <span className="user-name">{userFullName}</span>
         </li>
-        <li><a href='https://google.pl' target="_blank">Privacy Policy</a></li>
+        <li><a href='' target="_blank" rel="noopener noreferrer">Privacy Policy</a></li>
         <li>Terms of Use</li>
         <li>Help</li>
         <li className="settings-version">Version 11.1.0200.996</li>

@@ -20,7 +20,7 @@ hr {
     font-size: 16px;
     line-height: 31px;
     width: 100%;
-    padding: 20px;
+    padding: 20px 20px 19px 20px;
     align-items: center;
 }
 
@@ -202,7 +202,7 @@ hr {
 
 .settings-list {
     position: absolute;
-    left: -175px;
+    left: -150px;
     top: 20px;
     z-index: 999;
     width: 200px;
