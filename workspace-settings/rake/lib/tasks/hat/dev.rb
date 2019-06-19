@@ -2,6 +2,7 @@ require 'shell-helper'
 require 'common/version'
 require 'json'
 require 'nokogiri'
+require 'github'
 
 include ShellHelper::Shell
 
@@ -55,7 +56,8 @@ end
 
 desc "debug rake task"
 task :debug do
-  generate_comparison_report_markdown
+  # generate_comparison_report_markdown
+  publish_to_pull_request_page
 end
 
 def run_test(working_dir)
@@ -153,6 +155,7 @@ def generate_comparison_report_markdown
   mf.close()
 
 end
+
 def write_row_to_compare_table(mf, name, node)
   base_stmts = get_ratio(node["base_metric"],"cov_stat","total_stat")
   current_stmts = get_ratio(node["current_metric"],"cov_stat","total_stat")
@@ -241,4 +244,18 @@ def get_metics_node(source)
   metics_node
 end
 def publish_to_pull_request_page
+  unless ENV['USER'] == 'jenkins'
+    #only available in jenkins envrionment
+    puts "only available in jenkins env"
+    return
+  end
+  markdown_report_path = "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/.comparison_report/markdown.html"
+  unless File.exist? markdown_report_path
+    raise "#{markdown_report_path} does not exist, please generate before"
+  end
+  markdown_message = File.read(markdown_report_path)
+  job_url = ENV['BUILD_URL']
+  comments_message = "#{job_url}\n#{markdown_message}"
+  pull_request = Github::PullRequests.new(ENV['GITHUB_SVC_USER'], ENV['GITHUB_SVC_PWD'])
+  pull_request.comment_pull_request(ENV['PROJECT_NAME'],ENV['ORGANIZATION_NAME'],ENV["gphrbPullId"],comments_message)
 end
