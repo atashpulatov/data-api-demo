@@ -44,7 +44,8 @@ task :stage_0_test do
   init_base_branch_repo(ENV["ghprbTargetBranch"])
   #run test with base branch
   run_test(base_repo_path)
-  generate_comparison_report
+  generate_comparison_report_html
+  generate_comparison_report_markdown
   publish_to_pull_request_page
 
 end
@@ -243,6 +244,8 @@ def get_metics_node(source)
   metics_node["uncover"] = []
   metics_node
 end
+#publish markdown report to pull request page
+
 def publish_to_pull_request_page
   unless ENV['USER'] == 'jenkins'
     #only available in jenkins envrionment

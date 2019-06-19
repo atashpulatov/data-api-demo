@@ -25,27 +25,28 @@ export WORKSPACE_SETTING=aws_dev
 
 source .ecosystem
 
-rake test
+rake stage_0_test
 '
     end
   end
 
   publishers do
-    # junit do
-    # end
-    #
-    # cobertura do
-    # end
-    #
-    # cucumber do
-    #   file_include_pattern 'prepush_test.json'
-    # end
-    #
-    # html do
-    #   report_name 'Vagrant Logs'
-    #   report_directory_path "deploy/vagrant/esxi/dev/logs"
-    #   index_file_name 'index.html'
-    # end
+   
+    html do
+      report_name 'Code Coverage Report'
+      report_directory_path ".comparison_report"
+      index_file_name 'index.html'
+    end
+
+    ext_mailer do
+      recipients_list '$ghprbActualCommitAuthorEmail $ghprbPullAuthorEmail'
+      subject 'mstr-office pre merge - $BUILD_STATUS'
+      content '$DEFAULT_CONTENT'
+      fail_trigger_recipients_list ''
+      fail_trigger_notify_developer 'true'
+      always_trigger 'true'
+      always_trigger_recipients_list ''
+    end
   end
 
 end
