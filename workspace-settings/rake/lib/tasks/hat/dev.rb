@@ -259,6 +259,6 @@ def publish_to_pull_request_page
   markdown_message = File.read(markdown_report_path)
   job_url = ENV['BUILD_URL']
   comments_message = "#{job_url}\n#{markdown_message}"
-  pull_request = Github::PullRequests.new(ENV['GITHUB_SVC_USER'], ENV['GITHUB_SVC_PWD'])
+  pull_request = Github::PullRequests.new(ENV['GITHUB_USER'], ENV['GITHUB_PWD'])
   pull_request.comment_pull_request(ENV['PROJECT_NAME'],ENV['ORGANIZATION_NAME'],ENV["ghprbPullId"],comments_message)
 end
