@@ -39,6 +39,7 @@
   "Please wait until the import is complete.": "Please wait until the import is complete",
   "Refresh All Data": "Refresh All Data",
   "Refresh Data": "Refresh Data",
+  "Edit Data": "Edit Data",
   "Remove Data from Workbook": "Remove Data from Workbook",
   "Refreshing complete!": "Refreshing complete!",
   "OK": "OK",
@@ -113,5 +114,17 @@
   "This object cannot be imported. Objects with cross tabs, totals, or subtotals are not supported in this version of MicroStrategy for Office.": "This object cannot be imported. Objects with cross tabs, totals, or subtotals are not supported in this version of MicroStrategy for Office",
   "This object cannot be imported. Either you do not have necessary permissions to view it, or it is empty.": "This object cannot be imported. Either you do not have necessary permissions to view it, or it is empty",
   "No data returned for this view. This might be because the applied prompt excludes all data.": "No data returned for this view. This might be because the applied prompt excludes all data",
-  "The required data range in the worksheet is not empty": "The required data range in the worksheet is not empty"
+  "The required data range in the worksheet is not empty": "The required data range in the worksheet is not empty",
+  "The selected filter excludes all data": "The selected filter excludes all data",
+  "Dataset removed": "Dataset removed",
+  "Dataset refreshed": "Dataset refreshed",
+  "The object binding is no longer valid due to previous updates.": "The object binding is no longer valid due to previous updates",
+  "The object cannot be imported. Either you do not have necessary permissions to view it, or it is empty.": "The object cannot be imported. Either you do not have necessary permissions to view it, or it is empty",
+  "The required data range in the worksheet is not empty.": "The required data range in the worksheet is not empty",
+  "MicroStrategy Office Client loaded. Click Import Data on the Home tab to start plugin. Login to Environment to start browsing documents.": "MicroStrategy Office Client loaded. Click Import Data on the Home tab to start plugin. Login to Environment to start browsing documents",
+  "Refresh": "Refresh",
+  "Data Cleared!": "Data Cleared!",
+  "MicroStrategy data has been removed from the workbook. Click ‘Refresh’ to import it again.": "MicroStrategy data has been removed from the workbook. Click ‘Refresh’ to import it again.",
+  "View Data": "View Data",
+  "Secure data": "Secure data"
 }

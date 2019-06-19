@@ -15,9 +15,10 @@ hr {
 
 #app-header {
     display: flex;
+    justify-content: space-between;
     color: #555;
     font-size: 16px;
-    line-height: 32px;
+    line-height: 31px;
     width: 100%;
     padding: 20px;
     align-items: center;
@@ -67,7 +68,7 @@ hr {
     background: #b6b6b6;
     color: white;
     text-align: center;
-    display: block;
+    display: inline-block;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -79,11 +80,10 @@ hr {
 #logOut {
     color: #888;
     font-size: 12px;
-    margin-left: auto;
-    vertical-align: middle;
-    flex: auto 0 0;
+    margin-left: 10px;
+    vertical-align: inherit;
     align-self: center;
-    order: 3;
+    order: 4;
 }
 
 #app-main {
@@ -132,6 +132,7 @@ hr {
     margin: 0 6px;
     padding: 12px 6px;
     font-size: 14px;
+    font-weight: 400;
     color: #888888;
 }
 
@@ -199,4 +200,34 @@ hr {
     width: 70%;
     transform: translate(-50%, -50%);
     border: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dialog-container>div>span>svg {
+    height: 30px;
+    width: 30px;
+    padding-bottom: 5px;
+}
+
+#app-header .secure-btn,
+#app-header .secure-btn .ant-btn:disabled {
+    vertical-align: middle;
+    flex: auto 0 0;
+    align-self: center;
+    order: 3;
+    background: #FFFFFF;
+    box-shadow: 0 0;
+    border: none;
+    padding: 0;
+}
+
+#app-header .secure-btn img {
+    height: 18px;
+    width: 18px;
+}
+
+.user-data {
+    width: calc(100vw - 140px);
 }
