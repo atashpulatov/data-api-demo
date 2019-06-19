@@ -35,7 +35,7 @@ end
 
 desc "run the unit test and collect code coverage in stage_0 pre-merge job"
 task :stage_0_test do
-  run test under current workspace
+  #run test under current workspace
   if ENV["ghprbTargetBranch"].nil?
     raise "ghprbTargetBranch environment should not be nil"
   end
