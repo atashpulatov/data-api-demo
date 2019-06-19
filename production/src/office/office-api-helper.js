@@ -63,6 +63,9 @@ class OfficeApiHelper {
       tableRange.select();
       return await excelContext.sync();
     } catch (error) {
+      if (error.code === 'ItemNotFound') {
+        return notificationService.displayNotification('info', 'The object does not exist in the metadata.');
+      }
       errorService.handleOfficeError(error);
     }
   };
