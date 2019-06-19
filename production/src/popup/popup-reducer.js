@@ -2,10 +2,10 @@ import {
   START_REPORT_LOADING,
   STOP_REPORT_LOADING,
   RESET_STATE,
+  SET_REPORT_N_FILTERS,
 } from './popup-actions';
 
 export const initialState = {
-  refreshingReport: '',
 };
 
 export const popupReducer = (state = initialState, action) => {
@@ -21,6 +21,12 @@ export const popupReducer = (state = initialState, action) => {
       return {
         ...state,
         refreshingReport: undefined,
+      };
+    }
+    case SET_REPORT_N_FILTERS: {
+      return {
+        ...state,
+        editedReport: action.editedReport,
       };
     }
     case RESET_STATE: {
