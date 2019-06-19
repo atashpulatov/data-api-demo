@@ -27,7 +27,7 @@ body {
     margin-top: 60px;
 }
 
-.cookie-check-container .accept-button {
+.cookie-check-container .accept-button a {
     -webkit-appearance: none;
     background-color: #1c91dc;
     border-radius: 4px;
@@ -40,22 +40,21 @@ body {
     line-height: 34px;
     margin-top: 20px;
     margin: 10px auto;
-    padding: 0 12px;
+    max-width: 100%;
+    padding: 12px 24px;
     text-align: center;
-    width: 110px;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 50%;
 }
 
-.cookie-check-container .accept-button:focus {
+.cookie-check-container .accept-button a:focus {
     background-color: #1f78b7;
 }
 
-.cookie-check-container .accept-button:hover {
+.cookie-check-container .accept-button a:hover {
     background-color: #45a1e0;
-}
-
-.accept-button a {
-    text-decoration: none;
-    color: #fff;
 }
 
 .cookie-check-container .title {

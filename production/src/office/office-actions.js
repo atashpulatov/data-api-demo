@@ -1,6 +1,8 @@
 import {officeProperties} from './office-properties';
+import {officeStoreService} from './store/office-store-service';
 
-export function toggleStoreSecuredFlag(isSecured) {
+export function toggleSecuredFlag(isSecured) {
+  officeStoreService.toggleFileSecuredFlag(isSecured);
   return (dispatch) => {
     dispatch({
       type: officeProperties.actions.toggleSecuredFlag,
@@ -10,5 +12,5 @@ export function toggleStoreSecuredFlag(isSecured) {
 }
 
 export const actions = {
-  toggleStoreSecuredFlag,
+  toggleSecuredFlag,
 };
