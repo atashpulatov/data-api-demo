@@ -203,14 +203,12 @@ def add_data_for_doc(compare_obj, xml_doc, metric_name)
   compare_obj["All files"]["packages"]={} if compare_obj["All files"]["packages"].nil?
   xml_doc.coverage.project.metrics.package.each do |package|
     pack_name = package["name"]
-    puts compare_obj["All files"]["packages"][pack_name]
     compare_obj["All files"]["packages"][pack_name] = {}  if compare_obj["All files"]["packages"][pack_name].nil?
     compare_obj["All files"]["packages"][pack_name][metric_name] = get_metics_node(package.metrics)
     compare_obj["All files"]["packages"][pack_name]["files"] = {} if compare_obj["All files"]["packages"][pack_name]["files"].nil?
       
     package.file.each do |file|
       file_name = file["name"]
-      puts compare_obj["All files"]["packages"][pack_name]["files"][file_name]
       compare_obj["All files"]["packages"][pack_name]["files"][file_name] = {} if compare_obj["All files"]["packages"][pack_name]["files"][file_name].nil?
      
       compare_obj["All files"]["packages"][pack_name]["files"][file_name][metric_name] = get_metics_node(file.metrics)
