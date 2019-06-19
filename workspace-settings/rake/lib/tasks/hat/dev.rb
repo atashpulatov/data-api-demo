@@ -189,7 +189,6 @@ def compare_ratio(base, current)
   else
     current[0]+="↓"
   end
-  puts current[0]
   return true
   
 end
@@ -279,7 +278,7 @@ def publish_to_pull_request_page
   end
   markdown_message = File.read(markdown_report_path)
   job_url = ENV['BUILD_URL']
-  comments_message = "#{job_url}\n#{markdown_message}"
+  comments_message = "job page:\n#{job_url}\ndetailed report link:\n #{markdown_message}\n linter report:\n"
   pull_request = Github::PullRequests.new(ENV['GITHUB_USER'], ENV['GITHUB_PWD'])
   pull_request.comment_pull_request(ENV['PROJECT_NAME'],ENV['ORGANIZATION_NAME'],ENV["ghprbPullId"],comments_message)
 end
