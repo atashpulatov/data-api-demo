@@ -19,8 +19,8 @@ function officeInitialize() {
 }
 
 function startAuthentication() {
-  verifyToken(libraryUrl).then(valid => {
-    if (valid) {
+  verifyToken(libraryUrl).then(({ok}) => {
+    if (ok) {
       goToReact(libraryUrl);
     }
     else {
@@ -34,7 +34,7 @@ function startAuthentication() {
 
 function onLoginClick() {
   verifyToken(libraryUrl)
-    .then((valid) => valid ? goToReact(libraryUrl) : openAuthDialog(libraryUrl))
+    .then(({ok}) => ok ? goToReact(libraryUrl) : openAuthDialog(libraryUrl))
     .catch((e) => console.log(e) || openAuthDialog(libraryUrl))
 }
 
@@ -53,7 +53,7 @@ function verifyToken(libraryUrl) {
   const url = libraryUrl + '/api/sessions/privileges/' + OFFICE_PRIVILEGE_ID;
   const token = getCookie(window);
   const headers = {'X-MSTR-AuthToken': token};
-  return fetch(url, {credentials: 'include', headers}).then((res) => res.ok);
+  return fetch(url, {credentials: 'include', headers});
 }
 
 function openAuthDialog(url) {
@@ -62,10 +62,13 @@ function openAuthDialog(url) {
   isOfficeOnline ? openPopup(popupUrl) : openOfficeDialog(popupUrl);
 
   const listenAuthToken = () => {
-    verifyToken(url).then(valid => {
-      if (valid) {
+    verifyToken(url).then(({ok, status}) => {
+      if (ok) {
         popup.close();
         goToReact(url);
+      } else if (status === 403) {
+        window.location.replace(`${url}/static/loader-mstr-office/no-privilege.html`);
+        popup.close();
       } else {
         !popup.closed && setTimeout(listenAuthToken, 1000)
       }
