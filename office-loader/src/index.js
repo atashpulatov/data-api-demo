@@ -56,25 +56,36 @@ function verifyToken(libraryUrl) {
   return fetch(url, {credentials: 'include', headers});
 }
 
+function logout(libraryUrl) {
+  const url = libraryUrl + '/api/auth/logout';
+  const token = getCookie(window);
+  const headers = {'X-MSTR-AuthToken': token};
+  return fetch(url, {method: 'POST', credentials: 'include', headers});
+}
+
 function openAuthDialog(url) {
   const popupUrl = `${url}/apps/addin-mstr-office/auth.html?source=addin-mstr-office`;
   const isOfficeOnline = Office.context ? Office.context.platform === Office.PlatformType.OfficeOnline : false;
   isOfficeOnline ? openPopup(popupUrl) : openOfficeDialog(popupUrl);
-
+  const currentUuid = window.localStorage.getItem('uuid');
   const listenAuthToken = () => {
     verifyToken(url).then(({ok, status}) => {
       if (ok) {
         popup.close();
         goToReact(url);
-      } else if (status === 403) {
+      } else if (status === 403 && getCookie(window) !== currentUuid) {
         popup.close();
-        window.location.replace(`${url}/static/loader-mstr-office/no-privilege.html`);
+        logout(url).finally(() => {
+          window.location.replace(`${url}/static/loader-mstr-office/no-privilege.html`);
+        });
       } else {
         !popup.closed && setTimeout(listenAuthToken, 1000)
       }
     }).catch((e) => {
       console.log(e);
       popup.close();
+    }).finally(() => {
+      window.localStorage.setItem('uuid', getCookie(window));
     });
   }
   listenAuthToken();
