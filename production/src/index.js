@@ -23,8 +23,10 @@ function officeInitialize() {
             .then((canUseOffice) => {
               if (!canUseOffice) {
                 try {
-                  authenticationService.logout(envUrl + '/api', iSession);
-                  window.location.replace(`${envUrl}/static/loader-mstr-office/no-privilege.html`);
+                  authenticationService.logout(envUrl + '/api', iSession).then((res) => {
+                    const locale = Office.context.displayLanguage || navigator.language;
+                    res && window.location.replace(`${envUrl}/static/loader-mstr-office/no-privilege.html?locale=${locale}`);
+                  });
                 } catch (error) {
                   // Ignore error
                 }
