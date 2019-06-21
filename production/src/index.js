@@ -23,8 +23,9 @@ function officeInitialize() {
             .then((canUseOffice) => {
               if (!canUseOffice) {
                 try {
-                  authenticationService.logout(envUrl + '/api', iSession);
-                  window.location.replace(`${envUrl}/static/loader-mstr-office/no-privilege.html`);
+                  authenticationService.logout(envUrl + '/api', iSession).then((res) => {
+                    res && window.location.replace(`${envUrl}/static/loader-mstr-office/no-privilege.html`);
+                  });
                 } catch (error) {
                   // Ignore error
                 }
