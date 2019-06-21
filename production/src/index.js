@@ -17,7 +17,6 @@ function officeInitialize() {
   Office.onReady()
       .then(() => {
         const envUrl = window.location.pathname.split('/apps/')[0];
-        window.location.protocol !== 'https:' && window.location.replace(`${envUrl}/static/loader-mstr-office/no-https-connection.html`);
         const {iSession} = homeHelper.getParsedCookies();
         authenticationService.getOfficePrivilege(envUrl + '/api', iSession)
             .then((canUseOffice) => {
