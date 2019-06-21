@@ -81,7 +81,8 @@ function openAuthDialog(url) {
       } else if (status === 403 && getCookie(window) !== currentUuid) {
         popup.close();
         logout(url).finally(() => {
-          window.location.replace(`${url}/static/loader-mstr-office/no-privilege.html`);
+          const locale = Office.context.displayLanguage || navigator.language;
+          window.location.replace(`${url}/static/loader-mstr-office/no-privilege.html?locale=${locale}`);
         });
       } else {
         !popup.closed && setTimeout(listenAuthToken, 1000)

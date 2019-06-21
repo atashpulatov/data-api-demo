@@ -24,7 +24,8 @@ function officeInitialize() {
               if (!canUseOffice) {
                 try {
                   authenticationService.logout(envUrl + '/api', iSession).then((res) => {
-                    res && window.location.replace(`${envUrl}/static/loader-mstr-office/no-privilege.html`);
+                    const locale = Office.context.displayLanguage || navigator.language;
+                    res && window.location.replace(`${envUrl}/static/loader-mstr-office/no-privilege.html?locale=${locale}`);
                   });
                 } catch (error) {
                   // Ignore error
