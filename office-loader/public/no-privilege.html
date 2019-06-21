@@ -16,7 +16,6 @@
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
       Only files inside the `public` folder can be referenced from the HTML.
-
       Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
@@ -37,11 +36,12 @@
                     <div class="mstr-office-addin-logo"></div>
                 </div>
                 <div id="cookies-needed">
-                    <h1 class="title" id="dont-have-access-header" style="color:#d9232e;font-size:18px">You do not have
-                        the rights to access
+                    <h1 class="title" style="color:#d9232e;font-size:18px" id="dontHaveAccessHeader">You do not have the
+                        rights to access
                         MicroStrategy for Office</h1>
                     <div class="accept-button">
-                        <a href="./index.html" id="accept-cookies-btn" tabindex="0" aria-label="Try again">Try Again</a>
+                        <a href="./index.html" id="accept-cookies-btn" tabindex="0" aria-label="Try again"><span
+                                id="tryAgainSpan">Try Again</span></a>
                     </div>
                 </div>
             </div>
@@ -78,19 +78,22 @@
             'ja-JP': '再試行',
             'da-DK': 'Prøv igen'
         }
-        Office.onReady(function() {
-            try {
-                var locale = Office.context.displayLanguage || navigator.language;
-                if (!!dontHaveAccessTranslations[locale]) {
-                    var tryAgainSpan = document.getElementById('accept-cookies-btn');
-                    var dontHaveAccessHeader = document.getElementById('dont-have-access-header');
-                    dontHaveAccessHeader.innerText = dontHaveAccessTranslations[locale];
-                    tryAgainSpan.innerText = tryAgainTranslations[locale];
-                };
-            } catch (e) {
-                console.log(e)
-            }
-        });
+        function getParameterByName(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+        try {
+            var locale = getParameterByName('locale');
+            if (!!dontHaveAccessTranslations[locale]) {
+                dontHaveAccessHeader.innerText = dontHaveAccessTranslations[locale];
+                tryAgainSpan.innerText = tryAgainTranslations[locale];
+            };
+        } catch (e) {console.log(e)}
     </script>
 </body>
 
