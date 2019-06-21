@@ -1,6 +1,7 @@
 html,
 body {
     font-family: 'Roboto', 'Noto Sans', 'Noto Sans JP', 'Noto Sans KR', 'Noto Sans SC', 'Noto Sans TC', 'Helvetica Neue', sans-serif;
+    overflow: hidden;
 }
 
 .cookie-check-container {

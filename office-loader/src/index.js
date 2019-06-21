@@ -33,14 +33,19 @@ function startAuthentication() {
 }
 
 function onLoginClick() {
+  openAuthDialog(libraryUrl);
   verifyToken(libraryUrl)
-    .then(({ok}) => ok ? goToReact(libraryUrl) : openAuthDialog(libraryUrl))
-    .catch((e) => console.log(e) || openAuthDialog(libraryUrl))
+    .then(({ok}) => ok && goToReact(libraryUrl))
+    .catch((e) => console.log(e))
 }
 
 function goToReact(url) {
   const loginParams = 'source=addin-mstr-office';
-  window.location.replace(`${url}/apps/addin-mstr-office/index.html?${loginParams}`);
+  try {
+    popup && popup.close();
+  } finally {
+    window.location.replace(`${url}/apps/addin-mstr-office/index.html?${loginParams}`);
+  }
 }
 
 function getLibraryUrl() {
@@ -95,7 +100,7 @@ function openPopup(url) {
   if (popup === null || popup.closed) {
     const left = (screen.width - 400) / 2;
     const top = (screen.height - 600) / 2;
-    popup = window.open(url, 'MicroStrategy_for_Office', `resizable=1,status=1,height=600,width=400,top=${top},left=${left},screenX=${left},screenY=${top}location=0,dependent=1,alwaysOnTop=1`);
+    popup = window.open(url, 'MicroStrategy_for_Office', `resizable=1,status=1,height=650,width=400,top=${top},left=${left},screenX=${left},screenY=${top}location=0,dependent=1,alwaysOnTop=1`);
   } else {
     popup.focus();
   };
@@ -104,7 +109,7 @@ function openPopup(url) {
 
 function openOfficeDialog(url) {
   let dialog;
-  Office.context.ui.displayDialogAsync(url, {height: 50, width: 30},
+  Office.context.ui.displayDialogAsync(url, {height: 85, width: 25},
     function(asyncResult) {
       dialog = asyncResult.value;
       dialog.addEventHandler(Office.EventType.DialogMessageReceived, processDialogEvent);
