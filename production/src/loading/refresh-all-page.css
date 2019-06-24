@@ -103,6 +103,10 @@
     border-radius: 0px;
 }
 
+.tooltip-card .ant-popover-inner-content {
+    background: #fff;
+}
+
 .ant-popover-inner-content {
     padding: 5px 8px;
 }
