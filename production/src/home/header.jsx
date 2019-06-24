@@ -100,13 +100,14 @@ export class _Header extends Component {
           /* TODO: When rest api returns profileImage use it as source */}
           <span className="user-name not-clickable">{userFullName}</span>
         </li>
+        {/* TODO: url's for menu items will be added later */}
         <li><a href='' target="_blank" rel="noopener noreferrer">Privacy Policy</a></li>
-        <li>Terms of Use</li>
-        <li>Help</li>
+        <li><a href='' target="_blank" rel="noopener noreferrer">Terms of Use</a></li>
+        <li><a href='' target="_blank" rel="noopener noreferrer">Help</a></li>
         <li className="settings-version not-clickable">Version {BUILD_NUMBER}</li>
         <li className="not-clickable">
           <div className="contact-us">
-            <span>Contact Us</span>
+            <span><a href='' target="_blank" rel="noopener noreferrer">Contact Us</a></span>
           </div>
           <div className="logout-btn">
             <Button size='small' onClick={logout} disabled={loading}>
@@ -123,6 +124,7 @@ export class _Header extends Component {
       <header id='app-header'>
         <div className="mstr-logo">
           <span id='profileImage'>
+            {/* TODO: Alt text for logo will be added later */}
             <img src={mstrLogo} />
           </span>
         </div>
