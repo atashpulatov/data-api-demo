@@ -12,12 +12,16 @@ import {toggleSecuredFlag} from '../office/office-actions';
 import {MSTRIcon} from 'mstr-react-library';
 import mstrLogo from './assets/mstr_logo.png';
 
+const BUILD_NUMBER = '11.1';
+
 
 export class _Header extends Component {
   constructor() {
     super();
+    this.myRef = React.createRef();
     this.state = {isSettings: false};
   }
+
   componentDidMount = async () => {
     let userData = {};
     const IS_LOCALHOST = this.props.IS_LOCALHOST;
@@ -29,28 +33,33 @@ export class _Header extends Component {
       errorService.handleError(error, !IS_LOCALHOST);
     }
     !this.props.userFullName && sessionHelper.saveUserInfo(userData);
-    // clicking anywhere closes menu
-    document.addEventListener('click', (e) => {
-      e.domEvent && e.domEvent.stopPropagation();
-      if (this.state.isSettings && !e.target.classList.contains('settings-btn')) {
-        this.setState({...this.state, isSettings: false});
-      }
-    });
-    // ESC key closes settings menu
-    document.addEventListener('keyup', (e) => {
-      e.domEvent && e.domEvent.stopPropagation();
-      if (e.keyCode === 27 && this.state.isSettings) {
-        this.setState({...this.state, isSettings: false});
-      }
-    });
-  };
+    document.addEventListener('click', this.closeOnClick);
+    document.addEventListener('keyup', this.closeOnTab);
+  }
 
-  showSettings = () => {
+  componentWillUnmount = () => {
+    document.removeEventListener('click', this.closeOnClick);
+    document.removeEventListener('keyup', this.closeOnTab);
+  }
+
+  toggleSettings = () => {
     if (!this.state.isSettings) {
       return this.setState({...this.state, isSettings: true});
     }
     return this.setState({...this.state, isSettings: false});
   }
+
+  closeOnTab = (e) => {
+    if (e.keyCode === 27 && this.state.isSettings) {
+      this.setState({...this.state, isSettings: false});
+    }
+  };
+
+  closeOnClick = (e) => {
+    if (this.state.isSettings && !e.target.classList.contains('not-clickable')) {
+      this.setState({...this.state, isSettings: false});
+    }
+  };
 
   secureData = async () => {
     try {
@@ -84,18 +93,18 @@ export class _Header extends Component {
     const {userFullName, userInitials, loading, t} = this.props;
     return (this.state.isSettings &&
       <ul className="settings-list">
-        <li>
+        <li id="testid" className="user-data not-clickable">
           {userInitials !== null ?
-          <span id='initials' alt={t('User profile')}>{userInitials}</span> :
-          <img id='profile-image' src={logo} alt={t('User profile')} />
+          <span className="not-clickable" id='initials' alt={t('User profile')}>{userInitials}</span> :
+          <img className="not-clickable" id='profile-image' src={logo} alt={t('User profile')} />
           /* TODO: When rest api returns profileImage use it as source */}
-          <span className="user-name">{userFullName}</span>
+          <span className="user-name not-clickable">{userFullName}</span>
         </li>
         <li><a href='' target="_blank" rel="noopener noreferrer">Privacy Policy</a></li>
         <li>Terms of Use</li>
         <li>Help</li>
-        <li className="settings-version">Version 11.1.0200.996</li>
-        <li>
+        <li className="settings-version not-clickable">Version {BUILD_NUMBER}</li>
+        <li className="not-clickable">
           <div className="contact-us">
             <span>Contact Us</span>
           </div>
@@ -119,7 +128,7 @@ export class _Header extends Component {
         </div>
         <div className="header-buttons">
           {this.getSecureButton()}
-          <Button className="settings-btn" onClick={this.showSettings}>
+          <Button className="settings-btn not-clickable" onClick={this.toggleSettings}>
             <MSTRIcon type="settings" />
           </Button>
           {this.getSettingsMenu()}

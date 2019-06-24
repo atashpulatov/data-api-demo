@@ -202,12 +202,12 @@ hr {
 
 .settings-list {
     position: absolute;
-    left: -150px;
+    left: -165px;
     top: 20px;
     z-index: 999;
     width: 200px;
 	margin: 0;
-    padding: 10px;
+    padding: 5px 10px 10px 10px;
     list-style: none;
 	background: #fff;
     color: #3F4042;
@@ -216,29 +216,33 @@ hr {
 }
 
 .settings-list li {
-    padding: 2px;
+    padding: 3px 7px 0 7px;
     font-size: 12px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .settings-list li a {
+    display: block;
     color: #3F4042;
 }
 
-.settings-list li:first-child {
+.settings-list .user-data {
+    padding-bottom: 7px;
+    margin-bottom: 6px;
     font-weight: 500;
     border-bottom: solid 1px #e4e4e4;
 }
 
 #app-header .user-name {
-    margin-left: 10px;
     padding-left: 13px;
     padding-right: 13px;
     line-height: 32px;
-    text-overflow: ellipsis;
-    overflow: hidden;
 }
 
 .settings-list .settings-version {
+    padding: 7px;
     color: #1c91dc;
     font-weight: 300;
     font-size: 10px;
@@ -251,7 +255,7 @@ hr {
 }
 
 .settings-list li:last-child .contact-us {
-    color: #A4A4A4;
+    color: #a4a4a4;
     font-weight: 500;
     font-size: 10px;
 }
@@ -259,8 +263,8 @@ hr {
 #app-header .logout-btn .ant-btn {
     width: 70px;
     height: 20px;
-    border: 1px solid #3F4042;
+    border: 1px solid #3f4042;
     border-radius: 2px;
-    color: #3F4042;
+    color: #3f4042;
     font-size: 10px;
 }
