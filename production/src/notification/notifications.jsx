@@ -49,7 +49,7 @@ export class NotificationsWithoutRedux extends Component {
       case 'success':
         icon = <Icon type="check-circle" theme="filled" style={{color: '#52c41a'}} />;
         notification.config({
-          duration: 5,
+          duration: 2,
         });
         btn = null;
         break;

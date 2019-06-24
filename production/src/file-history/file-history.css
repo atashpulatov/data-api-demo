@@ -44,13 +44,13 @@ span.file-icons {
     float: right;
     background: #FFFFFF;
     box-shadow: 0 0;
-    width: 98px;
     height: 25px;
     border: none;
     margin-bottom: 16px;
     font-size: 12px;
     color: #1C91DC;
-    padding-right: 20px;
+    padding: 1px;
+    margin-right: 42px;
 }
 
 .refresh-all-btn .mstr-icon,
@@ -96,6 +96,8 @@ span.file-icons {
 
 .loading-button-container>img {
     vertical-align: baseline;
+    position: relative;
+    left: 2px;
 }
 
 .ant-input.rename-input {
