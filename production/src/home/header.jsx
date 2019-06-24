@@ -18,7 +18,6 @@ const BUILD_NUMBER = '11.1';
 export class _Header extends Component {
   constructor() {
     super();
-    this.myRef = React.createRef();
     this.state = {isSettings: false};
   }
 
