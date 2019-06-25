@@ -57,13 +57,10 @@ class NormalizedJsonHandler {
 
     return headers.rows.map((headerCells, rowIndex) => {
       const rowElements = this.mapElementIndicesToElements(definition, 'rows', headerCells);
-      return (
-        // Process elements
-        rowElements.map((e, attributeIndex) => onElement(e, rowIndex, attributeIndex))
-      ).concat(
-          // Process metric values of the same row
-          metricValues[rowIndex].map((mv, mvZoneColumnIndex) => onMetricValue(mv, rowIndex, mvZoneColumnIndex))
-      );
+      // Process elements
+      return rowElements.map((e, attributeIndex) => onElement(e, rowIndex, attributeIndex))
+      // Process metric values of the same row
+          .concat(metricValues[rowIndex].map((mv, mvZoneColumnIndex) => onMetricValue(mv, rowIndex, mvZoneColumnIndex)));
     });
   };
 
