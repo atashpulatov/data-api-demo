@@ -11,8 +11,7 @@ function officeInitialize() {
     .then(() => {
       translate();
       if (window.location.protocol !== 'https:') {
-        const envUrl = getLibraryUrl();
-        return window.location.replace(`${envUrl}/static/loader-mstr-office/no-https-connection.html`);
+        return window.location.replace(`${libraryUrl}/static/loader-mstr-office/no-https-connection.html`);
       }
       if (!canSaveCookies()) {
         showCookieWarning();
@@ -103,9 +102,11 @@ function openAuthDialog(url) {
 
 function openPopup(url) {
   if (popup === null || popup.closed) {
-    const left = (screen.width - 400) / 2;
-    const top = (screen.height - 600) / 2;
-    popup = window.open(url, 'MicroStrategy_for_Office', `resizable=1,status=1,height=650,width=400,top=${top},left=${left},screenX=${left},screenY=${top}location=0,dependent=1,alwaysOnTop=1`);
+    const height = 650;
+    const width = 400;
+    const left = (screen.width - width) / 2;
+    const top = (screen.height - height) / 2;
+    popup = window.open(url, 'MicroStrategy_for_Office', `resizable=1,status=1,height=${height},width=${width},top=${top},left=${left},screenX=${left},screenY=${top}location=0,dependent=1,alwaysOnTop=1`);
   } else {
     popup.focus();
   };
