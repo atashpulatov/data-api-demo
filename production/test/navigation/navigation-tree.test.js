@@ -177,7 +177,7 @@ describe('NavigationTree', () => {
     // given
     const givenObjectId = 'objectId';
     const givenProjectId = 'projectId';
-    const givenSubtype = 768;
+    const givenSubtype = 'subtype';
     const givenIsPrompted = 'customPromptAnswer';
     const selectObject = jest.fn();
     const isPromptedResponse = jest.spyOn(mstrObjectRestService, 'isPrompted')
