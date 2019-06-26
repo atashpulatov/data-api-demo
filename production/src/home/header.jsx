@@ -53,7 +53,7 @@ export class _Header extends Component {
               <img id='profile-image' src={logo} alt={t('User profile')} />
               /* TODO: When rest api returns profileImage use it as source */}
           </span>
-          <span id='full-name'>{userFullName || t('Microstrategy user')}</span>
+          <span id='full-name'>{userFullName || t('MicroStrategy user')}</span>
         </div>
         <div className="header-buttons">
           {this.getSecureButton()}
