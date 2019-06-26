@@ -327,3 +327,4 @@ coverage/
 .comparison_report/base/
 .comparison_report/current/
 .comparison_report/markdown.html
+.eslint/

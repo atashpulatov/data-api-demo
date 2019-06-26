@@ -37,6 +37,11 @@ rake stage_0_test
       report_directory_path ".comparison_report"
       index_file_name 'index.html'
     end
+    html do
+      report_name 'eslint report'
+      report_directory_path ".eslint"
+      index_file_name 'index.html'
+    end
 
     ext_mailer do
       recipients_list '$ghprbActualCommitAuthorEmail $ghprbPullAuthorEmail'

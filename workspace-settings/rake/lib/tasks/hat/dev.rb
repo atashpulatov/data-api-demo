@@ -18,6 +18,8 @@ task :build do
   shell_command! "zip -r office-loader-#{Common::Version.application_version}.zip .", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/office-loader/build"
 end
 
+
+
 task :clean do
   build_dir = "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/build"
   Dir.mkdir(build_dir) unless Dir.exist?(build_dir)
@@ -46,6 +48,7 @@ task :stage_0_test do
   run_test(base_repo_path)
   generate_comparison_report_html
   generate_comparison_report_markdown
+  generate_eslint_report
   publish_to_pull_request_page
 
 end
@@ -57,7 +60,8 @@ end
 
 desc "debug rake task"
 task :debug do
-  generate_comparison_report_markdown
+  # generate_comparison_report_markdown
+  generate_eslint_report
   # publish_to_pull_request_page
 end
 
@@ -120,6 +124,11 @@ def generate_comparison_report_html
   FileUtils.rm_rf "#{comparison_report_path}/current"
   FileUtils.cp_r("#{base_report_dir}/lcov-report","#{comparison_report_path}/base")
   FileUtils.cp_r("#{current_report_dir}/lcov-report","#{comparison_report_path}/current")
+end
+
+def generate_eslint_report
+  eslint_report_path = "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/.eslint/index.html"
+  shell_command "yarn eslint \"src/**\" -f html -o #{eslint_report_path}", cwd: $WORKSPACE_SETTINGS[:paths][:project][:production][:home]
 end
 
 
