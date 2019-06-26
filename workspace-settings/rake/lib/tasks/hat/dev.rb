@@ -287,7 +287,7 @@ def publish_to_pull_request_page
   end
   markdown_message = File.read(markdown_report_path)
   job_url = ENV['BUILD_URL']
-  comments_message = "job page:\n#{job_url}\ndetailed report link:\n#{job_url}Code_Coverage_Report\n#{markdown_message}\n linter report:\n#{job_url}eslint_report\n"
+  comments_message = "job page:\n#{job_url}\nlinter report:\n#{job_url}eslint_report\ncode coverage report link:\n#{job_url}Code_Coverage_Report\n#{markdown_message}\n"
   pull_request = Github::PullRequests.new(ENV['GITHUB_USER'], ENV['GITHUB_PWD'])
   pull_request.comment_pull_request(ENV['PROJECT_NAME'],ENV['ORGANIZATION_NAME'],ENV["ghprbPullId"],comments_message)
 end
