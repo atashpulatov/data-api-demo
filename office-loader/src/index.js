@@ -11,8 +11,7 @@ function officeInitialize() {
     .then(() => {
       translate();
       if (window.location.protocol !== 'https:') {
-        const envUrl = getLibraryUrl();
-        return window.location.replace(`${envUrl}/static/loader-mstr-office/no-https-connection.html`);
+        return window.location.replace(`${libraryUrl}/static/loader-mstr-office/no-https-connection.html`);
       }
       if (!canSaveCookies()) {
         showCookieWarning();
