@@ -43,7 +43,7 @@ export class _Header extends Component {
   }
 
   render() {
-    const {userFullName = 'MicroStrategy User', userInitials, loading, t} = this.props;
+    const {userFullName, userInitials, loading, t} = this.props;
     return (
       <header id='app-header'>
         <div className="user-data">
@@ -53,7 +53,7 @@ export class _Header extends Component {
               <img id='profile-image' src={logo} alt={t('User profile')} />
               /* TODO: When rest api returns profileImage use it as source */}
           </span>
-          <span id='full-name'>{userFullName}</span>
+          <span id='full-name'>{userFullName || t('Microstrategy user')}</span>
         </div>
         <div className="header-buttons">
           {this.getSecureButton()}

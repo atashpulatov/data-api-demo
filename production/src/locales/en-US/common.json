@@ -126,5 +126,6 @@
   "Data Cleared!": "Data Cleared!",
   "MicroStrategy data has been removed from the workbook. Click ‘Refresh’ to import it again.": "MicroStrategy data has been removed from the workbook. Click ‘Refresh’ to import it again.",
   "View Data": "View Data",
-  "Secure data": "Secure data"
+  "Secure data": "Secure data",
+  "MicroStrategy user": "MicroStrategy user"
 }
