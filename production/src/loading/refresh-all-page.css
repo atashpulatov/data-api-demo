@@ -103,8 +103,8 @@
     border-radius: 0px;
 }
 
-.tooltip-card .ant-popover-inner-content {
-    background: #fff;
+.tooltip-card .ant-popover-inner .ant-popover-inner-content {
+    background-color: #fff;
 }
 
 .ant-popover-inner-content {
