@@ -324,3 +324,7 @@ __pycache__/
 *bundle.js
 coverage/
 **/lost+found/
+.comparison_report/base/
+.comparison_report/current/
+.comparison_report/markdown.html
+.eslint/
