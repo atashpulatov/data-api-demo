@@ -237,28 +237,33 @@ def add_data_for_doc(compare_obj, xml_doc, metric_name)
     compare_obj["All files"]["packages"][pack_name] = {}  if compare_obj["All files"]["packages"][pack_name].nil?
     compare_obj["All files"]["packages"][pack_name][metric_name] = get_metics_node(package.metrics)
     compare_obj["All files"]["packages"][pack_name]["files"] = {} if compare_obj["All files"]["packages"][pack_name]["files"].nil?
-      
-    package.file.each do |file|
-      file_name = file["name"]
-      compare_obj["All files"]["packages"][pack_name]["files"][file_name] = {} if compare_obj["All files"]["packages"][pack_name]["files"][file_name].nil?
-     
-      compare_obj["All files"]["packages"][pack_name]["files"][file_name][metric_name] = get_metics_node(file.metrics)
-      lines = file.xpath("./line")
-      lines.each do |line|
-        compare_obj["All files"]["packages"][pack_name]["files"][file_name][metric_name]["total_lines"]+=1
-        compare_obj["All files"]["packages"][pack_name][metric_name]["total_lines"] +=1
-        compare_obj["All files"][metric_name]["total_lines"]+=1
-        if line["count"] == "0" 
-          compare_obj["All files"]["packages"][pack_name]["files"][file_name][metric_name]["uncover"].push(line["num"])
-        else
-          compare_obj["All files"]["packages"][pack_name]["files"][file_name][metric_name]["cov_lines"]+=1
-          compare_obj["All files"]["packages"][pack_name][metric_name]["cov_lines"] +=1
-          compare_obj["All files"][metric_name]["cov_lines"]+=1
-        end
+    if package.file.is_a?(Nokogiri::XML::Element)
+      handle_file(compare_obj,package.file,pack_name,metric_name)
+    elsif package.file.is_a?(Nokogiri::XML::NodeSet)
+      package.file.each do |file|
+        handle_file(compare_obj,file,pack_name,metric_name)
       end
     end
   end
 
+end
+def handle_file(compare_obj, file, pack_name,metric_name)
+  file_name = file["name"]
+  compare_obj["All files"]["packages"][pack_name]["files"][file_name] = {} if compare_obj["All files"]["packages"][pack_name]["files"][file_name].nil?
+  compare_obj["All files"]["packages"][pack_name]["files"][file_name][metric_name] = get_metics_node(file.metrics)
+  lines = file.xpath("./line")
+  lines.each do |line|
+    compare_obj["All files"]["packages"][pack_name]["files"][file_name][metric_name]["total_lines"]+=1
+    compare_obj["All files"]["packages"][pack_name][metric_name]["total_lines"] +=1
+    compare_obj["All files"][metric_name]["total_lines"]+=1
+    if line["count"] == "0" 
+      compare_obj["All files"]["packages"][pack_name]["files"][file_name][metric_name]["uncover"].push(line["num"])
+    else
+      compare_obj["All files"]["packages"][pack_name]["files"][file_name][metric_name]["cov_lines"]+=1
+      compare_obj["All files"]["packages"][pack_name][metric_name]["cov_lines"] +=1
+      compare_obj["All files"][metric_name]["cov_lines"]+=1
+    end
+  end
 end
 def get_metics_node(source)
   metics_node = {}
