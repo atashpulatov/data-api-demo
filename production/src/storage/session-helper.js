@@ -1,6 +1,7 @@
 import {reduxStore} from '../store';
 import {sessionProperties} from './session-properties';
 import {authenticationService} from '../authentication/auth-rest-service';
+import {userRestService} from '../home/user-rest-service';
 import {errorService} from '../error/error-handler';
 import {homeHelper} from '../home/home-helper';
 
@@ -71,11 +72,25 @@ class SessionHelper {
     };
     return session;
   }
+
+  getUserInfo = async () => {
+    let userData = {};
+    const IS_LOCALHOST = this.isLocalhost();
+    const envUrl = IS_LOCALHOST ? reduxStore.getState().sessionReducer.envUrl : homeHelper.saveLoginValues();
+    const authToken = IS_LOCALHOST ? reduxStore.getState().sessionReducer.authToken : homeHelper.saveTokenFromCookies();
+    try {
+      userData = await userRestService.getUserInfo(authToken, envUrl);
+      !userData.userInitials && sessionHelper.saveUserInfo(userData);
+    } catch (error) {
+      errorService.handleError(error, !IS_LOCALHOST);
+    }
+  }
+
   saveUserInfo = (values) => {
     reduxStore.dispatch({
       type: sessionProperties.actions.getUserInfo,
-      userFullName: values.fullName ? values.fullName : 'Microstrategy User',
-      userInitials: values.initials ? values.initials : null,
+      userFullName: values.fullName,
+      userInitials: values.initials,
     });
   }
 
@@ -84,6 +99,14 @@ class SessionHelper {
       type: sessionProperties.actions.setDialog,
       dialog,
     });
+  }
+
+  getUrl = () => {
+    return window.location.href;
+  }
+
+  isLocalhost = () => {
+    return this.getUrl().includes('localhost');
   }
 }
 

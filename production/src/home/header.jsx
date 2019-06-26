@@ -4,25 +4,14 @@ import {sessionHelper} from '../storage/session-helper';
 import {Button, Popover} from 'antd';
 import {errorService} from '../error/error-handler';
 import {connect} from 'react-redux';
-import {userRestService} from './user-rest-service';
-import {homeHelper} from './home-helper';
 import {withTranslation} from 'react-i18next';
 import {officeApiHelper} from '../office/office-api-helper';
 import {toggleSecuredFlag} from '../office/office-actions';
 import {MSTRIcon} from 'mstr-react-library';
 
 export class _Header extends Component {
-  componentDidMount = async () => {
-    let userData = {};
-    const IS_LOCALHOST = this.props.IS_LOCALHOST;
-    const envUrl = IS_LOCALHOST ? this.props.envUrl : homeHelper.saveLoginValues();
-    const authToken = IS_LOCALHOST ? this.props.authToken : homeHelper.saveTokenFromCookies();
-    try {
-      userData = await userRestService.getUserData(authToken, envUrl);
-    } catch (error) {
-      errorService.handleError(error, !IS_LOCALHOST);
-    }
-    !this.props.userFullName && sessionHelper.saveUserInfo(userData);
+  componentDidMount = () => {
+    sessionHelper.getUserInfo();
   };
 
   secureData = async () => {
@@ -45,8 +34,8 @@ export class _Header extends Component {
         <Popover placement="bottom" content={t('Secure data')} mouseEnterDelay={1}>
           <Button className="secure-btn" disabled={isSecured} size='small' onClick={this.secureData}>
             {isSecured
-            ? <MSTRIcon type='secure-access-inactive' />
-            : <MSTRIcon type='secure-access-active' />}
+              ? <MSTRIcon type='secure-access-inactive' />
+              : <MSTRIcon type='secure-access-active' />}
           </Button>
         </Popover>
       );
@@ -54,17 +43,17 @@ export class _Header extends Component {
   }
 
   render() {
-    const {userFullName, userInitials, loading, t} = this.props;
+    const {userFullName = 'MicroStrategy User', userInitials, loading, t} = this.props;
     return (
       <header id='app-header'>
         <div className="user-data">
-          <span id='profileImage' className={userFullName && 'got-user-data'}>
+          <span id='profileImage' className={userFullName}>
             {userInitials !== null ?
               <span id='initials' alt={t('User profile')}>{userInitials}</span> :
               <img id='profile-image' src={logo} alt={t('User profile')} />
               /* TODO: When rest api returns profileImage use it as source */}
           </span>
-          <span className={` ${userFullName && 'got-user-data'} header-name`}>{userFullName}</span>
+          <span id='full-name'>{userFullName}</span>
         </div>
         <div className="header-buttons">
           {this.getSecureButton()}
