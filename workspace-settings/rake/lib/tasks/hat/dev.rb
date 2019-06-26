@@ -237,6 +237,7 @@ def add_data_for_doc(compare_obj, xml_doc, metric_name)
     compare_obj["All files"]["packages"][pack_name] = {}  if compare_obj["All files"]["packages"][pack_name].nil?
     compare_obj["All files"]["packages"][pack_name][metric_name] = get_metics_node(package.metrics)
     compare_obj["All files"]["packages"][pack_name]["files"] = {} if compare_obj["All files"]["packages"][pack_name]["files"].nil?
+    #handle the single file package situation
     if package.file.is_a?(Nokogiri::XML::Element)
       handle_file(compare_obj,package.file,pack_name,metric_name)
     elsif package.file.is_a?(Nokogiri::XML::NodeSet)
