@@ -159,22 +159,38 @@ describe('Home', () => {
       const imageWrapper = headerWrapper.find('#initials');
       expect(imageWrapper).toBeTruthy();
     });
-
+    it('should display settings menu when isSettings flag is true', () => {
+      // given
+      const headerWrapper = mount(<_Header />);
+      // when
+      headerWrapper.setState({isSettings: true});
+      const settingsWrapper = headerWrapper.find('.settings-list');
+      // then
+      expect(headerWrapper.contains(settingsWrapper.get(0))).toBe(true);
+    });
+    it('should NOT display settings menu when isSettings flag is false', () => {
+      // given
+      const headerWrapper = mount(<_Header />);
+      // when
+      headerWrapper.setState({isSettings: false});
+      const settingsWrapper = headerWrapper.find('.settings-list');
+      // then
+      expect(headerWrapper.contains(settingsWrapper.get(0))).toBe(false);
+    });
     it('should log out on button click', async () => {
       // given
-      const tempPromise = Promise.resolve();
       const logOutRestSpy = jest.spyOn(sessionHelper, 'logOutRest');
       const logOutSpy = jest.spyOn(sessionHelper, 'logOut');
       const logOutRedirectSpy = jest.spyOn(sessionHelper, 'logOutRedirect');
       // when
       const headerWrapper = mount(<_Header />);
-      const buttonWrapper = headerWrapper.find('#logOut').at(0);
+      headerWrapper.setState({isSettings: true});
+      const buttonWrapper = headerWrapper.find('Button #logOut');
       buttonWrapper.simulate('click');
       // then
-      await (tempPromise);
-      expect(logOutRestSpy).toBeCalled();
-      expect(logOutSpy).toBeCalled();
-      expect(logOutRedirectSpy).toBeCalled();
+      await expect(logOutRestSpy).toBeCalled();
+      await expect(logOutSpy).toBeCalled();
+      await expect(logOutRedirectSpy).toBeCalled();
     });
     it('should handle error on logout', async () => {
       // given
@@ -183,7 +199,8 @@ describe('Home', () => {
       });
       // when
       const headerWrapper = mount(<_Header />);
-      const buttonWrapper = headerWrapper.find('#logOut').at(0);
+      headerWrapper.setState({isSettings: true});
+      const buttonWrapper = headerWrapper.find('Button #logOut');
       buttonWrapper.simulate('click');
       // then
       expect(logOutRestSpy).toThrowError();

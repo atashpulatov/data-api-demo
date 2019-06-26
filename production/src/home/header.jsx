@@ -42,10 +42,7 @@ export class _Header extends Component {
   }
 
   toggleSettings = () => {
-    if (!this.state.isSettings) {
-      return this.setState({...this.state, isSettings: true});
-    }
-    return this.setState({...this.state, isSettings: false});
+    return this.setState({...this.state, isSettings: !this.state.isSettings});
   }
 
   closeOnTab = (e) => {
@@ -74,14 +71,14 @@ export class _Header extends Component {
   }
 
   getSecureButton = () => {
-    const {reportArray, isSecured, t} = this.props;
+    const {reportArray, isSecured, loading, t} = this.props;
     if (reportArray && reportArray.length > 0) {
       return (
         <Popover placement="bottom" content={t('Secure data')} mouseEnterDelay={1}>
-          <Button className="secure-btn" disabled={isSecured} size='small' onClick={this.secureData}>
+          <Button className="secure-btn" disabled={isSecured || loading} size='small' onClick={this.secureData}>
             {isSecured
-            ? <MSTRIcon type='secure-access-inactive' />
-            : <MSTRIcon type='secure-access-active' />}
+              ? <MSTRIcon type='secure-access-inactive' />
+              : <MSTRIcon type='secure-access-active' />}
           </Button>
         </Popover>
       );
@@ -89,7 +86,7 @@ export class _Header extends Component {
   }
 
   getSettingsMenu = () => {
-    const {userFullName, userInitials, loading, t} = this.props;
+    const {userFullName, userInitials, t} = this.props;
     return (this.state.isSettings &&
       <ul className="settings-list">
         <li id="testid" className="user-data not-clickable">
@@ -109,7 +106,7 @@ export class _Header extends Component {
             <span><a href='' target="_blank" rel="noopener noreferrer">Contact Us</a></span>
           </div>
           <div className="logout-btn">
-            <Button size='small' onClick={logout} disabled={loading}>
+            <Button id="logOut" size='small' onClick={logout}>
               {t('Logout')}
             </Button>
           </div>
@@ -118,7 +115,7 @@ export class _Header extends Component {
   }
 
   render() {
-    const {t} = this.props;
+    const {loading, t} = this.props;
     return (
       <header id='app-header'>
         <div className="mstr-logo">
@@ -129,7 +126,7 @@ export class _Header extends Component {
         </div>
         <div className="header-buttons">
           {this.getSecureButton()}
-          <Button className="settings-btn not-clickable" onClick={this.toggleSettings}>
+          <Button className="settings-btn not-clickable" onClick={this.toggleSettings} disabled={loading}>
             <MSTRIcon type="settings" />
           </Button>
           {this.getSettingsMenu()}
