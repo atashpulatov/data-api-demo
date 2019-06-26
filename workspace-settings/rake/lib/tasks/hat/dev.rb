@@ -8,7 +8,7 @@ include ShellHelper::Shell
 
 desc "build project in #{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/build"
 task :build do
-  install_dependencies()
+  install_dependencies("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
   # build the office.zip
   shell_command! "yarn build", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
   shell_command! "zip -r office-#{Common::Version.application_version}.zip .", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/build"
@@ -73,7 +73,6 @@ end
 def install_dependencies(working_dir)
   shell_command! "rm -rf node_modules", cwd: "#{working_dir}/production"
   shell_command! "rm -rf node_modules", cwd: "#{working_dir}/office-loader"
-  update_package_json(working_dir)
   shell_command! "yarn install --network-concurrency 1", cwd: "#{working_dir}/production"
   shell_command! "yarn install --network-concurrency 1", cwd: "#{working_dir}/office-loader"
 end
