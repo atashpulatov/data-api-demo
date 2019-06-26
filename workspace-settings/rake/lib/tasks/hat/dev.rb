@@ -178,10 +178,10 @@ def write_row_to_compare_table(mf, name, node)
   current_line = [get_ratio(node["current_metric"],"cov_lines","total_lines")]
   base_uncover = get_uncover(node["base_metric"])
   current_uncover = get_uncover(node["current_metric"])
-  contains_diff = contains_diff || compare_ratio(base_stmts, current_stmts) 
-  contains_diff = contains_diff || compare_ratio(base_branch,current_branch) 
-  contains_diff = contains_diff || compare_ratio(base_func,current_func) 
-  contains_diff = contains_diff || compare_ratio(base_line,current_line)
+  contains_diff = compare_ratio(base_stmts, current_stmts) || contains_diff
+  contains_diff = compare_ratio(base_branch,current_branch) || contains_diff
+  contains_diff = compare_ratio(base_func,current_func) || contains_diff  
+  contains_diff = compare_ratio(base_line,current_line) || contains_diff  
   if contains_diff
     mf.write("<tr><td>#{name}</td><td>#{base_stmts[0]}</td><td>#{current_stmts[0]}</td>  <td>#{base_branch[0]}</td><td>#{current_branch[0]}</td>  <td>#{base_func[0]}</td><td>#{current_func[0]}</td>  <td>#{base_line[0]}</td><td>#{current_line[0]}</td>  <td>#{base_uncover}</td><td>#{current_uncover}</td></tr>")
   end
