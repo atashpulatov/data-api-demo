@@ -269,13 +269,13 @@ class OfficeApiHelper {
       let currentCell = startingCell;
       for (let j = 0; j < headerArray[i].length - 1; j++) {
         if (headerArray[i][j] === headerArray[i][j + 1]) {
-          currentCell.getResizedRange(OffsetForMoving2, OffsetForMoving1).merge(); // increasing size of selected range for 2 cells that will be merged
+          currentCell.getResizedRange(OffsetForMoving2, OffsetForMoving1).merge(); // increasing size of selected range for cells that will be merged
           currentCell.format.horizontalAlignment = Excel.HorizontalAlignment.center;
           currentCell.format.verticalAlignment = Excel.VerticalAlignment.center;
         }
-        currentCell = currentCell.getOffsetRange(OffsetForMoving2, OffsetForMoving1); // moving to next cell
+        currentCell = currentCell.getOffsetRange(OffsetForMoving2, OffsetForMoving1); // moving to next attributr value (cell)
       }
-      startingCell = startingCell.getOffsetRange(OffsetForMoving1, OffsetForMoving2); // moving to next row/column
+      startingCell = startingCell.getOffsetRange(OffsetForMoving1, OffsetForMoving2); // moving to next attribute (row/column)
     }
     await context.sync();
   }
