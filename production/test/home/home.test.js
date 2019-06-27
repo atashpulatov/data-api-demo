@@ -177,6 +177,34 @@ describe('Home', () => {
       // then
       expect(headerWrapper.contains(settingsWrapper.get(0))).toBe(false);
     });
+    it('should change isSettings flag when button settings is clicked', () => {
+      // given
+      const headerWrapper = mount(<_Header />);
+      headerWrapper.setState({isSettings: false});
+      const buttonWrapper = headerWrapper.find('Button .settings-btn');
+      // when
+      buttonWrapper.simulate('click');
+      // then
+      expect(headerWrapper.state('isSettings')).toBe(true);
+    });
+    // it('', () => {
+    //   // given
+    //   const headerWrapper = mount(<_Header />);
+    //   // when
+    //   headerWrapper.setState({isSettings: false});
+    //   const settingsWrapper = headerWrapper.find('.settings-list');
+    //   // then
+    //   expect(headerWrapper.contains(settingsWrapper.get(0))).toBe(false);
+    // });
+    // it('', () => {
+    //   // given
+    //   const headerWrapper = mount(<_Header />);
+    //   // when
+    //   headerWrapper.setState({isSettings: false});
+    //   const settingsWrapper = headerWrapper.find('.settings-list');
+    //   // then
+    //   expect(headerWrapper.contains(settingsWrapper.get(0))).toBe(false);
+    // });
     it('should log out on button click', async () => {
       // given
       const logOutRestSpy = jest.spyOn(sessionHelper, 'logOutRest');
