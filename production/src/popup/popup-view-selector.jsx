@@ -11,7 +11,7 @@ import {RefreshAllPage} from '../loading/refresh-all-page';
 
 export const _PopupViewSelector = (props) => {
   let popupType = props.popupType;
-  const {propsToPass, methods, importRequested} = props;
+  const {propsToPass, methods, importRequested, editedReport} = props;
   if (importRequested) {
     if (!props.isPrompted) {
       proceedToImport(props);
@@ -28,15 +28,22 @@ export const _PopupViewSelector = (props) => {
     return null;
   }
   propsToPass.token = props.authToken;
-  return renderProperComponent(popupType, methods, propsToPass);
+  return renderProperComponent(popupType, methods, propsToPass, editedReport);
 };
 
-function renderProperComponent(popupType, methods, propsToPass) {
-  if (!popupType) {
-    return <AttributeSelectorWindow parsed={propsToPass} handleBack={methods.handleBack} />;
+function renderProperComponent(popupType, methods, propsToPass, editedReport) {
+  if (popupType === PopupTypeEnum.dataPreparation) {
+    return <AttributeSelectorWindow mstrData={propsToPass} handleBack={methods.handleBack} />;
+  }
+  if (popupType === PopupTypeEnum.editFilters) {
+    const mstrData = {
+      ...propsToPass,
+      ...editedReport,
+    };
+    return <AttributeSelectorWindow mstrData={mstrData} handleBack={methods.handleBack} />;
   }
   if (popupType === PopupTypeEnum.navigationTree) {
-    return <NavigationTree handlePrepare={methods.handlePrepare} parsed={propsToPass} handlePopupErrors={methods.handlePopupErrors} />;
+    return <NavigationTree handlePrepare={methods.handlePrepare} mstrData={propsToPass} handlePopupErrors={methods.handlePopupErrors} />;
   }
   if (popupType === PopupTypeEnum.loadingPage) {
     return <LoadingPage />;
@@ -45,7 +52,7 @@ function renderProperComponent(popupType, methods, propsToPass) {
     return <RefreshAllPage />;
   }
   if (popupType === PopupTypeEnum.promptsWindow) {
-    return <PromptsWindow parsed={propsToPass} />;
+    return <PromptsWindow mstrData={propsToPass} />;
   }
   // TODO: do some error handling here
   return null;
@@ -58,6 +65,7 @@ function proceedToImport(props) {
     chosenProject: props.chosenProjectId,
     chosenSubtype: props.chosenSubtype,
     isPrompted: props.isPrompted,
+    promptAnswers: props.promptAnswers,
   };
   if (!!props.dossierData) {
     okObject.dossierData = {
@@ -70,12 +78,37 @@ function proceedToImport(props) {
   Office.context.ui.messageParent(JSON.stringify(okObject));
 }
 
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
+  const popupState = state.popupReducer.editedReport;
   return {
     ...state.navigationTree,
     authToken: state.sessionReducer.authToken,
+    editedReport: parsePopupState(popupState),
   };
 };
 
 export const PopupViewSelector = connect(mapStateToProps, actions)(_PopupViewSelector);
+
+function parsePopupState(popupState) {
+  return !!popupState && {
+    reportId: popupState.id,
+    projectId: popupState.projectId,
+    reportName: popupState.name,
+    reportType: popupState.objectType,
+    reportSubtype: popupState.objectType === 'report'
+      ? 768
+      : null,
+    selectedAttributes: popupState.body && popupState.body.requestedObjects.attributes.map((attr) => attr.id),
+    selectedMetrics: popupState.body && popupState.body.requestedObjects.metrics.map((mtrc) => mtrc.id),
+    selectedFilters: popupState.body && popupState.body.viewFilter
+      && popupState.body.viewFilter.operands[1].elements.map((elem) => elem.id)
+          .reduce((filters, elem) => {
+            const attrId = elem.split(':')[0];
+            filters[attrId] = !filters[attrId]
+            ? [elem]
+            : [...filters[attrId], elem];
+            return filters;
+          }, {}),
+  };
+}
 

@@ -138,4 +138,19 @@ describe('sessionReducer', () => {
     expect(wrongActionCall).toThrowError(SessionError);
     expect(wrongActionCall).toThrowError('Missing AuthToken.');
   });
+
+  it('should save userInfo on getUserInfo action', () => {
+    // given
+    const givenFullName = 'Full Name';
+    const givenInitials = 'IN';
+    // when
+    sessionStore.dispatch({
+      type: sessionProperties.actions.getUserInfo,
+      userFullName: givenFullName,
+      userInitials: givenInitials,
+    });
+    // then
+    expect(sessionStore.getState().userFullName).toEqual(givenFullName);
+    expect(sessionStore.getState().userInitials).toEqual(givenInitials);
+  });
 });

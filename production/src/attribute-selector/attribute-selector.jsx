@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {AttributeMetricFilter, ErrorBoundary} from 'mstr-react-library';
+import {withTranslation} from 'react-i18next';
 
-export class AttributeSelector extends Component {
+export class _AttributeSelector extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -10,19 +11,21 @@ export class AttributeSelector extends Component {
   }
 
   render() {
-    const {reportId, title, session, triggerUpdate, onTriggerUpdate, reportSubtype, resetTriggerUpdate, attributesSelectedChange} = this.props;
+    const {title, session,
+      triggerUpdate, onTriggerUpdate, mstrData,
+      resetTriggerUpdate, attributesSelectedChange, t} = this.props;
     return (
       <ErrorBoundary>
         <AttributeMetricFilter
+          t={t}
           attributesSelectedChange={attributesSelectedChange}
-          key={reportId}
+          key={mstrData.reportId}
           title={title}
           session={session}
+          mstrData={mstrData}
           triggerUpdate={triggerUpdate}
           onTriggerUpdate={onTriggerUpdate}
           withDataPreview
-          reportId={reportId}
-          reportSubtype={reportSubtype}
           resetTriggerUpdate={resetTriggerUpdate}
           withFolderTree={false}
           openModal={this.props.openModal}
@@ -31,3 +34,9 @@ export class AttributeSelector extends Component {
     );
   }
 }
+
+_AttributeSelector.defaultProps = {
+  t: (text) => text,
+};
+
+export const AttributeSelector = withTranslation('common')(_AttributeSelector);

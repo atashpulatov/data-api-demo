@@ -1,6 +1,8 @@
 import {errorService} from '../error/error-handler.js';
 import {moduleProxy} from '../module-proxy.js';
 
+const OFFICE_PRIVILEGE_ID = '273';
+
 class AuthenticationService {
   async authenticate(username, password, envUrl, loginMode = 1) {
     return await moduleProxy.request
@@ -20,7 +22,7 @@ class AuthenticationService {
         .set('x-mstr-authtoken', authToken)
         .withCredentials()
         .then((res) => {
-          return;
+          return true;
         })
         .catch((err) => {
           throw errorService.errorRestFactory(err);
@@ -36,6 +38,32 @@ class AuthenticationService {
         })
         .catch((err) => {
           throw errorService.errorRestFactory(err);
+        });
+  }
+
+  getOfficePrivilege = async (envUrl, iSession) => {
+    try {
+      const response = await this._fetchPrivilegeById(OFFICE_PRIVILEGE_ID, envUrl, iSession);
+      // Only return false if isUserLevelAllowed exists and is false
+      if (!response) return true;
+      if (response.isUserLevelAllowed === false) {
+        if (response.projects.find((project) => project.isAllowed === true)) return true;
+      }
+      return response.isUserLevelAllowed === true;
+    } catch (error) {
+      console.error(error);
+      // In case of errors skip privilege check (not supported environments)
+      return true;
+    }
+  }
+
+  _fetchPrivilegeById = (id, envUrl, authToken) => {
+    return moduleProxy.request
+        .get(`${envUrl}/sessions/privileges/${id}`)
+        .set('x-mstr-authtoken', authToken)
+        .withCredentials()
+        .then((res) => {
+          return res.body;
         });
   }
 }

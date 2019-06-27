@@ -8,7 +8,7 @@ import {notificationService} from '../notification/notification-service.js';
 import {RunOutsideOfficeError} from './run-outside-office-error.js';
 import {OverlappingTablesError} from './overlapping-tables-error';
 import {GenericOfficeError} from './generic-office-error.js';
-import {errorMessages, NOT_SUPPORTED_PROMPTS_REFRESH} from './constants';
+import {errorMessages, NOT_SUPPORTED_PROMPTS_REFRESH, TABLE_OVERLAP} from './constants';
 import {ConnectionBrokenError} from './connection-error.js';
 import {OutsideOfRangeError} from './outside-of-range-error.js';
 
@@ -17,7 +17,7 @@ const TIMEOUT = 2000;
 class ErrorService {
   errorRestFactory = (error) => {
     if (error.status === 200) {
-      return new PromptedReportError();
+      return new PromptedReportError(error);
     }
     const isOfficeError = error instanceof RunOutsideOfficeError
       || error instanceof OverlappingTablesError
@@ -28,18 +28,18 @@ class ErrorService {
         return new InternalServerError(error.response.body);
       }
       if (error.message && error.message.includes('Possible causes: the network is offline,')) {
-        return new ConnectionBrokenError();
+        return new ConnectionBrokenError(error);
       }
-      return new EnvironmentNotFoundError();
+      return new EnvironmentNotFoundError(error);
     }
     if (!!error.response) {
       switch (error.response.status) {
         case 404:
-          return new EnvironmentNotFoundError();
+          return new EnvironmentNotFoundError(error);
         case 400:
-          return new BadRequestError();
+          return new BadRequestError(error);
         case 401:
-          return new UnauthorizedError();
+          return new UnauthorizedError(error);
         case 500:
           return new InternalServerError(error.response.body ? error.response.body : {});
         default:
@@ -54,7 +54,7 @@ class ErrorService {
         case 'Excel is not defined':
           return new RunOutsideOfficeError(error.message);
         case `A table can't overlap another table. `:
-          return new OverlappingTablesError(error.message);
+          return new OverlappingTablesError(TABLE_OVERLAP);
         default:
           return new GenericOfficeError(error.message);
       }
@@ -94,18 +94,19 @@ class ErrorService {
     this.handleError(error, true);
   }
   handleOfficeError = (error) => {
+    const message = this.getErrorMessage(error);
     switch (true) {
       case error instanceof RunOutsideOfficeError:
-        notificationService.displayNotification('warning', 'Please run plugin inside Office');
+        notificationService.displayNotification('warning', message);
         break;
       case error instanceof OverlappingTablesError:
-        notificationService.displayNotification('warning', `Excel returned error: ${error.message}`);
+        notificationService.displayNotification('warning', message);
         break;
       case error instanceof GenericOfficeError:
-        notificationService.displayNotification('warning', `Excel returned error: ${error.message}`);
+        notificationService.displayNotification('warning', message);
         break;
       case error instanceof OutsideOfRangeError:
-        notificationService.displayNotification('warning', 'The table you try to import exceeds the worksheet limits.');
+        notificationService.displayNotification('warning', message);
         break;
       default:
         this.handleError(error);
@@ -142,7 +143,7 @@ class ErrorService {
       return 'The table you try to import exceeds the worksheet limits.';
     }
     if (error instanceof OverlappingTablesError) {
-      return 'The table you try to import exceeds the worksheet limits.';
+      return TABLE_OVERLAP;
     }
     if (error instanceof RunOutsideOfficeError) {
       return 'Please run plugin inside Office';

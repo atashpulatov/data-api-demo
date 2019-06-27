@@ -7,7 +7,6 @@ import {PromptsContainer} from './prompts-container';
 import {PromptWindowButtons} from './prompts-window-buttons';
 import {actions} from '../navigation/navigation-tree-actions';
 import {connect} from 'react-redux';
-import {_PopupButtons} from '../popup/popup-buttons';
 
 export class _PromptsWindow extends Component {
   constructor(props) {
@@ -16,11 +15,11 @@ export class _PromptsWindow extends Component {
     this.state = {
       session: {
         USE_PROXY: false,
-        url: this.props.parsed.envUrl,
-        authToken: this.props.parsed.token,
-        projectId: this.props.parsed.projectId,
+        url: this.props.mstrData.envUrl,
+        authToken: this.props.mstrData.token,
+        projectId: this.props.mstrData.projectId,
       },
-      reportId: this.props.parsed.reportId,
+      reportId: this.props.mstrData.reportId,
       triggerUpdate: false,
       loading: true,
       currentPageKey: '',
@@ -43,15 +42,15 @@ export class _PromptsWindow extends Component {
       const libraryUrl = this.state.session.url.replace('api', 'app');
 
       let msgRouter = null;
-      let _promptedAnswers = null;
-      const promptAnsweredHandler = function(promptAnswers) {
-        if (!promptAnswers) {
+      let promptAnswers = null;
+      const promptAnsweredHandler = function(_promptAnswers) {
+        if (!_promptAnswers) {
           return;
         }
-        if (_promptedAnswers) {
-          _promptedAnswers.push(promptAnswers);
+        if (promptAnswers) {
+          promptAnswers.push(_promptAnswers);
         } else {
-          _promptedAnswers = [promptAnswers];
+          promptAnswers = [_promptAnswers];
         }
       };
       const url = `${libraryUrl}/${projectId}/${this.state.reportId}`;
@@ -94,7 +93,7 @@ export class _PromptsWindow extends Component {
 
             msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, promptAnsweredHandler);
 
-            this.props.requestImport({dossierData});
+            this.props.requestImport({dossierData, promptAnswers});// TEMP - dossierData should eventually be removed as data should be gathered via REST from report instance, not dossier
           });
     }
 

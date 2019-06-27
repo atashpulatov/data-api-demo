@@ -26,6 +26,8 @@ export const officeReducer = (state = {loading: false}, action) => {
       return onStartLoading(state);
     case officeProperties.actions.stopLoading:
       return onStopLoading(state);
+    case officeProperties.actions.toggleSecuredFlag:
+      return toggleSecuredFlag(action, state);
     default:
       break;
   }
@@ -130,7 +132,7 @@ function _toggleSetLoadingStatus(action, state, status) {
   const newReportArray = [...state.reportArray];
   newReportArray[indexOfElement].isLoading = status;
   if (!status && !action.isError) {
-    const currentDate = new Date().toLocaleString();
+    const currentDate = new Date();
     newReportArray[indexOfElement].refreshDate = currentDate;
     officeStoreService.preserveReportValue(state.reportArray[indexOfElement].bindId, 'refreshDate', currentDate);
   }
@@ -138,6 +140,14 @@ function _toggleSetLoadingStatus(action, state, status) {
     ...state,
     loading: status,
     reportArray: newReportArray,
+    isRefreshAll: action.isRefreshAll,
+  };
+}
+
+function toggleSecuredFlag(action, state) {
+  return {
+    ...state,
+    isSecured: action.isSecured,
   };
 }
 

@@ -1,36 +1,13 @@
 import {
-  START_REFRESHING_ALL_REPORTS,
-  STOP_REFRESHING_ALL_REPORTS,
   START_REPORT_LOADING,
   STOP_REPORT_LOADING,
   RESET_STATE,
+  SET_REPORT_N_FILTERS,
 } from '../../src/popup/popup-actions';
 
 import {initialState, popupReducer} from '../../src/popup/popup-reducer';
 
 describe('Popup Reducer', () => {
-  it('should return proper state in case of START_REFRESHING_ALL_REPORTS action', () => {
-    // given
-    const action = {
-      type: START_REFRESHING_ALL_REPORTS,
-    };
-    // when
-    const newState = popupReducer(initialState, action);
-    // then
-    expect(newState).toEqual({...initialState, refreshingAll: true});
-  });
-
-  it('should return proper state in case of STOP_REFRESHING_ALL_REPORTS action', () => {
-    // given
-    const action = {
-      type: STOP_REFRESHING_ALL_REPORTS,
-    };
-    // when
-    const newState = popupReducer(initialState, action);
-    // then
-    expect(newState).toEqual({...initialState, refreshingAll: false});
-  });
-
   it('should return proper state in case of START_REPORT_LOADING action', () => {
     // given
     const action = {
@@ -66,5 +43,17 @@ describe('Popup Reducer', () => {
     // then
     expect(newState).toEqual({...initialState});
   });
-})
-;
+
+  it('should return proper state in case of SET_REPORT_N_FILTERS action', () => {
+    // given
+    const editedReport = 'editedReport';
+    const action = {
+      type: SET_REPORT_N_FILTERS,
+      editedReport,
+    };
+    // when
+    const newState = popupReducer(initialState, action);
+    // then
+    expect(newState).toEqual({editedReport});
+  });
+});

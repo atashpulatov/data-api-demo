@@ -9,6 +9,7 @@ export const officeProperties = new Proxy({
   workbookBindings: 'bindings',
   bindingItems: 'items',
   loadedReportProperties: 'reportProperties',
+  isSecured: 'isSecured',
   actions: {
     preLoadReport: 'PRE_OFFICE_LOAD_REPORT',
     loadReport: 'OFFICE_LOAD_REPORT',
@@ -23,5 +24,6 @@ export const officeProperties = new Proxy({
     stopLoading: 'STOP_LOADING',
     startRefreshingAll: 'START_REFRESHING_ALL',
     stopRefreshingAll: 'STOP_REFRESHING_ALL',
+    toggleSecuredFlag: 'TOGGLE_SECURED_FLAG',
   },
 }, propsProxy);
