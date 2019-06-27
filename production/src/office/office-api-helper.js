@@ -220,6 +220,13 @@ class OfficeApiHelper {
   }
 
 
+  /**
+   *Prepares parameters for createHeaders
+   * @param {Office} context Excel context
+   * @param {Office} cell Address of the first cell in report (top left)
+   * @param {Array} headers Contains headers structure and data
+   * @memberof OfficeApiHelper
+   */
   createRowsHeaders = async (context, cell, headers) => {
     const columnOffset = 0;
     const rowOffset = headers.rows[0].length;
@@ -228,8 +235,15 @@ class OfficeApiHelper {
     const OffsetForMoving1 = 0;
     const OffsetForMoving2 = 1;
 
-    await this.createHeaders(headerArray, startingCell, OffsetForMoving2, OffsetForMoving1, context);
+    await this.createHeaders(headerArray, startingCell, OffsetForMoving1, OffsetForMoving2, context);
   }
+  /**
+   *Prepares parameters for createHeaders
+   * @param {Office} context Excel context
+   * @param {Office} cell Address of the first cell in report (top left)
+   * @param {Array} headers Contains headers structure and data
+   * @memberof OfficeApiHelper
+   */
   createColumnsHeaders = async (context, cell, headers) => {
     const columnOffset = headers.columns.length;
     const rowOffset = 0;
@@ -238,10 +252,19 @@ class OfficeApiHelper {
     const OffsetForMoving1 = 1;
     const OffsetForMoving2 = 0;
 
-    await this.createHeaders(headerArray, startingCell, OffsetForMoving2, OffsetForMoving1, context);
+    await this.createHeaders(headerArray, startingCell, OffsetForMoving1, OffsetForMoving2, context);
   }
 
-  createHeaders = async (headerArray, startingCell, OffsetForMoving2, OffsetForMoving1, context) => {
+  /**
+   *Prepares parameters for createHeaders
+   * @param {Array} headerArray Contains rows/headers structure and data
+   * @param {Office} startingCell Address of the first cell header (top left)
+   * @param {number} OffsetForMoving1 regulate step size for iterating over cells
+   * @param {number} OffsetForMoving2 regulate step size for iterating over cells
+   * @param {Office} context Excel context
+   * @memberof OfficeApiHelper
+   */
+  createHeaders = async (headerArray, startingCell, OffsetForMoving1, OffsetForMoving2, context) => {
     for (let i = 0; i < headerArray.length - 1; i++) {
       let currentCell = startingCell;
       for (let j = 0; j < headerArray[i].length - 1; j++) {
@@ -257,6 +280,5 @@ class OfficeApiHelper {
     await context.sync();
   }
 }
-
 
 export const officeApiHelper = new OfficeApiHelper();
