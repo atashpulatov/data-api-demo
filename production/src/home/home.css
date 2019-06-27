@@ -13,6 +13,10 @@ hr {
     flex-direction: column;
 }
 
+#overlay {
+    animation: fadein 1.5s;
+}
+
 #app-header {
     display: flex;
     justify-content: space-between;
@@ -22,11 +26,7 @@ hr {
     width: 100%;
     padding: 20px;
     align-items: center;
-}
-
-.got-user-data {
-    transition: opacity 1.5s;
-    opacity: 1 !important;
+    animation: fadein 1.5s;
 }
 
 #profileImage {
@@ -36,10 +36,9 @@ hr {
     flex: auto 0 0;
     align-self: center;
     order: 1;
-    opacity: 0;
 }
 
-#app-header .header-name {
+#full-name {
     padding-left: 13px;
     padding-right: 13px;
     order: 2;
@@ -47,7 +46,6 @@ hr {
     text-overflow: ellipsis;
     overflow: hidden;
     min-width: 0;
-    opacity: 0;
     font-weight: 500;
 }
 
@@ -230,4 +228,9 @@ hr {
 
 .user-data {
     width: calc(100vw - 140px);
+}
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }
