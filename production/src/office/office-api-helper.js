@@ -6,6 +6,7 @@ import {officeProperties} from './office-properties';
 import {officeStoreService} from './store/office-store-service';
 import {notificationService} from '../notification/notification-service';
 import {errorService} from '../error/error-handler';
+import mstrNormalizedJsonHandler from '../mstr-object/mstr-normalized-json-handler';
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
@@ -217,6 +218,45 @@ class OfficeApiHelper {
     const tableRange = tableObject.getDataBodyRange();
     tableRange.clear(Excel.ClearApplyTo.contents);
   }
+
+
+  createRowsHeaders = async (context, cell, headers) => {
+    const columnOffset = 0;
+    const rowOffset = headers.rows[0].length;
+    const startingCell = cell.getOffsetRange(-columnOffset, -rowOffset);
+    const headerArray = mstrNormalizedJsonHandler._transposeMatrix(headers.rows);
+    const OffsetForMoving1 = 0;
+    const OffsetForMoving2 = 1;
+
+    await this.createHeaders(headerArray, startingCell, OffsetForMoving2, OffsetForMoving1, context);
+  }
+  createColumnsHeaders = async (context, cell, headers) => {
+    const columnOffset = headers.columns.length;
+    const rowOffset = 0;
+    const startingCell = cell.getOffsetRange(-columnOffset, -rowOffset);
+    const headerArray = headers.columns;
+    const OffsetForMoving1 = 1;
+    const OffsetForMoving2 = 0;
+
+    await this.createHeaders(headerArray, startingCell, OffsetForMoving2, OffsetForMoving1, context);
+  }
+
+  createHeaders = async (headerArray, startingCell, OffsetForMoving2, OffsetForMoving1, context) => {
+    for (let i = 0; i < headerArray.length - 1; i++) {
+      let currentCell = startingCell;
+      for (let j = 0; j < headerArray[i].length - 1; j++) {
+        if (headerArray[i][j] === headerArray[i][j + 1]) {
+          currentCell.getResizedRange(OffsetForMoving2, OffsetForMoving1).merge(); // increasing size of selected range for 2 cells that will be merged
+          currentCell.format.horizontalAlignment = Excel.HorizontalAlignment.center;
+          currentCell.format.verticalAlignment = Excel.VerticalAlignment.center;
+        }
+        currentCell = currentCell.getOffsetRange(OffsetForMoving2, OffsetForMoving1); // moving to next cell
+      }
+      startingCell = startingCell.getOffsetRange(OffsetForMoving1, OffsetForMoving2); // moving to next row/column
+    }
+    await context.sync();
+  }
 }
+
 
 export const officeApiHelper = new OfficeApiHelper();
