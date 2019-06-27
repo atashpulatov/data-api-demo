@@ -187,24 +187,46 @@ describe('Home', () => {
       // then
       expect(headerWrapper.state('isSettings')).toBe(true);
     });
-    // it('', () => {
-    //   // given
-    //   const headerWrapper = mount(<_Header />);
-    //   // when
-    //   headerWrapper.setState({isSettings: false});
-    //   const settingsWrapper = headerWrapper.find('.settings-list');
-    //   // then
-    //   expect(headerWrapper.contains(settingsWrapper.get(0))).toBe(false);
-    // });
-    // it('', () => {
-    //   // given
-    //   const headerWrapper = mount(<_Header />);
-    //   // when
-    //   headerWrapper.setState({isSettings: false});
-    //   const settingsWrapper = headerWrapper.find('.settings-list');
-    //   // then
-    //   expect(headerWrapper.contains(settingsWrapper.get(0))).toBe(false);
-    // });
+    it('isSettings flag should be set to false when click event is registered outside of settings menu', () => {
+      // given
+      const map = {};
+      document.addEventListener = jest.fn((event, cb) => {
+        map[event] = cb;
+      });
+      const headerWrapper = mount(<_Header />);
+      headerWrapper.setState({isSettings: true});
+      // when
+      map.click({
+        target: {
+          classList: {
+            contains: () => false,
+          },
+        }});
+      // then
+      expect(headerWrapper.state('isSettings')).toBe(false);
+    });
+    it('isSettings flag should be set to false when ESC keyup event is registered and settings menu is displayed', () => {
+      // given
+      const map = {};
+      document.addEventListener = jest.fn((event, cb) => {
+        map[event] = cb;
+      });
+      const headerWrapper = mount(<_Header />);
+      headerWrapper.setState({isSettings: true});
+      // when
+      map.keyup({keyCode: 27});
+      // then
+      expect(headerWrapper.state('isSettings')).toBe(false);
+    });
+    it('should unregister event listeners when unmounting component', () => {
+      // given
+      document.removeEventListener = jest.fn();
+      const headerWrapper = mount(<_Header />);
+      // when
+      headerWrapper.unmount();
+      // then
+      expect(document.removeEventListener).toBeCalledTimes(2);
+    });
     it('should log out on button click', async () => {
       // given
       const logOutRestSpy = jest.spyOn(sessionHelper, 'logOutRest');
