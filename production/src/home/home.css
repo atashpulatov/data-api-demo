@@ -202,6 +202,11 @@ hr {
     margin-left: 15px;
 }
 
+/* we need to override cursor not-allowed but only if it's there and use !important because antd uses !important */
+#app-header .secure-btn[style="display: inline-block; cursor: not-allowed;"] {
+    cursor: default !important;
+}
+
 #app-header .secure-btn svg {
     vertical-align: text-top;
 }

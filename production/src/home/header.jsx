@@ -9,9 +9,7 @@ import {officeApiHelper} from '../office/office-api-helper';
 import {toggleSecuredFlag} from '../office/office-actions';
 import {MSTRIcon} from 'mstr-react-library';
 import mstrLogo from './assets/mstr_logo.png';
-
-const BUILD_NUMBER = '11.1';
-
+import {VERSION} from '../version';
 
 export class _Header extends Component {
   constructor() {
@@ -89,7 +87,7 @@ export class _Header extends Component {
         <li><a href='' target="_blank" rel="noopener noreferrer">Privacy Policy</a></li>
         <li><a href='' target="_blank" rel="noopener noreferrer">Terms of Use</a></li>
         <li><a href='' target="_blank" rel="noopener noreferrer">Help</a></li>
-        <li className="settings-version not-clickable">Version {BUILD_NUMBER}</li>
+        <li className="settings-version not-clickable">Version {VERSION}</li>
         <li className="not-clickable">
           <div className="contact-us">
             <span><a href='' target="_blank" rel="noopener noreferrer">Contact Us</a></span>

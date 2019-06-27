@@ -1,0 +1,1 @@
+export const VERSION = '${APPLICATION_LONG_VERSION_PREFIX}' || '11.1';
