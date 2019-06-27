@@ -18,7 +18,7 @@ class PageBuilder {
         <Notifications />
         {
           authToken ?
-            <div>
+            <div id='overlay'>
               <Header IS_LOCALHOST={IS_LOCALHOST} loading={loadingReport} />
               <Tabs defaultActiveKey="data" className="tabs-container">
                 <TabPane tab={t('Imported Data')} key="data">

@@ -4,8 +4,6 @@ import {sessionHelper} from '../storage/session-helper';
 import {Button, Popover} from 'antd';
 import {errorService} from '../error/error-handler';
 import {connect} from 'react-redux';
-import {userRestService} from './user-rest-service';
-import {homeHelper} from './home-helper';
 import {withTranslation} from 'react-i18next';
 import {officeApiHelper} from '../office/office-api-helper';
 import {toggleSecuredFlag} from '../office/office-actions';
@@ -22,16 +20,7 @@ export class _Header extends Component {
   }
 
   componentDidMount = async () => {
-    let userData = {};
-    const IS_LOCALHOST = this.props.IS_LOCALHOST;
-    const envUrl = IS_LOCALHOST ? this.props.envUrl : homeHelper.saveLoginValues();
-    const authToken = IS_LOCALHOST ? this.props.authToken : homeHelper.saveTokenFromCookies();
-    try {
-      userData = await userRestService.getUserData(authToken, envUrl);
-    } catch (error) {
-      errorService.handleError(error, !IS_LOCALHOST);
-    }
-    !this.props.userFullName && sessionHelper.saveUserInfo(userData);
+    sessionHelper.getUserInfo();
     document.addEventListener('click', this.closeOnClick);
     document.addEventListener('keyup', this.closeOnTab);
   }
@@ -94,7 +83,7 @@ export class _Header extends Component {
           <span className="not-clickable" id='initials' alt={t('User profile')}>{userInitials}</span> :
           <img className="not-clickable" id='profile-image' src={logo} alt={t('User profile')} />
           /* TODO: When rest api returns profileImage use it as source */}
-          <span className="user-name not-clickable">{userFullName}</span>
+          <span className="user-name not-clickable">{userFullName || t('MicroStrategy user')}</span>
         </li>
         {/* TODO: url's for menu items will be added later */}
         <li><a href='' target="_blank" rel="noopener noreferrer">Privacy Policy</a></li>
