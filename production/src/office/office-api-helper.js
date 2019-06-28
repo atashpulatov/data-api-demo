@@ -222,62 +222,66 @@ class OfficeApiHelper {
 
   /**
    *Prepares parameters for createHeaders
+   *
    * @param {Office} context Excel context
    * @param {Office} cell Address of the first cell in report (top left)
    * @param {Array} headers Contains headers structure and data
    * @memberof OfficeApiHelper
+   * @return {Promise} Context.sync
    */
-  createRowsHeaders = async (context, cell, headers) => {
+  createRowsHeaders = (context, cell, headers) => {
     const columnOffset = 0;
     const rowOffset = headers.rows[0].length;
     const startingCell = cell.getOffsetRange(-columnOffset, -rowOffset);
     const headerArray = mstrNormalizedJsonHandler._transposeMatrix(headers.rows);
-    const OffsetForMoving1 = 0;
-    const OffsetForMoving2 = 1;
+    const directionVector = [0, 1];
 
-    await this.createHeaders(headerArray, startingCell, OffsetForMoving1, OffsetForMoving2, context);
+    return this.createHeaders(headerArray, startingCell, directionVector, context);
   }
   /**
    *Prepares parameters for createHeaders
+   *
    * @param {Office} context Excel context
    * @param {Office} cell Address of the first cell in report (top left)
    * @param {Array} headers Contains headers structure and data
    * @memberof OfficeApiHelper
+   * @return {Promise} Context.sync
    */
-  createColumnsHeaders = async (context, cell, headers) => {
+  createColumnsHeaders = (context, cell, headers) => {
     const columnOffset = headers.columns.length;
     const rowOffset = 0;
     const startingCell = cell.getOffsetRange(-columnOffset, -rowOffset);
     const headerArray = headers.columns;
-    const OffsetForMoving1 = 1;
-    const OffsetForMoving2 = 0;
+    const directionVector = [1, 0];
 
-    await this.createHeaders(headerArray, startingCell, OffsetForMoving1, OffsetForMoving2, context);
+    return this.createHeaders(headerArray, startingCell, directionVector, context);
   }
 
   /**
    *Prepares parameters for createHeaders
+   *
    * @param {Array} headerArray Contains rows/headers structure and data
    * @param {Office} startingCell Address of the first cell header (top left)
-   * @param {number} OffsetForMoving1 regulate step size for iterating over cells
-   * @param {number} OffsetForMoving2 regulate step size for iterating over cells
+   * @param {number} directionVector direction vertor for the step size when iterating over cells
    * @param {Office} context Excel context
    * @memberof OfficeApiHelper
+   * @return {Promise} Context.sync
    */
-  createHeaders = async (headerArray, startingCell, OffsetForMoving1, OffsetForMoving2, context) => {
+  createHeaders = (headerArray, startingCell, directionVector, context) => {
+    const [offsetForMoving1, offsetForMoving2] = directionVector;
     for (let i = 0; i < headerArray.length - 1; i++) {
       let currentCell = startingCell;
       for (let j = 0; j < headerArray[i].length - 1; j++) {
         if (headerArray[i][j] === headerArray[i][j + 1]) {
-          currentCell.getResizedRange(OffsetForMoving2, OffsetForMoving1).merge(); // increasing size of selected range for cells that will be merged
+          currentCell.getResizedRange(offsetForMoving2, offsetForMoving1).merge(); // increasing size of selected range for cells that will be merged
           currentCell.format.horizontalAlignment = Excel.HorizontalAlignment.center;
           currentCell.format.verticalAlignment = Excel.VerticalAlignment.center;
         }
-        currentCell = currentCell.getOffsetRange(OffsetForMoving2, OffsetForMoving1); // moving to next attributr value (cell)
+        currentCell = currentCell.getOffsetRange(offsetForMoving2, offsetForMoving1); // moving to next attributr value (cell)
       }
-      startingCell = startingCell.getOffsetRange(OffsetForMoving1, OffsetForMoving2); // moving to next attribute (row/column)
+      startingCell = startingCell.getOffsetRange(offsetForMoving1, offsetForMoving2); // moving to next attribute (row/column)
     }
-    await context.sync();
+    return context.sync();
   }
 }
 
