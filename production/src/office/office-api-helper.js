@@ -235,6 +235,8 @@ class OfficeApiHelper {
     const startingCell = cell.getOffsetRange(-columnOffset, -rowOffset);
     const headerArray = mstrNormalizedJsonHandler._transposeMatrix(headers.rows);
     const directionVector = [0, 1];
+    const headerRange = startingCell.getResizedRange(headerArray[0].length - 1, headerArray.length - 1);
+    headerRange.values = headers.rows;
 
     return this.createHeaders(headerArray, startingCell, directionVector, context);
   }
@@ -253,6 +255,8 @@ class OfficeApiHelper {
     const startingCell = cell.getOffsetRange(-columnOffset, -rowOffset);
     const headerArray = headers.columns;
     const directionVector = [1, 0];
+    const headerRange = startingCell.getResizedRange(headerArray.length - 1, headerArray[0].length - 1);
+    headerRange.value = headers.columns;
 
     return this.createHeaders(headerArray, startingCell, directionVector, context);
   }
