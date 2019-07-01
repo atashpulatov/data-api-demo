@@ -77,19 +77,19 @@ export class _Header extends Component {
       <ul className="settings-list">
         <li id="testid" className="user-data not-clickable">
           {userInitials !== null ?
-          <span className="not-clickable" id='initials' alt={t('User profile')}>{userInitials}</span> :
-          <img className="not-clickable" id='profile-image' src={logo} alt={t('User profile')} />
+            <span className="not-clickable" id='initials' alt={t('User profile')}>{userInitials}</span> :
+            <img className="not-clickable" id='profile-image' src={logo} alt={t('User profile')} />
           /* TODO: When rest api returns profileImage use it as source */}
           <span className="user-name not-clickable">{userFullName || t('MicroStrategy user')}</span>
         </li>
         {/* TODO: url's for menu items will be added later */}
-        <li><a href='' target="_blank" rel="noopener noreferrer">Privacy Policy</a></li>
-        <li><a href='' target="_blank" rel="noopener noreferrer">Terms of Use</a></li>
-        <li><a href='' target="_blank" rel="noopener noreferrer">Help</a></li>
-        <li className="settings-version not-clickable">Version {process.env.MSTR_OFFICE_VERSION}</li>
+        <li><a href='' target="_blank" rel="noopener noreferrer">{t('Privacy Policy')}</a></li>
+        <li><a href='' target="_blank" rel="noopener noreferrer">{t('Terms of Use')}</a></li>
+        <li><a href='' target="_blank" rel="noopener noreferrer">{t('Help')}</a></li>
+        <li className="settings-version not-clickable">{t('Version')} {process.env.MSTR_OFFICE_VERSION}</li>
         <li className="not-clickable">
           <div className="contact-us">
-            <span><a href='' target="_blank" rel="noopener noreferrer">Contact Us</a></span>
+            <span><a href='' target="_blank" rel="noopener noreferrer">{t('Contact Us')}</a></span>
           </div>
           <div className="logout-btn">
             <Button id="logOut" size='small' onClick={logout}>
