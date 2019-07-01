@@ -86,7 +86,7 @@ export class _Header extends Component {
         <li><a href='' target="_blank" rel="noopener noreferrer">Privacy Policy</a></li>
         <li><a href='' target="_blank" rel="noopener noreferrer">Terms of Use</a></li>
         <li><a href='' target="_blank" rel="noopener noreferrer">Help</a></li>
-        <li className="settings-version not-clickable">Version {process.env.MSTR_OFFICE_VERSION || '11.1'}</li>
+        <li className="settings-version not-clickable">Version {process.env.MSTR_OFFICE_VERSION}</li>
         <li className="not-clickable">
           <div className="contact-us">
             <span><a href='' target="_blank" rel="noopener noreferrer">Contact Us</a></span>
