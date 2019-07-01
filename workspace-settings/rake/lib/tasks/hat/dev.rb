@@ -61,8 +61,9 @@ end
 desc "debug rake task"
 task :debug do
   # generate_comparison_report_markdown
-  generate_eslint_report
+  # generate_eslint_report
   # publish_to_pull_request_page
+  update_package_json("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
 end
 
 def run_test(working_dir)
@@ -83,6 +84,10 @@ end
 def update_package_json(working_dir)
   package_json_path ="#{working_dir}/production/package.json"
   data = JSON.parse(File.read(package_json_path))
+  #US192297 modify package.json file to add the version information
+  if data.key?("version")
+    data["version"] = Common::Version.application_version
+  end
   if data["dependencies"].key?("mstr-react-library")
     repo = data["dependencies"]["mstr-react-library"].split("@github.microstrategy.com:")[1]
     data["dependencies"]["mstr-react-library"] = "https://#{ENV['GITHUB_USER']}:#{ENV['GITHUB_PWD']}@github.microstrategy.com/#{repo}"
