@@ -11,6 +11,10 @@
     font-weight: 200;
 }
 
+.ant-form.login-form {
+    padding: 15px;
+}
+
 .login-form-button {
     width: 50vw;
 }

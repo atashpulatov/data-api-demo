@@ -5,21 +5,25 @@ import {sessionHelper} from '../storage/session-helper';
 import {objectTypes} from 'mstr-react-library';
 import {notificationService} from '../notification/notification-service';
 import {reduxStore} from '../store';
-import {CLEAR_WINDOW} from './popup-actions';
+import {CLEAR_WINDOW, refreshReportsArray} from './popup-actions';
 import {errorService} from '../error/error-handler';
 import {authenticationHelper} from '../authentication/authentication-helper';
 import {officeProperties} from '../office/office-properties';
 import {officeApiHelper} from '../office/office-api-helper';
 import {START_REPORT_LOADING, STOP_REPORT_LOADING} from './popup-actions';
+import {officeStoreService} from '../office/store/office-store-service';
 const URL = `${window.location.href}`;
-const IS_LOCALHOST = URL.includes('localhost');
 
 class PopupController {
   runPopupNavigation = async () => {
     await this.runPopup(PopupTypeEnum.navigationTree, 80, 80);
   };
 
-  runPopup = async (popupType, height, width) => {
+  runEditFiltersPopup = async (reportParams) => {
+    await this.runPopup(PopupTypeEnum.editFilters, 80, 80, reportParams);
+  };
+
+  runPopup = async (popupType, height, width, reportParams = null) => {
     const session = sessionHelper.getSession();
     try {
       await authenticationHelper.validateAuthToken();
@@ -46,7 +50,7 @@ class PopupController {
             sessionHelper.setDialog(dialog);
             dialog.addEventHandler(
                 Office.EventType.DialogMessageReceived,
-                this.onMessageFromPopup.bind(null, dialog));
+                this.onMessageFromPopup.bind(null, dialog, reportParams));
             reduxStore.dispatch({type: CLEAR_WINDOW});
             dialog.addEventHandler(
             // Event received on dialog close
@@ -62,7 +66,7 @@ class PopupController {
     }
   };
 
-  onMessageFromPopup = async (dialog, arg) => {
+  onMessageFromPopup = async (dialog, reportParams, arg) => {
     const message = arg.message;
     const response = JSON.parse(message);
     try {
@@ -70,10 +74,21 @@ class PopupController {
       await officeApiHelper.getExcelSessionStatus(); // checking excel session status
       switch (response.command) {
         case selectorProperties.commandOk:
-          await this.handleOkCommand(response, dialog);
+          if (!reportParams) {
+            await this.handleOkCommand(response, reportParams);
+          } else {
+            await officeStoreService.preserveReportValue(reportParams.bindId, 'body', response.body);
+            await refreshReportsArray([reportParams], false)(reduxStore.dispatch);
+          }
           break;
         case selectorProperties.commandOnUpdate:
-          await this.handleUpdateCommand(response, dialog);
+          if (!reportParams) {
+            await this.handleUpdateCommand(response);
+          } else {
+            await officeStoreService.preserveReportValue(reportParams.bindId, 'body', response.body);
+            console.log(reportParams);
+            await refreshReportsArray([reportParams], false)(reduxStore.dispatch);
+          }
           break;
         case selectorProperties.commandCancel:
           break;
@@ -108,11 +123,12 @@ class PopupController {
     }
   }
 
-  handleOkCommand = async (response) => {
+  handleOkCommand = async (response, bindingId) => {
     if (response.chosenObject) {
       reduxStore.dispatch({type: officeProperties.actions.startLoading});
       reduxStore.dispatch({type: START_REPORT_LOADING, data: {name: response.reportName}});
-      const result = await officeDisplayService.printObject(response.dossierData, response.chosenObject, response.chosenProject, objectTypes.getTypeDescription(3, response.chosenSubtype) === 'Report', null, null, null, null, null, response.isPrompted);
+      const result =
+        await officeDisplayService.printObject(response.dossierData, response.chosenObject, response.chosenProject, objectTypes.getTypeDescription(3, response.chosenSubtype) === 'Report', null, null, bindingId, null, null, response.isPrompted, false, response.promptAnswers);
       if (result) {
         notificationService.displayNotification(result.type, result.message);
       }

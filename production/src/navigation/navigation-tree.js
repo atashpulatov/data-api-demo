@@ -7,6 +7,9 @@ import {FolderBrowser} from 'mstr-react-library';
 import {connect} from 'react-redux';
 import {actions} from './navigation-tree-actions';
 import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';
+import {withTranslation} from 'react-i18next';
+import {message} from 'antd';
+import {EMPTY_REPORT} from '../error/constants';
 
 export class _NavigationTree extends Component {
   constructor(props) {
@@ -15,10 +18,10 @@ export class _NavigationTree extends Component {
     this.state = {
       session: {
         USE_PROXY: false,
-        url: this.props.parsed.envUrl,
-        authToken: this.props.parsed.token,
+        url: this.props.mstrData.envUrl,
+        authToken: this.props.mstrData.token,
       },
-      reportId: this.props.parsed.reportId,
+      reportId: this.props.mstrData.reportId,
       triggerUpdate: false,
       chosenObjectId: this.props.chosenObjectId,
       chosenProjectId: this.props.chosenProjectId,
@@ -35,10 +38,18 @@ export class _NavigationTree extends Component {
     Office.context.ui.messageParent(JSON.stringify(updateObject));
   };
 
-  handleSecondary = () => {
-    this.props.handlePrepare(this.props.chosenProjectId, this.props.chosenObjectId,
-        this.props.chosenSubtype, this.props.chosenProjectName, this.props.chosenType);
-    this.setState({previewDisplay: true});
+  handleSecondary = async () => {
+    try {
+      const response = await mstrObjectRestService.getInstanceDefinition(this.props.chosenObjectId, this.props.chosenProjectId, this.props.chosenSubtype);
+      if (response && response.rows === 0) {
+        return message.warning(EMPTY_REPORT);
+      }
+      this.props.handlePrepare(this.props.chosenProjectId, this.props.chosenObjectId,
+          this.props.chosenSubtype, this.props.chosenProjectName, this.props.chosenType);
+      this.setState({previewDisplay: true});
+    } catch (err) {
+      this.props.handlePopupErrors(err);
+    }
   };
 
   handleCancel = () => {
@@ -50,27 +61,29 @@ export class _NavigationTree extends Component {
 
   // TODO: temporary solution
   onObjectChosen = async (objectId, projectId, subtype) => {
-    this.props.selectObject({
-      chosenObjectId: null,
-      chosenProjectId: null,
-      chosenSubtype: null,
-      isPrompted: null,
-    });
-
-    const isPrompted = await mstrObjectRestService.isPrompted(objectId, projectId);
-
-    this.props.selectObject({
-      chosenObjectId: objectId,
-      chosenProjectId: projectId,
-      chosenSubtype: subtype,
-      isPrompted,
-    });
+    try {
+      this.props.selectObject({
+        chosenObjectId: null,
+        chosenProjectId: null,
+        chosenSubtype: null,
+        isPrompted: null,
+      });
+      const isPrompted = await mstrObjectRestService.isPrompted(objectId, projectId);
+      this.props.selectObject({
+        chosenObjectId: objectId,
+        chosenProjectId: projectId,
+        chosenSubtype: subtype,
+        isPrompted,
+      });
+    } catch (err) {
+      this.props.handlePopupErrors(err);
+    }
   };
 
   render() {
     const {setDataSource, dataSource, chosenObjectId, chosenProjectId, pageSize, changeSearching, changeSorting,
       chosenSubtype, folder, selectFolder, loading, handlePopupErrors, scrollPosition, searchText, sorter,
-      updateScroll, updateSize, requestImport} = this.props;
+      updateScroll, updateSize, requestImport, t} = this.props;
     return (
       <FolderBrowser
         onSorterChange={changeSorting}
@@ -96,6 +109,7 @@ export class _NavigationTree extends Component {
         handlePopupErrors={handlePopupErrors}
         onSizeUpdated={updateSize}
         onScrollUpdated={updateScroll}
+        t={t}
       >
         {/* Temporary loading user action block */}
         <div id="action-block" style={{
@@ -123,6 +137,10 @@ export class _NavigationTree extends Component {
   }
 }
 
+_NavigationTree.defaultProps = {
+  t: (text) => text,
+};
+
 export const mapStateToProps = ({officeReducer, navigationTree}) => {
   const object = officeReducer.preLoadReport;
   return {
@@ -131,4 +149,4 @@ export const mapStateToProps = ({officeReducer, navigationTree}) => {
   };
 };
 
-export const NavigationTree = connect(mapStateToProps, actions)(_NavigationTree);
+export const NavigationTree = connect(mapStateToProps, actions)(withTranslation('common')(_NavigationTree));

@@ -7,22 +7,23 @@ import {selectorProperties} from '../attribute-selector/selector-properties';
 import {reduxStore} from '../store';
 import {Provider} from 'react-redux';
 import {PopupViewSelector} from './popup-view-selector';
+import i18next from '../i18n';
 
 export class Popup extends Component {
   constructor(props) {
     super(props);
-    const parsed = queryString.parse(this.props.location.search);
+    const mstrData = queryString.parse(this.props.location.search);
     this.state = {
-      parsed,
+      mstrData,
     };
     libraryErrorController.initializeHttpErrorsHandling(this.handlePopupErrors);
   }
 
   handlePrepare = (projectId, reportId, reportSubtype, reportName, reportType) => {
     this.setState({
-      parsed: {
-        ...this.state.parsed,
-        popupType: undefined,
+      mstrData: {
+        ...this.state.mstrData,
+        popupType: PopupTypeEnum.dataPreparation,
         projectId,
         reportId,
         reportSubtype,
@@ -34,8 +35,8 @@ export class Popup extends Component {
 
   handleBack = (projectId, reportId, reportSubtype) => {
     this.setState({
-      parsed: {
-        ...this.state.parsed,
+      mstrData: {
+        ...this.state.mstrData,
         popupType: PopupTypeEnum.navigationTree,
         projectId,
         reportId,
@@ -50,15 +51,16 @@ export class Popup extends Component {
       error,
     };
     officeContext.getOffice().context.ui.messageParent(JSON.stringify(messageObject));
-  }
+  };
 
   render() {
-    const {popupType, ...propsToPass} = this.state.parsed;
+    const {popupType, ...propsToPass} = this.state.mstrData;
     const methods = {
       handlePrepare: this.handlePrepare,
       handleBack: this.handleBack,
       handlePopupErrors: this.handlePopupErrors,
     };
+    i18next.changeLanguage(Office.context.displayLanguage);
     return (<Provider store={reduxStore}>
       <PopupViewSelector popupType={popupType} propsToPass={propsToPass} methods={methods} />
     </Provider>);

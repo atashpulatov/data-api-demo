@@ -1,0 +1,513 @@
+{
+    "id": "0ED85DEE11E9772400000080EFC5116D",
+    "name": "airline-sample-data--tabular-with-multiform",
+    "source": {
+        "id": "9A27E1B011E97721088D0080EFA5D16E",
+        "name": "airline-sample-data--with-multiform"
+    },
+    "definition": {
+        "grid": {
+            "crossTab": true,
+            "metricsPosition": {
+                "axis": "columns",
+                "index": 1
+            },
+            "rows": [
+                {
+                    "id": "9BC4691C11E97721AF570080EF55306C",
+                    "name": "Year",
+                    "type": "Attribute",
+                    "forms": [
+                        {
+                            "id": "45C11FA478E745FEA08D781CEA190FE5",
+                            "name": "ID",
+                            "dataType": 33,
+                            "baseFormType": 3
+                        }
+                    ],
+                    "elements": [
+                        {
+                            "id": "h2009;9BC4691C11E97721AF570080EF55306C",
+                            "formValues": [
+                                "2009"
+                            ]
+                        },
+                        {
+                            "id": "h2010;9BC4691C11E97721AF570080EF55306C",
+                            "formValues": [
+                                "2010"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "9BC470B011E977217DA10080EF55306D",
+                    "name": "Month",
+                    "type": "Attribute",
+                    "forms": [
+                        {
+                            "id": "45C11FA478E745FEA08D781CEA190FE5",
+                            "name": "ID",
+                            "dataType": 33,
+                            "baseFormType": 3
+                        }
+                    ],
+                    "elements": [
+                        {
+                            "id": "hJanuary;9BC470B011E977217DA10080EF55306D",
+                            "formValues": [
+                                "January"
+                            ]
+                        },
+                        {
+                            "id": "hFebruary;9BC470B011E977217DA10080EF55306D",
+                            "formValues": [
+                                "February"
+                            ]
+                        },
+                        {
+                            "id": "hMarch;9BC470B011E977217DA10080EF55306D",
+                            "formValues": [
+                                "March"
+                            ]
+                        },
+                        {
+                            "id": "j1;9BC470B011E977217DA10080EF55306D",
+                            "subtotal": true,
+                            "formValues": [
+                                "Total"
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "columns": [
+                {
+                    "id": "1D5F4A7811E97722F1050080EF65506C",
+                    "name": "Origin Airport",
+                    "type": "Attribute",
+                    "forms": [
+                        {
+                            "id": "CCFBE2A5EADB4F50941FB879CCF1721C",
+                            "name": "DESC",
+                            "dataType": 33,
+                            "baseFormType": 3
+                        },
+                        {
+                            "id": "45C11FA478E745FEA08D781CEA190FE5",
+                            "name": "ID",
+                            "dataType": 33,
+                            "baseFormType": 2
+                        }
+                    ],
+                    "elements": [
+                        {
+                            "id": "h1;1D5F4A7811E97722F1050080EF65506C",
+                            "formValues": [
+                                "BWI",
+                                "1"
+                            ]
+                        },
+                        {
+                            "id": "h2;1D5F4A7811E97722F1050080EF65506C",
+                            "formValues": [
+                                "DCA",
+                                "2"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "00000000000000000000000000000000",
+                    "name": "Metrics",
+                    "type": "Metrics",
+                    "elements": [
+                        {
+                            "id": "9BC486D611E977217DA10080EF55306D",
+                            "name": "Flights Delayed",
+                            "type": "Metric",
+                            "min": 0,
+                            "max": 10000,
+                            "dataType": 6,
+                            "numberFormatting": {
+                                "category": 7,
+                                "decimalPlaces": 0,
+                                "formatString": "0"
+                            }
+                        },
+                        {
+                            "id": "9BC4944611E977217DA10080EF55306D",
+                            "name": "Avg Delay (min)",
+                            "type": "Metric",
+                            "min": 0,
+                            "max": 10000,
+                            "dataType": 6,
+                            "numberFormatting": {
+                                "category": 7,
+                                "decimalPlaces": 0,
+                                "formatString": "0"
+                            }
+                        },
+                        {
+                            "id": "9BC4778611E977217DA10080EF55306D",
+                            "name": "On-Time",
+                            "type": "Metric",
+                            "min": 0,
+                            "max": 10000,
+                            "dataType": 6,
+                            "numberFormatting": {
+                                "category": 7,
+                                "decimalPlaces": 0,
+                                "formatString": "0"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "pageBy": [
+                {
+                    "id": "9BC4544A11E97721AF570080EF55306C",
+                    "name": "Airline Name",
+                    "type": "Attribute",
+                    "forms": [
+                        {
+                            "id": "45C11FA478E745FEA08D781CEA190FE5",
+                            "name": "ID",
+                            "dataType": 33,
+                            "baseFormType": 3
+                        }
+                    ],
+                    "elements": [
+                        {
+                            "id": "hComair Inc.;9BC4544A11E97721AF570080EF55306C",
+                            "formValues": [
+                                "Comair Inc."
+                            ]
+                        },
+                        {
+                            "id": "hMesa Airlines Inc.;9BC4544A11E97721AF570080EF55306C",
+                            "formValues": [
+                                "Mesa Airlines Inc."
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "9BC4625A11E97721AF570080EF55306C",
+                    "name": "Day of Week",
+                    "type": "Attribute",
+                    "forms": [
+                        {
+                            "id": "45C11FA478E745FEA08D781CEA190FE5",
+                            "name": "ID",
+                            "dataType": 33,
+                            "baseFormType": 3
+                        }
+                    ],
+                    "elements": [
+                        {
+                            "id": "hMonday;9BC4625A11E97721AF570080EF55306C",
+                            "formValues": [
+                                "Monday"
+                            ]
+                        },
+                        {
+                            "id": "hTuesday;9BC4625A11E97721AF570080EF55306C",
+                            "formValues": [
+                                "Tuesday"
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "sorting": {
+                "rows": [],
+                "columns": []
+            },
+            "thresholds": []
+        }
+    },
+    "data": {
+        "currentPageBy": [
+            0,
+            0
+        ],
+        "pagination": {
+            "offset": 0,
+            "limit": 100,
+            "totalCount": 8
+        },
+        "headers": {
+            "rows": [
+                [
+                    0,
+                    0
+                ],
+                [
+                    0,
+                    1
+                ],
+                [
+                    0,
+                    2
+                ],
+                [
+                    0,
+                    3
+                ],
+                [
+                    1,
+                    0
+                ],
+                [
+                    1,
+                    1
+                ],
+                [
+                    1,
+                    2
+                ],
+                [
+                    1,
+                    3
+                ]
+            ],
+            "columns": [
+                [
+                    0,
+                    0
+                ],
+                [
+                    0,
+                    1
+                ],
+                [
+                    0,
+                    2
+                ],
+                [
+                    1,
+                    0
+                ],
+                [
+                    1,
+                    1
+                ],
+                [
+                    1,
+                    2
+                ]
+            ]
+        },
+        "metricValues": [
+            [
+                {
+                    "rv": 3139,
+                    "fv": "3139"
+                },
+                {
+                    "rv": 17046.02,
+                    "fv": "17,046.02"
+                },
+                {
+                    "rv": 4543,
+                    "fv": "4543"
+                },
+                {
+                    "rv": 2406,
+                    "fv": "2406"
+                },
+                {
+                    "rv": 20915.41,
+                    "fv": "20,915.41"
+                },
+                {
+                    "rv": 3449,
+                    "fv": "3449"
+                }
+            ],
+            [
+                {
+                    "rv": 1829,
+                    "fv": "1829"
+                },
+                {
+                    "rv": 12610.65,
+                    "fv": "12,610.65"
+                },
+                {
+                    "rv": 5163,
+                    "fv": "5163"
+                },
+                {
+                    "rv": 1749,
+                    "fv": "1749"
+                },
+                {
+                    "rv": 14718.59,
+                    "fv": "14,718.59"
+                },
+                {
+                    "rv": 3704,
+                    "fv": "3704"
+                }
+            ],
+            [
+                {
+                    "rv": 2977,
+                    "fv": "2977"
+                },
+                {
+                    "rv": 15654.78,
+                    "fv": "15,654.78"
+                },
+                {
+                    "rv": 5248,
+                    "fv": "5248"
+                },
+                {
+                    "rv": 2053,
+                    "fv": "2053"
+                },
+                {
+                    "rv": 17608.82,
+                    "fv": "17,608.82"
+                },
+                {
+                    "rv": 3782,
+                    "fv": "3782"
+                }
+            ],
+            [
+                {
+                    "rv": 7945,
+                    "fv": "7945"
+                },
+                {
+                    "rv": 45311.46,
+                    "fv": "45,311.46"
+                },
+                {
+                    "rv": 14954,
+                    "fv": "14954"
+                },
+                {
+                    "rv": 6208,
+                    "fv": "6208"
+                },
+                {
+                    "rv": 53242.82,
+                    "fv": "53,242.82"
+                },
+                {
+                    "rv": 10935,
+                    "fv": "10935"
+                }
+            ],
+            [
+                {
+                    "rv": 2940,
+                    "fv": "2940"
+                },
+                {
+                    "rv": 15611.76,
+                    "fv": "15,611.76"
+                },
+                {
+                    "rv": 4808,
+                    "fv": "4808"
+                },
+                {
+                    "rv": 1699,
+                    "fv": "1699"
+                },
+                {
+                    "rv": 19524.66,
+                    "fv": "19,524.66"
+                },
+                {
+                    "rv": 4262,
+                    "fv": "4262"
+                }
+            ],
+            [
+                {
+                    "rv": 2376,
+                    "fv": "2376"
+                },
+                {
+                    "rv": 13586.74,
+                    "fv": "13,586.74"
+                },
+                {
+                    "rv": 4355,
+                    "fv": "4355"
+                },
+                {
+                    "rv": 1591,
+                    "fv": "1591"
+                },
+                {
+                    "rv": 17466.5,
+                    "fv": "17,466.50"
+                },
+                {
+                    "rv": 3682,
+                    "fv": "3682"
+                }
+            ],
+            [
+                {
+                    "rv": 3294,
+                    "fv": "3294"
+                },
+                {
+                    "rv": 17830.76,
+                    "fv": "17,830.76"
+                },
+                {
+                    "rv": 5140,
+                    "fv": "5140"
+                },
+                {
+                    "rv": 1993,
+                    "fv": "1993"
+                },
+                {
+                    "rv": 18595.95,
+                    "fv": "18,595.95"
+                },
+                {
+                    "rv": 4349,
+                    "fv": "4349"
+                }
+            ],
+            [
+                {
+                    "rv": 8610,
+                    "fv": "8610"
+                },
+                {
+                    "rv": 47029.27,
+                    "fv": "47,029.27"
+                },
+                {
+                    "rv": 14303,
+                    "fv": "14303"
+                },
+                {
+                    "rv": 5283,
+                    "fv": "5283"
+                },
+                {
+                    "rv": 55587.11,
+                    "fv": "55,587.11"
+                },
+                {
+                    "rv": 12293,
+                    "fv": "12293"
+                }
+            ]
+        ]
+    }
+}

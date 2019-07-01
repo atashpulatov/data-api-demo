@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="theme-color" content="#ffffff">
@@ -37,13 +38,18 @@
           <div class="mstr-office-addin-logo"></div>
         </div>
         <div>
-          <h1 id="cookies-not-needed" class="title">Loading...</h1>
+          <h1 id="cookies-not-needed" class="title"><span id="loadingSpan">Loading...</span></h1>
+          <div id="login-container" style="display:none">
+            <h1 id="title" class="title">MicroStrategy for Office</h1>
+            <button id="login-btn" class="accept-button" tabindex="0" aria-label="Login button"><span id="loginSpan">Log
+                in</span></button>
+          </div>
         </div>
         <div id="cookies-needed" style="display:none">
-          <h1 class="title">Please enable cookies to start using the add-in.</h1>
+          <h1 class="title" id="noCookiesHeader">Please enable cookies to start using the add-in.</h1>
           <div>
-            <button id="accept-cookies-btn" class="accept-button" tabindex="0"
-              aria-label="Enable Cookies">Enable</button>
+            <button id="accept-cookies-btn" class="accept-button" tabindex="0" aria-label="Enable Cookies"><span
+                id="enableSpan">Enable</span></button>
           </div>
         </div>
       </div>

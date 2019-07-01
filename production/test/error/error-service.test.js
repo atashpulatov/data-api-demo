@@ -17,6 +17,7 @@ import {
   NOT_IN_METADATA,
   PROJECT_ROW_LIMIT,
   NOT_SUPPORTED_PROMPTS_REFRESH,
+  TABLE_OVERLAP,
 } from '../../src/error/constants';
 
 jest.mock('../../src/storage/session-helper');
@@ -31,6 +32,14 @@ describe('ErrorService', () => {
     it('should return the same error if not handled', () => {
       // given
       const error = {response: {}};
+      // when
+      const result = errorService.errorRestFactory(error);
+      // then
+      expect(result).toBe(error);
+    });
+    it('should return the same error if already recognized', () => {
+      // given
+      const error = new RunOutsideOfficeError();
       // when
       const result = errorService.errorRestFactory(error);
       // then
@@ -299,7 +308,7 @@ describe('ErrorService', () => {
       errorService.handleError(error);
       // then
       expect(notificationSpy).toBeCalled();
-      expect(notificationSpy).toBeCalledWith('warning', `The table you try to import exceeds the worksheet limits.`);
+      expect(notificationSpy).toBeCalledWith('warning', TABLE_OVERLAP);
     });
   });
   describe('errorOfficeFactory', () => {
@@ -359,14 +368,14 @@ describe('ErrorService', () => {
     });
     it('should handle OverlappingTablesError', () => {
       // given
-      const errorMessage = `A table can't overlap another table. `;
+      const errorMessage = `A table can't overlap another table.`;
       const error = new OverlappingTablesError(errorMessage);
       const notificationSpy = jest.spyOn(notificationService, 'displayNotification');
       // when
       errorService.handleOfficeError(error);
       // then
       expect(notificationSpy).toBeCalled();
-      expect(notificationSpy).toBeCalledWith('warning', `Excel returned error: ${errorMessage}`);
+      expect(notificationSpy).toBeCalledWith('warning', TABLE_OVERLAP);
     });
     it('should handle GenericOfficeError', () => {
       // given
