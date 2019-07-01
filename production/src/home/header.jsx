@@ -60,7 +60,7 @@ export class _Header extends Component {
     const {reportArray, isSecured, loading, t} = this.props;
     if (reportArray && reportArray.length > 0) {
       return (
-        <Popover placement="bottom" content={t('Secure data')} mouseEnterDelay={1}>
+        <Popover placement="bottom" content={t('Clear data')} mouseEnterDelay={1}>
           <Button className="secure-btn" disabled={isSecured || loading} size='small' onClick={this.secureData}>
             {isSecured
               ? <MSTRIcon type='secure-access-inactive' />
