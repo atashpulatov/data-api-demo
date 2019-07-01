@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 
 const prepareButton = (disableActiveActions, button, t) => {
   return disableActiveActions ?
-    <Popover className='button-tooltip' placement="top" content={t('This button is currently disabled because you didn’t select any data')} mouseEnterDelay={1}>
+    <Popover className='button-tooltip' placement="topRight" content={t('This button is currently disabled because you didn’t select any data')} mouseEnterDelay={1}>
       {button}
     </Popover> : button;
 };

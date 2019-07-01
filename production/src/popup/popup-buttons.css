@@ -4,6 +4,7 @@
     background-color: #fff;
 }
 
+.popup-buttons .ant-btn,
 .popup-buttons .ant-btn .button-tooltip {
     height: 30px;
     padding-left: 20px;
@@ -31,22 +32,13 @@
     visibility: hidden;
 }
 
-.ant-btn.ant-btn-primary[disabled], .ant-btn.ant-btn-primary[disabled]:hover {
+.popup-buttons .ant-btn.ant-btn-primary[disabled], .ant-btn.ant-btn-primary[disabled]:hover {
     color: #ffffff;
     background: #1C91DC;
     border: 1px solid #1C91DC;
-    border-radius: 4px;
- }
- 
- .ant-btn[disabled], .ant-btn[disabled]:hover {
-    background: #FFFFFF;
-    border: 1px solid #D2D2D2;
-    border-radius: 4px;
-    color: #444649;
-    cursor: default;
  }
 
- span .ant-btn {
+ .popup-buttons span .ant-btn {
      margin-left: 0 !important;
  }
 
@@ -60,9 +52,4 @@
 
 .ant-popover-inner-content {
     max-width: 100%;
-
- }
-
- .ant-popover-placement-top > .ant-popover-content > .ant-popover-arrow {
-     border-color: #404040;
  }
