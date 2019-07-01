@@ -6,6 +6,7 @@ import {officeProperties} from './office-properties';
 import {officeStoreService} from './store/office-store-service';
 import {notificationService} from '../notification/notification-service';
 import {errorService} from '../error/error-handler';
+import mstrNormalizedJsonHandler from '../mstr-object/mstr-normalized-json-handler';
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
@@ -216,6 +217,88 @@ class OfficeApiHelper {
     const tableObject = context.workbook.tables.getItem(object.bindId);
     const tableRange = tableObject.getDataBodyRange();
     tableRange.clear(Excel.ClearApplyTo.contents);
+  }
+
+  /**
+   *Prepares parameters for createHeaders
+   *
+   * @param {Office} context Excel context
+   * @param {Office} cell Address of the first cell in report (top left)
+   * @param {Array} headers Contains headers structure and data
+   * @memberof OfficeApiHelper
+   * @return {Promise} Context.sync
+   */
+  createRowsHeaders = (context, cell, headers) => {
+    const columnOffset = 0;
+    const rowOffset = headers.rows[0].length;
+    cell.unmerge(); // excel api have problem with handling merged cells which are partailly in range, we unmerged selected cell to avoid this problem
+    const startingCell = cell.getCell(0, 0).getOffsetRange(-columnOffset, -rowOffset); // we call getCell in case multiple cells are selected
+    const headerArray = mstrNormalizedJsonHandler._transposeMatrix(headers.rows);
+    const directionVector = [0, 1];
+    const headerRange = startingCell.getResizedRange(headerArray[0].length - 1, headerArray.length - 1);
+    this.insertHeadersValues(headerRange, headers.rows);
+
+    return this.createHeaders(headerArray, startingCell, directionVector, context);
+  }
+  /**
+   *Prepares parameters for createHeaders
+   *
+   * @param {Office} context Excel context
+   * @param {Office} cell Address of the first cell in report (top left)
+   * @param {Array} headers Contains headers structure and data
+   * @memberof OfficeApiHelper
+   * @return {Promise} Context.sync
+   */
+  createColumnsHeaders = (context, cell, headers) => {
+    const columnOffset = headers.columns.length;
+    const rowOffset = 0;
+    cell.unmerge(); // excel api have problem with handling merged cells which are partailly in range, we unmerged selected cell to avoid this problem
+    const startingCell = cell.getCell(0, 0).getOffsetRange(-columnOffset, -rowOffset);// we call getCell in case multiple cells are selected
+    const headerArray = headers.columns;
+    const directionVector = [1, 0];
+    const headerRange = startingCell.getResizedRange(headerArray.length - 1, headerArray[0].length - 1);
+    this.insertHeadersValues(headerRange, headers.columns);
+
+    return this.createHeaders(headerArray, startingCell, directionVector, context);
+  }
+  /**
+   * Clear prevoius formatting and insert data in range
+   *
+   * @param {Office} headerRange Range of the header
+   * @param {Array} headerArray Contains rows/headers structure and data
+   * @memberof OfficeApiHelper
+   */
+  insertHeadersValues(headerRange, headerArray) {
+    headerRange.unmerge();
+    headerRange.clear(); // we are unmerging and removing formatting to avoid conflicts while merging cells
+    headerRange.values = headerArray;
+    headerRange.format.horizontalAlignment = Excel.HorizontalAlignment.center;
+    headerRange.format.verticalAlignment = Excel.VerticalAlignment.center;
+  }
+
+  /**
+   * Create Headers structure in Excel
+   *
+   * @param {Array} headerArray Contains rows/headers structure and data
+   * @param {Office} startingCell Address of the first cell header (top left)
+   * @param {number} directionVector direction vertor for the step size when iterating over cells
+   * @param {Office} context Excel context
+   * @memberof OfficeApiHelper
+   * @return {Promise} Context.sync
+   */
+  createHeaders = (headerArray, startingCell, directionVector, context) => {
+    const [offsetForMoving1, offsetForMoving2] = directionVector;
+    for (let i = 0; i < headerArray.length - 1; i++) {
+      let currentCell = startingCell;
+      for (let j = 0; j < headerArray[i].length - 1; j++) {
+        if (headerArray[i][j] === headerArray[i][j + 1]) {
+          currentCell.getResizedRange(offsetForMoving2, offsetForMoving1).merge(); // increasing size of selected range for cells that will be merged
+        }
+        currentCell = currentCell.getOffsetRange(offsetForMoving2, offsetForMoving1); // moving to next attributr value (cell)
+      }
+      startingCell = startingCell.getOffsetRange(offsetForMoving1, offsetForMoving2); // moving to next attribute (row/column)
+    }
+    return context.sync();
   }
 }
 
