@@ -63,6 +63,9 @@ class OfficeApiHelper {
       tableRange.select();
       return await excelContext.sync();
     } catch (error) {
+      if (error.code === 'ItemNotFound') {
+        return notificationService.displayNotification('info', 'The object does not exist in the metadata.');
+      }
       errorService.handleOfficeError(error);
     }
   };
@@ -207,6 +210,12 @@ class OfficeApiHelper {
             reject(result.error);
           }
         }));
+  }
+
+  deleteObjectTableBody = (context, object) => {
+    const tableObject = context.workbook.tables.getItem(object.bindId);
+    const tableRange = tableObject.getDataBodyRange();
+    tableRange.clear(Excel.ClearApplyTo.contents);
   }
 }
 

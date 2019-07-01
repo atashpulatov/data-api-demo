@@ -1,6 +1,7 @@
 import {mockReports} from '../mockData';
 import {officeStoreService} from '../../src/office/store/office-store-service';
 import {mockReportProperties} from './__mock__object__/office-settings-report-properties';
+import {officeProperties} from '../../src/office/office-properties';
 
 describe('OfficeStoreService', () => {
   beforeAll(() => {
@@ -61,5 +62,29 @@ describe('OfficeStoreService', () => {
     expect(result).toBeInstanceOf(Object);
     expect(result.envUrl).toEqual('testEnvUrl2');
     expect(result.tableId).toEqual('testTableId2');
+  });
+
+  it('should save isSecured flag in settings', async () => {
+    // given
+    const settings = officeStoreService.getOfficeSettings();
+    // when
+    officeStoreService.toggleFileSecuredFlag(true);
+    // then
+    expect(settings.set).toBeCalledWith(officeProperties.isSecured, true);
+  });
+
+  it('should return proper value from office when isFileSecured is called', async () => {
+    // given
+    jest.spyOn(officeStoreService, 'getOfficeSettings')
+        .mockReturnValue({
+          set: jest.fn(),
+          get: () => true,
+          saveAsync: jest.fn(),
+        });
+
+    // when
+    officeStoreService.isFileSecured();
+    // then
+    expect(officeStoreService.isFileSecured()).toBe(true);
   });
 });

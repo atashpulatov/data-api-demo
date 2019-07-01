@@ -7,11 +7,11 @@ import {errorService} from '../error/error-handler';
 import {popupController} from '../popup/popup-controller';
 import {authenticationHelper} from '../authentication/authentication-helper';
 import {PopupTypeEnum} from '../home/popup-type-enum';
-import {NOT_SUPPORTED_NO_ATTRIBUTES, ALL_DATA_FILTERED_OUT} from '../error/constants';
+import {NOT_SUPPORTED_NO_ATTRIBUTES, ALL_DATA_FILTERED_OUT, TABLE_OVERLAP, ERROR_POPUP_CLOSED} from '../error/constants';
 import {OverlappingTablesError} from '../error/overlapping-tables-error';
 
 class OfficeDisplayService {
-  printObject = async (dossierData, objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh, isPrompted, isRefreshAll = false) => {
+  printObject = async (dossierData, objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh, isPrompted, isRefreshAll = false, promptAnswers = undefined) => {
     if (!isRefreshAll) {
       const objectInfo = !!isPrompted ? await mstrObjectRestService.getObjectInfo(objectId, projectId, isReport) : await mstrObjectRestService.getObjectDefinition(objectId, projectId, isReport);
       reduxStore.dispatch({
@@ -21,7 +21,7 @@ class OfficeDisplayService {
       await popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
     }
     try {
-      return await this._printObject(objectId, projectId, isReport, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body, isPrompted);
+      return await this._printObject(objectId, projectId, isReport, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body, isPrompted, promptAnswers);
     } catch (error) {
       throw error;
     } finally {
@@ -29,7 +29,7 @@ class OfficeDisplayService {
     }
   }
 
-  _printObject = async (objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body, isPrompted) => {
+  _printObject = async (objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body, isPrompted, promptAnswers) => {
     let officeTable;
     let newOfficeTableId;
     let shouldFormat;
@@ -75,7 +75,7 @@ class OfficeDisplayService {
       // Save to store
       bindingId = bindingId || newOfficeTableId;
       await officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
-      this._addToStore(officeTableId, isRefresh, instanceDefinition, bindingId, newOfficeTableId, projectId, envUrl, body, objectType, isPrompted);
+      this._addToStore(officeTableId, isRefresh, instanceDefinition, bindingId, newOfficeTableId, projectId, envUrl, body, objectType, isPrompted, promptAnswers);
 
       console.timeEnd('Total');
       reduxStore.dispatch({
@@ -109,6 +109,7 @@ class OfficeDisplayService {
         isLoading: report.isLoading,
         objectType: report.objectType,
         isPrompted: report.isPrompted,
+        promptAnswers: report.promptAnswers,
       },
     });
     officeStoreService.preserveReport(report);
@@ -147,14 +148,45 @@ class OfficeDisplayService {
       return errorService.handleError(error);
     }
   };
-
-  _createOfficeTable = async (instanceDefinition, context, startCell, officeTableId) => {
+  /**
+   * Creates an office table if it's a new import or if the number of columns of an existing table changes.
+   * If we are refreshing a table and the new definiton range is not empty we keep the original table.
+   *
+   * @param {Object} instanceDefinition
+   * @param {Object} context ExcelContext
+   * @param {string} startCell  Top left corner cell
+   * @param {string} officeTableId Excel Binding ID
+   * @param {Object} prevOfficeTable Previous office table to refresh
+   *
+   * @memberOf OfficeDisplayService
+   */
+  _createOfficeTable = async (instanceDefinition, context, startCell, officeTableId, prevOfficeTable) => {
     const hasHeaders = true;
     const {rows, columns, mstrTable} = instanceDefinition;
     const sheet = context.workbook.worksheets.getActiveWorksheet();
     const tableRange = officeApiHelper.getRange(columns, startCell, rows);
     const sheetRange = sheet.getRange(tableRange);
-    await this._checkRangeValidity(context, sheetRange);
+    if (prevOfficeTable) {
+      prevOfficeTable.rows.load('count');
+      await context.sync();
+      const addedColumns = Math.max(0, columns - prevOfficeTable.columns.count);
+      const addedRows = Math.max(0, rows - prevOfficeTable.rows.count);
+
+      if (addedColumns) {
+        const rightRange = prevOfficeTable.getRange().getColumnsAfter(addedColumns);
+        await this._checkRangeValidity(context, rightRange);
+      }
+
+      if (addedRows) {
+        const bottomRange = prevOfficeTable.getRange().getRowsBelow(addedRows).getResizedRange(0, addedColumns);
+        await this._checkRangeValidity(context, bottomRange);
+      }
+
+      prevOfficeTable.delete();
+      await context.sync();
+    } else {
+      await this._checkRangeValidity(context, sheetRange);
+    }
 
     const officeTable = sheet.tables.add(tableRange, hasHeaders);
     try {
@@ -206,14 +238,26 @@ class OfficeDisplayService {
     }
   }
 
+  /**
+   * Function closes popup; used when  importing report
+   * it swallows error from office if dialog has been closed by user
+   *
+   * @memberOf OfficeDisplayService
+   */
   _dispatchPrintFinish() {
     const reduxStoreState = reduxStore.getState();
     reduxStore.dispatch({type: officeProperties.actions.popupHidden});
     reduxStore.dispatch({type: officeProperties.actions.stopLoading});
-    reduxStoreState.sessionReducer.dialog.close();
+    try {
+      reduxStoreState.sessionReducer.dialog.close();
+    } catch (err) {
+      if (!err.includes(ERROR_POPUP_CLOSED)) {
+        throw err;
+      }
+    }
   }
 
-  _addToStore(officeTableId, isRefresh, instanceDefinition, bindingId, newOfficeTableId, projectId, envUrl, body, objectType, isPrompted) {
+  _addToStore(officeTableId, isRefresh, instanceDefinition, bindingId, newOfficeTableId, projectId, envUrl, body, objectType, isPrompted, promptAnswers) {
     if (!officeTableId && !isRefresh) {
       this.addReportToStore({
         id: instanceDefinition.mstrTable.id,
@@ -226,6 +270,7 @@ class OfficeDisplayService {
         isLoading: false,
         objectType,
         isPrompted,
+        promptAnswers,
       });
     }
   }
@@ -260,9 +305,8 @@ class OfficeDisplayService {
         headerCell.load('address');
         await excelContext.sync();
         const startCell = officeApiHelper.getStartCell(headerCell.address);
-        prevOfficeTable.delete();
         await excelContext.sync();
-        officeTable = await this._createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId);
+        officeTable = await this._createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId, prevOfficeTable);
       } else {
         shouldFormat = false;
         officeTable = await this._updateOfficeTable(instanceDefinition, excelContext, prevOfficeTable);
@@ -326,7 +370,7 @@ class OfficeDisplayService {
     const usedDataRange = excelRange.getUsedRangeOrNullObject(true);
     await context.sync();
     if (!usedDataRange.isNullObject) {
-      throw new OverlappingTablesError('The required data range in the worksheet is not empty');
+      throw new OverlappingTablesError(TABLE_OVERLAP);
     }
   }
 

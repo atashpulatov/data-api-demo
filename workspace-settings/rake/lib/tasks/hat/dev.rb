@@ -102,7 +102,7 @@ def init_base_branch_repo(branch_name)
   shell_command! "git checkout #{branch_name}", cwd:base_repo_path
   shell_command! 'git reset --hard HEAD', cwd:base_repo_path
   shell_command! 'git clean -dfx', cwd:base_repo_path
-  shell_command! "git pull origin #{branch_name}", cwd:base_repo_path 
+  shell_command! "git pull origin #{branch_name}", cwd:base_repo_path
 end
 
 def base_repo_path
@@ -180,8 +180,8 @@ def write_row_to_compare_table(mf, name, node)
   current_uncover = get_uncover(node["current_metric"])
   contains_diff = compare_ratio(base_stmts, current_stmts) || contains_diff
   contains_diff = compare_ratio(base_branch,current_branch) || contains_diff
-  contains_diff = compare_ratio(base_func,current_func) || contains_diff  
-  contains_diff = compare_ratio(base_line,current_line) || contains_diff  
+  contains_diff = compare_ratio(base_func,current_func) || contains_diff
+  contains_diff = compare_ratio(base_line,current_line) || contains_diff
   if contains_diff
     mf.write("<tr><td>#{name}</td><td>#{base_stmts[0]}</td><td>#{current_stmts[0]}</td>  <td>#{base_branch[0]}</td><td>#{current_branch[0]}</td>  <td>#{base_func[0]}</td><td>#{current_func[0]}</td>  <td>#{base_line[0]}</td><td>#{current_line[0]}</td>  <td>#{base_uncover}</td><td>#{current_uncover}</td></tr>")
   end
@@ -202,7 +202,7 @@ def compare_ratio(base, current)
     current[0]+="↓"
   end
   return true
-  
+
 end
 def get_uncover(node)
   if node.nil?
@@ -240,7 +240,7 @@ def add_data_for_doc(compare_obj, xml_doc, metric_name)
     compare_obj["All files"]["packages"][pack_name] = {}  if compare_obj["All files"]["packages"][pack_name].nil?
     compare_obj["All files"]["packages"][pack_name][metric_name] = get_metics_node(package.metrics)
     compare_obj["All files"]["packages"][pack_name]["files"] = {} if compare_obj["All files"]["packages"][pack_name]["files"].nil?
-      
+
     #handle the single file package situation
     if package.file.is_a?(Nokogiri::XML::Element)
       handle_file(compare_obj,package.file,pack_name,metric_name)

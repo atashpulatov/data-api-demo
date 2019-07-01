@@ -5,6 +5,7 @@ import {selectorProperties} from '../attribute-selector/selector-properties';
 import {Button, Popover} from 'antd';
 import {MSTRIcon} from 'mstr-react-library';
 import warningIcon from './assets/icon_conflict.svg';
+import {withTranslation} from 'react-i18next';
 
 import './refresh-all-page.css';
 
@@ -57,13 +58,14 @@ export class _RefreshAllPage extends Component {
     clearInterval(this.intervalId);
   }
 
-  finished = () => {
-    localStorage.removeItem('refreshData');
-    const okObject = {
-      command: selectorProperties.commandOk,
-    };
-    Office.context.ui.messageParent(JSON.stringify(okObject));
-  }
+  // TODO: This will be used when button Ok will be added
+  // finished = () => {
+  //   localStorage.removeItem('refreshData');
+  //   const okObject = {
+  //     command: selectorProperties.commandOk,
+  //   };
+  //   Office.context.ui.messageParent(JSON.stringify(okObject));
+  // }
 
   getIcon = (res) => {
     if (res.isError === false) {
@@ -78,33 +80,36 @@ export class _RefreshAllPage extends Component {
   }
 
   getTooltipContent = (refreshData) => {
+    const excel = 'Excel returned error';
+    const {t} = this.props;
     return (
       <div className="tooltip-content">
         <div className="tooltip-header">
           <span className="tooltip-header-icon"><img width='14px' height='14px' src={warningIcon} alt='Refresh failed icon' /></span>
         </div>
         <div className="tooltip-message">
-          <div className="tooltip-message-title">{refreshData.name} could not be refreshed.</div>
-          <div className="tooltip-message-text">{refreshData.result}</div>
+          <div className="tooltip-message-title">{this.props.t('Report could not be refreshed', {report: refreshData.name})}</div>
+          <div className="tooltip-message-text">{refreshData.result.includes(excel) ? `${t(excel)}: ${refreshData.result.split(':')[1]}` : t(refreshData.result)}</div>
         </div>
       </div>
     );
   }
 
   render() {
+    const {t} = this.props;
     const displayName = this.state.name || 'data';
     return (<dialog className='refreshing-page dialogStyle'>
-      <div className="refresh-title">Refresh All Data</div>
+      <div className="refresh-title">{t('Refresh All Data')}</div>
       <div className="refresh-header">
         {!this.state.finished
           ?
           <div className='refresh-progress'>
             <h1 title={displayName} className={'titleStyle'}>{`${displayName}`}</h1>
             <h1 className={'progressStyle'}>{` (${this.state.currentNumber}/${this.state.allNumber})`}</h1>
-            <LoadingText text={'Loading data...'} />
+            <LoadingText text={t('Loading data...')} />
           </div>
           :
-          <span className="finished-header">Refreshing complete!</span>}
+          <span className="finished-header">{t('Refreshing complete!')}</span>}
       </div>
       <div className='results-container'>
         {this.state.results &&
@@ -125,10 +130,8 @@ export class _RefreshAllPage extends Component {
   }
 };
 
-const mapStateToProps = ({popupReducer}) => {
-  return {
-    name: popupReducer.refreshingReport,
-  };
+_RefreshAllPage.defaultProps = {
+  t: (text) => text,
 };
 
-export const RefreshAllPage = connect(mapStateToProps)(_RefreshAllPage);
+export const RefreshAllPage = withTranslation('common')(_RefreshAllPage);

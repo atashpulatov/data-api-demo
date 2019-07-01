@@ -18,6 +18,7 @@ class OfficeStoreService {
         body: report.body,
         objectType: report.objectType,
         isPrompted: report.isPrompted,
+        promptAnswers: report.promptAnswers,
       });
       settings.set(officeProperties.loadedReportProperties, reportProperties);
       settings.saveAsync();
@@ -85,6 +86,25 @@ class OfficeStoreService {
       throw new RunOutsideOfficeError();
     }
     return Office.context.document.settings;
+  }
+
+  toggleFileSecuredFlag = (value) => {
+    try {
+      const settings = this.getOfficeSettings();
+      settings.set(officeProperties.isSecured, value);
+      settings.saveAsync();
+    } catch (error) {
+      errorService.handleOfficeError(error);
+    }
+  }
+
+  isFileSecured = () => {
+    try {
+      const settings = this.getOfficeSettings();
+      return settings.get(officeProperties.isSecured);
+    } catch (error) {
+      errorService.handleOfficeError(error);
+    }
   }
 }
 
