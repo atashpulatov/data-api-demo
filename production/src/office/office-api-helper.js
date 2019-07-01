@@ -219,7 +219,6 @@ class OfficeApiHelper {
     tableRange.clear(Excel.ClearApplyTo.contents);
   }
 
-
   /**
    *Prepares parameters for createHeaders
    *
@@ -232,11 +231,12 @@ class OfficeApiHelper {
   createRowsHeaders = (context, cell, headers) => {
     const columnOffset = 0;
     const rowOffset = headers.rows[0].length;
-    const startingCell = cell.getOffsetRange(-columnOffset, -rowOffset);
+    cell.unmerge(); // excel api have problem with handling merged cells which are partailly in range, we unmerged selected cell to avoid this problem
+    const startingCell = cell.getCell(0, 0).getOffsetRange(-columnOffset, -rowOffset); // we call getCell in case multiple cells are selected
     const headerArray = mstrNormalizedJsonHandler._transposeMatrix(headers.rows);
     const directionVector = [0, 1];
     const headerRange = startingCell.getResizedRange(headerArray[0].length - 1, headerArray.length - 1);
-    headerRange.values = headers.rows;
+    this.insertHeadersValues(headerRange, headers.rows);
 
     return this.createHeaders(headerArray, startingCell, directionVector, context);
   }
@@ -252,17 +252,32 @@ class OfficeApiHelper {
   createColumnsHeaders = (context, cell, headers) => {
     const columnOffset = headers.columns.length;
     const rowOffset = 0;
-    const startingCell = cell.getOffsetRange(-columnOffset, -rowOffset);
+    cell.unmerge(); // excel api have problem with handling merged cells which are partailly in range, we unmerged selected cell to avoid this problem
+    const startingCell = cell.getCell(0, 0).getOffsetRange(-columnOffset, -rowOffset);// we call getCell in case multiple cells are selected
     const headerArray = headers.columns;
     const directionVector = [1, 0];
     const headerRange = startingCell.getResizedRange(headerArray.length - 1, headerArray[0].length - 1);
-    headerRange.value = headers.columns;
+    this.insertHeadersValues(headerRange, headers.columns);
 
     return this.createHeaders(headerArray, startingCell, directionVector, context);
   }
+  /**
+   * Clear prevoius formatting and insert data in range
+   *
+   * @param {Office} headerRange Range of the header
+   * @param {Array} headerArray Contains rows/headers structure and data
+   * @memberof OfficeApiHelper
+   */
+  insertHeadersValues(headerRange, headerArray) {
+    headerRange.unmerge();
+    headerRange.clear(); // we are unmerging and removing formatting to avoid conflicts while merging cells
+    headerRange.values = headerArray;
+    headerRange.format.horizontalAlignment = Excel.HorizontalAlignment.center;
+    headerRange.format.verticalAlignment = Excel.VerticalAlignment.center;
+  }
 
   /**
-   *Prepares parameters for createHeaders
+   * Create Headers structure in Excel
    *
    * @param {Array} headerArray Contains rows/headers structure and data
    * @param {Office} startingCell Address of the first cell header (top left)
@@ -278,8 +293,6 @@ class OfficeApiHelper {
       for (let j = 0; j < headerArray[i].length - 1; j++) {
         if (headerArray[i][j] === headerArray[i][j + 1]) {
           currentCell.getResizedRange(offsetForMoving2, offsetForMoving1).merge(); // increasing size of selected range for cells that will be merged
-          currentCell.format.horizontalAlignment = Excel.HorizontalAlignment.center;
-          currentCell.format.verticalAlignment = Excel.VerticalAlignment.center;
         }
         currentCell = currentCell.getOffsetRange(offsetForMoving2, offsetForMoving1); // moving to next attributr value (cell)
       }
