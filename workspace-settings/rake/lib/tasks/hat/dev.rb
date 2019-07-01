@@ -90,11 +90,14 @@ def update_package_json(working_dir)
   end
   if data["dependencies"].key?("mstr-react-library")
     repo = data["dependencies"]["mstr-react-library"].split("@github.microstrategy.com:")[1]
-    data["dependencies"]["mstr-react-library"] = "https://#{ENV['GITHUB_USER']}:#{ENV['GITHUB_PWD']}@github.microstrategy.com/#{repo}"
+    #only regenerate the url if the key words @github.microstrategy.com: founds
+    unless repo.nil?
+      data["dependencies"]["mstr-react-library"] = "https://#{ENV['GITHUB_USER']}:#{ENV['GITHUB_PWD']}@github.microstrategy.com/#{repo}"
+    end
   end
 
   File.open(package_json_path,"w") do |f|
-    f.write(data.to_json)
+    f.write(JSON.pretty_generate(data)) #generate beautified json
   end
 end
 
