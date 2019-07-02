@@ -10,6 +10,8 @@ import {toggleSecuredFlag} from '../office/office-actions';
 import {MSTRIcon} from 'mstr-react-library';
 import mstrLogo from './assets/mstr_logo.png';
 
+const APP_VERSION = process.env.REACT_APP_MSTR_OFFICE_VERSION;
+
 export class _Header extends Component {
   constructor() {
     super();
@@ -38,7 +40,7 @@ export class _Header extends Component {
   };
 
   closeOnClick = (e) => {
-    if (this.state.isSettings && !e.target.classList.contains('not-clickable')) {
+    if (this.state.isSettings && !e.target.classList.contains('no-trigger-close')) {
       this.setState({...this.state, isSettings: false});
     }
   };
@@ -54,6 +56,26 @@ export class _Header extends Component {
     } catch (error) {
       errorService.handleOfficeError(error);
     }
+  }
+
+  sendEmail = () => {
+    const {t} = this.props;
+    const {host, platform, version} = window.Office.context.diagnostics;
+    const userAgent = navigator.userAgent;
+    const message = t('Please don’t change the text below. Type your message above this line.');
+    const email = {
+      address: 'info@microstrategy.com',
+      title: 'MicroStrategy for Office Feedback',
+      body: [
+        `%0D%0A %0D%0A `,
+        `----- ${message} ----- `,
+        `Platform: ${host}/${platform}`,
+        `Excel version: ${version}`,
+        `MicroStrategy for Office version: ${APP_VERSION}`,
+        `User agent: ${userAgent}`,
+      ].join('%0D%0A'),
+    };
+    return 'mailto:' + email.address + '?subject=' + email.title + '&body=' + email.body;
   }
 
   getSecureButton = () => {
@@ -75,21 +97,20 @@ export class _Header extends Component {
     const {userFullName, userInitials, t} = this.props;
     return (this.state.isSettings &&
       <ul className="settings-list">
-        <li id="testid" className="user-data not-clickable">
+        <li id="testid" className="user-data no-trigger-close">
           {userInitials !== null ?
-            <span className="not-clickable" id='initials' alt={t('User profile')}>{userInitials}</span> :
-            <img className="not-clickable" id='profile-image' src={logo} alt={t('User profile')} />
+            <span className="no-trigger-close" id='initials' alt={t('User profile')}>{userInitials}</span> :
+            <img className="no-trigger-close" id='profile-image' src={logo} alt={t('User profile')} />
           /* TODO: When rest api returns profileImage use it as source */}
-          <span className="user-name not-clickable">{userFullName || t('MicroStrategy user')}</span>
+          <span className="user-name no-trigger-close">{userFullName || t('MicroStrategy user')}</span>
         </li>
-        {/* TODO: url's for menu items will be added later */}
-        <li><a href='' target="_blank" rel="noopener noreferrer">{t('Privacy Policy')}</a></li>
-        <li><a href='' target="_blank" rel="noopener noreferrer">{t('Terms of Use')}</a></li>
-        <li><a href='' target="_blank" rel="noopener noreferrer">{t('Help')}</a></li>
-        <li className="settings-version not-clickable">{t('Version')} {process.env.MSTR_OFFICE_VERSION}</li>
-        <li className="not-clickable">
+        <li><a href='https://www.microstrategy.com/legal-folder/privacy-policy' target="_blank" rel="noopener">{t('Privacy Policy')}</a></li>
+        <li><a href='https://www.microstrategy.com/legal-folder/legal-policies/terms-of-use' target="_blank" rel="noopener">{t('Terms of Use')}</a></li>
+        {/* <li><a href='' target="_blank" rel="noopener">{t('Help')}</a></li> */}
+        <li className="settings-version no-trigger-close">{t('Version', {APP_VERSION})}</li>
+        <li className="no-trigger-close">
           <div className="contact-us">
-            <span><a href='' target="_blank" rel="noopener noreferrer">{t('Contact Us')}</a></span>
+            <span><a href={this.sendEmail()}>{t('Contact Us')}</a></span>
           </div>
           <div className="logout-btn">
             <Button id="logOut" size='small' onClick={logout}>
@@ -112,7 +133,7 @@ export class _Header extends Component {
         </div>
         <div className="header-buttons">
           {this.getSecureButton()}
-          <Button className="settings-btn not-clickable" onClick={this.toggleSettings} disabled={loading}>
+          <Button className="settings-btn no-trigger-close" onClick={this.toggleSettings} disabled={loading}>
             <MSTRIcon type="settings" />
           </Button>
           {this.getSettingsMenu()}

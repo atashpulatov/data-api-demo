@@ -133,5 +133,6 @@
   "Terms of Use": "Terms of Use",
   "Help": "Help",
   "Contact Us": "Contact Us",
-  "Version": "Version"
+  "Version": "Version {{APP_VERSION}}",
+  "Please don’t change the text below. Type your message above this line.": "Please don’t change the text below. Type your message above this line."
 }
