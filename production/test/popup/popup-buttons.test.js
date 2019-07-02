@@ -5,7 +5,7 @@ import {_PopupButtons} from '../../src/popup/popup-buttons';
 describe('PopupButtons', () => {
   it('should NOT display prepare data when secondary action NOT provided',
       () => {
-        // given
+      // given
         const secondaryAction = jest.fn();
         // when
         const buttonsWrapped = shallow(<_PopupButtons />);
@@ -52,5 +52,25 @@ describe('PopupButtons', () => {
     secondaryButton.simulate('click');
     // then
     expect(secondaryAction).toBeCalled();
+  });
+  it('should render a tooltip span if the buttons are disabled', () => {
+    // given
+    const disableActiveActions = true;
+    // when
+    const buttonsWrapped = shallow(<_PopupButtons
+      disableActiveActions={disableActiveActions} />);
+    const tooltipSpan = buttonsWrapped.find('.button-tooltip');
+    // then
+    expect(tooltipSpan.length).toBe(2);
+  });
+  it('should not render a tooltip span if the buttons are enabled', () => {
+    // given
+    const disableActiveActions = false;
+    // when
+    const buttonsWrapped = shallow(<_PopupButtons
+      disableActiveActions={disableActiveActions} />);
+    const tooltipSpan = buttonsWrapped.find('.button-tooltip');
+    // then
+    expect(tooltipSpan.length).toBe(0);
   });
 });
