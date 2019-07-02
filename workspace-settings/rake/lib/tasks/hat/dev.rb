@@ -73,6 +73,7 @@ end
 def install_dependencies(working_dir)
   shell_command! "rm -rf node_modules", cwd: "#{working_dir}/production"
   shell_command! "rm -rf node_modules", cwd: "#{working_dir}/office-loader"
+  update_package_json(working_dir)
   shell_command! "yarn install --network-concurrency 1", cwd: "#{working_dir}/production"
   shell_command! "yarn install --network-concurrency 1", cwd: "#{working_dir}/office-loader"
 end
@@ -80,13 +81,12 @@ end
 def update_package_json(working_dir)
   package_json_path ="#{working_dir}/production/package.json"
   data = JSON.parse(File.read(package_json_path))
-  if data["dependencies"].key?("mstr-react-library")
-    repo = data["dependencies"]["mstr-react-library"].split("@github.microstrategy.com:")[1]
-    data["dependencies"]["mstr-react-library"] = "https://#{ENV['GITHUB_USER']}:#{ENV['GITHUB_PWD']}@github.microstrategy.com/#{repo}"
+  #US192297 modify package.json file to add the version information
+  if data.key?("version")
+    data["version"] = Common::Version.application_version
   end
-
   File.open(package_json_path,"w") do |f|
-    f.write(data.to_json)
+    f.write(JSON.pretty_generate(data)) #generate beautified json
   end
 end
 
