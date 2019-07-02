@@ -87,7 +87,8 @@ class OfficeApiHelper {
   }
 
   getExcelContext = async () => {
-    return await Excel.run(async (context) => {
+    // https://docs.microsoft.com/en-us/javascript/api/excel/excel.runoptions?view=office-js
+    return await Excel.run({delayForCellEdit: true}, async (context) => {
       return context;
     });
   }
