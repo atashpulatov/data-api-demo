@@ -401,6 +401,26 @@ describe('OfficeDisplayService', () => {
       expect(mockGetObjectContentGenerator).toBeCalled();
     });
   });
+  describe('_appendRowsToTable', () => {
+    it('should not call range.clear on import', () => {
+      // given
+      const mockClear = jest.fn();
+      const mockOfficeTable = {getHeaderRowRange: () => ({getRowsBelow: () => ({getOffsetRange: () => ({clear: mockClear})})})};
+      // when
+      officeDisplayService._appendRowsToTable(mockOfficeTable, [], 0, false);
+      // then
+      expect(mockClear).not.toBeCalled();
+    });
+    it('should call range.clear on refresh', () => {
+      // given
+      const mockClear = jest.fn();
+      const mockOfficeTable = {getHeaderRowRange: () => ({getRowsBelow: () => ({getOffsetRange: () => ({clear: mockClear})})})};
+      // when
+      officeDisplayService._appendRowsToTable(mockOfficeTable, [], 0, true);
+      // then
+      expect(mockClear).toBeCalled();
+    });
+  });
 
   describe.skip('delete report', () => {
     it('should fail', () => {
