@@ -205,6 +205,7 @@ class OfficeDisplayService {
   _updateOfficeTable = async (instanceDefinition, context, prevOfficeTable) => {
     try {
       const {rows, mstrTable} = instanceDefinition;
+      context.workbook.application.suspendApiCalculationUntilNextSync();
       prevOfficeTable.clearFilters();
       prevOfficeTable.sort.clear();
       prevOfficeTable.getHeaderRowRange().values = [mstrTable.headers];
@@ -318,7 +319,7 @@ class OfficeDisplayService {
     return {officeTable, newOfficeTableId, shouldFormat};
   }
 
-  async _fetchInsertDataIntoExcel(connectionData, officeData, instanceDefinition) {
+  async _fetchInsertDataIntoExcel(connectionData, officeData, instanceDefinition, isRefresh) {
     try {
       const {objectId, projectId, dossierData, isReport, body} = connectionData;
       const {excelContext, officeTable} = officeData;
@@ -334,7 +335,8 @@ class OfficeDisplayService {
         console.timeEnd('Fetch data');
         console.time('Append rows');
         const excelRows = this._getRowsArray(row, headers);
-        this._appendRowsToTable(officeTable, excelRows, rowIndex);
+        excelContext.workbook.application.suspendApiCalculationUntilNextSync();
+        this._appendRowsToTable(officeTable, excelRows, rowIndex, isRefresh);
         rowIndex += row.length;
         console.timeEnd('Append rows');
         contextPromises.push(excelContext.sync());
@@ -352,8 +354,11 @@ class OfficeDisplayService {
     }
   }
 
-  _appendRowsToTable(officeTable, excelRows, rowIndex) {
-    officeTable.getHeaderRowRange().getRowsBelow(excelRows.length).getOffsetRange(rowIndex, 0).values = excelRows;
+  _appendRowsToTable(officeTable, excelRows, rowIndex, isRefresh = false) {
+    const rowRange = officeTable.getHeaderRowRange().getRowsBelow(excelRows.length).getOffsetRange(rowIndex, 0);
+    // clear(applyToString?: "All" | "Formats" | "Contents" | "Hyperlinks" | "RemoveHyperlinks"): void;
+    isRefresh && rowRange.clear('Contents');
+    rowRange.values = excelRows;
   }
 
   _checkColumnsChange = async (prevOfficeTable, context, instanceDefinition) => {
