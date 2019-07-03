@@ -58,7 +58,7 @@ export class _Header extends Component {
     }
   }
 
-  sendEmail = () => {
+  prepareEmail = () => {
     const {t} = this.props;
     const {host, platform, version} = window.Office.context.diagnostics;
     const userAgent = navigator.userAgent;
@@ -111,7 +111,7 @@ export class _Header extends Component {
         < li className="settings-version no-trigger-close">{t('Version', {APP_VERSION})}</li>
         <li className="no-trigger-close">
           <div className="contact-us">
-            <span><a href={this.sendEmail()}>{t('Contact Us')}</a></span>
+            <span><a href={this.prepareEmail()}>{t('Contact Us')}</a></span>
           </div>
           <div className="logout-btn">
             <Button id="logOut" size='small' onClick={logout}>

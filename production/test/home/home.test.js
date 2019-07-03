@@ -162,6 +162,7 @@ describe('Home', () => {
     it('should display settings menu when isSettings flag is true', () => {
       // given
       const headerWrapper = mount(<_Header />);
+      const emailWrapper = jest.spyOn(headerWrapper.instance(), 'prepareEmail').mockImplementation(() => {});
       // when
       headerWrapper.setState({isSettings: true});
       const settingsWrapper = headerWrapper.find('.settings-list');
@@ -180,6 +181,7 @@ describe('Home', () => {
     it('should change isSettings flag when button settings is clicked', () => {
       // given
       const headerWrapper = mount(<_Header />);
+      const emailWrapper = jest.spyOn(headerWrapper.instance(), 'prepareEmail').mockImplementation(() => {});
       headerWrapper.setState({isSettings: false});
       const buttonWrapper = headerWrapper.find('Button .settings-btn');
       // when
@@ -194,6 +196,7 @@ describe('Home', () => {
         map[event] = cb;
       });
       const headerWrapper = mount(<_Header />);
+      const emailWrapper = jest.spyOn(headerWrapper.instance(), 'prepareEmail').mockImplementation(() => {});
       headerWrapper.setState({isSettings: true});
       // when
       map.click({
@@ -201,7 +204,8 @@ describe('Home', () => {
           classList: {
             contains: () => false,
           },
-        }});
+        },
+      });
       // then
       expect(headerWrapper.state('isSettings')).toBe(false);
     });
@@ -212,6 +216,7 @@ describe('Home', () => {
         map[event] = cb;
       });
       const headerWrapper = mount(<_Header />);
+      const emailWrapper = jest.spyOn(headerWrapper.instance(), 'prepareEmail').mockImplementation(() => {});
       headerWrapper.setState({isSettings: true});
       // when
       map.keyup({keyCode: 27});
@@ -234,6 +239,7 @@ describe('Home', () => {
       const logOutRedirectSpy = jest.spyOn(sessionHelper, 'logOutRedirect');
       // when
       const headerWrapper = mount(<_Header />);
+      const emailWrapper = jest.spyOn(headerWrapper.instance(), 'prepareEmail').mockImplementation(() => {});
       headerWrapper.setState({isSettings: true});
       const buttonWrapper = headerWrapper.find('Button #logOut');
       buttonWrapper.simulate('click');
@@ -249,6 +255,7 @@ describe('Home', () => {
       });
       // when
       const headerWrapper = mount(<_Header />);
+      const emailWrapper = jest.spyOn(headerWrapper.instance(), 'prepareEmail').mockImplementation(() => {});
       headerWrapper.setState({isSettings: true});
       const buttonWrapper = headerWrapper.find('Button #logOut');
       buttonWrapper.simulate('click');
@@ -261,7 +268,7 @@ describe('Home', () => {
       const wrappedComponent = mount(
           <_Header
             reportArray={mockReportArray}
-            isSecured={false}/>);
+            isSecured={false} />);
       const mockSecure = jest.spyOn(wrappedComponent.instance(), 'secureData');
       wrappedComponent.instance().forceUpdate();
       const secureButton = wrappedComponent.find('Button .secure-btn');
@@ -276,7 +283,7 @@ describe('Home', () => {
       const mockgetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => {
         return context;
       });
-      const mockDeleteBody = jest.spyOn(officeApiHelper, 'deleteObjectTableBody').mockImplementation(() => { });
+      const mockDeleteBody = jest.spyOn(officeApiHelper, 'deleteObjectTableBody').mockImplementation(() => {});
       const mockReportArray = createMockFilesArray();
       const mockToggleSecured = jest.fn();
       const wrappedComponent = mount(
@@ -301,7 +308,7 @@ describe('Home', () => {
       const wrappedComponent = mount(
           <_Header
             reportArray={mockReportArray}
-            isSecured={false}/>);
+            isSecured={false} />);
       // then
       expect(wrappedComponent.find('Button .secure-btn').length).toBe(1);
       expect(wrappedComponent.find('.secure-access-active').length).toBe(1);
@@ -313,7 +320,7 @@ describe('Home', () => {
       const wrappedComponent = mount(
           <_Header
             reportArray={mockReportArray}
-            isSecured={true}/>);
+            isSecured={true} />);
       // then
       expect(wrappedComponent.find('.secure-access-inactive').length).toBe(1);
     });
@@ -323,7 +330,7 @@ describe('Home', () => {
       const wrappedComponent = mount(
           <_Header
             reportArray={[]}
-            isSecured={false}/>);
+            isSecured={false} />);
       // then
       expect(wrappedComponent.find('Button .secure-btn').length).toBe(0);
     });
