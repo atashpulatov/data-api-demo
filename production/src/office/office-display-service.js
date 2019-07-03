@@ -11,7 +11,8 @@ import {NOT_SUPPORTED_NO_ATTRIBUTES, ALL_DATA_FILTERED_OUT, TABLE_OVERLAP, ERROR
 import {OverlappingTablesError} from '../error/overlapping-tables-error';
 
 class OfficeDisplayService {
-  printObject = async (dossierData, objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh, isPrompted, isRefreshAll = false, promptAnswers = undefined) => {
+  printObject = async (options) => {
+    const {isRefreshAll = false, isPrompted, objectId, projectId, isReport} = options;
     if (!isRefreshAll) {
       const objectInfo = !!isPrompted ? await mstrObjectRestService.getObjectInfo(objectId, projectId, isReport) : await mstrObjectRestService.getObjectDefinition(objectId, projectId, isReport);
       reduxStore.dispatch({
@@ -21,7 +22,7 @@ class OfficeDisplayService {
       await popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
     }
     try {
-      return await this._printObject(objectId, projectId, isReport, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body, isPrompted, promptAnswers);
+      return await this._printObject(options);
     } catch (error) {
       throw error;
     } finally {
@@ -29,7 +30,7 @@ class OfficeDisplayService {
     }
   }
 
-  _printObject = async (objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body, isPrompted, promptAnswers) => {
+  _printObject = async ({objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body, isPrompted, promptAnswers}) => {
     let officeTable;
     let newOfficeTableId;
     let shouldFormat;
@@ -75,7 +76,7 @@ class OfficeDisplayService {
       // Save to store
       bindingId = bindingId || newOfficeTableId;
       await officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
-      this._addToStore(officeTableId, isRefresh, instanceDefinition, bindingId, newOfficeTableId, projectId, envUrl, body, objectType, isPrompted, promptAnswers);
+      this._addToStore({officeTableId, isRefresh, instanceDefinition, bindingId, newOfficeTableId, projectId, envUrl, body, objectType, isPrompted, promptAnswers});
 
       console.timeEnd('Total');
       reduxStore.dispatch({
@@ -258,7 +259,7 @@ class OfficeDisplayService {
     }
   }
 
-  _addToStore(officeTableId, isRefresh, instanceDefinition, bindingId, newOfficeTableId, projectId, envUrl, body, objectType, isPrompted, promptAnswers) {
+  _addToStore({officeTableId, isRefresh, instanceDefinition, bindingId, newOfficeTableId, projectId, envUrl, body, objectType, isPrompted, promptAnswers}) {
     if (!officeTableId && !isRefresh) {
       this.addReportToStore({
         id: instanceDefinition.mstrTable.id,

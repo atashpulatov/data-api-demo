@@ -67,8 +67,8 @@ describe('Popup actions', () => {
   });
   it('storagePrepareRefreshAllData should write all rrefreshed eports data to localstorage', () => {
     // given
-    const mockStorageRemoveItem = jest.spyOn(localStorage, 'removeItem').mockImplementation(() => { });
-    const mockStorageSetItem = jest.spyOn(localStorage, 'setItem').mockImplementation(() => { });
+    const mockStorageRemoveItem = jest.spyOn(localStorage, 'removeItem').mockImplementation(() => {});
+    const mockStorageSetItem = jest.spyOn(localStorage, 'setItem').mockImplementation(() => {});
     const reportArray = [{
       bindId: 'testBinding1',
       name: 'testNamne1',
@@ -106,7 +106,7 @@ describe('Popup actions', () => {
     const mockStorageGetItem = jest.spyOn(localStorage, 'getItem').mockImplementation(() => {
       return JSON.stringify({});
     });
-    const mockStorageSetItem = jest.spyOn(localStorage, 'setItem').mockImplementation(() => { });
+    const mockStorageSetItem = jest.spyOn(localStorage, 'setItem').mockImplementation(() => {});
     const refreshReport = {
       name: 'testName',
     };
@@ -145,7 +145,7 @@ describe('Popup actions', () => {
     const mockStorageGetItem = jest.spyOn(localStorage, 'getItem').mockImplementation(() => {
       return JSON.stringify(refreshData);
     });
-    const mockStorageSetItem = jest.spyOn(localStorage, 'setItem').mockImplementation(() => { });
+    const mockStorageSetItem = jest.spyOn(localStorage, 'setItem').mockImplementation(() => {});
     // when
     popupHelper.storageReportRefreshFinish('ok', false, index, refreshData.data.length);
     // then
@@ -186,13 +186,25 @@ describe('Popup actions', () => {
     notificationService.displayNotification = jest.fn();
     popupHelper.storageReportRefreshFinish = jest.fn();
     const isRefreshAll = true;
+    const expectedOptions = {
+      dossierData: null,
+      objectId: mockReport.id,
+      projectId: mockReport.projectId,
+      isReport: true,
+      selectedCell: true,
+      officeTableId: mockReport.tableId,
+      bindingId: 'testBind',
+      body: mockReport.body,
+      isRefresh: true,
+      isPrompted: false,
+      isRefreshAll: isRefreshAll,
+    };
     // when
     await popupHelper.printRefreshedReport('testBind', 'report', 10, 3, isRefreshAll);
     // then
     expect(officeStoreService.getReportFromProperties).toHaveBeenCalled();
     expect(popupHelper.storageReportRefreshStart).toHaveBeenCalled();
-    expect(officeDisplayService.printObject).toHaveBeenCalledWith(null, mockReport.id, mockReport.projectId, true, true,
-        mockReport.tableId, 'testBind', mockReport.body, true, false, isRefreshAll);
+    expect(officeDisplayService.printObject).toHaveBeenCalledWith(expectedOptions);
     expect(notificationService.displayNotification).not.toHaveBeenCalled();
     expect(popupHelper.storageReportRefreshFinish).toHaveBeenCalled();
   });

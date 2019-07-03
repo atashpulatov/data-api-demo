@@ -108,14 +108,17 @@ class PopupController {
     }
   }
 
-  handleUpdateCommand = async (response) => {
-    if (response.reportId
-      && response.projectId
-      && response.reportSubtype
-      && response.body
-      && response.reportName) {
-      reduxStore.dispatch({type: START_REPORT_LOADING, data: {name: response.reportName}});
-      const result = await officeDisplayService.printObject(response.dossierData, response.reportId, response.projectId, objectTypes.getTypeDescription(3, response.reportSubtype) === 'Report', null, null, null, response.body);
+  handleUpdateCommand = async ({dossierData, reportId, projectId, reportSubtype, body, reportName}) => {
+    if (reportId && projectId && reportSubtype && body && reportName) {
+      reduxStore.dispatch({type: START_REPORT_LOADING, data: {name: reportName}});
+      const options = {
+        dossierData,
+        objectId: reportId,
+        projectId,
+        isReport: objectTypes.getTypeDescription(3, reportSubtype) === 'Report',
+        body,
+      };
+      const result = await officeDisplayService.printObject(options);
       if (result) {
         notificationService.displayNotification(result.type, result.message);
       }
@@ -123,12 +126,22 @@ class PopupController {
     }
   }
 
-  handleOkCommand = async (response, bindingId) => {
-    if (response.chosenObject) {
+  handleOkCommand = async ({chosenObject, dossierData, chosenProject, chosenSubtype, isPrompted, promptAnswers, reportName}, bindingId) => {
+    if (chosenObject) {
       reduxStore.dispatch({type: officeProperties.actions.startLoading});
-      reduxStore.dispatch({type: START_REPORT_LOADING, data: {name: response.reportName}});
+      reduxStore.dispatch({type: START_REPORT_LOADING, data: {name: reportName}});
+      const options = {
+        dossierData,
+        objectId: chosenObject,
+        projectId: chosenProject,
+        isReport: objectTypes.getTypeDescription(3, chosenSubtype) === 'Report',
+        bindingId,
+        isRefresh: false,
+        isPrompted,
+        promptAnswers,
+      };
       const result =
-        await officeDisplayService.printObject(response.dossierData, response.chosenObject, response.chosenProject, objectTypes.getTypeDescription(3, response.chosenSubtype) === 'Report', null, null, bindingId, null, null, response.isPrompted, false, response.promptAnswers);
+        await officeDisplayService.printObject(options);
       if (result) {
         notificationService.displayNotification(result.type, result.message);
       }
