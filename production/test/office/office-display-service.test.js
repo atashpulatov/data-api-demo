@@ -111,7 +111,7 @@ describe('OfficeDisplayService', () => {
     const getObjectDefinitionSpy = jest.spyOn(mstrObjectRestService, 'getObjectDefinition').mockResolvedValue(givenBody);
     const runPopupSpy = jest.spyOn(popupController, 'runPopup');
     const printInside = jest.spyOn(officeDisplayService, '_printObject').mockImplementationOnce(() => {});
-    // {objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body, isPrompted, promptAnswers}
+    // {objectId, projectId, isReport = true, selectedCell, bindingId, isRefresh, dossierData, body, isPrompted, promptAnswers}
     const options = {objectId: 'id123', projectId: 'p123', isReport: true};
     const mockDialog = {
       close: () => {},
@@ -164,7 +164,6 @@ describe('OfficeDisplayService', () => {
     // then
     expect(officeStoreService.preserveReport).toBeCalled();
     expect(officeStoreService.preserveReport).toBeCalledWith({
-      tableId: excelTableNameMock,
       id: givenReport.id,
       name: givenReport.name,
       bindId: excelTableNameMock,
@@ -196,7 +195,6 @@ describe('OfficeDisplayService', () => {
       id: 'firstTestId',
       name: 'firstTestName',
       bindId: 'firstBindId',
-      tableId: 'firstTableId',
       projectId: 'firstProjectId',
       envUrl: 'firstEnvUrl',
     };
@@ -217,7 +215,6 @@ describe('OfficeDisplayService', () => {
       id: 'firstTestId',
       name: 'firstTestName',
       bindId: 'firstBindId',
-      tableId: 'firstTableId',
       projectId: 'firstProjectId',
       envUrl: 'firstEnvUrl',
     };
@@ -240,7 +237,6 @@ describe('OfficeDisplayService', () => {
       id: 'firstTestId',
       name: 'firstTestName',
       bindId: 'firstBindId',
-      tableId: 'firstTableId',
       projectId: 'firstProjectId',
       envUrl: 'firstEnvUrl',
     };

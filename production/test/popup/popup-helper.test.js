@@ -178,7 +178,6 @@ describe('Popup actions', () => {
       id: 'testBindId',
       projectId: 'testProjectId',
       body: {},
-      tableId: 'testTableId',
     };
     officeStoreService.getReportFromProperties = jest.fn().mockImplementation(() => mockReport);
     popupHelper.storageReportRefreshStart = jest.fn();
@@ -192,7 +191,6 @@ describe('Popup actions', () => {
       projectId: mockReport.projectId,
       isReport: true,
       selectedCell: true,
-      officeTableId: mockReport.tableId,
       bindingId: 'testBind',
       body: mockReport.body,
       isRefresh: true,
@@ -214,7 +212,6 @@ describe('Popup actions', () => {
       id: 'testBindId',
       projectId: 'testProjectId',
       body: {},
-      tableId: 'testTableId',
     };
     officeStoreService.getReportFromProperties = jest.fn().mockImplementation(() => mockReport);
     popupHelper.storageReportRefreshStart = jest.fn();
@@ -236,7 +233,6 @@ describe('Popup actions', () => {
       id: 'testBindId',
       projectId: 'testProjectId',
       body: {},
-      tableId: 'testTableId',
     };
     const mockResult = {
       type: 'warning',

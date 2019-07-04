@@ -30,7 +30,7 @@ class OfficeDisplayService {
     }
   }
 
-  _printObject = async ({objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, isRefresh, dossierData, body, isPrompted, promptAnswers}) => {
+  _printObject = async ({objectId, projectId, isReport = true, selectedCell, bindingId, isRefresh, dossierData, body, isCrosstab, isPrompted, promptAnswers}) => {
     let officeTable;
     let newOfficeTableId;
     let shouldFormat;
@@ -60,7 +60,7 @@ class OfficeDisplayService {
       // TODO: If isRefresh check if new instance definition is same as before
 
       // Create or update table
-      ({officeTable, newOfficeTableId, shouldFormat} = await this._getOfficeTable(officeTableId, isRefresh, excelContext, bindingId, instanceDefinition, startCell));
+      ({officeTable, newOfficeTableId, shouldFormat} = await this._getOfficeTable(isRefresh, excelContext, bindingId, instanceDefinition, startCell));
 
       // Fetch, convert and insert with promise generator
       console.time('Fetch and insert into excel');
@@ -76,7 +76,7 @@ class OfficeDisplayService {
       // Save to store
       bindingId = bindingId || newOfficeTableId;
       await officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
-      this._addToStore({officeTableId, isRefresh, instanceDefinition, bindingId, newOfficeTableId, projectId, envUrl, body, objectType, isPrompted, promptAnswers});
+      this._addToStore({isRefresh, instanceDefinition, bindingId, projectId, envUrl, body, objectType, isCrosstab, isPrompted, promptAnswers});
 
       console.timeEnd('Total');
       reduxStore.dispatch({
@@ -103,12 +103,12 @@ class OfficeDisplayService {
         id: report.id,
         name: report.name,
         bindId: report.bindId,
-        tableId: report.tableId,
         projectId: report.projectId,
         envUrl: report.envUrl,
         body: report.body,
         isLoading: report.isLoading,
         objectType: report.objectType,
+        isCrosstab: report.isCrosstab,
         isPrompted: report.isPrompted,
         promptAnswers: report.promptAnswers,
       },
@@ -259,19 +259,19 @@ class OfficeDisplayService {
     }
   }
 
-  _addToStore({officeTableId, isRefresh, instanceDefinition, bindingId, newOfficeTableId, projectId, envUrl, body, objectType, isPrompted, promptAnswers}) {
-    if (!officeTableId && !isRefresh) {
+  _addToStore({isRefresh, instanceDefinition, bindingId, projectId, envUrl, body, objectType, isCrosstab, isPrompted, promptAnswers}) {
+    if (!isRefresh) {
       this.addReportToStore({
         id: instanceDefinition.mstrTable.id,
         name: instanceDefinition.mstrTable.name,
         bindId: bindingId,
-        tableId: newOfficeTableId,
         projectId,
         envUrl,
         body,
         isLoading: false,
         objectType,
         isPrompted,
+        isCrosstab,
         promptAnswers,
       });
     }
@@ -292,9 +292,9 @@ class OfficeDisplayService {
     }
   }
 
-  async _getOfficeTable(officeTableId, isRefresh, excelContext, bindingId, instanceDefinition, startCell) {
+  async _getOfficeTable(isRefresh, excelContext, bindingId, instanceDefinition, startCell) {
     console.time('Create or get table');
-    const newOfficeTableId = officeTableId || officeApiHelper.findAvailableOfficeTableId();
+    const newOfficeTableId = bindingId || officeApiHelper.findAvailableOfficeTableId();
     let officeTable;
     let shouldFormat = true;
 

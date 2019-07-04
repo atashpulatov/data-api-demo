@@ -140,8 +140,7 @@ class PopupController {
         isPrompted,
         promptAnswers,
       };
-      const result =
-        await officeDisplayService.printObject(options);
+      const result = await officeDisplayService.printObject(options);
       if (result) {
         notificationService.displayNotification(result.type, result.message);
       }
