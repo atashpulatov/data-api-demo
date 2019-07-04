@@ -10,6 +10,8 @@ import {PopupTypeEnum} from '../home/popup-type-enum';
 import {NOT_SUPPORTED_NO_ATTRIBUTES, ALL_DATA_FILTERED_OUT, TABLE_OVERLAP, ERROR_POPUP_CLOSED} from '../error/constants';
 import {OverlappingTablesError} from '../error/overlapping-tables-error';
 
+const DEFAULT_TABLE_STYLE = 'TableStyleLight8';
+
 class OfficeDisplayService {
   printObject = async (dossierData, objectId, projectId, isReport = true, selectedCell, officeTableId, bindingId, body, isRefresh, isPrompted, isRefreshAll = false, promptAnswers = undefined) => {
     if (!isRefreshAll) {
@@ -189,6 +191,7 @@ class OfficeDisplayService {
     }
 
     const officeTable = sheet.tables.add(tableRange, hasHeaders);
+    officeTable.style = DEFAULT_TABLE_STYLE;
     try {
       officeTable.load('name');
       officeTable.name = officeTableId;
