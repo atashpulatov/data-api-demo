@@ -221,6 +221,20 @@ class OfficeApiHelper {
   }
 
   /**
+   *Gets range of crosstab report - it sums table body range and headers ranges
+   *
+   * @param {Office} cell Starting table body cell
+   * @param {Array} headers Headers object from OfficeConverterServiceV2.getHeaders
+   * @memberof OfficeApiHelper
+   * @return {Object}
+   */
+  getCrossTabRange = (cell, headers) => {
+    const bodyRange = cell.getOffsetRange(headers.rows.length - 1, headers.columns[0].length - 1);
+    const startingCell = cell.getCell(0, 0).getOffsetRange(-headers.columns.length, -headers.rows[0].length);
+    return startingCell.getBoundingRect(bodyRange);
+  }
+
+  /**
    *Prepares parameters for createHeaders
    *
    * @param {Office} context Excel context
