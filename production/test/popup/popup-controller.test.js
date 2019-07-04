@@ -67,17 +67,19 @@ describe('PopupController', () => {
         };
         officeApiHelper.getOfficeSessionStatus = jest.fn();
         const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
+        const expectedOptions = {
+          objectId: reportData.objectId,
+          projectId: reportData.projectId,
+          bindingId: null,
+          isRefresh: false,
+          isReport: true,
+        };
         // when
         await popupController.onMessageFromPopup(dialog, null, arg);
         // then
         expect(dialog.close).toBeCalled();
         expect(mockPrint).toBeCalled();
-        expect(mockPrint).toBeCalledWith(
-            undefined,
-            reportData.objectId,
-            reportData.projectId,
-            true,
-            null, null, null, null, null, undefined, false, undefined);
+        expect(mockPrint).toBeCalledWith(expectedOptions);
       });
 
   it('should handle ok command from popup for report with dossier data',
@@ -105,17 +107,20 @@ describe('PopupController', () => {
         };
         officeApiHelper.getOfficeSessionStatus = jest.fn();
         const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
+        const expectedOptions = {
+          bindingId: null,
+          dossierData: reportData.dossierData,
+          objectId: reportData.objectId,
+          projectId: reportData.projectId,
+          isReport: reportData.isReport,
+          isRefresh: false,
+        };
         // when
         await popupController.onMessageFromPopup(dialog, null, arg);
         // then
         expect(dialog.close).toBeCalled();
         expect(mockPrint).toBeCalled();
-        expect(mockPrint).toBeCalledWith(
-            reportData.dossierData,
-            reportData.objectId,
-            reportData.projectId,
-            true,
-            null, null, null, null, null, undefined, false, undefined);
+        expect(mockPrint).toBeCalledWith(expectedOptions);
       });
 
   it('should handle update command from popup for cube',
@@ -135,18 +140,19 @@ describe('PopupController', () => {
         };
         officeApiHelper.getOfficeSessionStatus = jest.fn();
         const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
+        const expectedOptions = {
+          dossierData: undefined,
+          objectId: actionObject.reportId,
+          projectId: actionObject.projectId,
+          isReport: false,
+          body: actionObject.body,
+        };
         // when
         await popupController.onMessageFromPopup(dialog, null, arg);
         // then
         expect(dialog.close).toBeCalled();
         expect(mockPrint).toBeCalled();
-        expect(mockPrint).toBeCalledWith(
-            undefined,
-            actionObject.reportId,
-            actionObject.projectId,
-            false,
-            null, null, null,
-            actionObject.body);
+        expect(mockPrint).toBeCalledWith(expectedOptions);
       });
 
   it('should handle update command from popup for report WITHOUT instance id',
@@ -171,13 +177,16 @@ describe('PopupController', () => {
         // then
         expect(dialog.close).toBeCalled();
         expect(mockPrint).toBeCalled();
-        expect(mockPrint).toBeCalledWith(
-            undefined,
-            actionObject.reportId,
-            actionObject.projectId,
-            true,
-            null, null, null,
-            actionObject.body);
+
+        const expectedOptions = {
+          dossierData: undefined,
+          isReport: true,
+          objectId: actionObject.reportId,
+          projectId: actionObject.projectId,
+          body: actionObject.body,
+        };
+
+        expect(mockPrint).toBeCalledWith(expectedOptions);
       });
 
   it('should handle update command from popup for report with dossier data',
@@ -206,13 +215,13 @@ describe('PopupController', () => {
         // then
         expect(dialog.close).toBeCalled();
         expect(mockPrint).toBeCalled();
-        expect(mockPrint).toBeCalledWith(
-            actionObject.dossierData,
-            actionObject.reportId,
-            actionObject.projectId,
-            true,
-            null, null, null,
-            actionObject.body);
+        expect(mockPrint).toBeCalledWith({
+          dossierData: actionObject.dossierData,
+          objectId: actionObject.reportId,
+          projectId: actionObject.projectId,
+          isReport: true,
+          body: actionObject.body,
+        });
       });
 
   it('should handle error command from popup', async () => {
