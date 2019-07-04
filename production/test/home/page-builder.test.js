@@ -103,7 +103,7 @@ describe('PageBuilder', () => {
     expect(wrappedComponent.find('.dialog-container').get(0)).toBeDefined();
     expect(wrappedComponent.find('.ant-btn[disabled]')).toHaveLength(3);
   });
-  it('should disable logout and add data buttons while a popup is open and a report is loading', () => {
+  it('should disable settings and add data buttons while a popup is open and a report is loading', () => {
     // given
 
     // when
