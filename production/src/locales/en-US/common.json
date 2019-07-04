@@ -134,5 +134,6 @@
   "Help": "Help",
   "Contact Us": "Contact Us",
   "Version": "Version {{APP_VERSION}}",
-  "Please don’t change the text below. Type your message above this line.": "Please don’t change the text below. Type your message above this line."
+  "Please don’t change the text below. Type your message above this line.": "Please don’t change the text below. Type your message above this line.",
+  "Request error - cannot retrieve report data": "Request error - cannot retrieve report data"
 }
