@@ -3756,6 +3756,11 @@ eslint-plugin-jsx-a11y@6.1.1:
     has "^1.0.3"
     jsx-ast-utils "^2.0.1"
 
+eslint-plugin-react-hooks@^1.6.0:
+  version "1.6.1"
+  resolved "http://nexus.internal.microstrategy.com:8081/repository/npm-group/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-1.6.1.tgz#3c66a5515ea3e0a221ffc5d4e75c971c217b1a4c"
+  integrity sha512-wHhmGJyVuijnYIJXZJHDUF2WM+rJYTjulUTqF9k61d3BTk8etydz+M4dXUVH7M76ZRS85rqBTCx0Es/lLsrjnA==
+
 eslint-plugin-react@7.11.1:
   version "7.11.1"
   resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-7.11.1.tgz#c01a7af6f17519457d6116aa94fc6d2ccad5443c"
@@ -6973,10 +6978,10 @@ ms@^2.1.1:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.1.tgz#30a5864eb3ebb0a66f2ebe6d727af06a09d86e0a"
   integrity sha512-tgp+dl5cGk28utYktBsrFqA7HKgrhgPsg6Z/EfhWI4gl1Hwq8B/GmY/0oXZ6nF8hDVesS/FpnYaD/kOWhYQvyg==
 
-mstr-react-library@1.1.13:
-  version "1.1.13"
-  resolved "http://nexus.internal.microstrategy.com:8081/repository/npm-group/mstr-react-library/-/mstr-react-library-1.1.13.tgz#ff7b5ab0da1ef9dfe86c8be74de7d8a9f1647b38"
-  integrity sha512-6uVxSiLthzMpeg/QLA4xb+tA2Qx2377cAv7LVThEE/HpNCEa9wAbqXfhMG3uRq6IphoANXJT4xj4mCzpENYZ3w==
+mstr-react-library@1.1.16:
+  version "1.1.16"
+  resolved "http://nexus.internal.microstrategy.com:8081/repository/npm-group/mstr-react-library/-/mstr-react-library-1.1.16.tgz#a1d5b709c23b5e87ddba727da4b98124e67bd195"
+  integrity sha512-ODzyTNB8bA32GqdNgfBP/QhaNEHtxF4Jp44eW9pm32mZw9gujA8l5veZ0h0nDBd4HCsskd+JXeDeJfnhTJbIJw==
   dependencies:
     antd "^3.13.1"
     react-virtualized "^9.21.0"
