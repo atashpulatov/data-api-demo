@@ -79,7 +79,7 @@ export class _OfficeLoadedFile extends React.Component {
         <Col span={2}>
           {objectType === 'report' ? <MSTRIcon type='report' /> : <MSTRIcon type='dataset' />}
         </Col>
-        <Col span={14} className="report-title">
+        <Col span={12} className="report-title">
           <RenameInput bindingId={bindingId} fileName={fileName} />
           <div className="additional-data">{t('refreshed_date', {date: refreshDate})}</div>
         </Col>
@@ -87,8 +87,7 @@ export class _OfficeLoadedFile extends React.Component {
           <Popover placement="bottom" content={t('Edit Data')} mouseEnterDelay={1}>
             {!isPrompted && <span className="loading-button-container"
               onClick={this.editAction}>
-              {!isLoading ? <MSTRIcon type='edit' /> :
-              <img width='12px' height='12px' src={loadingSpinner} alt={t('Report loading icon')} />}
+              <MSTRIcon type='edit' />
             </span>}
           </Popover>
         </Col>
@@ -97,7 +96,7 @@ export class _OfficeLoadedFile extends React.Component {
             {!isPrompted && <span className="loading-button-container"
               onClick={this.refreshAction}>
               {!isLoading ? <MSTRIcon type='refresh' /> :
-              <img width='12px' height='12px' src={loadingSpinner} alt={t('Report loading icon')} />}
+                <img width='12px' height='12px' src={loadingSpinner} alt={t('Report loading icon')} />}
             </span>}
           </Popover>
         </Col>
