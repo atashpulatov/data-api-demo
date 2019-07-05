@@ -4,6 +4,7 @@ import {popupHelper} from './popup-helper';
 import {officeApiHelper} from '../office/office-api-helper';
 import {officeStoreService} from '../office/store/office-store-service';
 import {popupController} from './popup-controller';
+import {errorService} from '../error/error-handler';
 
 export const CLEAR_WINDOW = 'POPUP_CLOSE_WINDOW';
 export const START_REPORT_LOADING = 'START_REPORT_LOADING';
@@ -27,7 +28,11 @@ export function callForEdit(reportParams) {
 
 export function refreshReportsArray(reportArray, isRefreshAll) {
   return async (dispatch) => {
-    await Promise.all([officeApiHelper.getExcelSessionStatus(), authenticationHelper.validateAuthToken()]);
+    try {
+      await Promise.all([officeApiHelper.getExcelSessionStatus(), authenticationHelper.validateAuthToken()]);
+    } catch (error) {
+      return errorService.handleError(error);
+    }
     if (isRefreshAll) {
       popupHelper.storagePrepareRefreshAllData(reportArray);
       await popupHelper.runRefreshAllPopup(reportArray);

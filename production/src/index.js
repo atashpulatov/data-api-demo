@@ -15,24 +15,29 @@ const Office = window.Office;
 
 function officeInitialize() {
   Office.onReady()
-      .then(() => {
+      .then(async () => {
         const envUrl = window.location.pathname.split('/apps/')[0];
         const {iSession} = homeHelper.getParsedCookies();
-        authenticationService.getOfficePrivilege(envUrl + '/api', iSession)
-            .then((canUseOffice) => {
-              if (!canUseOffice) {
-                try {
-                  authenticationService.logout(envUrl + '/api', iSession).then((res) => {
-                    const locale = Office.context.displayLanguage || navigator.language;
-                    res && window.location.replace(`${envUrl}/static/loader-mstr-office/no-privilege.html?locale=${locale}`);
-                  });
-                } catch (error) {
-                  // Ignore error
-                }
-              }
-            });
-        goReact();
+        const canUseOffice = await authenticationService.getOfficePrivilege(envUrl + '/api', iSession);
+
+        if (!canUseOffice) {
+          handleUnauthorized(envUrl, iSession);
+        } else {
+          goReact();
+        }
       });
+}
+
+async function handleUnauthorized(envUrl, iSession) {
+  try {
+    const res = await authenticationService.logout(envUrl + '/api', iSession);
+    const locale = Office.context.displayLanguage || navigator.language;
+    res && setInterval(() => {
+      window.location.replace(`${envUrl}/static/loader-mstr-office/no-privilege.html?locale=${locale}`);
+    }, 200);
+  } catch (error) {
+    // Ignore error
+  }
 }
 
 function goReact() {
