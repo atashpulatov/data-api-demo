@@ -1,3 +1,47 @@
 @font-family: 'Roboto', 'Noto Sans', 'Noto Sans JP', 'Noto Sans KR', 'Noto Sans SC', 'Noto Sans TC', 'Helvetica Neue', sans-serif;
 @disabled-color: @text-color;
 @disabled-bg: @white;
+
+[ant-click-animating-without-extra-node='true']::after {
+  display: none;
+}
+
+.ant-radio-checked::after {
+  display: none;
+}
+
+.ant-radio-input:focus+.ant-radio-inner {
+  box-shadow: none;
+}
+
+.ant-btn:focus:not(.focus-visible),
+.ant-input:focus:not(.focus-visible) {
+  outline: none;
+  // color: initial;
+  // border: initial;
+  // box-shadow: initial;
+}
+
+*:focus.focus-visible {
+  outline: -webkit-focus-ring-color auto 5px;
+  color: initial;
+  border: initial;
+  box-shadow: initial;
+}
+
+// .ant-btn:active:focus,
+// .ant-input:active:focus {
+//   outline: none;
+// }
+
+// .ant-btn-primary:focus-visible {
+//   color: #fff
+// }
+
+// .ant-radio-input:focus+.ant-radio-inner {
+//   outline: -webkit-focus-ring-color auto 5px;
+// }
+
+// .ant-radio-input:active+.ant-radio-inner {
+//   outline: none;
+// }
