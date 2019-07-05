@@ -12,11 +12,11 @@ class OfficeStoreService {
         id: report.id,
         name: report.name,
         bindId: report.bindId,
-        tableId: report.tableId,
         projectId: report.projectId,
         envUrl: report.envUrl,
         body: report.body,
         objectType: report.objectType,
+        isCrosstab: report.isCrosstab,
         isPrompted: report.isPrompted,
         promptAnswers: report.promptAnswers,
       });

@@ -61,7 +61,7 @@ describe('OfficeStoreService', () => {
     // then
     expect(result).toBeInstanceOf(Object);
     expect(result.envUrl).toEqual('testEnvUrl2');
-    expect(result.tableId).toEqual('testTableId2');
+    expect(result.projectId).toEqual('testProjectId2');
   });
 
   it('should save isSecured flag in settings', async () => {
