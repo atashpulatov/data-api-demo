@@ -29,7 +29,7 @@ class OfficeApiHelper {
       (headerCount -= firstNumber) >= 0;
       firstNumber = secondNumber, secondNumber *= ALPHABET_RANGE_END) {
       endColumn = String.fromCharCode(parseInt(
-          (headerCount % secondNumber) / firstNumber)
+        (headerCount % secondNumber) / firstNumber)
         + ASCII_CAPITAL_LETTER_INDEX)
         + endColumn;
     }
@@ -74,8 +74,8 @@ class OfficeApiHelper {
   getBindingRange = (context, bindingId) => {
     try {
       return context.workbook.bindings
-          .getItem(bindingId).getTable()
-          .getRange();
+        .getItem(bindingId).getTable()
+        .getRange();
     } catch (error) {
       throw errorService.errorOfficeFactory(error);
     }
@@ -83,7 +83,7 @@ class OfficeApiHelper {
 
   getTable = (context, bindingId) => {
     return context.workbook.bindings
-        .getItem(bindingId).getTable();
+      .getItem(bindingId).getTable();
   }
 
   getExcelContext = async () => {
@@ -203,15 +203,15 @@ class OfficeApiHelper {
 
   bindNamedItem = (namedItem, bindingId) => {
     return new Promise((resolve, reject) => Office.context.document.bindings.addFromNamedItemAsync(
-        namedItem, 'table', {id: bindingId}, (result) => {
-          if (result.status === 'succeeded') {
-            console.log('Added new binding with type: ' + result.value.type + ' and id: ' + result.value.id);
-            resolve();
-          } else {
-            console.error('Error: ' + result.error.message);
-            reject(result.error);
-          }
-        }));
+      namedItem, 'table', {id: bindingId}, (result) => {
+        if (result.status === 'succeeded') {
+          console.log('Added new binding with type: ' + result.value.type + ' and id: ' + result.value.id);
+          resolve();
+        } else {
+          console.error('Error: ' + result.error.message);
+          reject(result.error);
+        }
+      }));
   }
 
   deleteObjectTableBody = (context, object) => {
@@ -238,16 +238,16 @@ class OfficeApiHelper {
    *Prepares parameters for createHeaders
    *
    * @param {Office} context Excel context
-   * @param {Office} cell Address of the first cell in report (top left)
+   * @param {Office} reportStartingCell Address of the first cell in report (top left)
    * @param {Array} headers Contains headers structure and data
    * @memberof OfficeApiHelper
    * @return {Promise} Context.sync
    */
-  createRowsHeaders = (context, cell, headers) => {
+  createRowsHeaders = (context, reportStartingCell, headers) => {
     const columnOffset = 0;
     const rowOffset = headers.rows[0].length;
-    cell.unmerge(); // excel api have problem with handling merged cells which are partailly in range, we unmerged selected cell to avoid this problem
-    const startingCell = cell.getCell(0, 0).getOffsetRange(-columnOffset, -rowOffset); // we call getCell in case multiple cells are selected
+    reportStartingCell.unmerge(); // excel api have problem with handling merged cells which are partailly in range, we unmerged selected cell to avoid this problem
+    const startingCell = reportStartingCell.getCell(0, 0).getOffsetRange(-columnOffset, -rowOffset); // we call getCell in case multiple cells are selected
     const headerArray = mstrNormalizedJsonHandler._transposeMatrix(headers.rows);
     const directionVector = [0, 1];
     const headerRange = startingCell.getResizedRange(headerArray[0].length - 1, headerArray.length - 1);
@@ -259,16 +259,16 @@ class OfficeApiHelper {
    *Prepares parameters for createHeaders
    *
    * @param {Office} context Excel context
-   * @param {Office} cell Address of the first cell in report (top left)
+   * @param {Office} reportStartingCell Address of the first cell in report (top left)
    * @param {Array} headers Contains headers structure and data
    * @memberof OfficeApiHelper
    * @return {Promise} Context.sync
    */
-  createColumnsHeaders = (context, cell, headers) => {
+  createColumnsHeaders = (context, reportStartingCell, headers) => {
     const columnOffset = headers.columns.length;
     const rowOffset = 0;
-    cell.unmerge(); // excel api have problem with handling merged cells which are partailly in range, we unmerged selected cell to avoid this problem
-    const startingCell = cell.getCell(0, 0).getOffsetRange(-columnOffset, -rowOffset);// we call getCell in case multiple cells are selected
+    reportStartingCell.unmerge(); // excel api have problem with handling merged cells which are partailly in range, we unmerged selected cell to avoid this problem
+    const startingCell = reportStartingCell.getCell(0, 0).getOffsetRange(-columnOffset, -rowOffset);// we call getCell in case multiple cells are selected
     const headerArray = headers.columns;
     const directionVector = [1, 0];
     const headerRange = startingCell.getResizedRange(headerArray.length - 1, headerArray[0].length - 1);
