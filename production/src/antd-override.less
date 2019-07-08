@@ -17,9 +17,6 @@
 .ant-btn:focus:not(.focus-visible),
 .ant-input:focus:not(.focus-visible) {
   outline: none;
-  // color: initial;
-  // border: initial;
-  // box-shadow: initial;
 }
 
 *:focus.focus-visible {
@@ -29,19 +26,10 @@
   box-shadow: initial;
 }
 
-// .ant-btn:active:focus,
-// .ant-input:active:focus {
-//   outline: none;
-// }
+.ant-btn-primary.focus-visible {
+  color: #fff
+}
 
-// .ant-btn-primary:focus-visible {
-//   color: #fff
-// }
-
-// .ant-radio-input:focus+.ant-radio-inner {
-//   outline: -webkit-focus-ring-color auto 5px;
-// }
-
-// .ant-radio-input:active+.ant-radio-inner {
-//   outline: none;
-// }
+.ant-radio-input.focus-visible+.ant-radio-inner {
+  outline: -webkit-focus-ring-color auto 5px;
+}
