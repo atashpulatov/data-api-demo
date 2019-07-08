@@ -117,7 +117,7 @@ class MstrObjectRestService {
         .catch((err) => {
           throw errorService.errorRestFactory(err);
         });
-  };
+  }
 
   async getObjectInfo(objectId, projectId, isReport = true) {
     const storeState = reduxStore.getState();
@@ -136,7 +136,7 @@ class MstrObjectRestService {
         .catch((err) => {
           throw errorService.errorRestFactory(err);
         });
-  };
+  }
 
   async getInstanceDefinition(objectId, projectId, isReport = true, dossierData, body = {}, limit = 1) {
     try {
@@ -205,7 +205,26 @@ class MstrObjectRestService {
         .catch((err) => {
           throw errorService.errorRestFactory(err);
         });
-  };
+  }
+
+  async deleteDossierInstance(projectId, objectId, instanceId) {
+    const storeState = reduxStore.getState();
+    const envUrl = storeState.sessionReducer.envUrl;
+    const authToken = storeState.sessionReducer.authToken;
+    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}`;
+
+    return await moduleProxy.request
+        .delete(fullPath)
+        .set('x-mstr-authtoken', authToken)
+        .set('x-mstr-projectid', projectId)
+        .withCredentials()
+        .then((res) => {
+          return res.body;
+        })
+        .catch((err) => {
+          throw errorService.errorRestFactory(err);
+        });
+  }
 };
 
 async function* fetchContentGenerator(instanceDefinition, objectId, projectId, isReport, dossierData, body, limit) {
