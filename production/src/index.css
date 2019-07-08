@@ -36,3 +36,12 @@ code {
 .hidden {
     display: none;
 }
+
+.ant-btn::after,
+.ant-radio-checked::after {
+  display: none;
+}
+
+.ant-radio-input:focus+.ant-radio-inner {
+  box-shadow: none;
+}
