@@ -49,7 +49,13 @@ class OfficeDisplayService {
 
       // Get mstr instance definition
       console.time('Instance definition');
-      const instanceDefinition = await mstrObjectRestService.getInstanceDefinition(objectId, projectId, isReport, dossierData, body);
+      let instanceDefinition = await mstrObjectRestService.createInstance(objectId, projectId, isReport, dossierData, body);
+      let count = 0;
+      while (instanceDefinition.status === 2) {
+        await mstrObjectRestService.answerPrompts(objectId, projectId, instanceDefinition.instanceId, promptAnswers[count]);
+        instanceDefinition = await mstrObjectRestService.getInstance(objectId, projectId, isReport, dossierData, body, instanceDefinition.instanceId);
+        count++;
+      }
       console.timeEnd('Instance definition');
 
       // Check if instance returned data

@@ -68,14 +68,14 @@ describe('OfficeDisplayService', () => {
   });
 
   beforeEach(() => {
-    const changedMock = jest.spyOn(mstrObjectRestService, 'getInstanceDefinition').mockResolvedValue({
+    const changedMock = jest.spyOn(mstrObjectRestService, 'createInstance').mockResolvedValue({
       mstrTable: {
         rows: [],
       },
     });
     changedMock.mockRestore();
 
-    jest.spyOn(mstrObjectRestService, 'getInstanceDefinition')
+    jest.spyOn(mstrObjectRestService, 'createInstance')
         .mockResolvedValue(givenReport);
   });
 
@@ -89,7 +89,7 @@ describe('OfficeDisplayService', () => {
 
   it('should create instance when no instance id provided', async () => {
     // given
-    const getObjectDefinitionSpy = jest.spyOn(mstrObjectRestService, 'getInstanceDefinition');
+    const getObjectDefinitionSpy = jest.spyOn(mstrObjectRestService, 'createInstance');
     jest.spyOn(officeApiHelper, 'getSelectedCell').mockImplementationOnce(() => {});
     jest.spyOn(officeApiHelper, 'formatNumbers').mockImplementationOnce(() => {});
     jest.spyOn(officeApiHelper, 'formatTable').mockImplementationOnce(() => {});
@@ -429,7 +429,7 @@ describe('OfficeDisplayService', () => {
   });
 
   it('should print proper warning message when empty prompted report', async () => {
-    const changedMock = jest.spyOn(mstrObjectRestService, 'getInstanceDefinition').mockResolvedValue({
+    const changedMock = jest.spyOn(mstrObjectRestService, 'createInstance').mockResolvedValue({
       mstrTable: {
         rows: [],
       },

@@ -43,7 +43,25 @@ class MstrObjectRestService {
         });
   }
 
-  async _getInstanceId(fullPath, authToken, projectId, body) {
+  // async _getInstanceId(fullPath, authToken, projectId, body) { //Probably TBR
+  //   return await moduleProxy.request
+  //       .post(fullPath)
+  //       .set('x-mstr-authtoken', authToken)
+  //       .set('x-mstr-projectid', projectId)
+  //       .send(body)
+  //       .withCredentials()
+  //       .then((res) => {
+  //         if (res.status === 200 && res.body.status === 2) {
+  //           throw (res);
+  //         }
+  //         return res.body.instanceId;
+  //       })
+  //       .catch((err) => {
+  //         throw err;
+  //       });
+  // }
+
+  async _createInstance(fullPath, authToken, projectId, body) {
     return await moduleProxy.request
         .post(fullPath)
         .set('x-mstr-authtoken', authToken)
@@ -51,27 +69,21 @@ class MstrObjectRestService {
         .send(body)
         .withCredentials()
         .then((res) => {
-          if (res.status === 200 && res.body.status === 2) {
-            throw (res);
-          }
-          return res.body.instanceId;
-        })
-        .catch((err) => {
-          throw err;
+        // if (res.status === 200 && res.body.status === 2) { // status = 2 is no longer something bad
+        //   throw (res);
+        // }
+          return this._parseInstanceDefinition(res);
         });
   }
 
-  async _getInstanceDefinition(fullPath, authToken, projectId, body) {
+  async _getInstance(fullPath, authToken, projectId, body) {
     return await moduleProxy.request
-        .post(fullPath)
+        .get(fullPath)
         .set('x-mstr-authtoken', authToken)
         .set('x-mstr-projectid', projectId)
         .send(body)
         .withCredentials()
         .then((res) => {
-          if (res.status === 200 && res.body.status === 2) {
-            throw (res);
-          }
           return this._parseInstanceDefinition(res);
         });
   }
@@ -92,6 +104,11 @@ class MstrObjectRestService {
   }
 
   _parseInstanceDefinition(res) {
+    if (res.status === 200 && res.body.status === 2) {
+      const {instanceId} = res.body;
+      const status = res.body.status;
+      return {instanceId, status};
+    }
     const {total} = res.body.result.data.paging;
     const {instanceId} = res.body;
     const mstrTable = officeConverterService.createTable(res.body);
@@ -138,7 +155,7 @@ class MstrObjectRestService {
         });
   }
 
-  async getInstanceDefinition(objectId, projectId, isReport = true, dossierData, body = {}, limit = 1) {
+  async createInstance(objectId, projectId, isReport = true, dossierData, body = {}, limit = 1) {
     try {
       const storeState = reduxStore.getState();
       const envUrl = storeState.sessionReducer.envUrl;
@@ -150,7 +167,19 @@ class MstrObjectRestService {
         instanceDefinition.mstrTable.name = dossierData.reportName;
         return instanceDefinition;
       }
-      return await this._getInstanceDefinition(fullPath, authToken, projectId, body);
+      return await this._createInstance(fullPath, authToken, projectId, body);
+    } catch (error) {
+      throw error instanceof OutsideOfRangeError ? error : errorService.errorRestFactory(error);
+    }
+  }
+
+  async getInstance(objectId, projectId, isReport = true, dossierData, body = {}, instanceId, limit = 1) {
+    try {
+      const storeState = reduxStore.getState();
+      const envUrl = storeState.sessionReducer.envUrl;
+      const authToken = storeState.sessionReducer.authToken;
+      const fullPath = this._getFullPath(dossierData, envUrl, limit, isReport, objectId, instanceId);
+      return await this._getInstance(fullPath, authToken, projectId, body);
     } catch (error) {
       throw error instanceof OutsideOfRangeError ? error : errorService.errorRestFactory(error);
     }
@@ -201,6 +230,25 @@ class MstrObjectRestService {
         .withCredentials()
         .then((res) => {
           return res.body && res.body.length;
+        })
+        .catch((err) => {
+          throw errorService.errorRestFactory(err);
+        });
+  }
+
+  async answerPrompts(objectId, projectId, instanceId, promptAnswers) {
+    const storeState = reduxStore.getState();
+    const envUrl = storeState.sessionReducer.envUrl;
+    const authToken = storeState.sessionReducer.authToken;
+    const fullPath = `${envUrl}/reports/${objectId}/instances/${instanceId}/promptsAnswers`;
+    return await moduleProxy.request
+        .post(fullPath)
+        .set('X-MSTR-AuthToken', authToken)
+        .set('X-MSTR-ProjectID', projectId)
+        .send(promptAnswers)
+        .withCredentials()
+        .then((res) => {
+          return res.status;
         })
         .catch((err) => {
           throw errorService.errorRestFactory(err);
