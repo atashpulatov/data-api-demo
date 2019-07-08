@@ -12,6 +12,7 @@ import {officeStoreService} from '../office/store/office-store-service';
 import {toggleSecuredFlag} from '../office/office-actions';
 import restrictedArt from './assets/art_restricted_access_blue.svg';
 
+import './../index.css';
 import './file-history.css';
 import {withTranslation} from 'react-i18next';
 
@@ -59,7 +60,7 @@ export class _FileHistoryContainer extends React.Component {
           <Button type="primary" className="show-data-btn" onClick={this.showData}>{t('View Data')}</Button>
         </div>
       }
-      <Button id="add-data-btn-container" className="add-data-btn" onClick={() => this.props.addDataAction()}
+      <Button id="add-data-btn-container" className="add-data-btn floating-button" onClick={() => this.props.addDataAction()}
         disabled={loading}>{t('Add Data')}</Button>
       <span className="refresh-button-container">
         <Popover placement="bottom" content={t('Refresh All Data')} mouseEnterDelay={1}>

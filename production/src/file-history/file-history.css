@@ -15,17 +15,13 @@ span.file-icons {
 }
 
 .add-data-btn {
-    background: #FFFFFF;
-    border: 1px solid #1C91DC;
     border-radius: 4px;
     max-width: 70%;
     height: 25px;
     margin-bottom: 16px;
-    font-size: 12px;
-    color: #1C91DC;
 }
 
-.add-data-btn:hover,
+
 .add-data-btn:focus {
     background: rgba(28, 145, 220, 0.05);
     border: 1px solid #1C91DC;

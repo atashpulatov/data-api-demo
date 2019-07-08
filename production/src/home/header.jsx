@@ -58,6 +58,12 @@ export class _Header extends Component {
     }
   }
 
+  isOverflown = (userName) => {
+    this.element = document.createElement('canvas');
+    this.context = this.element.getContext('2d');
+    return this.context.measureText(userName).width > 90; // width of the element is constant and equal to ~90px
+  }
+
   prepareEmail = () => {
     const {t} = this.props;
     const {host, platform, version} = window.Office.context.diagnostics;
@@ -82,7 +88,7 @@ export class _Header extends Component {
     const {reportArray, isSecured, loading, t} = this.props;
     if (reportArray && reportArray.length > 0) {
       return (
-        <Popover placement="bottom" content={t('Clear data')} mouseEnterDelay={1}>
+        <Popover placement="bottom" content={t('Clear Data')} mouseEnterDelay={1}>
           <Button className="secure-btn" disabled={isSecured || loading} size='small' onClick={this.secureData}>
             {isSecured
               ? <MSTRIcon type='secure-access-inactive' />
@@ -95,6 +101,7 @@ export class _Header extends Component {
 
   getSettingsMenu = () => {
     const {userFullName, userInitials, t} = this.props;
+    const userNameDisplay = userFullName || t('MicroStrategy user');
     return (this.state.isSettings &&
       <ul className="settings-list">
         <li id="testid" className="user-data no-trigger-close">
@@ -102,7 +109,12 @@ export class _Header extends Component {
             <span className="no-trigger-close" id='initials' alt={t('User profile')}>{userInitials}</span> :
             <img className="no-trigger-close" id='profile-image' src={logo} alt={t('User profile')} />
           /* TODO: When rest api returns profileImage use it as source */}
-          <span className="user-name no-trigger-close">{userFullName || t('MicroStrategy user')}</span>
+          {this.isOverflown(userNameDisplay) ?
+            <Popover placement="bottom" content={userNameDisplay} mouseEnterDelay={1}>
+              <span id="userName" className="user-name no-trigger-close">{userNameDisplay}</span>
+            </Popover> :
+            <span id="userName" className="user-name no-trigger-close">{userNameDisplay}</span>
+          }
         </li>
         <li><a href='https://www.microstrategy.com/legal-folder/privacy-policy' target="_blank" rel="noopener">{t('Privacy Policy')}</a></li>
         <li><a href='https://www.microstrategy.com/legal-folder/legal-policies/terms-of-use' target="_blank" rel="noopener">{t('Terms of Use')}</a></li>
@@ -134,9 +146,11 @@ export class _Header extends Component {
         </div>
         <div className="header-buttons">
           {this.getSecureButton()}
-          <Button className="settings-btn no-trigger-close" onClick={this.toggleSettings} disabled={loading}>
-            <MSTRIcon type="settings" />
-          </Button>
+          <Popover placement="bottom" content={t('More Items')} mouseEnterDelay={1}>
+            <Button className="settings-btn no-trigger-close" onClick={this.toggleSettings} disabled={loading}>
+              <MSTRIcon type="settings" />
+            </Button>
+          </Popover>
           {this.getSettingsMenu()}
         </div>
       </header >
