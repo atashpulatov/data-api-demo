@@ -306,11 +306,6 @@ describe('OfficeDisplayService', () => {
           clearFilters: jest.fn(),
         },
       };
-      const mockedPrevTable = {
-        delete: jest.fn(),
-        rows: {count: 1, load: jest.fn()},
-        columns: {count: 1},
-      };
       const mockedWorksheet = {
         tables: {
           add: jest.fn().mockReturnValue(mockedTable),
@@ -320,6 +315,12 @@ describe('OfficeDisplayService', () => {
           getUsedRangeOrNullObject: jest.fn().mockReturnValue({isNullObject: true}),
         }),
         activate: jest.fn(),
+      };
+      const mockedPrevTable = {
+        delete: jest.fn(),
+        rows: {count: 1, load: jest.fn()},
+        columns: {count: 1},
+        worksheet: mockedWorksheet,
       };
       jest.spyOn(officeDisplayService, '_checkRangeValidity').mockReturnValueOnce({});
       jest.spyOn(officeApiHelper, 'getRange').mockReturnValueOnce('A1:B5');
