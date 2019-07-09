@@ -126,7 +126,7 @@
   "Data Cleared!": "Data Cleared!",
   "MicroStrategy data has been removed from the workbook. Click ‘Refresh’ to import it again.": "MicroStrategy data has been removed from the workbook. Click ‘Refresh’ to import it again.",
   "View Data": "View Data",
-  "Secure data": "Secure data",
+  "Clear data": "Clear data",
   "MicroStrategy user": "MicroStrategy user",
   "This button is currently disabled because you didn’t select any data": "This button is currently disabled because you didn’t select any data",
   "Privacy Policy": "Privacy Policy",
@@ -135,5 +135,6 @@
   "Contact Us": "Contact Us",
   "Version": "Version {{APP_VERSION}}",
   "Please don’t change the text below. Type your message above this line.": "Please don’t change the text below. Type your message above this line.",
-  "Request error - cannot retrieve report data": "Request error - cannot retrieve report data"
+  "Request error - cannot retrieve report data": "Request error - cannot retrieve report data",
+  "More Items": "More Items"
 }
