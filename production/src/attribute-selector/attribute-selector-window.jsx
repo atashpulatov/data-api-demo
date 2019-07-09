@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import '../index.css';
 import '../home/home.css';
 import {selectorProperties} from './selector-properties';
 import {attributeSelectorHelpers} from './attribute-selector-helpers';
