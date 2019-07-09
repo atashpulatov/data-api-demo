@@ -29,7 +29,7 @@ class OfficeApiHelper {
       (headerCount -= firstNumber) >= 0;
       firstNumber = secondNumber, secondNumber *= ALPHABET_RANGE_END) {
       endColumn = String.fromCharCode(parseInt(
-          (headerCount % secondNumber) / firstNumber)
+        (headerCount % secondNumber) / firstNumber)
         + ASCII_CAPITAL_LETTER_INDEX)
         + endColumn;
     }
@@ -74,8 +74,8 @@ class OfficeApiHelper {
   getBindingRange = (context, bindingId) => {
     try {
       return context.workbook.bindings
-          .getItem(bindingId).getTable()
-          .getRange();
+        .getItem(bindingId).getTable()
+        .getRange();
     } catch (error) {
       throw errorService.errorOfficeFactory(error);
     }
@@ -83,7 +83,7 @@ class OfficeApiHelper {
 
   getTable = (context, bindingId) => {
     return context.workbook.bindings
-        .getItem(bindingId).getTable();
+      .getItem(bindingId).getTable();
   }
 
   getExcelContext = async () => {
@@ -203,15 +203,15 @@ class OfficeApiHelper {
 
   bindNamedItem = (namedItem, bindingId) => {
     return new Promise((resolve, reject) => Office.context.document.bindings.addFromNamedItemAsync(
-        namedItem, 'table', {id: bindingId}, (result) => {
-          if (result.status === 'succeeded') {
-            console.log('Added new binding with type: ' + result.value.type + ' and id: ' + result.value.id);
-            resolve();
-          } else {
-            console.error('Error: ' + result.error.message);
-            reject(result.error);
-          }
-        }));
+      namedItem, 'table', {id: bindingId}, (result) => {
+        if (result.status === 'succeeded') {
+          console.log('Added new binding with type: ' + result.value.type + ' and id: ' + result.value.id);
+          resolve();
+        } else {
+          console.error('Error: ' + result.error.message);
+          reject(result.error);
+        }
+      }));
   }
 
   deleteObjectTableBody = (context, object) => {
@@ -241,16 +241,15 @@ class OfficeApiHelper {
    * @param {Office} cell Starting subtotal row cell
    * @param {Array} headers Headers object from OfficeConverterServiceV2.getHeaders
    * @memberof OfficeApiHelper
-   * @return {Object}
+   * @return {Office} Range of subtotal row
    */
   getSubtotalRowRange = (startCell, cell, headers) => {
-    const headerRowsOffset = cell[0];
-    const headerColumnsOffset = headers.rows[cell[0]].length - cell[1];
-    const tableOffset = headers.columns[0].length - 1;
-    return startCell
-        .getResizedRange(headerRowsOffset, -headerColumnsOffset)
-        .getLastRow()
-        .getResizedRange(0, tableOffset);
+    const headerRowsOffset = cell[0]; // offset to go the row with subtotal
+    const headerColumnsOffset = headers.rows[0].length - cell[1]; // offset to go to the first cell of row with subtotal
+    const tableOffset = headers.columns[0].length - 1; // offset to go to the last cell of row with subtotal
+    const firstSubtotalCell = startCell.getOffsetRange(headerRowsOffset, -headerColumnsOffset);
+    const lastSubtotalCell = startCell.getOffsetRange(headerRowsOffset, tableOffset);
+    return firstSubtotalCell.getBoundingRect(lastSubtotalCell);
   }
 
   /**
