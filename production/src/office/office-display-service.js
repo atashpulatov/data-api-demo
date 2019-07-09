@@ -30,7 +30,7 @@ class OfficeDisplayService {
     }
   }
 
-  _printObject = async ({objectId, projectId, isReport = true, selectedCell, bindingId, isRefresh, dossierData, body, isCrosstab, isPrompted, promptAnswers}) => {
+  _printObject = async ({objectId, projectId, isReport = true, selectedCell, bindingId, isRefresh, dossierData, body, isCrosstab, isPrompted, promptsAnswers}) => {
     let officeTable;
     let newOfficeTableId;
     let shouldFormat;
@@ -52,7 +52,7 @@ class OfficeDisplayService {
       let instanceDefinition = await mstrObjectRestService.createInstance(objectId, projectId, isReport, dossierData, body);
       let count = 0;
       while (instanceDefinition.status === 2) {
-        await mstrObjectRestService.answerPrompts(objectId, projectId, instanceDefinition.instanceId, promptAnswers[count]);
+        await mstrObjectRestService.answerPrompts(objectId, projectId, instanceDefinition.instanceId, promptsAnswers[count]);
         instanceDefinition = await mstrObjectRestService.getInstance(objectId, projectId, isReport, dossierData, body, instanceDefinition.instanceId);
         count++;
       }
@@ -82,7 +82,7 @@ class OfficeDisplayService {
       // Save to store
       bindingId = bindingId || newOfficeTableId;
       await officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
-      this._addToStore({isRefresh, instanceDefinition, bindingId, projectId, envUrl, body, objectType, isCrosstab, isPrompted, promptAnswers});
+      this._addToStore({isRefresh, instanceDefinition, bindingId, projectId, envUrl, body, objectType, isCrosstab, isPrompted, promptsAnswers});
 
       console.timeEnd('Total');
       reduxStore.dispatch({
@@ -116,7 +116,7 @@ class OfficeDisplayService {
         objectType: report.objectType,
         isCrosstab: report.isCrosstab,
         isPrompted: report.isPrompted,
-        promptAnswers: report.promptAnswers,
+        promptsAnswers: report.promptsAnswers,
       },
     });
     officeStoreService.preserveReport(report);
@@ -275,7 +275,7 @@ class OfficeDisplayService {
     }
   }
 
-  _addToStore({isRefresh, instanceDefinition, bindingId, projectId, envUrl, body, objectType, isCrosstab, isPrompted, promptAnswers}) {
+  _addToStore({isRefresh, instanceDefinition, bindingId, projectId, envUrl, body, objectType, isCrosstab, isPrompted, promptsAnswers}) {
     if (!isRefresh) {
       this.addReportToStore({
         id: instanceDefinition.mstrTable.id,
@@ -288,7 +288,7 @@ class OfficeDisplayService {
         objectType,
         isPrompted,
         isCrosstab,
-        promptAnswers,
+        promptsAnswers,
       });
     }
   }

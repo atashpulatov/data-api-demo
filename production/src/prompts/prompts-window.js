@@ -96,7 +96,6 @@ export class _PromptsWindow extends Component {
           mstrObjectRestService.deleteDossierInstance(projectId, objectId, instanceId);
 
           msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, promptsAnsweredHandler);
-
           this.props.requestImport({dossierData, promptsAnswers});// TEMP - dossierData should eventually be removed as data should be gathered via REST from report instance, not dossier
         });
   }

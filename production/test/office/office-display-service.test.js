@@ -111,7 +111,7 @@ describe('OfficeDisplayService', () => {
     const getObjectDefinitionSpy = jest.spyOn(mstrObjectRestService, 'getObjectDefinition').mockResolvedValue(givenBody);
     const runPopupSpy = jest.spyOn(popupController, 'runPopup');
     const printInside = jest.spyOn(officeDisplayService, '_printObject').mockImplementationOnce(() => {});
-    // {objectId, projectId, isReport = true, selectedCell, bindingId, isRefresh, dossierData, body, isPrompted, promptAnswers}
+    // {objectId, projectId, isReport = true, selectedCell, bindingId, isRefresh, dossierData, body, isPrompted, promptsAnswers}
     const options = {objectId: 'id123', projectId: 'p123', isReport: true};
     const mockDialog = {
       close: () => {},
@@ -446,7 +446,7 @@ describe('OfficeDisplayService', () => {
       projectId: 'p123',
       isReport: true,
       isPrompted: true,
-      promptAnswers: [],
+      promptsAnswers: [],
     };
     // when
     const resultMessage = await officeDisplayService._printObject(options);

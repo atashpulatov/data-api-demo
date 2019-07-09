@@ -126,7 +126,7 @@ class PopupController {
     }
   }
 
-  handleOkCommand = async ({chosenObject, dossierData, chosenProject, chosenSubtype, isPrompted, promptAnswers, reportName}, bindingId) => {
+  handleOkCommand = async ({chosenObject, dossierData, chosenProject, chosenSubtype, isPrompted, promptsAnswers, reportName}, bindingId) => {
     if (chosenObject) {
       reduxStore.dispatch({type: officeProperties.actions.startLoading});
       reduxStore.dispatch({type: START_REPORT_LOADING, data: {name: reportName}});
@@ -138,7 +138,7 @@ class PopupController {
         bindingId,
         isRefresh: false,
         isPrompted,
-        promptAnswers,
+        promptsAnswers,
       };
       const result = await officeDisplayService.printObject(options);
       if (result) {

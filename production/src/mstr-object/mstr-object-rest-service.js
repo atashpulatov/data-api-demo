@@ -13,34 +13,34 @@ const OBJECT_TYPE = '3'; // both reports and cubes are of type 3
 
 class MstrObjectRestService {
   async getProjectContent(envUrl, authToken, projectId,
-      folderType = sharedFolderIdType) {
+    folderType = sharedFolderIdType) {
     const fullPath = `${envUrl}/folders/preDefined/${folderType}`;
     return await moduleProxy.request
-        .get(fullPath)
-        .set('x-mstr-authtoken', authToken)
-        .set('x-mstr-projectid', projectId)
-        .withCredentials()
-        .then((res) => {
-          return res.body;
-        })
-        .catch((err) => {
-          throw errorService.errorRestFactory(err);
-        });
+      .get(fullPath)
+      .set('x-mstr-authtoken', authToken)
+      .set('x-mstr-projectid', projectId)
+      .withCredentials()
+      .then((res) => {
+        return res.body;
+      })
+      .catch((err) => {
+        throw errorService.errorRestFactory(err);
+      });
   }
 
   async getFolderContent(envUrl, authToken, projectId, folderId) {
     const fullPath = `${envUrl}/folders/${folderId}`;
     return await moduleProxy.request
-        .get(fullPath)
-        .set('x-mstr-authtoken', authToken)
-        .set('x-mstr-projectid', projectId)
-        .withCredentials()
-        .then((res) => {
-          return res.body;
-        })
-        .catch((err) => {
-          throw errorService.errorRestFactory(err);
-        });
+      .get(fullPath)
+      .set('x-mstr-authtoken', authToken)
+      .set('x-mstr-projectid', projectId)
+      .withCredentials()
+      .then((res) => {
+        return res.body;
+      })
+      .catch((err) => {
+        throw errorService.errorRestFactory(err);
+      });
   }
 
   // async _getInstanceId(fullPath, authToken, projectId, body) { //Probably TBR
@@ -63,44 +63,44 @@ class MstrObjectRestService {
 
   async _createInstance(fullPath, authToken, projectId, body) {
     return await moduleProxy.request
-        .post(fullPath)
-        .set('x-mstr-authtoken', authToken)
-        .set('x-mstr-projectid', projectId)
-        .send(body)
-        .withCredentials()
-        .then((res) => {
+      .post(fullPath)
+      .set('x-mstr-authtoken', authToken)
+      .set('x-mstr-projectid', projectId)
+      .send(body)
+      .withCredentials()
+      .then((res) => {
         // if (res.status === 200 && res.body.status === 2) { // status = 2 is no longer something bad
         //   throw (res);
         // }
-          return this._parseInstanceDefinition(res);
-        });
+        return this._parseInstanceDefinition(res);
+      });
   }
 
   async _getInstance(fullPath, authToken, projectId, body) {
     return await moduleProxy.request
-        .get(fullPath)
-        .set('x-mstr-authtoken', authToken)
-        .set('x-mstr-projectid', projectId)
-        .send(body)
-        .withCredentials()
-        .then((res) => {
-          return this._parseInstanceDefinition(res);
-        });
+      .get(fullPath)
+      .set('x-mstr-authtoken', authToken)
+      .set('x-mstr-projectid', projectId)
+      .send(body)
+      .withCredentials()
+      .then((res) => {
+        return this._parseInstanceDefinition(res);
+      });
   }
 
   async _getDossierInstanceDefinition(fullPath, authToken, projectId, body) {
     return await moduleProxy.request
-        .get(fullPath)
-        .set('x-mstr-authtoken', authToken)
-        .set('x-mstr-projectid', projectId)
-        .send(body)
-        .withCredentials()
-        .then((res) => {
-          if (res.status === 200 && res.body.status === 2) {
-            throw (res);
-          }
-          return this._parseInstanceDefinition(res);
-        });
+      .get(fullPath)
+      .set('x-mstr-authtoken', authToken)
+      .set('x-mstr-projectid', projectId)
+      .send(body)
+      .withCredentials()
+      .then((res) => {
+        if (res.status === 200 && res.body.status === 2) {
+          throw (res);
+        }
+        return this._parseInstanceDefinition(res);
+      });
   }
 
   _parseInstanceDefinition(res) {
@@ -124,16 +124,16 @@ class MstrObjectRestService {
     const fullPath = `${envUrl}/${objectType}/${objectId}`;
 
     return await moduleProxy.request
-        .get(fullPath)
-        .set('x-mstr-authtoken', authToken)
-        .set('x-mstr-projectid', projectId)
-        .withCredentials()
-        .then((res) => {
-          return res.body;
-        })
-        .catch((err) => {
-          throw errorService.errorRestFactory(err);
-        });
+      .get(fullPath)
+      .set('x-mstr-authtoken', authToken)
+      .set('x-mstr-projectid', projectId)
+      .withCredentials()
+      .then((res) => {
+        return res.body;
+      })
+      .catch((err) => {
+        throw errorService.errorRestFactory(err);
+      });
   }
 
   async getObjectInfo(objectId, projectId, isReport = true) {
@@ -143,16 +143,16 @@ class MstrObjectRestService {
     const fullPath = `${envUrl}/objects/${objectId}?type=${OBJECT_TYPE}`;
 
     return await moduleProxy.request
-        .get(fullPath)
-        .set('x-mstr-authtoken', authToken)
-        .set('x-mstr-projectid', projectId)
-        .withCredentials()
-        .then((res) => {
-          return res.body;
-        })
-        .catch((err) => {
-          throw errorService.errorRestFactory(err);
-        });
+      .get(fullPath)
+      .set('x-mstr-authtoken', authToken)
+      .set('x-mstr-projectid', projectId)
+      .withCredentials()
+      .then((res) => {
+        return res.body;
+      })
+      .catch((err) => {
+        throw errorService.errorRestFactory(err);
+      });
   }
 
   async createInstance(objectId, projectId, isReport = true, dossierData, body = {}, limit = 1) {
@@ -161,12 +161,6 @@ class MstrObjectRestService {
       const envUrl = storeState.sessionReducer.envUrl;
       const authToken = storeState.sessionReducer.authToken;
       const fullPath = this._getFullPath(dossierData, envUrl, limit, isReport, objectId);
-      if (dossierData) {
-        const instanceDefinition = await this._getDossierInstanceDefinition(fullPath, authToken, projectId, body);
-        instanceDefinition.mstrTable.id = objectId;
-        instanceDefinition.mstrTable.name = dossierData.reportName;
-        return instanceDefinition;
-      }
       return await this._createInstance(fullPath, authToken, projectId, body);
     } catch (error) {
       throw error instanceof OutsideOfRangeError ? error : errorService.errorRestFactory(error);
@@ -191,10 +185,10 @@ class MstrObjectRestService {
 
   _fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = -1) {
     return moduleProxy.request
-        .get(`${fullPath}?offset=${offset}&limit=${limit}`)
-        .set('x-mstr-authtoken', authToken)
-        .set('x-mstr-projectid', projectId)
-        .withCredentials();
+      .get(`${fullPath}?offset=${offset}&limit=${limit}`)
+      .set('x-mstr-authtoken', authToken)
+      .set('x-mstr-projectid', projectId)
+      .withCredentials();
   }
 
   _checkTableDimensions(rows, columns) {
@@ -206,14 +200,9 @@ class MstrObjectRestService {
 
   _getFullPath(dossierData, envUrl, limit, isReport, objectId, instanceId) {
     let path;
-    if (dossierData) {
-      const {dossierId, instanceId, chapterKey, visualizationKey} = dossierData;
-      path = `${envUrl}/dossiers/${dossierId}/instances/${instanceId}/chapters/${chapterKey}/visualizations/${visualizationKey}`;
-    } else {
-      const objectType = isReport ? 'reports' : 'cubes';
-      path = `${envUrl}/${objectType}/${objectId}/instances`;
-      path += instanceId ? `/${instanceId}` : '';
-    }
+    const objectType = isReport ? 'reports' : 'cubes';
+    path = `${envUrl}/${objectType}/${objectId}/instances`;
+    path += instanceId ? `/${instanceId}` : '';
     path += limit ? `?limit=${limit}` : '';
     return path;
   }
@@ -224,35 +213,35 @@ class MstrObjectRestService {
     const authToken = storeState.sessionReducer.authToken;
     const fullPath = `${envUrl}/reports/${objectId}/prompts`;
     return await moduleProxy.request
-        .get(fullPath)
-        .set('x-mstr-authtoken', authToken)
-        .set('X-MSTR-ProjectID', projectId)
-        .withCredentials()
-        .then((res) => {
-          return res.body && res.body.length;
-        })
-        .catch((err) => {
-          throw errorService.errorRestFactory(err);
-        });
+      .get(fullPath)
+      .set('x-mstr-authtoken', authToken)
+      .set('X-MSTR-ProjectID', projectId)
+      .withCredentials()
+      .then((res) => {
+        return res.body && res.body.length;
+      })
+      .catch((err) => {
+        throw errorService.errorRestFactory(err);
+      });
   }
 
-  async answerPrompts(objectId, projectId, instanceId, promptAnswers) {
+  async answerPrompts(objectId, projectId, instanceId, promptsAnswers) {
     const storeState = reduxStore.getState();
     const envUrl = storeState.sessionReducer.envUrl;
     const authToken = storeState.sessionReducer.authToken;
     const fullPath = `${envUrl}/reports/${objectId}/instances/${instanceId}/promptsAnswers`;
     return await moduleProxy.request
-        .post(fullPath)
-        .set('X-MSTR-AuthToken', authToken)
-        .set('X-MSTR-ProjectID', projectId)
-        .send(promptAnswers)
-        .withCredentials()
-        .then((res) => {
-          return res.status;
-        })
-        .catch((err) => {
-          throw errorService.errorRestFactory(err);
-        });
+      .post(fullPath)
+      .set('X-MSTR-AuthToken', authToken)
+      .set('X-MSTR-ProjectID', projectId)
+      .send(promptsAnswers)
+      .withCredentials()
+      .then((res) => {
+        return res.status;
+      })
+      .catch((err) => {
+        throw errorService.errorRestFactory(err);
+      });
   }
 
   async deleteDossierInstance(projectId, objectId, instanceId) {
@@ -262,16 +251,16 @@ class MstrObjectRestService {
     const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}`;
 
     return await moduleProxy.request
-        .delete(fullPath)
-        .set('x-mstr-authtoken', authToken)
-        .set('x-mstr-projectid', projectId)
-        .withCredentials()
-        .then((res) => {
-          return res.body;
-        })
-        .catch((err) => {
-          throw errorService.errorRestFactory(err);
-        });
+      .delete(fullPath)
+      .set('x-mstr-authtoken', authToken)
+      .set('x-mstr-projectid', projectId)
+      .withCredentials()
+      .then((res) => {
+        return res.body;
+      })
+      .catch((err) => {
+        throw errorService.errorRestFactory(err);
+      });
   }
 };
 
