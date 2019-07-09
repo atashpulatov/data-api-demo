@@ -41,6 +41,10 @@ code {
     display: none;
 }
 
+.ant-switch .ant-click-animating-node {
+  animation: none;
+}
+
 .ant-radio-input:focus+.ant-radio-inner {
     box-shadow: none;
 }
