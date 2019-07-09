@@ -29,7 +29,7 @@ class OfficeApiHelper {
       (headerCount -= firstNumber) >= 0;
       firstNumber = secondNumber, secondNumber *= ALPHABET_RANGE_END) {
       endColumn = String.fromCharCode(parseInt(
-        (headerCount % secondNumber) / firstNumber)
+          (headerCount % secondNumber) / firstNumber)
         + ASCII_CAPITAL_LETTER_INDEX)
         + endColumn;
     }
@@ -74,8 +74,8 @@ class OfficeApiHelper {
   getBindingRange = (context, bindingId) => {
     try {
       return context.workbook.bindings
-        .getItem(bindingId).getTable()
-        .getRange();
+          .getItem(bindingId).getTable()
+          .getRange();
     } catch (error) {
       throw errorService.errorOfficeFactory(error);
     }
@@ -83,7 +83,7 @@ class OfficeApiHelper {
 
   getTable = (context, bindingId) => {
     return context.workbook.bindings
-      .getItem(bindingId).getTable();
+        .getItem(bindingId).getTable();
   }
 
   getExcelContext = async () => {
@@ -203,15 +203,15 @@ class OfficeApiHelper {
 
   bindNamedItem = (namedItem, bindingId) => {
     return new Promise((resolve, reject) => Office.context.document.bindings.addFromNamedItemAsync(
-      namedItem, 'table', {id: bindingId}, (result) => {
-        if (result.status === 'succeeded') {
-          console.log('Added new binding with type: ' + result.value.type + ' and id: ' + result.value.id);
-          resolve();
-        } else {
-          console.error('Error: ' + result.error.message);
-          reject(result.error);
-        }
-      }));
+        namedItem, 'table', {id: bindingId}, (result) => {
+          if (result.status === 'succeeded') {
+            console.log('Added new binding with type: ' + result.value.type + ' and id: ' + result.value.id);
+            resolve();
+          } else {
+            console.error('Error: ' + result.error.message);
+            reject(result.error);
+          }
+        }));
   }
 
   deleteObjectTableBody = (context, object) => {
@@ -232,6 +232,44 @@ class OfficeApiHelper {
     const bodyRange = cell.getOffsetRange(headers.rows.length - 1, headers.columns[0].length - 1);
     const startingCell = cell.getCell(0, 0).getOffsetRange(-headers.columns.length, -headers.rows[0].length);
     return startingCell.getBoundingRect(bodyRange);
+  }
+
+  /**
+   *Gers range of subtotal row based on subtotal cell
+   *
+   * @param {Office} startCell Starting table body cell
+   * @param {Office} cell Starting subtotal row cell
+   * @param {Array} headers Headers object from OfficeConverterServiceV2.getHeaders
+   * @memberof OfficeApiHelper
+   * @return {Object}
+   */
+  getSubtotalRowRange = (startCell, cell, headers) => {
+    const headerRowsOffset = cell[0];
+    const headerColumnsOffset = headers.rows[cell[0]].length - cell[1];
+    const tableOffset = headers.columns[0].length - 1;
+    return startCell
+        .getResizedRange(headerRowsOffset, -headerColumnsOffset)
+        .getLastRow()
+        .getResizedRange(0, tableOffset);
+  }
+
+  /**
+   *Sets bold format for all subtotal rows
+   *
+   * @param {Office} startCell Starting table body cell
+   * @param {Office} subtotalCells 2d array of all starting subtotal row cells (each element contains row and colum number of subtotal cell in headers columns)
+   * @param {Array} headers Headers object from OfficeConverterServiceV2.getHeaders
+   * @param {Boolean} bold Flag determinig if to set/unset bold format
+   * @param {Office} context Excel context
+   * @memberof OfficeApiHelper
+   * @return {Promise} Context.sync
+   */
+  formatSubtotalsRows = (startCell, subtotalCells, headers, bold, context) => {
+    subtotalCells.forEach(async (cell) => {
+      const subtotalRowRange = this.getSubtotalRowRange(startCell, cell, headers);
+      subtotalRowRange.format.font.bold = bold;
+    });
+    return context.sync();
   }
 
   /**
