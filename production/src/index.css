@@ -16,8 +16,10 @@ code {
 }
 
 .ant-popover-inner-content {
+    min-width: 38px;
     max-width: 280px;
     padding: 8px;
+    text-align: center;
     background-color: #404040;
     color: white;
     border-radius: 4px;
