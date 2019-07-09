@@ -264,7 +264,7 @@ class OfficeApiHelper {
    * @return {Promise} Context.sync
    */
   formatSubtotalsRows = (startCell, subtotalCells, headers, bold, context) => {
-    subtotalCells.forEach(async (cell) => {
+    subtotalCells.forEach((cell) => {
       const subtotalRowRange = this.getSubtotalRowRange(startCell, cell, headers);
       subtotalRowRange.format.font.bold = bold;
     });
