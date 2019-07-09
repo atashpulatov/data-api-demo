@@ -164,7 +164,7 @@ class OfficeDisplayService {
   _createOfficeTable = async (instanceDefinition, context, startCell, officeTableId, prevOfficeTable) => {
     const hasHeaders = true;
     const {rows, columns, mstrTable} = instanceDefinition;
-    const sheet = context.workbook.worksheets.getActiveWorksheet();
+    const sheet = prevOfficeTable ? prevOfficeTable.worksheet : context.workbook.worksheets.getActiveWorksheet();
     const tableRange = officeApiHelper.getRange(columns, startCell, rows);
     const sheetRange = sheet.getRange(tableRange);
     if (prevOfficeTable) {
@@ -206,6 +206,16 @@ class OfficeDisplayService {
   _updateOfficeTable = async (instanceDefinition, context, prevOfficeTable) => {
     try {
       const {rows, mstrTable} = instanceDefinition;
+
+      prevOfficeTable.rows.load('count');
+      await context.sync();
+      const addedRows = Math.max(0, rows - prevOfficeTable.rows.count);
+      // If the new table has more rows during update check validity
+      if (addedRows) {
+        const bottomRange = prevOfficeTable.getRange().getRowsBelow(addedRows);
+        await this._checkRangeValidity(context, bottomRange);
+      }
+
       context.workbook.application.suspendApiCalculationUntilNextSync();
       prevOfficeTable.clearFilters();
       prevOfficeTable.sort.clear();
