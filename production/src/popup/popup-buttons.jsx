@@ -1,7 +1,6 @@
 import React from 'react';
 import {Button, Popover} from 'antd';
 import './popup-buttons.css';
-import './../index.css';
 import {withTranslation} from 'react-i18next';
 import {connect} from 'react-redux';
 

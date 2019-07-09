@@ -14,7 +14,7 @@ span.file-icons {
     justify-content: space-around;
 }
 
-.add-data-btn {
+button.add-data-btn {
     border-radius: 4px;
     max-width: 70%;
     height: 25px;
@@ -22,14 +22,14 @@ span.file-icons {
 }
 
 
-.add-data-btn:focus {
+button.add-data-btn:focus {
     background: rgba(28, 145, 220, 0.05);
     border: 1px solid #1C91DC;
     border-radius: 4px;
     color: #1C91DC;
 }
 
-.add-data-btn:focus {
+button.add-data-btn:focus {
     background: rgba(28, 145, 220, 0.20);
 }
 

@@ -61,7 +61,8 @@ export class _Header extends Component {
   isOverflown = (userName) => {
     this.element = document.createElement('canvas');
     this.context = this.element.getContext('2d');
-    return this.context.measureText(userName).width > 90; // width of the element is constant and equal to ~90px
+    const elementWidth = 90;
+    return this.context.measureText(userName).width > elementWidth; // width of the element is constant and equal to ~90px
   }
 
   prepareEmail = () => {

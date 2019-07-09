@@ -12,7 +12,6 @@ import {officeStoreService} from '../office/store/office-store-service';
 import {toggleSecuredFlag} from '../office/office-actions';
 import restrictedArt from './assets/art_restricted_access_blue.svg';
 
-import './../index.css';
 import './file-history.css';
 import {withTranslation} from 'react-i18next';
 
