@@ -6983,12 +6983,13 @@ ms@^2.1.1:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.1.tgz#30a5864eb3ebb0a66f2ebe6d727af06a09d86e0a"
   integrity sha512-tgp+dl5cGk28utYktBsrFqA7HKgrhgPsg6Z/EfhWI4gl1Hwq8B/GmY/0oXZ6nF8hDVesS/FpnYaD/kOWhYQvyg==
 
-mstr-react-library@1.1.18:
-  version "1.1.18"
-  resolved "http://nexus.internal.microstrategy.com:8081/repository/npm-group/mstr-react-library/-/mstr-react-library-1.1.18.tgz#416e845a68f13c3733014a3c14be4fa114661c4b"
-  integrity sha512-ZWH6GdUKFkYkEjKTOgQ03wm/aBoKpn9k1KdPeUdksNkBidw2D+KaUD5XwHPyK8CG3r9lrvxozHOGXIVba51C4w==
+mstr-react-library@1.1.19:
+  version "1.1.19"
+  resolved "http://nexus.internal.microstrategy.com:8081/repository/npm-group/mstr-react-library/-/mstr-react-library-1.1.19.tgz#dfd9dd5f623e3e47692987f7e550c7bce1040dcc"
+  integrity sha512-Z5sypYHzXfCgOZqjkU+0PbEWWrtfqxV09+veykh1hOm4voD3+eZpeuTYd2JUhEKyG7mLGIouzpv3+gUJkwuo6Q==
   dependencies:
     antd "^3.13.1"
+    focus-visible "^5.0.1"
     react-virtualized "^9.21.0"
     superagent "^4.0.0"
 
