@@ -100,7 +100,7 @@ hr {
     height: calc(100vh - 72px);
 }
 
-#overlay>div>div.ant-tabs-bar.ant-tabs-top-bar>div>div>div>div {
+.ant-tabs-nav-scroll>div {
     margin-left: 4px;
 }
 
