@@ -44,7 +44,7 @@ code {
 }
 
 .ant-switch .ant-click-animating-node {
-  animation: none;
+    animation: none;
 }
 
 .ant-radio-input:focus+.ant-radio-inner {
@@ -128,27 +128,27 @@ code {
     cursor: default
 }
 
-.floating-button {
+button.floating-button {
     background-color: #FFFFFF;
     border-color: #1C91DC;
     font-size: 14px;
     color: #1C91DC;
 }
 
-.floating-button:hover {
+button.floating-button:hover {
     background-color: rgba(28, 145, 220, 0.05);
     border-color: #1C91DC;
     color: #1C91DC;
 }
 
-.floating-button:active {
+button.floating-button:active {
     background-color: rgba(28, 145, 220, 0.20);
     border-color: #1C91DC;
     color: #1C91DC;
 }
 
-.floating-button:disabled,
-.floating-button[disabled]:hover {
+button.floating-button:disabled,
+button.floating-button[disabled]:hover {
     background-color: #FFFFFF;
     border-color: #1C91DC;
     color: #1C91DC;

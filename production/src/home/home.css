@@ -24,7 +24,7 @@ hr {
     font-size: 16px;
     line-height: 31px;
     width: 100%;
-    padding: 20px 27px 19px 20px;
+    padding: 20px 27px 19px 10px;
     align-items: center;
 }
 
@@ -100,6 +100,10 @@ hr {
     height: calc(100vh - 72px);
 }
 
+.ant-tabs-nav-scroll>div {
+    margin-left: 4px;
+}
+
 .ant-tabs.tabs-container .ant-tabs-nav .ant-tabs-tab {
     margin: 0 6px;
     padding: 12px 6px;
@@ -126,11 +130,9 @@ hr {
 }
 
 .ant-tabs.tabs-container .ant-tabs-content {
-    padding: 11px;
-    height: calc(100% - 44px);
+    height: 100%;
     display: block;
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden;
 }
 
 .tabs-container .ant-tabs-ink-bar {
