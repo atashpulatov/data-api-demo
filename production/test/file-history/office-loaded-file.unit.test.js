@@ -225,7 +225,7 @@ describe('office loaded file', () => {
     expect(onDeleteMocked).not.toBeCalled();
     expect(onRefreshMocked).not.toBeCalled();
   });
-  it('should contain one popovers', () => {
+  it('should contain popovers', () => {
     // given
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile fileName='test' />);
