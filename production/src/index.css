@@ -49,6 +49,25 @@ code {
     box-shadow: none;
 }
 
+.ant-btn:focus:not(.focus-visible),
+.ant-input:focus:not(.focus-visible) {
+    outline: none;
+}
+
+*:focus.focus-visible {
+    outline: -webkit-focus-ring-color auto 5px;
+    color: initial;
+    border: initial;
+    box-shadow: initial;
+}
+
+.ant-btn-primary.focus-visible {
+    color: #fff
+}
+
+.ant-radio-input.focus-visible+.ant-radio-inner {
+    outline: -webkit-focus-ring-color auto 5px;
+}
 
 .ant-btn {
     background-color: #FFFFFF;
