@@ -92,7 +92,7 @@ export class _PromptsWindow extends Component {
             visualizationKey: visuzalisations[0].key,
           };
 
-          // Since the dossier is no needed anymore after intercepting promptsAnswers, we can try removing the instnace
+          // Since the dossier is no needed anymore after intercepting promptsAnswers, we can try removing the instanace
           mstrObjectRestService.deleteDossierInstance(projectId, objectId, instanceId);
 
           msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, promptsAnsweredHandler);

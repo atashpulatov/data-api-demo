@@ -50,12 +50,12 @@ class OfficeDisplayService {
       // Get mstr instance definition
       console.time('Instance definition');
       let instanceDefinition = await mstrObjectRestService.createInstance(objectId, projectId, isReport, dossierData, body);
-      let count = 0;
-      while (instanceDefinition.status === 2) {
-        await mstrObjectRestService.answerPrompts(objectId, projectId, instanceDefinition.instanceId, promptsAnswers[count]);
-        instanceDefinition = await mstrObjectRestService.getInstance(objectId, projectId, isReport, dossierData, body, instanceDefinition.instanceId);
-        count++;
+
+      // Status 2 = report has open prompts to be answered before data can be returned
+      if (instanceDefinition.status === 2) {
+        instanceDefinition = await this._answerPrompts(instanceDefinition, objectId, projectId, promptsAnswers, isReport, dossierData, body);
       }
+
       console.timeEnd('Instance definition');
 
       // Check if instance returned data
@@ -398,6 +398,16 @@ class OfficeDisplayService {
 
   _getRowsArray = (rows, headers) => {
     return rows.map((item) => headers.map((header) => item[header]));
+  }
+
+  async _answerPrompts(instanceDefinition, objectId, projectId, promptsAnswers, isReport, dossierData, body) {
+    let count = 0;
+    while (instanceDefinition.status === 2) {
+      await mstrObjectRestService.answerPrompts(objectId, projectId, instanceDefinition.instanceId, promptsAnswers[count]);
+      instanceDefinition = await mstrObjectRestService.getInstance(objectId, projectId, isReport, dossierData, body, instanceDefinition.instanceId);
+      count++;
+    }
+    return instanceDefinition;
   }
 }
 
