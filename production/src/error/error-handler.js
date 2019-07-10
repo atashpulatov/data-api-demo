@@ -124,11 +124,10 @@ class ErrorService {
       return '404 - Environment not found';
     };
     if (error instanceof ConnectionBrokenError) {
-      return 'Environment is unreachable.'
-        + '\nPlease check your internet connection.';
+      return 'Environment is unreachable. Please check your internet connection.';
     };
     if (error instanceof UnauthorizedError) {
-      return 'Your session has expired.\nPlease log in.';
+      return 'Your session has expired. Please log in.';
     };
     if (error instanceof BadRequestError) {
       return '400 - There has been a problem with your request';

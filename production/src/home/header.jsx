@@ -108,7 +108,7 @@ export class _Header extends Component {
         <li><a href='https://www.microstrategy.com/legal-folder/legal-policies/terms-of-use' target="_blank" rel="noopener">{t('Terms of Use')}</a></li>
         {/* TODO: get help url for plugin */}
         {/* <li><a href='' target="_blank" rel="noopener">{t('Help')}</a></li> */}
-        < li className="settings-version no-trigger-close">{t('Version', {APP_VERSION})}</li>
+        < li className="settings-version no-trigger-close">{t('Version {{APP_VERSION}}', {APP_VERSION})}</li>
         <li className="no-trigger-close">
           <div className="contact-us">
             <span><a href={this.prepareEmail()}>{t('Contact Us')}</a></span>
