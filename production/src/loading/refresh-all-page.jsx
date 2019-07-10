@@ -116,7 +116,9 @@ export class _RefreshAllPage extends Component {
           this.state.results.map((res) =>
             <div className="result-container" key={res.key}>
               {this.getIcon(res)}
-              <span title={res.name} className="report-name">{res.name}</span>
+              <Popover overlayClassName="title-tooltip" placement="topLeft" content={res.name}>
+                <span className="report-name">{res.name}</span>
+              </Popover>
             </div>)
         }
       </div>

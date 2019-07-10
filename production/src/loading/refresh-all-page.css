@@ -105,6 +105,11 @@
 
 .tooltip-card .ant-popover-inner .ant-popover-inner-content {
     background-color: #fff;
+    text-align: left;
+}
+
+.title-tooltip.ant-popover-placement-topLeft>.ant-popover-content>.ant-popover-arrow {
+    border-color: #404040;
 }
 
 .ant-popover-inner-content {
