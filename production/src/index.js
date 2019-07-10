@@ -1,3 +1,4 @@
+import 'focus-visible/dist/focus-visible';
 import 'core-js';
 import 'proxy-polyfill';
 import React from 'react';
