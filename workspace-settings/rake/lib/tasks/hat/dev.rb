@@ -85,8 +85,8 @@ def update_package_json(working_dir)
   package_json_path ="#{working_dir}/production/package.json"
   data = JSON.parse(File.read(package_json_path))
   #US192297 modify package.json file to add the version information
-  if data.key?("version")
-    data["version"] = Common::Version.application_version
+  if data.key?("build")
+    data["build"] = Common::Version.application_version
   end
   
   File.open(package_json_path,"w") do |f|
@@ -263,7 +263,7 @@ def handle_file(compare_obj, file, pack_name,metric_name)
     compare_obj["All files"]["packages"][pack_name]["files"][file_name][metric_name]["total_lines"]+=1
     compare_obj["All files"]["packages"][pack_name][metric_name]["total_lines"] +=1
     compare_obj["All files"][metric_name]["total_lines"]+=1
-    if line["count"] == "0" 
+    if line["count"] == "0"
       compare_obj["All files"]["packages"][pack_name]["files"][file_name][metric_name]["uncover"].push(line["num"])
     else
       compare_obj["All files"]["packages"][pack_name]["files"][file_name][metric_name]["cov_lines"]+=1
