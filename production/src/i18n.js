@@ -66,70 +66,73 @@ moment.locale('zh-TW', {
   },
 });
 
-i18n
-    .use(XHR)
-    .use(initReactI18next) // passes i18n down to react-i18next
-    .init({
-      resources: {
-        'en-US': {
-          common: enCommon,
-        },
-        'de-DE': {
-          common: deCommon,
-        },
-        'zh-CN': {
-          common: zhCNCommon,
-        },
-        'fr-FR': {
-          common: frCommon,
-        },
-        'es-ES': {
-          common: esCommon,
-        },
-        'it-IT': {
-          common: itCommon,
-        },
-        'zh-TW': {
-          common: zhTWCommon,
-        },
-        'ko-KR': {
-          common: koCommon,
-        },
-        'pt-BR': {
-          common: ptCommon,
-        },
-        'nl-NL': {
-          common: nlCommon,
-        },
-        'sv-SE': {
-          common: svCommon,
-        },
-        'ja-JP': {
-          common: jaCommon,
-        },
-        'da-DK': {
-          common: daCommon,
-        },
-      },
-      saveMissing: true,
-      saveMissingTo: 'all',
-      lng: 'en-US',
-      fallbackLng: 'en-US',
-      load: 'all',
-      keySeparator: false, // we do not use keys in form messages.welcome
+const config = {
+  resources: {
+    'en-US': {
+      common: enCommon,
+    },
+    'de-DE': {
+      common: deCommon,
+    },
+    'zh-CN': {
+      common: zhCNCommon,
+    },
+    'fr-FR': {
+      common: frCommon,
+    },
+    'es-ES': {
+      common: esCommon,
+    },
+    'it-IT': {
+      common: itCommon,
+    },
+    'zh-TW': {
+      common: zhTWCommon,
+    },
+    'ko-KR': {
+      common: koCommon,
+    },
+    'pt-BR': {
+      common: ptCommon,
+    },
+    'nl-NL': {
+      common: nlCommon,
+    },
+    'sv-SE': {
+      common: svCommon,
+    },
+    'ja-JP': {
+      common: jaCommon,
+    },
+    'da-DK': {
+      common: daCommon,
+    },
+  },
+  lng: 'en-US',
+  fallbackLng: 'en-US',
+  load: 'all',
+  keySeparator: false, // we do not use keys in form messages.welcome
 
-      interpolation: {
-        escapeValue: false, // react already safes from xss
-        format: function(value, format, lng) {
-          if (value instanceof Date) return moment(value).format(format);
-          return value;
-        },
-      },
-      debug: process.env.NODE_ENV !== 'production',
-      backend: {
-        addPath: 'https://10.23.6.59/office',
-      },
-    });
+  interpolation: {
+    escapeValue: false, // react already safes from xss
+    format: function(value, format, lng) {
+      if (value instanceof Date) return moment(value).format(format);
+      return value;
+    },
+  },
+  debug: process.env.NODE_ENV === 'development',
+};
+
+if (process.env.NODE_ENV === 'development') {
+  config.backend = {addPath: 'https://10.23.6.59/office'};
+  config.saveMissing = true;
+  config.saveMissingTo = 'en-US';
+  i18n.use(XHR);
+}
+
+i18n
+    .use(initReactI18next) // passes i18n down to react-i18next
+    .init(config);
 
 i18n.on('languageChanged', (lng) => moment.locale(lng));
 

@@ -112,7 +112,7 @@ const exportToResourceFile = async function(outputFileFolder) {
   console.log(`Completed exporting all resources files to ${outputFileFolder}!`);
 };
 
-exportToResourceFile('./locales/');
+exportToResourceFile('./src/locales/');
 
 // module.exports = {
 //     exportToResourceFile,
