@@ -12,10 +12,10 @@ const EXCEL_COLUMN_LIMIT = 16384;
 const OBJECT_TYPE = '3'; // both reports and cubes are of type 3
 
 class MstrObjectRestService {
-  async getProjectContent(envUrl, authToken, projectId,
+  getProjectContent(envUrl, authToken, projectId,
       folderType = sharedFolderIdType) {
     const fullPath = `${envUrl}/folders/preDefined/${folderType}`;
-    return await moduleProxy.request
+    return moduleProxy.request
         .get(fullPath)
         .set('x-mstr-authtoken', authToken)
         .set('x-mstr-projectid', projectId)
@@ -28,9 +28,9 @@ class MstrObjectRestService {
         });
   }
 
-  async getFolderContent(envUrl, authToken, projectId, folderId) {
+  getFolderContent(envUrl, authToken, projectId, folderId) {
     const fullPath = `${envUrl}/folders/${folderId}`;
-    return await moduleProxy.request
+    return moduleProxy.request
         .get(fullPath)
         .set('x-mstr-authtoken', authToken)
         .set('x-mstr-projectid', projectId)
@@ -43,8 +43,8 @@ class MstrObjectRestService {
         });
   }
 
-  async _getInstanceId(fullPath, authToken, projectId, body) { // Used for unit testing, apparently
-    return await moduleProxy.request
+  _getInstanceId(fullPath, authToken, projectId, body) { // Used for unit testing, apparently
+    return moduleProxy.request
         .post(fullPath)
         .set('x-mstr-authtoken', authToken)
         .set('x-mstr-projectid', projectId)
@@ -61,8 +61,8 @@ class MstrObjectRestService {
         });
   }
 
-  async _createInstance(fullPath, authToken, projectId, body) {
-    return await moduleProxy.request
+  _createInstance(fullPath, authToken, projectId, body) {
+    return moduleProxy.request
         .post(fullPath)
         .set('x-mstr-authtoken', authToken)
         .set('x-mstr-projectid', projectId)
@@ -73,8 +73,8 @@ class MstrObjectRestService {
         });
   }
 
-  async _getInstance(fullPath, authToken, projectId, body) {
-    return await moduleProxy.request
+  _getInstance(fullPath, authToken, projectId, body) {
+    return moduleProxy.request
         .get(fullPath)
         .set('x-mstr-authtoken', authToken)
         .set('x-mstr-projectid', projectId)
@@ -85,8 +85,8 @@ class MstrObjectRestService {
         });
   }
 
-  async _getDossierInstanceDefinition(fullPath, authToken, projectId, body) {
-    return await moduleProxy.request
+  _getDossierInstanceDefinition(fullPath, authToken, projectId, body) {
+    return moduleProxy.request
         .get(fullPath)
         .set('x-mstr-authtoken', authToken)
         .set('x-mstr-projectid', projectId)
@@ -113,14 +113,14 @@ class MstrObjectRestService {
     return {instanceId, rows, columns, mstrTable};
   }
 
-  async getObjectDefinition(objectId, projectId, isReport = true) {
+  getObjectDefinition(objectId, projectId, isReport = true) {
     const storeState = reduxStore.getState();
     const envUrl = storeState.sessionReducer.envUrl;
     const authToken = storeState.sessionReducer.authToken;
     const objectType = isReport ? 'reports' : 'cubes';
     const fullPath = `${envUrl}/${objectType}/${objectId}`;
 
-    return await moduleProxy.request
+    return moduleProxy.request
         .get(fullPath)
         .set('x-mstr-authtoken', authToken)
         .set('x-mstr-projectid', projectId)
@@ -133,13 +133,13 @@ class MstrObjectRestService {
         });
   }
 
-  async getObjectInfo(objectId, projectId, isReport = true) {
+  getObjectInfo(objectId, projectId, isReport = true) {
     const storeState = reduxStore.getState();
     const envUrl = storeState.sessionReducer.envUrl;
     const authToken = storeState.sessionReducer.authToken;
     const fullPath = `${envUrl}/objects/${objectId}?type=${OBJECT_TYPE}`;
 
-    return await moduleProxy.request
+    return moduleProxy.request
         .get(fullPath)
         .set('x-mstr-authtoken', authToken)
         .set('x-mstr-projectid', projectId)
@@ -152,25 +152,25 @@ class MstrObjectRestService {
         });
   }
 
-  async createInstance(objectId, projectId, isReport = true, dossierData, body = {}, limit = 1) {
+  createInstance(objectId, projectId, isReport = true, dossierData, body = {}, limit = 1) {
     try {
       const storeState = reduxStore.getState();
       const envUrl = storeState.sessionReducer.envUrl;
       const authToken = storeState.sessionReducer.authToken;
       const fullPath = this._getFullPath(dossierData, envUrl, limit, isReport, objectId);
-      return await this._createInstance(fullPath, authToken, projectId, body);
+      return this._createInstance(fullPath, authToken, projectId, body);
     } catch (error) {
       throw error instanceof OutsideOfRangeError ? error : errorService.errorRestFactory(error);
     }
   }
 
-  async getInstance(objectId, projectId, isReport = true, dossierData, body = {}, instanceId, limit = 1) {
+  getInstance(objectId, projectId, isReport = true, dossierData, body = {}, instanceId, limit = 1) {
     try {
       const storeState = reduxStore.getState();
       const envUrl = storeState.sessionReducer.envUrl;
       const authToken = storeState.sessionReducer.authToken;
       const fullPath = this._getFullPath(dossierData, envUrl, limit, isReport, objectId, instanceId);
-      return await this._getInstance(fullPath, authToken, projectId, body);
+      return this._getInstance(fullPath, authToken, projectId, body);
     } catch (error) {
       throw error instanceof OutsideOfRangeError ? error : errorService.errorRestFactory(error);
     }
@@ -204,12 +204,12 @@ class MstrObjectRestService {
     return path;
   }
 
-  async isPrompted(objectId, projectId) {
+  isPrompted(objectId, projectId) {
     const storeState = reduxStore.getState();
     const envUrl = storeState.sessionReducer.envUrl;
     const authToken = storeState.sessionReducer.authToken;
     const fullPath = `${envUrl}/reports/${objectId}/prompts`;
-    return await moduleProxy.request
+    return moduleProxy.request
         .get(fullPath)
         .set('x-mstr-authtoken', authToken)
         .set('X-MSTR-ProjectID', projectId)
@@ -222,7 +222,7 @@ class MstrObjectRestService {
         });
   }
 
-  async answerPrompts(objectId, projectId, instanceId, promptsAnswers) {
+  answerPrompts(objectId, projectId, instanceId, promptsAnswers) {
     const storeState = reduxStore.getState();
     const envUrl = storeState.sessionReducer.envUrl;
     const authToken = storeState.sessionReducer.authToken;
@@ -241,12 +241,11 @@ class MstrObjectRestService {
         });
   }
 
-  async deleteDossierInstance(projectId, objectId, instanceId) {
+  deleteDossierInstance(projectId, objectId, instanceId) {
     const storeState = reduxStore.getState();
     const envUrl = storeState.sessionReducer.envUrl;
     const authToken = storeState.sessionReducer.authToken;
     const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}`;
-
     return moduleProxy.request
         .delete(fullPath)
         .set('x-mstr-authtoken', authToken)
