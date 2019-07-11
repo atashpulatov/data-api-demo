@@ -82,8 +82,8 @@ def update_package_json(working_dir)
   package_json_path ="#{working_dir}/production/package.json"
   data = JSON.parse(File.read(package_json_path))
   #US192297 modify package.json file to add the version information
-  if data.key?("version")
-    data["version"] = Common::Version.application_version
+  if data.key?("build")
+    data["build"] = Common::Version.application_version
   end
   File.open(package_json_path,"w") do |f|
     f.write(JSON.pretty_generate(data)) #generate beautified json
@@ -99,7 +99,7 @@ def init_base_branch_repo(branch_name)
   shell_command! "git checkout #{branch_name}", cwd:base_repo_path
   shell_command! 'git reset --hard HEAD', cwd:base_repo_path
   shell_command! 'git clean -dfx', cwd:base_repo_path
-  shell_command! "git pull origin #{branch_name}", cwd:base_repo_path 
+  shell_command! "git pull origin #{branch_name}", cwd:base_repo_path
 end
 
 def base_repo_path
@@ -177,8 +177,8 @@ def write_row_to_compare_table(mf, name, node)
   current_uncover = get_uncover(node["current_metric"])
   contains_diff = compare_ratio(base_stmts, current_stmts) || contains_diff
   contains_diff = compare_ratio(base_branch,current_branch) || contains_diff
-  contains_diff = compare_ratio(base_func,current_func) || contains_diff  
-  contains_diff = compare_ratio(base_line,current_line) || contains_diff  
+  contains_diff = compare_ratio(base_func,current_func) || contains_diff
+  contains_diff = compare_ratio(base_line,current_line) || contains_diff
   if contains_diff
     mf.write("<tr><td>#{name}</td><td>#{base_stmts[0]}</td><td>#{current_stmts[0]}</td>  <td>#{base_branch[0]}</td><td>#{current_branch[0]}</td>  <td>#{base_func[0]}</td><td>#{current_func[0]}</td>  <td>#{base_line[0]}</td><td>#{current_line[0]}</td>  <td>#{base_uncover}</td><td>#{current_uncover}</td></tr>")
   end
@@ -199,7 +199,7 @@ def compare_ratio(base, current)
     current[0]+="↓"
   end
   return true
-  
+
 end
 def get_uncover(node)
   if node.nil?
@@ -257,7 +257,7 @@ def handle_file(compare_obj, file, pack_name,metric_name)
     compare_obj["All files"]["packages"][pack_name]["files"][file_name][metric_name]["total_lines"]+=1
     compare_obj["All files"]["packages"][pack_name][metric_name]["total_lines"] +=1
     compare_obj["All files"][metric_name]["total_lines"]+=1
-    if line["count"] == "0" 
+    if line["count"] == "0"
       compare_obj["All files"]["packages"][pack_name]["files"][file_name][metric_name]["uncover"].push(line["num"])
     else
       compare_obj["All files"]["packages"][pack_name]["files"][file_name][metric_name]["cov_lines"]+=1

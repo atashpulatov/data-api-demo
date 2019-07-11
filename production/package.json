@@ -1,6 +1,7 @@
 {
   "name": "mstr-office",
   "version": "0.1.0",
+  "build": "",
   "private": true,
   "homepage": ".",
   "dependencies": {
