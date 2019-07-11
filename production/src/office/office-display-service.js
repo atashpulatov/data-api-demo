@@ -193,7 +193,7 @@ class OfficeDisplayService {
     }
 
     const officeTable = sheet.tables.add(tableRange, hasHeaders);
-    this._styleTable(officeTable, TABLE_HEADER_FONT_COLOR, TABLE_HEADER_FILL_COLOR);
+    hasHeaders && this._styleHeaders(officeTable, TABLE_HEADER_FONT_COLOR, TABLE_HEADER_FILL_COLOR);
     try {
       officeTable.load('name');
       officeTable.name = officeTableId;
@@ -244,7 +244,7 @@ class OfficeDisplayService {
     }
   }
 
-  _styleTable = (officeTable, fontColor, fillColor) => {
+  _styleHeaders = (officeTable, fontColor, fillColor) => {
     officeTable.style = DEFAULT_TABLE_STYLE;
     const headerRowRange = officeTable.getHeaderRowRange();
     headerRowRange.format.fill.color = fillColor;
