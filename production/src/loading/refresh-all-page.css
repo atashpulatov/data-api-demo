@@ -108,8 +108,8 @@
     text-align: left;
 }
 
-.title-tooltip.ant-popover-placement-topLeft>.ant-popover-content>.ant-popover-arrow {
-    border-color: #404040;
+.tooltip-card.ant-popover-placement-topLeft>.ant-popover-content>.ant-popover-arrow {
+    border-color: #fff;
 }
 
 .ant-popover-inner-content {
