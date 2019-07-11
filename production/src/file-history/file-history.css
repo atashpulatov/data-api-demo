@@ -14,26 +14,22 @@ span.file-icons {
     justify-content: space-around;
 }
 
-.add-data-btn {
-    background: #FFFFFF;
-    border: 1px solid #1C91DC;
+button.add-data-btn {
     border-radius: 4px;
     max-width: 70%;
     height: 25px;
-    margin-bottom: 16px;
-    font-size: 12px;
-    color: #1C91DC;
+    margin: 10px 0px 10px 10px;
 }
 
-.add-data-btn:hover,
-.add-data-btn:focus {
+
+button.add-data-btn:focus {
     background: rgba(28, 145, 220, 0.05);
     border: 1px solid #1C91DC;
     border-radius: 4px;
     color: #1C91DC;
 }
 
-.add-data-btn:focus {
+button.add-data-btn:focus {
     background: rgba(28, 145, 220, 0.20);
 }
 
@@ -50,7 +46,7 @@ span.file-icons {
     font-size: 12px;
     color: #1C91DC;
     padding: 1px;
-    margin-right: 42px;
+    margin: 10px 52px 10px 0px;
 }
 
 .refresh-all-btn .mstr-icon,
@@ -67,7 +63,7 @@ span.file-icons {
     background: #FFFFFF;
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.20);
     border-radius: 2px;
-    margin-bottom: 10px;
+    margin: 5px 10px 10px 10px;
     padding-top: 16px;
     padding-bottom: 16px;
 }
@@ -203,4 +199,10 @@ span.file-icons {
 
 .show-data-btn {
     width: 125px;
+}
+
+.tables-container {
+    overflow-y: auto;
+    width: 100%;
+    height: calc(100% - 85px);
 }

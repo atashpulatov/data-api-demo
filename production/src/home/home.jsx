@@ -9,10 +9,14 @@ import {withTranslation} from 'react-i18next';
 
 export class _Home extends Component {
   componentDidMount = async () => {
-    await officeApiHelper.loadExistingReportBindingsExcel();
-    homeHelper.saveLoginValues();
-    homeHelper.saveTokenFromCookies();
-    sessionHelper.disableLoading();
+    try {
+      await officeApiHelper.loadExistingReportBindingsExcel();
+      homeHelper.saveLoginValues();
+      homeHelper.saveTokenFromCookies();
+      sessionHelper.disableLoading();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   componentDidUpdate() {

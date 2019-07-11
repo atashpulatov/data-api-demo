@@ -1,3 +1,4 @@
+import 'focus-visible/dist/focus-visible';
 import 'core-js';
 import 'proxy-polyfill';
 import React from 'react';
@@ -52,22 +53,6 @@ function goReact() {
   );
 }
 
-/**
- * This function adds a # value to iframe URL and modifies it n times
- * This should prevent navigating back to login page via browser 'Back' button
- * @param {number} count Amount of attempts
- */
-function disableBackNavigation(count) {
-  if (count) {
-    window.setTimeout(function() {
-      window.location.hash = count;
-      disableBackNavigation(count - 1);
-    }, 50);
-  }
-}
-
-// goReact();
-disableBackNavigation(10);
 officeInitialize();
 
 // If you want your app to work offline and load faster, you can change
