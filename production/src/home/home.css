@@ -130,7 +130,7 @@ hr {
 }
 
 .ant-tabs.tabs-container .ant-tabs-content {
-  height: 100%;
+  height: calc(100% - 50px);
   display: block;
   overflow: hidden;
 }
