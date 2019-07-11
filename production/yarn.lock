@@ -6983,10 +6983,10 @@ ms@^2.1.1:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.1.tgz#30a5864eb3ebb0a66f2ebe6d727af06a09d86e0a"
   integrity sha512-tgp+dl5cGk28utYktBsrFqA7HKgrhgPsg6Z/EfhWI4gl1Hwq8B/GmY/0oXZ6nF8hDVesS/FpnYaD/kOWhYQvyg==
 
-mstr-react-library@1.1.19:
-  version "1.1.19"
-  resolved "http://nexus.internal.microstrategy.com:8081/repository/npm-group/mstr-react-library/-/mstr-react-library-1.1.19.tgz#dfd9dd5f623e3e47692987f7e550c7bce1040dcc"
-  integrity sha512-Z5sypYHzXfCgOZqjkU+0PbEWWrtfqxV09+veykh1hOm4voD3+eZpeuTYd2JUhEKyG7mLGIouzpv3+gUJkwuo6Q==
+mstr-react-library@1.1.22:
+  version "1.1.22"
+  resolved "http://nexus.internal.microstrategy.com:8081/repository/npm-group/mstr-react-library/-/mstr-react-library-1.1.22.tgz#2521d0c71df31b24bbbcc216c84ca02339ea98cb"
+  integrity sha512-Lv/2NQ85PIqWFj+zUsViurAB9IP1obZzk07f2pESeCUuw+IPQqW6pezvY5uNVtthqBXHQQEyEu+872KHRm07wQ==
   dependencies:
     antd "^3.13.1"
     focus-visible "^5.0.1"
