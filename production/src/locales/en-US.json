@@ -134,5 +134,7 @@
   "Contact Us": "Contact Us",
   "Version {{APP_VERSION}}": "Version {{APP_VERSION}}",
   "Please don’t change the text below. Type your message above this line.": "Please don’t change the text below. Type your message above this line.",
-  "Request error - cannot retrieve report data": "Request error - cannot retrieve report data"
+  "Request error - cannot retrieve report data": "Request error - cannot retrieve report data",
+  "Clear data": "Clear data",
+  "Data preview displays 10 rows of data only.": "Data preview displays 10 rows of data only."
 }

@@ -1,4 +1,5 @@
 import i18n from 'i18next';
+import XHR from 'i18next-xhr-backend';
 import {initReactI18next} from 'react-i18next';
 import moment from 'moment';
 import enCommon from './locales/en-US';
@@ -66,6 +67,7 @@ moment.locale('zh-TW', {
 });
 
 i18n
+    .use(XHR)
     .use(initReactI18next) // passes i18n down to react-i18next
     .init({
       resources: {
@@ -124,6 +126,9 @@ i18n
         },
       },
       debug: process.env.NODE_ENV !== 'production',
+      backend: {
+        addPath: 'https://10.23.6.59/office',
+      },
     });
 
 i18n.on('languageChanged', (lng) => moment.locale(lng));

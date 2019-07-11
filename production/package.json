@@ -149,6 +149,7 @@
     "enzyme-adapter-react-16": "^1.6.0",
     "eslint-config-google": "^0.11.0",
     "eslint-plugin-react-hooks": "^1.6.0",
+    "i18next-xhr-backend": "^3.0.0",
     "jest-localstorage-mock": "^2.2.0",
     "less": "^3.9.0",
     "less-loader": "^5.0.0",
