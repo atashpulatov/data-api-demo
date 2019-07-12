@@ -51,7 +51,6 @@ export class _Header extends Component {
       this.props.reportArray.forEach((report) => {
         officeApiHelper.deleteObjectTableBody(excelContext, report);
       });
-      await excelContext.sync();
       this.props.toggleSecuredFlag(true);
     } catch (error) {
       errorService.handleOfficeError(error);

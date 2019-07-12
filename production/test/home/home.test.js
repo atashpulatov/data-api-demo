@@ -305,7 +305,6 @@ describe('Home', () => {
       // then
       await expect(mockgetContext).toBeCalled();
       expect(mockDeleteBody).toHaveBeenCalledTimes(6);
-      await expect(context.sync).toBeCalled();
       expect(mockToggleSecured).toBeCalled();
     });
     it('should display active Secure Data button when some reports are imported and isSecured is false', () => {
