@@ -152,13 +152,13 @@ class MstrObjectRestService {
         });
   }
 
-  createInstance(objectId, projectId, isReport = true, dossierData, body = {}, limit = 1) {
+  async createInstance(objectId, projectId, isReport = true, dossierData, body = {}, limit = 1) {
     try {
       const storeState = reduxStore.getState();
       const envUrl = storeState.sessionReducer.envUrl;
       const authToken = storeState.sessionReducer.authToken;
       const fullPath = this._getFullPath(dossierData, envUrl, limit, isReport, objectId);
-      return this._createInstance(fullPath, authToken, projectId, body);
+      return await this._createInstance(fullPath, authToken, projectId, body);
     } catch (error) {
       throw error instanceof OutsideOfRangeError ? error : errorService.errorRestFactory(error);
     }
