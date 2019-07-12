@@ -276,6 +276,7 @@ describe('OfficeDisplayService', () => {
         activate: jest.fn(),
       };
       jest.spyOn(officeDisplayService, '_checkRangeValidity').mockReturnValueOnce({});
+      jest.spyOn(officeDisplayService, '_styleHeaders').mockReturnValueOnce({});
       jest.spyOn(officeApiHelper, 'getRange').mockReturnValueOnce('A1:B5');
 
       const getActiveWorksheetMock = jest.fn();
@@ -323,6 +324,7 @@ describe('OfficeDisplayService', () => {
         worksheet: mockedWorksheet,
       };
       jest.spyOn(officeDisplayService, '_checkRangeValidity').mockReturnValueOnce({});
+      jest.spyOn(officeDisplayService, '_styleHeaders').mockReturnValueOnce({});
       jest.spyOn(officeApiHelper, 'getRange').mockReturnValueOnce('A1:B5');
 
       const getActiveWorksheetMock = jest.fn();
