@@ -29,7 +29,7 @@ class OfficeApiHelper {
       (headerCount -= firstNumber) >= 0;
       firstNumber = secondNumber, secondNumber *= ALPHABET_RANGE_END) {
       endColumn = String.fromCharCode(parseInt(
-        (headerCount % secondNumber) / firstNumber)
+          (headerCount % secondNumber) / firstNumber)
         + ASCII_CAPITAL_LETTER_INDEX)
         + endColumn;
     }
@@ -74,8 +74,8 @@ class OfficeApiHelper {
   getBindingRange = (context, bindingId) => {
     try {
       return context.workbook.bindings
-        .getItem(bindingId).getTable()
-        .getRange();
+          .getItem(bindingId).getTable()
+          .getRange();
     } catch (error) {
       throw errorService.errorOfficeFactory(error);
     }
@@ -83,7 +83,7 @@ class OfficeApiHelper {
 
   getTable = (context, bindingId) => {
     return context.workbook.bindings
-      .getItem(bindingId).getTable();
+        .getItem(bindingId).getTable();
   }
 
   getExcelContext = async () => {
@@ -203,21 +203,27 @@ class OfficeApiHelper {
 
   bindNamedItem = (namedItem, bindingId) => {
     return new Promise((resolve, reject) => Office.context.document.bindings.addFromNamedItemAsync(
-      namedItem, 'table', {id: bindingId}, (result) => {
-        if (result.status === 'succeeded') {
-          console.log('Added new binding with type: ' + result.value.type + ' and id: ' + result.value.id);
-          resolve();
-        } else {
-          console.error('Error: ' + result.error.message);
-          reject(result.error);
-        }
-      }));
+        namedItem, 'table', {id: bindingId}, (result) => {
+          if (result.status === 'succeeded') {
+            console.log('Added new binding with type: ' + result.value.type + ' and id: ' + result.value.id);
+            resolve();
+          } else {
+            console.error('Error: ' + result.error.message);
+            reject(result.error);
+          }
+        }));
   }
 
-  deleteObjectTableBody = (context, object) => {
-    const tableObject = context.workbook.tables.getItem(object.bindId);
-    const tableRange = tableObject.getDataBodyRange();
-    tableRange.clear(Excel.ClearApplyTo.contents);
+  deleteObjectTableBody = async (context, object) => {
+    try {
+      const excelContext = await officeApiHelper.getExcelContext();
+      const tableObject = context.workbook.tables.getItem(object.bindId);
+      const tableRange = tableObject.getDataBodyRange();
+      tableRange.clear(Excel.ClearApplyTo.contents);
+      await excelContext.sync();
+    } catch (error) {
+      console.error('Error: ' + error);
+    }
   }
 
   /**
