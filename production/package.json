@@ -75,7 +75,7 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node src/CompileStrings.js && node scripts/build.js",
-    "build-dev": "src/CompileStrings.js && node scripts/build-dev.js",
+    "build-dev": "node src/CompileStrings.js && node scripts/build-dev.js",
     "test": "node scripts/test.js"
   },
   "eslintConfig": {
