@@ -10,6 +10,10 @@ import {PopupTypeEnum} from '../home/popup-type-enum';
 import {NOT_SUPPORTED_NO_ATTRIBUTES, ALL_DATA_FILTERED_OUT, TABLE_OVERLAP, ERROR_POPUP_CLOSED} from '../error/constants';
 import {OverlappingTablesError} from '../error/overlapping-tables-error';
 
+const DEFAULT_TABLE_STYLE = 'TableStyleLight11';
+const TABLE_HEADER_FONT_COLOR = '#000000';
+const TABLE_HEADER_FILL_COLOR = '#ffffff';
+
 class OfficeDisplayService {
   printObject = async (options) => {
     const {isRefreshAll = false, isPrompted, objectId, projectId, isReport} = options;
@@ -30,7 +34,7 @@ class OfficeDisplayService {
     }
   }
 
-  _printObject = async ({objectId, projectId, isReport = true, selectedCell, bindingId, isRefresh, dossierData, body, isCrosstab, isPrompted, promptAnswers}) => {
+  _printObject = async ({objectId, projectId, isReport = true, selectedCell, bindingId, isRefresh, dossierData, body, isCrosstab, isPrompted, promptsAnswers}) => {
     let officeTable;
     let newOfficeTableId;
     let shouldFormat;
@@ -49,7 +53,13 @@ class OfficeDisplayService {
 
       // Get mstr instance definition
       console.time('Instance definition');
-      const instanceDefinition = await mstrObjectRestService.getInstanceDefinition(objectId, projectId, isReport, dossierData, body);
+      let instanceDefinition = await mstrObjectRestService.createInstance(objectId, projectId, isReport, dossierData, body);
+
+      // Status 2 = report has open prompts to be answered before data can be returned
+      if (instanceDefinition.status === 2) {
+        instanceDefinition = await this._answerPrompts(instanceDefinition, objectId, projectId, promptsAnswers, isReport, dossierData, body);
+      }
+
       console.timeEnd('Instance definition');
 
       // Check if instance returned data
@@ -76,7 +86,7 @@ class OfficeDisplayService {
       // Save to store
       bindingId = bindingId || newOfficeTableId;
       await officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
-      this._addToStore({isRefresh, instanceDefinition, bindingId, projectId, envUrl, body, objectType, isCrosstab, isPrompted, promptAnswers});
+      this._addToStore({isRefresh, instanceDefinition, bindingId, projectId, envUrl, body, objectType, isCrosstab, isPrompted, promptsAnswers});
 
       console.timeEnd('Total');
       reduxStore.dispatch({
@@ -110,7 +120,7 @@ class OfficeDisplayService {
         objectType: report.objectType,
         isCrosstab: report.isCrosstab,
         isPrompted: report.isPrompted,
-        promptAnswers: report.promptAnswers,
+        promptsAnswers: report.promptsAnswers,
       },
     });
     officeStoreService.preserveReport(report);
@@ -190,6 +200,7 @@ class OfficeDisplayService {
     }
 
     const officeTable = sheet.tables.add(tableRange, hasHeaders);
+    hasHeaders && this._styleHeaders(officeTable, TABLE_HEADER_FONT_COLOR, TABLE_HEADER_FILL_COLOR);
     try {
       officeTable.load('name');
       officeTable.name = officeTableId;
@@ -250,6 +261,13 @@ class OfficeDisplayService {
     }
   }
 
+  _styleHeaders = (officeTable, fontColor, fillColor) => {
+    officeTable.style = DEFAULT_TABLE_STYLE;
+    const headerRowRange = officeTable.getHeaderRowRange();
+    headerRowRange.format.fill.color = fillColor;
+    headerRowRange.format.font.color = fontColor;
+  }
+
   /**
    * Function closes popup; used when  importing report
    * it swallows error from office if dialog has been closed by user
@@ -269,7 +287,7 @@ class OfficeDisplayService {
     }
   }
 
-  _addToStore({isRefresh, instanceDefinition, bindingId, projectId, envUrl, body, objectType, isCrosstab, isPrompted, promptAnswers}) {
+  _addToStore({isRefresh, instanceDefinition, bindingId, projectId, envUrl, body, objectType, isCrosstab, isPrompted, promptsAnswers}) {
     if (!isRefresh) {
       this.addReportToStore({
         id: instanceDefinition.mstrTable.id,
@@ -282,7 +300,7 @@ class OfficeDisplayService {
         objectType,
         isPrompted,
         isCrosstab,
-        promptAnswers,
+        promptsAnswers,
       });
     }
   }
@@ -401,6 +419,16 @@ class OfficeDisplayService {
 
   _getRowsArray = (rows, headers) => {
     return rows.map((item) => headers.map((header) => item[header]));
+  }
+
+  async _answerPrompts(instanceDefinition, objectId, projectId, promptsAnswers, isReport, dossierData, body) {
+    let count = 0;
+    while (instanceDefinition.status === 2) {
+      await mstrObjectRestService.answerPrompts(objectId, projectId, instanceDefinition.instanceId, promptsAnswers[count]);
+      instanceDefinition = await mstrObjectRestService.getInstance(objectId, projectId, isReport, dossierData, body, instanceDefinition.instanceId);
+      count++;
+    }
+    return instanceDefinition;
   }
 }
 
