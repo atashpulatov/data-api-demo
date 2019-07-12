@@ -238,7 +238,7 @@ hr {
 }
 
 .settings-list li {
-  padding: 3px 7px 0 7px;
+  padding: 3px 7px 1px 7px;
   font-size: 12px;
   white-space: nowrap;
   text-overflow: ellipsis;

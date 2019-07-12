@@ -57,6 +57,7 @@ code {
 }
 
 *:focus.focus-visible {
+    outline: #5E9ED6 auto 3px;
     outline: -webkit-focus-ring-color auto 5px;
     color: initial;
     border: initial;
@@ -68,6 +69,7 @@ code {
 }
 
 .ant-radio-input.focus-visible+.ant-radio-inner {
+    outline: #5E9ED6 auto 3px;
     outline: -webkit-focus-ring-color auto 5px;
 }
 
