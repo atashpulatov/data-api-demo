@@ -191,7 +191,7 @@ describe('MstrObjectRestService', () => {
       expect(result).rejects.toThrow();
     });
   });
-  describe('getInstanceDefinition', () => {
+  describe('createInstance', () => {
     beforeEach(() => {
       reduxStore.dispatch({
         type: sessionProperties.actions.logIn,
@@ -219,7 +219,7 @@ describe('MstrObjectRestService', () => {
       const dossierData = null;
       const isReport = true;
       // when
-      const result = await mstrObjectRestService.getInstanceDefinition(
+      const result = await mstrObjectRestService.createInstance(
           objectId,
           projectId,
           isReport,
@@ -238,7 +238,7 @@ describe('MstrObjectRestService', () => {
       const expectedReportRows = 51;
       const expectedReportCols = 4;
       // when
-      const result = await mstrObjectRestService.getInstanceDefinition(
+      const result = await mstrObjectRestService.createInstance(
           objectId,
           projectId,
           isReport,
@@ -259,7 +259,7 @@ describe('MstrObjectRestService', () => {
         authToken: wrongAuthToken,
       });
       // when
-      const result = mstrObjectRestService.getInstanceDefinition(
+      const result = mstrObjectRestService.createInstance(
           objectId,
           projectId,
           isReport,
@@ -278,7 +278,7 @@ describe('MstrObjectRestService', () => {
       // given
       const incorrectObjectId = 'abc123';
       // when
-      const result = mstrObjectRestService.getInstanceDefinition(
+      const result = mstrObjectRestService.createInstance(
           incorrectObjectId,
           projectId,
           isReport,
@@ -297,7 +297,7 @@ describe('MstrObjectRestService', () => {
       // given
       const incorrectDossierData = 'abc123';
       // when
-      const result = mstrObjectRestService.getInstanceDefinition(
+      const result = mstrObjectRestService.createInstance(
           objectId,
           projectId,
           isReport,
@@ -316,7 +316,7 @@ describe('MstrObjectRestService', () => {
       // given
       const wrongProjectId = 'incorrectProjectId';
       // when
-      const result = mstrObjectRestService.getInstanceDefinition(
+      const result = mstrObjectRestService.createInstance(
           objectId,
           wrongProjectId,
           isReport,

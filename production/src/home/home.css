@@ -78,7 +78,7 @@ hr {
 
 .get-started-container {
   text-align: center;
-  padding: 40px 40px;
+  padding: 40px 40px 10px 40px;
   color: #4D5154;
 }
 
@@ -130,9 +130,10 @@ hr {
 }
 
 .ant-tabs.tabs-container .ant-tabs-content {
-  height: 100%;
+  height: calc(100% - 50px);
   display: block;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .tabs-container .ant-tabs-ink-bar {
