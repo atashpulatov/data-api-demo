@@ -18,6 +18,7 @@ class OfficeDisplayService {
   printObject = async (options) => {
     const {isRefreshAll = false, isPrompted, objectId, projectId, isReport} = options;
     if (!isRefreshAll) {
+      // /Reports/getDefinition endpoint does not work for Reports with Object Prompt(?) so we're using /Object_Management/getObject instead
       const objectInfo = !!isPrompted ? await mstrObjectRestService.getObjectInfo(objectId, projectId, isReport) : await mstrObjectRestService.getObjectDefinition(objectId, projectId, isReport);
       reduxStore.dispatch({
         type: officeProperties.actions.preLoadReport,

@@ -95,7 +95,7 @@ export class _OfficeLoadedFile extends React.Component {
         </Col>
         <Col span={1} offset={1}>
           <Popover placement="bottom" content={t('Refresh Data')} mouseEnterDelay={1}>
-            {!isPrompted && <span className="loading-button-container"
+            {<span className="loading-button-container"
               onClick={this.refreshAction}>
               {!isLoading ? <MSTRIcon type='refresh' /> :
                 <img width='12px' height='12px' src={loadingSpinner} alt={t('Report loading icon')} />}
