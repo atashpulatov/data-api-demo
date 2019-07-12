@@ -136,5 +136,7 @@
   "Please don’t change the text below. Type your message above this line.": "Please don’t change the text below. Type your message above this line.",
   "Request error - cannot retrieve report data": "Request error - cannot retrieve report data",
   "Clear data": "Clear data",
-  "Data preview displays 10 rows of data only.": "Data preview displays 10 rows of data only."
+  "Data preview displays 10 rows of data only.": "Data preview displays 10 rows of data only.",
+  "More Items": "More Items",
+  "Date and time of last modification": "Date and time of last modification"
 }

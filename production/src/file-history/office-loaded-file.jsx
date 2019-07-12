@@ -81,9 +81,11 @@ export class _OfficeLoadedFile extends React.Component {
         </Col>
         <Col span={12} className="report-title">
           <RenameInput bindingId={bindingId} fileName={fileName} />
-          <div className="additional-data">{t('refreshed_date', {date: refreshDate})}</div>
+          <Popover placement="bottom" content={t('Date and time of last modification')} mouseEnterDelay={1}>
+            <div className="additional-data">{t('refreshed_date', {date: refreshDate})}</div>
+          </Popover>
         </Col>
-        <Col span={1} offset={2}>
+        <Col span={1} offset={2} style={{marginTop: '1px'}}>
           <Popover placement="bottom" content={t('Edit Data')} mouseEnterDelay={1}>
             {!isPrompted && <span className="loading-button-container"
               onClick={this.editAction}>
