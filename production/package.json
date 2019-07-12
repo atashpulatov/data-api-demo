@@ -40,7 +40,7 @@
     "mini-css-extract-plugin": "0.4.3",
     "moment": "^2.24.0",
     "mssql": "^5.1.0",
-    "mstr-react-library": "1.1.22",
+    "mstr-react-library": "1.1.23",
     "optimize-css-assets-webpack-plugin": "5.0.1",
     "pnp-webpack-plugin": "1.1.0",
     "postcss-flexbugs-fixes": "4.1.0",

@@ -7083,10 +7083,10 @@ mssql@^5.1.0:
     generic-pool "^3.6.1"
     tedious "^4.2.0"
 
-mstr-react-library@1.1.22:
-  version "1.1.22"
-  resolved "http://nexus.internal.microstrategy.com:8081/repository/npm-group/mstr-react-library/-/mstr-react-library-1.1.22.tgz#2521d0c71df31b24bbbcc216c84ca02339ea98cb"
-  integrity sha512-Lv/2NQ85PIqWFj+zUsViurAB9IP1obZzk07f2pESeCUuw+IPQqW6pezvY5uNVtthqBXHQQEyEu+872KHRm07wQ==
+mstr-react-library@1.1.23:
+  version "1.1.23"
+  resolved "http://nexus.internal.microstrategy.com:8081/repository/npm-group/mstr-react-library/-/mstr-react-library-1.1.23.tgz#2237d3e5fc23f6342e9ecd744ebdf52f9e399fc4"
+  integrity sha512-B0ktLxKYVNMPXc/X22HJW05b36ZkzG2GssehmC/q6cSfG8KvRtdOETvV9dmlvYLOvj8l3PVgZK8RZvD0r1dlaQ==
   dependencies:
     antd "^3.13.1"
     focus-visible "^5.0.1"
