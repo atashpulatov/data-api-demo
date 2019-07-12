@@ -68,14 +68,14 @@ describe('OfficeDisplayService', () => {
   });
 
   beforeEach(() => {
-    const changedMock = jest.spyOn(mstrObjectRestService, 'getInstanceDefinition').mockResolvedValue({
+    const changedMock = jest.spyOn(mstrObjectRestService, 'createInstance').mockResolvedValue({
       mstrTable: {
         rows: [],
       },
     });
     changedMock.mockRestore();
 
-    jest.spyOn(mstrObjectRestService, 'getInstanceDefinition')
+    jest.spyOn(mstrObjectRestService, 'createInstance')
         .mockResolvedValue(givenReport);
   });
 
@@ -89,7 +89,7 @@ describe('OfficeDisplayService', () => {
 
   it('should create instance when no instance id provided', async () => {
     // given
-    const getObjectDefinitionSpy = jest.spyOn(mstrObjectRestService, 'getInstanceDefinition');
+    const getObjectDefinitionSpy = jest.spyOn(mstrObjectRestService, 'createInstance');
     jest.spyOn(officeApiHelper, 'getSelectedCell').mockImplementationOnce(() => {});
     jest.spyOn(officeApiHelper, 'formatNumbers').mockImplementationOnce(() => {});
     jest.spyOn(officeApiHelper, 'formatTable').mockImplementationOnce(() => {});
@@ -111,7 +111,7 @@ describe('OfficeDisplayService', () => {
     const getObjectDefinitionSpy = jest.spyOn(mstrObjectRestService, 'getObjectDefinition').mockResolvedValue(givenBody);
     const runPopupSpy = jest.spyOn(popupController, 'runPopup');
     const printInside = jest.spyOn(officeDisplayService, '_printObject').mockImplementationOnce(() => {});
-    // {objectId, projectId, isReport = true, selectedCell, bindingId, isRefresh, dossierData, body, isPrompted, promptAnswers}
+    // {objectId, projectId, isReport = true, selectedCell, bindingId, isRefresh, dossierData, body, isPrompted, promptsAnswers}
     const options = {objectId: 'id123', projectId: 'p123', isReport: true};
     const mockDialog = {
       close: () => {},
@@ -431,7 +431,7 @@ describe('OfficeDisplayService', () => {
   });
 
   it('should print proper warning message when empty prompted report', async () => {
-    const changedMock = jest.spyOn(mstrObjectRestService, 'getInstanceDefinition').mockResolvedValue({
+    const changedMock = jest.spyOn(mstrObjectRestService, 'createInstance').mockResolvedValue({
       mstrTable: {
         rows: [],
       },
@@ -448,7 +448,7 @@ describe('OfficeDisplayService', () => {
       projectId: 'p123',
       isReport: true,
       isPrompted: true,
-      promptAnswers: [],
+      promptsAnswers: [],
     };
     // when
     const resultMessage = await officeDisplayService._printObject(options);
