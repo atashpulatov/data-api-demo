@@ -1,103 +1,103 @@
 hr {
-  margin-left: 20px;
-  margin-right: 20px;
-  color: #75808B;
+    margin-left: 20px;
+    margin-right: 20px;
+    color: #75808B;
 }
 
 .padding {
-  padding: 15px;
+    padding: 15px;
 }
 
 #content {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 #overlay {
-  animation: fadein 1.5s;
+    animation: fadein 1.5s;
 }
 
 #app-header {
-  display: flex;
-  justify-content: space-between;
-  color: #555;
-  font-size: 16px;
-  line-height: 31px;
-  width: 100%;
-  padding: 20px 27px 19px 20px;
-  align-items: center;
+    display: flex;
+    justify-content: space-between;
+    color: #555;
+    font-size: 16px;
+    line-height: 31px;
+    width: 100%;
+    padding: 20px 27px 19px 20px;
+    align-items: center;
 }
 
 #overlay {
-  animation: fadein 1.5s;
+    animation: fadein 1.5s;
 }
 
 #app-header img {
-  height: 32px;
-  width: 32px;
-  min-width: 32px;
-  border-radius: 50%;
-  display: table-cell;
+    height: 32px;
+    width: 32px;
+    min-width: 32px;
+    border-radius: 50%;
+    display: table-cell;
 }
 
 #app-header #initials {
-  height: 28px;
-  width: 28px;
-  line-height: 28px;
-  border-radius: 50%;
-  font-size: 13px;
-  background: #e4e4e4;
-  color: white;
-  text-align: center;
-  display: inline-block;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+    height: 28px;
+    width: 28px;
+    line-height: 28px;
+    border-radius: 50%;
+    font-size: 13px;
+    background: #e4e4e4;
+    color: white;
+    text-align: center;
+    display: inline-block;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 #app-main {
-  background: #fff;
+    background: #fff;
 }
 
 #header {
-  font-size: 18px;
-  text-align: left;
-  align-items: center;
-  padding: 4px 0px 0px 0px;
+    font-size: 18px;
+    text-align: left;
+    align-items: center;
+    padding: 4px 0px 0px 0px;
 }
 
 #header-image {
-  border-radius: 50%;
-  height: 40px;
-  width: 40px;
-  padding: 10px;
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    padding: 10px;
 }
 
 .get-started-container {
-  text-align: center;
-  padding: 40px 40px;
-  color: #4D5154;
+    text-align: center;
+    padding: 40px 40px 10px 40px;
+    color: #4D5154;
 }
 
 .get-started-container h2 {
-  color: #4D5154;
-  font-weight: 500;
-  font-size: 20px;
-  padding: 24px 0;
+    color: #4D5154;
+    font-weight: 500;
+    font-size: 20px;
+    padding: 24px 0;
 }
 
 .get-started-container p {
-  padding-bottom: 40px;
-  margin: 0;
-  font-size: 14px;
-  font-weight: 300;
+    padding-bottom: 40px;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 300;
 }
 
 .ant-tabs {
-  height: calc(100vh - 72px);
+    height: calc(100vh - 72px);
 }
 
 .ant-tabs-nav-scroll>div {
@@ -105,82 +105,83 @@ hr {
 }
 
 .ant-tabs.tabs-container .ant-tabs-nav .ant-tabs-tab {
-  margin: 0 6px;
-  padding: 12px 6px;
-  font-size: 14px;
-  font-weight: 400;
-  color: #888888;
+    margin: 0 6px;
+    padding: 12px 6px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #888888;
 }
 
 .ant-tabs.tabs-container .ant-spin-blur {
-  opacity: 1;
-  cursor: progress;
+    opacity: 1;
+    cursor: progress;
 }
 
 .ant-tabs.tabs-container .ant-spin-blur::after {
-  opacity: 0.1;
+    opacity: 0.1;
 }
 
 .ant-tabs.tabs-container .ant-tabs-nav .ant-tabs-tab:hover {
-  color: #444649;
+    color: #444649;
 }
 
 .ant-tabs.tabs-container .ant-tabs-tab.ant-tabs-tab-active {
-  color: #444649;
+    color: #444649;
 }
 
 .ant-tabs.tabs-container .ant-tabs-content {
-  height: 100%;
-  display: block;
-  overflow: hidden;
+    height: calc(100% - 50px);
+    display: block;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .tabs-container .ant-tabs-ink-bar {
-  margin-bottom: 1px;
-  height: 3px;
-  background-color: #1c91dc;
+    margin-bottom: 1px;
+    height: 3px;
+    background-color: #1c91dc;
 }
 
 .tabs-container .ant-tabs-bar {
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.10);
-  margin: 0 0 5px 0;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.10);
+    margin: 0 0 5px 0;
 }
 
 .tabs-container .ant-btn.ant-btn-primary[disabled] {
-  background: #f5f5f5;
-  border: 1px solid #d9d9d9;
-  border-radius: 4px;
-  color: rgba(0, 0, 0, 0.25);
+    background: #f5f5f5;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    color: rgba(0, 0, 0, 0.25);
 }
 
 .dialog-container {
-  z-index: 10;
-  height: 100vh;
-  width: 100vw;
-  position: fixed;
-  text-align: center;
-  top: 0;
-  left: 0;
-  background-color: rgba(255, 255, 255, 0.7);
+    z-index: 10;
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    text-align: center;
+    top: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.7);
 }
 
 .dialog-container dialog {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  padding: 16px;
-  border-radius: 4px;
-  background-color: #fff;
-  width: 70%;
-  transform: translate(-50%, -50%);
-  border: 1px solid #ccc;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    padding: 16px;
+    border-radius: 4px;
+    background-color: #fff;
+    width: 70%;
+    transform: translate(-50%, -50%);
+    border: 1px solid #ccc;
 }
 
 .dialog-container svg {
-  height: 24px;
-  width: 24px;
-  margin: 0 auto 12px auto;
-  display: block;
+    height: 24px;
+    width: 24px;
+    margin: 0 auto 12px auto;
+    display: block;
 }
 
 /* application header buttons */
@@ -189,114 +190,114 @@ hr {
 #app-header .secure-btn .ant-btn:disabled,
 #app-header .settings-btn,
 #app-header .settings-btn .ant-btn:disabled {
-  vertical-align: middle;
-  align-self: center;
-  background: #FFFFFF;
-  box-shadow: 0 0;
-  border: none;
-  padding: 0;
+    vertical-align: middle;
+    align-self: center;
+    background: #FFFFFF;
+    box-shadow: 0 0;
+    border: none;
+    padding: 0;
 }
 
 #app-header .settings-btn,
 #app-header .settings-btn .ant-btn:disabled {
-  margin-left: 15px;
+    margin-left: 15px;
 }
 
 /* we need to override cursor not-allowed but only if it's there and use !important because antd uses !important */
 #app-header .secure-btn[style="display: inline-block; cursor: not-allowed;"] {
-  cursor: default !important;
+    cursor: default !important;
 }
 
 #app-header .secure-btn svg {
-  vertical-align: text-top;
+    vertical-align: text-top;
 }
 
 #app-header .mstr-icon.settings svg {
-  max-width: 22px;
-  max-height: 22px;
+    max-width: 22px;
+    max-height: 22px;
 }
 
 .header-buttons {
-  position: relative;
+    position: relative;
 }
 
 /* settings context menu */
 
 .settings-list {
-  position: absolute;
-  right: 20px;
-  top: 20px;
-  z-index: 999;
-  width: 200px;
-  margin: 0;
-  padding: 5px 10px 10px 10px;
-  list-style: none;
-  background: #fff;
-  color: #3F4042;
-  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.20);
-  border-radius: 2px;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    z-index: 999;
+    width: 200px;
+    margin: 0;
+    padding: 5px 10px 10px 10px;
+    list-style: none;
+    background: #fff;
+    color: #3F4042;
+    box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.20);
+    border-radius: 2px;
 }
 
 .settings-list li {
-  padding: 3px 7px 0 7px;
-  font-size: 12px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
+    padding: 3px 7px 0 7px;
+    font-size: 12px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .settings-list li a {
-  display: block;
-  color: #3f4042;
+    display: block;
+    color: #3f4042;
 }
 
 .settings-list .user-data {
-  padding-bottom: 7px;
-  margin-bottom: 6px;
-  font-weight: 500;
-  border-bottom: solid 1px #e4e4e4;
+    padding-bottom: 7px;
+    margin-bottom: 6px;
+    font-weight: 500;
+    border-bottom: solid 1px #e4e4e4;
 }
 
 #app-header .user-name {
-  padding-left: 13px;
-  padding-right: 13px;
-  line-height: 32px;
+    padding-left: 13px;
+    padding-right: 13px;
+    line-height: 32px;
 }
 
 .settings-list .settings-version {
-  padding: 7px;
-  color: #1c91dc;
-  font-weight: 300;
-  font-size: 10px;
-  text-align: center;
+    padding: 7px;
+    color: #1c91dc;
+    font-weight: 300;
+    font-size: 10px;
+    text-align: center;
 }
 
 .settings-list li:last-child {
-  display: flex;
-  justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
 }
 
 .settings-list li:last-child a {
-  color: #a4a4a4;
-  font-weight: 500;
-  font-size: 10px;
+    color: #a4a4a4;
+    font-weight: 500;
+    font-size: 10px;
 }
 
 #app-header .logout-btn .ant-btn {
-  width: 70px;
-  height: 20px;
-  border: 1px solid #3f4042;
-  border-radius: 2px;
-  color: #3f4042;
-  font-size: 10px;
+    width: 70px;
+    height: 20px;
+    border: 1px solid #3f4042;
+    border-radius: 2px;
+    color: #3f4042;
+    font-size: 10px;
 }
 
 @keyframes fadein {
-  from {
-    opacity: 0;
-  }
+    from {
+        opacity: 0;
+    }
 
-  to {
-    opacity: 1;
-  }
+    to {
+        opacity: 1;
+    }
 }
