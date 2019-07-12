@@ -98,8 +98,8 @@ function parsePopupState(popupState) {
     reportSubtype: popupState.objectType === 'report'
       ? 768
       : null,
-    selectedAttributes: popupState.body && popupState.body.requestedObjects.attributes.map((attr) => attr.id),
-    selectedMetrics: popupState.body && popupState.body.requestedObjects.metrics.map((mtrc) => mtrc.id),
+    selectedAttributes: popupState.body && popupState.body.requestedObjects && popupState.body.requestedObjects.attributes && popupState.body.requestedObjects.attributes.map((attr) => attr.id),
+    selectedMetrics: popupState.body && popupState.body.requestedObjects && popupState.body.requestedObjects.metrics && popupState.body.requestedObjects.metrics.map((mtrc) => mtrc.id),
     selectedFilters: popupState.body && popupState.body.viewFilter
       && popupState.body.viewFilter.operands[1].elements.map((elem) => elem.id)
           .reduce((filters, elem) => {

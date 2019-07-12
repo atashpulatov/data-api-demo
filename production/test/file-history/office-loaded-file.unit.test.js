@@ -9,7 +9,7 @@ describe('office loaded file', () => {
   it('should display provided file name', () => {
     // given
     // when
-    const wrappedComponent = mount(<_OfficeLoadedFile fileName='test' refreshDate={new Date()}/>);
+    const wrappedComponent = mount(<_OfficeLoadedFile fileName='test' refreshDate={new Date()} />);
     // then
     expect(wrappedComponent.find('Row').hasClass('file-history-container')).toBeTruthy();
     expect(wrappedComponent.html()).toContain('test');
@@ -73,7 +73,7 @@ describe('office loaded file', () => {
     const deleteButton = wrappedIcons.at(3);
     expect(deleteButton.props().type).toEqual('trash');
   });
-  
+
   it('refresh method should not do anything if in loading state', () => {
     // given
     const onRefreshMock = jest.fn();
@@ -225,11 +225,11 @@ describe('office loaded file', () => {
     expect(onDeleteMocked).not.toBeCalled();
     expect(onRefreshMocked).not.toBeCalled();
   });
-  it('should contain one popover', () => {
+  it('should contain popovers', () => {
     // given
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile fileName='test' />);
     // then
-    expect(wrappedComponent.find(Popover)).toHaveLength(4);
+    expect(wrappedComponent.find(Popover)).toHaveLength(5);
   });
 });

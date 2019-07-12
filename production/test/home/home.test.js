@@ -163,6 +163,7 @@ describe('Home', () => {
       // given
       const headerWrapper = mount(<_Header />);
       const emailWrapper = jest.spyOn(headerWrapper.instance(), 'prepareEmail').mockImplementation(() => {});
+      const overflowWrapper = jest.spyOn(headerWrapper.instance(), 'isOverflown').mockImplementation(() => {});
       // when
       headerWrapper.setState({isSettings: true});
       const settingsWrapper = headerWrapper.find('.settings-list');
@@ -172,6 +173,7 @@ describe('Home', () => {
     it('should NOT display settings menu when isSettings flag is false', () => {
       // given
       const headerWrapper = mount(<_Header />);
+      const overflowWrapper = jest.spyOn(headerWrapper.instance(), 'isOverflown').mockImplementation(() => {});
       // when
       headerWrapper.setState({isSettings: false});
       const settingsWrapper = headerWrapper.find('.settings-list');
@@ -181,6 +183,7 @@ describe('Home', () => {
     it('should change isSettings flag when button settings is clicked', () => {
       // given
       const headerWrapper = mount(<_Header />);
+      const overflowWrapper = jest.spyOn(headerWrapper.instance(), 'isOverflown').mockImplementation(() => {});
       const emailWrapper = jest.spyOn(headerWrapper.instance(), 'prepareEmail').mockImplementation(() => {});
       headerWrapper.setState({isSettings: false});
       const buttonWrapper = headerWrapper.find('Button .settings-btn');
@@ -196,6 +199,7 @@ describe('Home', () => {
         map[event] = cb;
       });
       const headerWrapper = mount(<_Header />);
+      const overflowWrapper = jest.spyOn(headerWrapper.instance(), 'isOverflown').mockImplementation(() => {});
       const emailWrapper = jest.spyOn(headerWrapper.instance(), 'prepareEmail').mockImplementation(() => {});
       headerWrapper.setState({isSettings: true});
       // when
@@ -216,6 +220,7 @@ describe('Home', () => {
         map[event] = cb;
       });
       const headerWrapper = mount(<_Header />);
+      const overflowWrapper = jest.spyOn(headerWrapper.instance(), 'isOverflown').mockImplementation(() => {});
       const emailWrapper = jest.spyOn(headerWrapper.instance(), 'prepareEmail').mockImplementation(() => {});
       headerWrapper.setState({isSettings: true});
       // when
@@ -240,6 +245,7 @@ describe('Home', () => {
       // when
       const headerWrapper = mount(<_Header />);
       const emailWrapper = jest.spyOn(headerWrapper.instance(), 'prepareEmail').mockImplementation(() => {});
+      const overflowWrapper = jest.spyOn(headerWrapper.instance(), 'isOverflown').mockImplementation(() => {});
       headerWrapper.setState({isSettings: true});
       const buttonWrapper = headerWrapper.find('Button #logOut');
       buttonWrapper.simulate('click');
@@ -256,6 +262,7 @@ describe('Home', () => {
       // when
       const headerWrapper = mount(<_Header />);
       const emailWrapper = jest.spyOn(headerWrapper.instance(), 'prepareEmail').mockImplementation(() => {});
+      const overflowWrapper = jest.spyOn(headerWrapper.instance(), 'isOverflown').mockImplementation(() => {});
       headerWrapper.setState({isSettings: true});
       const buttonWrapper = headerWrapper.find('Button #logOut');
       buttonWrapper.simulate('click');
@@ -298,7 +305,6 @@ describe('Home', () => {
       // then
       await expect(mockgetContext).toBeCalled();
       expect(mockDeleteBody).toHaveBeenCalledTimes(6);
-      await expect(context.sync).toBeCalled();
       expect(mockToggleSecured).toBeCalled();
     });
     it('should display active Secure Data button when some reports are imported and isSecured is false', () => {

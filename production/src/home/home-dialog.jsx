@@ -5,10 +5,10 @@ export const HomeDialog = ({show = false, text}) => {
   return (
     show ?
       <div className="dialog-container">
-        <div>
-          <span><InfoIcon /></span>
-          {text}
-        </div>
+        <dialog>
+          <InfoIcon />
+          <span>{text}</span>
+        </dialog>
       </div>
       : null
   );

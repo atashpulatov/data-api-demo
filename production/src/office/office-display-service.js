@@ -1,5 +1,5 @@
 import {officeApiHelper} from './office-api-helper';
-import {mstrObjectRestService, DATA_LIMIT} from '../mstr-object/mstr-object-rest-service';
+import {mstrObjectRestService, DATA_LIMIT, PROMISE_LIMIT} from '../mstr-object/mstr-object-rest-service';
 import {reduxStore} from '../store';
 import {officeProperties} from './office-properties';
 import {officeStoreService} from './store/office-store-service';
@@ -327,7 +327,9 @@ class OfficeDisplayService {
         officeTable = await this._createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId, prevOfficeTable);
       } else {
         shouldFormat = false;
+        console.time('Validate existing table');
         officeTable = await this._updateOfficeTable(instanceDefinition, excelContext, prevOfficeTable);
+        console.timeEnd('Validate existing table');
       }
     } else {
       officeTable = await this._createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId);
@@ -345,7 +347,7 @@ class OfficeDisplayService {
       const limit = Math.floor(DATA_LIMIT / columns);
       const rowGenerator = mstrObjectRestService.getObjectContentGenerator(instanceDefinition, objectId, projectId, isReport, dossierData, body, limit);
       let rowIndex = 0;
-      const contextPromises = [];
+      let contextPromises = [];
       console.time('Fetch data');
       for await (const row of rowGenerator) {
         console.groupCollapsed(`Importing rows: ${rowIndex} to ${Math.min(rowIndex + limit, rows)}`);
@@ -357,6 +359,13 @@ class OfficeDisplayService {
         rowIndex += row.length;
         console.timeEnd('Append rows');
         contextPromises.push(excelContext.sync());
+        const promiseLength = contextPromises.length;
+        if (promiseLength % PROMISE_LIMIT === 0) {
+          console.time('Waiting for pending context syncs');
+          await Promise.all(contextPromises);
+          console.timeEnd('Waiting for pending context syncs');
+          contextPromises = [];
+        }
         console.time('Fetch data');
         console.groupEnd();
       };

@@ -5,8 +5,9 @@ import {moduleProxy} from '../module-proxy';
 import {officeConverterService} from '../office/office-converter-service';
 
 const sharedFolderIdType = 7;
-// 200000 is around 1mb of MSTR JSON response
-export const DATA_LIMIT = 200000;
+
+export const DATA_LIMIT = 200000; // 200000 is around 1mb of MSTR JSON response
+export const PROMISE_LIMIT = 10; // Number of concurrent context.sync() promises during data import.
 const EXCEL_ROW_LIMIT = 1048576;
 const EXCEL_COLUMN_LIMIT = 16384;
 const OBJECT_TYPE = '3'; // both reports and cubes are of type 3
