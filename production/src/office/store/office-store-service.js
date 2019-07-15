@@ -18,7 +18,7 @@ class OfficeStoreService {
         objectType: report.objectType,
         isCrosstab: report.isCrosstab,
         isPrompted: report.isPrompted,
-        promptAnswers: report.promptAnswers,
+        promptsAnswers: report.promptsAnswers,
       });
       settings.set(officeProperties.loadedReportProperties, reportProperties);
       settings.saveAsync();
