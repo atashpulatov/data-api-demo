@@ -29,7 +29,7 @@ class OfficeApiHelper {
       (headerCount -= firstNumber) >= 0;
       firstNumber = secondNumber, secondNumber *= ALPHABET_RANGE_END) {
       endColumn = String.fromCharCode(parseInt(
-        (headerCount % secondNumber) / firstNumber)
+          (headerCount % secondNumber) / firstNumber)
         + ASCII_CAPITAL_LETTER_INDEX)
         + endColumn;
     }
@@ -74,8 +74,8 @@ class OfficeApiHelper {
   getBindingRange = (context, bindingId) => {
     try {
       return context.workbook.bindings
-        .getItem(bindingId).getTable()
-        .getRange();
+          .getItem(bindingId).getTable()
+          .getRange();
     } catch (error) {
       throw errorService.errorOfficeFactory(error);
     }
@@ -83,7 +83,7 @@ class OfficeApiHelper {
 
   getTable = (context, bindingId) => {
     return context.workbook.bindings
-      .getItem(bindingId).getTable();
+        .getItem(bindingId).getTable();
   }
 
   getExcelContext = async () => {
@@ -203,15 +203,15 @@ class OfficeApiHelper {
 
   bindNamedItem = (namedItem, bindingId) => {
     return new Promise((resolve, reject) => Office.context.document.bindings.addFromNamedItemAsync(
-      namedItem, 'table', {id: bindingId}, (result) => {
-        if (result.status === 'succeeded') {
-          console.log('Added new binding with type: ' + result.value.type + ' and id: ' + result.value.id);
-          resolve();
-        } else {
-          console.error('Error: ' + result.error.message);
-          reject(result.error);
-        }
-      }));
+        namedItem, 'table', {id: bindingId}, (result) => {
+          if (result.status === 'succeeded') {
+            console.log('Added new binding with type: ' + result.value.type + ' and id: ' + result.value.id);
+            resolve();
+          } else {
+            console.error('Error: ' + result.error.message);
+            reject(result.error);
+          }
+        }));
   }
 
   deleteObjectTableBody = (context, object) => {
@@ -260,6 +260,8 @@ class OfficeApiHelper {
         verticalLastCell: headers.rows.length - 1,
         horizontalLastCell: cell[1],
       };
+    } else {
+      return null;
     }
     const firstSubtotalCell = startCell.getOffsetRange(offsets.verticalFirstCell, offsets.horizontalFirstCell);
     const lastSubtotalCell = startCell.getOffsetRange(offsets.verticalLastCell, offsets.horizontalLastCell);
@@ -281,7 +283,7 @@ class OfficeApiHelper {
   formatSubtotals = (startCell, subtotalCells, axis, headers, bold, context) => {
     subtotalCells.forEach((cell) => {
       const subtotalRowRange = this.getSubtotalRange(startCell, cell, axis, headers);
-      subtotalRowRange.format.font.bold = bold;
+      subtotalRowRange && (subtotalRowRange.format.font.bold = bold);
     });
     return context.sync();
   }
