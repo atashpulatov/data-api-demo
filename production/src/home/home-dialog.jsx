@@ -5,7 +5,7 @@ export const HomeDialog = ({show = false, text}) => {
   return (
     show ?
       <div className="dialog-container">
-        <dialog>
+        <dialog open>
           <InfoIcon />
           <span>{text}</span>
         </dialog>
