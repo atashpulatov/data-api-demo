@@ -116,14 +116,26 @@ export class _Header extends Component {
             <span id="userName" className="user-name no-trigger-close">{userNameDisplay}</span>
           }
         </li>
-        <li><a href='https://www.microstrategy.com/legal-folder/privacy-policy' target="_blank" rel="noopener">{t('Privacy Policy')}</a></li>
-        <li><a href='https://www.microstrategy.com/legal-folder/legal-policies/terms-of-use' target="_blank" rel="noopener">{t('Terms of Use')}</a></li>
+        <li>
+          <a
+            tabIndex="0"
+            href='https://www.microstrategy.com/legal-folder/privacy-policy'
+            target="_blank"
+            rel="noopener">{t('Privacy Policy')}</a>
+        </li>
+        <li>
+          <a
+            tabIndex="0"
+            href='https://www.microstrategy.com/legal-folder/legal-policies/terms-of-use'
+            target="_blank"
+            rel="noopener">{t('Terms of Use')}</a>
+        </li>
         {/* TODO: get help url for plugin */}
         {/* <li><a href='' target="_blank" rel="noopener">{t('Help')}</a></li> */}
         < li className="settings-version no-trigger-close">{t('Version', {APP_VERSION})}</li>
         <li className="no-trigger-close">
           <div className="contact-us">
-            <span><a href={this.prepareEmail()}>{t('Contact Us')}</a></span>
+            <span><a tabIndex="0" href={this.prepareEmail()}>{t('Contact Us')}</a></span>
           </div>
           <div className="logout-btn">
             <Button id="logOut" size='small' onClick={logout}>

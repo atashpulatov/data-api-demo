@@ -62,7 +62,7 @@ class PopupHelper {
       body: refreshReport.body,
       isCrosstab: refreshReport.isCrosstab,
       isRefresh: true,
-      isPrompted: false,
+      isPrompted: refreshReport.isPrompted,
       isRefreshAll,
     };
     const result = await officeDisplayService.printObject(options);
