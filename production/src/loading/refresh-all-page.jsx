@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
 import {LoadingText} from 'mstr-react-library';
-import {selectorProperties} from '../attribute-selector/selector-properties';
-import {Button, Popover} from 'antd';
+import {Popover} from 'antd';
 import {MSTRIcon} from 'mstr-react-library';
 import warningIcon from './assets/icon_conflict.svg';
 import {withTranslation} from 'react-i18next';
@@ -72,27 +70,40 @@ export class _RefreshAllPage extends Component {
       return <span className="result-icon"><MSTRIcon type='refresh-success' /></span>;
     }
     if (res.isError === true) {
-      return (<Popover overlayClassName="tooltip-card" placement="topLeft" content={this.getTooltipContent(res)}>
-        <span className="result-icon"><img width='17px' height='17px' src={warningIcon} alt='Refresh failed icon' /></span>
-      </Popover>);
+      return (<span className="result-icon"><img width='17px' height='17px' src={warningIcon} alt='Refresh failed icon' /></span>);
     }
     return <span className="result-icon"></span>;
+  }
+
+  isOverflown = (reportName) => {
+    const measureReportName = document.createElement('SPAN');
+    measureReportName.innerHTML = reportName;
+    measureReportName.setAttribute('id', 'measure-text');
+    document.body.appendChild(measureReportName);
+    // we compare report name length with all popup width - 90px of paddings and icon container
+    const result = document.getElementById('measure-text').scrollWidth > window.innerWidth - 90;
+    measureReportName.remove();
+    return result;
   }
 
   getTooltipContent = (refreshData) => {
     const excel = 'Excel returned error';
     const {t} = this.props;
-    return (
-      <div className="tooltip-content">
-        <div className="tooltip-header">
-          <span className="tooltip-header-icon"><img width='14px' height='14px' src={warningIcon} alt='Refresh failed icon' /></span>
+    if (refreshData.isError === true) {
+      return (
+        <div className="tooltip-content">
+          <div className="tooltip-header">
+            <span className="tooltip-header-icon"><img width='14px' height='14px' src={warningIcon} alt='Refresh failed icon' /></span>
+          </div>
+          <div className="tooltip-message">
+            <div className="tooltip-message-title">{this.props.t('Report could not be refreshed', {report: refreshData.name})}</div>
+            <div className="tooltip-message-text">{refreshData.result.includes(excel) ? `${t(excel)}: ${refreshData.result.split(':')[1]}` : t(refreshData.result)}</div>
+          </div>
         </div>
-        <div className="tooltip-message">
-          <div className="tooltip-message-title">{this.props.t('Report could not be refreshed', {report: refreshData.name})}</div>
-          <div className="tooltip-message-text">{refreshData.result.includes(excel) ? `${t(excel)}: ${refreshData.result.split(':')[1]}` : t(refreshData.result)}</div>
-        </div>
-      </div>
-    );
+      );
+    } else {
+      return refreshData.name;
+    }
   }
 
   render() {
@@ -116,9 +127,11 @@ export class _RefreshAllPage extends Component {
           this.state.results.map((res) =>
             <div className="result-container" key={res.key}>
               {this.getIcon(res)}
-              <Popover placement="top" content={res.name}>
-                <span className="report-name">{res.name}</span>
-              </Popover>
+              {(res.isError || this.isOverflown(res.name))
+                ? <Popover placement="topLeft" overlayClassName={res.isError === true ? 'tooltip-card' : ''} content={this.getTooltipContent(res)}>
+                  <span className="report-name">{res.name}</span>
+                </Popover>
+                : <span className="report-name">{res.name}</span>}
             </div>)
         }
       </div>

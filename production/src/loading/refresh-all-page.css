@@ -147,3 +147,11 @@
 .tooltip-message-text {
     color: rgba(0, 0, 0, 0.65);
 }
+
+#measure-text {
+    position: absolute;
+    right: -100px;
+    top: -100px;
+    visibility: hidden;
+    /* opacity: 0; */
+}
