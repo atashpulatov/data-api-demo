@@ -97,7 +97,7 @@ export class _OfficeLoadedFile extends React.Component {
         </Col>
         <Col span={1} offset={1}>
           <Popover placement="bottom" content={t('Refresh Data')} mouseEnterDelay={1}>
-            {!isPrompted && <span
+            {<span
               tabIndex="0"
               className="loading-button-container"
               onClick={this.refreshAction}>
