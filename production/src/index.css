@@ -15,11 +15,11 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
-.ant-popover-inner-content {
+.ant-popover .ant-popover-inner-content {
     min-width: 38px;
     max-width: 280px;
     padding: 8px;
-    text-align: center;
+    text-align: left;
     background-color: #404040;
     color: white;
     border-radius: 4px;
