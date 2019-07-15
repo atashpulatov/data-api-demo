@@ -214,10 +214,16 @@ class OfficeApiHelper {
         }));
   }
 
-  deleteObjectTableBody = (context, object) => {
-    const tableObject = context.workbook.tables.getItem(object.bindId);
-    const tableRange = tableObject.getDataBodyRange();
-    tableRange.clear(Excel.ClearApplyTo.contents);
+  deleteObjectTableBody = async (context, object) => {
+    try {
+      const excelContext = await officeApiHelper.getExcelContext();
+      const tableObject = context.workbook.tables.getItem(object.bindId);
+      const tableRange = tableObject.getDataBodyRange();
+      tableRange.clear(Excel.ClearApplyTo.contents);
+      await excelContext.sync();
+    } catch (error) {
+      console.error('Error: ' + error);
+    }
   }
 
   /**

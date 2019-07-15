@@ -204,5 +204,5 @@ button.add-data-btn:focus {
 .tables-container {
     overflow-y: auto;
     width: 100%;
-    height: calc(100% - 85px);
+    height: calc(100% - 50px);
 }
