@@ -8,7 +8,7 @@ class OfficeStoreService {
     try {
       const settings = this.getOfficeSettings();
       const reportProperties = this._getReportProperties();
-      reportProperties.push({
+      reportProperties.unshift({
         id: report.id,
         name: report.name,
         bindId: report.bindId,
