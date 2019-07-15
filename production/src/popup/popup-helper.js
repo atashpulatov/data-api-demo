@@ -49,9 +49,11 @@ class PopupHelper {
     isRefreshAll && this.storageReportRefreshStart(refreshReport, index);
     const isReport = objectType === 'report';
     const instanceId = null;
-    // TODO: Pass proper isPrompted value
+    // TODO: Pass proper isPrompted value – promptsAnswers could probably serve as such, to be refactored.
+
     const options = {
       dossierData: instanceId,
+      promptsAnswers: refreshReport.promptsAnswers,
       objectId: refreshReport.id,
       projectId: refreshReport.projectId,
       isReport,
@@ -60,7 +62,7 @@ class PopupHelper {
       body: refreshReport.body,
       isCrosstab: refreshReport.isCrosstab,
       isRefresh: true,
-      isPrompted: false,
+      isPrompted: refreshReport.isPrompted,
       isRefreshAll,
     };
     const result = await officeDisplayService.printObject(options);

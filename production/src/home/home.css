@@ -78,7 +78,7 @@ hr {
 
 .get-started-container {
   text-align: center;
-  padding: 40px 40px;
+  padding: 40px 40px 10px 40px;
   color: #4D5154;
 }
 
@@ -101,7 +101,7 @@ hr {
 }
 
 .ant-tabs-nav-scroll>div {
-    margin-left: 4px;
+  margin-left: 4px;
 }
 
 .ant-tabs.tabs-container .ant-tabs-nav .ant-tabs-tab {
@@ -130,9 +130,10 @@ hr {
 }
 
 .ant-tabs.tabs-container .ant-tabs-content {
-  height: 100%;
+  height: calc(100% - 50px);
   display: block;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .tabs-container .ant-tabs-ink-bar {
@@ -154,7 +155,6 @@ hr {
 }
 
 .dialog-container {
-  z-index: 10;
   height: 100vh;
   width: 100vw;
   position: fixed;
@@ -238,7 +238,7 @@ hr {
 }
 
 .settings-list li {
-  padding: 3px 7px 0 7px;
+  padding: 3px 7px 1px 7px;
   font-size: 12px;
   white-space: nowrap;
   text-overflow: ellipsis;
