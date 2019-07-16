@@ -74,7 +74,7 @@ function onLoadReport(action, state) {
     ...state,
     loading: false,
     reportArray: state.reportArray
-      ? [...state.reportArray, action.report]
+      ? [action.report, ...state.reportArray]
       : [action.report],
   };
 }
