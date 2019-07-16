@@ -12,7 +12,7 @@ class PopupHelper {
 
   getPopupHeight = (reportArray, reportNumberToShow = 10) => {
     const reportsListLength = reportArray.length > reportNumberToShow ? reportNumberToShow : reportArray.length;
-    return Math.floor(((220 + (reportsListLength * 30)) / (window.innerHeight + 200)) * 100);
+    return Math.floor(((230 + (reportsListLength * 30)) / (window.innerHeight + 200)) * 100);
   };
 
   runRefreshAllPopup = async (reportArray, reportNumberToShow = 10) => {
