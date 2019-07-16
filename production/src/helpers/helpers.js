@@ -1,7 +1,7 @@
 class Helper {
-  isOverflown = (userName, containerWidth) => {
+  isOverflown = (text, containerWidth) => {
     const measureReportName = document.createElement('SPAN');
-    measureReportName.innerHTML = userName;
+    measureReportName.innerHTML = text;
     measureReportName.setAttribute('id', 'measure-text');
     document.body.appendChild(measureReportName);
     // we compare report name length with all popup width - 90px of paddings and icon container
