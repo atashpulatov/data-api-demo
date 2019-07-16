@@ -87,7 +87,9 @@ export class _OfficeLoadedFile extends React.Component {
         </Col>
         <Col span={1} offset={2} style={{marginTop: '1px'}}>
           <Popover placement="bottom" content={t('Edit Data')} mouseEnterDelay={1}>
-            {!isPrompted && <span className="loading-button-container"
+            {!isPrompted && <span
+              tabIndex="0"
+              className="loading-button-container"
               onClick={this.editAction}>
               <MSTRIcon type='edit' />
             </span>}
@@ -95,7 +97,9 @@ export class _OfficeLoadedFile extends React.Component {
         </Col>
         <Col span={1} offset={1}>
           <Popover placement="bottom" content={t('Refresh Data')} mouseEnterDelay={1}>
-            {<span className="loading-button-container"
+            {<span
+              tabIndex="0"
+              className="loading-button-container"
               onClick={this.refreshAction}>
               {!isLoading ? <MSTRIcon type='refresh' /> :
                 <img width='12px' height='12px' src={loadingSpinner} alt={t('Report loading icon')} />}
@@ -105,6 +109,7 @@ export class _OfficeLoadedFile extends React.Component {
         <Col span={1} offset={1}>
           <Popover placement="bottomRight" content={t('Remove Data from Workbook')} mouseEnterDelay={1} arrowPointAtCenter="true">
             <span
+              tabIndex="0"
               onClick={this.deleteAction}>
               <MSTRIcon type='trash' />
             </span>
