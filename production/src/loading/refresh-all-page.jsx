@@ -4,6 +4,7 @@ import {Popover} from 'antd';
 import {MSTRIcon} from 'mstr-react-library';
 import warningIcon from './assets/icon_conflict.svg';
 import {withTranslation} from 'react-i18next';
+import {helper} from '../helpers/helpers';
 
 import './refresh-all-page.css';
 
@@ -75,17 +76,6 @@ export class _RefreshAllPage extends Component {
     return <span className="result-icon"></span>;
   }
 
-  isOverflown = (reportName) => {
-    const measureReportName = document.createElement('SPAN');
-    measureReportName.innerHTML = reportName;
-    measureReportName.setAttribute('id', 'measure-text');
-    document.body.appendChild(measureReportName);
-    // we compare report name length with all popup width - 90px of paddings and icon container
-    const result = document.getElementById('measure-text').scrollWidth > window.innerWidth - 90;
-    measureReportName.remove();
-    return result;
-  }
-
   getTooltipContent = (refreshData) => {
     const excel = 'Excel returned error';
     const {t} = this.props;
@@ -127,7 +117,7 @@ export class _RefreshAllPage extends Component {
           this.state.results.map((res) =>
             <div className="result-container" key={res.key}>
               {this.getIcon(res)}
-              {(res.isError || this.isOverflown(res.name))
+              {(res.isError || helper.isOverflown(res.name, window.innerWidth - 90))
                 ? <Popover placement="topLeft" overlayClassName={res.isError === true ? 'tooltip-card' : ''} content={this.getTooltipContent(res)}>
                   <span className="report-name">{res.name}</span>
                 </Popover>

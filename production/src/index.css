@@ -159,3 +159,10 @@ button.floating-button[disabled]:hover {
     opacity: 0.5;
     cursor: default
 }
+
+#measure-text {
+    position: absolute;
+    right: -100px;
+    top: -100px;
+    visibility: hidden;
+}
