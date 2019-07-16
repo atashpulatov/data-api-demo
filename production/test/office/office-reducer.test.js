@@ -192,7 +192,7 @@ describe('officeReducer', () => {
     expect(storedReport).toBeUndefined();
   });
 
-  it('should save next report data to store', () => {
+  it('should save next report data to store as the first element in the array', () => {
     // given
     const firstReport = reportArrayMock[0];
     const secondReport = reportArrayMock[1];
@@ -207,7 +207,7 @@ describe('officeReducer', () => {
     });
     // then
     const officeStoreState = officeStore.getState();
-    const storedReport = officeStoreState.reportArray[1];
+    const storedReport = officeStoreState.reportArray[0];
     expect(storedReport).toBeDefined();
     expect(storedReport).toBe(secondReport);
   });
@@ -237,8 +237,9 @@ describe('officeReducer', () => {
     // then
     const officeStoreState = officeStore.getState().reportArray;
     expect(officeStoreState.length).toEqual(2);
-    expect(officeStoreState[0]).toEqual(firstReport);
-    expect(officeStoreState[1]).toEqual(thirdReport);
+    expect(officeStoreState.includes(firstReport)).toBe(true);
+    expect(officeStoreState.includes(secondReport)).toBe(false);
+    expect(officeStoreState.includes(thirdReport)).toBe(true);
   });
 
   it('should throw an error on missing report.bindId when removing report', () => {
