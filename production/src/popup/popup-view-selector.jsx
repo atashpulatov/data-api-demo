@@ -90,7 +90,10 @@ export function mapStateToProps(state) {
 export const PopupViewSelector = connect(mapStateToProps, actions)(_PopupViewSelector);
 
 function parsePopupState(popupState) {
-  return !!popupState && {
+  if (!popupState) {
+    return;
+  }
+  const reportData = {
     reportId: popupState.id,
     projectId: popupState.projectId,
     reportName: popupState.name,
@@ -98,17 +101,46 @@ function parsePopupState(popupState) {
     reportSubtype: popupState.objectType === 'report'
       ? 768
       : null,
-    selectedAttributes: popupState.body && popupState.body.requestedObjects && popupState.body.requestedObjects.attributes && popupState.body.requestedObjects.attributes.map((attr) => attr.id),
-    selectedMetrics: popupState.body && popupState.body.requestedObjects && popupState.body.requestedObjects.metrics && popupState.body.requestedObjects.metrics.map((mtrc) => mtrc.id),
-    selectedFilters: popupState.body && popupState.body.viewFilter
-      && popupState.body.viewFilter.operands[1].elements.map((elem) => elem.id)
-          .reduce((filters, elem) => {
-            const attrId = elem.split(':')[0];
-            filters[attrId] = !filters[attrId]
-            ? [elem]
-            : [...filters[attrId], elem];
-            return filters;
-          }, {}),
   };
+  restoreFilters(popupState.body, reportData);
+  return reportData;
+}
+
+function restoreFilters(body, reportData) {
+  try {
+    if (body && body.requestedObjects) {
+      reportData.selectedAttributes = body.requestedObjects.attributes && body.requestedObjects.attributes.map((attr) => attr.id);
+      reportData.selectedMetrics = body.requestedObjects.metrics && body.requestedObjects.metrics.map((mtrc) => mtrc.id);
+    }
+    if (body && body.viewFilter) {
+      reportData.selectedFilters = parseFilters(body.viewFilter.operands);
+    }
+  } catch (error) {
+    console.warn(error);
+  } finally {
+    return reportData;
+  }
+}
+
+function parseFilters(filtersNodes) {
+  if (!!filtersNodes[0].operands) {
+    debugger;
+    // equivalent to flatMap((node) => node.operands)
+    return parseFilters(filtersNodes.reduce((nodes, node) => nodes.concat(node.operands), []));
+  } else {
+    debugger;
+    const elementNodes = filtersNodes.filter((node) => node.type === 'elements');
+    // equivalent to flatMap((node) => node.elements)
+    const elements = elementNodes.reduce((elements, node) => elements.concat(node.elements), []);
+    const elementsIds = elements.map((elem) => elem.id);
+    return elementsIds
+        .reduce((filters, elem) => {
+          const attrId = elem.split(':')[0];
+          filters[attrId] = !filters[attrId]
+          ? [elem]
+          : [...filters[attrId], elem];
+          return filters;
+        }, {});
+  }
 }
 
