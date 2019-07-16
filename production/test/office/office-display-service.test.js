@@ -127,7 +127,7 @@ describe('OfficeDisplayService', () => {
     expect(printInside).toBeCalledWith(options);
   });
 
-  it('should add report to store', () => {
+  it('should add report to store as the first element in the array', () => {
     // given
     const report = {
       id: 'firstTestId',
@@ -141,7 +141,7 @@ describe('OfficeDisplayService', () => {
     const reportState = reduxStore.getState().officeReducer.reportArray;
     // then
     expect(reportState).toBeDefined();
-    expect(reportState[reportState.length - 1]).toEqual(report);
+    expect(reportState[0]).toEqual(report);
   });
 
   it('should call preserveReport on office store service', async () => {
