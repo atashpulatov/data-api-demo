@@ -25,7 +25,7 @@ describe('Popup actions', () => {
     // when
     const height = popupHelper.getPopupHeight(reportArray, reportNumberToShow);
     // then
-    expect(height).toBe(32);
+    expect(height).toBe(33);
   });
   it('getPopupHeight should calculate proper % height for 10 reports to show and 10 reports in array', () => {
     // given
@@ -35,7 +35,7 @@ describe('Popup actions', () => {
     // when
     const height = popupHelper.getPopupHeight(reportArray, reportNumberToShow);
     // then
-    expect(height).toBe(34);
+    expect(height).toBe(35);
   });
   it('getPopupHeight should calculate proper % height for 10 reports to show and 11 reports in array', () => {
     // given
@@ -45,7 +45,7 @@ describe('Popup actions', () => {
     // when
     const height = popupHelper.getPopupHeight(reportArray, reportNumberToShow);
     // then
-    expect(height).toBe(34);
+    expect(height).toBe(35);
   });
   it('runRefreshAllPopup should run proper helpers', () => {
     // given
@@ -151,25 +151,25 @@ describe('Popup actions', () => {
     // then
     expect(mockStorageGetItem).toHaveBeenCalled();
     expect(mockStorageSetItem).toHaveBeenCalledWith('refreshData',
-      JSON.stringify({
-        data: [
-          {
-            key: 'testBinding1',
-            name: 'testNamne1',
-            result: 'ok',
-            isError: false,
-          },
-          {
-            key: 'testBinding2',
-            name: 'testNamne2',
-            result: false,
-            isError: null,
-          },
-        ],
-        allNumber: 2,
-        finished: false,
-        currentNumber: 1,
-      })
+        JSON.stringify({
+          data: [
+            {
+              key: 'testBinding1',
+              name: 'testNamne1',
+              result: 'ok',
+              isError: false,
+            },
+            {
+              key: 'testBinding2',
+              name: 'testNamne2',
+              result: false,
+              isError: null,
+            },
+          ],
+          allNumber: 2,
+          finished: false,
+          currentNumber: 1,
+        })
     );
   });
   it('printRefreshedReport should call proper methods when isRefreshAll is true', async () => {
@@ -270,7 +270,7 @@ describe('Popup actions', () => {
     popupHelper.handleRefreshError(mockError, 10, 2, false);
     // then
     expect(notificationService.displayNotification)
-      .toHaveBeenCalledWith('info', 'Data is not relevant anymore. You can delete it from the list');
+        .toHaveBeenCalledWith('info', 'Data is not relevant anymore. You can delete it from the list');
   });
   it('handleRefreshError display proper notifications when isRefreshAll is false and error.code is NOT ItemNotFound', () => {
     // given
@@ -289,10 +289,10 @@ function prepareReportArray(reportsNumber) {
   const reportsArray = [];
   for (let i = 0; i < reportsNumber; i++) {
     reportsArray.push(
-      {
-        bindId: 'testBinding' + i,
-        name: 'testNamne' + i,
-      });
+        {
+          bindId: 'testBinding' + i,
+          name: 'testNamne' + i,
+        });
   }
   return reportsArray;
 }
