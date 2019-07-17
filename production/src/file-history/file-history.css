@@ -85,6 +85,7 @@ button.add-data-btn:focus {
 
 .mstr-icon.edit,
 .mstr-icon.refresh,
+.mstr-icon.reprompt,
 .mstr-icon.trash {
     cursor: pointer;
     display: inline-flex;
