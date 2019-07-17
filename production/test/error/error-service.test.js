@@ -14,6 +14,7 @@ import {sessionHelper} from '../../src/storage/session-helper';
 import {
   NOT_PUBLISHED_CUBE,
   NOT_SUPPORTED_SERVER_ERR,
+  NOT_SUPPORTED_CUSTOM_GROUP,
   NOT_IN_METADATA,
   PROJECT_ROW_LIMIT,
   NOT_SUPPORTED_PROMPTS_REFRESH,
@@ -237,6 +238,16 @@ describe('ErrorService', () => {
       // then
       expect(spyMethod).toBeCalled();
       expect(spyMethod).toBeCalledWith('warning', NOT_SUPPORTED_SERVER_ERR);
+    });
+    it('should display notification on InternalServerError on report with Custom Groups', () => {
+      // given
+      const error = new InternalServerError({iServerCode: '-2147171502'});
+      const spyMethod = jest.spyOn(notificationService, 'displayNotification');
+      // when
+      errorService.handleError(error);
+      // then
+      expect(spyMethod).toBeCalled();
+      expect(spyMethod).toBeCalledWith('warning', NOT_SUPPORTED_CUSTOM_GROUP);
     });
     it('should display notification on exceeding row limits', () => {
       // given
