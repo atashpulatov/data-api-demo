@@ -337,5 +337,37 @@ describe('PopupViewSelector', () => {
 
       expect(editedReport.selectedFilters).toEqual(complexFilterValue);
     });
+
+    it('should parse edited dataset properties', () => {
+      // given
+      const datesetInRedux = {
+        id: 'datasetId',
+        projectId: 'projectId',
+        name: 'reportName',
+        objectType: 'dataset',
+        body: reportBody,
+      };
+      const reduxState = {
+        navigationTree: {},
+        sessionReducer: {
+          authToken: 'token',
+        },
+        popupReducer: {
+          editedReport: datesetInRedux,
+        },
+      };
+      // when
+      const {editedReport} = mapStateToProps(reduxState);
+      // then
+      expect(editedReport.projectId).toEqual(datesetInRedux.projectId);
+      expect(editedReport.reportSubtype).toEqual(779);
+      expect(editedReport.reportName).toEqual(datesetInRedux.name);
+      expect(editedReport.reportType).toEqual(datesetInRedux.objectType);
+      expect(editedReport.reportId).toEqual(datesetInRedux.id);
+
+      expect(editedReport.selectedAttributes).toEqual([attributeId]);
+      expect(editedReport.selectedMetrics).toEqual([metricId]);
+      expect(editedReport.selectedFilters).toEqual(filterValue);
+    });
   });
 });

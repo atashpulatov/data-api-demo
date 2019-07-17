@@ -100,7 +100,7 @@ function parsePopupState(popupState) {
     reportType: popupState.objectType,
     reportSubtype: popupState.objectType === 'report'
       ? 768
-      : null,
+      : 779,
   };
   restoreFilters(popupState.body, reportData);
   return reportData;
