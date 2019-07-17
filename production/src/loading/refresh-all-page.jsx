@@ -79,7 +79,7 @@ export class _RefreshAllPage extends Component {
   getTooltipContent = (refreshData) => {
     const excel = 'Excel returned error';
     const {t} = this.props;
-    if (refreshData.isError === true) {
+    if (refreshData.isError) {
       return (
         <div className="tooltip-content">
           <div className="tooltip-header">
