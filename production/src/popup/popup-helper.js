@@ -12,6 +12,11 @@ class PopupHelper {
 
   getPopupHeight = (reportArray, reportNumberToShow = 10) => {
     const reportsListLength = reportArray.length > reportNumberToShow ? reportNumberToShow : reportArray.length;
+    // This formula calculates the height as a percentage of the excel window
+    // 230 is the title and refresh text height
+    // 30 is the height of each report list (variable)
+    // 200 is the excel ribbon + toolbar height
+    // 100 is to convert to percentage
     return Math.floor(((230 + (reportsListLength * 30)) / (window.innerHeight + 200)) * 100);
   };
 
