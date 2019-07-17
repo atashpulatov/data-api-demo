@@ -6,7 +6,6 @@ export const Tabs = ({t, children}) => {
       <div className="tab-container">
         <nav className="tabs-nav">
           <div className="tab-header">{t('Imported Data')}</div>
-          <div className="tab-line"></div>
         </nav>
       </div>
       <section className="tab-content">
