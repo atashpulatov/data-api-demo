@@ -99,13 +99,13 @@ export class _RefreshAllPage extends Component {
   render() {
     const {t} = this.props;
     const displayName = this.state.name || 'data';
-    return (<dialog className='refreshing-page dialogStyle'>
-      <div className="refresh-title">{t('Refresh All Data')}</div>
+    return (<div role="dialog" aria-labelledby="refresh-title" aria-describedby="refresh-report" className='refreshing-page dialog-style'>
+      <div id="refresh-title" className="refresh-title">{t('Refresh All Data')}</div>
       <div className="refresh-header">
         {!this.state.finished
           ?
           <div className='refresh-progress'>
-            <h1 title={displayName} className={'titleStyle'}>{`${displayName}`}</h1>
+            <h1 id="refresh-report" title={displayName} className={'titleStyle'}>{`${displayName}`}</h1>
             <h1 className={'progressStyle'}>{` (${this.state.currentNumber}/${this.state.allNumber})`}</h1>
             <LoadingText text={t('Loading data...')} />
           </div>
@@ -131,7 +131,7 @@ export class _RefreshAllPage extends Component {
         onClick={this.finished}>
           Ok
       </Button> */}
-    </dialog>);
+    </div>);
   }
 };
 
