@@ -1,5 +1,5 @@
 import {officeApiHelper} from './office-api-helper';
-import {mstrObjectRestService, DATA_LIMIT, PROMISE_LIMIT} from '../mstr-object/mstr-object-rest-service';
+import {mstrObjectRestService, DATA_LIMIT, PROMISE_LIMIT, IMPORT_ROW_LIMIT} from '../mstr-object/mstr-object-rest-service';
 import {reduxStore} from '../store';
 import {officeProperties} from './office-properties';
 import {officeStoreService} from './store/office-store-service';
@@ -18,6 +18,9 @@ class OfficeDisplayService {
   printObject = async (options) => {
     const {isRefreshAll = false, isPrompted, objectId, projectId, isReport} = options;
     if (!isRefreshAll) {
+      // /Reports/getDefinition (GET /reports/{reportId}) endpoint does not work for Reports with Object Prompt(?)
+      // so we're using /Object_Management/getObject (GET /objects/{id}) instead
+      // should probably open an DE
       const objectInfo = !!isPrompted ? await mstrObjectRestService.getObjectInfo(objectId, projectId, isReport) : await mstrObjectRestService.getObjectDefinition(objectId, projectId, isReport);
       reduxStore.dispatch({
         type: officeProperties.actions.preLoadReport,
@@ -356,7 +359,7 @@ class OfficeDisplayService {
       const {excelContext, officeTable} = officeData;
       const {mstrTable, columns, rows} = instanceDefinition;
       const {headers} = mstrTable;
-      const limit = Math.floor(DATA_LIMIT / columns);
+      const limit = Math.min(Math.floor(DATA_LIMIT / columns), IMPORT_ROW_LIMIT);
       const rowGenerator = mstrObjectRestService.getObjectContentGenerator(instanceDefinition, objectId, projectId, isReport, dossierData, body, limit);
       let rowIndex = 0;
       let contextPromises = [];

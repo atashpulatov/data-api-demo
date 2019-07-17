@@ -8,6 +8,7 @@ import {withTranslation} from 'react-i18next';
 import {officeApiHelper} from '../office/office-api-helper';
 import {toggleSecuredFlag} from '../office/office-actions';
 import {MSTRIcon} from 'mstr-react-library';
+import {helper} from '../helpers/helpers';
 import mstrLogo from './assets/mstr_logo.png';
 
 const APP_VERSION = process.env.REACT_APP_MSTR_OFFICE_VERSION;
@@ -57,13 +58,6 @@ export class _Header extends Component {
     }
   }
 
-  isOverflown = (userName) => {
-    this.element = document.createElement('canvas');
-    this.context = this.element.getContext('2d');
-    const elementWidth = 90;
-    return this.context.measureText(userName).width > elementWidth; // width of the element is constant and equal to ~90px
-  }
-
   prepareEmail = () => {
     const {t} = this.props;
     const {host, platform, version} = window.Office.context.diagnostics;
@@ -109,21 +103,33 @@ export class _Header extends Component {
             <span className="no-trigger-close" id='initials' alt={t('User profile')}>{userInitials}</span> :
             <img className="no-trigger-close" id='profile-image' src={logo} alt={t('User profile')} />
           /* TODO: When rest api returns profileImage use it as source */}
-          {this.isOverflown(userNameDisplay) ?
+          {helper.isOverflown(userNameDisplay, 130) ?
             <Popover placement="bottom" content={userNameDisplay} mouseEnterDelay={1}>
               <span id="userName" className="user-name no-trigger-close">{userNameDisplay}</span>
             </Popover> :
             <span id="userName" className="user-name no-trigger-close">{userNameDisplay}</span>
           }
         </li>
-        <li><a href='https://www.microstrategy.com/legal-folder/privacy-policy' target="_blank" rel="noopener">{t('Privacy Policy')}</a></li>
-        <li><a href='https://www.microstrategy.com/legal-folder/legal-policies/terms-of-use' target="_blank" rel="noopener">{t('Terms of Use')}</a></li>
+        <li>
+          <a
+            tabIndex="0"
+            href='https://www.microstrategy.com/legal-folder/privacy-policy'
+            target="_blank"
+            rel="noopener">{t('Privacy Policy')}</a>
+        </li>
+        <li>
+          <a
+            tabIndex="0"
+            href='https://www.microstrategy.com/legal-folder/legal-policies/terms-of-use'
+            target="_blank"
+            rel="noopener">{t('Terms of Use')}</a>
+        </li>
         {/* TODO: get help url for plugin */}
         {/* <li><a href='' target="_blank" rel="noopener">{t('Help')}</a></li> */}
         < li className="settings-version no-trigger-close">{t('Version', {APP_VERSION})}</li>
         <li className="no-trigger-close">
           <div className="contact-us">
-            <span><a href={this.prepareEmail()}>{t('Contact Us')}</a></span>
+            <span><a tabIndex="0" href={this.prepareEmail()}>{t('Contact Us')}</a></span>
           </div>
           <div className="logout-btn">
             <Button id="logOut" size='small' onClick={logout}>
