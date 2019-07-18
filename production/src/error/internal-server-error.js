@@ -1,4 +1,4 @@
-export function InternalServerError(error) {
+export function InternalServerError(error = {response: {}}) {
   this.status = error.status;
   this.response = error.response;
   this.message = error.message;
