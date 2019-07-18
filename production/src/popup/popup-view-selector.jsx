@@ -124,11 +124,9 @@ function restoreFilters(body, reportData) {
 
 function parseFilters(filtersNodes) {
   if (!!filtersNodes[0].operands) {
-    debugger;
     // equivalent to flatMap((node) => node.operands)
     return parseFilters(filtersNodes.reduce((nodes, node) => nodes.concat(node.operands), []));
   } else {
-    debugger;
     const elementNodes = filtersNodes.filter((node) => node.type === 'elements');
     // equivalent to flatMap((node) => node.elements)
     const elements = elementNodes.reduce((elements, node) => elements.concat(node.elements), []);
