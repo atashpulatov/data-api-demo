@@ -33,7 +33,7 @@ class ErrorService {
       return new EnvironmentNotFoundError(error);
     }
     if (!!error.response) {
-      switch (error.response.status) {
+      switch (error.status || error.response.status) {
         case 404:
           return new EnvironmentNotFoundError(error);
         case 400:
@@ -41,7 +41,7 @@ class ErrorService {
         case 401:
           return new UnauthorizedError(error);
         case 500:
-          return new InternalServerError(error.response.body ? error.response.body : {});
+          return new InternalServerError(error);
         default:
           return error;
       }
@@ -134,7 +134,7 @@ class ErrorService {
       return '400 - There has been a problem with your request';
     };
     if (error instanceof InternalServerError) {
-      return errorMessages[error.iServerCode];
+      return errorMessages[error.response.body ? error.response.body.iServerCode : '-1'];
     };
     if (error instanceof PromptedReportError) {
       return NOT_SUPPORTED_PROMPTS_REFRESH;
