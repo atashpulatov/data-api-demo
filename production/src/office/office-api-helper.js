@@ -230,7 +230,7 @@ class OfficeApiHelper {
    *
    * @param {Office} cell Starting table body cell
    * @param {Array} headers Headers object from OfficeConverterServiceV2.getHeaders
-   * @memberof OfficeApiHelpers
+   * @memberof OfficeApiHelper
    * @return {Object}
    */
   getCrossTabRange = (cell, headers) => {
