@@ -43,6 +43,69 @@
     pointer-events: all;
 }
 
+.error-notification {
+  min-width: 330px;
+  margin-right: 16px;
+}
+
+.error-notification .ant-notification-notice-content .ant-notification-notice-description {
+  margin-left: 36px;
+}
+
+.error-notification.ant-notification-notice {
+  padding: 28px 24px;
+}
+
+.error-notification .ant-btn {
+  width: 89px;
+  height: 30px;
+}
+
+.error-notification .ant-notification-notice-btn {
+  margin: 5px 34% 0 35%;
+}
+
+.error-notification p {
+  font-family: Roboto;
+  float: right;
+  cursor: pointer;
+  color: #1C91DC;
+  font-size: 12px;
+}
+
+.error-notification .show-more-arrow {
+  transform: rotate(-45deg);
+  border-bottom: 1px solid #3492ED;
+  border-left: 1px  solid #3492ED;
+  width: 5px;
+  height: 5px;
+  margin-left: 6.4px;
+  margin-bottom: 2px;
+  display: inline-block;
+  transition: 0.2s all;
+  transform-origin: 2px 3px;
+}
+
+.error-notification .show-less .show-more-arrow {
+  transform: rotate(135deg);
+}
+
+.error-notification .text-hidden {
+  max-height: 0;
+  transition: 0.4s all;
+  font-size: 12px;
+
+  color: #606060;
+}
+
+.error-notification .text-shown {
+  max-height: 176px;
+  transition: 0.4s all;
+  font-size: 12px;
+
+  color: #606060;
+}
+
 .ant-notification>span {
     display: flex;
     flex-direction: column;

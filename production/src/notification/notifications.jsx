@@ -3,6 +3,7 @@ import {notification, message, Icon, Button} from 'antd';
 import {connect} from 'react-redux';
 import './Notifications.css';
 import {withTranslation} from 'react-i18next';
+import CustomNotification from './custom-notification';
 
 export class NotificationsWithoutRedux extends Component {
   constructor(props) {
@@ -38,6 +39,7 @@ export class NotificationsWithoutRedux extends Component {
         break;
       case 'error':
         icon = <Icon type="close-circle" theme="filled" style={{color: '#f5222d'}} />;
+        console.log(this.props);
         break;
       case 'info':
         icon = <Icon type="info-circle" theme="filled" style={{color: '#1890ff'}} />;
@@ -56,12 +58,21 @@ export class NotificationsWithoutRedux extends Component {
       default:
         break;
     }
+    // notification.open({
+    //   message: t(title),
+    //   description: this.translateContent(content, t),
+    //   icon,
+    //   btn: btn,
+    //   key,
+    // });
+    console.log(this.props);
     notification.open({
       message: t(title),
-      description: this.translateContent(content, t),
+      description: <CustomNotification />,
       icon,
       btn: btn,
       key,
+      className: 'error-notification',
     });
   };
 
