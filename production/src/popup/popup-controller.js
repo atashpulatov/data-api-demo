@@ -23,6 +23,10 @@ class PopupController {
     await this.runPopup(PopupTypeEnum.editFilters, 80, 80, reportParams);
   };
 
+  runRepromptPopup = async (reportParams) => {
+    await this.runPopup(PopupTypeEnum.promptsWindow, 80, 80, reportParams);
+  };
+
   runPopup = async (popupType, height, width, reportParams = null) => {
     const session = sessionHelper.getSession();
     try {

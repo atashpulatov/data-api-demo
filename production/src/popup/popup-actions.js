@@ -26,6 +26,19 @@ export function callForEdit(reportParams) {
   };
 };
 
+export function callForReprompt(reportParams) {
+  return async (dispatch) => {
+    await Promise.all([officeApiHelper.getExcelSessionStatus(), authenticationHelper.validateAuthToken()]);
+    const repromptedReport = officeStoreService.getReportFromProperties(reportParams.bindId);
+    console.log(repromptedReport);
+    dispatch({
+      type: SET_REPORT_N_FILTERS,
+      repromptedReport,
+    });
+    popupController.runRepromptPopup(reportParams);
+  };
+};
+
 export function refreshReportsArray(reportArray, isRefreshAll) {
   return async (dispatch) => {
     try {
