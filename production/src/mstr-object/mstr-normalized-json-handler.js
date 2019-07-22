@@ -20,9 +20,21 @@ class NormalizedJsonHandler {
    * @return {Object}
    */
   lookupElement = (definition, axis, attributeIndex, elementIndex) => {
-    const rawElement = definition.grid[axis][attributeIndex].elements[elementIndex];
-    const {name, formValues} = rawElement;
-    return {...rawElement, value: formValues || [name]};
+    return definition[axis][attributeIndex].elements[elementIndex];
+  };
+
+  /**
+   * Gets the attribute name based on its index, returns object with an additional value key.
+   *
+   * @param {Object} definition - Dataset definition
+   * @param {string} axis - 'rows' or 'columns'
+   * @param {number} attributeIndex - Array index that corresponds to an attribute
+   *
+   * @memberof JSONHandler
+   * @return {Object}
+   */
+  lookupAttributeName = (definition, axis, attributeIndex) => {
+    return definition[axis][attributeIndex];
   };
 
   /**
@@ -35,9 +47,25 @@ class NormalizedJsonHandler {
    * @return {Array}
    */
   mapElementIndicesToElements = (definition, axis, elementIndices) => {
-    return elementIndices.map((elementIndex, attributeIndex) =>
+    return elementIndices.map((elementIndex, attributeIndex) => {
       // For elementsIndices tuple, each subscript is an attribute index and each value is an element index.
-      this.lookupElement(definition, axis, attributeIndex, elementIndex));
+      return this.lookupElement(definition, axis, attributeIndex, elementIndex);
+    });
+  };
+
+  /**
+   * Get an array with element names
+   *
+   * @param {Object} definition - Dataset definition
+   * @param {string} axis - 'rows' or 'columns'
+   * @param {number} elementIndices - Array index that corresponds to an attribue element
+   * @memberof NormalizedJsonHandler
+   * @return {Array}
+   */
+  mapElementIndicesToNames = (definition, axis, elementIndices) => {
+    return elementIndices.map((_, attributeIndex) =>
+      // For elementsIndices tuple, each subscript is an attribute index and each value is an element index.
+      this.lookupAttributeName(definition, axis, attributeIndex));
   };
 
   /**
@@ -45,27 +73,47 @@ class NormalizedJsonHandler {
    *
    * @param {Object} definition - Dataset definition
    * @param {Object} data - Response data object
+   * @param {Object} headers - Header data from response
    * @param {function} onElement - Callback function to process elements
    * @param {function} onMetricValue - Callback function to process metric values
    *
    * @memberof NormalizedJsonHandler
    * @return {Array}
    */
-  renderTabular = (definition, data, onElement, onMetricValue) => {
+  renderTabular = (definition, data, headers, onElement, onMetricValue) => {
     // For each row in header zone.
-    const {headers, metricValues} = data;
-
+    const {values} = data;
     return headers.rows.map((headerCells, rowIndex) => {
       const rowElements = this.mapElementIndicesToElements(definition, 'rows', headerCells);
       // Process elements
       return rowElements.map((e, attributeIndex) => onElement(e, rowIndex, attributeIndex))
       // Process metric values of the same row
-          .concat(metricValues[rowIndex].map((mv, mvZoneColumnIndex) => onMetricValue(mv, rowIndex, mvZoneColumnIndex)));
+          .concat(values[rowIndex].map((mv, mvZoneColumnIndex) => onMetricValue(mv, rowIndex, mvZoneColumnIndex)));
     });
   };
 
   /**
    * Creates a 2D array with the crosstabs headers
+   *
+   * @param {Object} definition - Dataset definition
+   * @param {string} axis - 'rows' or 'columns'
+   * @param {Array} headers - Header data from response
+   * @param {function} onElement - Callback function to process elements
+   *
+   * @memberof NormalizedJsonHandler
+   * @return {Array}
+   */
+  renderHeaders = (definition, axis, headers, onElement) => {
+    const headersNormalized = axis === 'columns' ? this._transposeMatrix(headers[axis]) : headers[axis];
+    const matrix = headersNormalized.map((headerCells) => {
+      const axisElements = this.mapElementIndicesToElements(definition, axis, headerCells);
+      return axisElements.map((e, axisIndex, elementIndex) => onElement(e, axisIndex, elementIndex));
+    });
+    return axis === 'columns' ? this._transposeMatrix(matrix) : matrix;
+  }
+
+  /**
+   * Creates a 2D array with the header titles
    *
    * @param {Object} definition - Dataset definition
    * @param {string} axis - 'rows' or 'columns'
@@ -75,12 +123,13 @@ class NormalizedJsonHandler {
    * @memberof NormalizedJsonHandler
    * @return {Array}
    */
-  renderHeaders = (definition, axis, headers, onElement) => {
+  renderTitles = (definition, axis, headers, onElement) => {
     const matrix = headers[axis].map((headerCells) => {
-      const axisElements = this.mapElementIndicesToElements(definition, axis, headerCells);
+      const mapFn = axis === 'rows' ? this.mapElementIndicesToNames : this.mapElementIndicesToElements;
+      const axisElements = mapFn(definition, axis, headerCells);
       return axisElements.map((e, axisIndex, elementIndex) => onElement(e, axisIndex, elementIndex));
     });
-    return axis === 'columns' ? this._transposeMatrix(matrix) : matrix;
+    return matrix;
   }
 
   /**

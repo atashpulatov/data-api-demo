@@ -24,7 +24,7 @@ class OfficeConverterServiceV2 {
    * @memberof OfficeConverterServiceV2
    */
   isCrosstab(response) {
-    return response.definition.grid.crossTab;
+    return !!response.definition.crossTab;
   }
 
   /**
@@ -37,7 +37,12 @@ class OfficeConverterServiceV2 {
   getRows(response) {
     // onMetric is passed when mapping the row [{rv:1, fv:"$1"}, ...]
     const onMetric = ({rv}) => rv;
-    return jsonHandler.renderRows(response.data.metricValues, onMetric);
+    const onAttribute = ({name}) => name;
+    if (this.isCrosstab(response)) {
+      return jsonHandler.renderRows(response.data.values, onMetric);
+    } else {
+      return jsonHandler.renderTabular(response.definition, response.data, response.headers, onAttribute, onMetric);
+    }
   }
 
   /**
@@ -48,10 +53,16 @@ class OfficeConverterServiceV2 {
    * @memberof OfficeConverterServiceV2
    */
   getHeaders(response) {
-    const onHeader = (e) => e.value[0];
-    const rows = jsonHandler.renderHeaders(response.definition, 'rows', response.data.headers, onHeader);
-    const columns = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onHeader);
-    return {rows, columns};
+    const onElement = ({name}) => name;
+    if (this.isCrosstab(response)) {
+      const rows = jsonHandler.renderHeaders(response.definition, 'rows', response.headers, onElement);
+      const columns = jsonHandler.renderHeaders(response.definition, 'columns', response.headers, onElement);
+      return {rows, columns};
+    } else {
+      const attributeTitles = jsonHandler.renderTitles(response.definition, 'rows', response.headers, onElement);
+      const metricHeaders = jsonHandler.renderHeaders(response.definition, 'columns', response.headers, onElement);
+      return {columns: [...attributeTitles[0], ...metricHeaders[0]]};
+    }
   }
 
   /**
@@ -63,28 +74,31 @@ class OfficeConverterServiceV2 {
    */
   getColumnInformation(response) {
     const onColumnHeader = (element) => element;
-    const columns = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onColumnHeader);
+    const columns = jsonHandler.renderHeaders(response.definition, 'columns', response.headers, onColumnHeader);
     const lastRow = columns[columns.length - 1];
     return lastRow.map((element, index) => {
-      if (element.type === 'Metric') {
-        return {
-          category: element.numberFormatting.category,
-          formatString: element.numberFormatting.formatString,
-          id: element.id,
-          index,
-          isAttribute: false,
-          name: element.name,
-        };
+      switch (element.type.toLowerCase()) {
+        case 'metric':
+          return {
+            category: element.numberFormatting.category,
+            formatString: element.numberFormatting.formatString,
+            id: element.id,
+            index,
+            isAttribute: false,
+            name: element.name,
+          };
+        case 'attribute':
+          return {
+            attributeId: element.id,
+            attributeName: element.name,
+            formId: element.form.id,
+            formName: element.form.name,
+            index,
+            isAttribute: true,
+          };
+        default:
+          return {};
       }
-      // TODO: Check, currently there are no v2 examples that have attributes in the table body
-      return {
-        attributeId: element.id,
-        attributeName: element.name,
-        formId: element.form.id,
-        formName: element.form.name,
-        index,
-        isAttribute: true,
-      };
     });
   }
 }
