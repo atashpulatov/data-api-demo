@@ -2,14 +2,7 @@ import {officeProperties} from './office-properties';
 import {OfficeError} from './office-error';
 import {officeStoreService} from './store/office-store-service';
 
-export const initialState = {
-  loading: false,
-  isSecured: false,
-  isSettings: false,
-  isConfirm: false,
-};
-
-export const officeReducer = (state = initialState, action) => {
+export const officeReducer = (state = {loading: false}, action) => {
   switch (action.type) {
     case officeProperties.actions.preLoadReport:
       return onPreLoadReport(action, state);

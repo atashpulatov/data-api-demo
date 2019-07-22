@@ -308,39 +308,6 @@ describe('Home', () => {
       expect(mockDeleteBody).toHaveBeenCalledTimes(6);
       expect(mockToggleSecured).toBeCalled();
     });
-    it('should display active Secure Data button when some reports are imported and isSecured is false', () => {
-      // given
-      const mockReportArray = createMockFilesArray();
-      // when
-      const wrappedComponent = mount(
-          <_Header
-            reportArray={mockReportArray}
-            isSecured={false} />);
-      // then
-      expect(wrappedComponent.find('Button .secure-btn').length).toBe(1);
-      expect(wrappedComponent.find('.secure-access-active').length).toBe(1);
-    });
-    it('should display INactive Secure Data button when some reports are imported and isSecured is true', () => {
-      // given
-      const mockReportArray = createMockFilesArray();
-      // when
-      const wrappedComponent = mount(
-          <_Header
-            reportArray={mockReportArray}
-            isSecured={true} />);
-      // then
-      expect(wrappedComponent.find('.secure-access-inactive').length).toBe(1);
-    });
-    it('should NOT display Secure Data button when NO reports are imported', () => {
-      // given
-      // when
-      const wrappedComponent = mount(
-          <_Header
-            reportArray={[]}
-            isSecured={false} />);
-      // then
-      expect(wrappedComponent.find('Button .secure-btn').length).toBe(0);
-    });
   });
 });
 
