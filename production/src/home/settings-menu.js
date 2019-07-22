@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {withTranslation} from 'react-i18next';
-import {toggleSecuredFlag, toggleIsConfirmFlag} from '../office/office-actions';
+import {toggleIsConfirmFlag} from '../office/office-actions';
 import logo from './assets/mstr_logo.png';
 import {helper} from '../helpers/helpers';
 import {Popover} from 'antd';
@@ -92,7 +92,6 @@ function mapStateToProps({sessionReducer, officeReducer}) {
 };
 
 const mapDispatchToProps = {
-  toggleSecuredFlag,
   toggleIsConfirmFlag,
 };
 

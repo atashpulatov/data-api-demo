@@ -3,7 +3,7 @@ import {sessionHelper} from '../storage/session-helper';
 import {Button, Popover} from 'antd';
 import {connect} from 'react-redux';
 import {withTranslation} from 'react-i18next';
-import {toggleSecuredFlag, toggleIsSettingsFlag, toggleIsConfirmFlag} from '../office/office-actions';
+import {toggleIsSettingsFlag} from '../office/office-actions';
 import {MSTRIcon} from 'mstr-react-library';
 import mstrLogo from './assets/mstr_logo.png';
 import {SettingsMenu} from './settings-menu';
@@ -89,9 +89,7 @@ function mapStateToProps({officeReducer}) {
 };
 
 const mapDispatchToProps = {
-  toggleSecuredFlag,
   toggleIsSettingsFlag,
-  toggleIsConfirmFlag,
 };
 
 export const Header = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_Header));
