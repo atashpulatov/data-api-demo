@@ -87,7 +87,7 @@ export class _OfficeLoadedFile extends React.Component {
         </Col>
         <Col span={1} offset={2} style={{marginTop: '1px'}}>
           <Popover placement="bottom" content={t('Edit Data')} mouseEnterDelay={1}>
-            {!isPrompted && <span
+            {<span
               tabIndex="0"
               className="loading-button-container"
               onClick={this.editAction}>
