@@ -3,42 +3,55 @@ import {sessionHelper} from '../storage/session-helper';
 import {Button, Popover} from 'antd';
 import {connect} from 'react-redux';
 import {withTranslation} from 'react-i18next';
-import {toggleSecuredFlag, toggleIsConfirmFlag} from '../office/office-actions';
+import {toggleSecuredFlag, toggleIsSettingsFlag, toggleIsConfirmFlag} from '../office/office-actions';
 import {MSTRIcon} from 'mstr-react-library';
 import mstrLogo from './assets/mstr_logo.png';
 import {SettingsMenu} from './settings-menu';
 import {Confirmation} from './confirmation';
 
 export class _Header extends Component {
-  constructor() {
-    super();
-    this.state = {isSettings: false};
-  }
-
   componentDidMount = async () => {
     sessionHelper.getUserInfo();
+    this.addCloseSettingsListeners();
+  }
+
+  componentWillUnmount = () => {
+    this.removeCloseSettingsListeners();
+  }
+
+  shouldComponentUpdate = (nextProps) => {
+    if (nextProps.isConfirm && !this.props.isConfirm) {
+      this.removeCloseSettingsListeners();
+    }
+    if (!nextProps.isConfirm && this.props.isConfirm) {
+      this.addCloseSettingsListeners();
+    }
+    return true;
+  }
+
+  addCloseSettingsListeners = () => {
     document.addEventListener('click', this.closeOnClick);
     document.addEventListener('keyup', this.closeOnTab);
   }
 
-  componentWillUnmount = () => {
+  removeCloseSettingsListeners = () => {
     document.removeEventListener('click', this.closeOnClick);
     document.removeEventListener('keyup', this.closeOnTab);
   }
 
   toggleSettings = () => {
-    return this.setState({...this.state, isSettings: !this.state.isSettings});
+    this.props.toggleIsSettingsFlag(!this.props.isSettings);
   }
 
   closeOnTab = (e) => {
-    if (e.keyCode === 27 && this.state.isSettings) {
-      this.setState({...this.state, isSettings: false});
+    if (e.keyCode === 27 && this.props.isSettings) {
+      this.props.toggleIsSettingsFlag(false);
     }
   };
 
   closeOnClick = (e) => {
-    if (this.state.isSettings && !e.target.classList.contains('no-trigger-close')) {
-      this.setState({...this.state, isSettings: false});
+    if (this.props.isSettings && !e.target.classList.contains('no-trigger-close')) {
+      this.props.toggleIsSettingsFlag(false);
     }
   };
 
@@ -58,7 +71,7 @@ export class _Header extends Component {
               <MSTRIcon type="settings" />
             </Button>
           </Popover>
-          {this.state.isSettings && <SettingsMenu />}
+          {this.props.isSettings && <SettingsMenu />}
           {isConfirm && <Confirmation />}
         </div>
       </header >
@@ -70,14 +83,14 @@ _Header.defaultProps = {
   t: (text) => text,
 };
 
-function mapStateToProps(state) {
-  const {userFullName, userInitials, envUrl, authToken} = state.sessionReducer;
-  const {reportArray, isSecured, isConfirm} = state.officeReducer;
-  return {userFullName, userInitials, envUrl, authToken, reportArray, isSecured, isConfirm};
+function mapStateToProps({officeReducer}) {
+  const {isSettings, isConfirm} = officeReducer;
+  return {isSettings, isConfirm};
 };
 
 const mapDispatchToProps = {
   toggleSecuredFlag,
+  toggleIsSettingsFlag,
   toggleIsConfirmFlag,
 };
 

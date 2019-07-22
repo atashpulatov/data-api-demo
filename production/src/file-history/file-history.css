@@ -250,7 +250,6 @@ button.add-data-btn:focus {
 
 .settings-list .user-data {
     padding-bottom: 7px;
-    margin-bottom: 6px;
     font-weight: 500;
     border-bottom: solid 1px #e4e4e4;
 }
@@ -262,6 +261,8 @@ button.add-data-btn:focus {
 }
 
 .settings-list .clear-data {
+    padding-top: 6px;
+    padding-bottom: 6px;
     border-bottom: solid 1px #e4e4e4;
 }
 

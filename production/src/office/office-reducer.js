@@ -2,7 +2,14 @@ import {officeProperties} from './office-properties';
 import {OfficeError} from './office-error';
 import {officeStoreService} from './store/office-store-service';
 
-export const officeReducer = (state = {loading: false}, action) => {
+export const initialState = {
+  loading: false,
+  isSecured: false,
+  isSettings: false,
+  isConfirm: false,
+};
+
+export const officeReducer = (state = initialState, action) => {
   switch (action.type) {
     case officeProperties.actions.preLoadReport:
       return onPreLoadReport(action, state);
@@ -28,6 +35,8 @@ export const officeReducer = (state = {loading: false}, action) => {
       return onStopLoading(state);
     case officeProperties.actions.toggleSecuredFlag:
       return toggleSecuredFlag(action, state);
+    case officeProperties.actions.toggleIsSettingsFlag:
+      return toggleIsSettingsFlag(action, state);
     case officeProperties.actions.toggleIsConfirmFlag:
       return toggleIsConfirmFlag(action, state);
     default:
@@ -150,6 +159,13 @@ function toggleSecuredFlag(action, state) {
   return {
     ...state,
     isSecured: action.isSecured,
+  };
+}
+
+function toggleIsSettingsFlag(action, state) {
+  return {
+    ...state,
+    isSettings: action.isSettings,
   };
 }
 
