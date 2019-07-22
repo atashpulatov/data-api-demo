@@ -47,7 +47,7 @@ class OfficeDisplayService {
       const {envUrl} = officeApiHelper.getCurrentMstrContext();
 
       // Get excel context and initial cell
-      console.groupCollapsed('Importing data performance');
+      console.group('Importing data performance');
       console.time('Total');
       console.time('Init excel');
       excelContext = await officeApiHelper.getExcelContext();
@@ -207,7 +207,7 @@ class OfficeDisplayService {
     try {
       officeTable.load('name');
       officeTable.name = officeTableId;
-      officeTable.getHeaderRowRange().values = [mstrTable.headers];
+      officeTable.getHeaderRowRange().values = [mstrTable.headers.columns];
       sheet.activate();
       await context.sync();
       return officeTable;
@@ -357,8 +357,7 @@ class OfficeDisplayService {
     try {
       const {objectId, projectId, dossierData, isReport, body} = connectionData;
       const {excelContext, officeTable} = officeData;
-      const {mstrTable, columns, rows} = instanceDefinition;
-      const {headers} = mstrTable;
+      const {columns, rows} = instanceDefinition;
       const limit = Math.min(Math.floor(DATA_LIMIT / columns), IMPORT_ROW_LIMIT);
       const rowGenerator = mstrObjectRestService.getObjectContentGenerator(instanceDefinition, objectId, projectId, isReport, dossierData, body, limit);
       let rowIndex = 0;
@@ -368,7 +367,7 @@ class OfficeDisplayService {
         console.groupCollapsed(`Importing rows: ${rowIndex} to ${Math.min(rowIndex + limit, rows)}`);
         console.timeEnd('Fetch data');
         console.time('Append rows');
-        const excelRows = this._getRowsArray(row, headers);
+        const excelRows = row;
         excelContext.workbook.application.suspendApiCalculationUntilNextSync();
         this._appendRowsToTable(officeTable, excelRows, rowIndex, isRefresh);
         rowIndex += row.length;
@@ -418,10 +417,6 @@ class OfficeDisplayService {
     if (!usedDataRange.isNullObject) {
       throw new OverlappingTablesError(TABLE_OVERLAP);
     }
-  }
-
-  _getRowsArray = (rows, headers) => {
-    return rows.map((item) => headers.map((header) => item[header]));
   }
 
   async _answerPrompts(instanceDefinition, objectId, projectId, promptsAnswers, isReport, dossierData, body) {
