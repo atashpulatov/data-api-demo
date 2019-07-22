@@ -11,6 +11,15 @@ export function toggleSecuredFlag(isSecured) {
   };
 }
 
+export function toggleIsConfirmFlag(isConfirm) {
+  return (dispatch) => {
+    dispatch({
+      type: officeProperties.actions.toggleIsConfirmFlag,
+      isConfirm,
+    });
+  };
+}
+
 export const actions = {
   toggleSecuredFlag,
 };

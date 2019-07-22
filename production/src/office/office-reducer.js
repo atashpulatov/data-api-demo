@@ -28,6 +28,8 @@ export const officeReducer = (state = {loading: false}, action) => {
       return onStopLoading(state);
     case officeProperties.actions.toggleSecuredFlag:
       return toggleSecuredFlag(action, state);
+    case officeProperties.actions.toggleIsConfirmFlag:
+      return toggleIsConfirmFlag(action, state);
     default:
       break;
   }
@@ -148,6 +150,13 @@ function toggleSecuredFlag(action, state) {
   return {
     ...state,
     isSecured: action.isSecured,
+  };
+}
+
+function toggleIsConfirmFlag(action, state) {
+  return {
+    ...state,
+    isConfirm: action.isConfirm,
   };
 }
 

@@ -25,5 +25,6 @@ export const officeProperties = new Proxy({
     startRefreshingAll: 'START_REFRESHING_ALL',
     stopRefreshingAll: 'STOP_REFRESHING_ALL',
     toggleSecuredFlag: 'TOGGLE_SECURED_FLAG',
+    toggleIsConfirmFlag: 'TOGGLE_IS_CONFIRM_FLAG',
   },
 }, propsProxy);
