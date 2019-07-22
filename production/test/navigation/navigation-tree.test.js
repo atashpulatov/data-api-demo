@@ -44,7 +44,7 @@ describe('NavigationTree', () => {
       chosenProjectName: 'Prepare Data',
       chosenType: 'Data',
     };
-    const mockGetDefinition = jest.spyOn(mstrObjectRestService, 'getInstanceDefinition').mockImplementation(() => {
+    const mockGetDefinition = jest.spyOn(mstrObjectRestService, 'createInstance').mockImplementation(() => {
       return {
         rows: 1,
       };
@@ -81,7 +81,7 @@ describe('NavigationTree', () => {
       chosenProjectName: 'Prepare Data',
       chosenType: 'Data',
     };
-    const mockGetDefinition = jest.spyOn(mstrObjectRestService, 'getInstanceDefinition').mockImplementation(() => {
+    const mockGetDefinition = jest.spyOn(mstrObjectRestService, 'createInstance').mockImplementation(() => {
       return {
         rows: 0,
       };

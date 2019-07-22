@@ -14,6 +14,7 @@ import {sessionHelper} from '../../src/storage/session-helper';
 import {
   NOT_PUBLISHED_CUBE,
   NOT_SUPPORTED_SERVER_ERR,
+  NOT_SUPPORTED_CUSTOM_GROUP,
   NOT_IN_METADATA,
   PROJECT_ROW_LIMIT,
   NOT_SUPPORTED_PROMPTS_REFRESH,
@@ -230,7 +231,7 @@ describe('ErrorService', () => {
     });
     it('should display notification on InternalServerError', () => {
       // given
-      const error = new InternalServerError({iServerCode: '-2147171501'});
+      const error = new InternalServerError({response: {body: {iServerCode: '-2147171501'}}});
       const spyMethod = jest.spyOn(notificationService, 'displayNotification');
       // when
       errorService.handleError(error);
@@ -238,9 +239,19 @@ describe('ErrorService', () => {
       expect(spyMethod).toBeCalled();
       expect(spyMethod).toBeCalledWith('warning', NOT_SUPPORTED_SERVER_ERR);
     });
+    it('should display notification on InternalServerError on report with Custom Groups', () => {
+      // given
+      const error = new InternalServerError({response: {body: {iServerCode: '-2147171502'}}});
+      const spyMethod = jest.spyOn(notificationService, 'displayNotification');
+      // when
+      errorService.handleError(error);
+      // then
+      expect(spyMethod).toBeCalled();
+      expect(spyMethod).toBeCalledWith('warning', NOT_SUPPORTED_CUSTOM_GROUP);
+    });
     it('should display notification on exceeding row limits', () => {
       // given
-      const error = new InternalServerError({iServerCode: '-2147205488'});
+      const error = new InternalServerError({response: {body: {iServerCode: '-2147205488'}}});
       const spyMethod = jest.spyOn(notificationService, 'displayNotification');
       // when
       errorService.handleError(error);
@@ -250,7 +261,7 @@ describe('ErrorService', () => {
     });
     it('should display notification on not published cubes', () => {
       // given
-      const error = new InternalServerError({iServerCode: '-2147072488'});
+      const error = new InternalServerError({response: {body: {iServerCode: '-2147072488'}}});
       const spyMethod = jest.spyOn(notificationService, 'displayNotification');
       // when
       errorService.handleError(error);
@@ -260,7 +271,7 @@ describe('ErrorService', () => {
     });
     it('should display notification on object not present in metadata', () => {
       // given
-      const error = new InternalServerError({iServerCode: '-2147216373'});
+      const error = new InternalServerError({response: {body: {iServerCode: '-2147216373'}}});
       const spyMethod = jest.spyOn(notificationService, 'displayNotification');
       // when
       errorService.handleError(error);

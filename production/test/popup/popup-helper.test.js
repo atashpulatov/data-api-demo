@@ -25,7 +25,7 @@ describe('Popup actions', () => {
     // when
     const height = popupHelper.getPopupHeight(reportArray, reportNumberToShow);
     // then
-    expect(height).toBe(32);
+    expect(height).toBe(33);
   });
   it('getPopupHeight should calculate proper % height for 10 reports to show and 10 reports in array', () => {
     // given
@@ -35,7 +35,7 @@ describe('Popup actions', () => {
     // when
     const height = popupHelper.getPopupHeight(reportArray, reportNumberToShow);
     // then
-    expect(height).toBe(34);
+    expect(height).toBe(35);
   });
   it('getPopupHeight should calculate proper % height for 10 reports to show and 11 reports in array', () => {
     // given
@@ -45,7 +45,7 @@ describe('Popup actions', () => {
     // when
     const height = popupHelper.getPopupHeight(reportArray, reportNumberToShow);
     // then
-    expect(height).toBe(34);
+    expect(height).toBe(35);
   });
   it('runRefreshAllPopup should run proper helpers', () => {
     // given
@@ -178,6 +178,7 @@ describe('Popup actions', () => {
       id: 'testBindId',
       projectId: 'testProjectId',
       body: {},
+      isPrompted: false,
     };
     officeStoreService.getReportFromProperties = jest.fn().mockImplementation(() => mockReport);
     popupHelper.storageReportRefreshStart = jest.fn();
@@ -194,7 +195,7 @@ describe('Popup actions', () => {
       bindingId: 'testBind',
       body: mockReport.body,
       isRefresh: true,
-      isPrompted: false,
+      isPrompted: mockReport.isPrompted,
       isRefreshAll: isRefreshAll,
     };
     // when

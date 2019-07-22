@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
 import {LoadingText} from 'mstr-react-library';
-import {selectorProperties} from '../attribute-selector/selector-properties';
-import {Button, Popover} from 'antd';
+import {Popover} from 'antd';
 import {MSTRIcon} from 'mstr-react-library';
 import warningIcon from './assets/icon_conflict.svg';
 import {withTranslation} from 'react-i18next';
+import {helper} from '../helpers/helpers';
 
 import './refresh-all-page.css';
 
@@ -72,9 +71,7 @@ export class _RefreshAllPage extends Component {
       return <span className="result-icon"><MSTRIcon type='refresh-success' /></span>;
     }
     if (res.isError === true) {
-      return (<Popover overlayClassName="tooltip-card" placement="topLeft" content={this.getTooltipContent(res)}>
-        <span className="result-icon"><img width='17px' height='17px' src={warningIcon} alt='Refresh failed icon' /></span>
-      </Popover>);
+      return (<span className="result-icon"><img width='17px' height='17px' src={warningIcon} alt='Refresh failed icon' /></span>);
     }
     return <span className="result-icon"></span>;
   }
@@ -82,29 +79,33 @@ export class _RefreshAllPage extends Component {
   getTooltipContent = (refreshData) => {
     const excel = 'Excel returned error';
     const {t} = this.props;
-    return (
-      <div className="tooltip-content">
-        <div className="tooltip-header">
-          <span className="tooltip-header-icon"><img width='14px' height='14px' src={warningIcon} alt='Refresh failed icon' /></span>
+    if (refreshData.isError) {
+      return (
+        <div className="tooltip-content">
+          <div className="tooltip-header">
+            <span className="tooltip-header-icon"><img width='14px' height='14px' src={warningIcon} alt='Refresh failed icon' /></span>
+          </div>
+          <div className="tooltip-message">
+            <div className="tooltip-message-title">{this.props.t('{{report}} could not be refreshed', {report: refreshData.name})}</div>
+            <div className="tooltip-message-text">{refreshData.result.includes(excel) ? `${t(excel)}: ${refreshData.result.split(':')[1]}` : t(refreshData.result)}</div>
+          </div>
         </div>
-        <div className="tooltip-message">
-          <div className="tooltip-message-title">{this.props.t('{{report}} could not be refreshed', {report: refreshData.name})}</div>
-          <div className="tooltip-message-text">{refreshData.result.includes(excel) ? `${t(excel)}: ${refreshData.result.split(':')[1]}` : t(refreshData.result)}</div>
-        </div>
-      </div>
-    );
+      );
+    } else {
+      return refreshData.name;
+    }
   }
 
   render() {
     const {t} = this.props;
     const displayName = this.state.name || 'data';
-    return (<dialog className='refreshing-page dialogStyle'>
-      <div className="refresh-title">{t('Refresh All Data')}</div>
+    return (<div role="dialog" aria-labelledby="refresh-title" aria-describedby="refresh-report" className='refreshing-page dialog-style'>
+      <div id="refresh-title" className="refresh-title">{t('Refresh All Data')}</div>
       <div className="refresh-header">
         {!this.state.finished
           ?
           <div className='refresh-progress'>
-            <h1 title={displayName} className={'titleStyle'}>{`${displayName}`}</h1>
+            <h1 id="refresh-report" title={displayName} className={'titleStyle'}>{`${displayName}`}</h1>
             <h1 className={'progressStyle'}>{` (${this.state.currentNumber}/${this.state.allNumber})`}</h1>
             <LoadingText text={t('Loading data...')} />
           </div>
@@ -116,7 +117,11 @@ export class _RefreshAllPage extends Component {
           this.state.results.map((res) =>
             <div className="result-container" key={res.key}>
               {this.getIcon(res)}
-              <span title={res.name} className="report-name">{res.name}</span>
+              {(res.isError || helper.isOverflown(res.name, window.innerWidth - 90))
+                ? <Popover placement="topLeft" overlayClassName={res.isError === true ? 'tooltip-card' : ''} content={this.getTooltipContent(res)}>
+                  <span className="report-name">{res.name}</span>
+                </Popover>
+                : <span className="report-name">{res.name}</span>}
             </div>)
         }
       </div>
@@ -126,7 +131,7 @@ export class _RefreshAllPage extends Component {
         onClick={this.finished}>
           Ok
       </Button> */}
-    </dialog>);
+    </div>);
   }
 };
 

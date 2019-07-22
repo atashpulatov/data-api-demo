@@ -12,7 +12,12 @@ class PopupHelper {
 
   getPopupHeight = (reportArray, reportNumberToShow = 10) => {
     const reportsListLength = reportArray.length > reportNumberToShow ? reportNumberToShow : reportArray.length;
-    return Math.floor(((220 + (reportsListLength * 30)) / (window.innerHeight + 200)) * 100);
+    // This formula calculates the height as a percentage of the excel window
+    // 230 is the title and refresh text height
+    // 30 is the height of each report list (variable)
+    // 200 is the excel ribbon + toolbar height
+    // 100 is to convert to percentage
+    return Math.floor(((230 + (reportsListLength * 30)) / (window.innerHeight + 200)) * 100);
   };
 
   runRefreshAllPopup = async (reportArray, reportNumberToShow = 10) => {
@@ -49,9 +54,11 @@ class PopupHelper {
     isRefreshAll && this.storageReportRefreshStart(refreshReport, index);
     const isReport = objectType === 'report';
     const instanceId = null;
-    // TODO: Pass proper isPrompted value
+    // TODO: Pass proper isPrompted value – promptsAnswers could probably serve as such, to be refactored.
+
     const options = {
       dossierData: instanceId,
+      promptsAnswers: refreshReport.promptsAnswers,
       objectId: refreshReport.id,
       projectId: refreshReport.projectId,
       isReport,
@@ -60,7 +67,7 @@ class PopupHelper {
       body: refreshReport.body,
       isCrosstab: refreshReport.isCrosstab,
       isRefresh: true,
-      isPrompted: false,
+      isPrompted: refreshReport.isPrompted,
       isRefreshAll,
     };
     const result = await officeDisplayService.printObject(options);

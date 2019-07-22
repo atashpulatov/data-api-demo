@@ -15,11 +15,12 @@ export const NOT_IN_METADATA = 'The object does not exist in the metadata.';
 export const PROJECT_ROW_LIMIT = 'The object exceeds project rows limitation';
 export const TABLE_OVERLAP = 'The required data range in the worksheet is not empty';
 export const ERROR_POPUP_CLOSED = 'Function close call failed, error code:';
+export const NOT_SUPPORTED_CUSTOM_GROUP = 'This object cannot be imported. Objects with custom groups are not supported in this version of MicroStrategy for Office.';
 
 // temporarily we map all those codes to one message; may be changed in the future
 export const errorMessages = withDefaultValue({
   '-2147171501': NOT_SUPPORTED_SERVER_ERR,
-  '-2147171502': NOT_SUPPORTED_SERVER_ERR,
+  '-2147171502': NOT_SUPPORTED_CUSTOM_GROUP,
   '-2147171503': NOT_SUPPORTED_SERVER_ERR,
   '-2147171504': NOT_SUPPORTED_SERVER_ERR,
   '-2147072488': NOT_PUBLISHED_CUBE,

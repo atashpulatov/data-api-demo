@@ -8,7 +8,7 @@ class OfficeStoreService {
     try {
       const settings = this.getOfficeSettings();
       const reportProperties = this._getReportProperties();
-      reportProperties.push({
+      reportProperties.unshift({
         id: report.id,
         name: report.name,
         bindId: report.bindId,
@@ -18,7 +18,7 @@ class OfficeStoreService {
         objectType: report.objectType,
         isCrosstab: report.isCrosstab,
         isPrompted: report.isPrompted,
-        promptAnswers: report.promptAnswers,
+        promptsAnswers: report.promptsAnswers,
       });
       settings.set(officeProperties.loadedReportProperties, reportProperties);
       settings.saveAsync();
