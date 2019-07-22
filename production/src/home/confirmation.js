@@ -7,7 +7,6 @@ import {withTranslation} from 'react-i18next';
 
 const _Confirmation = ({reportArray, toggleSecuredFlag, toggleIsConfirmFlag, toggleIsSettingsFlag}) => {
   const secureData = async () => {
-    console.log('report array', reportArray);
     const excelContext = await officeApiHelper.getExcelContext();
     for (const report of reportArray) {
       await officeApiHelper.deleteObjectTableBody(excelContext, report);
@@ -49,8 +48,7 @@ _Confirmation.defaultProps = {
 }; ;
 
 function mapStateToProps({officeReducer}) {
-  const {reportArray} = officeReducer;
-  return {reportArray};
+  return {reportArray: officeReducer.reportArray};
 };
 
 const mapDispatchToProps = {

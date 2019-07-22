@@ -56,7 +56,7 @@ export class _Header extends Component {
   };
 
   render() {
-    const {loading, t, isConfirm} = this.props;
+    const {loading, t, isSettings, isConfirm} = this.props;
     return (
       <header id='app-header'>
         <div className="mstr-logo">
@@ -71,7 +71,7 @@ export class _Header extends Component {
               <MSTRIcon type="settings" />
             </Button>
           </Popover>
-          {this.props.isSettings && <SettingsMenu />}
+          {isSettings && <SettingsMenu />}
           {isConfirm && <Confirmation />}
         </div>
       </header >
