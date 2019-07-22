@@ -98,6 +98,7 @@
   "Missing report": "리포트가 누락되었습니다.",
   "Missing report.id": "report.id가 누락되었습니다.",
   "Missing report.name": "report.name이 누락되었습니다.",
+  "Missing report.envUrl": "report.envUrl을(를) 찾을 수 없음",
   "Missing report.projectId": "report.projectId가 누락되었습니다.",
   "Missing AuthToken.": "AuthToken이 누락되었습니다.",
   "Missing loading": "로딩이 누락되었습니다.",
