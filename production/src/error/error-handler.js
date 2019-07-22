@@ -23,31 +23,28 @@ class ErrorService {
       || error instanceof OverlappingTablesError
       || error instanceof GenericOfficeError
       || error instanceof OutsideOfRangeError;
-    if (error.status === 404 || (!error.response && !isOfficeError)) {
-      if (error.response && error.response.body) {
-        return new InternalServerError(error.response.body);
-      }
-      if (error.message && error.message.includes('Possible causes: the network is offline,')) {
+
+    if (!error.status && !error.response && !isOfficeError) {
+      if (error.message.includes('Possible causes: the network is offline,')) {
         return new ConnectionBrokenError(error);
       }
-      return new EnvironmentNotFoundError(error);
+      return error;
     }
-    if (!!error.response) {
-      switch (error.status || error.response.status) {
-        case 404:
-          return new EnvironmentNotFoundError(error);
-        case 400:
-          return new BadRequestError(error);
-        case 401:
-          return new UnauthorizedError(error);
-        case 500:
-          return new InternalServerError(error);
-        default:
-          return error;
-      }
+
+    switch (error.status || error.response.status) {
+      case 404:
+        return new EnvironmentNotFoundError(error);
+      case 400:
+        return new BadRequestError(error);
+      case 401:
+        return new UnauthorizedError(error);
+      case 500:
+        return new InternalServerError(error);
+      default:
+        return error;
     }
-    return error;
   };
+
   errorOfficeFactory = (error) => {
     if (error.name === 'RichApi.Error') {
       switch (error.message) {
@@ -68,9 +65,7 @@ class ErrorService {
     } else {
       notificationService.displayNotification('warning', message);
     }
-    if (
-      error instanceof EnvironmentNotFoundError
-      || error instanceof ConnectionBrokenError
+    if (error instanceof ConnectionBrokenError
       || error instanceof UnauthorizedError) {
       if (!isLogout) {
         setTimeout(() => {
@@ -81,17 +76,17 @@ class ErrorService {
   }
 
 
-  handlePreAuthError = (error) => {
+  handlePreAuthError = (error, isLogout) => {
     switch (true) {
       case error instanceof UnauthorizedError:
         notificationService.displayNotification('error', 'Wrong username or password.');
         break;
       default:
-        this.handleError(error);
+        this.handleError(error, isLogout);
     }
   }
-  handleLogoutError = (error) => {
-    this.handleError(error, true);
+  handleLogoutError = (error, isLogout = true) => {
+    this.handleError(error, isLogout);
   }
   handleOfficeError = (error) => {
     const message = this.getErrorMessage(error);
@@ -121,7 +116,7 @@ class ErrorService {
 
   getErrorMessage = (error) => {
     if (error instanceof EnvironmentNotFoundError) {
-      return '404 - Environment not found';
+      return 'The endpoint cannot be reached';
     };
     if (error instanceof ConnectionBrokenError) {
       return 'Environment is unreachable.'
@@ -131,10 +126,10 @@ class ErrorService {
       return 'Your session has expired.\nPlease log in.';
     };
     if (error instanceof BadRequestError) {
-      return '400 - There has been a problem with your request';
+      return 'There has been a problem with your request';
     };
     if (error instanceof InternalServerError) {
-      return errorMessages[error.response.body ? error.response.body.iServerCode : '-1'];
+      return errorMessages[!error.response ? '-1' : error.response.body ? error.response.body.iServerCode : '-1'];
     };
     if (error instanceof PromptedReportError) {
       return NOT_SUPPORTED_PROMPTS_REFRESH;
