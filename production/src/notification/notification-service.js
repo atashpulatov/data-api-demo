@@ -6,8 +6,8 @@ class NotificationService {
     const action = actionCreator.showMessageAction(content, type);
     reduxStore.dispatch(action);
   }
-  displayNotification = (type, content, title = ' ') => {
-    const action = actionCreator.showNotificationAction(title, content, type);
+  displayNotification = (type, content, text, title = ' ') => {
+    const action = actionCreator.showNotificationAction(title, content, type, text);
     reduxStore.dispatch(action);
   }
 }

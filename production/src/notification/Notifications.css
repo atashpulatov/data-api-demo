@@ -48,12 +48,22 @@
   margin-right: 16px;
 }
 
+.error__header {
+  margin-bottom: 5px;
+}
+
+.error__section {
+  width: 234px;
+  margin-top: 3px;
+  font-size: 12px;
+}
+
 .error-notification .ant-notification-notice-content .ant-notification-notice-description {
-  margin-left: 36px;
+  margin-left: 34px;
 }
 
 .error-notification.ant-notification-notice {
-  padding: 28px 24px;
+  padding: 28px 17px 28px 24px;
 }
 
 .error-notification .ant-btn {
@@ -62,18 +72,18 @@
 }
 
 .error-notification .ant-notification-notice-btn {
-  margin: 5px 34% 0 35%;
+  margin: 5px 37% 0 35%;
 }
 
-.error-notification p {
+.error__show-more,
+.error__show-less {
   font-family: Roboto;
-  float: right;
+  text-align: right;
   cursor: pointer;
   color: #1C91DC;
-  font-size: 12px;
 }
 
-.error-notification .show-more-arrow {
+.error__arrow {
   transform: rotate(-45deg);
   border-bottom: 1px solid #3492ED;
   border-left: 1px  solid #3492ED;
@@ -86,24 +96,30 @@
   transform-origin: 2px 3px;
 }
 
-.error-notification .show-less .show-more-arrow {
+.error__show-less .error__arrow {
   transform: rotate(135deg);
 }
 
-.error-notification .text-hidden {
+.error__text-hidden {
   max-height: 0;
-  transition: 0.4s all;
-  font-size: 12px;
-
-  color: #606060;
 }
 
-.error-notification .text-shown {
-  max-height: 176px;
-  transition: 0.4s all;
-  font-size: 12px;
-
+.error__text {
+  transition: 0.3s all ease-in-out;
   color: #606060;
+  width: 255px;
+}
+
+.error__text-shown {
+  max-height: 176px;
+  overflow: auto;
+  margin-bottom: 24px;
+}
+
+.error__message {
+  margin: 0;
+  word-wrap: break-word;
+  width: 234px;
 }
 
 .ant-notification>span {

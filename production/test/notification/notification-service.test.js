@@ -33,21 +33,23 @@ describe('NotificationService', () => {
     const testType = notificationProperties.success;
     const testTitle = 'test title';
     const testContent = 'test content';
+    const testText = 'text text';
     const mockedAction = {
       type: reduxNotificationProperties.actions.showNotification,
       title: testTitle,
       content: testContent,
       messageType: testType,
       currentObject: 'notification',
+      text: testText,
     };
     actionCreator.showNotificationAction = jest.fn().mockImplementation(() => {
       return mockedAction;
     });
     // when
-    notificationService.displayNotification(testType, testContent, testTitle);
+    notificationService.displayNotification(testType, testContent, testText, testTitle);
     // then
     expect(actionCreator.showNotificationAction).toBeCalled();
-    expect(actionCreator.showNotificationAction).toBeCalledWith(testTitle, testContent, testType);
+    expect(actionCreator.showNotificationAction).toBeCalledWith(testTitle, testContent, testType, testText);
     expect(reduxStore.dispatch).toBeCalled();
     expect(reduxStore.dispatch).toBeCalledWith(mockedAction);
   });
