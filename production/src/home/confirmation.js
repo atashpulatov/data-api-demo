@@ -4,17 +4,21 @@ import warningIcon from '../loading/assets/icon_conflict.svg';
 import {officeApiHelper} from '../office/office-api-helper';
 import {toggleSecuredFlag, toggleIsSettingsFlag, toggleIsConfirmFlag} from '../office/office-actions';
 import {withTranslation} from 'react-i18next';
+import {errorService} from '../error/error-handler';
 
 export const _Confirmation = ({reportArray, toggleSecuredFlag, toggleIsConfirmFlag, toggleIsSettingsFlag}) => {
   const secureData = async () => {
-    const excelContext = await officeApiHelper.getExcelContext();
-    for (const report of reportArray) {
-      console.log('-----in for');
-      await officeApiHelper.deleteObjectTableBody(excelContext, report);
-    };
-    toggleIsConfirmFlag(false);
-    toggleIsSettingsFlag(false);
-    toggleSecuredFlag(true);
+    try {
+      const excelContext = await officeApiHelper.getExcelContext();
+      for (const report of reportArray) {
+        await officeApiHelper.deleteObjectTableBody(excelContext, report);
+      };
+      toggleIsConfirmFlag(false);
+      toggleIsSettingsFlag(false);
+      toggleSecuredFlag(true);
+    } catch (error) {
+      errorService.handleOfficeError(error);
+    }
   };
 
   return (

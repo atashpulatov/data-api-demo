@@ -117,12 +117,14 @@ hr {
 
 .tab-content .tabpane {
     flex-shrink: 0;
+    height: 100%;
     width: 100%;
     opacity: 1;
     transition: opacity 0.45s;
 }
 
 .tab-container {
+    height: 44px;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
     margin: 0 0 5px 0;
     border-bottom: 1px solid #e8e8e8;
