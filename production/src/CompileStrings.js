@@ -3,8 +3,8 @@ const sql = require('mssql');
 const path = require('path');
 
 const STRING_SERVER = '10.27.10.36'; // TS_SPHINX
-const DB_USER = 'dssadmin';
-const DB_PASSWD = 'dssadmin';
+const DB_USER = process.env.STRING_DB_USERNAME;
+const DB_PASSWD = process.env.STRING_DB_PASSWORD;
 const HASH_DSN_DB = {
   'LOCALIZATION_WEB': 'STRING_WEB',
 };
