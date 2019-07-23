@@ -10,7 +10,7 @@ import {errorService} from '../error/error-handler';
 
 const APP_VERSION = process.env.REACT_APP_MSTR_OFFICE_VERSION;
 
-const _SettingsMenu = ({userFullName, userInitials, isSecured, t, toggleIsConfirmFlag}) => {
+export const _SettingsMenu = ({userFullName, userInitials, isSecured, t, toggleIsConfirmFlag}) => {
   const userNameDisplay = userFullName || t('MicroStrategy user');
 
   const prepareEmail = () => {

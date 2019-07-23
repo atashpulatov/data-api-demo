@@ -5,10 +5,11 @@ import {officeApiHelper} from '../office/office-api-helper';
 import {toggleSecuredFlag, toggleIsSettingsFlag, toggleIsConfirmFlag} from '../office/office-actions';
 import {withTranslation} from 'react-i18next';
 
-const _Confirmation = ({reportArray, toggleSecuredFlag, toggleIsConfirmFlag, toggleIsSettingsFlag}) => {
+export const _Confirmation = ({reportArray, toggleSecuredFlag, toggleIsConfirmFlag, toggleIsSettingsFlag}) => {
   const secureData = async () => {
     const excelContext = await officeApiHelper.getExcelContext();
     for (const report of reportArray) {
+      console.log('-----in for');
       await officeApiHelper.deleteObjectTableBody(excelContext, report);
     };
     toggleIsConfirmFlag(false);
@@ -35,8 +36,8 @@ const _Confirmation = ({reportArray, toggleSecuredFlag, toggleIsConfirmFlag, tog
           </div>
         </div>
         <div className='confirm-buttons'>
-          <button className='ant-btn' onClick={secureData}>OK</button>
-          <button className='ant-btn' onClick={() => toggleIsConfirmFlag(false)}>Cancel</button>
+          <button className='ant-btn' id='confirm-btn' onClick={secureData}>OK</button>
+          <button className='ant-btn' id='cancel-btn' onClick={() => toggleIsConfirmFlag(false)}>Cancel</button>
         </div>
       </div>
     </React.Fragment>
