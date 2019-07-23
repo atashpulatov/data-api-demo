@@ -233,7 +233,7 @@ class OfficeDisplayService {
       context.workbook.application.suspendApiCalculationUntilNextSync();
       prevOfficeTable.clearFilters();
       prevOfficeTable.sort.clear();
-      prevOfficeTable.getHeaderRowRange().values = [mstrTable.headers];
+      prevOfficeTable.getHeaderRowRange().values = [mstrTable.headers.columns];
       await context.sync();
       await this._updateRows(prevOfficeTable, context, rows);
       return prevOfficeTable;
