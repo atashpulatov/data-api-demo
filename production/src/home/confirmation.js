@@ -31,7 +31,7 @@ export const _Confirmation = ({reportArray, toggleSecuredFlag, toggleIsConfirmFl
         </div>
         <div className='confirm-message'>
           <div className='confirm-message-title'>
-            Are you sure you want to <span className=''>Clear Data</span>?
+            Are you sure you want to <span>Clear Data</span>?
           </div>
           <div className='confirm-message-text'>
             This removes all MicroStrategy data from the workbook.

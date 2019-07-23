@@ -234,8 +234,8 @@ button.add-data-btn:focus {
     cursor: default;
 }
 
-.settings-list li:hover {
-    background: #F0F7FE;
+.settings-list li:not(:first-child):not(:last-child):hover {
+    background: #f0f7Fe;
 }
 
 .settings-list li:focus {

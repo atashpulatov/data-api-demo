@@ -240,9 +240,10 @@ hr {
 }
 
 .confirm-header-icon img {
+    position: relative;
+    bottom: 1px;
     width: 19px;
     height: 18px;
-    ;
 }
 
 .confirm-header,
@@ -271,7 +272,7 @@ hr {
 }
 
 .confirm-message-title span {
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .confirm-message-text {
@@ -286,7 +287,7 @@ hr {
 }
 
 .confirm-message-text span {
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .confirm-buttons {
