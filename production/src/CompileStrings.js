@@ -3,8 +3,6 @@ const sql = require('mssql');
 const path = require('path');
 
 const STRING_SERVER = '10.27.10.36'; // TS_SPHINX
-const DB_USER = process.env.STRING_DB_USERNAME;
-const DB_PASSWD = process.env.STRING_DB_PASSWORD;
 const HASH_DSN_DB = {
   'LOCALIZATION_WEB': 'STRING_WEB',
 };
@@ -14,7 +12,7 @@ const fetchStrings = async function(database, password, sqlString) {
   // const result = await sql.query`select * from mytable where id = ${value}`
 
   const config = {
-    user: DB_USER,
+    user: process.env.STRING_DB_USERNAME,
     password,
     server: STRING_SERVER,
     database,
@@ -54,7 +52,7 @@ const getObjectFromRow = function(row, columnPostfix) {
 const exportToResourceFile = async function(outputFileFolder) {
   // TODO ryu: Check if file exists before this?
   // const file = await fs.readFile(path.join(__dirname, '/../files/pwd.txt'))
-  const password = DB_PASSWD;
+  const password = process.env.STRING_DB_PASSWORD;
 
   const sqlWeb = `SELECT * FROM Office_Strings ORDER BY ID`;
   console.log(sqlWeb);
