@@ -86,7 +86,7 @@ export class _RefreshAllPage extends Component {
             <span className="tooltip-header-icon"><img width='14px' height='14px' src={warningIcon} alt='Refresh failed icon' /></span>
           </div>
           <div className="tooltip-message">
-            <div className="tooltip-message-title">{this.props.t('Report could not be refreshed', {report: refreshData.name})}</div>
+            <div className="tooltip-message-title">{this.props.t('{{report}} could not be refreshed', {report: refreshData.name})}</div>
             <div className="tooltip-message-text">{refreshData.result.includes(excel) ? `${t(excel)}: ${refreshData.result.split(':')[1]}` : t(refreshData.result)}</div>
           </div>
         </div>
