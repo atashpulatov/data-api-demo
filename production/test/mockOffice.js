@@ -3,6 +3,7 @@ export const mockOffice = {
     ui: {
       messageParent: () => {},
     },
+    diagnostics: {},
   },
 };
 
