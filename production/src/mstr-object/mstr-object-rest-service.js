@@ -122,7 +122,8 @@ class MstrObjectRestService {
     const envUrl = storeState.sessionReducer.envUrl;
     const authToken = storeState.sessionReducer.authToken;
     const objectType = isReport ? 'reports' : 'cubes';
-    const fullPath = `${envUrl}/${objectType}/${objectId}`;
+    const api = API_VERSION > 1 ? 'v2/' : '';
+    const fullPath = `${envUrl}/${api}${objectType}/${objectId}`;
 
     return moduleProxy.request
         .get(fullPath)
@@ -186,7 +187,7 @@ class MstrObjectRestService {
 
   _fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = -1) {
     return moduleProxy.request
-        .get(`${fullPath}&offset=${offset}&limit=${limit}`)
+        .get(`${fullPath}?offset=${offset}&limit=${limit}`)
         .set('x-mstr-authtoken', authToken)
         .set('x-mstr-projectid', projectId)
         .withCredentials();
@@ -199,13 +200,13 @@ class MstrObjectRestService {
     return {rows, columns};
   }
 
-  _getFullPath({dossierData, envUrl, limit, isReport, objectId, instanceId, version}) {
+  _getFullPath({dossierData, envUrl, limit, isReport, objectId, instanceId, version = 1}) {
     let path;
+    const api = version > 1 ? `v${version}/` : '';
     const objectType = isReport ? 'reports' : 'cubes';
-    path = `${envUrl}/${objectType}/${objectId}/instances`;
+    path = `${envUrl}/${api}${objectType}/${objectId}/instances`;
     path += instanceId ? `/${instanceId}` : '';
     path += limit ? `?limit=${limit}` : '';
-    path += version ? limit ? `&version=${version}` : `?version=${version}` : '';
     return path;
   }
 

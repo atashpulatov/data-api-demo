@@ -48,6 +48,7 @@ class NormalizedJsonHandler {
    */
   mapElementIndicesToElements = (definition, axis, elementIndices) => {
     return elementIndices.map((elementIndex, attributeIndex) => {
+      if (elementIndex < 0) return {name: ''};
       // For elementsIndices tuple, each subscript is an attribute index and each value is an element index.
       return this.lookupElement(definition, axis, attributeIndex, elementIndex);
     });
