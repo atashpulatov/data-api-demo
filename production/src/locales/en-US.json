@@ -141,5 +141,12 @@
   "More Items": "More Items",
   "Date and time of last modification": "Date and time of last modification",
   "Search objects": "Search objects",
-  "This object cannot be imported. Objects with custom groups are not supported in this version of MicroStrategy for Office.": "This object cannot be imported. Objects with custom groups are not supported in this version of MicroStrategy for Office."
+  "This object cannot be imported. Objects with custom groups are not supported in this version of MicroStrategy for Office.": "This object cannot be imported. Objects with custom groups are not supported in this version of MicroStrategy for Office.",
+  "Show more": "Show more",
+  "Show less": "Show less",
+  "Version": "Version",
+  "Refresh failed icon": "Refresh failed icon",
+  "In order to re-import the data, you will have to click the <span>View Data</span> button, which will appear in the add-in panel.": "In order to re-import the data, you will have to click the <span>View Data</span> button, which will appear in the add-in panel.",
+  "This removes all MicroStrategy data from the workbook.": "This removes all MicroStrategy data from the workbook.",
+  "Are you sure you want to <span>Clear Data</span>?": "Are you sure you want to <span>Clear Data</span>?"
 }
