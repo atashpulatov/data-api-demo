@@ -23,9 +23,13 @@ export function callForEdit(reportParams) {
       let instanceDefinition = await mstrObjectRestService.createInstance(editedReport.id, editedReport.projectId, true, null, null);
       let count = 0;
       while (instanceDefinition.status === 2) {
-        await mstrObjectRestService.answerPrompts(editedReport.id, editedReport.projectId, instanceDefinition.instanceId, editedReport.promptsAnswers[count]);
-        instanceDefinition = await mstrObjectRestService.getInstance(editedReport.id, editedReport.projectId, true, null, editedReport.body, instanceDefinition.instanceId);
-        count++;
+        try {
+          await mstrObjectRestService.answerPrompts(editedReport.id, editedReport.projectId, instanceDefinition.instanceId, editedReport.promptsAnswers[count]);
+          instanceDefinition = await mstrObjectRestService.getInstance(editedReport.id, editedReport.projectId, true, null, editedReport.body, instanceDefinition.instanceId);
+          count++;
+        } catch (error) {
+          return errorService.handleError(error);
+        }
       }
       editedReport.instanceId = instanceDefinition.instanceId;
     }
