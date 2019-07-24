@@ -29,7 +29,7 @@ export const _SettingsMenu = ({userFullName, userInitials, isSecured, t, toggleI
         `User agent: ${userAgent}`,
       ].join('%0D%0A'),
     };
-    return 'mailto:' + email.address + '?subject=' + email.title + '&body=' + email.body;
+    return `mailto:${email.address}?subject=${email.title}&body=${email.body}`;
   };
 
   return (
