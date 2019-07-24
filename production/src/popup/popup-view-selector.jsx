@@ -95,12 +95,14 @@ function parsePopupState(popupState) {
   }
   const reportData = {
     reportId: popupState.id,
+    instanceId: popupState.instanceId,
     projectId: popupState.projectId,
     reportName: popupState.name,
     reportType: popupState.objectType,
     reportSubtype: popupState.objectType === 'report'
       ? 768
       : 779,
+    promptsAnswers: popupState.promptsAnswers,
   };
   restoreFilters(popupState.body, reportData);
   return reportData;
