@@ -39,7 +39,6 @@ export class NotificationsWithoutRedux extends Component {
         break;
       case 'error':
         icon = <Icon type="close-circle" theme="filled" style={{color: '#f5222d'}} />;
-        console.log(this.props);
         break;
       case 'info':
         icon = <Icon type="info-circle" theme="filled" style={{color: '#1890ff'}} />;
