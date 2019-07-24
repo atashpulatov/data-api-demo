@@ -216,11 +216,10 @@ class OfficeApiHelper {
 
   deleteObjectTableBody = async (context, object) => {
     try {
-      const excelContext = await officeApiHelper.getExcelContext();
       const tableObject = context.workbook.tables.getItem(object.bindId);
       const tableRange = tableObject.getDataBodyRange();
       tableRange.clear(Excel.ClearApplyTo.contents);
-      await excelContext.sync();
+      await context.sync();
     } catch (error) {
       console.error('Error: ' + error);
     }
