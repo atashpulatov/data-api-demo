@@ -23,7 +23,7 @@ export const _Confirmation = ({reportArray, toggleSecuredFlag, toggleIsConfirmFl
 
   return (
     <React.Fragment>
-      <div className='block-ui' onClick={() => toggleIsConfirmFlag(false)}>
+      <div className='block-ui' onClick={() => toggleIsConfirmFlag(false)} />
       </div>
       <div className='confirm-container'>
         <div className='confirm-header'>
