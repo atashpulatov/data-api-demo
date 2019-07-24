@@ -26,7 +26,7 @@ export class NotificationsWithoutRedux extends Component {
   };
 
   displayNotification = () => {
-    const {notificationType, title, content, t, text} = this.props;
+    const {notificationType, title, content, t, details} = this.props;
     let icon;
     const key = `open${Date.now()}`;
     let btn = <Button type="primary" size="small" onClick={() => notification.close(key)} >{t('OK')}</Button>;
@@ -59,7 +59,7 @@ export class NotificationsWithoutRedux extends Component {
     }
     notification.open({
       message: t(title),
-      description: <CustomNotification text={text} t={t} translatedContent={this.translateContent(content, t)} />,
+      description: <CustomNotification details={details} t={t} translatedContent={this.translateContent(content, t)} />,
       icon,
       btn: btn,
       key,
@@ -90,7 +90,7 @@ const mapStateToProps = (state) => {
     messageType: state.notificationReducer.messageType,
     notificationType: state.notificationReducer.notificationType,
     currentObject: state.notificationReducer.currentObject,
-    text: state.notificationReducer.text,
+    details: state.notificationReducer.details,
   };
 };
 

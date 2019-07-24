@@ -158,7 +158,7 @@ describe('Notification reducer', () => {
         content: 'testContent',
         notificationType: 'someNotificationType',
         currentObject: 'notification',
-        text: 'testText',
+        details: 'testDetails',
       };
       // when
       const resultState = notificationReducer(undefined, action);
@@ -167,7 +167,7 @@ describe('Notification reducer', () => {
       expect(resultState.content).toEqual(action.content);
       expect(resultState.currentObject).toEqual(action.currentObject);
       expect(resultState.messageType).toEqual(action.messageType);
-      expect(resultState.text).toEqual(action.text);
+      expect(resultState.details).toEqual(action.details);
       expect(resultState.timeStamp).toBeDefined();
       expect(resultState.timeStamp).toBeTruthy();
     });

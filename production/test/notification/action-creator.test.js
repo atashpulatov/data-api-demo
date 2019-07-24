@@ -23,14 +23,14 @@ describe('Action Creator', () => {
     const testMessageType = 'error';
     const expectedCurrentObject = 'notification';
     const expectedType = reduxNotificationProperties.actions.showNotification;
-    const expectedText = 'response';
+    const expectedDetails = 'response';
     // when
-    const action = actionCreator.showNotificationAction(testTitle, testContent, testMessageType, expectedText);
+    const action = actionCreator.showNotificationAction(testTitle, testContent, testMessageType, expectedDetails);
     // then
     expect(action.content).toBe(testContent);
     expect(action.notificationType).toBe(testMessageType);
     expect(action.currentObject).toEqual(expectedCurrentObject);
     expect(action.type).toBe(expectedType);
-    expect(action.text).toBe(expectedText);
+    expect(action.details).toBe(expectedDetails);
   });
 });

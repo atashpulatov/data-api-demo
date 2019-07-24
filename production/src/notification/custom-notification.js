@@ -15,7 +15,7 @@ export default class CustomNotification extends Component {
 
   render() {
     const {isExpanded} = this.state;
-    const {text, translatedContent, t} = this.props;
+    const {details, translatedContent, t} = this.props;
     const config = !isExpanded ? {
       actionClass: 'error__show-more',
       messageClass: 'error__text-hidden',
@@ -25,11 +25,12 @@ export default class CustomNotification extends Component {
       messageClass: 'error__text-shown',
       message: 'Show less',
     };
+
     return (
       <section className="error__section">
         <header className="error__header">{translatedContent}</header>
         {
-          text && <div>
+          details && <div>
             <p
               onClick={this.handleCollapse}
               className={config.actionClass}>
@@ -37,7 +38,7 @@ export default class CustomNotification extends Component {
             </p>
             <div
               className={`${config.messageClass} error__text`}>
-              <p className="error__message">{text}</p>
+              <p className="error__message">{details}</p>
             </div>
           </div>
         }

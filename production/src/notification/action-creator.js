@@ -1,14 +1,14 @@
 import {reduxNotificationProperties} from './notification-properties';
 
 class ActionCreator {
-  showNotificationAction = (title, content, notificationType, text) => {
+  showNotificationAction = (title, content, notificationType, details) => {
     return {
       type: reduxNotificationProperties.actions.showNotification,
       title,
       content,
       notificationType: notificationType,
       currentObject: 'notification',
-      text,
+      details,
     };
   }
   showMessageAction = (content, messageType) => {
