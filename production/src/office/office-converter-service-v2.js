@@ -10,6 +10,7 @@ class OfficeConverterServiceV2 {
     return {
       id: response.id,
       name: response.name,
+      cubeName: response.cubeName,
       isCrosstab: this.isCrosstab(response),
       headers: this.getHeaders(response),
       rows: this.getRows(response),

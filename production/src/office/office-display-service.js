@@ -294,7 +294,7 @@ class OfficeDisplayService {
     if (!isRefresh) {
       this.addReportToStore({
         id: instanceDefinition.mstrTable.id,
-        name: instanceDefinition.mstrTable.name,
+        name: objectType === 'report' ? instanceDefinition.mstrTable.name : instanceDefinition.mstrTable.cubeName,
         bindId: bindingId,
         projectId,
         envUrl,
