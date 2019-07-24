@@ -34,7 +34,7 @@ export const _Confirmation = ({reportArray, toggleSecuredFlag, toggleIsConfirmFl
           </div>
           <div className='confirm-message-text'>
             This removes all MicroStrategy data from the workbook.
-            <br></br>
+            <br/>
             In order to re-import the data, you will have to click the <span>View Data</span> button, which will appear in the add-in panel.
           </div>
         </div>
