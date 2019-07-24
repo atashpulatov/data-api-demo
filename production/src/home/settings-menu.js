@@ -66,6 +66,13 @@ export const _SettingsMenu = ({userFullName, userInitials, isSecured, t, toggleI
       <li>
         <a
           tabIndex="0"
+          href=' https://www2.microstrategy.com/producthelp/Current/Office/index.htm'
+          target="_blank"
+          rel="noopener">{t('Help')}</a>
+      </li>
+      <li>
+        <a
+          tabIndex="0"
           href={prepareEmail()}
         >{t('Contact Us')}</a>
       </li>
@@ -74,8 +81,6 @@ export const _SettingsMenu = ({userFullName, userInitials, isSecured, t, toggleI
           {t('Logout')}
         </span>
       </li>
-      {/* TODO: get help url for plugin */}
-      {/* <li><a href='' target="_blank" rel="noopener">{t('Help')}</a></li> */}
       < li className="settings-version no-trigger-close">{t('Version', {APP_VERSION})}</li>
     </ul >
   );
