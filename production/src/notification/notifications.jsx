@@ -59,7 +59,7 @@ export class NotificationsWithoutRedux extends Component {
     }
     notification.open({
       message: t(title),
-      description: <CustomNotification text={text} translatedContent={this.translateContent(content, t)} />,
+      description: <CustomNotification text={text} t={t} translatedContent={this.translateContent(content, t)} />,
       icon,
       btn: btn,
       key,
