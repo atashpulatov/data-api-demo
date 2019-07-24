@@ -24,7 +24,6 @@ export const _Confirmation = ({reportArray, toggleSecuredFlag, toggleIsConfirmFl
   return (
     <React.Fragment>
       <div className='block-ui' onClick={() => toggleIsConfirmFlag(false)} />
-      </div>
       <div className='confirm-container'>
         <div className='confirm-header'>
           <span className="confirm-header-icon"><img width='19px' height='18px' src={warningIcon} alt='Refresh failed icon' /></span>
