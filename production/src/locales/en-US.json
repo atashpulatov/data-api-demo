@@ -148,5 +148,6 @@
   "Refresh failed icon": "Refresh failed icon",
   "In order to re-import the data, you will have to click the <span>View Data</span> button, which will appear in the add-in panel.": "In order to re-import the data, you will have to click the <span>View Data</span> button, which will appear in the add-in panel.",
   "This removes all MicroStrategy data from the workbook.": "This removes all MicroStrategy data from the workbook.",
-  "Are you sure you want to <span>Clear Data</span>?": "Are you sure you want to <span>Clear Data</span>?"
+  "Are you sure you want to <span>Clear Data</span>?": "Are you sure you want to <span>Clear Data</span>?",
+  "Clear Data": "Clear Data"
 }
