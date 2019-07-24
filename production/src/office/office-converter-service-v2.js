@@ -75,10 +75,11 @@ class OfficeConverterServiceV2 {
    * @memberof OfficeConverterServiceV2
    */
   getColumnInformation(response) {
-    const onColumnHeader = (element) => element;
-    const columns = jsonHandler.renderHeaders(response.definition, 'columns', response.headers, onColumnHeader);
-    const lastRow = columns[columns.length - 1];
-    return lastRow.map((element, index) => {
+    const onElement = (element) => element;
+    const metricColumns = jsonHandler.renderHeaders(response.definition, 'columns', response.headers, onElement);
+    const attributeColumns = jsonHandler.renderTitles(response.definition, 'rows', response.headers, onElement);
+    const columns = [...attributeColumns[attributeColumns.length - 1], ...metricColumns[metricColumns.length - 1]];
+    return columns.map((element, index) => {
       switch (element.type.toLowerCase()) {
         case 'metric':
           return {
@@ -93,8 +94,7 @@ class OfficeConverterServiceV2 {
           return {
             attributeId: element.id,
             attributeName: element.name,
-            formId: element.form.id,
-            formName: element.form.name,
+            forms: element.forms,
             index,
             isAttribute: true,
           };
