@@ -1,296 +1,304 @@
 hr {
-  margin-left: 20px;
-  margin-right: 20px;
-  color: #75808B;
+    margin-left: 20px;
+    margin-right: 20px;
+    color: #75808B;
 }
 
 .padding {
-  padding: 15px;
+    padding: 15px;
 }
 
 #content {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 #overlay {
-  animation: fadein 1.5s;
+    animation: fadein 1.5s;
 }
 
 #app-header {
-  display: flex;
-  justify-content: space-between;
-  color: #555;
-  font-size: 16px;
-  line-height: 31px;
-  width: 100%;
-  padding: 20px 27px 19px 20px;
-  align-items: center;
+    display: flex;
+    justify-content: space-between;
+    color: #555;
+    font-size: 16px;
+    line-height: 31px;
+    width: 100%;
+    padding: 20px 27px 19px 20px;
+    align-items: center;
 }
 
 #overlay {
-  animation: fadein 1.5s;
+    animation: fadein 1.5s;
 }
 
-#app-header img {
-  height: 32px;
-  width: 32px;
-  min-width: 32px;
-  border-radius: 50%;
-  display: table-cell;
+#app-header .mstr-logo img {
+    height: 32px;
+    width: 32px;
+    min-width: 32px;
+    border-radius: 50%;
+    display: table-cell;
 }
 
 #app-header #initials {
-  height: 28px;
-  width: 28px;
-  line-height: 28px;
-  border-radius: 50%;
-  font-size: 13px;
-  background: #e4e4e4;
-  color: white;
-  text-align: center;
-  display: inline-block;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+    height: 28px;
+    width: 28px;
+    line-height: 28px;
+    border-radius: 50%;
+    font-size: 13px;
+    background: #e4e4e4;
+    color: white;
+    text-align: center;
+    display: inline-block;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 #app-main {
-  background: #fff;
+    background: #fff;
 }
 
 #header {
-  font-size: 18px;
-  text-align: left;
-  align-items: center;
-  padding: 4px 0px 0px 0px;
+    font-size: 18px;
+    text-align: left;
+    align-items: center;
+    padding: 4px 0px 0px 0px;
 }
 
 #header-image {
-  border-radius: 50%;
-  height: 40px;
-  width: 40px;
-  padding: 10px;
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    padding: 10px;
 }
 
 .get-started-container {
-  text-align: center;
-  padding: 40px 40px 10px 40px;
-  color: #4D5154;
+    text-align: center;
+    padding: 40px 40px 10px 40px;
+    color: #4D5154;
 }
 
 .get-started-container h2 {
-  color: #4D5154;
-  font-weight: 500;
-  font-size: 20px;
-  padding: 24px 0;
+    color: #4D5154;
+    font-weight: 500;
+    font-size: 20px;
+    padding: 24px 0;
 }
 
 .get-started-container p {
-  padding-bottom: 40px;
-  margin: 0;
-  font-size: 14px;
-  font-weight: 300;
+    padding-bottom: 40px;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 300;
 }
 
 .tabs {
-  position: relative;
-  overflow: hidden;
-  zoom: 1;
-  height: calc(100vh - 72px);
+    position: relative;
+    overflow: hidden;
+    zoom: 1;
+    height: calc(100vh - 72px);
 }
 
 .tab-content {
-  display: flex;
-  flex-direction: row;
-  transition: margin-left 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-  will-change: margin-left;
-  height: calc(100% - 50px);
-  display: block;
-  overflow-x: hidden;
-  overflow-y: auto;
-  width: 100%;
+    display: flex;
+    flex-direction: row;
+    transition: margin-left 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    will-change: margin-left;
+    height: calc(100% - 50px);
+    display: block;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 100%;
 }
 
 .tab-content .tabpane {
-  flex-shrink: 0;
-  height: 100%;
-  width: 100%;
-  opacity: 1;
-  transition: opacity 0.45s;
+    flex-shrink: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 1;
+    transition: opacity 0.45s;
 }
 
 .tab-container {
-  height: 44px;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
-  margin: 0 0 5px 0;
-  border-bottom: 1px solid #e8e8e8;
+    height: 44px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+    margin: 0 0 5px 0;
+    border-bottom: 1px solid #e8e8e8;
 }
 
 .tabs-nav {
-  margin-left: 10px;
-  margin-bottom: -6px;
-  border-bottom: 2px solid #1c91dc;
-  position: relative;
-  overflow: hidden;
-  white-space: nowrap;
-  display: inline-block;
+    margin-left: 10px;
+    margin-bottom: -6px;
+    border-bottom: 2px solid #1c91dc;
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
 }
 
 .tab-header {
-  color: #444649;
-  padding: 12px 6px 8px 6px;
-  cursor: pointer;
-  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    color: #444649;
+    padding: 12px 6px 8px 6px;
+    cursor: pointer;
+    transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
 .dialog-container {
-  z-index: 1;
-  height: 100vh;
-  width: 100vw;
-  position: fixed;
-  text-align: center;
-  top: 0;
-  left: 0;
-  background-color: rgba(255, 255, 255, 0.7);
+    z-index: 1;
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    text-align: center;
+    top: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.7);
 }
 
 .dialog-container dialog {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  padding: 16px;
-  border-radius: 4px;
-  background-color: #fff;
-  width: 70%;
-  transform: translate(-50%, -50%);
-  border: 1px solid #ccc;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    padding: 16px;
+    border-radius: 4px;
+    background-color: #fff;
+    width: 70%;
+    transform: translate(-50%, -50%);
+    border: 1px solid #ccc;
 }
 
 .dialog-container svg {
-  height: 24px;
-  width: 24px;
-  margin: 0 auto 12px auto;
-  display: block;
+    height: 24px;
+    width: 24px;
+    margin: 0 auto 12px auto;
+    display: block;
 }
 
 /* application header buttons */
 
-#app-header .secure-btn,
-#app-header .secure-btn .ant-btn:disabled,
 #app-header .settings-btn,
 #app-header .settings-btn .ant-btn:disabled {
-  vertical-align: middle;
-  align-self: center;
-  background: #FFFFFF;
-  box-shadow: 0 0;
-  border: none;
-  padding: 0;
+    vertical-align: middle;
+    align-self: center;
+    background: #FFFFFF;
+    box-shadow: 0 0;
+    border: none;
+    padding: 0;
 }
 
 #app-header .settings-btn,
 #app-header .settings-btn .ant-btn:disabled {
-  margin-left: 15px;
-}
-
-/* we need to override cursor not-allowed but only if it's there and use !important because antd uses !important */
-#app-header .secure-btn[style="display: inline-block; cursor: not-allowed;"] {
-  cursor: default !important;
-}
-
-#app-header .secure-btn svg {
-  vertical-align: text-top;
+    margin-left: 15px;
 }
 
 #app-header .mstr-icon.settings svg {
-  max-width: 22px;
-  max-height: 22px;
+    max-width: 22px;
+    max-height: 22px;
 }
 
 .header-buttons {
-  position: relative;
-}
-
-/* settings context menu */
-
-.settings-list {
-  position: absolute;
-  right: 20px;
-  top: 20px;
-  z-index: 999;
-  width: 200px;
-  margin: 0;
-  padding: 5px 10px 10px 10px;
-  list-style: none;
-  background: #fff;
-  color: #3F4042;
-  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.20);
-  border-radius: 2px;
-}
-
-.settings-list li {
-  padding: 3px 7px 1px 7px;
-  font-size: 12px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-
-.settings-list li a {
-  display: block;
-  color: #3f4042;
-}
-
-.settings-list .user-data {
-  padding-bottom: 7px;
-  margin-bottom: 6px;
-  font-weight: 500;
-  border-bottom: solid 1px #e4e4e4;
-}
-
-#app-header .user-name {
-  padding-left: 13px;
-  padding-right: 13px;
-  line-height: 32px;
-}
-
-.settings-list .settings-version {
-  padding: 7px;
-  color: #1c91dc;
-  font-weight: 300;
-  font-size: 10px;
-  text-align: center;
-}
-
-.settings-list li:last-child {
-  display: flex;
-  justify-content: space-between;
-}
-
-.settings-list li:last-child a {
-  color: #a4a4a4;
-  font-weight: 500;
-  font-size: 10px;
-}
-
-#app-header .logout-btn .ant-btn {
-  width: 70px;
-  height: 20px;
-  border: 1px solid #3f4042;
-  border-radius: 2px;
-  color: #3f4042;
-  font-size: 10px;
+    position: relative;
 }
 
 @keyframes fadein {
-  from {
-    opacity: 0;
-  }
+    from {
+        opacity: 0;
+    }
 
-  to {
-    opacity: 1;
-  }
+    to {
+        opacity: 1;
+    }
+}
+
+.block-ui {
+    position: fixed;
+    width: 100%;
+    height: 1000px;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    background-color: #ffffff;
+    z-index: 1000;
+}
+
+.confirm-container {
+    position: fixed;
+    top: 130px;
+    left: 50%;
+    transform: translate(-50%);
+    width: 330px;
+    height: 250px;
+    padding: 37px 20px 38px 20px;
+    border: 1px solid #CECECE;
+    box-shadow: 1px 2px 8px 0 rgba(68, 70, 73, 0.20);
+    border-radius: 2px;
+    background-color: #ffffff;
+    z-index: 1001;
+}
+
+.confirm-header-icon img {
+    position: relative;
+    bottom: 1px;
+    width: 19px;
+    height: 18px;
+}
+
+.confirm-header,
+.confirm-message {
+    vertical-align: top;
+    display: inline-block;
+}
+
+.confirm-header {
+    width: 19px;
+    line-height: 16px;
+}
+
+.confirm-message {
+    width: calc(100% - 19px);
+    padding-left: 17px;
+}
+
+.confirm-message-title {
+    padding-bottom: 20px;
+    color: #444649;
+    font-size: 14px;
+    color: #444649;
+    letter-spacing: 0;
+    line-height: 16px;
+}
+
+.confirm-message-title span {
+    font-weight: 500;
+}
+
+.confirm-message-text {
+    color: rgba(0, 0, 0, 0.65);
+    padding-bottom: 30px;
+    padding-right: 18px;
+    font-size: 12px;
+    font-weight: 300;
+    color: #606060;
+    letter-spacing: 0;
+    line-height: 16px;
+}
+
+.confirm-message-text span {
+    font-weight: 500;
+}
+
+.confirm-buttons {
+    text-align: center;
+}
+
+.confirm-buttons button {
+    width: 90px;
+    height: 30px;
+}
+
+.confirm-buttons button:first-child {
+    margin-right: 10px;
 }
