@@ -8,16 +8,17 @@ import jsonHandler from '../mstr-object/mstr-normalized-json-handler';
 class OfficeConverterServiceV2 {
   createTable(response) {
     const columnInformation = this.getColumnInformation(response);
+    const isCrosstab = this.isCrosstab(response);
     return {
-      id: response.id,
-      name: response.name,
+      columnCount: this.getColumnCount(response, columnInformation, isCrosstab),
+      columnInformation,
       cubeId: response.cubeID,
       cubeName: response.cubeName,
-      isCrosstab: this.isCrosstab(response),
       headers: this.getHeaders(response),
-      rows: this.getRows(response),
-      columnInformation,
-      columnCount: columnInformation.length,
+      id: response.id,
+      isCrosstab,
+      name: response.name,
+      rows: this.getRows(response, isCrosstab),
     };
   }
   /**
@@ -71,6 +72,19 @@ class OfficeConverterServiceV2 {
       const metricHeaders = jsonHandler.renderHeaders(response.definition, 'columns', response.headers, onElement);
       return {columns: [[...attributeTitles[0], ...metricHeaders[0]]]};
     }
+  }
+
+  /**
+   * Returns number of columns of tabular data if not crosstabs of metrics grid if crosstabs
+   *
+   * @param {JSON} response
+   * @param {Object} columnInformation - Array with indexed column definition for metrics and attributes
+   * @param {Boolean} isCrosstab
+   * @return {Number}
+   * @memberof OfficeConverterServiceV2
+   */
+  getColumnCount(response, columnInformation, isCrosstab) {
+    return isCrosstab ? response.columnCount : columnInformation.length;
   }
 
   /**

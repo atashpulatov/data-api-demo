@@ -270,7 +270,7 @@ async function* fetchContentGenerator(instanceDefinition, objectId, projectId, i
   try {
     const totalRows = instanceDefinition.rows;
     const {instanceId, mstrTable} = instanceDefinition;
-    const {isCrossTab} = mstrTable;
+    const {isCrosstab} = mstrTable;
 
     const storeState = reduxStore.getState();
     const envUrl = storeState.sessionReducer.envUrl;
@@ -284,7 +284,7 @@ async function* fetchContentGenerator(instanceDefinition, objectId, projectId, i
       const {current} = response.body.data.paging;
       fetchedRows = current + offset;
       offset += current;
-      yield officeConverterServiceV2.getRows(response.body, isCrossTab);
+      yield officeConverterServiceV2.getRows(response.body, isCrosstab);
     }
   } catch (error) {
     console.log(error);
