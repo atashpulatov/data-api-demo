@@ -142,7 +142,7 @@ describe('ErrorService', () => {
       jest.advanceTimersByTime(2000);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('warning', '404 - Environment not found');
+      expect(spyMethod).toBeCalledWith('warning', '404 - Environment not found', undefined);
       expect(spyLogOut).toBeCalled();
     });
     it('should display notification and logout on UnauthorizedError', () => {
@@ -168,7 +168,7 @@ describe('ErrorService', () => {
       jest.advanceTimersByTime(2000);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('warning', 'Environment is unreachable. Please check your internet connection.');
+      expect(spyMethod).toBeCalledWith('warning', 'Environment is unreachable. Please check your internet connection.', undefined);
       expect(spyLogOut).toBeCalled();
     });
     it('should display notification and logout on BadRequestError', () => {
@@ -179,7 +179,7 @@ describe('ErrorService', () => {
       errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('warning', '400 - There has been a problem with your request');
+      expect(spyMethod).toBeCalledWith('warning', '400 - There has been a problem with your request', undefined);
     });
     it('should display notification on UnauthorizedError', () => {
       // given
@@ -199,7 +199,7 @@ describe('ErrorService', () => {
       errorService.handleError(error, true);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('warning', 'Environment is unreachable. Please check your internet connection.');
+      expect(spyMethod).toBeCalledWith('warning', 'Environment is unreachable. Please check your internet connection.', undefined);
     });
     it('should display notification on BadRequestError', () => {
       // given
@@ -209,7 +209,7 @@ describe('ErrorService', () => {
       errorService.handleError(error, true);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('warning', '400 - There has been a problem with your request');
+      expect(spyMethod).toBeCalledWith('warning', '400 - There has been a problem with your request', undefined);
     });
     it('should display notification on OutsideOfRangeError ', () => {
       // given
@@ -237,7 +237,7 @@ describe('ErrorService', () => {
       errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('warning', NOT_SUPPORTED_SERVER_ERR);
+      expect(spyMethod).toBeCalledWith('warning', NOT_SUPPORTED_SERVER_ERR, undefined);
     });
     it('should display notification on InternalServerError on report with Custom Groups', () => {
       // given
@@ -247,7 +247,7 @@ describe('ErrorService', () => {
       errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('warning', NOT_SUPPORTED_CUSTOM_GROUP);
+      expect(spyMethod).toBeCalledWith('warning', NOT_SUPPORTED_CUSTOM_GROUP, undefined);
     });
     it('should display notification on exceeding row limits', () => {
       // given
@@ -257,7 +257,7 @@ describe('ErrorService', () => {
       errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('warning', PROJECT_ROW_LIMIT);
+      expect(spyMethod).toBeCalledWith('warning', PROJECT_ROW_LIMIT, undefined);
     });
     it('should display notification on not published cubes', () => {
       // given
@@ -267,7 +267,7 @@ describe('ErrorService', () => {
       errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('warning', NOT_PUBLISHED_CUBE);
+      expect(spyMethod).toBeCalledWith('warning', NOT_PUBLISHED_CUBE, undefined);
     });
     it('should display notification on object not present in metadata', () => {
       // given
@@ -277,7 +277,7 @@ describe('ErrorService', () => {
       errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('warning', NOT_IN_METADATA);
+      expect(spyMethod).toBeCalledWith('warning', NOT_IN_METADATA, undefined);
     });
     it('should logout on UnauthorizedError', () => {
       // given
@@ -309,7 +309,7 @@ describe('ErrorService', () => {
       errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('warning', NOT_SUPPORTED_PROMPTS_REFRESH);
+      expect(spyMethod).toBeCalledWith('warning', NOT_SUPPORTED_PROMPTS_REFRESH, undefined);
     });
     it('should handle OverlappingTablesError', () => {
       // given
@@ -319,7 +319,7 @@ describe('ErrorService', () => {
       errorService.handleError(error);
       // then
       expect(notificationSpy).toBeCalled();
-      expect(notificationSpy).toBeCalledWith('warning', TABLE_OVERLAP);
+      expect(notificationSpy).toBeCalledWith('warning', TABLE_OVERLAP, undefined);
     });
   });
   describe('errorOfficeFactory', () => {
