@@ -53,5 +53,6 @@ function onShowNotification(action) {
     title: action.title,
     content: action.content,
     notificationType: action.notificationType,
+    details: action.details,
   };
 }
