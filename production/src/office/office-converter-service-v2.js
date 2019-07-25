@@ -7,6 +7,7 @@ import jsonHandler from '../mstr-object/mstr-normalized-json-handler';
  */
 class OfficeConverterServiceV2 {
   createTable(response) {
+    const columnInformation = this.getColumnInformation(response);
     return {
       id: response.id,
       name: response.name,
@@ -15,7 +16,8 @@ class OfficeConverterServiceV2 {
       isCrosstab: this.isCrosstab(response),
       headers: this.getHeaders(response),
       rows: this.getRows(response),
-      columnInformation: this.getColumnInformation(response),
+      columnInformation,
+      columnCount: columnInformation.length,
     };
   }
   /**
@@ -26,21 +28,25 @@ class OfficeConverterServiceV2 {
    * @memberof OfficeConverterServiceV2
    */
   isCrosstab(response) {
-    return !!response.definition.crossTab;
+    const {columns, rows} = response.headers;
+    return columns.length > 1 || rows.length > 1;
+    // TODO: Wait until the definition return crossTab
+    // return !!response.definition.crossTab;
   }
 
   /**
    * Gets raw table rows
    *
    * @param {JSON} response
+   * @param {Boolean} isCrosstabRender - Workaround since we don't know if a report is crosstab while importing data
    * @return {number[]}
    * @memberof OfficeConverterServiceV2
    */
-  getRows(response) {
+  getRows(response, isCrosstabRender = false) {
     // onMetric is passed when mapping the row [{rv:1, fv:"$1"}, ...]
     const onMetric = ({rv}) => rv;
     const onAttribute = ({name}) => name;
-    if (this.isCrosstab(response)) {
+    if (isCrosstabRender && this.isCrosstab(response)) {
       return jsonHandler.renderRows(response.data.values, onMetric);
     } else {
       return jsonHandler.renderTabular(response.definition, response.data, response.headers, onAttribute, onMetric);
@@ -63,7 +69,7 @@ class OfficeConverterServiceV2 {
     } else {
       const attributeTitles = jsonHandler.renderTitles(response.definition, 'rows', response.headers, onElement);
       const metricHeaders = jsonHandler.renderHeaders(response.definition, 'columns', response.headers, onElement);
-      return {columns: [...attributeTitles[0], ...metricHeaders[0]]};
+      return {columns: [[...attributeTitles[0], ...metricHeaders[0]]]};
     }
   }
 
