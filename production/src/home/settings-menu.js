@@ -10,8 +10,9 @@ import {errorService} from '../error/error-handler';
 
 const APP_VERSION = process.env.REACT_APP_MSTR_OFFICE_VERSION;
 
-export const _SettingsMenu = ({userFullName, userInitials, isSecured, t, toggleIsConfirmFlag}) => {
+export const _SettingsMenu = ({userFullName, userInitials, isSecured, reportArray, t, toggleIsConfirmFlag}) => {
   const userNameDisplay = userFullName || 'MicroStrategy user';
+  const isSecuredActive = !isSecured && reportArray && reportArray.length > 0;
 
   const prepareEmail = () => {
     const {host, platform, version} = window.Office.context.diagnostics;
@@ -46,7 +47,7 @@ export const _SettingsMenu = ({userFullName, userInitials, isSecured, t, toggleI
           <span id="userName" className="user-name no-trigger-close">{userNameDisplay}</span>
         }
       </li>
-      <li tabIndex='0' className={`no-trigger-close clear-data ${isSecured ? 'clear-data-inactive' : ''}`} onClick={!isSecured ? () => toggleIsConfirmFlag(true) : ''}>
+      <li tabIndex='0' className={`no-trigger-close clear-data ${!isSecuredActive ? 'clear-data-inactive' : ''}`} onClick={isSecuredActive ? () => toggleIsConfirmFlag(true) : null}>
         <span className='no-trigger-close'>{t('Clear Data')} </span>
       </li>
       <li>
@@ -92,8 +93,8 @@ _SettingsMenu.defaultProps = {
 
 function mapStateToProps({sessionReducer, officeReducer}) {
   const {userFullName, userInitials} = sessionReducer;
-  const {isSecured} = officeReducer;
-  return {userFullName, userInitials, isSecured};
+  const {isSecured, reportArray} = officeReducer;
+  return {userFullName, userInitials, isSecured, reportArray};
 };
 
 const mapDispatchToProps = {
