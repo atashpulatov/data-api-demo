@@ -16,30 +16,30 @@ export const SET_REPORT_N_FILTERS = 'SET_REPORT_N_FILTERS';
 
 export function callForEdit(reportParams) {
   return async (dispatch) => {
-    await Promise.all([officeApiHelper.getExcelSessionStatus(), authenticationHelper.validateAuthToken()]);
-    const editedReport = officeStoreService.getReportFromProperties(reportParams.bindId);
+    try {
+      await Promise.all([officeApiHelper.getExcelSessionStatus(), authenticationHelper.validateAuthToken()]);
+      const editedReport = officeStoreService.getReportFromProperties(reportParams.bindId);
 
-    if (editedReport.isPrompted) {
-      let instanceDefinition = await mstrObjectRestService.createInstance(editedReport.id, editedReport.projectId, true, null, null);
-      let count = 0;
-      while (instanceDefinition.status === 2) {
-        try {
+      if (editedReport.isPrompted) {
+        let instanceDefinition = await mstrObjectRestService.createInstance(editedReport.id, editedReport.projectId, true, null, null);
+        let count = 0;
+        while (instanceDefinition.status === 2) {
           await mstrObjectRestService.answerPrompts(editedReport.id, editedReport.projectId, instanceDefinition.instanceId, editedReport.promptsAnswers[count]);
           instanceDefinition = await mstrObjectRestService.getInstance(editedReport.id, editedReport.projectId, true, null, editedReport.body, instanceDefinition.instanceId);
           count++;
-        } catch (error) {
-          return errorService.handleError(error);
         }
+        editedReport.instanceId = instanceDefinition.instanceId;
       }
-      editedReport.instanceId = instanceDefinition.instanceId;
-    }
 
-    console.log(editedReport);
-    dispatch({
-      type: SET_REPORT_N_FILTERS,
-      editedReport,
-    });
-    popupController.runEditFiltersPopup(reportParams);
+      console.log(editedReport);
+      dispatch({
+        type: SET_REPORT_N_FILTERS,
+        editedReport,
+      });
+      popupController.runEditFiltersPopup(reportParams);
+    } catch (error) {
+      return errorService.handleError(error);
+    }
   };
 };
 
