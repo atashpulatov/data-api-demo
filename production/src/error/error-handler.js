@@ -16,9 +16,6 @@ const TIMEOUT = 2000;
 
 class ErrorService {
   errorRestFactory = (error) => {
-    if (error.status === 200) {
-      return new PromptedReportError(error);
-    }
     const isOfficeError = error instanceof RunOutsideOfficeError
       || error instanceof OverlappingTablesError
       || error instanceof GenericOfficeError

@@ -37,7 +37,7 @@ class OfficeDisplayService {
     }
   }
 
-  _printObject = async ({objectId, projectId, isReport = true, selectedCell, bindingId, isRefresh, dossierData, body, isCrosstab, isPrompted, promptsAnswers}) => {
+  _printObject = async ({objectId, instanceId, projectId, isReport = true, selectedCell, bindingId, isRefresh, dossierData, body, isCrosstab, isPrompted, promptsAnswers}) => {
     let officeTable;
     let newOfficeTableId;
     let shouldFormat;
@@ -56,7 +56,9 @@ class OfficeDisplayService {
 
       // Get mstr instance definition
       console.time('Instance definition');
-      let instanceDefinition = await mstrObjectRestService.createInstance(objectId, projectId, isReport, dossierData, body);
+      let instanceDefinition = !instanceId
+        ? await mstrObjectRestService.createInstance(objectId, projectId, isReport, dossierData, body)
+        : await mstrObjectRestService.getInstance(objectId, projectId, isReport, dossierData, body, instanceId);
 
       // Status 2 = report has open prompts to be answered before data can be returned
       if (instanceDefinition.status === 2) {
