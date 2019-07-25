@@ -81,7 +81,7 @@ export const _SettingsMenu = ({userFullName, userInitials, isSecured, t, toggleI
           {t('Logout')}
         </span>
       </li>
-      < li className="settings-version no-trigger-close">{t('Version', {APP_VERSION})}</li>
+      < li className="settings-version no-trigger-close">{t('Version {{APP_VERSION}}', {APP_VERSION})}</li>
     </ul >
   );
 };
