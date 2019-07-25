@@ -155,7 +155,7 @@ describe('ErrorService', () => {
       jest.advanceTimersByTime(2000);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('info', 'Your session has expired.\nPlease log in.');
+      expect(spyMethod).toBeCalledWith('info', 'Your session has expired. Please log in.');
       expect(spyLogOut).toBeCalled();
     });
     it('should display notification and logout on ConnectionBrokenError', () => {
@@ -168,7 +168,7 @@ describe('ErrorService', () => {
       jest.advanceTimersByTime(2000);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('warning', 'Environment is unreachable.' + '\nPlease check your internet connection.');
+      expect(spyMethod).toBeCalledWith('warning', 'Environment is unreachable. Please check your internet connection.');
       expect(spyLogOut).toBeCalled();
     });
     it('should display notification and logout on BadRequestError', () => {
@@ -189,7 +189,7 @@ describe('ErrorService', () => {
       errorService.handleError(error, true);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('info', 'Your session has expired.\nPlease log in.');
+      expect(spyMethod).toBeCalledWith('info', 'Your session has expired. Please log in.');
     });
     it('should display notification on ConnectionBrokenError', () => {
       // given
@@ -199,7 +199,7 @@ describe('ErrorService', () => {
       errorService.handleError(error, true);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('warning', 'Environment is unreachable.' + '\nPlease check your internet connection.');
+      expect(spyMethod).toBeCalledWith('warning', 'Environment is unreachable. Please check your internet connection.');
     });
     it('should display notification on BadRequestError', () => {
       // given

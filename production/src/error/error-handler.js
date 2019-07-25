@@ -119,11 +119,10 @@ class ErrorService {
       return 'The endpoint cannot be reached';
     };
     if (error instanceof ConnectionBrokenError) {
-      return 'Environment is unreachable.'
-        + '\nPlease check your internet connection.';
+      return 'Environment is unreachable. Please check your internet connection.';
     };
     if (error instanceof UnauthorizedError) {
-      return 'Your session has expired.\nPlease log in.';
+      return 'Your session has expired. Please log in.';
     };
     if (error instanceof BadRequestError) {
       return 'There has been a problem with your request';
