@@ -60,6 +60,7 @@ class PopupHelper {
       dossierData: instanceId,
       promptsAnswers: refreshReport.promptsAnswers,
       objectId: refreshReport.id,
+      instanceId: refreshReport.instanceId,
       projectId: refreshReport.projectId,
       isReport,
       selectedCell: true,

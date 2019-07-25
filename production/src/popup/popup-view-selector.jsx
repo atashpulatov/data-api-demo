@@ -95,12 +95,14 @@ function parsePopupState(popupState) {
   }
   const reportData = {
     reportId: popupState.id,
+    instanceId: popupState.instanceId,
     projectId: popupState.projectId,
     reportName: popupState.name,
     reportType: popupState.objectType,
     reportSubtype: popupState.objectType === 'report'
       ? 768
       : 779,
+    promptsAnswers: popupState.promptsAnswers,
   };
   restoreFilters(popupState.body, reportData);
   return reportData;
@@ -132,13 +134,13 @@ function parseFilters(filtersNodes) {
     const elements = elementNodes.reduce((elements, node) => elements.concat(node.elements), []);
     const elementsIds = elements.map((elem) => elem.id);
     return elementsIds
-        .reduce((filters, elem) => {
-          const attrId = elem.split(':')[0];
-          filters[attrId] = !filters[attrId]
+      .reduce((filters, elem) => {
+        const attrId = elem.split(':')[0];
+        filters[attrId] = !filters[attrId]
           ? [elem]
           : [...filters[attrId], elem];
-          return filters;
-        }, {});
+        return filters;
+      }, {});
   }
 }
 

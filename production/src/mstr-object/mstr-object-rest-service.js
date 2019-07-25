@@ -225,22 +225,26 @@ class MstrObjectRestService {
   }
 
   answerPrompts(objectId, projectId, instanceId, promptsAnswers) {
-    const storeState = reduxStore.getState();
-    const envUrl = storeState.sessionReducer.envUrl;
-    const authToken = storeState.sessionReducer.authToken;
-    const fullPath = `${envUrl}/reports/${objectId}/instances/${instanceId}/promptsAnswers`;
-    return moduleProxy.request
-        .post(fullPath)
-        .set('X-MSTR-AuthToken', authToken)
-        .set('X-MSTR-ProjectID', projectId)
-        .send(promptsAnswers)
-        .withCredentials()
-        .then((res) => {
-          return res.status;
-        })
-        .catch((err) => {
-          throw errorService.errorRestFactory(err);
-        });
+    try {
+      const storeState = reduxStore.getState();
+      const envUrl = storeState.sessionReducer.envUrl;
+      const authToken = storeState.sessionReducer.authToken;
+      const fullPath = `${envUrl}/reports/${objectId}/instances/${instanceId}/promptsAnswers`;
+      return moduleProxy.request
+          .post(fullPath)
+          .set('X-MSTR-AuthToken', authToken)
+          .set('X-MSTR-ProjectID', projectId)
+          .send(promptsAnswers)
+          .withCredentials()
+          .then((res) => {
+            return res.status;
+          })
+          .catch((err) => {
+            throw errorService.errorRestFactory(err);
+          });
+    } catch (error) {
+    throw errorService.errorRestFactory(error);
+    }  
   }
 
   deleteDossierInstance(projectId, objectId, instanceId) {

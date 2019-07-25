@@ -46,13 +46,13 @@ describe('ErrorService', () => {
       // then
       expect(result).toBe(error);
     });
-    it('should throw an PromptedReportError', () => {
+    it('should not throw an PromptedReportError', () => {
       // given
       const error = {status: 200};
       // when
       const resultError = errorService.errorRestFactory(error);
       // then
-      expect(resultError).toBeInstanceOf(PromptedReportError);
+      expect(resultError).not.toBe(PromptedReportError);
     });
     it('should throw an InternalServerError due to response 404 code', () => {
       // given
