@@ -175,8 +175,8 @@ class OfficeDisplayService {
    * @memberOf OfficeDisplayService
    */
   _createOfficeTable = async (instanceDefinition, context, startCell, officeTableId, prevOfficeTable) => {
-    const hasHeaders = true;
     const {rows, columns, mstrTable} = instanceDefinition;
+    const hasTableHeaders = !mstrTable.isCrosstab;
     const sheet = prevOfficeTable ? prevOfficeTable.worksheet : context.workbook.worksheets.getActiveWorksheet();
     const tableRange = officeApiHelper.getRange(columns, startCell, rows);
     const sheetRange = sheet.getRange(tableRange);
@@ -202,12 +202,13 @@ class OfficeDisplayService {
       await this._checkRangeValidity(context, sheetRange);
     }
 
-    const officeTable = sheet.tables.add(tableRange, hasHeaders);
-    hasHeaders && this._styleHeaders(officeTable, TABLE_HEADER_FONT_COLOR, TABLE_HEADER_FILL_COLOR);
+    const officeTable = sheet.tables.add(tableRange, true);
+    this._styleHeaders(officeTable, TABLE_HEADER_FONT_COLOR, TABLE_HEADER_FILL_COLOR);
     try {
       officeTable.load('name');
       officeTable.name = officeTableId;
-      officeTable.getHeaderRowRange().values = [mstrTable.headers.columns];
+      officeTable.getHeaderRowRange().values = [mstrTable.headers.columns[mstrTable.headers.columns.length - 1]];
+      officeTable.showHeaders = hasTableHeaders;
       sheet.activate();
       await context.sync();
       return officeTable;
@@ -367,9 +368,8 @@ class OfficeDisplayService {
         console.groupCollapsed(`Importing rows: ${rowIndex} to ${Math.min(rowIndex + limit, rows)}`);
         console.timeEnd('Fetch data');
         console.time('Append rows');
-        const excelRows = row;
         excelContext.workbook.application.suspendApiCalculationUntilNextSync();
-        this._appendRowsToTable(officeTable, excelRows, rowIndex, isRefresh);
+        await this._appendRowsToTable(officeTable, row, rowIndex, isRefresh);
         rowIndex += row.length;
         console.timeEnd('Append rows');
         contextPromises.push(excelContext.sync());
@@ -395,7 +395,8 @@ class OfficeDisplayService {
   }
 
   _appendRowsToTable(officeTable, excelRows, rowIndex, isRefresh = false) {
-    const rowRange = officeTable.getHeaderRowRange().getRowsBelow(excelRows.length).getOffsetRange(rowIndex, 0);
+    // Get resize range: The number of rows/cols by which to expand the bottom-right corner, relative to the current range.
+    const rowRange = officeTable.getDataBodyRange().getRow(0).getResizedRange(excelRows.length - 1, 0).getOffsetRange(rowIndex, 0);
     // clear(applyToString?: "All" | "Formats" | "Contents" | "Hyperlinks" | "RemoveHyperlinks"): void;
     isRefresh && rowRange.clear('Contents');
     rowRange.values = excelRows;
