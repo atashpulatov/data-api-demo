@@ -79,7 +79,7 @@ class OfficeDisplayService {
       console.time('Fetch and insert into excel');
       const connectionData = {objectId, projectId, dossierData, isReport, body};
       const officeData = {officeTable, excelContext, startCell, newOfficeTableId};
-      officeTable = await this._fetchInsertDataIntoExcel(connectionData, officeData, instanceDefinition, isRefresh);
+      officeTable = await this._fetchInsertDataIntoExcel({connectionData, officeData, instanceDefinition, isRefresh, startCell});
 
       // Apply formatting when table was created
       if (shouldFormat) {
@@ -99,7 +99,7 @@ class OfficeDisplayService {
       return {type: 'success', message: `Data loaded successfully`};
     } catch (error) {
       if (officeTable && !isRefresh) {
-        officeTable.delete();
+        // officeTable.delete();
       }
       throw errorService.errorOfficeFactory(error);
     } finally {
@@ -354,25 +354,31 @@ class OfficeDisplayService {
     return {officeTable, newOfficeTableId, shouldFormat};
   }
 
-  async _fetchInsertDataIntoExcel(connectionData, officeData, instanceDefinition, isRefresh) {
+  async _fetchInsertDataIntoExcel({connectionData, officeData, instanceDefinition, isRefresh}) {
     try {
       const {objectId, projectId, dossierData, isReport, body} = connectionData;
       const {excelContext, officeTable} = officeData;
-      const {columns, rows} = instanceDefinition;
+      const {columns, rows, mstrTable} = instanceDefinition;
       const limit = Math.min(Math.floor(DATA_LIMIT / columns), IMPORT_ROW_LIMIT);
       const rowGenerator = mstrObjectRestService.getObjectContentGenerator(instanceDefinition, objectId, projectId, isReport, dossierData, body, limit);
       let rowIndex = 0;
       let contextPromises = [];
       console.time('Fetch data');
-      for await (const row of rowGenerator) {
+      for await (const {row, header} of rowGenerator) {
         console.groupCollapsed(`Importing rows: ${rowIndex} to ${Math.min(rowIndex + limit, rows)}`);
         console.timeEnd('Fetch data');
         console.time('Append rows');
         excelContext.workbook.application.suspendApiCalculationUntilNextSync();
         await this._appendRowsToTable(officeTable, row, rowIndex, isRefresh);
-        rowIndex += row.length;
-        console.timeEnd('Append rows');
         contextPromises.push(excelContext.sync());
+        console.timeEnd('Append rows');
+        if (mstrTable.isCrosstab) {
+          console.time('Append crosstab rows');
+          this._appendCrosstabRowsToRange(officeTable, header.rows, rowIndex, isRefresh, excelContext);
+          contextPromises.push(excelContext.sync());
+          console.timeEnd('Append crosstab rows');
+        }
+        rowIndex += row.length;
         const promiseLength = contextPromises.length;
         if (promiseLength % PROMISE_LIMIT === 0) {
           console.time('Waiting for pending context syncs');
@@ -392,6 +398,11 @@ class OfficeDisplayService {
       console.log(error);
       throw error;
     }
+  }
+
+  _appendCrosstabRowsToRange(officeTable, headerRows, rowIndex, isRefresh) {
+    const startCell = officeTable.getDataBodyRange().getRow(0).getCell(0, 0).getOffsetRange(rowIndex, 0);
+    officeApiHelper.createRowsHeaders(startCell, headerRows);
   }
 
   _appendRowsToTable(officeTable, excelRows, rowIndex, isRefresh = false) {

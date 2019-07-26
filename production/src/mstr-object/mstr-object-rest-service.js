@@ -284,7 +284,12 @@ async function* fetchContentGenerator(instanceDefinition, objectId, projectId, i
       const {current} = response.body.data.paging;
       fetchedRows = current + offset;
       offset += current;
-      yield officeConverterServiceV2.getRows(response.body, isCrosstab);
+      const row = officeConverterServiceV2.getRows(response.body, isCrosstab);
+      let header;
+      if (isCrosstab) {
+        header = officeConverterServiceV2.getHeaders(response.body);
+      }
+      yield {row, header};
     }
   } catch (error) {
     console.log(error);

@@ -333,24 +333,24 @@ class OfficeApiHelper {
   /**
    *Prepares parameters for createHeaders
    *
-   * @param {Office} context Excel context
    * @param {Office} reportStartingCell Address of the first cell in report (top left)
-   * @param {Array} headers Contains headers structure and data
+   * @param {Array} rows Contains headers structure and data
+   * @param {Office} context Excel context
    * @memberof OfficeApiHelper
-   * @return {Promise} Context.sync
    */
-  createRowsHeaders = (context, reportStartingCell, headers) => {
+  createRowsHeaders = (reportStartingCell, rows) => {
     const columnOffset = 0;
-    const rowOffset = headers.rows[0].length;
-    reportStartingCell.unmerge(); // excel api have problem with handling merged cells which are partailly in range, we unmerged selected cell to avoid this problem
+    const rowOffset = rows[0].length;
+    // reportStartingCell.unmerge(); // excel api have problem with handling merged cells which are partailly in range, we unmerged selected cell to avoid this problem
     const startingCell = reportStartingCell.getCell(0, 0).getOffsetRange(-columnOffset, -rowOffset); // we call getCell in case multiple cells are selected
-    const headerArray = mstrNormalizedJsonHandler._transposeMatrix(headers.rows);
-    const directionVector = [0, 1];
+    const headerArray = mstrNormalizedJsonHandler._transposeMatrix(rows);
     const headerRange = startingCell.getResizedRange(headerArray[0].length - 1, headerArray.length - 1);
-    this.insertHeadersValues(headerRange, headers.rows);
-
-    return this.createHeaders(headerArray, startingCell, directionVector, context);
+    this.insertHeadersValues(headerRange, rows);
+    // TODO: Move merge cells after we import the whole table
+    // const directionVector = [0, 1];
+    // this.createHeaders(headerArray, startingCell, directionVector);
   }
+
   /**
    *Prepares parameters for createHeaders
    *
@@ -395,9 +395,8 @@ class OfficeApiHelper {
    * @param {number} directionVector direction vertor for the step size when iterating over cells
    * @param {Office} context Excel context
    * @memberof OfficeApiHelper
-   * @return {Promise} Context.sync
    */
-  createHeaders = (headerArray, startingCell, directionVector, context) => {
+  createHeaders = (headerArray, startingCell, directionVector) => {
     const [offsetForMoving1, offsetForMoving2] = directionVector;
     for (let i = 0; i < headerArray.length - 1; i++) {
       let currentCell = startingCell;
@@ -409,7 +408,6 @@ class OfficeApiHelper {
       }
       startingCell = startingCell.getOffsetRange(offsetForMoving1, offsetForMoving2); // moving to next attribute (row/column)
     }
-    return context.sync();
   }
 }
 
