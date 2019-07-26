@@ -55,8 +55,8 @@ class OfficeApiHelper {
   offsetCellBy = (cell, rowOffset, colOffset) => {
     const cellArray = cell.split(/(\d+)/);
     const [column, row] = cellArray;
-    const endRow = row + rowOffset;
-    const endColumn = this.numberToLetters(parseInt(this.lettersToNumber(column)) + colOffset);
+    const endRow = parseInt(row) + parseInt(rowOffset);
+    const endColumn = this.numberToLetters(parseInt(this.lettersToNumber(column) + colOffset));
     return `${endColumn}${endRow}`;
   }
 
@@ -268,11 +268,11 @@ class OfficeApiHelper {
    * @memberof OfficeApiHelper
    * @return {Object}
    */
-  getTableStartCell = ({startCell, sheet, mstrTable}) => {
+  getTableStartCell = ({startCell, mstrTable}) => {
     const {headers, isCrosstab} = mstrTable;
     if (!isCrosstab) return startCell;
-    const rowOffset = headers.rows.length - 1;
-    const colOffset = headers.columns[0].length - 1;
+    const rowOffset = headers.columns.length - 1;
+    const colOffset = headers.rows[0].length;
     return this.offsetCellBy(startCell, rowOffset, colOffset);
   }
 
