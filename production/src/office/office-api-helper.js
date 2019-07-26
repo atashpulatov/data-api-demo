@@ -270,9 +270,10 @@ class OfficeApiHelper {
    */
   getTableStartCell = ({startCell, sheet, mstrTable}) => {
     const {headers, isCrosstab} = mstrTable;
+    if (!isCrosstab) return startCell;
     const rowOffset = headers.rows.length - 1;
     const colOffset = headers.columns[0].length - 1;
-    return !isCrosstab ? startCell : this.offsetCellBy(startCell, rowOffset, colOffset);
+    return this.offsetCellBy(startCell, rowOffset, colOffset);
   }
 
   /**

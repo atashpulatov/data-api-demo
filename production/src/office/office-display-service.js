@@ -208,8 +208,7 @@ class OfficeDisplayService {
     try {
       officeTable.load('name');
       officeTable.name = officeTableId;
-      officeTable.getHeaderRowRange().values = [mstrTable.headers.columns[mstrTable.headers.columns.length - 1]];
-      officeTable.showHeaders = hasTableHeaders;
+      officeTable.getHeaderRowRange().values = [mstrTable.headers.columns.pop()];
       sheet.activate();
       await context.sync();
       return officeTable;
