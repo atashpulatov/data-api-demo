@@ -31,11 +31,13 @@ export default class CustomNotification extends Component {
         <header className="error__header">{translatedContent}</header>
         {
           details && <div>
-            <p
-              onClick={this.handleCollapse}
-              className={config.actionClass}>
-              {t(config.message)}<span className="error__arrow"></span>
-            </p>
+            <nav className="error__nav">
+              <p
+                onClick={this.handleCollapse}
+                className={config.actionClass}>
+                {t(config.message)}<span className="error__arrow"></span>
+              </p>
+            </nav>
             <div
               className={`${config.messageClass} error__text`}>
               <p className="error__message">{details}</p>
