@@ -40,6 +40,26 @@ class OfficeApiHelper {
     return `${startCell}:${endColumn}${endRow}`;
   }
 
+  numberToLetters = (colNum) => {
+    let colLetter = '';
+    let firstNumber = ALPHABET_RANGE_START;
+    let secondNumber = ALPHABET_RANGE_END;
+    for (firstNumber, secondNumber; (colNum -= firstNumber) >= 0; firstNumber = secondNumber, secondNumber *= ALPHABET_RANGE_END) {
+      colLetter = String.fromCharCode(parseInt((colNum % secondNumber) / firstNumber)
+        + ASCII_CAPITAL_LETTER_INDEX)
+        + colLetter;
+    }
+    return colLetter;
+  }
+
+  offsetCellBy = (cell, rowOffset, colOffset) => {
+    const cellArray = cell.split(/(\d+)/);
+    const [column, row] = cellArray;
+    const endRow = row + rowOffset;
+    const endColumn = this.numberToLetters(parseInt(this.lettersToNumber(column)) + colOffset);
+    return `${endColumn}${endRow}`;
+  }
+
   handleOfficeApiException = (error) => {
     console.error('error: ' + error);
     if (error instanceof OfficeExtension.Error) {
@@ -226,21 +246,37 @@ class OfficeApiHelper {
   }
 
   /**
-   *Gets range of crosstab report - it sums table body range and headers ranges
+   * Gets the total range of crosstab report - it sums table body range and headers ranges
    *
    * @param {Office} cell Starting table body cell
    * @param {Array} headers Headers object from OfficeConverterServiceV2.getHeaders
    * @memberof OfficeApiHelper
    * @return {Object}
    */
-  getCrossTabRange = (cell, headers) => {
+  getCrosstabRange = (cell, headers) => {
     const bodyRange = cell.getOffsetRange(headers.rows.length - 1, headers.columns[0].length - 1);
     const startingCell = cell.getCell(0, 0).getOffsetRange(-headers.columns.length, -headers.rows[0].length);
     return startingCell.getBoundingRect(bodyRange);
   }
 
   /**
-   *Gers range of subtotal row based on subtotal cell
+   * Returns the new initial cell considering crosstabs
+   *
+   * @param {Office} cell - Starting table body cell
+   * @param {Array} headers - Headers object from OfficeConverterServiceV2.getHeaders
+   * @param {Boolean} isCrosstab - When is crosstab we offset the inital cell
+   * @memberof OfficeApiHelper
+   * @return {Object}
+   */
+  getTableStartCell = ({startCell, sheet, mstrTable}) => {
+    const {headers, isCrosstab} = mstrTable;
+    const rowOffset = headers.rows.length - 1;
+    const colOffset = headers.columns[0].length - 1;
+    return !isCrosstab ? startCell : this.offsetCellBy(startCell, rowOffset, colOffset);
+  }
+
+  /**
+   * Gets range of subtotal row based on subtotal cell
    *
    * @param {Office} startCell Starting table body cell
    * @param {Office} cell Starting subtotal row cell

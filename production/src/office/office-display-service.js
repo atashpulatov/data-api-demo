@@ -178,7 +178,8 @@ class OfficeDisplayService {
     const {rows, columns, mstrTable} = instanceDefinition;
     const hasTableHeaders = !mstrTable.isCrosstab;
     const sheet = prevOfficeTable ? prevOfficeTable.worksheet : context.workbook.worksheets.getActiveWorksheet();
-    const tableRange = officeApiHelper.getRange(columns, startCell, rows);
+    const tableStartCell = officeApiHelper.getTableStartCell({startCell, sheet, mstrTable});
+    const tableRange = officeApiHelper.getRange(columns, tableStartCell, rows);
     const sheetRange = sheet.getRange(tableRange);
     if (prevOfficeTable) {
       prevOfficeTable.rows.load('count');
