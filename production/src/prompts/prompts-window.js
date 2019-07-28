@@ -23,6 +23,8 @@ export class _PromptsWindow extends Component {
       reportId: this.props.mstrData.reportId,
       triggerUpdate: false,
       loading: true,
+      isReprompt: props.mstrData.isReprompt,
+      promptsAnswers: props.mstrData.promptsAnswers,
       currentPageKey: '',
       dossierInstanceId: '',
       docId: '',
@@ -34,13 +36,50 @@ export class _PromptsWindow extends Component {
     this.outerCont = React.createRef();
   }
 
-  loadEmbeddedDossier = (container) => {
+  preparePromptedReportInstance = async (reportId, projectId, promptsAnswers) => {
+    const body = {};
+    const instanceDefinition = await mstrObjectRestService.createInstance(reportId, projectId, true, null, body);
+    let dossierInstanceDefinition = await mstrObjectRestService.createDossierBasedOnReport(reportId, instanceDefinition.instanceId, projectId);
+    if (dossierInstanceDefinition.status === 2) {
+      dossierInstanceDefinition = await this.answerDossierPrompts(dossierInstanceDefinition, reportId, projectId, promptsAnswers, true, null, body);
+    }
+
+    dossierInstanceDefinition = await mstrObjectRestService.rePromptDossier(reportId, dossierInstanceDefinition, projectId);
+    dossierInstanceDefinition.id = reportId;
+
+    return dossierInstanceDefinition;
+  }
+
+  answerDossierPrompts = async (instanceDefinition, objectId, projectId, promptsAnswers, isReport, dossierData, body) => {
+    const instanceId = instanceDefinition.mid;
+    let count = 0;
+    while (instanceDefinition.status === 2) {
+      await mstrObjectRestService.answerDossierPrompts(objectId, projectId, instanceDefinition.mid, promptsAnswers[count]);
+      instanceDefinition = await mstrObjectRestService.getDossierStatus(objectId, instanceDefinition.mid, projectId);
+      count++;
+    }
+    return instanceId;
+  }
+
+  loadEmbeddedDossier = async (container) => {
+    // debugger;
     if (!this.state.loading) {
       return;
     }
 
     const {authToken, projectId} = this.state.session;
     const libraryUrl = this.state.session.url.replace('api', 'app');
+
+    let instanceDefinition;
+    const instance = {};
+    if (this.state.isReprompt) {
+      instanceDefinition = await this.preparePromptedReportInstance(this.state.reportId, projectId, this.state.promptsAnswers);
+      console.log('JOB DONE: ' + JSON.stringify(instanceDefinition));
+
+      instance.id = instanceDefinition.id; // '00000000000000000000000000000000';
+      instance.mid = instanceDefinition.mid;
+    }
+    debugger;
 
     let msgRouter = null;
     let promptsAnswers = null;
@@ -61,12 +100,14 @@ export class _PromptsWindow extends Component {
     microstrategy.dossier
         .create({
           url: url,
+          instance,
           enableCustomAuthentication: true,
           customAuthenticationType:
           CustomAuthenticationType.AUTH_TOKEN,
           enableResponsive: true,
 
           getLoginToken: function() {
+          // debugger;
             return Promise.resolve(authToken);
           },
           placeholder: container,
@@ -187,6 +228,7 @@ export class _PromptsWindow extends Component {
 }
 
 export const mapStateToProps = (state) => {
+  // debugger;
   return {...state.promptsPopup};
 };
 

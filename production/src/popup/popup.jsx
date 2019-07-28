@@ -33,6 +33,20 @@ export class Popup extends Component {
     });
   };
 
+  handleReprompt = (projectId, reportId, reportSubtype, reportName, reportType) => {
+    this.setState({
+      mstrData: {
+        ...this.state.mstrData,
+        popupType: PopupTypeEnum.dataPreparation,
+        projectId,
+        reportId,
+        reportSubtype,
+        reportName,
+        reportType,
+      },
+    });
+  };
+
   handleBack = (projectId, reportId, reportSubtype) => {
     this.setState({
       mstrData: {
@@ -57,6 +71,7 @@ export class Popup extends Component {
     const {popupType, ...propsToPass} = this.state.mstrData;
     const methods = {
       handlePrepare: this.handlePrepare,
+      // handleReprompt: this.handleReprompt,
       handleBack: this.handleBack,
       handlePopupErrors: this.handlePopupErrors,
     };

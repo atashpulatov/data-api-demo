@@ -10,6 +10,7 @@ import {PromptsWindow} from '../prompts/prompts-window';
 import {RefreshAllPage} from '../loading/refresh-all-page';
 
 export const _PopupViewSelector = (props) => {
+  // debugger;
   let popupType = props.popupType;
   const {propsToPass, methods, importRequested, editedReport} = props;
   if (importRequested) {
@@ -54,6 +55,14 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
   if (popupType === PopupTypeEnum.promptsWindow) {
     return <PromptsWindow mstrData={propsToPass} />;
   }
+  if (popupType === PopupTypeEnum.repromptingWindow) {
+    const mstrData = {
+      ...propsToPass,
+      ...editedReport,
+      isReprompt: true,
+    };
+    return <PromptsWindow mstrData={mstrData} />; // use the same window as with prompting, but provide report info
+  }
   // TODO: do some error handling here
   return null;
 }
@@ -79,6 +88,7 @@ function proceedToImport(props) {
 }
 
 export function mapStateToProps(state) {
+  // debugger;
   const popupState = state.popupReducer.editedReport;
   return {
     ...state.navigationTree,
@@ -98,6 +108,7 @@ function parsePopupState(popupState) {
     reportSubtype: popupState.objectType === 'report'
       ? 768
       : null,
+    promptsAnswers: popupState.promptsAnswers,
     selectedAttributes: popupState.body && popupState.body.requestedObjects && popupState.body.requestedObjects.attributes && popupState.body.requestedObjects.attributes.map((attr) => attr.id),
     selectedMetrics: popupState.body && popupState.body.requestedObjects && popupState.body.requestedObjects.metrics && popupState.body.requestedObjects.metrics.map((mtrc) => mtrc.id),
     selectedFilters: popupState.body && popupState.body.viewFilter

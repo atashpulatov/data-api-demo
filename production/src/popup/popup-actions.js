@@ -29,11 +29,11 @@ export function callForEdit(reportParams) {
 export function callForReprompt(reportParams) {
   return async (dispatch) => {
     await Promise.all([officeApiHelper.getExcelSessionStatus(), authenticationHelper.validateAuthToken()]);
-    const repromptedReport = officeStoreService.getReportFromProperties(reportParams.bindId);
-    console.log(repromptedReport);
+    const editedReport = officeStoreService.getReportFromProperties(reportParams.bindId);
+    console.log(editedReport);
     dispatch({
       type: SET_REPORT_N_FILTERS,
-      repromptedReport,
+      editedReport,
     });
     popupController.runRepromptPopup(reportParams);
   };
@@ -59,7 +59,7 @@ export function refreshReportsArray(reportArray, isRefreshAll) {
           reportBindId: report.bindId,
           isRefreshAll: isRefreshAll,
         });
-        isError = await popupHelper.printRefreshedReport(report.bindId, report.objectType, reportArray.length, index, isRefreshAll);
+        isError = await popupHelper.printRefreshedReport(report.bindId, report.objectType, reportArray.length, index, isRefreshAll, report.promptsAnswers);
       } catch (error) {
         popupHelper.handleRefreshError(error, reportArray.length, index, isRefreshAll);
       } finally {

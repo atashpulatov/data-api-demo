@@ -44,7 +44,7 @@ class PopupHelper {
     return localStorage.setItem('refreshData', JSON.stringify(fromStorage));
   };
 
-  printRefreshedReport = async (bindingId, objectType, length, index, isRefreshAll) => {
+  printRefreshedReport = async (bindingId, objectType, length, index, isRefreshAll, promptsAnswers) => {
     const refreshReport = officeStoreService.getReportFromProperties(bindingId);
     isRefreshAll && this.storageReportRefreshStart(refreshReport, index);
     const isReport = objectType === 'report';
@@ -53,7 +53,7 @@ class PopupHelper {
 
     const options = {
       dossierData: instanceId,
-      promptsAnswers: refreshReport.promptsAnswers,
+      promptsAnswers: !promptsAnswers ? refreshReport.promptsAnswers : promptsAnswers,
       objectId: refreshReport.id,
       projectId: refreshReport.projectId,
       isReport,
