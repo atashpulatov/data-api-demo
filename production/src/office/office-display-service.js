@@ -1,5 +1,5 @@
 import {officeApiHelper} from './office-api-helper';
-import {mstrObjectRestService, DATA_LIMIT, PROMISE_LIMIT} from '../mstr-object/mstr-object-rest-service';
+import {mstrObjectRestService, DATA_LIMIT, PROMISE_LIMIT, IMPORT_ROW_LIMIT} from '../mstr-object/mstr-object-rest-service';
 import {reduxStore} from '../store';
 import {officeProperties} from './office-properties';
 import {officeStoreService} from './store/office-store-service';
@@ -37,7 +37,7 @@ class OfficeDisplayService {
     }
   }
 
-  _printObject = async ({objectId, projectId, isReport = true, selectedCell, bindingId, isRefresh, dossierData, body, isCrosstab, isPrompted, promptsAnswers}) => {
+  _printObject = async ({objectId, instanceId, projectId, isReport = true, selectedCell, bindingId, isRefresh, dossierData, body, isCrosstab, isPrompted, promptsAnswers}) => {
     let officeTable;
     let newOfficeTableId;
     let shouldFormat;
@@ -56,7 +56,9 @@ class OfficeDisplayService {
 
       // Get mstr instance definition
       console.time('Instance definition');
-      let instanceDefinition = await mstrObjectRestService.createInstance(objectId, projectId, isReport, dossierData, body);
+      let instanceDefinition = !instanceId
+        ? await mstrObjectRestService.createInstance(objectId, projectId, isReport, dossierData, body)
+        : await mstrObjectRestService.getInstance(objectId, projectId, isReport, dossierData, body, instanceId);
 
       // Status 2 = report has open prompts to be answered before data can be returned
       if (instanceDefinition.status === 2) {
@@ -359,7 +361,7 @@ class OfficeDisplayService {
       const {excelContext, officeTable} = officeData;
       const {mstrTable, columns, rows} = instanceDefinition;
       const {headers} = mstrTable;
-      const limit = Math.floor(DATA_LIMIT / columns);
+      const limit = Math.min(Math.floor(DATA_LIMIT / columns), IMPORT_ROW_LIMIT);
       const rowGenerator = mstrObjectRestService.getObjectContentGenerator(instanceDefinition, objectId, projectId, isReport, dossierData, body, limit);
       let rowIndex = 0;
       let contextPromises = [];

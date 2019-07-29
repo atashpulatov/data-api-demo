@@ -1,5 +1,5 @@
 import React from 'react';
-import {shallow, mount} from 'enzyme';
+import {shallow} from 'enzyme';
 import {Office} from '../mockOffice';
 import {selectorProperties} from '../../src/attribute-selector/selector-properties';
 import {_PopupViewSelector, mapStateToProps} from '../../src/popup/popup-view-selector';
@@ -229,12 +229,19 @@ describe('PopupViewSelector', () => {
   describe('PopupViewConnected', () => {
     const attributeId = 'ACF673EC11E9554D08E20080EF651EBC';
     const metricId = 'ACF6AF8811E9554D08EE0080EF651EBC';
-    const filterValue = {'ACF66B9A11E9554D08E20080EF651EBC': [
-      'ACF66B9A11E9554D08E20080EF651EBC:Europe',
-      'ACF66B9A11E9554D08E20080EF651EBC:North America',
-    ]};
+    const filterValue = {
+      'ACF66B9A11E9554D08E20080EF651EBC': [
+        'ACF66B9A11E9554D08E20080EF651EBC:Europe',
+        'ACF66B9A11E9554D08E20080EF651EBC:North America',
+      ],
+    };
+    // eslint-disable-next-line max-len
+    const complexFilterValue = {'8D679D3F11D3E4981000E787EC6DE8A4': ['8D679D3F11D3E4981000E787EC6DE8A4:1', '8D679D3F11D3E4981000E787EC6DE8A4:2', '8D679D3F11D3E4981000E787EC6DE8A4:3', '8D679D3F11D3E4981000E787EC6DE8A4:4', '8D679D3F11D3E4981000E787EC6DE8A4:5', '8D679D3F11D3E4981000E787EC6DE8A4:7', '8D679D3F11D3E4981000E787EC6DE8A4:8', '8D679D3F11D3E4981000E787EC6DE8A4:9', '8D679D3F11D3E4981000E787EC6DE8A4:10', '8D679D3F11D3E4981000E787EC6DE8A4:11', '8D679D3F11D3E4981000E787EC6DE8A4:12', '8D679D3F11D3E4981000E787EC6DE8A4:13', '8D679D3F11D3E4981000E787EC6DE8A4:14', '8D679D3F11D3E4981000E787EC6DE8A4:15', '8D679D3F11D3E4981000E787EC6DE8A4:16', '8D679D3F11D3E4981000E787EC6DE8A4:17', '8D679D3F11D3E4981000E787EC6DE8A4:18', '8D679D3F11D3E4981000E787EC6DE8A4:19', '8D679D3F11D3E4981000E787EC6DE8A4:20', '8D679D3F11D3E4981000E787EC6DE8A4:21', '8D679D3F11D3E4981000E787EC6DE8A4:24', '8D679D3F11D3E4981000E787EC6DE8A4:25', '8D679D3F11D3E4981000E787EC6DE8A4:27', '8D679D3F11D3E4981000E787EC6DE8A4:28', '8D679D3F11D3E4981000E787EC6DE8A4:30', '8D679D3F11D3E4981000E787EC6DE8A4:31', '8D679D3F11D3E4981000E787EC6DE8A4:32', '8D679D3F11D3E4981000E787EC6DE8A4:33', '8D679D3F11D3E4981000E787EC6DE8A4:34', '8D679D3F11D3E4981000E787EC6DE8A4:35', '8D679D3F11D3E4981000E787EC6DE8A4:36', '8D679D3F11D3E4981000E787EC6DE8A4:37', '8D679D3F11D3E4981000E787EC6DE8A4:38', '8D679D3F11D3E4981000E787EC6DE8A4:39'], '8D679D4B11D3E4981000E787EC6DE8A4': ['8D679D4B11D3E4981000E787EC6DE8A4:4', '8D679D4B11D3E4981000E787EC6DE8A4:2', '8D679D4B11D3E4981000E787EC6DE8A4:1', '8D679D4B11D3E4981000E787EC6DE8A4:6', '8D679D4B11D3E4981000E787EC6DE8A4:5', '8D679D4B11D3E4981000E787EC6DE8A4:3', '8D679D4B11D3E4981000E787EC6DE8A4:7', '8D679D4B11D3E4981000E787EC6DE8A4:12']};
+
     // eslint-disable-next-line max-len
     const reportBody = {'requestedObjects': {'attributes': [{'id': attributeId}], 'metrics': [{'id': metricId}]}, 'viewFilter': {'operator': 'In', 'operands': [{'type': 'attribute', 'id': 'ACF66B9A11E9554D08E20080EF651EBC'}, {'type': 'elements', 'elements': [{'id': 'ACF66B9A11E9554D08E20080EF651EBC:Europe'}, {'id': 'ACF66B9A11E9554D08E20080EF651EBC:North America'}]}]}};
+    // eslint-disable-next-line max-len
+    const reportComplexBody = {'requestedObjects': {'attributes': [{'id': '8D679D3F11D3E4981000E787EC6DE8A4'}], 'metrics': [{'id': '4C05177011D3E877C000B3B2D86C964F'}]}, 'viewFilter': {'operator': 'And', 'operands': [{'operator': 'In', 'operands': [{'type': 'attribute', 'id': '8D679D4B11D3E4981000E787EC6DE8A4'}, {'type': 'elements', 'elements': [{'id': '8D679D4B11D3E4981000E787EC6DE8A4:4'}, {'id': '8D679D4B11D3E4981000E787EC6DE8A4:2'}, {'id': '8D679D4B11D3E4981000E787EC6DE8A4:1'}, {'id': '8D679D4B11D3E4981000E787EC6DE8A4:6'}, {'id': '8D679D4B11D3E4981000E787EC6DE8A4:5'}, {'id': '8D679D4B11D3E4981000E787EC6DE8A4:3'}, {'id': '8D679D4B11D3E4981000E787EC6DE8A4:7'}, {'id': '8D679D4B11D3E4981000E787EC6DE8A4:12'}]}]}, {'operator': 'In', 'operands': [{'type': 'attribute', 'id': '8D679D3F11D3E4981000E787EC6DE8A4'}, {'type': 'elements', 'elements': [{'id': '8D679D3F11D3E4981000E787EC6DE8A4:1'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:2'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:3'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:4'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:5'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:7'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:8'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:9'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:10'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:11'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:12'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:13'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:14'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:15'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:16'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:17'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:18'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:19'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:20'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:21'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:24'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:25'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:27'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:28'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:30'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:31'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:32'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:33'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:34'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:35'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:36'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:37'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:38'}, {'id': '8D679D3F11D3E4981000E787EC6DE8A4:39'}]}]}]}};
 
     it('should parse edited report properties', () => {
       // given
@@ -300,7 +307,69 @@ describe('PopupViewSelector', () => {
 
       expect(editedReport.selectedAttributes).toEqual([attributeId]);
       expect(editedReport.selectedMetrics).toEqual([metricId]);
-      expect(editedReport.selectedFilters).toBe(null);
+      expect(editedReport.selectedFilters).not.toBeDefined();
+    });
+
+    it('should parse complex report properties', () => {
+      // given
+      const reportInRedux = {
+        id: 'reportId',
+        projectId: 'projectId',
+        name: 'reportName',
+        objectType: 'report',
+        body: reportComplexBody,
+      };
+      const reduxState = {
+        navigationTree: {},
+        sessionReducer: {
+          authToken: 'token',
+        },
+        popupReducer: {
+          editedReport: reportInRedux,
+        },
+      };
+      // when
+      const {editedReport} = mapStateToProps(reduxState);
+      // then
+      expect(editedReport.projectId).toEqual(reportInRedux.projectId);
+      expect(editedReport.reportSubtype).toEqual(768);
+      expect(editedReport.reportName).toEqual(reportInRedux.name);
+      expect(editedReport.reportType).toEqual(reportInRedux.objectType);
+      expect(editedReport.reportId).toEqual(reportInRedux.id);
+
+      expect(editedReport.selectedFilters).toEqual(complexFilterValue);
+    });
+
+    it('should parse edited dataset properties', () => {
+      // given
+      const datesetInRedux = {
+        id: 'datasetId',
+        projectId: 'projectId',
+        name: 'reportName',
+        objectType: 'dataset',
+        body: reportBody,
+      };
+      const reduxState = {
+        navigationTree: {},
+        sessionReducer: {
+          authToken: 'token',
+        },
+        popupReducer: {
+          editedReport: datesetInRedux,
+        },
+      };
+      // when
+      const {editedReport} = mapStateToProps(reduxState);
+      // then
+      expect(editedReport.projectId).toEqual(datesetInRedux.projectId);
+      expect(editedReport.reportSubtype).toEqual(779);
+      expect(editedReport.reportName).toEqual(datesetInRedux.name);
+      expect(editedReport.reportType).toEqual(datesetInRedux.objectType);
+      expect(editedReport.reportId).toEqual(datesetInRedux.id);
+
+      expect(editedReport.selectedAttributes).toEqual([attributeId]);
+      expect(editedReport.selectedMetrics).toEqual([metricId]);
+      expect(editedReport.selectedFilters).toEqual(filterValue);
     });
   });
 });

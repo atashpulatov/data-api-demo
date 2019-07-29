@@ -16,9 +16,6 @@ const TIMEOUT = 2000;
 
 class ErrorService {
   errorRestFactory = (error) => {
-    if (error.status === 200) {
-      return new PromptedReportError(error);
-    }
     const isOfficeError = error instanceof RunOutsideOfficeError
       || error instanceof OverlappingTablesError
       || error instanceof GenericOfficeError
@@ -33,7 +30,7 @@ class ErrorService {
       return new EnvironmentNotFoundError(error);
     }
     if (!!error.response) {
-      switch (error.response.status) {
+      switch (error.status || error.response.status) {
         case 404:
           return new EnvironmentNotFoundError(error);
         case 400:
@@ -41,7 +38,7 @@ class ErrorService {
         case 401:
           return new UnauthorizedError(error);
         case 500:
-          return new InternalServerError(error.response.body ? error.response.body : {});
+          return new InternalServerError(error);
         default:
           return error;
       }
@@ -63,10 +60,11 @@ class ErrorService {
   }
   handleError = (error, isLogout) => {
     const message = this.getErrorMessage(error);
+    const errorDetails = error.response && error.response.text;
     if (error instanceof UnauthorizedError) {
       notificationService.displayNotification('info', message);
     } else {
-      notificationService.displayNotification('warning', message);
+      notificationService.displayNotification('warning', message, errorDetails);
     }
     if (
       error instanceof EnvironmentNotFoundError
@@ -124,17 +122,16 @@ class ErrorService {
       return '404 - Environment not found';
     };
     if (error instanceof ConnectionBrokenError) {
-      return 'Environment is unreachable.'
-        + '\nPlease check your internet connection.';
+      return 'Environment is unreachable. Please check your internet connection.';
     };
     if (error instanceof UnauthorizedError) {
-      return 'Your session has expired.\nPlease log in.';
+      return 'Your session has expired. Please log in.';
     };
     if (error instanceof BadRequestError) {
       return '400 - There has been a problem with your request';
     };
     if (error instanceof InternalServerError) {
-      return errorMessages[error.iServerCode];
+      return errorMessages[error.response.body ? error.response.body.iServerCode : '-1'];
     };
     if (error instanceof PromptedReportError) {
       return NOT_SUPPORTED_PROMPTS_REFRESH;

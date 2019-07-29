@@ -216,11 +216,10 @@ class OfficeApiHelper {
 
   deleteObjectTableBody = async (context, object) => {
     try {
-      const excelContext = await officeApiHelper.getExcelContext();
       const tableObject = context.workbook.tables.getItem(object.bindId);
       const tableRange = tableObject.getDataBodyRange();
       tableRange.clear(Excel.ClearApplyTo.contents);
-      await excelContext.sync();
+      await context.sync();
     } catch (error) {
       console.error('Error: ' + error);
     }
@@ -245,16 +244,32 @@ class OfficeApiHelper {
    *
    * @param {Office} startCell Starting table body cell
    * @param {Office} cell Starting subtotal row cell
+   * @param {String} axis String pointing out if it's column or row subtotal
    * @param {Array} headers Headers object from OfficeConverterServiceV2.getHeaders
    * @memberof OfficeApiHelper
    * @return {Office} Range of subtotal row
    */
-  getSubtotalRowRange = (startCell, cell, headers) => {
-    const headerRowsOffset = cell[0]; // offset to go the row with subtotal
-    const headerColumnsOffset = headers.rows[0].length - cell[1]; // offset to go to the first cell of row with subtotal
-    const tableOffset = headers.columns[0].length - 1; // offset to go to the last cell of row with subtotal
-    const firstSubtotalCell = startCell.getOffsetRange(headerRowsOffset, -headerColumnsOffset);
-    const lastSubtotalCell = startCell.getOffsetRange(headerRowsOffset, tableOffset);
+  getSubtotalRange = (startCell, cell, axis, headers) => {
+    let offsets = {};
+    if (axis === 'row') {
+      offsets = {
+        verticalFirstCell: cell[0],
+        horizontalFirstCell: -(headers.rows[0].length - cell[1]),
+        verticalLastCell: cell[0],
+        horizontalLastCell: headers.columns[0].length - 1,
+      };
+    } else if (axis === 'column') {
+      offsets = {
+        verticalFirstCell: -(headers.columns.length - cell[0]),
+        horizontalFirstCell: cell[1],
+        verticalLastCell: headers.rows.length - 1,
+        horizontalLastCell: cell[1],
+      };
+    } else {
+      return null;
+    }
+    const firstSubtotalCell = startCell.getOffsetRange(offsets.verticalFirstCell, offsets.horizontalFirstCell);
+    const lastSubtotalCell = startCell.getOffsetRange(offsets.verticalLastCell, offsets.horizontalLastCell);
     return firstSubtotalCell.getBoundingRect(lastSubtotalCell);
   }
 
@@ -263,16 +278,17 @@ class OfficeApiHelper {
    *
    * @param {Office} startCell Starting table body cell
    * @param {Office} subtotalCells 2d array of all starting subtotal row cells (each element contains row and colum number of subtotal cell in headers columns)
+   * @param {String} axis String pointing out if array contains column or row subtotals
    * @param {Array} headers Headers object from OfficeConverterServiceV2.getHeaders
    * @param {Boolean} bold Flag determinig if to set/unset bold format
    * @param {Office} context Excel context
    * @memberof OfficeApiHelper
    * @return {Promise} Context.sync
    */
-  formatSubtotalsRows = (startCell, subtotalCells, headers, bold, context) => {
+  formatSubtotals = (startCell, subtotalCells, axis, headers, bold, context) => {
     subtotalCells.forEach((cell) => {
-      const subtotalRowRange = this.getSubtotalRowRange(startCell, cell, headers);
-      subtotalRowRange.format.font.bold = bold;
+      const subtotalRowRange = this.getSubtotalRange(startCell, cell, axis, headers);
+      subtotalRowRange && (subtotalRowRange.format.font.bold = bold);
     });
     return context.sync();
   }

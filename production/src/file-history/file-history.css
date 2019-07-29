@@ -170,7 +170,8 @@ button.add-data-btn:focus {
 
 .secured-screen-container {
     z-index: 10;
-    height: 100vh;
+    height: calc(100% - 60px);
+    overflow-y: auto;
     width: 100vw;
     position: fixed;
     top: 60px;
@@ -206,4 +207,74 @@ button.add-data-btn:focus {
     overflow-y: auto;
     width: 100%;
     height: calc(100% - 50px);
+}
+
+/* settings context menu */
+
+.settings-list {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    z-index: 999;
+    width: 200px;
+    margin: 0;
+    padding: 14px 0 0 0;
+    list-style: none;
+    background: #fff;
+    color: #3F4042;
+    box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.20);
+    border-radius: 2px;
+}
+
+.settings-list li {
+    padding: 0 17px;
+    font-size: 12px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    cursor: default;
+}
+
+.settings-list li:not(:first-child):not(:last-child):hover {
+    background: #f0f7Fe;
+}
+
+.settings-list li:focus {
+    outline: none;
+}
+
+.settings-list li a {
+    display: block;
+    color: #3f4042;
+    cursor: default;
+}
+
+.settings-list .user-data {
+    padding-bottom: 14px;
+    font-weight: 500;
+    border-bottom: solid 1px #e4e4e4;
+}
+
+#app-header .user-name {
+    padding-left: 13px;
+    padding-right: 13px;
+    line-height: 32px;
+}
+
+.settings-list .clear-data {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    border-bottom: solid 1px #e4e4e4;
+}
+
+.settings-list .settings-version {
+    padding: 0 17px 12px 17px;
+    color: #1c91dc;
+    font-weight: 300;
+    font-size: 10px;
+    text-align: center;
+}
+
+.clear-data-inactive {
+    color: rgba(0, 0, 0, 0.50);
 }

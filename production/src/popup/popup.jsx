@@ -75,7 +75,7 @@ export class Popup extends Component {
       handleBack: this.handleBack,
       handlePopupErrors: this.handlePopupErrors,
     };
-    i18next.changeLanguage(Office.context.displayLanguage);
+    i18next.changeLanguage(i18next.options.resources[Office.context.displayLanguage] ? Office.context.displayLanguage : 'en-US');
     return (<Provider store={reduxStore}>
       <PopupViewSelector popupType={popupType} propsToPass={propsToPass} methods={methods} />
     </Provider>);

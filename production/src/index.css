@@ -15,11 +15,11 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
-.ant-popover-inner-content {
+.ant-popover .ant-popover-inner-content {
     min-width: 38px;
     max-width: 280px;
     padding: 8px;
-    text-align: center;
+    text-align: left;
     background-color: #404040;
     color: white;
     border-radius: 4px;
@@ -30,7 +30,9 @@ code {
 
 .ant-popover-placement-bottom>.ant-popover-content>.ant-popover-arrow,
 .ant-popover-placement-bottomRight>.ant-popover-content>.ant-popover-arrow,
-.ant-popover-placement-topRight>.ant-popover-content>.ant-popover-arrow {
+.ant-popover-placement-topRight>.ant-popover-content>.ant-popover-arrow,
+.ant-popover-placement-topLeft>.ant-popover-content>.ant-popover-arrow,
+.ant-popover-placement-top>.ant-popover-content>.ant-popover-arrow {
     border-color: #404040;
 }
 
@@ -57,7 +59,8 @@ code {
 }
 
 *:focus.focus-visible {
-    outline: -webkit-focus-ring-color auto 5px;
+    outline: #5E9ED6 solid 3px;
+    outline: -webkit-focus-ring-color auto 4px;
     color: initial;
     border: initial;
     box-shadow: initial;
@@ -68,7 +71,8 @@ code {
 }
 
 .ant-radio-input.focus-visible+.ant-radio-inner {
-    outline: -webkit-focus-ring-color auto 5px;
+    outline: #5E9ED6 solid 3px;
+    outline: -webkit-focus-ring-color auto 4px;
 }
 
 .ant-btn {
@@ -154,4 +158,11 @@ button.floating-button[disabled]:hover {
     color: #1C91DC;
     opacity: 0.5;
     cursor: default
+}
+
+#measure-text {
+    position: fixed;
+    right: -100px;
+    top: -100px;
+    visibility: hidden;
 }
