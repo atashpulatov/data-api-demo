@@ -19,6 +19,7 @@ export function callForEdit(reportParams) {
     try {
       await Promise.all([officeApiHelper.getExcelSessionStatus(), authenticationHelper.validateAuthToken()]);
       const editedReport = officeStoreService.getReportFromProperties(reportParams.bindId);
+      console.log({editedReport});
 
       if (editedReport.isPrompted) {
         let instanceDefinition = await mstrObjectRestService.createInstance(editedReport.id, editedReport.projectId, true, null, null);
@@ -31,7 +32,6 @@ export function callForEdit(reportParams) {
         editedReport.instanceId = instanceDefinition.instanceId;
       }
 
-      console.log(editedReport);
       dispatch({
         type: SET_REPORT_N_FILTERS,
         editedReport,

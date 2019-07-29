@@ -8,21 +8,43 @@ import {LoadingPage} from '../loading/loading-page';
 import {selectorProperties} from '../attribute-selector/selector-properties';
 import {PromptsWindow} from '../prompts/prompts-window';
 import {RefreshAllPage} from '../loading/refresh-all-page';
+import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';
 
 export const _PopupViewSelector = (props) => {
   let popupType = props.popupType;
   const {propsToPass, methods, importRequested, editedReport} = props;
-  if (importRequested) {
-    if (!props.isPrompted) {
-      proceedToImport(props);
-    } else if (!!props.dossierData && !!props.dossierData.instanceId) {
-      proceedToImport(props);
-    } else {
-      popupType = PopupTypeEnum.promptsWindow;
-      propsToPass.projectId = props.chosenProjectId;
-      propsToPass.reportId = props.chosenObjectId;
+  console.log({...props});
+
+  if ((importRequested && !props.isPrompted)
+    || (importRequested && !!props.dossierData && !!props.dossierData.instanceId)) {
+    proceedToImport(props);
+  } else if (!!props.isPrompted && !!props.dossierData && !!props.dossierData.instanceId) {
+    let instanceDefinition = /* await */ mstrObjectRestService.createInstance(propsToPass.reportId, propsToPass.projectId, true, null, null);
+    let count = 0;
+    while (instanceDefinition.status === 2) {
+      /* await */ mstrObjectRestService.answerPrompts(propsToPass.reportId, propsToPass.projectId, instanceDefinition.instanceId, props.promptsAnswers[count]);
+      instanceDefinition = /* await */ mstrObjectRestService.getInstance(propsToPass.reportId, propsToPass.projectId, true, null, null, instanceDefinition.instanceId);
+      count++;
     }
+    propsToPass.instanceId = instanceDefinition.instanceId;
+  } else if (!!props.isPrompted && (importRequested || popupType === PopupTypeEnum.dataPreparation)) {
+    popupType = PopupTypeEnum.promptsWindow;
+    propsToPass.projectId = props.chosenProjectId;
+    propsToPass.reportId = props.chosenObjectId;
   }
+
+  // if (importRequested) {
+  //   if (!props.isPrompted) {
+  //     proceedToImport(props);
+  //   } else if (!!props.dossierData && !!props.dossierData.instanceId) {
+  //     console.log({props});
+  //     proceedToImport(props);
+  //   } else {
+  //     popupType = PopupTypeEnum.promptsWindow;
+  //     propsToPass.projectId = props.chosenProjectId;
+  //     propsToPass.reportId = props.chosenObjectId;
+  //   }
+  // }
   if (!props.authToken || !propsToPass) {
     console.log('Waiting for token to be passed');
     return null;

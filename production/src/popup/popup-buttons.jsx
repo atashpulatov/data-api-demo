@@ -30,7 +30,7 @@ export const _PopupButtons = ({handleOk, handleSecondary,
         </Button>, t)
       }
       {handleSecondary && prepareButton(disableActiveActions, <Button id="prepare" type="primary"
-        disabled={disableActiveActions || loading || isPrompted}
+        disabled={disableActiveActions || loading}
         onClick={handleSecondary}>
         {t('Prepare Data')}
       </Button>, t)}
