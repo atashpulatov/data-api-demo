@@ -118,5 +118,8 @@
   "The object binding is no longer valid due to previous updates.": "De binding van het object is niet langer geldig vanwege eerdere updates",
   "The object cannot be imported. Either you do not have necessary permissions to view it, or it is empty.": "Het object kan niet geïmporteerd worden. U hebt niet de vereiste toestemming om het te bekijken of het is leeg",
   "The required data range in the worksheet is not empty.": "Het vereiste gegevensbereik in de werkmap is niet leeg",
-  "MicroStrategy Office Client loaded. Click Import Data on the Home tab to start plugin. Login to Environment to start browsing documents.": "De MicroStrategy Office Client is geladen. Klik op Gegevens importeren op het starttabblad om de plug-in te starten. Meld je aan bij Omgeving om in het bestand te bladeren"
+  "MicroStrategy Office Client loaded. Click Import Data on the Home tab to start plugin. Login to Environment to start browsing documents.": "De MicroStrategy Office Client is geladen. Klik op Gegevens importeren op het starttabblad om de plug-in te starten. Meld je aan bij Omgeving om in het bestand te bladeren",
+  "Import report": "Rapport importeren",
+  "This object binding is no longer valid due to previous updates.": "De binding van het object is niet langer geldig vanwege eerdere updates",
+  "Import dataset": "Gegevensset importeren"
 }
