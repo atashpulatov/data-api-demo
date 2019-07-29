@@ -62,7 +62,6 @@ export class _PromptsWindow extends Component {
   }
 
   loadEmbeddedDossier = async (container) => {
-    // debugger;
     if (!this.state.loading) {
       return;
     }
@@ -74,12 +73,9 @@ export class _PromptsWindow extends Component {
     const instance = {};
     if (this.state.isReprompt) {
       instanceDefinition = await this.preparePromptedReportInstance(this.state.reportId, projectId, this.state.promptsAnswers);
-      console.log('JOB DONE: ' + JSON.stringify(instanceDefinition));
-
       instance.id = instanceDefinition.id; // '00000000000000000000000000000000';
       instance.mid = instanceDefinition.mid;
     }
-    debugger;
 
     let msgRouter = null;
     let promptsAnswers = null;
@@ -97,29 +93,33 @@ export class _PromptsWindow extends Component {
     const CustomAuthenticationType = microstrategy.dossier.CustomAuthenticationType;
     const EventType = microstrategy.dossier.EventType;
 
-    microstrategy.dossier
-        .create({
-          url: url,
-          instance,
-          enableCustomAuthentication: true,
-          customAuthenticationType:
-          CustomAuthenticationType.AUTH_TOKEN,
-          enableResponsive: true,
+    const props = {
+      url: url,
+      enableCustomAuthentication: true,
+      customAuthenticationType:
+        CustomAuthenticationType.AUTH_TOKEN,
+      enableResponsive: true,
 
-          getLoginToken: function() {
-          // debugger;
-            return Promise.resolve(authToken);
-          },
-          placeholder: container,
-          onMsgRouterReadyHandler: ({MsgRouter}) => {
-            msgRouter = MsgRouter;
-            msgRouter.registerEventHandler(
-                EventType.ON_PROMPT_ANSWERED,
-                promptsAnsweredHandler
-            );
-          // We should remember to unregister this handler once the page loads
-          },
-        })
+      getLoginToken: function() {
+        return Promise.resolve(authToken);
+      },
+      placeholder: container,
+      onMsgRouterReadyHandler: ({MsgRouter}) => {
+        msgRouter = MsgRouter;
+        msgRouter.registerEventHandler(
+            EventType.ON_PROMPT_ANSWERED,
+            promptsAnsweredHandler
+        );
+        // We should remember to unregister this handler once the page loads
+      },
+    };
+
+    if (this.state.isReprompt) {
+      props.instance = instance;
+    }
+
+    microstrategy.dossier
+        .create(props)
         .then(async (dossierPage) => {
           const chapter = await dossierPage.getCurrentChapter();
           const objectId = await dossierPage.getDossierId();
@@ -228,7 +228,6 @@ export class _PromptsWindow extends Component {
 }
 
 export const mapStateToProps = (state) => {
-  // debugger;
   return {...state.promptsPopup};
 };
 

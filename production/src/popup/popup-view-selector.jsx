@@ -10,7 +10,6 @@ import {PromptsWindow} from '../prompts/prompts-window';
 import {RefreshAllPage} from '../loading/refresh-all-page';
 
 export const _PopupViewSelector = (props) => {
-  // debugger;
   let popupType = props.popupType;
   const {propsToPass, methods, importRequested, editedReport} = props;
   if (importRequested) {
@@ -88,7 +87,6 @@ function proceedToImport(props) {
 }
 
 export function mapStateToProps(state) {
-  // debugger;
   const popupState = state.popupReducer.editedReport;
   return {
     ...state.navigationTree,

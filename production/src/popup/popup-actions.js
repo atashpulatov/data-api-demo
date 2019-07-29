@@ -30,7 +30,6 @@ export function callForReprompt(reportParams) {
   return async (dispatch) => {
     await Promise.all([officeApiHelper.getExcelSessionStatus(), authenticationHelper.validateAuthToken()]);
     const editedReport = officeStoreService.getReportFromProperties(reportParams.bindId);
-    console.log(editedReport);
     dispatch({
       type: SET_REPORT_N_FILTERS,
       editedReport,
