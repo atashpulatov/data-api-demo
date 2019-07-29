@@ -126,6 +126,7 @@
   "MicroStrategy data has been removed from the workbook. Click ‘Refresh’ to import it again.": "MicroStrategy data has been removed from the workbook. Click ‘Refresh’ to import it again.",
   "View Data": "View Data",
   "Secure data": "Secure data",
+  "MicroStrategy user": "MicroStrategy user",
   "This button is currently disabled because you didn’t select any data": "This button is currently disabled because you didn’t select any data",
   "Privacy Policy": "Privacy Policy",
   "Terms of Use": "Terms of Use",
@@ -148,5 +149,16 @@
   "In order to re-import the data, you will have to click the <span>View Data</span> button, which will appear in the add-in panel.": "In order to re-import the data, you will have to click the <span>View Data</span> button, which will appear in the add-in panel.",
   "This removes all MicroStrategy data from the workbook.": "This removes all MicroStrategy data from the workbook.",
   "Are you sure you want to <span>Clear Data</span>?": "Are you sure you want to <span>Clear Data</span>?",
-  "Clear Data": "Clear Data"
+  "Clear Data": "Clear Data",
+  "Import report": "Import report",
+  "MicroStrategy data has been removed from the workbook. Click 'View Data' to import it again.": "MicroStrategy data has been removed from the workbook. Click 'View Data' to import it again.",
+  "Unsuccessful HTTP response": "Unsuccessful HTTP response",
+  "This object binding is no longer valid due to previous updates.": "This object binding is no longer valid due to previous updates.",
+  "An internal error has occurred.": "An internal error has occurred.",
+  "Import dataset": "Import dataset",
+  "The named item does not exist.": "The named item does not exist.",
+  "This object does not contain any data.": "This object does not contain any data.",
+  "Reprompt": "Reprompt",
+  "The endpoint cannot be reached": "The endpoint cannot be reached",
+  "You haven't imported any reports or datasets yet. Import data to start!": "You haven't imported any reports or datasets yet. Import data to start!"
 }
