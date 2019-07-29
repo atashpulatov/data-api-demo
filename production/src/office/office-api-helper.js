@@ -349,7 +349,7 @@ class OfficeApiHelper {
     const startingCell = reportStartingCell.getCell(0, 0).getOffsetRange(-columnOffset, -rowOffset); // we call getCell in case multiple cells are selected
     const headerArray = mstrNormalizedJsonHandler._transposeMatrix(rows);
     const headerRange = startingCell.getResizedRange(headerArray[0].length - 1, headerArray.length - 1);
-    this.insertHeadersValues(headerRange, rows);
+    this.insertHeadersValues(headerRange, rows, 'rows');
     // TODO: Move merge cells after we import the whole table
     // const directionVector = [0, 1];
     // this.createHeaders(headerArray, startingCell, directionVector);
@@ -372,7 +372,7 @@ class OfficeApiHelper {
     const startingCell = reportStartingCell.getCell(0, 0).getOffsetRange(-(columnOffset - 1), -rowOffset);// we call getCell in case multiple cells are selected
     const directionVector = [1, 0];
     const headerRange = startingCell.getResizedRange(columns.length - 1, columns[0].length - 1);
-    this.insertHeadersValues(headerRange, columns);
+    this.insertHeadersValues(headerRange, columns, 'columns');
 
     return this.createHeaders(columns, startingCell, directionVector);
   }
@@ -381,14 +381,16 @@ class OfficeApiHelper {
    *
    * @param {Office} headerRange Range of the header
    * @param {Array} headerArray Contains rows/headers structure and data
+   * @param {String} axis - Axis to apply formatting columns or rows
    * @memberof OfficeApiHelper
    */
-  insertHeadersValues(headerRange, headerArray) {
+  insertHeadersValues(headerRange, headerArray, axis = 'rows') {
     headerRange.unmerge();
     headerRange.clear(); // we are unmerging and removing formatting to avoid conflicts while merging cells
     headerRange.values = headerArray;
-    headerRange.format.horizontalAlignment = Excel.HorizontalAlignment.center;
-    headerRange.format.verticalAlignment = Excel.VerticalAlignment.center;
+    const hAlign = axis === 'rows' ? 'left' : 'center';
+    headerRange.format.horizontalAlignment = Excel.HorizontalAlignment[hAlign];
+    headerRange.format.verticalAlignment = Excel.VerticalAlignment.top;
   }
 
   /**
