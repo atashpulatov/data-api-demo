@@ -248,12 +248,14 @@ class OfficeApiHelper {
   /**
    * Gets the total range of crosstab report - it sums table body range and headers ranges
    *
-   * @param {Office} cell Starting table body cell
+   * @param {Office} cellAddress Starting table body cell
    * @param {Array} headers Headers object from OfficeConverterServiceV2.getHeaders
+   * @param {Office} sheet Active Exccel spreadsheet
    * @memberof OfficeApiHelper
    * @return {Object}
    */
-  getCrosstabRange = (cell, headers) => {
+  getCrosstabRange = (cellAddress, headers, sheet) => {
+    const cell = sheet.getRange(cellAddress);
     const bodyRange = cell.getOffsetRange(headers.rows.length - 1, headers.columns[0].length - 1);
     const startingCell = cell.getCell(0, 0).getOffsetRange(-headers.columns.length, -headers.rows[0].length);
     return startingCell.getBoundingRect(bodyRange);
@@ -354,23 +356,23 @@ class OfficeApiHelper {
   /**
    *Prepares parameters for createHeaders
    *
-   * @param {Office} context Excel context
-   * @param {Office} reportStartingCell Address of the first cell in report (top left)
-   * @param {Array} headers Contains headers structure and data
+   * @param {Office} cellAddress Address of the first cell in report (top left)
+   * @param {Array} columns Contains headers structure and data
+   * @param {Office} sheet Active Exccel spreadsheet
    * @memberof OfficeApiHelper
    * @return {Promise} Context.sync
    */
-  createColumnsHeaders = (context, reportStartingCell, headers) => {
-    const columnOffset = headers.columns.length;
+  createColumnsHeaders = (cellAddress, columns, sheet) => {
+    const reportStartingCell = sheet.getRange(cellAddress);
+    const columnOffset = columns.length;
     const rowOffset = 0;
-    reportStartingCell.unmerge(); // excel api have problem with handling merged cells which are partailly in range, we unmerged selected cell to avoid this problem
-    const startingCell = reportStartingCell.getCell(0, 0).getOffsetRange(-columnOffset, -rowOffset);// we call getCell in case multiple cells are selected
-    const headerArray = headers.columns;
+    // reportStartingCell.unmerge(); // excel api have problem with handling merged cells which are partailly in range, we unmerged selected cell to avoid this problem
+    const startingCell = reportStartingCell.getCell(0, 0).getOffsetRange(-(columnOffset - 1), -rowOffset);// we call getCell in case multiple cells are selected
     const directionVector = [1, 0];
-    const headerRange = startingCell.getResizedRange(headerArray.length - 1, headerArray[0].length - 1);
-    this.insertHeadersValues(headerRange, headers.columns);
+    const headerRange = startingCell.getResizedRange(columns.length - 1, columns[0].length - 1);
+    this.insertHeadersValues(headerRange, columns);
 
-    return this.createHeaders(headerArray, startingCell, directionVector, context);
+    return this.createHeaders(columns, startingCell, directionVector);
   }
   /**
    * Clear prevoius formatting and insert data in range
@@ -393,7 +395,6 @@ class OfficeApiHelper {
    * @param {Array} headerArray Contains rows/headers structure and data
    * @param {Office} startingCell Address of the first cell header (top left)
    * @param {number} directionVector direction vertor for the step size when iterating over cells
-   * @param {Office} context Excel context
    * @memberof OfficeApiHelper
    */
   createHeaders = (headerArray, startingCell, directionVector) => {

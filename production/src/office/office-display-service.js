@@ -176,11 +176,16 @@ class OfficeDisplayService {
    */
   _createOfficeTable = async (instanceDefinition, context, startCell, officeTableId, prevOfficeTable) => {
     const {rows, columns, mstrTable} = instanceDefinition;
-    const hasTableHeaders = !mstrTable.isCrosstab;
+    const {isCrosstab} = mstrTable;
+    let range;
     const sheet = prevOfficeTable ? prevOfficeTable.worksheet : context.workbook.worksheets.getActiveWorksheet();
     const tableStartCell = officeApiHelper.getTableStartCell({startCell, sheet, mstrTable});
     const tableRange = officeApiHelper.getRange(columns, tableStartCell, rows);
-    const sheetRange = sheet.getRange(tableRange);
+    if (isCrosstab) {
+      range = officeApiHelper.getCrosstabRange(tableStartCell, mstrTable.headers, sheet);
+    } else {
+      range = sheet.getRange(tableRange);
+    }
     if (prevOfficeTable) {
       prevOfficeTable.rows.load('count');
       await context.sync();
@@ -200,15 +205,15 @@ class OfficeDisplayService {
       prevOfficeTable.delete();
       await context.sync();
     } else {
-      await this._checkRangeValidity(context, sheetRange);
+      await this._checkRangeValidity(context, range);
     }
-
+    isCrosstab && officeApiHelper.createColumnsHeaders(tableStartCell, mstrTable.headers.columns, sheet, range);
     const officeTable = sheet.tables.add(tableRange, true);
     this._styleHeaders(officeTable, TABLE_HEADER_FONT_COLOR, TABLE_HEADER_FILL_COLOR);
     try {
       officeTable.load('name');
       officeTable.name = officeTableId;
-      officeTable.getHeaderRowRange().values = [mstrTable.headers.columns.pop()];
+      !isCrosstab && (officeTable.getHeaderRowRange().values = [mstrTable.headers.columns.pop()]);
       sheet.activate();
       await context.sync();
       return officeTable;
