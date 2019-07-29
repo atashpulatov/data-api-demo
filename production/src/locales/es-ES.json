@@ -119,5 +119,8 @@
   "The object binding is no longer valid due to previous updates.": "El enlace de objeto ya no es válido debido a actualizaciones anteriores",
   "The object cannot be imported. Either you do not have necessary permissions to view it, or it is empty.": "Este objeto no puede importarse. No tiene los permisos necesarios para visualizarlo o el objeto está vacío",
   "The required data range in the worksheet is not empty.": "El rango de datos requerido no está vacío en la hoja de cálculo",
-  "MicroStrategy Office Client loaded. Click Import Data on the Home tab to start plugin. Login to Environment to start browsing documents.": "Cliente de MicroStrategy Office cargado. Haga clic en Importar datos en la pestaña Inicio para iniciar el complemento. Inicie sesión en el Entorno para empezar a examinar los documentos"
+  "MicroStrategy Office Client loaded. Click Import Data on the Home tab to start plugin. Login to Environment to start browsing documents.": "Cliente de MicroStrategy Office cargado. Haga clic en Importar datos en la pestaña Inicio para iniciar el complemento. Inicie sesión en el Entorno para empezar a examinar los documentos",
+  "Import report": "Importar informe",
+  "This object binding is no longer valid due to previous updates.": "El enlace de objeto ya no es válido debido a actualizaciones anteriores",
+  "Import dataset": "Importar conjunto de datos"
 }

@@ -118,5 +118,8 @@
   "The object binding is no longer valid due to previous updates.": "Objektbindingen er ikke længere gyldig på grund af tidligere opdateringer",
   "The object cannot be imported. Either you do not have necessary permissions to view it, or it is empty.": "Objektet kan ikke importeres. Enten har du ikke de nødvendige tilladelser til at se det, eller det er tomt.",
   "The required data range in the worksheet is not empty.": "Det nødvendige dataområde i regnearket er ikke tomt",
-  "MicroStrategy Office Client loaded. Click Import Data on the Home tab to start plugin. Login to Environment to start browsing documents.": "MicroStrategy Office-klient er indlæst. Klik på Importer data under fanen Startside for at starte plugin. Log på miljøet for at begynde at søge dokumenter"
+  "MicroStrategy Office Client loaded. Click Import Data on the Home tab to start plugin. Login to Environment to start browsing documents.": "MicroStrategy Office-klient er indlæst. Klik på Importer data under fanen Startside for at starte plugin. Log på miljøet for at begynde at søge dokumenter",
+  "Import report": "Importer rapport",
+  "This object binding is no longer valid due to previous updates.": "Objektbindingen er ikke længere gyldig på grund af tidligere opdateringer",
+  "Import dataset": "Importer datasæt"
 }
