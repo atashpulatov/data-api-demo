@@ -10,7 +10,7 @@ export const _Placeholder = ({loading, t, addDataAction}) => {
   return <div className='get-started-container'>
     <FolderArt aria-label={t('Office Add-in logo')}/>
     <h2>{t('Let\'s get started')}</h2>
-    <p>{t('You haven\'t imported any report or dataset yet. Let\'s import data to start!')}</p>
+    <p>{t('You haven\'t imported any reports or datasets yet. Import data to start!')}</p>
     <Button id='import-data-placeholder' type='primary' onClick={() => addDataAction()} disabled={loading}>{t('Import Data')}</Button>
   </div>;
 };
