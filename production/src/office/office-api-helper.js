@@ -249,15 +249,17 @@ class OfficeApiHelper {
    * Gets the total range of crosstab report - it sums table body range and headers ranges
    *
    * @param {Office} cellAddress Starting table body cell
-   * @param {Array} headers Headers object from OfficeConverterServiceV2.getHeaders
+   * @param {Array} instanceDefinition Object instance definition
    * @param {Office} sheet Active Exccel spreadsheet
    * @memberof OfficeApiHelper
    * @return {Object}
    */
-  getCrosstabRange = (cellAddress, headers, sheet) => {
+  getCrosstabRange = (cellAddress, instanceDefinition, sheet) => {
+    const {rows: rowsCount, mstrTable} = instanceDefinition;
+    const {headers, rows} = mstrTable;
     const cell = sheet.getRange(cellAddress);
-    const bodyRange = cell.getOffsetRange(headers.rows.length - 1, headers.columns[0].length - 1);
-    const startingCell = cell.getCell(0, 0).getOffsetRange(-headers.columns.length, -headers.rows[0].length);
+    const bodyRange = cell.getOffsetRange(rowsCount, headers.columns[0].length - 1);
+    const startingCell = cell.getCell(0, 0).getOffsetRange(-(headers.columns.length - 1), -rows.length);
     return startingCell.getBoundingRect(bodyRange);
   }
 

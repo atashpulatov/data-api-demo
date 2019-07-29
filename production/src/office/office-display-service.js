@@ -182,7 +182,7 @@ class OfficeDisplayService {
     const tableStartCell = officeApiHelper.getTableStartCell({startCell, sheet, mstrTable});
     const tableRange = officeApiHelper.getRange(columns, tableStartCell, rows);
     if (isCrosstab) {
-      range = officeApiHelper.getCrosstabRange(tableStartCell, mstrTable.headers, sheet);
+      range = officeApiHelper.getCrosstabRange(tableStartCell, instanceDefinition, sheet);
     } else {
       range = sheet.getRange(tableRange);
     }
