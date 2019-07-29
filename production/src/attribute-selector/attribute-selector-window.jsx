@@ -59,11 +59,14 @@ export class AttributeSelectorWindow extends Component {
   }
 
   render() {
+    const mstrData = this.props.mstrData;
+    const typeName = mstrData.reportType.charAt(0).toUpperCase() + mstrData.reportType.substring(1);
+
     return (
       <div>
         <AttributeSelector
           // TODO: logic for a title
-          title={`Import ${this.props.mstrData.reportType} > ${this.props.mstrData.reportName}`}
+          title={`Import ${typeName} > ${this.props.mstrData.reportName}`}
           attributesSelectedChange={this.attributesBeingSelected}
           mstrData={this.props.mstrData}
           session={this.state.session}
