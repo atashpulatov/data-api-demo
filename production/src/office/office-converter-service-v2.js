@@ -10,8 +10,8 @@ class OfficeConverterServiceV2 {
     const columnInformation = this.getColumnInformation(response);
     const isCrosstab = this.isCrosstab(response);
     return {
-      columnCount: this.getColumnCount(response, columnInformation, isCrosstab),
-      columnInformation,
+      tableSize: this.getTableSize(response, columnInformation, isCrosstab),
+      columnInformation: this.getColumnInformation(response),
       cubeId: response.cubeID,
       cubeName: response.cubeName,
       headers: this.getHeaders(response),
@@ -29,28 +29,28 @@ class OfficeConverterServiceV2 {
    * @memberof OfficeConverterServiceV2
    */
   isCrosstab(response) {
-    const {columns, rows} = response.headers;
-    return columns.length > 1 || rows.length > 1;
-    // TODO: Wait until the definition return crossTab
-    // return !!response.definition.crossTab;
+    try {
+      return !!response.definition.grid.crossTab;
+    } catch (error) {
+      // This is changing so often that we want to at least return false
+      return false;
+    }
   }
 
   /**
    * Gets raw table rows
    *
    * @param {JSON} response
-   * @param {Boolean} isCrosstabRender - Workaround since we don't know if a report is crosstab while importing data
    * @return {number[]}
    * @memberof OfficeConverterServiceV2
    */
-  getRows(response, isCrosstabRender = false) {
+  getRows(response) {
     // onMetric is passed when mapping the row [{rv:1, fv:"$1"}, ...]
-    const onMetric = ({rv}) => rv;
-    const onAttribute = ({name}) => name;
-    if (isCrosstabRender && this.isCrosstab(response)) {
-      return jsonHandler.renderRows(response.data.values, onMetric);
+    const onAttribute = ({value}) => value.join(' ');
+    if (this.isCrosstab(response)) {
+      return jsonHandler.renderRows(response.data);
     } else {
-      return jsonHandler.renderTabular(response.definition, response.data, response.headers, onAttribute, onMetric);
+      return jsonHandler.renderTabular(response.definition, response.data, onAttribute);
     }
   }
 
@@ -62,20 +62,20 @@ class OfficeConverterServiceV2 {
    * @memberof OfficeConverterServiceV2
    */
   getHeaders(response) {
-    const onElement = ({name}) => name;
+    const onElement = ({value}) => value.join(' ');
     if (this.isCrosstab(response)) {
-      const rows = jsonHandler.renderHeaders(response.definition, 'rows', response.headers, onElement);
-      const columns = jsonHandler.renderHeaders(response.definition, 'columns', response.headers, onElement);
+      const rows = jsonHandler.renderHeaders(response.definition, 'rows', response.data.headers, onElement);
+      const columns = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement);
       return {rows, columns};
     } else {
-      const attributeTitles = jsonHandler.renderTitles(response.definition, 'rows', response.headers, onElement);
-      const metricHeaders = jsonHandler.renderHeaders(response.definition, 'columns', response.headers, onElement);
+      const attributeTitles = jsonHandler.renderTitles(response.definition, 'rows', response.data.headers, onElement);
+      const metricHeaders = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement);
       return {columns: [[...attributeTitles[0], ...metricHeaders[0]]]};
     }
   }
 
   /**
-   * Returns number of columns of tabular data if not crosstabs of metrics grid if crosstabs
+   * Returns number of rows and metric columns of tabular data if not crosstabs of metrics grid if crosstabs
    *
    * @param {JSON} response
    * @param {Object} columnInformation - Array with indexed column definition for metrics and attributes
@@ -83,8 +83,11 @@ class OfficeConverterServiceV2 {
    * @return {Number}
    * @memberof OfficeConverterServiceV2
    */
-  getColumnCount(response, columnInformation, isCrosstab) {
-    return isCrosstab ? response.columnCount : columnInformation.length;
+  getTableSize(response, columnInformation, isCrosstab) {
+    return {
+      rows: response.data.paging.total,
+      columns: isCrosstab ? response.data.headers.columns[0].length : columnInformation.length,
+    };
   }
 
   /**
@@ -96,8 +99,8 @@ class OfficeConverterServiceV2 {
    */
   getColumnInformation(response) {
     const onElement = (element) => element;
-    const metricColumns = jsonHandler.renderHeaders(response.definition, 'columns', response.headers, onElement);
-    const attributeColumns = jsonHandler.renderTitles(response.definition, 'rows', response.headers, onElement);
+    const metricColumns = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement);
+    const attributeColumns = jsonHandler.renderTitles(response.definition, 'rows', response.data.headers, onElement);
     const columns = [...attributeColumns[attributeColumns.length - 1], ...metricColumns[metricColumns.length - 1]];
     return columns.map((element, index) => {
       switch (element.type.toLowerCase()) {

@@ -20,7 +20,10 @@ class NormalizedJsonHandler {
    * @return {Object}
    */
   lookupElement = (definition, axis, attributeIndex, elementIndex) => {
-    return definition[axis][attributeIndex].elements[elementIndex];
+    const rawElement = definition.grid[axis][attributeIndex].elements[elementIndex];
+    const {name, formValues} = rawElement;
+    rawElement.value = formValues || [name];
+    return rawElement;
   };
 
   /**
@@ -34,7 +37,7 @@ class NormalizedJsonHandler {
    * @return {Object}
    */
   lookupAttributeName = (definition, axis, attributeIndex) => {
-    return definition[axis][attributeIndex];
+    return definition.grid[axis][attributeIndex];
   };
 
   /**
@@ -48,7 +51,7 @@ class NormalizedJsonHandler {
    */
   mapElementIndicesToElements = (definition, axis, elementIndices) => {
     return elementIndices.map((elementIndex, attributeIndex) => {
-      if (elementIndex < 0) return {name: ''};
+      if (elementIndex < 0) return {value: ''};
       // For elementsIndices tuple, each subscript is an attribute index and each value is an element index.
       return this.lookupElement(definition, axis, attributeIndex, elementIndex);
     });
@@ -74,22 +77,20 @@ class NormalizedJsonHandler {
    *
    * @param {Object} definition - Dataset definition
    * @param {Object} data - Response data object
-   * @param {Object} headers - Header data from response
    * @param {function} onElement - Callback function to process elements
-   * @param {function} onMetricValue - Callback function to process metric values
+   * @param {String} valueMatrix - Cell value ("raw*", "formatted", "extras")
    *
    * @memberof NormalizedJsonHandler
    * @return {Array}
    */
-  renderTabular = (definition, data, headers, onElement, onMetricValue) => {
+  renderTabular = (definition, data, onElement, valueMatrix = 'raw') => {
     // For each row in header zone.
-    const {values} = data;
+    const {headers, metricValues} = data;
     return headers.rows.map((headerCells, rowIndex) => {
       const rowElements = this.mapElementIndicesToElements(definition, 'rows', headerCells);
       // Process elements
       return rowElements.map((e, attributeIndex) => onElement(e, rowIndex, attributeIndex))
-      // Process metric values of the same row
-          .concat(values[rowIndex].map((mv, mvZoneColumnIndex) => onMetricValue(mv, rowIndex, mvZoneColumnIndex)));
+          .concat(metricValues[valueMatrix][rowIndex]);
     });
   };
 
@@ -137,14 +138,14 @@ class NormalizedJsonHandler {
    * Creates an array with the metric values. We pass a function to pick the object key onElement.
    * e.g., onElement = (value) => value.rv;
    *
-   * @param {Array} metricValues - array of metric values
-   * @param {function} onElement - Callback function to process elements
+   * @param {Object} data - Metric values object
+   * @param {String} valueMatrix - Cell value ("raw*", "formatted", "extras")
    *
    * @memberof NormalizedJsonHandler
    * @return {Array}
    */
-  renderRows = (metricValues, onElement) => {
-    return metricValues.map((row) => row.map(onElement));
+  renderRows = (data, valueMatrix = 'raw') => {
+    return data.metricValues[valueMatrix];
   }
 
   /**

@@ -110,10 +110,9 @@ class MstrObjectRestService {
       const status = body.status;
       return {instanceId, status};
     }
-    const {total} = body.data.paging;
     const {instanceId} = body;
     const mstrTable = officeConverterServiceV2.createTable(body);
-    const {rows, columns} = this._checkTableDimensions(total, mstrTable.columnCount);
+    const {rows, columns} = this._checkTableDimensions(mstrTable.tableSize);
     return {instanceId, rows, columns, mstrTable};
   }
 
@@ -193,7 +192,8 @@ class MstrObjectRestService {
         .withCredentials();
   }
 
-  _checkTableDimensions(rows, columns) {
+  _checkTableDimensions(tableSize) {
+    const {rows, columns} = tableSize;
     if (rows >= EXCEL_ROW_LIMIT || columns >= EXCEL_COLUMN_LIMIT) {
       throw new OutsideOfRangeError();
     }
@@ -247,8 +247,8 @@ class MstrObjectRestService {
             throw errorService.errorRestFactory(err);
           });
     } catch (error) {
-    throw errorService.errorRestFactory(error);
-    }  
+      throw errorService.errorRestFactory(error);
+    }
   }
 
   deleteDossierInstance(projectId, objectId, instanceId) {
