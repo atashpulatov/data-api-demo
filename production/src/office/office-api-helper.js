@@ -389,6 +389,7 @@ class OfficeApiHelper {
     headerRange.clear(); // we are unmerging and removing formatting to avoid conflicts while merging cells
     headerRange.values = headerArray;
     const hAlign = axis === 'rows' ? 'left' : 'center';
+    headerRange.numberFormat = '@';
     headerRange.format.horizontalAlignment = Excel.HorizontalAlignment[hAlign];
     headerRange.format.verticalAlignment = Excel.VerticalAlignment.top;
     headerRange.format.borders.getItem('EdgeTop').color = EXCEL_XTABS_BORDER_COLOR;

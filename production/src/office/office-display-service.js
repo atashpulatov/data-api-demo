@@ -72,7 +72,7 @@ class OfficeDisplayService {
         crosstabHeaderDimensions = {
           columnsY: instanceDefinition.mstrTable.headers.columns.length,
           columnsX: instanceDefinition.mstrTable.headers.columns[0].length,
-          rowsX: instanceDefinition.mstrTable.rows.length,
+          rowsX: instanceDefinition.mstrTable.headers.rows[0].length,
           rowsY: instanceDefinition.rows,
         };
       }
@@ -243,7 +243,8 @@ class OfficeDisplayService {
     try {
       officeTable.load('name');
       officeTable.name = officeTableId;
-      !isCrosstab && (officeTable.getHeaderRowRange().values = [mstrTable.headers.columns.pop()]);
+      if (isCrosstab) officeTable.showFilterButton = false;
+      else officeTable.getHeaderRowRange().values = [mstrTable.headers.columns.pop()];
       sheet.activate();
       await context.sync();
       return officeTable;

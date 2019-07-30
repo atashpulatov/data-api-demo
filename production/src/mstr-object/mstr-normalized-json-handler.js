@@ -22,8 +22,7 @@ class NormalizedJsonHandler {
   lookupElement = (definition, axis, attributeIndex, elementIndex) => {
     const rawElement = definition.grid[axis][attributeIndex].elements[elementIndex];
     const {name, formValues} = rawElement;
-    rawElement.value = formValues || [name];
-    return rawElement;
+    return {...rawElement, value: formValues || [name]};
   };
 
   /**
@@ -37,7 +36,9 @@ class NormalizedJsonHandler {
    * @return {Object}
    */
   lookupAttributeName = (definition, axis, attributeIndex) => {
-    return definition.grid[axis][attributeIndex];
+    const rawAttribute = definition.grid[axis][attributeIndex];
+    const {name, formValues} = rawAttribute;
+    return {...rawAttribute, value: formValues || [name]};
   };
 
   /**
@@ -51,7 +52,7 @@ class NormalizedJsonHandler {
    */
   mapElementIndicesToElements = (definition, axis, elementIndices) => {
     return elementIndices.map((elementIndex, attributeIndex) => {
-      if (elementIndex < 0) return {value: ''};
+      if (elementIndex < 0) return {value: ['']};
       // For elementsIndices tuple, each subscript is an attribute index and each value is an element index.
       return this.lookupElement(definition, axis, attributeIndex, elementIndex);
     });
