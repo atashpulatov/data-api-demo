@@ -109,7 +109,7 @@ class OfficeDisplayService {
       return {type: 'success', message: `Data loaded successfully`};
     } catch (error) {
       if (officeTable && !isRefresh) {
-        // officeTable.delete();
+        officeTable.delete();
       }
       throw errorService.errorOfficeFactory(error);
     } finally {
@@ -234,8 +234,7 @@ class OfficeDisplayService {
     try {
       officeTable.load('name');
       officeTable.name = officeTableId;
-      if (isCrosstab) officeTable.showFilterButton = false;
-      else officeTable.getHeaderRowRange().values = [mstrTable.headers.columns.pop()];
+      !isCrosstab && (officeTable.getHeaderRowRange().values = [mstrTable.headers.columns.pop()]);
       sheet.activate();
       await context.sync();
       return officeTable;
