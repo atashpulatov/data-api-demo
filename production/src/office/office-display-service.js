@@ -43,6 +43,7 @@ class OfficeDisplayService {
     let shouldFormat;
     let excelContext;
     let crosstabHeaderDimensions;
+    let startCell;
     try {
       const objectType = isReport ? 'report' : 'dataset';
       const {envUrl} = officeApiHelper.getCurrentMstrContext();
@@ -52,7 +53,7 @@ class OfficeDisplayService {
       console.time('Total');
       console.time('Init excel');
       excelContext = await officeApiHelper.getExcelContext();
-      const startCell = selectedCell || await officeApiHelper.getSelectedCell(excelContext);
+      startCell = selectedCell || await officeApiHelper.getSelectedCell(excelContext);
       console.timeEnd('Init excel');
 
       // Get mstr instance definition
@@ -111,7 +112,13 @@ class OfficeDisplayService {
       return {type: 'success', message: `Data loaded successfully`};
     } catch (error) {
       if (officeTable && !isRefresh) {
+        let crosstabRange;
+        if (isCrosstab) {
+          const sheet = officeTable.worksheet;
+          crosstabRange = officeApiHelper.getCrosstabRange(startCell, crosstabHeaderDimensions, sheet);
+        }
         officeTable.delete();
+        isCrosstab && await crosstabRange.clear();
       }
       throw errorService.errorOfficeFactory(error);
     } finally {
@@ -262,7 +269,7 @@ class OfficeDisplayService {
       context.workbook.application.suspendApiCalculationUntilNextSync();
       prevOfficeTable.clearFilters();
       prevOfficeTable.sort.clear();
-      prevOfficeTable.getHeaderRowRange().values = [mstrTable.headers.columns];
+      prevOfficeTable.getHeaderRowRange().values = [mstrTable.headers.columns.pop()];
       await context.sync();
       await this._updateRows(prevOfficeTable, context, rows);
       return prevOfficeTable;
