@@ -77,6 +77,8 @@ export class _FileHistoryContainer extends React.Component {
           onClick={officeApiHelper.onBindingObjectClick}
           onDelete={officeDisplayService.removeReportFromExcel}
           isLoading={report.isLoading}
+          isCrosstab={report.isCrosstab}
+          crosstabHeaderDimensions={report.crosstabHeaderDimensions}
           objectType={report.objectType}
           refreshDate={report.refreshDate} />)}
       </div>
