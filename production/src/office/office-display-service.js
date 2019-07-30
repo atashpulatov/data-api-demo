@@ -234,7 +234,8 @@ class OfficeDisplayService {
     try {
       officeTable.load('name');
       officeTable.name = officeTableId;
-      !isCrosstab && (officeTable.getHeaderRowRange().values = [mstrTable.headers.columns.pop()]);
+      if (isCrosstab) officeTable.showFilterButton = false;
+      else officeTable.getHeaderRowRange().values = [mstrTable.headers.columns.pop()];
       sheet.activate();
       await context.sync();
       return officeTable;

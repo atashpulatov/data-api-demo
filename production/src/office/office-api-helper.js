@@ -14,6 +14,7 @@ const ASCII_CAPITAL_LETTER_INDEX = 65;
 const EXCEL_TABLE_NAME = 'table';
 const EXCEL_ROW_LIMIT = 1048576;
 const EXCEL_COL_LIMIT = 16384;
+const EXCEL_XTABS_BORDER_COLOR = '#a5a5a5';
 
 class OfficeApiHelper {
   getRange = (headerCount, startCell, rowCount = 0) => {
@@ -390,6 +391,12 @@ class OfficeApiHelper {
     const hAlign = axis === 'rows' ? 'left' : 'center';
     headerRange.format.horizontalAlignment = Excel.HorizontalAlignment[hAlign];
     headerRange.format.verticalAlignment = Excel.VerticalAlignment.top;
+    headerRange.format.borders.getItem('EdgeTop').color = EXCEL_XTABS_BORDER_COLOR;
+    headerRange.format.borders.getItem('EdgeRight').color = EXCEL_XTABS_BORDER_COLOR;
+    headerRange.format.borders.getItem('EdgeBottom').color = EXCEL_XTABS_BORDER_COLOR;
+    headerRange.format.borders.getItem('EdgeLeft').color = EXCEL_XTABS_BORDER_COLOR;
+    headerRange.format.borders.getItem('InsideVertical').color = EXCEL_XTABS_BORDER_COLOR;
+    headerRange.format.borders.getItem('InsideHorizontal').color = EXCEL_XTABS_BORDER_COLOR;
   }
 
   /**
