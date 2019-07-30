@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {connect} from 'react-redux';
 import warningIcon from '../loading/assets/icon_conflict.svg';
 import {officeApiHelper} from '../office/office-api-helper';
@@ -7,6 +7,17 @@ import {withTranslation} from 'react-i18next';
 import {errorService} from '../error/error-handler';
 
 export const _Confirmation = ({reportArray, toggleSecuredFlag, toggleIsConfirmFlag, toggleIsSettingsFlag, t}) => {
+  useEffect(() => {
+    const ua = window.navigator.userAgent;
+    // this is fix IE11 - it didn't handle z-index properties correctly
+    if (ua.indexOf('MSIE') > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+      const elm = document.querySelector('.confirm-container');
+      elm.style.zIndex = -1;
+      setTimeout(() => {
+        elm.style.zIndex = 3000;
+      }, 100);
+    }
+  });
   const secureData = async () => {
     try {
       const excelContext = await officeApiHelper.getExcelContext();
