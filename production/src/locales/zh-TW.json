@@ -119,5 +119,8 @@
   "The object binding is no longer valid due to previous updates.": "繫結的物件已因先前更新而失效。",
   "The object cannot be imported. Either you do not have necessary permissions to view it, or it is empty.": "無法匯入該物件。您沒有必要檢視權限，或內容為空白。",
   "The required data range in the worksheet is not empty.": "工作表中的必要資料範圍並非空白。",
-  "MicroStrategy Office Client loaded. Click Import Data on the Home tab to start plugin. Login to Environment to start browsing documents.": "MicroStrategy Office 用戶端已載入。按一下首頁索引標籤的 [匯入資料]，開始使用外掛程式。登入至環境，開始瀏覽文件。"
+  "MicroStrategy Office Client loaded. Click Import Data on the Home tab to start plugin. Login to Environment to start browsing documents.": "MicroStrategy Office 用戶端已載入。按一下首頁索引標籤的 [匯入資料]，開始使用外掛程式。登入至環境，開始瀏覽文件。",
+  "Import report": "匯入報表",
+  "This object binding is no longer valid due to previous updates.": "繫結的物件已因先前更新而失效。",
+  "Import dataset": "匯入資料集"
 }

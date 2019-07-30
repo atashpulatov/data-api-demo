@@ -1,4 +1,4 @@
-import {mount} from 'enzyme';
+import {mount, shallow} from 'enzyme';
 import React from 'react';
 import {Provider} from 'react-redux';
 import {reduxStore} from '../../src/store';
@@ -8,6 +8,7 @@ import {popupController} from '../../src/popup/popup-controller';
 import * as LoadedFilesConstans from '../../src/file-history/office-loaded-file.jsx';
 import {Popover} from 'antd';
 import {officeStoreService} from '../../src/office/store/office-store-service';
+import {authenticationHelper} from '../../src/authentication/authentication-helper';
 import {officeApiHelper} from '../../src/office/office-api-helper';
 
 describe('FileHistoryContainer', () => {
@@ -228,13 +229,13 @@ describe('FileHistoryContainer', () => {
     // then
     expect(mockShowData).toBeCalled();
   });
-  it('should call proper functions in showData method', () => {
+  it('should call proper functions in showData method', async () => {
     // given
     const refreshAllmock = jest.fn();
     const mockReportArray = createMockFilesArray();
     const mockRefreshReportArray = jest.fn();
     const mockToggleSecured = jest.fn();
-    const wrappedComponent = mount(
+    const wrappedComponent = shallow(
         < _FileHistoryContainer
           project={'testProject'}
           refreshingAll={refreshAllmock}
@@ -244,11 +245,13 @@ describe('FileHistoryContainer', () => {
           toggleSecuredFlag={mockToggleSecured}
         />);
     const mockRefreshAll = jest.spyOn(wrappedComponent.instance(), 'refreshAllAction');
-    // const mockToggle = jest.spyOn(wrappedComponent.instance(), 'toggleSecured');
+    const mockValidateToken = jest.spyOn(authenticationHelper, 'validateAuthToken').mockImplementation(() => {});
+    const mockGetExcelSession = jest.spyOn(officeApiHelper, 'getExcelSessionStatus').mockImplementation(() => {});
     wrappedComponent.instance().forceUpdate();
     // when
     wrappedComponent.instance().showData();
     // then
+    await Promise.all([expect(mockValidateToken).toBeCalled(), expect(mockGetExcelSession).toBeCalled()]);
     expect(mockRefreshAll).toBeCalled();
     expect(mockToggleSecured).toBeCalled();
   });

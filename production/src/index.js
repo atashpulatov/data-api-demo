@@ -42,7 +42,7 @@ async function handleUnauthorized(envUrl, iSession) {
 }
 
 function goReact() {
-  i18next.changeLanguage(Office.context.displayLanguage);
+  i18next.changeLanguage(i18next.options.resources[Office.context.displayLanguage] ? Office.context.displayLanguage : 'en-US');
   ReactDOM.render(
       <Provider store={reduxStore}>
         <PersistGate persistor={reduxPersistor}>

@@ -10,6 +10,8 @@ import {refreshReportsArray} from '../popup/popup-actions';
 import {fileHistoryContainerHOC} from './file-history-container-HOC.jsx';
 import {officeStoreService} from '../office/store/office-store-service';
 import {toggleSecuredFlag} from '../office/office-actions';
+import {errorService} from '../error/error-handler';
+import {authenticationHelper} from '../authentication/authentication-helper';
 import restrictedArt from './assets/art_restricted_access_blue.svg';
 
 import './file-history.css';
@@ -41,10 +43,15 @@ export class _FileHistoryContainer extends React.Component {
     });
   };
 
-  showData = () => {
-    const {reportArray, refreshReportsArray, toggleSecuredFlag} = this.props;
-    this.refreshAllAction(reportArray, refreshReportsArray);
-    toggleSecuredFlag(false);
+  showData = async () => {
+    try {
+      await Promise.all([officeApiHelper.getExcelSessionStatus(), authenticationHelper.validateAuthToken()]);
+      const {reportArray, refreshReportsArray, toggleSecuredFlag} = this.props;
+      this.refreshAllAction(reportArray, refreshReportsArray);
+      toggleSecuredFlag(false);
+    } catch (error) {
+      return errorService.handleError(error);
+    }
   }
 
   render() {
