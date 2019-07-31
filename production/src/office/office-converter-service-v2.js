@@ -12,8 +12,6 @@ class OfficeConverterServiceV2 {
     return {
       tableSize: this.getTableSize(response, columnInformation, isCrosstab),
       columnInformation: this.getColumnInformation(response),
-      cubeId: response.cubeID,
-      cubeName: response.cubeName,
       headers: this.getHeaders(response),
       id: response.id,
       isCrosstab,

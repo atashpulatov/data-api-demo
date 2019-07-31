@@ -330,8 +330,8 @@ class OfficeDisplayService {
   _addToStore({isRefresh, instanceDefinition, bindingId, projectId, envUrl, body, objectType, isCrosstab, isPrompted, promptsAnswers, crosstabHeaderDimensions}) {
     if (!isRefresh) {
       this.addReportToStore({
-        id: objectType === 'report' ? instanceDefinition.mstrTable.id : instanceDefinition.mstrTable.cubeId,
-        name: objectType === 'report' ? instanceDefinition.mstrTable.name : instanceDefinition.mstrTable.cubeName,
+        id: instanceDefinition.mstrTable.id,
+        name: instanceDefinition.mstrTable.name,
         bindId: bindingId,
         projectId,
         envUrl,
