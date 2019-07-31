@@ -179,12 +179,12 @@ class MstrObjectRestService {
   }
 
   createDossierBasedOnReport(reportId, instanceId, projectId) {
+    // TODO: get rid of the getState
     const storeState = reduxStore.getState();
     const envUrl = storeState.sessionReducer.envUrl;
     const authToken = storeState.sessionReducer.authToken;
     const fullPath = `${envUrl}/dossiers/instances`;
-    const body =
-    {
+    const body = {
       objects: [
         {
           type: 3,
@@ -316,8 +316,8 @@ class MstrObjectRestService {
             throw errorService.errorRestFactory(err);
           });
     } catch (error) {
-    throw errorService.errorRestFactory(error);
-    }  
+      throw errorService.errorRestFactory(error);
+    }
   }
 
   answerDossierPrompts(objectId, projectId, instanceId, promptsAnswers) {

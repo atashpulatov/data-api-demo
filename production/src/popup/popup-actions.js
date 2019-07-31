@@ -45,13 +45,17 @@ export function callForEdit(reportParams) {
 
 export function callForReprompt(reportParams) {
   return async (dispatch) => {
-    await Promise.all([officeApiHelper.getExcelSessionStatus(), authenticationHelper.validateAuthToken()]);
-    const editedReport = officeStoreService.getReportFromProperties(reportParams.bindId);
-    dispatch({
-      type: SET_REPORT_N_FILTERS,
-      editedReport,
-    });
-    popupController.runRepromptPopup(reportParams);
+    try {
+      await Promise.all([officeApiHelper.getExcelSessionStatus(), authenticationHelper.validateAuthToken()]);
+      const editedReport = officeStoreService.getReportFromProperties(reportParams.bindId);
+      dispatch({
+        type: SET_REPORT_N_FILTERS,
+        editedReport,
+      });
+      popupController.runRepromptPopup(reportParams);
+    } catch (error) {
+      return errorService.handleError(error);
+    }
   };
 };
 

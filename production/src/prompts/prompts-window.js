@@ -37,11 +37,10 @@ export class _PromptsWindow extends Component {
   }
 
   preparePromptedReportInstance = async (reportId, projectId, promptsAnswers) => {
-    const body = {};
-    const instanceDefinition = await mstrObjectRestService.createInstance(reportId, projectId, true, null, body);
+    const instanceDefinition = await mstrObjectRestService.createInstance(reportId, projectId, true, null);
     let dossierInstanceDefinition = await mstrObjectRestService.createDossierBasedOnReport(reportId, instanceDefinition.instanceId, projectId);
     if (dossierInstanceDefinition.status === 2) {
-      dossierInstanceDefinition = await this.answerDossierPrompts(dossierInstanceDefinition, reportId, projectId, promptsAnswers, true, null, body);
+      dossierInstanceDefinition = await this.answerDossierPrompts(dossierInstanceDefinition, reportId, projectId, promptsAnswers);
     }
 
     dossierInstanceDefinition = await mstrObjectRestService.rePromptDossier(reportId, dossierInstanceDefinition, projectId);
@@ -50,7 +49,7 @@ export class _PromptsWindow extends Component {
     return dossierInstanceDefinition;
   }
 
-  answerDossierPrompts = async (instanceDefinition, objectId, projectId, promptsAnswers, isReport, dossierData, body) => {
+  answerDossierPrompts = async (instanceDefinition, objectId, projectId, promptsAnswersM) => {
     const instanceId = instanceDefinition.mid;
     let count = 0;
     while (instanceDefinition.status === 2) {
@@ -110,7 +109,7 @@ export class _PromptsWindow extends Component {
             EventType.ON_PROMPT_ANSWERED,
             promptsAnsweredHandler
         );
-        // We should remember to unregister this handler once the page loads
+        // TODO: We should remember to unregister this handler once the page loads
       },
     };
 

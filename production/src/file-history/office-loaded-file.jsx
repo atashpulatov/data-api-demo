@@ -45,8 +45,11 @@ export class _OfficeLoadedFile extends React.Component {
     const {isLoading, bindingId, objectType, callForReprompt} = this.props;
     if (!isLoading) {
       this.setState({allowRefreshClick: false}, async () => {
-        await callForReprompt({bindId: bindingId, objectType});
-        this.setState({allowRefreshClick: true});
+        try {
+          await callForReprompt({bindId: bindingId, objectType});
+        } finally {
+          this.setState({allowRefreshClick: true});
+        }
       });
     }
   };
