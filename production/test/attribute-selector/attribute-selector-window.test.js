@@ -14,7 +14,7 @@ jest.mock('../../src/attribute-selector/attribute-selector-helpers');
 describe('AttributeSelectorWindow', () => {
   it('should contain attribute selector', () => {
     // given
-    const mstrData = {};
+    const mstrData = {reportType: 'report'};
     // when
     const componentWrapper = shallow(<AttributeSelectorWindow
       mstrData={mstrData} />);
@@ -31,6 +31,7 @@ describe('AttributeSelectorWindow', () => {
       token: 'token',
       projectId: 'proId',
       reportSubtype: 'subtype',
+      reportType: 'report',
     };
     // when
     const componentWrapper = shallow(<AttributeSelectorWindow
@@ -55,6 +56,7 @@ describe('AttributeSelectorWindow', () => {
       token: 'token',
       projectId: 'proId',
       reportId: 'repId',
+      reportType: 'report',
     };
 
     const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
@@ -75,6 +77,7 @@ describe('AttributeSelectorWindow', () => {
       projectId: 'proId',
       reportId: 'repId',
       reportName: '55',
+      reportType: 'report',
     };
 
     const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
@@ -95,6 +98,7 @@ describe('AttributeSelectorWindow', () => {
       projectId: 'proId',
       reportId: 'repId',
       reportName: '55',
+      reportType: 'report',
     };
 
     const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
@@ -114,6 +118,7 @@ describe('AttributeSelectorWindow', () => {
       token: 'token',
       projectId: 'proId',
       reportId: 'repId',
+      reportType: 'report',
     };
 
     const componentWrapper = mount(
@@ -139,6 +144,7 @@ describe('AttributeSelectorWindow', () => {
       token: 'token',
       projectId: 'proId',
       reportId: 'repId',
+      reportType: 'report',
     };
     const handleBack = jest.fn();
 
@@ -163,6 +169,7 @@ describe('AttributeSelectorWindow', () => {
       token: 'token',
       projectId: 'proId',
       reportId: 'repId',
+      reportType: 'report',
     };
 
     const componentWrapper = shallow(<AttributeSelectorWindow
@@ -184,6 +191,7 @@ describe('AttributeSelectorWindow', () => {
       envUrl: 'url',
       token: 'token',
       projectId: 'proId',
+      reportType: 'report',
       reportId: 'repId',
     };
 
@@ -205,6 +213,7 @@ describe('AttributeSelectorWindow', () => {
       token: 'token',
       projectId: 'proId',
       reportId: 'repId',
+      reportType: 'report',
     };
 
     const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
@@ -224,6 +233,7 @@ describe('AttributeSelectorWindow', () => {
       token: 'token',
       projectId: 'proId',
       reportId: 'repId',
+      reportType: 'report',
     };
 
     const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
@@ -241,6 +251,7 @@ describe('AttributeSelectorWindow', () => {
       token: 'token',
       projectId: 'proId',
       reportId: 'repId',
+      reportType: 'report',
     };
 
     const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);

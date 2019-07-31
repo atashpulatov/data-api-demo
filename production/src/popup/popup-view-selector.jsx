@@ -95,6 +95,14 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
   if (popupType === PopupTypeEnum.promptsWindow) {
     return <PromptsWindow mstrData={propsToPass} />;
   }
+  if (popupType === PopupTypeEnum.repromptingWindow) {
+    const mstrData = {
+      ...propsToPass,
+      ...editedReport,
+      isReprompt: true,
+    };
+    return <PromptsWindow mstrData={mstrData} />; // use the same window as with prompting, but provide report info
+  }
   // TODO: do some error handling here
   return null;
 }

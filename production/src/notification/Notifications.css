@@ -52,6 +52,10 @@
   margin-bottom: 5px;
 }
 
+.error__nav {
+  text-align: right;
+}
+
 .error__section {
   width: 234px;
   margin-top: 3px;
@@ -78,9 +82,9 @@
 .error__show-more,
 .error__show-less {
   font-family: Roboto;
-  text-align: right;
   cursor: pointer;
   color: #1C91DC;
+  display: inline-block;
 }
 
 .error__arrow {

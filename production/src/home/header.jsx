@@ -3,7 +3,7 @@ import {sessionHelper} from '../storage/session-helper';
 import {Button, Popover} from 'antd';
 import {connect} from 'react-redux';
 import {withTranslation} from 'react-i18next';
-import {toggleIsSettingsFlag} from '../office/office-actions';
+import {toggleIsSettingsFlag, toggleIsConfirmFlag} from '../office/office-actions';
 import {MSTRIcon} from 'mstr-react-library';
 import mstrLogo from './assets/mstr_logo.png';
 import {SettingsMenu} from './settings-menu';
@@ -22,38 +22,54 @@ export class _Header extends Component {
   shouldComponentUpdate = (nextProps) => {
     if (nextProps.isConfirm && !this.props.isConfirm) {
       this.removeCloseSettingsListeners();
+      this.addCloseConfirmationListener();
     }
     if (!nextProps.isConfirm && this.props.isConfirm) {
       this.addCloseSettingsListeners();
+      this.removeCloseConfirmationListener();
     }
     return true;
   }
 
   addCloseSettingsListeners = () => {
-    document.addEventListener('click', this.closeOnClick);
-    document.addEventListener('keyup', this.closeOnTab);
+    document.addEventListener('click', this.closeSettingsOnClick);
+    document.addEventListener('keyup', this.closeSettingsOnEsc);
   }
 
   removeCloseSettingsListeners = () => {
-    document.removeEventListener('click', this.closeOnClick);
-    document.removeEventListener('keyup', this.closeOnTab);
+    document.removeEventListener('click', this.closeSettingsOnClick);
+    document.removeEventListener('keyup', this.closeSettingsOnEsc);
+  }
+
+  addCloseConfirmationListener = () => {
+    document.addEventListener('keyup', this.closeConfirmationOnEsc);
+  }
+
+  removeCloseConfirmationListener = () => {
+    document.removeEventListener('keyup', this.closeConfirmationOnEsc);
   }
 
   toggleSettings = () => {
     this.props.toggleIsSettingsFlag(!this.props.isSettings);
   }
 
-  closeOnTab = (e) => {
+  closeSettingsOnEsc = (e) => {
     if (e.keyCode === 27 && this.props.isSettings) {
       this.props.toggleIsSettingsFlag(false);
     }
   };
 
-  closeOnClick = (e) => {
+  closeSettingsOnClick = (e) => {
     if (this.props.isSettings && !e.target.classList.contains('no-trigger-close')) {
       this.props.toggleIsSettingsFlag(false);
     }
   };
+
+  closeConfirmationOnEsc = (e) => {
+    if (e.keyCode === 27 && this.props.isConfirm) {
+      this.props.toggleIsConfirmFlag(false);
+    }
+  }
 
   render() {
     const {loading, t, isSettings, isConfirm} = this.props;
@@ -90,6 +106,7 @@ function mapStateToProps({officeReducer}) {
 
 const mapDispatchToProps = {
   toggleIsSettingsFlag,
+  toggleIsConfirmFlag,
 };
 
 export const Header = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_Header));

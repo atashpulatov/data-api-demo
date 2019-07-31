@@ -43,6 +43,22 @@ export function callForEdit(reportParams) {
   };
 };
 
+export function callForReprompt(reportParams) {
+  return async (dispatch) => {
+    try {
+      await Promise.all([officeApiHelper.getExcelSessionStatus(), authenticationHelper.validateAuthToken()]);
+      const editedReport = officeStoreService.getReportFromProperties(reportParams.bindId);
+      dispatch({
+        type: SET_REPORT_N_FILTERS,
+        editedReport,
+      });
+      popupController.runRepromptPopup(reportParams);
+    } catch (error) {
+      return errorService.handleError(error);
+    }
+  };
+};
+
 export function preparePromptedReport(instanceId, reportData) {
   console.log({instanceId, reportData});
   return (dispatch) => {
@@ -52,7 +68,7 @@ export function preparePromptedReport(instanceId, reportData) {
       reportData,
     });
   };
-};
+}
 
 export function refreshReportsArray(reportArray, isRefreshAll) {
   return async (dispatch) => {
@@ -74,7 +90,7 @@ export function refreshReportsArray(reportArray, isRefreshAll) {
           reportBindId: report.bindId,
           isRefreshAll: isRefreshAll,
         });
-        isError = await popupHelper.printRefreshedReport(report.bindId, report.objectType, reportArray.length, index, isRefreshAll);
+        isError = await popupHelper.printRefreshedReport(report.bindId, report.objectType, reportArray.length, index, isRefreshAll, report.promptsAnswers);
       } catch (error) {
         popupHelper.handleRefreshError(error, reportArray.length, index, isRefreshAll);
       } finally {
