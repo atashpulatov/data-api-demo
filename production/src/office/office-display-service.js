@@ -88,16 +88,15 @@ class OfficeDisplayService {
       // Create or update table
       ({officeTable, newOfficeTableId, shouldFormat} = await this._getOfficeTable(isRefresh, excelContext, bindingId, instanceDefinition, startCell, crosstabHeaderDimensions));
 
+      // Apply formatting when table was created
+      await this._applyFormatting(officeTable, instanceDefinition, excelContext);
+
       // Fetch, convert and insert with promise generator
       console.time('Fetch and insert into excel');
       const connectionData = {objectId, projectId, dossierData, isReport, body};
       const officeData = {officeTable, excelContext, startCell, newOfficeTableId};
       officeTable = await this._fetchInsertDataIntoExcel({connectionData, officeData, instanceDefinition, isRefresh, startCell});
 
-      // Apply formatting when table was created
-      if (shouldFormat) {
-        await this._applyFormatting(officeTable, instanceDefinition, excelContext);
-      }
 
       // Save to store
       bindingId = bindingId || newOfficeTableId;
@@ -306,6 +305,7 @@ class OfficeDisplayService {
     const headerRowRange = officeTable.getHeaderRowRange();
     headerRowRange.format.fill.color = fillColor;
     headerRowRange.format.font.color = fontColor;
+    headerRowRange.numberFormat = "@";  // setting  number format as text for headers
   }
 
   /**
@@ -350,8 +350,6 @@ class OfficeDisplayService {
     try {
       console.time('Apply formatting');
       officeApiHelper.formatNumbers(officeTable, instanceDefinition.mstrTable);
-      await excelContext.sync();
-      officeApiHelper.formatTable(officeTable);
       await excelContext.sync();
     } catch (error) {
       // TODO: Inform the user?
@@ -430,6 +428,8 @@ class OfficeDisplayService {
       console.time('Context sync');
       await Promise.all(contextPromises);
       console.timeEnd('Context sync');
+      officeApiHelper.formatTable(officeTable);
+      await excelContext.sync();
       return officeTable;
     } catch (error) {
       console.log(error);

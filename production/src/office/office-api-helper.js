@@ -30,7 +30,7 @@ class OfficeApiHelper {
       (headerCount -= firstNumber) >= 0;
       firstNumber = secondNumber, secondNumber *= ALPHABET_RANGE_END) {
       endColumn = String.fromCharCode(parseInt(
-          (headerCount % secondNumber) / firstNumber)
+        (headerCount % secondNumber) / firstNumber)
         + ASCII_CAPITAL_LETTER_INDEX)
         + endColumn;
     }
@@ -95,8 +95,8 @@ class OfficeApiHelper {
   getBindingRange = (context, bindingId) => {
     try {
       return context.workbook.bindings
-          .getItem(bindingId).getTable()
-          .getRange();
+        .getItem(bindingId).getTable()
+        .getRange();
     } catch (error) {
       throw errorService.errorOfficeFactory(error);
     }
@@ -104,7 +104,7 @@ class OfficeApiHelper {
 
   getTable = (context, bindingId) => {
     return context.workbook.bindings
-        .getItem(bindingId).getTable();
+      .getItem(bindingId).getTable();
   }
 
   getExcelContext = async () => {
@@ -155,9 +155,9 @@ class OfficeApiHelper {
         const columns = table.columns;
 
         for (const object of reportConvertedData.columnInformation) {
+          const columnRange = columns.getItemAt(object.index).getDataBodyRange();
+          let format = '';
           if (!object.isAttribute) {
-            const columnRange = columns.getItemAt(object.index).getDataBodyRange();
-            let format = '';
 
             if (object.category === 9) {
               format = this._getNumberFormattingCategoryName(object);
@@ -172,8 +172,10 @@ class OfficeApiHelper {
               // for fractions set General format
               object.formatString.match(/# \?+?\/\?+?/) && (format = 'General');
             }
-            columnRange.numberFormat = format;
+          } else {
+            format = "@"; // setting  number format as text for headers
           }
+          columnRange.numberFormat = format;
         }
       } catch (error) {
         throw errorService.handleError(error);
@@ -224,15 +226,15 @@ class OfficeApiHelper {
 
   bindNamedItem = (namedItem, bindingId) => {
     return new Promise((resolve, reject) => Office.context.document.bindings.addFromNamedItemAsync(
-        namedItem, 'table', {id: bindingId}, (result) => {
-          if (result.status === 'succeeded') {
-            console.log('Added new binding with type: ' + result.value.type + ' and id: ' + result.value.id);
-            resolve();
-          } else {
-            console.error('Error: ' + result.error.message);
-            reject(result.error);
-          }
-        }));
+      namedItem, 'table', {id: bindingId}, (result) => {
+        if (result.status === 'succeeded') {
+          console.log('Added new binding with type: ' + result.value.type + ' and id: ' + result.value.id);
+          resolve();
+        } else {
+          console.error('Error: ' + result.error.message);
+          reject(result.error);
+        }
+      }));
   }
 
   deleteObjectTableBody = async (context, object) => {
