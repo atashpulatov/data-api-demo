@@ -209,7 +209,7 @@ describe('PopupViewSelector', () => {
     expect(mockMessageParent).toHaveBeenCalledWith(JSON.stringify(resultAction));
   });
 
-  it('should handle prepare data when prompted and got dossierData', () => {
+  it.skip('should handle prepare data when prompted and got dossierData', () => {
     // given
     const location = {
       search: {},
@@ -444,6 +444,23 @@ describe('PopupViewSelector', () => {
       expect(editedReport.selectedAttributes).toEqual([attributeId]);
       expect(editedReport.selectedMetrics).toEqual([metricId]);
       expect(editedReport.selectedFilters).toEqual(filterValue);
+    });
+
+    it('should parse prepared instance id', () => {
+      // given
+      const reduxState = {
+        navigationTree: {},
+        sessionReducer: {
+          authToken: 'token',
+        },
+        popupReducer: {
+          preparedInstance: 'preparedInstance',
+        },
+      };
+      // when
+      const {preparedInstance} = mapStateToProps(reduxState);
+      // then
+      expect(preparedInstance).toEqual(reduxState.popupReducer.preparedInstance);
     });
   });
 });

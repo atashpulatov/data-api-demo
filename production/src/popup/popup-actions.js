@@ -12,6 +12,7 @@ export const START_REPORT_LOADING = 'START_REPORT_LOADING';
 export const STOP_REPORT_LOADING = 'STOP_REPORT_LOADING';
 export const RESET_STATE = 'RESET_STATE';
 export const SET_REPORT_N_FILTERS = 'SET_REPORT_N_FILTERS';
+export const SET_PREPARED_REPORT = 'SET_PREPARED_REPORT';
 // export const PRELOAD = 'PRELOAD';
 
 export function callForEdit(reportParams) {
@@ -19,7 +20,6 @@ export function callForEdit(reportParams) {
     try {
       await Promise.all([officeApiHelper.getExcelSessionStatus(), authenticationHelper.validateAuthToken()]);
       const editedReport = officeStoreService.getReportFromProperties(reportParams.bindId);
-      console.log({editedReport});
 
       if (editedReport.isPrompted) {
         let instanceDefinition = await mstrObjectRestService.createInstance(editedReport.id, editedReport.projectId, true, null, null);
@@ -40,6 +40,17 @@ export function callForEdit(reportParams) {
     } catch (error) {
       return errorService.handleError(error);
     }
+  };
+};
+
+export function preparePromptedReport(instanceId, reportData) {
+  console.log({instanceId, reportData});
+  return (dispatch) => {
+    dispatch({
+      type: SET_PREPARED_REPORT,
+      instanceId,
+      reportData,
+    });
   };
 };
 
