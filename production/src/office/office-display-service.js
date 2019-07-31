@@ -69,12 +69,7 @@ class OfficeDisplayService {
       const {isCrosstab} = instanceDefinition.mstrTable;
 
       if (isCrosstab) {
-        crosstabHeaderDimensions = {
-          columnsY: instanceDefinition.mstrTable.headers.columns.length,
-          columnsX: instanceDefinition.mstrTable.headers.columns[0].length,
-          rowsX: instanceDefinition.mstrTable.headers.rows[0].length,
-          rowsY: instanceDefinition.rows,
-        };
+        crosstabHeaderDimensions = this._getCrosstabHeaderDimensions(instanceDefinition);
       }
       console.timeEnd('Instance definition');
 
@@ -86,7 +81,7 @@ class OfficeDisplayService {
       // TODO: If isRefresh check if new instance definition is same as before
 
       // Create or update table
-      ({officeTable, newOfficeTableId, shouldFormat} = await this._getOfficeTable(isRefresh, excelContext, bindingId, instanceDefinition, startCell, crosstabHeaderDimensions));
+      ({officeTable, newOfficeTableId, shouldFormat} = await this._getOfficeTable(isRefresh, excelContext, bindingId, instanceDefinition, startCell));
 
       // Apply formatting when table was created
       await this._applyFormatting(officeTable, instanceDefinition, excelContext);
@@ -197,18 +192,18 @@ class OfficeDisplayService {
    * @param {Object} instanceDefinition
    * @param {Object} context ExcelContext
    * @param {string} startCell  Top left corner cell
-   * @param {Object} crosstabHeaderDimensions Contains information about crosstab headers dimensions
    * @param {string} officeTableId Excel Binding ID
    * @param {Object} prevOfficeTable Previous office table to refresh
    *
    * @memberOf OfficeDisplayService
    */
-  _createOfficeTable = async (instanceDefinition, context, startCell, crosstabHeaderDimensions, officeTableId, prevOfficeTable) => {
+  _createOfficeTable = async (instanceDefinition, context, startCell, officeTableId, prevOfficeTable) => {
+    const crosstabHeaderDimensions = this._getCrosstabHeaderDimensions(instanceDefinition);
     const {rows, columns, mstrTable} = instanceDefinition;
     const {isCrosstab} = mstrTable;
     let range;
     const sheet = prevOfficeTable ? prevOfficeTable.worksheet : context.workbook.worksheets.getActiveWorksheet();
-    const tableStartCell = officeApiHelper.getTableStartCell({startCell, sheet, mstrTable});
+    const tableStartCell = officeApiHelper.getTableStartCell({startCell, sheet, mstrTable, prevOfficeTable});
     const tableRange = officeApiHelper.getRange(columns, tableStartCell, rows);
     if (isCrosstab) {
       range = officeApiHelper.getCrosstabRange(tableStartCell, crosstabHeaderDimensions, sheet);
@@ -231,6 +226,7 @@ class OfficeDisplayService {
         await this._checkRangeValidity(context, bottomRange);
       }
 
+      if (isCrosstab) officeApiHelper.clearCrosstabRange(prevOfficeTable, crosstabHeaderDimensions);
       prevOfficeTable.delete();
       await context.sync();
     } else {
@@ -253,9 +249,10 @@ class OfficeDisplayService {
     }
   }
 
-  _updateOfficeTable = async (instanceDefinition, context, prevOfficeTable) => {
+  _updateOfficeTable = async (instanceDefinition, context, startCell, prevOfficeTable) => {
     try {
       const {rows, mstrTable} = instanceDefinition;
+      const crosstabHeaderDimensions = this._getCrosstabHeaderDimensions(instanceDefinition);
 
       prevOfficeTable.rows.load('count');
       await context.sync();
@@ -266,10 +263,21 @@ class OfficeDisplayService {
         await this._checkRangeValidity(context, bottomRange);
       }
 
+      if (mstrTable.isCrosstab) {
+        try {
+          // Recreate the headers during refresh since we don't know if they changed locally
+          officeApiHelper.clearCrosstabRange(prevOfficeTable, crosstabHeaderDimensions);
+          const range = officeApiHelper.getCrosstabRange(startCell, crosstabHeaderDimensions, prevOfficeTable.worksheet);
+          officeApiHelper.createColumnsHeaders(startCell, mstrTable.headers.columns, prevOfficeTable.worksheet, range);
+        } catch (error) {
+          console.log(error);
+        }
+      }
       context.workbook.application.suspendApiCalculationUntilNextSync();
       prevOfficeTable.clearFilters();
       prevOfficeTable.sort.clear();
-      prevOfficeTable.getHeaderRowRange().values = [mstrTable.headers.columns.pop()];
+      if (!mstrTable.isCrosstab) prevOfficeTable.getHeaderRowRange().values = [mstrTable.headers.columns.pop()];
+      this._styleHeaders(prevOfficeTable, TABLE_HEADER_FONT_COLOR, TABLE_HEADER_FILL_COLOR);
       await context.sync();
       await this._updateRows(prevOfficeTable, context, rows);
       return prevOfficeTable;
@@ -277,6 +285,17 @@ class OfficeDisplayService {
       await context.sync();
       throw error;
     }
+  }
+
+  _getCrosstabHeaderDimensions(instanceDefinition) {
+    const {mstrTable} = instanceDefinition;
+    const {isCrosstab, headers} = mstrTable;
+    return ({
+      columnsY: isCrosstab ? headers.columns.length : 0,
+      columnsX: isCrosstab ? headers.columns[0].length : 0,
+      rowsX: isCrosstab ? headers.rows[0].length : 0,
+      rowsY: isCrosstab ? instanceDefinition.rows : 0,
+    });
   }
 
   async _updateRows(prevOfficeTable, context, rows) {
@@ -359,7 +378,7 @@ class OfficeDisplayService {
     }
   }
 
-  async _getOfficeTable(isRefresh, excelContext, bindingId, instanceDefinition, startCell, crosstabHeaderDimensions) {
+  async _getOfficeTable(isRefresh, excelContext, bindingId, instanceDefinition, startCell) {
     console.time('Create or get table');
     const newOfficeTableId = bindingId || officeApiHelper.findAvailableOfficeTableId();
     let officeTable;
@@ -368,22 +387,22 @@ class OfficeDisplayService {
     if (isRefresh) {
       const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindingId);
       const tableColumnsChanged = await this._checkColumnsChange(prevOfficeTable, excelContext, instanceDefinition);
+      console.log('Instance definition changed, creating new table');
+      const headerCell = prevOfficeTable.getHeaderRowRange().getCell(0, 0);
+      headerCell.load('address');
+      await excelContext.sync();
+      const startCell = officeApiHelper.getStartCell(headerCell.address);
+      await excelContext.sync();
       if (tableColumnsChanged) {
-        console.log('Instance definition changed, creating new table');
-        const headerCell = prevOfficeTable.getHeaderRowRange().getCell(0, 0);
-        headerCell.load('address');
-        await excelContext.sync();
-        const startCell = officeApiHelper.getStartCell(headerCell.address);
-        await excelContext.sync();
-        officeTable = await this._createOfficeTable(instanceDefinition, excelContext, startCell, crosstabHeaderDimensions, newOfficeTableId, prevOfficeTable);
+        officeTable = await this._createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId, prevOfficeTable);
       } else {
         shouldFormat = false;
         console.time('Validate existing table');
-        officeTable = await this._updateOfficeTable(instanceDefinition, excelContext, prevOfficeTable);
+        officeTable = await this._updateOfficeTable(instanceDefinition, excelContext, startCell, prevOfficeTable);
         console.timeEnd('Validate existing table');
       }
     } else {
-      officeTable = await this._createOfficeTable(instanceDefinition, excelContext, startCell, crosstabHeaderDimensions, newOfficeTableId);
+      officeTable = await this._createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId);
     }
     console.timeEnd('Create or get table');
     return {officeTable, newOfficeTableId, shouldFormat};

@@ -266,6 +266,28 @@ class OfficeApiHelper {
   }
 
   /**
+   * Clears the two crosstab report ranges
+   *
+   * @param {Office} officeTable Starting table body cell
+   * @param {Object} headerDimensions Contains information about crosstab headers dimensions
+   * @memberof OfficeApiHelper
+   */
+  clearCrosstabRange = (officeTable, headerDimensions) => {
+    try {
+      // Remove row headers
+      const leftRange = officeTable.getRange().getColumnsBefore(headerDimensions.rowsX);
+      leftRange.clear();
+
+      // Remove column headers
+      const topRange = officeTable.getRange().getRowsAbove(headerDimensions.columnsY - 1);
+      topRange.clear();
+    } catch (error) {
+      // TODO: Throw no available range error
+
+    }
+  }
+
+  /**
    * Returns the new initial cell considering crosstabs
    *
    * @param {Office} cell - Starting table body cell
@@ -274,9 +296,9 @@ class OfficeApiHelper {
    * @memberof OfficeApiHelper
    * @return {Object}
    */
-  getTableStartCell = ({startCell, mstrTable}) => {
+  getTableStartCell = ({startCell, mstrTable, prevOfficeTable}) => {
     const {headers, isCrosstab} = mstrTable;
-    if (!isCrosstab) return startCell;
+    if (!isCrosstab || prevOfficeTable) return startCell;
     const rowOffset = headers.columns.length - 1;
     const colOffset = headers.rows[0].length;
     return this.offsetCellBy(startCell, rowOffset, colOffset);
@@ -387,7 +409,6 @@ class OfficeApiHelper {
    * @memberof OfficeApiHelper
    */
   insertHeadersValues(headerRange, headerArray, axis = 'rows') {
-    headerRange.unmerge();
     headerRange.clear(); // we are unmerging and removing formatting to avoid conflicts while merging cells
     headerRange.values = headerArray;
     const hAlign = axis === 'rows' ? 'left' : 'center';
