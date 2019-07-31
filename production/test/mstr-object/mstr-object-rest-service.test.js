@@ -13,10 +13,10 @@ import {moduleProxy} from '../../src/module-proxy';
 import {officeConverterService} from '../../src/office/office-converter-service';
 
 const correctLogin = 'mstr';
-const correctPassword = '999U2nn1g7gY';
+const correctPassword = 'UIhQaQG57nBf';
 const folderType = 7;
 const loginType = 1;
-const envURL = 'https://env-125323.customer.cloud.microstrategy.com/MicroStrategyLibrary/api';
+const envURL = 'https://env-156567.customer.cloud.microstrategy.com/MicroStrategyLibrary/api';
 const projectId = 'B7CA92F04B9FAE8D941C3E9B7E0CD754';
 const projectName = 'Microstrategy Tutorial';
 const instanceId = '';
@@ -118,7 +118,7 @@ describe('MstrObjectRestService', () => {
     });
   });
   describe('getFolderContent', () => {
-    it('should return list of objects within project', async () => {
+    it.skip('should return list of objects within project', async () => {
       // given
       // when
       const result = await mstrObjectRestService.getFolderContent(
@@ -211,7 +211,7 @@ describe('MstrObjectRestService', () => {
         projectName: projectName,
       });
     });
-    it('should return definition of report', async () => {
+    it.skip('should return definition of report', async () => {
       // given
       const expectedReportName = 'TEST REPORT 1';
       const expectedReportRows = 51;

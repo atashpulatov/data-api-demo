@@ -5,7 +5,7 @@ import {sessionHelper} from '../../src/storage/session-helper';
 import {_Header} from '../../src/home/header.jsx';
 import React from 'react';
 
-const envURL = 'https://env-125323.customer.cloud.microstrategy.com/MicroStrategyLibrary/api';
+const envURL = 'https://env-156567.customer.cloud.microstrategy.com/MicroStrategyLibrary/api';
 
 describe('getUserInfo', () => {
   afterEach(() => {

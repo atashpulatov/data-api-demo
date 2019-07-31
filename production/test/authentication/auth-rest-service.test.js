@@ -6,9 +6,9 @@ import request from 'superagent';
 import {errorService} from '../../src/error/error-handler';
 
 const correctLogin = 'mstr';
-const correctPassword = '999U2nn1g7gY';
+const correctPassword = 'UIhQaQG57nBf';
 const authType = 1;
-const envURL = 'https://env-125323.customer.cloud.microstrategy.com/MicroStrategyLibrary/api';
+const envURL = 'https://env-156567.customer.cloud.microstrategy.com/MicroStrategyLibrary/api';
 
 describe('AuthRestService', () => {
   describe('authenticate', () => {
