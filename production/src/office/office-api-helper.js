@@ -67,7 +67,8 @@ class OfficeApiHelper {
       if (error.code === 'ItemNotFound') {
         return notificationService.displayNotification('info', 'The object does not exist in the metadata.');
       }
-      errorService.handleOfficeError(error);
+      const errorAfterOfficeFactory = errorService.errorOfficeFactory(error);
+      errorService.handleOfficeError(errorAfterOfficeFactory);
     }
   };
 
