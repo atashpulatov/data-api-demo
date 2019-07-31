@@ -67,7 +67,7 @@ export class NotificationsWithoutRedux extends Component {
     });
   };
 
-  translateContent = (content, t) => content.includes('Excel returned error') ? `${t('Excel returned error')}: ${content.split(':')[1]}` : t(content);
+  translateContent = (content, t) => content.includes('Excel returned error') ? `${t('Excel returned error')}: ${t(content.split(': ')[1])}` : t(content);
 
   displayMessage = () => {
     const {messageType, content, t} = this.props;
