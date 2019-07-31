@@ -26,7 +26,7 @@ const objectId = 'C536EA7A11E903741E640080EF55BFE2';
 const dossierData = {dossierId: 'dossierId', instanceId: 'iId', chapterKey: 'ckey', visualizationKey: 'vkey'};
 const mockInstanceDefinition = {rows: 50, instanceId: 'ABC', mstrTable: {headers: []}};
 
-describe('MstrObjectRestService', () => {
+describe.skip('MstrObjectRestService', () => {
   let authToken;
   beforeAll(() => {
     const mockAgent = superagent.agent();

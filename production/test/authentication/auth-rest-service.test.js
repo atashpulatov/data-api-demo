@@ -10,7 +10,7 @@ const correctPassword = 'UIhQaQG57nBf';
 const authType = 1;
 const envURL = 'https://env-156567.customer.cloud.microstrategy.com/MicroStrategyLibrary/api';
 
-describe('AuthRestService', () => {
+describe.skip('AuthRestService', () => {
   describe('authenticate', () => {
     const originalAgent = request;
     beforeAll(() => {
