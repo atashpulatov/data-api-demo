@@ -36,7 +36,7 @@ describe('PromptWindowButtons', () => {
     expect(cancelImportRequestMock).toBeCalled();
   });
 
-  it('should call handleCancel when clicking Cancel if reprompted', () => {
+  it('should call closePopup when clicking Cancel if reprompted', () => {
     // given
     const closePopupMock = jest.fn();
     // when
