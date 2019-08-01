@@ -46,10 +46,9 @@ describe('Normalized JSON Handler', () => {
     // given
     const {definition, data} = response;
     const onElement = (element) => element.value[0];
-    const onMetricValue = (metric) => metric.rv;
     const expectedFirstRow = ['2009', 'January', 3139, 17046.02, 4543, 2406, 20915.41, 3449];
     // when
-    const tabular = jsonHandler.renderTabular(definition, data, onElement, onMetricValue);
+    const tabular = jsonHandler.renderTabular(definition, data, onElement);
     // then
     expect(tabular[0]).toEqual(expectedFirstRow);
   });
@@ -68,11 +67,9 @@ describe('Normalized JSON Handler', () => {
   it('should render metric values', () => {
     // given
     const {data} = response;
-    const {metricValues} = data;
-    const onMetric = ({rv}) => rv;
     const expectedFirstRow = [3139, 17046.02, 4543, 2406, 20915.41, 3449];
     // when
-    const rows = jsonHandler.renderRows(metricValues, onMetric);
+    const rows = jsonHandler.renderRows(data);
     // then
     expect(rows[0]).toEqual(expectedFirstRow);
   });
@@ -85,7 +82,7 @@ describe('Normalized JSON Handler', () => {
       ['BWI', 'BWI', 'BWI', 'DCA', 'DCA', 'DCA'],
       ['Flights Delayed', 'Avg Delay (min)', 'On-Time', 'Flights Delayed', 'Avg Delay (min)', 'On-Time'],
     ];
-    const onElement = (e) => e.value[0];
+    const onElement = ({value}) => value[0];
     // when
     const colHeaders = jsonHandler.renderHeaders(definition, axis, headers, onElement);
     // then
