@@ -1,9 +1,10 @@
 import {
   SELECT_FOLDER, SELECT_OBJECT, SET_DATA_SOURCE, START_IMPORT, UPDATE_SCROLL, UPDATE_SIZE,
-  CHANGE_SEARCHING, CHANGE_SORTING, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT
+  CHANGE_SEARCHING, CHANGE_SORTING, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED
 } from '../../src/navigation/navigation-tree-actions';
 import {navigationTree, initialState, DEFAULT_TYPE, DEFAULT_PROJECT_NAME} from '../../src/storage/navigation-tree-reducer';
 import {CLEAR_WINDOW} from '../../src/popup/popup-actions';
+import {notDeepEqual} from 'assert';
 
 describe('NavigationTree Reducer', () => {
   it('should return new proper state in case of SELECT_OBJECT action', () => {
@@ -202,6 +203,23 @@ describe('NavigationTree Reducer', () => {
 
     // then
     expect(newState.importRequested).toBe(true);
+    expect(newState.dossierData).not.toBeDefined();
+  });
+
+  it('should set request import flag and dossier data on REQUEST_IMPORT action', () => {
+    // given
+    const action = {
+      type: PROMPTS_ANSWERED,
+      data: {
+        dossierData: 'whatever',
+      },
+    };
+
+    // when
+    const newState = navigationTree({}, action);
+
+    // then
+    expect(newState.importRequested).toBeFalsy();
     expect(newState.dossierData).toBe(action.data.dossierData);
   });
 

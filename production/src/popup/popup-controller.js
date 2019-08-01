@@ -60,7 +60,6 @@ class PopupController {
             // Event received on dialog close
                 Office.EventType.DialogEventReceived, (event) => {
                   reduxStore.dispatch({type: officeProperties.actions.popupHidden});
-                  console.log(event);
                 });
 
             reduxStore.dispatch({type: officeProperties.actions.popupShown});
@@ -73,6 +72,8 @@ class PopupController {
   onMessageFromPopup = async (dialog, reportParams, arg) => {
     const message = arg.message;
     const response = JSON.parse(message);
+    console.log({response});
+    
     try {
       await this.closeDialog(dialog);
       await officeApiHelper.getExcelSessionStatus(); // checking excel session status
@@ -94,7 +95,6 @@ class PopupController {
             await this.handleUpdateCommand(response);
           } else {
             await officeStoreService.preserveReportValue(reportParams.bindId, 'body', response.body);
-            console.log(reportParams);
             await refreshReportsArray([reportParams], false)(reduxStore.dispatch);
           }
           break;

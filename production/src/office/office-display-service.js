@@ -16,6 +16,8 @@ const TABLE_HEADER_FILL_COLOR = '#ffffff';
 
 class OfficeDisplayService {
   printObject = async (options) => {
+    console.log({options});
+    
     const {isRefreshAll = false, isPrompted, objectId, projectId, isReport} = options;
     if (!isRefreshAll) {
       // /Reports/getDefinition (GET /reports/{reportId}) endpoint does not work for Reports with Object Prompt(?)

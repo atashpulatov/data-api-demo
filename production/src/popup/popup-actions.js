@@ -60,14 +60,11 @@ export function callForReprompt(reportParams) {
 };
 
 export function preparePromptedReport(instanceId, reportData) {
-  console.log({instanceId, reportData});
-  return (dispatch) => {
-    dispatch({
-      type: SET_PREPARED_REPORT,
-      instanceId,
-      reportData,
-    });
-  };
+  return (dispatch) => dispatch({
+    type: SET_PREPARED_REPORT,
+    instanceId,
+    reportData,
+  });
 }
 
 export function refreshReportsArray(reportArray, isRefreshAll) {

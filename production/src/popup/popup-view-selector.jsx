@@ -17,15 +17,13 @@ export const _PopupViewSelector = (props) => {
 
   if ((importRequested && !props.isPrompted)
     || (importRequested && !!props.dossierData && !!props.dossierData.instanceId)) {
-      console.log('proceedtoimport');
-      
     proceedToImport(props);
   } else if (!!props.isPrompted && !!props.dossierData && !!props.dossierData.instanceId) {
     if (!!editedReport.instanceId && props.preparedInstance === editedReport.instanceId) {
       popupType = PopupTypeEnum.editFilters;
     } else {
       obtainInstanceWithPromptsAnswers(propsToPass, props);
-      return null;
+      return <div/>;
     }
   } else if (!!props.isPrompted && (importRequested || popupType === PopupTypeEnum.dataPreparation)) {
     popupType = PopupTypeEnum.promptsWindow;
@@ -54,8 +52,6 @@ export const _PopupViewSelector = (props) => {
 };
 
 async function obtainInstanceWithPromptsAnswers(propsToPass, props) {
-  console.log({props});
-  debugger;
   let instanceDefinition = await mstrObjectRestService.createInstance(propsToPass.reportId, propsToPass.projectId, true, null, null);
   let count = 0;
   while (instanceDefinition.status === 2) {
@@ -67,9 +63,11 @@ async function obtainInstanceWithPromptsAnswers(propsToPass, props) {
     id: propsToPass.reportId,
     projectId: propsToPass.projectId,
     name: propsToPass.reportName,
-    objectType: propsToPass.reportType,
+    objectType: 'report',
+    instanceId: instanceDefinition.instanceId,
+    promptsAnswers: props.promptsAnswers,
   };
-  preparePromptedReport(instanceDefinition.instanceId, preparedReport);
+  props.preparePromptedReport(instanceDefinition.instanceId, preparedReport);
 }
 
 function renderProperComponent(popupType, methods, propsToPass, editedReport) {
@@ -77,6 +75,8 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
     return <AttributeSelectorWindow mstrData={propsToPass} handleBack={methods.handleBack} />;
   }
   if (popupType === PopupTypeEnum.editFilters) {
+    console.log({popupType, methods, propsToPass, editedReport});
+    
     const mstrData = {
       ...propsToPass,
       ...editedReport,
@@ -142,7 +142,7 @@ const popupActions = {
   preparePromptedReport,
 };
 
-export const PopupViewSelector = connect(mapStateToProps, actions)(_PopupViewSelector);
+export const PopupViewSelector = connect(mapStateToProps, popupActions)(_PopupViewSelector);
 
 function parsePopupState(popupState) {
   if (!popupState) {
