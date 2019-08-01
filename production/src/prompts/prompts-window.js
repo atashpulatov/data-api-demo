@@ -49,7 +49,7 @@ export class _PromptsWindow extends Component {
     return dossierInstanceDefinition;
   }
 
-  answerDossierPrompts = async (instanceDefinition, objectId, projectId, promptsAnswersM) => {
+  answerDossierPrompts = async (instanceDefinition, objectId, projectId, promptsAnswers) => {
     const instanceId = instanceDefinition.mid;
     let count = 0;
     while (instanceDefinition.status === 2) {
