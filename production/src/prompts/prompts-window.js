@@ -23,6 +23,8 @@ export class _PromptsWindow extends Component {
       reportId: this.props.mstrData.reportId,
       triggerUpdate: false,
       loading: true,
+      isReprompt: props.mstrData.isReprompt,
+      promptsAnswers: props.mstrData.promptsAnswers,
       currentPageKey: '',
       dossierInstanceId: '',
       docId: '',
@@ -34,13 +36,45 @@ export class _PromptsWindow extends Component {
     this.outerCont = React.createRef();
   }
 
-  loadEmbeddedDossier = (container) => {
+  preparePromptedReportInstance = async (reportId, projectId, promptsAnswers) => {
+    const instanceDefinition = await mstrObjectRestService.createInstance(reportId, projectId, true, null);
+    let dossierInstanceDefinition = await mstrObjectRestService.createDossierBasedOnReport(reportId, instanceDefinition.instanceId, projectId);
+    if (dossierInstanceDefinition.status === 2) {
+      dossierInstanceDefinition = await this.answerDossierPrompts(dossierInstanceDefinition, reportId, projectId, promptsAnswers);
+    }
+
+    dossierInstanceDefinition = await mstrObjectRestService.rePromptDossier(reportId, dossierInstanceDefinition, projectId);
+    dossierInstanceDefinition.id = reportId;
+
+    return dossierInstanceDefinition;
+  }
+
+  answerDossierPrompts = async (instanceDefinition, objectId, projectId, promptsAnswers) => {
+    const instanceId = instanceDefinition.mid;
+    let count = 0;
+    while (instanceDefinition.status === 2) {
+      await mstrObjectRestService.answerDossierPrompts(objectId, projectId, instanceDefinition.mid, promptsAnswers[count]);
+      instanceDefinition = await mstrObjectRestService.getDossierStatus(objectId, instanceDefinition.mid, projectId);
+      count++;
+    }
+    return instanceId;
+  }
+
+  loadEmbeddedDossier = async (container) => {
     if (!this.state.loading) {
       return;
     }
 
     const {authToken, projectId} = this.state.session;
     const libraryUrl = this.state.session.url.replace('api', 'app');
+
+    let instanceDefinition;
+    const instance = {};
+    if (this.state.isReprompt) {
+      instanceDefinition = await this.preparePromptedReportInstance(this.state.reportId, projectId, this.state.promptsAnswers);
+      instance.id = instanceDefinition.id; // '00000000000000000000000000000000';
+      instance.mid = instanceDefinition.mid;
+    }
 
     let msgRouter = null;
     let promptsAnswers = null;
@@ -58,27 +92,33 @@ export class _PromptsWindow extends Component {
     const CustomAuthenticationType = microstrategy.dossier.CustomAuthenticationType;
     const EventType = microstrategy.dossier.EventType;
 
-    microstrategy.dossier
-        .create({
-          url: url,
-          enableCustomAuthentication: true,
-          customAuthenticationType:
-          CustomAuthenticationType.AUTH_TOKEN,
-          enableResponsive: true,
+    const props = {
+      url: url,
+      enableCustomAuthentication: true,
+      customAuthenticationType:
+        CustomAuthenticationType.AUTH_TOKEN,
+      enableResponsive: true,
 
-          getLoginToken: function() {
-            return Promise.resolve(authToken);
-          },
-          placeholder: container,
-          onMsgRouterReadyHandler: ({MsgRouter}) => {
-            msgRouter = MsgRouter;
-            msgRouter.registerEventHandler(
-                EventType.ON_PROMPT_ANSWERED,
-                promptsAnsweredHandler
-            );
-          // We should remember to unregister this handler once the page loads
-          },
-        })
+      getLoginToken: function() {
+        return Promise.resolve(authToken);
+      },
+      placeholder: container,
+      onMsgRouterReadyHandler: ({MsgRouter}) => {
+        msgRouter = MsgRouter;
+        msgRouter.registerEventHandler(
+            EventType.ON_PROMPT_ANSWERED,
+            promptsAnsweredHandler
+        );
+        // TODO: We should remember to unregister this handler once the page loads
+      },
+    };
+
+    if (this.state.isReprompt) {
+      props.instance = instance;
+    }
+
+    microstrategy.dossier
+        .create(props)
         .then(async (dossierPage) => {
           const chapter = await dossierPage.getCurrentChapter();
           const objectId = await dossierPage.getDossierId();
