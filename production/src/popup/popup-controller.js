@@ -23,6 +23,10 @@ class PopupController {
     await this.runPopup(PopupTypeEnum.editFilters, 80, 80, reportParams);
   };
 
+  runRepromptPopup = async (reportParams) => {
+    await this.runPopup(PopupTypeEnum.repromptingWindow, 80, 80, reportParams);
+  };
+
   runPopup = async (popupType, height, width, reportParams = null) => {
     const session = sessionHelper.getSession();
     try {
@@ -78,6 +82,10 @@ class PopupController {
             await this.handleOkCommand(response, reportParams);
           } else {
             await officeStoreService.preserveReportValue(reportParams.bindId, 'body', response.body);
+            if (response.promptsAnswers) {
+              // Include new promptsAnswers in case of Re-prompt workflow
+              reportParams.promptsAnswers = response.promptsAnswers;
+            }
             await refreshReportsArray([reportParams], false)(reduxStore.dispatch);
           }
           break;

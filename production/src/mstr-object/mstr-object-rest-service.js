@@ -180,6 +180,79 @@ class MstrObjectRestService {
     }
   }
 
+  createDossierBasedOnReport(reportId, instanceId, projectId) {
+    // TODO: get rid of the getState
+    const storeState = reduxStore.getState();
+    const envUrl = storeState.sessionReducer.envUrl;
+    const authToken = storeState.sessionReducer.authToken;
+    const fullPath = `${envUrl}/dossiers/instances`;
+    const body = {
+      objects: [
+        {
+          type: 3,
+          id: reportId,
+          newName: 'Temp Dossier',
+        },
+      ],
+      linkingInfo: {
+        sourceInstanceId: instanceId,
+        selectorMode: 'NONE',
+      },
+    };
+
+    return moduleProxy.request
+        .post(fullPath)
+        .set('x-mstr-authtoken', authToken)
+        .set('x-mstr-projectid', projectId)
+        .send(body)
+        .withCredentials()
+        .then((res) => {
+          return res.body;
+        })
+        .catch((err) => {
+          throw errorService.errorRestFactory(err);
+        });
+  }
+
+  getDossierStatus(dossierId, instanceId, projectId) {
+    const storeState = reduxStore.getState();
+    const envUrl = storeState.sessionReducer.envUrl;
+    const authToken = storeState.sessionReducer.authToken;
+    const fullPath = `${envUrl}/documents/${dossierId}/instances/${instanceId}/status`;
+
+    return moduleProxy.request
+        .get(fullPath)
+        .set('x-mstr-authtoken', authToken)
+        .set('x-mstr-projectid', projectId)
+        .withCredentials()
+        .then((res) => {
+          return res.body;
+        })
+        .catch((err) => {
+          throw errorService.errorRestFactory(err);
+        });
+  }
+
+
+  rePromptDossier(dossierId, instanceId, projectId) {
+    const storeState = reduxStore.getState();
+    const envUrl = storeState.sessionReducer.envUrl;
+    const authToken = storeState.sessionReducer.authToken;
+    const fullPath = `${envUrl}/documents/${dossierId}/instances/${instanceId}/rePrompt`;
+
+    return moduleProxy.request
+        .post(fullPath)
+        .set('x-mstr-authtoken', authToken)
+        .set('x-mstr-projectid', projectId)
+        .withCredentials()
+        .then((res) => {
+          return res.body;
+        })
+        .catch((err) => {
+          throw errorService.errorRestFactory(err);
+        });
+  }
+
   getObjectContentGenerator(instanceDefinition, objectId, projectId, isReport, dossierData, body, limit = DATA_LIMIT) {
     return fetchContentGenerator(instanceDefinition, objectId, projectId, isReport, dossierData, body, limit);
   }
@@ -249,6 +322,25 @@ class MstrObjectRestService {
     } catch (error) {
       throw errorService.errorRestFactory(error);
     }
+  }
+
+  answerDossierPrompts(objectId, projectId, instanceId, promptsAnswers) {
+    const storeState = reduxStore.getState();
+    const envUrl = storeState.sessionReducer.envUrl;
+    const authToken = storeState.sessionReducer.authToken;
+    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/promptsAnswers`;
+    return moduleProxy.request
+        .post(fullPath)
+        .set('X-MSTR-AuthToken', authToken)
+        .set('X-MSTR-ProjectID', projectId)
+        .send(promptsAnswers)
+        .withCredentials()
+        .then((res) => {
+          return res.status;
+        })
+        .catch((err) => {
+          throw errorService.errorRestFactory(err);
+        });
   }
 
   deleteDossierInstance(projectId, objectId, instanceId) {

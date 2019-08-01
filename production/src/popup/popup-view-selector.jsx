@@ -54,6 +54,14 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
   if (popupType === PopupTypeEnum.promptsWindow) {
     return <PromptsWindow mstrData={propsToPass} />;
   }
+  if (popupType === PopupTypeEnum.repromptingWindow) {
+    const mstrData = {
+      ...propsToPass,
+      ...editedReport,
+      isReprompt: true,
+    };
+    return <PromptsWindow mstrData={mstrData} />; // use the same window as with prompting, but provide report info
+  }
   // TODO: do some error handling here
   return null;
 }
@@ -134,13 +142,13 @@ function parseFilters(filtersNodes) {
     const elements = elementNodes.reduce((elements, node) => elements.concat(node.elements), []);
     const elementsIds = elements.map((elem) => elem.id);
     return elementsIds
-      .reduce((filters, elem) => {
-        const attrId = elem.split(':')[0];
-        filters[attrId] = !filters[attrId]
+        .reduce((filters, elem) => {
+          const attrId = elem.split(':')[0];
+          filters[attrId] = !filters[attrId]
           ? [elem]
           : [...filters[attrId], elem];
-        return filters;
-      }, {});
+          return filters;
+        }, {});
   }
 }
 
