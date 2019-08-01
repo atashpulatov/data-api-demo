@@ -25,7 +25,7 @@ describe('Office converter service v2', () => {
     const crosstabsResponse = response;
     const expectedHeaders = {
       columns: [
-        ['BWI', 'BWI', 'BWI', 'DCA', 'DCA', 'DCA'],
+        ['BWI 1', 'BWI 1', 'BWI 1', 'DCA 2', 'DCA 2', 'DCA 2'],
         ['Flights Delayed', 'Avg Delay (min)', 'On-Time', 'Flights Delayed', 'Avg Delay (min)', 'On-Time'],
       ],
       rows: [
@@ -48,12 +48,11 @@ describe('Office converter service v2', () => {
     // given
     const crosstabsResponse = response;
     const expectedFirstColumn = {
-      category: 7,
-      formatString: '0',
-      id: '9BC486D611E977217DA10080EF55306D',
+      attributeId: '9BC4691C11E97721AF570080EF55306C',
+      attributeName: 'Year',
+      forms: [{baseFormType: 3, dataType: 33, id: '45C11FA478E745FEA08D781CEA190FE5', name: 'ID'}],
       index: 0,
-      isAttribute: false,
-      name: 'Flights Delayed',
+      isAttribute: true,
     };
     // when
     const colInformation = officeConverter.getColumnInformation(crosstabsResponse);
