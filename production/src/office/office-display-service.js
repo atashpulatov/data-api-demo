@@ -84,7 +84,7 @@ class OfficeDisplayService {
       ({officeTable, newOfficeTableId, shouldFormat} = await this._getOfficeTable(isRefresh, excelContext, bindingId, instanceDefinition, startCell));
 
       // Apply formatting when table was created
-      await this._applyFormatting(officeTable, instanceDefinition, excelContext);
+      if (shouldFormat) await this._applyFormatting(officeTable, instanceDefinition, excelContext);
 
       // Fetch, convert and insert with promise generator
       console.time('Fetch and insert into excel');
@@ -324,7 +324,7 @@ class OfficeDisplayService {
     const headerRowRange = officeTable.getHeaderRowRange();
     headerRowRange.format.fill.color = fillColor;
     headerRowRange.format.font.color = fontColor;
-    headerRowRange.numberFormat = "@";  // setting  number format as text for headers
+    headerRowRange.numberFormat = '@'; // setting  number format as text for headers
   }
 
   /**
