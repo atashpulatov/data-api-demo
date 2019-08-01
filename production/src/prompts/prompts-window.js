@@ -219,7 +219,9 @@ export class _PromptsWindow extends Component {
 
         <div style={{position: 'absolute', bottom: '0'}}>
           <PromptWindowButtons
-            handleRun={this.handleRun} />
+            handleRun={this.handleRun}
+            isReprompt={this.state.isReprompt}
+          />
         </div>
       </div>
     );
