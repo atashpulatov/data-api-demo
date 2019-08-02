@@ -3,14 +3,14 @@ import {officeContextMock} from './__mock__object__/OfficeContext';
 import {officeDisplayService} from '../../src/office/office-display-service';
 import {reduxStore} from '../../src/store';
 import {mstrObjectRestService} from '../../src/mstr-object/mstr-object-rest-service';
-import {mockReports} from '../mockData';
+import {reportV2} from '../mockDataV2';
 import {officeStoreService} from '../../src/office/store/office-store-service';
 import {authenticationHelper} from '../../src/authentication/authentication-helper';
 import {popupController} from '../../src/popup/popup-controller';
 import {PopupTypeEnum} from '../../src/home/popup-type-enum';
 import {sessionHelper} from '../../src/storage/session-helper';
 import {OverlappingTablesError} from '../../src/error/overlapping-tables-error';
-import {officeConverterService} from '../../src/office/office-converter-service';
+import officeConverterService from '../../src/office/office-converter-service-v2';
 import {ALL_DATA_FILTERED_OUT} from '../../src/error/constants';
 
 jest.mock('../../src/mstr-object/mstr-object-rest-service');
@@ -18,7 +18,7 @@ jest.mock('../../src/office/store/office-store-service');
 jest.mock('../../src/authentication/authentication-helper');
 
 describe('OfficeDisplayService', () => {
-  const givenReport = mockReports[0];
+  const givenReport = reportV2;
   const excelTableNameMock = 'table';
 
   const mstrContext = {
@@ -148,6 +148,7 @@ describe('OfficeDisplayService', () => {
     // given
     jest.spyOn(officeDisplayService, '_fetchInsertDataIntoExcel').mockReturnValueOnce({});
     jest.spyOn(officeDisplayService, '_createOfficeTable').mockReturnValueOnce({});
+    jest.spyOn(officeApiHelper, 'createColumnsHeaders').mockReturnValueOnce(() => {});
     jest.spyOn(officeApiHelper, 'getSelectedCell').mockReturnValueOnce({});
     jest.spyOn(officeApiHelper, 'bindNamedItem').mockReturnValueOnce({});
     jest.spyOn(officeApiHelper, 'formatTable').mockReturnValueOnce({});
@@ -170,6 +171,12 @@ describe('OfficeDisplayService', () => {
       envUrl: mstrContext.envUrl,
       projectId: mstrContext.projectId,
       isLoading: false,
+      crosstabHeaderDimensions: {
+        columnsX: 6,
+        columnsY: 2,
+        rowsX: 2,
+      },
+      isCrosstab: givenReport.definition.grid.crossTab,
       objectType: 'report',
     });
   });
@@ -272,6 +279,13 @@ describe('OfficeDisplayService', () => {
         getRange: jest.fn().mockReturnValue({
           value: 'A1:B5',
           getUsedRangeOrNullObject: jest.fn().mockReturnValue({isNullObject: true}),
+          getOffsetRange: jest.fn(),
+          getCell: jest.fn().mockReturnValue({
+            getOffsetRange: jest.fn().mockReturnValue({
+              getBoundingRect: jest.fn(),
+              getResizedRange: jest.fn().mockReturnValue({clear: jest.fn()}),
+            }),
+          }),
         }),
         activate: jest.fn(),
       };
@@ -287,7 +301,7 @@ describe('OfficeDisplayService', () => {
       const startCell = 'A1';
       const reportName = 'someReportName';
       // when
-      const result = await officeDisplayService._createOfficeTable(givenReport, officeContextMock, startCell, reportName);
+      const result = await officeDisplayService._createOfficeTable(reportV2, officeContextMock, startCell, reportName);
       // then
       expect(getActiveWorksheetMock).toBeCalled();
       expect(result.name).toEqual(reportName);
@@ -314,6 +328,13 @@ describe('OfficeDisplayService', () => {
         getRange: jest.fn().mockReturnValue({
           value: 'A1:B5',
           getUsedRangeOrNullObject: jest.fn().mockReturnValue({isNullObject: true}),
+          getOffsetRange: jest.fn(),
+          getCell: jest.fn().mockReturnValue({
+            getOffsetRange: jest.fn().mockReturnValue({
+              getBoundingRect: jest.fn(),
+              getResizedRange: jest.fn().mockReturnValue({clear: jest.fn()}),
+            }),
+          }),
         }),
         activate: jest.fn(),
       };
@@ -323,6 +344,7 @@ describe('OfficeDisplayService', () => {
         columns: {count: 1},
         worksheet: mockedWorksheet,
       };
+      jest.spyOn(officeApiHelper, 'createColumnsHeaders').mockReturnValueOnce(() => {});
       jest.spyOn(officeDisplayService, '_checkRangeValidity').mockReturnValueOnce({});
       jest.spyOn(officeDisplayService, '_styleHeaders').mockReturnValueOnce({});
       jest.spyOn(officeApiHelper, 'getRange').mockReturnValueOnce('A1:B5');
@@ -385,11 +407,12 @@ describe('OfficeDisplayService', () => {
   describe('_FetchInsertDataIntoExcel', () => {
     it('should call getObjectGenerator', () => {
       // given
-      const mockConnectionData = {objectId: 'objectId', projectId: 'projectId', isReport: true, body: {}};
+      const mockConnectionData = {objectId: 'objectId', projectId: 'projectId', isReport: true, isCrosstab: true, body: {}};
       const mockOfficeData = {excelContext: {}, officeTable: {}};
       const mockGetObjectContentGenerator = jest.spyOn(mstrObjectRestService, 'getObjectContentGenerator').mockReturnValueOnce([]);
+      const options = {connectionData: mockConnectionData, officeData: mockOfficeData, instanceDefinition: givenReport, isRefresh: false};
       // when
-      officeDisplayService._fetchInsertDataIntoExcel(mockConnectionData, mockOfficeData, givenReport);
+      officeDisplayService._fetchInsertDataIntoExcel(options);
       // then
       expect(mockGetObjectContentGenerator).toBeCalled();
     });
@@ -398,7 +421,9 @@ describe('OfficeDisplayService', () => {
     it('should not call range.clear on import', () => {
       // given
       const mockClear = jest.fn();
-      const mockOfficeTable = {getHeaderRowRange: () => ({getRowsBelow: () => ({getOffsetRange: () => ({clear: mockClear})})})};
+      const mockOfficeTable = {
+        getDataBodyRange: () => ({getRow: () => ({getResizedRange: () => ({getOffsetRange: () => ({clear: mockClear})})})}),
+      };
       // when
       officeDisplayService._appendRowsToTable(mockOfficeTable, [], 0, false);
       // then
@@ -407,7 +432,9 @@ describe('OfficeDisplayService', () => {
     it('should call range.clear on refresh', () => {
       // given
       const mockClear = jest.fn();
-      const mockOfficeTable = {getHeaderRowRange: () => ({getRowsBelow: () => ({getOffsetRange: () => ({clear: mockClear})})})};
+      const mockOfficeTable = {
+        getDataBodyRange: () => ({getRow: () => ({getResizedRange: () => ({getOffsetRange: () => ({clear: mockClear})})})}),
+      };
       // when
       officeDisplayService._appendRowsToTable(mockOfficeTable, [], 0, true);
       // then
