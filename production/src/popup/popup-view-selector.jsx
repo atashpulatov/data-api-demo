@@ -31,18 +31,6 @@ export const _PopupViewSelector = (props) => {
     propsToPass.reportId = props.chosenObjectId;
   }
 
-  // if (importRequested) {
-  //   if (!props.isPrompted) {
-  //     proceedToImport(props);
-  //   } else if (!!props.dossierData && !!props.dossierData.instanceId) {
-  //     console.log({props});
-  //     proceedToImport(props);
-  //   } else {
-  //     popupType = PopupTypeEnum.promptsWindow;
-  //     propsToPass.projectId = props.chosenProjectId;
-  //     propsToPass.reportId = props.chosenObjectId;
-  //   }
-  // }
   if (!props.authToken || !propsToPass) {
     console.log('Waiting for token to be passed');
     return null;
