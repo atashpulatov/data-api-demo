@@ -48,6 +48,7 @@ export function callForReprompt(reportParams) {
     try {
       await Promise.all([officeApiHelper.getExcelSessionStatus(), authenticationHelper.validateAuthToken()]);
       const editedReport = officeStoreService.getReportFromProperties(reportParams.bindId);
+      editedReport.isPrompted = true;
       dispatch({
         type: SET_REPORT_N_FILTERS,
         editedReport,

@@ -93,6 +93,10 @@ class PopupController {
             await this.handleUpdateCommand(response);
           } else {
             await officeStoreService.preserveReportValue(reportParams.bindId, 'body', response.body);
+            if (response.promptsAnswers) {
+              // Include new promptsAnswers in case of Re-prompt workflow
+              reportParams.promptsAnswers = response.promptsAnswers;
+            }
             await refreshReportsArray([reportParams], false)(reduxStore.dispatch);
           }
           break;

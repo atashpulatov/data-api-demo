@@ -118,6 +118,7 @@ export const navigationTree = (state = initialState, action) => {
         newState.promptsAnswers = data.promptsAnswers;
         newState.dossierData = data.dossierData;
       }
+      newState.isPrompted = true;
       return newState;
     }
     case CANCEL_REQUEST_IMPORT: {

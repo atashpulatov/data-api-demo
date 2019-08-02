@@ -189,7 +189,7 @@ describe('NavigationTree Reducer', () => {
     expect(newState.instanceId).toBe(action.data.instanceId);
   });
 
-  it('should set request import flag and dossier data on REQUEST_IMPORT action', () => {
+  it('should set request import flag on REQUEST_IMPORT action', () => {
     // given
     const action = {
       type: REQUEST_IMPORT,
@@ -206,7 +206,7 @@ describe('NavigationTree Reducer', () => {
     expect(newState.dossierData).not.toBeDefined();
   });
 
-  it('should set request import flag and dossier data on REQUEST_IMPORT action', () => {
+  it('should set dossier data on PROMPTS_ANSWERED action', () => {
     // given
     const action = {
       type: PROMPTS_ANSWERED,
@@ -221,6 +221,7 @@ describe('NavigationTree Reducer', () => {
     // then
     expect(newState.importRequested).toBeFalsy();
     expect(newState.dossierData).toBe(action.data.dossierData);
+    expect(newState.isPrompted).toBeTruthy();
   });
 
   it('should return new proper state in case of START_IMPORT action', () => {

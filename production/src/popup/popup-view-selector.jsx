@@ -23,7 +23,7 @@ export const _PopupViewSelector = (props) => {
       popupType = PopupTypeEnum.editFilters;
     } else {
       obtainInstanceWithPromptsAnswers(propsToPass, props);
-      return <div/>;
+      return <div />;
     }
   } else if (!!props.isPrompted && (importRequested || popupType === PopupTypeEnum.dataPreparation)) {
     popupType = PopupTypeEnum.promptsWindow;
@@ -52,16 +52,18 @@ export const _PopupViewSelector = (props) => {
 };
 
 async function obtainInstanceWithPromptsAnswers(propsToPass, props) {
-  let instanceDefinition = await mstrObjectRestService.createInstance(propsToPass.reportId, propsToPass.projectId, true, null, null);
+  const projectId = propsToPass.projectId || props.editedReport.projectId;
+  const reportId = propsToPass.reportId || props.editedReport.reportId;
+  let instanceDefinition = await mstrObjectRestService.createInstance(reportId, projectId, true, null, null);
   let count = 0;
   while (instanceDefinition.status === 2) {
-    await mstrObjectRestService.answerPrompts(propsToPass.reportId, propsToPass.projectId, instanceDefinition.instanceId, props.promptsAnswers[count]);
-    instanceDefinition = await mstrObjectRestService.getInstance(propsToPass.reportId, propsToPass.projectId, true, null, null, instanceDefinition.instanceId);
+    await mstrObjectRestService.answerPrompts(reportId, projectId, instanceDefinition.instanceId, props.promptsAnswers[count]);
+    instanceDefinition = await mstrObjectRestService.getInstance(reportId, projectId, true, null, null, instanceDefinition.instanceId);
     count++;
   }
   const preparedReport = {
-    id: propsToPass.reportId,
-    projectId: propsToPass.projectId,
+    id: reportId,
+    projectId: projectId,
     name: propsToPass.reportName,
     objectType: 'report',
     instanceId: instanceDefinition.instanceId,
@@ -187,13 +189,13 @@ function parseFilters(filtersNodes) {
     const elements = elementNodes.reduce((elements, node) => elements.concat(node.elements), []);
     const elementsIds = elements.map((elem) => elem.id);
     return elementsIds
-        .reduce((filters, elem) => {
-          const attrId = elem.split(':')[0];
-          filters[attrId] = !filters[attrId]
+      .reduce((filters, elem) => {
+        const attrId = elem.split(':')[0];
+        filters[attrId] = !filters[attrId]
           ? [elem]
           : [...filters[attrId], elem];
-          return filters;
-        }, {});
+        return filters;
+      }, {});
   }
 }
 
