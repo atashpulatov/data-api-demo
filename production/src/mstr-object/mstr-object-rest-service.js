@@ -376,16 +376,18 @@ async function* fetchContentGenerator(instanceDefinition, objectId, projectId, i
     let offset = 0;
 
     while (fetchedRows < totalRows && fetchedRows < EXCEL_ROW_LIMIT) {
+      let header;
+      let crosstabSubtotal;
       const response = await mstrObjectRestService._fetchObjectContent(fullPath, authToken, projectId, offset, limit);
       const {current} = response.body.data.paging;
       fetchedRows = current + offset;
       offset += current;
-      const row = officeConverterServiceV2.getRows(response.body, isCrosstab);
-      let header;
+      const {row, rowTotals} = officeConverterServiceV2.getRows(response.body, isCrosstab);
       if (isCrosstab) {
         header = officeConverterServiceV2.getHeaders(response.body);
+        crosstabSubtotal = header.subtotalAddress;
       }
-      yield {row, header};
+      yield {row, header, subtotalAddress: isCrosstab ? crosstabSubtotal : rowTotals};
     }
   } catch (error) {
     console.log(error);

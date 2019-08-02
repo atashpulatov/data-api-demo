@@ -11,7 +11,7 @@ class OfficeConverterServiceV2 {
     const isCrosstab = this.isCrosstab(response);
     return {
       tableSize: this.getTableSize(response, columnInformation, isCrosstab),
-      columnInformation: this.getColumnInformation(response),
+      columnInformation,
       headers: this.getHeaders(response),
       id: response.id,
       isCrosstab,
@@ -43,12 +43,18 @@ class OfficeConverterServiceV2 {
    * @memberof OfficeConverterServiceV2
    */
   getRows(response) {
-    // onMetric is passed when mapping the row [{rv:1, fv:"$1"}, ...]
-    const onAttribute = ({value}) => value.join(' ');
+    const rowTotals = [];
+    const onAttribute = (array) => {
+      return (e) => {
+        if (array) array.push(e.subtotalAddress);
+        return e.value.join(' ');
+      };
+    };
     if (this.isCrosstab(response)) {
-      return jsonHandler.renderRows(response.data);
+      return {row: jsonHandler.renderRows(response.data)};
     } else {
-      return jsonHandler.renderTabular(response.definition, response.data, onAttribute);
+      const row = jsonHandler.renderTabular(response.definition, response.data, onAttribute(rowTotals));
+      return {row, rowTotals};
     }
   }
 
@@ -60,14 +66,24 @@ class OfficeConverterServiceV2 {
    * @memberof OfficeConverterServiceV2
    */
   getHeaders(response) {
-    const onElement = ({value}) => value.join(' ');
+    const rowTotals = [];
+    const columnTotals = [];
+
+    const onElement = (array) => {
+      return (e) => {
+        if (array) array.push(e.subtotalAddress);
+        return e.value.join(' ');
+      };
+    };
+
     if (this.isCrosstab(response)) {
-      const rows = jsonHandler.renderHeaders(response.definition, 'rows', response.data.headers, onElement);
-      const columns = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement);
-      return {rows, columns};
+      const rows = jsonHandler.renderHeaders(response.definition, 'rows', response.data.headers, onElement(rowTotals));
+      const columns = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement(columnTotals));
+      const subtotalAddress = [...rowTotals, ...columnTotals];
+      return {rows, columns, subtotalAddress};
     } else {
-      const attributeTitles = jsonHandler.renderTitles(response.definition, 'rows', response.data.headers, onElement);
-      const metricHeaders = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement);
+      const attributeTitles = jsonHandler.renderTitles(response.definition, 'rows', response.data.headers, onElement());
+      const metricHeaders = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement());
       return {columns: [[...attributeTitles[0], ...metricHeaders[0]]]};
     }
   }

@@ -44,6 +44,7 @@ class OfficeDisplayService {
     let excelContext;
     let crosstabHeaderDimensions;
     let startCell;
+    let subtotalsAddresses;
     try {
       const objectType = isReport ? 'report' : 'dataset';
       const {envUrl} = officeApiHelper.getCurrentMstrContext();
@@ -66,7 +67,8 @@ class OfficeDisplayService {
       if (instanceDefinition.status === 2) {
         instanceDefinition = await this._answerPrompts(instanceDefinition, objectId, projectId, promptsAnswers, isReport, dossierData, body);
       }
-      const {isCrosstab} = instanceDefinition.mstrTable;
+      const {mstrTable} = instanceDefinition;
+      const {isCrosstab} = mstrTable;
 
       if (isCrosstab) {
         crosstabHeaderDimensions = this._getCrosstabHeaderDimensions(instanceDefinition);
@@ -84,14 +86,18 @@ class OfficeDisplayService {
       ({officeTable, newOfficeTableId, shouldFormat} = await this._getOfficeTable(isRefresh, excelContext, bindingId, instanceDefinition, startCell));
 
       // Apply formatting when table was created
-      if (shouldFormat) await this._applyFormatting(officeTable, instanceDefinition, excelContext);
+      if (shouldFormat) await this._applyFormatting(officeTable, instanceDefinition, isCrosstab, excelContext);
 
       // Fetch, convert and insert with promise generator
       console.time('Fetch and insert into excel');
       const connectionData = {objectId, projectId, dossierData, isReport, body};
       const officeData = {officeTable, excelContext, startCell, newOfficeTableId};
-      officeTable = await this._fetchInsertDataIntoExcel({connectionData, officeData, instanceDefinition, isRefresh, startCell});
+      ({officeTable, subtotalsAddresses} = await this._fetchInsertDataIntoExcel({connectionData, officeData, instanceDefinition, isRefresh, startCell}));
 
+      if (subtotalsAddresses.length) {
+        const reportstartCell = officeTable.getRange().getCell(0, 0);
+        officeApiHelper.formatSubtotals(reportstartCell, subtotalsAddresses, mstrTable, excelContext);
+      }
 
       // Save to store
       bindingId = bindingId || newOfficeTableId;
@@ -365,10 +371,10 @@ class OfficeDisplayService {
     }
   }
 
-  async _applyFormatting(officeTable, instanceDefinition, excelContext) {
+  async _applyFormatting(officeTable, instanceDefinition, isCrosstab, excelContext) {
     try {
       console.time('Apply formatting');
-      officeApiHelper.formatNumbers(officeTable, instanceDefinition.mstrTable);
+      officeApiHelper.formatNumbers(officeTable, instanceDefinition.mstrTable, isCrosstab);
       await excelContext.sync();
     } catch (error) {
       // TODO: Inform the user?
@@ -417,8 +423,9 @@ class OfficeDisplayService {
       const rowGenerator = mstrObjectRestService.getObjectContentGenerator(instanceDefinition, objectId, projectId, isReport, dossierData, body, limit);
       let rowIndex = 0;
       let contextPromises = [];
+      let subtotalsAddresses = [];
       console.time('Fetch data');
-      for await (const {row, header} of rowGenerator) {
+      for await (const {row, header, subtotalAddress} of rowGenerator) {
         console.groupCollapsed(`Importing rows: ${rowIndex} to ${Math.min(rowIndex + limit, rows)}`);
         console.timeEnd('Fetch data');
         console.time('Append rows');
@@ -432,6 +439,7 @@ class OfficeDisplayService {
           contextPromises.push(excelContext.sync());
           console.timeEnd('Append crosstab rows');
         }
+        subtotalsAddresses = subtotalAddress.flat(Infinity).filter(Boolean);
         rowIndex += row.length;
         const promiseLength = contextPromises.length;
         if (promiseLength % PROMISE_LIMIT === 0) {
@@ -449,7 +457,7 @@ class OfficeDisplayService {
       console.timeEnd('Context sync');
       officeApiHelper.formatTable(officeTable);
       await excelContext.sync();
-      return officeTable;
+      return {officeTable, subtotalsAddresses};
     } catch (error) {
       console.log(error);
       throw error;

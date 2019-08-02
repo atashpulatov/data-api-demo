@@ -149,11 +149,10 @@ class OfficeApiHelper {
     }
   }
 
-  formatNumbers = (table, reportConvertedData) => {
+  formatNumbers = (table, reportConvertedData, isCrosstab) => {
     if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
       try {
         const columns = table.columns;
-
         for (const object of reportConvertedData.columnInformation) {
           const columnRange = columns.getItemAt(object.index).getDataBodyRange();
           let format = '';
@@ -171,8 +170,12 @@ class OfficeApiHelper {
               // for fractions set General format
               object.formatString.match(/# \?+?\/\?+?/) && (format = 'General');
             }
-          } else {
-            format = '@'; // setting  number format as text for headers
+          } else if (!isCrosstab) {
+            if (object.forms.length > 1) {
+              format = '@';
+            } else {
+              format = object.forms[0] === 'text' ? '@' : 'General';
+            }
           }
           columnRange.numberFormat = format;
         }
@@ -308,29 +311,36 @@ class OfficeApiHelper {
    *
    * @param {Office} startCell Starting table body cell
    * @param {Office} cell Starting subtotal row cell
-   * @param {String} axis String pointing out if it's column or row subtotal
-   * @param {Array} headers Headers object from OfficeConverterServiceV2.getHeaders
+   * @param {Object} mstrTable mstrTable object instance definition
    * @memberof OfficeApiHelper
    * @return {Office} Range of subtotal row
    */
-  getSubtotalRange = (startCell, cell, axis, headers) => {
+  getSubtotalRange = (startCell, cell, mstrTable) => {
+    const {headers} = mstrTable;
+    const {axis} = cell;
     let offsets = {};
-    if (axis === 'row') {
+
+    if (axis === 'rows') {
       offsets = {
-        verticalFirstCell: cell[0],
-        horizontalFirstCell: -(headers.rows[0].length - cell[1]),
-        verticalLastCell: cell[0],
+        verticalFirstCell: cell.colIndex + 1,
+        horizontalFirstCell: -(headers.rows[0].length - cell.attributeIndex),
+        verticalLastCell: cell.colIndex + 1,
         horizontalLastCell: headers.columns[0].length - 1,
       };
-    } else if (axis === 'column') {
+    } else if (axis === 'columns') {
       offsets = {
-        verticalFirstCell: -(headers.columns.length - cell[0]),
-        horizontalFirstCell: cell[1],
-        verticalLastCell: headers.rows.length - 1,
-        horizontalLastCell: cell[1],
+        verticalFirstCell: -((headers.columns.length - cell.attributeIndex) - 1),
+        horizontalFirstCell: cell.colIndex,
+        verticalLastCell: mstrTable.tableSize.rows,
+        horizontalLastCell: cell.colIndex,
       };
-    } else {
-      return null;
+    } else { // if not a crosstab
+      offsets = {
+        verticalFirstCell: cell.rowIndex + 1,
+        horizontalFirstCell: cell.attributeIndex,
+        verticalLastCell: cell.rowIndex + 1,
+        horizontalLastCell: mstrTable.tableSize.columns - 1,
+      };
     }
     const firstSubtotalCell = startCell.getOffsetRange(offsets.verticalFirstCell, offsets.horizontalFirstCell);
     const lastSubtotalCell = startCell.getOffsetRange(offsets.verticalLastCell, offsets.horizontalLastCell);
@@ -342,18 +352,16 @@ class OfficeApiHelper {
    *
    * @param {Office} startCell Starting table body cell
    * @param {Office} subtotalCells 2d array of all starting subtotal row cells (each element contains row and colum number of subtotal cell in headers columns)
-   * @param {String} axis String pointing out if array contains column or row subtotals
-   * @param {Array} headers Headers object from OfficeConverterServiceV2.getHeaders
-   * @param {Boolean} bold Flag determinig if to set/unset bold format
+   * @param {Object} mstrTable mstrTable object instance definition
    * @param {Office} context Excel context
    * @memberof OfficeApiHelper
    * @return {Promise} Context.sync
    */
-  formatSubtotals = (startCell, subtotalCells, axis, headers, bold, context) => {
-    subtotalCells.forEach((cell) => {
-      const subtotalRowRange = this.getSubtotalRange(startCell, cell, axis, headers);
-      subtotalRowRange && (subtotalRowRange.format.font.bold = bold);
-    });
+  formatSubtotals = (startCell, subtotalCells, mstrTable, context) => {
+    for (const cell of subtotalCells) {
+      const subtotalRowRange = this.getSubtotalRange(startCell, cell, mstrTable, context);
+      subtotalRowRange && (subtotalRowRange.format.font.bold = true);
+    };
     return context.sync();
   }
 
