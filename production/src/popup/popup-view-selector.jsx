@@ -75,8 +75,6 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
     return <AttributeSelectorWindow mstrData={propsToPass} handleBack={methods.handleBack} />;
   }
   if (popupType === PopupTypeEnum.editFilters) {
-    console.log({popupType, methods, propsToPass, editedReport});
-    
     const mstrData = {
       ...propsToPass,
       ...editedReport,

@@ -404,7 +404,6 @@ async function* fetchContentGenerator(instanceDefinition, objectId, projectId, i
       yield officeConverterService.getRows(response.body, mstrTable.headers);
     }
   } catch (error) {
-    console.log(error);
     throw errorService.errorRestFactory(error);
   }
 }

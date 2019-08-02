@@ -72,8 +72,6 @@ class PopupController {
   onMessageFromPopup = async (dialog, reportParams, arg) => {
     const message = arg.message;
     const response = JSON.parse(message);
-    console.log({response, reportParams});
-    
     try {
       await this.closeDialog(dialog);
       await officeApiHelper.getExcelSessionStatus(); // checking excel session status
