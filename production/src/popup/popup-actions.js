@@ -12,6 +12,7 @@ export const START_REPORT_LOADING = 'START_REPORT_LOADING';
 export const STOP_REPORT_LOADING = 'STOP_REPORT_LOADING';
 export const RESET_STATE = 'RESET_STATE';
 export const SET_REPORT_N_FILTERS = 'SET_REPORT_N_FILTERS';
+export const SET_PREPARED_REPORT = 'SET_PREPARED_REPORT';
 // export const PRELOAD = 'PRELOAD';
 
 export function callForEdit(reportParams) {
@@ -31,7 +32,6 @@ export function callForEdit(reportParams) {
         editedReport.instanceId = instanceDefinition.instanceId;
       }
 
-      console.log(editedReport);
       dispatch({
         type: SET_REPORT_N_FILTERS,
         editedReport,
@@ -48,6 +48,7 @@ export function callForReprompt(reportParams) {
     try {
       await Promise.all([officeApiHelper.getExcelSessionStatus(), authenticationHelper.validateAuthToken()]);
       const editedReport = officeStoreService.getReportFromProperties(reportParams.bindId);
+      editedReport.isPrompted = true;
       dispatch({
         type: SET_REPORT_N_FILTERS,
         editedReport,
@@ -58,6 +59,14 @@ export function callForReprompt(reportParams) {
     }
   };
 };
+
+export function preparePromptedReport(instanceId, reportData) {
+  return (dispatch) => dispatch({
+    type: SET_PREPARED_REPORT,
+    instanceId,
+    reportData,
+  });
+}
 
 export function refreshReportsArray(reportArray, isRefreshAll) {
   return async (dispatch) => {

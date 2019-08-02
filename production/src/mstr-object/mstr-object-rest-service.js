@@ -87,6 +87,18 @@ class MstrObjectRestService {
         });
   }
 
+  _putInstance(fullPath, authToken, projectId, body) {
+    return moduleProxy.request
+        .put(fullPath)
+        .set('x-mstr-authtoken', authToken)
+        .set('x-mstr-projectid', projectId)
+        .send(body)
+        .withCredentials()
+        .then((res) => {
+          return this._parseInstanceDefinition(res);
+        });
+  }
+
   _getDossierInstanceDefinition(fullPath, authToken, projectId, body) {
     return moduleProxy.request
         .get(fullPath)
@@ -161,6 +173,18 @@ class MstrObjectRestService {
       const authToken = storeState.sessionReducer.authToken;
       const fullPath = this._getFullPath(dossierData, envUrl, limit, isReport, objectId);
       return await this._createInstance(fullPath, authToken, projectId, body);
+    } catch (error) {
+      throw error instanceof OutsideOfRangeError ? error : errorService.errorRestFactory(error);
+    }
+  }
+
+  modifyInstance(objectId, projectId, isReport = true, dossierData, body = {}, instanceId, limit = 1) {
+    try {
+      const storeState = reduxStore.getState();
+      const envUrl = storeState.sessionReducer.envUrl;
+      const authToken = storeState.sessionReducer.authToken;
+      const fullPath = this._getFullPath(dossierData, envUrl, limit, isReport, objectId, instanceId);
+      return this._putInstance(fullPath, authToken, projectId, body);
     } catch (error) {
       throw error instanceof OutsideOfRangeError ? error : errorService.errorRestFactory(error);
     }
@@ -313,9 +337,11 @@ class MstrObjectRestService {
             return res.status;
           })
           .catch((err) => {
+            console.error(err);
             throw errorService.errorRestFactory(err);
           });
     } catch (error) {
+      console.error(error);
       throw errorService.errorRestFactory(error);
     }
   }
@@ -378,7 +404,6 @@ async function* fetchContentGenerator(instanceDefinition, objectId, projectId, i
       yield officeConverterService.getRows(response.body, mstrTable.headers);
     }
   } catch (error) {
-    console.log(error);
     throw errorService.errorRestFactory(error);
   }
 }

@@ -60,7 +60,6 @@ class PopupController {
             // Event received on dialog close
                 Office.EventType.DialogEventReceived, (event) => {
                   reduxStore.dispatch({type: officeProperties.actions.popupHidden});
-                  console.log(event);
                 });
 
             reduxStore.dispatch({type: officeProperties.actions.popupShown});
@@ -94,7 +93,10 @@ class PopupController {
             await this.handleUpdateCommand(response);
           } else {
             await officeStoreService.preserveReportValue(reportParams.bindId, 'body', response.body);
-            console.log(reportParams);
+            if (response.promptsAnswers) {
+              // Include new promptsAnswers in case of Re-prompt workflow
+              reportParams.promptsAnswers = response.promptsAnswers;
+            }
             await refreshReportsArray([reportParams], false)(reduxStore.dispatch);
           }
           break;
@@ -116,13 +118,16 @@ class PopupController {
     }
   }
 
-  handleUpdateCommand = async ({dossierData, reportId, projectId, reportSubtype, body, reportName}) => {
+  handleUpdateCommand = async ({dossierData, reportId, projectId, reportSubtype, body, reportName, promptsAnswers, isPrompted, instanceId}) => {
     if (reportId && projectId && reportSubtype && body && reportName) {
       reduxStore.dispatch({type: START_REPORT_LOADING, data: {name: reportName}});
       const options = {
+        isPrompted,
+        promptsAnswers,
         dossierData,
         objectId: reportId,
         projectId,
+        instanceId,
         isReport: objectTypes.getTypeDescription(3, reportSubtype) === 'Report',
         body,
       };
