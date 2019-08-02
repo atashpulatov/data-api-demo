@@ -34,8 +34,10 @@ export class AttributeSelectorWindow extends Component {
   };
 
   onTriggerUpdate = (reportId, projectId, reportSubtype, body, reportName = this.props.mstrData.reportName) => {
+    console.log({props: this.props});
+    const {mstrData} = this.props;
     attributeSelectorHelpers.officeMessageParent(selectorProperties.commandOnUpdate,
-        reportId, projectId, reportSubtype, body, reportName);
+        reportId, projectId, reportSubtype, body, reportName, mstrData.instanceId, mstrData.promptsAnswers);
   };
 
   /**

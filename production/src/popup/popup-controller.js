@@ -72,7 +72,7 @@ class PopupController {
   onMessageFromPopup = async (dialog, reportParams, arg) => {
     const message = arg.message;
     const response = JSON.parse(message);
-    console.log({response});
+    console.log({response, reportParams});
     
     try {
       await this.closeDialog(dialog);
@@ -116,13 +116,16 @@ class PopupController {
     }
   }
 
-  handleUpdateCommand = async ({dossierData, reportId, projectId, reportSubtype, body, reportName}) => {
+  handleUpdateCommand = async ({dossierData, reportId, projectId, reportSubtype, body, reportName, promptsAnswers, isPrompted, instanceId}) => {
     if (reportId && projectId && reportSubtype && body && reportName) {
       reduxStore.dispatch({type: START_REPORT_LOADING, data: {name: reportName}});
       const options = {
+        isPrompted,
+        promptsAnswers,
         dossierData,
         objectId: reportId,
         projectId,
+        instanceId,
         isReport: objectTypes.getTypeDescription(3, reportSubtype) === 'Report',
         body,
       };
