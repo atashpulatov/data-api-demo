@@ -28,7 +28,8 @@ class ErrorService {
       return error;
     }
 
-    switch (error.status || error.response.status) {
+    const status = error.status || (error.response ? error.response.status : 0);
+    switch (status) {
       case 404:
         return new EnvironmentNotFoundError(error);
       case 400:

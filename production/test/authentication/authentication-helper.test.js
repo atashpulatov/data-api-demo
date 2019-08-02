@@ -94,7 +94,7 @@ describe('loginUser', () => {
     // then
     expect(authenticateMock).toBeCalled();
     expect(errorService.handlePreAuthError).toBeCalled();
-    expect(errorService.handlePreAuthError).toBeCalledWith(testError);
+    expect(errorService.handlePreAuthError).toBeCalledWith(testError, true);
     expect(sessionHelper.disableLoading).toBeCalled();
   });
   it('should call getSession on validating token', async () => {
