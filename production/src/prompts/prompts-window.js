@@ -8,6 +8,7 @@ import {PromptWindowButtons} from './prompts-window-buttons';
 import {actions} from '../navigation/navigation-tree-actions';
 import {connect} from 'react-redux';
 import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';
+import {selectorProperties} from '../attribute-selector/selector-properties';
 
 export class _PromptsWindow extends Component {
   constructor(props) {
@@ -149,7 +150,12 @@ export class _PromptsWindow extends Component {
       runButton && runButton.click();
     }
   }
-
+  closePopup = () => {
+    const cancelObject = {
+      command: selectorProperties.commandCancel,
+    };
+    Office.context.ui.messageParent(JSON.stringify(cancelObject));
+  };
   /**
    * This function applies an external css file to a document
    */
@@ -219,7 +225,10 @@ export class _PromptsWindow extends Component {
 
         <div style={{position: 'absolute', bottom: '0'}}>
           <PromptWindowButtons
-            handleRun={this.handleRun} />
+            handleRun={this.handleRun}
+            isReprompt={this.state.isReprompt}
+            closePopup={this.closePopup}
+          />
         </div>
       </div>
     );
