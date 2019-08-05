@@ -136,7 +136,7 @@
       <!-- LongStrings max characters==250. -->
       <bt:LongStrings>
         <bt:String id="MSTR.TaskpaneButton.Tooltip" DefaultValue="Click to Show a Taskpane" />
-        <bt:String id="MSTR.GetStarted.Description" DefaultValue="Click MicroStrategy for Office on Home tab to start plugin. Login to Environment to start browsing documents." />
+        <bt:String id="MSTR.GetStarted.Description" DefaultValue="Click MicroStrategy for Office on Home tab to start plugin. Log in to Environment to start browsing documents." />
       </bt:LongStrings>
     </Resources>
   </VersionOverrides>
