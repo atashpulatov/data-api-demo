@@ -279,7 +279,7 @@ class OfficeApiHelper {
    */
   getCrosstabRange = (cellAddress, headerDimensions, sheet) => {
     const {columnsY, columnsX, rowsX, rowsY} = headerDimensions;
-    const cell = sheet.getRange(cellAddress);
+    const cell = typeof cellAddress === 'string' ? sheet.getRange(cellAddress) : cellAddress;
     const bodyRange = cell.getOffsetRange(rowsY, columnsX - 1);
     const startingCell = cell.getCell(0, 0).getOffsetRange(-(columnsY - 1), -rowsX);
     return startingCell.getBoundingRect(bodyRange);

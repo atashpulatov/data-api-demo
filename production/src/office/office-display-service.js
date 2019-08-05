@@ -68,7 +68,7 @@ class OfficeDisplayService {
         instanceDefinition = await this._answerPrompts(instanceDefinition, objectId, projectId, promptsAnswers, isReport, dossierData, body);
       }
       const {mstrTable} = instanceDefinition;
-      const {isCrosstab} = mstrTable;
+      isCrosstab = mstrTable.isCrosstab;
 
       if (isCrosstab) {
         crosstabHeaderDimensions = this._getCrosstabHeaderDimensions(instanceDefinition);
@@ -117,7 +117,7 @@ class OfficeDisplayService {
         let crosstabRange;
         if (isCrosstab) {
           const sheet = officeTable.worksheet;
-          crosstabRange = officeApiHelper.getCrosstabRange(startCell, crosstabHeaderDimensions, sheet);
+          crosstabRange = officeApiHelper.getCrosstabRange(officeTable.getRange().getCell(0, 0), crosstabHeaderDimensions, sheet);
         }
         officeTable.delete();
         isCrosstab && await crosstabRange.clear();
