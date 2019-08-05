@@ -50,7 +50,8 @@ export const _SettingsMenu = ({userFullName, userInitials, isSecured, reportArra
       <li tabIndex='0' className={`no-trigger-close clear-data ${!isSecuredActive ? 'clear-data-inactive' : ''}`} onClick={isSecuredActive ? () => toggleIsConfirmFlag(true) : null}>
         <span className='no-trigger-close'>{t('Clear Data')} </span>
       </li>
-      <li>
+      <div class="separate-line"></div>
+      <li className="privacy-policy">
         <a
           tabIndex="0"
           href='https://www.microstrategy.com/legal-folder/privacy-policy'
