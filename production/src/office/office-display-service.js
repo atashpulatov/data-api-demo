@@ -92,7 +92,7 @@ class OfficeDisplayService {
       console.time('Fetch and insert into excel');
       const connectionData = {objectId, projectId, dossierData, isReport, body};
       const officeData = {officeTable, excelContext, startCell, newOfficeTableId};
-      ({officeTable, subtotalsAddresses} = await this._fetchInsertDataIntoExcel({connectionData, officeData, instanceDefinition, isRefresh, startCell}));
+      ({officeTable, subtotalsAddresses} = await this._fetchInsertDataIntoExcel({connectionData, officeData, instanceDefinition, isRefresh, startCell, crosstabHeaderDimensions}));
 
       if (subtotalsAddresses.length) {
         // Removing duplicated subtotal addresses from headers
