@@ -16,8 +16,6 @@ export const _PopupViewSelector = (props) => {
   const {propsToPass, methods, importRequested, editedReport} = props;
   const localEditReport = Object.assign({}, editedReport);
 
-  debugger;
-
   if ((importRequested && !props.isPrompted)
     || (importRequested && !!props.dossierData && !!props.dossierData.instanceId)) {
     proceedToImport(props);
