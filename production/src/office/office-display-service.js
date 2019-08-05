@@ -95,6 +95,7 @@ class OfficeDisplayService {
       ({officeTable, subtotalsAddresses} = await this._fetchInsertDataIntoExcel({connectionData, officeData, instanceDefinition, isRefresh, startCell}));
 
       if (subtotalsAddresses.length) {
+        subtotalsAddresses = isCrosstab && subtotalsAddresses.filter((v, i, a) => a.findIndex((t) => (t.attributeIndex === v.attributeIndex && t.colIndex === v.colIndex && t.axis === v.axis)) === i); // removing duplicated subtotal addresses from headers
         const reportstartCell = officeTable.getRange().getCell(0, 0);
         officeApiHelper.formatSubtotals(reportstartCell, subtotalsAddresses, mstrTable, excelContext);
       }
@@ -439,7 +440,7 @@ class OfficeDisplayService {
           contextPromises.push(excelContext.sync());
           console.timeEnd('Append crosstab rows');
         }
-        subtotalsAddresses = subtotalAddress.flat(Infinity).filter(Boolean);
+        subtotalsAddresses = subtotalsAddresses.concat(subtotalAddress.flat(Infinity).filter(Boolean));
         rowIndex += row.length;
         const promiseLength = contextPromises.length;
         if (promiseLength % PROMISE_LIMIT === 0) {
