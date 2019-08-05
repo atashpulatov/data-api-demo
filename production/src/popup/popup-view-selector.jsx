@@ -8,21 +8,29 @@ import {LoadingPage} from '../loading/loading-page';
 import {selectorProperties} from '../attribute-selector/selector-properties';
 import {PromptsWindow} from '../prompts/prompts-window';
 import {RefreshAllPage} from '../loading/refresh-all-page';
+import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';
+import {preparePromptedReport} from './popup-actions';
 
 export const _PopupViewSelector = (props) => {
   let popupType = props.popupType;
   const {propsToPass, methods, importRequested, editedReport} = props;
-  if (importRequested) {
-    if (!props.isPrompted) {
-      proceedToImport(props);
-    } else if (!!props.dossierData && !!props.dossierData.instanceId) {
-      proceedToImport(props);
+
+  if ((importRequested && !props.isPrompted)
+    || (importRequested && !!props.dossierData && !!props.dossierData.instanceId)) {
+    proceedToImport(props);
+  } else if (!!props.isPrompted && !!props.dossierData && !!props.dossierData.instanceId) {
+    if (!!editedReport.instanceId && props.preparedInstance === editedReport.instanceId) {
+      popupType = PopupTypeEnum.editFilters;
     } else {
-      popupType = PopupTypeEnum.promptsWindow;
-      propsToPass.projectId = props.chosenProjectId;
-      propsToPass.reportId = props.chosenObjectId;
+      obtainInstanceWithPromptsAnswers(propsToPass, props);
+      return <div />;
     }
+  } else if (!!props.isPrompted && (importRequested || popupType === PopupTypeEnum.dataPreparation)) {
+    popupType = PopupTypeEnum.promptsWindow;
+    propsToPass.projectId = props.chosenProjectId;
+    propsToPass.reportId = props.chosenObjectId;
   }
+
   if (!props.authToken || !propsToPass) {
     console.log('Waiting for token to be passed');
     return null;
@@ -30,6 +38,27 @@ export const _PopupViewSelector = (props) => {
   propsToPass.token = props.authToken;
   return renderProperComponent(popupType, methods, propsToPass, editedReport);
 };
+
+async function obtainInstanceWithPromptsAnswers(propsToPass, props) {
+  const projectId = propsToPass.projectId || props.editedReport.projectId;
+  const reportId = propsToPass.reportId || props.editedReport.reportId;
+  let instanceDefinition = await mstrObjectRestService.createInstance(reportId, projectId, true, null, null);
+  let count = 0;
+  while (instanceDefinition.status === 2) {
+    await mstrObjectRestService.answerPrompts(reportId, projectId, instanceDefinition.instanceId, props.promptsAnswers[count]);
+    instanceDefinition = await mstrObjectRestService.getInstance(reportId, projectId, true, null, null, instanceDefinition.instanceId);
+    count++;
+  }
+  const preparedReport = {
+    id: reportId,
+    projectId: projectId,
+    name: propsToPass.reportName,
+    objectType: 'report',
+    instanceId: instanceDefinition.instanceId,
+    promptsAnswers: props.promptsAnswers,
+  };
+  props.preparePromptedReport(instanceDefinition.instanceId, preparedReport);
+}
 
 function renderProperComponent(popupType, methods, propsToPass, editedReport) {
   if (popupType === PopupTypeEnum.dataPreparation) {
@@ -53,6 +82,14 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
   }
   if (popupType === PopupTypeEnum.promptsWindow) {
     return <PromptsWindow mstrData={propsToPass} />;
+  }
+  if (popupType === PopupTypeEnum.repromptingWindow) {
+    const mstrData = {
+      ...propsToPass,
+      ...editedReport,
+      isReprompt: true,
+    };
+    return <PromptsWindow mstrData={mstrData} />; // use the same window as with prompting, but provide report info
   }
   // TODO: do some error handling here
   return null;
@@ -84,10 +121,16 @@ export function mapStateToProps(state) {
     ...state.navigationTree,
     authToken: state.sessionReducer.authToken,
     editedReport: parsePopupState(popupState),
+    preparedInstance: state.popupReducer.preparedInstance,
   };
 };
 
-export const PopupViewSelector = connect(mapStateToProps, actions)(_PopupViewSelector);
+const popupActions = {
+  ...actions,
+  preparePromptedReport,
+};
+
+export const PopupViewSelector = connect(mapStateToProps, popupActions)(_PopupViewSelector);
 
 function parsePopupState(popupState) {
   if (!popupState) {

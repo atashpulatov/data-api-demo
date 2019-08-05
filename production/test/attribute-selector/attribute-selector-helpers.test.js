@@ -20,6 +20,6 @@ describe('AttributeSelectorHelpers', () => {
 
     // then
     expect(getOfficeSpy).toHaveBeenCalled();
-    expect(messageParentMock).toHaveBeenCalledWith(JSON.stringify({command: 'simple_command'}));
+    expect(messageParentMock).toHaveBeenCalledWith(JSON.stringify({command: 'simple_command', isPrompted: false}));
   });
 });

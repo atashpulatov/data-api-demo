@@ -143,6 +143,32 @@ describe('PopupViewSelector', () => {
     expect(selectorWrapped.find(PromptsWindow).get(0)).toBeTruthy();
   });
 
+  it('should navigate to prompts window when data preparation for prompted called', () => {
+    // given
+    const location = {
+      search: {},
+    };
+    const propsToPass = {
+      chosenObjectId: 'objectId',
+      chosenProjectId: 'projectId',
+      authToken: 'token',
+      startImport: jest.fn(),
+      startLoading: jest.fn(),
+      isPrompted: true,
+    };
+    // when
+    // eslint-disable-next-line react/jsx-pascal-case
+    const selectorWrapped = shallow(<_PopupViewSelector
+      location={location}
+      {...propsToPass}
+      propsToPass={propsToPass}
+      methods={{}}
+      popupType={PopupTypeEnum.dataPreparation}
+    />);
+    // then
+    expect(selectorWrapped.find(PromptsWindow).get(0)).toBeTruthy();
+  });
+
   it('should handle request import when prompted and got dossierData', () => {
     // given
     const location = {
@@ -181,6 +207,54 @@ describe('PopupViewSelector', () => {
     expect(propsToPass.startLoading).toHaveBeenCalled();
     expect(propsToPass.startImport).toHaveBeenCalled();
     expect(mockMessageParent).toHaveBeenCalledWith(JSON.stringify(resultAction));
+  });
+
+  it.skip('should handle prepare data when prompted and got dossierData', () => {
+    // given
+    const location = {
+      search: {},
+    };
+    const props = {
+      popupType: PopupTypeEnum.dataPreparation,
+      authToken: 'token',
+      propsToPass: {
+        envUrl: 'envUrl',
+        reportId: 'objectId',
+        projectId: 'projectId',
+        reportName: 'reportName',
+        reportType: 'reportType',
+        reportSubtype: 'reportSubtype',
+      },
+      startImport: jest.fn(),
+      startLoading: jest.fn(),
+      isPrompted: true,
+      dossierData: {
+        instanceId: 'instanceId',
+        whatever: 'whatever',
+      },
+    };
+    // when
+    // eslint-disable-next-line react/jsx-pascal-case
+    const selectorWrapped = shallow(<_PopupViewSelector
+      location={location}
+      {...props}
+      methods={{}}
+    />);
+    // then
+    const attributeSelectorWrapped = selectorWrapped.find(AttributeSelectorWindow);
+    expect(attributeSelectorWrapped.get(0)).toBeDefined();
+    const mstrDataProp = attributeSelectorWrapped.at(0).prop('mstrData');
+    expect(mstrDataProp.reportName).toBeDefined();
+    expect(mstrDataProp.reportType).toBeDefined();
+    expect(mstrDataProp.projectId).toBeDefined();
+    expect(mstrDataProp.instanceId).toBeDefined();
+
+    expect(mstrDataProp)
+        .toEqual({
+          ...props.propsToPass,
+          ...props.editedReport,
+          token: props.authToken,
+        });
   });
 
   it('should pass authToken', () => {
@@ -370,6 +444,23 @@ describe('PopupViewSelector', () => {
       expect(editedReport.selectedAttributes).toEqual([attributeId]);
       expect(editedReport.selectedMetrics).toEqual([metricId]);
       expect(editedReport.selectedFilters).toEqual(filterValue);
+    });
+
+    it('should parse prepared instance id', () => {
+      // given
+      const reduxState = {
+        navigationTree: {},
+        sessionReducer: {
+          authToken: 'token',
+        },
+        popupReducer: {
+          preparedInstance: 'preparedInstance',
+        },
+      };
+      // when
+      const {preparedInstance} = mapStateToProps(reduxState);
+      // then
+      expect(preparedInstance).toEqual(reduxState.popupReducer.preparedInstance);
     });
   });
 });

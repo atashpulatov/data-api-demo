@@ -110,12 +110,23 @@ describe('NavigationTree Actions', () => {
   it('should dispatch proper requestImport action', () => {
     // given
     const listener = jest.fn();
+
+    // when
+    actions.requestImport()(listener);
+
+    // then
+    expect(listener).toHaveBeenCalledWith({type: actions.REQUEST_IMPORT});
+  });
+
+  it('should dispatch proper promptsAnswered action', () => {
+    // given
+    const listener = jest.fn();
     const data = 'whatever';
 
     // when
-    actions.requestImport(data)(listener);
+    actions.promptsAnswered(data)(listener);
 
     // then
-    expect(listener).toHaveBeenCalledWith({type: actions.REQUEST_IMPORT, data});
+    expect(listener).toHaveBeenCalledWith({type: actions.PROMPTS_ANSWERED, data});
   });
 });

@@ -23,6 +23,10 @@ class PopupController {
     await this.runPopup(PopupTypeEnum.editFilters, 80, 80, reportParams);
   };
 
+  runRepromptPopup = async (reportParams) => {
+    await this.runPopup(PopupTypeEnum.repromptingWindow, 80, 80, reportParams);
+  };
+
   runPopup = async (popupType, height, width, reportParams = null) => {
     const session = sessionHelper.getSession();
     try {
@@ -56,7 +60,6 @@ class PopupController {
             // Event received on dialog close
                 Office.EventType.DialogEventReceived, (event) => {
                   reduxStore.dispatch({type: officeProperties.actions.popupHidden});
-                  console.log(event);
                 });
 
             reduxStore.dispatch({type: officeProperties.actions.popupShown});
@@ -78,6 +81,10 @@ class PopupController {
             await this.handleOkCommand(response, reportParams);
           } else {
             await officeStoreService.preserveReportValue(reportParams.bindId, 'body', response.body);
+            if (response.promptsAnswers) {
+              // Include new promptsAnswers in case of Re-prompt workflow
+              reportParams.promptsAnswers = response.promptsAnswers;
+            }
             await refreshReportsArray([reportParams], false)(reduxStore.dispatch);
           }
           break;
@@ -86,7 +93,10 @@ class PopupController {
             await this.handleUpdateCommand(response);
           } else {
             await officeStoreService.preserveReportValue(reportParams.bindId, 'body', response.body);
-            console.log(reportParams);
+            if (response.promptsAnswers) {
+              // Include new promptsAnswers in case of Re-prompt workflow
+              reportParams.promptsAnswers = response.promptsAnswers;
+            }
             await refreshReportsArray([reportParams], false)(reduxStore.dispatch);
           }
           break;
@@ -108,13 +118,16 @@ class PopupController {
     }
   }
 
-  handleUpdateCommand = async ({dossierData, reportId, projectId, reportSubtype, body, reportName}) => {
+  handleUpdateCommand = async ({dossierData, reportId, projectId, reportSubtype, body, reportName, promptsAnswers, isPrompted, instanceId}) => {
     if (reportId && projectId && reportSubtype && body && reportName) {
       reduxStore.dispatch({type: START_REPORT_LOADING, data: {name: reportName}});
       const options = {
+        isPrompted,
+        promptsAnswers,
         dossierData,
         objectId: reportId,
         projectId,
+        instanceId,
         isReport: objectTypes.getTypeDescription(3, reportSubtype) === 'Report',
         body,
       };

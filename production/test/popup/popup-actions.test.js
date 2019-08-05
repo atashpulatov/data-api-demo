@@ -2,7 +2,6 @@ import * as actions from '../../src/popup/popup-actions';
 import {popupHelper} from '../../src/popup/popup-helper';
 import {officeApiHelper} from '../../src/office/office-api-helper';
 import {authenticationHelper} from '../../src/authentication/authentication-helper';
-import {reduxStore} from '../../src/store';
 import {UnauthorizedError} from '../../src/error/unauthorized-error';
 import {officeProperties} from '../../src/office/office-properties';
 import {officeStoreService} from '../../src/office/store/office-store-service';
@@ -29,12 +28,18 @@ describe('Popup actions', () => {
       const reportArray = [{
         bindId: 'testBinding1',
         objectType: 'report',
-        name: 'testNamne1',
+        name: 'testName1',
       },
       {
         bindId: 'testBinding2',
         objectType: 'report',
-        name: 'testNamne2',
+        name: 'testName2',
+      },
+      {
+        bindId: 'testBinding3',
+        objectType: 'report',
+        name: 'testName3',
+        promptsAnswers: 'testPromptAnswers3',
       }];
       const isRefreshAll = true;
       // when
@@ -44,10 +49,11 @@ describe('Popup actions', () => {
       expect(authenticationHelper.validateAuthToken).toHaveBeenCalled();
       expect(popupHelper.storagePrepareRefreshAllData).toHaveBeenCalledWith(reportArray);
       expect(popupHelper.runRefreshAllPopup).toHaveBeenCalledWith(reportArray);
-      expect(popupHelper.printRefreshedReport).toHaveBeenCalledTimes(2);
-      expect(popupHelper.printRefreshedReport).toHaveBeenCalledWith(reportArray[0].bindId, reportArray[0].objectType, reportArray.length, 0, true);
-      expect(popupHelper.printRefreshedReport).toHaveBeenCalledWith(reportArray[1].bindId, reportArray[1].objectType, reportArray.length, 1, true);
-      expect(listener).toHaveBeenCalledTimes(4);
+      expect(popupHelper.printRefreshedReport).toHaveBeenCalledTimes(3);
+      expect(popupHelper.printRefreshedReport).toHaveBeenCalledWith(reportArray[0].bindId, reportArray[0].objectType, reportArray.length, 0, true, reportArray[0].promptsAnswers);
+      expect(popupHelper.printRefreshedReport).toHaveBeenCalledWith(reportArray[1].bindId, reportArray[1].objectType, reportArray.length, 1, true, reportArray[1].promptsAnswers);
+      expect(popupHelper.printRefreshedReport).toHaveBeenCalledWith(reportArray[2].bindId, reportArray[2].objectType, reportArray.length, 2, true, reportArray[2].promptsAnswers);
+      expect(listener).toHaveBeenCalledTimes(6);
       expect(listener).toHaveBeenCalledWith({
         type: officeProperties.actions.startLoadingReport,
         reportBindId: reportArray[0].bindId,
@@ -56,6 +62,11 @@ describe('Popup actions', () => {
       expect(listener).toHaveBeenCalledWith({
         type: officeProperties.actions.startLoadingReport,
         reportBindId: reportArray[1].bindId,
+        isRefreshAll: isRefreshAll,
+      });
+      expect(listener).toHaveBeenCalledWith({
+        type: officeProperties.actions.startLoadingReport,
+        reportBindId: reportArray[2].bindId,
         isRefreshAll: isRefreshAll,
       });
     });
@@ -134,5 +145,16 @@ describe('Popup actions', () => {
     expect(officeStoreService.getReportFromProperties).toBeCalledWith(bindingId);
     expect(listener).toHaveBeenCalledWith({type: actions.SET_REPORT_N_FILTERS, editedReport: returnedValue});
     expect(popupController.runEditFiltersPopup).toBeCalledWith(report);
+  });
+
+  it('should set proper popupType when switch to edit requested', () => {
+    // given
+    const reportInstance = 'instanceId';
+    const reportData = 'reportData';
+    const listener = jest.fn();
+    // when
+    actions.preparePromptedReport(reportInstance, reportData)(listener);
+    // then
+    expect(listener).toHaveBeenCalledWith({type: actions.SET_PREPARED_REPORT, instanceId: reportInstance, reportData});
   });
 });

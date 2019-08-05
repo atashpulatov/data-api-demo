@@ -78,6 +78,8 @@ describe('AttributeSelectorWindow', () => {
       reportId: 'repId',
       reportName: '55',
       reportType: 'report',
+      instanceId: 'instanceId',
+      promptsAnswers: 'promptsAnswers',
     };
 
     const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
@@ -87,7 +89,7 @@ describe('AttributeSelectorWindow', () => {
     componentWrapper.instance().onTriggerUpdate(1, 2, 3, 4);
 
     // then
-    expect(spyMethod).toHaveBeenCalledWith(selectorProperties.commandOnUpdate, 1, 2, 3, 4, mstrData.reportName);
+    expect(spyMethod).toHaveBeenCalledWith(selectorProperties.commandOnUpdate, 1, 2, 3, 4, mstrData.reportName, mstrData.instanceId, mstrData.promptsAnswers);
   });
 
   it('should call attributeSelectorHelpers.officeMessageParent if onTriggerUpdate is called with report name', () => {
@@ -99,6 +101,8 @@ describe('AttributeSelectorWindow', () => {
       reportId: 'repId',
       reportName: '55',
       reportType: 'report',
+      instanceId: 'instanceId',
+      promptsAnswers: 'promptsAnswers',
     };
 
     const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
@@ -108,7 +112,7 @@ describe('AttributeSelectorWindow', () => {
     componentWrapper.instance().onTriggerUpdate(1, 2, 3, 4, 5);
 
     // then
-    expect(spyMethod).toHaveBeenCalledWith(selectorProperties.commandOnUpdate, 1, 2, 3, 4, 5);
+    expect(spyMethod).toHaveBeenCalledWith(selectorProperties.commandOnUpdate, 1, 2, 3, 4, 5, mstrData.instanceId, mstrData.promptsAnswers);
   });
 
   it('should trigger handleCancel when Cancel was clicked', () => {

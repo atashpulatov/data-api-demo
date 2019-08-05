@@ -230,6 +230,6 @@ describe('office loaded file', () => {
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile fileName='test' />);
     // then
-    expect(wrappedComponent.find(Popover)).toHaveLength(5);
+    expect(wrappedComponent.find(Popover)).toHaveLength(6);
   });
 });
