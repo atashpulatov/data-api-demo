@@ -497,13 +497,18 @@ class OfficeDisplayService {
   }
 
   async _answerPrompts(instanceDefinition, objectId, projectId, promptsAnswers, isReport, dossierData, body) {
-    let count = 0;
-    while (instanceDefinition.status === 2) {
-      await mstrObjectRestService.answerPrompts(objectId, projectId, instanceDefinition.instanceId, promptsAnswers[count]);
-      instanceDefinition = await mstrObjectRestService.getInstance(objectId, projectId, isReport, dossierData, body, instanceDefinition.instanceId);
-      count++;
+    try {
+      let count = 0;
+      while (instanceDefinition.status === 2) {
+        await mstrObjectRestService.answerPrompts(objectId, projectId, instanceDefinition.instanceId, promptsAnswers[count]);
+        instanceDefinition = await mstrObjectRestService.modifyInstance(objectId, projectId, isReport, dossierData, body, instanceDefinition.instanceId);
+        count++;
+      }
+      return instanceDefinition;
+    } catch (error) {
+      console.error(error);
+      throw error;
     }
-    return instanceDefinition;
   }
 }
 

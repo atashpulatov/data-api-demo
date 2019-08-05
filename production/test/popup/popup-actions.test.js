@@ -146,4 +146,15 @@ describe('Popup actions', () => {
     expect(listener).toHaveBeenCalledWith({type: actions.SET_REPORT_N_FILTERS, editedReport: returnedValue});
     expect(popupController.runEditFiltersPopup).toBeCalledWith(report);
   });
+
+  it('should set proper popupType when switch to edit requested', () => {
+    // given
+    const reportInstance = 'instanceId';
+    const reportData = 'reportData';
+    const listener = jest.fn();
+    // when
+    actions.preparePromptedReport(reportInstance, reportData)(listener);
+    // then
+    expect(listener).toHaveBeenCalledWith({type: actions.SET_PREPARED_REPORT, instanceId: reportInstance, reportData});
+  });
 });
