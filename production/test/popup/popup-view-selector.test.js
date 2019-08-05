@@ -257,6 +257,47 @@ describe('PopupViewSelector', () => {
         });
   });
 
+  it('should clear attributes and metrics if going to edit filters from prompts window', () => {
+    // given
+    const instanceId = 'instanceId';
+    const location = {
+      search: {},
+    };
+    const props = {
+      popupType: 'whatever',
+      authToken: 'token',
+      propsToPass: {
+        prop: 'prop',
+      },
+      preparedInstance: instanceId,
+      isPrompted: true,
+      editedReport: {
+        instanceId: instanceId,
+        selectedAttributes: 'notEmptyThing',
+        selectedMetrics: 'notEmptyThing',
+        selectedFilters: 'notEmptyThing',
+      },
+      dossierData: {
+        instanceId: 'instanceId',
+        whatever: 'whatever',
+      },
+    };
+    // when
+    // eslint-disable-next-line react/jsx-pascal-case
+    const selectorWrapped = shallow(<_PopupViewSelector
+      location={location}
+      {...props}
+      methods={{}}
+    />);
+    // then
+    const attributeSelectorWrapped = selectorWrapped.find(AttributeSelectorWindow);
+    expect(attributeSelectorWrapped.get(0)).toBeDefined();
+    const mstrDataProp = attributeSelectorWrapped.at(0).prop('mstrData');
+    expect(mstrDataProp.selectedAttributes).not.toBeDefined();
+    expect(mstrDataProp.selectedMetrics).not.toBeDefined();
+    expect(mstrDataProp.selectedFilters).not.toBeDefined();
+  });
+
   it('should pass authToken', () => {
     // given
     const location = {
