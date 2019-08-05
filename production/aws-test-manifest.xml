@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" 
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-  xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0" 
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
   xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="TaskPaneApp">
 
   <!-- Begin Basic Settings: Add-in metadata, used for all versions of Office unless override provided. -->
@@ -136,7 +136,7 @@
       <!-- LongStrings max characters==250. -->
       <bt:LongStrings>
         <bt:String id="MSTR.TaskpaneButton.Tooltip" DefaultValue="Click to Show a Taskpane" />
-        <bt:String id="MSTR.GetStarted.Description" DefaultValue="Click MicroStrategy for Office on Home tab to start plugin. Login to Environment to start browsing documents." />
+        <bt:String id="MSTR.GetStarted.Description" DefaultValue="Click MicroStrategy for Office on Home tab to start plugin. Log in to Environment to start browsing documents." />
       </bt:LongStrings>
     </Resources>
   </VersionOverrides>
