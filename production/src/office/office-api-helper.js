@@ -143,9 +143,9 @@ class OfficeApiHelper {
   }
 
   formatTable = (table, isCrosstab, crosstabHeaderDimensions) => {
-    const {rowsX} = crosstabHeaderDimensions;
     if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
       if (isCrosstab) {
+        const {rowsX} = crosstabHeaderDimensions;
         table.getRange().format.autofitColumns();
         table.getRange().getColumnsBefore(rowsX).format.autofitColumns();
       } else {
