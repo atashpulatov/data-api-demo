@@ -96,7 +96,7 @@ class OfficeDisplayService {
 
       if (subtotalsAddresses.length) {
         // Removing duplicated subtotal addresses from headers
-        subtotalsAddresses = isCrosstab && subtotalsAddresses.filter((v, i, a) => a.findIndex((t) => (t.attributeIndex === v.attributeIndex && t.colIndex === v.colIndex && t.axis === v.axis)) === i);
+        if (isCrosstab) subtotalsAddresses = new Set(subtotalsAddresses);
         const reportstartCell = officeTable.getRange().getCell(0, 0);
         await officeApiHelper.formatSubtotals(reportstartCell, subtotalsAddresses, mstrTable, excelContext);
       }

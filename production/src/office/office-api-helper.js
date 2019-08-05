@@ -157,11 +157,22 @@ class OfficeApiHelper {
   }
 
   formatNumbers = (table, reportConvertedData, isCrosstab) => {
+    const {columnInformation} = reportConvertedData;
+    let filteredColumnInformation;
     if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
       try {
         const columns = table.columns;
-        for (const object of reportConvertedData.columnInformation) {
-          const columnRange = columns.getItemAt(object.index).getDataBodyRange();
+        if (isCrosstab) {
+          filteredColumnInformation = columnInformation.filter((e) => {// we store attribute informations in column information in crosstab attributes are in headers not excel table so we dont need them here.
+            if (e.isAttribute === false) return e;
+          });
+        } else {
+          filteredColumnInformation = columnInformation;
+        }
+        const offset = columnInformation.length - filteredColumnInformation.length;
+        for (const object of filteredColumnInformation) {
+          let columnRange = columns.getItemAt(object.index).getDataBodyRange();
+          if (isCrosstab) columnRange = columnRange.getOffsetRange(0, -offset); // we are adding offset to left equal to number of removed attributes in column information
           let format = '';
           if (!object.isAttribute) {
             if (object.category === 9) {
