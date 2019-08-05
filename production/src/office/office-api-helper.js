@@ -142,9 +142,15 @@ class OfficeApiHelper {
     return {envUrl, username};
   }
 
-  formatTable = (table) => {
+  formatTable = (table, isCrosstab, crosstabHeaderDimensions) => {
+    const {rowsX} = crosstabHeaderDimensions;
     if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
-      table.getRange().format.autofitColumns();
+      if (isCrosstab) {
+        table.getRange().format.autofitColumns();
+        table.getRange().getColumnsBefore(rowsX).format.autofitColumns();
+      } else {
+        table.getRange().format.autofitColumns();
+      }
     } else {
       notificationService.displayNotification('warning', `Unable to format table.`);
     }

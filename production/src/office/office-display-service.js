@@ -95,9 +95,10 @@ class OfficeDisplayService {
       ({officeTable, subtotalsAddresses} = await this._fetchInsertDataIntoExcel({connectionData, officeData, instanceDefinition, isRefresh, startCell}));
 
       if (subtotalsAddresses.length) {
-        subtotalsAddresses = isCrosstab && subtotalsAddresses.filter((v, i, a) => a.findIndex((t) => (t.attributeIndex === v.attributeIndex && t.colIndex === v.colIndex && t.axis === v.axis)) === i); // removing duplicated subtotal addresses from headers
+        // Removing duplicated subtotal addresses from headers
+        subtotalsAddresses = isCrosstab && subtotalsAddresses.filter((v, i, a) => a.findIndex((t) => (t.attributeIndex === v.attributeIndex && t.colIndex === v.colIndex && t.axis === v.axis)) === i);
         const reportstartCell = officeTable.getRange().getCell(0, 0);
-        officeApiHelper.formatSubtotals(reportstartCell, subtotalsAddresses, mstrTable, excelContext);
+        await officeApiHelper.formatSubtotals(reportstartCell, subtotalsAddresses, mstrTable, excelContext);
       }
 
       // Save to store
@@ -415,7 +416,7 @@ class OfficeDisplayService {
     return {officeTable, newOfficeTableId, shouldFormat};
   }
 
-  async _fetchInsertDataIntoExcel({connectionData, officeData, instanceDefinition, isRefresh}) {
+  async _fetchInsertDataIntoExcel({connectionData, officeData, instanceDefinition, isRefresh, crosstabHeaderDimensions}) {
     try {
       const {objectId, projectId, dossierData, isReport, body} = connectionData;
       const {excelContext, officeTable} = officeData;
@@ -456,7 +457,7 @@ class OfficeDisplayService {
       console.time('Context sync');
       await Promise.all(contextPromises);
       console.timeEnd('Context sync');
-      officeApiHelper.formatTable(officeTable);
+      officeApiHelper.formatTable(officeTable, mstrTable.isCrosstab, crosstabHeaderDimensions);
       await excelContext.sync();
       return {officeTable, subtotalsAddresses};
     } catch (error) {
