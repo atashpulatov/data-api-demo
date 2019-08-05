@@ -21,13 +21,13 @@ class NormalizedJsonHandler {
    */
   lookupElement = ({definition, axis, attributeIndex, elementIndex, rowIndex = -1, colIndex = -1}) => {
     const {crossTab} = definition.grid;
-    let subtotalAddress;
+    let subtotalAddress = false;
     const rawElement = definition.grid[axis][attributeIndex].elements[elementIndex];
     const {name, formValues, subtotal} = rawElement;
     if (crossTab) {
-      subtotalAddress = subtotal && {attributeIndex, colIndex, axis};
+      if (subtotal) subtotalAddress = {attributeIndex, colIndex, axis};
     } else {
-      subtotalAddress = subtotal && {attributeIndex, rowIndex};
+      if (subtotal) subtotalAddress = {attributeIndex, rowIndex};
     }
     return {
       ...rawElement, value: formValues || [name], subtotalAddress,

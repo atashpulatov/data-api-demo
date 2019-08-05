@@ -1,11 +1,11 @@
 import jsonHandler from '../../src/mstr-object/mstr-normalized-json-handler';
-import response from '../../src/mstr-object/rest-api-v2.json';
+import {reportV2} from '../mockDataV2';
 
 
 describe('Normalized JSON Handler', () => {
   it('should lookup for column elements by index', () => {
     // given
-    const {definition} = response;
+    const {definition} = reportV2;
     const axis = 'columns';
     const attributeIndex = 0;
     const elementIndex = 1;
@@ -13,38 +13,39 @@ describe('Normalized JSON Handler', () => {
       'id': 'h2;1D5F4A7811E97722F1050080EF65506C',
       'formValues': ['DCA', '2'],
       'value': ['DCA', '2'],
+      'subtotalAddress': false,
     };
     // when
-    const element = jsonHandler.lookupElement(definition, axis, attributeIndex, elementIndex);
+    const element = jsonHandler.lookupElement({definition, axis, attributeIndex, elementIndex});
     // then
     expect(element).toEqual(expectedElement);
   });
   it('should lookup for row elemens by index', () => {
     // given
-    const {definition} = response;
+    const {definition} = reportV2;
     const axis = 'rows';
     const attributeIndex = 0;
     const elementIndex = 1;
-    const expectedElement = {'id': 'h2010;9BC4691C11E97721AF570080EF55306C', 'formValues': ['2010'], 'value': ['2010']};
+    const expectedElement = {'id': 'h2010;9BC4691C11E97721AF570080EF55306C', 'formValues': ['2010'], 'value': ['2010'], 'subtotalAddress': false};
     // when
-    const element = jsonHandler.lookupElement(definition, axis, attributeIndex, elementIndex);
+    const element = jsonHandler.lookupElement({definition, axis, attributeIndex, elementIndex});
     // then
     expect(element).toEqual(expectedElement);
   });
   it('should map indices to elements', () => {
     // given
-    const {definition} = response;
+    const {definition} = reportV2;
     const axis = 'columns';
-    const elementIndices = [0];
-    const expectedElements = [{'formValues': ['BWI', '1'], 'id': 'h1;1D5F4A7811E97722F1050080EF65506C', 'value': ['BWI', '1']}];
+    const headerCells = [0];
+    const expectedElements = [{'formValues': ['BWI', '1'], 'id': 'h1;1D5F4A7811E97722F1050080EF65506C', 'value': ['BWI', '1'], 'subtotalAddress': false}];
     // when
-    const elements = jsonHandler.mapElementIndicesToElements(definition, axis, elementIndices);
+    const elements = jsonHandler.mapElementIndicesToElements({definition, axis, headerCells});
     // then
     expect(elements).toEqual(expectedElements);
   });
   it('should render tabular data', () => {
     // given
-    const {definition, data} = response;
+    const {definition, data} = reportV2;
     const onElement = (element) => element.value[0];
     const expectedFirstRow = ['2009', 'January', 3139, 17046.02, 4543, 2406, 20915.41, 3449];
     // when
@@ -54,7 +55,7 @@ describe('Normalized JSON Handler', () => {
   });
   it('should get element id for a given cell', () => {
     // given
-    const {definition} = response;
+    const {definition} = reportV2;
     const axis = 'columns';
     const attributeIndex = 0;
     const headerIndex = 1;
@@ -66,7 +67,7 @@ describe('Normalized JSON Handler', () => {
   });
   it('should render metric values', () => {
     // given
-    const {data} = response;
+    const {data} = reportV2;
     const expectedFirstRow = [3139, 17046.02, 4543, 2406, 20915.41, 3449];
     // when
     const rows = jsonHandler.renderRows(data);
@@ -75,7 +76,7 @@ describe('Normalized JSON Handler', () => {
   });
   it('should render column headers', () => {
     // given
-    const {definition, data} = response;
+    const {definition, data} = reportV2;
     const {headers} = data;
     const axis = 'columns';
     const expectedHeaders = [
@@ -90,7 +91,7 @@ describe('Normalized JSON Handler', () => {
   });
   it('should render row headers', () => {
     // given
-    const {definition, data} = response;
+    const {definition, data} = reportV2;
     const {headers} = data;
     const axis = 'rows';
     const expectedHeaders = [

@@ -3,6 +3,15 @@ import response from '../../src/mstr-object/rest-api-v2.json';
 
 
 describe('Office converter service v2', () => {
+  it('should return create a table', () => {
+    // given
+    const crosstabsResponse = response;
+    const expecteObjectKeys = ['tableSize', 'columnInformation', 'headers', 'id', 'isCrosstab', 'name', 'rows'];
+    // when
+    const table = officeConverter.createTable(crosstabsResponse);
+    // then
+    expect(Object.keys(table)).toEqual(expecteObjectKeys);
+  });
   it('should return isCrossTab', () => {
     // given
     const crosstabsResponse = response;
@@ -16,9 +25,18 @@ describe('Office converter service v2', () => {
     const crosstabsResponse = response;
     const expectedFirstRow = [3139, 17046.02, 4543, 2406, 20915.41, 3449];
     // when
-    const rows = officeConverter.getRows(crosstabsResponse);
+    const {row} = officeConverter.getRows(crosstabsResponse);
     // then
-    expect(rows[0]).toEqual(expectedFirstRow);
+    expect(row[0]).toEqual(expectedFirstRow);
+  });
+  it('should return isCrosstab', () => {
+    // given
+    const crosstabsResponse = response;
+    const expectedValue = true;
+    // when
+    const isCrosstab = officeConverter.isCrosstab(crosstabsResponse);
+    // then
+    expect(isCrosstab).toEqual(expectedValue);
   });
   it('should return row and column headers', () => {
     // given
@@ -38,11 +56,23 @@ describe('Office converter service v2', () => {
         ['2010', 'March'],
         ['2010', 'Total'],
       ],
+      subtotalAddress: [false, false, false, false, false, false, false, {'attributeIndex': 1, 'axis': 'rows', 'colIndex': 3}, false, false, false, false, false, false, false, {'attributeIndex': 1, 'axis': 'rows', 'colIndex': 7}, false, false, false, false, false, false, false, false, false, false, false, false],
     };
     // when
     const headers = officeConverter.getHeaders(crosstabsResponse);
     // then
     expect(headers).toEqual(expectedHeaders);
+  });
+  it('should getTableSize', () => {
+    // given
+    const crosstabsResponse = response;
+    const isCrosstab = officeConverter.isCrosstab(crosstabsResponse);
+    const columnInformation = officeConverter.getColumnInformation(crosstabsResponse);
+    const expectedValue = {columns: 6, rows: 8};
+    // when
+    const tableSize = officeConverter.getTableSize(crosstabsResponse, columnInformation, isCrosstab);
+    // then
+    expect(tableSize).toEqual(expectedValue);
   });
   it('should get column information for formatting', () => {
     // given

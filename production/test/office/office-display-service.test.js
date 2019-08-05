@@ -17,7 +17,7 @@ jest.mock('../../src/mstr-object/mstr-object-rest-service');
 jest.mock('../../src/office/store/office-store-service');
 jest.mock('../../src/authentication/authentication-helper');
 
-describe('OfficeDisplayService', () => {
+describe.skip('OfficeDisplayService', () => {
   const givenReport = reportV2;
   const excelTableNameMock = 'table';
 
