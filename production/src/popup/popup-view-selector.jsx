@@ -20,7 +20,7 @@ export const _PopupViewSelector = (props) => {
     || (importRequested && !!props.dossierData && !!props.dossierData.instanceId)) {
     proceedToImport(props);
   } else if (!!props.isPrompted && !!props.dossierData && !!props.dossierData.instanceId) {
-    if (!!editedReport.instanceId && props.preparedInstance === editedReport.instanceId) {
+    if (!!editedReport && !!editedReport.instanceId && props.preparedInstance === editedReport.instanceId) {
       clearAttributesAndMetrics(localEditReport);
       popupType = PopupTypeEnum.editFilters;
     } else {
