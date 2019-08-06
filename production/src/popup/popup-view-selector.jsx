@@ -90,7 +90,7 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
     return <RefreshAllPage />;
   }
   if (popupType === PopupTypeEnum.promptsWindow) {
-    return <PromptsWindow mstrData={propsToPass} />;
+    return <PromptsWindow mstrData={propsToPass} handleBack={methods.handleBack} />;
   }
   if (popupType === PopupTypeEnum.repromptingWindow) {
     const mstrData = {
@@ -98,7 +98,7 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
       ...editedReport,
       isReprompt: true,
     };
-    return <PromptsWindow mstrData={mstrData} />; // use the same window as with prompting, but provide report info
+    return <PromptsWindow mstrData={mstrData} handleBack={methods.handleBack} />; // use the same window as with prompting, but provide report info
   }
   // TODO: do some error handling here
   return null;

@@ -5,11 +5,12 @@ import '../popup/popup-buttons.css';
 import {cancelImportRequest} from '../navigation/navigation-tree-actions';
 import {withTranslation} from 'react-i18next';
 
-export const _PromptWindowButtons = ({handleRun, isReprompt, closePopup, cancelImportRequest, t = (text) => text}) => {
+export const _PromptWindowButtons = ({handleRun, isReprompt, closePopup, cancelImportRequest, handleBack, t = (text) => text}) => {
   return (
     <div className="popup-buttons popup-footer">
+      {!isReprompt && <Button id="back" onClick={() => cancelImportRequest() && handleBack()}>{t('Back')}</Button>}
       <Button id="run" onClick={handleRun}>{t('Run')}</Button>
-      <Button id="cancel" onClick={isReprompt ? closePopup : cancelImportRequest}>{t('Cancel')}</Button>
+      <Button id="cancel" onClick={closePopup}>{t('Cancel')}</Button>
     </div >
   );
 };
