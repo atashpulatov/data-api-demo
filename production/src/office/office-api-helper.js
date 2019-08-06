@@ -316,9 +316,9 @@ class OfficeApiHelper {
    * @memberof OfficeApiHelper
    * @return {Object}
    */
-  getTableStartCell = ({startCell, mstrTable, prevOfficeTable}) => {
+  getTableStartCell = ({startCell, mstrTable, prevOfficeTable, crosstabChange}) => {
     const {headers, isCrosstab} = mstrTable;
-    if (!isCrosstab || prevOfficeTable) return startCell;
+    if (!crosstabChange && (!isCrosstab || prevOfficeTable)) return startCell;
     const rowOffset = headers.columns.length - 1;
     const colOffset = headers.rows[0].length;
     return this.offsetCellBy(startCell, rowOffset, colOffset);
