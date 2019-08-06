@@ -290,8 +290,7 @@ class MstrObjectRestService {
         .withCredentials();
   }
 
-  _checkTableDimensions(tableSize) {
-    const {rows, columns} = tableSize;
+  _checkTableDimensions({rows, columns}) {
     if (rows >= EXCEL_ROW_LIMIT || columns >= EXCEL_COLUMN_LIMIT) {
       throw new OutsideOfRangeError();
     }

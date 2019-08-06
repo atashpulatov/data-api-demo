@@ -52,10 +52,9 @@ class OfficeConverterServiceV2 {
     };
     if (this.isCrosstab(response)) {
       return {row: jsonHandler.renderRows(response.data)};
-    } else {
-      const row = jsonHandler.renderTabular(response.definition, response.data, onAttribute(rowTotals));
-      return {row, rowTotals};
     }
+    const row = jsonHandler.renderTabular(response.definition, response.data, onAttribute(rowTotals));
+    return {row, rowTotals};
   }
 
   /**
@@ -81,11 +80,10 @@ class OfficeConverterServiceV2 {
       const columns = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement(columnTotals));
       const subtotalAddress = [...rowTotals, ...columnTotals];
       return {rows, columns, subtotalAddress};
-    } else {
-      const attributeTitles = jsonHandler.renderTitles(response.definition, 'rows', response.data.headers, onElement());
-      const metricHeaders = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement());
-      return {columns: [[...attributeTitles[0], ...metricHeaders[0]]]};
     }
+    const attributeTitles = jsonHandler.renderTitles(response.definition, 'rows', response.data.headers, onElement());
+    const metricHeaders = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement());
+    return {columns: [[...attributeTitles[0], ...metricHeaders[0]]]};
   }
 
   /**

@@ -21,16 +21,16 @@ class NormalizedJsonHandler {
    */
   lookupElement = ({definition, axis, attributeIndex, elementIndex, rowIndex = -1, colIndex = -1}) => {
     const {crossTab} = definition.grid;
-    let subtotalAddress = false;
     const rawElement = definition.grid[axis][attributeIndex].elements[elementIndex];
     const {name, formValues, subtotal} = rawElement;
-    if (crossTab) {
-      if (subtotal) subtotalAddress = {attributeIndex, colIndex, axis};
-    } else {
-      if (subtotal) subtotalAddress = {attributeIndex, rowIndex};
+    if (!subtotal) {
+      return {
+        ...rawElement, value: formValues || [name], subtotalAddress: false,
+      };
     }
     return {
-      ...rawElement, value: formValues || [name], subtotalAddress,
+      ...rawElement, value: formValues || [name],
+      subtotalAddress: crossTab ? {attributeIndex, colIndex, axis} : {attributeIndex, rowIndex},
     };
   };
 
@@ -136,12 +136,11 @@ class NormalizedJsonHandler {
    * @return {Array}
    */
   renderTitles = (definition, axis, headers, onElement) => {
-    const matrix = headers[axis].map((headerCells) => {
+    return headers[axis].map((headerCells) => {
       const mapFn = axis === 'rows' ? this.mapElementIndicesToNames : this.mapElementIndicesToElements;
       const axisElements = mapFn({definition, axis, headerCells});
       return axisElements.map((e, axisIndex, elementIndex) => onElement(e, axisIndex, elementIndex));
     });
-    return matrix;
   }
 
   /**
