@@ -171,8 +171,7 @@ class OfficeApiHelper {
         }
         const offset = columnInformation.length - filteredColumnInformation.length;
         for (const object of filteredColumnInformation) {
-          let columnRange = columns.getItemAt(object.index).getDataBodyRange();
-          if (isCrosstab) columnRange = columnRange.getOffsetRange(0, -offset); // we are adding offset to left equal to number of removed attributes in column information
+          const columnRange = columns.getItemAt(object.index - offset).getDataBodyRange();
           let format = '';
           if (!object.isAttribute) {
             if (object.category === 9) {
