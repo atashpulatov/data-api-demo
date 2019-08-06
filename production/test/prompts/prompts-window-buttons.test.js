@@ -41,7 +41,7 @@ describe('PromptWindowButtons', () => {
   it('should call closePopup when clicking Cancel if reprompted', () => {
     // given
     const closePopupMock = jest.fn();
-    const buttonsWrapper = shallow(<_PromptWindowButtons isReprompt={true} closePopup={closePopupMock} />);
+    const buttonsWrapper = shallow(<_PromptWindowButtons closePopup={closePopupMock} />);
     const cancelButton = buttonsWrapper.find('#cancel');
     // when
     cancelButton.simulate('click');
