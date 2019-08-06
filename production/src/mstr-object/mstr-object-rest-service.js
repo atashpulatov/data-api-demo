@@ -9,6 +9,7 @@ const sharedFolderIdType = 7;
 export const DATA_LIMIT = 200000; // 200000 is around 1mb of MSTR JSON response
 export const PROMISE_LIMIT = 10; // Number of concurrent context.sync() promises during data import.
 export const IMPORT_ROW_LIMIT = 20000; // Maximum number of rows to fetch during data import (For few columns tables).
+export const CONTEXT_LIMIT = 500; // Maximum number of Excel operations before context syncing.
 const EXCEL_ROW_LIMIT = 1048576;
 const EXCEL_COLUMN_LIMIT = 16384;
 const OBJECT_TYPE = '3'; // both reports and cubes are of type 3
@@ -185,7 +186,7 @@ class MstrObjectRestService {
       const storeState = reduxStore.getState();
       const envUrl = storeState.sessionReducer.envUrl;
       const authToken = storeState.sessionReducer.authToken;
-      const fullPath = this._getFullPath(dossierData, envUrl, limit, isReport, objectId, instanceId);
+      const fullPath = this._getFullPath({dossierData, envUrl, limit, isReport, objectId, instanceId, version: API_VERSION});
       return this._putInstance(fullPath, authToken, projectId, body);
     } catch (error) {
       throw error instanceof OutsideOfRangeError ? error : errorService.errorRestFactory(error);

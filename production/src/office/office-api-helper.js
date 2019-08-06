@@ -7,6 +7,7 @@ import {officeStoreService} from './store/office-store-service';
 import {notificationService} from '../notification/notification-service';
 import {errorService} from '../error/error-handler';
 import mstrNormalizedJsonHandler from '../mstr-object/mstr-normalized-json-handler';
+import {CONTEXT_LIMIT} from '../mstr-object/mstr-object-rest-service';
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
@@ -375,13 +376,14 @@ class OfficeApiHelper {
    * @return {Promise} Context.sync
    */
   formatSubtotals = async (startCell, subtotalCells, mstrTable, context) => {
-    const contextPromises = [];
+    let contextPromises = [];
     for (const cell of subtotalCells) {
       const subtotalRowRange = this.getSubtotalRange(startCell, cell, mstrTable, context);
       subtotalRowRange && (subtotalRowRange.format.font.bold = true);
       contextPromises.push(context.sync());
-      if (contextPromises.length % 500 === 499) {
+      if (contextPromises.length % CONTEXT_LIMIT === 0) {
         await Promise.all(contextPromises);
+        contextPromises = [];
       }
     };
   }

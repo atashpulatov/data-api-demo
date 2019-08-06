@@ -1,5 +1,5 @@
 import {officeApiHelper} from './office-api-helper';
-import {mstrObjectRestService, DATA_LIMIT, PROMISE_LIMIT, IMPORT_ROW_LIMIT} from '../mstr-object/mstr-object-rest-service';
+import {mstrObjectRestService, DATA_LIMIT, PROMISE_LIMIT, IMPORT_ROW_LIMIT, CONTEXT_LIMIT} from '../mstr-object/mstr-object-rest-service';
 import {reduxStore} from '../store';
 import {officeProperties} from './office-properties';
 import {officeStoreService} from './store/office-store-service';
@@ -325,7 +325,7 @@ class OfficeDisplayService {
       const rowsToRemove = tableRows.items;
       for (let i = tableRowCount - 1; i >= rows; i--) {
         rowsToRemove[i].delete();
-        if (i === rows || i % 500 === 0) {
+        if (i === rows || i % CONTEXT_LIMIT === 0) {
           await context.sync();
         }
       }
