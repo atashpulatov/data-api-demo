@@ -388,7 +388,7 @@ class OfficeDisplayService {
   async _getOfficeTable(isRefresh, excelContext, bindingId, instanceDefinition, startCell) {
     console.time('Create or get table');
     const newOfficeTableId = bindingId || officeApiHelper.findAvailableOfficeTableId();
-    const {prevCrosstabDimensions, crosstabHeaderDimensions} = instanceDefinition;
+    const {prevCrosstabDimensions} = instanceDefinition;
     let officeTable;
     let shouldFormat = true;
 
@@ -396,8 +396,7 @@ class OfficeDisplayService {
       const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindingId);
       if (prevCrosstabDimensions) officeApiHelper.clearCrosstabRange(prevOfficeTable, prevCrosstabDimensions);
       const tableColumnsChanged = await this._checkColumnsChange(prevOfficeTable, excelContext, instanceDefinition);
-      instanceDefinition.crosstabChange = ((!prevCrosstabDimensions && instanceDefinition.mstrTable.isCrosstab) ||
-        (prevCrosstabDimensions && !instanceDefinition.mstrTable.isCrosstab));
+      instanceDefinition.crosstabChange = ((!prevCrosstabDimensions && instanceDefinition.mstrTable.isCrosstab));
       const headerCell = prevOfficeTable.getHeaderRowRange().getCell(0, 0);
       headerCell.load('address');
       await excelContext.sync();
