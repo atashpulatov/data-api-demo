@@ -25,24 +25,13 @@ describe('PromptWindowButtons', () => {
     expect(handleRunMock).toBeCalled();
   });
 
-  it('should call cancelImportRequest when clicking Cancel if not reprompted', () => {
-    // given
-    const cancelImportRequestMock = jest.fn();
-    const buttonsWrapper = shallow(<_PromptWindowButtons isReprompt={false} cancelImportRequest={cancelImportRequestMock} />);
-    const cancelButton = buttonsWrapper.find('#cancel');
-    // when
-    cancelButton.simulate('click');
-    // then
-    expect(cancelImportRequestMock).toBeCalled();
-  });
-
-  it('should call closePopup when clicking Cancel if reprompted', () => {
+  it('should call closePopup when clicking Cancel', () => {
     // given
     const closePopupMock = jest.fn();
-    const buttonsWrapper = shallow(<_PromptWindowButtons isReprompt={true} closePopup={closePopupMock} />);
+    const buttonsWrapper = shallow(<_PromptWindowButtons isReprompt={false} closePopup={closePopupMock} />);
     const cancelButton = buttonsWrapper.find('#cancel');
     // when
-    cancelButton.simulate('click');
+    cancelButton.prop('onClick')();
     // then
     expect(closePopupMock).toBeCalled();
   });
