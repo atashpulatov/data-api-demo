@@ -54,14 +54,14 @@ describe('ErrorService', () => {
       // then
       expect(resultError).not.toBe(PromptedReportError);
     });
-    it('should throw an InternalServerError due to response 404 code', () => {
+    it('should throw a not found error due to response with 404 code', () => {
       // given
       const response = {body: {iServerCode: '-2147171501'}};
       const error = {status: 404, response: response};
       // when
       const resultError = errorService.errorRestFactory(error);
       // then
-      expect(resultError).toBeInstanceOf(InternalServerError);
+      expect(resultError).toBeInstanceOf(EnvironmentNotFoundError);
     });
 
     it('should throw an ConnectionBrokenError due to response 404 code', () => {
@@ -142,8 +142,8 @@ describe('ErrorService', () => {
       jest.advanceTimersByTime(2000);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('warning', '404 - Environment not found', undefined);
-      expect(spyLogOut).toBeCalled();
+      expect(spyMethod).toBeCalledWith('warning', 'The endpoint cannot be reached', undefined);
+      expect(spyLogOut).not.toBeCalled();
     });
     it('should display notification and logout on UnauthorizedError', () => {
       // given
@@ -179,7 +179,7 @@ describe('ErrorService', () => {
       errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('warning', '400 - There has been a problem with your request', undefined);
+      expect(spyMethod).toBeCalledWith('warning', 'There has been a problem with your request', undefined);
     });
     it('should display notification on UnauthorizedError', () => {
       // given
@@ -209,7 +209,7 @@ describe('ErrorService', () => {
       errorService.handleError(error, true);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('warning', '400 - There has been a problem with your request', undefined);
+      expect(spyMethod).toBeCalledWith('warning', 'There has been a problem with your request', undefined);
     });
     it('should display notification on OutsideOfRangeError ', () => {
       // given
@@ -295,11 +295,9 @@ describe('ErrorService', () => {
       const error = new EnvironmentNotFoundError();
       const spyMethod = jest.spyOn(notificationService, 'displayNotification');
       // when
-      errorService.handleError(error);
+      errorService.handleError(error, true);
       // then
       expect(spyMethod).toBeCalled();
-      expect(setTimeout).toBeCalled();
-      expect(setTimeout).toBeCalledWith(expect.any(Function), 2000);
     });
     it('should display notification on PromptedReportError', () => {
       // given

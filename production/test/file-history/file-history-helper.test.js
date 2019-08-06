@@ -38,11 +38,14 @@ describe('FileHistoryHelper', () => {
       // given
       const mockedOnDelete = jest.fn();
       const testBindId = 'someBindingIt';
+      const isCrosstab = true;
+      const objectType = 'test';
+      const headerDimensions = {};
       // when
-      await fileHistoryHelper.deleteReport(mockedOnDelete, testBindId);
+      await fileHistoryHelper.deleteReport(mockedOnDelete, testBindId, objectType, isCrosstab, headerDimensions);
       // then
       expect(mockedOnDelete).toBeCalled();
-      expect(mockedOnDelete).toBeCalledWith(testBindId);
+      expect(mockedOnDelete).toBeCalledWith(testBindId, isCrosstab, headerDimensions);
     });
     it('should display message on success', async () => {
       // given

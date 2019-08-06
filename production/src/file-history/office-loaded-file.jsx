@@ -30,9 +30,9 @@ export class _OfficeLoadedFile extends React.Component {
     if (!this.state.allowDeleteClick) {
       return;
     }
-    const {onDelete, bindingId, objectType} = this.props;
+    const {onDelete, bindingId, objectType, isCrosstab, crosstabHeaderDimensions} = this.props;
     this.setState({allowDeleteClick: false, allowRefreshClick: false}, async () => {
-      await fileHistoryHelper.deleteReport(onDelete, bindingId, objectType);
+      await fileHistoryHelper.deleteReport(onDelete, bindingId, objectType, isCrosstab, crosstabHeaderDimensions);
       this._ismounted && this.setState({allowDeleteClick: true, allowRefreshClick: true});
     });
   };

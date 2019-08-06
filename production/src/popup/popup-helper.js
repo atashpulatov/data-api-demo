@@ -67,6 +67,7 @@ class PopupHelper {
       bindingId,
       body: refreshReport.body,
       isCrosstab: refreshReport.isCrosstab,
+      crosstabHeaderDimensions: refreshReport.crosstabHeaderDimensions,
       isRefresh: true,
       isPrompted: refreshReport.isPrompted,
       isRefreshAll,
