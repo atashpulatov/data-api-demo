@@ -14,12 +14,14 @@ import {preparePromptedReport} from './popup-actions';
 export const _PopupViewSelector = (props) => {
   let popupType = props.popupType;
   const {propsToPass, methods, importRequested, editedReport} = props;
+  const localEditReport = Object.assign({}, editedReport);
 
   if ((importRequested && !props.isPrompted)
     || (importRequested && !!props.dossierData && !!props.dossierData.instanceId)) {
     proceedToImport(props);
   } else if (!!props.isPrompted && !!props.dossierData && !!props.dossierData.instanceId) {
     if (!!editedReport.instanceId && props.preparedInstance === editedReport.instanceId) {
+      clearAttributesAndMetrics(localEditReport);
       popupType = PopupTypeEnum.editFilters;
     } else {
       obtainInstanceWithPromptsAnswers(propsToPass, props);
@@ -36,8 +38,15 @@ export const _PopupViewSelector = (props) => {
     return null;
   }
   propsToPass.token = props.authToken;
-  return renderProperComponent(popupType, methods, propsToPass, editedReport);
+
+  return renderProperComponent(popupType, methods, propsToPass, localEditReport);
 };
+
+function clearAttributesAndMetrics(localEditReport) {
+  delete localEditReport.selectedAttributes;
+  delete localEditReport.selectedMetrics;
+  delete localEditReport.selectedFilters;
+}
 
 async function obtainInstanceWithPromptsAnswers(propsToPass, props) {
   const projectId = propsToPass.projectId || props.editedReport.projectId;
@@ -177,13 +186,13 @@ function parseFilters(filtersNodes) {
     const elements = elementNodes.reduce((elements, node) => elements.concat(node.elements), []);
     const elementsIds = elements.map((elem) => elem.id);
     return elementsIds
-      .reduce((filters, elem) => {
-        const attrId = elem.split(':')[0];
-        filters[attrId] = !filters[attrId]
+        .reduce((filters, elem) => {
+          const attrId = elem.split(':')[0];
+          filters[attrId] = !filters[attrId]
           ? [elem]
           : [...filters[attrId], elem];
-        return filters;
-      }, {});
+          return filters;
+        }, {});
   }
 }
 
