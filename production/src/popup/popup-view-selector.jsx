@@ -212,13 +212,13 @@ function parseFilters(filtersNodes) {
     const elements = elementNodes.reduce((elements, node) => elements.concat(node.elements), []);
     const elementsIds = elements.map((elem) => elem.id);
     return elementsIds
-      .reduce((filters, elem) => {
-        const attrId = elem.split(':')[0];
-        filters[attrId] = !filters[attrId]
+        .reduce((filters, elem) => {
+          const attrId = elem.split(':')[0];
+          filters[attrId] = !filters[attrId]
           ? [elem]
           : [...filters[attrId], elem];
-        return filters;
-      }, {});
+          return filters;
+        }, {});
   }
 }
 
