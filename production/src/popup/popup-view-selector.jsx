@@ -13,21 +13,22 @@ import {preparePromptedReport} from './popup-actions';
 
 export const _PopupViewSelector = (props) => {
   let popupType = props.popupType;
-  const {propsToPass, methods, importRequested, editedReport} = props;
-  const localEditReport = Object.assign({}, editedReport);
+  const {propsToPass, methods, importRequested} = props;
 
+  const localEditReport = {...props.editedReport};
   if ((importRequested && !props.isPrompted)
-    || (importRequested && !!props.dossierData && !!props.dossierData.instanceId)) {
+    || (importRequested && arePromptsAnswered(props))) {
     proceedToImport(props);
-  } else if (!!props.isPrompted && !!props.dossierData && !!props.dossierData.instanceId) {
-    if (!!editedReport && !!editedReport.instanceId && props.preparedInstance === editedReport.instanceId) {
+  } else if (!!props.isPrompted && arePromptsAnswered(props)) {
+    if (isInstanceWithPromptsAnswered(props)) {
+      wasReportJustImported(props) && proceedToImport(props);
       clearAttributesAndMetrics(localEditReport);
       popupType = PopupTypeEnum.editFilters;
     } else {
       obtainInstanceWithPromptsAnswers(propsToPass, props);
       return <div />;
     }
-  } else if (!!props.isPrompted && (importRequested || popupType === PopupTypeEnum.dataPreparation)) {
+  } else if (promptedReportSubmitted(props)) {
     popupType = PopupTypeEnum.promptsWindow;
     propsToPass.projectId = props.chosenProjectId;
     propsToPass.reportId = props.chosenObjectId;
@@ -41,6 +42,31 @@ export const _PopupViewSelector = (props) => {
 
   return renderProperComponent(popupType, methods, propsToPass, localEditReport);
 };
+
+function wasReportJustImported(props) {
+  const isNullOrEmpty = (obj) => {
+    const stringifiedObj = JSON.stringify(obj);
+    return !obj || stringifiedObj === '{}' || stringifiedObj === '[]';
+  };
+  return !!props.editedReport
+    && isNullOrEmpty(props.editedReport.selectedAttributes)
+    && isNullOrEmpty(props.editedReport.selectedMetrics)
+    && isNullOrEmpty(props.editedReport.selectedFilters);
+}
+
+function promptedReportSubmitted(props) {
+  return !!props.isPrompted
+    && (props.importRequested || props.popupType === PopupTypeEnum.dataPreparation);
+}
+
+function isInstanceWithPromptsAnswered(props) {
+  return !!props.editedReport && !!props.editedReport.instanceId
+    && props.preparedInstance === props.editedReport.instanceId;
+}
+
+function arePromptsAnswered(props) {
+  return !!props.dossierData && !!props.dossierData.instanceId;
+}
 
 function clearAttributesAndMetrics(localEditReport) {
   delete localEditReport.selectedAttributes;
@@ -67,6 +93,26 @@ async function obtainInstanceWithPromptsAnswers(propsToPass, props) {
     promptsAnswers: props.promptsAnswers,
   };
   props.preparePromptedReport(instanceDefinition.instanceId, preparedReport);
+}
+
+function proceedToImport(props) {
+  const okObject = {
+    command: selectorProperties.commandOk,
+    chosenObject: props.chosenObjectId,
+    chosenProject: props.chosenProjectId,
+    chosenSubtype: props.chosenSubtype,
+    isPrompted: props.isPrompted,
+    promptsAnswers: props.promptsAnswers,
+  };
+  if (!!props.dossierData) {
+    okObject.dossierData = {
+      ...props.dossierData,
+      reportName: props.chosenProjectName,
+    };
+  }
+  props.startLoading();
+  props.startImport();
+  Office.context.ui.messageParent(JSON.stringify(okObject));
 }
 
 function renderProperComponent(popupType, methods, propsToPass, editedReport) {
@@ -102,26 +148,6 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
   }
   // TODO: do some error handling here
   return null;
-}
-
-function proceedToImport(props) {
-  const okObject = {
-    command: selectorProperties.commandOk,
-    chosenObject: props.chosenObjectId,
-    chosenProject: props.chosenProjectId,
-    chosenSubtype: props.chosenSubtype,
-    isPrompted: props.isPrompted,
-    promptsAnswers: props.promptsAnswers,
-  };
-  if (!!props.dossierData) {
-    okObject.dossierData = {
-      ...props.dossierData,
-      reportName: props.chosenProjectName,
-    };
-  }
-  props.startLoading();
-  props.startImport();
-  Office.context.ui.messageParent(JSON.stringify(okObject));
 }
 
 export function mapStateToProps(state) {
@@ -186,13 +212,13 @@ function parseFilters(filtersNodes) {
     const elements = elementNodes.reduce((elements, node) => elements.concat(node.elements), []);
     const elementsIds = elements.map((elem) => elem.id);
     return elementsIds
-        .reduce((filters, elem) => {
-          const attrId = elem.split(':')[0];
-          filters[attrId] = !filters[attrId]
+      .reduce((filters, elem) => {
+        const attrId = elem.split(':')[0];
+        filters[attrId] = !filters[attrId]
           ? [elem]
           : [...filters[attrId], elem];
-          return filters;
-        }, {});
+        return filters;
+      }, {});
   }
 }
 

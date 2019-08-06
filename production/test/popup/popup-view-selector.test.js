@@ -257,6 +257,50 @@ describe('PopupViewSelector', () => {
         });
   });
 
+  it('should proceed to import when prompts answered and no attributes, metrics and filters', () => {
+    // given
+    const instanceId = 'instanceId';
+    const location = {
+      search: {},
+    };
+    const reduxMethods = {
+      startImport: jest.fn(),
+      startLoading: jest.fn(),
+    };
+    const props = {
+      popupType: 'whatever',
+      authToken: 'token',
+      propsToPass: {
+        prop: 'prop',
+      },
+      preparedInstance: instanceId,
+      isPrompted: true,
+      editedReport: {
+        instanceId: instanceId,
+        // selectedAttributes: undefined,
+        selectedMetrics: [],
+        selectedFilters: {},
+      },
+      dossierData: {
+        instanceId: 'instanceId',
+        whatever: 'whatever',
+      },
+    };
+    const mockMessageParent = jest.spyOn(Office.context.ui, 'messageParent');
+    // when
+    // eslint-disable-next-line react/jsx-pascal-case
+    shallow(<_PopupViewSelector
+      location={location}
+      {...reduxMethods}
+      {...props}
+      methods={{}}
+    />);
+    // then
+    expect(reduxMethods.startLoading).toHaveBeenCalled();
+    expect(reduxMethods.startImport).toHaveBeenCalled();
+    expect(mockMessageParent).toHaveBeenCalled();
+  });
+
   it('should clear attributes and metrics if going to edit filters from prompts window', () => {
     // given
     const instanceId = 'instanceId';
