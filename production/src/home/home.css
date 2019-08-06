@@ -232,8 +232,8 @@ hr {
   width: 330px;
   height: 250px;
   padding: 37px 20px 38px 20px;
-  border: 1px solid #CECECE;
-  box-shadow: 1px 2px 8px 0 rgba(68, 70, 73, 0.20);
+  border: 1px solid #ffffff;
+  box-shadow: 1px 2px 8px 0 #b7b7b7;
   border-radius: 2px;
   background-color: #ffffff;
   z-index: 1001;
