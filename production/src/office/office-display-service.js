@@ -96,9 +96,14 @@ class OfficeDisplayService {
 
       if (subtotalsAddresses.length) {
         // Removing duplicated subtotal addresses from headers
+        console.time('Subtotal Formatting');
         if (isCrosstab) subtotalsAddresses = new Set(subtotalsAddresses);
         const reportstartCell = officeTable.getRange().getCell(0, 0);
-        await officeApiHelper.formatSubtotals(reportstartCell, subtotalsAddresses, mstrTable, excelContext);
+        excelContext.trackedObjects.add(reportstartCell);
+        const sheet = officeTable.worksheet;
+        await officeApiHelper.formatSubtotals(reportstartCell, subtotalsAddresses, mstrTable, excelContext, sheet);
+        excelContext.trackedObjects.remove(reportstartCell);
+        console.timeEnd('Subtotal Formatting');
       }
 
       // Save to store
