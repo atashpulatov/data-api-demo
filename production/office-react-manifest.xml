@@ -14,7 +14,7 @@
   <ProviderName>Microstrategy Inc.</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <!-- The display name of your add-in. Used on the store and various places of the Office UI such as the add-ins dialog. -->
-  <DisplayName DefaultValue="MicroStrategy for Office" />
+  <DisplayName DefaultValue="localhost" />
   <Description DefaultValue="New plugin to insert data from Microstrategy into Microsoft Office products."/>
 
   <!-- Icon for your add-in. Used on installation screens and the add-ins dialog. -->
@@ -128,15 +128,15 @@
       </bt:Urls>
       <!-- ShortStrings max characters==125. -->
       <bt:ShortStrings>
-        <bt:String id="MSTR.TaskpaneButton.Label" DefaultValue="MicroStrategy for Office" />
-        <bt:String id="MSTR.GroupMicrostrategy.Label" DefaultValue="Microstrategy" />
+        <bt:String id="MSTR.TaskpaneButton.Label" DefaultValue="localhost" />
+        <bt:String id="MSTR.GroupMicrostrategy.Label" DefaultValue="localhost" />
         <bt:String id="MSTR.GetStarted.Title" DefaultValue="MicroStrategy for Office loaded" />
-        <bt:String id="MSTR.OfficeTab.Label" DefaultValue="Microstrategy" />
+        <bt:String id="MSTR.OfficeTab.Label" DefaultValue="localhost" />
       </bt:ShortStrings>
       <!-- LongStrings max characters==250. -->
       <bt:LongStrings>
         <bt:String id="MSTR.TaskpaneButton.Tooltip" DefaultValue="Click to Show a Taskpane" />
-        <bt:String id="MSTR.GetStarted.Description" DefaultValue="Click MicroStrategy for Office on Home tab to start plugin. Login to Environment to start browsing documents." />
+        <bt:String id="MSTR.GetStarted.Description" DefaultValue="Click MicroStrategy for Office on Home tab to start plugin. Log in to Environment to start browsing documents." />
       </bt:LongStrings>
     </Resources>
   </VersionOverrides>

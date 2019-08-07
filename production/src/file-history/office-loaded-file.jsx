@@ -4,7 +4,7 @@ import {Row, Col, Popover} from 'antd';
 import {MSTRIcon} from 'mstr-react-library';
 import {fileHistoryHelper} from './file-history-helper';
 import loadingSpinner from './assets/report_loading_spinner.gif';
-import {refreshReportsArray, callForEdit} from '../popup/popup-actions';
+import {refreshReportsArray, callForEdit, callForReprompt} from '../popup/popup-actions';
 import RenameInput from './file-history-rename-input';
 import {withTranslation} from 'react-i18next';
 
@@ -30,11 +30,28 @@ export class _OfficeLoadedFile extends React.Component {
     if (!this.state.allowDeleteClick) {
       return;
     }
-    const {onDelete, bindingId, objectType} = this.props;
+    const {onDelete, bindingId, objectType, isCrosstab, crosstabHeaderDimensions} = this.props;
     this.setState({allowDeleteClick: false, allowRefreshClick: false}, async () => {
-      await fileHistoryHelper.deleteReport(onDelete, bindingId, objectType);
+      await fileHistoryHelper.deleteReport(onDelete, bindingId, objectType, isCrosstab, crosstabHeaderDimensions);
       this._ismounted && this.setState({allowDeleteClick: true, allowRefreshClick: true});
     });
+  };
+
+  repromptAction = (e) => {
+    e.stopPropagation();
+    if (!this.state.allowRefreshClick) {
+      return;
+    }
+    const {isLoading, bindingId, objectType, callForReprompt} = this.props;
+    if (!isLoading) {
+      this.setState({allowRefreshClick: false}, async () => {
+        try {
+          await callForReprompt({bindId: bindingId, objectType});
+        } finally {
+          this.setState({allowRefreshClick: true});
+        }
+      });
+    }
   };
 
   editAction = (e) => {
@@ -79,31 +96,45 @@ export class _OfficeLoadedFile extends React.Component {
         <Col span={2}>
           {objectType === 'report' ? <MSTRIcon type='report' /> : <MSTRIcon type='dataset' />}
         </Col>
-        <Col span={14} className="report-title">
+        <Col span={11} className="report-title">
           <RenameInput bindingId={bindingId} fileName={fileName} />
-          <div className="additional-data">{t('refreshed_date', {date: refreshDate})}</div>
+          <Popover placement="bottom" content={t('Date and time of last modification')} mouseEnterDelay={1}>
+            <div className="additional-data">{t('refreshed_date', {date: refreshDate})}</div>
+          </Popover>
         </Col>
-        <Col span={1} offset={2}>
+        <Col span={1} offset={1} style={{marginTop: '1px'}}>
+          <Popover placement="bottom" content={t('Reprompt')} mouseEnterDelay={1}>
+            {!!isPrompted && <span className="loading-button-container"
+              onClick={this.repromptAction}>
+              <MSTRIcon type='reprompt' />
+            </span>}
+          </Popover>
+        </Col>
+        <Col span={1} offset={1} style={{marginTop: '1px'}}>
           <Popover placement="bottom" content={t('Edit Data')} mouseEnterDelay={1}>
-            {!isPrompted && <span className="loading-button-container"
+            {<span
+              tabIndex="0"
+              className="loading-button-container"
               onClick={this.editAction}>
-              {!isLoading ? <MSTRIcon type='edit' /> :
-              <img width='12px' height='12px' src={loadingSpinner} alt={t('Report loading icon')} />}
+              <MSTRIcon type='edit' />
             </span>}
           </Popover>
         </Col>
         <Col span={1} offset={1}>
           <Popover placement="bottom" content={t('Refresh Data')} mouseEnterDelay={1}>
-            {!isPrompted && <span className="loading-button-container"
+            {<span
+              tabIndex="0"
+              className="loading-button-container"
               onClick={this.refreshAction}>
               {!isLoading ? <MSTRIcon type='refresh' /> :
-              <img width='12px' height='12px' src={loadingSpinner} alt={t('Report loading icon')} />}
+                <img width='12px' height='12px' src={loadingSpinner} alt={t('Report loading icon')} />}
             </span>}
           </Popover>
         </Col>
         <Col span={1} offset={1}>
           <Popover placement="bottomRight" content={t('Remove Data from Workbook')} mouseEnterDelay={1} arrowPointAtCenter="true">
             <span
+              tabIndex="0"
               onClick={this.deleteAction}>
               <MSTRIcon type='trash' />
             </span>
@@ -121,6 +152,7 @@ _OfficeLoadedFile.defaultProps = {
 const mapDispatchToProps = {
   refreshReportsArray,
   callForEdit,
+  callForReprompt,
 };
 
 export const OfficeLoadedFile = connect(null, mapDispatchToProps)(withTranslation('common')(_OfficeLoadedFile));

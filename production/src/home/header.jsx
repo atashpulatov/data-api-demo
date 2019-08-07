@@ -1,65 +1,94 @@
 import React, {Component} from 'react';
-import logo from './assets/mstr_logo.png';
 import {sessionHelper} from '../storage/session-helper';
 import {Button, Popover} from 'antd';
-import {errorService} from '../error/error-handler';
 import {connect} from 'react-redux';
 import {withTranslation} from 'react-i18next';
-import {officeApiHelper} from '../office/office-api-helper';
-import {toggleSecuredFlag} from '../office/office-actions';
+import {toggleIsSettingsFlag, toggleIsConfirmFlag} from '../office/office-actions';
 import {MSTRIcon} from 'mstr-react-library';
+import mstrLogo from './assets/mstr_logo.png';
+import {SettingsMenu} from './settings-menu';
+import {Confirmation} from './confirmation';
 
 export class _Header extends Component {
-  componentDidMount = () => {
+  componentDidMount = async () => {
     sessionHelper.getUserInfo();
-  };
-
-  secureData = async () => {
-    try {
-      const excelContext = await officeApiHelper.getExcelContext();
-      this.props.reportArray.forEach((report) => {
-        officeApiHelper.deleteObjectTableBody(excelContext, report);
-      });
-      await excelContext.sync();
-      this.props.toggleSecuredFlag(true);
-    } catch (error) {
-      errorService.handleOfficeError(error);
-    }
+    this.addCloseSettingsListeners();
   }
 
-  getSecureButton = () => {
-    const {reportArray, isSecured, t} = this.props;
-    if (reportArray && reportArray.length > 0) {
-      return (
-        <Popover placement="bottom" content={t('Secure data')} mouseEnterDelay={1}>
-          <Button className="secure-btn" disabled={isSecured} size='small' onClick={this.secureData}>
-            {isSecured
-              ? <MSTRIcon type='secure-access-inactive' />
-              : <MSTRIcon type='secure-access-active' />}
-          </Button>
-        </Popover>
-      );
+  componentWillUnmount = () => {
+    this.removeCloseSettingsListeners();
+  }
+
+  shouldComponentUpdate = (nextProps) => {
+    if (nextProps.isConfirm && !this.props.isConfirm) {
+      this.removeCloseSettingsListeners();
+      this.addCloseConfirmationListener();
+    }
+    if (!nextProps.isConfirm && this.props.isConfirm) {
+      this.addCloseSettingsListeners();
+      this.removeCloseConfirmationListener();
+    }
+    return true;
+  }
+
+  addCloseSettingsListeners = () => {
+    document.addEventListener('click', this.closeSettingsOnClick);
+    document.addEventListener('keyup', this.closeSettingsOnEsc);
+  }
+
+  removeCloseSettingsListeners = () => {
+    document.removeEventListener('click', this.closeSettingsOnClick);
+    document.removeEventListener('keyup', this.closeSettingsOnEsc);
+  }
+
+  addCloseConfirmationListener = () => {
+    document.addEventListener('keyup', this.closeConfirmationOnEsc);
+  }
+
+  removeCloseConfirmationListener = () => {
+    document.removeEventListener('keyup', this.closeConfirmationOnEsc);
+  }
+
+  toggleSettings = () => {
+    this.props.toggleIsSettingsFlag(!this.props.isSettings);
+  }
+
+  closeSettingsOnEsc = (e) => {
+    if (e.keyCode === 27 && this.props.isSettings) {
+      this.props.toggleIsSettingsFlag(false);
+    }
+  };
+
+  closeSettingsOnClick = (e) => {
+    if (this.props.isSettings && !e.target.classList.contains('no-trigger-close')) {
+      this.props.toggleIsSettingsFlag(false);
+    }
+  };
+
+  closeConfirmationOnEsc = (e) => {
+    if (e.keyCode === 27 && this.props.isConfirm) {
+      this.props.toggleIsConfirmFlag(false);
     }
   }
 
   render() {
-    const {userFullName, userInitials, loading, t} = this.props;
+    const {loading, t, isSettings, isConfirm} = this.props;
     return (
       <header id='app-header'>
-        <div className="user-data">
-          <span id='profileImage' className={userFullName}>
-            {userInitials !== null ?
-              <span id='initials' alt={t('User profile')}>{userInitials}</span> :
-              <img id='profile-image' src={logo} alt={t('User profile')} />
-              /* TODO: When rest api returns profileImage use it as source */}
+        <div className="mstr-logo">
+          <span id='profileImage'>
+            {/* TODO: Alt text for logo will be added later */}
+            <img src={mstrLogo} />
           </span>
-          <span id='full-name'>{userFullName || t('MicroStrategy user')}</span>
         </div>
         <div className="header-buttons">
-          {this.getSecureButton()}
-          <Button id='logOut' onClick={logout} size='small' disabled={loading}>
-            {t('Log out')}
-          </Button>
+          <Popover placement="bottom" content={t('More Items')} mouseEnterDelay={1}>
+            <Button className="settings-btn no-trigger-close" onClick={this.toggleSettings} disabled={loading}>
+              <MSTRIcon type="settings" />
+            </Button>
+          </Popover>
+          {isSettings && <SettingsMenu />}
+          {isConfirm && <Confirmation />}
         </div>
       </header >
     );
@@ -70,25 +99,15 @@ _Header.defaultProps = {
   t: (text) => text,
 };
 
-function mapStateToProps(state) {
-  const {userFullName, userInitials, envUrl, authToken} = state.sessionReducer;
-  const {reportArray, isSecured} = state.officeReducer;
-  return {userFullName, userInitials, envUrl, authToken, reportArray, isSecured};
+function mapStateToProps({officeReducer}) {
+  const {isSettings, isConfirm} = officeReducer;
+  return {isSettings, isConfirm};
 };
 
 const mapDispatchToProps = {
-  toggleSecuredFlag,
+  toggleIsSettingsFlag,
+  toggleIsConfirmFlag,
 };
 
 export const Header = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_Header));
-
-async function logout() {
-  try {
-    await sessionHelper.logOutRest();
-    sessionHelper.logOut();
-    sessionHelper.logOutRedirect();
-  } catch (error) {
-    errorService.handleError(error);
-  }
-}
 

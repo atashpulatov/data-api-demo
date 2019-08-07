@@ -23,6 +23,10 @@ class PopupController {
     await this.runPopup(PopupTypeEnum.editFilters, 80, 80, reportParams);
   };
 
+  runRepromptPopup = async (reportParams) => {
+    await this.runPopup(PopupTypeEnum.repromptingWindow, 80, 80, reportParams);
+  };
+
   runPopup = async (popupType, height, width, reportParams = null) => {
     const session = sessionHelper.getSession();
     try {
@@ -56,7 +60,6 @@ class PopupController {
             // Event received on dialog close
                 Office.EventType.DialogEventReceived, (event) => {
                   reduxStore.dispatch({type: officeProperties.actions.popupHidden});
-                  console.log(event);
                 });
 
             reduxStore.dispatch({type: officeProperties.actions.popupShown});
@@ -77,17 +80,14 @@ class PopupController {
           if (!reportParams) {
             await this.handleOkCommand(response, reportParams);
           } else {
-            await officeStoreService.preserveReportValue(reportParams.bindId, 'body', response.body);
-            await refreshReportsArray([reportParams], false)(reduxStore.dispatch);
+            await this.saveReportWithParams(reportParams, response);
           }
           break;
         case selectorProperties.commandOnUpdate:
           if (!reportParams) {
             await this.handleUpdateCommand(response);
           } else {
-            await officeStoreService.preserveReportValue(reportParams.bindId, 'body', response.body);
-            console.log(reportParams);
-            await refreshReportsArray([reportParams], false)(reduxStore.dispatch);
+            await this.saveReportWithParams(reportParams, response);
           }
           break;
         case selectorProperties.commandCancel:
@@ -108,14 +108,20 @@ class PopupController {
     }
   }
 
-  handleUpdateCommand = async (response) => {
-    if (response.reportId
-      && response.projectId
-      && response.reportSubtype
-      && response.body
-      && response.reportName) {
-      reduxStore.dispatch({type: START_REPORT_LOADING, data: {name: response.reportName}});
-      const result = await officeDisplayService.printObject(response.dossierData, response.reportId, response.projectId, objectTypes.getTypeDescription(3, response.reportSubtype) === 'Report', null, null, null, response.body);
+  handleUpdateCommand = async ({dossierData, reportId, projectId, reportSubtype, body, reportName, promptsAnswers, isPrompted, instanceId}) => {
+    if (reportId && projectId && reportSubtype && body && reportName) {
+      reduxStore.dispatch({type: START_REPORT_LOADING, data: {name: reportName}});
+      const options = {
+        isPrompted,
+        promptsAnswers,
+        dossierData,
+        objectId: reportId,
+        projectId,
+        instanceId,
+        isReport: objectTypes.getTypeDescription(3, reportSubtype) === 'Report',
+        body,
+      };
+      const result = await officeDisplayService.printObject(options);
       if (result) {
         notificationService.displayNotification(result.type, result.message);
       }
@@ -123,12 +129,21 @@ class PopupController {
     }
   }
 
-  handleOkCommand = async (response, bindingId) => {
-    if (response.chosenObject) {
+  handleOkCommand = async ({chosenObject, dossierData, chosenProject, chosenSubtype, isPrompted, promptsAnswers, reportName}, bindingId) => {
+    if (chosenObject) {
       reduxStore.dispatch({type: officeProperties.actions.startLoading});
-      reduxStore.dispatch({type: START_REPORT_LOADING, data: {name: response.reportName}});
-      const result =
-        await officeDisplayService.printObject(response.dossierData, response.chosenObject, response.chosenProject, objectTypes.getTypeDescription(3, response.chosenSubtype) === 'Report', null, null, bindingId, null, null, response.isPrompted, false, response.promptAnswers);
+      reduxStore.dispatch({type: START_REPORT_LOADING, data: {name: reportName}});
+      const options = {
+        dossierData,
+        objectId: chosenObject,
+        projectId: chosenProject,
+        isReport: objectTypes.getTypeDescription(3, chosenSubtype) === 'Report',
+        bindingId,
+        isRefresh: false,
+        isPrompted,
+        promptsAnswers,
+      };
+      const result = await officeDisplayService.printObject(options);
       if (result) {
         notificationService.displayNotification(result.type, result.message);
       }
@@ -149,6 +164,16 @@ class PopupController {
     } catch (e) {
       console.log('Attempted to close an already closed dialog');
     }
+  }
+
+  async saveReportWithParams(reportParams, response) {
+    await officeStoreService.preserveReportValue(reportParams.bindId, 'body', response.body);
+    if (response.promptsAnswers) {
+      // Include new promptsAnswers in case of Re-prompt workflow
+      reportParams.promptsAnswers = response.promptsAnswers;
+      await officeStoreService.preserveReportValue(reportParams.bindId, 'promptsAnswers', response.promptsAnswers);
+    }
+    await refreshReportsArray([reportParams], false)(reduxStore.dispatch);
   }
 }
 

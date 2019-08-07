@@ -3,6 +3,7 @@ import {
   STOP_REPORT_LOADING,
   RESET_STATE,
   SET_REPORT_N_FILTERS,
+  SET_PREPARED_REPORT,
 } from '../../src/popup/popup-actions';
 
 import {initialState, popupReducer} from '../../src/popup/popup-reducer';
@@ -55,5 +56,20 @@ describe('Popup Reducer', () => {
     const newState = popupReducer(initialState, action);
     // then
     expect(newState).toEqual({editedReport});
+  });
+
+  it('should return proper state in case of SET_PREPARED_REPORT action', () => {
+    // given
+    const instanceId = 'id';
+    const reportData = 'data';
+    const action = {
+      type: SET_PREPARED_REPORT,
+      instanceId,
+      reportData,
+    };
+    // when
+    const newState = popupReducer(initialState, action);
+    // then
+    expect(newState).toEqual({preparedInstance: instanceId, editedReport: reportData});
   });
 });

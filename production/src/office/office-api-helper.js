@@ -6,6 +6,8 @@ import {officeProperties} from './office-properties';
 import {officeStoreService} from './store/office-store-service';
 import {notificationService} from '../notification/notification-service';
 import {errorService} from '../error/error-handler';
+import mstrNormalizedJsonHandler from '../mstr-object/mstr-normalized-json-handler';
+import {CONTEXT_LIMIT} from '../mstr-object/mstr-object-rest-service';
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
@@ -13,6 +15,7 @@ const ASCII_CAPITAL_LETTER_INDEX = 65;
 const EXCEL_TABLE_NAME = 'table';
 const EXCEL_ROW_LIMIT = 1048576;
 const EXCEL_COL_LIMIT = 16384;
+const EXCEL_XTABS_BORDER_COLOR = '#a5a5a5';
 
 class OfficeApiHelper {
   getRange = (headerCount, startCell, rowCount = 0) => {
@@ -37,6 +40,26 @@ class OfficeApiHelper {
       throw new OutsideOfRangeError('The table you try to import exceeds the worksheet limits.');
     }
     return `${startCell}:${endColumn}${endRow}`;
+  }
+
+  numberToLetters = (colNum) => {
+    let colLetter = '';
+    let firstNumber = ALPHABET_RANGE_START;
+    let secondNumber = ALPHABET_RANGE_END;
+    for (firstNumber, secondNumber; (colNum -= firstNumber) >= 0; firstNumber = secondNumber, secondNumber *= ALPHABET_RANGE_END) {
+      colLetter = String.fromCharCode(parseInt((colNum % secondNumber) / firstNumber)
+        + ASCII_CAPITAL_LETTER_INDEX)
+        + colLetter;
+    }
+    return colLetter;
+  }
+
+  offsetCellBy = (cell, rowOffset, colOffset) => {
+    const cellArray = cell.split(/(\d+)/);
+    const [column, row] = cellArray;
+    const endRow = parseInt(row) + parseInt(rowOffset);
+    const endColumn = this.numberToLetters(parseInt(this.lettersToNumber(column) + colOffset));
+    return `${endColumn}${endRow}`;
   }
 
   handleOfficeApiException = (error) => {
@@ -66,7 +89,8 @@ class OfficeApiHelper {
       if (error.code === 'ItemNotFound') {
         return notificationService.displayNotification('info', 'The object does not exist in the metadata.');
       }
-      errorService.handleOfficeError(error);
+      const errorAfterOfficeFactory = errorService.errorOfficeFactory(error);
+      errorService.handleOfficeError(errorAfterOfficeFactory);
     }
   };
 
@@ -86,7 +110,8 @@ class OfficeApiHelper {
   }
 
   getExcelContext = async () => {
-    return await Excel.run(async (context) => {
+    // https://docs.microsoft.com/en-us/javascript/api/excel/excel.runoptions?view=office-js
+    return await Excel.run({delayForCellEdit: true}, async (context) => {
       return context;
     });
   }
@@ -118,24 +143,38 @@ class OfficeApiHelper {
     return {envUrl, username};
   }
 
-  formatTable = (table) => {
+  formatTable = (table, isCrosstab, crosstabHeaderDimensions) => {
     if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
-      table.getRange().format.autofitColumns();
+      if (isCrosstab) {
+        const {rowsX} = crosstabHeaderDimensions;
+        table.getRange().format.autofitColumns();
+        table.getRange().getColumnsBefore(rowsX).format.autofitColumns();
+      } else {
+        table.getRange().format.autofitColumns();
+      }
     } else {
       notificationService.displayNotification('warning', `Unable to format table.`);
     }
   }
 
-  formatNumbers = (table, reportConvertedData) => {
+  formatNumbers = (table, reportConvertedData, isCrosstab) => {
+    const {columnInformation} = reportConvertedData;
+    let filteredColumnInformation;
     if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
       try {
         const columns = table.columns;
-
-        for (const object of reportConvertedData.columnInformation) {
+        if (isCrosstab) {
+          filteredColumnInformation = columnInformation.filter((e) => {// we store attribute informations in column information in crosstab attributes are in headers not excel table so we dont need them here.
+            if (e.isAttribute === false) return e;
+          });
+        } else {
+          filteredColumnInformation = columnInformation;
+        }
+        const offset = columnInformation.length - filteredColumnInformation.length;
+        for (const object of filteredColumnInformation) {
+          const columnRange = columns.getItemAt(object.index - offset).getDataBodyRange();
+          let format = '';
           if (!object.isAttribute) {
-            const columnRange = columns.getItemAt(object.index).getDataBodyRange();
-            let format = '';
-
             if (object.category === 9) {
               format = this._getNumberFormattingCategoryName(object);
             } else {
@@ -149,8 +188,14 @@ class OfficeApiHelper {
               // for fractions set General format
               object.formatString.match(/# \?+?\/\?+?/) && (format = 'General');
             }
-            columnRange.numberFormat = format;
+          } else if (!isCrosstab) {
+            if (object.forms.length > 1) {
+              format = '@';
+            } else {
+              format = object.forms[0] === 'text' ? '@' : 'General';
+            }
           }
+          columnRange.numberFormat = format;
         }
       } catch (error) {
         throw errorService.handleError(error);
@@ -212,10 +257,222 @@ class OfficeApiHelper {
         }));
   }
 
-  deleteObjectTableBody = (context, object) => {
-    const tableObject = context.workbook.tables.getItem(object.bindId);
-    const tableRange = tableObject.getDataBodyRange();
-    tableRange.clear(Excel.ClearApplyTo.contents);
+  deleteObjectTableBody = async (context, object) => {
+    try {
+      const tableObject = context.workbook.tables.getItem(object.bindId);
+      const tableRange = tableObject.getDataBodyRange();
+      tableRange.clear(Excel.ClearApplyTo.contents);
+      await context.sync();
+    } catch (error) {
+      console.error('Error: ' + error);
+    }
+  }
+
+  /**
+   * Gets the total range of crosstab report - it sums table body range and headers ranges
+   *
+   * @param {Office} cellAddress Starting table body cell
+   * @param {Object} headerDimensions Contains information about crosstab headers dimensions
+   * @param {Office} sheet Active Exccel spreadsheet
+   * @memberof OfficeApiHelper
+   * @return {Object}
+   */
+  getCrosstabRange = (cellAddress, headerDimensions, sheet) => {
+    const {columnsY, columnsX, rowsX, rowsY} = headerDimensions;
+    const cell = typeof cellAddress === 'string' ? sheet.getRange(cellAddress) : cellAddress;
+    const bodyRange = cell.getOffsetRange(rowsY, columnsX - 1);
+    const startingCell = cell.getCell(0, 0).getOffsetRange(-(columnsY - 1), -rowsX);
+    return startingCell.getBoundingRect(bodyRange);
+  }
+
+  /**
+   * Clears the two crosstab report ranges
+   *
+   * @param {Office} officeTable Starting table body cell
+   * @param {Object} headerDimensions Contains information about crosstab headers dimensions
+   * @memberof OfficeApiHelper
+   */
+  clearCrosstabRange = (officeTable, headerDimensions) => {
+    try {
+      // Remove row headers
+      const leftRange = officeTable.getRange().getColumnsBefore(headerDimensions.rowsX);
+      leftRange.clear();
+
+      // Remove column headers
+      const topRange = officeTable.getRange().getRowsAbove(headerDimensions.columnsY - 1);
+      topRange.clear();
+    } catch (error) {
+      // TODO: Throw no available range error
+
+    }
+  }
+
+  /**
+   * Returns the new initial cell considering crosstabs
+   *
+   * @param {Office} cell - Starting table body cell
+   * @param {Array} headers - Headers object from OfficeConverterServiceV2.getHeaders
+   * @param {Boolean} isCrosstab - When is crosstab we offset the inital cell
+   * @memberof OfficeApiHelper
+   * @return {Object}
+   */
+  getTableStartCell = ({startCell, mstrTable, prevOfficeTable, crosstabChange}) => {
+    const {headers, isCrosstab} = mstrTable;
+    if (!crosstabChange && (!isCrosstab || prevOfficeTable)) return startCell;
+    const rowOffset = headers.columns.length - 1;
+    const colOffset = headers.rows[0].length;
+    return this.offsetCellBy(startCell, rowOffset, colOffset);
+  }
+
+  /**
+   * Gets range of subtotal row based on subtotal cell
+   *
+   * @param {Office} startCell Starting table body cell
+   * @param {Office} cell Starting subtotal row cell
+   * @param {Object} mstrTable mstrTable object instance definition
+   * @memberof OfficeApiHelper
+   * @return {Office} Range of subtotal row
+   */
+  getSubtotalRange = (startCell, cell, mstrTable) => {
+    const {headers} = mstrTable;
+    const {axis} = cell;
+    let offsets = {};
+
+    if (axis === 'rows') {
+      offsets = {
+        verticalFirstCell: cell.colIndex + 1,
+        horizontalFirstCell: -(headers.rows[0].length - cell.attributeIndex),
+        verticalLastCell: cell.colIndex + 1,
+        horizontalLastCell: headers.columns[0].length - 1,
+      };
+    } else if (axis === 'columns') {
+      offsets = {
+        verticalFirstCell: -((headers.columns.length - cell.attributeIndex) - 1),
+        horizontalFirstCell: cell.colIndex,
+        verticalLastCell: mstrTable.tableSize.rows,
+        horizontalLastCell: cell.colIndex,
+      };
+    } else { // if not a crosstab
+      offsets = {
+        verticalFirstCell: cell.rowIndex + 1,
+        horizontalFirstCell: cell.attributeIndex,
+        verticalLastCell: cell.rowIndex + 1,
+        horizontalLastCell: mstrTable.tableSize.columns - 1,
+      };
+    }
+    const firstSubtotalCell = startCell.getOffsetRange(offsets.verticalFirstCell, offsets.horizontalFirstCell);
+    const lastSubtotalCell = startCell.getOffsetRange(offsets.verticalLastCell, offsets.horizontalLastCell);
+    return firstSubtotalCell.getBoundingRect(lastSubtotalCell);
+  }
+
+  /**
+   *Sets bold format for all subtotal rows
+   *
+   * @param {Office} startCell Starting table body cell
+   * @param {Office} subtotalCells 2d array of all starting subtotal row cells (each element contains row and colum number of subtotal cell in headers columns)
+   * @param {Object} mstrTable mstrTable object instance definition
+   * @param {Office} context Excel context
+   * @memberof OfficeApiHelper
+   * @return {Promise} Context.sync
+   */
+  formatSubtotals = async (startCell, subtotalCells, mstrTable, context) => {
+    let contextPromises = [];
+    for (const cell of subtotalCells) {
+      const subtotalRowRange = this.getSubtotalRange(startCell, cell, mstrTable, context);
+      subtotalRowRange && (subtotalRowRange.format.font.bold = true);
+      contextPromises.push(context.sync());
+      if (contextPromises.length % CONTEXT_LIMIT === 0) {
+        await Promise.all(contextPromises);
+        contextPromises = [];
+      }
+    };
+  }
+
+  /**
+   *Prepares parameters for createHeaders
+   *
+   * @param {Office} reportStartingCell Address of the first cell in report (top left)
+   * @param {Array} rows Contains headers structure and data
+   * @param {Office} context Excel context
+   * @memberof OfficeApiHelper
+   */
+  createRowsHeaders = (reportStartingCell, rows) => {
+    const columnOffset = 0;
+    const rowOffset = rows[0].length;
+    // reportStartingCell.unmerge(); // excel api have problem with handling merged cells which are partailly in range, we unmerged selected cell to avoid this problem
+    const startingCell = reportStartingCell.getCell(0, 0).getOffsetRange(-columnOffset, -rowOffset); // we call getCell in case multiple cells are selected
+    const headerArray = mstrNormalizedJsonHandler._transposeMatrix(rows);
+    const headerRange = startingCell.getResizedRange(headerArray[0].length - 1, headerArray.length - 1);
+    this.insertHeadersValues(headerRange, rows, 'rows');
+    // TODO: Move merge cells after we import the whole table
+    // const directionVector = [0, 1];
+    // this.createHeaders(headerArray, startingCell, directionVector);
+  }
+
+  /**
+   *Prepares parameters for createHeaders
+   *
+   * @param {Office} cellAddress Address of the first cell in report (top left)
+   * @param {Array} columns Contains headers structure and data
+   * @param {Office} sheet Active Exccel spreadsheet
+   * @memberof OfficeApiHelper
+   * @return {Promise} Context.sync
+   */
+  createColumnsHeaders = (cellAddress, columns, sheet) => {
+    const reportStartingCell = sheet.getRange(cellAddress);
+    const columnOffset = columns.length;
+    const rowOffset = 0;
+    // reportStartingCell.unmerge(); // excel api have problem with handling merged cells which are partailly in range, we unmerged selected cell to avoid this problem
+    const startingCell = reportStartingCell.getCell(0, 0).getOffsetRange(-(columnOffset - 1), -rowOffset);// we call getCell in case multiple cells are selected
+    const directionVector = [1, 0];
+    const headerRange = startingCell.getResizedRange(columns.length - 1, columns[0].length - 1);
+    this.insertHeadersValues(headerRange, columns, 'columns');
+
+    return this.createHeaders(columns, startingCell, directionVector);
+  }
+  /**
+   * Clear prevoius formatting and insert data in range
+   *
+   * @param {Office} headerRange Range of the header
+   * @param {Array} headerArray Contains rows/headers structure and data
+   * @param {String} axis - Axis to apply formatting columns or rows
+   * @memberof OfficeApiHelper
+   */
+  insertHeadersValues(headerRange, headerArray, axis = 'rows') {
+    headerRange.clear(); // we are unmerging and removing formatting to avoid conflicts while merging cells
+    headerRange.values = headerArray;
+    const hAlign = axis === 'rows' ? 'left' : 'center';
+    headerRange.numberFormat = '@';
+    headerRange.format.horizontalAlignment = Excel.HorizontalAlignment[hAlign];
+    headerRange.format.verticalAlignment = Excel.VerticalAlignment.top;
+    headerRange.format.borders.getItem('EdgeTop').color = EXCEL_XTABS_BORDER_COLOR;
+    headerRange.format.borders.getItem('EdgeRight').color = EXCEL_XTABS_BORDER_COLOR;
+    headerRange.format.borders.getItem('EdgeBottom').color = EXCEL_XTABS_BORDER_COLOR;
+    headerRange.format.borders.getItem('EdgeLeft').color = EXCEL_XTABS_BORDER_COLOR;
+    headerRange.format.borders.getItem('InsideVertical').color = EXCEL_XTABS_BORDER_COLOR;
+    headerRange.format.borders.getItem('InsideHorizontal').color = EXCEL_XTABS_BORDER_COLOR;
+  }
+
+  /**
+   * Create Headers structure in Excel
+   *
+   * @param {Array} headerArray Contains rows/headers structure and data
+   * @param {Office} startingCell Address of the first cell header (top left)
+   * @param {number} directionVector direction vertor for the step size when iterating over cells
+   * @memberof OfficeApiHelper
+   */
+  createHeaders = (headerArray, startingCell, directionVector) => {
+    const [offsetForMoving1, offsetForMoving2] = directionVector;
+    for (let i = 0; i < headerArray.length - 1; i++) {
+      let currentCell = startingCell;
+      for (let j = 0; j < headerArray[i].length - 1; j++) {
+        if (headerArray[i][j] === headerArray[i][j + 1]) {
+          currentCell.getResizedRange(offsetForMoving2, offsetForMoving1).merge(); // increasing size of selected range for cells that will be merged
+        }
+        currentCell = currentCell.getOffsetRange(offsetForMoving2, offsetForMoving1); // moving to next attributr value (cell)
+      }
+      startingCell = startingCell.getOffsetRange(offsetForMoving1, offsetForMoving2); // moving to next attribute (row/column)
+    }
   }
 }
 

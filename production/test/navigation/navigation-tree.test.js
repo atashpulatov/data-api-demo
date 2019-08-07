@@ -44,7 +44,7 @@ describe('NavigationTree', () => {
       chosenProjectName: 'Prepare Data',
       chosenType: 'Data',
     };
-    const mockGetDefinition = jest.spyOn(mstrObjectRestService, 'getInstanceDefinition').mockImplementation(() => {
+    const mockGetDefinition = jest.spyOn(mstrObjectRestService, 'createInstance').mockImplementation(() => {
       return {
         rows: 1,
       };
@@ -81,7 +81,7 @@ describe('NavigationTree', () => {
       chosenProjectName: 'Prepare Data',
       chosenType: 'Data',
     };
-    const mockGetDefinition = jest.spyOn(mstrObjectRestService, 'getInstanceDefinition').mockImplementation(() => {
+    const mockGetDefinition = jest.spyOn(mstrObjectRestService, 'createInstance').mockImplementation(() => {
       return {
         rows: 0,
       };
@@ -177,7 +177,7 @@ describe('NavigationTree', () => {
     // given
     const givenObjectId = 'objectId';
     const givenProjectId = 'projectId';
-    const givenSubtype = 'subtype';
+    const givenSubtype = 768;
     const givenIsPrompted = 'customPromptAnswer';
     const selectObject = jest.fn();
     const isPromptedResponse = jest.spyOn(mstrObjectRestService, 'isPrompted')

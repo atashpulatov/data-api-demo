@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import '../index.css';
 import '../home/home.css';
 import {selectorProperties} from './selector-properties';
 import {attributeSelectorHelpers} from './attribute-selector-helpers';
@@ -35,8 +34,9 @@ export class AttributeSelectorWindow extends Component {
   };
 
   onTriggerUpdate = (reportId, projectId, reportSubtype, body, reportName = this.props.mstrData.reportName) => {
+    const {mstrData} = this.props;
     attributeSelectorHelpers.officeMessageParent(selectorProperties.commandOnUpdate,
-        reportId, projectId, reportSubtype, body, reportName);
+        reportId, projectId, reportSubtype, body, reportName, mstrData.instanceId, mstrData.promptsAnswers);
   };
 
   /**
@@ -60,11 +60,14 @@ export class AttributeSelectorWindow extends Component {
   }
 
   render() {
+    const mstrData = this.props.mstrData;
+    const typeName = mstrData.reportType.charAt(0).toUpperCase() + mstrData.reportType.substring(1);
+
     return (
       <div>
         <AttributeSelector
           // TODO: logic for a title
-          title={`Import ${this.props.mstrData.reportType} > ${this.props.mstrData.reportName}`}
+          title={`Import ${typeName} > ${this.props.mstrData.reportName}`}
           attributesSelectedChange={this.attributesBeingSelected}
           mstrData={this.props.mstrData}
           session={this.state.session}

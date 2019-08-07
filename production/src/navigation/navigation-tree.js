@@ -3,7 +3,7 @@ import '../index.css';
 import '../home/home.css';
 import {selectorProperties} from '../attribute-selector/selector-properties';
 import {PopupButtons} from '../popup/popup-buttons.jsx';
-import {FolderBrowser} from 'mstr-react-library';
+import {FolderBrowser, objectTypes} from 'mstr-react-library';
 import {connect} from 'react-redux';
 import {actions} from './navigation-tree-actions';
 import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';
@@ -40,7 +40,7 @@ export class _NavigationTree extends Component {
 
   handleSecondary = async () => {
     try {
-      const response = await mstrObjectRestService.getInstanceDefinition(this.props.chosenObjectId, this.props.chosenProjectId, this.props.chosenSubtype);
+      const response = await mstrObjectRestService.createInstance(this.props.chosenObjectId, this.props.chosenProjectId, this.props.chosenSubtype);
       if (response && response.rows === 0) {
         return message.warning(EMPTY_REPORT);
       }
@@ -68,7 +68,13 @@ export class _NavigationTree extends Component {
         chosenSubtype: null,
         isPrompted: null,
       });
-      const isPrompted = await mstrObjectRestService.isPrompted(objectId, projectId);
+
+      // Only check for prompts when it's a report
+      let isPrompted = false;
+      if (objectTypes.getTypeDescription(3, subtype) === 'Report') {
+        isPrompted = await mstrObjectRestService.isPrompted(objectId, projectId);
+      }
+
       this.props.selectObject({
         chosenObjectId: objectId,
         chosenProjectId: projectId,

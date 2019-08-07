@@ -3,6 +3,7 @@ import {notification, message, Icon, Button} from 'antd';
 import {connect} from 'react-redux';
 import './Notifications.css';
 import {withTranslation} from 'react-i18next';
+import CustomNotification from './custom-notification';
 
 export class NotificationsWithoutRedux extends Component {
   constructor(props) {
@@ -25,7 +26,7 @@ export class NotificationsWithoutRedux extends Component {
   };
 
   displayNotification = () => {
-    const {notificationType, title, content, t} = this.props;
+    const {notificationType, title, content, t, details} = this.props;
     let icon;
     const key = `open${Date.now()}`;
     let btn = <Button type="primary" size="small" onClick={() => notification.close(key)} >{t('OK')}</Button>;
@@ -58,14 +59,15 @@ export class NotificationsWithoutRedux extends Component {
     }
     notification.open({
       message: t(title),
-      description: this.translateContent(content, t),
+      description: <CustomNotification details={details} t={t} translatedContent={this.translateContent(content, t)} />,
       icon,
       btn: btn,
       key,
+      className: 'error-notification',
     });
   };
 
-  translateContent = (content, t) => content.includes('Excel returned error') ? `${t('Excel returned error')}: ${content.split(':')[1]}` : t(content);
+  translateContent = (content, t) => content.includes('Excel returned error') ? `${t('Excel returned error')}: ${content.split(': ')[1]}` : t(content);
 
   displayMessage = () => {
     const {messageType, content, t} = this.props;
@@ -88,6 +90,7 @@ const mapStateToProps = (state) => {
     messageType: state.notificationReducer.messageType,
     notificationType: state.notificationReducer.notificationType,
     currentObject: state.notificationReducer.currentObject,
+    details: state.notificationReducer.details,
   };
 };
 

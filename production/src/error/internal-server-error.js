@@ -1,4 +1,6 @@
-export function InternalServerError(errorBody) {
-  this.iServerCode = errorBody && errorBody.iServerCode ? errorBody.iServerCode : '';
+export function InternalServerError(error = {response: {}}) {
+  this.status = error.status;
+  this.response = error.response;
+  this.message = error.message;
 };
 InternalServerError.prototype = new Error();

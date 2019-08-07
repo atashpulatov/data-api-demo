@@ -10,6 +10,8 @@ import {refreshReportsArray} from '../popup/popup-actions';
 import {fileHistoryContainerHOC} from './file-history-container-HOC.jsx';
 import {officeStoreService} from '../office/store/office-store-service';
 import {toggleSecuredFlag} from '../office/office-actions';
+import {errorService} from '../error/error-handler';
+import {authenticationHelper} from '../authentication/authentication-helper';
 import restrictedArt from './assets/art_restricted_access_blue.svg';
 
 import './file-history.css';
@@ -41,10 +43,15 @@ export class _FileHistoryContainer extends React.Component {
     });
   };
 
-  showData = () => {
-    const {reportArray, refreshReportsArray, toggleSecuredFlag} = this.props;
-    this.refreshAllAction(reportArray, refreshReportsArray);
-    toggleSecuredFlag(false);
+  showData = async () => {
+    try {
+      await Promise.all([officeApiHelper.getExcelSessionStatus(), authenticationHelper.validateAuthToken()]);
+      const {reportArray, refreshReportsArray, toggleSecuredFlag} = this.props;
+      this.refreshAllAction(reportArray, refreshReportsArray);
+      toggleSecuredFlag(false);
+    } catch (error) {
+      return errorService.handleError(error);
+    }
   }
 
   render() {
@@ -53,13 +60,13 @@ export class _FileHistoryContainer extends React.Component {
       {
         isSecured &&
         <div className="secured-screen-container">
-          <img src={restrictedArt} alt={t('Refresh')}/>
+          <img src={restrictedArt} alt={t('Refresh')} />
           <div className="secured-header">{t('Data Cleared!')}</div>
-          <p className="secured-info">{t(`MicroStrategy data has been removed from the workbook. Click 'Refresh' to import it again.`)}</p>
+          <p className="secured-info">{t(`MicroStrategy data has been removed from the workbook. Click 'View Data' to import it again.`)}</p>
           <Button type="primary" className="show-data-btn" onClick={this.showData}>{t('View Data')}</Button>
         </div>
       }
-      <Button id="add-data-btn-container" className="add-data-btn" onClick={() => this.props.addDataAction()}
+      <Button id="add-data-btn-container" className="add-data-btn floating-button" onClick={() => this.props.addDataAction()}
         disabled={loading}>{t('Add Data')}</Button>
       <span className="refresh-button-container">
         <Popover placement="bottom" content={t('Refresh All Data')} mouseEnterDelay={1}>
@@ -77,6 +84,8 @@ export class _FileHistoryContainer extends React.Component {
           onClick={officeApiHelper.onBindingObjectClick}
           onDelete={officeDisplayService.removeReportFromExcel}
           isLoading={report.isLoading}
+          isCrosstab={report.isCrosstab}
+          crosstabHeaderDimensions={report.crosstabHeaderDimensions}
           objectType={report.objectType}
           refreshDate={report.refreshDate} />)}
       </div>

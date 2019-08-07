@@ -1,6 +1,6 @@
 import React from 'react';
 import {Provider} from 'react-redux';
-import {mount} from 'enzyme';
+import {mount, shallow} from 'enzyme';
 import {Home, _Home} from '../../src/home/home.jsx';
 import {_Header} from '../../src/home/header.jsx';
 import {sessionHelper} from '../../src/storage/session-helper';
@@ -8,6 +8,7 @@ import {officeApiHelper} from '../../src/office/office-api-helper';
 import {reduxStore} from '../../src/store';
 import {homeHelper} from '../../src/home/home-helper.js';
 import {pageBuilder} from '../../src/home/page-builder.js';
+import {SettingsMenu} from '../../src/home/settings-menu';
 
 jest.mock('../../src/storage/session-helper');
 jest.mock('../../src/office/office-api-helper');
@@ -159,119 +160,74 @@ describe('Home', () => {
       const imageWrapper = headerWrapper.find('#initials');
       expect(imageWrapper).toBeTruthy();
     });
-
-    it('should log out on button click', async () => {
+    it('should display settings menu when isSettings flag is true', () => {
       // given
-      const tempPromise = Promise.resolve();
-      const logOutRestSpy = jest.spyOn(sessionHelper, 'logOutRest');
-      const logOutSpy = jest.spyOn(sessionHelper, 'logOut');
-      const logOutRedirectSpy = jest.spyOn(sessionHelper, 'logOutRedirect');
+      const isSettings = true;
       // when
-      const headerWrapper = mount(<_Header />);
-      const buttonWrapper = headerWrapper.find('#logOut').at(0);
+      const headerWrapper = shallow(<_Header isSettings={isSettings} />);
+      // then
+      expect(headerWrapper.contains(<SettingsMenu />)).toBe(true);
+    });
+    it('should NOT display settings menu when isSettings flag is false', () => {
+      // given
+      const isSettings = false;
+      // when
+      const headerWrapper = mount(<_Header isSettings={isSettings} />);
+      // then
+      expect(headerWrapper.contains(<SettingsMenu />)).toBe(false);
+    });
+    it('should change isSettings flag when button settings is clicked', () => {
+      // given
+      const mockToggle = jest.fn();
+      const headerWrapper = mount(<_Header isSettings={false} isConfirm={false} toggleIsSettingsFlag={mockToggle} />);
+      const buttonWrapper = headerWrapper.find('Button .settings-btn');
+      const mockToggleSettings = jest.spyOn(headerWrapper.instance(), 'toggleSettings');
+      headerWrapper.instance().forceUpdate();
+      // when
       buttonWrapper.simulate('click');
       // then
-      await (tempPromise);
-      expect(logOutRestSpy).toBeCalled();
-      expect(logOutSpy).toBeCalled();
-      expect(logOutRedirectSpy).toBeCalled();
+      expect(mockToggleSettings).toBeCalled();
     });
-    it('should handle error on logout', async () => {
+    it('toggleIsSettingsFlag should be called with false when click event is registered outside of settings menu', () => {
       // given
-      const logOutRestSpy = jest.spyOn(sessionHelper, 'logOutRest').mockImplementation(() => {
-        throw new Error();
+      const map = {};
+      document.addEventListener = jest.fn((event, cb) => {
+        map[event] = cb;
       });
+      const mockToggle = jest.fn();
+      shallow(<_Header isSettings={true} toggleIsSettingsFlag={mockToggle} />);
       // when
+      map.click({
+        target: {
+          classList: {
+            contains: () => false,
+          },
+        },
+      });
+      // then
+      expect(mockToggle).toBeCalledWith(false);
+    });
+    it('toggleIsSettingsFlag should be called with false when ESC keyup event is registered and settings menu is displayed', () => {
+      // given
+      const map = {};
+      document.addEventListener = jest.fn((event, cb) => {
+        map[event] = cb;
+      });
+      const mockToggle = jest.fn();
+      shallow(<_Header isSettings={true} toggleIsSettingsFlag={mockToggle} />);
+      // when
+      map.keyup({keyCode: 27});
+      // then
+      expect(mockToggle).toBeCalledWith(false);
+    });
+    it('should unregister event listeners when unmounting component', () => {
+      // given
+      document.removeEventListener = jest.fn();
       const headerWrapper = mount(<_Header />);
-      const buttonWrapper = headerWrapper.find('#logOut').at(0);
-      buttonWrapper.simulate('click');
-      // then
-      expect(logOutRestSpy).toThrowError();
-    });
-    it('should run secureData when Secure button is clicked', () => {
-      // given
-      const mockReportArray = createMockFilesArray();
-      const wrappedComponent = mount(
-          <_Header
-            reportArray={mockReportArray}
-            isSecured={false}/>);
-      const mockSecure = jest.spyOn(wrappedComponent.instance(), 'secureData');
-      wrappedComponent.instance().forceUpdate();
-      const secureButton = wrappedComponent.find('Button .secure-btn');
       // when
-      secureButton.simulate('click');
+      headerWrapper.unmount();
       // then
-      expect(mockSecure).toBeCalled();
-    });
-    it('should call proper methods in secureData method', async () => {
-      // given
-      const context = {sync: jest.fn()};
-      const mockgetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => {
-        return context;
-      });
-      const mockDeleteBody = jest.spyOn(officeApiHelper, 'deleteObjectTableBody').mockImplementation(() => { });
-      const mockReportArray = createMockFilesArray();
-      const mockToggleSecured = jest.fn();
-      const wrappedComponent = mount(
-          < _Header
-            reportArray={mockReportArray}
-            isSecured={false}
-            toggleSecuredFlag={mockToggleSecured}
-          />);
-      wrappedComponent.instance().forceUpdate();
-      // when
-      wrappedComponent.instance().secureData();
-      // then
-      await expect(mockgetContext).toBeCalled();
-      expect(mockDeleteBody).toHaveBeenCalledTimes(6);
-      await expect(context.sync).toBeCalled();
-      expect(mockToggleSecured).toBeCalled();
-    });
-    it('should display active Secure Data button when some reports are imported and isSecured is false', () => {
-      // given
-      const mockReportArray = createMockFilesArray();
-      // when
-      const wrappedComponent = mount(
-          <_Header
-            reportArray={mockReportArray}
-            isSecured={false}/>);
-      // then
-      expect(wrappedComponent.find('Button .secure-btn').length).toBe(1);
-      expect(wrappedComponent.find('.secure-access-active').length).toBe(1);
-    });
-    it('should display INactive Secure Data button when some reports are imported and isSecured is true', () => {
-      // given
-      const mockReportArray = createMockFilesArray();
-      // when
-      const wrappedComponent = mount(
-          <_Header
-            reportArray={mockReportArray}
-            isSecured={true}/>);
-      // then
-      expect(wrappedComponent.find('.secure-access-inactive').length).toBe(1);
-    });
-    it('should NOT display Secure Data button when NO reports are imported', () => {
-      // given
-      // when
-      const wrappedComponent = mount(
-          <_Header
-            reportArray={[]}
-            isSecured={false}/>);
-      // then
-      expect(wrappedComponent.find('Button .secure-btn').length).toBe(0);
+      expect(document.removeEventListener).toBeCalledTimes(2);
     });
   });
 });
-
-const createMockFilesArray = () => {
-  const mockArray = [];
-  for (let i = 0; i < 6; i++) {
-    mockArray.push({
-      refreshDate: new Date(),
-      id: 'mockId_' + i,
-      name: 'mockName_' + i,
-      bindId: 'mockBindId_' + i,
-    });
-  }
-  return mockArray;
-};

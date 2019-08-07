@@ -17,7 +17,7 @@ class AuthenticationHelper {
               values.envUrl, 1);
       sessionHelper.logIn(authToken);
     } catch (error) {
-      errorService.handlePreAuthError(error);
+      errorService.handlePreAuthError(error, true);
     } finally {
       sessionHelper.disableLoading();
     }
