@@ -2,7 +2,7 @@
 
 Add-in for Microsoft Office applications and MicroStrategy.
 
-[![Build Status](https://jenkins.internal.microstrategy.com/buildStatus/icon?job=mstr-office-.-m2020-.-stage-1-dev)](https://jenkins.internal.microstrategy.com/job/mstr-office-.-m2020-.-stage-1-dev/)
+[![Build Status](https://jenkins.internal.microstrategy.com/buildStatus/icon?job=mstr-office-.-m2019_update-.-stage-1-dev)](https://jenkins.internal.microstrategy.com/job/mstr-office-.-m2019_update-.-stage-1-dev/)
 
 ## Getting Started
 
@@ -43,7 +43,7 @@ yarn start
 
 #### Manifest file
 
-To sideload our plugin on any of the platforms you will need manifest file.
+To sideload our plugin on any of the platforms you will need manifest file. 
 The file is being stored in mstr-react/production/office-react-manifest.xml
 Below you can find information and links describe process of sideloading the add-in.
 
@@ -54,7 +54,7 @@ You need to copy manifest file to Office location in Library like so
 cp mstr-office/production/office-react-manifest.xml ~/Library/Containers/com.microsoft.Excel/documents/wef
 ```
 
-Now you can run add-in using Insert -> My Add-ins.
+Now you can run add-in using Insert -> My Add-ins. 
 MicroStrategy for Office should appear under Developer Add-ins.
 You may be required to accept self-signed certificate in order to start add-in.
 
@@ -62,7 +62,7 @@ Additional information can be found on [Microsoft page](https://docs.microsoft.c
 
 #### Office for Windows
 
-Simply follow instruction from official [Microsoft page](https://docs.microsoft.com/en-us/office/dev/add-ins/testing/create-a-network-shared-folder-catalog-for-task-pane-and-content-add-ins)
+Simply follow instruction from official [Microsoft page](https://docs.microsoft.com/en-us/office/dev/add-ins/testing/create-a-network-shared-folder-catalog-for-task-pane-and-content-add-ins) 
 
 #### Office Online
 
@@ -88,14 +88,14 @@ ssh-add /custom/path/to/ssh/key
 Host key verification failed.
 fatal: Could not read from remote repository.
 ```
-This means that you don't have microstrategy.github.com added to known hosts.
+This means that you don't have microstrategy.github.com added to known hosts. 
 To fix it simply run
 ```
 ssh github.microstrategy.com
 The authenticity of host 'github.microstrategy.com (X.X.X.X)' can't be established.
 ECDSA key fingerprint is SHA256:--------------------------------------------.
 Are you sure you want to continue connecting (yes/no)? yes
-```
+``` 
 Type **yes** when prompted.
 
 ## Running the tests
