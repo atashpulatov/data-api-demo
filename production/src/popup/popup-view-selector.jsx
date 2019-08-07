@@ -15,7 +15,14 @@ export const _PopupViewSelector = (props) => {
   let popupType = props.popupType;
   const {propsToPass, methods, importRequested} = props;
 
+  if (!props.authToken || !propsToPass) {
+    console.log('Waiting for token to be passed');
+    return null;
+  }
+  propsToPass.token = props.authToken;
+
   const localEditReport = {...props.editedReport};
+  console.log({props, localEditReport});
   if ((importRequested && !props.isPrompted)
     || (importRequested && arePromptsAnswered(props))) {
     proceedToImport(props);
@@ -33,12 +40,6 @@ export const _PopupViewSelector = (props) => {
     propsToPass.projectId = props.chosenProjectId;
     propsToPass.reportId = props.chosenObjectId;
   }
-
-  if (!props.authToken || !propsToPass) {
-    console.log('Waiting for token to be passed');
-    return null;
-  }
-  propsToPass.token = props.authToken;
 
   return renderProperComponent(popupType, methods, propsToPass, localEditReport);
 };
@@ -91,7 +92,11 @@ async function obtainInstanceWithPromptsAnswers(propsToPass, props) {
     objectType: 'report',
     instanceId: instanceDefinition.instanceId,
     promptsAnswers: props.promptsAnswers,
+    selectedAttributes: props.editedReport.selectedAttributes,
+    selectedMetrics: props.editedReport.selectedMetrics,
+    selectedFilters: props.editedReport.selectedFilters,
   };
+  console.log({preparedReport, propsToPass});
   props.preparePromptedReport(instanceDefinition.instanceId, preparedReport);
 }
 
@@ -152,6 +157,8 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
 
 export function mapStateToProps(state) {
   const popupState = state.popupReducer.editedReport;
+  console.log({popupState});
+
   return {
     ...state.navigationTree,
     authToken: state.sessionReducer.authToken,
