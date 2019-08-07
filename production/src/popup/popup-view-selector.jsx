@@ -92,9 +92,9 @@ async function obtainInstanceWithPromptsAnswers(propsToPass, props) {
     objectType: 'report',
     instanceId: instanceDefinition.instanceId,
     promptsAnswers: props.promptsAnswers,
-    selectedAttributes: props.editedReport.selectedAttributes,
-    selectedMetrics: props.editedReport.selectedMetrics,
-    selectedFilters: props.editedReport.selectedFilters,
+    selectedAttributes: props.editedReport && props.editedReport.selectedAttributes,
+    selectedMetrics: props.editedReport && props.editedReport.selectedMetrics,
+    selectedFilters: props.editedReport && props.editedReport.selectedFilters,
   };
   console.log({preparedReport, propsToPass});
   props.preparePromptedReport(instanceDefinition.instanceId, preparedReport);
