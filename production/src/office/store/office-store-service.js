@@ -19,6 +19,7 @@ class OfficeStoreService {
         isCrosstab: report.isCrosstab,
         isPrompted: report.isPrompted,
         promptsAnswers: report.promptsAnswers,
+        crosstabHeaderDimensions: report.crosstabHeaderDimensions,
       });
       settings.set(officeProperties.loadedReportProperties, reportProperties);
       settings.saveAsync();

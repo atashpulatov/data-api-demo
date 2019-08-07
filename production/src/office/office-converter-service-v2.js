@@ -7,13 +7,16 @@ import jsonHandler from '../mstr-object/mstr-normalized-json-handler';
  */
 class OfficeConverterServiceV2 {
   createTable(response) {
+    const columnInformation = this.getColumnInformation(response);
+    const isCrosstab = this.isCrosstab(response);
     return {
-      id: response.id,
-      name: response.name,
-      isCrosstab: this.isCrosstab(response),
+      tableSize: this.getTableSize(response, columnInformation, isCrosstab),
+      columnInformation,
       headers: this.getHeaders(response),
-      rows: this.getRows(response),
-      columnInformation: this.getColumnInformation(response),
+      id: response.id,
+      isCrosstab,
+      name: response.name,
+      rows: this.getRows(response, isCrosstab),
     };
   }
   /**
@@ -24,7 +27,12 @@ class OfficeConverterServiceV2 {
    * @memberof OfficeConverterServiceV2
    */
   isCrosstab(response) {
-    return response.definition.grid.crossTab;
+    try {
+      return !!response.definition.grid.crossTab;
+    } catch (error) {
+      // This is changing so often that we want to at least return false
+      return false;
+    }
   }
 
   /**
@@ -35,9 +43,18 @@ class OfficeConverterServiceV2 {
    * @memberof OfficeConverterServiceV2
    */
   getRows(response) {
-    // onMetric is passed when mapping the row [{rv:1, fv:"$1"}, ...]
-    const onMetric = ({rv}) => rv;
-    return jsonHandler.renderRows(response.data.metricValues, onMetric);
+    const rowTotals = [];
+    const onAttribute = (array) => {
+      return (e) => {
+        if (array) array.push(e.subtotalAddress);
+        return e.value.join(' ');
+      };
+    };
+    if (this.isCrosstab(response)) {
+      return {row: jsonHandler.renderRows(response.data)};
+    }
+    const row = jsonHandler.renderTabular(response.definition, response.data, onAttribute(rowTotals));
+    return {row, rowTotals};
   }
 
   /**
@@ -48,10 +65,41 @@ class OfficeConverterServiceV2 {
    * @memberof OfficeConverterServiceV2
    */
   getHeaders(response) {
-    const onHeader = (e) => e.value[0];
-    const rows = jsonHandler.renderHeaders(response.definition, 'rows', response.data.headers, onHeader);
-    const columns = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onHeader);
-    return {rows, columns};
+    const rowTotals = [];
+    const columnTotals = [];
+
+    const onElement = (array) => {
+      return (e) => {
+        if (array) array.push(e.subtotalAddress);
+        return e.value.join(' ');
+      };
+    };
+
+    if (this.isCrosstab(response)) {
+      const rows = jsonHandler.renderHeaders(response.definition, 'rows', response.data.headers, onElement(rowTotals));
+      const columns = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement(columnTotals));
+      const subtotalAddress = [...rowTotals, ...columnTotals];
+      return {rows, columns, subtotalAddress};
+    }
+    const attributeTitles = jsonHandler.renderTitles(response.definition, 'rows', response.data.headers, onElement());
+    const metricHeaders = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement());
+    return {columns: [[...attributeTitles[0], ...metricHeaders[0]]]};
+  }
+
+  /**
+   * Returns number of rows and metric columns of tabular data if not crosstabs of metrics grid if crosstabs
+   *
+   * @param {JSON} response
+   * @param {Object} columnInformation - Array with indexed column definition for metrics and attributes
+   * @param {Boolean} isCrosstab
+   * @return {Number}
+   * @memberof OfficeConverterServiceV2
+   */
+  getTableSize(response, columnInformation, isCrosstab) {
+    return {
+      rows: response.data.paging.total,
+      columns: isCrosstab ? response.data.headers.columns[0].length : columnInformation.length,
+    };
   }
 
   /**
@@ -62,29 +110,32 @@ class OfficeConverterServiceV2 {
    * @memberof OfficeConverterServiceV2
    */
   getColumnInformation(response) {
-    const onColumnHeader = (element) => element;
-    const columns = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onColumnHeader);
-    const lastRow = columns[columns.length - 1];
-    return lastRow.map((element, index) => {
-      if (element.type === 'Metric') {
-        return {
-          category: element.numberFormatting.category,
-          formatString: element.numberFormatting.formatString,
-          id: element.id,
-          index,
-          isAttribute: false,
-          name: element.name,
-        };
+    const onElement = (element) => element;
+    const metricColumns = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement);
+    const attributeColumns = jsonHandler.renderTitles(response.definition, 'rows', response.data.headers, onElement);
+    const columns = [...attributeColumns[attributeColumns.length - 1], ...metricColumns[metricColumns.length - 1]];
+    return columns.map((element, index) => {
+      switch (element.type.toLowerCase()) {
+        case 'metric':
+          return {
+            category: element.numberFormatting.category,
+            formatString: element.numberFormatting.formatString,
+            id: element.id,
+            index,
+            isAttribute: false,
+            name: element.name,
+          };
+        case 'attribute':
+          return {
+            attributeId: element.id,
+            attributeName: element.name,
+            forms: element.forms,
+            index,
+            isAttribute: true,
+          };
+        default:
+          return {};
       }
-      // TODO: Check, currently there are no v2 examples that have attributes in the table body
-      return {
-        attributeId: element.id,
-        attributeName: element.name,
-        formId: element.form.id,
-        formName: element.form.name,
-        index,
-        isAttribute: true,
-      };
     });
   }
 }

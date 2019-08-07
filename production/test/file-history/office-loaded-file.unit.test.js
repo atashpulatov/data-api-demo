@@ -170,6 +170,8 @@ describe('office loaded file', () => {
     const wrappedComponent = mount(<_OfficeLoadedFile
       refreshDate={new Date()}
       bindingId={testBindingId}
+      isCrosstab={true}
+      crosstabHeaderDimensions={{}}
       fileName='test'
       onDelete={onDeleteMocked} />);
     wrappedComponent.setState({allowDeleteClick: true});
@@ -178,7 +180,7 @@ describe('office loaded file', () => {
     deleteButton.props().onClick(mockEvent);
     // then
     expect(onDeleteMocked).toBeCalled();
-    expect(onDeleteMocked).toBeCalledWith(testBindingId);
+    expect(onDeleteMocked).toBeCalledWith(testBindingId, true, {});
   });
   it('should NOT invoke delete method on button click if allowDeleteClick is false', () => {
     // given
