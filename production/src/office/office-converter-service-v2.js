@@ -71,7 +71,7 @@ class OfficeConverterServiceV2 {
     const onElement = (array) => {
       return (e) => {
         if (array) array.push(e.subtotalAddress);
-        return e.value.join(' ');
+        return '\'' + e.value.join(' ');
       };
     };
 
