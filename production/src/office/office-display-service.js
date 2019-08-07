@@ -443,7 +443,7 @@ class OfficeDisplayService {
           contextPromises.push(excelContext.sync());
           console.timeEnd('Append crosstab rows');
         }
-        subtotalsAddresses = subtotalsAddresses.concat(subtotalAddress.flat(Infinity).filter(Boolean));
+        subtotalsAddresses = subtotalsAddresses.concat(subtotalAddress.reduce((acc, val) => acc.concat(val), []).filter(Boolean));
         rowIndex += row.length;
         const promiseLength = contextPromises.length;
         if (promiseLength % PROMISE_LIMIT === 0) {
