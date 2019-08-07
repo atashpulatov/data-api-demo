@@ -31,6 +31,7 @@ rake stage_0_test
   end
 
   publishers do
+
     html do
       report_name 'Code Coverage Report'
       report_directory_path ".comparison_report"
