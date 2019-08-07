@@ -18,6 +18,8 @@ task :build do
   shell_command! "zip -r office-loader-#{Common::Version.application_version}.zip .", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/office-loader/build"
 end
 
+
+
 task :clean do
   build_dir = "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/build"
   Dir.mkdir(build_dir) unless Dir.exist?(build_dir)
@@ -59,8 +61,9 @@ end
 desc "debug rake task"
 task :debug do
   # generate_comparison_report_markdown
-  generate_eslint_report
+  # generate_eslint_report
   # publish_to_pull_request_page
+  update_package_json("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
 end
 
 def run_test(working_dir)
@@ -85,6 +88,7 @@ def update_package_json(working_dir)
   if data.key?("build")
     data["build"] = Common::Version.application_version
   end
+
   File.open(package_json_path,"w") do |f|
     f.write(JSON.pretty_generate(data)) #generate beautified json
   end
@@ -237,6 +241,7 @@ def add_data_for_doc(compare_obj, xml_doc, metric_name)
     compare_obj["All files"]["packages"][pack_name] = {}  if compare_obj["All files"]["packages"][pack_name].nil?
     compare_obj["All files"]["packages"][pack_name][metric_name] = get_metics_node(package.metrics)
     compare_obj["All files"]["packages"][pack_name]["files"] = {} if compare_obj["All files"]["packages"][pack_name]["files"].nil?
+
     #handle the single file package situation
     if package.file.is_a?(Nokogiri::XML::Element)
       handle_file(compare_obj,package.file,pack_name,metric_name)
@@ -248,6 +253,7 @@ def add_data_for_doc(compare_obj, xml_doc, metric_name)
   end
 
 end
+
 def handle_file(compare_obj, file, pack_name,metric_name)
   file_name = file["name"]
   compare_obj["All files"]["packages"][pack_name]["files"][file_name] = {} if compare_obj["All files"]["packages"][pack_name]["files"][file_name].nil?
@@ -266,6 +272,7 @@ def handle_file(compare_obj, file, pack_name,metric_name)
     end
   end
 end
+
 def get_metics_node(source)
   metics_node = {}
   metics_node["total_stat"] = source["statements"].to_i

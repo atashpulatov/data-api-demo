@@ -2,16 +2,18 @@ import {errorService} from '../error/error-handler';
 import {OutsideOfRangeError} from '../error/outside-of-range-error';
 import {reduxStore} from '../store';
 import {moduleProxy} from '../module-proxy';
-import {officeConverterService} from '../office/office-converter-service';
+import officeConverterServiceV2 from '../office/office-converter-service-v2';
 
 const sharedFolderIdType = 7;
 
 export const DATA_LIMIT = 200000; // 200000 is around 1mb of MSTR JSON response
 export const PROMISE_LIMIT = 10; // Number of concurrent context.sync() promises during data import.
 export const IMPORT_ROW_LIMIT = 20000; // Maximum number of rows to fetch during data import (For few columns tables).
+export const CONTEXT_LIMIT = 500; // Maximum number of Excel operations before context syncing.
 const EXCEL_ROW_LIMIT = 1048576;
 const EXCEL_COLUMN_LIMIT = 16384;
 const OBJECT_TYPE = '3'; // both reports and cubes are of type 3
+const API_VERSION = 2;
 
 class MstrObjectRestService {
   getProjectContent(envUrl, authToken, projectId,
@@ -115,15 +117,15 @@ class MstrObjectRestService {
   }
 
   _parseInstanceDefinition(res) {
-    if (res.status === 200 && res.body.status === 2) {
-      const {instanceId} = res.body;
-      const status = res.body.status;
+    const {body} = res;
+    if (res.status === 200 && body.status === 2) {
+      const {instanceId} = body;
+      const status = body.status;
       return {instanceId, status};
     }
-    const {total} = res.body.result.data.paging;
-    const {instanceId} = res.body;
-    const mstrTable = officeConverterService.createTable(res.body);
-    const {rows, columns} = this._checkTableDimensions(total, mstrTable.headers.length);
+    const {instanceId} = body;
+    const mstrTable = officeConverterServiceV2.createTable(body);
+    const {rows, columns} = this._checkTableDimensions(mstrTable.tableSize);
     return {instanceId, rows, columns, mstrTable};
   }
 
@@ -132,7 +134,8 @@ class MstrObjectRestService {
     const envUrl = storeState.sessionReducer.envUrl;
     const authToken = storeState.sessionReducer.authToken;
     const objectType = isReport ? 'reports' : 'cubes';
-    const fullPath = `${envUrl}/${objectType}/${objectId}`;
+    const api = API_VERSION > 1 ? 'v2/' : '';
+    const fullPath = `${envUrl}/${api}${objectType}/${objectId}`;
 
     return moduleProxy.request
         .get(fullPath)
@@ -171,7 +174,7 @@ class MstrObjectRestService {
       const storeState = reduxStore.getState();
       const envUrl = storeState.sessionReducer.envUrl;
       const authToken = storeState.sessionReducer.authToken;
-      const fullPath = this._getFullPath(dossierData, envUrl, limit, isReport, objectId);
+      const fullPath = this._getFullPath({dossierData, envUrl, limit, isReport, objectId, version: API_VERSION});
       return await this._createInstance(fullPath, authToken, projectId, body);
     } catch (error) {
       throw error instanceof OutsideOfRangeError ? error : errorService.errorRestFactory(error);
@@ -183,7 +186,7 @@ class MstrObjectRestService {
       const storeState = reduxStore.getState();
       const envUrl = storeState.sessionReducer.envUrl;
       const authToken = storeState.sessionReducer.authToken;
-      const fullPath = this._getFullPath(dossierData, envUrl, limit, isReport, objectId, instanceId);
+      const fullPath = this._getFullPath({dossierData, envUrl, limit, isReport, objectId, instanceId, version: API_VERSION});
       return this._putInstance(fullPath, authToken, projectId, body);
     } catch (error) {
       throw error instanceof OutsideOfRangeError ? error : errorService.errorRestFactory(error);
@@ -195,7 +198,7 @@ class MstrObjectRestService {
       const storeState = reduxStore.getState();
       const envUrl = storeState.sessionReducer.envUrl;
       const authToken = storeState.sessionReducer.authToken;
-      const fullPath = this._getFullPath(dossierData, envUrl, limit, isReport, objectId, instanceId);
+      const fullPath = this._getFullPath({dossierData, envUrl, limit, isReport, objectId, instanceId, version: API_VERSION});
       return this._getInstance(fullPath, authToken, projectId, body);
     } catch (error) {
       throw error instanceof OutsideOfRangeError ? error : errorService.errorRestFactory(error);
@@ -287,17 +290,18 @@ class MstrObjectRestService {
         .withCredentials();
   }
 
-  _checkTableDimensions(rows, columns) {
+  _checkTableDimensions({rows, columns}) {
     if (rows >= EXCEL_ROW_LIMIT || columns >= EXCEL_COLUMN_LIMIT) {
       throw new OutsideOfRangeError();
     }
     return {rows, columns};
   }
 
-  _getFullPath(dossierData, envUrl, limit, isReport, objectId, instanceId) {
+  _getFullPath({dossierData, envUrl, limit, isReport, objectId, instanceId, version = 1}) {
     let path;
+    const api = version > 1 ? `v${version}/` : '';
     const objectType = isReport ? 'reports' : 'cubes';
-    path = `${envUrl}/${objectType}/${objectId}/instances`;
+    path = `${envUrl}/${api}${objectType}/${objectId}/instances`;
     path += instanceId ? `/${instanceId}` : '';
     path += limit ? `?limit=${limit}` : '';
     return path;
@@ -388,20 +392,36 @@ async function* fetchContentGenerator(instanceDefinition, objectId, projectId, i
   try {
     const totalRows = instanceDefinition.rows;
     const {instanceId, mstrTable} = instanceDefinition;
-
+    const {isCrosstab} = mstrTable;
+    const offsetSubtotal = (e) => {
+      e && (e.rowIndex = e.rowIndex + offset);
+    };
+    const offsetCrosstabSubtotal = (e) => {
+      (e && e.axis === 'rows') && (e.colIndex = e.colIndex + offset);
+    };
     const storeState = reduxStore.getState();
     const envUrl = storeState.sessionReducer.envUrl;
     const authToken = storeState.sessionReducer.authToken;
-    const fullPath = mstrObjectRestService._getFullPath(dossierData, envUrl, false, isReport, objectId, instanceId);
+    const fullPath = mstrObjectRestService._getFullPath({dossierData, envUrl, isReport, objectId, instanceId, version: API_VERSION});
     let fetchedRows = 0;
     let offset = 0;
 
     while (fetchedRows < totalRows && fetchedRows < EXCEL_ROW_LIMIT) {
+      let header;
+      let crosstabSubtotal;
       const response = await mstrObjectRestService._fetchObjectContent(fullPath, authToken, projectId, offset, limit);
-      const {current} = response.body.result.data.paging;
+      const {current} = response.body.data.paging;
       fetchedRows = current + offset;
+      const {row, rowTotals} = officeConverterServiceV2.getRows(response.body, isCrosstab);
+      if (isCrosstab) {
+        header = officeConverterServiceV2.getHeaders(response.body);
+        crosstabSubtotal = header.subtotalAddress;
+        offset !== 0 && crosstabSubtotal.map((e) => offsetCrosstabSubtotal(e));
+      } else {
+        offset !== 0 && rowTotals.map((e) => offsetSubtotal(e));
+      }
       offset += current;
-      yield officeConverterService.getRows(response.body, mstrTable.headers);
+      yield {row, header, subtotalAddress: isCrosstab ? crosstabSubtotal : rowTotals};
     }
   } catch (error) {
     throw errorService.errorRestFactory(error);
