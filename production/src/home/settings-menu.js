@@ -80,7 +80,7 @@ export const _SettingsMenu = ({userFullName, userInitials, isSecured, reportArra
       </li>
       <li onClick={logout}>
         <span tabIndex="0" id="logOut" size='small'>
-          {t('Logout')}
+          {t('Log out')}
         </span>
       </li>
       < li className="settings-version no-trigger-close">{t('Version {{APP_VERSION}}', {APP_VERSION})}</li>
