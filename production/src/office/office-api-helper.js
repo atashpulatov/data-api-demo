@@ -233,7 +233,7 @@ class OfficeApiHelper {
   }
 
   getSelectedCell = async (context) => {
-    const selectedRangeStart = context.workbook.getSelectedRange();
+    const selectedRangeStart = context.workbook.getSelectedRange().getCell(0, 0);
     selectedRangeStart.load(officeProperties.officeAddress);
     await context.sync();
     const startCell = this.getStartCell(selectedRangeStart.address);
