@@ -160,5 +160,11 @@
   "This object does not contain any data.": "This object does not contain any data.",
   "Reprompt": "Reprompt",
   "The endpoint cannot be reached": "The endpoint cannot be reached",
-  "You haven't imported any reports or datasets yet. Import data to start!": "You haven't imported any reports or datasets yet. Import data to start!"
+  "You haven't imported any reports or datasets yet. Import data to start!": "You haven't imported any reports or datasets yet. Import data to start!",
+  "MicroStrategy for Office loaded": "MicroStrategy for Office loaded",
+  "Click MicroStrategy for Office on Home tab to start plugin. Log in to Environment to start browsing documents.": "Click MicroStrategy for Office on Home tab to start plugin. Log in to Environment to start browsing documents.",
+  "Click to Show a Taskpane": "Click to Show a Taskpane",
+  "New plugin to insert data from Microstrategy into Microsoft Office products.": "New plugin to insert data from Microstrategy into Microsoft Office products.",
+  "MicroStrategy for Office": "MicroStrategy for Office",
+  "This report does not exist in the workbook anymore": "This report does not exist in the workbook anymore"
 }
