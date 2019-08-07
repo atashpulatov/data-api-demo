@@ -18,7 +18,6 @@ produces and publishes a versioned deployment package'
       script '#!/usr/bin/env bash
 set +xe
 
-
 export PATH=/usr/local/sbin:/usr/local/bin:$PATH
 
 export WORKSPACE_SETTING=aws_dev
@@ -54,6 +53,5 @@ rake update_ready_for_pr
       }
     end
   end
-
 
 end
