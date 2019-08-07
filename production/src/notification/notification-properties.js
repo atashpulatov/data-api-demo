@@ -3,7 +3,7 @@ export const reduxNotificationProperties = {
     actions: {
         showMessage: 'SHOW_MESSAGE',
         showNotification: 'SHOW_NOTIFICATION',
-        showTranslatedNotifications: 'SHOW_TRANSLATED_NOTIFICATIONS',
+        showTranslatedNotification: 'SHOW_TRANSLATED_NOTIFICATIONS',
     }
 }
 

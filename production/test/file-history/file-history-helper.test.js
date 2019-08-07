@@ -49,7 +49,7 @@ describe('FileHistoryHelper', () => {
     });
     it('should display message on success', async () => {
       // given
-      const mockedDisplayMessage = notificationService.displayNotification;
+      const mockedDisplayMessage = notificationService.displayTranslatedNotification;
       const mockedOnDelete = jest.fn().mockImplementation(() => true);
       const testBindId = 'someBindingIt';
       const objectType = 'object type';

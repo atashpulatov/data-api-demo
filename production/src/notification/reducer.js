@@ -10,7 +10,7 @@ export const notificationReducer = (state = {}, action) => {
       return onShowMessage(action, state);
     case reduxNotificationProperties.actions.showNotification:
       return onShowNotification(action);
-    case reduxNotificationProperties.actions.showTranslatedNotifications:
+    case reduxNotificationProperties.actions.showTranslatedNotification:
       return onShowNotification(action, true);
     default:
       break;
