@@ -44,11 +44,6 @@ describe('NavigationTree', () => {
       chosenProjectName: 'Prepare Data',
       chosenType: 'Data',
     };
-    const mockGetDefinition = jest.spyOn(mstrObjectRestService, 'createInstance').mockImplementation(() => {
-      return {
-        rows: 1,
-      };
-    });
     const wrappedComponent = shallow(
         <_NavigationTree
           mstrData={mstrData}
@@ -58,47 +53,10 @@ describe('NavigationTree', () => {
     // when
     wrappedComponent.instance().handleSecondary();
     // then
-    await expect(mockGetDefinition).toBeCalledWith(actionObject.chosenObjectId, actionObject.chosenProjectId, actionObject.chosenSubtype);
     expect(propsMethod).toBeCalled();
     expect(propsMethod).toBeCalledWith(actionObject.chosenProjectId, actionObject.chosenObjectId,
         actionObject.chosenSubtype, actionObject.chosenProjectName, actionObject.chosenType);
     expect(wrappedComponent.state('previewDisplay')).toEqual(true);
-  });
-
-  it('should display warning when trying to prepare empty report', async () => {
-    // given
-    const propsMethod = jest.fn();
-    const mstrData = {
-      envUrl: 'env',
-      token: 'token',
-      projectId: 'projectId',
-    };
-    const actionObject = {
-      command: selectorProperties.commandSecondary,
-      chosenObjectId: 'objectId',
-      chosenProjectId: 'projectId',
-      chosenSubtype: 'subtype',
-      chosenProjectName: 'Prepare Data',
-      chosenType: 'Data',
-    };
-    const mockGetDefinition = jest.spyOn(mstrObjectRestService, 'createInstance').mockImplementation(() => {
-      return {
-        rows: 0,
-      };
-    });
-    message.warning = jest.fn();
-    const wrappedComponent = shallow(
-        <_NavigationTree
-          mstrData={mstrData}
-          handlePrepare={propsMethod}
-          {...actionObject}
-        />);
-    // when
-    wrappedComponent.instance().handleSecondary();
-    // then
-    await expect(mockGetDefinition).toBeCalledWith(actionObject.chosenObjectId, actionObject.chosenProjectId, actionObject.chosenSubtype);
-    expect(message.warning).toBeCalledWith(EMPTY_REPORT);
-    expect(wrappedComponent.state('previewDisplay')).toEqual(false);
   });
 
   it('should call proper method on cancel action', () => {
