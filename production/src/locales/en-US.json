@@ -166,5 +166,6 @@
   "Click to Show a Taskpane": "Click to Show a Taskpane",
   "New plugin to insert data from Microstrategy into Microsoft Office products.": "New plugin to insert data from Microstrategy into Microsoft Office products.",
   "MicroStrategy for Office": "MicroStrategy for Office",
-  "This report does not exist in the workbook anymore": "This report does not exist in the workbook anymore"
+  "This report does not exist in the workbook anymore": "This report does not exist in the workbook anymore",
+  "{{name}} has been removed from the workbook.": "{{name}} has been removed from the workbook."
 }

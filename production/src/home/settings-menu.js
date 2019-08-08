@@ -50,7 +50,7 @@ export const _SettingsMenu = ({userFullName, userInitials, isSecured, reportArra
       <li tabIndex='0' className={`no-trigger-close clear-data ${!isSecuredActive ? 'clear-data-inactive' : ''}`} onClick={isSecuredActive ? () => toggleIsConfirmFlag(true) : null}>
         <span className='no-trigger-close'>{t('Clear Data')} </span>
       </li>
-      <div class="separate-line"></div>
+      <div className="separate-line"></div>
       <li className="privacy-policy">
         <a
           tabIndex="0"
