@@ -49,7 +49,6 @@ class OfficeConverterServiceV2 {
     const rowsAttributes = definition.grid.rows.map((e) => {
       return `'${e.name}`;
     });
-    columnsAttributes.pop(); // Last object in this array will always by "Metric", we do not want to insert it into Excel so we remove it from array
     return {rowsAttributes, columnsAttributes};
   }
 
