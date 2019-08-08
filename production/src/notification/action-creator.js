@@ -10,7 +10,19 @@ class ActionCreator {
       currentObject: 'notification',
       details,
     };
-  }
+  };
+
+  showTranslatedNotification = (title, content, notificationType, details) => {
+    return {
+      type: reduxNotificationProperties.actions.showTranslatedNotification,
+      title,
+      content,
+      notificationType: notificationType,
+      currentObject: 'notification',
+      details,
+    };
+  };
+
   showMessageAction = (content, messageType) => {
     return {
       type: reduxNotificationProperties.actions.showMessage,

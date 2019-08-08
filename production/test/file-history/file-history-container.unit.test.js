@@ -135,17 +135,28 @@ describe('FileHistoryContainer', () => {
   it('should call componentWillUnmount ', () => {
     // given
     // when
+    const refreshAllmock = jest.fn();
+    const mockReportArray = createMockFilesArray();
+    const mockRefreshReportArray = jest.fn();
+    const mockToggleSecured = jest.fn();
     const wrappedComponent = mount(
-        <Provider store={reduxStore}>
-          < FileHistoryContainer />
-        </Provider>);
-
+        < _FileHistoryContainer
+          project={'testProject'}
+          refreshingAll={refreshAllmock}
+          reportArray={mockReportArray}
+          isSecured={true}
+          refreshReportsArray={mockRefreshReportArray}
+          toggleSecuredFlag={mockToggleSecured}
+        />);
     const tmp = wrappedComponent.instance();
+    const mockRemoveListener = jest.spyOn(wrappedComponent.instance(), 'deleteRemoveReportListener').mockImplementation(jest.fn());
+    wrappedComponent.instance().forceUpdate();
     wrappedComponent.unmount();
     // then
     expect(tmp).toBeTruthy();
 
     expect(tmp._ismounted).toBeFalsy();
+    expect(mockRemoveListener).toBeCalled();
   });
 
   it('should contain popover', () => {

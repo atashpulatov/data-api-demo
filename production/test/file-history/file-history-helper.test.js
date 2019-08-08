@@ -39,26 +39,27 @@ describe('FileHistoryHelper', () => {
       const mockedOnDelete = jest.fn();
       const testBindId = 'someBindingIt';
       const isCrosstab = true;
-      const objectType = 'test';
       const headerDimensions = {};
+      const name = 'test';
       // when
-      await fileHistoryHelper.deleteReport(mockedOnDelete, testBindId, objectType, isCrosstab, headerDimensions);
+      await fileHistoryHelper.deleteReport(mockedOnDelete, testBindId, isCrosstab, headerDimensions, name);
       // then
       expect(mockedOnDelete).toBeCalled();
       expect(mockedOnDelete).toBeCalledWith(testBindId, isCrosstab, headerDimensions);
     });
     it('should display message on success', async () => {
       // given
-      const mockedDisplayMessage = notificationService.displayNotification;
+      const mockedDisplayMessage = notificationService.displayTranslatedNotification;
       const mockedOnDelete = jest.fn().mockImplementation(() => true);
       const testBindId = 'someBindingIt';
-      const objectType = 'object type';
-      const expectedObjectType = 'Object type';
+      const isCrosstab = true;
+      const headerDimensions = {};
+      const message = 'test name';
       // when
-      await fileHistoryHelper.deleteReport(mockedOnDelete, testBindId, objectType);
+      await fileHistoryHelper.deleteReport(mockedOnDelete, testBindId, isCrosstab, headerDimensions, message);
       // then
       expect(mockedDisplayMessage).toBeCalled();
-      expect(mockedDisplayMessage).toBeCalledWith('success', `${expectedObjectType} removed`);
+      expect(mockedDisplayMessage).toBeCalledWith('success', message);
     });
     it('should not display message without success', async () => {
       // given
