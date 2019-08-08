@@ -79,18 +79,20 @@ class OfficeApiHelper {
       r * ALPHABET_RANGE_END + parseInt(a, 36) - 9, 0);
   }
 
-  onBindingObjectClick = async (bindingId) => {
+  onBindingObjectClick = async (bindingId, shouldSelect = true) => {
     try {
       const excelContext = await this.getExcelContext();
       const tableRange = this.getBindingRange(excelContext, bindingId);
-      tableRange.select();
-      return await excelContext.sync();
+      shouldSelect && tableRange.select();
+      await excelContext.sync();
+      return true;
     } catch (error) {
       if (error.code === 'ItemNotFound') {
         return notificationService.displayNotification('info', 'The object does not exist in the metadata.');
       }
       const errorAfterOfficeFactory = errorService.errorOfficeFactory(error);
       errorService.handleOfficeError(errorAfterOfficeFactory);
+      return false;
     }
   };
 
@@ -147,10 +149,10 @@ class OfficeApiHelper {
     if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
       if (isCrosstab) {
         const {rowsX} = crosstabHeaderDimensions;
-        table.getRange().format.autofitColumns();
-        table.getRange().getColumnsBefore(rowsX).format.autofitColumns();
+        table.getDataBodyRange().format.autofitColumns();
+        table.getDataBodyRange().getColumnsBefore(rowsX).format.autofitColumns();
       } else {
-        table.getRange().format.autofitColumns();
+        table.getDataBodyRange().format.autofitColumns();
       }
     } else {
       notificationService.displayNotification('warning', `Unable to format table.`);
@@ -187,12 +189,6 @@ class OfficeApiHelper {
 
               // for fractions set General format
               object.formatString.match(/# \?+?\/\?+?/) && (format = 'General');
-            }
-          } else if (!isCrosstab) {
-            if (object.forms.length > 1) {
-              format = '@';
-            } else {
-              format = object.forms[0] === 'text' ? '@' : 'General';
             }
           }
           columnRange.numberFormat = format;
@@ -233,7 +229,7 @@ class OfficeApiHelper {
   }
 
   getSelectedCell = async (context) => {
-    const selectedRangeStart = context.workbook.getSelectedRange();
+    const selectedRangeStart = context.workbook.getSelectedRange().getCell(0, 0);
     selectedRangeStart.load(officeProperties.officeAddress);
     await context.sync();
     const startCell = this.getStartCell(selectedRangeStart.address);
@@ -281,7 +277,7 @@ class OfficeApiHelper {
     const {columnsY, columnsX, rowsX, rowsY} = headerDimensions;
     const cell = typeof cellAddress === 'string' ? sheet.getRange(cellAddress) : cellAddress;
     const bodyRange = cell.getOffsetRange(rowsY, columnsX - 1);
-    const startingCell = cell.getCell(0, 0).getOffsetRange(-(columnsY - 1), -rowsX);
+    const startingCell = cell.getCell(0, 0).getOffsetRange(-(columnsY), -rowsX);
     return startingCell.getBoundingRect(bodyRange);
   }
 
@@ -299,8 +295,12 @@ class OfficeApiHelper {
       leftRange.clear();
 
       // Remove column headers
-      const topRange = officeTable.getRange().getRowsAbove(headerDimensions.columnsY - 1);
+      const topRange = officeTable.getRange().getRowsAbove(headerDimensions.columnsY);
       topRange.clear();
+
+      // Remove title headers
+      const titlesRange = officeTable.getRange().getCell(0, 0).getOffsetRange(0, -1).getResizedRange(-(headerDimensions.columnsY), -(headerDimensions.rowsX - 1));
+      titlesRange.clear();
     } catch (error) {
       // TODO: Throw no available range error
 
@@ -319,7 +319,7 @@ class OfficeApiHelper {
   getTableStartCell = ({startCell, mstrTable, prevOfficeTable, crosstabChange}) => {
     const {headers, isCrosstab} = mstrTable;
     if (!crosstabChange && (!isCrosstab || prevOfficeTable)) return startCell;
-    const rowOffset = headers.columns.length - 1;
+    const rowOffset = headers.columns.length;
     const colOffset = headers.rows[0].length;
     return this.offsetCellBy(startCell, rowOffset, colOffset);
   }
@@ -340,14 +340,14 @@ class OfficeApiHelper {
 
     if (axis === 'rows') {
       offsets = {
-        verticalFirstCell: cell.colIndex + 1,
+        verticalFirstCell: cell.colIndex,
         horizontalFirstCell: -(headers.rows[0].length - cell.attributeIndex),
-        verticalLastCell: cell.colIndex + 1,
+        verticalLastCell: cell.colIndex,
         horizontalLastCell: headers.columns[0].length - 1,
       };
     } else if (axis === 'columns') {
       offsets = {
-        verticalFirstCell: -((headers.columns.length - cell.attributeIndex) - 1),
+        verticalFirstCell: -((headers.columns.length - cell.attributeIndex) + 1),
         horizontalFirstCell: cell.colIndex,
         verticalLastCell: mstrTable.tableSize.rows,
         horizontalLastCell: cell.colIndex,
@@ -378,7 +378,7 @@ class OfficeApiHelper {
   formatSubtotals = async (startCell, subtotalCells, mstrTable, context) => {
     let contextPromises = [];
     for (const cell of subtotalCells) {
-      const subtotalRowRange = this.getSubtotalRange(startCell, cell, mstrTable, context);
+      const subtotalRowRange = this.getSubtotalRange(startCell, cell, mstrTable);
       subtotalRowRange && (subtotalRowRange.format.font.bold = true);
       contextPromises.push(context.sync());
       if (contextPromises.length % CONTEXT_LIMIT === 0) {
@@ -423,7 +423,7 @@ class OfficeApiHelper {
     const columnOffset = columns.length;
     const rowOffset = 0;
     // reportStartingCell.unmerge(); // excel api have problem with handling merged cells which are partailly in range, we unmerged selected cell to avoid this problem
-    const startingCell = reportStartingCell.getCell(0, 0).getOffsetRange(-(columnOffset - 1), -rowOffset);// we call getCell in case multiple cells are selected
+    const startingCell = reportStartingCell.getCell(0, 0).getOffsetRange(-columnOffset, -rowOffset);// we call getCell in case multiple cells are selected
     const directionVector = [1, 0];
     const headerRange = startingCell.getResizedRange(columns.length - 1, columns[0].length - 1);
     this.insertHeadersValues(headerRange, columns, 'columns');
@@ -431,7 +431,30 @@ class OfficeApiHelper {
     return this.createHeaders(columns, startingCell, directionVector);
   }
   /**
-   * Clear prevoius formatting and insert data in range
+ * Create Title headers for crosstab report
+ *
+ * @param {Office} cellAddress Address of the first cell in report (top left)
+ * @param {Object} attributesNames Contains arrays of attributes names in crosstab report
+ * @param {Office} sheet Active Exccel spreadsheet
+ * @param {Object} crosstabHeaderDimensions Contains dimensions of crosstab report headers
+ * @memberof OfficeApiHelper
+ */
+  createRowsTitleHeaders = async (cellAddress, attributesNames, sheet, crosstabHeaderDimensions) => {
+    const reportStartingCell = sheet.getRange(cellAddress);
+    const titlesBottomCell = reportStartingCell.getOffsetRange(0, -1);
+
+    const rowsTitlesRange = titlesBottomCell.getResizedRange(0, -(crosstabHeaderDimensions.rowsX - 1));
+    rowsTitlesRange.values = [attributesNames.rowsAttributes];
+    const columnssTitlesRange = titlesBottomCell.getOffsetRange(-1, 0).getResizedRange(-(crosstabHeaderDimensions.columnsY - 1), 0);
+    columnssTitlesRange.values = mstrNormalizedJsonHandler._transposeMatrix([attributesNames.columnsAttributes]);
+
+    const headerTitlesRange = columnssTitlesRange.getBoundingRect(rowsTitlesRange);
+    headerTitlesRange.format.verticalAlignment = Excel.VerticalAlignment.bottom;
+    this.formatCrosstabRange(headerTitlesRange);
+  }
+
+  /**
+   * Clear previous formatting and insert data in range
    *
    * @param {Office} headerRange Range of the header
    * @param {Array} headerArray Contains rows/headers structure and data
@@ -442,15 +465,24 @@ class OfficeApiHelper {
     headerRange.clear(); // we are unmerging and removing formatting to avoid conflicts while merging cells
     headerRange.values = headerArray;
     const hAlign = axis === 'rows' ? 'left' : 'center';
-    headerRange.numberFormat = '@';
     headerRange.format.horizontalAlignment = Excel.HorizontalAlignment[hAlign];
     headerRange.format.verticalAlignment = Excel.VerticalAlignment.top;
-    headerRange.format.borders.getItem('EdgeTop').color = EXCEL_XTABS_BORDER_COLOR;
-    headerRange.format.borders.getItem('EdgeRight').color = EXCEL_XTABS_BORDER_COLOR;
-    headerRange.format.borders.getItem('EdgeBottom').color = EXCEL_XTABS_BORDER_COLOR;
-    headerRange.format.borders.getItem('EdgeLeft').color = EXCEL_XTABS_BORDER_COLOR;
-    headerRange.format.borders.getItem('InsideVertical').color = EXCEL_XTABS_BORDER_COLOR;
-    headerRange.format.borders.getItem('InsideHorizontal').color = EXCEL_XTABS_BORDER_COLOR;
+    this.formatCrosstabRange(headerRange);
+  }
+
+  /**
+   * Format crosstab range
+   *
+   * @param {Office} range Range of the header
+   * @memberof OfficeApiHelper
+   */
+  formatCrosstabRange(range) {
+    range.format.borders.getItem('EdgeTop').color = EXCEL_XTABS_BORDER_COLOR;
+    range.format.borders.getItem('EdgeRight').color = EXCEL_XTABS_BORDER_COLOR;
+    range.format.borders.getItem('EdgeBottom').color = EXCEL_XTABS_BORDER_COLOR;
+    range.format.borders.getItem('EdgeLeft').color = EXCEL_XTABS_BORDER_COLOR;
+    range.format.borders.getItem('InsideVertical').color = EXCEL_XTABS_BORDER_COLOR;
+    range.format.borders.getItem('InsideHorizontal').color = EXCEL_XTABS_BORDER_COLOR;
   }
 
   /**

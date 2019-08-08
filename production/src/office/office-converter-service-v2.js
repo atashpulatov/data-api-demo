@@ -17,6 +17,7 @@ class OfficeConverterServiceV2 {
       isCrosstab,
       name: response.name,
       rows: this.getRows(response, isCrosstab),
+      attributesNames: this.getAttributesName(response.definition),
     };
   }
   /**
@@ -34,6 +35,22 @@ class OfficeConverterServiceV2 {
       return false;
     }
   }
+  /**
+   * Get attribute names for crosstab report
+   *
+   * @param {JSON} definition Object definition from response
+   * @return {Object} Contains arrays of columns and rows attributes names
+   * @memberof OfficeConverterServiceV2
+   */
+  getAttributesName = (definition) => {
+    const columnsAttributes = definition.grid.columns.map((e) => {
+      return `'${e.name}`;
+    });
+    const rowsAttributes = definition.grid.rows.map((e) => {
+      return `'${e.name}`;
+    });
+    return {rowsAttributes, columnsAttributes};
+  }
 
   /**
    * Gets raw table rows
@@ -47,7 +64,7 @@ class OfficeConverterServiceV2 {
     const onAttribute = (array) => {
       return (e) => {
         if (array) array.push(e.subtotalAddress);
-        return e.value.join(' ');
+        return `'${e.value.join(' ')}`;
       };
     };
     if (this.isCrosstab(response)) {
@@ -71,7 +88,7 @@ class OfficeConverterServiceV2 {
     const onElement = (array) => {
       return (e) => {
         if (array) array.push(e.subtotalAddress);
-        return e.value.join(' ');
+        return `'${e.value.join(' ')}`;
       };
     };
 

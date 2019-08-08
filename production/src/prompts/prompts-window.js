@@ -225,6 +225,7 @@ export class _PromptsWindow extends Component {
 
         <div style={{position: 'absolute', bottom: '0'}}>
           <PromptWindowButtons
+            handleBack={this.props.handleBack}
             handleRun={this.handleRun}
             isReprompt={this.state.isReprompt}
             closePopup={this.closePopup}
