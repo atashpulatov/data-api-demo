@@ -174,6 +174,7 @@ class OfficeDisplayService {
         const excelContext = await officeApiHelper.getExcelContext();
         const tableObject = excelContext.workbook.tables.getItem(bindingId);
         if (isCrosstab) {
+          tableObject.showHeaders = true;
           const sheet = tableObject.worksheet;
           const cell = tableObject.getRange().getCell(0, 0);
           cell.load('address');
@@ -250,8 +251,10 @@ class OfficeDisplayService {
     try {
       officeTable.load('name');
       officeTable.name = officeTableId;
-      if (isCrosstab) officeTable.showFilterButton = false;
-      else officeTable.getHeaderRowRange().values = [mstrTable.headers.columns.pop()];
+      if (isCrosstab) {
+        officeTable.showFilterButton = false;
+        officeTable.showHeaders = false;
+      } else officeTable.getHeaderRowRange().values = [mstrTable.headers.columns[mstrTable.headers.columns.length - 1]];
       sheet.activate();
       await context.sync();
       return officeTable;
@@ -287,7 +290,7 @@ class OfficeDisplayService {
       context.workbook.application.suspendApiCalculationUntilNextSync();
       prevOfficeTable.clearFilters();
       prevOfficeTable.sort.clear();
-      if (!mstrTable.isCrosstab) prevOfficeTable.getHeaderRowRange().values = [mstrTable.headers.columns.pop()];
+      if (!mstrTable.isCrosstab) prevOfficeTable.getHeaderRowRange().values = [mstrTable.headers.columns[mstrTable.headers.columns.length - 1]];
       this._styleHeaders(prevOfficeTable, TABLE_HEADER_FONT_COLOR, TABLE_HEADER_FILL_COLOR);
       await context.sync();
       await this._updateRows(prevOfficeTable, context, rows);
@@ -335,7 +338,6 @@ class OfficeDisplayService {
     const headerRowRange = officeTable.getHeaderRowRange();
     headerRowRange.format.fill.color = fillColor;
     headerRowRange.format.font.color = fontColor;
-    headerRowRange.numberFormat = '@'; // setting  number format as text for headers
   }
 
   /**
@@ -398,6 +400,8 @@ class OfficeDisplayService {
 
     if (isRefresh) {
       const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindingId);
+      prevOfficeTable.showHeaders = true;
+      await excelContext.sync();
       if (prevCrosstabDimensions) officeApiHelper.clearCrosstabRange(prevOfficeTable, prevCrosstabDimensions);
       const tableColumnsChanged = await this._checkColumnsChange(prevOfficeTable, excelContext, instanceDefinition);
       instanceDefinition.crosstabChange = ((!prevCrosstabDimensions && instanceDefinition.mstrTable.isCrosstab));
@@ -464,6 +468,7 @@ class OfficeDisplayService {
       await Promise.all(contextPromises);
       console.timeEnd('Context sync');
       officeApiHelper.formatTable(officeTable, mstrTable.isCrosstab, instanceDefinition.crosstabHeaderDimensions);
+      if (mstrTable) officeTable.showHeaders = false;
       await excelContext.sync();
       return {officeTable, subtotalsAddresses};
     } catch (error) {

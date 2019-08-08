@@ -147,10 +147,10 @@ class OfficeApiHelper {
     if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
       if (isCrosstab) {
         const {rowsX} = crosstabHeaderDimensions;
-        table.getRange().format.autofitColumns();
-        table.getRange().getColumnsBefore(rowsX).format.autofitColumns();
+        table.getDataBodyRange().format.autofitColumns();
+        table.getDataBodyRange().getColumnsBefore(rowsX).format.autofitColumns();
       } else {
-        table.getRange().format.autofitColumns();
+        table.getDataBodyRange().format.autofitColumns();
       }
     } else {
       notificationService.displayNotification('warning', `Unable to format table.`);
@@ -275,7 +275,7 @@ class OfficeApiHelper {
     const {columnsY, columnsX, rowsX, rowsY} = headerDimensions;
     const cell = typeof cellAddress === 'string' ? sheet.getRange(cellAddress) : cellAddress;
     const bodyRange = cell.getOffsetRange(rowsY, columnsX - 1);
-    const startingCell = cell.getCell(0, 0).getOffsetRange(-(columnsY - 1), -rowsX);
+    const startingCell = cell.getCell(0, 0).getOffsetRange(-(columnsY), -rowsX);
     return startingCell.getBoundingRect(bodyRange);
   }
 
@@ -293,11 +293,11 @@ class OfficeApiHelper {
       leftRange.clear();
 
       // Remove column headers
-      const topRange = officeTable.getRange().getRowsAbove(headerDimensions.columnsY - 1);
+      const topRange = officeTable.getRange().getRowsAbove(headerDimensions.columnsY);
       topRange.clear();
 
       // Remove title headers
-      const titlesRange = officeTable.getRange().getCell(0, 0).getOffsetRange(-1, -1).getResizedRange(-(headerDimensions.columnsY - 1), -(headerDimensions.rowsX - 1));
+      const titlesRange = officeTable.getRange().getCell(0, 0).getOffsetRange(0, -1).getResizedRange(-(headerDimensions.columnsY), -(headerDimensions.rowsX - 1));
       titlesRange.clear();
     } catch (error) {
       // TODO: Throw no available range error
@@ -317,7 +317,7 @@ class OfficeApiHelper {
   getTableStartCell = ({startCell, mstrTable, prevOfficeTable, crosstabChange}) => {
     const {headers, isCrosstab} = mstrTable;
     if (!crosstabChange && (!isCrosstab || prevOfficeTable)) return startCell;
-    const rowOffset = headers.columns.length - 1;
+    const rowOffset = headers.columns.length;
     const colOffset = headers.rows[0].length;
     return this.offsetCellBy(startCell, rowOffset, colOffset);
   }
@@ -421,7 +421,7 @@ class OfficeApiHelper {
     const columnOffset = columns.length;
     const rowOffset = 0;
     // reportStartingCell.unmerge(); // excel api have problem with handling merged cells which are partailly in range, we unmerged selected cell to avoid this problem
-    const startingCell = reportStartingCell.getCell(0, 0).getOffsetRange(-(columnOffset - 1), -rowOffset);// we call getCell in case multiple cells are selected
+    const startingCell = reportStartingCell.getCell(0, 0).getOffsetRange(-columnOffset, -rowOffset);// we call getCell in case multiple cells are selected
     const directionVector = [1, 0];
     const headerRange = startingCell.getResizedRange(columns.length - 1, columns[0].length - 1);
     this.insertHeadersValues(headerRange, columns, 'columns');
@@ -443,7 +443,7 @@ class OfficeApiHelper {
 
     const rowsTitlesRange = titlesBottomCell.getResizedRange(0, -(crosstabHeaderDimensions.rowsX - 1));
     rowsTitlesRange.values = [attributesNames.rowsAttributes];
-    const columnssTitlesRange = titlesBottomCell.getOffsetRange(-1, 0).getResizedRange(-(crosstabHeaderDimensions.columnsY - 2), 0);
+    const columnssTitlesRange = titlesBottomCell.getOffsetRange(-1, 0).getResizedRange(-(crosstabHeaderDimensions.columnsY - 1), 0);
     columnssTitlesRange.values = mstrNormalizedJsonHandler._transposeMatrix([attributesNames.columnsAttributes]);
 
     const headerTitlesRange = columnssTitlesRange.getBoundingRect(rowsTitlesRange);
