@@ -401,13 +401,16 @@ describe('OfficeApiHelper', () => {
       const loadMock = jest.fn().mockImplementation(() => {
         return 'Sheet1!A12';
       });
+      const getCellMock = jest.fn().mockImplementation(() => ({
+        load: loadMock,
+        address: loadMock(),
+      }));
       const mockSync = jest.fn();
       const context = {
         workbook: {
           getSelectedRange: jest.fn().mockImplementation(() => {
             return {
-              load: loadMock,
-              address: loadMock(),
+              getCell: getCellMock,
             };
           }),
         },
@@ -417,6 +420,7 @@ describe('OfficeApiHelper', () => {
       const result = await officeApiHelper.getSelectedCell(context);
       // then
       expect(context.workbook.getSelectedRange).toBeCalled();
+      expect(getCellMock).toBeCalled();
       expect(loadMock).toBeCalled();
       expect(loadMock).toBeCalledWith(officeProperties.officeAddress);
       expect(result).toEqual('A12');
@@ -428,12 +432,15 @@ describe('OfficeApiHelper', () => {
         return 'Sheet1!A12:B14';
       });
       const mockSync = jest.fn();
+      const getCellMock = jest.fn().mockImplementation(() => ({
+        load: loadMock,
+        address: loadMock(),
+      }));
       const context = {
         workbook: {
           getSelectedRange: jest.fn().mockImplementation(() => {
             return {
-              load: loadMock,
-              address: loadMock(),
+              getCell: getCellMock,
             };
           }),
         },
@@ -443,6 +450,7 @@ describe('OfficeApiHelper', () => {
       const result = await officeApiHelper.getSelectedCell(context);
       // then
       expect(context.workbook.getSelectedRange).toBeCalled();
+      expect(getCellMock).toBeCalled();
       expect(loadMock).toBeCalled();
       expect(loadMock).toBeCalledWith(officeProperties.officeAddress);
       expect(result).toEqual('A12');

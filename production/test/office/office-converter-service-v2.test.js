@@ -6,7 +6,7 @@ describe('Office converter service v2', () => {
   it('should return create a table', () => {
     // given
     const crosstabsResponse = response;
-    const expecteObjectKeys = ['tableSize', 'columnInformation', 'headers', 'id', 'isCrosstab', 'name', 'rows'];
+    const expecteObjectKeys = ['tableSize', 'columnInformation', 'headers', 'id', 'isCrosstab', 'name', 'rows', 'attributesNames'];
     // when
     const table = officeConverter.createTable(crosstabsResponse);
     // then
