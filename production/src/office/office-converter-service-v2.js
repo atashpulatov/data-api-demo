@@ -36,7 +36,7 @@ class OfficeConverterServiceV2 {
     }
   }
   /**
-   * Checks if response contains crosstabs
+   * Get attribute names for crosstab report
    *
    * @param {JSON} definition Object definition from response
    * @return {Object} Contains arrays of columns and rows attributes names
@@ -49,7 +49,7 @@ class OfficeConverterServiceV2 {
     const rowsAttributes = definition.grid.rows.map((e) => {
       return `'${e.name}`;
     });
-    columnsAttributes.pop();
+    columnsAttributes.pop(); // Last object in this array will always by "Metric", we do not want to insert it into Excel so we remove it from array
     return {rowsAttributes, columnsAttributes};
   }
 
