@@ -7,6 +7,7 @@ import loadingSpinner from './assets/report_loading_spinner.gif';
 import {refreshReportsArray, callForEdit, callForReprompt} from '../popup/popup-actions';
 import RenameInput from './file-history-rename-input';
 import {withTranslation} from 'react-i18next';
+import {officeApiHelper} from '../office/office-api-helper';
 
 export class _OfficeLoadedFile extends React.Component {
   constructor() {
@@ -46,7 +47,8 @@ export class _OfficeLoadedFile extends React.Component {
     if (!isLoading) {
       this.setState({allowRefreshClick: false}, async () => {
         try {
-          await callForReprompt({bindId: bindingId, objectType});
+          // calling onBindingObjectClick to check whether the object exists in Excel before opening prompt popup
+          await officeApiHelper.onBindingObjectClick(bindingId, false) && await callForReprompt({bindId: bindingId, objectType});
         } finally {
           this.setState({allowRefreshClick: true});
         }
@@ -62,8 +64,12 @@ export class _OfficeLoadedFile extends React.Component {
     const {isLoading, bindingId, objectType, callForEdit} = this.props;
     if (!isLoading) {
       this.setState({allowRefreshClick: false}, async () => {
-        await callForEdit({bindId: bindingId, objectType});
-        this.setState({allowRefreshClick: true});
+        try {
+          // calling onBindingObjectClick to check whether the object exists in Excel before opening edit data popup
+          await officeApiHelper.onBindingObjectClick(bindingId, false) && await callForEdit({bindId: bindingId, objectType});
+        } finally {
+          this.setState({allowRefreshClick: true});
+        }
       });
     }
   };
