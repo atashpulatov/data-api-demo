@@ -59,7 +59,9 @@ class OfficeDisplayService {
       // Get mstr instance definition
       console.time('Instance definition');
 
-      body.template = body.requestedObjects;
+      if (!!body) {
+        body.template = body.requestedObjects;
+      };
       let instanceDefinition = await mstrObjectRestService.createInstance(objectId, projectId, isReport, dossierData, body);
       
       // Status 2 = report has open prompts to be answered before data can be returned
