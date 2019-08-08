@@ -14,14 +14,12 @@ import {errorService} from '../error/error-handler';
 import {authenticationHelper} from '../authentication/authentication-helper';
 import restrictedArt from './assets/art_restricted_access_blue.svg';
 import {notificationService} from '../notification/notification-service';
-import {fileHistoryHelper} from './file-history-helper';
 
 import './file-history.css';
 import {withTranslation} from 'react-i18next';
 
 export class _FileHistoryContainer extends React.Component {
   constructor(props) {
-    console.log('------props', props.reportArray);
     super(props);
     if (officeStoreService.isFileSecured()) {
       props.toggleSecuredFlag(true);
@@ -58,9 +56,9 @@ export class _FileHistoryContainer extends React.Component {
   }
 
   deleteRemoveReportListener = async () => {
-    const test = this.eventRemove.context;
+    const eventRemoveContext = this.eventRemove.context;
     this.eventRemove.remove();
-    await test.sync();
+    await eventRemoveContext.sync();
   }
 
   refreshAllAction = (reportArray, refreshAll) => {

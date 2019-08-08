@@ -7,7 +7,6 @@ import loadingSpinner from './assets/report_loading_spinner.gif';
 import {refreshReportsArray, callForEdit, callForReprompt} from '../popup/popup-actions';
 import RenameInput from './file-history-rename-input';
 import {withTranslation} from 'react-i18next';
-import {officeApiHelper} from '../office/office-api-helper';
 
 export class _OfficeLoadedFile extends React.Component {
   constructor() {
