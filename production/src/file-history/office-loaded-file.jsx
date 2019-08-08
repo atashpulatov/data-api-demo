@@ -83,8 +83,11 @@ export class _OfficeLoadedFile extends React.Component {
     if (!isLoading) {
       this.setState({allowRefreshClick: false}, async () => {
         // await refreshReport(bindingId, objectType, false);
-        await officeApiHelper.onBindingObjectClick(bindingId, false) && await refreshReportsArray([{bindId: bindingId, objectType}], false);
-        this.setState({allowRefreshClick: true});
+        try {
+          await officeApiHelper.onBindingObjectClick(bindingId, false) && await refreshReportsArray([{bindId: bindingId, objectType}], false);
+        } finally {
+          this.setState({allowRefreshClick: true});
+        }
       });
     }
   };
