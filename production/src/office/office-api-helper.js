@@ -338,14 +338,14 @@ class OfficeApiHelper {
 
     if (axis === 'rows') {
       offsets = {
-        verticalFirstCell: cell.colIndex + 1,
+        verticalFirstCell: cell.colIndex,
         horizontalFirstCell: -(headers.rows[0].length - cell.attributeIndex),
-        verticalLastCell: cell.colIndex + 1,
+        verticalLastCell: cell.colIndex,
         horizontalLastCell: headers.columns[0].length - 1,
       };
     } else if (axis === 'columns') {
       offsets = {
-        verticalFirstCell: -((headers.columns.length - cell.attributeIndex) - 1),
+        verticalFirstCell: -((headers.columns.length - cell.attributeIndex) + 1),
         horizontalFirstCell: cell.colIndex,
         verticalLastCell: mstrTable.tableSize.rows,
         horizontalLastCell: cell.colIndex,
@@ -376,7 +376,7 @@ class OfficeApiHelper {
   formatSubtotals = async (startCell, subtotalCells, mstrTable, context) => {
     let contextPromises = [];
     for (const cell of subtotalCells) {
-      const subtotalRowRange = this.getSubtotalRange(startCell, cell, mstrTable, context);
+      const subtotalRowRange = this.getSubtotalRange(startCell, cell, mstrTable);
       subtotalRowRange && (subtotalRowRange.format.font.bold = true);
       contextPromises.push(context.sync());
       if (contextPromises.length % CONTEXT_LIMIT === 0) {

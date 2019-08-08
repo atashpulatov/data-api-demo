@@ -221,6 +221,7 @@ class OfficeDisplayService {
     } else {
       range = sheet.getRange(tableRange);
     }
+    range.format.font.bold = false;
     if (prevOfficeTable) {
       prevOfficeTable.rows.load('count');
       await context.sync();
@@ -270,6 +271,7 @@ class OfficeDisplayService {
       const crosstabHeaderDimensions = this._getCrosstabHeaderDimensions(instanceDefinition);
 
       prevOfficeTable.rows.load('count');
+      prevOfficeTable.getRange().format.font.bold = false;
       await context.sync();
       const addedRows = Math.max(0, rows - prevOfficeTable.rows.count);
       // If the new table has more rows during update check validity
@@ -281,6 +283,7 @@ class OfficeDisplayService {
       if (mstrTable.isCrosstab) {
         try {
           const range = officeApiHelper.getCrosstabRange(startCell, crosstabHeaderDimensions, prevOfficeTable.worksheet);
+          range.format.font.bold = false;
           officeApiHelper.createColumnsHeaders(startCell, mstrTable.headers.columns, prevOfficeTable.worksheet, range);
           officeApiHelper.createRowsTitleHeaders(startCell, mstrTable.attributesNames, prevOfficeTable.worksheet, crosstabHeaderDimensions);
         } catch (error) {
