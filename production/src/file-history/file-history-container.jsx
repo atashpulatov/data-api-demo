@@ -40,25 +40,33 @@ export class _FileHistoryContainer extends React.Component {
   }
 
   addRemoveReportListener = async () => {
-    const excelContext = await officeApiHelper.getExcelContext();
-    this.eventRemove = excelContext.workbook.tables.onDeleted.add(async (e) => {
-      try {
-        await Promise.all([officeApiHelper.getExcelSessionStatus(), authenticationHelper.validateAuthToken()]);
-        const {name} = this.props.reportArray.find((report) => report.bindId === e.tableName);
-        officeDisplayService.removeReportFromStore(e.tableName);
-        const message = this.props.t('{{name}} has been removed from the workbook.', {name});
-        notificationService.displayTranslatedNotification('success', message);
-      } catch (error) {
-        errorService.handleError(error);
-      }
-    });
-    excelContext.sync();
+    try {
+      const excelContext = await officeApiHelper.getExcelContext();
+      this.eventRemove = excelContext.workbook.tables.onDeleted.add(async (e) => {
+        try {
+          await Promise.all([officeApiHelper.getExcelSessionStatus(), authenticationHelper.validateAuthToken()]);
+          const {name} = this.props.reportArray.find((report) => report.bindId === e.tableName);
+          officeDisplayService.removeReportFromStore(e.tableName);
+          const message = this.props.t('{{name}} has been removed from the workbook.', {name});
+          notificationService.displayTranslatedNotification('success', message);
+        } catch (error) {
+          errorService.handleError(error);
+        }
+      });
+      excelContext.sync();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   deleteRemoveReportListener = () => {
-    const eventRemoveContext = this.eventRemove.context;
-    this.eventRemove.remove();
-    eventRemoveContext.sync();
+    try {
+      const eventRemoveContext = this.eventRemove.context;
+      this.eventRemove.remove();
+      eventRemoveContext.sync();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   refreshAllAction = (reportArray, refreshAll) => {
