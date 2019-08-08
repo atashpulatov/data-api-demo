@@ -40,10 +40,6 @@ export class _NavigationTree extends Component {
 
   handleSecondary = async () => {
     try {
-      const response = await mstrObjectRestService.createInstance(this.props.chosenObjectId, this.props.chosenProjectId, this.props.chosenSubtype);
-      if (response && response.rows === 0) {
-        return message.warning(EMPTY_REPORT);
-      }
       this.props.handlePrepare(this.props.chosenProjectId, this.props.chosenObjectId,
           this.props.chosenSubtype, this.props.chosenProjectName, this.props.chosenType);
       this.setState({previewDisplay: true});
