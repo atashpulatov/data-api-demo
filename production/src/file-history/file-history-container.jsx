@@ -55,7 +55,7 @@ export class _FileHistoryContainer extends React.Component {
     excelContext.sync();
   }
 
-  deleteRemoveReportListener = async () => {
+  deleteRemoveReportListener = () => {
     const eventRemoveContext = this.eventRemove.context;
     this.eventRemove.remove();
     eventRemoveContext.sync();

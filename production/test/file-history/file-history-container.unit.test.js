@@ -132,7 +132,7 @@ describe('FileHistoryContainer', () => {
     expect(clickSpy).toHaveBeenCalled();
   });
 
-  it('should call componentWillUnmount ', async () => {
+  it('should call componentWillUnmount ', () => {
     // given
     // when
     const refreshAllmock = jest.fn();
