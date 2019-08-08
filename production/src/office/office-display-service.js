@@ -472,7 +472,7 @@ class OfficeDisplayService {
       await Promise.all(contextPromises);
       console.timeEnd('Context sync');
       officeApiHelper.formatTable(officeTable, mstrTable.isCrosstab, instanceDefinition.crosstabHeaderDimensions);
-      if (mstrTable) officeTable.showHeaders = false;
+      if (mstrTable.isCrosstab) officeTable.showHeaders = false;
       await excelContext.sync();
       return {officeTable, subtotalsAddresses};
     } catch (error) {
