@@ -188,12 +188,6 @@ class OfficeApiHelper {
               // for fractions set General format
               object.formatString.match(/# \?+?\/\?+?/) && (format = 'General');
             }
-          } else if (!isCrosstab) {
-            if (object.forms.length > 1) {
-              format = '@';
-            } else {
-              format = object.forms[0] === 'text' ? '@' : 'General';
-            }
           }
           columnRange.numberFormat = format;
         }
@@ -301,6 +295,10 @@ class OfficeApiHelper {
       // Remove column headers
       const topRange = officeTable.getRange().getRowsAbove(headerDimensions.columnsY - 1);
       topRange.clear();
+
+      // Remove title headers
+      const titlesRange = officeTable.getRange().getCell(0, 0).getOffsetRange(-1, -1).getResizedRange(-(headerDimensions.columnsY - 1), -(headerDimensions.rowsX - 1));
+      titlesRange.clear();
     } catch (error) {
       // TODO: Throw no available range error
 
@@ -431,7 +429,30 @@ class OfficeApiHelper {
     return this.createHeaders(columns, startingCell, directionVector);
   }
   /**
-   * Clear prevoius formatting and insert data in range
+ * Create Title headers for crosstab report
+ *
+ * @param {Office} cellAddress Address of the first cell in report (top left)
+ * @param {Object} attributesNames Contains arrays of attributes names in crosstab report
+ * @param {Office} sheet Active Exccel spreadsheet
+ * @param {Object} crosstabHeaderDimensions Contains dimensions of crosstab report headers
+ * @memberof OfficeApiHelper
+ */
+  createRowsTitleHeaders = async (cellAddress, attributesNames, sheet, crosstabHeaderDimensions) => {
+    const reportStartingCell = sheet.getRange(cellAddress);
+    const titlesBottomCell = reportStartingCell.getOffsetRange(0, -1);
+
+    const rowsTitlesRange = titlesBottomCell.getResizedRange(0, -(crosstabHeaderDimensions.rowsX - 1));
+    rowsTitlesRange.values = [attributesNames.rowsAttributes];
+    const columnssTitlesRange = titlesBottomCell.getOffsetRange(-1, 0).getResizedRange(-(crosstabHeaderDimensions.columnsY - 2), 0);
+    columnssTitlesRange.values = mstrNormalizedJsonHandler._transposeMatrix([attributesNames.columnsAttributes]);
+
+    const headerTitlesRange = columnssTitlesRange.getBoundingRect(rowsTitlesRange);
+    headerTitlesRange.format.verticalAlignment = Excel.VerticalAlignment.bottom;
+    this.formatCrosstabRange(headerTitlesRange);
+  }
+
+  /**
+   * Clear previous formatting and insert data in range
    *
    * @param {Office} headerRange Range of the header
    * @param {Array} headerArray Contains rows/headers structure and data
@@ -444,12 +465,22 @@ class OfficeApiHelper {
     const hAlign = axis === 'rows' ? 'left' : 'center';
     headerRange.format.horizontalAlignment = Excel.HorizontalAlignment[hAlign];
     headerRange.format.verticalAlignment = Excel.VerticalAlignment.top;
-    headerRange.format.borders.getItem('EdgeTop').color = EXCEL_XTABS_BORDER_COLOR;
-    headerRange.format.borders.getItem('EdgeRight').color = EXCEL_XTABS_BORDER_COLOR;
-    headerRange.format.borders.getItem('EdgeBottom').color = EXCEL_XTABS_BORDER_COLOR;
-    headerRange.format.borders.getItem('EdgeLeft').color = EXCEL_XTABS_BORDER_COLOR;
-    headerRange.format.borders.getItem('InsideVertical').color = EXCEL_XTABS_BORDER_COLOR;
-    headerRange.format.borders.getItem('InsideHorizontal').color = EXCEL_XTABS_BORDER_COLOR;
+    this.formatCrosstabRange(headerRange);
+  }
+
+  /**
+   * Format crosstab range
+   *
+   * @param {Office} range Range of the header
+   * @memberof OfficeApiHelper
+   */
+  formatCrosstabRange(range) {
+    range.format.borders.getItem('EdgeTop').color = EXCEL_XTABS_BORDER_COLOR;
+    range.format.borders.getItem('EdgeRight').color = EXCEL_XTABS_BORDER_COLOR;
+    range.format.borders.getItem('EdgeBottom').color = EXCEL_XTABS_BORDER_COLOR;
+    range.format.borders.getItem('EdgeLeft').color = EXCEL_XTABS_BORDER_COLOR;
+    range.format.borders.getItem('InsideVertical').color = EXCEL_XTABS_BORDER_COLOR;
+    range.format.borders.getItem('InsideHorizontal').color = EXCEL_XTABS_BORDER_COLOR;
   }
 
   /**
