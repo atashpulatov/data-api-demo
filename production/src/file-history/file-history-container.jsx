@@ -13,12 +13,15 @@ import {toggleSecuredFlag} from '../office/office-actions';
 import {errorService} from '../error/error-handler';
 import {authenticationHelper} from '../authentication/authentication-helper';
 import restrictedArt from './assets/art_restricted_access_blue.svg';
+import {notificationService} from '../notification/notification-service';
+import {fileHistoryHelper} from './file-history-helper';
 
 import './file-history.css';
 import {withTranslation} from 'react-i18next';
 
 export class _FileHistoryContainer extends React.Component {
   constructor(props) {
+    console.log('------props', props.reportArray);
     super(props);
     if (officeStoreService.isFileSecured()) {
       props.toggleSecuredFlag(true);
@@ -28,12 +31,36 @@ export class _FileHistoryContainer extends React.Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this._ismounted = true;
+    await this.addRemoveReportListener();
   }
 
-  componentWillUnmount() {
+  async componentWillUnmount() {
     this._ismounted = false;
+    await this.deleteRemoveReportListener();
+  }
+
+  addRemoveReportListener = async () => {
+    const excelContext = await officeApiHelper.getExcelContext();
+    this.eventRemove = excelContext.workbook.tables.onDeleted.add(async (e) => {
+      try {
+        await Promise.all([officeApiHelper.getExcelSessionStatus(), authenticationHelper.validateAuthToken()]);
+        const {name} = this.props.reportArray.find((report) => report.bindId === e.tableName);
+        officeDisplayService.removeReportFromStore(e.tableName);
+        const message = this.props.t('{{name}} has been removed from the workbook.', {name});
+        notificationService.displayTranslatedNotification('success', message);
+      } catch (error) {
+        return errorService.handleError(error);
+      }
+    });
+    await excelContext.sync();
+  }
+
+  deleteRemoveReportListener = async () => {
+    const test = this.eventRemove.context;
+    this.eventRemove.remove();
+    await test.sync();
   }
 
   refreshAllAction = (reportArray, refreshAll) => {

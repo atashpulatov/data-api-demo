@@ -7,11 +7,11 @@ const capitalize = (str) => {
 };
 
 class FileHistoryHelper {
-  deleteReport = async (onDelete, bindingId, objectType, isCrosstab = false, crosstabHeaderDimensions = {}) => {
+  deleteReport = async (onDelete, bindingId, isCrosstab = false, crosstabHeaderDimensions = {}, message) => {
     sessionHelper.enableLoading();
     try {
       const removed = await onDelete(bindingId, isCrosstab, crosstabHeaderDimensions);
-      removed && notificationService.displayTranslatedNotification('success', `${capitalize(objectType)} removed`);
+      removed && notificationService.displayTranslatedNotification('success', message);
     } catch (error) {
       errorService.handleError(error);
     } finally {

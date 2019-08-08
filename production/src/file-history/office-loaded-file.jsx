@@ -7,6 +7,7 @@ import loadingSpinner from './assets/report_loading_spinner.gif';
 import {refreshReportsArray, callForEdit, callForReprompt} from '../popup/popup-actions';
 import RenameInput from './file-history-rename-input';
 import {withTranslation} from 'react-i18next';
+import {officeApiHelper} from '../office/office-api-helper';
 
 export class _OfficeLoadedFile extends React.Component {
   constructor() {
@@ -30,9 +31,10 @@ export class _OfficeLoadedFile extends React.Component {
     if (!this.state.allowDeleteClick) {
       return;
     }
-    const {onDelete, bindingId, objectType, isCrosstab, crosstabHeaderDimensions} = this.props;
+    const {onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, fileName} = this.props;
     this.setState({allowDeleteClick: false, allowRefreshClick: false}, async () => {
-      await fileHistoryHelper.deleteReport(onDelete, bindingId, objectType, isCrosstab, crosstabHeaderDimensions);
+      const message = this.props.t('{{name}} has been removed from the workbook.', {name: fileName});
+      await fileHistoryHelper.deleteReport(onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, message);
       this._ismounted && this.setState({allowDeleteClick: true, allowRefreshClick: true});
     });
   };

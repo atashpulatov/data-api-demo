@@ -181,8 +181,12 @@ class OfficeDisplayService {
           crosstabRange = officeApiHelper.getCrosstabRange(cell.address, crosstabHeaderDimensions, sheet);
         }
         await tableObject.clearFilters();
+        // since we are removing table from Excel, we don't need event to be emitted
+        excelContext.runtime.enableEvents = false;
+        await excelContext.sync();
         await tableObject.delete();
         isCrosstab && await crosstabRange.clear();
+        excelContext.runtime.enableEvents = true;
         await excelContext.sync();
         return !isRefresh && this.removeReportFromStore(bindingId);
       } catch (e) {
