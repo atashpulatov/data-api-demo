@@ -435,7 +435,7 @@ class OfficeDisplayService {
       const rowGenerator = mstrObjectRestService.getObjectContentGenerator(instanceDefinition, objectId, projectId, isReport, dossierData, body, limit);
       let rowIndex = 0;
       let contextPromises = [];
-      let subtotalsAddresses = [];
+      const subtotalsAddresses = [];
       console.time('Fetch data');
       for await (const {row, header, subtotalAddress} of rowGenerator) {
         console.groupCollapsed(`Importing rows: ${rowIndex} to ${Math.min(rowIndex + limit, rows)}`);
@@ -451,7 +451,11 @@ class OfficeDisplayService {
           contextPromises.push(excelContext.sync());
           console.timeEnd('Append crosstab rows');
         }
-        subtotalsAddresses = subtotalsAddresses.concat(subtotalAddress.reduce((acc, val) => acc.concat(val), []).filter(Boolean));
+        console.time('Get subtotals coordinates');
+        for (let i = 0; i < subtotalAddress.length - 1; i++) {
+          Boolean(subtotalAddress[i]) && subtotalsAddresses.push(subtotalAddress[i]);
+        }
+        console.timeEnd('Get subtotals coordinates');
         rowIndex += row.length;
         const promiseLength = contextPromises.length;
         if (promiseLength % PROMISE_LIMIT === 0) {
