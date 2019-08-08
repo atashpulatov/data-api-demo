@@ -52,13 +52,13 @@ export class _FileHistoryContainer extends React.Component {
         return errorService.handleError(error);
       }
     });
-    await excelContext.sync();
+    return excelContext.sync();
   }
 
   deleteRemoveReportListener = async () => {
     const eventRemoveContext = this.eventRemove.context;
     this.eventRemove.remove();
-    await eventRemoveContext.sync();
+    return eventRemoveContext.sync();
   }
 
   refreshAllAction = (reportArray, refreshAll) => {
