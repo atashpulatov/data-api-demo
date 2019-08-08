@@ -9,7 +9,9 @@ export const notificationReducer = (state = {}, action) => {
     case reduxNotificationProperties.actions.showMessage:
       return onShowMessage(action, state);
     case reduxNotificationProperties.actions.showNotification:
-      return onShowNotification(action, state);
+      return onShowNotification(action);
+    case reduxNotificationProperties.actions.showTranslatedNotification:
+      return onShowNotification(action, true);
     default:
       break;
   }
@@ -34,7 +36,7 @@ function onShowMessage(action) {
   };
 }
 
-function onShowNotification(action) {
+function onShowNotification(action, translated) {
   if (!action.title) {
     throw new NotificationError('Missing title');
   }
@@ -54,5 +56,6 @@ function onShowNotification(action) {
     content: action.content,
     notificationType: action.notificationType,
     details: action.details,
+    translated,
   };
 }

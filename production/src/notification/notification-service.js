@@ -10,6 +10,10 @@ class NotificationService {
     const action = actionCreator.showNotificationAction(title, content, type, details);
     reduxStore.dispatch(action);
   }
+  displayTranslatedNotification = (type, content, details, title = ' ') => {
+    const action = actionCreator.showTranslatedNotification(title, content, type, details);
+    reduxStore.dispatch(action);
+  }
 }
 
 export const notificationService = new NotificationService();
