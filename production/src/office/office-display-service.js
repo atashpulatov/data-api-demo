@@ -245,7 +245,10 @@ class OfficeDisplayService {
     } else {
       await this._checkRangeValidity(context, range);
     }
-    isCrosstab && officeApiHelper.createColumnsHeaders(tableStartCell, mstrTable.headers.columns, sheet, range);
+    if (isCrosstab) {
+      officeApiHelper.createColumnsHeaders(tableStartCell, mstrTable.headers.columns, sheet, range);
+      officeApiHelper.createRowsTitleHeaders(tableStartCell, mstrTable.attributesNames, sheet, crosstabHeaderDimensions);
+    }
     const officeTable = sheet.tables.add(tableRange, true);
     this._styleHeaders(officeTable, TABLE_HEADER_FONT_COLOR, TABLE_HEADER_FILL_COLOR);
     try {
@@ -280,6 +283,7 @@ class OfficeDisplayService {
         try {
           const range = officeApiHelper.getCrosstabRange(startCell, crosstabHeaderDimensions, prevOfficeTable.worksheet);
           officeApiHelper.createColumnsHeaders(startCell, mstrTable.headers.columns, prevOfficeTable.worksheet, range);
+          officeApiHelper.createRowsTitleHeaders(startCell, mstrTable.attributesNames, prevOfficeTable.worksheet, crosstabHeaderDimensions);
         } catch (error) {
           console.log(error);
         }
