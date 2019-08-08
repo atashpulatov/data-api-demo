@@ -29,14 +29,14 @@ export class _FileHistoryContainer extends React.Component {
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     this._ismounted = true;
-    await this.addRemoveReportListener();
+    this.addRemoveReportListener();
   }
 
-  async componentWillUnmount() {
+  componentWillUnmount() {
     this._ismounted = false;
-    await this.deleteRemoveReportListener();
+    this.deleteRemoveReportListener();
   }
 
   addRemoveReportListener = async () => {
@@ -49,16 +49,16 @@ export class _FileHistoryContainer extends React.Component {
         const message = this.props.t('{{name}} has been removed from the workbook.', {name});
         notificationService.displayTranslatedNotification('success', message);
       } catch (error) {
-        return errorService.handleError(error);
+        errorService.handleError(error);
       }
     });
-    return excelContext.sync();
+    excelContext.sync();
   }
 
   deleteRemoveReportListener = async () => {
     const eventRemoveContext = this.eventRemove.context;
     this.eventRemove.remove();
-    return eventRemoveContext.sync();
+    eventRemoveContext.sync();
   }
 
   refreshAllAction = (reportArray, refreshAll) => {
