@@ -79,18 +79,20 @@ class OfficeApiHelper {
       r * ALPHABET_RANGE_END + parseInt(a, 36) - 9, 0);
   }
 
-  onBindingObjectClick = async (bindingId) => {
+  onBindingObjectClick = async (bindingId, shouldSelect = true) => {
     try {
       const excelContext = await this.getExcelContext();
       const tableRange = this.getBindingRange(excelContext, bindingId);
-      tableRange.select();
-      return await excelContext.sync();
+      shouldSelect && tableRange.select();
+      await excelContext.sync();
+      return true;
     } catch (error) {
       if (error.code === 'ItemNotFound') {
         return notificationService.displayNotification('info', 'The object does not exist in the metadata.');
       }
       const errorAfterOfficeFactory = errorService.errorOfficeFactory(error);
       errorService.handleOfficeError(errorAfterOfficeFactory);
+      return false;
     }
   };
 
