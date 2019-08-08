@@ -13,6 +13,7 @@ import {toggleSecuredFlag} from '../office/office-actions';
 import {errorService} from '../error/error-handler';
 import {authenticationHelper} from '../authentication/authentication-helper';
 import restrictedArt from './assets/art_restricted_access_blue.svg';
+import {notificationService} from '../notification/notification-service';
 
 import './file-history.css';
 import {withTranslation} from 'react-i18next';
@@ -30,10 +31,42 @@ export class _FileHistoryContainer extends React.Component {
 
   componentDidMount() {
     this._ismounted = true;
+    this.addRemoveReportListener();
   }
 
   componentWillUnmount() {
     this._ismounted = false;
+    this.deleteRemoveReportListener();
+  }
+
+  addRemoveReportListener = async () => {
+    try {
+      const excelContext = await officeApiHelper.getExcelContext();
+      this.eventRemove = excelContext.workbook.tables.onDeleted.add(async (e) => {
+        try {
+          await Promise.all([officeApiHelper.getExcelSessionStatus(), authenticationHelper.validateAuthToken()]);
+          const {name} = this.props.reportArray.find((report) => report.bindId === e.tableName);
+          officeDisplayService.removeReportFromStore(e.tableName);
+          const message = this.props.t('{{name}} has been removed from the workbook.', {name});
+          notificationService.displayTranslatedNotification('success', message);
+        } catch (error) {
+          errorService.handleError(error);
+        }
+      });
+      excelContext.sync();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  deleteRemoveReportListener = () => {
+    try {
+      const eventRemoveContext = this.eventRemove.context;
+      this.eventRemove.remove();
+      eventRemoveContext.sync();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   refreshAllAction = (reportArray, refreshAll) => {
