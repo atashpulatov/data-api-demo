@@ -22,13 +22,13 @@ export const _PopupViewSelector = (props) => {
   propsToPass.token = props.authToken;
 
   const localEditReport = {...props.editedReport};
-  console.log({props, localEditReport});
   if ((importRequested && !props.isPrompted)
     || (importRequested && arePromptsAnswered(props))) {
     proceedToImport(props);
   } else if (!!props.isPrompted && arePromptsAnswered(props)) {
     if (isInstanceWithPromptsAnswered(props)) {
-      wasReportJustImported(props) && proceedToImport(props);
+      popupType === PopupTypeEnum.repromptingWindow
+        && wasReportJustImported(props) && proceedToImport(props);
       clearAttributesAndMetrics(localEditReport);
       popupType = PopupTypeEnum.editFilters;
     } else {
@@ -85,6 +85,11 @@ async function obtainInstanceWithPromptsAnswers(propsToPass, props) {
     instanceDefinition = await mstrObjectRestService.getInstance(reportId, projectId, true, null, null, instanceDefinition.instanceId);
     count++;
   }
+  const body = createBody(
+      props.editedReport && props.editedReport.selectedAttributes,
+      props.editedReport && props.editedReport.selectedMetrics,
+      props.editedReport && props.editedReport.selectedFilters
+  );
   const preparedReport = {
     id: reportId,
     projectId: projectId,
@@ -92,13 +97,74 @@ async function obtainInstanceWithPromptsAnswers(propsToPass, props) {
     objectType: 'report',
     instanceId: instanceDefinition.instanceId,
     promptsAnswers: props.promptsAnswers,
-    selectedAttributes: props.editedReport && props.editedReport.selectedAttributes,
-    selectedMetrics: props.editedReport && props.editedReport.selectedMetrics,
-    selectedFilters: props.editedReport && props.editedReport.selectedFilters,
+    body,
   };
   console.log({preparedReport, propsToPass});
   props.preparePromptedReport(instanceDefinition.instanceId, preparedReport);
 }
+
+// TODO: get this method from library
+function createBody(attributes, metrics, filters, instanceId) {
+  // temporary line below.
+  // Once the rest structure is unified for both endpoints, this conditional won't be needed anymore.
+  const restObjectType = !instanceId ? 'requestedObjects' : 'template';
+  const body = {
+    [restObjectType]: {
+      attributes: [],
+      metrics: [],
+    },
+  };
+  if (attributes && attributes.length > 0) {
+    attributes.forEach((att) => {
+      body[restObjectType].attributes.push({'id': att});
+    });
+  }
+  if (metrics && metrics.length > 0) {
+    metrics.forEach((met) => {
+      body[restObjectType].metrics.push({'id': met});
+    });
+  }
+  if (filters && Object.keys(filters).length > 0) {
+    body.viewFilter = composeFilter(filters);
+  }
+  return body;
+}
+
+// TODO: remove once create body is from library
+function composeFilter(selectedFilters) {
+  let branch;
+  const filterOperands = [];
+  const addItem = (item) => {
+    branch.operands[1].elements.push({
+      id: item,
+    });
+  };
+  for (const att in selectedFilters) {
+    if (selectedFilters[att].length) {
+      branch = {
+        operator: 'In',
+        operands: [],
+      };
+      branch.operands.push({
+        type: 'attribute',
+        id: att,
+      });
+      branch.operands.push({
+        type: 'elements',
+        elements: [],
+      });
+      selectedFilters[att].forEach(addItem);
+      filterOperands.push(branch);
+    }
+  }
+  const operandsLength = filterOperands.length;
+  const filter = operandsLength === 0
+    ? null
+    : operandsLength === 1
+      ? filterOperands[0]
+      : {operator: 'And', operands: filterOperands};
+  return filter;
+};
 
 function proceedToImport(props) {
   const okObject = {
@@ -157,8 +223,6 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
 
 export function mapStateToProps(state) {
   const popupState = state.popupReducer.editedReport;
-  console.log({popupState});
-
   return {
     ...state.navigationTree,
     authToken: state.sessionReducer.authToken,
