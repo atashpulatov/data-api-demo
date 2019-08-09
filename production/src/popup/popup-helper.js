@@ -94,7 +94,6 @@ class PopupHelper {
       return notificationService.displayNotification('info', 'Data is not relevant anymore. You can delete it from the list');
     }
     errorService.handleError(error);
-    return error;
   }
 }
 
