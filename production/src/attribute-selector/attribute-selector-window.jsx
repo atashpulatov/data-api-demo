@@ -79,7 +79,7 @@ export class AttributeSelectorWindow extends Component {
         />
         <PopupButtons
           disableActiveActions={!this.state.attributesSelected}
-          handleBack={this.handleBack}
+          handleBack={!this.props.mstrData.editRequested && this.handleBack}
           handleOk={this.handleOk}
           handleCancel={this.handleCancel}
           loading={this.state.loading}
