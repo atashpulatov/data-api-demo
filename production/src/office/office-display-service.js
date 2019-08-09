@@ -134,27 +134,6 @@ class OfficeDisplayService {
     }
   }
 
-  // TODO: move it to api helper?
-  addReportToStore = (report) => {
-    reduxStore.dispatch({
-      type: officeProperties.actions.loadReport,
-      report: {
-        id: report.id,
-        name: report.name,
-        bindId: report.bindId,
-        projectId: report.projectId,
-        envUrl: report.envUrl,
-        body: report.body,
-        isLoading: report.isLoading,
-        objectType: report.objectType,
-        isCrosstab: report.isCrosstab,
-        isPrompted: report.isPrompted,
-        promptsAnswers: report.promptsAnswers,
-        crosstabHeaderDimensions: report.crosstabHeaderDimensions,
-      },
-    });
-    officeStoreService.preserveReport(report);
-  };
 
   removeReportFromStore = (bindingId) => {
     reduxStore.dispatch({
@@ -380,22 +359,21 @@ class OfficeDisplayService {
   }
 
   _addToStore({isRefresh, instanceDefinition, bindingId, projectId, envUrl, body, objectType, isCrosstab, isPrompted, promptsAnswers}) {
-    if (!isRefresh) {
-      this.addReportToStore({
-        id: instanceDefinition.mstrTable.id,
-        name: instanceDefinition.mstrTable.name,
-        bindId: bindingId,
-        projectId,
-        envUrl,
-        body,
-        isLoading: false,
-        objectType,
-        isPrompted,
-        isCrosstab,
-        promptsAnswers,
-        crosstabHeaderDimensions: instanceDefinition.crosstabHeaderDimensions,
-      });
-    }
+    const report = {
+      id: instanceDefinition.mstrTable.id,
+      name: instanceDefinition.mstrTable.name,
+      bindId: bindingId,
+      projectId,
+      envUrl,
+      body,
+      isLoading: false,
+      objectType,
+      isPrompted,
+      isCrosstab,
+      promptsAnswers,
+      crosstabHeaderDimensions: instanceDefinition.crosstabHeaderDimensions,
+    };
+    officeStoreService.saveAndPreserveReportInStore(report, isRefresh);
   }
 
   async _applyFormatting(officeTable, instanceDefinition, isCrosstab, excelContext) {

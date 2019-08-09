@@ -2,6 +2,7 @@ import {officeProperties} from '../office-properties';
 import {officeApiHelper} from '../../office/office-api-helper';
 import {RunOutsideOfficeError} from '../../error/run-outside-office-error';
 import {errorService} from '../../error/error-handler';
+import {reduxStore} from '../../store';
 
 class OfficeStoreService {
   preserveReport = (report) => {
@@ -107,6 +108,36 @@ class OfficeStoreService {
       errorService.handleOfficeError(error);
     }
   }
+  saveAndPreserveReportInStore = (report, isRefresh) => {
+    if (isRefresh) {
+      const settings = this.getOfficeSettings();
+      const reportsArray = [...this._getReportProperties()];
+      const reportObj = reportsArray.find(
+          (element) => element.bindId === report.bindId
+      );
+      reportsArray[reportsArray.indexOf(reportObj)].crosstabHeaderDimensions = report.crosstabHeaderDimensions;
+      settings.set(officeProperties.loadedReportProperties, reportsArray);
+    } else {
+      this.preserveReport(report);
+    }
+    reduxStore.dispatch({
+      type: isRefresh ? officeProperties.actions.modifyReport : officeProperties.actions.loadReport,
+      report: {
+        id: report.id,
+        name: report.name,
+        bindId: report.bindId,
+        projectId: report.projectId,
+        envUrl: report.envUrl,
+        body: report.body,
+        isLoading: report.isLoading,
+        objectType: report.objectType,
+        isCrosstab: report.isCrosstab,
+        isPrompted: report.isPrompted,
+        promptsAnswers: report.promptsAnswers,
+        crosstabHeaderDimensions: report.crosstabHeaderDimensions,
+      },
+    });
+  };
 }
 
 export const officeStoreService = new OfficeStoreService();

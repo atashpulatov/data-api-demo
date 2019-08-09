@@ -32,6 +32,8 @@ export const officeReducer = (state = {loading: false}, action) => {
       return toggleIsSettingsFlag(action, state);
     case officeProperties.actions.toggleIsConfirmFlag:
       return toggleIsConfirmFlag(action, state);
+    case officeProperties.actions.modifyReport:
+      return onModifyReport(action, state);
     default:
       break;
   }
@@ -188,4 +190,8 @@ function _checkReportData(report) {
   if (!report.projectId) {
     throw new OfficeError('Missing report.projectId');
   }
+}
+
+function onModifyReport(action, state) {
+  return state;
 }
