@@ -107,6 +107,8 @@ describe('PopupViewSelector', () => {
       importRequested={true}
       {...reduxMethods}
       {...resultAction}
+      authToken={{}}
+      propsToPass={{}}
       methods={{}}
       chosenObjectId={resultAction.chosenObject}
       chosenProjectId={resultAction.chosenProject}
@@ -201,6 +203,8 @@ describe('PopupViewSelector', () => {
     shallow(<_PopupViewSelector
       location={location}
       {...propsToPass}
+      authToken={{}}
+      propsToPass={{}}
       methods={{}}
     />);
     // then
@@ -268,7 +272,7 @@ describe('PopupViewSelector', () => {
       startLoading: jest.fn(),
     };
     const props = {
-      popupType: 'whatever',
+      popupType: PopupTypeEnum.repromptingWindow,
       authToken: 'token',
       propsToPass: {
         prop: 'prop',
@@ -293,6 +297,8 @@ describe('PopupViewSelector', () => {
       location={location}
       {...reduxMethods}
       {...props}
+      authToken={{}}
+      propsToPass={{}}
       methods={{}}
     />);
     // then
