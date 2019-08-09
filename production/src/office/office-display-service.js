@@ -247,7 +247,10 @@ class OfficeDisplayService {
         await this._checkRangeValidity(context, bottomRange);
       }
 
+      context.runtime.enableEvents = false;
+      await context.sync();
       prevOfficeTable.delete();
+      context.runtime.enableEvents = true;
       await context.sync();
     } else {
       await this._checkRangeValidity(context, range);
