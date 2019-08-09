@@ -224,11 +224,11 @@ class OfficeDisplayService {
    */
   _createOfficeTable = async (instanceDefinition, context, startCell, officeTableId, prevOfficeTable) => {
     const crosstabHeaderDimensions = this._getCrosstabHeaderDimensions(instanceDefinition);
-    const {rows, columns, mstrTable, crosstabChange} = instanceDefinition;
+    const {rows, columns, mstrTable, toCrosstabChange, fromCrosstabChange} = instanceDefinition;
     const {isCrosstab} = mstrTable;
     let range;
     const sheet = prevOfficeTable ? prevOfficeTable.worksheet : context.workbook.worksheets.getActiveWorksheet();
-    const tableStartCell = officeApiHelper.getTableStartCell({startCell, sheet, mstrTable, prevOfficeTable, crosstabChange});
+    const tableStartCell = officeApiHelper.getTableStartCell({startCell, sheet, instanceDefinition, prevOfficeTable, toCrosstabChange, fromCrosstabChange});
     const tableRange = officeApiHelper.getRange(columns, tableStartCell, rows);
     if (isCrosstab) {
       range = officeApiHelper.getCrosstabRange(tableStartCell, crosstabHeaderDimensions, sheet);
@@ -424,7 +424,8 @@ class OfficeDisplayService {
       await excelContext.sync();
       if (prevCrosstabDimensions) officeApiHelper.clearCrosstabRange(prevOfficeTable, prevCrosstabDimensions);
       tableColumnsChanged = await this._checkColumnsChange(prevOfficeTable, excelContext, instanceDefinition);
-      instanceDefinition.crosstabChange = ((!prevCrosstabDimensions && instanceDefinition.mstrTable.isCrosstab));
+      instanceDefinition.toCrosstabChange = ((!prevCrosstabDimensions && instanceDefinition.mstrTable.isCrosstab));
+      instanceDefinition.fromCrosstabChange = ((prevCrosstabDimensions && !instanceDefinition.mstrTable.isCrosstab));
       const headerCell = prevOfficeTable.getHeaderRowRange().getCell(0, 0);
       headerCell.load('address');
       await excelContext.sync();
