@@ -164,6 +164,7 @@ class OfficeDisplayService {
 
   removeReportFromExcel = async (bindingId, isCrosstab, crosstabHeaderDimensions, isRefresh) => {
     let crosstabRange;
+    let cell;
     try {
       await authenticationHelper.validateAuthToken();
       const officeContext = await officeApiHelper.getOfficeContext();
@@ -176,10 +177,12 @@ class OfficeDisplayService {
         if (isCrosstab) {
           tableObject.showHeaders = true;
           const sheet = tableObject.worksheet;
-          const cell = tableObject.getRange().getCell(0, 0);
+          cell = tableObject.getRange().getCell(0, 0);
+          excelContext.trackedObjects.add(cell);
           cell.load('address');
           await excelContext.sync();
           crosstabRange = officeApiHelper.getCrosstabRange(cell.address, crosstabHeaderDimensions, sheet);
+          excelContext.trackedObjects.add(crosstabRange);
         }
         await tableObject.clearFilters();
         // since we are removing table from Excel, we don't need event to be emitted
@@ -189,6 +192,8 @@ class OfficeDisplayService {
         isCrosstab && await crosstabRange.clear();
         excelContext.runtime.enableEvents = true;
         await excelContext.sync();
+        excelContext.trackedObjects.remove(cell);
+        excelContext.trackedObjects.remove(crosstabRange);
         return !isRefresh && this.removeReportFromStore(bindingId);
       } catch (e) {
         if (e.code === 'ItemNotFound') {
@@ -242,7 +247,10 @@ class OfficeDisplayService {
         await this._checkRangeValidity(context, bottomRange);
       }
 
+      context.runtime.enableEvents = false;
+      await context.sync();
       prevOfficeTable.delete();
+      context.runtime.enableEvents = true;
       await context.sync();
     } else {
       await this._checkRangeValidity(context, range);
