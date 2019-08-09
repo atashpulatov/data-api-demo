@@ -70,7 +70,6 @@ class PopupController {
   };
 
   onMessageFromPopup = async (dialog, reportParams, arg) => {
-    const reportPreviousState = this._getReportsPreviousState(reportParams);
     const message = arg.message;
     const response = JSON.parse(message);
     try {
@@ -81,6 +80,7 @@ class PopupController {
           if (!reportParams) {
             await this.handleOkCommand(response, reportParams);
           } else {
+            const reportPreviousState = this._getReportsPreviousState(reportParams);
             await this.saveReportWithParams(reportParams, response, reportPreviousState);
           }
           break;
@@ -88,6 +88,7 @@ class PopupController {
           if (!reportParams) {
             await this.handleUpdateCommand(response);
           } else {
+            const reportPreviousState = this._getReportsPreviousState(reportParams);
             await this.saveReportWithParams(reportParams, response, reportPreviousState);
           }
           break;
