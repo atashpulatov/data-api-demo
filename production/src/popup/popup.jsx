@@ -24,6 +24,7 @@ export class Popup extends Component {
       mstrData: {
         ...this.state.mstrData,
         popupType: PopupTypeEnum.dataPreparation,
+        forceChange: false,
         projectId,
         reportId,
         reportSubtype,
@@ -33,11 +34,12 @@ export class Popup extends Component {
     });
   };
 
-  handleBack = (projectId, reportId, reportSubtype) => {
+  handleBack = (projectId, reportId, reportSubtype, forceChange = false) => {
     this.setState({
       mstrData: {
         ...this.state.mstrData,
         popupType: PopupTypeEnum.navigationTree,
+        forceChange,
         projectId,
         reportId,
         reportSubtype,
