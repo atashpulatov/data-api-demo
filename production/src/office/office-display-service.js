@@ -44,6 +44,7 @@ class OfficeDisplayService {
     let excelContext;
     let startCell;
     let subtotalsAddresses;
+    let tableColumnsChanged;
     try {
       const objectType = isReport ? 'report' : 'dataset';
       const {envUrl} = officeApiHelper.getCurrentMstrContext();
@@ -63,7 +64,7 @@ class OfficeDisplayService {
         body.template = body.requestedObjects;
       };
       let instanceDefinition = await mstrObjectRestService.createInstance(objectId, projectId, isReport, dossierData, body);
-      
+
       // Status 2 = report has open prompts to be answered before data can be returned
       if (instanceDefinition.status === 2) {
         instanceDefinition = await this._answerPrompts(instanceDefinition, objectId, projectId, promptsAnswers, isReport, dossierData, body);
@@ -82,7 +83,7 @@ class OfficeDisplayService {
       // TODO: If isRefresh check if new instance definition is same as before
 
       // Create or update table
-      ({officeTable, newOfficeTableId, shouldFormat} = await this._getOfficeTable(isRefresh, excelContext, bindingId, instanceDefinition, startCell));
+      ({officeTable, newOfficeTableId, shouldFormat, tableColumnsChanged} = await this._getOfficeTable(isRefresh, excelContext, bindingId, instanceDefinition, startCell));
 
       // Apply formatting when table was created
       if (shouldFormat) await this._applyFormatting(officeTable, instanceDefinition, isCrosstab, excelContext);
@@ -91,7 +92,7 @@ class OfficeDisplayService {
       console.time('Fetch and insert into excel');
       const connectionData = {objectId, projectId, dossierData, isReport, body};
       const officeData = {officeTable, excelContext, startCell, newOfficeTableId};
-      ({officeTable, subtotalsAddresses} = await this._fetchInsertDataIntoExcel({connectionData, officeData, instanceDefinition, isRefresh, startCell}));
+      ({officeTable, subtotalsAddresses} = await this._fetchInsertDataIntoExcel({connectionData, officeData, instanceDefinition, isRefresh, startCell, tableColumnsChanged}));
 
       if (subtotalsAddresses.length) {
         // Removing duplicated subtotal addresses from headers
@@ -191,11 +192,13 @@ class OfficeDisplayService {
         excelContext.runtime.enableEvents = false;
         await excelContext.sync();
         await tableObject.delete();
-        isCrosstab && await crosstabRange.clear();
+        if (isCrosstab) {
+          await crosstabRange.clear();
+          excelContext.trackedObjects.remove(cell);
+          excelContext.trackedObjects.remove(crosstabRange);
+        }
         excelContext.runtime.enableEvents = true;
         await excelContext.sync();
-        excelContext.trackedObjects.remove(cell);
-        excelContext.trackedObjects.remove(crosstabRange);
         return !isRefresh && this.removeReportFromStore(bindingId);
       } catch (e) {
         if (e.code === 'ItemNotFound') {
@@ -414,13 +417,13 @@ class OfficeDisplayService {
     const {prevCrosstabDimensions} = instanceDefinition;
     let officeTable;
     let shouldFormat = true;
-
+    let tableColumnsChanged;
     if (isRefresh) {
       const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindingId);
       prevOfficeTable.showHeaders = true;
       await excelContext.sync();
       if (prevCrosstabDimensions) officeApiHelper.clearCrosstabRange(prevOfficeTable, prevCrosstabDimensions);
-      const tableColumnsChanged = await this._checkColumnsChange(prevOfficeTable, excelContext, instanceDefinition);
+      tableColumnsChanged = await this._checkColumnsChange(prevOfficeTable, excelContext, instanceDefinition);
       instanceDefinition.crosstabChange = ((!prevCrosstabDimensions && instanceDefinition.mstrTable.isCrosstab));
       const headerCell = prevOfficeTable.getHeaderRowRange().getCell(0, 0);
       headerCell.load('address');
@@ -440,10 +443,10 @@ class OfficeDisplayService {
       officeTable = await this._createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId);
     }
     console.timeEnd('Create or get table');
-    return {officeTable, newOfficeTableId, shouldFormat};
+    return {officeTable, newOfficeTableId, shouldFormat, tableColumnsChanged};
   }
 
-  async _fetchInsertDataIntoExcel({connectionData, officeData, instanceDefinition, isRefresh}) {
+  async _fetchInsertDataIntoExcel({connectionData, officeData, instanceDefinition, isRefresh, tableColumnsChanged}) {
     try {
       const {objectId, projectId, dossierData, isReport, body} = connectionData;
       const {excelContext, officeTable} = officeData;
@@ -459,7 +462,7 @@ class OfficeDisplayService {
         console.timeEnd('Fetch data');
         console.time('Append rows');
         excelContext.workbook.application.suspendApiCalculationUntilNextSync();
-        await this._appendRowsToTable(officeTable, row, rowIndex, isRefresh);
+        await this._appendRowsToTable(officeTable, row, rowIndex, isRefresh, tableColumnsChanged);
         contextPromises.push(excelContext.sync());
         console.timeEnd('Append rows');
         if (mstrTable.isCrosstab) {
@@ -503,11 +506,11 @@ class OfficeDisplayService {
     officeApiHelper.createRowsHeaders(startCell, headerRows);
   }
 
-  _appendRowsToTable(officeTable, excelRows, rowIndex, isRefresh = false) {
+  _appendRowsToTable(officeTable, excelRows, rowIndex, isRefresh = false, tableColumnsChanged) {
     // Get resize range: The number of rows/cols by which to expand the bottom-right corner, relative to the current range.
     const rowRange = officeTable.getDataBodyRange().getRow(0).getResizedRange(excelRows.length - 1, 0).getOffsetRange(rowIndex, 0);
     // clear(applyToString?: "All" | "Formats" | "Contents" | "Hyperlinks" | "RemoveHyperlinks"): void;
-    isRefresh && rowRange.clear('Contents');
+    if (!tableColumnsChanged && isRefresh) rowRange.clear('Contents');
     rowRange.values = excelRows;
   }
 
