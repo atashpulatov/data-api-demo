@@ -159,7 +159,7 @@ function composeFilter(selectedFilters) {
   }
   const operandsLength = filterOperands.length;
   if (!operandsLength) {
-    return null; // or empty return, if null is not necessary
+    return;
   }
   return operandsLength === 1
     ? filterOperands[0]
