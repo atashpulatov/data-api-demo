@@ -114,7 +114,9 @@ describe('Popup actions', () => {
         },
       ];
       // when
-      await actions.refreshReportsArray(reportArray, false)(listener);
+      try {
+        await actions.refreshReportsArray(reportArray, false)(listener);
+      } catch (error) { }
       // then
       expect(popupHelper.handleRefreshError).toHaveBeenCalledWith(mockErrorObject, 1, 0, false);
     });
