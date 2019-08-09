@@ -158,12 +158,12 @@ function composeFilter(selectedFilters) {
     }
   }
   const operandsLength = filterOperands.length;
-  const filter = operandsLength === 0
-    ? null
-    : operandsLength === 1
-      ? filterOperands[0]
-      : {operator: 'And', operands: filterOperands};
-  return filter;
+  if (!operandsLength) {
+    return null; // or empty return, if null is not necessary
+  }
+  return operandsLength === 1
+    ? filterOperands[0]
+    : {operator: 'And', operands: filterOperands};
 };
 
 function proceedToImport(props) {
