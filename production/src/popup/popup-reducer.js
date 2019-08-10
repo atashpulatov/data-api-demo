@@ -38,7 +38,6 @@ export const popupReducer = (state = initialState, action) => {
         editedReport: action.reportData,
       };
     }
-    case CLEAR_WINDOW:
     case CLEAR_PROMPTS_ANSWERS: {
       return {
         ...state,
