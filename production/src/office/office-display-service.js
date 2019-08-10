@@ -397,7 +397,7 @@ class OfficeDisplayService {
   async _getOfficeTable(isRefresh, excelContext, bindingId, instanceDefinition, startCell) {
     console.time('Create or get table');
     const newOfficeTableId = bindingId || officeApiHelper.findAvailableOfficeTableId();
-    const {mstrTable} = instanceDefinition;
+    const {mstrTable, columns, rows} = instanceDefinition;
     const {prevCrosstabDimensions, isCrosstab} = mstrTable;
     let officeTable;
     let shouldFormat = true;
@@ -406,7 +406,6 @@ class OfficeDisplayService {
       const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindingId);
       prevOfficeTable.showHeaders = true;
       await excelContext.sync();
-      if (prevCrosstabDimensions) officeApiHelper.clearCrosstabRange(prevOfficeTable, prevCrosstabDimensions);
       tableColumnsChanged = await this._checkColumnsChange(prevOfficeTable, excelContext, instanceDefinition);
       mstrTable.toCrosstabChange = ((!prevCrosstabDimensions && isCrosstab));
       mstrTable.fromCrosstabChange = ((prevCrosstabDimensions && !isCrosstab));
@@ -414,6 +413,8 @@ class OfficeDisplayService {
       headerCell.load('address');
       await excelContext.sync();
       const startCell = officeApiHelper.getStartCell(headerCell.address);
+      officeApiHelper.getRange(columns, startCell, rows);
+      if (prevCrosstabDimensions) officeApiHelper.clearCrosstabRange(prevOfficeTable, prevCrosstabDimensions);
       await excelContext.sync();
       if (tableColumnsChanged) {
         console.log('Instance definition changed, creating new table');
