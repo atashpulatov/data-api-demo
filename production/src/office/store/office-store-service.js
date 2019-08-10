@@ -118,25 +118,25 @@ class OfficeStoreService {
       reportsArray[reportsArray.indexOf(reportObj)].crosstabHeaderDimensions = report.crosstabHeaderDimensions;
       settings.set(officeProperties.loadedReportProperties, reportsArray);
     } else {
+      reduxStore.dispatch({
+        type: officeProperties.actions.loadReport,
+        report: {
+          id: report.id,
+          name: report.name,
+          bindId: report.bindId,
+          projectId: report.projectId,
+          envUrl: report.envUrl,
+          body: report.body,
+          isLoading: report.isLoading,
+          objectType: report.objectType,
+          isCrosstab: report.isCrosstab,
+          isPrompted: report.isPrompted,
+          promptsAnswers: report.promptsAnswers,
+          crosstabHeaderDimensions: report.crosstabHeaderDimensions,
+        },
+      });
       this.preserveReport(report);
     }
-    reduxStore.dispatch({
-      type: isRefresh ? officeProperties.actions.modifyReport : officeProperties.actions.loadReport,
-      report: {
-        id: report.id,
-        name: report.name,
-        bindId: report.bindId,
-        projectId: report.projectId,
-        envUrl: report.envUrl,
-        body: report.body,
-        isLoading: report.isLoading,
-        objectType: report.objectType,
-        isCrosstab: report.isCrosstab,
-        isPrompted: report.isPrompted,
-        promptsAnswers: report.promptsAnswers,
-        crosstabHeaderDimensions: report.crosstabHeaderDimensions,
-      },
-    });
   };
 }
 
