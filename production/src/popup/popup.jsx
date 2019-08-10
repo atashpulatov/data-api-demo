@@ -8,6 +8,7 @@ import {reduxStore} from '../store';
 import {Provider} from 'react-redux';
 import {PopupViewSelector} from './popup-view-selector';
 import i18next from '../i18n';
+import {CLEAR_PROMPTS_ANSWERS} from '../navigation/navigation-tree-actions';
 
 export class Popup extends Component {
   constructor(props) {
@@ -44,7 +45,7 @@ export class Popup extends Component {
         reportId,
         reportSubtype,
       },
-    });
+    }, () => reduxStore.dispatch({type: CLEAR_PROMPTS_ANSWERS}));
   };
 
   handlePopupErrors = (error) => {
