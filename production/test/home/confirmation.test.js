@@ -79,6 +79,7 @@ const createMockFilesArray = () => {
       id: 'mockId_' + i,
       name: 'mockName_' + i,
       bindId: 'mockBindId_' + i,
+      isCrosstab: true,
     });
   }
   return mockArray;
