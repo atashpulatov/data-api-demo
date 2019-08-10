@@ -3,8 +3,9 @@ import {
   STOP_REPORT_LOADING,
   RESET_STATE,
   SET_REPORT_N_FILTERS,
-  SET_PREPARED_REPORT,
+  SET_PREPARED_REPORT, CLEAR_WINDOW,
 } from './popup-actions';
+import {CLEAR_PROMPTS_ANSWERS} from '../navigation/navigation-tree-actions';
 
 export const initialState = {
 };
@@ -35,6 +36,14 @@ export const popupReducer = (state = initialState, action) => {
         ...state,
         preparedInstance: action.instanceId,
         editedReport: action.reportData,
+      };
+    }
+    case CLEAR_WINDOW:
+    case CLEAR_PROMPTS_ANSWERS: {
+      return {
+        ...state,
+        preparedInstance: null,
+        editedReport: null,
       };
     }
     case RESET_STATE: {

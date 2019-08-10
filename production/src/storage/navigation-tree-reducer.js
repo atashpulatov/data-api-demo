@@ -1,6 +1,6 @@
 import {
   SELECT_FOLDER, SELECT_OBJECT, SET_DATA_SOURCE, START_IMPORT, CHANGE_SORTING, CHANGE_SEARCHING, UPDATE_SCROLL,
-  UPDATE_SIZE, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED,
+  UPDATE_SIZE, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED, CLEAR_PROMPTS_ANSWERS,
 } from '../navigation/navigation-tree-actions';
 import {CLEAR_WINDOW} from '../popup/popup-actions';
 
@@ -119,6 +119,12 @@ export const navigationTree = (state = initialState, action) => {
         newState.dossierData = data.dossierData;
       }
       newState.isPrompted = true;
+      return newState;
+    }
+    case CLEAR_PROMPTS_ANSWERS: {
+      const newState = {...state};
+      newState.promptsAnswers = null;
+      newState.dossierData = null;
       return newState;
     }
     case CANCEL_REQUEST_IMPORT: {

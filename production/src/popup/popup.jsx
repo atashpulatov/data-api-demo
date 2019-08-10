@@ -8,6 +8,7 @@ import {reduxStore} from '../store';
 import {Provider} from 'react-redux';
 import {PopupViewSelector} from './popup-view-selector';
 import i18next from '../i18n';
+import {CLEAR_PROMPTS_ANSWERS} from '../navigation/navigation-tree-actions';
 
 export class Popup extends Component {
   constructor(props) {
@@ -24,6 +25,7 @@ export class Popup extends Component {
       mstrData: {
         ...this.state.mstrData,
         popupType: PopupTypeEnum.dataPreparation,
+        forceChange: false,
         projectId,
         reportId,
         reportSubtype,
@@ -33,16 +35,17 @@ export class Popup extends Component {
     });
   };
 
-  handleBack = (projectId, reportId, reportSubtype) => {
+  handleBack = (projectId, reportId, reportSubtype, forceChange = false) => {
     this.setState({
       mstrData: {
         ...this.state.mstrData,
         popupType: PopupTypeEnum.navigationTree,
+        forceChange,
         projectId,
         reportId,
         reportSubtype,
       },
-    });
+    }, () => reduxStore.dispatch({type: CLEAR_PROMPTS_ANSWERS}));
   };
 
   handlePopupErrors = (error) => {
