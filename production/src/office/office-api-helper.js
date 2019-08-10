@@ -289,24 +289,27 @@ class OfficeApiHelper {
    *
    * @param {Office} officeTable Starting table body cell
    * @param {Object} headerDimensions Contains information about crosstab headers dimensions
+   * @param {Office} context Excel context
    * @memberof OfficeApiHelper
    */
-  clearCrosstabRange = (officeTable, headerDimensions) => {
+  clearCrosstabRange = async (officeTable, headerDimensions, context) => {
     try {
-      // Remove row headers
+      // Row headers
       const leftRange = officeTable.getRange().getColumnsBefore(headerDimensions.rowsX);
-      leftRange.clear('contents');
-
-      // Remove column headers
+      // Column headers
       const topRange = officeTable.getRange().getRowsAbove(headerDimensions.columnsY);
-      topRange.clear('contents');
-
-      // Remove title headers
+      // Title headers
       const titlesRange = officeTable.getRange().getCell(0, 0).getOffsetRange(0, -1).getResizedRange(-(headerDimensions.columnsY), -(headerDimensions.rowsX - 1));
+
+      // Check if ranges are valid before clearing
+      await context.sync();
+
+      leftRange.clear('contents');
+      topRange.clear('contents');
       titlesRange.clear('contents');
     } catch (error) {
-      // TODO: Throw no available range error
-
+      officeTable.showHeaders = false;
+      throw error;
     }
   }
 

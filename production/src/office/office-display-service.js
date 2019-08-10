@@ -396,40 +396,44 @@ class OfficeDisplayService {
 
   async _getOfficeTable(isRefresh, excelContext, bindingId, instanceDefinition, startCell) {
     console.time('Create or get table');
-    const newOfficeTableId = bindingId || officeApiHelper.findAvailableOfficeTableId();
-    const {mstrTable, columns, rows} = instanceDefinition;
-    const {prevCrosstabDimensions, isCrosstab} = mstrTable;
-    let officeTable;
-    let shouldFormat = true;
-    let tableColumnsChanged;
-    if (isRefresh) {
-      const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindingId);
-      prevOfficeTable.showHeaders = true;
-      await excelContext.sync();
-      tableColumnsChanged = await this._checkColumnsChange(prevOfficeTable, excelContext, instanceDefinition);
-      mstrTable.toCrosstabChange = ((!prevCrosstabDimensions && isCrosstab));
-      mstrTable.fromCrosstabChange = ((prevCrosstabDimensions && !isCrosstab));
-      const headerCell = prevOfficeTable.getHeaderRowRange().getCell(0, 0);
-      headerCell.load('address');
-      await excelContext.sync();
-      const startCell = officeApiHelper.getStartCell(headerCell.address);
-      officeApiHelper.getRange(columns, startCell, rows);
-      if (prevCrosstabDimensions) officeApiHelper.clearCrosstabRange(prevOfficeTable, prevCrosstabDimensions);
-      await excelContext.sync();
-      if (tableColumnsChanged) {
-        console.log('Instance definition changed, creating new table');
-        officeTable = await this._createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId, prevOfficeTable);
+    try {
+      const newOfficeTableId = bindingId || officeApiHelper.findAvailableOfficeTableId();
+      const {mstrTable, columns, rows} = instanceDefinition;
+      const {prevCrosstabDimensions, isCrosstab} = mstrTable;
+      let officeTable;
+      let shouldFormat = true;
+      let tableColumnsChanged;
+      if (isRefresh) {
+        const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindingId);
+        prevOfficeTable.showHeaders = true;
+        await excelContext.sync();
+        tableColumnsChanged = await this._checkColumnsChange(prevOfficeTable, excelContext, instanceDefinition);
+        mstrTable.toCrosstabChange = ((!prevCrosstabDimensions && isCrosstab));
+        mstrTable.fromCrosstabChange = ((prevCrosstabDimensions && !isCrosstab));
+        const headerCell = prevOfficeTable.getHeaderRowRange().getCell(0, 0);
+        headerCell.load('address');
+        await excelContext.sync();
+        const startCell = officeApiHelper.getStartCell(headerCell.address);
+        officeApiHelper.getRange(columns, startCell, rows);
+        if (prevCrosstabDimensions) officeApiHelper.clearCrosstabRange(prevOfficeTable, prevCrosstabDimensions, excelContext);
+        await excelContext.sync();
+        if (tableColumnsChanged) {
+          console.log('Instance definition changed, creating new table');
+          officeTable = await this._createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId, prevOfficeTable);
+        } else {
+          shouldFormat = false;
+          console.time('Validate existing table');
+          officeTable = await this._updateOfficeTable(instanceDefinition, excelContext, startCell, prevOfficeTable);
+          console.timeEnd('Validate existing table');
+        }
       } else {
-        shouldFormat = false;
-        console.time('Validate existing table');
-        officeTable = await this._updateOfficeTable(instanceDefinition, excelContext, startCell, prevOfficeTable);
-        console.timeEnd('Validate existing table');
+        officeTable = await this._createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId);
       }
-    } else {
-      officeTable = await this._createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId);
+      console.timeEnd('Create or get table');
+      return {officeTable, newOfficeTableId, shouldFormat, tableColumnsChanged};
+    } catch (error) {
+      throw error;
     }
-    console.timeEnd('Create or get table');
-    return {officeTable, newOfficeTableId, shouldFormat, tableColumnsChanged};
   }
 
   async _fetchInsertDataIntoExcel({connectionData, officeData, instanceDefinition, isRefresh, tableColumnsChanged}) {
