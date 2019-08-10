@@ -65,7 +65,6 @@ end
 
 def run_test(working_dir)
   install_dependencies(working_dir)
-  shell_command! "yarn jest", cwd: "#{working_dir}/production"
   shell_command! "yarn jest --coverage", cwd: "#{working_dir}/production"
 end
 
