@@ -11,8 +11,28 @@ describe('Confirmation', () => {
 
   it('should call proper methods from secureData when Ok button is clicked', async () => {
     // given
-    const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => {});
+    const mockSync = jest.fn();
+    const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => {
+      return {
+        sync: mockSync,
+      };
+    });
     const mockDeleteTableBody = jest.spyOn(officeApiHelper, 'deleteObjectTableBody').mockImplementation(() => {});
+    const mockGetTable = jest.spyOn(officeApiHelper, 'getTable').mockImplementation(() => {
+      return {
+        showHeaders: null,
+        showFilterButton: null,
+        getHeaderRowRange: () => {
+          return {
+            format: {
+              font: {
+                color: null,
+              },
+            },
+          };
+        },
+      };
+    });
     const mockToggleIsConfirmFlag = jest.fn();
     const mockToggleIsSettingsFlag = jest.fn();
     const mockToggleSecuredFlag = jest.fn();
@@ -28,10 +48,12 @@ describe('Confirmation', () => {
     okWrapper.simulate('click');
     // then
     await expect(mockGetContext).toBeCalled();
+    await expect(mockGetTable).toBeCalled();
+    await expect(mockSync).toBeCalled();
     await expect(mockDeleteTableBody).toBeCalled();
-    expect(mockToggleIsConfirmFlag).toBeCalledWith(false);
-    expect(mockToggleIsSettingsFlag).toBeCalledWith(false);
-    expect(mockToggleSecuredFlag).toBeCalledWith(true);
+    await expect(mockToggleIsConfirmFlag).toBeCalledWith(false);
+    await expect(mockToggleIsSettingsFlag).toBeCalledWith(false);
+    await expect(mockToggleSecuredFlag).toBeCalledWith(true);
   });
 
   it('should set isConfirm flag to false when Cancel is clicked', async () => {
