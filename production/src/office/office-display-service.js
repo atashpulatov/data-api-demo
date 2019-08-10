@@ -146,7 +146,6 @@ class OfficeDisplayService {
 
   removeReportFromExcel = async (bindingId, isCrosstab, crosstabHeaderDimensions, isRefresh) => {
     let crosstabRange;
-    let cell;
     try {
       await authenticationHelper.validateAuthToken();
       const officeContext = await officeApiHelper.getOfficeContext();
@@ -158,12 +157,7 @@ class OfficeDisplayService {
         const tableObject = excelContext.workbook.tables.getItem(bindingId);
         if (isCrosstab) {
           tableObject.showHeaders = true;
-          const sheet = tableObject.worksheet;
-          cell = tableObject.getRange().getCell(0, 0);
-          excelContext.trackedObjects.add(cell);
-          cell.load('address');
-          await excelContext.sync();
-          crosstabRange = officeApiHelper.getCrosstabRange(cell.address, crosstabHeaderDimensions, sheet);
+          crosstabRange = await officeApiHelper.getCrosstabRangeSafely(tableObject, crosstabHeaderDimensions, excelContext);
           excelContext.trackedObjects.add(crosstabRange);
         }
         await tableObject.clearFilters();
@@ -173,7 +167,6 @@ class OfficeDisplayService {
         await tableObject.delete();
         if (isCrosstab) {
           await crosstabRange.clear();
-          excelContext.trackedObjects.remove(cell);
           excelContext.trackedObjects.remove(crosstabRange);
         }
         excelContext.runtime.enableEvents = true;

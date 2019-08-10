@@ -285,6 +285,48 @@ class OfficeApiHelper {
   }
 
   /**
+   * Gets the total range of crosstab report - it sums table body range and headers ranges
+   *
+   * @param {Office} table Excel table
+   * @param {Object} headerDimensions Contains information about crosstab headers dimensions
+   * @param {Office} context Excel context
+   * @memberof OfficeApiHelper
+   * @return {Object}
+   */
+  getCrosstabRangeSafely = async (table, headerDimensions, context) => {
+    const {columnsY, rowsX} = headerDimensions;
+
+    const validColumnsY = await this.getValidOffset(table, columnsY, 'getRowsAbove', context);
+    const validRowsX = await this.getValidOffset(table, rowsX, 'getColumnsBefore', context);
+
+    const startingCell = table.getRange().getCell(0, 0).getOffsetRange(-validColumnsY, -validRowsX);
+
+    return startingCell.getBoundingRect(table.getRange());
+  }
+
+  /**
+   * Gets the biggest valid range by checking axis by axis
+   *
+   * @param {Office} table Excel table
+   * @param {Number} limit Number of rows or columns to check
+   * @param {String} getFunction Excel range function 'getRowsAbove'|'getColumnsBefore'
+   * @param {Office} context Excel context
+   * @memberof OfficeApiHelper
+   * @return {Number}
+   */
+  getValidOffset = async (table, limit, getFunction, context) => {
+    for (let i = 0; i <= limit; i++) {
+      try {
+        table.getRange()[getFunction](i + 1);
+        await context.sync();
+      } catch (error) {
+        return i;
+      }
+    }
+    return limit;
+  }
+
+  /**
    * Clears the two crosstab report ranges
    *
    * @param {Office} officeTable Starting table body cell
