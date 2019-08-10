@@ -452,7 +452,7 @@ class OfficeApiHelper {
     const headerTitlesRange = columnssTitlesRange.getBoundingRect(rowsTitlesRange);
     headerTitlesRange.format.verticalAlignment = Excel.VerticalAlignment.bottom;
     this.formatCrosstabRange(headerTitlesRange);
-    headerTitlesRange.values = String.fromCharCode(30);
+    headerTitlesRange.values = '  ';
 
     rowsTitlesRange.values = [attributesNames.rowsAttributes];
     columnssTitlesRange.values = mstrNormalizedJsonHandler._transposeMatrix([attributesNames.columnsAttributes]);

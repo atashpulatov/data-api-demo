@@ -11,6 +11,7 @@ export const CHANGE_SEARCHING = 'NAV_TREE_CHANGE_SEARCHING';
 export const UPDATE_SCROLL = 'NAV_TREE_UPDATE_SCROLL';
 export const UPDATE_SIZE = 'NAV_TREE_UPDATE_SIZE';
 export const CANCEL_REQUEST_IMPORT = 'CANCEL_REQUEST_IMPORT';
+export const CLEAR_PROMPTS_ANSWERS = 'CLEAR_PROMPTS_ANSWERS';
 
 export function selectObject(data) {
   return (dispatch) => dispatch({

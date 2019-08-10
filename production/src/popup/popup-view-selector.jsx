@@ -26,7 +26,7 @@ export const _PopupViewSelector = (props) => {
   if ((importRequested && !props.isPrompted)
     || (importRequested && arePromptsAnswered(props))) {
     proceedToImport(props);
-  } else if (!!props.isPrompted && arePromptsAnswered(props)) {
+  } else if (!!props.isPrompted && arePromptsAnswered(props) && !propsToPass.forceChange) {
     if (isInstanceWithPromptsAnswered(props)) {
       popupType === PopupTypeEnum.repromptingWindow
         && wasReportJustImported(props) && proceedToImport(props);
@@ -189,7 +189,7 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
       ...propsToPass,
       ...editedReport,
     };
-    return <AttributeSelectorWindow mstrData={mstrData} handleBack={methods.handleBack} />;
+    return <AttributeSelectorWindow mstrData={mstrData} handleBack={() => methods.handleBack( null, null, null, true)} />;
   }
   if (popupType === PopupTypeEnum.navigationTree) {
     return <NavigationTree handlePrepare={methods.handlePrepare} mstrData={propsToPass} handlePopupErrors={methods.handlePopupErrors} />;
@@ -277,13 +277,13 @@ function parseFilters(filtersNodes) {
     const elements = elementNodes.reduce((elements, node) => elements.concat(node.elements), []);
     const elementsIds = elements.map((elem) => elem.id);
     return elementsIds
-        .reduce((filters, elem) => {
-          const attrId = elem.split(':')[0];
-          filters[attrId] = !filters[attrId]
+      .reduce((filters, elem) => {
+        const attrId = elem.split(':')[0];
+        filters[attrId] = !filters[attrId]
           ? [elem]
           : [...filters[attrId], elem];
-          return filters;
-        }, {});
+        return filters;
+      }, {});
   }
 }
 
