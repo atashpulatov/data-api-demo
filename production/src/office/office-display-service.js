@@ -205,7 +205,7 @@ class OfficeDisplayService {
     const crosstabHeaderDimensions = this._getCrosstabHeaderDimensions(instanceDefinition);
     const {rows, columns, mstrTable} = instanceDefinition;
     const {isCrosstab, toCrosstabChange, fromCrosstabChange, prevCrosstabDimensions} = mstrTable;
-    const {columnsX: prevRowsX, columnsY: prevColumnsY} = prevCrosstabDimensions;
+    const {rowsX: prevRowsX, columnsY: prevColumnsY} = prevCrosstabDimensions;
     const {rowsX, columnsY} = crosstabHeaderDimensions;
     let range;
     const sheet = prevOfficeTable ? prevOfficeTable.worksheet : context.workbook.worksheets.getActiveWorksheet();
@@ -457,7 +457,7 @@ class OfficeDisplayService {
           console.timeEnd('Append crosstab rows');
         }
         console.time('Get subtotals coordinates');
-        for (let i = 0; i < subtotalAddress.length - 1; i++) {
+        for (let i = 0; i < subtotalAddress.length; i++) {
           Boolean(subtotalAddress[i]) && subtotalsAddresses.push(subtotalAddress[i]);
         }
         console.timeEnd('Get subtotals coordinates');
