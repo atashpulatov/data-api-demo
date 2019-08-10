@@ -446,15 +446,16 @@ class OfficeApiHelper {
   createRowsTitleHeaders = async (cellAddress, attributesNames, sheet, crosstabHeaderDimensions) => {
     const reportStartingCell = sheet.getRange(cellAddress);
     const titlesBottomCell = reportStartingCell.getOffsetRange(0, -1);
-
     const rowsTitlesRange = titlesBottomCell.getResizedRange(0, -(crosstabHeaderDimensions.rowsX - 1));
-    rowsTitlesRange.values = [attributesNames.rowsAttributes];
     const columnssTitlesRange = titlesBottomCell.getOffsetRange(-1, 0).getResizedRange(-(crosstabHeaderDimensions.columnsY - 1), 0);
-    columnssTitlesRange.values = mstrNormalizedJsonHandler._transposeMatrix([attributesNames.columnsAttributes]);
 
     const headerTitlesRange = columnssTitlesRange.getBoundingRect(rowsTitlesRange);
     headerTitlesRange.format.verticalAlignment = Excel.VerticalAlignment.bottom;
     this.formatCrosstabRange(headerTitlesRange);
+    headerTitlesRange.values = String.fromCharCode(30);
+
+    rowsTitlesRange.values = [attributesNames.rowsAttributes];
+    columnssTitlesRange.values = mstrNormalizedJsonHandler._transposeMatrix([attributesNames.columnsAttributes]);
   }
 
   /**
