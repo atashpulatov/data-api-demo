@@ -295,15 +295,15 @@ class OfficeApiHelper {
     try {
       // Remove row headers
       const leftRange = officeTable.getRange().getColumnsBefore(headerDimensions.rowsX);
-      leftRange.clear();
+      leftRange.clear('contents');
 
       // Remove column headers
       const topRange = officeTable.getRange().getRowsAbove(headerDimensions.columnsY);
-      topRange.clear();
+      topRange.clear('contents');
 
       // Remove title headers
       const titlesRange = officeTable.getRange().getCell(0, 0).getOffsetRange(0, -1).getResizedRange(-(headerDimensions.columnsY), -(headerDimensions.rowsX - 1));
-      titlesRange.clear();
+      titlesRange.clear('contents');
     } catch (error) {
       // TODO: Throw no available range error
 
@@ -465,9 +465,10 @@ class OfficeApiHelper {
    * @param {Array} headerArray Contains rows/headers structure and data
    * @param {String} axis - Axis to apply formatting columns or rows
    * @memberof OfficeApiHelper
-   */
+   */x
   insertHeadersValues(headerRange, headerArray, axis = 'rows') {
-    headerRange.clear(); // we are unmerging and removing formatting to avoid conflicts while merging cells
+    headerRange.clear('contents'); // we are unmerging and removing formatting to avoid conflicts while merging cells
+    headerRange.unmerge();
     headerRange.values = headerArray;
     const hAlign = axis === 'rows' ? 'left' : 'center';
     headerRange.format.horizontalAlignment = Excel.HorizontalAlignment[hAlign];
