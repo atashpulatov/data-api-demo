@@ -320,7 +320,7 @@ class OfficeApiHelper {
    * @return {Object}
    */
   getTableStartCell = ({startCell, instanceDefinition, prevOfficeTable, toCrosstabChange, fromCrosstabChange}) => {
-    const {mstrTable: {headers, isCrosstab}, prevCrosstabDimensions} = instanceDefinition;
+    const {mstrTable: {headers, isCrosstab, prevCrosstabDimensions}} = instanceDefinition;
     if (fromCrosstabChange) return this.offsetCellBy(startCell, -prevCrosstabDimensions.columnsY, -prevCrosstabDimensions.rowsX);
     if (!toCrosstabChange && (!isCrosstab || prevOfficeTable)) return startCell;
     const rowOffset = headers.columns.length;

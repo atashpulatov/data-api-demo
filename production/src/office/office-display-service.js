@@ -71,8 +71,8 @@ class OfficeDisplayService {
       }
       const {mstrTable} = instanceDefinition;
       isCrosstab = mstrTable.isCrosstab;
-      instanceDefinition.prevCrosstabDimensions = crosstabHeaderDimensions;
-      instanceDefinition.crosstabHeaderDimensions = isCrosstab ? this._getCrosstabHeaderDimensions(instanceDefinition) : false;
+      mstrTable.prevCrosstabDimensions = crosstabHeaderDimensions;
+      mstrTable.crosstabHeaderDimensions = isCrosstab ? this._getCrosstabHeaderDimensions(instanceDefinition) : false;
       console.timeEnd('Instance definition');
 
       // Check if instance returned data
@@ -203,10 +203,10 @@ class OfficeDisplayService {
    */
   _createOfficeTable = async (instanceDefinition, context, startCell, officeTableId, prevOfficeTable) => {
     const crosstabHeaderDimensions = this._getCrosstabHeaderDimensions(instanceDefinition);
-    const {rows, columns, mstrTable, toCrosstabChange, fromCrosstabChange, prevCrosstabDimensions} = instanceDefinition;
+    const {rows, columns, mstrTable} = instanceDefinition;
+    const {isCrosstab, toCrosstabChange, fromCrosstabChange, prevCrosstabDimensions} = mstrTable;
     const {columnsX: prevRowsX, columnsY: prevColumnsY} = prevCrosstabDimensions;
     const {rowsX, columnsY} = crosstabHeaderDimensions;
-    const {isCrosstab} = mstrTable;
     let range;
     const sheet = prevOfficeTable ? prevOfficeTable.worksheet : context.workbook.worksheets.getActiveWorksheet();
     let tableStartCell = officeApiHelper.getTableStartCell({startCell, sheet, instanceDefinition, prevOfficeTable, toCrosstabChange, fromCrosstabChange});
@@ -363,10 +363,10 @@ class OfficeDisplayService {
     }
   }
 
-  _addToStore({isRefresh, instanceDefinition, bindingId, projectId, envUrl, body, objectType, isCrosstab, isPrompted, promptsAnswers}) {
+  _addToStore({isRefresh, instanceDefinition: {mstrTable}, bindingId, projectId, envUrl, body, objectType, isCrosstab, isPrompted, promptsAnswers}) {
     const report = {
-      id: instanceDefinition.mstrTable.id,
-      name: instanceDefinition.mstrTable.name,
+      id: mstrTable.id,
+      name: mstrTable.name,
       bindId: bindingId,
       projectId,
       envUrl,
@@ -376,7 +376,7 @@ class OfficeDisplayService {
       isPrompted,
       isCrosstab,
       promptsAnswers,
-      crosstabHeaderDimensions: instanceDefinition.crosstabHeaderDimensions,
+      crosstabHeaderDimensions: mstrTable.crosstabHeaderDimensions,
     };
     officeStoreService.saveAndPreserveReportInStore(report, isRefresh);
   }
@@ -397,7 +397,8 @@ class OfficeDisplayService {
   async _getOfficeTable(isRefresh, excelContext, bindingId, instanceDefinition, startCell) {
     console.time('Create or get table');
     const newOfficeTableId = bindingId || officeApiHelper.findAvailableOfficeTableId();
-    const {prevCrosstabDimensions} = instanceDefinition;
+    const {mstrTable} = instanceDefinition;
+    const {prevCrosstabDimensions, isCrosstab} = mstrTable;
     let officeTable;
     let shouldFormat = true;
     let tableColumnsChanged;
@@ -407,8 +408,8 @@ class OfficeDisplayService {
       await excelContext.sync();
       if (prevCrosstabDimensions) officeApiHelper.clearCrosstabRange(prevOfficeTable, prevCrosstabDimensions);
       tableColumnsChanged = await this._checkColumnsChange(prevOfficeTable, excelContext, instanceDefinition);
-      instanceDefinition.toCrosstabChange = ((!prevCrosstabDimensions && instanceDefinition.mstrTable.isCrosstab));
-      instanceDefinition.fromCrosstabChange = ((prevCrosstabDimensions && !instanceDefinition.mstrTable.isCrosstab));
+      mstrTable.toCrosstabChange = ((!prevCrosstabDimensions && isCrosstab));
+      mstrTable.fromCrosstabChange = ((prevCrosstabDimensions && !isCrosstab));
       const headerCell = prevOfficeTable.getHeaderRowRange().getCell(0, 0);
       headerCell.load('address');
       await excelContext.sync();
@@ -475,7 +476,7 @@ class OfficeDisplayService {
       console.time('Context sync');
       await Promise.all(contextPromises);
       console.timeEnd('Context sync');
-      officeApiHelper.formatTable(officeTable, mstrTable.isCrosstab, instanceDefinition.crosstabHeaderDimensions);
+      officeApiHelper.formatTable(officeTable, mstrTable.isCrosstab, mstrTable.crosstabHeaderDimensions);
       if (mstrTable.isCrosstab) officeTable.showHeaders = false;
       await excelContext.sync();
       return {officeTable, subtotalsAddresses};

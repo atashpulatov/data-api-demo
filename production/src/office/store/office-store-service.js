@@ -110,13 +110,18 @@ class OfficeStoreService {
   }
   saveAndPreserveReportInStore = (report, isRefresh) => {
     if (isRefresh) {
-      const settings = this.getOfficeSettings();
-      const reportsArray = [...this._getReportProperties()];
-      const reportObj = reportsArray.find(
-          (element) => element.bindId === report.bindId
-      );
-      reportsArray[reportsArray.indexOf(reportObj)].crosstabHeaderDimensions = report.crosstabHeaderDimensions;
-      settings.set(officeProperties.loadedReportProperties, reportsArray);
+      try {
+        const settings = this.getOfficeSettings();
+        const reportsArray = [...this._getReportProperties()];
+        const reportObj = reportsArray.find(
+            (element) => element.bindId === report.bindId
+        );
+        reportsArray[reportsArray.indexOf(reportObj)].crosstabHeaderDimensions = report.crosstabHeaderDimensions;
+        settings.set(officeProperties.loadedReportProperties, reportsArray);
+      } catch (error) {
+        const e = errorService.errorOfficeFactory(error);
+        errorService.handleOfficeError(e);
+      }
     } else {
       reduxStore.dispatch({
         type: officeProperties.actions.loadReport,
