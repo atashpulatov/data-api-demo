@@ -77,11 +77,11 @@ describe('PopupViewSelector', () => {
     const attributeSelectorWrapped = componentWrapper.find(AttributeSelectorWindow);
     expect(attributeSelectorWrapped.get(0)).toBeDefined();
     expect(attributeSelectorWrapped.at(0).prop('mstrData'))
-        .toEqual({
-          ...props.propsToPass,
-          ...props.editedReport,
-          token: props.authToken,
-        });
+      .toEqual({
+        ...props.propsToPass,
+        ...props.editedReport,
+        token: props.authToken,
+      });
   });
 
   it('should handle request import when not prompted', () => {
@@ -254,11 +254,11 @@ describe('PopupViewSelector', () => {
     expect(mstrDataProp.instanceId).toBeDefined();
 
     expect(mstrDataProp)
-        .toEqual({
-          ...props.propsToPass,
-          ...props.editedReport,
-          token: props.authToken,
-        });
+      .toEqual({
+        ...props.propsToPass,
+        ...props.editedReport,
+        token: props.authToken,
+      });
   });
 
   it('should proceed to import when prompts answered and no attributes, metrics and filters', () => {
@@ -359,6 +359,7 @@ describe('PopupViewSelector', () => {
       authToken: 'token',
     };
     // when
+    
     // eslint-disable-next-line react/jsx-pascal-case
     const componentWrapper = shallow(<_PopupViewSelector
       location={location}
