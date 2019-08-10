@@ -465,7 +465,7 @@ class OfficeApiHelper {
    * @param {Array} headerArray Contains rows/headers structure and data
    * @param {String} axis - Axis to apply formatting columns or rows
    * @memberof OfficeApiHelper
-   */x
+   */
   insertHeadersValues(headerRange, headerArray, axis = 'rows') {
     headerRange.clear('contents'); // we are unmerging and removing formatting to avoid conflicts while merging cells
     headerRange.unmerge();
