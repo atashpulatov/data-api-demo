@@ -295,7 +295,6 @@ class OfficeDisplayService {
       prevOfficeTable.clearFilters();
       prevOfficeTable.sort.clear();
       if (!mstrTable.isCrosstab) prevOfficeTable.getHeaderRowRange().values = [mstrTable.headers.columns[mstrTable.headers.columns.length - 1]];
-      this._styleHeaders(prevOfficeTable, TABLE_HEADER_FONT_COLOR, TABLE_HEADER_FILL_COLOR);
       await context.sync();
       await this._updateRows(prevOfficeTable, context, rows);
       return prevOfficeTable;
@@ -339,9 +338,10 @@ class OfficeDisplayService {
 
   _styleHeaders = (officeTable, fontColor, fillColor) => {
     officeTable.style = DEFAULT_TABLE_STYLE;
-    const headerRowRange = officeTable.getHeaderRowRange();
-    headerRowRange.format.fill.color = fillColor;
-    headerRowRange.format.font.color = fontColor;
+    // Temporarily disabling header formatting
+    // const headerRowRange = officeTable.getHeaderRowRange();
+    // headerRowRange.format.fill.color = fillColor;
+    // headerRowRange.format.font.color = fontColor;
   }
 
   /**
