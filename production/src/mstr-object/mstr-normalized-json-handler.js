@@ -99,8 +99,8 @@ class NormalizedJsonHandler {
     return headers.rows.map((headerCells, rowIndex) => {
       const rowElements = this.mapElementIndicesToElements({definition, axis: 'rows', headerCells, rowIndex});
       // Process elements
-      return rowElements.map((e, attributeIndex) => onElement(e, rowIndex, attributeIndex))
-          .concat(metricValues[valueMatrix][rowIndex]);
+      const tabularRows = rowElements.map((e, attributeIndex) => onElement(e, rowIndex, attributeIndex));
+      return metricValues ? tabularRows.concat(metricValues[valueMatrix][rowIndex]) : tabularRows;
     });
   };
 
@@ -116,6 +116,7 @@ class NormalizedJsonHandler {
    * @return {Array}
    */
   renderHeaders = (definition, axis, headers, onElement) => {
+    if (headers[axis].length === 0) return [[]];
     const headersNormalized = axis === 'columns' ? this._transposeMatrix(headers[axis]) : headers[axis];
     const matrix = headersNormalized.map((headerCells, colIndex) => {
       const axisElements = this.mapElementIndicesToElements({definition, axis, headerCells, colIndex});
@@ -146,6 +147,7 @@ class NormalizedJsonHandler {
   /**
    * Creates an array with the metric values. We pass a function to pick the object key onElement.
    * e.g., onElement = (value) => value.rv;
+   * If the table doesn't have metrics we return an empty 2d array
    *
    * @param {Object} data - Metric values object
    * @param {String} valueMatrix - Cell value ("raw*", "formatted", "extras")
@@ -154,7 +156,7 @@ class NormalizedJsonHandler {
    * @return {Array}
    */
   renderRows = (data, valueMatrix = 'raw') => {
-    return data.metricValues[valueMatrix];
+    return data.metricValues ? data.metricValues[valueMatrix] : Array(data.paging.current).fill(Array(data.headers.columns[0].length).fill(null));
   }
 
   /**

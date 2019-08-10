@@ -74,6 +74,17 @@ describe('Normalized JSON Handler', () => {
     // then
     expect(rows[0]).toEqual(expectedFirstRow);
   });
+  it('should return empty array when there are no metrics', () => {
+    // given
+    const {data} = reportV2;
+    const cloneData = {...data};
+    delete cloneData.metricValues;
+    const expectedTable = Array(8).fill(Array(6).fill(null));
+    // when
+    const rows = jsonHandler.renderRows(cloneData);
+    // then
+    expect(rows).toEqual(expectedTable);
+  });
   it('should render column headers', () => {
     // given
     const {definition, data} = reportV2;
