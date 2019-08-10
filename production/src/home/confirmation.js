@@ -22,12 +22,14 @@ export const _Confirmation = ({reportArray, toggleSecuredFlag, toggleIsConfirmFl
     try {
       const excelContext = await officeApiHelper.getExcelContext();
       for (const report of reportArray) {
-        const officeTable = await officeApiHelper.getTable(excelContext, report.bindId);
-        officeTable.showHeaders = true;
-        officeTable.showFilterButton = false;
-        const headers = officeTable.getHeaderRowRange();
-        headers.format.font.color = 'white';
-        await excelContext.sync();
+        if (!!report.isCrosstab) {
+          const officeTable = await officeApiHelper.getTable(excelContext, report.bindId);
+          officeTable.showHeaders = true;
+          officeTable.showFilterButton = false;
+          const headers = officeTable.getHeaderRowRange();
+          headers.format.font.color = 'white';
+          await excelContext.sync();
+        }
         await officeApiHelper.deleteObjectTableBody(excelContext, report);
       };
       toggleIsConfirmFlag(false);
