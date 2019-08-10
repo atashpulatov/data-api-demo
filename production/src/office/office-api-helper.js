@@ -338,17 +338,20 @@ class OfficeApiHelper {
     try {
       // Row headers
       const leftRange = officeTable.getRange().getColumnsBefore(headerDimensions.rowsX);
+      context.trackedObjects.add(leftRange);
       // Column headers
       const topRange = officeTable.getRange().getRowsAbove(headerDimensions.columnsY);
+      context.trackedObjects.add(topRange);
       // Title headers
       const titlesRange = officeTable.getRange().getCell(0, 0).getOffsetRange(0, -1).getResizedRange(-(headerDimensions.columnsY), -(headerDimensions.rowsX - 1));
-
+      context.trackedObjects.add(titlesRange);
       // Check if ranges are valid before clearing
       await context.sync();
 
       leftRange.clear('contents');
       topRange.clear('contents');
       titlesRange.clear('contents');
+      context.trackedObjects.remove([leftRange, topRange, titlesRange]);
     } catch (error) {
       officeTable.showHeaders = false;
       throw error;
