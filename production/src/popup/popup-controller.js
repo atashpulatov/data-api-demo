@@ -80,14 +80,16 @@ class PopupController {
           if (!reportParams) {
             await this.handleOkCommand(response, reportParams);
           } else {
-            await this.saveReportWithParams(reportParams, response);
+            const reportPreviousState = this._getReportsPreviousState(reportParams);
+            await this.saveReportWithParams(reportParams, response, reportPreviousState);
           }
           break;
         case selectorProperties.commandOnUpdate:
           if (!reportParams) {
             await this.handleUpdateCommand(response);
           } else {
-            await this.saveReportWithParams(reportParams, response);
+            const reportPreviousState = this._getReportsPreviousState(reportParams);
+            await this.saveReportWithParams(reportParams, response, reportPreviousState);
           }
           break;
         case selectorProperties.commandCancel:
@@ -166,14 +168,25 @@ class PopupController {
     }
   }
 
-  async saveReportWithParams(reportParams, response) {
+  _getReportsPreviousState(reportParams) {
+    const currentReportArray = reduxStore.getState().officeReducer.reportArray;
+    const indexOfOriginalValues = currentReportArray.findIndex((report) => report.bindId === reportParams.bindId);
+    const originalValues = currentReportArray[indexOfOriginalValues];
+    return {...originalValues};
+  }
+
+  async saveReportWithParams(reportParams, response, reportPreviousState) {
     await officeStoreService.preserveReportValue(reportParams.bindId, 'body', response.body);
     if (response.promptsAnswers) {
       // Include new promptsAnswers in case of Re-prompt workflow
       reportParams.promptsAnswers = response.promptsAnswers;
       await officeStoreService.preserveReportValue(reportParams.bindId, 'promptsAnswers', response.promptsAnswers);
     }
-    await refreshReportsArray([reportParams], false)(reduxStore.dispatch);
+    try {
+      await refreshReportsArray([reportParams], false)(reduxStore.dispatch);
+    } catch (error) {
+      await officeStoreService.preserveReportValue(reportParams.bindId, 'body', reportPreviousState.body);
+    }
   }
 }
 

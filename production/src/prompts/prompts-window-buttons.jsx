@@ -2,6 +2,7 @@ import React from 'react';
 import {Button} from 'antd';
 import {connect} from 'react-redux';
 import '../popup/popup-buttons.css';
+import {cancelImportRequest} from '../navigation/navigation-tree-actions';
 import {withTranslation} from 'react-i18next';
 
 export const _PromptWindowButtons = ({handleRun, isReprompt, closePopup, cancelImportRequest, handleBack, t = (text) => text}) => {
@@ -14,4 +15,4 @@ export const _PromptWindowButtons = ({handleRun, isReprompt, closePopup, cancelI
   );
 };
 
-export const PromptWindowButtons = withTranslation('common')(_PromptWindowButtons);
+export const PromptWindowButtons = connect(() => ({}), {cancelImportRequest})(withTranslation('common')(_PromptWindowButtons));

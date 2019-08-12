@@ -107,6 +107,8 @@ describe('PopupViewSelector', () => {
       importRequested={true}
       {...reduxMethods}
       {...resultAction}
+      authToken={{}}
+      propsToPass={{}}
       methods={{}}
       chosenObjectId={resultAction.chosenObject}
       chosenProjectId={resultAction.chosenProject}
@@ -201,6 +203,8 @@ describe('PopupViewSelector', () => {
     shallow(<_PopupViewSelector
       location={location}
       {...propsToPass}
+      authToken={{}}
+      propsToPass={{}}
       methods={{}}
     />);
     // then
@@ -268,7 +272,7 @@ describe('PopupViewSelector', () => {
       startLoading: jest.fn(),
     };
     const props = {
-      popupType: 'whatever',
+      popupType: PopupTypeEnum.repromptingWindow,
       authToken: 'token',
       propsToPass: {
         prop: 'prop',
@@ -293,6 +297,8 @@ describe('PopupViewSelector', () => {
       location={location}
       {...reduxMethods}
       {...props}
+      authToken={{}}
+      propsToPass={{}}
       methods={{}}
     />);
     // then
@@ -301,7 +307,7 @@ describe('PopupViewSelector', () => {
     expect(mockMessageParent).toHaveBeenCalled();
   });
 
-  it('should clear attributes and metrics if going to edit filters from prompts window', () => {
+  it('should not clear attributes and metrics if going to edit filters from prompts window', () => {
     // given
     const instanceId = 'instanceId';
     const location = {
@@ -337,9 +343,9 @@ describe('PopupViewSelector', () => {
     const attributeSelectorWrapped = selectorWrapped.find(AttributeSelectorWindow);
     expect(attributeSelectorWrapped.get(0)).toBeDefined();
     const mstrDataProp = attributeSelectorWrapped.at(0).prop('mstrData');
-    expect(mstrDataProp.selectedAttributes).not.toBeDefined();
-    expect(mstrDataProp.selectedMetrics).not.toBeDefined();
-    expect(mstrDataProp.selectedFilters).not.toBeDefined();
+    expect(mstrDataProp.selectedAttributes).toBeDefined();
+    expect(mstrDataProp.selectedMetrics).toBeDefined();
+    expect(mstrDataProp.selectedFilters).toBeDefined();
   });
 
   it('should pass authToken', () => {
@@ -353,6 +359,7 @@ describe('PopupViewSelector', () => {
       authToken: 'token',
     };
     // when
+
     // eslint-disable-next-line react/jsx-pascal-case
     const componentWrapper = shallow(<_PopupViewSelector
       location={location}
@@ -361,7 +368,7 @@ describe('PopupViewSelector', () => {
     />);
     // then
     const wrappedNavTree = componentWrapper.find(NavigationTree).at(0);
-    expect(wrappedNavTree.prop('mstrData')).toEqual({token: props.authToken});
+    expect(wrappedNavTree.prop('mstrData').token).toEqual(props.authToken);
   });
 
   it('should render not conent when no token provided', () => {
