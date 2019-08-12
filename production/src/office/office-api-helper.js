@@ -255,9 +255,12 @@ class OfficeApiHelper {
 
   deleteObjectTableBody = async (context, object) => {
     try {
+      context.runtime.enableEvents = false;
+      await context.sync();
       const tableObject = context.workbook.tables.getItem(object.bindId);
       const tableRange = tableObject.getDataBodyRange();
       tableRange.clear(Excel.ClearApplyTo.contents);
+      context.runtime.enableEvents = true;
       await context.sync();
     } catch (error) {
       console.error('Error: ' + error);
@@ -282,28 +285,76 @@ class OfficeApiHelper {
   }
 
   /**
+   * Gets the total range of crosstab report - it sums table body range and headers ranges
+   *
+   * @param {Office} table Excel table
+   * @param {Object} headerDimensions Contains information about crosstab headers dimensions
+   * @param {Office} context Excel context
+   * @memberof OfficeApiHelper
+   * @return {Object}
+   */
+  getCrosstabRangeSafely = async (table, headerDimensions, context) => {
+    const {columnsY, rowsX} = headerDimensions;
+
+    const validColumnsY = await this.getValidOffset(table, columnsY, 'getRowsAbove', context);
+    const validRowsX = await this.getValidOffset(table, rowsX, 'getColumnsBefore', context);
+
+    const startingCell = table.getRange().getCell(0, 0).getOffsetRange(-validColumnsY, -validRowsX);
+
+    return startingCell.getBoundingRect(table.getRange());
+  }
+
+  /**
+   * Gets the biggest valid range by checking axis by axis
+   *
+   * @param {Office} table Excel table
+   * @param {Number} limit Number of rows or columns to check
+   * @param {String} getFunction Excel range function 'getRowsAbove'|'getColumnsBefore'
+   * @param {Office} context Excel context
+   * @memberof OfficeApiHelper
+   * @return {Number}
+   */
+  getValidOffset = async (table, limit, getFunction, context) => {
+    for (let i = 0; i <= limit; i++) {
+      try {
+        table.getRange()[getFunction](i + 1);
+        await context.sync();
+      } catch (error) {
+        return i;
+      }
+    }
+    return limit;
+  }
+
+  /**
    * Clears the two crosstab report ranges
    *
    * @param {Office} officeTable Starting table body cell
    * @param {Object} headerDimensions Contains information about crosstab headers dimensions
+   * @param {Office} context Excel context
    * @memberof OfficeApiHelper
    */
-  clearCrosstabRange = (officeTable, headerDimensions) => {
+  clearCrosstabRange = async (officeTable, headerDimensions, context) => {
     try {
-      // Remove row headers
+      // Row headers
       const leftRange = officeTable.getRange().getColumnsBefore(headerDimensions.rowsX);
-      leftRange.clear();
-
-      // Remove column headers
+      context.trackedObjects.add(leftRange);
+      // Column headers
       const topRange = officeTable.getRange().getRowsAbove(headerDimensions.columnsY);
-      topRange.clear();
-
-      // Remove title headers
+      context.trackedObjects.add(topRange);
+      // Title headers
       const titlesRange = officeTable.getRange().getCell(0, 0).getOffsetRange(0, -1).getResizedRange(-(headerDimensions.columnsY), -(headerDimensions.rowsX - 1));
-      titlesRange.clear();
-    } catch (error) {
-      // TODO: Throw no available range error
+      context.trackedObjects.add(titlesRange);
+      // Check if ranges are valid before clearing
+      await context.sync();
 
+      leftRange.clear('contents');
+      topRange.clear('contents');
+      titlesRange.clear('contents');
+      context.trackedObjects.remove([leftRange, topRange, titlesRange]);
+    } catch (error) {
+      officeTable.showHeaders = false;
+      throw error;
     }
   }
 
@@ -316,9 +367,10 @@ class OfficeApiHelper {
    * @memberof OfficeApiHelper
    * @return {Object}
    */
-  getTableStartCell = ({startCell, mstrTable, prevOfficeTable, crosstabChange}) => {
-    const {headers, isCrosstab} = mstrTable;
-    if (!crosstabChange && (!isCrosstab || prevOfficeTable)) return startCell;
+  getTableStartCell = ({startCell, instanceDefinition, prevOfficeTable, toCrosstabChange, fromCrosstabChange}) => {
+    const {mstrTable: {headers, isCrosstab, prevCrosstabDimensions}} = instanceDefinition;
+    if (fromCrosstabChange) return this.offsetCellBy(startCell, -prevCrosstabDimensions.columnsY, -prevCrosstabDimensions.rowsX);
+    if (!toCrosstabChange && (!isCrosstab || prevOfficeTable)) return startCell;
     const rowOffset = headers.columns.length;
     const colOffset = headers.rows[0].length;
     return this.offsetCellBy(startCell, rowOffset, colOffset);
@@ -442,15 +494,16 @@ class OfficeApiHelper {
   createRowsTitleHeaders = async (cellAddress, attributesNames, sheet, crosstabHeaderDimensions) => {
     const reportStartingCell = sheet.getRange(cellAddress);
     const titlesBottomCell = reportStartingCell.getOffsetRange(0, -1);
-
     const rowsTitlesRange = titlesBottomCell.getResizedRange(0, -(crosstabHeaderDimensions.rowsX - 1));
-    rowsTitlesRange.values = [attributesNames.rowsAttributes];
     const columnssTitlesRange = titlesBottomCell.getOffsetRange(-1, 0).getResizedRange(-(crosstabHeaderDimensions.columnsY - 1), 0);
-    columnssTitlesRange.values = mstrNormalizedJsonHandler._transposeMatrix([attributesNames.columnsAttributes]);
 
     const headerTitlesRange = columnssTitlesRange.getBoundingRect(rowsTitlesRange);
     headerTitlesRange.format.verticalAlignment = Excel.VerticalAlignment.bottom;
     this.formatCrosstabRange(headerTitlesRange);
+    headerTitlesRange.values = '  ';
+
+    rowsTitlesRange.values = [attributesNames.rowsAttributes];
+    columnssTitlesRange.values = mstrNormalizedJsonHandler._transposeMatrix([attributesNames.columnsAttributes]);
   }
 
   /**
@@ -462,7 +515,8 @@ class OfficeApiHelper {
    * @memberof OfficeApiHelper
    */
   insertHeadersValues(headerRange, headerArray, axis = 'rows') {
-    headerRange.clear(); // we are unmerging and removing formatting to avoid conflicts while merging cells
+    headerRange.clear('contents'); // we are unmerging and removing formatting to avoid conflicts while merging cells
+    headerRange.unmerge();
     headerRange.values = headerArray;
     const hAlign = axis === 'rows' ? 'left' : 'center';
     headerRange.format.horizontalAlignment = Excel.HorizontalAlignment[hAlign];

@@ -93,7 +93,7 @@ class PopupHelper {
     if (error.code === 'ItemNotFound') {
       return notificationService.displayNotification('info', 'Data is not relevant anymore. You can delete it from the list');
     }
-    return errorService.handleError(error);
+    errorService.handleError(error);
   }
 }
 

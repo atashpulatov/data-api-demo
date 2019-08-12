@@ -51,6 +51,7 @@ describe('PopupController', () => {
       async () => {
       // given
         officeApiHelper.getExcelSessionStatus = jest.fn();
+        popupController._getReportsPreviousState = jest.fn();
         const reportData = {
           objectId: 'objectId',
           projectId: 'projectId',

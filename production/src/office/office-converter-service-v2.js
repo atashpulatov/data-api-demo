@@ -132,7 +132,8 @@ class OfficeConverterServiceV2 {
     const attributeColumns = jsonHandler.renderTitles(response.definition, 'rows', response.data.headers, onElement);
     const columns = [...attributeColumns[attributeColumns.length - 1], ...metricColumns[metricColumns.length - 1]];
     return columns.map((element, index) => {
-      switch (element.type.toLowerCase()) {
+      const type = element.type ? element.type.toLowerCase() : null;
+      switch (type) {
         case 'metric':
           return {
             category: element.numberFormatting.category,
