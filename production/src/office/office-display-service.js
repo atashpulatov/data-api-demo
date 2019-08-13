@@ -520,8 +520,11 @@ class OfficeDisplayService {
       let count = 0;
       while (instanceDefinition.status === 2) {
         await mstrObjectRestService.answerPrompts(objectId, projectId, instanceDefinition.instanceId, promptsAnswers[count]);
-        instanceDefinition = await mstrObjectRestService.modifyInstance(objectId, projectId, isReport, dossierData, body, instanceDefinition.instanceId);
+        instanceDefinition = await mstrObjectRestService.getInstance(objectId, projectId, isReport, dossierData, body, instanceDefinition.instanceId);
         count++;
+      }
+      if (body) { // Only modify the instance if there's actual data to do it
+        instanceDefinition = await mstrObjectRestService.modifyInstance(objectId, projectId, isReport, dossierData, body, instanceDefinition.instanceId);
       }
       return instanceDefinition;
     } catch (error) {
