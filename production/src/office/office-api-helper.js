@@ -174,7 +174,7 @@ class OfficeApiHelper {
         }
         const offset = columnInformation.length - filteredColumnInformation.length;
         for (const object of filteredColumnInformation) {
-          if (Object.keys(object).length === 0) { // Skips iteration if object is emptys
+          if (Object.keys(object).length === 0) { // Skips iteration if object is empty
             continue;
           }
 
