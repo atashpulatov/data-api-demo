@@ -71,7 +71,7 @@ export class _RefreshAllPage extends Component {
       return <span className="result-icon"><MSTRIcon type='refresh-success' /></span>;
     }
     if (res.isError === true) {
-      return (<WarningIcon/>);
+      return (<WarningIcon width='17px' height='17px'/>);
     }
     return <span className="result-icon"></span>;
   }
@@ -83,7 +83,7 @@ export class _RefreshAllPage extends Component {
       return (
         <div className="tooltip-content">
           <div className="tooltip-header">
-            <WarningIcon/>
+            <WarningIcon width='17px' height='17px'/>
           </div>
           <div className="tooltip-message">
             <div className="tooltip-message-title">{this.props.t('{{report}} could not be refreshed', {report: refreshData.name})}</div>
