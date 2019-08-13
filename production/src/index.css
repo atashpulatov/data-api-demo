@@ -75,6 +75,10 @@ code {
     outline: -webkit-focus-ring-color auto 4px;
 }
 
+.js-focus-visible :focus:not(.focus-visible){
+  outline: none;
+}
+
 .ant-btn {
     background-color: #FFFFFF;
     border-color: #D2D2D2;
