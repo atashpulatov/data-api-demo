@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {LoadingText} from 'mstr-react-library';
 import {Popover} from 'antd';
 import {MSTRIcon} from 'mstr-react-library';
-import warningIcon from './assets/icon_conflict.svg';
+import {ReactComponent as WarningIcon} from './assets/icon_conflict.svg';
 import {withTranslation} from 'react-i18next';
 import {helper} from '../helpers/helpers';
 
@@ -71,7 +71,7 @@ export class _RefreshAllPage extends Component {
       return <span className="result-icon"><MSTRIcon type='refresh-success' /></span>;
     }
     if (res.isError === true) {
-      return (<span className="result-icon"><img width='17px' height='17px' src={warningIcon} alt='Refresh failed icon' /></span>);
+      return (<WarningIcon/>);
     }
     return <span className="result-icon"></span>;
   }
@@ -83,7 +83,7 @@ export class _RefreshAllPage extends Component {
       return (
         <div className="tooltip-content">
           <div className="tooltip-header">
-            <span className="tooltip-header-icon"><img width='14px' height='14px' src={warningIcon} alt='Refresh failed icon' /></span>
+            <WarningIcon/>
           </div>
           <div className="tooltip-message">
             <div className="tooltip-message-title">{this.props.t('{{report}} could not be refreshed', {report: refreshData.name})}</div>
