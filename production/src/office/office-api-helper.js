@@ -31,7 +31,7 @@ class OfficeApiHelper {
       (headerCount -= firstNumber) >= 0;
       firstNumber = secondNumber, secondNumber *= ALPHABET_RANGE_END) {
       endColumn = String.fromCharCode(parseInt(
-          (headerCount % secondNumber) / firstNumber)
+        (headerCount % secondNumber) / firstNumber)
         + ASCII_CAPITAL_LETTER_INDEX)
         + endColumn;
     }
@@ -99,8 +99,8 @@ class OfficeApiHelper {
   getBindingRange = (context, bindingId) => {
     try {
       return context.workbook.bindings
-          .getItem(bindingId).getTable()
-          .getRange();
+        .getItem(bindingId).getTable()
+        .getRange();
     } catch (error) {
       throw errorService.errorOfficeFactory(error);
     }
@@ -108,7 +108,7 @@ class OfficeApiHelper {
 
   getTable = (context, bindingId) => {
     return context.workbook.bindings
-        .getItem(bindingId).getTable();
+      .getItem(bindingId).getTable();
   }
 
   getExcelContext = async () => {
@@ -242,15 +242,15 @@ class OfficeApiHelper {
 
   bindNamedItem = (namedItem, bindingId) => {
     return new Promise((resolve, reject) => Office.context.document.bindings.addFromNamedItemAsync(
-        namedItem, 'table', {id: bindingId}, (result) => {
-          if (result.status === 'succeeded') {
-            console.log('Added new binding with type: ' + result.value.type + ' and id: ' + result.value.id);
-            resolve();
-          } else {
-            console.error('Error: ' + result.error.message);
-            reject(result.error);
-          }
-        }));
+      namedItem, 'table', {id: bindingId}, (result) => {
+        if (result.status === 'succeeded') {
+          console.log('Added new binding with type: ' + result.value.type + ' and id: ' + result.value.id);
+          resolve();
+        } else {
+          console.error('Error: ' + result.error.message);
+          reject(result.error);
+        }
+      }));
   }
 
   deleteObjectTableBody = async (context, object) => {
@@ -332,9 +332,10 @@ class OfficeApiHelper {
    * @param {Office} officeTable Starting table body cell
    * @param {Object} headerDimensions Contains information about crosstab headers dimensions
    * @param {Office} context Excel context
+   * @param {String} clearType clear(applyToString?: "All" | "Formats" | "Contents" | "Hyperlinks" | "RemoveHyperlinks"): void;
    * @memberof OfficeApiHelper
    */
-  clearCrosstabRange = async (officeTable, headerDimensions, context) => {
+  clearCrosstabRange = async (officeTable, headerDimensions, context, clearType = 'contents') => {
     try {
       // Row headers
       const leftRange = officeTable.getRange().getColumnsBefore(headerDimensions.rowsX);
@@ -348,9 +349,9 @@ class OfficeApiHelper {
       // Check if ranges are valid before clearing
       await context.sync();
 
-      leftRange.clear('contents');
-      topRange.clear('contents');
-      titlesRange.clear('contents');
+      leftRange.clear(clearType);
+      topRange.clear(clearType);
+      titlesRange.clear(clearType);
       context.trackedObjects.remove([leftRange, topRange, titlesRange]);
     } catch (error) {
       officeTable.showHeaders = false;
