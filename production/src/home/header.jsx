@@ -78,7 +78,7 @@ export class _Header extends Component {
         <div className="mstr-logo">
           <span id='profileImage'>
             {/* TODO: Alt text for logo will be added later */}
-            <img src={mstrLogo} />
+            <img src={mstrLogo} alt='microstrategy logo' />
           </span>
         </div>
         <div className="header-buttons">

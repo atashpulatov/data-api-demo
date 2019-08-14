@@ -23,7 +23,7 @@ export class _RefreshAllPage extends Component {
   componentDidMount() {
     // in IE we get local storage each 500ms as event listener doesn't work
     const ua = window.navigator.userAgent;
-    if (ua.indexOf('MSIE ') > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+    if (ua.indexOf('MSIE ') > 0 || !!navigator.userAgent.match(/Trident.*rv:11\./)) {
       this.intervalId = setInterval(() => {
         try {
           const fromStorage = JSON.parse(localStorage.getItem('refreshData'));

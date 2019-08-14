@@ -11,6 +11,8 @@ import {withTranslation} from 'react-i18next';
 import {message} from 'antd';
 import {EMPTY_REPORT} from '../error/constants';
 
+/* global Office */
+
 export class _NavigationTree extends Component {
   constructor(props) {
     super(props);

@@ -15,8 +15,9 @@ export const historyReducer = (state = {}, action) => {
     case historyProperties.actions.goToProjects:
     case sessionProperties.actions.logOut:
       return eraseHistory(state);
+    default:
+      return state;
   }
-  return state;
 };
 
 function onGoInsideProject(action, state) {

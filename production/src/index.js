@@ -11,6 +11,9 @@ import './index.css';
 import {authenticationService} from './authentication/auth-rest-service.js';
 import {homeHelper} from './home/home-helper.js';
 import i18next from './i18n';
+import {Popup} from './popup/popup';
+
+/* global root */
 
 const Office = window.Office;
 
@@ -43,14 +46,23 @@ async function handleUnauthorized(envUrl, iSession) {
 
 function goReact() {
   i18next.changeLanguage(i18next.options.resources[Office.context.displayLanguage] ? Office.context.displayLanguage : 'en-US');
-  ReactDOM.render(
-      <Provider store={reduxStore}>
-        <PersistGate persistor={reduxPersistor}>
-          <Home loading={false} />
-        </PersistGate>
-      </Provider>
-      , document.getElementById('root')
-  );
+
+  if (window.location.href.indexOf('popupType') === -1) {
+    ReactDOM.render(
+        <Provider store={reduxStore}>
+          <PersistGate persistor={reduxPersistor}>
+            <Home loading={false} />
+          </PersistGate>
+        </Provider>
+        , document.getElementById('root')
+    );
+  } else {
+    root.style.display = 'none';
+    ReactDOM.render(
+        <Provider store={reduxStore}><Popup /></Provider>,
+        document.getElementById('popup')
+    );
+  }
 }
 
 officeInitialize();

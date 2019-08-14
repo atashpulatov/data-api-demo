@@ -1,3 +1,5 @@
+/* eslint array-callback-return: "off" */
+
 class OfficeConverterService {
   createTable(jsonReport) {
     const headers = this._getHeaders(jsonReport);
@@ -42,7 +44,7 @@ class OfficeConverterService {
           }
         };
         let childRows = this._parseTreeToArray(child, headers,
-            level + attributeFormsCount);
+          level + attributeFormsCount);
         childRows = childRows.map((childRow) => {
           for (const key in formValues) {
             /* istanbul ignore else */

@@ -4,16 +4,16 @@ import * as queryString from 'query-string';
 import {libraryErrorController} from 'mstr-react-library';
 import {officeContext} from '../office/office-context';
 import {selectorProperties} from '../attribute-selector/selector-properties';
-import {reduxStore} from '../store';
-import {Provider} from 'react-redux';
 import {PopupViewSelector} from './popup-view-selector';
 import i18next from '../i18n';
 import {CLEAR_PROMPTS_ANSWERS} from '../navigation/navigation-tree-actions';
 
+/* global Office */
+
 export class Popup extends Component {
   constructor(props) {
     super(props);
-    const mstrData = queryString.parse(this.props.location.search);
+    const mstrData = queryString.parse(window.location.search);
     this.state = {
       mstrData,
     };
@@ -64,8 +64,6 @@ export class Popup extends Component {
       handlePopupErrors: this.handlePopupErrors,
     };
     i18next.changeLanguage(i18next.options.resources[Office.context.displayLanguage] ? Office.context.displayLanguage : 'en-US');
-    return (<Provider store={reduxStore}>
-      <PopupViewSelector popupType={popupType} propsToPass={propsToPass} methods={methods} />
-    </Provider>);
+    return (<PopupViewSelector popupType={popupType} propsToPass={propsToPass} methods={methods} />);
   }
 }

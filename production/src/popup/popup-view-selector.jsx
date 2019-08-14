@@ -11,6 +11,8 @@ import {RefreshAllPage} from '../loading/refresh-all-page';
 import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';
 import {preparePromptedReport} from './popup-actions';
 
+/* global Office */
+
 export const _PopupViewSelector = (props) => {
   let popupType = props.popupType;
   const {propsToPass, methods, importRequested} = props;

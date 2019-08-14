@@ -14,6 +14,8 @@ import {START_REPORT_LOADING, STOP_REPORT_LOADING} from './popup-actions';
 import {officeStoreService} from '../office/store/office-store-service';
 const URL = `${window.location.href}`;
 
+/* global Office */
+
 class PopupController {
   runPopupNavigation = async () => {
     await this.runPopup(PopupTypeEnum.navigationTree, 80, 80);
@@ -35,11 +37,11 @@ class PopupController {
       errorService.handleError(error);
       return;
     }
-    let url = URL;
+    const url = URL;
     // if (IS_LOCALHOST) {
     // url = `${window.location.origin}/popup.html`;
     // } else {
-    url = url.replace('index.html', 'popup.html');
+    // url = url.replace('index.html', 'popup.html');
     // }
     const splittedUrl = url.split('?'); // we need to get rid of any query params
     try {
