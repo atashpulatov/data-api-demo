@@ -8,6 +8,7 @@ import {MSTRIcon} from 'mstr-react-library';
 import mstrLogo from './assets/mstr_logo.png';
 import {SettingsMenu} from './settings-menu';
 import {Confirmation} from './confirmation';
+import {LoadingText} from 'mstr-react-library';
 
 export class _Header extends Component {
   componentDidMount = async () => {
@@ -72,25 +73,31 @@ export class _Header extends Component {
   }
 
   render() {
-    const {loading, t, isSettings, isConfirm} = this.props;
+    const {loading, t, isSettings, isConfirm, isClearing} = this.props;
     return (
-      <header id='app-header'>
-        <div className="mstr-logo">
-          <span id='profileImage'>
-            {/* TODO: Alt text for logo will be added later */}
-            <img src={mstrLogo} />
-          </span>
-        </div>
-        <div className="header-buttons">
-          <Popover placement="bottom" content={t('More Items')} mouseEnterDelay={1}>
-            <Button className="settings-btn no-trigger-close" onClick={this.toggleSettings} disabled={loading}>
-              <MSTRIcon type="settings" />
-            </Button>
-          </Popover>
-          {isSettings && <SettingsMenu />}
-          {isConfirm && <Confirmation />}
-        </div>
-      </header >
+      <React.Fragment>
+        {isClearing &&
+          <div className='block-all-ui' >
+            <LoadingText text={t('Clearing data...')} />
+          </div>}
+        <header id='app-header'>
+          <div className="mstr-logo">
+            <span id='profileImage'>
+              {/* TODO: Alt text for logo will be added later */}
+              <img src={mstrLogo} />
+            </span>
+          </div>
+          <div className="header-buttons">
+            <Popover placement="bottom" content={t('More Items')} mouseEnterDelay={1}>
+              <Button className="settings-btn no-trigger-close" onClick={this.toggleSettings} disabled={loading}>
+                <MSTRIcon type="settings" />
+              </Button>
+            </Popover>
+            {isSettings && <SettingsMenu />}
+            {isConfirm && <Confirmation />}
+          </div>
+        </header >
+      </React.Fragment>
     );
   };
 }
@@ -100,8 +107,8 @@ _Header.defaultProps = {
 };
 
 function mapStateToProps({officeReducer}) {
-  const {isSettings, isConfirm} = officeReducer;
-  return {isSettings, isConfirm};
+  const {isSettings, isConfirm, isClearing} = officeReducer;
+  return {isSettings, isConfirm, isClearing};
 };
 
 const mapDispatchToProps = {
