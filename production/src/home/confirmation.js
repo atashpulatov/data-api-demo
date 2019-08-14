@@ -23,9 +23,9 @@ export const _Confirmation = ({reportArray, toggleSecuredFlag, toggleIsConfirmFl
     let reportName = '';
     const clearErrors = [];
     try {
+      const excelContext = await officeApiHelper.getExcelContext();
       toggleIsClearingFlag(true);
       toggleIsConfirmFlag(false);
-      const excelContext = await officeApiHelper.getExcelContext();
       for (const report of reportArray) {
         try {
           reportName = report.name;
