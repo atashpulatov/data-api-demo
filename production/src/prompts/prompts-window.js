@@ -9,6 +9,8 @@ import {actions} from '../navigation/navigation-tree-actions';
 import {connect} from 'react-redux';
 import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';
 import {selectorProperties} from '../attribute-selector/selector-properties';
+import {notificationService} from '../notification/notification-service';
+import {Notifications} from '../notification/notifications';
 
 export class _PromptsWindow extends Component {
   constructor(props) {
@@ -189,6 +191,23 @@ export class _PromptsWindow extends Component {
     });
   };
 
+  messageReceived = (message = {}) => {
+    if (message.data && message.data.name === 'onError') {
+      if (message.data.value && message.data.value.iServerErrorCode === -2147466604) {
+        notificationService.displayNotification('warning', 'The object exceeds project rows limitation');
+        this.iframe && this.iframe.contentWindow.location.reload();
+      }
+    }
+  };
+
+  componentDidMount() {
+    window.addEventListener('message', this.messageReceived);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('message', this.messageReceived);
+  }
+
   onPromptsContainerMount = (container) => {
     this.watchForIframeAddition(container, this.onIframeLoad);
     this.loadEmbeddedDossier(container);
@@ -205,6 +224,7 @@ export class _PromptsWindow extends Component {
       for (const mutation of mutationList) {
         if (mutation.addedNodes && mutation.addedNodes.length && mutation.addedNodes[0].nodeName === 'IFRAME') {
           const iframe = mutation.addedNodes[0];
+          this.iframe = iframe;
           callback(iframe);
         }
       }
@@ -219,6 +239,7 @@ export class _PromptsWindow extends Component {
         style={{position: 'relative'}}
         ref={this.outerCont}
       >
+        <Notifications />
         <PromptsContainer
           postMount={this.onPromptsContainerMount}
         />
