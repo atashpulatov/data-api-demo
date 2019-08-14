@@ -233,7 +233,7 @@ button.add-data-btn:focus {
   line-height: 15px;
 }
 
-.settings-list li:not(:first-child):not(:last-child):hover {
+.settings-list li:not(:first-child):not(:last-child):not(.clear-data-inactive):hover {
   background: #f0f7Fe;
 }
 
