@@ -32,6 +32,8 @@ export const officeReducer = (state = {loading: false}, action) => {
       return toggleIsSettingsFlag(action, state);
     case officeProperties.actions.toggleIsConfirmFlag:
       return toggleIsConfirmFlag(action, state);
+    case officeProperties.actions.toggleIsClearingFlag:
+      return toggleIsClearingFlag(action, state);
     default:
       break;
   }
@@ -166,6 +168,13 @@ function toggleIsConfirmFlag(action, state) {
   return {
     ...state,
     isConfirm: action.isConfirm,
+  };
+}
+
+function toggleIsClearingFlag(action, state) {
+  return {
+    ...state,
+    isClearing: action.isClearing,
   };
 }
 

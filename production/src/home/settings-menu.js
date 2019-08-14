@@ -1,16 +1,16 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {withTranslation} from 'react-i18next';
-import {toggleIsConfirmFlag} from '../office/office-actions';
 import logo from './assets/mstr_logo.png';
 import {helper} from '../helpers/helpers';
 import {Popover} from 'antd';
 import {sessionHelper} from '../storage/session-helper';
 import {errorService} from '../error/error-handler';
+import {toggleIsSettingsFlag, toggleIsConfirmFlag} from '../office/office-actions';
 
 const APP_VERSION = process.env.REACT_APP_MSTR_OFFICE_VERSION;
 
-export const _SettingsMenu = ({userFullName, userInitials, isSecured, reportArray, t, toggleIsConfirmFlag}) => {
+export const _SettingsMenu = ({userFullName, userInitials, isSecured, reportArray, toggleIsConfirmFlag, toggleIsSettingsFlag, t}) => {
   const userNameDisplay = userFullName || 'MicroStrategy user';
   const isSecuredActive = !isSecured && reportArray && reportArray.length > 0;
 
@@ -33,6 +33,11 @@ export const _SettingsMenu = ({userFullName, userInitials, isSecured, reportArra
     return `mailto:${email.address}?subject=${email.title}&body=${email.body}`;
   };
 
+  const showConfirmationPopup = () => {
+    toggleIsConfirmFlag(true);
+    toggleIsSettingsFlag(false);
+  };
+
   return (
     <ul className="settings-list">
       <li id="testid" className="user-data no-trigger-close">
@@ -47,7 +52,7 @@ export const _SettingsMenu = ({userFullName, userInitials, isSecured, reportArra
           <span id="userName" className="user-name no-trigger-close">{userNameDisplay}</span>
         }
       </li>
-      <li tabIndex='0' className={`no-trigger-close clear-data ${!isSecuredActive ? 'clear-data-inactive' : ''}`} onClick={isSecuredActive ? () => toggleIsConfirmFlag(true) : null}>
+      <li tabIndex='0' className={`no-trigger-close clear-data ${!isSecuredActive ? 'clear-data-inactive' : ''}`} onClick={isSecuredActive ? showConfirmationPopup : null}>
         <span className='no-trigger-close'>{t('Clear Data')} </span>
       </li>
       <div className="separate-line"></div>
@@ -99,6 +104,7 @@ function mapStateToProps({sessionReducer, officeReducer}) {
 };
 
 const mapDispatchToProps = {
+  toggleIsSettingsFlag,
   toggleIsConfirmFlag,
 };
 

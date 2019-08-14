@@ -10,6 +10,7 @@ export const officeProperties = new Proxy({
   bindingItems: 'items',
   loadedReportProperties: 'reportProperties',
   isSecured: 'isSecured',
+  isClearing: 'isClearing',
   actions: {
     preLoadReport: 'PRE_OFFICE_LOAD_REPORT',
     loadReport: 'OFFICE_LOAD_REPORT',
@@ -27,5 +28,6 @@ export const officeProperties = new Proxy({
     toggleSecuredFlag: 'TOGGLE_SECURED_FLAG',
     toggleIsSettingsFlag: 'TOGGLE_IS_SETTINGS_FLAG',
     toggleIsConfirmFlag: 'TOGGLE_IS_CONFIRM_FLAG',
+    toggleIsClearingFlag: 'TOGGLE_IS_CLEARING_FLAG',
   },
 }, propsProxy);

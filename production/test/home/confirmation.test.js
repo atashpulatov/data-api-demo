@@ -34,26 +34,27 @@ describe('Confirmation', () => {
       };
     });
     const mockToggleIsConfirmFlag = jest.fn();
-    const mockToggleIsSettingsFlag = jest.fn();
+    const mockToggleIsClearingFlag = jest.fn();
     const mockToggleSecuredFlag = jest.fn();
     const mockReportArray = createMockFilesArray();
     const confirmationWrapper = mount(<_Confirmation
       reportArray={mockReportArray}
       isSecured={false}
       toggleIsConfirmFlag={mockToggleIsConfirmFlag}
-      toggleIsSettingsFlag={mockToggleIsSettingsFlag}
+      toggleIsClearingFlag={mockToggleIsClearingFlag}
       toggleSecuredFlag={mockToggleSecuredFlag} />);
     const okWrapper = confirmationWrapper.find('#confirm-btn');
     // when
     okWrapper.simulate('click');
     // then
+    expect(mockToggleIsClearingFlag).toBeCalled();
+    expect(mockToggleIsConfirmFlag).toBeCalled();
     await expect(mockGetContext).toBeCalled();
     await expect(mockGetTable).toBeCalled();
     await expect(mockSync).toBeCalled();
     await expect(mockDeleteTableBody).toBeCalled();
-    await expect(mockToggleIsConfirmFlag).toBeCalledWith(false);
-    await expect(mockToggleIsSettingsFlag).toBeCalledWith(false);
-    await expect(mockToggleSecuredFlag).toBeCalledWith(true);
+    expect(mockToggleIsClearingFlag).toBeCalled();
+    expect(mockToggleSecuredFlag).toBeCalledWith(true);
   });
 
   it('should set isConfirm flag to false when Cancel is clicked', async () => {
