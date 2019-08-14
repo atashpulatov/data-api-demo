@@ -7,6 +7,7 @@ import {selectorProperties} from '../attribute-selector/selector-properties';
 import {PopupViewSelector} from './popup-view-selector';
 import i18next from '../i18n';
 import {CLEAR_PROMPTS_ANSWERS} from '../navigation/navigation-tree-actions';
+import {reduxStore} from '../store';
 
 /* global Office */
 

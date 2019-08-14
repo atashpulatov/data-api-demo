@@ -30,8 +30,9 @@
   "dependencies": {
     "antd": "^3.19.3",
     "core-js": "^3.1.3",
+    "focus-visible": "^5.0.2",
     "i18next": "^17.0.6",
-    "mstr-react-library": "^1.1.18",
+    "i18next-xhr-backend": "^3.1.2",
     "proxy-polyfill": "^0.3.0",
     "query-string": "^6.7.0",
     "react": "^16.8.6",
