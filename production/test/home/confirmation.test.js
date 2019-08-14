@@ -47,9 +47,9 @@ describe('Confirmation', () => {
     // when
     okWrapper.simulate('click');
     // then
+    await expect(mockGetContext).toBeCalled();
     expect(mockToggleIsClearingFlag).toBeCalled();
     expect(mockToggleIsConfirmFlag).toBeCalled();
-    await expect(mockGetContext).toBeCalled();
     await expect(mockGetTable).toBeCalled();
     await expect(mockSync).toBeCalled();
     await expect(mockDeleteTableBody).toBeCalled();
