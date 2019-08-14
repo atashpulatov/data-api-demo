@@ -3,6 +3,7 @@ import {OutsideOfRangeError} from '../error/outside-of-range-error';
 import {reduxStore} from '../store';
 import {moduleProxy} from '../module-proxy';
 import officeConverterServiceV2 from '../office/office-converter-service-v2';
+import {NOT_SUPPORTED_NO_ATTRIBUTES} from '../error/constants';
 
 const sharedFolderIdType = 7;
 
@@ -125,6 +126,9 @@ class MstrObjectRestService {
     }
     const {instanceId} = body;
     const mstrTable = officeConverterServiceV2.createTable(body);
+    if (Object.keys(mstrTable).length === 0) {
+      throw new Error(NOT_SUPPORTED_NO_ATTRIBUTES);
+    }
     const {rows, columns} = this._checkTableDimensions(mstrTable.tableSize);
     return {instanceId, rows, columns, mstrTable};
   }
