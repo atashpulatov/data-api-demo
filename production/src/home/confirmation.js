@@ -56,8 +56,8 @@ export const _Confirmation = ({reportArray, toggleSecuredFlag, toggleIsConfirmFl
   };
 
   function displayClearDataError(clearErrors) {
-    const reportNames = clearErrors.map((elm) => elm.reportName).join(', ');
-    const errorMessage = clearErrors.map((elm) => elm.errorMessage).join(', ');
+    const reportNames = clearErrors.map((report) => report.reportName).join(', ');
+    const errorMessage = clearErrors.map((report) => report.errorMessage).join(', ');
     notificationService.displayTranslatedNotification('warning', t('{{reportNames}} could not be cleared.', {reportNames}), errorMessage);
   }
 
