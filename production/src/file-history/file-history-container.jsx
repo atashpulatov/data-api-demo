@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {Button, Popover} from 'antd';
+import {Button} from 'antd';
 import {OfficeLoadedFile} from './office-loaded-file.jsx';
 import {officeApiHelper} from '../office/office-api-helper';
 import {officeDisplayService} from '../office/office-display-service';
@@ -17,6 +17,7 @@ import {notificationService} from '../notification/notification-service';
 
 import './file-history.css';
 import {withTranslation} from 'react-i18next';
+import {ButtonPopover} from './button-popover.jsx';
 
 export class _FileHistoryContainer extends React.Component {
   constructor(props) {
@@ -102,11 +103,11 @@ export class _FileHistoryContainer extends React.Component {
       <Button id="add-data-btn-container" className="add-data-btn floating-button" onClick={() => this.props.addDataAction()}
         disabled={loading}>{t('Add Data')}</Button>
       <span className="refresh-button-container">
-        <Popover placement="bottom" content={t('Refresh All Data')} mouseEnterDelay={1}>
+        <ButtonPopover placement="bottom" content={t('Refresh All Data')} mouseEnterDelay={1}>
           <Button id="refresh-all-btn" className="refresh-all-btn" style={{float: 'right'}} onClick={() => this.refreshAllAction(reportArray, refreshReportsArray)} disabled={loading}>
             {!refreshingAll ? <MSTRIcon type='refresh' /> : <img width='12px' height='12px' src={loadingSpinner} alt={t('Report loading icon')} />}
           </Button>
-        </Popover>
+        </ButtonPopover>
       </span>
       <div role="list" className='tables-container'>
         {reportArray.map((report) => <OfficeLoadedFile
