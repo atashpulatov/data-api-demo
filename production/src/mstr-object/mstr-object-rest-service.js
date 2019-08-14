@@ -118,17 +118,21 @@ class MstrObjectRestService {
   }
 
   _parseInstanceDefinition(res) {
-    const {body} = res;
-    if (res.status === 200 && body.status === 2) {
-      const {instanceId} = body;
-      const status = body.status;
-      return {instanceId, status};
+    try {
+      const {body} = res;
+      if (res.status === 200 && body.status === 2) {
+        const {instanceId} = body;
+        const status = body.status;
+        return {instanceId, status};
+      }
+      const {instanceId, data} = body;
+      if (data.paging.total === 0) throw new Error(NOT_SUPPORTED_NO_ATTRIBUTES);
+      const mstrTable = officeConverterServiceV2.createTable(body);
+      const {rows, columns} = this._checkTableDimensions(mstrTable.tableSize);
+      return {instanceId, rows, columns, mstrTable};
+    } catch (err) {
+      throw errorService.errorRestFactory(err);
     }
-    const {instanceId, data} = body;
-    if (data.paging.total === 0) throw new Error(NOT_SUPPORTED_NO_ATTRIBUTES);
-    const mstrTable = officeConverterServiceV2.createTable(body);
-    const {rows, columns} = this._checkTableDimensions(mstrTable.tableSize);
-    return {instanceId, rows, columns, mstrTable};
   }
 
   getObjectDefinition(objectId, projectId, isReport = true) {
