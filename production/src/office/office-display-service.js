@@ -208,7 +208,7 @@ class OfficeDisplayService {
       tableStartCell = officeApiHelper.offsetCellBy(tableStartCell, (columnsY - prevColumnsY), (rowsX - prevRowsX));
     }
     const tableRange = officeApiHelper.getRange(columns, tableStartCell, rows);
-    if (prevCrosstabDimensions) {
+    if (prevCrosstabDimensions && isCrosstab) {
       range = officeApiHelper.getCrosstabRange(tableStartCell, crosstabHeaderDimensions, sheet);
     } else {
       range = sheet.getRange(tableRange);
@@ -232,7 +232,12 @@ class OfficeDisplayService {
       }
 
       context.runtime.enableEvents = false;
-      if (prevCrosstabDimensions) await officeApiHelper.clearCrosstabRange(prevOfficeTable, prevCrosstabDimensions, context, 'All');
+      try {
+        // Clear crosstab range will throw an error if the required range is not empty
+        if (prevCrosstabDimensions) await officeApiHelper.clearCrosstabRange(prevOfficeTable, prevCrosstabDimensions, context, 'All');
+      } catch (error) {
+        throw new OverlappingTablesError(TABLE_OVERLAP);
+      }
       prevOfficeTable.delete();
       context.runtime.enableEvents = true;
       await context.sync();
@@ -411,7 +416,12 @@ class OfficeDisplayService {
         await excelContext.sync();
         const startCell = officeApiHelper.getStartCell(headerCell.address);
         officeApiHelper.getRange(columns, startCell, rows);
-        if (prevCrosstabDimensions) officeApiHelper.clearCrosstabRange(prevOfficeTable, prevCrosstabDimensions, excelContext);
+        try {
+          // Clear crosstab range will throw an error if the required range is not empty
+          if (prevCrosstabDimensions) await officeApiHelper.clearCrosstabRange(prevOfficeTable, prevCrosstabDimensions, excelContext);
+        } catch (error) {
+          throw new OverlappingTablesError(TABLE_OVERLAP);
+        }
         await excelContext.sync();
         if (tableColumnsChanged) {
           console.log('Instance definition changed, creating new table');
