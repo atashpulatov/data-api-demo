@@ -174,6 +174,8 @@ class OfficeApiHelper {
         }
         const offset = columnInformation.length - filteredColumnInformation.length;
         for (const object of filteredColumnInformation) {
+          if (!Object.keys(object).length) continue; // Skips iteration if object is empty
+
           const columnRange = columns.getItemAt(object.index - offset).getDataBodyRange();
           let format = '';
           if (!object.isAttribute) {
