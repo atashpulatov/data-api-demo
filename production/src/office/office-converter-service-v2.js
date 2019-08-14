@@ -8,9 +8,6 @@ import jsonHandler from '../mstr-object/mstr-normalized-json-handler';
 class OfficeConverterServiceV2 {
   createTable(response) {
     const columnInformation = this.getColumnInformation(response);
-    if (Object.keys(columnInformation).length === 0) {
-      return {};
-    }
     const isCrosstab = this.isCrosstab(response);
     return {
       tableSize: this.getTableSize(response, columnInformation, isCrosstab),
@@ -133,9 +130,6 @@ class OfficeConverterServiceV2 {
     const onElement = (element) => element;
     const metricColumns = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement);
     const attributeColumns = jsonHandler.renderTitles(response.definition, 'rows', response.data.headers, onElement);
-    if (!(attributeColumns.length > 0)) {
-      return {};
-    }
     const columns = [...attributeColumns[attributeColumns.length - 1], ...metricColumns[metricColumns.length - 1]];
     return columns.map((element, index) => {
       const type = element.type ? element.type.toLowerCase() : null;

@@ -124,11 +124,9 @@ class MstrObjectRestService {
       const status = body.status;
       return {instanceId, status};
     }
-    const {instanceId} = body;
+    const {instanceId, data} = body;
+    if (data.paging.total === 0) throw new Error(NOT_SUPPORTED_NO_ATTRIBUTES);
     const mstrTable = officeConverterServiceV2.createTable(body);
-    if (Object.keys(mstrTable).length === 0) {
-      throw new Error(NOT_SUPPORTED_NO_ATTRIBUTES);
-    }
     const {rows, columns} = this._checkTableDimensions(mstrTable.tableSize);
     return {instanceId, rows, columns, mstrTable};
   }
