@@ -30,6 +30,7 @@ export const _PopupViewSelector = (props) => {
     if (isInstanceWithPromptsAnswered(props)) {
       popupType === PopupTypeEnum.repromptingWindow
         && wasReportJustImported(props) && proceedToImport(props);
+      popupType !== PopupTypeEnum.repromptingWindow && clearAttributesAndMetrics(localEditReport);
       popupType = PopupTypeEnum.editFilters;
     } else {
       obtainInstanceWithPromptsAnswers(propsToPass, props);
@@ -69,6 +70,12 @@ function arePromptsAnswered(props) {
   return !!props.dossierData && !!props.dossierData.instanceId;
 }
 
+function clearAttributesAndMetrics(localEditReport) {
+  delete localEditReport.selectedAttributes;
+  delete localEditReport.selectedMetrics;
+  delete localEditReport.selectedFilters;
+}
+
 async function obtainInstanceWithPromptsAnswers(propsToPass, props) {
   const projectId = propsToPass.projectId || props.editedReport.projectId;
   const reportId = propsToPass.reportId || props.editedReport.reportId;
@@ -80,9 +87,9 @@ async function obtainInstanceWithPromptsAnswers(propsToPass, props) {
     count++;
   }
   const body = createBody(
-      props.editedReport && props.editedReport.selectedAttributes,
-      props.editedReport && props.editedReport.selectedMetrics,
-      props.editedReport && props.editedReport.selectedFilters
+    props.editedReport && props.editedReport.selectedAttributes,
+    props.editedReport && props.editedReport.selectedMetrics,
+    props.editedReport && props.editedReport.selectedFilters
   );
   const preparedReport = {
     id: reportId,

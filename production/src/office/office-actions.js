@@ -29,6 +29,15 @@ export function toggleIsConfirmFlag(isConfirm) {
   };
 }
 
+export function toggleIsClearingFlag(isClearing) {
+  return (dispatch) => {
+    dispatch({
+      type: officeProperties.actions.toggleIsClearingFlag,
+      isClearing,
+    });
+  };
+}
+
 export const actions = {
   toggleSecuredFlag,
 };
