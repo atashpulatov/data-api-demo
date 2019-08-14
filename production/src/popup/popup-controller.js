@@ -45,25 +45,25 @@ class PopupController {
     try {
       await officeApiHelper.getExcelSessionStatus();
       Office.context.ui.displayDialogAsync(
-        splittedUrl[0]
+          splittedUrl[0]
         + '?popupType=' + popupType
         + '&envUrl=' + session.url,
-        {height, width, displayInIframe: true},
-        (asyncResult) => {
-          const dialog = asyncResult.value;
-          sessionHelper.setDialog(dialog);
-          dialog.addEventHandler(
-            Office.EventType.DialogMessageReceived,
-            this.onMessageFromPopup.bind(null, dialog, reportParams));
-          reduxStore.dispatch({type: CLEAR_WINDOW});
-          dialog.addEventHandler(
+          {height, width, displayInIframe: true},
+          (asyncResult) => {
+            const dialog = asyncResult.value;
+            sessionHelper.setDialog(dialog);
+            dialog.addEventHandler(
+                Office.EventType.DialogMessageReceived,
+                this.onMessageFromPopup.bind(null, dialog, reportParams));
+            reduxStore.dispatch({type: CLEAR_WINDOW});
+            dialog.addEventHandler(
             // Event received on dialog close
-            Office.EventType.DialogEventReceived, (event) => {
-              reduxStore.dispatch({type: officeProperties.actions.popupHidden});
-            });
+                Office.EventType.DialogEventReceived, (event) => {
+                  reduxStore.dispatch({type: officeProperties.actions.popupHidden});
+                });
 
-          reduxStore.dispatch({type: officeProperties.actions.popupShown});
-        });
+            reduxStore.dispatch({type: officeProperties.actions.popupShown});
+          });
     } catch (error) {
       errorService.handleOfficeError(error);
     }
@@ -182,9 +182,8 @@ class PopupController {
       reportParams.promptsAnswers = response.promptsAnswers;
       await officeStoreService.preserveReportValue(reportParams.bindId, 'promptsAnswers', response.promptsAnswers);
     }
-    try {
-      await refreshReportsArray([reportParams], false)(reduxStore.dispatch);
-    } catch (error) {
+    const isErrorOnRefresh = await refreshReportsArray([reportParams], false)(reduxStore.dispatch);
+    if (isErrorOnRefresh) {
       await officeStoreService.preserveReportValue(reportParams.bindId, 'body', reportPreviousState.body);
     }
   }
