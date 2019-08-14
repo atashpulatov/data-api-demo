@@ -173,8 +173,7 @@ button.add-data-btn:focus {
   height: calc(100% - 60px);
   overflow-y: auto;
   width: 100vw;
-  position: fixed;
-  top: 60px;
+  position: absolute;
   left: 0;
   padding: 130px 30px 0 30px;
   text-align: center;

@@ -56,8 +56,8 @@ export class _PromptsWindow extends Component {
     const instanceId = instanceDefinition.mid;
     let count = 0;
     while (instanceDefinition.status === 2) {
-      await mstrObjectRestService.answerDossierPrompts(objectId, projectId, instanceDefinition.mid, promptsAnswers[count]);
-      instanceDefinition = await mstrObjectRestService.getDossierStatus(objectId, instanceDefinition.mid, projectId);
+      await mstrObjectRestService.answerDossierPrompts(objectId, projectId, instanceId, promptsAnswers[count]);
+      instanceDefinition = await mstrObjectRestService.getDossierStatus(objectId, instanceId, projectId);
       count++;
     }
     return instanceId;

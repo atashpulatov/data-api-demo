@@ -182,6 +182,7 @@ class OfficeDisplayService {
       return errorService.handleError(error);
     }
   };
+
   /**
    * Creates an office table if it's a new import or if the number of columns of an existing table changes.
    * If we are refreshing a table and the new definiton range is not empty we keep the original table.
@@ -207,12 +208,13 @@ class OfficeDisplayService {
       tableStartCell = officeApiHelper.offsetCellBy(tableStartCell, (columnsY - prevColumnsY), (rowsX - prevRowsX));
     }
     const tableRange = officeApiHelper.getRange(columns, tableStartCell, rows);
-    if (isCrosstab) {
+    if (prevCrosstabDimensions) {
       range = officeApiHelper.getCrosstabRange(tableStartCell, crosstabHeaderDimensions, sheet);
     } else {
       range = sheet.getRange(tableRange);
     }
     range.format.font.bold = false;
+    context.trackedObjects.add(range);
     if (prevOfficeTable) {
       prevOfficeTable.rows.load('count');
       await context.sync();
@@ -230,7 +232,7 @@ class OfficeDisplayService {
       }
 
       context.runtime.enableEvents = false;
-      await context.sync();
+      if (prevCrosstabDimensions) await officeApiHelper.clearCrosstabRange(prevOfficeTable, prevCrosstabDimensions, context, 'All');
       prevOfficeTable.delete();
       context.runtime.enableEvents = true;
       await context.sync();
@@ -241,6 +243,7 @@ class OfficeDisplayService {
       officeApiHelper.createColumnsHeaders(tableStartCell, mstrTable.headers.columns, sheet, range);
       officeApiHelper.createRowsTitleHeaders(tableStartCell, mstrTable.attributesNames, sheet, crosstabHeaderDimensions);
     }
+    context.trackedObjects.remove(range);
     const officeTable = sheet.tables.add(tableRange, true);
     this._styleHeaders(officeTable, TABLE_HEADER_FONT_COLOR, TABLE_HEADER_FILL_COLOR);
     try {
@@ -520,8 +523,11 @@ class OfficeDisplayService {
       let count = 0;
       while (instanceDefinition.status === 2) {
         await mstrObjectRestService.answerPrompts(objectId, projectId, instanceDefinition.instanceId, promptsAnswers[count]);
-        instanceDefinition = await mstrObjectRestService.modifyInstance(objectId, projectId, isReport, dossierData, body, instanceDefinition.instanceId);
+        instanceDefinition = await mstrObjectRestService.getInstance(objectId, projectId, isReport, dossierData, body, instanceDefinition.instanceId);
         count++;
+      }
+      if (body) { // Only modify the instance if there's actual data to do it
+        instanceDefinition = await mstrObjectRestService.modifyInstance(objectId, projectId, isReport, dossierData, body, instanceDefinition.instanceId);
       }
       return instanceDefinition;
     } catch (error) {
