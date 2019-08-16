@@ -87,7 +87,6 @@ export class _OfficeLoadedFile extends React.Component {
     if (!isLoading && !reduxStoreState.officeReducer.isRefreshPending) {
       reduxStore.dispatch({type: officeProperties.actions.setRefresh});
       this.setState({allowRefreshClick: false}, async () => {
-        // await refreshReport(bindingId, objectType, false);
         try {
           await officeApiHelper.onBindingObjectClick(bindingId, false) && await refreshReportsArray([{bindId: bindingId, objectType}], false);
         } finally {
