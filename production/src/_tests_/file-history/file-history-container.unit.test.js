@@ -9,6 +9,7 @@ import * as LoadedFilesConstans from '../../file-history/office-loaded-file.jsx'
 import {Popover} from 'antd';
 import {officeStoreService} from '../../office/store/office-store-service';
 import {officeApiHelper} from '../../office/office-api-helper';
+import {authenticationHelper} from '../../authentication/authentication-helper';
 
 describe('FileHistoryContainer', () => {
   it('should render component when we are insinde project', () => {

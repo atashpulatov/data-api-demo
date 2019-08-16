@@ -8,6 +8,7 @@ import {officeApiHelper} from '../../office/office-api-helper';
 import {reduxStore} from '../../store';
 import {homeHelper} from '../../home/home-helper.js';
 import {pageBuilder} from '../../home/page-builder.js';
+import {SettingsMenu} from '../../home/settings-menu.js';
 
 jest.mock('../../storage/session-helper');
 jest.mock('../../office/office-api-helper');
