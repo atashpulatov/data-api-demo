@@ -29,6 +29,15 @@ export function toggleIsConfirmFlag(isConfirm) {
   };
 }
 
+export function toggleIsRefreshPending(isRefreshPending) {
+  return (dispatch) => {
+    dispatch({
+      type: officeProperties.actions.toggleIsRefreshPending,
+      isRefreshPending,
+    });
+  };
+}
+
 export const actions = {
   toggleSecuredFlag,
 };

@@ -8,8 +8,7 @@ import {refreshReportsArray, callForEdit, callForReprompt} from '../popup/popup-
 import RenameInput from './file-history-rename-input';
 import {withTranslation} from 'react-i18next';
 import {officeApiHelper} from '../office/office-api-helper';
-import {reduxStore} from '../store';
-import {officeProperties} from '../office/office-properties';
+import {toggleIsRefreshPending} from '../office/office-actions';
 
 export class _OfficeLoadedFile extends React.Component {
   constructor() {
@@ -82,15 +81,14 @@ export class _OfficeLoadedFile extends React.Component {
     if (!this.state.allowRefreshClick) {
       return;
     }
-    const {isLoading, bindingId, objectType, refreshReportsArray} = this.props;
-    const reduxStoreState = reduxStore.getState();
-    if (!isLoading && !reduxStoreState.officeReducer.isRefreshPending) {
-      reduxStore.dispatch({type: officeProperties.actions.setRefresh});
+    const {isLoading, bindingId, objectType, refreshReportsArray, isRefreshPending, toggleIsRefreshPending} = this.props;
+    if (!isLoading && !isRefreshPending) {
+      toggleIsRefreshPending(true);
       this.setState({allowRefreshClick: false}, async () => {
         try {
           await officeApiHelper.onBindingObjectClick(bindingId, false) && await refreshReportsArray([{bindId: bindingId, objectType}], false);
         } finally {
-          reduxStore.dispatch({type: officeProperties.actions.endRefresh});
+          toggleIsRefreshPending(false);
           this.setState({allowRefreshClick: true});
         }
       });
@@ -163,11 +161,16 @@ _OfficeLoadedFile.defaultProps = {
   t: (text) => text,
 };
 
+function mapStateToProps(state) {
+  return {isRefreshPending: state.officeReducer.isRefreshPending};
+}
+
 const mapDispatchToProps = {
   refreshReportsArray,
   callForEdit,
   callForReprompt,
+  toggleIsRefreshPending,
 };
 
-export const OfficeLoadedFile = connect(null, mapDispatchToProps)(withTranslation('common')(_OfficeLoadedFile));
+export const OfficeLoadedFile = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_OfficeLoadedFile));
 
