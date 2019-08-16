@@ -1,5 +1,5 @@
-import officeConverter from '../../src/office/office-converter-service-v2';
-import response from '../../src/mstr-object/rest-api-v2.json';
+import officeConverter from '../../office/office-converter-service-v2';
+import response from '../../mstr-object/rest-api-v2.json';
 
 
 describe('Office converter service v2', () => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import {mount} from 'enzyme';
-import {_RefreshAllPage} from '../../src/loading/refresh-all-page';
+import {_RefreshAllPage} from '../../loading/refresh-all-page';
 
 const refreshData = {
   data: [

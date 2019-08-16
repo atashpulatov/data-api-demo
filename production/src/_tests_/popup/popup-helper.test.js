@@ -1,9 +1,9 @@
-import {popupController} from '../../src/popup/popup-controller';
-import {popupHelper} from '../../src/popup/popup-helper';
-import {officeStoreService} from '../../src/office/store/office-store-service';
-import {officeDisplayService} from '../../src/office/office-display-service';
-import {notificationService} from '../../src/notification/notification-service';
-import {errorService} from '../../src/error/error-handler';
+import {popupController} from '../../popup/popup-controller';
+import {popupHelper} from '../../popup/popup-helper';
+import {officeStoreService} from '../../office/store/office-store-service';
+import {officeDisplayService} from '../../office/office-display-service';
+import {notificationService} from '../../notification/notification-service';
+import {errorService} from '../../error/error-handler';
 
 describe('Popup actions', () => {
   afterEach(() => {

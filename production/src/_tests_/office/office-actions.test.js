@@ -1,6 +1,6 @@
-import {officeProperties} from '../../src/office/office-properties';
-import {officeStoreService} from '../../src/office/store/office-store-service';
-import * as actions from '../../src/office/office-actions';
+import {officeProperties} from '../../office/office-properties';
+import {officeStoreService} from '../../office/store/office-store-service';
+import * as actions from '../../office/office-actions';
 
 describe('Office Actions', () => {
   it('should dispatch proper toggleStoreSecuredFlag action', () => {

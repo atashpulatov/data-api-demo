@@ -1,6 +1,6 @@
 import React from 'react';
 import {shallow} from 'enzyme';
-import {_PromptWindowButtons} from '../../src/prompts/prompts-window-buttons';
+import {_PromptWindowButtons} from '../../prompts/prompts-window-buttons';
 
 describe('PromptWindowButtons', () => {
   it('should render 2 buttons - Run and Cancel', () => {

@@ -1,4 +1,4 @@
-import jsonHandler from '../../src/mstr-object/mstr-normalized-json-handler';
+import jsonHandler from '../../mstr-object/mstr-normalized-json-handler';
 import {reportV2} from '../mockDataV2';
 
 

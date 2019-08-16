@@ -4,7 +4,7 @@ import {_OfficeLoadedFile} from '../../file-history/office-loaded-file';
 import {reduxStore} from '../../store';
 import {fileHistoryHelper} from '../../file-history/file-history-helper';
 import {Popover} from 'antd';
-import {officeApiHelper} from '../../src/office/office-api-helper';
+import {officeApiHelper} from '../../office/office-api-helper';
 
 describe('office loaded file', () => {
   it('should display provided file name', () => {

@@ -1,8 +1,8 @@
 import React from 'react';
 import {mount} from 'enzyme';
-import {_Confirmation} from '../../src/home/confirmation';
+import {_Confirmation} from '../../home/confirmation';
 import {Office} from '../mockOffice';
-import {officeApiHelper} from '../../src/office/office-api-helper';
+import {officeApiHelper} from '../../office/office-api-helper';
 
 describe('Confirmation', () => {
   afterEach(() => {

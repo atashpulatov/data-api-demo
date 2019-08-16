@@ -1,7 +1,7 @@
 import React from 'react';
 import {mount} from 'enzyme';
-import {sessionHelper} from '../../src/storage/session-helper';
-import {_SettingsMenu} from '../../src/home/settings-menu';
+import {sessionHelper} from '../../storage/session-helper';
+import {_SettingsMenu} from '../../home/settings-menu';
 import {Office} from '../mockOffice';
 
 describe('Settings Menu', () => {

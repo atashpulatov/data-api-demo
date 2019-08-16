@@ -1,6 +1,6 @@
 import React from 'react';
 import {shallow} from 'enzyme';
-import {_AttributeSelector} from '../../src/attribute-selector/attribute-selector';
+import {_AttributeSelector} from '../../attribute-selector/attribute-selector';
 import {AttributeMetricFilter} from 'mstr-react-library';
 
 describe('_AttributeSelector', () => {
