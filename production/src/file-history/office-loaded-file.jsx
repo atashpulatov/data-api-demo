@@ -8,6 +8,8 @@ import {refreshReportsArray, callForEdit, callForReprompt} from '../popup/popup-
 import RenameInput from './file-history-rename-input';
 import {withTranslation} from 'react-i18next';
 import {officeApiHelper} from '../office/office-api-helper';
+import {reduxStore} from '../store';
+import {officeProperties} from '../office/office-properties';
 
 export class _OfficeLoadedFile extends React.Component {
   constructor() {
@@ -81,12 +83,15 @@ export class _OfficeLoadedFile extends React.Component {
       return;
     }
     const {isLoading, bindingId, objectType, refreshReportsArray} = this.props;
-    if (!isLoading) {
+    const reduxStoreState = reduxStore.getState();
+    if (!isLoading && !reduxStoreState.officeReducer.isRefreshPending) {
+      reduxStore.dispatch({type: officeProperties.actions.setRefresh});
       this.setState({allowRefreshClick: false}, async () => {
         // await refreshReport(bindingId, objectType, false);
         try {
           await officeApiHelper.onBindingObjectClick(bindingId, false) && await refreshReportsArray([{bindId: bindingId, objectType}], false);
         } finally {
+          reduxStore.dispatch({type: officeProperties.actions.endRefresh});
           this.setState({allowRefreshClick: true});
         }
       });
