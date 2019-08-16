@@ -156,7 +156,8 @@ describe('FileHistoryContainer', () => {
     expect(tmp).toBeTruthy();
 
     expect(tmp._ismounted).toBeFalsy();
-    expect(mockRemoveListener).toBeCalled();
+    // TODO: DE145722; Removed from 11.1.3 due to problems while editing -> importing
+    // expect(mockRemoveListener).toBeCalled();
   });
 
   it('should contain popover', () => {
