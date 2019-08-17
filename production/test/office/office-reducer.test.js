@@ -32,7 +32,7 @@ describe('officeReducer', () => {
 
   beforeEach(() => {
     // default state should be empty
-    expect(officeStore.getState()).toEqual({loading: false});
+    expect(officeStore.getState()).toEqual({loading: false, isRefreshPending: false});
   });
 
   afterEach(() => {
@@ -396,7 +396,6 @@ describe('officeReducer', () => {
     // then
     expect(newState).toThrowError('Missing reportBindId');
   });
-
   it('should return new proper state in case of toggleSecuredFlag action', () => {
     // given
     const oldState = {isSecured: false};
@@ -408,5 +407,41 @@ describe('officeReducer', () => {
     const newState = officeReducer(oldState, action);
     // then
     expect(newState).toEqual({isSecured: true});
+  });
+  it('should return new proper state in case of toggleIsSettingsFlag action', () => {
+    // given
+    const oldState = {isSettings: false};
+    const action = {
+      type: officeProperties.actions.toggleIsSettingsFlag,
+      isSettings: true,
+    };
+    // when
+    const newState = officeReducer(oldState, action);
+    // then
+    expect(newState).toEqual({isSettings: true});
+  });
+  it('should return new proper state in case of toggleIsConfirmFlag action', () => {
+    // given
+    const oldState = {isConfirm: false};
+    const action = {
+      type: officeProperties.actions.toggleIsConfirmFlag,
+      isConfirm: true,
+    };
+    // when
+    const newState = officeReducer(oldState, action);
+    // then
+    expect(newState).toEqual({isConfirm: true});
+  });
+  it('should return new proper state in case of toggleIsRefreshPending action', () => {
+    // given
+    const oldState = {isRefreshPending: false};
+    const action = {
+      type: officeProperties.actions.toggleIsRefreshPending,
+      isRefreshPending: true,
+    };
+    // when
+    const newState = officeReducer(oldState, action);
+    // then
+    expect(newState).toEqual({isRefreshPending: true});
   });
 });

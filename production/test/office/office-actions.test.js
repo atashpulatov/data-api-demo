@@ -11,5 +11,32 @@ describe('Office Actions', () => {
     // then
     expect(listener).toHaveBeenCalledWith({type: officeProperties.actions.toggleSecuredFlag, isSecured: true});
   });
+
+  it('should dispatch proper toggleIsSettingsFlag action', () => {
+    // given
+    const listener = jest.fn();
+    // when
+    actions.toggleIsSettingsFlag(true)(listener);
+    // then
+    expect(listener).toHaveBeenCalledWith({type: officeProperties.actions.toggleIsSettingsFlag, isSettings: true});
+  });
+
+  it('should dispatch proper toggleIsConfirmFlag action', () => {
+    // given
+    const listener = jest.fn();
+    // when
+    actions.toggleIsConfirmFlag(true)(listener);
+    // then
+    expect(listener).toHaveBeenCalledWith({type: officeProperties.actions.toggleIsConfirmFlag, isConfirm: true});
+  });
+
+  it('should dispatch proper toggleIsRefreshPending action', () => {
+    // given
+    const listener = jest.fn();
+    // when
+    actions.toggleIsRefreshPending(true)(listener);
+    // then
+    expect(listener).toHaveBeenCalledWith({type: officeProperties.actions.toggleIsRefreshPending, isRefreshPending: true});
+  });
 })
 ;
