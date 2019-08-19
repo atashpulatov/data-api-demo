@@ -92,7 +92,6 @@ describe('office loaded file', () => {
   });
   it('refresh method should run onRefresh method', async () => {
     // given
-    const isRefreshMock = false;
     const mockToggle = jest.fn();
     const onRefreshMock = jest.fn();
     const mockEvent = {stopPropagation: jest.fn()};
@@ -104,8 +103,7 @@ describe('office loaded file', () => {
       fileName='test'
       refreshReportsArray={onRefreshMock}
       isLoading={false}
-      toggleIsRefreshPending={mockToggle}
-      isRefreshPending={isRefreshMock}/>);
+      toggleIsRefreshPending={mockToggle}/>);
     const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
     const refreshButton = wrappedIcons.at(2);
     refreshButton.props().onClick(mockEvent);
@@ -115,7 +113,6 @@ describe('office loaded file', () => {
   });
   it('should invoke refresh method on button click', async () => {
     // given
-    const isRefreshMock = false;
     const toggleMock = jest.fn();
     const onRefreshMocked = jest.fn();
     const mockEvent = {stopPropagation: jest.fn()};
@@ -131,8 +128,7 @@ describe('office loaded file', () => {
       fileName='test'
       refreshReportsArray={onRefreshMocked}
       isLoading={false}
-      toggleIsRefreshPending={toggleMock}
-      isRefreshPending={isRefreshMock}/>);
+      toggleIsRefreshPending={toggleMock}/>);
     const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
     const refreshButton = wrappedIcons.at(2);
     refreshButton.props().onClick(mockEvent);

@@ -29,14 +29,5 @@ describe('Office Actions', () => {
     // then
     expect(listener).toHaveBeenCalledWith({type: officeProperties.actions.toggleIsConfirmFlag, isConfirm: true});
   });
-
-  it('should dispatch proper toggleIsRefreshPending action', () => {
-    // given
-    const listener = jest.fn();
-    // when
-    actions.toggleIsRefreshPending(true)(listener);
-    // then
-    expect(listener).toHaveBeenCalledWith({type: officeProperties.actions.toggleIsRefreshPending, isRefreshPending: true});
-  });
 })
 ;

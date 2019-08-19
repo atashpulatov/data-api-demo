@@ -2,7 +2,7 @@ import {officeProperties} from './office-properties';
 import {OfficeError} from './office-error';
 import {officeStoreService} from './store/office-store-service';
 
-export const officeReducer = (state = {loading: false, isRefreshPending: false}, action) => {
+export const officeReducer = (state = {loading: false}, action) => {
   switch (action.type) {
     case officeProperties.actions.preLoadReport:
       return onPreLoadReport(action, state);
@@ -32,8 +32,6 @@ export const officeReducer = (state = {loading: false, isRefreshPending: false},
       return toggleIsSettingsFlag(action, state);
     case officeProperties.actions.toggleIsConfirmFlag:
       return toggleIsConfirmFlag(action, state);
-    case officeProperties.actions.toggleIsRefreshPending:
-      return toggleIsRefreshPending(action, state);
     default:
       break;
   }
@@ -168,13 +166,6 @@ function toggleIsConfirmFlag(action, state) {
   return {
     ...state,
     isConfirm: action.isConfirm,
-  };
-}
-
-function toggleIsRefreshPending(action, state) {
-  return {
-    ...state,
-    isRefreshPending: action.isRefreshPending,
   };
 }
 

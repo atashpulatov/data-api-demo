@@ -32,7 +32,7 @@ describe('officeReducer', () => {
 
   beforeEach(() => {
     // default state should be empty
-    expect(officeStore.getState()).toEqual({loading: false, isRefreshPending: false});
+    expect(officeStore.getState()).toEqual({loading: false});
   });
 
   afterEach(() => {
@@ -431,17 +431,5 @@ describe('officeReducer', () => {
     const newState = officeReducer(oldState, action);
     // then
     expect(newState).toEqual({isConfirm: true});
-  });
-  it('should return new proper state in case of toggleIsRefreshPending action', () => {
-    // given
-    const oldState = {isRefreshPending: false};
-    const action = {
-      type: officeProperties.actions.toggleIsRefreshPending,
-      isRefreshPending: true,
-    };
-    // when
-    const newState = officeReducer(oldState, action);
-    // then
-    expect(newState).toEqual({isRefreshPending: true});
   });
 });

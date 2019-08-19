@@ -78,17 +78,15 @@ export class _OfficeLoadedFile extends React.Component {
 
   refreshAction = (e) => {
     e.stopPropagation();
-    if (!this.state.allowRefreshClick) {
+    const {isLoading, bindingId, objectType, refreshReportsArray, loading} = this.props;
+    if (!this.state.allowRefreshClick || loading) {
       return;
     }
-    const {isLoading, bindingId, objectType, refreshReportsArray, isRefreshPending, toggleIsRefreshPending} = this.props;
-    if (!isLoading && !isRefreshPending) {
-      toggleIsRefreshPending(true);
+    if (!isLoading) {
       this.setState({allowRefreshClick: false}, async () => {
         try {
           await officeApiHelper.onBindingObjectClick(bindingId, false) && await refreshReportsArray([{bindId: bindingId, objectType}], false);
         } finally {
-          toggleIsRefreshPending(false);
           this.setState({allowRefreshClick: true});
         }
       });
@@ -162,14 +160,15 @@ _OfficeLoadedFile.defaultProps = {
 };
 
 function mapStateToProps(state) {
-  return {isRefreshPending: state.officeReducer.isRefreshPending};
+  return {
+    loading: state.officeReducer.loading,
+  };
 }
 
 const mapDispatchToProps = {
   refreshReportsArray,
   callForEdit,
   callForReprompt,
-  toggleIsRefreshPending,
 };
 
 export const OfficeLoadedFile = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_OfficeLoadedFile));
