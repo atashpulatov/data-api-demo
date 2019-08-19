@@ -1,4 +1,4 @@
-import 'core-js';
+import 'airbnb-browser-shims';
 import 'proxy-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';

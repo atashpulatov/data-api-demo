@@ -1,29 +1,12 @@
 {
-    "extends": [
-        "google",
-        "react-app"
-    ],
-    "parserOptions": {
-        "ecmaVersion": 8
-    },
-    "env": {
-        "es6": true,
-        "browser": true,
-        "node": true,
-        "mocha": true
-    },
-    "globals": {
-        "Office": true,
-        "Excel": true,
-        "OfficeExtension": true
-    },
-    "rules": {
-        "max-len": [
-            "warn",
-            250
-        ],
-        "no-multi-str": "off",
-        "require-jsdoc": "off",
-        "no-invalid-this": "off"
-    }
+  "extends": "airbnb",
+  "parserOptions": {
+    "ecmaVersion": 2019
+  },
+  "globals": {
+    "Excel": true,
+    "microstrategy": true,
+    "Office": true,
+    "OfficeExtension": true
+  }
 }
