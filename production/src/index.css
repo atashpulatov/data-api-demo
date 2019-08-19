@@ -58,14 +58,6 @@ code {
     outline: none;
 }
 
-*:focus.focus-visible {
-    outline: #5E9ED6 solid 3px;
-    outline: -webkit-focus-ring-color auto 4px;
-    color: initial;
-    border: initial;
-    box-shadow: initial;
-}
-
 .ant-btn-primary.focus-visible {
     color: #fff
 }
@@ -73,6 +65,10 @@ code {
 .ant-radio-input.focus-visible+.ant-radio-inner {
     outline: #5E9ED6 solid 3px;
     outline: -webkit-focus-ring-color auto 4px;
+}
+
+.js-focus-visible :focus:not(.focus-visible){
+  outline: none;
 }
 
 .ant-btn {

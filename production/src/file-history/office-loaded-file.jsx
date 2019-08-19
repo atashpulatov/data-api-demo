@@ -8,6 +8,7 @@ import {refreshReportsArray, callForEdit, callForReprompt} from '../popup/popup-
 import RenameInput from './file-history-rename-input';
 import {withTranslation} from 'react-i18next';
 import {officeApiHelper} from '../office/office-api-helper';
+import {ButtonPopover} from './button-popover';
 
 export class _OfficeLoadedFile extends React.Component {
   constructor() {
@@ -121,17 +122,17 @@ export class _OfficeLoadedFile extends React.Component {
           </Popover>
         </Col>
         <Col span={1} offset={1} style={{marginTop: '1px'}}>
-          <Popover placement="bottom" content={t('Edit Data')} mouseEnterDelay={1}>
+          <ButtonPopover placement="bottom" content={t('Edit Data')} mouseEnterDelay={1}>
             {<span
               tabIndex="0"
               className="loading-button-container"
               onClick={this.editAction}>
               <MSTRIcon type='edit' />
             </span>}
-          </Popover>
+          </ButtonPopover>
         </Col>
         <Col span={1} offset={1}>
-          <Popover placement="bottom" content={t('Refresh Data')} mouseEnterDelay={1}>
+          <ButtonPopover placement="bottom" content={t('Refresh Data')} mouseEnterDelay={1}>
             {<span
               tabIndex="0"
               className="loading-button-container"
@@ -139,7 +140,7 @@ export class _OfficeLoadedFile extends React.Component {
               {!isLoading ? <MSTRIcon type='refresh' /> :
                 <img width='12px' height='12px' src={loadingSpinner} alt={t('Report loading icon')} />}
             </span>}
-          </Popover>
+          </ButtonPopover>
         </Col>
         <Col span={1} offset={1}>
           <Popover placement="bottomRight" content={t('Remove Data from Workbook')} mouseEnterDelay={1} arrowPointAtCenter="true">
