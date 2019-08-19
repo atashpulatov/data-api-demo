@@ -92,7 +92,6 @@ describe('office loaded file', () => {
   });
   it('refresh method should run onRefresh method', async () => {
     // given
-    const mockToggle = jest.fn();
     const onRefreshMock = jest.fn();
     const mockEvent = {stopPropagation: jest.fn()};
     const objectClickMock = jest.spyOn(officeApiHelper, 'onBindingObjectClick').mockImplementation(() => true);
@@ -112,7 +111,6 @@ describe('office loaded file', () => {
   });
   it('should invoke refresh method on button click', async () => {
     // given
-    const toggleMock = jest.fn();
     const onRefreshMocked = jest.fn();
     const mockEvent = {stopPropagation: jest.fn()};
     const testBindingId = 'testBindingId';

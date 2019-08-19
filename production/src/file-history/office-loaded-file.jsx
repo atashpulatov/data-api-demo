@@ -8,7 +8,6 @@ import {refreshReportsArray, callForEdit, callForReprompt} from '../popup/popup-
 import RenameInput from './file-history-rename-input';
 import {withTranslation} from 'react-i18next';
 import {officeApiHelper} from '../office/office-api-helper';
-import {toggleIsRefreshPending} from '../office/office-actions';
 
 export class _OfficeLoadedFile extends React.Component {
   constructor() {
