@@ -102,8 +102,7 @@ describe('office loaded file', () => {
       bindingId={''}
       fileName='test'
       refreshReportsArray={onRefreshMock}
-      isLoading={false}
-      toggleIsRefreshPending={mockToggle}/>);
+      isLoading={false}/>);
     const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
     const refreshButton = wrappedIcons.at(2);
     refreshButton.props().onClick(mockEvent);
@@ -127,8 +126,7 @@ describe('office loaded file', () => {
       objectType={objectType}
       fileName='test'
       refreshReportsArray={onRefreshMocked}
-      isLoading={false}
-      toggleIsRefreshPending={toggleMock}/>);
+      isLoading={false}/>);
     const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
     const refreshButton = wrappedIcons.at(2);
     refreshButton.props().onClick(mockEvent);
