@@ -74,7 +74,6 @@ describe('office loaded file', () => {
     const deleteButton = wrappedIcons.at(3);
     expect(deleteButton.props().type).toEqual('trash');
   });
-
   it('refresh method should not do anything if in loading state', () => {
     // given
     const onRefreshMock = jest.fn();
@@ -102,7 +101,7 @@ describe('office loaded file', () => {
       bindingId={''}
       fileName='test'
       refreshReportsArray={onRefreshMock}
-      isLoading={false} />);
+      isLoading={false}/>);
     const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
     const refreshButton = wrappedIcons.at(2);
     refreshButton.props().onClick(mockEvent);
@@ -125,7 +124,7 @@ describe('office loaded file', () => {
       objectType={objectType}
       fileName='test'
       refreshReportsArray={onRefreshMocked}
-      isLoading={false} />);
+      isLoading={false}/>);
     const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
     const refreshButton = wrappedIcons.at(2);
     refreshButton.props().onClick(mockEvent);
@@ -151,7 +150,7 @@ describe('office loaded file', () => {
       isLoading={false} />);
     wrappedComponent.setState({allowRefreshClick: false});
     const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
-    const refreshButton = wrappedIcons.at(1);
+    const refreshButton = wrappedIcons.at(2);
     refreshButton.props().onClick(mockEvent);
     // then
     expect(onRefreshMocked).not.toBeCalled();

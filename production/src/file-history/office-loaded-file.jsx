@@ -78,13 +78,12 @@ export class _OfficeLoadedFile extends React.Component {
 
   refreshAction = (e) => {
     e.stopPropagation();
-    if (!this.state.allowRefreshClick) {
+    const {isLoading, bindingId, objectType, refreshReportsArray, loading} = this.props;
+    if (!this.state.allowRefreshClick || loading) {
       return;
     }
-    const {isLoading, bindingId, objectType, refreshReportsArray} = this.props;
     if (!isLoading) {
       this.setState({allowRefreshClick: false}, async () => {
-        // await refreshReport(bindingId, objectType, false);
         try {
           await officeApiHelper.onBindingObjectClick(bindingId, false) && await refreshReportsArray([{bindId: bindingId, objectType}], false);
         } finally {
@@ -160,11 +159,17 @@ _OfficeLoadedFile.defaultProps = {
   t: (text) => text,
 };
 
+function mapStateToProps(state) {
+  return {
+    loading: state.officeReducer.loading,
+  };
+}
+
 const mapDispatchToProps = {
   refreshReportsArray,
   callForEdit,
   callForReprompt,
 };
 
-export const OfficeLoadedFile = connect(null, mapDispatchToProps)(withTranslation('common')(_OfficeLoadedFile));
+export const OfficeLoadedFile = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_OfficeLoadedFile));
 
