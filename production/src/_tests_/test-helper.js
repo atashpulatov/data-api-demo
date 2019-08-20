@@ -9,7 +9,7 @@ function expectPropertiesDefined(result) {
       }
     }
   });
-};
+}
 
 function expectEqualsGivenReport(result, expectedReportPath) {
   if (!fs.existsSync(expectedReportPath)) {
@@ -19,7 +19,7 @@ function expectEqualsGivenReport(result, expectedReportPath) {
   }
   const expectedReport = require(expectedReportPath).default;
   expect(result).toEqual(expectedReport);
-};
+}
 
 export default {
   expectPropertiesDefined,

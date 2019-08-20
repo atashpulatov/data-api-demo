@@ -25,7 +25,7 @@ describe('Office converter service v2', () => {
     const crosstabsResponse = response;
     const expectedFirstRow = [3139, 17046.02, 4543, 2406, 20915.41, 3449];
     // when
-    const {row} = officeConverter.getRows(crosstabsResponse);
+    const { row } = officeConverter.getRows(crosstabsResponse);
     // then
     expect(row[0]).toEqual(expectedFirstRow);
   });
@@ -56,7 +56,7 @@ describe('Office converter service v2', () => {
         ['\'2010', '\'March'],
         ['\'2010', '\'Total'],
       ],
-      subtotalAddress: [false, false, false, false, false, false, false, {'attributeIndex': 1, 'axis': 'rows', 'colIndex': 3}, false, false, false, false, false, false, false, {'attributeIndex': 1, 'axis': 'rows', 'colIndex': 7}, false, false, false, false, false, false, false, false, false, false, false, false],
+      subtotalAddress: [false, false, false, false, false, false, false, { attributeIndex: 1, axis: 'rows', colIndex: 3 }, false, false, false, false, false, false, false, { attributeIndex: 1, axis: 'rows', colIndex: 7 }, false, false, false, false, false, false, false, false, false, false, false, false],
     };
     // when
     const headers = officeConverter.getHeaders(crosstabsResponse);
@@ -68,7 +68,7 @@ describe('Office converter service v2', () => {
     const crosstabsResponse = response;
     const isCrosstab = officeConverter.isCrosstab(crosstabsResponse);
     const columnInformation = officeConverter.getColumnInformation(crosstabsResponse);
-    const expectedValue = {columns: 6, rows: 8};
+    const expectedValue = { columns: 6, rows: 8 };
     // when
     const tableSize = officeConverter.getTableSize(crosstabsResponse, columnInformation, isCrosstab);
     // then
@@ -80,7 +80,9 @@ describe('Office converter service v2', () => {
     const expectedFirstColumn = {
       attributeId: '9BC4691C11E97721AF570080EF55306C',
       attributeName: 'Year',
-      forms: [{baseFormType: 3, dataType: 33, id: '45C11FA478E745FEA08D781CEA190FE5', name: 'ID'}],
+      forms: [{
+        baseFormType: 3, dataType: 33, id: '45C11FA478E745FEA08D781CEA190FE5', name: 'ID',
+      }],
       index: 0,
       isAttribute: true,
     };
@@ -90,4 +92,3 @@ describe('Office converter service v2', () => {
     expect(colInformation[0]).toEqual(expectedFirstColumn);
   });
 });
-

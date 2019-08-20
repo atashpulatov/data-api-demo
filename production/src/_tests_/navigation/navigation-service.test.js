@@ -1,7 +1,7 @@
-import {navigationService} from '../../navigation/navigation-service';
-import {historyProperties} from '../../history/history-properties';
-import {sessionProperties} from '../../storage/session-properties';
-import {reduxStore} from '../../store';
+import { navigationService } from '../../navigation/navigation-service';
+import { historyProperties } from '../../history/history-properties';
+import { sessionProperties } from '../../storage/session-properties';
+import { reduxStore } from '../../store';
 
 describe('NavigatorService', () => {
   beforeAll(() => {

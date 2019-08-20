@@ -4,10 +4,10 @@ const path = require('path');
 
 const STRING_SERVER = '10.27.10.36'; // TS_SPHINX
 const HASH_DSN_DB = {
-  'LOCALIZATION_WEB': 'STRING_WEB',
+  LOCALIZATION_WEB: 'STRING_WEB',
 };
 
-const fetchStrings = async function(database, password, sqlString) {
+const fetchStrings = async function (database, password, sqlString) {
   // const pool = await sql.connect('mssql://username:password@localhost/database')
   // const result = await sql.query`select * from mytable where id = ${value}`
 
@@ -31,12 +31,12 @@ const fetchStrings = async function(database, password, sqlString) {
   }
 };
 
-const getObjectFromRow = function(row, columnPostfix) {
-  const engMessage = row['String_English'];
+const getObjectFromRow = function (row, columnPostfix) {
+  const engMessage = row.String_English;
 
-  const columnName = 'String_' + columnPostfix;
+  const columnName = `String_${columnPostfix}`;
   // For the language that owned by one DB but not another
-  const msg = (columnName in row) ? row[columnName] : ('*' + engMessage + '*');
+  const msg = (columnName in row) ? row[columnName] : (`*${engMessage}*`);
 
   // Really not sure why messages in DB has '&' everywhere...
   if (!msg) {
@@ -44,20 +44,20 @@ const getObjectFromRow = function(row, columnPostfix) {
   }
 
   return {
-    'key': engMessage,
-    'v': msg,
+    key: engMessage,
+    v: msg,
   };
 };
 
-const exportToResourceFile = async function(outputFileFolder) {
+const exportToResourceFile = async function (outputFileFolder) {
   // TODO ryu: Check if file exists before this?
   // const file = await fs.readFile(path.join(__dirname, '/../files/pwd.txt'))
   const password = process.env.STRING_DB_PASSWORD;
 
-  const sqlWeb = `SELECT * FROM Office_Strings ORDER BY ID`;
+  const sqlWeb = 'SELECT * FROM Office_Strings ORDER BY ID';
   console.log(sqlWeb);
   try {
-    const webRows = await fetchStrings(HASH_DSN_DB['LOCALIZATION_WEB'], password, sqlWeb);
+    const webRows = await fetchStrings(HASH_DSN_DB.LOCALIZATION_WEB, password, sqlWeb);
     // There are inconsistencies between gui and web DB. We use | to separate them here.
     const acceptLanguageDict = {
       'da-DK': 'Danish',
@@ -102,12 +102,11 @@ const exportToResourceFile = async function(outputFileFolder) {
     }
 
     await fs.ensureDir(outputFileFolder);
-    await Promise.all(Object.keys(acceptLanguageDict).map((locale) => {
-      // return fs.writeJson(path.join(resourceFilesFolder, `${locale}.js`),
-      //   wholeDescriptors[locale], 'utf8')
+    await Promise.all(Object.keys(acceptLanguageDict).map((locale) =>
+    // return fs.writeJson(path.join(resourceFilesFolder, `${locale}.js`),
+    //   wholeDescriptors[locale], 'utf8')
 
-      return fs.writeFile(path.join(outputFileFolder, `${locale}.json`), JSON.stringify(wholeDescriptors[locale], null, 2), 'utf8');
-    }));
+      fs.writeFile(path.join(outputFileFolder, `${locale}.json`), JSON.stringify(wholeDescriptors[locale], null, 2), 'utf8')));
     console.log(`Completed exporting all resources files to ${outputFileFolder}!`);
   } catch (e) {
     console.log('No connection to strings DB. Skipping this step');

@@ -1,7 +1,7 @@
-import {historyHelper} from '../../history/history-helper';
-import {historyProperties} from '../../history/history-properties';
-import {HistoryError} from '../../history/history-error';
-import {reduxStore} from '../../store';
+import { historyHelper } from '../../history/history-helper';
+import { historyProperties } from '../../history/history-properties';
+import { HistoryError } from '../../history/history-error';
+import { reduxStore } from '../../store';
 
 describe('historyHelper', () => {
   it('should return true when asked is directory stored and there is some',
@@ -19,8 +19,7 @@ describe('historyHelper', () => {
       const isStored = historyHelper.isDirectoryStored(dirArr);
       // then
       expect(isStored).toBe(true);
-    }
-  );
+    });
 
   it('should return false when asked is directory stored and there is none',
     () => {
@@ -28,8 +27,7 @@ describe('historyHelper', () => {
       const isStored = historyHelper.isDirectoryStored();
       // then
       expect(isStored).toBe(false);
-    }
-  );
+    });
 
   it('should return current directory when there is one', () => {
     // given

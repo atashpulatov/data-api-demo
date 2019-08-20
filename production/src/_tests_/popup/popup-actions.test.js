@@ -1,11 +1,11 @@
 import * as actions from '../../popup/popup-actions';
-import {popupHelper} from '../../popup/popup-helper';
-import {officeApiHelper} from '../../office/office-api-helper';
-import {authenticationHelper} from '../../authentication/authentication-helper';
-import {UnauthorizedError} from '../../error/unauthorized-error';
-import {officeProperties} from '../../office/office-properties';
-import {officeStoreService} from '../../office/store/office-store-service';
-import {popupController} from '../../popup/popup-controller';
+import { popupHelper } from '../../popup/popup-helper';
+import { officeApiHelper } from '../../office/office-api-helper';
+import { authenticationHelper } from '../../authentication/authentication-helper';
+import { UnauthorizedError } from '../../error/unauthorized-error';
+import { officeProperties } from '../../office/office-properties';
+import { officeStoreService } from '../../office/store/office-store-service';
+import { popupController } from '../../popup/popup-controller';
 
 jest.mock('../../office/office-api-helper');
 jest.mock('../../authentication/authentication-helper');
@@ -57,17 +57,17 @@ describe('Popup actions', () => {
       expect(listener).toHaveBeenCalledWith({
         type: officeProperties.actions.startLoadingReport,
         reportBindId: reportArray[0].bindId,
-        isRefreshAll: isRefreshAll,
+        isRefreshAll,
       });
       expect(listener).toHaveBeenCalledWith({
         type: officeProperties.actions.startLoadingReport,
         reportBindId: reportArray[1].bindId,
-        isRefreshAll: isRefreshAll,
+        isRefreshAll,
       });
       expect(listener).toHaveBeenCalledWith({
         type: officeProperties.actions.startLoadingReport,
         reportBindId: reportArray[2].bindId,
-        isRefreshAll: isRefreshAll,
+        isRefreshAll,
       });
     });
     it('should NOT call some methods when isRefreshAll is false', async () => {
@@ -128,14 +128,14 @@ describe('Popup actions', () => {
       // when
       actions.resetState(true)(listener);
       // then
-      expect(listener).toHaveBeenCalledWith({type: actions.RESET_STATE});
+      expect(listener).toHaveBeenCalledWith({ type: actions.RESET_STATE });
     });
   });
 
   it('should do certain operations when edit action called', async () => {
     // given
     const bindingId = 'bindingId';
-    const report = {bindId: bindingId, objectType: 'whatever'};
+    const report = { bindId: bindingId, objectType: 'whatever' };
     const returnedValue = 'returnFromSettings';
     officeStoreService.getReportFromProperties.mockReturnValue(returnedValue);
     const listener = jest.fn();
@@ -145,7 +145,7 @@ describe('Popup actions', () => {
     expect(officeApiHelper.getExcelSessionStatus).toBeCalled();
     expect(authenticationHelper.validateAuthToken).toBeCalled();
     expect(officeStoreService.getReportFromProperties).toBeCalledWith(bindingId);
-    expect(listener).toHaveBeenCalledWith({type: actions.SET_REPORT_N_FILTERS, editedReport: returnedValue});
+    expect(listener).toHaveBeenCalledWith({ type: actions.SET_REPORT_N_FILTERS, editedReport: returnedValue });
     expect(popupController.runEditFiltersPopup).toBeCalledWith(report);
   });
 
@@ -157,6 +157,6 @@ describe('Popup actions', () => {
     // when
     actions.preparePromptedReport(reportInstance, reportData)(listener);
     // then
-    expect(listener).toHaveBeenCalledWith({type: actions.SET_PREPARED_REPORT, instanceId: reportInstance, reportData});
+    expect(listener).toHaveBeenCalledWith({ type: actions.SET_PREPARED_REPORT, instanceId: reportInstance, reportData });
   });
 });

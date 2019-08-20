@@ -1,8 +1,8 @@
-import {sessionHelper} from '../../storage/session-helper';
-import {fileHistoryHelper} from '../../file-history/file-history-helper';
-import {notificationService} from '../../notification/notification-service';
-import {errorService} from '../../error/error-handler';
-import {reduxStore} from '../../store';
+import { sessionHelper } from '../../storage/session-helper';
+import { fileHistoryHelper } from '../../file-history/file-history-helper';
+import { notificationService } from '../../notification/notification-service';
+import { errorService } from '../../error/error-handler';
+import { reduxStore } from '../../store';
 
 jest.mock('../../authentication/authentication-helper');
 jest.mock('../../storage/session-helper');

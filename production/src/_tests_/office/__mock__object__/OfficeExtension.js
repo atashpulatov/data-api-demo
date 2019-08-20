@@ -1,8 +1,8 @@
 
 export class OfficeExtension {
-    constructor() {
-        this.Error = new OfficeError;
-    };
+  constructor() {
+    this.Error = new OfficeError();
+  }
 }
 
-class OfficeError extends Error { };
+class OfficeError extends Error { }

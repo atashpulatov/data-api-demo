@@ -1,7 +1,7 @@
-import {messageProperties, notificationProperties, reduxNotificationProperties} from '../../notification/notification-properties';
-import {notificationService} from '../../notification/notification-service';
-import {actionCreator} from '../../notification/action-creator';
-import {reduxStore} from '../../store';
+import { messageProperties, notificationProperties, reduxNotificationProperties } from '../../notification/notification-properties';
+import { notificationService } from '../../notification/notification-service';
+import { actionCreator } from '../../notification/action-creator';
+import { reduxStore } from '../../store';
 
 jest.mock('../../notification/action-creator');
 jest.mock('../../store');
@@ -17,9 +17,7 @@ describe('NotificationService', () => {
       messageType: testType,
       currentObject: 'message',
     };
-    actionCreator.showMessageAction = jest.fn().mockImplementation(() => {
-      return mockedAction;
-    });
+    actionCreator.showMessageAction = jest.fn().mockImplementation(() => mockedAction);
     // when
     notificationService.displayMessage(testType, testContent);
     // then
@@ -42,9 +40,7 @@ describe('NotificationService', () => {
       currentObject: 'notification',
       details: testDetails,
     };
-    actionCreator.showNotificationAction = jest.fn().mockImplementation(() => {
-      return mockedAction;
-    });
+    actionCreator.showNotificationAction = jest.fn().mockImplementation(() => mockedAction);
     // when
     notificationService.displayNotification(testType, testContent, testDetails, testTitle);
     // then
@@ -67,9 +63,7 @@ describe('NotificationService', () => {
       currentObject: 'notification',
       details: testDetails,
     };
-    actionCreator.showTranslatedNotification = jest.fn().mockImplementation(() => {
-      return mockedAction;
-    });
+    actionCreator.showTranslatedNotification = jest.fn().mockImplementation(() => mockedAction);
     // when
     notificationService.displayTranslatedNotification(testType, testContent, testDetails, testTitle);
     // then

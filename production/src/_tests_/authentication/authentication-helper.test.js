@@ -1,8 +1,8 @@
-import {sessionHelper} from '../../storage/session-helper';
-import {authenticationService} from '../../authentication/auth-rest-service';
-import {notificationService} from '../../notification/notification-service';
-import {errorService} from '../../error/error-handler';
-import {authenticationHelper} from '../../authentication/authentication-helper';
+import { sessionHelper } from '../../storage/session-helper';
+import { authenticationService } from '../../authentication/auth-rest-service';
+import { notificationService } from '../../notification/notification-service';
+import { errorService } from '../../error/error-handler';
+import { authenticationHelper } from '../../authentication/authentication-helper';
 
 jest.mock('../../error/error-handler');
 jest.mock('../../notification/notification-service');
@@ -55,7 +55,8 @@ describe('loginUser', () => {
         givenValues.username,
         givenValues.password,
         givenValues.envUrl,
-        1);
+        1,
+      );
   });
   it('should save authToken', async () => {
     // given
@@ -84,11 +85,10 @@ describe('loginUser', () => {
       envUrl: 'testEnvUrl',
     };
     const testError = new Error();
-    const authenticateMock =
-      jest.spyOn(authenticationService, 'authenticate')
-        .mockImplementation(async () => {
-          throw testError;
-        });
+    const authenticateMock = jest.spyOn(authenticationService, 'authenticate')
+      .mockImplementation(async () => {
+        throw testError;
+      });
     // when
     await authenticationHelper.loginUser(givenError, givenValues);
     // then

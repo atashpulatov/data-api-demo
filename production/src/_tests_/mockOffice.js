@@ -8,4 +8,4 @@ export const mockOffice = {
 };
 
 global.Office = mockOffice;
-export const Office = global.Office;
+export const { Office } = global;

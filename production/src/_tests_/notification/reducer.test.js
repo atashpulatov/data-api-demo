@@ -1,6 +1,6 @@
-import {notificationReducer} from '../../notification/reducer';
-import {NotificationError} from '../../notification/notification-error';
-import {reduxNotificationProperties} from '../../notification/notification-properties';
+import { notificationReducer } from '../../notification/reducer';
+import { NotificationError } from '../../notification/notification-error';
+import { reduxNotificationProperties } from '../../notification/notification-properties';
 
 describe('Notification reducer', () => {
   it('should do nothing on not matching action and empty state', () => {
@@ -75,7 +75,7 @@ describe('Notification reducer', () => {
     it('should return proper state for message', () => {
       // given
       const action = {
-        type: type,
+        type,
         currentObject: 'testObject',
         content: 'testContent',
         messageType: 'someMessageType',

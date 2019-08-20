@@ -1,12 +1,12 @@
-import {authenticationService} from '../../authentication/auth-rest-service';
 import superagent from 'superagent';
-import {moduleProxy} from '../../module-proxy';
-import {promptsRestService} from '../../prompts/prompts-rest-service';
-import {reduxStore} from '../../store';
-import {sessionProperties} from '../../storage/session-properties';
-import {historyProperties} from '../../history/history-properties';
-import {promptDef} from './mock-prompt-definitions';
-import {mstrObjectRestService} from '../../mstr-object/mstr-object-rest-service';
+import { authenticationService } from '../../authentication/auth-rest-service';
+import { moduleProxy } from '../../module-proxy';
+import { promptsRestService } from '../../prompts/prompts-rest-service';
+import { reduxStore } from '../../store';
+import { sessionProperties } from '../../storage/session-properties';
+import { historyProperties } from '../../history/history-properties';
+import { promptDef } from './mock-prompt-definitions';
+import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 
 const login = 'mstr';
 const password = '999U2nn1g7gY';
@@ -32,7 +32,8 @@ describe.skip('PromptsRestService', () => {
       login,
       password,
       envURL,
-      loginType);
+      loginType,
+    );
 
     reduxStore.dispatch({
       type: sessionProperties.actions.logIn,
@@ -44,12 +45,12 @@ describe.skip('PromptsRestService', () => {
     });
     reduxStore.dispatch({
       type: sessionProperties.actions.loggedIn,
-      authToken: authToken,
+      authToken,
     });
     reduxStore.dispatch({
       type: historyProperties.actions.goInsideProject,
-      projectId: projectId,
-      projectName: projectName,
+      projectId,
+      projectName,
     });
   });
 
@@ -59,7 +60,7 @@ describe.skip('PromptsRestService', () => {
       const reportId = '7D5A304811E9292DB6700080EF85EFFD';
       // when
       const result = await promptsRestService.getReportPrompts(
-        reportId
+        reportId,
       );
       // then
       expect(result).toBeDefined();
@@ -72,7 +73,7 @@ describe.skip('PromptsRestService', () => {
       const reportId = '315E4D8C11E9295022A10080EFD510B5';
       // when
       const result = await promptsRestService.getReportPrompts(
-        reportId
+        reportId,
       );
       // then
       expect(result).toBeDefined();
@@ -87,7 +88,7 @@ describe.skip('PromptsRestService', () => {
       const instanceId = await mstrObjectRestService._getInstanceId(fullPath, authToken, projectId);
       // when
       const result = await promptsRestService.getReportInstancePrompts(
-        reportId, instanceId
+        reportId, instanceId,
       );
       // then
       expect(result).toBeDefined();
@@ -102,7 +103,8 @@ describe.skip('PromptsRestService', () => {
       const instanceId = await mstrObjectRestService._getInstanceId(fullPath, authToken, projectId);
       // when
       const result = await promptsRestService.getReportInstancePrompts(
-        reportId, instanceId);
+        reportId, instanceId,
+      );
       // then
       expect(result).toBeDefined();
       expect(result.length).toEqual(0);

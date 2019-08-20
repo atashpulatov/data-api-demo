@@ -1,9 +1,9 @@
-import {popupController} from '../../popup/popup-controller';
-import {popupHelper} from '../../popup/popup-helper';
-import {officeStoreService} from '../../office/store/office-store-service';
-import {officeDisplayService} from '../../office/office-display-service';
-import {notificationService} from '../../notification/notification-service';
-import {errorService} from '../../error/error-handler';
+import { popupController } from '../../popup/popup-controller';
+import { popupHelper } from '../../popup/popup-helper';
+import { officeStoreService } from '../../office/store/office-store-service';
+import { officeDisplayService } from '../../office/office-display-service';
+import { notificationService } from '../../notification/notification-service';
+import { errorService } from '../../error/error-handler';
 
 describe('Popup actions', () => {
   afterEach(() => {
@@ -103,9 +103,7 @@ describe('Popup actions', () => {
   });
   it('storageReportRefreshStart should write report refresh data to localstorage', () => {
     // given
-    const mockStorageGetItem = jest.spyOn(localStorage, 'getItem').mockImplementation(() => {
-      return JSON.stringify({});
-    });
+    const mockStorageGetItem = jest.spyOn(localStorage, 'getItem').mockImplementation(() => JSON.stringify({}));
     const mockStorageSetItem = jest.spyOn(localStorage, 'setItem').mockImplementation(() => {});
     const refreshReport = {
       name: 'testName',
@@ -142,9 +140,7 @@ describe('Popup actions', () => {
       currentNumber: 1,
     };
     const index = 0;
-    const mockStorageGetItem = jest.spyOn(localStorage, 'getItem').mockImplementation(() => {
-      return JSON.stringify(refreshData);
-    });
+    const mockStorageGetItem = jest.spyOn(localStorage, 'getItem').mockImplementation(() => JSON.stringify(refreshData));
     const mockStorageSetItem = jest.spyOn(localStorage, 'setItem').mockImplementation(() => {});
     // when
     popupHelper.storageReportRefreshFinish('ok', false, index, refreshData.data.length);
@@ -169,8 +165,7 @@ describe('Popup actions', () => {
         allNumber: 2,
         finished: false,
         currentNumber: 1,
-      })
-    );
+      }));
   });
   it('printRefreshedReport should call proper methods when isRefreshAll is true', async () => {
     // given
@@ -196,7 +191,7 @@ describe('Popup actions', () => {
       body: mockReport.body,
       isRefresh: true,
       isPrompted: mockReport.isPrompted,
-      isRefreshAll: isRefreshAll,
+      isRefreshAll,
     };
     // when
     await popupHelper.printRefreshedReport('testBind', 'report', 10, 3, isRefreshAll);
@@ -290,9 +285,10 @@ function prepareReportArray(reportsNumber) {
   for (let i = 0; i < reportsNumber; i++) {
     reportsArray.push(
       {
-        bindId: 'testBinding' + i,
-        name: 'testNamne' + i,
-      });
+        bindId: `testBinding${i}`,
+        name: `testNamne${i}`,
+      },
+    );
   }
   return reportsArray;
 }

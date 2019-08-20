@@ -1,7 +1,7 @@
-import {createStore} from 'redux';
-import {sessionReducer} from '../../storage/session-reducer';
-import {sessionProperties} from '../../storage/session-properties';
-import {SessionError} from '../../storage/session-error';
+import { createStore } from 'redux';
+import { sessionReducer } from '../../storage/session-reducer';
+import { sessionProperties } from '../../storage/session-properties';
+import { SessionError } from '../../storage/session-error';
 
 describe('sessionReducer', () => {
   const sessionStore = createStore(sessionReducer);
@@ -69,11 +69,11 @@ describe('sessionReducer', () => {
     // when
     sessionStore.dispatch({
       type: sessionProperties.actions.logIn,
-      values: {envUrl: givenEnvUrl},
+      values: { envUrl: givenEnvUrl },
     });
     // then
     const sessionStoreState = sessionStore.getState();
-    const envUrl = sessionStoreState.envUrl;
+    const { envUrl } = sessionStoreState;
     expect(envUrl).toBe(givenEnvUrl);
   });
 
@@ -83,8 +83,10 @@ describe('sessionReducer', () => {
     const givenToken = 'token';
     const givenFullName = 'Name';
     const givenInitials = 'Initials';
-    const state = {isRememberMeOn: rememberMe, authToken: givenToken, userFullName: givenFullName, userInitials: givenInitials};
-    const action = {type: sessionProperties.actions.logOut};
+    const state = {
+      isRememberMeOn: rememberMe, authToken: givenToken, userFullName: givenFullName, userInitials: givenInitials,
+    };
+    const action = { type: sessionProperties.actions.logOut };
     // const spyLogOut = jest.spyOn(sessionReducer, 'onLogOut');
     // when
     const newState = sessionReducer(state, action);

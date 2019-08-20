@@ -11,6 +11,7 @@
     "test:debug": "CI=true react-scripts test --debug",
     "test:coverage": "CI=true react-scripts test --coverage --silent --noStackTrace --forceExit --ci",
     "eject": "react-scripts eject",
+    "eslint": "eslint ./src --ext .js,.jsx --fix --ignore-pattern *.test*",
     "start:desktop": "office-addin-debugging start manifest.xml desktop",
     "start:web": "office-addin-debugging start manifest.xml web",
     "stop": "office-addin-debugging stop manifest.xml",

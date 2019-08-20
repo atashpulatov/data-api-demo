@@ -1,11 +1,11 @@
-import {createStore} from 'redux';
-import {sessionReducer} from '../../storage/session-reducer';
-import {sessionProperties} from '../../storage/session-properties';
-import {sessionHelper} from '../../storage/session-helper';
-import {errorService} from '../../error/error-handler';
-import {authenticationService} from '../../authentication/auth-rest-service';
-import {homeHelper} from '../../home/home-helper';
-import {reduxStore} from '../../store';
+import { createStore } from 'redux';
+import { sessionReducer } from '../../storage/session-reducer';
+import { sessionProperties } from '../../storage/session-properties';
+import { sessionHelper } from '../../storage/session-helper';
+import { errorService } from '../../error/error-handler';
+import { authenticationService } from '../../authentication/auth-rest-service';
+import { homeHelper } from '../../home/home-helper';
+import { reduxStore } from '../../store';
 
 describe('sessionHelper', () => {
   const sessionStore = createStore(sessionReducer);
@@ -33,7 +33,7 @@ describe('sessionHelper', () => {
   });
   it('should call redirect logOutRedirect', async () => {
     // given
-    homeHelper.getWindowLocation = jest.fn().mockReturnValueOnce({origin: 'origin'});
+    homeHelper.getWindowLocation = jest.fn().mockReturnValueOnce({ origin: 'origin' });
     sessionHelper.replaceWindowLocation = jest.fn();
     const replaceHelper = jest.spyOn(sessionHelper, 'replaceWindowLocation');
     // when
@@ -44,7 +44,7 @@ describe('sessionHelper', () => {
   it('should disable loading for localhost in logOutRedirect', async () => {
     // given
     const loadingHelper = jest.spyOn(sessionHelper, 'disableLoading');
-    homeHelper.getWindowLocation = jest.fn().mockReturnValueOnce({origin: 'localhost'});
+    homeHelper.getWindowLocation = jest.fn().mockReturnValueOnce({ origin: 'localhost' });
 
     // when
     sessionHelper.logOutRedirect();
@@ -61,18 +61,17 @@ describe('sessionHelper', () => {
     // when
     sessionHelper.logIn(authToken);
     // then
-    expect(dispatchSpy).toHaveBeenCalledWith({type: sessionProperties.actions.loggedIn, authToken: authToken});
+    expect(dispatchSpy).toHaveBeenCalledWith({ type: sessionProperties.actions.loggedIn, authToken });
   });
   it('should save envUrl in redux on login', async () => {
     // given
     reduxStore.dispatch = jest.fn();
     const dispatchSpy = jest.spyOn(reduxStore, 'dispatch');
-    const givenValues = {envUrl: 'envUrl'};
+    const givenValues = { envUrl: 'envUrl' };
     // when
     sessionHelper.saveLoginValues(givenValues);
 
     // then
-    expect(dispatchSpy).toHaveBeenCalledWith({type: sessionProperties.actions.logIn, values: {envUrl: givenValues.envUrl}});
+    expect(dispatchSpy).toHaveBeenCalledWith({ type: sessionProperties.actions.logIn, values: { envUrl: givenValues.envUrl } });
   });
 });
-

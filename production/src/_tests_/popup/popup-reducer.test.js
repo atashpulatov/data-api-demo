@@ -6,7 +6,7 @@ import {
   SET_PREPARED_REPORT,
 } from '../../popup/popup-actions';
 
-import {initialState, popupReducer} from '../../popup/popup-reducer';
+import { initialState, popupReducer } from '../../popup/popup-reducer';
 
 describe('Popup Reducer', () => {
   it('should return proper state in case of START_REPORT_LOADING action', () => {
@@ -20,7 +20,7 @@ describe('Popup Reducer', () => {
     // when
     const newState = popupReducer(initialState, action);
     // then
-    expect(newState).toEqual({...initialState, refreshingReport: 'testReport'});
+    expect(newState).toEqual({ ...initialState, refreshingReport: 'testReport' });
   });
 
   it('should return proper state in case of STOP_REPORT_LOADING action', () => {
@@ -31,7 +31,7 @@ describe('Popup Reducer', () => {
     // when
     const newState = popupReducer(initialState, action);
     // then
-    expect(newState).toEqual({...initialState, refreshingReport: undefined});
+    expect(newState).toEqual({ ...initialState, refreshingReport: undefined });
   });
 
   it('should return proper state in case of RESET_STATE action', () => {
@@ -42,7 +42,7 @@ describe('Popup Reducer', () => {
     // when
     const newState = popupReducer(initialState, action);
     // then
-    expect(newState).toEqual({...initialState});
+    expect(newState).toEqual({ ...initialState });
   });
 
   it('should return proper state in case of SET_REPORT_N_FILTERS action', () => {
@@ -55,7 +55,7 @@ describe('Popup Reducer', () => {
     // when
     const newState = popupReducer(initialState, action);
     // then
-    expect(newState).toEqual({editedReport});
+    expect(newState).toEqual({ editedReport });
   });
 
   it('should return proper state in case of SET_PREPARED_REPORT action', () => {
@@ -70,6 +70,6 @@ describe('Popup Reducer', () => {
     // when
     const newState = popupReducer(initialState, action);
     // then
-    expect(newState).toEqual({preparedInstance: instanceId, editedReport: reportData});
+    expect(newState).toEqual({ preparedInstance: instanceId, editedReport: reportData });
   });
 });

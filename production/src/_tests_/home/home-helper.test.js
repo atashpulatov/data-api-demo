@@ -1,6 +1,6 @@
-import {sessionHelper} from '../../storage/session-helper';
-import {homeHelper} from '../../home/home-helper';
-import {reduxStore} from '../../store';
+import { sessionHelper } from '../../storage/session-helper';
+import { homeHelper } from '../../home/home-helper';
+import { reduxStore } from '../../store';
 
 jest.mock('../../storage/session-helper');
 
@@ -8,7 +8,7 @@ describe('HomeHelper', () => {
   describe('saveLoginValues', () => {
     it('should trigger logout because of missing token and running on localhost', () => {
       // given
-      jest.spyOn(homeHelper, 'getWindowLocation').mockReturnValueOnce({origin: 'localhost'});
+      jest.spyOn(homeHelper, 'getWindowLocation').mockReturnValueOnce({ origin: 'localhost' });
       sessionHelper.logOut = jest.fn();
       // when
       homeHelper.saveLoginValues();
@@ -17,7 +17,7 @@ describe('HomeHelper', () => {
     });
     it('should return', () => {
       // given
-      jest.spyOn(homeHelper, 'getWindowLocation').mockReturnValueOnce({origin: 'localhost'});
+      jest.spyOn(homeHelper, 'getWindowLocation').mockReturnValueOnce({ origin: 'localhost' });
       sessionHelper.logOut = jest.fn();
       jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({
         sessionReducer: {

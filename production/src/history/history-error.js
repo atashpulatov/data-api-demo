@@ -1,1 +1,1 @@
-export class HistoryError extends Error {};
+export class HistoryError extends Error {}

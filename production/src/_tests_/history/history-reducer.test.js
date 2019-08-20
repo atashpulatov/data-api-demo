@@ -1,8 +1,8 @@
-import {createStore} from 'redux';
-import {historyReducer} from '../../history/history-reducer';
-import {HistoryError} from '../../history/history-error';
-import {historyProperties} from '../../history/history-properties';
-import {sessionProperties} from '../../storage/session-properties';
+import { createStore } from 'redux';
+import { historyReducer } from '../../history/history-reducer';
+import { HistoryError } from '../../history/history-error';
+import { historyProperties } from '../../history/history-properties';
+import { sessionProperties } from '../../storage/session-properties';
 
 describe('historyReducer', () => {
   const historyStore = createStore(historyReducer);
@@ -29,7 +29,7 @@ describe('historyReducer', () => {
       projectName: givenName,
     });
     // then
-    const project = historyStore.getState().project;
+    const { project } = historyStore.getState();
     expect(project.projectId).toBe(givenId);
     expect(project.projectName).toBe(givenName);
   });
@@ -134,8 +134,8 @@ describe('historyReducer', () => {
 
   it('should throw an error on go up without id provided', () => {
     // given
-    const state = {directoryArray: []};
-    const action = {type: historyProperties.actions.goUpTo};
+    const state = { directoryArray: [] };
+    const action = { type: historyProperties.actions.goUpTo };
     // when
     const wrongFunctionCall = () => {
       historyReducer(state, action);
@@ -187,7 +187,7 @@ describe('historyReducer', () => {
       type: historyProperties.actions.goUp,
     });
     // then
-    const projectId = historyStore.getState().projectId;
+    const { projectId } = historyStore.getState();
     expect(projectId).toBeFalsy();
   });
 
@@ -221,7 +221,7 @@ describe('historyReducer', () => {
       });
     }
     // then
-    const project = historyStore.getState().project;
+    const { project } = historyStore.getState();
     expect(project).toBeFalsy();
   });
 

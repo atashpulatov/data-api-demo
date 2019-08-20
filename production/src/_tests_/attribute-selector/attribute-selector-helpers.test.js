@@ -1,5 +1,5 @@
-import {officeContext} from '../../office/office-context';
-import {attributeSelectorHelpers} from '../../attribute-selector/attribute-selector-helpers';
+import { officeContext } from '../../office/office-context';
+import { attributeSelectorHelpers } from '../../attribute-selector/attribute-selector-helpers';
 
 jest.mock('../../office/office-context');
 
@@ -20,6 +20,6 @@ describe('AttributeSelectorHelpers', () => {
 
     // then
     expect(getOfficeSpy).toHaveBeenCalled();
-    expect(messageParentMock).toHaveBeenCalledWith(JSON.stringify({command: 'simple_command', isPrompted: false}));
+    expect(messageParentMock).toHaveBeenCalledWith(JSON.stringify({ command: 'simple_command', isPrompted: false }));
   });
 });

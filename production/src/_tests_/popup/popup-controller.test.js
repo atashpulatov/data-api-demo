@@ -1,11 +1,11 @@
-import {selectorProperties} from '../../attribute-selector/selector-properties';
-import {popupController} from '../../popup/popup-controller';
-import {officeDisplayService} from '../../office/office-display-service';
-import {objectTypes} from 'mstr-react-library';
-import {errorService} from '../../error/error-handler';
-import {EnvironmentNotFoundError} from '../../error/environment-not-found-error';
-import {PopupTypeEnum} from '../../home/popup-type-enum';
-import {officeApiHelper} from '../../office/office-api-helper';
+import { objectTypes } from 'mstr-react-library';
+import { selectorProperties } from '../../attribute-selector/selector-properties';
+import { popupController } from '../../popup/popup-controller';
+import { officeDisplayService } from '../../office/office-display-service';
+import { errorService } from '../../error/error-handler';
+import { EnvironmentNotFoundError } from '../../error/environment-not-found-error';
+import { PopupTypeEnum } from '../../home/popup-type-enum';
+import { officeApiHelper } from '../../office/office-api-helper';
 
 describe('PopupController', () => {
   const dialog = {};
@@ -234,7 +234,7 @@ describe('PopupController', () => {
         status: 404,
       },
     };
-    const expectedMessage = JSON.stringify({command, error});
+    const expectedMessage = JSON.stringify({ command, error });
     const givenArg = {
       message: expectedMessage,
     };

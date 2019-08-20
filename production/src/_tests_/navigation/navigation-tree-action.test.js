@@ -1,5 +1,5 @@
 import * as actions from '../../navigation/navigation-tree-actions';
-import {officeProperties} from '../../office/office-properties';
+import { officeProperties } from '../../office/office-properties';
 
 describe('NavigationTree Actions', () => {
   it('should dispatch proper selectObject action', () => {
@@ -10,7 +10,7 @@ describe('NavigationTree Actions', () => {
     actions.selectObject(true)(listener);
 
     // then
-    expect(listener).toHaveBeenCalledWith({type: actions.SELECT_OBJECT, data: true});
+    expect(listener).toHaveBeenCalledWith({ type: actions.SELECT_OBJECT, data: true });
   });
 
   it('should dispatch proper cancelImportRequest action', () => {
@@ -21,7 +21,7 @@ describe('NavigationTree Actions', () => {
     actions.cancelImportRequest()(listener);
 
     // then
-    expect(listener).toHaveBeenCalledWith({type: actions.CANCEL_REQUEST_IMPORT});
+    expect(listener).toHaveBeenCalledWith({ type: actions.CANCEL_REQUEST_IMPORT });
   });
 
   it('should dispatch proper setDataSource action', () => {
@@ -32,7 +32,7 @@ describe('NavigationTree Actions', () => {
     actions.setDataSource(true)(listener);
 
     // then
-    expect(listener).toHaveBeenCalledWith({type: actions.SET_DATA_SOURCE, data: true});
+    expect(listener).toHaveBeenCalledWith({ type: actions.SET_DATA_SOURCE, data: true });
   });
 
   it('should dispatch proper selectFolder action', () => {
@@ -43,7 +43,7 @@ describe('NavigationTree Actions', () => {
     actions.selectFolder(true)(listener);
 
     // then
-    expect(listener).toHaveBeenCalledWith({type: actions.SELECT_FOLDER, data: true});
+    expect(listener).toHaveBeenCalledWith({ type: actions.SELECT_FOLDER, data: true });
   });
 
   it('should dispatch proper startImport action', () => {
@@ -54,7 +54,7 @@ describe('NavigationTree Actions', () => {
     actions.startImport(true)(listener);
 
     // then
-    expect(listener).toHaveBeenCalledWith({type: actions.START_IMPORT});
+    expect(listener).toHaveBeenCalledWith({ type: actions.START_IMPORT });
   });
   it('should dispatch proper startLoading action', () => {
     // given
@@ -64,7 +64,7 @@ describe('NavigationTree Actions', () => {
     actions.startLoading(true)(listener);
 
     // then
-    expect(listener).toHaveBeenCalledWith({type: officeProperties.actions.startLoading});
+    expect(listener).toHaveBeenCalledWith({ type: officeProperties.actions.startLoading });
   });
   it('should dispatch proper changeSorting action', () => {
     // given
@@ -74,7 +74,7 @@ describe('NavigationTree Actions', () => {
     actions.changeSorting(true)(listener);
 
     // then
-    expect(listener).toHaveBeenCalledWith({type: actions.CHANGE_SORTING, data: true});
+    expect(listener).toHaveBeenCalledWith({ type: actions.CHANGE_SORTING, data: true });
   });
   it('should dispatch proper changeSearching action', () => {
     // given
@@ -84,7 +84,7 @@ describe('NavigationTree Actions', () => {
     actions.changeSearching(true)(listener);
 
     // then
-    expect(listener).toHaveBeenCalledWith({type: actions.CHANGE_SEARCHING, data: true});
+    expect(listener).toHaveBeenCalledWith({ type: actions.CHANGE_SEARCHING, data: true });
   });
   it('should dispatch proper updateScroll action', () => {
     // given
@@ -94,7 +94,7 @@ describe('NavigationTree Actions', () => {
     actions.updateScroll(true)(listener);
 
     // then
-    expect(listener).toHaveBeenCalledWith({type: actions.UPDATE_SCROLL, data: true});
+    expect(listener).toHaveBeenCalledWith({ type: actions.UPDATE_SCROLL, data: true });
   });
   it('should dispatch proper updateSize action', () => {
     // given
@@ -104,7 +104,7 @@ describe('NavigationTree Actions', () => {
     actions.updateSize(true)(listener);
 
     // then
-    expect(listener).toHaveBeenCalledWith({type: actions.UPDATE_SIZE, data: true});
+    expect(listener).toHaveBeenCalledWith({ type: actions.UPDATE_SIZE, data: true });
   });
 
   it('should dispatch proper requestImport action', () => {
@@ -115,7 +115,7 @@ describe('NavigationTree Actions', () => {
     actions.requestImport()(listener);
 
     // then
-    expect(listener).toHaveBeenCalledWith({type: actions.REQUEST_IMPORT});
+    expect(listener).toHaveBeenCalledWith({ type: actions.REQUEST_IMPORT });
   });
 
   it('should dispatch proper promptsAnswered action', () => {
@@ -127,6 +127,6 @@ describe('NavigationTree Actions', () => {
     actions.promptsAnswered(data)(listener);
 
     // then
-    expect(listener).toHaveBeenCalledWith({type: actions.PROMPTS_ANSWERED, data});
+    expect(listener).toHaveBeenCalledWith({ type: actions.PROMPTS_ANSWERED, data });
   });
 });

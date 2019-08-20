@@ -1,8 +1,8 @@
-import {officeProperties} from './office-properties';
-import {OfficeError} from './office-error';
-import {officeStoreService} from './store/office-store-service';
+import { officeProperties } from './office-properties';
+import { OfficeError } from './office-error';
+import { officeStoreService } from './store/office-store-service';
 
-export const officeReducer = (state = {loading: false}, action) => {
+export const officeReducer = (state = { loading: false }, action) => {
   switch (action.type) {
     case officeProperties.actions.preLoadReport:
       return onPreLoadReport(action, state);
@@ -97,7 +97,7 @@ function onLoadAllReports(action, state) {
 }
 
 function onRemoveAllReports(action, state) {
-  const newState = {...state};
+  const newState = { ...state };
   delete newState.reportArray;
   return newState;
 }
@@ -106,9 +106,7 @@ function onRemoveReport(action, state) {
   if (!action.reportBindId) {
     throw new OfficeError('Missing reportBindId');
   }
-  const indexOfElement = state.reportArray.findIndex((report) => {
-    return (report.bindId === action.reportBindId);
-  });
+  const indexOfElement = state.reportArray.findIndex((report) => (report.bindId === action.reportBindId));
   return {
     ...state,
     reportArray: [
@@ -130,9 +128,7 @@ function _toggleSetLoadingStatus(action, state, status) {
   if (!action.reportBindId) {
     throw new OfficeError('Missing reportBindId');
   }
-  const indexOfElement = state.reportArray.findIndex((report) => {
-    return (report.bindId === action.reportBindId);
-  });
+  const indexOfElement = state.reportArray.findIndex((report) => (report.bindId === action.reportBindId));
   const newReportArray = [...state.reportArray];
   newReportArray[indexOfElement].isLoading = status;
   if (!status && !action.isError) {

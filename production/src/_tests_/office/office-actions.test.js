@@ -1,4 +1,4 @@
-import {officeProperties} from '../../office/office-properties';
+import { officeProperties } from '../../office/office-properties';
 import * as actions from '../../office/office-actions';
 
 describe('Office Actions', () => {
@@ -8,7 +8,7 @@ describe('Office Actions', () => {
     // when
     actions.toggleSecuredFlag(true)(listener);
     // then
-    expect(listener).toHaveBeenCalledWith({type: officeProperties.actions.toggleSecuredFlag, isSecured: true});
+    expect(listener).toHaveBeenCalledWith({ type: officeProperties.actions.toggleSecuredFlag, isSecured: true });
   });
 
   it('should dispatch proper toggleIsSettingsFlag action', () => {
@@ -17,7 +17,7 @@ describe('Office Actions', () => {
     // when
     actions.toggleIsSettingsFlag(true)(listener);
     // then
-    expect(listener).toHaveBeenCalledWith({type: officeProperties.actions.toggleIsSettingsFlag, isSettings: true});
+    expect(listener).toHaveBeenCalledWith({ type: officeProperties.actions.toggleIsSettingsFlag, isSettings: true });
   });
 
   it('should dispatch proper toggleIsConfirmFlag action', () => {
@@ -26,7 +26,6 @@ describe('Office Actions', () => {
     // when
     actions.toggleIsConfirmFlag(true)(listener);
     // then
-    expect(listener).toHaveBeenCalledWith({type: officeProperties.actions.toggleIsConfirmFlag, isConfirm: true});
+    expect(listener).toHaveBeenCalledWith({ type: officeProperties.actions.toggleIsConfirmFlag, isConfirm: true });
   });
-})
-  ;
+});

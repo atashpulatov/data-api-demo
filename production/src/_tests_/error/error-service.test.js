@@ -1,16 +1,16 @@
-import {errorService} from '../../error/error-handler';
-import {EnvironmentNotFoundError} from '../../error/environment-not-found-error';
-import {UnauthorizedError} from '../../error/unauthorized-error';
-import {BadRequestError} from '../../error/bad-request-error';
-import {InternalServerError} from '../../error/internal-server-error';
-import {notificationService} from '../../notification/notification-service';
-import {RunOutsideOfficeError} from '../../error/run-outside-office-error';
-import {OverlappingTablesError} from '../../error/overlapping-tables-error';
-import {GenericOfficeError} from '../../error/generic-office-error';
-import {OutsideOfRangeError} from '../../error/outside-of-range-error';
-import {ConnectionBrokenError} from '../../error/connection-error';
-import {PromptedReportError} from '../../error/prompted-report-error';
-import {sessionHelper} from '../../storage/session-helper';
+import { errorService } from '../../error/error-handler';
+import { EnvironmentNotFoundError } from '../../error/environment-not-found-error';
+import { UnauthorizedError } from '../../error/unauthorized-error';
+import { BadRequestError } from '../../error/bad-request-error';
+import { InternalServerError } from '../../error/internal-server-error';
+import { notificationService } from '../../notification/notification-service';
+import { RunOutsideOfficeError } from '../../error/run-outside-office-error';
+import { OverlappingTablesError } from '../../error/overlapping-tables-error';
+import { GenericOfficeError } from '../../error/generic-office-error';
+import { OutsideOfRangeError } from '../../error/outside-of-range-error';
+import { ConnectionBrokenError } from '../../error/connection-error';
+import { PromptedReportError } from '../../error/prompted-report-error';
+import { sessionHelper } from '../../storage/session-helper';
 import {
   NOT_PUBLISHED_CUBE,
   NOT_SUPPORTED_SERVER_ERR,
@@ -32,7 +32,7 @@ describe('ErrorService', () => {
   describe('errorRestFactory', () => {
     it('should return the same error if not handled', () => {
       // given
-      const error = {response: {}};
+      const error = { response: {} };
       // when
       const result = errorService.errorRestFactory(error);
       // then
@@ -48,7 +48,7 @@ describe('ErrorService', () => {
     });
     it('should not throw an PromptedReportError', () => {
       // given
-      const error = {status: 200};
+      const error = { status: 200 };
       // when
       const resultError = errorService.errorRestFactory(error);
       // then
@@ -56,8 +56,8 @@ describe('ErrorService', () => {
     });
     it('should throw a not found error due to response with 404 code', () => {
       // given
-      const response = {body: {iServerCode: '-2147171501'}};
-      const error = {status: 404, response: response};
+      const response = { body: { iServerCode: '-2147171501' } };
+      const error = { status: 404, response };
       // when
       const resultError = errorService.errorRestFactory(error);
       // then
@@ -88,8 +88,8 @@ describe('ErrorService', () => {
     });
     it('should throw a UnauthorizedError due to response 401 code', () => {
       // given
-      const response = {status: 401};
-      const error = {response};
+      const response = { status: 401 };
+      const error = { response };
       // when
       const resultError = errorService.errorRestFactory(error);
       // then
@@ -97,8 +97,8 @@ describe('ErrorService', () => {
     });
     it('should throw a UnauthorizedError due to response 404 code', () => {
       // given
-      const response = {status: 404};
-      const error = {response};
+      const response = { status: 404 };
+      const error = { response };
       // when
       const resultError = errorService.errorRestFactory(error);
       // then
@@ -106,7 +106,7 @@ describe('ErrorService', () => {
     });
     it('should throw a UnauthorizedError due to error with 404', () => {
       // given
-      const error = {status: 404};
+      const error = { status: 404 };
       // when
       const resultError = errorService.errorRestFactory(error);
       // then
@@ -114,8 +114,8 @@ describe('ErrorService', () => {
     });
     it('should throw a InternalServerError due to response 500 code', () => {
       // given
-      const response = {status: 500, body: {iServerCode: '-2147171501'}};
-      const error = {response};
+      const response = { status: 500, body: { iServerCode: '-2147171501' } };
+      const error = { response };
       // when
       const resultError = errorService.errorRestFactory(error);
       // then
@@ -123,8 +123,8 @@ describe('ErrorService', () => {
     });
     it('should throw a InternalServerError due to status 500 code', () => {
       // given
-      const response = {status: 500};
-      const error = {response};
+      const response = { status: 500 };
+      const error = { response };
       // when
       const resultError = errorService.errorRestFactory(error);
       // then
@@ -231,7 +231,7 @@ describe('ErrorService', () => {
     });
     it('should display notification on InternalServerError', () => {
       // given
-      const error = new InternalServerError({response: {body: {iServerCode: '-2147171501'}}});
+      const error = new InternalServerError({ response: { body: { iServerCode: '-2147171501' } } });
       const spyMethod = jest.spyOn(notificationService, 'displayNotification');
       // when
       errorService.handleError(error);
@@ -241,7 +241,7 @@ describe('ErrorService', () => {
     });
     it('should display notification on InternalServerError on report with Custom Groups', () => {
       // given
-      const error = new InternalServerError({response: {body: {iServerCode: '-2147171502'}}});
+      const error = new InternalServerError({ response: { body: { iServerCode: '-2147171502' } } });
       const spyMethod = jest.spyOn(notificationService, 'displayNotification');
       // when
       errorService.handleError(error);
@@ -251,7 +251,7 @@ describe('ErrorService', () => {
     });
     it('should display notification on exceeding row limits', () => {
       // given
-      const error = new InternalServerError({response: {body: {iServerCode: '-2147205488'}}});
+      const error = new InternalServerError({ response: { body: { iServerCode: '-2147205488' } } });
       const spyMethod = jest.spyOn(notificationService, 'displayNotification');
       // when
       errorService.handleError(error);
@@ -261,7 +261,7 @@ describe('ErrorService', () => {
     });
     it('should display notification on not published cubes', () => {
       // given
-      const error = new InternalServerError({response: {body: {iServerCode: '-2147072488'}}});
+      const error = new InternalServerError({ response: { body: { iServerCode: '-2147072488' } } });
       const spyMethod = jest.spyOn(notificationService, 'displayNotification');
       // when
       errorService.handleError(error);
@@ -271,7 +271,7 @@ describe('ErrorService', () => {
     });
     it('should display notification on object not present in metadata', () => {
       // given
-      const error = new InternalServerError({response: {body: {iServerCode: '-2147216373'}}});
+      const error = new InternalServerError({ response: { body: { iServerCode: '-2147216373' } } });
       const spyMethod = jest.spyOn(notificationService, 'displayNotification');
       // when
       errorService.handleError(error);
@@ -336,7 +336,7 @@ describe('ErrorService', () => {
       // given
       const error = {
         name: 'RichApi.Error',
-        message: `A table can't overlap another table. `,
+        message: 'A table can\'t overlap another table. ',
       };
       // when
       const returnedError = errorService.errorOfficeFactory(error);
@@ -377,7 +377,7 @@ describe('ErrorService', () => {
     });
     it('should handle OverlappingTablesError', () => {
       // given
-      const errorMessage = `A table can't overlap another table.`;
+      const errorMessage = 'A table can\'t overlap another table.';
       const error = new OverlappingTablesError(errorMessage);
       const notificationSpy = jest.spyOn(notificationService, 'displayNotification');
       // when
@@ -388,7 +388,7 @@ describe('ErrorService', () => {
     });
     it('should handle GenericOfficeError', () => {
       // given
-      const errorMessage = `A table can't overlap another table. `;
+      const errorMessage = 'A table can\'t overlap another table. ';
       const error = new GenericOfficeError(errorMessage);
       const notificationSpy = jest.spyOn(notificationService, 'displayNotification');
       // when
@@ -405,11 +405,11 @@ describe('ErrorService', () => {
       errorService.handleOfficeError(error);
       // then
       expect(notificationSpy).toBeCalled();
-      expect(notificationSpy).toBeCalledWith('warning', `The table you try to import exceeds the worksheet limits.`);
+      expect(notificationSpy).toBeCalledWith('warning', 'The table you try to import exceeds the worksheet limits.');
     });
     it('should forward error that it does not handle to next method', () => {
       // given
-      const error = {constructor: () => {}};
+      const error = { constructor: () => {} };
       const originalMethod = errorService.handleError;
       errorService.handleError = jest.fn();
       // when
@@ -432,7 +432,7 @@ describe('ErrorService', () => {
     });
     it('should forward error that it does not handle to next method', () => {
       // given
-      const error = {constructor: () => {}};
+      const error = { constructor: () => {} };
       const originalMethod = errorService.handleError;
       errorService.handleError = jest.fn();
       // when
@@ -459,7 +459,7 @@ describe('ErrorService', () => {
     });
     it('should handle LogoutError', () => {
       // given
-      const error = {message: 'error'};
+      const error = { message: 'error' };
       const fullLogOutSpy = jest.spyOn(errorService, 'handleError');
       // when
       errorService.handleLogoutError(error);

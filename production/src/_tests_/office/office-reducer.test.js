@@ -1,7 +1,7 @@
-import {createStore} from 'redux';
-import {officeReducer} from '../../office/office-reducer';
-import {officeProperties} from '../../office/office-properties';
-import {OfficeError} from '../../office/office-error';
+import { createStore } from 'redux';
+import { officeReducer } from '../../office/office-reducer';
+import { officeProperties } from '../../office/office-properties';
+import { OfficeError } from '../../office/office-error';
 
 describe('officeReducer', () => {
   const officeStore = createStore(officeReducer);
@@ -32,7 +32,7 @@ describe('officeReducer', () => {
 
   beforeEach(() => {
     // default state should be empty
-    expect(officeStore.getState()).toEqual({loading: false});
+    expect(officeStore.getState()).toEqual({ loading: false });
   });
 
   afterEach(() => {
@@ -329,8 +329,8 @@ describe('officeReducer', () => {
   });
   it('should set popupOpen to true onPopupShown', () => {
     // given
-    const prevState = {popupOpen: false};
-    const action = {type: officeProperties.actions.popupShown};
+    const prevState = { popupOpen: false };
+    const action = { type: officeProperties.actions.popupShown };
     // when
     const newState = officeReducer(prevState, action);
     // then
@@ -338,8 +338,8 @@ describe('officeReducer', () => {
   });
   it('should set popupOpen to false onPopupHidden', () => {
     // given
-    const prevState = {popupOpen: true};
-    const action = {type: officeProperties.actions.popupHidden};
+    const prevState = { popupOpen: true };
+    const action = { type: officeProperties.actions.popupHidden };
     // when
     const newState = officeReducer(prevState, action);
     // then
@@ -347,8 +347,8 @@ describe('officeReducer', () => {
   });
   it('should dispatch proper action when startLoading', () => {
     // given
-    const prevState = {loading: false};
-    const action = {type: officeProperties.actions.startLoading};
+    const prevState = { loading: false };
+    const action = { type: officeProperties.actions.startLoading };
     // when
     const newState = officeReducer(prevState, action);
     // then
@@ -356,8 +356,8 @@ describe('officeReducer', () => {
   });
   it('should dispatch proper action when onStartLoadingReport', () => {
     // given
-    const prevState = {reportArray: [...reportArrayMock], loading: false};
-    const action = {type: officeProperties.actions.startLoadingReport, reportBindId: 'secondBindId'};
+    const prevState = { reportArray: [...reportArrayMock], loading: false };
+    const action = { type: officeProperties.actions.startLoadingReport, reportBindId: 'secondBindId' };
     // when
     const newState = officeReducer(prevState, action);
     // then
@@ -366,8 +366,8 @@ describe('officeReducer', () => {
   });
   it('should throw when onStartLoadingReport for empty reportBindId', () => {
     // given
-    const prevState = {reportArray: [...reportArrayMock], loading: false};
-    const action = {type: officeProperties.actions.startLoadingReport};
+    const prevState = { reportArray: [...reportArrayMock], loading: false };
+    const action = { type: officeProperties.actions.startLoadingReport };
     // when
     const newState = () => {
       officeReducer(prevState, action);
@@ -377,8 +377,8 @@ describe('officeReducer', () => {
   });
   it('should dispatch proper action when onFinishLoadingReport', () => {
     // given
-    const prevState = {reportArray: [...reportArrayMock], loading: true};
-    const action = {type: officeProperties.actions.finishLoadingReport, reportBindId: 'secondBindId'};
+    const prevState = { reportArray: [...reportArrayMock], loading: true };
+    const action = { type: officeProperties.actions.finishLoadingReport, reportBindId: 'secondBindId' };
     // when
     const newState = officeReducer(prevState, action);
     // then
@@ -387,8 +387,8 @@ describe('officeReducer', () => {
   });
   it('should throw when onFinishLoadingReport for empty reportBindId', () => {
     // given
-    const prevState = {reportArray: [...reportArrayMock], loading: true};
-    const action = {type: officeProperties.actions.startLoadingReport};
+    const prevState = { reportArray: [...reportArrayMock], loading: true };
+    const action = { type: officeProperties.actions.startLoadingReport };
     // when
     const newState = () => {
       officeReducer(prevState, action);
@@ -398,7 +398,7 @@ describe('officeReducer', () => {
   });
   it('should return new proper state in case of toggleSecuredFlag action', () => {
     // given
-    const oldState = {isSecured: false};
+    const oldState = { isSecured: false };
     const action = {
       type: officeProperties.actions.toggleSecuredFlag,
       isSecured: true,
@@ -406,11 +406,11 @@ describe('officeReducer', () => {
     // when
     const newState = officeReducer(oldState, action);
     // then
-    expect(newState).toEqual({isSecured: true});
+    expect(newState).toEqual({ isSecured: true });
   });
   it('should return new proper state in case of toggleIsSettingsFlag action', () => {
     // given
-    const oldState = {isSettings: false};
+    const oldState = { isSettings: false };
     const action = {
       type: officeProperties.actions.toggleIsSettingsFlag,
       isSettings: true,
@@ -418,11 +418,11 @@ describe('officeReducer', () => {
     // when
     const newState = officeReducer(oldState, action);
     // then
-    expect(newState).toEqual({isSettings: true});
+    expect(newState).toEqual({ isSettings: true });
   });
   it('should return new proper state in case of toggleIsConfirmFlag action', () => {
     // given
-    const oldState = {isConfirm: false};
+    const oldState = { isConfirm: false };
     const action = {
       type: officeProperties.actions.toggleIsConfirmFlag,
       isConfirm: true,
@@ -430,6 +430,6 @@ describe('officeReducer', () => {
     // when
     const newState = officeReducer(oldState, action);
     // then
-    expect(newState).toEqual({isConfirm: true});
+    expect(newState).toEqual({ isConfirm: true });
   });
 });

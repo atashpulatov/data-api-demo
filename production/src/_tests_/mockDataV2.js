@@ -1,118 +1,118 @@
 export const reportV2 = {
-  'id': '0ED85DEE11E9772400000080EFC5116D',
-  'name': 'airline-sample-data--tabular-with-multiform',
-  'instanceId': '23058A7E11E98B7620BF0080EF15AAB5',
-  'status': 1,
-  'source': {
-    'id': '9A27E1B011E97721088D0080EFA5D16E',
-    'name': 'airline-sample-data--with-multiform',
+  id: '0ED85DEE11E9772400000080EFC5116D',
+  name: 'airline-sample-data--tabular-with-multiform',
+  instanceId: '23058A7E11E98B7620BF0080EF15AAB5',
+  status: 1,
+  source: {
+    id: '9A27E1B011E97721088D0080EFA5D16E',
+    name: 'airline-sample-data--with-multiform',
   },
-  'definition': {
-    'grid': {
-      'crossTab': true,
-      'metricsPosition': {
-        'axis': 'columns',
-        'index': 1,
+  definition: {
+    grid: {
+      crossTab: true,
+      metricsPosition: {
+        axis: 'columns',
+        index: 1,
       },
-      'rows': [
+      rows: [
         {
-          'id': '9BC4691C11E97721AF570080EF55306C',
-          'name': 'Year',
-          'type': 'Attribute',
-          'forms': [
+          id: '9BC4691C11E97721AF570080EF55306C',
+          name: 'Year',
+          type: 'Attribute',
+          forms: [
             {
-              'id': '45C11FA478E745FEA08D781CEA190FE5',
-              'name': 'ID',
-              'dataType': 33,
-              'baseFormType': 3,
+              id: '45C11FA478E745FEA08D781CEA190FE5',
+              name: 'ID',
+              dataType: 33,
+              baseFormType: 3,
             },
           ],
-          'elements': [
+          elements: [
             {
-              'id': 'h2009;9BC4691C11E97721AF570080EF55306C',
-              'formValues': [
+              id: 'h2009;9BC4691C11E97721AF570080EF55306C',
+              formValues: [
                 '2009',
               ],
             },
             {
-              'id': 'h2010;9BC4691C11E97721AF570080EF55306C',
-              'formValues': [
+              id: 'h2010;9BC4691C11E97721AF570080EF55306C',
+              formValues: [
                 '2010',
               ],
             },
           ],
         },
         {
-          'id': '9BC470B011E977217DA10080EF55306D',
-          'name': 'Month',
-          'type': 'Attribute',
-          'forms': [
+          id: '9BC470B011E977217DA10080EF55306D',
+          name: 'Month',
+          type: 'Attribute',
+          forms: [
             {
-              'id': '45C11FA478E745FEA08D781CEA190FE5',
-              'name': 'ID',
-              'dataType': 33,
-              'baseFormType': 3,
+              id: '45C11FA478E745FEA08D781CEA190FE5',
+              name: 'ID',
+              dataType: 33,
+              baseFormType: 3,
             },
           ],
-          'elements': [
+          elements: [
             {
-              'id': 'hJanuary;9BC470B011E977217DA10080EF55306D',
-              'formValues': [
+              id: 'hJanuary;9BC470B011E977217DA10080EF55306D',
+              formValues: [
                 'January',
               ],
             },
             {
-              'id': 'hFebruary;9BC470B011E977217DA10080EF55306D',
-              'formValues': [
+              id: 'hFebruary;9BC470B011E977217DA10080EF55306D',
+              formValues: [
                 'February',
               ],
             },
             {
-              'id': 'hMarch;9BC470B011E977217DA10080EF55306D',
-              'formValues': [
+              id: 'hMarch;9BC470B011E977217DA10080EF55306D',
+              formValues: [
                 'March',
               ],
             },
             {
-              'id': 'j1;9BC470B011E977217DA10080EF55306D',
-              'subtotal': true,
-              'formValues': [
+              id: 'j1;9BC470B011E977217DA10080EF55306D',
+              subtotal: true,
+              formValues: [
                 'Total',
               ],
             },
           ],
         },
       ],
-      'columns': [
+      columns: [
         {
-          'id': '1D5F4A7811E97722F1050080EF65506C',
-          'name': 'Origin Airport',
-          'type': 'Attribute',
-          'forms': [
+          id: '1D5F4A7811E97722F1050080EF65506C',
+          name: 'Origin Airport',
+          type: 'Attribute',
+          forms: [
             {
-              'id': 'CCFBE2A5EADB4F50941FB879CCF1721C',
-              'name': 'DESC',
-              'dataType': 33,
-              'baseFormType': 3,
+              id: 'CCFBE2A5EADB4F50941FB879CCF1721C',
+              name: 'DESC',
+              dataType: 33,
+              baseFormType: 3,
             },
             {
-              'id': '45C11FA478E745FEA08D781CEA190FE5',
-              'name': 'ID',
-              'dataType': 33,
-              'baseFormType': 2,
+              id: '45C11FA478E745FEA08D781CEA190FE5',
+              name: 'ID',
+              dataType: 33,
+              baseFormType: 2,
             },
           ],
-          'elements': [
+          elements: [
             {
-              'id': 'h1;1D5F4A7811E97722F1050080EF65506C',
-              'formValues': [
+              id: 'h1;1D5F4A7811E97722F1050080EF65506C',
+              formValues: [
                 'BWI',
                 '1',
               ],
             },
             {
-              'id': 'h2;1D5F4A7811E97722F1050080EF65506C',
-              'formValues': [
+              id: 'h2;1D5F4A7811E97722F1050080EF65506C',
+              formValues: [
                 'DCA',
                 '2',
               ],
@@ -120,128 +120,128 @@ export const reportV2 = {
           ],
         },
         {
-          'id': '00000000000000000000000000000000',
-          'name': 'Metrics',
-          'type': 'Metrics',
-          'elements': [
+          id: '00000000000000000000000000000000',
+          name: 'Metrics',
+          type: 'Metrics',
+          elements: [
             {
-              'id': '9BC486D611E977217DA10080EF55306D',
-              'name': 'Flights Delayed',
-              'type': 'Metric',
-              'min': 0,
-              'max': 10000,
-              'dataType': 6,
-              'numberFormatting': {
-                'category': 7,
-                'decimalPlaces': 0,
-                'formatString': '0',
+              id: '9BC486D611E977217DA10080EF55306D',
+              name: 'Flights Delayed',
+              type: 'Metric',
+              min: 0,
+              max: 10000,
+              dataType: 6,
+              numberFormatting: {
+                category: 7,
+                decimalPlaces: 0,
+                formatString: '0',
               },
             },
             {
-              'id': '9BC4944611E977217DA10080EF55306D',
-              'name': 'Avg Delay (min)',
-              'type': 'Metric',
-              'min': 0,
-              'max': 10000,
-              'dataType': 6,
-              'numberFormatting': {
-                'category': 7,
-                'decimalPlaces': 0,
-                'formatString': '0',
+              id: '9BC4944611E977217DA10080EF55306D',
+              name: 'Avg Delay (min)',
+              type: 'Metric',
+              min: 0,
+              max: 10000,
+              dataType: 6,
+              numberFormatting: {
+                category: 7,
+                decimalPlaces: 0,
+                formatString: '0',
               },
             },
             {
-              'id': '9BC4778611E977217DA10080EF55306D',
-              'name': 'On-Time',
-              'type': 'Metric',
-              'min': 0,
-              'max': 10000,
-              'dataType': 6,
-              'numberFormatting': {
-                'category': 7,
-                'decimalPlaces': 0,
-                'formatString': '0',
+              id: '9BC4778611E977217DA10080EF55306D',
+              name: 'On-Time',
+              type: 'Metric',
+              min: 0,
+              max: 10000,
+              dataType: 6,
+              numberFormatting: {
+                category: 7,
+                decimalPlaces: 0,
+                formatString: '0',
               },
             },
           ],
         },
       ],
-      'pageBy': [
+      pageBy: [
         {
-          'id': '9BC4544A11E97721AF570080EF55306C',
-          'name': 'Airline Name',
-          'type': 'Attribute',
-          'forms': [
+          id: '9BC4544A11E97721AF570080EF55306C',
+          name: 'Airline Name',
+          type: 'Attribute',
+          forms: [
             {
-              'id': '45C11FA478E745FEA08D781CEA190FE5',
-              'name': 'ID',
-              'dataType': 33,
-              'baseFormType': 3,
+              id: '45C11FA478E745FEA08D781CEA190FE5',
+              name: 'ID',
+              dataType: 33,
+              baseFormType: 3,
             },
           ],
-          'elements': [
+          elements: [
             {
-              'id': 'hComair Inc.;9BC4544A11E97721AF570080EF55306C',
-              'formValues': [
+              id: 'hComair Inc.;9BC4544A11E97721AF570080EF55306C',
+              formValues: [
                 'Comair Inc.',
               ],
             },
             {
-              'id': 'hMesa Airlines Inc.;9BC4544A11E97721AF570080EF55306C',
-              'formValues': [
+              id: 'hMesa Airlines Inc.;9BC4544A11E97721AF570080EF55306C',
+              formValues: [
                 'Mesa Airlines Inc.',
               ],
             },
           ],
         },
         {
-          'id': '9BC4625A11E97721AF570080EF55306C',
-          'name': 'Day of Week',
-          'type': 'Attribute',
-          'forms': [
+          id: '9BC4625A11E97721AF570080EF55306C',
+          name: 'Day of Week',
+          type: 'Attribute',
+          forms: [
             {
-              'id': '45C11FA478E745FEA08D781CEA190FE5',
-              'name': 'ID',
-              'dataType': 33,
-              'baseFormType': 3,
+              id: '45C11FA478E745FEA08D781CEA190FE5',
+              name: 'ID',
+              dataType: 33,
+              baseFormType: 3,
             },
           ],
-          'elements': [
+          elements: [
             {
-              'id': 'hMonday;9BC4625A11E97721AF570080EF55306C',
-              'formValues': [
+              id: 'hMonday;9BC4625A11E97721AF570080EF55306C',
+              formValues: [
                 'Monday',
               ],
             },
             {
-              'id': 'hTuesday;9BC4625A11E97721AF570080EF55306C',
-              'formValues': [
+              id: 'hTuesday;9BC4625A11E97721AF570080EF55306C',
+              formValues: [
                 'Tuesday',
               ],
             },
           ],
         },
       ],
-      'sorting': {
-        'rows': [],
-        'columns': [],
+      sorting: {
+        rows: [],
+        columns: [],
       },
-      'thresholds': [],
+      thresholds: [],
     },
   },
-  'data': {
-    'currentPageBy': [
+  data: {
+    currentPageBy: [
       0,
       0,
     ],
-    'paging': {
-      'current': 8,
-      'total': 8,
-      'offset': 0,
-      'limit': 100,
+    paging: {
+      current: 8,
+      total: 8,
+      offset: 0,
+      limit: 100,
     },
-    'headers': {
-      'rows': [
+    headers: {
+      rows: [
         [
           0,
           0,
@@ -275,7 +275,7 @@ export const reportV2 = {
           3,
         ],
       ],
-      'columns': [
+      columns: [
         [
           0,
           0,
@@ -294,8 +294,8 @@ export const reportV2 = {
         ],
       ],
     },
-    'metricValues': {
-      'raw': [
+    metricValues: {
+      raw: [
         [
           3139,
           17046.02,
@@ -361,7 +361,7 @@ export const reportV2 = {
           12293,
         ],
       ],
-      'formatted': [
+      formatted: [
         [
           '3139',
           '17,046.02',
@@ -427,165 +427,165 @@ export const reportV2 = {
           '12293',
         ],
       ],
-      'extras': [
+      extras: [
         [
           {
-            'mi': 0,
+            mi: 0,
           },
           {
-            'mi': 1,
+            mi: 1,
           },
           {
-            'mi': 2,
+            mi: 2,
           },
           {
-            'mi': 0,
+            mi: 0,
           },
           {
-            'mi': 1,
+            mi: 1,
           },
           {
-            'mi': 2,
+            mi: 2,
           },
         ],
         [
           {
-            'mi': 0,
+            mi: 0,
           },
           {
-            'mi': 1,
+            mi: 1,
           },
           {
-            'mi': 2,
+            mi: 2,
           },
           {
-            'mi': 0,
+            mi: 0,
           },
           {
-            'mi': 1,
+            mi: 1,
           },
           {
-            'mi': 2,
-          },
-        ],
-        [
-          {
-            'mi': 0,
-          },
-          {
-            'mi': 1,
-          },
-          {
-            'mi': 2,
-          },
-          {
-            'mi': 0,
-          },
-          {
-            'mi': 1,
-          },
-          {
-            'mi': 2,
+            mi: 2,
           },
         ],
         [
           {
-            'mi': 0,
+            mi: 0,
           },
           {
-            'mi': 1,
+            mi: 1,
           },
           {
-            'mi': 2,
+            mi: 2,
           },
           {
-            'mi': 0,
+            mi: 0,
           },
           {
-            'mi': 1,
+            mi: 1,
           },
           {
-            'mi': 2,
-          },
-        ],
-        [
-          {
-            'mi': 0,
-          },
-          {
-            'mi': 1,
-          },
-          {
-            'mi': 2,
-          },
-          {
-            'mi': 0,
-          },
-          {
-            'mi': 1,
-          },
-          {
-            'mi': 2,
+            mi: 2,
           },
         ],
         [
           {
-            'mi': 0,
+            mi: 0,
           },
           {
-            'mi': 1,
+            mi: 1,
           },
           {
-            'mi': 2,
+            mi: 2,
           },
           {
-            'mi': 0,
+            mi: 0,
           },
           {
-            'mi': 1,
+            mi: 1,
           },
           {
-            'mi': 2,
-          },
-        ],
-        [
-          {
-            'mi': 0,
-          },
-          {
-            'mi': 1,
-          },
-          {
-            'mi': 2,
-          },
-          {
-            'mi': 0,
-          },
-          {
-            'mi': 1,
-          },
-          {
-            'mi': 2,
+            mi: 2,
           },
         ],
         [
           {
-            'mi': 0,
+            mi: 0,
           },
           {
-            'mi': 1,
+            mi: 1,
           },
           {
-            'mi': 2,
+            mi: 2,
           },
           {
-            'mi': 0,
+            mi: 0,
           },
           {
-            'mi': 1,
+            mi: 1,
           },
           {
-            'mi': 2,
+            mi: 2,
+          },
+        ],
+        [
+          {
+            mi: 0,
+          },
+          {
+            mi: 1,
+          },
+          {
+            mi: 2,
+          },
+          {
+            mi: 0,
+          },
+          {
+            mi: 1,
+          },
+          {
+            mi: 2,
+          },
+        ],
+        [
+          {
+            mi: 0,
+          },
+          {
+            mi: 1,
+          },
+          {
+            mi: 2,
+          },
+          {
+            mi: 0,
+          },
+          {
+            mi: 1,
+          },
+          {
+            mi: 2,
+          },
+        ],
+        [
+          {
+            mi: 0,
+          },
+          {
+            mi: 1,
+          },
+          {
+            mi: 2,
+          },
+          {
+            mi: 0,
+          },
+          {
+            mi: 1,
+          },
+          {
+            mi: 2,
           },
         ],
       ],

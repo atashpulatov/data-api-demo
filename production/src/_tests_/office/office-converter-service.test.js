@@ -1,14 +1,14 @@
 import path from 'path';
 import testHelper from '../test-helper';
-import {mockReports} from '../mockData';
-import {officeConverterService} from '../../office/office-converter-service';
+import { mockReports } from '../mockData';
+import { officeConverterService } from '../../office/office-converter-service';
 
 describe('OfficeConverterService', () => {
   it('should create a table', () => {
     // given
     const expectedReportPath = path.join(
       __dirname,
-      '__expected__/expected-simple-report.js'
+      '__expected__/expected-simple-report.js',
     );
     // when
     const result = officeConverterService.createTable(mockReports[1]);
@@ -22,7 +22,7 @@ describe('OfficeConverterService', () => {
     // given
     const expectedReportPath = path.join(
       __dirname,
-      '__expected__/expected-test-report.js'
+      '__expected__/expected-test-report.js',
     );
     // when
     const result = officeConverterService.createTable(mockReports[0]);
@@ -37,7 +37,7 @@ describe('OfficeConverterService', () => {
     // given
     const expectedReportPath = path.join(
       __dirname,
-      '__expected__/expected-complex-report.js'
+      '__expected__/expected-complex-report.js',
     );
     // when
     const result = officeConverterService.createTable(mockReports[2]);
@@ -51,7 +51,7 @@ describe('OfficeConverterService', () => {
     // given
     const expectedReportPath = path.join(
       __dirname,
-      '__expected__/expected-simple-report.js'
+      '__expected__/expected-simple-report.js',
     );
     // when
     let result = officeConverterService.createTable(mockReports[1]);
@@ -67,7 +67,7 @@ describe('OfficeConverterService', () => {
     // given
     const expectedReportPath = path.join(
       __dirname,
-      '__expected__/expected-multiline-header-report.js'
+      '__expected__/expected-multiline-header-report.js',
     );
     // when
     const result = officeConverterService.createTable(mockReports[3]);
@@ -91,7 +91,7 @@ describe('OfficeConverterService', () => {
     // given
     const expectedReportPath = path.join(
       __dirname,
-      '__expected__/expected-complex-attributes-report.js'
+      '__expected__/expected-complex-attributes-report.js',
     );
     // when
     const result = officeConverterService.createTable(mockReports[4]);
@@ -106,7 +106,7 @@ describe('OfficeConverterService', () => {
     result.rows.forEach((row) => {
       expect(row['Category DESC']).toBeDefined();
       expect(row['Category ID']).toBeDefined();
-      expect(row['Subcategory']).toBeDefined();
+      expect(row.Subcategory).toBeDefined();
       expect(row['Units Received']).toBeDefined();
     });
 
@@ -117,7 +117,7 @@ describe('OfficeConverterService', () => {
     // given
     const expectedReportPath = path.join(
       __dirname,
-      '__expected__/no-attributes-report.js'
+      '__expected__/no-attributes-report.js',
     );
     // when
     const result = officeConverterService.createTable(mockReports[5]);
@@ -134,7 +134,7 @@ describe('OfficeConverterService', () => {
     // given
     const expectedReportPath = path.join(
       __dirname,
-      '__expected__/all-filtered-out-report.js'
+      '__expected__/all-filtered-out-report.js',
     );
     // when
     const result = officeConverterService.createTable(mockReports[6]);

@@ -5,13 +5,13 @@ import {
   SET_REPORT_N_FILTERS,
   SET_PREPARED_REPORT, CLEAR_WINDOW,
 } from './popup-actions';
-import {CLEAR_PROMPTS_ANSWERS} from '../navigation/navigation-tree-actions';
+import { CLEAR_PROMPTS_ANSWERS } from '../navigation/navigation-tree-actions';
 
 export const initialState = {
 };
 
 export const popupReducer = (state = initialState, action) => {
-  const {type, data} = action;
+  const { type, data } = action;
   switch (type) {
     case START_REPORT_LOADING: {
       return {

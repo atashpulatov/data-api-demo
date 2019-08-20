@@ -1,10 +1,10 @@
-import {officeApiHelper} from '../../office/office-api-helper';
-import {IncorrectInputTypeError} from '../../office/incorrect-input-type';
-import {OfficeError, OfficeBindingError} from '../../office/office-error';
-import {reduxStore} from '../../store';
-import {sessionProperties} from '../../storage/session-properties';
-import {historyProperties} from '../../history/history-properties';
-import {officeProperties} from '../../office/office-properties';
+import { officeApiHelper } from '../../office/office-api-helper';
+import { IncorrectInputTypeError } from '../../office/incorrect-input-type';
+import { OfficeError, OfficeBindingError } from '../../office/office-error';
+import { reduxStore } from '../../store';
+import { sessionProperties } from '../../storage/session-properties';
+import { historyProperties } from '../../history/history-properties';
+import { officeProperties } from '../../office/office-properties';
 
 // FIXME: these were disabled anyway. Needs to be redone.
 describe('OfficeApiHelper', () => {
@@ -146,11 +146,11 @@ describe('OfficeApiHelper', () => {
   it.skip('should return proper bindingsArray', () => {
     // given
     const entryArray = [
-      {id: 'SimpleReport_B2_BD1E844211E85FF536AB0080EFB5F215_projectId_envUrl'},
-      {id: 'ComplexReport_DB5_BD1E84FF536AB0080EFB5F215_projectId_envUrl'},
-      {id: 'Simple_B542_BD1E844211E85FF53EFB5F215_projectId_envUrl'},
-      {id: 'Report_B22222_BD11E85FF536AB0080EFB5F215_projectId_envUrl'},
-      {id: 'port_BASDFFF2_4211E85FF536AB0080EFB5F215_projectId_envUrl'},
+      { id: 'SimpleReport_B2_BD1E844211E85FF536AB0080EFB5F215_projectId_envUrl' },
+      { id: 'ComplexReport_DB5_BD1E84FF536AB0080EFB5F215_projectId_envUrl' },
+      { id: 'Simple_B542_BD1E844211E85FF53EFB5F215_projectId_envUrl' },
+      { id: 'Report_B22222_BD11E85FF536AB0080EFB5F215_projectId_envUrl' },
+      { id: 'port_BASDFFF2_4211E85FF536AB0080EFB5F215_projectId_envUrl' },
     ];
     const resultExpectedArray = [
       {
@@ -249,12 +249,10 @@ describe('OfficeApiHelper', () => {
       workbook: {
         tables: {
           load: mockLoad,
-          getItemOrNullObject: () => {
-            return {
-              load: mockLoad,
-              isNull: true,
-            };
-          },
+          getItemOrNullObject: () => ({
+            load: mockLoad,
+            isNull: true,
+          }),
         },
       },
       sync: () => {},
@@ -398,9 +396,7 @@ describe('OfficeApiHelper', () => {
   describe('getSelectedCell', () => {
     it('should return starting cell from range address(single cell)', async () => {
       // given
-      const loadMock = jest.fn().mockImplementation(() => {
-        return 'Sheet1!A12';
-      });
+      const loadMock = jest.fn().mockImplementation(() => 'Sheet1!A12');
       const getCellMock = jest.fn().mockImplementation(() => ({
         load: loadMock,
         address: loadMock(),
@@ -408,11 +404,9 @@ describe('OfficeApiHelper', () => {
       const mockSync = jest.fn();
       const context = {
         workbook: {
-          getSelectedRange: jest.fn().mockImplementation(() => {
-            return {
-              getCell: getCellMock,
-            };
-          }),
+          getSelectedRange: jest.fn().mockImplementation(() => ({
+            getCell: getCellMock,
+          })),
         },
         sync: mockSync,
       };
@@ -428,9 +422,7 @@ describe('OfficeApiHelper', () => {
     });
     it('should return starting cell from range address(multiple cells)', async () => {
       // given
-      const loadMock = jest.fn().mockImplementation(() => {
-        return 'Sheet1!A12:B14';
-      });
+      const loadMock = jest.fn().mockImplementation(() => 'Sheet1!A12:B14');
       const mockSync = jest.fn();
       const getCellMock = jest.fn().mockImplementation(() => ({
         load: loadMock,
@@ -438,11 +430,9 @@ describe('OfficeApiHelper', () => {
       }));
       const context = {
         workbook: {
-          getSelectedRange: jest.fn().mockImplementation(() => {
-            return {
-              getCell: getCellMock,
-            };
-          }),
+          getSelectedRange: jest.fn().mockImplementation(() => ({
+            getCell: getCellMock,
+          })),
         },
         sync: mockSync,
       };
@@ -491,30 +481,24 @@ describe('OfficeApiHelper', () => {
       const originalGetBindingsFromWorkbook = officeApiHelper._getBindingsFromWorkbook;
       const originalExcelBindingsToStore = officeApiHelper._excelBindingsToStore;
       const originalGetOfficeContext = officeApiHelper.getOfficeContext;
-      const mockMethodGetBindingsFromWorkbook = jest.fn().mockImplementation(() => {
-        return mockArray;
-      });
-      const mockGetOfficeContext = jest.fn().mockImplementation(() => {
-        return context;
-      });
-      const mockMethodExcelBindingsToStore = jest.fn().mockImplementation(() => {
-        return [
-          {
-            id: 'BD1E844211E85FF536AB0080EFB5F215',
-            name: 'SimpleReport',
-            bindId: 'SimpleReport_B2_BD1E844211E85FF536AB0080EFB5F215_projectId_envUrl',
-            projectId: 'projectId',
-            envUrl: 'envUrl',
-          },
-          {
-            id: 'BD1E84FF536AB0080EFB5F215',
-            name: 'ComplexReport',
-            bindId: 'ComplexReport_DB5_BD1E84FF536AB0080EFB5F215_projectId_envUrl',
-            projectId: 'projectId',
-            envUrl: 'envUrl',
-          },
-        ];
-      });
+      const mockMethodGetBindingsFromWorkbook = jest.fn().mockImplementation(() => mockArray);
+      const mockGetOfficeContext = jest.fn().mockImplementation(() => context);
+      const mockMethodExcelBindingsToStore = jest.fn().mockImplementation(() => [
+        {
+          id: 'BD1E844211E85FF536AB0080EFB5F215',
+          name: 'SimpleReport',
+          bindId: 'SimpleReport_B2_BD1E844211E85FF536AB0080EFB5F215_projectId_envUrl',
+          projectId: 'projectId',
+          envUrl: 'envUrl',
+        },
+        {
+          id: 'BD1E84FF536AB0080EFB5F215',
+          name: 'ComplexReport',
+          bindId: 'ComplexReport_DB5_BD1E84FF536AB0080EFB5F215_projectId_envUrl',
+          projectId: 'projectId',
+          envUrl: 'envUrl',
+        },
+      ]);
       officeApiHelper._getBindingsFromWorkbook = mockMethodGetBindingsFromWorkbook;
       officeApiHelper._excelBindingsToStore = mockMethodExcelBindingsToStore;
       officeApiHelper.getOfficeContext = mockGetOfficeContext;

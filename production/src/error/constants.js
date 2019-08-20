@@ -1,8 +1,6 @@
-const withDefaultValue = (obj, defaultValue) => {
-  return new Proxy(obj, {
-    get: (target, name) => target[name] === undefined ? defaultValue : target[name],
-  });
-};
+const withDefaultValue = (obj, defaultValue) => new Proxy(obj, {
+  get: (target, name) => (target[name] === undefined ? defaultValue : target[name]),
+});
 
 export const GENERIC_SERVER_ERR = 'This object cannot be imported.';
 export const ALL_DATA_FILTERED_OUT = 'No data returned for this view. This might be because the applied prompt excludes all data.';
@@ -27,4 +25,3 @@ export const errorMessages = withDefaultValue({
   '-2147205488': PROJECT_ROW_LIMIT,
   '-2147216373': NOT_IN_METADATA,
 }, GENERIC_SERVER_ERR);
-

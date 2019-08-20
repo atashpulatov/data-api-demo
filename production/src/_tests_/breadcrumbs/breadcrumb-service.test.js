@@ -1,6 +1,6 @@
-import {breadcrumbsService} from '../../breadcrumbs/breadcrumb-service';
-import {reduxStore} from '../../store';
-import {historyProperties} from '../../history/history-properties';
+import { breadcrumbsService } from '../../breadcrumbs/breadcrumb-service';
+import { reduxStore } from '../../store';
+import { historyProperties } from '../../history/history-properties';
 
 describe('Breadcrumbs Service', () => {
   const givenProject = {
@@ -76,6 +76,6 @@ describe('Breadcrumbs Service', () => {
     breadcrumbsService.navigateToDir(testId);
     // then
     expect(spyDispatch).toBeCalled();
-    expect(spyDispatch).toBeCalledWith({type: dispatchType, dirId: testId});
+    expect(spyDispatch).toBeCalledWith({ type: dispatchType, dirId: testId });
   });
 });

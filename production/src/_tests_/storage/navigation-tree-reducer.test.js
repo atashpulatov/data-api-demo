@@ -1,9 +1,11 @@
 import {
   SELECT_FOLDER, SELECT_OBJECT, SET_DATA_SOURCE, START_IMPORT, UPDATE_SCROLL, UPDATE_SIZE,
-  CHANGE_SEARCHING, CHANGE_SORTING, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED
+  CHANGE_SEARCHING, CHANGE_SORTING, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED,
 } from '../../navigation/navigation-tree-actions';
-import {navigationTree, initialState, DEFAULT_TYPE, DEFAULT_PROJECT_NAME} from '../../storage/navigation-tree-reducer';
-import {CLEAR_WINDOW} from '../../popup/popup-actions';
+import {
+  navigationTree, initialState, DEFAULT_TYPE, DEFAULT_PROJECT_NAME,
+} from '../../storage/navigation-tree-reducer';
+import { CLEAR_WINDOW } from '../../popup/popup-actions';
 
 describe('NavigationTree Reducer', () => {
   it('should return new proper state in case of SELECT_OBJECT action', () => {
@@ -40,7 +42,7 @@ describe('NavigationTree Reducer', () => {
     };
 
     // when
-    const newState = navigationTree({dataSource: [{projectId: '2', key: '1', name: 'name'}]}, action);
+    const newState = navigationTree({ dataSource: [{ projectId: '2', key: '1', name: 'name' }] }, action);
 
     // then
     expect(newState.chosenProjectName).toEqual('name');
@@ -58,7 +60,7 @@ describe('NavigationTree Reducer', () => {
     };
 
     // when
-    const newState = navigationTree({dataSource: [{}]}, action);
+    const newState = navigationTree({ dataSource: [{}] }, action);
 
     // then
     expect(newState.chosenProjectName).toEqual('Prepare Data');
@@ -78,7 +80,7 @@ describe('NavigationTree Reducer', () => {
     };
 
     // when
-    const newState = navigationTree({dataSource: [{}]}, action);
+    const newState = navigationTree({ dataSource: [{}] }, action);
 
     // then
     expect(newState.chosenType).toEqual('Report');
@@ -129,7 +131,7 @@ describe('NavigationTree Reducer', () => {
 
   it('should return old state in case of SELECT_FOLDER action and the same selected folder', () => {
     // given
-    const oldState = {folder: 'mock'};
+    const oldState = { folder: 'mock' };
     const action = {
       type: SELECT_FOLDER,
       data: 'mock',
@@ -257,7 +259,7 @@ describe('NavigationTree Reducer', () => {
     };
 
     // when
-    const newState = navigationTree({importRequested: true}, action);
+    const newState = navigationTree({ importRequested: true }, action);
 
     // then
     expect(newState.importRequested).toBeFalsy();
