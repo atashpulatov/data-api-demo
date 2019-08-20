@@ -1,6 +1,6 @@
 import React from 'react';
 import {mount} from 'enzyme';
-import {ButtonPopover} from '../../src/file-history/button-popover';
+import {ButtonPopover} from '../../file-history/button-popover';
 import {Button} from 'antd';
 
 describe('ButtonPopover', () => {
@@ -15,9 +15,9 @@ describe('ButtonPopover', () => {
     // given
     // when
     const componentWrapper = mount(
-        <ButtonPopover>
-          <Button />
-        </ButtonPopover>
+      <ButtonPopover>
+        <Button />
+      </ButtonPopover>
     );
     // then
     expect(componentWrapper.children().length).toBeGreaterThan(0);
@@ -25,9 +25,9 @@ describe('ButtonPopover', () => {
   it('should clear timeout when unmounting component', () => {
     // given
     const componentWrapper = mount(
-        <ButtonPopover>
-          <Button />
-        </ButtonPopover>
+      <ButtonPopover>
+        <Button />
+      </ButtonPopover>
     );
     // when
     componentWrapper.unmount();
@@ -38,9 +38,9 @@ describe('ButtonPopover', () => {
     // given
     ButtonPopover.prototype.setState = jest.fn(ButtonPopover.prototype.setState);
     const componentWrapper = mount(
-        <ButtonPopover mouseEnterDelay={1}>
-          <Button />
-        </ButtonPopover>
+      <ButtonPopover mouseEnterDelay={1}>
+        <Button />
+      </ButtonPopover>
     );
     // when
     componentWrapper.simulate('mouseEnter');
@@ -52,9 +52,9 @@ describe('ButtonPopover', () => {
   it('should clear timeout on mouseLeave event', () => {
     // given
     const componentWrapper = mount(
-        <ButtonPopover>
-          <Button />
-        </ButtonPopover>
+      <ButtonPopover>
+        <Button />
+      </ButtonPopover>
     );
     // when
     componentWrapper.simulate('mouseLeave');

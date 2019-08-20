@@ -3,14 +3,14 @@ import {officeContextMock} from './__mock__object__/OfficeContext';
 import {officeDisplayService} from '../../office/office-display-service';
 import {reduxStore} from '../../store';
 import {mstrObjectRestService} from '../../mstr-object/mstr-object-rest-service';
-import {mockReports} from '../mockData';
+import {reportV2} from '../mockDataV2';
 import {officeStoreService} from '../../office/store/office-store-service';
 import {authenticationHelper} from '../../authentication/authentication-helper';
 import {popupController} from '../../popup/popup-controller';
 import {PopupTypeEnum} from '../../home/popup-type-enum';
 import {sessionHelper} from '../../storage/session-helper';
 import {OverlappingTablesError} from '../../error/overlapping-tables-error';
-import {officeConverterService} from '../../office/office-converter-service';
+import officeConverterService from '../../office/office-converter-service-v2';
 import {ALL_DATA_FILTERED_OUT} from '../../error/constants';
 
 jest.mock('../../mstr-object/mstr-object-rest-service');
@@ -30,41 +30,41 @@ describe.skip('OfficeDisplayService', () => {
     givenReport.mstrTable = officeConverterService.createTable(givenReport);
 
     jest.spyOn(officeApiHelper, 'findAvailableOfficeTableId')
-        .mockReturnValue(excelTableNameMock);
+      .mockReturnValue(excelTableNameMock);
     jest.spyOn(officeApiHelper, 'getCurrentMstrContext')
-        .mockReturnValue(mstrContext);
+      .mockReturnValue(mstrContext);
     jest.spyOn(officeApiHelper, 'getOfficeContext')
-        .mockReturnValue({
-          document: {
-            bindings: {
-              releaseByIdAsync: jest.fn(),
-            },
+      .mockReturnValue({
+        document: {
+          bindings: {
+            releaseByIdAsync: jest.fn(),
           },
-        });
+        },
+      });
     jest.spyOn(officeApiHelper, 'getExcelContext')
-        .mockReturnValue({
-          workbook: {
-            tables: {
-              getItem: () => {
-                return {
-                  delete: () => {},
-                  clearFilters: () => {},
-                };
-              },
-            },
-            worksheets: {
-              getActiveWorksheet: () => {},
-            },
-            bindings: {
-              getItem: () => {
-                return {
-                  getTable: () => {},
-                };
-              },
+      .mockReturnValue({
+        workbook: {
+          tables: {
+            getItem: () => {
+              return {
+                delete: () => {},
+                clearFilters: () => {},
+              };
             },
           },
-          sync: () => {},
-        });
+          worksheets: {
+            getActiveWorksheet: () => {},
+          },
+          bindings: {
+            getItem: () => {
+              return {
+                getTable: () => {},
+              };
+            },
+          },
+        },
+        sync: () => {},
+      });
   });
 
   beforeEach(() => {
@@ -76,7 +76,7 @@ describe.skip('OfficeDisplayService', () => {
     changedMock.mockRestore();
 
     jest.spyOn(mstrObjectRestService, 'createInstance')
-        .mockResolvedValue(givenReport);
+      .mockResolvedValue(givenReport);
   });
 
   afterEach(() => {
@@ -256,7 +256,7 @@ describe.skip('OfficeDisplayService', () => {
     expect(officeStoreService.deleteReport).not.toBeCalled();
   });
 
-  describe('_createOfficeTable', () => {
+  describe('_createOfficeTable', async () => {
     it('should return officeTable proper name and invoke required methods', async () => {
       // given
       const mockedTable = {
@@ -363,7 +363,7 @@ describe.skip('OfficeDisplayService', () => {
       expect(result.name).toEqual(reportName);
     });
   });
-  describe('_checkRangeValidity', () => {
+  describe('_checkRangeValidity', async () => {
     it('should return null when data range is empty', async () => {
       // given
       jest.spyOn(officeDisplayService, '_checkRangeValidity').mockRestore();

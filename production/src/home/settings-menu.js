@@ -15,7 +15,7 @@ export const _SettingsMenu = ({userFullName, userInitials, isSecured, reportArra
   const isSecuredActive = !isSecured && reportArray && reportArray.length > 0;
 
   const prepareEmail = () => {
-    const {host, platform, version} = window.Office.context.diagnostics;
+    const {host, platform, version} = Office.context.diagnostics;
     const userAgent = navigator.userAgent;
     const message = t('Please don’t change the text below. Type your message above this line.');
     const email = {

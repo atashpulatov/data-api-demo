@@ -56,7 +56,7 @@ export class _FileHistoryContainer extends React.Component {
       });
       excelContext.sync();
     } catch (error) {
-      console.log(error);
+      console.log('Cannot add onDeleted event listener');
     }
   }
 
@@ -66,7 +66,7 @@ export class _FileHistoryContainer extends React.Component {
       this.eventRemove.remove();
       eventRemoveContext.sync();
     } catch (error) {
-      console.log(error);
+      console.log('Cannot remove onDeleted event listener');
     }
   }
 

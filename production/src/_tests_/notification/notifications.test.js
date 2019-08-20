@@ -20,9 +20,9 @@ describe('Notifications', () => {
     // given
     const action = actionCreator.showMessageAction('Test', 'info', 'message');
     const wrappedComponent = mount(
-        <Provider store={reduxStore}>
-          <Notifications />
-        </Provider>);
+      <Provider store={reduxStore}>
+        <Notifications />
+      </Provider>);
     const wrappedComponentAlone = wrappedComponent.find('NotificationsWithoutRedux');
     const spyMethod = jest.spyOn(wrappedComponentAlone.instance(), 'displayMessage');
     // when
@@ -37,9 +37,9 @@ describe('Notifications', () => {
     // given
     const action = actionCreator.showNotificationAction('Test title', 'Test content', 'error', 'message');
     const wrappedComponent = mount(
-        <Provider store={reduxStore}>
-          <Notifications />
-        </Provider>);
+      <Provider store={reduxStore}>
+        <Notifications />
+      </Provider>);
     const wrappedComponentAlone = wrappedComponent.find('NotificationsWithoutRedux');
     const spyMethod = jest.spyOn(wrappedComponentAlone.instance(), 'displayNotification');
     // when
@@ -52,9 +52,9 @@ describe('Notifications', () => {
     // given
     const action = actionCreator.showNotificationAction('Test title', 'Test content', 'warning', 'message');
     const wrappedComponent = mount(
-        <Provider store={reduxStore}>
-          <Notifications />
-        </Provider>);
+      <Provider store={reduxStore}>
+        <Notifications />
+      </Provider>);
     const wrappedComponentAlone = wrappedComponent.find('NotificationsWithoutRedux');
     const spyMethod = jest.spyOn(wrappedComponentAlone.instance(), 'displayNotification');
     // when
@@ -67,9 +67,9 @@ describe('Notifications', () => {
     // given
     const action = actionCreator.showNotificationAction('Test title', 'Test content', 'success', 'message');
     const wrappedComponent = mount(
-        <Provider store={reduxStore}>
-          <Notifications />
-        </Provider>);
+      <Provider store={reduxStore}>
+        <Notifications />
+      </Provider>);
     const wrappedComponentAlone = wrappedComponent.find('NotificationsWithoutRedux');
     const spyMethod = jest.spyOn(wrappedComponentAlone.instance(), 'displayNotification');
     // when
@@ -82,9 +82,9 @@ describe('Notifications', () => {
     // given
     const action = actionCreator.showNotificationAction('Test title', 'Test content', 'info', 'message');
     const wrappedComponent = mount(
-        <Provider store={reduxStore}>
-          <Notifications />
-        </Provider>);
+      <Provider store={reduxStore}>
+        <Notifications />
+      </Provider>);
     const wrappedComponentAlone = wrappedComponent.find('NotificationsWithoutRedux');
     const spyMethod = jest.spyOn(wrappedComponentAlone.instance(), 'displayNotification');
     // when
@@ -97,9 +97,9 @@ describe('Notifications', () => {
     // given
     const action = actionCreator.showNotificationAction('Test title', 'Test content', 'type', 'message');
     const wrappedComponent = mount(
-        <Provider store={reduxStore}>
-          <Notifications />
-        </Provider>);
+      <Provider store={reduxStore}>
+        <Notifications />
+      </Provider>);
     const wrappedComponentAlone = wrappedComponent.find('NotificationsWithoutRedux');
     const spyMethod = jest.spyOn(wrappedComponentAlone.instance(), 'displayNotification');
     // when

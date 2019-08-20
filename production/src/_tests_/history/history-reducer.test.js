@@ -1,10 +1,8 @@
-/* eslint-disable */
 import {createStore} from 'redux';
 import {historyReducer} from '../../history/history-reducer';
 import {HistoryError} from '../../history/history-error';
 import {historyProperties} from '../../history/history-properties';
 import {sessionProperties} from '../../storage/session-properties';
-/* eslint-enable */
 
 describe('historyReducer', () => {
   const historyStore = createStore(historyReducer);

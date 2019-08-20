@@ -6,18 +6,18 @@ import {officeProperties} from '../../office/office-properties';
 describe('OfficeStoreService', () => {
   beforeAll(() => {
     jest.spyOn(officeStoreService, 'getOfficeSettings')
-        .mockReturnValue({
-          set: jest.fn(),
-          get: jest.fn(),
-          saveAsync: jest.fn(),
-        });
+      .mockReturnValue({
+        set: jest.fn(),
+        get: jest.fn(),
+        saveAsync: jest.fn(),
+      });
 
     jest.spyOn(officeStoreService, '_getReportProperties');
   });
 
   beforeEach(() => {
     officeStoreService._getReportProperties
-        .mockReturnValue(mockReportProperties[1].slice());
+      .mockReturnValue(mockReportProperties[1].slice());
   });
 
   afterEach(() => {
@@ -76,11 +76,11 @@ describe('OfficeStoreService', () => {
   it('should return proper value from office when isFileSecured is called', async () => {
     // given
     jest.spyOn(officeStoreService, 'getOfficeSettings')
-        .mockReturnValue({
-          set: jest.fn(),
-          get: () => true,
-          saveAsync: jest.fn(),
-        });
+      .mockReturnValue({
+        set: jest.fn(),
+        get: () => true,
+        saveAsync: jest.fn(),
+      });
 
     // when
     officeStoreService.isFileSecured();

@@ -4,14 +4,14 @@ import {_PopupButtons} from '../../popup/popup-buttons';
 
 describe('PopupButtons', () => {
   it('should NOT display prepare data when secondary action NOT provided',
-      () => {
+    () => {
       // given
-        const secondaryAction = jest.fn();
-        // when
-        const buttonsWrapped = shallow(<_PopupButtons />);
-        // then
-        expect(buttonsWrapped.exists('#prepare')).not.toBeTruthy();
-      });
+      const secondaryAction = jest.fn();
+      // when
+      const buttonsWrapped = shallow(<_PopupButtons />);
+      // then
+      expect(buttonsWrapped.exists('#prepare')).not.toBeTruthy();
+    });
 
   it('should display prepare data when secondary action provided', () => {
     // given

@@ -1,5 +1,5 @@
-import { actionCreator } from '../../notification/action-creator';
-import { reduxNotificationProperties } from '../../notification/notification-properties';
+import {actionCreator} from '../../notification/action-creator';
+import {reduxNotificationProperties} from '../../notification/notification-properties';
 
 describe('Action Creator', () => {
   it('should return action for showMessageAction', () => {

@@ -20,14 +20,14 @@ describe('NavigatorService', () => {
   });
 
   it('should give a path object to project page',
-      () => {
+    () => {
       // when
-        const pathObject = navigationService.getProjectsRoute();
-        // then
-        expect(pathObject.pathname).toBeDefined();
-        expect(pathObject.pathname).toContain('/');
-        expect(pathObject.state).not.toBeDefined();
-      });
+      const pathObject = navigationService.getProjectsRoute();
+      // then
+      expect(pathObject.pathname).toBeDefined();
+      expect(pathObject.pathname).toContain('/');
+      expect(pathObject.state).not.toBeDefined();
+    });
 
 
   it('should give a path object to folder contents', () => {
@@ -89,38 +89,38 @@ describe('NavigatorService', () => {
   });
 
   it('should call for projects route when env, token and project present',
-      () => {
-        const originalMethod = navigationService.getObjectsRoute;
-        // given
-        try {
-          reduxStore.dispatch({
-            type: sessionProperties.actions.logIn,
-            values: {
-              username: 'usr',
-              envUrl: 'env',
-              isRememberMeOn: true,
-            },
-          });
-          reduxStore.dispatch({
-            type: sessionProperties.actions.loggedIn,
-            authToken: 'token',
-          });
-          reduxStore.dispatch({
-            type: historyProperties.actions.goInsideProject,
-            projectId: 'id',
-            projectName: 'name',
-          });
-          const expected = {
-            prop: 'expect',
-          };
-          navigationService.getObjectsRoute = jest.fn();
-          navigationService.getObjectsRoute.mockReturnValueOnce(expected);
-          // when
-          const result = navigationService.getNavigationRoute();
-          expect(result).toBeDefined();
-          expect(result).toBe(expected);
-        } finally {
-          navigationService.getObjectsRoute = originalMethod;
-        }
-      });
+    () => {
+      const originalMethod = navigationService.getObjectsRoute;
+      // given
+      try {
+        reduxStore.dispatch({
+          type: sessionProperties.actions.logIn,
+          values: {
+            username: 'usr',
+            envUrl: 'env',
+            isRememberMeOn: true,
+          },
+        });
+        reduxStore.dispatch({
+          type: sessionProperties.actions.loggedIn,
+          authToken: 'token',
+        });
+        reduxStore.dispatch({
+          type: historyProperties.actions.goInsideProject,
+          projectId: 'id',
+          projectName: 'name',
+        });
+        const expected = {
+          prop: 'expect',
+        };
+        navigationService.getObjectsRoute = jest.fn();
+        navigationService.getObjectsRoute.mockReturnValueOnce(expected);
+        // when
+        const result = navigationService.getNavigationRoute();
+        expect(result).toBeDefined();
+        expect(result).toBe(expected);
+      } finally {
+        navigationService.getObjectsRoute = originalMethod;
+      }
+    });
 });

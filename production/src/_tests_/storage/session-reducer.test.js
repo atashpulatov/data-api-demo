@@ -2,7 +2,6 @@ import {createStore} from 'redux';
 import {sessionReducer} from '../../storage/session-reducer';
 import {sessionProperties} from '../../storage/session-properties';
 import {SessionError} from '../../storage/session-error';
-import {isUndefined} from 'util';
 
 describe('sessionReducer', () => {
   const sessionStore = createStore(sessionReducer);

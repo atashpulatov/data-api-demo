@@ -45,17 +45,17 @@ describe('NavigationTree', () => {
       chosenType: 'Data',
     };
     const wrappedComponent = shallow(
-        <_NavigationTree
-          mstrData={mstrData}
-          handlePrepare={propsMethod}
-          {...actionObject}
-        />);
+      <_NavigationTree
+        mstrData={mstrData}
+        handlePrepare={propsMethod}
+        {...actionObject}
+      />);
     // when
     wrappedComponent.instance().handleSecondary();
     // then
     expect(propsMethod).toBeCalled();
     expect(propsMethod).toBeCalledWith(actionObject.chosenProjectId, actionObject.chosenObjectId,
-        actionObject.chosenSubtype, actionObject.chosenProjectName, actionObject.chosenType);
+      actionObject.chosenSubtype, actionObject.chosenProjectName, actionObject.chosenType);
     expect(wrappedComponent.state('previewDisplay')).toEqual(true);
   });
 
@@ -139,7 +139,7 @@ describe('NavigationTree', () => {
     const givenIsPrompted = 'customPromptAnswer';
     const selectObject = jest.fn();
     const isPromptedResponse = jest.spyOn(mstrObjectRestService, 'isPrompted')
-        .mockImplementationOnce(async () => givenIsPrompted);
+      .mockImplementationOnce(async () => givenIsPrompted);
     const wrappedComponent = shallow(<_NavigationTree selectObject={selectObject} mstrData={{}} />);
     // when
     await wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype);

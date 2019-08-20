@@ -8,7 +8,7 @@ import {officeApiHelper} from '../../office/office-api-helper';
 import {reduxStore} from '../../store';
 import {homeHelper} from '../../home/home-helper.js';
 import {pageBuilder} from '../../home/page-builder.js';
-import {SettingsMenu} from '../../home/settings-menu.js';
+import {SettingsMenu} from '../../home/settings-menu';
 
 jest.mock('../../storage/session-helper');
 jest.mock('../../office/office-api-helper');
@@ -24,9 +24,9 @@ describe('Home', () => {
     // given
     // when
     const componentWrapper = mount(
-        <Provider store={reduxStore}>
-          <Home />
-        </Provider>
+      <Provider store={reduxStore}>
+        <Home />
+      </Provider>
     );
     // then
     expect(componentWrapper.children().length).toBeGreaterThan(0);
@@ -43,15 +43,15 @@ describe('Home', () => {
     const tempPromise = Promise.resolve();
     const sessionHelperSpy = jest.spyOn(sessionHelper, 'disableLoading');
     const officeHelperSpy = jest
-        .spyOn(officeApiHelper, 'loadExistingReportBindingsExcel')
-        .mockImplementation(async () => null);
+      .spyOn(officeApiHelper, 'loadExistingReportBindingsExcel')
+      .mockImplementation(async () => null);
     sessionHelperSpy.mockClear();
     officeHelperSpy.mockClear();
     // when
     const componentWrapper = mount(
-        <Provider store={reduxStore}>
-          <_Home {...props} />
-        </Provider>
+      <Provider store={reduxStore}>
+        <_Home {...props} />
+      </Provider>
     );
     // then
     setImmediate(() => tempPromise);
@@ -80,16 +80,21 @@ describe('Home', () => {
     expect(homeHelper.saveTokenFromCookies).toBeCalled();
   });
 
-  it('should trigger saveTokenFromCookies on update', () => {
+  it('should trigger saveTokenFromCookies on update', async () => {
     // given
     const props = {
       loading: false,
       loadingReport: false,
       authToken: false,
       reportArray: false,
+
     };
+    jest.spyOn(pageBuilder, 'getPage').mockReturnValueOnce(null);
+    const tempPromise = Promise.resolve();
     const wrappedComponent = mount(
-      <_Home {...props} />
+      <Provider store={reduxStore}>
+        <_Home {...props} />
+      </Provider>
     );
     // when
     wrappedComponent.setProps({
@@ -97,6 +102,7 @@ describe('Home', () => {
       authToken: 'new',
     });
     // then
+    await (tempPromise);
     expect(homeHelper.saveTokenFromCookies).toBeCalled();
   });
   describe('Header', () => {

@@ -10,11 +10,11 @@ desc "build project in #{$WORKSPACE_SETTINGS[:paths][:project][:production][:hom
 task :build do
   install_dependencies("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
   # build the office.zip
-  shell_command! "yarn build", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
+  shell_command! "npm run build", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
   shell_command! "zip -r office-#{Common::Version.application_version}.zip .", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/build"
 
   # build the office_loader.zip
-  shell_command! "yarn build", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/office-loader/build"
+  shell_command! "npm run build", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/office-loader/build"
   shell_command! "zip -r office-loader-#{Common::Version.application_version}.zip .", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/office-loader/build"
 end
 
@@ -65,7 +65,7 @@ end
 
 def run_test(working_dir)
   install_dependencies(working_dir)
-  shell_command! "yarn jest --coverage", cwd: "#{working_dir}/production"
+  shell_command! "npm run test:coverage", cwd: "#{working_dir}/production"
 end
 
 
@@ -73,8 +73,8 @@ def install_dependencies(working_dir)
   shell_command! "rm -rf node_modules", cwd: "#{working_dir}/production"
   shell_command! "rm -rf node_modules", cwd: "#{working_dir}/office-loader"
   update_package_json(working_dir)
-  shell_command! "yarn install --network-concurrency 1", cwd: "#{working_dir}/production"
-  shell_command! "yarn install --network-concurrency 1", cwd: "#{working_dir}/office-loader"
+  shell_command! "npm install --network-concurrency 1", cwd: "#{working_dir}/production"
+  shell_command! "npm install --network-concurrency 1", cwd: "#{working_dir}/office-loader"
 end
 
 def update_package_json(working_dir)
@@ -124,7 +124,7 @@ end
 
 def generate_eslint_report
   eslint_report_path = "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/.eslint/index.html"
-  shell_command "yarn eslint \"src/**\" -f html -o #{eslint_report_path}", cwd: $WORKSPACE_SETTINGS[:paths][:project][:production][:home]
+  shell_command "npm eslint \"src/**\" -f html -o #{eslint_report_path}", cwd: $WORKSPACE_SETTINGS[:paths][:project][:production][:home]
 end
 
 

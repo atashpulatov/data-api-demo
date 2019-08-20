@@ -1,6 +1,6 @@
 import {
   SELECT_FOLDER, SELECT_OBJECT, SET_DATA_SOURCE, START_IMPORT, UPDATE_SCROLL, UPDATE_SIZE,
-  CHANGE_SEARCHING, CHANGE_SORTING, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED,
+  CHANGE_SEARCHING, CHANGE_SORTING, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED
 } from '../../navigation/navigation-tree-actions';
 import {navigationTree, initialState, DEFAULT_TYPE, DEFAULT_PROJECT_NAME} from '../../storage/navigation-tree-reducer';
 import {CLEAR_WINDOW} from '../../popup/popup-actions';

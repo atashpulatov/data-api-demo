@@ -3,8 +3,6 @@ import {fileHistoryHelper} from '../../file-history/file-history-helper';
 import {notificationService} from '../../notification/notification-service';
 import {errorService} from '../../error/error-handler';
 import {reduxStore} from '../../store';
-import {officeProperties} from '../../office/office-properties';
-import {authenticationHelper} from '../../authentication/authentication-helper';
 
 jest.mock('../../authentication/authentication-helper');
 jest.mock('../../storage/session-helper');

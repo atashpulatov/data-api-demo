@@ -77,7 +77,7 @@ describe('HomeHelper', () => {
         otherCookie: 'otherCookieValue',
       };
       jest.spyOn(homeHelper, 'getParsedCookies')
-          .mockReturnValueOnce(cookieJarWithoutToken);
+        .mockReturnValueOnce(cookieJarWithoutToken);
       // when
       homeHelper.saveTokenFromCookies();
       // then
@@ -91,7 +91,7 @@ describe('HomeHelper', () => {
         iSession: 'someAuthToken',
       };
       jest.spyOn(homeHelper, 'getParsedCookies')
-          .mockReturnValueOnce(cookieJarWithoutToken);
+        .mockReturnValueOnce(cookieJarWithoutToken);
       // when
       homeHelper.saveTokenFromCookies();
       // then

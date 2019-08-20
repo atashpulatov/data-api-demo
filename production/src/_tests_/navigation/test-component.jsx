@@ -1,11 +1,11 @@
-import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
+import React, {Component} from 'react';
 
 export class _TestComponent extends Component {
-    constructor(props) {
-        super(props);
-    }
+  constructor(props) {
+    super(props);
+  }
 
-    render() {
-        return <div></div>;
-    }
+  render() {
+    return <div></div>;
+  }
 };

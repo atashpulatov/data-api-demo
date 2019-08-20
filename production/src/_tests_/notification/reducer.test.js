@@ -1,6 +1,6 @@
-import { notificationReducer } from '../../notification/reducer';
-import { NotificationError } from '../../notification/notification-error';
-import { reduxNotificationProperties } from '../../notification/notification-properties';
+import {notificationReducer} from '../../notification/reducer';
+import {NotificationError} from '../../notification/notification-error';
+import {reduxNotificationProperties} from '../../notification/notification-properties';
 
 describe('Notification reducer', () => {
   it('should do nothing on not matching action and empty state', () => {

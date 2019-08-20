@@ -11,9 +11,9 @@ describe('Loading page', () => {
     // given
     // when
     const componentWrapper = mount(
-        <Provider store={reduxStore}>
-          <LoadingPage />
-        </Provider>
+      <Provider store={reduxStore}>
+        <LoadingPage />
+      </Provider>
     );
     // then
     expect(componentWrapper.children().length).toBeGreaterThan(0);
@@ -24,9 +24,9 @@ describe('Loading page', () => {
     const expectedTitle = 'Importing data';
     // when
     const componentWrapper = mount(
-        <Provider store={reduxStore}>
-          <LoadingPage />
-        </Provider>
+      <Provider store={reduxStore}>
+        <LoadingPage />
+      </Provider>
     );
     // then
     const headerWrapper = componentWrapper.find('h1');
@@ -44,9 +44,9 @@ describe('Loading page', () => {
     });
     // when
     const componentWrapper = mount(
-        <Provider store={reduxStore}>
-          <LoadingPage name={mockedTitle} />
-        </Provider>
+      <Provider store={reduxStore}>
+        <LoadingPage name={mockedTitle} />
+      </Provider>
     );
     // then
     const headerWrapper = componentWrapper.find('h1');
@@ -57,9 +57,9 @@ describe('Loading page', () => {
     // given
     // when
     const componentWrapper = mount(
-        <Provider store={reduxStore}>
-          <LoadingPage />
-        </Provider>
+      <Provider store={reduxStore}>
+        <LoadingPage />
+      </Provider>
     );
     // then
     const headerWrapper = componentWrapper.find('img');

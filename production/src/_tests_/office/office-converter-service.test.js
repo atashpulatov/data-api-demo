@@ -7,8 +7,8 @@ describe('OfficeConverterService', () => {
   it('should create a table', () => {
     // given
     const expectedReportPath = path.join(
-        __dirname,
-        '__expected__/expected-simple-report.js'
+      __dirname,
+      '__expected__/expected-simple-report.js'
     );
     // when
     const result = officeConverterService.createTable(mockReports[1]);
@@ -21,8 +21,8 @@ describe('OfficeConverterService', () => {
   it('should convert test report', () => {
     // given
     const expectedReportPath = path.join(
-        __dirname,
-        '__expected__/expected-test-report.js'
+      __dirname,
+      '__expected__/expected-test-report.js'
     );
     // when
     const result = officeConverterService.createTable(mockReports[0]);
@@ -36,8 +36,8 @@ describe('OfficeConverterService', () => {
   it('should convert complex report', () => {
     // given
     const expectedReportPath = path.join(
-        __dirname,
-        '__expected__/expected-complex-report.js'
+      __dirname,
+      '__expected__/expected-complex-report.js'
     );
     // when
     const result = officeConverterService.createTable(mockReports[2]);
@@ -50,8 +50,8 @@ describe('OfficeConverterService', () => {
   it('should convert same report thrice', () => {
     // given
     const expectedReportPath = path.join(
-        __dirname,
-        '__expected__/expected-simple-report.js'
+      __dirname,
+      '__expected__/expected-simple-report.js'
     );
     // when
     let result = officeConverterService.createTable(mockReports[1]);
@@ -66,8 +66,8 @@ describe('OfficeConverterService', () => {
   it('should split forms of attribute when there are many', () => {
     // given
     const expectedReportPath = path.join(
-        __dirname,
-        '__expected__/expected-multiline-header-report.js'
+      __dirname,
+      '__expected__/expected-multiline-header-report.js'
     );
     // when
     const result = officeConverterService.createTable(mockReports[3]);
@@ -90,8 +90,8 @@ describe('OfficeConverterService', () => {
   it('should convert complex attributes report', () => {
     // given
     const expectedReportPath = path.join(
-        __dirname,
-        '__expected__/expected-complex-attributes-report.js'
+      __dirname,
+      '__expected__/expected-complex-attributes-report.js'
     );
     // when
     const result = officeConverterService.createTable(mockReports[4]);
@@ -116,8 +116,8 @@ describe('OfficeConverterService', () => {
   it('should convert no attributes report', () => {
     // given
     const expectedReportPath = path.join(
-        __dirname,
-        '__expected__/no-attributes-report.js'
+      __dirname,
+      '__expected__/no-attributes-report.js'
     );
     // when
     const result = officeConverterService.createTable(mockReports[5]);
@@ -133,8 +133,8 @@ describe('OfficeConverterService', () => {
   it('should convert all filtered out report', () => {
     // given
     const expectedReportPath = path.join(
-        __dirname,
-        '__expected__/all-filtered-out-report.js'
+      __dirname,
+      '__expected__/all-filtered-out-report.js'
     );
     // when
     const result = officeConverterService.createTable(mockReports[6]);

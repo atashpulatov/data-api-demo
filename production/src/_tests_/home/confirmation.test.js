@@ -1,7 +1,6 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import {_Confirmation} from '../../home/confirmation';
-import {Office} from '../mockOffice';
 import {officeApiHelper} from '../../office/office-api-helper';
 
 describe('Confirmation', () => {

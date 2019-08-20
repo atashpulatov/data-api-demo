@@ -3,6 +3,7 @@ import {
   STOP_REPORT_LOADING,
   RESET_STATE,
   SET_REPORT_N_FILTERS,
+  SET_PREPARED_REPORT,
 } from '../../popup/popup-actions';
 
 import {initialState, popupReducer} from '../../popup/popup-reducer';

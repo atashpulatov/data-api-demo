@@ -10,10 +10,6 @@ Add-in for Microsoft Office applications and MicroStrategy.
 
 * Office Online, Office 365, Office 2016 or later
 * Node.js LTS
-* yarn
-```
-npm install --global yarn
-```
 * ssh-key added to your github account (our project depends on 2nd repository, that we contribute, that contains reusable MicroStrategy React components)
 To add key follow instructions on our [github](https://help.github.com/enterprise/2.16/user/articles/generating-an-ssh-key/)
 
@@ -30,13 +26,13 @@ Navigate to project folder and install dependencies
 
 ```
 cd production
-yarn install
+npm install
 ```
 
 To start project just simply type
 
 ```
-yarn start
+npm start
 ```
 
 ### Sideloading
@@ -103,7 +99,7 @@ Type **yes** when prompted.
 We currently support only tests using [Jest](https://jestjs.io/) and [Enzyme](https://airbnb.io/enzyme/docs/api/)
 You can run them using
 ```
-yarn test
+npm test
 ```
 
 ## Deployment
@@ -195,7 +191,6 @@ Currently we do not support production builds.
 * [Ant Design](https://ant.design/docs/react/introduce) - React UI library
 * [superagent](https://visionmedia.github.io/superagent/) - AJAX API
 * [React Router](https://github.com/ReactTraining/react-router) - Router for navigation
-* [yarn](https://yarnpkg.com/en/) - Dependency Management
 * [webpack](https://webpack.js.org/) - module bundler
 * [Babel](https://babeljs.io/) - JavaScript transpiler
 * [Mstr React Library](https://github.microstrategy.com/Tech/mstr-react-library) - MicroStrategy React Components

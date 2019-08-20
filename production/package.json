@@ -7,7 +7,9 @@
   "scripts": {
     "start": "HTTPS=true react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --silent --noStackTrace",
+    "test:debug": "CI=true react-scripts test --debug",
+    "test:coverage": "CI=true react-scripts test --coverage --silent --noStackTrace --forceExit --ci",
     "eject": "react-scripts eject",
     "start:desktop": "office-addin-debugging start manifest.xml desktop",
     "start:web": "office-addin-debugging start manifest.xml web",

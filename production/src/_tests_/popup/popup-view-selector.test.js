@@ -359,7 +359,7 @@ describe('PopupViewSelector', () => {
       authToken: 'token',
     };
     // when
-    
+
     // eslint-disable-next-line react/jsx-pascal-case
     const componentWrapper = shallow(<_PopupViewSelector
       location={location}
