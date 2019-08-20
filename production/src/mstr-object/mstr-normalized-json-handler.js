@@ -137,6 +137,7 @@ class NormalizedJsonHandler {
    * @return {Array}
    */
   renderTitles = (definition, axis, headers, onElement) => {
+    if (headers[axis].length === 0) return [[]];
     return headers[axis].map((headerCells) => {
       const mapFn = axis === 'rows' ? this.mapElementIndicesToNames : this.mapElementIndicesToElements;
       const axisElements = mapFn({definition, axis, headerCells});
