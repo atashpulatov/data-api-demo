@@ -8,8 +8,6 @@ import {connect} from 'react-redux';
 import {actions} from './navigation-tree-actions';
 import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';
 import {withTranslation} from 'react-i18next';
-import {message} from 'antd';
-import {EMPTY_REPORT} from '../error/constants';
 
 /* global Office */
 
@@ -43,7 +41,7 @@ export class _NavigationTree extends Component {
   handleSecondary = async () => {
     try {
       this.props.handlePrepare(this.props.chosenProjectId, this.props.chosenObjectId,
-          this.props.chosenSubtype, this.props.chosenProjectName, this.props.chosenType);
+        this.props.chosenSubtype, this.props.chosenProjectName, this.props.chosenType);
       this.setState({previewDisplay: true});
     } catch (err) {
       this.props.handlePopupErrors(err);

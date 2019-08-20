@@ -15,7 +15,7 @@ export const _SettingsMenu = ({userFullName, userInitials, isSecured, reportArra
   const isSecuredActive = !isSecured && reportArray && reportArray.length > 0;
 
   const prepareEmail = () => {
-    const {host, platform, version} = Office.context.diagnostics;
+    const {host, platform, version} = window.Office.context.diagnostics;
     const userAgent = navigator.userAgent;
     const message = t('Please don’t change the text below. Type your message above this line.');
     const email = {
@@ -56,21 +56,21 @@ export const _SettingsMenu = ({userFullName, userInitials, isSecured, reportArra
           tabIndex="0"
           href='https://www.microstrategy.com/legal-folder/privacy-policy'
           target="_blank"
-          rel="noopener">{t('Privacy Policy')}</a>
+          rel="noopener noreferrer">{t('Privacy Policy')}</a>
       </li>
       <li>
         <a
           tabIndex="0"
           href='https://www.microstrategy.com/legal-folder/legal-policies/terms-of-use'
           target="_blank"
-          rel="noopener">{t('Terms of Use')}</a>
+          rel="noopener noreferrer">{t('Terms of Use')}</a>
       </li>
       <li>
         <a
           tabIndex="0"
           href=' https://www2.microstrategy.com/producthelp/Current/Office/index.htm'
           target="_blank"
-          rel="noopener">{t('Help')}</a>
+          rel="noopener noreferrer">{t('Help')}</a>
       </li>
       <li>
         <a

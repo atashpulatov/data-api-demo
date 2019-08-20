@@ -10,7 +10,7 @@ export const _Confirmation = ({reportArray, toggleSecuredFlag, toggleIsConfirmFl
   useEffect(() => {
     const ua = window.navigator.userAgent;
     // this is fix IE11 - it didn't handle z-index properties correctly
-    if (ua.indexOf('MSIE') > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+    if (ua.indexOf('MSIE') > 0 || !!navigator.userAgent.match(/Trident.*rv:11\./)) {
       const elm = document.querySelector('.confirm-container');
       elm.style.zIndex = -1;
       setTimeout(() => {
