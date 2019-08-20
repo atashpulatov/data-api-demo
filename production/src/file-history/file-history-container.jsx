@@ -32,12 +32,12 @@ export class _FileHistoryContainer extends React.Component {
 
   componentDidMount() {
     this._ismounted = true;
-    this.addRemoveReportListener();
+    // this.addRemoveReportListener();
   }
 
   componentWillUnmount() {
     this._ismounted = false;
-    this.deleteRemoveReportListener();
+    // this.deleteRemoveReportListener();
   }
 
   addRemoveReportListener = async () => {

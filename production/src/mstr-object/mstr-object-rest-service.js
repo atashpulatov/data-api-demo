@@ -27,9 +27,6 @@ class MstrObjectRestService {
         .withCredentials()
         .then((res) => {
           return res.body;
-        })
-        .catch((err) => {
-          throw errorService.errorRestFactory(err);
         });
   }
 
@@ -42,9 +39,6 @@ class MstrObjectRestService {
         .withCredentials()
         .then((res) => {
           return res.body;
-        })
-        .catch((err) => {
-          throw errorService.errorRestFactory(err);
         });
   }
 
@@ -60,9 +54,6 @@ class MstrObjectRestService {
             throw (res);
           }
           return res.body.instanceId;
-        })
-        .catch((err) => {
-          throw err;
         });
   }
 
@@ -118,21 +109,17 @@ class MstrObjectRestService {
   }
 
   _parseInstanceDefinition(res) {
-    try {
-      const {body} = res;
-      if (res.status === 200 && body.status === 2) {
-        const {instanceId} = body;
-        const status = body.status;
-        return {instanceId, status};
-      }
-      const {instanceId, data} = body;
-      if (data.paging.total === 0) throw new Error(NOT_SUPPORTED_NO_ATTRIBUTES);
-      const mstrTable = officeConverterServiceV2.createTable(body);
-      const {rows, columns} = this._checkTableDimensions(mstrTable.tableSize);
-      return {instanceId, rows, columns, mstrTable};
-    } catch (err) {
-      throw errorService.errorRestFactory(err);
+    const {body} = res;
+    if (res.status === 200 && body.status === 2) {
+      const {instanceId} = body;
+      const status = body.status;
+      return {instanceId, status};
     }
+    const {instanceId, data} = body;
+    if (data.paging.total === 0) throw new Error(NOT_SUPPORTED_NO_ATTRIBUTES);
+    const mstrTable = officeConverterServiceV2.createTable(body);
+    const {rows, columns} = this._checkTableDimensions(mstrTable.tableSize);
+    return {instanceId, rows, columns, mstrTable};
   }
 
   getObjectDefinition(objectId, projectId, isReport = true) {
@@ -150,9 +137,6 @@ class MstrObjectRestService {
         .withCredentials()
         .then((res) => {
           return res.body;
-        })
-        .catch((err) => {
-          throw errorService.errorRestFactory(err);
         });
   }
 
@@ -169,46 +153,31 @@ class MstrObjectRestService {
         .withCredentials()
         .then((res) => {
           return res.body;
-        })
-        .catch((err) => {
-          throw errorService.errorRestFactory(err);
         });
   }
 
   async createInstance(objectId, projectId, isReport = true, dossierData, body = {}, limit = 1) {
-    try {
-      const storeState = reduxStore.getState();
-      const envUrl = storeState.sessionReducer.envUrl;
-      const authToken = storeState.sessionReducer.authToken;
-      const fullPath = this._getFullPath({dossierData, envUrl, limit, isReport, objectId, version: API_VERSION});
-      return await this._createInstance(fullPath, authToken, projectId, body);
-    } catch (error) {
-      throw error instanceof OutsideOfRangeError ? error : errorService.errorRestFactory(error);
-    }
+    const storeState = reduxStore.getState();
+    const envUrl = storeState.sessionReducer.envUrl;
+    const authToken = storeState.sessionReducer.authToken;
+    const fullPath = this._getFullPath({dossierData, envUrl, limit, isReport, objectId, version: API_VERSION});
+    return await this._createInstance(fullPath, authToken, projectId, body);
   }
 
   modifyInstance(objectId, projectId, isReport = true, dossierData, body = {}, instanceId, limit = 1) {
-    try {
-      const storeState = reduxStore.getState();
-      const envUrl = storeState.sessionReducer.envUrl;
-      const authToken = storeState.sessionReducer.authToken;
-      const fullPath = this._getFullPath({dossierData, envUrl, limit, isReport, objectId, instanceId, version: API_VERSION});
-      return this._putInstance(fullPath, authToken, projectId, body);
-    } catch (error) {
-      throw error instanceof OutsideOfRangeError ? error : errorService.errorRestFactory(error);
-    }
+    const storeState = reduxStore.getState();
+    const envUrl = storeState.sessionReducer.envUrl;
+    const authToken = storeState.sessionReducer.authToken;
+    const fullPath = this._getFullPath({dossierData, envUrl, limit, isReport, objectId, instanceId, version: API_VERSION});
+    return this._putInstance(fullPath, authToken, projectId, body);
   }
 
   getInstance(objectId, projectId, isReport = true, dossierData, body = {}, instanceId, limit = 1) {
-    try {
-      const storeState = reduxStore.getState();
-      const envUrl = storeState.sessionReducer.envUrl;
-      const authToken = storeState.sessionReducer.authToken;
-      const fullPath = this._getFullPath({dossierData, envUrl, limit, isReport, objectId, instanceId, version: API_VERSION});
-      return this._getInstance(fullPath, authToken, projectId, body);
-    } catch (error) {
-      throw error instanceof OutsideOfRangeError ? error : errorService.errorRestFactory(error);
-    }
+    const storeState = reduxStore.getState();
+    const envUrl = storeState.sessionReducer.envUrl;
+    const authToken = storeState.sessionReducer.authToken;
+    const fullPath = this._getFullPath({dossierData, envUrl, limit, isReport, objectId, instanceId, version: API_VERSION});
+    return this._getInstance(fullPath, authToken, projectId, body);
   }
 
   createDossierBasedOnReport(reportId, instanceId, projectId) {
@@ -239,9 +208,6 @@ class MstrObjectRestService {
         .withCredentials()
         .then((res) => {
           return res.body;
-        })
-        .catch((err) => {
-          throw errorService.errorRestFactory(err);
         });
   }
 
@@ -258,9 +224,6 @@ class MstrObjectRestService {
         .withCredentials()
         .then((res) => {
           return res.body;
-        })
-        .catch((err) => {
-          throw errorService.errorRestFactory(err);
         });
   }
 
@@ -278,9 +241,6 @@ class MstrObjectRestService {
         .withCredentials()
         .then((res) => {
           return res.body;
-        })
-        .catch((err) => {
-          throw errorService.errorRestFactory(err);
         });
   }
 
@@ -325,9 +285,6 @@ class MstrObjectRestService {
         .withCredentials()
         .then((res) => {
           return res.body && res.body.length;
-        })
-        .catch((err) => {
-          throw errorService.errorRestFactory(err);
         });
   }
 
@@ -348,11 +305,11 @@ class MstrObjectRestService {
           })
           .catch((err) => {
             console.error(err);
-            throw errorService.errorRestFactory(err);
+            throw err;
           });
     } catch (error) {
       console.error(error);
-      throw errorService.errorRestFactory(error);
+      throw error;
     }
   }
 
@@ -369,9 +326,6 @@ class MstrObjectRestService {
         .withCredentials()
         .then((res) => {
           return res.status;
-        })
-        .catch((err) => {
-          throw errorService.errorRestFactory(err);
         });
   }
 
@@ -387,50 +341,43 @@ class MstrObjectRestService {
         .withCredentials()
         .then((res) => {
           return res.body;
-        })
-        .catch((err) => {
-          throw errorService.errorRestFactory(err);
         });
   }
 };
 
 async function* fetchContentGenerator(instanceDefinition, objectId, projectId, isReport, dossierData, body, limit) {
-  try {
-    const totalRows = instanceDefinition.rows;
-    const {instanceId, mstrTable} = instanceDefinition;
-    const {isCrosstab} = mstrTable;
-    const offsetSubtotal = (e) => {
-      e && (e.rowIndex = e.rowIndex + offset);
-    };
-    const offsetCrosstabSubtotal = (e) => {
-      (e && e.axis === 'rows') && (e.colIndex = e.colIndex + offset);
-    };
-    const storeState = reduxStore.getState();
-    const envUrl = storeState.sessionReducer.envUrl;
-    const authToken = storeState.sessionReducer.authToken;
-    const fullPath = mstrObjectRestService._getFullPath({dossierData, envUrl, isReport, objectId, instanceId, version: API_VERSION});
-    let fetchedRows = 0;
-    let offset = 0;
+  const totalRows = instanceDefinition.rows;
+  const {instanceId, mstrTable} = instanceDefinition;
+  const {isCrosstab} = mstrTable;
+  const offsetSubtotal = (e) => {
+    e && (e.rowIndex = e.rowIndex + offset);
+  };
+  const offsetCrosstabSubtotal = (e) => {
+    (e && e.axis === 'rows') && (e.colIndex = e.colIndex + offset);
+  };
+  const storeState = reduxStore.getState();
+  const envUrl = storeState.sessionReducer.envUrl;
+  const authToken = storeState.sessionReducer.authToken;
+  const fullPath = mstrObjectRestService._getFullPath({dossierData, envUrl, isReport, objectId, instanceId, version: API_VERSION});
+  let fetchedRows = 0;
+  let offset = 0;
 
-    while (fetchedRows < totalRows && fetchedRows < EXCEL_ROW_LIMIT) {
-      let header;
-      let crosstabSubtotal;
-      const response = await mstrObjectRestService._fetchObjectContent(fullPath, authToken, projectId, offset, limit);
-      const {current} = response.body.data.paging;
-      fetchedRows = current + offset;
-      const {row, rowTotals} = officeConverterServiceV2.getRows(response.body, isCrosstab);
-      if (isCrosstab) {
-        header = officeConverterServiceV2.getHeaders(response.body);
-        crosstabSubtotal = header.subtotalAddress;
-        offset !== 0 && crosstabSubtotal.map((e) => offsetCrosstabSubtotal(e));
-      } else {
-        offset !== 0 && rowTotals.map((e) => offsetSubtotal(e));
-      }
-      offset += current;
-      yield {row, header, subtotalAddress: isCrosstab ? crosstabSubtotal : rowTotals};
+  while (fetchedRows < totalRows && fetchedRows < EXCEL_ROW_LIMIT) {
+    let header;
+    let crosstabSubtotal;
+    const response = await mstrObjectRestService._fetchObjectContent(fullPath, authToken, projectId, offset, limit);
+    const {current} = response.body.data.paging;
+    fetchedRows = current + offset;
+    const {row, rowTotals} = officeConverterServiceV2.getRows(response.body, isCrosstab);
+    if (isCrosstab) {
+      header = officeConverterServiceV2.getHeaders(response.body);
+      crosstabSubtotal = header.subtotalAddress;
+      offset !== 0 && crosstabSubtotal.map((e) => offsetCrosstabSubtotal(e));
+    } else {
+      offset !== 0 && rowTotals.map((e) => offsetSubtotal(e));
     }
-  } catch (error) {
-    throw errorService.errorRestFactory(error);
+    offset += current;
+    yield {row, header, subtotalAddress: isCrosstab ? crosstabSubtotal : rowTotals};
   }
 }
 

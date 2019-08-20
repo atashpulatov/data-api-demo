@@ -65,7 +65,7 @@ class PopupController {
             reduxStore.dispatch({type: officeProperties.actions.popupShown});
           });
     } catch (error) {
-      errorService.handleOfficeError(error);
+      errorService.handleError(error);
     }
   };
 
@@ -95,15 +95,14 @@ class PopupController {
         case selectorProperties.commandCancel:
           break;
         case selectorProperties.commandError:
-          const error = errorService.errorRestFactory(response.error);
-          errorService.handleError(error, false);
+          errorService.handleError(response.error, false);
           break;
         default:
           break;
       }
     } catch (error) {
       console.error(error);
-      errorService.handleOfficeError(error);
+      errorService.handleError(error);
     } finally {
       reduxStore.dispatch({type: officeProperties.actions.popupHidden});
       reduxStore.dispatch({type: officeProperties.actions.stopLoading});

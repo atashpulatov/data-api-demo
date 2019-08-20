@@ -8,9 +8,10 @@ import {notificationService} from '../notification/notification-service.js';
 import {RunOutsideOfficeError} from './run-outside-office-error.js';
 import {OverlappingTablesError} from './overlapping-tables-error';
 import {GenericOfficeError} from './generic-office-error.js';
-import {errorMessages, NOT_SUPPORTED_PROMPTS_REFRESH, TABLE_OVERLAP} from './constants';
+import {errorMessages, NOT_SUPPORTED_PROMPTS_REFRESH, TABLE_OVERLAP, TABLE_REMOVED} from './constants';
 import {ConnectionBrokenError} from './connection-error.js';
 import {OutsideOfRangeError} from './outside-of-range-error.js';
+import {TableRemovedFromExcelError} from './table-removed-from-excel-error.js';
 
 const TIMEOUT = 2000;
 
@@ -44,28 +45,34 @@ class ErrorService {
   };
 
   errorOfficeFactory = (error) => {
-    if (error.name === 'RichApi.Error') {
-      switch (error.message) {
-        case 'Excel is not defined':
-          return new RunOutsideOfficeError(error.message);
-        case `A table can't overlap another table. `:
-          return new OverlappingTablesError(TABLE_OVERLAP);
-        default:
-          return new GenericOfficeError(error.message);
-      }
+    switch (error.message) {
+      case 'Excel is not defined':
+        return new RunOutsideOfficeError(error.message);
+      case `A table can't overlap another table. `:
+        return new OverlappingTablesError(TABLE_OVERLAP);
+      case 'This object binding is no longer valid due to previous updates.':
+        return new TableRemovedFromExcelError(TABLE_REMOVED);
+      default:
+        return new GenericOfficeError(error.message);
     }
-    return error;
   }
+
   handleError = (error, isLogout) => {
-    const message = this.getErrorMessage(error);
+    if (error.name === 'RichApi.Error') return this.handleOfficeError(error);
+    return this.handleRestError(error, isLogout);
+  }
+
+  handleRestError = (error, isLogout) => {
+    const restError = this.errorRestFactory(error);
+    const message = this.getErrorMessage(restError);
     const errorDetails = error.response && error.response.text;
-    if (error instanceof UnauthorizedError) {
+    if (restError instanceof UnauthorizedError) {
       notificationService.displayNotification('info', message);
     } else {
       notificationService.displayNotification('warning', message, errorDetails);
     }
-    if (error instanceof ConnectionBrokenError
-      || error instanceof UnauthorizedError) {
+    if (restError instanceof ConnectionBrokenError
+      || restError instanceof UnauthorizedError) {
       if (!isLogout) {
         setTimeout(() => {
           this.fullLogOut();
@@ -74,37 +81,10 @@ class ErrorService {
     }
   }
 
-
-  handlePreAuthError = (error, isLogout) => {
-    switch (true) {
-      case error instanceof UnauthorizedError:
-        notificationService.displayNotification('error', 'Wrong username or password.');
-        break;
-      default:
-        this.handleError(error, isLogout);
-    }
-  }
-  handleLogoutError = (error, isLogout = true) => {
-    this.handleError(error, isLogout);
-  }
   handleOfficeError = (error) => {
-    const message = this.getErrorMessage(error);
-    switch (true) {
-      case error instanceof RunOutsideOfficeError:
-        notificationService.displayNotification('warning', message);
-        break;
-      case error instanceof OverlappingTablesError:
-        notificationService.displayNotification('warning', message);
-        break;
-      case error instanceof GenericOfficeError:
-        notificationService.displayNotification('warning', message);
-        break;
-      case error instanceof OutsideOfRangeError:
-        notificationService.displayNotification('warning', message);
-        break;
-      default:
-        this.handleError(error);
-    }
+    const officeError = this.errorOfficeFactory(error);
+    const message = this.getErrorMessage(officeError);
+    notificationService.displayNotification('warning', message);
   }
 
   fullLogOut = () => {
@@ -121,7 +101,8 @@ class ErrorService {
       return 'Environment is unreachable. Please check your internet connection.';
     };
     if (error instanceof UnauthorizedError) {
-      return 'Your session has expired. Please log in.';
+      if (error.response.body.code === 'ERR009') return 'Your session has expired. Please log in.';
+      if (error.response.body.code === 'ERR003') return 'Wrong username or password.';
     };
     if (error instanceof BadRequestError) {
       return 'There has been a problem with your request';
@@ -140,6 +121,9 @@ class ErrorService {
     }
     if (error instanceof RunOutsideOfficeError) {
       return 'Please run plugin inside Office';
+    }
+    if (error instanceof TableRemovedFromExcelError) {
+      return TABLE_REMOVED;
     }
     if (error instanceof GenericOfficeError) {
       return `Excel returned error: ${error.message}`;
