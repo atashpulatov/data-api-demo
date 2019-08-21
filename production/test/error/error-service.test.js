@@ -355,30 +355,27 @@ describe('ErrorService', () => {
       // then
       expect(returnedError).toBeInstanceOf(GenericOfficeError);
     });
-    it('should throw same error if it is not expected error', () => {
-      // given
-      const error = {};
-      // when
-      const returnedError = errorService.errorOfficeFactory(error);
-      // then
-      expect(returnedError).toBe(error);
-    });
   });
   describe('errorOfficeHandler', () => {
     it('should handle RunOutsideOfficeError', () => {
       // given
-      const error = new RunOutsideOfficeError();
+      const error = {
+        name: 'RichApi.Error',
+        message: 'Excel is not defined',
+      };
       const notificationSpy = jest.spyOn(notificationService, 'displayNotification');
       // when
-      errorService.handleOfficeError(error);
+      errorService.handleError(error);
       // then
       expect(notificationSpy).toBeCalled();
       expect(notificationSpy).toBeCalledWith('warning', 'Please run plugin inside Office');
     });
     it('should handle OverlappingTablesError', () => {
       // given
-      const errorMessage = `A table can't overlap another table.`;
-      const error = new OverlappingTablesError(errorMessage);
+      const error = {
+        name: 'RichApi.Error',
+        message: `A table can't overlap another table. `,
+      };
       const notificationSpy = jest.spyOn(notificationService, 'displayNotification');
       // when
       errorService.handleOfficeError(error);
@@ -388,14 +385,16 @@ describe('ErrorService', () => {
     });
     it('should handle GenericOfficeError', () => {
       // given
-      const errorMessage = `A table can't overlap another table. `;
-      const error = new GenericOfficeError(errorMessage);
+      const error = {
+        name: 'RichApi.Error',
+        message: 'Generic error message',
+      };
       const notificationSpy = jest.spyOn(notificationService, 'displayNotification');
       // when
       errorService.handleOfficeError(error);
       // then
       expect(notificationSpy).toBeCalled();
-      expect(notificationSpy).toBeCalledWith('warning', `Excel returned error: ${errorMessage}`);
+      expect(notificationSpy).toBeCalledWith('warning', `Excel returned error: ${error.message}`);
     });
     it('should handle OutsideOfRangeError', () => {
       // given
@@ -407,16 +406,16 @@ describe('ErrorService', () => {
       expect(notificationSpy).toBeCalled();
       expect(notificationSpy).toBeCalledWith('warning', `The table you try to import exceeds the worksheet limits.`);
     });
-    it('should forward error that it does not handle to next method', () => {
+    it('should forward error to a proper method', () => {
       // given
       const error = {constructor: () => {}};
-      const originalMethod = errorService.handleError;
-      errorService.handleError = jest.fn();
+      const originalMethod = errorService.handleRestError;
+      errorService.handleRestError = jest.fn();
       // when
-      errorService.handleOfficeError(error);
+      errorService.handleError(error);
       // then
-      expect(errorService.handleError).toBeCalled();
-      errorService.handleError = originalMethod;
+      expect(errorService.handleRestError).toBeCalled();
+      errorService.handleRestError = originalMethod;
     });
   });
   describe('handlePreAuthError', () => {
@@ -462,7 +461,7 @@ describe('ErrorService', () => {
       const error = {message: 'error'};
       const fullLogOutSpy = jest.spyOn(errorService, 'handleError');
       // when
-      errorService.handleLogoutError(error);
+      errorService.handleError(error);
       // then
       expect(fullLogOutSpy).toBeCalled();
     });

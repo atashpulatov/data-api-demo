@@ -23,7 +23,7 @@ class ErrorService {
       || error instanceof OutsideOfRangeError;
 
     if (!error.status && !error.response && !isOfficeError) {
-      if (error.message.includes('Possible causes: the network is offline,')) {
+      if (error.message && error.message.includes('Possible causes: the network is offline,')) {
         return new ConnectionBrokenError(error);
       }
       return error;
