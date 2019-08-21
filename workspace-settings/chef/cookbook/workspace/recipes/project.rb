@@ -34,6 +34,14 @@ when 'redhat', 'centos', 'fedora', 'amazon'
     only_if "echo $USER | grep jenkins"
   end
 
+  bash 'install linux dependencies' do
+    user 'root'
+    code <<-EOH
+      yum install -y avahi-compat-libdns_sd*
+    EOH
+    only_if "echo $USER | grep jenkins"
+end
+
 when 'mac_os_x'
   include_recipe 'java-osx'
 else
