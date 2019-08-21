@@ -60,7 +60,7 @@ class ErrorService {
     return error;
   }
 
-  handleError = (error, isLogout) => {
+  handleError = (error, isLogout = false) => {
     const officeError = this.errorOfficeFactory(error);
     const restError = this.errorRestFactory(officeError);
     return this.universalHandler(restError, isLogout);
