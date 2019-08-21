@@ -7,11 +7,6 @@ include_recipe 'chef_commons'
 include_recipe 'workspace::attributes_overrides'
 include_recipe 'nodejs'
 
-nodejs_npm 'yarn' do
-  version '1.13.0'
-end
-
-
 case node['platform']
 when 'redhat', 'centos', 'fedora', 'amazon'
   include_recipe 'java'
