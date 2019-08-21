@@ -60,13 +60,9 @@ class ErrorService {
     return error;
   }
 
-  handleError = (error, isLogout = false) => {
-    const officeError = this.errorOfficeFactory(error);
-    const restError = this.errorRestFactory(officeError);
-    return this.universalHandler(restError, isLogout);
-  }
-
-  universalHandler = (error, isLogout) => {
+  handleError = (errorToHandle, isLogout = false) => {
+    const officeError = this.errorOfficeFactory(errorToHandle);
+    const error = this.errorRestFactory(officeError);
     const message = this.getErrorMessage(error);
     const errorDetails = error.response && error.response.text;
     if (error instanceof UnauthorizedError) {
@@ -82,7 +78,7 @@ class ErrorService {
         }, TIMEOUT);
       }
     }
-  };
+  }
 
   fullLogOut = () => {
     sessionHelper.logOutRest();
@@ -98,8 +94,8 @@ class ErrorService {
       return 'Environment is unreachable. Please check your internet connection.';
     };
     if (error instanceof UnauthorizedError) {
-      if (error.response.body.code === 'ERR009') return 'Your session has expired. Please log in.';
       if (error.response.body.code === 'ERR003') return 'Wrong username or password.';
+      return 'Your session has expired. Please log in.';
     };
     if (error instanceof BadRequestError) {
       return 'There has been a problem with your request';
