@@ -89,6 +89,7 @@ export function refreshReportsArray(reportArray, isRefreshAll) {
           isRefreshAll: isRefreshAll,
         });
         isError = await popupHelper.printRefreshedReport(report.bindId, report.objectType, reportArray.length, index, isRefreshAll, report.promptsAnswers);
+        return {isErrorOnRefresh: false};
       } catch (error) {
         popupHelper.handleRefreshError(error, reportArray.length, index, isRefreshAll);
         return {isErrorOnRefresh: true};
