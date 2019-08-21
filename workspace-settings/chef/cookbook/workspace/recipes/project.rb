@@ -32,6 +32,7 @@ when 'redhat', 'centos', 'fedora', 'amazon'
   bash 'install linux dependencies' do
     user 'root'
     code <<-EOH
+      yum install -y clang
       yum install -y avahi-compat-libdns_sd*
     EOH
     only_if "echo $USER | grep jenkins"
