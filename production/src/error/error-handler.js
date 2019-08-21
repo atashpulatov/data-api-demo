@@ -45,47 +45,44 @@ class ErrorService {
   };
 
   errorOfficeFactory = (error) => {
-    switch (error.message) {
-      case 'Excel is not defined':
-        return new RunOutsideOfficeError(error.message);
-      case `A table can't overlap another table. `:
-        return new OverlappingTablesError(TABLE_OVERLAP);
-      case 'This object binding is no longer valid due to previous updates.':
-        return new TableRemovedFromExcelError(TABLE_REMOVED);
-      default:
-        return new GenericOfficeError(error.message);
+    if (error.name === 'RichApi.Error') {
+      switch (error.message) {
+        case 'Excel is not defined':
+          return new RunOutsideOfficeError(error.message);
+        case `A table can't overlap another table. `:
+          return new OverlappingTablesError(TABLE_OVERLAP);
+        case 'This object binding is no longer valid due to previous updates.':
+          return new TableRemovedFromExcelError(TABLE_REMOVED);
+        default:
+          return new GenericOfficeError(error.message);
+      }
     }
+    return error;
   }
 
   handleError = (error, isLogout) => {
-    if (error.name === 'RichApi.Error') return this.handleOfficeError(error);
-    return this.handleRestError(error, isLogout);
+    const officeError = this.errorOfficeFactory(error);
+    const restError = this.errorRestFactory(officeError);
+    return this.universalHandler(restError, isLogout);
   }
 
-  handleRestError = (error, isLogout) => {
-    const restError = this.errorRestFactory(error);
-    const message = this.getErrorMessage(restError);
+  universalHandler = (error, isLogout) => {
+    const message = this.getErrorMessage(error);
     const errorDetails = error.response && error.response.text;
-    if (restError instanceof UnauthorizedError) {
+    if (error instanceof UnauthorizedError) {
       notificationService.displayNotification('info', message);
     } else {
       notificationService.displayNotification('warning', message, errorDetails);
     }
-    if (restError instanceof ConnectionBrokenError
-      || restError instanceof UnauthorizedError) {
+    if (error instanceof ConnectionBrokenError
+      || error instanceof UnauthorizedError) {
       if (!isLogout) {
         setTimeout(() => {
           this.fullLogOut();
         }, TIMEOUT);
       }
     }
-  }
-
-  handleOfficeError = (error) => {
-    const officeError = this.errorOfficeFactory(error);
-    const message = this.getErrorMessage(officeError);
-    notificationService.displayNotification('warning', message);
-  }
+  };
 
   fullLogOut = () => {
     sessionHelper.logOutRest();
