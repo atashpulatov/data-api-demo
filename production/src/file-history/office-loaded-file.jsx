@@ -8,6 +8,7 @@ import {refreshReportsArray, callForEdit, callForReprompt} from '../popup/popup-
 import RenameInput from './file-history-rename-input';
 import {withTranslation} from 'react-i18next';
 import {officeApiHelper} from '../office/office-api-helper';
+import {ButtonPopover} from './button-popover';
 
 export class _OfficeLoadedFile extends React.Component {
   constructor() {
@@ -77,13 +78,12 @@ export class _OfficeLoadedFile extends React.Component {
 
   refreshAction = (e) => {
     e.stopPropagation();
-    if (!this.state.allowRefreshClick) {
+    const {isLoading, bindingId, objectType, refreshReportsArray, loading} = this.props;
+    if (!this.state.allowRefreshClick || loading) {
       return;
     }
-    const {isLoading, bindingId, objectType, refreshReportsArray} = this.props;
     if (!isLoading) {
       this.setState({allowRefreshClick: false}, async () => {
-        // await refreshReport(bindingId, objectType, false);
         try {
           await officeApiHelper.onBindingObjectClick(bindingId, false) && await refreshReportsArray([{bindId: bindingId, objectType}], false);
         } finally {
@@ -121,17 +121,17 @@ export class _OfficeLoadedFile extends React.Component {
           </Popover>
         </Col>
         <Col span={1} offset={1} style={{marginTop: '1px'}}>
-          <Popover placement="bottom" content={t('Edit Data')} mouseEnterDelay={1}>
+          <ButtonPopover placement="bottom" content={t('Edit Data')} mouseEnterDelay={1}>
             {<span
               tabIndex="0"
               className="loading-button-container"
               onClick={this.editAction}>
               <MSTRIcon type='edit' />
             </span>}
-          </Popover>
+          </ButtonPopover>
         </Col>
         <Col span={1} offset={1}>
-          <Popover placement="bottom" content={t('Refresh Data')} mouseEnterDelay={1}>
+          <ButtonPopover placement="bottom" content={t('Refresh Data')} mouseEnterDelay={1}>
             {<span
               tabIndex="0"
               className="loading-button-container"
@@ -139,7 +139,7 @@ export class _OfficeLoadedFile extends React.Component {
               {!isLoading ? <MSTRIcon type='refresh' /> :
                 <img width='12px' height='12px' src={loadingSpinner} alt={t('Report loading icon')} />}
             </span>}
-          </Popover>
+          </ButtonPopover>
         </Col>
         <Col span={1} offset={1}>
           <Popover placement="bottomRight" content={t('Remove Data from Workbook')} mouseEnterDelay={1} arrowPointAtCenter="true">
@@ -159,11 +159,17 @@ _OfficeLoadedFile.defaultProps = {
   t: (text) => text,
 };
 
+function mapStateToProps(state) {
+  return {
+    loading: state.officeReducer.loading,
+  };
+}
+
 const mapDispatchToProps = {
   refreshReportsArray,
   callForEdit,
   callForReprompt,
 };
 
-export const OfficeLoadedFile = connect(null, mapDispatchToProps)(withTranslation('common')(_OfficeLoadedFile));
+export const OfficeLoadedFile = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_OfficeLoadedFile));
 
