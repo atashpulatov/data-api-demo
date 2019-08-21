@@ -182,7 +182,7 @@ class PopupController {
       reportParams.promptsAnswers = response.promptsAnswers;
       await officeStoreService.preserveReportValue(reportParams.bindId, 'promptsAnswers', response.promptsAnswers);
     }
-    const isErrorOnRefresh = await refreshReportsArray([reportParams], false)(reduxStore.dispatch);
+    const {isErrorOnRefresh} = await refreshReportsArray([reportParams], false)(reduxStore.dispatch);
     if (isErrorOnRefresh) {
       await officeStoreService.preserveReportValue(reportParams.bindId, 'body', reportPreviousState.body);
     }
