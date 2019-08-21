@@ -91,7 +91,8 @@ export function refreshReportsArray(reportArray, isRefreshAll) {
         isError = await popupHelper.printRefreshedReport(report.bindId, report.objectType, reportArray.length, index, isRefreshAll, report.promptsAnswers);
       } catch (error) {
         popupHelper.handleRefreshError(error, reportArray.length, index, isRefreshAll);
-        return {isErrorOnRefresh: true};
+        // We want to return isErrorOnRefresh:true when refreshing after editing a single table so we don't store the new body
+        if (!isRefreshAll) return {isErrorOnRefresh: true};
       } finally {
         dispatch({
           type: officeProperties.actions.finishLoadingReport,
@@ -101,7 +102,7 @@ export function refreshReportsArray(reportArray, isRefreshAll) {
         });
       }
     }
-    return {isErrorOnRefresh: false};
+    if (!isRefreshAll) return {isErrorOnRefresh: false};
   };
 }
 
