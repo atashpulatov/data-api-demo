@@ -101,6 +101,7 @@ export function refreshReportsArray(reportArray, isRefreshAll) {
         });
       }
     }
+    return {isErrorOnRefresh: false};
   };
 }
 
