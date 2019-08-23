@@ -230,7 +230,7 @@ hr {
   left: 50%;
   transform: translate(-50%);
   width: 330px;
-  height: 250px;
+  height: auto;
   padding: 37px 20px 38px 20px;
   border: 1px solid #ffffff;
   box-shadow: 1px 2px 8px 0 #b7b7b7;
