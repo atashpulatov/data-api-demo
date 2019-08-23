@@ -90,20 +90,15 @@ class OfficeApiHelper {
       if (error.code === 'ItemNotFound') {
         return notificationService.displayNotification('info', 'The object does not exist in the metadata.');
       }
-      const errorAfterOfficeFactory = errorService.errorOfficeFactory(error);
-      errorService.handleOfficeError(errorAfterOfficeFactory);
+      errorService.handleError(error);
       return false;
     }
   };
 
   getBindingRange = (context, bindingId) => {
-    try {
-      return context.workbook.bindings
-          .getItem(bindingId).getTable()
-          .getRange();
-    } catch (error) {
-      throw errorService.errorOfficeFactory(error);
-    }
+    return context.workbook.bindings
+        .getItem(bindingId).getTable()
+        .getRange();
   }
 
   getTable = (context, bindingId) => {

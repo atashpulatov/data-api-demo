@@ -127,7 +127,7 @@ class OfficeDisplayService {
         officeTable.delete();
         isCrosstab && await crosstabRange.clear();
       }
-      throw errorService.errorOfficeFactory(error);
+      throw error;
     } finally {
       excelContext.sync();
       console.groupEnd();

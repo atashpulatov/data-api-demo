@@ -21,7 +21,7 @@ describe('loginUser', () => {
     expect(authenticationService.authenticate).not.toBeCalled();
     expect(notificationService.displayNotification).not.toBeCalled();
     expect(sessionHelper.logIn).not.toBeCalled();
-    expect(errorService.handlePreAuthError).not.toBeCalled();
+    expect(errorService.handleError).not.toBeCalled();
     expect(sessionHelper.disableLoading).not.toBeCalled();
   });
   it('should save login values', () => {
@@ -93,8 +93,8 @@ describe('loginUser', () => {
     await authenticationHelper.loginUser(givenError, givenValues);
     // then
     expect(authenticateMock).toBeCalled();
-    expect(errorService.handlePreAuthError).toBeCalled();
-    expect(errorService.handlePreAuthError).toBeCalledWith(testError, true);
+    expect(errorService.handleError).toBeCalled();
+    expect(errorService.handleError).toBeCalledWith(testError, true);
     expect(sessionHelper.disableLoading).toBeCalled();
   });
   it('should call getSession on validating token', async () => {

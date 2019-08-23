@@ -9,9 +9,6 @@ class UserRestService {
         .withCredentials()
         .then((res) => {
           return res.body;
-        })
-        .catch((err) => {
-          throw errorService.errorRestFactory(err);
         });
   }
 }

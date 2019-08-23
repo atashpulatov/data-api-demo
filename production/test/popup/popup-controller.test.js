@@ -3,9 +3,9 @@ import {popupController} from '../../src/popup/popup-controller';
 import {officeDisplayService} from '../../src/office/office-display-service';
 import {objectTypes} from 'mstr-react-library';
 import {errorService} from '../../src/error/error-handler';
-import {EnvironmentNotFoundError} from '../../src/error/environment-not-found-error';
 import {PopupTypeEnum} from '../../src/home/popup-type-enum';
 import {officeApiHelper} from '../../src/office/office-api-helper';
+import {notificationService} from '../../src/notification/notification-service';
 
 describe('PopupController', () => {
   const dialog = {};
@@ -240,13 +240,12 @@ describe('PopupController', () => {
     };
     officeApiHelper.getOfficeSessionStatus = jest.fn();
     const handleErrorSpy = jest.spyOn(errorService, 'handleError');
+    const notifySpy = jest.spyOn(notificationService, 'displayNotification');
     // when
     await popupController.onMessageFromPopup(dialog, null, givenArg);
     // then
-    expect(handleErrorSpy).toBeCalled();
-    const handleErrorArgs = handleErrorSpy.mock.calls[0];
-    expect(handleErrorArgs[0]).toBeInstanceOf(EnvironmentNotFoundError);
-    expect(handleErrorArgs[1]).toBe(false);
+    expect(handleErrorSpy).toBeCalledWith(error, false);
+    expect(notifySpy).toBeCalledWith('warning', 'The endpoint cannot be reached', undefined);
     expect(dialog.close).toBeCalled();
   });
 });
