@@ -165,5 +165,15 @@
   "Click MicroStrategy for Office on Home tab to start plugin. Log in to Environment to start browsing documents.": "Klicka på MicroStrategy för Office på startfliken när du vill starta plugin-programmet. Logga in på miljön för att börja navigera bland dokument.",
   "Click to Show a Taskpane": "Klicka för att visa ett åtgärdsfönster",
   "New plugin to insert data from Microstrategy into Microsoft Office products.": "Ny plugin för att infoga data från Microstrategy i Microsoft Office-produkter.",
-  "MicroStrategy for Office": "MicroStrategy för Office"
+  "MicroStrategy for Office": "MicroStrategy för Office",
+  "This report does not exist in the workbook anymore": "Rapporten finns inte längre i arbetsboken",
+  "{{name}} has been removed from the workbook.": "{{name}} har tagits bort från arbetsboken.",
+  "This is a crosstab report. The layout of the table might change depending on the attributes you’ve selected.": "Det här är en korstabellrapport. Layouten för tabellen kan ändras beroende på vilka attribut du har valt.",
+  "{{fileName}} has been removed from the workbook.": "{{fileName}} har tagits bort från arbetsboken.",
+  "Parameter out of range": "Parametern ligger utanför intervallet",
+  "This is a crosstab report. The layout of the table might change depending on the attributes you’ve selected. See Data Preview.": "Det här är en korstabellrapport. Layouten för tabellen kan ändras beroende på vilka attribut du har valt. Se Förhandsgranskning.",
+  "Element cannot be loaded": "Elementet kan inte laddas",
+  "Clearing data": "Rensar data",
+  "{{reportNames}} could not be cleared.": "{{reportNames}} kunde inte rensas.",
+  "Invalid attempt to spread non-iterable instance": "Ogiltigt försök att sprida instans som inte kan upprepas"
 }
