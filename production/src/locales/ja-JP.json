@@ -165,5 +165,15 @@
   "Click MicroStrategy for Office on Home tab to start plugin. Log in to Environment to start browsing documents.": "[Home]タブの[MicroStrategy for Office]をクリックしてプラグインを開始します。環境にログインしてドキュメントの閲覧を開始します。",
   "Click to Show a Taskpane": "[Show a Taskpane]をクリック",
   "New plugin to insert data from Microstrategy into Microsoft Office products.": "MicrostrategyからMicrosoft Office製品にデータを挿入するための新しいプラグイン。",
-  "MicroStrategy for Office": "MicroStrategy for Office"
+  "MicroStrategy for Office": "MicroStrategy for Office",
+  "This report does not exist in the workbook anymore": "このレポートは今後このワークブックに存在しなくなります。",
+  "{{name}} has been removed from the workbook.": "ワークブックから{{name}}が削除されました。",
+  "This is a crosstab report. The layout of the table might change depending on the attributes you’ve selected.": "これはクロス集計表レポートです。選択したアトリビュートによっては、テーブルのレイアウトが変更される場合があります。",
+  "{{fileName}} has been removed from the workbook.": "ワークブックから{{fileName}}が削除されました。",
+  "Parameter out of range": "パラメーターが、範囲外です",
+  "This is a crosstab report. The layout of the table might change depending on the attributes you’ve selected. See Data Preview.": "これはクロス集計表レポートです。選択したアトリビュートによっては、テーブルのレイアウトが変更される場合があります。データ プレビューを参照してください。",
+  "Element cannot be loaded": "エレメントを読み込めません",
+  "Clearing data": "データをクリアーしています",
+  "{{reportNames}} could not be cleared.": "{{reportNames}}をクリアーできませんでした。",
+  "Invalid attempt to spread non-iterable instance": "反復不可能なインスタンスを広めようとする試みが無効です"
 }

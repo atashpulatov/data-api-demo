@@ -165,5 +165,15 @@
   "Click MicroStrategy for Office on Home tab to start plugin. Log in to Environment to start browsing documents.": "플러그인을 시작하려면 홈 탭에서 Office용 MicroStrategy를 클릭합니다. 문서 검색을 시작하려면 환경에 로그인합니다.",
   "Click to Show a Taskpane": "클릭하여 작업창 표시",
   "New plugin to insert data from Microstrategy into Microsoft Office products.": "Microstrategy에서 Microsoft Office 제품으로 데이터를 삽입하는 새 플러그인입니다.",
-  "MicroStrategy for Office": "Office용 MicroStrategy"
+  "MicroStrategy for Office": "Office용 MicroStrategy",
+  "This report does not exist in the workbook anymore": "이 리포트가 더 이상 워크북에 없습니다.",
+  "{{name}} has been removed from the workbook.": "{{name}}이(가) 워크북에서 제거되었습니다.",
+  "This is a crosstab report. The layout of the table might change depending on the attributes you’ve selected.": "이것은 크로스탭 리포트입니다. 테이블 레이아웃은 선택한 애트리뷰트에 따라 달라질 수 있습니다.",
+  "{{fileName}} has been removed from the workbook.": "{{fileName}}이(가) 워크북에서 제거되었습니다.",
+  "Parameter out of range": "매개 변수가 범위를 벗어남",
+  "This is a crosstab report. The layout of the table might change depending on the attributes you’ve selected. See Data Preview.": "이것은 크로스탭 리포트입니다. 테이블 레이아웃은 선택한 애트리뷰트에 따라 달라질 수 있습니다. 데이터 미리보기를 참조하십시오",
+  "Element cannot be loaded": "요소를 로드할 수 없습니다.",
+  "Clearing data": "데이터 지우기",
+  "{{reportNames}} could not be cleared.": "{{reportNames}}을(를) 삭제할 수 없습니다.",
+  "Invalid attempt to spread non-iterable instance": "반복 불가능한 인스턴스를 분산하려는 잘못된 시도"
 }
