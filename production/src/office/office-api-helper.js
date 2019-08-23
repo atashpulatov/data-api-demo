@@ -145,14 +145,17 @@ class OfficeApiHelper {
     return {envUrl, username};
   }
 
-  formatTable = (table, isCrosstab, crosstabHeaderDimensions) => {
+  formatTable = async (table, isCrosstab, crosstabHeaderDimensions, context) => {
     if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
+      const columns = table.columns;
       if (isCrosstab) {
         const {rowsX} = crosstabHeaderDimensions;
-        table.getDataBodyRange().format.autofitColumns();
         table.getDataBodyRange().getColumnsBefore(rowsX).format.autofitColumns();
       } else {
-        table.getDataBodyRange().format.autofitColumns();
+      }
+      for (let index = 0; index < columns.length; index++) {
+        columns[index].getDataBodyRange().format.autofitColumns();
+        await context.sync();
       }
     } else {
       notificationService.displayNotification('warning', `Unable to format table.`);
