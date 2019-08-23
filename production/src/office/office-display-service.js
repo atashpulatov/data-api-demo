@@ -213,7 +213,6 @@ class OfficeDisplayService {
     } else {
       range = sheet.getRange(tableRange);
     }
-    range.format.font.bold = false;
     context.trackedObjects.add(range);
     if (prevOfficeTable) {
       prevOfficeTable.rows.load('count');
@@ -487,7 +486,7 @@ class OfficeDisplayService {
       console.time('Context sync');
       await Promise.all(contextPromises);
       console.timeEnd('Context sync');
-      officeApiHelper.formatTable(officeTable, mstrTable.isCrosstab, mstrTable.crosstabHeaderDimensions);
+      await officeApiHelper.formatTable(officeTable, mstrTable.isCrosstab, mstrTable.crosstabHeaderDimensions, excelContext);
       if (mstrTable.isCrosstab) officeTable.showHeaders = false;
       await excelContext.sync();
       return {officeTable, subtotalsAddresses};
@@ -506,6 +505,7 @@ class OfficeDisplayService {
     // Get resize range: The number of rows/cols by which to expand the bottom-right corner, relative to the current range.
     const rowRange = officeTable.getDataBodyRange().getRow(0).getResizedRange(excelRows.length - 1, 0).getOffsetRange(rowIndex, 0);
     // clear(applyToString?: "All" | "Formats" | "Contents" | "Hyperlinks" | "RemoveHyperlinks"): void;
+    rowRange.format.font.bold = false;
     if (!tableColumnsChanged && isRefresh) rowRange.clear('Contents');
     rowRange.values = excelRows;
   }
