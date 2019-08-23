@@ -212,6 +212,7 @@ class OfficeDisplayService {
     } else {
       range = sheet.getRange(tableRange);
     }
+    context.trackedObjects.add(range);
     if (prevOfficeTable) {
       prevOfficeTable.rows.load('count');
       await context.sync();

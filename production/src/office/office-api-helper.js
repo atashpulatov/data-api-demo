@@ -147,15 +147,20 @@ class OfficeApiHelper {
 
   formatTable = async (table, isCrosstab, crosstabHeaderDimensions, context) => {
     if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
-      const columns = table.columns;
       if (isCrosstab) {
         const {rowsX} = crosstabHeaderDimensions;
         table.getDataBodyRange().getColumnsBefore(rowsX).format.autofitColumns();
-      } else {
       }
-      for (let index = 0; index < columns.length; index++) {
-        columns[index].getDataBodyRange().format.autofitColumns();
+      try {
+        const columns = table.columns;
+        columns.load('items');
         await context.sync();
+        for (let index = 0; index < columns.items.length; index++) {
+          columns.items[index].getRange().format.autofitColumns();
+          await context.sync();
+        }
+      } catch (error) {
+        console.log('Error when formatting - no columns autofit applied');
       }
     } else {
       notificationService.displayNotification('warning', `Unable to format table.`);
