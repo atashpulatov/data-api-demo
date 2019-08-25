@@ -1,11 +1,11 @@
-import { objectTypes } from 'mstr-react-library';
-import { selectorProperties } from '../../attribute-selector/selector-properties';
-import { popupController } from '../../popup/popup-controller';
-import { officeDisplayService } from '../../office/office-display-service';
-import { errorService } from '../../error/error-handler';
-import { EnvironmentNotFoundError } from '../../error/environment-not-found-error';
-import { PopupTypeEnum } from '../../home/popup-type-enum';
-import { officeApiHelper } from '../../office/office-api-helper';
+import {selectorProperties} from '../../attribute-selector/selector-properties';
+import {popupController} from '../../popup/popup-controller';
+import {officeDisplayService} from '../../office/office-display-service';
+import {objectTypes} from 'mstr-react-library';
+import {errorService} from '../../error/error-handler';
+import {PopupTypeEnum} from '../../home/popup-type-enum';
+import {officeApiHelper} from '../../office/office-api-helper';
+import {notificationService} from '../../notification/notification-service';
 
 describe('PopupController', () => {
   const dialog = {};
@@ -234,19 +234,18 @@ describe('PopupController', () => {
         status: 404,
       },
     };
-    const expectedMessage = JSON.stringify({ command, error });
+    const expectedMessage = JSON.stringify({command, error});
     const givenArg = {
       message: expectedMessage,
     };
     officeApiHelper.getOfficeSessionStatus = jest.fn();
     const handleErrorSpy = jest.spyOn(errorService, 'handleError');
+    const notifySpy = jest.spyOn(notificationService, 'displayNotification');
     // when
     await popupController.onMessageFromPopup(dialog, null, givenArg);
     // then
-    expect(handleErrorSpy).toBeCalled();
-    const handleErrorArgs = handleErrorSpy.mock.calls[0];
-    expect(handleErrorArgs[0]).toBeInstanceOf(EnvironmentNotFoundError);
-    expect(handleErrorArgs[1]).toBe(false);
+    expect(handleErrorSpy).toBeCalledWith(error, false);
+    expect(notifySpy).toBeCalledWith('warning', 'The endpoint cannot be reached', undefined);
     expect(dialog.close).toBeCalled();
   });
 });
