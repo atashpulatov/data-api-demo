@@ -11,9 +11,6 @@ class AuthenticationService {
         .withCredentials()
         .then((res) => {
           return res.headers['x-mstr-authtoken'];
-        })
-        .catch((err) => {
-          throw errorService.errorRestFactory(err);
         });
   }
   logout = async (envUrl, authToken) => {
@@ -23,9 +20,6 @@ class AuthenticationService {
         .withCredentials()
         .then((res) => {
           return true;
-        })
-        .catch((err) => {
-          throw errorService.errorRestFactory(err);
         });
   }
   getSessions = async (envUrl, authToken) => {
@@ -35,9 +29,6 @@ class AuthenticationService {
         .withCredentials()
         .then((res) => {
           return res;
-        })
-        .catch((err) => {
-          throw errorService.errorRestFactory(err);
         });
   }
 

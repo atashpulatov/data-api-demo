@@ -27,7 +27,7 @@ class OfficeStoreService {
       settings.set(officeProperties.loadedReportProperties, reportProperties);
       settings.saveAsync();
     } catch (error) {
-      errorService.handleOfficeError(error);
+      errorService.handleError(error);
     }
   }
 
@@ -43,7 +43,7 @@ class OfficeStoreService {
       await settings.saveAsync();
       await officeApiHelper.loadExistingReportBindingsExcel();
     } catch (error) {
-      errorService.handleOfficeError(error);
+      errorService.handleError(error);
     }
   }
 
@@ -58,7 +58,7 @@ class OfficeStoreService {
       settings.set(officeProperties.loadedReportProperties, reportProperties);
       settings.saveAsync();
     } catch (error) {
-      errorService.handleOfficeError(error);
+      errorService.handleError(error);
     }
   }
 
@@ -79,7 +79,7 @@ class OfficeStoreService {
       }
       return settings.get(officeProperties.loadedReportProperties);
     } catch (error) {
-      errorService.handleOfficeError(error);
+      errorService.handleError(error);
     }
   };
 
@@ -98,7 +98,7 @@ class OfficeStoreService {
       settings.set(officeProperties.isSecured, value);
       settings.saveAsync();
     } catch (error) {
-      errorService.handleOfficeError(error);
+      errorService.handleError(error);
     }
   }
 
@@ -107,7 +107,7 @@ class OfficeStoreService {
       const settings = this.getOfficeSettings();
       return settings.get(officeProperties.isSecured);
     } catch (error) {
-      errorService.handleOfficeError(error);
+      errorService.handleError(error);
     }
   }
   saveAndPreserveReportInStore = (report, isRefresh) => {
@@ -121,8 +121,7 @@ class OfficeStoreService {
         reportsArray[reportsArray.indexOf(reportObj)].crosstabHeaderDimensions = report.crosstabHeaderDimensions;
         settings.set(officeProperties.loadedReportProperties, reportsArray);
       } catch (error) {
-        const e = errorService.errorOfficeFactory(error);
-        errorService.handleOfficeError(e);
+        errorService.handleError(error);
       }
     } else {
       reduxStore.dispatch({

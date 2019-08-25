@@ -36,7 +36,7 @@ export const _Confirmation = ({reportArray, toggleSecuredFlag, toggleIsConfirmFl
       toggleIsSettingsFlag(false);
       toggleSecuredFlag(true);
     } catch (error) {
-      errorService.handleOfficeError(error);
+      errorService.handleError(error);
     }
   };
 

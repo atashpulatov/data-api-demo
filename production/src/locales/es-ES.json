@@ -165,5 +165,15 @@
   "Click MicroStrategy for Office on Home tab to start plugin. Log in to Environment to start browsing documents.": "Haga clic en MicroStrategy para Office en la pestaña Inicio para iniciar el complemento. Inicie sesión en el entorno para empezar a examinar los documentos.",
   "Click to Show a Taskpane": "Haga clic para mostrar un panel de tareas",
   "New plugin to insert data from Microstrategy into Microsoft Office products.": "Nuevo complemento para insertar datos de MicroStrategy en productos de Microsoft Office.",
-  "MicroStrategy for Office": "MicroStrategy para Office"
+  "MicroStrategy for Office": "MicroStrategy para Office",
+  "This report does not exist in the workbook anymore": "Este informe ya no existe en el libro",
+  "{{name}} has been removed from the workbook.": "{{name}} se ha quitado del libro de trabajo.",
+  "This is a crosstab report. The layout of the table might change depending on the attributes you’ve selected.": "Este es un informe de referencias cruzadas. El diseño de la tabla puede cambiar en función de los atributos que haya seleccionado.",
+  "{{fileName}} has been removed from the workbook.": "{{fileName}} se ha quitado del libro de trabajo.",
+  "Parameter out of range": "Parámetro fuera de rango",
+  "This is a crosstab report. The layout of the table might change depending on the attributes you’ve selected. See Data Preview.": "Este es un informe de referencias cruzadas. El diseño de la tabla puede cambiar en función de los atributos que haya seleccionado. Véase Vista preliminar de datos.",
+  "Element cannot be loaded": "El elemento no se puede cargar",
+  "Clearing data": "Borrando datos",
+  "{{reportNames}} could not be cleared.": "{{reportNames}} no se pudo borrar.",
+  "Invalid attempt to spread non-iterable instance": "Intento no válido de propagación de instancia no iterable"
 }

@@ -100,7 +100,7 @@ class NormalizedJsonHandler {
       const rowElements = this.mapElementIndicesToElements({definition, axis: 'rows', headerCells, rowIndex});
       // Process elements
       const tabularRows = rowElements.map((e, attributeIndex) => onElement(e, rowIndex, attributeIndex));
-      return metricValues ? tabularRows.concat(metricValues[valueMatrix][rowIndex]) : tabularRows;
+      return (metricValues && metricValues.raw.length > 0) ? tabularRows.concat(metricValues[valueMatrix][rowIndex]) : tabularRows;
     });
   };
 
