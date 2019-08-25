@@ -73,8 +73,8 @@ def install_dependencies(working_dir)
   shell_command! "rm -rf node_modules", cwd: "#{working_dir}/production"
   shell_command! "rm -rf node_modules", cwd: "#{working_dir}/office-loader"
   update_package_json(working_dir)
-  shell_command! "npm install --network-concurrency 1", cwd: "#{working_dir}/production"
-  shell_command! "npm install --network-concurrency 1", cwd: "#{working_dir}/office-loader"
+  shell_command! "export USER=root && npm install --network-concurrency 1", cwd: "#{working_dir}/production"
+  shell_command! "export USER=root && npm install --network-concurrency 1", cwd: "#{working_dir}/office-loader"
 end
 
 def update_package_json(working_dir)
