@@ -14,7 +14,7 @@ task :build do
   shell_command! "zip -r office-#{Common::Version.application_version}.zip .", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/build"
 
   # build the office_loader.zip
-  shell_command! "npm run build", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/office-loader/build"
+  shell_command! "yarn run build", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/office-loader/build"
   shell_command! "zip -r office-loader-#{Common::Version.application_version}.zip .", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/office-loader/build"
 end
 
@@ -74,7 +74,7 @@ def install_dependencies(working_dir)
   shell_command! "rm -rf node_modules", cwd: "#{working_dir}/office-loader"
   update_package_json(working_dir)
   shell_command! "export USER=root && npm install --network-concurrency 1", cwd: "#{working_dir}/production"
-  shell_command! "export USER=root && npm install --network-concurrency 1", cwd: "#{working_dir}/office-loader"
+  shell_command! "yarn install --network-concurrency 1", cwd: "#{working_dir}/office-loader"
 end
 
 def update_package_json(working_dir)
