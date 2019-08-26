@@ -1,3 +1,4 @@
+/* global Office Excel */
 
 class OfficeContext {
     getOffice = () => {

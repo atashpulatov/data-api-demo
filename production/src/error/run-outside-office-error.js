@@ -1,2 +1,2 @@
-export function RunOutsideOfficeError() {};
+export function RunOutsideOfficeError() {}
 RunOutsideOfficeError.prototype = new Error();

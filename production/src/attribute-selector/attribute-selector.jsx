@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {AttributeMetricFilter, ErrorBoundary} from 'mstr-react-library';
+import {AttributeMetricFilter, ErrorBoundary} from '@mstr/mstr-react-library';
 import {withTranslation} from 'react-i18next';
 
 export class _AttributeSelector extends Component {

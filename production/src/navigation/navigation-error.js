@@ -1,1 +1,1 @@
-export class NavigationError extends Error {};
+export class NavigationError extends Error {}

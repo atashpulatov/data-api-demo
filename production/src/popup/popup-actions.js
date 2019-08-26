@@ -1,11 +1,11 @@
-import {authenticationHelper} from '../authentication/authentication-helper';
-import {officeProperties} from '../office/office-properties';
-import {popupHelper} from './popup-helper';
-import {officeApiHelper} from '../office/office-api-helper';
-import {officeStoreService} from '../office/store/office-store-service';
-import {popupController} from './popup-controller';
-import {errorService} from '../error/error-handler';
-import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';
+import { authenticationHelper } from '../authentication/authentication-helper';
+import { officeProperties } from '../office/office-properties';
+import { popupHelper } from './popup-helper';
+import { officeApiHelper } from '../office/office-api-helper';
+import { officeStoreService } from '../office/store/office-store-service';
+import { popupController } from './popup-controller';
+import { errorService } from '../error/error-handler';
+import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 
 export const CLEAR_WINDOW = 'POPUP_CLOSE_WINDOW';
 export const START_REPORT_LOADING = 'START_REPORT_LOADING';
@@ -41,7 +41,7 @@ export function callForEdit(reportParams) {
       return errorService.handleError(error);
     }
   };
-};
+}
 
 export function callForReprompt(reportParams) {
   return async (dispatch) => {
@@ -58,7 +58,7 @@ export function callForReprompt(reportParams) {
       return errorService.handleError(error);
     }
   };
-};
+}
 
 export function preparePromptedReport(instanceId, reportData) {
   return (dispatch) => dispatch({
@@ -86,7 +86,7 @@ export function refreshReportsArray(reportArray, isRefreshAll) {
         dispatch({
           type: officeProperties.actions.startLoadingReport,
           reportBindId: report.bindId,
-          isRefreshAll: isRefreshAll,
+          isRefreshAll,
         });
         isError = await popupHelper.printRefreshedReport(report.bindId, report.objectType, reportArray.length, index, isRefreshAll, report.promptsAnswers);
       } catch (error) {
@@ -97,7 +97,7 @@ export function refreshReportsArray(reportArray, isRefreshAll) {
           type: officeProperties.actions.finishLoadingReport,
           reportBindId: report.bindId,
           isRefreshAll: false,
-          isError: isError,
+          isError,
         });
       }
     }

@@ -10,10 +10,10 @@ desc "build project in #{$WORKSPACE_SETTINGS[:paths][:project][:production][:hom
 task :build do
   install_dependencies("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
   # build the office.zip
-  shell_command! "yarn build", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
+  shell_command! "npm run build", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
   shell_command! "zip -r office-#{Common::Version.application_version}.zip .", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/build"
 
-  # build the office_loader.zip
+  # # build the office_loader.zip
   shell_command! "yarn build", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/office-loader/build"
   shell_command! "zip -r office-loader-#{Common::Version.application_version}.zip .", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/office-loader/build"
 end
@@ -35,19 +35,26 @@ end
 
 desc "run the unit test and collect code coverage in stage_0 pre-merge job"
 task :stage_0_test do
+  info "npm version"
+  shell_command! "npm -v", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
+
+  info "node version"
+  shell_command! "node -v", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
+
+  
   #run test under current workspace
   if ENV["ghprbTargetBranch"].nil?
     raise "ghprbTargetBranch environment should not be nil"
   end
   run_test("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
-  #checkout the code in base branch
-  init_base_branch_repo(ENV["ghprbTargetBranch"])
-  #run test with base branch
-  run_test(base_repo_path)
-  generate_comparison_report_html
-  generate_comparison_report_markdown
+  # #checkout the code in base branch
+  # init_base_branch_repo(ENV["ghprbTargetBranch"])
+  # #run test with base branch
+  # run_test(base_repo_path)
+  # generate_comparison_report_html
+  # generate_comparison_report_markdown
   generate_eslint_report
-  publish_to_pull_request_page
+  # publish_to_pull_request_page
 
 end
 
@@ -65,7 +72,7 @@ end
 
 def run_test(working_dir)
   install_dependencies(working_dir)
-  shell_command! "yarn jest --coverage", cwd: "#{working_dir}/production"
+  shell_command! "npm run test:coverage", cwd: "#{working_dir}/production"
 end
 
 
@@ -73,7 +80,7 @@ def install_dependencies(working_dir)
   shell_command! "rm -rf node_modules", cwd: "#{working_dir}/production"
   shell_command! "rm -rf node_modules", cwd: "#{working_dir}/office-loader"
   update_package_json(working_dir)
-  shell_command! "yarn install --network-concurrency 1", cwd: "#{working_dir}/production"
+  shell_command! "npm install", cwd: "#{working_dir}/production"
   shell_command! "yarn install --network-concurrency 1", cwd: "#{working_dir}/office-loader"
 end
 
@@ -124,7 +131,7 @@ end
 
 def generate_eslint_report
   eslint_report_path = "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/.eslint/index.html"
-  shell_command "yarn eslint \"src/**\" -f html -o #{eslint_report_path}", cwd: $WORKSPACE_SETTINGS[:paths][:project][:production][:home]
+  shell_command "npm run eslint \"src/**\" -f html -o #{eslint_report_path}", cwd: $WORKSPACE_SETTINGS[:paths][:project][:production][:home]
 end
 
 

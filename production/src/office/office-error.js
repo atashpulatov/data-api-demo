@@ -1,3 +1,3 @@
-export class OfficeError extends Error {};
+export class OfficeError extends Error {}
 
-export class OfficeBindingError extends Error {};
+export class OfficeBindingError extends Error {}

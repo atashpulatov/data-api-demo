@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {LoadingText} from 'mstr-react-library';
+import {LoadingText} from '@mstr/mstr-react-library';
 import {Popover} from 'antd';
-import {MSTRIcon} from 'mstr-react-library';
+import {MSTRIcon} from '@mstr/mstr-react-library';
 import {ReactComponent as WarningIcon} from './assets/icon_conflict.svg';
 import {withTranslation} from 'react-i18next';
 import {helper} from '../helpers/helpers';
@@ -23,7 +23,7 @@ export class _RefreshAllPage extends Component {
   componentDidMount() {
     // in IE we get local storage each 500ms as event listener doesn't work
     const ua = window.navigator.userAgent;
-    if (ua.indexOf('MSIE ') > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+    if (ua.indexOf('MSIE ') > 0 || !!navigator.userAgent.match(/Trident.*rv:11\./)) {
       this.intervalId = setInterval(() => {
         try {
           const fromStorage = JSON.parse(localStorage.getItem('refreshData'));

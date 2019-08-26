@@ -4,6 +4,8 @@ import {RunOutsideOfficeError} from '../../error/run-outside-office-error';
 import {errorService} from '../../error/error-handler';
 import {reduxStore} from '../../store';
 
+/* global Office */
+
 class OfficeStoreService {
   preserveReport = (report) => {
     try {

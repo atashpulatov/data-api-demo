@@ -1,4 +1,4 @@
-import {propsProxy} from '../home/enum-props-proxy';
+import { propsProxy } from '../home/enum-props-proxy';
 
 export const sessionProperties = new Proxy({
   /**
@@ -22,4 +22,3 @@ export const sessionProperties = new Proxy({
     setDialog: 'SESSION_SET_DIALOG',
   },
 }, propsProxy);
-

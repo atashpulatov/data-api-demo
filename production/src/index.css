@@ -1,5 +1,5 @@
-@import '~antd/dist/antd.less';
-@import 'antd-override.less';
+@import '~antd/dist/antd.css';
+/* @import 'antd-override.less'; */
 
 #root,
 #popup,

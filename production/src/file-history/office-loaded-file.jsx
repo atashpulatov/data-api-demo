@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Row, Col, Popover} from 'antd';
-import {MSTRIcon} from 'mstr-react-library';
+import {MSTRIcon} from '@mstr/mstr-react-library';
 import {fileHistoryHelper} from './file-history-helper';
 import loadingSpinner from './assets/report_loading_spinner.gif';
 import {refreshReportsArray, callForEdit, callForReprompt} from '../popup/popup-actions';
