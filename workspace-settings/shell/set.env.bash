@@ -17,7 +17,7 @@ export VAGRANT_BOXES_OSX_VERSION='1.0.0.next'
 
 jdk_version="jdk1.8.0_74"
 
-export NODE_HOME=/usr/local/nodejs-binary
+export NODE_HOME=/usr/local/nodejs-binary-10.16.3
 export PATH=$NODE_HOME/bin:$PATH
 
 if uname -a | grep -q "Darwin"; then
