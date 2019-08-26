@@ -4,9 +4,7 @@ import {withTranslation} from 'react-i18next';
 import {toggleIsSettingsFlag, toggleRenderSettingsFlag} from '../office/office-actions';
 
 export class _SettingsComponent extends Component {
-  constructor(props) {
-    super(props);
-  }
+
 
   closeSettingsComponent = () => {
     this.props.toggleIsSettingsFlag(!this.props.isSettings);
