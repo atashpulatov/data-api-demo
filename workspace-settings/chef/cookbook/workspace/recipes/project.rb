@@ -32,7 +32,7 @@ when 'redhat', 'centos', 'fedora', 'amazon'
   bash 'install linux dependencies' do
     user 'root'
     code <<-EOH
-      sudo yum install -y avahi-compat-libdns_sd* make gcc gcc-c++ kernel-devel
+      sudo yum install -y avahi-compat-libdns_sd-devel make gcc gcc-c++ kernel-devel
     EOH
     only_if "echo $USER | grep jenkins"
 end
