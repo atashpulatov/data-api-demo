@@ -3,8 +3,76 @@ require 'common/version'
 require 'json'
 require 'nokogiri'
 require 'github'
+require 'localization/generator'
+require 'json'
 
 include ShellHelper::Shell
+
+
+desc "generate local strings"
+task :generate_string do
+  database = 'EXCEL'
+  default_lan = 'English'
+  languages = {
+    English:            'en-US',
+    Francais:           'fr-FR',
+    Deutsch:            'de-DE',
+    Danish:             'da-DK',
+    Dutch:              'nl-NL',
+    Espanol_Espana:     'es-ES',
+    Svenska:            'sv-SE',
+    Italiano:           'it-IT',
+    Portuguese_Brazil:  'pt-BR',
+    Japanese:           'ja-JP',
+    Korean:             'ko-KR',
+    Chinese:            'zh-CN',
+    Trad_Chinese:       'zh-TW'
+  }
+
+  # Localization::Generator.generate_string(database)
+  connect =  Sequel.sqlite("#{$WORKSPACE_SETTINGS[:paths][:organization][:home]}/ProductStrings/#{database}/#{database}.db")
+
+  translated_strings = Hash.new
+  languages.each do |lan, short_lan|
+    translated_strings[lan] = Hash.new
+  end
+
+  strings = connect[:Strings]
+
+  strings.each{|string|
+    languages.each do |lan, short_lan|
+      key = string["String_#{default_lan}".to_sym]
+      value = string["String_#{lan}".to_sym]
+      if value.nil?
+        translated_strings[lan][key] = key
+      else
+        translated_strings[lan][key] = value
+      end
+    end
+  }
+
+  string_file_path_base = "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/src/locales"
+  translated_strings_default = translated_strings[default_lan.to_sym]
+
+  languages.each do |lan, short_lan|
+    string_file_path = File.join(string_file_path_base, "#{short_lan}.json")
+
+    translated_strings_lan =  translated_strings[lan]
+    string_file = File.open(string_file_path, 'w')
+    
+    string_file.write("{\n")
+
+    translated_strings[lan].each do |symbolicname, str|
+      if str.nil? or str.eql?('')
+        str = "(#{translated_strings_default[symbolicname]})"
+      end
+      string_file.write("  \"#{symbolicname}\": \"#{str.to_s}\",\n")
+    end
+    string_file.write("}")
+    string_file.close
+  end
+
+end
 
 desc "build project in #{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/build"
 task :build do
