@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {withTranslation} from 'react-i18next';
-import {toggleRenderSettingsFlag} from '../office/office-actions';
+import {toggleIsSettingsFlag, toggleRenderSettingsFlag} from '../office/office-actions';
 
 export class _SettingsComponent extends Component {
   constructor(props) {
@@ -9,6 +9,7 @@ export class _SettingsComponent extends Component {
   }
 
   closeSettingsComponent = () => {
+    this.props.toggleIsSettingsFlag(!this.props.isSettings);
     this.props.toggleRenderSettingsFlag(!this.props.shouldRenderSettings);
   }
 
@@ -28,11 +29,12 @@ _SettingsComponent.defaultProps = {
 };
 
 function mapStateToProps({officeReducer}) {
-  const {shouldRenderSettings} = officeReducer;
-  return {shouldRenderSettings};
+  const {isSettings, shouldRenderSettings} = officeReducer;
+  return {isSettings, shouldRenderSettings};
 }
 
 const mapDispatchToProps = {
+  toggleIsSettingsFlag,
   toggleRenderSettingsFlag,
 };
 
