@@ -80,9 +80,7 @@ def install_dependencies(working_dir)
   shell_command! "rm -rf node_modules", cwd: "#{working_dir}/production"
   shell_command! "rm -rf node_modules", cwd: "#{working_dir}/office-loader"
   update_package_json(working_dir)
-  shell_command! "sudo npm uninstall mdns2 -g"
-  shell_command! "npm uninstall mdns2", cwd: "#{working_dir}/production"
-  shell_command! "npm install --production --network-concurrency 1", cwd: "#{working_dir}/production"
+  shell_command! "npm install", cwd: "#{working_dir}/production"
   shell_command! "yarn install --network-concurrency 1", cwd: "#{working_dir}/office-loader"
 end
 
