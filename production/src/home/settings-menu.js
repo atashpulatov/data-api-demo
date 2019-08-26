@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {withTranslation} from 'react-i18next';
-import {toggleIsConfirmFlag} from '../office/office-actions';
+import {toggleIsConfirmFlag, toggleRenderSettingsFlag} from '../office/office-actions';
 import logo from './assets/mstr_logo.png';
 import {helper} from '../helpers/helpers';
 import {Popover} from 'antd';
@@ -10,7 +10,7 @@ import {errorService} from '../error/error-handler';
 
 const APP_VERSION = process.env.REACT_APP_MSTR_OFFICE_VERSION;
 
-export const _SettingsMenu = ({userFullName, userInitials, isSecured, reportArray, t, toggleIsConfirmFlag}) => {
+export const _SettingsMenu = ({userFullName, userInitials, isSecured, reportArray, t, toggleIsConfirmFlag, shouldRenderSettings, toggleRenderSettingsFlag}) => {
   const userNameDisplay = userFullName || 'MicroStrategy user';
   const isSecuredActive = !isSecured && reportArray && reportArray.length > 0;
 
@@ -51,7 +51,7 @@ export const _SettingsMenu = ({userFullName, userInitials, isSecured, reportArra
         <span className='no-trigger-close'>{t('Clear Data')} </span>
       </li>
       <div className="separate-line"></div>
-      <li tabIndex='0' className={`no-trigger-close settings`} onClick={isSecuredActive ? () => toggleIsConfirmFlag(true) : null}>
+      <li tabIndex='0' className={`no-trigger-close settings`} onClick={() => toggleRenderSettingsFlag(true)}>
         <span className='no-trigger-close'>{t('Settings')} </span>
       </li>
       <div className="separate-line"></div>
@@ -98,12 +98,13 @@ _SettingsMenu.defaultProps = {
 
 function mapStateToProps({sessionReducer, officeReducer}) {
   const {userFullName, userInitials} = sessionReducer;
-  const {isSecured, reportArray} = officeReducer;
-  return {userFullName, userInitials, isSecured, reportArray};
+  const {isSecured, reportArray, shouldRenderSettings} = officeReducer;
+  return {userFullName, userInitials, isSecured, reportArray, shouldRenderSettings};
 };
 
 const mapDispatchToProps = {
   toggleIsConfirmFlag,
+  toggleRenderSettingsFlag,
 };
 
 export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_SettingsMenu));

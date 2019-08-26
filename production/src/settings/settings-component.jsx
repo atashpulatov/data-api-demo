@@ -1,16 +1,20 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {withTranslation} from 'react-i18next';
+import {toggleRenderSettingsFlag} from '../office/office-actions';
 
-export class _SettingComponent extends Component {
+export class SettingsComponent extends Component {
   constructor(props) {
     super(props);
   }
+
   render() {
-    const {t} = this.props;
-    return (<div>
-      {t('SETTINGS WILL BE HERE')}
-      <button >{t('BACK')}</button>
-    </div>);
+    return (
+      <div>
+        SETTINGS WILL BE HERE
+      </div>
+    );
   }
 }
+
+

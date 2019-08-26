@@ -24,8 +24,8 @@ export class _Home extends Component {
   };
 
   render() {
-    const {loading, loadingReport, authToken, reportArray, popupOpen, t} = this.props;
-    return (<div>{pageBuilder.getPage(loading, loadingReport, authToken, reportArray, popupOpen, t)}</div>);
+    const {loading, loadingReport, authToken, reportArray, popupOpen, t, shouldRenderSettings} = this.props;
+    return (<div>{pageBuilder.getPage(loading, loadingReport, authToken, reportArray, popupOpen, t, shouldRenderSettings)}</div>);
   }
 }
 
@@ -36,6 +36,7 @@ function mapStateToProps(state) {
     popupOpen: state.officeReducer.popupOpen,
     authToken: state.sessionReducer.authToken,
     reportArray: state.officeReducer.reportArray,
+    shouldRenderSettings: state.officeReducer.shouldRenderSettings,
   };
 }
 

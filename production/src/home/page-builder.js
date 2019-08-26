@@ -7,26 +7,29 @@ import {Authenticate} from '../authentication/auth-component.jsx';
 import {Placeholder} from './placeholder.jsx';
 import {HomeDialog} from './home-dialog';
 import {Tabs} from './tabs';
+import {SettingsComponent} from '../settings/settings-component.jsx';
 
 const URL = `${window.location.href}`;
 const IS_LOCALHOST = URL.includes('localhost');
 
 class PageBuilder {
-  getPage = ((loading, loadingReport, authToken, reportArray, popupOpen, t) => {
+  getPage = ((loading, loadingReport, authToken, reportArray, popupOpen, t, shouldRenderSettings) => {
     return (
       <div id='content'>
         <Notifications />
         {
           authToken ?
-            <div id='overlay'>
-              <Header IS_LOCALHOST={IS_LOCALHOST} loading={loadingReport} />
-              <Tabs t={t}>
-                {(reportArray && reportArray.length !== 0) && <FileHistoryContainer
-                  loading={loadingReport}
-                />}
-                {(!reportArray || !reportArray.length) && <Placeholder loading={loadingReport} />}
-              </Tabs>
-            </div> :
+            shouldRenderSettings ? <SettingsComponent />
+              :
+              <div id='overlay'>
+                <Header IS_LOCALHOST={IS_LOCALHOST} loading={loadingReport} />
+                <Tabs t={t}>
+                  {(reportArray && reportArray.length !== 0) && <FileHistoryContainer
+                    loading={loadingReport}
+                  />}
+                  {(!reportArray || !reportArray.length) && <Placeholder loading={loadingReport} />}
+                </Tabs>
+              </div> :
             < Spin spinning={loading}>
               {IS_LOCALHOST && <Authenticate />}
             </Spin>

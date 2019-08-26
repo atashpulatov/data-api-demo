@@ -27,5 +27,6 @@ export const officeProperties = new Proxy({
     toggleSecuredFlag: 'TOGGLE_SECURED_FLAG',
     toggleIsSettingsFlag: 'TOGGLE_IS_SETTINGS_FLAG',
     toggleIsConfirmFlag: 'TOGGLE_IS_CONFIRM_FLAG',
+    toggleRenderSettingsFlag: 'TOGGLE_RENDER_SETTINGS_FLAG',
   },
 }, propsProxy);

@@ -29,6 +29,15 @@ export function toggleIsConfirmFlag(isConfirm) {
   };
 }
 
+export function toggleRenderSettingsFlag(shouldRenderSettings) {
+  return (dispatch) => {
+    dispatch({
+      type: officeProperties.actions.toggleRenderSettingsFlag,
+      shouldRenderSettings,
+    });
+  };
+}
+
 export const actions = {
   toggleSecuredFlag,
 };
