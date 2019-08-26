@@ -51,6 +51,10 @@ export const _SettingsMenu = ({userFullName, userInitials, isSecured, reportArra
         <span className='no-trigger-close'>{t('Clear Data')} </span>
       </li>
       <div className="separate-line"></div>
+      <li tabIndex='0' className={`no-trigger-close settings`} onClick={isSecuredActive ? () => toggleIsConfirmFlag(true) : null}>
+        <span className='no-trigger-close'>{t('Settings')} </span>
+      </li>
+      <div className="separate-line"></div>
       <li className="privacy-policy">
         <a
           tabIndex="0"
