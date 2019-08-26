@@ -35,19 +35,26 @@ end
 
 desc "run the unit test and collect code coverage in stage_0 pre-merge job"
 task :stage_0_test do
+  info "npm version"
+  shell_command! "npm -v", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
+
+  info "node version"
+  shell_command! "node -v", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
+
+  
   #run test under current workspace
-  if ENV["ghprbTargetBranch"].nil?
-    raise "ghprbTargetBranch environment should not be nil"
-  end
-  run_test("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
-  #checkout the code in base branch
-  init_base_branch_repo(ENV["ghprbTargetBranch"])
-  #run test with base branch
-  run_test(base_repo_path)
-  generate_comparison_report_html
-  generate_comparison_report_markdown
-  generate_eslint_report
-  publish_to_pull_request_page
+  # if ENV["ghprbTargetBranch"].nil?
+  #   raise "ghprbTargetBranch environment should not be nil"
+  # end
+  # run_test("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
+  # #checkout the code in base branch
+  # init_base_branch_repo(ENV["ghprbTargetBranch"])
+  # #run test with base branch
+  # run_test(base_repo_path)
+  # generate_comparison_report_html
+  # generate_comparison_report_markdown
+  # generate_eslint_report
+  # publish_to_pull_request_page
 
 end
 
