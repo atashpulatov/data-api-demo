@@ -3,7 +3,7 @@ import {shallow, mount} from 'enzyme';
 import {Popup} from '../../popup/popup.jsx';
 import {Provider} from 'react-redux';
 import {reduxStore} from '../../store';
-import {libraryErrorController} from 'mstr-react-library';
+import {libraryErrorController} from '@mstr/mstr-react-library';
 import {officeContext} from '../../office/office-context.js';
 import {selectorProperties} from '../../attribute-selector/selector-properties.js';
 import {PopupTypeEnum} from '../../home/popup-type-enum.js';

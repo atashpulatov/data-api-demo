@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {LoadingText} from 'mstr-react-library';
+import {LoadingText} from '@mstr/mstr-react-library';
 import {Popover} from 'antd';
-import {MSTRIcon} from 'mstr-react-library';
+import {MSTRIcon} from '@mstr/mstr-react-library';
 import {ReactComponent as WarningIcon} from './assets/icon_conflict.svg';
 import {withTranslation} from 'react-i18next';
 import {helper} from '../helpers/helpers';

@@ -4,7 +4,7 @@ import {Button, Popover} from 'antd';
 import {connect} from 'react-redux';
 import {withTranslation} from 'react-i18next';
 import {toggleIsSettingsFlag, toggleIsConfirmFlag} from '../office/office-actions';
-import {MSTRIcon} from 'mstr-react-library';
+import {MSTRIcon} from '@mstr/mstr-react-library';
 import mstrLogo from './assets/mstr_logo.png';
 import {SettingsMenu} from './settings-menu';
 import {Confirmation} from './confirmation';

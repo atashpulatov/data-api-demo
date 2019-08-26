@@ -3,7 +3,7 @@ import '../index.css';
 import '../home/home.css';
 import {selectorProperties} from '../attribute-selector/selector-properties';
 import {PopupButtons} from '../popup/popup-buttons.jsx';
-import {FolderBrowser, objectTypes} from 'mstr-react-library';
+import {FolderBrowser, objectTypes} from '@mstr/mstr-react-library';
 import {connect} from 'react-redux';
 import {actions} from './navigation-tree-actions';
 import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';

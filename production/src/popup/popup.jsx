@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {PopupTypeEnum} from '../home/popup-type-enum';
 import * as queryString from 'query-string';
-import {libraryErrorController} from 'mstr-react-library';
+import {libraryErrorController} from '@mstr/mstr-react-library';
 import {officeContext} from '../office/office-context';
 import {selectorProperties} from '../attribute-selector/selector-properties';
 import {PopupViewSelector} from './popup-view-selector';

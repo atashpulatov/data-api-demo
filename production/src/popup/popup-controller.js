@@ -2,7 +2,7 @@ import {selectorProperties} from '../attribute-selector/selector-properties';
 import {officeDisplayService} from '../office/office-display-service';
 import {PopupTypeEnum} from '../home/popup-type-enum';
 import {sessionHelper} from '../storage/session-helper';
-import {objectTypes} from 'mstr-react-library';
+import {objectTypes} from '@mstr/mstr-react-library';
 import {notificationService} from '../notification/notification-service';
 import {reduxStore} from '../store';
 import {CLEAR_WINDOW, refreshReportsArray} from './popup-actions';

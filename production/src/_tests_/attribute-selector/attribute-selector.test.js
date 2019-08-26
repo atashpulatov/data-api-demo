@@ -1,7 +1,7 @@
 import React from 'react';
 import {shallow} from 'enzyme';
 import {_AttributeSelector} from '../../attribute-selector/attribute-selector';
-import {AttributeMetricFilter} from 'mstr-react-library';
+import {AttributeMetricFilter} from '@mstr/mstr-react-library';
 
 describe('_AttributeSelector', () => {
   it('should pass mstr to its children', () => {

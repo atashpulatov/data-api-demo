@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {LoadingText} from 'mstr-react-library';
+import {LoadingText} from '@mstr/mstr-react-library';
 import './loading-page.css';
 import {withTranslation} from 'react-i18next';
 
