@@ -43,17 +43,17 @@ task :stage_0_test do
 
   
   #run test under current workspace
-  # if ENV["ghprbTargetBranch"].nil?
-  #   raise "ghprbTargetBranch environment should not be nil"
-  # end
-  # run_test("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
+  if ENV["ghprbTargetBranch"].nil?
+    raise "ghprbTargetBranch environment should not be nil"
+  end
+  run_test("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
   # #checkout the code in base branch
   # init_base_branch_repo(ENV["ghprbTargetBranch"])
   # #run test with base branch
   # run_test(base_repo_path)
   # generate_comparison_report_html
   # generate_comparison_report_markdown
-  # generate_eslint_report
+  generate_eslint_report
   # publish_to_pull_request_page
 
 end
@@ -80,7 +80,7 @@ def install_dependencies(working_dir)
   shell_command! "rm -rf node_modules", cwd: "#{working_dir}/production"
   shell_command! "rm -rf node_modules", cwd: "#{working_dir}/office-loader"
   update_package_json(working_dir)
-  shell_command! "export USER=root && npm install --network-concurrency 1", cwd: "#{working_dir}/production"
+  shell_command! "npm install --network-concurrency 1", cwd: "#{working_dir}/production"
   shell_command! "yarn install --network-concurrency 1", cwd: "#{working_dir}/office-loader"
 end
 
