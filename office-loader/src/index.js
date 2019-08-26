@@ -1,4 +1,5 @@
-import 'airbnb-browser-shims';
+import 'core-js';
+import 'whatwg-fetch'; import 'whatwg-fetch';
 
 const Office = window.Office;
 const OFFICE_PRIVILEGE_ID = '273';
