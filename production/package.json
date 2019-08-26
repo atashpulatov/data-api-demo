@@ -28,12 +28,11 @@
     ]
   },
   "dependencies": {
+    "@mstr/mstr-react-library": "^1.2.0",
     "airbnb-browser-shims": "^3.2.1",
     "antd": "^3.19.3",
     "focus-visible": "^5.0.2",
     "i18next": "^17.0.6",
-    "i18next-xhr-backend": "^3.1.2",
-    "@mstr/mstr-react-library": "^1.2.0",
     "proxy-polyfill": "^0.3.0",
     "query-string": "^6.7.0",
     "react": "^16.9.0",
@@ -58,6 +57,7 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-react-hooks": "^1.7.0",
+    "i18next-xhr-backend": "^3.1.2",
     "jest-localstorage-mock": "^2.4.0",
     "office-addin-debugging": "^3.0.10",
     "office-addin-dev-certs": "^1.2.4",
