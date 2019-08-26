@@ -78,7 +78,7 @@ end
 
 def install_dependencies(working_dir)
   shell_command! "rm -rf ~/.node-gyp"
-  shell_command! "npm i -g node-gyp"
+  shell_command! "sudo npm i -g node-gyp"
   shell_command! "rm -rf node_modules", cwd: "#{working_dir}/production"
   shell_command! "rm -rf node_modules", cwd: "#{working_dir}/office-loader"
   update_package_json(working_dir)
