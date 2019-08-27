@@ -1,20 +1,21 @@
-import React, {Component} from 'react';
-import {PopupTypeEnum} from '../home/popup-type-enum';
+import React, { Component } from 'react';
 import * as queryString from 'query-string';
-import {libraryErrorController} from '@mstr/mstr-react-library';
-import {officeContext} from '../office/office-context';
-import {selectorProperties} from '../attribute-selector/selector-properties';
-import {PopupViewSelector} from './popup-view-selector';
+import { libraryErrorController } from '@mstr/mstr-react-library';
+import { PopupTypeEnum } from '../home/popup-type-enum';
+import { officeContext } from '../office/office-context';
+import { selectorProperties } from '../attribute-selector/selector-properties';
+import { PopupViewSelector } from './popup-view-selector';
 import i18next from '../i18n';
-import {CLEAR_PROMPTS_ANSWERS} from '../navigation/navigation-tree-actions';
-import {reduxStore} from '../store';
+import { CLEAR_PROMPTS_ANSWERS } from '../navigation/navigation-tree-actions';
+import { reduxStore } from '../store';
 
 /* global Office */
 
 export class Popup extends Component {
   constructor(props) {
     super(props);
-    const mstrData = queryString.parse(props.location.search || window.location.search);
+    const location = (props.location && props.location.search) || window.location.search;
+    const mstrData = queryString.parse(location);
     this.state = {
       mstrData,
     };
@@ -46,7 +47,7 @@ export class Popup extends Component {
         reportId,
         reportSubtype,
       },
-    }, () => reduxStore.dispatch({type: CLEAR_PROMPTS_ANSWERS}));
+    }, () => reduxStore.dispatch({ type: CLEAR_PROMPTS_ANSWERS }));
   };
 
   handlePopupErrors = (error) => {
@@ -58,7 +59,7 @@ export class Popup extends Component {
   };
 
   render() {
-    const {popupType, ...propsToPass} = this.state.mstrData;
+    const { popupType, ...propsToPass } = this.state.mstrData;
     const methods = {
       handlePrepare: this.handlePrepare,
       handleBack: this.handleBack,

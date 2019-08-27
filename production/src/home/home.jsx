@@ -1,11 +1,11 @@
-import React, {Component} from 'react'; // eslint-disable-line no-unused-vars
-import {connect} from 'react-redux';
+import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
+import { connect } from 'react-redux';
 import './home.css';
-import {sessionHelper} from '../storage/session-helper';
-import {pageBuilder} from './page-builder.js';
-import {officeApiHelper} from '../office/office-api-helper';
-import {homeHelper} from './home-helper';
-import {withTranslation} from 'react-i18next';
+import { withTranslation } from 'react-i18next';
+import { sessionHelper } from '../storage/session-helper';
+import { pageBuilder } from './page-builder.js';
+import { officeApiHelper } from '../office/office-api-helper';
+import { homeHelper } from './home-helper';
 
 export class _Home extends Component {
   componentDidMount = async () => {
@@ -21,10 +21,12 @@ export class _Home extends Component {
 
   componentDidUpdate() {
     homeHelper.saveTokenFromCookies();
-  };
+  }
 
   render() {
-    const {loading, loadingReport, authToken, reportArray, popupOpen, t} = this.props;
+    const {
+      loading, loadingReport, authToken, reportArray, popupOpen, t,
+    } = this.props;
     return (<div>{pageBuilder.getPage(loading, loadingReport, authToken, reportArray, popupOpen, t)}</div>);
   }
 }

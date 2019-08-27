@@ -1,5 +1,5 @@
-import {reduxStore} from '../store';
-import {sessionHelper} from '../storage/session-helper';
+import { reduxStore } from '../store';
+import { sessionHelper } from '../storage/session-helper';
 
 class HomeHelper {
   saveLoginValues = () => {
@@ -8,7 +8,6 @@ class HomeHelper {
     if (location.origin.search('localhost') !== -1) {
       if (!token) {
         sessionHelper.logOut();
-        return;
       }
     } else {
       const currentPath = location.pathname;
@@ -25,15 +24,15 @@ class HomeHelper {
   getParsedCookies = () => {
     const cookieJar = this.getDocumentCookie();
     return cookieJar.split(';')
-        .reduce((res, c) => {
-          const [key, val] = c.trim().split('=').map(decodeURIComponent);
-          const allNumbers = (str) => /^\d+$/.test(str);
-          try {
-            return Object.assign(res, {[key]: allNumbers(val) ? val : JSON.parse(val)});
-          } catch (e) {
-            return Object.assign(res, {[key]: val});
-          }
-        }, {});
+      .reduce((res, c) => {
+        const [key, val] = c.trim().split('=').map(decodeURIComponent);
+        const allNumbers = (str) => /^\d+$/.test(str);
+        try {
+          return Object.assign(res, { [key]: allNumbers(val) ? val : JSON.parse(val) });
+        } catch (e) {
+          return Object.assign(res, { [key]: val });
+        }
+      }, {});
   };
 
   saveTokenFromCookies = () => {
@@ -44,13 +43,9 @@ class HomeHelper {
     }
   };
 
-  getWindowLocation = () => {
-    return window.location;
-  }
+  getWindowLocation = () => window.location
 
-  getDocumentCookie = () => {
-    return document.cookie;
-  }
+  getDocumentCookie = () => document.cookie
 }
 
 export const homeHelper = new HomeHelper();

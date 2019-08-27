@@ -1,21 +1,21 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {actions} from '../navigation/navigation-tree-actions';
-import {AttributeSelectorWindow} from '../attribute-selector/attribute-selector-window';
-import {PopupTypeEnum} from '../home/popup-type-enum';
-import {NavigationTree} from '../navigation/navigation-tree';
-import {LoadingPage} from '../loading/loading-page';
-import {selectorProperties} from '../attribute-selector/selector-properties';
-import {PromptsWindow} from '../prompts/prompts-window';
-import {RefreshAllPage} from '../loading/refresh-all-page';
-import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';
-import {preparePromptedReport} from './popup-actions';
+import { connect } from 'react-redux';
+import { actions } from '../navigation/navigation-tree-actions';
+import { AttributeSelectorWindow } from '../attribute-selector/attribute-selector-window';
+import { PopupTypeEnum } from '../home/popup-type-enum';
+import { NavigationTree } from '../navigation/navigation-tree';
+import { LoadingPage } from '../loading/loading-page';
+import { selectorProperties } from '../attribute-selector/selector-properties';
+import { PromptsWindow } from '../prompts/prompts-window';
+import { RefreshAllPage } from '../loading/refresh-all-page';
+import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
+import { preparePromptedReport } from './popup-actions';
 
 /* global Office */
 
 export const _PopupViewSelector = (props) => {
-  let popupType = props.popupType;
-  const {propsToPass, methods, importRequested} = props;
+  let { popupType } = props;
+  const { propsToPass, methods, importRequested } = props;
 
   if (!props.authToken || !propsToPass) {
     console.log('Waiting for token to be passed');
@@ -24,7 +24,7 @@ export const _PopupViewSelector = (props) => {
   propsToPass.token = props.authToken;
 
   propsToPass.editRequested = popupType === PopupTypeEnum.editFilters;
-  const localEditReport = {...props.editedReport};
+  const localEditReport = { ...props.editedReport };
   if ((importRequested && !props.isPrompted)
     || (importRequested && arePromptsAnswered(props))) {
     proceedToImport(props);
@@ -82,20 +82,20 @@ async function obtainInstanceWithPromptsAnswers(propsToPass, props) {
     count++;
   }
   const body = createBody(
-      props.editedReport && props.editedReport.selectedAttributes,
-      props.editedReport && props.editedReport.selectedMetrics,
-      props.editedReport && props.editedReport.selectedFilters
+    props.editedReport && props.editedReport.selectedAttributes,
+    props.editedReport && props.editedReport.selectedMetrics,
+    props.editedReport && props.editedReport.selectedFilters,
   );
   const preparedReport = {
     id: reportId,
-    projectId: projectId,
+    projectId,
     name: propsToPass.reportName,
     objectType: 'report',
     instanceId: instanceDefinition.instanceId,
     promptsAnswers: props.promptsAnswers,
     body,
   };
-  console.log({preparedReport, propsToPass});
+  console.log({ preparedReport, propsToPass });
   props.preparePromptedReport(instanceDefinition.instanceId, preparedReport);
 }
 
@@ -112,12 +112,12 @@ function createBody(attributes, metrics, filters, instanceId) {
   };
   if (attributes && attributes.length > 0) {
     attributes.forEach((att) => {
-      body[restObjectType].attributes.push({'id': att});
+      body[restObjectType].attributes.push({ id: att });
     });
   }
   if (metrics && metrics.length > 0) {
     metrics.forEach((met) => {
-      body[restObjectType].metrics.push({'id': met});
+      body[restObjectType].metrics.push({ id: met });
     });
   }
   if (filters && Object.keys(filters).length > 0) {
@@ -159,8 +159,8 @@ function composeFilter(selectedFilters) {
   }
   return operandsLength === 1
     ? filterOperands[0]
-    : {operator: 'And', operands: filterOperands};
-};
+    : { operator: 'And', operands: filterOperands };
+}
 
 function proceedToImport(props) {
   const okObject = {
@@ -171,7 +171,7 @@ function proceedToImport(props) {
     isPrompted: props.isPrompted,
     promptsAnswers: props.promptsAnswers,
   };
-  if (!!props.dossierData) {
+  if (props.dossierData) {
     okObject.dossierData = {
       ...props.dossierData,
       reportName: props.chosenProjectName,
@@ -191,7 +191,7 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
       ...propsToPass,
       ...editedReport,
     };
-    return <AttributeSelectorWindow mstrData={mstrData} handleBack={() => methods.handleBack( null, null, null, true)} />;
+    return <AttributeSelectorWindow mstrData={mstrData} handleBack={() => methods.handleBack(null, null, null, true)} />;
   }
   if (popupType === PopupTypeEnum.navigationTree) {
     return <NavigationTree handlePrepare={methods.handlePrepare} mstrData={propsToPass} handlePopupErrors={methods.handlePopupErrors} />;
@@ -225,7 +225,7 @@ export function mapStateToProps(state) {
     editedReport: parsePopupState(popupState),
     preparedInstance: state.popupReducer.preparedInstance,
   };
-};
+}
 
 const popupActions = {
   ...actions,
@@ -270,22 +270,20 @@ function restoreFilters(body, reportData) {
 }
 
 function parseFilters(filtersNodes) {
-  if (!!filtersNodes[0].operands) {
+  if (filtersNodes[0].operands) {
     // equivalent to flatMap((node) => node.operands)
     return parseFilters(filtersNodes.reduce((nodes, node) => nodes.concat(node.operands), []));
-  } else {
-    const elementNodes = filtersNodes.filter((node) => node.type === 'elements');
-    // equivalent to flatMap((node) => node.elements)
-    const elements = elementNodes.reduce((elements, node) => elements.concat(node.elements), []);
-    const elementsIds = elements.map((elem) => elem.id);
-    return elementsIds
-      .reduce((filters, elem) => {
-        const attrId = elem.split(':')[0];
-        filters[attrId] = !filters[attrId]
-          ? [elem]
-          : [...filters[attrId], elem];
-        return filters;
-      }, {});
   }
+  const elementNodes = filtersNodes.filter((node) => node.type === 'elements');
+  // equivalent to flatMap((node) => node.elements)
+  const elements = elementNodes.reduce((elements, node) => elements.concat(node.elements), []);
+  const elementsIds = elements.map((elem) => elem.id);
+  return elementsIds
+    .reduce((filters, elem) => {
+      const attrId = elem.split(':')[0];
+      filters[attrId] = !filters[attrId]
+        ? [elem]
+        : [...filters[attrId], elem];
+      return filters;
+    }, {});
 }
-

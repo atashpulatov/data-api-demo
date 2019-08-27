@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
-import {LoadingText} from '@mstr/mstr-react-library';
-import {Popover} from 'antd';
-import {MSTRIcon} from '@mstr/mstr-react-library';
-import {ReactComponent as WarningIcon} from './assets/icon_conflict.svg';
-import {withTranslation} from 'react-i18next';
-import {helper} from '../helpers/helpers';
+import React, { Component } from 'react';
+import { LoadingText, MSTRIcon } from '@mstr/mstr-react-library';
+import { Popover } from 'antd';
+
+import { withTranslation } from 'react-i18next';
+import { ReactComponent as WarningIcon } from './assets/icon_conflict.svg';
+import { helper } from '../helpers/helpers';
 
 import './refresh-all-page.css';
 
@@ -20,6 +20,7 @@ export class _RefreshAllPage extends Component {
       finished: false,
     };
   }
+
   componentDidMount() {
     // in IE we get local storage each 500ms as event listener doesn't work
     const ua = window.navigator.userAgent;
@@ -48,7 +49,7 @@ export class _RefreshAllPage extends Component {
           finished: fromStorage.finished,
         });
       } catch (e) {
-        return;
+
       }
     });
   }
@@ -68,72 +69,75 @@ export class _RefreshAllPage extends Component {
 
   getIcon = (res) => {
     if (res.isError === false) {
-      return <span className="result-icon"><MSTRIcon type='refresh-success' /></span>;
+      return <span className="result-icon"><MSTRIcon type="refresh-success" /></span>;
     }
     if (res.isError === true) {
-      return (<WarningIcon width='17px' height='17px'/>);
+      return (<WarningIcon width="17px" height="17px" />);
     }
-    return <span className="result-icon"></span>;
+    return <span className="result-icon" />;
   }
 
   getTooltipContent = (refreshData) => {
     const excel = 'Excel returned error';
-    const {t} = this.props;
+    const { t } = this.props;
     if (refreshData.isError) {
       return (
         <div className="tooltip-content">
           <div className="tooltip-header">
-            <WarningIcon width='17px' height='17px'/>
+            <WarningIcon width="17px" height="17px" />
           </div>
           <div className="tooltip-message">
-            <div className="tooltip-message-title">{this.props.t('{{report}} could not be refreshed', {report: refreshData.name})}</div>
+            <div className="tooltip-message-title">{this.props.t('{{report}} could not be refreshed', { report: refreshData.name })}</div>
             <div className="tooltip-message-text">{refreshData.result.includes(excel) ? `${t(excel)}: ${refreshData.result.split(':')[1]}` : t(refreshData.result)}</div>
           </div>
         </div>
       );
-    } else {
-      return refreshData.name;
     }
+    return refreshData.name;
   }
 
   render() {
-    const {t} = this.props;
+    const { t } = this.props;
     const displayName = this.state.name || 'data';
-    return (<div role="dialog" aria-labelledby="refresh-title" aria-describedby="refresh-report" className='refreshing-page dialog-style'>
-      <div id="refresh-title" className="refresh-title">{t('Refresh All Data')}</div>
-      <div className="refresh-header">
-        {!this.state.finished
-          ?
-          <div className='refresh-progress'>
-            <h1 id="refresh-report" title={displayName} className={'titleStyle'}>{`${displayName}`}</h1>
-            <h1 className={'progressStyle'}>{` (${this.state.currentNumber}/${this.state.allNumber})`}</h1>
-            <LoadingText text={t('Loading data...')} />
-          </div>
-          :
-          <span className="finished-header">{t('Refreshing complete!')}</span>}
-      </div>
-      <div className='results-container'>
-        {this.state.results &&
-          this.state.results.map((res) =>
+    return (
+      <div role="dialog" aria-labelledby="refresh-title" aria-describedby="refresh-report" className="refreshing-page dialog-style">
+        <div id="refresh-title" className="refresh-title">{t('Refresh All Data')}</div>
+        <div className="refresh-header">
+          {!this.state.finished
+            ? (
+              <div className="refresh-progress">
+                <h1 id="refresh-report" title={displayName} className="titleStyle">{`${displayName}`}</h1>
+                <h1 className="progressStyle">{` (${this.state.currentNumber}/${this.state.allNumber})`}</h1>
+                <LoadingText text={t('Loading data...')} />
+              </div>
+            )
+            : <span className="finished-header">{t('Refreshing complete!')}</span>}
+        </div>
+        <div className="results-container">
+          {this.state.results
+          && this.state.results.map((res) => (
             <div className="result-container" key={res.key}>
               {this.getIcon(res)}
               {(res.isError || helper.isOverflown(res.name, window.innerWidth - 90))
-                ? <Popover placement="topLeft" overlayClassName={res.isError === true ? 'tooltip-card' : ''} content={this.getTooltipContent(res)}>
-                  <span className="report-name">{res.name}</span>
-                </Popover>
+                ? (
+                  <Popover placement="topLeft" overlayClassName={res.isError === true ? 'tooltip-card' : ''} content={this.getTooltipContent(res)}>
+                    <span className="report-name">{res.name}</span>
+                  </Popover>
+                )
                 : <span className="report-name">{res.name}</span>}
-            </div>)
-        }
-      </div>
-      { // TODO: Find a way to make button ok work properly
+            </div>
+          ))}
+        </div>
+        { // TODO: Find a way to make button ok work properly
         /* <Button id="prepare" type="primary"
         className={ !this.state.finished ? 'hidden' : ''}
         onClick={this.finished}>
           Ok
       </Button> */}
-    </div>);
+      </div>
+    );
   }
-};
+}
 
 _RefreshAllPage.defaultProps = {
   t: (text) => text,

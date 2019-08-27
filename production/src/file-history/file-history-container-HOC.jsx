@@ -1,5 +1,5 @@
 import React from 'react';
-import {popupController} from '../popup/popup-controller';
+import { popupController } from '../popup/popup-controller';
 
 export const fileHistoryContainerHOC = (Component) => {
   class _FileHistoryContainerHOC extends React.Component {
@@ -16,9 +16,9 @@ export const fileHistoryContainerHOC = (Component) => {
         }
 
         addDataAction = () => {
-          this.state.allowAddDataClick && this.setState({allowAddDataClick: false}, async () => {
+          this.state.allowAddDataClick && this.setState({ allowAddDataClick: false }, async () => {
             await popupController.runPopupNavigation();
-            this._ismounted && this.setState({allowAddDataClick: true});
+            this._ismounted && this.setState({ allowAddDataClick: true });
           });
         };
 
