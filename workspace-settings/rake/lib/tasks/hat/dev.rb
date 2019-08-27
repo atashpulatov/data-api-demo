@@ -85,7 +85,7 @@ task :monitor_DB_change  => [:generate_localization_strings] do
   diff = File.read("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/#{diff_file}")
   if not diff.eql?('')
       shell_command!(
-        "git commit -m \"update strings\" -- #{base_path}",
+        "git commit -m \"update strings\" -- #{@string_file_path_base}",
         cwd:"#{$WORKSPACE_SETTINGS[:paths][:project][:home]}"
       )
       shell_command!(
