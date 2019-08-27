@@ -4,13 +4,13 @@ import {moduleProxy} from '../module-proxy';
 class PromptsRestService {
   async _getPrompts(fullPath, authToken, projectId) {
     return await moduleProxy.request
-        .get(fullPath)
-        .set('x-mstr-authtoken', authToken)
-        .set('x-mstr-projectid', projectId)
-        .withCredentials()
-        .then((res) => {
-          return res.body;
-        });
+      .get(fullPath)
+      .set('x-mstr-authtoken', authToken)
+      .set('x-mstr-projectid', projectId)
+      .withCredentials()
+      .then((res) => {
+        return res.body;
+      });
   }
 
   async getReportInstancePrompts(reportId, instanceId) {

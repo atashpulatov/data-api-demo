@@ -17,6 +17,8 @@ const EXCEL_ROW_LIMIT = 1048576;
 const EXCEL_COL_LIMIT = 16384;
 const EXCEL_XTABS_BORDER_COLOR = '#a5a5a5';
 
+/* global Office Excel OfficeExtension */
+
 class OfficeApiHelper {
   getRange = (headerCount, startCell, rowCount = 0) => {
     if (!Number.isInteger(headerCount)) {

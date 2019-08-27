@@ -1,4 +1,4 @@
-import {propsProxy} from './enum-props-proxy';
+import { propsProxy } from './enum-props-proxy';
 
 export const PopupTypeEnum = new Proxy({
   /**

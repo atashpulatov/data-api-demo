@@ -2,7 +2,7 @@ import {selectorProperties} from '../attribute-selector/selector-properties';
 import {officeDisplayService} from '../office/office-display-service';
 import {PopupTypeEnum} from '../home/popup-type-enum';
 import {sessionHelper} from '../storage/session-helper';
-import {objectTypes} from 'mstr-react-library';
+import {objectTypes} from '@mstr/mstr-react-library';
 import {notificationService} from '../notification/notification-service';
 import {reduxStore} from '../store';
 import {CLEAR_WINDOW, refreshReportsArray} from './popup-actions';
@@ -13,6 +13,8 @@ import {officeApiHelper} from '../office/office-api-helper';
 import {START_REPORT_LOADING, STOP_REPORT_LOADING} from './popup-actions';
 import {officeStoreService} from '../office/store/office-store-service';
 const URL = `${window.location.href}`;
+
+/* global Office */
 
 class PopupController {
   runPopupNavigation = async () => {
@@ -35,11 +37,11 @@ class PopupController {
       errorService.handleError(error);
       return;
     }
-    let url = URL;
+    const url = URL;
     // if (IS_LOCALHOST) {
     // url = `${window.location.origin}/popup.html`;
     // } else {
-    url = url.replace('index.html', 'popup.html');
+    // url = url.replace('index.html', 'popup.html');
     // }
     const splittedUrl = url.split('?'); // we need to get rid of any query params
     try {

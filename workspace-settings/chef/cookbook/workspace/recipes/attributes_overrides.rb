@@ -44,11 +44,11 @@ else
 end
 
 node.override[:nodejs].deep_merge!(
-  version: '8.11.2',
+  version: '10.16.3',
   binary: {
     checksum: {
-      darwin_x64: '6bd619ab577a1256531e50e31924d99a094eb920de8b5bd060a056a2608282b9',
-      linux_x64: '67dc4c06a58d4b23c5378325ad7e0a2ec482b48cea802252b99ebe8538a3ab79'
+      darwin_x64: '6febc571e1543c2845fa919c6d06b36a24e4e142c91aedbe28b6ff7d296119e4',
+      linux_x64: '2f0397bb81c1d0c9901b9aff82a933257bf60f3992227b86107111a75b9030d9'
     }
   }
 )

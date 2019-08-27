@@ -1,5 +1,5 @@
-import {sessionProperties} from './session-properties';
-import {SessionError} from './session-error';
+import { sessionProperties } from './session-properties';
+import { SessionError } from './session-error';
 
 export const sessionReducer = (state = {}, action) => {
   switch (action.type) {
@@ -22,7 +22,7 @@ export const sessionReducer = (state = {}, action) => {
 };
 
 function onLogIn(action, state) {
-  const {values} = action;
+  const { values } = action;
   if (!values || !values.envUrl) {
     throw new SessionError('Missing EnvUrl.');
   }

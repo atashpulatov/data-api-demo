@@ -4,7 +4,7 @@ import {Button, Popover} from 'antd';
 import {connect} from 'react-redux';
 import {withTranslation} from 'react-i18next';
 import {toggleIsSettingsFlag, toggleIsConfirmFlag} from '../office/office-actions';
-import {MSTRIcon} from 'mstr-react-library';
+import {MSTRIcon} from '@mstr/mstr-react-library';
 import mstrLogo from './assets/mstr_logo.png';
 import {SettingsMenu} from './settings-menu';
 import {Confirmation} from './confirmation';
@@ -78,7 +78,7 @@ export class _Header extends Component {
         <div className="mstr-logo">
           <span id='profileImage'>
             {/* TODO: Alt text for logo will be added later */}
-            <img src={mstrLogo} />
+            <img src={mstrLogo} alt='microstrategy logo' />
           </span>
         </div>
         <div className="header-buttons">
