@@ -2,10 +2,10 @@ import 'airbnb-browser-shims';
 import 'proxy-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {BrowserRouter, Route} from 'react-router-dom';
-import {Popup} from './popup/popup';
+import { BrowserRouter, Route } from 'react-router-dom';
+import { Popup } from './popup/popup';
 
-const Office = window.Office;
+const { Office } = window;
 
 function officeInitialize() {
   Office.onReady()
@@ -19,7 +19,7 @@ function goReact() {
     <BrowserRouter>
       <Route path="/" component={Popup} />
     </BrowserRouter>,
-    document.getElementById('popup')
+    document.getElementById('popup'),
   );
 }
 

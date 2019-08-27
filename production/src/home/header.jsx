@@ -1,13 +1,13 @@
-import React, {Component} from 'react';
-import {sessionHelper} from '../storage/session-helper';
-import {Button, Popover} from 'antd';
-import {connect} from 'react-redux';
-import {withTranslation} from 'react-i18next';
-import {toggleIsSettingsFlag, toggleIsConfirmFlag} from '../office/office-actions';
-import {MSTRIcon} from '@mstr/mstr-react-library';
+import React, { Component } from 'react';
+import { Button, Popover } from 'antd';
+import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
+import { MSTRIcon } from '@mstr/mstr-react-library';
+import { toggleIsSettingsFlag, toggleIsConfirmFlag } from '../office/office-actions';
+import { sessionHelper } from '../storage/session-helper';
 import mstrLogo from './assets/mstr_logo.png';
-import {SettingsMenu} from './settings-menu';
-import {Confirmation} from './confirmation';
+import { SettingsMenu } from './settings-menu';
+import { Confirmation } from './confirmation';
 
 export class _Header extends Component {
   componentDidMount = async () => {
@@ -72,13 +72,15 @@ export class _Header extends Component {
   }
 
   render() {
-    const {loading, t, isSettings, isConfirm} = this.props;
+    const {
+      loading, t, isSettings, isConfirm,
+    } = this.props;
     return (
-      <header id='app-header'>
+      <header id="app-header">
         <div className="mstr-logo">
-          <span id='profileImage'>
+          <span id="profileImage">
             {/* TODO: Alt text for logo will be added later */}
-            <img src={mstrLogo} alt='microstrategy logo' />
+            <img src={mstrLogo} alt="microstrategy logo" />
           </span>
         </div>
         <div className="header-buttons">
@@ -90,19 +92,19 @@ export class _Header extends Component {
           {isSettings && <SettingsMenu />}
           {isConfirm && <Confirmation />}
         </div>
-      </header >
+      </header>
     );
-  };
+  }
 }
 
 _Header.defaultProps = {
   t: (text) => text,
 };
 
-function mapStateToProps({officeReducer}) {
-  const {isSettings, isConfirm} = officeReducer;
-  return {isSettings, isConfirm};
-};
+function mapStateToProps({ officeReducer }) {
+  const { isSettings, isConfirm } = officeReducer;
+  return { isSettings, isConfirm };
+}
 
 const mapDispatchToProps = {
   toggleIsSettingsFlag,
@@ -110,4 +112,3 @@ const mapDispatchToProps = {
 };
 
 export const Header = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_Header));
-

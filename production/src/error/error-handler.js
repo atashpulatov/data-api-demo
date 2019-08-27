@@ -1,17 +1,19 @@
-import {EnvironmentNotFoundError} from './environment-not-found-error.js';
-import {UnauthorizedError} from './unauthorized-error.js';
-import {BadRequestError} from './bad-request-error.js';
-import {InternalServerError} from './internal-server-error.js';
-import {PromptedReportError} from './prompted-report-error';
-import {sessionHelper} from '../storage/session-helper.js';
-import {notificationService} from '../notification/notification-service.js';
-import {RunOutsideOfficeError} from './run-outside-office-error.js';
-import {OverlappingTablesError} from './overlapping-tables-error';
-import {GenericOfficeError} from './generic-office-error.js';
-import {errorMessages, NOT_SUPPORTED_PROMPTS_REFRESH, TABLE_OVERLAP, TABLE_REMOVED} from './constants';
-import {ConnectionBrokenError} from './connection-error.js';
-import {OutsideOfRangeError} from './outside-of-range-error.js';
-import {TableRemovedFromExcelError} from './table-removed-from-excel-error.js';
+import { EnvironmentNotFoundError } from './environment-not-found-error.js';
+import { UnauthorizedError } from './unauthorized-error.js';
+import { BadRequestError } from './bad-request-error.js';
+import { InternalServerError } from './internal-server-error.js';
+import { PromptedReportError } from './prompted-report-error';
+import { sessionHelper } from '../storage/session-helper.js';
+import { notificationService } from '../notification/notification-service.js';
+import { RunOutsideOfficeError } from './run-outside-office-error.js';
+import { OverlappingTablesError } from './overlapping-tables-error';
+import { GenericOfficeError } from './generic-office-error.js';
+import {
+  errorMessages, NOT_SUPPORTED_PROMPTS_REFRESH, TABLE_OVERLAP, TABLE_REMOVED,
+} from './constants';
+import { ConnectionBrokenError } from './connection-error.js';
+import { OutsideOfRangeError } from './outside-of-range-error.js';
+import { TableRemovedFromExcelError } from './table-removed-from-excel-error.js';
 
 const TIMEOUT = 2000;
 
@@ -49,7 +51,7 @@ class ErrorService {
       switch (error.message) {
         case 'Excel is not defined':
           return new RunOutsideOfficeError(error.message);
-        case `A table can't overlap another table. `:
+        case 'A table can\'t overlap another table. ':
           return new OverlappingTablesError(TABLE_OVERLAP);
         case 'This object binding is no longer valid due to previous updates.':
           return new TableRemovedFromExcelError(TABLE_REMOVED);
@@ -89,23 +91,23 @@ class ErrorService {
   getErrorMessage = (error) => {
     if (error instanceof EnvironmentNotFoundError) {
       return 'The endpoint cannot be reached';
-    };
+    }
     if (error instanceof ConnectionBrokenError) {
       return 'Environment is unreachable. Please check your internet connection.';
-    };
+    }
     if (error instanceof UnauthorizedError) {
       if (error.response.body.code === 'ERR003') return 'Wrong username or password.';
       return 'Your session has expired. Please log in.';
-    };
+    }
     if (error instanceof BadRequestError) {
       return 'There has been a problem with your request';
-    };
+    }
     if (error instanceof InternalServerError) {
       return errorMessages[!error.response ? '-1' : error.response.body ? error.response.body.iServerCode : '-1'];
-    };
+    }
     if (error instanceof PromptedReportError) {
       return NOT_SUPPORTED_PROMPTS_REFRESH;
-    };
+    }
     if (error instanceof OutsideOfRangeError) {
       return 'The table you try to import exceeds the worksheet limits.';
     }

@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
-import {selectorProperties} from '../attribute-selector/selector-properties';
-import {PopupButtons} from '../popup/popup-buttons.jsx';
-import {FolderBrowser, objectTypes} from '@mstr/mstr-react-library';
-import {connect} from 'react-redux';
-import {actions} from './navigation-tree-actions';
-import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';
-import {withTranslation} from 'react-i18next';
+import React, { Component } from 'react';
+import { FolderBrowser, objectTypes } from '@mstr/mstr-react-library';
+import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
+import { selectorProperties } from '../attribute-selector/selector-properties';
+import { PopupButtons } from '../popup/popup-buttons.jsx';
+import { actions } from './navigation-tree-actions';
+import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 
 /* global Office */
 
@@ -40,7 +40,7 @@ export class _NavigationTree extends Component {
     try {
       this.props.handlePrepare(this.props.chosenProjectId, this.props.chosenObjectId,
         this.props.chosenSubtype, this.props.chosenProjectName, this.props.chosenType);
-      this.setState({previewDisplay: true});
+      this.setState({ previewDisplay: true });
     } catch (err) {
       this.props.handlePopupErrors(err);
     }
@@ -81,16 +81,18 @@ export class _NavigationTree extends Component {
   };
 
   render() {
-    const {setDataSource, dataSource, chosenObjectId, chosenProjectId, pageSize, changeSearching, changeSorting,
+    const {
+      setDataSource, dataSource, chosenObjectId, chosenProjectId, pageSize, changeSearching, changeSorting,
       chosenSubtype, folder, selectFolder, loading, handlePopupErrors, scrollPosition, searchText, sorter,
-      updateScroll, updateSize, requestImport, t} = this.props;
+      updateScroll, updateSize, requestImport, t,
+    } = this.props;
     return (
       <FolderBrowser
         onSorterChange={changeSorting}
         onSearchChange={changeSearching}
         searchText={searchText}
         sorter={sorter}
-        title='Import data'
+        title="Import data"
         session={this.state.session}
         triggerUpdate={this.state.triggerUpdate}
         onTriggerUpdate={this.onTriggerUpdate}
@@ -112,18 +114,20 @@ export class _NavigationTree extends Component {
         t={t}
       >
         {/* Temporary loading user action block */}
-        <div id="action-block" style={{
-          display: loading ? 'block' : 'none',
-          position: 'fixed',
-          top: '0',
-          left: '0',
-          height: '100vh',
-          width: '100vw',
-          zindex: '100',
-          backgroundColor: '#fff',
-          opacity: '0.5',
-        }}>
-        </div>
+        <div
+          id="action-block"
+          style={{
+            display: loading ? 'block' : 'none',
+            position: 'fixed',
+            top: '0',
+            left: '0',
+            height: '100vh',
+            width: '100vw',
+            zindex: '100',
+            backgroundColor: '#fff',
+            opacity: '0.5',
+          }}
+        />
         <PopupButtons
           loading={loading}
           disableActiveActions={!chosenObjectId}
@@ -141,11 +145,11 @@ _NavigationTree.defaultProps = {
   t: (text) => text,
 };
 
-export const mapStateToProps = ({officeReducer, navigationTree}) => {
+export const mapStateToProps = ({ officeReducer, navigationTree }) => {
   const object = officeReducer.preLoadReport;
   return {
     ...navigationTree,
-    title: !!object ? object.name : undefined,
+    title: object ? object.name : undefined,
   };
 };
 

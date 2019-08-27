@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 export class _TestComponent extends Component {
   constructor(props) {
@@ -6,6 +6,6 @@ export class _TestComponent extends Component {
   }
 
   render() {
-    return <div></div>;
+    return <div />;
   }
-};
+}

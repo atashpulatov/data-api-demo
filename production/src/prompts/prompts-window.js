@@ -1,15 +1,15 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import '../index.css';
 import '../home/home.css';
-import {PromptsContainer} from './prompts-container';
-import {PromptWindowButtons} from './prompts-window-buttons';
-import {actions} from '../navigation/navigation-tree-actions';
-import {connect} from 'react-redux';
-import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';
-import {selectorProperties} from '../attribute-selector/selector-properties';
+import { connect } from 'react-redux';
+import { PromptsContainer } from './prompts-container';
+import { PromptWindowButtons } from './prompts-window-buttons';
+import { actions } from '../navigation/navigation-tree-actions';
+import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
+import { selectorProperties } from '../attribute-selector/selector-properties';
 
-const Office = window.Office;
-const microstrategy = window.microstrategy;
+const { Office } = window;
+const { microstrategy } = window;
 
 export class _PromptsWindow extends Component {
   constructor(props) {
@@ -67,7 +67,7 @@ export class _PromptsWindow extends Component {
       return;
     }
 
-    const {authToken, projectId} = this.state.session;
+    const { authToken, projectId } = this.state.session;
     const libraryUrl = this.state.session.url.replace('api', 'app');
 
     let instanceDefinition;
@@ -80,7 +80,7 @@ export class _PromptsWindow extends Component {
 
     let msgRouter = null;
     let promptsAnswers = null;
-    const promptsAnsweredHandler = function(_promptsAnswers) {
+    const promptsAnsweredHandler = function (_promptsAnswers) {
       if (!_promptsAnswers) {
         return;
       }
@@ -91,25 +91,25 @@ export class _PromptsWindow extends Component {
       }
     };
     const url = `${libraryUrl}/${projectId}/${this.state.reportId}`;
-    const CustomAuthenticationType = microstrategy.dossier.CustomAuthenticationType;
-    const EventType = microstrategy.dossier.EventType;
+    const { CustomAuthenticationType } = microstrategy.dossier;
+    const { EventType } = microstrategy.dossier;
 
     const props = {
-      url: url,
+      url,
       enableCustomAuthentication: true,
       customAuthenticationType:
         CustomAuthenticationType.AUTH_TOKEN,
       enableResponsive: true,
 
-      getLoginToken: function() {
+      getLoginToken() {
         return Promise.resolve(authToken);
       },
       placeholder: container,
-      onMsgRouterReadyHandler: ({MsgRouter}) => {
+      onMsgRouterReadyHandler: ({ MsgRouter }) => {
         msgRouter = MsgRouter;
         msgRouter.registerEventHandler(
           EventType.ON_PROMPT_ANSWERED,
-          promptsAnsweredHandler
+          promptsAnsweredHandler,
         );
         // TODO: We should remember to unregister this handler once the page loads
       },
@@ -130,7 +130,7 @@ export class _PromptsWindow extends Component {
         const dossierData = {
           chapterKey: chapter.nodeKey,
           dossierId: objectId,
-          instanceId: instanceId,
+          instanceId,
           visualizationKey: visuzalisations[0].key,
         };
 
@@ -138,7 +138,7 @@ export class _PromptsWindow extends Component {
         mstrObjectRestService.deleteDossierInstance(projectId, objectId, instanceId);
 
         msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, promptsAnsweredHandler);
-        this.props.promptsAnswered({dossierData, promptsAnswers});// TEMP - dossierData should eventually be removed as data should be gathered via REST from report instance, not dossier
+        this.props.promptsAnswered({ dossierData, promptsAnswers });// TEMP - dossierData should eventually be removed as data should be gathered via REST from report instance, not dossier
       });
   }
 
@@ -151,12 +151,14 @@ export class _PromptsWindow extends Component {
       runButton && runButton.click();
     }
   }
+
   closePopup = () => {
     const cancelObject = {
       command: selectorProperties.commandCancel,
     };
     Office.context.ui.messageParent(JSON.stringify(cancelObject));
   };
+
   /**
    * This function applies an external css file to a document
    */
@@ -201,7 +203,7 @@ export class _PromptsWindow extends Component {
    * @param {*} callback
    */
   watchForIframeAddition(container, callback) {
-    const config = {childList: true};
+    const config = { childList: true };
     const onMutation = (mutationList) => {
       for (const mutation of mutationList) {
         if (mutation.addedNodes && mutation.addedNodes.length && mutation.addedNodes[0].nodeName === 'IFRAME') {
@@ -217,14 +219,14 @@ export class _PromptsWindow extends Component {
   render() {
     return (
       <div
-        style={{position: 'relative'}}
+        style={{ position: 'relative' }}
         ref={this.outerCont}
       >
         <PromptsContainer
           postMount={this.onPromptsContainerMount}
         />
 
-        <div style={{position: 'absolute', bottom: '0'}}>
+        <div style={{ position: 'absolute', bottom: '0' }}>
           <PromptWindowButtons
             handleBack={this.props.handleBack}
             handleRun={this.handleRun}
@@ -234,12 +236,9 @@ export class _PromptsWindow extends Component {
         </div>
       </div>
     );
-  };
+  }
 }
 
-export const mapStateToProps = (state) => {
-  return {...state.promptsPopup};
-};
+export const mapStateToProps = (state) => ({ ...state.promptsPopup });
 
 export const PromptsWindow = connect(mapStateToProps, actions)(_PromptsWindow);
-

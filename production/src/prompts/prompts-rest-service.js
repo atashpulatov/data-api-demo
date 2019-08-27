@@ -1,5 +1,5 @@
-import {reduxStore} from '../store';
-import {moduleProxy} from '../module-proxy';
+import { reduxStore } from '../store';
+import { moduleProxy } from '../module-proxy';
 
 class PromptsRestService {
   async _getPrompts(fullPath, authToken, projectId) {
@@ -13,9 +13,9 @@ class PromptsRestService {
 
   async getReportInstancePrompts(reportId, instanceId) {
     const storeState = reduxStore.getState();
-    const {envUrl} = storeState.sessionReducer;
-    const {authToken} = storeState.sessionReducer;
-    const {projectId} = storeState.historyReducer.project;
+    const { envUrl } = storeState.sessionReducer;
+    const { authToken } = storeState.sessionReducer;
+    const { projectId } = storeState.historyReducer.project;
 
     const fullPath = `${envUrl}/reports/${reportId}/instances/${instanceId}/prompts`;
     return this._getPrompts(fullPath, authToken, projectId);
@@ -23,8 +23,8 @@ class PromptsRestService {
 
   async getReportPrompts(reportId, projectId) {
     const storeState = reduxStore.getState();
-    const {envUrl} = storeState.sessionReducer;
-    const {authToken} = storeState.sessionReducer;
+    const { envUrl } = storeState.sessionReducer;
+    const { authToken } = storeState.sessionReducer;
     // const projectId = storeState.historyReducer.project.projectId;
 
     const fullPath = `${envUrl}/reports/${reportId}/prompts`;

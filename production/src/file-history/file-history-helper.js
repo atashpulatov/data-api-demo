@@ -1,10 +1,8 @@
-import {sessionHelper} from '../storage/session-helper';
-import {notificationService} from '../notification/notification-service';
-import {errorService} from '../error/error-handler';
+import { sessionHelper } from '../storage/session-helper';
+import { notificationService } from '../notification/notification-service';
+import { errorService } from '../error/error-handler';
 
-const capitalize = (str) => {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-};
+const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
 class FileHistoryHelper {
   deleteReport = async (onDelete, bindingId, isCrosstab = false, crosstabHeaderDimensions = {}, message) => {

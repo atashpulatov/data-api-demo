@@ -1,9 +1,9 @@
-import {errorService} from '../error/error-handler';
-import {OutsideOfRangeError} from '../error/outside-of-range-error';
-import {reduxStore} from '../store';
-import {moduleProxy} from '../module-proxy';
+import { errorService } from '../error/error-handler';
+import { OutsideOfRangeError } from '../error/outside-of-range-error';
+import { reduxStore } from '../store';
+import { moduleProxy } from '../module-proxy';
 import officeConverterServiceV2 from '../office/office-converter-service-v2';
-import {NOT_SUPPORTED_NO_ATTRIBUTES} from '../error/constants';
+import { NOT_SUPPORTED_NO_ATTRIBUTES } from '../error/constants';
 
 const sharedFolderIdType = 7;
 
@@ -99,16 +99,16 @@ class MstrObjectRestService {
   }
 
   _parseInstanceDefinition(res) {
-    const {body} = res;
+    const { body } = res;
     if (res.status === 200 && body.status === 2) {
-      const {instanceId} = body;
-      const {status} = body;
-      return {instanceId, status};
+      const { instanceId } = body;
+      const { status } = body;
+      return { instanceId, status };
     }
-    const {instanceId, data} = body;
+    const { instanceId, data } = body;
     if (data.paging.total === 0) throw new Error(NOT_SUPPORTED_NO_ATTRIBUTES);
     const mstrTable = officeConverterServiceV2.createTable(body);
-    const {rows, columns} = this._checkTableDimensions(mstrTable.tableSize);
+    const { rows, columns } = this._checkTableDimensions(mstrTable.tableSize);
     return {
       instanceId, rows, columns, mstrTable,
     };
@@ -116,8 +116,8 @@ class MstrObjectRestService {
 
   getObjectDefinition(objectId, projectId, isReport = true) {
     const storeState = reduxStore.getState();
-    const {envUrl} = storeState.sessionReducer;
-    const {authToken} = storeState.sessionReducer;
+    const { envUrl } = storeState.sessionReducer;
+    const { authToken } = storeState.sessionReducer;
     const objectType = isReport ? 'reports' : 'cubes';
     const api = API_VERSION > 1 ? 'v2/' : '';
     const fullPath = `${envUrl}/${api}${objectType}/${objectId}`;
@@ -132,8 +132,8 @@ class MstrObjectRestService {
 
   getObjectInfo(objectId, projectId, isReport = true) {
     const storeState = reduxStore.getState();
-    const {envUrl} = storeState.sessionReducer;
-    const {authToken} = storeState.sessionReducer;
+    const { envUrl } = storeState.sessionReducer;
+    const { authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/objects/${objectId}?type=${OBJECT_TYPE}`;
 
     return moduleProxy.request
@@ -146,8 +146,8 @@ class MstrObjectRestService {
 
   async createInstance(objectId, projectId, isReport = true, dossierData, body = {}, limit = 1) {
     const storeState = reduxStore.getState();
-    const {envUrl} = storeState.sessionReducer;
-    const {authToken} = storeState.sessionReducer;
+    const { envUrl } = storeState.sessionReducer;
+    const { authToken } = storeState.sessionReducer;
     const fullPath = this._getFullPath({
       dossierData, envUrl, limit, isReport, objectId, version: API_VERSION,
     });
@@ -156,8 +156,8 @@ class MstrObjectRestService {
 
   modifyInstance(objectId, projectId, isReport = true, dossierData, body = {}, instanceId, limit = 1) {
     const storeState = reduxStore.getState();
-    const {envUrl} = storeState.sessionReducer;
-    const {authToken} = storeState.sessionReducer;
+    const { envUrl } = storeState.sessionReducer;
+    const { authToken } = storeState.sessionReducer;
     const fullPath = this._getFullPath({
       dossierData, envUrl, limit, isReport, objectId, instanceId, version: API_VERSION,
     });
@@ -166,8 +166,8 @@ class MstrObjectRestService {
 
   getInstance(objectId, projectId, isReport = true, dossierData, body = {}, instanceId, limit = 1) {
     const storeState = reduxStore.getState();
-    const {envUrl} = storeState.sessionReducer;
-    const {authToken} = storeState.sessionReducer;
+    const { envUrl } = storeState.sessionReducer;
+    const { authToken } = storeState.sessionReducer;
     const fullPath = this._getFullPath({
       dossierData, envUrl, limit, isReport, objectId, instanceId, version: API_VERSION,
     });
@@ -177,8 +177,8 @@ class MstrObjectRestService {
   createDossierBasedOnReport(reportId, instanceId, projectId) {
     // TODO: get rid of the getState
     const storeState = reduxStore.getState();
-    const {envUrl} = storeState.sessionReducer;
-    const {authToken} = storeState.sessionReducer;
+    const { envUrl } = storeState.sessionReducer;
+    const { authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/dossiers/instances`;
     const body = {
       objects: [
@@ -205,8 +205,8 @@ class MstrObjectRestService {
 
   getDossierStatus(dossierId, instanceId, projectId) {
     const storeState = reduxStore.getState();
-    const {envUrl} = storeState.sessionReducer;
-    const {authToken} = storeState.sessionReducer;
+    const { envUrl } = storeState.sessionReducer;
+    const { authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/documents/${dossierId}/instances/${instanceId}/status`;
 
     return moduleProxy.request
@@ -220,8 +220,8 @@ class MstrObjectRestService {
 
   rePromptDossier(dossierId, instanceId, projectId) {
     const storeState = reduxStore.getState();
-    const {envUrl} = storeState.sessionReducer;
-    const {authToken} = storeState.sessionReducer;
+    const { envUrl } = storeState.sessionReducer;
+    const { authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/documents/${dossierId}/instances/${instanceId}/rePrompt`;
 
     return moduleProxy.request
@@ -244,11 +244,11 @@ class MstrObjectRestService {
       .withCredentials();
   }
 
-  _checkTableDimensions({rows, columns}) {
+  _checkTableDimensions({ rows, columns }) {
     if (rows >= EXCEL_ROW_LIMIT || columns >= EXCEL_COLUMN_LIMIT) {
       throw new OutsideOfRangeError();
     }
-    return {rows, columns};
+    return { rows, columns };
   }
 
   _getFullPath({
@@ -265,8 +265,8 @@ class MstrObjectRestService {
 
   isPrompted(objectId, projectId) {
     const storeState = reduxStore.getState();
-    const {envUrl} = storeState.sessionReducer;
-    const {authToken} = storeState.sessionReducer;
+    const { envUrl } = storeState.sessionReducer;
+    const { authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/reports/${objectId}/prompts`;
     return moduleProxy.request
       .get(fullPath)
@@ -279,8 +279,8 @@ class MstrObjectRestService {
   answerPrompts(objectId, projectId, instanceId, promptsAnswers) {
     try {
       const storeState = reduxStore.getState();
-      const {envUrl} = storeState.sessionReducer;
-      const {authToken} = storeState.sessionReducer;
+      const { envUrl } = storeState.sessionReducer;
+      const { authToken } = storeState.sessionReducer;
       const fullPath = `${envUrl}/reports/${objectId}/instances/${instanceId}/promptsAnswers`;
       return moduleProxy.request
         .post(fullPath)
@@ -301,8 +301,8 @@ class MstrObjectRestService {
 
   answerDossierPrompts(objectId, projectId, instanceId, promptsAnswers) {
     const storeState = reduxStore.getState();
-    const {envUrl} = storeState.sessionReducer;
-    const {authToken} = storeState.sessionReducer;
+    const { envUrl } = storeState.sessionReducer;
+    const { authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/promptsAnswers`;
     return moduleProxy.request
       .post(fullPath)
@@ -315,8 +315,8 @@ class MstrObjectRestService {
 
   deleteDossierInstance(projectId, objectId, instanceId) {
     const storeState = reduxStore.getState();
-    const {envUrl} = storeState.sessionReducer;
-    const {authToken} = storeState.sessionReducer;
+    const { envUrl } = storeState.sessionReducer;
+    const { authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}`;
     return moduleProxy.request
       .delete(fullPath)
@@ -329,8 +329,8 @@ class MstrObjectRestService {
 
 async function* fetchContentGenerator(instanceDefinition, objectId, projectId, isReport, dossierData, body, limit) {
   const totalRows = instanceDefinition.rows;
-  const {instanceId, mstrTable} = instanceDefinition;
-  const {isCrosstab} = mstrTable;
+  const { instanceId, mstrTable } = instanceDefinition;
+  const { isCrosstab } = mstrTable;
   const offsetSubtotal = (e) => {
     e && (e.rowIndex += offset);
   };
@@ -338,8 +338,8 @@ async function* fetchContentGenerator(instanceDefinition, objectId, projectId, i
     (e && e.axis === 'rows') && (e.colIndex += offset);
   };
   const storeState = reduxStore.getState();
-  const {envUrl} = storeState.sessionReducer;
-  const {authToken} = storeState.sessionReducer;
+  const { envUrl } = storeState.sessionReducer;
+  const { authToken } = storeState.sessionReducer;
   const fullPath = mstrObjectRestService._getFullPath({
     dossierData, envUrl, isReport, objectId, instanceId, version: API_VERSION,
   });
@@ -350,9 +350,9 @@ async function* fetchContentGenerator(instanceDefinition, objectId, projectId, i
     let header;
     let crosstabSubtotal;
     const response = await mstrObjectRestService._fetchObjectContent(fullPath, authToken, projectId, offset, limit);
-    const {current} = response.body.data.paging;
+    const { current } = response.body.data.paging;
     fetchedRows = current + offset;
-    const {row, rowTotals} = officeConverterServiceV2.getRows(response.body, isCrosstab);
+    const { row, rowTotals } = officeConverterServiceV2.getRows(response.body, isCrosstab);
     if (isCrosstab) {
       header = officeConverterServiceV2.getHeaders(response.body);
       crosstabSubtotal = header.subtotalAddress;
@@ -361,7 +361,7 @@ async function* fetchContentGenerator(instanceDefinition, objectId, projectId, i
       offset !== 0 && rowTotals.map((e) => offsetSubtotal(e));
     }
     offset += current;
-    yield {row, header, subtotalAddress: isCrosstab ? crosstabSubtotal : rowTotals};
+    yield { row, header, subtotalAddress: isCrosstab ? crosstabSubtotal : rowTotals };
   }
 }
 

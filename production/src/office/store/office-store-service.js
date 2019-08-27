@@ -1,8 +1,8 @@
-import {officeProperties} from '../office-properties';
-import {officeApiHelper} from '../../office/office-api-helper';
-import {RunOutsideOfficeError} from '../../error/run-outside-office-error';
-import {errorService} from '../../error/error-handler';
-import {reduxStore} from '../../store';
+import { officeProperties } from '../office-properties';
+import { officeApiHelper } from '../office-api-helper';
+import { RunOutsideOfficeError } from '../../error/run-outside-office-error';
+import { errorService } from '../../error/error-handler';
+import { reduxStore } from '../../store';
 
 /* global Office */
 
@@ -35,9 +35,7 @@ class OfficeStoreService {
     try {
       const settings = this.getOfficeSettings();
       const reportProperties = this._getReportProperties();
-      const indexOfReport = reportProperties.findIndex((oldReport) => {
-        return (oldReport.bindId === bindId);
-      });
+      const indexOfReport = reportProperties.findIndex((oldReport) => (oldReport.bindId === bindId));
       reportProperties[indexOfReport][key] = value;
       settings.set(officeProperties.loadedReportProperties, reportProperties);
       await settings.saveAsync();
@@ -51,9 +49,7 @@ class OfficeStoreService {
     try {
       const settings = this.getOfficeSettings();
       const reportProperties = this._getReportProperties();
-      const indexOfReport = reportProperties.findIndex((report) => {
-        return (report.bindId === bindingId);
-      });
+      const indexOfReport = reportProperties.findIndex((report) => (report.bindId === bindingId));
       reportProperties.splice(indexOfReport, 1);
       settings.set(officeProperties.loadedReportProperties, reportProperties);
       settings.saveAsync();
@@ -64,9 +60,7 @@ class OfficeStoreService {
 
   getReportFromProperties = (bindingId) => {
     const reportProperties = this._getReportProperties();
-    return reportProperties.find((report) => {
-      return report.bindId === bindingId;
-    });
+    return reportProperties.find((report) => report.bindId === bindingId);
   };
 
   _getReportProperties = () => {
@@ -110,13 +104,14 @@ class OfficeStoreService {
       errorService.handleError(error);
     }
   }
+
   saveAndPreserveReportInStore = (report, isRefresh) => {
     if (isRefresh) {
       try {
         const settings = this.getOfficeSettings();
         const reportsArray = [...this._getReportProperties()];
         const reportObj = reportsArray.find(
-            (element) => element.bindId === report.bindId
+          (element) => element.bindId === report.bindId,
         );
         reportsArray[reportsArray.indexOf(reportObj)].crosstabHeaderDimensions = report.crosstabHeaderDimensions;
         settings.set(officeProperties.loadedReportProperties, reportsArray);
