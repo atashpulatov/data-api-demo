@@ -1,28 +1,18 @@
 .settings-bar {
-  margin: auto;
   display: flex;
-  align-content: center;
+  justify-content: center; 
   color: #333333;
   font-weight: 700;
   font-size: 15px;
-  width: 100%;
-  overflow: hidden;
-  white-space: nowrap;
   line-height: 36px;
-  padding: 14px 20px;
+  padding: 14px;
   border-top: 1px solid #E8EDF0;
   border-bottom: 1px solid #E8EDF0;
-  justify-content: flex-start; 
+  box-shadow: 0 2px 4px #ccc;
   position: relative;
 }
 
-.settings-text{
-  flex: 0 1 auto;
-  position: absolute;            
-  left: 50%;
-  transform: translateX(-50%);
-}
-
 .back-wrapper{
-  flex: 0 1 auto;
+  position: absolute;
+  left: 20px;
 }

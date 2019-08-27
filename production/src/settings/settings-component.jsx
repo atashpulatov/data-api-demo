@@ -21,7 +21,7 @@ export class _SettingsComponent extends Component {
       <div>
         <div className={'settings-bar'}>
           <div className={'back-wrapper'}><Icon type="left" onClick={this.closeSettingsComponent} /></div>
-          <div className={'settings-text'}>{t('Settings')}</div>
+          <div>{t('Settings')}</div>
         </div>
       </div>
     );
