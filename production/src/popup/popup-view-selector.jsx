@@ -215,7 +215,7 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
     return <PromptsWindow mstrData={mstrData} handleBack={methods.handleBack} />; // use the same window as with prompting, but provide report info
   }
   if (popupType === PopupTypeEnum.dossierWindow) {
-    return <DossierWindow />;
+    return <DossierWindow dossierId={1234} dossierName={"Testing dossier"} handleBack={methods.handleBack} />;
   }
   // TODO: do some error handling here
   return null;
