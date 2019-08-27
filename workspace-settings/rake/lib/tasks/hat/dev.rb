@@ -30,7 +30,7 @@ task :generate_localization_strings do
     Trad_Chinese:       'zh-TW'
   }
 
-  # Localization::Generator.generate_string(database)
+  Localization::Generator.generate_string(database)
   connect =  Sequel.sqlite("#{$WORKSPACE_SETTINGS[:paths][:organization][:home]}/ProductStrings/#{database}/#{database}.db")
 
   translated_strings = Hash.new
