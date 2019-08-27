@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 import { PopupButtons } from '../popup/popup-buttons.jsx';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 
 const Office = window.Office;
 
-export default class DossierWindow extends Component {
+class _DossierWindow extends Component {
 
     handleCancel = () => {
         const cancelObject = {
@@ -14,10 +16,9 @@ export default class DossierWindow extends Component {
     };
 
     render() {
-        const { dossierId, dossierName, handleBack } = this.props;
+        const { dossierId, dossierName, handleBack, t } = this.props;
         return <div>
-            {/* {`${t('Importing')} ${displayName}`}*/}
-            <h1 title={dossierName} className="ant-col folder-browser-title">{`${'Importing'} ${dossierName} with id = ${dossierId}`}</h1>
+            <h1 title={dossierName} className="ant-col folder-browser-title">{`${t('Importing')} ${dossierName} with id = ${dossierId}`}</h1>
             <p>DossierWindowComponent</p>
             <PopupButtons
                 handleBack={handleBack}
@@ -26,3 +27,9 @@ export default class DossierWindow extends Component {
         </div>
     }
 }
+
+_DossierWindow.defaultProps = {
+    t: (text) => text,
+};
+
+export const DossierWindow = connect()(withTranslation('common')(_DossierWindow));  
