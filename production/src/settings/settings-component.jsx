@@ -19,12 +19,10 @@ export class _SettingsComponent extends Component {
     const {t} = this.props;
     return (
       <div>
-        {/* <h1 className={'settings-bar'}> <Icon type="left" onClick={this.closeSettingsComponent} />Settings</h1> */}
         <div className={'settings-bar'}>
           <div className={'back-wrapper'}><Icon type="left" onClick={this.closeSettingsComponent} /></div>
           <div className={'settings-text'}>{t('Settings')}</div>
         </div>
-        {/* <Button icon="left" onClick={this.closeSettingsComponent}></Button> */}
       </div>
     );
   }
