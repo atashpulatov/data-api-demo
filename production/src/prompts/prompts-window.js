@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-/* eslint-disable valid-jsdoc */
 import React, {Component} from 'react';
 import '../index.css';
 import '../home/home.css';
@@ -9,6 +7,9 @@ import {actions} from '../navigation/navigation-tree-actions';
 import {connect} from 'react-redux';
 import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';
 import {selectorProperties} from '../attribute-selector/selector-properties';
+
+const Office = window.Office;
+const microstrategy = window.microstrategy;
 
 export class _PromptsWindow extends Component {
   constructor(props) {
@@ -107,8 +108,8 @@ export class _PromptsWindow extends Component {
       onMsgRouterReadyHandler: ({MsgRouter}) => {
         msgRouter = MsgRouter;
         msgRouter.registerEventHandler(
-            EventType.ON_PROMPT_ANSWERED,
-            promptsAnsweredHandler
+          EventType.ON_PROMPT_ANSWERED,
+          promptsAnsweredHandler
         );
         // TODO: We should remember to unregister this handler once the page loads
       },
@@ -119,26 +120,26 @@ export class _PromptsWindow extends Component {
     }
 
     microstrategy.dossier
-        .create(props)
-        .then(async (dossierPage) => {
-          const chapter = await dossierPage.getCurrentChapter();
-          const objectId = await dossierPage.getDossierId();
-          const instanceId = await dossierPage.getDossierInstanceId();
-          const visuzalisations = await dossierPage.getCurrentPageVisualizationList();
+      .create(props)
+      .then(async (dossierPage) => {
+        const chapter = await dossierPage.getCurrentChapter();
+        const objectId = await dossierPage.getDossierId();
+        const instanceId = await dossierPage.getDossierInstanceId();
+        const visuzalisations = await dossierPage.getCurrentPageVisualizationList();
 
-          const dossierData = {
-            chapterKey: chapter.nodeKey,
-            dossierId: objectId,
-            instanceId: instanceId,
-            visualizationKey: visuzalisations[0].key,
-          };
+        const dossierData = {
+          chapterKey: chapter.nodeKey,
+          dossierId: objectId,
+          instanceId: instanceId,
+          visualizationKey: visuzalisations[0].key,
+        };
 
-          // Since the dossier is no needed anymore after intercepting promptsAnswers, we can try removing the instanace
-          mstrObjectRestService.deleteDossierInstance(projectId, objectId, instanceId);
+        // Since the dossier is no needed anymore after intercepting promptsAnswers, we can try removing the instanace
+        mstrObjectRestService.deleteDossierInstance(projectId, objectId, instanceId);
 
-          msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, promptsAnsweredHandler);
-          this.props.promptsAnswered({dossierData, promptsAnswers});// TEMP - dossierData should eventually be removed as data should be gathered via REST from report instance, not dossier
-        });
+        msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, promptsAnsweredHandler);
+        this.props.promptsAnswered({dossierData, promptsAnswers});// TEMP - dossierData should eventually be removed as data should be gathered via REST from report instance, not dossier
+      });
   }
 
   /**

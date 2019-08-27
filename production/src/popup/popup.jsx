@@ -14,7 +14,8 @@ import {reduxStore} from '../store';
 export class Popup extends Component {
   constructor(props) {
     super(props);
-    const mstrData = queryString.parse(props.location.search || window.location.search);
+    const location = (props.location && props.location.search) || window.location.search
+    const mstrData = queryString.parse(location);
     this.state = {
       mstrData,
     };

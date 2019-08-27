@@ -1,6 +1,4 @@
 import React, {Component} from 'react';
-import '../index.css';
-import '../home/home.css';
 import {selectorProperties} from '../attribute-selector/selector-properties';
 import {PopupButtons} from '../popup/popup-buttons.jsx';
 import {FolderBrowser, objectTypes} from '@mstr/mstr-react-library';

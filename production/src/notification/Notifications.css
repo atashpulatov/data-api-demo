@@ -148,6 +148,7 @@
 }
 
 .ant-notification-notice-icon {
+    position:static !important;
     font-size: 18px;
     margin-top: 5px;
 }

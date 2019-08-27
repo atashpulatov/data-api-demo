@@ -1,19 +1,17 @@
 import 'focus-visible/dist/focus-visible';
 import 'airbnb-browser-shims';
 import 'proxy-polyfill';
+import './index.css'
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Home} from './home/home.jsx';
 import {reduxStore, reduxPersistor} from './store';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/lib/integration/react';
-import './index.css';
 import {authenticationService} from './authentication/auth-rest-service.js';
 import {homeHelper} from './home/home-helper.js';
 import i18next from './i18n';
 import {Popup} from './popup/popup';
-
-/* global root */
 
 const Office = window.Office;
 
@@ -57,10 +55,9 @@ function goReact() {
       , document.getElementById('root')
     );
   } else {
-    root.style.display = 'none';
     ReactDOM.render(
       <Provider store={reduxStore}><Popup /></Provider>,
-      document.getElementById('popup')
+      document.getElementById('root')
     );
   }
 }
