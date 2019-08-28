@@ -1,11 +1,11 @@
-import {selectorProperties} from '../../attribute-selector/selector-properties';
-import {popupController} from '../../popup/popup-controller';
-import {officeDisplayService} from '../../office/office-display-service';
-import {objectTypes} from '@mstr/mstr-react-library';
-import {errorService} from '../../error/error-handler';
-import {PopupTypeEnum} from '../../home/popup-type-enum';
-import {officeApiHelper} from '../../office/office-api-helper';
-import {notificationService} from '../../notification/notification-service';
+import { objectTypes } from '@mstr/mstr-react-library';
+import { selectorProperties } from '../../attribute-selector/selector-properties';
+import { popupController } from '../../popup/popup-controller';
+import { officeDisplayService } from '../../office/office-display-service';
+import { errorService } from '../../error/error-handler';
+import { PopupTypeEnum } from '../../home/popup-type-enum';
+import { officeApiHelper } from '../../office/office-api-helper';
+import { notificationService } from '../../notification/notification-service';
 
 describe('PopupController', () => {
   const dialog = {};
@@ -26,7 +26,7 @@ describe('PopupController', () => {
     // given
     const popupType = PopupTypeEnum.navigationTree;
     const size = 80;
-    const runPopupSpy = jest.spyOn(popupController, 'runPopup').mockImplementationOnce(() => {});
+    const runPopupSpy = jest.spyOn(popupController, 'runPopup').mockImplementationOnce(() => { });
     // when
     popupController.runPopupNavigation();
     // then
@@ -39,7 +39,7 @@ describe('PopupController', () => {
     const reportParams = 'reportData';
     const popupType = PopupTypeEnum.editFilters;
     const size = 80;
-    const runPopupSpy = jest.spyOn(popupController, 'runPopup').mockImplementationOnce(() => {});
+    const runPopupSpy = jest.spyOn(popupController, 'runPopup').mockImplementationOnce(() => { });
     // when
     popupController.runEditFiltersPopup(reportParams);
     // then
@@ -234,7 +234,7 @@ describe('PopupController', () => {
         status: 404,
       },
     };
-    const expectedMessage = JSON.stringify({command, error});
+    const expectedMessage = JSON.stringify({ command, error });
     const givenArg = {
       message: expectedMessage,
     };
@@ -245,7 +245,7 @@ describe('PopupController', () => {
     await popupController.onMessageFromPopup(dialog, null, givenArg);
     // then
     expect(handleErrorSpy).toBeCalledWith(error, false);
-    expect(notifySpy).toBeCalledWith('warning', 'The endpoint cannot be reached', undefined);
+    expect(notifySpy).toBeCalledWith('warning', 'The endpoint cannot be reached', '');
     expect(dialog.close).toBeCalled();
   });
 });
