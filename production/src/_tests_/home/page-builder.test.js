@@ -1,19 +1,28 @@
 import React from 'react';
-import {mount} from 'enzyme';
-import {pageBuilder} from '../../home/page-builder';
+import { mount } from 'enzyme';
+import { Provider } from 'react-redux';
+import HomeContent from '../../home/page-builder';
 // TODO: get rid of Provider and reduxStore - everything should be mocked.
 //  Using right now, as children components require store. They should be mocked as well
-import {Provider} from 'react-redux';
-import {reduxStore} from '../../store';
+import { reduxStore } from '../../store';
 
 
 describe('PageBuilder', () => {
   it('should return page with two children as false and spinner with authentication', () => {
     // given
+    const givenProps = {
+      loading: false,
+      loadingReport: false,
+      authToken: false,
+      reportArray: [],
+      popupOpen: false,
+      shouldRenderSettings: false,
+      toggleRenderSettingsFlag: false,
+      t: (t) => t,
+    };
 
     // when
-    const Page = () => pageBuilder.getPage(false, false, false, false, false, (text) => text);
-    const wrappedComponent = mount(<Provider store={reduxStore}><Page /></Provider>);
+    const wrappedComponent = mount(<Provider store={reduxStore}><HomeContent {...givenProps} /></Provider>);
 
     // then
     expect(wrappedComponent.find('_FileHistoryContainer').get(0)).toBeUndefined();
@@ -24,10 +33,19 @@ describe('PageBuilder', () => {
 
   it('should return page with one false element and Placeholder element should be defined', () => {
     // given
+    const givenProps = {
+      loading: false,
+      loadingReport: false,
+      authToken: true,
+      reportArray: [],
+      popupOpen: false,
+      shouldRenderSettings: false,
+      toggleRenderSettingsFlag: false,
+      t: (t) => t,
+    };
 
     // when
-    const Page = () => pageBuilder.getPage(false, false, true, false, false, (text) => text);
-    const wrappedComponent = mount(<Provider store={reduxStore}><Page /></Provider>);
+    const wrappedComponent = mount(<Provider store={reduxStore}><HomeContent {...givenProps} /></Provider>);
 
     // then
     expect(wrappedComponent.find('_FileHistoryContainer').get(0)).toBeUndefined();
@@ -38,8 +56,8 @@ describe('PageBuilder', () => {
     // given
 
     // when
-    const Page = () => pageBuilder.getPage(false, false, false, true, false, (text) => text);
-    const wrappedComponent = mount(<Provider store={reduxStore}><Page /></Provider>);
+    const Page = () => HomeContent(false, false, false, true, false, (text) => text);
+    const wrappedComponent = mount(<Provider store={reduxStore}><HomeContent /></Provider>);
 
     // then
     expect(wrappedComponent.find('_FileHistoryContainer').get(0)).toBeUndefined();
@@ -50,8 +68,8 @@ describe('PageBuilder', () => {
     // given
 
     // when
-    const Page = () => pageBuilder.getPage(false, false, true, false, false, (text) => text);
-    const wrappedComponent = mount(<Provider store={reduxStore}><Page /></Provider>);
+    const Page = () => HomeContent(false, false, true, false, false, (text) => text);
+    const wrappedComponent = mount(<Provider store={reduxStore}><HomeContent /></Provider>);
 
     // then
     expect(wrappedComponent.find('_FileHistoryContainer').get(0)).toBeUndefined();
@@ -62,8 +80,8 @@ describe('PageBuilder', () => {
     // given
 
     // when
-    const Page = () => pageBuilder.getPage(false, false, true, [{}], false, (text) => text);
-    const wrappedComponent = mount(<Provider store={reduxStore}><Page /></Provider>);
+    const Page = () => HomeContent(false, false, true, [{}], false, (text) => text);
+    const wrappedComponent = mount(<Provider store={reduxStore}><HomeContent /></Provider>);
 
     // then
     expect(wrappedComponent.find('_FileHistoryContainer').get(0)).toBeDefined();
@@ -73,8 +91,8 @@ describe('PageBuilder', () => {
     // given
 
     // when
-    const Page = () => pageBuilder.getPage(false, false, true, [{}], true, (text) => text);
-    const wrappedComponent = mount(<Provider store={reduxStore}><Page /></Provider>);
+    const Page = () => HomeContent(false, false, true, [{}], true, (text) => text);
+    const wrappedComponent = mount(<Provider store={reduxStore}><HomeContent /></Provider>);
 
     // then
     expect(wrappedComponent.find('_FileHistoryContainer').get(0)).toBeDefined();
@@ -84,8 +102,8 @@ describe('PageBuilder', () => {
     // given
 
     // when
-    const Page = () => pageBuilder.getPage(false, true, true, [{}], false, (text) => text);
-    const wrappedComponent = mount(<Provider store={reduxStore}><Page /></Provider>);
+    const Page = () => HomeContent(false, true, true, [{}], false, (text) => text);
+    const wrappedComponent = mount(<Provider store={reduxStore}><HomeContent /></Provider>);
 
     // then
     expect(wrappedComponent.find('_FileHistoryContainer').get(0)).toBeDefined();
@@ -95,8 +113,8 @@ describe('PageBuilder', () => {
     // given
 
     // when
-    const Page = () => pageBuilder.getPage(false, false, true, [{}], true, (text) => text);
-    const wrappedComponent = mount(<Provider store={reduxStore}><Page /></Provider>);
+    const Page = () => HomeContent(false, false, true, [{}], true, (text) => text);
+    const wrappedComponent = mount(<Provider store={reduxStore}><HomeContent /></Provider>);
 
     // then
     expect(wrappedComponent.find('_FileHistoryContainer').get(0)).toBeDefined();
@@ -107,8 +125,8 @@ describe('PageBuilder', () => {
     // given
 
     // when
-    const Page = () => pageBuilder.getPage(false, true, true, [{}], true, (text) => text);
-    const wrappedComponent = mount(<Provider store={reduxStore}><Page /></Provider>);
+    const Page = () => HomeContent(false, true, true, [{}], true, (text) => text);
+    const wrappedComponent = mount(<Provider store={reduxStore}><HomeContent /></Provider>);
 
     // then
     expect(wrappedComponent.find('_FileHistoryContainer').get(0)).toBeDefined();
