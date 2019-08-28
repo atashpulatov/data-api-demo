@@ -1,6 +1,4 @@
 import { errorService } from '../../error/error-handler';
-import { EnvironmentNotFoundError } from '../../error/environment-not-found-error';
-import { UnauthorizedError } from '../../error/unauthorized-error';
 import { notificationService } from '../../notification/notification-service';
 import { OutsideOfRangeError } from '../../error/outside-of-range-error';
 import { sessionHelper } from '../../storage/session-helper';
@@ -284,7 +282,7 @@ describe('ErrorService', () => {
     });
     it('should logout on UnauthorizedError', () => {
       // given
-      const errorObject = {
+      const error = {
         status: 401,
         response: {
           body: {
@@ -292,7 +290,6 @@ describe('ErrorService', () => {
           },
         },
       };
-      const error = new UnauthorizedError(errorObject);
       const spyMethod = jest.spyOn(notificationService, 'displayNotification');
       // when
       errorService.handleError(error);
@@ -303,7 +300,7 @@ describe('ErrorService', () => {
     });
     it('should logout on EnvironmentNotFound', () => {
       // given
-      const error = new EnvironmentNotFoundError();
+      const error = { status: 404 };
       const spyMethod = jest.spyOn(notificationService, 'displayNotification');
       // when
       errorService.handleError(error, true);
