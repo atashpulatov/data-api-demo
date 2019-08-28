@@ -32,7 +32,7 @@ describe('officeReducer', () => {
 
   beforeEach(() => {
     // default state should be empty
-    expect(officeStore.getState()).toEqual({ loading: false });
+    expect(officeStore.getState()).toEqual({ loading: false, shouldRenderSettings: false, isSettings: false });
   });
 
   afterEach(() => {

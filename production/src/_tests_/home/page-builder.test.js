@@ -54,10 +54,19 @@ describe('PageBuilder', () => {
 
   it('should return page with two children as false because of non-existing auth token', () => {
     // given
+    const givenProps = {
+      loading: true,
+      loadingReport: true,
+      authToken: false,
+      reportArray: [],
+      popupOpen: false,
+      shouldRenderSettings: false,
+      toggleRenderSettingsFlag: false,
+      t: (t) => t,
+    };
 
     // when
-    const Page = () => HomeContent(false, false, false, true, false, (text) => text);
-    const wrappedComponent = mount(<Provider store={reduxStore}><HomeContent /></Provider>);
+    const wrappedComponent = mount(<Provider store={reduxStore}><HomeContent {...givenProps} /></Provider>);
 
     // then
     expect(wrappedComponent.find('_FileHistoryContainer').get(0)).toBeUndefined();
@@ -66,10 +75,18 @@ describe('PageBuilder', () => {
 
   it('should return page with one false element and Placeholder element should be defined if report is not an array', () => {
     // given
-
+    const givenProps = {
+      loading: false,
+      loadingReport: false,
+      authToken: true,
+      reportArray: [],
+      popupOpen: false,
+      shouldRenderSettings: false,
+      toggleRenderSettingsFlag: false,
+      t: (t) => t,
+    };
     // when
-    const Page = () => HomeContent(false, false, true, false, false, (text) => text);
-    const wrappedComponent = mount(<Provider store={reduxStore}><HomeContent /></Provider>);
+    const wrappedComponent = mount(<Provider store={reduxStore}><HomeContent {...givenProps} /></Provider>);
 
     // then
     expect(wrappedComponent.find('_FileHistoryContainer').get(0)).toBeUndefined();
@@ -78,10 +95,18 @@ describe('PageBuilder', () => {
 
   it('should return page with one false element and 3th element should be defined if there is some reports', () => {
     // given
-
+    const givenProps = {
+      loading: false,
+      loadingReport: false,
+      authToken: true,
+      reportArray: [{}],
+      popupOpen: false,
+      shouldRenderSettings: false,
+      toggleRenderSettingsFlag: false,
+      t: (t) => t,
+    };
     // when
-    const Page = () => HomeContent(false, false, true, [{}], false, (text) => text);
-    const wrappedComponent = mount(<Provider store={reduxStore}><HomeContent /></Provider>);
+    const wrappedComponent = mount(<Provider store={reduxStore}><HomeContent {...givenProps} /></Provider>);
 
     // then
     expect(wrappedComponent.find('_FileHistoryContainer').get(0)).toBeDefined();
@@ -89,10 +114,18 @@ describe('PageBuilder', () => {
   });
   it('should return page with a home dialog component when the popup is open', () => {
     // given
-
+    const givenProps = {
+      loading: false,
+      loadingReport: false,
+      authToken: true,
+      reportArray: [{}],
+      popupOpen: true,
+      shouldRenderSettings: false,
+      toggleRenderSettingsFlag: false,
+      t: (t) => t,
+    };
     // when
-    const Page = () => HomeContent(false, false, true, [{}], true, (text) => text);
-    const wrappedComponent = mount(<Provider store={reduxStore}><HomeContent /></Provider>);
+    const wrappedComponent = mount(<Provider store={reduxStore}><HomeContent {...givenProps} /></Provider>);
 
     // then
     expect(wrappedComponent.find('_FileHistoryContainer').get(0)).toBeDefined();
@@ -100,10 +133,18 @@ describe('PageBuilder', () => {
   });
   it('should disable logout and add data buttons while loading a report', () => {
     // given
-
+    const givenProps = {
+      loading: false,
+      loadingReport: true,
+      authToken: true,
+      reportArray: [{}],
+      popupOpen: false,
+      shouldRenderSettings: false,
+      toggleRenderSettingsFlag: false,
+      t: (t) => t,
+    };
     // when
-    const Page = () => HomeContent(false, true, true, [{}], false, (text) => text);
-    const wrappedComponent = mount(<Provider store={reduxStore}><HomeContent /></Provider>);
+    const wrappedComponent = mount(<Provider store={reduxStore}><HomeContent {...givenProps} /></Provider>);
 
     // then
     expect(wrappedComponent.find('_FileHistoryContainer').get(0)).toBeDefined();
@@ -111,10 +152,18 @@ describe('PageBuilder', () => {
   });
   it('should disable logout and add data buttons while a popup is open', () => {
     // given
-
+    const givenProps = {
+      loading: false,
+      loadingReport: false,
+      authToken: true,
+      reportArray: [{}],
+      popupOpen: true,
+      shouldRenderSettings: false,
+      toggleRenderSettingsFlag: false,
+      t: (t) => t,
+    };
     // when
-    const Page = () => HomeContent(false, false, true, [{}], true, (text) => text);
-    const wrappedComponent = mount(<Provider store={reduxStore}><HomeContent /></Provider>);
+    const wrappedComponent = mount(<Provider store={reduxStore}><HomeContent {...givenProps} /></Provider>);
 
     // then
     expect(wrappedComponent.find('_FileHistoryContainer').get(0)).toBeDefined();
@@ -123,10 +172,18 @@ describe('PageBuilder', () => {
   });
   it('should disable settings and add data buttons while a popup is open and a report is loading', () => {
     // given
-
+    const givenProps = {
+      loading: false,
+      loadingReport: true,
+      authToken: true,
+      reportArray: [{}],
+      popupOpen: true,
+      shouldRenderSettings: false,
+      toggleRenderSettingsFlag: false,
+      t: (t) => t,
+    };
     // when
-    const Page = () => HomeContent(false, true, true, [{}], true, (text) => text);
-    const wrappedComponent = mount(<Provider store={reduxStore}><HomeContent /></Provider>);
+    const wrappedComponent = mount(<Provider store={reduxStore}><HomeContent {...givenProps} /></Provider>);
 
     // then
     expect(wrappedComponent.find('_FileHistoryContainer').get(0)).toBeDefined();

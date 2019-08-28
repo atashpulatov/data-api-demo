@@ -1,14 +1,14 @@
 import React from 'react';
-import {Provider} from 'react-redux';
-import {mount, shallow} from 'enzyme';
-import {Home, _Home} from '../../home/home.jsx';
-import {_Header} from '../../home/header.jsx';
-import {sessionHelper} from '../../storage/session-helper';
-import {officeApiHelper} from '../../office/office-api-helper';
-import {reduxStore} from '../../store';
-import {homeHelper} from '../../home/home-helper.js';
-import {pageBuilder} from '../../home/page-builder.js';
-import {SettingsMenu} from '../../home/settings-menu';
+import { Provider } from 'react-redux';
+import { mount, shallow } from 'enzyme';
+import { Home, _Home } from '../../home/home';
+import { _Header } from '../../home/header';
+import { sessionHelper } from '../../storage/session-helper';
+import { officeApiHelper } from '../../office/office-api-helper';
+import { reduxStore } from '../../store';
+import { homeHelper } from '../../home/home-helper';
+import HomeContent from '../../home/page-builder';
+import { SettingsMenu } from '../../home/settings-menu';
 
 jest.mock('../../storage/session-helper');
 jest.mock('../../office/office-api-helper');
@@ -26,7 +26,7 @@ describe('Home', () => {
     const componentWrapper = mount(
       <Provider store={reduxStore}>
         <Home />
-      </Provider>
+      </Provider>,
     );
     // then
     expect(componentWrapper.children().length).toBeGreaterThan(0);
@@ -51,7 +51,7 @@ describe('Home', () => {
     const componentWrapper = mount(
       <Provider store={reduxStore}>
         <_Home {...props} />
-      </Provider>
+      </Provider>,
     );
     // then
     setImmediate(() => tempPromise);
@@ -70,10 +70,9 @@ describe('Home', () => {
       authToken: false,
       reportArray: false,
     };
-    jest.spyOn(pageBuilder, 'getPage').mockReturnValueOnce(null);
     const tempPromise = Promise.resolve();
     // when
-    const wrappedComponent = mount(<_Home {...props} />);
+    mount(<Provider store={reduxStore}><Home {...props} /></Provider>);
     // then
     await (tempPromise);
     expect(homeHelper.saveLoginValues).toBeCalled();
@@ -89,12 +88,12 @@ describe('Home', () => {
       reportArray: false,
 
     };
-    jest.spyOn(pageBuilder, 'getPage').mockReturnValueOnce(null);
+
     const tempPromise = Promise.resolve();
     const wrappedComponent = mount(
       <Provider store={reduxStore}>
         <_Home {...props} />
-      </Provider>
+      </Provider>,
     );
     // when
     wrappedComponent.setProps({
@@ -123,7 +122,7 @@ describe('Home', () => {
       const homeWrapper = mount(
         <Provider store={reduxStore}>
           <Home />
-        </Provider>
+        </Provider>,
       );
       const headerWrapper = mount(<_Header />);
       // then
@@ -148,7 +147,7 @@ describe('Home', () => {
 
       // when
       const headerWrapper = mount(<_Header />);
-      headerWrapper.setProps({userInitials: null});
+      headerWrapper.setProps({ userInitials: null });
       // then
       const imageWrapper = headerWrapper.find('#profile-image');
       expect(imageWrapper).toBeTruthy();
@@ -158,7 +157,7 @@ describe('Home', () => {
 
       // when
       const headerWrapper = mount(<_Header />);
-      headerWrapper.setProps({userInitials: 'n'});
+      headerWrapper.setProps({ userInitials: 'n' });
       // then
       const imageWrapper = headerWrapper.find('#initials');
       expect(imageWrapper).toBeTruthy();
@@ -198,7 +197,7 @@ describe('Home', () => {
         map[event] = cb;
       });
       const mockToggle = jest.fn();
-      shallow(<_Header isSettings={true} toggleIsSettingsFlag={mockToggle} />);
+      shallow(<_Header isSettings toggleIsSettingsFlag={mockToggle} />);
       // when
       map.click({
         target: {
@@ -217,9 +216,9 @@ describe('Home', () => {
         map[event] = cb;
       });
       const mockToggle = jest.fn();
-      shallow(<_Header isSettings={true} toggleIsSettingsFlag={mockToggle} />);
+      shallow(<_Header isSettings toggleIsSettingsFlag={mockToggle} />);
       // when
-      map.keyup({keyCode: 27});
+      map.keyup({ keyCode: 27 });
       // then
       expect(mockToggle).toBeCalledWith(false);
     });
