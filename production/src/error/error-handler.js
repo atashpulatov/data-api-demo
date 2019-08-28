@@ -50,13 +50,7 @@ class ErrorService {
   }
 
   getRestErrorType = (error) => {
-    const isOfficeError = [
-      errorTypes.RUN_OUTSIDE_OFFICE_ERR,
-      errorTypes.OVERLAPPING_TABLES_ERR,
-      errorTypes.GENERIC_OFFICE_ERR,
-      errorTypes.OUTSIDE_OF_RANGE_ERR].includes(error.type);
-
-    if (!error.status && !error.response && !isOfficeError) {
+    if (!error.status && !error.response) {
       if (error.message && error.message.includes('Possible causes: the network is offline,')) {
         return errorTypes.CONNECTION_BROKEN_ERR;
       }
