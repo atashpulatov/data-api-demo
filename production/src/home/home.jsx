@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import './home.css';
 import { withTranslation } from 'react-i18next';
 import { sessionHelper } from '../storage/session-helper';
-import { pageBuilder } from './page-builder.js';
+import HomePage from './page-builder';
 import { officeApiHelper } from '../office/office-api-helper';
 import { homeHelper } from './home-helper';
 
@@ -24,10 +24,8 @@ export class _Home extends Component {
   }
 
   render() {
-    const {
-      loading, loadingReport, authToken, reportArray, popupOpen, t, shouldRenderSettings,
-    } = this.props;
-    return (<div>{pageBuilder.getPage(loading, loadingReport, authToken, reportArray, popupOpen, t, shouldRenderSettings)}</div>);
+    const { ...relevantProps } = this.props;
+    return (<HomePage props={relevantProps} />);
   }
 }
 

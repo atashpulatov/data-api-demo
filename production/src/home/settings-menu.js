@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
+import { Popover } from 'antd';
 import { toggleIsConfirmFlag, toggleRenderSettingsFlag } from '../office/office-actions';
 import logo from './assets/mstr_logo.png';
 import { helper } from '../helpers/helpers';
