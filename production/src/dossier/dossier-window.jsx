@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
@@ -7,13 +7,13 @@ import { selectorProperties } from '../attribute-selector/selector-properties';
 
 const { Office } = window;
 
-export class _DossierWindow extends Component {
-  handleCancel = () => {
+export default class _DossierWindow extends React.Component {
+  handleCancel() {
     const cancelObject = {
       command: selectorProperties.commandCancel,
     };
     Office.context.ui.messageParent(JSON.stringify(cancelObject));
-  };
+  }
 
   render() {
     const {

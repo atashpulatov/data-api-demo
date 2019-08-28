@@ -12,7 +12,7 @@ import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { preparePromptedReport } from './popup-actions';
 import { DossierWindow } from '../dossier/dossier-window';
 
-/* global Office */
+const { Office } = window;
 
 export const _PopupViewSelector = (props) => {
   let { popupType } = props;
