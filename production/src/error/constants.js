@@ -17,7 +17,7 @@ export const NOT_SUPPORTED_CUSTOM_GROUP = 'This object cannot be imported. Objec
 export const TABLE_REMOVED = 'It looks like the object was deleted from the workbook. Delete it in the sidebar or click Add Data to import it again.';
 
 // temporarily we map all those codes to one message; may be changed in the future
-export const errorMessages = withDefaultValue({
+const errorMessages = withDefaultValue({
   '-2147171501': NOT_SUPPORTED_SERVER_ERR,
   '-2147171502': NOT_SUPPORTED_CUSTOM_GROUP,
   '-2147171503': NOT_SUPPORTED_SERVER_ERR,
@@ -40,6 +40,19 @@ export const errorTypes = {
   TABLE_REMOVED_FROM_EXCEL_ERR: 'tableRemovedFromExcel',
   GENERIC_OFFICE_ERR: 'genericOffice',
 };
+
+export const httpStatusToErrorType = withDefaultValue({
+  404: errorTypes.ENV_NOT_FOUND_ERR,
+  400: errorTypes.BAD_REQUEST_ERR,
+  401: errorTypes.UNAUTHORIZED_ERR,
+  500: errorTypes.INTERNAL_SERVER_ERR,
+}, null);
+
+export const officeMessageToErrorType = withDefaultValue({
+  'Excel is not defined': errorTypes.RUN_OUTSIDE_OFFICE_ERR,
+  'A table can\'t overlap another table. ': errorTypes.OVERLAPPING_TABLES_ERR,
+  'This object binding is no longer valid due to previous updates.': errorTypes.TABLE_REMOVED_FROM_EXCEL_ERR,
+}, errorTypes.GENERIC_OFFICE_ERR);
 
 export const errorMessageFactory = withDefaultValue({
   [errorTypes.ENV_NOT_FOUND_ERR]: () => 'The endpoint cannot be reached',

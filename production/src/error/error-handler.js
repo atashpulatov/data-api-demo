@@ -1,6 +1,8 @@
 import { sessionHelper } from '../storage/session-helper';
 import { notificationService } from '../notification/notification-service.js';
-import { errorTypes, errorMessageFactory } from './constants';
+import {
+  errorTypes, httpStatusToErrorType, officeMessageToErrorType, errorMessageFactory,
+} from './constants';
 
 const TIMEOUT = 2000;
 
@@ -35,16 +37,7 @@ class ErrorService {
 
   getOfficeErrorType = (error) => {
     if (error.name === 'RichApi.Error') {
-      switch (error.message) {
-        case 'Excel is not defined':
-          return errorTypes.RUN_OUTSIDE_OFFICE_ERR;
-        case 'A table can\'t overlap another table. ':
-          return errorTypes.OVERLAPPING_TABLES_ERR;
-        case 'This object binding is no longer valid due to previous updates.':
-          return errorTypes.TABLE_REMOVED_FROM_EXCEL_ERR;
-        default:
-          return errorTypes.GENERIC_OFFICE_ERR;
-      }
+      return officeMessageToErrorType[error.message];
     }
     return null;
   }
@@ -56,19 +49,8 @@ class ErrorService {
       }
       return null;
     }
-    const status = error.status || (error.response ? error.response.status : 0);
-    switch (status) {
-      case 404:
-        return errorTypes.ENV_NOT_FOUND_ERR;
-      case 400:
-        return errorTypes.BAD_REQUEST_ERR;
-      case 401:
-        return errorTypes.UNAUTHORIZED_ERR;
-      case 500:
-        return errorTypes.INTERNAL_SERVER_ERR;
-      default:
-        return null;
-    }
+    const status = error.status || (error.response ? error.response.status : null);
+    return httpStatusToErrorType[status];
   }
 
   getErrorMessage = (error) => {
