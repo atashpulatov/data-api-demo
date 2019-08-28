@@ -24,8 +24,7 @@ export class _Home extends Component {
   }
 
   render() {
-    const { ...relevantProps } = this.props;
-    return (<HomePage props={relevantProps} />);
+    return (<HomePage {...this.props} />);
   }
 }
 
