@@ -2,43 +2,46 @@ import { officeProperties } from './office-properties';
 import { OfficeError } from './office-error';
 import { officeStoreService } from './store/office-store-service';
 
-export const officeReducer = (state = { loading: false }, action) => {
-  switch (action.type) {
-    case officeProperties.actions.preLoadReport:
-      return onPreLoadReport(action, state);
-    case officeProperties.actions.loadReport:
-      return onLoadReport(action, state);
-    case officeProperties.actions.removeAllReports:
-      return onRemoveAllReports(action, state);
-    case officeProperties.actions.removeReport:
-      return onRemoveReport(action, state);
-    case officeProperties.actions.loadAllReports:
-      return onLoadAllReports(action, state);
-    case officeProperties.actions.startLoadingReport:
-      return onStartLoadingReport(action, state);
-    case officeProperties.actions.finishLoadingReport:
-      return onFinishLoadingReport(action, state);
-    case officeProperties.actions.popupShown:
-      return onPopupShown(state);
-    case officeProperties.actions.popupHidden:
-      return onPopupHidden(state);
-    case officeProperties.actions.startLoading:
-      return onStartLoading(state);
-    case officeProperties.actions.stopLoading:
-      return onStopLoading(state);
-    case officeProperties.actions.toggleSecuredFlag:
-      return toggleSecuredFlag(action, state);
-    case officeProperties.actions.toggleIsSettingsFlag:
-      return toggleIsSettingsFlag(action, state);
-    case officeProperties.actions.toggleIsConfirmFlag:
-      return toggleIsConfirmFlag(action, state);
-    case officeProperties.actions.toggleRenderSettingsFlag:
-      return toggleRenderSettingsFlag(action, state);
-    default:
-      break;
+function checkReportData(report) {
+  if (!report) {
+    throw new OfficeError('Missing report');
   }
-  return state;
-};
+  if (!report.id) {
+    throw new OfficeError('Missing report.id');
+  }
+  if (!report.name) {
+    throw new OfficeError('Missing report.name');
+  }
+  if (!report.bindId) {
+    throw new OfficeError('Missing report.bindId');
+  }
+  if (!report.envUrl) {
+    throw new OfficeError('Missing report.envUrl');
+  }
+  if (!report.projectId) {
+    throw new OfficeError('Missing report.projectId');
+  }
+}
+
+function toggleSetLoadingStatus(action, state, status) {
+  if (!action.reportBindId) {
+    throw new OfficeError('Missing reportBindId');
+  }
+  const indexOfElement = state.reportArray.findIndex((report) => (report.bindId === action.reportBindId));
+  const newReportArray = [...state.reportArray];
+  newReportArray[indexOfElement].isLoading = status;
+  if (!status && !action.isError) {
+    const currentDate = new Date();
+    newReportArray[indexOfElement].refreshDate = currentDate;
+    officeStoreService.preserveReportValue(state.reportArray[indexOfElement].bindId, 'refreshDate', currentDate);
+  }
+  return {
+    ...state,
+    loading: status,
+    reportArray: newReportArray,
+    isRefreshAll: action.isRefreshAll,
+  };
+}
 
 function onStartLoading(state) {
   return {
@@ -75,7 +78,7 @@ function onPreLoadReport(action, state) {
 }
 
 function onLoadReport(action, state) {
-  _checkReportData(action.report);
+  checkReportData(action.report);
   return {
     ...state,
     loading: false,
@@ -90,7 +93,7 @@ function onLoadAllReports(action, state) {
     throw new OfficeError('Missing reportArray');
   }
   action.reportArray.forEach((report) => {
-    _checkReportData(report);
+    checkReportData(report);
   });
   return {
     ...state,
@@ -119,31 +122,11 @@ function onRemoveReport(action, state) {
 }
 
 function onStartLoadingReport(action, state) {
-  return _toggleSetLoadingStatus(action, state, true);
+  return toggleSetLoadingStatus(action, state, true);
 }
 
 function onFinishLoadingReport(action, state) {
-  return _toggleSetLoadingStatus(action, state, false);
-}
-
-function _toggleSetLoadingStatus(action, state, status) {
-  if (!action.reportBindId) {
-    throw new OfficeError('Missing reportBindId');
-  }
-  const indexOfElement = state.reportArray.findIndex((report) => (report.bindId === action.reportBindId));
-  const newReportArray = [...state.reportArray];
-  newReportArray[indexOfElement].isLoading = status;
-  if (!status && !action.isError) {
-    const currentDate = new Date();
-    newReportArray[indexOfElement].refreshDate = currentDate;
-    officeStoreService.preserveReportValue(state.reportArray[indexOfElement].bindId, 'refreshDate', currentDate);
-  }
-  return {
-    ...state,
-    loading: status,
-    reportArray: newReportArray,
-    isRefreshAll: action.isRefreshAll,
-  };
+  return toggleSetLoadingStatus(action, state, false);
 }
 
 function toggleSecuredFlag(action, state) {
@@ -170,27 +153,45 @@ function toggleIsConfirmFlag(action, state) {
 function toggleRenderSettingsFlag(action, state) {
   return {
     ...state,
-    shouldRenderSettings: action.shouldRenderSettings,
+    shouldRenderSettings: !state.shouldRenderSettings,
+    isSettings: !state.shouldRenderSettings,
   };
 }
 
-function _checkReportData(report) {
-  if (!report) {
-    throw new OfficeError('Missing report');
+export const officeReducer = (state = { loading: false, shouldRenderSettings: false, isSettings: false }, action) => {
+  switch (action.type) {
+    case officeProperties.actions.preLoadReport:
+      return onPreLoadReport(action, state);
+    case officeProperties.actions.loadReport:
+      return onLoadReport(action, state);
+    case officeProperties.actions.removeAllReports:
+      return onRemoveAllReports(action, state);
+    case officeProperties.actions.removeReport:
+      return onRemoveReport(action, state);
+    case officeProperties.actions.loadAllReports:
+      return onLoadAllReports(action, state);
+    case officeProperties.actions.startLoadingReport:
+      return onStartLoadingReport(action, state);
+    case officeProperties.actions.finishLoadingReport:
+      return onFinishLoadingReport(action, state);
+    case officeProperties.actions.popupShown:
+      return onPopupShown(state);
+    case officeProperties.actions.popupHidden:
+      return onPopupHidden(state);
+    case officeProperties.actions.startLoading:
+      return onStartLoading(state);
+    case officeProperties.actions.stopLoading:
+      return onStopLoading(state);
+    case officeProperties.actions.toggleSecuredFlag:
+      return toggleSecuredFlag(action, state);
+    case officeProperties.actions.toggleIsSettingsFlag:
+      return toggleIsSettingsFlag(action, state);
+    case officeProperties.actions.toggleIsConfirmFlag:
+      return toggleIsConfirmFlag(action, state);
+    case officeProperties.actions.toggleRenderSettingsFlag:
+      return toggleRenderSettingsFlag(action, state);
+    default:
+      break;
   }
-  if (!report.id) {
-    throw new OfficeError('Missing report.id');
-  }
-  if (!report.name) {
-    throw new OfficeError('Missing report.name');
-  }
-  if (!report.bindId) {
-    throw new OfficeError('Missing report.bindId');
-  }
-  if (!report.envUrl) {
-    throw new OfficeError('Missing report.envUrl');
-  }
-  if (!report.projectId) {
-    throw new OfficeError('Missing report.projectId');
-  }
-}
+  return state;
+};

@@ -7,18 +7,19 @@ import { Authenticate } from '../authentication/auth-component';
 import { Placeholder } from './placeholder';
 import { HomeDialog } from './home-dialog';
 import { Tabs } from './tabs';
-import { SettingsComponent } from '../settings/settings-component';
+import SettingsComponent from '../settings/settings-component';
 
 
 const URL = `${window.location.href}`;
 const IS_LOCALHOST = URL.includes('localhost');
 
 export default function HomeContent({
-  loading, loadingReport, authToken, reportArray, popupOpen, shouldRenderSettings, t,
+  loading, loadingReport, authToken, reportArray, popupOpen, shouldRenderSettings,
+  toggleRenderSettingsFlag, t,
 }) {
   let homeComponent;
   if (authToken) {
-    homeComponent = shouldRenderSettings ? <SettingsComponent />
+    homeComponent = shouldRenderSettings ? <SettingsComponent onBack={toggleRenderSettingsFlag} t={t} />
       : (
         <div id="overlay">
           <Header IS_LOCALHOST={IS_LOCALHOST} loading={loadingReport} />

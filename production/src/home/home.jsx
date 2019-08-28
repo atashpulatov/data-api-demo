@@ -6,6 +6,7 @@ import { sessionHelper } from '../storage/session-helper';
 import HomePage from './page-builder';
 import { officeApiHelper } from '../office/office-api-helper';
 import { homeHelper } from './home-helper';
+import { toggleRenderSettingsFlag } from '../office/office-actions';
 
 export class _Home extends Component {
   componentDidMount = async () => {
@@ -39,8 +40,12 @@ function mapStateToProps(state) {
   };
 }
 
+const mapDispatchToProps = {
+  toggleRenderSettingsFlag,
+};
+
 _Home.defaultProps = {
   t: (text) => text,
 };
 
-export const Home = connect(mapStateToProps)(withTranslation('common')(_Home));
+export const Home = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_Home));

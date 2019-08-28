@@ -29,11 +29,10 @@ export function toggleIsConfirmFlag(isConfirm) {
   };
 }
 
-export function toggleRenderSettingsFlag(shouldRenderSettings) {
+export function toggleRenderSettingsFlag() {
   return (dispatch) => {
     dispatch({
       type: officeProperties.actions.toggleRenderSettingsFlag,
-      shouldRenderSettings,
     });
   };
 }
