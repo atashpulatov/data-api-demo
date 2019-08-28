@@ -1,5 +1,10 @@
 {
-    "eslint.workingDirectories": [{ "directory": "./production", "changeProcessCWD": true }],
-    "eslint.autoFixOnSave": true,
-    "editor.formatOnSave": true,
-  }
+  "eslint.workingDirectories": [
+    {
+      "directory": "./production",
+      "changeProcessCWD": true
+    }
+  ],
+  "eslint.autoFixOnSave": true,
+  "editor.formatOnSave": true,
+}
