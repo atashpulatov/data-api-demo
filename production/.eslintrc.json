@@ -1,12 +1,23 @@
 {
-  "extends": "airbnb",
+  "extends": [
+    "react-app",
+    "airbnb"
+  ],
   "parserOptions": {
-    "ecmaVersion": 2019
+    "ecmaVersion": 9
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "jest": true
   },
   "globals": {
     "Excel": true,
     "microstrategy": true,
     "Office": true,
     "OfficeExtension": true
+  },
+  "rules": {
+    "react/prop-types": 0
   }
 }

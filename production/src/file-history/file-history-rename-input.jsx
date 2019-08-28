@@ -1,7 +1,9 @@
 import React from 'react';
-import {Input, Dropdown, Menu, Popover} from 'antd';
-import {officeStoreService} from '../office/store/office-store-service';
-import {withTranslation} from 'react-i18next';
+import {
+  Input, Dropdown, Menu, Popover,
+} from 'antd';
+import { withTranslation } from 'react-i18next';
+import { officeStoreService } from '../office/store/office-store-service';
 
 export class _RenameInput extends React.Component {
   constructor(props) {
@@ -16,10 +18,10 @@ export class _RenameInput extends React.Component {
     t: (text) => text,
   };
 
-  renameReport = /* istanbul ignore next */ ({target}) => {
-    const {bindingId, fileName} = this.props;
+  renameReport = /* istanbul ignore next */ ({ target }) => {
+    const { bindingId, fileName } = this.props;
     const newName = target.value || fileName;
-    this.setState({value: newName});
+    this.setState({ value: newName });
     this.setEditable(false);
     newName && bindingId && officeStoreService.preserveReportValue(bindingId, 'name', newName);
   };
@@ -33,11 +35,11 @@ export class _RenameInput extends React.Component {
   };
 
   handleChange = (e) => {
-    this.setState({value: e.target.value});
+    this.setState({ value: e.target.value });
   }
 
   setEditable = (editable) => {
-    this.setState({editable});
+    this.setState({ editable });
   }
 
   enableEdit = (e) => {
@@ -48,18 +50,21 @@ export class _RenameInput extends React.Component {
 
   getNameContainer(editable, bindingId, fileName, value) {
     if (editable) {
-      return <Input
-        type='text'
-        className='rename-input'
-        maxLength={255}
-        id={`input-${bindingId}`}
-        defaultValue={fileName}
-        value={value}
-        onChange={this.handleChange}
-        onBlur={this.renameReport}
-        onPressEnter={this.renameReport} />;
+      return (
+        <Input
+          type="text"
+          className="rename-input"
+          maxLength={255}
+          id={`input-${bindingId}`}
+          defaultValue={fileName}
+          value={value}
+          onChange={this.handleChange}
+          onBlur={this.renameReport}
+          onPressEnter={this.renameReport}
+        />
+      );
     }
-    return <div className='rename-container' id={`rename-container-${bindingId}`}>{value}</div>;
+    return <div className="rename-container" id={`rename-container-${bindingId}`}>{value}</div>;
   }
 
   copyValue = /* istanbul ignore next */ (e) => {
@@ -73,20 +78,21 @@ export class _RenameInput extends React.Component {
   }
 
   render() {
-    const {editable, value} = this.state;
-    const {fileName, bindingId, t} = this.props;
+    const { editable, value } = this.state;
+    const { fileName, bindingId, t } = this.props;
     const nameContainer = this.getNameContainer(editable, bindingId, fileName, value);
     const menu = (
       <Menu>
         <Menu.Item key="copy" onClick={this.copyValue}>{t('Copy')}</Menu.Item>
         <Menu.Item key="rename" onClick={this.enableEdit}>{t('Rename')}</Menu.Item>
-      </Menu>);
+      </Menu>
+    );
     return (
       <Popover overlayClassName={`${editable ? 'hidden' : ''}`} placement="bottomLeft" content={value} mouseEnterDelay={1}>
         <Dropdown overlay={menu} trigger={['contextMenu']}>
-          <div onDoubleClick={this.enableEdit} style={{position: 'relative'}}>
+          <div onDoubleClick={this.enableEdit} style={{ position: 'relative' }}>
             {nameContainer}
-          </div >
+          </div>
         </Dropdown>
       </Popover>
     );

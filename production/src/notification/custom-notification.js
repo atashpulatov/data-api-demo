@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 export default class CustomNotification extends Component {
   state = {
@@ -6,16 +6,14 @@ export default class CustomNotification extends Component {
   }
 
   handleCollapse = () => {
-    this.setState(({isExpanded}) => {
-      return {
-        isExpanded: !isExpanded,
-      };
-    });
+    this.setState(({ isExpanded }) => ({
+      isExpanded: !isExpanded,
+    }));
   };
 
   render() {
-    const {isExpanded} = this.state;
-    const {details, translatedContent, t} = this.props;
+    const { isExpanded } = this.state;
+    const { details, translatedContent, t } = this.props;
     const config = !isExpanded ? {
       actionClass: 'error__show-more',
       messageClass: 'error__text-hidden',
@@ -30,22 +28,26 @@ export default class CustomNotification extends Component {
       <section className="error__section">
         <header className="error__header">{translatedContent}</header>
         {
-          details && <div>
+          details && (
+          <div>
             <nav className="error__nav">
               <p
                 onClick={this.handleCollapse}
-                className={config.actionClass}>
-                {t(config.message)}<span className="error__arrow"></span>
+                className={config.actionClass}
+              >
+                {t(config.message)}
+                <span className="error__arrow" />
               </p>
             </nav>
             <div
-              className={`${config.messageClass} error__text`}>
+              className={`${config.messageClass} error__text`}
+            >
               <p className="error__message">{details}</p>
             </div>
           </div>
+          )
         }
-      </section >
+      </section>
     );
   }
-};
-
+}

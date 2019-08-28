@@ -176,5 +176,5 @@
   "Clearing data": "Clearing data",
   "{{reportNames}} could not be cleared.": "{{reportNames}} could not be cleared.",
   "Invalid attempt to spread non-iterable instance": "Invalid attempt to spread non-iterable instance",
-  "It looks like the object was deleted from the workbook.Delete it in the sidebar or click Add Data to import it again.": "It looks like the object was deleted from the workbook.Delete it in the sidebar or click Add Data to import it again."
+  "It looks like the object was deleted from the workbook. Delete it in the sidebar or click Add Data to import it again.": "It looks like the object was deleted from the workbook. Delete it in the sidebar or click Add Data to import it again."
 }

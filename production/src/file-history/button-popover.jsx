@@ -1,5 +1,5 @@
 import React from 'react';
-import {Popover} from 'antd';
+import { Popover } from 'antd';
 
 export class ButtonPopover extends React.Component {
   constructor(props) {
@@ -14,12 +14,12 @@ export class ButtonPopover extends React.Component {
   }
 
   showPopover = () => {
-    this.popoverTimeoutId = setTimeout(() => this.setState({popoverVisible: true}), this.props.mouseEnterDelay * 1000);
+    this.popoverTimeoutId = setTimeout(() => this.setState({ popoverVisible: true }), this.props.mouseEnterDelay * 1000);
   }
 
   hidePopover = () => {
     clearTimeout(this.popoverTimeoutId);
-    this.setState({popoverVisible: false});
+    this.setState({ popoverVisible: false });
   }
 
   render() {

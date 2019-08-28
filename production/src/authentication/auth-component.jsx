@@ -1,10 +1,13 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './auth-component.css';
-import {Form, Icon, Input, Button, Checkbox} from 'antd';
-import {authenticationHelper} from './authentication-helper';
-import {connect} from 'react-redux';
-import {resetState} from '../popup/popup-actions';
-import {withTranslation} from 'react-i18next';
+import {
+  Form, Icon, Input, Button, Checkbox,
+} from 'antd';
+import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
+import { authenticationHelper } from './authentication-helper';
+import { resetState } from '../popup/popup-actions';
+
 const FormItem = Form.Item;
 
 export class _Authenticate extends Component {
@@ -16,56 +19,65 @@ export class _Authenticate extends Component {
 
   onLoginUser = async (event) => {
     event.preventDefault();
-    const validateFields = this.props.form.validateFields;
+    const { validateFields } = this.props.form;
     await validateFields(async (err, values) => authenticationHelper.loginUser(err, values));
   }
 
   render() {
-    const {session, form, t} = this.props;
-    const {getFieldDecorator} = form;
+    const { session, form, t } = this.props;
+    const { getFieldDecorator } = form;
     return (
       <article>
         <header>
-          <h1 id='authenticate-message'>
+          <h1 id="authenticate-message">
             {t('Connect to MicroStrategy Environment')}
           </h1>
         </header>
-        <Form onSubmit={(event) => this.onLoginUser(event)} className='login-form grid-container padding'>
+        <Form onSubmit={(event) => this.onLoginUser(event)} className="login-form grid-container padding">
           <FormItem
-            label={t('Username')}>
+            label={t('Username')}
+          >
             {getFieldDecorator('username', {
               initialValue: session.username,
-              rules: [{required: true, message: t('Please input your username!')}],
+              rules: [{ required: true, message: t('Please input your username!') }],
             })(
-                <Input
-                  prefix={
-                    <Icon type='user' style={{color: 'rgba(0,0,0,.25)'}} />}
-                  placeholder={t('Username')} />
+              <Input
+                prefix={
+                  <Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />
+}
+                placeholder={t('Username')}
+              />,
             )}
           </FormItem>
           <FormItem
-            label={t('Password')}>
+            label={t('Password')}
+          >
             {getFieldDecorator('password', {
               initialValue: session.password || '',
-              rules: [{message: t('Please input your Password!')}],
+              rules: [{ message: t('Please input your Password!') }],
             })(
-                <Input
-                  prefix={
-                    <Icon type='lock' style={{color: 'rgba(0,0,0,.25)'}} />}
-                  type='password'
-                  placeholder={t('Password')} />
+              <Input
+                prefix={
+                  <Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />
+}
+                type="password"
+                placeholder={t('Password')}
+              />,
             )}
           </FormItem>
           <FormItem
-            label={t('Environment URL')}>
+            label={t('Environment URL')}
+          >
             {getFieldDecorator('envUrl', {
               initialValue: session.envUrl || '',
-              rules: [{required: true, message: t('Please input environment URL!'), type: 'url'}],
+              rules: [{ required: true, message: t('Please input environment URL!'), type: 'url' }],
             })(
-                <Input
-                  prefix={
-                    <Icon type='link' style={{color: 'rgba(0,0,0,.25)'}} />}
-                  placeholder={t('environment URL')} />
+              <Input
+                prefix={
+                  <Icon type="link" style={{ color: 'rgba(0,0,0,.25)' }} />
+}
+                placeholder={t('environment URL')}
+              />,
             )}
           </FormItem>
           <FormItem>
@@ -73,13 +85,14 @@ export class _Authenticate extends Component {
               valuePropName: 'checked',
               initialValue: session.isRememberMeOn || false,
             })(
-                <Checkbox>{t('Remember Me')}</Checkbox>
+              <Checkbox>{t('Remember Me')}</Checkbox>,
             )}
           </FormItem>
           <div
-            className='centered-fields-container'>
+            className="centered-fields-container"
+          >
             <FormItem>
-              <Button type='primary' htmlType='submit' className='login-form-button'>
+              <Button type="primary" htmlType="submit" className="login-form-button">
                 {t('Log in')}
               </Button>
             </FormItem>

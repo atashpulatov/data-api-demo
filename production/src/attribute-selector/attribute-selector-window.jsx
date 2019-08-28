@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import '../home/home.css';
-import {selectorProperties} from './selector-properties';
-import {attributeSelectorHelpers} from './attribute-selector-helpers';
-import {AttributeSelector} from '../attribute-selector/attribute-selector.jsx';
-import {PopupButtons} from '../popup/popup-buttons.jsx';
+import { selectorProperties } from './selector-properties';
+import { attributeSelectorHelpers } from './attribute-selector-helpers';
+import { AttributeSelector } from './attribute-selector.jsx';
+import { PopupButtons } from '../popup/popup-buttons.jsx';
 
 export class AttributeSelectorWindow extends Component {
   constructor(props) {
@@ -24,7 +24,7 @@ export class AttributeSelectorWindow extends Component {
   }
 
   handleOk = () => {
-    this.setState({triggerUpdate: true, loading: true});
+    this.setState({ triggerUpdate: true, loading: true });
   };
 
   handleCancel = () => attributeSelectorHelpers.officeMessageParent(selectorProperties.commandCancel);
@@ -34,9 +34,9 @@ export class AttributeSelectorWindow extends Component {
   };
 
   onTriggerUpdate = (reportId, projectId, reportSubtype, body, reportName = this.props.mstrData.reportName) => {
-    const {mstrData} = this.props;
+    const { mstrData } = this.props;
     attributeSelectorHelpers.officeMessageParent(selectorProperties.commandOnUpdate,
-        reportId, projectId, reportSubtype, body, reportName, mstrData.instanceId, mstrData.promptsAnswers);
+      reportId, projectId, reportSubtype, body, reportName, mstrData.instanceId, mstrData.promptsAnswers);
   };
 
   /**
@@ -44,23 +44,23 @@ export class AttributeSelectorWindow extends Component {
    * should be called every time OK is pressed but selector popup should not close
    */
   resetTriggerUpdate = () => {
-    this.setState({triggerUpdate: false, loading: false});
+    this.setState({ triggerUpdate: false, loading: false });
   };
 
   attributesBeingSelected = (attributesSelected) => {
-    this.setState({attributesSelected});
+    this.setState({ attributesSelected });
   };
 
   openModal = () => {
-    this.setState({openModal: true});
+    this.setState({ openModal: true });
   }
 
   closeModal = () => {
-    this.setState({openModal: false});
+    this.setState({ openModal: false });
   }
 
   render() {
-    const mstrData = this.props.mstrData;
+    const { mstrData } = this.props;
     const typeName = mstrData.reportType.charAt(0).toUpperCase() + mstrData.reportType.substring(1);
 
     return (
@@ -85,7 +85,7 @@ export class AttributeSelectorWindow extends Component {
           loading={this.state.loading}
           onPreviewClick={this.openModal}
         />
-      </div >
+      </div>
     );
   }
 }

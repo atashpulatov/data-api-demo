@@ -1,14 +1,12 @@
-import {officeDisplayService} from '../office/office-display-service';
-import {officeStoreService} from '../office/store/office-store-service';
-import {notificationService} from '../notification/notification-service';
-import {popupController} from './popup-controller';
-import {PopupTypeEnum} from '../home/popup-type-enum';
-import {errorService} from '../error/error-handler';
+import { officeDisplayService } from '../office/office-display-service';
+import { officeStoreService } from '../office/store/office-store-service';
+import { notificationService } from '../notification/notification-service';
+import { popupController } from './popup-controller';
+import { PopupTypeEnum } from '../home/popup-type-enum';
+import { errorService } from '../error/error-handler';
 
 class PopupHelper {
-  capitalize = (str) => {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  };
+  capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
   getPopupHeight = (reportArray, reportNumberToShow = 10) => {
     const reportsListLength = reportArray.length > reportNumberToShow ? reportNumberToShow : reportArray.length;
@@ -27,10 +25,12 @@ class PopupHelper {
 
   storagePrepareRefreshAllData = (reportArray) => {
     localStorage.removeItem('refreshData');
-    const refreshReportsData = reportArray.map((report) => {
-      return {key: report.bindId, name: report.name, result: false, isError: null};
-    });
-    const refreshData = {data: refreshReportsData, allNumber: reportArray.length, finished: false, currentNumber: 1};
+    const refreshReportsData = reportArray.map((report) => ({
+      key: report.bindId, name: report.name, result: false, isError: null,
+    }));
+    const refreshData = {
+      data: refreshReportsData, allNumber: reportArray.length, finished: false, currentNumber: 1,
+    };
     localStorage.setItem('refreshData', JSON.stringify(refreshData));
   };
 
