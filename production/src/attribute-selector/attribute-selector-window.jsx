@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import '../home/home.css';
-import { selectorProperties } from './selector-properties';
-import { attributeSelectorHelpers } from './attribute-selector-helpers';
-import { AttributeSelector } from './attribute-selector.jsx';
-import { PopupButtons } from '../popup/popup-buttons.jsx';
+import React, { Component } from "react";
+import "../home/home.css";
+import { selectorProperties } from "./selector-properties";
+import { attributeSelectorHelpers } from "./attribute-selector-helpers";
+import { AttributeSelector } from "./attribute-selector.jsx";
+import { PopupButtons } from "../popup/popup-buttons.jsx";
 
 export class AttributeSelectorWindow extends Component {
   constructor(props) {
@@ -14,12 +14,12 @@ export class AttributeSelectorWindow extends Component {
         USE_PROXY: false,
         url: this.props.mstrData.envUrl,
         authToken: this.props.mstrData.token,
-        projectId: this.props.mstrData.projectId,
+        projectId: this.props.mstrData.projectId
       },
       openModal: false,
       triggerUpdate: false,
       loading: false,
-      attributesSelected: false,
+      attributesSelected: false
     };
   }
 
@@ -27,16 +27,33 @@ export class AttributeSelectorWindow extends Component {
     this.setState({ triggerUpdate: true, loading: true });
   };
 
-  handleCancel = () => attributeSelectorHelpers.officeMessageParent(selectorProperties.commandCancel);
+  handleCancel = () =>
+    attributeSelectorHelpers.officeMessageParent(
+      selectorProperties.commandCancel
+    );
 
   handleBack = () => {
     this.props.handleBack();
   };
 
-  onTriggerUpdate = (reportId, projectId, reportSubtype, body, reportName = this.props.mstrData.reportName) => {
+  onTriggerUpdate = (
+    reportId,
+    projectId,
+    reportSubtype,
+    body,
+    reportName = this.props.mstrData.reportName
+  ) => {
     const { mstrData } = this.props;
-    attributeSelectorHelpers.officeMessageParent(selectorProperties.commandOnUpdate,
-      reportId, projectId, reportSubtype, body, reportName, mstrData.instanceId, mstrData.promptsAnswers);
+    attributeSelectorHelpers.officeMessageParent(
+      selectorProperties.commandOnUpdate,
+      reportId,
+      projectId,
+      reportSubtype,
+      body,
+      reportName,
+      mstrData.instanceId,
+      mstrData.promptsAnswers
+    );
   };
 
   /**
@@ -47,21 +64,23 @@ export class AttributeSelectorWindow extends Component {
     this.setState({ triggerUpdate: false, loading: false });
   };
 
-  attributesBeingSelected = (attributesSelected) => {
+  attributesBeingSelected = attributesSelected => {
     this.setState({ attributesSelected });
   };
 
   openModal = () => {
     this.setState({ openModal: true });
-  }
+  };
 
   closeModal = () => {
     this.setState({ openModal: false });
-  }
+  };
 
   render() {
     const { mstrData } = this.props;
-    const typeName = mstrData.reportType.charAt(0).toUpperCase() + mstrData.reportType.substring(1);
+    const typeName =
+      mstrData.reportType.name.charAt(0).toUpperCase() +
+      mstrData.reportType.name.substring(1);
 
     return (
       <div>

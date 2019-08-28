@@ -1,23 +1,23 @@
-import { popupController } from '../../popup/popup-controller';
-import { popupHelper } from '../../popup/popup-helper';
-import { officeStoreService } from '../../office/store/office-store-service';
-import { officeDisplayService } from '../../office/office-display-service';
-import { notificationService } from '../../notification/notification-service';
-import { errorService } from '../../error/error-handler';
+import { popupController } from "../../popup/popup-controller";
+import { popupHelper } from "../../popup/popup-helper";
+import { officeStoreService } from "../../office/store/office-store-service";
+import { officeDisplayService } from "../../office/office-display-service";
+import { notificationService } from "../../notification/notification-service";
+import { errorService } from "../../error/error-handler";
 
-describe('Popup actions', () => {
+describe("Popup actions", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
-  it('capitalize should return with first letter set to upper case', () => {
+  it("capitalize should return with first letter set to upper case", () => {
     // given
-    const string = 'test string';
+    const string = "test string";
     // when
     const capitalized = popupHelper.capitalize(string);
     // then
-    expect(capitalized).toBe('Test string');
+    expect(capitalized).toBe("Test string");
   });
-  it('getPopupHeight should calculate proper % height for 10 reports to show and 9 reports in array', () => {
+  it("getPopupHeight should calculate proper % height for 10 reports to show and 9 reports in array", () => {
     // given
     const reportNumberToShow = 10;
     const reportArray = prepareReportArray(9);
@@ -27,7 +27,7 @@ describe('Popup actions', () => {
     // then
     expect(height).toBe(33);
   });
-  it('getPopupHeight should calculate proper % height for 10 reports to show and 10 reports in array', () => {
+  it("getPopupHeight should calculate proper % height for 10 reports to show and 10 reports in array", () => {
     // given
     const reportNumberToShow = 10;
     const reportArray = prepareReportArray(10);
@@ -37,7 +37,7 @@ describe('Popup actions', () => {
     // then
     expect(height).toBe(35);
   });
-  it('getPopupHeight should calculate proper % height for 10 reports to show and 11 reports in array', () => {
+  it("getPopupHeight should calculate proper % height for 10 reports to show and 11 reports in array", () => {
     // given
     const reportNumberToShow = 10;
     const reportArray = prepareReportArray(11);
@@ -47,135 +47,166 @@ describe('Popup actions', () => {
     // then
     expect(height).toBe(35);
   });
-  it('runRefreshAllPopup should run proper helpers', () => {
+  it("runRefreshAllPopup should run proper helpers", () => {
     // given
     popupHelper.getPopupHeight = jest.fn();
     popupController.runPopup = jest.fn();
-    const reportArray = [{
-      bindId: 'testBinding1',
-      name: 'testNamne1',
-    },
-    {
-      bindId: 'testBinding2',
-      name: 'testNamne2',
-    }];
+    const reportArray = [
+      {
+        bindId: "testBinding1",
+        name: "testNamne1"
+      },
+      {
+        bindId: "testBinding2",
+        name: "testNamne2"
+      }
+    ];
     // when
     popupHelper.runRefreshAllPopup(reportArray, 10);
     // then
     expect(popupHelper.getPopupHeight).toHaveBeenCalled();
     expect(popupController.runPopup).toHaveBeenCalled();
   });
-  it('storagePrepareRefreshAllData should write all rrefreshed eports data to localstorage', () => {
+  it("storagePrepareRefreshAllData should write all rrefreshed eports data to localstorage", () => {
     // given
-    const mockStorageRemoveItem = jest.spyOn(localStorage, 'removeItem').mockImplementation(() => {});
-    const mockStorageSetItem = jest.spyOn(localStorage, 'setItem').mockImplementation(() => {});
-    const reportArray = [{
-      bindId: 'testBinding1',
-      name: 'testNamne1',
-    },
-    {
-      bindId: 'testBinding2',
-      name: 'testNamne2',
-    }];
+    const mockStorageRemoveItem = jest
+      .spyOn(localStorage, "removeItem")
+      .mockImplementation(() => {});
+    const mockStorageSetItem = jest
+      .spyOn(localStorage, "setItem")
+      .mockImplementation(() => {});
+    const reportArray = [
+      {
+        bindId: "testBinding1",
+        name: "testNamne1"
+      },
+      {
+        bindId: "testBinding2",
+        name: "testNamne2"
+      }
+    ];
     // when
     popupHelper.storagePrepareRefreshAllData(reportArray);
     // then
-    expect(mockStorageRemoveItem).toHaveBeenCalledWith('refreshData');
-    expect(mockStorageSetItem).toHaveBeenCalledWith('refreshData', JSON.stringify({
-      data: [
-        {
-          key: 'testBinding1',
-          name: 'testNamne1',
-          result: false,
-          isError: null,
-        },
-        {
-          key: 'testBinding2',
-          name: 'testNamne2',
-          result: false,
-          isError: null,
-        },
-      ],
-      allNumber: reportArray.length,
-      finished: false,
-      currentNumber: 1,
-    }));
+    expect(mockStorageRemoveItem).toHaveBeenCalledWith("refreshData");
+    expect(mockStorageSetItem).toHaveBeenCalledWith(
+      "refreshData",
+      JSON.stringify({
+        data: [
+          {
+            key: "testBinding1",
+            name: "testNamne1",
+            result: false,
+            isError: null
+          },
+          {
+            key: "testBinding2",
+            name: "testNamne2",
+            result: false,
+            isError: null
+          }
+        ],
+        allNumber: reportArray.length,
+        finished: false,
+        currentNumber: 1
+      })
+    );
   });
-  it('storageReportRefreshStart should write report refresh data to localstorage', () => {
+  it("storageReportRefreshStart should write report refresh data to localstorage", () => {
     // given
-    const mockStorageGetItem = jest.spyOn(localStorage, 'getItem').mockImplementation(() => JSON.stringify({}));
-    const mockStorageSetItem = jest.spyOn(localStorage, 'setItem').mockImplementation(() => {});
+    const mockStorageGetItem = jest
+      .spyOn(localStorage, "getItem")
+      .mockImplementation(() => JSON.stringify({}));
+    const mockStorageSetItem = jest
+      .spyOn(localStorage, "setItem")
+      .mockImplementation(() => {});
     const refreshReport = {
-      name: 'testName',
+      name: "testName"
     };
     const index = 0;
     // when
     popupHelper.storageReportRefreshStart(refreshReport, index);
     // then
     expect(mockStorageGetItem).toHaveBeenCalled();
-    expect(mockStorageSetItem).toHaveBeenCalledWith('refreshData', JSON.stringify({
-      currentName: 'testName',
-      currentNumber: 1,
-    }));
+    expect(mockStorageSetItem).toHaveBeenCalledWith(
+      "refreshData",
+      JSON.stringify({
+        currentName: "testName",
+        currentNumber: 1
+      })
+    );
   });
-  it('storageReportRefreshFinish should write report refresh data to localstorage', () => {
+  it("storageReportRefreshFinish should write report refresh data to localstorage", () => {
     // given
     const refreshData = {
       data: [
         {
-          key: 'testBinding1',
-          name: 'testNamne1',
+          key: "testBinding1",
+          name: "testNamne1",
           result: false,
-          isError: null,
+          isError: null
         },
         {
-          key: 'testBinding2',
-          name: 'testNamne2',
+          key: "testBinding2",
+          name: "testNamne2",
           result: false,
-          isError: null,
-        },
+          isError: null
+        }
       ],
       allNumber: 2,
       finished: false,
-      currentNumber: 1,
+      currentNumber: 1
     };
     const index = 0;
-    const mockStorageGetItem = jest.spyOn(localStorage, 'getItem').mockImplementation(() => JSON.stringify(refreshData));
-    const mockStorageSetItem = jest.spyOn(localStorage, 'setItem').mockImplementation(() => {});
+    const mockStorageGetItem = jest
+      .spyOn(localStorage, "getItem")
+      .mockImplementation(() => JSON.stringify(refreshData));
+    const mockStorageSetItem = jest
+      .spyOn(localStorage, "setItem")
+      .mockImplementation(() => {});
     // when
-    popupHelper.storageReportRefreshFinish('ok', false, index, refreshData.data.length);
+    popupHelper.storageReportRefreshFinish(
+      "ok",
+      false,
+      index,
+      refreshData.data.length
+    );
     // then
     expect(mockStorageGetItem).toHaveBeenCalled();
-    expect(mockStorageSetItem).toHaveBeenCalledWith('refreshData',
+    expect(mockStorageSetItem).toHaveBeenCalledWith(
+      "refreshData",
       JSON.stringify({
         data: [
           {
-            key: 'testBinding1',
-            name: 'testNamne1',
-            result: 'ok',
-            isError: false,
+            key: "testBinding1",
+            name: "testNamne1",
+            result: "ok",
+            isError: false
           },
           {
-            key: 'testBinding2',
-            name: 'testNamne2',
+            key: "testBinding2",
+            name: "testNamne2",
             result: false,
-            isError: null,
-          },
+            isError: null
+          }
         ],
         allNumber: 2,
         finished: false,
-        currentNumber: 1,
-      }));
+        currentNumber: 1
+      })
+    );
   });
-  it('printRefreshedReport should call proper methods when isRefreshAll is true', async () => {
+  it("printRefreshedReport should call proper methods when isRefreshAll is true", async () => {
     // given
     const mockReport = {
-      id: 'testBindId',
-      projectId: 'testProjectId',
+      id: "testBindId",
+      projectId: "testProjectId",
       body: {},
-      isPrompted: false,
+      isPrompted: false
     };
-    officeStoreService.getReportFromProperties = jest.fn().mockImplementation(() => mockReport);
+    officeStoreService.getReportFromProperties = jest
+      .fn()
+      .mockImplementation(() => mockReport);
     popupHelper.storageReportRefreshStart = jest.fn();
     officeDisplayService.printObject = jest.fn();
     notificationService.displayNotification = jest.fn();
@@ -185,37 +216,47 @@ describe('Popup actions', () => {
       dossierData: null,
       objectId: mockReport.id,
       projectId: mockReport.projectId,
-      isReport: true,
+      mstrObjectType: "report",
       selectedCell: true,
-      bindingId: 'testBind',
+      bindingId: "testBind",
       body: mockReport.body,
       isRefresh: true,
       isPrompted: mockReport.isPrompted,
-      isRefreshAll,
+      isRefreshAll
     };
     // when
-    await popupHelper.printRefreshedReport('testBind', 'report', 10, 3, isRefreshAll);
+    await popupHelper.printRefreshedReport(
+      "testBind",
+      "report",
+      10,
+      3,
+      isRefreshAll
+    );
     // then
     expect(officeStoreService.getReportFromProperties).toHaveBeenCalled();
     expect(popupHelper.storageReportRefreshStart).toHaveBeenCalled();
-    expect(officeDisplayService.printObject).toHaveBeenCalledWith(expectedOptions);
+    expect(officeDisplayService.printObject).toHaveBeenCalledWith(
+      expectedOptions
+    );
     expect(notificationService.displayNotification).not.toHaveBeenCalled();
     expect(popupHelper.storageReportRefreshFinish).toHaveBeenCalled();
   });
-  it('printRefreshedReport should call proper methods when isRefreshAll is false', async () => {
+  it("printRefreshedReport should call proper methods when isRefreshAll is false", async () => {
     // given
     const mockReport = {
-      id: 'testBindId',
-      projectId: 'testProjectId',
-      body: {},
+      id: "testBindId",
+      projectId: "testProjectId",
+      body: {}
     };
-    officeStoreService.getReportFromProperties = jest.fn().mockImplementation(() => mockReport);
+    officeStoreService.getReportFromProperties = jest
+      .fn()
+      .mockImplementation(() => mockReport);
     popupHelper.storageReportRefreshStart = jest.fn();
     officeDisplayService.printObject = jest.fn();
     notificationService.displayNotification = jest.fn();
     popupHelper.storageReportRefreshFinish = jest.fn();
     // when
-    await popupHelper.printRefreshedReport('testBind', 'Report', 10, 3, false);
+    await popupHelper.printRefreshedReport("testBind", "Report", 10, 3, false);
     // then
     expect(officeStoreService.getReportFromProperties).toHaveBeenCalled();
     expect(popupHelper.storageReportRefreshStart).not.toHaveBeenCalled();
@@ -223,28 +264,32 @@ describe('Popup actions', () => {
     expect(notificationService.displayNotification).toHaveBeenCalled();
     expect(popupHelper.storageReportRefreshFinish).not.toHaveBeenCalled();
   });
-  it('printRefreshedReport throws error when result type is warning', async () => {
+  it("printRefreshedReport throws error when result type is warning", async () => {
     // given
     const mockReport = {
-      id: 'testBindId',
-      projectId: 'testProjectId',
-      body: {},
+      id: "testBindId",
+      projectId: "testProjectId",
+      body: {}
     };
     const mockResult = {
-      type: 'warning',
-      message: 'Test err message',
+      type: "warning",
+      message: "Test err message"
     };
-    officeStoreService.getReportFromProperties = jest.fn().mockImplementation(() => mockReport);
+    officeStoreService.getReportFromProperties = jest
+      .fn()
+      .mockImplementation(() => mockReport);
     popupHelper.storageReportRefreshStart = jest.fn();
     officeDisplayService.printObject = jest.fn().mockReturnValue(mockResult);
     // then
-    await expect(popupHelper.printRefreshedReport('testBind', 'Report', 10, 3, false)).rejects.toThrowError(new Error(mockResult.message));
+    await expect(
+      popupHelper.printRefreshedReport("testBind", "Report", 10, 3, false)
+    ).rejects.toThrowError(new Error(mockResult.message));
   });
-  it('handleRefreshError calls proper methods when isRefreshAll flag is true', () => {
+  it("handleRefreshError calls proper methods when isRefreshAll flag is true", () => {
     // given
-    const error = 'testError';
-    const officeError = 'Test error message';
-    const errorMessage = 'Test error message';
+    const error = "testError";
+    const officeError = "Test error message";
+    const errorMessage = "Test error message";
     errorService.errorOfficeFactory = jest.fn().mockReturnValue(officeError);
     errorService.getErrorMessage = jest.fn().mockReturnValue(errorMessage);
     popupHelper.storageReportRefreshFinish = jest.fn();
@@ -253,24 +298,31 @@ describe('Popup actions', () => {
     // then
     expect(errorService.errorOfficeFactory).toHaveBeenCalledWith(error);
     expect(errorService.getErrorMessage).toHaveBeenCalledWith(officeError);
-    expect(popupHelper.storageReportRefreshFinish).toHaveBeenCalledWith(errorMessage, true, 2, 10);
+    expect(popupHelper.storageReportRefreshFinish).toHaveBeenCalledWith(
+      errorMessage,
+      true,
+      2,
+      10
+    );
   });
-  it('handleRefreshError display proper notifications when isRefreshAll is false and error.code is ItemNotFound', () => {
+  it("handleRefreshError display proper notifications when isRefreshAll is false and error.code is ItemNotFound", () => {
     // given
     const mockError = {
-      code: 'ItemNotFound',
+      code: "ItemNotFound"
     };
     notificationService.displayNotification = jest.fn();
     // when
     popupHelper.handleRefreshError(mockError, 10, 2, false);
     // then
-    expect(notificationService.displayNotification)
-      .toHaveBeenCalledWith('info', 'Data is not relevant anymore. You can delete it from the list');
+    expect(notificationService.displayNotification).toHaveBeenCalledWith(
+      "info",
+      "Data is not relevant anymore. You can delete it from the list"
+    );
   });
-  it('handleRefreshError display proper notifications when isRefreshAll is false and error.code is NOT ItemNotFound', () => {
+  it("handleRefreshError display proper notifications when isRefreshAll is false and error.code is NOT ItemNotFound", () => {
     // given
     const mockError = {
-      code: 'testErrCode',
+      code: "testErrCode"
     };
     errorService.handleError = jest.fn();
     // when
@@ -283,12 +335,10 @@ describe('Popup actions', () => {
 function prepareReportArray(reportsNumber) {
   const reportsArray = [];
   for (let i = 0; i < reportsNumber; i++) {
-    reportsArray.push(
-      {
-        bindId: `testBinding${i}`,
-        name: `testNamne${i}`,
-      },
-    );
+    reportsArray.push({
+      bindId: `testBinding${i}`,
+      name: `testNamne${i}`
+    });
   }
   return reportsArray;
 }

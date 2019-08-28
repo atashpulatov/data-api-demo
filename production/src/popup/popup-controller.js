@@ -1,19 +1,22 @@
-import { objectTypes } from '@mstr/mstr-react-library';
-import { selectorProperties } from '../attribute-selector/selector-properties';
-import { officeDisplayService } from '../office/office-display-service';
-import { PopupTypeEnum } from '../home/popup-type-enum';
-import { sessionHelper } from '../storage/session-helper';
-import { notificationService } from '../notification/notification-service';
-import { reduxStore } from '../store';
+import { objectTypes } from "@mstr/mstr-react-library";
+import { selectorProperties } from "../attribute-selector/selector-properties";
+import { officeDisplayService } from "../office/office-display-service";
+import { PopupTypeEnum } from "../home/popup-type-enum";
+import { sessionHelper } from "../storage/session-helper";
+import { notificationService } from "../notification/notification-service";
+import { reduxStore } from "../store";
 import {
-  CLEAR_WINDOW, refreshReportsArray, START_REPORT_LOADING, STOP_REPORT_LOADING,
-} from './popup-actions';
-import { errorService } from '../error/error-handler';
-import { authenticationHelper } from '../authentication/authentication-helper';
-import { officeProperties } from '../office/office-properties';
-import { officeApiHelper } from '../office/office-api-helper';
-
-import { officeStoreService } from '../office/store/office-store-service';
+  CLEAR_WINDOW,
+  refreshReportsArray,
+  START_REPORT_LOADING,
+  STOP_REPORT_LOADING
+} from "./popup-actions";
+import { errorService } from "../error/error-handler";
+import { authenticationHelper } from "../authentication/authentication-helper";
+import { officeProperties } from "../office/office-properties";
+import { officeApiHelper } from "../office/office-api-helper";
+import { MstrObjectType } from "../mstr-object/mstr-object-type-enum";
+import { officeStoreService } from "../office/store/office-store-service";
 
 const URL = `${window.location.href}`;
 
@@ -24,11 +27,11 @@ class PopupController {
     await this.runPopup(PopupTypeEnum.navigationTree, 80, 80);
   };
 
-  runEditFiltersPopup = async (reportParams) => {
+  runEditFiltersPopup = async reportParams => {
     await this.runPopup(PopupTypeEnum.editFilters, 80, 80, reportParams);
   };
 
-  runRepromptPopup = async (reportParams) => {
+  runRepromptPopup = async reportParams => {
     await this.runPopup(PopupTypeEnum.repromptingWindow, 80, 80, reportParams);
   };
 
@@ -46,31 +49,32 @@ class PopupController {
     // } else {
     // url = url.replace('index.html', 'popup.html');
     // }
-    const splittedUrl = url.split('?'); // we need to get rid of any query params
+    const splittedUrl = url.split("?"); // we need to get rid of any query params
     try {
       await officeApiHelper.getExcelSessionStatus();
       Office.context.ui.displayDialogAsync(
-        `${splittedUrl[0]
-        }?popupType=${popupType
-        }&envUrl=${session.url}`,
+        `${splittedUrl[0]}?popupType=${popupType}&envUrl=${session.url}`,
         { height, width, displayInIframe: true },
-        (asyncResult) => {
+        asyncResult => {
           const dialog = asyncResult.value;
           sessionHelper.setDialog(dialog);
           dialog.addEventHandler(
             Office.EventType.DialogMessageReceived,
-            this.onMessageFromPopup.bind(null, dialog, reportParams),
+            this.onMessageFromPopup.bind(null, dialog, reportParams)
           );
           reduxStore.dispatch({ type: CLEAR_WINDOW });
           dialog.addEventHandler(
             // Event received on dialog close
-            Office.EventType.DialogEventReceived, (event) => {
-              reduxStore.dispatch({ type: officeProperties.actions.popupHidden });
-            },
+            Office.EventType.DialogEventReceived,
+            event => {
+              reduxStore.dispatch({
+                type: officeProperties.actions.popupHidden
+              });
+            }
           );
 
           reduxStore.dispatch({ type: officeProperties.actions.popupShown });
-        },
+        }
       );
     } catch (error) {
       errorService.handleError(error);
@@ -88,16 +92,28 @@ class PopupController {
           if (!reportParams) {
             await this.handleOkCommand(response, reportParams);
           } else {
-            const reportPreviousState = this._getReportsPreviousState(reportParams);
-            await this.saveReportWithParams(reportParams, response, reportPreviousState);
+            const reportPreviousState = this._getReportsPreviousState(
+              reportParams
+            );
+            await this.saveReportWithParams(
+              reportParams,
+              response,
+              reportPreviousState
+            );
           }
           break;
         case selectorProperties.commandOnUpdate:
           if (!reportParams) {
             await this.handleUpdateCommand(response);
           } else {
-            const reportPreviousState = this._getReportsPreviousState(reportParams);
-            await this.saveReportWithParams(reportParams, response, reportPreviousState);
+            const reportPreviousState = this._getReportsPreviousState(
+              reportParams
+            );
+            await this.saveReportWithParams(
+              reportParams,
+              response,
+              reportPreviousState
+            );
           }
           break;
         case selectorProperties.commandCancel:
@@ -115,13 +131,24 @@ class PopupController {
       reduxStore.dispatch({ type: officeProperties.actions.popupHidden });
       reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
     }
-  }
+  };
 
   handleUpdateCommand = async ({
-    dossierData, reportId, projectId, reportSubtype, body, reportName, promptsAnswers, isPrompted, instanceId,
+    dossierData,
+    reportId,
+    projectId,
+    reportSubtype,
+    body,
+    reportName,
+    promptsAnswers,
+    isPrompted,
+    instanceId
   }) => {
     if (reportId && projectId && reportSubtype && body && reportName) {
-      reduxStore.dispatch({ type: START_REPORT_LOADING, data: { name: reportName } });
+      reduxStore.dispatch({
+        type: START_REPORT_LOADING,
+        data: { name: reportName }
+      });
       const options = {
         isPrompted,
         promptsAnswers,
@@ -129,8 +156,8 @@ class PopupController {
         objectId: reportId,
         projectId,
         instanceId,
-        isReport: objectTypes.getTypeDescription(3, reportSubtype) === 'Report',
-        body,
+        mstrObjectType: MstrObjectType.getMstrTypeBySubtype(reportSubtype),
+        body
       };
       const result = await officeDisplayService.printObject(options);
       if (result) {
@@ -138,23 +165,35 @@ class PopupController {
       }
       reduxStore.dispatch({ type: STOP_REPORT_LOADING });
     }
-  }
+  };
 
-  handleOkCommand = async ({
-    chosenObject, dossierData, chosenProject, chosenSubtype, isPrompted, promptsAnswers, reportName,
-  }, bindingId) => {
+  handleOkCommand = async (
+    {
+      chosenObject,
+      dossierData,
+      chosenProject,
+      chosenSubtype,
+      isPrompted,
+      promptsAnswers,
+      reportName
+    },
+    bindingId
+  ) => {
     if (chosenObject) {
       reduxStore.dispatch({ type: officeProperties.actions.startLoading });
-      reduxStore.dispatch({ type: START_REPORT_LOADING, data: { name: reportName } });
+      reduxStore.dispatch({
+        type: START_REPORT_LOADING,
+        data: { name: reportName }
+      });
       const options = {
         dossierData,
         objectId: chosenObject,
         projectId: chosenProject,
-        isReport: objectTypes.getTypeDescription(3, chosenSubtype) === 'Report',
+        mstrObjectType: MstrObjectType.getMstrTypeBySubtype(chosenSubtype),
         bindingId,
         isRefresh: false,
         isPrompted,
-        promptsAnswers,
+        promptsAnswers
       };
       const result = await officeDisplayService.printObject(options);
       if (result) {
@@ -162,38 +201,54 @@ class PopupController {
       }
       reduxStore.dispatch({ type: STOP_REPORT_LOADING });
     }
-  }
+  };
 
-  loadPending = (wrapped) => async (...args) => {
+  loadPending = wrapped => async (...args) => {
     this.runPopup(PopupTypeEnum.loadingPage, 30, 40);
     return await wrapped(...args);
-  }
+  };
 
-  closeDialog = (dialog) => {
+  closeDialog = dialog => {
     try {
       return dialog.close();
     } catch (e) {
-      console.log('Attempted to close an already closed dialog');
+      console.log("Attempted to close an already closed dialog");
     }
-  }
+  };
 
   _getReportsPreviousState(reportParams) {
     const currentReportArray = reduxStore.getState().officeReducer.reportArray;
-    const indexOfOriginalValues = currentReportArray.findIndex((report) => report.bindId === reportParams.bindId);
+    const indexOfOriginalValues = currentReportArray.findIndex(
+      report => report.bindId === reportParams.bindId
+    );
     const originalValues = currentReportArray[indexOfOriginalValues];
     return { ...originalValues };
   }
 
   async saveReportWithParams(reportParams, response, reportPreviousState) {
-    await officeStoreService.preserveReportValue(reportParams.bindId, 'body', response.body);
+    await officeStoreService.preserveReportValue(
+      reportParams.bindId,
+      "body",
+      response.body
+    );
     if (response.promptsAnswers) {
       // Include new promptsAnswers in case of Re-prompt workflow
       reportParams.promptsAnswers = response.promptsAnswers;
-      await officeStoreService.preserveReportValue(reportParams.bindId, 'promptsAnswers', response.promptsAnswers);
+      await officeStoreService.preserveReportValue(
+        reportParams.bindId,
+        "promptsAnswers",
+        response.promptsAnswers
+      );
     }
-    const isErrorOnRefresh = await refreshReportsArray([reportParams], false)(reduxStore.dispatch);
+    const isErrorOnRefresh = await refreshReportsArray([reportParams], false)(
+      reduxStore.dispatch
+    );
     if (isErrorOnRefresh) {
-      await officeStoreService.preserveReportValue(reportParams.bindId, 'body', reportPreviousState.body);
+      await officeStoreService.preserveReportValue(
+        reportParams.bindId,
+        "body",
+        reportPreviousState.body
+      );
     }
   }
 }
