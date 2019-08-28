@@ -1,6 +1,6 @@
 {
-  "parser": "babel-eslint",
   "extends": [
+    "react-app",
     "airbnb"
   ],
   "parserOptions": {
@@ -8,12 +8,16 @@
   },
   "env": {
     "browser": true,
-    "node": true
+    "node": true,
+    "jest": true
   },
   "globals": {
     "Excel": true,
     "microstrategy": true,
     "Office": true,
     "OfficeExtension": true
+  },
+  "rules": {
+    "react/prop-types": 0
   }
 }
