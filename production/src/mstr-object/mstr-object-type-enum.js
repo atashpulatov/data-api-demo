@@ -1,4 +1,4 @@
-class _MstrObjectType {
+class MstrObjectType {
   // TODO: Add support for documents
 
   mstrObjectType = {
@@ -52,5 +52,5 @@ class _MstrObjectType {
   };
 }
 
-const MstrObjectType = new _MstrObjectType();
-export default MstrObjectType;
+const mstrObjectType = new MstrObjectType();
+export default mstrObjectType;

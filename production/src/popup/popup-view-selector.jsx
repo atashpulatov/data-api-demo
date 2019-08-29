@@ -10,7 +10,7 @@ import { PromptsWindow } from '../prompts/prompts-window';
 import { RefreshAllPage } from '../loading/refresh-all-page';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { preparePromptedReport } from './popup-actions';
-import MstrObjectType from '../mstr-object/mstr-object-type-enum';
+import mstrObjectType from '../mstr-object/mstr-object-type-enum';
 
 /* global Office */
 
@@ -126,7 +126,7 @@ async function obtainInstanceWithPromptsAnswers(propsToPass, props) {
     id: reportId,
     projectId,
     name: propsToPass.reportName,
-    objectType: MstrObjectType.mstrObjectType.report,
+    objectType: mstrObjectType.mstrObjectType.report,
     instanceId: instanceDefinition.instanceId,
     promptsAnswers: props.promptsAnswers,
     body,

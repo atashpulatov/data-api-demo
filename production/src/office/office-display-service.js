@@ -13,7 +13,7 @@ import { errorService } from '../error/error-handler';
 import { popupController } from '../popup/popup-controller';
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { PopupTypeEnum } from '../home/popup-type-enum';
-import MstrObjectType from '../mstr-object/mstr-object-type-enum';
+import mstrObjectType from '../mstr-object/mstr-object-type-enum';
 import {
   NOT_SUPPORTED_NO_ATTRIBUTES,
   ALL_DATA_FILTERED_OUT,
@@ -69,7 +69,7 @@ class OfficeDisplayService {
     objectId,
     instanceId,
     projectId,
-    mstrObjectType = MstrObjectType.mstrObjectType.report,
+    mstrObjectType = mstrObjectType.mstrObjectType.report,
     selectedCell,
     bindingId,
     isRefresh,

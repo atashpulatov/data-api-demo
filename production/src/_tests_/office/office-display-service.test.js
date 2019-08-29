@@ -12,7 +12,7 @@ import { sessionHelper } from "../../storage/session-helper";
 import { OverlappingTablesError } from "../../error/overlapping-tables-error";
 import officeConverterService from "../../office/office-converter-service-v2";
 import { ALL_DATA_FILTERED_OUT } from "../../error/constants";
-import { MstrObjectType } from "../../mstr-object/mstr-object-type-enum";
+import { mstrObjectType } from "../../mstr-object/mstr-object-type-enum";
 
 jest.mock("../../mstr-object/mstr-object-rest-service");
 jest.mock("../../office/store/office-store-service");
@@ -144,7 +144,7 @@ describe.skip("OfficeDisplayService", () => {
     const options = {
       objectId: "id123",
       projectId: "p123",
-      mstrObjectType: MstrObjectType.mstrObjectType.report
+      mstrObjectType: mstrObjectType.mstrObjectType.report
     };
     const mockDialog = {
       close: () => {}

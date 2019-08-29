@@ -6,7 +6,7 @@ import { errorService } from '../../error/error-handler';
 import { PopupTypeEnum } from '../../home/popup-type-enum';
 import { officeApiHelper } from '../../office/office-api-helper';
 import { notificationService } from '../../notification/notification-service';
-import MstrObjectType from '../../mstr-object/mstr-object-type-enum';
+import mstrObjectType from '../../mstr-object/mstr-object-type-enum';
 
 describe('PopupController', () => {
   const dialog = {};
@@ -59,7 +59,7 @@ describe('PopupController', () => {
     const reportData = {
       objectId: 'objectId',
       projectId: 'projectId',
-      mstrObjectType: MstrObjectType.mstrObjectType.report,
+      mstrObjectType: mstrObjectType.mstrObjectType.report,
     };
     const actionObject = {
       command: selectorProperties.commandOk,
@@ -77,7 +77,7 @@ describe('PopupController', () => {
       projectId: reportData.projectId,
       bindingId: null,
       isRefresh: false,
-      mstrObjectType: MstrObjectType.mstrObjectType.report,
+      mstrObjectType: mstrObjectType.mstrObjectType.report,
     };
     // when
     await popupController.onMessageFromPopup(dialog, null, arg);
@@ -93,7 +93,7 @@ describe('PopupController', () => {
     const reportData = {
       objectId: 'objectId',
       projectId: 'projectId',
-      mstrObjectType: MstrObjectType.mstrObjectType.report,
+      mstrObjectType: mstrObjectType.mstrObjectType.report,
       dossierData: {
         instanceId: 'instanceId',
         whatever: 'whatever',
@@ -147,7 +147,7 @@ describe('PopupController', () => {
       dossierData: undefined,
       objectId: actionObject.reportId,
       projectId: actionObject.projectId,
-      mstrObjectType: MstrObjectType.mstrObjectType.dataset,
+      mstrObjectType: mstrObjectType.mstrObjectType.dataset,
       body: actionObject.body,
     };
     // when
@@ -182,7 +182,7 @@ describe('PopupController', () => {
 
     const expectedOptions = {
       dossierData: undefined,
-      mstrObjectType: MstrObjectType.mstrObjectType.report,
+      mstrObjectType: mstrObjectType.mstrObjectType.report,
       objectId: actionObject.reportId,
       projectId: actionObject.projectId,
       body: actionObject.body,
@@ -220,7 +220,7 @@ describe('PopupController', () => {
       dossierData: actionObject.dossierData,
       objectId: actionObject.reportId,
       projectId: actionObject.projectId,
-      mstrObjectType: MstrObjectType.mstrObjectType.report,
+      mstrObjectType: mstrObjectType.mstrObjectType.report,
       body: actionObject.body,
     });
   });

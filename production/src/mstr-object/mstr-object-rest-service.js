@@ -3,7 +3,7 @@ import { reduxStore } from '../store';
 import { moduleProxy } from '../module-proxy';
 import officeConverterServiceV2 from '../office/office-converter-service-v2';
 import { NOT_SUPPORTED_NO_ATTRIBUTES } from '../error/constants';
-import MstrObjectType from './mstr-object-type-enum';
+import mstrObjectType from './mstr-object-type-enum';
 
 const sharedFolderIdType = 7;
 
@@ -117,7 +117,7 @@ class MstrObjectRestService {
   getObjectDefinition = (
     objectId,
     projectId,
-    mstrObjectType = MstrObjectType.mstrObjectType.report,
+    mstrObjectType = mstrObjectType.mstrObjectType.report,
   ) => {
     const storeState = reduxStore.getState();
     const { envUrl } = storeState.sessionReducer;
@@ -136,7 +136,7 @@ class MstrObjectRestService {
   getObjectInfo = (
     objectId,
     projectId,
-    mstrObjectType = MstrObjectType.mstrObjectType.report,
+    mstrObjectType = mstrObjectType.mstrObjectType.report,
   ) => {
     const storeState = reduxStore.getState();
     const { envUrl } = storeState.sessionReducer;
@@ -154,7 +154,7 @@ class MstrObjectRestService {
   async createInstance(
     objectId,
     projectId,
-    mstrObjectType = MstrObjectType.mstrObjectType.report,
+    mstrObjectType = mstrObjectType.mstrObjectType.report,
     dossierData,
     body = {},
     limit = 1,
@@ -176,7 +176,7 @@ class MstrObjectRestService {
   modifyInstance(
     objectId,
     projectId,
-    mstrObjectType = MstrObjectType.mstrObjectType.report,
+    mstrObjectType = mstrObjectType.mstrObjectType.report,
     dossierData,
     body = {},
     instanceId,
@@ -200,7 +200,7 @@ class MstrObjectRestService {
   getInstance(
     objectId,
     projectId,
-    mstrObjectType = MstrObjectType.mstrObjectType.report,
+    mstrObjectType = mstrObjectType.mstrObjectType.report,
     dossierData,
     body = {},
     instanceId,
