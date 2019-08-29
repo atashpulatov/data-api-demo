@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { actions } from '../navigation/navigation-tree-actions';
-import AttributeSelectorWindow from '../attribute-selector/attribute-selector-window';
+import { AttributeSelectorWindow } from '../attribute-selector/attribute-selector-window';
 import { PopupTypeEnum } from '../home/popup-type-enum';
 import { NavigationTree } from '../navigation/navigation-tree';
 import { LoadingPage } from '../loading/loading-page';

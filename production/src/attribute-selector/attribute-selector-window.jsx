@@ -5,7 +5,7 @@ import { attributeSelectorHelpers } from './attribute-selector-helpers';
 import { AttributeSelector } from './attribute-selector';
 import { PopupButtons } from '../popup/popup-buttons';
 
-export default class AttributeSelectorWindow extends Component {
+export class AttributeSelectorWindow extends Component {
   constructor(props) {
     super(props);
     const {
@@ -43,7 +43,7 @@ export default class AttributeSelectorWindow extends Component {
     projectId,
     reportSubtype,
     body,
-    // reportName = this.props.mstrData.reportName,
+    reportName = this.props.mstrData.reportName,
   ) => {
     const { mstrData } = this.props;
     attributeSelectorHelpers.officeMessageParent(
@@ -52,7 +52,7 @@ export default class AttributeSelectorWindow extends Component {
       projectId,
       reportSubtype,
       body,
-      mstrData.reportName,
+      reportName,
       mstrData.instanceId,
       mstrData.promptsAnswers,
     );

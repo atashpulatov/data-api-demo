@@ -71,7 +71,7 @@ export class _OfficeLoadedFile extends React.Component {
       return;
     }
     const {
-      isLoading, bindingId, objectType,
+      isLoading, bindingId, objectType, onReprompt,
     } = this.props;
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
@@ -79,7 +79,7 @@ export class _OfficeLoadedFile extends React.Component {
           // calling onBindingObjectClick to check whether the object exists in Excel
           // before opening prompt popup
           if (await officeApiHelper.onBindingObjectClick(bindingId, false)) {
-            await callForReprompt({ bindId: bindingId, objectType });
+            await onReprompt({ bindId: bindingId, objectType });
           }
         } finally {
           this.setState({ allowRefreshClick: true });
@@ -274,7 +274,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
   refreshReportsArray,
   callForEdit,
-  callForReprompt,
+  onReprompt: callForReprompt,
 };
 
 export const OfficeLoadedFile = connect(
