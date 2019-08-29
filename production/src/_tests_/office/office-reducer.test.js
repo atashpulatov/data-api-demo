@@ -432,17 +432,17 @@ describe('officeReducer', () => {
     // then
     expect(newState).toEqual({ isConfirm: true });
   });
-  it('should return new proper state in case of toggleRenderSettingsFlaglag action', () => {
+  it('should return new proper state in case of toggleRenderSettingsFlag action', () => {
     // given
     const oldState = { isSettings: false, shouldRenderSettings: false };
     const action = {
       type: officeProperties.actions.toggleRenderSettingsFlag,
-      isSettings: true,
+      isSettings: false,
       shouldRenderSettings: true,
     };
     // when
     const newState = officeReducer(oldState, action);
     // then
-    expect(newState).toEqual({ isSettings: true, shouldRenderSettings: true });
+    expect(newState).toEqual({ isSettings: false, shouldRenderSettings: true });
   });
 });
