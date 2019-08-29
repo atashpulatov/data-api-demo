@@ -31,7 +31,7 @@ class OfficeApiHelper {
       (headerCount -= firstNumber) >= 0;
       firstNumber = secondNumber, secondNumber *= ALPHABET_RANGE_END) {
       endColumn = String.fromCharCode(parseInt(
-        (headerCount % secondNumber) / firstNumber)
+          (headerCount % secondNumber) / firstNumber)
         + ASCII_CAPITAL_LETTER_INDEX)
         + endColumn;
     }
@@ -99,8 +99,8 @@ class OfficeApiHelper {
   getBindingRange = (context, bindingId) => {
     try {
       return context.workbook.bindings
-        .getItem(bindingId).getTable()
-        .getRange();
+          .getItem(bindingId).getTable()
+          .getRange();
     } catch (error) {
       throw errorService.errorOfficeFactory(error);
     }
@@ -108,7 +108,7 @@ class OfficeApiHelper {
 
   getTable = (context, bindingId) => {
     return context.workbook.bindings
-      .getItem(bindingId).getTable();
+        .getItem(bindingId).getTable();
   }
 
   getExcelContext = async () => {
@@ -145,14 +145,22 @@ class OfficeApiHelper {
     return {envUrl, username};
   }
 
-  formatTable = (table, isCrosstab, crosstabHeaderDimensions) => {
+  formatTable = async (table, isCrosstab, crosstabHeaderDimensions, context) => {
     if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
       if (isCrosstab) {
         const {rowsX} = crosstabHeaderDimensions;
-        table.getDataBodyRange().format.autofitColumns();
         table.getDataBodyRange().getColumnsBefore(rowsX).format.autofitColumns();
-      } else {
-        table.getDataBodyRange().format.autofitColumns();
+      }
+      try {
+        const columns = table.columns;
+        columns.load('items');
+        await context.sync();
+        for (let index = 0; index < columns.items.length; index++) {
+          columns.items[index].getRange().format.autofitColumns();
+          await context.sync();
+        }
+      } catch (error) {
+        console.log('Error when formatting - no columns autofit applied');
       }
     } else {
       notificationService.displayNotification('warning', `Unable to format table.`);
@@ -243,15 +251,15 @@ class OfficeApiHelper {
 
   bindNamedItem = (namedItem, bindingId) => {
     return new Promise((resolve, reject) => Office.context.document.bindings.addFromNamedItemAsync(
-      namedItem, 'table', {id: bindingId}, (result) => {
-        if (result.status === 'succeeded') {
-          console.log('Added new binding with type: ' + result.value.type + ' and id: ' + result.value.id);
-          resolve();
-        } else {
-          console.error('Error: ' + result.error.message);
-          reject(result.error);
-        }
-      }));
+        namedItem, 'table', {id: bindingId}, (result) => {
+          if (result.status === 'succeeded') {
+            console.log('Added new binding with type: ' + result.value.type + ' and id: ' + result.value.id);
+            resolve();
+          } else {
+            console.error('Error: ' + result.error.message);
+            reject(result.error);
+          }
+        }));
   }
 
   deleteObjectTableBody = async (context, object) => {
