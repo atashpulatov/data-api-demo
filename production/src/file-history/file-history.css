@@ -274,6 +274,10 @@ button.add-data-btn:focus {
   margin: 8px 0;
 }
 
+.settings-list .settings {
+  margin: 8px 0;
+}
+
 .settings-list .settings-version {
   padding: 0 17px 12px 17px;
   line-height: 31px;

@@ -18,7 +18,10 @@
     "OfficeExtension": true
   },
   "rules": {
-    "react/prop-types": 0,
-    "class-methods-use-this": "warn"
+    "class-methods-use-this": "warn",
+    "jsx-a11y/click-events-have-key-events": "warn",
+    "no-console": "off",
+    "react/jsx-props-no-spreading": "warn",
+    "react/prop-types": "off"
   }
 }
