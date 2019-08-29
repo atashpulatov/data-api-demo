@@ -154,7 +154,7 @@ function toggleRenderSettingsFlag(action, state) {
   return {
     ...state,
     shouldRenderSettings: !state.shouldRenderSettings,
-    isSettings: !state.shouldRenderSettings,
+    isSettings: false,
   };
 }
 

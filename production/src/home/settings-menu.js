@@ -11,7 +11,7 @@ import { errorService } from '../error/error-handler';
 const APP_VERSION = process.env.REACT_APP_MSTR_OFFICE_VERSION;
 
 export const _SettingsMenu = ({
-  userFullName, userInitials, isSecured, reportArray, t, toggleIsConfirmFlag, shouldRenderSettings, toggleRenderSettingsFlag,
+  userFullName, userInitials, isSecured, reportArray, t, toggleIsConfirmFlag, toggleRenderSettingsFlag,
 }) => {
   const userNameDisplay = userFullName || 'MicroStrategy user';
   const isSecuredActive = !isSecured && reportArray && reportArray.length > 0;
@@ -118,9 +118,9 @@ _SettingsMenu.defaultProps = {
 
 function mapStateToProps({ sessionReducer, officeReducer }) {
   const { userFullName, userInitials } = sessionReducer;
-  const { isSecured, reportArray, shouldRenderSettings } = officeReducer;
+  const { isSecured, reportArray } = officeReducer;
   return {
-    userFullName, userInitials, isSecured, reportArray, shouldRenderSettings,
+    userFullName, userInitials, isSecured, reportArray,
   };
 }
 
