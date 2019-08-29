@@ -31,11 +31,12 @@
     ]
   },
   "dependencies": {
-    "@mstr/mstr-react-library": "^1.2.0",
+    "@mstr/mstr-react-library": "^1.2.2",
     "airbnb-browser-shims": "^3.2.1",
     "antd": "^3.22.2",
     "focus-visible": "^5.0.2",
     "i18next": "^17.0.6",
+    "prop-types": "^15.7.2",
     "proxy-polyfill": "^0.3.0",
     "query-string": "^6.7.0",
     "react": "^16.9.0",

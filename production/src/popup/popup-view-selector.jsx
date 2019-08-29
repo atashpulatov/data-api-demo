@@ -10,8 +10,9 @@ import { PromptsWindow } from '../prompts/prompts-window';
 import { RefreshAllPage } from '../loading/refresh-all-page';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { preparePromptedReport } from './popup-actions';
+import { DossierWindow } from '../dossier/dossier-window';
 
-/* global Office */
+const { Office } = window;
 
 export const _PopupViewSelector = (props) => {
   let { popupType } = props;
@@ -212,6 +213,14 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
       isReprompt: true,
     };
     return <PromptsWindow mstrData={mstrData} handleBack={methods.handleBack} />; // use the same window as with prompting, but provide report info
+  }
+  if (popupType === PopupTypeEnum.dossierWindow) {
+    return (
+      <DossierWindow
+        handleBack={methods.handleBack}
+        t={propsToPass.t}
+      />
+    );
   }
   // TODO: do some error handling here
   return null;
