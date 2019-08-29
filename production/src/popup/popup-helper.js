@@ -4,7 +4,7 @@ import { notificationService } from '../notification/notification-service';
 import { popupController } from './popup-controller';
 import { errorService } from '../error/error-handler';
 import { PopupTypeEnum } from '../home/popup-type-enum';
-import mstrObjectType from '../mstr-object/mstr-object-type-enum';
+import objectTypeEnum from '../mstr-object/mstr-object-type-enum';
 
 class PopupHelper {
   capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
@@ -74,7 +74,7 @@ class PopupHelper {
   ) => {
     const refreshReport = officeStoreService.getReportFromProperties(bindingId);
     if (isRefreshAll) this.storageReportRefreshStart(refreshReport, index);
-    const mstrObjectType = mstrObjectType.getMstrTypeByName(objectType);
+    const mstrObjectType = objectTypeEnum.getMstrTypeByName(objectType);
     const instanceId = null;
     // TODO: Pass proper isPrompted value – promptsAnswers could probably serve as such,
     // to be refactored.
