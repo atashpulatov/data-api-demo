@@ -114,8 +114,7 @@ class PopupHelper {
 
   handleRefreshError = (error, length, index, isRefreshAll) => {
     if (isRefreshAll) {
-      const officeError = errorService.errorOfficeFactory(error);
-      const errorMessage = errorService.getErrorMessage(officeError);
+      const errorMessage = errorService.getErrorMessage(error);
       return this.storageReportRefreshFinish(errorMessage, true, index, length);
     }
     if (error.code === 'ItemNotFound') {

@@ -29,7 +29,7 @@ describe('PopupController', () => {
     const size = 80;
     const runPopupSpy = jest
       .spyOn(popupController, 'runPopup')
-      .mockImplementationOnce(() => {});
+      .mockImplementationOnce(() => { });
     // when
     popupController.runPopupNavigation();
     // then
@@ -44,7 +44,7 @@ describe('PopupController', () => {
     const size = 80;
     const runPopupSpy = jest
       .spyOn(popupController, 'runPopup')
-      .mockImplementationOnce(() => {});
+      .mockImplementationOnce(() => { });
     // when
     popupController.runEditFiltersPopup(reportParams);
     // then

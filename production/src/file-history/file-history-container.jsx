@@ -118,24 +118,17 @@ export class _FileHistoryContainer extends React.Component {
     } = this.props;
     return (
       <>
-        {isSecured && (
-          <div className="secured-screen-container">
-            <img src={restrictedArt} alt={t('Refresh')} />
-            <div className="secured-header">{t('Data Cleared!')}</div>
-            <p className="secured-info">
-              {t(
-                "MicroStrategy data has been removed from the workbook. Click 'View Data' to import it again.",
-              )}
-            </p>
-            <Button
-              type="primary"
-              className="show-data-btn"
-              onClick={this.showData}
-            >
-              {t('View Data')}
-            </Button>
-          </div>
-        )}
+        {
+          isSecured
+          && (
+            <div className="secured-screen-container">
+              <img src={restrictedArt} alt={t('Refresh')} />
+              <div className="secured-header">{t('Data Cleared!')}</div>
+              <p className="secured-info">{t('MicroStrategy data has been removed from the workbook. Click \'View Data\' to import it again.')}</p>
+              <Button type="primary" className="show-data-btn" onClick={this.showData}>{t('View Data')}</Button>
+            </div>
+          )
+        }
         <Button
           id="add-data-btn-container"
           className="add-data-btn floating-button"
@@ -161,11 +154,11 @@ export class _FileHistoryContainer extends React.Component {
                 <MSTRIcon type="refresh" />
               ) : (
                 <img
-                  width="12px"
-                  height="12px"
-                  src={loadingSpinner}
-                  alt={t('Report loading icon')}
-                />
+                    width="12px"
+                    height="12px"
+                    src={loadingSpinner}
+                    alt={t('Report loading icon')}
+                  />
               )}
             </Button>
           </ButtonPopover>

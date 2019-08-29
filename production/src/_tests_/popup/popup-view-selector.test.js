@@ -7,6 +7,7 @@ import { PromptsWindow } from '../../prompts/prompts-window';
 import { PopupTypeEnum } from '../../home/popup-type-enum';
 import { NavigationTree } from '../../navigation/navigation-tree';
 import { AttributeSelectorWindow } from '../../attribute-selector/attribute-selector-window';
+import { DossierWindow } from '../../dossier/dossier-window';
 
 describe('PopupViewSelector', () => {
   it('should render navigation tree when requested', () => {
@@ -28,6 +29,27 @@ describe('PopupViewSelector', () => {
     />);
     // then
     expect(componentWrapper.find(NavigationTree).get(0)).toBeDefined();
+  });
+
+  it('should render navigation tree when requested', () => {
+    // given
+    const location = {
+      search: {},
+    };
+    const props = {
+      popupType: PopupTypeEnum.dossierWindow,
+      propsToPass: {},
+      authToken: 'token',
+    };
+    // when
+    // eslint-disable-next-line react/jsx-pascal-case
+    const componentWrapper = shallow(<_PopupViewSelector
+      location={location}
+      {...props}
+      methods={{}}
+    />);
+    // then
+    expect(componentWrapper.find(DossierWindow).get(0)).toBeDefined();
   });
 
   it('should render AttributeSelectorWindow when requested', () => {

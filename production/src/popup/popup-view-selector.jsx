@@ -11,8 +11,9 @@ import { RefreshAllPage } from '../loading/refresh-all-page';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { preparePromptedReport } from './popup-actions';
 import mstrObjectType from '../mstr-object/mstr-object-type-enum';
+import { DossierWindow } from '../dossier/dossier-window';
 
-/* global Office */
+const { Office } = window;
 
 export const _PopupViewSelector = (props) => {
   let { popupType } = props;
@@ -269,6 +270,14 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
     return (
       <PromptsWindow mstrData={mstrData} handleBack={methods.handleBack} />
     ); // use the same window as with prompting, but provide report info
+  }
+  if (popupType === PopupTypeEnum.dossierWindow) {
+    return (
+      <DossierWindow
+        handleBack={methods.handleBack}
+        t={propsToPass.t}
+      />
+    );
   }
   // TODO: do some error handling here
   return null;

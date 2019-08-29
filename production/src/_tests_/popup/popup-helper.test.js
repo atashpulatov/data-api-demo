@@ -71,10 +71,10 @@ describe('Popup actions', () => {
     // given
     const mockStorageRemoveItem = jest
       .spyOn(localStorage, 'removeItem')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
     const mockStorageSetItem = jest
       .spyOn(localStorage, 'setItem')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
     const reportArray = [
       {
         bindId: 'testBinding1',
@@ -119,7 +119,7 @@ describe('Popup actions', () => {
       .mockImplementation(() => JSON.stringify({}));
     const mockStorageSetItem = jest
       .spyOn(localStorage, 'setItem')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
     const refreshReport = {
       name: 'testName',
     };
@@ -163,7 +163,7 @@ describe('Popup actions', () => {
       .mockImplementation(() => JSON.stringify(refreshData));
     const mockStorageSetItem = jest
       .spyOn(localStorage, 'setItem')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
     // when
     popupHelper.storageReportRefreshFinish(
       'ok',
@@ -309,12 +309,7 @@ describe('Popup actions', () => {
     // then
     expect(errorService.errorOfficeFactory).toHaveBeenCalledWith(error);
     expect(errorService.getErrorMessage).toHaveBeenCalledWith(officeError);
-    expect(popupHelper.storageReportRefreshFinish).toHaveBeenCalledWith(
-      errorMessage,
-      true,
-      2,
-      10,
-    );
+    expect(popupHelper.storageReportRefreshFinish).toHaveBeenCalledWith(errorMessage, true, 2, 10);
   });
   it('handleRefreshError display proper notifications when isRefreshAll is false and error.code is ItemNotFound', () => {
     // given

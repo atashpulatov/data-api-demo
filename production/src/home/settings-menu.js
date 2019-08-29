@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { Popover } from 'antd';
-import { toggleIsConfirmFlag } from '../office/office-actions';
+import { toggleIsConfirmFlag, toggleRenderSettingsFlag } from '../office/office-actions';
 import logo from './assets/mstr_logo.png';
 import { helper } from '../helpers/helpers';
 import { sessionHelper } from '../storage/session-helper';
@@ -11,7 +11,7 @@ import { errorService } from '../error/error-handler';
 const APP_VERSION = process.env.REACT_APP_MSTR_OFFICE_VERSION;
 
 export const _SettingsMenu = ({
-  userFullName, userInitials, isSecured, reportArray, t, toggleIsConfirmFlag,
+  userFullName, userInitials, isSecured, reportArray, t, toggleIsConfirmFlag, toggleRenderSettingsFlag,
 }) => {
   const userNameDisplay = userFullName || 'MicroStrategy user';
   const isSecuredActive = !isSecured && reportArray && reportArray.length > 0;
@@ -53,7 +53,12 @@ export const _SettingsMenu = ({
       <li tabIndex="0" className={`no-trigger-close clear-data ${!isSecuredActive ? 'clear-data-inactive' : ''}`} onClick={isSecuredActive ? () => toggleIsConfirmFlag(true) : null}>
         <span className="no-trigger-close">
           {t('Clear Data')}
-          {' '}
+        </span>
+      </li>
+      <div className="separate-line" />
+      <li tabIndex="0" className="no-trigger-close settings" onClick={() => toggleRenderSettingsFlag(true)}>
+        <span className="no-trigger-close">
+          {t('Settings')}
         </span>
       </li>
       <div className="separate-line" />
@@ -119,6 +124,7 @@ function mapStateToProps({ sessionReducer, officeReducer }) {
 
 const mapDispatchToProps = {
   toggleIsConfirmFlag,
+  toggleRenderSettingsFlag,
 };
 
 export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_SettingsMenu));
