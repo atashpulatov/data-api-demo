@@ -2,7 +2,6 @@ import * as actions from '../../popup/popup-actions';
 import { popupHelper } from '../../popup/popup-helper';
 import { officeApiHelper } from '../../office/office-api-helper';
 import { authenticationHelper } from '../../authentication/authentication-helper';
-import { UnauthorizedError } from '../../error/unauthorized-error';
 import { officeProperties } from '../../office/office-properties';
 import { officeStoreService } from '../../office/store/office-store-service';
 import { popupController } from '../../popup/popup-controller';
@@ -103,7 +102,7 @@ describe('Popup actions', () => {
         response: 'testResponse',
         message: 'testMessage',
       };
-      popupHelper.printRefreshedReport = jest.fn().mockRejectedValue(new UnauthorizedError(mockErrorObject));
+      popupHelper.printRefreshedReport = jest.fn().mockRejectedValue(mockErrorObject);
       popupHelper.handleRefreshError = jest.fn();
       const listener = jest.fn();
       const reportArray = [
@@ -116,7 +115,7 @@ describe('Popup actions', () => {
       // when
       try {
         await actions.refreshReportsArray(reportArray, false)(listener);
-      } catch (error) {}
+      } catch (error) { }
       // then
       expect(popupHelper.handleRefreshError).toHaveBeenCalledWith(mockErrorObject, 1, 0, false);
     });

@@ -67,8 +67,8 @@ describe('Popup actions', () => {
   });
   it('storagePrepareRefreshAllData should write all rrefreshed eports data to localstorage', () => {
     // given
-    const mockStorageRemoveItem = jest.spyOn(localStorage, 'removeItem').mockImplementation(() => {});
-    const mockStorageSetItem = jest.spyOn(localStorage, 'setItem').mockImplementation(() => {});
+    const mockStorageRemoveItem = jest.spyOn(localStorage, 'removeItem').mockImplementation(() => { });
+    const mockStorageSetItem = jest.spyOn(localStorage, 'setItem').mockImplementation(() => { });
     const reportArray = [{
       bindId: 'testBinding1',
       name: 'testNamne1',
@@ -104,7 +104,7 @@ describe('Popup actions', () => {
   it('storageReportRefreshStart should write report refresh data to localstorage', () => {
     // given
     const mockStorageGetItem = jest.spyOn(localStorage, 'getItem').mockImplementation(() => JSON.stringify({}));
-    const mockStorageSetItem = jest.spyOn(localStorage, 'setItem').mockImplementation(() => {});
+    const mockStorageSetItem = jest.spyOn(localStorage, 'setItem').mockImplementation(() => { });
     const refreshReport = {
       name: 'testName',
     };
@@ -141,7 +141,7 @@ describe('Popup actions', () => {
     };
     const index = 0;
     const mockStorageGetItem = jest.spyOn(localStorage, 'getItem').mockImplementation(() => JSON.stringify(refreshData));
-    const mockStorageSetItem = jest.spyOn(localStorage, 'setItem').mockImplementation(() => {});
+    const mockStorageSetItem = jest.spyOn(localStorage, 'setItem').mockImplementation(() => { });
     // when
     popupHelper.storageReportRefreshFinish('ok', false, index, refreshData.data.length);
     // then
@@ -251,8 +251,7 @@ describe('Popup actions', () => {
     // when
     popupHelper.handleRefreshError(error, 10, 2, true);
     // then
-    expect(errorService.errorOfficeFactory).toHaveBeenCalledWith(error);
-    expect(errorService.getErrorMessage).toHaveBeenCalledWith(officeError);
+    expect(errorService.getErrorMessage).toHaveBeenCalledWith(error);
     expect(popupHelper.storageReportRefreshFinish).toHaveBeenCalledWith(errorMessage, true, 2, 10);
   });
   it('handleRefreshError display proper notifications when isRefreshAll is false and error.code is ItemNotFound', () => {
