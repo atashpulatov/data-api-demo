@@ -1,25 +1,25 @@
-import React from "react";
-import { connect } from "react-redux";
-import { Row, Col, Popover } from "antd";
-import { MSTRIcon } from "@mstr/mstr-react-library";
-import { withTranslation } from "react-i18next";
-import { fileHistoryHelper } from "./file-history-helper";
-import loadingSpinner from "./assets/report_loading_spinner.gif";
+import React from 'react';
+import { connect } from 'react-redux';
+import { Row, Col, Popover } from 'antd';
+import { MSTRIcon } from '@mstr/mstr-react-library';
+import { withTranslation } from 'react-i18next';
+import { fileHistoryHelper } from './file-history-helper';
+import loadingSpinner from './assets/report_loading_spinner.gif';
 import {
   refreshReportsArray,
   callForEdit,
-  callForReprompt
-} from "../popup/popup-actions";
-import RenameInput from "./file-history-rename-input";
-import { officeApiHelper } from "../office/office-api-helper";
-import { ButtonPopover } from "./button-popover";
+  callForReprompt,
+} from '../popup/popup-actions';
+import RenameInput from './file-history-rename-input';
+import { officeApiHelper } from '../office/office-api-helper';
+import { ButtonPopover } from './button-popover';
 
 export class _OfficeLoadedFile extends React.Component {
   constructor() {
     super();
     this.state = {
       allowDeleteClick: true,
-      allowRefreshClick: true
+      allowRefreshClick: true,
     };
   }
 
@@ -31,9 +31,11 @@ export class _OfficeLoadedFile extends React.Component {
     this._ismounted = false;
   }
 
-  deleteAction = e => {
+  deleteAction = (e) => {
+    const { allowDeleteClick } = this.state;
+    const { t } = this.props;
     e.stopPropagation();
-    if (!this.state.allowDeleteClick) {
+    if (!allowDeleteClick) {
       return;
     }
     const {
@@ -41,40 +43,44 @@ export class _OfficeLoadedFile extends React.Component {
       bindingId,
       isCrosstab,
       crosstabHeaderDimensions,
-      fileName
+      fileName,
     } = this.props;
     this.setState(
       { allowDeleteClick: false, allowRefreshClick: false },
       async () => {
-        const message = this.props.t(
-          "{{name}} has been removed from the workbook.",
-          { name: fileName }
+        const message = t(
+          '{{name}} has been removed from the workbook.',
+          { name: fileName },
         );
         await fileHistoryHelper.deleteReport(
           onDelete,
           bindingId,
           isCrosstab,
           crosstabHeaderDimensions,
-          message
+          message,
         );
-        this._ismounted &&
-          this.setState({ allowDeleteClick: true, allowRefreshClick: true });
-      }
+        if (this._ismounted) this.setState({ allowDeleteClick: true, allowRefreshClick: true });
+      },
     );
   };
 
-  repromptAction = e => {
+  repromptAction = (e) => {
+    const { allowRefreshClick } = this.state;
     e.stopPropagation();
-    if (!this.state.allowRefreshClick) {
+    if (!allowRefreshClick) {
       return;
     }
-    const { isLoading, bindingId, objectType, callForReprompt } = this.props;
+    const {
+      isLoading, bindingId, objectType,
+    } = this.props;
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
-          // calling onBindingObjectClick to check whether the object exists in Excel before opening prompt popup
-          (await officeApiHelper.onBindingObjectClick(bindingId, false)) &&
-            (await callForReprompt({ bindId: bindingId, objectType }));
+          // calling onBindingObjectClick to check whether the object exists in Excel
+          // before opening prompt popup
+          if (await officeApiHelper.onBindingObjectClick(bindingId, false)) {
+            await callForReprompt({ bindId: bindingId, objectType });
+          }
         } finally {
           this.setState({ allowRefreshClick: true });
         }
@@ -82,18 +88,23 @@ export class _OfficeLoadedFile extends React.Component {
     }
   };
 
-  editAction = e => {
+  editAction = (e) => {
+    const { allowRefreshClick } = this.state;
     e.stopPropagation();
-    if (!this.state.allowRefreshClick) {
+    if (!allowRefreshClick) {
       return;
     }
-    const { isLoading, bindingId, objectType, callForEdit } = this.props;
+    const {
+      isLoading, bindingId, objectType, callForEdit,
+    } = this.props;
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
-          // calling onBindingObjectClick to check whether the object exists in Excel before opening edit data popup
-          (await officeApiHelper.onBindingObjectClick(bindingId, false)) &&
+          // calling onBindingObjectClick to check whether the object exists in Excel
+          // before opening edit data popup
+          if (await officeApiHelper.onBindingObjectClick(bindingId, false)) {
             (await callForEdit({ bindId: bindingId, objectType }));
+          }
         } finally {
           this.setState({ allowRefreshClick: true });
         }
@@ -101,26 +112,28 @@ export class _OfficeLoadedFile extends React.Component {
     }
   };
 
-  refreshAction = e => {
+  refreshAction = (e) => {
     e.stopPropagation();
     const {
       isLoading,
       bindingId,
       objectType,
       refreshReportsArray,
-      loading
+      loading,
     } = this.props;
-    if (!this.state.allowRefreshClick || loading) {
+    const { allowRefreshClick } = this.state;
+    if (!allowRefreshClick || loading) {
       return;
     }
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
-          (await officeApiHelper.onBindingObjectClick(bindingId, false)) &&
+          if (await officeApiHelper.onBindingObjectClick(bindingId, false)) {
             (await refreshReportsArray(
               [{ bindId: bindingId, objectType }],
-              false
+              false,
             ));
+          }
         } finally {
           this.setState({ allowRefreshClick: true });
         }
@@ -128,11 +141,11 @@ export class _OfficeLoadedFile extends React.Component {
     }
   };
 
-  getMstrIcon = objectType => {
+  getMstrIcon = (objectType) => {
     switch (objectType.name) {
-      case "report":
+      case 'report':
         return <MSTRIcon type="report" />;
-      case "dataset":
+      case 'dataset':
         return <MSTRIcon type="dataset" />;
       default:
         break;
@@ -148,7 +161,7 @@ export class _OfficeLoadedFile extends React.Component {
       objectType,
       isPrompted,
       refreshDate,
-      t
+      t,
     } = this.props;
     return (
       <Row
@@ -164,18 +177,18 @@ export class _OfficeLoadedFile extends React.Component {
           <RenameInput bindingId={bindingId} fileName={fileName} />
           <Popover
             placement="bottom"
-            content={t("Date and time of last modification")}
+            content={t('Date and time of last modification')}
             mouseEnterDelay={1}
           >
             <div className="additional-data">
-              {t("refreshed_date", { date: refreshDate })}
+              {t('refreshed_date', { date: refreshDate })}
             </div>
           </Popover>
         </Col>
-        <Col span={1} offset={1} style={{ marginTop: "1px" }}>
+        <Col span={1} offset={1} style={{ marginTop: '1px' }}>
           <Popover
             placement="bottom"
-            content={t("Reprompt")}
+            content={t('Reprompt')}
             mouseEnterDelay={1}
           >
             {!!isPrompted && (
@@ -188,10 +201,10 @@ export class _OfficeLoadedFile extends React.Component {
             )}
           </Popover>
         </Col>
-        <Col span={1} offset={1} style={{ marginTop: "1px" }}>
+        <Col span={1} offset={1} style={{ marginTop: '1px' }}>
           <ButtonPopover
             placement="bottom"
-            content={t("Edit Data")}
+            content={t('Edit Data')}
             mouseEnterDelay={1}
           >
             {
@@ -208,7 +221,7 @@ export class _OfficeLoadedFile extends React.Component {
         <Col span={1} offset={1}>
           <ButtonPopover
             placement="bottom"
-            content={t("Refresh Data")}
+            content={t('Refresh Data')}
             mouseEnterDelay={1}
           >
             {
@@ -224,7 +237,7 @@ export class _OfficeLoadedFile extends React.Component {
                     width="12px"
                     height="12px"
                     src={loadingSpinner}
-                    alt={t("Report loading icon")}
+                    alt={t('Report loading icon')}
                   />
                 )}
               </span>
@@ -234,7 +247,7 @@ export class _OfficeLoadedFile extends React.Component {
         <Col span={1} offset={1}>
           <Popover
             placement="bottomRight"
-            content={t("Remove Data from Workbook")}
+            content={t('Remove Data from Workbook')}
             mouseEnterDelay={1}
             arrowPointAtCenter="true"
           >
@@ -249,22 +262,22 @@ export class _OfficeLoadedFile extends React.Component {
 }
 
 _OfficeLoadedFile.defaultProps = {
-  t: text => text
+  t: (text) => text,
 };
 
 function mapStateToProps(state) {
   return {
-    loading: state.officeReducer.loading
+    loading: state.officeReducer.loading,
   };
 }
 
 const mapDispatchToProps = {
   refreshReportsArray,
   callForEdit,
-  callForReprompt
+  callForReprompt,
 };
 
 export const OfficeLoadedFile = connect(
   mapStateToProps,
-  mapDispatchToProps
-)(withTranslation("common")(_OfficeLoadedFile));
+  mapDispatchToProps,
+)(withTranslation('common')(_OfficeLoadedFile));

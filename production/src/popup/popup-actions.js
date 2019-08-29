@@ -1,29 +1,29 @@
-import { authenticationHelper } from "../authentication/authentication-helper";
-import { officeProperties } from "../office/office-properties";
-import { popupHelper } from "./popup-helper";
-import { officeApiHelper } from "../office/office-api-helper";
-import { officeStoreService } from "../office/store/office-store-service";
-import { popupController } from "./popup-controller";
-import { errorService } from "../error/error-handler";
-import { mstrObjectRestService } from "../mstr-object/mstr-object-rest-service";
+import { authenticationHelper } from '../authentication/authentication-helper';
+import { officeProperties } from '../office/office-properties';
+import { popupHelper } from './popup-helper';
+import { officeApiHelper } from '../office/office-api-helper';
+import { officeStoreService } from '../office/store/office-store-service';
+import { popupController } from './popup-controller';
+import { errorService } from '../error/error-handler';
+import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 
-export const CLEAR_WINDOW = "POPUP_CLOSE_WINDOW";
-export const START_REPORT_LOADING = "START_REPORT_LOADING";
-export const STOP_REPORT_LOADING = "STOP_REPORT_LOADING";
-export const RESET_STATE = "RESET_STATE";
-export const SET_REPORT_N_FILTERS = "SET_REPORT_N_FILTERS";
-export const SET_PREPARED_REPORT = "SET_PREPARED_REPORT";
+export const CLEAR_WINDOW = 'POPUP_CLOSE_WINDOW';
+export const START_REPORT_LOADING = 'START_REPORT_LOADING';
+export const STOP_REPORT_LOADING = 'STOP_REPORT_LOADING';
+export const RESET_STATE = 'RESET_STATE';
+export const SET_REPORT_N_FILTERS = 'SET_REPORT_N_FILTERS';
+export const SET_PREPARED_REPORT = 'SET_PREPARED_REPORT';
 // export const PRELOAD = 'PRELOAD';
 
 export function callForEdit(reportParams) {
-  return async dispatch => {
+  return async (dispatch) => {
     try {
       await Promise.all([
         officeApiHelper.getExcelSessionStatus(),
-        authenticationHelper.validateAuthToken()
+        authenticationHelper.validateAuthToken(),
       ]);
       const editedReport = officeStoreService.getReportFromProperties(
-        reportParams.bindId
+        reportParams.bindId,
       );
       if (editedReport.isPrompted) {
         let instanceDefinition = await mstrObjectRestService.createInstance(
@@ -31,7 +31,7 @@ export function callForEdit(reportParams) {
           editedReport.projectId,
           true,
           null,
-          null
+          null,
         );
         let count = 0;
         while (instanceDefinition.status === 2) {
@@ -39,7 +39,7 @@ export function callForEdit(reportParams) {
             editedReport.id,
             editedReport.projectId,
             instanceDefinition.instanceId,
-            editedReport.promptsAnswers[count]
+            editedReport.promptsAnswers[count],
           );
           instanceDefinition = await mstrObjectRestService.getInstance(
             editedReport.id,
@@ -47,7 +47,7 @@ export function callForEdit(reportParams) {
             true,
             null,
             editedReport.body,
-            instanceDefinition.instanceId
+            instanceDefinition.instanceId,
           );
           count++;
         }
@@ -56,7 +56,7 @@ export function callForEdit(reportParams) {
 
       dispatch({
         type: SET_REPORT_N_FILTERS,
-        editedReport
+        editedReport,
       });
       popupController.runEditFiltersPopup(reportParams);
     } catch (error) {
@@ -66,19 +66,19 @@ export function callForEdit(reportParams) {
 }
 
 export function callForReprompt(reportParams) {
-  return async dispatch => {
+  return async (dispatch) => {
     try {
       await Promise.all([
         officeApiHelper.getExcelSessionStatus(),
-        authenticationHelper.validateAuthToken()
+        authenticationHelper.validateAuthToken(),
       ]);
       const editedReport = officeStoreService.getReportFromProperties(
-        reportParams.bindId
+        reportParams.bindId,
       );
       editedReport.isPrompted = true;
       dispatch({
         type: SET_REPORT_N_FILTERS,
-        editedReport
+        editedReport,
       });
       popupController.runRepromptPopup(reportParams);
     } catch (error) {
@@ -88,20 +88,19 @@ export function callForReprompt(reportParams) {
 }
 
 export function preparePromptedReport(instanceId, reportData) {
-  return dispatch =>
-    dispatch({
-      type: SET_PREPARED_REPORT,
-      instanceId,
-      reportData
-    });
+  return (dispatch) => dispatch({
+    type: SET_PREPARED_REPORT,
+    instanceId,
+    reportData,
+  });
 }
 
 export function refreshReportsArray(reportArray, isRefreshAll) {
-  return async dispatch => {
+  return async (dispatch) => {
     try {
       await Promise.all([
         officeApiHelper.getExcelSessionStatus(),
-        authenticationHelper.validateAuthToken()
+        authenticationHelper.validateAuthToken(),
       ]);
     } catch (error) {
       return errorService.handleError(error);
@@ -117,7 +116,7 @@ export function refreshReportsArray(reportArray, isRefreshAll) {
         dispatch({
           type: officeProperties.actions.startLoadingReport,
           reportBindId: report.bindId,
-          isRefreshAll
+          isRefreshAll,
         });
         isError = await popupHelper.printRefreshedReport(
           report.bindId,
@@ -125,14 +124,14 @@ export function refreshReportsArray(reportArray, isRefreshAll) {
           reportArray.length,
           index,
           isRefreshAll,
-          report.promptsAnswers
+          report.promptsAnswers,
         );
       } catch (error) {
         popupHelper.handleRefreshError(
           error,
           reportArray.length,
           index,
-          isRefreshAll
+          isRefreshAll,
         );
         return true;
       } finally {
@@ -140,7 +139,7 @@ export function refreshReportsArray(reportArray, isRefreshAll) {
           type: officeProperties.actions.finishLoadingReport,
           reportBindId: report.bindId,
           isRefreshAll: false,
-          isError
+          isError,
         });
       }
     }
@@ -148,13 +147,12 @@ export function refreshReportsArray(reportArray, isRefreshAll) {
 }
 
 export function resetState() {
-  return dispatch =>
-    dispatch({
-      type: RESET_STATE
-    });
+  return (dispatch) => dispatch({
+    type: RESET_STATE,
+  });
 }
 
 export const actions = {
   refreshReportsArray,
-  resetState
+  resetState,
 };

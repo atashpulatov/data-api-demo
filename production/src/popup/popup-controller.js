@@ -1,22 +1,22 @@
-import { objectTypes } from "@mstr/mstr-react-library";
-import { selectorProperties } from "../attribute-selector/selector-properties";
-import { officeDisplayService } from "../office/office-display-service";
-import { PopupTypeEnum } from "../home/popup-type-enum";
-import { sessionHelper } from "../storage/session-helper";
-import { notificationService } from "../notification/notification-service";
-import { reduxStore } from "../store";
+import { objectTypes } from '@mstr/mstr-react-library';
+import { selectorProperties } from '../attribute-selector/selector-properties';
+import { officeDisplayService } from '../office/office-display-service';
+import { PopupTypeEnum } from '../home/popup-type-enum';
+import { sessionHelper } from '../storage/session-helper';
+import { notificationService } from '../notification/notification-service';
+import { reduxStore } from '../store';
 import {
   CLEAR_WINDOW,
   refreshReportsArray,
   START_REPORT_LOADING,
-  STOP_REPORT_LOADING
-} from "./popup-actions";
-import { errorService } from "../error/error-handler";
-import { authenticationHelper } from "../authentication/authentication-helper";
-import { officeProperties } from "../office/office-properties";
-import { officeApiHelper } from "../office/office-api-helper";
-import { MstrObjectType } from "../mstr-object/mstr-object-type-enum";
-import { officeStoreService } from "../office/store/office-store-service";
+  STOP_REPORT_LOADING,
+} from './popup-actions';
+import { errorService } from '../error/error-handler';
+import { authenticationHelper } from '../authentication/authentication-helper';
+import { officeProperties } from '../office/office-properties';
+import { officeApiHelper } from '../office/office-api-helper';
+import MstrObjectType from '../mstr-object/mstr-object-type-enum';
+import { officeStoreService } from '../office/store/office-store-service';
 
 const URL = `${window.location.href}`;
 
@@ -27,11 +27,11 @@ class PopupController {
     await this.runPopup(PopupTypeEnum.navigationTree, 80, 80);
   };
 
-  runEditFiltersPopup = async reportParams => {
+  runEditFiltersPopup = async (reportParams) => {
     await this.runPopup(PopupTypeEnum.editFilters, 80, 80, reportParams);
   };
 
-  runRepromptPopup = async reportParams => {
+  runRepromptPopup = async (reportParams) => {
     await this.runPopup(PopupTypeEnum.repromptingWindow, 80, 80, reportParams);
   };
 
@@ -49,32 +49,32 @@ class PopupController {
     // } else {
     // url = url.replace('index.html', 'popup.html');
     // }
-    const splittedUrl = url.split("?"); // we need to get rid of any query params
+    const splittedUrl = url.split('?'); // we need to get rid of any query params
     try {
       await officeApiHelper.getExcelSessionStatus();
       Office.context.ui.displayDialogAsync(
         `${splittedUrl[0]}?popupType=${popupType}&envUrl=${session.url}`,
         { height, width, displayInIframe: true },
-        asyncResult => {
+        (asyncResult) => {
           const dialog = asyncResult.value;
           sessionHelper.setDialog(dialog);
           dialog.addEventHandler(
             Office.EventType.DialogMessageReceived,
-            this.onMessageFromPopup.bind(null, dialog, reportParams)
+            this.onMessageFromPopup.bind(null, dialog, reportParams),
           );
           reduxStore.dispatch({ type: CLEAR_WINDOW });
           dialog.addEventHandler(
             // Event received on dialog close
             Office.EventType.DialogEventReceived,
-            event => {
+            () => {
               reduxStore.dispatch({
-                type: officeProperties.actions.popupHidden
+                type: officeProperties.actions.popupHidden,
               });
-            }
+            },
           );
 
           reduxStore.dispatch({ type: officeProperties.actions.popupShown });
-        }
+        },
       );
     } catch (error) {
       errorService.handleError(error);
@@ -93,12 +93,12 @@ class PopupController {
             await this.handleOkCommand(response, reportParams);
           } else {
             const reportPreviousState = this._getReportsPreviousState(
-              reportParams
+              reportParams,
             );
             await this.saveReportWithParams(
               reportParams,
               response,
-              reportPreviousState
+              reportPreviousState,
             );
           }
           break;
@@ -107,12 +107,12 @@ class PopupController {
             await this.handleUpdateCommand(response);
           } else {
             const reportPreviousState = this._getReportsPreviousState(
-              reportParams
+              reportParams,
             );
             await this.saveReportWithParams(
               reportParams,
               response,
-              reportPreviousState
+              reportPreviousState,
             );
           }
           break;
@@ -142,12 +142,12 @@ class PopupController {
     reportName,
     promptsAnswers,
     isPrompted,
-    instanceId
+    instanceId,
   }) => {
     if (reportId && projectId && reportSubtype && body && reportName) {
       reduxStore.dispatch({
         type: START_REPORT_LOADING,
-        data: { name: reportName }
+        data: { name: reportName },
       });
       const options = {
         isPrompted,
@@ -157,7 +157,7 @@ class PopupController {
         projectId,
         instanceId,
         mstrObjectType: MstrObjectType.getMstrTypeBySubtype(reportSubtype),
-        body
+        body,
       };
       const result = await officeDisplayService.printObject(options);
       if (result) {
@@ -175,15 +175,15 @@ class PopupController {
       chosenSubtype,
       isPrompted,
       promptsAnswers,
-      reportName
+      reportName,
     },
-    bindingId
+    bindingId,
   ) => {
     if (chosenObject) {
       reduxStore.dispatch({ type: officeProperties.actions.startLoading });
       reduxStore.dispatch({
         type: START_REPORT_LOADING,
-        data: { name: reportName }
+        data: { name: reportName },
       });
       const options = {
         dossierData,
@@ -193,7 +193,7 @@ class PopupController {
         bindingId,
         isRefresh: false,
         isPrompted,
-        promptsAnswers
+        promptsAnswers,
       };
       const result = await officeDisplayService.printObject(options);
       if (result) {
@@ -203,51 +203,51 @@ class PopupController {
     }
   };
 
-  loadPending = wrapped => async (...args) => {
+  loadPending = (wrapped) => async (...args) => {
     this.runPopup(PopupTypeEnum.loadingPage, 30, 40);
     return await wrapped(...args);
   };
 
-  closeDialog = dialog => {
+  closeDialog = (dialog) => {
     try {
       return dialog.close();
     } catch (e) {
-      console.log("Attempted to close an already closed dialog");
+      console.log('Attempted to close an already closed dialog');
     }
   };
 
-  _getReportsPreviousState(reportParams) {
+  _getReportsPreviousState = (reportParams) => {
     const currentReportArray = reduxStore.getState().officeReducer.reportArray;
     const indexOfOriginalValues = currentReportArray.findIndex(
-      report => report.bindId === reportParams.bindId
+      (report) => report.bindId === reportParams.bindId,
     );
     const originalValues = currentReportArray[indexOfOriginalValues];
     return { ...originalValues };
   }
 
-  async saveReportWithParams(reportParams, response, reportPreviousState) {
+  saveReportWithParams = async (reportParams, response, reportPreviousState) => {
     await officeStoreService.preserveReportValue(
       reportParams.bindId,
-      "body",
-      response.body
+      'body',
+      response.body,
     );
     if (response.promptsAnswers) {
       // Include new promptsAnswers in case of Re-prompt workflow
       reportParams.promptsAnswers = response.promptsAnswers;
       await officeStoreService.preserveReportValue(
         reportParams.bindId,
-        "promptsAnswers",
-        response.promptsAnswers
+        'promptsAnswers',
+        response.promptsAnswers,
       );
     }
     const isErrorOnRefresh = await refreshReportsArray([reportParams], false)(
-      reduxStore.dispatch
+      reduxStore.dispatch,
     );
     if (isErrorOnRefresh) {
       await officeStoreService.preserveReportValue(
         reportParams.bindId,
-        "body",
-        reportPreviousState.body
+        'body',
+        reportPreviousState.body,
       );
     }
   }
