@@ -22,7 +22,13 @@ export class Popup extends Component {
     libraryErrorController.initializeHttpErrorsHandling(this.handlePopupErrors);
   }
 
-  handlePrepare = (projectId, reportId, reportSubtype, reportName, reportType) => {
+  handlePrepare = (
+    projectId,
+    reportId,
+    reportSubtype,
+    reportName,
+    reportType,
+  ) => {
     this.setState({
       mstrData: {
         ...this.state.mstrData,
@@ -38,16 +44,19 @@ export class Popup extends Component {
   };
 
   handleBack = (projectId, reportId, reportSubtype, forceChange = false) => {
-    this.setState({
-      mstrData: {
-        ...this.state.mstrData,
-        popupType: PopupTypeEnum.navigationTree,
-        forceChange,
-        projectId,
-        reportId,
-        reportSubtype,
+    this.setState(
+      {
+        mstrData: {
+          ...this.state.mstrData,
+          popupType: PopupTypeEnum.navigationTree,
+          forceChange,
+          projectId,
+          reportId,
+          reportSubtype,
+        },
       },
-    }, () => reduxStore.dispatch({ type: CLEAR_PROMPTS_ANSWERS }));
+      () => reduxStore.dispatch({ type: CLEAR_PROMPTS_ANSWERS }),
+    );
   };
 
   handlePopupErrors = (error) => {
@@ -55,7 +64,9 @@ export class Popup extends Component {
       command: selectorProperties.commandError,
       error,
     };
-    officeContext.getOffice().context.ui.messageParent(JSON.stringify(messageObject));
+    officeContext
+      .getOffice()
+      .context.ui.messageParent(JSON.stringify(messageObject));
   };
 
   render() {
@@ -65,7 +76,17 @@ export class Popup extends Component {
       handleBack: this.handleBack,
       handlePopupErrors: this.handlePopupErrors,
     };
-    i18next.changeLanguage(i18next.options.resources[Office.context.displayLanguage] ? Office.context.displayLanguage : 'en-US');
-    return (<PopupViewSelector popupType={popupType} propsToPass={propsToPass} methods={methods} />);
+    i18next.changeLanguage(
+      i18next.options.resources[Office.context.displayLanguage]
+        ? Office.context.displayLanguage
+        : 'en-US',
+    );
+    return (
+      <PopupViewSelector
+        popupType={popupType}
+        propsToPass={propsToPass}
+        methods={methods}
+      />
+    );
   }
 }
