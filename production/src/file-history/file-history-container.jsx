@@ -139,7 +139,7 @@ export class _FileHistoryContainer extends React.Component {
         <Button
           id="add-data-btn-container"
           className="add-data-btn floating-button"
-          onClick={addDataAction()}
+          onClick={() => addDataAction()}
           disabled={loading}
         >
           {t('Add Data')}
