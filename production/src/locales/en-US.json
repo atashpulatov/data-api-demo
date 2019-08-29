@@ -166,5 +166,14 @@
   "Click to Show a Taskpane": "Click to Show a Taskpane",
   "New plugin to insert data from Microstrategy into Microsoft Office products.": "New plugin to insert data from Microstrategy into Microsoft Office products.",
   "MicroStrategy for Office": "MicroStrategy for Office",
-  "Let's get started BLABLABLA": "Let's get started BLABLABLA"
+  "This report does not exist in the workbook anymore": "This report does not exist in the workbook anymore",
+  "{{name}} has been removed from the workbook.": "{{name}} has been removed from the workbook.",
+  "This is a crosstab report. The layout of the table might change depending on the attributes you’ve selected.": "This is a crosstab report. The layout of the table might change depending on the attributes you’ve selected.",
+  "{{fileName}} has been removed from the workbook.": "{{fileName}} has been removed from the workbook.",
+  "Parameter out of range": "Parameter out of range",
+  "This is a crosstab report. The layout of the table might change depending on the attributes you’ve selected. See Data Preview.": "This is a crosstab report. The layout of the table might change depending on the attributes you’ve selected. See Data Preview.",
+  "Element cannot be loaded": "Element cannot be loaded",
+  "Clearing data": "Clearing data",
+  "{{reportNames}} could not be cleared.": "{{reportNames}} could not be cleared.",
+  "Invalid attempt to spread non-iterable instance": "Invalid attempt to spread non-iterable instance"
 }
