@@ -248,7 +248,7 @@ describe('PopupController', () => {
     expect(notifySpy).toBeCalledWith(
       'warning',
       'The endpoint cannot be reached',
-      undefined,
+      '',
     );
     expect(dialog.close).toBeCalled();
   });
