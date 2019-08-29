@@ -1,7 +1,7 @@
 import { sessionHelper } from '../storage/session-helper';
 import { notificationService } from '../notification/notification-service.js';
 import {
-  errorTypes, httpStatusToErrorType, officeMessageToErrorType, errorMessageFactory,
+  errorTypes, httpStatusToErrorType, stringMessageToErrorType, errorMessageFactory,
 } from './constants';
 
 const TIMEOUT = 2000;
@@ -37,7 +37,7 @@ class ErrorService {
 
   getOfficeErrorType = (error) => {
     if (error.name === 'RichApi.Error') {
-      return officeMessageToErrorType[error.message];
+      return stringMessageToErrorType[error.message];
     }
     return null;
   }
