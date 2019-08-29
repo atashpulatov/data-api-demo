@@ -16,7 +16,7 @@ export default class _DossierWindow extends React.Component {
 
   render() {
     const {
-      dossierName, handleBack, t,
+      dossierName, handleBack, t, isVisualisationSelected,
     } = this.props;
     return (
       <div>
@@ -25,6 +25,8 @@ export default class _DossierWindow extends React.Component {
         <PopupButtons
           handleBack={handleBack}
           handleCancel={this.handleCancel}
+          hideSecondary
+          disableActiveActions={!isVisualisationSelected}
         />
       </div>
     );
@@ -36,6 +38,7 @@ _DossierWindow.propTypes = {
   dossierName: PropTypes.string,
   handleBack: PropTypes.func,
   t: PropTypes.func,
+  isVisualisationSelected: PropTypes.bool,
 };
 
 _DossierWindow.defaultProps = {
@@ -43,6 +46,7 @@ _DossierWindow.defaultProps = {
   dossierName: 'testingName',
   handleBack: () => { },
   t: (text) => text,
+  isVisualisationSelected: false,
 };
 
 export const DossierWindow = connect()(withTranslation('common')(_DossierWindow));
