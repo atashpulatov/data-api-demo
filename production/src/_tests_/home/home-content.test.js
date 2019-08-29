@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import { Provider } from 'react-redux';
-import HomeContent from '../../home/page-builder';
+import HomeContent from '../../home/home-content';
 // TODO: get rid of Provider and reduxStore - everything should be mocked.
 //  Using right now, as children components require store. They should be mocked as well
 import { reduxStore } from '../../store';

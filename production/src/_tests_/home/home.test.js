@@ -7,7 +7,7 @@ import { sessionHelper } from '../../storage/session-helper';
 import { officeApiHelper } from '../../office/office-api-helper';
 import { reduxStore } from '../../store';
 import { homeHelper } from '../../home/home-helper';
-import HomeContent from '../../home/page-builder';
+import HomeContent from '../../home/home-content';
 import { SettingsMenu } from '../../home/settings-menu';
 
 jest.mock('../../storage/session-helper');

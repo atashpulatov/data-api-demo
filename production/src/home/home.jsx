@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import './home.css';
 import { withTranslation } from 'react-i18next';
 import { sessionHelper } from '../storage/session-helper';
-import HomeContent from './page-builder';
+import HomeContent from './home-content';
 import { officeApiHelper } from '../office/office-api-helper';
 import { homeHelper } from './home-helper';
 import { toggleRenderSettingsFlag } from '../office/office-actions';
