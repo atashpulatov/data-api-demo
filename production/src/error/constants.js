@@ -16,16 +16,18 @@ export const errorTypes = {
   GENERIC_OFFICE_ERR: 'genericOffice',
 };
 
-const incomingErrorStrings = {
+export const incomingErrorStrings = {
   EXCEL_NOT_DEFINED: 'Excel is not defined',
   TABLE_OVERLAP: 'A table can\'t overlap another table. ',
   BINDING_NOT_VALID: 'This object binding is no longer valid due to previous updates.',
+  CONNECTION_BROKEN: 'Possible causes: the network is offline,',
 };
 
 export const stringMessageToErrorType = withDefaultValue({
   [incomingErrorStrings.EXCEL_NOT_DEFINED]: errorTypes.RUN_OUTSIDE_OFFICE_ERR,
   [incomingErrorStrings.TABLE_OVERLAP]: errorTypes.OVERLAPPING_TABLES_ERR,
   [incomingErrorStrings.BINDING_NOT_VALID]: errorTypes.TABLE_REMOVED_FROM_EXCEL_ERR,
+  [incomingErrorStrings.CONNECTION_BROKEN]: errorTypes.CONNECTION_BROKEN_ERR,
 }, errorTypes.GENERIC_OFFICE_ERR);
 
 export const httpStatusToErrorType = withDefaultValue({

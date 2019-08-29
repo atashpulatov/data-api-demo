@@ -1,7 +1,11 @@
 import { sessionHelper } from '../storage/session-helper';
 import { notificationService } from '../notification/notification-service.js';
 import {
-  errorTypes, httpStatusToErrorType, stringMessageToErrorType, errorMessageFactory,
+  errorTypes,
+  httpStatusToErrorType,
+  stringMessageToErrorType,
+  errorMessageFactory,
+  incomingErrorStrings,
 } from './constants';
 
 const TIMEOUT = 2000;
@@ -44,7 +48,7 @@ class ErrorService {
 
   getRestErrorType = (error) => {
     if (!error.status && !error.response) {
-      if (error.message && error.message.includes('Possible causes: the network is offline,')) {
+      if (error.message && error.message.includes(incomingErrorStrings.CONNECTION_BROKEN)) {
         return errorTypes.CONNECTION_BROKEN_ERR;
       }
       return null;
