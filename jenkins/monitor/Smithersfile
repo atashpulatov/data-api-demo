@@ -1,15 +1,17 @@
-job 'stage-1-dev' do
-  description 'the first stage in the pipeline
-designed to complete quickly, < 10 mins
-produces and publishes a versioned deployment package'
+job 'stage-0-monitor' do
+  description 'monitor String DB change'
 
   configure_common_items{}
 
   assigned_node_string 'amazon_linux'
 
   triggers do
-    scm_polling do
-      set_to_every_minute
+    timer_trigger do
+      minute 'H'
+      hour '*/1'
+      month '*'
+      day_of_week '*'
+      day_of_month '*'
     end
   end
 
@@ -21,11 +23,9 @@ set +xe
 export PATH=/usr/local/sbin:/usr/local/bin:$PATH
 
 export WORKSPACE_SETTING=aws_dev
-
 source .ecosystem
-export HATS=$HATS:rallytask
-rake generate_localization_strings upload_plugins update_dep_db_from_file
-rake update_ready_for_pr
+
+rake monitor_DB_change
 '
     end
   end
@@ -47,12 +47,13 @@ rake update_ready_for_pr
     #   index_file_name 'index.html'
     # end
 
-    parameterized_trigger do
-      job_short_names %w{
-        stage-2-regression-test
-      }
-    end
+    #parameterized_trigger do
+    #  job_short_names %w{
+    #    stage-2-regression-test
+    #  }
+    #end
   end
 
 end
- 
+
+

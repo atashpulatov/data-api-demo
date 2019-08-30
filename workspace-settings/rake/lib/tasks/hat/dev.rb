@@ -3,8 +3,97 @@ require 'common/version'
 require 'json'
 require 'nokogiri'
 require 'github'
+require 'localization/generator'
+require 'json'
 
 include ShellHelper::Shell
+
+@string_file_path_base = "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/src/locales"
+
+desc "generate local strings"
+task :generate_localization_strings do
+  database = 'EXCEL'
+  default_lan = 'English'
+  languages = {
+    English:            'en-US',
+    Francais:           'fr-FR',
+    Deutsch:            'de-DE',
+    Danish:             'da-DK',
+    Dutch:              'nl-NL',
+    Espanol_Espana:     'es-ES',
+    Svenska:            'sv-SE',
+    Italiano:           'it-IT',
+    Portuguese_Brazil:  'pt-BR',
+    Japanese:           'ja-JP',
+    Korean:             'ko-KR',
+    Chinese:            'zh-CN',
+    Trad_Chinese:       'zh-TW'
+  }
+
+  Localization::Generator.generate_string(database)
+  connect =  Sequel.sqlite("#{$WORKSPACE_SETTINGS[:paths][:organization][:home]}/ProductStrings/#{database}/#{database}.db")
+
+  translated_strings = Hash.new
+  languages.each do |lan, short_lan|
+    translated_strings[lan] = Hash.new
+  end
+
+  strings = connect[:Strings]
+
+  strings.each{|string|
+    languages.each do |lan, short_lan|
+      key = string["String_#{default_lan}".to_sym]
+      value = string["String_#{lan}".to_sym]
+      if value.nil?
+        translated_strings[lan][key] = key
+      else
+        translated_strings[lan][key] = value
+      end
+    end
+  }
+
+  translated_strings_default = translated_strings[default_lan.to_sym]
+
+
+  languages.each do |lan, short_lan|
+    string_file_path = File.join(@string_file_path_base, "#{short_lan}.json")
+
+    translated_strings_lan =  translated_strings[lan]
+    string_file = File.open(string_file_path, 'w')
+    string_file.write(JSON.pretty_generate(translated_strings_lan))
+    string_file.close
+  end
+
+end
+
+desc "monitor DB change"
+task :monitor_DB_change  => [:generate_localization_strings] do
+  puts "Monitor DB change"
+  diff_file = "strings_diff.txt"
+
+  shell_command! "git config user.email \"jenkins@microstrategy.com\"", cwd: $WORKSPACE_SETTINGS[:paths][:project][:home]
+  shell_command! "git config user.name \"Jenkins Vagrant\"", cwd: $WORKSPACE_SETTINGS[:paths][:project][:home]
+
+  shell_command! "git checkout #{Common::Version.application_branch}", cwd: $WORKSPACE_SETTINGS[:paths][:project][:home]
+  shell_command! "git pull", cwd: $WORKSPACE_SETTINGS[:paths][:project][:home]
+
+  shell_command!(
+    "git diff -c #{@string_file_path_base} > #{diff_file}",
+    cwd:"#{$WORKSPACE_SETTINGS[:paths][:project][:home]}"
+  )
+
+  diff = File.read("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/#{diff_file}")
+  if not diff.eql?('')
+      shell_command!(
+        "git commit -m \"update strings\" -- #{@string_file_path_base}",
+        cwd:"#{$WORKSPACE_SETTINGS[:paths][:project][:home]}"
+      )
+      shell_command!(
+        "git push origin #{Git.branch_name}",
+        cwd:"#{$WORKSPACE_SETTINGS[:paths][:project][:home]}"
+      )
+  end
+end
 
 desc "build project in #{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/build"
 task :build do
