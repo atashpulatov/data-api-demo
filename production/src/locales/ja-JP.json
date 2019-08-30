@@ -146,7 +146,7 @@
   "Show less": "簡易表示",
   "Version": "バージョン",
   "Refresh failed icon": "更新失敗アイコン",
-  "In order to re-import the data, you will have to click the <span>View Data</span> button, which will appear in the add-in panel.": "データを再度インポートするためには、[<span>View Data</span>]ボタンをクリックする必要があります。これは、アドイン パネルに表示されます。",
+  "In order to re-import the data, you will have to click the <span>View Data</span> button, which will appear in the add-in panel.": "データを再度インポートするためには、[<span>View Data</span>]ボタンをクリックする必要があります。これは、デアドイン パネルに表示されます。",
   "This removes all MicroStrategy data from the workbook.": "これにより、すべてのMicroStrategyデータがワークブックから削除されます。",
   "Are you sure you want to <span>Clear Data</span>?": "<span>データをクリアー</span>してもよろしいですか?",
   "Clear Data": "データをクリアー",
@@ -163,7 +163,7 @@
   "You haven't imported any reports or datasets yet. Import data to start!": "まだレポートやデータセットをインポートしていません。データのインポートを始めましょう。",
   "MicroStrategy for Office loaded": "MicroStrategy for Officeがロードされました",
   "Click MicroStrategy for Office on Home tab to start plugin. Log in to Environment to start browsing documents.": "[Home]タブの[MicroStrategy for Office]をクリックしてプラグインを開始します。環境にログインしてドキュメントの閲覧を開始します。",
-  "Click to Show a Taskpane": "[Show a Taskpane]をクリック",
+  "Click to Show a Taskpane": "[作業ウィンドウ]をクリック",
   "New plugin to insert data from Microstrategy into Microsoft Office products.": "MicrostrategyからMicrosoft Office製品にデータを挿入するための新しいプラグイン。",
   "MicroStrategy for Office": "MicroStrategy for Office",
   "This report does not exist in the workbook anymore": "このレポートは今後このワークブックに存在しなくなります。",
@@ -174,6 +174,6 @@
   "This is a crosstab report. The layout of the table might change depending on the attributes you’ve selected. See Data Preview.": "これはクロス集計表レポートです。選択したアトリビュートによっては、テーブルのレイアウトが変更される場合があります。データ プレビューを参照してください。",
   "Element cannot be loaded": "エレメントを読み込めません",
   "Clearing data": "データをクリアーしています",
-  "{{reportNames}} could not be cleared.": "{{reportNames}}をクリアーできませんでした。",
+  "{{reportNames}} could not be cleared.": "{{reportNames}}をクリアできませんでした。",
   "Invalid attempt to spread non-iterable instance": "反復不可能なインスタンスを広めようとする試みが無効です"
 }
