@@ -1,4 +1,3 @@
-import { errorService } from '../error/error-handler';
 import { OutsideOfRangeError } from '../error/outside-of-range-error';
 import { reduxStore } from '../store';
 import { moduleProxy } from '../module-proxy';
