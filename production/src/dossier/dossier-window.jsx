@@ -16,12 +16,13 @@ export default class _DossierWindow extends React.Component {
 
   render() {
     const {
-      dossierName, handleBack, t, isVisualisationSelected,
+      dossierId, dossierName, handleBack, t, isVisualisationSelected,
     } = this.props;
+    console.log('dossierId:', dossierId);
     return (
       <div>
         <h1 title={dossierName} className="ant-col folder-browser-title">{`${t('Import Dossier')} > ${dossierName}`}</h1>
-        {/* TODO:  Insert  dossier iframe for embeded API */}
+        {/* TODO:  Insert  dossier iframe for embeded API by using dossierId */}
         <PopupButtons
           handleBack={handleBack}
           handleCancel={this.handleCancel}
@@ -34,7 +35,7 @@ export default class _DossierWindow extends React.Component {
 }
 
 _DossierWindow.propTypes = {
-  // TODO: dossierId: PropTypes.number,
+  dossierId: PropTypes.string,
   dossierName: PropTypes.string,
   handleBack: PropTypes.func,
   t: PropTypes.func,
@@ -42,11 +43,19 @@ _DossierWindow.propTypes = {
 };
 
 _DossierWindow.defaultProps = {
-  // TODO: dossierId: 1234,
+  dossierId: '1234ABCD',
   dossierName: 'testingName',
   handleBack: () => { },
   t: (text) => text,
   isVisualisationSelected: false,
 };
 
-export const DossierWindow = connect()(withTranslation('common')(_DossierWindow));
+function mapStateToProps(state) {
+  const { chosenObjectId, chosenProjectName } = state.navigationTree;
+  return {
+    dossierId: chosenObjectId,
+    dossierName: chosenProjectName,
+  };
+}
+
+export const DossierWindow = connect(mapStateToProps)(withTranslation('common')(_DossierWindow));
