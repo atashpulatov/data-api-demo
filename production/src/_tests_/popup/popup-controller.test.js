@@ -244,8 +244,10 @@ describe('PopupController', () => {
     // when
     await popupController.onMessageFromPopup(dialog, null, givenArg);
     // then
-    expect(handleErrorSpy).toBeCalledWith(error, false);
-    expect(notifySpy).toBeCalledWith('warning', 'The endpoint cannot be reached', '');
+    expect(handleErrorSpy).toBeCalledWith(error);
+    expect(notifySpy).toBeCalledWith({
+      type: 'warning', content: 'The endpoint cannot be reached', details: '', onConfirm: null,
+    });
     expect(dialog.close).toBeCalled();
   });
 });

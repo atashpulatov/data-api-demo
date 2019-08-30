@@ -27,6 +27,20 @@ export class _OfficeLoadedFile extends React.Component {
     this._ismounted = false;
   }
 
+  deleteReport = async () => {
+    const {
+      onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, fileName, t,
+    } = this.props;
+    const message = t('{{name}} has been removed from the workbook.', { name: fileName });
+    await fileHistoryHelper.deleteReport(
+      onDelete,
+      bindingId,
+      isCrosstab,
+      crosstabHeaderDimensions,
+      message,
+    );
+  }
+
   deleteAction = (e) => {
     e.stopPropagation();
     if (!this.state.allowDeleteClick) {
@@ -54,7 +68,7 @@ export class _OfficeLoadedFile extends React.Component {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
           // calling onBindingObjectClick to check whether the object exists in Excel before opening prompt popup
-          await officeApiHelper.onBindingObjectClick(bindingId, false) && await callForReprompt({ bindId: bindingId, objectType });
+          await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport) && await callForReprompt({ bindId: bindingId, objectType });
         } finally {
           this.setState({ allowRefreshClick: true });
         }
@@ -74,7 +88,7 @@ export class _OfficeLoadedFile extends React.Component {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
           // calling onBindingObjectClick to check whether the object exists in Excel before opening edit data popup
-          await officeApiHelper.onBindingObjectClick(bindingId, false) && await callForEdit({ bindId: bindingId, objectType });
+          await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport) && await callForEdit({ bindId: bindingId, objectType });
         } finally {
           this.setState({ allowRefreshClick: true });
         }
@@ -93,7 +107,7 @@ export class _OfficeLoadedFile extends React.Component {
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
-          await officeApiHelper.onBindingObjectClick(bindingId, false) && await refreshReportsArray([{ bindId: bindingId, objectType }], false);
+          await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport) && await refreshReportsArray([{ bindId: bindingId, objectType }], false);
         } finally {
           this.setState({ allowRefreshClick: true });
         }
@@ -112,7 +126,7 @@ export class _OfficeLoadedFile extends React.Component {
         justify="center"
         role="listitem"
         tabIndex="0"
-        onClick={() => onClick(bindingId)}
+        onClick={() => onClick(bindingId, true, this.deleteReport, fileName)}
       >
         <Col span={2}>
           {objectType === 'report' ? <MSTRIcon type="report" /> : <MSTRIcon type="dataset" />}
@@ -126,12 +140,12 @@ export class _OfficeLoadedFile extends React.Component {
         <Col span={1} offset={1} style={{ marginTop: '1px' }}>
           <Popover placement="bottom" content={t('Reprompt')} mouseEnterDelay={1}>
             {!!isPrompted && (
-            <span
-              className="loading-button-container"
-              onClick={this.repromptAction}
-            >
-              <MSTRIcon type="reprompt" />
-            </span>
+              <span
+                className="loading-button-container"
+                onClick={this.repromptAction}
+              >
+                <MSTRIcon type="reprompt" />
+              </span>
             )}
           </Popover>
         </Col>
@@ -143,7 +157,7 @@ export class _OfficeLoadedFile extends React.Component {
               onClick={this.editAction}
             >
               <MSTRIcon type="edit" />
-            </span>}
+             </span>}
           </ButtonPopover>
         </Col>
         <Col span={1} offset={1}>
@@ -155,7 +169,7 @@ export class _OfficeLoadedFile extends React.Component {
             >
               {!isLoading ? <MSTRIcon type="refresh" />
                 : <img width="12px" height="12px" src={loadingSpinner} alt={t('Report loading icon')} />}
-            </span>}
+             </span>}
           </ButtonPopover>
         </Col>
         <Col span={1} offset={1}>

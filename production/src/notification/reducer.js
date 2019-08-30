@@ -57,5 +57,6 @@ function onShowNotification(action, translated) {
     notificationType: action.notificationType,
     details: action.details,
     translated,
+    onConfirm: action.onConfirm,
   };
 }

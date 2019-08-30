@@ -77,7 +77,7 @@ class PopupHelper {
       throw new Error(result.message);
     }
     if (!isRefreshAll) {
-      notificationService.displayNotification('success', `${this.capitalize(objectType)} refreshed`);
+      notificationService.displayNotification({ type: 'success', content: `${this.capitalize(objectType)} refreshed` });
       return false;
     }
     this.storageReportRefreshFinish('ok', false, index, length);
@@ -90,7 +90,7 @@ class PopupHelper {
       return this.storageReportRefreshFinish(errorMessage, true, index, length);
     }
     if (error.code === 'ItemNotFound') {
-      return notificationService.displayNotification('info', 'Data is not relevant anymore. You can delete it from the list');
+      return notificationService.displayNotification({ type: 'info', content: 'Data is not relevant anymore. You can delete it from the list' });
     }
     errorService.handleError(error);
   }

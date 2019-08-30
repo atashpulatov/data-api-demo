@@ -73,17 +73,17 @@ const iServerErrorMessages = withDefaultValue({
 export const errorMessageFactory = withDefaultValue({
   [errorTypes.ENV_NOT_FOUND_ERR]: () => ENDPOINT_NOT_REACHED,
   [errorTypes.CONNECTION_BROKEN_ERR]: () => CONNECTION_BROKEN,
-  [errorTypes.UNAUTHORIZED_ERR]: (error) => {
+  [errorTypes.UNAUTHORIZED_ERR]: ({ error }) => {
     if (error.response.body.code === 'ERR003') return WRONG_CREDENTIALS;
     return SESSION_EXPIRED;
   },
   [errorTypes.BAD_REQUEST_ERR]: () => PROBLEM_WITH_REQUEST,
-  [errorTypes.INTERNAL_SERVER_ERR]: (error) => iServerErrorMessages[!error.response ? '-1' : error.response.body ? error.response.body.iServerCode : '-1'],
+  [errorTypes.INTERNAL_SERVER_ERR]: ({ error }) => iServerErrorMessages[!error.response ? '-1' : error.response.body ? error.response.body.iServerCode : '-1'],
   [errorTypes.PROMPTED_REPORT_ERR]: () => NOT_SUPPORTED_PROMPTS_REFRESH,
   [errorTypes.OUTSIDE_OF_RANGE_ERR]: () => EXCEEDS_WORKSHEET_LIMITS,
   [errorTypes.OVERLAPPING_TABLES_ERR]: () => TABLE_OVERLAP,
   [errorTypes.RUN_OUTSIDE_OFFICE_ERR]: () => OUTSIDE_OF_OFFICE,
-  [errorTypes.TABLE_REMOVED_FROM_EXCEL_ERR]: () => TABLE_REMOVED,
-  [errorTypes.GENERIC_OFFICE_ERR]: (error) => `Excel returned error: ${error.message}`,
+  [errorTypes.TABLE_REMOVED_FROM_EXCEL_ERR]: ({ reportName } = 'Report') => `${reportName} does not exist in the workbook anymore.`,
+  [errorTypes.GENERIC_OFFICE_ERR]: ({ error }) => `Excel returned error: ${error.message}`,
 },
-(error) => error.message || UNKNOWN_ERROR);
+({ error }) => error.message || UNKNOWN_ERROR);

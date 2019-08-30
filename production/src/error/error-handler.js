@@ -11,10 +11,13 @@ import {
 const TIMEOUT = 2000;
 
 class ErrorService {
-  handleError = (error, isLogout = false) => {
+  handleError = (...[error, options = { reportName: '', onConfirm: null, isLogout: false }]) => {
+    const { onConfirm, isLogout, ...parameters } = options;
     const errorType = this.getErrorType(error);
-    const errorMessage = errorMessageFactory[errorType](error);
-    this.displayErrorNotification(error, errorType, errorMessage);
+    const errorMessage = errorMessageFactory[errorType]({ error, ...parameters });
+    this.displayErrorNotification(
+      error, errorType, errorMessage, onConfirm,
+    );
     this.checkForLogout(isLogout, errorType);
   }
 
@@ -22,12 +25,15 @@ class ErrorService {
     || this.getOfficeErrorType(error)
     || this.getRestErrorType(error)
 
-  displayErrorNotification = (error, type, message) => {
-    const errorDetails = (error.response && error.response.text) || '';
+  displayErrorNotification = (error, type, message = '', onConfirm = null) => {
+    const errorDetails = (error.response && error.response.text) || error.message || '';
+    const details = message !== errorDetails ? errorDetails : '';
     if (type === errorTypes.UNAUTHORIZED_ERR) {
-      return notificationService.displayNotification('info', message);
+      return notificationService.displayNotification({ type: 'info', content: message });
     }
-    return notificationService.displayNotification('warning', message, errorDetails);
+    return notificationService.displayNotification({
+      type: 'warning', content: message, details, onConfirm,
+    });
   }
 
   checkForLogout = (isLogout = false, errorType) => {

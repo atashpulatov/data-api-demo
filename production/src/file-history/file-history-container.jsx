@@ -49,7 +49,7 @@ export class _FileHistoryContainer extends React.Component {
           const { name } = this.props.reportArray.find((report) => report.bindId === e.tableName);
           officeDisplayService.removeReportFromStore(e.tableName);
           const message = this.props.t('{{name}} has been removed from the workbook.', { name });
-          notificationService.displayTranslatedNotification('success', message);
+          notificationService.displayTranslatedNotification({ type: 'success', content: message });
         } catch (error) {
           errorService.handleError(error);
         }

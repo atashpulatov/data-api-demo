@@ -30,11 +30,22 @@ export class NotificationsWithoutRedux extends Component {
 
   displayNotification = () => {
     const {
-      notificationType, title, content, t, details, translated,
+      notificationType, title, content, t, details, translated, onConfirm,
     } = this.props;
     let icon;
     const key = `open${Date.now()}`;
-    let btn = <Button type="primary" size="small" onClick={() => notification.close(key)}>{t('OK')}</Button>;
+    let btn = (
+      <Button
+        type="primary"
+        size="small"
+        onClick={() => {
+          notification.close(key);
+          onConfirm && onConfirm();
+        }}
+      >
+        {t('OK')}
+      </Button>
+    );
     notification.config({
       duration: 0,
     });
@@ -95,6 +106,7 @@ const mapStateToProps = (state) => ({
   currentObject: state.notificationReducer.currentObject,
   details: state.notificationReducer.details,
   translated: state.notificationReducer.translated,
+  onConfirm: state.notificationReducer.onConfirm,
 });
 
 NotificationsWithoutRedux.defaultProps = {

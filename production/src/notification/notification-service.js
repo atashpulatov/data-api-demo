@@ -7,13 +7,17 @@ class NotificationService {
     reduxStore.dispatch(action);
   }
 
-  displayNotification = (type, content, details, title = ' ') => {
-    const action = actionCreator.showNotificationAction(title, content, type, details);
+  displayNotification = ({
+    type, content, details, title = ' ', onConfirm = null,
+  }) => {
+    const action = actionCreator.showNotificationAction(title, content, type, details, onConfirm);
     reduxStore.dispatch(action);
   }
 
-  displayTranslatedNotification = (type, content, details, title = ' ') => {
-    const action = actionCreator.showTranslatedNotification(title, content, type, details);
+  displayTranslatedNotification = ({
+    type, content, details, title = ' ', onConfirm = null,
+  }) => {
+    const action = actionCreator.showTranslatedNotification(title, content, type, details, onConfirm);
     reduxStore.dispatch(action);
   }
 }

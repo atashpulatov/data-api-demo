@@ -264,7 +264,7 @@ describe('Popup actions', () => {
     popupHelper.handleRefreshError(mockError, 10, 2, false);
     // then
     expect(notificationService.displayNotification)
-      .toHaveBeenCalledWith('info', 'Data is not relevant anymore. You can delete it from the list');
+      .toHaveBeenCalledWith({ type: 'info', content: 'Data is not relevant anymore. You can delete it from the list' });
   });
   it('handleRefreshError display proper notifications when isRefreshAll is false and error.code is NOT ItemNotFound', () => {
     // given
