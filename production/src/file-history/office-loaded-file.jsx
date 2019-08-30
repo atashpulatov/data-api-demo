@@ -62,13 +62,13 @@ export class _OfficeLoadedFile extends React.Component {
       return;
     }
     const {
-      isLoading, bindingId, objectType, callForReprompt,
+      isLoading, bindingId, objectType, callForReprompt, fileName,
     } = this.props;
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
           // calling onBindingObjectClick to check whether the object exists in Excel before opening prompt popup
-          await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport) && await callForReprompt({ bindId: bindingId, objectType });
+          await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport, fileName) && await callForReprompt({ bindId: bindingId, objectType });
         } finally {
           this.setState({ allowRefreshClick: true });
         }
@@ -82,13 +82,13 @@ export class _OfficeLoadedFile extends React.Component {
       return;
     }
     const {
-      isLoading, bindingId, objectType, callForEdit,
+      isLoading, bindingId, objectType, callForEdit, fileName,
     } = this.props;
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
           // calling onBindingObjectClick to check whether the object exists in Excel before opening edit data popup
-          await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport) && await callForEdit({ bindId: bindingId, objectType });
+          await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport, fileName) && await callForEdit({ bindId: bindingId, objectType });
         } finally {
           this.setState({ allowRefreshClick: true });
         }
@@ -99,7 +99,7 @@ export class _OfficeLoadedFile extends React.Component {
   refreshAction = (e) => {
     e.stopPropagation();
     const {
-      isLoading, bindingId, objectType, refreshReportsArray, loading,
+      isLoading, bindingId, objectType, refreshReportsArray, loading, fileName,
     } = this.props;
     if (!this.state.allowRefreshClick || loading) {
       return;
@@ -107,7 +107,7 @@ export class _OfficeLoadedFile extends React.Component {
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
-          await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport) && await refreshReportsArray([{ bindId: bindingId, objectType }], false);
+          await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport, fileName) && await refreshReportsArray([{ bindId: bindingId, objectType }], false);
         } finally {
           this.setState({ allowRefreshClick: true });
         }
