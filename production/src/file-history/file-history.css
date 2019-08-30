@@ -46,7 +46,7 @@ button.add-data-btn:focus {
   font-size: 12px;
   color: #1C91DC;
   padding: 1px;
-  margin: 10px 52px 10px 0px;
+  margin: 10px 40px 10px 0px;
 }
 
 .refresh-all-btn .mstr-icon,
@@ -60,12 +60,40 @@ button.add-data-btn:focus {
 }
 
 .file-history-container {
+  display: flex;
+  flex-direction: column;
   background: #FFFFFF;
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.20);
   border-radius: 2px;
   margin: 5px 10px 10px 10px;
-  padding-top: 16px;
-  padding-bottom: 16px;
+  padding: 16px 16px 16px 16px;
+}
+
+.refresh-icons-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 11px;
+}
+
+.refresh-icons-row>span {
+  display: flex;
+  align-items: center;
+}
+
+.object-icons>* {
+  margin-left: 10px;
+}
+
+.visualisation-path-row {
+  font-family: HelveticaNeue;
+  font-size: 10px;
+  color: #444649;
+  margin-bottom: 8px;
+}
+
+.object-title-row {
+  display: flex;
+  flex-direction: row;
 }
 
 .file-history-container:hover {
@@ -133,6 +161,7 @@ button.add-data-btn:focus {
   user-select: none;
   font-size: 14px;
   font-weight: 500;
+  margin-left: 10px;
 }
 
 .ant-dropdown-trigger {
@@ -163,7 +192,7 @@ button.add-data-btn:focus {
 }
 
 .additional-data {
-  padding: 0 2px;
+  padding: 0 4px;
   font-size: 12px;
   color: #888888;
 }
