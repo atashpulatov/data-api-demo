@@ -7,8 +7,6 @@ import { PopupButtons } from '../popup/popup-buttons';
 import { actions } from './navigation-tree-actions';
 import { isPrompted as checkIfPrompted } from '../mstr-object/mstr-object-rest-service';
 
-const { Office } = window;
-
 export class _NavigationTree extends Component {
   constructor(props) {
     super(props);
