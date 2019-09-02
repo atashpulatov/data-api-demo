@@ -3,27 +3,27 @@ import { FolderBrowser, objectTypes } from '@mstr/mstr-react-library';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { selectorProperties } from '../attribute-selector/selector-properties';
-import { PopupButtons } from '../popup/popup-buttons.jsx';
+import { PopupButtons } from '../popup/popup-buttons';
 import { actions } from './navigation-tree-actions';
-import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
+import { isPrompted as checkIfPrompted } from '../mstr-object/mstr-object-rest-service';
 
-/* global Office */
+const { Office } = window;
 
 export class _NavigationTree extends Component {
   constructor(props) {
     super(props);
-
+    const { mstrData, chosenObjectId, chosenProjectId, chosenSubtype } = this.props;
     this.state = {
       session: {
         USE_PROXY: false,
-        url: this.props.mstrData.envUrl,
-        authToken: this.props.mstrData.token,
+        url: mstrData.envUrl,
+        authToken: mstrData.token,
       },
-      reportId: this.props.mstrData.reportId,
+      reportId: mstrData.reportId,
       triggerUpdate: false,
-      chosenObjectId: this.props.chosenObjectId,
-      chosenProjectId: this.props.chosenProjectId,
-      chosenSubtype: this.props.chosenSubtype,
+      chosenObjectId,
+      chosenProjectId,
+      chosenSubtype,
       previewDisplay: false,
     };
   }
@@ -66,7 +66,7 @@ export class _NavigationTree extends Component {
       // Only check for prompts when it's a report
       let isPrompted = false;
       if (objectTypes.getTypeDescription(3, subtype) === 'Report') {
-        isPrompted = await mstrObjectRestService.isPrompted(objectId, projectId);
+        isPrompted = await checkIfPrompted(objectId, projectId);
       }
 
       this.props.selectObject({
