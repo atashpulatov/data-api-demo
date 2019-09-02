@@ -32,7 +32,7 @@ describe('officeReducer', () => {
 
   beforeEach(() => {
     // default state should be empty
-    expect(officeStore.getState()).toEqual({ loading: false });
+    expect(officeStore.getState()).toEqual({ loading: false, shouldRenderSettings: false, isSettings: false });
   });
 
   afterEach(() => {
@@ -431,5 +431,18 @@ describe('officeReducer', () => {
     const newState = officeReducer(oldState, action);
     // then
     expect(newState).toEqual({ isConfirm: true });
+  });
+  it('should return new proper state in case of toggleRenderSettingsFlag action', () => {
+    // given
+    const oldState = { isSettings: false, shouldRenderSettings: false };
+    const action = {
+      type: officeProperties.actions.toggleRenderSettingsFlag,
+      isSettings: false,
+      shouldRenderSettings: true,
+    };
+    // when
+    const newState = officeReducer(oldState, action);
+    // then
+    expect(newState).toEqual({ isSettings: false, shouldRenderSettings: true });
   });
 });

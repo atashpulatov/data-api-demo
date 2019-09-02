@@ -8,7 +8,7 @@
     "start": "HTTPS=true react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --silent --noStackTrace",
-    "test:debug": "CI=true react-scripts test --debug",
+    "test:debug": "react-scripts test --debug",
     "test:coverage": "CI=true react-scripts test --coverage --silent --noStackTrace --forceExit --ci",
     "eject": "react-scripts eject",
     "eslint": "eslint ./src --ext .js,.jsx --ignore-pattern *.test*",
@@ -31,7 +31,7 @@
     ]
   },
   "dependencies": {
-    "@mstr/mstr-react-library": "^1.2.0",
+    "@mstr/mstr-react-library": "^1.2.3",
     "airbnb-browser-shims": "^3.2.1",
     "antd": "^3.22.2",
     "focus-visible": "^5.0.2",
@@ -66,7 +66,6 @@
     "office-addin-debugging": "^3.0.10",
     "office-addin-dev-certs": "^1.2.4",
     "office-toolbox": "^0.3.0",
-    "redux-devtools-extension": "^2.13.5",
     "webpack-cli": "^3.1.2"
   },
   "browserslist": {

@@ -18,15 +18,37 @@ export const SET_PREPARED_REPORT = 'SET_PREPARED_REPORT';
 export function callForEdit(reportParams) {
   return async (dispatch) => {
     try {
-      await Promise.all([officeApiHelper.getExcelSessionStatus(), authenticationHelper.validateAuthToken()]);
-      const editedReport = officeStoreService.getReportFromProperties(reportParams.bindId);
-
+      await Promise.all([
+        officeApiHelper.getExcelSessionStatus(),
+        authenticationHelper.validateAuthToken(),
+      ]);
+      const editedReport = officeStoreService.getReportFromProperties(
+        reportParams.bindId,
+      );
       if (editedReport.isPrompted) {
-        let instanceDefinition = await mstrObjectRestService.createInstance(editedReport.id, editedReport.projectId, true, null, null);
+        let instanceDefinition = await mstrObjectRestService.createInstance(
+          editedReport.id,
+          editedReport.projectId,
+          true,
+          null,
+          null,
+        );
         let count = 0;
         while (instanceDefinition.status === 2) {
-          await mstrObjectRestService.answerPrompts(editedReport.id, editedReport.projectId, instanceDefinition.instanceId, editedReport.promptsAnswers[count]);
-          instanceDefinition = await mstrObjectRestService.getInstance(editedReport.id, editedReport.projectId, true, null, editedReport.body, instanceDefinition.instanceId);
+          await mstrObjectRestService.answerPrompts(
+            editedReport.id,
+            editedReport.projectId,
+            instanceDefinition.instanceId,
+            editedReport.promptsAnswers[count],
+          );
+          instanceDefinition = await mstrObjectRestService.getInstance(
+            editedReport.id,
+            editedReport.projectId,
+            true,
+            null,
+            editedReport.body,
+            instanceDefinition.instanceId,
+          );
           count++;
         }
         editedReport.instanceId = instanceDefinition.instanceId;
@@ -46,8 +68,13 @@ export function callForEdit(reportParams) {
 export function callForReprompt(reportParams) {
   return async (dispatch) => {
     try {
-      await Promise.all([officeApiHelper.getExcelSessionStatus(), authenticationHelper.validateAuthToken()]);
-      const editedReport = officeStoreService.getReportFromProperties(reportParams.bindId);
+      await Promise.all([
+        officeApiHelper.getExcelSessionStatus(),
+        authenticationHelper.validateAuthToken(),
+      ]);
+      const editedReport = officeStoreService.getReportFromProperties(
+        reportParams.bindId,
+      );
       editedReport.isPrompted = true;
       dispatch({
         type: SET_REPORT_N_FILTERS,
@@ -71,7 +98,10 @@ export function preparePromptedReport(instanceId, reportData) {
 export function refreshReportsArray(reportArray, isRefreshAll) {
   return async (dispatch) => {
     try {
-      await Promise.all([officeApiHelper.getExcelSessionStatus(), authenticationHelper.validateAuthToken()]);
+      await Promise.all([
+        officeApiHelper.getExcelSessionStatus(),
+        authenticationHelper.validateAuthToken(),
+      ]);
     } catch (error) {
       return errorService.handleError(error);
     }
@@ -88,9 +118,21 @@ export function refreshReportsArray(reportArray, isRefreshAll) {
           reportBindId: report.bindId,
           isRefreshAll,
         });
-        isError = await popupHelper.printRefreshedReport(report.bindId, report.objectType, reportArray.length, index, isRefreshAll, report.promptsAnswers);
+        isError = await popupHelper.printRefreshedReport(
+          report.bindId,
+          report.objectType,
+          reportArray.length,
+          index,
+          isRefreshAll,
+          report.promptsAnswers,
+        );
       } catch (error) {
-        popupHelper.handleRefreshError(error, reportArray.length, index, isRefreshAll);
+        popupHelper.handleRefreshError(
+          error,
+          reportArray.length,
+          index,
+          isRefreshAll,
+        );
         return true;
       } finally {
         dispatch({
