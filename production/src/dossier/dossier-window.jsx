@@ -18,7 +18,6 @@ export default class _DossierWindow extends React.Component {
     const {
       dossierId, dossierName, handleBack, t, isVisualisationSelected,
     } = this.props;
-    console.log('dossierId:', dossierId);
     return (
       <div>
         <h1 title={dossierName} className="ant-col folder-browser-title">{`${t('Import Dossier')} > ${dossierName}`}</h1>
@@ -51,11 +50,7 @@ _DossierWindow.defaultProps = {
 };
 
 function mapStateToProps(state) {
-  const { chosenObjectId, chosenProjectName } = state.navigationTree;
-  return {
-    dossierId: chosenObjectId,
-    dossierName: chosenProjectName,
-  };
+  return {};
 }
 
 export const DossierWindow = connect(mapStateToProps)(withTranslation('common')(_DossierWindow));
