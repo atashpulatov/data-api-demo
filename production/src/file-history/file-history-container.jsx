@@ -17,6 +17,7 @@ import restrictedArt from './assets/art_restricted_access_blue.svg';
 import { notificationService } from '../notification/notification-service';
 import './file-history.css';
 import { ButtonPopover } from './button-popover';
+import { test } from '../mstr-object/mstr-list-rest-service';
 
 export class _FileHistoryContainer extends React.Component {
   constructor(props) {
@@ -132,7 +133,7 @@ export class _FileHistoryContainer extends React.Component {
         <Button
           id="add-data-btn-container"
           className="add-data-btn floating-button"
-          onClick={() => addDataAction()}
+          onClick={() => test()}
           disabled={loading}
         >
           {t('Add Data')}
