@@ -249,7 +249,7 @@ export class _OfficeLoadedFile extends React.Component {
       isPrompted,
       refreshDate,
       t,
-      visualisationPath = 'Hello World!!!',
+      visualisationPath,
     } = this.props;
     const buttonsFunctions = {
       reprompt: this.repromptAction, edit: this.editAction, refresh: this.refreshAction, delete: this.deleteAction,

@@ -170,6 +170,10 @@ button.add-data-btn:focus {
 
 .ant-dropdown-trigger {
   height: 21px;
+  position: relative;
+  max-width: calc(100% - 20px);
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .ant-input.rename-input:focus,
