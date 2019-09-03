@@ -111,4 +111,5 @@ const mapDispatchToProps = {
   toggleIsConfirmFlag,
 };
 
-export const Header = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_Header));
+const Header = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_Header));
+export default Header;

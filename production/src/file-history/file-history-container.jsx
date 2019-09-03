@@ -2,22 +2,21 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'antd';
 import { MSTRIcon } from '@mstr/mstr-react-library';
-import { OfficeLoadedFile } from './office-loaded-file.jsx';
+import { withTranslation } from 'react-i18next';
+import { OfficeLoadedFile } from './office-loaded-file';
 import { officeApiHelper } from '../office/office-api-helper';
 import { officeDisplayService } from '../office/office-display-service';
 import loadingSpinner from './assets/report_loading_spinner.gif';
 import { refreshReportsArray } from '../popup/popup-actions';
-import { fileHistoryContainerHOC } from './file-history-container-HOC.jsx';
+import { fileHistoryContainerHOC } from './file-history-container-HOC';
 import { officeStoreService } from '../office/store/office-store-service';
 import { toggleSecuredFlag } from '../office/office-actions';
 import { errorService } from '../error/error-handler';
 import { authenticationHelper } from '../authentication/authentication-helper';
 import restrictedArt from './assets/art_restricted_access_blue.svg';
 import { notificationService } from '../notification/notification-service';
-
 import './file-history.css';
-import { withTranslation } from 'react-i18next';
-import { ButtonPopover } from './button-popover.jsx';
+import { ButtonPopover } from './button-popover';
 
 export class _FileHistoryContainer extends React.Component {
   constructor(props) {
@@ -42,11 +41,17 @@ export class _FileHistoryContainer extends React.Component {
 
   addRemoveReportListener = async () => {
     try {
+      const { reportArray, t } = this.props;
       const excelContext = await officeApiHelper.getExcelContext();
       this.eventRemove = excelContext.workbook.tables.onDeleted.add(async (e) => {
         try {
-          await Promise.all([officeApiHelper.getExcelSessionStatus(), authenticationHelper.validateAuthToken()]);
-          const { name } = this.props.reportArray.find((report) => report.bindId === e.tableName);
+          await Promise.all([
+            officeApiHelper.getExcelSessionStatus(),
+            authenticationHelper.validateAuthToken(),
+          ]);
+          const { name } = reportArray.find(
+            (report) => report.bindId === e.tableName,
+          );
           officeDisplayService.removeReportFromStore(e.tableName);
           const message = this.props.t('{{name}} has been removed from the workbook.', { name });
           notificationService.displayTranslatedNotification({ type: 'success', content: message });
@@ -58,7 +63,7 @@ export class _FileHistoryContainer extends React.Component {
     } catch (error) {
       console.log('Cannot add onDeleted event listener');
     }
-  }
+  };
 
   deleteRemoveReportListener = () => {
     try {
@@ -68,29 +73,45 @@ export class _FileHistoryContainer extends React.Component {
     } catch (error) {
       console.log('Cannot remove onDeleted event listener');
     }
-  }
+  };
 
   refreshAllAction = (reportArray, refreshAll) => {
-    this.state.allowRefreshAllClick && this.setState({ allowRefreshAllClick: false }, async () => {
-      await refreshAll(reportArray, true);
-      this._ismounted && this.setState({ allowRefreshAllClick: true });
-    });
+    const { allowRefreshAllClick } = this.state;
+    if (allowRefreshAllClick) {
+      this.setState({ allowRefreshAllClick: false }, async () => {
+        await refreshAll(reportArray, true);
+        if (this._ismounted) this.setState({ allowRefreshAllClick: true });
+      });
+    }
   };
 
   showData = async () => {
     try {
-      await Promise.all([officeApiHelper.getExcelSessionStatus(), authenticationHelper.validateAuthToken()]);
-      const { reportArray, refreshReportsArray, toggleSecuredFlag } = this.props;
+      await Promise.all([
+        officeApiHelper.getExcelSessionStatus(),
+        authenticationHelper.validateAuthToken(),
+      ]);
+      const {
+        reportArray,
+        refreshReportsArray,
+        toggleSecuredFlag,
+      } = this.props;
       this.refreshAllAction(reportArray, refreshReportsArray);
       toggleSecuredFlag(false);
     } catch (error) {
       return errorService.handleError(error);
     }
-  }
+  };
 
   render() {
     const {
-      reportArray = [], loading, refreshingAll, refreshReportsArray, isSecured, t,
+      reportArray = [],
+      loading,
+      refreshingAll,
+      refreshReportsArray,
+      isSecured,
+      addDataAction,
+      t,
     } = this.props;
     return (
       <>
@@ -108,15 +129,34 @@ export class _FileHistoryContainer extends React.Component {
         <Button
           id="add-data-btn-container"
           className="add-data-btn floating-button"
-          onClick={() => this.props.addDataAction()}
+          onClick={() => addDataAction()}
           disabled={loading}
         >
           {t('Add Data')}
         </Button>
         <span className="refresh-button-container">
-          <ButtonPopover placement="bottom" content={t('Refresh All Data')} mouseEnterDelay={1}>
-            <Button id="refresh-all-btn" className="refresh-all-btn" style={{ float: 'right' }} onClick={() => this.refreshAllAction(reportArray, refreshReportsArray)} disabled={loading}>
-              {!refreshingAll ? <MSTRIcon type="refresh" /> : <img width="12px" height="12px" src={loadingSpinner} alt={t('Report loading icon')} />}
+          <ButtonPopover
+            placement="bottom"
+            content={t('Refresh All Data')}
+            mouseEnterDelay={1}
+          >
+            <Button
+              id="refresh-all-btn"
+              className="refresh-all-btn"
+              style={{ float: 'right' }}
+              onClick={() => this.refreshAllAction(reportArray, refreshReportsArray)}
+              disabled={loading}
+            >
+              {!refreshingAll ? (
+                <MSTRIcon type="refresh" />
+              ) : (
+                <img
+                    width="12px"
+                    height="12px"
+                    src={loadingSpinner}
+                    alt={t('Report loading icon')}
+                  />
+              )}
             </Button>
           </ButtonPopover>
         </span>
@@ -160,6 +200,11 @@ const mapDispatchToProps = {
   toggleSecuredFlag,
 };
 
-const WrappedFileHistoryContainer = fileHistoryContainerHOC(_FileHistoryContainer);
+const WrappedFileHistoryContainer = fileHistoryContainerHOC(
+  _FileHistoryContainer,
+);
 
-export const FileHistoryContainer = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(WrappedFileHistoryContainer));
+export const FileHistoryContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(withTranslation('common')(WrappedFileHistoryContainer));

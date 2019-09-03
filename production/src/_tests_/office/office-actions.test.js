@@ -28,4 +28,13 @@ describe('Office Actions', () => {
     // then
     expect(listener).toHaveBeenCalledWith({ type: officeProperties.actions.toggleIsConfirmFlag, isConfirm: true });
   });
+
+  it('should dispatch proper toggleRenderSettingsFlag action', () => {
+    // given
+    const listener = jest.fn();
+    // when
+    actions.toggleRenderSettingsFlag()(listener);
+    // then
+    expect(listener).toHaveBeenCalledWith({ type: officeProperties.actions.toggleRenderSettingsFlag });
+  });
 });

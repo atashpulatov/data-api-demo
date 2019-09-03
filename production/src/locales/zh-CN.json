@@ -175,5 +175,5 @@
   "Element cannot be loaded": "无法载入元素",
   "Clearing data": "正在清除数据",
   "{{reportNames}} could not be cleared.": "{{reportNames}} 无法清除。",
-  "Invalid attempt to spread non-iterable instance": "传播不可迭代实例的尝试无效"
+  "Invalid attempt to spread non-iterable instance": "尝试传播不可迭代实例失败。"
 }
