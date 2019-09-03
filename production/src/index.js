@@ -1,5 +1,5 @@
+import 'core-js/stable';
 import 'focus-visible/dist/focus-visible';
-import 'airbnb-browser-shims';
 import 'proxy-polyfill';
 import './index.css';
 import React from 'react';
