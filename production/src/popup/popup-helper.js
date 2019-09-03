@@ -102,17 +102,16 @@ class PopupHelper {
       throw new Error(result.message);
     }
     if (!isRefreshAll) {
-      notificationService.displayNotification({ type: 'success', content: `${this.capitalize(objectType)} refreshed` });
+      notificationService.displayNotification({ type: 'success', content: `${this.capitalize(mstrObjectType.name)} refreshed` });
       return false;
     }
     this.storageReportRefreshFinish('ok', false, index, length);
     return false;
   };
 
-  handleRefreshError = (error, length, index, isRefreshAll) => {
+  handleRefreshError(error, length, index, isRefreshAll) {
     if (isRefreshAll) {
-      const officeError = errorService.errorOfficeFactory(error);
-      const errorMessage = errorService.getErrorMessage(officeError);
+      const errorMessage = errorService.getErrorMessage(error);
       return this.storageReportRefreshFinish(errorMessage, true, index, length);
     }
     if (error.code === 'ItemNotFound') {
