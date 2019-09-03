@@ -1,3 +1,5 @@
+/* eslint-disable no-mixed-operators */
+/* eslint-disable no-bitwise */
 
 /**
  * Mapping of the EnumDSSXMLViewMedia bits from MicroStrategy WebSDK
@@ -41,7 +43,7 @@ const DOCUMENT_TYPES = Object.freeze({
 function getDefaultViewMode(viewMedia) {
   const defModePosition = viewMedia >> 27;
 
-  if (defModePosition == 0) {
+  if (defModePosition === 0) {
     return 0;
   }
   return EnumDSSXMLViewMedia.DssXmlViewMediaViewStatic << defModePosition - 1;
@@ -57,7 +59,7 @@ function getTypeFromViewMedia(viewMedia) {
     return null;
   }
   if (defaultViewMedia & EnumDSSXMLViewMedia.DssXmlViewMediaViewAnalysis
-        | defaultViewMedia & EnumDSSXMLViewMedia.DssXmlViewMediaHTML5Dashboard) {
+    | defaultViewMedia & EnumDSSXMLViewMedia.DssXmlViewMediaHTML5Dashboard) {
     return DOCUMENT_TYPES.DOSSIER;
   } if (defaultViewMedia & EnumDSSXMLViewMedia.DssXmlViewMediaViewStatic) {
     return DOCUMENT_TYPES.RSD;
@@ -71,7 +73,7 @@ function getTypeFromViewMedia(viewMedia) {
  * @returns {boolean}
  */
 function isRsd(viewMedia) {
-  return getTypeFromViewMedia(viewMedia) == DOCUMENT_TYPES.RSD;
+  return getTypeFromViewMedia(viewMedia) === DOCUMENT_TYPES.RSD;
 }
 
 /**
@@ -80,5 +82,5 @@ function isRsd(viewMedia) {
  * @returns {boolean}
  */
 export default function isDossier(viewMedia) {
-  return getTypeFromViewMedia(viewMedia) == DOCUMENT_TYPES.DOSSIER;
+  return getTypeFromViewMedia(viewMedia) === DOCUMENT_TYPES.DOSSIER;
 }

@@ -31,7 +31,7 @@ export class _NavigationTree extends Component {
       command: selectorProperties.commandOnUpdate,
       body,
     };
-    Office.context.ui.messageParent(JSON.stringify(updateObject));
+    window.Office.context.ui.messageParent(JSON.stringify(updateObject));
   };
 
   handleSecondary = async () => {
@@ -48,7 +48,7 @@ export class _NavigationTree extends Component {
     const cancelObject = {
       command: selectorProperties.commandCancel,
     };
-    Office.context.ui.messageParent(JSON.stringify(cancelObject));
+    window.Office.context.ui.messageParent(JSON.stringify(cancelObject));
   };
 
   // TODO: temporary solution
