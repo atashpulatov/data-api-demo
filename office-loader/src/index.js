@@ -117,13 +117,16 @@ function openPopup(url) {
     popup = window.open(url, 'MicroStrategy_for_Office', `resizable=1,status=1,height=${height},width=${width},top=${top},left=${left},screenX=${left},screenY=${top}location=0,dependent=1,alwaysOnTop=1`);
     return Promise.resolve(popup);
   } else {
-    popup.focus();
-    if (popup) return Promise.reject('A dialog is already open');
+        return Promise.resolve(popup.focus());
   };
 }
 
 function openOfficeDialog(url) {
-    if (popup != null && popup.closed === false) return Promise.reject('A dialog is already open');
+    if (popup != null && popup.closed === false) {
+        /* if window was already displayed we close it, and open it once again, becouse DialogHandler from office doesn't provide refresh or focus methods. */
+        Promise.resolve(popup.close());
+    }
+
   return new Promise((resolve) => {
     Office.context.ui.displayDialogAsync(url, { height: 85, width: 25 },
       function (asyncResult) {
@@ -137,7 +140,6 @@ function openOfficeDialog(url) {
 }
 
 function processDialogEvent(arg) {
-  console.log('cacache', arg);
   switch (arg.error) {
     case 12002:
       console.log('The dialog box has been directed to a page that it cannot find or load, or the URL syntax is invalid.');
@@ -146,7 +148,7 @@ function processDialogEvent(arg) {
       console.log('The dialog box has been directed to a URL with the HTTP protocol. HTTPS is required.');
       break;
     case 12006:
-      console.log('Dialog closed.');
+            console.log('Dialog closed by user.');
       popup.closed = true;
       break;
     default:
