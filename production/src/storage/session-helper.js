@@ -32,7 +32,7 @@ class SessionHelper {
     try {
       await authenticationService.logout(envUrl, authToken);
     } catch (error) {
-      errorService.handleError(error, true);
+      errorService.handleError(error, { isLogout: true });
     }
   }
 
@@ -89,7 +89,7 @@ class SessionHelper {
       userData = await userRestService.getUserInfo(authToken, envUrl);
       !userData.userInitials && sessionHelper.saveUserInfo(userData);
     } catch (error) {
-      errorService.handleError(error, !IS_LOCALHOST);
+      errorService.handleError(error, { isLogout: !IS_LOCALHOST });
     }
   }
 
