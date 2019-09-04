@@ -123,7 +123,7 @@ function openPopup(url) {
 }
 
 function openOfficeDialog(url) {
-  if (popup) return Promise.reject('A dialog is already open');
+    if (popup != null && popup.closed === false) return Promise.reject('A dialog is already open');
   return new Promise((resolve) => {
     Office.context.ui.displayDialogAsync(url, { height: 85, width: 25 },
       function (asyncResult) {
