@@ -1,3 +1,10 @@
+/**
+ * Logic for fetching of single list of objects (Reports, Datasets and Dossiers) from MSTR API
+ *
+ * @export
+ * @class getObjectList
+ */
+
 import request from 'superagent';
 import { reduxStore } from '../store';
 import filterDossiersByViewMedia from '../helpers/viewMediaHelper';
@@ -8,16 +15,20 @@ const DOSSIER_SUBTYPE = 14081;
 const SUBTYPES = [768, 769, 774, 776, 779, DOSSIER_SUBTYPE];
 
 /**
- * TODO
+ * Applies filtering function to body.result array of objects
  *
- * @param {*} body
- * @returns
+ * @param {Object} body - MSTR API response body
+ * @returns {Array}
  */
 function filterDossier(body) {
-  // TODO what if there is no body.result
   return body.result.filter(filterFunction);
 }
-
+/**
+ * Uses imported helper function to check whether object is a Dossier, but only if it is the same subtype as Dossier
+ *
+ * @param {Object} object -
+ * @returns {Boolean}
+ */
 function filterFunction(object) {
   if (object.subtype === DOSSIER_SUBTYPE) {
     return filterDossiersByViewMedia(object.viewMedia);
@@ -26,7 +37,6 @@ function filterFunction(object) {
 }
 
 function processTotalItems(body) {
-  // TODO what if there is no totalItems
   return body.totalItems;
 }
 
@@ -41,6 +51,17 @@ function fetchTotalItems({ limit = 1, callback = processTotalItems, requestParam
   return fetchObjectList({ limit, callback, requestParams });
 }
 
+/**
+ * Fetches object of given subtypes from MSTR API.
+ *
+ * @param {Object} { requestParams, callback = (res) => res, offset = 0, limit = LIMIT }
+ * @param {Object} requestParams - Object containing environment url, authToken and
+ * subtypes of objects, for which to execute the request
+ * @param {Function} callback - Function to be applied to the returned response body
+ * @param {number} offset - Starting index of object to be fetched
+ * @param {number} limit - Number of objects to be fetched per request
+ * @returns
+ */
 function fetchObjectList({ requestParams, callback = (res) => res, offset = 0, limit = LIMIT }) {
   const { envUrl, authToken, typeQuery } = requestParams;
   const url = `${envUrl}/${SEARCH_ENDPOINT}?limit=${limit}&offset=${offset}&type=${typeQuery}`;
@@ -49,9 +70,17 @@ function fetchObjectList({ requestParams, callback = (res) => res, offset = 0, l
     .set('x-mstr-authtoken', authToken)
     .withCredentials()
     .then((res) => res.body)
+    .then(filterDossier)
     .then(callback);
 }
 
+/**
+ * Uses request with limit of 1 to check for total number of objects of given subtypes and then
+ * executes multiple requests to API to apply pagination.
+ *
+ * @param {Function} callback - function to be passed to fetchObjectList method
+ * @returns {Array} of promises
+ */
 async function fetchObjectListPagination(callback) {
   const requestParams = getRequestParams();
   const total = await fetchTotalItems({ requestParams });
@@ -66,7 +95,12 @@ async function fetchObjectListPagination(callback) {
   return promiseList;
 }
 
-
-export default function getObjectList() {
-  return fetchObjectListPagination(filterDossier);
+/**
+ *
+ *
+ * @export
+ * @returns {Promise} A promise
+ */
+export default function getObjectList(callback) {
+  return fetchObjectListPagination(callback);
 }
