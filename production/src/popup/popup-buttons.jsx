@@ -12,39 +12,40 @@ const prepareButton = (disableActiveActions, button, t) => (disableActiveActions
   ) : button);
 
 export const _PopupButtons = ({
-  handleOk, handleSecondary,
-  handleCancel, handleBack, loading, disableActiveActions, onPreviewClick, isPrompted, t = (text) => text,
+  handleOk, handleSecondary, handleCancel, handleBack,
+  loading, disableActiveActions, onPreviewClick, t = (text) => text,
+  hideSecondary,
 }) => (
-  <div className="popup-buttons popup-footer">
-    {!handleSecondary && prepareButton(disableActiveActions, <Button id="data-preview" onClick={onPreviewClick} disabled={disableActiveActions}>
-      {t('Data Preview')}
-    </Button>, t)}
-    {
+    <div className="popup-buttons popup-footer">
+      {!hideSecondary && !handleSecondary && prepareButton(disableActiveActions, <Button id="data-preview" onClick={onPreviewClick} disabled={disableActiveActions}>
+        {t('Data Preview')}
+      </Button>, t)}
+      {
         handleBack
         && (
-        <Button id="back" onClick={handleBack}>
-          {t('Back')}
-        </Button>
+          <Button id="back" onClick={handleBack}>
+            {t('Back')}
+          </Button>
         )
       }
-    {
+      {
         prepareButton(disableActiveActions, <Button id="import" type={!handleSecondary ? 'primary' : ''} onClick={handleOk} loading={loading} disabled={disableActiveActions}>
           {t('Import')}
-                                            </Button>, t)
+        </Button>, t)
       }
-    {handleSecondary && prepareButton(disableActiveActions, <Button
-      id="prepare"
-      type="primary"
-      disabled={disableActiveActions || loading}
-      onClick={handleSecondary}
-    >
-      {t('Prepare Data')}
-                                                            </Button>, t)}
-    <Button id="cancel" onClick={handleCancel}>
-      {t('Cancel')}
-    </Button>
-  </div>
-);
+      {!hideSecondary && handleSecondary && prepareButton(disableActiveActions, <Button
+        id="prepare"
+        type="primary"
+        disabled={disableActiveActions || loading}
+        onClick={handleSecondary}
+      >
+        {t('Prepare Data')}
+      </Button>, t)}
+      <Button id="cancel" onClick={handleCancel}>
+        {t('Cancel')}
+      </Button>
+    </div>
+  );
 
 function mapStateToProps({ navigationTree }) {
   return { isPrompted: navigationTree.isPrompted };
