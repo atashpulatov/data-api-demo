@@ -32,6 +32,20 @@ export class _OfficeLoadedFile extends React.Component {
     this._ismounted = false;
   }
 
+  deleteReport = async () => {
+    const {
+      onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, fileName, t,
+    } = this.props;
+    const message = t('{{name}} has been removed from the workbook.', { name: fileName });
+    await fileHistoryHelper.deleteReport(
+      onDelete,
+      bindingId,
+      isCrosstab,
+      crosstabHeaderDimensions,
+      message,
+    );
+  }
+
   deleteAction = (e) => {
     const { allowDeleteClick } = this.state;
     const { t } = this.props;
@@ -72,15 +86,15 @@ export class _OfficeLoadedFile extends React.Component {
       return;
     }
     const {
-      isLoading, bindingId, objectType, onReprompt,
+      isLoading, bindingId, objectType, callForReprompt, fileName,
     } = this.props;
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
           // calling onBindingObjectClick to check whether the object exists in Excel
           // before opening prompt popup
-          if (await officeApiHelper.onBindingObjectClick(bindingId, false)) {
-            await onReprompt({ bindId: bindingId, objectType });
+          if (await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport, fileName)) {
+            await callForReprompt({ bindId: bindingId, objectType });
           }
         } finally {
           this.setState({ allowRefreshClick: true });
@@ -96,14 +110,14 @@ export class _OfficeLoadedFile extends React.Component {
       return;
     }
     const {
-      isLoading, bindingId, objectType, callForEdit,
+      isLoading, bindingId, objectType, callForEdit, fileName,
     } = this.props;
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
           // calling onBindingObjectClick to check whether the object exists in Excel
           // before opening edit data popup
-          if (await officeApiHelper.onBindingObjectClick(bindingId, false)) {
+          if (await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport, fileName)) {
             (await callForEdit({ bindId: bindingId, objectType }));
           }
         } finally {
@@ -115,13 +129,8 @@ export class _OfficeLoadedFile extends React.Component {
 
   refreshAction = (e) => {
     if (e) e.stopPropagation();
-    const {
-      isLoading,
-      bindingId,
-      objectType,
-      refreshReportsArray,
-      loading,
-    } = this.props;
+    const { isLoading, bindingId, objectType, refreshReportsArray, loading, fileName } = this.props;
+
     const { allowRefreshClick } = this.state;
     if (!allowRefreshClick || loading) {
       return;
@@ -129,7 +138,7 @@ export class _OfficeLoadedFile extends React.Component {
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
-          if (await officeApiHelper.onBindingObjectClick(bindingId, false)) {
+          if (await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport, fileName)) {
             (await refreshReportsArray(
               [{ bindId: bindingId, objectType }],
               false,
@@ -261,8 +270,8 @@ export class _OfficeLoadedFile extends React.Component {
         justify="center"
         role="button"
         tabIndex="0"
-        onClick={() => onClick(bindingId)}
-        onKeyPress={() => onClick(bindingId)}
+        onClick={() => onClick(bindingId, true, this.deleteReport, fileName)}
+        onKeyPress={() => onClick(bindingId, true, this.deleteReport, fileName)}
       >
         <div className="refresh-icons-row">
           <ButtonPopover

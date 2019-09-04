@@ -110,7 +110,9 @@ describe('ErrorService', () => {
       jest.advanceTimersByTime(2000);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('warning', 'The endpoint cannot be reached', '');
+      expect(spyMethod).toBeCalledWith({
+        content: 'The endpoint cannot be reached', details: '', onConfirm: null, type: 'warning',
+      });
       expect(spyLogOut).not.toBeCalled();
     });
     it('should display notification and logout on UNAUTHORIZED_ERR', () => {
@@ -130,7 +132,7 @@ describe('ErrorService', () => {
       jest.advanceTimersByTime(2000);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('info', 'Your session has expired. Please log in.');
+      expect(spyMethod).toBeCalledWith({ content: 'Your session has expired. Please log in.', type: 'info' });
       expect(spyLogOut).toBeCalled();
     });
     it('should display notification and logout on UNAUTHORIZED_ERR with ERR003 code', () => {
@@ -148,7 +150,7 @@ describe('ErrorService', () => {
       errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('info', 'Wrong username or password.');
+      expect(spyMethod).toBeCalledWith({ content: 'Wrong username or password.', type: 'info' });
     });
     it('should display notification and logout on CONNECTION_BROKEN_ERR', () => {
       // given
@@ -162,7 +164,9 @@ describe('ErrorService', () => {
       jest.advanceTimersByTime(2000);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('warning', 'Environment is unreachable. Please check your internet connection.', '');
+      expect(spyMethod).toBeCalledWith({
+        content: 'Environment is unreachable. Please check your internet connection.', details: 'Possible causes: the network is offline,', onConfirm: null, type: 'warning',
+      });
       expect(spyLogOut).toBeCalled();
     });
     it('should display notification and logout on BAD_REQUEST_ERR', () => {
@@ -177,7 +181,9 @@ describe('ErrorService', () => {
       errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('warning', 'There has been a problem with your request', '');
+      expect(spyMethod).toBeCalledWith({
+        content: 'There has been a problem with your request', details: '', onConfirm: null, type: 'warning',
+      });
     });
     it('should display notification on CONNECTION_BROKEN_ERR and NOR logout if flag is true', () => {
       // given
@@ -190,7 +196,9 @@ describe('ErrorService', () => {
       errorService.handleError(error, true);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('warning', 'Environment is unreachable. Please check your internet connection.', '');
+      expect(spyMethod).toBeCalledWith({
+        type: 'warning', content: 'Environment is unreachable. Please check your internet connection.', details: error.message, onConfirm: null,
+      });
       expect(spyLogOut).not.toBeCalled();
     });
     it('should display notification on BadRequestError', () => {
@@ -205,7 +213,9 @@ describe('ErrorService', () => {
       errorService.handleError(error, true);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('warning', 'There has been a problem with your request', '');
+      expect(spyMethod).toBeCalledWith({
+        content: 'There has been a problem with your request', details: '', onConfirm: null, type: 'warning',
+      });
     });
     it('should display notification on OutsideOfRangeError ', () => {
       // given
@@ -234,7 +244,9 @@ describe('ErrorService', () => {
       errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('warning', NOT_SUPPORTED_SERVER_ERR, '');
+      expect(spyMethod).toBeCalledWith({
+        content: NOT_SUPPORTED_SERVER_ERR, details: '', onConfirm: null, type: 'warning',
+      });
     });
     it('should display notification on InternalServerError on report with Custom Groups', () => {
       // given
@@ -245,7 +257,9 @@ describe('ErrorService', () => {
       errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('warning', NOT_SUPPORTED_CUSTOM_GROUP, '');
+      expect(spyMethod).toBeCalledWith({
+        content: NOT_SUPPORTED_CUSTOM_GROUP, details: '', onConfirm: null, type: 'warning',
+      });
     });
     it('should display notification on exceeding row limits', () => {
       // given
@@ -256,7 +270,9 @@ describe('ErrorService', () => {
       errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('warning', PROJECT_ROW_LIMIT, '');
+      expect(spyMethod).toBeCalledWith({
+        content: PROJECT_ROW_LIMIT, details: '', onConfirm: null, type: 'warning',
+      });
     });
     it('should display notification on not published cubes', () => {
       // given
@@ -267,7 +283,9 @@ describe('ErrorService', () => {
       errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('warning', NOT_PUBLISHED_CUBE, '');
+      expect(spyMethod).toBeCalledWith({
+        content: NOT_PUBLISHED_CUBE, details: '', onConfirm: null, type: 'warning',
+      });
     });
     it('should display notification on object not present in metadata', () => {
       // given
@@ -278,7 +296,9 @@ describe('ErrorService', () => {
       errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith('warning', NOT_IN_METADATA, '');
+      expect(spyMethod).toBeCalledWith({
+        content: NOT_IN_METADATA, details: '', onConfirm: null, type: 'warning',
+      });
     });
     it('should logout on UnauthorizedError', () => {
       // given
@@ -315,7 +335,9 @@ describe('ErrorService', () => {
       errorService.handleError(error);
       // then
       expect(notificationSpy).toBeCalled();
-      expect(notificationSpy).toBeCalledWith('warning', TABLE_OVERLAP, '');
+      expect(notificationSpy).toBeCalledWith({
+        content: TABLE_OVERLAP, details: "A table can't overlap another table. ", onConfirm: null, type: 'warning',
+      });
     });
   });
   describe('getOfficeErrorType', () => {
@@ -377,7 +399,9 @@ describe('ErrorService', () => {
       errorService.handleError(error);
       // then
       expect(notificationSpy).toBeCalled();
-      expect(notificationSpy).toBeCalledWith('warning', 'Please run plugin inside Office', '');
+      expect(notificationSpy).toBeCalledWith({
+        content: 'Please run plugin inside Office', details: 'Excel is not defined', onConfirm: null, type: 'warning',
+      });
     });
     it('should display notification on OVERLAPPING_TABLES_ERR', () => {
       // given
@@ -390,7 +414,9 @@ describe('ErrorService', () => {
       errorService.handleError(error);
       // then
       expect(notificationSpy).toBeCalled();
-      expect(notificationSpy).toBeCalledWith('warning', TABLE_OVERLAP, '');
+      expect(notificationSpy).toBeCalledWith({
+        content: TABLE_OVERLAP, details: "A table can't overlap another table. ", onConfirm: null, type: 'warning',
+      });
     });
     it('should display notification on GENERIC_OFFICE_ERR', () => {
       // given
@@ -403,7 +429,9 @@ describe('ErrorService', () => {
       errorService.handleError(error);
       // then
       expect(notificationSpy).toBeCalled();
-      expect(notificationSpy).toBeCalledWith('warning', `Excel returned error: ${error.message}`, '');
+      expect(notificationSpy).toBeCalledWith({
+        content: `Excel returned error: ${error.message}`, details: 'Generic error message', onConfirm: null, type: 'warning',
+      });
     });
     it('should display notification on OutsideOfRangeError', () => {
       // given
@@ -413,7 +441,9 @@ describe('ErrorService', () => {
       errorService.handleError(error);
       // then
       expect(notificationSpy).toBeCalled();
-      expect(notificationSpy).toBeCalledWith('warning', 'The table you try to import exceeds the worksheet limits.', '');
+      expect(notificationSpy).toBeCalledWith({
+        content: 'The table you try to import exceeds the worksheet limits.', details: '', onConfirm: null, type: 'warning',
+      });
     });
   });
   describe('logout', () => {

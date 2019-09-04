@@ -9,7 +9,7 @@ class FileHistoryHelper {
     sessionHelper.enableLoading();
     try {
       const removed = await onDelete(bindingId, isCrosstab, crosstabHeaderDimensions);
-      removed && notificationService.displayTranslatedNotification('success', message);
+      removed && notificationService.displayTranslatedNotification({ type: 'success', content: message });
     } catch (error) {
       errorService.handleError(error);
     } finally {
