@@ -7,8 +7,14 @@ const LIMIT = 2048; // 2048; Don't use -1
 const DOSSIER_SUBTYPE = 14081;
 const SUBTYPES = [768, 769, 774, 776, 779, DOSSIER_SUBTYPE];
 
-
+/**
+ * TODO
+ *
+ * @param {*} body
+ * @returns
+ */
 function filterDossier(body) {
+  // TODO what if there is no body.result
   return body.result.filter(filterFunction);
 }
 
@@ -20,14 +26,8 @@ function filterFunction(object) {
 }
 
 function processTotalItems(body) {
+  // TODO what if there is no totalItems
   return body.totalItems;
-}
-
-function processObjectList(body) {
-  console.time('Filtering');
-  const filteredList = filterDossier(body);
-  console.timeEnd('Filtering');
-  return filteredList;
 }
 
 function getRequestParams() {
@@ -41,7 +41,7 @@ function fetchTotalItems({ limit = 1, callback = processTotalItems, requestParam
   return fetchObjectList({ limit, callback, requestParams });
 }
 
-export function fetchObjectList({ requestParams, callback = (res) => res, offset = 0, limit = LIMIT }) {
+function fetchObjectList({ requestParams, callback = (res) => res, offset = 0, limit = LIMIT }) {
   const { envUrl, authToken, typeQuery } = requestParams;
   const url = `${envUrl}/${SEARCH_ENDPOINT}?limit=${limit}&offset=${offset}&type=${typeQuery}`;
   return request
@@ -52,7 +52,7 @@ export function fetchObjectList({ requestParams, callback = (res) => res, offset
     .then(callback);
 }
 
-export default async function getObjectList(callback) {
+async function fetchObjectListPagination(callback) {
   const requestParams = getRequestParams();
   const total = await fetchTotalItems({ requestParams });
 
@@ -67,7 +67,6 @@ export default async function getObjectList(callback) {
 }
 
 
-export async function test() {
-  const promiseList = await getObjectList(processObjectList);
-  Promise.all(promiseList).then(console.log);
+export default function getObjectList() {
+  return fetchObjectListPagination(filterDossier);
 }
