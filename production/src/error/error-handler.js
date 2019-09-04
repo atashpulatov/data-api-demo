@@ -11,7 +11,7 @@ import {
 const TIMEOUT = 2000;
 
 class ErrorService {
-  handleError = (...[error, options = { reportName: 'Report', onConfirm: null, isLogout: false }]) => {
+  handleError = (error, options = { reportName: 'Report', onConfirm: null, isLogout: false }) => {
     const { onConfirm, isLogout, ...parameters } = options;
     const errorType = this.getErrorType(error);
     const errorMessage = errorMessageFactory[errorType]({ error, ...parameters });
@@ -63,7 +63,7 @@ class ErrorService {
     return httpStatusToErrorType[status];
   }
 
-  getErrorMessage = (...[error, options = { reportName: 'Report' }]) => {
+  getErrorMessage = (error, options = { reportName: 'Report' }) => {
     const errorType = this.getErrorType(error);
     return errorMessageFactory[errorType]({ error, ...options });
   }
