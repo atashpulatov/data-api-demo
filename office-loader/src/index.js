@@ -22,7 +22,7 @@ function officeInitialize() {
 }
 
 function startAuthentication() {
-  verifyToken(libraryUrl).then(({ok}) => {
+  verifyToken(libraryUrl).then(({ ok }) => {
     if (ok) {
       goToReact(libraryUrl);
     }
@@ -38,7 +38,7 @@ function startAuthentication() {
 function onLoginClick() {
   openAuthDialog(libraryUrl);
   verifyToken(libraryUrl)
-    .then(({ok}) => ok && goToReact(libraryUrl))
+    .then(({ ok }) => ok && goToReact(libraryUrl))
     .catch((e) => console.log(e))
 }
 
@@ -60,24 +60,27 @@ function getLibraryUrl() {
 function verifyToken(libraryUrl) {
   const url = libraryUrl + '/api/sessions/privileges/' + OFFICE_PRIVILEGE_ID;
   const token = getCookie(window);
-  const headers = {'X-MSTR-AuthToken': token};
-  return fetch(url, {credentials: 'include', headers});
+  const headers = { 'X-MSTR-AuthToken': token };
+  return fetch(url, { credentials: 'include', headers });
 }
 
 function logout(libraryUrl) {
   const url = libraryUrl + '/api/auth/logout';
   const token = getCookie(window);
-  const headers = {'X-MSTR-AuthToken': token};
-  return fetch(url, {method: 'POST', credentials: 'include', headers});
+  const headers = { 'X-MSTR-AuthToken': token };
+  return fetch(url, { method: 'POST', credentials: 'include', headers });
 }
 
 function openAuthDialog(url) {
+  // const popupUrl = `https://localhost:3000/test.html`;
   const popupUrl = `${url}/apps/addin-mstr-office/auth.html?source=addin-mstr-office`;
   const isOfficeOnline = Office.context ? Office.context.platform === Office.PlatformType.OfficeOnline : false;
-  isOfficeOnline ? openPopup(popupUrl) : openOfficeDialog(popupUrl);
+  const popupPromise = isOfficeOnline ? openPopup : openOfficeDialog;
   const currentUuid = window.localStorage.getItem('uuid');
   const listenAuthToken = () => {
-    verifyToken(url).then(({ok, status}) => {
+    console.log(popup);
+    if (popup === null || popup.closed) changeLoginBtnText('Log in');
+    verifyToken(url).then(({ ok, status }) => {
       if (ok) {
         popup.close();
         goToReact(url);
@@ -88,7 +91,7 @@ function openAuthDialog(url) {
           window.location.replace(`${url}/static/loader-mstr-office/no-privilege.html?locale=${locale}`);
         });
       } else {
-        !popup.closed && setTimeout(listenAuthToken, 1000)
+        if (!popup.closed) setTimeout(listenAuthToken, 1000)
       }
     }).catch((e) => {
       console.log(e);
@@ -97,7 +100,12 @@ function openAuthDialog(url) {
       window.localStorage.setItem('uuid', getCookie(window));
     });
   }
-  listenAuthToken();
+  popupPromise(popupUrl).then(() => {
+    changeLoginBtnText('Focus dialog');
+    listenAuthToken();
+  }).catch((error) => {
+    console.log(error);
+  });
 }
 
 function openPopup(url) {
@@ -107,25 +115,29 @@ function openPopup(url) {
     const left = (screen.width - width) / 2;
     const top = (screen.height - height) / 2;
     popup = window.open(url, 'MicroStrategy_for_Office', `resizable=1,status=1,height=${height},width=${width},top=${top},left=${left},screenX=${left},screenY=${top}location=0,dependent=1,alwaysOnTop=1`);
+    return Promise.resolve(popup);
   } else {
     popup.focus();
+    if (popup) return Promise.reject('A dialog is already open');
   };
-  return popup;
 }
 
 function openOfficeDialog(url) {
-  let dialog;
-  Office.context.ui.displayDialogAsync(url, {height: 85, width: 25},
-    function(asyncResult) {
-      dialog = asyncResult.value;
-      dialog.addEventHandler(Office.EventType.DialogMessageReceived, processDialogEvent);
-      popup = dialog;
-      popup.closed = false;
-    }
-  );
+  if (popup) return Promise.reject('A dialog is already open');
+  return new Promise((resolve) => {
+    Office.context.ui.displayDialogAsync(url, { height: 85, width: 25 },
+      function (asyncResult) {
+        popup = asyncResult.value;
+        popup.addEventHandler(Office.EventType.DialogEventReceived, processDialogEvent);
+        popup.closed = false;
+        resolve();
+      }
+    );
+  });
 }
 
 function processDialogEvent(arg) {
+  console.log('cacache', arg);
   switch (arg.error) {
     case 12002:
       console.log('The dialog box has been directed to a page that it cannot find or load, or the URL syntax is invalid.');
@@ -157,6 +169,10 @@ function showLoginBtn() {
   document.getElementById('cookies-not-needed').style.display = 'none';
   document.getElementById('login-container').style.display = 'block';
   document.getElementById('login-btn').addEventListener('click', onLoginClick);
+}
+
+function changeLoginBtnText(text) {
+  document.getElementById('loginSpan').innerText = text;
 }
 
 function canSaveCookies() {
