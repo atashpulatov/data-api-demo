@@ -11,7 +11,7 @@ jest.mock('../../error/error-handler');
 
 describe('FileHistoryHelper', () => {
   beforeAll(() => {
-    jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => {});
+    jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => { });
   });
   afterEach(() => {
     jest.resetAllMocks();
@@ -57,7 +57,7 @@ describe('FileHistoryHelper', () => {
       await fileHistoryHelper.deleteReport(mockedOnDelete, testBindId, isCrosstab, headerDimensions, message);
       // then
       expect(mockedDisplayMessage).toBeCalled();
-      expect(mockedDisplayMessage).toBeCalledWith('success', message);
+      expect(mockedDisplayMessage).toBeCalledWith({ type: 'success', content: message });
     });
     it('should not display message without success', async () => {
       // given

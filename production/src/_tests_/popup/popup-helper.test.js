@@ -299,17 +299,13 @@ describe('Popup actions', () => {
   it('handleRefreshError calls proper methods when isRefreshAll flag is true', () => {
     // given
     const error = 'testError';
-    const officeError = 'Test error message';
-    const errorMessage = 'Test error message';
-    errorService.errorOfficeFactory = jest.fn().mockReturnValue(officeError);
-    errorService.getErrorMessage = jest.fn().mockReturnValue(errorMessage);
+    errorService.getErrorMessage = jest.fn().mockReturnValue(error);
     popupHelper.storageReportRefreshFinish = jest.fn();
     // when
     popupHelper.handleRefreshError(error, 10, 2, true);
     // then
-    expect(errorService.errorOfficeFactory).toHaveBeenCalledWith(error);
-    expect(errorService.getErrorMessage).toHaveBeenCalledWith(officeError);
-    expect(popupHelper.storageReportRefreshFinish).toHaveBeenCalledWith(errorMessage, true, 2, 10);
+    expect(errorService.getErrorMessage).toHaveBeenCalledWith(error);
+    expect(popupHelper.storageReportRefreshFinish).toHaveBeenCalledWith(error, true, 2, 10);
   });
   it('handleRefreshError display proper notifications when isRefreshAll is false and error.code is ItemNotFound', () => {
     // given
@@ -320,10 +316,8 @@ describe('Popup actions', () => {
     // when
     popupHelper.handleRefreshError(mockError, 10, 2, false);
     // then
-    expect(notificationService.displayNotification).toHaveBeenCalledWith(
-      'info',
-      'Data is not relevant anymore. You can delete it from the list',
-    );
+    expect(notificationService.displayNotification)
+      .toHaveBeenCalledWith({ type: 'info', content: 'Data is not relevant anymore. You can delete it from the list' });
   });
   it('handleRefreshError display proper notifications when isRefreshAll is false and error.code is NOT ItemNotFound', () => {
     // given

@@ -102,27 +102,20 @@ class PopupHelper {
       throw new Error(result.message);
     }
     if (!isRefreshAll) {
-      notificationService.displayNotification(
-        'success',
-        `${this.capitalize(objectType.name)} refreshed`,
-      );
+      notificationService.displayNotification({ type: 'success', content: `${this.capitalize(mstrObjectType.name)} refreshed` });
       return false;
     }
     this.storageReportRefreshFinish('ok', false, index, length);
     return false;
   };
 
-  handleRefreshError = (error, length, index, isRefreshAll) => {
+  handleRefreshError(error, length, index, isRefreshAll) {
     if (isRefreshAll) {
-      const officeError = errorService.errorOfficeFactory(error);
-      const errorMessage = errorService.getErrorMessage(officeError);
+      const errorMessage = errorService.getErrorMessage(error);
       return this.storageReportRefreshFinish(errorMessage, true, index, length);
     }
     if (error.code === 'ItemNotFound') {
-      return notificationService.displayNotification(
-        'info',
-        'Data is not relevant anymore. You can delete it from the list',
-      );
+      return notificationService.displayNotification({ type: 'info', content: 'Data is not relevant anymore. You can delete it from the list' });
     }
     errorService.handleError(error);
   }

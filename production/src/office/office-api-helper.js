@@ -81,7 +81,7 @@ class OfficeApiHelper {
     return letters.split('').reduce((r, a) => r * ALPHABET_RANGE_END + parseInt(a, 36) - 9, 0);
   }
 
-  onBindingObjectClick = async (bindingId, shouldSelect = true) => {
+  onBindingObjectClick = async (bindingId, shouldSelect = true, deleteReport, reportName) => {
     try {
       const excelContext = await this.getExcelContext();
       const tableRange = this.getBindingRange(excelContext, bindingId);
@@ -90,9 +90,9 @@ class OfficeApiHelper {
       return true;
     } catch (error) {
       if (error.code === 'ItemNotFound') {
-        return notificationService.displayNotification('info', 'The object does not exist in the metadata.');
+        return notificationService.displayNotification({ type: 'info', content: 'The object does not exist in the metadata.' });
       }
-      errorService.handleError(error);
+      errorService.handleError(error, { reportName, onConfirm: deleteReport });
       return false;
     }
   };
@@ -150,7 +150,7 @@ class OfficeApiHelper {
         console.log('Error when formatting - no columns autofit applied');
       }
     } else {
-      notificationService.displayNotification('warning', 'Unable to format table.');
+      notificationService.displayNotification({ type: 'warning', content: 'Unable to format table.' });
     }
   }
 
