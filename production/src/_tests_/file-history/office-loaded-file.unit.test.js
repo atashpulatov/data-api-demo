@@ -58,18 +58,20 @@ describe('office loaded file', () => {
     // given
     const onClickMocked = jest.fn();
     const testBindingId = 'testBindingId';
+    const testName = 'testName';
     const wrappedComponent = mount(<_OfficeLoadedFile
       refreshDate={new Date()}
       bindingId={testBindingId}
       onClick={onClickMocked}
-      fileName="test"
+      fileName={testName}
       objectType={{ name: 'report' }}
     />);
     // when
+    const mockDelete = jest.spyOn(wrappedComponent.instance(), 'deleteReport');
     const textWrapper = wrappedComponent.childAt(0).find('Col');
     textWrapper.at(1).simulate('click');
     expect(onClickMocked).toBeCalled();
-    expect(onClickMocked).toBeCalledWith(testBindingId);
+    expect(onClickMocked).toBeCalledWith(testBindingId, true, mockDelete, testName);
   });
   it('should display delete and refresh buttons', () => {
     // given
@@ -132,7 +134,7 @@ describe('office loaded file', () => {
     const mockEvent = { stopPropagation: jest.fn() };
     const testBindingId = 'testBindingId';
     const objectType = { name: 'report' };
-    jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => {});
+    jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => { });
     const objectClickMock = jest.spyOn(officeApiHelper, 'onBindingObjectClick').mockImplementation(() => true);
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
@@ -157,7 +159,7 @@ describe('office loaded file', () => {
     const mockEvent = { stopPropagation: jest.fn() };
     const testBindingId = 'testBindingId';
     const objectType = 'report';
-    jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => {});
+    jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => { });
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
       refreshDate={new Date()}
@@ -215,7 +217,7 @@ describe('office loaded file', () => {
     const mockEvent = { stopPropagation: jest.fn() };
     const testBindingId = 'testBindingId';
     const objectType = 'report';
-    jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => {});
+    jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => { });
 
     const wrappedComponent = mount(<_OfficeLoadedFile
       refreshDate={new Date()}
@@ -240,21 +242,23 @@ describe('office loaded file', () => {
     const onRefreshMocked = jest.fn();
     const mockEvent = { stopPropagation: jest.fn() };
     const testBindingId = 'testBindingId';
+    const testName = 'testName';
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
       refreshDate={new Date()}
       bindingId={testBindingId}
       onClick={onClickMocked}
-      fileName="test"
+      fileName={testName}
       refreshReport={onRefreshMocked}
       onDelete={onDeleteMocked}
       objectType={{ name: 'report' }}
     />);
+    const mockDelete = jest.spyOn(wrappedComponent.instance(), 'deleteReport');
     const textWrapper = wrappedComponent.childAt(0);
     textWrapper.props().onClick(mockEvent);
     // then
     expect(onClickMocked).toBeCalled();
-    expect(onClickMocked).toBeCalledWith(testBindingId);
+    expect(onClickMocked).toBeCalledWith(testBindingId, true, mockDelete, testName);
     expect(onDeleteMocked).not.toBeCalled();
     expect(onRefreshMocked).not.toBeCalled();
   });
@@ -271,7 +275,7 @@ describe('office loaded file', () => {
     const mockEvent = { stopPropagation: jest.fn() };
     const testBindingId = 'testBindingId';
     const objectType = { name: 'report' };
-    jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => {});
+    jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => { });
     const objectClickMock = jest.spyOn(officeApiHelper, 'onBindingObjectClick').mockImplementation(() => true);
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
@@ -296,14 +300,15 @@ describe('office loaded file', () => {
     const mockEvent = { stopPropagation: jest.fn() };
     const testBindingId = 'testBindingId';
     const objectType = { name: 'report' };
-    jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => {});
+    jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => { });
     const objectClickMock = jest.spyOn(officeApiHelper, 'onBindingObjectClick').mockImplementation(() => true);
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
       refreshDate={new Date()}
       bindingId={testBindingId}
+      objectType={objectType}
       fileName="test"
-      onReprompt={onRepromptMocked}
+      callForReprompt={onRepromptMocked}
       isLoading={false}
       isPrompted
       objectType={objectType}

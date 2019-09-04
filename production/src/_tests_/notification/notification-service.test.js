@@ -42,10 +42,12 @@ describe('NotificationService', () => {
     };
     actionCreator.showNotificationAction = jest.fn().mockImplementation(() => mockedAction);
     // when
-    notificationService.displayNotification(testType, testContent, testDetails, testTitle);
+    notificationService.displayNotification({
+      type: testType, content: testContent, details: testDetails, title: testTitle,
+    });
     // then
     expect(actionCreator.showNotificationAction).toBeCalled();
-    expect(actionCreator.showNotificationAction).toBeCalledWith(testTitle, testContent, testType, testDetails);
+    expect(actionCreator.showNotificationAction).toBeCalledWith(testTitle, testContent, testType, testDetails, null);
     expect(reduxStore.dispatch).toBeCalled();
     expect(reduxStore.dispatch).toBeCalledWith(mockedAction);
   });
@@ -65,10 +67,12 @@ describe('NotificationService', () => {
     };
     actionCreator.showTranslatedNotification = jest.fn().mockImplementation(() => mockedAction);
     // when
-    notificationService.displayTranslatedNotification(testType, testContent, testDetails, testTitle);
+    notificationService.displayTranslatedNotification({
+      type: testType, content: testContent, details: testDetails, title: testTitle,
+    });
     // then
     expect(actionCreator.showTranslatedNotification).toBeCalled();
-    expect(actionCreator.showTranslatedNotification).toBeCalledWith(testTitle, testContent, testType, testDetails);
+    expect(actionCreator.showTranslatedNotification).toBeCalledWith(testTitle, testContent, testType, testDetails, null);
     expect(reduxStore.dispatch).toBeCalled();
     expect(reduxStore.dispatch).toBeCalledWith(mockedAction);
   });

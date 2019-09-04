@@ -18,7 +18,7 @@ class AuthenticationHelper {
         );
       sessionHelper.logIn(authToken);
     } catch (error) {
-      errorService.handleError(error, true);
+      errorService.handleError(error, { isLogout: true });
     } finally {
       sessionHelper.disableLoading();
     }
