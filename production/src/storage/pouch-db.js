@@ -1,6 +1,18 @@
 import PouchDB from 'pouchdb';
 
+/**
+ * Helper class to create, reset and add MicroStrategy objects into the db
+ *
+ * @export
+ * @class DB
+ */
 export default class DB {
+  /**
+   * Creates an instance of PouchDB with limited revision history.
+   *
+   * @param {String} dbName Name of db
+   * @memberof DB
+   */
   constructor(dbName) {
     this.db = new PouchDB(dbName, { revs_limit: 2 });
     this.dbName = dbName;
@@ -40,7 +52,8 @@ export default class DB {
   }
 
   /**
-   * Takes a list of documents that you want to put() into the database
+   * Takes a list of documents that you want to put() into the database and
+   * adds the PouchDB required _id key
    *
    * @param {MSTR} objects MicroStrategy object array
    * @returns {Promise} Promise containing result of bulkDocs operation
