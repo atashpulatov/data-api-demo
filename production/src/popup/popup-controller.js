@@ -119,7 +119,7 @@ class PopupController {
         case selectorProperties.commandCancel:
           break;
         case selectorProperties.commandError:
-          errorService.handleError(response.error, false);
+          errorService.handleError(response.error);
           break;
         default:
           break;
@@ -161,7 +161,7 @@ class PopupController {
       };
       const result = await officeDisplayService.printObject(options);
       if (result) {
-        notificationService.displayNotification(result.type, result.message);
+        notificationService.displayNotification({ type: result.type, content: result.message });
       }
       reduxStore.dispatch({ type: STOP_REPORT_LOADING });
     }
@@ -197,7 +197,7 @@ class PopupController {
       };
       const result = await officeDisplayService.printObject(options);
       if (result) {
-        notificationService.displayNotification(result.type, result.message);
+        notificationService.displayNotification({ type: result.type, content: result.message });
       }
       reduxStore.dispatch({ type: STOP_REPORT_LOADING });
     }

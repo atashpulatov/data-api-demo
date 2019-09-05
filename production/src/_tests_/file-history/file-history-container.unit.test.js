@@ -17,11 +17,11 @@ describe('FileHistoryContainer', () => {
     const mockReportArray = createMockFilesArray();
     // when
     const wrappedComponent = mount(<Provider store={reduxStore}>
-        <_FileHistoryContainer
-          project="testProject"
-          reportArray={mockReportArray}
-        />
-      </Provider>,);
+      <_FileHistoryContainer
+        project="testProject"
+        reportArray={mockReportArray}
+      />
+    </Provider>);
     // then
     expect(wrappedComponent.html()).not.toBeNull();
   });
@@ -30,12 +30,12 @@ describe('FileHistoryContainer', () => {
     const mockFiles = createMockFilesArray();
     // when
     const wrappedComponent = mount(<Provider store={reduxStore}>
-        <_FileHistoryContainer
-          reportArray={mockFiles}
-          project="testProject"
-        />
-      </Provider>,);
-    const wrappedListElements = wrappedComponent.find('Row');
+      <_FileHistoryContainer
+        reportArray={mockFiles}
+        project="testProject"
+      />
+    </Provider>);
+    const wrappedListElements = wrappedComponent.find('div.file-history-container');
     // then
     expect(wrappedComponent.html()).not.toContain('No files loaded.');
     expect(wrappedListElements.length).toEqual(mockFiles.length);
@@ -46,12 +46,12 @@ describe('FileHistoryContainer', () => {
     const mockReportArray = createMockFilesArray();
     // when
     const wrappedComponent = mount(<Provider store={reduxStore}>
-        <_FileHistoryContainer
-          project="testProject"
-          refreshingAll={refreshingAll}
-          reportArray={mockReportArray}
-        />
-      </Provider>,);
+      <_FileHistoryContainer
+        project="testProject"
+        refreshingAll={refreshingAll}
+        reportArray={mockReportArray}
+      />
+    </Provider>);
     // then
     expect(wrappedComponent.exists('Button .refresh-all-btn MSTRIcon')).toBeTruthy();
   });
@@ -61,12 +61,12 @@ describe('FileHistoryContainer', () => {
     const mockReportArray = createMockFilesArray();
     // when
     const wrappedComponent = mount(<Provider store={reduxStore}>
-        <_FileHistoryContainer
-          project="testProject"
-          refreshingAll={refreshingAll}
-          reportArray={mockReportArray}
-        />
-      </Provider>,);
+      <_FileHistoryContainer
+        project="testProject"
+        refreshingAll={refreshingAll}
+        reportArray={mockReportArray}
+      />
+    </Provider>);
     // then
     expect(wrappedComponent.exists('Button .refresh-all-btn img')).toBeTruthy();
   });
@@ -75,12 +75,12 @@ describe('FileHistoryContainer', () => {
     const refreshAllmock = jest.fn();
     const mockReportArray = createMockFilesArray();
     const wrappedComponent = mount(<Provider store={reduxStore}>
-        <_FileHistoryContainer
-          project="testProject"
-          reportArray={mockReportArray}
-          refreshReportsArray={refreshAllmock}
-        />
-      </Provider>,);
+      <_FileHistoryContainer
+        project="testProject"
+        reportArray={mockReportArray}
+        refreshReportsArray={refreshAllmock}
+      />
+    </Provider>);
     const refreshButton = wrappedComponent.find('Button .refresh-all-btn');
     // when
     refreshButton.simulate('click');
@@ -93,10 +93,10 @@ describe('FileHistoryContainer', () => {
     const mockReportArray = createMockFilesArray();
     LoadedFilesConstans.OfficeLoadedFile = () => <div />;
     const wrappedComponent = mount(<_FileHistoryContainer
-        project="testProject"
-        reportArray={mockReportArray}
-        refreshReportsArray={jest.fn()}
-      />,);
+      project="testProject"
+      reportArray={mockReportArray}
+      refreshReportsArray={jest.fn()}
+    />);
     wrappedComponent.instance()._ismounted = false;
     wrappedComponent.instance().setState = jest.fn((obj, callback) => setStateCallBack = callback || (() => { }));
     const refreshButton = wrappedComponent.find('Button .refresh-all-btn');
@@ -115,12 +115,12 @@ describe('FileHistoryContainer', () => {
     sessionHelperSpy.mockClear();
     const clickSpy = jest.spyOn(popupController, 'runPopupNavigation');
     const wrappedComponent = mount(<Provider store={reduxStore}>
-        <FileHistoryContainer
-          project="testProject"
-          reportArray={mockReportArray}
-          refreshAll={refreshAllmock}
-        />
-      </Provider>,);
+      <FileHistoryContainer
+        project="testProject"
+        reportArray={mockReportArray}
+        refreshAll={refreshAllmock}
+      />
+    </Provider>);
     const wrappedButton = wrappedComponent.find('#add-data-btn-container').at(0);
 
     // when
@@ -138,13 +138,13 @@ describe('FileHistoryContainer', () => {
     const mockRefreshReportArray = jest.fn();
     const mockToggleSecured = jest.fn();
     const wrappedComponent = mount(<_FileHistoryContainer
-        project="testProject"
-        refreshingAll={refreshAllmock}
-        reportArray={mockReportArray}
-        isSecured
-        refreshReportsArray={mockRefreshReportArray}
-        toggleSecuredFlag={mockToggleSecured}
-      />,);
+      project="testProject"
+      refreshingAll={refreshAllmock}
+      reportArray={mockReportArray}
+      isSecured
+      refreshReportsArray={mockRefreshReportArray}
+      toggleSecuredFlag={mockToggleSecured}
+    />);
     const tmp = wrappedComponent.instance();
     const mockRemoveListener = jest.spyOn(wrappedComponent.instance(), 'deleteRemoveReportListener').mockImplementation(jest.fn());
     wrappedComponent.instance().forceUpdate();
@@ -162,12 +162,12 @@ describe('FileHistoryContainer', () => {
     const mockReportArray = createMockFilesArray();
     // when
     const wrappedComponent = mount(<Provider store={reduxStore}>
-        <_FileHistoryContainer
-          project="testProject"
-          refreshingAll={refreshingAll}
-          reportArray={mockReportArray}
-        />
-      </Provider>,);
+      <_FileHistoryContainer
+        project="testProject"
+        refreshingAll={refreshingAll}
+        reportArray={mockReportArray}
+      />
+    </Provider>);
     // then
     expect(wrappedComponent.find(Popover)).toHaveLength(1);
   });
@@ -179,13 +179,13 @@ describe('FileHistoryContainer', () => {
     const mockRefreshReportArray = jest.fn();
     const mockToggleSecured = jest.fn();
     const wrappedComponent = mount(<_FileHistoryContainer
-        project="testProject"
-        refreshingAll={refreshAllmock}
-        reportArray={mockReportArray}
-        isSecured={false}
-        refreshReportsArray={mockRefreshReportArray}
-        toggleSecuredFlag={mockToggleSecured}
-      />,);
+      project="testProject"
+      refreshingAll={refreshAllmock}
+      reportArray={mockReportArray}
+      isSecured={false}
+      refreshReportsArray={mockRefreshReportArray}
+      toggleSecuredFlag={mockToggleSecured}
+    />);
     // when
     const secureContainer = wrappedComponent.find('.secured-screen-container');
     // then
@@ -199,13 +199,13 @@ describe('FileHistoryContainer', () => {
     const mockRefreshReportArray = jest.fn();
     const mockToggleSecured = jest.fn();
     const wrappedComponent = mount(<_FileHistoryContainer
-        project="testProject"
-        refreshingAll={refreshAllmock}
-        reportArray={mockReportArray}
-        isSecured
-        refreshReportsArray={mockRefreshReportArray}
-        toggleSecuredFlag={mockToggleSecured}
-      />,);
+      project="testProject"
+      refreshingAll={refreshAllmock}
+      reportArray={mockReportArray}
+      isSecured
+      refreshReportsArray={mockRefreshReportArray}
+      toggleSecuredFlag={mockToggleSecured}
+    />);
     // when
     const secureContainer = wrappedComponent.find('.secured-screen-container');
     // then
@@ -219,13 +219,13 @@ describe('FileHistoryContainer', () => {
     const mockRefreshReportArray = jest.fn();
     const mockToggleSecured = jest.fn();
     const wrappedComponent = mount(<_FileHistoryContainer
-        project="testProject"
-        refreshingAll={refreshAllmock}
-        reportArray={mockReportArray}
-        isSecured
-        refreshReportsArray={mockRefreshReportArray}
-        toggleSecuredFlag={mockToggleSecured}
-      />,);
+      project="testProject"
+      refreshingAll={refreshAllmock}
+      reportArray={mockReportArray}
+      isSecured
+      refreshReportsArray={mockRefreshReportArray}
+      toggleSecuredFlag={mockToggleSecured}
+    />);
     const mockShowData = jest.spyOn(wrappedComponent.instance(), 'showData');
     wrappedComponent.instance().forceUpdate();
     const secureDataButton = wrappedComponent.find('Button .show-data-btn');
@@ -241,13 +241,13 @@ describe('FileHistoryContainer', () => {
     const mockRefreshReportArray = jest.fn();
     const mockToggleSecured = jest.fn();
     const wrappedComponent = shallow(<_FileHistoryContainer
-        project="testProject"
-        refreshingAll={refreshAllmock}
-        reportArray={mockReportArray}
-        isSecured
-        refreshReportsArray={mockRefreshReportArray}
-        toggleSecuredFlag={mockToggleSecured}
-      />,);
+      project="testProject"
+      refreshingAll={refreshAllmock}
+      reportArray={mockReportArray}
+      isSecured
+      refreshReportsArray={mockRefreshReportArray}
+      toggleSecuredFlag={mockToggleSecured}
+    />);
     const mockRefreshAll = jest.spyOn(wrappedComponent.instance(), 'refreshAllAction');
     const mockValidateToken = jest.spyOn(authenticationHelper, 'validateAuthToken').mockImplementation(() => { });
     const mockGetExcelSession = jest.spyOn(officeApiHelper, 'getExcelSessionStatus').mockImplementation(() => { });
@@ -268,13 +268,13 @@ describe('FileHistoryContainer', () => {
     const mockToggleSecured = jest.fn();
     // when
     const wrappedComponent = mount(<_FileHistoryContainer
-        project="testProject"
-        refreshingAll={refreshAllmock}
-        reportArray={mockReportArray}
-        isSecured
-        refreshReportsArray={mockRefreshReportArray}
-        toggleSecuredFlag={mockToggleSecured}
-      />,);
+      project="testProject"
+      refreshingAll={refreshAllmock}
+      reportArray={mockReportArray}
+      isSecured
+      refreshReportsArray={mockRefreshReportArray}
+      toggleSecuredFlag={mockToggleSecured}
+    />);
     // then
     expect(mockToggleSecured).toBeCalledWith(true);
   });
