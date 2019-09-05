@@ -1,4 +1,3 @@
-import { errorService } from '../error/error-handler.js';
 import { moduleProxy } from '../module-proxy.js';
 
 const OFFICE_PRIVILEGE_ID = '273';

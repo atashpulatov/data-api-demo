@@ -75,13 +75,13 @@
       'ja-JP': 'ロード中...',
       'da-DK': 'Indlæser...'
     };
-    Office.onReady().then(() => {
+    Office.onReady(function () {
       try {
         var locale = Office.context.displayLanguage;
         if (!!loadingTranslations[locale]) {
           loadingSpan.innerHTML = loadingTranslations[locale];
         }
-      } catch (e) {}
+      } catch (e) { }
     });
   </script>
   <!--

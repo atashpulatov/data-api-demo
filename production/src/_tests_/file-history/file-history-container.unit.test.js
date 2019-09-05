@@ -39,7 +39,7 @@ describe('FileHistoryContainer', () => {
         />
       </Provider>,
     );
-    const wrappedListElements = wrappedComponent.find('Row');
+    const wrappedListElements = wrappedComponent.find('div.file-history-container');
     // then
     expect(wrappedComponent.html()).not.toContain('No files loaded.');
     expect(wrappedListElements.length).toEqual(mockFiles.length);

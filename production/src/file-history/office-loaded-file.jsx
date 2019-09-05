@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Row, Col, Popover } from 'antd';
 import { MSTRIcon } from '@mstr/mstr-react-library';
 import { withTranslation } from 'react-i18next';
 import { fileHistoryHelper } from './file-history-helper';
@@ -13,6 +12,8 @@ import {
 import RenameInput from './file-history-rename-input';
 import { officeApiHelper } from '../office/office-api-helper';
 import { ButtonPopover } from './button-popover';
+import { ReactComponent as DossierIcon } from './assets/icon_Dossier.svg';
+import { ReactComponent as ClockIcon } from './assets/icon_clock.svg';
 
 export class _OfficeLoadedFile extends React.Component {
   constructor() {
@@ -48,7 +49,7 @@ export class _OfficeLoadedFile extends React.Component {
   deleteAction = (e) => {
     const { allowDeleteClick } = this.state;
     const { t } = this.props;
-    e.stopPropagation();
+    if (e) e.stopPropagation();
     if (!allowDeleteClick) {
       return;
     }
@@ -80,7 +81,7 @@ export class _OfficeLoadedFile extends React.Component {
 
   repromptAction = (e) => {
     const { allowRefreshClick } = this.state;
-    e.stopPropagation();
+    if (e) e.stopPropagation();
     if (!allowRefreshClick) {
       return;
     }
@@ -104,7 +105,7 @@ export class _OfficeLoadedFile extends React.Component {
 
   editAction = (e) => {
     const { allowRefreshClick } = this.state;
-    e.stopPropagation();
+    if (e) e.stopPropagation();
     if (!allowRefreshClick) {
       return;
     }
@@ -127,8 +128,9 @@ export class _OfficeLoadedFile extends React.Component {
   };
 
   refreshAction = (e) => {
-    e.stopPropagation();
+    if (e) e.stopPropagation();
     const { isLoading, bindingId, objectType, refreshReportsArray, loading, fileName } = this.props;
+
     const { allowRefreshClick } = this.state;
     if (!allowRefreshClick || loading) {
       return;
@@ -155,10 +157,96 @@ export class _OfficeLoadedFile extends React.Component {
         return <MSTRIcon type="report" />;
       case 'dataset':
         return <MSTRIcon type="dataset" />;
+      case 'dossier':
+        return <DossierIcon />;
       default:
         break;
     }
+    return <></>;
   };
+
+  renderIcons(t, isPrompted, isLoading) {
+    return (
+      <span className="object-icons">
+        <ButtonPopover
+          placement="bottom"
+          content={t('Reprompt')}
+          mouseEnterDelay={1}
+        >
+          {!!isPrompted && (
+            <span
+              role="button"
+              tabIndex="0"
+              className="loading-button-container"
+              onClick={this.repromptAction}
+              onKeyPress={this.repromptAction}
+            >
+              <MSTRIcon type="reprompt" />
+            </span>
+          )}
+        </ButtonPopover>
+        <ButtonPopover
+          placement="bottom"
+          content={t('Edit Data')}
+          mouseEnterDelay={1}
+        >
+          {
+            <span
+              role="button"
+              tabIndex="0"
+              className="loading-button-container"
+              onClick={this.editAction}
+              onKeyPress={this.editAction}
+            >
+              <MSTRIcon type="edit" />
+            </span>
+          }
+        </ButtonPopover>
+        <ButtonPopover
+          placement="bottom"
+          content={t('Refresh Data')}
+          mouseEnterDelay={1}
+        >
+          {
+            <span
+              role="button"
+              tabIndex="0"
+              className="loading-button-container"
+              onClick={this.refreshAction}
+              onKeyPress={this.refreshAction}
+            >
+              {!isLoading ? (
+                <MSTRIcon type="refresh" />
+              ) : (
+                <img
+                    width="12px"
+                    height="12px"
+                    src={loadingSpinner}
+                    alt={t('Report loading icon')}
+                  />
+              )}
+            </span>
+          }
+        </ButtonPopover>
+        <ButtonPopover
+          placement="bottomRight"
+          content={t('Remove Data from Workbook')}
+          mouseEnterDelay={1}
+          arrowPointAtCenter="true"
+        >
+          <span
+            role="button"
+            tabIndex="0"
+            onClick={this.deleteAction}
+            onKeyPress={this.deleteAction}
+          >
+            <MSTRIcon type="trash" />
+          </span>
+        </ButtonPopover>
+      </span>
+    );
+  }
+
 
   render() {
     const {
@@ -170,101 +258,44 @@ export class _OfficeLoadedFile extends React.Component {
       isPrompted,
       refreshDate,
       t,
+      visualisationPath,
     } = this.props;
+    const buttonsFunctions = {
+      reprompt: this.repromptAction, edit: this.editAction, refresh: this.refreshAction, delete: this.deleteAction,
+    };
     return (
-      <Row
+      <div
         className="file-history-container"
         type="flex"
         justify="center"
-        role="listitem"
+        role="button"
         tabIndex="0"
         onClick={() => onClick(bindingId, true, this.deleteReport, fileName)}
+        onKeyPress={() => onClick(bindingId, true, this.deleteReport, fileName)}
       >
-        <Col span={2}>{this.getMstrIcon(objectType)}</Col>
-        <Col span={11} className="report-title">
-          <RenameInput bindingId={bindingId} fileName={fileName} />
-          <Popover
+        <div className="refresh-icons-row">
+          <ButtonPopover
             placement="bottom"
             content={t('Date and time of last modification')}
             mouseEnterDelay={1}
           >
-            <div className="additional-data">
-              {t('refreshed_date', { date: refreshDate })}
-            </div>
-          </Popover>
-        </Col>
-        <Col span={1} offset={1} style={{ marginTop: '1px' }}>
-          <Popover
-            placement="bottom"
-            content={t('Reprompt')}
-            mouseEnterDelay={1}
-          >
-            {!!isPrompted && (
-              <span
-                className="loading-button-container"
-                onClick={this.repromptAction}
-              >
-                <MSTRIcon type="reprompt" />
+            <span>
+              <ClockIcon style={{ marginBottom: '2px' }} />
+              <span className="additional-data">
+                {t('refreshed_date', { date: refreshDate })}
               </span>
-            )}
-          </Popover>
-        </Col>
-        <Col span={1} offset={1} style={{ marginTop: '1px' }}>
-          <ButtonPopover
-            placement="bottom"
-            content={t('Edit Data')}
-            mouseEnterDelay={1}
-          >
-            {
-              <span
-                tabIndex="0"
-                className="loading-button-container"
-                onClick={this.editAction}
-              >
-                <MSTRIcon type="edit" />
-              </span>
-            }
-          </ButtonPopover>
-        </Col>
-        <Col span={1} offset={1}>
-          <ButtonPopover
-            placement="bottom"
-            content={t('Refresh Data')}
-            mouseEnterDelay={1}
-          >
-            {
-              <span
-                tabIndex="0"
-                className="loading-button-container"
-                onClick={this.refreshAction}
-              >
-                {!isLoading ? (
-                  <MSTRIcon type="refresh" />
-                ) : (
-                    <img
-                      width="12px"
-                      height="12px"
-                      src={loadingSpinner}
-                      alt={t('Report loading icon')}
-                    />
-                  )}
-              </span>
-            }
-          </ButtonPopover>
-        </Col>
-        <Col span={1} offset={1}>
-          <Popover
-            placement="bottomRight"
-            content={t('Remove Data from Workbook')}
-            mouseEnterDelay={1}
-            arrowPointAtCenter="true"
-          >
-            <span tabIndex="0" onClick={this.deleteAction}>
-              <MSTRIcon type="trash" />
             </span>
-          </Popover>
-        </Col>
-      </Row>
+          </ButtonPopover>
+          {this.renderIcons(t, isPrompted, isLoading)}
+        </div>
+
+        {objectType.name === 'dossier' && <div className="visualisation-path-row">{visualisationPath}</div>}
+
+        <div className="object-title-row">
+          {this.getMstrIcon(objectType)}
+          <RenameInput bindingId={bindingId} fileName={fileName} buttonsFunctions={buttonsFunctions} isPrompted={isPrompted} />
+        </div>
+      </div>
     );
   }
 }
