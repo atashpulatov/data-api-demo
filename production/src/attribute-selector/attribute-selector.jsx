@@ -10,6 +10,10 @@ export class _AttributeSelector extends Component {
     };
   }
 
+  toggleSubtotal = (isYes) => {
+    console.log('isYES ??? : ', isYes);
+  }
+
   render() {
     const {
       title, session,
@@ -32,6 +36,7 @@ export class _AttributeSelector extends Component {
           withFolderTree={false}
           openModal={this.props.openModal}
           closeModal={this.props.closeModal}
+          toggleSubtotal={this.toggleSubtotal}
         />
       </ErrorBoundary>
     );
