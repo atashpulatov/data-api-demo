@@ -37,6 +37,7 @@
     "core-js": "^3.2.1",
     "focus-visible": "^5.0.2",
     "i18next": "^17.0.6",
+    "pouchdb": "^7.1.1",
     "prop-types": "^15.7.2",
     "proxy-polyfill": "^0.3.0",
     "query-string": "^6.7.0",
