@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import '../index.css';
-import '../home/home.css';
 import { connect } from 'react-redux';
+import { selectorProperties } from '../attribute-selector/selector-properties';
+import '../home/home.css';
+import '../index.css';
+import { actions } from '../navigation/navigation-tree-actions';
 import { PromptsContainer } from './prompts-container';
 import { PromptWindowButtons } from './prompts-window-buttons';
-import { actions } from '../navigation/navigation-tree-actions';
-import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
-import { selectorProperties } from '../attribute-selector/selector-properties';
+import {
+  createInstance, createDossierBasedOnReport, rePromptDossier, answerDossierPrompts as postAnswerDossierPrompts, getDossierStatus, deleteDossierInstance,
+} from '../mstr-object/mstr-object-rest-service';
 
 const { Office } = window;
 const { microstrategy } = window;
@@ -39,13 +41,14 @@ export class _PromptsWindow extends Component {
   }
 
   preparePromptedReportInstance = async (reportId, projectId, promptsAnswers) => {
-    const instanceDefinition = await mstrObjectRestService.createInstance(reportId, projectId, true, null);
-    let dossierInstanceDefinition = await mstrObjectRestService.createDossierBasedOnReport(reportId, instanceDefinition.instanceId, projectId);
+    const config = { objectId: reportId, projectId };
+    const instanceDefinition = await createInstance(config);
+    let dossierInstanceDefinition = await createDossierBasedOnReport(reportId, instanceDefinition.instanceId, projectId);
     if (dossierInstanceDefinition.status === 2) {
       dossierInstanceDefinition = await this.answerDossierPrompts(dossierInstanceDefinition, reportId, projectId, promptsAnswers);
     }
 
-    dossierInstanceDefinition = await mstrObjectRestService.rePromptDossier(reportId, dossierInstanceDefinition, projectId);
+    dossierInstanceDefinition = await rePromptDossier(reportId, dossierInstanceDefinition, projectId);
     dossierInstanceDefinition.id = reportId;
 
     return dossierInstanceDefinition;
@@ -55,8 +58,9 @@ export class _PromptsWindow extends Component {
     const instanceId = instanceDefinition.mid;
     let count = 0;
     while (instanceDefinition.status === 2) {
-      await mstrObjectRestService.answerDossierPrompts(objectId, projectId, instanceDefinition.mid, promptsAnswers[count]);
-      instanceDefinition = await mstrObjectRestService.getDossierStatus(objectId, instanceDefinition.mid, projectId);
+      const config = { objectId, projectId, instanceId: instanceDefinition.mid, promptsAnswers: promptsAnswers[count] };
+      await postAnswerDossierPrompts(config);
+      instanceDefinition = await getDossierStatus(objectId, instanceDefinition.mid, projectId);
       count++;
     }
     return instanceId;
@@ -107,10 +111,7 @@ export class _PromptsWindow extends Component {
       placeholder: container,
       onMsgRouterReadyHandler: ({ MsgRouter }) => {
         msgRouter = MsgRouter;
-        msgRouter.registerEventHandler(
-          EventType.ON_PROMPT_ANSWERED,
-          promptsAnsweredHandler,
-        );
+        msgRouter.registerEventHandler(EventType.ON_PROMPT_ANSWERED, promptsAnsweredHandler);
         // TODO: We should remember to unregister this handler once the page loads
       },
     };
@@ -135,7 +136,7 @@ export class _PromptsWindow extends Component {
         };
 
         // Since the dossier is no needed anymore after intercepting promptsAnswers, we can try removing the instanace
-        mstrObjectRestService.deleteDossierInstance(projectId, objectId, instanceId);
+        deleteDossierInstance(projectId, objectId, instanceId);
 
         msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, promptsAnsweredHandler);
         this.props.promptsAnswered({ dossierData, promptsAnswers });// TEMP - dossierData should eventually be removed as data should be gathered via REST from report instance, not dossier
