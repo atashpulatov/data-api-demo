@@ -10,18 +10,8 @@ import { isPrompted as checkIfPrompted } from '../mstr-object/mstr-object-rest-s
 export class _NavigationTree extends Component {
   constructor(props) {
     super(props);
-    const { mstrData, chosenObjectId, chosenProjectId, chosenSubtype } = this.props;
     this.state = {
-      session: {
-        USE_PROXY: false,
-        url: mstrData.envUrl,
-        authToken: mstrData.token,
-      },
-      reportId: mstrData.reportId,
       triggerUpdate: false,
-      chosenObjectId,
-      chosenProjectId,
-      chosenSubtype,
       previewDisplay: false,
     };
   }
@@ -36,11 +26,12 @@ export class _NavigationTree extends Component {
 
   handleSecondary = async () => {
     try {
-      this.props.handlePrepare(this.props.chosenProjectId, this.props.chosenObjectId,
-        this.props.chosenSubtype, this.props.chosenProjectName, this.props.chosenType);
+      const { chosenProjectId, chosenObjectId, chosenProjectName, chosenType, chosenSubtype, handlePrepare } = this.props;
+      handlePrepare(chosenProjectId, chosenObjectId, chosenSubtype, chosenProjectName, chosenType);
       this.setState({ previewDisplay: true });
     } catch (err) {
-      this.props.handlePopupErrors(err);
+      const { handlePopupErrors } = this.props;
+      handlePopupErrors(err);
     }
   };
 
@@ -54,7 +45,8 @@ export class _NavigationTree extends Component {
   // TODO: temporary solution
   onObjectChosen = async (objectId, projectId, subtype) => {
     try {
-      this.props.selectObject({
+      const { selectObject } = this.props;
+      selectObject({
         chosenObjectId: null,
         chosenProjectId: null,
         chosenSubtype: null,
@@ -67,14 +59,15 @@ export class _NavigationTree extends Component {
         isPrompted = await checkIfPrompted(objectId, projectId);
       }
 
-      this.props.selectObject({
+      selectObject({
         chosenObjectId: objectId,
         chosenProjectId: projectId,
         chosenSubtype: subtype,
         isPrompted,
       });
     } catch (err) {
-      this.props.handlePopupErrors(err);
+      const { handlePopupErrors } = this.props;
+      handlePopupErrors(err);
     }
   };
 
@@ -82,8 +75,9 @@ export class _NavigationTree extends Component {
     const {
       setDataSource, dataSource, chosenObjectId, chosenProjectId, pageSize, changeSearching, changeSorting,
       chosenSubtype, folder, selectFolder, loading, handlePopupErrors, scrollPosition, searchText, sorter,
-      updateScroll, updateSize, requestImport, t,
+      updateScroll, mstrData, updateSize, requestImport, t,
     } = this.props;
+    const { triggerUpdate, previewDisplay } = this.state;
     return (
       <FolderBrowser
         onSorterChange={changeSorting}
@@ -91,8 +85,8 @@ export class _NavigationTree extends Component {
         searchText={searchText}
         sorter={sorter}
         title="Import data"
-        session={this.state.session}
-        triggerUpdate={this.state.triggerUpdate}
+        session={{ url: mstrData.envUrl, authToken: mstrData.token }}
+        triggerUpdate={triggerUpdate}
         onTriggerUpdate={this.onTriggerUpdate}
         onObjectChosen={this.onObjectChosen}
         setDataSource={setDataSource}
@@ -132,7 +126,7 @@ export class _NavigationTree extends Component {
           handleOk={requestImport}
           handleSecondary={this.handleSecondary}
           handleCancel={this.handleCancel}
-          previewDisplay={this.state.previewDisplay}
+          previewDisplay={previewDisplay}
         />
       </FolderBrowser>
     );
