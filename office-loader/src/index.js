@@ -61,7 +61,6 @@ function verifyToken(libraryUrl) {
     const url = libraryUrl + '/api/sessions/privileges/' + OFFICE_PRIVILEGE_ID;
     const token = getCookie(window);
     const headers = { 'X-MSTR-AuthToken': token };
-    // return Promise.resolve(false);
     return fetch(url, { credentials: 'include', headers });
 }
 
@@ -73,7 +72,6 @@ function logout(libraryUrl) {
 }
 
 function openAuthDialog(url) {
-    // const popupUrl = `https://localhost:3000/test.html`;
     const popupUrl = `${url}/apps/addin-mstr-office/auth.html?source=addin-mstr-office`;
     const isOfficeOnline = Office.context ? Office.context.platform === Office.PlatformType.OfficeOnline : false;
     const popupPromise = isOfficeOnline ? openPopup : openOfficeDialog;
