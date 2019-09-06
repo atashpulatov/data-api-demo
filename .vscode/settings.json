@@ -7,4 +7,5 @@
   ],
   "eslint.autoFixOnSave": true,
   "editor.formatOnSave": true,
+  "editor.detectIndentation": false
 }
