@@ -1,5 +1,5 @@
 const mockApiRepsonseWithDossiers = {
-  totalItems: 773,
+  totalItems: 7,
   result: [
     {
       name: 'Photo Uploader Widget Dataset - Standard',

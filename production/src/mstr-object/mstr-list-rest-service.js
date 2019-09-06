@@ -23,6 +23,7 @@ const SUBTYPES = [768, 769, 774, 776, 779, DOSSIER_SUBTYPE];
 function filterDossier(body) {
   return body.result.filter(filterFunction);
 }
+
 /**
  * Uses imported helper function to check whether object is a Dossier, but only if it is the same subtype as Dossier
  *
@@ -52,6 +53,27 @@ function fetchTotalItems({ limit = 1, callback = processTotalItems, requestParam
 }
 
 /**
+ * Uses request with limit of 1 to check for total number of objects of given subtypes and then
+ * executes multiple requests to API to apply pagination.
+ *
+ * @param {Function} callback - function to be passed to fetchObjectList method
+ * @returns {Array} of promises
+ */
+async function fetchObjectListPagination(callback) {
+  const requestParams = getRequestParams();
+  const total = await fetchTotalItems({ requestParams });
+
+  let offset = 0;
+  const promiseList = [];
+  const paginationArgs = { limit: LIMIT, callback, requestParams };
+  while (offset <= total) {
+    promiseList.push(fetchObjectList({ ...paginationArgs, offset }));
+    offset += LIMIT;
+  }
+  return promiseList;
+}
+
+/**
  * Fetches object of given subtypes from MSTR API.
  *
  * @param {Object} { requestParams, callback = (res) => res, offset = 0, limit = LIMIT }
@@ -72,27 +94,6 @@ function fetchObjectList({ requestParams, callback = (res) => res, offset = 0, l
     .then((res) => res.body)
     .then(filterDossier)
     .then(callback);
-}
-
-/**
- * Uses request with limit of 1 to check for total number of objects of given subtypes and then
- * executes multiple requests to API to apply pagination.
- *
- * @param {Function} callback - function to be passed to fetchObjectList method
- * @returns {Array} of promises
- */
-async function fetchObjectListPagination(callback) {
-  const requestParams = getRequestParams();
-  const total = await fetchTotalItems({ requestParams });
-
-  let offset = 0;
-  const promiseList = [];
-  const paginationArgs = { limit: LIMIT, callback, requestParams };
-  while (offset <= total) {
-    promiseList.push(fetchObjectList({ ...paginationArgs, offset }));
-    offset += LIMIT;
-  }
-  return promiseList;
 }
 
 /**
