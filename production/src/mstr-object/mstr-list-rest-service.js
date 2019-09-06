@@ -1,16 +1,9 @@
-/**
- * Logic for fetching of single list of objects (Reports, Datasets and Dossiers) from MSTR API
- *
- * @export
- * @class getObjectList
- */
-
 import request from 'superagent';
 import { reduxStore } from '../store';
 import filterDossiersByViewMedia from '../helpers/viewMediaHelper';
 
 const SEARCH_ENDPOINT = 'searches/results';
-const LIMIT = 2048; // 2048; Don't use -1
+const LIMIT = 2048; // Don't use -1
 const DOSSIER_SUBTYPE = 14081;
 const SUBTYPES = [768, 769, 774, 776, 779, DOSSIER_SUBTYPE];
 
@@ -20,35 +13,52 @@ const SUBTYPES = [768, 769, 774, 776, 779, DOSSIER_SUBTYPE];
  * @param {Object} body - MSTR API response body
  * @returns {Array}
  */
-function filterDossier(body) {
+export function filterDossier(body) {
   return body.result.filter(filterFunction);
 }
 
 /**
  * Uses imported helper function to check whether object is a Dossier, but only if it is the same subtype as Dossier
  *
- * @param {Object} object -
+ * @param {Object} object MicroStrategy Object (Resport, Dossier, Cube)
  * @returns {Boolean}
  */
-function filterFunction(object) {
+export function filterFunction(object) {
   if (object.subtype === DOSSIER_SUBTYPE) {
     return filterDossiersByViewMedia(object.viewMedia);
   }
   return true;
 }
 
-function processTotalItems(body) {
+/**
+ * Extracts the totalItems value from the response body
+ *
+ * @param {*} body
+ * @returns
+ */
+export function processTotalItems(body) {
   return body.totalItems;
 }
 
-function getRequestParams() {
+/**
+ * Creates the request parameters from redux state
+ *
+ * @returns
+ */
+export function getRequestParams() {
   const { sessionReducer } = reduxStore.getState();
   const { envUrl, authToken } = sessionReducer;
   const typeQuery = SUBTYPES.join('&type=');
   return { envUrl, authToken, typeQuery };
 }
 
-function fetchTotalItems({ limit = 1, callback = processTotalItems, requestParams }) {
+/**
+ * Get the totalItems value by fetching only 1 object.
+ *
+ * @param {Object} { limit = 1, callback = processTotalItems, requestParams }
+ * @returns
+ */
+export function fetchTotalItems({ limit = 1, callback = processTotalItems, requestParams }) {
   return fetchObjectList({ limit, callback, requestParams });
 }
 
@@ -59,7 +69,7 @@ function fetchTotalItems({ limit = 1, callback = processTotalItems, requestParam
  * @param {Function} callback - function to be passed to fetchObjectList method
  * @returns {Array} of promises
  */
-async function fetchObjectListPagination(callback) {
+export async function fetchObjectListPagination(callback) {
   const requestParams = getRequestParams();
   const total = await fetchTotalItems({ requestParams });
 
@@ -84,7 +94,7 @@ async function fetchObjectListPagination(callback) {
  * @param {number} limit - Number of objects to be fetched per request
  * @returns
  */
-function fetchObjectList({ requestParams, callback = (res) => res, offset = 0, limit = LIMIT }) {
+export function fetchObjectList({ requestParams, callback = (res) => res, offset = 0, limit = LIMIT }) {
   const { envUrl, authToken, typeQuery } = requestParams;
   const url = `${envUrl}/${SEARCH_ENDPOINT}?limit=${limit}&offset=${offset}&type=${typeQuery}`;
   return request
@@ -97,10 +107,12 @@ function fetchObjectList({ requestParams, callback = (res) => res, offset = 0, l
 }
 
 /**
+ * Logic for fetching a list of objects (Reports, Datasets and Dossiers) from MSTR API.
+ * It takes a function that will be called when the pagination promise resolves.
  *
- *
+ * @param {Function} callback - Function to be applied to the returned response body
  * @export
- * @returns {Promise} A promise
+ * @class getObjectList
  */
 export default function getObjectList(callback) {
   return fetchObjectListPagination(callback);
