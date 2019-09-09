@@ -597,7 +597,7 @@ class OfficeDisplayService {
       const { columns, rows, mstrTable } = instanceDefinition;
       const limit = Math.min(Math.floor(DATA_LIMIT / columns),
         IMPORT_ROW_LIMIT);
-      const configGenerator = { instanceDefinition, objectId, projectId, mstrObjectType, dossierData };
+      const configGenerator = { instanceDefinition, objectId, projectId, mstrObjectType, dossierData, limit };
       const rowGenerator = getObjectContentGenerator(configGenerator);
       let rowIndex = 0;
       let contextPromises = [];

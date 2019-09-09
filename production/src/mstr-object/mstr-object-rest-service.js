@@ -172,7 +172,7 @@ export function modifyInstance({ objectId, projectId, mstrObjectType = reportObj
 }
 
 export function getObjectContentGenerator({
-  instanceDefinition, objectId, projectId, mstrObjectType, dossierData, limit = DATA_LIMIT,
+  instanceDefinition, objectId, projectId, mstrObjectType, dossierData, limit = IMPORT_ROW_LIMIT,
 }) {
   return fetchContentGenerator({ instanceDefinition, objectId, projectId, mstrObjectType, dossierData, limit });
 }
