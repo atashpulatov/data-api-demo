@@ -16,7 +16,12 @@ export const DATA_LIMIT = 200000; // 200000 is around 1mb of MSTR JSON response
 export const IMPORT_ROW_LIMIT = 20000; // Maximum number of rows to fetch during data import.
 export const PROMISE_LIMIT = 10; // Number of concurrent context.sync() promises during data import.
 
-export function answerDossierPrompts({ objectId, projectId, instanceId, promptsAnswers }) {
+export function answerDossierPrompts({
+  objectId,
+  projectId,
+  instanceId,
+  promptsAnswers,
+}) {
   const storeState = reduxStore.getState();
   const { envUrl } = storeState.sessionReducer;
   const { authToken } = storeState.sessionReducer;
@@ -30,7 +35,12 @@ export function answerDossierPrompts({ objectId, projectId, instanceId, promptsA
     .then((res) => res.status);
 }
 
-export function answerPrompts({ objectId, projectId, instanceId, promptsAnswers }) {
+export function answerPrompts({
+  objectId,
+  projectId,
+  instanceId,
+  promptsAnswers,
+}) {
   try {
     const storeState = reduxStore.getState();
     const { envUrl } = storeState.sessionReducer;
@@ -83,12 +93,24 @@ export function createDossierBasedOnReport(reportId, instanceId, projectId) {
 }
 
 export function createInstance({
-  objectId, projectId, mstrObjectType = reportObjectType, dossierData, body = {}, limit = 1,
+  objectId,
+  projectId,
+  mstrObjectType = reportObjectType,
+  dossierData,
+  body = {},
+  limit = 1,
 }) {
   const storeState = reduxStore.getState();
   const { envUrl } = storeState.sessionReducer;
   const { authToken } = storeState.sessionReducer;
-  const fullPath = getFullPath({ dossierData, envUrl, limit, mstrObjectType, objectId, version: API_VERSION });
+  const fullPath = getFullPath({
+    dossierData,
+    envUrl,
+    limit,
+    mstrObjectType,
+    objectId,
+    version: API_VERSION,
+  });
 
   return request
     .post(fullPath)
@@ -126,7 +148,14 @@ export function getDossierStatus(dossierId, instanceId, projectId) {
     .then((res) => res.body);
 }
 
-export function getInstance({ objectId, projectId, mstrObjectType = reportObjectType, dossierData, body = {}, instanceId }) {
+export function getInstance({
+  objectId,
+  projectId,
+  mstrObjectType = reportObjectType,
+  dossierData,
+  body = {},
+  instanceId,
+}) {
   const storeState = reduxStore.getState();
   const { envUrl } = storeState.sessionReducer;
   const { authToken } = storeState.sessionReducer;
@@ -148,7 +177,14 @@ export function getInstance({ objectId, projectId, mstrObjectType = reportObject
     .then((res) => parseInstanceDefinition(res));
 }
 
-export function modifyInstance({ objectId, projectId, mstrObjectType = reportObjectType, dossierData, body = {}, instanceId }) {
+export function modifyInstance({
+  objectId,
+  projectId,
+  mstrObjectType = reportObjectType,
+  dossierData,
+  body = {},
+  instanceId,
+}) {
   const storeState = reduxStore.getState();
   const { envUrl } = storeState.sessionReducer;
   const { authToken } = storeState.sessionReducer;
@@ -172,12 +208,26 @@ export function modifyInstance({ objectId, projectId, mstrObjectType = reportObj
 }
 
 export function getObjectContentGenerator({
-  instanceDefinition, objectId, projectId, mstrObjectType, dossierData, limit = DATA_LIMIT,
+  instanceDefinition,
+  objectId,
+  projectId,
+  mstrObjectType,
+  dossierData,
+  limit = IMPORT_ROW_LIMIT,
 }) {
-  return fetchContentGenerator({ instanceDefinition, objectId, projectId, mstrObjectType, dossierData, limit });
+  return fetchContentGenerator({
+    instanceDefinition,
+    objectId,
+    projectId,
+    mstrObjectType,
+    dossierData,
+    limit,
+  });
 }
 
-export function getObjectDefinition(objectId, projectId, mstrObjectType = reportObjectType) {
+export function getObjectDefinition(objectId,
+  projectId,
+  mstrObjectType = reportObjectType,) {
   const storeState = reduxStore.getState();
   const { envUrl } = storeState.sessionReducer;
   const { authToken } = storeState.sessionReducer;
@@ -192,7 +242,9 @@ export function getObjectDefinition(objectId, projectId, mstrObjectType = report
     .then((res) => res.body);
 }
 
-export function getObjectInfo(objectId, projectId, mstrObjectType = reportObjectType) {
+export function getObjectInfo(objectId,
+  projectId,
+  mstrObjectType = reportObjectType,) {
   const storeState = reduxStore.getState();
   const { envUrl } = storeState.sessionReducer;
   const { authToken } = storeState.sessionReducer;
@@ -241,7 +293,12 @@ function checkTableDimensions({ rows, columns }) {
 }
 
 function getFullPath({
-  envUrl, limit, mstrObjectType, objectId, instanceId, version = 1,
+  envUrl,
+  limit,
+  mstrObjectType,
+  objectId,
+  instanceId,
+  version = 1,
 }) {
   let path;
   const api = version > 1 ? `v${version}/` : '';
@@ -251,7 +308,14 @@ function getFullPath({
   return path;
 }
 
-async function* fetchContentGenerator({ instanceDefinition, objectId, projectId, mstrObjectType, dossierData, limit }) {
+async function* fetchContentGenerator({
+  instanceDefinition,
+  objectId,
+  projectId,
+  mstrObjectType,
+  dossierData,
+  limit,
+}) {
   const totalRows = instanceDefinition.rows;
   const { instanceId, mstrTable } = instanceDefinition;
   const { isCrosstab } = mstrTable;
@@ -269,20 +333,24 @@ async function* fetchContentGenerator({ instanceDefinition, objectId, projectId,
   let fetchedRows = 0;
   let offset = 0;
   const offsetSubtotal = (e) => {
-    if (e) (e.rowIndex += offset);
+    if (e) e.rowIndex += offset;
   };
   const offsetCrosstabSubtotal = (e) => {
-    if (e && e.axis === 'rows') (e.colIndex += offset);
+    if (e && e.axis === 'rows') e.colIndex += offset;
   };
 
   while (fetchedRows < totalRows && fetchedRows < EXCEL_ROW_LIMIT) {
     let header;
     let crosstabSubtotal;
-    const response = await fetchObjectContent(fullPath, authToken, projectId, offset, limit);
+    const response = await fetchObjectContent(fullPath,
+      authToken,
+      projectId,
+      offset,
+      limit,);
     const { current } = response.body.data.paging;
     fetchedRows = current + offset;
     const { row, rowTotals } = officeConverterServiceV2.getRows(response.body,
-      isCrosstab);
+      isCrosstab,);
     if (isCrosstab) {
       header = officeConverterServiceV2.getHeaders(response.body);
       crosstabSubtotal = header.subtotalAddress;
@@ -299,7 +367,11 @@ async function* fetchContentGenerator({ instanceDefinition, objectId, projectId,
   }
 }
 
-function fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = -1) {
+function fetchObjectContent(fullPath,
+  authToken,
+  projectId,
+  offset = 0,
+  limit = -1,) {
   return request
     .get(`${fullPath}?offset=${offset}&limit=${limit}`)
     .set('x-mstr-authtoken', authToken)
