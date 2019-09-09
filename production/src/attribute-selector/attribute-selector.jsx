@@ -10,14 +10,13 @@ export class _AttributeSelector extends Component {
     };
   }
 
-
   render() {
     const {
       title, session,
       triggerUpdate, onTriggerUpdate, mstrData,
-      resetTriggerUpdate, attributesSelectedChange, t, toggleSubtotal,
+      resetTriggerUpdate, attributesSelectedChange, t, openModal, closeModal, toggleSubtotal,
     } = this.props;
-    const { openModal, closeModal } = this.props;
+
     return (
       <ErrorBoundary>
         <AttributeMetricFilter

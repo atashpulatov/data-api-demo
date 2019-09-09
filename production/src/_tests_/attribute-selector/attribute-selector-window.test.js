@@ -1,15 +1,13 @@
-/* eslint-disable */
 import React from 'react';
 import { Provider } from 'react-redux';
-import { reduxStore } from '../../store';
 import { shallow, mount } from 'enzyme';
+import { reduxStore } from '../../store';
 import { AttributeSelectorWindow } from '../../attribute-selector/attribute-selector-window';
 import { AttributeSelector } from '../../attribute-selector/attribute-selector';
 import { attributeSelectorHelpers } from '../../attribute-selector/attribute-selector-helpers';
 import { selectorProperties } from '../../attribute-selector/selector-properties';
 
 jest.mock('../../attribute-selector/attribute-selector-helpers');
-/* eslint-enable */
 
 describe('AttributeSelectorWindow', () => {
   it('should contain attribute selector', () => {
@@ -92,7 +90,9 @@ describe('AttributeSelectorWindow', () => {
     componentWrapper.instance().onTriggerUpdate(1, 2, 3, 4);
 
     // then
-    expect(spyMethod).toHaveBeenCalledWith(selectorProperties.commandOnUpdate, 1, 2, 3, 4, mstrData.reportName, mstrData.instanceId, mstrData.promptsAnswers, mstrData.importSubtotal);
+    expect(spyMethod).toHaveBeenCalledWith(
+selectorProperties.commandOnUpdate, 1, 2, 3, 4, mstrData.reportName, mstrData.instanceId, mstrData.promptsAnswers, mstrData.importSubtotal
+);
   });
 
   it('should call attributeSelectorHelpers.officeMessageParent if onTriggerUpdate is called with report name', () => {
@@ -116,7 +116,9 @@ describe('AttributeSelectorWindow', () => {
     componentWrapper.instance().onTriggerUpdate(1, 2, 3, 4, 5);
 
     // then
-    expect(spyMethod).toHaveBeenCalledWith(selectorProperties.commandOnUpdate, 1, 2, 3, 4, 5, mstrData.instanceId, mstrData.promptsAnswers, mstrData.importSubtotal);
+    expect(spyMethod).toHaveBeenCalledWith(
+selectorProperties.commandOnUpdate, 1, 2, 3, 4, 5, mstrData.instanceId, mstrData.promptsAnswers, mstrData.importSubtotal
+);
   });
 
   it('should trigger handleCancel when Cancel was clicked', () => {
@@ -129,13 +131,11 @@ describe('AttributeSelectorWindow', () => {
       reportType: 'report',
     };
 
-    const componentWrapper = mount(
-      <Provider store={reduxStore}>
+    const componentWrapper = mount(<Provider store={reduxStore}>
         <AttributeSelectorWindow
           mstrData={mstrData}
         />
-      </Provider>,
-    );
+      </Provider>,);
     const spyMethod = jest.spyOn(attributeSelectorHelpers, 'officeMessageParent');
 
     const wrappedCancelButton = componentWrapper.find('Button #cancel');
@@ -158,14 +158,12 @@ describe('AttributeSelectorWindow', () => {
     };
     const handleBack = jest.fn();
 
-    const componentWrapper = mount(
-      <Provider store={reduxStore}>
+    const componentWrapper = mount(<Provider store={reduxStore}>
         <AttributeSelectorWindow
           mstrData={mstrData}
           handleBack={handleBack}
         />
-      </Provider>,
-    );
+      </Provider>,);
 
     const wrappedCancelButton = componentWrapper.find('Button #back');
 
