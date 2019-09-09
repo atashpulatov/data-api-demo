@@ -167,9 +167,9 @@ function showLoginBtn() {
     document.getElementById('cookies-not-needed').style.display = 'none';
     document.getElementById('login-container').style.display = 'block';
     document.getElementById('login-btn').addEventListener('click', onLoginClick);
-    /* Remove the focus around button immediately after the button is clicked by mouse. 
-    By using mouseup we're keeping the default behavior for keyboard-based interactions like click. */
-    document.getElementById('login-btn').addEventListener('mouseup', (function () { this.blur() }));
+    /* Remove the focus around button after the button is clicked by mouse. Focus was displayed by default.
+    We're keeping the default behavior for keyboard-based interactions like click. */
+    document.getElementById('login-btn').addEventListener('mousedown', (function (e) { e.preventDefault(); }));
 }
 
 
