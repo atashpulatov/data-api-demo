@@ -77,6 +77,7 @@ class OfficeDisplayService {
     isPrompted,
     promptsAnswers,
     crosstabHeaderDimensions = false,
+    importSubtotal = true,
   }) => {
     let officeTable;
     let newOfficeTableId;
@@ -165,8 +166,7 @@ class OfficeDisplayService {
         startCell,
         tableColumnsChanged,
       }));
-
-      if (subtotalsAddresses.length) {
+      if (importSubtotal && subtotalsAddresses.length) {
         // Removing duplicated subtotal addresses from headers
         console.time('Subtotal Formatting');
         if (isCrosstab) subtotalsAddresses = new Set(subtotalsAddresses);
@@ -192,6 +192,7 @@ class OfficeDisplayService {
         isCrosstab,
         isPrompted,
         promptsAnswers,
+        importSubtotal,
       });
 
       console.timeEnd('Total');
@@ -497,6 +498,7 @@ class OfficeDisplayService {
     isCrosstab,
     isPrompted,
     promptsAnswers,
+    importSubtotal,
   }) => {
     const report = {
       id: mstrTable.id,
@@ -509,6 +511,7 @@ class OfficeDisplayService {
       objectType,
       isPrompted,
       isCrosstab,
+      importSubtotal,
       promptsAnswers,
       crosstabHeaderDimensions: mstrTable.crosstabHeaderDimensions,
     };

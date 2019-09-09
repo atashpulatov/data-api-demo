@@ -221,6 +221,7 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
       ...propsToPass,
       ...editedReport,
     };
+
     return (
       <AttributeSelectorWindow
         mstrData={mstrData}
@@ -299,6 +300,7 @@ function parsePopupState(popupState) {
     reportType: popupState.objectType,
     reportSubtype: popupState.objectType === 'report' ? 768 : 779,
     promptsAnswers: popupState.promptsAnswers,
+    importSubtotal: popupState.importSubtotal,
   };
   restoreFilters(popupState.body, reportData);
   return reportData;
