@@ -10,16 +10,14 @@ export class _AttributeSelector extends Component {
     };
   }
 
-  toggleSubtotal = (isYes) => {
-    console.log('isYES ??? : ', isYes);
-  }
 
   render() {
     const {
       title, session,
       triggerUpdate, onTriggerUpdate, mstrData,
-      resetTriggerUpdate, attributesSelectedChange, t,
+      resetTriggerUpdate, attributesSelectedChange, t, toggleSubtotal,
     } = this.props;
+    const { openModal, closeModal } = this.props;
     return (
       <ErrorBoundary>
         <AttributeMetricFilter
@@ -34,9 +32,10 @@ export class _AttributeSelector extends Component {
           withDataPreview
           resetTriggerUpdate={resetTriggerUpdate}
           withFolderTree={false}
-          openModal={this.props.openModal}
-          closeModal={this.props.closeModal}
-          toggleSubtotal={this.toggleSubtotal}
+          openModal={openModal}
+          closeModal={closeModal}
+          toggleSubtotal={toggleSubtotal}
+          importSubtotal={mstrData.importSubtotal}
         />
       </ErrorBoundary>
     );

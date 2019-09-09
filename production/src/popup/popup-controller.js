@@ -143,6 +143,7 @@ class PopupController {
     promptsAnswers,
     isPrompted,
     instanceId,
+    importSubtotal,
   }) => {
     if (reportId && projectId && reportSubtype && body && reportName) {
       reduxStore.dispatch({
@@ -158,6 +159,7 @@ class PopupController {
         instanceId,
         mstrObjectType: mstrObjectType.getMstrTypeBySubtype(reportSubtype),
         body,
+        importSubtotal,
       };
       const result = await officeDisplayService.printObject(options);
       if (result) {
@@ -176,6 +178,7 @@ class PopupController {
       isPrompted,
       promptsAnswers,
       reportName,
+
     },
     bindingId,
   ) => {
@@ -194,6 +197,7 @@ class PopupController {
         isRefresh: false,
         isPrompted,
         promptsAnswers,
+
       };
       const result = await officeDisplayService.printObject(options);
       if (result) {
@@ -229,8 +233,15 @@ class PopupController {
     await officeStoreService.preserveReportValue(
       reportParams.bindId,
       'body',
-      response.body,
+      reportPreviousState.body,
     );
+    if (reportPreviousState.importSubtotal !== response.importSubtotal) {
+      await officeStoreService.preserveReportValue(
+        reportParams.bindId,
+        'importSubtotal',
+        response.importSubtotal,
+      );
+    }
     if (response.promptsAnswers) {
       // Include new promptsAnswers in case of Re-prompt workflow
       reportParams.promptsAnswers = response.promptsAnswers;

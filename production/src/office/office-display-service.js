@@ -79,6 +79,7 @@ class OfficeDisplayService {
     isPrompted,
     promptsAnswers,
     crosstabHeaderDimensions = false,
+    importSubtotal = true,
   }) => {
     let officeTable;
     let newOfficeTableId;
@@ -198,8 +199,7 @@ class OfficeDisplayService {
         startCell,
         tableColumnsChanged,
       }));
-
-      if (subtotalsAddresses.length) {
+      if (importSubtotal && subtotalsAddresses.length) {
         // Removing duplicated subtotal addresses from headers
         console.time('Subtotal Formatting');
         if (isCrosstab) subtotalsAddresses = new Set(subtotalsAddresses);
@@ -231,6 +231,7 @@ class OfficeDisplayService {
         isCrosstab,
         isPrompted,
         promptsAnswers,
+        importSubtotal,
       });
 
       console.timeEnd('Total');
@@ -528,30 +529,30 @@ class OfficeDisplayService {
     };
   }
 
-   _updateRows = async (prevOfficeTable, context, rows) => {
-     const tableRows = prevOfficeTable.rows;
-     tableRows.load('count');
-     await context.sync();
-     const tableRowCount = tableRows.count;
-     // Delete extra rows if new report is smaller
-     if (rows < tableRowCount) {
-       prevOfficeTable
-         .getRange()
-         .getRow(rows + 1)
-         .getResizedRange(tableRowCount - rows, 0)
-         .clear();
-       await context.sync();
-       tableRows.load('items');
-       await context.sync();
-       const rowsToRemove = tableRows.items;
-       for (let i = tableRowCount - 1; i >= rows; i--) {
-         rowsToRemove[i].delete();
-         if (i === rows || i % CONTEXT_LIMIT === 0) {
-           await context.sync();
-         }
-       }
-     }
-   }
+  _updateRows = async (prevOfficeTable, context, rows) => {
+    const tableRows = prevOfficeTable.rows;
+    tableRows.load('count');
+    await context.sync();
+    const tableRowCount = tableRows.count;
+    // Delete extra rows if new report is smaller
+    if (rows < tableRowCount) {
+      prevOfficeTable
+        .getRange()
+        .getRow(rows + 1)
+        .getResizedRange(tableRowCount - rows, 0)
+        .clear();
+      await context.sync();
+      tableRows.load('items');
+      await context.sync();
+      const rowsToRemove = tableRows.items;
+      for (let i = tableRowCount - 1; i >= rows; i--) {
+        rowsToRemove[i].delete();
+        if (i === rows || i % CONTEXT_LIMIT === 0) {
+          await context.sync();
+        }
+      }
+    }
+  }
 
   _styleHeaders = (officeTable, fontColor, fillColor) => {
     officeTable.style = DEFAULT_TABLE_STYLE;
@@ -591,6 +592,7 @@ class OfficeDisplayService {
     isCrosstab,
     isPrompted,
     promptsAnswers,
+    importSubtotal,
   }) => {
     const report = {
       id: mstrTable.id,
@@ -603,6 +605,7 @@ class OfficeDisplayService {
       objectType,
       isPrompted,
       isCrosstab,
+      importSubtotal,
       promptsAnswers,
       crosstabHeaderDimensions: mstrTable.crosstabHeaderDimensions,
     };

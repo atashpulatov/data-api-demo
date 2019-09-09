@@ -78,7 +78,6 @@ class PopupHelper {
     const instanceId = null;
     // TODO: Pass proper isPrompted value – promptsAnswers could probably serve as such,
     // to be refactored.
-
     const options = {
       dossierData: instanceId,
       promptsAnswers: !promptsAnswers
@@ -96,6 +95,7 @@ class PopupHelper {
       isRefresh: true,
       isPrompted: refreshReport.isPrompted,
       isRefreshAll,
+      importSubtotal: refreshReport.importSubtotal,
     };
     const result = await officeDisplayService.printObject(options);
     if (result && result.type === 'warning') {
