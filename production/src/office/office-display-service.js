@@ -1,10 +1,15 @@
 import { officeApiHelper } from './office-api-helper';
 import {
-  mstrObjectRestService,
   DATA_LIMIT,
   PROMISE_LIMIT,
   IMPORT_ROW_LIMIT,
   CONTEXT_LIMIT,
+  getObjectInfo,
+  getObjectDefinition,
+  createInstance,
+  getObjectContentGenerator,
+  answerPrompts,
+  modifyInstance,
 } from '../mstr-object/mstr-object-rest-service';
 import { reduxStore } from '../store';
 import { officeProperties } from './office-properties';
@@ -13,7 +18,7 @@ import { errorService } from '../error/error-handler';
 import { popupController } from '../popup/popup-controller';
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { PopupTypeEnum } from '../home/popup-type-enum';
-import mstrObjectType from '../mstr-object/mstr-object-type-enum';
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import {
   NOT_SUPPORTED_NO_ATTRIBUTES,
   ALL_DATA_FILTERED_OUT,
@@ -40,16 +45,12 @@ class OfficeDisplayService {
       // so we're using /Object_Management/getObject (GET /objects/{id}) instead
       // should probably open an DE
       const objectInfo = isPrompted
-        ? await mstrObjectRestService.getObjectInfo(
-          objectId,
+        ? await getObjectInfo(objectId,
           projectId,
-          mstrObjectType,
-        )
-        : await mstrObjectRestService.getObjectDefinition(
-          objectId,
+          mstrObjectType)
+        : await getObjectDefinition(objectId,
           projectId,
-          mstrObjectType,
-        );
+          mstrObjectType);
       reduxStore.dispatch({
         type: officeProperties.actions.preLoadReport,
         preLoadReport: objectInfo,
@@ -58,8 +59,6 @@ class OfficeDisplayService {
     }
     try {
       return await this._printObject(options);
-    } catch (error) {
-      throw error;
     } finally {
       if (!isRefreshAll) this._dispatchPrintFinish();
     }
@@ -67,9 +66,8 @@ class OfficeDisplayService {
 
   _printObject = async ({
     objectId,
-    instanceId,
     projectId,
-    mstrObjectType = mstrObjectType.mstrObjectType.report,
+    mstrObjectType = mstrObjectEnum.mstrObjectType.report,
     selectedCell,
     bindingId,
     isRefresh,
@@ -106,13 +104,8 @@ class OfficeDisplayService {
       if (body) {
         body.template = body.requestedObjects;
       }
-      let instanceDefinition = await mstrObjectRestService.createInstance(
-        objectId,
-        projectId,
-        mstrObjectType,
-        dossierData,
-        body,
-      );
+      const config = { objectId, projectId, mstrObjectType, dossierData, body };
+      let instanceDefinition = await createInstance(config);
 
       // Status 2 = report has open prompts to be answered before data can be returned
       if (instanceDefinition.status === 2) {
@@ -150,48 +143,22 @@ class OfficeDisplayService {
       // TODO: If isRefresh check if new instance definition is same as before
 
       // Create or update table
-      ({
-        officeTable,
-        newOfficeTableId,
-        shouldFormat,
-        tableColumnsChanged,
-      } = await this._getOfficeTable(
-        isRefresh,
+      ({ officeTable, newOfficeTableId, shouldFormat, tableColumnsChanged } = await this._getOfficeTable(isRefresh,
         excelContext,
         bindingId,
         instanceDefinition,
-        startCell,
-      ));
+        startCell));
 
       // Apply formatting when table was created
       if (shouldFormat) {
-        await this._applyFormatting(
-          officeTable,
-          instanceDefinition,
-          isCrosstab,
-          excelContext,
-        );
+        await this._applyFormatting(officeTable, instanceDefinition, isCrosstab, excelContext);
       }
 
       // Fetch, convert and insert with promise generator
       console.time('Fetch and insert into excel');
-      const connectionData = {
-        objectId,
-        projectId,
-        dossierData,
-        mstrObjectType,
-        body,
-      };
-      const officeData = {
-        officeTable,
-        excelContext,
-        startCell,
-        newOfficeTableId,
-      };
-      ({
-        officeTable,
-        subtotalsAddresses,
-      } = await this._fetchInsertDataIntoExcel({
+      const connectionData = { objectId, projectId, dossierData, mstrObjectType, body };
+      const officeData = { officeTable, excelContext, startCell, newOfficeTableId };
+      ({ officeTable, subtotalsAddresses } = await this._fetchInsertDataIntoExcel({
         connectionData,
         officeData,
         instanceDefinition,
@@ -206,13 +173,7 @@ class OfficeDisplayService {
         const reportstartCell = officeTable.getRange().getCell(0, 0);
         excelContext.trackedObjects.add(reportstartCell);
         const sheet = officeTable.worksheet;
-        await officeApiHelper.formatSubtotals(
-          reportstartCell,
-          subtotalsAddresses,
-          mstrTable,
-          excelContext,
-          sheet,
-        );
+        await officeApiHelper.formatSubtotals(reportstartCell, subtotalsAddresses, mstrTable, excelContext, sheet);
         excelContext.trackedObjects.remove(reportstartCell);
         console.timeEnd('Subtotal Formatting');
       }
@@ -245,11 +206,9 @@ class OfficeDisplayService {
         let crosstabRange;
         if (isCrosstab) {
           const sheet = officeTable.worksheet;
-          crosstabRange = officeApiHelper.getCrosstabRange(
-            officeTable.getRange().getCell(0, 0),
+          crosstabRange = officeApiHelper.getCrosstabRange(officeTable.getRange().getCell(0, 0),
             crosstabHeaderDimensions,
-            sheet,
-          );
+            sheet);
         }
         officeTable.delete();
         if (isCrosstab) (await crosstabRange.clear());
@@ -281,21 +240,17 @@ class OfficeDisplayService {
       await authenticationHelper.validateAuthToken();
       const officeContext = await officeApiHelper.getOfficeContext();
       try {
-        await officeContext.document.bindings.releaseByIdAsync(
-          bindingId,
-          (asyncResult) => {
+        await officeContext.document.bindings.releaseByIdAsync(bindingId,
+          () => {
             console.log('released binding');
-          },
-        );
+          });
         const excelContext = await officeApiHelper.getExcelContext();
         const tableObject = excelContext.workbook.tables.getItem(bindingId);
         if (isCrosstab) {
           tableObject.showHeaders = true;
-          crosstabRange = await officeApiHelper.getCrosstabRangeSafely(
-            tableObject,
+          crosstabRange = await officeApiHelper.getCrosstabRangeSafely(tableObject,
             crosstabHeaderDimensions,
-            excelContext,
-          );
+            excelContext);
           excelContext.trackedObjects.add(crosstabRange);
         }
         await tableObject.clearFilters();
@@ -333,23 +288,10 @@ class OfficeDisplayService {
    *
    * @memberOf OfficeDisplayService
    */
-  _createOfficeTable = async (
-    instanceDefinition,
-    context,
-    startCell,
-    officeTableId,
-    prevOfficeTable,
-  ) => {
-    const crosstabHeaderDimensions = this._getCrosstabHeaderDimensions(
-      instanceDefinition,
-    );
+  _createOfficeTable = async (instanceDefinition, context, startCell, officeTableId, prevOfficeTable) => {
+    const crosstabHeaderDimensions = this._getCrosstabHeaderDimensions(instanceDefinition);
     const { rows, columns, mstrTable } = instanceDefinition;
-    const {
-      isCrosstab,
-      toCrosstabChange,
-      fromCrosstabChange,
-      prevCrosstabDimensions,
-    } = mstrTable;
+    const { isCrosstab, toCrosstabChange, fromCrosstabChange, prevCrosstabDimensions } = mstrTable;
     const { rowsX: prevRowsX, columnsY: prevColumnsY } = prevCrosstabDimensions;
     const { rowsX, columnsY } = crosstabHeaderDimensions;
     let range;
@@ -369,19 +311,13 @@ class OfficeDisplayService {
       && prevCrosstabDimensions !== crosstabHeaderDimensions
       && isCrosstab
     ) {
-      tableStartCell = officeApiHelper.offsetCellBy(
-        tableStartCell,
+      tableStartCell = officeApiHelper.offsetCellBy(tableStartCell,
         columnsY - prevColumnsY,
-        rowsX - prevRowsX,
-      );
+        rowsX - prevRowsX);
     }
     const tableRange = officeApiHelper.getRange(columns, tableStartCell, rows);
     if (isCrosstab) {
-      range = officeApiHelper.getCrosstabRange(
-        tableStartCell,
-        crosstabHeaderDimensions,
-        sheet,
-      );
+      range = officeApiHelper.getCrosstabRange(tableStartCell, crosstabHeaderDimensions, sheet);
     } else {
       range = sheet.getRange(tableRange);
     }
@@ -416,25 +352,11 @@ class OfficeDisplayService {
       await this._checkRangeValidity(context, range);
     }
     if (isCrosstab) {
-      officeApiHelper.createColumnsHeaders(
-        tableStartCell,
-        mstrTable.headers.columns,
-        sheet,
-        range,
-      );
-      officeApiHelper.createRowsTitleHeaders(
-        tableStartCell,
-        mstrTable.attributesNames,
-        sheet,
-        crosstabHeaderDimensions,
-      );
+      officeApiHelper.createColumnsHeaders(tableStartCell, mstrTable.headers.columns, sheet, range);
+      officeApiHelper.createRowsTitleHeaders(tableStartCell, mstrTable.attributesNames, sheet, crosstabHeaderDimensions);
     }
     const officeTable = sheet.tables.add(tableRange, true);
-    this._styleHeaders(
-      officeTable,
-      TABLE_HEADER_FONT_COLOR,
-      TABLE_HEADER_FILL_COLOR,
-    );
+    this._styleHeaders(officeTable, TABLE_HEADER_FONT_COLOR, TABLE_HEADER_FILL_COLOR);
     try {
       officeTable.load('name');
       officeTable.name = officeTableId;
@@ -463,9 +385,7 @@ class OfficeDisplayService {
   ) => {
     try {
       const { rows, mstrTable } = instanceDefinition;
-      const crosstabHeaderDimensions = this._getCrosstabHeaderDimensions(
-        instanceDefinition,
-      );
+      const crosstabHeaderDimensions = this._getCrosstabHeaderDimensions(instanceDefinition);
 
       prevOfficeTable.rows.load('count');
       prevOfficeTable.getRange().format.font.bold = false;
@@ -479,24 +399,10 @@ class OfficeDisplayService {
 
       if (mstrTable.isCrosstab) {
         try {
-          const range = officeApiHelper.getCrosstabRange(
-            startCell,
-            crosstabHeaderDimensions,
-            prevOfficeTable.worksheet,
-          );
+          const range = officeApiHelper.getCrosstabRange(startCell, crosstabHeaderDimensions, prevOfficeTable.worksheet);
           range.format.font.bold = false;
-          officeApiHelper.createColumnsHeaders(
-            startCell,
-            mstrTable.headers.columns,
-            prevOfficeTable.worksheet,
-            range,
-          );
-          officeApiHelper.createRowsTitleHeaders(
-            startCell,
-            mstrTable.attributesNames,
-            prevOfficeTable.worksheet,
-            crosstabHeaderDimensions,
-          );
+          officeApiHelper.createColumnsHeaders(startCell, mstrTable.headers.columns, prevOfficeTable.worksheet, range);
+          officeApiHelper.createRowsTitleHeaders(startCell, mstrTable.attributesNames, prevOfficeTable.worksheet, crosstabHeaderDimensions);
         } catch (error) {
           console.log(error);
         }
@@ -620,11 +526,9 @@ class OfficeDisplayService {
   ) => {
     try {
       console.time('Apply formatting');
-      officeApiHelper.formatNumbers(
-        officeTable,
+      officeApiHelper.formatNumbers(officeTable,
         instanceDefinition.mstrTable,
-        isCrosstab,
-      );
+        isCrosstab);
       await excelContext.sync();
     } catch (error) {
       // TODO: Inform the user?
@@ -642,146 +546,82 @@ class OfficeDisplayService {
     startCell,
   ) => {
     console.time('Create or get table');
-    try {
-      const newOfficeTableId = bindingId || officeApiHelper.findAvailableOfficeTableId();
-      const { mstrTable, columns, rows } = instanceDefinition;
-      const { prevCrosstabDimensions, isCrosstab } = mstrTable;
-      let officeTable;
-      let shouldFormat = true;
-      let tableColumnsChanged;
-      if (isRefresh) {
-        const prevOfficeTable = await officeApiHelper.getTable(
-          excelContext,
-          bindingId,
-        );
-        prevOfficeTable.showHeaders = true;
-        await excelContext.sync();
-        tableColumnsChanged = await this._checkColumnsChange(
-          prevOfficeTable,
-          excelContext,
-          instanceDefinition,
-        );
-        mstrTable.toCrosstabChange = !prevCrosstabDimensions && isCrosstab;
-        mstrTable.fromCrosstabChange = prevCrosstabDimensions && !isCrosstab;
-        const headerCell = prevOfficeTable.getHeaderRowRange().getCell(0, 0);
-        headerCell.load('address');
-        await excelContext.sync();
-        const startCell = officeApiHelper.getStartCell(headerCell.address);
-        officeApiHelper.getRange(columns, startCell, rows);
-        if (prevCrosstabDimensions) {
-          officeApiHelper.clearCrosstabRange(
-            prevOfficeTable,
-            prevCrosstabDimensions,
-            excelContext,
-          );
-        }
-        await excelContext.sync();
-        if (tableColumnsChanged) {
-          console.log('Instance definition changed, creating new table');
-          officeTable = await this._createOfficeTable(
-            instanceDefinition,
-            excelContext,
-            startCell,
-            newOfficeTableId,
-            prevOfficeTable,
-          );
-        } else {
-          shouldFormat = false;
-          console.time('Validate existing table');
-          officeTable = await this._updateOfficeTable(
-            instanceDefinition,
-            excelContext,
-            startCell,
-            prevOfficeTable,
-          );
-          console.timeEnd('Validate existing table');
-        }
-      } else {
-        officeTable = await this._createOfficeTable(
-          instanceDefinition,
-          excelContext,
-          startCell,
-          newOfficeTableId,
-        );
+    const newOfficeTableId = bindingId || officeApiHelper.findAvailableOfficeTableId();
+    const { mstrTable, columns, rows } = instanceDefinition;
+    const { prevCrosstabDimensions, isCrosstab } = mstrTable;
+    let officeTable;
+    let shouldFormat = true;
+    let tableColumnsChanged;
+    if (isRefresh) {
+      const prevOfficeTable = await officeApiHelper.getTable(excelContext,
+        bindingId);
+      prevOfficeTable.showHeaders = true;
+      await excelContext.sync();
+      tableColumnsChanged = await this._checkColumnsChange(prevOfficeTable, excelContext, instanceDefinition);
+      mstrTable.toCrosstabChange = !prevCrosstabDimensions && isCrosstab;
+      mstrTable.fromCrosstabChange = prevCrosstabDimensions && !isCrosstab;
+      const headerCell = prevOfficeTable.getHeaderRowRange().getCell(0, 0);
+      headerCell.load('address');
+      await excelContext.sync();
+      startCell = officeApiHelper.getStartCell(headerCell.address);
+      officeApiHelper.getRange(columns, startCell, rows);
+      if (prevCrosstabDimensions) {
+        officeApiHelper.clearCrosstabRange(prevOfficeTable, prevCrosstabDimensions, excelContext);
       }
-      console.timeEnd('Create or get table');
-      return {
-        officeTable,
-        newOfficeTableId,
-        shouldFormat,
-        tableColumnsChanged,
-      };
-    } catch (error) {
-      throw error;
+      await excelContext.sync();
+      if (tableColumnsChanged) {
+        console.log('Instance definition changed, creating new table');
+        officeTable = await this._createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId, prevOfficeTable);
+      } else {
+        shouldFormat = false;
+        console.time('Validate existing table');
+        officeTable = await this._updateOfficeTable(instanceDefinition, excelContext, startCell, prevOfficeTable);
+        console.timeEnd('Validate existing table');
+      }
+    } else {
+      officeTable = await this._createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId);
     }
+    console.timeEnd('Create or get table');
+    return {
+      officeTable,
+      newOfficeTableId,
+      shouldFormat,
+      tableColumnsChanged,
+    };
   }
 
-  async _fetchInsertDataIntoExcel({
-    connectionData,
-    officeData,
-    instanceDefinition,
-    isRefresh,
-    tableColumnsChanged,
-  }) {
+  async _fetchInsertDataIntoExcel({ connectionData, officeData, instanceDefinition, isRefresh, tableColumnsChanged }) {
     try {
-      const {
-        objectId,
-        projectId,
-        dossierData,
-        mstrObjectType,
-        body,
-      } = connectionData;
+      const { objectId, projectId, dossierData, mstrObjectType } = connectionData;
       const { excelContext, officeTable } = officeData;
       const { columns, rows, mstrTable } = instanceDefinition;
-      const limit = Math.min(
-        Math.floor(DATA_LIMIT / columns),
-        IMPORT_ROW_LIMIT,
-      );
-      const rowGenerator = mstrObjectRestService.getObjectContentGenerator(
-        instanceDefinition,
-        objectId,
-        projectId,
-        mstrObjectType,
-        dossierData,
-        body,
-        limit,
-      );
+      const limit = Math.min(Math.floor(DATA_LIMIT / columns),
+        IMPORT_ROW_LIMIT);
+      const configGenerator = { instanceDefinition, objectId, projectId, mstrObjectType, dossierData };
+      const rowGenerator = getObjectContentGenerator(configGenerator);
       let rowIndex = 0;
       let contextPromises = [];
       const subtotalsAddresses = [];
       console.time('Fetch data');
+      // eslint-disable-next-line no-restricted-syntax, no-unused-vars
       for await (const { row, header, subtotalAddress } of rowGenerator) {
-        console.groupCollapsed(
-          `Importing rows: ${rowIndex} to ${Math.min(rowIndex + limit, rows)}`,
-        );
+        console.groupCollapsed(`Importing rows: ${rowIndex} to ${Math.min(rowIndex + limit, rows)}`);
         console.timeEnd('Fetch data');
         console.time('Append rows');
         excelContext.workbook.application.suspendApiCalculationUntilNextSync();
-        await this._appendRowsToTable(
-          officeTable,
-          row,
-          rowIndex,
-          isRefresh,
-          tableColumnsChanged,
-        );
+        await this._appendRowsToTable(officeTable, row, rowIndex, isRefresh, tableColumnsChanged);
         contextPromises.push(excelContext.sync());
         console.timeEnd('Append rows');
         if (mstrTable.isCrosstab) {
           console.time('Append crosstab rows');
-          this._appendCrosstabRowsToRange(
-            officeTable,
-            header.rows,
-            rowIndex,
-            isRefresh,
-            excelContext,
-          );
+          this._appendCrosstabRowsToRange(officeTable, header.rows, rowIndex, isRefresh, excelContext);
           contextPromises.push(excelContext.sync());
           console.timeEnd('Append crosstab rows');
         }
         console.time('Get subtotals coordinates');
-        for (let i = 0; i < subtotalAddress.length; i++) {
-          Boolean(subtotalAddress[i])
-            && subtotalsAddresses.push(subtotalAddress[i]);
+        for (let i = 0; i < subtotalAddress.length; i += 1) {
+          // eslint removed Boolean(subtotalAddress[i])
+          if (subtotalAddress[i]) subtotalsAddresses.push(subtotalAddress[i]);
         }
         console.timeEnd('Get subtotals coordinates');
         rowIndex += row.length;
@@ -799,12 +639,7 @@ class OfficeDisplayService {
       console.time('Context sync');
       await Promise.all(contextPromises);
       console.timeEnd('Context sync');
-      await officeApiHelper.formatTable(
-        officeTable,
-        mstrTable.isCrosstab,
-        mstrTable.crosstabHeaderDimensions,
-        excelContext,
-      );
+      await officeApiHelper.formatTable(officeTable, mstrTable.isCrosstab, mstrTable.crosstabHeaderDimensions, excelContext);
       if (mstrTable.isCrosstab) officeTable.showHeaders = false;
       await excelContext.sync();
       return { officeTable, subtotalsAddresses };
@@ -814,7 +649,7 @@ class OfficeDisplayService {
     }
   }
 
-  _appendCrosstabRowsToRange = (officeTable, headerRows, rowIndex, isRefresh) => {
+  _appendCrosstabRowsToRange = (officeTable, headerRows, rowIndex) => {
     const startCell = officeTable
       .getDataBodyRange()
       .getRow(0)
@@ -823,13 +658,7 @@ class OfficeDisplayService {
     officeApiHelper.createRowsHeaders(startCell, headerRows);
   }
 
-  _appendRowsToTable = (
-    officeTable,
-    excelRows,
-    rowIndex,
-    isRefresh = false,
-    tableColumnsChanged,
-  ) => {
+  _appendRowsToTable = (officeTable, excelRows, rowIndex, isRefresh = false, tableColumnsChanged) => {
     // Get resize range: The number of rows/cols by which to expand the bottom-right corner,
     // relative to the current range.
     const rowRange = officeTable
@@ -844,11 +673,7 @@ class OfficeDisplayService {
     rowRange.values = excelRows;
   }
 
-  _checkColumnsChange = async (
-    prevOfficeTable,
-    context,
-    instanceDefinition,
-  ) => {
+  _checkColumnsChange = async (prevOfficeTable, context, instanceDefinition) => {
     const { columns } = instanceDefinition;
     const tableColumns = prevOfficeTable.columns;
     tableColumns.load('count');
@@ -866,33 +691,15 @@ class OfficeDisplayService {
     }
   };
 
-  _answerPrompts = async (
-    instanceDefinition,
-    objectId,
-    projectId,
-    promptsAnswers,
-    mstrObjectType,
-    dossierData,
-    body,
-  ) => {
+  _answerPrompts = async (instanceDefinition, objectId, projectId, promptsAnswers, dossierData, body) => {
     try {
       let count = 0;
       while (instanceDefinition.status === 2) {
-        await mstrObjectRestService.answerPrompts(
-          objectId,
-          projectId,
-          instanceDefinition.instanceId,
-          promptsAnswers[count],
-        );
-        instanceDefinition = await mstrObjectRestService.modifyInstance(
-          objectId,
-          projectId,
-          mstrObjectType,
-          dossierData,
-          body,
-          instanceDefinition.instanceId,
-        );
-        count++;
+        const config = { objectId, projectId, instanceId: instanceDefinition.instanceId, promptsAnswers: promptsAnswers[count] };
+        await answerPrompts(config);
+        const configInstance = { objectId, projectId, dossierData, body, instanceId: instanceDefinition.instanceId };
+        instanceDefinition = await modifyInstance(configInstance);
+        count += 1;
       }
       return instanceDefinition;
     } catch (error) {
@@ -901,5 +708,5 @@ class OfficeDisplayService {
     }
   }
 }
-
 export const officeDisplayService = new OfficeDisplayService();
+export default officeDisplayService;

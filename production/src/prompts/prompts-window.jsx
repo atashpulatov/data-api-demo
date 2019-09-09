@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
-import '../index.css';
-import '../home/home.css';
 import { connect } from 'react-redux';
+import { selectorProperties } from '../attribute-selector/selector-properties';
+import '../home/home.css';
+import '../index.css';
+import { actions } from '../navigation/navigation-tree-actions';
 import { PromptsContainer } from './prompts-container';
 import { PromptWindowButtons } from './prompts-window-buttons';
-import { actions } from '../navigation/navigation-tree-actions';
-import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
-import { selectorProperties } from '../attribute-selector/selector-properties';
+import {
+  createInstance,
+  createDossierBasedOnReport,
+  rePromptDossier,
+  answerDossierPrompts as postAnswerDossierPrompts,
+  getDossierStatus,
+  deleteDossierInstance,
+} from '../mstr-object/mstr-object-rest-service';
 
 const { Office } = window;
 const { microstrategy } = window;
@@ -14,19 +21,13 @@ const { microstrategy } = window;
 export class _PromptsWindow extends Component {
   constructor(props) {
     super(props);
-
+    const { mstrData } = props;
     this.state = {
-      session: {
-        USE_PROXY: false,
-        url: this.props.mstrData.envUrl,
-        authToken: this.props.mstrData.token,
-        projectId: this.props.mstrData.projectId,
-      },
-      reportId: this.props.mstrData.reportId,
+      reportId: mstrData.reportId,
       triggerUpdate: false,
       loading: true,
-      isReprompt: props.mstrData.isReprompt,
-      promptsAnswers: props.mstrData.promptsAnswers,
+      isReprompt: mstrData.isReprompt,
+      promptsAnswers: mstrData.promptsAnswers,
       currentPageKey: '',
       dossierInstanceId: '',
       docId: '',
@@ -39,13 +40,14 @@ export class _PromptsWindow extends Component {
   }
 
   preparePromptedReportInstance = async (reportId, projectId, promptsAnswers) => {
-    const instanceDefinition = await mstrObjectRestService.createInstance(reportId, projectId, true, null);
-    let dossierInstanceDefinition = await mstrObjectRestService.createDossierBasedOnReport(reportId, instanceDefinition.instanceId, projectId);
+    const config = { objectId: reportId, projectId };
+    const instanceDefinition = await createInstance(config);
+    let dossierInstanceDefinition = await createDossierBasedOnReport(reportId, instanceDefinition.instanceId, projectId);
     if (dossierInstanceDefinition.status === 2) {
       dossierInstanceDefinition = await this.answerDossierPrompts(dossierInstanceDefinition, reportId, projectId, promptsAnswers);
     }
 
-    dossierInstanceDefinition = await mstrObjectRestService.rePromptDossier(reportId, dossierInstanceDefinition, projectId);
+    dossierInstanceDefinition = await rePromptDossier(reportId, dossierInstanceDefinition, projectId);
     dossierInstanceDefinition.id = reportId;
 
     return dossierInstanceDefinition;
@@ -55,32 +57,36 @@ export class _PromptsWindow extends Component {
     const instanceId = instanceDefinition.mid;
     let count = 0;
     while (instanceDefinition.status === 2) {
-      await mstrObjectRestService.answerDossierPrompts(objectId, projectId, instanceDefinition.mid, promptsAnswers[count]);
-      instanceDefinition = await mstrObjectRestService.getDossierStatus(objectId, instanceDefinition.mid, projectId);
-      count++;
+      const config = { objectId, projectId, instanceId: instanceDefinition.mid, promptsAnswers: promptsAnswers[count] };
+      await postAnswerDossierPrompts(config);
+      instanceDefinition = await getDossierStatus(objectId, instanceDefinition.mid, projectId);
+      count += 1;
     }
     return instanceId;
   }
 
   loadEmbeddedDossier = async (container) => {
-    if (!this.state.loading) {
+    const { loading, reportId, isReprompt } = this.state;
+    let { promptsAnswers } = this.state;
+    const { promptsAnswered, mstrData } = this.props;
+    if (!loading) {
       return;
     }
 
-    const { authToken, projectId } = this.state.session;
-    const libraryUrl = this.state.session.url.replace('api', 'app');
+    const { envUrl, token, projectId } = mstrData;
+    const libraryUrl = envUrl.replace('api', 'app');
 
     let instanceDefinition;
     const instance = {};
-    if (this.state.isReprompt) {
-      instanceDefinition = await this.preparePromptedReportInstance(this.state.reportId, projectId, this.state.promptsAnswers);
+    if (isReprompt) {
+      instanceDefinition = await this.preparePromptedReportInstance(reportId, projectId, promptsAnswers);
       instance.id = instanceDefinition.id; // '00000000000000000000000000000000';
       instance.mid = instanceDefinition.mid;
     }
 
     let msgRouter = null;
-    let promptsAnswers = null;
-    const promptsAnsweredHandler = function (_promptsAnswers) {
+    promptsAnswers = null;
+    const promptsAnsweredHandler = function promptsAnswerFn(_promptsAnswers) {
       if (!_promptsAnswers) {
         return;
       }
@@ -90,7 +96,7 @@ export class _PromptsWindow extends Component {
         promptsAnswers = [_promptsAnswers];
       }
     };
-    const url = `${libraryUrl}/${projectId}/${this.state.reportId}`;
+    const url = `${libraryUrl}/${projectId}/${reportId}`;
     const { CustomAuthenticationType } = microstrategy.dossier;
     const { EventType } = microstrategy.dossier;
 
@@ -102,20 +108,17 @@ export class _PromptsWindow extends Component {
       enableResponsive: true,
 
       getLoginToken() {
-        return Promise.resolve(authToken);
+        return Promise.resolve(token);
       },
       placeholder: container,
       onMsgRouterReadyHandler: ({ MsgRouter }) => {
         msgRouter = MsgRouter;
-        msgRouter.registerEventHandler(
-          EventType.ON_PROMPT_ANSWERED,
-          promptsAnsweredHandler,
-        );
+        msgRouter.registerEventHandler(EventType.ON_PROMPT_ANSWERED, promptsAnsweredHandler);
         // TODO: We should remember to unregister this handler once the page loads
       },
     };
 
-    if (this.state.isReprompt) {
+    if (isReprompt) {
       props.instance = instance;
     }
 
@@ -135,10 +138,10 @@ export class _PromptsWindow extends Component {
         };
 
         // Since the dossier is no needed anymore after intercepting promptsAnswers, we can try removing the instanace
-        mstrObjectRestService.deleteDossierInstance(projectId, objectId, instanceId);
+        deleteDossierInstance(projectId, objectId, instanceId);
 
         msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, promptsAnsweredHandler);
-        this.props.promptsAnswered({ dossierData, promptsAnswers });// TEMP - dossierData should eventually be removed as data should be gathered via REST from report instance, not dossier
+        promptsAnswered({ dossierData, promptsAnswers });// TEMP - dossierData should eventually be removed as data should be gathered via REST from report instance, not dossier
       });
   }
 
@@ -148,7 +151,7 @@ export class _PromptsWindow extends Component {
   handleRun = () => {
     if (this.embeddedDocument) {
       const runButton = this.embeddedDocument.getElementsByClassName('mstrPromptEditorButtonRun')[0];
-      runButton && runButton.click();
+      if (runButton) runButton.click();
     }
   }
 
@@ -217,6 +220,8 @@ export class _PromptsWindow extends Component {
   }
 
   render() {
+    const { handleBack } = this.props;
+    const { isReprompt } = this.state;
     return (
       <div
         style={{ position: 'relative' }}
@@ -228,9 +233,9 @@ export class _PromptsWindow extends Component {
 
         <div style={{ position: 'absolute', bottom: '0' }}>
           <PromptWindowButtons
-            handleBack={this.props.handleBack}
+            handleBack={handleBack}
             handleRun={this.handleRun}
-            isReprompt={this.state.isReprompt}
+            isReprompt={isReprompt}
             closePopup={this.closePopup}
           />
         </div>

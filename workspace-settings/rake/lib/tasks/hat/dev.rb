@@ -136,14 +136,24 @@ task :stage_0_test do
     raise "ghprbTargetBranch environment should not be nil"
   end
   run_test("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
-  # #checkout the code in base branch
-  # init_base_branch_repo(ENV["ghprbTargetBranch"])
-  # #run test with base branch
-  # run_test(base_repo_path)
-  # generate_comparison_report_html
-  # generate_comparison_report_markdown
-  generate_eslint_report
-  # publish_to_pull_request_page
+
+  # pre-merge job shouldn't fail when test fail in base branch.
+  # if the build process fail in base branch, publish the error message to pull request page.
+  begin
+    message = nil
+    #checkout the code in base branch
+    init_base_branch_repo(ENV["ghprbTargetBranch"])
+    #run test with base branch
+    run_test(base_repo_path)
+    generate_comparison_report_html
+    generate_comparison_report_markdown
+    generate_eslint_report
+  rescue Exception => e
+    message = "Waring: Failed to run test with base branch and generate report, caught exception #{e}!"
+    warn(message)
+  ensure
+    publish_to_pull_request_page(message)
+  end
 
 end
 
@@ -327,7 +337,8 @@ end
 def add_data_for_doc(compare_obj, xml_doc, metric_name)
   compare_obj["All files"][metric_name] = get_metics_node(xml_doc.coverage.project.metrics)
   compare_obj["All files"]["packages"]={} if compare_obj["All files"]["packages"].nil?
-  xml_doc.coverage.project.metrics.package.each do |package|
+  # the clover.xml format has changed, node 'project' is the child of node 'coverage'
+  xml_doc.coverage.project.package.each do |package|
     pack_name = package["name"]
     compare_obj["All files"]["packages"][pack_name] = {}  if compare_obj["All files"]["packages"][pack_name].nil?
     compare_obj["All files"]["packages"][pack_name][metric_name] = get_metics_node(package.metrics)
@@ -376,19 +387,24 @@ def get_metics_node(source)
 end
 #publish markdown report to pull request page
 
-def publish_to_pull_request_page
+def publish_to_pull_request_page(message=nil)
   unless ENV['USER'] == 'jenkins'
     #only available in jenkins envrionment
     puts "only available in jenkins env"
     return
   end
-  markdown_report_path = "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/.comparison_report/markdown.html"
-  unless File.exist? markdown_report_path
-    raise "#{markdown_report_path} does not exist, please generate before"
+  # if the argument 'message' is not given(message=nil), then publish the markdown report to pull request page.
+  if message
+    comments_message = message
+  else
+    markdown_report_path = "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/.comparison_report/markdown.html"
+    unless File.exist? markdown_report_path
+      raise "#{markdown_report_path} does not exist, please generate before"
+    end
+    markdown_message = File.read(markdown_report_path)
+    job_url = ENV['BUILD_URL']
+    comments_message = "job page:\n#{job_url}\nlinter report:\n#{job_url}eslint_report\ncode coverage report:\n#{job_url}Code_Coverage_Report\n#{markdown_message}\n"
   end
-  markdown_message = File.read(markdown_report_path)
-  job_url = ENV['BUILD_URL']
-  comments_message = "job page:\n#{job_url}\nlinter report:\n#{job_url}eslint_report\ncode coverage report:\n#{job_url}Code_Coverage_Report\n#{markdown_message}\n"
   pull_request = Github::PullRequests.new(ENV['GITHUB_USER'], ENV['GITHUB_PWD'])
   pull_request.comment_pull_request(ENV['PROJECT_NAME'],ENV['ORGANIZATION_NAME'],ENV["ghprbPullId"],comments_message)
 end
