@@ -1,13 +1,9 @@
 import React from 'react';
-import {_NavigationTree, mapStateToProps, mapDispatchToProps} from '../../navigation/navigation-tree';
-import {SELECT_OBJECT, SET_DATA_SOURCE, SELECT_FOLDER, START_IMPORT} from '../../navigation/navigation-tree-actions';
-import {shallow, mount} from 'enzyme';
-import {selectorProperties} from '../../attribute-selector/selector-properties';
-import {PopupButtons} from '../../popup/popup-buttons';
-import {Office} from '../mockOffice';
-import {mstrObjectRestService} from '../../mstr-object/mstr-object-rest-service';
-import {message} from 'antd';
-import {EMPTY_REPORT} from '../../error/constants';
+import { shallow } from 'enzyme';
+import { _NavigationTree, mapStateToProps } from '../../navigation/navigation-tree';
+import { selectorProperties } from '../../attribute-selector/selector-properties';
+import { Office } from '../mockOffice';
+import * as mstrObjectRestService from '../../mstr-object/mstr-object-rest-service';
 
 describe('NavigationTree', () => {
   afterAll(() => {
@@ -44,12 +40,11 @@ describe('NavigationTree', () => {
       chosenProjectName: 'Prepare Data',
       chosenType: 'Data',
     };
-    const wrappedComponent = shallow(
-      <_NavigationTree
-        mstrData={mstrData}
-        handlePrepare={propsMethod}
-        {...actionObject}
-      />);
+    const wrappedComponent = shallow(<_NavigationTree
+      mstrData={mstrData}
+      handlePrepare={propsMethod}
+      {...actionObject}
+    />);
     // when
     wrappedComponent.instance().handleSecondary();
     // then

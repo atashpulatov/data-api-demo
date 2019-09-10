@@ -1,11 +1,11 @@
 import { authenticationHelper } from '../authentication/authentication-helper';
-import { officeProperties } from '../office/office-properties';
-import { popupHelper } from './popup-helper';
+import { errorService } from '../error/error-handler';
 import { officeApiHelper } from '../office/office-api-helper';
+import { officeProperties } from '../office/office-properties';
 import { officeStoreService } from '../office/store/office-store-service';
 import { popupController } from './popup-controller';
-import { errorService } from '../error/error-handler';
-import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
+import { popupHelper } from './popup-helper';
+import { createInstance, answerPrompts, getInstance } from '../mstr-object/mstr-object-rest-service';
 
 export const CLEAR_WINDOW = 'POPUP_CLOSE_WINDOW';
 export const START_REPORT_LOADING = 'START_REPORT_LOADING';
@@ -22,34 +22,29 @@ export function callForEdit(reportParams) {
         officeApiHelper.getExcelSessionStatus(),
         authenticationHelper.validateAuthToken(),
       ]);
-      const editedReport = officeStoreService.getReportFromProperties(
-        reportParams.bindId,
-      );
+      const editedReport = officeStoreService.getReportFromProperties(reportParams.bindId);
       if (editedReport.isPrompted) {
-        let instanceDefinition = await mstrObjectRestService.createInstance(
-          editedReport.id,
-          editedReport.projectId,
-          true,
-          null,
-          null,
-        );
+        const config = { objectId: editedReport.id, projectId: editedReport.projectId };
+        let instanceDefinition = await createInstance(config);
         let count = 0;
         while (instanceDefinition.status === 2) {
-          await mstrObjectRestService.answerPrompts(
-            editedReport.id,
-            editedReport.projectId,
-            instanceDefinition.instanceId,
-            editedReport.promptsAnswers[count],
-          );
-          instanceDefinition = await mstrObjectRestService.getInstance(
-            editedReport.id,
-            editedReport.projectId,
-            true,
-            null,
-            editedReport.body,
-            instanceDefinition.instanceId,
-          );
-          count++;
+          const { id, projectId, promptsAnswers } = editedReport;
+          const configPrompts = {
+            objectId: id,
+            projectId,
+            instanceDefinition:
+              instanceDefinition.instanceId,
+            promptsAnswers: promptsAnswers[count],
+          };
+          await answerPrompts(configPrompts);
+          const configInstance = {
+            objectId: editedReport.id,
+            projectId: editedReport.projectId,
+            body: editedReport.body,
+            instanceId: instanceDefinition.instanceId,
+          };
+          instanceDefinition = await getInstance(configInstance);
+          count += 1;
         }
         editedReport.instanceId = instanceDefinition.instanceId;
       }
@@ -72,9 +67,7 @@ export function callForReprompt(reportParams) {
         officeApiHelper.getExcelSessionStatus(),
         authenticationHelper.validateAuthToken(),
       ]);
-      const editedReport = officeStoreService.getReportFromProperties(
-        reportParams.bindId,
-      );
+      const editedReport = officeStoreService.getReportFromProperties(reportParams.bindId);
       editedReport.isPrompted = true;
       dispatch({
         type: SET_REPORT_N_FILTERS,
@@ -118,21 +111,17 @@ export function refreshReportsArray(reportArray, isRefreshAll) {
           reportBindId: report.bindId,
           isRefreshAll,
         });
-        isError = await popupHelper.printRefreshedReport(
-          report.bindId,
+        isError = await popupHelper.printRefreshedReport(report.bindId,
           report.objectType,
           reportArray.length,
           index,
           isRefreshAll,
-          report.promptsAnswers,
-        );
+          report.promptsAnswers);
       } catch (error) {
-        popupHelper.handleRefreshError(
-          error,
+        popupHelper.handleRefreshError(error,
           reportArray.length,
           index,
-          isRefreshAll,
-        );
+          isRefreshAll);
         return true;
       } finally {
         dispatch({

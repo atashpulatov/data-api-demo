@@ -14,8 +14,9 @@ export class _AttributeSelector extends Component {
     const {
       title, session,
       triggerUpdate, onTriggerUpdate, mstrData,
-      resetTriggerUpdate, attributesSelectedChange, t,
+      resetTriggerUpdate, attributesSelectedChange, t, openModal, closeModal, toggleSubtotal,
     } = this.props;
+
     return (
       <ErrorBoundary>
         <AttributeMetricFilter
@@ -30,8 +31,10 @@ export class _AttributeSelector extends Component {
           withDataPreview
           resetTriggerUpdate={resetTriggerUpdate}
           withFolderTree={false}
-          openModal={this.props.openModal}
-          closeModal={this.props.closeModal}
+          openModal={openModal}
+          closeModal={closeModal}
+          toggleSubtotal={toggleSubtotal}
+          importSubtotal={mstrData.importSubtotal}
         />
       </ErrorBoundary>
     );

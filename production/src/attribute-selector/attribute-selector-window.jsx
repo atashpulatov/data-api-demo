@@ -20,7 +20,12 @@ export class AttributeSelectorWindow extends Component {
       triggerUpdate: false,
       loading: false,
       attributesSelected: false,
+      importSubtotal: true,
     };
+  }
+
+  toggleSubtotal = (isSubtotal) => {
+    this.setState({ importSubtotal: isSubtotal });
   }
 
   handleOk = () => {
@@ -44,6 +49,7 @@ export class AttributeSelectorWindow extends Component {
     reportName = this.props.mstrData.reportName,
   ) => {
     const { mstrData } = this.props;
+    const { importSubtotal } = this.state;
     attributeSelectorHelpers.officeMessageParent(
       selectorProperties.commandOnUpdate,
       reportId,
@@ -53,6 +59,7 @@ export class AttributeSelectorWindow extends Component {
       reportName,
       mstrData.instanceId,
       mstrData.promptsAnswers,
+      importSubtotal,
     );
   };
 
@@ -81,6 +88,7 @@ export class AttributeSelectorWindow extends Component {
     const {
       session, triggerUpdate, openModal, attributesSelected, loading,
     } = this.state;
+    const { toggleSubtotal } = this;
     const typeName = mstrData.reportType.name
       ? mstrData.reportType.name.charAt(0).toUpperCase() + mstrData.reportType.name.substring(1)
       : mstrData.reportType.charAt(0).toUpperCase() + mstrData.reportType.substring(1);
@@ -98,6 +106,7 @@ export class AttributeSelectorWindow extends Component {
           resetTriggerUpdate={this.resetTriggerUpdate}
           openModal={openModal}
           closeModal={this.closeModal}
+          toggleSubtotal={toggleSubtotal}
         />
         <PopupButtons
           disableActiveActions={!attributesSelected}
