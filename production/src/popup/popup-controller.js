@@ -1,4 +1,3 @@
-import { objectTypes } from '@mstr/mstr-react-library';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { officeDisplayService } from '../office/office-display-service';
 import { PopupTypeEnum } from '../home/popup-type-enum';

@@ -51,7 +51,7 @@ export class _FileHistoryContainer extends React.Component {
           ]);
           const { name } = reportArray.find((report) => report.bindId === e.tableName);
           officeDisplayService.removeReportFromStore(e.tableName);
-          const message = this.props.t('{{name}} has been removed from the workbook.', { name });
+          const message = t('{{name}} has been removed from the workbook.', { name });
           notificationService.displayTranslatedNotification({ type: 'success', content: message });
         } catch (error) {
           errorService.handleError(error);
@@ -148,8 +148,8 @@ export class _FileHistoryContainer extends React.Component {
               {!refreshingAll ? (
                 <MSTRIcon type="refresh" />
               ) : (
-                <img width="12px" height="12px" src={loadingSpinner} alt={t('Report loading icon')} />
-              )}
+                  <img width="12px" height="12px" src={loadingSpinner} alt={t('Report loading icon')} />
+                )}
             </Button>
           </ButtonPopover>
         </span>
