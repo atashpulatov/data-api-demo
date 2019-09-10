@@ -49,7 +49,27 @@ describe('AttributeSelectorWindow', () => {
     expect(selectorWrapped.prop('reportSubtype')).not.toBeDefined();
   });
 
-  it('should call setState if toggleSubtotal is called', () => {
+  it('should call setState if toggleSubtotal is called with parameter', () => {
+    // given
+    const mstrData = {
+      envUrl: 'url',
+      token: 'token',
+      projectId: 'proId',
+      reportId: 'repId',
+      reportType: 'report',
+    };
+
+    const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
+    const spyMethod = jest.spyOn(componentWrapper.instance(), 'setState');
+
+    // when
+    componentWrapper.instance().toggleSubtotal(true);
+
+    // then
+    expect(spyMethod).toHaveBeenCalledWith({ importSubtotal: true });
+  });
+
+  it('should call setState if toggleSubtotal is called WITHOUT parameter', () => {
     // given
     const mstrData = {
       envUrl: 'url',
@@ -155,7 +175,7 @@ describe('AttributeSelectorWindow', () => {
       <AttributeSelectorWindow
         mstrData={mstrData}
       />
-                                   </Provider>);
+    </Provider>);
     const spyMethod = jest.spyOn(attributeSelectorHelpers, 'officeMessageParent');
 
     const wrappedCancelButton = componentWrapper.find('Button #cancel');
@@ -183,7 +203,7 @@ describe('AttributeSelectorWindow', () => {
         mstrData={mstrData}
         handleBack={handleBack}
       />
-                                   </Provider>);
+    </Provider>);
 
     const wrappedCancelButton = componentWrapper.find('Button #back');
 
