@@ -98,4 +98,14 @@ describe('PopupButtons', () => {
       expect(buttonsWrapped.exists('#data-preview')).toBeTruthy();
       expect(buttonsWrapped.exists('#import')).toBeTruthy();
     });
+
+  it('should display only secondary button tooltip when disableSecondary prop is provided ',
+    () => {
+      // given
+      // when
+      const buttonsWrapped = shallow(<_PopupButtons handleSecondary disableSecondary />);
+      const tooltipSpan = buttonsWrapped.find('.button-tooltip');
+      // then
+      expect(tooltipSpan.length).toBe(1);
+    });
 });
