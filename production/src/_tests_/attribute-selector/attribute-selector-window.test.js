@@ -49,6 +49,46 @@ describe('AttributeSelectorWindow', () => {
     expect(selectorWrapped.prop('reportSubtype')).not.toBeDefined();
   });
 
+  it('should call setState if toggleSubtotal is called with parameter', () => {
+    // given
+    const mstrData = {
+      envUrl: 'url',
+      token: 'token',
+      projectId: 'proId',
+      reportId: 'repId',
+      reportType: 'report',
+    };
+
+    const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
+    const spyMethod = jest.spyOn(componentWrapper.instance(), 'setState');
+
+    // when
+    componentWrapper.instance().toggleSubtotal(true);
+
+    // then
+    expect(spyMethod).toHaveBeenCalledWith({ importSubtotal: true });
+  });
+
+  it('should call setState if toggleSubtotal is called WITHOUT parameter', () => {
+    // given
+    const mstrData = {
+      envUrl: 'url',
+      token: 'token',
+      projectId: 'proId',
+      reportId: 'repId',
+      reportType: 'report',
+    };
+
+    const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
+    const spyMethod = jest.spyOn(componentWrapper.instance(), 'setState');
+
+    // when
+    componentWrapper.instance().toggleSubtotal();
+
+    // then
+    expect(spyMethod).toHaveBeenCalledWith({ importSubtotal: undefined });
+  });
+
   it('should call setState if handleOk is called', () => {
     // given
     const mstrData = {
@@ -91,8 +131,8 @@ describe('AttributeSelectorWindow', () => {
 
     // then
     expect(spyMethod).toHaveBeenCalledWith(
-selectorProperties.commandOnUpdate, 1, 2, 3, 4, mstrData.reportName, mstrData.instanceId, mstrData.promptsAnswers, mstrData.importSubtotal
-);
+      selectorProperties.commandOnUpdate, 1, 2, 3, 4, mstrData.reportName, mstrData.instanceId, mstrData.promptsAnswers, mstrData.importSubtotal,
+    );
   });
 
   it('should call attributeSelectorHelpers.officeMessageParent if onTriggerUpdate is called with report name', () => {
@@ -117,8 +157,8 @@ selectorProperties.commandOnUpdate, 1, 2, 3, 4, mstrData.reportName, mstrData.in
 
     // then
     expect(spyMethod).toHaveBeenCalledWith(
-selectorProperties.commandOnUpdate, 1, 2, 3, 4, 5, mstrData.instanceId, mstrData.promptsAnswers, mstrData.importSubtotal
-);
+      selectorProperties.commandOnUpdate, 1, 2, 3, 4, 5, mstrData.instanceId, mstrData.promptsAnswers, mstrData.importSubtotal,
+    );
   });
 
   it('should trigger handleCancel when Cancel was clicked', () => {
@@ -132,10 +172,10 @@ selectorProperties.commandOnUpdate, 1, 2, 3, 4, 5, mstrData.instanceId, mstrData
     };
 
     const componentWrapper = mount(<Provider store={reduxStore}>
-        <AttributeSelectorWindow
-          mstrData={mstrData}
-        />
-      </Provider>,);
+      <AttributeSelectorWindow
+        mstrData={mstrData}
+      />
+    </Provider>);
     const spyMethod = jest.spyOn(attributeSelectorHelpers, 'officeMessageParent');
 
     const wrappedCancelButton = componentWrapper.find('Button #cancel');
@@ -159,11 +199,11 @@ selectorProperties.commandOnUpdate, 1, 2, 3, 4, 5, mstrData.instanceId, mstrData
     const handleBack = jest.fn();
 
     const componentWrapper = mount(<Provider store={reduxStore}>
-        <AttributeSelectorWindow
-          mstrData={mstrData}
-          handleBack={handleBack}
-        />
-      </Provider>,);
+      <AttributeSelectorWindow
+        mstrData={mstrData}
+        handleBack={handleBack}
+      />
+    </Provider>);
 
     const wrappedCancelButton = componentWrapper.find('Button #back');
 
