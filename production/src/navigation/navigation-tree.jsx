@@ -6,6 +6,7 @@ import { selectorProperties } from '../attribute-selector/selector-properties';
 import { PopupButtons } from '../popup/popup-buttons';
 import { actions } from './navigation-tree-actions';
 import { isPrompted as checkIfPrompted } from '../mstr-object/mstr-object-rest-service';
+import mstrObjectType from '../mstr-object/mstr-object-type-enum';
 
 export class _NavigationTree extends Component {
   constructor(props) {
@@ -17,8 +18,8 @@ export class _NavigationTree extends Component {
   }
 
   handleOk = () => {
-    const { isDossier, requestImport, handleDossierOpen } = this.props;
-    if (isDossier) {
+    const { objectType, requestImport, handleDossierOpen } = this.props;
+    if (objectType.name === mstrObjectType.mstrObjectType.dossier.name) {
       handleDossierOpen();
     } else {
       requestImport();
@@ -60,6 +61,7 @@ export class _NavigationTree extends Component {
         chosenProjectId: null,
         chosenSubtype: null,
         isPrompted: null,
+        objectType: null,
       });
 
       // Only check for prompts when it's a report
@@ -73,6 +75,7 @@ export class _NavigationTree extends Component {
         chosenProjectId: projectId,
         chosenSubtype: subtype,
         isPrompted,
+        objectType: mstrObjectType.getMstrTypeBySubtype(subtype),
       });
     } catch (err) {
       const { handlePopupErrors } = this.props;
@@ -84,7 +87,7 @@ export class _NavigationTree extends Component {
     const {
       setDataSource, dataSource, chosenObjectId, chosenProjectId, pageSize, changeSearching, changeSorting,
       chosenSubtype, folder, selectFolder, loading, handlePopupErrors, scrollPosition, searchText, sorter,
-      updateScroll, mstrData, updateSize, t, isDossier,
+      updateScroll, mstrData, updateSize, t, objectType,
     } = this.props;
     const { triggerUpdate, previewDisplay } = this.state;
     return (
@@ -136,7 +139,7 @@ export class _NavigationTree extends Component {
           handleSecondary={this.handleSecondary}
           handleCancel={this.handleCancel}
           previewDisplay={previewDisplay}
-          disableSecondary={isDossier}
+          disableSecondary={objectType && objectType.name === mstrObjectType.mstrObjectType.dossier.name}
         />
       </FolderBrowser>
     );

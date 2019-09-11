@@ -6,6 +6,13 @@ import { PopupButtons } from '../popup/popup-buttons';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 
 export default class _DossierWindow extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isVisualisationSelected: false,
+    };
+  }
+
   handleCancel() {
     const { Office } = window;
     const cancelObject = {
@@ -15,12 +22,11 @@ export default class _DossierWindow extends React.Component {
   }
 
   render() {
-    const {
-      dossierId, dossierName, handleBack, t, isVisualisationSelected,
-    } = this.props;
+    const { chosenObjectId, chosenProjectName, handleBack, t } = this.props;
+    const { isVisualisationSelected } = this.state;
     return (
       <div>
-        <h1 title={dossierName} className="ant-col folder-browser-title">{`${t('Import Dossier')} > ${dossierName}`}</h1>
+        <h1 title={chosenProjectName} className="ant-col folder-browser-title">{`${t('Import Dossier')} > ${chosenProjectName}`}</h1>
         {/* TODO:  Insert  dossier iframe for embeded API by using dossierId */}
         <PopupButtons
           handleBack={handleBack}
@@ -34,23 +40,23 @@ export default class _DossierWindow extends React.Component {
 }
 
 _DossierWindow.propTypes = {
-  dossierId: PropTypes.string,
-  dossierName: PropTypes.string,
+  chosenObjectId: PropTypes.string,
+  chosenProjectName: PropTypes.string,
   handleBack: PropTypes.func,
   t: PropTypes.func,
-  isVisualisationSelected: PropTypes.bool,
 };
 
 _DossierWindow.defaultProps = {
-  dossierId: '1234ABCD',
-  dossierName: 'testingName',
+  chosenObjectId: 'default id',
+  chosenProjectName: 'default name',
   handleBack: () => { },
   t: (text) => text,
-  isVisualisationSelected: false,
 };
 
 function mapStateToProps(state) {
-  return {};
+  return {
+    ...state.navigationTree,
+  };
 }
 
 export const DossierWindow = connect(mapStateToProps)(withTranslation('common')(_DossierWindow));
