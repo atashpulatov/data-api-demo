@@ -3,7 +3,7 @@ import { reduxStore } from '../store';
 import filterDossiersByViewMedia from '../helpers/viewMediaHelper';
 
 const SEARCH_ENDPOINT = 'searches/results';
-const LIMIT = 4096;
+const LIMIT = 8192;
 const DOSSIER_SUBTYPE = 14081;
 const SUBTYPES = [768, 769, 774, 776, 779, DOSSIER_SUBTYPE];
 
