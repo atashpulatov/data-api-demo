@@ -26,7 +26,6 @@ export const _PopupViewSelector = (props) => {
   propsToPass.token = props.authToken;
   propsToPass.editRequested = popupType === PopupTypeEnum.editFilters;
   const localEditReport = { ...props.editedReport };
-
   if (
     (importRequested && !props.isPrompted)
     || (importRequested && arePromptsAnswered(props))

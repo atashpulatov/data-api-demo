@@ -44,7 +44,8 @@ export class Popup extends Component {
   };
 
   handleBack = (projectId, reportId, reportSubtype, forceChange = false) => {
-    this.setState({
+    this.setState(
+      {
         mstrData: {
           ...this.state.mstrData,
           popupType: PopupTypeEnum.navigationTree,
@@ -54,7 +55,8 @@ export class Popup extends Component {
           reportSubtype,
         },
       },
-    () => reduxStore.dispatch({ type: CLEAR_PROMPTS_ANSWERS }));
+      () => reduxStore.dispatch({ type: CLEAR_PROMPTS_ANSWERS }),
+    );
   };
 
   handlePopupErrors = (error) => {
