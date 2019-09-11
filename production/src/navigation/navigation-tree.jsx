@@ -16,6 +16,15 @@ export class _NavigationTree extends Component {
     };
   }
 
+  handleOk = () => {
+    const { isDossier, requestImport, handleDossierOpen } = this.props;
+    if (isDossier) {
+      handleDossierOpen();
+    } else {
+      requestImport();
+    }
+  }
+
   onTriggerUpdate = (body) => {
     const updateObject = {
       command: selectorProperties.commandOnUpdate,
@@ -75,7 +84,7 @@ export class _NavigationTree extends Component {
     const {
       setDataSource, dataSource, chosenObjectId, chosenProjectId, pageSize, changeSearching, changeSorting,
       chosenSubtype, folder, selectFolder, loading, handlePopupErrors, scrollPosition, searchText, sorter,
-      updateScroll, mstrData, updateSize, requestImport, t,
+      updateScroll, mstrData, updateSize, t, isDossier,
     } = this.props;
     const { triggerUpdate, previewDisplay } = this.state;
     return (
@@ -123,10 +132,11 @@ export class _NavigationTree extends Component {
         <PopupButtons
           loading={loading}
           disableActiveActions={!chosenObjectId}
-          handleOk={requestImport}
+          handleOk={this.handleOk}
           handleSecondary={this.handleSecondary}
           handleCancel={this.handleCancel}
           previewDisplay={previewDisplay}
+          disableSecondary={isDossier}
         />
       </FolderBrowser>
     );

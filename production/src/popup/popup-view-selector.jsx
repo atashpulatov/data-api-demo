@@ -235,6 +235,7 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
         handlePrepare={methods.handlePrepare}
         mstrData={propsToPass}
         handlePopupErrors={methods.handlePopupErrors}
+        handleDossierOpen={methods.handleDossierOpen}
       />
     );
   }

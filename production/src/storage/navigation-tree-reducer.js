@@ -28,6 +28,7 @@ export const initialState = {
   chosenSubtype: null,
   chosenProjectName: DEFAULT_PROJECT_NAME,
   chosenType: DEFAULT_TYPE,
+  isDossier: false,
   isPrompted: false,
   dataSource: null,
   loading: false,

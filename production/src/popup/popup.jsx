@@ -69,12 +69,33 @@ export class Popup extends Component {
       .context.ui.messageParent(JSON.stringify(messageObject));
   };
 
+  handleDossierOpen = (
+    projectId,
+    reportId,
+    reportSubtype,
+    reportName,
+    reportType) => {
+    this.setState({
+      mstrData: {
+        ...this.state.mstrData,
+        popupType: PopupTypeEnum.dossierWindow,
+        forceChange: false,
+        projectId,
+        reportId,
+        reportSubtype,
+        reportName,
+        reportType,
+      },
+    });
+  };
+
   render() {
     const { popupType, ...propsToPass } = this.state.mstrData;
     const methods = {
       handlePrepare: this.handlePrepare,
       handleBack: this.handleBack,
       handlePopupErrors: this.handlePopupErrors,
+      handleDossierOpen: this.handleDossierOpen,
     };
     i18next.changeLanguage(
       i18next.options.resources[Office.context.displayLanguage]
