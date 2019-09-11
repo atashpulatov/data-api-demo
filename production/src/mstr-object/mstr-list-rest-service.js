@@ -3,7 +3,7 @@ import { reduxStore } from '../store';
 import filterDossiersByViewMedia from '../helpers/viewMediaHelper';
 
 const SEARCH_ENDPOINT = 'searches/results';
-const LIMIT = 2048; // Don't use -1
+const LIMIT = 4096;
 const DOSSIER_SUBTYPE = 14081;
 const SUBTYPES = [768, 769, 774, 776, 779, DOSSIER_SUBTYPE];
 
@@ -14,7 +14,8 @@ const SUBTYPES = [768, 769, 774, 776, 779, DOSSIER_SUBTYPE];
  * @returns {Array}
  */
 export function filterDossier(body) {
-  return body.result.filter(filterFunction);
+  const { result, totalItems } = body;
+  return { result: result.filter(filterFunction), totalItems };
 }
 
 /**
@@ -56,10 +57,14 @@ export function getRequestParams() {
  * Get the totalItems value by fetching only 1 object.
  *
  * @param {Object} { limit = 1, callback = processTotalItems, requestParams }
- * @returns
+ * @returns {Array} [totalItems, Promise]
  */
-export function fetchTotalItems({ limit = 1, callback = processTotalItems, requestParams }) {
-  return fetchObjectList({ limit, callback, requestParams });
+export function fetchTotalItems({ limit = LIMIT, callback, requestParams }) {
+  const totalItemsCallback = (body) => {
+    const filtered = filterDossier(body);
+    return [filtered.totalItems, callback(filtered)];
+  };
+  return fetchObjectList({ limit, callback: totalItemsCallback, requestParams });
 }
 
 /**
@@ -71,11 +76,10 @@ export function fetchTotalItems({ limit = 1, callback = processTotalItems, reque
  */
 export async function fetchObjectListPagination(callback) {
   const requestParams = getRequestParams();
-  const total = await fetchTotalItems({ requestParams });
-
-  let offset = 0;
-  const promiseList = [];
-  const paginationArgs = { limit: LIMIT, callback, requestParams };
+  const paginationArgs = { callback, requestParams };
+  const [total, promise] = await fetchTotalItems(paginationArgs);
+  const promiseList = [promise];
+  let offset = LIMIT;
   while (offset <= total) {
     promiseList.push(fetchObjectList({ ...paginationArgs, offset }));
     offset += LIMIT;
@@ -102,7 +106,6 @@ export function fetchObjectList({ requestParams, callback = (res) => res, offset
     .set('x-mstr-authtoken', authToken)
     .withCredentials()
     .then((res) => res.body)
-    .then(filterDossier)
     .then(callback);
 }
 
@@ -115,5 +118,6 @@ export function fetchObjectList({ requestParams, callback = (res) => res, offset
  * @class getObjectList
  */
 export default function getObjectList(callback) {
-  return fetchObjectListPagination(callback);
+  const cbFilter = (res) => callback(filterDossier(res).result);
+  return fetchObjectListPagination(cbFilter);
 }

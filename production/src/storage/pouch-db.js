@@ -16,6 +16,7 @@ export default class DB {
   constructor(dbName) {
     this.db = new PouchDB(dbName, { revs_limit: 2 });
     this.dbName = dbName;
+    this.putObjects = this.putObjects.bind(this);
   }
 
   /**
@@ -39,6 +40,16 @@ export default class DB {
   }
 
   /**
+  * Get database info promise
+  *
+  * @returns {Promise} Database info
+  * @memberof DB
+  */
+  info() {
+    return this.instance.info();
+  }
+
+  /**
    * Delete the current database and create a new instance with the same name
    *
    * @returns {Promise} Promise containing response of deletion
@@ -52,6 +63,17 @@ export default class DB {
   }
 
   /**
+   * Delete the current database
+   *
+   * @returns {Promise} Promise containing response of deletion
+   * @memberof DB
+   */
+  clear() {
+    console.log('Destroy DB');
+    return this.db.destroy();
+  }
+
+  /**
    * Takes a list of documents that you want to put() into the database and
    * adds the PouchDB required _id key
    *
@@ -62,7 +84,7 @@ export default class DB {
   putObjects(objects) {
     // Map PouchDB _id to MicroStrategy object.id
     const documents = objects.map((object) => ({ ...object, _id: String(object.id) }));
-    console.log(documents);
+    console.log('Inserting into DB');
     return this.db.bulkDocs(documents);
   }
 }

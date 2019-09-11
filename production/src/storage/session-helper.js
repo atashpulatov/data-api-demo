@@ -4,6 +4,8 @@ import { authenticationService } from '../authentication/auth-rest-service';
 import { userRestService } from '../home/user-rest-service';
 import { errorService } from '../error/error-handler';
 import { homeHelper } from '../home/home-helper';
+import getObjectList from '../mstr-object/mstr-list-rest-service';
+import DB from './pouch-db';
 
 class SessionHelper {
   enableLoading = () => {
@@ -24,6 +26,7 @@ class SessionHelper {
     reduxStore.dispatch({
       type: sessionProperties.actions.logOut,
     });
+    this.clearDB();
   }
 
   logOutRest = async () => {
@@ -44,7 +47,7 @@ class SessionHelper {
       const loginParams = 'source=addin-mstr-office';
       this.replaceWindowLocation(pathBeginning, loginParams);
     } else {
-      sessionHelper.disableLoading();
+      this.disableLoading();
     }
   };
 
@@ -64,6 +67,7 @@ class SessionHelper {
       type: sessionProperties.actions.loggedIn,
       authToken,
     });
+    this.connectDB();
   }
 
   getSession = () => {
@@ -111,6 +115,26 @@ class SessionHelper {
   getUrl = () => window.location.href
 
   isLocalhost = () => this.getUrl().includes('localhost')
+
+  connectDB = () => {
+    // Create or get DB for current user
+    const { sessionReducer } = reduxStore.getState();
+    const db = new DB(sessionReducer.username);
+
+    // If DB info and if empty fetch objects from server
+    db.info().then((info) => {
+      if (!info.doc_count) {
+        const callback = db.putObjects;
+        getObjectList(callback).catch(console.error);
+      }
+    });
+  }
+
+  clearDB = () => {
+    const { sessionReducer } = reduxStore.getState();
+    const db = new DB(sessionReducer.username);
+    db.clear().catch(console.error);
+  }
 }
 
 export const sessionHelper = new SessionHelper();
