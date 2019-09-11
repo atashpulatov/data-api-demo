@@ -296,7 +296,7 @@ export class _OfficeLoadedFile extends React.Component {
       t,
       visualisationPath,
     } = this.props;
-    const { editable, value, allowDeleteClick } = this.state;
+    const { editable, value } = this.state;
     const menu = (
       <Menu>
         {isPrompted && <Menu.Item key="reprompt" onClick={(e) => { e.domEvent.stopPropagation(); this.repromptAction(); }}>{t('Reprompt')}</Menu.Item>}
@@ -338,7 +338,7 @@ export class _OfficeLoadedFile extends React.Component {
 
           <div className="object-title-row">
             {this.getMstrIcon(objectType)}
-            <RenameInput bindingId={bindingId} fileName={fileName} editable={editable} value={value} enableEdit={this.enableEdit} handleChange={this.handleChange} renameReport={this.renameReport} deleting={!allowDeleteClick} />
+            <RenameInput bindingId={bindingId} fileName={fileName} editable={editable} value={value} enableEdit={this.enableEdit} handleChange={this.handleChange} renameReport={this.renameReport} />
           </div>
         </div>
       </Dropdown>
