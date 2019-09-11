@@ -6,7 +6,7 @@ import { officeContext } from '../office/office-context';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { PopupViewSelector } from './popup-view-selector';
 import i18next from '../i18n';
-import { CANCEL_REQUEST_IMPORT, CLEAR_PROMPTS_ANSWERS } from '../navigation/navigation-tree-actions';
+import { CLEAR_PROMPTS_ANSWERS } from '../navigation/navigation-tree-actions';
 import { reduxStore } from '../store';
 
 /* global Office */
@@ -43,8 +43,7 @@ export class Popup extends Component {
     });
   };
 
-  handleBack = (projectId, reportId, reportSubtype, forceChange = false, clearImportRequested = false) => {
-    const selectedType = clearImportRequested ? CANCEL_REQUEST_IMPORT : CLEAR_PROMPTS_ANSWERS;
+  handleBack = (projectId, reportId, reportSubtype, forceChange = false) => {
     this.setState({
         mstrData: {
           ...this.state.mstrData,
@@ -55,8 +54,7 @@ export class Popup extends Component {
           reportSubtype,
         },
       },
-      () => reduxStore.dispatch({ type: selectedType }),
-    );
+    () => reduxStore.dispatch({ type: CLEAR_PROMPTS_ANSWERS }));
   };
 
   handlePopupErrors = (error) => {

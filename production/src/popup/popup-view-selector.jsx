@@ -27,15 +27,7 @@ export const _PopupViewSelector = (props) => {
   propsToPass.editRequested = popupType === PopupTypeEnum.editFilters;
   const localEditReport = { ...props.editedReport };
 
-  // MOCK
-  let isDossierMock;
-  if (props.chosenProjectName === 'Sales Data') {
-    isDossierMock = true;
-  }
-
-  if (isDossierMock && importRequested) {
-    popupType = PopupTypeEnum.dossierWindow;
-  } else if (
+  if (
     (importRequested && !props.isPrompted)
     || (importRequested && arePromptsAnswered(props))
   ) {
@@ -271,7 +263,7 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
   if (popupType === PopupTypeEnum.dossierWindow) {
     return (
       <DossierWindow
-        handleBack={() => methods.handleBack(null, null, null, false, true)}
+        handleBack={methods.handleBack}
         t={propsToPass.t}
       />
     );
