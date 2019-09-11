@@ -5,10 +5,10 @@ import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 
 const prepareButton = (disableActiveActions, button, t, disableSecondary = false) => {
-  const disableReason = disableSecondary ? 'this action in not possible for selected item' : 'you didn’t select any data';
+  const disableReason = disableSecondary ? 'This option is not available for dossier' : 'This button is currently disabled because you didn’t select any data';
   return ((disableActiveActions || disableSecondary)
     ? (
-      <Popover className="button-tooltip" placement="topRight" content={t(`This button is currently disabled because ${disableReason}`)} mouseEnterDelay={1}>
+      <Popover className="button-tooltip" placement="topRight" content={t(`${disableReason}`)} mouseEnterDelay={1}>
         {button}
       </Popover>
     ) : button);
