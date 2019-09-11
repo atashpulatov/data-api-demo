@@ -10,7 +10,11 @@ export default class _DossierWindow extends React.Component {
     super(props);
     this.state = {
       isVisualisationSelected: false,
+      // chapterKey: '',
+      // visualisationKey: '',
     };
+    this.handleSelection = this.handleSelection.bind(this);
+    this.handleOk = this.handleOk.bind(this);
   }
 
   handleCancel() {
@@ -21,14 +25,31 @@ export default class _DossierWindow extends React.Component {
     Office.context.ui.messageParent(JSON.stringify(cancelObject));
   }
 
+  handleSelection(e) {
+    // TODO:
+    // let newValue = false;
+    // if ((e.chapterKey !== '') && (e.visualisationKey !== '')) {
+    //   newValue = true;
+    // }
+    // this.setState({ isVisualisationSelected: newValue, chapterKey: e.chapterKey, visualisationKey: e.visualisationKey   });
+  }
+
+  handleOk() {
+    // TODO: const {chosenObjectId} = this.props;
+    // TODO: const {chapterKey, visualisationKey } = this.state;
+    // TODO: fetchVisualisationData( )
+    // TODO: await fethcing data and procced to import
+  }
+
   render() {
-    const { chosenObjectId, chosenProjectName, handleBack, t } = this.props;
+    const { chosenProjectName, handleBack, t } = this.props;
     const { isVisualisationSelected } = this.state;
     return (
       <div>
         <h1 title={chosenProjectName} className="ant-col folder-browser-title">{`${t('Import Dossier')} > ${chosenProjectName}`}</h1>
-        {/* TODO:  Insert  dossier iframe for embeded API by using dossierId */}
+        {/* TODO:  Insert  dossier iframe for embeded API by using chosenObjectId and attach handlers */}
         <PopupButtons
+          handleOk={this.handleOk}
           handleBack={handleBack}
           handleCancel={this.handleCancel}
           hideSecondary
