@@ -26,7 +26,7 @@ describe('Office Actions', () => {
     // when
     actions.toggleIsConfirmFlag(true)(listener);
     // then
-    expect(listener).toHaveBeenCalledWith({ type: officeProperties.actions.toggleIsConfirmFlag, isConfirm: true });
+    expect(listener).toHaveBeenCalledWith({ type: officeProperties.actions.toggleIsConfirmFlag });
   });
 
   it('should dispatch proper toggleRenderSettingsFlag action', () => {

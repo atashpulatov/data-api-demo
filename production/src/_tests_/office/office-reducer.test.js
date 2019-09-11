@@ -32,7 +32,7 @@ describe('officeReducer', () => {
 
   beforeEach(() => {
     // default state should be empty
-    expect(officeStore.getState()).toEqual({ loading: false, shouldRenderSettings: false, isSettings: false });
+    expect(officeStore.getState()).toEqual({ loading: false, shouldRenderSettings: false, isSettings: false, isConfirm: false });
   });
 
   afterEach(() => {
@@ -422,15 +422,16 @@ describe('officeReducer', () => {
   });
   it('should return new proper state in case of toggleIsConfirmFlag action', () => {
     // given
-    const oldState = { isConfirm: false };
+    const oldState = { isConfirm: false, isSettings: false };
     const action = {
       type: officeProperties.actions.toggleIsConfirmFlag,
       isConfirm: true,
+      isSettings: false,
     };
     // when
     const newState = officeReducer(oldState, action);
     // then
-    expect(newState).toEqual({ isConfirm: true });
+    expect(newState).toEqual({ isConfirm: true, isSettings: false });
   });
   it('should return new proper state in case of toggleRenderSettingsFlag action', () => {
     // given
