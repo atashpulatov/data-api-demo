@@ -4,6 +4,7 @@ import { _NavigationTree, mapStateToProps } from '../../navigation/navigation-tr
 import { selectorProperties } from '../../attribute-selector/selector-properties';
 import { Office } from '../mockOffice';
 import * as mstrObjectRestService from '../../mstr-object/mstr-object-rest-service';
+import mstrObjectType from '../../mstr-object/mstr-object-type-enum';
 
 describe('NavigationTree', () => {
   afterAll(() => {
@@ -132,6 +133,7 @@ describe('NavigationTree', () => {
     const givenProjectId = 'projectId';
     const givenSubtype = 768;
     const givenIsPrompted = 'customPromptAnswer';
+    const givenObjectType = mstrObjectType.mstrObjectType.report;
     const selectObject = jest.fn();
     const isPromptedResponse = jest.spyOn(mstrObjectRestService, 'isPrompted')
       .mockImplementationOnce(async () => givenIsPrompted);
@@ -146,12 +148,50 @@ describe('NavigationTree', () => {
       chosenProjectId: null,
       chosenSubtype: null,
       isPrompted: null,
+      objectType: null,
     });
     expect(selectObject.mock.calls[1][0]).toEqual({
       chosenObjectId: givenObjectId,
       chosenProjectId: givenProjectId,
       chosenSubtype: givenSubtype,
       isPrompted: givenIsPrompted,
+      objectType: givenObjectType,
     });
+  });
+
+  it('should call handleDossierOpen on handleOk if provided objectType is dossier', () => {
+    // given
+    const mstrData = {
+      envUrl: 'env',
+      token: 'token',
+      projectId: 'projectId',
+    };
+    const objectType = { name: mstrObjectType.mstrObjectType.dossier.name };
+    const mockRequestImport = jest.fn();
+    const mockHandleDossierOpen = jest.fn();
+    const wrappedComponent = shallow(<_NavigationTree mstrData={mstrData} objectType={objectType} requestImport={mockRequestImport} handleDossierOpen={mockHandleDossierOpen} />);
+    // when
+    wrappedComponent.instance().handleOk();
+    // then
+    expect(mockRequestImport).not.toHaveBeenCalled();
+    expect(mockHandleDossierOpen).toHaveBeenCalled();
+  });
+
+  it('should call requestImport on handleOk if provided objectType is not dossier', () => {
+    // given
+    const mstrData = {
+      envUrl: 'env',
+      token: 'token',
+      projectId: 'projectId',
+    };
+    const objectType = { name: mstrObjectType.mstrObjectType.report.name };
+    const mockRequestImport = jest.fn();
+    const mockHandleDossierOpen = jest.fn();
+    const wrappedComponent = shallow(<_NavigationTree mstrData={mstrData} objectType={objectType} requestImport={mockRequestImport} handleDossierOpen={mockHandleDossierOpen} />);
+    // when
+    wrappedComponent.instance().handleOk();
+    // then
+    expect(mockRequestImport).toHaveBeenCalled();
+    expect(mockHandleDossierOpen).not.toHaveBeenCalled();
   });
 });
