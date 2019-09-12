@@ -84,7 +84,19 @@ export default class DB {
   putObjects(objects) {
     // Map PouchDB _id to MicroStrategy object.id
     const documents = objects.map((object) => ({ ...object, _id: String(object.id) }));
-    console.log('Inserting into DB');
     return this.db.bulkDocs(documents);
+  }
+
+  /**
+   * Checks if DB is empty and if yes executes the callback fn with DB.putObjects()
+   *
+   * @param {MSTR} callback Function that fetches documents
+   * @returns {Promise} Promise containing result of bulkDocs operation
+   * @memberof DB
+   */
+  addObjectsAsync(callback) {
+    return this.info().then((info) => {
+      if (!info.doc_count) callback(this.putObjects);
+    });
   }
 }

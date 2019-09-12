@@ -4,7 +4,7 @@ import { authenticationService } from '../authentication/auth-rest-service';
 import { userRestService } from '../home/user-rest-service';
 import { errorService } from '../error/error-handler';
 import { homeHelper } from '../home/home-helper';
-import getObjectList from '../mstr-object/mstr-list-rest-service';
+import getObjectList, { fetchProjects } from '../mstr-object/mstr-list-rest-service';
 import DB from './pouch-db';
 
 class SessionHelper {
@@ -119,21 +119,22 @@ class SessionHelper {
   connectDB = () => {
     // Create or get DB for current user
     const { sessionReducer } = reduxStore.getState();
-    const db = new DB(sessionReducer.username);
+    const { username } = sessionReducer;
+    const objectsDB = new DB(`${username}-objects`);
+    const projectsDB = new DB(`${username}-projects`);
 
-    // If DB info and if empty fetch objects from server
-    db.info().then((info) => {
-      if (!info.doc_count) {
-        const callback = db.putObjects;
-        getObjectList(callback).catch(console.error);
-      }
-    });
+    objectsDB.addObjectsAsync(getObjectList).catch(console.error);
+    projectsDB.addObjectsAsync(fetchProjects).catch(console.error);
   }
 
   clearDB = () => {
     const { sessionReducer } = reduxStore.getState();
-    const db = new DB(sessionReducer.username);
-    db.clear().catch(console.error);
+    const { username } = sessionReducer;
+    const objectsDB = new DB(`${username}-objects`);
+    const projectsDB = new DB(`${username}-projects`);
+
+    objectsDB.clear().catch(console.error);
+    projectsDB.clear().catch(console.error);
   }
 }
 

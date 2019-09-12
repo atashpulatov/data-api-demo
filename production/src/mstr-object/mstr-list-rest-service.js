@@ -3,7 +3,8 @@ import { reduxStore } from '../store';
 import filterDossiersByViewMedia from '../helpers/viewMediaHelper';
 
 const SEARCH_ENDPOINT = 'searches/results';
-const LIMIT = 8192;
+const PROJECTS_ENDPOINT = 'projects';
+const LIMIT = 4096;
 const DOSSIER_SUBTYPE = 14081;
 const SUBTYPES = [768, 769, 774, 776, 779, DOSSIER_SUBTYPE];
 
@@ -101,6 +102,23 @@ export async function fetchObjectListPagination(callback) {
 export function fetchObjectList({ requestParams, callback = (res) => res, offset = 0, limit = LIMIT }) {
   const { envUrl, authToken, typeQuery } = requestParams;
   const url = `${envUrl}/${SEARCH_ENDPOINT}?limit=${limit}&offset=${offset}&type=${typeQuery}`;
+  return request
+    .get(url)
+    .set('x-mstr-authtoken', authToken)
+    .withCredentials()
+    .then((res) => res.body)
+    .then(callback);
+}
+
+/**
+ * Fetches all projects for the authenticated session.
+ *
+ * @param {Function} callback - Function to be applied to the returned response body
+ * @returns
+ */
+export function fetchProjects(callback = (res) => res) {
+  const { envUrl, authToken } = getRequestParams();
+  const url = `${envUrl}/${PROJECTS_ENDPOINT}`;
   return request
     .get(url)
     .set('x-mstr-authtoken', authToken)
