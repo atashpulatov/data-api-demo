@@ -9,7 +9,7 @@ describe('Logic for fetching list of objects from MSTR API', () => {
     const filteredOutId = '0089BFF447598FEABECC32AB64840016';
     // when
     const filteredElements = listRestService.filterDossier(response);
-    const isBadDossier = filteredElements.filter((element) => element.id === filteredOutId);
+    const isBadDossier = filteredElements.result.filter((element) => element.id === filteredOutId);
     // then
     expect(isBadDossier).toEqual([]);
   });
