@@ -74,8 +74,10 @@ _DossierWindow.defaultProps = {
 };
 
 function mapStateToProps(state) {
+  const { chosenProjectName, chosenObjectId } = state.navigationTree;
   return {
-    ...state.navigationTree,
+    chosenProjectName,
+    chosenObjectId,
   };
 }
 
