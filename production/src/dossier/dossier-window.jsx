@@ -10,8 +10,8 @@ export default class _DossierWindow extends React.Component {
     super(props);
     this.state = {
       isVisualisationSelected: false,
-      // chapterKey: '',
-      // visualisationKey: '',
+      // TODO: chapterKey: '',
+      // TODO: visualisationKey: '',
     };
     this.handleSelection = this.handleSelection.bind(this);
     this.handleOk = this.handleOk.bind(this);
@@ -26,12 +26,11 @@ export default class _DossierWindow extends React.Component {
   }
 
   handleSelection(e) {
-    // TODO:
-    // let newValue = false;
-    // if ((e.chapterKey !== '') && (e.visualisationKey !== '')) {
-    //   newValue = true;
-    // }
-    // this.setState({ isVisualisationSelected: newValue, chapterKey: e.chapterKey, visualisationKey: e.visualisationKey   });
+    // TODO: let newValue = false;
+    // TODO: if ((e.chapterKey !== '') && (e.visualisationKey !== '')) {
+    // TODO:  newValue = true;
+    // TODO: }
+    // TODO: this.setState({ isVisualisationSelected: newValue, chapterKey: e.chapterKey, visualisationKey: e.visualisationKey   });
   }
 
   handleOk() {
