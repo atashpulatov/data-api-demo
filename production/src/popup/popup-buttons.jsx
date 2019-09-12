@@ -4,17 +4,20 @@ import './popup-buttons.css';
 import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 
-const prepareButton = (disableActiveActions, button, t) => (disableActiveActions
-  ? (
-    <Popover className="button-tooltip" placement="topRight" content={t('This button is currently disabled because you didn’t select any data')} mouseEnterDelay={1}>
-      {button}
-    </Popover>
-  ) : button);
+const prepareButton = (disableActiveActions, button, t, disableSecondary = false) => {
+  const disableReason = disableSecondary ? 'This option is not available for dossier' : 'This button is currently disabled because you didn’t select any data';
+  return ((disableActiveActions || disableSecondary)
+    ? (
+      <Popover className="button-tooltip" placement="topRight" content={t(`${disableReason}`)} mouseEnterDelay={1}>
+        {button}
+      </Popover>
+    ) : button);
+};
 
 export const _PopupButtons = ({
   handleOk, handleSecondary, handleCancel, handleBack,
   loading, disableActiveActions, onPreviewClick, t = (text) => text,
-  hideSecondary,
+  hideSecondary, disableSecondary,
 }) => (
     <div className="popup-buttons popup-footer">
       {!hideSecondary && !handleSecondary && prepareButton(disableActiveActions, <Button id="data-preview" onClick={onPreviewClick} disabled={disableActiveActions}>
@@ -36,11 +39,11 @@ export const _PopupButtons = ({
       {!hideSecondary && handleSecondary && prepareButton(disableActiveActions, <Button
         id="prepare"
         type="primary"
-        disabled={disableActiveActions || loading}
+        disabled={disableActiveActions || loading || disableSecondary}
         onClick={handleSecondary}
       >
         {t('Prepare Data')}
-      </Button>, t)}
+      </Button>, t, disableSecondary)}
       <Button id="cancel" onClick={handleCancel}>
         {t('Cancel')}
       </Button>

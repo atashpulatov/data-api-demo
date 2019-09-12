@@ -1,4 +1,3 @@
-import { objectTypes } from '@mstr/mstr-react-library';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { officeDisplayService } from '../office/office-display-service';
 import { PopupTypeEnum } from '../home/popup-type-enum';
@@ -15,7 +14,7 @@ import { errorService } from '../error/error-handler';
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { officeProperties } from '../office/office-properties';
 import { officeApiHelper } from '../office/office-api-helper';
-import mstrObjectType from '../mstr-object/mstr-object-type-enum';
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { officeStoreService } from '../office/store/office-store-service';
 
 const URL = `${window.location.href}`;
@@ -143,7 +142,7 @@ class PopupController {
         objectId: reportId,
         projectId,
         instanceId,
-        mstrObjectType: mstrObjectType.getMstrTypeBySubtype(reportSubtype),
+        mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(reportSubtype),
         body,
         importSubtotal,
       };
@@ -178,7 +177,7 @@ class PopupController {
         dossierData,
         objectId: chosenObject,
         projectId: chosenProject,
-        mstrObjectType: mstrObjectType.getMstrTypeBySubtype(chosenSubtype),
+        mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype),
         bindingId,
         isRefresh: false,
         isPrompted,

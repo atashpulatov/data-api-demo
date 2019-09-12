@@ -148,8 +148,8 @@ export class _FileHistoryContainer extends React.Component {
               {!refreshingAll ? (
                 <MSTRIcon type="refresh" />
               ) : (
-                <img width="12px" height="12px" src={loadingSpinner} alt={t('Report loading icon')} />
-              )}
+                  <img width="12px" height="12px" src={loadingSpinner} alt={t('Report loading icon')} />
+                )}
             </Button>
           </ButtonPopover>
         </span>

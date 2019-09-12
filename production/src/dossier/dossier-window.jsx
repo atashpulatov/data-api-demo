@@ -6,6 +6,17 @@ import { PopupButtons } from '../popup/popup-buttons';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 
 export default class _DossierWindow extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isVisualisationSelected: false,
+      // TODO: chapterKey: '',
+      // TODO: visualisationKey: '',
+    };
+    this.handleSelection = this.handleSelection.bind(this);
+    this.handleOk = this.handleOk.bind(this);
+  }
+
   handleCancel() {
     const { Office } = window;
     const cancelObject = {
@@ -14,15 +25,30 @@ export default class _DossierWindow extends React.Component {
     Office.context.ui.messageParent(JSON.stringify(cancelObject));
   }
 
+  handleSelection(e) {
+    // TODO: let newValue = false;
+    // TODO: if ((e.chapterKey !== '') && (e.visualisationKey !== '')) {
+    // TODO:  newValue = true;
+    // TODO: }
+    // TODO: this.setState({ isVisualisationSelected: newValue, chapterKey: e.chapterKey, visualisationKey: e.visualisationKey   });
+  }
+
+  handleOk() {
+    // TODO: const {chosenObjectId} = this.props;
+    // TODO: const {chapterKey, visualisationKey } = this.state;
+    // TODO: fetchVisualisationData( )
+    // TODO: await fethcing data and procced to import
+  }
+
   render() {
-    const {
-      dossierId, dossierName, handleBack, t, isVisualisationSelected,
-    } = this.props;
+    const { chosenProjectName, handleBack, t } = this.props;
+    const { isVisualisationSelected } = this.state;
     return (
       <div>
-        <h1 title={dossierName} className="ant-col folder-browser-title">{`${t('Import Dossier')} > ${dossierName}`}</h1>
-        {/* TODO:  Insert  dossier iframe for embeded API by using dossierId */}
+        <h1 title={chosenProjectName} className="ant-col folder-browser-title">{`${t('Import Dossier')} > ${chosenProjectName}`}</h1>
+        {/* TODO:  Insert  dossier iframe for embeded API by using chosenObjectId and attach handlers */}
         <PopupButtons
+          handleOk={this.handleOk}
           handleBack={handleBack}
           handleCancel={this.handleCancel}
           hideSecondary
@@ -34,23 +60,25 @@ export default class _DossierWindow extends React.Component {
 }
 
 _DossierWindow.propTypes = {
-  dossierId: PropTypes.string,
-  dossierName: PropTypes.string,
+  chosenObjectId: PropTypes.string,
+  chosenProjectName: PropTypes.string,
   handleBack: PropTypes.func,
   t: PropTypes.func,
-  isVisualisationSelected: PropTypes.bool,
 };
 
 _DossierWindow.defaultProps = {
-  dossierId: '1234ABCD',
-  dossierName: 'testingName',
+  chosenObjectId: 'default id',
+  chosenProjectName: 'default name',
   handleBack: () => { },
   t: (text) => text,
-  isVisualisationSelected: false,
 };
 
 function mapStateToProps(state) {
-  return {};
+  const { chosenProjectName, chosenObjectId } = state.navigationTree;
+  return {
+    chosenProjectName,
+    chosenObjectId,
+  };
 }
 
 export const DossierWindow = connect(mapStateToProps)(withTranslation('common')(_DossierWindow));

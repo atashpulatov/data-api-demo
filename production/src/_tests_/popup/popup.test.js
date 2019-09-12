@@ -87,6 +87,30 @@ describe('Popup.js', () => {
     expect(mstrData.popupType).toEqual(PopupTypeEnum.dataPreparation);
   });
 
+  it('should set popupType to dossierWindow on handleDossierOpen', () => {
+    // given
+    const location = {
+      search: {},
+    };
+    const givenRecord = {
+      reportId: 'reportId',
+      projectId: 'projectId',
+      subtype: 'subtype',
+      reportName: '',
+      reportType: 3,
+    };
+    const popupWrapped = shallow(<Popup location={location} />);
+    // when
+    popupWrapped.instance().handleDossierOpen(givenRecord.projectId,
+      givenRecord.reportId,
+      givenRecord.subtype,
+      givenRecord.reportName,
+      givenRecord.reportType);
+    // then
+    const { mstrData } = popupWrapped.state();
+    expect(mstrData.popupType).toEqual(PopupTypeEnum.dossierWindow);
+  });
+
   it('should set projectId, reportId and subtype on handleBack', () => {
     // given
     const location = {
