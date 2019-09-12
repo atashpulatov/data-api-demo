@@ -6,7 +6,7 @@ import { DossierWindow } from '../dossier/dossier-window';
 import { PopupTypeEnum } from '../home/popup-type-enum';
 import { LoadingPage } from '../loading/loading-page';
 import { RefreshAllPage } from '../loading/refresh-all-page';
-import mstrObjectType from '../mstr-object/mstr-object-type-enum';
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { NavigationTree } from '../navigation/navigation-tree';
 import { actions } from '../navigation/navigation-tree-actions';
 import { PromptsWindow } from '../prompts/prompts-window';
@@ -114,7 +114,7 @@ async function obtainInstanceWithPromptsAnswers(propsToPass, props) {
     id: objectId,
     projectId,
     name: propsToPass.reportName,
-    objectType: mstrObjectType.mstrObjectType.report,
+    objectType: mstrObjectEnum.mstrObjectType.report,
     instanceId: instanceDefinition.instanceId,
     promptsAnswers: props.promptsAnswers,
     body,

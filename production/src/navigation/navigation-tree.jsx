@@ -6,7 +6,7 @@ import { selectorProperties } from '../attribute-selector/selector-properties';
 import { PopupButtons } from '../popup/popup-buttons';
 import { actions } from './navigation-tree-actions';
 import { isPrompted as checkIfPrompted } from '../mstr-object/mstr-object-rest-service';
-import mstrObjectType from '../mstr-object/mstr-object-type-enum';
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 
 export class _NavigationTree extends Component {
   constructor(props) {
@@ -19,7 +19,7 @@ export class _NavigationTree extends Component {
 
   handleOk = () => {
     const { objectType, requestImport, handleDossierOpen } = this.props;
-    if (objectType.name === mstrObjectType.mstrObjectType.dossier.name) {
+    if (objectType.name === mstrObjectEnum.mstrObjectType.dossier.name) {
       handleDossierOpen();
     } else {
       requestImport();
@@ -75,7 +75,7 @@ export class _NavigationTree extends Component {
         chosenProjectId: projectId,
         chosenSubtype: subtype,
         isPrompted,
-        objectType: mstrObjectType.getMstrTypeBySubtype(subtype),
+        objectType: mstrObjectEnum.getMstrTypeBySubtype(subtype),
       });
     } catch (err) {
       const { handlePopupErrors } = this.props;
@@ -139,7 +139,7 @@ export class _NavigationTree extends Component {
           handleSecondary={this.handleSecondary}
           handleCancel={this.handleCancel}
           previewDisplay={previewDisplay}
-          disableSecondary={objectType && objectType.name === mstrObjectType.mstrObjectType.dossier.name}
+          disableSecondary={objectType && objectType.name === mstrObjectEnum.mstrObjectType.dossier.name}
         />
       </FolderBrowser>
     );

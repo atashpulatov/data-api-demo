@@ -1,18 +1,18 @@
-import { officeApiHelper } from "../../office/office-api-helper";
-import { officeContextMock } from "./__mock__object__/OfficeContext";
-import { officeDisplayService } from "../../office/office-display-service";
-import { reduxStore } from "../../store";
-import { mstrObjectRestService } from "../../mstr-object/mstr-object-rest-service";
-import { reportV2 } from "../mockDataV2";
-import { officeStoreService } from "../../office/store/office-store-service";
-import { authenticationHelper } from "../../authentication/authentication-helper";
-import { popupController } from "../../popup/popup-controller";
-import { PopupTypeEnum } from "../../home/popup-type-enum";
-import { sessionHelper } from "../../storage/session-helper";
-import { OverlappingTablesError } from "../../error/overlapping-tables-error";
-import officeConverterService from "../../office/office-converter-service-v2";
-import { ALL_DATA_FILTERED_OUT } from "../../error/constants";
-import { mstrObjectType } from "../../mstr-object/mstr-object-type-enum";
+import { officeApiHelper } from '../../office/office-api-helper';
+import { officeContextMock } from './__mock__object__/OfficeContext';
+import { officeDisplayService } from '../../office/office-display-service';
+import { reduxStore } from '../../store';
+import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
+import { reportV2 } from '../mockDataV2';
+import { officeStoreService } from '../../office/store/office-store-service';
+import { authenticationHelper } from '../../authentication/authentication-helper';
+import { popupController } from '../../popup/popup-controller';
+import { PopupTypeEnum } from '../../home/popup-type-enum';
+import { sessionHelper } from '../../storage/session-helper';
+import { OverlappingTablesError } from '../../error/overlapping-tables-error';
+import officeConverterService from '../../office/office-converter-service-v2';
+import { ALL_DATA_FILTERED_OUT } from '../../error/constants';
+import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 
 jest.mock("../../mstr-object/mstr-object-rest-service");
 jest.mock("../../office/store/office-store-service");
@@ -142,9 +142,9 @@ describe.skip("OfficeDisplayService", () => {
       .mockImplementationOnce(() => {});
     // {objectId, projectId, isReport = true, selectedCell, bindingId, isRefresh, dossierData, body, isPrompted, promptsAnswers}
     const options = {
-      objectId: "id123",
-      projectId: "p123",
-      mstrObjectType: mstrObjectType.mstrObjectType.report
+      objectId: 'id123',
+      projectId: 'p123',
+      mstrObjectType: mstrObjectEnum.mstrObjectType.report,
     };
     const mockDialog = {
       close: () => {}

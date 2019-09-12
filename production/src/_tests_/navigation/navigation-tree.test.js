@@ -4,7 +4,7 @@ import { _NavigationTree, mapStateToProps } from '../../navigation/navigation-tr
 import { selectorProperties } from '../../attribute-selector/selector-properties';
 import { Office } from '../mockOffice';
 import * as mstrObjectRestService from '../../mstr-object/mstr-object-rest-service';
-import mstrObjectType from '../../mstr-object/mstr-object-type-enum';
+import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 
 describe('NavigationTree', () => {
   afterAll(() => {
@@ -133,7 +133,7 @@ describe('NavigationTree', () => {
     const givenProjectId = 'projectId';
     const givenSubtype = 768;
     const givenIsPrompted = 'customPromptAnswer';
-    const givenObjectType = mstrObjectType.mstrObjectType.report;
+    const givenObjectType = mstrObjectEnum.mstrObjectType.report;
     const selectObject = jest.fn();
     const isPromptedResponse = jest.spyOn(mstrObjectRestService, 'isPrompted')
       .mockImplementationOnce(async () => givenIsPrompted);
@@ -166,7 +166,7 @@ describe('NavigationTree', () => {
       token: 'token',
       projectId: 'projectId',
     };
-    const objectType = { name: mstrObjectType.mstrObjectType.dossier.name };
+    const objectType = { name: mstrObjectEnum.mstrObjectType.dossier.name };
     const mockRequestImport = jest.fn();
     const mockHandleDossierOpen = jest.fn();
     const wrappedComponent = shallow(<_NavigationTree mstrData={mstrData} objectType={objectType} requestImport={mockRequestImport} handleDossierOpen={mockHandleDossierOpen} />);
@@ -184,7 +184,7 @@ describe('NavigationTree', () => {
       token: 'token',
       projectId: 'projectId',
     };
-    const objectType = { name: mstrObjectType.mstrObjectType.report.name };
+    const objectType = { name: mstrObjectEnum.mstrObjectType.report.name };
     const mockRequestImport = jest.fn();
     const mockHandleDossierOpen = jest.fn();
     const wrappedComponent = shallow(<_NavigationTree mstrData={mstrData} objectType={objectType} requestImport={mockRequestImport} handleDossierOpen={mockHandleDossierOpen} />);
