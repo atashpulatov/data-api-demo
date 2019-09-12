@@ -69,22 +69,11 @@ export class Popup extends Component {
       .context.ui.messageParent(JSON.stringify(messageObject));
   };
 
-  handleDossierOpen = (
-    projectId,
-    reportId,
-    reportSubtype,
-    reportName,
-    reportType) => {
+  handleDossierOpen = () => {
     this.setState({
       mstrData: {
         ...this.state.mstrData,
         popupType: PopupTypeEnum.dossierWindow,
-        forceChange: false,
-        projectId,
-        reportId,
-        reportSubtype,
-        reportName,
-        reportType,
       },
     });
   };
