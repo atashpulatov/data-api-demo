@@ -146,7 +146,8 @@ function toggleIsSettingsFlag(action, state) {
 function toggleIsConfirmFlag(action, state) {
   return {
     ...state,
-    isConfirm: action.isConfirm,
+    isConfirm: !state.isConfirm,
+    isSettings: false,
   };
 }
 
@@ -158,7 +159,7 @@ function toggleRenderSettingsFlag(action, state) {
   };
 }
 
-export const officeReducer = (state = { loading: false, shouldRenderSettings: false, isSettings: false }, action) => {
+export const officeReducer = (state = { loading: false, shouldRenderSettings: false, isConfirm: false, isSettings: false }, action) => {
   switch (action.type) {
     case officeProperties.actions.preLoadReport:
       return onPreLoadReport(action, state);
