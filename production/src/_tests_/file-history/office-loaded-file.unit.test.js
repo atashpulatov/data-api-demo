@@ -5,6 +5,7 @@ import { _OfficeLoadedFile } from '../../file-history/office-loaded-file';
 import { reduxStore } from '../../store';
 import { fileHistoryHelper } from '../../file-history/file-history-helper';
 import { officeApiHelper } from '../../office/office-api-helper';
+import { officeStoreService } from '../../office/store/office-store-service';
 
 describe('office loaded file', () => {
   it('should display provided file name', () => {
@@ -135,7 +136,7 @@ describe('office loaded file', () => {
     const mockEvent = { stopPropagation: jest.fn() };
     const testBindingId = 'testBindingId';
     const objectType = { name: 'report' };
-    jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => { });
+    jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => {});
     const objectClickMock = jest.spyOn(officeApiHelper, 'onBindingObjectClick').mockImplementation(() => true);
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
@@ -160,7 +161,7 @@ describe('office loaded file', () => {
     const mockEvent = { stopPropagation: jest.fn() };
     const testBindingId = 'testBindingId';
     const objectType = 'report';
-    jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => { });
+    jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => {});
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
       refreshDate={new Date()}
@@ -218,7 +219,7 @@ describe('office loaded file', () => {
     const mockEvent = { stopPropagation: jest.fn() };
     const testBindingId = 'testBindingId';
     const objectType = 'report';
-    jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => { });
+    jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => {});
 
     const wrappedComponent = mount(<_OfficeLoadedFile
       refreshDate={new Date()}
@@ -236,7 +237,7 @@ describe('office loaded file', () => {
     // then
     expect(fileHistoryHelper.deleteReport).not.toBeCalled();
   });
-  it('should invoke ONLY select method on button click', () => {
+  it('should invoke ONLY select method on button click', async () => {
     // given
     const onDeleteMocked = jest.fn();
     const onClickMocked = jest.fn();
@@ -255,7 +256,7 @@ describe('office loaded file', () => {
       objectType={{ name: 'report' }}
     />);
     const mockDelete = jest.spyOn(wrappedComponent.instance(), 'deleteReport');
-    const textWrapper = wrappedComponent.childAt(0);
+    const textWrapper = wrappedComponent.find('.file-history-container');
     textWrapper.props().onClick(mockEvent);
     // then
     expect(onClickMocked).toBeCalled();
@@ -276,7 +277,7 @@ describe('office loaded file', () => {
     const mockEvent = { stopPropagation: jest.fn() };
     const testBindingId = 'testBindingId';
     const objectType = { name: 'report' };
-    jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => { });
+    jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => {});
     const objectClickMock = jest.spyOn(officeApiHelper, 'onBindingObjectClick').mockImplementation(() => true);
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
@@ -301,7 +302,7 @@ describe('office loaded file', () => {
     const mockEvent = { stopPropagation: jest.fn() };
     const testBindingId = 'testBindingId';
     const objectType = { name: 'report' };
-    jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => { });
+    jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => {});
     const objectClickMock = jest.spyOn(officeApiHelper, 'onBindingObjectClick').mockImplementation(() => true);
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
@@ -321,5 +322,146 @@ describe('office loaded file', () => {
     await expect(objectClickMock).toBeCalled();
     expect(onRepromptMocked).toBeCalled();
     expect(onRepromptMocked).toBeCalledWith({ bindId: testBindingId, objectType });
+  });
+  it('rename report should call officeStoreService.renameReport method when filename is given', async () => {
+    // given
+    const givenFileName = 'name';
+    const testBindingId = 'testBindingId';
+    const objectType = { name: 'report' };
+    const target = { value: givenFileName };
+    const mockOfficeService = jest.spyOn(officeStoreService, 'preserveReportValue');
+    // when
+    const wrappedComponent = mount(<_OfficeLoadedFile
+      refreshDate={new Date()}
+      bindingId={testBindingId}
+      objectType={objectType}
+      fileName="test"
+      isLoading={false}
+      isPrompted
+      objectType={objectType}
+    />);
+    wrappedComponent.instance().renameReport({ target });
+    // then
+    expect(mockOfficeService).toHaveBeenCalled();
+  });
+
+  it('should show contextual menu on right click', () => {
+    // given
+    const testBindingId = 'testBindingId';
+    const objectType = { name: 'report' };
+    // when
+    const wrappedComponent = mount(<_OfficeLoadedFile
+      refreshDate={new Date()}
+      bindingId={testBindingId}
+      objectType={objectType}
+      fileName="test"
+      isLoading={false}
+      isPrompted
+      objectType={objectType}
+    />);
+    wrappedComponent.simulate('contextmenu', {});
+    // then
+    expect(wrappedComponent.exists('.ant-dropdown.ant-dropdown-hidden')).toBeFalsy();
+  });
+  it('should update value state when onChange is called', () => {
+    // given
+    const newFileName = 'newName';
+    const event = { target: { value: newFileName } };
+    const testBindingId = 'testBindingId';
+    const objectType = { name: 'report' };
+    // when
+    const wrappedComponent = mount(<_OfficeLoadedFile
+      refreshDate={new Date()}
+      bindingId={testBindingId}
+      objectType={objectType}
+      fileName="test"
+      isLoading={false}
+      isPrompted
+      objectType={objectType}
+    />);
+    wrappedComponent.instance().handleChange(event);
+    // then
+    expect(wrappedComponent.state().value).toEqual(newFileName);
+  });
+  it('should update state on setEditable', () => {
+    // given
+    const testBindingId = 'testBindingId';
+    const objectType = { name: 'report' };
+    // when
+    const wrappedComponent = mount(<_OfficeLoadedFile
+      refreshDate={new Date()}
+      bindingId={testBindingId}
+      objectType={objectType}
+      fileName="test"
+      isLoading={false}
+      isPrompted
+      objectType={objectType}
+    />);
+    // then
+    wrappedComponent.instance().setEditable(true);
+    expect(wrappedComponent.state().editable).toEqual(true);
+    wrappedComponent.instance().setEditable(false);
+    expect(wrappedComponent.state().editable).toEqual(false);
+  });
+  it('should set editable and select text on enableEdit', () => {
+    // given
+    const event = { domEvent: { stopPropagation: jest.fn() } };
+    const testBindingId = 'testBindingId';
+    const objectType = { name: 'report' };
+    // when
+    const wrappedComponent = mount(<_OfficeLoadedFile
+      refreshDate={new Date()}
+      bindingId={testBindingId}
+      objectType={objectType}
+      fileName="test"
+      isLoading={false}
+      isPrompted
+      objectType={objectType}
+    />);
+    wrappedComponent.instance().enableEdit(event);
+    // then
+    expect(wrappedComponent.state().editable).toEqual(true);
+  });
+  it('should select text async', () => {
+    // given
+
+    const mockDocument = jest.spyOn(document, 'getElementById').mockImplementation(() => ({ select: jest.fn() }));
+    const testBindingId = 'testBindingId';
+    const objectType = { name: 'report' };
+    // when
+    const wrappedComponent = mount(<_OfficeLoadedFile
+      refreshDate={new Date()}
+      bindingId={testBindingId}
+      objectType={objectType}
+      fileName="test"
+      isLoading={false}
+      isPrompted
+      objectType={objectType}
+    />);
+    wrappedComponent.instance().selectTextAsync();
+    // then
+    setTimeout(() => {
+      expect(mockDocument).toHaveBeenCalled();
+    }, 150);
+  });
+
+  it('should render an input element on doubleclick', () => {
+    // given
+    const testBindingId = 'testBindingId';
+    const objectType = { name: 'report' };
+    const wrappedComponent = mount(<_OfficeLoadedFile
+      refreshDate={new Date()}
+      bindingId={testBindingId}
+      objectType={objectType}
+      fileName="test"
+      isLoading={false}
+      isPrompted
+      objectType={objectType}
+    />);
+    // when
+    wrappedComponent.find('.rename-container').simulate('dblclick', {});
+    // then
+    expect(wrappedComponent).toBeDefined();
+    expect(wrappedComponent.exists(`#input-${testBindingId}`)).toBeTruthy();
   });
 });

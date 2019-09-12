@@ -20,11 +20,10 @@ export function toggleIsSettingsFlag(isSettings) {
   };
 }
 
-export function toggleIsConfirmFlag(isConfirm) {
+export function toggleIsConfirmFlag() {
   return (dispatch) => {
     dispatch({
       type: officeProperties.actions.toggleIsConfirmFlag,
-      isConfirm,
     });
   };
 }
