@@ -37,10 +37,9 @@ export class _OfficeLoadedFile extends React.Component {
   }
 
   renameReport = /* istanbul ignore next */ async ({ target }) => {
-    console.log('target:', target);
     const { bindingId, fileName } = this.props;
     const newName = target.value || fileName;
-    this.setState({ value: newName }, () => console.log('cacache'));
+    this.setState({ value: newName });
     if (newName && bindingId) await officeStoreService.preserveReportValue(bindingId, 'name', newName);
     this.setEditable(false);
   };
@@ -52,10 +51,6 @@ export class _OfficeLoadedFile extends React.Component {
       document.getElementById(id).select();
     }, 100);
   };
-
-  handleChange = (e) => {
-    this.setState({ value: e.target.value });
-  }
 
   setEditable = (editable) => {
     this.setState({ editable });
@@ -316,7 +311,6 @@ export class _OfficeLoadedFile extends React.Component {
           role="button"
           tabIndex="0"
           onClick={() => onClick(bindingId, true, this.deleteReport, fileName)}
-          onKeyPress={() => onClick(bindingId, true, this.deleteReport, fileName)}
         >
           <div className="refresh-icons-row">
             <ButtonPopover

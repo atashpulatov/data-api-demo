@@ -13,8 +13,6 @@ export class _RenameInput extends React.Component {
           maxLength={255}
           id={`input-${bindingId}`}
           defaultValue={fileName}
-          value={value}
-          onChange={handleChange}
           onBlur={renameReport}
           onPressEnter={renameReport}
         />
