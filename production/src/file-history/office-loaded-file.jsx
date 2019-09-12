@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { MSTRIcon } from '@mstr/mstr-react-library';
 import { withTranslation } from 'react-i18next';
+import { Dropdown, Menu } from 'antd';
 import { fileHistoryHelper } from './file-history-helper';
 import loadingSpinner from './assets/report_loading_spinner.gif';
 import {
@@ -14,13 +15,16 @@ import { officeApiHelper } from '../office/office-api-helper';
 import { ButtonPopover } from './button-popover';
 import { ReactComponent as DossierIcon } from './assets/icon_Dossier.svg';
 import { ReactComponent as ClockIcon } from './assets/icon_clock.svg';
+import { officeStoreService } from '../office/store/office-store-service';
 
 export class _OfficeLoadedFile extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       allowDeleteClick: true,
       allowRefreshClick: true,
+      editable: false,
+      value: props.fileName,
     };
   }
 
@@ -32,18 +36,60 @@ export class _OfficeLoadedFile extends React.Component {
     this._ismounted = false;
   }
 
+  renameReport = /* istanbul ignore next */ async ({ target }) => {
+    console.log('target:', target);
+    const { bindingId, fileName } = this.props;
+    const newName = target.value || fileName;
+    this.setState({ value: newName }, () => console.log('cacache'));
+    if (newName && bindingId) await officeStoreService.preserveReportValue(bindingId, 'name', newName);
+    this.setEditable(false);
+  };
+
+  selectTextAsync = (id) => {
+    // TODO: Timeout hardcoded value, without it cannot select text of the input
+    setTimeout(() => {
+      /* istanbul ignore next */
+      document.getElementById(id).select();
+    }, 100);
+  };
+
+  handleChange = (e) => {
+    this.setState({ value: e.target.value });
+  }
+
+  setEditable = (editable) => {
+    this.setState({ editable });
+  }
+
+  enableEdit = (e) => {
+    if (e.domEvent) e.domEvent.stopPropagation();
+    const { bindingId } = this.props;
+    this.selectTextAsync(`input-${bindingId}`);
+    this.setEditable(true);
+  }
+
+
+  copyValue = /* istanbul ignore next */ (e) => {
+    const { value } = this.state;
+    e.domEvent.stopPropagation();
+    const text = document.createElement('textarea');
+    text.value = value;
+    document.body.appendChild(text);
+    text.select();
+    document.execCommand('copy');
+    document.body.removeChild(text);
+  }
+
   deleteReport = async () => {
     const {
       onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, fileName, t,
     } = this.props;
     const message = t('{{name}} has been removed from the workbook.', { name: fileName });
-    await fileHistoryHelper.deleteReport(
-      onDelete,
+    await fileHistoryHelper.deleteReport(onDelete,
       bindingId,
       isCrosstab,
       crosstabHeaderDimensions,
-      message,
-    );
+      message);
   }
 
   deleteAction = (e) => {
@@ -60,23 +106,17 @@ export class _OfficeLoadedFile extends React.Component {
       crosstabHeaderDimensions,
       fileName,
     } = this.props;
-    this.setState(
-      { allowDeleteClick: false, allowRefreshClick: false },
+    this.setState({ allowDeleteClick: false, allowRefreshClick: false },
       async () => {
-        const message = t(
-          '{{name}} has been removed from the workbook.',
-          { name: fileName },
-        );
-        await fileHistoryHelper.deleteReport(
-          onDelete,
+        const message = t('{{name}} has been removed from the workbook.',
+          { name: fileName });
+        await fileHistoryHelper.deleteReport(onDelete,
           bindingId,
           isCrosstab,
           crosstabHeaderDimensions,
-          message,
-        );
+          message);
         if (this._ismounted) this.setState({ allowDeleteClick: true, allowRefreshClick: true });
-      },
-    );
+      });
   };
 
   repromptAction = (e) => {
@@ -130,7 +170,6 @@ export class _OfficeLoadedFile extends React.Component {
   refreshAction = (e) => {
     if (e) e.stopPropagation();
     const { isLoading, bindingId, objectType, refreshReportsArray, loading, fileName } = this.props;
-
     const { allowRefreshClick } = this.state;
     if (!allowRefreshClick || loading) {
       return;
@@ -139,10 +178,7 @@ export class _OfficeLoadedFile extends React.Component {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
           if (await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport, fileName)) {
-            (await refreshReportsArray(
-              [{ bindId: bindingId, objectType }],
-              false,
-            ));
+            (await refreshReportsArray([{ bindId: bindingId, objectType }], false));
           }
         } finally {
           this.setState({ allowRefreshClick: true });
@@ -260,42 +296,52 @@ export class _OfficeLoadedFile extends React.Component {
       t,
       visualisationPath,
     } = this.props;
-    const buttonsFunctions = {
-      reprompt: this.repromptAction, edit: this.editAction, refresh: this.refreshAction, delete: this.deleteAction,
-    };
+    const { editable, value } = this.state;
+    const menu = (
+      <Menu>
+        {isPrompted && <Menu.Item key="reprompt" onClick={(e) => { e.domEvent.stopPropagation(); this.repromptAction(); }}>{t('Reprompt')}</Menu.Item>}
+        <Menu.Item key="edit" onClick={(e) => { e.domEvent.stopPropagation(); this.editAction(); }}>{t('Edit')}</Menu.Item>
+        <Menu.Item key="refresh" onClick={(e) => { e.domEvent.stopPropagation(); this.refreshAction(); }}>{t('Refresh')}</Menu.Item>
+        <Menu.Item key="remove" onClick={(e) => { e.domEvent.stopPropagation(); this.deleteAction(); }}>{t('Remove')}</Menu.Item>
+        <Menu.Item key="rename" onClick={this.enableEdit}>{t('Rename')}</Menu.Item>
+        <Menu.Item key="copy" onClick={this.copyValue}>{t('Copy')}</Menu.Item>
+      </Menu>
+    );
     return (
-      <div
-        className="file-history-container"
-        type="flex"
-        justify="center"
-        role="button"
-        tabIndex="0"
-        onClick={() => onClick(bindingId, true, this.deleteReport, fileName)}
-        onKeyPress={() => onClick(bindingId, true, this.deleteReport, fileName)}
-      >
-        <div className="refresh-icons-row">
-          <ButtonPopover
-            placement="bottom"
-            content={t('Date and time of last modification')}
-            mouseEnterDelay={1}
-          >
-            <span>
-              <ClockIcon style={{ marginBottom: '2px' }} />
-              <span className="additional-data">
-                {t('refreshed_date', { date: refreshDate })}
+      <Dropdown overlay={menu} trigger={['contextMenu']}>
+        <div
+          className="file-history-container"
+          type="flex"
+          justify="center"
+          role="button"
+          tabIndex="0"
+          onClick={() => onClick(bindingId, true, this.deleteReport, fileName)}
+          onKeyPress={() => onClick(bindingId, true, this.deleteReport, fileName)}
+        >
+          <div className="refresh-icons-row">
+            <ButtonPopover
+              placement="bottom"
+              content={t('Date and time of last modification')}
+              mouseEnterDelay={1}
+            >
+              <span>
+                <ClockIcon style={{ marginBottom: '2px' }} />
+                <span className="additional-data">
+                  {t('refreshed_date', { date: refreshDate })}
+                </span>
               </span>
-            </span>
-          </ButtonPopover>
-          {this.renderIcons(t, isPrompted, isLoading)}
-        </div>
+            </ButtonPopover>
+            {this.renderIcons(t, isPrompted, isLoading)}
+          </div>
 
-        {objectType.name === 'dossier' && <div className="visualisation-path-row">{visualisationPath}</div>}
+          {objectType.name === 'dossier' && <div className="visualisation-path-row">{visualisationPath}</div>}
 
-        <div className="object-title-row">
-          {this.getMstrIcon(objectType)}
-          <RenameInput bindingId={bindingId} fileName={fileName} buttonsFunctions={buttonsFunctions} isPrompted={isPrompted} />
+          <div className="object-title-row">
+            {this.getMstrIcon(objectType)}
+            <RenameInput bindingId={bindingId} fileName={fileName} editable={editable} value={value} enableEdit={this.enableEdit} handleChange={this.handleChange} renameReport={this.renameReport} />
+          </div>
         </div>
-      </div>
+      </Dropdown>
     );
   }
 }
@@ -316,7 +362,5 @@ const mapDispatchToProps = {
   onReprompt: callForReprompt,
 };
 
-export const OfficeLoadedFile = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(withTranslation('common')(_OfficeLoadedFile));
+export const OfficeLoadedFile = connect(mapStateToProps,
+  mapDispatchToProps)(withTranslation('common')(_OfficeLoadedFile));
