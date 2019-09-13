@@ -4,7 +4,7 @@ import { authenticationService } from '../authentication/auth-rest-service';
 import { userRestService } from '../home/user-rest-service';
 import { errorService } from '../error/error-handler';
 import { homeHelper } from '../home/home-helper';
-import getObjectList, { fetchProjects } from '../mstr-object/mstr-list-rest-service';
+import getObjectList, { getProjectDictionary } from '../mstr-object/mstr-list-rest-service';
 import DB from './pouch-db';
 
 class SessionHelper {
@@ -26,7 +26,6 @@ class SessionHelper {
     reduxStore.dispatch({
       type: sessionProperties.actions.logOut,
     });
-    this.clearDB();
   }
 
   logOutRest = async () => {
@@ -116,25 +115,24 @@ class SessionHelper {
 
   isLocalhost = () => this.getUrl().includes('localhost')
 
-  connectDB = () => {
+  connectDB = async () => {
     // Create or get DB for current user
     const { sessionReducer } = reduxStore.getState();
     const { username } = sessionReducer;
-    const objectsDB = new DB(`${username}-objects`);
-    const projectsDB = new DB(`${username}-projects`);
+    const objectsDB = new DB(`${username}`);
 
-    objectsDB.addObjectsAsync(getObjectList).catch(console.error);
-    projectsDB.addObjectsAsync(fetchProjects).catch(console.error);
+    // Remove PouchDBs from other users
+    DB.purgePouchDB(username);
+    getProjectDictionary().then((projects) => {
+      objectsDB.addObjectsAsync(getObjectList, projects).catch(console.error);
+    }).catch(console.error);
   }
 
   clearDB = () => {
     const { sessionReducer } = reduxStore.getState();
     const { username } = sessionReducer;
-    const objectsDB = new DB(`${username}-objects`);
-    const projectsDB = new DB(`${username}-projects`);
-
+    const objectsDB = new DB(`${username}`);
     objectsDB.clear().catch(console.error);
-    projectsDB.clear().catch(console.error);
   }
 }
 

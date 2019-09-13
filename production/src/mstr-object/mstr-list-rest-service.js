@@ -69,6 +69,16 @@ export function fetchTotalItems({ limit = LIMIT, callback, requestParams }) {
 }
 
 /**
+ * Get a projects dictionary with key:value {id:name} pairs
+ *
+ * @returns {Object} {ProjetId: projectName}
+ */
+export function getProjectDictionary() {
+  return fetchProjects()
+    .then((projects) => projects.reduce((dict, project) => ({ ...dict, [project.id]: project.name || '' }), {}));
+}
+
+/**
  * Uses request with limit of 1 to check for total number of objects of given subtypes and then
  * executes multiple requests to API to apply pagination.
  *
