@@ -6,6 +6,8 @@ import '../index.css';
 import { actions } from '../navigation/navigation-tree-actions';
 import { PromptsContainer } from './prompts-container';
 import { PromptWindowButtons } from './prompts-window-buttons';
+import { notificationService } from '../notification/notification-service';
+import { Notifications } from '../notification/notifications';
 import {
   createInstance,
   createDossierBasedOnReport,
@@ -24,19 +26,21 @@ export class _PromptsWindow extends Component {
     const { mstrData } = props;
     this.state = {
       reportId: mstrData.reportId,
-      triggerUpdate: false,
       loading: true,
       isReprompt: mstrData.isReprompt,
       promptsAnswers: mstrData.promptsAnswers,
-      currentPageKey: '',
-      dossierInstanceId: '',
-      docId: '',
-      // The one below is not needed, but can be useful if we need to ensure the sessionId and authToken match
-      sessionId: '',
     };
 
     this.container = React.createRef();
     this.outerCont = React.createRef();
+  }
+
+  componentDidMount() {
+    window.addEventListener('message', this.messageReceived);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('message', this.messageReceived);
   }
 
   preparePromptedReportInstance = async (reportId, projectId, promptsAnswers) => {
@@ -55,11 +59,12 @@ export class _PromptsWindow extends Component {
 
   answerDossierPrompts = async (instanceDefinition, objectId, projectId, promptsAnswers) => {
     const instanceId = instanceDefinition.mid;
+    let currentInstanceDefinition = instanceDefinition;
     let count = 0;
-    while (instanceDefinition.status === 2) {
-      const config = { objectId, projectId, instanceId: instanceDefinition.mid, promptsAnswers: promptsAnswers[count] };
+    while (currentInstanceDefinition.status === 2) {
+      const config = { objectId, projectId, instanceId: currentInstanceDefinition.mid, promptsAnswers: promptsAnswers[count] };
       await postAnswerDossierPrompts(config);
-      instanceDefinition = await getDossierStatus(objectId, instanceDefinition.mid, projectId);
+      currentInstanceDefinition = await getDossierStatus(objectId, currentInstanceDefinition.mid, projectId);
       count += 1;
     }
     return instanceId;
@@ -195,6 +200,12 @@ export class _PromptsWindow extends Component {
     });
   };
 
+  messageReceived = (message = {}) => {
+    if (message.data && message.data.value && message.data.value.iServerErrorCode) {
+      notificationService.displayNotification({ type: 'warning', content: 'This object cannot be imported.', details: message.data.value.message });
+    }
+  };
+
   onPromptsContainerMount = (container) => {
     this.watchForIframeAddition(container, this.onIframeLoad);
     this.loadEmbeddedDossier(container);
@@ -227,6 +238,7 @@ export class _PromptsWindow extends Component {
         style={{ position: 'relative' }}
         ref={this.outerCont}
       >
+        <Notifications />
         <PromptsContainer
           postMount={this.onPromptsContainerMount}
         />
