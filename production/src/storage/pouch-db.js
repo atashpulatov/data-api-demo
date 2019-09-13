@@ -13,7 +13,7 @@ export default class DB {
    * @param {String} dbName Name of db
    * @memberof DB
    */
-  constructor(dbName) {
+  constructor(dbName = 'cache') {
     this.db = new PouchDB(dbName, { revs_limit: 2 });
     this.dbName = dbName;
     this.putObjects = this.putObjects.bind(this);

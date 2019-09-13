@@ -7,7 +7,7 @@
 /coverage
 
 # PouchDB
-/undefined
+/cache
 
 # production
 /build

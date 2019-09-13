@@ -115,11 +115,11 @@ class SessionHelper {
 
   isLocalhost = () => this.getUrl().includes('localhost')
 
-  connectDB = async () => {
+  connectDB = () => {
     // Create or get DB for current user
     const { sessionReducer } = reduxStore.getState();
     const { username } = sessionReducer;
-    const objectsDB = new DB(`${username}`);
+    const objectsDB = new DB(username);
 
     // Remove PouchDBs from other users
     DB.purgePouchDB(username);
@@ -131,7 +131,7 @@ class SessionHelper {
   clearDB = () => {
     const { sessionReducer } = reduxStore.getState();
     const { username } = sessionReducer;
-    const objectsDB = new DB(`${username}`);
+    const objectsDB = new DB(username);
     objectsDB.clear().catch(console.error);
   }
 }
