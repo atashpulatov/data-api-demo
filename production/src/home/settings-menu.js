@@ -131,6 +131,7 @@ export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(withTra
 
 async function logout() {
   try {
+    await sessionHelper.clearDB();
     await sessionHelper.logOutRest();
     sessionHelper.logOut();
     sessionHelper.logOutRedirect();

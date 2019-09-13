@@ -69,21 +69,21 @@ export default class DB {
    * @memberof DB
    */
   clear() {
-    console.log('Destroy DB');
     return this.db.destroy();
   }
 
   /**
    * Takes a list of documents that you want to put() into the database and
-   * adds the PouchDB required _id key
+   * adds the PouchDB required _id key and projectName
    *
    * @param {MSTR} objects MicroStrategy object array
+   * @param {Object} projects Dictionary with project id and name
    * @returns {Promise} Promise containing result of bulkDocs operation
    * @memberof DB
    */
-  putObjects(objects) {
+  putObjects(objects, projects) {
     // Map PouchDB _id to MicroStrategy object.id
-    const documents = objects.map((object) => ({ ...object, _id: String(object.id) }));
+    const documents = objects.map((object) => ({ ...object, _id: String(object.id), projectName: projects[object.projectId] || '' }));
     return this.db.bulkDocs(documents);
   }
 
@@ -91,12 +91,32 @@ export default class DB {
    * Checks if DB is empty and if yes executes the callback fn with DB.putObjects()
    *
    * @param {MSTR} callback Function that fetches documents
+   * @param {Object} projects Dictionary with project id and name
    * @returns {Promise} Promise containing result of bulkDocs operation
    * @memberof DB
    */
-  addObjectsAsync(callback) {
+  addObjectsAsync(callback, projects) {
     return this.info().then((info) => {
-      if (!info.doc_count) callback(this.putObjects);
+      if (!info.doc_count) callback((objects) => this.putObjects(objects, projects));
     });
+  }
+
+  /**
+   * Checks IndexedDB for all PouchDBs and deletes them if the username
+   * is not the one provided. Used when changing users after session expires.
+   *
+   * @static
+   * @param {String} usernameToKeep Current authenticated user
+   * @returns
+   * @memberof DB
+   */
+  static purgePouchDB(usernameToKeep) {
+    if (window.indexedDB) {
+      return window.indexedDB.databases()
+        .then((dbs) => dbs.filter((db) => (db.name.includes('_pouch_') && !db.name.includes(usernameToKeep))).map((e) => e.name))
+        .then((pouchDBS) => pouchDBS.forEach((pouchDB) => window.indexedDB.deleteDatabase(pouchDB)))
+        .catch(console.error);
+    }
+    return false;
   }
 }
