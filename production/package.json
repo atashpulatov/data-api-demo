@@ -86,6 +86,7 @@
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}",
+      "!src/_tests_/**/*.{js,jsx}",
       "!src/**/*rest-service.js",
       "!src/error.jsx",
       "!src/index.js",
@@ -96,9 +97,9 @@
       "!src/office/office-display-service.js",
       "!src/office/store/office-store-service.js",
       "!src/storage/session-helper.js",
+      "!src/storage/pouch-db.js",
       "!src/popup/popup-controller.js",
-      "!src/breadcrumbs/breadcrumbs.jsx",
-      "!src/prompts/prompts-rest-service.jsx"
+      "!src/breadcrumbs/breadcrumbs.jsx"
     ]
   }
 }

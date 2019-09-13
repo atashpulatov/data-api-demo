@@ -6,6 +6,9 @@
 # testing
 /coverage
 
+# PouchDB
+/undefined
+
 # production
 /build
 
