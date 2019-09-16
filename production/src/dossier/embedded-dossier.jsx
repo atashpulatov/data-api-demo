@@ -30,6 +30,52 @@ export default class _EmbeddedDossier extends React.Component {
         return Promise.resolve(token);
       },
       placeholder: container,
+      dossierFeature: {
+        readoOnly: true,
+      },
+      enableCollaboration: false,
+      filterFeature: {
+        enabled: true,
+        edit: true,
+        summary: true,
+      },
+      navigationBar: {
+        enabled: true,
+        gotoLibrary: false,
+        title: true,
+        toc: true,
+        reset: true,
+        reprompt: true,
+        share: false,
+        comment: false,
+        notification: false,
+        filter: true,
+        options: false,
+        search: false,
+        bookmark: true,
+      },
+      optionsFeature: {
+        enabled: true,
+        help: true,
+        logout: true,
+        manage: true,
+        showTutorials: true,
+      },
+      shareFeature: {
+        enabled: true,
+        invite: true,
+        link: true,
+        email: true,
+        export: true,
+        download: true,
+      },
+      tocFeature: {
+        enabled: true,
+      },
+      uiMessage: {
+        enabled: true,
+        addToLibrary: true,
+      },
     };
 
     microstrategy.dossier
