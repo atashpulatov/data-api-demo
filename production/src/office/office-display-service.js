@@ -143,11 +143,7 @@ class OfficeDisplayService {
       // TODO: If isRefresh check if new instance definition is same as before
 
       // Create or update table
-      ({ officeTable, newOfficeTableId, shouldFormat, tableColumnsChanged } = await this._getOfficeTable(isRefresh,
-        excelContext,
-        bindingId,
-        instanceDefinition,
-        startCell));
+      ({ officeTable, newOfficeTableId, shouldFormat, tableColumnsChanged } = await this._getOfficeTable(isRefresh, excelContext, bindingId, instanceDefinition, startCell));
 
       // Apply formatting when table was created
       if (shouldFormat) {
@@ -289,31 +285,17 @@ class OfficeDisplayService {
    * @memberOf OfficeDisplayService
    */
   _createOfficeTable = async (instanceDefinition, context, startCell, officeTableId, prevOfficeTable) => {
-    const crosstabHeaderDimensions = this._getCrosstabHeaderDimensions(instanceDefinition);
     const { rows, columns, mstrTable } = instanceDefinition;
-    const { isCrosstab, toCrosstabChange, fromCrosstabChange, prevCrosstabDimensions } = mstrTable;
+    const { isCrosstab, toCrosstabChange, fromCrosstabChange, prevCrosstabDimensions, crosstabHeaderDimensions } = mstrTable;
     const { rowsX: prevRowsX, columnsY: prevColumnsY } = prevCrosstabDimensions;
     const { rowsX, columnsY } = crosstabHeaderDimensions;
     let range;
     const sheet = prevOfficeTable
       ? prevOfficeTable.worksheet
       : context.workbook.worksheets.getActiveWorksheet();
-    let tableStartCell = officeApiHelper.getTableStartCell({
-      startCell,
-      sheet,
-      instanceDefinition,
-      prevOfficeTable,
-      toCrosstabChange,
-      fromCrosstabChange,
-    });
-    if (
-      prevCrosstabDimensions
-      && prevCrosstabDimensions !== crosstabHeaderDimensions
-      && isCrosstab
-    ) {
-      tableStartCell = officeApiHelper.offsetCellBy(tableStartCell,
-        columnsY - prevColumnsY,
-        rowsX - prevRowsX);
+    let tableStartCell = officeApiHelper.getTableStartCell({ startCell, sheet, instanceDefinition, prevOfficeTable, toCrosstabChange, fromCrosstabChange });
+    if (prevCrosstabDimensions && prevCrosstabDimensions !== crosstabHeaderDimensions && isCrosstab) {
+      tableStartCell = officeApiHelper.offsetCellBy(tableStartCell, columnsY - prevColumnsY, rowsX - prevRowsX);
     }
     const tableRange = officeApiHelper.getRange(columns, tableStartCell, rows);
     if (isCrosstab) {
@@ -430,7 +412,7 @@ class OfficeDisplayService {
     return {
       columnsY: isCrosstab ? headers.columns.length : 0,
       columnsX: isCrosstab ? headers.columns[0].length : 0,
-      rowsX: isCrosstab ? headers.rows[0].length : 0,
+      rowsX: isCrosstab ? (headers.rows[0].length || 1) : 0, // if there is no attributes in rows we need to setup 1 for offset for column attributes names
       rowsY: isCrosstab ? instanceDefinition.rows : 0,
     };
   }
@@ -538,13 +520,7 @@ class OfficeDisplayService {
     }
   }
 
-  _getOfficeTable = async (
-    isRefresh,
-    excelContext,
-    bindingId,
-    instanceDefinition,
-    startCell,
-  ) => {
+  _getOfficeTable = async (isRefresh, excelContext, bindingId, instanceDefinition, startCell) => {
     console.time('Create or get table');
     const newOfficeTableId = bindingId || officeApiHelper.findAvailableOfficeTableId();
     const { mstrTable, columns, rows } = instanceDefinition;
