@@ -263,6 +263,7 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
   if (popupType === PopupTypeEnum.dossierWindow) {
     return (
       <DossierWindow
+        mstrData={propsToPass}
         handleBack={methods.handleBack}
         t={propsToPass.t}
       />

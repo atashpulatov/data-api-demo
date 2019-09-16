@@ -4,6 +4,7 @@ import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { PopupButtons } from '../popup/popup-buttons';
 import { selectorProperties } from '../attribute-selector/selector-properties';
+import { EmbeddedDossier } from './embedded-dossier';
 
 export default class _DossierWindow extends React.Component {
   constructor(props) {
@@ -41,12 +42,13 @@ export default class _DossierWindow extends React.Component {
   }
 
   render() {
-    const { chosenProjectName, handleBack, t } = this.props;
+    const { chosenProjectName, chosenObjectId, chosenProjectId, handleBack, t, mstrData } = this.props;
     const { isVisualisationSelected } = this.state;
+    const propsToPass = { envUrl: mstrData.envUrl, token: mstrData.token, dossierId: chosenObjectId, projectId: chosenProjectId };
     return (
       <div>
         <h1 title={chosenProjectName} className="ant-col folder-browser-title">{`${t('Import Dossier')} > ${chosenProjectName}`}</h1>
-        {/* TODO:  Insert  dossier iframe for embeded API by using chosenObjectId and attach handlers */}
+        <EmbeddedDossier mstrData={propsToPass} />
         <PopupButtons
           handleOk={this.handleOk}
           handleBack={handleBack}
@@ -62,22 +64,27 @@ export default class _DossierWindow extends React.Component {
 _DossierWindow.propTypes = {
   chosenObjectId: PropTypes.string,
   chosenProjectName: PropTypes.string,
+  chosenProjectId: PropTypes.string,
   handleBack: PropTypes.func,
   t: PropTypes.func,
+  mstrData: PropTypes.shape({ envUrl: PropTypes.string, token: PropTypes.string }),
 };
 
 _DossierWindow.defaultProps = {
   chosenObjectId: 'default id',
   chosenProjectName: 'default name',
+  chosenProjectId: 'default id',
   handleBack: () => { },
   t: (text) => text,
+  mstrData: { envUrl: 'no env url', token: 'no token' },
 };
 
 function mapStateToProps(state) {
-  const { chosenProjectName, chosenObjectId } = state.navigationTree;
+  const { chosenProjectName, chosenObjectId, chosenProjectId } = state.navigationTree;
   return {
     chosenProjectName,
     chosenObjectId,
+    chosenProjectId,
   };
 }
 
