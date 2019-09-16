@@ -442,9 +442,9 @@ class OfficeApiHelper {
    */
   createRowsHeaders = (reportStartingCell, rows) => {
     const rowOffset = rows[0].length || 1; // we put 1 as offset if there are no attribue in rows
-    let headerArray = null;
+    let headerArray = [];
     // reportStartingCell.unmerge(); // excel api have problem with handling merged cells which are partailly in range, we unmerged selected cell to avoid this problem
-    const startingCell = reportStartingCell.getCell(0, 0).getOffsetRange(-0, -rowOffset); // we call getCell in case multiple cells are selected
+    const startingCell = reportStartingCell.getCell(0, 0).getOffsetRange(0, -rowOffset); // we call getCell in case multiple cells are selected
     headerArray = mstrNormalizedJsonHandler._transposeMatrix(rows);
     const colOffset = !headerArray.length ? rows.length - 1 : headerArray[0].length - 1; // transposed array length is 0 if there is no attributes in rows
     const headerRange = startingCell.getResizedRange(colOffset, rowOffset - 1);
