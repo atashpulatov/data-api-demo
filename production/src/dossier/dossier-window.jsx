@@ -11,8 +11,8 @@ export default class _DossierWindow extends React.Component {
     super(props);
     this.state = {
       isVisualisationSelected: false,
-      // TODO: chapterKey: '',
-      // TODO: visualisationKey: '',
+      chapterKey: '',
+      visualizationKey: '',
     };
     this.handleSelection = this.handleSelection.bind(this);
     this.handleOk = this.handleOk.bind(this);
@@ -26,19 +26,22 @@ export default class _DossierWindow extends React.Component {
     Office.context.ui.messageParent(JSON.stringify(cancelObject));
   }
 
-  handleSelection(e) {
-    // TODO: let newValue = false;
-    // TODO: if ((e.chapterKey !== '') && (e.visualisationKey !== '')) {
-    // TODO:  newValue = true;
-    // TODO: }
-    // TODO: this.setState({ isVisualisationSelected: newValue, chapterKey: e.chapterKey, visualisationKey: e.visualisationKey   });
+  handleSelection(dossierData) {
+    const { chapterKey, visualizationKey } = dossierData;
+    let newValue = false;
+    if ((chapterKey !== '') && (visualizationKey !== '')) {
+      newValue = true;
+    }
+    this.setState({ isVisualisationSelected: newValue, chapterKey, visualizationKey });
   }
 
   handleOk() {
-    // TODO: const {chosenObjectId} = this.props;
-    // TODO: const {chapterKey, visualisationKey } = this.state;
-    // TODO: fetchVisualisationData( )
-    // TODO: await fethcing data and procced to import
+    const { chosenObjectId, chosenProjectId } = this.props;
+    const { chapterKey, visualizationKey } = this.state;
+    // !!TODO:
+    // store vis data
+    // dispach fetching
+    // close popup
   }
 
   render() {
@@ -48,7 +51,7 @@ export default class _DossierWindow extends React.Component {
     return (
       <div>
         <h1 title={chosenProjectName} className="ant-col folder-browser-title">{`${t('Import Dossier')} > ${chosenProjectName}`}</h1>
-        <EmbeddedDossier mstrData={propsToPass} />
+        <EmbeddedDossier mstrData={propsToPass} handleSelection={this.handleSelection} />
         <PopupButtons
           handleOk={this.handleOk}
           handleBack={handleBack}

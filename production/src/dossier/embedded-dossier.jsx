@@ -35,14 +35,14 @@ export default class _EmbeddedDossier extends React.Component {
     microstrategy.dossier
       .create(props)
       .then(async (dossierPage) => {
-        // TODO: const chapter = await dossierPage.getCurrentChapter();
-        // TODO: const objectId = await dossierPage.getDossierId();
-        // TODO: const visuzalisations = await dossierPage.getCurrentPageVisualizationList();
-        // TODO: const dossierData = {
-        // TODO:   chapterKey: chapter.nodeKey,
-        // TODO:   dossierId: objectId,
-        // TODO:   visualizationKey: (visuzalisations.length > 0) ? visuzalisations[0].key : '',
-        // TODO: };
+        const chapter = await dossierPage.getCurrentChapter();
+        const visuzalisations = await dossierPage.getCurrentPageVisualizationList();
+        const dossierData = {
+          chapterKey: chapter.nodeKey,
+          visualizationKey: (visuzalisations.length > 0) ? visuzalisations[0].key : '',
+        };
+        const { handleSelection } = this.props;
+        handleSelection(dossierData);
       });
   }
 
