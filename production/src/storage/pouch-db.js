@@ -111,7 +111,7 @@ export default class DB {
    * @memberof DB
    */
   static purgePouchDB(usernameToKeep) {
-    if (window.indexedDB) {
+    if (window.indexedDB && window.indexedDB.databases) {
       return window.indexedDB.databases()
         .then((dbs) => dbs.filter((db) => (db.name.includes('_pouch_') && !db.name.includes(usernameToKeep))).map((e) => e.name))
         .then((pouchDBS) => pouchDBS.forEach((pouchDB) => window.indexedDB.deleteDatabase(pouchDB)))
