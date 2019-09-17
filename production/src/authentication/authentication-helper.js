@@ -12,7 +12,7 @@ class AuthenticationHelper {
       sessionHelper.enableLoading();
       sessionHelper.saveLoginValues(values);
       const authToken = await authenticationService
-        .authenticate(values.username, values.password, values.envUrl, values.loginMode);
+        .authenticate(values.username, values.password, values.envUrl, values.loginMode || 1);
       sessionHelper.logIn(authToken);
     } catch (error) {
       errorService.handleError(error, { isLogout: true });

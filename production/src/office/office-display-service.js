@@ -643,7 +643,6 @@ class OfficeDisplayService {
     // relative to the current range.
     for (let i = 0; i < splittedExcelRows.length; i += 1) {
       excelContext.workbook.application.suspendApiCalculationUntilNextSync();
-      console.log(rowIndex);
       const rowRange = officeTable
         .getDataBodyRange()
         .getRow(0)
