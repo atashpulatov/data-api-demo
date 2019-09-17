@@ -419,11 +419,11 @@ class OfficeApiHelper {
    * @memberof OfficeApiHelper
    * @return {Promise} Context.sync
    */
-  formatSubtotals = async (startCell, subtotalCells, mstrTable, context) => {
+  formatSubtotals = async (startCell, subtotalCells, mstrTable, context, shouldBold) => {
     let contextPromises = [];
     for (const cell of subtotalCells) {
       const subtotalRowRange = this.getSubtotalRange(startCell, cell, mstrTable);
-      subtotalRowRange && (subtotalRowRange.format.font.bold = true);
+      subtotalRowRange && (subtotalRowRange.format.font.bold = shouldBold);
       contextPromises.push(context.sync());
       if (contextPromises.length % CONTEXT_LIMIT === 0) {
         await Promise.all(contextPromises);

@@ -96,6 +96,7 @@ class PopupHelper {
       isPrompted: refreshReport.isPrompted,
       isRefreshAll,
       importSubtotal: refreshReport.importSubtotal,
+      subtotalsAddresses: refreshReport.subtotalsAddresses,
     };
     const result = await officeDisplayService.printObject(options);
     if (result && result.type === 'warning') {
