@@ -706,11 +706,7 @@ class OfficeDisplayService {
         bytes += value.length * 2;
       } else if (typeof value === 'number') {
         bytes += 8;
-      } else if
-      (
-        typeof value === 'object'
-        && objectList.indexOf(value) === -1
-      ) {
+      } else if (typeof value === 'object' && objectList.indexOf(value) === -1) {
         objectList.push(value);
         for (const i in value) {
           stack.push(value[i]);
