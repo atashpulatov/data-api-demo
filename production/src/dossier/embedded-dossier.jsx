@@ -74,7 +74,7 @@ export default class _EmbeddedDossier extends React.Component {
       },
       uiMessage: {
         enabled: true,
-        addToLibrary: true,
+        addToLibrary: false,
       },
     };
 
@@ -94,7 +94,12 @@ export default class _EmbeddedDossier extends React.Component {
 
   render() {
     return (
-      <div ref={this.container} />
+      /*
+      Height needs to be passed for container becouse without it, embbeded api will set default height: 600px;
+      We need to calculate actual height, regarding the size of other elements:
+      58px for header, 9px for header margin and 68px for buttons
+      */
+      <div ref={this.container} style={{ position: 'relative', top: '0', left: '0', height: 'calc(100vh - 135px)' }} />
     );
   }
 }
