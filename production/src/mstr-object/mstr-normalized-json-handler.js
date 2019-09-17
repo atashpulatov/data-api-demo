@@ -1,3 +1,5 @@
+/* eslint-disable class-methods-use-this */
+
 /**
  * Helper class to manipulate the new normalized REST API V2
  *
@@ -33,7 +35,7 @@ class NormalizedJsonHandler {
       value: formValues || [name],
       subtotalAddress: crossTab ? { attributeIndex, colIndex, axis } : { attributeIndex, rowIndex },
     };
-  };
+  }
 
   /**
    * Gets the attribute name based on its index, returns object with an additional value key.
@@ -49,7 +51,7 @@ class NormalizedJsonHandler {
     const rawAttribute = definition.grid[axis][attributeIndex];
     const { name, formValues } = rawAttribute;
     return { ...rawAttribute, value: formValues || [name] };
-  };
+  }
 
   /**
    * Get an array with element names
@@ -62,14 +64,15 @@ class NormalizedJsonHandler {
    */
   mapElementIndicesToElements = ({ definition, axis, headerCells: elementIndices, rowIndex = -1, colIndex = -1 }) => {
     const result = [];
-    elementIndices.forEach((elementIndex, attributeIndex) => {
+    for (let attributeIndex = 0; attributeIndex < elementIndices.length; attributeIndex++) {
+      const elementIndex = elementIndices[attributeIndex];
       if (elementIndex < 0) {
         result.push({ value: [''] });
       } else {
         // For elementsIndices tuple, each subscript is an attribute index and each value is an element index.
         result.push(this.lookupElement({ definition, axis, attributeIndex, elementIndex, rowIndex, colIndex }));
       }
-    });
+    }
     return result;
   }
 
@@ -105,16 +108,23 @@ class NormalizedJsonHandler {
   renderTabular = (definition, data, onElement, valueMatrix = 'raw') => {
     // For each row in header zone.
     const { headers, metricValues } = data;
+    const { rows } = headers;
     const result = [];
-    headers.rows.forEach((headerCells, rowIndex) => {
-      const rowElements = this.mapElementIndicesToElements({
-        definition, axis: 'rows', headerCells, rowIndex,
-      });
-      // Process elements
+
+    for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+      const headerCells = rows[rowIndex];
+      const rowElements = this.mapElementIndicesToElements({ definition, axis: 'rows', headerCells, rowIndex });
       const tabularRows = [];
-      rowElements.forEach((e, attributeIndex) => tabularRows.push(onElement(e, rowIndex, attributeIndex)));
-      result.push((metricValues && metricValues.raw.length > 0) ? tabularRows.concat(metricValues[valueMatrix][rowIndex]) : tabularRows);
-    });
+      for (let attributeIndex = 0; attributeIndex < rowElements.length; attributeIndex++) {
+        const element = rowElements[attributeIndex];
+        tabularRows.push(onElement(element, rowIndex, attributeIndex));
+      }
+      if (metricValues && metricValues.raw.length > 0) {
+        result.push(tabularRows.concat(metricValues[valueMatrix][rowIndex]));
+      } else {
+        result.push(tabularRows);
+      }
+    }
     return result;
   };
 
@@ -132,14 +142,11 @@ class NormalizedJsonHandler {
   renderHeaders = (definition, axis, headers, onElement) => {
     if (headers[axis].length === 0) return [[]];
     const headersNormalized = axis === 'columns' ? this._transposeMatrix(headers[axis]) : headers[axis];
-    const matrix = [];
-    headersNormalized.forEach((headerCells, colIndex) => {
+    const matrix = headersNormalized.map((headerCells, colIndex) => {
       const axisElements = this.mapElementIndicesToElements({
         definition, axis, headerCells, colIndex,
       });
-      const elementRow = [];
-      axisElements.forEach((e, axisIndex, elementIndex) => elementRow.push(onElement(e, axisIndex, elementIndex)));
-      matrix.push(elementRow);
+      return axisElements.map((e, axisIndex, elementIndex) => onElement(e, axisIndex, elementIndex));
     });
     return axis === 'columns' ? this._transposeMatrix(matrix) : matrix;
   }
@@ -155,17 +162,11 @@ class NormalizedJsonHandler {
    * @memberof NormalizedJsonHandler
    * @return {Array}
    */
-  renderTitles = (definition, axis, headers, onElement) => {
-    const results = [];
-    headers[axis].forEach((headerCells) => {
-      const titleRow = [];
-      const mapFn = axis === 'rows' ? this.mapElementIndicesToNames : this.mapElementIndicesToElements;
-      const axisElements = mapFn({ definition, axis, headerCells });
-      axisElements.forEach((e, axisIndex, elementIndex) => titleRow.push(onElement(e, axisIndex, elementIndex)));
-      results.push(titleRow);
-    });
-    return results;
-  }
+  renderTitles = (definition, axis, headers, onElement) => headers[axis].map((headerCells) => {
+    const mapFn = axis === 'rows' ? this.mapElementIndicesToNames : this.mapElementIndicesToElements;
+    const axisElements = mapFn({ definition, axis, headerCells });
+    return axisElements.map((e, axisIndex, elementIndex) => onElement(e, axisIndex, elementIndex));
+  })
 
   /**
    * Creates an array with the metric values. We pass a function to pick the object key onElement.
