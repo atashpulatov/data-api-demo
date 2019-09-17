@@ -367,7 +367,7 @@ class OfficeDisplayService {
 
       prevOfficeTable.rows.load('count');
       await context.sync();
-      await this.applySubtotalFormatting(isCrosstab, subtotalsAddresses, prevOfficeTable, context, mstrTable, false);
+      if (subtotalsAddresses.length) await this.applySubtotalFormatting(isCrosstab, subtotalsAddresses, prevOfficeTable, context, mstrTable, false);
       const addedRows = Math.max(0, rows - prevOfficeTable.rows.count);
       // If the new table has more rows during update check validity
       if (addedRows) {
