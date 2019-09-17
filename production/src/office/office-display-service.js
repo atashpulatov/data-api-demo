@@ -585,7 +585,7 @@ class OfficeDisplayService {
         console.timeEnd('Fetch data');
         console.time('Append rows');
         excelContext.workbook.application.suspendApiCalculationUntilNextSync();
-        await this._appendRowsToTable(officeTable, row, rowIndex, isRefresh, tableColumnsChanged);
+        this._appendRowsToTable(officeTable, row, rowIndex, isRefresh, tableColumnsChanged);
         contextPromises.push(excelContext.sync());
         console.timeEnd('Append rows');
         if (mstrTable.isCrosstab) {
