@@ -636,22 +636,22 @@ class OfficeDisplayService {
 
   _appendRowsToTable = async (officeTable, excelRows, rowIndex, isRefresh = false, tableColumnsChanged, excelContext) => {
     console.time('Split Rows');
-    const splittedExcelRows = this.splitExcelRows(excelRows);
+    const splitExcelRows = this.splitExcelRows(excelRows);
     console.timeEnd('Split Rows');
     const contextPromises = [];
     // Get resize range: The number of rows/cols by which to expand the bottom-right corner,
     // relative to the current range.
-    for (let i = 0; i < splittedExcelRows.length; i += 1) {
+    for (let i = 0; i < splitExcelRows.length; i += 1) {
       excelContext.workbook.application.suspendApiCalculationUntilNextSync();
       const rowRange = officeTable
         .getDataBodyRange()
         .getRow(0)
-        .getResizedRange(splittedExcelRows[i].length - 1, 0)
+        .getResizedRange(splitExcelRows[i].length - 1, 0)
         .getOffsetRange(rowIndex, 0);
-      rowIndex += splittedExcelRows[i].length;
+      rowIndex += splitExcelRows[i].length;
       rowRange.format.font.bold = false;
       if (!tableColumnsChanged && isRefresh) rowRange.clear('Contents');
-      rowRange.values = splittedExcelRows[i];
+      rowRange.values = splitExcelRows[i];
       await excelContext.sync();
     }
     return contextPromises;
@@ -665,26 +665,26 @@ class OfficeDisplayService {
    * @memberof officeDisplayService
    */
   splitExcelRows = (excelRows) => {
-    let splitted = [excelRows];
+    let splitRows = [excelRows];
     let isFitSize = false;
     do {
-      const tempSplitted = [];
+      const tempSplit = [];
       let changed = false;
-      for (let i = 0; i < splitted.length; i += 1) {
+      for (let i = 0; i < splitRows.length; i += 1) {
         // 5 MB is a limit for excel
-        if (this.sizeOfObject(splitted[i]) > 5) {
-          const { length } = splitted[i];
-          tempSplitted.push(splitted[i].slice(0, length / 2));
-          tempSplitted.push(splitted[i].slice(length / 2, length));
+        if (this.sizeOfObject(splitRows[i]) > 5) {
+          const { length } = splitRows[i];
+          tempSplit.push(splitRows[i].slice(0, length / 2));
+          tempSplit.push(splitRows[i].slice(length / 2, length));
           changed = true;
         } else {
-          tempSplitted.push(splitted[i]);
+          tempSplit.push(splitRows[i]);
         }
       }
-      splitted = [...tempSplitted];
+      splitRows = [...tempSplit];
       if (!changed) isFitSize = true;
     } while (!isFitSize);
-    return splitted;
+    return splitRows;
   }
 
   /**
