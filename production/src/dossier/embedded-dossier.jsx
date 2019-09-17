@@ -81,6 +81,7 @@ export default class _EmbeddedDossier extends React.Component {
     microstrategy.dossier
       .create(props)
       .then(async (dossierPage) => {
+        // Workaround unitl embeding api enables onVisSelection event
         const chapter = await dossierPage.getCurrentChapter();
         const visuzalisations = await dossierPage.getCurrentPageVisualizationList();
         const dossierData = {
@@ -89,6 +90,9 @@ export default class _EmbeddedDossier extends React.Component {
         };
         const { handleSelection } = this.props;
         handleSelection(dossierData);
+        // Workaround end.
+
+        // !TODO: dossierPage.addEventListener('onVisSelection', handleSelection);
       });
   }
 

@@ -48,6 +48,8 @@ export const initialState = {
   dossierData: null,
   promptsAnswers: null,
   objectType: null,
+  chosenChapterKey: null,
+  chosenVisualizationKey: null,
 };
 
 function getProjectName(projects, projectId, objectId) {
@@ -75,6 +77,8 @@ export const navigationTree = (state = initialState, action) => {
       newState.chosenType = getType(data.chosenSubtype);
       newState.isPrompted = !!data.isPrompted;
       newState.objectType = data.objectType;
+      newState.chosenChapterKey = data.chosenChapterKey || null;
+      newState.chosenVisualizationKey = data.chosenVisualizationKey || null;
       return newState;
     }
     case UPDATE_SCROLL: {

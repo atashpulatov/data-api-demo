@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import { PopupButtons } from '../popup/popup-buttons';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { EmbeddedDossier } from './embedded-dossier';
+import { actions } from '../navigation/navigation-tree-actions';
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 
 export default class _DossierWindow extends React.Component {
   constructor(props) {
@@ -36,12 +38,18 @@ export default class _DossierWindow extends React.Component {
   }
 
   handleOk() {
-    const { chosenObjectId, chosenProjectId } = this.props;
+    const { chosenObjectId, chosenProjectId, requestImport, selectObject } = this.props;
     const { chapterKey, visualizationKey } = this.state;
-    // !!TODO:
-    // store vis data
-    // dispach fetching
-    // close popup
+    const selectedVisualization = {
+      chosenObjectId,
+      chosenProjectId,
+      chosenSubtype: mstrObjectEnum.mstrObjectType.visualization.subtypes,
+      objectType: mstrObjectEnum.mstrObjectType.visualization.type,
+      chosenChapterKey: chapterKey,
+      chosenVisualizationKey: visualizationKey,
+    };
+    selectObject(selectedVisualization);
+    requestImport();
   }
 
   render() {
@@ -91,4 +99,4 @@ function mapStateToProps(state) {
   };
 }
 
-export const DossierWindow = connect(mapStateToProps)(withTranslation('common')(_DossierWindow));
+export const DossierWindow = connect(mapStateToProps, actions)(withTranslation('common')(_DossierWindow));
