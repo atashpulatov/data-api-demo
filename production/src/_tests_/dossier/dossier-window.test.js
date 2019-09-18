@@ -29,7 +29,7 @@ describe('Dossierwindow', () => {
     expect(office).toHaveBeenCalledWith(JSON.stringify(cancelObject));
   });
 
-  it('shoudl use handleSelection as unselection', () => {
+  it('should use handleSelection as unselection', () => {
     // given
     const dossierData = { chapterKey: 'C40', visualizationKey: '' };
     const componentWrapper = shallow(<_DossierWindow />);
@@ -39,7 +39,7 @@ describe('Dossierwindow', () => {
     expect(componentWrapper.instance().state.isVisualisationSelected).toBeFalsy();
   });
 
-  it('shoudl use handleSelection as selection', () => {
+  it('should use handleSelection as selection', () => {
     // given
     const dossierData = { chapterKey: 'C40', visualizationKey: 'V78' };
     const componentWrapper = shallow(<_DossierWindow />);
@@ -49,7 +49,7 @@ describe('Dossierwindow', () => {
     expect(componentWrapper.instance().state.isVisualisationSelected).toBeTruthy();
   });
 
-  it('shoudl use handleOk and run selectObject with given parameters', () => {
+  it('should use handleOk and run selectObject with given parameters', () => {
     // given
     const componentState = { isVisualisationSelected: true, chapterKey: 'C40', visualizationKey: 'V78' };
     const selectObject = jest.fn();

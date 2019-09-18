@@ -81,7 +81,7 @@ export default class _EmbeddedDossier extends React.Component {
     microstrategy.dossier
       .create(props)
       .then(async (dossierPage) => {
-        // Workaround unitl embeding api enables onVisSelection event
+        // Workaround until embedding api enables onVisSelection event
         const chapter = await dossierPage.getCurrentChapter();
         const visuzalisations = await dossierPage.getCurrentPageVisualizationList();
         const dossierData = {
@@ -99,7 +99,7 @@ export default class _EmbeddedDossier extends React.Component {
   render() {
     return (
       /*
-      Height needs to be passed for container becouse without it, embbeded api will set default height: 600px;
+      Height needs to be passed for container because without it, embedded api will set default height: 600px;
       We need to calculate actual height, regarding the size of other elements:
       58px for header, 9px for header margin and 68px for buttons
       */
