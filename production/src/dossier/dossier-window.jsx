@@ -4,14 +4,17 @@ import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { PopupButtons } from '../popup/popup-buttons';
 import { selectorProperties } from '../attribute-selector/selector-properties';
+import { EmbeddedDossier } from './embedded-dossier';
+import { actions } from '../navigation/navigation-tree-actions';
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 
 export default class _DossierWindow extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isVisualisationSelected: false,
-      // TODO: chapterKey: '',
-      // TODO: visualisationKey: '',
+      chapterKey: '',
+      visualizationKey: '',
     };
     this.handleSelection = this.handleSelection.bind(this);
     this.handleOk = this.handleOk.bind(this);
@@ -25,28 +28,38 @@ export default class _DossierWindow extends React.Component {
     Office.context.ui.messageParent(JSON.stringify(cancelObject));
   }
 
-  handleSelection(e) {
-    // TODO: let newValue = false;
-    // TODO: if ((e.chapterKey !== '') && (e.visualisationKey !== '')) {
-    // TODO:  newValue = true;
-    // TODO: }
-    // TODO: this.setState({ isVisualisationSelected: newValue, chapterKey: e.chapterKey, visualisationKey: e.visualisationKey   });
+  handleSelection(dossierData) {
+    const { chapterKey, visualizationKey } = dossierData;
+    let newValue = false;
+    if ((chapterKey !== '') && (visualizationKey !== '')) {
+      newValue = true;
+    }
+    this.setState({ isVisualisationSelected: newValue, chapterKey, visualizationKey });
   }
 
   handleOk() {
-    // TODO: const {chosenObjectId} = this.props;
-    // TODO: const {chapterKey, visualisationKey } = this.state;
-    // TODO: fetchVisualisationData( )
-    // TODO: await fethcing data and procced to import
+    const { chosenObjectId, chosenProjectId, requestImport, selectObject } = this.props;
+    const { chapterKey, visualizationKey } = this.state;
+    const selectedVisualization = {
+      chosenObjectId,
+      chosenProjectId,
+      chosenSubtype: mstrObjectEnum.mstrObjectType.visualization.subtypes,
+      objectType: mstrObjectEnum.mstrObjectType.visualization.type,
+      chosenChapterKey: chapterKey,
+      chosenVisualizationKey: visualizationKey,
+    };
+    selectObject(selectedVisualization);
+    requestImport();
   }
 
   render() {
-    const { chosenProjectName, handleBack, t } = this.props;
+    const { chosenProjectName, chosenObjectId, chosenProjectId, handleBack, t, mstrData } = this.props;
     const { isVisualisationSelected } = this.state;
+    const propsToPass = { envUrl: mstrData.envUrl, token: mstrData.token, dossierId: chosenObjectId, projectId: chosenProjectId };
     return (
       <div>
         <h1 title={chosenProjectName} className="ant-col folder-browser-title">{`${t('Import Dossier')} > ${chosenProjectName}`}</h1>
-        {/* TODO:  Insert  dossier iframe for embeded API by using chosenObjectId and attach handlers */}
+        <EmbeddedDossier mstrData={propsToPass} handleSelection={this.handleSelection} />
         <PopupButtons
           handleOk={this.handleOk}
           handleBack={handleBack}
@@ -62,23 +75,28 @@ export default class _DossierWindow extends React.Component {
 _DossierWindow.propTypes = {
   chosenObjectId: PropTypes.string,
   chosenProjectName: PropTypes.string,
+  chosenProjectId: PropTypes.string,
   handleBack: PropTypes.func,
   t: PropTypes.func,
+  mstrData: PropTypes.shape({ envUrl: PropTypes.string, token: PropTypes.string }),
 };
 
 _DossierWindow.defaultProps = {
   chosenObjectId: 'default id',
   chosenProjectName: 'default name',
+  chosenProjectId: 'default id',
   handleBack: () => { },
   t: (text) => text,
+  mstrData: { envUrl: 'no env url', token: 'no token' },
 };
 
 function mapStateToProps(state) {
-  const { chosenProjectName, chosenObjectId } = state.navigationTree;
+  const { chosenProjectName, chosenObjectId, chosenProjectId } = state.navigationTree;
   return {
     chosenProjectName,
     chosenObjectId,
+    chosenProjectId,
   };
 }
 
-export const DossierWindow = connect(mapStateToProps)(withTranslation('common')(_DossierWindow));
+export const DossierWindow = connect(mapStateToProps, actions)(withTranslation('common')(_DossierWindow));

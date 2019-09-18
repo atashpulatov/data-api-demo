@@ -194,7 +194,7 @@ export class _PromptsWindow extends Component {
       this.embeddedDocument = embeddedDocument;
       if (!this.isLoginPage(embeddedDocument)) {
         const cssLocation = window.location.origin
-          + window.location.pathname.replace('popup.html', 'promptsWindow.css');
+          + window.location.pathname.replace('index.html', 'promptsWindow.css');
         this.applyStyle(embeddedDocument, cssLocation);
       }
     });
