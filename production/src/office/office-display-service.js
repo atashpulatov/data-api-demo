@@ -590,11 +590,10 @@ class OfficeDisplayService {
       for await (const { row, header, subtotalAddress } of rowGenerator) {
         console.groupCollapsed(`Importing rows: ${rowIndex} to ${Math.min(rowIndex + limit, rows)}`);
         console.timeEnd('Fetch data');
-        console.time('Append rows');
         excelContext.workbook.application.suspendApiCalculationUntilNextSync();
-        this._appendRowsToTable(officeTable, row, rowIndex, isRefresh, tableColumnsChanged);
-        contextPromises.push(excelContext.sync());
-        console.timeEnd('Append rows');
+        console.group('Append rows');
+        await this._appendRowsToTable(officeTable, row, rowIndex, isRefresh, tableColumnsChanged, excelContext);
+        console.groupEnd('Append rows');
         if (mstrTable.isCrosstab) {
           console.time('Append crosstab rows');
           this._appendCrosstabRowsToRange(officeTable, header.rows, rowIndex, isRefresh, excelContext);
@@ -643,18 +642,86 @@ class OfficeDisplayService {
     officeApiHelper.createRowsHeaders(startCell, headerRows);
   }
 
-  _appendRowsToTable = (officeTable, excelRows, rowIndex, isRefresh = false, tableColumnsChanged) => {
+  _appendRowsToTable = async (officeTable, excelRows, rowIndex, isRefresh = false, tableColumnsChanged, excelContext) => {
+    console.time('Split Rows');
+    let splitExcelRows = [excelRows];
+    if (this.sizeOfObject(excelRows) > 5) splitExcelRows = this.splitExcelRows(excelRows);
+    console.timeEnd('Split Rows');
     // Get resize range: The number of rows/cols by which to expand the bottom-right corner,
     // relative to the current range.
-    const rowRange = officeTable
-      .getDataBodyRange()
-      .getRow(0)
-      .getResizedRange(excelRows.length - 1, 0)
-      .getOffsetRange(rowIndex, 0);
-    // clear(applyToString?: "All" | "Formats" | "Contents" | "Hyperlinks" | "RemoveHyperlinks")
-    // : void;
-    if (!tableColumnsChanged && isRefresh) rowRange.clear('Contents');
-    rowRange.values = excelRows;
+    for (let i = 0; i < splitExcelRows.length; i += 1) {
+      excelContext.workbook.application.suspendApiCalculationUntilNextSync();
+      const rowRange = officeTable
+        .getDataBodyRange()
+        .getRow(rowIndex)
+        .getResizedRange(splitExcelRows[i].length - 1, 0);
+      rowIndex += splitExcelRows[i].length;
+      if (!tableColumnsChanged && isRefresh) rowRange.clear('Contents');
+      rowRange.values = splitExcelRows[i];
+      console.time(`Sync for ${splitExcelRows[i].length} rows`);
+      await excelContext.sync();
+      console.timeEnd(`Sync for ${splitExcelRows[i].length} rows`);
+    }
+  }
+
+  /**
+   * Split Excel Rows into chunks that meets limit of 5MB
+   *
+   * @param {Array} excelRows Array of table data
+   * @returns {Array} Array with sub-arrays with size not more than 5MB
+   * @memberof officeDisplayService
+   */
+  splitExcelRows = (excelRows) => {
+    let splitRows = [excelRows];
+    let isFitSize = false;
+    do {
+      const tempSplit = [];
+      let changed = false;
+      for (let i = 0; i < splitRows.length; i += 1) {
+        // 5 MB is a limit for excel
+        if (this.sizeOfObject(splitRows[i]) > 5) {
+          const { length } = splitRows[i];
+          tempSplit.push(splitRows[i].slice(0, length / 2));
+          tempSplit.push(splitRows[i].slice(length / 2, length));
+          changed = true;
+        } else {
+          tempSplit.push(splitRows[i]);
+        }
+      }
+      splitRows = [...tempSplit];
+      if (!changed) isFitSize = true;
+    } while (!isFitSize);
+    return splitRows;
+  }
+
+  /**
+   * Check size of passed object in MB
+   *
+   * @param {Object} object Item to check size of
+   * @returns {number} Size of passed object in MB
+   * @memberof officeDisplayService
+   */
+  sizeOfObject = (object) => {
+    const objectList = [];
+    const stack = [object];
+    let bytes = 0;
+    while (stack.length) {
+      const value = stack.pop();
+      if (typeof value === 'boolean') {
+        bytes += 4;
+      } else if (typeof value === 'string') {
+        bytes += value.length * 2;
+      } else if (typeof value === 'number') {
+        bytes += 8;
+      } else if (typeof value === 'object' && objectList.indexOf(value) === -1) {
+        objectList.push(value);
+        for (const i in value) {
+          stack.push(value[i]);
+        }
+      }
+    }
+    // Formating bytes to MB in decimal
+    return bytes / 1000000;
   }
 
   _checkColumnsChange = async (prevOfficeTable, context, instanceDefinition) => {
