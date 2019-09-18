@@ -138,14 +138,14 @@ class OfficeApiHelper {
       }
       try {
         const { columns } = table;
-        columns.load('items');
+        columns.load('count');
         await context.sync();
-        for (let index = 0; index < columns.items.length; index++) {
-          columns.items[index].getRange().format.autofitColumns();
+        for (let index = 0; index < columns.count; index++) {
+          columns.getItemAt(index).getRange().format.autofitColumns();
           await context.sync();
         }
       } catch (error) {
-        console.log('Error when formatting - no columns autofit applied');
+        console.log('Error when formatting - no columns autofit applied', error);
       }
     } else {
       notificationService.displayNotification({ type: 'warning', content: 'Unable to format table.' });
@@ -419,11 +419,11 @@ class OfficeApiHelper {
    * @memberof OfficeApiHelper
    * @return {Promise} Context.sync
    */
-  formatSubtotals = async (startCell, subtotalCells, mstrTable, context) => {
+  formatSubtotals = async (startCell, subtotalCells, mstrTable, context, shouldBold) => {
     let contextPromises = [];
     for (const cell of subtotalCells) {
       const subtotalRowRange = this.getSubtotalRange(startCell, cell, mstrTable);
-      subtotalRowRange && (subtotalRowRange.format.font.bold = true);
+      subtotalRowRange && (subtotalRowRange.format.font.bold = shouldBold);
       contextPromises.push(context.sync());
       if (contextPromises.length % CONTEXT_LIMIT === 0) {
         await Promise.all(contextPromises);

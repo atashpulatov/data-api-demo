@@ -78,13 +78,13 @@ class OfficeDisplayService {
     promptsAnswers,
     crosstabHeaderDimensions = false,
     importSubtotal = true,
+    subtotalsAddresses = false,
   }) => {
     let officeTable;
     let newOfficeTableId;
     let shouldFormat;
     let excelContext;
     let startCell;
-    let subtotalsAddresses;
     let tableColumnsChanged;
     try {
       const objectType = mstrObjectType;
@@ -125,6 +125,7 @@ class OfficeDisplayService {
       mstrTable.crosstabHeaderDimensions = isCrosstab
         ? this._getCrosstabHeaderDimensions(instanceDefinition)
         : false;
+      mstrTable.subtotalsAddresses = subtotalsAddresses;
       console.timeEnd('Instance definition');
 
       // Check if instance returned data
@@ -164,14 +165,7 @@ class OfficeDisplayService {
       }));
       if (importSubtotal && subtotalsAddresses.length) {
         // Removing duplicated subtotal addresses from headers
-        console.time('Subtotal Formatting');
-        if (isCrosstab) subtotalsAddresses = new Set(subtotalsAddresses);
-        const reportstartCell = officeTable.getRange().getCell(0, 0);
-        excelContext.trackedObjects.add(reportstartCell);
-        const sheet = officeTable.worksheet;
-        await officeApiHelper.formatSubtotals(reportstartCell, subtotalsAddresses, mstrTable, excelContext, sheet);
-        excelContext.trackedObjects.remove(reportstartCell);
-        console.timeEnd('Subtotal Formatting');
+        await this.applySubtotalFormatting(isCrosstab, subtotalsAddresses, officeTable, excelContext, mstrTable);
       }
 
       // Save to store
@@ -189,6 +183,7 @@ class OfficeDisplayService {
         isPrompted,
         promptsAnswers,
         importSubtotal,
+        subtotalsAddresses,
       });
 
       console.timeEnd('Total');
@@ -367,11 +362,12 @@ class OfficeDisplayService {
   ) => {
     try {
       const { rows, mstrTable } = instanceDefinition;
+      const { isCrosstab, subtotalsAddresses } = mstrTable;
       const crosstabHeaderDimensions = this._getCrosstabHeaderDimensions(instanceDefinition);
 
       prevOfficeTable.rows.load('count');
-      prevOfficeTable.getRange().format.font.bold = false;
       await context.sync();
+      if (subtotalsAddresses.length) await this.applySubtotalFormatting(isCrosstab, subtotalsAddresses, prevOfficeTable, context, mstrTable, false);
       const addedRows = Math.max(0, rows - prevOfficeTable.rows.count);
       // If the new table has more rows during update check validity
       if (addedRows) {
@@ -382,7 +378,6 @@ class OfficeDisplayService {
       if (mstrTable.isCrosstab) {
         try {
           const range = officeApiHelper.getCrosstabRange(startCell, crosstabHeaderDimensions, prevOfficeTable.worksheet);
-          range.format.font.bold = false;
           officeApiHelper.createColumnsHeaders(startCell, mstrTable.headers.columns, prevOfficeTable.worksheet, range);
           officeApiHelper.createRowsTitleHeaders(startCell, mstrTable.attributesNames, prevOfficeTable.worksheet, crosstabHeaderDimensions);
         } catch (error) {
@@ -481,6 +476,7 @@ class OfficeDisplayService {
     isPrompted,
     promptsAnswers,
     importSubtotal,
+    subtotalsAddresses,
   }) => {
     const report = {
       id: mstrTable.id,
@@ -494,6 +490,7 @@ class OfficeDisplayService {
       isPrompted,
       isCrosstab,
       importSubtotal,
+      subtotalsAddresses,
       promptsAnswers,
       crosstabHeaderDimensions: mstrTable.crosstabHeaderDimensions,
     };
@@ -566,6 +563,16 @@ class OfficeDisplayService {
     };
   }
 
+  applySubtotalFormatting = async (isCrosstab, subtotalsAddresses, officeTable, excelContext, mstrTable, shouldbold = true) => {
+    console.time('Subtotal Formatting');
+    if (isCrosstab) { subtotalsAddresses = new Set(subtotalsAddresses); }
+    const reportstartCell = officeTable.getRange().getCell(0, 0);
+    excelContext.trackedObjects.add(reportstartCell);
+    await officeApiHelper.formatSubtotals(reportstartCell, subtotalsAddresses, mstrTable, excelContext, shouldbold);
+    excelContext.trackedObjects.remove(reportstartCell);
+    console.timeEnd('Subtotal Formatting');
+  }
+
   async _fetchInsertDataIntoExcel({ connectionData, officeData, instanceDefinition, isRefresh, tableColumnsChanged }) {
     try {
       const { objectId, projectId, dossierData, mstrObjectType } = connectionData;
@@ -614,7 +621,9 @@ class OfficeDisplayService {
       console.time('Context sync');
       await Promise.all(contextPromises);
       console.timeEnd('Context sync');
+      console.time('Column auto size');
       await officeApiHelper.formatTable(officeTable, mstrTable.isCrosstab, mstrTable.crosstabHeaderDimensions, excelContext);
+      console.timeEnd('Column auto size');
       if (mstrTable.isCrosstab) officeTable.showHeaders = false;
       await excelContext.sync();
       return { officeTable, subtotalsAddresses };
