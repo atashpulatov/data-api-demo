@@ -584,9 +584,9 @@ class OfficeDisplayService {
         console.groupCollapsed(`Importing rows: ${rowIndex} to ${Math.min(rowIndex + limit, rows)}`);
         console.timeEnd('Fetch data');
         excelContext.workbook.application.suspendApiCalculationUntilNextSync();
-        console.time('Append rows');
+        console.group('Append rows');
         await this._appendRowsToTable(officeTable, row, rowIndex, isRefresh, tableColumnsChanged, excelContext);
-        console.timeEnd('Append rows');
+        console.groupEnd('Append rows');
         if (mstrTable.isCrosstab) {
           console.time('Append crosstab rows');
           this._appendCrosstabRowsToRange(officeTable, header.rows, rowIndex, isRefresh, excelContext);
@@ -634,7 +634,10 @@ class OfficeDisplayService {
   }
 
   _appendRowsToTable = async (officeTable, excelRows, rowIndex, isRefresh = false, tableColumnsChanged, excelContext) => {
-    const splitExcelRows = this.splitExcelRows(excelRows);
+    console.time('Split Rows');
+    let splitExcelRows = [excelRows];
+    if (this.sizeOfObject(excelRows) > 5) splitExcelRows = this.splitExcelRows(excelRows);
+    console.timeEnd('Split Rows');
     // Get resize range: The number of rows/cols by which to expand the bottom-right corner,
     // relative to the current range.
     for (let i = 0; i < splitExcelRows.length; i += 1) {
@@ -644,10 +647,11 @@ class OfficeDisplayService {
         .getRow(rowIndex)
         .getResizedRange(splitExcelRows[i].length - 1, 0);
       rowIndex += splitExcelRows[i].length;
-      rowRange.format.font.bold = false;
       if (!tableColumnsChanged && isRefresh) rowRange.clear('Contents');
       rowRange.values = splitExcelRows[i];
+      console.time(`Sync for ${splitExcelRows[i].length} rows`);
       await excelContext.sync();
+      console.timeEnd(`Sync for ${splitExcelRows[i].length} rows`);
     }
   }
 

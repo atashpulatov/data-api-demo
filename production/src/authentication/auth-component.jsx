@@ -76,10 +76,10 @@ export class _Authenticate extends Component {
             />)}
           </FormItem>
           <FormItem
-            label={t('Login mode')}
+            label="Login mode"
           >
             {getFieldDecorator('loginMode', {
-              initialValue: '1',
+              initialValue: session.loginMode || '1',
               rules: [{ required: true }],
             })(<Select>
               <Option value="1">Standard</Option>
