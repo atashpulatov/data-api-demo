@@ -28,6 +28,15 @@ export function toggleIsConfirmFlag() {
   };
 }
 
+export function toggleIsClearingFlag(isClearing) {
+  return (dispatch) => {
+    dispatch({
+      type: officeProperties.actions.toggleIsClearingFlag,
+      isClearing,
+    });
+  };
+}
+
 export function toggleRenderSettingsFlag() {
   return (dispatch) => {
     dispatch({
