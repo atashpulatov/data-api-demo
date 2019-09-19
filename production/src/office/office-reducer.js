@@ -159,6 +159,13 @@ function toggleRenderSettingsFlag(action, state) {
   };
 }
 
+function toggleIsClearingFlag(action, state) {
+  return {
+    ...state,
+    isClearing: action.isClearing,
+  };
+}
+
 export const officeReducer = (state = { loading: false, shouldRenderSettings: false, isConfirm: false, isSettings: false }, action) => {
   switch (action.type) {
     case officeProperties.actions.preLoadReport:
@@ -191,6 +198,8 @@ export const officeReducer = (state = { loading: false, shouldRenderSettings: fa
       return toggleIsConfirmFlag(action, state);
     case officeProperties.actions.toggleRenderSettingsFlag:
       return toggleRenderSettingsFlag(action, state);
+    case officeProperties.actions.toggleIsClearingFlag:
+      return toggleIsClearingFlag(action, state);
     default:
       break;
   }

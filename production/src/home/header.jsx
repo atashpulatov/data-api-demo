@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { Button, Popover } from 'antd';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import { MSTRIcon } from '@mstr/mstr-react-library';
+import { MSTRIcon, LoadingText } from '@mstr/mstr-react-library';
 import { toggleIsSettingsFlag, toggleIsConfirmFlag } from '../office/office-actions';
 import { sessionHelper } from '../storage/session-helper';
 import mstrLogo from './assets/mstr_logo.png';
 import { SettingsMenu } from './settings-menu';
 import { Confirmation } from './confirmation';
+
 
 export class _Header extends Component {
   componentDidMount = async () => {
@@ -72,27 +73,34 @@ export class _Header extends Component {
   }
 
   render() {
-    const {
-      loading, t, isSettings, isConfirm,
-    } = this.props;
+    const { loading, t, isSettings, isConfirm, isClearing } = this.props;
     return (
-      <header id="app-header">
-        <div className="mstr-logo">
-          <span id="profileImage">
-            {/* TODO: Alt text for logo will be added later */}
-            <img src={mstrLogo} alt="microstrategy logo" />
-          </span>
-        </div>
-        <div className="header-buttons">
-          <Popover placement="bottom" content={t('More Items')} mouseEnterDelay={1}>
-            <Button className="settings-btn no-trigger-close" onClick={this.toggleSettings} disabled={loading}>
-              <MSTRIcon type="settings" />
-            </Button>
-          </Popover>
-          {isSettings && <SettingsMenu />}
-          {isConfirm && <Confirmation />}
-        </div>
-      </header>
+      <>
+        {isClearing
+          && (
+            <div className="block-all-ui">
+              <LoadingText text={t('Clearing data...')} />
+            </div>
+          )}
+        <header id="app-header">
+          <div className="mstr-logo">
+            <span id="profileImage">
+              {/* TODO: Alt text for logo will be added later */}
+              <img src={mstrLogo} />
+            </span>
+          </div>
+          <div className="header-buttons">
+            <Popover placement="bottom" content={t('More Items')} mouseEnterDelay={1}>
+              <Button className="settings-btn no-trigger-close" onClick={this.toggleSettings} disabled={loading}>
+                <MSTRIcon type="settings" />
+              </Button>
+            </Popover>
+            {isSettings && <SettingsMenu />}
+            {isConfirm && <Confirmation />}
+          </div>
+        </header>
+      </>
+
     );
   }
 }
@@ -102,8 +110,8 @@ _Header.defaultProps = {
 };
 
 function mapStateToProps({ officeReducer }) {
-  const { isSettings, isConfirm } = officeReducer;
-  return { isSettings, isConfirm };
+  const { isSettings, isConfirm, isClearing } = officeReducer;
+  return { isSettings, isConfirm, isClearing };
 }
 
 const mapDispatchToProps = {
