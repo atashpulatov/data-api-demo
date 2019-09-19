@@ -83,7 +83,8 @@ export default class DB {
    */
   putObjects(objects, projects) {
     // Map PouchDB _id to MicroStrategy object.id
-    const documents = objects.map((object) => ({ ...object, _id: String(object.id), projectName: projects[object.projectId] || '', ownerName: object.owner.name, ownerId: object.owner.id, certified: object.certifiedInfo.certified }));
+    // Object's IDs can be the same between apps, the _id is the concat of ObjectId and projectId
+    const documents = objects.map((object) => ({ ...object, _id: String(object.projectId + object.id), projectName: projects[object.projectId] || '', ownerName: object.owner.name, ownerId: object.owner.id, certified: object.certifiedInfo.certified }));
     return this.db.bulkDocs(documents);
   }
 
