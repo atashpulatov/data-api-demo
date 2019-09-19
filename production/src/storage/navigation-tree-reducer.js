@@ -8,6 +8,7 @@ export const DEFAULT_PROJECT_NAME = 'Prepare Data';
 export const DEFAULT_TYPE = 'Data';
 
 // TODO: use some global store, redux one probably will be the best choice, or maybe some const global value
+// TODO: use mstrObjectType instead of this array
 const supportedTypesArray = [
   {
     name: 'Report',
@@ -18,6 +19,11 @@ const supportedTypesArray = [
     name: 'Dataset',
     type: 3,
     subtype: [776, 779],
+  },
+  {
+    name: 'Dossier',
+    type: 55,
+    subtype: [14081],
   },
 ];
 
@@ -41,6 +47,9 @@ export const initialState = {
   importRequested: false,
   dossierData: null,
   promptsAnswers: null,
+  objectType: null,
+  chosenChapterKey: null,
+  chosenVisualizationKey: null,
 };
 
 function getProjectName(projects, projectId, objectId) {
@@ -67,6 +76,9 @@ export const navigationTree = (state = initialState, action) => {
       newState.chosenProjectName = getProjectName(state.dataSource, data.chosenProjectId, data.chosenObjectId);
       newState.chosenType = getType(data.chosenSubtype);
       newState.isPrompted = !!data.isPrompted;
+      newState.objectType = data.objectType;
+      newState.chosenChapterKey = data.chosenChapterKey || null;
+      newState.chosenVisualizationKey = data.chosenVisualizationKey || null;
       return newState;
     }
     case UPDATE_SCROLL: {

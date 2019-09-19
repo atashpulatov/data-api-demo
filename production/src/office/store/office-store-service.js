@@ -22,6 +22,7 @@ class OfficeStoreService {
         isCrosstab: report.isCrosstab,
         isPrompted: report.isPrompted,
         importSubtotal: report.importSubtotal,
+        subtotalsAddresses: report.subtotalsAddresses,
         promptsAnswers: report.promptsAnswers,
         crosstabHeaderDimensions: report.crosstabHeaderDimensions,
       });
@@ -132,6 +133,7 @@ class OfficeStoreService {
           isCrosstab: report.isCrosstab,
           isPrompted: report.isPrompted,
           importSubtotal: report.importSubtotal,
+          subtotalsAddresses: report.subtotalsAddresses,
           promptsAnswers: report.promptsAnswers,
           crosstabHeaderDimensions: report.crosstabHeaderDimensions,
         },

@@ -3,12 +3,11 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import warningIcon from '../loading/assets/icon_conflict.svg';
 import { officeApiHelper } from '../office/office-api-helper';
-import { toggleSecuredFlag, toggleIsSettingsFlag, toggleIsConfirmFlag } from '../office/office-actions';
+import { toggleSecuredFlag, toggleIsConfirmFlag, toggleIsClearingFlag } from '../office/office-actions';
 import { errorService } from '../error/error-handler';
+import { notificationService } from '../notification/notification-service';
 
-export const _Confirmation = ({
-  reportArray, toggleSecuredFlag, toggleIsConfirmFlag, toggleIsSettingsFlag, t,
-}) => {
+export const _Confirmation = ({ reportArray, toggleSecuredFlag, toggleIsConfirmFlag, toggleIsClearingFlag, t }) => {
   useEffect(() => {
     const ua = window.navigator.userAgent;
     // this is fix IE11 - it didn't handle z-index properties correctly
@@ -21,26 +20,48 @@ export const _Confirmation = ({
     }
   });
   const secureData = async () => {
+    let reportName = '';
+    const clearErrors = [];
     try {
+      toggleIsClearingFlag(true);
+      toggleIsConfirmFlag(false);
       const excelContext = await officeApiHelper.getExcelContext();
       for (const report of reportArray) {
-        if (report.isCrosstab) {
-          const officeTable = await officeApiHelper.getTable(excelContext, report.bindId);
-          officeTable.showHeaders = true;
-          officeTable.showFilterButton = false;
-          const headers = officeTable.getHeaderRowRange();
-          headers.format.font.color = 'white';
-          await excelContext.sync();
+        try {
+          reportName = report.name;
+          if (report.isCrosstab) {
+            const officeTable = await officeApiHelper.getTable(excelContext, report.bindId);
+            officeTable.showHeaders = true;
+            officeTable.showFilterButton = false;
+            const headers = officeTable.getHeaderRowRange();
+            headers.format.font.color = 'white';
+            await excelContext.sync();
+          }
+          await officeApiHelper.deleteObjectTableBody(excelContext, report);
+        } catch (error) {
+          const officeError = errorService.handleError(error);
+          clearErrors.push({ reportName, officeError });
         }
-        await officeApiHelper.deleteObjectTableBody(excelContext, report);
       }
       toggleIsConfirmFlag(false);
-      toggleIsSettingsFlag(false);
-      toggleSecuredFlag(true);
+      if (clearErrors.length > 0) {
+        displayClearDataError(clearErrors);
+      } else {
+        toggleSecuredFlag(true);
+      }
     } catch (error) {
       errorService.handleError(error);
+    } finally {
+      toggleIsClearingFlag(false);
+      toggleIsConfirmFlag(true);
     }
   };
+
+  function displayClearDataError(clearErrors) {
+    const reportNames = clearErrors.map((report) => report.reportName).join(', ');
+    const errorMessage = clearErrors.map((report) => report.errorMessage).join(', ');
+    notificationService.displayTranslatedNotification('warning', t('{{reportNames}} could not be cleared.', { reportNames }), errorMessage);
+  }
 
   return (
     <>
@@ -78,8 +99,8 @@ function mapStateToProps({ officeReducer }) {
 
 const mapDispatchToProps = {
   toggleSecuredFlag,
-  toggleIsSettingsFlag,
   toggleIsConfirmFlag,
+  toggleIsClearingFlag,
 };
 
 export const Confirmation = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_Confirmation));

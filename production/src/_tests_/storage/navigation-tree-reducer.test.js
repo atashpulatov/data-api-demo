@@ -19,6 +19,9 @@ describe('NavigationTree Reducer', () => {
         chosenProjectName: 'Prepare Data',
         chosenType: 'Data',
         isPrompted: false,
+        chosenChapterKey: null,
+        objectType: undefined,
+        chosenVisualizationKey: null,
       },
     };
 
@@ -105,6 +108,9 @@ describe('NavigationTree Reducer', () => {
       chosenProjectName: 'Prepare Data',
       chosenType: 'Data',
       isPrompted: false,
+      chosenChapterKey: null,
+      objectType: undefined,
+      chosenVisualizationKey: null,
     });
   });
 

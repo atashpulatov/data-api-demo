@@ -121,10 +121,15 @@ class OfficeConverterServiceV2 {
    * @memberof OfficeConverterServiceV2
    */
   getColumnInformation(response) {
+    let columns;
     const onElement = (element) => element;
     const metricColumns = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement);
     const attributeColumns = jsonHandler.renderTitles(response.definition, 'rows', response.data.headers, onElement);
-    const columns = [...attributeColumns[attributeColumns.length - 1], ...metricColumns[metricColumns.length - 1]];
+    if (!attributeColumns.length) {
+      columns = metricColumns[metricColumns.length - 1];
+    } else {
+      columns = [...attributeColumns[attributeColumns.length - 1], ...metricColumns[metricColumns.length - 1]];
+    } // we return only columns attributes if there is no attributes in rows
     return columns.map((element, index) => {
       const type = element.type ? element.type.toLowerCase() : null;
       switch (type) {

@@ -45,18 +45,17 @@ describe('loginUser', () => {
       username: 'testUsername',
       password: 'testPassword',
       envUrl: 'testEnvUrl',
+      loginMode: '1',
     };
     // when
     authenticationHelper.loginUser(givenError, givenValues);
     // then
     expect(authenticationService.authenticate).toBeCalled();
     expect(authenticationService.authenticate)
-      .toBeCalledWith(
-        givenValues.username,
+      .toBeCalledWith(givenValues.username,
         givenValues.password,
         givenValues.envUrl,
-        1,
-      );
+        1);
   });
   it('should save authToken', async () => {
     // given

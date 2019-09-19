@@ -1,21 +1,21 @@
-import mstrObjectType from '../../mstr-object/mstr-object-type-enum';
+import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 
 describe('mstrObjectTypeEnum', () => {
   it('should return proper type by subtype', () => {
     // given
     const subtypeMock = 774;
-    const expectedOutput = mstrObjectType.mstrObjectType.report;
+    const expectedOutput = mstrObjectEnum.mstrObjectType.report;
     // when
-    const ouptput = mstrObjectType.getMstrTypeBySubtype(subtypeMock);
+    const ouptput = mstrObjectEnum.getMstrTypeBySubtype(subtypeMock);
     // then
     expect(ouptput).toBe(expectedOutput);
   });
   it('should return proper type by name', () => {
     // given
     const nameMock = 'DaTaSet';
-    const expectedOutput = mstrObjectType.mstrObjectType.dataset;
+    const expectedOutput = mstrObjectEnum.mstrObjectType.dataset;
     // when
-    const ouptput = mstrObjectType.getMstrTypeByName(nameMock);
+    const ouptput = mstrObjectEnum.getMstrTypeByName(nameMock);
     // then
     expect(ouptput).toBe(expectedOutput);
   });

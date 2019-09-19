@@ -1,3 +1,5 @@
+/* eslint-disable class-methods-use-this */
+
 /**
  * Helper class to manipulate the new normalized REST API V2
  *
@@ -19,9 +21,7 @@ class NormalizedJsonHandler {
    * @memberof JSONHandler
    * @return {Object}
    */
-  lookupElement = ({
-    definition, axis, attributeIndex, elementIndex, rowIndex = -1, colIndex = -1,
-  }) => {
+  lookupElement = ({ definition, axis, attributeIndex, elementIndex, rowIndex = -1, colIndex = -1 }) => {
     const { crossTab } = definition.grid;
     const rawElement = definition.grid[axis][attributeIndex].elements[elementIndex];
     const { name, formValues, subtotal } = rawElement;
@@ -35,7 +35,7 @@ class NormalizedJsonHandler {
       value: formValues || [name],
       subtotalAddress: crossTab ? { attributeIndex, colIndex, axis } : { attributeIndex, rowIndex },
     };
-  };
+  }
 
   /**
    * Gets the attribute name based on its index, returns object with an additional value key.
@@ -51,7 +51,7 @@ class NormalizedJsonHandler {
     const rawAttribute = definition.grid[axis][attributeIndex];
     const { name, formValues } = rawAttribute;
     return { ...rawAttribute, value: formValues || [name] };
-  };
+  }
 
   /**
    * Get an array with element names
@@ -62,15 +62,19 @@ class NormalizedJsonHandler {
    * @memberof NormalizedJsonHandler
    * @return {Array}
    */
-  mapElementIndicesToElements = ({
-    definition, axis, headerCells: elementIndices, rowIndex = -1, colIndex = -1,
-  }) => elementIndices.map((elementIndex, attributeIndex) => {
-    if (elementIndex < 0) return { value: [''] };
-    // For elementsIndices tuple, each subscript is an attribute index and each value is an element index.
-    return this.lookupElement({
-      definition, axis, attributeIndex, elementIndex, rowIndex, colIndex,
-    });
-  });
+  mapElementIndicesToElements = ({ definition, axis, headerCells: elementIndices, rowIndex = -1, colIndex = -1 }) => {
+    const result = [];
+    for (let attributeIndex = 0; attributeIndex < elementIndices.length; attributeIndex++) {
+      const elementIndex = elementIndices[attributeIndex];
+      if (elementIndex < 0) {
+        result.push({ value: [''] });
+      } else {
+        // For elementsIndices tuple, each subscript is an attribute index and each value is an element index.
+        result.push(this.lookupElement({ definition, axis, attributeIndex, elementIndex, rowIndex, colIndex }));
+      }
+    }
+    return result;
+  }
 
   /**
    * Get an array with element names
@@ -81,9 +85,14 @@ class NormalizedJsonHandler {
    * @memberof NormalizedJsonHandler
    * @return {Array}
    */
-  mapElementIndicesToNames = ({ definition, axis, headerCells: elementIndices }) => elementIndices.map((_, attributeIndex) =>
-  // For elementsIndices tuple, each subscript is an attribute index and each value is an element index.
-    this.lookupAttributeName(definition, axis, attributeIndex));
+  mapElementIndicesToNames = ({ definition, axis, headerCells: elementIndices }) => {
+    const result = [];
+    for (let attributeIndex = 0; attributeIndex < elementIndices.length; attributeIndex++) {
+      // For elementsIndices tuple, each subscript is an attribute index and each value is an element index.
+      result.push(this.lookupAttributeName(definition, axis, attributeIndex));
+    }
+    return result;
+  }
 
   /**
    * Creates a 2D Array with row attribute headers and metric values
@@ -99,14 +108,24 @@ class NormalizedJsonHandler {
   renderTabular = (definition, data, onElement, valueMatrix = 'raw') => {
     // For each row in header zone.
     const { headers, metricValues } = data;
-    return headers.rows.map((headerCells, rowIndex) => {
-      const rowElements = this.mapElementIndicesToElements({
-        definition, axis: 'rows', headerCells, rowIndex,
-      });
-      // Process elements
-      const tabularRows = rowElements.map((e, attributeIndex) => onElement(e, rowIndex, attributeIndex));
-      return (metricValues && metricValues.raw.length > 0) ? tabularRows.concat(metricValues[valueMatrix][rowIndex]) : tabularRows;
-    });
+    const { rows } = headers;
+    const result = [];
+
+    for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+      const headerCells = rows[rowIndex];
+      const rowElements = this.mapElementIndicesToElements({ definition, axis: 'rows', headerCells, rowIndex });
+      const tabularRows = [];
+      for (let attributeIndex = 0; attributeIndex < rowElements.length; attributeIndex++) {
+        const element = rowElements[attributeIndex];
+        tabularRows.push(onElement(element, rowIndex, attributeIndex));
+      }
+      if (metricValues && metricValues.raw.length > 0) {
+        result.push(tabularRows.concat(metricValues[valueMatrix][rowIndex]));
+      } else {
+        result.push(tabularRows);
+      }
+    }
+    return result;
   };
 
   /**
