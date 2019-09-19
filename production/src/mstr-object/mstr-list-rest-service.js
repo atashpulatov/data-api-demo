@@ -4,6 +4,7 @@ import filterDossiersByViewMedia from '../helpers/viewMediaHelper';
 
 const SEARCH_ENDPOINT = 'searches/results';
 const PROJECTS_ENDPOINT = 'projects';
+const MY_LIBRARY_ENDPOINT = 'library';
 const LIMIT = 4096;
 const DOSSIER_SUBTYPE = 14081;
 const SUBTYPES = [768, 769, 774, 776, 779, DOSSIER_SUBTYPE];
@@ -15,7 +16,14 @@ const SUBTYPES = [768, 769, 774, 776, 779, DOSSIER_SUBTYPE];
  * @returns {Array}
  */
 export function filterDossier(body) {
-  const { result, totalItems } = body;
+  let result = '';
+  let totalItems = '';
+  if (body.result) {
+    ({ result, totalItems } = body);
+  } else {
+    result = body;
+    totalItems = body.length;
+  }
   return { result: result.filter(filterFunction), totalItems };
 }
 
@@ -118,6 +126,42 @@ export function fetchObjectList({ requestParams, callback = (res) => res, offset
     .withCredentials()
     .then((res) => res.body)
     .then(callback);
+}
+
+/**
+ * Fetches all objects available in my Library from MSTR API and filters out non-Dossier objects.
+ *
+ */
+export function fetchMyLibraryObjectList({ requestParams, callback = (res) => res }) {
+  const { envUrl, authToken } = requestParams;
+  const url = `${envUrl}/${MY_LIBRARY_ENDPOINT}`;
+  return request
+    .get(url)
+    .set('x-mstr-authtoken', authToken)
+    .withCredentials()
+    .then((res) => res.body)
+    .then(callback);
+}
+
+/**
+ * Creates multiple API requests if necessary for pagination
+ *
+ */
+export async function fetchMyLibraryObjectListPagination(callback) {
+  const requestParams = getRequestParams();
+  const paginationArgs = { callback, requestParams };
+  const promiseList = [];
+  promiseList.push(fetchMyLibraryObjectList({ ...paginationArgs }));
+  return promiseList;
+}
+
+/**
+ * Returns all objects available in my Library with filtered out non-Dossier objects.
+ *
+ */
+export function getMyLibraryObjectList(callback = (res) => res) {
+  const cbFilter = (res) => callback(filterDossier(res).result);
+  return fetchMyLibraryObjectListPagination(cbFilter);
 }
 
 /**
