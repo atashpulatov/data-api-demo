@@ -4,6 +4,7 @@ import { authenticationService } from '../authentication/auth-rest-service';
 import { userRestService } from '../home/user-rest-service';
 import { errorService } from '../error/error-handler';
 import { homeHelper } from '../home/home-helper';
+import { createCache } from '../cache/cache-actions';
 
 class SessionHelper {
   enableLoading = () => {
@@ -44,7 +45,7 @@ class SessionHelper {
       const loginParams = 'source=addin-mstr-office';
       this.replaceWindowLocation(pathBeginning, loginParams);
     } else {
-      sessionHelper.disableLoading();
+      this.disableLoading();
     }
   };
 
@@ -64,6 +65,7 @@ class SessionHelper {
       type: sessionProperties.actions.loggedIn,
       authToken,
     });
+    createCache()(reduxStore.dispatch, reduxStore.getState);
   }
 
   getSession = () => {

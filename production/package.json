@@ -37,6 +37,7 @@
     "core-js": "^3.2.1",
     "focus-visible": "^5.0.2",
     "i18next": "^17.0.6",
+    "pouchdb": "^7.1.1",
     "prop-types": "^15.7.2",
     "proxy-polyfill": "^0.3.0",
     "query-string": "^6.7.0",
@@ -85,6 +86,7 @@
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}",
+      "!src/_tests_/**/*.{js,jsx}",
       "!src/**/*rest-service.js",
       "!src/error.jsx",
       "!src/index.js",
@@ -95,9 +97,9 @@
       "!src/office/office-display-service.js",
       "!src/office/store/office-store-service.js",
       "!src/storage/session-helper.js",
+      "!src/storage/pouch-db.js",
       "!src/popup/popup-controller.js",
-      "!src/breadcrumbs/breadcrumbs.jsx",
-      "!src/prompts/prompts-rest-service.jsx"
+      "!src/breadcrumbs/breadcrumbs.jsx"
     ]
   }
 }
