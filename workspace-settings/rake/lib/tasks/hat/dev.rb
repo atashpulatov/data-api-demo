@@ -97,14 +97,32 @@ end
 
 desc "build project in #{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/build"
 task :build do
-  install_dependencies("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
-  # build the office.zip
-  shell_command! "npm run build", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
-  shell_command! "zip -r office-#{Common::Version.application_version}.zip .", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/build"
+  #US183475 support publish build ci metrics
+  start_time = Time.now
+  metrics_build = {}
+  build_fail = false
+  begin
+    install_dependencies("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
+    # build the office.zip
+    shell_command! "npm run build", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
+    shell_command! "zip -r office-#{Common::Version.application_version}.zip .", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/build"
 
-  # # build the office_loader.zip
-  shell_command! "yarn build", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/office-loader/build"
-  shell_command! "zip -r office-loader-#{Common::Version.application_version}.zip .", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/office-loader/build"
+    # build the office_loader.zip
+    shell_command! "yarn build", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/office-loader/build"
+    shell_command! "zip -r office-loader-#{Common::Version.application_version}.zip .", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/office-loader/build"
+
+    metrics_build['BUILD_RESULT'] = 'PASS'
+  rescue
+    build_fail = true
+    metrics_build['BUILD_RESULT'] = 'FAIL'
+  ensure
+    finish_time = Time.now
+    metrics_build['BUILD_DURATION'] = (finish_time - start_time)
+    metrics_build['BUILD_TOOL'] = 'gradle'
+    puts "\nMETRICS_BUILD=#{metrics_build.to_json}\n"
+    raise "build error" if build_fail
+  end
+  
 end
 
 task :clean do
