@@ -118,7 +118,7 @@ task :build do
   ensure
     finish_time = Time.now
     metrics_build['BUILD_DURATION'] = (finish_time - start_time)
-    metrics_build['BUILD_TOOL'] = 'gradle'
+    metrics_build['BUILD_TOOL'] = 'npm'
     puts "\nMETRICS_BUILD=#{metrics_build.to_json}\n"
     raise "build error" if build_fail
   end
