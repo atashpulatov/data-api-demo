@@ -81,10 +81,7 @@ export default class DB {
    * @returns {Promise} Promise containing result of bulkDocs operation
    * @memberof DB
    */
-  putObjects(objects, projects) {
-    // Map PouchDB _id to MicroStrategy object.id
-    // Object's IDs can be the same between apps, the _id is the concat of ObjectId and projectId
-    const documents = objects.map((object) => ({ ...object, _id: String(object.projectId + object.id), projectName: projects[object.projectId] || '', ownerName: object.owner.name, ownerId: object.owner.id, certified: object.certifiedInfo.certified }));
+  putObjects(documents) {
     return this.db.bulkDocs(documents);
   }
 
@@ -96,9 +93,10 @@ export default class DB {
    * @returns {Promise} Promise containing result of bulkDocs operation
    * @memberof DB
    */
-  addObjectsAsync(callback, projects) {
+  addObjectsAsync(callback) {
     return this.info().then((info) => {
-      if (!info.doc_count) callback((objects) => this.putObjects(objects, projects));
+      if (!info.doc_count) return callback(this.putObjects);
+      return Promise.resolve();
     });
   }
 

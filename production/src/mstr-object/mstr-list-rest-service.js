@@ -16,14 +16,7 @@ const SUBTYPES = [768, 769, 774, 776, 779, DOSSIER_SUBTYPE];
  * @returns {Array}
  */
 export function filterDossier(body) {
-  let result = '';
-  let totalItems = '';
-  if (body.result) {
-    ({ result, totalItems } = body);
-  } else {
-    result = body;
-    totalItems = body.length;
-  }
+  const { result, totalItems } = body;
   return { result: result.filter(filterFunction), totalItems };
 }
 
@@ -103,7 +96,7 @@ export async function fetchObjectListPagination(callback) {
     promiseList.push(fetchObjectList({ ...paginationArgs, offset }));
     offset += LIMIT;
   }
-  return promiseList;
+  return Promise.all(promiseList);
 }
 
 /**
@@ -132,36 +125,15 @@ export function fetchObjectList({ requestParams, callback = (res) => res, offset
  * Fetches all objects available in my Library from MSTR API and filters out non-Dossier objects.
  *
  */
-export function fetchMyLibraryObjectList({ requestParams, callback = (res) => res }) {
-  const { envUrl, authToken } = requestParams;
-  const url = `${envUrl}/${MY_LIBRARY_ENDPOINT}`;
+export function fetchMyLibraryObjectList(callback = (res) => res) {
+  const { envUrl, authToken } = getRequestParams();
+  const url = `${envUrl}/${MY_LIBRARY_ENDPOINT}?outputFlag=FILTER_TOC`;
   return request
     .get(url)
     .set('x-mstr-authtoken', authToken)
     .withCredentials()
     .then((res) => res.body)
     .then(callback);
-}
-
-/**
- * Creates multiple API requests if necessary for pagination
- *
- */
-export async function fetchMyLibraryObjectListPagination(callback) {
-  const requestParams = getRequestParams();
-  const paginationArgs = { callback, requestParams };
-  const promiseList = [];
-  promiseList.push(fetchMyLibraryObjectList({ ...paginationArgs }));
-  return promiseList;
-}
-
-/**
- * Returns all objects available in my Library with filtered out non-Dossier objects.
- *
- */
-export function getMyLibraryObjectList(callback = (res) => res) {
-  const cbFilter = (res) => callback(filterDossier(res).result);
-  return fetchMyLibraryObjectListPagination(cbFilter);
 }
 
 /**
@@ -179,6 +151,15 @@ export function fetchProjects(callback = (res) => res) {
     .withCredentials()
     .then((res) => res.body)
     .then(callback);
+}
+
+/**
+ * Returns all objects available in my Library with filtered out non-Dossier objects.
+ *
+ */
+export function getMyLibraryObjectList(callback) {
+  const cbFilter = (res) => callback(res.filter((object) => filterDossiersByViewMedia(object.target.viewMedia)));
+  return fetchMyLibraryObjectList(cbFilter);
 }
 
 /**

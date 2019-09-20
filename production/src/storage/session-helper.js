@@ -4,8 +4,7 @@ import { authenticationService } from '../authentication/auth-rest-service';
 import { userRestService } from '../home/user-rest-service';
 import { errorService } from '../error/error-handler';
 import { homeHelper } from '../home/home-helper';
-import getObjectList, { getProjectDictionary } from '../mstr-object/mstr-list-rest-service';
-import DB from './pouch-db';
+import { createCache } from '../cache/cache-actions';
 
 class SessionHelper {
   enableLoading = () => {
@@ -66,7 +65,7 @@ class SessionHelper {
       type: sessionProperties.actions.loggedIn,
       authToken,
     });
-    this.connectDB();
+    createCache()(reduxStore.dispatch, reduxStore.getState);
   }
 
   getSession = () => {
@@ -114,26 +113,6 @@ class SessionHelper {
   getUrl = () => window.location.href
 
   isLocalhost = () => this.getUrl().includes('localhost')
-
-  connectDB = () => {
-    // Create or get DB for current user
-    const { sessionReducer } = reduxStore.getState();
-    const { username } = sessionReducer;
-    const objectsDB = new DB(username);
-
-    // Remove PouchDBs from other users
-    DB.purgePouchDB(username);
-    getProjectDictionary().then((projects) => {
-      objectsDB.addObjectsAsync(getObjectList, projects).catch(console.error);
-    }).catch(console.error);
-  }
-
-  clearDB = () => {
-    const { sessionReducer } = reduxStore.getState();
-    const { username } = sessionReducer;
-    const objectsDB = new DB(username);
-    objectsDB.clear().catch(console.error);
-  }
 }
 
 export const sessionHelper = new SessionHelper();

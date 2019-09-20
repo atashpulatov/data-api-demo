@@ -7,11 +7,12 @@ import logo from './assets/mstr_logo.png';
 import { helper } from '../helpers/helpers';
 import { sessionHelper } from '../storage/session-helper';
 import { errorService } from '../error/error-handler';
+import { clearCache } from '../cache/cache-actions';
 
 const APP_VERSION = process.env.REACT_APP_MSTR_OFFICE_VERSION;
 
 export const _SettingsMenu = ({
-  userFullName, userInitials, isSecured, reportArray, t, toggleIsConfirmFlag, toggleIsSettingsFlag, toggleRenderSettingsFlag,
+  userFullName, userInitials, isSecured, reportArray, t, toggleIsConfirmFlag, toggleIsSettingsFlag, toggleRenderSettingsFlag, clearCache,
 }) => {
   const userNameDisplay = userFullName || 'MicroStrategy user';
   const isSecuredActive = !isSecured && reportArray && reportArray.length > 0;
@@ -105,7 +106,7 @@ export const _SettingsMenu = ({
           {t('Contact Us')}
         </a>
       </li>
-      <li onClick={logout}>
+      <li onClick={() => logout(clearCache)}>
         <span tabIndex="0" id="logOut" size="small">
           {t('Log out')}
         </span>
@@ -131,13 +132,14 @@ const mapDispatchToProps = {
   toggleIsSettingsFlag,
   toggleIsConfirmFlag,
   toggleRenderSettingsFlag,
+  clearCache,
 };
 
 export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_SettingsMenu));
 
-async function logout() {
+async function logout(preLogout) {
   try {
-    await sessionHelper.clearDB();
+    await preLogout();
     await sessionHelper.logOutRest();
     sessionHelper.logOut();
     sessionHelper.logOutRedirect();
