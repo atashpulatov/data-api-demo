@@ -11,11 +11,11 @@ describe('Settings Menu', () => {
 
   it('should log out on element logout click and delete the cache DB', async () => {
     // given
-    const clearDB = jest.spyOn(sessionHelper, 'clearDB').mockImplementation(() => { });
+    const clearDB = jest.fn();
     const logOutRestSpy = jest.spyOn(sessionHelper, 'logOutRest').mockImplementation(() => { });
     const logOutSpy = jest.spyOn(sessionHelper, 'logOut');
     const logOutRedirectSpy = jest.spyOn(sessionHelper, 'logOutRedirect');
-    const menuWrapper = mount(<_SettingsMenu />);
+    const menuWrapper = mount(<_SettingsMenu clearCache={clearDB} />);
     const buttonWrapper = menuWrapper.find('#logOut');
     // when
     buttonWrapper.simulate('click');

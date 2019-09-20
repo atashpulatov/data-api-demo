@@ -1,12 +1,14 @@
 import { SET_OBJECT_LIST_LOADING, SET_MY_LIBRARY_LOADING } from './cache-actions';
 
-const cacheReducer = (state = {
+export const DEFAULT_STATE = {
   isLoading: {
     objectList: false,
     myLibrary: false,
   },
-}, action) => {
-  switch (action.type) {
+};
+
+const cacheReducer = (state = DEFAULT_STATE, action) => {
+  switch (action && action.type) {
     case SET_OBJECT_LIST_LOADING:
       return {
         ...state,
