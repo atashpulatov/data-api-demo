@@ -1,13 +1,13 @@
 import uuid from 'uuid/v4';
-import {IncorrectInputTypeError} from './incorrect-input-type';
-import {OutsideOfRangeError} from '../error/outside-of-range-error';
-import {reduxStore} from '../store';
-import {officeProperties} from './office-properties';
-import {officeStoreService} from './store/office-store-service';
-import {notificationService} from '../notification/notification-service';
-import {errorService} from '../error/error-handler';
+import { IncorrectInputTypeError } from './incorrect-input-type';
+import { OutsideOfRangeError } from '../error/outside-of-range-error';
+import { reduxStore } from '../store';
+import { officeProperties } from './office-properties';
+import { officeStoreService } from './store/office-store-service';
+import { notificationService } from '../notification/notification-service';
+import { errorService } from '../error/error-handler';
 import mstrNormalizedJsonHandler from '../mstr-object/mstr-normalized-json-handler';
-import {CONTEXT_LIMIT} from '../mstr-object/mstr-object-rest-service';
+import { CONTEXT_LIMIT } from '../mstr-object/mstr-object-rest-service';
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
@@ -16,6 +16,8 @@ const EXCEL_TABLE_NAME = 'table';
 const EXCEL_ROW_LIMIT = 1048576;
 const EXCEL_COL_LIMIT = 16384;
 const EXCEL_XTABS_BORDER_COLOR = '#a5a5a5';
+
+/* global Office Excel OfficeExtension */
 
 class OfficeApiHelper {
   getRange = (headerCount, startCell, rowCount = 0) => {
@@ -30,8 +32,7 @@ class OfficeApiHelper {
       secondNumber = ALPHABET_RANGE_END;
       (headerCount -= firstNumber) >= 0;
       firstNumber = secondNumber, secondNumber *= ALPHABET_RANGE_END) {
-      endColumn = String.fromCharCode(parseInt(
-          (headerCount % secondNumber) / firstNumber)
+      endColumn = String.fromCharCode(parseInt((headerCount % secondNumber) / firstNumber)
         + ASCII_CAPITAL_LETTER_INDEX)
         + endColumn;
     }
@@ -63,9 +64,9 @@ class OfficeApiHelper {
   }
 
   handleOfficeApiException = (error) => {
-    console.error('error: ' + error);
+    console.error(`error: ${error}`);
     if (error instanceof OfficeExtension.Error) {
-      console.error('Debug info: ' + JSON.stringify(error.debugInfo));
+      console.error(`Debug info: ${JSON.stringify(error.debugInfo)}`);
     } else {
       throw error;
     }
@@ -75,11 +76,10 @@ class OfficeApiHelper {
     if (!letters.match(/^[A-Z]*[A-Z]$/)) {
       throw new IncorrectInputTypeError();
     }
-    return letters.split('').reduce((r, a) =>
-      r * ALPHABET_RANGE_END + parseInt(a, 36) - 9, 0);
+    return letters.split('').reduce((r, a) => r * ALPHABET_RANGE_END + parseInt(a, 36) - 9, 0);
   }
 
-  onBindingObjectClick = async (bindingId, shouldSelect = true) => {
+  onBindingObjectClick = async (bindingId, shouldSelect = true, deleteReport, reportName) => {
     try {
       const excelContext = await this.getExcelContext();
       const tableRange = this.getBindingRange(excelContext, bindingId);
@@ -88,48 +88,33 @@ class OfficeApiHelper {
       return true;
     } catch (error) {
       if (error.code === 'ItemNotFound') {
-        return notificationService.displayNotification('info', 'The object does not exist in the metadata.');
+        return notificationService.displayNotification({ type: 'info', content: 'The object does not exist in the metadata.' });
       }
-      const errorAfterOfficeFactory = errorService.errorOfficeFactory(error);
-      errorService.handleOfficeError(errorAfterOfficeFactory);
+      errorService.handleError(error, { reportName, onConfirm: deleteReport });
       return false;
     }
   };
 
-  getBindingRange = (context, bindingId) => {
-    try {
-      return context.workbook.bindings
-          .getItem(bindingId).getTable()
-          .getRange();
-    } catch (error) {
-      throw errorService.errorOfficeFactory(error);
-    }
-  }
+  getBindingRange = (context, bindingId) => context.workbook.bindings
+    .getItem(bindingId).getTable()
+    .getRange()
 
-  getTable = (context, bindingId) => {
-    return context.workbook.bindings
-        .getItem(bindingId).getTable();
-  }
+  getTable = (context, bindingId) => context.workbook.bindings
+    .getItem(bindingId).getTable()
 
-  getExcelContext = async () => {
+  getExcelContext = async () =>
     // https://docs.microsoft.com/en-us/javascript/api/excel/excel.runoptions?view=office-js
-    return await Excel.run({delayForCellEdit: true}, async (context) => {
-      return context;
-    });
-  }
+    await Excel.run({ delayForCellEdit: true }, async (context) => context)
 
-  getOfficeContext = async () => {
-    return await Office.context;
-  }
 
-  getExcelSessionStatus = async () => {
+  getOfficeContext = async () => await Office.context
+
+  getExcelSessionStatus = async () =>
     // ToDo find better way to check session status
-    return await this.getExcelContext() ? true : false;
-  }
+    !!await this.getExcelContext()
 
-  findAvailableOfficeTableId = () => {
-    return EXCEL_TABLE_NAME + uuid().split('-').join('');
-  }
+
+  findAvailableOfficeTableId = () => EXCEL_TABLE_NAME + uuid().split('-').join('')
 
   loadExistingReportBindingsExcel = async () => {
     const reportArray = await officeStoreService._getReportProperties();
@@ -140,41 +125,41 @@ class OfficeApiHelper {
   };
 
   getCurrentMstrContext = () => {
-    const envUrl = reduxStore.getState().sessionReducer.envUrl;
-    const username = reduxStore.getState().sessionReducer.username;
-    return {envUrl, username};
+    const { envUrl } = reduxStore.getState().sessionReducer;
+    const { username } = reduxStore.getState().sessionReducer;
+    return { envUrl, username };
   }
 
   formatTable = async (table, isCrosstab, crosstabHeaderDimensions, context) => {
     if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
       if (isCrosstab) {
-        const {rowsX} = crosstabHeaderDimensions;
+        const { rowsX } = crosstabHeaderDimensions;
         table.getDataBodyRange().getColumnsBefore(rowsX).format.autofitColumns();
       }
       try {
-        const columns = table.columns;
-        columns.load('items');
+        const { columns } = table;
+        columns.load('count');
         await context.sync();
-        for (let index = 0; index < columns.items.length; index++) {
-          columns.items[index].getRange().format.autofitColumns();
+        for (let index = 0; index < columns.count; index++) {
+          columns.getItemAt(index).getRange().format.autofitColumns();
           await context.sync();
         }
       } catch (error) {
-        console.log('Error when formatting - no columns autofit applied');
+        console.log('Error when formatting - no columns autofit applied', error);
       }
     } else {
-      notificationService.displayNotification('warning', `Unable to format table.`);
+      notificationService.displayNotification({ type: 'warning', content: 'Unable to format table.' });
     }
   }
 
   formatNumbers = (table, reportConvertedData, isCrosstab) => {
-    const {columnInformation} = reportConvertedData;
+    const { columnInformation } = reportConvertedData;
     let filteredColumnInformation;
     if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
       try {
-        const columns = table.columns;
+        const { columns } = table;
         if (isCrosstab) {
-          filteredColumnInformation = columnInformation.filter((e) => {// we store attribute informations in column information in crosstab attributes are in headers not excel table so we dont need them here.
+          filteredColumnInformation = columnInformation.filter((e) => { // we store attribute informations in column information in crosstab attributes are in headers not excel table so we dont need them here.
             if (e.isAttribute === false) return e;
           });
         } else {
@@ -183,6 +168,7 @@ class OfficeApiHelper {
         const offset = columnInformation.length - filteredColumnInformation.length;
         for (const object of filteredColumnInformation) {
           if (!Object.keys(object).length) continue; // Skips iteration if object is empty
+
           const columnRange = columns.getItemAt(object.index - offset).getDataBodyRange();
           let format = '';
           if (!object.isAttribute) {
@@ -245,22 +231,17 @@ class OfficeApiHelper {
     return startCell;
   }
 
-  getStartCell = (excelAdress) => {
-    return excelAdress.match(/!(\w+\d+)(:|$)/)[1];
-  }
+  getStartCell = (excelAdress) => excelAdress.match(/!(\w+\d+)(:|$)/)[1]
 
-  bindNamedItem = (namedItem, bindingId) => {
-    return new Promise((resolve, reject) => Office.context.document.bindings.addFromNamedItemAsync(
-        namedItem, 'table', {id: bindingId}, (result) => {
-          if (result.status === 'succeeded') {
-            console.log('Added new binding with type: ' + result.value.type + ' and id: ' + result.value.id);
-            resolve();
-          } else {
-            console.error('Error: ' + result.error.message);
-            reject(result.error);
-          }
-        }));
-  }
+  bindNamedItem = (namedItem, bindingId) => new Promise((resolve, reject) => Office.context.document.bindings.addFromNamedItemAsync(namedItem, 'table', { id: bindingId }, (result) => {
+    if (result.status === 'succeeded') {
+      console.log(`Added new binding with type: ${result.value.type} and id: ${result.value.id}`);
+      resolve();
+    } else {
+      console.error(`Error: ${result.error.message}`);
+      reject(result.error);
+    }
+  }))
 
   deleteObjectTableBody = async (context, object) => {
     context.runtime.enableEvents = false;
@@ -282,7 +263,9 @@ class OfficeApiHelper {
    * @return {Object}
    */
   getCrosstabRange = (cellAddress, headerDimensions, sheet) => {
-    const {columnsY, columnsX, rowsX, rowsY} = headerDimensions;
+    const {
+      columnsY, columnsX, rowsX, rowsY,
+    } = headerDimensions;
     const cell = typeof cellAddress === 'string' ? sheet.getRange(cellAddress) : cellAddress;
     const bodyRange = cell.getOffsetRange(rowsY, columnsX - 1);
     const startingCell = cell.getCell(0, 0).getOffsetRange(-(columnsY), -rowsX);
@@ -299,7 +282,7 @@ class OfficeApiHelper {
    * @return {Object}
    */
   getCrosstabRangeSafely = async (table, headerDimensions, context) => {
-    const {columnsY, rowsX} = headerDimensions;
+    const { columnsY, rowsX } = headerDimensions;
 
     const validColumnsY = await this.getValidOffset(table, columnsY, 'getRowsAbove', context);
     const validRowsX = await this.getValidOffset(table, rowsX, 'getColumnsBefore', context);
@@ -373,12 +356,12 @@ class OfficeApiHelper {
    * @memberof OfficeApiHelper
    * @return {Object}
    */
-  getTableStartCell = ({startCell, instanceDefinition, prevOfficeTable, toCrosstabChange, fromCrosstabChange}) => {
-    const {mstrTable: {headers, isCrosstab, prevCrosstabDimensions}} = instanceDefinition;
+  getTableStartCell = ({ startCell, instanceDefinition, prevOfficeTable, toCrosstabChange, fromCrosstabChange }) => {
+    const { mstrTable: { isCrosstab, prevCrosstabDimensions, crosstabHeaderDimensions } } = instanceDefinition;
     if (fromCrosstabChange) return this.offsetCellBy(startCell, -prevCrosstabDimensions.columnsY, -prevCrosstabDimensions.rowsX);
     if (!toCrosstabChange && (!isCrosstab || prevOfficeTable)) return startCell;
-    const rowOffset = headers.columns.length;
-    const colOffset = headers.rows[0].length;
+    const rowOffset = crosstabHeaderDimensions.columnsY;
+    const colOffset = crosstabHeaderDimensions.rowsX;
     return this.offsetCellBy(startCell, rowOffset, colOffset);
   }
 
@@ -392,8 +375,8 @@ class OfficeApiHelper {
    * @return {Office} Range of subtotal row
    */
   getSubtotalRange = (startCell, cell, mstrTable) => {
-    const {headers} = mstrTable;
-    const {axis} = cell;
+    const { headers } = mstrTable;
+    const { axis } = cell;
     let offsets = {};
 
     if (axis === 'rows') {
@@ -433,17 +416,17 @@ class OfficeApiHelper {
    * @memberof OfficeApiHelper
    * @return {Promise} Context.sync
    */
-  formatSubtotals = async (startCell, subtotalCells, mstrTable, context) => {
+  formatSubtotals = async (startCell, subtotalCells, mstrTable, context, shouldBold) => {
     let contextPromises = [];
     for (const cell of subtotalCells) {
       const subtotalRowRange = this.getSubtotalRange(startCell, cell, mstrTable);
-      subtotalRowRange && (subtotalRowRange.format.font.bold = true);
+      subtotalRowRange && (subtotalRowRange.format.font.bold = shouldBold);
       contextPromises.push(context.sync());
       if (contextPromises.length % CONTEXT_LIMIT === 0) {
         await Promise.all(contextPromises);
         contextPromises = [];
       }
-    };
+    }
   }
 
   /**
@@ -455,12 +438,13 @@ class OfficeApiHelper {
    * @memberof OfficeApiHelper
    */
   createRowsHeaders = (reportStartingCell, rows) => {
-    const columnOffset = 0;
-    const rowOffset = rows[0].length;
+    const rowOffset = rows[0].length || 1; // we put 1 as offset if there are no attribue in rows
+    let headerArray = [];
     // reportStartingCell.unmerge(); // excel api have problem with handling merged cells which are partailly in range, we unmerged selected cell to avoid this problem
-    const startingCell = reportStartingCell.getCell(0, 0).getOffsetRange(-columnOffset, -rowOffset); // we call getCell in case multiple cells are selected
-    const headerArray = mstrNormalizedJsonHandler._transposeMatrix(rows);
-    const headerRange = startingCell.getResizedRange(headerArray[0].length - 1, headerArray.length - 1);
+    const startingCell = reportStartingCell.getCell(0, 0).getOffsetRange(0, -rowOffset); // we call getCell in case multiple cells are selected
+    headerArray = mstrNormalizedJsonHandler._transposeMatrix(rows);
+    const colOffset = !headerArray.length ? rows.length - 1 : headerArray[0].length - 1; // transposed array length is 0 if there is no attributes in rows
+    const headerRange = startingCell.getResizedRange(colOffset, rowOffset - 1);
     this.insertHeadersValues(headerRange, rows, 'rows');
     // TODO: Move merge cells after we import the whole table
     // const directionVector = [0, 1];
@@ -488,15 +472,16 @@ class OfficeApiHelper {
 
     return this.createHeaders(columns, startingCell, directionVector);
   }
+
   /**
- * Create Title headers for crosstab report
- *
- * @param {Office} cellAddress Address of the first cell in report (top left)
- * @param {Object} attributesNames Contains arrays of attributes names in crosstab report
- * @param {Office} sheet Active Exccel spreadsheet
- * @param {Object} crosstabHeaderDimensions Contains dimensions of crosstab report headers
- * @memberof OfficeApiHelper
- */
+  * Create Title headers for crosstab report
+  *
+  * @param {Office} cellAddress Address of the first cell in report (top left)
+  * @param {Object} attributesNames Contains arrays of attributes names in crosstab report
+  * @param {Office} sheet Active Exccel spreadsheet
+  * @param {Object} crosstabHeaderDimensions Contains dimensions of crosstab report headers
+  * @memberof OfficeApiHelper
+  */
   createRowsTitleHeaders = async (cellAddress, attributesNames, sheet, crosstabHeaderDimensions) => {
     const reportStartingCell = sheet.getRange(cellAddress);
     const titlesBottomCell = reportStartingCell.getOffsetRange(0, -1);
@@ -508,7 +493,7 @@ class OfficeApiHelper {
     this.formatCrosstabRange(headerTitlesRange);
     headerTitlesRange.values = '  ';
 
-    rowsTitlesRange.values = [attributesNames.rowsAttributes];
+    if (attributesNames.rowsAttributes.length) rowsTitlesRange.values = [attributesNames.rowsAttributes]; // we are not inserting row attributes names if they do not exist
     columnssTitlesRange.values = mstrNormalizedJsonHandler._transposeMatrix([attributesNames.columnsAttributes]);
   }
 
@@ -523,7 +508,7 @@ class OfficeApiHelper {
   insertHeadersValues(headerRange, headerArray, axis = 'rows') {
     headerRange.clear('contents'); // we are unmerging and removing formatting to avoid conflicts while merging cells
     headerRange.unmerge();
-    headerRange.values = headerArray;
+    headerRange.values = axis === 'rows' && !headerArray[0].length ? '' : headerArray; // if there is no attributes in rows we insert empty string for whole range
     const hAlign = axis === 'rows' ? 'left' : 'center';
     headerRange.format.horizontalAlignment = Excel.HorizontalAlignment[hAlign];
     headerRange.format.verticalAlignment = Excel.VerticalAlignment.top;

@@ -3,19 +3,126 @@ require 'common/version'
 require 'json'
 require 'nokogiri'
 require 'github'
+require 'localization/generator'
+require 'json'
 
 include ShellHelper::Shell
 
+@string_file_path_base = "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/src/locales"
+
+desc "generate local strings"
+task :generate_localization_strings do
+  database = 'EXCEL'
+  default_lan = 'English'
+  languages = {
+    English:            'en-US',
+    Francais:           'fr-FR',
+    Deutsch:            'de-DE',
+    Danish:             'da-DK',
+    Dutch:              'nl-NL',
+    Espanol_Espana:     'es-ES',
+    Svenska:            'sv-SE',
+    Italiano:           'it-IT',
+    Portuguese_Brazil:  'pt-BR',
+    Japanese:           'ja-JP',
+    Korean:             'ko-KR',
+    Chinese:            'zh-CN',
+    Trad_Chinese:       'zh-TW'
+  }
+
+  Localization::Generator.generate_string(database)
+  connect =  Sequel.sqlite("#{$WORKSPACE_SETTINGS[:paths][:organization][:home]}/ProductStrings/#{database}/#{database}.db")
+
+  translated_strings = Hash.new
+  languages.each do |lan, short_lan|
+    translated_strings[lan] = Hash.new
+  end
+
+  strings = connect[:Strings]
+
+  strings.each{|string|
+    languages.each do |lan, short_lan|
+      key = string["String_#{default_lan}".to_sym]
+      value = string["String_#{lan}".to_sym]
+      if value.nil?
+        translated_strings[lan][key] = key
+      else
+        translated_strings[lan][key] = value
+      end
+    end
+  }
+
+  translated_strings_default = translated_strings[default_lan.to_sym]
+
+
+  languages.each do |lan, short_lan|
+    string_file_path = File.join(@string_file_path_base, "#{short_lan}.json")
+
+    translated_strings_lan =  translated_strings[lan]
+    string_file = File.open(string_file_path, 'w')
+    string_file.write(JSON.pretty_generate(translated_strings_lan))
+    string_file.close
+  end
+
+end
+
+desc "monitor DB change"
+task :monitor_DB_change  => [:generate_localization_strings] do
+  puts "Monitor DB change"
+  diff_file = "strings_diff.txt"
+
+  shell_command! "git config user.email \"jenkins@microstrategy.com\"", cwd: $WORKSPACE_SETTINGS[:paths][:project][:home]
+  shell_command! "git config user.name \"Jenkins Vagrant\"", cwd: $WORKSPACE_SETTINGS[:paths][:project][:home]
+
+  shell_command! "git checkout #{Common::Version.application_branch}", cwd: $WORKSPACE_SETTINGS[:paths][:project][:home]
+  shell_command! "git pull", cwd: $WORKSPACE_SETTINGS[:paths][:project][:home]
+
+  shell_command!(
+    "git diff -c #{@string_file_path_base} > #{diff_file}",
+    cwd:"#{$WORKSPACE_SETTINGS[:paths][:project][:home]}"
+  )
+
+  diff = File.read("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/#{diff_file}")
+  if not diff.eql?('')
+      shell_command!(
+        "git commit -m \"update strings\" -- #{@string_file_path_base}",
+        cwd:"#{$WORKSPACE_SETTINGS[:paths][:project][:home]}"
+      )
+      shell_command!(
+        "git push origin #{Git.branch_name}",
+        cwd:"#{$WORKSPACE_SETTINGS[:paths][:project][:home]}"
+      )
+  end
+end
+
 desc "build project in #{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/build"
 task :build do
-  install_dependencies("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
-  # build the office.zip
-  shell_command! "yarn build", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
-  shell_command! "zip -r office-#{Common::Version.application_version}.zip .", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/build"
+  #US183475 support publish build ci metrics
+  start_time = Time.now
+  metrics_build = {}
+  build_fail = false
+  begin
+    install_dependencies("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
+    # build the office.zip
+    shell_command! "npm run build", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
+    shell_command! "zip -r office-#{Common::Version.application_version}.zip .", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/build"
 
-  # build the office_loader.zip
-  shell_command! "yarn build", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/office-loader/build"
-  shell_command! "zip -r office-loader-#{Common::Version.application_version}.zip .", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/office-loader/build"
+    # build the office_loader.zip
+    shell_command! "yarn build", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/office-loader/build"
+    shell_command! "zip -r office-loader-#{Common::Version.application_version}.zip .", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/office-loader/build"
+
+    metrics_build['BUILD_RESULT'] = 'PASS'
+  rescue
+    build_fail = true
+    metrics_build['BUILD_RESULT'] = 'FAIL'
+  ensure
+    finish_time = Time.now
+    metrics_build['BUILD_DURATION'] = (finish_time - start_time)
+    metrics_build['BUILD_TOOL'] = 'npm'
+    puts "\nMETRICS_BUILD=#{metrics_build.to_json}\n"
+    raise "build error" if build_fail
+  end
+  
 end
 
 task :clean do
@@ -35,19 +142,36 @@ end
 
 desc "run the unit test and collect code coverage in stage_0 pre-merge job"
 task :stage_0_test do
+  info "npm version"
+  shell_command! "npm -v", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
+
+  info "node version"
+  shell_command! "node -v", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
+
+  
   #run test under current workspace
   if ENV["ghprbTargetBranch"].nil?
     raise "ghprbTargetBranch environment should not be nil"
   end
   run_test("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
-  #checkout the code in base branch
-  init_base_branch_repo(ENV["ghprbTargetBranch"])
-  #run test with base branch
-  run_test(base_repo_path)
-  generate_comparison_report_html
-  generate_comparison_report_markdown
-  generate_eslint_report
-  publish_to_pull_request_page
+
+  # pre-merge job shouldn't fail when test fail in base branch.
+  # if the build process fail in base branch, publish the error message to pull request page.
+  begin
+    message = nil
+    #checkout the code in base branch
+    init_base_branch_repo(ENV["ghprbTargetBranch"])
+    #run test with base branch
+    run_test(base_repo_path)
+    generate_comparison_report_html
+    generate_comparison_report_markdown
+    generate_eslint_report
+  rescue Exception => e
+    message = "Waring: Failed to run test with base branch and generate report, caught exception #{e}!"
+    warn(message)
+  ensure
+    publish_to_pull_request_page(message)
+  end
 
 end
 
@@ -65,7 +189,7 @@ end
 
 def run_test(working_dir)
   install_dependencies(working_dir)
-  shell_command! "yarn jest --coverage", cwd: "#{working_dir}/production"
+  shell_command! "npm run test:coverage", cwd: "#{working_dir}/production"
 end
 
 
@@ -73,7 +197,7 @@ def install_dependencies(working_dir)
   shell_command! "rm -rf node_modules", cwd: "#{working_dir}/production"
   shell_command! "rm -rf node_modules", cwd: "#{working_dir}/office-loader"
   update_package_json(working_dir)
-  shell_command! "yarn install --network-concurrency 1", cwd: "#{working_dir}/production"
+  shell_command! "npm install", cwd: "#{working_dir}/production"
   shell_command! "yarn install --network-concurrency 1", cwd: "#{working_dir}/office-loader"
 end
 
@@ -124,7 +248,7 @@ end
 
 def generate_eslint_report
   eslint_report_path = "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/.eslint/index.html"
-  shell_command "yarn eslint \"src/**\" -f html -o #{eslint_report_path}", cwd: $WORKSPACE_SETTINGS[:paths][:project][:production][:home]
+  shell_command "npm run eslint \"src/**\" -f html -o #{eslint_report_path}", cwd: $WORKSPACE_SETTINGS[:paths][:project][:production][:home]
 end
 
 
@@ -231,7 +355,8 @@ end
 def add_data_for_doc(compare_obj, xml_doc, metric_name)
   compare_obj["All files"][metric_name] = get_metics_node(xml_doc.coverage.project.metrics)
   compare_obj["All files"]["packages"]={} if compare_obj["All files"]["packages"].nil?
-  xml_doc.coverage.project.metrics.package.each do |package|
+  # the clover.xml format has changed, node 'project' is the child of node 'coverage'
+  xml_doc.coverage.project.package.each do |package|
     pack_name = package["name"]
     compare_obj["All files"]["packages"][pack_name] = {}  if compare_obj["All files"]["packages"][pack_name].nil?
     compare_obj["All files"]["packages"][pack_name][metric_name] = get_metics_node(package.metrics)
@@ -280,19 +405,24 @@ def get_metics_node(source)
 end
 #publish markdown report to pull request page
 
-def publish_to_pull_request_page
+def publish_to_pull_request_page(message=nil)
   unless ENV['USER'] == 'jenkins'
     #only available in jenkins envrionment
     puts "only available in jenkins env"
     return
   end
-  markdown_report_path = "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/.comparison_report/markdown.html"
-  unless File.exist? markdown_report_path
-    raise "#{markdown_report_path} does not exist, please generate before"
+  # if the argument 'message' is not given(message=nil), then publish the markdown report to pull request page.
+  if message
+    comments_message = message
+  else
+    markdown_report_path = "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/.comparison_report/markdown.html"
+    unless File.exist? markdown_report_path
+      raise "#{markdown_report_path} does not exist, please generate before"
+    end
+    markdown_message = File.read(markdown_report_path)
+    job_url = ENV['BUILD_URL']
+    comments_message = "job page:\n#{job_url}\nlinter report:\n#{job_url}eslint_report\ncode coverage report:\n#{job_url}Code_Coverage_Report\n#{markdown_message}\n"
   end
-  markdown_message = File.read(markdown_report_path)
-  job_url = ENV['BUILD_URL']
-  comments_message = "job page:\n#{job_url}\nlinter report:\n#{job_url}eslint_report\ncode coverage report:\n#{job_url}Code_Coverage_Report\n#{markdown_message}\n"
   pull_request = Github::PullRequests.new(ENV['GITHUB_USER'], ENV['GITHUB_PWD'])
   pull_request.comment_pull_request(ENV['PROJECT_NAME'],ENV['ORGANIZATION_NAME'],ENV["ghprbPullId"],comments_message)
 end

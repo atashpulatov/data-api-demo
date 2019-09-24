@@ -1,11 +1,11 @@
-import {authenticationHelper} from '../authentication/authentication-helper';
-import {officeProperties} from '../office/office-properties';
-import {popupHelper} from './popup-helper';
-import {officeApiHelper} from '../office/office-api-helper';
-import {officeStoreService} from '../office/store/office-store-service';
-import {popupController} from './popup-controller';
-import {errorService} from '../error/error-handler';
-import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';
+import { authenticationHelper } from '../authentication/authentication-helper';
+import { errorService } from '../error/error-handler';
+import { officeApiHelper } from '../office/office-api-helper';
+import { officeProperties } from '../office/office-properties';
+import { officeStoreService } from '../office/store/office-store-service';
+import { popupController } from './popup-controller';
+import { popupHelper } from './popup-helper';
+import { createInstance, answerPrompts, getInstance } from '../mstr-object/mstr-object-rest-service';
 
 export const CLEAR_WINDOW = 'POPUP_CLOSE_WINDOW';
 export const START_REPORT_LOADING = 'START_REPORT_LOADING';
@@ -18,16 +18,33 @@ export const SET_PREPARED_REPORT = 'SET_PREPARED_REPORT';
 export function callForEdit(reportParams) {
   return async (dispatch) => {
     try {
-      await Promise.all([officeApiHelper.getExcelSessionStatus(), authenticationHelper.validateAuthToken()]);
+      await Promise.all([
+        officeApiHelper.getExcelSessionStatus(),
+        authenticationHelper.validateAuthToken(),
+      ]);
       const editedReport = officeStoreService.getReportFromProperties(reportParams.bindId);
-
       if (editedReport.isPrompted) {
-        let instanceDefinition = await mstrObjectRestService.createInstance(editedReport.id, editedReport.projectId, true, null, null);
+        const config = { objectId: editedReport.id, projectId: editedReport.projectId };
+        let instanceDefinition = await createInstance(config);
         let count = 0;
         while (instanceDefinition.status === 2) {
-          await mstrObjectRestService.answerPrompts(editedReport.id, editedReport.projectId, instanceDefinition.instanceId, editedReport.promptsAnswers[count]);
-          instanceDefinition = await mstrObjectRestService.getInstance(editedReport.id, editedReport.projectId, true, null, editedReport.body, instanceDefinition.instanceId);
-          count++;
+          const { id, projectId, promptsAnswers } = editedReport;
+          const configPrompts = {
+            objectId: id,
+            projectId,
+            instanceDefinition:
+              instanceDefinition.instanceId,
+            promptsAnswers: promptsAnswers[count],
+          };
+          await answerPrompts(configPrompts);
+          const configInstance = {
+            objectId: editedReport.id,
+            projectId: editedReport.projectId,
+            body: editedReport.body,
+            instanceId: instanceDefinition.instanceId,
+          };
+          instanceDefinition = await getInstance(configInstance);
+          count += 1;
         }
         editedReport.instanceId = instanceDefinition.instanceId;
       }
@@ -41,12 +58,15 @@ export function callForEdit(reportParams) {
       return errorService.handleError(error);
     }
   };
-};
+}
 
 export function callForReprompt(reportParams) {
   return async (dispatch) => {
     try {
-      await Promise.all([officeApiHelper.getExcelSessionStatus(), authenticationHelper.validateAuthToken()]);
+      await Promise.all([
+        officeApiHelper.getExcelSessionStatus(),
+        authenticationHelper.validateAuthToken(),
+      ]);
       const editedReport = officeStoreService.getReportFromProperties(reportParams.bindId);
       editedReport.isPrompted = true;
       dispatch({
@@ -58,7 +78,7 @@ export function callForReprompt(reportParams) {
       return errorService.handleError(error);
     }
   };
-};
+}
 
 export function preparePromptedReport(instanceId, reportData) {
   return (dispatch) => dispatch({
@@ -71,7 +91,10 @@ export function preparePromptedReport(instanceId, reportData) {
 export function refreshReportsArray(reportArray, isRefreshAll) {
   return async (dispatch) => {
     try {
-      await Promise.all([officeApiHelper.getExcelSessionStatus(), authenticationHelper.validateAuthToken()]);
+      await Promise.all([
+        officeApiHelper.getExcelSessionStatus(),
+        authenticationHelper.validateAuthToken(),
+      ]);
     } catch (error) {
       return errorService.handleError(error);
     }
@@ -86,19 +109,26 @@ export function refreshReportsArray(reportArray, isRefreshAll) {
         dispatch({
           type: officeProperties.actions.startLoadingReport,
           reportBindId: report.bindId,
-          isRefreshAll: isRefreshAll,
+          isRefreshAll,
         });
-        isError = await popupHelper.printRefreshedReport(report.bindId, report.objectType, reportArray.length, index, isRefreshAll, report.promptsAnswers);
+        isError = await popupHelper.printRefreshedReport(report.bindId,
+          report.objectType,
+          reportArray.length,
+          index,
+          isRefreshAll,
+          report.promptsAnswers);
       } catch (error) {
-        popupHelper.handleRefreshError(error, reportArray.length, index, isRefreshAll);
-        // We want to return isErrorOnRefresh:true when refreshing after editing a single table so we don't store the new body
-        if (!isRefreshAll) return {isErrorOnRefresh: true};
+        popupHelper.handleRefreshError(error,
+          reportArray.length,
+          index,
+          isRefreshAll);
+        return true;
       } finally {
         dispatch({
           type: officeProperties.actions.finishLoadingReport,
           reportBindId: report.bindId,
           isRefreshAll: false,
-          isError: isError,
+          isError,
         });
       }
     }

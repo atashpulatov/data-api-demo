@@ -165,5 +165,15 @@
   "Click MicroStrategy for Office on Home tab to start plugin. Log in to Environment to start browsing documents.": "在“开始”选项卡中单击“MicroStrategy for Office ”，启动插件。登录环境，开始浏览文档。",
   "Click to Show a Taskpane": "单击以显示任务窗格",
   "New plugin to insert data from Microstrategy into Microsoft Office products.": "将数据从 MicroStrategy 插入到 Microsoft Office 产品的新插件。",
-  "MicroStrategy for Office": "MicroStrategy for Office"
+  "MicroStrategy for Office": "MicroStrategy for Office",
+  "This report does not exist in the workbook anymore": "此报表不再存在于工作簿中",
+  "{{name}} has been removed from the workbook.": "{{name}} 已从工作簿移除。",
+  "This is a crosstab report. The layout of the table might change depending on the attributes you’ve selected.": "这是一个交叉表报表。表的布局可能会根据您所选择的实体而改变。",
+  "{{fileName}} has been removed from the workbook.": "{{fileName}} 已从工作簿移除。",
+  "Parameter out of range": "参数超出范围",
+  "This is a crosstab report. The layout of the table might change depending on the attributes you’ve selected. See Data Preview.": "这是一个交叉表报表。表的布局可能会根据您所选择的实体而改变。查看数据预览。",
+  "Element cannot be loaded": "无法载入元素",
+  "Clearing data": "正在清除数据",
+  "{{reportNames}} could not be cleared.": "{{reportNames}} 无法清除。",
+  "Invalid attempt to spread non-iterable instance": "尝试传播不可迭代实例失败。"
 }

@@ -20,6 +20,7 @@ class OfficeConverterServiceV2 {
       attributesNames: this.getAttributesName(response.definition),
     };
   }
+
   /**
    * Checks if response contains crosstabs
    *
@@ -35,6 +36,7 @@ class OfficeConverterServiceV2 {
       return false;
     }
   }
+
   /**
    * Get attribute names for crosstab report
    *
@@ -43,13 +45,9 @@ class OfficeConverterServiceV2 {
    * @memberof OfficeConverterServiceV2
    */
   getAttributesName = (definition) => {
-    const columnsAttributes = definition.grid.columns.map((e) => {
-      return `'${e.name}`;
-    });
-    const rowsAttributes = definition.grid.rows.map((e) => {
-      return `'${e.name}`;
-    });
-    return {rowsAttributes, columnsAttributes};
+    const columnsAttributes = definition.grid.columns.map((e) => `'${e.name}`);
+    const rowsAttributes = definition.grid.rows.map((e) => `'${e.name}`);
+    return { rowsAttributes, columnsAttributes };
   }
 
   /**
@@ -61,17 +59,15 @@ class OfficeConverterServiceV2 {
    */
   getRows(response) {
     const rowTotals = [];
-    const onAttribute = (array) => {
-      return (e) => {
-        if (array) array.push(e.subtotalAddress);
-        return `'${e.value.join(' ')}`;
-      };
+    const onAttribute = (array) => (e) => {
+      if (array) array.push(e.subtotalAddress);
+      return `'${e.value.join(' ')}`;
     };
     if (this.isCrosstab(response)) {
-      return {row: jsonHandler.renderRows(response.data)};
+      return { row: jsonHandler.renderRows(response.data) };
     }
     const row = jsonHandler.renderTabular(response.definition, response.data, onAttribute(rowTotals));
-    return {row, rowTotals};
+    return { row, rowTotals };
   }
 
   /**
@@ -85,22 +81,20 @@ class OfficeConverterServiceV2 {
     const rowTotals = [];
     const columnTotals = [];
 
-    const onElement = (array) => {
-      return (e) => {
-        if (array) array.push(e.subtotalAddress);
-        return `'${e.value.join(' ')}`;
-      };
+    const onElement = (array) => (e) => {
+      if (array) array.push(e.subtotalAddress);
+      return `'${e.value.join(' ')}`;
     };
 
     if (this.isCrosstab(response)) {
       const rows = jsonHandler.renderHeaders(response.definition, 'rows', response.data.headers, onElement(rowTotals));
       const columns = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement(columnTotals));
       const subtotalAddress = [...rowTotals, ...columnTotals];
-      return {rows, columns, subtotalAddress};
+      return { rows, columns, subtotalAddress };
     }
     const attributeTitles = jsonHandler.renderTitles(response.definition, 'rows', response.data.headers, onElement());
     const metricHeaders = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement());
-    return {columns: [[...attributeTitles[0], ...metricHeaders[0]]]};
+    return { columns: [[...attributeTitles[0], ...metricHeaders[0]]] };
   }
 
   /**
@@ -127,10 +121,15 @@ class OfficeConverterServiceV2 {
    * @memberof OfficeConverterServiceV2
    */
   getColumnInformation(response) {
+    let columns;
     const onElement = (element) => element;
     const metricColumns = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement);
     const attributeColumns = jsonHandler.renderTitles(response.definition, 'rows', response.data.headers, onElement);
-    const columns = [...attributeColumns[attributeColumns.length - 1], ...metricColumns[metricColumns.length - 1]];
+    if (!attributeColumns.length) {
+      columns = metricColumns[metricColumns.length - 1];
+    } else {
+      columns = [...attributeColumns[attributeColumns.length - 1], ...metricColumns[metricColumns.length - 1]];
+    } // we return only columns attributes if there is no attributes in rows
     return columns.map((element, index) => {
       const type = element.type ? element.type.toLowerCase() : null;
       switch (type) {

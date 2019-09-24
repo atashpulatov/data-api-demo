@@ -1,17 +1,17 @@
-import React, {useEffect} from 'react';
-import {connect} from 'react-redux';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 import warningIcon from '../loading/assets/icon_conflict.svg';
-import {officeApiHelper} from '../office/office-api-helper';
-import {toggleSecuredFlag, toggleIsConfirmFlag, toggleIsClearingFlag} from '../office/office-actions';
-import {withTranslation} from 'react-i18next';
-import {errorService} from '../error/error-handler';
-import {notificationService} from '../notification/notification-service';
+import { officeApiHelper } from '../office/office-api-helper';
+import { toggleSecuredFlag, toggleIsConfirmFlag, toggleIsClearingFlag } from '../office/office-actions';
+import { errorService } from '../error/error-handler';
+import { notificationService } from '../notification/notification-service';
 
-export const _Confirmation = ({reportArray, toggleSecuredFlag, toggleIsConfirmFlag, toggleIsClearingFlag, t}) => {
+export const _Confirmation = ({ reportArray, toggleSecuredFlag, toggleIsConfirmFlag, toggleIsClearingFlag, t }) => {
   useEffect(() => {
     const ua = window.navigator.userAgent;
     // this is fix IE11 - it didn't handle z-index properties correctly
-    if (ua.indexOf('MSIE') > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+    if (ua.indexOf('MSIE') > 0 || !!navigator.userAgent.match(/Trident.*rv:11\./)) {
       const elm = document.querySelector('.confirm-container');
       elm.style.zIndex = -1;
       setTimeout(() => {
@@ -23,13 +23,15 @@ export const _Confirmation = ({reportArray, toggleSecuredFlag, toggleIsConfirmFl
     let reportName = '';
     const clearErrors = [];
     try {
+      toggleIsClearingFlag(true);
+      toggleIsConfirmFlag(false);
       const excelContext = await officeApiHelper.getExcelContext();
       toggleIsClearingFlag(true);
       toggleIsConfirmFlag(false);
       for (const report of reportArray) {
         try {
           reportName = report.name;
-          if (!!report.isCrosstab) {
+          if (report.isCrosstab) {
             const officeTable = await officeApiHelper.getTable(excelContext, report.bindId);
             officeTable.showHeaders = true;
             officeTable.showFilterButton = false;
@@ -39,51 +41,53 @@ export const _Confirmation = ({reportArray, toggleSecuredFlag, toggleIsConfirmFl
           }
           await officeApiHelper.deleteObjectTableBody(excelContext, report);
         } catch (error) {
-          const officeError = errorService.errorOfficeFactory(error);
-          const errorMessage = errorService.getErrorMessage(officeError);
-          clearErrors.push({reportName, errorMessage});
+          const officeError = errorService.handleError(error);
+          clearErrors.push({ reportName, officeError });
         }
-      };
-      toggleIsClearingFlag(false);
+      }
+      toggleIsConfirmFlag(false);
       if (clearErrors.length > 0) {
         displayClearDataError(clearErrors);
       } else {
         toggleSecuredFlag(true);
       }
     } catch (error) {
-      errorService.handleOfficeError(error);
+      errorService.handleError(error);
+    } finally {
+      toggleIsClearingFlag(false);
+      toggleIsConfirmFlag(true);
     }
   };
 
   function displayClearDataError(clearErrors) {
     const reportNames = clearErrors.map((report) => report.reportName).join(', ');
     const errorMessage = clearErrors.map((report) => report.errorMessage).join(', ');
-    notificationService.displayTranslatedNotification('warning', t('{{reportNames}} could not be cleared.', {reportNames}), errorMessage);
+    notificationService.displayTranslatedNotification('warning', t('{{reportNames}} could not be cleared.', { reportNames }), errorMessage);
   }
 
   return (
-    <React.Fragment>
-      <div className='block-ui' onClick={() => toggleIsConfirmFlag(false)} />
-      <div className='confirm-container'>
-        <div className='confirm-header'>
-          <span className="confirm-header-icon"><img width='19px' height='18px' src={warningIcon} alt={t('Refresh failed icon')} /></span>
+    <>
+      <div className="block-ui" onClick={() => toggleIsConfirmFlag(false)} />
+      <div className="confirm-container">
+        <div className="confirm-header">
+          <span className="confirm-header-icon"><img width="19px" height="18px" src={warningIcon} alt={t('Refresh failed icon')} /></span>
         </div>
-        <div className='confirm-message'>
-          <div className='confirm-message-title'>
-            <div dangerouslySetInnerHTML={{__html: t('Are you sure you want to <span>Clear Data</span>?')}}></div>
+        <div className="confirm-message">
+          <div className="confirm-message-title">
+            <div dangerouslySetInnerHTML={{ __html: t('Are you sure you want to <span>Clear Data</span>?') }} />
           </div>
-          <div className='confirm-message-text'>
+          <div className="confirm-message-text">
             {t('This removes all MicroStrategy data from the workbook.')}
             <br />
-            <div dangerouslySetInnerHTML={{__html: t('In order to re-import the data, you will have to click the <span>View Data</span> button, which will appear in the add-in panel.')}}></div>
+            <div dangerouslySetInnerHTML={{ __html: t('In order to re-import the data, you will have to click the <span>View Data</span> button, which will appear in the add-in panel.') }} />
           </div>
         </div>
-        <div className='confirm-buttons'>
-          <button className='ant-btn' id='confirm-btn' onClick={secureData}>{t('OK')}</button>
-          <button className='ant-btn' id='cancel-btn' onClick={() => toggleIsConfirmFlag(false)}>{t('Cancel')}</button>
+        <div className="confirm-buttons">
+          <button className="ant-btn" id="confirm-btn" onClick={secureData}>{t('OK')}</button>
+          <button className="ant-btn" id="cancel-btn" onClick={() => toggleIsConfirmFlag(false)}>{t('Cancel')}</button>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 
@@ -91,9 +95,9 @@ _Confirmation.defaultProps = {
   t: (text) => text,
 };
 
-function mapStateToProps({officeReducer}) {
-  return {reportArray: officeReducer.reportArray};
-};
+function mapStateToProps({ officeReducer }) {
+  return { reportArray: officeReducer.reportArray };
+}
 
 const mapDispatchToProps = {
   toggleSecuredFlag,
