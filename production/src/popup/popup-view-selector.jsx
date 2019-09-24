@@ -89,12 +89,6 @@ function arePromptsAnswered(props) {
   return !!props.dossierData && !!props.dossierData.instanceId;
 }
 
-function clearAttributesAndMetrics(localEditReport) {
-  delete localEditReport.selectedAttributes;
-  delete localEditReport.selectedMetrics;
-  delete localEditReport.selectedFilters;
-}
-
 async function obtainInstanceWithPromptsAnswers(propsToPass, props) {
   const projectId = propsToPass.projectId || props.editedReport.projectId;
   const objectId = propsToPass.reportId || props.editedReport.reportId;

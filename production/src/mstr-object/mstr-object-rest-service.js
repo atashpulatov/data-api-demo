@@ -5,7 +5,6 @@ import { OutsideOfRangeError } from '../error/outside-of-range-error';
 import { reduxStore } from '../store';
 import objectTypeEnum from './mstr-object-type-enum';
 import officeConverterServiceV2 from '../office/office-converter-service-v2';
-import {NOT_SUPPORTED_NO_ATTRIBUTES} from '../error/constants';
 
 const reportObjectType = objectTypeEnum.mstrObjectType.report;
 

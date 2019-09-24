@@ -21,7 +21,7 @@ describe('FileHistoryContainer', () => {
         project="testProject"
         reportArray={mockReportArray}
       />
-    </Provider>);
+                                   </Provider>);
     // then
     expect(wrappedComponent.html()).not.toBeNull();
   });
@@ -34,7 +34,7 @@ describe('FileHistoryContainer', () => {
         reportArray={mockFiles}
         project="testProject"
       />
-    </Provider>);
+                                   </Provider>);
     const wrappedListElements = wrappedComponent.find('div.file-history-container');
     // then
     expect(wrappedComponent.html()).not.toContain('No files loaded.');
@@ -51,7 +51,7 @@ describe('FileHistoryContainer', () => {
         refreshingAll={refreshingAll}
         reportArray={mockReportArray}
       />
-    </Provider>);
+                                   </Provider>);
     // then
     expect(wrappedComponent.exists('Button .refresh-all-btn MSTRIcon')).toBeTruthy();
   });
@@ -66,7 +66,7 @@ describe('FileHistoryContainer', () => {
         refreshingAll={refreshingAll}
         reportArray={mockReportArray}
       />
-    </Provider>);
+                                   </Provider>);
     // then
     expect(wrappedComponent.exists('Button .refresh-all-btn img')).toBeTruthy();
   });
@@ -80,7 +80,7 @@ describe('FileHistoryContainer', () => {
         reportArray={mockReportArray}
         refreshReportsArray={refreshAllmock}
       />
-    </Provider>);
+                                   </Provider>);
     const refreshButton = wrappedComponent.find('Button .refresh-all-btn');
     // when
     refreshButton.simulate('click');
@@ -120,7 +120,7 @@ describe('FileHistoryContainer', () => {
         reportArray={mockReportArray}
         refreshAll={refreshAllmock}
       />
-    </Provider>);
+                                   </Provider>);
     const wrappedButton = wrappedComponent.find('#add-data-btn-container').at(0);
 
     // when
@@ -153,8 +153,7 @@ describe('FileHistoryContainer', () => {
     expect(tmp).toBeTruthy();
 
     expect(tmp._ismounted).toBeFalsy();
-    // TODO: DE145722; Removed from 11.1.3 due to problems while editing -> importing
-    // expect(mockRemoveListener).toBeCalled();
+    expect(mockRemoveListener).toBeCalled();
   });
 
   it('should contain popover', () => {
@@ -168,7 +167,7 @@ describe('FileHistoryContainer', () => {
         refreshingAll={refreshingAll}
         reportArray={mockReportArray}
       />
-    </Provider>);
+                                   </Provider>);
     // then
     expect(wrappedComponent.find(Popover)).toHaveLength(1);
   });

@@ -31,14 +31,12 @@ export class _FileHistoryContainer extends React.Component {
 
   componentDidMount() {
     this._ismounted = true;
-    // TODO: DE145722; Removed from 11.1.3 due to problems while editing -> importing
-    // this.addRemoveReportListener();
+    this.addRemoveReportListener();
   }
 
   componentWillUnmount() {
     this._ismounted = false;
-    // TODO: DE145722; Removed from 11.1.3 due to problems while editing -> importing
-    // this.deleteRemoveReportListener();
+    this.deleteRemoveReportListener();
   }
 
   addRemoveReportListener = async () => {
@@ -150,8 +148,8 @@ export class _FileHistoryContainer extends React.Component {
               {!refreshingAll ? (
                 <MSTRIcon type="refresh" />
               ) : (
-                  <img width="12px" height="12px" src={loadingSpinner} alt={t('Report loading icon')} />
-                )}
+                <img width="12px" height="12px" src={loadingSpinner} alt={t('Report loading icon')} />
+              )}
             </Button>
           </ButtonPopover>
         </span>

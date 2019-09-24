@@ -293,7 +293,7 @@ class OfficeDisplayService {
       tableStartCell = officeApiHelper.offsetCellBy(tableStartCell, columnsY - prevColumnsY, rowsX - prevRowsX);
     }
     const tableRange = officeApiHelper.getRange(columns, tableStartCell, rows);
-    if (prevCrosstabDimensions && isCrosstab) {
+    if (isCrosstab) {
       range = officeApiHelper.getCrosstabRange(tableStartCell, crosstabHeaderDimensions, sheet);
     } else {
       range = sheet.getRange(tableRange);
@@ -321,12 +321,7 @@ class OfficeDisplayService {
       }
 
       context.runtime.enableEvents = false;
-      try {
-        // Clear crosstab range will throw an error if the required range is not empty
-        if (prevCrosstabDimensions) await officeApiHelper.clearCrosstabRange(prevOfficeTable, prevCrosstabDimensions, context, 'All');
-      } catch (error) {
-        throw new OverlappingTablesError(TABLE_OVERLAP);
-      }
+      await context.sync();
       prevOfficeTable.delete();
       context.runtime.enableEvents = true;
       await context.sync();
@@ -337,7 +332,6 @@ class OfficeDisplayService {
       officeApiHelper.createColumnsHeaders(tableStartCell, mstrTable.headers.columns, sheet, range);
       officeApiHelper.createRowsTitleHeaders(tableStartCell, mstrTable.attributesNames, sheet, crosstabHeaderDimensions);
     }
-    context.trackedObjects.remove(range);
     const officeTable = sheet.tables.add(tableRange, true);
     this._styleHeaders(officeTable, TABLE_HEADER_FONT_COLOR, TABLE_HEADER_FILL_COLOR);
     try {
@@ -757,9 +751,6 @@ class OfficeDisplayService {
         const configInstance = { objectId, projectId, dossierData, body, instanceId: instanceDefinition.instanceId };
         instanceDefinition = await modifyInstance(configInstance);
         count += 1;
-      }
-      if (body) { // Only modify the instance if there's actual data to do it
-        instanceDefinition = await mstrObjectRestService.modifyInstance(objectId, projectId, isReport, dossierData, body, instanceDefinition.instanceId);
       }
       return instanceDefinition;
     } catch (error) {

@@ -320,10 +320,9 @@ class OfficeApiHelper {
    * @param {Office} officeTable Starting table body cell
    * @param {Object} headerDimensions Contains information about crosstab headers dimensions
    * @param {Office} context Excel context
-   * @param {String} clearType clear(applyToString?: "All" | "Formats" | "Contents" | "Hyperlinks" | "RemoveHyperlinks"): void;
    * @memberof OfficeApiHelper
    */
-  clearCrosstabRange = async (officeTable, headerDimensions, context, clearType = 'contents') => {
+  clearCrosstabRange = async (officeTable, headerDimensions, context) => {
     try {
       // Row headers
       const leftRange = officeTable.getRange().getColumnsBefore(headerDimensions.rowsX);
@@ -337,9 +336,9 @@ class OfficeApiHelper {
       // Check if ranges are valid before clearing
       await context.sync();
 
-      leftRange.clear(clearType);
-      topRange.clear(clearType);
-      titlesRange.clear(clearType);
+      leftRange.clear('contents');
+      topRange.clear('contents');
+      titlesRange.clear('contents');
       context.trackedObjects.remove([leftRange, topRange, titlesRange]);
     } catch (error) {
       officeTable.showHeaders = false;

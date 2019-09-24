@@ -132,7 +132,6 @@ export function refreshReportsArray(reportArray, isRefreshAll) {
         });
       }
     }
-    if (!isRefreshAll) return {isErrorOnRefresh: false};
   };
 }
 
