@@ -10,6 +10,8 @@ import {
   getObjectContentGenerator,
   answerPrompts,
   modifyInstance,
+  createDossierInstance,
+  fetchVisualizationDefinition,
 } from '../mstr-object/mstr-object-rest-service';
 import { reduxStore } from '../store';
 import { officeProperties } from './office-properties';
@@ -44,17 +46,20 @@ class OfficeDisplayService {
       // /Reports/getDefinition (GET /reports/{reportId}) endpoint does not work for Reports with Object Prompt(?)
       // so we're using /Object_Management/getObject (GET /objects/{id}) instead
       // should probably open an DE
-      const objectInfo = isPrompted
-        ? await getObjectInfo(objectId,
-          projectId,
-          mstrObjectType)
-        : await getObjectDefinition(objectId,
-          projectId,
-          mstrObjectType);
-      reduxStore.dispatch({
-        type: officeProperties.actions.preLoadReport,
-        preLoadReport: objectInfo,
-      });
+      if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization) {
+        const objectInfo = isPrompted
+          ? await getObjectInfo(objectId,
+            projectId,
+            mstrObjectType)
+          : await getObjectDefinition(objectId,
+            projectId,
+            mstrObjectType);
+        reduxStore.dispatch({
+          type: officeProperties.actions.preLoadReport,
+          preLoadReport: objectInfo,
+        });
+      }
+
       await popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
     }
     try {
@@ -79,6 +84,7 @@ class OfficeDisplayService {
     crosstabHeaderDimensions = false,
     importSubtotal = true,
     subtotalsAddresses = false,
+    visualizationInfo,
   }) => {
     let officeTable;
     let newOfficeTableId;
@@ -86,6 +92,7 @@ class OfficeDisplayService {
     let excelContext;
     let startCell;
     let tableColumnsChanged;
+    let instanceDefinition;
     try {
       const objectType = mstrObjectType;
       const { envUrl } = officeApiHelper.getCurrentMstrContext();
@@ -104,9 +111,18 @@ class OfficeDisplayService {
       if (body) {
         body.template = body.requestedObjects;
       }
-      const config = { objectId, projectId, mstrObjectType, dossierData, body };
-      let instanceDefinition = await createInstance(config);
-
+      if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
+        const instanceId = (await createDossierInstance(projectId, objectId, body)).body.mid;
+        const config = {
+          projectId, objectId, instanceId, mstrObjectType, dossierData, body, visualizationInfo,
+        };
+        const temp = await fetchVisualizationDefinition(config);
+        instanceDefinition = { ...temp, instanceId };
+      } else {
+        const config = { objectId, projectId, mstrObjectType, dossierData, body };
+        instanceDefinition = await createInstance(config);
+      }
+      console.log(instanceDefinition);
       // Status 2 = report has open prompts to be answered before data can be returned
       if (instanceDefinition.status === 2) {
         instanceDefinition = await this._answerPrompts(
@@ -162,6 +178,7 @@ class OfficeDisplayService {
         isRefresh,
         startCell,
         tableColumnsChanged,
+        visualizationInfo,
       }));
       if (importSubtotal && subtotalsAddresses.length) {
         // Removing duplicated subtotal addresses from headers
@@ -184,6 +201,7 @@ class OfficeDisplayService {
         promptsAnswers,
         importSubtotal,
         subtotalsAddresses,
+        visualizationInfo,
       });
 
       console.timeEnd('Total');
@@ -477,6 +495,7 @@ class OfficeDisplayService {
     promptsAnswers,
     importSubtotal,
     subtotalsAddresses,
+    visualizationInfo,
   }) => {
     const report = {
       id: mstrTable.id,
@@ -493,6 +512,7 @@ class OfficeDisplayService {
       subtotalsAddresses,
       promptsAnswers,
       crosstabHeaderDimensions: mstrTable.crosstabHeaderDimensions,
+      visualizationInfo,
     };
     officeStoreService.saveAndPreserveReportInStore(report, isRefresh);
   }
@@ -573,14 +593,16 @@ class OfficeDisplayService {
     console.timeEnd('Subtotal Formatting');
   }
 
-  async _fetchInsertDataIntoExcel({ connectionData, officeData, instanceDefinition, isRefresh, tableColumnsChanged }) {
+  async _fetchInsertDataIntoExcel({ connectionData, officeData, instanceDefinition, isRefresh, tableColumnsChanged, visualizationInfo }) {
     try {
       const { objectId, projectId, dossierData, mstrObjectType } = connectionData;
       const { excelContext, officeTable } = officeData;
       const { columns, rows, mstrTable } = instanceDefinition;
       const limit = Math.min(Math.floor(DATA_LIMIT / columns),
         IMPORT_ROW_LIMIT);
-      const configGenerator = { instanceDefinition, objectId, projectId, mstrObjectType, dossierData, limit };
+      const configGenerator = {
+        instanceDefinition, objectId, projectId, mstrObjectType, dossierData, limit, visualizationInfo,
+      };
       const rowGenerator = getObjectContentGenerator(configGenerator);
       let rowIndex = 0;
       let contextPromises = [];

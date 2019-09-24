@@ -16,6 +16,7 @@ import { ButtonPopover } from './button-popover';
 import { ReactComponent as DossierIcon } from './assets/icon_Dossier.svg';
 import { ReactComponent as ClockIcon } from './assets/icon_clock.svg';
 import { officeStoreService } from '../office/store/office-store-service';
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum.js';
 
 export class _OfficeLoadedFile extends React.Component {
   constructor(props) {
@@ -184,11 +185,11 @@ export class _OfficeLoadedFile extends React.Component {
 
   getMstrIcon = (objectType) => {
     switch (objectType.name) {
-      case 'report':
+      case mstrObjectEnum.mstrObjectType.report.name:
         return <MSTRIcon type="report" />;
-      case 'dataset':
+      case mstrObjectEnum.mstrObjectType.dataset.name:
         return <MSTRIcon type="dataset" />;
-      case 'dossier':
+      case mstrObjectEnum.mstrObjectType.visualization.name:
         return <DossierIcon />;
       default:
         break;

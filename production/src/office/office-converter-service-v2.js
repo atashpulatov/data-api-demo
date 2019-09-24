@@ -13,9 +13,9 @@ class OfficeConverterServiceV2 {
       tableSize: this.getTableSize(response, columnInformation, isCrosstab),
       columnInformation,
       headers: this.getHeaders(response),
-      id: response.id,
+      id: response.k || response.id,
       isCrosstab,
-      name: response.name,
+      name: response.n || response.name,
       rows: this.getRows(response, isCrosstab),
       attributesNames: this.getAttributesName(response.definition),
     };
