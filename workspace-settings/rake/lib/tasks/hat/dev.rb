@@ -290,7 +290,7 @@ end
 
 def get_unit_test_metrics(working_dir)
   unit_test_result_path = "#{working_dir}/production/coverage/test-results.json"
-  unit_result_json = JSON.parse((File.read(unit_test_result_path)).to_json)
+  unit_result_json = JSON.parse((File.read(unit_test_result_path)))
 
   total_tests = unit_result_json['numTotalTests'].to_i
   total_passed = unit_result_json['numPassedTests'].to_i
