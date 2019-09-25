@@ -12,6 +12,7 @@ import {
   modifyInstance,
   createDossierInstance,
   fetchVisualizationDefinition,
+  getDossierDefinition,
 } from '../mstr-object/mstr-object-rest-service';
 import { reduxStore } from '../store';
 import { officeProperties } from './office-properties';
@@ -84,7 +85,7 @@ class OfficeDisplayService {
     crosstabHeaderDimensions = false,
     importSubtotal = true,
     subtotalsAddresses = false,
-    visualizationInfo,
+    visualizationInfo = false,
   }) => {
     let officeTable;
     let newOfficeTableId;
@@ -93,6 +94,7 @@ class OfficeDisplayService {
     let startCell;
     let tableColumnsChanged;
     let instanceDefinition;
+    let dossierStructure;
     try {
       const objectType = mstrObjectType;
       const { envUrl } = officeApiHelper.getCurrentMstrContext();
@@ -183,6 +185,12 @@ class OfficeDisplayService {
       if (importSubtotal && subtotalsAddresses.length) {
         // Removing duplicated subtotal addresses from headers
         await this.applySubtotalFormatting(isCrosstab, subtotalsAddresses, officeTable, excelContext, mstrTable);
+      }
+
+      // get visualisation path
+      if (objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
+        dossierStructure = await this.getDossierStructure(projectId, objectId, visualizationInfo, mstrTable.name);
+        visualizationInfo.dossierStructure = dossierStructure;
       }
 
       // Save to store
@@ -763,6 +771,27 @@ class OfficeDisplayService {
       throw new OverlappingTablesError(TABLE_OVERLAP);
     }
   };
+
+  getDossierStructure = async (projectId, objectId, visualizationInfo, dossierName) => {
+    const { visualizationKey, chapterKey } = visualizationInfo;
+    const dossierStructure = { dossierName };
+    const dossierDefinition = await getDossierDefinition(projectId, objectId);
+
+    const chapter = dossierDefinition.chapters.find((el) => el.key === chapterKey);
+    dossierStructure.chapterName = chapter.name;
+    const { pages } = chapter;
+    if (pages.length === 1) {
+      dossierStructure.pageName = chapter.pages[0].name;
+    } else {
+      for (let i = 0; i < pages.length; i++) {
+        for (let j = 0; j < pages[i].visualizations.length; j++) {
+          if (pages[i].visualizations[j].key === visualizationKey) dossierStructure.pageName = pages[i].name;
+        }
+      }
+    }
+    return dossierStructure;
+  }
+
 
   _answerPrompts = async (instanceDefinition, objectId, projectId, promptsAnswers, dossierData, body) => {
     try {

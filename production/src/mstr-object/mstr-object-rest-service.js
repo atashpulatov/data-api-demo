@@ -130,6 +130,20 @@ export function createDossierInstance(projectId, objectId, body) {
     .then((res) => res);
 }
 
+export function getDossierDefinition(projectId, objectId) {
+  const storeState = reduxStore.getState();
+  const { envUrl } = storeState.sessionReducer;
+  const { authToken } = storeState.sessionReducer;
+  const fullPath = `${envUrl}/dossiers/${objectId}/definition`;
+  return request
+    .get(fullPath)
+    .set('x-mstr-authtoken', authToken)
+    .set('x-mstr-projectid', projectId)
+    .withCredentials()
+    .then((res) => res.body);
+}
+
+
 export function deleteDossierInstance(projectId, objectId, instanceId) {
   const storeState = reduxStore.getState();
   const { envUrl } = storeState.sessionReducer;
@@ -382,4 +396,5 @@ export default {
   modifyInstance,
   rePromptDossier,
   fetchVisualizationDefinition,
+  getDossierDefinition,
 };
