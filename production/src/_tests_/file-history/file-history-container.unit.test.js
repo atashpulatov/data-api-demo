@@ -15,13 +15,17 @@ describe('FileHistoryContainer', () => {
   it('should render component when we are insinde project', () => {
     // given
     const mockReportArray = createMockFilesArray();
+    const visualizationInfoMock = {
+      dossierStructure: 'test',
+    };
     // when
     const wrappedComponent = mount(<Provider store={reduxStore}>
       <_FileHistoryContainer
         project="testProject"
         reportArray={mockReportArray}
+        visualizationInfo={visualizationInfoMock}
       />
-    </Provider>);
+                                   </Provider>);
     // then
     expect(wrappedComponent.html()).not.toBeNull();
   });
@@ -34,7 +38,7 @@ describe('FileHistoryContainer', () => {
         reportArray={mockFiles}
         project="testProject"
       />
-    </Provider>);
+                                   </Provider>);
     const wrappedListElements = wrappedComponent.find('div.file-history-container');
     // then
     expect(wrappedComponent.html()).not.toContain('No files loaded.');
@@ -51,7 +55,7 @@ describe('FileHistoryContainer', () => {
         refreshingAll={refreshingAll}
         reportArray={mockReportArray}
       />
-    </Provider>);
+                                   </Provider>);
     // then
     expect(wrappedComponent.exists('Button .refresh-all-btn MSTRIcon')).toBeTruthy();
   });
@@ -66,7 +70,7 @@ describe('FileHistoryContainer', () => {
         refreshingAll={refreshingAll}
         reportArray={mockReportArray}
       />
-    </Provider>);
+                                   </Provider>);
     // then
     expect(wrappedComponent.exists('Button .refresh-all-btn img')).toBeTruthy();
   });
@@ -80,7 +84,7 @@ describe('FileHistoryContainer', () => {
         reportArray={mockReportArray}
         refreshReportsArray={refreshAllmock}
       />
-    </Provider>);
+                                   </Provider>);
     const refreshButton = wrappedComponent.find('Button .refresh-all-btn');
     // when
     refreshButton.simulate('click');
@@ -120,7 +124,7 @@ describe('FileHistoryContainer', () => {
         reportArray={mockReportArray}
         refreshAll={refreshAllmock}
       />
-    </Provider>);
+                                   </Provider>);
     const wrappedButton = wrappedComponent.find('#add-data-btn-container').at(0);
 
     // when
@@ -167,7 +171,7 @@ describe('FileHistoryContainer', () => {
         refreshingAll={refreshingAll}
         reportArray={mockReportArray}
       />
-    </Provider>);
+                                   </Provider>);
     // then
     expect(wrappedComponent.find(Popover)).toHaveLength(1);
   });
@@ -289,6 +293,7 @@ const createMockFilesArray = () => {
       name: `mockName_${i}`,
       bindId: `mockBindId_${i}`,
       objectType: { name: 'report' },
+      visualizationInfo: {},
     });
   }
   return mockArray;

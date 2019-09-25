@@ -29,12 +29,16 @@ describe('File history rename input', () => {
     const onClickMocked = jest.fn();
     const testBindingId = 'testBindingId';
     const testName = 'testName';
+    const visualizationInfoMock = {
+      dossierStructure: 'test',
+    };
     const wrap = mount(<_OfficeLoadedFile
       refreshDate={new Date()}
       bindingId={testBindingId}
       onClick={onClickMocked}
       fileName={testName}
       objectType={{ name: 'report' }}
+      visualizationInfo={visualizationInfoMock}
     />);
     // when
     const enableEdit = jest.spyOn(wrap.instance(), 'enableEdit');
