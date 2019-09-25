@@ -4,7 +4,7 @@ import { authenticationService } from '../authentication/auth-rest-service';
 import { userRestService } from '../home/user-rest-service';
 import { errorService } from '../error/error-handler';
 import { homeHelper } from '../home/home-helper';
-import { createCache } from '../cache/cache-actions';
+import { createCache, fetchObjects } from '../cache/cache-actions';
 
 class SessionHelper {
   enableLoading = () => {
@@ -65,7 +65,7 @@ class SessionHelper {
       type: sessionProperties.actions.loggedIn,
       authToken,
     });
-    createCache()(reduxStore.dispatch, reduxStore.getState);
+    fetchObjects()(reduxStore.dispatch, reduxStore.getState);
   }
 
   getSession = () => {

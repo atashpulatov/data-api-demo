@@ -157,7 +157,7 @@ export function fetchProjects(callback = (res) => res) {
  * Returns all objects available in my Library with filtered out non-Dossier objects.
  *
  */
-export function getMyLibraryObjectList(callback) {
+export function getMyLibraryObjectList(callback = (res) => res) {
   const cbFilter = (res) => callback(res.filter((object) => filterDossiersByViewMedia(object.target.viewMedia)));
   return fetchMyLibraryObjectList(cbFilter);
 }
