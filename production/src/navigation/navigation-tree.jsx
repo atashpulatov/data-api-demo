@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { FolderBrowser, objectTypes } from '@mstr/mstr-react-library';
+import { objectTypes } from '@mstr/mstr-react-library';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
+import { ObjectTable } from '@mstr/rc/dist';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { PopupButtons } from '../popup/popup-buttons';
 import { actions } from './navigation-tree-actions';
@@ -91,47 +92,9 @@ export class _NavigationTree extends Component {
     } = this.props;
     const { triggerUpdate, previewDisplay } = this.state;
     return (
-      <FolderBrowser
-        onSorterChange={changeSorting}
-        onSearchChange={changeSearching}
-        searchText={searchText}
-        sorter={sorter}
-        title="Import data"
-        session={{ url: mstrData.envUrl, authToken: mstrData.token }}
-        triggerUpdate={triggerUpdate}
-        onTriggerUpdate={this.onTriggerUpdate}
-        onObjectChosen={this.onObjectChosen}
-        setDataSource={setDataSource}
-        dataSource={dataSource}
-        chosenItem={{
-          objectId: chosenObjectId,
-          projectId: chosenProjectId,
-          subtype: chosenSubtype,
-        }}
-        scrollPosition={scrollPosition}
-        pageSize={pageSize}
-        chosenFolder={folder}
-        onChoseFolder={selectFolder}
-        handlePopupErrors={handlePopupErrors}
-        onSizeUpdated={updateSize}
-        onScrollUpdated={updateScroll}
-        t={t}
-      >
-        {/* Temporary loading user action block */}
-        <div
-          id="action-block"
-          style={{
-            display: loading ? 'block' : 'none',
-            position: 'fixed',
-            top: '0',
-            left: '0',
-            height: '100vh',
-            width: '100vw',
-            zindex: '100',
-            backgroundColor: '#fff',
-            opacity: '0.5',
-          }}
-        />
+      <div>
+        <ObjectTable />
+
         <PopupButtons
           loading={loading}
           disableActiveActions={!chosenObjectId}
@@ -141,7 +104,7 @@ export class _NavigationTree extends Component {
           previewDisplay={previewDisplay}
           disableSecondary={objectType && objectType.name === mstrObjectEnum.mstrObjectType.dossier.name}
         />
-      </FolderBrowser>
+      </div>
     );
   }
 }
