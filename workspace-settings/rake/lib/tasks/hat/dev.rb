@@ -154,6 +154,7 @@ task :stage_0_test do
     raise "ghprbTargetBranch environment should not be nil"
   end
   run_test("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
+  get_unit_test_metrics("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
 
   # pre-merge job shouldn't fail when test fail in base branch.
   # if the build process fail in base branch, publish the error message to pull request page.
@@ -178,6 +179,7 @@ end
 desc "run the unit test and collect code coverage in stage_1 dev job"
 task :stage_1_test do
   run_test("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
+  get_unit_test_metrics("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
 end
 
 desc "debug rake task"
@@ -284,6 +286,24 @@ def generate_comparison_report_markdown
   mf.write('</table>')
   mf.close()
 
+end
+
+def get_unit_test_metrics(working_dir)
+  unit_test_result_path = "#{working_dir}/production/coverage/test-results.json"
+  unit_result_json = JSON.parse((File.read(unit_test_result_path)))
+
+  total_tests = unit_result_json['numTotalTests'].to_i
+  total_passed = unit_result_json['numPassedTests'].to_i
+  total_failures = unit_result_json['numFailedTests'].to_i
+  total_skipped = unit_result_json['numPendingTests'].to_i
+  # Time.now returns seconds from epoch, json is in ms
+  total_duration = Time.now.to_i - unit_result_json['startTime'] / 1000
+  metrics_unit = {}
+  metrics_unit['UNIT_TEST_TOTAL'] = total_tests - total_skipped
+  metrics_unit['UNIT_TEST_FAILURES'] = total_failures
+  metrics_unit['UNIT_TEST_SUCCESSES'] = total_passed
+  metrics_unit['UNIT_TEST_DURATION'] = total_duration
+  puts "METRICS_UNIT=#{metrics_unit.to_json}"
 end
 
 def write_row_to_compare_table(mf, name, node)
