@@ -286,6 +286,24 @@ def generate_comparison_report_markdown
 
 end
 
+def get_unit_test_metrics
+  base_report_dir = "#{base_repo_path}/production/coverage"
+  unit_test_result_path = "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/production/coverage/test-results.json"
+  #read both coverage xml report
+  unit_result_json = JSON.parse((File.read(unit_test_result_path)).to_json)
+
+  total_tests = unit_result_json['numTotalTests'].to_i
+  total_failures = unit_result_json['numFailedTests'].to_i
+  total_skipped = unit_result_json['numPendingTests'].to_i
+  total_duration = 0 #TODO unit_result_json['startTime'] - now()?
+  metrics_unit = {}
+  metrics_unit['UNIT_TEST_TOTAL'] = total_tests
+  metrics_unit['UNIT_TEST_FAILURES'] = total_failures
+  metrics_unit['UNIT_TEST_SUCCESSES'] = total_tests - total_failures - total_skipped
+  metrics_unit['UNIT_TEST_DURATION'] = total_duration
+  puts "METRICS_UNIT=#{metrics_unit.to_json}"
+end
+
 def write_row_to_compare_table(mf, name, node)
   contains_diff = false
   base_stmts = [get_ratio(node["base_metric"],"cov_stat","total_stat")]

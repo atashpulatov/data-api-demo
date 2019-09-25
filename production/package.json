@@ -10,7 +10,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --silent --noStackTrace",
     "test:debug": "react-scripts test --debug",
-    "test:coverage": "CI=true react-scripts test --coverage --silent --noStackTrace --forceExit --ci",
+    "test:coverage": "CI=true react-scripts test  --silent --coverage --noStackTrace --forceExit --ci --json --outputFile=./coverage/test-results.json",
     "eject": "react-scripts eject",
     "eslint": "eslint ./src --ext .js,.jsx --ignore-pattern *.test*",
     "start:desktop": "office-addin-debugging start manifest.xml desktop",
