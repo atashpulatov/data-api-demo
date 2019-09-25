@@ -109,12 +109,11 @@ class OfficeDisplayService {
 
       // Get mstr instance definition
       console.time('Instance definition');
-
       if (body) {
         body.template = body.requestedObjects;
       }
       if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-        const instanceId = (await createDossierInstance(projectId, objectId, body)).body.mid;
+        const instanceId = (await createDossierInstance(projectId, objectId, body));
         const config = {
           projectId, objectId, instanceId, mstrObjectType, dossierData, body, visualizationInfo,
         };
@@ -189,8 +188,11 @@ class OfficeDisplayService {
 
       // get visualisation path
       if (objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
+        console.time('Get dossier structure');
+        mstrTable.id = objectId;
         dossierStructure = await this.getDossierStructure(projectId, objectId, visualizationInfo, mstrTable.name);
         visualizationInfo.dossierStructure = dossierStructure;
+        console.timeEnd('Get dossier structure');
       }
 
       // Save to store
@@ -773,9 +775,11 @@ class OfficeDisplayService {
   };
 
   getDossierStructure = async (projectId, objectId, visualizationInfo, dossierName) => {
+    console.log('visualizationInfo:', visualizationInfo);
     const { visualizationKey, chapterKey } = visualizationInfo;
     const dossierStructure = { dossierName };
     const dossierDefinition = await getDossierDefinition(projectId, objectId);
+    console.log('dossierDefinition:', dossierDefinition);
 
     const chapter = dossierDefinition.chapters.find((el) => el.key === chapterKey);
     dossierStructure.chapterName = chapter.name;
@@ -785,7 +789,9 @@ class OfficeDisplayService {
     } else {
       for (let i = 0; i < pages.length; i++) {
         for (let j = 0; j < pages[i].visualizations.length; j++) {
-          if (pages[i].visualizations[j].key === visualizationKey) dossierStructure.pageName = pages[i].name;
+          if (pages[i].visualizations[j].key === visualizationKey) {
+            dossierStructure.pageName = pages[i].name;
+          }
         }
       }
     }

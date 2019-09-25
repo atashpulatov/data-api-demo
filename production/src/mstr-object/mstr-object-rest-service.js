@@ -127,7 +127,7 @@ export function createDossierInstance(projectId, objectId, body) {
     .set('x-mstr-projectid', projectId)
     .send(body)
     .withCredentials()
-    .then((res) => res);
+    .then((res) => res.body.mid);
 }
 
 export function getDossierDefinition(projectId, objectId) {
