@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { objectTypes } from '@mstr/mstr-react-library';
+import { objectTypes, FolderBrowser } from '@mstr/mstr-react-library';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { ObjectTable } from '@mstr/rc/dist';

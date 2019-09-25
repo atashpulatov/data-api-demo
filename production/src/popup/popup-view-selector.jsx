@@ -1,31 +1,32 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { AttributeSelectorWindow } from '../attribute-selector/attribute-selector-window';
-import { selectorProperties } from '../attribute-selector/selector-properties';
-import { DossierWindow } from '../dossier/dossier-window';
-import { PopupTypeEnum } from '../home/popup-type-enum';
-import { LoadingPage } from '../loading/loading-page';
-import { RefreshAllPage } from '../loading/refresh-all-page';
+import {connect} from 'react-redux';
+import {AttributeSelectorWindow} from '../attribute-selector/attribute-selector-window';
+import {selectorProperties} from '../attribute-selector/selector-properties';
+import {DossierWindow} from '../dossier/dossier-window';
+import {PopupTypeEnum} from '../home/popup-type-enum';
+import {LoadingPage} from '../loading/loading-page';
+import {RefreshAllPage} from '../loading/refresh-all-page';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import { NavigationTree } from '../navigation/navigation-tree';
-import { actions } from '../navigation/navigation-tree-actions';
-import { PromptsWindow } from '../prompts/prompts-window';
-import { preparePromptedReport } from './popup-actions';
-import { createInstance, answerPrompts, getInstance } from '../mstr-object/mstr-object-rest-service';
+import {NavigationTree} from '../navigation/navigation-tree';
+import {Browser} from '../browser/browser';
+import {actions} from '../navigation/navigation-tree-actions';
+import {PromptsWindow} from '../prompts/prompts-window';
+import {preparePromptedReport} from './popup-actions';
+import {createInstance, answerPrompts, getInstance} from '../mstr-object/mstr-object-rest-service';
 
 
-const { Office } = window;
+const {Office} = window;
 
 export const _PopupViewSelector = (props) => {
-  let { popupType } = props;
-  const { propsToPass, methods, importRequested } = props;
+  let {popupType} = props;
+  const {propsToPass, methods, importRequested} = props;
   if (!props.authToken || !propsToPass) {
     console.log('Waiting for token to be passed');
     return null;
   }
   propsToPass.token = props.authToken;
   propsToPass.editRequested = popupType === PopupTypeEnum.editFilters;
-  const localEditReport = { ...props.editedReport };
+  const localEditReport = {...props.editedReport};
   if (
     (importRequested && !props.isPrompted)
     || (importRequested && arePromptsAnswered(props))
@@ -92,7 +93,7 @@ function arePromptsAnswered(props) {
 async function obtainInstanceWithPromptsAnswers(propsToPass, props) {
   const projectId = propsToPass.projectId || props.editedReport.projectId;
   const objectId = propsToPass.reportId || props.editedReport.reportId;
-  const configInstace = { objectId, projectId };
+  const configInstace = {objectId, projectId};
   let instanceDefinition = await createInstance(configInstace);
   let count = 0;
   while (instanceDefinition.status === 2) {
@@ -103,7 +104,7 @@ async function obtainInstanceWithPromptsAnswers(propsToPass, props) {
       promptsAnswers: props.promptsAnswers[count],
     };
     await answerPrompts(configPrompts);
-    const configAnsPrompts = { objectId, projectId, instanceId: instanceDefinition.instanceId };
+    const configAnsPrompts = {objectId, projectId, instanceId: instanceDefinition.instanceId};
     instanceDefinition = await getInstance(configAnsPrompts);
     count += 1;
   }
@@ -119,7 +120,7 @@ async function obtainInstanceWithPromptsAnswers(propsToPass, props) {
     promptsAnswers: props.promptsAnswers,
     body,
   };
-  console.log({ preparedReport, propsToPass });
+  console.log({preparedReport, propsToPass});
   props.preparePromptedReport(instanceDefinition.instanceId, preparedReport);
 }
 
@@ -137,12 +138,12 @@ function createBody(attributes, metrics, filters, instanceId) {
   };
   if (attributes && attributes.length > 0) {
     attributes.forEach((att) => {
-      body[restObjectType].attributes.push({ id: att });
+      body[restObjectType].attributes.push({id: att});
     });
   }
   if (metrics && metrics.length > 0) {
     metrics.forEach((met) => {
-      body[restObjectType].metrics.push({ id: met });
+      body[restObjectType].metrics.push({id: met});
     });
   }
   if (filters && Object.keys(filters).length > 0) {
@@ -184,7 +185,7 @@ function composeFilter(selectedFilters) {
   }
   return operandsLength === 1
     ? filterOperands[0]
-    : { operator: 'And', operands: filterOperands };
+    : {operator: 'And', operands: filterOperands};
 }
 
 function proceedToImport(props) {
@@ -231,12 +232,13 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
   }
   if (popupType === PopupTypeEnum.navigationTree) {
     return (
-      <NavigationTree
-        handlePrepare={methods.handlePrepare}
-        mstrData={propsToPass}
-        handlePopupErrors={methods.handlePopupErrors}
-        handleDossierOpen={methods.handleDossierOpen}
-      />
+      <Browser />
+      // <NavigationTree
+      //   handlePrepare={methods.handlePrepare}
+      //   mstrData={propsToPass}
+      //   handlePopupErrors={methods.handlePopupErrors}
+      //   handleDossierOpen={methods.handleDossierOpen}
+      // />
     );
   }
   if (popupType === PopupTypeEnum.loadingPage) {
