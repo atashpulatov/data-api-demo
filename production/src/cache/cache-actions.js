@@ -20,10 +20,10 @@ export const myLibraryLoading = (isLoading) => ({
 export function createCache() {
   return (dispatch, getState) => {
     // Create or get DB for current user
-    const { sessionReducer, cacheReducer } = getState();
+    const { sessionReducer } = getState();
     const { username } = sessionReducer;
-    const objectsDB = new DB(`${username}-objects`);
-    const myLibraryDB = new DB(`${username}-my-library`);
+    const objectsDB = new DB(`${username || 'cache'}-objects`);
+    const myLibraryDB = new DB(`${username || 'cache'}-my-library`);
     // Remove PouchDBs from other users
     DB.purgePouchDB(username);
     dispatch(objectListLoading(true));
