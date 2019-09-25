@@ -91,57 +91,27 @@ export class _NavigationTree extends Component {
     } = this.props;
     const { triggerUpdate, previewDisplay } = this.state;
     return (
-      <FolderBrowser
-        onSorterChange={changeSorting}
-        onSearchChange={changeSearching}
-        searchText={searchText}
-        sorter={sorter}
-        title="Import data"
-        session={{ url: mstrData.envUrl, authToken: mstrData.token }}
-        triggerUpdate={triggerUpdate}
-        onTriggerUpdate={this.onTriggerUpdate}
-        onObjectChosen={this.onObjectChosen}
-        setDataSource={setDataSource}
-        dataSource={dataSource}
-        chosenItem={{
-          objectId: chosenObjectId,
-          projectId: chosenProjectId,
-          subtype: chosenSubtype,
-        }}
-        scrollPosition={scrollPosition}
-        pageSize={pageSize}
-        chosenFolder={folder}
-        onChoseFolder={selectFolder}
-        handlePopupErrors={handlePopupErrors}
-        onSizeUpdated={updateSize}
-        onScrollUpdated={updateScroll}
-        t={t}
-      >
-        {/* Temporary loading user action block */}
-        <div
-          id="action-block"
-          style={{
-            display: loading ? 'block' : 'none',
-            position: 'fixed',
-            top: '0',
-            left: '0',
-            height: '100vh',
-            width: '100vw',
-            zindex: '100',
-            backgroundColor: '#fff',
-            opacity: '0.5',
-          }}
-        />
-        <PopupButtons
-          loading={loading}
-          disableActiveActions={!chosenObjectId}
-          handleOk={this.handleOk}
-          handleSecondary={this.handleSecondary}
-          handleCancel={this.handleCancel}
-          previewDisplay={previewDisplay}
-          disableSecondary={objectType && objectType.name === mstrObjectEnum.mstrObjectType.dossier.name}
-        />
-      </FolderBrowser>
+      <div style={{ height: 'calc(100% - 130px)' }}>
+        <div style={{ margin: '15px' }}>
+
+          <div style={{ fontSize: '18px'}}>Import Data</div>
+      </div>
+      <div style={{
+        background: '#ccc', display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '100px', height: '100%', border: '2px dotted black',
+      }}>
+        mock table
+        
+        </div>
+      <PopupButtons
+        loading={loading}
+        disableActiveActions={!chosenObjectId}
+        handleOk={this.handleOk}
+        handleSecondary={this.handleSecondary}
+        handleCancel={this.handleCancel}
+        previewDisplay={previewDisplay}
+        disableSecondary={objectType && objectType.name === mstrObjectEnum.mstrObjectType.dossier.name}
+      />
+      </div >
     );
   }
 }
