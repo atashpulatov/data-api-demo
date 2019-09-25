@@ -91,32 +91,33 @@ export class _NavigationTree extends Component {
     } = this.props;
     const { triggerUpdate, previewDisplay } = this.state;
     return (
-      <FolderBrowser
-        onSorterChange={changeSorting}
-        onSearchChange={changeSearching}
-        searchText={searchText}
-        sorter={sorter}
-        title="Import data"
-        session={{ url: mstrData.envUrl, authToken: mstrData.token }}
-        triggerUpdate={triggerUpdate}
-        onTriggerUpdate={this.onTriggerUpdate}
-        onObjectChosen={this.onObjectChosen}
-        setDataSource={setDataSource}
-        dataSource={dataSource}
-        chosenItem={{
-          objectId: chosenObjectId,
-          projectId: chosenProjectId,
-          subtype: chosenSubtype,
-        }}
-        scrollPosition={scrollPosition}
-        pageSize={pageSize}
-        chosenFolder={folder}
-        onChoseFolder={selectFolder}
-        handlePopupErrors={handlePopupErrors}
-        onSizeUpdated={updateSize}
-        onScrollUpdated={updateScroll}
-        t={t}
-      >
+      <>
+        <FolderBrowser
+          onSorterChange={changeSorting}
+          onSearchChange={changeSearching}
+          searchText={searchText}
+          sorter={sorter}
+          title="Import data"
+          session={{ url: mstrData.envUrl, authToken: mstrData.token }}
+          triggerUpdate={triggerUpdate}
+          onTriggerUpdate={this.onTriggerUpdate}
+          onObjectChosen={this.onObjectChosen}
+          setDataSource={setDataSource}
+          dataSource={dataSource}
+          chosenItem={{
+            objectId: chosenObjectId,
+            projectId: chosenProjectId,
+            subtype: chosenSubtype,
+          }}
+          scrollPosition={scrollPosition}
+          pageSize={pageSize}
+          chosenFolder={folder}
+          onChoseFolder={selectFolder}
+          handlePopupErrors={handlePopupErrors}
+          onSizeUpdated={updateSize}
+          onScrollUpdated={updateScroll}
+          t={t}
+        />
         {/* Temporary loading user action block */}
         <div
           id="action-block"
@@ -141,7 +142,7 @@ export class _NavigationTree extends Component {
           previewDisplay={previewDisplay}
           disableSecondary={objectType && objectType.name === mstrObjectEnum.mstrObjectType.dossier.name}
         />
-      </FolderBrowser>
+      </>
     );
   }
 }
