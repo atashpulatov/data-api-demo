@@ -517,7 +517,7 @@ class OfficeDisplayService {
     console.time('Create or get table');
     const newOfficeTableId = bindingId || officeApiHelper.findAvailableOfficeTableId();
     const { mstrTable, columns, rows } = instanceDefinition;
-    const { prevCrosstabDimensions, isCrosstab } = mstrTable;
+    const { prevCrosstabDimensions, crosstabHeaderDimensions, isCrosstab } = mstrTable;
     let officeTable;
     let shouldFormat = true;
     let tableColumnsChanged;
@@ -535,7 +535,7 @@ class OfficeDisplayService {
       startCell = officeApiHelper.getStartCell(headerCell.address);
       officeApiHelper.getRange(columns, startCell, rows);
       if (prevCrosstabDimensions) {
-        officeApiHelper.clearCrosstabRange(prevOfficeTable, prevCrosstabDimensions, isCrosstab, excelContext);
+        officeApiHelper.clearCrosstabRange(prevOfficeTable, crosstabHeaderDimensions, prevCrosstabDimensions, isCrosstab, excelContext);
       }
       await excelContext.sync();
       if (tableColumnsChanged) {
