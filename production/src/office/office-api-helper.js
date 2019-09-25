@@ -322,7 +322,7 @@ class OfficeApiHelper {
    * @param {Office} context Excel context
    * @memberof OfficeApiHelper
    */
-  clearCrosstabRange = async (officeTable, headerDimensions, context) => {
+  clearCrosstabRange = async (officeTable, headerDimensions, isCrosstab, context) => {
     try {
       // Row headers
       const leftRange = officeTable.getRange().getColumnsBefore(headerDimensions.rowsX);
@@ -335,10 +335,15 @@ class OfficeApiHelper {
       context.trackedObjects.add(titlesRange);
       // Check if ranges are valid before clearing
       await context.sync();
-
-      leftRange.clear('contents');
-      topRange.clear('contents');
-      titlesRange.clear('contents');
+      if (isCrosstab) {
+        leftRange.clear('contents');
+        topRange.clear('contents');
+        titlesRange.clear('contents');
+      } else {
+        leftRange.clear();
+        topRange.clear();
+        titlesRange.clear();
+      }
       context.trackedObjects.remove([leftRange, topRange, titlesRange]);
     } catch (error) {
       officeTable.showHeaders = false;
