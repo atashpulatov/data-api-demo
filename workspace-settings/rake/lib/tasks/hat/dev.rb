@@ -166,7 +166,7 @@ task :stage_0_test do
     generate_comparison_report_html
     generate_comparison_report_markdown
     generate_eslint_report
-    get_unit_test_metrics
+    get_unit_test_metrics("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
   rescue Exception => e
     message = "Waring: Failed to run test with base branch and generate report, caught exception #{e}!"
     warn(message)
@@ -179,6 +179,7 @@ end
 desc "run the unit test and collect code coverage in stage_1 dev job"
 task :stage_1_test do
   run_test("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
+  get_unit_test_metrics("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
 end
 
 desc "debug rake task"
@@ -287,19 +288,20 @@ def generate_comparison_report_markdown
 
 end
 
-def get_unit_test_metrics
-  base_report_dir = "#{base_repo_path}/production/coverage"
+def get_unit_test_metrics(working_dir)
+  base_report_dir = "#{working_dir}/production/coverage"
   unit_test_result_path = "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/production/coverage/test-results.json"
   unit_result_json = JSON.parse((File.read(unit_test_result_path)).to_json)
 
   total_tests = unit_result_json['numTotalTests'].to_i
+  total_passed = unit_result_json['numPassedTests'].to_i
   total_failures = unit_result_json['numFailedTests'].to_i
   total_skipped = unit_result_json['numPendingTests'].to_i
   total_duration = 0 #TODO unit_result_json['startTime'] - now()?
   metrics_unit = {}
   metrics_unit['UNIT_TEST_TOTAL'] = total_tests
   metrics_unit['UNIT_TEST_FAILURES'] = total_failures
-  metrics_unit['UNIT_TEST_SUCCESSES'] = total_tests - total_failures - total_skipped
+  metrics_unit['UNIT_TEST_SUCCESSES'] = total_passed
   metrics_unit['UNIT_TEST_DURATION'] = total_duration
   puts "METRICS_UNIT=#{metrics_unit.to_json}"
 end
