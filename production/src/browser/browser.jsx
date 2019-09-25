@@ -1,11 +1,12 @@
 import React from 'react';
-import { PopupButtons } from '../popup/popup-buttons';
+import {PopupButtons} from '../popup/popup-buttons';
 
-export const Browser = () => {
+export const Browser = (props) => {
   console.log('');
+
   return (
     <div>
-      placeholder
+
       <PopupButtons />
     </div>
   );
