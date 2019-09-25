@@ -1,45 +1,27 @@
-import {errorService} from '../error/error-handler.js';
-import {moduleProxy} from '../module-proxy.js';
+import { moduleProxy } from '../module-proxy.js';
 
 const OFFICE_PRIVILEGE_ID = '273';
 
 class AuthenticationService {
   async authenticate(username, password, envUrl, loginMode = 1) {
     return await moduleProxy.request
-        .post(envUrl + '/auth/login')
-        .send({username, password, loginMode})
-        .withCredentials()
-        .then((res) => {
-          return res.headers['x-mstr-authtoken'];
-        })
-        .catch((err) => {
-          throw errorService.errorRestFactory(err);
-        });
+      .post(`${envUrl}/auth/login`)
+      .send({ username, password, loginMode })
+      .withCredentials()
+      .then((res) => res.headers['x-mstr-authtoken']);
   }
-  logout = async (envUrl, authToken) => {
-    return await moduleProxy.request
-        .post(envUrl + '/auth/logout')
-        .set('x-mstr-authtoken', authToken)
-        .withCredentials()
-        .then((res) => {
-          return true;
-        })
-        .catch((err) => {
-          throw errorService.errorRestFactory(err);
-        });
-  }
-  getSessions = async (envUrl, authToken) => {
-    return await moduleProxy.request
-        .get(`${envUrl}/sessions/userInfo`)
-        .set('x-mstr-authtoken', authToken)
-        .withCredentials()
-        .then((res) => {
-          return res;
-        })
-        .catch((err) => {
-          throw errorService.errorRestFactory(err);
-        });
-  }
+
+  logout = async (envUrl, authToken) => await moduleProxy.request
+    .post(`${envUrl}/auth/logout`)
+    .set('x-mstr-authtoken', authToken)
+    .withCredentials()
+    .then((res) => true)
+
+  getSessions = async (envUrl, authToken) => await moduleProxy.request
+    .get(`${envUrl}/sessions/userInfo`)
+    .set('x-mstr-authtoken', authToken)
+    .withCredentials()
+    .then((res) => res)
 
   getOfficePrivilege = async (envUrl, iSession) => {
     try {
@@ -57,15 +39,11 @@ class AuthenticationService {
     }
   }
 
-  _fetchPrivilegeById = (id, envUrl, authToken) => {
-    return moduleProxy.request
-        .get(`${envUrl}/sessions/privileges/${id}`)
-        .set('x-mstr-authtoken', authToken)
-        .withCredentials()
-        .then((res) => {
-          return res.body;
-        });
-  }
+  _fetchPrivilegeById = (id, envUrl, authToken) => moduleProxy.request
+    .get(`${envUrl}/sessions/privileges/${id}`)
+    .set('x-mstr-authtoken', authToken)
+    .withCredentials()
+    .then((res) => res.body)
 }
 
 export const authenticationService = new AuthenticationService();

@@ -7,10 +7,9 @@ include_recipe 'chef_commons'
 include_recipe 'workspace::attributes_overrides'
 include_recipe 'nodejs'
 
-nodejs_npm 'yarn' do
-  version '1.13.0'
-end
-
+nodejs_npm 'yarn' do	
+  version '1.13.0'	
+end	
 
 case node['platform']
 when 'redhat', 'centos', 'fedora', 'amazon'
@@ -30,6 +29,7 @@ when 'redhat', 'centos', 'fedora', 'amazon'
     user 'root'
     code <<-EOH
       chown -R jenkins:jenkins /var/lib/jenkins/.config || mkdir -p /var/lib/jenkins/.config && chown -R jenkins:jenkins /var/lib/jenkins/.config
+      chown -R jenkins:jenkins /var/lib/jenkins/.npm
     EOH
     only_if "echo $USER | grep jenkins"
   end

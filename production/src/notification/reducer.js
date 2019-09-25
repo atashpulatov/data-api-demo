@@ -1,5 +1,5 @@
-import {reduxNotificationProperties} from './notification-properties';
-import {NotificationError} from './notification-error';
+import { reduxNotificationProperties } from './notification-properties';
+import { NotificationError } from './notification-error';
 
 export const notificationReducer = (state = {}, action) => {
   if (!action.type) {
@@ -57,5 +57,6 @@ function onShowNotification(action, translated) {
     notificationType: action.notificationType,
     details: action.details,
     translated,
+    onConfirm: action.onConfirm,
   };
 }

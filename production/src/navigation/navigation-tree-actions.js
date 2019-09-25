@@ -1,4 +1,4 @@
-import {officeProperties} from '../office/office-properties';
+import { officeProperties } from '../office/office-properties';
 
 export const SELECT_OBJECT = 'NAV_TREE_SELECT_OBJECT';
 export const SET_DATA_SOURCE = 'NAV_TREE_SET_DATA_SOURCE';
@@ -35,39 +35,39 @@ export function selectFolder(data) {
 }
 
 export function requestImport() {
-  return (dispatch) => dispatch({type: REQUEST_IMPORT});
+  return (dispatch) => dispatch({ type: REQUEST_IMPORT });
 }
 
 export function promptsAnswered(data) {
-  return (dispatch) => dispatch({type: PROMPTS_ANSWERED, data});
+  return (dispatch) => dispatch({ type: PROMPTS_ANSWERED, data });
 }
 
 export function cancelImportRequest() {
-  return (dispatch) => dispatch({type: CANCEL_REQUEST_IMPORT});
+  return (dispatch) => dispatch({ type: CANCEL_REQUEST_IMPORT });
 }
 
 export function startImport() {
-  return (dispatch) => dispatch({type: START_IMPORT});
+  return (dispatch) => dispatch({ type: START_IMPORT });
 }
 
 export function startLoading() {
-  return (dispatch) => dispatch({type: officeProperties.actions.startLoading});
+  return (dispatch) => dispatch({ type: officeProperties.actions.startLoading });
 }
 
 export function changeSorting(data) {
-  return (dispatch) => dispatch({type: CHANGE_SORTING, data});
+  return (dispatch) => dispatch({ type: CHANGE_SORTING, data });
 }
 
 export function changeSearching(data) {
-  return (dispatch) => dispatch({type: CHANGE_SEARCHING, data});
+  return (dispatch) => dispatch({ type: CHANGE_SEARCHING, data });
 }
 
 export function updateScroll(data) {
-  return (dispatch) => dispatch({type: UPDATE_SCROLL, data});
+  return (dispatch) => dispatch({ type: UPDATE_SCROLL, data });
 }
 
 export function updateSize(data) {
-  return (dispatch) => dispatch({type: UPDATE_SIZE, data});
+  return (dispatch) => dispatch({ type: UPDATE_SIZE, data });
 }
 
 export const actions = {

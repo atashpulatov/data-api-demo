@@ -6,7 +6,7 @@ else
   shouldBuild="$1"
 fi
 if [ "$shouldBuild" == "y" ]; then 
-    yarn build
+    npm run build
 else
     echo -e "Build skipped\n" 
 fi

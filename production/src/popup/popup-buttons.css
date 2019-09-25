@@ -46,7 +46,7 @@
     margin-left: 14px;
  }
 
- #popup .button-tooltip[style='display: inline-block; cursor: not-allowed;'] {
+ #root .button-tooltip[style='display: inline-block; cursor: not-allowed;'] {
     cursor: default !important;
  }
 

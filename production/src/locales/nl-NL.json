@@ -165,5 +165,15 @@
   "Click MicroStrategy for Office on Home tab to start plugin. Log in to Environment to start browsing documents.": "Klik op MicroStrategy voor Office op het starttabblad om de plug-in te starten. Meld u aan bij Omgeving om in het bestand te bladeren.",
   "Click to Show a Taskpane": "Klik om een taakvenster weer te geven",
   "New plugin to insert data from Microstrategy into Microsoft Office products.": "Nieuwe plug-in om gegevens van Microstrategy in Microsoft Office-producten te voegen.",
-  "MicroStrategy for Office": "MicroStrategy voor Office"
+  "MicroStrategy for Office": "MicroStrategy voor Office",
+  "This report does not exist in the workbook anymore": "Dit rapport bestaat niet meer in het workbook",
+  "{{name}} has been removed from the workbook.": "{{name}} is verwijderd uit het workbook.",
+  "This is a crosstab report. The layout of the table might change depending on the attributes you’ve selected.": "Dit is een rapport met kruisgewijze tabbladen. De opmaak van de tabel kan verschillen afhankelijk van de door u gekozen attributen.",
+  "{{fileName}} has been removed from the workbook.": "{{fileName}} is verwijderd uit het workbook.",
+  "Parameter out of range": "Parameter is buiten bereik",
+  "This is a crosstab report. The layout of the table might change depending on the attributes you’ve selected. See Data Preview.": "Dit is een rapport met kruisgewijze tabbladen. De opmaak van de tabel kan verschillen afhankelijk van de door u gekozen attributen. Zie gegevensoverzicht.",
+  "Element cannot be loaded": "Element kan niet worden geladen",
+  "Clearing data": "Gegevens wissen",
+  "{{reportNames}} could not be cleared.": "{{reportNames}} kan niet worden gewist.",
+  "Invalid attempt to spread non-iterable instance": "Ongeldige poging om niet-herhalende instantie te verspreiden"
 }

@@ -1,8 +1,41 @@
-const withDefaultValue = (obj, defaultValue) => {
-  return new Proxy(obj, {
-    get: (target, name) => target[name] === undefined ? defaultValue : target[name],
-  });
+const withDefaultValue = (obj, defaultValue) => new Proxy(obj, {
+  get: (target, name) => (target[name] === undefined ? defaultValue : target[name]),
+});
+
+export const errorTypes = {
+  ENV_NOT_FOUND_ERR: 'environmentNotFound',
+  CONNECTION_BROKEN_ERR: 'connectionBroken',
+  UNAUTHORIZED_ERR: 'unauthorized',
+  BAD_REQUEST_ERR: 'badRequest',
+  INTERNAL_SERVER_ERR: 'internalServer',
+  PROMPTED_REPORT_ERR: 'promptedReport',
+  OUTSIDE_OF_RANGE_ERR: 'outsideOfRange',
+  OVERLAPPING_TABLES_ERR: 'overlappingTables',
+  RUN_OUTSIDE_OFFICE_ERR: 'runOutsideOffice',
+  TABLE_REMOVED_FROM_EXCEL_ERR: 'tableRemovedFromExcel',
+  GENERIC_OFFICE_ERR: 'genericOffice',
 };
+
+export const incomingErrorStrings = {
+  EXCEL_NOT_DEFINED: 'Excel is not defined',
+  TABLE_OVERLAP: 'A table can\'t overlap another table. ',
+  BINDING_NOT_VALID: 'This object binding is no longer valid due to previous updates.',
+  CONNECTION_BROKEN: 'Possible causes: the network is offline,',
+};
+
+export const stringMessageToErrorType = withDefaultValue({
+  [incomingErrorStrings.EXCEL_NOT_DEFINED]: errorTypes.RUN_OUTSIDE_OFFICE_ERR,
+  [incomingErrorStrings.TABLE_OVERLAP]: errorTypes.OVERLAPPING_TABLES_ERR,
+  [incomingErrorStrings.BINDING_NOT_VALID]: errorTypes.TABLE_REMOVED_FROM_EXCEL_ERR,
+  [incomingErrorStrings.CONNECTION_BROKEN]: errorTypes.CONNECTION_BROKEN_ERR,
+}, errorTypes.GENERIC_OFFICE_ERR);
+
+export const httpStatusToErrorType = withDefaultValue({
+  404: errorTypes.ENV_NOT_FOUND_ERR,
+  400: errorTypes.BAD_REQUEST_ERR,
+  401: errorTypes.UNAUTHORIZED_ERR,
+  500: errorTypes.INTERNAL_SERVER_ERR,
+}, null);
 
 export const GENERIC_SERVER_ERR = 'This object cannot be imported.';
 export const ALL_DATA_FILTERED_OUT = 'No data returned for this view. This might be because the applied prompt excludes all data.';
@@ -16,9 +49,18 @@ export const PROJECT_ROW_LIMIT = 'The object exceeds project rows limitation';
 export const TABLE_OVERLAP = 'The required data range in the worksheet is not empty';
 export const ERROR_POPUP_CLOSED = 'Function close call failed, error code:';
 export const NOT_SUPPORTED_CUSTOM_GROUP = 'This object cannot be imported. Objects with custom groups are not supported in this version of MicroStrategy for Office.';
+export const TABLE_REMOVED = 'It looks like the object was deleted from the workbook. Delete it in the sidebar or click Add Data to import it again.';
+export const ENDPOINT_NOT_REACHED = 'The endpoint cannot be reached';
+export const EXCEEDS_WORKSHEET_LIMITS = 'The table you try to import exceeds the worksheet limits.';
+export const OUTSIDE_OF_OFFICE = 'Please run plugin inside Office';
+export const CONNECTION_BROKEN = 'Environment is unreachable. Please check your internet connection.';
+export const WRONG_CREDENTIALS = 'Wrong username or password.';
+export const SESSION_EXPIRED = 'Your session has expired. Please log in.';
+export const PROBLEM_WITH_REQUEST = 'There has been a problem with your request';
+export const UNKNOWN_ERROR = 'Unknown error';
 
 // temporarily we map all those codes to one message; may be changed in the future
-export const errorMessages = withDefaultValue({
+const iServerErrorMessages = withDefaultValue({
   '-2147171501': NOT_SUPPORTED_SERVER_ERR,
   '-2147171502': NOT_SUPPORTED_CUSTOM_GROUP,
   '-2147171503': NOT_SUPPORTED_SERVER_ERR,
@@ -28,3 +70,20 @@ export const errorMessages = withDefaultValue({
   '-2147216373': NOT_IN_METADATA,
 }, GENERIC_SERVER_ERR);
 
+export const errorMessageFactory = withDefaultValue({
+  [errorTypes.ENV_NOT_FOUND_ERR]: () => ENDPOINT_NOT_REACHED,
+  [errorTypes.CONNECTION_BROKEN_ERR]: () => CONNECTION_BROKEN,
+  [errorTypes.UNAUTHORIZED_ERR]: ({ error }) => {
+    if (error.response.body.code === 'ERR003') return WRONG_CREDENTIALS;
+    return SESSION_EXPIRED;
+  },
+  [errorTypes.BAD_REQUEST_ERR]: () => PROBLEM_WITH_REQUEST,
+  [errorTypes.INTERNAL_SERVER_ERR]: ({ error }) => iServerErrorMessages[!error.response ? '-1' : error.response.body ? error.response.body.iServerCode : '-1'],
+  [errorTypes.PROMPTED_REPORT_ERR]: () => NOT_SUPPORTED_PROMPTS_REFRESH,
+  [errorTypes.OUTSIDE_OF_RANGE_ERR]: () => EXCEEDS_WORKSHEET_LIMITS,
+  [errorTypes.OVERLAPPING_TABLES_ERR]: () => TABLE_OVERLAP,
+  [errorTypes.RUN_OUTSIDE_OFFICE_ERR]: () => OUTSIDE_OF_OFFICE,
+  [errorTypes.TABLE_REMOVED_FROM_EXCEL_ERR]: ({ reportName }) => `${reportName} does not exist in the workbook anymore.`,
+  [errorTypes.GENERIC_OFFICE_ERR]: ({ error }) => `Excel returned error: ${error.message}`,
+},
+({ error }) => error.message || UNKNOWN_ERROR);

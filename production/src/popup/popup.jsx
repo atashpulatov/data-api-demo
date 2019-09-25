@@ -1,26 +1,34 @@
-import React, {Component} from 'react';
-import {PopupTypeEnum} from '../home/popup-type-enum';
+import React, { Component } from 'react';
 import * as queryString from 'query-string';
-import {libraryErrorController} from 'mstr-react-library';
-import {officeContext} from '../office/office-context';
-import {selectorProperties} from '../attribute-selector/selector-properties';
-import {reduxStore} from '../store';
-import {Provider} from 'react-redux';
-import {PopupViewSelector} from './popup-view-selector';
+import { libraryErrorController } from '@mstr/mstr-react-library';
+import { PopupTypeEnum } from '../home/popup-type-enum';
+import { officeContext } from '../office/office-context';
+import { selectorProperties } from '../attribute-selector/selector-properties';
+import { PopupViewSelector } from './popup-view-selector';
 import i18next from '../i18n';
-import {CLEAR_PROMPTS_ANSWERS} from '../navigation/navigation-tree-actions';
+import { CLEAR_PROMPTS_ANSWERS } from '../navigation/navigation-tree-actions';
+import { reduxStore } from '../store';
+
+/* global Office */
 
 export class Popup extends Component {
   constructor(props) {
     super(props);
-    const mstrData = queryString.parse(this.props.location.search);
+    const location = (props.location && props.location.search) || window.location.search;
+    const mstrData = queryString.parse(location);
     this.state = {
       mstrData,
     };
     libraryErrorController.initializeHttpErrorsHandling(this.handlePopupErrors);
   }
 
-  handlePrepare = (projectId, reportId, reportSubtype, reportName, reportType) => {
+  handlePrepare = (
+    projectId,
+    reportId,
+    reportSubtype,
+    reportName,
+    reportType,
+  ) => {
     this.setState({
       mstrData: {
         ...this.state.mstrData,
@@ -36,16 +44,19 @@ export class Popup extends Component {
   };
 
   handleBack = (projectId, reportId, reportSubtype, forceChange = false) => {
-    this.setState({
-      mstrData: {
-        ...this.state.mstrData,
-        popupType: PopupTypeEnum.navigationTree,
-        forceChange,
-        projectId,
-        reportId,
-        reportSubtype,
+    this.setState(
+      {
+        mstrData: {
+          ...this.state.mstrData,
+          popupType: PopupTypeEnum.navigationTree,
+          forceChange,
+          projectId,
+          reportId,
+          reportSubtype,
+        },
       },
-    }, () => reduxStore.dispatch({type: CLEAR_PROMPTS_ANSWERS}));
+      () => reduxStore.dispatch({ type: CLEAR_PROMPTS_ANSWERS }),
+    );
   };
 
   handlePopupErrors = (error) => {
@@ -53,19 +64,39 @@ export class Popup extends Component {
       command: selectorProperties.commandError,
       error,
     };
-    officeContext.getOffice().context.ui.messageParent(JSON.stringify(messageObject));
+    officeContext
+      .getOffice()
+      .context.ui.messageParent(JSON.stringify(messageObject));
+  };
+
+  handleDossierOpen = () => {
+    this.setState({
+      mstrData: {
+        ...this.state.mstrData,
+        popupType: PopupTypeEnum.dossierWindow,
+      },
+    });
   };
 
   render() {
-    const {popupType, ...propsToPass} = this.state.mstrData;
+    const { popupType, ...propsToPass } = this.state.mstrData;
     const methods = {
       handlePrepare: this.handlePrepare,
       handleBack: this.handleBack,
       handlePopupErrors: this.handlePopupErrors,
+      handleDossierOpen: this.handleDossierOpen,
     };
-    i18next.changeLanguage(i18next.options.resources[Office.context.displayLanguage] ? Office.context.displayLanguage : 'en-US');
-    return (<Provider store={reduxStore}>
-      <PopupViewSelector popupType={popupType} propsToPass={propsToPass} methods={methods} />
-    </Provider>);
+    i18next.changeLanguage(
+      i18next.options.resources[Office.context.displayLanguage]
+        ? Office.context.displayLanguage
+        : 'en-US',
+    );
+    return (
+      <PopupViewSelector
+        popupType={popupType}
+        propsToPass={propsToPass}
+        methods={methods}
+      />
+    );
   }
 }
