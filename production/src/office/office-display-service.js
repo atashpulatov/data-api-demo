@@ -123,7 +123,6 @@ class OfficeDisplayService {
         const config = { objectId, projectId, mstrObjectType, dossierData, body };
         instanceDefinition = await createInstance(config);
       }
-      console.log(instanceDefinition);
       // Status 2 = report has open prompts to be answered before data can be returned
       if (instanceDefinition.status === 2) {
         instanceDefinition = await this._answerPrompts(
@@ -775,12 +774,9 @@ class OfficeDisplayService {
   };
 
   getDossierStructure = async (projectId, objectId, visualizationInfo, dossierName) => {
-    console.log('visualizationInfo:', visualizationInfo);
     const { visualizationKey, chapterKey } = visualizationInfo;
     const dossierStructure = { dossierName };
     const dossierDefinition = await getDossierDefinition(projectId, objectId);
-    console.log('dossierDefinition:', dossierDefinition);
-
     const chapter = dossierDefinition.chapters.find((el) => el.key === chapterKey);
     dossierStructure.chapterName = chapter.name;
     const { pages } = chapter;
