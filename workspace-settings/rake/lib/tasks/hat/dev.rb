@@ -154,6 +154,7 @@ task :stage_0_test do
     raise "ghprbTargetBranch environment should not be nil"
   end
   run_test("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
+  get_unit_test_metrics("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
 
   # pre-merge job shouldn't fail when test fail in base branch.
   # if the build process fail in base branch, publish the error message to pull request page.
@@ -163,7 +164,6 @@ task :stage_0_test do
     init_base_branch_repo(ENV["ghprbTargetBranch"])
     #run test with base branch
     run_test(base_repo_path)
-    get_unit_test_metrics("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
     generate_comparison_report_html
     generate_comparison_report_markdown
     generate_eslint_report
