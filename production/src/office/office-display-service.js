@@ -185,7 +185,8 @@ class OfficeDisplayService {
         await this.applySubtotalFormatting(isCrosstab, subtotalsAddresses, officeTable, excelContext, mstrTable);
       }
 
-      // get visualisation path
+      // Get visualization path from dossier definition.
+      // Used to show in sidebar placeholder
       if (objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
         console.time('Get dossier structure');
         mstrTable.id = objectId;

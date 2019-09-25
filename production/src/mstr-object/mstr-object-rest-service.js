@@ -101,13 +101,13 @@ export function createInstance({
 }
 
 export function fetchVisualizationDefinition({
-  projectId, objectId, instanceId, visualizationInfo, limit = 1,
+  projectId, objectId, instanceId, visualizationInfo,
 }) {
   const storeState = reduxStore.getState();
   const { envUrl } = storeState.sessionReducer;
   const { authToken } = storeState.sessionReducer;
   const { chapterKey, visualizationKey } = visualizationInfo;
-  const fullPath = `${envUrl}/v2/dossiers/${objectId}/instances/${instanceId}/chapters/${chapterKey}/visualizations/${visualizationKey}?limit=${limit}`;
+  const fullPath = `${envUrl}/v2/dossiers/${objectId}/instances/${instanceId}/chapters/${chapterKey}/visualizations/${visualizationKey}?limit=1`;
   return request
     .get(fullPath)
     .set('x-mstr-authtoken', authToken)
@@ -288,13 +288,18 @@ function checkTableDimensions({ rows, columns }) {
 }
 
 function getFullPath({
-  envUrl, limit, mstrObjectType, objectId, instanceId, version = 1,
+  envUrl, limit, mstrObjectType, objectId, instanceId, version = 1, visualizationInfo = false,
 }) {
   let path;
-  const api = version > 1 ? `v${version}/` : '';
-  path = `${envUrl}/${api}${mstrObjectType.request}/${objectId}/instances`;
-  path += instanceId ? `/${instanceId}` : '';
-  path += limit ? `?limit=${limit}` : '';
+  if (visualizationInfo) {
+    const { chapterKey, visualizationKey } = visualizationInfo;
+    path = `${envUrl}/v2/dossiers/${objectId}/instances/${instanceId}/chapters/${chapterKey}/visualizations/${visualizationKey}`;
+  } else {
+    const api = version > 1 ? `v${version}/` : '';
+    path = `${envUrl}/${api}${mstrObjectType.request}/${objectId}/instances`;
+    path += instanceId ? `/${instanceId}` : '';
+    path += limit ? `?limit=${limit}` : '';
+  }
   return path;
 }
 
@@ -307,20 +312,16 @@ async function* fetchContentGenerator({ instanceDefinition, objectId, projectId,
   const { authToken } = storeState.sessionReducer;
   let fetchedRows = 0;
   let offset = 0;
-  let fullPath;
-  if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-    const { chapterKey, visualizationKey } = visualizationInfo;
-    fullPath = `${envUrl}/v2/dossiers/${objectId}/instances/${instanceId}/chapters/${chapterKey}/visualizations/${visualizationKey}`;
-  } else {
-    fullPath = getFullPath({
-      dossierData,
-      envUrl,
-      mstrObjectType,
-      objectId,
-      instanceId,
-      version: API_VERSION,
-    });
-  }
+  const fullPath = getFullPath({
+    dossierData,
+    envUrl,
+    mstrObjectType,
+    objectId,
+    instanceId,
+    version: API_VERSION,
+    visualizationInfo,
+  });
+
 
   const offsetSubtotal = (e) => {
     if (e) (e.rowIndex += offset);
