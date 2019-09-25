@@ -166,6 +166,7 @@ task :stage_0_test do
     generate_comparison_report_html
     generate_comparison_report_markdown
     generate_eslint_report
+    get_unit_test_metrics
   rescue Exception => e
     message = "Waring: Failed to run test with base branch and generate report, caught exception #{e}!"
     warn(message)
@@ -289,7 +290,6 @@ end
 def get_unit_test_metrics
   base_report_dir = "#{base_repo_path}/production/coverage"
   unit_test_result_path = "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/production/coverage/test-results.json"
-  #read both coverage xml report
   unit_result_json = JSON.parse((File.read(unit_test_result_path)).to_json)
 
   total_tests = unit_result_json['numTotalTests'].to_i
