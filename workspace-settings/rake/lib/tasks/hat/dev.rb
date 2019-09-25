@@ -296,9 +296,10 @@ def get_unit_test_metrics(working_dir)
   total_passed = unit_result_json['numPassedTests'].to_i
   total_failures = unit_result_json['numFailedTests'].to_i
   total_skipped = unit_result_json['numPendingTests'].to_i
-  total_duration = Time.now.to_f - unit_result_json['startTime']
+  # Time.now returns seconds from epoch, json is in ms
+  total_duration = Time.now.to_i - unit_result_json['startTime'] / 1000
   metrics_unit = {}
-  metrics_unit['UNIT_TEST_TOTAL'] = total_tests
+  metrics_unit['UNIT_TEST_TOTAL'] = total_tests - total_skipped
   metrics_unit['UNIT_TEST_FAILURES'] = total_failures
   metrics_unit['UNIT_TEST_SUCCESSES'] = total_passed
   metrics_unit['UNIT_TEST_DURATION'] = total_duration
