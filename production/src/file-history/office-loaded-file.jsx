@@ -16,6 +16,7 @@ import { ButtonPopover } from './button-popover';
 import { ReactComponent as DossierIcon } from './assets/icon_Dossier.svg';
 import { ReactComponent as ClockIcon } from './assets/icon_clock.svg';
 import { officeStoreService } from '../office/store/office-store-service';
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum.js';
 
 export class _OfficeLoadedFile extends React.Component {
   constructor(props) {
@@ -184,11 +185,11 @@ export class _OfficeLoadedFile extends React.Component {
 
   getMstrIcon = (objectType) => {
     switch (objectType.name) {
-      case 'report':
+      case mstrObjectEnum.mstrObjectType.report.name:
         return <MSTRIcon type="report" />;
-      case 'dataset':
+      case mstrObjectEnum.mstrObjectType.dataset.name:
         return <MSTRIcon type="dataset" />;
-      case 'dossier':
+      case mstrObjectEnum.mstrObjectType.visualization.name:
         return <DossierIcon />;
       default:
         break;
@@ -289,9 +290,10 @@ export class _OfficeLoadedFile extends React.Component {
       isPrompted,
       refreshDate,
       t,
-      visualisationPath,
+      visualizationInfo: { dossierStructure = false },
     } = this.props;
     const { editable, value } = this.state;
+    const { dossierName, chapterName, pageName } = dossierStructure;
     const menu = (
       <Menu>
         {isPrompted && <Menu.Item key="reprompt" onClick={(e) => { e.domEvent.stopPropagation(); this.repromptAction(); }}>{t('Reprompt')}</Menu.Item>}
@@ -328,10 +330,19 @@ export class _OfficeLoadedFile extends React.Component {
             {this.renderIcons(t, isPrompted, isLoading)}
           </div>
 
-          {objectType.name === 'dossier' && <div className="visualisation-path-row">{visualisationPath}</div>}
+
+          {objectType.name === mstrObjectEnum.mstrObjectType.visualization.name && dossierStructure
+            && (
+              <ButtonPopover
+                placement="bottom"
+                content={`${dossierName} > ${chapterName} > ${pageName}`}
+                mouseEnterDelay={1}>
+                <div className="visualisation-path-row">{`${dossierName} > ${chapterName} > ${pageName}`}</div>
+              </ButtonPopover>
+            )}
 
           <div className="object-title-row">
-            {this.getMstrIcon(objectType)}
+            {<span>{this.getMstrIcon(objectType)}</span>}
             <RenameInput bindingId={bindingId} fileName={fileName} editable={editable} value={value} enableEdit={this.enableEdit} handleChange={this.handleChange} renameReport={this.renameReport} />
           </div>
         </div>
