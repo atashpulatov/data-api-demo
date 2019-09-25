@@ -85,6 +85,10 @@ export default class DB {
     return this.db.bulkDocs(documents);
   }
 
+  getAllObjects() {
+    return this.db.allDocs({ include_docs: true });
+  }
+
   /**
    * Checks if DB is empty and if yes executes the callback fn with DB.putObjects()
    *
