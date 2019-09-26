@@ -7,6 +7,7 @@ import { PopupButtons } from '../popup/popup-buttons';
 import { actions } from './navigation-tree-actions';
 import { isPrompted as checkIfPrompted } from '../mstr-object/mstr-object-rest-service';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import './navigation-tree.css';
 
 export class _NavigationTree extends Component {
   constructor(props) {
@@ -90,28 +91,21 @@ export class _NavigationTree extends Component {
       updateScroll, mstrData, updateSize, t, objectType,
     } = this.props;
     const { triggerUpdate, previewDisplay } = this.state;
-    return (
-      <div style={{ height: 'calc(100% - 130px)' }}>
-        <div style={{ margin: '15px' }}>
 
-          <div style={{ fontSize: '18px'}}>Import Data</div>
+    return (
+      <div className="navigation_tree__main_wrapper">
+        <div className="navigation_tree__title_bar">Import Data</div>
+        <div className="navigation_tree__table_wrapper">mock table</div>
+        <PopupButtons
+          loading={loading}
+          disableActiveActions={!chosenObjectId}
+          handleOk={this.handleOk}
+          handleSecondary={this.handleSecondary}
+          handleCancel={this.handleCancel}
+          previewDisplay={previewDisplay}
+          disableSecondary={objectType && objectType.name === mstrObjectEnum.mstrObjectType.dossier.name}
+        />
       </div>
-      <div style={{
-        background: '#ccc', display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '100px', height: '100%', border: '2px dotted black',
-      }}>
-        mock table
-        
-        </div>
-      <PopupButtons
-        loading={loading}
-        disableActiveActions={!chosenObjectId}
-        handleOk={this.handleOk}
-        handleSecondary={this.handleSecondary}
-        handleCancel={this.handleCancel}
-        previewDisplay={previewDisplay}
-        disableSecondary={objectType && objectType.name === mstrObjectEnum.mstrObjectType.dossier.name}
-      />
-      </div >
     );
   }
 }
