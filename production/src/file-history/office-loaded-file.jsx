@@ -311,7 +311,7 @@ export class _OfficeLoadedFile extends React.Component {
           className="file-history-container"
           type="flex"
           justify="center"
-          role="button"
+          role="listitem"
           tabIndex="0"
           onClick={() => onClick(bindingId, true, this.deleteReport, fileName)}
         >
