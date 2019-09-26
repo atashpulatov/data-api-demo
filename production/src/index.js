@@ -46,19 +46,15 @@ function goReact() {
   i18next.changeLanguage(i18next.options.resources[Office.context.displayLanguage] ? Office.context.displayLanguage : 'en-US');
 
   if (window.location.href.indexOf('popupType') === -1) {
-    ReactDOM.render(
-      <Provider store={reduxStore}>
-        <PersistGate persistor={reduxPersistor}>
-          <Home loading={false} />
-        </PersistGate>
-      </Provider>,
-      document.getElementById('root'),
-    );
+    ReactDOM.render(<Provider store={reduxStore}>
+      <PersistGate persistor={reduxPersistor}>
+        <Home loading={false} />
+      </PersistGate>
+                    </Provider>,
+    document.getElementById('root'), () => console.timeEnd('React loading time'));
   } else {
-    ReactDOM.render(
-      <Provider store={reduxStore}><Popup /></Provider>,
-      document.getElementById('root'),
-    );
+    ReactDOM.render(<Provider store={reduxStore}><Popup /></Provider>,
+      document.getElementById('root'), () => console.timeEnd('React loading time'));
   }
 }
 
