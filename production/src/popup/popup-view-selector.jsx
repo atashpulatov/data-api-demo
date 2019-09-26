@@ -188,6 +188,13 @@ function composeFilter(selectedFilters) {
 }
 
 function proceedToImport(props) {
+  let visualizationInfo;
+  if (props.chosenChapterKey) {
+    visualizationInfo = {
+      chapterKey: props.chosenChapterKey,
+      visualizationKey: props.chosenVisualizationKey,
+    };
+  }
   const okObject = {
     command: selectorProperties.commandOk,
     chosenObject: props.chosenObjectId,
@@ -195,6 +202,7 @@ function proceedToImport(props) {
     chosenSubtype: props.chosenSubtype,
     isPrompted: props.isPrompted,
     promptsAnswers: props.promptsAnswers,
+    visualizationInfo,
   };
   if (props.dossierData) {
     okObject.dossierData = {

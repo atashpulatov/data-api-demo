@@ -8,6 +8,7 @@ import { PopupButtons } from '../popup/popup-buttons';
 import { actions } from './navigation-tree-actions';
 import { isPrompted as checkIfPrompted } from '../mstr-object/mstr-object-rest-service';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import './navigation-tree.css';
 
 export class _NavigationTree extends Component {
   constructor(props) {
@@ -91,10 +92,11 @@ export class _NavigationTree extends Component {
       updateScroll, mstrData, updateSize, t, objectType,
     } = this.props;
     const { triggerUpdate, previewDisplay } = this.state;
-    return (
-      <div>
-        <ObjectTable />
 
+    return (
+      <div className="navigation_tree__main_wrapper">
+        <div className="navigation_tree__title_bar">Import Data</div>
+        <div className="navigation_tree__table_wrapper">mock table</div>
         <PopupButtons
           loading={loading}
           disableActiveActions={!chosenObjectId}

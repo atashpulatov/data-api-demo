@@ -18,18 +18,12 @@ class PopupHelper {
     // 30 is the height of each report list (variable)
     // 200 is the excel ribbon + toolbar height
     // 100 is to convert to percentage
-    return Math.floor(
-      ((230 + reportsListLength * 30) / (window.innerHeight + 200)) * 100,
-    );
+    return Math.floor(((230 + reportsListLength * 30) / (window.innerHeight + 200)) * 100);
   };
 
   runRefreshAllPopup = async (reportArray, reportNumberToShow = 10) => {
     const popupHeight = this.getPopupHeight(reportArray, reportNumberToShow);
-    await popupController.runPopup(
-      PopupTypeEnum.refreshAllPage,
-      popupHeight,
-      28,
-    );
+    await popupController.runPopup(PopupTypeEnum.refreshAllPage, popupHeight, 28);
   };
 
   storagePrepareRefreshAllData = (reportArray) => {
@@ -97,6 +91,7 @@ class PopupHelper {
       isRefreshAll,
       importSubtotal: refreshReport.importSubtotal,
       subtotalsAddresses: refreshReport.subtotalsAddresses,
+      visualizationInfo: refreshReport.visualizationInfo,
     };
     const result = await officeDisplayService.printObject(options);
     if (result && result.type === 'warning') {

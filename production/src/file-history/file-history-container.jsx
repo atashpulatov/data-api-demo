@@ -167,6 +167,7 @@ export class _FileHistoryContainer extends React.Component {
               crosstabHeaderDimensions={report.crosstabHeaderDimensions}
               objectType={report.objectType}
               refreshDate={report.refreshDate}
+              visualizationInfo={report.visualizationInfo}
             />
           ))}
         </div>

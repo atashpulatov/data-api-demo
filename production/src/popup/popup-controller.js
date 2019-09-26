@@ -163,7 +163,7 @@ class PopupController {
       isPrompted,
       promptsAnswers,
       reportName,
-
+      visualizationInfo,
     },
     bindingId,
   ) => {
@@ -182,6 +182,7 @@ class PopupController {
         isRefresh: false,
         isPrompted,
         promptsAnswers,
+        visualizationInfo,
       };
       const result = await officeDisplayService.printObject(options);
       if (result) {
