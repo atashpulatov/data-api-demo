@@ -95,7 +95,7 @@ export class _NavigationTree extends Component {
 
     return (
       <div className="navigation_tree__main_wrapper">
-        <div className="navigation_tree__title_bar">Import Data</div>
+        <div className="navigation_tree__title_bar">{t('Import Data')}</div>
         <div className="navigation_tree__table_wrapper">mock table</div>
         <PopupButtons
           loading={loading}
