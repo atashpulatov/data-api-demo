@@ -206,7 +206,6 @@ export function modifyInstance({ objectId, projectId, mstrObjectType = reportObj
     instanceId,
     version: API_VERSION,
   });
-
   return request
     .put(fullPath)
     .set('x-mstr-authtoken', authToken)
