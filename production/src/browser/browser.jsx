@@ -5,15 +5,31 @@ import { reportsExample } from './objects';
 import { projectsExample } from './projects';
 
 export const Browser = (props) => {
-  console.log('');  // TODO: replace with story code for test
+  // TODO: replace the storybook code snippets below
   const objects = reportsExample.result;
   const projects = projectsExample;
-  console.log(objects);
+  console.log({ objects });
   return (
-    <div>
-      <ObjectTable objects={objects} projects={projects} sort={{}} />
+    <>
+      <ObjectTable
+        objects={objects}
+        projects={projects}
+        sort={{
+          sortBy: 'dateModified',
+          sortDirection: 'DESC',
+        }}
+        onSortChange={(data) => console.log(data)}
+        selected={{
+          id: '02DDEFDA460B58681B005AAB4A1CBFD3',
+          projectId: 'CE52831411E696C8BD2F0080EFD5AF44',
+        }}
+        onSelect={(data) => console.log(data)}
+        locale="en-US"
+        filter={{}}
+        myLibrary={false}
+      />
       <PopupButtons />
-    </div>
+    </>
   );
 };
 
