@@ -290,8 +290,9 @@ export class _OfficeLoadedFile extends React.Component {
       isPrompted,
       refreshDate,
       t,
-      visualizationInfo: { dossierStructure = false },
+      visualizationInfo = false,
     } = this.props;
+    const { dossierStructure = false } = visualizationInfo;
     const { editable, value } = this.state;
     const { dossierName, chapterName, pageName } = dossierStructure;
     const menu = (
