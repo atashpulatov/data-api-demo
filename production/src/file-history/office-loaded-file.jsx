@@ -250,13 +250,13 @@ export class _OfficeLoadedFile extends React.Component {
               {!isLoading ? (
                 <MSTRIcon type="refresh" />
               ) : (
-                <img
+                  <img
                     width="12px"
                     height="12px"
                     src={loadingSpinner}
                     alt={t('Report loading icon')}
                   />
-              )}
+                )}
             </span>
           }
         </ButtonPopover>
@@ -365,8 +365,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
   refreshReportsArray,
   callForEdit,
-  onReprompt: callForReprompt,
+  callForReprompt,
 };
 
-export const OfficeLoadedFile = connect(mapStateToProps,
-  mapDispatchToProps)(withTranslation('common')(_OfficeLoadedFile));
+export const OfficeLoadedFile = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_OfficeLoadedFile));

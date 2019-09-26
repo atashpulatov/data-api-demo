@@ -125,15 +125,7 @@ class OfficeDisplayService {
       }
       // Status 2 = report has open prompts to be answered before data can be returned
       if (instanceDefinition.status === 2) {
-        instanceDefinition = await this._answerPrompts(
-          instanceDefinition,
-          objectId,
-          projectId,
-          promptsAnswers,
-          mstrObjectType,
-          dossierData,
-          body,
-        );
+        instanceDefinition = await this._answerPrompts(instanceDefinition, objectId, projectId, promptsAnswers, dossierData, body);
       }
       const { mstrTable } = instanceDefinition;
       isCrosstab = mstrTable.isCrosstab;
