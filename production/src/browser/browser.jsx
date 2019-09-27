@@ -51,4 +51,14 @@ _Browser.propTypes = {
   myLibrary: PropTypes.bool,
 };
 
+export function mapStateToProps(state) {
+  const cachedData = state.cacheReducer;
+  const browsingData = state.browserReducer;
+  return {
+    projects: cachedData.projects,
+    objects: browsingData.myLibrary ? cachedData.myLibrary : cachedData.environmentLibrary,
+    myLibrary: browsingData.myLibrary,
+  };
+}
+
 export default _Browser;
