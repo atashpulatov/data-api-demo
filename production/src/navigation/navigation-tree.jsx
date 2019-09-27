@@ -18,9 +18,9 @@ export class _NavigationTree extends Component {
   }
 
   handleOk = () => {
-    const { objectType, requestImport, handleDossierOpen } = this.props;
+    const { objectType, requestImport, requestDossierOpen } = this.props;
     if (objectType.name === mstrObjectEnum.mstrObjectType.dossier.name) {
-      handleDossierOpen();
+      requestDossierOpen();
     } else {
       requestImport();
     }

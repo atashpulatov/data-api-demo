@@ -12,6 +12,7 @@ export const UPDATE_SCROLL = 'NAV_TREE_UPDATE_SCROLL';
 export const UPDATE_SIZE = 'NAV_TREE_UPDATE_SIZE';
 export const CANCEL_REQUEST_IMPORT = 'CANCEL_REQUEST_IMPORT';
 export const CLEAR_PROMPTS_ANSWERS = 'CLEAR_PROMPTS_ANSWERS';
+export const REQUEST_DOSSIER_OPEN = 'REQUEST_DOSSIER_OPEN';
 
 export function selectObject(data) {
   return (dispatch) => dispatch({
@@ -70,6 +71,10 @@ export function updateSize(data) {
   return (dispatch) => dispatch({ type: UPDATE_SIZE, data });
 }
 
+export function requestDossierOpen() {
+  return (dispatch) => dispatch({ type: REQUEST_DOSSIER_OPEN });
+}
+
 export const actions = {
-  selectFolder, selectObject, setDataSource, requestImport, promptsAnswered, startImport, startLoading, changeSearching, changeSorting, updateScroll, updateSize,
+  selectFolder, selectObject, setDataSource, requestImport, promptsAnswered, startImport, startLoading, changeSearching, changeSorting, updateScroll, updateSize, requestDossierOpen,
 };
