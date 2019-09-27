@@ -116,7 +116,7 @@ export function fetchVisualizationDefinition({
     .then((res) => parseInstanceDefinition(res));
 }
 
-export function createDossierInstance(projectId, objectId, body) {
+export function createDossierInstance(projectId, objectId, body = {}) {
   const storeState = reduxStore.getState();
   const { envUrl } = storeState.sessionReducer;
   const { authToken } = storeState.sessionReducer;

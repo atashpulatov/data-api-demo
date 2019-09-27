@@ -42,6 +42,8 @@ export const _PopupViewSelector = (props) => {
         && proceedToImport(props);
       popupType = PopupTypeEnum.editFilters;
     } else if (dossierOpenRequested) {
+      // pass given prompts anserws to dossierWindow
+      propsToPass.promptsAnswers = props.promptsAnswers;
       popupType = PopupTypeEnum.dossierWindow;
     } else {
       obtainInstanceWithPromptsAnswers(propsToPass, props);
@@ -52,6 +54,8 @@ export const _PopupViewSelector = (props) => {
     propsToPass.projectId = props.chosenProjectId;
     propsToPass.reportId = props.chosenObjectId;
   } else if (dossierOpenRequested) {
+    // open dossier without prompts
+    propsToPass.promptsAnswers = null;
     popupType = PopupTypeEnum.dossierWindow;
   }
 

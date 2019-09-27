@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { createDossierInstance } from '../mstr-object/mstr-object-rest-service';
 
 const { microstrategy } = window;
 
@@ -15,13 +16,16 @@ export default class _EmbeddedDossier extends React.Component {
 
   loadEmbeddedDossier = async (container) => {
     const { mstrData } = this.props;
-    const { envUrl, token, dossierId, projectId } = mstrData;
+    const { envUrl, token, dossierId, projectId, promptsAnswers } = mstrData;
+    const instance = {};
+    instance.mid = await createDossierInstance(projectId, dossierId);
     const libraryUrl = envUrl.replace('api', 'app');
 
     const url = `${libraryUrl}/${projectId}/${dossierId}`;
     const { CustomAuthenticationType } = microstrategy.dossier;
 
     const props = {
+      instance,
       url,
       enableCustomAuthentication: true,
       customAuthenticationType: CustomAuthenticationType.AUTH_TOKEN,

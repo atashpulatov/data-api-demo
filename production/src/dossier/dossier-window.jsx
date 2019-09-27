@@ -55,7 +55,7 @@ export default class _DossierWindow extends React.Component {
   render() {
     const { chosenProjectName, chosenObjectId, chosenProjectId, handleBack, t, mstrData } = this.props;
     const { isVisualisationSelected } = this.state;
-    const propsToPass = { envUrl: mstrData.envUrl, token: mstrData.token, dossierId: chosenObjectId, projectId: chosenProjectId };
+    const propsToPass = { envUrl: mstrData.envUrl, token: mstrData.token, dossierId: chosenObjectId, projectId: chosenProjectId, promptsAnswers: mstrData.promptsAnswers };
     return (
       <div>
         <h1 title={chosenProjectName} className="ant-col folder-browser-title">{`${t('Import Dossier')} > ${chosenProjectName}`}</h1>
@@ -78,7 +78,7 @@ _DossierWindow.propTypes = {
   chosenProjectId: PropTypes.string,
   handleBack: PropTypes.func,
   t: PropTypes.func,
-  mstrData: PropTypes.shape({ envUrl: PropTypes.string, token: PropTypes.string }),
+  mstrData: PropTypes.shape({ envUrl: PropTypes.string, token: PropTypes.string, promptsAnswers: PropTypes.array || null }),
 };
 
 _DossierWindow.defaultProps = {
@@ -87,7 +87,7 @@ _DossierWindow.defaultProps = {
   chosenProjectId: 'default id',
   handleBack: () => { },
   t: (text) => text,
-  mstrData: { envUrl: 'no env url', token: 'no token' },
+  mstrData: { envUrl: 'no env url', token: 'no token', promptsAnswers: null },
 };
 
 function mapStateToProps(state) {
