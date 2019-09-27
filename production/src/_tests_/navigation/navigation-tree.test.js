@@ -131,6 +131,7 @@ describe('NavigationTree', () => {
     // given
     const givenObjectId = 'objectId';
     const givenProjectId = 'projectId';
+    const givenObjectTypeName = 'report';
     const givenSubtype = 768;
     const givenIsPrompted = 'customPromptAnswer';
     const givenObjectType = mstrObjectEnum.mstrObjectType.report;
@@ -141,7 +142,7 @@ describe('NavigationTree', () => {
     // when
     await wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype);
     // then
-    expect(isPromptedResponse).toBeCalledWith(givenObjectId, givenProjectId);
+    expect(isPromptedResponse).toBeCalledWith(givenObjectId, givenProjectId, givenObjectTypeName);
     expect(selectObject).toBeCalledTimes(2);
     expect(selectObject.mock.calls[0][0]).toEqual({
       chosenObjectId: null,
