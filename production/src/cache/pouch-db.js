@@ -14,7 +14,7 @@ export default class DB {
    * @memberof DB
    */
   constructor(dbName = 'cache') {
-    this.db = new PouchDB(dbName, { revs_limit: 2 });
+    this.db = new PouchDB(dbName, { revs_limit: 1 });
     this.dbName = dbName;
     this.putObjects = this.putObjects.bind(this);
   }
@@ -50,6 +50,23 @@ export default class DB {
   }
 
   /**
+  * Listen to database changes and calls the passed function
+  *
+  * @param {Function} callback Function called on change
+  * @memberof DB
+  */
+  onChange(callback) {
+    return this.instance.changes({ include_docs: true, live: true })
+      .on('change', (change) => {
+        callback(change);
+      }).on('complete', (info) => {
+        console.log(info);
+      }).on('error', (err) => {
+        console.log(err);
+      });
+  }
+
+  /**
    * Delete the current database and create a new instance with the same name
    *
    * @returns {Promise} Promise containing response of deletion
@@ -70,6 +87,25 @@ export default class DB {
    */
   clear() {
     return this.db.destroy();
+  }
+
+  /**
+   * Takes data to put() into the database specified id
+   *
+   * @param {String} _id Document id in the database
+   * @param {Object} data Object to store in the document
+   * @returns {Promise} Promise containing result of put operation
+   * @memberof DB
+   */
+  putData(_id, data) {
+    return this.db.get(_id)
+      .then((doc) => this.db.put({ _id, _rev: doc._rev, data }))
+      .catch((err) => {
+        if (err.name === 'not_found') {
+          return this.db.put({ _id, data });
+        }
+        throw err;
+      });
   }
 
   /**

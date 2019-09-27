@@ -89,14 +89,38 @@ export class _NavigationTree extends Component {
     const {
       setDataSource, dataSource, chosenObjectId, chosenProjectId, pageSize, changeSearching, changeSorting,
       chosenSubtype, folder, selectFolder, loading, handlePopupErrors, scrollPosition, searchText, sorter,
-      updateScroll, mstrData, updateSize, t, objectType,
+      updateScroll, mstrData, updateSize, t, objectType, cache,
     } = this.props;
     const { triggerUpdate, previewDisplay } = this.state;
 
     return (
       <div className="navigation_tree__main_wrapper">
         <div className="navigation_tree__title_bar">{t('Import Data')}</div>
-        <div className="navigation_tree__table_wrapper">mock table</div>
+        {/* <div className="navigation_tree__table_wrapper" style={{ fontSize: 12 }}> */}
+        <div>
+          <p>
+            Projects:
+            {' '}
+            {cache.projects.length}
+          </p>
+          <br />
+          <p>
+            My Library
+            {' '}
+            {cache.myLibrary.isLoading ? '(loading):' : ':'}
+            {' '}
+            {cache.myLibrary.objects.length}
+          </p>
+          <br />
+          <p>
+            Environment Library
+            {' '}
+            {cache.environmentLibrary.isLoading ? '(loading):' : ':'}
+            {' '}
+            {cache.environmentLibrary.objects.length}
+          </p>
+
+        </div>
         <PopupButtons
           loading={loading}
           disableActiveActions={!chosenObjectId}
@@ -115,11 +139,12 @@ _NavigationTree.defaultProps = {
   t: (text) => text,
 };
 
-export const mapStateToProps = ({ officeReducer, navigationTree }) => {
+export const mapStateToProps = ({ officeReducer, navigationTree, cacheReducer }) => {
   const object = officeReducer.preLoadReport;
   return {
     ...navigationTree,
     title: object ? object.name : undefined,
+    cache: cacheReducer,
   };
 };
 

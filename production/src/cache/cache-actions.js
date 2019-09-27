@@ -11,6 +11,11 @@ export const ADD_MY_LIBRARY_OBJECTS = 'ADD_MY_LIBRARY_OBJECTS';
 export const ADD_PROJECTS = 'ADD_PROJECTS';
 export const ADD_ENV_OBJECTS = 'ADD_ENV_OBJECTS';
 
+export const PROJECTS_DB_ID = 'projects';
+export const MY_LIBRARY_DB_ID = 'my-library';
+export const ENV_LIBRARY_DB_ID = 'env-library';
+export const LOADING_DB = 'loading-';
+
 export const objectListLoading = (isLoading) => ({
   type: SET_OBJECT_LIST_LOADING,
   data: isLoading,
@@ -40,29 +45,37 @@ export const clearStateCache = () => ({
   type: CLEAR_CACHE,
 });
 
-export function fetchObjects() {
-  return (dispatch, getState) => {
-    // Projects
-    fetchProjects((objects) => {
-      dispatch(addProjects(objects));
-    });
+export function fetchObjects(dispatch, cache) {
+  // Projects
+  fetchProjects((objects) => cache.putData(PROJECTS_DB_ID, objects))
+    .catch(console.error);
 
-    // My library
-    dispatch(myLibraryLoading(true));
-    getMyLibraryObjectList((objects) => {
-      dispatch(addMyLibraryObjects(objects));
-    }).finally(() => {
+  // My library
+  console.time('Fetch my library');
+  dispatch(myLibraryLoading(true));
+  cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, true);
+  getMyLibraryObjectList((objects) => cache.putData(MY_LIBRARY_DB_ID, objects))
+    .catch(console.error)
+    .finally(() => {
+      console.timeEnd('Fetch my library');
       dispatch(myLibraryLoading(false));
+      cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, false);
     });
 
-    // Environment library
-    dispatch(objectListLoading(true));
-    getObjectList((objects) => {
-      dispatch(addEnvObjects(objects));
-    }).finally(() => {
+  // Environment library
+  console.time('Fetch environment objects');
+  dispatch(objectListLoading(true));
+  cache.putData(LOADING_DB + ENV_LIBRARY_DB_ID, true);
+  const objectCache = [];
+  getObjectList((objects) => {
+    objectCache.push(...objects);
+    return cache.putData(ENV_LIBRARY_DB_ID, objectCache);
+  }).catch(console.error)
+    .finally(() => {
+      console.timeEnd('Fetch environment objects');
       dispatch(objectListLoading(false));
+      cache.putData(LOADING_DB + ENV_LIBRARY_DB_ID, false);
     });
-  };
 }
 
 export function createCache() {
@@ -73,13 +86,41 @@ export function createCache() {
     const cache = new DB(username || 'cache');
     // Remove PouchDBs from other users
     DB.purgePouchDB(username);
+    fetchObjects(dispatch, cache);
+  };
+}
+
+export function connectToCache() {
+  return (dispatch, getState) => {
+    // Create or get DB for current user
+    const { sessionReducer } = getState();
+    const { username } = sessionReducer;
+    const cache = new DB(username || 'cache');
+    dispatch(myLibraryLoading(true));
     dispatch(objectListLoading(true));
-    cache.addObjectsAsync(getObjectList)
-      .then((allObjects) => {
-        // Add to cache
-        dispatch(objectListLoading(false));
-      })
-      .catch(console.error);
+
+    cache.onChange((result) => {
+      console.log(result);
+      switch (result.id) {
+        case PROJECTS_DB_ID:
+          dispatch(addProjects(result.doc.data));
+          break;
+        case MY_LIBRARY_DB_ID:
+          dispatch(addMyLibraryObjects(result.doc.data));
+          break;
+        case ENV_LIBRARY_DB_ID:
+          dispatch(addEnvObjects(result.doc.data));
+          break;
+        case LOADING_DB + MY_LIBRARY_DB_ID:
+          dispatch(myLibraryLoading(result.doc.data));
+          break;
+        case LOADING_DB + ENV_LIBRARY_DB_ID:
+          dispatch(objectListLoading(result.doc.data));
+          break;
+        default:
+          break;
+      }
+    });
   };
 }
 
