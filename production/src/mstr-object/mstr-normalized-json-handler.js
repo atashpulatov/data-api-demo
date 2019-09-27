@@ -110,7 +110,6 @@ class NormalizedJsonHandler {
     const { headers, metricValues } = data;
     const { rows } = headers;
     const result = [];
-
     for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
       const headerCells = rows[rowIndex];
       const rowElements = this.mapElementIndicesToElements({ definition, axis: 'rows', headerCells, rowIndex });
@@ -124,6 +123,9 @@ class NormalizedJsonHandler {
       } else {
         result.push(tabularRows);
       }
+    }
+    if ((result.length === 0) && metricValues && metricValues.raw.length > 0) {
+      result.push([].concat(metricValues[valueMatrix][0]));
     }
     return result;
   };
@@ -162,11 +164,15 @@ class NormalizedJsonHandler {
    * @memberof NormalizedJsonHandler
    * @return {Array}
    */
-  renderTitles = (definition, axis, headers, onElement) => headers[axis].map((headerCells) => {
-    const mapFn = axis === 'rows' ? this.mapElementIndicesToNames : this.mapElementIndicesToElements;
-    const axisElements = mapFn({ definition, axis, headerCells });
-    return axisElements.map((e, axisIndex, elementIndex) => onElement(e, axisIndex, elementIndex));
-  })
+  renderTitles = (definition, axis, headers, onElement) => {
+    const columnTitles = headers[axis].map((headerCells) => {
+      const mapFn = axis === 'rows' ? this.mapElementIndicesToNames : this.mapElementIndicesToElements;
+      const axisElements = mapFn({ definition, axis, headerCells });
+      return axisElements.map((e, axisIndex, elementIndex) => onElement(e, axisIndex, elementIndex));
+    });
+    if (columnTitles.length === 0) return [[]];
+    return columnTitles;
+  }
 
   /**
    * Creates an array with the metric values. We pass a function to pick the object key onElement.
