@@ -5,7 +5,7 @@ import filterDossiersByViewMedia from '../helpers/viewMediaHelper';
 const SEARCH_ENDPOINT = 'searches/results';
 const PROJECTS_ENDPOINT = 'projects';
 const MY_LIBRARY_ENDPOINT = 'library';
-const LIMIT = 4096;
+const LIMIT = 10000;
 const DOSSIER_SUBTYPE = 14081;
 const SUBTYPES = [768, 769, 774, 776, 779, DOSSIER_SUBTYPE];
 
@@ -89,19 +89,22 @@ export function getProjectDictionary() {
 export async function fetchObjectListPagination(callback) {
   const requestParams = getRequestParams();
   console.time('Fetching first batch of objects');
-  const total = await fetchTotalItems({ requestParams, callback });
+  const total = await fetchTotalItems({ requestParams, callback, limit: 1000 });
   console.timeEnd('Fetching first batch of objects');
   const promiseList = [];
-  let offset = LIMIT;
+  let offset = 1000;
   console.time('Fetching environment objects');
   while (offset <= total) {
-    promiseList.push(fetchObjectList({ requestParams, offset }));
+    const promise = fetchObjectList({ requestParams, offset });
+    promiseList.push(promise);
+    const results = await promise;
+    callback(results);
     offset += LIMIT;
   }
-  return Promise.all(promiseList).then((objects) => {
+  return Promise.all(promiseList).then(() => {
     console.timeEnd('Fetching environment objects');
-    const flatObjects = Array.prototype.concat.apply([], objects);
-    return callback(flatObjects);
+    // const flatObjects = Array.prototype.concat.apply([], objects);
+    // return callback(flatObjects);
   });
 }
 

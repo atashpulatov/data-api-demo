@@ -97,7 +97,7 @@ export class _NavigationTree extends Component {
       <div className="navigation_tree__main_wrapper">
         <div className="navigation_tree__title_bar">{t('Import Data')}</div>
         {/* <div className="navigation_tree__table_wrapper" style={{ fontSize: 12 }}> */}
-        <div>
+        <div style={{ padding: 64, fontSize: 20 }}>
           <p>
             Projects:
             {' '}

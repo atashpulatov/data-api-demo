@@ -66,11 +66,7 @@ export function fetchObjects(dispatch, cache) {
   console.time('Fetch environment objects');
   dispatch(objectListLoading(true));
   cache.putData(LOADING_DB + ENV_LIBRARY_DB_ID, true);
-  const objectCache = [];
-  getObjectList((objects) => {
-    objectCache.push(...objects);
-    return cache.putData(ENV_LIBRARY_DB_ID, objectCache);
-  }).catch(console.error)
+  getObjectList((objects) => cache.putData(ENV_LIBRARY_DB_ID, objects, true)).catch(console.error)
     .finally(() => {
       console.timeEnd('Fetch environment objects');
       dispatch(objectListLoading(false));

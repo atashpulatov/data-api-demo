@@ -97,9 +97,13 @@ export default class DB {
    * @returns {Promise} Promise containing result of put operation
    * @memberof DB
    */
-  putData(_id, data) {
+  putData(_id, data, append = false) {
     return this.db.get(_id)
-      .then((doc) => this.db.put({ _id, _rev: doc._rev, data }))
+      .then((doc) => {
+        console.log(doc);
+        if (append) data = doc.data.concat(data);
+        this.db.put({ _id, _rev: doc._rev, data });
+      })
       .catch((err) => {
         if (err.name === 'not_found') {
           return this.db.put({ _id, data });
