@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { createDossierInstance } from '../mstr-object/mstr-object-rest-service';
+import { createDossierInstance, answerDossierPrompts } from '../mstr-object/mstr-object-rest-service';
 
 const { microstrategy } = window;
 
@@ -19,6 +19,15 @@ export default class _EmbeddedDossier extends React.Component {
     const { envUrl, token, dossierId, projectId, promptsAnswers } = mstrData;
     const instance = {};
     instance.mid = await createDossierInstance(projectId, dossierId);
+    if (promptsAnswers != null) {
+      let count = 0;
+      let response;
+      do {
+        response = await answerDossierPrompts({ objectId: dossierId, projectId, instanceId: instance.mid, promptsAnswers: promptsAnswers[count] });
+        count++;
+      } while (response.status === 2);
+    }
+
     const libraryUrl = envUrl.replace('api', 'app');
 
     const url = `${libraryUrl}/${projectId}/${dossierId}`;
@@ -91,6 +100,7 @@ export default class _EmbeddedDossier extends React.Component {
         const dossierData = {
           chapterKey: chapter.nodeKey,
           visualizationKey: (visuzalisations.length > 0) ? visuzalisations[0].key : '',
+          promptsAnswers,
         };
         const { handleSelection } = this.props;
         handleSelection(dossierData);

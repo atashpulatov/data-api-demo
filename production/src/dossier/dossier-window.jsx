@@ -15,6 +15,7 @@ export default class _DossierWindow extends React.Component {
       isVisualisationSelected: false,
       chapterKey: '',
       visualizationKey: '',
+      promptsAnswers: [],
     };
     this.handleSelection = this.handleSelection.bind(this);
     this.handleOk = this.handleOk.bind(this);
@@ -29,17 +30,17 @@ export default class _DossierWindow extends React.Component {
   }
 
   handleSelection(dossierData) {
-    const { chapterKey, visualizationKey } = dossierData;
+    const { chapterKey, visualizationKey, promptsAnswers } = dossierData;
     let newValue = false;
     if ((chapterKey !== '') && (visualizationKey !== '')) {
       newValue = true;
     }
-    this.setState({ isVisualisationSelected: newValue, chapterKey, visualizationKey });
+    this.setState({ isVisualisationSelected: newValue, chapterKey, visualizationKey, promptsAnswers });
   }
 
   handleOk() {
     const { chosenObjectId, chosenProjectId, requestImport, selectObject } = this.props;
-    const { chapterKey, visualizationKey } = this.state;
+    const { chapterKey, visualizationKey, promptsAnswers } = this.state;
     const selectedVisualization = {
       chosenObjectId,
       chosenProjectId,
@@ -47,6 +48,7 @@ export default class _DossierWindow extends React.Component {
       objectType: mstrObjectEnum.mstrObjectType.visualization.type,
       chosenChapterKey: chapterKey,
       chosenVisualizationKey: visualizationKey,
+      promptsAnswers,
     };
     selectObject(selectedVisualization);
     requestImport();
