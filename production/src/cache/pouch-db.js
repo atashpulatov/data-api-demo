@@ -130,16 +130,16 @@ export default class DB {
   }
 
   /**
-   * Checks if DB is empty and if yes executes the callback fn with DB.putObjects()
+   * Checks if DB is empty and if yes executes the callback fn
    *
    * @param {MSTR} callback Function that fetches documents
    * @param {Object} projects Dictionary with project id and name
-   * @returns {Promise} Promise containing result of bulkDocs operation
+   * @returns {Promise} Promise
    * @memberof DB
    */
-  addObjectsAsync(callback) {
+  callIfEmpty(callback) {
     return this.info().then((info) => {
-      if (!info.doc_count) return callback(this.putObjects);
+      if (!info.doc_count) return callback();
       return Promise.resolve();
     });
   }

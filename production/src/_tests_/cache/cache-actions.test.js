@@ -1,5 +1,5 @@
 import {
-  SET_OBJECT_LIST_LOADING, objectListLoading, SET_MY_LIBRARY_LOADING, myLibraryLoading, createCache, clearCache,
+  SET_OBJECT_LIST_LOADING, objectListLoading, SET_MY_LIBRARY_LOADING, myLibraryLoading, createCache, clearCache, ADD_MY_LIBRARY_OBJECTS, addMyLibraryObjects, ADD_ENV_OBJECTS, addEnvObjects, connectToCache,
 } from '../../cache/cache-actions';
 
 describe('Cache actions', () => {
@@ -8,7 +8,7 @@ describe('Cache actions', () => {
     const isLoading = true;
     const expectedAction = {
       type: SET_OBJECT_LIST_LOADING,
-      isLoading,
+      data: isLoading,
     };
 
     // when
@@ -23,11 +23,41 @@ describe('Cache actions', () => {
     const isLoading = true;
     const expectedAction = {
       type: SET_MY_LIBRARY_LOADING,
-      isLoading,
+      data: isLoading,
     };
 
     // when
     const action = myLibraryLoading(isLoading);
+
+    // then
+    expect(action).toEqual(expectedAction);
+  });
+
+  it('should return add my library objects dispatch action', () => {
+    // given
+    const testResult = ['test'];
+    const expectedAction = {
+      type: ADD_MY_LIBRARY_OBJECTS,
+      data: testResult,
+    };
+
+    // when
+    const action = addMyLibraryObjects(testResult);
+
+    // then
+    expect(action).toEqual(expectedAction);
+  });
+
+  it('should return add environment objects dispatch action', () => {
+    // given
+    const testResult = ['test'];
+    const expectedAction = {
+      type: ADD_ENV_OBJECTS,
+      data: testResult,
+    };
+
+    // when
+    const action = addEnvObjects(testResult);
 
     // then
     expect(action).toEqual(expectedAction);
@@ -38,6 +68,16 @@ describe('Cache actions', () => {
 
     // when
     const hof = createCache();
+
+    // then
+    expect(hof).toBeInstanceOf(Function);
+  });
+
+  it('should return connect to cache high order function', () => {
+    // given
+
+    // when
+    const hof = connectToCache();
 
     // then
     expect(hof).toBeInstanceOf(Function);
