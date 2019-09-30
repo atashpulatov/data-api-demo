@@ -7,6 +7,10 @@ import { Office } from '../mockOffice';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 
 describe('Dossierwindow', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should render PopupButtons', () => {
     // given
     // when
