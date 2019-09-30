@@ -113,7 +113,6 @@ class OfficeDisplayService {
         body.template = body.requestedObjects;
       }
       if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-        // !TODO: console.log(promptsAnswers);
         // !TODO: include promptsAnswers in instance body to get prompted data
         const instanceId = (await createDossierInstance(projectId, objectId, body));
         const config = {

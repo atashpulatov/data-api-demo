@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createDossierInstance, answerDossierPrompts } from '../mstr-object/mstr-object-rest-service';
+import { errorService } from '../error/error-handler';
 
 const { microstrategy } = window;
 
@@ -22,10 +23,14 @@ export default class _EmbeddedDossier extends React.Component {
     if (promptsAnswers != null) {
       let count = 0;
       let response;
-      do {
-        response = await answerDossierPrompts({ objectId: dossierId, projectId, instanceId: instance.mid, promptsAnswers: promptsAnswers[count] });
-        count++;
-      } while (response.status === 2);
+      try {
+        do {
+          response = await answerDossierPrompts({ objectId: dossierId, projectId, instanceId: instance.mid, promptsAnswers: promptsAnswers[count] });
+          count++;
+        } while (response.status === 2 && count < promptsAnswers.length);
+      } catch (error) {
+        errorService.handleError(error);
+      }
     }
 
     const libraryUrl = envUrl.replace('api', 'app');

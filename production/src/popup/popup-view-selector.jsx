@@ -42,7 +42,7 @@ export const _PopupViewSelector = (props) => {
         && proceedToImport(props);
       popupType = PopupTypeEnum.editFilters;
     } else if (dossierOpenRequested) {
-      // pass given prompts anserws to dossierWindow
+      // pass given prompts answers to dossierWindow
       propsToPass.promptsAnswers = props.promptsAnswers;
       popupType = PopupTypeEnum.dossierWindow;
     } else {
