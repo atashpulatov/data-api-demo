@@ -42,7 +42,7 @@ describe('Browser', () => {
     const wrappedObjectTables = shallowedComponent.find(ObjectTable);
     expect(wrappedObjectTables.length).toEqual(1);
   });
-  it('should render with proper props passed', () => {
+  it('should render correctly', () => {
     // given
     // when
     const shallowedComponent = shallow(<_Browser {...mockedProps} />);
@@ -100,6 +100,6 @@ describe('Browser', () => {
       expect(parsedProps.myLibrary).toEqual(state.browserReducer.myLibrary);
       expect(parsedProps.objects).toEqual(state.cacheReducer.myLibrary);
     });
-  // objects, projects, onSelect, l selected,ocale, sort, onSortChange, filter, myLibrary,    
+  // objects, projects, onSelect, l selected,ocale, sort, onSortChange, filter, myLibrary 
   });
 });

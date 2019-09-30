@@ -7,19 +7,19 @@ export const _Browser = ({
   objects, projects, selected, onSelect, locale, sort, onSortChange, filter, myLibrary,
 }) => (
   <>
-      <ObjectTable
-        objects={objects}
-        projects={projects}
-        sort={sort}
-        onSortChange={onSortChange}
-        selected={selected}
-        onSelect={onSelect}
-        locale={locale}
-        filter={filter}
-        myLibrary={myLibrary}
+    <ObjectTable
+      objects={objects}
+      projects={projects}
+      sort={sort}
+      onSortChange={onSortChange}
+      selected={selected}
+      onSelect={onSelect}
+      locale={locale}
+      filter={filter}
+      myLibrary={myLibrary}
       />
-      <PopupButtons />
-    </>
+    <PopupButtons />
+  </>
 );
 _Browser.propTypes = {
   objects: PropTypes.arrayOf(PropTypes.object).isRequired,
