@@ -37,10 +37,9 @@ export const _PopupViewSelector = (props) => {
     && !propsToPass.forceChange
   ) {
     if (isInstanceWithPromptsAnswered(props)) {
-      popupType === PopupTypeEnum.repromptingWindow
-        && wasReportJustImported(props)
-        && proceedToImport(props);
-      popupType = PopupTypeEnum.editFilters;
+      if (popupType === PopupTypeEnum.repromptingWindow && wasReportJustImported(props) && proceedToImport(props)) {
+        popupType = PopupTypeEnum.editFilters;
+      }
     } else {
       obtainInstanceWithPromptsAnswers(propsToPass, props);
       return <div />;
@@ -50,7 +49,6 @@ export const _PopupViewSelector = (props) => {
     propsToPass.projectId = props.chosenProjectId;
     propsToPass.reportId = props.chosenObjectId;
   }
-
   return renderProperComponent(popupType,
     methods,
     propsToPass,
