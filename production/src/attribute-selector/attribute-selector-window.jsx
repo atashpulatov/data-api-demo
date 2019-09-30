@@ -32,22 +32,14 @@ export class AttributeSelectorWindow extends Component {
     this.setState({ triggerUpdate: true, loading: true });
   };
 
-  handleCancel = () => attributeSelectorHelpers.officeMessageParent(
-    selectorProperties.commandCancel,
-  );
+  handleCancel = () => attributeSelectorHelpers.officeMessageParent(selectorProperties.commandCancel);
 
   handleBack = () => {
     const { handleBack } = this.props;
     handleBack();
   };
 
-  onTriggerUpdate = (
-    reportId,
-    projectId,
-    reportSubtype,
-    body,
-    reportName = this.props.mstrData.reportName,
-  ) => {
+  onTriggerUpdate = (reportId, projectId, reportSubtype, body, reportName = this.props.mstrData.reportName) => {
     const { mstrData } = this.props;
     const { importSubtotal } = this.state;
     attributeSelectorHelpers.officeMessageParent(
