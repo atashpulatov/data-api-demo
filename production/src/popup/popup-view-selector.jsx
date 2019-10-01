@@ -38,10 +38,7 @@ export const _PopupViewSelector = (props) => {
     && !propsToPass.forceChange
   ) {
     if (isInstanceWithPromptsAnswered(props)) {
-      popupType === PopupTypeEnum.repromptingWindow
-        && wasReportJustImported(props)
-        && proceedToImport(props);
-      popupType = PopupTypeEnum.editFilters;
+      popupType === PopupTypeEnum.repromptingWindow && wasReportJustImported(props) && proceedToImport(props);
     } else {
       obtainInstanceWithPromptsAnswers(propsToPass, props);
       return <div />;
@@ -51,7 +48,6 @@ export const _PopupViewSelector = (props) => {
     propsToPass.projectId = props.chosenProjectId;
     propsToPass.reportId = props.chosenObjectId;
   }
-
   return renderProperComponent(popupType,
     methods,
     propsToPass,
@@ -189,6 +185,13 @@ function composeFilter(selectedFilters) {
 }
 
 function proceedToImport(props) {
+  let visualizationInfo;
+  if (props.chosenChapterKey) {
+    visualizationInfo = {
+      chapterKey: props.chosenChapterKey,
+      visualizationKey: props.chosenVisualizationKey,
+    };
+  }
   const okObject = {
     command: selectorProperties.commandOk,
     chosenObject: props.chosenObjectId,
@@ -196,6 +199,7 @@ function proceedToImport(props) {
     chosenSubtype: props.chosenSubtype,
     isPrompted: props.isPrompted,
     promptsAnswers: props.promptsAnswers,
+    visualizationInfo,
   };
   if (props.dossierData) {
     okObject.dossierData = {

@@ -15,11 +15,15 @@ describe('FileHistoryContainer', () => {
   it('should render component when we are insinde project', () => {
     // given
     const mockReportArray = createMockFilesArray();
+    const visualizationInfoMock = {
+      dossierStructure: 'test',
+    };
     // when
     const wrappedComponent = mount(<Provider store={reduxStore}>
       <_FileHistoryContainer
         project="testProject"
         reportArray={mockReportArray}
+        visualizationInfo={visualizationInfoMock}
       />
                                    </Provider>);
     // then
@@ -289,6 +293,7 @@ const createMockFilesArray = () => {
       name: `mockName_${i}`,
       bindId: `mockBindId_${i}`,
       objectType: { name: 'report' },
+      visualizationInfo: {},
     });
   }
   return mockArray;

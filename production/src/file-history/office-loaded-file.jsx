@@ -16,6 +16,7 @@ import { ButtonPopover } from './button-popover';
 import { ReactComponent as DossierIcon } from './assets/icon_Dossier.svg';
 import { ReactComponent as ClockIcon } from './assets/icon_clock.svg';
 import { officeStoreService } from '../office/store/office-store-service';
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum.js';
 
 export class _OfficeLoadedFile extends React.Component {
   constructor(props) {
@@ -184,11 +185,11 @@ export class _OfficeLoadedFile extends React.Component {
 
   getMstrIcon = (objectType) => {
     switch (objectType.name) {
-      case 'report':
+      case mstrObjectEnum.mstrObjectType.report.name:
         return <MSTRIcon type="report" />;
-      case 'dataset':
+      case mstrObjectEnum.mstrObjectType.dataset.name:
         return <MSTRIcon type="dataset" />;
-      case 'dossier':
+      case mstrObjectEnum.mstrObjectType.visualization.name:
         return <DossierIcon />;
       default:
         break;
@@ -206,6 +207,7 @@ export class _OfficeLoadedFile extends React.Component {
         >
           {!!isPrompted && (
             <span
+              aria-title="Repromt button"
               role="button"
               tabIndex="0"
               className="loading-button-container"
@@ -223,6 +225,7 @@ export class _OfficeLoadedFile extends React.Component {
         >
           {
             <span
+              aria-title="Edit button"
               role="button"
               tabIndex="0"
               className="loading-button-container"
@@ -240,6 +243,7 @@ export class _OfficeLoadedFile extends React.Component {
         >
           {
             <span
+              aria-title="Refresh button"
               role="button"
               tabIndex="0"
               className="loading-button-container"
@@ -249,13 +253,13 @@ export class _OfficeLoadedFile extends React.Component {
               {!isLoading ? (
                 <MSTRIcon type="refresh" />
               ) : (
-                <img
+                  <img
                     width="12px"
                     height="12px"
                     src={loadingSpinner}
                     alt={t('Report loading icon')}
                   />
-              )}
+                )}
             </span>
           }
         </ButtonPopover>
@@ -266,6 +270,7 @@ export class _OfficeLoadedFile extends React.Component {
           arrowPointAtCenter="true"
         >
           <span
+            aria-title="Delete button"
             role="button"
             tabIndex="0"
             onClick={this.deleteAction}
@@ -289,9 +294,11 @@ export class _OfficeLoadedFile extends React.Component {
       isPrompted,
       refreshDate,
       t,
-      visualisationPath,
+      visualizationInfo = false,
     } = this.props;
+    const { dossierStructure = false } = visualizationInfo;
     const { editable, value } = this.state;
+    const { dossierName, chapterName, pageName } = dossierStructure;
     const menu = (
       <Menu>
         {isPrompted && <Menu.Item key="reprompt" onClick={(e) => { e.domEvent.stopPropagation(); this.repromptAction(); }}>{t('Reprompt')}</Menu.Item>}
@@ -308,7 +315,7 @@ export class _OfficeLoadedFile extends React.Component {
           className="file-history-container"
           type="flex"
           justify="center"
-          role="button"
+          role="listitem"
           tabIndex="0"
           onClick={() => onClick(bindingId, true, this.deleteReport, fileName)}
         >
@@ -328,10 +335,19 @@ export class _OfficeLoadedFile extends React.Component {
             {this.renderIcons(t, isPrompted, isLoading)}
           </div>
 
-          {objectType.name === 'dossier' && <div className="visualisation-path-row">{visualisationPath}</div>}
+
+          {objectType.name === mstrObjectEnum.mstrObjectType.visualization.name && dossierStructure
+            && (
+              <ButtonPopover
+                placement="bottom"
+                content={`${dossierName} > ${chapterName} > ${pageName}`}
+                mouseEnterDelay={1}>
+                <div className="visualisation-path-row">{`${dossierName} > ${chapterName} > ${pageName}`}</div>
+              </ButtonPopover>
+            )}
 
           <div className="object-title-row">
-            {this.getMstrIcon(objectType)}
+            {<span>{this.getMstrIcon(objectType)}</span>}
             <RenameInput bindingId={bindingId} fileName={fileName} editable={editable} value={value} enableEdit={this.enableEdit} handleChange={this.handleChange} renameReport={this.renameReport} />
           </div>
         </div>
@@ -353,8 +369,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
   refreshReportsArray,
   callForEdit,
-  onReprompt: callForReprompt,
+  callForReprompt,
 };
 
-export const OfficeLoadedFile = connect(mapStateToProps,
-  mapDispatchToProps)(withTranslation('common')(_OfficeLoadedFile));
+export const OfficeLoadedFile = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_OfficeLoadedFile));

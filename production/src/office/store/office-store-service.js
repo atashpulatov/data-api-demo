@@ -25,6 +25,7 @@ class OfficeStoreService {
         subtotalsAddresses: report.subtotalsAddresses,
         promptsAnswers: report.promptsAnswers,
         crosstabHeaderDimensions: report.crosstabHeaderDimensions,
+        visualizationInfo: report.visualizationInfo,
       });
       settings.set(officeProperties.loadedReportProperties, reportProperties);
       settings.saveAsync();
@@ -80,9 +81,7 @@ class OfficeStoreService {
   };
 
   getOfficeSettings = () => {
-    if (Office === undefined
-      || Office.context === undefined
-      || Office.context.document === undefined) {
+    if (Office === undefined || Office.context === undefined || Office.context.document === undefined) {
       throw new RunOutsideOfficeError();
     }
     return Office.context.document.settings;
@@ -136,6 +135,7 @@ class OfficeStoreService {
           subtotalsAddresses: report.subtotalsAddresses,
           promptsAnswers: report.promptsAnswers,
           crosstabHeaderDimensions: report.crosstabHeaderDimensions,
+          visualizationInfo: report.visualizationInfo,
         },
       });
       this.preserveReport(report);

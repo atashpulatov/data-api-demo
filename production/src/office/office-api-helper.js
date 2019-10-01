@@ -322,23 +322,28 @@ class OfficeApiHelper {
    * @param {Office} context Excel context
    * @memberof OfficeApiHelper
    */
-  clearCrosstabRange = async (officeTable, headerDimensions, context) => {
+  clearCrosstabRange = async (officeTable, crosstabHeaderDimensions, prevheaderDimensions, isCrosstab, context) => {
     try {
       // Row headers
-      const leftRange = officeTable.getRange().getColumnsBefore(headerDimensions.rowsX);
+      const leftRange = officeTable.getRange().getColumnsBefore(prevheaderDimensions.rowsX);
       context.trackedObjects.add(leftRange);
       // Column headers
-      const topRange = officeTable.getRange().getRowsAbove(headerDimensions.columnsY);
+      const topRange = officeTable.getRange().getRowsAbove(prevheaderDimensions.columnsY);
       context.trackedObjects.add(topRange);
       // Title headers
-      const titlesRange = officeTable.getRange().getCell(0, 0).getOffsetRange(0, -1).getResizedRange(-(headerDimensions.columnsY), -(headerDimensions.rowsX - 1));
+      const titlesRange = officeTable.getRange().getCell(0, 0).getOffsetRange(0, -1).getResizedRange(-(prevheaderDimensions.columnsY), -(prevheaderDimensions.rowsX - 1));
       context.trackedObjects.add(titlesRange);
       // Check if ranges are valid before clearing
       await context.sync();
-
-      leftRange.clear('contents');
-      topRange.clear('contents');
-      titlesRange.clear('contents');
+      if (isCrosstab && (crosstabHeaderDimensions === prevheaderDimensions)) {
+        leftRange.clear('contents');
+        topRange.clear('contents');
+        titlesRange.clear('contents');
+      } else {
+        leftRange.clear();
+        topRange.clear();
+        titlesRange.clear();
+      }
       context.trackedObjects.remove([leftRange, topRange, titlesRange]);
     } catch (error) {
       officeTable.showHeaders = false;

@@ -5,6 +5,7 @@ import { OutsideOfRangeError } from '../error/outside-of-range-error';
 import { reduxStore } from '../store';
 import objectTypeEnum from './mstr-object-type-enum';
 import officeConverterServiceV2 from '../office/office-converter-service-v2';
+import mstrObjectEnum from './mstr-object-type-enum';
 
 const reportObjectType = objectTypeEnum.mstrObjectType.report;
 
@@ -99,6 +100,50 @@ export function createInstance({
     .then((res) => parseInstanceDefinition(res));
 }
 
+export function fetchVisualizationDefinition({
+  projectId, objectId, instanceId, visualizationInfo,
+}) {
+  const storeState = reduxStore.getState();
+  const { envUrl } = storeState.sessionReducer;
+  const { authToken } = storeState.sessionReducer;
+  const { chapterKey, visualizationKey } = visualizationInfo;
+  const fullPath = `${envUrl}/v2/dossiers/${objectId}/instances/${instanceId}/chapters/${chapterKey}/visualizations/${visualizationKey}?limit=1`;
+  return request
+    .get(fullPath)
+    .set('x-mstr-authtoken', authToken)
+    .set('x-mstr-projectid', projectId)
+    .withCredentials()
+    .then((res) => parseInstanceDefinition(res));
+}
+
+export function createDossierInstance(projectId, objectId, body = {}) {
+  const storeState = reduxStore.getState();
+  const { envUrl } = storeState.sessionReducer;
+  const { authToken } = storeState.sessionReducer;
+  const fullPath = `${envUrl}/dossiers/${objectId}/instances`;
+  return request
+    .post(fullPath)
+    .set('x-mstr-authtoken', authToken)
+    .set('x-mstr-projectid', projectId)
+    .send(body)
+    .withCredentials()
+    .then((res) => res.body.mid);
+}
+
+export function getDossierDefinition(projectId, objectId) {
+  const storeState = reduxStore.getState();
+  const { envUrl } = storeState.sessionReducer;
+  const { authToken } = storeState.sessionReducer;
+  const fullPath = `${envUrl}/dossiers/${objectId}/definition`;
+  return request
+    .get(fullPath)
+    .set('x-mstr-authtoken', authToken)
+    .set('x-mstr-projectid', projectId)
+    .withCredentials()
+    .then((res) => res.body);
+}
+
+
 export function deleteDossierInstance(projectId, objectId, instanceId) {
   const storeState = reduxStore.getState();
   const { envUrl } = storeState.sessionReducer;
@@ -161,7 +206,6 @@ export function modifyInstance({ objectId, projectId, mstrObjectType = reportObj
     instanceId,
     version: API_VERSION,
   });
-
   return request
     .put(fullPath)
     .set('x-mstr-authtoken', authToken)
@@ -172,9 +216,11 @@ export function modifyInstance({ objectId, projectId, mstrObjectType = reportObj
 }
 
 export function getObjectContentGenerator({
-  instanceDefinition, objectId, projectId, mstrObjectType, dossierData, limit = IMPORT_ROW_LIMIT,
+  instanceDefinition, objectId, projectId, mstrObjectType, dossierData, limit = IMPORT_ROW_LIMIT, visualizationInfo,
 }) {
-  return fetchContentGenerator({ instanceDefinition, objectId, projectId, mstrObjectType, dossierData, limit });
+  return fetchContentGenerator({
+    instanceDefinition, objectId, projectId, mstrObjectType, dossierData, limit, visualizationInfo,
+  });
 }
 
 export function getObjectDefinition(objectId, projectId, mstrObjectType = reportObjectType) {
@@ -241,23 +287,30 @@ function checkTableDimensions({ rows, columns }) {
 }
 
 function getFullPath({
-  envUrl, limit, mstrObjectType, objectId, instanceId, version = 1,
+  envUrl, limit, mstrObjectType, objectId, instanceId, version = 1, visualizationInfo = false,
 }) {
   let path;
-  const api = version > 1 ? `v${version}/` : '';
-  path = `${envUrl}/${api}${mstrObjectType.request}/${objectId}/instances`;
-  path += instanceId ? `/${instanceId}` : '';
-  path += limit ? `?limit=${limit}` : '';
+  if (visualizationInfo) {
+    const { chapterKey, visualizationKey } = visualizationInfo;
+    path = `${envUrl}/v2/dossiers/${objectId}/instances/${instanceId}/chapters/${chapterKey}/visualizations/${visualizationKey}`;
+  } else {
+    const api = version > 1 ? `v${version}/` : '';
+    path = `${envUrl}/${api}${mstrObjectType.request}/${objectId}/instances`;
+    path += instanceId ? `/${instanceId}` : '';
+    path += limit ? `?limit=${limit}` : '';
+  }
   return path;
 }
 
-async function* fetchContentGenerator({ instanceDefinition, objectId, projectId, mstrObjectType, dossierData, limit }) {
+async function* fetchContentGenerator({ instanceDefinition, objectId, projectId, mstrObjectType, dossierData, limit, visualizationInfo }) {
   const totalRows = instanceDefinition.rows;
   const { instanceId, mstrTable } = instanceDefinition;
   const { isCrosstab } = mstrTable;
   const storeState = reduxStore.getState();
   const { envUrl } = storeState.sessionReducer;
   const { authToken } = storeState.sessionReducer;
+  let fetchedRows = 0;
+  let offset = 0;
   const fullPath = getFullPath({
     dossierData,
     envUrl,
@@ -265,9 +318,10 @@ async function* fetchContentGenerator({ instanceDefinition, objectId, projectId,
     objectId,
     instanceId,
     version: API_VERSION,
+    visualizationInfo,
   });
-  let fetchedRows = 0;
-  let offset = 0;
+
+
   const offsetSubtotal = (e) => {
     if (e) (e.rowIndex += offset);
   };
@@ -331,6 +385,7 @@ export default {
   answerPrompts,
   createDossierBasedOnReport,
   createInstance,
+  createDossierInstance,
   deleteDossierInstance,
   getDossierStatus,
   getInstance,
@@ -340,4 +395,6 @@ export default {
   isPrompted,
   modifyInstance,
   rePromptDossier,
+  fetchVisualizationDefinition,
+  getDossierDefinition,
 };
