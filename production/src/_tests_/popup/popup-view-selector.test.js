@@ -416,30 +416,6 @@ describe('PopupViewSelector', () => {
     expect(componentInstance).toBe(null);
   });
 
-  it('should connect on DB when treeview is displayed', () => {
-    // given
-    const location = {
-      search: {},
-    };
-    const connectToDB = jest.fn();
-    const props = {
-      popupType: PopupTypeEnum.navigationTree,
-      connectToDB,
-      propsToPass: {},
-      authToken: 'token',
-    };
-    // when
-
-    // eslint-disable-next-line react/jsx-pascal-case
-    shallow(<_PopupViewSelector
-      location={location}
-      {...props}
-      methods={{}}
-    />);
-    // then
-    expect(connectToDB).toHaveBeenCalled();
-  });
-
   describe('PopupViewConnected', () => {
     const attributeId = 'ACF673EC11E9554D08E20080EF651EBC';
     const metricId = 'ACF6AF8811E9554D08EE0080EF651EBC';
