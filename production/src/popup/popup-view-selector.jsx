@@ -240,7 +240,6 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
     );
   }
   if (popupType === PopupTypeEnum.navigationTree) {
-    propsToPass.connectToDB();
     return (
       <NavigationTree
         handlePrepare={methods.handlePrepare}

@@ -94,13 +94,11 @@ export function connectToCache() {
     const { sessionReducer } = getState();
     const { username } = sessionReducer;
     const cache = new DB(username || 'cache');
-    console.time('Cache loading');
     dispatch(myLibraryLoading(true));
     dispatch(objectListLoading(true));
 
-    cache.onChange((result) => {
+    return cache.onChange((result) => {
       console.log(result);
-      console.timeEnd('Cache loading');
       switch (result.id) {
         case PROJECTS_DB_ID:
           dispatch(addProjects(result.doc.data));

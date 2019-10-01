@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { objectTypes } from '@mstr/mstr-react-library';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import { ObjectTable } from '@mstr/rc/dist';
+// import { ObjectTable } from '@mstr/rc/dist';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { PopupButtons } from '../popup/popup-buttons';
 import { actions } from './navigation-tree-actions';
@@ -17,6 +17,23 @@ export class _NavigationTree extends Component {
       triggerUpdate: false,
       previewDisplay: false,
     };
+    const ua = window.navigator.userAgent;
+    this.isMSIE = ua.indexOf('MSIE ') > 0 || !!navigator.userAgent.match(/Trident.*rv:11\./);
+  }
+
+  componentDidMount() {
+    const { mstrData } = this.props;
+    this.DBConnection = mstrData.connectToDB();
+  }
+
+  componentDidUpdate() {
+    if (this.isMSIE) {
+      this.DBConnection.cancel();
+      const { cache } = this.props;
+      if (cache.myLibrary.isLoading || cache.environmentLibrary.isLoading) {
+        this.mstrData.connectToDB();
+      }
+    }
   }
 
   handleOk = () => {
