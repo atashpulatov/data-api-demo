@@ -1,11 +1,12 @@
 /* eslint-disable react/jsx-filename-extension */
 import React from 'react';
-import {shallow} from 'enzyme';
-import {ObjectTable} from '@mstr/rc';
-import {_Browser, mapStateToProps} from './browser';
-import {PopupButtons} from '../popup/popup-buttons';
-import {reportsExample} from './objects';
-import {projectsExample} from './projects';
+import { shallow } from 'enzyme';
+import { ObjectTable } from '@mstr/rc';
+import { _Browser, mapStateToProps, mapDispatchToProps } from './browser';
+import { PopupButtons } from '../popup/popup-buttons';
+import { reportsExample } from './objects';
+import { projectsExample } from './projects';
+import {browserActions} from './browser-actions';
 
 describe('Browser', () => {
   const mockedProps = {
@@ -123,6 +124,10 @@ describe('Browser', () => {
       expect(parsedProps.selected).toEqual(state.browserReducer.selected);
       expect(parsedProps.sort).toEqual(state.browserReducer.sort);
       expect(parsedProps.filter).toEqual(state.browserReducer.filter);
+    });
+
+    it('should plug browser actions to props', () => {
+      expect(mapDispatchToProps).toEqual(browserActions);
     });
   });
 });

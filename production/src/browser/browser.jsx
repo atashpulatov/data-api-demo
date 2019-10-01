@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 import { ObjectTable } from '@mstr/rc';
 import { PopupButtons } from '../popup/popup-buttons';
+import {browserActions} from './browser-actions';
 
 export const _Browser = ({
   objects, projects, selected, onSelect, locale, sort, onSortChange, filter, myLibrary,
@@ -64,4 +67,9 @@ export function mapStateToProps(state) {
   };
 }
 
-export default _Browser;
+export const mapDispatchToProps = {
+  ...browserActions,
+};
+
+export const Browser = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_Browser));
+export default Browser;
