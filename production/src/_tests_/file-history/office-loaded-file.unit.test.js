@@ -324,7 +324,7 @@ describe('office loaded file', () => {
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile fileName="test" objectType={{ name: 'report' }} visualizationInfo={visualizationInfoMock} />);
     // then
-    expect(wrappedComponent.find(Popover)).toHaveLength(6);
+    expect(wrappedComponent.find(Popover)).toHaveLength(7);
   });
   it('should invoke edit method on button click', async () => {
     // given
