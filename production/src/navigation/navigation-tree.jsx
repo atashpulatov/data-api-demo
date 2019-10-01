@@ -9,6 +9,7 @@ import { actions } from './navigation-tree-actions';
 import { isPrompted as checkIfPrompted } from '../mstr-object/mstr-object-rest-service';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './navigation-tree.css';
+import { connectToCache, refreshCache, createCache } from '../cache/cache-actions';
 
 export class _NavigationTree extends Component {
   constructor(props) {
@@ -22,21 +23,33 @@ export class _NavigationTree extends Component {
   }
 
   componentDidMount() {
-    const { mstrData } = this.props;
-    this.DBConnection = mstrData.connectToDB();
-    if (this.isMSIE) this.reconnectToDB();
+    this.connectToCache();
   }
 
-  reconnectToDB = () => {
-    const { cache, mstrData } = this.props;
+  connectToCache = () => {
+    const { connectToDB } = this.props;
+    this.DBConnection = connectToDB();
+    if (this.isMSIE) this.startDBListener();
+  }
+
+  startDBListener = () => {
+    const { cache, connectToDB } = this.props;
     if (cache.projects.length < 1 || cache.myLibrary.isLoading || cache.environmentLibrary.isLoading) {
       setTimeout(() => {
-        mstrData.connectToDB(true);
-        this.reconnectToDB();
+        connectToDB(true);
+        this.startDBListener();
       }, 1000);
     } else {
       this.DBConnection.cancel();
     }
+  }
+
+  refresh = () => {
+    this.DBConnection.cancel();
+    const { refreshDB, initDB } = this.props;
+    refreshDB(initDB).then(() => {
+      this.connectToCache();
+    });
   }
 
   handleOk = () => {
@@ -109,7 +122,7 @@ export class _NavigationTree extends Component {
     const {
       setDataSource, dataSource, chosenObjectId, chosenProjectId, pageSize, changeSearching, changeSorting,
       chosenSubtype, folder, selectFolder, loading, handlePopupErrors, scrollPosition, searchText, sorter,
-      updateScroll, mstrData, updateSize, t, objectType, cache,
+      updateScroll, mstrData, updateSize, t, objectType, cache, refreshDB,
     } = this.props;
     const { triggerUpdate, previewDisplay } = this.state;
 
@@ -139,6 +152,7 @@ export class _NavigationTree extends Component {
             {' '}
             {cache.environmentLibrary.objects.length}
           </p>
+          <button type="button" onClick={this.refresh}>Refresh</button>
 
         </div>
         <PopupButtons
@@ -159,6 +173,7 @@ _NavigationTree.defaultProps = {
   t: (text) => text,
 };
 
+
 export const mapStateToProps = ({ officeReducer, navigationTree, cacheReducer }) => {
   const object = officeReducer.preLoadReport;
   return {
@@ -168,4 +183,11 @@ export const mapStateToProps = ({ officeReducer, navigationTree, cacheReducer })
   };
 };
 
-export const NavigationTree = connect(mapStateToProps, actions)(withTranslation('common')(_NavigationTree));
+const mapActionsToProps = {
+  ...actions,
+  initDB: createCache,
+  connectToDB: connectToCache,
+  refreshDB: refreshCache,
+};
+
+export const NavigationTree = connect(mapStateToProps, mapActionsToProps)(withTranslation('common')(_NavigationTree));

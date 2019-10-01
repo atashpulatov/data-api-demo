@@ -12,19 +12,17 @@ import { actions } from '../navigation/navigation-tree-actions';
 import { PromptsWindow } from '../prompts/prompts-window';
 import { preparePromptedReport } from './popup-actions';
 import { createInstance, answerPrompts, getInstance } from '../mstr-object/mstr-object-rest-service';
-import { connectToCache } from '../cache/cache-actions';
 
 
 const { Office } = window;
 
 export const _PopupViewSelector = (props) => {
   let { popupType } = props;
-  const { propsToPass, methods, importRequested, connectToDB } = props;
+  const { propsToPass, methods, importRequested } = props;
   if (!props.authToken || !propsToPass) {
     console.log('Waiting for token to be passed');
     return null;
   }
-  propsToPass.connectToDB = connectToDB;
   propsToPass.token = props.authToken;
   propsToPass.editRequested = popupType === PopupTypeEnum.editFilters;
   const localEditReport = { ...props.editedReport };
@@ -296,7 +294,6 @@ export function mapStateToProps(state) {
 const popupActions = {
   ...actions,
   preparePromptedReport,
-  connectToDB: connectToCache,
 };
 
 export const PopupViewSelector = connect(mapStateToProps, popupActions)(_PopupViewSelector);

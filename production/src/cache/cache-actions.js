@@ -133,3 +133,13 @@ export function clearCache() {
     return cache.clear().catch(console.error);
   };
 }
+
+export function refreshCache(callback) {
+  return (dispatch, getState) => {
+    const { sessionReducer } = getState();
+    const { username } = sessionReducer;
+    const cache = new DB(username || 'cache');
+    dispatch(clearStateCache());
+    return cache.clear().then(callback).catch(console.error);
+  };
+}

@@ -1,5 +1,5 @@
 import {
-  SET_OBJECT_LIST_LOADING, objectListLoading, SET_MY_LIBRARY_LOADING, myLibraryLoading, createCache, clearCache, ADD_MY_LIBRARY_OBJECTS, addMyLibraryObjects, ADD_ENV_OBJECTS, addEnvObjects, connectToCache,
+  SET_OBJECT_LIST_LOADING, objectListLoading, SET_MY_LIBRARY_LOADING, myLibraryLoading, createCache, clearCache, ADD_MY_LIBRARY_OBJECTS, addMyLibraryObjects, ADD_ENV_OBJECTS, addEnvObjects, connectToCache, refreshCache,
 } from '../../cache/cache-actions';
 
 describe('Cache actions', () => {
@@ -88,6 +88,16 @@ describe('Cache actions', () => {
 
     // when
     const hof = clearCache();
+
+    // then
+    expect(hof).toBeInstanceOf(Function);
+  });
+
+  it('should return refresh cache high order function', () => {
+    // given
+
+    // when
+    const hof = refreshCache();
 
     // then
     expect(hof).toBeInstanceOf(Function);
