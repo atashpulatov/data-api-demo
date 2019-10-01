@@ -24,15 +24,18 @@ export class _NavigationTree extends Component {
   componentDidMount() {
     const { mstrData } = this.props;
     this.DBConnection = mstrData.connectToDB();
+    if (this.isMSIE) this.reconnectToDB();
   }
 
-  componentDidUpdate() {
-    if (this.isMSIE) {
+  reconnectToDB = () => {
+    const { cache, mstrData } = this.props;
+    if (cache.projects.length < 1 || cache.myLibrary.isLoading || cache.environmentLibrary.isLoading) {
+      setTimeout(() => {
+        mstrData.connectToDB(true);
+        this.reconnectToDB();
+      }, 1000);
+    } else {
       this.DBConnection.cancel();
-      const { cache } = this.props;
-      if (cache.myLibrary.isLoading || cache.environmentLibrary.isLoading) {
-        this.mstrData.connectToDB();
-      }
     }
   }
 

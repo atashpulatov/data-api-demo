@@ -88,14 +88,16 @@ export function createCache() {
   };
 }
 
-export function connectToCache() {
+export function connectToCache(reconnect = false) {
   return (dispatch, getState) => {
     // Create or get DB for current user
     const { sessionReducer } = getState();
     const { username } = sessionReducer;
     const cache = new DB(username || 'cache');
-    dispatch(myLibraryLoading(true));
-    dispatch(objectListLoading(true));
+    if (!reconnect) {
+      dispatch(myLibraryLoading(true));
+      dispatch(objectListLoading(true));
+    }
 
     return cache.onChange((result) => {
       console.log(result);
