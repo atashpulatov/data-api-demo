@@ -13,6 +13,7 @@ export const UPDATE_SIZE = 'NAV_TREE_UPDATE_SIZE';
 export const CANCEL_REQUEST_IMPORT = 'CANCEL_REQUEST_IMPORT';
 export const CLEAR_PROMPTS_ANSWERS = 'CLEAR_PROMPTS_ANSWERS';
 export const REQUEST_DOSSIER_OPEN = 'REQUEST_DOSSIER_OPEN';
+export const CANCEL_DOSSIER_OPEN = 'CANCEL_DOSSIER_OPEN';
 
 export function selectObject(data) {
   return (dispatch) => dispatch({
