@@ -58,6 +58,9 @@ export function mapStateToProps(state) {
     projects: cachedData.projects,
     objects: browsingData.myLibrary ? cachedData.myLibrary : cachedData.environmentLibrary,
     myLibrary: browsingData.myLibrary,
+    selected: browsingData.selected,
+    sort: browsingData.sort,
+    filter: browsingData.filter,
   };
 }
 

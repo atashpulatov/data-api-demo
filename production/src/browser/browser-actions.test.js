@@ -7,7 +7,7 @@ import {
 } from './browser-actions';
 
 describe('Browser actions', () => {
-  it('should dispatch proper setMyLibrary action', () => {
+  it('should dispatch proper onMyLibraryChange action', () => {
     // given
     const myLibraryFilter = 'myLibraryFilter';
     const listener = jest.fn();
@@ -17,7 +17,7 @@ describe('Browser actions', () => {
     expect(listener).toHaveBeenCalledWith({ type: ON_MY_LIBRARY_CHANGED_CONST, myLibrary: myLibraryFilter });
   });
 
-  it('should dispatch proper setFilter action', () => {
+  it('should dispatch proper onFilterChange action', () => {
     // given
     const filter = 'filter';
     const listener = jest.fn();
@@ -27,7 +27,7 @@ describe('Browser actions', () => {
     expect(listener).toHaveBeenCalledWith({ type: ON_FILTER_CHANGED_CONST, filter });
   });
 
-  it('should dispatch proper setSort action', () => {
+  it('should dispatch proper onSortChange action', () => {
     // given
     const sort = 'sort';
     const listener = jest.fn();
@@ -37,7 +37,7 @@ describe('Browser actions', () => {
     expect(listener).toHaveBeenCalledWith({ type: ON_SORT_CHANGE_CONST, sort });
   });
 
-  it('should dispatch proper setSelected action', () => {
+  it('should dispatch proper onSelect action', () => {
     // given
     const selected = 'selectedObject';
     const listener = jest.fn();

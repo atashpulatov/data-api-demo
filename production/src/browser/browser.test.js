@@ -100,6 +100,29 @@ describe('Browser', () => {
       expect(parsedProps.myLibrary).toEqual(state.browserReducer.myLibrary);
       expect(parsedProps.objects).toEqual(state.cacheReducer.myLibrary);
     });
-  // objects, projects, onSelect, l selected,ocale, sort, onSortChange, filter, myLibrary 
+
+    it('should parse other properties', () => {
+      // given
+      const state = {
+        cacheReducer: {
+          projects: 'projects',
+          environmentLibrary: 'environmentLibrary',
+          myLibrary: 'myLibrary',
+        },
+        browserReducer: {
+          myLibrary: 'myLibraryFlag',
+          selected: 'selectedObject',
+          sort: 'sortOrder',
+          filter: 'filter',
+        },
+      };
+      // when
+      const parsedProps = mapStateToProps(state);
+      // then
+      expect(parsedProps.myLibrary).toEqual(state.browserReducer.myLibrary);
+      expect(parsedProps.selected).toEqual(state.browserReducer.selected);
+      expect(parsedProps.sort).toEqual(state.browserReducer.sort);
+      expect(parsedProps.filter).toEqual(state.browserReducer.filter);
+    });
   });
 });
