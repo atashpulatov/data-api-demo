@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createDossierInstance, answerDossierPrompts } from '../mstr-object/mstr-object-rest-service';
-import { errorService } from '../error/error-handler';
 
 const { microstrategy } = window;
 
@@ -12,7 +11,11 @@ export default class _EmbeddedDossier extends React.Component {
   }
 
   componentDidMount() {
-    this.loadEmbeddedDossier(this.container.current);
+    try {
+      this.loadEmbeddedDossier(this.container.current);
+    } catch (error) {
+      // !TODO: close popup and display custom error message
+    }
   }
 
   loadEmbeddedDossier = async (container) => {
@@ -22,14 +25,13 @@ export default class _EmbeddedDossier extends React.Component {
     instance.mid = await createDossierInstance(projectId, dossierId);
     if (promptsAnswers != null) {
       let count = 0;
-      let response;
-      try {
-        do {
-          response = await answerDossierPrompts({ objectId: dossierId, projectId, instanceId: instance.mid, promptsAnswers: promptsAnswers[count] });
-          count++;
-        } while (response.status === 2 && count < promptsAnswers.length);
-      } catch (error) {
-        errorService.handleError(error);
+      let responseStatus;
+      while (count < promptsAnswers.length) {
+        responseStatus = await answerDossierPrompts({ objectId: dossierId, projectId, instanceId: instance.mid, promptsAnswers: promptsAnswers[count] });
+        if (responseStatus !== 204) {
+          throw new Error();
+        }
+        count++;
       }
     }
 
