@@ -1,4 +1,10 @@
-import { browserActions, SET_MY_LIBRARY_CONST, SET_FILTER_CONST, SET_SORT_CONST, SET_SELECTED_CONST } from './browser-actions';
+import {
+  browserActions,
+  ON_MY_LIBRARY_CHANGED_CONST,
+  ON_FILTER_CHANGED_CONST,
+  ON_SORT_CHANGE_CONST,
+  ON_SELECT_CONST,
+} from './browser-actions';
 
 describe('Browser actions', () => {
   it('should dispatch proper setMyLibrary action', () => {
@@ -6,9 +12,9 @@ describe('Browser actions', () => {
     const myLibraryFilter = 'myLibraryFilter';
     const listener = jest.fn();
     // when
-    browserActions.setMyLibrary(myLibraryFilter)(listener);
+    browserActions.onMyLibraryChange(myLibraryFilter)(listener);
     // then
-    expect(listener).toHaveBeenCalledWith({ type: SET_MY_LIBRARY_CONST, myLibrary: myLibraryFilter });
+    expect(listener).toHaveBeenCalledWith({ type: ON_MY_LIBRARY_CHANGED_CONST, myLibrary: myLibraryFilter });
   });
 
   it('should dispatch proper setFilter action', () => {
@@ -16,9 +22,9 @@ describe('Browser actions', () => {
     const filter = 'filter';
     const listener = jest.fn();
     // when
-    browserActions.setFilter(filter)(listener);
+    browserActions.onFilterChange(filter)(listener);
     // then
-    expect(listener).toHaveBeenCalledWith({ type: SET_FILTER_CONST, filter });
+    expect(listener).toHaveBeenCalledWith({ type: ON_FILTER_CHANGED_CONST, filter });
   });
 
   it('should dispatch proper setSort action', () => {
@@ -26,9 +32,9 @@ describe('Browser actions', () => {
     const sort = 'sort';
     const listener = jest.fn();
     // when
-    browserActions.setSort(sort)(listener);
+    browserActions.onSortChange(sort)(listener);
     // then
-    expect(listener).toHaveBeenCalledWith({ type: SET_SORT_CONST, sort });
+    expect(listener).toHaveBeenCalledWith({ type: ON_SORT_CHANGE_CONST, sort });
   });
 
   it('should dispatch proper setSelected action', () => {
@@ -36,8 +42,8 @@ describe('Browser actions', () => {
     const selected = 'selectedObject';
     const listener = jest.fn();
     // when
-    browserActions.setSelected(selected)(listener);
+    browserActions.onSelect(selected)(listener);
     // then
-    expect(listener).toHaveBeenCalledWith({ type: SET_SELECTED_CONST, selected });
+    expect(listener).toHaveBeenCalledWith({ type: ON_SELECT_CONST, selected });
   });
 });

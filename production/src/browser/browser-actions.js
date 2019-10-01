@@ -1,41 +1,41 @@
-export const SET_MY_LIBRARY_CONST = 'MY_LIBRARY_FILTER';
-export const SET_FILTER_CONST = 'FILTER_OF_OBJECTS';
-export const SET_SORT_CONST = 'SORT_OF_OBJECTS';
-export const SET_SELECTED_CONST = 'SELECTED_OBJECT';
+export const ON_MY_LIBRARY_CHANGED_CONST = 'ON_MY_LIBRARY_CHANGED';
+export const ON_FILTER_CHANGED_CONST = 'ON_FILTER_CHANGED';
+export const ON_SORT_CHANGE_CONST = 'ON_SORT_CHANGE';
+export const ON_SELECT_CONST = 'ON_SELECT';
 
-const setMyLibrary = (myLibrary) => (dispatch) => {
+const onMyLibraryChange = (myLibrary) => (dispatch) => {
   dispatch({
-    type: SET_MY_LIBRARY_CONST,
+    type: ON_MY_LIBRARY_CHANGED_CONST,
     myLibrary,
   });
 };
 
-const setFilter = (filter) => (dispatch) => {
+const onFilterChange = (filter) => (dispatch) => {
   dispatch({
-    type: SET_FILTER_CONST,
+    type: ON_FILTER_CHANGED_CONST,
     filter,
   });
 };
 
-const setSort = (sort) => (dispatch) => {
+const onSortChange = (sort) => (dispatch) => {
   dispatch({
-    type: SET_SORT_CONST,
+    type: ON_SORT_CHANGE_CONST,
     sort,
   });
 };
 
-const setSelected = (selected) => (dispatch) => {
+const onSelect = (selected) => (dispatch) => {
   dispatch({
-    type: SET_SELECTED_CONST,
+    type: ON_SELECT_CONST,
     selected,
   });
 };
 
 export const browserActions = {
-  setMyLibrary,
-  setFilter,
-  setSort,
-  setSelected,
+  onMyLibraryChange,
+  onFilterChange,
+  onSortChange,
+  onSelect,
 };
 
 export default {};

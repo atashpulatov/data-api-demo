@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-filename-extension */
 import { createStore } from 'redux';
 import { browserReducer } from './browser-reducer';
-import { SET_MY_LIBRARY_CONST, SET_FILTER_CONST, SET_SORT_CONST, SET_SELECTED_CONST } from './browser-actions';
+import { ON_MY_LIBRARY_CHANGED_CONST, ON_FILTER_CHANGED_CONST, ON_SORT_CHANGE_CONST, ON_SELECT_CONST } from './browser-actions';
 
 describe('Browser reducer', () => {
   const browserStore = createStore(browserReducer);
@@ -20,7 +20,7 @@ describe('Browser reducer', () => {
     const myLibrary = 'myLibraryFilter';
     // when
     browserStore.dispatch({
-      type: SET_MY_LIBRARY_CONST,
+      type: ON_MY_LIBRARY_CHANGED_CONST,
       myLibrary,
     });
     // then
@@ -33,7 +33,7 @@ describe('Browser reducer', () => {
     const filter = 'filterToSet';
     // when
     browserStore.dispatch({
-      type: SET_FILTER_CONST,
+      type: ON_FILTER_CHANGED_CONST,
       filter,
     });
     // then
@@ -46,7 +46,7 @@ describe('Browser reducer', () => {
     const sort = 'sortOrder';
     // when
     browserStore.dispatch({
-      type: SET_SORT_CONST,
+      type: ON_SORT_CHANGE_CONST,
       sort,
     });
     // then
@@ -59,7 +59,7 @@ describe('Browser reducer', () => {
     const selected = 'selectedObject';
     // when
     browserStore.dispatch({
-      type: SET_SELECTED_CONST,
+      type: ON_SELECT_CONST,
       selected,
     });
     // then
