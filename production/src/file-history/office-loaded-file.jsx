@@ -207,6 +207,7 @@ export class _OfficeLoadedFile extends React.Component {
         >
           {!!isPrompted && (
             <span
+              aria-title="Repromt button"
               role="button"
               tabIndex="0"
               className="loading-button-container"
@@ -224,6 +225,7 @@ export class _OfficeLoadedFile extends React.Component {
         >
           {
             <span
+              aria-title="Edit button"
               role="button"
               tabIndex="0"
               className="loading-button-container"
@@ -241,6 +243,7 @@ export class _OfficeLoadedFile extends React.Component {
         >
           {
             <span
+              aria-title="Refresh button"
               role="button"
               tabIndex="0"
               className="loading-button-container"
@@ -250,13 +253,13 @@ export class _OfficeLoadedFile extends React.Component {
               {!isLoading ? (
                 <MSTRIcon type="refresh" />
               ) : (
-                <img
+                  <img
                     width="12px"
                     height="12px"
                     src={loadingSpinner}
                     alt={t('Report loading icon')}
                   />
-              )}
+                )}
             </span>
           }
         </ButtonPopover>
@@ -267,6 +270,7 @@ export class _OfficeLoadedFile extends React.Component {
           arrowPointAtCenter="true"
         >
           <span
+            aria-title="Delete button"
             role="button"
             tabIndex="0"
             onClick={this.deleteAction}
@@ -311,7 +315,7 @@ export class _OfficeLoadedFile extends React.Component {
           className="file-history-container"
           type="flex"
           justify="center"
-          role="button"
+          role="listitem"
           tabIndex="0"
           onClick={() => onClick(bindingId, true, this.deleteReport, fileName)}
         >
@@ -365,8 +369,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
   refreshReportsArray,
   callForEdit,
-  onReprompt: callForReprompt,
+  callForReprompt,
 };
 
-export const OfficeLoadedFile = connect(mapStateToProps,
-  mapDispatchToProps)(withTranslation('common')(_OfficeLoadedFile));
+export const OfficeLoadedFile = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_OfficeLoadedFile));

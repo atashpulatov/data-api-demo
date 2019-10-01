@@ -80,12 +80,10 @@ class OfficeConverterServiceV2 {
   getHeaders(response) {
     const rowTotals = [];
     const columnTotals = [];
-
     const onElement = (array) => (e) => {
       if (array) array.push(e.subtotalAddress);
       return `'${e.value.join(' ')}`;
     };
-
     if (this.isCrosstab(response)) {
       const rows = jsonHandler.renderHeaders(response.definition, 'rows', response.data.headers, onElement(rowTotals));
       const columns = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement(columnTotals));

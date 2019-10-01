@@ -32,8 +32,7 @@ export function callForEdit(reportParams) {
           const configPrompts = {
             objectId: id,
             projectId,
-            instanceDefinition:
-              instanceDefinition.instanceId,
+            instanceId: instanceDefinition.instanceId,
             promptsAnswers: promptsAnswers[count],
           };
           await answerPrompts(configPrompts);

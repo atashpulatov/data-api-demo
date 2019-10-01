@@ -336,7 +336,7 @@ describe('PopupViewSelector', () => {
       search: {},
     };
     const props = {
-      popupType: 'whatever',
+      popupType: PopupTypeEnum.editFilters,
       authToken: 'token',
       propsToPass: {
         prop: 'prop',

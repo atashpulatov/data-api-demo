@@ -37,10 +37,7 @@ export const _PopupViewSelector = (props) => {
     && !propsToPass.forceChange
   ) {
     if (isInstanceWithPromptsAnswered(props)) {
-      popupType === PopupTypeEnum.repromptingWindow
-        && wasReportJustImported(props)
-        && proceedToImport(props);
-      popupType = PopupTypeEnum.editFilters;
+      popupType === PopupTypeEnum.repromptingWindow && wasReportJustImported(props) && proceedToImport(props);
     } else if (dossierOpenRequested) {
       // pass given prompts answers to dossierWindow
       propsToPass.promptsAnswers = props.promptsAnswers;
@@ -58,7 +55,6 @@ export const _PopupViewSelector = (props) => {
     propsToPass.promptsAnswers = null;
     popupType = PopupTypeEnum.dossierWindow;
   }
-
   return renderProperComponent(popupType,
     methods,
     propsToPass,
