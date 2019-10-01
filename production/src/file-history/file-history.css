@@ -88,18 +88,17 @@ button.add-data-btn:focus {
   margin-left: 12px;
 }
 
-.visualisation-path-row {
+.visualization-path-row {
   font-family: HelveticaNeue;
   font-size: 10px;
   color: #444649;
   margin-bottom: 8px;
   overflow: hidden;
   text-overflow: ellipsis;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+}
+
+.ant-popover .ant-popover-inner-content  {
+  text-align: left;
 }
 
 .object-title-row {
