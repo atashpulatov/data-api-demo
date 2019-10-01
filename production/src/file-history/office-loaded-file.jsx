@@ -214,7 +214,7 @@ export class _OfficeLoadedFile extends React.Component {
         return (
           <ButtonPopover
             placement="bottom"
-            content={t('Visualization')}
+            content={t('Dossier')}
             mouseEnterDelay={1}
           >
             <span>
@@ -337,7 +337,7 @@ export class _OfficeLoadedFile extends React.Component {
         <Menu.Item key="refresh" onClick={(e) => { e.domEvent.stopPropagation(); this.refreshAction(); }}>{t('Refresh')}</Menu.Item>
         <Menu.Item key="remove" onClick={(e) => { e.domEvent.stopPropagation(); this.deleteAction(); }}>{t('Remove')}</Menu.Item>
         <Menu.Item key="rename" onClick={this.enableEdit}>{t('Rename')}</Menu.Item>
-        <Menu.Item key="copy" onClick={this.copyValue}>{t('Copy')}</Menu.Item>
+        <Menu.Item key="copy" onClick={this.copyValue}>{t('Copy Name')}</Menu.Item>
       </Menu>
     );
     return (
