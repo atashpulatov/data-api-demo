@@ -129,4 +129,15 @@ describe('NavigationTree Actions', () => {
     // then
     expect(listener).toHaveBeenCalledWith({ type: actions.PROMPTS_ANSWERED, data });
   });
+
+  it('should dispatch proper requestDossierOpen action', () => {
+    // given
+    const listener = jest.fn();
+
+    // when
+    actions.requestDossierOpen()(listener);
+
+    // then
+    expect(listener).toHaveBeenCalledWith({ type: actions.REQUEST_DOSSIER_OPEN });
+  });
 });

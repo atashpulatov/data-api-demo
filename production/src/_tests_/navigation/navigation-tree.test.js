@@ -5,7 +5,9 @@ import { selectorProperties } from '../../attribute-selector/selector-properties
 import { Office } from '../mockOffice';
 import * as mstrObjectRestService from '../../mstr-object/mstr-object-rest-service';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
+import { DEFAULT_STATE as CACHE_STATE } from '../../cache/cache-reducer';
 
+// TODO: Enable and update when new table component is implemented
 describe.skip('NavigationTree', () => {
   afterAll(() => {
     jest.restoreAllMocks();
@@ -41,11 +43,7 @@ describe.skip('NavigationTree', () => {
       chosenProjectName: 'Prepare Data',
       chosenType: 'Data',
     };
-    const wrappedComponent = shallow(<_NavigationTree
-      mstrData={mstrData}
-      handlePrepare={propsMethod}
-      {...actionObject}
-    />);
+    const wrappedComponent = shallow(<_NavigationTree mstrData={mstrData} handlePrepare={propsMethod} {...actionObject} />);
     // when
     wrappedComponent.instance().handleSecondary();
     // then
@@ -66,9 +64,7 @@ describe.skip('NavigationTree', () => {
       command: selectorProperties.commandCancel,
     };
     const office = jest.spyOn(Office.context.ui, 'messageParent');
-    const wrappedComponent = shallow(<_NavigationTree
-      mstrData={mstrData}
-    />);
+    const wrappedComponent = shallow(<_NavigationTree mstrData={mstrData} />);
     // when
     wrappedComponent.instance().handleCancel();
     // then
@@ -88,9 +84,7 @@ describe.skip('NavigationTree', () => {
       body,
     };
     const mockMessageParent = jest.spyOn(Office.context.ui, 'messageParent');
-    const wrappedComponent = shallow(<_NavigationTree
-      mstrData={mstrData}
-    />);
+    const wrappedComponent = shallow(<_NavigationTree mstrData={mstrData} />);
     // when
     wrappedComponent.instance().onTriggerUpdate(body);
     // then
@@ -131,6 +125,7 @@ describe.skip('NavigationTree', () => {
     // given
     const givenObjectId = 'objectId';
     const givenProjectId = 'projectId';
+    const givenObjectTypeName = 'report';
     const givenSubtype = 768;
     const givenIsPrompted = 'customPromptAnswer';
     const givenObjectType = mstrObjectEnum.mstrObjectType.report;
@@ -141,7 +136,7 @@ describe.skip('NavigationTree', () => {
     // when
     await wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype);
     // then
-    expect(isPromptedResponse).toBeCalledWith(givenObjectId, givenProjectId);
+    expect(isPromptedResponse).toBeCalledWith(givenObjectId, givenProjectId, givenObjectTypeName);
     expect(selectObject).toBeCalledTimes(2);
     expect(selectObject.mock.calls[0][0]).toEqual({
       chosenObjectId: null,
@@ -159,7 +154,7 @@ describe.skip('NavigationTree', () => {
     });
   });
 
-  it('should call handleDossierOpen on handleOk if provided objectType is dossier', () => {
+  it('should call requestDossierOpen on handleOk if provided objectType is dossier', () => {
     // given
     const mstrData = {
       envUrl: 'env',
@@ -168,13 +163,13 @@ describe.skip('NavigationTree', () => {
     };
     const objectType = { name: mstrObjectEnum.mstrObjectType.dossier.name };
     const mockRequestImport = jest.fn();
-    const mockHandleDossierOpen = jest.fn();
-    const wrappedComponent = shallow(<_NavigationTree mstrData={mstrData} objectType={objectType} requestImport={mockRequestImport} handleDossierOpen={mockHandleDossierOpen} />);
+    const mockRequestDossierOpen = jest.fn();
+    const wrappedComponent = shallow(<_NavigationTree mstrData={mstrData} objectType={objectType} requestImport={mockRequestImport} requestDossierOpen={mockRequestDossierOpen} />);
     // when
     wrappedComponent.instance().handleOk();
     // then
     expect(mockRequestImport).not.toHaveBeenCalled();
-    expect(mockHandleDossierOpen).toHaveBeenCalled();
+    expect(mockRequestDossierOpen).toHaveBeenCalled();
   });
 
   it('should call requestImport on handleOk if provided objectType is not dossier', () => {
@@ -193,5 +188,20 @@ describe.skip('NavigationTree', () => {
     // then
     expect(mockRequestImport).toHaveBeenCalled();
     expect(mockHandleDossierOpen).not.toHaveBeenCalled();
+  });
+
+  it('should connect on DB when navigation-tree is mounted', () => {
+    // given
+    const connectToDB = jest.fn();
+    const mstrData = {
+      envUrl: 'env',
+      token: 'token',
+      projectId: 'projectId',
+      connectToDB,
+    };
+    // whens
+    shallow(<_NavigationTree mstrData={mstrData} cache={CACHE_STATE} />);
+    // then
+    expect(connectToDB).toHaveBeenCalled();
   });
 });

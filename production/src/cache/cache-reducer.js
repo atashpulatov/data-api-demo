@@ -29,7 +29,7 @@ const cacheReducer = (state = DEFAULT_STATE, action) => {
     case ADD_ENV_OBJECTS:
       return {
         ...state,
-        environmentLibrary: { ...state.environmentLibrary, objects: [...state.environmentLibrary.objects, ...action.data] },
+        environmentLibrary: { ...state.environmentLibrary, objects: action.data },
       };
     case ADD_MY_LIBRARY_OBJECTS:
       return {

@@ -15,6 +15,7 @@ export default class _DossierWindow extends React.Component {
       isVisualisationSelected: false,
       chapterKey: '',
       visualizationKey: '',
+      promptsAnswers: [],
     };
     this.handleSelection = this.handleSelection.bind(this);
     this.handleOk = this.handleOk.bind(this);
@@ -29,17 +30,17 @@ export default class _DossierWindow extends React.Component {
   }
 
   handleSelection(dossierData) {
-    const { chapterKey, visualizationKey } = dossierData;
+    const { chapterKey, visualizationKey, promptsAnswers } = dossierData;
     let newValue = false;
     if ((chapterKey !== '') && (visualizationKey !== '')) {
       newValue = true;
     }
-    this.setState({ isVisualisationSelected: newValue, chapterKey, visualizationKey });
+    this.setState({ isVisualisationSelected: newValue, chapterKey, visualizationKey, promptsAnswers });
   }
 
   handleOk() {
     const { chosenObjectId, chosenProjectId, requestImport, selectObject } = this.props;
-    const { chapterKey, visualizationKey } = this.state;
+    const { chapterKey, visualizationKey, promptsAnswers } = this.state;
     const selectedVisualization = {
       chosenObjectId,
       chosenProjectId,
@@ -47,6 +48,7 @@ export default class _DossierWindow extends React.Component {
       objectType: mstrObjectEnum.mstrObjectType.visualization.type,
       chosenChapterKey: chapterKey,
       chosenVisualizationKey: visualizationKey,
+      promptsAnswers,
     };
     selectObject(selectedVisualization);
     requestImport();
@@ -55,7 +57,7 @@ export default class _DossierWindow extends React.Component {
   render() {
     const { chosenProjectName, chosenObjectId, chosenProjectId, handleBack, t, mstrData } = this.props;
     const { isVisualisationSelected } = this.state;
-    const propsToPass = { envUrl: mstrData.envUrl, token: mstrData.token, dossierId: chosenObjectId, projectId: chosenProjectId };
+    const propsToPass = { envUrl: mstrData.envUrl, token: mstrData.token, dossierId: chosenObjectId, projectId: chosenProjectId, promptsAnswers: mstrData.promptsAnswers };
     return (
       <div>
         <h1 title={chosenProjectName} className="ant-col folder-browser-title">{`${t('Import Dossier')} > ${chosenProjectName}`}</h1>
@@ -78,7 +80,7 @@ _DossierWindow.propTypes = {
   chosenProjectId: PropTypes.string,
   handleBack: PropTypes.func,
   t: PropTypes.func,
-  mstrData: PropTypes.shape({ envUrl: PropTypes.string, token: PropTypes.string }),
+  mstrData: PropTypes.shape({ envUrl: PropTypes.string, token: PropTypes.string, promptsAnswers: PropTypes.array || null }),
 };
 
 _DossierWindow.defaultProps = {
@@ -87,7 +89,7 @@ _DossierWindow.defaultProps = {
   chosenProjectId: 'default id',
   handleBack: () => { },
   t: (text) => text,
-  mstrData: { envUrl: 'no env url', token: 'no token' },
+  mstrData: { envUrl: 'no env url', token: 'no token', promptsAnswers: null },
 };
 
 function mapStateToProps(state) {

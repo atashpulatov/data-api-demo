@@ -51,11 +51,13 @@ class PopupController {
     const splittedUrl = url.split('?'); // we need to get rid of any query params
     try {
       await officeApiHelper.getExcelSessionStatus();
+      console.time('Popup load time');
       Office.context.ui.displayDialogAsync(`${splittedUrl[0]}?popupType=${popupType}&envUrl=${session.url}`,
         { height, width, displayInIframe: true },
         (asyncResult) => {
           const dialog = asyncResult.value;
           sessionHelper.setDialog(dialog);
+          console.timeEnd('Popup load time');
           dialog.addEventHandler(Office.EventType.DialogMessageReceived,
             this.onMessageFromPopup.bind(null, dialog, reportParams));
           reduxStore.dispatch({ type: CLEAR_WINDOW });
