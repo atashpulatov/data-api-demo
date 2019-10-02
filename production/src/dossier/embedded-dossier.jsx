@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { createDossierInstance, answerDossierPrompts } from '../mstr-object/mstr-object-rest-service';
 
 const { microstrategy } = window;
 
@@ -10,18 +11,37 @@ export default class _EmbeddedDossier extends React.Component {
   }
 
   componentDidMount() {
-    this.loadEmbeddedDossier(this.container.current);
+    try {
+      this.loadEmbeddedDossier(this.container.current);
+    } catch (error) {
+      // !TODO: close popup and display custom error message
+    }
   }
 
   loadEmbeddedDossier = async (container) => {
     const { mstrData } = this.props;
-    const { envUrl, token, dossierId, projectId } = mstrData;
+    const { envUrl, token, dossierId, projectId, promptsAnswers } = mstrData;
+    const instance = {};
+    instance.mid = await createDossierInstance(projectId, dossierId);
+    if (promptsAnswers != null) {
+      let count = 0;
+      let responseStatus;
+      while (count < promptsAnswers.length) {
+        responseStatus = await answerDossierPrompts({ objectId: dossierId, projectId, instanceId: instance.mid, promptsAnswers: promptsAnswers[count] });
+        if (responseStatus !== 204) {
+          throw new Error();
+        }
+        count++;
+      }
+    }
+
     const libraryUrl = envUrl.replace('api', 'app');
 
     const url = `${libraryUrl}/${projectId}/${dossierId}`;
     const { CustomAuthenticationType } = microstrategy.dossier;
 
     const props = {
+      instance,
       url,
       enableCustomAuthentication: true,
       customAuthenticationType: CustomAuthenticationType.AUTH_TOKEN,
@@ -87,6 +107,7 @@ export default class _EmbeddedDossier extends React.Component {
         const dossierData = {
           chapterKey: chapter.nodeKey,
           visualizationKey: (visuzalisations.length > 0) ? visuzalisations[0].key : '',
+          promptsAnswers,
         };
         const { handleSelection } = this.props;
         handleSelection(dossierData);

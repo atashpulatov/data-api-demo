@@ -7,6 +7,10 @@ import { Office } from '../mockOffice';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 
 describe('Dossierwindow', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should render PopupButtons', () => {
     // given
     // when
@@ -51,7 +55,7 @@ describe('Dossierwindow', () => {
 
   it('should use handleOk and run selectObject with given parameters', () => {
     // given
-    const componentState = { isVisualisationSelected: true, chapterKey: 'C40', visualizationKey: 'V78' };
+    const componentState = { isVisualisationSelected: true, chapterKey: 'C40', visualizationKey: 'V78', promptsAnswers: [] };
     const selectObject = jest.fn();
     const requestImport = jest.fn();
     const componentProps = { chosenObjectId: 'ABC123', chosenProjectId: 'DEF456', requestImport, selectObject };
@@ -62,6 +66,7 @@ describe('Dossierwindow', () => {
       objectType: mstrObjectEnum.mstrObjectType.visualization.type,
       chosenChapterKey: 'C40',
       chosenVisualizationKey: 'V78',
+      promptsAnswers: [],
     };
     const componentWrapper = shallow(<_DossierWindow />);
     componentWrapper.setProps(componentProps);

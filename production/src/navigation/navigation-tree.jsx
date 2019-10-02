@@ -18,9 +18,9 @@ export class _NavigationTree extends Component {
   }
 
   handleOk = () => {
-    const { objectType, requestImport, handleDossierOpen } = this.props;
+    const { objectType, requestImport, requestDossierOpen } = this.props;
     if (objectType.name === mstrObjectEnum.mstrObjectType.dossier.name) {
-      handleDossierOpen();
+      requestDossierOpen();
     } else {
       requestImport();
     }
@@ -64,10 +64,11 @@ export class _NavigationTree extends Component {
         objectType: null,
       });
 
-      // Only check for prompts when it's a report
+      // Only check for prompts when it's a report or dossier
       let isPrompted = false;
-      if (objectTypes.getTypeDescription(3, subtype) === 'Report') {
-        isPrompted = await checkIfPrompted(objectId, projectId);
+      const objectType = mstrObjectEnum.getMstrTypeBySubtype(subtype);
+      if ((objectType === mstrObjectEnum.mstrObjectType.report) || (objectType === mstrObjectEnum.mstrObjectType.dossier)) {
+        isPrompted = await checkIfPrompted(objectId, projectId, objectType.name);
       }
 
       selectObject({
@@ -75,7 +76,7 @@ export class _NavigationTree extends Component {
         chosenProjectId: projectId,
         chosenSubtype: subtype,
         isPrompted,
-        objectType: mstrObjectEnum.getMstrTypeBySubtype(subtype),
+        objectType,
       });
     } catch (err) {
       const { handlePopupErrors } = this.props;

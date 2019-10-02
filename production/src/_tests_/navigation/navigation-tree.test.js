@@ -131,6 +131,7 @@ describe('NavigationTree', () => {
     // given
     const givenObjectId = 'objectId';
     const givenProjectId = 'projectId';
+    const givenObjectTypeName = 'report';
     const givenSubtype = 768;
     const givenIsPrompted = 'customPromptAnswer';
     const givenObjectType = mstrObjectEnum.mstrObjectType.report;
@@ -141,7 +142,7 @@ describe('NavigationTree', () => {
     // when
     await wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype);
     // then
-    expect(isPromptedResponse).toBeCalledWith(givenObjectId, givenProjectId);
+    expect(isPromptedResponse).toBeCalledWith(givenObjectId, givenProjectId, givenObjectTypeName);
     expect(selectObject).toBeCalledTimes(2);
     expect(selectObject.mock.calls[0][0]).toEqual({
       chosenObjectId: null,
@@ -159,7 +160,7 @@ describe('NavigationTree', () => {
     });
   });
 
-  it('should call handleDossierOpen on handleOk if provided objectType is dossier', () => {
+  it('should call requestDossierOpen on handleOk if provided objectType is dossier', () => {
     // given
     const mstrData = {
       envUrl: 'env',
@@ -168,13 +169,13 @@ describe('NavigationTree', () => {
     };
     const objectType = { name: mstrObjectEnum.mstrObjectType.dossier.name };
     const mockRequestImport = jest.fn();
-    const mockHandleDossierOpen = jest.fn();
-    const wrappedComponent = shallow(<_NavigationTree mstrData={mstrData} objectType={objectType} requestImport={mockRequestImport} handleDossierOpen={mockHandleDossierOpen} />);
+    const mockRequestDossierOpen = jest.fn();
+    const wrappedComponent = shallow(<_NavigationTree mstrData={mstrData} objectType={objectType} requestImport={mockRequestImport} requestDossierOpen={mockRequestDossierOpen} />);
     // when
     wrappedComponent.instance().handleOk();
     // then
     expect(mockRequestImport).not.toHaveBeenCalled();
-    expect(mockHandleDossierOpen).toHaveBeenCalled();
+    expect(mockRequestDossierOpen).toHaveBeenCalled();
   });
 
   it('should call requestImport on handleOk if provided objectType is not dossier', () => {

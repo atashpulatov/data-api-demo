@@ -6,7 +6,7 @@ import { officeContext } from '../office/office-context';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { PopupViewSelector } from './popup-view-selector';
 import i18next from '../i18n';
-import { CLEAR_PROMPTS_ANSWERS } from '../navigation/navigation-tree-actions';
+import { CLEAR_PROMPTS_ANSWERS, CANCEL_DOSSIER_OPEN } from '../navigation/navigation-tree-actions';
 import { reduxStore } from '../store';
 
 /* global Office */
@@ -55,9 +55,11 @@ export class Popup extends Component {
           reportSubtype,
         },
       },
-      () => reduxStore.dispatch({ type: CLEAR_PROMPTS_ANSWERS }),
-    );
-  };
+    () => {
+      reduxStore.dispatch({ type: CLEAR_PROMPTS_ANSWERS });
+      reduxStore.dispatch({ type: CANCEL_DOSSIER_OPEN });
+    });
+  }
 
   handlePopupErrors = (error) => {
     const messageObject = {
@@ -69,22 +71,12 @@ export class Popup extends Component {
       .context.ui.messageParent(JSON.stringify(messageObject));
   };
 
-  handleDossierOpen = () => {
-    this.setState({
-      mstrData: {
-        ...this.state.mstrData,
-        popupType: PopupTypeEnum.dossierWindow,
-      },
-    });
-  };
-
   render() {
     const { popupType, ...propsToPass } = this.state.mstrData;
     const methods = {
       handlePrepare: this.handlePrepare,
       handleBack: this.handleBack,
       handlePopupErrors: this.handlePopupErrors,
-      handleDossierOpen: this.handleDossierOpen,
     };
     i18next.changeLanguage(
       i18next.options.resources[Office.context.displayLanguage]
