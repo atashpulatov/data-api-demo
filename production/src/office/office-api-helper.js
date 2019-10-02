@@ -83,10 +83,11 @@ class OfficeApiHelper {
     let crosstabRange;
     try {
       const excelContext = await this.getExcelContext();
-
       const tableObject = excelContext.workbook.tables.getItem(bindingId);
+      tableObject.showHeaders = true;
       if (isCrosstab) {
         crosstabRange = await this.getCrosstabRangeSafely(tableObject, crosstabHeaderDimensions, excelContext);
+        tableObject.showHeaders = false;
         shouldSelect && crosstabRange.select();
       } else {
         const tableRange = this.getBindingRange(excelContext, bindingId);
@@ -204,30 +205,30 @@ class OfficeApiHelper {
 
   _getNumberFormattingCategoryName = (metric) => {
     switch (metric.category) {
-      case -2:
-        return 'Default';
-      case 9:
-        return 'General';
-      case 0:
-        return 'Fixed';
-      case 1:
-        return 'Currency';
-      case 2:
-        return 'Date';
-      case 3:
-        return 'Time';
-      case 4:
-        return 'Percentage';
-      case 5:
-        return 'Fraction';
-      case 6:
-        return 'Scientific';
-      case 7: // 'Custom'
-        return metric.formatString;
-      case 8:
-        return 'Special';
-      default:
-        return 'General';
+    case -2:
+      return 'Default';
+    case 9:
+      return 'General';
+    case 0:
+      return 'Fixed';
+    case 1:
+      return 'Currency';
+    case 2:
+      return 'Date';
+    case 3:
+      return 'Time';
+    case 4:
+      return 'Percentage';
+    case 5:
+      return 'Fraction';
+    case 6:
+      return 'Scientific';
+    case 7: // 'Custom'
+      return metric.formatString;
+    case 8:
+      return 'Special';
+    default:
+      return 'General';
     }
   }
 
@@ -302,12 +303,10 @@ class OfficeApiHelper {
    */
   getCrosstabRangeSafely = async (table, headerDimensions, context) => {
     const { columnsY, rowsX } = headerDimensions;
-
     const validColumnsY = await this.getValidOffset(table, columnsY, 'getRowsAbove', context);
     const validRowsX = await this.getValidOffset(table, rowsX, 'getColumnsBefore', context);
-
+    console.log('VALID', validColumnsY, validRowsX)
     const startingCell = table.getRange().getCell(0, 0).getOffsetRange(-validColumnsY, -validRowsX);
-
     return startingCell.getBoundingRect(table.getRange());
   }
 
