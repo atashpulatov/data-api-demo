@@ -47,7 +47,7 @@ class OfficeDisplayService {
       // /Reports/getDefinition (GET /reports/{reportId}) endpoint does not work for Reports with Object Prompt(?)
       // so we're using /Object_Management/getObject (GET /objects/{id}) instead
       // should probably open an DE
-      if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization) {
+      if (mstrObjectType.name !== mstrObjectEnum.mstrObjectType.visualization.name) {
         const objectInfo = isPrompted
           ? await getObjectInfo(objectId,
             projectId,
@@ -60,7 +60,6 @@ class OfficeDisplayService {
           preLoadReport: objectInfo,
         });
       }
-
       await popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
     }
     try {
@@ -86,6 +85,7 @@ class OfficeDisplayService {
     importSubtotal = true,
     subtotalsAddresses = false,
     visualizationInfo = false,
+    preparedInstanceId,
   }) => {
     let officeTable;
     let newOfficeTableId;
@@ -114,10 +114,8 @@ class OfficeDisplayService {
       }
       if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
         // !TODO: include promptsAnswers in instance body to get prompted data
-        const instanceId = (await createDossierInstance(projectId, objectId, body));
-        const config = {
-          projectId, objectId, instanceId, mstrObjectType, dossierData, body, visualizationInfo,
-        };
+        const instanceId = preparedInstanceId || (await createDossierInstance(projectId, objectId, body));
+        const config = { projectId, objectId, instanceId, mstrObjectType, dossierData, body, visualizationInfo };
         const temp = await fetchVisualizationDefinition(config);
         instanceDefinition = { ...temp, instanceId };
       } else {
@@ -183,7 +181,7 @@ class OfficeDisplayService {
       if (objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
         console.time('Get dossier structure');
         mstrTable.id = objectId;
-        dossierStructure = await this.getDossierStructure(projectId, objectId, visualizationInfo, mstrTable.name);
+        dossierStructure = await this.getDossierStructure(projectId, objectId, visualizationInfo, mstrTable.name, preparedInstanceId);
         visualizationInfo.dossierStructure = dossierStructure;
         console.timeEnd('Get dossier structure');
       }
@@ -599,9 +597,7 @@ class OfficeDisplayService {
       const { columns, rows, mstrTable } = instanceDefinition;
       const limit = Math.min(Math.floor(DATA_LIMIT / columns),
         IMPORT_ROW_LIMIT);
-      const configGenerator = {
-        instanceDefinition, objectId, projectId, mstrObjectType, dossierData, limit, visualizationInfo,
-      };
+      const configGenerator = { instanceDefinition, objectId, projectId, mstrObjectType, dossierData, limit, visualizationInfo, };
       const rowGenerator = getObjectContentGenerator(configGenerator);
       let rowIndex = 0;
       let contextPromises = [];
@@ -763,10 +759,10 @@ class OfficeDisplayService {
     }
   };
 
-  getDossierStructure = async (projectId, objectId, visualizationInfo, dossierName) => {
+  getDossierStructure = async (projectId, objectId, visualizationInfo, dossierName, preparedInstanceId) => {
     const { visualizationKey, chapterKey } = visualizationInfo;
     const dossierStructure = { dossierName };
-    const dossierDefinition = await getDossierDefinition(projectId, objectId);
+    const dossierDefinition = await getDossierDefinition(projectId, objectId, preparedInstanceId);
     const chapter = dossierDefinition.chapters.find((el) => el.key === chapterKey);
     dossierStructure.chapterName = chapter.name;
     const { pages } = chapter;
@@ -788,11 +784,13 @@ class OfficeDisplayService {
   _answerPrompts = async (instanceDefinition, objectId, projectId, promptsAnswers, dossierData, body) => {
     try {
       let count = 0;
-      while (instanceDefinition.status === 2) {
+      while (instanceDefinition.status === 2 && count < promptsAnswers.length) {
         const config = { objectId, projectId, instanceId: instanceDefinition.instanceId, promptsAnswers: promptsAnswers[count] };
         await answerPrompts(config);
         const configInstance = { objectId, projectId, dossierData, body, instanceId: instanceDefinition.instanceId };
-        instanceDefinition = await modifyInstance(configInstance);
+        if (count === promptsAnswers.length - 1) {
+          instanceDefinition = await modifyInstance(configInstance);
+        }
         count += 1;
       }
       return instanceDefinition;

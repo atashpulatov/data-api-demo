@@ -16,6 +16,7 @@ export default class _DossierWindow extends React.Component {
       chapterKey: '',
       visualizationKey: '',
       promptsAnswers: [],
+      preparedInstanceId: '',
     };
     this.handleSelection = this.handleSelection.bind(this);
     this.handleOk = this.handleOk.bind(this);
@@ -23,24 +24,22 @@ export default class _DossierWindow extends React.Component {
 
   handleCancel() {
     const { Office } = window;
-    const cancelObject = {
-      command: selectorProperties.commandCancel,
-    };
+    const cancelObject = { command: selectorProperties.commandCancel, };
     Office.context.ui.messageParent(JSON.stringify(cancelObject));
   }
 
   handleSelection(dossierData) {
-    const { chapterKey, visualizationKey, promptsAnswers } = dossierData;
+    const { chapterKey, visualizationKey, promptsAnswers, preparedInstanceId } = dossierData;
     let newValue = false;
     if ((chapterKey !== '') && (visualizationKey !== '')) {
       newValue = true;
     }
-    this.setState({ isVisualisationSelected: newValue, chapterKey, visualizationKey, promptsAnswers });
+    this.setState({ isVisualisationSelected: newValue, chapterKey, visualizationKey, promptsAnswers, preparedInstanceId });
   }
 
   handleOk() {
     const { chosenObjectId, chosenProjectId, requestImport, selectObject } = this.props;
-    const { chapterKey, visualizationKey, promptsAnswers } = this.state;
+    const { chapterKey, visualizationKey, promptsAnswers, preparedInstanceId } = this.state;
     const selectedVisualization = {
       chosenObjectId,
       chosenProjectId,
@@ -49,6 +48,7 @@ export default class _DossierWindow extends React.Component {
       chosenChapterKey: chapterKey,
       chosenVisualizationKey: visualizationKey,
       promptsAnswers,
+      preparedInstanceId,
     };
     selectObject(selectedVisualization);
     requestImport();
@@ -60,7 +60,7 @@ export default class _DossierWindow extends React.Component {
     const propsToPass = { envUrl: mstrData.envUrl, token: mstrData.token, dossierId: chosenObjectId, projectId: chosenProjectId, promptsAnswers: mstrData.promptsAnswers };
     return (
       <div>
-        <h1 title={chosenProjectName} className="ant-col folder-browser-title">{`${t('Import Dossier')} > ${chosenProjectName}`}</h1>
+        <h1 title={chosenProjectName} className='ant-col folder-browser-title'>{`${t('Import Dossier')} > ${chosenProjectName}`}</h1>
         <EmbeddedDossier mstrData={propsToPass} handleSelection={this.handleSelection} />
         <PopupButtons
           handleOk={this.handleOk}
