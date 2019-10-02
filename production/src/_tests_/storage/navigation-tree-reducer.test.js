@@ -1,6 +1,7 @@
 import {
   SELECT_FOLDER, SELECT_OBJECT, SET_DATA_SOURCE, START_IMPORT, UPDATE_SCROLL, UPDATE_SIZE,
   CHANGE_SEARCHING, CHANGE_SORTING, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED,
+  REQUEST_DOSSIER_OPEN,
 } from '../../navigation/navigation-tree-actions';
 import {
   navigationTree, initialState, DEFAULT_TYPE, DEFAULT_PROJECT_NAME,
@@ -325,5 +326,18 @@ describe('NavigationTree Reducer', () => {
 
     // then
     expect(newState.scrollPosition).toEqual(action.data);
+  });
+
+  it('should return new proper state in case of REQUEST_DOSSIER_OPEN action', () => {
+    // given
+    const action = {
+      type: REQUEST_DOSSIER_OPEN,
+    };
+
+    // when
+    const newState = navigationTree({}, action);
+
+    // then
+    expect(newState.dossierOpenRequested).toEqual(true);
   });
 });

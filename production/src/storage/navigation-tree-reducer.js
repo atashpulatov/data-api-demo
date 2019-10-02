@@ -1,6 +1,7 @@
 import {
   SELECT_FOLDER, SELECT_OBJECT, SET_DATA_SOURCE, START_IMPORT, CHANGE_SORTING, CHANGE_SEARCHING, UPDATE_SCROLL,
-  UPDATE_SIZE, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED, CLEAR_PROMPTS_ANSWERS,
+  UPDATE_SIZE, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED, CLEAR_PROMPTS_ANSWERS, REQUEST_DOSSIER_OPEN,
+  CANCEL_DOSSIER_OPEN,
 } from '../navigation/navigation-tree-actions';
 import { CLEAR_WINDOW } from '../popup/popup-actions';
 
@@ -50,6 +51,7 @@ export const initialState = {
   objectType: null,
   chosenChapterKey: null,
   chosenVisualizationKey: null,
+  dossierOpenRequested: false,
 };
 
 function getProjectName(projects, projectId, objectId) {
@@ -158,6 +160,16 @@ export const navigationTree = (state = initialState, action) => {
     case CHANGE_SEARCHING: {
       const newState = { ...state };
       newState.searchText = data;
+      return newState;
+    }
+    case REQUEST_DOSSIER_OPEN: {
+      const newState = { ...state };
+      newState.dossierOpenRequested = true;
+      return newState;
+    }
+    case CANCEL_DOSSIER_OPEN: {
+      const newState = { ...state };
+      newState.dossierOpenRequested = false;
       return newState;
     }
     default: {

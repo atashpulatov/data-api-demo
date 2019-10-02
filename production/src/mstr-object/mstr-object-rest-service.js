@@ -116,7 +116,7 @@ export function fetchVisualizationDefinition({
     .then((res) => parseInstanceDefinition(res));
 }
 
-export function createDossierInstance(projectId, objectId, body) {
+export function createDossierInstance(projectId, objectId, body = {}) {
   const storeState = reduxStore.getState();
   const { envUrl } = storeState.sessionReducer;
   const { authToken } = storeState.sessionReducer;
@@ -252,11 +252,17 @@ export function getObjectInfo(objectId, projectId, mstrObjectType = reportObject
     .then((res) => res.body);
 }
 
-export function isPrompted(objectId, projectId) {
+export function isPrompted(objectId, projectId, objectTypeName) {
   const storeState = reduxStore.getState();
   const { envUrl } = storeState.sessionReducer;
   const { authToken } = storeState.sessionReducer;
-  const fullPath = `${envUrl}/reports/${objectId}/prompts`;
+  let typePath;
+  if (objectTypeName === mstrObjectEnum.mstrObjectType.report.name) {
+    typePath = 'reports';
+  } else if (objectTypeName === mstrObjectEnum.mstrObjectType.dossier.name) {
+    typePath = 'documents';
+  }
+  const fullPath = `${envUrl}/${typePath}/${objectId}/prompts`;
   return request
     .get(fullPath)
     .set('x-mstr-authtoken', authToken)

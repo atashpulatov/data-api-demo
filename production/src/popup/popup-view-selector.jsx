@@ -18,7 +18,7 @@ const { Office } = window;
 
 export const _PopupViewSelector = (props) => {
   let { popupType } = props;
-  const { propsToPass, methods, importRequested } = props;
+  const { propsToPass, methods, importRequested, isPrompted, dossierOpenRequested } = props;
   if (!props.authToken || !propsToPass) {
     console.log('Waiting for token to be passed');
     return null;
@@ -27,30 +27,34 @@ export const _PopupViewSelector = (props) => {
   propsToPass.editRequested = popupType === PopupTypeEnum.editFilters;
   const localEditReport = { ...props.editedReport };
   if (
-    (importRequested && !props.isPrompted)
+    (importRequested && !isPrompted)
     || (importRequested && arePromptsAnswered(props))
   ) {
     proceedToImport(props);
   } else if (
-    !!props.isPrompted
+    !!isPrompted
     && arePromptsAnswered(props)
     && !propsToPass.forceChange
   ) {
     if (isInstanceWithPromptsAnswered(props)) {
-      popupType === PopupTypeEnum.repromptingWindow
-        && wasReportJustImported(props)
-        && proceedToImport(props);
-      popupType = PopupTypeEnum.editFilters;
+      popupType === PopupTypeEnum.repromptingWindow && wasReportJustImported(props) && proceedToImport(props);
+    } else if (dossierOpenRequested) {
+      // pass given prompts answers to dossierWindow
+      propsToPass.promptsAnswers = props.promptsAnswers;
+      popupType = PopupTypeEnum.dossierWindow;
     } else {
       obtainInstanceWithPromptsAnswers(propsToPass, props);
       return <div />;
     }
-  } else if (promptedReportSubmitted(props)) {
+  } else if (promptedReportSubmitted(props) || (dossierOpenRequested && !!isPrompted)) {
     popupType = PopupTypeEnum.promptsWindow;
     propsToPass.projectId = props.chosenProjectId;
     propsToPass.reportId = props.chosenObjectId;
+  } else if (dossierOpenRequested) {
+    // open dossier without prompts
+    propsToPass.promptsAnswers = null;
+    popupType = PopupTypeEnum.dossierWindow;
   }
-
   return renderProperComponent(popupType,
     methods,
     propsToPass,

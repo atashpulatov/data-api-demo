@@ -184,13 +184,44 @@ export class _OfficeLoadedFile extends React.Component {
   };
 
   getMstrIcon = (objectType) => {
+    const { t } = this.props;
     switch (objectType.name) {
       case mstrObjectEnum.mstrObjectType.report.name:
-        return <MSTRIcon type="report" />;
+        return (
+          <ButtonPopover
+            placement="bottom"
+            content={t('Report')}
+            mouseEnterDelay={1}
+          >
+            <span>
+              <MSTRIcon type="report" />
+            </span>
+          </ButtonPopover>
+        );
       case mstrObjectEnum.mstrObjectType.dataset.name:
-        return <MSTRIcon type="dataset" />;
+        return (
+          <ButtonPopover
+            placement="bottom"
+            content={t('Dataset')}
+            mouseEnterDelay={1}
+          >
+            <span>
+              <MSTRIcon type="dataset" />
+            </span>
+          </ButtonPopover>
+        );
       case mstrObjectEnum.mstrObjectType.visualization.name:
-        return <DossierIcon />;
+        return (
+          <ButtonPopover
+            placement="bottom"
+            content={t('Dossier')}
+            mouseEnterDelay={1}
+          >
+            <span>
+              <DossierIcon />
+            </span>
+          </ButtonPopover>
+        );
       default:
         break;
     }
@@ -253,13 +284,13 @@ export class _OfficeLoadedFile extends React.Component {
               {!isLoading ? (
                 <MSTRIcon type="refresh" />
               ) : (
-                  <img
+                <img
                     width="12px"
                     height="12px"
                     src={loadingSpinner}
                     alt={t('Report loading icon')}
                   />
-                )}
+              )}
             </span>
           }
         </ButtonPopover>
@@ -306,7 +337,7 @@ export class _OfficeLoadedFile extends React.Component {
         <Menu.Item key="refresh" onClick={(e) => { e.domEvent.stopPropagation(); this.refreshAction(); }}>{t('Refresh')}</Menu.Item>
         <Menu.Item key="remove" onClick={(e) => { e.domEvent.stopPropagation(); this.deleteAction(); }}>{t('Remove')}</Menu.Item>
         <Menu.Item key="rename" onClick={this.enableEdit}>{t('Rename')}</Menu.Item>
-        <Menu.Item key="copy" onClick={this.copyValue}>{t('Copy')}</Menu.Item>
+        <Menu.Item key="copy" onClick={this.copyValue}>{t('Copy Name')}</Menu.Item>
       </Menu>
     );
     return (
@@ -342,12 +373,12 @@ export class _OfficeLoadedFile extends React.Component {
                 placement="bottom"
                 content={`${dossierName} > ${chapterName} > ${pageName}`}
                 mouseEnterDelay={1}>
-                <div className="visualisation-path-row">{`${dossierName} > ${chapterName} > ${pageName}`}</div>
+                <div className="visualization-path-row">{`${dossierName} > ${chapterName} > ${pageName}`}</div>
               </ButtonPopover>
             )}
 
           <div className="object-title-row">
-            {<span>{this.getMstrIcon(objectType)}</span>}
+            {this.getMstrIcon(objectType)}
             <RenameInput bindingId={bindingId} fileName={fileName} editable={editable} value={value} enableEdit={this.enableEdit} handleChange={this.handleChange} renameReport={this.renameReport} />
           </div>
         </div>

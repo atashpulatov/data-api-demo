@@ -337,7 +337,7 @@ describe('PopupViewSelector', () => {
       search: {},
     };
     const props = {
-      popupType: 'whatever',
+      popupType: PopupTypeEnum.editFilters,
       authToken: 'token',
       propsToPass: {
         prop: 'prop',
@@ -414,6 +414,75 @@ describe('PopupViewSelector', () => {
     // then
     const componentInstance = componentWrapper.get(0);
     expect(componentInstance).toBe(null);
+  });
+
+  it('should open dossierWindow', () => {
+    // given
+    const location = {
+      search: {},
+    };
+    const propsToPass = {
+      authToken: 'token',
+      dossierOpenRequested: true,
+    };
+    // when
+    // eslint-disable-next-line react/jsx-pascal-case
+    const selectorWrapped = shallow(<_PopupViewSelector
+      location={location}
+      {...propsToPass}
+      propsToPass={propsToPass}
+      methods={{}}
+    />);
+    // then
+    expect(selectorWrapped.find(DossierWindow).get(0)).toBeTruthy();
+  });
+
+  it('should open promptsWindow if prompted dossier was selected', () => {
+    // given
+    const location = {
+      search: {},
+    };
+    const propsToPass = {
+      authToken: 'token',
+      isPrompted: true,
+      dossierOpenRequested: true,
+    };
+    // when
+    // eslint-disable-next-line react/jsx-pascal-case
+    const selectorWrapped = shallow(<_PopupViewSelector
+      location={location}
+      {...propsToPass}
+      propsToPass={propsToPass}
+      methods={{}}
+    />);
+    // then
+    expect(selectorWrapped.find(PromptsWindow).get(0)).toBeTruthy();
+  });
+
+  it('should open dossierWindow when prompts answers for dossier were provided', () => {
+    // given
+    const location = {
+      search: {},
+    };
+    const propsToPass = {
+      authToken: 'token',
+      isPrompted: true,
+      dossierOpenRequested: true,
+      promptsAnswers: ['whatever'],
+      dossierData: {
+        instanceId: 'whatever',
+      },
+    };
+    // when
+    // eslint-disable-next-line react/jsx-pascal-case
+    const selectorWrapped = shallow(<_PopupViewSelector
+      location={location}
+      {...propsToPass}
+      propsToPass={propsToPass}
+      methods={{}}
+    />);
+    // then
+    expect(selectorWrapped.find(DossierWindow).get(0)).toBeTruthy();
   });
 
   describe('PopupViewConnected', () => {
