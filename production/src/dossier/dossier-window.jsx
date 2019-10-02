@@ -7,6 +7,8 @@ import { selectorProperties } from '../attribute-selector/selector-properties';
 import { EmbeddedDossier } from './embedded-dossier';
 import { actions } from '../navigation/navigation-tree-actions';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import './dossier.css';
+import { MSTRIcon } from '@mstr/mstr-react-library';
 
 export default class _DossierWindow extends React.Component {
   constructor(props) {
@@ -23,9 +25,7 @@ export default class _DossierWindow extends React.Component {
 
   handleCancel() {
     const { Office } = window;
-    const cancelObject = {
-      command: selectorProperties.commandCancel,
-    };
+    const cancelObject = { command: selectorProperties.commandCancel };
     Office.context.ui.messageParent(JSON.stringify(cancelObject));
   }
 
@@ -60,7 +60,11 @@ export default class _DossierWindow extends React.Component {
     const propsToPass = { envUrl: mstrData.envUrl, token: mstrData.token, dossierId: chosenObjectId, projectId: chosenProjectId, promptsAnswers: mstrData.promptsAnswers };
     return (
       <div>
-        <h1 title={chosenProjectName} className="ant-col folder-browser-title">{`${t('Import Dossier')} > ${chosenProjectName}`}</h1>
+        <h1 title={chosenProjectName} className='ant-col folder-browser-title'>{`${t('Import Dossier')} > ${chosenProjectName}`}</h1>
+        <span className='frame'>
+          <MSTRIcon clasName='icon' type='info-icon' />
+          <span className='text'>{`${t('This view supports the regular dossier manipulations. To import data, select a visualization.')}`}</span>
+        </span>
         <EmbeddedDossier mstrData={propsToPass} handleSelection={this.handleSelection} />
         <PopupButtons
           handleOk={this.handleOk}
