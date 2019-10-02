@@ -77,9 +77,7 @@ export class _OfficeLoadedFile extends React.Component {
   }
 
   deleteReport = async () => {
-    const {
-      onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, fileName, t,
-    } = this.props;
+    const {onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, fileName, t,} = this.props;
     const message = t('{{name}} has been removed from the workbook.', { name: fileName });
     await fileHistoryHelper.deleteReport(onDelete,
       bindingId,
@@ -121,9 +119,7 @@ export class _OfficeLoadedFile extends React.Component {
     if (!allowRefreshClick) {
       return;
     }
-    const {
-      isLoading, bindingId, objectType, callForReprompt, fileName,
-    } = this.props;
+    const {isLoading, bindingId, objectType, callForReprompt, fileName,} = this.props;
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
@@ -145,9 +141,7 @@ export class _OfficeLoadedFile extends React.Component {
     if (!allowRefreshClick) {
       return;
     }
-    const {
-      isLoading, bindingId, objectType, callForEdit, fileName,
-    } = this.props;
+    const {isLoading, bindingId, objectType, callForEdit, fileName,} = this.props;
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
@@ -186,34 +180,34 @@ export class _OfficeLoadedFile extends React.Component {
   getMstrIcon = (objectType) => {
     const { t } = this.props;
     switch (objectType.name) {
-      case mstrObjectEnum.mstrObjectType.report.name:
-        return (
+    case mstrObjectEnum.mstrObjectType.report.name:
+      return (
           <ButtonPopover
-            placement="bottom"
+            placement='bottom'
             content={t('Report')}
             mouseEnterDelay={1}
           >
             <span>
-              <MSTRIcon type="report" />
+              <MSTRIcon type='report' />
             </span>
           </ButtonPopover>
-        );
-      case mstrObjectEnum.mstrObjectType.dataset.name:
-        return (
+      );
+    case mstrObjectEnum.mstrObjectType.dataset.name:
+      return (
           <ButtonPopover
-            placement="bottom"
+            placement='bottom'
             content={t('Dataset')}
             mouseEnterDelay={1}
           >
             <span>
-              <MSTRIcon type="dataset" />
+              <MSTRIcon type='dataset' />
             </span>
           </ButtonPopover>
-        );
-      case mstrObjectEnum.mstrObjectType.visualization.name:
-        return (
+      );
+    case mstrObjectEnum.mstrObjectType.visualization.name:
+      return (
           <ButtonPopover
-            placement="bottom"
+            placement='bottom'
             content={t('Dossier')}
             mouseEnterDelay={1}
           >
@@ -221,93 +215,93 @@ export class _OfficeLoadedFile extends React.Component {
               <DossierIcon />
             </span>
           </ButtonPopover>
-        );
-      default:
-        break;
+      );
+    default:
+      break;
     }
     return <></>;
   };
 
   renderIcons(t, isPrompted, isLoading) {
     return (
-      <span className="object-icons">
+      <span className='object-icons'>
         <ButtonPopover
-          placement="bottom"
+          placement='bottom'
           content={t('Reprompt')}
           mouseEnterDelay={1}
         >
           {!!isPrompted && (
             <span
-              aria-title="Repromt button"
-              role="button"
-              tabIndex="0"
-              className="loading-button-container"
+              aria-title='Repromt button'
+              role='button'
+              tabIndex='0'
+              className='loading-button-container'
               onClick={this.repromptAction}
               onKeyPress={this.repromptAction}
             >
-              <MSTRIcon type="reprompt" />
+              <MSTRIcon type='reprompt' />
             </span>
           )}
         </ButtonPopover>
         <ButtonPopover
-          placement="bottom"
+          placement='bottom'
           content={t('Edit Data')}
           mouseEnterDelay={1}
         >
           {
             <span
-              aria-title="Edit button"
-              role="button"
-              tabIndex="0"
-              className="loading-button-container"
+              aria-title='Edit button'
+              role='button'
+              tabIndex='0'
+              className='loading-button-container'
               onClick={this.editAction}
               onKeyPress={this.editAction}
             >
-              <MSTRIcon type="edit" />
+              <MSTRIcon type='edit' />
             </span>
           }
         </ButtonPopover>
         <ButtonPopover
-          placement="bottom"
+          placement='bottom'
           content={t('Refresh Data')}
           mouseEnterDelay={1}
         >
           {
             <span
-              aria-title="Refresh button"
-              role="button"
-              tabIndex="0"
-              className="loading-button-container"
+              aria-title='Refresh button'
+              role='button'
+              tabIndex='0'
+              className='loading-button-container'
               onClick={this.refreshAction}
               onKeyPress={this.refreshAction}
             >
               {!isLoading ? (
-                <MSTRIcon type="refresh" />
+                <MSTRIcon type='refresh' />
               ) : (
                 <img
-                    width="12px"
-                    height="12px"
+                    width='12px'
+                    height='12px'
                     src={loadingSpinner}
                     alt={t('Report loading icon')}
                   />
-              )}
+                )}
             </span>
           }
         </ButtonPopover>
         <ButtonPopover
-          placement="bottomRight"
+          placement='bottomRight'
           content={t('Remove Data from Workbook')}
           mouseEnterDelay={1}
-          arrowPointAtCenter="true"
+          arrowPointAtCenter='true'
         >
           <span
-            aria-title="Delete button"
-            role="button"
-            tabIndex="0"
+            aria-title='Delete button'
+            role='button'
+            tabIndex='0'
             onClick={this.deleteAction}
             onKeyPress={this.deleteAction}
           >
-            <MSTRIcon type="trash" />
+            <MSTRIcon type='trash' />
           </span>
         </ButtonPopover>
       </span>
@@ -326,39 +320,41 @@ export class _OfficeLoadedFile extends React.Component {
       refreshDate,
       t,
       visualizationInfo = false,
+      isCrosstab,
+      crosstabHeaderDimensions
     } = this.props;
     const { dossierStructure = false } = visualizationInfo;
     const { editable, value } = this.state;
     const { dossierName, chapterName, pageName } = dossierStructure;
     const menu = (
       <Menu>
-        {isPrompted && <Menu.Item key="reprompt" onClick={(e) => { e.domEvent.stopPropagation(); this.repromptAction(); }}>{t('Reprompt')}</Menu.Item>}
-        <Menu.Item key="edit" onClick={(e) => { e.domEvent.stopPropagation(); this.editAction(); }}>{t('Edit')}</Menu.Item>
-        <Menu.Item key="refresh" onClick={(e) => { e.domEvent.stopPropagation(); this.refreshAction(); }}>{t('Refresh')}</Menu.Item>
-        <Menu.Item key="remove" onClick={(e) => { e.domEvent.stopPropagation(); this.deleteAction(); }}>{t('Remove')}</Menu.Item>
-        <Menu.Item key="rename" onClick={this.enableEdit}>{t('Rename')}</Menu.Item>
-        <Menu.Item key="copy" onClick={this.copyValue}>{t('Copy Name')}</Menu.Item>
+        {isPrompted && <Menu.Item key='reprompt' onClick={(e) => { e.domEvent.stopPropagation(); this.repromptAction(); }}>{t('Reprompt')}</Menu.Item>}
+        <Menu.Item key='edit' onClick={(e) => { e.domEvent.stopPropagation(); this.editAction(); }}>{t('Edit')}</Menu.Item>
+        <Menu.Item key='refresh' onClick={(e) => { e.domEvent.stopPropagation(); this.refreshAction(); }}>{t('Refresh')}</Menu.Item>
+        <Menu.Item key='remove' onClick={(e) => { e.domEvent.stopPropagation(); this.deleteAction(); }}>{t('Remove')}</Menu.Item>
+        <Menu.Item key='rename' onClick={this.enableEdit}>{t('Rename')}</Menu.Item>
+        <Menu.Item key='copy' onClick={this.copyValue}>{t('Copy Name')}</Menu.Item>
       </Menu>
     );
     return (
       <Dropdown overlay={menu} trigger={['contextMenu']}>
         <div
-          className="file-history-container"
-          type="flex"
-          justify="center"
-          role="listitem"
-          tabIndex="0"
-          onClick={() => onClick(bindingId, true, this.deleteReport, fileName)}
+          className='file-history-container'
+          type='flex'
+          justify='center'
+          role='listitem'
+          tabIndex='0'
+          onClick={() => onClick(bindingId, true, this.deleteReport, fileName, isCrosstab, crosstabHeaderDimensions)}
         >
-          <div className="refresh-icons-row">
+          <div className='refresh-icons-row'>
             <ButtonPopover
-              placement="bottom"
+              placement='bottom'
               content={t('Date and time of last modification')}
               mouseEnterDelay={1}
             >
               <span>
                 <ClockIcon style={{ marginBottom: '2px' }} />
-                <span className="additional-data">
+                <span className='additional-data'>
                   {t('refreshed_date', { date: refreshDate })}
                 </span>
               </span>
@@ -370,14 +366,14 @@ export class _OfficeLoadedFile extends React.Component {
           {objectType.name === mstrObjectEnum.mstrObjectType.visualization.name && dossierStructure
             && (
               <ButtonPopover
-                placement="bottom"
+                placement='bottom'
                 content={`${dossierName} > ${chapterName} > ${pageName}`}
                 mouseEnterDelay={1}>
-                <div className="visualization-path-row">{`${dossierName} > ${chapterName} > ${pageName}`}</div>
+                <div className='visualization-path-row'>{`${dossierName} > ${chapterName} > ${pageName}`}</div>
               </ButtonPopover>
             )}
 
-          <div className="object-title-row">
+          <div className='object-title-row'>
             {this.getMstrIcon(objectType)}
             <RenameInput bindingId={bindingId} fileName={fileName} editable={editable} value={value} enableEdit={this.enableEdit} handleChange={this.handleChange} renameReport={this.renameReport} />
           </div>
@@ -387,14 +383,10 @@ export class _OfficeLoadedFile extends React.Component {
   }
 }
 
-_OfficeLoadedFile.defaultProps = {
-  t: (text) => text,
-};
+_OfficeLoadedFile.defaultProps = {t: (text) => text,};
 
 function mapStateToProps(state) {
-  return {
-    loading: state.officeReducer.loading,
-  };
+  return {loading: state.officeReducer.loading,};
 }
 
 const mapDispatchToProps = {

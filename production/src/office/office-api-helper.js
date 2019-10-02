@@ -79,11 +79,20 @@ class OfficeApiHelper {
     return letters.split('').reduce((r, a) => r * ALPHABET_RANGE_END + parseInt(a, 36) - 9, 0);
   }
 
-  onBindingObjectClick = async (bindingId, shouldSelect = true, deleteReport, reportName) => {
+  onBindingObjectClick = async (bindingId, shouldSelect = true, deleteReport, reportName, isCrosstab, crosstabHeaderDimensions) => {
+    let crosstabRange;
     try {
       const excelContext = await this.getExcelContext();
-      const tableRange = this.getBindingRange(excelContext, bindingId);
-      shouldSelect && tableRange.select();
+
+      const tableObject = excelContext.workbook.tables.getItem(bindingId);
+      if (isCrosstab) {
+        tableObject.showHeaders = true;
+        crosstabRange = await this.getCrosstabRangeSafely(tableObject, crosstabHeaderDimensions, excelContext);
+        shouldSelect && crosstabRange.select();
+      } else {
+        const tableRange = this.getBindingRange(excelContext, bindingId);
+        shouldSelect && tableRange.select();
+      }
       await excelContext.sync();
       return true;
     } catch (error) {
@@ -196,30 +205,30 @@ class OfficeApiHelper {
 
   _getNumberFormattingCategoryName = (metric) => {
     switch (metric.category) {
-      case -2:
-        return 'Default';
-      case 9:
-        return 'General';
-      case 0:
-        return 'Fixed';
-      case 1:
-        return 'Currency';
-      case 2:
-        return 'Date';
-      case 3:
-        return 'Time';
-      case 4:
-        return 'Percentage';
-      case 5:
-        return 'Fraction';
-      case 6:
-        return 'Scientific';
-      case 7: // 'Custom'
-        return metric.formatString;
-      case 8:
-        return 'Special';
-      default:
-        return 'General';
+    case -2:
+      return 'Default';
+    case 9:
+      return 'General';
+    case 0:
+      return 'Fixed';
+    case 1:
+      return 'Currency';
+    case 2:
+      return 'Date';
+    case 3:
+      return 'Time';
+    case 4:
+      return 'Percentage';
+    case 5:
+      return 'Fraction';
+    case 6:
+      return 'Scientific';
+    case 7: // 'Custom'
+      return metric.formatString;
+    case 8:
+      return 'Special';
+    default:
+      return 'General';
     }
   }
 
@@ -263,9 +272,7 @@ class OfficeApiHelper {
    * @return {Object}
    */
   getCrosstabRange = (cellAddress, headerDimensions, sheet) => {
-    const {
-      columnsY, columnsX, rowsX, rowsY,
-    } = headerDimensions;
+    const { columnsY, columnsX, rowsX, rowsY, } = headerDimensions;
     const cell = typeof cellAddress === 'string' ? sheet.getRange(cellAddress) : cellAddress;
     const bodyRange = cell.getOffsetRange(rowsY, columnsX - 1);
     const startingCell = cell.getCell(0, 0).getOffsetRange(-(columnsY), -rowsX);
