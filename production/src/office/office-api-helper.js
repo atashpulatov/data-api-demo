@@ -86,7 +86,6 @@ class OfficeApiHelper {
 
       const tableObject = excelContext.workbook.tables.getItem(bindingId);
       if (isCrosstab) {
-        tableObject.showHeaders = true;
         crosstabRange = await this.getCrosstabRangeSafely(tableObject, crosstabHeaderDimensions, excelContext);
         shouldSelect && crosstabRange.select();
       } else {
@@ -205,30 +204,30 @@ class OfficeApiHelper {
 
   _getNumberFormattingCategoryName = (metric) => {
     switch (metric.category) {
-    case -2:
-      return 'Default';
-    case 9:
-      return 'General';
-    case 0:
-      return 'Fixed';
-    case 1:
-      return 'Currency';
-    case 2:
-      return 'Date';
-    case 3:
-      return 'Time';
-    case 4:
-      return 'Percentage';
-    case 5:
-      return 'Fraction';
-    case 6:
-      return 'Scientific';
-    case 7: // 'Custom'
-      return metric.formatString;
-    case 8:
-      return 'Special';
-    default:
-      return 'General';
+      case -2:
+        return 'Default';
+      case 9:
+        return 'General';
+      case 0:
+        return 'Fixed';
+      case 1:
+        return 'Currency';
+      case 2:
+        return 'Date';
+      case 3:
+        return 'Time';
+      case 4:
+        return 'Percentage';
+      case 5:
+        return 'Fraction';
+      case 6:
+        return 'Scientific';
+      case 7: // 'Custom'
+        return metric.formatString;
+      case 8:
+        return 'Special';
+      default:
+        return 'General';
     }
   }
 
@@ -253,13 +252,26 @@ class OfficeApiHelper {
   }))
 
   deleteObjectTableBody = async (context, object) => {
+    const { isCrosstab, crosstabHeaderDimensions } = object
     context.runtime.enableEvents = false;
     await context.sync();
     const tableObject = context.workbook.tables.getItem(object.bindId);
     const tableRange = tableObject.getDataBodyRange();
+    context.trackedObjects.add(tableRange)
+    if (isCrosstab) {
+      const { rowsX, rowsY, columnsX, columnsY } = crosstabHeaderDimensions;
+      const crosstabRange = await this.getCrosstabRangeSafely(tableObject, crosstabHeaderDimensions, context);
+      const firstCell = crosstabRange.getCell(0, 0);
+      const columnsHeaders = firstCell.getOffsetRange(0, rowsX).getResizedRange(columnsY - 1, columnsX - 1)
+      const rowsHeaders = firstCell.getResizedRange((columnsY + rowsY - 1), rowsX - 1)
+      columnsHeaders.clear(Excel.ClearApplyTo.contents);
+      rowsHeaders.clear(Excel.ClearApplyTo.contents);
+    }
+
     tableRange.clear(Excel.ClearApplyTo.contents);
     context.runtime.enableEvents = true;
     await context.sync();
+    context.trackedObjects.remove(tableRange)
   }
 
   /**
