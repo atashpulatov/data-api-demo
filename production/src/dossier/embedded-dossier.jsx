@@ -60,7 +60,7 @@ export default class _EmbeddedDossier extends React.Component {
         return Promise.resolve(token);
       },
       placeholder: container,
-      dossierFeature: { readoOnly: true },
+      dossierFeature: { readoOnly: true, },
       enableCollaboration: false,
       filterFeature: {
         enabled: true,
@@ -114,6 +114,7 @@ export default class _EmbeddedDossier extends React.Component {
           chapterKey: chapter.nodeKey,
           visualizationKey: (visuzalisations.length > 0) ? visuzalisations[0].key : '',
           promptsAnswers,
+          preparedInstanceId: instance.mid,
         };
         const { handleSelection } = this.props;
         handleSelection(dossierData);
