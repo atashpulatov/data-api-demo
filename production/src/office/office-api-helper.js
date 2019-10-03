@@ -84,10 +84,9 @@ class OfficeApiHelper {
     try {
       const excelContext = await this.getExcelContext();
       const tableObject = excelContext.workbook.tables.getItem(bindingId);
-      tableObject.showHeaders = true;
       if (isCrosstab) {
+        crosstabHeaderDimensions.columnsY += 1;
         crosstabRange = await this.getCrosstabRangeSafely(tableObject, crosstabHeaderDimensions, excelContext);
-        tableObject.showHeaders = false;
         shouldSelect && crosstabRange.select();
       } else {
         const tableRange = this.getBindingRange(excelContext, bindingId);
