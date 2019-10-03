@@ -3,7 +3,7 @@ import {
   CHANGE_SEARCHING, CHANGE_SORTING, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED,
   REQUEST_DOSSIER_OPEN,
 } from '../../navigation/navigation-tree-actions';
-import {navigationTree, initialState, DEFAULT_TYPE, DEFAULT_PROJECT_NAME,} from '../../storage/navigation-tree-reducer';
+import { navigationTree, initialState, DEFAULT_TYPE, DEFAULT_PROJECT_NAME, } from '../../storage/navigation-tree-reducer';
 import { CLEAR_WINDOW } from '../../popup/popup-actions';
 
 describe('NavigationTree Reducer', () => {
@@ -21,7 +21,7 @@ describe('NavigationTree Reducer', () => {
         chosenChapterKey: null,
         objectType: undefined,
         chosenVisualizationKey: null,
-        reparedInstanceId: null,
+        preparedInstanceId: null,
       },
     };
 
@@ -184,7 +184,7 @@ describe('NavigationTree Reducer', () => {
     // given
     const action = {
       type: REQUEST_IMPORT,
-      data: {instanceId: 'instance',},
+      data: { instanceId: 'instance', },
     };
 
     // when
@@ -199,7 +199,7 @@ describe('NavigationTree Reducer', () => {
     // given
     const action = {
       type: REQUEST_IMPORT,
-      data: {dossierData: 'whatever',},
+      data: { dossierData: 'whatever', },
     };
 
     // when
@@ -214,7 +214,7 @@ describe('NavigationTree Reducer', () => {
     // given
     const action = {
       type: PROMPTS_ANSWERED,
-      data: {dossierData: 'whatever',},
+      data: { dossierData: 'whatever', },
     };
 
     // when
@@ -228,7 +228,7 @@ describe('NavigationTree Reducer', () => {
 
   it('should return new proper state in case of START_IMPORT action', () => {
     // given
-    const action = {type: START_IMPORT,};
+    const action = { type: START_IMPORT, };
 
     // when
     const newState = navigationTree({}, action);
@@ -240,7 +240,7 @@ describe('NavigationTree Reducer', () => {
 
   it('should return new proper state in case of CLEAR_WINDOW action', () => {
     // given
-    const action = {type: CLEAR_WINDOW,};
+    const action = { type: CLEAR_WINDOW, };
 
     // when
     const newState = navigationTree({}, action);
@@ -251,7 +251,7 @@ describe('NavigationTree Reducer', () => {
 
   it('should return new proper state in case of CANCEL_REQUEST_IMPORT action', () => {
     // given
-    const action = {type: CANCEL_REQUEST_IMPORT,};
+    const action = { type: CANCEL_REQUEST_IMPORT, };
 
     // when
     const newState = navigationTree({ importRequested: true }, action);
@@ -318,7 +318,7 @@ describe('NavigationTree Reducer', () => {
 
   it('should return new proper state in case of REQUEST_DOSSIER_OPEN action', () => {
     // given
-    const action = {type: REQUEST_DOSSIER_OPEN,};
+    const action = { type: REQUEST_DOSSIER_OPEN, };
 
     // when
     const newState = navigationTree({}, action);
