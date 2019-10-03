@@ -61,10 +61,12 @@ export class _PromptsWindow extends Component {
     const instanceId = instanceDefinition.mid;
     let currentInstanceDefinition = instanceDefinition;
     let count = 0;
-    while (currentInstanceDefinition.status === 2) {
+    while (currentInstanceDefinition.status === 2 && count < promptsAnswers.length) {
       const config = { objectId, projectId, instanceId: currentInstanceDefinition.mid, promptsAnswers: promptsAnswers[count] };
       await postAnswerDossierPrompts(config);
-      currentInstanceDefinition = await getDossierStatus(objectId, currentInstanceDefinition.mid, projectId);
+      if (count === promptsAnswers.length - 1) {
+        currentInstanceDefinition = await getDossierStatus(objectId, currentInstanceDefinition.mid, projectId);
+      }
       count += 1;
     }
     return instanceId;
@@ -161,9 +163,7 @@ export class _PromptsWindow extends Component {
   }
 
   closePopup = () => {
-    const cancelObject = {
-      command: selectorProperties.commandCancel,
-    };
+    const cancelObject = { command: selectorProperties.commandCancel };
     Office.context.ui.messageParent(JSON.stringify(cancelObject));
   };
 

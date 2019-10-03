@@ -34,10 +34,6 @@
       }
     ],
     "key-spacing": "off",
-    "jsx-quotes": [
-      "error",
-      "prefer-single"
-    ],
     "max-len": [
       "error",
       120,
