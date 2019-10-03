@@ -64,6 +64,7 @@ class PopupController {
             Office.EventType.DialogEventReceived,
             () => {
               reduxStore.dispatch({ type: officeProperties.actions.popupHidden });
+              reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
             }
           );
           reduxStore.dispatch({ type: officeProperties.actions.popupShown });
