@@ -92,7 +92,6 @@ export class _OfficeLoadedFile extends React.Component {
   deleteAction = (e) => {
     const { allowDeleteClick } = this.state;
     const { t, loading } = this.props;
-    console.log('DELETE ACTION', loading)
     if (e) e.stopPropagation();
     if (!allowDeleteClick || loading) {
       return;
