@@ -10,9 +10,7 @@ import { officeStoreService } from '../../office/store/office-store-service';
 describe('office loaded file', () => {
   it('should display provided file name', () => {
     // given
-    const visualizationInfoMock = {
-      dossierStructure: 'test',
-    };
+    const visualizationInfoMock = { dossierStructure: 'test' };
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
       fileName="test"
@@ -26,9 +24,7 @@ describe('office loaded file', () => {
   });
   it('should call componentWillUnmount provided file name', () => {
     // given
-    const visualizationInfoMock = {
-      dossierStructure: 'test',
-    };
+    const visualizationInfoMock = { dossierStructure: 'test' };
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
       fileName="test"
@@ -42,9 +38,7 @@ describe('office loaded file', () => {
   });
   it('should display dataset type icon', () => {
     // given
-    const visualizationInfoMock = {
-      dossierStructure: 'test',
-    };
+    const visualizationInfoMock = { dossierStructure: 'test' };
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile objectType={{ name: 'dataset' }} refreshDate={new Date()} visualizationInfo={visualizationInfoMock} />);
     const wrappedCol = wrappedComponent.find('.object-title-row');
@@ -56,9 +50,7 @@ describe('office loaded file', () => {
 
   it('should display report type icon', () => {
     // given
-    const visualizationInfoMock = {
-      dossierStructure: 'test',
-    };
+    const visualizationInfoMock = { dossierStructure: 'test' };
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile objectType={{ name: 'report' }} refreshDate={new Date()} visualizationInfo={visualizationInfoMock} />);
     const wrappedCol = wrappedComponent.find('.object-title-row');
@@ -70,12 +62,12 @@ describe('office loaded file', () => {
 
   it('should invoke select method on report name click', () => {
     // given
-    const visualizationInfoMock = {
-      dossierStructure: 'test',
-    };
+    const visualizationInfoMock = { dossierStructure: 'test' };
     const onClickMocked = jest.fn();
     const testBindingId = 'testBindingId';
     const testName = 'testName';
+    const isCrosstab = false;
+    const crosstabHeaderDimensions = false
     const wrappedComponent = mount(<_OfficeLoadedFile
       refreshDate={new Date()}
       bindingId={testBindingId}
@@ -83,6 +75,8 @@ describe('office loaded file', () => {
       fileName={testName}
       objectType={{ name: 'report' }}
       visualizationInfo={visualizationInfoMock}
+      isCrosstab={isCrosstab}
+      crosstabHeaderDimensions={crosstabHeaderDimensions}
     />);
     // when
     const mockDelete = jest.spyOn(wrappedComponent.instance(), 'deleteReport');
@@ -90,13 +84,11 @@ describe('office loaded file', () => {
 
     textWrapper.at(1).simulate('click');
     expect(onClickMocked).toBeCalled();
-    expect(onClickMocked).toBeCalledWith(testBindingId, true, mockDelete, testName);
+    expect(onClickMocked).toBeCalledWith(testBindingId, true, mockDelete, testName, isCrosstab, crosstabHeaderDimensions);
   });
   it('should display delete and refresh buttons', () => {
     // given
-    const visualizationInfoMock = {
-      dossierStructure: 'test',
-    };
+    const visualizationInfoMock = { dossierStructure: 'test' };
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
       fileName="test"
@@ -116,9 +108,7 @@ describe('office loaded file', () => {
     // given
     const onRefreshMock = jest.fn();
     const mockEvent = { stopPropagation: jest.fn() };
-    const visualizationInfoMock = {
-      dossierStructure: 'test',
-    };
+    const visualizationInfoMock = { dossierStructure: 'test' };
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
       refreshDate={new Date()}
@@ -139,9 +129,7 @@ describe('office loaded file', () => {
     const onRefreshMock = jest.fn();
     const mockEvent = { stopPropagation: jest.fn() };
     const objectClickMock = jest.spyOn(officeApiHelper, 'onBindingObjectClick').mockImplementation(() => true);
-    const visualizationInfoMock = {
-      dossierStructure: 'test',
-    };
+    const visualizationInfoMock = { dossierStructure: 'test' };
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
       refreshDate={new Date()}
@@ -167,9 +155,7 @@ describe('office loaded file', () => {
     const objectType = { name: 'report' };
     jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => { });
     const objectClickMock = jest.spyOn(officeApiHelper, 'onBindingObjectClick').mockImplementation(() => true);
-    const visualizationInfoMock = {
-      dossierStructure: 'test',
-    };
+    const visualizationInfoMock = { dossierStructure: 'test' };
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
       refreshDate={new Date()}
@@ -195,9 +181,7 @@ describe('office loaded file', () => {
     const testBindingId = 'testBindingId';
     const objectType = 'report';
     jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => { });
-    const visualizationInfoMock = {
-      dossierStructure: 'test',
-    };
+    const visualizationInfoMock = { dossierStructure: 'test' };
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
       refreshDate={new Date()}
@@ -217,9 +201,7 @@ describe('office loaded file', () => {
   });
   it('should display spinner when report is refreshing', () => {
     // given
-    const visualizationInfoMock = {
-      dossierStructure: 'test',
-    };
+    const visualizationInfoMock = { dossierStructure: 'test' };
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
       refreshDate={new Date()}
@@ -236,9 +218,7 @@ describe('office loaded file', () => {
     const onDeleteMocked = jest.fn();
     const testBindingId = 'testBindingId';
     const mockEvent = { stopPropagation: jest.fn() };
-    const visualizationInfoMock = {
-      dossierStructure: 'test',
-    };
+    const visualizationInfoMock = { dossierStructure: 'test' };
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
       refreshDate={new Date()}
@@ -265,9 +245,7 @@ describe('office loaded file', () => {
     const testBindingId = 'testBindingId';
     const objectType = 'report';
     jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => { });
-    const visualizationInfoMock = {
-      dossierStructure: 'test',
-    };
+    const visualizationInfoMock = { dossierStructure: 'test' };
     const wrappedComponent = mount(<_OfficeLoadedFile
       refreshDate={new Date()}
       bindingId={testBindingId}
@@ -293,9 +271,9 @@ describe('office loaded file', () => {
     const mockEvent = { stopPropagation: jest.fn() };
     const testBindingId = 'testBindingId';
     const testName = 'testName';
-    const visualizationInfoMock = {
-      dossierStructure: 'test',
-    };
+    const visualizationInfoMock = { dossierStructure: 'test' };
+    const isCrosstab = false;
+    const crosstabHeaderDimensions = false
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
       refreshDate={new Date()}
@@ -306,21 +284,21 @@ describe('office loaded file', () => {
       onDelete={onDeleteMocked}
       objectType={{ name: 'report' }}
       visualizationInfo={visualizationInfoMock}
+      isCrosstab={isCrosstab}
+      crosstabHeaderDimensions={crosstabHeaderDimensions}
     />);
     const mockDelete = jest.spyOn(wrappedComponent.instance(), 'deleteReport');
     const textWrapper = wrappedComponent.find('.file-history-container');
     textWrapper.props().onClick(mockEvent);
     // then
     expect(onClickMocked).toBeCalled();
-    expect(onClickMocked).toBeCalledWith(testBindingId, true, mockDelete, testName);
+    expect(onClickMocked).toBeCalledWith(testBindingId, true, mockDelete, testName, isCrosstab, crosstabHeaderDimensions);
     expect(onDeleteMocked).not.toBeCalled();
     expect(onRefreshMocked).not.toBeCalled();
   });
   it('should contain popovers', () => {
     // given
-    const visualizationInfoMock = {
-      dossierStructure: 'test',
-    };
+    const visualizationInfoMock = { dossierStructure: 'test' };
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile fileName="test" objectType={{ name: 'report' }} visualizationInfo={visualizationInfoMock} />);
     // then
@@ -334,9 +312,7 @@ describe('office loaded file', () => {
     const objectType = { name: 'report' };
     jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => { });
     const objectClickMock = jest.spyOn(officeApiHelper, 'onBindingObjectClick').mockImplementation(() => true);
-    const visualizationInfoMock = {
-      dossierStructure: 'test',
-    };
+    const visualizationInfoMock = { dossierStructure: 'test' };
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
       refreshDate={new Date()}
@@ -363,9 +339,7 @@ describe('office loaded file', () => {
     const objectType = { name: 'report' };
     jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => { });
     const objectClickMock = jest.spyOn(officeApiHelper, 'onBindingObjectClick').mockImplementation(() => true);
-    const visualizationInfoMock = {
-      dossierStructure: 'test',
-    };
+    const visualizationInfoMock = { dossierStructure: 'test' };
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
       refreshDate={new Date()}
@@ -393,9 +367,7 @@ describe('office loaded file', () => {
     const objectType = { name: 'report' };
     const target = { value: givenFileName };
     const mockOfficeService = jest.spyOn(officeStoreService, 'preserveReportValue');
-    const visualizationInfoMock = {
-      dossierStructure: 'test',
-    };
+    const visualizationInfoMock = { dossierStructure: 'test' };
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
       refreshDate={new Date()}
@@ -416,9 +388,7 @@ describe('office loaded file', () => {
     // given
     const testBindingId = 'testBindingId';
     const objectType = { name: 'report' };
-    const visualizationInfoMock = {
-      dossierStructure: 'test',
-    };
+    const visualizationInfoMock = { dossierStructure: 'test' };
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
       refreshDate={new Date()}
@@ -439,9 +409,7 @@ describe('office loaded file', () => {
     // given
     const testBindingId = 'testBindingId';
     const objectType = { name: 'report' };
-    const visualizationInfoMock = {
-      dossierStructure: 'test',
-    };
+    const visualizationInfoMock = { dossierStructure: 'test' };
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
       refreshDate={new Date()}
@@ -464,9 +432,7 @@ describe('office loaded file', () => {
     const event = { domEvent: { stopPropagation: jest.fn() } };
     const testBindingId = 'testBindingId';
     const objectType = { name: 'report' };
-    const visualizationInfoMock = {
-      dossierStructure: 'test',
-    };
+    const visualizationInfoMock = { dossierStructure: 'test' };
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
       refreshDate={new Date()}
@@ -488,9 +454,7 @@ describe('office loaded file', () => {
     const mockDocument = jest.spyOn(document, 'getElementById').mockImplementation(() => ({ select: jest.fn() }));
     const testBindingId = 'testBindingId';
     const objectType = { name: 'report' };
-    const visualizationInfoMock = {
-      dossierStructure: 'test',
-    };
+    const visualizationInfoMock = { dossierStructure: 'test' };
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
       refreshDate={new Date()}
@@ -513,9 +477,7 @@ describe('office loaded file', () => {
     // given
     const testBindingId = 'testBindingId';
     const objectType = { name: 'report' };
-    const visualizationInfoMock = {
-      dossierStructure: 'test',
-    };
+    const visualizationInfoMock = { dossierStructure: 'test' };
     const wrappedComponent = mount(<_OfficeLoadedFile
       refreshDate={new Date()}
       bindingId={testBindingId}

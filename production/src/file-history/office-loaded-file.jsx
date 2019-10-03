@@ -77,9 +77,7 @@ export class _OfficeLoadedFile extends React.Component {
   }
 
   deleteReport = async () => {
-    const {
-      onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, fileName, t,
-    } = this.props;
+    const { onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, fileName, t, } = this.props;
     const message = t('{{name}} has been removed from the workbook.', { name: fileName });
     await fileHistoryHelper.deleteReport(onDelete,
       bindingId,
@@ -121,9 +119,7 @@ export class _OfficeLoadedFile extends React.Component {
     if (!allowRefreshClick) {
       return;
     }
-    const {
-      isLoading, bindingId, objectType, callForReprompt, fileName,
-    } = this.props;
+    const { isLoading, bindingId, objectType, callForReprompt, fileName, } = this.props;
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
@@ -145,9 +141,7 @@ export class _OfficeLoadedFile extends React.Component {
     if (!allowRefreshClick) {
       return;
     }
-    const {
-      isLoading, bindingId, objectType, callForEdit, fileName,
-    } = this.props;
+    const { isLoading, bindingId, objectType, callForEdit, fileName, } = this.props;
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
@@ -186,8 +180,8 @@ export class _OfficeLoadedFile extends React.Component {
   getMstrIcon = (objectType) => {
     const { t } = this.props;
     switch (objectType.name) {
-      case mstrObjectEnum.mstrObjectType.report.name:
-        return (
+    case mstrObjectEnum.mstrObjectType.report.name:
+      return (
           <ButtonPopover
             placement="bottom"
             content={t('Report')}
@@ -197,9 +191,9 @@ export class _OfficeLoadedFile extends React.Component {
               <MSTRIcon type="report" />
             </span>
           </ButtonPopover>
-        );
-      case mstrObjectEnum.mstrObjectType.dataset.name:
-        return (
+      );
+    case mstrObjectEnum.mstrObjectType.dataset.name:
+      return (
           <ButtonPopover
             placement="bottom"
             content={t('Dataset')}
@@ -209,9 +203,9 @@ export class _OfficeLoadedFile extends React.Component {
               <MSTRIcon type="dataset" />
             </span>
           </ButtonPopover>
-        );
-      case mstrObjectEnum.mstrObjectType.visualization.name:
-        return (
+      );
+    case mstrObjectEnum.mstrObjectType.visualization.name:
+      return (
           <ButtonPopover
             placement="bottom"
             content={t('Dossier')}
@@ -221,9 +215,9 @@ export class _OfficeLoadedFile extends React.Component {
               <DossierIcon />
             </span>
           </ButtonPopover>
-        );
-      default:
-        break;
+      );
+    default:
+      break;
     }
     return <></>;
   };
@@ -290,7 +284,7 @@ export class _OfficeLoadedFile extends React.Component {
                     src={loadingSpinner}
                     alt={t('Report loading icon')}
                   />
-              )}
+                )}
             </span>
           }
         </ButtonPopover>
@@ -326,6 +320,8 @@ export class _OfficeLoadedFile extends React.Component {
       refreshDate,
       t,
       visualizationInfo = false,
+      isCrosstab,
+      crosstabHeaderDimensions
     } = this.props;
     const { dossierStructure = false } = visualizationInfo;
     const { editable, value } = this.state;
@@ -348,7 +344,7 @@ export class _OfficeLoadedFile extends React.Component {
           justify="center"
           role="listitem"
           tabIndex="0"
-          onClick={() => onClick(bindingId, true, this.deleteReport, fileName)}
+          onClick={() => onClick(bindingId, true, this.deleteReport, fileName, isCrosstab, crosstabHeaderDimensions)}
         >
           <div className="refresh-icons-row">
             <ButtonPopover
@@ -387,14 +383,10 @@ export class _OfficeLoadedFile extends React.Component {
   }
 }
 
-_OfficeLoadedFile.defaultProps = {
-  t: (text) => text,
-};
+_OfficeLoadedFile.defaultProps = { t: (text) => text, };
 
 function mapStateToProps(state) {
-  return {
-    loading: state.officeReducer.loading,
-  };
+  return { loading: state.officeReducer.loading, };
 }
 
 const mapDispatchToProps = {
