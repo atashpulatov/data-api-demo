@@ -60,7 +60,7 @@ export default class _DossierWindow extends React.Component {
     const propsToPass = { envUrl: mstrData.envUrl, token: mstrData.token, dossierId: chosenObjectId, projectId: chosenProjectId, promptsAnswers: mstrData.promptsAnswers };
     return (
       <div>
-        <h1 title={chosenProjectName} className='ant-col folder-browser-title'>{`${t('Import Dossier')} > ${chosenProjectName}`}</h1>
+        <h1 title={chosenProjectName} className="ant-col folder-browser-title">{`${t('Import Dossier')} > ${chosenProjectName}`}</h1>
         <EmbeddedDossier mstrData={propsToPass} handleSelection={this.handleSelection} />
         <PopupButtons
           handleOk={this.handleOk}
