@@ -1,9 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createDossierInstance, answerDossierPrompts } from '../mstr-object/mstr-object-rest-service';
-import { selectorProperties } from '../attribute-selector/selector-properties';
 
-const { Office } = window;
 const { microstrategy } = window;
 
 export default class _EmbeddedDossier extends React.Component {
@@ -16,34 +14,27 @@ export default class _EmbeddedDossier extends React.Component {
     this.loadEmbeddedDossier(this.container.current);
   }
 
-  closePopup = () => {
-    const cancelObject = { command: selectorProperties.commandCancel };
-    Office.context.ui.messageParent(JSON.stringify(cancelObject));
-  };
-
   loadEmbeddedDossier = async (container) => {
-    const { mstrData } = this.props;
+    const { mstrData, handleSelection, handlePopupErrors } = this.props;
     const { envUrl, token, dossierId, projectId, promptsAnswers } = mstrData;
     const instance = {};
-
-    try {
       instance.mid = await createDossierInstance(projectId, dossierId);
       if (promptsAnswers != null) {
         let count = 0;
-        let responseStatus;
         while (count < promptsAnswers.length) {
-          responseStatus = await answerDossierPrompts({ objectId: dossierId, projectId, instanceId: instance.mid, promptsAnswers: promptsAnswers[count] });
-          if (responseStatus !== 204) {
-            throw new Error(responseStatus);
-          }
+        try {
+          await answerDossierPrompts({
+            objectId: dossierId,
+            projectId,
+            instanceId: instance.mid,
+            promptsAnswers: promptsAnswers[count]
+          });
           count++;
+        } catch (e) {
+          handlePopupErrors(e)
         }
       }
-    } catch (error) {
-      this.closePopup();
-      // !TODO: display some custom error message like `bad server response`
     }
-
 
     const libraryUrl = envUrl.replace('api', 'app');
 
@@ -116,7 +107,6 @@ export default class _EmbeddedDossier extends React.Component {
           promptsAnswers,
           preparedInstanceId: instance.mid,
         };
-        const { handleSelection } = this.props;
         handleSelection(dossierData);
         // Workaround end.
 

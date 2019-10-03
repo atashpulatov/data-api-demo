@@ -57,7 +57,10 @@ export default class _DossierWindow extends React.Component {
   }
 
   render() {
-    const { chosenProjectName, chosenObjectId, chosenProjectId, handleBack, t, mstrData } = this.props;
+    const {
+      chosenProjectName, chosenObjectId, chosenProjectId, handleBack, t, mstrData,
+      handlePopupErrors
+    } = this.props;
     const { isVisualisationSelected } = this.state;
     const propsToPass = { envUrl: mstrData.envUrl, token: mstrData.token, dossierId: chosenObjectId, projectId: chosenProjectId, promptsAnswers: mstrData.promptsAnswers };
     return (
@@ -67,7 +70,11 @@ export default class _DossierWindow extends React.Component {
           <MSTRIcon clasName="icon" type="info-icon" />
           <span className="text">{`${t('This view supports the regular dossier manipulations. To import data, select a visualization.')}`}</span>
         </span>
-        <EmbeddedDossier mstrData={propsToPass} handleSelection={this.handleSelection} />
+        <EmbeddedDossier
+          mstrData={propsToPass}
+          handleSelection={this.handleSelection}
+          handlePopupErrors={handlePopupErrors}
+        />
         <PopupButtons
           handleOk={this.handleOk}
           handleBack={handleBack}
@@ -86,7 +93,12 @@ _DossierWindow.propTypes = {
   chosenProjectId: PropTypes.string,
   handleBack: PropTypes.func,
   t: PropTypes.func,
-  mstrData: PropTypes.shape({ envUrl: PropTypes.string, token: PropTypes.string, promptsAnswers: PropTypes.array || null }),
+  mstrData: PropTypes.shape({
+    envUrl: PropTypes.string,
+    token: PropTypes.string,
+    promptsAnswers: PropTypes.array || null
+  }),
+  handlePopupErrors: PropTypes.func,
 };
 
 _DossierWindow.defaultProps = {
@@ -95,7 +107,12 @@ _DossierWindow.defaultProps = {
   chosenProjectId: 'default id',
   handleBack: () => { },
   t: (text) => text,
-  mstrData: { envUrl: 'no env url', token: 'no token', promptsAnswers: null },
+  mstrData: {
+    envUrl: 'no env url',
+    token: 'no token',
+    promptsAnswers: null
+  },
+  handlePopupErrors: () => { },
 };
 
 function mapStateToProps(state) {
