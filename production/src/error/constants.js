@@ -74,7 +74,9 @@ export const errorMessageFactory = withDefaultValue({
   [errorTypes.ENV_NOT_FOUND_ERR]: () => ENDPOINT_NOT_REACHED,
   [errorTypes.CONNECTION_BROKEN_ERR]: () => CONNECTION_BROKEN,
   [errorTypes.UNAUTHORIZED_ERR]: ({ error }) => {
-    if (error.response.body.code === 'ERR003') return WRONG_CREDENTIALS;
+    if ((error.response.body.code === 'ERR003') && (error.response.body.iServerCode === '-2147216959')) {
+      return WRONG_CREDENTIALS;
+    }
     return SESSION_EXPIRED;
   },
   [errorTypes.BAD_REQUEST_ERR]: () => PROBLEM_WITH_REQUEST,
