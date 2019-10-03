@@ -22,9 +22,7 @@ describe('Dossierwindow', () => {
 
   it('should call proper method on cancel action', () => {
     // given
-    const cancelObject = {
-      command: selectorProperties.commandCancel,
-    };
+    const cancelObject = {command: selectorProperties.commandCancel,};
     const office = jest.spyOn(Office.context.ui, 'messageParent');
     const wrappedComponent = shallow(<_DossierWindow />);
     // when
@@ -67,6 +65,7 @@ describe('Dossierwindow', () => {
       chosenChapterKey: 'C40',
       chosenVisualizationKey: 'V78',
       promptsAnswers: [],
+      preparedInstanceId: '',
     };
     const componentWrapper = shallow(<_DossierWindow />);
     componentWrapper.setProps(componentProps);
