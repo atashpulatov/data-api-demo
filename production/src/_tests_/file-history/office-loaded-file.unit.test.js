@@ -13,7 +13,7 @@ describe('office loaded file', () => {
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
-      fileName='test'
+      fileName="test"
       refreshDate={new Date()}
       objectType={{ name: 'report' }}
       visualizationInfo={visualizationInfoMock}
@@ -27,7 +27,7 @@ describe('office loaded file', () => {
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
-      fileName='test'
+      fileName="test"
       refreshDate={new Date()}
       objectType={{ name: 'report' }}
       visualizationInfo={visualizationInfoMock}
@@ -91,7 +91,7 @@ describe('office loaded file', () => {
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
-      fileName='test'
+      fileName="test"
       refreshDate={new Date()}
       objectType={{ name: 'report' }}
       visualizationInfo={visualizationInfoMock}
@@ -112,8 +112,8 @@ describe('office loaded file', () => {
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
       refreshDate={new Date()}
-      bindingId=''
-      fileName='test'
+      bindingId=""
+      fileName="test"
       refreshReport={onRefreshMock}
       isLoading
       objectType={{ name: 'report' }}
@@ -133,8 +133,8 @@ describe('office loaded file', () => {
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
       refreshDate={new Date()}
-      bindingId=''
-      fileName='test'
+      bindingId=""
+      fileName="test"
       refreshReportsArray={onRefreshMock}
       isLoading={false}
       objectType={{ name: 'report' }}
@@ -160,7 +160,7 @@ describe('office loaded file', () => {
     const wrappedComponent = mount(<_OfficeLoadedFile
       refreshDate={new Date()}
       bindingId={testBindingId}
-      fileName='test'
+      fileName="test"
       refreshReportsArray={onRefreshMocked}
       isLoading={false}
       objectType={objectType}
@@ -187,7 +187,7 @@ describe('office loaded file', () => {
       refreshDate={new Date()}
       bindingId={testBindingId}
       objectType={objectType}
-      fileName='test'
+      fileName="test"
       refreshReport={onRefreshMocked}
       isLoading={false}
       visualizationInfo={visualizationInfoMock}
@@ -225,7 +225,7 @@ describe('office loaded file', () => {
       bindingId={testBindingId}
       isCrosstab
       crosstabHeaderDimensions={{}}
-      fileName='test'
+      fileName="test"
       onDelete={onDeleteMocked}
       objectType={{ name: 'report' }}
       visualizationInfo={visualizationInfoMock}
@@ -250,7 +250,7 @@ describe('office loaded file', () => {
       refreshDate={new Date()}
       bindingId={testBindingId}
       objectType={objectType}
-      fileName='test'
+      fileName="test"
       isLoading={false}
       objectType={{ name: 'report' }}
       visualizationInfo={visualizationInfoMock}
@@ -300,7 +300,7 @@ describe('office loaded file', () => {
     // given
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
-    const wrappedComponent = mount(<_OfficeLoadedFile fileName='test' objectType={{ name: 'report' }} visualizationInfo={visualizationInfoMock} />);
+    const wrappedComponent = mount(<_OfficeLoadedFile fileName="test" objectType={{ name: 'report' }} visualizationInfo={visualizationInfoMock} />);
     // then
     expect(wrappedComponent.find(Popover)).toHaveLength(7);
   });
@@ -317,7 +317,7 @@ describe('office loaded file', () => {
     const wrappedComponent = mount(<_OfficeLoadedFile
       refreshDate={new Date()}
       bindingId={testBindingId}
-      fileName='test'
+      fileName="test"
       callForEdit={onEditMocked}
       isLoading={false}
       objectType={objectType}
@@ -345,7 +345,7 @@ describe('office loaded file', () => {
       refreshDate={new Date()}
       bindingId={testBindingId}
       objectType={objectType}
-      fileName='test'
+      fileName="test"
       callForReprompt={onRepromptMocked}
       isLoading={false}
       isPrompted
@@ -373,7 +373,7 @@ describe('office loaded file', () => {
       refreshDate={new Date()}
       bindingId={testBindingId}
       objectType={objectType}
-      fileName='test'
+      fileName="test"
       isLoading={false}
       isPrompted
       objectType={objectType}
@@ -394,7 +394,7 @@ describe('office loaded file', () => {
       refreshDate={new Date()}
       bindingId={testBindingId}
       objectType={objectType}
-      fileName='test'
+      fileName="test"
       isLoading={false}
       isPrompted
       objectType={objectType}
@@ -415,7 +415,7 @@ describe('office loaded file', () => {
       refreshDate={new Date()}
       bindingId={testBindingId}
       objectType={objectType}
-      fileName='test'
+      fileName="test"
       isLoading={false}
       isPrompted
       objectType={objectType}
@@ -438,7 +438,7 @@ describe('office loaded file', () => {
       refreshDate={new Date()}
       bindingId={testBindingId}
       objectType={objectType}
-      fileName='test'
+      fileName="test"
       isLoading={false}
       isPrompted
       objectType={objectType}
@@ -460,7 +460,7 @@ describe('office loaded file', () => {
       refreshDate={new Date()}
       bindingId={testBindingId}
       objectType={objectType}
-      fileName='test'
+      fileName="test"
       isLoading={false}
       isPrompted
       objectType={objectType}
@@ -482,7 +482,7 @@ describe('office loaded file', () => {
       refreshDate={new Date()}
       bindingId={testBindingId}
       objectType={objectType}
-      fileName='test'
+      fileName="test"
       isLoading={false}
       isPrompted
       objectType={objectType}

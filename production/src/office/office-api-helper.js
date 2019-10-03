@@ -304,7 +304,6 @@ class OfficeApiHelper {
     const { columnsY, rowsX } = headerDimensions;
     const validColumnsY = await this.getValidOffset(table, columnsY, 'getRowsAbove', context);
     const validRowsX = await this.getValidOffset(table, rowsX, 'getColumnsBefore', context);
-    console.log('VALID', validColumnsY, validRowsX)
     const startingCell = table.getRange().getCell(0, 0).getOffsetRange(-validColumnsY, -validRowsX);
     return startingCell.getBoundingRect(table.getRange());
   }

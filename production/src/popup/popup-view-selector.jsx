@@ -160,9 +160,7 @@ function composeFilter(selectedFilters) {
   let branch;
   const filterOperands = [];
   const addItem = (item) => {
-    branch.operands[1].elements.push({
-      id: item,
-    });
+    branch.operands[1].elements.push({ id: item, });
   };
   for (const att in selectedFilters) {
     if (selectedFilters[att].length) {
@@ -207,6 +205,7 @@ function proceedToImport(props) {
     isPrompted: props.isPrompted,
     promptsAnswers: props.promptsAnswers,
     visualizationInfo,
+    preparedInstanceId: props.preparedInstanceId,
   };
   if (props.dossierData) {
     okObject.dossierData = {

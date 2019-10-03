@@ -108,7 +108,7 @@ export const _SettingsMenu = ({
       </li>
       <li onClick={() => logout(clearCache)}>
         <span tabIndex="0" id="logOut" size="small">
-          {t('Log out')}
+          {t('Log Out')}
         </span>
       </li>
       <li className="settings-version no-trigger-close">{t('Version {{APP_VERSION}}', { APP_VERSION })}</li>
