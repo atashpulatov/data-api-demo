@@ -92,10 +92,12 @@ export class _OfficeLoadedFile extends React.Component {
   deleteAction = (e) => {
     const { allowDeleteClick } = this.state;
     const { t, loading } = this.props;
+    console.log('DELETE ACTION', loading)
     if (e) e.stopPropagation();
     if (!allowDeleteClick || loading) {
       return;
     }
+    reduxStore.dispatch({ type: officeProperties.actions.startLoading });
     const {
       onDelete,
       bindingId,
@@ -113,6 +115,7 @@ export class _OfficeLoadedFile extends React.Component {
           crosstabHeaderDimensions,
           message);
         if (this._ismounted) this.setState({ allowDeleteClick: true, allowRefreshClick: true });
+        reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
       });
   };
 
@@ -123,6 +126,7 @@ export class _OfficeLoadedFile extends React.Component {
     if (!allowRefreshClick || loading) {
       return;
     }
+    reduxStore.dispatch({ type: officeProperties.actions.startLoading });
     const { isLoading, bindingId, objectType, callForReprompt, fileName, } = this.props;
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
@@ -134,6 +138,7 @@ export class _OfficeLoadedFile extends React.Component {
           }
         } finally {
           this.setState({ allowRefreshClick: true });
+          reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
         }
       });
     }
