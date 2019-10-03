@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { createDossierInstance, answerDossierPrompts } from '../mstr-object/mstr-object-rest-service';
 
 const { microstrategy } = window;
@@ -18,10 +19,10 @@ export default class _EmbeddedDossier extends React.Component {
     const { mstrData, handleSelection, handlePopupErrors } = this.props;
     const { envUrl, token, dossierId, projectId, promptsAnswers } = mstrData;
     const instance = {};
-      instance.mid = await createDossierInstance(projectId, dossierId);
-      if (promptsAnswers != null) {
-        let count = 0;
-        while (count < promptsAnswers.length) {
+    instance.mid = await createDossierInstance(projectId, dossierId);
+    if (promptsAnswers != null) {
+      let count = 0;
+      while (count < promptsAnswers.length) {
         try {
           await answerDossierPrompts({
             objectId: dossierId,
@@ -125,5 +126,29 @@ export default class _EmbeddedDossier extends React.Component {
     );
   }
 }
+
+_EmbeddedDossier.propTypes = {
+  mstrData: PropTypes.shape({
+    envUrl: PropTypes.string,
+    token: PropTypes.string,
+    dossierId: PropTypes.string,
+    projectId: PropTypes.string,
+    promptsAnswers: PropTypes.array || null
+  }),
+  handleSelection: PropTypes.func,
+  handlePopupErrors: PropTypes.func
+};
+
+_EmbeddedDossier.defaultProps = {
+  mstrData: {
+    envUrl: 'no env url',
+    token: 'no token',
+    dossierId: 'default id',
+    projectId: 'default id',
+    promptsAnswers: null
+  },
+  handleSelection: () => { },
+  handlePopupErrors: () => { }
+};
 
 export const EmbeddedDossier = connect()(_EmbeddedDossier);
