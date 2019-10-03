@@ -11,12 +11,6 @@ import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './dossier.css';
 
 export default class _DossierWindow extends React.Component {
-  static handleCancel() {
-    const { Office } = window;
-    const cancelObject = { command: selectorProperties.commandCancel, };
-    Office.context.ui.messageParent(JSON.stringify(cancelObject));
-  }
-
   constructor(props) {
     super(props);
     this.state = {
@@ -28,6 +22,12 @@ export default class _DossierWindow extends React.Component {
     };
     this.handleSelection = this.handleSelection.bind(this);
     this.handleOk = this.handleOk.bind(this);
+  }
+
+  handleCancel() {
+    const { Office } = window;
+    const cancelObject = { command: selectorProperties.commandCancel, };
+    Office.context.ui.messageParent(JSON.stringify(cancelObject));
   }
 
   handleSelection(dossierData) {
