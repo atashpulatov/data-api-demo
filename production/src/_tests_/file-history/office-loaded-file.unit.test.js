@@ -310,6 +310,7 @@ describe('office loaded file', () => {
     const mockEvent = { stopPropagation: jest.fn() };
     const testBindingId = 'testBindingId';
     const objectType = { name: 'report' };
+    const loading = false;
     jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => { });
     const objectClickMock = jest.spyOn(officeApiHelper, 'onBindingObjectClick').mockImplementation(() => true);
     const visualizationInfoMock = { dossierStructure: 'test' };
@@ -320,6 +321,7 @@ describe('office loaded file', () => {
       fileName="test"
       callForEdit={onEditMocked}
       isLoading={false}
+      loading={loading}
       objectType={objectType}
       visualizationInfo={visualizationInfoMock}
     />);
@@ -329,8 +331,9 @@ describe('office loaded file', () => {
     // then
     await expect(objectClickMock).toBeCalled();
     expect(onEditMocked).toBeCalled();
-    expect(onEditMocked).toBeCalledWith({ bindId: testBindingId, objectType });
+    expect(onEditMocked).toBeCalledWith({ bindId: testBindingId, objectType }, loading);
   });
+
   it('should invoke re-prompt method on button click', async () => {
     // given
     const onRepromptMocked = jest.fn();
