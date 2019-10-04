@@ -63,10 +63,7 @@ export default class _DossierWindow extends React.Component {
   }
 
   render() {
-    const {
-      chosenProjectName, chosenObjectId, chosenProjectId, handleBack, t, mstrData,
-      handlePopupErrors
-    } = this.props;
+    const { chosenProjectName, chosenObjectId, chosenProjectId, handleBack, t, mstrData, handlePopupErrors } = this.props;
     const { isVisualisationSelected } = this.state;
     const propsToPass = {
       envUrl: mstrData.envUrl,
@@ -127,7 +124,7 @@ _DossierWindow.defaultProps = {
   t: (text) => text,
   mstrData: {
     envUrl: 'no env url',
-    token: 'no token',
+    token: null,
     promptsAnswers: null
   },
   requestImport: () => { },

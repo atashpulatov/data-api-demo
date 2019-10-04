@@ -19,11 +19,11 @@ export default class _EmbeddedDossier extends React.Component {
     const { mstrData, handleSelection, handlePopupErrors } = this.props;
     const { envUrl, token, dossierId, projectId, promptsAnswers } = mstrData;
     const instance = {};
-    instance.mid = await createDossierInstance(projectId, dossierId);
-    if (promptsAnswers != null) {
-      let count = 0;
-      while (count < promptsAnswers.length) {
-        try {
+    try {
+      instance.mid = await createDossierInstance(projectId, dossierId);
+      if (promptsAnswers != null) {
+        let count = 0;
+        while (count < promptsAnswers.length) {
           await answerDossierPrompts({
             objectId: dossierId,
             projectId,
@@ -31,10 +31,10 @@ export default class _EmbeddedDossier extends React.Component {
             promptsAnswers: promptsAnswers[count]
           });
           count++;
-        } catch (e) {
-          handlePopupErrors(e)
         }
       }
+    } catch (e) {
+      handlePopupErrors(e)
     }
 
     const libraryUrl = envUrl.replace('api', 'app');
@@ -142,7 +142,7 @@ _EmbeddedDossier.propTypes = {
 _EmbeddedDossier.defaultProps = {
   mstrData: {
     envUrl: 'no env url',
-    token: 'no token',
+    token: null,
     dossierId: 'default id',
     projectId: 'default id',
     promptsAnswers: null
