@@ -1,23 +1,23 @@
 /* eslint-disable react/jsx-filename-extension */
 import React from 'react';
 import { shallow } from 'enzyme';
-import { ObjectTable } from '@mstr/rc';
+import { ObjectTable, FilterPanel } from '@mstr/rc';
 import { _Browser, mapStateToProps, mapDispatchToProps } from './browser';
 import { PopupButtons } from '../popup/popup-buttons';
 import { reportsExample } from './objects';
 import { projectsExample } from './projects';
-import {browserActions} from './browser-actions';
+import { browserActions } from './browser-actions';
 
 describe('Browser', () => {
   const mockedProps = {
     objects: reportsExample.result,
     projects: projectsExample,
-    onSortChange: () => {},
+    onSortChange: () => { },
     selected: {
       id: '02DDEFDA460B58681B005AAB4A1CBFD3',
       projectId: 'CE52831411E696C8BD2F0080EFD5AF44',
     },
-    onSelect: () => {},
+    onSelect: () => { },
   };
 
   it('should render empty container for filters and table of objects', () => {
@@ -128,6 +128,15 @@ describe('Browser', () => {
 
     it('should plug browser actions to props', () => {
       expect(mapDispatchToProps).toEqual(browserActions);
+    });
+  });
+  describe('Filter Panel', () => {
+    it('should render filter panel correctly', () => {
+      // given
+      // when
+      const shallowedBrowser = shallow(<_Browser />);
+      // then
+      expect(shallowedBrowser.find(FilterPanel).length).toEqual(1);
     });
   });
 });
