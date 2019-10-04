@@ -2,7 +2,7 @@
 import { browserReducer } from './browser-reducer';
 import {
   ON_MY_LIBRARY_CHANGED_CONST, ON_FILTER_CHANGED_CONST,
-  ON_SORT_CHANGE_CONST, ON_SELECT_CONST
+  ON_SORT_CHANGE_CONST, ON_SELECT_CONST, LOAD_BROWSING_STATE_CONST
 } from './browser-actions';
 import { officeStoreService } from '../office/store/office-store-service';
 
@@ -62,6 +62,18 @@ describe('Browser reducer', () => {
     });
     // then
     expect(browserState.selected).toBe(selected);
+  });
+
+  it('should load entire state', () => {
+    // given
+    const browsingState = 'browsingState';
+    // when
+    const browserState = browserReducer({}, {
+      type: LOAD_BROWSING_STATE_CONST,
+      browsingState,
+    });
+    // then
+    expect(browserState).toBe(browsingState);
   });
 
   it('should save browsing filters to office settings', () => {

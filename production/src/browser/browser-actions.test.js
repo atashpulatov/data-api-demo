@@ -4,6 +4,7 @@ import {
   ON_FILTER_CHANGED_CONST,
   ON_SORT_CHANGE_CONST,
   ON_SELECT_CONST,
+  LOAD_BROWSING_STATE_CONST,
 } from './browser-actions';
 
 describe('Browser actions', () => {
@@ -45,5 +46,18 @@ describe('Browser actions', () => {
     browserActions.onSelect(selected)(listener);
     // then
     expect(listener).toHaveBeenCalledWith({ type: ON_SELECT_CONST, selected });
+  });
+
+  it('should dispatch proper loadBrowsingState action', () => {
+    // given
+    const browsingState = 'browsingState';
+    const listener = jest.fn();
+    // when
+    browserActions.loadBrowsingState(browsingState)(listener);
+    // then
+    expect(listener).toHaveBeenCalledWith({
+      type: LOAD_BROWSING_STATE_CONST,
+      browsingState,
+    });
   });
 });

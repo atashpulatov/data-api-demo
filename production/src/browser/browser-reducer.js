@@ -1,5 +1,5 @@
-import { ON_MY_LIBRARY_CHANGED_CONST, ON_FILTER_CHANGED_CONST, ON_SORT_CHANGE_CONST, ON_SELECT_CONST } from './browser-actions';
-import {officeStoreService} from '../office/store/office-store-service';
+import { ON_MY_LIBRARY_CHANGED_CONST, ON_FILTER_CHANGED_CONST, ON_SORT_CHANGE_CONST, ON_SELECT_CONST, LOAD_BROWSING_STATE_CONST } from './browser-actions';
+import { officeStoreService } from '../office/store/office-store-service';
 
 const updateState = (state, action) => {
   switch (action.type) {
@@ -23,6 +23,8 @@ const updateState = (state, action) => {
       ...state,
       selected: action.selected,
     };
+  case LOAD_BROWSING_STATE_CONST:
+    return action.browsingState;
   default:
     break;
   }
