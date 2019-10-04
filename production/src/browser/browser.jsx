@@ -2,27 +2,35 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import { ObjectTable } from '@mstr/rc';
+import { ObjectTable, FilterPanel } from '@mstr/rc';
 import { PopupButtons } from '../popup/popup-buttons';
-import {browserActions} from './browser-actions';
+import { browserActions } from './browser-actions';
 
 export const _Browser = ({
-  objects, projects, selected, onSelect, locale, sort, onSortChange, filter, myLibrary,
+  objects, projects, selected, onSelect, locale, sort, onSortChange, filter, onFilterChange, myLibrary,
 }) => (
   <>
-    <ObjectTable
-      objects={objects}
-      projects={projects}
-      sort={sort}
-      onSortChange={onSortChange}
-      selected={selected}
-      onSelect={onSelect}
-      locale={locale}
-      filter={filter}
-      myLibrary={myLibrary}
+      <FilterPanel
+        objects={objects}
+        applications={projects}
+        filter={filter}
+        onFilterChange={onFilterChange}
+        myLibrary={myLibrary}
+        locale={locale}
       />
-    <PopupButtons />
-  </>
+      <ObjectTable
+        objects={objects}
+        projects={projects}
+        sort={sort}
+        onSortChange={onSortChange}
+        selected={selected}
+        onSelect={onSelect}
+        locale={locale}
+        filter={filter}
+        myLibrary={myLibrary}
+      />
+      <PopupButtons />
+    </>
 );
 _Browser.propTypes = {
   objects: PropTypes.arrayOf(PropTypes.object).isRequired,
