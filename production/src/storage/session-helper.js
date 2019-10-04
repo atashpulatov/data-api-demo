@@ -1,9 +1,10 @@
-import {reduxStore} from '../store';
-import {sessionProperties} from './session-properties';
-import {authenticationService} from '../authentication/auth-rest-service';
-import {userRestService} from '../home/user-rest-service';
-import {errorService} from '../error/error-handler';
-import {homeHelper} from '../home/home-helper';
+import { reduxStore } from '../store';
+import { sessionProperties } from './session-properties';
+import { authenticationService } from '../authentication/auth-rest-service';
+import { userRestService } from '../home/user-rest-service';
+import { errorService } from '../error/error-handler';
+import { homeHelper } from '../home/home-helper';
+import { createCache } from '../cache/cache-actions';
 
 class SessionHelper {
   enableLoading = () => {
@@ -12,37 +13,42 @@ class SessionHelper {
       loading: true,
     });
   }
+
   disableLoading = () => {
     reduxStore.dispatch({
       type: sessionProperties.actions.setLoading,
       loading: false,
     });
   }
+
   logOut = () => {
     reduxStore.dispatch({
       type: sessionProperties.actions.logOut,
     });
   }
+
   logOutRest = async () => {
-    const authToken = reduxStore.getState().sessionReducer.authToken;
-    const envUrl = reduxStore.getState().sessionReducer.envUrl;
+    const { authToken } = reduxStore.getState().sessionReducer;
+    const { envUrl } = reduxStore.getState().sessionReducer;
     try {
       await authenticationService.logout(envUrl, authToken);
     } catch (error) {
-      errorService.handleLogoutError(error, true);
-    };
+      errorService.handleError(error, { isLogout: true });
+    }
   }
+
   logOutRedirect = () => {
-    const {origin} = homeHelper.getWindowLocation();
+    const { origin } = homeHelper.getWindowLocation();
     if (!origin.includes('localhost')) {
       const currentPath = window.location.pathname;
       const pathBeginning = currentPath.split('/apps/')[0];
       const loginParams = 'source=addin-mstr-office';
       this.replaceWindowLocation(pathBeginning, loginParams);
     } else {
-      sessionHelper.disableLoading();
+      this.disableLoading();
     }
   };
+
   replaceWindowLocation = (pathBeginning, loginParams) => {
     window.location.replace(`${pathBeginning}/static/loader-mstr-office/index.html?${loginParams}`);
   }
@@ -50,15 +56,18 @@ class SessionHelper {
   saveLoginValues = (values) => {
     reduxStore.dispatch({
       type: sessionProperties.actions.logIn,
-      values: values,
+      values,
     });
   }
+
   logIn = (authToken) => {
     reduxStore.dispatch({
       type: sessionProperties.actions.loggedIn,
-      authToken: authToken,
+      authToken,
     });
+    createCache()(reduxStore.dispatch, reduxStore.getState);
   }
+
   getSession = () => {
     const currentStore = reduxStore.getState();
     const projectId = currentStore.historyReducer.project
@@ -82,7 +91,7 @@ class SessionHelper {
       userData = await userRestService.getUserInfo(authToken, envUrl);
       !userData.userInitials && sessionHelper.saveUserInfo(userData);
     } catch (error) {
-      errorService.handleError(error, !IS_LOCALHOST);
+      errorService.handleError(error, { isLogout: !IS_LOCALHOST });
     }
   }
 
@@ -101,13 +110,9 @@ class SessionHelper {
     });
   }
 
-  getUrl = () => {
-    return window.location.href;
-  }
+  getUrl = () => window.location.href
 
-  isLocalhost = () => {
-    return this.getUrl().includes('localhost');
-  }
+  isLocalhost = () => this.getUrl().includes('localhost')
 }
 
 export const sessionHelper = new SessionHelper();

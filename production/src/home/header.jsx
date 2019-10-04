@@ -1,14 +1,14 @@
-import React, {Component} from 'react';
-import {sessionHelper} from '../storage/session-helper';
-import {Button, Popover} from 'antd';
-import {connect} from 'react-redux';
-import {withTranslation} from 'react-i18next';
-import {toggleIsSettingsFlag, toggleIsConfirmFlag} from '../office/office-actions';
-import {MSTRIcon} from 'mstr-react-library';
+import React, { Component } from 'react';
+import { Button, Popover } from 'antd';
+import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
+import { MSTRIcon, LoadingText } from '@mstr/mstr-react-library';
+import { toggleIsSettingsFlag, toggleIsConfirmFlag } from '../office/office-actions';
+import { sessionHelper } from '../storage/session-helper';
 import mstrLogo from './assets/mstr_logo.png';
-import {SettingsMenu} from './settings-menu';
-import {Confirmation} from './confirmation';
-import {LoadingText} from 'mstr-react-library';
+import { SettingsMenu } from './settings-menu';
+import { Confirmation } from './confirmation';
+
 
 export class _Header extends Component {
   componentDidMount = async () => {
@@ -73,16 +73,18 @@ export class _Header extends Component {
   }
 
   render() {
-    const {loading, t, isSettings, isConfirm, isClearing} = this.props;
+    const { loading, t, isSettings, isConfirm, isClearing } = this.props;
     return (
-      <React.Fragment>
-        {isClearing &&
-          <div className='block-all-ui' >
-            <LoadingText text={t('Clearing data...')} />
-          </div>}
-        <header id='app-header'>
+      <>
+        {isClearing
+          && (
+            <div className="block-all-ui">
+              <LoadingText text={t('Clearing data...')} />
+            </div>
+          )}
+        <header id="app-header">
           <div className="mstr-logo">
-            <span id='profileImage'>
+            <span id="profileImage">
               {/* TODO: Alt text for logo will be added later */}
               <img src={mstrLogo} />
             </span>
@@ -96,25 +98,26 @@ export class _Header extends Component {
             {isSettings && <SettingsMenu />}
             {isConfirm && <Confirmation />}
           </div>
-        </header >
-      </React.Fragment>
+        </header>
+      </>
+
     );
-  };
+  }
 }
 
 _Header.defaultProps = {
   t: (text) => text,
 };
 
-function mapStateToProps({officeReducer}) {
-  const {isSettings, isConfirm, isClearing} = officeReducer;
-  return {isSettings, isConfirm, isClearing};
-};
+function mapStateToProps({ officeReducer }) {
+  const { isSettings, isConfirm, isClearing } = officeReducer;
+  return { isSettings, isConfirm, isClearing };
+}
 
 const mapDispatchToProps = {
   toggleIsSettingsFlag,
   toggleIsConfirmFlag,
 };
 
-export const Header = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_Header));
-
+const Header = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_Header));
+export default Header;

@@ -1,2 +1,2 @@
 
-export class NotificationError extends Error { };
+export class NotificationError extends Error { }

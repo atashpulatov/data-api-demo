@@ -1,11 +1,9 @@
+/* global Office Excel */
 
 class OfficeContext {
-    getOffice = () => {
-        return Office;
-    }
-    getExcel = () => {
-        return Excel;
-    }
+    getOffice = () => Office
+
+    getExcel = () => Excel
 }
 
 export const officeContext = new OfficeContext();

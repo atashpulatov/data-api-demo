@@ -1,5 +1,5 @@
-import {officeProperties} from './office-properties';
-import {officeStoreService} from './store/office-store-service';
+import { officeProperties } from './office-properties';
+import { officeStoreService } from './store/office-store-service';
 
 export function toggleSecuredFlag(isSecured) {
   officeStoreService.toggleFileSecuredFlag(isSecured);
@@ -20,11 +20,10 @@ export function toggleIsSettingsFlag(isSettings) {
   };
 }
 
-export function toggleIsConfirmFlag(isConfirm) {
+export function toggleIsConfirmFlag() {
   return (dispatch) => {
     dispatch({
       type: officeProperties.actions.toggleIsConfirmFlag,
-      isConfirm,
     });
   };
 }
@@ -34,6 +33,14 @@ export function toggleIsClearingFlag(isClearing) {
     dispatch({
       type: officeProperties.actions.toggleIsClearingFlag,
       isClearing,
+    });
+  };
+}
+
+export function toggleRenderSettingsFlag() {
+  return (dispatch) => {
+    dispatch({
+      type: officeProperties.actions.toggleRenderSettingsFlag,
     });
   };
 }

@@ -1,8 +1,10 @@
-import {officeProperties} from '../office-properties';
-import {officeApiHelper} from '../../office/office-api-helper';
-import {RunOutsideOfficeError} from '../../error/run-outside-office-error';
-import {errorService} from '../../error/error-handler';
-import {reduxStore} from '../../store';
+import { officeProperties } from '../office-properties';
+import { officeApiHelper } from '../office-api-helper';
+import { RunOutsideOfficeError } from '../../error/run-outside-office-error';
+import { errorService } from '../../error/error-handler';
+import { reduxStore } from '../../store';
+
+/* global Office */
 
 class OfficeStoreService {
   preserveReport = (report) => {
@@ -19,13 +21,16 @@ class OfficeStoreService {
         objectType: report.objectType,
         isCrosstab: report.isCrosstab,
         isPrompted: report.isPrompted,
+        importSubtotal: report.importSubtotal,
+        subtotalsAddresses: report.subtotalsAddresses,
         promptsAnswers: report.promptsAnswers,
         crosstabHeaderDimensions: report.crosstabHeaderDimensions,
+        visualizationInfo: report.visualizationInfo,
       });
       settings.set(officeProperties.loadedReportProperties, reportProperties);
       settings.saveAsync();
     } catch (error) {
-      errorService.handleOfficeError(error);
+      errorService.handleError(error);
     }
   }
 
@@ -33,15 +38,13 @@ class OfficeStoreService {
     try {
       const settings = this.getOfficeSettings();
       const reportProperties = this._getReportProperties();
-      const indexOfReport = reportProperties.findIndex((oldReport) => {
-        return (oldReport.bindId === bindId);
-      });
+      const indexOfReport = reportProperties.findIndex((oldReport) => (oldReport.bindId === bindId));
       reportProperties[indexOfReport][key] = value;
       settings.set(officeProperties.loadedReportProperties, reportProperties);
       await settings.saveAsync();
       await officeApiHelper.loadExistingReportBindingsExcel();
     } catch (error) {
-      errorService.handleOfficeError(error);
+      errorService.handleError(error);
     }
   }
 
@@ -49,22 +52,18 @@ class OfficeStoreService {
     try {
       const settings = this.getOfficeSettings();
       const reportProperties = this._getReportProperties();
-      const indexOfReport = reportProperties.findIndex((report) => {
-        return (report.bindId === bindingId);
-      });
+      const indexOfReport = reportProperties.findIndex((report) => (report.bindId === bindingId));
       reportProperties.splice(indexOfReport, 1);
       settings.set(officeProperties.loadedReportProperties, reportProperties);
       settings.saveAsync();
     } catch (error) {
-      errorService.handleOfficeError(error);
+      errorService.handleError(error);
     }
   }
 
   getReportFromProperties = (bindingId) => {
     const reportProperties = this._getReportProperties();
-    return reportProperties.find((report) => {
-      return report.bindId === bindingId;
-    });
+    return reportProperties.find((report) => report.bindId === bindingId);
   };
 
   _getReportProperties = () => {
@@ -77,14 +76,12 @@ class OfficeStoreService {
       }
       return settings.get(officeProperties.loadedReportProperties);
     } catch (error) {
-      errorService.handleOfficeError(error);
+      errorService.handleError(error);
     }
   };
 
   getOfficeSettings = () => {
-    if (Office === undefined
-      || Office.context === undefined
-      || Office.context.document === undefined) {
+    if (Office === undefined || Office.context === undefined || Office.context.document === undefined) {
       throw new RunOutsideOfficeError();
     }
     return Office.context.document.settings;
@@ -96,7 +93,7 @@ class OfficeStoreService {
       settings.set(officeProperties.isSecured, value);
       settings.saveAsync();
     } catch (error) {
-      errorService.handleOfficeError(error);
+      errorService.handleError(error);
     }
   }
 
@@ -105,22 +102,20 @@ class OfficeStoreService {
       const settings = this.getOfficeSettings();
       return settings.get(officeProperties.isSecured);
     } catch (error) {
-      errorService.handleOfficeError(error);
+      errorService.handleError(error);
     }
   }
+
   saveAndPreserveReportInStore = (report, isRefresh) => {
     if (isRefresh) {
       try {
         const settings = this.getOfficeSettings();
         const reportsArray = [...this._getReportProperties()];
-        const reportObj = reportsArray.find(
-            (element) => element.bindId === report.bindId
-        );
+        const reportObj = reportsArray.find((element) => element.bindId === report.bindId);
         reportsArray[reportsArray.indexOf(reportObj)].crosstabHeaderDimensions = report.crosstabHeaderDimensions;
         settings.set(officeProperties.loadedReportProperties, reportsArray);
       } catch (error) {
-        const e = errorService.errorOfficeFactory(error);
-        errorService.handleOfficeError(e);
+        errorService.handleError(error);
       }
     } else {
       reduxStore.dispatch({
@@ -136,8 +131,11 @@ class OfficeStoreService {
           objectType: report.objectType,
           isCrosstab: report.isCrosstab,
           isPrompted: report.isPrompted,
+          importSubtotal: report.importSubtotal,
+          subtotalsAddresses: report.subtotalsAddresses,
           promptsAnswers: report.promptsAnswers,
           crosstabHeaderDimensions: report.crosstabHeaderDimensions,
+          visualizationInfo: report.visualizationInfo,
         },
       });
       this.preserveReport(report);

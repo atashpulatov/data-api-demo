@@ -46,7 +46,7 @@ button.add-data-btn:focus {
   font-size: 12px;
   color: #1C91DC;
   padding: 1px;
-  margin: 10px 52px 10px 0px;
+  margin: 10px 42px 10px 0px;
 }
 
 .refresh-all-btn .mstr-icon,
@@ -60,12 +60,54 @@ button.add-data-btn:focus {
 }
 
 .file-history-container {
+  display: flex;
+  flex-direction: column;
   background: #FFFFFF;
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.20);
   border-radius: 2px;
   margin: 5px 10px 10px 10px;
-  padding-top: 16px;
-  padding-bottom: 16px;
+  padding: 16px 16px 16px 16px;
+}
+
+.refresh-icons-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.refresh-icons-row>span {
+  display: flex;
+  align-items: center;
+}
+
+.object-icons>* {
+  margin-left: 10px;
+}
+
+.object-icons>*:last-child {
+  margin-left: 12px;
+}
+
+.visualization-path-row {
+  font-family: HelveticaNeue;
+  font-size: 10px;
+  color: #444649;
+  margin-bottom: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-user-select: none;
+  -khtml-user-select: none;	
+  -moz-user-select: none;	
+}
+
+.ant-popover .ant-popover-inner-content  {
+  text-align: left;
+}
+
+.object-title-row {
+  display: flex;
+  flex-direction: row;
+  height: 25px;
 }
 
 .file-history-container:hover {
@@ -112,6 +154,10 @@ button.add-data-btn:focus {
   outline: none;
 }
 
+.object-name {
+  width: 100%
+}
+
 .rename-container {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -121,7 +167,7 @@ button.add-data-btn:focus {
   color: rgba(0, 0, 0, 0.65);
   border: none;
   background-color: #fff;
-  width: 100%;
+  max-width: 90%;
   overflow: hidden;
   display: inline-block;
   text-overflow: ellipsis;
@@ -133,10 +179,14 @@ button.add-data-btn:focus {
   user-select: none;
   font-size: 14px;
   font-weight: 500;
+  margin-left: 10px;
 }
 
 .ant-dropdown-trigger {
-  height: 21px;
+  position: relative;
+  max-width: calc(100% - 20px);
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .ant-input.rename-input:focus,
@@ -163,9 +213,12 @@ button.add-data-btn:focus {
 }
 
 .additional-data {
-  padding: 0 2px;
+  padding: 0 4px;
   font-size: 12px;
   color: #888888;
+  -webkit-user-select: none;	
+  -khtml-user-select: none;	
+  -moz-user-select: none;
 }
 
 .secured-screen-container {
@@ -199,7 +252,7 @@ button.add-data-btn:focus {
 }
 
 .show-data-btn {
-  width: 125px;
+  width: auto;
 }
 
 .tables-container {
@@ -231,6 +284,11 @@ button.add-data-btn:focus {
   font-size: 12px;
   cursor: default;
   line-height: 15px;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;	
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .settings-list li:not(:first-child):not(:last-child):not(.clear-data-inactive):hover {
@@ -274,6 +332,10 @@ button.add-data-btn:focus {
   margin: 8px 0;
 }
 
+.settings-list .settings {
+  margin: 8px 0;
+}
+
 .settings-list .settings-version {
   padding: 0 17px 12px 17px;
   line-height: 31px;
@@ -281,6 +343,11 @@ button.add-data-btn:focus {
   font-weight: 300;
   font-size: 10px;
   text-align: center;
+  -moz-user-select: text;
+  -khtml-user-select: text;
+  -webkit-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
 }
 
 .clear-data-inactive {

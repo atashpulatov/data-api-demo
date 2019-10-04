@@ -97,14 +97,32 @@ end
 
 desc "build project in #{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/build"
 task :build do
-  install_dependencies("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
-  # build the office.zip
-  shell_command! "yarn build", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
-  shell_command! "zip -r office-#{Common::Version.application_version}.zip .", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/build"
+  #US183475 support publish build ci metrics
+  start_time = Time.now
+  metrics_build = {}
+  build_fail = false
+  begin
+    install_dependencies("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
+    # build the office.zip
+    shell_command! "npm run build", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
+    shell_command! "zip -r office-#{Common::Version.application_version}.zip .", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/build"
 
-  # build the office_loader.zip
-  shell_command! "yarn build", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/office-loader/build"
-  shell_command! "zip -r office-loader-#{Common::Version.application_version}.zip .", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/office-loader/build"
+    # build the office_loader.zip
+    shell_command! "yarn build", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/office-loader/build"
+    shell_command! "zip -r office-loader-#{Common::Version.application_version}.zip .", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/office-loader/build"
+
+    metrics_build['BUILD_RESULT'] = 'PASS'
+  rescue
+    build_fail = true
+    metrics_build['BUILD_RESULT'] = 'FAIL'
+  ensure
+    finish_time = Time.now
+    metrics_build['BUILD_DURATION'] = (finish_time - start_time)
+    metrics_build['BUILD_TOOL'] = 'npm'
+    puts "\nMETRICS_BUILD=#{metrics_build.to_json}\n"
+    raise "build error" if build_fail
+  end
+  
 end
 
 task :clean do
@@ -124,25 +142,44 @@ end
 
 desc "run the unit test and collect code coverage in stage_0 pre-merge job"
 task :stage_0_test do
+  info "npm version"
+  shell_command! "npm -v", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
+
+  info "node version"
+  shell_command! "node -v", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
+
+  
   #run test under current workspace
   if ENV["ghprbTargetBranch"].nil?
     raise "ghprbTargetBranch environment should not be nil"
   end
   run_test("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
-  #checkout the code in base branch
-  init_base_branch_repo(ENV["ghprbTargetBranch"])
-  #run test with base branch
-  run_test(base_repo_path)
-  generate_comparison_report_html
-  generate_comparison_report_markdown
-  generate_eslint_report
-  publish_to_pull_request_page
+  get_unit_test_metrics("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
+
+  # pre-merge job shouldn't fail when test fail in base branch.
+  # if the build process fail in base branch, publish the error message to pull request page.
+  begin
+    message = nil
+    #checkout the code in base branch
+    init_base_branch_repo(ENV["ghprbTargetBranch"])
+    #run test with base branch
+    run_test(base_repo_path)
+    generate_comparison_report_html
+    generate_comparison_report_markdown
+    generate_eslint_report
+  rescue Exception => e
+    message = "Waring: Failed to run test with base branch and generate report, caught exception #{e}!"
+    warn(message)
+  ensure
+    publish_to_pull_request_page(message)
+  end
 
 end
 
 desc "run the unit test and collect code coverage in stage_1 dev job"
 task :stage_1_test do
   run_test("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
+  get_unit_test_metrics("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
 end
 
 desc "debug rake task"
@@ -155,7 +192,7 @@ end
 
 def run_test(working_dir)
   install_dependencies(working_dir)
-  shell_command! "yarn jest --coverage", cwd: "#{working_dir}/production"
+  shell_command! "npm run test:coverage", cwd: "#{working_dir}/production"
 end
 
 
@@ -163,7 +200,7 @@ def install_dependencies(working_dir)
   shell_command! "rm -rf node_modules", cwd: "#{working_dir}/production"
   shell_command! "rm -rf node_modules", cwd: "#{working_dir}/office-loader"
   update_package_json(working_dir)
-  shell_command! "yarn install --network-concurrency 1", cwd: "#{working_dir}/production"
+  shell_command! "npm install", cwd: "#{working_dir}/production"
   shell_command! "yarn install --network-concurrency 1", cwd: "#{working_dir}/office-loader"
 end
 
@@ -214,7 +251,7 @@ end
 
 def generate_eslint_report
   eslint_report_path = "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/.eslint/index.html"
-  shell_command "yarn eslint \"src/**\" -f html -o #{eslint_report_path}", cwd: $WORKSPACE_SETTINGS[:paths][:project][:production][:home]
+  shell_command "npm run eslint \"src/**\" -f html -o #{eslint_report_path}", cwd: $WORKSPACE_SETTINGS[:paths][:project][:production][:home]
 end
 
 
@@ -250,6 +287,24 @@ def generate_comparison_report_markdown
   mf.write('</table>')
   mf.close()
 
+end
+
+def get_unit_test_metrics(working_dir)
+  unit_test_result_path = "#{working_dir}/production/coverage/test-results.json"
+  unit_result_json = JSON.parse((File.read(unit_test_result_path)))
+
+  total_tests = unit_result_json['numTotalTests'].to_i
+  total_passed = unit_result_json['numPassedTests'].to_i
+  total_failures = unit_result_json['numFailedTests'].to_i
+  total_skipped = unit_result_json['numPendingTests'].to_i
+  # Time.now returns seconds from epoch, json is in ms
+  total_duration = Time.now.to_i - unit_result_json['startTime'] / 1000
+  metrics_unit = {}
+  metrics_unit['UNIT_TEST_TOTAL'] = total_tests - total_skipped
+  metrics_unit['UNIT_TEST_FAILURES'] = total_failures
+  metrics_unit['UNIT_TEST_SUCCESSES'] = total_passed
+  metrics_unit['UNIT_TEST_DURATION'] = total_duration
+  puts "\nMETRICS_UNIT=#{metrics_unit.to_json}"
 end
 
 def write_row_to_compare_table(mf, name, node)
@@ -321,7 +376,8 @@ end
 def add_data_for_doc(compare_obj, xml_doc, metric_name)
   compare_obj["All files"][metric_name] = get_metics_node(xml_doc.coverage.project.metrics)
   compare_obj["All files"]["packages"]={} if compare_obj["All files"]["packages"].nil?
-  xml_doc.coverage.project.metrics.package.each do |package|
+  # the clover.xml format has changed, node 'project' is the child of node 'coverage'
+  xml_doc.coverage.project.package.each do |package|
     pack_name = package["name"]
     compare_obj["All files"]["packages"][pack_name] = {}  if compare_obj["All files"]["packages"][pack_name].nil?
     compare_obj["All files"]["packages"][pack_name][metric_name] = get_metics_node(package.metrics)
@@ -370,19 +426,24 @@ def get_metics_node(source)
 end
 #publish markdown report to pull request page
 
-def publish_to_pull_request_page
+def publish_to_pull_request_page(message=nil)
   unless ENV['USER'] == 'jenkins'
     #only available in jenkins envrionment
     puts "only available in jenkins env"
     return
   end
-  markdown_report_path = "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/.comparison_report/markdown.html"
-  unless File.exist? markdown_report_path
-    raise "#{markdown_report_path} does not exist, please generate before"
+  # if the argument 'message' is not given(message=nil), then publish the markdown report to pull request page.
+  if message
+    comments_message = message
+  else
+    markdown_report_path = "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/.comparison_report/markdown.html"
+    unless File.exist? markdown_report_path
+      raise "#{markdown_report_path} does not exist, please generate before"
+    end
+    markdown_message = File.read(markdown_report_path)
+    job_url = ENV['BUILD_URL']
+    comments_message = "job page:\n#{job_url}\nlinter report:\n#{job_url}eslint_report\ncode coverage report:\n#{job_url}Code_Coverage_Report\n#{markdown_message}\n"
   end
-  markdown_message = File.read(markdown_report_path)
-  job_url = ENV['BUILD_URL']
-  comments_message = "job page:\n#{job_url}\nlinter report:\n#{job_url}eslint_report\ncode coverage report:\n#{job_url}Code_Coverage_Report\n#{markdown_message}\n"
   pull_request = Github::PullRequests.new(ENV['GITHUB_USER'], ENV['GITHUB_PWD'])
   pull_request.comment_pull_request(ENV['PROJECT_NAME'],ENV['ORGANIZATION_NAME'],ENV["ghprbPullId"],comments_message)
 end

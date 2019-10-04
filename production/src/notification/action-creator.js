@@ -1,36 +1,32 @@
-import {reduxNotificationProperties} from './notification-properties';
+import { reduxNotificationProperties } from './notification-properties';
 
 class ActionCreator {
-  showNotificationAction = (title, content, notificationType, details) => {
-    return {
-      type: reduxNotificationProperties.actions.showNotification,
-      title,
-      content,
-      notificationType: notificationType,
-      currentObject: 'notification',
-      details,
-    };
-  };
+  showNotificationAction = (title, content, notificationType, details, onConfirm) => ({
+    type: reduxNotificationProperties.actions.showNotification,
+    title,
+    content,
+    notificationType,
+    currentObject: 'notification',
+    details,
+    onConfirm,
+  });
 
-  showTranslatedNotification = (title, content, notificationType, details) => {
-    return {
-      type: reduxNotificationProperties.actions.showTranslatedNotification,
-      title,
-      content,
-      notificationType: notificationType,
-      currentObject: 'notification',
-      details,
-    };
-  };
+  showTranslatedNotification = (title, content, notificationType, details, onConfirm) => ({
+    type: reduxNotificationProperties.actions.showTranslatedNotification,
+    title,
+    content,
+    notificationType,
+    currentObject: 'notification',
+    details,
+    onConfirm,
+  });
 
-  showMessageAction = (content, messageType) => {
-    return {
-      type: reduxNotificationProperties.actions.showMessage,
-      content,
-      messageType: messageType,
-      currentObject: 'message',
-    };
-  }
+  showMessageAction = (content, messageType) => ({
+    type: reduxNotificationProperties.actions.showMessage,
+    content,
+    messageType,
+    currentObject: 'message',
+  })
 }
 
 export const actionCreator = new ActionCreator();

@@ -1,4 +1,4 @@
-import {propsProxy} from '../home/enum-props-proxy';
+import { propsProxy } from '../home/enum-props-proxy';
 
 export const officeProperties = new Proxy({
   /**
@@ -28,6 +28,7 @@ export const officeProperties = new Proxy({
     toggleSecuredFlag: 'TOGGLE_SECURED_FLAG',
     toggleIsSettingsFlag: 'TOGGLE_IS_SETTINGS_FLAG',
     toggleIsConfirmFlag: 'TOGGLE_IS_CONFIRM_FLAG',
+    toggleRenderSettingsFlag: 'TOGGLE_RENDER_SETTINGS_FLAG',
     toggleIsClearingFlag: 'TOGGLE_IS_CLEARING_FLAG',
   },
 }, propsProxy);
