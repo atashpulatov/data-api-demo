@@ -18,21 +18,20 @@ export const IMPORT_ROW_LIMIT = 20000; // Maximum number of rows to fetch during
 export const PROMISE_LIMIT = 10; // Number of concurrent context.sync() promises during data import.
 
 export function answerDossierPrompts({ objectId, projectId, instanceId, promptsAnswers }) {
-  const storeState = reduxStore.getState();
-  const { envUrl } = storeState.sessionReducer;
-  const { authToken } = storeState.sessionReducer;
-  const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/promptsAnswers`;
-  return request
-    .post(fullPath)
-    .set('X-MSTR-AuthToken', authToken)
-    .set('X-MSTR-ProjectID', projectId)
-    .send(promptsAnswers)
-    .withCredentials()
+    const storeState = reduxStore.getState();
+    const { envUrl } = storeState.sessionReducer;
+    const { authToken } = storeState.sessionReducer;
+    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/promptsAnswers`;
+    return request
+      .post(fullPath)
+      .set('X-MSTR-AuthToken', authToken)
+      .set('X-MSTR-ProjectID', projectId)
+      .send(promptsAnswers)
+      .withCredentials()
     .then((res) => res.status);
-}
+  }
 
 export function answerPrompts({ objectId, projectId, instanceId, promptsAnswers }) {
-  try {
     const storeState = reduxStore.getState();
     const { envUrl } = storeState.sessionReducer;
     const { authToken } = storeState.sessionReducer;
@@ -43,15 +42,7 @@ export function answerPrompts({ objectId, projectId, instanceId, promptsAnswers 
       .set('X-MSTR-ProjectID', projectId)
       .send(promptsAnswers)
       .withCredentials()
-      .then((res) => res.status)
-      .catch((err) => {
-        console.error(err);
-        throw err;
-      });
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
+    .then((res) => res.status);
 }
 
 export function createDossierBasedOnReport(reportId, instanceId, projectId) {
