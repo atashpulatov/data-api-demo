@@ -1,3 +1,6 @@
+/* eslint-disable camelcase */
+/* eslint-disable no-underscore-dangle */
+
 import PouchDB from 'pouchdb';
 
 /**
@@ -156,8 +159,8 @@ export default class DB {
   static purgePouchDB(usernameToKeep) {
     if (window.indexedDB && window.indexedDB.databases) {
       return window.indexedDB.databases()
-        .then((dbs) => dbs.filter((db) => (db.name.includes('_pouch_') && !db.name.includes(usernameToKeep))).map((e) => e.name))
-        .then((pouchDBS) => pouchDBS.forEach((pouchDB) => window.indexedDB.deleteDatabase(pouchDB)))
+        .then((dbs) => dbs.filter((db) => (db.name.includes('_pouch_') && (!usernameToKeep || !db.name.includes(usernameToKeep)))))
+        .then((pouchDBS) => Promise.all(pouchDBS.map((pouchDB) => window.indexedDB.deleteDatabase(pouchDB.name))))
         .catch(console.error);
     }
     return false;

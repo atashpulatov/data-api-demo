@@ -41,9 +41,7 @@ export const addProjects = (objects) => ({
   data: objects,
 });
 
-export const clearStateCache = () => ({
-  type: CLEAR_CACHE,
-});
+export const clearStateCache = () => ({ type: CLEAR_CACHE, });
 
 export function fetchObjects(dispatch, cache) {
   // Projects

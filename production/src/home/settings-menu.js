@@ -11,9 +11,7 @@ import { clearCache } from '../cache/cache-actions';
 
 const APP_VERSION = process.env.REACT_APP_MSTR_OFFICE_VERSION;
 
-export const _SettingsMenu = ({
-  userFullName, userInitials, isSecured, reportArray, t, toggleIsConfirmFlag, toggleIsSettingsFlag, toggleRenderSettingsFlag, clearCache,
-}) => {
+export const SettingsMenuHOC = ({ userFullName, userInitials, isSecured, reportArray, t, toggleIsConfirmFlag, toggleIsSettingsFlag, toggleRenderSettingsFlag, clearCache, }) => {
   const userNameDisplay = userFullName || 'MicroStrategy user';
   const isSecuredActive = !isSecured && reportArray && reportArray.length > 0;
 
@@ -116,16 +114,12 @@ export const _SettingsMenu = ({
   );
 };
 
-_SettingsMenu.defaultProps = {
-  t: (text) => text,
-};
+SettingsMenuHOC.defaultProps = { t: (text) => text, };
 
 function mapStateToProps({ sessionReducer, officeReducer }) {
   const { userFullName, userInitials } = sessionReducer;
   const { isSecured, reportArray } = officeReducer;
-  return {
-    userFullName, userInitials, isSecured, reportArray,
-  };
+  return { userFullName, userInitials, isSecured, reportArray, };
 }
 
 const mapDispatchToProps = {
@@ -135,13 +129,13 @@ const mapDispatchToProps = {
   clearCache,
 };
 
-export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_SettingsMenu));
+export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(SettingsMenuHOC));
 
 async function logout(preLogout) {
   try {
-    await preLogout();
     await sessionHelper.logOutRest();
     sessionHelper.logOut();
+    await preLogout();
     sessionHelper.logOutRedirect();
   } catch (error) {
     errorService.handleError(error);
