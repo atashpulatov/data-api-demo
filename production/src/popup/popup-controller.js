@@ -65,10 +65,9 @@ class PopupController {
             // Event received on dialog close
             Office.EventType.DialogEventReceived,
             () => {
-              reduxStore.dispatch({
-                type: officeProperties.actions.popupHidden,
-              });
-            });
+              reduxStore.dispatch({ type: officeProperties.actions.popupHidden });
+            }
+          );
           reduxStore.dispatch({ type: officeProperties.actions.popupShown });
         });
     } catch (error) {
@@ -83,33 +82,33 @@ class PopupController {
       await this.closeDialog(dialog);
       await officeApiHelper.getExcelSessionStatus(); // checking excel session status
       switch (response.command) {
-        case selectorProperties.commandOk:
-          if (!reportParams) {
-            await this.handleOkCommand(response, reportParams);
-          } else {
-            const reportPreviousState = this._getReportsPreviousState(reportParams);
-            await this.saveReportWithParams(reportParams,
-              response,
-              reportPreviousState);
-          }
-          break;
-        case selectorProperties.commandOnUpdate:
-          if (!reportParams) {
-            await this.handleUpdateCommand(response);
-          } else {
-            const reportPreviousState = this._getReportsPreviousState(reportParams);
-            await this.saveReportWithParams(reportParams,
-              response,
-              reportPreviousState);
-          }
-          break;
-        case selectorProperties.commandCancel:
-          break;
-        case selectorProperties.commandError:
-          errorService.handleError(response.error);
-          break;
-        default:
-          break;
+      case selectorProperties.commandOk:
+        if (!reportParams) {
+          await this.handleOkCommand(response, reportParams);
+        } else {
+          const reportPreviousState = this._getReportsPreviousState(reportParams);
+          await this.saveReportWithParams(reportParams,
+            response,
+            reportPreviousState);
+        }
+        break;
+      case selectorProperties.commandOnUpdate:
+        if (!reportParams) {
+          await this.handleUpdateCommand(response);
+        } else {
+          const reportPreviousState = this._getReportsPreviousState(reportParams);
+          await this.saveReportWithParams(reportParams,
+            response,
+            reportPreviousState);
+        }
+        break;
+      case selectorProperties.commandCancel:
+        break;
+      case selectorProperties.commandError:
+        errorService.handleError(response.error);
+        break;
+      default:
+        break;
       }
     } catch (error) {
       console.error(error);
@@ -166,6 +165,7 @@ class PopupController {
       promptsAnswers,
       reportName,
       visualizationInfo,
+      preparedInstanceId,
     },
     bindingId,
   ) => {
@@ -185,6 +185,7 @@ class PopupController {
         isPrompted,
         promptsAnswers,
         visualizationInfo,
+        preparedInstanceId,
       };
       const result = await officeDisplayService.printObject(options);
       if (result) {
