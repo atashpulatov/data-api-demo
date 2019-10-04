@@ -40,10 +40,7 @@ export const initialState = {
   loading: false,
   scrollPosition: null,
   pageSize: null,
-  sorter: {
-    columnKey: 'dateModified',
-    order: 'descend',
-  },
+  sorter: {},
   searchText: '',
   importRequested: false,
   dossierData: null,

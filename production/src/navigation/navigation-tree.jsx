@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { objectTypes } from '@mstr/mstr-react-library';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-// import { ObjectTable } from '@mstr/rc/dist';
+import { ObjectTable } from '@mstr/rc';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { PopupButtons } from '../popup/popup-buttons';
 import { actions } from './navigation-tree-actions';
@@ -59,7 +58,7 @@ export class _NavigationTree extends Component {
     } else {
       requestImport();
     }
-  }
+  };
 
   onTriggerUpdate = (body) => {
     const updateObject = {
@@ -123,39 +122,25 @@ export class _NavigationTree extends Component {
     const {
       setDataSource, dataSource, chosenObjectId, chosenProjectId, pageSize, changeSearching, changeSorting,
       chosenSubtype, folder, selectFolder, loading, handlePopupErrors, scrollPosition, searchText, sorter,
-      updateScroll, mstrData, updateSize, t, objectType, cache, refreshDB,
+      updateScroll, mstrData, updateSize, t, objectType, cache, refreshDB, i18n
     } = this.props;
     const { triggerUpdate, previewDisplay } = this.state;
 
     return (
       <div className="navigation_tree__main_wrapper">
         <div className="navigation_tree__title_bar">{t('Import Data')}</div>
-        {/* <div className="navigation_tree__table_wrapper" style={{ fontSize: 12 }}> */}
-        <div style={{ padding: 64, fontSize: 20 }}>
-          <p>
-            Projects:
-            {' '}
-            {cache.projects.length}
-          </p>
-          <br />
-          <p>
-            My Library
-            {' '}
-            {cache.myLibrary.isLoading ? '(loading):' : ':'}
-            {' '}
-            {cache.myLibrary.objects.length}
-          </p>
-          <br />
-          <p>
-            Environment Library
-            {' '}
-            {cache.environmentLibrary.isLoading ? '(loading):' : ':'}
-            {' '}
-            {cache.environmentLibrary.objects.length}
-          </p>
-          <button type="button" onClick={this.refresh}>Refresh</button>
-
-        </div>
+        <ObjectTable
+          objects={cache.environmentLibrary.objects}
+          projects={cache.projects}
+          selected={{
+            id: chosenObjectId,
+            projectId: chosenProjectId
+          }}
+          onSelect={({ id, projectId, subtype }) => this.onObjectChosen(id, projectId, subtype)}
+          sort={sorter}
+          onSortChange={changeSorting}
+          locale={i18n.language}
+          isLoading={loading} />
         <PopupButtons
           loading={loading}
           disableActiveActions={!chosenObjectId}
