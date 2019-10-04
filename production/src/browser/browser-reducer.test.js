@@ -1,30 +1,30 @@
 /* eslint-disable react/jsx-filename-extension */
-import { createStore } from 'redux';
 import { browserReducer } from './browser-reducer';
-import { ON_MY_LIBRARY_CHANGED_CONST, ON_FILTER_CHANGED_CONST, ON_SORT_CHANGE_CONST, ON_SELECT_CONST } from './browser-actions';
+import {
+  ON_MY_LIBRARY_CHANGED_CONST, ON_FILTER_CHANGED_CONST,
+  ON_SORT_CHANGE_CONST, ON_SELECT_CONST
+} from './browser-actions';
+import { officeStoreService } from '../office/store/office-store-service';
 
 describe('Browser reducer', () => {
-  const browserStore = createStore(browserReducer);
-  it('should return proper default state', () => {
+  it('should return default state', () => {
     // given
+    const defaultState = 'defaultState'
     // when
-    const defaultState = browserStore.getState();
+    const browserState = browserReducer(defaultState, {});
     // then
-    expect(defaultState).toEqual({
-      myLibrary: true,
-    });
+    expect(browserState).toEqual(defaultState);
   });
 
   it('should set myLibrary flag', () => {
     // given
     const myLibrary = 'myLibraryFilter';
     // when
-    browserStore.dispatch({
+    const browserState = browserReducer({}, {
       type: ON_MY_LIBRARY_CHANGED_CONST,
       myLibrary,
     });
     // then
-    const browserState = browserStore.getState();
     expect(browserState.myLibrary).toBe(myLibrary);
   });
 
@@ -32,12 +32,11 @@ describe('Browser reducer', () => {
     // given
     const filter = 'filterToSet';
     // when
-    browserStore.dispatch({
+    const browserState = browserReducer({}, {
       type: ON_FILTER_CHANGED_CONST,
       filter,
     });
     // then
-    const browserState = browserStore.getState();
     expect(browserState.filter).toBe(filter);
   });
 
@@ -45,12 +44,11 @@ describe('Browser reducer', () => {
     // given
     const sort = 'sortOrder';
     // when
-    browserStore.dispatch({
+    const browserState = browserReducer({}, {
       type: ON_SORT_CHANGE_CONST,
       sort,
     });
     // then
-    const browserState = browserStore.getState();
     expect(browserState.sort).toBe(sort);
   });
 
@@ -58,12 +56,21 @@ describe('Browser reducer', () => {
     // given
     const selected = 'selectedObject';
     // when
-    browserStore.dispatch({
+    const browserState = browserReducer({}, {
       type: ON_SELECT_CONST,
       selected,
     });
     // then
-    const browserState = browserStore.getState();
     expect(browserState.selected).toBe(selected);
+  });
+
+  it('should save browsing filters to office settings', () => {
+    // given
+    jest.spyOn(officeStoreService, 'preserveBrowsingFilters');
+    const defaultState = 'defaultState'
+    // when
+    browserReducer(defaultState, {});
+    // then
+    expect(officeStoreService.preserveBrowsingFilters).toBeCalledWith(defaultState);
   });
 });

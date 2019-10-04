@@ -87,4 +87,35 @@ describe('OfficeStoreService', () => {
     // then
     expect(officeStoreService.isFileSecured()).toBe(true);
   });
+
+  it('should store the applied filter', () => {
+    // given
+    const setFunction = jest.fn();
+    const saveFuntction = jest.fn();
+    jest.spyOn(officeStoreService, 'getOfficeSettings')
+      .mockReturnValue({
+        set: setFunction,
+        saveAsync: saveFuntction,
+      });
+    const givenBrowsingState = 'givenBrowsingState';
+    // when
+    officeStoreService.preserveBrowsingFilters(givenBrowsingState);
+    // then
+    expect(setFunction).toBeCalledWith(officeProperties.browsingFiltersApplied, givenBrowsingState);
+    expect(saveFuntction).toBeCalled();
+  });
+
+  it('should return the applied filter', () => {
+    // given
+    const appliedBrowsingFilters = 'appliedBrowsingFilter';
+    const getFuntion = jest.fn()
+      .mockReturnValue(appliedBrowsingFilters);
+    jest.spyOn(officeStoreService, 'getOfficeSettings')
+      .mockReturnValue({ get: getFuntion });
+    // when
+    const storedFilters = officeStoreService.getBrowsingFilters();
+    // then
+    expect(getFuntion).toBeCalledWith(officeProperties.browsingFiltersApplied);
+    expect(storedFilters).toBe(appliedBrowsingFilters);
+  });
 });
