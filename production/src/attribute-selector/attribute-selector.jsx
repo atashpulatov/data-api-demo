@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
-import {AttributeMetricFilter, ErrorBoundary} from 'mstr-react-library';
-import {withTranslation} from 'react-i18next';
+import React, { Component } from 'react';
+import { AttributeMetricFilter, ErrorBoundary } from '@mstr/mstr-react-library';
+import { withTranslation } from 'react-i18next';
 
 export class _AttributeSelector extends Component {
   constructor(props) {
@@ -11,9 +11,12 @@ export class _AttributeSelector extends Component {
   }
 
   render() {
-    const {title, session,
+    const {
+      title, session,
       triggerUpdate, onTriggerUpdate, mstrData,
-      resetTriggerUpdate, attributesSelectedChange, t} = this.props;
+      resetTriggerUpdate, attributesSelectedChange, t, openModal, closeModal, toggleSubtotal,
+    } = this.props;
+
     return (
       <ErrorBoundary>
         <AttributeMetricFilter
@@ -28,8 +31,11 @@ export class _AttributeSelector extends Component {
           withDataPreview
           resetTriggerUpdate={resetTriggerUpdate}
           withFolderTree={false}
-          openModal={this.props.openModal}
-          closeModal={this.props.closeModal} />
+          openModal={openModal}
+          closeModal={closeModal}
+          toggleSubtotal={toggleSubtotal}
+          importSubtotal={mstrData.importSubtotal}
+        />
       </ErrorBoundary>
     );
   }

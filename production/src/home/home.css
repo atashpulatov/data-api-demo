@@ -145,6 +145,11 @@ hr {
   padding: 12px 6px 8px 6px;
   cursor: pointer;
   transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .dialog-container {
@@ -243,7 +248,7 @@ hr {
   left: 50%;
   transform: translate(-50%);
   width: 330px;
-  height: 250px;
+  height: auto;
   padding: 37px 20px 38px 20px;
   border: 1px solid #ffffff;
   box-shadow: 1px 2px 8px 0 #b7b7b7;

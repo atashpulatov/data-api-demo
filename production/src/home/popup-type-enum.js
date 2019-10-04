@@ -1,4 +1,4 @@
-import {propsProxy} from './enum-props-proxy';
+import { propsProxy } from './enum-props-proxy';
 
 export const PopupTypeEnum = new Proxy({
   /**
@@ -11,4 +11,5 @@ export const PopupTypeEnum = new Proxy({
   refreshAllPage: 'refresh-all-page',
   promptsWindow: 'prompts-window',
   repromptingWindow: 'reprompting-window',
+  dossierWindow: 'dossier-window',
 }, propsProxy);

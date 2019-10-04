@@ -1,11 +1,12 @@
-import React, {Component} from 'react'; // eslint-disable-line no-unused-vars
-import {connect} from 'react-redux';
+import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
+import { connect } from 'react-redux';
 import './home.css';
-import {sessionHelper} from '../storage/session-helper';
-import {pageBuilder} from './page-builder.js';
-import {officeApiHelper} from '../office/office-api-helper';
-import {homeHelper} from './home-helper';
-import {withTranslation} from 'react-i18next';
+import { withTranslation } from 'react-i18next';
+import { sessionHelper } from '../storage/session-helper';
+import HomeContent from './home-content';
+import { officeApiHelper } from '../office/office-api-helper';
+import { homeHelper } from './home-helper';
+import { toggleRenderSettingsFlag } from '../office/office-actions';
 
 export class _Home extends Component {
   componentDidMount = async () => {
@@ -21,11 +22,10 @@ export class _Home extends Component {
 
   componentDidUpdate() {
     homeHelper.saveTokenFromCookies();
-  };
+  }
 
   render() {
-    const {loading, loadingReport, authToken, reportArray, popupOpen, t} = this.props;
-    return (<div>{pageBuilder.getPage(loading, loadingReport, authToken, reportArray, popupOpen, t)}</div>);
+    return (<HomeContent {...this.props} />);
   }
 }
 
@@ -36,11 +36,16 @@ function mapStateToProps(state) {
     popupOpen: state.officeReducer.popupOpen,
     authToken: state.sessionReducer.authToken,
     reportArray: state.officeReducer.reportArray,
+    shouldRenderSettings: state.officeReducer.shouldRenderSettings,
   };
 }
+
+const mapDispatchToProps = {
+  toggleRenderSettingsFlag,
+};
 
 _Home.defaultProps = {
   t: (text) => text,
 };
 
-export const Home = connect(mapStateToProps)(withTranslation('common')(_Home));
+export const Home = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_Home));

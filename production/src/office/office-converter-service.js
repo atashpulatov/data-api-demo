@@ -1,3 +1,5 @@
+/* eslint array-callback-return: "off" */
+
 class OfficeConverterService {
   createTable(jsonReport) {
     const headers = this._getHeaders(jsonReport);
@@ -12,14 +14,13 @@ class OfficeConverterService {
 
   _getHeaders(jsonReport) {
     const headers = [];
-    const attributes = jsonReport.result.definition.attributes;
-    const metrics = jsonReport.result.definition.metrics;
+    const { attributes } = jsonReport.result.definition;
+    const { metrics } = jsonReport.result.definition;
     attributes.forEach((attribute) => {
       if (attribute.forms.length === 1) {
         headers.push(attribute.name);
       } else {
-        attribute.forms.forEach((form) =>
-          headers.push(`${attribute.name} ${form.name}`));
+        attribute.forms.forEach((form) => headers.push(`${attribute.name} ${form.name}`));
       }
     });
     metrics.forEach((metric) => headers.push(metric.name));
@@ -33,16 +34,16 @@ class OfficeConverterService {
       rows.push(row);
     } else {
       node.children.forEach((child) => {
-        const formValues = node.element.formValues;
+        const { formValues } = node.element;
         let attributeFormsCount = 0;
         for (const key in formValues) {
           /* istanbul ignore else */
           if (formValues.hasOwnProperty(key)) {
             attributeFormsCount++;
           }
-        };
+        }
         let childRows = this._parseTreeToArray(child, headers,
-            level + attributeFormsCount);
+          level + attributeFormsCount);
         childRows = childRows.map((childRow) => {
           for (const key in formValues) {
             /* istanbul ignore else */
@@ -50,7 +51,7 @@ class OfficeConverterService {
               childRow[headers[level]] = formValues[key];
               level++;
             }
-          };
+          }
           level -= attributeFormsCount;
           return childRow;
         });
@@ -63,7 +64,7 @@ class OfficeConverterService {
   _parseLastAttributeAndMetrics(node, headers) {
     const row = {};
     // Parsing last attribute
-    const formValues = node.element.formValues;
+    const { formValues } = node.element;
     let level = 0;
     for (const key in formValues) {
       /* istanbul ignore else */
@@ -71,9 +72,9 @@ class OfficeConverterService {
         row[headers[level]] = formValues[key];
         level++;
       }
-    };
+    }
 
-    const metrics = node.metrics;
+    const { metrics } = node;
     for (const property in metrics) {
       /* istanbul ignore else */
       if (metrics.hasOwnProperty(property)) {
@@ -99,7 +100,7 @@ class OfficeConverterService {
     const columnInformation = [];
     let index = 0;
 
-    const attributes = jsonReport.result.definition.attributes;
+    const { attributes } = jsonReport.result.definition;
     attributes.map((attribute) => {
       attribute.forms.map((form) => columnInformation.push({
         isAttribute: true,
@@ -111,7 +112,7 @@ class OfficeConverterService {
       }));
     });
 
-    const metrics = jsonReport.result.definition.metrics;
+    const { metrics } = jsonReport.result.definition;
     metrics.map((metric, metricIndex) => {
       columnInformation.push({
         isAttribute: false,

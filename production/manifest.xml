@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+  xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="TaskPaneApp">
+
+  <!-- Begin Basic Settings: Add-in metadata, used for all versions of Office unless override provided. -->
+
+  <!-- IMPORTANT! Id must be unique for your add-in, if you reuse this manifest ensure that you change this id to a new GUID. -->
+  <Id>abc601fd-678b-4fdb-801d-047612bea62f</Id>
+
+  <!--Version. Updates from the store only get triggered if there is a version change. -->
+  <Version>1.0.0.0</Version>
+  <ProviderName>Microstrategy Inc.</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <!-- The display name of your add-in. Used on the store and various places of the Office UI such as the add-ins dialog. -->
+  <DisplayName DefaultValue="localhost" />
+  <Description DefaultValue="New plugin to insert data from Microstrategy into Microsoft Office products.">
+    <Override Locale="da-dk" Value="Nyt plugin til at indsætte data fra Microstrategy i Microsoft Office-produkter."/>
+    <Override Locale="de-de" Value="Neues Plug-in zur Datenübertragung aus Microstrategy in Microsoft-Office-Produkte."/>
+    <Override Locale="es-es" Value="Nuevo complemento para insertar datos de MicroStrategy en productos de Microsoft Office."/>
+    <Override Locale="fr-fr" Value="Nouveau plugin pour insérer des données depuis MicroStrategy vers des produits Microsoft Office."/>
+    <Override Locale="it-it" Value="Nuovo plugin per inserire dati da MicroStrategy nei prodotti MicroStrategy per Office."/>
+    <Override Locale="ja-jp" Value="MicrostrategyからMicrosoft Office製品にデータを挿入するための新しいプラグイン。"/>
+    <Override Locale="ko-kr" Value="Microstrategy에서 Microsoft Office 제품으로 데이터를 삽입하는 새 플러그인입니다."/>
+    <Override Locale="nl-nl" Value="Nieuwe plug-in om gegevens van Microstrategy in Microsoft Office-producten te voegen."/>
+    <Override Locale="pt-br" Value="Novo plugin para inserir dados do MicroStrategy em produtos Microsoft Office."/>
+    <Override Locale="sv-se" Value="Ny plugin för att infoga data från Microstrategy i Microsoft Office-produkter."/>
+    <Override Locale="zh-cn" Value="将数据从 MicroStrategy 插入到 Microsoft Office 产品的新插件。"/>
+    <Override Locale="zh-tw" Value="將資料從 Microstrategy 插入 Microsoft Office 產品的新外掛程式。"/>
+  </Description>
+
+  <!-- Icon for your add-in. Used on installation screens and the add-ins dialog. -->
+  <IconUrl DefaultValue="https://localhost:3000/assets/mstr_logo_32.png" />
+  <HighResolutionIconUrl DefaultValue="https://localhost:3000/assets/mstr_logo_512.png"/>
+
+  <!--If you plan to submit this add-in to the Office Store, uncomment the SupportUrl element below-->
+  <SupportUrl DefaultValue="https://localhost:3000/index.html" />
+
+  <!-- Domains that will be allowed when navigating. For example, if you use ShowTaskpane and then have an href link, navigation will only be allowed if the domain is on this list. -->
+  <AppDomains>
+    <AppDomain>AppDomain1</AppDomain>
+    <AppDomain>AppDomain2</AppDomain>
+    <AppDomain>AppDomain3</AppDomain>
+  </AppDomains>
+  <!--End Basic Settings. -->
+
+  <!--Begin TaskPane Mode integration. This section is used if there are no VersionOverrides or if the Office client version does not support add-in commands. -->
+  <Hosts>
+    <Host Name="Workbook" />
+  </Hosts>
+  <DefaultSettings>
+    <SourceLocation DefaultValue="https://localhost:3000/index.html" />
+  </DefaultSettings>
+  <!-- End TaskPane Mode integration.  -->
+
+  <Permissions>ReadWriteDocument</Permissions>
+
+  <!-- Begin Add-in Commands Mode integration. -->
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
+
+    <!-- The Hosts node is required. -->
+    <Hosts>
+      <!-- Each host can have a different set of commands. -->
+      <!-- Excel host is Workbook, Word host is Document, and PowerPoint host is Presentation. -->
+      <!-- Make sure the hosts you override match the hosts declared in the top section of the manifest. -->
+      <Host xsi:type="Workbook">
+        <!-- Form factor. Currently only DesktopFormFactor is supported. -->
+        <DesktopFormFactor>
+          <!--"This code enables a customizable message to be displayed when the add-in is loaded successfully upon individual install."-->
+          <GetStarted>
+            <!-- Title of the Getting Started callout. resid points to a ShortString resource -->
+            <Title resid="MSTR.GetStarted.Title"/>
+
+            <!-- Description of the Getting Started callout. resid points to a LongString resource -->
+            <Description resid="MSTR.GetStarted.Description"/>
+
+            <!-- Point to a url resource which details how the add-in should be used. -->
+            <LearnMoreUrl resid="MSTR.GetStarted.LearnMoreUrl"/>
+          </GetStarted>
+          <!-- Function file is a HTML page that includes the JavaScript where functions for ExecuteAction will be called.
+            Think of the FunctionFile as the code behind ExecuteFunction. -->
+          <FunctionFile resid="MSTR.DesktopFunctionFile.Url" />
+
+          <!-- PrimaryCommandSurface is the main Office Ribbon. -->
+          <ExtensionPoint xsi:type="PrimaryCommandSurface">
+            <!-- Use OfficeTab to extend an existing Tab. Use CustomTab to create a new tab. -->
+            <OfficeTab id="TabHome">
+              <!-- Ensure you provide a unique id for the group. Recommendation for any IDs is to namespace using your company name. -->
+              <Group id="MSTR.Group1">
+                <!-- Label for your group. resid must point to a ShortString resource. -->
+                <Label resid="MSTR.GroupMicrostrategy.Label" />
+                <!-- Icons. Required sizes 16,32,80, optional 20, 24, 40, 48, 64. Strongly recommended to provide all sizes for great UX. -->
+                <!-- Use PNG icons. All URLs on the resources section must use HTTPS. -->
+                <Icon>
+                  <bt:Image size="16" resid="MSTR.tpicon_16x16" />
+                  <bt:Image size="32" resid="MSTR.tpicon_32x32" />
+                  <bt:Image size="80" resid="MSTR.tpicon_80x80" />
+                </Icon>
+
+                <!-- Control. It can be of type "Button" or "Menu". -->
+                <Control xsi:type="Button" id="MSTR.TaskpaneButton">
+                  <Label resid="MSTR.TaskpaneButton.Label" />
+                  <Supertip>
+                    <!-- ToolTip title. resid must point to a ShortString resource. -->
+                    <Title resid="MSTR.TaskpaneButton.Label" />
+                    <!-- ToolTip description. resid must point to a LongString resource. -->
+                    <Description resid="MSTR.TaskpaneButton.Tooltip" />
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="MSTR.tpicon_16x16" />
+                    <bt:Image size="32" resid="MSTR.tpicon_32x32" />
+                    <bt:Image size="80" resid="MSTR.tpicon_80x80" />
+                  </Icon>
+
+                  <!-- This is what happens when the command is triggered (E.g. click on the Ribbon). Supported actions are ExecuteFunction or ShowTaskpane. -->
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>TaskPaneMainButton</TaskpaneId>
+                    <!-- Provide a url resource id for the location that will be displayed on the task pane. -->
+                    <SourceLocation resid="MSTR.Taskpane.Url" />
+                  </Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+
+    <!-- You can use resources across hosts and form factors. -->
+    <Resources>
+      <bt:Images>
+        <bt:Image id="MSTR.tpicon_16x16" DefaultValue="https://localhost:3000/assets/mstr_logo_16.png" />
+        <bt:Image id="MSTR.tpicon_32x32" DefaultValue="https://localhost:3000/assets/mstr_logo_32.png" />
+        <bt:Image id="MSTR.tpicon_80x80" DefaultValue="https://localhost:3000/assets/mstr_logo_80.png" />
+      </bt:Images>
+      <bt:Urls>
+        <bt:Url id="MSTR.Taskpane.Url" DefaultValue="https://localhost:3000/index.html" />
+        <bt:Url id="MSTR.GetStarted.LearnMoreUrl" DefaultValue="https://go.microsoft.com/fwlink/?LinkId=276812" />
+        <bt:Url id="MSTR.DesktopFunctionFile.Url" DefaultValue="https://localhost:3000/function-file/function-file.html" />
+      </bt:Urls>
+      <!-- ShortStrings max characters==125. -->
+      <bt:ShortStrings>
+        <bt:String id="MSTR.TaskpaneButton.Label" DefaultValue="localhost" />
+        <bt:String id="MSTR.GroupMicrostrategy.Label" DefaultValue="localhost" />
+        <bt:String id="MSTR.GetStarted.Title" DefaultValue="MicroStrategy for Office loaded">
+            <bt:Override Locale="da-dk" Value="MicroStrategy for Office indlæst"/>
+            <bt:Override Locale="de-de" Value="MicroStrategy für Office wurde geladen"/>
+            <bt:Override Locale="es-es" Value="MicroStrategy para Office cargado"/>
+            <bt:Override Locale="fr-fr" Value="MicroStrategy pour Office chargé"/>
+            <bt:Override Locale="it-it" Value="MicroStrategy per Office caricato"/>
+            <bt:Override Locale="ja-jp" Value="MicroStrategy for Officeがロードされました"/>
+            <bt:Override Locale="ko-kr" Value="Office용 MicroStrategy가 로드됨"/>
+            <bt:Override Locale="nl-nl" Value="MicroStrategy voor Office is geladen"/>
+            <bt:Override Locale="pt-br" Value="MicroStrategy for Office carregado"/>
+            <bt:Override Locale="sv-se" Value="MicroStrategy för Office inläst"/>
+            <bt:Override Locale="zh-cn" Value="已加载 MicroStrategy for Office"/>
+            <bt:Override Locale="zh-tw" Value="已載入 MicroStrategy for Office"/>
+        </bt:String>
+        <bt:String id="MSTR.OfficeTab.Label" DefaultValue="localhost" />
+      </bt:ShortStrings>
+      <!-- LongStrings max characters==250. -->
+      <bt:LongStrings>
+        <bt:String id="MSTR.TaskpaneButton.Tooltip" DefaultValue="Click to Show a Taskpane">
+            <bt:Override Locale="da-dk" Value="Klik for at vise et opgavepanel"/>
+            <bt:Override Locale="de-de" Value="Hier klicken, um Aufgabenbereich anzuzeigen"/>
+            <bt:Override Locale="es-es" Value="Haga clic para mostrar un panel de tareas"/>
+            <bt:Override Locale="fr-fr" Value="Cliquez pour afficher un volet de tâches"/>
+            <bt:Override Locale="it-it" Value="Fare clic per mostrare un riquadro attività"/>
+            <bt:Override Locale="ja-jp" Value="[Show a Taskpane]をクリック"/>
+            <bt:Override Locale="ko-kr" Value="클릭하여 작업창 표시"/>
+            <bt:Override Locale="nl-nl" Value="Klik om een taakvenster weer te geven"/>
+            <bt:Override Locale="pt-br" Value="Clique para mostrar um painel de tarefas"/>
+            <bt:Override Locale="sv-se" Value="Klicka för att visa ett åtgärdsfönster"/>
+            <bt:Override Locale="zh-cn" Value="单击以显示任务窗格"/>
+            <bt:Override Locale="zh-tw" Value="按一下以顯示一個 Taskpane"/>
+        </bt:String>
+        <bt:String id="MSTR.GetStarted.Description" DefaultValue="Click MicroStrategy for Office on Home tab to start plugin. Log in to Environment to start browsing documents.">
+            <bt:Override Locale="da-dk" Value="Klik på MicroStrategy for Office på fanen Startside for at starte plugin. Log på miljøet for at begynde at søge dokumenter."/>
+            <bt:Override Locale="de-de" Value="Klicken Sie auf der Registerkarte 'Start' auf 'MicroStrategy für Office', um das Plug-in zu starten. Melden Sie sich bei einer Umgebung an, um nach Dokumenten zu suchen."/>
+            <bt:Override Locale="es-es" Value="Haga clic en MicroStrategy para Office en la pestaña Inicio para iniciar el complemento. Inicie sesión en el entorno para empezar a examinar los documentos."/>
+            <bt:Override Locale="fr-fr" Value="Cliquez sur MicroStrategy pour Office sur la page d'accueil pour démarrer le plugin. Connectez-vous à un environnement pour parcourir les documents."/>
+            <bt:Override Locale="it-it" Value="Fare clic su MicroStrategy per Office nella scheda Home per avviare il plugin. Accedere all'ambiente per iniziare a sfogliare i documenti."/>
+            <bt:Override Locale="ja-jp" Value="[Home]タブの[MicroStrategy for Office]をクリックしてプラグインを開始します。環境にログインしてドキュメントの閲覧を開始します。"/>
+            <bt:Override Locale="ko-kr" Value="플러그인을 시작하려면 홈 탭에서 Office용 MicroStrategy를 클릭합니다. 문서 검색을 시작하려면 환경에 로그인합니다."/>
+            <bt:Override Locale="nl-nl" Value="Klik op MicroStrategy voor Office op het starttabblad om de plug-in te starten. Meld u aan bij Omgeving om in het bestand te bladeren."/>
+            <bt:Override Locale="pt-br" Value="Clique na guia MicroStrategy for Office on Home para iniciar o plugin. Faça o login no Ambiente para começar a navegar pelos documentos."/>
+            <bt:Override Locale="sv-se" Value="Klicka på MicroStrategy för Office på startfliken när du vill starta plugin-programmet. Logga in på miljön för att börja navigera bland dokument."/>
+            <bt:Override Locale="zh-cn" Value="在“开始”选项卡中单击“MicroStrategy for Office ”，启动插件。登录环境，开始浏览文档。"/>
+            <bt:Override Locale="zh-tw" Value="按一下首頁索引標籤的 [MicroStrategy for Office]，開始使用外掛程式。登入至環境，開始瀏覽文件。"/>
+        </bt:String>
+      </bt:LongStrings>
+    </Resources>
+  </VersionOverrides>
+  <!-- End Add-in Commands Mode integration. -->
+
+</OfficeApp>

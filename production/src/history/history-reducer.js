@@ -1,6 +1,6 @@
-import {HistoryError} from './history-error';
-import {historyProperties} from './history-properties';
-import {sessionProperties} from '../storage/session-properties';
+import { HistoryError } from './history-error';
+import { historyProperties } from './history-properties';
+import { sessionProperties } from '../storage/session-properties';
 
 export const historyReducer = (state = {}, action) => {
   switch (action.type) {
@@ -15,8 +15,9 @@ export const historyReducer = (state = {}, action) => {
     case historyProperties.actions.goToProjects:
     case sessionProperties.actions.logOut:
       return eraseHistory(state);
+    default:
+      return state;
   }
-  return state;
 };
 
 function onGoInsideProject(action, state) {
@@ -63,9 +64,7 @@ function onGoUpTo(action, state) {
   if (!action.dirId) {
     throw new HistoryError('Missing dirId');
   }
-  const indexOfElement = dirArray.findIndex((dir) => {
-    return (dir.dirId === action.dirId);
-  });
+  const indexOfElement = dirArray.findIndex((dir) => (dir.dirId === action.dirId));
   const resultDirArray = dirArray.slice(0, indexOfElement + 1);
   return {
     ...state,
