@@ -85,8 +85,8 @@ class OfficeApiHelper {
       const excelContext = await this.getExcelContext();
       const tableObject = excelContext.workbook.tables.getItem(bindingId);
       if (isCrosstab) {
-        crosstabHeaderDimensions.columnsY += 1;
-        crosstabRange = await this.getCrosstabRangeSafely(tableObject, crosstabHeaderDimensions, excelContext);
+        const tmpXtabDimensions = { ...crosstabHeaderDimensions, columnsY: crosstabHeaderDimensions.columnsY + 1, };
+        crosstabRange = await this.getCrosstabRangeSafely(tableObject, tmpXtabDimensions, excelContext);
         shouldSelect && crosstabRange.select();
       } else {
         const tableRange = this.getBindingRange(excelContext, bindingId);
@@ -204,30 +204,30 @@ class OfficeApiHelper {
 
   _getNumberFormattingCategoryName = (metric) => {
     switch (metric.category) {
-    case -2:
-      return 'Default';
-    case 9:
-      return 'General';
-    case 0:
-      return 'Fixed';
-    case 1:
-      return 'Currency';
-    case 2:
-      return 'Date';
-    case 3:
-      return 'Time';
-    case 4:
-      return 'Percentage';
-    case 5:
-      return 'Fraction';
-    case 6:
-      return 'Scientific';
-    case 7: // 'Custom'
-      return metric.formatString;
-    case 8:
-      return 'Special';
-    default:
-      return 'General';
+      case -2:
+        return 'Default';
+      case 9:
+        return 'General';
+      case 0:
+        return 'Fixed';
+      case 1:
+        return 'Currency';
+      case 2:
+        return 'Date';
+      case 3:
+        return 'Time';
+      case 4:
+        return 'Percentage';
+      case 5:
+        return 'Fraction';
+      case 6:
+        return 'Scientific';
+      case 7: // 'Custom'
+        return metric.formatString;
+      case 8:
+        return 'Special';
+      default:
+        return 'General';
     }
   }
 
