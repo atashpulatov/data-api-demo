@@ -2,7 +2,7 @@
 
 Add-in for Microsoft Office applications and MicroStrategy.
 
-[![Build Status](https://jenkins.internal.microstrategy.com/buildStatus/icon?job=mstr-office-.-m2019_update-.-stage-1-dev)](https://jenkins.internal.microstrategy.com/job/mstr-office-.-m2019_update-.-stage-1-dev/)
+[![Build Status](https://jenkins.internal.microstrategy.com/buildStatus/icon?job=mstr-office-.-m2020-.-stage-1-dev)](https://jenkins.internal.microstrategy.com/view/mstr-office/view/m2020/job/mstr-office-.-m2020-.-stage-1-dev/)
 
 ## Getting Started
 
@@ -110,7 +110,7 @@ Currently we do not support production builds.
 
 ### Get Office addin and Office addin loader from Nexus at link:
 1. go to http://nexus.internal.microstrategy.com/#browse/browse:releases:com%2Fmicrostrategy
-2. choose a branch folder (e.g. “m2019-update”)
+2. choose a branch folder (e.g. “m2020”)
 3. get addin:
     1. find folder “office”
     2. choose a version folder (e.g. “11.1.3.1050”)

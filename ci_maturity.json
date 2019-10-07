@@ -1,0 +1,25 @@
+{
+  "Premerge": {
+    "Build_Full": "0",
+    "Test_Unit": "2",
+    "Test_Subsystem": "0",
+    "Code_Static_Analysis": "0",
+    "Code_Security_Scanning": "0",
+    "Code_Coverage": "2"
+  },
+  "Postmerge Dev": {
+    "Build_Full": "2",
+    "Test_Unit": "0",
+    "Test_Subsystem": "0",
+    "Code_Static_Analysis": "0",
+    "Code_Security_Scanning": "0",
+    "Code_Coverage": "0",
+    "Docker_Image": "0"
+  },
+  "Postmerge Test": {
+    "Test_Subsystem": "0"
+  },
+  "Postmerge Demo": {
+    "Deployment": "0"
+  }
+}
