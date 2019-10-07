@@ -34,13 +34,9 @@
       }
     ],
     "key-spacing": "off",
-    "jsx-quotes": [
-      "error",
-      "prefer-single"
-    ],
     "max-len": [
       "error",
-      120,
+      150,
       2
     ],
     "object-curly-spacing": [
@@ -54,7 +50,8 @@
         "ignoredNodes": [
           "JSXElement *",
           "JSXElement"
-        ]
+        ],
+        "SwitchCase": 1
       }
     ],
     "comma-dangle": "off",

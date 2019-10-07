@@ -83,9 +83,7 @@ export function createDossierBasedOnReport(reportId, instanceId, projectId) {
     .then((res) => res.body);
 }
 
-export function createInstance({
-  objectId, projectId, mstrObjectType = reportObjectType, dossierData, body = {}, limit = 1,
-}) {
+export function createInstance({ objectId, projectId, mstrObjectType = reportObjectType, dossierData, body = {}, limit = 1, }) {
   const storeState = reduxStore.getState();
   const { envUrl } = storeState.sessionReducer;
   const { authToken } = storeState.sessionReducer;
@@ -100,9 +98,7 @@ export function createInstance({
     .then((res) => parseInstanceDefinition(res));
 }
 
-export function fetchVisualizationDefinition({
-  projectId, objectId, instanceId, visualizationInfo,
-}) {
+export function fetchVisualizationDefinition({ projectId, objectId, instanceId, visualizationInfo, body, }) {
   const storeState = reduxStore.getState();
   const { envUrl } = storeState.sessionReducer;
   const { authToken } = storeState.sessionReducer;
@@ -112,8 +108,9 @@ export function fetchVisualizationDefinition({
     .get(fullPath)
     .set('x-mstr-authtoken', authToken)
     .set('x-mstr-projectid', projectId)
+    .send(body || '')
     .withCredentials()
-    .then((res) => parseInstanceDefinition(res));
+    .then((res) => parseInstanceDefinition(res))
 }
 
 export function createDossierInstance(projectId, objectId, body = {}) {
@@ -134,7 +131,7 @@ export function getDossierDefinition(projectId, objectId) {
   const storeState = reduxStore.getState();
   const { envUrl } = storeState.sessionReducer;
   const { authToken } = storeState.sessionReducer;
-  const fullPath = `${envUrl}/dossiers/${objectId}/definition`;
+  const fullPath = `${envUrl}/v2/dossiers/${objectId}/definition`;
   return request
     .get(fullPath)
     .set('x-mstr-authtoken', authToken)
@@ -215,12 +212,8 @@ export function modifyInstance({ objectId, projectId, mstrObjectType = reportObj
     .then((res) => parseInstanceDefinition(res));
 }
 
-export function getObjectContentGenerator({
-  instanceDefinition, objectId, projectId, mstrObjectType, dossierData, limit = IMPORT_ROW_LIMIT, visualizationInfo,
-}) {
-  return fetchContentGenerator({
-    instanceDefinition, objectId, projectId, mstrObjectType, dossierData, limit, visualizationInfo,
-  });
+export function getObjectContentGenerator({ instanceDefinition, objectId, projectId, mstrObjectType, dossierData, limit = IMPORT_ROW_LIMIT, visualizationInfo, }) {
+  return fetchContentGenerator({ instanceDefinition, objectId, projectId, mstrObjectType, dossierData, limit, visualizationInfo, });
 }
 
 export function getObjectDefinition(objectId, projectId, mstrObjectType = reportObjectType) {
@@ -292,11 +285,9 @@ function checkTableDimensions({ rows, columns }) {
   return { rows, columns };
 }
 
-function getFullPath({
-  envUrl, limit, mstrObjectType, objectId, instanceId, version = 1, visualizationInfo = false,
-}) {
+function getFullPath({ envUrl, limit, mstrObjectType, objectId, instanceId, version = 1, visualizationInfo = false, }) {
   let path;
-  if (visualizationInfo) {
+  if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
     const { chapterKey, visualizationKey } = visualizationInfo;
     path = `${envUrl}/v2/dossiers/${objectId}/instances/${instanceId}/chapters/${chapterKey}/visualizations/${visualizationKey}`;
   } else {

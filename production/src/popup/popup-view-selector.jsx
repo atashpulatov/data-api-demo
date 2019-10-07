@@ -162,7 +162,7 @@ function composeFilter(selectedFilters) {
   let branch;
   const filterOperands = [];
   const addItem = (item) => {
-    branch.operands[1].elements.push({id: item,});
+    branch.operands[1].elements.push({ id: item, });
   };
   for (const att in selectedFilters) {
     if (selectedFilters[att].length) {
@@ -207,6 +207,7 @@ function proceedToImport(props) {
     isPrompted: props.isPrompted,
     promptsAnswers: props.promptsAnswers,
     visualizationInfo,
+    preparedInstanceId: props.preparedInstanceId,
   };
   if (props.dossierData) {
     okObject.dossierData = {
@@ -244,12 +245,6 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
   if (popupType === PopupTypeEnum.navigationTree) {
     return (
       <Browser />
-      // <NavigationTree
-      //   handlePrepare={methods.handlePrepare}
-      //   mstrData={propsToPass}
-      //   handlePopupErrors={methods.handlePopupErrors}
-      //   handleDossierOpen={methods.handleDossierOpen}
-      // />
     );
   }
   if (popupType === PopupTypeEnum.loadingPage) {

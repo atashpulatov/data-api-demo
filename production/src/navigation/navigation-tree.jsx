@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { objectTypes, FolderBrowser } from '@mstr/mstr-react-library';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-// import { ObjectTable } from '@mstr/rc/dist';
+import { ObjectTable } from '@mstr/rc';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { PopupButtons } from '../popup/popup-buttons';
 import { actions } from './navigation-tree-actions';
@@ -59,7 +59,7 @@ export class _NavigationTree extends Component {
     } else {
       requestImport();
     }
-  }
+  };
 
   onTriggerUpdate = (body) => {
     const updateObject = {
@@ -121,7 +121,7 @@ export class _NavigationTree extends Component {
     const {
       setDataSource, dataSource, chosenObjectId, chosenProjectId, pageSize, changeSearching, changeSorting,
       chosenSubtype, folder, selectFolder, loading, handlePopupErrors, scrollPosition, searchText, sorter,
-      updateScroll, mstrData, updateSize, t, objectType, cache, refreshDB,
+      updateScroll, mstrData, updateSize, t, objectType, cache, refreshDB, i18n
     } = this.props;
     const { triggerUpdate, previewDisplay } = this.state;
 
