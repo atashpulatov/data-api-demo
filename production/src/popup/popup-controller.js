@@ -81,33 +81,33 @@ class PopupController {
       await this.closeDialog(dialog);
       await officeApiHelper.getExcelSessionStatus(); // checking excel session status
       switch (response.command) {
-      case selectorProperties.commandOk:
-        if (!reportParams) {
-          await this.handleOkCommand(response, reportParams);
-        } else {
-          const reportPreviousState = this._getReportsPreviousState(reportParams);
-          await this.saveReportWithParams(reportParams,
-            response,
-            reportPreviousState);
-        }
-        break;
-      case selectorProperties.commandOnUpdate:
-        if (!reportParams) {
-          await this.handleUpdateCommand(response);
-        } else {
-          const reportPreviousState = this._getReportsPreviousState(reportParams);
-          await this.saveReportWithParams(reportParams,
-            response,
-            reportPreviousState);
-        }
-        break;
-      case selectorProperties.commandCancel:
-        break;
-      case selectorProperties.commandError:
-        errorService.handleError(response.error);
-        break;
-      default:
-        break;
+        case selectorProperties.commandOk:
+          if (!reportParams) {
+            await this.handleOkCommand(response, reportParams);
+          } else {
+            const reportPreviousState = this._getReportsPreviousState(reportParams);
+            await this.saveReportWithParams(reportParams,
+              response,
+              reportPreviousState);
+          }
+          break;
+        case selectorProperties.commandOnUpdate:
+          if (!reportParams) {
+            await this.handleUpdateCommand(response);
+          } else {
+            const reportPreviousState = this._getReportsPreviousState(reportParams);
+            await this.saveReportWithParams(reportParams,
+              response,
+              reportPreviousState);
+          }
+          break;
+        case selectorProperties.commandCancel:
+          break;
+        case selectorProperties.commandError:
+          errorService.handleError(response.error);
+          break;
+        default:
+          break;
       }
     } catch (error) {
       console.error(error);
@@ -215,14 +215,15 @@ class PopupController {
   }
 
   saveReportWithParams = async (reportParams, response, reportPreviousState) => {
+    console.log('reportPreviousState', reportPreviousState)
     await officeStoreService.preserveReportValue(reportParams.bindId,
       'body',
       response.body);
-    if (reportPreviousState.importSubtotal !== response.importSubtotal) {
-      await officeStoreService.preserveReportValue(reportParams.bindId,
-        'importSubtotal',
-        response.importSubtotal);
-    }
+    // if (reportPreviousState.subtotalInfo.importSubtotal !== response.subtotalInfo.importSubtotal) {
+    //   await officeStoreService.preserveReportValue(reportParams.bindId,
+    //     'importSubtotal',
+    //     response.subtotalInfo.importSubtotal);
+    // }
     if (response.promptsAnswers) {
       // Include new promptsAnswers in case of Re-prompt workflow
       reportParams.promptsAnswers = response.promptsAnswers;

@@ -107,6 +107,7 @@ describe('office loaded file', () => {
   it('refresh method should not do anything if in loading state', () => {
     // given
     const onRefreshMock = jest.fn();
+    const startLoadingMocked = jest.fn();
     const mockEvent = { stopPropagation: jest.fn() };
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
@@ -116,6 +117,7 @@ describe('office loaded file', () => {
       fileName="test"
       refreshReport={onRefreshMock}
       isLoading
+      startLoading={startLoadingMocked}
       objectType={{ name: 'report' }}
       visualizationInfo={visualizationInfoMock}
     />);
@@ -127,6 +129,7 @@ describe('office loaded file', () => {
   it('refresh method should run onRefresh method', async () => {
     // given
     const onRefreshMock = jest.fn();
+    const startLoadingMocked = jest.fn();
     const mockEvent = { stopPropagation: jest.fn() };
     const objectClickMock = jest.spyOn(officeApiHelper, 'onBindingObjectClick').mockImplementation(() => true);
     const visualizationInfoMock = { dossierStructure: 'test' };
@@ -137,6 +140,7 @@ describe('office loaded file', () => {
       fileName="test"
       refreshReportsArray={onRefreshMock}
       isLoading={false}
+      startLoading={startLoadingMocked}
       objectType={{ name: 'report' }}
       visualizationInfo={visualizationInfoMock}
     />);
@@ -150,6 +154,7 @@ describe('office loaded file', () => {
   it('should invoke refresh method on button click', async () => {
     // given
     const onRefreshMocked = jest.fn();
+    const startLoadingMocked = jest.fn();
     const mockEvent = { stopPropagation: jest.fn() };
     const testBindingId = 'testBindingId';
     const objectType = { name: 'report' };
@@ -163,6 +168,7 @@ describe('office loaded file', () => {
       fileName="test"
       refreshReportsArray={onRefreshMocked}
       isLoading={false}
+      startLoading={startLoadingMocked}
       objectType={objectType}
       visualizationInfo={visualizationInfoMock}
     />);
@@ -177,6 +183,7 @@ describe('office loaded file', () => {
   it('should NOT invoke refresh method on button click if allowRefreshClick is false', () => {
     // given
     const onRefreshMocked = jest.fn();
+    const startLoadingMocked = jest.fn();
     const mockEvent = { stopPropagation: jest.fn() };
     const testBindingId = 'testBindingId';
     const objectType = 'report';
@@ -190,6 +197,7 @@ describe('office loaded file', () => {
       fileName="test"
       refreshReport={onRefreshMocked}
       isLoading={false}
+      startLoading={startLoadingMocked}
       visualizationInfo={visualizationInfoMock}
     />);
     wrappedComponent.setState({ allowRefreshClick: false });
@@ -216,6 +224,7 @@ describe('office loaded file', () => {
   it('should invoke delete method on button click', () => {
     // given
     const onDeleteMocked = jest.fn();
+    const startLoadingMocked = jest.fn();
     const testBindingId = 'testBindingId';
     const mockEvent = { stopPropagation: jest.fn() };
     const visualizationInfoMock = { dossierStructure: 'test' };
@@ -227,6 +236,7 @@ describe('office loaded file', () => {
       crosstabHeaderDimensions={{}}
       fileName="test"
       onDelete={onDeleteMocked}
+      startLoading={startLoadingMocked}
       objectType={{ name: 'report' }}
       visualizationInfo={visualizationInfoMock}
     />);
@@ -307,6 +317,7 @@ describe('office loaded file', () => {
   it('should invoke edit method on button click', async () => {
     // given
     const onEditMocked = jest.fn();
+    const startLoadingMocked = jest.fn();
     const mockEvent = { stopPropagation: jest.fn() };
     const testBindingId = 'testBindingId';
     const objectType = { name: 'report' };
@@ -321,6 +332,7 @@ describe('office loaded file', () => {
       fileName="test"
       callForEdit={onEditMocked}
       isLoading={false}
+      startLoading={startLoadingMocked}
       loading={loading}
       objectType={objectType}
       visualizationInfo={visualizationInfoMock}
@@ -337,6 +349,7 @@ describe('office loaded file', () => {
   it('should invoke re-prompt method on button click', async () => {
     // given
     const onRepromptMocked = jest.fn();
+    const startLoadingMocked = jest.fn();
     const mockEvent = { stopPropagation: jest.fn() };
     const testBindingId = 'testBindingId';
     const objectType = { name: 'report' };
@@ -351,6 +364,7 @@ describe('office loaded file', () => {
       fileName="test"
       callForReprompt={onRepromptMocked}
       isLoading={false}
+      startLoading={startLoadingMocked}
       isPrompted
       objectType={objectType}
       visualizationInfo={visualizationInfoMock}
