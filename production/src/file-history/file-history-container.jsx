@@ -17,8 +17,7 @@ import restrictedArt from './assets/art_restricted_access_blue.svg';
 import { notificationService } from '../notification/notification-service';
 import './file-history.css';
 import { ButtonPopover } from './button-popover';
-import { reduxStore } from '../store';
-import { officeProperties } from '../office/office-properties';
+import { startLoading, stopLoading } from '../navigation/navigation-tree-actions';
 
 export class _FileHistoryContainer extends React.Component {
   constructor(props) {
@@ -74,7 +73,8 @@ export class _FileHistoryContainer extends React.Component {
   };
 
   refreshAllAction = (reportArray, refreshAll) => {
-    reduxStore.dispatch({ type: officeProperties.actions.startLoading });
+    const { startLoading } = this.props;
+    startLoading();
     const { allowRefreshAllClick } = this.state;
     if (allowRefreshAllClick) {
       this.setState({ allowRefreshAllClick: false }, async () => {
@@ -191,6 +191,8 @@ function mapStateToProps({ officeReducer, historyReducer }) {
 const mapDispatchToProps = {
   refreshReportsArray,
   toggleSecuredFlag,
+  startLoading,
+  stopLoading,
 };
 
 const WrappedFileHistoryContainer = fileHistoryContainerHOC(_FileHistoryContainer);

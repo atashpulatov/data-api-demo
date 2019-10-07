@@ -17,8 +17,8 @@ import { ReactComponent as DossierIcon } from './assets/icon_Dossier.svg';
 import { ReactComponent as ClockIcon } from './assets/icon_clock.svg';
 import { officeStoreService } from '../office/store/office-store-service';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum.js';
-import { reduxStore } from '../store';
-import { officeProperties } from '../office/office-properties';
+import { startLoading, stopLoading } from '../navigation/navigation-tree-actions';
+
 
 export class _OfficeLoadedFile extends React.Component {
   constructor(props) {
@@ -91,12 +91,12 @@ export class _OfficeLoadedFile extends React.Component {
 
   deleteAction = (e) => {
     const { allowDeleteClick } = this.state;
-    const { t, loading } = this.props;
+    const { t, loading, startLoading, stopLoading } = this.props;
     if (e) e.stopPropagation();
     if (!allowDeleteClick || loading) {
       return;
     }
-    reduxStore.dispatch({ type: officeProperties.actions.startLoading });
+    startLoading();
     const {
       onDelete,
       bindingId,
@@ -114,18 +114,18 @@ export class _OfficeLoadedFile extends React.Component {
           crosstabHeaderDimensions,
           message);
         if (this._ismounted) this.setState({ allowDeleteClick: true, allowRefreshClick: true });
-        reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
+        stopLoading();
       });
   };
 
   repromptAction = (e) => {
     const { allowRefreshClick } = this.state;
-    const { loading } = this.props;
+    const { loading, startLoading, stopLoading } = this.props;
     if (e) e.stopPropagation();
     if (!allowRefreshClick || loading) {
       return;
     }
-    reduxStore.dispatch({ type: officeProperties.actions.startLoading });
+    startLoading();
     const { isLoading, bindingId, objectType, callForReprompt, fileName, } = this.props;
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
@@ -137,7 +137,7 @@ export class _OfficeLoadedFile extends React.Component {
           }
         } finally {
           this.setState({ allowRefreshClick: true });
-          reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
+          stopLoading();
         }
       });
     }
@@ -145,12 +145,12 @@ export class _OfficeLoadedFile extends React.Component {
 
   editAction = (e) => {
     const { allowRefreshClick } = this.state;
-    const { isLoading, bindingId, objectType, callForEdit, fileName, loading } = this.props;
+    const { isLoading, bindingId, objectType, callForEdit, fileName, loading, startLoading } = this.props;
     if (e) e.stopPropagation();
     if (!allowRefreshClick || loading) {
       return;
     }
-    reduxStore.dispatch({ type: officeProperties.actions.startLoading });
+    startLoading();
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
@@ -168,12 +168,12 @@ export class _OfficeLoadedFile extends React.Component {
 
   refreshAction = (e) => {
     if (e) e.stopPropagation();
-    const { isLoading, bindingId, objectType, refreshReportsArray, loading, fileName } = this.props;
+    const { isLoading, bindingId, objectType, refreshReportsArray, loading, fileName, startLoading, stopLoading } = this.props;
     const { allowRefreshClick } = this.state;
     if (!allowRefreshClick || loading) {
       return;
     }
-    reduxStore.dispatch({ type: officeProperties.actions.startLoading });
+    startLoading();
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
@@ -182,7 +182,7 @@ export class _OfficeLoadedFile extends React.Component {
           }
         } finally {
           this.setState({ allowRefreshClick: true });
-          reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
+          stopLoading();
         }
       });
     }
@@ -404,6 +404,8 @@ const mapDispatchToProps = {
   refreshReportsArray,
   callForEdit,
   callForReprompt,
+  startLoading,
+  stopLoading
 };
 
 export const OfficeLoadedFile = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_OfficeLoadedFile));

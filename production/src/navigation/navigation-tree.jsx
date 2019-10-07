@@ -7,8 +7,6 @@ import { PopupButtons } from '../popup/popup-buttons';
 import { actions } from './navigation-tree-actions';
 import { isPrompted as checkIfPrompted } from '../mstr-object/mstr-object-rest-service';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import { reduxStore } from '../store';
-import { officeProperties } from '../office/office-properties';
 
 
 export class _NavigationTree extends Component {
@@ -49,9 +47,10 @@ export class _NavigationTree extends Component {
   };
 
   handleCancel = () => {
+    const { stopLoading } = this.props;
+    stopLoading();
     const cancelObject = { command: selectorProperties.commandCancel, };
     window.Office.context.ui.messageParent(JSON.stringify(cancelObject));
-    reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
   };
 
   // TODO: temporary solution
