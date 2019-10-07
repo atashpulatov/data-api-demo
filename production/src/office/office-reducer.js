@@ -44,14 +44,12 @@ function toggleSetLoadingStatus(action, state, status) {
 }
 
 function onStartLoading(state) {
-  console.log('onStartLoading')
   return {
     ...state,
     loading: true,
   };
 }
 function onStopLoading(state) {
-  console.log('STOP LOADING REDUCER')
   return {
     ...state,
     loading: false,
