@@ -17,6 +17,8 @@ import { ReactComponent as DossierIcon } from './assets/icon_Dossier.svg';
 import { ReactComponent as ClockIcon } from './assets/icon_clock.svg';
 import { officeStoreService } from '../office/store/office-store-service';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum.js';
+import { startLoading, stopLoading } from '../navigation/navigation-tree-actions';
+
 
 export class _OfficeLoadedFile extends React.Component {
   constructor(props) {
@@ -79,6 +81,7 @@ export class _OfficeLoadedFile extends React.Component {
   deleteReport = async () => {
     const { onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, fileName, t, } = this.props;
     const message = t('{{name}} has been removed from the workbook.', { name: fileName });
+
     await fileHistoryHelper.deleteReport(onDelete,
       bindingId,
       isCrosstab,
@@ -88,11 +91,12 @@ export class _OfficeLoadedFile extends React.Component {
 
   deleteAction = (e) => {
     const { allowDeleteClick } = this.state;
-    const { t } = this.props;
+    const { t, loading, startLoading, stopLoading } = this.props;
     if (e) e.stopPropagation();
-    if (!allowDeleteClick) {
+    if (!allowDeleteClick || loading) {
       return;
     }
+    startLoading();
     const {
       onDelete,
       bindingId,
@@ -110,15 +114,18 @@ export class _OfficeLoadedFile extends React.Component {
           crosstabHeaderDimensions,
           message);
         if (this._ismounted) this.setState({ allowDeleteClick: true, allowRefreshClick: true });
+        stopLoading();
       });
   };
 
   repromptAction = (e) => {
     const { allowRefreshClick } = this.state;
+    const { loading, startLoading, stopLoading } = this.props;
     if (e) e.stopPropagation();
-    if (!allowRefreshClick) {
+    if (!allowRefreshClick || loading) {
       return;
     }
+    startLoading();
     const { isLoading, bindingId, objectType, callForReprompt, fileName, } = this.props;
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
@@ -130,6 +137,7 @@ export class _OfficeLoadedFile extends React.Component {
           }
         } finally {
           this.setState({ allowRefreshClick: true });
+          stopLoading();
         }
       });
     }
@@ -137,18 +145,19 @@ export class _OfficeLoadedFile extends React.Component {
 
   editAction = (e) => {
     const { allowRefreshClick } = this.state;
+    const { isLoading, bindingId, objectType, callForEdit, fileName, loading, startLoading } = this.props;
     if (e) e.stopPropagation();
-    if (!allowRefreshClick) {
+    if (!allowRefreshClick || loading) {
       return;
     }
-    const { isLoading, bindingId, objectType, callForEdit, fileName, } = this.props;
+    startLoading();
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
           // calling onBindingObjectClick to check whether the object exists in Excel
           // before opening edit data popup
           if (await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport, fileName)) {
-            (await callForEdit({ bindId: bindingId, objectType }));
+            (await callForEdit({ bindId: bindingId, objectType }, loading));
           }
         } finally {
           this.setState({ allowRefreshClick: true });
@@ -159,11 +168,12 @@ export class _OfficeLoadedFile extends React.Component {
 
   refreshAction = (e) => {
     if (e) e.stopPropagation();
-    const { isLoading, bindingId, objectType, refreshReportsArray, loading, fileName } = this.props;
+    const { isLoading, bindingId, objectType, refreshReportsArray, loading, fileName, startLoading, stopLoading } = this.props;
     const { allowRefreshClick } = this.state;
     if (!allowRefreshClick || loading) {
       return;
     }
+    startLoading();
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
@@ -172,6 +182,7 @@ export class _OfficeLoadedFile extends React.Component {
           }
         } finally {
           this.setState({ allowRefreshClick: true });
+          stopLoading();
         }
       });
     }
@@ -393,6 +404,8 @@ const mapDispatchToProps = {
   refreshReportsArray,
   callForEdit,
   callForReprompt,
+  startLoading,
+  stopLoading
 };
 
 export const OfficeLoadedFile = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_OfficeLoadedFile));

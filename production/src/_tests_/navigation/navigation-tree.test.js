@@ -57,17 +57,17 @@ describe('NavigationTree', () => {
 
   it('should call proper method on cancel action', () => {
     // given
+    const stopLoadingMocked = jest.fn();
     const mstrData = {
       envUrl: 'env',
       token: 'token',
       projectId: 'projectId',
     };
-    const resultAction = {
-      command: selectorProperties.commandCancel,
-    };
+    const resultAction = { command: selectorProperties.commandCancel, };
     const office = jest.spyOn(Office.context.ui, 'messageParent');
     const wrappedComponent = shallow(<_NavigationTree
       mstrData={mstrData}
+      stopLoading={stopLoadingMocked}
     />);
     // when
     wrappedComponent.instance().handleCancel();
@@ -101,11 +101,7 @@ describe('NavigationTree', () => {
     // given
     const initialState = {
       navigationTree: {},
-      officeReducer: {
-        preLoadReport: {
-          name: 'Some name',
-        },
-      },
+      officeReducer: { preLoadReport: { name: 'Some name', }, },
     };
     // then
     expect(mapStateToProps(initialState)).toEqual({

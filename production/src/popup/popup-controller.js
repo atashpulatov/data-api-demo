@@ -64,6 +64,7 @@ class PopupController {
             Office.EventType.DialogEventReceived,
             () => {
               reduxStore.dispatch({ type: officeProperties.actions.popupHidden });
+              reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
             }
           );
           reduxStore.dispatch({ type: officeProperties.actions.popupShown });
@@ -217,11 +218,11 @@ class PopupController {
     await officeStoreService.preserveReportValue(reportParams.bindId,
       'body',
       response.body);
-    if (reportPreviousState.importSubtotal !== response.importSubtotal) {
-      await officeStoreService.preserveReportValue(reportParams.bindId,
-        'importSubtotal',
-        response.importSubtotal);
-    }
+    // if (reportPreviousState.subtotalInfo.importSubtotal !== response.subtotalInfo.importSubtotal) {
+    //   await officeStoreService.preserveReportValue(reportParams.bindId,
+    //     'importSubtotal',
+    //     response.subtotalInfo.importSubtotal);
+    // }
     if (response.promptsAnswers) {
       // Include new promptsAnswers in case of Re-prompt workflow
       reportParams.promptsAnswers = response.promptsAnswers;

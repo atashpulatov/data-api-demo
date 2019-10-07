@@ -82,8 +82,10 @@ class OfficeDisplayService {
     isPrompted,
     promptsAnswers,
     crosstabHeaderDimensions = false,
-    importSubtotal = true,
-    subtotalsAddresses = false,
+    subtotalInfo: {
+      importSubtotal = true,
+      subtotalsAddresses = false,
+    } = false,
     visualizationInfo = false,
     preparedInstanceId,
   }) => {
@@ -171,7 +173,7 @@ class OfficeDisplayService {
         tableColumnsChanged,
         visualizationInfo,
       }));
-      if (importSubtotal && subtotalsAddresses.length) {
+      if (subtotalsAddresses.length) {
         // Removing duplicated subtotal addresses from headers
         await this.applySubtotalFormatting(isCrosstab, subtotalsAddresses, officeTable, excelContext, mstrTable);
       }
@@ -200,8 +202,10 @@ class OfficeDisplayService {
         isCrosstab,
         isPrompted,
         promptsAnswers,
-        importSubtotal,
-        subtotalsAddresses,
+        subtotalInfo: {
+          importSubtotal,
+          subtotalsAddresses,
+        },
         visualizationInfo,
       });
 
@@ -490,8 +494,7 @@ class OfficeDisplayService {
     isCrosstab,
     isPrompted,
     promptsAnswers,
-    importSubtotal,
-    subtotalsAddresses,
+    subtotalInfo,
     visualizationInfo,
   }) => {
     const report = {
@@ -505,8 +508,7 @@ class OfficeDisplayService {
       objectType,
       isPrompted,
       isCrosstab,
-      importSubtotal,
-      subtotalsAddresses,
+      subtotalInfo,
       promptsAnswers,
       crosstabHeaderDimensions: mstrTable.crosstabHeaderDimensions,
       visualizationInfo,

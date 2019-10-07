@@ -17,6 +17,7 @@ import restrictedArt from './assets/art_restricted_access_blue.svg';
 import { notificationService } from '../notification/notification-service';
 import './file-history.css';
 import { ButtonPopover } from './button-popover';
+import { startLoading, stopLoading } from '../navigation/navigation-tree-actions';
 
 export class _FileHistoryContainer extends React.Component {
   constructor(props) {
@@ -24,9 +25,7 @@ export class _FileHistoryContainer extends React.Component {
     if (officeStoreService.isFileSecured()) {
       props.toggleSecuredFlag(true);
     }
-    this.state = {
-      allowRefreshAllClick: true,
-    };
+    this.state = { allowRefreshAllClick: true, };
   }
 
   componentDidMount() {
@@ -74,6 +73,8 @@ export class _FileHistoryContainer extends React.Component {
   };
 
   refreshAllAction = (reportArray, refreshAll) => {
+    const { startLoading } = this.props;
+    startLoading();
     const { allowRefreshAllClick } = this.state;
     if (allowRefreshAllClick) {
       this.setState({ allowRefreshAllClick: false }, async () => {
@@ -149,7 +150,7 @@ export class _FileHistoryContainer extends React.Component {
                 <MSTRIcon type="refresh" />
               ) : (
                 <img width="12px" height="12px" src={loadingSpinner} alt={t('Report loading icon')} />
-              )}
+                )}
             </Button>
           </ButtonPopover>
         </span>
@@ -176,9 +177,7 @@ export class _FileHistoryContainer extends React.Component {
   }
 }
 
-_FileHistoryContainer.defaultProps = {
-  t: (text) => text,
-};
+_FileHistoryContainer.defaultProps = { t: (text) => text, };
 
 function mapStateToProps({ officeReducer, historyReducer }) {
   return {
@@ -192,6 +191,8 @@ function mapStateToProps({ officeReducer, historyReducer }) {
 const mapDispatchToProps = {
   refreshReportsArray,
   toggleSecuredFlag,
+  startLoading,
+  stopLoading,
 };
 
 const WrappedFileHistoryContainer = fileHistoryContainerHOC(_FileHistoryContainer);
