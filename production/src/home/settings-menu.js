@@ -11,7 +11,7 @@ import { clearCache } from '../cache/cache-actions';
 
 const APP_VERSION = process.env.REACT_APP_MSTR_OFFICE_VERSION;
 
-export const _SettingsMenu = ({ userFullName, userInitials, isSecured, reportArray, t, toggleIsConfirmFlag, toggleIsSettingsFlag, toggleRenderSettingsFlag, clearCache, }) => {
+export const SettingsMenuHOC = ({ userFullName, userInitials, isSecured, reportArray, t, toggleIsConfirmFlag, toggleIsSettingsFlag, toggleRenderSettingsFlag, clearCache, }) => {
   const userNameDisplay = userFullName || 'MicroStrategy user';
   const isSecuredActive = !isSecured && reportArray && reportArray.length > 0;
 
@@ -114,7 +114,7 @@ export const _SettingsMenu = ({ userFullName, userInitials, isSecured, reportArr
   );
 };
 
-_SettingsMenu.defaultProps = { t: (text) => text, };
+SettingsMenuHOC.defaultProps = { t: (text) => text, };
 
 function mapStateToProps({ sessionReducer, officeReducer }) {
   const { userFullName, userInitials } = sessionReducer;
