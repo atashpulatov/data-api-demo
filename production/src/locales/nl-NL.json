@@ -175,5 +175,15 @@
   "Element cannot be loaded": "Element kan niet worden geladen",
   "Clearing data": "Gegevens wissen",
   "{{reportNames}} could not be cleared.": "{{reportNames}} kan niet worden gewist.",
-  "Invalid attempt to spread non-iterable instance": "Ongeldige poging om niet-herhalende instantie te verspreiden"
+  "Invalid attempt to spread non-iterable instance": "Ongeldige poging om niet-herhalende instantie te verspreiden",
+  "This view supports the regular dossier manipulations. To import data, select a visualization.": "*This view supports the regular dossier manipulations. To import data, select a visualization.*",
+  "Report": "*Report*",
+  "Log Out": "*Log Out*",
+  "Dossier": "*Dossier*",
+  "Edit": "*Edit*",
+  "Copy Name": "*Copy Name*",
+  "Dataset": "*Dataset*",
+  "Remove": "*Remove*",
+  "Subtotals and Totals": "*Subtotals and Totals*",
+  "Import Dossier": "*Import Dossier*"
 }

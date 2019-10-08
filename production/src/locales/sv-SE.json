@@ -175,5 +175,15 @@
   "Element cannot be loaded": "Elementet kan inte laddas",
   "Clearing data": "Rensar data",
   "{{reportNames}} could not be cleared.": "{{reportNames}} kunde inte rensas.",
-  "Invalid attempt to spread non-iterable instance": "Ogiltigt försök att sprida instans som inte kan upprepas"
+  "Invalid attempt to spread non-iterable instance": "Ogiltigt försök att sprida instans som inte kan upprepas",
+  "This view supports the regular dossier manipulations. To import data, select a visualization.": "*This view supports the regular dossier manipulations. To import data, select a visualization.*",
+  "Report": "*Report*",
+  "Log Out": "*Log Out*",
+  "Dossier": "*Dossier*",
+  "Edit": "*Edit*",
+  "Copy Name": "*Copy Name*",
+  "Dataset": "*Dataset*",
+  "Remove": "*Remove*",
+  "Subtotals and Totals": "*Subtotals and Totals*",
+  "Import Dossier": "*Import Dossier*"
 }

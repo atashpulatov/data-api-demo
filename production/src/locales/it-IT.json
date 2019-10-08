@@ -175,5 +175,15 @@
   "Element cannot be loaded": "Impossibile caricare l’elemento",
   "Clearing data": "Cancellazione dati",
   "{{reportNames}} could not be cleared.": "Impossibile cancellare {{reportNames}}.",
-  "Invalid attempt to spread non-iterable instance": "Tentativo non valido di diffusione di istanza non iterabile"
+  "Invalid attempt to spread non-iterable instance": "Tentativo non valido di diffusione di istanza non iterabile",
+  "This view supports the regular dossier manipulations. To import data, select a visualization.": "*This view supports the regular dossier manipulations. To import data, select a visualization.*",
+  "Report": "*Report*",
+  "Log Out": "*Log Out*",
+  "Dossier": "*Dossier*",
+  "Edit": "*Edit*",
+  "Copy Name": "*Copy Name*",
+  "Dataset": "*Dataset*",
+  "Remove": "*Remove*",
+  "Subtotals and Totals": "*Subtotals and Totals*",
+  "Import Dossier": "*Import Dossier*"
 }

@@ -175,5 +175,15 @@
   "Element cannot be loaded": "Das Element kann nicht geladen werden.",
   "Clearing data": "Daten werden gelöscht",
   "{{reportNames}} could not be cleared.": "{{reportNames}} konnte nicht gelöscht werden.",
-  "Invalid attempt to spread non-iterable instance": "Ungültiger Versuch, nicht iterierbare Instanz zu verbreiten."
+  "Invalid attempt to spread non-iterable instance": "Ungültiger Versuch, nicht iterierbare Instanz zu verbreiten.",
+  "This view supports the regular dossier manipulations. To import data, select a visualization.": "*This view supports the regular dossier manipulations. To import data, select a visualization.*",
+  "Report": "*Report*",
+  "Log Out": "*Log Out*",
+  "Dossier": "*Dossier*",
+  "Edit": "*Edit*",
+  "Copy Name": "*Copy Name*",
+  "Dataset": "*Dataset*",
+  "Remove": "*Remove*",
+  "Subtotals and Totals": "*Subtotals and Totals*",
+  "Import Dossier": "*Import Dossier*"
 }
