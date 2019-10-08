@@ -175,5 +175,15 @@
   "Element cannot be loaded": "Element cannot be loaded",
   "Clearing data": "Clearing data",
   "{{reportNames}} could not be cleared.": "{{reportNames}} could not be cleared.",
-  "Invalid attempt to spread non-iterable instance": "Invalid attempt to spread non-iterable instance"
+  "Invalid attempt to spread non-iterable instance": "Invalid attempt to spread non-iterable instance",
+  "This view supports the regular dossier manipulations. To import data, select a visualization.": "This view supports the regular dossier manipulations. To import data, select a visualization.",
+  "Report": "Report",
+  "Log Out": "Log Out",
+  "Dossier": "Dossier",
+  "Edit": "Edit",
+  "Copy Name": "Copy Name",
+  "Dataset": "Dataset",
+  "Remove": "Remove",
+  "Subtotals and Totals": "Subtotals and Totals",
+  "Import Dossier": "Import Dossier"
 }

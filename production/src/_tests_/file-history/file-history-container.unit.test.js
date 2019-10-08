@@ -15,9 +15,7 @@ describe('FileHistoryContainer', () => {
   it('should render component when we are insinde project', () => {
     // given
     const mockReportArray = createMockFilesArray();
-    const visualizationInfoMock = {
-      dossierStructure: 'test',
-    };
+    const visualizationInfoMock = { dossierStructure: 'test', };
     // when
     const wrappedComponent = mount(<Provider store={reduxStore}>
       <_FileHistoryContainer
@@ -25,7 +23,7 @@ describe('FileHistoryContainer', () => {
         reportArray={mockReportArray}
         visualizationInfo={visualizationInfoMock}
       />
-                                   </Provider>);
+    </Provider>);
     // then
     expect(wrappedComponent.html()).not.toBeNull();
   });
@@ -38,7 +36,7 @@ describe('FileHistoryContainer', () => {
         reportArray={mockFiles}
         project="testProject"
       />
-                                   </Provider>);
+    </Provider>);
     const wrappedListElements = wrappedComponent.find('div.file-history-container');
     // then
     expect(wrappedComponent.html()).not.toContain('No files loaded.');
@@ -55,7 +53,7 @@ describe('FileHistoryContainer', () => {
         refreshingAll={refreshingAll}
         reportArray={mockReportArray}
       />
-                                   </Provider>);
+    </Provider>);
     // then
     expect(wrappedComponent.exists('Button .refresh-all-btn MSTRIcon')).toBeTruthy();
   });
@@ -70,21 +68,23 @@ describe('FileHistoryContainer', () => {
         refreshingAll={refreshingAll}
         reportArray={mockReportArray}
       />
-                                   </Provider>);
+    </Provider>);
     // then
     expect(wrappedComponent.exists('Button .refresh-all-btn img')).toBeTruthy();
   });
   it('should run onRefreshAll when refreshAll is clicked', () => {
     // given
     const refreshAllmock = jest.fn();
+    const startLoadingMock = jest.fn();
     const mockReportArray = createMockFilesArray();
     const wrappedComponent = mount(<Provider store={reduxStore}>
       <_FileHistoryContainer
         project="testProject"
         reportArray={mockReportArray}
         refreshReportsArray={refreshAllmock}
+        startLoading={startLoadingMock}
       />
-                                   </Provider>);
+    </Provider>);
     const refreshButton = wrappedComponent.find('Button .refresh-all-btn');
     // when
     refreshButton.simulate('click');
@@ -95,11 +95,13 @@ describe('FileHistoryContainer', () => {
     // given
     let setStateCallBack;
     const mockReportArray = createMockFilesArray();
+    const startLoadingMock = jest.fn();
     LoadedFilesConstans.OfficeLoadedFile = () => <div />;
     const wrappedComponent = mount(<_FileHistoryContainer
       project="testProject"
       reportArray={mockReportArray}
       refreshReportsArray={jest.fn()}
+      startLoading={startLoadingMock}
     />);
     wrappedComponent.instance()._ismounted = false;
     wrappedComponent.instance().setState = jest.fn((obj, callback) => setStateCallBack = callback || (() => { }));
@@ -124,7 +126,7 @@ describe('FileHistoryContainer', () => {
         reportArray={mockReportArray}
         refreshAll={refreshAllmock}
       />
-                                   </Provider>);
+    </Provider>);
     const wrappedButton = wrappedComponent.find('#add-data-btn-container').at(0);
 
     // when
@@ -171,7 +173,7 @@ describe('FileHistoryContainer', () => {
         refreshingAll={refreshingAll}
         reportArray={mockReportArray}
       />
-                                   </Provider>);
+    </Provider>);
     // then
     expect(wrappedComponent.find(Popover)).toHaveLength(1);
   });
@@ -241,6 +243,7 @@ describe('FileHistoryContainer', () => {
   it('should call proper functions in showData method', async () => {
     // given
     const refreshAllmock = jest.fn();
+    const startLoadingMock = jest.fn();
     const mockReportArray = createMockFilesArray();
     const mockRefreshReportArray = jest.fn();
     const mockToggleSecured = jest.fn();
@@ -251,6 +254,7 @@ describe('FileHistoryContainer', () => {
       isSecured
       refreshReportsArray={mockRefreshReportArray}
       toggleSecuredFlag={mockToggleSecured}
+      startLoading={startLoadingMock}
     />);
     const mockRefreshAll = jest.spyOn(wrappedComponent.instance(), 'refreshAllAction');
     const mockValidateToken = jest.spyOn(authenticationHelper, 'validateAuthToken').mockImplementation(() => { });

@@ -10,6 +10,8 @@ import {
   PROJECT_ROW_LIMIT,
   TABLE_OVERLAP,
   errorTypes,
+  SESSION_EXPIRED,
+  WRONG_CREDENTIALS,
 } from '../../error/constants';
 
 jest.mock('../../storage/session-helper');
@@ -139,9 +141,23 @@ describe('ErrorService', () => {
       // given
       const error = {
         status: 401,
+        response: { body: { code: 'ERR003' } },
+      };
+      const spyMethod = jest.spyOn(notificationService, 'displayNotification');
+      // when
+      errorService.handleError(error);
+      // then
+      expect(spyMethod).toBeCalled();
+      expect(spyMethod).toBeCalledWith({ content: SESSION_EXPIRED, type: 'info' });
+    });
+    it('should display notification about wrong username on UNAUTHORIZED_ERR with ERR003 code and iServerCode', () => {
+      // given
+      const error = {
+        status: 401,
         response: {
           body: {
             code: 'ERR003',
+            iServerCode: -2147216959,
           },
         },
       };
@@ -150,7 +166,7 @@ describe('ErrorService', () => {
       errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith({ content: 'Wrong username or password.', type: 'info' });
+      expect(spyMethod).toBeCalledWith({ content: WRONG_CREDENTIALS, type: 'info' });
     });
     it('should display notification and logout on CONNECTION_BROKEN_ERR', () => {
       // given

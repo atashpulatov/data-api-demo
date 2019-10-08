@@ -60,12 +60,12 @@ export const SettingsMenuHOC = ({ userFullName, userInitials, isSecured, reportA
         </span>
       </li>
       <div className="separate-line" />
-      <li tabIndex="0" className="no-trigger-close settings" onClick={() => toggleRenderSettingsFlag(true)}>
+      {/* TODO: <li tabIndex="0" className="no-trigger-close settings" onClick={() => toggleRenderSettingsFlag(true)}>
         <span className="no-trigger-close">
           {t('Settings')}
         </span>
       </li>
-      <div className="separate-line" />
+      <div className="separate-line" /> */}
       <li className="privacy-policy">
         <a
           tabIndex="0"

@@ -11,6 +11,7 @@ import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './navigation-tree.css';
 import { connectToCache, refreshCache, createCache } from '../cache/cache-actions';
 
+
 export class _NavigationTree extends Component {
   constructor(props) {
     super(props);
@@ -81,6 +82,8 @@ export class _NavigationTree extends Component {
   };
 
   handleCancel = () => {
+    const { stopLoading } = this.props;
+    stopLoading();
     const cancelObject = { command: selectorProperties.commandCancel, };
     window.Office.context.ui.messageParent(JSON.stringify(cancelObject));
   };

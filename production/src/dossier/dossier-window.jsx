@@ -2,11 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
+import { MSTRIcon } from '@mstr/mstr-react-library';
 import { PopupButtons } from '../popup/popup-buttons';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { EmbeddedDossier } from './embedded-dossier';
 import { actions } from '../navigation/navigation-tree-actions';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import './dossier.css';
 
 export default class _DossierWindow extends React.Component {
   constructor(props) {
@@ -34,7 +36,13 @@ export default class _DossierWindow extends React.Component {
     if ((chapterKey !== '') && (visualizationKey !== '')) {
       newValue = true;
     }
-    this.setState({ isVisualisationSelected: newValue, chapterKey, visualizationKey, promptsAnswers, preparedInstanceId });
+    this.setState({
+      isVisualisationSelected: newValue,
+      chapterKey,
+      visualizationKey,
+      promptsAnswers,
+      preparedInstanceId
+    });
   }
 
   handleOk() {
@@ -55,13 +63,31 @@ export default class _DossierWindow extends React.Component {
   }
 
   render() {
-    const { chosenProjectName, chosenObjectId, chosenProjectId, handleBack, t, mstrData } = this.props;
+    const { chosenProjectName, chosenObjectId, chosenProjectId, handleBack, t, mstrData, handlePopupErrors } = this.props;
     const { isVisualisationSelected } = this.state;
-    const propsToPass = { envUrl: mstrData.envUrl, token: mstrData.token, dossierId: chosenObjectId, projectId: chosenProjectId, promptsAnswers: mstrData.promptsAnswers };
+    const propsToPass = {
+      envUrl: mstrData.envUrl,
+      token: mstrData.token,
+      dossierId: chosenObjectId,
+      projectId: chosenProjectId,
+      promptsAnswers: mstrData.promptsAnswers
+    };
     return (
       <div>
-        <h1 title={chosenProjectName} className="ant-col folder-browser-title">{`${t('Import Dossier')} > ${chosenProjectName}`}</h1>
-        <EmbeddedDossier mstrData={propsToPass} handleSelection={this.handleSelection} />
+        <h1 title={chosenProjectName} className="ant-col folder-browser-title">
+          {`${t('Import Dossier')} > ${chosenProjectName}`}
+        </h1>
+        <span className="dossier-window-information-frame">
+          <MSTRIcon clasName="dossier-window-information-icon" type="info-icon" />
+          <span className="dossier-window-information-text">
+            {`${t('This view supports the regular dossier manipulations. To import data, select a visualization.')}`}
+          </span>
+        </span>
+        <EmbeddedDossier
+          mstrData={propsToPass}
+          handleSelection={this.handleSelection}
+          handlePopupErrors={handlePopupErrors}
+        />
         <PopupButtons
           handleOk={this.handleOk}
           handleBack={handleBack}
@@ -80,7 +106,14 @@ _DossierWindow.propTypes = {
   chosenProjectId: PropTypes.string,
   handleBack: PropTypes.func,
   t: PropTypes.func,
-  mstrData: PropTypes.shape({ envUrl: PropTypes.string, token: PropTypes.string, promptsAnswers: PropTypes.array || null }),
+  mstrData: PropTypes.shape({
+    envUrl: PropTypes.string,
+    token: PropTypes.string,
+    promptsAnswers: PropTypes.array || null
+  }),
+  requestImport: PropTypes.func,
+  selectObject: PropTypes.func,
+  handlePopupErrors: PropTypes.func,
 };
 
 _DossierWindow.defaultProps = {
@@ -89,7 +122,14 @@ _DossierWindow.defaultProps = {
   chosenProjectId: 'default id',
   handleBack: () => { },
   t: (text) => text,
-  mstrData: { envUrl: 'no env url', token: 'no token', promptsAnswers: null },
+  mstrData: {
+    envUrl: 'no env url',
+    token: null,
+    promptsAnswers: null
+  },
+  requestImport: () => { },
+  selectObject: () => { },
+  handlePopupErrors: () => { },
 };
 
 function mapStateToProps(state) {

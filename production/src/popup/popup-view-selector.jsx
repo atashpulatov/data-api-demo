@@ -273,6 +273,7 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
       <DossierWindow
         mstrData={propsToPass}
         handleBack={methods.handleBack}
+        handlePopupErrors={methods.handlePopupErrors}
         t={propsToPass.t}
       />
     );

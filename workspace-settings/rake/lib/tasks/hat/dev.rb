@@ -185,8 +185,9 @@ end
 desc "debug rake task"
 task :debug do
   # generate_comparison_report_markdown
-  generate_eslint_report
+  # generate_eslint_report
   # publish_to_pull_request_page
+  update_package_json("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
 end
 
 def run_test(working_dir)
