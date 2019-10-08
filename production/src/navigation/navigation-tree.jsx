@@ -10,6 +10,7 @@ import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './navigation-tree.css';
 import { connectToCache, refreshCache, createCache } from '../cache/cache-actions';
 
+const DB_TIMEOUT = 2500; // Interval for checking indexedDB changes on IE
 
 export class _NavigationTree extends Component {
   constructor(props) {
@@ -38,7 +39,7 @@ export class _NavigationTree extends Component {
       setTimeout(() => {
         connectToDB(true);
         this.startDBListener();
-      }, 1000);
+      }, DB_TIMEOUT);
     } else {
       this.DBConnection.cancel();
     }
@@ -143,7 +144,7 @@ export class _NavigationTree extends Component {
           locale={i18n.language}
           isLoading={loading} />
         <PopupButtons
-          loading={loading}
+          loading={cache.environmentLibrary.isLoading}
           disableActiveActions={!chosenObjectId}
           handleOk={this.handleOk}
           handleSecondary={this.handleSecondary}

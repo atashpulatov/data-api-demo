@@ -5,7 +5,7 @@ import filterDossiersByViewMedia from '../helpers/viewMediaHelper';
 const SEARCH_ENDPOINT = 'searches/results';
 const PROJECTS_ENDPOINT = 'projects';
 const MY_LIBRARY_ENDPOINT = 'library';
-const LIMIT = 10000;
+const LIMIT = 7000;
 const DOSSIER_SUBTYPE = 14081;
 const SUBTYPES = [768, 769, 774, 776, 779, DOSSIER_SUBTYPE];
 
