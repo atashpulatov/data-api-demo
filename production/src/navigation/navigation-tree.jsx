@@ -10,6 +10,7 @@ import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './navigation-tree.css';
 import { connectToCache, refreshCache, createCache } from '../cache/cache-actions';
 
+
 export class _NavigationTree extends Component {
   constructor(props) {
     super(props);
@@ -80,9 +81,9 @@ export class _NavigationTree extends Component {
   };
 
   handleCancel = () => {
-    const cancelObject = {
-      command: selectorProperties.commandCancel,
-    };
+    const { stopLoading } = this.props;
+    stopLoading();
+    const cancelObject = { command: selectorProperties.commandCancel, };
     window.Office.context.ui.messageParent(JSON.stringify(cancelObject));
   };
 
@@ -155,9 +156,7 @@ export class _NavigationTree extends Component {
   }
 }
 
-_NavigationTree.defaultProps = {
-  t: (text) => text,
-};
+_NavigationTree.defaultProps = { t: (text) => text, };
 
 
 export const mapStateToProps = ({ officeReducer, navigationTree, cacheReducer }) => {

@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { createDossierInstance, answerDossierPrompts } from '../mstr-object/mstr-object-rest-service';
 
 const { microstrategy } = window;
@@ -11,28 +12,29 @@ export default class _EmbeddedDossier extends React.Component {
   }
 
   componentDidMount() {
-    try {
-      this.loadEmbeddedDossier(this.container.current);
-    } catch (error) {
-      // !TODO: close popup and display custom error message
-    }
+    this.loadEmbeddedDossier(this.container.current);
   }
 
   loadEmbeddedDossier = async (container) => {
-    const { mstrData } = this.props;
+    const { mstrData, handleSelection, handlePopupErrors } = this.props;
     const { envUrl, token, dossierId, projectId, promptsAnswers } = mstrData;
     const instance = {};
-    instance.mid = await createDossierInstance(projectId, dossierId);
-    if (promptsAnswers != null) {
-      let count = 0;
-      let responseStatus;
-      while (count < promptsAnswers.length) {
-        responseStatus = await answerDossierPrompts({ objectId: dossierId, projectId, instanceId: instance.mid, promptsAnswers: promptsAnswers[count] });
-        if (responseStatus !== 204) {
-          throw new Error();
+    try {
+      instance.mid = await createDossierInstance(projectId, dossierId);
+      if (promptsAnswers != null) {
+        let count = 0;
+        while (count < promptsAnswers.length) {
+          await answerDossierPrompts({
+            objectId: dossierId,
+            projectId,
+            instanceId: instance.mid,
+            promptsAnswers: promptsAnswers[count]
+          });
+          count++;
         }
-        count++;
       }
+    } catch (e) {
+      handlePopupErrors(e)
     }
 
     const libraryUrl = envUrl.replace('api', 'app');
@@ -63,7 +65,7 @@ export default class _EmbeddedDossier extends React.Component {
         title: true,
         toc: true,
         reset: true,
-        reprompt: true,
+        reprompt: false,
         share: false,
         comment: false,
         notification: false,
@@ -106,7 +108,6 @@ export default class _EmbeddedDossier extends React.Component {
           promptsAnswers,
           preparedInstanceId: instance.mid,
         };
-        const { handleSelection } = this.props;
         handleSelection(dossierData);
         // Workaround end.
 
@@ -125,5 +126,29 @@ export default class _EmbeddedDossier extends React.Component {
     );
   }
 }
+
+_EmbeddedDossier.propTypes = {
+  mstrData: PropTypes.shape({
+    envUrl: PropTypes.string,
+    token: PropTypes.string,
+    dossierId: PropTypes.string,
+    projectId: PropTypes.string,
+    promptsAnswers: PropTypes.array || null
+  }),
+  handleSelection: PropTypes.func,
+  handlePopupErrors: PropTypes.func
+};
+
+_EmbeddedDossier.defaultProps = {
+  mstrData: {
+    envUrl: 'no env url',
+    token: null,
+    dossierId: 'default id',
+    projectId: 'default id',
+    promptsAnswers: null
+  },
+  handleSelection: () => { },
+  handlePopupErrors: () => { }
+};
 
 export const EmbeddedDossier = connect()(_EmbeddedDossier);

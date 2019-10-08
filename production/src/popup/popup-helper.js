@@ -89,8 +89,7 @@ class PopupHelper {
       isRefresh: true,
       isPrompted: refreshReport.isPrompted,
       isRefreshAll,
-      importSubtotal: refreshReport.importSubtotal,
-      subtotalsAddresses: refreshReport.subtotalsAddresses,
+      subtotalInfo: refreshReport.subtotalInfo,
       visualizationInfo: refreshReport.visualizationInfo,
     };
     const result = await officeDisplayService.printObject(options);

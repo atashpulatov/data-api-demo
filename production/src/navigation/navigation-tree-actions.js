@@ -56,6 +56,10 @@ export function startLoading() {
   return (dispatch) => dispatch({ type: officeProperties.actions.startLoading });
 }
 
+export function stopLoading() {
+  return (dispatch) => dispatch({ type: officeProperties.actions.stopLoading });
+}
+
 export function changeSorting(data) {
   return (dispatch) => dispatch({ type: CHANGE_SORTING, data });
 }
@@ -76,6 +80,4 @@ export function requestDossierOpen() {
   return (dispatch) => dispatch({ type: REQUEST_DOSSIER_OPEN });
 }
 
-export const actions = {
-  selectFolder, selectObject, setDataSource, requestImport, promptsAnswered, startImport, startLoading, changeSearching, changeSorting, updateScroll, updateSize, requestDossierOpen,
-};
+export const actions = { selectFolder, selectObject, setDataSource, requestImport, promptsAnswered, startImport, startLoading, stopLoading, changeSearching, changeSorting, updateScroll, updateSize, requestDossierOpen, };

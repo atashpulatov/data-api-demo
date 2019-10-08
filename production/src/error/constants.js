@@ -58,6 +58,7 @@ export const WRONG_CREDENTIALS = 'Wrong username or password.';
 export const SESSION_EXPIRED = 'Your session has expired. Please log in.';
 export const PROBLEM_WITH_REQUEST = 'There has been a problem with your request';
 export const UNKNOWN_ERROR = 'Unknown error';
+export const LOGIN_FAILURE = 'Login failure';
 
 // temporarily we map all those codes to one message; may be changed in the future
 const iServerErrorMessages = withDefaultValue({
@@ -68,13 +69,20 @@ const iServerErrorMessages = withDefaultValue({
   '-2147072488': NOT_PUBLISHED_CUBE,
   '-2147205488': PROJECT_ROW_LIMIT,
   '-2147216373': NOT_IN_METADATA,
+  '-2147216959': LOGIN_FAILURE,
 }, GENERIC_SERVER_ERR);
 
 export const errorMessageFactory = withDefaultValue({
   [errorTypes.ENV_NOT_FOUND_ERR]: () => ENDPOINT_NOT_REACHED,
   [errorTypes.CONNECTION_BROKEN_ERR]: () => CONNECTION_BROKEN,
   [errorTypes.UNAUTHORIZED_ERR]: ({ error }) => {
-    if (error.response.body.code === 'ERR003') return WRONG_CREDENTIALS;
+    if (
+      (error.response.body.code === 'ERR003')
+      && (error.response.body.iServerCode)
+      && (iServerErrorMessages[error.response.body.iServerCode] === LOGIN_FAILURE)
+    ) {
+      return WRONG_CREDENTIALS;
+    }
     return SESSION_EXPIRED;
   },
   [errorTypes.BAD_REQUEST_ERR]: () => PROBLEM_WITH_REQUEST,

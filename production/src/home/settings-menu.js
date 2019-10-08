@@ -11,7 +11,7 @@ import { clearCache } from '../cache/cache-actions';
 
 const APP_VERSION = process.env.REACT_APP_MSTR_OFFICE_VERSION;
 
-export const SettingsMenuHOC = ({ userFullName, userInitials, isSecured, reportArray, t, toggleIsConfirmFlag, toggleIsSettingsFlag, toggleRenderSettingsFlag, clearCache, }) => {
+export const _SettingsMenu = ({ userFullName, userInitials, isSecured, reportArray, t, toggleIsConfirmFlag, toggleIsSettingsFlag, toggleRenderSettingsFlag, clearCache, }) => {
   const userNameDisplay = userFullName || 'MicroStrategy user';
   const isSecuredActive = !isSecured && reportArray && reportArray.length > 0;
 
@@ -60,12 +60,12 @@ export const SettingsMenuHOC = ({ userFullName, userInitials, isSecured, reportA
         </span>
       </li>
       <div className="separate-line" />
-      <li tabIndex="0" className="no-trigger-close settings" onClick={() => toggleRenderSettingsFlag(true)}>
+      {/* TODO: <li tabIndex="0" className="no-trigger-close settings" onClick={() => toggleRenderSettingsFlag(true)}>
         <span className="no-trigger-close">
           {t('Settings')}
         </span>
       </li>
-      <div className="separate-line" />
+      <div className="separate-line" /> */}
       <li className="privacy-policy">
         <a
           tabIndex="0"
@@ -114,7 +114,7 @@ export const SettingsMenuHOC = ({ userFullName, userInitials, isSecured, reportA
   );
 };
 
-SettingsMenuHOC.defaultProps = { t: (text) => text, };
+_SettingsMenu.defaultProps = { t: (text) => text, };
 
 function mapStateToProps({ sessionReducer, officeReducer }) {
   const { userFullName, userInitials } = sessionReducer;
