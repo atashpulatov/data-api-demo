@@ -138,7 +138,7 @@ describe('Browser', () => {
     });
   });
 
-  describe('Browser filters restoring', () => {
+  describe('BrowserStoreService', () => {
     beforeAll(() => {
       jest.spyOn(browserStoreService, 'getOfficeSettings')
         .mockReturnValue({
@@ -149,10 +149,18 @@ describe('Browser', () => {
     });
     it('should restore the filters on mount', () => {
       // given
+      const useEffectSpy = jest.spyOn(React, 'useEffect')
+        .mockImplementation((callback) => callback());
+      const storedBrowsingState = 'storedBrowsingState';
+      jest.spyOn(browserStoreService, 'getBrowsingFilters')
+        .mockReturnValue(storedBrowsingState);
+      const loadBrowsingState = jest.fn();
       // when
-      const shallowedComponent = shallow(<_Browser />);
+      shallow(<_Browser {...{ loadBrowsingState }} />);
       // then
+      expect(useEffectSpy).toBeCalled();
       expect(browserStoreService.getBrowsingFilters).toBeCalled();
+      expect(loadBrowsingState).toBeCalledWith(storedBrowsingState);
     });
   });
 });

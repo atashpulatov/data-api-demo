@@ -222,7 +222,7 @@ export class _NavigationTree extends Component {
             disableSecondary={objectType && objectType.name === mstrObjectEnum.mstrObjectType.dossier.name}
           />
         </div>
-      </>
+      </div>
     );
   }
 }

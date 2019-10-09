@@ -7,11 +7,13 @@ import { PopupButtons } from '../popup/popup-buttons';
 import { browserActions } from './browser-actions';
 import './browser.css';
 import { connectToCache, createCache, refreshCache } from '../cache/cache-actions';
+import { browserStoreService } from './browser-store-service';
 
 // eslint-disable-next-line no-underscore-dangle
 export const _Browser = ({
   objects, projects, selected, onSelect, locale, sort, onSortChange, cache,
   filter, onFilterChange, myLibrary, onMyLibraryChange, t, connectToDB, initDB, refreshDB,
+  loadBrowsingState,
 }) => {
   let DBConnection;
   const ua = window.navigator.userAgent;
@@ -39,6 +41,12 @@ export const _Browser = ({
   };
 
   React.useEffect(() => connectToCacheMethod(), []);
+
+  // React.useEffect(() => {
+  //   const browsingState = browserStoreService.getBrowsingFilters()
+  //   console.log({ browsingState });
+  //   loadBrowsingState(browsingState);
+  // }, [loadBrowsingState]);
 
   return (
     <div className="browser-wrapper">
@@ -108,7 +116,10 @@ _Browser.propTypes = {
   connectToDB: PropTypes.func,
   refreshDB: PropTypes.func,
   cache: PropTypes.object,
+  loadBrowsingState: PropTypes.func,
 };
+
+_Browser.defaultProps = { t: (text) => text };
 
 export function mapStateToProps(state) {
   const cache = state.cacheReducer;
