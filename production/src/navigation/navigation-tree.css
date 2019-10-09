@@ -21,3 +21,11 @@
 .ReactVirtualized__Table__rowColumn.radio > input {
   margin-left: 2px;
 }
+
+.top-filter-panel {
+  float: right;
+}
+
+.panel-container {
+  z-index: 2;
+}
