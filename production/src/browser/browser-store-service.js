@@ -1,7 +1,7 @@
 import { officeProperties } from '../office/office-properties';
 import { RunOutsideOfficeError } from '../error/run-outside-office-error';
 
-/* global Office */
+// const { Office } = window;
 
 class BrowserStoreService {
     getOfficeSettings = () => {

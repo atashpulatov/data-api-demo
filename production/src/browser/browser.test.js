@@ -7,17 +7,18 @@ import { PopupButtons } from '../popup/popup-buttons';
 import { reportsExample } from './objects';
 import { projectsExample } from './projects';
 import { browserActions } from './browser-actions';
+import { browserStoreService } from './browser-store-service';
 
 describe('Browser', () => {
   const mockedProps = {
     objects: reportsExample.result,
     projects: projectsExample,
-    onSortChange: () => { },
+    onSortChange: () => {},
     selected: {
       id: '02DDEFDA460B58681B005AAB4A1CBFD3',
       projectId: 'CE52831411E696C8BD2F0080EFD5AF44',
     },
-    onSelect: () => { },
+    onSelect: () => {},
   };
 
   it('should render empty container for filters and table of objects', () => {
@@ -72,8 +73,7 @@ describe('Browser', () => {
           environmentLibrary: 'environmentLibrary',
           myLibrary: 'myLibrary',
         },
-        browserReducer: {
-        },
+        browserReducer: {},
       };
       // when
       const parsedProps = mapStateToProps(state);
@@ -90,9 +90,7 @@ describe('Browser', () => {
           environmentLibrary: 'environmentLibrary',
           myLibrary: 'myLibrary',
         },
-        browserReducer: {
-          myLibrary: true,
-        },
+        browserReducer: { myLibrary: true, },
       };
       // when
       const parsedProps = mapStateToProps(state);
@@ -137,6 +135,24 @@ describe('Browser', () => {
       const shallowedBrowser = shallow(<_Browser />);
       // then
       expect(shallowedBrowser.find(FilterPanel).length).toEqual(1);
+    });
+  });
+
+  describe('Browser filters restoring', () => {
+    beforeAll(() => {
+      jest.spyOn(browserStoreService, 'getOfficeSettings')
+        .mockReturnValue({
+          set: jest.fn(),
+          get: jest.fn(),
+          saveAsync: jest.fn(),
+        });
+    });
+    it('should restore the filters on mount', () => {
+      // given
+      // when
+      const shallowedComponent = shallow(<_Browser />);
+      // then
+      expect(browserStoreService.getBrowsingFilters).toBeCalled();
     });
   });
 });
