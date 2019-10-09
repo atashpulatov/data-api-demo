@@ -2,35 +2,33 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import { ObjectTable, FilterPanel } from '@mstr/rc';
+import { ObjectBrowser } from '@mstr/rc/dist';
 import { PopupButtons } from '../popup/popup-buttons';
 import { browserActions } from './browser-actions';
 
+// eslint-disable-next-line no-underscore-dangle
 export const _Browser = ({
-  objects, projects, selected, onSelect, locale, sort, onSortChange, filter, onFilterChange, myLibrary,
+  objects, projects, selected, onSelect, locale, sort, onSortChange,
+  filter, onFilterChange, myLibrary, onMyLibraryChange
 }) => (
   <>
-      <FilterPanel
-        objects={objects}
-        applications={projects}
-        filter={filter}
-        onFilterChange={onFilterChange}
-        myLibrary={myLibrary}
-        locale={locale}
-      />
-      <ObjectTable
-        objects={objects}
-        projects={projects}
-        sort={sort}
+    <ObjectBrowser
         onSortChange={onSortChange}
+        sort={sort}
+        objects={objects.objects}
+        projects={projects}
         selected={selected}
         onSelect={onSelect}
         locale={locale}
+        // searchText={text('searchText', 'photo')}
         filter={filter}
+        onFilterChange={onFilterChange}
         myLibrary={myLibrary}
+        onMyLibraryChange={onMyLibraryChange}
+        isLoading={objects.isLoading}
       />
-      <PopupButtons />
-    </>
+    <PopupButtons />
+  </>
 );
 _Browser.propTypes = {
   objects: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -59,6 +57,7 @@ _Browser.propTypes = {
       to: PropTypes.object,
     }),
   }),
+  onFilterChange: PropTypes.func.isRequired,
   myLibrary: PropTypes.bool,
 };
 
@@ -75,9 +74,7 @@ export function mapStateToProps(state) {
   };
 }
 
-export const mapDispatchToProps = {
-  ...browserActions,
-};
+export const mapDispatchToProps = { ...browserActions };
 
 export const Browser = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_Browser));
 export default Browser;
