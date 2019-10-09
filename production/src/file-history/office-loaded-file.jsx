@@ -137,7 +137,6 @@ export class _OfficeLoadedFile extends React.Component {
           }
         } finally {
           this.setState({ allowRefreshClick: true });
-          stopLoading();
         }
       });
     }
