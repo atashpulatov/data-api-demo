@@ -2,34 +2,77 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import { ObjectBrowser } from '@mstr/rc/dist';
+import { ObjectTable, TopFilterPanel } from '@mstr/rc';
 import { PopupButtons } from '../popup/popup-buttons';
 import { browserActions } from './browser-actions';
+import './browser.css';
+import { connectToCache, createCache, refreshCache } from '../cache/cache-actions';
 
 // eslint-disable-next-line no-underscore-dangle
 export const _Browser = ({
-  objects, projects, selected, onSelect, locale, sort, onSortChange,
-  filter, onFilterChange, myLibrary, onMyLibraryChange
-}) => (
-  <>
-    <ObjectBrowser
-        onSortChange={onSortChange}
-        sort={sort}
-        objects={objects.objects}
+  objects, projects, selected, onSelect, locale, sort, onSortChange, cache,
+  filter, onFilterChange, myLibrary, onMyLibraryChange, t, connectToDB, initDB, refreshDB,
+}) => {
+  let DBConnection;
+  const ua = window.navigator.userAgent;
+  const isMSIE = ua.indexOf('MSIE ') > 0 || !!navigator.userAgent.match(/Trident.*rv:11\./);
+  const startDBListener = () => {
+    if (cache.projects.length < 1 || cache.myLibrary.isLoading || cache.environmentLibrary.isLoading) {
+      setTimeout(() => {
+        connectToDB(true);
+        startDBListener();
+      }, 1000);
+    } else {
+      DBConnection.cancel();
+    }
+  };
+  const connectToCacheMethod = () => {
+    DBConnection = connectToDB();
+    if (isMSIE) startDBListener();
+  };
+  const refresh = () => {
+    // eslint-disable-next-line no-unused-expressions
+    DBConnection && DBConnection.cancel();
+    refreshDB(initDB).then(() => {
+      connectToCacheMethod();
+    });
+  };
+
+  React.useEffect(() => connectToCacheMethod(), []);
+
+  return (
+    <div className="browser-wrapper">
+      <div className="browser-top-panel">
+        <div className="browser-title-bar">{t('Import Data')}</div>
+        <TopFilterPanel
+          isLoading={false}
+          locale={locale}
+          objects={objects}
+          applications={projects}
+          onFilterChange={onFilterChange}
+          onSearch={() => {}} // TODO: Add proper function
+          onSwitch={onMyLibraryChange}
+          filter={filter}
+          onRefresh={() => refresh()}
+          myLibrary={myLibrary} />
+      </div>
+      <ObjectTable
+        objects={objects}
         projects={projects}
+        sort={sort}
+        onSortChange={onSortChange}
         selected={selected}
         onSelect={onSelect}
         locale={locale}
-        // searchText={text('searchText', 'photo')}
         filter={filter}
-        onFilterChange={onFilterChange}
         myLibrary={myLibrary}
-        onMyLibraryChange={onMyLibraryChange}
-        isLoading={objects.isLoading}
-      />
-    <PopupButtons />
-  </>
-);
+        searchText="" // TODO: Provide proper search text
+        isLoading={false} />
+      <PopupButtons />
+    </div>
+  );
+};
+
 _Browser.propTypes = {
   objects: PropTypes.arrayOf(PropTypes.object).isRequired,
   projects: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -59,22 +102,34 @@ _Browser.propTypes = {
   }),
   onFilterChange: PropTypes.func.isRequired,
   myLibrary: PropTypes.bool,
+  onMyLibraryChange: PropTypes.func,
+  t: PropTypes.func,
+  initDB: PropTypes.func,
+  connectToDB: PropTypes.func,
+  refreshDB: PropTypes.func,
+  cache: PropTypes.object,
 };
 
 export function mapStateToProps(state) {
-  const cachedData = state.cacheReducer;
+  const cache = state.cacheReducer;
   const browsingData = state.browserReducer;
   return {
-    projects: cachedData.projects,
-    objects: browsingData.myLibrary ? cachedData.myLibrary : cachedData.environmentLibrary,
+    projects: cache.projects,
+    objects: browsingData.myLibrary ? cache.myLibrary.objects : cache.environmentLibrary.objects,
     myLibrary: browsingData.myLibrary,
     selected: browsingData.selected,
     sort: browsingData.sort,
     filter: browsingData.filter,
+    cache,
   };
 }
 
-export const mapDispatchToProps = { ...browserActions };
+export const mapDispatchToProps = {
+  ...browserActions,
+  initDB: createCache,
+  connectToDB: connectToCache,
+  refreshDB: refreshCache,
+};
 
 export const Browser = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_Browser));
 export default Browser;
