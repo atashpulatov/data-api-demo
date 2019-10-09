@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import { ObjectTable } from '@mstr/rc';
+import { ObjectTable, TopFilterPanel } from '@mstr/rc';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { PopupButtons } from '../popup/popup-buttons';
 import { actions } from './navigation-tree-actions';
@@ -31,7 +31,7 @@ export class _NavigationTree extends Component {
     const { connectToDB } = this.props;
     this.DBConnection = connectToDB();
     if (this.isMSIE) this.startDBListener();
-  }
+  };
 
   startDBListener = () => {
     const { cache, connectToDB } = this.props;
@@ -43,15 +43,16 @@ export class _NavigationTree extends Component {
     } else {
       this.DBConnection.cancel();
     }
-  }
+  };
 
   refresh = () => {
     this.DBConnection.cancel();
     const { refreshDB, initDB } = this.props;
-    refreshDB(initDB).then(() => {
-      this.connectToCache();
-    });
-  }
+    refreshDB(initDB)
+      .then(() => {
+        this.connectToCache();
+      });
+  };
 
   handleOk = () => {
     const { objectType, requestImport, requestDossierOpen } = this.props;
@@ -84,7 +85,7 @@ export class _NavigationTree extends Component {
   handleCancel = () => {
     const { stopLoading } = this.props;
     stopLoading();
-    const cancelObject = { command: selectorProperties.commandCancel, };
+    const cancelObject = { command: selectorProperties.commandCancel };
     window.Office.context.ui.messageParent(JSON.stringify(cancelObject));
   };
 
@@ -122,29 +123,44 @@ export class _NavigationTree extends Component {
 
   render() {
     const {
-      setDataSource, dataSource, chosenObjectId, chosenProjectId, pageSize, changeSearching, changeSorting,
-      chosenSubtype, folder, selectFolder, loading, handlePopupErrors, scrollPosition, searchText, sorter,
-      updateScroll, mstrData, updateSize, t, objectType, cache, refreshDB, i18n
+      chosenObjectId, chosenProjectId, changeSorting, loading, handlePopupErrors, searchText, sorter,
+      changeSearching, objectType, cache, filter, myLibrary, switchMyLibrary, changeFilter, t, i18n,
     } = this.props;
     const { triggerUpdate, previewDisplay } = this.state;
+    const objects = myLibrary ? cache.myLibrary.objects : cache.environmentLibrary.objects;
 
     return (
       <div className="navigation_tree__main_wrapper">
-        <div className="navigation_tree__title_bar">{t('Import Data')}</div>
+        <div className="navigation_tree__title_bar">
+          <span>{t('Import Data')}</span>
+          <TopFilterPanel
+            locale={i18n.language}
+            objects={objects}
+            applications={cache.projects}
+            onFilterChange={changeFilter}
+            onSearch={changeSearching}
+            isLoading={loading}
+            myLibrary={myLibrary}
+            filter={filter}
+            onRefresh={() => this.refresh()}
+            onSwitch={switchMyLibrary} />
+        </div>
         <ObjectTable
-          objects={cache.environmentLibrary.objects}
+          objects={objects}
           projects={cache.projects}
           selected={{
             id: chosenObjectId,
-            projectId: chosenProjectId
+            projectId: chosenProjectId,
           }}
           onSelect={({ id, projectId, subtype }) => this.onObjectChosen(id, projectId, subtype)}
           sort={sorter}
           onSortChange={changeSorting}
           locale={i18n.language}
+          searchText={searchText}
+          filter={filter}
           isLoading={loading} />
         <PopupButtons
-          loading={cache.environmentLibrary.isLoading}
+          loading={loading}
           disableActiveActions={!chosenObjectId}
           handleOk={this.handleOk}
           handleSecondary={this.handleSecondary}
@@ -157,8 +173,7 @@ export class _NavigationTree extends Component {
   }
 }
 
-_NavigationTree.defaultProps = { t: (text) => text, };
-
+_NavigationTree.defaultProps = { t: (text) => text };
 
 export const mapStateToProps = ({ officeReducer, navigationTree, cacheReducer }) => {
   const object = officeReducer.preLoadReport;
