@@ -4,9 +4,17 @@ import {
   ON_MY_LIBRARY_CHANGED_CONST, ON_FILTER_CHANGED_CONST,
   ON_SORT_CHANGE_CONST, ON_SELECT_CONST, LOAD_BROWSING_STATE_CONST
 } from './browser-actions';
-import { officeStoreService } from '../office/store/office-store-service';
+import { browserStoreService } from './browser-store-service';
 
 describe('Browser reducer', () => {
+  beforeAll(() => {
+    jest.spyOn(browserStoreService, 'getOfficeSettings')
+      .mockReturnValue({
+        set: jest.fn(),
+        get: jest.fn(),
+        saveAsync: jest.fn(),
+      });
+  });
   it('should return default state', () => {
     // given
     const defaultState = 'defaultState'
@@ -78,11 +86,11 @@ describe('Browser reducer', () => {
 
   it('should save browsing filters to office settings', () => {
     // given
-    jest.spyOn(officeStoreService, 'preserveBrowsingFilters');
+    jest.spyOn(browserStoreService, 'preserveBrowsingFilters');
     const defaultState = 'defaultState'
     // when
     browserReducer(defaultState, {});
     // then
-    expect(officeStoreService.preserveBrowsingFilters).toBeCalledWith(defaultState);
+    expect(browserStoreService.preserveBrowsingFilters).toBeCalledWith(defaultState);
   });
 });
