@@ -74,28 +74,15 @@ export function fetchObjects(dispatch, cache) {
 
 export function createCache() {
   return (dispatch, getState) => {
-    try {
-      // Create or get DB for current user
-      const { sessionReducer } = getState();
-      const { username } = sessionReducer;
-      const objectsDB = new DB(`${username || 'cache'}-objects`);
-      const myLibraryDB = new DB(`${username || 'cache'}-my-library`);
-      // Remove PouchDBs from other users
-      DB.purgePouchDB(username);
-      dispatch(objectListLoading(true));
-      objectsDB.addObjectsAsync(getObjectList)
-        .then(() => { dispatch(objectListLoading(false)); })
-        .catch(console.error);
-
-      dispatch(myLibraryLoading(true));
-      myLibraryDB.addObjectsAsync(getMyLibraryObjectList)
-        .then(() => { dispatch(myLibraryLoading(false)); })
-        .catch(console.error);
-    } catch (error) {
-      console.error(error);
-      dispatch(objectListLoading(false));
-      dispatch(myLibraryLoading(false));
-    }
+    // Create or get DB for current user
+    const { sessionReducer } = getState();
+    const { username } = sessionReducer;
+    const cache = new DB(username || 'cache');
+    // Remove PouchDBs from other users
+    DB.purgePouchDB(username);
+    cache.callIfEmpty(() => {
+      fetchObjects(dispatch, cache);
+    });
   };
 }
 
