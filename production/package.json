@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@mstr/mstr-react-library": "^1.2.15",
+    "@mstr/rc": "^0.1.30",
     "antd": "^3.22.2",
     "core-js": "^3.2.1",
     "focus-visible": "^5.0.2",
