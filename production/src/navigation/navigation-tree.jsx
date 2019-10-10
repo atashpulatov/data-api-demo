@@ -10,6 +10,7 @@ import { isPrompted as checkIfPrompted } from '../mstr-object/mstr-object-rest-s
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './navigation-tree.css';
 import { connectToCache, refreshCache, createCache } from '../cache/cache-actions';
+import { browserStoreService } from '../browser/browser-store-service';
 
 const DB_TIMEOUT = 2500; // Interval for checking indexedDB changes on IE
 
@@ -25,7 +26,20 @@ export class _NavigationTree extends Component {
   }
 
   componentDidMount() {
+    const preservedBrowsingState = browserStoreService.getBrowsingFilters();
+    console.log('mounting');
+    console.log(preservedBrowsingState);
+    this.setState({ ...preservedBrowsingState });
+    console.log({ state: this.state });
+
     this.connectToCache();
+  }
+
+  componentWillUnmount() {
+    console.log('unmount');
+    console.log(this.state);
+
+    browserStoreService.preserveBrowsingFilters(this.state);
   }
 
   connectToCache = () => {
@@ -171,7 +185,7 @@ export class _NavigationTree extends Component {
         />
         {/* Temporary loading user action block */}
         <div
-          id='action-block'
+          id="action-block"
           style={{
             display: loading ? 'block' : 'none',
             position: 'fixed',
@@ -184,8 +198,8 @@ export class _NavigationTree extends Component {
             opacity: '0.5',
           }}
         />
-        <div className='navigation_tree__main_wrapper'>
-          <div className='navigation_tree__title_bar'>{t('Import Data')}</div>
+        <div className="navigation_tree__main_wrapper">
+          <div className="navigation_tree__title_bar">{t('Import Data')}</div>
           {/* <div className="navigation_tree__table_wrapper" style={{ fontSize: 12 }}> */}
           <div style={{ padding: 64, fontSize: 20 }}>
             <p>
@@ -209,7 +223,7 @@ export class _NavigationTree extends Component {
               {' '}
               {cache.environmentLibrary.objects.length}
             </p>
-            <button type='button' onClick={this.refresh}>Refresh</button>
+            <button type="button" onClick={this.refresh}>Refresh</button>
 
           </div>
           <PopupButtons
