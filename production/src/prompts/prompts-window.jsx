@@ -163,6 +163,8 @@ export class _PromptsWindow extends Component {
   }
 
   closePopup = () => {
+    const { stopLoading } = this.props;
+    stopLoading();
     const cancelObject = { command: selectorProperties.commandCancel };
     Office.context.ui.messageParent(JSON.stringify(cancelObject));
   };
