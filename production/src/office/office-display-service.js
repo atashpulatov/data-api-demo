@@ -548,7 +548,7 @@ class OfficeDisplayService {
     if (isRefresh) {
       const prevOfficeTable = await officeApiHelper.getTable(excelContext,
         bindingId);
-      officeApiHelper.clearEmptyCrosstabRow(prevOfficeTable); // Since showing Excel table header dont override the data but insert new row, we clear values from empty row in crosstab to prevent it
+      if (isCrosstab) officeApiHelper.clearEmptyCrosstabRow(prevOfficeTable); // Since showing Excel table header dont override the data but insert new row, we clear values from empty row in crosstab to prevent it
       prevOfficeTable.showHeaders = true;
       await excelContext.sync();
       tableColumnsChanged = await this._checkColumnsChange(prevOfficeTable, excelContext, instanceDefinition);
