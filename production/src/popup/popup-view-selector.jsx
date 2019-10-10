@@ -244,7 +244,12 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
   }
   if (popupType === PopupTypeEnum.navigationTree) {
     return (
-      <Browser />
+      <NavigationTree
+        handlePrepare={methods.handlePrepare}
+        mstrData={propsToPass}
+        handlePopupErrors={methods.handlePopupErrors}
+        handleDossierOpen={methods.handleDossierOpen}
+      />
     );
   }
   if (popupType === PopupTypeEnum.loadingPage) {
