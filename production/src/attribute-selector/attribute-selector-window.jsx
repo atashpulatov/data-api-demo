@@ -76,10 +76,8 @@ export class AttributeSelectorWindow extends Component {
   };
 
   render() {
-    const { mstrData } = this.props;
-    const {
-      session, triggerUpdate, openModal, attributesSelected, loading,
-    } = this.state;
+    const { mstrData, handlePopupErrors } = this.props;
+    const { session, triggerUpdate, openModal, attributesSelected, loading, } = this.state;
     const { toggleSubtotal } = this;
     const typeName = mstrData.reportType.name
       ? mstrData.reportType.name.charAt(0).toUpperCase() + mstrData.reportType.name.substring(1)
@@ -99,6 +97,7 @@ export class AttributeSelectorWindow extends Component {
           openModal={openModal}
           closeModal={this.closeModal}
           toggleSubtotal={toggleSubtotal}
+          handlePopupErrors={handlePopupErrors}
         />
         <PopupButtons
           disableActiveActions={!attributesSelected}
