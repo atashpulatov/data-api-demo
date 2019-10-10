@@ -72,7 +72,6 @@
     ],
     "no-multi-str": "off",
     "no-invalid-this": "off",
-    "arrow-parens": "off",
     "no-param-reassign": "off",
     "consistent-return": "off",
     "no-plusplus": "off",

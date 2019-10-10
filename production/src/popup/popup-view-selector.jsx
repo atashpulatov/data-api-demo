@@ -226,6 +226,7 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
       <AttributeSelectorWindow
         mstrData={propsToPass}
         handleBack={methods.handleBack}
+        handlePopupErrors={methods.handlePopupErrors}
       />
     );
   }
@@ -239,6 +240,7 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
       <AttributeSelectorWindow
         mstrData={mstrData}
         handleBack={() => methods.handleBack(null, null, null, true)}
+        handlePopupErrors={methods.handlePopupErrors}
       />
     );
   }

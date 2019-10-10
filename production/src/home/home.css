@@ -40,7 +40,8 @@ hr {
   display: table-cell;
 }
 
-#app-header #initials {
+#app-header #initials,
+#app-header #profile-image {
   height: 28px;
   width: 28px;
   line-height: 28px;
@@ -189,7 +190,7 @@ hr {
   vertical-align: middle;
   align-self: center;
   background: #FFFFFF;
-  box-shadow: 0 0;
+  box-shadow: none;
   border: none;
   padding: 0;
 }

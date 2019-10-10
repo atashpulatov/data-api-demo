@@ -39,6 +39,7 @@ class PopupController {
     try {
       await authenticationHelper.validateAuthToken();
     } catch (error) {
+      reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
       errorService.handleError(error);
       return;
     }
@@ -72,6 +73,7 @@ class PopupController {
           reduxStore.dispatch({ type: officeProperties.actions.popupShown });
         });
     } catch (error) {
+      reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
       errorService.handleError(error);
     }
   };
