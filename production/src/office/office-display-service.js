@@ -261,6 +261,8 @@ class OfficeDisplayService {
         const excelContext = await officeApiHelper.getExcelContext();
         const tableObject = excelContext.workbook.tables.getItem(bindingId);
         if (isCrosstab) {
+          const headerRange = tableObject.getRange().getRow(0).getOffsetRange(-1, 0);
+          headerRange.clear('Contents'); // Since showing Excel table header dont override the data but insert new row, we clear values from empty row in crosstab to prevent it
           tableObject.showHeaders = true;
           crosstabRange = await officeApiHelper.getCrosstabRangeSafely(tableObject,
             crosstabHeaderDimensions,
@@ -547,6 +549,8 @@ class OfficeDisplayService {
     if (isRefresh) {
       const prevOfficeTable = await officeApiHelper.getTable(excelContext,
         bindingId);
+      const headerRange = prevOfficeTable.getRange().getRow(0).getOffsetRange(-1, 0);
+      headerRange.clear('Contents'); // Since showing Excel table header dont override the data but insert new row, we clear values from empty row in crosstab to prevent it
       prevOfficeTable.showHeaders = true;
       await excelContext.sync();
       tableColumnsChanged = await this._checkColumnsChange(prevOfficeTable, excelContext, instanceDefinition);
