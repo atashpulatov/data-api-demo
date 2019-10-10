@@ -31,8 +31,7 @@ export const _Confirmation = ({ reportArray, toggleSecuredFlag, toggleIsConfirmF
           reportName = report.name;
           if (report.isCrosstab) {
             const officeTable = await officeApiHelper.getTable(excelContext, report.bindId);
-            const headerRange = officeTable.getRange().getRow(0).getOffsetRange(-1, 0);
-            headerRange.clear('Contents'); // Since showing Excel table header dont override the data but insert new row, we clear values from empty row in crosstab to prevent it
+            officeApiHelper.clearEmptyCrosstabRow(officeTable); // Since showing Excel table header dont override the data but insert new row, we clear values from empty row in crosstab to prevent it
             officeTable.showHeaders = true;
             officeTable.showFilterButton = false;
             const headers = officeTable.getHeaderRowRange();

@@ -11,19 +11,14 @@ describe('Confirmation', () => {
   it('should call proper methods from secureData when Ok button is clicked', async () => {
     // given
     const mockSync = jest.fn();
-    const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({
-      sync: mockSync,
-    }));
+    const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
     const mockDeleteTableBody = jest.spyOn(officeApiHelper, 'deleteObjectTableBody').mockImplementation(() => { });
+    const mockClearEmptyRow = jest.spyOn(officeApiHelper, 'clearEmptyCrosstabRow').mockImplementation(() => { });
     const mockGetTable = jest.spyOn(officeApiHelper, 'getTable').mockImplementation(() => ({
       showHeaders: null,
       showFilterButton: null,
       getHeaderRowRange: () => ({
-        format: {
-          font: {
-            color: null,
-          },
-        },
+        format: { font: { color: null, }, },
       }),
     }));
     const mockToggleIsConfirmFlag = jest.fn();
@@ -44,6 +39,7 @@ describe('Confirmation', () => {
     expect(mockToggleIsClearingFlag).toBeCalled();
     expect(mockToggleIsConfirmFlag).toBeCalled();
     await expect(mockGetTable).toBeCalled();
+    expect(mockClearEmptyRow).toBeCalled();
     await expect(mockSync).toBeCalled();
     await expect(mockDeleteTableBody).toBeCalled();
     expect(mockToggleIsClearingFlag).toBeCalled();

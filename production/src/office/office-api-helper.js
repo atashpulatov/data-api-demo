@@ -571,6 +571,17 @@ class OfficeApiHelper {
       startingCell = startingCell.getOffsetRange(offsetForMoving1, offsetForMoving2); // moving to next attribute (row/column)
     }
   }
+
+  /**
+   * Clear the empty row in Crosstab Report
+   *
+   * @param {Office} officeTable Excel Object containig information about Excel Table
+   * @memberof OfficeApiHelper
+   */
+  clearEmptyCrosstabRow = officeTable => {
+    const headerRange = officeTable.getRange().getRow(0).getOffsetRange(-1, 0);
+    headerRange.clear('Contents');
+  }
 }
 
 export const officeApiHelper = new OfficeApiHelper();
