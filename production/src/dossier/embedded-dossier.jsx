@@ -9,14 +9,21 @@ export default class _EmbeddedDossier extends React.Component {
   constructor(props) {
     super(props);
     this.container = React.createRef();
+    this.msgRouter = null;
+    this.eventHandler = this.eventHandler.bind(this);
+    this.dossierData = {};
   }
 
   componentDidMount() {
     this.loadEmbeddedDossier(this.container.current);
   }
 
+  componentWillUnmount() {
+    this.msgRouter.removeEventhandler('onVizSelectionChanged', this.eventHandler);
+  }
+
   loadEmbeddedDossier = async (container) => {
-    const { mstrData, handleSelection, handlePopupErrors } = this.props;
+    const { mstrData, handlePopupErrors } = this.props;
     const { envUrl, token, dossierId, projectId, promptsAnswers } = mstrData;
     const instance = {};
     try {
@@ -94,25 +101,61 @@ export default class _EmbeddedDossier extends React.Component {
         enabled: true,
         addToLibrary: false,
       },
+      enableVizSelection: true,
+      onMsgRouterReadyHandler: ({ MsgRouter }) => {
+        this.msgRouter = MsgRouter;
+        this.msgRouter.registerEventHandler('onVizSelectionChanged', this.eventHandler);
+      },
     };
 
     microstrategy.dossier
       .create(props)
-      .then(async (dossierPage) => {
-        // Workaround until embedding api enables onVisSelection event
-        const chapter = await dossierPage.getCurrentChapter();
-        const visuzalisations = await dossierPage.getCurrentPageVisualizationList();
-        const dossierData = {
-          chapterKey: chapter.nodeKey,
-          visualizationKey: (visuzalisations.length > 0) ? visuzalisations[0].key : '',
+      .then(async () => {
+        this.dossierData = {
           promptsAnswers,
           preparedInstanceId: instance.mid,
         };
-        handleSelection(dossierData);
-        // Workaround end.
-
-        // !TODO: dossierPage.addEventListener('onVisSelection', handleSelection);
       });
+  }
+
+  /**
+   * Handles the event throwed after new vizualization selection.
+   * Retrives the selected vizualizationKey and chapterKey.
+   * Passes new data to parent component by handleSelection function.
+   * When there is no selected vizualization the keys are set to empty strings.
+   *
+   * @param {Object} payload - payload throwed by embedded.api after the visualization was selected
+   */
+  eventHandler(payload) {
+    const { handleSelection } = this.props;
+    let targetChapterKey = '';
+    let targetVisKey = '';
+
+    // !TODO: Delete this **** after Library enables to select only 1 visualisation
+    /* Iterate over event payload object and find the first child object (visKey)
+    which is set to true (which is selected), then save its key and chapter key.
+    If all the child objects are set to false then save both keys as empty strings
+    */
+    Object.keys(payload).some(chapterKey => {
+      if (Object.keys(payload[chapterKey]).some(visKey => {
+        if (payload[chapterKey][visKey] === true) {
+          targetVisKey = visKey;
+          return true;
+        }
+        return false;
+      })) {
+        targetChapterKey = chapterKey;
+        return true;
+      }
+      return false;
+    });
+
+    this.dossierData = {
+      ...this.dossierData,
+      chapterKey: targetChapterKey,
+      visualizationKey: targetVisKey
+    }
+    handleSelection(this.dossierData);
   }
 
   render() {
