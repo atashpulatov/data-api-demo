@@ -105,7 +105,7 @@ export class _Header extends Component {
   }
 }
 
-_Header.defaultProps = { t: (text) => text, };
+_Header.defaultProps = { t: (text) => text };
 
 function mapStateToProps({ officeReducer }) {
   const { isSettings, isConfirm, isClearing } = officeReducer;
