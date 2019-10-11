@@ -10,7 +10,7 @@ export default class _EmbeddedDossier extends React.Component {
     super(props);
     this.container = React.createRef();
     this.msgRouter = null;
-    this.eventHandler = this.eventHandler.bind(this);
+    this.onVizSelectionHandler = this.onVizSelectionHandler.bind(this);
     this.dossierData = {};
   }
 
@@ -19,7 +19,26 @@ export default class _EmbeddedDossier extends React.Component {
   }
 
   componentWillUnmount() {
-    this.msgRouter.removeEventhandler('onVizSelectionChanged', this.eventHandler);
+    this.msgRouter.removeEventhandler('onVizSelectionChanged', this.onVizSelectionHandler);
+  }
+
+  /**
+ * Handles the event throwed after new vizualization selection.
+ * Retrives the selected vizualizationKey and chapterKey.
+ * Passes new data to parent component by handleSelection function.
+ *
+ * @param {Object} payload - payload throwed by embedded.api after the visualization was selected
+ */
+  onVizSelectionHandler(payload) {
+    const { handleSelection } = this.props;
+    const { 0: payloadChapterKey } = Object.keys(payload);
+    const { 0: payloadVisKey } = Object.keys(payload[payloadChapterKey]);
+    this.dossierData = {
+      ...this.dossierData,
+      chapterKey: payloadChapterKey,
+      visualizationKey: payloadVisKey
+    }
+    handleSelection(this.dossierData);
   }
 
   loadEmbeddedDossier = async (container) => {
@@ -104,7 +123,7 @@ export default class _EmbeddedDossier extends React.Component {
       enableVizSelection: true,
       onMsgRouterReadyHandler: ({ MsgRouter }) => {
         this.msgRouter = MsgRouter;
-        this.msgRouter.registerEventHandler('onVizSelectionChanged', this.eventHandler);
+        this.msgRouter.registerEventHandler('onVizSelectionChanged', this.onVizSelectionHandler);
       },
     };
 
@@ -116,25 +135,6 @@ export default class _EmbeddedDossier extends React.Component {
           preparedInstanceId: instance.mid,
         };
       });
-  }
-
-  /**
-   * Handles the event throwed after new vizualization selection.
-   * Retrives the selected vizualizationKey and chapterKey.
-   * Passes new data to parent component by handleSelection function.
-   *
-   * @param {Object} payload - payload throwed by embedded.api after the visualization was selected
-   */
-  eventHandler(payload) {
-    const { handleSelection } = this.props;
-    const { 0: payloadChapterKey } = Object.keys(payload);
-    const { 0: payloadVisKey } = Object.keys(payload[payloadChapterKey]);
-    this.dossierData = {
-      ...this.dossierData,
-      chapterKey: payloadChapterKey,
-      visualizationKey: payloadVisKey
-    }
-    handleSelection(this.dossierData);
   }
 
   render() {
