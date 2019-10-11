@@ -205,30 +205,30 @@ class OfficeApiHelper {
 
   _getNumberFormattingCategoryName = (metric) => {
     switch (metric.category) {
-      case -2:
-        return 'Default';
-      case 9:
-        return 'General';
-      case 0:
-        return 'Fixed';
-      case 1:
-        return 'Currency';
-      case 2:
-        return 'Date';
-      case 3:
-        return 'Time';
-      case 4:
-        return 'Percentage';
-      case 5:
-        return 'Fraction';
-      case 6:
-        return 'Scientific';
-      case 7: // 'Custom'
-        return metric.formatString;
-      case 8:
-        return 'Special';
-      default:
-        return 'General';
+    case -2:
+      return 'Default';
+    case 9:
+      return 'General';
+    case 0:
+      return 'Fixed';
+    case 1:
+      return 'Currency';
+    case 2:
+      return 'Date';
+    case 3:
+      return 'Time';
+    case 4:
+      return 'Percentage';
+    case 5:
+      return 'Fraction';
+    case 6:
+      return 'Scientific';
+    case 7: // 'Custom'
+      return metric.formatString;
+    case 8:
+      return 'Special';
+    default:
+      return 'General';
     }
   }
 
@@ -275,25 +275,41 @@ class OfficeApiHelper {
     context.trackedObjects.remove(tableRange)
   }
 
-  removeObjectNotExistingInExcel = async (t, report, officeContext) => {
-    notificationService.displayTranslatedNotification({ type: 'warning', content: t('{{name}} has been removed from the workbook.', { name: report.name }) });
-    officeDisplayService.removeReportFromStore(report.bindId);
-    await officeContext.document.bindings.releaseByIdAsync(report.bindId, () => { console.log('released binding'); });
+  /**
+   * Remove objects that no longer exists in the Excel workbook from the store
+   *
+   * @param {Function} t i18n translating function
+   * @param {Object} object Contains information obout the object
+   * @param {Office} officeContext Excel context
+   * @memberof OfficeApiHelper
+   */
+  removeObjectNotExistingInExcel = async (t, object, officeContext) => {
+    notificationService.displayTranslatedNotification({ type: 'warning', content: t('{{name}} has been removed from the workbook.', { name: object.name }) });
+    officeDisplayService.removeReportFromStore(object.bindId);
+    await officeContext.document.bindings.releaseByIdAsync(object.bindId, () => { console.log('released binding'); });
   }
 
-  checkIfObjectExist = async (t, report, excelContext) => {
+  /**
+   * Checks if the object existing in Excel workbook
+   *
+   * @param {Function} t i18n translating function
+   * @param {Object} object Contains information obout the object
+   * @param {Office} excelContext Excel context
+   * @memberof OfficeApiHelper
+   * @return {Boolean}
+   */
+  checkIfObjectExist = async (t, object, excelContext) => {
     const officeContext = await this.getOfficeContext();
     let result = true;
     try {
-      await this.getTable(excelContext, report.bindId);
+      await this.getTable(excelContext, object.bindId);
       await excelContext.sync();
     } catch (error) {
-      await this.removeObjectNotExistingInExcel(t, report, officeContext);
+      await this.removeObjectNotExistingInExcel(t, object, officeContext);
       result = false
     }
     return result;
   }
-
 
   /**
    * Gets the total range of crosstab report - it sums table body range and headers ranges
