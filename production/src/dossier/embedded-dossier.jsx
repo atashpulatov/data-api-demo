@@ -31,8 +31,8 @@ export default class _EmbeddedDossier extends React.Component {
  */
   onVizSelectionHandler(payload) {
     const { handleSelection } = this.props;
-    const { 0: payloadChapterKey } = Object.keys(payload);
-    const { 0: payloadVisKey } = Object.keys(payload[payloadChapterKey]);
+    const [payloadChapterKey] = Object.keys(payload);
+    const [payloadVisKey] = Object.keys(payload[payloadChapterKey]);
     this.dossierData = {
       ...this.dossierData,
       chapterKey: payloadChapterKey,
@@ -129,7 +129,7 @@ export default class _EmbeddedDossier extends React.Component {
 
     microstrategy.dossier
       .create(props)
-      .then(async () => {
+      .then(() => {
         this.dossierData = {
           promptsAnswers,
           preparedInstanceId: instance.mid,
