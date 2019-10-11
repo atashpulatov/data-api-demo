@@ -139,25 +139,6 @@ class OfficeStoreService {
       this.preserveReport(report);
     }
   };
-
-  preserveBrowsingFilters = (browsingFiltersApplied) => {
-    try {
-      const settings = this.getOfficeSettings();
-      settings.set(officeProperties.browsingFiltersApplied, browsingFiltersApplied);
-      settings.saveAsync();
-    } catch (error) {
-      errorService.handleError(error);
-    }
-  }
-
-  getBrowsingFilters = () => {
-    try {
-      const settings = this.getOfficeSettings();
-      return settings.get(officeProperties.browsingFiltersApplied);
-    } catch (error) {
-      errorService.handleError(error);
-    }
-  }
 }
 
 export const officeStoreService = new OfficeStoreService();

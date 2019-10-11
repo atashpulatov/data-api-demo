@@ -26,20 +26,16 @@ export class _NavigationTree extends Component {
   }
 
   componentDidMount() {
-    const preservedBrowsingState = browserStoreService.getBrowsingFilters();
-    console.log('mounting');
-    console.log(preservedBrowsingState);
-    this.setState({ ...preservedBrowsingState });
-    console.log({ state: this.state });
-
     this.connectToCache();
   }
 
-  componentWillUnmount() {
-    console.log('unmount');
-    console.log(this.state);
-
-    browserStoreService.preserveBrowsingFilters(this.state);
+  componentDidUpdate() {
+    const { sorter, objectType, filter, myLibrary } = this.props;
+    const propsToSave = { sorter, objectType, filter, myLibrary };
+    window.Office.context.ui.messageParent(JSON.stringify({
+      command: selectorProperties.commandBrowseUpdate,
+      body: propsToSave,
+    }));
   }
 
   connectToCache = () => {
@@ -183,59 +179,6 @@ export class _NavigationTree extends Component {
           previewDisplay={previewDisplay}
           disableSecondary={objectType && objectType.name === mstrObjectEnum.mstrObjectType.dossier.name}
         />
-        {/* Temporary loading user action block */}
-        <div
-          id="action-block"
-          style={{
-            display: loading ? 'block' : 'none',
-            position: 'fixed',
-            top: '0',
-            left: '0',
-            height: '100vh',
-            width: '100vw',
-            zindex: '100',
-            backgroundColor: '#fff',
-            opacity: '0.5',
-          }}
-        />
-        <div className="navigation_tree__main_wrapper">
-          <div className="navigation_tree__title_bar">{t('Import Data')}</div>
-          {/* <div className="navigation_tree__table_wrapper" style={{ fontSize: 12 }}> */}
-          <div style={{ padding: 64, fontSize: 20 }}>
-            <p>
-              Projects:
-              {' '}
-              {cache.projects.length}
-            </p>
-            <br />
-            <p>
-              My Library
-              {' '}
-              {cache.myLibrary.isLoading ? '(loading):' : ':'}
-              {' '}
-              {cache.myLibrary.objects.length}
-            </p>
-            <br />
-            <p>
-              Environment Library
-              {' '}
-              {cache.environmentLibrary.isLoading ? '(loading):' : ':'}
-              {' '}
-              {cache.environmentLibrary.objects.length}
-            </p>
-            <button type="button" onClick={this.refresh}>Refresh</button>
-
-          </div>
-          <PopupButtons
-            loading={loading}
-            disableActiveActions={!chosenObjectId}
-            handleOk={this.handleOk}
-            handleSecondary={this.handleSecondary}
-            handleCancel={this.handleCancel}
-            previewDisplay={previewDisplay}
-            disableSecondary={objectType && objectType.name === mstrObjectEnum.mstrObjectType.dossier.name}
-          />
-        </div>
       </div>
     );
   }

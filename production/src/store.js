@@ -19,7 +19,6 @@ const rootReducer = combineReducers({
   navigationTree,
   popupReducer,
   cacheReducer,
-  browserReducer,
 });
 
 const persistConfig = {

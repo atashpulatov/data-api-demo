@@ -13,8 +13,6 @@ class BrowserStoreService {
 
   preserveBrowsingFilters = (browsingFiltersApplied) => {
     try {
-      console.log({ browsingFiltersApplied });
-
       const settings = this.getOfficeSettings();
       settings.set(officeProperties.browsingFiltersApplied, browsingFiltersApplied);
       settings.saveAsync();

@@ -5,7 +5,6 @@ import { sessionHelper } from '../storage/session-helper';
 import { notificationService } from '../notification/notification-service';
 import { reduxStore } from '../store';
 import {
-  CLEAR_WINDOW,
   refreshReportsArray,
   START_REPORT_LOADING,
   STOP_REPORT_LOADING,
@@ -16,6 +15,8 @@ import { officeProperties } from '../office/office-properties';
 import { officeApiHelper } from '../office/office-api-helper';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { officeStoreService } from '../office/store/office-store-service';
+import { browserStoreService } from '../browser/browser-store-service';
+import { LOAD_BROWSING_STATE_CONST } from '../browser/browser-actions';
 
 const URL = `${window.location.href}`;
 
@@ -61,7 +62,10 @@ class PopupController {
           console.timeEnd('Popup load time');
           dialog.addEventHandler(Office.EventType.DialogMessageReceived,
             this.onMessageFromPopup.bind(null, dialog, reportParams));
-          reduxStore.dispatch({ type: CLEAR_WINDOW });
+
+          const browsingState = browserStoreService.getBrowsingFilters();
+          reduxStore.dispatch({ type: LOAD_BROWSING_STATE_CONST, browsingState });
+
           dialog.addEventHandler(
             // Event received on dialog close
             Office.EventType.DialogEventReceived,
@@ -81,37 +85,42 @@ class PopupController {
   onMessageFromPopup = async (dialog, reportParams, arg) => {
     const { message } = arg;
     const response = JSON.parse(message);
+    if (response.command === selectorProperties.commandBrowseUpdate) {
+      browserStoreService.preserveBrowsingFilters(response.body);
+      // reduxStore.dispatch({ type: LOAD_BROWSING_STATE_CONST, browsingState: response.body });
+      return;
+    }
     try {
       await this.closeDialog(dialog);
       await officeApiHelper.getExcelSessionStatus(); // checking excel session status
       switch (response.command) {
-      case selectorProperties.commandOk:
-        if (!reportParams) {
-          await this.handleOkCommand(response, reportParams);
-        } else {
-          const reportPreviousState = this._getReportsPreviousState(reportParams);
-          await this.saveReportWithParams(reportParams,
-            response,
-            reportPreviousState);
-        }
-        break;
-      case selectorProperties.commandOnUpdate:
-        if (!reportParams) {
-          await this.handleUpdateCommand(response);
-        } else {
-          const reportPreviousState = this._getReportsPreviousState(reportParams);
-          await this.saveReportWithParams(reportParams,
-            response,
-            reportPreviousState);
-        }
-        break;
-      case selectorProperties.commandCancel:
-        break;
-      case selectorProperties.commandError:
-        errorService.handleError(response.error);
-        break;
-      default:
-        break;
+        case selectorProperties.commandOk:
+          if (!reportParams) {
+            await this.handleOkCommand(response, reportParams);
+          } else {
+            const reportPreviousState = this._getReportsPreviousState(reportParams);
+            await this.saveReportWithParams(reportParams,
+              response,
+              reportPreviousState);
+          }
+          break;
+        case selectorProperties.commandOnUpdate:
+          if (!reportParams) {
+            await this.handleUpdateCommand(response);
+          } else {
+            const reportPreviousState = this._getReportsPreviousState(reportParams);
+            await this.saveReportWithParams(reportParams,
+              response,
+              reportPreviousState);
+          }
+          break;
+        case selectorProperties.commandCancel:
+          break;
+        case selectorProperties.commandError:
+          errorService.handleError(response.error);
+          break;
+        default:
+          break;
       }
     } catch (error) {
       console.error(error);
