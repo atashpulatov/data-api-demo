@@ -8,6 +8,7 @@ import { notificationService } from '../notification/notification-service';
 import { errorService } from '../error/error-handler';
 import mstrNormalizedJsonHandler from '../mstr-object/mstr-normalized-json-handler';
 import { CONTEXT_LIMIT } from '../mstr-object/mstr-object-rest-service';
+import officeDisplayService from './office-display-service';
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
@@ -272,6 +273,40 @@ class OfficeApiHelper {
     context.runtime.enableEvents = true;
     await context.sync();
     context.trackedObjects.remove(tableRange)
+  }
+
+  /**
+   * Remove objects that no longer exists in the Excel workbook from the store
+   *
+   * @param {Function} t i18n translating function
+   * @param {Object} object Contains information obout the object
+   * @param {Office} officeContext Excel context
+   * @memberof OfficeApiHelper
+   */
+  removeObjectNotExistingInExcel = async (t, object, officeContext) => {
+    officeDisplayService.removeReportFromStore(object.bindId);
+    await officeContext.document.bindings.releaseByIdAsync(object.bindId, () => { console.log('released binding'); });
+  }
+
+  /**
+   * Checks if the object existing in Excel workbook
+   *
+   * @param {Function} t i18n translating function
+   * @param {Object} object Contains information obout the object
+   * @param {Office} excelContext Excel context
+   * @memberof OfficeApiHelper
+   * @return {Boolean}
+   */
+  checkIfObjectExist = async (t, object, excelContext) => {
+    const officeContext = await this.getOfficeContext();
+    try {
+      await this.getTable(excelContext, object.bindId);
+      await excelContext.sync();
+      return true;
+    } catch (error) {
+      await this.removeObjectNotExistingInExcel(t, object, officeContext);
+      return false;
+    }
   }
 
   /**

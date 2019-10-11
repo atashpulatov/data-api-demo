@@ -79,7 +79,7 @@ export class _Header extends Component {
         {isClearing
           && (
             <div className="block-all-ui">
-              <LoadingText text={t('Clearing data...')} />
+              <LoadingText text={t('Clearing data')} />
             </div>
           )}
         <header id="app-header">
@@ -105,9 +105,7 @@ export class _Header extends Component {
   }
 }
 
-_Header.defaultProps = {
-  t: (text) => text,
-};
+_Header.defaultProps = { t: (text) => text };
 
 function mapStateToProps({ officeReducer }) {
   const { isSettings, isConfirm, isClearing } = officeReducer;
