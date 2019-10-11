@@ -63,8 +63,6 @@ export class _AttributeSelector extends Component {
   }
 }
 
-_AttributeSelector.defaultProps = {
-  t: (text) => text,
-};
+_AttributeSelector.defaultProps = { t: (text) => text, };
 
 export const AttributeSelector = withTranslation('common')(_AttributeSelector);

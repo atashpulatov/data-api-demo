@@ -135,9 +135,7 @@ export function refreshReportsArray(reportArray, isRefreshAll) {
 }
 
 export function resetState() {
-  return (dispatch) => dispatch({
-    type: RESET_STATE,
-  });
+  return (dispatch) => dispatch({ type: RESET_STATE, });
 }
 
 export const actions = {
