@@ -284,7 +284,6 @@ class OfficeApiHelper {
    * @memberof OfficeApiHelper
    */
   removeObjectNotExistingInExcel = async (t, object, officeContext) => {
-    notificationService.displayTranslatedNotification({ type: 'warning', content: t('{{name}} has been removed from the workbook.', { name: object.name }) });
     officeDisplayService.removeReportFromStore(object.bindId);
     await officeContext.document.bindings.releaseByIdAsync(object.bindId, () => { console.log('released binding'); });
   }
@@ -300,15 +299,14 @@ class OfficeApiHelper {
    */
   checkIfObjectExist = async (t, object, excelContext) => {
     const officeContext = await this.getOfficeContext();
-    let result = true;
     try {
       await this.getTable(excelContext, object.bindId);
       await excelContext.sync();
+      return true;
     } catch (error) {
       await this.removeObjectNotExistingInExcel(t, object, officeContext);
-      result = false
+      return false;
     }
-    return result;
   }
 
   /**
