@@ -128,7 +128,7 @@ export class _NavigationTree extends Component {
     } = this.props;
     const { triggerUpdate, previewDisplay } = this.state;
     const objects = myLibrary ? cache.myLibrary.objects : cache.environmentLibrary.objects;
-
+    const cacheLoading = myLibrary ? cache.myLibrary.isLoading : cache.environmentLibrary.isLoading;
     return (
       <div className="navigation_tree__main_wrapper">
         <div className="navigation_tree__title_bar">
@@ -139,7 +139,7 @@ export class _NavigationTree extends Component {
             applications={cache.projects}
             onFilterChange={changeFilter}
             onSearch={changeSearching}
-            isLoading={loading}
+            isLoading={cacheLoading}
             myLibrary={myLibrary}
             filter={filter}
             onRefresh={() => this.refresh()}
@@ -158,7 +158,7 @@ export class _NavigationTree extends Component {
           locale={i18n.language}
           searchText={searchText}
           filter={filter}
-          isLoading={loading} />
+          isLoading={cacheLoading} />
         <PopupButtons
           loading={loading}
           disableActiveActions={!chosenObjectId}
