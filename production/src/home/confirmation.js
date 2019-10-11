@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
@@ -27,21 +28,23 @@ export const _Confirmation = ({ reportArray, toggleSecuredFlag, toggleIsConfirmF
       toggleIsConfirmFlag(false);
       const excelContext = await officeApiHelper.getExcelContext();
       for (const report of reportArray) {
-        try {
-          reportName = report.name;
-          if (report.isCrosstab) {
-            const officeTable = await officeApiHelper.getTable(excelContext, report.bindId);
-            officeApiHelper.clearEmptyCrosstabRow(officeTable); // Since showing Excel table header dont override the data but insert new row, we clear values from empty row in crosstab to prevent it
-            officeTable.showHeaders = true;
-            officeTable.showFilterButton = false;
-            const headers = officeTable.getHeaderRowRange();
-            headers.format.font.color = 'white';
-            await excelContext.sync();
+        if (await officeApiHelper.checkIfObjectExist(t, report, excelContext)) {
+          try {
+            reportName = report.name;
+            if (report.isCrosstab) {
+              const officeTable = await officeApiHelper.getTable(excelContext, report.bindId);
+              officeApiHelper.clearEmptyCrosstabRow(officeTable); // Since showing Excel table header dont override the data but insert new row, we clear values from empty row in crosstab to prevent it
+              officeTable.showHeaders = true;
+              officeTable.showFilterButton = false;
+              const headers = officeTable.getHeaderRowRange();
+              headers.format.font.color = 'white';
+              await excelContext.sync();
+            }
+            await officeApiHelper.deleteObjectTableBody(excelContext, report);
+          } catch (error) {
+            const officeError = errorService.handleError(error);
+            clearErrors.push({ reportName, officeError });
           }
-          await officeApiHelper.deleteObjectTableBody(excelContext, report);
-        } catch (error) {
-          const officeError = errorService.handleError(error);
-          clearErrors.push({ reportName, officeError });
         }
       }
       toggleIsConfirmFlag(false);
