@@ -8,6 +8,7 @@ import { notificationService } from '../notification/notification-service';
 import { errorService } from '../error/error-handler';
 import mstrNormalizedJsonHandler from '../mstr-object/mstr-normalized-json-handler';
 import { CONTEXT_LIMIT } from '../mstr-object/mstr-object-rest-service';
+import officeDisplayService from './office-display-service';
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
@@ -204,30 +205,30 @@ class OfficeApiHelper {
 
   _getNumberFormattingCategoryName = (metric) => {
     switch (metric.category) {
-    case -2:
-      return 'Default';
-    case 9:
-      return 'General';
-    case 0:
-      return 'Fixed';
-    case 1:
-      return 'Currency';
-    case 2:
-      return 'Date';
-    case 3:
-      return 'Time';
-    case 4:
-      return 'Percentage';
-    case 5:
-      return 'Fraction';
-    case 6:
-      return 'Scientific';
-    case 7: // 'Custom'
-      return metric.formatString;
-    case 8:
-      return 'Special';
-    default:
-      return 'General';
+      case -2:
+        return 'Default';
+      case 9:
+        return 'General';
+      case 0:
+        return 'Fixed';
+      case 1:
+        return 'Currency';
+      case 2:
+        return 'Date';
+      case 3:
+        return 'Time';
+      case 4:
+        return 'Percentage';
+      case 5:
+        return 'Fraction';
+      case 6:
+        return 'Scientific';
+      case 7: // 'Custom'
+        return metric.formatString;
+      case 8:
+        return 'Special';
+      default:
+        return 'General';
     }
   }
 
@@ -273,6 +274,26 @@ class OfficeApiHelper {
     await context.sync();
     context.trackedObjects.remove(tableRange)
   }
+
+  removeObjectNotExistingInExcel = async (t, report, officeContext) => {
+    notificationService.displayTranslatedNotification({ type: 'warning', content: t('{{name}} has been removed from the workbook.', { name: report.name }) });
+    officeDisplayService.removeReportFromStore(report.bindId);
+    await officeContext.document.bindings.releaseByIdAsync(report.bindId, () => { console.log('released binding'); });
+  }
+
+  checkIfObjectExist = async (t, report, excelContext) => {
+    const officeContext = await this.getOfficeContext();
+    let result = true;
+    try {
+      await this.getTable(excelContext, report.bindId);
+      await excelContext.sync();
+    } catch (error) {
+      await this.removeObjectNotExistingInExcel(t, report, officeContext);
+      result = false
+    }
+    return result;
+  }
+
 
   /**
    * Gets the total range of crosstab report - it sums table body range and headers ranges
