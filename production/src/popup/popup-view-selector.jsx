@@ -222,9 +222,10 @@ function proceedToImport(props) {
 
 function renderProperComponent(popupType, methods, propsToPass, editedReport) {
   if (popupType === PopupTypeEnum.dataPreparation) {
+    const mstrData = { ...propsToPass, instanceId: editedReport.instanceId }
     return (
       <AttributeSelectorWindow
-        mstrData={propsToPass}
+        mstrData={mstrData}
         handleBack={methods.handleBack}
         handlePopupErrors={methods.handlePopupErrors}
       />
@@ -235,7 +236,6 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
       ...propsToPass,
       ...editedReport,
     };
-
     return (
       <AttributeSelectorWindow
         mstrData={mstrData}
