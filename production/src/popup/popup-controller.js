@@ -63,9 +63,6 @@ class PopupController {
           dialog.addEventHandler(Office.EventType.DialogMessageReceived,
             this.onMessageFromPopup.bind(null, dialog, reportParams));
 
-          const browsingState = browserStoreService.getBrowsingFilters();
-          reduxStore.dispatch({ type: LOAD_BROWSING_STATE_CONST, browsingState });
-
           dialog.addEventHandler(
             // Event received on dialog close
             Office.EventType.DialogEventReceived,
@@ -86,8 +83,7 @@ class PopupController {
     const { message } = arg;
     const response = JSON.parse(message);
     if (response.command === selectorProperties.commandBrowseUpdate) {
-      browserStoreService.preserveBrowsingFilters(response.body);
-      // reduxStore.dispatch({ type: LOAD_BROWSING_STATE_CONST, browsingState: response.body });
+      reduxStore.dispatch({ type: LOAD_BROWSING_STATE_CONST, browsingState: response.body });
       return;
     }
     try {
