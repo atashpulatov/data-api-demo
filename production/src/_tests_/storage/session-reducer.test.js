@@ -20,18 +20,14 @@ describe('sessionReducer', () => {
         isRememberMeOn: false,
       },
     });
-    sessionStore.dispatch({
-      type: sessionProperties.actions.logOut,
-    });
+    sessionStore.dispatch({ type: sessionProperties.actions.logOut, });
   });
 
   it('should throw error due to missing loading property', () => {
     // given
     // when
     const wrongActionCall = () => {
-      sessionStore.dispatch({
-        type: sessionProperties.actions.setLoading,
-      });
+      sessionStore.dispatch({ type: sessionProperties.actions.setLoading, });
     };
     // then
     expect(wrongActionCall).toThrowError(SessionError);
@@ -83,9 +79,7 @@ describe('sessionReducer', () => {
     const givenToken = 'token';
     const givenFullName = 'Name';
     const givenInitials = 'Initials';
-    const state = {
-      isRememberMeOn: rememberMe, authToken: givenToken, userFullName: givenFullName, userInitials: givenInitials,
-    };
+    const state = { isRememberMeOn: rememberMe, authToken: givenToken, userFullName: givenFullName, userInitials: givenInitials, };
     const action = { type: sessionProperties.actions.logOut };
     // const spyLogOut = jest.spyOn(sessionReducer, 'onLogOut');
     // when
@@ -131,9 +125,7 @@ describe('sessionReducer', () => {
     // given
     // when
     const wrongActionCall = () => {
-      sessionStore.dispatch({
-        type: sessionProperties.actions.loggedIn,
-      });
+      sessionStore.dispatch({ type: sessionProperties.actions.loggedIn, });
     };
     // then
     expect(wrongActionCall).toThrowError(SessionError);
@@ -153,5 +145,17 @@ describe('sessionReducer', () => {
     // then
     expect(sessionStore.getState().userFullName).toEqual(givenFullName);
     expect(sessionStore.getState().userInitials).toEqual(givenInitials);
+  });
+
+  it('should save givenDialog on setDialog action', () => {
+    // given
+    const mockDialog = { close: () => { } };
+    // when
+    sessionStore.dispatch({
+      type: sessionProperties.actions.setDialog,
+      dialog: mockDialog,
+    });
+    // then
+    expect(sessionStore.getState().dialog).toEqual(mockDialog);
   });
 });
