@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
-import { FolderBrowser, objectTypes } from '@mstr/mstr-react-library';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
+import { ObjectTable, TopFilterPanel } from '@mstr/rc';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { PopupButtons } from '../popup/popup-buttons';
 import { actions } from './navigation-tree-actions';
 import { isPrompted as checkIfPrompted } from '../mstr-object/mstr-object-rest-service';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import './navigation-tree.css';
+import { connectToCache, clearCache, createCache, listenToCache, REFRESH_CACHE_COMMAND, refreshCacheState } from '../cache/cache-actions';
 
+const DB_TIMEOUT = 3000; // Interval for checking indexedDB changes on IE
 
 export class _NavigationTree extends Component {
   constructor(props) {
@@ -16,7 +19,46 @@ export class _NavigationTree extends Component {
       triggerUpdate: false,
       previewDisplay: false,
     };
+    const ua = window.navigator.userAgent;
+    this.isMSIE = ua.indexOf('MSIE ') > 0 || !!navigator.userAgent.match(/Trident.*rv:11\./);
   }
+
+  componentDidMount() {
+    this.connectToCache();
+  }
+
+  componentWillUnmount() {
+    this.DBOnChange.cancel()
+  }
+
+  connectToCache = () => {
+    const { connectToDB, listenToDB } = this.props;
+    if (this.isMSIE) {
+      [this.DB, this.DBOnChange] = listenToDB();
+      this.DBOnChange.then(this.startDBListener)
+    } else {
+      [this.DB, this.DBOnChange] = connectToDB();
+    }
+  };
+
+  startDBListener = () => {
+    const { cache, listenToDB } = this.props;
+    if (cache.projects.length < 1 || cache.myLibrary.isLoading || cache.environmentLibrary.isLoading) {
+      setTimeout(() => {
+        [this.DB, this.DBOnChange] = listenToDB(this.DB);
+        this.DBOnChange.then(this.startDBListener());
+      }, DB_TIMEOUT);
+    }
+  };
+
+  refresh = () => {
+    if (!this.isMSIE && this.DBOnChange) this.DBOnChange.cancel();
+    this.props.resetDB();
+    window.Office.context.ui.messageParent(JSON.stringify({ command: REFRESH_CACHE_COMMAND }));
+    setTimeout(() => {
+      this.connectToCache();
+    }, 1000);
+  };
 
   handleOk = () => {
     const { objectType, requestImport, requestDossierOpen } = this.props;
@@ -25,7 +67,7 @@ export class _NavigationTree extends Component {
     } else {
       requestImport();
     }
-  }
+  };
 
   onTriggerUpdate = (body) => {
     const updateObject = {
@@ -49,7 +91,7 @@ export class _NavigationTree extends Component {
   handleCancel = () => {
     const { stopLoading } = this.props;
     stopLoading();
-    const cancelObject = { command: selectorProperties.commandCancel, };
+    const cancelObject = { command: selectorProperties.commandCancel };
     window.Office.context.ui.messageParent(JSON.stringify(cancelObject));
   };
 
@@ -87,53 +129,42 @@ export class _NavigationTree extends Component {
 
   render() {
     const {
-      setDataSource, dataSource, chosenObjectId, chosenProjectId, pageSize, changeSearching, changeSorting,
-      chosenSubtype, folder, selectFolder, loading, handlePopupErrors, scrollPosition, searchText, sorter,
-      updateScroll, mstrData, updateSize, t, objectType,
+      chosenObjectId, chosenProjectId, changeSorting, loading, handlePopupErrors, searchText, sorter,
+      changeSearching, objectType, cache, filter, myLibrary, switchMyLibrary, changeFilter, t, i18n,
     } = this.props;
     const { triggerUpdate, previewDisplay } = this.state;
+    const objects = myLibrary ? cache.myLibrary.objects : cache.environmentLibrary.objects;
+    const cacheLoading = cache.myLibrary.isLoading || cache.environmentLibrary.isLoading;
     return (
-      <FolderBrowser
-        onSorterChange={changeSorting}
-        onSearchChange={changeSearching}
-        searchText={searchText}
-        sorter={sorter}
-        title="Import data"
-        session={{ url: mstrData.envUrl, authToken: mstrData.token }}
-        triggerUpdate={triggerUpdate}
-        onTriggerUpdate={this.onTriggerUpdate}
-        onObjectChosen={this.onObjectChosen}
-        setDataSource={setDataSource}
-        dataSource={dataSource}
-        chosenItem={{
-          objectId: chosenObjectId,
-          projectId: chosenProjectId,
-          subtype: chosenSubtype,
-        }}
-        scrollPosition={scrollPosition}
-        pageSize={pageSize}
-        chosenFolder={folder}
-        onChoseFolder={selectFolder}
-        handlePopupErrors={handlePopupErrors}
-        onSizeUpdated={updateSize}
-        onScrollUpdated={updateScroll}
-        t={t}
-      >
-        {/* Temporary loading user action block */}
-        <div
-          id="action-block"
-          style={{
-            display: loading ? 'block' : 'none',
-            position: 'fixed',
-            top: '0',
-            left: '0',
-            height: '100vh',
-            width: '100vw',
-            zindex: '100',
-            backgroundColor: '#fff',
-            opacity: '0.5',
+      <div className="navigation_tree__main_wrapper">
+        <div className="navigation_tree__title_bar">
+          <span>{t('Import Data')}</span>
+          <TopFilterPanel
+            locale={i18n.language}
+            objects={objects}
+            applications={cache.projects}
+            onFilterChange={changeFilter}
+            onSearch={changeSearching}
+            isLoading={cacheLoading}
+            myLibrary={myLibrary}
+            filter={filter}
+            onRefresh={() => this.refresh()}
+            onSwitch={switchMyLibrary} />
+        </div>
+        <ObjectTable
+          objects={objects}
+          projects={cache.projects}
+          selected={{
+            id: chosenObjectId,
+            projectId: chosenProjectId,
           }}
-        />
+          onSelect={({ id, projectId, subtype }) => this.onObjectChosen(id, projectId, subtype)}
+          sort={sorter}
+          onSortChange={changeSorting}
+          locale={i18n.language}
+          searchText={searchText}
+          filter={filter}
+          isLoading={cacheLoading} />
         <PopupButtons
           loading={loading}
           disableActiveActions={!chosenObjectId}
@@ -143,19 +174,29 @@ export class _NavigationTree extends Component {
           previewDisplay={previewDisplay}
           disableSecondary={objectType && objectType.name === mstrObjectEnum.mstrObjectType.dossier.name}
         />
-      </FolderBrowser>
+      </div>
     );
   }
 }
 
-_NavigationTree.defaultProps = { t: (text) => text, };
+_NavigationTree.defaultProps = { t: (text) => text };
 
-export const mapStateToProps = ({ officeReducer, navigationTree }) => {
+export const mapStateToProps = ({ officeReducer, navigationTree, cacheReducer }) => {
   const object = officeReducer.preLoadReport;
   return {
     ...navigationTree,
     title: object ? object.name : undefined,
+    cache: cacheReducer,
   };
 };
 
-export const NavigationTree = connect(mapStateToProps, actions)(withTranslation('common')(_NavigationTree));
+const mapActionsToProps = {
+  ...actions,
+  initDB: createCache,
+  connectToDB: connectToCache,
+  listenToDB: listenToCache,
+  clearDB: clearCache,
+  resetDB: refreshCacheState,
+};
+
+export const NavigationTree = connect(mapStateToProps, mapActionsToProps)(withTranslation('common')(_NavigationTree));

@@ -36,7 +36,7 @@
     "key-spacing": "off",
     "max-len": [
       "error",
-      120,
+      150,
       2
     ],
     "object-curly-spacing": [
@@ -50,7 +50,8 @@
         "ignoredNodes": [
           "JSXElement *",
           "JSXElement"
-        ]
+        ],
+        "SwitchCase": 1
       }
     ],
     "comma-dangle": "off",
@@ -71,7 +72,6 @@
     ],
     "no-multi-str": "off",
     "no-invalid-this": "off",
-    "arrow-parens": "off",
     "no-param-reassign": "off",
     "consistent-return": "off",
     "no-plusplus": "off",

@@ -16,19 +16,15 @@ export class Popup extends Component {
     super(props);
     const location = (props.location && props.location.search) || window.location.search;
     const mstrData = queryString.parse(location);
-    this.state = {
-      mstrData,
-    };
+    this.state = { mstrData, };
     libraryErrorController.initializeHttpErrorsHandling(this.handlePopupErrors);
   }
 
-  handlePrepare = (
-    projectId,
+  handlePrepare = (projectId,
     reportId,
     reportSubtype,
     reportName,
-    reportType,
-  ) => {
+    reportType) => {
     this.setState({
       mstrData: {
         ...this.state.mstrData,
@@ -44,22 +40,21 @@ export class Popup extends Component {
   };
 
   handleBack = (projectId, reportId, reportSubtype, forceChange = false) => {
-    this.setState(
-      {
-        mstrData: {
-          ...this.state.mstrData,
-          popupType: PopupTypeEnum.navigationTree,
-          forceChange,
-          projectId,
-          reportId,
-          reportSubtype,
-        },
+    this.setState({
+      mstrData: {
+        ...this.state.mstrData,
+        popupType: PopupTypeEnum.navigationTree,
+        forceChange,
+        projectId,
+        reportId,
+        reportSubtype,
       },
+    },
     () => {
       reduxStore.dispatch({ type: CLEAR_PROMPTS_ANSWERS });
       reduxStore.dispatch({ type: CANCEL_DOSSIER_OPEN });
     });
-  }
+  };
 
   handlePopupErrors = (error) => {
     const messageObject = {
@@ -78,11 +73,9 @@ export class Popup extends Component {
       handleBack: this.handleBack,
       handlePopupErrors: this.handlePopupErrors,
     };
-    i18next.changeLanguage(
-      i18next.options.resources[Office.context.displayLanguage]
-        ? Office.context.displayLanguage
-        : 'en-US',
-    );
+    i18next.changeLanguage(i18next.options.resources[Office.context.displayLanguage]
+      ? Office.context.displayLanguage
+      : 'en-US');
     return (
       <PopupViewSelector
         popupType={popupType}

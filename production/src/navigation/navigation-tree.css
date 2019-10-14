@@ -1,0 +1,31 @@
+.navigation_tree__main_wrapper {
+  height: calc(100% - 125px);
+}
+
+.navigation_tree__title_bar {
+  font-size: 18px;
+  color: #333333;
+  margin: 15px;
+}
+
+.navigation_tree__table_wrapper {
+  background: #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 100px;
+  height: 100%;
+  border: 2px dotted black
+}
+
+.ReactVirtualized__Table__rowColumn.radio > input {
+  margin-left: 2px;
+}
+
+.top-filter-panel {
+  float: right;
+}
+
+.panel-container {
+  z-index: 2;
+}

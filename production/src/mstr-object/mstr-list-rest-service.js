@@ -5,7 +5,7 @@ import filterDossiersByViewMedia from '../helpers/viewMediaHelper';
 const SEARCH_ENDPOINT = 'searches/results';
 const PROJECTS_ENDPOINT = 'projects';
 const MY_LIBRARY_ENDPOINT = 'library';
-const LIMIT = 4096;
+const LIMIT = 7000;
 const DOSSIER_SUBTYPE = 14081;
 const SUBTYPES = [768, 769, 774, 776, 779, DOSSIER_SUBTYPE];
 
@@ -16,8 +16,8 @@ const SUBTYPES = [768, 769, 774, 776, 779, DOSSIER_SUBTYPE];
  * @returns {Array}
  */
 export function filterDossier(body) {
-  const { result, totalItems } = body;
-  return { result: result.filter(filterFunction), totalItems };
+  const { result } = body;
+  return result.filter(filterFunction);
 }
 
 /**
@@ -61,10 +61,10 @@ export function getRequestParams() {
  * @param {Object} { limit = 1, callback = processTotalItems, requestParams }
  * @returns {Array} [totalItems, Promise]
  */
-export function fetchTotalItems({ limit = LIMIT, callback, requestParams }) {
+export function fetchTotalItems({ limit = LIMIT, callback = (res) => res, requestParams }) {
   const totalItemsCallback = (body) => {
-    const filtered = filterDossier(body);
-    return [filtered.totalItems, callback(filtered)];
+    callback(filterDossier(body));
+    return processTotalItems(body);
   };
   return fetchObjectList({ limit, callback: totalItemsCallback, requestParams });
 }
@@ -88,15 +88,24 @@ export function getProjectDictionary() {
  */
 export async function fetchObjectListPagination(callback) {
   const requestParams = getRequestParams();
-  const paginationArgs = { callback, requestParams };
-  const [total, promise] = await fetchTotalItems(paginationArgs);
-  const promiseList = [promise];
-  let offset = LIMIT;
+  console.time('Fetching first batch of objects');
+  const total = await fetchTotalItems({ requestParams, callback, limit: 1000 });
+  console.timeEnd('Fetching first batch of objects');
+  const promiseList = [];
+  let offset = 1000;
+  console.time('Fetching environment objects');
   while (offset <= total) {
-    promiseList.push(fetchObjectList({ ...paginationArgs, offset }));
+    const promise = fetchObjectList({ requestParams, offset });
+    promiseList.push(promise);
+    const results = await promise;
+    callback(results);
     offset += LIMIT;
   }
-  return Promise.all(promiseList);
+  return Promise.all(promiseList).then(() => {
+    console.timeEnd('Fetching environment objects');
+    // const flatObjects = Array.prototype.concat.apply([], objects);
+    // return callback(flatObjects);
+  });
 }
 
 /**
@@ -110,7 +119,7 @@ export async function fetchObjectListPagination(callback) {
  * @param {number} limit - Number of objects to be fetched per request
  * @returns
  */
-export function fetchObjectList({ requestParams, callback = (res) => res, offset = 0, limit = LIMIT }) {
+export function fetchObjectList({ requestParams, callback = filterDossier, offset = 0, limit = LIMIT }) {
   const { envUrl, authToken, typeQuery } = requestParams;
   const url = `${envUrl}/${SEARCH_ENDPOINT}?limit=${limit}&offset=${offset}&type=${typeQuery}`;
   return request
@@ -157,7 +166,7 @@ export function fetchProjects(callback = (res) => res) {
  * Returns all objects available in my Library with filtered out non-Dossier objects.
  *
  */
-export function getMyLibraryObjectList(callback) {
+export function getMyLibraryObjectList(callback = (res) => res) {
   const cbFilter = (res) => callback(res.filter((object) => filterDossiersByViewMedia(object.target.viewMedia)));
   return fetchMyLibraryObjectList(cbFilter);
 }
@@ -171,6 +180,5 @@ export function getMyLibraryObjectList(callback) {
  * @class getObjectList
  */
 export default function getObjectList(callback) {
-  const cbFilter = (res) => callback(filterDossier(res).result);
-  return fetchObjectListPagination(cbFilter);
+  return fetchObjectListPagination(callback);
 }
