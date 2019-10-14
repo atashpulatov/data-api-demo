@@ -40,9 +40,9 @@ export class _FileHistoryContainer extends React.Component {
 
   addRemoveReportListener = async () => {
     try {
-      const { reportArray, t } = this.props;
       const excelContext = await officeApiHelper.getExcelContext();
       this.eventRemove = excelContext.workbook.tables.onDeleted.add(async (e) => {
+        const { reportArray, t } = this.props;
         try {
           await Promise.all([
             officeApiHelper.getExcelSessionStatus(),
