@@ -34,8 +34,8 @@ export class _NavigationTree extends Component {
   connectToCache = () => {
     const { connectToDB, listenToDB } = this.props;
     if (this.isMSIE) {
-      this.DB = listenToDB();
-      this.startDBListener();
+      [this.DB, this.DBOnChange] = listenToDB();
+      this.DBOnChange.then(this.startDBListener)
     } else {
       [this.DB, this.DBOnChange] = connectToDB();
     }
@@ -45,8 +45,8 @@ export class _NavigationTree extends Component {
     const { cache, listenToDB } = this.props;
     if (cache.myLibrary.isLoading || cache.environmentLibrary.isLoading) {
       setTimeout(() => {
-        listenToDB(this.DB);
-        this.startDBListener();
+        [this.DB, this.DBOnChange] = listenToDB(this.DB);
+        this.DBOnChange.then(this.startDBListener());
       }, DB_TIMEOUT);
     }
   };

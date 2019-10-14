@@ -138,13 +138,13 @@ export function listenToCache(prevCache) {
       dispatch(objectListLoading(true));
     }
 
-    cache.getAllObjects()
+    const onChange = cache.getAllObjects()
       .then((results) => {
         results.rows.forEach((result) => {
           dispatchCacheResults(result, dispatch)
         })
       });
-    return cache;
+    return [cache, onChange];
   };
 }
 
