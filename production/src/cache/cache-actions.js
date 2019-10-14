@@ -4,12 +4,14 @@ import getObjectList, { getMyLibraryObjectList, fetchProjects } from '../mstr-ob
 
 export const CREATE_CACHE = 'CREATE_CACHE';
 export const CLEAR_CACHE = 'CLEAR_CACHE';
+export const REFRESH_CACHE = 'REFRESH_CACHE';
 export const SET_OBJECT_LIST_LOADING = 'SET_OBJECT_LIST_LOADING';
 export const SET_MY_LIBRARY_LOADING = 'SET_MY_LIBRARY_LOADING';
 export const SET_PROJECTS_LOADING = 'SET_PROJECTS_LOADING';
 export const ADD_MY_LIBRARY_OBJECTS = 'ADD_MY_LIBRARY_OBJECTS';
 export const ADD_PROJECTS = 'ADD_PROJECTS';
 export const ADD_ENV_OBJECTS = 'ADD_ENV_OBJECTS';
+export const REFRESH_CACHE_COMMAND = 'REFRESH_COMMAND';
 
 export const PROJECTS_DB_ID = 'projects';
 export const MY_LIBRARY_DB_ID = 'my-library';
@@ -43,10 +45,10 @@ export const addProjects = (objects) => ({
 
 export const clearStateCache = () => ({ type: CLEAR_CACHE, });
 
-export const resetCacheLoadingState = (username) => {
-  const cache = new DB(username || 'cache');
-  cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, false);
-  cache.putData(LOADING_DB + ENV_LIBRARY_DB_ID, false);
+export const refreshCacheAction = () => ({ type: REFRESH_CACHE, });
+
+export const refreshCacheState = () => (dispatch) => {
+  dispatch(refreshCacheAction());
 }
 
 export function fetchObjects(dispatch, cache) {
@@ -87,6 +89,19 @@ export function createCache() {
     // Remove PouchDBs from other users
     DB.purgePouchDB(username);
     cache.callIfEmpty(() => {
+      fetchObjects(dispatch, cache);
+    });
+  };
+}
+
+export function refreshCache() {
+  return (dispatch, getState) => {
+    // Create or get DB for current user
+    const { sessionReducer } = getState();
+    const { username } = sessionReducer;
+    const cache = new DB(username || 'cache');
+    // Overwrite cache
+    cache.reset().then(() => {
       fetchObjects(dispatch, cache);
     });
   };

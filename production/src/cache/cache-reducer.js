@@ -1,6 +1,4 @@
-import {
-  SET_OBJECT_LIST_LOADING, SET_MY_LIBRARY_LOADING, ADD_MY_LIBRARY_OBJECTS, ADD_PROJECTS, ADD_ENV_OBJECTS, CLEAR_CACHE,
-} from './cache-actions';
+import { SET_OBJECT_LIST_LOADING, SET_MY_LIBRARY_LOADING, ADD_MY_LIBRARY_OBJECTS, ADD_PROJECTS, ADD_ENV_OBJECTS, CLEAR_CACHE, REFRESH_CACHE, } from './cache-actions';
 
 export const DEFAULT_STATE = {
   myLibrary: {
@@ -10,6 +8,18 @@ export const DEFAULT_STATE = {
   projects: [],
   environmentLibrary: {
     isLoading: false,
+    objects: [],
+  },
+};
+
+export const REFRESH_STATE = {
+  myLibrary: {
+    isLoading: true,
+    objects: [],
+  },
+  projects: [],
+  environmentLibrary: {
+    isLoading: true,
     objects: [],
   },
 };
@@ -43,6 +53,8 @@ const cacheReducer = (state = DEFAULT_STATE, action) => {
       };
     case CLEAR_CACHE:
       return DEFAULT_STATE;
+    case REFRESH_CACHE:
+      return REFRESH_STATE;
     default:
       return state;
   }
