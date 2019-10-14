@@ -9,14 +9,40 @@ export default class _EmbeddedDossier extends React.Component {
   constructor(props) {
     super(props);
     this.container = React.createRef();
+    this.msgRouter = null;
+    this.onVizSelectionHandler = this.onVizSelectionHandler.bind(this);
+    this.dossierData = { promptsAnswers: props.mstrData.promptsAnswers, };
   }
 
   componentDidMount() {
     this.loadEmbeddedDossier(this.container.current);
   }
 
+  componentWillUnmount() {
+    this.msgRouter.removeEventhandler('onVizSelectionChanged', this.onVizSelectionHandler);
+  }
+
+  /**
+ * Handles the event throwed after new vizualization selection.
+ * Retrives the selected vizualizationKey and chapterKey.
+ * Passes new data to parent component by handleSelection function.
+ *
+ * @param {Object} payload - payload throwed by embedded.api after the visualization was selected
+ */
+  onVizSelectionHandler(payload) {
+    const { handleSelection } = this.props;
+    const [payloadChapterKey] = Object.keys(payload);
+    const [payloadVisKey] = Object.keys(payload[payloadChapterKey]);
+    this.dossierData = {
+      ...this.dossierData,
+      chapterKey: payloadChapterKey,
+      visualizationKey: payloadVisKey
+    }
+    handleSelection(this.dossierData);
+  }
+
   loadEmbeddedDossier = async (container) => {
-    const { mstrData, handleSelection, handlePopupErrors } = this.props;
+    const { mstrData, handlePopupErrors } = this.props;
     const { envUrl, token, dossierId, projectId, promptsAnswers } = mstrData;
     const instance = {};
     try {
@@ -35,6 +61,11 @@ export default class _EmbeddedDossier extends React.Component {
       }
     } catch (e) {
       handlePopupErrors(e)
+    }
+
+    this.dossierData = {
+      ...this.dossierData,
+      preparedInstanceId: instance.mid,
     }
 
     const libraryUrl = envUrl.replace('api', 'app');
@@ -94,25 +125,14 @@ export default class _EmbeddedDossier extends React.Component {
         enabled: true,
         addToLibrary: false,
       },
+      enableVizSelection: true,
+      onMsgRouterReadyHandler: ({ MsgRouter }) => {
+        this.msgRouter = MsgRouter;
+        this.msgRouter.registerEventHandler('onVizSelectionChanged', this.onVizSelectionHandler);
+      },
     };
 
-    microstrategy.dossier
-      .create(props)
-      .then(async (dossierPage) => {
-        // Workaround until embedding api enables onVisSelection event
-        const chapter = await dossierPage.getCurrentChapter();
-        const visuzalisations = await dossierPage.getCurrentPageVisualizationList();
-        const dossierData = {
-          chapterKey: chapter.nodeKey,
-          visualizationKey: (visuzalisations.length > 0) ? visuzalisations[0].key : '',
-          promptsAnswers,
-          preparedInstanceId: instance.mid,
-        };
-        handleSelection(dossierData);
-        // Workaround end.
-
-        // !TODO: dossierPage.addEventListener('onVisSelection', handleSelection);
-      });
+    microstrategy.dossier.create(props);
   }
 
   render() {
