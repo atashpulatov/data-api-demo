@@ -86,18 +86,18 @@ export function createCache() {
   };
 }
 
-export function connectToCache(reconnect = false) {
+export function connectToCache(prevCache) {
   return (dispatch, getState) => {
     // Create or get DB for current user
     const { sessionReducer } = getState();
     const { username } = sessionReducer;
-    const cache = new DB(username || 'cache');
-    if (!reconnect) {
+    const cache = prevCache || new DB(username || 'cache');
+    if (!prevCache) {
       dispatch(myLibraryLoading(true));
       dispatch(objectListLoading(true));
     }
 
-    return cache.onChange((result) => {
+    const onChange = cache.onChange((result) => {
       console.log(result);
       switch (result.id) {
         case PROJECTS_DB_ID:
@@ -119,25 +119,16 @@ export function connectToCache(reconnect = false) {
           break;
       }
     });
+    return [cache, onChange]
   };
 }
 
-export function clearCache() {
+export function clearCache(prevCache) {
   return (dispatch, getState) => {
     const { sessionReducer } = getState();
     const { username } = sessionReducer;
-    const cache = new DB(username || 'cache');
+    const cache = prevCache || new DB(username || 'cache');
     dispatch(clearStateCache());
     return cache.clear().catch(console.error);
-  };
-}
-
-export function refreshCache(callback) {
-  return (dispatch, getState) => {
-    const { sessionReducer } = getState();
-    const { username } = sessionReducer;
-    const cache = new DB(username || 'cache');
-    dispatch(clearStateCache());
-    return cache.clear().then(callback).catch(console.error);
   };
 }

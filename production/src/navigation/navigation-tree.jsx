@@ -8,7 +8,7 @@ import { actions } from './navigation-tree-actions';
 import { isPrompted as checkIfPrompted } from '../mstr-object/mstr-object-rest-service';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './navigation-tree.css';
-import { connectToCache, refreshCache, createCache } from '../cache/cache-actions';
+import { connectToCache, clearCache, createCache } from '../cache/cache-actions';
 
 const DB_TIMEOUT = 2500; // Interval for checking indexedDB changes on IE
 
@@ -27,31 +27,34 @@ export class _NavigationTree extends Component {
     this.connectToCache();
   }
 
+  componentWillUnmount() {
+    this.DBOnChange.cancel()
+  }
+
   connectToCache = () => {
     const { connectToDB } = this.props;
-    this.DBConnection = connectToDB();
-    if (this.isMSIE) this.startDBListener();
+    [this.DB, this.DBOnChange] = connectToDB();
+    // if (this.isMSIE) this.startDBListener();
   };
 
   startDBListener = () => {
-    const { cache, connectToDB } = this.props;
-    if (cache.projects.length < 1 || cache.myLibrary.isLoading || cache.environmentLibrary.isLoading) {
-      setTimeout(() => {
-        connectToDB(true);
-        this.startDBListener();
-      }, DB_TIMEOUT);
-    } else {
-      this.DBConnection.cancel();
-    }
+    // const { cache, connectToDB } = this.props;
+    // if (cache.projects.length < 1 || cache.myLibrary.isLoading || cache.environmentLibrary.isLoading) {
+    //   setTimeout(() => {
+    //     connectToDB(true);
+    //     this.startDBListener();
+    //   }, DB_TIMEOUT);
+    // } else {
+    //   this.DBConnection.cancel();
+    // }
   };
 
   refresh = () => {
-    this.DBConnection.cancel();
-    const { refreshDB, initDB } = this.props;
-    refreshDB(initDB)
-      .then(() => {
-        this.connectToCache();
-      });
+    this.DBOnChange.cancel();
+    const { clearDB, initDB } = this.props;
+    clearDB(this.DB)
+      .then(initDB)
+      .then(this.connectToCache);
   };
 
   handleOk = () => {
@@ -128,7 +131,7 @@ export class _NavigationTree extends Component {
     } = this.props;
     const { triggerUpdate, previewDisplay } = this.state;
     const objects = myLibrary ? cache.myLibrary.objects : cache.environmentLibrary.objects;
-    const cacheLoading = myLibrary ? cache.myLibrary.isLoading : cache.environmentLibrary.isLoading;
+    const cacheLoading = cache.myLibrary.isLoading || cache.environmentLibrary.isLoading;
     return (
       <div className="navigation_tree__main_wrapper">
         <div className="navigation_tree__title_bar">
@@ -188,7 +191,7 @@ const mapActionsToProps = {
   ...actions,
   initDB: createCache,
   connectToDB: connectToCache,
-  refreshDB: refreshCache,
+  clearDB: clearCache,
 };
 
 export const NavigationTree = connect(mapStateToProps, mapActionsToProps)(withTranslation('common')(_NavigationTree));
