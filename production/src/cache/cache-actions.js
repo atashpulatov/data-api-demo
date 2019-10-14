@@ -86,6 +86,29 @@ export function createCache() {
   };
 }
 
+export function dispatchCacheResults(result, dispatch) {
+  console.log(result);
+  switch (result.id) {
+    case PROJECTS_DB_ID:
+      dispatch(addProjects(result.doc.data));
+      break;
+    case MY_LIBRARY_DB_ID:
+      dispatch(addMyLibraryObjects(result.doc.data));
+      break;
+    case ENV_LIBRARY_DB_ID:
+      dispatch(addEnvObjects(result.doc.data));
+      break;
+    case LOADING_DB + MY_LIBRARY_DB_ID:
+      dispatch(myLibraryLoading(result.doc.data));
+      break;
+    case LOADING_DB + ENV_LIBRARY_DB_ID:
+      dispatch(objectListLoading(result.doc.data));
+      break;
+    default:
+      break;
+  }
+}
+
 export function connectToCache(prevCache) {
   return (dispatch, getState) => {
     // Create or get DB for current user
@@ -97,29 +120,31 @@ export function connectToCache(prevCache) {
       dispatch(objectListLoading(true));
     }
 
-    const onChange = cache.onChange((result) => {
-      console.log(result);
-      switch (result.id) {
-        case PROJECTS_DB_ID:
-          dispatch(addProjects(result.doc.data));
-          break;
-        case MY_LIBRARY_DB_ID:
-          dispatch(addMyLibraryObjects(result.doc.data));
-          break;
-        case ENV_LIBRARY_DB_ID:
-          dispatch(addEnvObjects(result.doc.data));
-          break;
-        case LOADING_DB + MY_LIBRARY_DB_ID:
-          dispatch(myLibraryLoading(result.doc.data));
-          break;
-        case LOADING_DB + ENV_LIBRARY_DB_ID:
-          dispatch(objectListLoading(result.doc.data));
-          break;
-        default:
-          break;
-      }
+    const onChange = cache.onChange((results) => {
+      dispatchCacheResults(results, dispatch)
     });
     return [cache, onChange]
+  };
+}
+
+export function listenToCache(prevCache) {
+  return (dispatch, getState) => {
+    // Create or get DB for current user
+    const { sessionReducer } = getState();
+    const { username } = sessionReducer;
+    const cache = prevCache || new DB(username || 'cache');
+    if (!prevCache) {
+      dispatch(myLibraryLoading(true));
+      dispatch(objectListLoading(true));
+    }
+
+    cache.getAllObjects()
+      .then((results) => {
+        results.rows.forEach((result) => {
+          dispatchCacheResults(result, dispatch)
+        })
+      });
+    return cache;
   };
 }
 

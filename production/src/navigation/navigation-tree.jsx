@@ -8,7 +8,7 @@ import { actions } from './navigation-tree-actions';
 import { isPrompted as checkIfPrompted } from '../mstr-object/mstr-object-rest-service';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './navigation-tree.css';
-import { connectToCache, clearCache, createCache } from '../cache/cache-actions';
+import { connectToCache, clearCache, createCache, listenToCache } from '../cache/cache-actions';
 
 const DB_TIMEOUT = 2500; // Interval for checking indexedDB changes on IE
 
@@ -32,25 +32,27 @@ export class _NavigationTree extends Component {
   }
 
   connectToCache = () => {
-    const { connectToDB } = this.props;
-    [this.DB, this.DBOnChange] = connectToDB();
-    // if (this.isMSIE) this.startDBListener();
+    const { connectToDB, listenToDB } = this.props;
+    if (this.isMSIE) {
+      this.DB = listenToDB();
+      this.startDBListener();
+    } else {
+      [this.DB, this.DBOnChange] = connectToDB();
+    }
   };
 
   startDBListener = () => {
-    // const { cache, connectToDB } = this.props;
-    // if (cache.projects.length < 1 || cache.myLibrary.isLoading || cache.environmentLibrary.isLoading) {
-    //   setTimeout(() => {
-    //     connectToDB(true);
-    //     this.startDBListener();
-    //   }, DB_TIMEOUT);
-    // } else {
-    //   this.DBConnection.cancel();
-    // }
+    const { cache, listenToDB } = this.props;
+    if (cache.myLibrary.isLoading || cache.environmentLibrary.isLoading) {
+      setTimeout(() => {
+        listenToDB(this.DB);
+        this.startDBListener();
+      }, DB_TIMEOUT);
+    }
   };
 
   refresh = () => {
-    this.DBOnChange.cancel();
+    if (!this.isMSIE) this.DBOnChange.cancel();
     const { clearDB, initDB } = this.props;
     clearDB(this.DB)
       .then(initDB)
@@ -191,6 +193,7 @@ const mapActionsToProps = {
   ...actions,
   initDB: createCache,
   connectToDB: connectToCache,
+  listenToDB: listenToCache,
   clearDB: clearCache,
 };
 
