@@ -11,7 +11,7 @@ export default class _EmbeddedDossier extends React.Component {
     this.container = React.createRef();
     this.msgRouter = null;
     this.onVizSelectionHandler = this.onVizSelectionHandler.bind(this);
-    this.dossierData = {};
+    this.dossierData = { promptsAnswers: props.mstrData.promptsAnswers, };
   }
 
   componentDidMount() {
@@ -61,6 +61,11 @@ export default class _EmbeddedDossier extends React.Component {
       }
     } catch (e) {
       handlePopupErrors(e)
+    }
+
+    this.dossierData = {
+      ...this.dossierData,
+      preparedInstanceId: instance.mid,
     }
 
     const libraryUrl = envUrl.replace('api', 'app');
@@ -127,14 +132,7 @@ export default class _EmbeddedDossier extends React.Component {
       },
     };
 
-    microstrategy.dossier
-      .create(props)
-      .then(() => {
-        this.dossierData = {
-          promptsAnswers,
-          preparedInstanceId: instance.mid,
-        };
-      });
+    microstrategy.dossier.create(props);
   }
 
   render() {
