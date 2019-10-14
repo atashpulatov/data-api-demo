@@ -130,6 +130,7 @@ describe('office loaded file', () => {
     // given
     const onRefreshMock = jest.fn();
     const startLoadingMocked = jest.fn();
+    const stopLoadingMocked = jest.fn();
     const mockEvent = { stopPropagation: jest.fn() };
     const objectClickMock = jest.spyOn(officeApiHelper, 'onBindingObjectClick').mockImplementation(() => true);
     const visualizationInfoMock = { dossierStructure: 'test' };
@@ -141,6 +142,7 @@ describe('office loaded file', () => {
       refreshReportsArray={onRefreshMock}
       isLoading={false}
       startLoading={startLoadingMocked}
+      stopLoading={stopLoadingMocked}
       objectType={{ name: 'report' }}
       visualizationInfo={visualizationInfoMock}
     />);
@@ -155,6 +157,7 @@ describe('office loaded file', () => {
     // given
     const onRefreshMocked = jest.fn();
     const startLoadingMocked = jest.fn();
+    const stopLoadingMocked = jest.fn();
     const mockEvent = { stopPropagation: jest.fn() };
     const testBindingId = 'testBindingId';
     const objectType = { name: 'report' };
@@ -169,6 +172,7 @@ describe('office loaded file', () => {
       refreshReportsArray={onRefreshMocked}
       isLoading={false}
       startLoading={startLoadingMocked}
+      stopLoading={stopLoadingMocked}
       objectType={objectType}
       visualizationInfo={visualizationInfoMock}
     />);
@@ -184,6 +188,7 @@ describe('office loaded file', () => {
     // given
     const onRefreshMocked = jest.fn();
     const startLoadingMocked = jest.fn();
+    const stopLoadingMocked = jest.fn();
     const mockEvent = { stopPropagation: jest.fn() };
     const testBindingId = 'testBindingId';
     const objectType = 'report';
@@ -198,6 +203,7 @@ describe('office loaded file', () => {
       refreshReport={onRefreshMocked}
       isLoading={false}
       startLoading={startLoadingMocked}
+      stopLoading={stopLoadingMocked}
       visualizationInfo={visualizationInfoMock}
     />);
     wrappedComponent.setState({ allowRefreshClick: false });
@@ -225,6 +231,7 @@ describe('office loaded file', () => {
     // given
     const onDeleteMocked = jest.fn();
     const startLoadingMocked = jest.fn();
+    const stopLoadingMocked = jest.fn();
     const testBindingId = 'testBindingId';
     const mockEvent = { stopPropagation: jest.fn() };
     const visualizationInfoMock = { dossierStructure: 'test' };
@@ -237,6 +244,7 @@ describe('office loaded file', () => {
       fileName="test"
       onDelete={onDeleteMocked}
       startLoading={startLoadingMocked}
+      stopLoading={stopLoadingMocked}
       objectType={{ name: 'report' }}
       visualizationInfo={visualizationInfoMock}
     />);

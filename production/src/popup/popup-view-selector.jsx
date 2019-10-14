@@ -220,7 +220,7 @@ function proceedToImport(props) {
 
 function renderProperComponent(popupType, methods, propsToPass, editedReport) {
   if (popupType === PopupTypeEnum.dataPreparation) {
-    const mstrData = { ...propsToPass, instanceId: editedReport.instanceId }
+    const mstrData = { ...propsToPass, instanceId: editedReport.instanceId, promptsAnswers: editedReport.promptsAnswers }
     return (
       <AttributeSelectorWindow
         mstrData={mstrData}
@@ -289,10 +289,11 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
 
 export function mapStateToProps(state) {
   const popupState = state.popupReducer.editedReport;
+  const { promptsAnswers } = state.navigationTree;
   return {
     ...state.navigationTree,
     authToken: state.sessionReducer.authToken,
-    editedReport: parsePopupState(popupState),
+    editedReport: { ...(parsePopupState(popupState)), promptsAnswers },
     preparedInstance: state.popupReducer.preparedInstance,
   };
 }

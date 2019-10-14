@@ -81,7 +81,7 @@ describe('Confirmation', () => {
     await expect(mockSync).not.toBeCalled();
     await expect(mockDeleteTableBody).not.toBeCalled();
     expect(mockToggleIsClearingFlag).toBeCalled();
-    expect(mockToggleSecuredFlag).toBeCalledWith(true);
+    expect(mockToggleSecuredFlag).not.toBeCalled();
   });
 
   it('should set isConfirm flag to false when Cancel is clicked', async () => {
