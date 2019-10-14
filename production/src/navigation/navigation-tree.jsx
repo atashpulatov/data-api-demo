@@ -43,13 +43,11 @@ export class _NavigationTree extends Component {
 
   startDBListener = () => {
     const { cache, listenToDB } = this.props;
-    let extraTime = 0;
     if (cache.projects.length < 1 || cache.myLibrary.isLoading || cache.environmentLibrary.isLoading) {
       setTimeout(() => {
         [this.DB, this.DBOnChange] = listenToDB(this.DB);
         this.DBOnChange.then(this.startDBListener());
-        extraTime += 1000;
-      }, DB_TIMEOUT + extraTime);
+      }, DB_TIMEOUT);
     }
   };
 

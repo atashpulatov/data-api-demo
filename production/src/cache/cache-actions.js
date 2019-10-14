@@ -43,6 +43,12 @@ export const addProjects = (objects) => ({
 
 export const clearStateCache = () => ({ type: CLEAR_CACHE, });
 
+export const resetCacheLoadingState = (username) => {
+  const cache = new DB(username || 'cache');
+  cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, false);
+  cache.putData(LOADING_DB + ENV_LIBRARY_DB_ID, false);
+}
+
 export function fetchObjects(dispatch, cache) {
   // Projects
   fetchProjects((objects) => cache.putData(PROJECTS_DB_ID, objects))
