@@ -42,12 +42,6 @@ export const _Browser = ({
 
   React.useEffect(() => connectToCacheMethod(), []);
 
-  // React.useEffect(() => {
-  //   const browsingState = browserStoreService.getBrowsingFilters()
-  //   console.log({ browsingState });
-  //   loadBrowsingState(browsingState);
-  // }, [loadBrowsingState]);
-
   return (
     <div className="browser-wrapper">
       <div className="browser-top-panel">
