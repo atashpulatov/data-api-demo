@@ -87,7 +87,6 @@ export function createCache() {
 }
 
 export function dispatchCacheResults(result, dispatch) {
-  console.log(result);
   switch (result.id) {
     case PROJECTS_DB_ID:
       dispatch(addProjects(result.doc.data));

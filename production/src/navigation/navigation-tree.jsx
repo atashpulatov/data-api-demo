@@ -10,7 +10,7 @@ import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './navigation-tree.css';
 import { connectToCache, clearCache, createCache, listenToCache } from '../cache/cache-actions';
 
-const DB_TIMEOUT = 2500; // Interval for checking indexedDB changes on IE
+const DB_TIMEOUT = 3000; // Interval for checking indexedDB changes on IE
 
 export class _NavigationTree extends Component {
   constructor(props) {
@@ -43,11 +43,13 @@ export class _NavigationTree extends Component {
 
   startDBListener = () => {
     const { cache, listenToDB } = this.props;
-    if (cache.myLibrary.isLoading || cache.environmentLibrary.isLoading) {
+    let extraTime = 0;
+    if (cache.projects.length < 1 || cache.myLibrary.isLoading || cache.environmentLibrary.isLoading) {
       setTimeout(() => {
         [this.DB, this.DBOnChange] = listenToDB(this.DB);
         this.DBOnChange.then(this.startDBListener());
-      }, DB_TIMEOUT);
+        extraTime += 1000;
+      }, DB_TIMEOUT + extraTime);
     }
   };
 
