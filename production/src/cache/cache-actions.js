@@ -53,14 +53,14 @@ export const refreshCacheState = () => (dispatch) => {
 
 export function fetchObjects(dispatch, cache) {
   // Projects
-  fetchProjects((objects) => cache.putData(PROJECTS_DB_ID, objects))
+  fetchProjects((objects) => cache.putData(PROJECTS_DB_ID, objects, true))
     .catch(console.error);
 
   // My library
   console.time('Fetch my library');
   dispatch(myLibraryLoading(true));
-  cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, true);
-  getMyLibraryObjectList((objects) => cache.putData(MY_LIBRARY_DB_ID, objects))
+  cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, false);
+  getMyLibraryObjectList((objects) => cache.putData(MY_LIBRARY_DB_ID, objects, true))
     .catch(console.error)
     .finally(() => {
       console.timeEnd('Fetch my library');
@@ -71,8 +71,9 @@ export function fetchObjects(dispatch, cache) {
   // Environment library
   console.time('Fetch environment objects');
   dispatch(objectListLoading(true));
-  cache.putData(LOADING_DB + ENV_LIBRARY_DB_ID, true);
-  getObjectList((objects) => cache.putData(ENV_LIBRARY_DB_ID, objects, true)).catch(console.error)
+  cache.putData(LOADING_DB + ENV_LIBRARY_DB_ID, false);
+  getObjectList((objects) => cache.putData(ENV_LIBRARY_DB_ID, objects, true))
+    .catch(console.error)
     .finally(() => {
       console.timeEnd('Fetch environment objects');
       dispatch(objectListLoading(false));
@@ -80,12 +81,12 @@ export function fetchObjects(dispatch, cache) {
     });
 }
 
-export function createCache() {
+export function createCache(initUsername) {
   return (dispatch, getState) => {
     // Create or get DB for current user
     const { sessionReducer } = getState();
     const { username } = sessionReducer;
-    const cache = new DB(username || 'cache');
+    const cache = new DB(initUsername || username || 'cache');
     // Remove PouchDBs from other users
     DB.purgePouchDB(username);
     cache.callIfEmpty(() => {
