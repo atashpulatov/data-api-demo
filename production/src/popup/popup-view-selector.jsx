@@ -8,7 +8,6 @@ import { LoadingPage } from '../loading/loading-page';
 import { RefreshAllPage } from '../loading/refresh-all-page';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { NavigationTree } from '../navigation/navigation-tree';
-import { Browser } from '../browser/browser';
 import { actions } from '../navigation/navigation-tree-actions';
 import { PromptsWindow } from '../prompts/prompts-window';
 import { preparePromptedReport } from './popup-actions';

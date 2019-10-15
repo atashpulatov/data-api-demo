@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { objectTypes, FolderBrowser } from '@mstr/mstr-react-library';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { ObjectTable, TopFilterPanel } from '@mstr/rc';
@@ -9,7 +8,6 @@ import { actions } from './navigation-tree-actions';
 import { isPrompted as checkIfPrompted } from '../mstr-object/mstr-object-rest-service';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './navigation-tree.css';
-import { browserStoreService } from '../browser/browser-store-service';
 import { connectToCache, clearCache, createCache, listenToCache, REFRESH_CACHE_COMMAND, refreshCacheState } from '../cache/cache-actions';
 
 const DB_TIMEOUT = 3000; // Interval for checking indexedDB changes on IE
