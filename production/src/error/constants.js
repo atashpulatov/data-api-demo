@@ -1,6 +1,9 @@
-const withDefaultValue = (obj, defaultValue) => new Proxy(obj, {
-  get: (target, name) => (target[name] === undefined ? defaultValue : target[name]),
-});
+const withDefaultValue = (obj, defaultValue) => (value) => {
+  if (value in obj) {
+    return obj[value];
+  }
+  return defaultValue;
+};
 
 export const errorTypes = {
   ENV_NOT_FOUND_ERR: 'environmentNotFound',
@@ -86,7 +89,7 @@ export const errorMessageFactory = withDefaultValue({
     return SESSION_EXPIRED;
   },
   [errorTypes.BAD_REQUEST_ERR]: () => PROBLEM_WITH_REQUEST,
-  [errorTypes.INTERNAL_SERVER_ERR]: ({ error }) => iServerErrorMessages[!error.response ? '-1' : error.response.body ? error.response.body.iServerCode : '-1'],
+  [errorTypes.INTERNAL_SERVER_ERR]: ({ error }) => iServerErrorMessages(!error.response ? '-1' : error.response.body ? error.response.body.iServerCode : '-1'),
   [errorTypes.PROMPTED_REPORT_ERR]: () => NOT_SUPPORTED_PROMPTS_REFRESH,
   [errorTypes.OUTSIDE_OF_RANGE_ERR]: () => EXCEEDS_WORKSHEET_LIMITS,
   [errorTypes.OVERLAPPING_TABLES_ERR]: () => TABLE_OVERLAP,
