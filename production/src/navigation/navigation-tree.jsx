@@ -28,7 +28,7 @@ export class _NavigationTree extends Component {
   }
 
   componentWillUnmount() {
-    this.DBOnChange.cancel()
+    this.DB.instance.close()
   }
 
   connectToCache = () => {
