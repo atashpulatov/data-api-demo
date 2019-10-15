@@ -82,7 +82,7 @@ export const errorMessageFactory = withDefaultValue({
     if (
       (error.response.body.code === 'ERR003')
       && (error.response.body.iServerCode)
-      && (iServerErrorMessages[error.response.body.iServerCode] === LOGIN_FAILURE)
+      && (iServerErrorMessages(error.response.body.iServerCode) === LOGIN_FAILURE)
     ) {
       return WRONG_CREDENTIALS;
     }
