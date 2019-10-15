@@ -210,7 +210,7 @@ function proceedToImport(props) {
   if (props.dossierData) {
     okObject.dossierData = {
       ...props.dossierData,
-      reportName: props.chosenProjectName,
+      reportName: props.chosenObjectName,
     };
   }
   props.startLoading();
