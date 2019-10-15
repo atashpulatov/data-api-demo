@@ -47,7 +47,7 @@ export class _NavigationTree extends Component {
     if (cache.projects.length < 1 || cache.myLibrary.isLoading || cache.environmentLibrary.isLoading) {
       setTimeout(() => {
         [this.DB, this.DBOnChange] = listenToDB(this.DB);
-        this.DBOnChange.then(this.startDBListener());
+        this.DBOnChange.then(this.startDBListener);
       }, DB_TIMEOUT);
     }
   };
