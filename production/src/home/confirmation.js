@@ -21,6 +21,7 @@ export const _Confirmation = ({ reportArray, toggleSecuredFlag, toggleIsConfirmF
     }
   });
   const secureData = async () => {
+    let counter = 0;
     let reportName = '';
     const clearErrors = [];
     try {
@@ -45,14 +46,14 @@ export const _Confirmation = ({ reportArray, toggleSecuredFlag, toggleIsConfirmF
             const officeError = errorService.handleError(error);
             clearErrors.push({ reportName, officeError });
           }
+        } else {
+          counter++;
         }
       }
       toggleIsConfirmFlag(false);
       if (clearErrors.length > 0) {
         displayClearDataError(clearErrors);
-      } else {
-        toggleSecuredFlag(true);
-      }
+      } else if (counter !== reportArray.length) toggleSecuredFlag(true);
     } catch (error) {
       errorService.handleError(error);
     } finally {

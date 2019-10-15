@@ -1,6 +1,4 @@
-import {
-  SET_OBJECT_LIST_LOADING, objectListLoading, SET_MY_LIBRARY_LOADING, myLibraryLoading, createCache, clearCache, ADD_MY_LIBRARY_OBJECTS, addMyLibraryObjects, ADD_ENV_OBJECTS, addEnvObjects, connectToCache, refreshCache,
-} from '../../cache/cache-actions';
+import { SET_OBJECT_LIST_LOADING, objectListLoading, SET_MY_LIBRARY_LOADING, myLibraryLoading, createCache, clearCache, ADD_MY_LIBRARY_OBJECTS, addMyLibraryObjects, ADD_ENV_OBJECTS, addEnvObjects, connectToCache, refreshCache, } from '../../cache/cache-actions';
 
 describe('Cache actions', () => {
   it('should return object list loading dispatch action', () => {
@@ -63,7 +61,7 @@ describe('Cache actions', () => {
     expect(action).toEqual(expectedAction);
   });
 
-  it('should return create cache high order function', () => {
+  it('should return create cache higher order function', () => {
     // given
 
     // when
@@ -73,7 +71,7 @@ describe('Cache actions', () => {
     expect(hof).toBeInstanceOf(Function);
   });
 
-  it('should return connect to cache high order function', () => {
+  it('should return connect to cache higher order function', () => {
     // given
 
     // when
@@ -83,21 +81,11 @@ describe('Cache actions', () => {
     expect(hof).toBeInstanceOf(Function);
   });
 
-  it('should return clear cache high order function', () => {
+  it('should return clear cache higher order function', () => {
     // given
 
     // when
     const hof = clearCache();
-
-    // then
-    expect(hof).toBeInstanceOf(Function);
-  });
-
-  it('should return refresh cache high order function', () => {
-    // given
-
-    // when
-    const hof = refreshCache();
 
     // then
     expect(hof).toBeInstanceOf(Function);

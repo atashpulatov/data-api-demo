@@ -183,7 +183,7 @@ class OfficeDisplayService {
       if (objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
         console.time('Get dossier structure');
         mstrTable.id = objectId;
-        dossierStructure = await this.getDossierStructure(projectId, objectId, visualizationInfo, mstrTable.name, preparedInstanceId);
+        dossierStructure = await this.getDossierStructure(projectId, objectId, visualizationInfo, preparedInstanceId);
         visualizationInfo.dossierStructure = dossierStructure;
         console.timeEnd('Get dossier structure');
       }
@@ -763,10 +763,10 @@ class OfficeDisplayService {
     }
   };
 
-  getDossierStructure = async (projectId, objectId, visualizationInfo, dossierName, preparedInstanceId) => {
+  getDossierStructure = async (projectId, objectId, visualizationInfo, preparedInstanceId) => {
     const { visualizationKey, chapterKey } = visualizationInfo;
-    const dossierStructure = { dossierName };
     const dossierDefinition = await getDossierDefinition(projectId, objectId, preparedInstanceId);
+    const dossierStructure = { dossierName: dossierDefinition.name };
     const chapter = dossierDefinition.chapters.find((el) => el.key === chapterKey);
     dossierStructure.chapterName = chapter.name;
     const { pages } = chapter;

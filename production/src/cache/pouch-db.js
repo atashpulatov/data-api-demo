@@ -116,8 +116,7 @@ export default class DB {
   }
 
   /**
-   * Takes a list of documents that you want to put() into the database and
-   * adds the PouchDB required _id key and projectName
+   * Takes a list of documents that you want to put() into the database
    *
    * @param {MSTR} objects MicroStrategy object array
    * @param {Object} projects Dictionary with project id and name

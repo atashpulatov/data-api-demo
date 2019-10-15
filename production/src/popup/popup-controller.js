@@ -15,8 +15,8 @@ import { officeProperties } from '../office/office-properties';
 import { officeApiHelper } from '../office/office-api-helper';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { officeStoreService } from '../office/store/office-store-service';
-import { browserStoreService } from '../browser/browser-store-service';
 import { LOAD_BROWSING_STATE_CONST } from '../browser/browser-actions';
+import { REFRESH_CACHE_COMMAND, refreshCache } from '../cache/cache-actions';
 
 const URL = `${window.location.href}`;
 
@@ -87,7 +87,7 @@ class PopupController {
       return;
     }
     try {
-      await this.closeDialog(dialog);
+      if (response.command !== REFRESH_CACHE_COMMAND) await this.closeDialog(dialog);
       await officeApiHelper.getExcelSessionStatus(); // checking excel session status
       switch (response.command) {
         case selectorProperties.commandOk:
@@ -115,6 +115,9 @@ class PopupController {
         case selectorProperties.commandError:
           errorService.handleError(response.error);
           break;
+        case REFRESH_CACHE_COMMAND:
+          this.handleRefreshCacheCommand();
+          break;
         default:
           break;
       }
@@ -126,6 +129,11 @@ class PopupController {
       reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
     }
   };
+
+  handleRefreshCacheCommand = () => {
+    const { dispatch, getState } = reduxStore;
+    refreshCache()(dispatch, getState);
+  }
 
   handleUpdateCommand = async ({
     dossierData,

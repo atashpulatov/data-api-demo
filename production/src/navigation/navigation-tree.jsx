@@ -9,10 +9,10 @@ import { actions } from './navigation-tree-actions';
 import { isPrompted as checkIfPrompted } from '../mstr-object/mstr-object-rest-service';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './navigation-tree.css';
-import { connectToCache, refreshCache, createCache } from '../cache/cache-actions';
 import { browserStoreService } from '../browser/browser-store-service';
+import { connectToCache, clearCache, createCache, listenToCache, REFRESH_CACHE_COMMAND, refreshCacheState } from '../cache/cache-actions';
 
-const DB_TIMEOUT = 2500; // Interval for checking indexedDB changes on IE
+const DB_TIMEOUT = 3000; // Interval for checking indexedDB changes on IE
 
 export class _NavigationTree extends Component {
   constructor(props) {
@@ -38,31 +38,37 @@ export class _NavigationTree extends Component {
     }));
   }
 
+  componentWillUnmount() {
+    this.DBOnChange.cancel()
+  }
+
   connectToCache = () => {
-    const { connectToDB } = this.props;
-    this.DBConnection = connectToDB();
-    if (this.isMSIE) this.startDBListener();
+    const { connectToDB, listenToDB } = this.props;
+    if (this.isMSIE) {
+      [this.DB, this.DBOnChange] = listenToDB();
+      this.DBOnChange.then(this.startDBListener)
+    } else {
+      [this.DB, this.DBOnChange] = connectToDB();
+    }
   };
 
   startDBListener = () => {
-    const { cache, connectToDB } = this.props;
+    const { cache, listenToDB } = this.props;
     if (cache.projects.length < 1 || cache.myLibrary.isLoading || cache.environmentLibrary.isLoading) {
       setTimeout(() => {
-        connectToDB(true);
-        this.startDBListener();
+        [this.DB, this.DBOnChange] = listenToDB(this.DB);
+        this.DBOnChange.then(this.startDBListener());
       }, DB_TIMEOUT);
-    } else {
-      this.DBConnection.cancel();
     }
   };
 
   refresh = () => {
-    this.DBConnection.cancel();
-    const { refreshDB, initDB } = this.props;
-    refreshDB(initDB)
-      .then(() => {
-        this.connectToCache();
-      });
+    if (!this.isMSIE && this.DBOnChange) this.DBOnChange.cancel();
+    this.props.resetDB();
+    window.Office.context.ui.messageParent(JSON.stringify({ command: REFRESH_CACHE_COMMAND }));
+    setTimeout(() => {
+      this.connectToCache();
+    }, 1000);
   };
 
   handleOk = () => {
@@ -139,7 +145,7 @@ export class _NavigationTree extends Component {
     } = this.props;
     const { triggerUpdate, previewDisplay } = this.state;
     const objects = myLibrary ? cache.myLibrary.objects : cache.environmentLibrary.objects;
-
+    const cacheLoading = cache.myLibrary.isLoading || cache.environmentLibrary.isLoading;
     return (
       <div className="navigation_tree__main_wrapper">
         <div className="navigation_tree__title_bar">
@@ -150,7 +156,7 @@ export class _NavigationTree extends Component {
             applications={cache.projects}
             onFilterChange={changeFilter}
             onSearch={changeSearching}
-            isLoading={loading}
+            isLoading={cacheLoading}
             myLibrary={myLibrary}
             filter={filter}
             onRefresh={() => this.refresh()}
@@ -169,7 +175,7 @@ export class _NavigationTree extends Component {
           locale={i18n.language}
           searchText={searchText}
           filter={filter}
-          isLoading={loading} />
+          isLoading={cacheLoading} />
         <PopupButtons
           loading={loading}
           disableActiveActions={!chosenObjectId}
@@ -199,7 +205,9 @@ const mapActionsToProps = {
   ...actions,
   initDB: createCache,
   connectToDB: connectToCache,
-  refreshDB: refreshCache,
+  listenToDB: listenToCache,
+  clearDB: clearCache,
+  resetDB: refreshCacheState,
 };
 
 export const NavigationTree = connect(mapStateToProps, mapActionsToProps)(withTranslation('common')(_NavigationTree));
