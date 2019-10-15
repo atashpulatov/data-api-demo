@@ -17,7 +17,7 @@ export default class DB {
    * @memberof DB
    */
   constructor(dbName = 'cache') {
-    this.db = new PouchDB(dbName, { revs_limit: 1 });
+    this.db = new PouchDB(dbName, { revs_limit: 0 });
     this.dbName = dbName;
     this.putObjects = this.putObjects.bind(this);
   }
@@ -97,13 +97,13 @@ export default class DB {
    *
    * @param {String} _id Document id in the database
    * @param {Object} data Object to store in the document
+   * @param {Boolean} append Flag to append new data to array
    * @returns {Promise} Promise containing result of put operation
    * @memberof DB
    */
   putData(_id, data, append = false) {
     return this.db.get(_id)
       .then((doc) => {
-        console.log(doc);
         if (append) data = doc.data.concat(data);
         this.db.put({ _id, _rev: doc._rev, data });
       })

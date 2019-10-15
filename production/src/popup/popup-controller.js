@@ -125,8 +125,10 @@ class PopupController {
       console.error(error);
       errorService.handleError(error);
     } finally {
-      reduxStore.dispatch({ type: officeProperties.actions.popupHidden });
-      reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
+      if (response.command !== REFRESH_CACHE_COMMAND) {
+        reduxStore.dispatch({ type: officeProperties.actions.popupHidden });
+        reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
+      }
     }
   };
 
