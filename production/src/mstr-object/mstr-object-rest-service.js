@@ -18,30 +18,30 @@ export const IMPORT_ROW_LIMIT = 20000; // Maximum number of rows to fetch during
 export const PROMISE_LIMIT = 10; // Number of concurrent context.sync() promises during data import.
 
 export function answerDossierPrompts({ objectId, projectId, instanceId, promptsAnswers }) {
-    const storeState = reduxStore.getState();
-    const { envUrl } = storeState.sessionReducer;
-    const { authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/promptsAnswers`;
-    return request
-      .post(fullPath)
-      .set('X-MSTR-AuthToken', authToken)
-      .set('X-MSTR-ProjectID', projectId)
-      .send(promptsAnswers)
-      .withCredentials()
+  const storeState = reduxStore.getState();
+  const { envUrl } = storeState.sessionReducer;
+  const { authToken } = storeState.sessionReducer;
+  const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/promptsAnswers`;
+  return request
+    .post(fullPath)
+    .set('X-MSTR-AuthToken', authToken)
+    .set('X-MSTR-ProjectID', projectId)
+    .send(promptsAnswers)
+    .withCredentials()
     .then((res) => res.status);
-  }
+}
 
 export function answerPrompts({ objectId, projectId, instanceId, promptsAnswers }) {
-    const storeState = reduxStore.getState();
-    const { envUrl } = storeState.sessionReducer;
-    const { authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/reports/${objectId}/instances/${instanceId}/promptsAnswers`;
-    return request
-      .post(fullPath)
-      .set('X-MSTR-AuthToken', authToken)
-      .set('X-MSTR-ProjectID', projectId)
-      .send(promptsAnswers)
-      .withCredentials()
+  const storeState = reduxStore.getState();
+  const { envUrl } = storeState.sessionReducer;
+  const { authToken } = storeState.sessionReducer;
+  const fullPath = `${envUrl}/reports/${objectId}/instances/${instanceId}/promptsAnswers`;
+  return request
+    .post(fullPath)
+    .set('X-MSTR-AuthToken', authToken)
+    .set('X-MSTR-ProjectID', projectId)
+    .send(promptsAnswers)
+    .withCredentials()
     .then((res) => res.status);
 }
 
@@ -94,7 +94,7 @@ export function fetchVisualizationDefinition({ projectId, objectId, instanceId, 
   const { envUrl } = storeState.sessionReducer;
   const { authToken } = storeState.sessionReducer;
   const { chapterKey, visualizationKey } = visualizationInfo;
-  const fullPath = `${envUrl}/v2/dossiers/${objectId}/instances/${instanceId}/chapters/${chapterKey}/visualizations/${visualizationKey}?limit=1`;
+  const fullPath = `${envUrl}/v2/dossiers/${objectId}/instances/${instanceId}/chapters/${chapterKey}/visualizations/${visualizationKey}?limit=1&contentFlags=768`;
   return request
     .get(fullPath)
     .set('x-mstr-authtoken', authToken)
@@ -356,7 +356,7 @@ function parseInstanceDefinition(res) {
     const { status } = body;
     return { instanceId, status };
   }
-  const { instanceId, data } = body;
+  const { instanceId, data, internal } = body;
   if (data.paging.total === 0) throw new Error(NOT_SUPPORTED_NO_ATTRIBUTES);
   const mstrTable = officeConverterServiceV2.createTable(body);
   const { rows, columns } = checkTableDimensions(mstrTable.tableSize);
@@ -365,6 +365,7 @@ function parseInstanceDefinition(res) {
     rows,
     columns,
     mstrTable,
+    manipulationsXML: internal,
   };
 }
 
