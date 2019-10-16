@@ -56,7 +56,7 @@ export default class DB {
   * Closes any open connection to the underlying storage
   * and frees memory (event listeners) the database may be using.
   *
-  * @returns {Promise} Database info
+  * @returns {Promise} Close promise
   * @memberof DB
   */
   close() {
@@ -119,7 +119,7 @@ export default class DB {
     return this.db.get(_id)
       .then((doc) => {
         if (append) data = doc.data.concat(data);
-        this.db.put({ _id, _rev: doc._rev, data });
+        return this.db.put({ _id, _rev: doc._rev, data });
       })
       .catch((err) => {
         if (err.name === 'not_found') {

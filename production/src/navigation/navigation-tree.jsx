@@ -65,9 +65,9 @@ export class _NavigationTree extends Component {
     }
   };
 
-  refresh = () => {
+  refresh = async () => {
     if (!this.isMSIE && this.DBOnChange) this.DBOnChange.cancel();
-    this.props.resetDB();
+    await this.props.resetDB(this.DB);
     window.Office.context.ui.messageParent(JSON.stringify({ command: REFRESH_CACHE_COMMAND }));
     setTimeout(() => {
       this.connectToCache();

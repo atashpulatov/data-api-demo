@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import DB from './pouch-db';
 import getObjectList, { getMyLibraryObjectList, fetchProjects } from '../mstr-object/mstr-list-rest-service';
 
@@ -47,8 +48,9 @@ export const clearStateCache = () => ({ type: CLEAR_CACHE, });
 
 export const refreshCacheAction = () => ({ type: REFRESH_CACHE, });
 
-export const refreshCacheState = () => (dispatch) => {
+export const refreshCacheState = (cache) => (dispatch) => {
   dispatch(refreshCacheAction());
+  return Promise.all([cache.putData(LOADING_DB + ENV_LIBRARY_DB_ID, true), cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, true)]);
 }
 
 export function fetchObjects(dispatch, cache) {
@@ -59,25 +61,27 @@ export function fetchObjects(dispatch, cache) {
   // My library
   console.time('Fetch my library');
   dispatch(myLibraryLoading(true));
-  cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, false);
+  cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, true);
   getMyLibraryObjectList((objects) => cache.putData(MY_LIBRARY_DB_ID, objects, true))
     .catch(console.error)
     .finally(() => {
       console.timeEnd('Fetch my library');
-      dispatch(myLibraryLoading(false));
-      cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, false);
+      cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, false).then(() => {
+        dispatch(myLibraryLoading(false));
+      });
     });
 
   // Environment library
   console.time('Fetch environment objects');
   dispatch(objectListLoading(true));
-  cache.putData(LOADING_DB + ENV_LIBRARY_DB_ID, false);
+  cache.putData(LOADING_DB + ENV_LIBRARY_DB_ID, true);
   getObjectList((objects) => cache.putData(ENV_LIBRARY_DB_ID, objects, true))
     .catch(console.error)
     .finally(() => {
       console.timeEnd('Fetch environment objects');
-      dispatch(objectListLoading(false));
-      cache.putData(LOADING_DB + ENV_LIBRARY_DB_ID, false);
+      cache.putData(LOADING_DB + ENV_LIBRARY_DB_ID, false).then(() => {
+        dispatch(objectListLoading(false));
+      });
     });
 }
 
@@ -85,10 +89,10 @@ export function createCache(initUsername) {
   return (dispatch, getState) => {
     // Create or get DB for current user
     const { sessionReducer } = getState();
-    const { username } = sessionReducer;
-    const cache = new DB(initUsername || username || 'cache');
+    const { userID } = sessionReducer;
+    const cache = new DB(initUsername || userID || 'cache');
     // Remove PouchDBs from other users
-    DB.purgePouchDB(username);
+    DB.purgePouchDB(initUsername || userID);
     cache.callIfEmpty(() => {
       fetchObjects(dispatch, cache);
     });
@@ -99,8 +103,8 @@ export function refreshCache() {
   return (dispatch, getState) => {
     // Create or get DB for current user
     const { sessionReducer } = getState();
-    const { username } = sessionReducer;
-    const cache = new DB(username || 'cache');
+    const { userID } = sessionReducer;
+    const cache = new DB(userID || 'cache');
     // Overwrite cache
     cache.reset().then(() => {
       fetchObjects(dispatch, cache);
@@ -134,8 +138,8 @@ export function connectToCache(prevCache) {
   return (dispatch, getState) => {
     // Create or get DB for current user
     const { sessionReducer } = getState();
-    const { username } = sessionReducer;
-    const cache = prevCache || new DB(username || 'cache');
+    const { userID } = sessionReducer;
+    const cache = prevCache || new DB(userID || 'cache');
     if (!prevCache) {
       dispatch(myLibraryLoading(true));
       dispatch(objectListLoading(true));
@@ -144,7 +148,7 @@ export function connectToCache(prevCache) {
     const onChange = cache.onChange((results) => {
       dispatchCacheResults(results, dispatch)
     });
-    return [cache, onChange]
+    return [cache, onChange];
   };
 }
 
@@ -152,8 +156,8 @@ export function listenToCache(prevCache) {
   return (dispatch, getState) => {
     // Create or get DB for current user
     const { sessionReducer } = getState();
-    const { username } = sessionReducer;
-    const cache = prevCache || new DB(username || 'cache');
+    const { userID } = sessionReducer;
+    const cache = prevCache || new DB(userID || 'cache');
     if (!prevCache) {
       dispatch(myLibraryLoading(true));
       dispatch(objectListLoading(true));
@@ -169,11 +173,11 @@ export function listenToCache(prevCache) {
   };
 }
 
-export function clearCache(prevCache) {
+export function clearCache(prevCache, prevUserID) {
   return (dispatch, getState) => {
     const { sessionReducer } = getState();
-    const { username } = sessionReducer;
-    const cache = prevCache || new DB(username || 'cache');
+    const { userID } = sessionReducer;
+    const cache = prevCache || new DB(prevUserID || userID || 'cache');
     dispatch(clearStateCache());
     return cache.clear().catch(console.error);
   };
