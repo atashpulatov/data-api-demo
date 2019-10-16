@@ -97,6 +97,7 @@ class OfficeDisplayService {
     let startCell;
     let tableColumnsChanged;
     let instanceDefinition;
+    // TODO: Uncomment this as far as DE150758 will be resolved (Can not get definition for prompted dossier)
     // let dossierStructure;
     try {
       const objectType = mstrObjectType;
@@ -186,6 +187,8 @@ class OfficeDisplayService {
 
       // Get visualization path from dossier definition.
       // Used to show in sidebar placeholder
+
+      // TODO: Uncomment this as far as DE150758 will be resolved (Can not get definition for prompted dossier)
       // if (objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
       //   console.time('Get dossier structure');
       //   mstrTable.id = objectId;

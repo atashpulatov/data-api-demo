@@ -185,7 +185,7 @@ export class _PromptsWindow extends Component {
   /**
    * This function returns false if a document is login page and true otherwise
    */
-  isLoginPage = (document) => document && document.URL.includes('embeddedLogin.jsp');
+  isLoginPage = (document) => document.URL.includes('embeddedLogin.jsp');
 
   /**
    * This function is called after a child (iframe) is added into mbedded dossier container
