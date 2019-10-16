@@ -49,7 +49,18 @@ export default class DB {
   * @memberof DB
   */
   info() {
-    return this.instance.info();
+    return this.db.info();
+  }
+
+  /**
+  * Closes any open connection to the underlying storage
+  * and frees memory (event listeners) the database may be using.
+  *
+  * @returns {Promise} Database info
+  * @memberof DB
+  */
+  close() {
+    return this.db.close();
   }
 
   /**
@@ -59,7 +70,7 @@ export default class DB {
   * @memberof DB
   */
   onChange(callback) {
-    return this.instance.changes({ include_docs: true, live: true })
+    return this.db.changes({ include_docs: true, live: true })
       .on('change', (change) => {
         callback(change);
       }).on('complete', (info) => {
@@ -77,8 +88,11 @@ export default class DB {
    */
   reset() {
     return this.db.destroy().then((res) => {
-      if (res.ok) this.db = new PouchDB(this.dbName);
-      return res;
+      if (res.ok) {
+        this.db = new PouchDB(this.dbName);
+        return res;
+      }
+      throw res;
     });
   }
 
