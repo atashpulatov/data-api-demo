@@ -1,0 +1,19 @@
+.browser-wrapper {
+  height: calc(100% - 125px);
+}
+
+.browser-top-panel {
+  display: flex;
+  justify-content: space-between;
+  margin: 0px 25px 0px 25px;
+}
+
+.browser-title-bar {
+  font-size: 18px;
+  color: #333333;
+  margin: 15px;
+}
+
+/*.ReactVirtualized__Table__rowColumn.radio > input {*/
+/*  margin-left: 2px;*/
+/*}*/

@@ -12,4 +12,5 @@ export const selectorProperties = {
   commandCancel: 'command_cancel',
   commandOnUpdate: 'commandOnUpdate',
   commandError: 'commandError',
+  commandBrowseUpdate: 'commandBrowseUpdate',
 };
