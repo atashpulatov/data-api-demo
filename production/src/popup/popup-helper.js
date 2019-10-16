@@ -91,6 +91,7 @@ class PopupHelper {
       isRefreshAll,
       subtotalInfo: refreshReport.subtotalInfo,
       visualizationInfo: refreshReport.visualizationInfo,
+      manipulationsXML: refreshReport.manipulationsXML,
     };
     const result = await officeDisplayService.printObject(options);
     if (result && result.type === 'warning') {
