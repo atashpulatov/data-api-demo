@@ -146,7 +146,7 @@ export class _NavigationTree extends Component {
   render() {
     const {
       chosenObjectId, chosenProjectId, changeSorting, loading, handlePopupErrors, searchText, sorter,
-      changeSearching, objectType, cache, filter, myLibrary, switchMyLibrary, changeFilter, t, i18n,
+      changeSearching, objectType, cache, envFilter, myLibraryFilter, myLibrary, switchMyLibrary, changeFilter, t, i18n,
     } = this.props;
     const { triggerUpdate, previewDisplay } = this.state;
     const objects = myLibrary ? cache.myLibrary.objects : cache.environmentLibrary.objects;
@@ -163,7 +163,7 @@ export class _NavigationTree extends Component {
             onSearch={changeSearching}
             isLoading={cacheLoading}
             myLibrary={myLibrary}
-            filter={filter}
+            filter={myLibrary ? myLibraryFilter : envFilter}
             onRefresh={() => this.refresh()}
             onSwitch={switchMyLibrary} />
         </div>
@@ -179,9 +179,9 @@ export class _NavigationTree extends Component {
           onSortChange={changeSorting}
           locale={i18n.language}
           searchText={searchText}
-          filter={filter}
-          isLoading={cacheLoading}
-          myLibrary={myLibrary} />
+          myLibrary={myLibrary}
+          filter={myLibrary ? myLibraryFilter : envFilter}
+          isLoading={cacheLoading} />
         <PopupButtons
           loading={loading}
           disableActiveActions={!chosenObjectId}
