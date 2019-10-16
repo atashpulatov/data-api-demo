@@ -1,5 +1,5 @@
-import {browserStoreService} from "./browser-store-service";
-import {officeProperties} from "../office/office-properties";
+import { browserStoreService } from '../../browser/browser-store-service';
+import { officeProperties } from '../../office/office-properties';
 
 describe('BrowserStoreService', () => {
   it('should store the applied filter', () => {

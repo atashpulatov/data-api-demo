@@ -2,24 +2,24 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { ObjectTable, TopFilterPanel } from '@mstr/rc';
-import { _Browser, mapStateToProps, mapDispatchToProps } from './browser';
-import { PopupButtons } from '../popup/popup-buttons';
-import { reportsExample } from './objects';
-import { projectsExample } from './projects';
-import { browserActions } from './browser-actions';
-import { browserStoreService } from './browser-store-service';
-import { createCache, connectToCache, refreshCache } from '../cache/cache-actions';
+import { _Browser, mapStateToProps, mapDispatchToProps } from '../../browser/browser';
+import { PopupButtons } from '../../popup/popup-buttons';
+import { reportsExample } from '../../browser/objects';
+import { projectsExample } from '../../browser/projects';
+import { browserActions } from '../../browser/browser-actions';
+import { browserStoreService } from '../../browser/browser-store-service';
+import { createCache, connectToCache, refreshCache } from '../../cache/cache-actions';
 
 describe('Browser', () => {
   const mockedProps = {
     objects: reportsExample.result,
     projects: projectsExample,
-    onSortChange: () => {},
+    onSortChange: () => { },
     selected: {
       id: '02DDEFDA460B58681B005AAB4A1CBFD3',
       projectId: 'CE52831411E696C8BD2F0080EFD5AF44',
     },
-    onSelect: () => {},
+    onSelect: () => { },
   };
 
   it('should render empty container for filters and table of objects', () => {

@@ -5,7 +5,7 @@ import {
   ON_SORT_CHANGE_CONST,
   ON_SELECT_CONST,
   LOAD_BROWSING_STATE_CONST,
-} from './browser-actions';
+} from '../../browser/browser-actions';
 
 describe('Browser actions', () => {
   it('should dispatch proper onMyLibraryChange action', () => {

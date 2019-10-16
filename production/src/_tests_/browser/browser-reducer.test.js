@@ -1,10 +1,10 @@
 /* eslint-disable react/jsx-filename-extension */
-import { browserReducer } from './browser-reducer';
+import { browserReducer } from '../../browser/browser-reducer';
 import {
   ON_MY_LIBRARY_CHANGED_CONST, ON_FILTER_CHANGED_CONST,
   ON_SORT_CHANGE_CONST, ON_SELECT_CONST, LOAD_BROWSING_STATE_CONST
-} from './browser-actions';
-import { browserStoreService } from './browser-store-service';
+} from '../../browser/browser-actions';
+import { browserStoreService } from '../../browser/browser-store-service';
 
 describe('Browser reducer', () => {
   beforeAll(() => {
