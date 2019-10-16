@@ -41,7 +41,7 @@ export class _FileHistoryContainer extends React.Component {
   addRemoveReportListener = async () => {
     try {
       const excelContext = await officeApiHelper.getExcelContext();
-      if (window.Office.context.requirements.isSetSupported('ExcelApi', 1.9)) {
+      if (window.Office.context.requirements.isSetSupported('ExcelApi', 1.92)) {
         this.eventRemove = excelContext.workbook.tables.onDeleted.add(async (e) => {
           const { reportArray, t } = this.props;
           try {
@@ -59,22 +59,25 @@ export class _FileHistoryContainer extends React.Component {
         });
       } else if (window.Office.context.requirements.isSetSupported('ExcelApi', 1.7)) {
         this.eventRemove = excelContext.workbook.worksheets.onDeleted.add(async () => {
-          excelContext.workbook.tables.load('items');
-          await excelContext.sync()
-          const reportsOfSheets = excelContext.workbook.tables.items
-          const { reportArray, t } = this.props;
-          const sheets = excelContext.workbook.worksheets;
-          sheets.load('items/name');
-          return excelContext.sync()
-            .then(() => {
-              const reportsToBeDeleted = reportArray.filter((report) => !reportsOfSheets.find((table) => table.name === report.bindId));
-              for (const report of reportsToBeDeleted) {
-                const { name } = report;
-                officeDisplayService.removeReportFromStore(report.bindId);
-                const message = t('{{name}} has been removed from the workbook.', { name });
-                notificationService.displayTranslatedNotification({ type: 'success', content: message });
-              }
-            });
+          try {
+            await Promise.all([
+              officeApiHelper.getExcelSessionStatus(),
+              authenticationHelper.validateAuthToken(),
+            ]);
+            excelContext.workbook.tables.load('items');
+            await excelContext.sync()
+            const reportsOfSheets = excelContext.workbook.tables.items
+            const { reportArray, t } = this.props;
+            const reportsToBeDeleted = reportArray.filter((report) => !reportsOfSheets.find((table) => table.name === report.bindId));
+            for (const report of reportsToBeDeleted) {
+              const { name } = report;
+              officeDisplayService.removeReportFromStore(report.bindId);
+              const message = t('{{name}} has been removed from the workbook.', { name });
+              notificationService.displayTranslatedNotification({ type: 'success', content: message });
+            }
+          } catch (error) {
+            errorService.handleError(error);
+          }
         });
       }
       excelContext.sync();
