@@ -10,7 +10,7 @@ import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './navigation-tree.css';
 import { connectToCache, clearCache, createCache, listenToCache, REFRESH_CACHE_COMMAND, refreshCacheState } from '../cache/cache-actions';
 
-const DB_TIMEOUT = 3000; // Interval for checking indexedDB changes on IE
+const DB_TIMEOUT = 5000; // Interval for checking indexedDB changes on IE
 
 export class _NavigationTree extends Component {
   constructor(props) {
@@ -24,6 +24,8 @@ export class _NavigationTree extends Component {
   }
 
   componentDidMount() {
+    const { resetDBState } = this.props
+    resetDBState();
     this.connectToCache();
   }
 
@@ -47,8 +49,10 @@ export class _NavigationTree extends Component {
   connectToCache = () => {
     const { connectToDB, listenToDB } = this.props;
     if (this.isMSIE) {
-      [this.DB, this.DBOnChange] = listenToDB();
-      this.DBOnChange.then(this.startDBListener)
+      setTimeout(() => {
+        [this.DB, this.DBOnChange] = listenToDB();
+        this.DBOnChange.then(this.startDBListener)
+      }, 500);
     } else {
       [this.DB, this.DBOnChange] = connectToDB();
     }
@@ -66,12 +70,11 @@ export class _NavigationTree extends Component {
   };
 
   refresh = () => {
+    const { resetDBState } = this.props
     if (!this.isMSIE && this.DBOnChange) this.DBOnChange.cancel();
-    this.props.resetDB();
+    resetDBState();
     window.Office.context.ui.messageParent(JSON.stringify({ command: REFRESH_CACHE_COMMAND }));
-    setTimeout(() => {
-      this.connectToCache();
-    }, 1000);
+    this.connectToCache(this.DB);
   };
 
   handleOk = () => {
@@ -110,7 +113,7 @@ export class _NavigationTree extends Component {
   };
 
   // TODO: temporary solution
-  onObjectChosen = async (objectId, projectId, subtype, objectName) => {
+  onObjectChosen = async (objectId, projectId, subtype, objectName, target, myLibrary) => {
     try {
       const { selectObject } = this.props;
       selectObject({
@@ -122,9 +125,19 @@ export class _NavigationTree extends Component {
         objectType: null,
       });
 
+      // If myLibrary is on, then selected object is a dossier.
+      const objectType = myLibrary ? mstrObjectEnum.mstrObjectType.dossier : mstrObjectEnum.getMstrTypeBySubtype(subtype);
+
+      /* If selected object is a dossier from myLibrary then the data of proper item is passed in target object.
+      We need to store selected item id (library dossier id) to be able to select that on list */
+      let chosenLibraryDossier;
+      if (myLibrary) {
+        chosenLibraryDossier = objectId;
+        objectId = target.id;
+      }
+
       // Only check for prompts when it's a report or dossier
       let isPrompted = false;
-      const objectType = mstrObjectEnum.getMstrTypeBySubtype(subtype);
       if ((objectType === mstrObjectEnum.mstrObjectType.report) || (objectType === mstrObjectEnum.mstrObjectType.dossier)) {
         isPrompted = await checkIfPrompted(objectId, projectId, objectType.name);
       }
@@ -136,6 +149,7 @@ export class _NavigationTree extends Component {
         chosenSubtype: subtype,
         isPrompted,
         objectType,
+        chosenLibraryDossier,
       });
     } catch (err) {
       const { handlePopupErrors } = this.props;
@@ -145,10 +159,10 @@ export class _NavigationTree extends Component {
 
   render() {
     const {
-      chosenObjectId, chosenProjectId, changeSorting, loading, handlePopupErrors, searchText, sorter,
+      chosenObjectId, chosenProjectId, changeSorting, loading, chosenLibraryDossier, searchText, sorter,
       changeSearching, objectType, cache, envFilter, myLibraryFilter, myLibrary, switchMyLibrary, changeFilter, t, i18n,
     } = this.props;
-    const { triggerUpdate, previewDisplay } = this.state;
+    const { previewDisplay } = this.state;
     const objects = myLibrary ? cache.myLibrary.objects : cache.environmentLibrary.objects;
     const cacheLoading = cache.myLibrary.isLoading || cache.environmentLibrary.isLoading;
     return (
@@ -171,10 +185,10 @@ export class _NavigationTree extends Component {
           objects={objects}
           projects={cache.projects}
           selected={{
-            id: chosenObjectId,
+            id: myLibrary ? chosenLibraryDossier : chosenObjectId,
             projectId: chosenProjectId,
           }}
-          onSelect={({ id, projectId, subtype, name }) => this.onObjectChosen(id, projectId, subtype, name)}
+          onSelect={({ id, projectId, subtype, name, target }) => this.onObjectChosen(id, projectId, subtype, name, target, myLibrary)}
           sort={sorter}
           onSortChange={changeSorting}
           locale={i18n.language}
@@ -213,7 +227,7 @@ const mapActionsToProps = {
   connectToDB: connectToCache,
   listenToDB: listenToCache,
   clearDB: clearCache,
-  resetDB: refreshCacheState,
+  resetDBState: refreshCacheState,
 };
 
 export const NavigationTree = connect(mapStateToProps, mapActionsToProps)(withTranslation('common')(_NavigationTree));
