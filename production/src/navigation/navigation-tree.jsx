@@ -10,7 +10,7 @@ import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './navigation-tree.css';
 import { connectToCache, clearCache, createCache, listenToCache, REFRESH_CACHE_COMMAND, refreshCacheState } from '../cache/cache-actions';
 
-const DB_TIMEOUT = 3000; // Interval for checking indexedDB changes on IE
+const DB_TIMEOUT = 5000; // Interval for checking indexedDB changes on IE
 
 export class _NavigationTree extends Component {
   constructor(props) {
@@ -24,6 +24,8 @@ export class _NavigationTree extends Component {
   }
 
   componentDidMount() {
+    const { resetDBState } = this.props
+    resetDBState();
     this.connectToCache();
   }
 
@@ -47,8 +49,10 @@ export class _NavigationTree extends Component {
   connectToCache = () => {
     const { connectToDB, listenToDB } = this.props;
     if (this.isMSIE) {
-      [this.DB, this.DBOnChange] = listenToDB();
-      this.DBOnChange.then(this.startDBListener)
+      setTimeout(() => {
+        [this.DB, this.DBOnChange] = listenToDB();
+        this.DBOnChange.then(this.startDBListener)
+      }, 500);
     } else {
       [this.DB, this.DBOnChange] = connectToDB();
     }
@@ -66,12 +70,11 @@ export class _NavigationTree extends Component {
   };
 
   refresh = () => {
+    const { resetDBState } = this.props
     if (!this.isMSIE && this.DBOnChange) this.DBOnChange.cancel();
-    this.props.resetDB();
+    resetDBState();
     window.Office.context.ui.messageParent(JSON.stringify({ command: REFRESH_CACHE_COMMAND }));
-    setTimeout(() => {
-      this.connectToCache();
-    }, 1000);
+    this.connectToCache(this.DB);
   };
 
   handleOk = () => {
@@ -223,7 +226,7 @@ const mapActionsToProps = {
   connectToDB: connectToCache,
   listenToDB: listenToCache,
   clearDB: clearCache,
-  resetDB: refreshCacheState,
+  resetDBState: refreshCacheState,
 };
 
 export const NavigationTree = connect(mapStateToProps, mapActionsToProps)(withTranslation('common')(_NavigationTree));
