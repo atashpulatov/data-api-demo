@@ -34,7 +34,7 @@ export const initialState = {
   chosenObjectId: null,
   chosenProjectId: null,
   chosenSubtype: null,
-  chosenProjectName: DEFAULT_PROJECT_NAME,
+  chosenObjectName: DEFAULT_PROJECT_NAME,
   chosenType: DEFAULT_TYPE,
   isPrompted: false,
   dataSource: null,
@@ -54,14 +54,6 @@ export const initialState = {
   myLibrary: true,
 };
 
-function getProjectName(projects, projectId, objectId) {
-  if (!projects || !projects.length) {
-    return DEFAULT_PROJECT_NAME;
-  }
-  const selectedObject = projects.find((item) => item.projectId === projectId && item.key === objectId);
-  return selectedObject ? selectedObject.name : DEFAULT_PROJECT_NAME;
-}
-
 function getType(subtype) {
   const selectedType = supportedTypesArray.find((item) => item.subtype.includes(subtype));
   return selectedType ? selectedType.name : DEFAULT_TYPE;
@@ -75,7 +67,7 @@ export const navigationTree = (state = initialState, action) => {
       newState.chosenObjectId = data.chosenObjectId || null;
       newState.chosenProjectId = data.chosenProjectId || null;
       newState.chosenSubtype = data.chosenSubtype || null;
-      newState.chosenProjectName = getProjectName(state.dataSource, data.chosenProjectId, data.chosenObjectId);
+      newState.chosenObjectName = data.chosenObjectName || DEFAULT_PROJECT_NAME;
       newState.chosenType = getType(data.chosenSubtype);
       newState.isPrompted = !!data.isPrompted;
       newState.objectType = data.objectType;
@@ -108,7 +100,7 @@ export const navigationTree = (state = initialState, action) => {
       newState.chosenObjectId = null;
       newState.chosenProjectId = null;
       newState.chosenSubtype = null;
-      newState.chosenProjectName = DEFAULT_PROJECT_NAME;
+      newState.chosenObjectName = DEFAULT_PROJECT_NAME;
       newState.chosenType = DEFAULT_TYPE;
       newState.scrollPosition = null;
       newState.pageSize = null;

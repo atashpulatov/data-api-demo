@@ -40,7 +40,7 @@ describe.skip('NavigationTree', () => {
       chosenObjectId: 'objectId',
       chosenProjectId: 'projectId',
       chosenSubtype: 'subtype',
-      chosenProjectName: 'Prepare Data',
+      chosenObjectName: 'Prepare Data',
       chosenType: 'Data',
     };
     const wrappedComponent = shallow(<_NavigationTree mstrData={mstrData} handlePrepare={propsMethod} {...actionObject} />);
@@ -49,7 +49,7 @@ describe.skip('NavigationTree', () => {
     // then
     expect(propsMethod).toBeCalled();
     expect(propsMethod).toBeCalledWith(actionObject.chosenProjectId, actionObject.chosenObjectId,
-      actionObject.chosenSubtype, actionObject.chosenProjectName, actionObject.chosenType);
+      actionObject.chosenSubtype, actionObject.chosenObjectName, actionObject.chosenType);
     expect(wrappedComponent.state('previewDisplay')).toEqual(true);
   });
 
