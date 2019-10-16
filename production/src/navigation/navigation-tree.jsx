@@ -193,6 +193,7 @@ export class _NavigationTree extends Component {
           onSortChange={changeSorting}
           locale={i18n.language}
           searchText={searchText}
+          myLibrary={myLibrary}
           filter={myLibrary ? myLibraryFilter : envFilter}
           isLoading={cacheLoading} />
         <PopupButtons
