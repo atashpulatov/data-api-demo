@@ -4,6 +4,7 @@ import {
   CANCEL_DOSSIER_OPEN, SWITCH_MY_LIBRARY, CHANGE_FILTER,
 } from '../navigation/navigation-tree-actions';
 import { CLEAR_WINDOW } from '../popup/popup-actions';
+import { LOAD_BROWSING_STATE_CONST } from '../browser/browser-actions';
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
 export const DEFAULT_TYPE = 'Data';
@@ -174,6 +175,11 @@ export const navigationTree = (state = initialState, action) => {
       newState.filter = data;
       return newState;
     }
+    case LOAD_BROWSING_STATE_CONST:
+      return {
+        ...initialState,
+        ...action.browsingState,
+      };
     default: {
       return state;
     }
