@@ -26,6 +26,28 @@
   float: right;
 }
 
+.top-filter-panel .panel-wrapper,
+.top-filter-panel .search-field,
+.top-filter-panel .refresh-button-container {
+  font-size: 0px;
+}
+
+.mstr-switch-container span {
+  position: relative;
+  top: -1px;
+}
+
+.top-filter-panel .refresh-button-container button {
+  position: relative;
+  top: 1px;
+}
+
+.top-filter-panel .search-field__input {
+  height: 26px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .panel-container {
   z-index: 2;
 }
