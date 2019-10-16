@@ -25,6 +25,7 @@ class OfficeStoreService {
         promptsAnswers: report.promptsAnswers,
         crosstabHeaderDimensions: report.crosstabHeaderDimensions,
         visualizationInfo: report.visualizationInfo,
+        manipulationsXML: report.manipulationsXML,
       });
       settings.set(officeProperties.loadedReportProperties, reportProperties);
       settings.saveAsync();
@@ -134,6 +135,7 @@ class OfficeStoreService {
           promptsAnswers: report.promptsAnswers,
           crosstabHeaderDimensions: report.crosstabHeaderDimensions,
           visualizationInfo: report.visualizationInfo,
+          manipulationsXML: report.manipulationsXML,
         },
       });
       this.preserveReport(report);
