@@ -52,6 +52,7 @@ export const initialState = {
   dossierOpenRequested: false,
   filter: {},
   myLibrary: true,
+  chosenLibraryDossier: null,
 };
 
 function getType(subtype) {
@@ -74,6 +75,7 @@ export const navigationTree = (state = initialState, action) => {
       newState.chosenChapterKey = data.chosenChapterKey || null;
       newState.chosenVisualizationKey = data.chosenVisualizationKey || null;
       newState.preparedInstanceId = data.preparedInstanceId || null;
+      newState.chosenLibraryDossier = data.chosenLibraryDossier || null;
       return newState;
     }
     case UPDATE_SCROLL: {
