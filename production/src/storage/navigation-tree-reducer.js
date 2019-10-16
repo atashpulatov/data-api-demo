@@ -50,7 +50,8 @@ export const initialState = {
   chosenChapterKey: null,
   chosenVisualizationKey: null,
   dossierOpenRequested: false,
-  filter: {},
+  envFilter: {},
+  myLibraryFilter: {},
   myLibrary: true,
   chosenLibraryDossier: null,
 };
@@ -174,7 +175,11 @@ export const navigationTree = (state = initialState, action) => {
     }
     case CHANGE_FILTER: {
       const newState = { ...state };
-      newState.filter = data;
+      if (state.myLibrary) {
+        newState.myLibraryFilter = data;
+      } else {
+        newState.envFilter = data;
+      }
       return newState;
     }
     case LOAD_BROWSING_STATE_CONST:
