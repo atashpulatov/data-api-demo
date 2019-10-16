@@ -27,8 +27,21 @@ export class _NavigationTree extends Component {
     this.connectToCache();
   }
 
+  componentDidUpdate() {
+    const { sorter, objectType, filter, myLibrary } = this.props;
+    const propsToSave = { sorter, objectType, filter, myLibrary };
+    window.Office.context.ui.messageParent(JSON.stringify({
+      command: selectorProperties.commandBrowseUpdate,
+      body: propsToSave,
+    }));
+  }
+
   componentWillUnmount() {
-    this.DB.instance.close()
+    try {
+      this.DB.close();
+    } catch (error) {
+      // Ignoring error
+    }
   }
 
   connectToCache = () => {
