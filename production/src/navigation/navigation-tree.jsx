@@ -180,7 +180,8 @@ export class _NavigationTree extends Component {
           locale={i18n.language}
           searchText={searchText}
           filter={filter}
-          isLoading={cacheLoading} />
+          isLoading={cacheLoading}
+          myLibrary={myLibrary} />
         <PopupButtons
           loading={loading}
           disableActiveActions={!chosenObjectId}
