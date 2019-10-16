@@ -16,6 +16,7 @@ import { createInstance, answerPrompts, getInstance } from '../mstr-object/mstr-
 
 const { Office } = window;
 
+// eslint-disable-next-line no-underscore-dangle
 export const _PopupViewSelector = (props) => {
   let { popupType } = props;
   const { propsToPass, methods, importRequested, isPrompted, dossierOpenRequested } = props;
@@ -210,7 +211,7 @@ function proceedToImport(props) {
   if (props.dossierData) {
     okObject.dossierData = {
       ...props.dossierData,
-      reportName: props.chosenProjectName,
+      reportName: props.chosenObjectName,
     };
   }
   props.startLoading();

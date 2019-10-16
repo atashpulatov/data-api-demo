@@ -5,7 +5,6 @@ import { sessionHelper } from '../storage/session-helper';
 import { notificationService } from '../notification/notification-service';
 import { reduxStore } from '../store';
 import {
-  CLEAR_WINDOW,
   refreshReportsArray,
   START_REPORT_LOADING,
   STOP_REPORT_LOADING,
@@ -16,6 +15,7 @@ import { officeProperties } from '../office/office-properties';
 import { officeApiHelper } from '../office/office-api-helper';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { officeStoreService } from '../office/store/office-store-service';
+import { LOAD_BROWSING_STATE_CONST } from '../browser/browser-actions';
 import { REFRESH_CACHE_COMMAND, refreshCache } from '../cache/cache-actions';
 
 const URL = `${window.location.href}`;
@@ -62,7 +62,7 @@ class PopupController {
           console.timeEnd('Popup load time');
           dialog.addEventHandler(Office.EventType.DialogMessageReceived,
             this.onMessageFromPopup.bind(null, dialog, reportParams));
-          reduxStore.dispatch({ type: CLEAR_WINDOW });
+
           dialog.addEventHandler(
             // Event received on dialog close
             Office.EventType.DialogEventReceived,
@@ -82,6 +82,10 @@ class PopupController {
   onMessageFromPopup = async (dialog, reportParams, arg) => {
     const { message } = arg;
     const response = JSON.parse(message);
+    if (response.command === selectorProperties.commandBrowseUpdate) {
+      reduxStore.dispatch({ type: LOAD_BROWSING_STATE_CONST, browsingState: response.body });
+      return;
+    }
     try {
       if (response.command !== REFRESH_CACHE_COMMAND) await this.closeDialog(dialog);
       await officeApiHelper.getExcelSessionStatus(); // checking excel session status

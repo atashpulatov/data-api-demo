@@ -63,7 +63,7 @@ export default class _DossierWindow extends React.Component {
   }
 
   render() {
-    const { chosenProjectName, chosenObjectId, chosenProjectId, handleBack, t, mstrData, handlePopupErrors } = this.props;
+    const { chosenObjectName, chosenObjectId, chosenProjectId, handleBack, t, mstrData, handlePopupErrors } = this.props;
     const { isVisualisationSelected } = this.state;
     const propsToPass = {
       envUrl: mstrData.envUrl,
@@ -74,8 +74,8 @@ export default class _DossierWindow extends React.Component {
     };
     return (
       <div>
-        <h1 title={chosenProjectName} className="ant-col folder-browser-title">
-          {`${t('Import Dossier')} > ${chosenProjectName}`}
+        <h1 title={chosenObjectName} className="ant-col folder-browser-title">
+          {`${t('Import Dossier')} > ${chosenObjectName}`}
         </h1>
         <span className="dossier-window-information-frame">
           <MSTRIcon clasName="dossier-window-information-icon" type="info-icon" />
@@ -102,7 +102,7 @@ export default class _DossierWindow extends React.Component {
 
 _DossierWindow.propTypes = {
   chosenObjectId: PropTypes.string,
-  chosenProjectName: PropTypes.string,
+  chosenObjectName: PropTypes.string,
   chosenProjectId: PropTypes.string,
   handleBack: PropTypes.func,
   t: PropTypes.func,
@@ -118,7 +118,7 @@ _DossierWindow.propTypes = {
 
 _DossierWindow.defaultProps = {
   chosenObjectId: 'default id',
-  chosenProjectName: 'default name',
+  chosenObjectName: 'default name',
   chosenProjectId: 'default id',
   handleBack: () => { },
   t: (text) => text,
@@ -133,9 +133,9 @@ _DossierWindow.defaultProps = {
 };
 
 function mapStateToProps(state) {
-  const { chosenProjectName, chosenObjectId, chosenProjectId } = state.navigationTree;
+  const { chosenObjectName, chosenObjectId, chosenProjectId } = state.navigationTree;
   return {
-    chosenProjectName,
+    chosenObjectName,
     chosenObjectId,
     chosenProjectId,
   };

@@ -27,8 +27,21 @@ export class _NavigationTree extends Component {
     this.connectToCache();
   }
 
+  componentDidUpdate() {
+    const { sorter, objectType, filter, myLibrary } = this.props;
+    const propsToSave = { sorter, objectType, filter, myLibrary };
+    window.Office.context.ui.messageParent(JSON.stringify({
+      command: selectorProperties.commandBrowseUpdate,
+      body: propsToSave,
+    }));
+  }
+
   componentWillUnmount() {
-    this.DBOnChange.cancel()
+    try {
+      this.DB.close();
+    } catch (error) {
+      // Ignoring error
+    }
   }
 
   connectToCache = () => {
@@ -80,8 +93,8 @@ export class _NavigationTree extends Component {
 
   handleSecondary = async () => {
     try {
-      const { chosenProjectId, chosenObjectId, chosenProjectName, chosenType, chosenSubtype, handlePrepare } = this.props;
-      handlePrepare(chosenProjectId, chosenObjectId, chosenSubtype, chosenProjectName, chosenType);
+      const { chosenProjectId, chosenObjectId, chosenObjectName, chosenType, chosenSubtype, handlePrepare } = this.props;
+      handlePrepare(chosenProjectId, chosenObjectId, chosenSubtype, chosenObjectName, chosenType);
       this.setState({ previewDisplay: true });
     } catch (err) {
       const { handlePopupErrors } = this.props;
@@ -97,11 +110,12 @@ export class _NavigationTree extends Component {
   };
 
   // TODO: temporary solution
-  onObjectChosen = async (objectId, projectId, subtype) => {
+  onObjectChosen = async (objectId, projectId, subtype, objectName) => {
     try {
       const { selectObject } = this.props;
       selectObject({
         chosenObjectId: null,
+        chosenObjectName: null,
         chosenProjectId: null,
         chosenSubtype: null,
         isPrompted: null,
@@ -117,6 +131,7 @@ export class _NavigationTree extends Component {
 
       selectObject({
         chosenObjectId: objectId,
+        chosenObjectName: objectName,
         chosenProjectId: projectId,
         chosenSubtype: subtype,
         isPrompted,
@@ -159,7 +174,7 @@ export class _NavigationTree extends Component {
             id: chosenObjectId,
             projectId: chosenProjectId,
           }}
-          onSelect={({ id, projectId, subtype }) => this.onObjectChosen(id, projectId, subtype)}
+          onSelect={({ id, projectId, subtype, name }) => this.onObjectChosen(id, projectId, subtype, name)}
           sort={sorter}
           onSortChange={changeSorting}
           locale={i18n.language}
