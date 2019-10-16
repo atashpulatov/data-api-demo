@@ -48,9 +48,8 @@ export const clearStateCache = () => ({ type: CLEAR_CACHE, });
 
 export const refreshCacheAction = () => ({ type: REFRESH_CACHE, });
 
-export const refreshCacheState = (cache) => (dispatch) => {
+export const refreshCacheState = () => (dispatch) => {
   dispatch(refreshCacheAction());
-  return Promise.all([cache.putData(LOADING_DB + ENV_LIBRARY_DB_ID, true), cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, true)]);
 }
 
 export function fetchObjects(dispatch, cache) {
@@ -59,26 +58,26 @@ export function fetchObjects(dispatch, cache) {
     .catch(console.error);
 
   // My library
-  console.time('Fetch my library');
+  // console.time('Fetch my library');
   dispatch(myLibraryLoading(true));
   cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, true);
   getMyLibraryObjectList((objects) => cache.putData(MY_LIBRARY_DB_ID, objects, true))
     .catch(console.error)
     .finally(() => {
-      console.timeEnd('Fetch my library');
+      // console.timeEnd('Fetch my library');
       cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, false).then(() => {
         dispatch(myLibraryLoading(false));
       });
     });
 
   // Environment library
-  console.time('Fetch environment objects');
+  // console.time('Fetch environment objects');
   dispatch(objectListLoading(true));
   cache.putData(LOADING_DB + ENV_LIBRARY_DB_ID, true);
   getObjectList((objects) => cache.putData(ENV_LIBRARY_DB_ID, objects, true))
     .catch(console.error)
     .finally(() => {
-      console.timeEnd('Fetch environment objects');
+      // console.timeEnd('Fetch environment objects');
       cache.putData(LOADING_DB + ENV_LIBRARY_DB_ID, false).then(() => {
         dispatch(objectListLoading(false));
       });
