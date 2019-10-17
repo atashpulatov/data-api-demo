@@ -42,10 +42,9 @@ describe('office loaded file', () => {
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile objectType={{ name: 'dataset' }} refreshDate={new Date()} visualizationInfo={visualizationInfoMock} />);
     const wrappedCol = wrappedComponent.find('.object-title-row');
-    const wrappedIcons = wrappedCol.find('MSTRIcon');
+    const wrappedIcons = wrappedCol.find('img');
     // then
     expect(wrappedCol.at(0).contains(wrappedIcons.get(0))).toBe(true);
-    expect(wrappedIcons.at(0).prop('type')).toBe('dataset');
   });
 
   it('should display report type icon', () => {
@@ -54,10 +53,9 @@ describe('office loaded file', () => {
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile objectType={{ name: 'report' }} refreshDate={new Date()} visualizationInfo={visualizationInfoMock} />);
     const wrappedCol = wrappedComponent.find('.object-title-row');
-    const wrappedIcons = wrappedCol.find('MSTRIcon');
+    const wrappedIcons = wrappedCol.find('img');
     // then
     expect(wrappedCol.at(0).contains(wrappedIcons.get(0))).toBe(true);
-    expect(wrappedIcons.at(0).prop('type')).toBe('report');
   });
 
   it('should invoke select method on report name click', () => {
