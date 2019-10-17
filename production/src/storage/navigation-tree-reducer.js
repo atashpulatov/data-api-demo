@@ -52,7 +52,7 @@ export const initialState = {
   dossierOpenRequested: false,
   envFilter: {},
   myLibraryFilter: {},
-  myLibrary: true,
+  myLibrary: false,
   chosenLibraryDossier: null,
 };
 
