@@ -98,7 +98,7 @@ class SessionHelper {
       type: sessionProperties.actions.getUserInfo,
       userFullName: values.fullName,
       userInitials: values.initials,
-      username: values.id,
+      userID: values.id,
     });
   }
 
