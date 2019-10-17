@@ -105,9 +105,9 @@ class OfficeApiHelper {
     }
   };
 
-  getExcelSessionStatus = async () => {
+  getExcelSession = async () => {
     await Promise.all([
-      officeApiHelper.getExcelSessionStatus(),
+      this.getExcelSessionStatus(),
       authenticationHelper.validateAuthToken(),
     ]);
   }
