@@ -34,7 +34,7 @@ const updateState = (state, action) => {
 /**
  * Creates new state, saves the state to office settings and then returns it.
  */
-export const browserReducer = (state = { myLibrary: true }, action) => {
+export const browserReducer = (state = { myLibrary: false }, action) => {
   const updatedState = updateState(state, action);
   browserStoreService.preserveBrowsingFilters(updatedState);
   return updatedState;
