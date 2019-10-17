@@ -21,7 +21,6 @@ button.add-data-btn {
   margin: 10px 0px 10px 10px;
 }
 
-
 button.add-data-btn:focus {
   background: rgba(28, 145, 220, 0.05);
   border: 1px solid #1C91DC;
@@ -33,10 +32,7 @@ button.add-data-btn:focus {
   background: rgba(28, 145, 220, 0.20);
 }
 
-.ant-btn.refresh-all-btn,
-.ant-btn.refresh-all-btn:hover,
-.ant-btn.refresh-all-btn:focus,
-.refresh-all-btn .ant-btn {
+.ant-btn.refresh-all-btn, .ant-btn.refresh-all-btn:hover, .ant-btn.refresh-all-btn:focus, .refresh-all-btn .ant-btn {
   float: right;
   background: #FFFFFF;
   box-shadow: 0 0;
@@ -49,8 +45,7 @@ button.add-data-btn:focus {
   margin: 10px 42px 10px 0px;
 }
 
-.refresh-all-btn .mstr-icon,
-.refresh-all-btn img {
+.refresh-all-btn .mstr-icon, .refresh-all-btn img {
   margin-right: 5px;
   vertical-align: sub;
 }
@@ -96,11 +91,11 @@ button.add-data-btn:focus {
   overflow: hidden;
   text-overflow: ellipsis;
   -webkit-user-select: none;
-  -khtml-user-select: none;	
-  -moz-user-select: none;	
+  -khtml-user-select: none;
+  -moz-user-select: none;
 }
 
-.ant-popover .ant-popover-inner-content  {
+.ant-popover .ant-popover-inner-content {
   text-align: left;
 }
 
@@ -108,6 +103,10 @@ button.add-data-btn:focus {
   display: flex;
   flex-direction: row;
   height: 25px;
+}
+
+.object-title-row img {
+  height: 18px;
 }
 
 .file-history-container:hover {
@@ -125,10 +124,7 @@ button.add-data-btn:focus {
   text-overflow: ellipsis;
 }
 
-.mstr-icon.edit,
-.mstr-icon.refresh,
-.mstr-icon.reprompt,
-.mstr-icon.trash {
+.mstr-icon.edit, .mstr-icon.refresh, .mstr-icon.reprompt, .mstr-icon.trash {
   cursor: pointer;
   display: inline-flex;
 }
@@ -189,8 +185,7 @@ button.add-data-btn:focus {
   white-space: nowrap;
 }
 
-.ant-input.rename-input:focus,
-.ant-input.rename-input:hover {
+.ant-input.rename-input:focus, .ant-input.rename-input:hover {
   box-shadow: none;
   transition: .3s;
   font-size: 13px;
@@ -216,8 +211,8 @@ button.add-data-btn:focus {
   padding: 0 4px;
   font-size: 12px;
   color: #888888;
-  -webkit-user-select: none;	
-  -khtml-user-select: none;	
+  -webkit-user-select: none;
+  -khtml-user-select: none;
   -moz-user-select: none;
 }
 
@@ -233,8 +228,7 @@ button.add-data-btn:focus {
   background: rgba(255, 255, 255, 0.8);
 }
 
-.secured-header,
-.secured-info {
+.secured-header, .secured-info {
   color: #4D5154;
   background: rgba(255, 255, 255, 0.5);
 }
@@ -286,7 +280,7 @@ button.add-data-btn:focus {
   line-height: 15px;
   -webkit-user-select: none;
   -khtml-user-select: none;
-  -moz-user-select: none;	
+  -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
 }
