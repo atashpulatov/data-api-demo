@@ -24,14 +24,19 @@ export class _NavigationTree extends Component {
   }
 
   componentDidMount() {
-    const { resetDBState } = this.props
+    const { resetDBState } = this.props;
     resetDBState();
     this.connectToCache();
   }
 
   componentDidUpdate() {
     const { sorter, objectType, filter, myLibrary } = this.props;
-    const propsToSave = { sorter, objectType, filter, myLibrary };
+    const propsToSave = {
+      sorter,
+      objectType,
+      filter,
+      myLibrary,
+    };
     window.Office.context.ui.messageParent(JSON.stringify({
       command: selectorProperties.commandBrowseUpdate,
       body: propsToSave,
@@ -51,7 +56,7 @@ export class _NavigationTree extends Component {
     if (this.isMSIE) {
       setTimeout(() => {
         [this.DB, this.DBOnChange] = listenToDB();
-        this.DBOnChange.then(this.startDBListener)
+        this.DBOnChange.then(this.startDBListener);
       }, 500);
     } else {
       [this.DB, this.DBOnChange] = connectToDB();
@@ -60,7 +65,7 @@ export class _NavigationTree extends Component {
 
   startDBListener = () => {
     const { cache, listenToDB } = this.props;
-    console.log(cache.projects.length, cache.myLibrary.objects.length, cache.myLibrary.isLoading, cache.environmentLibrary.objects.length, cache.environmentLibrary.isLoading)
+    console.log(cache.projects.length, cache.myLibrary.objects.length, cache.myLibrary.isLoading, cache.environmentLibrary.objects.length, cache.environmentLibrary.isLoading);
     if (cache.projects.length < 1 || cache.myLibrary.isLoading || cache.environmentLibrary.isLoading) {
       setTimeout(() => {
         [this.DB, this.DBOnChange] = listenToDB(this.DB);
@@ -70,7 +75,7 @@ export class _NavigationTree extends Component {
   };
 
   refresh = () => {
-    const { resetDBState } = this.props
+    const { resetDBState } = this.props;
     if (!this.isMSIE && this.DBOnChange) this.DBOnChange.cancel();
     resetDBState();
     window.Office.context.ui.messageParent(JSON.stringify({ command: REFRESH_CACHE_COMMAND }));
@@ -114,13 +119,17 @@ export class _NavigationTree extends Component {
 
   // TODO: temporary solution
   onObjectChosen = async (objectId, projectId, subtype, objectName, target, myLibrary) => {
+    const { selectObject, chosenObjectId, requestPerformed } = this.props;
+    if (chosenObjectId && !requestPerformed) {
+      return;
+    }
     try {
-      const { selectObject } = this.props;
       selectObject({
-        chosenObjectId: null,
-        chosenObjectName: null,
-        chosenProjectId: null,
-        chosenSubtype: null,
+        requestPerformed: false,
+        chosenObjectId: objectId,
+        chosenObjectName: objectName,
+        chosenProjectId: projectId,
+        chosenSubtype: subtype,
         isPrompted: null,
         objectType: null,
       });
@@ -143,6 +152,7 @@ export class _NavigationTree extends Component {
       }
 
       selectObject({
+        requestPerformed: true,
         chosenObjectId: objectId,
         chosenObjectName: objectName,
         chosenProjectId: projectId,
@@ -152,6 +162,15 @@ export class _NavigationTree extends Component {
         chosenLibraryDossier,
       });
     } catch (err) {
+      selectObject({
+        requestPerformed: false,
+        chosenObjectId: null,
+        chosenObjectName: null,
+        chosenProjectId: null,
+        chosenSubtype: null,
+        isPrompted: null,
+        objectType: null,
+      });
       const { handlePopupErrors } = this.props;
       handlePopupErrors(err);
     }
@@ -159,7 +178,7 @@ export class _NavigationTree extends Component {
 
   render() {
     const {
-      chosenObjectId, chosenProjectId, changeSorting, loading, chosenLibraryDossier, searchText, sorter,
+      chosenObjectId, chosenProjectId, changeSorting, loading, chosenLibraryDossier, searchText, sorter, requestPerformed,
       changeSearching, objectType, cache, envFilter, myLibraryFilter, myLibrary, switchMyLibrary, changeFilter, t, i18n,
     } = this.props;
     const { previewDisplay } = this.state;
@@ -179,7 +198,7 @@ export class _NavigationTree extends Component {
             myLibrary={myLibrary}
             filter={myLibrary ? myLibraryFilter : envFilter}
             onRefresh={() => this.refresh()}
-            onSwitch={switchMyLibrary} />
+            onSwitch={switchMyLibrary}/>
         </div>
         <ObjectTable
           objects={objects}
@@ -195,10 +214,10 @@ export class _NavigationTree extends Component {
           searchText={searchText}
           myLibrary={myLibrary}
           filter={myLibrary ? myLibraryFilter : envFilter}
-          isLoading={cacheLoading} />
+          isLoading={cacheLoading}/>
         <PopupButtons
           loading={loading}
-          disableActiveActions={!chosenObjectId}
+          disableActiveActions={!requestPerformed}
           handleOk={this.handleOk}
           handleSecondary={this.handleSecondary}
           handleCancel={this.handleCancel}
