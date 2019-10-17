@@ -29,14 +29,14 @@ export const myLibraryLoading = (isLoading) => ({
   data: isLoading,
 });
 
-export const addMyLibraryObjects = (objects) => ({
+export const addMyLibraryObjects = (objects, append = false) => ({
   type: ADD_MY_LIBRARY_OBJECTS,
-  data: objects,
+  data: { objects, append },
 });
 
-export const addEnvObjects = (objects) => ({
+export const addEnvObjects = (objects, append = false) => ({
   type: ADD_ENV_OBJECTS,
-  data: objects,
+  data: { objects, append },
 });
 
 export const addProjects = (objects) => ({
@@ -57,18 +57,18 @@ export function fetchObjects(dispatch, cache) {
   fetchProjects((objects) => cache.putData(PROJECTS_DB_ID, objects, true))
     .catch(console.error);
 
-  // My library
+  // NOTE: My library removed from m2020
   // console.time('Fetch my library');
-  dispatch(myLibraryLoading(true));
-  cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, true);
-  getMyLibraryObjectList((objects) => cache.putData(MY_LIBRARY_DB_ID, objects, true))
-    .catch(console.error)
-    .finally(() => {
-      // console.timeEnd('Fetch my library');
-      cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, false).then(() => {
-        dispatch(myLibraryLoading(false));
-      });
-    });
+  // dispatch(myLibraryLoading(true));
+  // cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, true);
+  // getMyLibraryObjectList((objects) => cache.putData(MY_LIBRARY_DB_ID, objects, true))
+  //   .catch(console.error)
+  //   .finally(() => {
+  //     // console.timeEnd('Fetch my library');
+  //     cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, false).then(() => {
+  //       dispatch(myLibraryLoading(false));
+  //     });
+  //   });
 
   // Environment library
   // console.time('Fetch environment objects');
@@ -82,6 +82,27 @@ export function fetchObjects(dispatch, cache) {
         dispatch(objectListLoading(false));
       });
     });
+}
+
+export function fetchObjectsFallback() {
+  return (dispatch) => {
+    // Projects
+    fetchProjects((projects) => dispatch(addProjects(projects)))
+      .catch(console.error);
+
+    // NOTE: My library removed from m2020
+    // dispatch(myLibraryLoading(true));
+    // getMyLibraryObjectList((objects) => dispatch(addMyLibraryObjects(objects, true)))
+    //   .catch(console.error)
+    //   .finally(() => dispatch(myLibraryLoading(false)));
+
+    // Environment library
+    // console.time('Fetch environment objects');
+    dispatch(objectListLoading(true));
+    getObjectList((objects) => dispatch(addEnvObjects(objects, true)))
+      .catch(console.error)
+      .finally(() => dispatch(objectListLoading(false)));
+  }
 }
 
 export function createCache(initUsername) {
@@ -140,7 +161,7 @@ export function connectToCache(prevCache) {
     const { userID } = sessionReducer;
     const cache = prevCache || new DB(userID || 'cache');
     if (!prevCache) {
-      dispatch(myLibraryLoading(true));
+      // dispatch(myLibraryLoading(true));
       dispatch(objectListLoading(true));
     }
 
@@ -158,7 +179,7 @@ export function listenToCache(prevCache) {
     const { userID } = sessionReducer;
     const cache = prevCache || new DB(userID || 'cache');
     if (!prevCache) {
-      dispatch(myLibraryLoading(true));
+      // dispatch(myLibraryLoading(true));
       dispatch(objectListLoading(true));
     }
 

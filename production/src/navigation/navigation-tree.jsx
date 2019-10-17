@@ -8,9 +8,11 @@ import { actions } from './navigation-tree-actions';
 import { isPrompted as checkIfPrompted } from '../mstr-object/mstr-object-rest-service';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './navigation-tree.css';
-import { connectToCache, clearCache, createCache, listenToCache, REFRESH_CACHE_COMMAND, refreshCacheState } from '../cache/cache-actions';
+import { connectToCache, clearCache, createCache, listenToCache, REFRESH_CACHE_COMMAND, refreshCacheState, fetchObjectsFallback } from '../cache/cache-actions';
+import DB from '../cache/pouch-db';
 
 const DB_TIMEOUT = 5000; // Interval for checking indexedDB changes on IE
+const SAFETY_FALLBACK = 7000; // Interval for falling back to network
 
 export class _NavigationTree extends Component {
   constructor(props) {
@@ -19,15 +21,22 @@ export class _NavigationTree extends Component {
       triggerUpdate: false,
       previewDisplay: false,
     };
+    this.indexedDBSupport = DB.getIndexedDBSupport();
     const ua = window.navigator.userAgent;
     this.isMSIE = ua.indexOf('MSIE ') > 0 || !!navigator.userAgent.match(/Trident.*rv:11\./);
   }
 
   componentDidMount() {
-    const { resetDBState } = this.props;
+    const { resetDBState, fetchObjectsFromNetwork } = this.props
     resetDBState();
-    this.connectToCache();
+    if (this.indexedDBSupport) {
+      this.startFallbackProtocol();
+      this.connectToCache();
+    } else {
+      fetchObjectsFromNetwork();
+    }
   }
+
 
   componentDidUpdate() {
     const { sorter, objectType, filter, myLibrary } = this.props;
@@ -56,17 +65,30 @@ export class _NavigationTree extends Component {
     if (this.isMSIE) {
       setTimeout(() => {
         [this.DB, this.DBOnChange] = listenToDB();
-        this.DBOnChange.then(this.startDBListener);
-      }, 500);
+        this.DBOnChange.then(this.startDBListener)
+      }, 700);
     } else {
       [this.DB, this.DBOnChange] = connectToDB();
     }
   };
 
+  refresh = () => {
+    const { resetDBState, fetchObjectsFromNetwork } = this.props
+    resetDBState();
+    if (this.indexedDBSupport) {
+      if (!this.isMSIE && this.DBOnChange) this.DBOnChange.cancel();
+      window.Office.context.ui.messageParent(JSON.stringify({ command: REFRESH_CACHE_COMMAND }));
+      this.connectToCache(this.DB);
+    } else {
+      fetchObjectsFromNetwork();
+    }
+  };
+
   startDBListener = () => {
     const { cache, listenToDB } = this.props;
-    console.log(cache.projects.length, cache.myLibrary.objects.length, cache.myLibrary.isLoading, cache.environmentLibrary.objects.length, cache.environmentLibrary.isLoading);
-    if (cache.projects.length < 1 || cache.myLibrary.isLoading || cache.environmentLibrary.isLoading) {
+    const { projects, myLibrary, environmentLibrary } = cache;
+    console.log(projects.length, myLibrary.objects.length, myLibrary.isLoading, environmentLibrary.objects.length, environmentLibrary.isLoading)
+    if (projects.length < 1 || myLibrary.isLoading || environmentLibrary.isLoading) {
       setTimeout(() => {
         [this.DB, this.DBOnChange] = listenToDB(this.DB);
         this.DBOnChange.then(this.startDBListener);
@@ -74,13 +96,17 @@ export class _NavigationTree extends Component {
     }
   };
 
-  refresh = () => {
-    const { resetDBState } = this.props;
-    if (!this.isMSIE && this.DBOnChange) this.DBOnChange.cancel();
-    resetDBState();
-    window.Office.context.ui.messageParent(JSON.stringify({ command: REFRESH_CACHE_COMMAND }));
-    this.connectToCache(this.DB);
-  };
+  startFallbackProtocol = () => {
+    setTimeout(() => {
+      const { cache, fetchObjectsFromNetwork, resetDBState } = this.props;
+      const { projects } = cache;
+      if (projects.length === 0) {
+        console.log('Cache failed, fetching from network');
+        resetDBState();
+        fetchObjectsFromNetwork();
+      }
+    }, SAFETY_FALLBACK);
+  }
 
   handleOk = () => {
     const { objectType, requestImport, requestDossierOpen } = this.props;
@@ -198,7 +224,7 @@ export class _NavigationTree extends Component {
             myLibrary={myLibrary}
             filter={myLibrary ? myLibraryFilter : envFilter}
             onRefresh={() => this.refresh()}
-            onSwitch={switchMyLibrary}/>
+            onSwitch={switchMyLibrary} />
         </div>
         <ObjectTable
           objects={objects}
@@ -214,7 +240,7 @@ export class _NavigationTree extends Component {
           searchText={searchText}
           myLibrary={myLibrary}
           filter={myLibrary ? myLibraryFilter : envFilter}
-          isLoading={cacheLoading}/>
+          isLoading={cacheLoading} />
         <PopupButtons
           loading={loading}
           disableActiveActions={!requestPerformed}
@@ -247,6 +273,7 @@ const mapActionsToProps = {
   listenToDB: listenToCache,
   clearDB: clearCache,
   resetDBState: refreshCacheState,
+  fetchObjectsFromNetwork: fetchObjectsFallback
 };
 
 export const NavigationTree = connect(mapStateToProps, mapActionsToProps)(withTranslation('common')(_NavigationTree));

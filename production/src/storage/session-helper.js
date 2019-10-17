@@ -5,6 +5,7 @@ import { userRestService } from '../home/user-rest-service';
 import { errorService } from '../error/error-handler';
 import { homeHelper } from '../home/home-helper';
 import { createCache } from '../cache/cache-actions';
+import DB from '../cache/pouch-db';
 
 class SessionHelper {
   enableLoading = () => {
@@ -87,7 +88,7 @@ class SessionHelper {
     try {
       userData = await userRestService.getUserInfo(authToken, envUrl);
       !userData.userInitials && sessionHelper.saveUserInfo(userData);
-      createCache(userData.id)(reduxStore.dispatch, reduxStore.getState);
+      if (DB.getIndexedDBSupport()) createCache(userData.id)(reduxStore.dispatch, reduxStore.getState);
     } catch (error) {
       errorService.handleError(error, { isLogout: !IS_LOCALHOST });
     }
