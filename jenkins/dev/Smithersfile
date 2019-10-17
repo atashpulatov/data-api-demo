@@ -24,7 +24,9 @@ export WORKSPACE_SETTING=aws_dev
 
 source .ecosystem
 export HATS=$HATS:rallytask
-rake generate_localization_strings upload_plugins update_dep_db_from_file
+rake generate_localization_strings upload_plugins 
+rake cloc
+rake update_dep_db_from_file
 rake update_ready_for_pr
 '
     end
