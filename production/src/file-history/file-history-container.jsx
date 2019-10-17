@@ -42,14 +42,14 @@ export class _FileHistoryContainer extends React.Component {
     try {
       const excelContext = await officeApiHelper.getExcelContext();
       const officeContext = await officeApiHelper.getOfficeContext();
-      if (window.Office.context.requirements.isSetSupported('ExcelApi', 1.9)) {
+      if (officeContext.requirements.isSetSupported('ExcelApi', 1.9)) {
         this.eventRemove = excelContext.workbook.tables.onDeleted.add(async (e) => {
           await officeApiHelper.checkStatusOfSessions();
           const { reportArray, t } = this.props;
           const reportToDelete = reportArray.find((report) => report.bindId === e.tableName);
           officeApiHelper.removeObjectAndDisplaytNotification(reportToDelete, officeContext, t)
         });
-      } else if (window.Office.context.requirements.isSetSupported('ExcelApi', 1.7)) {
+      } else if (officeContext.requirements.isSetSupported('ExcelApi', 1.7)) {
         this.eventRemove = excelContext.workbook.worksheets.onDeleted.add(async () => {
           await officeApiHelper.checkStatusOfSessions();
           excelContext.workbook.tables.load('items');
