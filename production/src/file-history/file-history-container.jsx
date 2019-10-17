@@ -12,7 +12,6 @@ import { fileHistoryContainerHOC } from './file-history-container-HOC';
 import { officeStoreService } from '../office/store/office-store-service';
 import { toggleSecuredFlag } from '../office/office-actions';
 import { errorService } from '../error/error-handler';
-import { authenticationHelper } from '../authentication/authentication-helper';
 import restrictedArt from './assets/art_restricted_access_blue.svg';
 import { notificationService } from '../notification/notification-service';
 import './file-history.css';
@@ -38,24 +37,31 @@ export class _FileHistoryContainer extends React.Component {
     this.deleteRemoveReportListener();
   }
 
+
   addRemoveReportListener = async () => {
     try {
       const excelContext = await officeApiHelper.getExcelContext();
-      this.eventRemove = excelContext.workbook.tables.onDeleted.add(async (e) => {
-        const { reportArray, t } = this.props;
-        try {
-          await Promise.all([
-            officeApiHelper.getExcelSessionStatus(),
-            authenticationHelper.validateAuthToken(),
-          ]);
-          const { name } = reportArray.find((report) => report.bindId === e.tableName);
-          officeDisplayService.removeReportFromStore(e.tableName);
-          const message = t('{{name}} has been removed from the workbook.', { name });
-          notificationService.displayTranslatedNotification({ type: 'success', content: message });
-        } catch (error) {
-          errorService.handleError(error);
-        }
-      });
+      const officeContext = await officeApiHelper.getOfficeContext();
+      if (officeContext.requirements.isSetSupported('ExcelApi', 1.9)) {
+        this.eventRemove = excelContext.workbook.tables.onDeleted.add(async (e) => {
+          await officeApiHelper.checkStatusOfSessions();
+          const { reportArray, t } = this.props;
+          const reportToDelete = reportArray.find((report) => report.bindId === e.tableName);
+          officeApiHelper.removeObjectAndDisplaytNotification(reportToDelete, officeContext, t)
+        });
+      } else if (officeContext.requirements.isSetSupported('ExcelApi', 1.7)) {
+        this.eventRemove = excelContext.workbook.worksheets.onDeleted.add(async () => {
+          await officeApiHelper.checkStatusOfSessions();
+          excelContext.workbook.tables.load('items');
+          await excelContext.sync()
+          const reportsOfSheets = excelContext.workbook.tables.items
+          const { reportArray, t } = this.props;
+          const reportsToBeDeleted = reportArray.filter((report) => !reportsOfSheets.find((table) => table.name === report.bindId));
+          for (const report of reportsToBeDeleted) {
+            officeApiHelper.removeObjectAndDisplaytNotification(report, officeContext, t)
+          }
+        });
+      }
       excelContext.sync();
     } catch (error) {
       console.log('Cannot add onDeleted event listener');
@@ -86,10 +92,7 @@ export class _FileHistoryContainer extends React.Component {
 
   showData = async () => {
     try {
-      await Promise.all([
-        officeApiHelper.getExcelSessionStatus(),
-        authenticationHelper.validateAuthToken(),
-      ]);
+      await officeApiHelper.checkStatusOfSessions();
       const {
         reportArray,
         refreshReportsArray,

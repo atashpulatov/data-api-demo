@@ -9,6 +9,7 @@ import { errorService } from '../error/error-handler';
 import mstrNormalizedJsonHandler from '../mstr-object/mstr-normalized-json-handler';
 import { CONTEXT_LIMIT } from '../mstr-object/mstr-object-rest-service';
 import officeDisplayService from './office-display-service';
+import { authenticationHelper } from '../authentication/authentication-helper';
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
@@ -103,6 +104,33 @@ class OfficeApiHelper {
       return false;
     }
   };
+
+  /**
+ * checks excel session and auth token
+ *
+ * @memberof OfficeApiHelper
+ */
+  checkStatusOfSessions = async () => {
+    await Promise.all([
+      this.getExcelSessionStatus(),
+      authenticationHelper.validateAuthToken(),
+    ]);
+  }
+
+  /**
+     * Gets range of subtotal row based on subtotal cell
+     *
+     * @param {Office} object
+     * @param {Office} officeContext office context
+     * @param {Object} t i18n translating function
+     * @memberof OfficeApiHelper
+     */
+  removeObjectAndDisplaytNotification = async (object, officeContext, t) => {
+    const { name } = object
+    this.removeObjectNotExistingInExcel(t, object, officeContext)
+    const message = t('{{name}} has been removed from the workbook.', { name });
+    notificationService.displayTranslatedNotification({ type: 'success', content: message });
+  }
 
   getBindingRange = (context, bindingId) => context.workbook.bindings
     .getItem(bindingId).getTable()
@@ -205,30 +233,30 @@ class OfficeApiHelper {
 
   _getNumberFormattingCategoryName = (metric) => {
     switch (metric.category) {
-    case -2:
-      return 'Default';
-    case 9:
-      return 'General';
-    case 0:
-      return 'Fixed';
-    case 1:
-      return 'Currency';
-    case 2:
-      return 'Date';
-    case 3:
-      return 'Time';
-    case 4:
-      return 'Percentage';
-    case 5:
-      return 'Fraction';
-    case 6:
-      return 'Scientific';
-    case 7: // 'Custom'
-      return metric.formatString;
-    case 8:
-      return 'Special';
-    default:
-      return 'General';
+      case -2:
+        return 'Default';
+      case 9:
+        return 'General';
+      case 0:
+        return 'Fixed';
+      case 1:
+        return 'Currency';
+      case 2:
+        return 'Date';
+      case 3:
+        return 'Time';
+      case 4:
+        return 'Percentage';
+      case 5:
+        return 'Fraction';
+      case 6:
+        return 'Scientific';
+      case 7: // 'Custom'
+        return metric.formatString;
+      case 8:
+        return 'Special';
+      default:
+        return 'General';
     }
   }
 
@@ -613,7 +641,7 @@ class OfficeApiHelper {
    * @param {Office} officeTable Excel Object containig information about Excel Table
    * @memberof OfficeApiHelper
    */
-  clearEmptyCrosstabRow = officeTable => {
+  clearEmptyCrosstabRow = (officeTable) => {
     const headerRange = officeTable.getRange().getRow(0).getOffsetRange(-1, 0);
     headerRange.clear('Contents');
   }
