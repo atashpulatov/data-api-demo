@@ -36,7 +36,7 @@ function onLogOut(action, state) {
     return {
       ...state,
       authToken: false,
-      username: null,
+      userID: null,
       userFullName: null,
       userInitials: null,
     };
@@ -66,7 +66,7 @@ function onSetLoading(action, state) {
 function onGetUserInfo(action, state) {
   return {
     ...state,
-    username: action.username,
+    userID: action.userID,
     userFullName: action.userFullName,
     userInitials: action.userInitials,
   };
