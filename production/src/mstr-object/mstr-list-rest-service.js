@@ -7,7 +7,7 @@ const PROJECTS_ENDPOINT = 'projects';
 const MY_LIBRARY_ENDPOINT = 'library';
 const LIMIT = 7000;
 const DOSSIER_SUBTYPE = 14081;
-const SUBTYPES = [768, 769, 774, 776, 779, DOSSIER_SUBTYPE];
+const SUBTYPES = [768, 769, 774, 776, 779]; // removed DOSSIER_SUBTYPE from SUBTYPES array for 11.2
 
 /**
  * Applies filtering function to body.result array of objects
@@ -17,7 +17,11 @@ const SUBTYPES = [768, 769, 774, 776, 779, DOSSIER_SUBTYPE];
  */
 export function filterDossier(body) {
   const { result } = body;
-  return result.filter(filterFunction);
+
+  /*   removed for 11.2
+
+  return result.filter(filterFunction); */
+  return result;
 }
 
 /**
