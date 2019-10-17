@@ -178,4 +178,16 @@ export default class DB {
     }
     return false;
   }
+
+  /**
+   * Check if browser supports indexed DB and indexed DB databases.
+   * Set to false to completely disable the cache (!)
+   *
+   * @static
+   * @returns Boolean
+   * @memberof DB
+   */
+  static getIndexedDBSupport() {
+    return (window.indexedDB && window.indexedDB.databases);
+  }
 }
