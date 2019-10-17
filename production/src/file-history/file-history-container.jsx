@@ -38,34 +38,27 @@ export class _FileHistoryContainer extends React.Component {
   }
 
 
-  removeAndDisplayReportNotification = async (report, officeContext, t) => {
-    const { name } = report
-    officeApiHelper.removeObjectNotExistingInExcel(t, report, officeContext)
-    const message = t('{{name}} has been removed from the workbook.', { name });
-    notificationService.displayTranslatedNotification({ type: 'success', content: message });
-  }
-
   addRemoveReportListener = async () => {
     try {
       const excelContext = await officeApiHelper.getExcelContext();
       const officeContext = await officeApiHelper.getOfficeContext();
       if (window.Office.context.requirements.isSetSupported('ExcelApi', 1.9)) {
         this.eventRemove = excelContext.workbook.tables.onDeleted.add(async (e) => {
-          await officeApiHelper.getExcelSession();
+          await officeApiHelper.checkStatusOfSessions();
           const { reportArray, t } = this.props;
           const reportToDelete = reportArray.find((report) => report.bindId === e.tableName);
-          this.removeAndDisplayReportNotification(reportToDelete, officeContext, t)
+          officeApiHelper.removeObjectAndDisplaytNotification(reportToDelete, officeContext, t)
         });
       } else if (window.Office.context.requirements.isSetSupported('ExcelApi', 1.7)) {
         this.eventRemove = excelContext.workbook.worksheets.onDeleted.add(async () => {
-          await officeApiHelper.getExcelSession();
+          await officeApiHelper.checkStatusOfSessions();
           excelContext.workbook.tables.load('items');
           await excelContext.sync()
           const reportsOfSheets = excelContext.workbook.tables.items
           const { reportArray, t } = this.props;
           const reportsToBeDeleted = reportArray.filter((report) => !reportsOfSheets.find((table) => table.name === report.bindId));
           for (const report of reportsToBeDeleted) {
-            this.removeAndDisplayReportNotification(report, officeContext, t)
+            officeApiHelper.removeObjectAndDisplaytNotification(report, officeContext, t)
           }
         });
       }
@@ -99,7 +92,7 @@ export class _FileHistoryContainer extends React.Component {
 
   showData = async () => {
     try {
-      await officeApiHelper.getExcelSession();
+      await officeApiHelper.checkStatusOfSessions();
       const {
         reportArray,
         refreshReportsArray,

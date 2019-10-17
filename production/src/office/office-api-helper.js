@@ -105,11 +105,31 @@ class OfficeApiHelper {
     }
   };
 
-  getExcelSession = async () => {
+  /**
+ * checks excel session and auth token
+ *
+ * @memberof OfficeApiHelper
+ */
+  checkStatusOfSessions = async () => {
     await Promise.all([
       this.getExcelSessionStatus(),
       authenticationHelper.validateAuthToken(),
     ]);
+  }
+
+  /**
+     * Gets range of subtotal row based on subtotal cell
+     *
+     * @param {Office} object
+     * @param {Office} officeContext office context
+     * @param {Object} t i18n translating function
+     * @memberof OfficeApiHelper
+     */
+  removeObjectAndDisplaytNotification = async (object, officeContext, t) => {
+    const { name } = object
+    this.removeObjectNotExistingInExcel(t, object, officeContext)
+    const message = t('{{name}} has been removed from the workbook.', { name });
+    notificationService.displayTranslatedNotification({ type: 'success', content: message });
   }
 
   getBindingRange = (context, bindingId) => context.workbook.bindings
