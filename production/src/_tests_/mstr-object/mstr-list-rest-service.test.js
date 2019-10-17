@@ -3,7 +3,7 @@ import mockApiResponseWithDossiers from '../mockApiResponseWithDossiers';
 import { reduxStore } from '../../store';
 
 describe('Logic for fetching list of objects from MSTR API', () => {
-  it('should apply filter function to response body.result and return array with non-Dossier type 14081 objects filtered out', () => {
+  it.skip('should apply filter function to response body.result and return array with non-Dossier type 14081 objects filtered out', () => { // disabled for 11.2
     // given
     const response = mockApiResponseWithDossiers;
     const filteredOutId = '0089BFF447598FEABECC32AB64840016';

@@ -14,7 +14,7 @@ export const DEFAULT_STATE = {
 
 export const REFRESH_STATE = {
   myLibrary: {
-    isLoading: true,
+    isLoading: false,
     objects: [],
   },
   projects: [],
@@ -39,12 +39,18 @@ const cacheReducer = (state = DEFAULT_STATE, action) => {
     case ADD_ENV_OBJECTS:
       return {
         ...state,
-        environmentLibrary: { ...state.environmentLibrary, objects: action.data },
+        environmentLibrary: {
+          ...state.environmentLibrary,
+          objects: action.data.append ? [...state.environmentLibrary.objects, ...action.data.objects] : action.data.objects
+        },
       };
     case ADD_MY_LIBRARY_OBJECTS:
       return {
         ...state,
-        myLibrary: { ...state.environmentLibrary, objects: action.data },
+        myLibrary: {
+          ...state.myLibrary,
+          objects: action.data.append ? [...state.myLibrary.objects, ...action.data.objects] : action.data.objects
+        },
       };
     case ADD_PROJECTS:
       return {
