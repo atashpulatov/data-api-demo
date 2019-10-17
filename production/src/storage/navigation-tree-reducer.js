@@ -50,8 +50,10 @@ export const initialState = {
   chosenChapterKey: null,
   chosenVisualizationKey: null,
   dossierOpenRequested: false,
-  filter: {},
+  envFilter: {},
+  myLibraryFilter: {},
   myLibrary: true,
+  chosenLibraryDossier: null,
 };
 
 function getType(subtype) {
@@ -74,6 +76,7 @@ export const navigationTree = (state = initialState, action) => {
       newState.chosenChapterKey = data.chosenChapterKey || null;
       newState.chosenVisualizationKey = data.chosenVisualizationKey || null;
       newState.preparedInstanceId = data.preparedInstanceId || null;
+      newState.chosenLibraryDossier = data.chosenLibraryDossier || null;
       return newState;
     }
     case UPDATE_SCROLL: {
@@ -172,7 +175,11 @@ export const navigationTree = (state = initialState, action) => {
     }
     case CHANGE_FILTER: {
       const newState = { ...state };
-      newState.filter = data;
+      if (state.myLibrary) {
+        newState.myLibraryFilter = data;
+      } else {
+        newState.envFilter = data;
+      }
       return newState;
     }
     case LOAD_BROWSING_STATE_CONST:
