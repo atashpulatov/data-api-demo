@@ -11,7 +11,7 @@ import { clearCache } from '../cache/cache-actions';
 
 const APP_VERSION = process.env.REACT_APP_MSTR_OFFICE_VERSION;
 
-export const SettingsMenuHOC = ({ userFullName, userInitials, isSecured, reportArray, t, toggleIsConfirmFlag, toggleIsSettingsFlag, toggleRenderSettingsFlag, clearCache, }) => {
+export const SettingsMenuHOC = ({ userFullName, userID, userInitials, isSecured, reportArray, t, toggleIsConfirmFlag, toggleIsSettingsFlag, toggleRenderSettingsFlag, clearCache, }) => {
   const userNameDisplay = userFullName || 'MicroStrategy user';
   const isSecuredActive = !isSecured && reportArray && reportArray.length > 0;
 
@@ -104,7 +104,7 @@ export const SettingsMenuHOC = ({ userFullName, userInitials, isSecured, reportA
           {t('Contact Us')}
         </a>
       </li>
-      <li onClick={() => logout(clearCache)}>
+      <li onClick={() => logout(() => clearCache(null, userID))}>
         <span tabIndex="0" id="logOut" size="small">
           {t('Log Out')}
         </span>
@@ -117,9 +117,9 @@ export const SettingsMenuHOC = ({ userFullName, userInitials, isSecured, reportA
 SettingsMenuHOC.defaultProps = { t: (text) => text, };
 
 function mapStateToProps({ sessionReducer, officeReducer }) {
-  const { userFullName, userInitials } = sessionReducer;
+  const { userFullName, userInitials, userID } = sessionReducer;
   const { isSecured, reportArray } = officeReducer;
-  return { userFullName, userInitials, isSecured, reportArray, };
+  return { userFullName, userInitials, isSecured, reportArray, userID };
 }
 
 const mapDispatchToProps = {

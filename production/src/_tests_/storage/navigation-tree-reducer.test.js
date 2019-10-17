@@ -22,6 +22,7 @@ describe('NavigationTree Reducer', () => {
         objectType: undefined,
         chosenVisualizationKey: null,
         preparedInstanceId: null,
+        chosenLibraryDossier: null,
       },
     };
 
@@ -112,6 +113,7 @@ describe('NavigationTree Reducer', () => {
       objectType: undefined,
       chosenVisualizationKey: null,
       preparedInstanceId: null,
+      chosenLibraryDossier: null,
     });
   });
 
