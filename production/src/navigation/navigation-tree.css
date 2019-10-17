@@ -24,7 +24,7 @@
 
 .top-filter-panel {
   display: block;
-  width: 280px;
+  width: 289px; /* change to 385px when showing My Library switch */
   float: right;
 }
 
@@ -38,7 +38,7 @@
 }
 
 .top-filter-panel .refresh-button-container {
-  margin: -5px 13px 0 0;
+  margin: -5px 20px 0 25px;
 }
 
 .top-filter-panel .mstr-switch-container span {
@@ -56,8 +56,8 @@
 }
 
 .top-filter-panel .search-field {
-  margin-left: 20px;
-  width: 213px;
+  margin-left: 30px;
+  width: 180px;
 }
 
 .top-filter-panel .search-field__input {
