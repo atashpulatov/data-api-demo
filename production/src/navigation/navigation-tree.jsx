@@ -30,7 +30,6 @@ export class _NavigationTree extends Component {
     const { resetDBState, fetchObjectsFromNetwork } = this.props
     resetDBState();
     if (this.indexedDBSupport) {
-      this.startFallbackProtocol();
       this.connectToCache();
     } else {
       fetchObjectsFromNetwork();
@@ -62,14 +61,15 @@ export class _NavigationTree extends Component {
 
   connectToCache = () => {
     const { connectToDB, listenToDB } = this.props;
-    if (this.isMSIE) {
-      setTimeout(() => {
+    this.startFallbackProtocol();
+    setTimeout(() => {
+      if (this.isMSIE) {
         [this.DB, this.DBOnChange] = listenToDB();
         this.DBOnChange.then(this.startDBListener)
-      }, 700);
-    } else {
-      [this.DB, this.DBOnChange] = connectToDB();
-    }
+      } else {
+        [this.DB, this.DBOnChange] = connectToDB();
+      }
+    }, 1000);
   };
 
   refresh = () => {
