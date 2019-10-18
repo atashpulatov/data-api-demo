@@ -109,7 +109,11 @@ async function obtainInstanceWithPromptsAnswers(propsToPass, props) {
     };
     await answerPrompts(configPrompts);
     const configAnsPrompts = { objectId, projectId, instanceId: instanceDefinition.instanceId };
-    instanceDefinition = await getInstance(configAnsPrompts);
+    try {
+      instanceDefinition = await getInstance(configAnsPrompts);
+    } catch (error) {
+      props.methods.handlePopupErrors(error.message);
+    }
     count += 1;
   }
   const body = createBody(props.editedReport && props.editedReport.selectedAttributes,
