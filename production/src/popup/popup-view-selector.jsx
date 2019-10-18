@@ -265,7 +265,11 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
   }
   if (popupType === PopupTypeEnum.promptsWindow) {
     return (
-      <PromptsWindow mstrData={propsToPass} handleBack={methods.handleBack} />
+      <PromptsWindow
+        mstrData={propsToPass}
+        handleBack={methods.handleBack}
+        handlePopupErrors={methods.handlePopupErrors}
+      />
     );
   }
   if (popupType === PopupTypeEnum.repromptingWindow) {
