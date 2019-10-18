@@ -245,7 +245,7 @@ export class _NavigationTree extends Component {
           isLoading={cacheLoading} />
         <PopupButtons
           loading={loading}
-          disableActiveActions={!requestPerformed}
+          disableActiveActions={!requestPerformed || !chosenObjectId}
           handleOk={this.handleOk}
           handleSecondary={this.handleSecondary}
           handleCancel={this.handleCancel}
