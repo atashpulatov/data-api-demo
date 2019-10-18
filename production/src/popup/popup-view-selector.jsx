@@ -19,7 +19,9 @@ const { Office } = window;
 // eslint-disable-next-line no-underscore-dangle
 export const _PopupViewSelector = (props) => {
   let { popupType } = props;
-  const { propsToPass, methods, importRequested, isPrompted, dossierOpenRequested } = props;
+
+  const { propsToPass, methods, importRequested, dossierOpenRequested } = props;
+  const isPrompted = propsToPass.isPrompted || props.isPrompted;
   if (!props.authToken || !propsToPass) {
     console.log('Waiting for token to be passed');
     return null;
@@ -77,7 +79,7 @@ function wasReportJustImported(props) {
 
 function promptedReportSubmitted(props) {
   return (
-    !!props.isPrompted
+    !!(props.propsToPass.isPrompted || props.isPrompted)
     && (props.importRequested || props.popupType === PopupTypeEnum.dataPreparation)
   );
 }
@@ -298,7 +300,7 @@ export function mapStateToProps(state) {
   return {
     ...state.navigationTree,
     authToken: state.sessionReducer.authToken,
-    editedReport: { ...(parsePopupState(popupState)), promptsAnswers },
+    editedReport: { ...(parsePopupState(popupState, promptsAnswers)) },
     preparedInstance: state.popupReducer.preparedInstance,
   };
 }
@@ -310,7 +312,7 @@ const popupActions = {
 
 export const PopupViewSelector = connect(mapStateToProps, popupActions)(_PopupViewSelector);
 
-function parsePopupState(popupState) {
+function parsePopupState(popupState, promptsAnswers) {
   if (!popupState) {
     return;
   }
@@ -321,7 +323,7 @@ function parsePopupState(popupState) {
     reportName: popupState.name,
     reportType: popupState.objectType,
     reportSubtype: popupState.objectType === 'report' ? 768 : 779,
-    promptsAnswers: popupState.promptsAnswers,
+    promptsAnswers: promptsAnswers || popupState.promptsAnswers,
     importSubtotal: popupState.importSubtotal,
   };
   restoreFilters(popupState.body, reportData);
