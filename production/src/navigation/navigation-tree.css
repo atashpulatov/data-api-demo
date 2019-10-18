@@ -3,9 +3,12 @@
 }
 
 .navigation_tree__title_bar {
+  margin: 15px;
+}
+
+.navigation_tree__title_bar > span {
   font-size: 18px;
   color: #333333;
-  margin: 15px;
 }
 
 .navigation_tree__table_wrapper {
@@ -23,51 +26,16 @@
 }
 
 .top-filter-panel {
-  display: block;
-  width: 289px; /* change to 385px when showing My Library switch */
   float: right;
+  line-height: 1;
 }
 
-.top-filter-panel > div {
-  float: left;
-}
-
-.top-filter-panel .search-field,
-.top-filter-panel .refresh-button-container {
-  font-size: 0px;
-}
-
-.top-filter-panel .refresh-button-container {
-  margin: -5px 20px 0 25px;
-}
-
-.top-filter-panel .mstr-switch-container span {
-    position: relative;
-    top: -1px;
+.top-filter-panel > .mstr-switch-container {
+  display: none;
 }
 
 .top-filter-panel .panel-wrapper {
   z-index: 2;
-  padding-top: 3px;
-}
-
-.top-filter-panel .filter-button {
-  padding-top: 3px;
-}
-
-.top-filter-panel .search-field {
-  margin-left: 30px;
-  width: 180px;
-}
-
-.top-filter-panel .search-field__input {
-  height: 26px;
-  width: 100%;
-  box-sizing: border-box;
-} 
-
-.top-filter-panel .mstr-switch-container {
-  display: none;
 }
 
 .filter-panel input[id=Dossier],
