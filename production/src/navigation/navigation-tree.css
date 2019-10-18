@@ -66,9 +66,8 @@
   box-sizing: border-box;
 } 
 
-.top-filter-panel .mstr-switch-container,
 .filter-panel input[id=Dossier],
-.filter-panel label[for=Dossier]  {
+.filter-panel label[for=Dossier] {
   display: none;
 }
 
