@@ -1,7 +1,7 @@
 import {
   SELECT_FOLDER, SELECT_OBJECT, SET_DATA_SOURCE, START_IMPORT, CHANGE_SORTING, CHANGE_SEARCHING, UPDATE_SCROLL,
   UPDATE_SIZE, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED, CLEAR_PROMPTS_ANSWERS, REQUEST_DOSSIER_OPEN,
-  CANCEL_DOSSIER_OPEN, SWITCH_MY_LIBRARY, CHANGE_FILTER,
+  CANCEL_DOSSIER_OPEN, SWITCH_MY_LIBRARY, CHANGE_FILTER, CHANGE_IS_PROMPTED,
 } from '../navigation/navigation-tree-actions';
 import { CLEAR_WINDOW } from '../popup/popup-actions';
 import { LOAD_BROWSING_STATE_CONST } from '../browser/browser-actions';
@@ -73,7 +73,6 @@ export const navigationTree = (state = initialState, action) => {
       newState.chosenSubtype = data.chosenSubtype || null;
       newState.chosenObjectName = data.chosenObjectName || DEFAULT_PROJECT_NAME;
       newState.chosenType = getType(data.chosenSubtype);
-      newState.isPrompted = !!data.isPrompted;
       newState.objectType = data.objectType;
       newState.chosenChapterKey = data.chosenChapterKey || null;
       newState.chosenVisualizationKey = data.chosenVisualizationKey || null;
@@ -84,6 +83,11 @@ export const navigationTree = (state = initialState, action) => {
     case UPDATE_SCROLL: {
       const newState = { ...state };
       newState.scrollPosition = data;
+      return newState;
+    }
+    case CHANGE_IS_PROMPTED: {
+      const newState = { ...state };
+      newState.isPrompted = data;
       return newState;
     }
     case UPDATE_SIZE: {

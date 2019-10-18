@@ -110,12 +110,24 @@ export class _NavigationTree extends Component {
     }, SAFETY_FALLBACK);
   }
 
-  handleOk = () => {
-    const { objectType, requestImport, requestDossierOpen } = this.props;
-    if (objectType.name === mstrObjectEnum.mstrObjectType.dossier.name) {
-      requestDossierOpen();
-    } else {
-      requestImport();
+  handleOk = async () => {
+    const { chosenSubtype, chosenObjectId, chosenProjectId, requestImport, requestDossierOpen, changeIsPrompted } = this.props;
+    let isPrompted = false;
+    try {
+      // If myLibrary is on, then selected object is a dossier.
+      const objectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
+      if ((objectType === mstrObjectEnum.mstrObjectType.report) || (objectType === mstrObjectEnum.mstrObjectType.dossier)) {
+        isPrompted = await checkIfPrompted(chosenObjectId, chosenProjectId, objectType.name);
+        changeIsPrompted(isPrompted);
+      }
+      if (objectType.name === mstrObjectEnum.mstrObjectType.dossier.name) {
+        requestDossierOpen();
+      } else {
+        requestImport();
+      }
+    } catch (e) {
+      const { handlePopupErrors } = this.props;
+      handlePopupErrors(e);
     }
   };
 
@@ -128,8 +140,14 @@ export class _NavigationTree extends Component {
   };
 
   handleSecondary = async () => {
+    const { chosenProjectId, chosenObjectId, chosenObjectName, chosenType, chosenSubtype, handlePrepare, changeIsPrompted } = this.props;
+    let isPrompted = false;
     try {
-      const { chosenProjectId, chosenObjectId, chosenObjectName, chosenType, chosenSubtype, handlePrepare } = this.props;
+      const objectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
+      if ((objectType === mstrObjectEnum.mstrObjectType.report) || (objectType === mstrObjectEnum.mstrObjectType.dossier)) {
+        isPrompted = await checkIfPrompted(chosenObjectId, chosenProjectId, objectType.name);
+        changeIsPrompted(isPrompted);
+      }
       handlePrepare(chosenProjectId, chosenObjectId, chosenSubtype, chosenObjectName, chosenType);
       this.setState({ previewDisplay: true });
     } catch (err) {
@@ -147,61 +165,22 @@ export class _NavigationTree extends Component {
 
   // TODO: temporary solution
   onObjectChosen = async (objectId, projectId, subtype, objectName, target, myLibrary) => {
-    const { selectObject, chosenObjectId, requestPerformed } = this.props;
-    if (chosenObjectId && !requestPerformed) {
-      return;
+    const { selectObject } = this.props;
+    // If myLibrary is on, then selected object is a dossier.
+    const objectType = myLibrary ? mstrObjectEnum.mstrObjectType.dossier : mstrObjectEnum.getMstrTypeBySubtype(subtype);
+    let chosenLibraryDossier;
+    if (myLibrary) {
+      chosenLibraryDossier = objectId;
+      objectId = target.id;
     }
-    try {
-      selectObject({
-        requestPerformed: false,
-        chosenObjectId: objectId,
-        chosenObjectName: objectName,
-        chosenProjectId: projectId,
-        chosenSubtype: subtype,
-        isPrompted: null,
-        objectType: null,
-      });
-
-      // If myLibrary is on, then selected object is a dossier.
-      const objectType = myLibrary ? mstrObjectEnum.mstrObjectType.dossier : mstrObjectEnum.getMstrTypeBySubtype(subtype);
-
-      /* If selected object is a dossier from myLibrary then the data of proper item is passed in target object.
-      We need to store selected item id (library dossier id) to be able to select that on list */
-      let chosenLibraryDossier;
-      if (myLibrary) {
-        chosenLibraryDossier = objectId;
-        objectId = target.id;
-      }
-
-      // Only check for prompts when it's a report or dossier
-      let isPrompted = false;
-      if ((objectType === mstrObjectEnum.mstrObjectType.report) || (objectType === mstrObjectEnum.mstrObjectType.dossier)) {
-        isPrompted = await checkIfPrompted(objectId, projectId, objectType.name);
-      }
-
-      selectObject({
-        requestPerformed: true,
-        chosenObjectId: objectId,
-        chosenObjectName: objectName,
-        chosenProjectId: projectId,
-        chosenSubtype: subtype,
-        isPrompted,
-        objectType,
-        chosenLibraryDossier,
-      });
-    } catch (err) {
-      selectObject({
-        requestPerformed: false,
-        chosenObjectId: null,
-        chosenObjectName: null,
-        chosenProjectId: null,
-        chosenSubtype: null,
-        isPrompted: null,
-        objectType: null,
-      });
-      const { handlePopupErrors } = this.props;
-      handlePopupErrors(err);
-    }
+    selectObject({
+      chosenObjectId: objectId,
+      chosenObjectName: objectName,
+      chosenProjectId: projectId,
+      chosenSubtype: subtype,
+      objectType,
+      chosenLibraryDossier,
+    });
   };
 
   render() {
@@ -245,7 +224,7 @@ export class _NavigationTree extends Component {
           isLoading={cacheLoading} />
         <PopupButtons
           loading={loading}
-          disableActiveActions={!requestPerformed || !chosenObjectId}
+          disableActiveActions={!chosenObjectId}
           handleOk={this.handleOk}
           handleSecondary={this.handleSecondary}
           handleCancel={this.handleCancel}

@@ -16,10 +16,17 @@ export const REQUEST_DOSSIER_OPEN = 'REQUEST_DOSSIER_OPEN';
 export const CANCEL_DOSSIER_OPEN = 'CANCEL_DOSSIER_OPEN';
 export const CHANGE_FILTER = 'CHANGE_FILTER';
 export const SWITCH_MY_LIBRARY = 'SWITCH_MY_LIBRARY';
+export const CHANGE_IS_PROMPTED = 'CHANGE_IS_PROMPTED';
 
 export function selectObject(data) {
   return (dispatch) => dispatch({
     type: SELECT_OBJECT,
+    data,
+  });
+}
+export function changeIsPrompted(data) {
+  return (dispatch) => dispatch({
+    type: CHANGE_IS_PROMPTED,
     data,
   });
 }
