@@ -13,9 +13,10 @@ const TIMEOUT = 2000;
 class ErrorService {
   handleError = (error, options = { reportName: 'Report', onConfirm: null, isLogout: false }) => {
     const { onConfirm, isLogout, ...parameters } = options;
-    const errorType = this.getErrorType(error);
-    const errorMessage = errorMessageFactory(errorType)({ error, ...parameters });
-    this.displayErrorNotification(error, errorType, errorMessage, onConfirm);
+    const errorObj = ((typeof error) === 'string') ? JSON.parse(error) : error;
+    const errorType = this.getErrorType(errorObj);
+    const errorMessage = errorMessageFactory(errorType)({ error: errorObj, ...parameters });
+    this.displayErrorNotification(errorObj, errorType, errorMessage, onConfirm);
     this.checkForLogout(isLogout, errorType);
   }
 

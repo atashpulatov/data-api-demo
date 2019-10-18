@@ -112,7 +112,7 @@ async function obtainInstanceWithPromptsAnswers(propsToPass, props) {
     try {
       instanceDefinition = await getInstance(configAnsPrompts);
     } catch (error) {
-      props.methods.handlePopupErrors(error.message);
+      props.methods.handlePopupErrors(error);
     }
     count += 1;
   }
