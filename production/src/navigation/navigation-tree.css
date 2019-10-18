@@ -69,3 +69,12 @@
 .top-filter-panel .mstr-switch-container {
   display: none;
 }
+
+.filter-panel input[id=Dossier],
+.filter-panel label[for=Dossier] {
+  display: none;
+}
+
+.filter-panel .category-list-wrapper:nth-child(3) {
+  margin-top: 0px;
+}
