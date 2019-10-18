@@ -183,12 +183,16 @@ export function listenToCache(prevCache) {
       dispatch(objectListLoading(true));
     }
 
-    const onChange = cache.getAllObjects()
-      .then((results) => {
-        results.rows.forEach((result) => {
-          dispatchCacheResults(result, dispatch)
-        })
+    const onChange = cache.get(PROJECTS_DB_ID).then((projects) => {
+      dispatch(addProjects(projects.data))
+      cache.get(ENV_LIBRARY_DB_ID).then((objects) => {
+        dispatch(addEnvObjects(objects.data));
+        cache.get(LOADING_DB + ENV_LIBRARY_DB_ID).then((loading) => {
+          dispatch(objectListLoading(loading.data));
+        });
       });
+    });
+
     return [cache, onChange];
   };
 }
