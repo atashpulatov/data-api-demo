@@ -1,5 +1,5 @@
 GEM
-  remote: https://rubygems.org/
+  remote: https://nexus.internal.microstrategy.com/repository/rubygems-group/
   specs:
     CFPropertyList (2.3.6)
     activesupport (4.0.13)
@@ -774,7 +774,6 @@ GEM
       fuzzyurl
       mixlib-config (~> 2.0)
       mixlib-shellout (~> 2.0)
-    chef-sugar (5.0.0)
     chef-zero (5.3.2)
       ffi-yajl (~> 2.2)
       hashie (>= 2.0, < 4.0)
@@ -1205,8 +1204,7 @@ GEM
     thread_safe (0.3.6)
     timers (4.0.4)
       hitimes
-    tiny_tds (1.3.0)
-      mini_portile2 (~> 2.0)
+    tiny_tds (2.1.2)
     to_regexp (0.2.1)
     tomlrb (1.2.8)
     transparent (1.6.14)
@@ -1283,7 +1281,6 @@ DEPENDENCIES
   berkshelf (~> 6.3.2)
   cfndsl
   chef (= 12.21.1)
-  chef-sugar
   chefspec
   cucumber
   deep_merge
@@ -1316,7 +1313,7 @@ DEPENDENCIES
   sqlite3 (= 1.3.13)
   sshkey
   symmetric-encryption (= 3.6.0)
-  tiny_tds (= 1.3.0)
+  tiny_tds (= 2.1.2)
   transparent (= 1.6.14)
   vagrant (= 2.0.1)
   vagrant-aws
