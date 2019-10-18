@@ -17,7 +17,6 @@ describe('NavigationTree Reducer', () => {
         chosenSubtype: '3',
         chosenObjectName: 'Prepare Data',
         chosenType: 'Data',
-        isPrompted: false,
         chosenChapterKey: null,
         objectType: undefined,
         chosenVisualizationKey: null,
@@ -80,7 +79,6 @@ describe('NavigationTree Reducer', () => {
         chosenObjectId: '1',
         chosenProjectId: '2',
         chosenSubtype: 768,
-        isPrompted: true,
       },
     };
 
@@ -89,7 +87,6 @@ describe('NavigationTree Reducer', () => {
 
     // then
     expect(newState.chosenType).toEqual('Report');
-    expect(newState.isPrompted).toBe(true);
   });
 
   it('should return new proper state in case of SELECT_OBJECT action without proper data', () => {
@@ -109,7 +106,6 @@ describe('NavigationTree Reducer', () => {
       chosenSubtype: null,
       chosenObjectName: 'Prepare Data',
       chosenType: 'Data',
-      isPrompted: false,
       chosenChapterKey: null,
       objectType: undefined,
       chosenVisualizationKey: null,
