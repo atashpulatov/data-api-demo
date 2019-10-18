@@ -300,7 +300,7 @@ export function mapStateToProps(state) {
   return {
     ...state.navigationTree,
     authToken: state.sessionReducer.authToken,
-    editedReport: { ...(parsePopupState(popupState)), promptsAnswers },
+    editedReport: { ...(parsePopupState(popupState, promptsAnswers)) },
     preparedInstance: state.popupReducer.preparedInstance,
   };
 }
@@ -312,7 +312,7 @@ const popupActions = {
 
 export const PopupViewSelector = connect(mapStateToProps, popupActions)(_PopupViewSelector);
 
-function parsePopupState(popupState) {
+function parsePopupState(popupState, promptsAnswers) {
   if (!popupState) {
     return;
   }
@@ -323,7 +323,7 @@ function parsePopupState(popupState) {
     reportName: popupState.name,
     reportType: popupState.objectType,
     reportSubtype: popupState.objectType === 'report' ? 768 : 779,
-    promptsAnswers: popupState.promptsAnswers,
+    promptsAnswers: promptsAnswers || popupState.promptsAnswers,
     importSubtotal: popupState.importSubtotal,
   };
   restoreFilters(popupState.body, reportData);
