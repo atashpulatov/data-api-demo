@@ -146,7 +146,7 @@ export class _NavigationTree extends Component {
       if ((objectType === mstrObjectEnum.mstrObjectType.report) || (objectType === mstrObjectEnum.mstrObjectType.dossier)) {
         isPrompted = await checkIfPrompted(chosenObjectId, chosenProjectId, objectType.name);
       }
-      handlePrepare(chosenProjectId, chosenObjectId, chosenSubtype, chosenObjectName, chosenType);
+      handlePrepare(chosenProjectId, chosenObjectId, chosenSubtype, chosenObjectName, chosenType, isPrompted);
       this.setState({ previewDisplay: true });
     } catch (err) {
       const { handlePopupErrors } = this.props;

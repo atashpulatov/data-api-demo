@@ -19,7 +19,9 @@ const { Office } = window;
 // eslint-disable-next-line no-underscore-dangle
 export const _PopupViewSelector = (props) => {
   let { popupType } = props;
-  const { propsToPass, methods, importRequested, isPrompted, dossierOpenRequested } = props;
+
+  const { propsToPass, methods, importRequested, dossierOpenRequested } = props;
+  const isPrompted = propsToPass.isPrompted || props.isPrompted;
   if (!props.authToken || !propsToPass) {
     console.log('Waiting for token to be passed');
     return null;
@@ -77,7 +79,7 @@ function wasReportJustImported(props) {
 
 function promptedReportSubmitted(props) {
   return (
-    !!props.isPrompted
+    !!(props.propsToPass.isPrompted || props.isPrompted)
     && (props.importRequested || props.popupType === PopupTypeEnum.dataPreparation)
   );
 }

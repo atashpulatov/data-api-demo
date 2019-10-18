@@ -24,7 +24,8 @@ export class Popup extends Component {
     reportId,
     reportSubtype,
     reportName,
-    reportType) => {
+    reportType,
+    isPrompted) => {
     this.setState({
       mstrData: {
         ...this.state.mstrData,
@@ -35,6 +36,7 @@ export class Popup extends Component {
         reportSubtype,
         reportName,
         reportType,
+        isPrompted,
       },
     });
   };
