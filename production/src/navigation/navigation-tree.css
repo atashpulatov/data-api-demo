@@ -30,7 +30,7 @@
   line-height: 1;
 }
 
-.top-filter-panel .mstr-switch-container {
+.top-filter-panel > .mstr-switch-container {
   display: none;
 }
 
