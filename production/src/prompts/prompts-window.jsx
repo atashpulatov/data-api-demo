@@ -160,9 +160,7 @@ export class _PromptsWindow extends Component {
   handleRun = async () => {
     const { handlePopupErrors } = this.props;
     try {
-      await Promise.all([
-        authenticationHelper.validateAuthToken(),
-      ]);
+      await authenticationHelper.validateAuthToken();
       if (this.embeddedDocument) {
         const runButton = this.embeddedDocument.getElementsByClassName('mstrPromptEditorButtonRun')[0];
         if (runButton) runButton.click();
