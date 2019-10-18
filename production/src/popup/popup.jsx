@@ -57,12 +57,11 @@ export class Popup extends Component {
   };
 
   handlePopupErrors = (error) => {
-    const errorString = JSON.stringify(error, Object.getOwnPropertyNames(error));
+    const errorObj = error && { status: error.status, message: error.message, response: error.response, type: error.type }
     const messageObject = {
       command: selectorProperties.commandError,
-      error: errorString,
+      error: errorObj,
     };
-    console.log(JSON.stringify(messageObject, Object.getOwnPropertyNames(error)));
     officeContext
       .getOffice()
       .context.ui.messageParent(JSON.stringify(messageObject));
