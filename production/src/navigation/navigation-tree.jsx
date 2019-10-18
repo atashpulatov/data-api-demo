@@ -77,8 +77,10 @@ export class _NavigationTree extends Component {
     resetDBState();
     if (this.indexedDBSupport) {
       if (!this.isMSIE && this.DBOnChange) this.DBOnChange.cancel();
-      window.Office.context.ui.messageParent(JSON.stringify({ command: REFRESH_CACHE_COMMAND }));
-      this.connectToCache(this.DB);
+      this.DB.clear().then(() => {
+        window.Office.context.ui.messageParent(JSON.stringify({ command: REFRESH_CACHE_COMMAND }));
+        this.connectToCache(this.DB);
+      }).catch(() => this.startFallbackProtocol());
     } else {
       fetchObjectsFromNetwork();
     }
