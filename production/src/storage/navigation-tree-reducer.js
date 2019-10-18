@@ -31,6 +31,7 @@ const supportedTypesArray = [
 
 export const initialState = {
   folder: null,
+  requestPerformed: false,
   chosenObjectId: null,
   chosenProjectId: null,
   chosenSubtype: null,
@@ -66,6 +67,7 @@ export const navigationTree = (state = initialState, action) => {
   switch (type) {
     case SELECT_OBJECT: {
       const newState = { ...state };
+      newState.requestPerformed = data.requestPerformed || false;
       newState.chosenObjectId = data.chosenObjectId || null;
       newState.chosenProjectId = data.chosenProjectId || null;
       newState.chosenSubtype = data.chosenSubtype || null;

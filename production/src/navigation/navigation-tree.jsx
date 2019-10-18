@@ -40,7 +40,12 @@ export class _NavigationTree extends Component {
 
   componentDidUpdate() {
     const { sorter, objectType, filter, myLibrary } = this.props;
-    const propsToSave = { sorter, objectType, filter, myLibrary };
+    const propsToSave = {
+      sorter,
+      objectType,
+      filter,
+      myLibrary,
+    };
     window.Office.context.ui.messageParent(JSON.stringify({
       command: selectorProperties.commandBrowseUpdate,
       body: propsToSave,
@@ -72,8 +77,10 @@ export class _NavigationTree extends Component {
     resetDBState();
     if (this.indexedDBSupport) {
       if (!this.isMSIE && this.DBOnChange) this.DBOnChange.cancel();
-      window.Office.context.ui.messageParent(JSON.stringify({ command: REFRESH_CACHE_COMMAND }));
-      this.connectToCache(this.DB);
+      this.DB.clear().then(() => {
+        window.Office.context.ui.messageParent(JSON.stringify({ command: REFRESH_CACHE_COMMAND }));
+        this.connectToCache(this.DB);
+      }).catch(() => this.startFallbackProtocol());
     } else {
       fetchObjectsFromNetwork();
     }
@@ -140,13 +147,17 @@ export class _NavigationTree extends Component {
 
   // TODO: temporary solution
   onObjectChosen = async (objectId, projectId, subtype, objectName, target, myLibrary) => {
+    const { selectObject, chosenObjectId, requestPerformed } = this.props;
+    if (chosenObjectId && !requestPerformed) {
+      return;
+    }
     try {
-      const { selectObject } = this.props;
       selectObject({
-        chosenObjectId: null,
-        chosenObjectName: null,
-        chosenProjectId: null,
-        chosenSubtype: null,
+        requestPerformed: false,
+        chosenObjectId: objectId,
+        chosenObjectName: objectName,
+        chosenProjectId: projectId,
+        chosenSubtype: subtype,
         isPrompted: null,
         objectType: null,
       });
@@ -169,6 +180,7 @@ export class _NavigationTree extends Component {
       }
 
       selectObject({
+        requestPerformed: true,
         chosenObjectId: objectId,
         chosenObjectName: objectName,
         chosenProjectId: projectId,
@@ -178,6 +190,15 @@ export class _NavigationTree extends Component {
         chosenLibraryDossier,
       });
     } catch (err) {
+      selectObject({
+        requestPerformed: false,
+        chosenObjectId: null,
+        chosenObjectName: null,
+        chosenProjectId: null,
+        chosenSubtype: null,
+        isPrompted: null,
+        objectType: null,
+      });
       const { handlePopupErrors } = this.props;
       handlePopupErrors(err);
     }
@@ -185,7 +206,7 @@ export class _NavigationTree extends Component {
 
   render() {
     const {
-      chosenObjectId, chosenProjectId, changeSorting, loading, chosenLibraryDossier, searchText, sorter,
+      chosenObjectId, chosenProjectId, changeSorting, loading, chosenLibraryDossier, searchText, sorter, requestPerformed,
       changeSearching, objectType, cache, envFilter, myLibraryFilter, myLibrary, switchMyLibrary, changeFilter, t, i18n,
     } = this.props;
     const { previewDisplay } = this.state;
@@ -224,7 +245,7 @@ export class _NavigationTree extends Component {
           isLoading={cacheLoading} />
         <PopupButtons
           loading={loading}
-          disableActiveActions={!chosenObjectId}
+          disableActiveActions={!requestPerformed}
           handleOk={this.handleOk}
           handleSecondary={this.handleSecondary}
           handleCancel={this.handleCancel}
