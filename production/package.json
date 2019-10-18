@@ -32,8 +32,8 @@
     ]
   },
   "dependencies": {
-    "@mstr/mstr-react-library": "^1.2.16",
-    "@mstr/rc": "^0.2.20",
+    "@mstr/mstr-react-library": "^1.2.18",
+    "@mstr/rc": "^0.2.21",
     "antd": "^3.22.2",
     "core-js": "^3.2.1",
     "focus-visible": "^5.0.2",

@@ -23,6 +23,7 @@ describe('NavigationTree Reducer', () => {
         chosenVisualizationKey: null,
         preparedInstanceId: null,
         chosenLibraryDossier: null,
+        requestPerformed: false,
       },
     };
 
@@ -114,6 +115,7 @@ describe('NavigationTree Reducer', () => {
       chosenVisualizationKey: null,
       preparedInstanceId: null,
       chosenLibraryDossier: null,
+      requestPerformed: false,
     });
   });
 
