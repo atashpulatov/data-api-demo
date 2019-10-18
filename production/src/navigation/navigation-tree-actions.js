@@ -45,8 +45,8 @@ export function selectFolder(data) {
   });
 }
 
-export function requestImport() {
-  return (dispatch) => dispatch({ type: REQUEST_IMPORT });
+export function requestImport(data) {
+  return (dispatch) => dispatch({ type: REQUEST_IMPORT, data });
 }
 
 export function promptsAnswered(data) {
@@ -85,8 +85,8 @@ export function updateSize(data) {
   return (dispatch) => dispatch({ type: UPDATE_SIZE, data });
 }
 
-export function requestDossierOpen() {
-  return (dispatch) => dispatch({ type: REQUEST_DOSSIER_OPEN });
+export function requestDossierOpen(data) {
+  return (dispatch) => dispatch({ type: REQUEST_DOSSIER_OPEN, data });
 }
 
 export function switchMyLibrary() {

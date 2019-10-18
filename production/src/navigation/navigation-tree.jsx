@@ -118,12 +118,11 @@ export class _NavigationTree extends Component {
       const objectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
       if ((objectType === mstrObjectEnum.mstrObjectType.report) || (objectType === mstrObjectEnum.mstrObjectType.dossier)) {
         isPrompted = await checkIfPrompted(chosenObjectId, chosenProjectId, objectType.name);
-        changeIsPrompted(isPrompted);
       }
       if (objectType.name === mstrObjectEnum.mstrObjectType.dossier.name) {
         requestDossierOpen();
       } else {
-        requestImport();
+        requestImport(isPrompted);
       }
     } catch (e) {
       const { handlePopupErrors } = this.props;
@@ -146,7 +145,6 @@ export class _NavigationTree extends Component {
       const objectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
       if ((objectType === mstrObjectEnum.mstrObjectType.report) || (objectType === mstrObjectEnum.mstrObjectType.dossier)) {
         isPrompted = await checkIfPrompted(chosenObjectId, chosenProjectId, objectType.name);
-        changeIsPrompted(isPrompted);
       }
       handlePrepare(chosenProjectId, chosenObjectId, chosenSubtype, chosenObjectName, chosenType);
       this.setState({ previewDisplay: true });

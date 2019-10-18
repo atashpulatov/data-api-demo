@@ -126,6 +126,7 @@ export const navigationTree = (state = initialState, action) => {
     case REQUEST_IMPORT: {
       const newState = { ...state };
       newState.importRequested = true;
+      newState.isPrompted = data;
       return newState;
     }
     case PROMPTS_ANSWERED: {
@@ -167,6 +168,7 @@ export const navigationTree = (state = initialState, action) => {
     case REQUEST_DOSSIER_OPEN: {
       const newState = { ...state };
       newState.dossierOpenRequested = true;
+      newState.isPrompted = data;
       return newState;
     }
     case CANCEL_DOSSIER_OPEN: {
