@@ -16,6 +16,7 @@ import {
   getDossierStatus,
   deleteDossierInstance,
 } from '../mstr-object/mstr-object-rest-service';
+import { authenticationHelper } from '../authentication/authentication-helper';
 
 const { Office } = window;
 const { microstrategy } = window;
@@ -154,11 +155,20 @@ export class _PromptsWindow extends Component {
 
   /**
    * This should run the embedded dossier and pass instance ID to the plugin
+   * Session status is checked, and log out is performed if session expired.
    */
-  handleRun = () => {
-    if (this.embeddedDocument) {
-      const runButton = this.embeddedDocument.getElementsByClassName('mstrPromptEditorButtonRun')[0];
-      if (runButton) runButton.click();
+  handleRun = async () => {
+    const { handlePopupErrors } = this.props;
+    try {
+      await Promise.all([
+        authenticationHelper.validateAuthToken(),
+      ]);
+      if (this.embeddedDocument) {
+        const runButton = this.embeddedDocument.getElementsByClassName('mstrPromptEditorButtonRun')[0];
+        if (runButton) runButton.click();
+      }
+    } catch (error) {
+      handlePopupErrors(error)
     }
   }
 
