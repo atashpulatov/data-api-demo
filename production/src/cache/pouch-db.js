@@ -141,8 +141,25 @@ export default class DB {
     return this.db.bulkDocs(documents);
   }
 
+  /**
+   * Get all db documents
+   *
+   * @returns {Promise} allDocs promise operation
+   * @memberof DB
+   */
   getAllObjects() {
     return this.db.allDocs({ include_docs: true });
+  }
+
+  /**
+   * Get a single db document by ID
+   *
+   * @param {String} id Name of db key
+   * @returns {Promise} get promise operation
+   * @memberof DB
+   */
+  get(id) {
+    return this.db.get(id);
   }
 
   /**
