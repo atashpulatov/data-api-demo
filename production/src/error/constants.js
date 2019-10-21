@@ -76,7 +76,13 @@ const iServerErrorMessages = withDefaultValue({
 }, GENERIC_SERVER_ERR);
 
 export const errorMessageFactory = withDefaultValue({
-  [errorTypes.ENV_NOT_FOUND_ERR]: () => ENDPOINT_NOT_REACHED,
+  [errorTypes.ENV_NOT_FOUND_ERR]: ({ error }) => {
+    if (error.response.body.iServerCode) {
+      if (error.response.body.iServerCode === -2147216373) {
+        return NOT_IN_METADATA;
+      }
+    }
+  },
   [errorTypes.CONNECTION_BROKEN_ERR]: () => CONNECTION_BROKEN,
   [errorTypes.UNAUTHORIZED_ERR]: ({ error }) => {
     if (
