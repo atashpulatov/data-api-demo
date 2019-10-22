@@ -88,9 +88,9 @@ export class _PromptsWindow extends Component {
     try {
       if (isReprompt) {
         instanceDefinition = await this.preparePromptedReportInstance(reportId, projectId, promptsAnswers);
+        instance.id = instanceDefinition && instanceDefinition.id; // '00000000000000000000000000000000';
+        instance.mid = instanceDefinition && instanceDefinition.mid;
       }
-      instance.id = instanceDefinition && instanceDefinition.id; // '00000000000000000000000000000000';
-      instance.mid = instanceDefinition && instanceDefinition.mid;
 
       let msgRouter = null;
       promptsAnswers = null;
