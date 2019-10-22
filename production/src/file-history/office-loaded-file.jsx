@@ -122,7 +122,7 @@ export class _OfficeLoadedFile extends React.Component {
 
   repromptAction = (e) => {
     const { allowRefreshClick } = this.state;
-    const { loading, startLoading, stopLoading } = this.props;
+    const { loading, startLoading } = this.props;
     if (e) e.stopPropagation();
     if (!allowRefreshClick || loading) {
       return;
