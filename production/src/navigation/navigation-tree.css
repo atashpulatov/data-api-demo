@@ -6,9 +6,10 @@
   margin: 15px;
 }
 
-.navigation_tree__title_bar > span {
+.navigation_tree__title_bar>span {
   font-size: 18px;
   color: #333333;
+  font-weight: 500;
 }
 
 .navigation_tree__table_wrapper {
@@ -21,7 +22,7 @@
   border: 2px dotted black
 }
 
-.ReactVirtualized__Table__rowColumn.radio > input {
+.ReactVirtualized__Table__rowColumn.radio>input {
   margin-left: 2px;
 }
 
@@ -30,7 +31,7 @@
   line-height: 1;
 }
 
-.top-filter-panel > .mstr-switch-container {
+.top-filter-panel>.mstr-switch-container {
   display: none;
 }
 
@@ -38,11 +39,14 @@
   z-index: 2;
 }
 
-.filter-panel input[id=Dossier],
-.filter-panel label[for=Dossier] {
+.filter-panel input[id=Dossier], .filter-panel label[for=Dossier] {
   display: none;
 }
 
 .filter-panel .category-list-wrapper:nth-child(3) {
   margin-top: 0px;
+}
+
+.header-container span.data-tip {
+  font-weight: 500;
 }
