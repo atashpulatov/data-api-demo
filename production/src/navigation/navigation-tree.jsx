@@ -38,12 +38,13 @@ export class _NavigationTree extends Component {
 
 
   componentDidUpdate() {
-    const { sorter, objectType, filter, myLibrary } = this.props;
+    const { sorter, objectType, myLibrary, myLibraryFilter, envFilter } = this.props;
     const propsToSave = {
       sorter,
       objectType,
-      filter,
       myLibrary,
+      envFilter,
+      myLibraryFilter,
     };
     window.Office.context.ui.messageParent(JSON.stringify({
       command: selectorProperties.commandBrowseUpdate,
