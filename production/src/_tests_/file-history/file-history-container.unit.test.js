@@ -257,13 +257,12 @@ describe('FileHistoryContainer', () => {
       startLoading={startLoadingMock}
     />);
     const mockRefreshAll = jest.spyOn(wrappedComponent.instance(), 'refreshAllAction');
-    const mockValidateToken = jest.spyOn(authenticationHelper, 'validateAuthToken').mockImplementation(() => { });
-    const mockGetExcelSession = jest.spyOn(officeApiHelper, 'getExcelSessionStatus').mockImplementation(() => { });
+    const checkStatusOfSessions = jest.spyOn(officeApiHelper, 'checkStatusOfSessions').mockImplementation(() => { });
     wrappedComponent.instance().forceUpdate();
     // when
     wrappedComponent.instance().showData();
     // then
-    await Promise.all([expect(mockValidateToken).toBeCalled(), expect(mockGetExcelSession).toBeCalled()]);
+    await expect(checkStatusOfSessions).toBeCalled();
     expect(mockRefreshAll).toBeCalled();
     expect(mockToggleSecured).toBeCalled();
   });

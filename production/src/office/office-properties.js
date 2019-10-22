@@ -11,6 +11,7 @@ export const officeProperties = new Proxy({
   loadedReportProperties: 'reportProperties',
   isSecured: 'isSecured',
   isClearing: 'isClearing',
+  browsingFiltersApplied: 'browsingFiltersApplied',
   actions: {
     preLoadReport: 'PRE_OFFICE_LOAD_REPORT',
     loadReport: 'OFFICE_LOAD_REPORT',

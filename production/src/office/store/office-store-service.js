@@ -25,6 +25,7 @@ class OfficeStoreService {
         promptsAnswers: report.promptsAnswers,
         crosstabHeaderDimensions: report.crosstabHeaderDimensions,
         visualizationInfo: report.visualizationInfo,
+        manipulationsXML: report.manipulationsXML,
       });
       settings.set(officeProperties.loadedReportProperties, reportProperties);
       settings.saveAsync();
@@ -112,6 +113,7 @@ class OfficeStoreService {
         const reportsArray = [...this._getReportProperties()];
         const reportObj = reportsArray.find((element) => element.bindId === report.bindId);
         reportsArray[reportsArray.indexOf(reportObj)].crosstabHeaderDimensions = report.crosstabHeaderDimensions;
+        reportsArray[reportsArray.indexOf(reportObj)].isCrosstab = report.isCrosstab;
         settings.set(officeProperties.loadedReportProperties, reportsArray);
       } catch (error) {
         errorService.handleError(error);
@@ -134,6 +136,7 @@ class OfficeStoreService {
           promptsAnswers: report.promptsAnswers,
           crosstabHeaderDimensions: report.crosstabHeaderDimensions,
           visualizationInfo: report.visualizationInfo,
+          manipulationsXML: report.manipulationsXML,
         },
       });
       this.preserveReport(report);

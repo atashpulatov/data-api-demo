@@ -1,0 +1,48 @@
+.navigation_tree__main_wrapper {
+  height: calc(100% - 125px);
+}
+
+.navigation_tree__title_bar {
+  margin: 15px;
+}
+
+.navigation_tree__title_bar > span {
+  font-size: 18px;
+  color: #333333;
+}
+
+.navigation_tree__table_wrapper {
+  background: #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 100px;
+  height: 100%;
+  border: 2px dotted black
+}
+
+.ReactVirtualized__Table__rowColumn.radio > input {
+  margin-left: 2px;
+}
+
+.top-filter-panel {
+  float: right;
+  line-height: 1;
+}
+
+.top-filter-panel > .mstr-switch-container {
+  display: none;
+}
+
+.top-filter-panel .panel-wrapper {
+  z-index: 2;
+}
+
+.filter-panel input[id=Dossier],
+.filter-panel label[for=Dossier] {
+  display: none;
+}
+
+.filter-panel .category-list-wrapper:nth-child(3) {
+  margin-top: 0px;
+}

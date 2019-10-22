@@ -15,13 +15,14 @@ describe('NavigationTree Reducer', () => {
         chosenObjectId: '1',
         chosenProjectId: '2',
         chosenSubtype: '3',
-        chosenProjectName: 'Prepare Data',
+        chosenObjectName: 'Prepare Data',
         chosenType: 'Data',
-        isPrompted: false,
         chosenChapterKey: null,
         objectType: undefined,
         chosenVisualizationKey: null,
         preparedInstanceId: null,
+        chosenLibraryDossier: null,
+        requestPerformed: false,
       },
     };
 
@@ -40,7 +41,7 @@ describe('NavigationTree Reducer', () => {
         chosenObjectId: '1',
         chosenProjectId: '2',
         chosenSubtype: '3',
-        chosenProjectName: 'name',
+        chosenObjectName: 'name',
       },
     };
 
@@ -48,7 +49,7 @@ describe('NavigationTree Reducer', () => {
     const newState = navigationTree({ dataSource: [{ projectId: '2', key: '1', name: 'name' }] }, action);
 
     // then
-    expect(newState.chosenProjectName).toEqual('name');
+    expect(newState.chosenObjectName).toEqual('name');
   });
 
   it('should return new proper state in case of SELECT_OBJECT action with datasource wrong', () => {
@@ -66,7 +67,7 @@ describe('NavigationTree Reducer', () => {
     const newState = navigationTree({ dataSource: [{}] }, action);
 
     // then
-    expect(newState.chosenProjectName).toEqual('Prepare Data');
+    expect(newState.chosenObjectName).toEqual('Prepare Data');
     expect(newState.chosenType).toEqual('Data');
   });
 
@@ -78,7 +79,6 @@ describe('NavigationTree Reducer', () => {
         chosenObjectId: '1',
         chosenProjectId: '2',
         chosenSubtype: 768,
-        isPrompted: true,
       },
     };
 
@@ -87,7 +87,6 @@ describe('NavigationTree Reducer', () => {
 
     // then
     expect(newState.chosenType).toEqual('Report');
-    expect(newState.isPrompted).toBe(true);
   });
 
   it('should return new proper state in case of SELECT_OBJECT action without proper data', () => {
@@ -105,13 +104,14 @@ describe('NavigationTree Reducer', () => {
       chosenObjectId: null,
       chosenProjectId: null,
       chosenSubtype: null,
-      chosenProjectName: 'Prepare Data',
+      chosenObjectName: 'Prepare Data',
       chosenType: 'Data',
-      isPrompted: false,
       chosenChapterKey: null,
       objectType: undefined,
       chosenVisualizationKey: null,
       preparedInstanceId: null,
+      chosenLibraryDossier: null,
+      requestPerformed: false,
     });
   });
 
@@ -132,7 +132,7 @@ describe('NavigationTree Reducer', () => {
     expect(newState.chosenSubtype).toEqual(null);
     expect(newState.scrollPosition).toEqual(null);
     expect(newState.pageSize).toEqual(null);
-    expect(newState.chosenProjectName).toEqual(DEFAULT_PROJECT_NAME);
+    expect(newState.chosenObjectName).toEqual(DEFAULT_PROJECT_NAME);
     expect(newState.chosenType).toEqual(DEFAULT_TYPE);
   });
 

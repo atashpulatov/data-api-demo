@@ -13,10 +13,12 @@ import {
 import RenameInput from './file-history-rename-input';
 import { officeApiHelper } from '../office/office-api-helper';
 import { ButtonPopover } from './button-popover';
-import { ReactComponent as DossierIcon } from './assets/icon_Dossier.svg';
+import datasetIcon from './assets/icon_Dataset_32.png';
+import dossierIcon from './assets/icon_Dossier_32.png';
+import reportIcon from './assets/icon_Report_blue_32.png';
 import { ReactComponent as ClockIcon } from './assets/icon_clock.svg';
 import { officeStoreService } from '../office/store/office-store-service';
-import mstrObjectEnum from '../mstr-object/mstr-object-type-enum.js';
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { startLoading, stopLoading } from '../navigation/navigation-tree-actions';
 
 
@@ -120,7 +122,7 @@ export class _OfficeLoadedFile extends React.Component {
 
   repromptAction = (e) => {
     const { allowRefreshClick } = this.state;
-    const { loading, startLoading, stopLoading } = this.props;
+    const { loading, startLoading } = this.props;
     if (e) e.stopPropagation();
     if (!allowRefreshClick || loading) {
       return;
@@ -190,44 +192,44 @@ export class _OfficeLoadedFile extends React.Component {
   getMstrIcon = (objectType) => {
     const { t } = this.props;
     switch (objectType.name) {
-    case mstrObjectEnum.mstrObjectType.report.name:
-      return (
+      case mstrObjectEnum.mstrObjectType.report.name:
+        return (
           <ButtonPopover
             placement="bottom"
             content={t('Report')}
             mouseEnterDelay={1}
           >
             <span>
-              <MSTRIcon type="report" />
+              <img src={reportIcon} alt="report icon" />
             </span>
           </ButtonPopover>
-      );
-    case mstrObjectEnum.mstrObjectType.dataset.name:
-      return (
+        );
+      case mstrObjectEnum.mstrObjectType.dataset.name:
+        return (
           <ButtonPopover
             placement="bottom"
             content={t('Dataset')}
             mouseEnterDelay={1}
           >
             <span>
-              <MSTRIcon type="dataset" />
+              <img src={datasetIcon} alt="dataset icon" />
             </span>
           </ButtonPopover>
-      );
-    case mstrObjectEnum.mstrObjectType.visualization.name:
-      return (
+        );
+      case mstrObjectEnum.mstrObjectType.visualization.name:
+        return (
           <ButtonPopover
             placement="bottom"
             content={t('Dossier')}
             mouseEnterDelay={1}
           >
             <span>
-              <DossierIcon />
+              <img src={dossierIcon} alt="dossier icon" />
             </span>
           </ButtonPopover>
-      );
-    default:
-      break;
+        );
+      default:
+        break;
     }
     return <></>;
   };

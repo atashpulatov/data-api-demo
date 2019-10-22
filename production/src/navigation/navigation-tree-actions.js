@@ -14,10 +14,19 @@ export const CANCEL_REQUEST_IMPORT = 'CANCEL_REQUEST_IMPORT';
 export const CLEAR_PROMPTS_ANSWERS = 'CLEAR_PROMPTS_ANSWERS';
 export const REQUEST_DOSSIER_OPEN = 'REQUEST_DOSSIER_OPEN';
 export const CANCEL_DOSSIER_OPEN = 'CANCEL_DOSSIER_OPEN';
+export const CHANGE_FILTER = 'CHANGE_FILTER';
+export const SWITCH_MY_LIBRARY = 'SWITCH_MY_LIBRARY';
+export const CHANGE_IS_PROMPTED = 'CHANGE_IS_PROMPTED';
 
 export function selectObject(data) {
   return (dispatch) => dispatch({
     type: SELECT_OBJECT,
+    data,
+  });
+}
+export function changeIsPrompted(data) {
+  return (dispatch) => dispatch({
+    type: CHANGE_IS_PROMPTED,
     data,
   });
 }
@@ -36,8 +45,8 @@ export function selectFolder(data) {
   });
 }
 
-export function requestImport() {
-  return (dispatch) => dispatch({ type: REQUEST_IMPORT });
+export function requestImport(data) {
+  return (dispatch) => dispatch({ type: REQUEST_IMPORT, data });
 }
 
 export function promptsAnswered(data) {
@@ -76,8 +85,16 @@ export function updateSize(data) {
   return (dispatch) => dispatch({ type: UPDATE_SIZE, data });
 }
 
-export function requestDossierOpen() {
-  return (dispatch) => dispatch({ type: REQUEST_DOSSIER_OPEN });
+export function requestDossierOpen(data) {
+  return (dispatch) => dispatch({ type: REQUEST_DOSSIER_OPEN, data });
 }
 
-export const actions = { selectFolder, selectObject, setDataSource, requestImport, promptsAnswered, startImport, startLoading, stopLoading, changeSearching, changeSorting, updateScroll, updateSize, requestDossierOpen, };
+export function switchMyLibrary() {
+  return (dispatch) => dispatch({ type: SWITCH_MY_LIBRARY });
+}
+
+export function changeFilter(data) {
+  return (dispatch) => dispatch({ type: CHANGE_FILTER, data });
+}
+
+export const actions = { selectFolder, selectObject, setDataSource, requestImport, promptsAnswered, startImport, startLoading, stopLoading, changeSearching, changeSorting, updateScroll, updateSize, requestDossierOpen, switchMyLibrary, changeFilter };

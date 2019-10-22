@@ -1,6 +1,9 @@
-const withDefaultValue = (obj, defaultValue) => new Proxy(obj, {
-  get: (target, name) => (target[name] === undefined ? defaultValue : target[name]),
-});
+const withDefaultValue = (obj, defaultValue) => (value) => {
+  if (value in obj) {
+    return obj[value];
+  }
+  return defaultValue;
+};
 
 export const errorTypes = {
   ENV_NOT_FOUND_ERR: 'environmentNotFound',
@@ -73,20 +76,25 @@ const iServerErrorMessages = withDefaultValue({
 }, GENERIC_SERVER_ERR);
 
 export const errorMessageFactory = withDefaultValue({
-  [errorTypes.ENV_NOT_FOUND_ERR]: () => ENDPOINT_NOT_REACHED,
+  [errorTypes.ENV_NOT_FOUND_ERR]: ({ error }) => {
+    if (error.response && error.response.body && (error.response.body.iServerCode === -2147216373)) {
+      return NOT_IN_METADATA;
+    }
+    return ENDPOINT_NOT_REACHED;
+  },
   [errorTypes.CONNECTION_BROKEN_ERR]: () => CONNECTION_BROKEN,
   [errorTypes.UNAUTHORIZED_ERR]: ({ error }) => {
     if (
       (error.response.body.code === 'ERR003')
       && (error.response.body.iServerCode)
-      && (iServerErrorMessages[error.response.body.iServerCode] === LOGIN_FAILURE)
+      && (iServerErrorMessages(error.response.body.iServerCode) === LOGIN_FAILURE)
     ) {
       return WRONG_CREDENTIALS;
     }
     return SESSION_EXPIRED;
   },
   [errorTypes.BAD_REQUEST_ERR]: () => PROBLEM_WITH_REQUEST,
-  [errorTypes.INTERNAL_SERVER_ERR]: ({ error }) => iServerErrorMessages[!error.response ? '-1' : error.response.body ? error.response.body.iServerCode : '-1'],
+  [errorTypes.INTERNAL_SERVER_ERR]: ({ error }) => iServerErrorMessages(!error.response ? '-1' : error.response.body ? error.response.body.iServerCode : '-1'),
   [errorTypes.PROMPTED_REPORT_ERR]: () => NOT_SUPPORTED_PROMPTS_REFRESH,
   [errorTypes.OUTSIDE_OF_RANGE_ERR]: () => EXCEEDS_WORKSHEET_LIMITS,
   [errorTypes.OVERLAPPING_TABLES_ERR]: () => TABLE_OVERLAP,

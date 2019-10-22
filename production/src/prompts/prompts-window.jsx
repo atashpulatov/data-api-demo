@@ -16,6 +16,7 @@ import {
   getDossierStatus,
   deleteDossierInstance,
 } from '../mstr-object/mstr-object-rest-service';
+import { authenticationHelper } from '../authentication/authentication-helper';
 
 const { Office } = window;
 const { microstrategy } = window;
@@ -29,6 +30,7 @@ export class _PromptsWindow extends Component {
       loading: true,
       isReprompt: mstrData.isReprompt,
       promptsAnswers: mstrData.promptsAnswers,
+      disableRunButton: false
     };
 
     this.container = React.createRef();
@@ -154,11 +156,21 @@ export class _PromptsWindow extends Component {
 
   /**
    * This should run the embedded dossier and pass instance ID to the plugin
+   * Session status is checked, and log out is performed if session expired.
    */
-  handleRun = () => {
-    if (this.embeddedDocument) {
-      const runButton = this.embeddedDocument.getElementsByClassName('mstrPromptEditorButtonRun')[0];
-      if (runButton) runButton.click();
+  handleRun = async () => {
+    const { handlePopupErrors } = this.props;
+    try {
+      await authenticationHelper.validateAuthToken();
+      if (this.embeddedDocument) {
+        const runButton = this.embeddedDocument.getElementsByClassName('mstrPromptEditorButtonRun')[0];
+        if (runButton) {
+          runButton.click();
+          this.setState({ disableRunButton: true })
+        }
+      }
+    } catch (error) {
+      handlePopupErrors(error)
     }
   }
 
@@ -234,7 +246,7 @@ export class _PromptsWindow extends Component {
 
   render() {
     const { handleBack } = this.props;
-    const { isReprompt } = this.state;
+    const { isReprompt, disableRunButton } = this.state;
     return (
       <div
         style={{ position: 'relative' }}
@@ -251,6 +263,7 @@ export class _PromptsWindow extends Component {
             handleRun={this.handleRun}
             isReprompt={isReprompt}
             closePopup={this.closePopup}
+            disableRunButton={disableRunButton}
           />
         </div>
       </div>

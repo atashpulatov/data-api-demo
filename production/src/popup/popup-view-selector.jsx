@@ -16,9 +16,12 @@ import { createInstance, answerPrompts, getInstance } from '../mstr-object/mstr-
 
 const { Office } = window;
 
+// eslint-disable-next-line no-underscore-dangle
 export const _PopupViewSelector = (props) => {
   let { popupType } = props;
-  const { propsToPass, methods, importRequested, isPrompted, dossierOpenRequested } = props;
+
+  const { propsToPass, methods, importRequested, dossierOpenRequested } = props;
+  const isPrompted = propsToPass.isPrompted || props.isPrompted;
   if (!props.authToken || !propsToPass) {
     console.log('Waiting for token to be passed');
     return null;
@@ -76,7 +79,7 @@ function wasReportJustImported(props) {
 
 function promptedReportSubmitted(props) {
   return (
-    !!props.isPrompted
+    !!(props.propsToPass.isPrompted || props.isPrompted)
     && (props.importRequested || props.popupType === PopupTypeEnum.dataPreparation)
   );
 }
@@ -108,7 +111,11 @@ async function obtainInstanceWithPromptsAnswers(propsToPass, props) {
     };
     await answerPrompts(configPrompts);
     const configAnsPrompts = { objectId, projectId, instanceId: instanceDefinition.instanceId };
-    instanceDefinition = await getInstance(configAnsPrompts);
+    try {
+      instanceDefinition = await getInstance(configAnsPrompts);
+    } catch (error) {
+      props.methods.handlePopupErrors(error);
+    }
     count += 1;
   }
   const body = createBody(props.editedReport && props.editedReport.selectedAttributes,
@@ -210,7 +217,7 @@ function proceedToImport(props) {
   if (props.dossierData) {
     okObject.dossierData = {
       ...props.dossierData,
-      reportName: props.chosenProjectName,
+      reportName: props.chosenObjectName,
     };
   }
   props.startLoading();
@@ -220,7 +227,7 @@ function proceedToImport(props) {
 
 function renderProperComponent(popupType, methods, propsToPass, editedReport) {
   if (popupType === PopupTypeEnum.dataPreparation) {
-    const mstrData = { ...propsToPass, instanceId: editedReport.instanceId }
+    const mstrData = { ...propsToPass, instanceId: editedReport.instanceId, promptsAnswers: editedReport.promptsAnswers }
     return (
       <AttributeSelectorWindow
         mstrData={mstrData}
@@ -260,7 +267,11 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
   }
   if (popupType === PopupTypeEnum.promptsWindow) {
     return (
-      <PromptsWindow mstrData={propsToPass} handleBack={methods.handleBack} />
+      <PromptsWindow
+        mstrData={propsToPass}
+        handleBack={methods.handleBack}
+        handlePopupErrors={methods.handlePopupErrors}
+      />
     );
   }
   if (popupType === PopupTypeEnum.repromptingWindow) {
@@ -289,10 +300,11 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
 
 export function mapStateToProps(state) {
   const popupState = state.popupReducer.editedReport;
+  const { promptsAnswers } = state.navigationTree;
   return {
     ...state.navigationTree,
     authToken: state.sessionReducer.authToken,
-    editedReport: parsePopupState(popupState),
+    editedReport: { ...(parsePopupState(popupState, promptsAnswers)) },
     preparedInstance: state.popupReducer.preparedInstance,
   };
 }
@@ -304,7 +316,7 @@ const popupActions = {
 
 export const PopupViewSelector = connect(mapStateToProps, popupActions)(_PopupViewSelector);
 
-function parsePopupState(popupState) {
+function parsePopupState(popupState, promptsAnswers) {
   if (!popupState) {
     return;
   }
@@ -315,7 +327,7 @@ function parsePopupState(popupState) {
     reportName: popupState.name,
     reportType: popupState.objectType,
     reportSubtype: popupState.objectType === 'report' ? 768 : 779,
-    promptsAnswers: popupState.promptsAnswers,
+    promptsAnswers: promptsAnswers || popupState.promptsAnswers,
     importSubtotal: popupState.importSubtotal,
   };
   restoreFilters(popupState.body, reportData);

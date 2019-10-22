@@ -88,6 +88,7 @@ class OfficeDisplayService {
     } = false,
     visualizationInfo = false,
     preparedInstanceId,
+    manipulationsXML = false,
   }) => {
     let officeTable;
     let newOfficeTableId;
@@ -96,7 +97,8 @@ class OfficeDisplayService {
     let startCell;
     let tableColumnsChanged;
     let instanceDefinition;
-    let dossierStructure;
+    // TODO: Uncomment this as far as DE150758 will be resolved (Can not get definition for prompted dossier)
+    // let dossierStructure;
     try {
       const objectType = mstrObjectType;
       const { envUrl } = officeApiHelper.getCurrentMstrContext();
@@ -116,6 +118,11 @@ class OfficeDisplayService {
       }
       if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
         // !TODO: include promptsAnswers in instance body to get prompted data
+        if (manipulationsXML) {
+          if (!body) body = {};
+          body.manipulations = manipulationsXML.manipulations;
+          body.promptAnswers = manipulationsXML.promptAnswers;
+        }
         const instanceId = preparedInstanceId || (await createDossierInstance(projectId, objectId, body));
         const config = { projectId, objectId, instanceId, mstrObjectType, dossierData, body, visualizationInfo };
         const temp = await fetchVisualizationDefinition(config);
@@ -180,13 +187,15 @@ class OfficeDisplayService {
 
       // Get visualization path from dossier definition.
       // Used to show in sidebar placeholder
-      if (objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-        console.time('Get dossier structure');
-        mstrTable.id = objectId;
-        dossierStructure = await this.getDossierStructure(projectId, objectId, visualizationInfo, mstrTable.name, preparedInstanceId);
-        visualizationInfo.dossierStructure = dossierStructure;
-        console.timeEnd('Get dossier structure');
-      }
+
+      // TODO: Uncomment this as far as DE150758 will be resolved (Can not get definition for prompted dossier)
+      // if (objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
+      //   console.time('Get dossier structure');
+      //   mstrTable.id = objectId;
+      //   dossierStructure = await this.getDossierStructure(projectId, objectId, visualizationInfo, preparedInstanceId);
+      //   visualizationInfo.dossierStructure = dossierStructure;
+      //   console.timeEnd('Get dossier structure');
+      // }
 
       // Save to store
       bindingId = bindingId || newOfficeTableId;
@@ -207,6 +216,7 @@ class OfficeDisplayService {
           subtotalsAddresses,
         },
         visualizationInfo,
+        objectId,
       });
 
       console.timeEnd('Total');
@@ -486,7 +496,7 @@ class OfficeDisplayService {
 
   _addToStore = ({
     isRefresh,
-    instanceDefinition: { mstrTable },
+    instanceDefinition,
     bindingId,
     projectId,
     envUrl,
@@ -497,9 +507,11 @@ class OfficeDisplayService {
     promptsAnswers,
     subtotalInfo,
     visualizationInfo,
+    objectId
   }) => {
+    const { mstrTable, manipulationsXML } = instanceDefinition;
     const report = {
-      id: mstrTable.id,
+      id: objectId,
       name: mstrTable.name,
       bindId: bindingId,
       projectId,
@@ -513,6 +525,7 @@ class OfficeDisplayService {
       promptsAnswers,
       crosstabHeaderDimensions: mstrTable.crosstabHeaderDimensions,
       visualizationInfo,
+      manipulationsXML,
     };
     officeStoreService.saveAndPreserveReportInStore(report, isRefresh);
   }
@@ -763,10 +776,10 @@ class OfficeDisplayService {
     }
   };
 
-  getDossierStructure = async (projectId, objectId, visualizationInfo, dossierName, preparedInstanceId) => {
+  getDossierStructure = async (projectId, objectId, visualizationInfo, preparedInstanceId) => {
     const { visualizationKey, chapterKey } = visualizationInfo;
-    const dossierStructure = { dossierName };
     const dossierDefinition = await getDossierDefinition(projectId, objectId, preparedInstanceId);
+    const dossierStructure = { dossierName: dossierDefinition.name };
     const chapter = dossierDefinition.chapters.find((el) => el.key === chapterKey);
     dossierStructure.chapterName = chapter.name;
     const { pages } = chapter;

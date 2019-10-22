@@ -14,7 +14,7 @@ class ErrorService {
   handleError = (error, options = { reportName: 'Report', onConfirm: null, isLogout: false }) => {
     const { onConfirm, isLogout, ...parameters } = options;
     const errorType = this.getErrorType(error);
-    const errorMessage = errorMessageFactory[errorType]({ error, ...parameters });
+    const errorMessage = errorMessageFactory(errorType)({ error, ...parameters });
     this.displayErrorNotification(error, errorType, errorMessage, onConfirm);
     this.checkForLogout(isLogout, errorType);
   }
@@ -29,9 +29,7 @@ class ErrorService {
     if (type === errorTypes.UNAUTHORIZED_ERR) {
       return notificationService.displayNotification({ type: 'info', content: message });
     }
-    return notificationService.displayNotification({
-      type: 'warning', content: message, details, onConfirm,
-    });
+    return notificationService.displayNotification({ type: 'warning', content: message, details, onConfirm, });
   }
 
   checkForLogout = (isLogout = false, errorType) => {
@@ -45,7 +43,7 @@ class ErrorService {
 
   getOfficeErrorType = (error) => {
     if (error.name === 'RichApi.Error') {
-      return stringMessageToErrorType[error.message];
+      return stringMessageToErrorType(error.message);
     }
     return null;
   }
@@ -58,12 +56,12 @@ class ErrorService {
       return null;
     }
     const status = error.status || (error.response ? error.response.status : null);
-    return httpStatusToErrorType[status];
+    return httpStatusToErrorType(status);
   }
 
   getErrorMessage = (error, options = { reportName: 'Report' }) => {
     const errorType = this.getErrorType(error);
-    return errorMessageFactory[errorType]({ error, ...options });
+    return errorMessageFactory(errorType)({ error, ...options });
   }
 
   fullLogOut = () => {

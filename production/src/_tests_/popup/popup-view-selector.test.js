@@ -17,6 +17,7 @@ describe('PopupViewSelector', () => {
     };
     const props = {
       popupType: PopupTypeEnum.navigationTree,
+      connectToDB: jest.fn(),
       propsToPass: {},
       authToken: 'token',
     };
@@ -377,6 +378,7 @@ describe('PopupViewSelector', () => {
     };
     const props = {
       popupType: PopupTypeEnum.navigationTree,
+      connectToDB: jest.fn(),
       propsToPass: {},
       authToken: 'token',
     };

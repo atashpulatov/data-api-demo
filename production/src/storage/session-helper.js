@@ -5,6 +5,7 @@ import { userRestService } from '../home/user-rest-service';
 import { errorService } from '../error/error-handler';
 import { homeHelper } from '../home/home-helper';
 import { createCache } from '../cache/cache-actions';
+import DB from '../cache/pouch-db';
 
 class SessionHelper {
   enableLoading = () => {
@@ -22,9 +23,7 @@ class SessionHelper {
   }
 
   logOut = () => {
-    reduxStore.dispatch({
-      type: sessionProperties.actions.logOut,
-    });
+    reduxStore.dispatch({ type: sessionProperties.actions.logOut, });
   }
 
   logOutRest = async () => {
@@ -65,7 +64,6 @@ class SessionHelper {
       type: sessionProperties.actions.loggedIn,
       authToken,
     });
-    createCache()(reduxStore.dispatch, reduxStore.getState);
   }
 
   getSession = () => {
@@ -90,6 +88,7 @@ class SessionHelper {
     try {
       userData = await userRestService.getUserInfo(authToken, envUrl);
       !userData.userInitials && sessionHelper.saveUserInfo(userData);
+      if (DB.getIndexedDBSupport()) createCache(userData.id)(reduxStore.dispatch, reduxStore.getState);
     } catch (error) {
       errorService.handleError(error, { isLogout: !IS_LOCALHOST });
     }
@@ -100,6 +99,7 @@ class SessionHelper {
       type: sessionProperties.actions.getUserInfo,
       userFullName: values.fullName,
       userInitials: values.initials,
+      userID: values.id,
     });
   }
 
