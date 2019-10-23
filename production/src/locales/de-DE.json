@@ -185,5 +185,7 @@
   "Dataset": "Datensatz",
   "Remove": "Entfernen",
   "Subtotals and Totals": "Zwischensummen und Summen",
-  "Import Dossier": "Dossier importieren"
+  "Import Dossier": "Dossier importieren",
+  "This is a crosstab report. To preserve its structure, select all attributes and metrics.": "*This is a crosstab report. To preserve its structure, select all attributes and metrics.*",
+  "This object does not exist in the workbook anymore.": "*This object does not exist in the workbook anymore.*"
 }
