@@ -555,18 +555,18 @@ class OfficeDisplayService {
     const newOfficeTableId = bindingId || officeApiHelper.findAvailableOfficeTableId();
     const { mstrTable, columns, rows } = instanceDefinition;
     const { prevCrosstabDimensions, crosstabHeaderDimensions, isCrosstab } = mstrTable;
+    mstrTable.toCrosstabChange = !prevCrosstabDimensions && isCrosstab;
+    mstrTable.fromCrosstabChange = prevCrosstabDimensions && !isCrosstab;
     let officeTable;
     let shouldFormat = true;
     let tableColumnsChanged;
     if (isRefresh) {
       const prevOfficeTable = await officeApiHelper.getTable(excelContext,
         bindingId);
-      if (isCrosstab) officeApiHelper.clearEmptyCrosstabRow(prevOfficeTable); // Since showing Excel table header dont override the data but insert new row, we clear values from empty row in crosstab to prevent it
+      if (isCrosstab && !mstrTable.toCrosstabChange) officeApiHelper.clearEmptyCrosstabRow(prevOfficeTable); // Since showing Excel table header dont override the data but insert new row, we clear values from empty row in crosstab to prevent it
       prevOfficeTable.showHeaders = true;
       await excelContext.sync();
       tableColumnsChanged = await this._checkColumnsChange(prevOfficeTable, excelContext, instanceDefinition);
-      mstrTable.toCrosstabChange = !prevCrosstabDimensions && isCrosstab;
-      mstrTable.fromCrosstabChange = prevCrosstabDimensions && !isCrosstab;
       const headerCell = prevOfficeTable.getHeaderRowRange().getCell(0, 0);
       headerCell.load('address');
       await excelContext.sync();
