@@ -185,5 +185,7 @@
   "Dataset": "데이터세트",
   "Remove": "제거",
   "Subtotals and Totals": "부분 합계 및 합계",
-  "Import Dossier": "관련 문서 가져오기"
+  "Import Dossier": "관련 문서 가져오기",
+  "This is a crosstab report. To preserve its structure, select all attributes and metrics.": "*This is a crosstab report. To preserve its structure, select all attributes and metrics.*",
+  "This object does not exist in the workbook anymore.": "*This object does not exist in the workbook anymore.*"
 }
