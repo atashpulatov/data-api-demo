@@ -223,7 +223,8 @@ function proceedToImport(props) {
     // skip this part if report contains no selected attribiutes/metrics/filters
     if (isReprompt && !wasReportJustImported(props)) {
       okObject.command = selectorProperties.commandOnUpdate;
-      okObject.body = createBody(props.editedReport.selectedAttributes, props.editedReport.selectedMetrics, props.editedReport.selectedFilters, false);
+      const { selectedAttributes, selectedMetrics, selectedFilters } = props.editedReport;
+      okObject.body = createBody(selectedAttributes, selectedMetrics, selectedFilters, false);
     }
   }
   props.startLoading();
