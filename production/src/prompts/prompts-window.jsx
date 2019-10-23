@@ -144,6 +144,7 @@ export class _PromptsWindow extends Component {
             dossierId: objectId,
             instanceId,
             visualizationKey: visuzalisations[0].key,
+            isReprompt
           };
 
           // Since the dossier is no needed anymore after intercepting promptsAnswers, we can try removing the instanace
