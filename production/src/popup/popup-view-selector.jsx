@@ -288,7 +288,11 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
       isReprompt: true,
     };
     return (
-      <PromptsWindow mstrData={mstrData} handleBack={methods.handleBack} />
+      <PromptsWindow
+        mstrData={mstrData}
+        handleBack={methods.handleBack}
+        handlePopupErrors={methods.handlePopupErrors}
+      />
     ); // use the same window as with prompting, but provide report info
   }
   if (popupType === PopupTypeEnum.dossierWindow) {

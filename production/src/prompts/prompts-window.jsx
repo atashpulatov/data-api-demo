@@ -76,83 +76,86 @@ export class _PromptsWindow extends Component {
 
   loadEmbeddedDossier = async (container) => {
     const { loading, reportId, isReprompt } = this.state;
-    let { promptsAnswers } = this.state;
-    const { promptsAnswered, mstrData } = this.props;
     if (!loading) {
       return;
     }
-
+    let { promptsAnswers } = this.state;
+    const { promptsAnswered, mstrData, handlePopupErrors } = this.props;
     const { envUrl, token, projectId } = mstrData;
-    const libraryUrl = envUrl.replace('api', 'app');
 
     let instanceDefinition;
     const instance = {};
-    if (isReprompt) {
-      instanceDefinition = await this.preparePromptedReportInstance(reportId, projectId, promptsAnswers);
-      instance.id = instanceDefinition.id; // '00000000000000000000000000000000';
-      instance.mid = instanceDefinition.mid;
-    }
-
-    let msgRouter = null;
-    promptsAnswers = null;
-    const promptsAnsweredHandler = function promptsAnswerFn(_promptsAnswers) {
-      if (!_promptsAnswers) {
-        return;
+    try {
+      if (isReprompt) {
+        instanceDefinition = await this.preparePromptedReportInstance(reportId, projectId, promptsAnswers);
+        instance.id = instanceDefinition && instanceDefinition.id; // '00000000000000000000000000000000';
+        instance.mid = instanceDefinition && instanceDefinition.mid;
       }
-      if (promptsAnswers) {
-        promptsAnswers.push(_promptsAnswers);
-      } else {
-        promptsAnswers = [_promptsAnswers];
+
+      let msgRouter = null;
+      promptsAnswers = null;
+      const promptsAnsweredHandler = function promptsAnswerFn(_promptsAnswers) {
+        if (!_promptsAnswers) {
+          return;
+        }
+        if (promptsAnswers) {
+          promptsAnswers.push(_promptsAnswers);
+        } else {
+          promptsAnswers = [_promptsAnswers];
+        }
+      };
+      const libraryUrl = envUrl.replace('api', 'app');
+      const url = `${libraryUrl}/${projectId}/${reportId}`;
+      const { CustomAuthenticationType } = microstrategy.dossier;
+      const { EventType } = microstrategy.dossier;
+
+      const props = {
+        url,
+        enableCustomAuthentication: true,
+        customAuthenticationType:
+          CustomAuthenticationType.AUTH_TOKEN,
+        enableResponsive: true,
+
+        getLoginToken() {
+          return Promise.resolve(token);
+        },
+        placeholder: container,
+        onMsgRouterReadyHandler: ({ MsgRouter }) => {
+          msgRouter = MsgRouter;
+          msgRouter.registerEventHandler(EventType.ON_PROMPT_ANSWERED, promptsAnsweredHandler);
+          // TODO: We should remember to unregister this handler once the page loads
+        },
+      };
+
+      if (isReprompt) {
+        props.instance = instance;
       }
-    };
-    const url = `${libraryUrl}/${projectId}/${reportId}`;
-    const { CustomAuthenticationType } = microstrategy.dossier;
-    const { EventType } = microstrategy.dossier;
 
-    const props = {
-      url,
-      enableCustomAuthentication: true,
-      customAuthenticationType:
-        CustomAuthenticationType.AUTH_TOKEN,
-      enableResponsive: true,
+      microstrategy.dossier
+        .create(props)
+        .then(async (dossierPage) => {
+          const chapter = await dossierPage.getCurrentChapter();
+          const objectId = await dossierPage.getDossierId();
+          const instanceId = await dossierPage.getDossierInstanceId();
+          const visuzalisations = await dossierPage.getCurrentPageVisualizationList();
 
-      getLoginToken() {
-        return Promise.resolve(token);
-      },
-      placeholder: container,
-      onMsgRouterReadyHandler: ({ MsgRouter }) => {
-        msgRouter = MsgRouter;
-        msgRouter.registerEventHandler(EventType.ON_PROMPT_ANSWERED, promptsAnsweredHandler);
-        // TODO: We should remember to unregister this handler once the page loads
-      },
-    };
+          const dossierData = {
+            chapterKey: chapter.nodeKey,
+            dossierId: objectId,
+            instanceId,
+            visualizationKey: visuzalisations[0].key,
+            isReprompt
+          };
 
-    if (isReprompt) {
-      props.instance = instance;
+          // Since the dossier is no needed anymore after intercepting promptsAnswers, we can try removing the instanace
+          deleteDossierInstance(projectId, objectId, instanceId);
+
+          msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, promptsAnsweredHandler);
+          promptsAnswered({ dossierData, promptsAnswers });// TEMP - dossierData should eventually be removed as data should be gathered via REST from report instance, not dossier
+        });
+    } catch (error) {
+      handlePopupErrors(error);
     }
-
-    microstrategy.dossier
-      .create(props)
-      .then(async (dossierPage) => {
-        const chapter = await dossierPage.getCurrentChapter();
-        const objectId = await dossierPage.getDossierId();
-        const instanceId = await dossierPage.getDossierInstanceId();
-        const visuzalisations = await dossierPage.getCurrentPageVisualizationList();
-
-        const dossierData = {
-          chapterKey: chapter.nodeKey,
-          dossierId: objectId,
-          instanceId,
-          visualizationKey: visuzalisations[0].key,
-          isReprompt
-        };
-
-        // Since the dossier is no needed anymore after intercepting promptsAnswers, we can try removing the instanace
-        deleteDossierInstance(projectId, objectId, instanceId);
-
-        msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, promptsAnsweredHandler);
-        promptsAnswered({ dossierData, promptsAnswers });// TEMP - dossierData should eventually be removed as data should be gathered via REST from report instance, not dossier
-      });
   }
 
   /**
@@ -167,11 +170,11 @@ export class _PromptsWindow extends Component {
         const runButton = this.embeddedDocument.getElementsByClassName('mstrPromptEditorButtonRun')[0];
         if (runButton) {
           runButton.click();
-          this.setState({ disableRunButton: true })
+          this.setState({ disableRunButton: true });
         }
       }
     } catch (error) {
-      handlePopupErrors(error)
+      handlePopupErrors(error);
     }
   }
 
