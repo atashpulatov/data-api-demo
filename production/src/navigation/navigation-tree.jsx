@@ -219,7 +219,6 @@ export class _NavigationTree extends Component {
           locale={i18n.language}
           searchText={searchText}
           myLibrary={myLibrary}
-          objectsPreFormatted
           filter={myLibrary ? myLibraryFilter : envFilter}
           isLoading={cacheLoading} />
         <PopupButtons
