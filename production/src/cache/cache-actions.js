@@ -1,6 +1,7 @@
 /* eslint-disable import/no-cycle */
+import { addNestedPropertiesToObjects } from '@mstr/rc';
 import DB from './pouch-db';
-import getObjectList, { getMyLibraryObjectList, fetchProjects } from '../mstr-object/mstr-list-rest-service';
+import getObjectList, { fetchProjects } from '../mstr-object/mstr-list-rest-service';
 
 
 export const CREATE_CACHE = 'CREATE_CACHE';
@@ -54,54 +55,63 @@ export const refreshCacheState = () => (dispatch) => {
 
 export function fetchObjects(dispatch, cache) {
   // Projects
-  fetchProjects((objects) => cache.putData(PROJECTS_DB_ID, objects, true))
-    .catch(console.error);
+  fetchProjects((projects) => {
+    cache.putData(PROJECTS_DB_ID, projects, true).catch(console.error);
 
-  // NOTE: My library removed from m2020
-  // console.time('Fetch my library');
-  // dispatch(myLibraryLoading(true));
-  // cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, true);
-  // getMyLibraryObjectList((objects) => cache.putData(MY_LIBRARY_DB_ID, objects, true))
-  //   .catch(console.error)
-  //   .finally(() => {
-  //     // console.timeEnd('Fetch my library');
-  //     cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, false).then(() => {
-  //       dispatch(myLibraryLoading(false));
-  //     });
-  //   });
+    // NOTE: My library removed from m2020
+    // console.time('Fetch my library');
+    // dispatch(myLibraryLoading(true));
+    // cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, true);
+    // getMyLibraryObjectList((objects) => cache.putData(MY_LIBRARY_DB_ID, objects, true))
+    //   .catch(console.error)
+    //   .finally(() => {
+    //     // console.timeEnd('Fetch my library');
+    //     cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, false).then(() => {
+    //       dispatch(myLibraryLoading(false));
+    //     });
+    //   });
 
-  // Environment library
-  // console.time('Fetch environment objects');
-  dispatch(objectListLoading(true));
-  cache.putData(LOADING_DB + ENV_LIBRARY_DB_ID, true);
-  getObjectList((objects) => cache.putData(ENV_LIBRARY_DB_ID, objects, true))
-    .catch(console.error)
-    .finally(() => {
-      // console.timeEnd('Fetch environment objects');
-      cache.putData(LOADING_DB + ENV_LIBRARY_DB_ID, false).then(() => {
-        dispatch(objectListLoading(false));
+    // Environment library
+    // console.time('Fetch environment objects');
+    dispatch(objectListLoading(true));
+    cache.putData(LOADING_DB + ENV_LIBRARY_DB_ID, true);
+    getObjectList((objects) => {
+      objects = addNestedPropertiesToObjects(objects, projects);
+      return cache.putData(ENV_LIBRARY_DB_ID, objects, true)
+    })
+      .catch(console.error)
+      .finally(() => {
+        // console.timeEnd('Fetch environment objects');
+        cache.putData(LOADING_DB + ENV_LIBRARY_DB_ID, false).then(() => {
+          dispatch(objectListLoading(false));
+        });
       });
-    });
+  }).catch(console.error);
 }
 
 export function fetchObjectsFallback() {
   return (dispatch) => {
     // Projects
-    fetchProjects((projects) => dispatch(addProjects(projects)))
+    fetchProjects((projects) => {
+      dispatch(addProjects(projects));
+
+      // NOTE: My library removed from m2020
+      // dispatch(myLibraryLoading(true));
+      // getMyLibraryObjectList((objects) => dispatch(addMyLibraryObjects(objects, true)))
+      //   .catch(console.error)
+      //   .finally(() => dispatch(myLibraryLoading(false)));
+
+      // Environment library
+      // console.time('Fetch environment objects');
+      dispatch(objectListLoading(true));
+      getObjectList((objects) => {
+        objects = addNestedPropertiesToObjects(objects, projects);
+        dispatch(addEnvObjects(objects, true))
+      })
+        .catch(console.error)
+        .finally(() => dispatch(objectListLoading(false)));
+    })
       .catch(console.error);
-
-    // NOTE: My library removed from m2020
-    // dispatch(myLibraryLoading(true));
-    // getMyLibraryObjectList((objects) => dispatch(addMyLibraryObjects(objects, true)))
-    //   .catch(console.error)
-    //   .finally(() => dispatch(myLibraryLoading(false)));
-
-    // Environment library
-    // console.time('Fetch environment objects');
-    dispatch(objectListLoading(true));
-    getObjectList((objects) => dispatch(addEnvObjects(objects, true)))
-      .catch(console.error)
-      .finally(() => dispatch(objectListLoading(false)));
   }
 }
 
