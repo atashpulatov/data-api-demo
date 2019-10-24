@@ -40,6 +40,8 @@ class PopupController {
     try {
       await authenticationHelper.validateAuthToken();
     } catch (error) {
+      console.error({ error });
+
       reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
       errorService.handleError(error);
       return;
@@ -113,6 +115,8 @@ class PopupController {
         case selectorProperties.commandCancel:
           break;
         case selectorProperties.commandError:
+          console.error({ response });
+
           errorService.handleError(response.error);
           break;
         case REFRESH_CACHE_COMMAND:

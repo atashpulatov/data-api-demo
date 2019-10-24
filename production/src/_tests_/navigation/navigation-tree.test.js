@@ -6,6 +6,10 @@ import { Office } from '../mockOffice';
 import * as mstrObjectRestService from '../../mstr-object/mstr-object-rest-service';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { DEFAULT_STATE as CACHE_STATE } from '../../cache/cache-reducer';
+import { authenticationHelper } from '../../authentication/authentication-helper';
+
+jest.mock('../../authentication/authentication-helper');
+
 
 // TODO: Enable and update when new table component is implemented
 describe.skip('NavigationTree', () => {
@@ -197,9 +201,27 @@ describe.skip('NavigationTree', () => {
       projectId: 'projectId',
       connectToDB,
     };
-    // whens
+    // when
     shallow(<_NavigationTree mstrData={mstrData} cache={CACHE_STATE} />);
     // then
     expect(connectToDB).toHaveBeenCalled();
+  });
+
+  it('should send error message on refresh when no session', () => {
+    // given
+    // const asyncMock = jest.fn().mockRejectedValue(new Error('Async error'));
+    const givenError = new Error('Session error');
+    authenticationHelper.validateAuthToken.mockRejectedValue(givenError);
+    const messageParent = jest.spyOn(Office.context.ui, 'messageParent');
+    const wrappedComponent = shallow(<_NavigationTree />);
+    // when
+    wrappedComponent.instance().refresh();
+    // then
+    expect(messageParent).toBeCalled();
+    expect(messageParent).toBeCalledWith(JSON.stringify({
+      command: selectorProperties.commandError,
+      error: givenError,
+    }));
+    expect(true).toBeFalsy();
   });
 });
