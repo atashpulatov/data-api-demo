@@ -80,11 +80,12 @@ export class _NavigationTree extends Component {
     try {
       await authenticationHelper.validateAuthToken();
     } catch (error) {
-      console.log({error});
-      
       window.Office.context.ui.messageParent(JSON.stringify({
         command: selectorProperties.commandError,
-        error,
+        error:{
+          ...error,
+          message: error.message,
+        }
       }));
       return;
     }
