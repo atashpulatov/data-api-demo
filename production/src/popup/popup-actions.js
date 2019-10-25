@@ -6,6 +6,7 @@ import { officeStoreService } from '../office/store/office-store-service';
 import { popupController } from './popup-controller';
 import { popupHelper } from './popup-helper';
 import { createInstance, answerPrompts, getInstance } from '../mstr-object/mstr-object-rest-service';
+import { reduxStore } from '../store';
 
 export const CLEAR_WINDOW = 'POPUP_CLOSE_WINDOW';
 export const START_REPORT_LOADING = 'START_REPORT_LOADING';
@@ -54,6 +55,7 @@ export function callForEdit(reportParams) {
       });
       popupController.runEditFiltersPopup(reportParams);
     } catch (error) {
+      reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
       return errorService.handleError(error);
     }
   };
@@ -74,6 +76,7 @@ export function callForReprompt(reportParams) {
       });
       popupController.runRepromptPopup(reportParams);
     } catch (error) {
+      reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
       return errorService.handleError(error);
     }
   };
@@ -95,6 +98,7 @@ export function refreshReportsArray(reportArray, isRefreshAll) {
         authenticationHelper.validateAuthToken(),
       ]);
     } catch (error) {
+      reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
       return errorService.handleError(error);
     }
     if (isRefreshAll) {
