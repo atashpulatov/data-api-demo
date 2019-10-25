@@ -185,5 +185,7 @@
   "Dataset": "数据集",
   "Remove": "移除",
   "Subtotals and Totals": "小计与合计",
-  "Import Dossier": "导入达析报告"
+  "Import Dossier": "导入达析报告",
+  "This is a crosstab report. To preserve its structure, select all attributes and metrics.": "*This is a crosstab report. To preserve its structure, select all attributes and metrics.*",
+  "This object does not exist in the workbook anymore.": "*This object does not exist in the workbook anymore.*"
 }

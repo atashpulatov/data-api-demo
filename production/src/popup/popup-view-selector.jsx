@@ -40,7 +40,7 @@ export const _PopupViewSelector = (props) => {
     && !propsToPass.forceChange
   ) {
     if (isInstanceWithPromptsAnswered(props)) {
-      popupType === PopupTypeEnum.repromptingWindow && wasReportJustImported(props) && proceedToImport(props);
+      if (popupType === PopupTypeEnum.repromptingWindow) { proceedToImport(props); }
     } else if (dossierOpenRequested) {
       // pass given prompts answers to dossierWindow
       propsToPass.promptsAnswers = props.promptsAnswers;
@@ -219,6 +219,13 @@ function proceedToImport(props) {
       ...props.dossierData,
       reportName: props.chosenObjectName,
     };
+    const { isReprompt } = props.dossierData;
+    // skip this part if report contains no selected attribiutes/metrics/filters
+    if (isReprompt && !wasReportJustImported(props)) {
+      okObject.command = selectorProperties.commandOnUpdate;
+      const { selectedAttributes, selectedMetrics, selectedFilters } = props.editedReport;
+      okObject.body = createBody(selectedAttributes, selectedMetrics, selectedFilters, false);
+    }
   }
   props.startLoading();
   props.startImport();
@@ -281,7 +288,11 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
       isReprompt: true,
     };
     return (
-      <PromptsWindow mstrData={mstrData} handleBack={methods.handleBack} />
+      <PromptsWindow
+        mstrData={mstrData}
+        handleBack={methods.handleBack}
+        handlePopupErrors={methods.handlePopupErrors}
+      />
     ); // use the same window as with prompting, but provide report info
   }
   if (popupType === PopupTypeEnum.dossierWindow) {

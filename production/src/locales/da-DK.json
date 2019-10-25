@@ -185,5 +185,7 @@
   "Dataset": "Datasæt",
   "Remove": "Fjern",
   "Subtotals and Totals": "Subtotaler og Totals",
-  "Import Dossier": "Importer dossier"
+  "Import Dossier": "Importer dossier",
+  "This is a crosstab report. To preserve its structure, select all attributes and metrics.": "*This is a crosstab report. To preserve its structure, select all attributes and metrics.*",
+  "This object does not exist in the workbook anymore.": "*This object does not exist in the workbook anymore.*"
 }
