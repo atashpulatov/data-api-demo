@@ -1,46 +1,46 @@
 .ant-message {
-    top: 50% !important;
-    transform: translateY(-50%);
+  top: 50% !important;
+  transform: translateY(-50%);
 }
 
 .ant-message-notice {
-    width: 100vw;
-    -webkit-animation-duration: 0.3s;
-    animation-duration: 0.3s;
+  width: 100vw;
+  -webkit-animation-duration: 0.3s;
+  animation-duration: 0.3s;
 }
 
 .ant-message-notice-content {
-    top: 50%;
-    left: 50%;
-    margin-right: -50%;
-    transform: translate(-50%, 50%)
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translateX(-20px);
 }
 
 .ant-message-custom-content {
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-height: 85px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 85px;
 }
 
 .ant-notification {
-    pointer-events: none;
-    top: 50% !important;
-    width: 100vw !important;
-    transform: translateY(-50%);
+  pointer-events: none;
+  top: 50% !important;
+  width: 100vw !important;
+  transform: translateY(-50%);
 }
 
 .ant-notification-notice-message {
-    display: none;
+  display: none;
 }
 
 .ant-notification-notice {
-    padding: 12px;
-    max-width: 80%;
-    -webkit-animation-duration: 0.3s;
-    animation-duration: 0.3s;
-    flex: 1 0 auto;
-    pointer-events: all;
+  padding: 12px;
+  max-width: 80%;
+  -webkit-animation-duration: 0.3s;
+  animation-duration: 0.3s;
+  flex: 1 0 auto;
+  pointer-events: all;
 }
 
 .error-notification {
@@ -80,8 +80,7 @@
   margin: 5px 37% 0 35%;
 }
 
-.error__show-more,
-.error__show-less {
+.error__show-more, .error__show-less {
   font-family: Roboto;
   cursor: pointer;
   color: #1C91DC;
@@ -91,7 +90,7 @@
 .error__arrow {
   transform: rotate(-45deg);
   border-bottom: 1px solid #3492ED;
-  border-left: 1px  solid #3492ED;
+  border-left: 1px solid #3492ED;
   width: 5px;
   height: 5px;
   margin-left: 6.4px;
@@ -128,92 +127,86 @@
 }
 
 .ant-notification>span {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 100vw;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100vw;
+  align-items: center;
 }
 
-
 .ant-notification-notice-with-icon .ant-notification-notice-description {
-    margin: -26px 0 0 25px;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  margin: -26px 0 0 25px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .ant-notification-notice-with-icon {
-    width: 100%;
-    align-items: center;
+  width: 100%;
+  align-items: center;
 }
 
 .ant-notification-notice-icon {
-    position:static !important;
-    font-size: 18px;
-    margin-top: 5px;
+  position: static !important;
+  font-size: 18px;
+  margin-top: 5px;
 }
 
 .ant-notification-notice-btn {
-    margin: 5px 45% 0 45%;
+  margin: 5px 45% 0 45%;
 }
 
 .ant-notification-notice-close {
-    display: none;
+  display: none;
 }
 
 .ant-message-notice.move-up-leave.move-up-leave-active {
-    overflow: hidden;
-    -webkit-animation-name: MessageMoveOut;
-    animation-name: MessageMoveOut;
-    -webkit-animation-duration: 0.3s;
-    animation-duration: 0.3s;
+  overflow: hidden;
+  -webkit-animation-name: MessageMoveOut;
+  animation-name: MessageMoveOut;
+  -webkit-animation-duration: 0.3s;
+  animation-duration: 0.3s;
 }
 
 @-webkit-keyframes MessageMoveOut {
-    0% {
-        max-height: 150px;
-        opacity: 1;
-    }
-
-    100% {
-        max-height: 0;
-        opacity: 0;
-    }
+  0% {
+    max-height: 150px;
+    opacity: 1;
+  }
+  100% {
+    max-height: 0;
+    opacity: 0;
+  }
 }
 
 @keyframes MessageMoveOut {
-    0% {
-        max-height: 150px;
-        opacity: 1;
-    }
-
-    100% {
-        max-height: 0;
-        opacity: 0;
-    }
+  0% {
+    max-height: 150px;
+    opacity: 1;
+  }
+  100% {
+    max-height: 0;
+    opacity: 0;
+  }
 }
 
 @keyframes antMoveUpIn {
-    0% {
-        max-height: 0;
-        opacity: 0;
-    }
-
-    100% {
-        max-height: 150px;
-        opacity: 1;
-    }
+  0% {
+    max-height: 0;
+    opacity: 0;
+  }
+  100% {
+    max-height: 150px;
+    opacity: 1;
+  }
 }
 
 @keyframes NotificationFadeIn {
-    0% {
-        max-height: 0;
-        opacity: 0;
-    }
-
-    100% {
-        max-height: 150px;
-        opacity: 1;
-    }
-
+  0% {
+    max-height: 0;
+    opacity: 0;
+  }
+  100% {
+    max-height: 150px;
+    opacity: 1;
+  }
 }
