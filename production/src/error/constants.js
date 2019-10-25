@@ -62,6 +62,7 @@ export const SESSION_EXPIRED = 'Your session has expired. Please log in.';
 export const PROBLEM_WITH_REQUEST = 'There has been a problem with your request';
 export const UNKNOWN_ERROR = 'Unknown error';
 export const LOGIN_FAILURE = 'Login failure';
+export const OBJ_REMOVED_FROM_EXCEL = 'This object does not exist in the workbook anymore.'
 
 // temporarily we map all those codes to one message; may be changed in the future
 const iServerErrorMessages = withDefaultValue({
@@ -77,7 +78,11 @@ const iServerErrorMessages = withDefaultValue({
 
 export const errorMessageFactory = withDefaultValue({
   [errorTypes.ENV_NOT_FOUND_ERR]: ({ error }) => {
-    if (error.response && error.response.body && (error.response.body.iServerCode === -2147216373)) {
+    if (
+      error.response
+      && error.response.body
+      && (error.response.body.iServerCode === -2147216373)
+    ) {
       return NOT_IN_METADATA;
     }
     return ENDPOINT_NOT_REACHED;
