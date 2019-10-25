@@ -30,7 +30,6 @@ export class _PromptsWindow extends Component {
       loading: true,
       isReprompt: mstrData.isReprompt,
       promptsAnswers: mstrData.promptsAnswers,
-      disableRunButton: false
     };
 
     this.container = React.createRef();
@@ -144,6 +143,7 @@ export class _PromptsWindow extends Component {
             dossierId: objectId,
             instanceId,
             visualizationKey: visuzalisations[0].key,
+            isReprompt
           };
 
           // Since the dossier is no needed anymore after intercepting promptsAnswers, we can try removing the instanace
@@ -169,7 +169,6 @@ export class _PromptsWindow extends Component {
         const runButton = this.embeddedDocument.getElementsByClassName('mstrPromptEditorButtonRun')[0];
         if (runButton) {
           runButton.click();
-          this.setState({ disableRunButton: true });
         }
       }
     } catch (error) {
@@ -266,7 +265,6 @@ export class _PromptsWindow extends Component {
             handleRun={this.handleRun}
             isReprompt={isReprompt}
             closePopup={this.closePopup}
-            disableRunButton={disableRunButton}
           />
         </div>
       </div>
