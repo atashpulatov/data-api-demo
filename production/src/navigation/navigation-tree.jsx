@@ -80,13 +80,8 @@ export class _NavigationTree extends Component {
     try {
       await authenticationHelper.validateAuthToken();
     } catch (error) {
-      window.Office.context.ui.messageParent(JSON.stringify({
-        command: selectorProperties.commandError,
-        error:{
-          ...error,
-          message: error.message,
-        }
-      }));
+      const { handlePopupErrors } = this.props;
+      handlePopupErrors(error);
       return;
     }
 
