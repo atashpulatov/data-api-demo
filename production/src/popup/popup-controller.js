@@ -90,7 +90,7 @@ class PopupController {
     }
     try {
       if (response.command !== REFRESH_CACHE_COMMAND) await this.closeDialog(dialog);
-      await officeApiHelper.getExcelSessionStatus(); // checking excel session status
+      if (response.command !== selectorProperties.commandError) await officeApiHelper.getExcelSessionStatus(); // checking excel session status
       switch (response.command) {
         case selectorProperties.commandOk:
           if (!reportParams) {
@@ -115,8 +115,6 @@ class PopupController {
         case selectorProperties.commandCancel:
           break;
         case selectorProperties.commandError:
-          console.error({ response });
-
           errorService.handleError(response.error);
           break;
         case REFRESH_CACHE_COMMAND:

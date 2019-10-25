@@ -220,7 +220,10 @@ describe.skip('NavigationTree', () => {
     expect(messageParent).toBeCalled();
     expect(messageParent).toBeCalledWith(JSON.stringify({
       command: selectorProperties.commandError,
-      error: givenError,
+      error:{
+        ...givenError,
+        message: givenError.message,
+      }
     }));
     expect(true).toBeFalsy();
   });
