@@ -1,7 +1,7 @@
 import {
   SELECT_FOLDER, SELECT_OBJECT, SET_DATA_SOURCE, START_IMPORT, UPDATE_SCROLL, UPDATE_SIZE,
   CHANGE_SEARCHING, CHANGE_SORTING, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED,
-  REQUEST_DOSSIER_OPEN,
+  REQUEST_DOSSIER_OPEN, CHANGE_IS_PROMPTED, SWITCH_MY_LIBRARY, CHANGE_FILTER
 } from '../../navigation/navigation-tree-actions';
 import { navigationTree, initialState, DEFAULT_TYPE, DEFAULT_PROJECT_NAME, } from '../../storage/navigation-tree-reducer';
 import { CLEAR_WINDOW } from '../../popup/popup-actions';
@@ -328,6 +328,7 @@ describe('NavigationTree Reducer', () => {
     expect(newState.dossierOpenRequested).toEqual(true);
   });
 
+
   it('should return new proper state in case of CREATE_CACHE action', () => {
     // given
     const action = { type: CREATE_CACHE, };
@@ -374,5 +375,42 @@ describe('NavigationTree Reducer', () => {
     expect(newState.chosenSubtype).toEqual(null);
     expect(newState.chosenObjectName).toEqual('Prepare Data');
     expect(newState.chosenType).toEqual('Data');
+    
+  it('should return new proper state in case of CHANGE_IS_PROMPTED action', () => {
+    // given
+    const action = { type: CHANGE_IS_PROMPTED, data: true };
+    // when
+    const newState = navigationTree({}, action);
+    // then
+    expect(newState.isPrompted).toEqual(true);
+  });
+
+  it('should return new proper state in case of SWITCH_MY_LIBRARY action - from false to true', () => {
+    // given
+    const action = { type: SWITCH_MY_LIBRARY };
+    // when
+    const newState = navigationTree({ myLibrary: false }, action);
+    // then
+    expect(newState.myLibrary).toEqual(true);
+  });
+
+  it('should return new proper state in case of CHANGE_FILTER action - it shoudl update myLibraryFilter', () => {
+    // given
+    const testData = 'test data';
+    const action = { type: CHANGE_FILTER, data: testData };
+    // when
+    const newState = navigationTree({ myLibrary: true }, action);
+    // then
+    expect(newState.myLibraryFilter).toEqual(testData);
+  });
+
+  it('should return new proper state in case of CHANGE_FILTER action - it shoudl update envFilter', () => {
+    // given
+    const testData = 'test data';
+    const action = { type: CHANGE_FILTER, data: testData };
+    // when
+    const newState = navigationTree({ myLibrary: false }, action);
+    // then
+    expect(newState.envFilter).toEqual(testData);
   });
 });

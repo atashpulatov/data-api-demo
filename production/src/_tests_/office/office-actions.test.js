@@ -37,4 +37,13 @@ describe('Office Actions', () => {
     // then
     expect(listener).toHaveBeenCalledWith({ type: officeProperties.actions.toggleRenderSettingsFlag });
   });
+
+  it('should dispatch proper toggleIsClearingFlag action', () => {
+    // given
+    const listener = jest.fn();
+    // when
+    actions.toggleIsClearingFlag(true)(listener);
+    // then
+    expect(listener).toHaveBeenCalledWith({ type: officeProperties.actions.toggleIsClearingFlag, isClearing: true });
+  });
 });
