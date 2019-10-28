@@ -40,6 +40,8 @@ class PopupController {
     try {
       await authenticationHelper.validateAuthToken();
     } catch (error) {
+      console.error({ error });
+
       reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
       errorService.handleError(error);
       return;
@@ -88,7 +90,7 @@ class PopupController {
     }
     try {
       if (response.command !== REFRESH_CACHE_COMMAND) await this.closeDialog(dialog);
-      await officeApiHelper.getExcelSessionStatus(); // checking excel session status
+      if (response.command !== selectorProperties.commandError) await officeApiHelper.getExcelSessionStatus(); // checking excel session status
       switch (response.command) {
         case selectorProperties.commandOk:
           if (!reportParams) {
