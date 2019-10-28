@@ -10,6 +10,7 @@ import mstrNormalizedJsonHandler from '../mstr-object/mstr-normalized-json-handl
 import { CONTEXT_LIMIT } from '../mstr-object/mstr-object-rest-service';
 import officeDisplayService from './office-display-service';
 import { authenticationHelper } from '../authentication/authentication-helper';
+import { OBJ_REMOVED_FROM_EXCEL } from '../error/constants'
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
@@ -98,7 +99,7 @@ class OfficeApiHelper {
       return true;
     } catch (error) {
       if (error.code === 'ItemNotFound') {
-        return notificationService.displayNotification({ type: 'info', content: 'The object does not exist in the metadata.' });
+        return notificationService.displayTranslatedNotification({ type: 'info', content: OBJ_REMOVED_FROM_EXCEL });
       }
       errorService.handleError(error, { reportName, onConfirm: deleteReport });
       return false;

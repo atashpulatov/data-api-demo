@@ -375,7 +375,9 @@ describe('NavigationTree Reducer', () => {
     expect(newState.chosenSubtype).toEqual(null);
     expect(newState.chosenObjectName).toEqual('Prepare Data');
     expect(newState.chosenType).toEqual('Data');
-    
+  });
+
+
   it('should return new proper state in case of CHANGE_IS_PROMPTED action', () => {
     // given
     const action = { type: CHANGE_IS_PROMPTED, data: true };
