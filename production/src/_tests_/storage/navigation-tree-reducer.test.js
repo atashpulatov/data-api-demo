@@ -5,6 +5,7 @@ import {
 } from '../../navigation/navigation-tree-actions';
 import { navigationTree, initialState, DEFAULT_TYPE, DEFAULT_PROJECT_NAME, } from '../../storage/navigation-tree-reducer';
 import { CLEAR_WINDOW } from '../../popup/popup-actions';
+import { CREATE_CACHE, CLEAR_CACHE, REFRESH_CACHE } from '../../cache/cache-actions';
 
 describe('NavigationTree Reducer', () => {
   it('should return new proper state in case of SELECT_OBJECT action', () => {
@@ -325,5 +326,53 @@ describe('NavigationTree Reducer', () => {
 
     // then
     expect(newState.dossierOpenRequested).toEqual(true);
+  });
+
+  it('should return new proper state in case of CREATE_CACHE action', () => {
+    // given
+    const action = { type: CREATE_CACHE, };
+
+    // when
+    const newState = navigationTree({}, action);
+
+    // then
+    expect(newState.sorter).toEqual({});
+    expect(newState.chosenObjectId).toEqual(null);
+    expect(newState.chosenProjectId).toEqual(null);
+    expect(newState.chosenSubtype).toEqual(null);
+    expect(newState.chosenObjectName).toEqual('Prepare Data');
+    expect(newState.chosenType).toEqual('Data');
+  });
+
+  it('should return new proper state in case of CLEAR_CACHE action', () => {
+    // given
+    const action = { type: CLEAR_CACHE, };
+
+    // when
+    const newState = navigationTree({}, action);
+
+    // then
+    expect(newState.sorter).toEqual({});
+    expect(newState.chosenObjectId).toEqual(null);
+    expect(newState.chosenProjectId).toEqual(null);
+    expect(newState.chosenSubtype).toEqual(null);
+    expect(newState.chosenObjectName).toEqual('Prepare Data');
+    expect(newState.chosenType).toEqual('Data');
+  });
+
+  it('should return new proper state in case of REFRESH_CACHE action', () => {
+    // given
+    const action = { type: REFRESH_CACHE, };
+
+    // when
+    const newState = navigationTree({}, action);
+
+    // then
+    expect(newState.sorter).toEqual({});
+    expect(newState.chosenObjectId).toEqual(null);
+    expect(newState.chosenProjectId).toEqual(null);
+    expect(newState.chosenSubtype).toEqual(null);
+    expect(newState.chosenObjectName).toEqual('Prepare Data');
+    expect(newState.chosenType).toEqual('Data');
   });
 });
