@@ -98,7 +98,6 @@ class OfficeApiHelper {
       await excelContext.sync();
       return true;
     } catch (error) {
-      console.log(`parsed error from office-api-helper.js: `, JSON.parse(JSON.stringify(error)));
       if (error.code === 'ItemNotFound') {
         return notificationService.displayTranslatedNotification({ type: 'info', content: OBJ_REMOVED_FROM_EXCEL });
       }
