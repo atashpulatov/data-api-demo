@@ -16,7 +16,7 @@ describe('Cache actions', () => {
     expect(action).toEqual(expectedAction);
   });
 
-  it.skip('should return my library loading dispatch action', () => {
+  it('should return my library loading dispatch action', () => {
     // given
     const isLoading = true;
     const expectedAction = {
@@ -31,12 +31,12 @@ describe('Cache actions', () => {
     expect(action).toEqual(expectedAction);
   });
 
-  it.skip('should return add my library objects dispatch action', () => {
+  it('should return add my library objects dispatch action', () => {
     // given
     const testResult = ['test'];
     const expectedAction = {
       type: ADD_MY_LIBRARY_OBJECTS,
-      data: { objects: testResult, append: false },
+      data: testResult,
     };
 
     // when
@@ -51,7 +51,7 @@ describe('Cache actions', () => {
     const testResult = ['test'];
     const expectedAction = {
       type: ADD_ENV_OBJECTS,
-      data: { objects: testResult, append: false }
+      data: testResult,
     };
 
     // when
