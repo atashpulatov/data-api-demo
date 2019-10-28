@@ -10,6 +10,9 @@ import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './navigation-tree.css';
 import { connectToCache, clearCache, createCache, listenToCache, REFRESH_CACHE_COMMAND, refreshCacheState, fetchObjectsFallback } from '../cache/cache-actions';
 import DB from '../cache/pouch-db';
+import { sessionHelper } from '../storage/session-helper';
+import { authenticationHelper } from '../authentication/authentication-helper';
+import { errorService } from '../error/error-handler';
 
 const DB_TIMEOUT = 5000; // Interval for checking indexedDB changes on IE
 const SAFETY_FALLBACK = 7000; // Interval for falling back to network
@@ -73,7 +76,15 @@ export class _NavigationTree extends Component {
     }, 1000);
   };
 
-  refresh = () => {
+  refresh = async () => {
+    try {
+      await authenticationHelper.validateAuthToken();
+    } catch (error) {
+      const { handlePopupErrors } = this.props;
+      handlePopupErrors(error);
+      return;
+    }
+
     const { resetDBState, fetchObjectsFromNetwork } = this.props
     resetDBState();
     if (this.indexedDBSupport) {

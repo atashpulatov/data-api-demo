@@ -4,6 +4,8 @@ import {
   CANCEL_DOSSIER_OPEN, SWITCH_MY_LIBRARY, CHANGE_FILTER, CHANGE_IS_PROMPTED
 } from '../navigation/navigation-tree-actions';
 import { CLEAR_WINDOW } from '../popup/popup-actions';
+import { LOAD_BROWSING_STATE_CONST } from '../browser/browser-actions';
+import { CREATE_CACHE, CLEAR_CACHE, REFRESH_CACHE } from '../cache/cache-actions';
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
 export const DEFAULT_TYPE = 'Data';
@@ -187,6 +189,24 @@ export const navigationTree = (state = initialState, action) => {
       } else {
         newState.envFilter = data;
       }
+      return newState;
+    }
+    case LOAD_BROWSING_STATE_CONST: {
+      return {
+        ...initialState,
+        ...action.browsingState,
+      };
+    }
+    case CREATE_CACHE:
+    case CLEAR_CACHE:
+    case REFRESH_CACHE: {
+      const newState = { ...state };
+      newState.sorter = initialState.sorter;
+      newState.chosenObjectId = initialState.chosenObjectId;
+      newState.chosenProjectId = initialState.chosenProjectId;
+      newState.chosenSubtype = initialState.chosenSubtype;
+      newState.chosenObjectName = initialState.chosenObjectName;
+      newState.chosenType = initialState.chosenType;
       return newState;
     }
     default: {
