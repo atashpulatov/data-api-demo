@@ -36,9 +36,7 @@ describe('officeReducer', () => {
   });
 
   afterEach(() => {
-    officeStore.dispatch({
-      type: officeProperties.actions.removeAllReports,
-    });
+    officeStore.dispatch({ type: officeProperties.actions.removeAllReports, });
   });
 
   it('should throw an error on missing report.id', () => {
@@ -183,9 +181,7 @@ describe('officeReducer', () => {
       type: officeProperties.actions.loadReport,
       report: secondReport,
     });
-    officeStore.dispatch({
-      type: officeProperties.actions.removeAllReports,
-    });
+    officeStore.dispatch({ type: officeProperties.actions.removeAllReports, });
     // then
     const officeStoreState = officeStore.getState();
     const storedReport = officeStoreState.reportArray;
@@ -246,9 +242,7 @@ describe('officeReducer', () => {
     // given
     // when
     const wrongDispatch = () => {
-      officeStore.dispatch({
-        type: officeProperties.actions.removeReport,
-      });
+      officeStore.dispatch({ type: officeProperties.actions.removeReport, });
     };
     // then
     expect(wrongDispatch).toThrowError(OfficeError);
@@ -303,9 +297,7 @@ describe('officeReducer', () => {
     // given
     // when
     const wrongDispatch = () => {
-      officeStore.dispatch({
-        type: officeProperties.actions.loadAllReports,
-      });
+      officeStore.dispatch({ type: officeProperties.actions.loadAllReports, });
     };
     // then
     expect(wrongDispatch).toThrowError(OfficeError);
@@ -445,5 +437,29 @@ describe('officeReducer', () => {
     const newState = officeReducer(oldState, action);
     // then
     expect(newState).toEqual({ isSettings: false, shouldRenderSettings: true });
+  });
+  it('should set preLoadReport to given value on preLoadReport', () => {
+    // given
+    const oldState = { preLoadReport: false };
+    const action = {
+      type: officeProperties.actions.preLoadReport,
+      preLoadReport: true,
+    };
+    // when
+    const newState = officeReducer(oldState, action);
+    // then
+    expect(newState.preLoadReport).toBe(true);
+  });
+  it('should set isClearing to given value on toggleIsClearingFlag', () => {
+    // given
+    const oldState = { isClearing: false };
+    const action = {
+      type: officeProperties.actions.toggleIsClearingFlag,
+      isClearing: true,
+    };
+    // when
+    const newState = officeReducer(oldState, action);
+    // then
+    expect(newState.isClearing).toBe(true);
   });
 });

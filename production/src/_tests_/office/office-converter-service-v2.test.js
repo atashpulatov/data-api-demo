@@ -1,6 +1,6 @@
 import officeConverter from '../../office/office-converter-service-v2';
 import response from '../../mstr-object/rest-api-v2.json';
-
+import jsonHandler from '../../mstr-object/mstr-normalized-json-handler';
 
 describe('Office converter service v2', () => {
   it('should return create a table', () => {
@@ -80,9 +80,7 @@ describe('Office converter service v2', () => {
     const expectedFirstColumn = {
       attributeId: '9BC4691C11E97721AF570080EF55306C',
       attributeName: 'Year',
-      forms: [{
-        baseFormType: 3, dataType: 33, id: '45C11FA478E745FEA08D781CEA190FE5', name: 'ID',
-      }],
+      forms: [{ baseFormType: 3, dataType: 33, id: '45C11FA478E745FEA08D781CEA190FE5', name: 'ID', }],
       index: 0,
       isAttribute: true,
     };
@@ -90,5 +88,23 @@ describe('Office converter service v2', () => {
     const colInformation = officeConverter.getColumnInformation(crosstabsResponse);
     // then
     expect(colInformation[0]).toEqual(expectedFirstColumn);
+  });
+  it('should return isCrosstab error handler which is false', () => {
+    // given
+    const expectedValue = false;
+    // when
+    const isCrosstab = officeConverter.isCrosstab();
+    // then
+    expect(isCrosstab).toEqual(expectedValue);
+  });
+  it('should run handler for tabular data', () => {
+    // given
+    const renderTabularSpy = jest.spyOn(jsonHandler, 'renderTabular');
+    const mockResponse = { definition: {}, data: { headers: { rows: {} } } };
+    // when
+    const returnedValue = officeConverter.getRows(mockResponse);
+    // then
+    expect(renderTabularSpy).toBeCalled();
+    expect(returnedValue).toStrictEqual({ row: [], rowTotals: [] });
   });
 });
