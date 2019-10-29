@@ -1,7 +1,7 @@
 /* eslint-disable import/no-cycle */
 import { addNestedPropertiesToObjects } from '@mstr/rc';
 import DB from './pouch-db';
-import getObjectList, { fetchProjects } from '../mstr-object/mstr-list-rest-service';
+import getObjectList, { fetchProjects, getMyLibraryObjectList } from '../mstr-object/mstr-list-rest-service';
 
 
 export const CREATE_CACHE = 'CREATE_CACHE';
@@ -58,18 +58,18 @@ export function fetchObjects(dispatch, cache) {
   fetchProjects((projects) => {
     cache.putData(PROJECTS_DB_ID, projects, true).catch(console.error);
 
-    // NOTE: My library removed from m2020
+    // My library
     // console.time('Fetch my library');
-    // dispatch(myLibraryLoading(true));
-    // cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, true);
-    // getMyLibraryObjectList((objects) => cache.putData(MY_LIBRARY_DB_ID, objects, true))
-    //   .catch(console.error)
-    //   .finally(() => {
-    //     // console.timeEnd('Fetch my library');
-    //     cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, false).then(() => {
-    //       dispatch(myLibraryLoading(false));
-    //     });
-    //   });
+    dispatch(myLibraryLoading(true));
+    cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, true);
+    getMyLibraryObjectList((objects) => cache.putData(MY_LIBRARY_DB_ID, objects, true))
+      .catch(console.error)
+      .finally(() => {
+        // console.timeEnd('Fetch my library');
+        cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, false).then(() => {
+          dispatch(myLibraryLoading(false));
+        });
+      });
 
     // Environment library
     // console.time('Fetch environment objects');
@@ -171,7 +171,7 @@ export function connectToCache(prevCache) {
     const { userID } = sessionReducer;
     const cache = prevCache || new DB(userID || 'cache');
     if (!prevCache) {
-      // dispatch(myLibraryLoading(true));
+      dispatch(myLibraryLoading(true));
       dispatch(objectListLoading(true));
     }
 
@@ -189,7 +189,7 @@ export function listenToCache(prevCache) {
     const { userID } = sessionReducer;
     const cache = prevCache || new DB(userID || 'cache');
     if (!prevCache) {
-      // dispatch(myLibraryLoading(true));
+      dispatch(myLibraryLoading(true));
       dispatch(objectListLoading(true));
     }
 
