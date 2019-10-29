@@ -31,10 +31,6 @@
   line-height: 1;
 }
 
-.top-filter-panel>.mstr-switch-container {
-  display: none;
-}
-
 .top-filter-panel .panel-wrapper {
   z-index: 2;
 }
