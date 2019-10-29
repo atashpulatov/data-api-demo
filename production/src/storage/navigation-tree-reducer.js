@@ -54,7 +54,7 @@ export const initialState = {
   dossierOpenRequested: false,
   envFilter: {},
   myLibraryFilter: {},
-  myLibrary: false,
+  myLibrary: true,
   chosenLibraryDossier: null,
 };
 

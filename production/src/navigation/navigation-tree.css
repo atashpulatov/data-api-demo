@@ -31,20 +31,8 @@
   line-height: 1;
 }
 
-.top-filter-panel>.mstr-switch-container {
-  display: none;
-}
-
 .top-filter-panel .panel-wrapper {
   z-index: 2;
-}
-
-.filter-panel input[id=Dossier], .filter-panel label[for=Dossier] {
-  display: none;
-}
-
-.filter-panel .category-list-wrapper:nth-child(3) {
-  margin-top: 0px;
 }
 
 .header-container span.data-tip {

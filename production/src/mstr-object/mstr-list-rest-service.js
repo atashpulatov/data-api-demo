@@ -7,22 +7,7 @@ const PROJECTS_ENDPOINT = 'projects';
 const MY_LIBRARY_ENDPOINT = 'library';
 const LIMIT = 7000;
 const DOSSIER_SUBTYPE = 14081;
-const SUBTYPES = [768, 769, 774, 776, 779]; // removed DOSSIER_SUBTYPE from SUBTYPES array for 11.2
-
-/**
- * Applies filtering function to body.result array of objects
- *
- * @param {Object} body - MSTR API response body
- * @returns {Array}
- */
-export function filterDossier(body) {
-  const { result } = body;
-
-  /*   removed for 11.2
-
-  return result.filter(filterFunction); */
-  return result;
-}
+const SUBTYPES = [768, 769, 774, 776, 779, DOSSIER_SUBTYPE];
 
 /**
  * Uses imported helper function to check whether object is a Dossier, but only if it is the same subtype as Dossier
@@ -35,6 +20,17 @@ export function filterFunction(object) {
     return filterDossiersByViewMedia(object.viewMedia);
   }
   return true;
+}
+
+/**
+ * Applies filtering function to body.result array of objects
+ *
+ * @param {Object} body - MSTR API response body
+ * @returns {Array}
+ */
+export function filterDossier(body) {
+  const { result } = body;
+  return result.filter(filterFunction);
 }
 
 /**
