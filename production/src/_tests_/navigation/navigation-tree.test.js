@@ -43,7 +43,7 @@ describe('NavigationTree', () => {
 
   it('should call proper method on secondary action', async () => {
     // given
-    const propsMethod = jest.fn();
+    const mockHandlePrepare = jest.fn();
     const mstrData = {
       envUrl: 'env',
       token: 'token',
@@ -53,24 +53,54 @@ describe('NavigationTree', () => {
       command: selectorProperties.commandSecondary,
       chosenObjectId: 'objectId',
       chosenProjectId: 'projectId',
-      chosenSubtype: 'subtype',
+      chosenSubtype: mstrObjectEnum.mstrObjectType.report.subtypes[0],
       chosenObjectName: 'Prepare Data',
       chosenType: 'Data',
-      chosenLibraryDossier: false
     };
+    const givenIsPrompted = 'customPromptAnswer';
+    jest.spyOn(mstrObjectRestService, 'isPrompted')
+      .mockImplementationOnce(async () => givenIsPrompted);
     const wrappedComponent = shallow(<_NavigationTree
       mstrData={mstrData}
-      handlePrepare={propsMethod}
+      handlePrepare={mockHandlePrepare}
       {...actionObject}
       {...mockFunctionsAndProps}
     />);
     // when
+    await wrappedComponent.instance().handleSecondary();
+    // then
+    expect(mockHandlePrepare).toBeCalledWith(actionObject.chosenProjectId, actionObject.chosenObjectId,
+      actionObject.chosenSubtype, actionObject.chosenObjectName, actionObject.chosenType, givenIsPrompted);
+    expect(wrappedComponent.state('previewDisplay')).toEqual(true);
+  });
+
+  it('should call handlePopupErrors on checkIfPrompted bad response in handleSecondary', () => {
+    // given
+    const mstrData = {
+      envUrl: 'env',
+      token: 'token',
+      projectId: 'projectId',
+    };
+    const givenObjectId = 'objectId';
+    const givenProjectId = 'projectId';
+    const givenSubtype = mstrObjectEnum.mstrObjectType.dossier.subtypes[0];
+    const mockHandlePopupErrors = jest.fn();
+    jest.spyOn(mstrObjectRestService, 'isPrompted')
+      .mockImplementationOnce(() => { throw new Error() });
+    const wrappedComponent = shallow(
+      <_NavigationTree
+        mstrData={mstrData}
+        chosenObjectId={givenObjectId}
+        chosenProjectId={givenProjectId}
+        chosenSubtype={givenSubtype}
+        {...mockFunctionsAndProps}
+        handlePopupErrors={mockHandlePopupErrors}
+      />
+    );
+    // when
     wrappedComponent.instance().handleSecondary();
     // then
-    expect(propsMethod).toBeCalled();
-    expect(propsMethod).toBeCalledWith(actionObject.chosenProjectId, actionObject.chosenObjectId,
-      actionObject.chosenSubtype, actionObject.chosenObjectName, actionObject.chosenType, actionObject.chosenLibraryDossier);
-    expect(wrappedComponent.state('previewDisplay')).toEqual(true);
+    expect(mockHandlePopupErrors).toBeCalled();
   });
 
   it('should call proper method on cancel action', () => {
