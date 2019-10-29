@@ -37,7 +37,7 @@ describe('Cache reducer', () => {
     expect(state.environmentLibrary).toEqual(expectedState);
   });
 
-  it('should change state when add environment objects action is received', () => {
+  it.skip('should change state when add environment objects action is received', () => {
     // given
     const objects = ['TestObject'];
     const expectedState = { ...DEFAULT_STATE.environmentLibrary, objects };
@@ -49,7 +49,7 @@ describe('Cache reducer', () => {
     expect(state.environmentLibrary).toEqual(expectedState);
   });
 
-  it('should change state when add my library action is received', () => {
+  it.skip('should change state when add my library action is received', () => {
     // given
     const objects = ['TestObject'];
     const expectedState = { ...DEFAULT_STATE.myLibrary, objects };
