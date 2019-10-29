@@ -174,41 +174,60 @@ describe('NavigationTree', () => {
     });
   });
 
-  it.skip('should disable buttons until instance id obtained', async () => {
+  it('should call selectObject on onObjectChosen handler with simple data', () => {
     // given
     const givenObjectId = 'objectId';
     const givenProjectId = 'projectId';
-    const givenObjectTypeName = 'report';
-    const givenSubtype = 768;
-    const givenIsPrompted = 'customPromptAnswer';
-    const givenObjectType = mstrObjectEnum.mstrObjectType.report;
-    const selectObject = jest.fn();
-    const isPromptedResponse = jest.spyOn(mstrObjectRestService, 'isPrompted')
-      .mockImplementationOnce(async () => givenIsPrompted);
+    const givenSubtype = mstrObjectEnum.mstrObjectType.report.subtypes[0];
+    const givenObjectName = 'objectName';
+    const givenTarget = {};
+    const givenMyLibrary = false;
+    const mockSelectObject = jest.fn();
+
     const wrappedComponent = shallow(<_NavigationTree
-      selectObject={selectObject}
-      mstrData={{}}
       {...mockFunctionsAndProps}
+      selectObject={mockSelectObject}
     />);
     // when
-    await wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype);
+    wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype, givenObjectName, givenTarget, givenMyLibrary);
     // then
-    expect(isPromptedResponse).toBeCalledWith(givenObjectId, givenProjectId, givenObjectTypeName);
-    expect(selectObject).toBeCalledTimes(2);
-    expect(selectObject.mock.calls[0][0]).toEqual({
-      chosenObjectId: null,
-      chosenProjectId: null,
-      chosenSubtype: null,
-      isPrompted: null,
-      objectType: null,
-    });
-    expect(selectObject.mock.calls[1][0]).toEqual({
+    const expectedObject = {
       chosenObjectId: givenObjectId,
+      chosenObjectName: givenObjectName,
       chosenProjectId: givenProjectId,
       chosenSubtype: givenSubtype,
-      isPrompted: givenIsPrompted,
-      objectType: givenObjectType,
-    });
+      objectType: mstrObjectEnum.mstrObjectType.report,
+      chosenLibraryDossier: undefined
+    };
+    expect(mockSelectObject).toBeCalledWith(expectedObject);
+  });
+
+  it('should call selectObject on onObjectChosen handler with myLibrary data', () => {
+    // given
+    const givenObjectId = 'objectId';
+    const givenProjectId = 'projectId';
+    const givenSubtype = mstrObjectEnum.mstrObjectType.dossier.subtypes[0];
+    const givenObjectName = 'objectName';
+    const givenTarget = { id: 'LibraryObjectId' };
+    const givenMyLibrary = true;
+    const mockSelectObject = jest.fn();
+
+    const wrappedComponent = shallow(<_NavigationTree
+      {...mockFunctionsAndProps}
+      selectObject={mockSelectObject}
+    />);
+    // when
+    wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype, givenObjectName, givenTarget, givenMyLibrary);
+    // then
+    const expectedObject = {
+      chosenObjectId: givenTarget.id,
+      chosenObjectName: givenObjectName,
+      chosenProjectId: givenProjectId,
+      chosenSubtype: givenSubtype,
+      objectType: mstrObjectEnum.mstrObjectType.dossier,
+      chosenLibraryDossier: givenObjectId
+    };
+    expect(mockSelectObject).toBeCalledWith(expectedObject);
   });
 
   it('should call requestDossierOpen on handleOk if provided objectType is dossier', async () => {
