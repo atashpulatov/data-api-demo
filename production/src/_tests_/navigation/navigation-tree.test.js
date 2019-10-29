@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import i18n from '../../i18n';
 import { _NavigationTree, mapStateToProps } from '../../navigation/navigation-tree';
 import { selectorProperties } from '../../attribute-selector/selector-properties';
 import { Office } from '../mockOffice';
@@ -12,10 +13,17 @@ jest.mock('../../authentication/authentication-helper');
 
 
 // TODO: Enable and update when new table component is implemented
-describe.skip('NavigationTree', () => {
+describe('NavigationTree', () => {
   afterAll(() => {
     jest.restoreAllMocks();
   });
+
+  const mockFunctionsAndProps = {
+    cache: CACHE_STATE,
+    i18n,
+    resetDBState: jest.fn(),
+    fetchObjectsFromNetwork: jest.fn(),
+  }
 
   it('should render with props given', () => {
     // given
@@ -25,10 +33,14 @@ describe.skip('NavigationTree', () => {
       projectId: 'projectId',
     };
     // when
-    const wrappedComponent = shallow(<_NavigationTree mstrData={mstrData} />);
+    const wrappedComponent = shallow(<_NavigationTree
+      mstrData={mstrData}
+      {...mockFunctionsAndProps}
+    />);
     // then
     expect(wrappedComponent.instance()).toBeDefined();
-    expect(wrappedComponent.find('FolderBrowser').get(0)).toBeDefined();
+    expect(wrappedComponent.find('TopFilterPanel').get(0)).toBeDefined();
+    expect(wrappedComponent.find('ObjectTable').get(0)).toBeDefined();
   });
 
   it('should call proper method on secondary action', async () => {
@@ -46,14 +58,20 @@ describe.skip('NavigationTree', () => {
       chosenSubtype: 'subtype',
       chosenObjectName: 'Prepare Data',
       chosenType: 'Data',
+      chosenLibraryDossier: false
     };
-    const wrappedComponent = shallow(<_NavigationTree mstrData={mstrData} handlePrepare={propsMethod} {...actionObject} />);
+    const wrappedComponent = shallow(<_NavigationTree
+      mstrData={mstrData}
+      handlePrepare={propsMethod}
+      {...actionObject}
+      {...mockFunctionsAndProps}
+    />);
     // when
     wrappedComponent.instance().handleSecondary();
     // then
     expect(propsMethod).toBeCalled();
     expect(propsMethod).toBeCalledWith(actionObject.chosenProjectId, actionObject.chosenObjectId,
-      actionObject.chosenSubtype, actionObject.chosenObjectName, actionObject.chosenType);
+      actionObject.chosenSubtype, actionObject.chosenObjectName, actionObject.chosenType, actionObject.chosenLibraryDossier);
     expect(wrappedComponent.state('previewDisplay')).toEqual(true);
   });
 
@@ -70,6 +88,8 @@ describe.skip('NavigationTree', () => {
     const wrappedComponent = shallow(<_NavigationTree
       mstrData={mstrData}
       stopLoading={stopLoadingMocked}
+      cache={CACHE_STATE}
+      {...mockFunctionsAndProps}
     />);
     // when
     wrappedComponent.instance().handleCancel();
@@ -90,7 +110,10 @@ describe.skip('NavigationTree', () => {
       body,
     };
     const mockMessageParent = jest.spyOn(Office.context.ui, 'messageParent');
-    const wrappedComponent = shallow(<_NavigationTree mstrData={mstrData} />);
+    const wrappedComponent = shallow(<_NavigationTree
+      mstrData={mstrData}
+      {...mockFunctionsAndProps}
+    />);
     // when
     wrappedComponent.instance().onTriggerUpdate(body);
     // then
@@ -123,7 +146,7 @@ describe.skip('NavigationTree', () => {
     });
   });
 
-  it('should disable buttons until instance id obtained', async () => {
+  it.skip('should disable buttons until instance id obtained', async () => {
     // given
     const givenObjectId = 'objectId';
     const givenProjectId = 'projectId';
@@ -134,7 +157,11 @@ describe.skip('NavigationTree', () => {
     const selectObject = jest.fn();
     const isPromptedResponse = jest.spyOn(mstrObjectRestService, 'isPrompted')
       .mockImplementationOnce(async () => givenIsPrompted);
-    const wrappedComponent = shallow(<_NavigationTree selectObject={selectObject} mstrData={{}} />);
+    const wrappedComponent = shallow(<_NavigationTree
+      selectObject={selectObject}
+      mstrData={{}}
+      {...mockFunctionsAndProps}
+    />);
     // when
     await wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype);
     // then
@@ -156,7 +183,7 @@ describe.skip('NavigationTree', () => {
     });
   });
 
-  it('should call requestDossierOpen on handleOk if provided objectType is dossier', () => {
+  it.skip('should call requestDossierOpen on handleOk if provided objectType is dossier', () => {
     // given
     const mstrData = {
       envUrl: 'env',
@@ -166,7 +193,13 @@ describe.skip('NavigationTree', () => {
     const objectType = { name: mstrObjectEnum.mstrObjectType.dossier.name };
     const mockRequestImport = jest.fn();
     const mockRequestDossierOpen = jest.fn();
-    const wrappedComponent = shallow(<_NavigationTree mstrData={mstrData} objectType={objectType} requestImport={mockRequestImport} requestDossierOpen={mockRequestDossierOpen} />);
+    const wrappedComponent = shallow(<_NavigationTree
+      mstrData={mstrData}
+      objectType={objectType}
+      requestImport={mockRequestImport}
+      requestDossierOpen={mockRequestDossierOpen}
+      {...mockFunctionsAndProps}
+    />);
     // when
     wrappedComponent.instance().handleOk();
     // then
@@ -174,7 +207,7 @@ describe.skip('NavigationTree', () => {
     expect(mockRequestDossierOpen).toHaveBeenCalled();
   });
 
-  it('should call requestImport on handleOk if provided objectType is not dossier', () => {
+  it.skip('should call requestImport on handleOk if provided objectType is not dossier', () => {
     // given
     const mstrData = {
       envUrl: 'env',
@@ -184,7 +217,13 @@ describe.skip('NavigationTree', () => {
     const objectType = { name: mstrObjectEnum.mstrObjectType.report.name };
     const mockRequestImport = jest.fn();
     const mockHandleDossierOpen = jest.fn();
-    const wrappedComponent = shallow(<_NavigationTree mstrData={mstrData} objectType={objectType} requestImport={mockRequestImport} handleDossierOpen={mockHandleDossierOpen} />);
+    const wrappedComponent = shallow(<_NavigationTree
+      mstrData={mstrData}
+      objectType={objectType}
+      requestImport={mockRequestImport}
+      handleDossierOpen={mockHandleDossierOpen}
+      {...mockFunctionsAndProps}
+    />);
     // when
     wrappedComponent.instance().handleOk();
     // then
@@ -192,7 +231,7 @@ describe.skip('NavigationTree', () => {
     expect(mockHandleDossierOpen).not.toHaveBeenCalled();
   });
 
-  it('should connect on DB when navigation-tree is mounted', () => {
+  it.skip('should connect on DB when navigation-tree is mounted', () => {
     // given
     const connectToDB = jest.fn();
     const mstrData = {
@@ -202,7 +241,10 @@ describe.skip('NavigationTree', () => {
       connectToDB,
     };
     // when
-    shallow(<_NavigationTree mstrData={mstrData} cache={CACHE_STATE} />);
+    shallow(<_NavigationTree
+      mstrData={mstrData}
+      {...mockFunctionsAndProps}
+    />);
     // then
     expect(connectToDB).toHaveBeenCalled();
   });
@@ -213,18 +255,14 @@ describe.skip('NavigationTree', () => {
     const givenError = new Error('Session error');
     authenticationHelper.validateAuthToken.mockRejectedValue(givenError);
     const messageParent = jest.spyOn(Office.context.ui, 'messageParent');
-    const wrappedComponent = shallow(<_NavigationTree />);
+    const wrappedComponent = shallow(<_NavigationTree
+      {...mockFunctionsAndProps}
+    />);
     // when
     wrappedComponent.instance().refresh();
     // then
-    expect(messageParent).toBeCalled();
-    expect(messageParent).toBeCalledWith(JSON.stringify({
-      command: selectorProperties.commandError,
-      error:{
-        ...givenError,
-        message: givenError.message,
-      }
-    }));
-    expect(true).toBeFalsy();
+    expect(messageParent).toBeCalledTimes(2);
+    expect(messageParent.mock.calls[0][0]).toEqual(JSON.stringify({ command: selectorProperties.commandCancel }));
+    expect(messageParent.mock.calls[1][0]).toEqual(JSON.stringify({ command: selectorProperties.commandOnUpdate, body: {} }));
   });
 });
