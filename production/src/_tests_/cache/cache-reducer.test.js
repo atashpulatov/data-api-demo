@@ -1,5 +1,5 @@
-import cacheReducer, { DEFAULT_STATE } from '../../cache/cache-reducer';
-import { SET_OBJECT_LIST_LOADING, SET_MY_LIBRARY_LOADING, ADD_MY_LIBRARY_OBJECTS, ADD_ENV_OBJECTS, ADD_PROJECTS, CLEAR_CACHE, } from '../../cache/cache-actions';
+import cacheReducer, { DEFAULT_STATE, REFRESH_STATE } from '../../cache/cache-reducer';
+import { SET_OBJECT_LIST_LOADING, SET_MY_LIBRARY_LOADING, ADD_MY_LIBRARY_OBJECTS, ADD_ENV_OBJECTS, ADD_PROJECTS, CLEAR_CACHE, REFRESH_CACHE } from '../../cache/cache-actions';
 
 describe('Cache reducer', () => {
   it('should return default state', () => {
@@ -91,6 +91,17 @@ describe('Cache reducer', () => {
     // when
     const state = cacheReducer(initState, action);
 
+    // then
+    expect(state).toEqual(expectedState);
+  });
+
+  it('should refresh state when refresh cache action is received', () => {
+    // given
+    const initState = { DEFAULT_STATE };
+    const expectedState = REFRESH_STATE;
+    const action = { type: REFRESH_CACHE };
+    // when
+    const state = cacheReducer(initState, action);
     // then
     expect(state).toEqual(expectedState);
   });
