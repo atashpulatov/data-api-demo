@@ -46,36 +46,38 @@ export default class _DossierWindow extends React.Component {
   }
 
   handleOk() {
-    const { chosenObjectId, chosenProjectId, requestImport, selectObject } = this.props;
+    const { chosenObjectId, chosenProjectId, requestImport, selectObject, mstrData: { reportId, projectId, isEdit } } = this.props;
     const { chapterKey, visualizationKey, promptsAnswers, preparedInstanceId } = this.state;
     const selectedVisualization = {
-      chosenObjectId,
-      chosenProjectId,
+      chosenObjectId: chosenObjectId || reportId,
+      chosenProjectId: chosenProjectId || projectId,
       chosenSubtype: mstrObjectEnum.mstrObjectType.visualization.subtypes,
       objectType: mstrObjectEnum.mstrObjectType.visualization.type,
       chosenChapterKey: chapterKey,
       chosenVisualizationKey: visualizationKey,
       promptsAnswers,
       preparedInstanceId,
+      isEdit,
     };
     selectObject(selectedVisualization);
     requestImport();
   }
 
   render() {
-    const { chosenObjectName, chosenObjectId, chosenProjectId, handleBack, t, mstrData, handlePopupErrors } = this.props;
+    const { chosenObjectName, chosenObjectId, chosenProjectId, handleBack, t, mstrData: { envUrl, token, reportId, projectId, instanceId, promptsAnswers, dossierName }, handlePopupErrors } = this.props;
     const { isVisualisationSelected } = this.state;
     const propsToPass = {
-      envUrl: mstrData.envUrl,
-      token: mstrData.token,
-      dossierId: chosenObjectId,
-      projectId: chosenProjectId,
-      promptsAnswers: mstrData.promptsAnswers
+      envUrl,
+      token,
+      dossierId: chosenObjectId || reportId,
+      projectId: chosenProjectId || projectId,
+      promptsAnswers,
+      instanceId,
     };
     return (
       <div>
-        <h1 title={chosenObjectName} className="ant-col folder-browser-title">
-          {`${t('Import Dossier')} > ${chosenObjectName}`}
+        <h1 title={dossierName || chosenObjectName} className="ant-col folder-browser-title">
+          {`${t('Import Dossier')} > ${dossierName || chosenObjectName}`}
         </h1>
         <span className="dossier-window-information-frame">
           <MSTRIcon clasName="dossier-window-information-icon" type="info-icon" />

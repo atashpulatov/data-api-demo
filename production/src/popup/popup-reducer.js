@@ -7,8 +7,7 @@ import {
 } from './popup-actions';
 import { CLEAR_PROMPTS_ANSWERS } from '../navigation/navigation-tree-actions';
 
-export const initialState = {
-};
+export const initialState = {};
 
 export const popupReducer = (state = initialState, action) => {
   const { type, data } = action;
@@ -46,9 +45,7 @@ export const popupReducer = (state = initialState, action) => {
       };
     }
     case RESET_STATE: {
-      return {
-        ...initialState,
-      };
+      return { ...initialState, };
     }
     default:
       return state;

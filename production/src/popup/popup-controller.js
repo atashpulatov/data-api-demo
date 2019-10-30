@@ -35,6 +35,10 @@ class PopupController {
     await this.runPopup(PopupTypeEnum.repromptingWindow, 80, 80, reportParams);
   };
 
+  runEditDossierPopup = async (reportParams) => {
+    await this.runPopup(PopupTypeEnum.dossierWindow, 80, 80, reportParams);
+  };
+
   runPopup = async (popupType, height, width, reportParams = null) => {
     const session = sessionHelper.getSession();
     try {
@@ -97,9 +101,7 @@ class PopupController {
             await this.handleOkCommand(response, reportParams);
           } else {
             const reportPreviousState = this._getReportsPreviousState(reportParams);
-            await this.saveReportWithParams(reportParams,
-              response,
-              reportPreviousState);
+            await this.saveReportWithParams(reportParams, response, reportPreviousState);
           }
           break;
         case selectorProperties.commandOnUpdate:
@@ -107,9 +109,7 @@ class PopupController {
             await this.handleUpdateCommand(response);
           } else {
             const reportPreviousState = this._getReportsPreviousState(reportParams);
-            await this.saveReportWithParams(reportParams,
-              response,
-              reportPreviousState);
+            await this.saveReportWithParams(reportParams, response, reportPreviousState);
           }
           break;
         case selectorProperties.commandCancel:
@@ -247,15 +247,17 @@ class PopupController {
     if (response.promptsAnswers) {
       // Include new promptsAnswers in case of Re-prompt workflow
       reportParams.promptsAnswers = response.promptsAnswers;
-      await officeStoreService.preserveReportValue(reportParams.bindId,
-        'promptsAnswers',
-        response.promptsAnswers);
+      await officeStoreService.preserveReportValue(reportParams.bindId, 'promptsAnswers', response.promptsAnswers);
+    }
+    if (response.isEdit) {
+      if (reportPreviousState.visualizationInfo.visualizationKey !== response.visualizationInfo.visualizationKey) {
+        await officeStoreService.preserveReportValue(reportParams.bindId, 'visualizationInfo', response.visualizationInfo);
+      }
+      await officeStoreService.preserveReportValue(reportParams.bindId, 'isEdit', false)
     }
     const isErrorOnRefresh = await refreshReportsArray([reportParams], false)(reduxStore.dispatch);
     if (isErrorOnRefresh) {
-      await officeStoreService.preserveReportValue(reportParams.bindId,
-        'body',
-        reportPreviousState.body);
+      await officeStoreService.preserveReportValue(reportParams.bindId, 'body', reportPreviousState.body);
     }
   }
 }

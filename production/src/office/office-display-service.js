@@ -97,8 +97,7 @@ class OfficeDisplayService {
     let startCell;
     let tableColumnsChanged;
     let instanceDefinition;
-    // TODO: Uncomment this as far as DE150758 will be resolved (Can not get definition for prompted dossier)
-    // let dossierStructure;
+    let dossierStructure;
     try {
       const objectType = mstrObjectType;
       const { envUrl } = officeApiHelper.getCurrentMstrContext();
@@ -188,14 +187,13 @@ class OfficeDisplayService {
       // Get visualization path from dossier definition.
       // Used to show in sidebar placeholder
 
-      // TODO: Uncomment this as far as DE150758 will be resolved (Can not get definition for prompted dossier)
-      // if (objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-      //   console.time('Get dossier structure');
-      //   mstrTable.id = objectId;
-      //   dossierStructure = await this.getDossierStructure(projectId, objectId, visualizationInfo, preparedInstanceId);
-      //   visualizationInfo.dossierStructure = dossierStructure;
-      //   console.timeEnd('Get dossier structure');
-      // }
+      if (objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
+        console.time('Get dossier structure');
+        mstrTable.id = objectId;
+        dossierStructure = await this.getDossierStructure(projectId, objectId, visualizationInfo, preparedInstanceId);
+        visualizationInfo.dossierStructure = dossierStructure;
+        console.timeEnd('Get dossier structure');
+      }
 
       // Save to store
       bindingId = bindingId || newOfficeTableId;

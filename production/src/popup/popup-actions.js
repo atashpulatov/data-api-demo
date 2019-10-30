@@ -5,7 +5,7 @@ import { officeProperties } from '../office/office-properties';
 import { officeStoreService } from '../office/store/office-store-service';
 import { popupController } from './popup-controller';
 import { popupHelper } from './popup-helper';
-import { createInstance, answerPrompts, getInstance } from '../mstr-object/mstr-object-rest-service';
+import { createInstance, answerPrompts, getInstance, createDossierInstance } from '../mstr-object/mstr-object-rest-service';
 import { reduxStore } from '../store';
 
 export const CLEAR_WINDOW = 'POPUP_CLOSE_WINDOW';
@@ -134,6 +134,29 @@ export function refreshReportsArray(reportArray, isRefreshAll) {
           isError,
         });
       }
+    }
+  };
+}
+
+export function callForEditDossier(reportParams) {
+  return async (dispatch) => {
+    try {
+      await Promise.all([
+        officeApiHelper.getExcelSessionStatus(),
+        authenticationHelper.validateAuthToken(),
+      ]);
+      const editedDossier = officeStoreService.getReportFromProperties(reportParams.bindId);
+      const { projectId, id, manipulationsXML } = editedDossier
+      const instanceId = await createDossierInstance(projectId, id, { ...manipulationsXML });
+      editedDossier.instanceId = instanceId;
+      editedDossier.isEdit = true;
+      dispatch({
+        type: SET_REPORT_N_FILTERS,
+        editedReport: editedDossier,
+      });
+      popupController.runEditDossierPopup(reportParams);
+    } catch (error) {
+      return errorService.handleError(error);
     }
   };
 }

@@ -58,10 +58,7 @@ export const _PopupViewSelector = (props) => {
     propsToPass.promptsAnswers = null;
     popupType = PopupTypeEnum.dossierWindow;
   }
-  return renderProperComponent(popupType,
-    methods,
-    propsToPass,
-    localEditReport);
+  return renderProperComponent(popupType, methods, propsToPass, localEditReport);
 };
 
 function wasReportJustImported(props) {
@@ -213,6 +210,7 @@ function proceedToImport(props) {
     promptsAnswers: props.promptsAnswers,
     visualizationInfo,
     preparedInstanceId: props.preparedInstanceId,
+    isEdit: props.isEdit,
   };
   if (props.dossierData) {
     okObject.dossierData = {
@@ -296,9 +294,13 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
     ); // use the same window as with prompting, but provide report info
   }
   if (popupType === PopupTypeEnum.dossierWindow) {
+    const mstrData = {
+      ...propsToPass,
+      ...editedReport,
+    };
     return (
       <DossierWindow
-        mstrData={propsToPass}
+        mstrData={mstrData}
         handleBack={methods.handleBack}
         handlePopupErrors={methods.handlePopupErrors}
         t={propsToPass.t}
@@ -331,6 +333,11 @@ function parsePopupState(popupState, promptsAnswers) {
   if (!popupState) {
     return;
   }
+  let dossierName;
+  const { visualizationInfo } = popupState;
+  if (visualizationInfo && visualizationInfo.dossierStructure) {
+    ({ dossierName } = popupState.visualizationInfo.dossierStructure)
+  }
   const reportData = {
     reportId: popupState.id,
     instanceId: popupState.instanceId,
@@ -340,6 +347,8 @@ function parsePopupState(popupState, promptsAnswers) {
     reportSubtype: popupState.objectType === 'report' ? 768 : 779,
     promptsAnswers: promptsAnswers || popupState.promptsAnswers,
     importSubtotal: popupState.importSubtotal,
+    isEdit: popupState.isEdit,
+    dossierName
   };
   restoreFilters(popupState.body, reportData);
   return reportData;
