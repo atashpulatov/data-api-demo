@@ -12,16 +12,16 @@ describe('OfficeStoreService', () => {
         saveAsync: jest.fn(),
       });
 
-    jest.spyOn(officeStoreService, '_getReportProperties');
+    jest.spyOn(officeStoreService, 'getReportProperties');
   });
 
   beforeEach(() => {
-    officeStoreService._getReportProperties
+    officeStoreService.getReportProperties
       .mockReturnValue(mockReportProperties[1].slice());
   });
 
   afterEach(() => {
-    officeStoreService._getReportProperties.mockClear();
+    officeStoreService.getReportProperties.mockClear();
   });
 
   it('should save report properties to office settings', () => {
@@ -31,7 +31,7 @@ describe('OfficeStoreService', () => {
     // when
     officeStoreService.preserveReport(givenReport);
     // then
-    expect(officeStoreService._getReportProperties).toBeCalled();
+    expect(officeStoreService.getReportProperties).toBeCalled();
     expect(settings.saveAsync).toBeCalled();
   });
   it('should delete report properties from office settings', async () => {

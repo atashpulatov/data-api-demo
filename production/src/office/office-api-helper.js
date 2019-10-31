@@ -8,7 +8,6 @@ import { notificationService } from '../notification/notification-service';
 import { errorService } from '../error/error-handler';
 import mstrNormalizedJsonHandler from '../mstr-object/mstr-normalized-json-handler';
 import { CONTEXT_LIMIT } from '../mstr-object/mstr-object-rest-service';
-import officeDisplayService from './office-display-service';
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { OBJ_REMOVED_FROM_EXCEL } from '../error/constants'
 
@@ -155,7 +154,7 @@ class OfficeApiHelper {
   findAvailableOfficeTableId = () => EXCEL_TABLE_NAME + uuid().split('-').join('')
 
   loadExistingReportBindingsExcel = async () => {
-    const reportArray = await officeStoreService._getReportProperties();
+    const reportArray = await officeStoreService.getReportProperties();
     reduxStore.dispatch({
       type: officeProperties.actions.loadAllReports,
       reportArray,
@@ -313,7 +312,7 @@ class OfficeApiHelper {
    * @memberof OfficeApiHelper
    */
   removeObjectNotExistingInExcel = async (t, object, officeContext) => {
-    officeDisplayService.removeReportFromStore(object.bindId);
+    officeStoreService.removeReportFromStore(object.bindId);
     await officeContext.document.bindings.releaseByIdAsync(object.bindId, () => { console.log('released binding'); });
   }
 

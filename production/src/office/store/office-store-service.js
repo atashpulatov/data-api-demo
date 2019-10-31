@@ -7,10 +7,46 @@ import { reduxStore } from '../../store';
 /* global Office */
 
 class OfficeStoreService {
+  addObjectToStore = ({
+    isRefresh,
+    instanceDefinition,
+    bindingId,
+    projectId,
+    envUrl,
+    body,
+    objectType,
+    isCrosstab,
+    isPrompted,
+    promptsAnswers,
+    subtotalInfo,
+    visualizationInfo,
+    objectId
+  }) => {
+    const { mstrTable, manipulationsXML } = instanceDefinition;
+    const report = {
+      id: objectId,
+      name: mstrTable.name,
+      bindId: bindingId,
+      projectId,
+      envUrl,
+      body,
+      isLoading: false,
+      objectType,
+      isPrompted,
+      isCrosstab,
+      subtotalInfo,
+      promptsAnswers,
+      crosstabHeaderDimensions: mstrTable.crosstabHeaderDimensions,
+      visualizationInfo,
+      manipulationsXML,
+    };
+    this.saveAndPreserveReportInStore(report, isRefresh);
+  }
+
   preserveReport = (report) => {
     try {
       const settings = this.getOfficeSettings();
-      const reportProperties = this._getReportProperties();
+      const reportProperties = this.getReportProperties();
       reportProperties.unshift({
         id: report.id,
         name: report.name,
@@ -37,7 +73,7 @@ class OfficeStoreService {
   preserveReportValue = async (bindId, key, value) => {
     try {
       const settings = this.getOfficeSettings();
-      const reportProperties = this._getReportProperties();
+      const reportProperties = this.getReportProperties();
       const indexOfReport = reportProperties.findIndex((oldReport) => (oldReport.bindId === bindId));
       reportProperties[indexOfReport][key] = value;
       settings.set(officeProperties.loadedReportProperties, reportProperties);
@@ -51,7 +87,7 @@ class OfficeStoreService {
   deleteReport = (bindingId) => {
     try {
       const settings = this.getOfficeSettings();
-      const reportProperties = this._getReportProperties();
+      const reportProperties = this.getReportProperties();
       const indexOfReport = reportProperties.findIndex((report) => (report.bindId === bindingId));
       reportProperties.splice(indexOfReport, 1);
       settings.set(officeProperties.loadedReportProperties, reportProperties);
@@ -62,11 +98,11 @@ class OfficeStoreService {
   }
 
   getReportFromProperties = (bindingId) => {
-    const reportProperties = this._getReportProperties();
+    const reportProperties = this.getReportProperties();
     return reportProperties.find((report) => report.bindId === bindingId);
   };
 
-  _getReportProperties = () => {
+  getReportProperties = () => {
     try {
       const settings = this.getOfficeSettings();
       if (!(settings.get(officeProperties.loadedReportProperties))) {
@@ -110,7 +146,7 @@ class OfficeStoreService {
     if (isRefresh) {
       try {
         const settings = this.getOfficeSettings();
-        const reportsArray = [...this._getReportProperties()];
+        const reportsArray = [...this.getReportProperties()];
         const reportObj = reportsArray.find((element) => element.bindId === report.bindId);
         const ObjectIndex = reportsArray.indexOf(reportObj)
         reportsArray[ObjectIndex].crosstabHeaderDimensions = report.crosstabHeaderDimensions;
@@ -143,6 +179,15 @@ class OfficeStoreService {
       });
       this.preserveReport(report);
     }
+  };
+
+  removeReportFromStore = (bindingId) => {
+    reduxStore.dispatch({
+      type: officeProperties.actions.removeReport,
+      reportBindId: bindingId,
+    });
+    this.deleteReport(bindingId);
+    return true;
   };
 }
 
