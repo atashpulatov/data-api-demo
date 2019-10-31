@@ -9,6 +9,7 @@ import {
   refreshReportsArray,
   callForEdit,
   callForReprompt,
+  callForEditDossier,
 } from '../popup/popup-actions';
 import RenameInput from './file-history-rename-input';
 import { officeApiHelper } from '../office/office-api-helper';
@@ -146,7 +147,7 @@ export class _OfficeLoadedFile extends React.Component {
 
   editAction = (e) => {
     const { allowRefreshClick } = this.state;
-    const { isLoading, bindingId, objectType, callForEdit, fileName, loading, startLoading } = this.props;
+    const { isLoading, bindingId, objectType, callForEdit, fileName, loading, startLoading, callForEditDossier } = this.props;
     if (e) e.stopPropagation();
     if (!allowRefreshClick || loading) {
       return;
@@ -158,7 +159,11 @@ export class _OfficeLoadedFile extends React.Component {
           // calling onBindingObjectClick to check whether the object exists in Excel
           // before opening edit data popup
           if (await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport, fileName)) {
-            (await callForEdit({ bindId: bindingId, objectType }, loading));
+            if (objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
+              (await callForEditDossier({ bindId: bindingId, objectType }, loading))
+            } else {
+              (await callForEdit({ bindId: bindingId, objectType }, loading));
+            }
           }
         } finally {
           this.setState({ allowRefreshClick: true });
@@ -244,7 +249,7 @@ export class _OfficeLoadedFile extends React.Component {
         >
           {!!isPrompted && (
             <span
-              aria-title="Repromt button"
+              aria-title="Reprompt button"
               role="button"
               tabIndex="0"
               className="loading-button-container"
@@ -405,6 +410,7 @@ const mapDispatchToProps = {
   refreshReportsArray,
   callForEdit,
   callForReprompt,
+  callForEditDossier,
   startLoading,
   stopLoading
 };

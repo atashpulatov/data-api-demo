@@ -43,20 +43,24 @@ export default class _EmbeddedDossier extends React.Component {
 
   loadEmbeddedDossier = async (container) => {
     const { mstrData, handlePopupErrors } = this.props;
-    const { envUrl, token, dossierId, projectId, promptsAnswers } = mstrData;
+    const { envUrl, token, dossierId, projectId, promptsAnswers, instanceId } = mstrData;
     const instance = {};
     try {
-      instance.mid = await createDossierInstance(projectId, dossierId);
-      if (promptsAnswers != null) {
-        let count = 0;
-        while (count < promptsAnswers.length) {
-          await answerDossierPrompts({
-            objectId: dossierId,
-            projectId,
-            instanceId: instance.mid,
-            promptsAnswers: promptsAnswers[count]
-          });
-          count++;
+      if (instanceId) {
+        instance.mid = instanceId
+      } else {
+        instance.mid = await createDossierInstance(projectId, dossierId);
+        if (promptsAnswers != null) {
+          let count = 0;
+          while (count < promptsAnswers.length) {
+            await answerDossierPrompts({
+              objectId: dossierId,
+              projectId,
+              instanceId: instance.mid,
+              promptsAnswers: promptsAnswers[count]
+            });
+            count++;
+          }
         }
       }
     } catch (e) {
@@ -153,6 +157,7 @@ _EmbeddedDossier.propTypes = {
     token: PropTypes.string,
     dossierId: PropTypes.string,
     projectId: PropTypes.string,
+    instanceId: PropTypes.string,
     promptsAnswers: PropTypes.array || null
   }),
   handleSelection: PropTypes.func,
@@ -165,6 +170,7 @@ _EmbeddedDossier.defaultProps = {
     token: null,
     dossierId: 'default id',
     projectId: 'default id',
+    instanceId: 'default id',
     promptsAnswers: null
   },
   handleSelection: () => { },

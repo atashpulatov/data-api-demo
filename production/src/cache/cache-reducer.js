@@ -14,7 +14,7 @@ export const DEFAULT_STATE = {
 
 export const REFRESH_STATE = {
   myLibrary: {
-    isLoading: true,
+    isLoading: false,
     objects: [],
   },
   projects: [],

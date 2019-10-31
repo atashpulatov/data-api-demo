@@ -54,7 +54,7 @@ export const initialState = {
   dossierOpenRequested: false,
   envFilter: {},
   myLibraryFilter: {},
-  myLibrary: true,
+  myLibrary: false,
   chosenLibraryDossier: null,
 };
 
@@ -78,6 +78,7 @@ export const navigationTree = (state = initialState, action) => {
       newState.chosenChapterKey = data.chosenChapterKey || null;
       newState.chosenVisualizationKey = data.chosenVisualizationKey || null;
       newState.preparedInstanceId = data.preparedInstanceId || null;
+      newState.isEdit = data.isEdit;
       newState.chosenLibraryDossier = data.chosenLibraryDossier || null;
       return newState;
     }
