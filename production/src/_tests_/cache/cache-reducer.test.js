@@ -62,16 +62,29 @@ describe('Cache reducer', () => {
     expect(state).toEqual(expectedState);
   });
 
-  it.skip('should change state when add my library action is received', () => {
+  it('should change state when append myLibrary objects action is received', () => {
     // given
-    const objects = ['TestObject'];
-    const expectedState = { ...DEFAULT_STATE.myLibrary, objects };
-    const action = { type: ADD_MY_LIBRARY_OBJECTS, data: objects };
+    const initObject = 'Default Test';
+    const initState = { ...DEFAULT_STATE, myLibrary: { ...DEFAULT_STATE.myLibrary, objects: [initObject] } };
+    const objects = ['TestObject1', 'TestObject2'];
+    const action = { type: ADD_MY_LIBRARY_OBJECTS, data: { objects, append: true } };
     // when
-    const state = cacheReducer(DEFAULT_STATE, action);
-
+    const state = cacheReducer(initState, action);
+    const expectedState = { ...DEFAULT_STATE, myLibrary: { ...DEFAULT_STATE.myLibrary, objects: [initObject, ...objects] } };
     // then
-    expect(state.myLibrary).toEqual(expectedState);
+    expect(state).toEqual(expectedState);
+  });
+
+  it('should change state when replace myLibrary objects action is received', () => {
+    // given
+    const initState = DEFAULT_STATE;
+    const objects = ['TestObject1', 'TestObject2'];
+    const action = { type: ADD_MY_LIBRARY_OBJECTS, data: { objects, append: false } };
+    // when
+    const state = cacheReducer(initState, action);
+    const expectedState = { ...DEFAULT_STATE, myLibrary: { ...DEFAULT_STATE.myLibrary, objects } };
+    // then
+    expect(state).toEqual(expectedState);
   });
 
   it('should change state when add projects action is received', () => {
