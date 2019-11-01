@@ -48,8 +48,6 @@ describe('Confirmation', () => {
     expect(mockToggleSecuredFlag).toBeCalledWith(true);
   });
 
-  // /////////////////////////////////////////////////////////////////////////////////
-
   it('should fill clearErrors when secureData fails in ok button click', async () => {
     // given
     const mockSync = jest.fn();
@@ -78,7 +76,6 @@ describe('Confirmation', () => {
     // when
     okWrapper.simulate('click');
     // then
-    // expect(errorService.handleError).toBeCalledWith(error)
     expect(clearErrors).not.toBe(null)
   });
 
