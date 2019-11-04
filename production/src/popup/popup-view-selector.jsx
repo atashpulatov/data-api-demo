@@ -20,7 +20,7 @@ const { Office } = window;
 export const _PopupViewSelector = (props) => {
   let { popupType } = props;
 
-  const { propsToPass, methods, importRequested, dossierOpenRequested } = props;
+  const { propsToPass, methods, importRequested, dossierOpenRequested, loading } = props;
   const isPrompted = propsToPass.isPrompted || props.isPrompted;
   if (!props.authToken || !propsToPass) {
     console.log('Waiting for token to be passed');
@@ -53,7 +53,7 @@ export const _PopupViewSelector = (props) => {
     popupType = PopupTypeEnum.promptsWindow;
     propsToPass.projectId = props.chosenProjectId;
     propsToPass.reportId = props.chosenObjectId;
-  } else if (dossierOpenRequested) {
+  } else if ((dossierOpenRequested) && (!loading)) {
     // open dossier without prompts
     propsToPass.promptsAnswers = null;
     popupType = PopupTypeEnum.dossierWindow;

@@ -143,4 +143,9 @@ function mapStateToProps(state) {
   };
 }
 
-export const DossierWindow = connect(mapStateToProps, actions)(withTranslation('common')(_DossierWindow));
+const mapActionsToProps = {
+  requestImport: actions.requestImport,
+  selectObject: actions.selectObject,
+};
+
+export const DossierWindow = connect(mapStateToProps, mapActionsToProps)(withTranslation('common')(_DossierWindow));

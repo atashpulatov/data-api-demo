@@ -132,7 +132,7 @@ export class _NavigationTree extends Component {
         isPrompted = await checkIfPrompted(chosenObjectId, chosenProjectId, objectType.name);
       }
       if (objectType.name === mstrObjectEnum.mstrObjectType.dossier.name) {
-        requestDossierOpen();
+        requestDossierOpen(isPrompted);
       } else {
         requestImport(isPrompted);
       }
