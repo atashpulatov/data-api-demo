@@ -21,6 +21,7 @@ import { ReactComponent as ClockIcon } from './assets/icon_clock.svg';
 import { officeStoreService } from '../office/store/office-store-service';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { startLoading, stopLoading } from '../navigation/navigation-tree-actions';
+import { errorService } from '../error/error-handler';
 
 
 export class _OfficeLoadedFile extends React.Component {
@@ -109,13 +110,20 @@ export class _OfficeLoadedFile extends React.Component {
     } = this.props;
     this.setState({ allowDeleteClick: false, allowRefreshClick: false },
       async () => {
-        const message = t('{{name}} has been removed from the workbook.',
-          { name: fileName });
-        await fileHistoryHelper.deleteReport(onDelete,
-          bindingId,
-          isCrosstab,
-          crosstabHeaderDimensions,
-          message);
+        const excelContext = await officeApiHelper.getExcelContext();
+        const isProtected = await officeApiHelper.isWorksheetProtected(excelContext)
+        if (isProtected) {
+          const error = new Error(t('Worksheet is protected'))
+          errorService.handleError(error)
+        } else {
+          const message = t('{{name}} has been removed from the workbook.',
+            { name: fileName });
+          await fileHistoryHelper.deleteReport(onDelete,
+            bindingId,
+            isCrosstab,
+            crosstabHeaderDimensions,
+            message);
+        }
         if (this._ismounted) this.setState({ allowDeleteClick: true, allowRefreshClick: true });
         stopLoading();
       });
@@ -174,7 +182,7 @@ export class _OfficeLoadedFile extends React.Component {
 
   refreshAction = (e) => {
     if (e) e.stopPropagation();
-    const { isLoading, bindingId, objectType, refreshReportsArray, loading, fileName, startLoading, stopLoading } = this.props;
+    const { isLoading, bindingId, objectType, refreshReportsArray, loading, fileName, startLoading, stopLoading, t } = this.props;
     const { allowRefreshClick } = this.state;
     if (!allowRefreshClick || loading) {
       return;
@@ -183,7 +191,12 @@ export class _OfficeLoadedFile extends React.Component {
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
-          if (await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport, fileName)) {
+          const excelContext = await officeApiHelper.getExcelContext();
+          const isProtected = await officeApiHelper.isWorksheetProtected(excelContext)
+          if (isProtected) {
+            const error = new Error(t('Worksheet is protected'))
+            errorService.handleError(error)
+          } if (await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport, fileName)) {
             (await refreshReportsArray([{ bindId: bindingId, objectType }], false));
           }
         } finally {
