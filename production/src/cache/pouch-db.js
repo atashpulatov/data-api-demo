@@ -17,7 +17,7 @@ export default class DB {
    * @memberof DB
    */
   constructor(dbName = 'cache') {
-    this.db = new PouchDB(dbName, { revs_limit: 1 });
+    this.db = new PouchDB(dbName, { revs_limit: 1, auto_compaction: true });
     this.dbName = dbName;
     this.putObjects = this.putObjects.bind(this);
   }
