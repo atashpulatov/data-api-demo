@@ -26,8 +26,12 @@ export const _Confirmation = ({ reportArray, toggleSecuredFlag, toggleIsConfirmF
     const clearErrors = [];
     try {
       toggleIsClearingFlag(true);
-      toggleIsConfirmFlag(false);
+      toggleIsConfirmFlag(); // Switch off isConfirm popup
       const excelContext = await officeApiHelper.getExcelContext();
+      const isProtected = await officeApiHelper.isWorksheetProtected(excelContext)
+      if (isProtected) {
+        throw new Error(t('Worksheet is protected'))
+      }
       for (const report of reportArray) {
         if (await officeApiHelper.checkIfObjectExist(t, report, excelContext)) {
           try {
@@ -50,7 +54,6 @@ export const _Confirmation = ({ reportArray, toggleSecuredFlag, toggleIsConfirmF
           counter++;
         }
       }
-      toggleIsConfirmFlag(false);
       if (clearErrors.length > 0) {
         displayClearDataError(clearErrors);
       } else if (counter !== reportArray.length) toggleSecuredFlag(true);
@@ -58,7 +61,6 @@ export const _Confirmation = ({ reportArray, toggleSecuredFlag, toggleIsConfirmF
       errorService.handleError(error);
     } finally {
       toggleIsClearingFlag(false);
-      toggleIsConfirmFlag(true);
     }
   };
 

@@ -317,6 +317,19 @@ class OfficeApiHelper {
   }
 
   /**
+    * Returns true if excel worksheet is protected
+    *
+    * @param {Excel} excelContext Excel context
+    * @memberof OfficeApiHelper
+    */
+  isWorksheetProtected = async (excelContext) => {
+    const activeSheet = excelContext.workbook.worksheets.getActiveWorksheet();
+    activeSheet.load('protection/protected');
+    await excelContext.sync();
+    return activeSheet.protection.protected
+  }
+
+  /**
    * Checks if the object existing in Excel workbook
    *
    * @param {Function} t i18n translating function
