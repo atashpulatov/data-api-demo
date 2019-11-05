@@ -294,13 +294,10 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
     ); // use the same window as with prompting, but provide report info
   }
   if (popupType === PopupTypeEnum.dossierWindow) {
-    const mstrData = {
-      ...propsToPass,
-      ...editedReport,
-    };
     return (
       <DossierWindow
-        mstrData={mstrData}
+        mstrData={propsToPass}
+        editedReport={editedReport}
         handleBack={methods.handleBack}
         handlePopupErrors={methods.handlePopupErrors}
         t={propsToPass.t}
