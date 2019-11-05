@@ -49,6 +49,37 @@ describe('Confirmation', () => {
     expect(mockToggleSecuredFlag).toBeCalledWith(true);
   });
 
+  it('should fill clearErrors when secureData fails in ok button click', async () => {
+    // given
+    const mockSync = jest.fn();
+    const error = new Error('test error')
+    jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementationOnce(() => ({ sync: mockSync, }));
+    jest.spyOn(officeApiHelper, 'checkIfObjectExist').mockImplementationOnce(() => true);
+    jest.spyOn(officeApiHelper, 'getTable').mockImplementationOnce(() => { throw error });
+    jest.spyOn(errorService, 'handleError').mockImplementationOnce(() => { });
+    const clearErrors = [];
+    const reportName = 'Test'
+    const returnValue = {}
+    errorService.handleError.mockReturnValueOnce(() => returnValue)
+    clearErrors.push({ reportName, returnValue })
+
+    const mockToggleIsConfirmFlag = jest.fn();
+    const mockToggleIsClearingFlag = jest.fn();
+    const mockToggleSecuredFlag = jest.fn();
+    const mockReportArray = createMockFilesArray();
+    const confirmationWrapper = mount(<_Confirmation
+      reportArray={mockReportArray}
+      isSecured={false}
+      toggleIsConfirmFlag={mockToggleIsConfirmFlag}
+      toggleIsClearingFlag={mockToggleIsClearingFlag}
+      toggleSecuredFlag={mockToggleSecuredFlag} />);
+    const okWrapper = confirmationWrapper.find('#confirm-btn');
+    // when
+    okWrapper.simulate('click');
+    // then
+    expect(clearErrors).not.toBe(null)
+  });
+
   it('should not call functions if failed to get table in clear data', async () => {
     // given
     const mockSync = jest.fn();

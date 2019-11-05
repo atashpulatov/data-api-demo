@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import i18n from '../../i18n';
 import { _NavigationTree, mapStateToProps } from '../../navigation/navigation-tree';
 import { selectorProperties } from '../../attribute-selector/selector-properties';
 import { Office } from '../mockOffice';
@@ -10,12 +11,17 @@ import { authenticationHelper } from '../../authentication/authentication-helper
 
 jest.mock('../../authentication/authentication-helper');
 
-
-// TODO: Enable and update when new table component is implemented
-describe.skip('NavigationTree', () => {
+describe('NavigationTree', () => {
   afterAll(() => {
     jest.restoreAllMocks();
   });
+
+  const mockFunctionsAndProps = {
+    cache: CACHE_STATE,
+    i18n,
+    resetDBState: jest.fn(),
+    fetchObjectsFromNetwork: jest.fn(),
+  }
 
   it('should render with props given', () => {
     // given
@@ -25,15 +31,19 @@ describe.skip('NavigationTree', () => {
       projectId: 'projectId',
     };
     // when
-    const wrappedComponent = shallow(<_NavigationTree mstrData={mstrData} />);
+    const wrappedComponent = shallow(<_NavigationTree
+      mstrData={mstrData}
+      {...mockFunctionsAndProps}
+    />);
     // then
     expect(wrappedComponent.instance()).toBeDefined();
-    expect(wrappedComponent.find('FolderBrowser').get(0)).toBeDefined();
+    expect(wrappedComponent.find('TopFilterPanel').get(0)).toBeDefined();
+    expect(wrappedComponent.find('ObjectTable').get(0)).toBeDefined();
   });
 
   it('should call proper method on secondary action', async () => {
     // given
-    const propsMethod = jest.fn();
+    const mockHandlePrepare = jest.fn();
     const mstrData = {
       envUrl: 'env',
       token: 'token',
@@ -43,18 +53,54 @@ describe.skip('NavigationTree', () => {
       command: selectorProperties.commandSecondary,
       chosenObjectId: 'objectId',
       chosenProjectId: 'projectId',
-      chosenSubtype: 'subtype',
+      chosenSubtype: mstrObjectEnum.mstrObjectType.report.subtypes[0],
       chosenObjectName: 'Prepare Data',
       chosenType: 'Data',
     };
-    const wrappedComponent = shallow(<_NavigationTree mstrData={mstrData} handlePrepare={propsMethod} {...actionObject} />);
+    const givenIsPrompted = 'customPromptAnswer';
+    jest.spyOn(mstrObjectRestService, 'isPrompted')
+      .mockImplementationOnce(async () => givenIsPrompted);
+    const wrappedComponent = shallow(<_NavigationTree
+      mstrData={mstrData}
+      handlePrepare={mockHandlePrepare}
+      {...actionObject}
+      {...mockFunctionsAndProps}
+    />);
+    // when
+    await wrappedComponent.instance().handleSecondary();
+    // then
+    expect(mockHandlePrepare).toBeCalledWith(actionObject.chosenProjectId, actionObject.chosenObjectId,
+      actionObject.chosenSubtype, actionObject.chosenObjectName, actionObject.chosenType, givenIsPrompted);
+    expect(wrappedComponent.state('previewDisplay')).toEqual(true);
+  });
+
+  it('should call handlePopupErrors on checkIfPrompted bad response in handleSecondary', () => {
+    // given
+    const mstrData = {
+      envUrl: 'env',
+      token: 'token',
+      projectId: 'projectId',
+    };
+    const givenObjectId = 'objectId';
+    const givenProjectId = 'projectId';
+    const givenSubtype = mstrObjectEnum.mstrObjectType.dossier.subtypes[0];
+    const mockHandlePopupErrors = jest.fn();
+    jest.spyOn(mstrObjectRestService, 'isPrompted')
+      .mockImplementationOnce(() => { throw new Error() });
+    const wrappedComponent = shallow(
+      <_NavigationTree
+        mstrData={mstrData}
+        chosenObjectId={givenObjectId}
+        chosenProjectId={givenProjectId}
+        chosenSubtype={givenSubtype}
+        {...mockFunctionsAndProps}
+        handlePopupErrors={mockHandlePopupErrors}
+      />
+    );
     // when
     wrappedComponent.instance().handleSecondary();
     // then
-    expect(propsMethod).toBeCalled();
-    expect(propsMethod).toBeCalledWith(actionObject.chosenProjectId, actionObject.chosenObjectId,
-      actionObject.chosenSubtype, actionObject.chosenObjectName, actionObject.chosenType);
-    expect(wrappedComponent.state('previewDisplay')).toEqual(true);
+    expect(mockHandlePopupErrors).toBeCalled();
   });
 
   it('should call proper method on cancel action', () => {
@@ -70,6 +116,8 @@ describe.skip('NavigationTree', () => {
     const wrappedComponent = shallow(<_NavigationTree
       mstrData={mstrData}
       stopLoading={stopLoadingMocked}
+      cache={CACHE_STATE}
+      {...mockFunctionsAndProps}
     />);
     // when
     wrappedComponent.instance().handleCancel();
@@ -90,7 +138,10 @@ describe.skip('NavigationTree', () => {
       body,
     };
     const mockMessageParent = jest.spyOn(Office.context.ui, 'messageParent');
-    const wrappedComponent = shallow(<_NavigationTree mstrData={mstrData} />);
+    const wrappedComponent = shallow(<_NavigationTree
+      mstrData={mstrData}
+      {...mockFunctionsAndProps}
+    />);
     // when
     wrappedComponent.instance().onTriggerUpdate(body);
     // then
@@ -123,76 +174,155 @@ describe.skip('NavigationTree', () => {
     });
   });
 
-  it('should disable buttons until instance id obtained', async () => {
+  it('should call selectObject on onObjectChosen handler with simple data', () => {
     // given
     const givenObjectId = 'objectId';
     const givenProjectId = 'projectId';
-    const givenObjectTypeName = 'report';
-    const givenSubtype = 768;
-    const givenIsPrompted = 'customPromptAnswer';
-    const givenObjectType = mstrObjectEnum.mstrObjectType.report;
-    const selectObject = jest.fn();
-    const isPromptedResponse = jest.spyOn(mstrObjectRestService, 'isPrompted')
-      .mockImplementationOnce(async () => givenIsPrompted);
-    const wrappedComponent = shallow(<_NavigationTree selectObject={selectObject} mstrData={{}} />);
+    const givenSubtype = mstrObjectEnum.mstrObjectType.report.subtypes[0];
+    const givenObjectName = 'objectName';
+    const givenTarget = {};
+    const givenMyLibrary = false;
+    const mockSelectObject = jest.fn();
+
+    const wrappedComponent = shallow(<_NavigationTree
+      {...mockFunctionsAndProps}
+      selectObject={mockSelectObject}
+    />);
     // when
-    await wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype);
+    wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype, givenObjectName, givenTarget, givenMyLibrary);
     // then
-    expect(isPromptedResponse).toBeCalledWith(givenObjectId, givenProjectId, givenObjectTypeName);
-    expect(selectObject).toBeCalledTimes(2);
-    expect(selectObject.mock.calls[0][0]).toEqual({
-      chosenObjectId: null,
-      chosenProjectId: null,
-      chosenSubtype: null,
-      isPrompted: null,
-      objectType: null,
-    });
-    expect(selectObject.mock.calls[1][0]).toEqual({
+    const expectedObject = {
       chosenObjectId: givenObjectId,
+      chosenObjectName: givenObjectName,
       chosenProjectId: givenProjectId,
       chosenSubtype: givenSubtype,
-      isPrompted: givenIsPrompted,
-      objectType: givenObjectType,
-    });
+      objectType: mstrObjectEnum.mstrObjectType.report,
+      chosenLibraryDossier: undefined
+    };
+    expect(mockSelectObject).toBeCalledWith(expectedObject);
   });
 
-  it('should call requestDossierOpen on handleOk if provided objectType is dossier', () => {
+  it('should call selectObject on onObjectChosen handler with myLibrary data', () => {
+    // given
+    const givenObjectId = 'objectId';
+    const givenProjectId = 'projectId';
+    const givenSubtype = mstrObjectEnum.mstrObjectType.dossier.subtypes[0];
+    const givenObjectName = 'objectName';
+    const givenTarget = { id: 'LibraryObjectId' };
+    const givenMyLibrary = true;
+    const mockSelectObject = jest.fn();
+
+    const wrappedComponent = shallow(<_NavigationTree
+      {...mockFunctionsAndProps}
+      selectObject={mockSelectObject}
+    />);
+    // when
+    wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype, givenObjectName, givenTarget, givenMyLibrary);
+    // then
+    const expectedObject = {
+      chosenObjectId: givenTarget.id,
+      chosenObjectName: givenObjectName,
+      chosenProjectId: givenProjectId,
+      chosenSubtype: givenSubtype,
+      objectType: mstrObjectEnum.mstrObjectType.dossier,
+      chosenLibraryDossier: givenObjectId
+    };
+    expect(mockSelectObject).toBeCalledWith(expectedObject);
+  });
+
+  it('should call requestDossierOpen on handleOk if provided objectType is dossier', async () => {
     // given
     const mstrData = {
       envUrl: 'env',
       token: 'token',
       projectId: 'projectId',
     };
-    const objectType = { name: mstrObjectEnum.mstrObjectType.dossier.name };
+    const givenObjectId = 'objectId';
+    const givenProjectId = 'projectId';
+    const givenIsPrompted = 'customPromptAnswer';
+    const givenSubtype = mstrObjectEnum.mstrObjectType.dossier.subtypes[0];
     const mockRequestImport = jest.fn();
     const mockRequestDossierOpen = jest.fn();
-    const wrappedComponent = shallow(<_NavigationTree mstrData={mstrData} objectType={objectType} requestImport={mockRequestImport} requestDossierOpen={mockRequestDossierOpen} />);
+    jest.spyOn(mstrObjectRestService, 'isPrompted')
+      .mockImplementationOnce(async () => givenIsPrompted);
+    const wrappedComponent = shallow(
+      <_NavigationTree
+        mstrData={mstrData}
+        chosenObjectId={givenObjectId}
+        chosenProjectId={givenProjectId}
+        chosenSubtype={givenSubtype}
+        {...mockFunctionsAndProps}
+        requestImport={mockRequestImport}
+        requestDossierOpen={mockRequestDossierOpen}
+      />
+    );
     // when
-    wrappedComponent.instance().handleOk();
+    await wrappedComponent.instance().handleOk();
     // then
-    expect(mockRequestImport).not.toHaveBeenCalled();
-    expect(mockRequestDossierOpen).toHaveBeenCalled();
+    expect(mockRequestImport).not.toBeCalled();
+    expect(mockRequestDossierOpen).toBeCalled();
   });
 
-  it('should call requestImport on handleOk if provided objectType is not dossier', () => {
+  it('should call requestImport on handleOk if provided objectType is dataset', () => {
     // given
     const mstrData = {
       envUrl: 'env',
       token: 'token',
       projectId: 'projectId',
     };
-    const objectType = { name: mstrObjectEnum.mstrObjectType.report.name };
+    const givenObjectId = 'objectId';
+    const givenProjectId = 'projectId';
+    const givenSubtype = mstrObjectEnum.mstrObjectType.dataset.subtypes[0];
     const mockRequestImport = jest.fn();
-    const mockHandleDossierOpen = jest.fn();
-    const wrappedComponent = shallow(<_NavigationTree mstrData={mstrData} objectType={objectType} requestImport={mockRequestImport} handleDossierOpen={mockHandleDossierOpen} />);
+    const mockRequestDossierOpen = jest.fn();
+    const wrappedComponent = shallow(
+      <_NavigationTree
+        mstrData={mstrData}
+        chosenObjectId={givenObjectId}
+        chosenProjectId={givenProjectId}
+        chosenSubtype={givenSubtype}
+        {...mockFunctionsAndProps}
+        requestImport={mockRequestImport}
+        requestDossierOpen={mockRequestDossierOpen}
+      />
+    );
     // when
     wrappedComponent.instance().handleOk();
     // then
-    expect(mockRequestImport).toHaveBeenCalled();
-    expect(mockHandleDossierOpen).not.toHaveBeenCalled();
+    expect(mockRequestImport).toBeCalled();
+    expect(mockRequestDossierOpen).not.toBeCalled();
   });
 
-  it('should connect on DB when navigation-tree is mounted', () => {
+  it('should call handlePopupErrors on checkIfPrompted bad response in handleOk', () => {
+    // given
+    const mstrData = {
+      envUrl: 'env',
+      token: 'token',
+      projectId: 'projectId',
+    };
+    const givenObjectId = 'objectId';
+    const givenProjectId = 'projectId';
+    const givenSubtype = mstrObjectEnum.mstrObjectType.report.subtypes[0];
+    const mockHandlePopupErrors = jest.fn();
+    jest.spyOn(mstrObjectRestService, 'isPrompted')
+      .mockImplementationOnce(() => { throw new Error() });
+    const wrappedComponent = shallow(
+      <_NavigationTree
+        mstrData={mstrData}
+        chosenObjectId={givenObjectId}
+        chosenProjectId={givenProjectId}
+        chosenSubtype={givenSubtype}
+        {...mockFunctionsAndProps}
+        handlePopupErrors={mockHandlePopupErrors}
+      />
+    );
+    // when
+    wrappedComponent.instance().handleOk();
+    // then
+    expect(mockHandlePopupErrors).toBeCalled();
+  });
+
+  it.skip('should connect on DB when navigation-tree is mounted', () => {
     // given
     const connectToDB = jest.fn();
     const mstrData = {
@@ -202,7 +332,10 @@ describe.skip('NavigationTree', () => {
       connectToDB,
     };
     // when
-    shallow(<_NavigationTree mstrData={mstrData} cache={CACHE_STATE} />);
+    shallow(<_NavigationTree
+      mstrData={mstrData}
+      {...mockFunctionsAndProps}
+    />);
     // then
     expect(connectToDB).toHaveBeenCalled();
   });
@@ -213,18 +346,14 @@ describe.skip('NavigationTree', () => {
     const givenError = new Error('Session error');
     authenticationHelper.validateAuthToken.mockRejectedValue(givenError);
     const messageParent = jest.spyOn(Office.context.ui, 'messageParent');
-    const wrappedComponent = shallow(<_NavigationTree />);
+    const wrappedComponent = shallow(<_NavigationTree
+      {...mockFunctionsAndProps}
+    />);
     // when
     wrappedComponent.instance().refresh();
     // then
-    expect(messageParent).toBeCalled();
-    expect(messageParent).toBeCalledWith(JSON.stringify({
-      command: selectorProperties.commandError,
-      error:{
-        ...givenError,
-        message: givenError.message,
-      }
-    }));
-    expect(true).toBeFalsy();
+    expect(messageParent).toBeCalledTimes(2);
+    expect(messageParent.mock.calls[0][0]).toEqual(JSON.stringify({ command: selectorProperties.commandCancel }));
+    expect(messageParent.mock.calls[1][0]).toEqual(JSON.stringify({ command: selectorProperties.commandOnUpdate, body: {} }));
   });
 });
