@@ -196,6 +196,7 @@ export class _OfficeLoadedFile extends React.Component {
           if (isProtected) {
             const error = new Error(t('Worksheet is protected'))
             errorService.handleError(error)
+            return;
           } if (await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport, fileName)) {
             (await refreshReportsArray([{ bindId: bindingId, objectType }], false));
           }
