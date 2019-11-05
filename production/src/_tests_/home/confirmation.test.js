@@ -2,6 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { _Confirmation } from '../../home/confirmation';
 import { officeApiHelper } from '../../office/office-api-helper';
+import { errorService } from '../../error/error-handler';
 
 describe('Confirmation', () => {
   afterEach(() => {
@@ -14,6 +15,7 @@ describe('Confirmation', () => {
     const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
     const mockDeleteTableBody = jest.spyOn(officeApiHelper, 'deleteObjectTableBody').mockImplementation(() => { });
     const mockClearEmptyRow = jest.spyOn(officeApiHelper, 'clearEmptyCrosstabRow').mockImplementation(() => { });
+    const mockIsProtected = jest.spyOn(officeApiHelper, 'isWorksheetProtected').mockImplementation(() => false)
     const mockCheckObject = jest.spyOn(officeApiHelper, 'checkIfObjectExist').mockImplementation(() => true);
     const mockGetTable = jest.spyOn(officeApiHelper, 'getTable').mockImplementation(() => ({
       showHeaders: null,
@@ -37,6 +39,7 @@ describe('Confirmation', () => {
     await expect(mockGetContext).toBeCalled();
     expect(mockToggleIsClearingFlag).toBeCalled();
     expect(mockToggleIsConfirmFlag).toBeCalled();
+    await expect(mockIsProtected).toBeCalled();
     await expect(mockCheckObject).toBeCalled();
     await expect(mockGetTable).toBeCalled();
     expect(mockClearEmptyRow).toBeCalled();
@@ -52,6 +55,7 @@ describe('Confirmation', () => {
     const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
     const mockDeleteTableBody = jest.spyOn(officeApiHelper, 'deleteObjectTableBody').mockImplementation(() => { });
     const mockClearEmptyRow = jest.spyOn(officeApiHelper, 'clearEmptyCrosstabRow').mockImplementation(() => { });
+    const mockIsProtected = jest.spyOn(officeApiHelper, 'isWorksheetProtected').mockImplementation(() => false)
     const mockCheckObject = jest.spyOn(officeApiHelper, 'checkIfObjectExist').mockImplementation(() => false);
     const mockGetTable = jest.spyOn(officeApiHelper, 'getTable').mockImplementation(() => ({
       showHeaders: null,
@@ -75,6 +79,7 @@ describe('Confirmation', () => {
     await expect(mockGetContext).toBeCalled();
     expect(mockToggleIsClearingFlag).toBeCalled();
     expect(mockToggleIsConfirmFlag).toBeCalled();
+    await expect(mockIsProtected).toBeCalled();
     await expect(mockCheckObject).toBeCalled();
     await expect(mockGetTable).not.toBeCalled();
     expect(mockClearEmptyRow).not.toBeCalled();
@@ -82,6 +87,34 @@ describe('Confirmation', () => {
     await expect(mockDeleteTableBody).not.toBeCalled();
     expect(mockToggleIsClearingFlag).toBeCalled();
     expect(mockToggleSecuredFlag).not.toBeCalled();
+  });
+
+  it('should throw error if isProtected is true', async () => {
+    // given
+    const mockSync = jest.fn();
+    const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
+    const mockIsProtected = jest.spyOn(officeApiHelper, 'isWorksheetProtected').mockImplementation(() => true)
+    const mockHandleError = jest.spyOn(errorService, 'handleError').mockImplementation(() => { })
+
+    const mockToggleIsConfirmFlag = jest.fn();
+    const mockToggleIsClearingFlag = jest.fn();
+    const mockToggleSecuredFlag = jest.fn();
+    const mockReportArray = createMockFilesArray();
+    const confirmationWrapper = mount(<_Confirmation
+      reportArray={mockReportArray}
+      isSecured={false}
+      toggleIsConfirmFlag={mockToggleIsConfirmFlag}
+      toggleIsClearingFlag={mockToggleIsClearingFlag}
+      toggleSecuredFlag={mockToggleSecuredFlag} />);
+    const okWrapper = confirmationWrapper.find('#confirm-btn');
+    // when
+    okWrapper.simulate('click');
+    // then
+    await expect(mockGetContext).toBeCalled();
+    expect(mockToggleIsClearingFlag).toBeCalled();
+    expect(mockToggleIsConfirmFlag).toBeCalled();
+    await expect(mockIsProtected).toBeCalled();
+    expect(mockHandleError).toBeCalled()
   });
 
   it('should set isConfirm flag to false when Cancel is clicked', async () => {
