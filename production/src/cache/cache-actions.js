@@ -136,11 +136,11 @@ export function refreshCache() {
     const cache = new DB(userID || 'cache');
     // Overwrite cache
     Promise.all([
-      cache.putData(PROJECTS_DB_ID, [], true),
-      cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, true),
-      cache.putData(MY_LIBRARY_DB_ID, [], true),
-      cache.putData(LOADING_DB + ENV_LIBRARY_DB_ID, true),
-      cache.putData(ENV_LIBRARY_DB_ID, [], true),
+      cache.putData(PROJECTS_DB_ID, []),
+      cache.putData(LOADING_DB + MY_LIBRARY_DB_ID),
+      cache.putData(MY_LIBRARY_DB_ID, []),
+      cache.putData(LOADING_DB + ENV_LIBRARY_DB_ID),
+      cache.putData(ENV_LIBRARY_DB_ID, []),
     ]).then(() => {
       fetchObjects(dispatch, cache);
     });
