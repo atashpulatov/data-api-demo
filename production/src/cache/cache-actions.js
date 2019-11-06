@@ -77,7 +77,7 @@ export function fetchObjects(dispatch, cache) {
     cache.putData(LOADING_DB + ENV_LIBRARY_DB_ID, true);
     getObjectList((objects) => {
       objects = addNestedPropertiesToObjects(objects, projects);
-      return cache.putData(ENV_LIBRARY_DB_ID, objects, true)
+      return cache.putData(ENV_LIBRARY_DB_ID, objects, true);
     })
       .catch(console.error)
       .finally(() => {
@@ -95,14 +95,13 @@ export function fetchObjectsFallback() {
     fetchProjects((projects) => {
       dispatch(addProjects(projects));
 
-      // NOTE: My library removed from m2020
-      // dispatch(myLibraryLoading(true));
-      // getMyLibraryObjectList((objects) => dispatch(addMyLibraryObjects(objects, true)))
-      //   .catch(console.error)
-      //   .finally(() => dispatch(myLibraryLoading(false)));
+      // My Library
+      dispatch(myLibraryLoading(true));
+      getMyLibraryObjectList((objects) => dispatch(addMyLibraryObjects(objects, true)))
+        .catch(console.error)
+        .finally(() => dispatch(myLibraryLoading(false)));
 
       // Environment library
-      // console.time('Fetch environment objects');
       dispatch(objectListLoading(true));
       getObjectList((objects) => {
         objects = addNestedPropertiesToObjects(objects, projects);
@@ -136,7 +135,13 @@ export function refreshCache() {
     const { userID } = sessionReducer;
     const cache = new DB(userID || 'cache');
     // Overwrite cache
-    cache.reset().then(() => {
+    Promise.all([
+      cache.putData(PROJECTS_DB_ID, [], true),
+      cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, true),
+      cache.putData(MY_LIBRARY_DB_ID, [], true),
+      cache.putData(LOADING_DB + ENV_LIBRARY_DB_ID, true),
+      cache.putData(ENV_LIBRARY_DB_ID, [], true),
+    ]).then(() => {
       fetchObjects(dispatch, cache);
     });
   };
