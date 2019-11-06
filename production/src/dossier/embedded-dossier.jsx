@@ -13,6 +13,7 @@ export default class _EmbeddedDossier extends React.Component {
     this.onVizSelectionHandler = this.onVizSelectionHandler.bind(this);
     this.dossierData = { promptsAnswers: props.mstrData.promptsAnswers, };
     this.promptsAnsweredHandler = this.promptsAnsweredHandler.bind(this);
+    this.embeddedDossier = null;
   }
 
   componentDidMount() {
@@ -139,12 +140,19 @@ export default class _EmbeddedDossier extends React.Component {
       },
     };
 
-    microstrategy.dossier.create(props);
+    this.embeddedDossier = await microstrategy.dossier.create(props);
   }
 
   promptsAnsweredHandler(promptsAnswers) {
-    const { handlePromptAnswerw } = this.props;
-    handlePromptAnswerw(promptsAnswers)
+    const { handlePromptAnswer } = this.props;
+    if (this.embeddedDossier) {
+      this.embeddedDossier.getDossierInstanceId().then((newInstanceId) => {
+        this.dossierData.preparedInstanceId = newInstanceId;
+        handlePromptAnswer(promptsAnswers, newInstanceId);
+      });
+    } else {
+      handlePromptAnswer(promptsAnswers);
+    }
   }
 
   render() {

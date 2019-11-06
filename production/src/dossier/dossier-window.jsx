@@ -23,7 +23,7 @@ export default class _DossierWindow extends React.Component {
     };
     this.handleSelection = this.handleSelection.bind(this);
     this.handleOk = this.handleOk.bind(this);
-    this.handlePromptAnswerw = this.handlePromptAnswerw.bind(this);
+    this.handlePromptAnswer = this.handlePromptAnswer.bind(this);
   }
 
   handleCancel() {
@@ -48,7 +48,8 @@ export default class _DossierWindow extends React.Component {
   }
 
   handleOk() {
-    const { chosenObjectName, chosenObjectId, chosenProjectId, requestImport, selectObject, mstrData: { reportId, projectId, isEdit } } = this.props;
+    const { chosenObjectName, chosenObjectId, chosenProjectId, requestImport, selectObject, editedReport } = this.props;
+    const { reportId, projectId, isEdit } = editedReport;
     const { chapterKey, visualizationKey, promptsAnswers, preparedInstanceId } = this.state;
     const selectedVisualization = {
       chosenObjectName,
@@ -66,15 +67,15 @@ export default class _DossierWindow extends React.Component {
     requestImport();
   }
 
-  handlePromptAnswerw(newAnswerws) {
-    this.setState({ promptsAnswers: newAnswerws })
+  handlePromptAnswer(newAnswerws, newInstanceId) {
+    this.setState({ promptsAnswers: newAnswerws, preparedInstanceId: newInstanceId });
   }
 
   render() {
     const { chosenObjectName, chosenObjectId, chosenProjectId, handleBack, t, mstrData, editedReport, handlePopupErrors } = this.props;
     const { envUrl, token } = mstrData;
     const { reportId: editetObjectId, projectId: editedProjectId, instanceId: editedInstanceId, dossierName: editedObjectName, promptsAnswers: editedPromptsAnswers } = editedReport;
-    const { isVisualisationSelected, promptsAnswers } = this.state;
+    const { isVisualisationSelected, promptsAnswers, preparedInstanceId } = this.state;
     const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME)
     const propsToPass = {
       envUrl,
@@ -100,7 +101,7 @@ export default class _DossierWindow extends React.Component {
         <EmbeddedDossier
           mstrData={propsToPass}
           handleSelection={this.handleSelection}
-          handlePromptAnswerw={this.handlePromptAnswerw}
+          handlePromptAnswer={this.handlePromptAnswer}
           handlePopupErrors={handlePopupErrors}
         />
         <PopupButtons
