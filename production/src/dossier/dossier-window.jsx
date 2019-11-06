@@ -9,6 +9,7 @@ import { EmbeddedDossier } from './embedded-dossier';
 import { actions } from '../navigation/navigation-tree-actions';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './dossier.css';
+import { DEFAULT_PROJECT_NAME, } from '../storage/navigation-tree-reducer';
 
 export default class _DossierWindow extends React.Component {
   constructor(props) {
@@ -22,6 +23,7 @@ export default class _DossierWindow extends React.Component {
     };
     this.handleSelection = this.handleSelection.bind(this);
     this.handleOk = this.handleOk.bind(this);
+    this.handlePromptAnswer = this.handlePromptAnswer.bind(this);
   }
 
   handleCancel() {
@@ -46,9 +48,11 @@ export default class _DossierWindow extends React.Component {
   }
 
   handleOk() {
-    const { chosenObjectId, chosenProjectId, requestImport, selectObject, mstrData: { reportId, projectId, isEdit } } = this.props;
+    const { chosenObjectName, chosenObjectId, chosenProjectId, requestImport, selectObject, editedReport } = this.props;
+    const { reportId, projectId, isEdit } = editedReport;
     const { chapterKey, visualizationKey, promptsAnswers, preparedInstanceId } = this.state;
     const selectedVisualization = {
+      chosenObjectName,
       chosenObjectId: chosenObjectId || reportId,
       chosenProjectId: chosenProjectId || projectId,
       chosenSubtype: mstrObjectEnum.mstrObjectType.visualization.subtypes,
@@ -63,21 +67,30 @@ export default class _DossierWindow extends React.Component {
     requestImport();
   }
 
+  handlePromptAnswer(newAnswerws, newInstanceId) {
+    this.setState({ promptsAnswers: newAnswerws, preparedInstanceId: newInstanceId });
+  }
+
   render() {
-    const { chosenObjectName, chosenObjectId, chosenProjectId, handleBack, t, mstrData: { envUrl, token, reportId, projectId, instanceId, promptsAnswers, dossierName }, handlePopupErrors } = this.props;
-    const { isVisualisationSelected } = this.state;
+    const { chosenObjectName, chosenObjectId, chosenProjectId, handleBack, t, mstrData, editedReport, handlePopupErrors } = this.props;
+    const { envUrl, token } = mstrData;
+    const { reportId: editetObjectId, projectId: editedProjectId, instanceId: editedInstanceId, dossierName: editedObjectName, promptsAnswers: editedPromptsAnswers } = editedReport;
+    const { isVisualisationSelected, promptsAnswers } = this.state;
+    const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME)
     const propsToPass = {
       envUrl,
       token,
-      dossierId: chosenObjectId || reportId,
-      projectId: chosenProjectId || projectId,
-      promptsAnswers,
-      instanceId,
+      dossierId: isEdit ? editetObjectId : chosenObjectId,
+      projectId: isEdit ? editedProjectId : chosenProjectId,
+      promptsAnswers: isEdit ? editedPromptsAnswers : promptsAnswers,
+
     };
+    if (isEdit) propsToPass.instanceId = editedInstanceId;
+    const dossierFinalName = (isEdit) ? editedObjectName : chosenObjectName;
     return (
       <div>
-        <h1 title={dossierName || chosenObjectName} className="ant-col folder-browser-title">
-          {`${t('Import Dossier')} > ${dossierName || chosenObjectName}`}
+        <h1 title={dossierFinalName} className="ant-col folder-browser-title">
+          {`${t('Import Dossier')} > ${dossierFinalName}`}
         </h1>
         <span className="dossier-window-information-frame">
           <MSTRIcon clasName="dossier-window-information-icon" type="info-icon" />
@@ -88,6 +101,7 @@ export default class _DossierWindow extends React.Component {
         <EmbeddedDossier
           mstrData={propsToPass}
           handleSelection={this.handleSelection}
+          handlePromptAnswer={this.handlePromptAnswer}
           handlePopupErrors={handlePopupErrors}
         />
         <PopupButtons
@@ -116,11 +130,16 @@ _DossierWindow.propTypes = {
   requestImport: PropTypes.func,
   selectObject: PropTypes.func,
   handlePopupErrors: PropTypes.func,
+  editedReport: PropTypes.shape({
+    reportId: PropTypes.string,
+    projectId: PropTypes.string,
+    isEdit: PropTypes.bool
+  }),
 };
 
 _DossierWindow.defaultProps = {
   chosenObjectId: 'default id',
-  chosenObjectName: 'default name',
+  chosenObjectName: DEFAULT_PROJECT_NAME,
   chosenProjectId: 'default id',
   handleBack: () => { },
   t: (text) => text,
@@ -132,6 +151,11 @@ _DossierWindow.defaultProps = {
   requestImport: () => { },
   selectObject: () => { },
   handlePopupErrors: () => { },
+  editedReport: {
+    reportId: undefined,
+    projectId: undefined,
+    isEdit: false
+  },
 };
 
 function mapStateToProps(state) {
@@ -143,4 +167,9 @@ function mapStateToProps(state) {
   };
 }
 
-export const DossierWindow = connect(mapStateToProps, actions)(withTranslation('common')(_DossierWindow));
+const mapActionsToProps = {
+  requestImport: actions.requestImport,
+  selectObject: actions.selectObject,
+};
+
+export const DossierWindow = connect(mapStateToProps, mapActionsToProps)(withTranslation('common')(_DossierWindow));
