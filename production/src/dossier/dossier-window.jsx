@@ -75,7 +75,7 @@ export default class _DossierWindow extends React.Component {
     const { chosenObjectName, chosenObjectId, chosenProjectId, handleBack, t, mstrData, editedReport, handlePopupErrors } = this.props;
     const { envUrl, token } = mstrData;
     const { reportId: editetObjectId, projectId: editedProjectId, instanceId: editedInstanceId, dossierName: editedObjectName, promptsAnswers: editedPromptsAnswers } = editedReport;
-    const { isVisualisationSelected, promptsAnswers, preparedInstanceId } = this.state;
+    const { isVisualisationSelected, promptsAnswers } = this.state;
     const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME)
     const propsToPass = {
       envUrl,
@@ -130,11 +130,16 @@ _DossierWindow.propTypes = {
   requestImport: PropTypes.func,
   selectObject: PropTypes.func,
   handlePopupErrors: PropTypes.func,
+  editedReport: PropTypes.shape({
+    reportId: PropTypes.string,
+    projectId: PropTypes.string,
+    isEdit: PropTypes.bool
+  }),
 };
 
 _DossierWindow.defaultProps = {
   chosenObjectId: 'default id',
-  chosenObjectName: 'default name',
+  chosenObjectName: DEFAULT_PROJECT_NAME,
   chosenProjectId: 'default id',
   handleBack: () => { },
   t: (text) => text,
@@ -146,6 +151,11 @@ _DossierWindow.defaultProps = {
   requestImport: () => { },
   selectObject: () => { },
   handlePopupErrors: () => { },
+  editedReport: {
+    reportId: undefined,
+    projectId: undefined,
+    isEdit: false
+  },
 };
 
 function mapStateToProps(state) {

@@ -22,7 +22,7 @@ describe('Dossierwindow', () => {
 
   it('should call proper method on cancel action', () => {
     // given
-    const cancelObject = {command: selectorProperties.commandCancel,};
+    const cancelObject = { command: selectorProperties.commandCancel, };
     const office = jest.spyOn(Office.context.ui, 'messageParent');
     const wrappedComponent = shallow(<_DossierWindow />);
     // when
@@ -56,8 +56,9 @@ describe('Dossierwindow', () => {
     const componentState = { isVisualisationSelected: true, chapterKey: 'C40', visualizationKey: 'V78', promptsAnswers: [] };
     const selectObject = jest.fn();
     const requestImport = jest.fn();
-    const componentProps = { chosenObjectId: 'ABC123', chosenProjectId: 'DEF456', requestImport, selectObject };
+    const componentProps = { chosenObjectName: 'selectedObject', chosenObjectId: 'ABC123', chosenProjectId: 'DEF456', requestImport, selectObject };
     const mockupVisualisationData = {
+      chosenObjectName: 'selectedObject',
       chosenObjectId: 'ABC123',
       chosenProjectId: 'DEF456',
       chosenSubtype: mstrObjectEnum.mstrObjectType.visualization.subtypes,
@@ -66,6 +67,7 @@ describe('Dossierwindow', () => {
       chosenVisualizationKey: 'V78',
       promptsAnswers: [],
       preparedInstanceId: '',
+      isEdit: false,
     };
     const componentWrapper = shallow(<_DossierWindow />);
     componentWrapper.setProps(componentProps);
