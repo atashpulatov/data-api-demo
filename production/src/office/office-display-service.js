@@ -134,7 +134,7 @@ class OfficeDisplayService {
 
       if (objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
         mstrTable.id = objectId;
-        visualizationInfo.dossierStructure = await this.getDossierStructure(projectId, objectId, visualizationInfo, preparedInstanceId);
+        visualizationInfo = await this.getVisualizationInfo(projectId, objectId, visualizationInfo.visualizationKey, preparedInstanceId);
       }
 
       // Save to store
@@ -442,27 +442,28 @@ class OfficeDisplayService {
     return bytes / 1000000;
   }
 
-  getDossierStructure = async (projectId, objectId, visualizationInfo, preparedInstanceId) => {
+  getDossierStructure = async (projectId, objectId, visualizationKey, preparedInstanceId) => {
     console.time('Get dossier structure');
-    const { visualizationKey, chapterKey } = visualizationInfo;
     const dossierDefinition = await getDossierDefinition(projectId, objectId, preparedInstanceId);
-    const dossierStructure = { dossierName: dossierDefinition.name };
-    const chapter = dossierDefinition.chapters.find((el) => el.key === chapterKey);
-    dossierStructure.chapterName = chapter.name;
-    const { pages } = chapter;
-    if (pages.length === 1) {
-      dossierStructure.pageName = chapter.pages[0].name;
-    } else {
-      for (let i = 0; i < pages.length; i++) {
-        for (let j = 0; j < pages[i].visualizations.length; j++) {
-          if (pages[i].visualizations[j].key === visualizationKey) {
-            dossierStructure.pageName = pages[i].name;
+    for (const chapter of dossierDefinition.chapters) {
+      for (const page of chapter.pages) {
+        for (const visualization of page.visualizations) {
+          if (visualization.key === visualizationKey) {
+            return {
+              chapterKey: chapter.key,
+              visualizationKey,
+              dossierStructure: {
+                chapterName: chapter.name,
+                dossierName: dossierDefinition.name,
+                pageName: page.name
+              }
+            }
           }
         }
       }
     }
     console.timeEnd('Get dossier structure');
-    return dossierStructure;
+    return undefined;
   }
 
 
