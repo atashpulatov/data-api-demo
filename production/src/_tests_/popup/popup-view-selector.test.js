@@ -8,13 +8,15 @@ import { PopupTypeEnum } from '../../home/popup-type-enum';
 import { NavigationTree } from '../../navigation/navigation-tree';
 import { AttributeSelectorWindow } from '../../attribute-selector/attribute-selector-window';
 import { DossierWindow } from '../../dossier/dossier-window';
+import { createInstance, answerPrompts } from '../../mstr-object/mstr-object-rest-service';
+
+jest.mock('../../mstr-object/mstr-object-rest-service');
+jest.mock('../../office/office-context');
 
 describe('PopupViewSelector', () => {
   it('should render navigation tree when requested', () => {
     // given
-    const location = {
-      search: {},
-    };
+    const location = { search: {}, };
     const props = {
       popupType: PopupTypeEnum.navigationTree,
       connectToDB: jest.fn(),
@@ -34,9 +36,7 @@ describe('PopupViewSelector', () => {
 
   it('should render navigation tree when requested', () => {
     // given
-    const location = {
-      search: {},
-    };
+    const location = { search: {}, };
     const props = {
       popupType: PopupTypeEnum.dossierWindow,
       propsToPass: {},
@@ -55,9 +55,7 @@ describe('PopupViewSelector', () => {
 
   it('should render AttributeSelectorWindow when requested', () => {
     // given
-    const location = {
-      search: {},
-    };
+    const location = { search: {}, };
     const props = {
       popupType: PopupTypeEnum.dataPreparation,
       propsToPass: {},
@@ -76,17 +74,11 @@ describe('PopupViewSelector', () => {
 
   it('should render AttributeSelectorWindow with edit mode when requested', () => {
     // given
-    const location = {
-      search: {},
-    };
+    const location = { search: {}, };
     const props = {
       popupType: PopupTypeEnum.editFilters,
-      propsToPass: {
-        passedProps: 'passedProps',
-      },
-      editedReport: {
-        reportContent: 'reportToEdit',
-      },
+      propsToPass: { passedProps: 'passedProps', },
+      editedReport: { reportContent: 'reportToEdit', },
       authToken: 'token',
     };
     // when
@@ -109,9 +101,7 @@ describe('PopupViewSelector', () => {
 
   it('should handle request import when not prompted', () => {
     // given
-    const location = {
-      search: {},
-    };
+    const location = { search: {}, };
     const resultAction = {
       command: selectorProperties.commandOk,
       chosenObject: 'objectId',
@@ -144,9 +134,7 @@ describe('PopupViewSelector', () => {
 
   it('should navigate to prompts window request import when prompted', () => {
     // given
-    const location = {
-      search: {},
-    };
+    const location = { search: {}, };
     const propsToPass = {
       chosenObjectId: 'objectId',
       chosenProjectId: 'projectId',
@@ -168,11 +156,67 @@ describe('PopupViewSelector', () => {
     expect(selectorWrapped.find(PromptsWindow).get(0)).toBeTruthy();
   });
 
+  it('should invoke implementations inside proceedToImport', () => {
+    // given
+
+    const props = {
+      importRequested: true,
+      isPrompted: false,
+      chosenChapterKey: 'chosenChapterKey',
+      chosenObjectId: 'objectId',
+      chosenProjectId: 'projectId',
+      chosenSubtype: 'chosenSubtype',
+      popupType: PopupTypeEnum.dataPreparation,
+      authToken: 'token',
+      dossierData: {
+        instanceId: 'instanceId',
+        isReprompt: true,
+      },
+      editedReport: {
+        selectedAttributes: ['1', '2'],
+        selectedMetrics: ['1', '2'],
+        selectedFilters: {},
+      },
+      propsToPass: {
+        envUrl: 'envUrl',
+        reportId: 'objectId',
+        projectId: 'projectId',
+        reportName: 'reportName',
+        reportType: 'reportType',
+        reportSubtype: 'reportSubtype',
+      },
+      startImport: jest.fn(),
+      startLoading: jest.fn(),
+    };
+    const visualizationInfo = {
+      chapterKey: props.chosenChapterKey,
+      visualizationKey: props.visualizationKey,
+    }
+    const okObject = {
+      command: selectorProperties.commandOk,
+      chosenObject: props.chosenObjectId,
+      chosenProject: props.chosenProjectId,
+      chosenSubtype: props.chosenSubtype,
+      isPrompted: props.isPrompted,
+      promptsAnswers: props.promptsAnswers,
+      visualizationInfo,
+      preparedInstanceId: props.preparedInstanceId,
+    }
+    // when
+    // eslint-disable-next-line react/jsx-pascal-case
+    shallow(<_PopupViewSelector
+      location={location}
+      {...props}
+      methods={{}}
+    />);
+    // then
+    expect(props.startLoading).toHaveBeenCalled();
+    expect(props.startImport).toHaveBeenCalled();
+  });
+
   it('should navigate to prompts window when data preparation for prompted called', () => {
     // given
-    const location = {
-      search: {},
-    };
+    const location = { search: {}, };
     const propsToPass = {
       chosenObjectId: 'objectId',
       chosenProjectId: 'projectId',
@@ -196,9 +240,7 @@ describe('PopupViewSelector', () => {
 
   it('should handle request import when prompted and got dossierData', () => {
     // given
-    const location = {
-      search: {},
-    };
+    const location = { search: {}, };
     const propsToPass = {
       chosenObjectId: 'objectId',
       chosenProjectId: 'projectId',
@@ -238,9 +280,7 @@ describe('PopupViewSelector', () => {
 
   it.skip('should handle prepare data when prompted and got dossierData', () => {
     // given
-    const location = {
-      search: {},
-    };
+    const location = { search: {}, };
     const props = {
       popupType: PopupTypeEnum.dataPreparation,
       authToken: 'token',
@@ -287,9 +327,7 @@ describe('PopupViewSelector', () => {
   it('should proceed to import when prompts answered and no attributes, metrics and filters', () => {
     // given
     const instanceId = 'instanceId';
-    const location = {
-      search: {},
-    };
+    const location = { search: {}, };
     const reduxMethods = {
       startImport: jest.fn(),
       startLoading: jest.fn(),
@@ -297,9 +335,7 @@ describe('PopupViewSelector', () => {
     const props = {
       popupType: PopupTypeEnum.repromptingWindow,
       authToken: 'token',
-      propsToPass: {
-        prop: 'prop',
-      },
+      propsToPass: { prop: 'prop', },
       preparedInstance: instanceId,
       isPrompted: true,
       editedReport: {
@@ -333,15 +369,11 @@ describe('PopupViewSelector', () => {
   it('should not clear attributes and metrics if going to edit filters from prompts window', () => {
     // given
     const instanceId = 'instanceId';
-    const location = {
-      search: {},
-    };
+    const location = { search: {}, };
     const props = {
       popupType: PopupTypeEnum.editFilters,
       authToken: 'token',
-      propsToPass: {
-        prop: 'prop',
-      },
+      propsToPass: { prop: 'prop', },
       preparedInstance: instanceId,
       isPrompted: true,
       editedReport: {
@@ -373,9 +405,7 @@ describe('PopupViewSelector', () => {
 
   it('should pass authToken', () => {
     // given
-    const location = {
-      search: {},
-    };
+    const location = { search: {}, };
     const props = {
       popupType: PopupTypeEnum.navigationTree,
       connectToDB: jest.fn(),
@@ -397,9 +427,7 @@ describe('PopupViewSelector', () => {
 
   it('should render not conent when no token provided', () => {
     // given
-    const location = {
-      search: {},
-    };
+    const location = { search: {}, };
     const props = {
       popupType: PopupTypeEnum.navigationTree,
       propsToPass: {},
@@ -418,9 +446,7 @@ describe('PopupViewSelector', () => {
 
   it('should open dossierWindow', () => {
     // given
-    const location = {
-      search: {},
-    };
+    const location = { search: {}, };
     const propsToPass = {
       authToken: 'token',
       dossierOpenRequested: true,
@@ -437,11 +463,114 @@ describe('PopupViewSelector', () => {
     expect(selectorWrapped.find(DossierWindow).get(0)).toBeTruthy();
   });
 
+  it('should invoke obtainInstanceWithPromptsAnswers', async () => {
+    // given
+    const props = {
+      dossierData: { instanceId: 'instanceId' },
+      dossierOpenRequested: false,
+      methods: {},
+      importRequested: false,
+      authToken: 'token',
+      propsToPass: {
+        isPrompted: true,
+        projectId: '1',
+        reportId: '1'
+      },
+      preparePromptedReport: jest.fn()
+    };
+    createInstance.mockImplementationOnce(() => ({ status: 3, instanceId: 'abc' }));
+
+    // when
+    // eslint-disable-next-line react/jsx-pascal-case
+    await shallow(<_PopupViewSelector
+      {...props}
+    />);
+    // then
+    expect(createInstance).toHaveBeenCalled();
+    expect(props.preparePromptedReport).toHaveBeenCalled();
+  });
+
+  it('should do the necessary operations inside while of obtainInstanceWithPromptsAnswers', async () => {
+    // given
+    const props = {
+      dossierData: { instanceId: 'instanceId' },
+      dossierOpenRequested: false,
+      methods: {},
+      importRequested: false,
+      authToken: 'token',
+      propsToPass: {
+        isPrompted: true,
+        projectId: '1',
+        reportId: '1',
+      },
+      promptsAnswers: ['test1', 'test2', 'test3'],
+      preparePromptedReport: jest.fn()
+    };
+    const returnedValue = { status: 2, instanceId: 'abc' }
+    createInstance.mockImplementationOnce(() => (returnedValue));
+    const configPromptsMocked = {
+      objectId: props.propsToPass.reportId,
+      projectId: props.propsToPass.projectId,
+      instanceId: returnedValue.instanceId,
+      promptsAnswers: props.promptsAnswers[0]
+    }
+    // when
+    // eslint-disable-next-line react/jsx-pascal-case
+    await shallow(<_PopupViewSelector
+      {...props}
+    />);
+    // then
+    expect(answerPrompts).toBeCalledWith(configPromptsMocked)
+  });
+
+  it('should invoke implementations inside createBody when in obtainInstanceWithPromptsAnswers', async () => {
+    // given
+    const instanceId = 'instanceId';
+    const props = {
+      editedReport: {
+        instanceId,
+        selectedAttributes: ['1', '2'],
+        selectedMetrics: ['1', '2'],
+        selectedFilters: 'notEmptyThing',
+      },
+      dossierData: { instanceId: 'instanceId' },
+      dossierOpenRequested: false,
+      methods: {},
+      importRequested: false,
+      authToken: 'token',
+      promptsAnswers: ['test1', 'test2', 'test3'],
+      preparePromptedReport: jest.fn(),
+      propsToPass: {
+        isPrompted: true,
+        projectId: '1',
+        reportId: '1',
+      },
+    };
+
+    const returnedValue = { status: 3, instanceId: 'abc' }
+    createInstance.mockReturnValueOnce((returnedValue));
+
+
+    const body = {
+      template: {
+        attributes: ['1', '2'],
+        metrics: ['1', '2'],
+      },
+    }
+    // when
+    // eslint-disable-next-line react/jsx-pascal-case
+    shallow(<_PopupViewSelector
+      {...props}
+    />);
+    // then
+    expect(body.template.attributes[0]).toEqual(props.editedReport.selectedAttributes[0])
+    expect(body.template.metrics[0]).toEqual(props.editedReport.selectedMetrics[0])
+  });
+
+
   it('should open promptsWindow if prompted dossier was selected', () => {
     // given
-    const location = {
-      search: {},
-    };
+    const location = { search: {}, };
     const propsToPass = {
       authToken: 'token',
       isPrompted: true,
@@ -461,17 +590,13 @@ describe('PopupViewSelector', () => {
 
   it('should open dossierWindow when prompts answers for dossier were provided', () => {
     // given
-    const location = {
-      search: {},
-    };
+    const location = { search: {}, };
     const propsToPass = {
       authToken: 'token',
       isPrompted: true,
       dossierOpenRequested: true,
       promptsAnswers: ['whatever'],
-      dossierData: {
-        instanceId: 'whatever',
-      },
+      dossierData: { instanceId: 'whatever', },
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
@@ -513,12 +638,8 @@ describe('PopupViewSelector', () => {
       };
       const reduxState = {
         navigationTree: {},
-        sessionReducer: {
-          authToken: 'token',
-        },
-        popupReducer: {
-          editedReport: reportInRedux,
-        },
+        sessionReducer: { authToken: 'token', },
+        popupReducer: { editedReport: reportInRedux, },
       };
       // when
       const { editedReport } = mapStateToProps(reduxState);
@@ -548,12 +669,8 @@ describe('PopupViewSelector', () => {
       };
       const reduxState = {
         navigationTree: {},
-        sessionReducer: {
-          authToken: 'token',
-        },
-        popupReducer: {
-          editedReport: reportInRedux,
-        },
+        sessionReducer: { authToken: 'token', },
+        popupReducer: { editedReport: reportInRedux, },
       };
       // when
       const { editedReport } = mapStateToProps(reduxState);
@@ -580,12 +697,8 @@ describe('PopupViewSelector', () => {
       };
       const reduxState = {
         navigationTree: {},
-        sessionReducer: {
-          authToken: 'token',
-        },
-        popupReducer: {
-          editedReport: reportInRedux,
-        },
+        sessionReducer: { authToken: 'token', },
+        popupReducer: { editedReport: reportInRedux, },
       };
       // when
       const { editedReport } = mapStateToProps(reduxState);
@@ -610,12 +723,8 @@ describe('PopupViewSelector', () => {
       };
       const reduxState = {
         navigationTree: {},
-        sessionReducer: {
-          authToken: 'token',
-        },
-        popupReducer: {
-          editedReport: datesetInRedux,
-        },
+        sessionReducer: { authToken: 'token', },
+        popupReducer: { editedReport: datesetInRedux, },
       };
       // when
       const { editedReport } = mapStateToProps(reduxState);
@@ -635,12 +744,8 @@ describe('PopupViewSelector', () => {
       // given
       const reduxState = {
         navigationTree: {},
-        sessionReducer: {
-          authToken: 'token',
-        },
-        popupReducer: {
-          preparedInstance: 'preparedInstance',
-        },
+        sessionReducer: { authToken: 'token', },
+        popupReducer: { preparedInstance: 'preparedInstance', },
       };
       // when
       const { preparedInstance } = mapStateToProps(reduxState);

@@ -31,17 +31,28 @@ describe('Cache actions', () => {
     expect(action).toEqual(expectedAction);
   });
 
-  it.skip('should return add my library objects dispatch action', () => {
+  it('should return add myLibrary objects dispatch action with default append===false', () => {
     // given
     const testResult = ['test'];
     const expectedAction = {
       type: ADD_MY_LIBRARY_OBJECTS,
-      data: testResult,
+      data: { objects: testResult, append: false },
     };
-
     // when
     const action = addMyLibraryObjects(testResult);
+    // then
+    expect(action).toEqual(expectedAction);
+  });
 
+  it('should return add myLibrary objects dispatch action with append===true', () => {
+    // given
+    const testResult = ['test'];
+    const expectedAction = {
+      type: ADD_MY_LIBRARY_OBJECTS,
+      data: { objects: testResult, append: true },
+    };
+    // when
+    const action = addMyLibraryObjects(testResult, true);
     // then
     expect(action).toEqual(expectedAction);
   });

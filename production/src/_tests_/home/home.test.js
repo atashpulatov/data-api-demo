@@ -199,13 +199,7 @@ describe('Home', () => {
       const mockToggle = jest.fn();
       shallow(<_Header isSettings toggleIsSettingsFlag={mockToggle} />);
       // when
-      map.click({
-        target: {
-          classList: {
-            contains: () => false,
-          },
-        },
-      });
+      map.click({ target: { classList: { contains: () => false, }, }, });
       // then
       expect(mockToggle).toBeCalledWith(false);
     });
@@ -222,14 +216,47 @@ describe('Home', () => {
       // then
       expect(mockToggle).toBeCalledWith(false);
     });
+
     it('should unregister event listeners when unmounting component', () => {
       // given
       document.removeEventListener = jest.fn();
-      const headerWrapper = mount(<_Header />);
+      const headerWrapper = shallow(<_Header />);
       // when
       headerWrapper.unmount();
       // then
       expect(document.removeEventListener).toBeCalledTimes(2);
+    });
+
+    it('should check the event listeners if nextProps.isConfirm is true and props.isConfirm is false on shouldComponentUpdate', () => {
+      // given
+      const nextProps = { isConfirm: true }
+      const props = { isConfirm: false }
+      document.removeEventListener = jest.fn();
+      document.addEventListener = jest.fn();
+
+      const wrapper = shallow(<_Header {...props} />);
+
+      // when
+      wrapper.instance().shouldComponentUpdate(nextProps)
+      // then
+      expect(document.removeEventListener).toBeCalledTimes(2);
+      expect(document.addEventListener).toBeCalled();
+    });
+
+    it('should check the event listeners if nextProps.isConfirm is false and props.isConfirm is true on shouldComponentUpdate', () => {
+      // given
+      const nextProps = { isConfirm: false }
+      const props = { isConfirm: true }
+      document.removeEventListener = jest.fn();
+      document.addEventListener = jest.fn();
+
+      const wrapper = shallow(<_Header {...props} />);
+
+      // when
+      wrapper.instance().shouldComponentUpdate(nextProps)
+      // then
+      expect(document.addEventListener).toBeCalled()
+      expect(document.removeEventListener).toBeCalled();
     });
   });
 });
