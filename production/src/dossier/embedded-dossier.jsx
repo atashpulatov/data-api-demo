@@ -139,7 +139,6 @@ export default class _EmbeddedDossier extends React.Component {
         this.msgRouter.registerEventHandler('onPromptAnswered', this.promptsAnsweredHandler);
       },
     };
-
     this.embeddedDossier = await microstrategy.dossier.create(props);
   }
 
