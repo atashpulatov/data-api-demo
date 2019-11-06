@@ -134,7 +134,9 @@ class OfficeDisplayService {
 
       if (objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
         mstrTable.id = objectId;
-        visualizationInfo = await this.getVisualizationInfo(projectId, objectId, visualizationInfo.visualizationKey, preparedInstanceId);
+        console.time('Get dossier structure');
+        visualizationInfo = await this.getVisualizationInfo(projectId, objectId, visualizationInfo.visualizationKey, preparedInstanceId) || visualizationInfo;
+        console.timeEnd('Get dossier structure');
       }
 
       // Save to store
@@ -443,7 +445,6 @@ class OfficeDisplayService {
   }
 
   getVisualizationInfo = async (projectId, objectId, visualizationKey, preparedInstanceId) => {
-    console.time('Get dossier structure');
     const dossierDefinition = await getDossierDefinition(projectId, objectId, preparedInstanceId);
     for (const chapter of dossierDefinition.chapters) {
       for (const page of chapter.pages) {
@@ -462,7 +463,6 @@ class OfficeDisplayService {
         }
       }
     }
-    console.timeEnd('Get dossier structure');
     return undefined;
   }
 
