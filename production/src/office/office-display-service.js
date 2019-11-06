@@ -442,7 +442,7 @@ class OfficeDisplayService {
     return bytes / 1000000;
   }
 
-  getDossierStructure = async (projectId, objectId, visualizationKey, preparedInstanceId) => {
+  getVisualizationInfo = async (projectId, objectId, visualizationKey, preparedInstanceId) => {
     console.time('Get dossier structure');
     const dossierDefinition = await getDossierDefinition(projectId, objectId, preparedInstanceId);
     for (const chapter of dossierDefinition.chapters) {
