@@ -71,7 +71,7 @@ export class _NavigationTree extends Component {
       } else {
         [this.DB, this.DBOnChange] = connectToDB();
       }
-    }, 1000);
+    }, 500);
   };
 
   refresh = async () => {
@@ -86,11 +86,9 @@ export class _NavigationTree extends Component {
     const { resetDBState, fetchObjectsFromNetwork } = this.props
     resetDBState();
     if (this.indexedDBSupport) {
-      // if (!this.isMSIE && this.DBOnChange) this.DBOnChange.cancel();
-      // this.DB.clear().then(() => {
+      if (this.DBOnChange) this.DBOnChange.cancel();
       window.Office.context.ui.messageParent(JSON.stringify({ command: REFRESH_CACHE_COMMAND }));
       this.connectToCache(this.DB);
-      // }).catch(() => this.startFallbackProtocol());
     } else {
       fetchObjectsFromNetwork();
     }
@@ -109,15 +107,15 @@ export class _NavigationTree extends Component {
   };
 
   startFallbackProtocol = () => {
-    // setTimeout(() => {
-    //   const { cache, fetchObjectsFromNetwork, resetDBState } = this.props;
-    //   const { projects } = cache;
-    //   if (projects.length === 0) {
-    //     console.log('Cache failed, fetching from network');
-    //     resetDBState();
-    //     fetchObjectsFromNetwork();
-    //   }
-    // }, SAFETY_FALLBACK);
+    setTimeout(() => {
+      const { cache, fetchObjectsFromNetwork, resetDBState } = this.props;
+      const { projects } = cache;
+      if (projects.length === 0) {
+        console.log('Cache failed, fetching from network');
+        resetDBState();
+        fetchObjectsFromNetwork();
+      }
+    }, SAFETY_FALLBACK);
   }
 
   handleOk = async () => {
