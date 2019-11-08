@@ -18,17 +18,14 @@ const SAFETY_FALLBACK = 7000; // Interval for falling back to network
 export class _NavigationTree extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      triggerUpdate: false,
-      previewDisplay: false,
-    };
+    this.state = { previewDisplay: false, };
     this.indexedDBSupport = DB.getIndexedDBSupport();
     const ua = window.navigator.userAgent;
     this.isMSIE = ua.indexOf('MSIE ') > 0 || !!navigator.userAgent.match(/Trident.*rv:11\./);
   }
 
   componentDidMount() {
-    const { resetDBState, fetchObjectsFromNetwork } = this.props
+    const { resetDBState, fetchObjectsFromNetwork } = this.props;
     resetDBState();
     if (this.indexedDBSupport) {
       this.connectToCache();
@@ -67,7 +64,7 @@ export class _NavigationTree extends Component {
     setTimeout(() => {
       if (this.isMSIE) {
         [this.DB, this.DBOnChange] = listenToDB();
-        this.DBOnChange.then(this.startDBListener)
+        this.DBOnChange.then(this.startDBListener);
       } else {
         [this.DB, this.DBOnChange] = connectToDB();
       }
@@ -83,10 +80,10 @@ export class _NavigationTree extends Component {
       return;
     }
 
-    const { resetDBState, fetchObjectsFromNetwork } = this.props
+    const { resetDBState, fetchObjectsFromNetwork } = this.props;
     resetDBState();
     if (this.indexedDBSupport) {
-      if (this.DBOnChange) this.DBOnChange.cancel();
+      if (!this.isMSIE && this.DBOnChange) this.DBOnChange.cancel();
       window.Office.context.ui.messageParent(JSON.stringify({ command: REFRESH_CACHE_COMMAND }));
       this.connectToCache(this.DB);
     } else {
@@ -97,7 +94,7 @@ export class _NavigationTree extends Component {
   startDBListener = () => {
     const { cache, listenToDB } = this.props;
     const { projects, myLibrary, environmentLibrary } = cache;
-    console.log(projects.length, myLibrary.objects.length, myLibrary.isLoading, environmentLibrary.objects.length, environmentLibrary.isLoading)
+    console.log(projects.length, myLibrary.objects.length, myLibrary.isLoading, environmentLibrary.objects.length, environmentLibrary.isLoading);
     if (projects.length < 1 || myLibrary.isLoading || environmentLibrary.isLoading) {
       setTimeout(() => {
         [this.DB, this.DBOnChange] = listenToDB(this.DB);
@@ -119,7 +116,7 @@ export class _NavigationTree extends Component {
   }
 
   handleOk = async () => {
-    const { chosenSubtype, chosenObjectId, chosenProjectId, requestImport, requestDossierOpen, changeIsPrompted } = this.props;
+    const { chosenSubtype, chosenObjectId, chosenProjectId, requestImport, requestDossierOpen } = this.props;
     let isPrompted = false;
     try {
       // If myLibrary is on, then selected object is a dossier.
@@ -147,7 +144,7 @@ export class _NavigationTree extends Component {
   };
 
   handleSecondary = async () => {
-    const { chosenProjectId, chosenObjectId, chosenObjectName, chosenType, chosenSubtype, handlePrepare, changeIsPrompted } = this.props;
+    const { chosenProjectId, chosenObjectId, chosenObjectName, chosenType, chosenSubtype, handlePrepare } = this.props;
     let isPrompted = false;
     try {
       const objectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
@@ -191,7 +188,7 @@ export class _NavigationTree extends Component {
 
   render() {
     const {
-      chosenObjectId, chosenProjectId, changeSorting, loading, chosenLibraryDossier, searchText, sorter, requestPerformed,
+      chosenObjectId, chosenProjectId, changeSorting, loading, chosenLibraryDossier, searchText, sorter,
       changeSearching, objectType, cache, envFilter, myLibraryFilter, myLibrary, switchMyLibrary, changeFilter, t, i18n,
     } = this.props;
     const { previewDisplay } = this.state;
