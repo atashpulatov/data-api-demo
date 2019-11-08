@@ -125,7 +125,7 @@ export function refreshReportsArray(reportArray, isRefreshAll) {
           reportArray.length,
           index,
           isRefreshAll);
-        return true;
+        if (!isRefreshAll) return true;
       } finally {
         dispatch({
           type: officeProperties.actions.finishLoadingReport,
