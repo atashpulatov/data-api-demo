@@ -8,11 +8,9 @@ import { actions } from './navigation-tree-actions';
 import { isPrompted as checkIfPrompted } from '../mstr-object/mstr-object-rest-service';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './navigation-tree.css';
-import { connectToCache, clearCache, createCache, listenToCache, REFRESH_CACHE_COMMAND, refreshCacheState, fetchObjectsFallback } from '../cache/cache-actions';
+import { connectToCache, listenToCache, REFRESH_CACHE_COMMAND, refreshCacheState, fetchObjectsFallback } from '../cache/cache-actions';
 import DB from '../cache/pouch-db';
-import { sessionHelper } from '../storage/session-helper';
 import { authenticationHelper } from '../authentication/authentication-helper';
-import { errorService } from '../error/error-handler';
 
 const DB_TIMEOUT = 5000; // Interval for checking indexedDB changes on IE
 const SAFETY_FALLBACK = 7000; // Interval for falling back to network
@@ -88,11 +86,11 @@ export class _NavigationTree extends Component {
     const { resetDBState, fetchObjectsFromNetwork } = this.props
     resetDBState();
     if (this.indexedDBSupport) {
-      if (!this.isMSIE && this.DBOnChange) this.DBOnChange.cancel();
-      this.DB.clear().then(() => {
-        window.Office.context.ui.messageParent(JSON.stringify({ command: REFRESH_CACHE_COMMAND }));
-        this.connectToCache(this.DB);
-      }).catch(() => this.startFallbackProtocol());
+      // if (!this.isMSIE && this.DBOnChange) this.DBOnChange.cancel();
+      // this.DB.clear().then(() => {
+      window.Office.context.ui.messageParent(JSON.stringify({ command: REFRESH_CACHE_COMMAND }));
+      this.connectToCache(this.DB);
+      // }).catch(() => this.startFallbackProtocol());
     } else {
       fetchObjectsFromNetwork();
     }
@@ -111,15 +109,15 @@ export class _NavigationTree extends Component {
   };
 
   startFallbackProtocol = () => {
-    setTimeout(() => {
-      const { cache, fetchObjectsFromNetwork, resetDBState } = this.props;
-      const { projects } = cache;
-      if (projects.length === 0) {
-        console.log('Cache failed, fetching from network');
-        resetDBState();
-        fetchObjectsFromNetwork();
-      }
-    }, SAFETY_FALLBACK);
+    // setTimeout(() => {
+    //   const { cache, fetchObjectsFromNetwork, resetDBState } = this.props;
+    //   const { projects } = cache;
+    //   if (projects.length === 0) {
+    //     console.log('Cache failed, fetching from network');
+    //     resetDBState();
+    //     fetchObjectsFromNetwork();
+    //   }
+    // }, SAFETY_FALLBACK);
   }
 
   handleOk = async () => {
@@ -260,10 +258,8 @@ export const mapStateToProps = ({ officeReducer, navigationTree, cacheReducer })
 
 const mapActionsToProps = {
   ...actions,
-  initDB: createCache,
   connectToDB: connectToCache,
   listenToDB: listenToCache,
-  clearDB: clearCache,
   resetDBState: refreshCacheState,
   fetchObjectsFromNetwork: fetchObjectsFallback
 };
