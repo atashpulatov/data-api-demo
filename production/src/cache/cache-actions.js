@@ -206,6 +206,12 @@ export function listenToCache(prevCache) {
           dispatch(objectListLoading(loading.data));
         });
       });
+      cache.get(MY_LIBRARY_DB_ID).then((objects) => {
+        dispatch(addMyLibraryObjects(objects.data));
+        cache.get(LOADING_DB + MY_LIBRARY_DB_ID).then((loading) => {
+          dispatch(myLibraryLoading(loading.data));
+        });
+      });
     });
 
     return [cache, onChange];
