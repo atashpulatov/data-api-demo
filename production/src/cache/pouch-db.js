@@ -205,6 +205,6 @@ export default class DB {
    * @memberof DB
    */
   static getIndexedDBSupport() {
-    return (window.indexedDB && window.indexedDB.databases);
+    return window.indexedDB;
   }
 }

@@ -61,14 +61,14 @@ export class _NavigationTree extends Component {
   connectToCache = () => {
     const { connectToDB, listenToDB } = this.props;
     this.startFallbackProtocol();
-    setTimeout(() => {
-      if (this.isMSIE) {
-        [this.DB, this.DBOnChange] = listenToDB();
-        this.DBOnChange.then(this.startDBListener);
-      } else {
-        [this.DB, this.DBOnChange] = connectToDB();
-      }
-    }, 500);
+    // setTimeout(() => {
+    if (this.isMSIE) {
+      [this.DB, this.DBOnChange] = listenToDB();
+      this.DBOnChange.then(this.startDBListener);
+    } else {
+      [this.DB, this.DBOnChange] = connectToDB();
+    }
+    // }, 500);
   };
 
   refresh = async () => {
