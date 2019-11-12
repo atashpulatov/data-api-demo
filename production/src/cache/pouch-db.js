@@ -17,7 +17,7 @@ export default class DB {
    * @memberof DB
    */
   constructor(dbName = 'cache') {
-    this.db = new PouchDB(dbName, { revs_limit: 1 });
+    this.db = new PouchDB(dbName, { revs_limit: 1, auto_compaction: true });
     this.dbName = dbName;
     this.putObjects = this.putObjects.bind(this);
   }
@@ -197,7 +197,7 @@ export default class DB {
   }
 
   /**
-   * Check if browser supports indexed DB and indexed DB databases.
+   * Check if browser supports indexed DB.
    * Set to false to completely disable the cache (!)
    *
    * @static
@@ -205,6 +205,6 @@ export default class DB {
    * @memberof DB
    */
   static getIndexedDBSupport() {
-    return (window.indexedDB && window.indexedDB.databases);
+    return window.indexedDB;
   }
 }

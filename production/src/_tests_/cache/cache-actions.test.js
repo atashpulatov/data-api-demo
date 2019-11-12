@@ -1,4 +1,4 @@
-import { SET_OBJECT_LIST_LOADING, objectListLoading, SET_MY_LIBRARY_LOADING, myLibraryLoading, createCache, clearCache, ADD_MY_LIBRARY_OBJECTS, addMyLibraryObjects, ADD_ENV_OBJECTS, addEnvObjects, connectToCache, refreshCache, } from '../../cache/cache-actions';
+import { SET_OBJECT_LIST_LOADING, objectListLoading, SET_MY_LIBRARY_LOADING, myLibraryLoading, createCache, clearCache, ADD_MY_LIBRARY_OBJECTS, addMyLibraryObjects, ADD_ENV_OBJECTS, addEnvObjects, connectToCache, refreshCache, ADD_PROJECTS, addProjects, CLEAR_CACHE, clearStateCache, refreshCacheAction, REFRESH_CACHE, refreshCacheState, fetchObjectsFallback, initCache, resetLoading, } from '../../cache/cache-actions';
 
 describe('Cache actions', () => {
   it('should return object list loading dispatch action', () => {
@@ -75,11 +75,60 @@ describe('Cache actions', () => {
     expect(action).toEqual(expectedAction);
   });
 
+  it('should return add environment projects dispatch action', () => {
+    // given
+    const testResult = ['test'];
+    const expectedAction = {
+      type: ADD_PROJECTS,
+      data: testResult
+    };
+
+    // when
+    const action = addProjects(testResult);
+
+    // then
+    expect(action).toEqual(expectedAction);
+  });
+
+  it('should dispatch clear and refresh cache actions', () => {
+    // given
+    const expectedClearAction = { type: CLEAR_CACHE, };
+    const expectedRefreshAction = { type: REFRESH_CACHE, };
+
+    // when
+    const clearAction = clearStateCache();
+    const refreshAction = refreshCacheAction();
+
+    // then
+    expect(clearAction).toEqual(expectedClearAction);
+    expect(refreshAction).toEqual(expectedRefreshAction);
+  });
+
   it('should return create cache higher order function', () => {
     // given
 
     // when
     const hof = createCache();
+
+    // then
+    expect(hof).toBeInstanceOf(Function);
+  });
+
+  it('should return refresh cache higher order function', () => {
+    // given
+
+    // when
+    const hof = refreshCacheState();
+
+    // then
+    expect(hof).toBeInstanceOf(Function);
+  });
+
+  it('should return fetchObjects fallback higher order function', () => {
+    // given
+
+    // when
+    const hof = fetchObjectsFallback();
 
     // then
     expect(hof).toBeInstanceOf(Function);
@@ -103,5 +152,29 @@ describe('Cache actions', () => {
 
     // then
     expect(hof).toBeInstanceOf(Function);
+  });
+
+  it('should initialize cache', async () => {
+    // given
+    const putMock = jest.fn().mockImplementation((string) => string);
+    const cacheMock = { putData: putMock };
+    const expectedResult = ['projects', 'loading-my-library', 'my-library', 'loading-env-library', 'env-library'];
+    // when
+    const result = await initCache(cacheMock);
+
+    // then
+    expect(result).toEqual(expectedResult);
+  });
+
+  it('should reset cache loading properly', async () => {
+    // given
+    const putMock = jest.fn().mockImplementation((string) => string);
+    const cacheMock = { putData: putMock };
+    const expectedResult = ['loading-my-library', 'loading-env-library'];
+    // when
+    const result = await resetLoading(cacheMock);
+
+    // then
+    expect(result).toEqual(expectedResult);
   });
 });

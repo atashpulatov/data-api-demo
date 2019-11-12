@@ -62,7 +62,7 @@
         "allowTemplateLiterals": true
       }
     ],
-    "semi": "off",
+    "semi": 1,
     "space-before-function-paren": "off",
     "camelcase": [
       "error",
