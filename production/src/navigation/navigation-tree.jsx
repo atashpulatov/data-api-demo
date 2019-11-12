@@ -58,17 +58,18 @@ export class _NavigationTree extends Component {
     }
   }
 
-  connectToCache = () => {
+  connectToCache = (isRefresh) => {
     const { connectToDB, listenToDB } = this.props;
     this.startFallbackProtocol();
-    // setTimeout(() => {
-    if (this.isMSIE) {
-      [this.DB, this.DBOnChange] = listenToDB();
-      this.DBOnChange.then(this.startDBListener);
-    } else {
-      [this.DB, this.DBOnChange] = connectToDB();
-    }
-    // }, 500);
+    setTimeout(() => {
+      if (this.isMSIE) {
+        [this.DB, this.DBOnChange] = listenToDB();
+        this.DBOnChange.then(this.startDBListener);
+      } else {
+        [this.DB, this.DBOnChange] = connectToDB();
+      }
+    }, isRefresh ? 500 : 0);
+    // Timeout to avoid reading old cache while it's cleared in the sidebar (IE)
   };
 
   refresh = async () => {
@@ -85,7 +86,7 @@ export class _NavigationTree extends Component {
     if (this.indexedDBSupport) {
       if (!this.isMSIE && this.DBOnChange) this.DBOnChange.cancel();
       window.Office.context.ui.messageParent(JSON.stringify({ command: REFRESH_CACHE_COMMAND }));
-      this.connectToCache(this.DB);
+      this.connectToCache(true);
     } else {
       fetchObjectsFromNetwork();
     }

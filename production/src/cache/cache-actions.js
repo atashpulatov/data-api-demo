@@ -115,13 +115,21 @@ export function fetchObjectsFallback() {
   };
 }
 
-export function initCache(cache) {
+export function initCache(cache, loading = false) {
+  console.log('Initializing cache');
   return Promise.all([
     cache.putData(PROJECTS_DB_ID, []),
-    cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, true),
+    cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, loading),
     cache.putData(MY_LIBRARY_DB_ID, []),
-    cache.putData(LOADING_DB + ENV_LIBRARY_DB_ID, true),
+    cache.putData(LOADING_DB + ENV_LIBRARY_DB_ID, loading),
     cache.putData(ENV_LIBRARY_DB_ID, []),
+  ]);
+}
+
+export function resetLoading(cache) {
+  return Promise.all([
+    cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, false),
+    cache.putData(LOADING_DB + ENV_LIBRARY_DB_ID, false),
   ]);
 }
 
@@ -135,16 +143,19 @@ export function createCache(initUsername) {
     // Clear PouchDB if user is different
     cache.get(CURRENT_USER).then((doc) => {
       if (doc.data !== userID) {
-        console.log('User changed, creating cache for user', user);
-        initCache(cache).then(() => {
+        console.log('Creating cache for user', user);
+        return initCache(cache).then(() => {
           cache.putData(CURRENT_USER, user).then(() => {
             fetchObjects(dispatch, cache);
           });
         });
       }
+      // If loading is active when starting the add-in with the same user,
+      // we disable loading to allow refresh.
+      return resetLoading(cache).catch(console.error);
     }).catch((error) => {
       if (error.name === 'not_found') {
-        console.log('Creating cache for user', user);
+        console.log('Creating new cache for user', user);
         return cache.instance
           .put({ _id: CURRENT_USER, data: user })
           .then(() => {
@@ -153,10 +164,6 @@ export function createCache(initUsername) {
       }
       console.error(error);
     });
-
-    // cache.callIfEmpty(() => {
-    //   fetchObjects(dispatch, cache);
-    // });
   };
 }
 
@@ -164,7 +171,7 @@ export function refreshCache() {
   return (dispatch) => {
     const cache = new DB();
     // Overwrite cache
-    initCache(cache).then(() => {
+    initCache(cache, true).then(() => {
       fetchObjects(dispatch, cache);
     });
   };
@@ -239,6 +246,7 @@ export function clearCache(prevCache) {
   return (dispatch) => {
     const cache = prevCache || new DB();
     dispatch(clearStateCache());
+    console.log('Clearing cache');
     return cache.putData(CURRENT_USER, null).then(() => {
       initCache(cache);
     }).catch(console.error);
