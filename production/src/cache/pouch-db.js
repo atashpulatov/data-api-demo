@@ -197,7 +197,7 @@ export default class DB {
   }
 
   /**
-   * Check if browser supports indexed DB and indexed DB databases.
+   * Check if browser supports indexed DB.
    * Set to false to completely disable the cache (!)
    *
    * @static
