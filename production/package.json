@@ -106,7 +106,12 @@
       "!src/storage/session-helper.js",
       "!src/storage/pouch-db.js",
       "!src/popup/popup-controller.js",
-      "!src/breadcrumbs/breadcrumbs.jsx"
+      "!src/breadcrumbs/breadcrumbs.jsx",
+      "!src/CompileStrings.js",
+      "!src/cache/pouch-db.js",
+      "!src/cache/cache-actions.js",
+      "!src/dossier/embedded-dossier.jsx",
+      "!src/prompts/prompts-window.jsx"
     ]
   }
 }
