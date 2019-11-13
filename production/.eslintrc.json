@@ -89,7 +89,12 @@
         "devDependencies": true
       }
     ],
-    "react/no-multi-comp": "warn",
+    "react/no-multi-comp": [
+      "warn",
+      {
+        "ignoreStateless": true
+      }
+    ],
     "react/no-did-update-set-state": "error",
     "react/no-unknown-property": "error",
     "react/no-unused-prop-types": "error",
