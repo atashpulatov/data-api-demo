@@ -317,16 +317,36 @@ class OfficeApiHelper {
   }
 
   /**
-    * Returns true if excel worksheet is protected
+    * Returns excel sheet from specific table
     *
     * @param {Excel} excelContext Excel context
+    * @param {String} bindId Report bind id
     * @memberof OfficeApiHelper
     */
-  isWorksheetProtected = async (excelContext) => {
-    const activeSheet = excelContext.workbook.worksheets.getActiveWorksheet();
-    activeSheet.load('protection/protected');
+  getExcelSheetFromTable = async (excelContext, bindId) => {
+    const table = excelContext.workbook.tables.getItem(bindId)
+    return table.getRange().worksheet;
+  }
+
+  /**
+      * Returns current excel sheet
+      *
+      * @param {Excel} excelContext Excel context
+      * @memberof OfficeApiHelper
+      */
+  getCurrentExcelSheet = async (excelContext) => excelContext.workbook.worksheets.getActiveWorksheet()
+
+  /**
+      * Returns true if specific worksheet is protected
+      *
+      * @param {Excel} excelContext Excel context
+      * @param {OfficeWorkSheet} sheet specific worksheet
+      * @memberof OfficeApiHelper
+      */
+  isSheetProtected = async (excelContext, sheet) => {
+    sheet.load('protection/protected');
     await excelContext.sync();
-    return activeSheet.protection.protected
+    return sheet.protection.protected
   }
 
   /**

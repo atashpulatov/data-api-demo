@@ -17,6 +17,7 @@ export const errorTypes = {
   RUN_OUTSIDE_OFFICE_ERR: 'runOutsideOffice',
   TABLE_REMOVED_FROM_EXCEL_ERR: 'tableRemovedFromExcel',
   GENERIC_OFFICE_ERR: 'genericOffice',
+  PROTECTED_SHEET: 'protectedSheet',
 };
 
 export const incomingErrorStrings = {
@@ -62,7 +63,8 @@ export const SESSION_EXPIRED = 'Your session has expired. Please log in.';
 export const PROBLEM_WITH_REQUEST = 'There has been a problem with your request';
 export const UNKNOWN_ERROR = 'Unknown error';
 export const LOGIN_FAILURE = 'Login failure';
-export const OBJ_REMOVED_FROM_EXCEL = 'This object does not exist in the workbook anymore.'
+export const OBJ_REMOVED_FROM_EXCEL = 'This object does not exist in the workbook anymore.';
+export const PROTECTED_SHEET = 'The cell or chart you are trying to change is on a protected sheet. To make a change, unprotect the sheet. You might be requested to enter a password.';
 
 // temporarily we map all those codes to one message; may be changed in the future
 const iServerErrorMessages = withDefaultValue({

@@ -7,6 +7,7 @@ import { popupController } from './popup-controller';
 import { popupHelper } from './popup-helper';
 import { createInstance, answerPrompts, getInstance, createDossierInstance } from '../mstr-object/mstr-object-rest-service';
 import { reduxStore } from '../store';
+import { ProtectedSheetError } from '../error/protected-sheets-error';
 
 export const CLEAR_WINDOW = 'POPUP_CLOSE_WINDOW';
 export const START_REPORT_LOADING = 'START_REPORT_LOADING';
@@ -108,6 +109,12 @@ export function refreshReportsArray(reportArray, isRefreshAll) {
     for (const [index, report] of reportArray.entries()) {
       let isError = true;
       try {
+        const excelContext = await officeApiHelper.getExcelContext();
+        const sheet = await officeApiHelper.getExcelSheetFromTable(excelContext, report.bindId)
+        const isProtected = await officeApiHelper.isSheetProtected(excelContext, sheet)
+        if (isProtected) {
+          throw new ProtectedSheetError();
+        }
         // TODO: these two actions should be merged into one in the future
         dispatch({
           type: officeProperties.actions.startLoadingReport,

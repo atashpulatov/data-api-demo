@@ -7,6 +7,7 @@ import { officeApiHelper } from '../office/office-api-helper';
 import { toggleSecuredFlag, toggleIsConfirmFlag, toggleIsClearingFlag } from '../office/office-actions';
 import { errorService } from '../error/error-handler';
 import { notificationService } from '../notification/notification-service';
+import { ProtectedSheetError } from '../error/protected-sheets-error';
 
 export const _Confirmation = ({ reportArray, toggleSecuredFlag, toggleIsConfirmFlag, toggleIsClearingFlag, t }) => {
   useEffect(() => {
@@ -28,9 +29,15 @@ export const _Confirmation = ({ reportArray, toggleSecuredFlag, toggleIsConfirmF
       toggleIsClearingFlag(true);
       toggleIsConfirmFlag(); // Switch off isConfirm popup
       const excelContext = await officeApiHelper.getExcelContext();
-      const isProtected = await officeApiHelper.isWorksheetProtected(excelContext)
-      if (isProtected) {
-        throw new Error(t('Worksheet is protected'))
+      const sheets = excelContext.workbook.worksheets;
+      sheets.load('items/name');
+      await excelContext.sync();
+
+      for (const sheet of sheets.items) {
+        const isProtected = await officeApiHelper.isSheetProtected(excelContext, sheet);
+        if (isProtected) {
+          throw new ProtectedSheetError();
+        }
       }
       for (const report of reportArray) {
         if (await officeApiHelper.checkIfObjectExist(t, report, excelContext)) {

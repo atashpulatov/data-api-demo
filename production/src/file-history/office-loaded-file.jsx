@@ -22,6 +22,7 @@ import { officeStoreService } from '../office/store/office-store-service';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { startLoading, stopLoading } from '../navigation/navigation-tree-actions';
 import { errorService } from '../error/error-handler';
+import { ProtectedSheetError } from '../error/protected-sheets-error';
 
 
 export class _OfficeLoadedFile extends React.Component {
@@ -82,6 +83,15 @@ export class _OfficeLoadedFile extends React.Component {
     document.body.removeChild(text);
   }
 
+  // Get sheet of the table. Return isSheetProtected
+  isCurrentReportSheetProtected = async (bindingId) => {
+    const excelContext = await officeApiHelper.getExcelContext();
+    const currentExcelSheet = await officeApiHelper.getExcelSheetFromTable(excelContext, bindingId)
+    const isSheetProtected = await officeApiHelper.isSheetProtected(excelContext, currentExcelSheet)
+    return isSheetProtected
+  }
+
+
   deleteReport = async () => {
     const { onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, fileName, t, } = this.props;
     const message = t('{{name}} has been removed from the workbook.', { name: fileName });
@@ -110,11 +120,9 @@ export class _OfficeLoadedFile extends React.Component {
     } = this.props;
     this.setState({ allowDeleteClick: false, allowRefreshClick: false },
       async () => {
-        const excelContext = await officeApiHelper.getExcelContext();
-        const isProtected = await officeApiHelper.isWorksheetProtected(excelContext)
+        const isProtected = await this.isCurrentReportSheetProtected(bindingId)
         if (isProtected) {
-          const error = new Error(t('Worksheet is protected'))
-          errorService.handleError(error)
+          errorService.handleError(new ProtectedSheetError())
         } else {
           const message = t('{{name}} has been removed from the workbook.',
             { name: fileName });
@@ -155,7 +163,7 @@ export class _OfficeLoadedFile extends React.Component {
 
   editAction = (e) => {
     const { allowRefreshClick } = this.state;
-    const { isLoading, bindingId, objectType, callForEdit, fileName, loading, startLoading, callForEditDossier } = this.props;
+    const { isLoading, bindingId, objectType, callForEdit, fileName, loading, startLoading, stopLoading, callForEditDossier, t } = this.props;
     if (e) e.stopPropagation();
     if (!allowRefreshClick || loading) {
       return;
@@ -164,13 +172,19 @@ export class _OfficeLoadedFile extends React.Component {
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
-          // calling onBindingObjectClick to check whether the object exists in Excel
-          // before opening edit data popup
-          if (await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport, fileName)) {
-            if (objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-              (await callForEditDossier({ bindId: bindingId, objectType }, loading))
-            } else {
-              (await callForEdit({ bindId: bindingId, objectType }, loading));
+          const isProtected = await this.isCurrentReportSheetProtected(bindingId)
+          if (isProtected) {
+            stopLoading();
+            errorService.handleError(new ProtectedSheetError())
+          } else {
+            // calling onBindingObjectClick to check whether the object exists in Excel
+            // before opening edit data popup
+            if (await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport, fileName)) {
+              if (objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
+                (await callForEditDossier({ bindId: bindingId, objectType }, loading))
+              } else {
+                (await callForEdit({ bindId: bindingId, objectType }, loading));
+              }
             }
           }
         } finally {
@@ -191,13 +205,12 @@ export class _OfficeLoadedFile extends React.Component {
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
-          const excelContext = await officeApiHelper.getExcelContext();
-          const isProtected = await officeApiHelper.isWorksheetProtected(excelContext)
+          const isProtected = await this.isCurrentReportSheetProtected(bindingId)
           if (isProtected) {
-            const error = new Error(t('Worksheet is protected'))
-            errorService.handleError(error)
+            errorService.handleError(new ProtectedSheetError())
             return;
-          } if (await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport, fileName)) {
+          }
+          if (await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport, fileName)) {
             (await refreshReportsArray([{ bindId: bindingId, objectType }], false));
           }
         } finally {

@@ -84,18 +84,12 @@ export class _FileHistoryContainer extends React.Component {
   };
 
   refreshAllAction = (reportArray, refreshAll) => {
-    const { startLoading, stopLoading, t } = this.props;
+    const { startLoading } = this.props;
     startLoading();
     const { allowRefreshAllClick } = this.state;
     if (allowRefreshAllClick) {
       this.setState({ allowRefreshAllClick: false }, async () => {
-        const excelContext = await officeApiHelper.getExcelContext();
-        const isProtected = await officeApiHelper.isWorksheetProtected(excelContext)
-        if (isProtected) {
-          const error = new Error(t('Worksheet is protected'))
-          errorService.handleError(error)
-          stopLoading()
-        } else { await refreshAll(reportArray, true); }
+        await refreshAll(reportArray, true);
         if (this._ismounted) this.setState({ allowRefreshAllClick: true });
       });
     }
