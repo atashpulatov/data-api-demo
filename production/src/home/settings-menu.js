@@ -8,6 +8,7 @@ import { helper } from '../helpers/helpers';
 import { sessionHelper } from '../storage/session-helper';
 import { errorService } from '../error/error-handler';
 import { clearCache } from '../cache/cache-actions';
+import DB from '../cache/pouch-db';
 
 const APP_VERSION = process.env.REACT_APP_MSTR_OFFICE_VERSION;
 
@@ -135,7 +136,7 @@ async function logout(preLogout) {
   try {
     await sessionHelper.logOutRest();
     sessionHelper.logOut();
-    await preLogout();
+    if (DB.getIndexedDBSupport()) await preLogout();
     sessionHelper.logOutRedirect();
   } catch (error) {
     errorService.handleError(error);
