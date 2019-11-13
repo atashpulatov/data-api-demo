@@ -17,7 +17,7 @@ export const errorTypes = {
   RUN_OUTSIDE_OFFICE_ERR: 'runOutsideOffice',
   TABLE_REMOVED_FROM_EXCEL_ERR: 'tableRemovedFromExcel',
   GENERIC_OFFICE_ERR: 'genericOffice',
-  PROTECTED_SHEET: 'protectedSheet',
+  PROTECTED_SHEET_ERR: 'protectedSheet',
 };
 
 export const incomingErrorStrings = {
@@ -108,5 +108,6 @@ export const errorMessageFactory = withDefaultValue({
   [errorTypes.RUN_OUTSIDE_OFFICE_ERR]: () => OUTSIDE_OF_OFFICE,
   [errorTypes.TABLE_REMOVED_FROM_EXCEL_ERR]: ({ reportName }) => `${reportName} does not exist in the workbook anymore.`,
   [errorTypes.GENERIC_OFFICE_ERR]: ({ error }) => `Excel returned error: ${error.message}`,
+  [errorTypes.PROTECTED_SHEET_ERR]: () => PROTECTED_SHEET,
 },
 ({ error }) => error.message || UNKNOWN_ERROR);
