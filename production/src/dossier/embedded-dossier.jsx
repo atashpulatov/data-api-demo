@@ -12,6 +12,8 @@ export default class _EmbeddedDossier extends React.Component {
     this.msgRouter = null;
     this.onVizSelectionHandler = this.onVizSelectionHandler.bind(this);
     this.dossierData = { promptsAnswers: props.mstrData.promptsAnswers, };
+    this.promptsAnsweredHandler = this.promptsAnsweredHandler.bind(this);
+    this.embeddedDossier = null;
   }
 
   componentDidMount() {
@@ -20,6 +22,7 @@ export default class _EmbeddedDossier extends React.Component {
 
   componentWillUnmount() {
     this.msgRouter.removeEventhandler('onVizSelectionChanged', this.onVizSelectionHandler);
+    this.msgRouter.removeEventhandler('onPromptAnswered', this.promptsAnsweredHandler);
   }
 
   /**
@@ -100,7 +103,7 @@ export default class _EmbeddedDossier extends React.Component {
         title: true,
         toc: true,
         reset: true,
-        reprompt: false,
+        reprompt: true,
         share: false,
         comment: false,
         notification: false,
@@ -133,10 +136,22 @@ export default class _EmbeddedDossier extends React.Component {
       onMsgRouterReadyHandler: ({ MsgRouter }) => {
         this.msgRouter = MsgRouter;
         this.msgRouter.registerEventHandler('onVizSelectionChanged', this.onVizSelectionHandler);
+        this.msgRouter.registerEventHandler('onPromptAnswered', this.promptsAnsweredHandler);
       },
     };
+    this.embeddedDossier = await microstrategy.dossier.create(props);
+  }
 
-    microstrategy.dossier.create(props);
+  promptsAnsweredHandler(promptsAnswers) {
+    const { handlePromptAnswer } = this.props;
+    if (this.embeddedDossier) {
+      this.embeddedDossier.getDossierInstanceId().then((newInstanceId) => {
+        this.dossierData.preparedInstanceId = newInstanceId;
+        handlePromptAnswer(promptsAnswers, newInstanceId);
+      });
+    } else {
+      handlePromptAnswer(promptsAnswers);
+    }
   }
 
   render() {

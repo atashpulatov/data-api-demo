@@ -253,6 +253,7 @@ class PopupController {
       if (reportPreviousState.visualizationInfo.visualizationKey !== response.visualizationInfo.visualizationKey) {
         await officeStoreService.preserveReportValue(reportParams.bindId, 'visualizationInfo', response.visualizationInfo);
       }
+      await officeStoreService.preserveReportValue(reportParams.bindId, 'instanceId', response.preparedInstanceId);
       await officeStoreService.preserveReportValue(reportParams.bindId, 'isEdit', false)
     }
     const isErrorOnRefresh = await refreshReportsArray([reportParams], false)(reduxStore.dispatch);

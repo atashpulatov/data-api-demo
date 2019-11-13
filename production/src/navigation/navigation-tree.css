@@ -1,5 +1,7 @@
 .navigation_tree__main_wrapper {
   height: calc(100% - 125px);
+  position: fixed;
+  width: 100%;
 }
 
 .navigation_tree__title_bar {
