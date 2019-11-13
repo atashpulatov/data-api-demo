@@ -9,7 +9,8 @@ import { errorService } from '../error/error-handler';
 import mstrNormalizedJsonHandler from '../mstr-object/mstr-normalized-json-handler';
 import { CONTEXT_LIMIT } from '../mstr-object/mstr-object-rest-service';
 import { authenticationHelper } from '../authentication/authentication-helper';
-import { OBJ_REMOVED_FROM_EXCEL } from '../error/constants'
+import { OBJ_REMOVED_FROM_EXCEL } from '../error/constants';
+import { ProtectedSheetError } from '../error/protected-sheets-error';
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
@@ -126,8 +127,8 @@ class OfficeApiHelper {
      * @memberof OfficeApiHelper
      */
   removeObjectAndDisplaytNotification = async (object, officeContext, t) => {
-    const { name } = object
-    this.removeObjectNotExistingInExcel(t, object, officeContext)
+    const { name } = object;
+    this.removeObjectNotExistingInExcel(t, object, officeContext);
     const message = t('{{name}} has been removed from the workbook.', { name });
     notificationService.displayTranslatedNotification({ type: 'success', content: message });
   }
@@ -281,18 +282,18 @@ class OfficeApiHelper {
   }))
 
   deleteObjectTableBody = async (context, object) => {
-    const { isCrosstab, crosstabHeaderDimensions } = object
+    const { isCrosstab, crosstabHeaderDimensions } = object;
     context.runtime.enableEvents = false;
     await context.sync();
     const tableObject = context.workbook.tables.getItem(object.bindId);
     const tableRange = tableObject.getDataBodyRange();
-    context.trackedObjects.add(tableRange)
+    context.trackedObjects.add(tableRange);
     if (isCrosstab) {
       const { rowsX, rowsY, columnsX, columnsY } = crosstabHeaderDimensions;
       const crosstabRange = await this.getCrosstabRangeSafely(tableObject, crosstabHeaderDimensions, context);
       const firstCell = crosstabRange.getCell(0, 0);
-      const columnsHeaders = firstCell.getOffsetRange(0, rowsX).getResizedRange(columnsY - 1, columnsX - 1)
-      const rowsHeaders = firstCell.getResizedRange((columnsY + rowsY), rowsX - 1)
+      const columnsHeaders = firstCell.getOffsetRange(0, rowsX).getResizedRange(columnsY - 1, columnsX - 1);
+      const rowsHeaders = firstCell.getResizedRange((columnsY + rowsY), rowsX - 1);
       columnsHeaders.clear(Excel.ClearApplyTo.contents);
       rowsHeaders.clear(Excel.ClearApplyTo.contents);
     }
@@ -300,7 +301,7 @@ class OfficeApiHelper {
     tableRange.clear(Excel.ClearApplyTo.contents);
     context.runtime.enableEvents = true;
     await context.sync();
-    context.trackedObjects.remove(tableRange)
+    context.trackedObjects.remove(tableRange);
   }
 
   /**
@@ -324,7 +325,7 @@ class OfficeApiHelper {
     * @memberof OfficeApiHelper
     */
   getExcelSheetFromTable = async (excelContext, bindId) => {
-    const table = excelContext.workbook.tables.getItem(bindId)
+    const table = excelContext.workbook.tables.getItem(bindId);
     return table.getRange().worksheet;
   }
 
@@ -346,8 +347,31 @@ class OfficeApiHelper {
   isSheetProtected = async (excelContext, sheet) => {
     sheet.load('protection/protected');
     await excelContext.sync();
-    return sheet.protection.protected
+    return sheet.protection.protected;
   }
+
+  /**
+      * Get sheet of the table. Return isSheetProtected
+      *
+      * @param {String} bindingId Excel context
+      * @memberof OfficeApiHelper
+      */
+  isCurrentReportSheetProtected = async (bindingId) => {
+    let isProtected = false;
+    if (bindingId) {
+      const excelContext = await this.getExcelContext();
+      const currentExcelSheet = await this.getExcelSheetFromTable(excelContext, bindingId);
+      isProtected = await this.isSheetProtected(excelContext, currentExcelSheet);
+    } else {
+      const excelContext = await this.getExcelContext();
+      const currentSheet = await this.getCurrentExcelSheet(excelContext);
+      isProtected = await this.isSheetProtected(excelContext, currentSheet);
+    }
+    if (isProtected) {
+      throw new ProtectedSheetError();
+    }
+  }
+
 
   /**
    * Checks if the object existing in Excel workbook

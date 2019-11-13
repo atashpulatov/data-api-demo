@@ -21,13 +21,7 @@ export const fileHistoryContainerHOC = (Component) => {
 
     addDataAction = async () => {
       try {
-        // Check if current sheet is protected. If yes, send error
-        const excelContext = await officeApiHelper.getExcelContext();
-        const currentSheet = await officeApiHelper.getCurrentExcelSheet(excelContext);
-        const isSheetProtected = await officeApiHelper.isSheetProtected(excelContext, currentSheet);
-        if (isSheetProtected) {
-          throw new ProtectedSheetError();
-        }
+        await officeApiHelper.isCurrentReportSheetProtected();
 
         // Prevent navigation tree from going straight into importing previously selected item.
         if (reduxStore.getState().navigationTree.importRequested) reduxStore.dispatch({ type: CANCEL_REQUEST_IMPORT });

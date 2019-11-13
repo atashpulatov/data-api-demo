@@ -83,14 +83,6 @@ export class _OfficeLoadedFile extends React.Component {
     document.body.removeChild(text);
   }
 
-  // Get sheet of the table. Return isSheetProtected
-  isCurrentReportSheetProtected = async (bindingId) => {
-    const excelContext = await officeApiHelper.getExcelContext();
-    const currentExcelSheet = await officeApiHelper.getExcelSheetFromTable(excelContext, bindingId)
-    const isSheetProtected = await officeApiHelper.isSheetProtected(excelContext, currentExcelSheet)
-    return isSheetProtected
-  }
-
 
   deleteReport = async () => {
     const { onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, fileName, t, } = this.props;
@@ -120,10 +112,8 @@ export class _OfficeLoadedFile extends React.Component {
     } = this.props;
     this.setState({ allowDeleteClick: false, allowRefreshClick: false },
       async () => {
-        const isProtected = await this.isCurrentReportSheetProtected(bindingId)
-        if (isProtected) {
-          errorService.handleError(new ProtectedSheetError())
-        } else {
+        try {
+          await officeApiHelper.isCurrentReportSheetProtected(bindingId);
           const message = t('{{name}} has been removed from the workbook.',
             { name: fileName });
           await fileHistoryHelper.deleteReport(onDelete,
@@ -131,9 +121,13 @@ export class _OfficeLoadedFile extends React.Component {
             isCrosstab,
             crosstabHeaderDimensions,
             message);
+          if (this._ismounted) this.setState({ allowDeleteClick: true, allowRefreshClick: true });
+          stopLoading();
+        } catch (error) {
+          errorService.handleError(error);
+        } finally {
+          stopLoading();
         }
-        if (this._ismounted) this.setState({ allowDeleteClick: true, allowRefreshClick: true });
-        stopLoading();
       });
   };
 
@@ -172,22 +166,18 @@ export class _OfficeLoadedFile extends React.Component {
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
-          const isProtected = await this.isCurrentReportSheetProtected(bindingId)
-          if (isProtected) {
-            stopLoading();
-            errorService.handleError(new ProtectedSheetError())
-          } else {
-            // calling onBindingObjectClick to check whether the object exists in Excel
-            // before opening edit data popup
-            if (await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport, fileName)) {
-              if (objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-                (await callForEditDossier({ bindId: bindingId, objectType }, loading))
-              } else {
-                (await callForEdit({ bindId: bindingId, objectType }, loading));
-              }
+          await officeApiHelper.isCurrentReportSheetProtected(bindingId);
+          if (await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport, fileName)) {
+            if (objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
+              (await callForEditDossier({ bindId: bindingId, objectType }, loading));
+            } else {
+              (await callForEdit({ bindId: bindingId, objectType }, loading));
             }
           }
+        } catch (error) {
+          errorService.handleError(error);
         } finally {
+          stopLoading();
           this.setState({ allowRefreshClick: true });
         }
       });
@@ -205,14 +195,12 @@ export class _OfficeLoadedFile extends React.Component {
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
-          const isProtected = await this.isCurrentReportSheetProtected(bindingId)
-          if (isProtected) {
-            errorService.handleError(new ProtectedSheetError())
-            return;
-          }
+          await officeApiHelper.isCurrentReportSheetProtected(bindingId);
           if (await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport, fileName)) {
             (await refreshReportsArray([{ bindId: bindingId, objectType }], false));
           }
+        } catch (error) {
+          errorService.handleError(error);
         } finally {
           this.setState({ allowRefreshClick: true });
           stopLoading();

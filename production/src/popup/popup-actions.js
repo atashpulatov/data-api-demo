@@ -109,12 +109,7 @@ export function refreshReportsArray(reportArray, isRefreshAll) {
     for (const [index, report] of reportArray.entries()) {
       let isError = true;
       try {
-        const excelContext = await officeApiHelper.getExcelContext();
-        const sheet = await officeApiHelper.getExcelSheetFromTable(excelContext, report.bindId)
-        const isProtected = await officeApiHelper.isSheetProtected(excelContext, sheet)
-        if (isProtected) {
-          throw new ProtectedSheetError();
-        }
+        await officeApiHelper.isCurrentReportSheetProtected(report.bindId);
         // TODO: these two actions should be merged into one in the future
         dispatch({
           type: officeProperties.actions.startLoadingReport,
@@ -153,7 +148,7 @@ export function callForEditDossier(reportParams) {
         authenticationHelper.validateAuthToken(),
       ]);
       const editedDossier = officeStoreService.getReportFromProperties(reportParams.bindId);
-      const { projectId, id, manipulationsXML } = editedDossier
+      const { projectId, id, manipulationsXML } = editedDossier;
       const instanceId = await createDossierInstance(projectId, id, { ...manipulationsXML });
       editedDossier.instanceId = instanceId;
       editedDossier.isEdit = true;
