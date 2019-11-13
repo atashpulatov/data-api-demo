@@ -341,7 +341,7 @@ class OfficeApiHelper {
       * Returns true if specific worksheet is protected
       *
       * @param {Excel} excelContext Excel context
-      * @param {OfficeWorkSheet} sheet specific worksheet
+      * @param {Excel} sheet Excel Sheet
       * @memberof OfficeApiHelper
       */
   isSheetProtected = async (excelContext, sheet) => {
@@ -353,7 +353,9 @@ class OfficeApiHelper {
   /**
       * Get sheet of the table. Return isSheetProtected
       *
-      * @param {String} bindingId Excel context
+      * @param {String} bindingId Report bind id
+      * @param {Excel} sheet Excel Sheet
+      * @param {Excel} exlCntxt Excel context
       * @memberof OfficeApiHelper
       */
   isCurrentReportSheetProtected = async (bindingId, sheet, exlCntxt) => {
