@@ -34,10 +34,7 @@ export const _Confirmation = ({ reportArray, toggleSecuredFlag, toggleIsConfirmF
       await excelContext.sync();
 
       for (const sheet of sheets.items) {
-        const isProtected = await officeApiHelper.isSheetProtected(excelContext, sheet);
-        if (isProtected) {
-          throw new ProtectedSheetError();
-        }
+        await officeApiHelper.isCurrentReportSheetProtected(null, sheet, excelContext);
       }
       for (const report of reportArray) {
         if (await officeApiHelper.checkIfObjectExist(t, report, excelContext)) {

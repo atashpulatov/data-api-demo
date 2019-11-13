@@ -356,13 +356,18 @@ class OfficeApiHelper {
       * @param {String} bindingId Excel context
       * @memberof OfficeApiHelper
       */
-  isCurrentReportSheetProtected = async (bindingId) => {
+  isCurrentReportSheetProtected = async (bindingId, sheet, exlCntxt) => {
     let isProtected = false;
     if (bindingId) {
+      console.log('1', bindingId, sheet, exlCntxt);
       const excelContext = await this.getExcelContext();
       const currentExcelSheet = await this.getExcelSheetFromTable(excelContext, bindingId);
       isProtected = await this.isSheetProtected(excelContext, currentExcelSheet);
+    } else if (sheet && exlCntxt) {
+      console.log('2', bindingId, sheet, exlCntxt);
+      isProtected = await this.isSheetProtected(exlCntxt, sheet);
     } else {
+      console.log('3', bindingId, sheet, exlCntxt);
       const excelContext = await this.getExcelContext();
       const currentSheet = await this.getCurrentExcelSheet(excelContext);
       isProtected = await this.isSheetProtected(excelContext, currentSheet);
