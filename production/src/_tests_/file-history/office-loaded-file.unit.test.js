@@ -6,6 +6,7 @@ import { reduxStore } from '../../store';
 import { fileHistoryHelper } from '../../file-history/file-history-helper';
 import { officeApiHelper } from '../../office/office-api-helper';
 import { officeStoreService } from '../../office/store/office-store-service';
+import { errorService } from '../../error/error-handler';
 
 describe('office loaded file', () => {
   it('should display provided file name', () => {
@@ -65,7 +66,7 @@ describe('office loaded file', () => {
     const testBindingId = 'testBindingId';
     const testName = 'testName';
     const isCrosstab = false;
-    const crosstabHeaderDimensions = false
+    const crosstabHeaderDimensions = false;
     const wrappedComponent = mount(<_OfficeLoadedFile
       refreshDate={new Date()}
       bindingId={testBindingId}
@@ -130,6 +131,7 @@ describe('office loaded file', () => {
     const startLoadingMocked = jest.fn();
     const stopLoadingMocked = jest.fn();
     const mockEvent = { stopPropagation: jest.fn() };
+    const mockIsCurrentSheetProtected = jest.spyOn(officeApiHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
     const objectClickMock = jest.spyOn(officeApiHelper, 'onBindingObjectClick').mockImplementation(() => true);
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
@@ -148,15 +150,47 @@ describe('office loaded file', () => {
     const refreshButton = wrappedIcons.at(1);
     refreshButton.props().onClick(mockEvent);
     // then
+    await expect(mockIsCurrentSheetProtected).toBeCalled();
     await expect(objectClickMock).toBeCalled();
     expect(onRefreshMock).toBeCalled();
   });
+
+  it('should throw error if isCurrentReportSheetProtected fails refresh action', async () => {
+    // given
+    const onRefreshMock = jest.fn();
+    const startLoadingMocked = jest.fn();
+    const stopLoadingMocked = jest.fn();
+    const mockEvent = { stopPropagation: jest.fn() };
+    const mockIsCurrentSheetProtected = jest.spyOn(officeApiHelper, 'isCurrentReportSheetProtected').mockImplementation(() => { throw new Error(); });
+    const mockHandleError = jest.spyOn(errorService, 'handleError').mockImplementation(() => { });
+    const visualizationInfoMock = { dossierStructure: 'test' };
+    // when
+    const wrappedComponent = mount(<_OfficeLoadedFile
+      refreshDate={new Date()}
+      bindingId=""
+      fileName="test"
+      refreshReportsArray={onRefreshMock}
+      isLoading={false}
+      startLoading={startLoadingMocked}
+      stopLoading={stopLoadingMocked}
+      objectType={{ name: 'report' }}
+      visualizationInfo={visualizationInfoMock}
+    />);
+    const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
+    const refreshButton = wrappedIcons.at(1);
+    refreshButton.props().onClick(mockEvent);
+    // then
+    await expect(mockIsCurrentSheetProtected).toBeCalled();
+    expect(mockHandleError).toBeCalled();
+  });
+
   it('should invoke refresh method on button click', async () => {
     // given
     const onRefreshMocked = jest.fn();
     const startLoadingMocked = jest.fn();
     const stopLoadingMocked = jest.fn();
     const mockEvent = { stopPropagation: jest.fn() };
+    const mockIsCurrentSheetProtected = jest.spyOn(officeApiHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
     const testBindingId = 'testBindingId';
     const objectType = { name: 'report' };
     jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => { });
@@ -178,6 +212,7 @@ describe('office loaded file', () => {
     const refreshButton = wrappedIcons.at(1);
     refreshButton.props().onClick(mockEvent);
     // then
+    await expect(mockIsCurrentSheetProtected).toBeCalled();
     await expect(objectClickMock).toBeCalled();
     expect(onRefreshMocked).toBeCalled();
     expect(onRefreshMocked).toBeCalledWith([{ bindId: testBindingId, objectType }], false);
@@ -225,13 +260,14 @@ describe('office loaded file', () => {
     // then
     expect(wrappedSpinner).toBeTruthy();
   });
-  it('should invoke delete method on button click', () => {
+  it('should invoke delete method on button click', async () => {
     // given
     const onDeleteMocked = jest.fn();
     const startLoadingMocked = jest.fn();
     const stopLoadingMocked = jest.fn();
     const testBindingId = 'testBindingId';
     const mockEvent = { stopPropagation: jest.fn() };
+    const mockIsCurrentSheetProtected = jest.spyOn(officeApiHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
@@ -251,9 +287,43 @@ describe('office loaded file', () => {
     const deleteButton = wrappedIcons.at(2);
     deleteButton.props().onClick(mockEvent);
     // then
+    await expect(mockIsCurrentSheetProtected).toBeCalled();
     expect(onDeleteMocked).toBeCalled();
     expect(onDeleteMocked).toBeCalledWith(testBindingId, true, {});
   });
+
+  it('should throw error if isCurrentReportSheetProtected fails in delete', async () => {
+    // given
+    const onDeleteMocked = jest.fn();
+    const startLoadingMocked = jest.fn();
+    const stopLoadingMocked = jest.fn();
+    const testBindingId = 'testBindingId';
+    const mockEvent = { stopPropagation: jest.fn() };
+    const mockIsCurrentSheetProtected = jest.spyOn(officeApiHelper, 'isCurrentReportSheetProtected').mockImplementation(() => { throw new Error(); });
+    const mockHandleError = jest.spyOn(errorService, 'handleError').mockImplementation(() => { });
+    const visualizationInfoMock = { dossierStructure: 'test' };
+    // when
+    const wrappedComponent = mount(<_OfficeLoadedFile
+      refreshDate={new Date()}
+      bindingId={testBindingId}
+      isCrosstab
+      crosstabHeaderDimensions={{}}
+      fileName="test"
+      onDelete={onDeleteMocked}
+      startLoading={startLoadingMocked}
+      stopLoading={stopLoadingMocked}
+      objectType={{ name: 'report' }}
+      visualizationInfo={visualizationInfoMock}
+    />);
+    wrappedComponent.setState({ allowDeleteClick: true });
+    const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
+    const deleteButton = wrappedIcons.at(2);
+    deleteButton.props().onClick(mockEvent);
+    // then
+    await expect(mockIsCurrentSheetProtected).toBeCalled();
+    expect(mockHandleError).toBeCalled();
+  });
+
   it('should NOT invoke delete method on button click if allowDeleteClick is false', () => {
     // given
     fileHistoryHelper.deleteReport = jest.fn();
@@ -289,7 +359,7 @@ describe('office loaded file', () => {
     const testName = 'testName';
     const visualizationInfoMock = { dossierStructure: 'test' };
     const isCrosstab = false;
-    const crosstabHeaderDimensions = false
+    const crosstabHeaderDimensions = false;
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile
       refreshDate={new Date()}
@@ -322,6 +392,7 @@ describe('office loaded file', () => {
   });
   it('should invoke edit method on button click', async () => {
     // given
+    const mockIsCurrentSheetProtected = jest.spyOn(officeApiHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
     const onEditMocked = jest.fn();
     const startLoadingMocked = jest.fn();
     const mockEvent = { stopPropagation: jest.fn() };
@@ -347,6 +418,7 @@ describe('office loaded file', () => {
     const editButton = wrappedIcons.at(0);
     editButton.props().onClick(mockEvent);
     // then
+    await expect(mockIsCurrentSheetProtected).toBeCalled();
     await expect(objectClickMock).toBeCalled();
     expect(onEditMocked).toBeCalled();
     expect(onEditMocked).toBeCalledWith({ bindId: testBindingId, objectType }, loading);
@@ -354,6 +426,7 @@ describe('office loaded file', () => {
 
   it('should invoke re-prompt method on button click', async () => {
     // given
+    const mockIsCurrentSheetProtected = jest.spyOn(officeApiHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
     const onRepromptMocked = jest.fn();
     const startLoadingMocked = jest.fn();
     const mockEvent = { stopPropagation: jest.fn() };
@@ -379,6 +452,7 @@ describe('office loaded file', () => {
     const repromptButton = wrappedIcons.at(0);
     repromptButton.props().onClick(mockEvent);
     // then
+    await expect(mockIsCurrentSheetProtected).toBeCalled();
     await expect(objectClickMock).toBeCalled();
     expect(onRepromptMocked).toBeCalled();
     expect(onRepromptMocked).toBeCalledWith({ bindId: testBindingId, objectType });

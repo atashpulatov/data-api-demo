@@ -9,7 +9,7 @@ import { popupController } from '../../popup/popup-controller';
 import * as LoadedFilesConstans from '../../file-history/office-loaded-file';
 import { officeStoreService } from '../../office/store/office-store-service';
 import { officeApiHelper } from '../../office/office-api-helper';
-import { authenticationHelper } from '../../authentication/authentication-helper';
+
 
 describe('FileHistoryContainer', () => {
   it('should render component when we are insinde project', () => {
@@ -72,10 +72,12 @@ describe('FileHistoryContainer', () => {
     // then
     expect(wrappedComponent.exists('Button .refresh-all-btn img')).toBeTruthy();
   });
-  it('should run onRefreshAll when refreshAll is clicked', () => {
+  it('should run onRefreshAll when refreshAll is clicked', async () => {
     // given
     const refreshAllmock = jest.fn();
     const startLoadingMock = jest.fn();
+    const mockSync = jest.fn();
+    const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
     const mockReportArray = createMockFilesArray();
     const wrappedComponent = mount(<Provider store={reduxStore}>
       <_FileHistoryContainer
@@ -89,19 +91,23 @@ describe('FileHistoryContainer', () => {
     // when
     refreshButton.simulate('click');
     // then
+    await expect(mockGetContext).toBeCalled();
     expect(refreshAllmock).toBeCalled();
   });
+
   it('should not run onRefreshAll when refreshAll is clicked', async () => {
     // given
     let setStateCallBack;
     const mockReportArray = createMockFilesArray();
     const startLoadingMock = jest.fn();
+    const stopLoadingMock = jest.fn();
     LoadedFilesConstans.OfficeLoadedFile = () => <div />;
     const wrappedComponent = mount(<_FileHistoryContainer
       project="testProject"
       reportArray={mockReportArray}
       refreshReportsArray={jest.fn()}
       startLoading={startLoadingMock}
+      stopLoading={stopLoadingMock}
     />);
     wrappedComponent.instance()._ismounted = false;
     wrappedComponent.instance().setState = jest.fn((obj, callback) => setStateCallBack = callback || (() => { }));
@@ -113,12 +119,13 @@ describe('FileHistoryContainer', () => {
     expect(wrappedComponent.instance().setState).toHaveBeenCalledTimes(1);
   });
 
-  it('should open popup on button click', () => {
-    // given
+  it('should open popup on button click', async () => {
+    // given,
     const refreshAllmock = jest.fn();
     const mockReportArray = createMockFilesArray();
     const sessionHelperSpy = jest.spyOn(sessionHelper, 'disableLoading');
     sessionHelperSpy.mockClear();
+    const mockIsCurrentSheetProtected = jest.spyOn(officeApiHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
     const clickSpy = jest.spyOn(popupController, 'runPopupNavigation');
     const wrappedComponent = mount(<Provider store={reduxStore}>
       <FileHistoryContainer
@@ -133,7 +140,8 @@ describe('FileHistoryContainer', () => {
     wrappedButton.simulate('click');
     // then
     expect(wrappedButton).toBeDefined();
-    expect(clickSpy).toHaveBeenCalled();
+    await expect(mockIsCurrentSheetProtected).toBeCalled();
+    await expect(clickSpy).toHaveBeenCalled();
   });
 
   it('should call componentWillUnmount ', () => {

@@ -7,6 +7,7 @@ import { popupController } from './popup-controller';
 import { popupHelper } from './popup-helper';
 import { createInstance, answerPrompts, getInstance, createDossierInstance } from '../mstr-object/mstr-object-rest-service';
 import { reduxStore } from '../store';
+import { ProtectedSheetError } from '../error/protected-sheets-error';
 
 export const CLEAR_WINDOW = 'POPUP_CLOSE_WINDOW';
 export const START_REPORT_LOADING = 'START_REPORT_LOADING';
@@ -108,6 +109,7 @@ export function refreshReportsArray(reportArray, isRefreshAll) {
     for (const [index, report] of reportArray.entries()) {
       let isError = true;
       try {
+        await officeApiHelper.isCurrentReportSheetProtected(report.bindId);
         // TODO: these two actions should be merged into one in the future
         dispatch({
           type: officeProperties.actions.startLoadingReport,
@@ -146,7 +148,7 @@ export function callForEditDossier(reportParams) {
         authenticationHelper.validateAuthToken(),
       ]);
       const editedDossier = officeStoreService.getReportFromProperties(reportParams.bindId);
-      const { projectId, id, manipulationsXML } = editedDossier
+      const { projectId, id, manipulationsXML } = editedDossier;
       const instanceId = await createDossierInstance(projectId, id, { ...manipulationsXML });
       editedDossier.instanceId = instanceId;
       editedDossier.isEdit = true;
