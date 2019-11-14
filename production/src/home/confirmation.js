@@ -29,13 +29,7 @@ export const _Confirmation = ({ reportArray, toggleSecuredFlag, toggleIsConfirmF
       toggleIsClearingFlag(true);
       toggleIsConfirmFlag(); // Switch off isConfirm popup
       const excelContext = await officeApiHelper.getExcelContext();
-      const sheets = excelContext.workbook.worksheets;
-      sheets.load('items/name');
-      await excelContext.sync();
-
-      for (const sheet of sheets.items) {
-        await officeApiHelper.isCurrentReportSheetProtected(null, sheet, excelContext);
-      }
+      await officeApiHelper.checkIfAnySheetProtected(excelContext);
       for (const report of reportArray) {
         if (await officeApiHelper.checkIfObjectExist(t, report, excelContext)) {
           try {

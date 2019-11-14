@@ -15,7 +15,7 @@ describe('Confirmation', () => {
     const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
     const mockDeleteTableBody = jest.spyOn(officeApiHelper, 'deleteObjectTableBody').mockImplementation(() => { });
     const mockClearEmptyRow = jest.spyOn(officeApiHelper, 'clearEmptyCrosstabRow').mockImplementation(() => { });
-    const mockIsProtected = jest.spyOn(officeApiHelper, 'isWorksheetProtected').mockImplementation(() => false)
+    const mockIfAnyProtected = jest.spyOn(officeApiHelper, 'checkIfAnySheetProtected').mockImplementation(() => false);
     const mockCheckObject = jest.spyOn(officeApiHelper, 'checkIfObjectExist').mockImplementation(() => true);
     const mockGetTable = jest.spyOn(officeApiHelper, 'getTable').mockImplementation(() => ({
       showHeaders: null,
@@ -39,7 +39,7 @@ describe('Confirmation', () => {
     await expect(mockGetContext).toBeCalled();
     expect(mockToggleIsClearingFlag).toBeCalled();
     expect(mockToggleIsConfirmFlag).toBeCalled();
-    await expect(mockIsProtected).toBeCalled();
+    await expect(mockIfAnyProtected).toBeCalled();
     await expect(mockCheckObject).toBeCalled();
     await expect(mockGetTable).toBeCalled();
     expect(mockClearEmptyRow).toBeCalled();
@@ -52,16 +52,16 @@ describe('Confirmation', () => {
   it('should fill clearErrors when secureData fails in ok button click', async () => {
     // given
     const mockSync = jest.fn();
-    const error = new Error('test error')
+    const error = new Error('test error');
     jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementationOnce(() => ({ sync: mockSync, }));
     jest.spyOn(officeApiHelper, 'checkIfObjectExist').mockImplementationOnce(() => true);
-    jest.spyOn(officeApiHelper, 'getTable').mockImplementationOnce(() => { throw error });
+    jest.spyOn(officeApiHelper, 'getTable').mockImplementationOnce(() => { throw error; });
     jest.spyOn(errorService, 'handleError').mockImplementationOnce(() => { });
     const clearErrors = [];
-    const reportName = 'Test'
-    const returnValue = {}
-    errorService.handleError.mockReturnValueOnce(() => returnValue)
-    clearErrors.push({ reportName, returnValue })
+    const reportName = 'Test';
+    const returnValue = {};
+    errorService.handleError.mockReturnValueOnce(() => returnValue);
+    clearErrors.push({ reportName, returnValue });
 
     const mockToggleIsConfirmFlag = jest.fn();
     const mockToggleIsClearingFlag = jest.fn();
@@ -77,7 +77,7 @@ describe('Confirmation', () => {
     // when
     okWrapper.simulate('click');
     // then
-    expect(clearErrors).not.toBe(null)
+    expect(clearErrors).not.toBe(null);
   });
 
   it('should not call functions if failed to get table in clear data', async () => {
@@ -86,7 +86,7 @@ describe('Confirmation', () => {
     const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
     const mockDeleteTableBody = jest.spyOn(officeApiHelper, 'deleteObjectTableBody').mockImplementation(() => { });
     const mockClearEmptyRow = jest.spyOn(officeApiHelper, 'clearEmptyCrosstabRow').mockImplementation(() => { });
-    const mockIsProtected = jest.spyOn(officeApiHelper, 'isWorksheetProtected').mockImplementation(() => false)
+    const mockIfAnyProtected = jest.spyOn(officeApiHelper, 'checkIfAnySheetProtected').mockImplementation(() => false);
     const mockCheckObject = jest.spyOn(officeApiHelper, 'checkIfObjectExist').mockImplementation(() => false);
     const mockGetTable = jest.spyOn(officeApiHelper, 'getTable').mockImplementation(() => ({
       showHeaders: null,
@@ -110,7 +110,7 @@ describe('Confirmation', () => {
     await expect(mockGetContext).toBeCalled();
     expect(mockToggleIsClearingFlag).toBeCalled();
     expect(mockToggleIsConfirmFlag).toBeCalled();
-    await expect(mockIsProtected).toBeCalled();
+    await expect(mockIfAnyProtected).toBeCalled();
     await expect(mockCheckObject).toBeCalled();
     await expect(mockGetTable).not.toBeCalled();
     expect(mockClearEmptyRow).not.toBeCalled();
@@ -120,12 +120,12 @@ describe('Confirmation', () => {
     expect(mockToggleSecuredFlag).not.toBeCalled();
   });
 
-  it('should throw error if isProtected is true', async () => {
+  it('should throw error if checkIfAnySheetProtected fails', async () => {
     // given
     const mockSync = jest.fn();
     const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
-    const mockIsProtected = jest.spyOn(officeApiHelper, 'isWorksheetProtected').mockImplementation(() => true)
-    const mockHandleError = jest.spyOn(errorService, 'handleError').mockImplementation(() => { })
+    const mockIfAnyProtected = jest.spyOn(officeApiHelper, 'checkIfAnySheetProtected').mockImplementationOnce(() => { throw new Error(); });
+    const mockHandleError = jest.spyOn(errorService, 'handleError').mockImplementation(() => { });
 
     const mockToggleIsConfirmFlag = jest.fn();
     const mockToggleIsClearingFlag = jest.fn();
@@ -144,8 +144,8 @@ describe('Confirmation', () => {
     await expect(mockGetContext).toBeCalled();
     expect(mockToggleIsClearingFlag).toBeCalled();
     expect(mockToggleIsConfirmFlag).toBeCalled();
-    await expect(mockIsProtected).toBeCalled();
-    expect(mockHandleError).toBeCalled()
+    await expect(mockIfAnyProtected).toBeCalled();
+    expect(mockHandleError).toBeCalled();
   });
 
   it('should set isConfirm flag to false when Cancel is clicked', async () => {

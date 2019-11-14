@@ -127,13 +127,14 @@ export class _OfficeLoadedFile extends React.Component {
           errorService.handleError(error);
         } finally {
           stopLoading();
+          this.setState({ allowRefreshClick: true });
         }
       });
   };
 
   repromptAction = (e) => {
     const { allowRefreshClick } = this.state;
-    const { loading, startLoading } = this.props;
+    const { loading, startLoading, stopLoading } = this.props;
     if (e) e.stopPropagation();
     if (!allowRefreshClick || loading) {
       return;
@@ -143,13 +144,17 @@ export class _OfficeLoadedFile extends React.Component {
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
+          await officeApiHelper.isCurrentReportSheetProtected(bindingId);
           // calling onBindingObjectClick to check whether the object exists in Excel
           // before opening prompt popup
           if (await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport, fileName)) {
             await callForReprompt({ bindId: bindingId, objectType });
           }
+        } catch (error) {
+          errorService.handleError(error);
         } finally {
           this.setState({ allowRefreshClick: true });
+          stopLoading();
         }
       });
     }

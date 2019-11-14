@@ -320,7 +320,7 @@ class OfficeApiHelper {
   /**
     * Returns excel sheet from specific table
     *
-    * @param {Excel} excelContext Excel context
+    * @param {Office} excelContext Excel context
     * @param {String} bindId Report bind id
     * @memberof OfficeApiHelper
     */
@@ -332,7 +332,7 @@ class OfficeApiHelper {
   /**
       * Returns current excel sheet
       *
-      * @param {Excel} excelContext Excel context
+      * @param {Office} excelContext Excel context
       * @memberof OfficeApiHelper
       */
   getCurrentExcelSheet = async (excelContext) => excelContext.workbook.worksheets.getActiveWorksheet()
@@ -340,8 +340,8 @@ class OfficeApiHelper {
   /**
       * Returns true if specific worksheet is protected
       *
-      * @param {Excel} excelContext Excel context
-      * @param {Excel} sheet Excel Sheet
+      * @param {Office} excelContext Excel context
+      * @param {Office} sheet Excel Sheet
       * @memberof OfficeApiHelper
       */
   isSheetProtected = async (excelContext, sheet) => {
@@ -351,25 +351,38 @@ class OfficeApiHelper {
   }
 
   /**
+      * Returns true if specific worksheet is protected
+      *
+      * @param {Office} excelContext Excel context
+      * @memberof OfficeApiHelper
+      */
+  checkIfAnySheetProtected = async (excelContext) => {
+    const sheets = excelContext.workbook.worksheets;
+    sheets.load('items/name');
+    await excelContext.sync();
+
+    for (const sheet of sheets.items) {
+      await officeApiHelper.isCurrentReportSheetProtected(null, sheet, excelContext);
+    }
+  }
+
+  /**
       * Get sheet of the table. Return isSheetProtected
       *
       * @param {String} bindingId Report bind id
-      * @param {Excel} sheet Excel Sheet
-      * @param {Excel} exlCntxt Excel context
+      * @param {Office} sheet Excel Sheet
+      * @param {Office} exlCntxt Excel context
       * @memberof OfficeApiHelper
       */
   isCurrentReportSheetProtected = async (bindingId, sheet, exlCntxt) => {
     let isProtected = false;
     if (bindingId) {
-      console.log('1', bindingId, sheet, exlCntxt);
       const excelContext = await this.getExcelContext();
       const currentExcelSheet = await this.getExcelSheetFromTable(excelContext, bindingId);
       isProtected = await this.isSheetProtected(excelContext, currentExcelSheet);
     } else if (sheet && exlCntxt) {
-      console.log('2', bindingId, sheet, exlCntxt);
       isProtected = await this.isSheetProtected(exlCntxt, sheet);
     } else {
-      console.log('3', bindingId, sheet, exlCntxt);
       const excelContext = await this.getExcelContext();
       const currentSheet = await this.getCurrentExcelSheet(excelContext);
       isProtected = await this.isSheetProtected(excelContext, currentSheet);
