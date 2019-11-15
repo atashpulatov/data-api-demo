@@ -19,16 +19,13 @@ class OfficeTableHelper {
    * @param {string} officeTableId Excel Binding ID
    * @param {Object} prevOfficeTable Previous office table to refresh
    *
-   * @memberOf OfficeDisplayService
+   * @memberOf OfficeTableHelper
    */
   createOfficeTable = async (instanceDefinition, context, startCell, officeTableId, prevOfficeTable) => {
-    const { rows, columns, mstrTable } = instanceDefinition;
-    const { isCrosstab, toCrosstabChange, fromCrosstabChange, prevCrosstabDimensions, crosstabHeaderDimensions } = mstrTable;
-    const { rowsX: prevRowsX, columnsY: prevColumnsY } = prevCrosstabDimensions;
-    const { rowsX, columnsY } = crosstabHeaderDimensions;
+    const { rows, columns, mstrTable, mstrTable:{ isCrosstab, crosstabHeaderDimensions } } = instanceDefinition;
 
     const sheet = this.getExcelWorksheet(prevOfficeTable, context);
-    const tableStartCell = this.getTableStartCell(startCell, sheet, instanceDefinition, prevOfficeTable, toCrosstabChange, fromCrosstabChange, prevCrosstabDimensions, crosstabHeaderDimensions, isCrosstab, columnsY, prevColumnsY, rowsX, prevRowsX);
+    const tableStartCell = this.getTableStartCell(startCell, sheet, instanceDefinition, prevOfficeTable);
     const tableRange = officeApiHelper.getRange(columns, tableStartCell, rows);
     const range = this.getObjectRange(isCrosstab, tableStartCell, crosstabHeaderDimensions, sheet, tableRange);
 
@@ -38,20 +35,24 @@ class OfficeTableHelper {
       this.createCrosstabHeaders(tableStartCell, mstrTable, sheet, range, crosstabHeaderDimensions);
     }
 
-    const officeTable = sheet.tables.add(tableRange, true);
+    const officeTable = sheet.tables.add(tableRange, true); // create office table based on the range
     this.styleHeaders(officeTable, TABLE_HEADER_FONT_COLOR, TABLE_HEADER_FILL_COLOR);
-    return this.bindOfficeTable(officeTable, officeTableId, mstrTable, sheet, context, isCrosstab)
+    return this.setOfficeTableProperties(officeTable, officeTableId, mstrTable, sheet, context)
   };
 
-  updateOfficeTable = async (
-    instanceDefinition,
-    context,
-    startCell,
-    prevOfficeTable,
-  ) => {
+  /**
+   * Updates office table if the number of columns or rows of an existing table changes.
+   *
+   * @param {Object} instanceDefinition
+   * @param {Object} context ExcelContext
+   * @param {string} startCell  Top left corner cell
+   * @param {Object} prevOfficeTable Previous office table to refresh
+   *
+   * @memberOf OfficeTableHelper
+   */
+  updateOfficeTable = async (instanceDefinition, context, startCell, prevOfficeTable) => {
     try {
-      const { rows, mstrTable } = instanceDefinition;
-      const { isCrosstab, subtotalsAddresses } = mstrTable;
+      const { rows, mstrTable, mstrTable:{ isCrosstab, subtotalsAddresses } } = instanceDefinition;
       const crosstabHeaderDimensions = this.getCrosstabHeaderDimensions(instanceDefinition);
 
       prevOfficeTable.rows.load('count');
@@ -63,23 +64,19 @@ class OfficeTableHelper {
         const bottomRange = prevOfficeTable.getRange().getRowsBelow(addedRows);
         await this.checkRangeValidity(context, bottomRange);
       }
-
-      if (mstrTable.isCrosstab) {
+      if (isCrosstab) {
         try {
-          const range = officeApiHelper.getCrosstabRange(startCell, crosstabHeaderDimensions, prevOfficeTable.worksheet);
-          officeApiHelper.createColumnsHeaders(startCell, mstrTable.headers.columns, prevOfficeTable.worksheet, range);
-          officeApiHelper.createRowsTitleHeaders(startCell, mstrTable.attributesNames, prevOfficeTable.worksheet, crosstabHeaderDimensions);
+          const sheet = prevOfficeTable.worksheet;
+          const range = officeApiHelper.getCrosstabRange(startCell, crosstabHeaderDimensions, sheet);
+          this.createCrosstabHeaders(startCell, mstrTable, sheet, range, crosstabHeaderDimensions);
         } catch (error) {
           console.log(error);
         }
       }
       context.workbook.application.suspendApiCalculationUntilNextSync();
-      prevOfficeTable.clearFilters();
-      prevOfficeTable.sort.clear();
+      this.clearTableFilters(prevOfficeTable);
       if (!mstrTable.isCrosstab) {
-        prevOfficeTable.getHeaderRowRange().values = [
-          mstrTable.headers.columns[mstrTable.headers.columns.length - 1],
-        ];
+        prevOfficeTable.getHeaderRowRange().values = [mstrTable.headers.columns[mstrTable.headers.columns.length - 1]];
       }
       await context.sync();
       await this.updateRows(prevOfficeTable, context, rows);
@@ -90,6 +87,13 @@ class OfficeTableHelper {
     }
   };
 
+  /**
+   * Gets dimensions od the headers of crosstab report
+   *
+   * @param {Object} instanceDefinition
+   *
+   * @memberOf OfficeTableHelper
+   */
   getCrosstabHeaderDimensions = (instanceDefinition) => {
     const { mstrTable } = instanceDefinition;
     const { isCrosstab, headers } = mstrTable;
@@ -101,6 +105,15 @@ class OfficeTableHelper {
     };
   }
 
+  /**
+   * Updates number of rows in office table.
+   *
+   * @param {Object} prevOfficeTable Previous office table to refresh
+   * @param {Object} context ExcelContext
+   * @param {number} rows  number of rows in the object
+   *
+   * @memberOf OfficeTableHelper
+   */
   updateRows = async (prevOfficeTable, context, rows) => {
     const tableRows = prevOfficeTable.rows;
     tableRows.load('count');
@@ -126,6 +139,15 @@ class OfficeTableHelper {
     }
   }
 
+  /**
+   * Set style for office table
+   *
+   * @param {Object} officeTable
+   * @param {string} fontColor
+   * @param {string} fillColor
+   *
+   * @memberOf OfficeTableHelper
+   */
   styleHeaders = (officeTable, fontColor, fillColor) => {
     officeTable.style = DEFAULT_TABLE_STYLE;
     // Temporarily disabling header formatting
@@ -134,41 +156,29 @@ class OfficeTableHelper {
     // headerRowRange.format.font.color = fontColor;
   };
 
+  /**
+   * Creates an office table if it's a new import or if the number of columns of an existing table changes.
+   * If we are refreshing a table and the new definiton range is not empty we keep the original table.
+   *
+   * @param {boolean} isRefresh
+   * @param {Object} excelContext
+   * @param {string} bindingId
+   * @param {Object} instanceDefinition
+   * @param {string} startCell  Top left corner cell
+   *
+   * @memberOf OfficeTableHelper
+   */
   getOfficeTable = async (isRefresh, excelContext, bindingId, instanceDefinition, startCell) => {
     console.time('Create or get table');
     const newOfficeTableId = bindingId || officeApiHelper.findAvailableOfficeTableId();
-    const { mstrTable, columns, rows } = instanceDefinition;
-    const { prevCrosstabDimensions, crosstabHeaderDimensions, isCrosstab } = mstrTable;
-    mstrTable.toCrosstabChange = !prevCrosstabDimensions && isCrosstab;
-    mstrTable.fromCrosstabChange = prevCrosstabDimensions && !isCrosstab;
+    this.checkReportTypeChange(instanceDefinition);
     let officeTable;
     let shouldFormat = true;
     let tableColumnsChanged;
     if (isRefresh) {
-      const prevOfficeTable = await officeApiHelper.getTable(excelContext,
-        bindingId);
-      if (isCrosstab && !mstrTable.toCrosstabChange) officeApiHelper.clearEmptyCrosstabRow(prevOfficeTable); // Since showing Excel table header dont override the data but insert new row, we clear values from empty row in crosstab to prevent it
-      prevOfficeTable.showHeaders = true;
-      await excelContext.sync();
-      tableColumnsChanged = await this.checkColumnsChange(prevOfficeTable, excelContext, instanceDefinition);
-      const headerCell = prevOfficeTable.getHeaderRowRange().getCell(0, 0);
-      headerCell.load('address');
-      await excelContext.sync();
-      startCell = officeApiHelper.getStartCell(headerCell.address);
-      officeApiHelper.getRange(columns, startCell, rows);
-      if (prevCrosstabDimensions) {
-        officeApiHelper.clearCrosstabRange(prevOfficeTable, crosstabHeaderDimensions, prevCrosstabDimensions, isCrosstab, excelContext);
-      }
-      await excelContext.sync();
-      if (tableColumnsChanged) {
-        console.log('Instance definition changed, creating new table');
-        officeTable = await this.createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId, prevOfficeTable);
-      } else {
-        shouldFormat = false;
-        console.time('Validate existing table');
-        officeTable = await this.updateOfficeTable(instanceDefinition, excelContext, startCell, prevOfficeTable);
-        console.timeEnd('Validate existing table');
-      }
+      ({ tableColumnsChanged, startCell, officeTable, shouldFormat } = await this.changeOfficeTableOnRefresh(
+        excelContext, bindingId, instanceDefinition, startCell, officeTable, newOfficeTableId, shouldFormat
+      ));
     } else {
       officeTable = await this.createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId);
     }
@@ -181,6 +191,14 @@ class OfficeTableHelper {
     };
   }
 
+  /**
+   * Checks if the range is empty
+   *
+   * @param {Object} context excelContext
+   * @param {Object} excelRange range in which table will be inserted
+   *
+   * @memberOf OfficeTableHelper
+   */
   checkRangeValidity = async (context, excelRange) => {
     // Pass true so only cells with values count as used
     const usedDataRange = excelRange.getUsedRangeOrNullObject(true);
@@ -190,6 +208,15 @@ class OfficeTableHelper {
     }
   };
 
+  /**
+   * Compares if the number of columns in table has changed.
+   *
+   * @param {Object} prevOfficeTable previous office table
+   * @param {Object} context excelContext
+   * @param {Object} instanceDefinition
+   *
+   * @memberOf OfficeTableHelper
+   */
   checkColumnsChange = async (prevOfficeTable, context, instanceDefinition) => {
     const { columns } = instanceDefinition;
     const tableColumns = prevOfficeTable.columns;
@@ -199,16 +226,28 @@ class OfficeTableHelper {
     return columns !== tableColumnsCount;
   };
 
-  getTableStartCell = (startCell, sheet, instanceDefinition, prevOfficeTable, toCrosstabChange, fromCrosstabChange, prevCrosstabDimensions, crosstabHeaderDimensions, isCrosstab, columnsY, prevColumnsY, rowsX, prevRowsX) => {
-    let tableStartCell = officeApiHelper.getTableStartCell({ startCell, sheet, instanceDefinition, prevOfficeTable, toCrosstabChange, fromCrosstabChange });
-    if (prevCrosstabDimensions && prevCrosstabDimensions !== crosstabHeaderDimensions && isCrosstab) {
-      tableStartCell = officeApiHelper.offsetCellBy(tableStartCell, columnsY - prevColumnsY, rowsX - prevRowsX);
-    }
-    return tableStartCell;
-  }
 
+  /**
+   * Get excel worksheet of previous office table or acxtive if no table was passed.
+   *
+   * @param {Object} prevOfficeTable previous office table
+   * @param {Object} context excelContext
+   *
+   * @memberOf OfficeTableHelper
+   */
   getExcelWorksheet = (prevOfficeTable, context) => (prevOfficeTable ? prevOfficeTable.worksheet : context.workbook.worksheets.getActiveWorksheet())
 
+  /**
+   * Get range of the table. For crosstabs range is extended by headers.
+   *
+   * @param {Boolean} isCrosstab  Specified if object is crosstab report
+   * @param {Object} tableStartCell  Top left corner cell
+   * @param {Object} crosstabHeaderDimensions contains dimension of crosstab headers (columnsY, cloumnsX, RowsY, RowsX)
+   * @param {Object} sheet  excel worksheet
+   * @param {Object} tableRange range of the table
+   *
+   * @memberOf OfficeTableHelper
+   */
   getObjectRange = (isCrosstab, tableStartCell, crosstabHeaderDimensions, sheet, tableRange) => {
     if (isCrosstab) {
       return officeApiHelper.getCrosstabRange(tableStartCell, crosstabHeaderDimensions, sheet);
@@ -216,11 +255,138 @@ class OfficeTableHelper {
     return sheet.getRange(tableRange);
   }
 
+  /**
+   * Create column and title headers for crosstab
+   *
+   * @param {string} tableStartCell  Top left corner cell of the table
+   * @param {Object} mstrTable  contains informations about mstr object
+   * @param {Object} sheet  excel worksheet
+   * @param {Object} range range of the table
+   * @param {Object} crosstabHeaderDimensions contains dimension of crosstab headers (columnsY, cloumnsX, RowsY, RowsX)
+   *
+   * @memberOf OfficeTableHelper
+   */
   createCrosstabHeaders = (tableStartCell, mstrTable, sheet, range, crosstabHeaderDimensions) => {
     officeApiHelper.createColumnsHeaders(tableStartCell, mstrTable.headers.columns, sheet, range);
     officeApiHelper.createRowsTitleHeaders(tableStartCell, mstrTable.attributesNames, sheet, crosstabHeaderDimensions);
   }
 
+  /**
+   * Clears filters and sorting in the table
+   *
+   * @param {Object} prevOfficeTable previous office table
+   *
+   * @memberOf OfficeTableHelper
+   */
+  clearTableFilters =(prevOfficeTable) => {
+    prevOfficeTable.clearFilters();
+    prevOfficeTable.sort.clear();
+  }
+
+  /**
+   * Checks if the report changes to or from crosstab
+   *
+   * @param {Object} instanceDefinition
+   *
+   * @memberOf OfficeTableHelper
+   */
+  checkReportTypeChange=(instanceDefinition) => {
+    const { mstrTable, mstrTable: { prevCrosstabDimensions, isCrosstab } } = instanceDefinition;
+    mstrTable.toCrosstabChange = !prevCrosstabDimensions && isCrosstab;
+    mstrTable.fromCrosstabChange = prevCrosstabDimensions && !isCrosstab;
+  }
+
+  /**
+   * Creates an office table if the number of columns of an existing table changes.
+   * If the new definiton range is not empty we keep the original table.
+   *
+   * @param {Object} excelContext
+   * @param {String} bindingId
+   * @param {Object} instanceDefinition
+   * @param {Object} startCell  Top left corner cell
+   * @param {Object} OfficeTable
+   * @param {String} newOfficeTableId new name for office table
+   * @param {Boolean} shouldFormat
+   *
+   * @memberOf OfficeTableHelper
+   */
+  async changeOfficeTableOnRefresh(excelContext, bindingId, instanceDefinition, startCell, officeTable, newOfficeTableId, shouldFormat) {
+    const { mstrTable, mstrTable:{ prevCrosstabDimensions, crosstabHeaderDimensions, isCrosstab }, columns, rows } = instanceDefinition;
+    const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindingId);
+    // Since showing Excel table header dont override the data but insert new row, we clear values from empty row in crosstab to prevent it
+    if (isCrosstab && !mstrTable.toCrosstabChange) { officeApiHelper.clearEmptyCrosstabRow(prevOfficeTable); }
+    prevOfficeTable.showHeaders = true;
+    await excelContext.sync();
+    const tableColumnsChanged = await this.checkColumnsChange(prevOfficeTable, excelContext, instanceDefinition);
+    startCell = await this.getStartCell(prevOfficeTable, excelContext);
+
+    officeApiHelper.getRange(columns, startCell, rows);
+    if (prevCrosstabDimensions) {
+      officeApiHelper.clearCrosstabRange(prevOfficeTable, crosstabHeaderDimensions, prevCrosstabDimensions, isCrosstab, excelContext);
+    }
+    await excelContext.sync();
+
+    if (tableColumnsChanged) {
+      console.log('Instance definition changed, creating new table');
+      officeTable = await this.createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId, prevOfficeTable);
+    } else {
+      shouldFormat = false;
+      console.time('Validate existing table');
+      officeTable = await this.updateOfficeTable(instanceDefinition, excelContext, startCell, prevOfficeTable);
+      console.timeEnd('Validate existing table');
+    }
+    return { tableColumnsChanged, startCell, officeTable, shouldFormat };
+  }
+
+
+  /**
+   * Get top left cell from the excel table.
+   *
+   * @param {Object} prevOfficeTable previous office table
+   * @param {Object} excelContext
+   *
+   * @memberOf OfficeTableHelper
+   */
+   getStartCell = async(prevOfficeTable, excelContext) => {
+     const headerCell = prevOfficeTable.getHeaderRowRange().getCell(0, 0);
+     headerCell.load('address');
+     await excelContext.sync();
+     return officeApiHelper.getStartCell(headerCell.address);
+   }
+
+  /**
+   * Get top left cell from the excel table. For crosstabs return the first cell of Excel table not crosstab headers.
+   *
+   * @param {string} startCell  Top left corner cell
+   * @param {Object} sheet  excel worksheet
+   * @param {Object} instanceDefinition
+   * @param {Object} prevOfficeTable previous office table
+   *
+   * @memberOf OfficeTableHelper
+   */
+  getTableStartCell = (startCell, sheet, instanceDefinition, prevOfficeTable) => {
+    const { mstrTable } = instanceDefinition;
+    const { isCrosstab, toCrosstabChange, fromCrosstabChange, prevCrosstabDimensions, crosstabHeaderDimensions } = mstrTable;
+    const { rowsX: prevRowsX, columnsY: prevColumnsY } = prevCrosstabDimensions;
+    const { rowsX, columnsY } = crosstabHeaderDimensions;
+    let tableStartCell = officeApiHelper.getTableStartCell({ startCell, sheet, instanceDefinition, prevOfficeTable, toCrosstabChange, fromCrosstabChange });
+    if (prevCrosstabDimensions && prevCrosstabDimensions !== crosstabHeaderDimensions && isCrosstab) {
+      tableStartCell = officeApiHelper.offsetCellBy(tableStartCell, columnsY - prevColumnsY, rowsX - prevRowsX);
+    }
+    return tableStartCell;
+  }
+
+  /**
+   * Checks if the range for the table after refresh is cleared.
+   *
+   * @param {Object} prevOfficeTable previous office table
+   * @param {Object} context excelContext
+   * @param {number} columns number of columns in the table
+   * @param {number} rows number of rows in the table
+   * @param {Object} range range of the resized table
+   *
+   * @memberOf OfficeTableHelper
+   */
   async checkObjectRangeValidity(prevOfficeTable, context, columns, rows, range) {
     if (prevOfficeTable) {
       prevOfficeTable.rows.load('count');
@@ -250,7 +416,19 @@ class OfficeTableHelper {
     }
   }
 
-  bindOfficeTable = async (officeTable, officeTableId, mstrTable, sheet, context, isCrosstab) => {
+  /**
+   * Set name of the table and format office table headers
+   *
+   * @param {Object} officeTable previous office table
+   * @param {Object} officeTableId office table name
+   * @param {Object} mstrTable  contains informations about mstr object
+   * @param {Object} sheet  excel worksheet
+   * @param {Object} context excelContext
+   *
+   * @memberOf OfficeTableHelper
+   */
+  setOfficeTableProperties = async (officeTable, officeTableId, mstrTable, sheet, context) => {
+    const { isCrosstab } = mstrTable
     try {
       officeTable.load('name');
       officeTable.name = officeTableId;

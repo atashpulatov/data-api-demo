@@ -255,6 +255,20 @@ export function isPrompted(objectId, projectId, objectTypeName) {
     .then((res) => res.body && res.body.length);
 }
 
+export function getCubeStatus(objectId, projectId) {
+  const storeState = reduxStore.getState();
+  const { envUrl } = storeState.sessionReducer;
+  const { authToken } = storeState.sessionReducer;
+
+  const fullPath = `${envUrl}/cubes/${objectId}`;
+  return request
+    .head(fullPath)
+    .set('x-mstr-authtoken', authToken)
+    .set('X-MSTR-ProjectID', projectId)
+    .withCredentials()
+    .then((res) => res.headers['x-mstr-cubestatus']);
+}
+
 export function rePromptDossier(dossierId, instanceId, projectId) {
   const storeState = reduxStore.getState();
   const { envUrl } = storeState.sessionReducer;
@@ -386,4 +400,5 @@ export default {
   rePromptDossier,
   fetchVisualizationDefinition,
   getDossierDefinition,
+  getCubeStatus,
 };

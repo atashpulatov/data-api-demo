@@ -5,12 +5,13 @@ import { ObjectTable, TopFilterPanel } from '@mstr/rc';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { PopupButtons } from '../popup/popup-buttons';
 import { actions } from './navigation-tree-actions';
-import { isPrompted as checkIfPrompted } from '../mstr-object/mstr-object-rest-service';
+import { getCubeStatus, isPrompted as checkIfPrompted } from '../mstr-object/mstr-object-rest-service';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './navigation-tree.css';
 import { connectToCache, listenToCache, REFRESH_CACHE_COMMAND, refreshCacheState, fetchObjectsFallback } from '../cache/cache-actions';
 import DB from '../cache/pouch-db';
 import { authenticationHelper } from '../authentication/authentication-helper';
+import { Popup } from '../popup/popup';
 
 const DB_TIMEOUT = 5000; // Interval for checking indexedDB changes on IE
 const SAFETY_FALLBACK = 7000; // Interval for falling back to network
@@ -18,7 +19,10 @@ const SAFETY_FALLBACK = 7000; // Interval for falling back to network
 export class _NavigationTree extends Component {
   constructor(props) {
     super(props);
-    this.state = { previewDisplay: false, };
+    this.state = {
+      previewDisplay: false,
+      isPublished: true,
+    };
     this.indexedDBSupport = DB.getIndexedDBSupport();
     const ua = window.navigator.userAgent;
     this.isMSIE = ua.indexOf('MSIE ') > 0 || !!navigator.userAgent.match(/Trident.*rv:11\./);
@@ -177,6 +181,16 @@ export class _NavigationTree extends Component {
       chosenLibraryDossier = objectId;
       objectId = target.id;
     }
+
+    if (objectType === mstrObjectEnum.mstrObjectType.dataset) {
+      try {
+        const cubeStatus = await getCubeStatus(objectId, projectId) !== '0';
+        this.setState({ isPublished:cubeStatus });
+      } catch (error) {
+        Popup.handlePopupErrors(error);
+      }
+    }
+
     selectObject({
       chosenObjectId: objectId,
       chosenObjectName: objectName,
@@ -192,7 +206,7 @@ export class _NavigationTree extends Component {
       chosenObjectId, chosenProjectId, changeSorting, loading, chosenLibraryDossier, searchText, sorter,
       changeSearching, objectType, cache, envFilter, myLibraryFilter, myLibrary, switchMyLibrary, changeFilter, t, i18n,
     } = this.props;
-    const { previewDisplay } = this.state;
+    const { previewDisplay, isPublished } = this.state;
     const objects = myLibrary ? cache.myLibrary.objects : cache.environmentLibrary.objects;
     const cacheLoading = cache.myLibrary.isLoading || cache.environmentLibrary.isLoading;
     return (
@@ -229,12 +243,13 @@ export class _NavigationTree extends Component {
           isLoading={cacheLoading} />
         <PopupButtons
           loading={loading}
-          disableActiveActions={!chosenObjectId}
+          disableActiveActions={!chosenObjectId || !isPublished}
           handleOk={this.handleOk}
           handleSecondary={this.handleSecondary}
           handleCancel={this.handleCancel}
           previewDisplay={previewDisplay}
           disableSecondary={objectType && objectType.name === mstrObjectEnum.mstrObjectType.dossier.name}
+          isPublished={isPublished}
         />
       </div>
     );
