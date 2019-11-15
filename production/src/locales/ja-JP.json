@@ -187,5 +187,6 @@
   "Subtotals and Totals": "小計および合計",
   "Import Dossier": "Dossier をインポート",
   "This is a crosstab report. To preserve its structure, select all attributes and metrics.": "*This is a crosstab report. To preserve its structure, select all attributes and metrics.*",
-  "This object does not exist in the workbook anymore.": "*This object does not exist in the workbook anymore.*"
+  "This object does not exist in the workbook anymore.": "*This object does not exist in the workbook anymore.*",
+  "The table you are trying to manipulate is in a protected sheet. To make a change, unprotect the sheet. You might be requested to enter a password.": "*The table you are trying to manipulate is in a protected sheet. To make a change, unprotect the sheet. You might be requested to enter a password.*"
 }
