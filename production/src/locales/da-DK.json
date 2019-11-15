@@ -186,7 +186,7 @@
   "Remove": "Fjern",
   "Subtotals and Totals": "Subtotaler og Totals",
   "Import Dossier": "Importer dossier",
-  "This is a crosstab report. To preserve its structure, select all attributes and metrics.": "*This is a crosstab report. To preserve its structure, select all attributes and metrics.*",
-  "This object does not exist in the workbook anymore.": "*This object does not exist in the workbook anymore.*",
-  "The table you are trying to manipulate is in a protected sheet. To make a change, unprotect the sheet. You might be requested to enter a password.": "*The table you are trying to manipulate is in a protected sheet. To make a change, unprotect the sheet. You might be requested to enter a password.*"
+  "This is a crosstab report. To preserve its structure, select all attributes and metrics.": "Dette er en tværgående fane-rapport. For at bevare sin struktur skal du vælge alle attributter og målepunkter.",
+  "This object does not exist in the workbook anymore.": "Dette objekt findes ikke mere i projektmappen.",
+  "The table you are trying to manipulate is in a protected sheet. To make a change, unprotect the sheet. You might be requested to enter a password.": "Tabellen, du prøver at manipulere, er på et beskyttet ark. For at foretage en ændring skal beskyttelsesarket afbeskyttes. Du kan blive bedt om at indtaste en adgangskode."
 }

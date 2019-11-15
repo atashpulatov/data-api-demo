@@ -186,7 +186,7 @@
   "Remove": "Remover",
   "Subtotals and Totals": "Subtotais e totais",
   "Import Dossier": "Importar Dossier",
-  "This is a crosstab report. To preserve its structure, select all attributes and metrics.": "*This is a crosstab report. To preserve its structure, select all attributes and metrics.*",
-  "This object does not exist in the workbook anymore.": "*This object does not exist in the workbook anymore.*",
-  "The table you are trying to manipulate is in a protected sheet. To make a change, unprotect the sheet. You might be requested to enter a password.": "*The table you are trying to manipulate is in a protected sheet. To make a change, unprotect the sheet. You might be requested to enter a password.*"
+  "This is a crosstab report. To preserve its structure, select all attributes and metrics.": "Este é um relatório de tabulação. Para preservar sua estrutura, selecione todos os atributos e métricas.",
+  "This object does not exist in the workbook anymore.": "Este objeto não existe mais na pasta de trabalho.",
+  "The table you are trying to manipulate is in a protected sheet. To make a change, unprotect the sheet. You might be requested to enter a password.": "A tabela que você está tentando manipular está em uma folha protegida. Para fazer uma alteração, desproteja a folha. Pode ser solicitado que você insira uma senha."
 }
