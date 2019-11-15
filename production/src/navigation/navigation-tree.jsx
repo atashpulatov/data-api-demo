@@ -11,6 +11,7 @@ import './navigation-tree.css';
 import { connectToCache, listenToCache, REFRESH_CACHE_COMMAND, refreshCacheState, fetchObjectsFallback } from '../cache/cache-actions';
 import DB from '../cache/pouch-db';
 import { authenticationHelper } from '../authentication/authentication-helper';
+import { Popup } from '../popup/popup';
 
 const DB_TIMEOUT = 5000; // Interval for checking indexedDB changes on IE
 const SAFETY_FALLBACK = 7000; // Interval for falling back to network
@@ -182,7 +183,12 @@ export class _NavigationTree extends Component {
     }
 
     if (objectType === mstrObjectEnum.mstrObjectType.dataset) {
-      this.setState({ isPublished: await getCubeStatus(objectId, projectId) !== '0' })
+      try {
+        const cubeStatus = await getCubeStatus(objectId, projectId) !== '0';
+        this.setState({ isPublished:cubeStatus });
+      } catch (error) {
+        Popup.handlePopupErrors(error);
+      }
     }
 
     selectObject({
