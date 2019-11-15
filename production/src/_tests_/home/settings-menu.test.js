@@ -3,6 +3,7 @@ import { mount } from 'enzyme';
 import { sessionHelper } from '../../storage/session-helper';
 import { SettingsMenuHOC } from '../../home/settings-menu';
 import { Office } from '../mockOffice';
+import DB from '../../cache/pouch-db';
 
 describe('Settings Menu', () => {
   afterEach(() => {
@@ -13,6 +14,7 @@ describe('Settings Menu', () => {
     // given
     const clearDB = jest.fn();
     const logOutRestSpy = jest.spyOn(sessionHelper, 'logOutRest').mockImplementation(() => { });
+    const indexedDBSpy = jest.spyOn(DB, 'getIndexedDBSupport').mockImplementation(() => true);
     const logOutSpy = jest.spyOn(sessionHelper, 'logOut');
     const logOutRedirectSpy = jest.spyOn(sessionHelper, 'logOutRedirect');
     const menuWrapper = mount(<SettingsMenuHOC clearCache={clearDB} />);
@@ -23,6 +25,7 @@ describe('Settings Menu', () => {
     await expect(logOutRestSpy).toBeCalled();
     await expect(logOutSpy).toBeCalled();
     await expect(logOutRedirectSpy).toBeCalled();
+    await expect(indexedDBSpy).toBeCalled();
     await expect(clearDB).toBeCalled();
   });
 

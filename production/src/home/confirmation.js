@@ -7,6 +7,7 @@ import { officeApiHelper } from '../office/office-api-helper';
 import { toggleSecuredFlag, toggleIsConfirmFlag, toggleIsClearingFlag } from '../office/office-actions';
 import { errorService } from '../error/error-handler';
 import { notificationService } from '../notification/notification-service';
+import { ProtectedSheetError } from '../error/protected-sheets-error';
 
 export const _Confirmation = ({ reportArray, toggleSecuredFlag, toggleIsConfirmFlag, toggleIsClearingFlag, t }) => {
   useEffect(() => {
@@ -26,8 +27,9 @@ export const _Confirmation = ({ reportArray, toggleSecuredFlag, toggleIsConfirmF
     const clearErrors = [];
     try {
       toggleIsClearingFlag(true);
-      toggleIsConfirmFlag(false);
+      toggleIsConfirmFlag(); // Switch off isConfirm popup
       const excelContext = await officeApiHelper.getExcelContext();
+      await officeApiHelper.checkIfAnySheetProtected(excelContext);
       for (const report of reportArray) {
         if (await officeApiHelper.checkIfObjectExist(t, report, excelContext)) {
           try {
@@ -50,7 +52,6 @@ export const _Confirmation = ({ reportArray, toggleSecuredFlag, toggleIsConfirmF
           counter++;
         }
       }
-      toggleIsConfirmFlag(false);
       if (clearErrors.length > 0) {
         displayClearDataError(clearErrors);
       } else if (counter !== reportArray.length) toggleSecuredFlag(true);
@@ -58,7 +59,6 @@ export const _Confirmation = ({ reportArray, toggleSecuredFlag, toggleIsConfirmF
       errorService.handleError(error);
     } finally {
       toggleIsClearingFlag(false);
-      toggleIsConfirmFlag(true);
     }
   };
 
