@@ -105,7 +105,6 @@ class OfficeTableHelper {
     };
   }
 
-
   /**
    * Updates number of rows in office table.
    *

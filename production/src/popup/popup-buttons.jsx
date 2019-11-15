@@ -4,6 +4,7 @@ import './popup-buttons.css';
 import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { NOT_PUBLISHED_CUBE } from '../error/constants';
 
 const prepareButton = (disableActiveActions, button, t, isPublished = true, disableSecondary = false) => {
   let disableReason;
@@ -11,7 +12,7 @@ const prepareButton = (disableActiveActions, button, t, isPublished = true, disa
     if (disableSecondary) {
       disableReason = 'This option is not available for dossier'
     } else { disableReason = 'This button is currently disabled because you didn’t select any data' }
-  } else { disableReason = 'This option is not available for not published cubes' }
+  } else { disableReason = NOT_PUBLISHED_CUBE }
   return ((disableActiveActions || disableSecondary || !isPublished)
     ? (
       <Popover className="button-tooltip" placement="topRight" content={t(`${disableReason}`)} mouseEnterDelay={1}>
