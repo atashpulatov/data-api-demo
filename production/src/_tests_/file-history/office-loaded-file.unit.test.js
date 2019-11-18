@@ -131,6 +131,8 @@ describe('office loaded file', () => {
     const startLoadingMocked = jest.fn();
     const stopLoadingMocked = jest.fn();
     const mockEvent = { stopPropagation: jest.fn() };
+    const mockSync = jest.fn();
+    const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
     const mockIsCurrentSheetProtected = jest.spyOn(officeApiHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
     const objectClickMock = jest.spyOn(officeApiHelper, 'onBindingObjectClick').mockImplementation(() => true);
     const visualizationInfoMock = { dossierStructure: 'test' };
@@ -150,6 +152,7 @@ describe('office loaded file', () => {
     const refreshButton = wrappedIcons.at(1);
     refreshButton.props().onClick(mockEvent);
     // then
+    await expect(mockGetContext).toBeCalled();
     await expect(mockIsCurrentSheetProtected).toBeCalled();
     await expect(objectClickMock).toBeCalled();
     expect(onRefreshMock).toBeCalled();
@@ -190,6 +193,8 @@ describe('office loaded file', () => {
     const startLoadingMocked = jest.fn();
     const stopLoadingMocked = jest.fn();
     const mockEvent = { stopPropagation: jest.fn() };
+    const mockSync = jest.fn();
+    const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
     const mockIsCurrentSheetProtected = jest.spyOn(officeApiHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
     const testBindingId = 'testBindingId';
     const objectType = { name: 'report' };
@@ -212,6 +217,7 @@ describe('office loaded file', () => {
     const refreshButton = wrappedIcons.at(1);
     refreshButton.props().onClick(mockEvent);
     // then
+    await expect(mockGetContext).toBeCalled();
     await expect(mockIsCurrentSheetProtected).toBeCalled();
     await expect(objectClickMock).toBeCalled();
     expect(onRefreshMocked).toBeCalled();
@@ -267,6 +273,8 @@ describe('office loaded file', () => {
     const stopLoadingMocked = jest.fn();
     const testBindingId = 'testBindingId';
     const mockEvent = { stopPropagation: jest.fn() };
+    const mockSync = jest.fn();
+    const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
     const mockIsCurrentSheetProtected = jest.spyOn(officeApiHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
@@ -287,6 +295,7 @@ describe('office loaded file', () => {
     const deleteButton = wrappedIcons.at(2);
     deleteButton.props().onClick(mockEvent);
     // then
+    await expect(mockGetContext).toBeCalled();
     await expect(mockIsCurrentSheetProtected).toBeCalled();
     expect(onDeleteMocked).toBeCalled();
     expect(onDeleteMocked).toBeCalledWith(testBindingId, true, {});
@@ -392,6 +401,8 @@ describe('office loaded file', () => {
   });
   it('should invoke edit method on button click', async () => {
     // given
+    const mockSync = jest.fn();
+    const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
     const mockIsCurrentSheetProtected = jest.spyOn(officeApiHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
     const onEditMocked = jest.fn();
     const startLoadingMocked = jest.fn();
@@ -418,6 +429,7 @@ describe('office loaded file', () => {
     const editButton = wrappedIcons.at(0);
     editButton.props().onClick(mockEvent);
     // then
+    await expect(mockGetContext).toBeCalled();
     await expect(mockIsCurrentSheetProtected).toBeCalled();
     await expect(objectClickMock).toBeCalled();
     expect(onEditMocked).toBeCalled();
@@ -426,6 +438,8 @@ describe('office loaded file', () => {
 
   it('should invoke re-prompt method on button click', async () => {
     // given
+    const mockSync = jest.fn();
+    const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
     const mockIsCurrentSheetProtected = jest.spyOn(officeApiHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
     const onRepromptMocked = jest.fn();
     const startLoadingMocked = jest.fn();
@@ -452,6 +466,7 @@ describe('office loaded file', () => {
     const repromptButton = wrappedIcons.at(0);
     repromptButton.props().onClick(mockEvent);
     // then
+    await expect(mockGetContext).toBeCalled();
     await expect(mockIsCurrentSheetProtected).toBeCalled();
     await expect(objectClickMock).toBeCalled();
     expect(onRepromptMocked).toBeCalled();

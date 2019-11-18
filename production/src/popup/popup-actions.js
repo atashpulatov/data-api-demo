@@ -109,7 +109,8 @@ export function refreshReportsArray(reportArray, isRefreshAll) {
     for (const [index, report] of reportArray.entries()) {
       let isError = true;
       try {
-        await officeApiHelper.isCurrentReportSheetProtected(report.bindId);
+        const excelContext = await officeApiHelper.getExcelContext();
+        await officeApiHelper.isCurrentReportSheetProtected(excelContext, report.bindId);
         // TODO: these two actions should be merged into one in the future
         dispatch({
           type: officeProperties.actions.startLoadingReport,

@@ -29,9 +29,9 @@ export const _Confirmation = ({ reportArray, toggleSecuredFlag, toggleIsConfirmF
       toggleIsClearingFlag(true);
       toggleIsConfirmFlag(); // Switch off isConfirm popup
       const excelContext = await officeApiHelper.getExcelContext();
-      await officeApiHelper.checkIfAnySheetProtected(excelContext);
+      await officeApiHelper.checkIfAnySheetProtected(excelContext, reportArray);
       for (const report of reportArray) {
-        if (await officeApiHelper.checkIfObjectExist(t, report, excelContext)) {
+        if (await officeApiHelper.checkIfObjectExist(report, excelContext)) {
           try {
             reportName = report.name;
             if (report.isCrosstab) {
