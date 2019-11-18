@@ -359,6 +359,7 @@ class OfficeApiHelper {
       * Returns true if specific worksheet is protected
       *
       * @param {Office} excelContext Excel context
+      * @param {Array} reportArray array of Mstr Tables
       * @memberof OfficeApiHelper
       */
   checkIfAnySheetProtected = async (excelContext, reportArray) => {
@@ -375,25 +376,25 @@ class OfficeApiHelper {
   /**
       * Get sheet of the table. Return isSheetProtected
       *
-      * @param {Office} exlCntxt Excel context
+      * @param {Office} excelContext Excel context
       * @param {String} report Report object
       * @param {Office} sheet Excel Sheet
       * @memberof OfficeApiHelper
       */
-  isCurrentReportSheetProtected = async (exlCntxt, bindId, sheet) => {
+  isCurrentReportSheetProtected = async (excelContext, bindId, sheet) => {
     let isProtected = false;
     if (bindId) {
-      const currentExcelSheet = await this.getExcelSheetFromTable(exlCntxt, bindId);
+      const currentExcelSheet = await this.getExcelSheetFromTable(excelContext, bindId);
       if (currentExcelSheet) {
-        isProtected = await this.isSheetProtected(exlCntxt, currentExcelSheet);
+        isProtected = await this.isSheetProtected(excelContext, currentExcelSheet);
       } else {
         isProtected = false;
       }
-    } else if (sheet && exlCntxt) {
-      isProtected = await this.isSheetProtected(exlCntxt, sheet);
+    } else if (sheet && excelContext) {
+      isProtected = await this.isSheetProtected(excelContext, sheet);
     } else {
-      const currentSheet = await this.getCurrentExcelSheet(exlCntxt);
-      isProtected = await this.isSheetProtected(exlCntxt, currentSheet);
+      const currentSheet = await this.getCurrentExcelSheet(excelContext);
+      isProtected = await this.isSheetProtected(excelContext, currentSheet);
     }
     if (isProtected) {
       throw new ProtectedSheetError();
