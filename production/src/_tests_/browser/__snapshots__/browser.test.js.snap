@@ -40844,6 +40844,6 @@ exports[`Browser should render correctly 1`] = `
       }
     }
   />
-  <Connect(withI18nextTranslation(_PopupButtons)) />
+  <Connect(withI18nextTranslation(NotConnectedPopupButtons)) />
 </div>
 `;
