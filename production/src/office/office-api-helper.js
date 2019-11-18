@@ -367,6 +367,11 @@ class OfficeApiHelper {
     await excelContext.sync();
 
     for (const sheet of sheets.items) {
+      sheet.load('tables');
+      await excelContext.sync();
+      if (!sheet.tables.count) {
+        return;
+      }
       await officeApiHelper.isCurrentReportSheetProtected(excelContext, undefined, sheet);
     }
   }
