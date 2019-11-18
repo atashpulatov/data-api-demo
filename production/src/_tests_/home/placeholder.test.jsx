@@ -25,6 +25,8 @@ describe('Placeholder', () => {
     // given
     const sessionHelperSpy = jest.spyOn(sessionHelper, 'disableLoading');
     sessionHelperSpy.mockClear();
+    const mockSync = jest.fn();
+    const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
     const mockIsCurrentSheetProtected = jest.spyOn(officeApiHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
     const clickSpy = jest.spyOn(popupController, 'runPopupNavigation');
     const wrappedComponent = mount(<Placeholder />);
@@ -34,6 +36,7 @@ describe('Placeholder', () => {
     wrappedButton.simulate('click');
     // then
     expect(wrappedButton).toBeDefined();
+    await expect(mockGetContext).toBeCalled();
     await expect(mockIsCurrentSheetProtected).toBeCalled();
     await expect(clickSpy).toHaveBeenCalled();
   });
