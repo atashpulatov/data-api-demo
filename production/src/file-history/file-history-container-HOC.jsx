@@ -22,7 +22,7 @@ export const fileHistoryContainerHOC = (Component) => {
     addDataAction = async () => {
       try {
         const excelContext = await officeApiHelper.getExcelContext();
-        await officeApiHelper.isCurrentReportSheetProtected(excelContext, undefined, undefined);
+        await officeApiHelper.isCurrentReportSheetProtected(excelContext);
 
         // Prevent navigation tree from going straight into importing previously selected item.
         if (reduxStore.getState().navigationTree.importRequested) reduxStore.dispatch({ type: CANCEL_REQUEST_IMPORT });
