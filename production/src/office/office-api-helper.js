@@ -361,18 +361,14 @@ class OfficeApiHelper {
       * @param {Office} excelContext Excel context
       * @memberof OfficeApiHelper
       */
-  checkIfAnySheetProtected = async (excelContext) => {
-    const sheets = excelContext.workbook.worksheets;
-    sheets.load('items/name');
-    await excelContext.sync();
-
-    for (const sheet of sheets.items) {
-      sheet.load('tables');
-      await excelContext.sync();
-      if (!sheet.tables.count) {
-        return;
+  checkIfAnySheetProtected = async (excelContext, reportArray) => {
+    for (const report of reportArray) {
+      const sheet = await this.getExcelSheetFromTable(excelContext, report.bindId);
+      if (sheet) {
+        await this.isCurrentReportSheetProtected(excelContext, undefined, sheet);
+      } else {
+        return false;
       }
-      await officeApiHelper.isCurrentReportSheetProtected(excelContext, undefined, sheet);
     }
   }
 
