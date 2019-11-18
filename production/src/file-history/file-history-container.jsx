@@ -49,7 +49,7 @@ export class _FileHistoryContainer extends React.Component {
           await officeApiHelper.checkStatusOfSessions();
           const { reportArray, t } = this.props;
           const reportToDelete = reportArray.find((report) => report.bindId === e.tableName);
-          officeApiHelper.removeObjectAndDisplaytNotification(reportToDelete, officeContext, t)
+          officeApiHelper.removeObjectAndDisplaytNotification(reportToDelete, officeContext);
           stopLoading();
         });
       } else if (officeContext.requirements.isSetSupported('ExcelApi', 1.7)) {
@@ -57,12 +57,12 @@ export class _FileHistoryContainer extends React.Component {
           startLoading();
           await officeApiHelper.checkStatusOfSessions();
           excelContext.workbook.tables.load('items');
-          await excelContext.sync()
-          const reportsOfSheets = excelContext.workbook.tables.items
+          await excelContext.sync();
+          const reportsOfSheets = excelContext.workbook.tables.items;
           const { reportArray, t } = this.props;
           const reportsToBeDeleted = reportArray.filter((report) => !reportsOfSheets.find((table) => table.name === report.bindId));
           for (const report of reportsToBeDeleted) {
-            officeApiHelper.removeObjectAndDisplaytNotification(report, officeContext, t)
+            officeApiHelper.removeObjectAndDisplaytNotification(report, officeContext);
           }
           stopLoading();
         });

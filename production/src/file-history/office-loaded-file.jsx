@@ -113,7 +113,8 @@ export class _OfficeLoadedFile extends React.Component {
     this.setState({ allowDeleteClick: false, allowRefreshClick: false },
       async () => {
         try {
-          await officeApiHelper.isCurrentReportSheetProtected(bindingId);
+          const excelContext = await officeApiHelper.getExcelContext();
+          await officeApiHelper.isCurrentReportSheetProtected(excelContext, bindingId);
           const message = t('{{name}} has been removed from the workbook.',
             { name: fileName });
           await fileHistoryHelper.deleteReport(onDelete,
@@ -127,7 +128,7 @@ export class _OfficeLoadedFile extends React.Component {
           errorService.handleError(error);
         } finally {
           stopLoading();
-          this.setState({ allowRefreshClick: true });
+          this.setState({ allowDeleteClick: true, allowRefreshClick: true });
         }
       });
   };
@@ -144,7 +145,8 @@ export class _OfficeLoadedFile extends React.Component {
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
-          await officeApiHelper.isCurrentReportSheetProtected(bindingId);
+          const excelContext = await officeApiHelper.getExcelContext();
+          await officeApiHelper.isCurrentReportSheetProtected(excelContext, bindingId);
           // calling onBindingObjectClick to check whether the object exists in Excel
           // before opening prompt popup
           if (await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport, fileName)) {
@@ -171,7 +173,8 @@ export class _OfficeLoadedFile extends React.Component {
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
-          await officeApiHelper.isCurrentReportSheetProtected(bindingId);
+          const excelContext = await officeApiHelper.getExcelContext();
+          await officeApiHelper.isCurrentReportSheetProtected(excelContext, bindingId);
           if (await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport, fileName)) {
             if (objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
               (await callForEditDossier({ bindId: bindingId, objectType }, loading));
@@ -200,7 +203,8 @@ export class _OfficeLoadedFile extends React.Component {
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
-          await officeApiHelper.isCurrentReportSheetProtected(bindingId);
+          const excelContext = await officeApiHelper.getExcelContext();
+          await officeApiHelper.isCurrentReportSheetProtected(excelContext, bindingId);
           if (await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport, fileName)) {
             (await refreshReportsArray([{ bindId: bindingId, objectType }], false));
           }

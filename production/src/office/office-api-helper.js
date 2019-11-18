@@ -128,7 +128,7 @@ class OfficeApiHelper {
      */
   removeObjectAndDisplaytNotification = async (object, officeContext, t) => {
     const { name } = object;
-    this.removeObjectNotExistingInExcel(t, object, officeContext);
+    this.removeObjectNotExistingInExcel(object, officeContext);
     const message = t('{{name}} has been removed from the workbook.', { name });
     notificationService.displayTranslatedNotification({ type: 'success', content: message });
   }
@@ -312,7 +312,7 @@ class OfficeApiHelper {
    * @param {Office} officeContext Excel context
    * @memberof OfficeApiHelper
    */
-  removeObjectNotExistingInExcel = async (t, object, officeContext) => {
+  removeObjectNotExistingInExcel = async (object, officeContext) => {
     officeStoreService.removeReportFromStore(object.bindId);
     await officeContext.document.bindings.releaseByIdAsync(object.bindId, () => { console.log('released binding'); });
   }
@@ -325,8 +325,13 @@ class OfficeApiHelper {
     * @memberof OfficeApiHelper
     */
   getExcelSheetFromTable = async (excelContext, bindId) => {
-    const table = excelContext.workbook.tables.getItem(bindId);
-    return table.getRange().worksheet;
+    try {
+      const table = excelContext.workbook.tables.getItem(bindId);
+      await excelContext.sync();
+      return table.getRange().worksheet;
+    } catch (error) {
+      return false;
+    }
   }
 
   /**
@@ -362,30 +367,32 @@ class OfficeApiHelper {
     await excelContext.sync();
 
     for (const sheet of sheets.items) {
-      await officeApiHelper.isCurrentReportSheetProtected(null, sheet, excelContext);
+      await officeApiHelper.isCurrentReportSheetProtected(excelContext, undefined, sheet);
     }
   }
 
   /**
       * Get sheet of the table. Return isSheetProtected
       *
-      * @param {String} bindingId Report bind id
-      * @param {Office} sheet Excel Sheet
       * @param {Office} exlCntxt Excel context
+      * @param {String} report Report object
+      * @param {Office} sheet Excel Sheet
       * @memberof OfficeApiHelper
       */
-  isCurrentReportSheetProtected = async (bindingId, sheet, exlCntxt) => {
+  isCurrentReportSheetProtected = async (exlCntxt, bindId, sheet) => {
     let isProtected = false;
-    if (bindingId) {
-      const excelContext = await this.getExcelContext();
-      const currentExcelSheet = await this.getExcelSheetFromTable(excelContext, bindingId);
-      isProtected = await this.isSheetProtected(excelContext, currentExcelSheet);
+    if (bindId) {
+      const currentExcelSheet = await this.getExcelSheetFromTable(exlCntxt, bindId);
+      if (currentExcelSheet) {
+        isProtected = await this.isSheetProtected(exlCntxt, currentExcelSheet);
+      } else {
+        isProtected = false;
+      }
     } else if (sheet && exlCntxt) {
       isProtected = await this.isSheetProtected(exlCntxt, sheet);
     } else {
-      const excelContext = await this.getExcelContext();
-      const currentSheet = await this.getCurrentExcelSheet(excelContext);
-      isProtected = await this.isSheetProtected(excelContext, currentSheet);
+      const currentSheet = await this.getCurrentExcelSheet(exlCntxt);
+      isProtected = await this.isSheetProtected(exlCntxt, currentSheet);
     }
     if (isProtected) {
       throw new ProtectedSheetError();
@@ -402,14 +409,14 @@ class OfficeApiHelper {
    * @memberof OfficeApiHelper
    * @return {Boolean}
    */
-  checkIfObjectExist = async (t, object, excelContext) => {
+  checkIfObjectExist = async (object, excelContext) => {
     const officeContext = await this.getOfficeContext();
     try {
       await this.getTable(excelContext, object.bindId);
       await excelContext.sync();
       return true;
     } catch (error) {
-      await this.removeObjectNotExistingInExcel(t, object, officeContext);
+      await this.removeObjectNotExistingInExcel(object, officeContext);
       return false;
     }
   }

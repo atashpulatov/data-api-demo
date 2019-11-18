@@ -31,7 +31,7 @@ export const _Confirmation = ({ reportArray, toggleSecuredFlag, toggleIsConfirmF
       const excelContext = await officeApiHelper.getExcelContext();
       await officeApiHelper.checkIfAnySheetProtected(excelContext);
       for (const report of reportArray) {
-        if (await officeApiHelper.checkIfObjectExist(t, report, excelContext)) {
+        if (await officeApiHelper.checkIfObjectExist(report, excelContext)) {
           try {
             reportName = report.name;
             if (report.isCrosstab) {
