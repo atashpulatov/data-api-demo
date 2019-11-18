@@ -1,7 +1,8 @@
 import 'core-js/stable';
 import 'focus-visible/dist/focus-visible';
+import 'proxy-polyfill';
 import './index.css';
-import React, { Suspense, lazy } from 'react';
+import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import { authenticationService } from './authentication/auth-rest-service';
 import { homeHelper } from './home/home-helper';
