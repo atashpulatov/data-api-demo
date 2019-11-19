@@ -16,12 +16,16 @@ describe('NavigationTree', () => {
     jest.restoreAllMocks();
   });
 
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   const mockFunctionsAndProps = {
     cache: CACHE_STATE,
     i18n,
     resetDBState: jest.fn(),
     fetchObjectsFromNetwork: jest.fn(),
-  }
+  };
 
   it('should render with props given', () => {
     // given
@@ -86,7 +90,7 @@ describe('NavigationTree', () => {
     const givenSubtype = mstrObjectEnum.mstrObjectType.dossier.subtypes[0];
     const mockHandlePopupErrors = jest.fn();
     jest.spyOn(mstrObjectRestService, 'isPrompted')
-      .mockImplementationOnce(() => { throw new Error() });
+      .mockImplementationOnce(() => { throw new Error(); });
     const wrappedComponent = shallow(
       <_NavigationTree
         mstrData={mstrData}
@@ -305,7 +309,7 @@ describe('NavigationTree', () => {
     const givenSubtype = mstrObjectEnum.mstrObjectType.report.subtypes[0];
     const mockHandlePopupErrors = jest.fn();
     jest.spyOn(mstrObjectRestService, 'isPrompted')
-      .mockImplementationOnce(() => { throw new Error() });
+      .mockImplementationOnce(() => { throw new Error(); });
     const wrappedComponent = shallow(
       <_NavigationTree
         mstrData={mstrData}
@@ -340,20 +344,16 @@ describe('NavigationTree', () => {
     expect(connectToDB).toHaveBeenCalled();
   });
 
-  it('should send error message on refresh when no session', () => {
+  it('should send error message on refresh when no session', async () => {
     // given
     // const asyncMock = jest.fn().mockRejectedValue(new Error('Async error'));
     const givenError = new Error('Session error');
     authenticationHelper.validateAuthToken.mockRejectedValue(givenError);
-    const messageParent = jest.spyOn(Office.context.ui, 'messageParent');
-    const wrappedComponent = shallow(<_NavigationTree
-      {...mockFunctionsAndProps}
-    />);
+    const mockHandlePopupErrors = jest.fn();
+    const wrappedComponent = shallow(<_NavigationTree {...mockFunctionsAndProps} handlePopupErrors={mockHandlePopupErrors} />);
     // when
-    wrappedComponent.instance().refresh();
+    await wrappedComponent.instance().refresh();
     // then
-    expect(messageParent).toBeCalledTimes(2);
-    expect(messageParent.mock.calls[0][0]).toEqual(JSON.stringify({ command: selectorProperties.commandCancel }));
-    expect(messageParent.mock.calls[1][0]).toEqual(JSON.stringify({ command: selectorProperties.commandOnUpdate, body: {} }));
+    await expect(mockHandlePopupErrors).toBeCalled();
   });
 });
