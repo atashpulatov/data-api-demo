@@ -95,7 +95,7 @@
       "!src/**/*rest-service.js",
       "!src/error.jsx",
       "!src/index.js",
-      "!src/popup-entrypoint.js",
+      "!src/entry-point/*.*",
       "!src/serviceWorker.js",
       "!src/office/office-api-helper.js",
       "!src/office/office-context.js",

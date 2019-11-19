@@ -4,7 +4,6 @@ import { Provider } from 'react-redux';
 import { reduxPersistor, reduxStore } from '../store';
 import { Home } from '../home/home';
 
-
 export default function SidebarEntryPoint() {
   return (
     <Provider store={reduxStore}>
