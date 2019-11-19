@@ -181,8 +181,15 @@ class OfficeDisplayService {
       }
       throw error;
     } finally {
-      if (!isRefreshAll) this.dispatchPrintFinish();
-      excelContext.sync();
+      excelContext = excelContext || await officeApiHelper.getExcelContext();
+      if (!isRefreshAll) {
+        reduxStore.dispatch({
+          type: officeProperties.actions.finishLoadingReport,
+          reportBindId: bindingId,
+        });
+        this.dispatchPrintFinish();
+      }
+      await excelContext.sync();
       console.groupEnd();
     }
   };
@@ -246,7 +253,9 @@ class OfficeDisplayService {
     reduxStore.dispatch({ type: officeProperties.actions.popupHidden });
     reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
     try {
+      if (reduxStoreState.sessionReducer.dialog.close) {
       reduxStoreState.sessionReducer.dialog.close();
+      }
     } catch (err) {
       if (!err.includes(ERROR_POPUP_CLOSED)) {
         throw err;
