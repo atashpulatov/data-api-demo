@@ -20,7 +20,7 @@ code {
 
 .ant-popover .ant-popover-inner-content {
     min-width: 38px;
-    max-width: 280px;
+    max-width: none;
     padding: 8px;
     text-align: left;
     background-color: #404040;
