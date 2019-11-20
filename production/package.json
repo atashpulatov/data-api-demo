@@ -21,9 +21,6 @@
     "unload": "office-toolbox remove -m manifest.xml -a excel",
     "validate": "office-toolbox validate -m manifest.xml"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "babel": {
     "presets": [
       [
