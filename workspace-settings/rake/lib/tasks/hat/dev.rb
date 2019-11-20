@@ -180,6 +180,7 @@ desc "run the unit test and collect code coverage in stage_1 dev job"
 task :stage_1_test do
   run_test("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
   get_unit_test_metrics("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
+  get_test_coverage_metrics
 end
 
 desc "debug rake task"
@@ -446,4 +447,59 @@ def publish_to_pull_request_page(message=nil)
   end
   pull_request = Github::PullRequests.new(ENV['GITHUB_USER'], ENV['GITHUB_PWD'])
   pull_request.comment_pull_request(ENV['PROJECT_NAME'],ENV['ORGANIZATION_NAME'],ENV["ghprbPullId"],comments_message)
+end
+
+def get_test_coverage_metrics
+  base_coverage_dir = "#{base_repo_path}/production/coverage"
+  coverage_file = "#{base_coverage_dir}/clover.xml"
+  cov_doc = Hash.from_xml(File.read(coverage_file))
+
+  total_line = cov_doc['coverage']['project']['metrics']['loc'].to_i
+  total_line_covered = cov_doc['coverage']['project']['metrics']['ncloc'].to_i
+
+  total_method = cov_doc['coverage']['project']['metrics']['methods'].to_i
+  total_method_covered = cov_doc['coverage']['project']['metrics']['coveredmethods'].to_i
+
+  total_branch = cov_doc['coverage']['project']['metrics']['conditionals'].to_i
+  total_branch_covered = cov_doc['coverage']['project']['metrics']['coveredconditionals'].to_i
+
+  # packages_json = coverage_json['packages']
+
+  total_package_covered = 0
+  total_package = 0
+  total_class_covered = 0
+  total_class = 0
+
+  cov_doc['coverage']['project']['package'].each do |package|
+    total_package += 1
+    if package['metrics']['coveredstatements'].to_i > 0
+      total_package_covered += 1
+    end
+    file_array = package['file']
+    if package['file'].is_a? Hash
+      file_array = [package['file']]
+    end
+    file_array.each do |file|
+      total_class += 1
+      if file['metrics']['coveredstatements'].to_i > 0
+        total_class_covered += 1
+      end
+    end
+  end
+
+  metrics_ut_coverage = {}
+  #line coverage
+  metrics_ut_coverage['TOTAL_LINE'] = total_line
+  metrics_ut_coverage['TOTAL_LINE_COVERED'] = total_line_covered
+  #branching coverage
+  metrics_ut_coverage['TOTAL_BRANCH'] = total_branch
+  metrics_ut_coverage['TOTAL_BRANCH_COVERED'] =total_branch_covered
+  metrics_ut_coverage['TOTAL_PACKAGE'] = total_package
+  metrics_ut_coverage['TOTAL_PACKAGE_COVERED'] = total_package_covered
+  metrics_ut_coverage['TOTAL_CLASS'] = total_class
+  metrics_ut_coverage['TOTAL_CLASS_COVERED'] = total_class_covered
+  metrics_ut_coverage['TOTAL_METHOD'] = total_method
+  metrics_ut_coverage['TOTAL_METHOD_COVERED'] = total_method_covered
+  puts "\nMETRICS_UT_COVERAGE=#{metrics_ut_coverage.to_json}\n"
+
 end
