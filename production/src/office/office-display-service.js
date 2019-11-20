@@ -63,6 +63,7 @@ class OfficeDisplayService {
     let officeTable;
 
     try {
+      excelContext = await officeApiHelper.getExcelContext();
       if (!isRefreshAll) {
         // /Reports/getDefinition (GET /reports/{reportId}) endpoint does not work for Reports with Object Prompt(?)
         // so we're using /Object_Management/getObject (GET /objects/{id}) instead
@@ -76,7 +77,6 @@ class OfficeDisplayService {
       console.group('Importing data performance');
       console.time('Total');
       console.time('Init excel');
-      excelContext = await officeApiHelper.getExcelContext();
       startCell = selectedCell || (await officeApiHelper.getSelectedCell(excelContext));
       console.timeEnd('Init excel');
 
@@ -181,7 +181,6 @@ class OfficeDisplayService {
       }
       throw error;
     } finally {
-      excelContext = excelContext || await officeApiHelper.getExcelContext();
       if (!isRefreshAll) {
         reduxStore.dispatch({
           type: officeProperties.actions.finishLoadingReport,
