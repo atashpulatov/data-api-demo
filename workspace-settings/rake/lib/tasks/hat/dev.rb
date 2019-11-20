@@ -155,7 +155,8 @@ task :stage_0_test do
   end
   run_test("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
   get_unit_test_metrics("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
-
+  get_test_coverage_metrics
+  
   # pre-merge job shouldn't fail when test fail in base branch.
   # if the build process fail in base branch, publish the error message to pull request page.
   begin
@@ -450,7 +451,7 @@ def publish_to_pull_request_page(message=nil)
 end
 
 def get_test_coverage_metrics
-  base_coverage_dir = "#{base_repo_path}/production/coverage"
+  base_coverage_dir = "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/coverage"
   coverage_file = "#{base_coverage_dir}/clover.xml"
   cov_doc = Hash.from_xml(File.read(coverage_file))
 
