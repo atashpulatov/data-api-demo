@@ -41,76 +41,76 @@ export const SettingsMenuHOC = ({ userFullName, userID, userInitials, isSecured,
   };
 
   return (
-    <ul className='settings-list'>
-      <li id='testid' className='user-data no-trigger-close'>
+    <ul className="settings-list">
+      <li id="testid" className="user-data no-trigger-close">
         {userInitials !== null
-          ? <span className='no-trigger-close' id='initials' alt={t('User profile')}>{userInitials}</span>
-          : <img className='no-trigger-close' id='profile-image' src={logo} alt={t('User profile')} />
+          ? <span className="no-trigger-close" id="initials" alt={t('User profile')}>{userInitials}</span>
+          : <img className="no-trigger-close" id="profile-image" src={logo} alt={t('User profile')} />
           /* TODO: When rest api returns profileImage use it as source */}
         {helper.isOverflown(userNameDisplay, 130)
           ? (
-            <Popover placement='bottom' content={userNameDisplay} mouseEnterDelay={1}>
-              <span id='userName' className='user-name no-trigger-close'>{userNameDisplay}</span>
+            <Popover placement="bottom" content={userNameDisplay} mouseEnterDelay={1}>
+              <span id="userName" className="user-name no-trigger-close">{userNameDisplay}</span>
             </Popover>
           )
-          : <span id='userName' className='user-name no-trigger-close'>{userNameDisplay}</span>}
+          : <span id="userName" className="user-name no-trigger-close">{userNameDisplay}</span>}
       </li>
-      <li tabIndex='0' className={`no-trigger-close clear-data ${!isSecuredActive ? 'clear-data-inactive' : ''}`} onClick={isSecuredActive ? showConfirmationPopup : null}>
-        <span className='no-trigger-close'>
+      <li tabIndex="0" className={`no-trigger-close clear-data ${!isSecuredActive ? 'clear-data-inactive' : ''}`} onClick={isSecuredActive ? showConfirmationPopup : null}>
+        <span className="no-trigger-close">
           {t('Clear Data')}
         </span>
       </li>
-      <div className='separate-line' />
+      <div className="separate-line" />
       {/* TODO: <li tabIndex="0" className="no-trigger-close settings" onClick={() => toggleRenderSettingsFlag(true)}>
         <span className="no-trigger-close">
           {t('Settings')}
         </span>
       </li>
       <div className="separate-line" /> */}
-      <li className='privacy-policy'>
+      <li className="privacy-policy">
         <a
-          tabIndex='0'
-          href='https://www.microstrategy.com/legal-folder/privacy-policy'
-          target='_blank'
-          rel='noopener noreferrer'
+          tabIndex="0"
+          href="https://www.microstrategy.com/legal-folder/privacy-policy"
+          target="_blank"
+          rel="noopener noreferrer"
         >
           {t('Privacy Policy')}
         </a>
       </li>
       <li>
         <a
-          tabIndex='0'
-          href='https://www.microstrategy.com/legal-folder/legal-policies/terms-of-use'
-          target='_blank'
-          rel='noopener noreferrer'
+          tabIndex="0"
+          href="https://www.microstrategy.com/legal-folder/legal-policies/terms-of-use"
+          target="_blank"
+          rel="noopener noreferrer"
         >
           {t('Terms of Use')}
         </a>
       </li>
       <li>
         <a
-          tabIndex='0'
-          href=' https://www2.microstrategy.com/producthelp/Current/Office/index.htm'
-          target='_blank'
-          rel='noopener noreferrer'
+          tabIndex="0"
+          href=" https://www2.microstrategy.com/producthelp/Current/Office/index.htm"
+          target="_blank"
+          rel="noopener noreferrer"
         >
           {t('Help')}
         </a>
       </li>
       <li>
         <a
-          tabIndex='0'
+          tabIndex="0"
           href={prepareEmail()}
         >
           {t('Contact Us')}
         </a>
       </li>
       <li onClick={() => logout(() => clearCache(null, userID))}>
-        <span tabIndex='0' id='logOut' size='small'>
+        <span tabIndex="0" id="logOut" size="small">
           {t('Log Out')}
         </span>
       </li>
-      <li className='settings-version no-trigger-close'>{t('Version {{APP_VERSION}}', { APP_VERSION })}</li>
+      <li className="settings-version no-trigger-close">{t('Version {{APP_VERSION}}', { APP_VERSION })}</li>
     </ul>
   );
 };

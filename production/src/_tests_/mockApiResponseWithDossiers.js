@@ -16,7 +16,9 @@ const mockApiRepsonseWithDossiers = {
         name: 'Administrator',
         id: '54F3D26011D2896560009A8E67019608',
       },
-      certifiedInfo: { certified: false, },
+      certifiedInfo: {
+        certified: false,
+      },
       projectId: 'CE52831411E696C8BD2F0080EFD5AF44',
     },
     {
@@ -34,7 +36,9 @@ const mockApiRepsonseWithDossiers = {
         name: 'Administrator',
         id: '54F3D26011D2896560009A8E67019608',
       },
-      certifiedInfo: { certified: false, },
+      certifiedInfo: {
+        certified: false,
+      },
       projectId: '4BAE16A340B995CAD24193AA3AC15D29',
     },
     {
@@ -52,7 +56,9 @@ const mockApiRepsonseWithDossiers = {
         name: 'Administrator',
         id: '54F3D26011D2896560009A8E67019608',
       },
-      certifiedInfo: { certified: false, },
+      certifiedInfo: {
+        certified: false,
+      },
       projectId: 'CE52831411E696C8BD2F0080EFD5AF44',
     },
     {
@@ -72,7 +78,9 @@ const mockApiRepsonseWithDossiers = {
         name: 'Administrator',
         id: '54F3D26011D2896560009A8E67019608',
       },
-      certifiedInfo: { certified: false, },
+      certifiedInfo: {
+        certified: false,
+      },
       projectId: 'B7CA92F04B9FAE8D941C3E9B7E0CD754',
     },
     {
@@ -91,7 +99,9 @@ const mockApiRepsonseWithDossiers = {
         name: 'Administrator',
         id: '54F3D26011D2896560009A8E67019608',
       },
-      certifiedInfo: { certified: false, },
+      certifiedInfo: {
+        certified: false,
+      },
       projectId: 'CE52831411E696C8BD2F0080EFD5AF44',
     },
     {
@@ -109,7 +119,9 @@ const mockApiRepsonseWithDossiers = {
         name: 'Administrator',
         id: '54F3D26011D2896560009A8E67019608',
       },
-      certifiedInfo: { certified: false, },
+      certifiedInfo: {
+        certified: false,
+      },
       projectId: 'CE52831411E696C8BD2F0080EFD5AF44',
     },
     {
@@ -128,7 +140,9 @@ const mockApiRepsonseWithDossiers = {
         name: 'Administrator',
         id: '54F3D26011D2896560009A8E67019608',
       },
-      certifiedInfo: { certified: false, },
+      certifiedInfo: {
+        certified: false,
+      },
       projectId: 'CE52831411E696C8BD2F0080EFD5AF44',
     },
   ],

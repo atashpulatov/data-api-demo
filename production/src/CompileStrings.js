@@ -3,7 +3,9 @@ const sql = require('mssql');
 const path = require('path');
 
 const STRING_SERVER = '10.27.10.36'; // TS_SPHINX
-const HASH_DSN_DB = { LOCALIZATION_WEB: 'STRING_WEB', };
+const HASH_DSN_DB = {
+  LOCALIZATION_WEB: 'STRING_WEB',
+};
 
 const fetchStrings = async function (database, password, sqlString) {
   // const pool = await sql.connect('mssql://username:password@localhost/database')
@@ -14,7 +16,9 @@ const fetchStrings = async function (database, password, sqlString) {
     password,
     server: STRING_SERVER,
     database,
-    options: { encrypt: false, },
+    options: {
+      encrypt: false,
+    },
   };
 
   try {

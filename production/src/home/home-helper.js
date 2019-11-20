@@ -13,7 +13,9 @@ class HomeHelper {
       const currentPath = location.pathname;
       const pathBeginning = currentPath.split('/apps/')[0];
       const envUrl = `${location.origin}${pathBeginning}/api`;
-      const values = { envUrl, };
+      const values = {
+        envUrl,
+      };
       sessionHelper.saveLoginValues(values);
       return values.envUrl;
     }

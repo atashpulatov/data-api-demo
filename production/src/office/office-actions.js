@@ -22,7 +22,9 @@ export function toggleIsSettingsFlag(isSettings) {
 
 export function toggleIsConfirmFlag() {
   return (dispatch) => {
-    dispatch({ type: officeProperties.actions.toggleIsConfirmFlag, });
+    dispatch({
+      type: officeProperties.actions.toggleIsConfirmFlag,
+    });
   };
 }
 
@@ -37,8 +39,12 @@ export function toggleIsClearingFlag(isClearing) {
 
 export function toggleRenderSettingsFlag() {
   return (dispatch) => {
-    dispatch({ type: officeProperties.actions.toggleRenderSettingsFlag, });
+    dispatch({
+      type: officeProperties.actions.toggleRenderSettingsFlag,
+    });
   };
 }
 
-export const actions = { toggleSecuredFlag, };
+export const actions = {
+  toggleSecuredFlag,
+};

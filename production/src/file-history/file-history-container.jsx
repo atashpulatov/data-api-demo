@@ -125,44 +125,44 @@ export class _FileHistoryContainer extends React.Component {
         {
           isSecured
           && (
-            <div className='secured-screen-container'>
+            <div className="secured-screen-container">
               <img src={restrictedArt} alt={t('Refresh')} />
-              <div className='secured-header'>{t('Data Cleared!')}</div>
-              <p className='secured-info'>{t('MicroStrategy data has been removed from the workbook. Click \'View Data\' to import it again.')}</p>
-              <Button type='primary' className='show-data-btn' onClick={this.showData}>{t('View Data')}</Button>
+              <div className="secured-header">{t('Data Cleared!')}</div>
+              <p className="secured-info">{t('MicroStrategy data has been removed from the workbook. Click \'View Data\' to import it again.')}</p>
+              <Button type="primary" className="show-data-btn" onClick={this.showData}>{t('View Data')}</Button>
             </div>
           )
         }
         <Button
-          id='add-data-btn-container'
-          className='add-data-btn floating-button'
+          id="add-data-btn-container"
+          className="add-data-btn floating-button"
           onClick={() => addDataAction()}
           disabled={loading}
         >
           {t('Add Data')}
         </Button>
-        <span className='refresh-button-container'>
+        <span className="refresh-button-container">
           <ButtonPopover
-            placement='bottom'
+            placement="bottom"
             content={t('Refresh All Data')}
             mouseEnterDelay={1}
           >
             <Button
-              id='refresh-all-btn'
-              className='refresh-all-btn'
+              id="refresh-all-btn"
+              className="refresh-all-btn"
               style={{ float: 'right' }}
               onClick={() => this.refreshAllAction(reportArray, refreshReportsArray)}
               disabled={loading}
             >
               {!refreshingAll ? (
-                <MSTRIcon type='refresh' />
+                <MSTRIcon type="refresh" />
               ) : (
-                <img width='12px' height='12px' src={loadingSpinner} alt={t('Report loading icon')} />
+                <img width="12px" height="12px" src={loadingSpinner} alt={t('Report loading icon')} />
                 )}
             </Button>
           </ButtonPopover>
         </span>
-        <div role='list' className='tables-container'>
+        <div role="list" className="tables-container">
           {reportArray.map((report) => (
             <OfficeLoadedFile
               isPrompted={report.isPrompted}

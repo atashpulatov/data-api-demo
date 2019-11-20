@@ -12,7 +12,7 @@ export class _Breadcrumbs extends Component {
       ? null
       : (
         <div>
-          <header className='mstr-objects'>
+          <header className="mstr-objects">
                     All Files
           </header>
           <hr />

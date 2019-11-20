@@ -66,19 +66,45 @@ moment.locale('zh-TW', {
 
 const config = {
   resources: {
-    'en-US': { common: enCommon, },
-    'de-DE': { common: deCommon, },
-    'zh-CN': { common: zhCNCommon, },
-    'fr-FR': { common: frCommon, },
-    'es-ES': { common: esCommon, },
-    'it-IT': { common: itCommon, },
-    'zh-TW': { common: zhTWCommon, },
-    'ko-KR': { common: koCommon, },
-    'pt-BR': { common: ptCommon, },
-    'nl-NL': { common: nlCommon, },
-    'sv-SE': { common: svCommon, },
-    'ja-JP': { common: jaCommon, },
-    'da-DK': { common: daCommon, },
+    'en-US': {
+      common: enCommon,
+    },
+    'de-DE': {
+      common: deCommon,
+    },
+    'zh-CN': {
+      common: zhCNCommon,
+    },
+    'fr-FR': {
+      common: frCommon,
+    },
+    'es-ES': {
+      common: esCommon,
+    },
+    'it-IT': {
+      common: itCommon,
+    },
+    'zh-TW': {
+      common: zhTWCommon,
+    },
+    'ko-KR': {
+      common: koCommon,
+    },
+    'pt-BR': {
+      common: ptCommon,
+    },
+    'nl-NL': {
+      common: nlCommon,
+    },
+    'sv-SE': {
+      common: svCommon,
+    },
+    'ja-JP': {
+      common: jaCommon,
+    },
+    'da-DK': {
+      common: daCommon,
+    },
   },
   lng: 'en-US',
   fallbackLng: 'en-US',

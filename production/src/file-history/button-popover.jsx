@@ -4,7 +4,9 @@ import { Popover } from 'antd';
 export class ButtonPopover extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { popoverVisible: false, };
+    this.state = {
+      popoverVisible: false,
+    };
   }
 
   componentWillUnmount = () => {

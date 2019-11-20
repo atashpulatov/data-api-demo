@@ -4,19 +4,19 @@ import { sessionProperties } from '../storage/session-properties';
 
 export const historyReducer = (state = {}, action) => {
   switch (action.type) {
-  case historyProperties.actions.goInsideProject:
-    return onGoInsideProject(action, state);
-  case historyProperties.actions.goInside:
-    return onGoInside(action, state);
-  case historyProperties.actions.goUp:
-    return onGoUp(state);
-  case historyProperties.actions.goUpTo:
-    return onGoUpTo(action, state);
-  case historyProperties.actions.goToProjects:
-  case sessionProperties.actions.logOut:
-    return eraseHistory(state);
-  default:
-    return state;
+    case historyProperties.actions.goInsideProject:
+      return onGoInsideProject(action, state);
+    case historyProperties.actions.goInside:
+      return onGoInside(action, state);
+    case historyProperties.actions.goUp:
+      return onGoUp(state);
+    case historyProperties.actions.goUpTo:
+      return onGoUpTo(action, state);
+    case historyProperties.actions.goToProjects:
+    case sessionProperties.actions.logOut:
+      return eraseHistory(state);
+    default:
+      return state;
   }
 };
 

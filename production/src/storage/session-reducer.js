@@ -3,20 +3,20 @@ import { SessionError } from './session-error';
 
 export const sessionReducer = (state = {}, action) => {
   switch (action.type) {
-  case sessionProperties.actions.logIn:
-    return onLogIn(action, state);
-  case sessionProperties.actions.logOut:
-    return onLogOut(action, state);
-  case sessionProperties.actions.loggedIn:
-    return onLoggedIn(action, state);
-  case sessionProperties.actions.setLoading:
-    return onSetLoading(action, state);
-  case sessionProperties.actions.getUserInfo:
-    return onGetUserInfo(action, state);
-  case sessionProperties.actions.setDialog:
-    return onSetDialog(action, state);
-  default:
-    break;
+    case sessionProperties.actions.logIn:
+      return onLogIn(action, state);
+    case sessionProperties.actions.logOut:
+      return onLogOut(action, state);
+    case sessionProperties.actions.loggedIn:
+      return onLoggedIn(action, state);
+    case sessionProperties.actions.setLoading:
+      return onSetLoading(action, state);
+    case sessionProperties.actions.getUserInfo:
+      return onGetUserInfo(action, state);
+    case sessionProperties.actions.setDialog:
+      return onSetDialog(action, state);
+    default:
+      break;
   }
   return state;
 };

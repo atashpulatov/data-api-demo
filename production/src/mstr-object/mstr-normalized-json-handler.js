@@ -26,7 +26,9 @@ class NormalizedJsonHandler {
     const rawElement = definition.grid[axis][attributeIndex].elements[elementIndex];
     const { name, formValues, subtotal } = rawElement;
     if (!subtotal) {
-      return { ...rawElement, value: formValues || [name], subtotalAddress: false, };
+      return {
+        ...rawElement, value: formValues || [name], subtotalAddress: false,
+      };
     }
     return {
       ...rawElement,
@@ -143,7 +145,9 @@ class NormalizedJsonHandler {
     if (headers[axis].length === 0) return [[]];
     const headersNormalized = axis === 'columns' ? this._transposeMatrix(headers[axis]) : headers[axis];
     const matrix = headersNormalized.map((headerCells, colIndex) => {
-      const axisElements = this.mapElementIndicesToElements({ definition, axis, headerCells, colIndex, });
+      const axisElements = this.mapElementIndicesToElements({
+        definition, axis, headerCells, colIndex,
+      });
       return axisElements.map((e, axisIndex, elementIndex) => onElement(e, axisIndex, elementIndex));
     });
     return axis === 'columns' ? this._transposeMatrix(matrix) : matrix;

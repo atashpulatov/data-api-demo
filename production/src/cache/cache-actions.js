@@ -179,23 +179,23 @@ export function refreshCache() {
 
 export function dispatchCacheResults(result, dispatch) {
   switch (result.id) {
-  case PROJECTS_DB_ID:
-    dispatch(addProjects(result.doc.data));
-    break;
-  case MY_LIBRARY_DB_ID:
-    dispatch(addMyLibraryObjects(result.doc.data));
-    break;
-  case ENV_LIBRARY_DB_ID:
-    dispatch(addEnvObjects(result.doc.data));
-    break;
-  case LOADING_DB + MY_LIBRARY_DB_ID:
-    dispatch(myLibraryLoading(result.doc.data));
-    break;
-  case LOADING_DB + ENV_LIBRARY_DB_ID:
-    dispatch(objectListLoading(result.doc.data));
-    break;
-  default:
-    break;
+    case PROJECTS_DB_ID:
+      dispatch(addProjects(result.doc.data));
+      break;
+    case MY_LIBRARY_DB_ID:
+      dispatch(addMyLibraryObjects(result.doc.data));
+      break;
+    case ENV_LIBRARY_DB_ID:
+      dispatch(addEnvObjects(result.doc.data));
+      break;
+    case LOADING_DB + MY_LIBRARY_DB_ID:
+      dispatch(myLibraryLoading(result.doc.data));
+      break;
+    case LOADING_DB + ENV_LIBRARY_DB_ID:
+      dispatch(objectListLoading(result.doc.data));
+      break;
+    default:
+      break;
   }
 }
 

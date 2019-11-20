@@ -15,7 +15,7 @@ const prepareButton = (disableActiveActions, button, t, isPublished = true, disa
   } else { disableReason = NOT_PUBLISHED_CUBE }
   return ((disableActiveActions || disableSecondary || !isPublished)
     ? (
-      <Popover className='button-tooltip' placement='topRight' content={t(`${disableReason}`)} mouseEnterDelay={1}>
+      <Popover className="button-tooltip" placement="topRight" content={t(`${disableReason}`)} mouseEnterDelay={1}>
         {button}
       </Popover>
     ) : button);
@@ -25,28 +25,28 @@ export const NotConnectedPopupButtons = ({
   handleOk, handleSecondary, handleCancel, handleBack,
   loading, disableActiveActions, onPreviewClick, t = (text) => text, hideSecondary, disableSecondary, isPublished
 }) => (
-  <div className='popup-buttons popup-footer'>
+  <div className="popup-buttons popup-footer">
     {(!hideSecondary && !handleSecondary)
-        && prepareButton(disableActiveActions, <Button id='data-preview' onClick={onPreviewClick} disabled={disableActiveActions}>
+        && prepareButton(disableActiveActions, <Button id="data-preview" onClick={onPreviewClick} disabled={disableActiveActions}>
           {t('Data Preview')}
         </Button>, t, isPublished)}
 
 
-    {handleBack && (<Button id='back' onClick={handleBack}>{t('Back')}</Button>)}
+    {handleBack && (<Button id="back" onClick={handleBack}>{t('Back')}</Button>)}
 
     {prepareButton(disableActiveActions,
-      <Button id='import' type={!handleSecondary ? 'primary' : ''} onClick={handleOk} loading={loading} disabled={disableActiveActions}>
+      <Button id="import" type={!handleSecondary ? 'primary' : ''} onClick={handleOk} loading={loading} disabled={disableActiveActions}>
         {t('Import')}</Button>, t, isPublished)}
 
     {!hideSecondary && handleSecondary && prepareButton(disableActiveActions, <Button
-        id='prepare'
-        type='primary'
+        id="prepare"
+        type="primary"
         disabled={disableActiveActions || loading || disableSecondary || !isPublished}
         onClick={handleSecondary}>
       {t('Prepare Data')}
     </Button>, t, isPublished, disableSecondary)}
 
-    <Button id='cancel' onClick={handleCancel}>
+    <Button id="cancel" onClick={handleCancel}>
       {t('Cancel')}
     </Button>
   </div>

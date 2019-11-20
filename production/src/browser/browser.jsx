@@ -28,10 +28,10 @@ export const _Browser = ({
       DBConnection.cancel();
     }
   };
-  const connectToCacheMethod = useCallback(() => {
+  const connectToCacheMethod = () => {
     DBConnection = connectToDB();
     if (isMSIE) startDBListener();
-  });
+  };
   const refresh = () => {
     // eslint-disable-next-line no-unused-expressions
     DBConnection && DBConnection.cancel();
@@ -40,12 +40,12 @@ export const _Browser = ({
     });
   };
 
-  React.useEffect(() => connectToCacheMethod(), [connectToCacheMethod]);
+  React.useEffect(() => connectToCacheMethod(), []);
 
   return (
-    <div className='browser-wrapper'>
-      <div className='browser-top-panel'>
-        <div className='browser-title-bar'>{t('Import Data')}</div>
+    <div className="browser-wrapper">
+      <div className="browser-top-panel">
+        <div className="browser-title-bar">{t('Import Data')}</div>
         <TopFilterPanel
           isLoading={false}
           locale={locale}
@@ -68,7 +68,7 @@ export const _Browser = ({
         locale={locale}
         filter={filter}
         myLibrary={myLibrary}
-        searchText='' // TODO: Provide proper search text
+        searchText="" // TODO: Provide proper search text
         isLoading={false} />
       <PopupButtons />
     </div>

@@ -4,16 +4,21 @@ class NavigationService {
   getLoginRoute() {
     return {
       pathname: '/authenticate',
-      state: {},
+      state: {
+      },
     };
   }
 
   getProjectsRoute() {
-    return { pathname: '/', };
+    return {
+      pathname: '/',
+    };
   }
 
   getObjectsRoute() {
-    return { pathname: '/objects', };
+    return {
+      pathname: '/objects',
+    };
   }
 
   getNavigationRoute() {
