@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import {
-  notification, message, Icon, Button,
-} from 'antd';
+import { notification, message, Icon, Button, } from 'antd';
 import { connect } from 'react-redux';
 import './Notifications.css';
 import { withTranslation } from 'react-i18next';
@@ -14,9 +12,7 @@ export class NotificationsWithoutRedux extends Component {
       duration: 5,
       maxCount: 3,
     });
-    notification.config({
-      duration: 0,
-    });
+    notification.config({ duration: 0, });
   }
 
   componentDidUpdate = () => {
@@ -29,15 +25,13 @@ export class NotificationsWithoutRedux extends Component {
   };
 
   displayNotification = () => {
-    const {
-      notificationType, title, content, t, details, translated, onConfirm,
-    } = this.props;
+    const { notificationType, title, content, t, details, translated, onConfirm, } = this.props;
     let icon;
     const key = `open${Date.now()}`;
     let btn = (
       <Button
-        type="primary"
-        size="small"
+        type='primary'
+        size='small'
         onClick={() => {
           notification.close(key);
           onConfirm && onConfirm();
@@ -46,32 +40,26 @@ export class NotificationsWithoutRedux extends Component {
         {t('OK')}
       </Button>
     );
-    notification.config({
-      duration: 0,
-    });
+    notification.config({ duration: 0, });
     switch (notificationType) {
-      case 'warning':
-        icon = <Icon type="warning" theme="filled" style={{ color: '#faad14' }} />;
-        break;
-      case 'error':
-        icon = <Icon type="close-circle" theme="filled" style={{ color: '#f5222d' }} />;
-        break;
-      case 'info':
-        icon = <Icon type="info-circle" theme="filled" style={{ color: '#1890ff' }} />;
-        notification.config({
-          duration: 5,
-        });
-        btn = null;
-        break;
-      case 'success':
-        icon = <Icon type="check-circle" theme="filled" style={{ color: '#52c41a' }} />;
-        notification.config({
-          duration: 2,
-        });
-        btn = null;
-        break;
-      default:
-        break;
+    case 'warning':
+      icon = <Icon type='warning' theme='filled' style={{ color: '#faad14' }} />;
+      break;
+    case 'error':
+      icon = <Icon type='close-circle' theme='filled' style={{ color: '#f5222d' }} />;
+      break;
+    case 'info':
+      icon = <Icon type='info-circle' theme='filled' style={{ color: '#1890ff' }} />;
+      notification.config({ duration: 5, });
+      btn = null;
+      break;
+    case 'success':
+      icon = <Icon type='check-circle' theme='filled' style={{ color: '#52c41a' }} />;
+      notification.config({ duration: 2, });
+      btn = null;
+      break;
+    default:
+      break;
     }
     notification.open({
       message: t(title),
@@ -109,8 +97,6 @@ const mapStateToProps = (state) => ({
   onConfirm: state.notificationReducer.onConfirm,
 });
 
-NotificationsWithoutRedux.defaultProps = {
-  t: (text) => text,
-};
+NotificationsWithoutRedux.defaultProps = { t: (text) => text, };
 
 export const Notifications = connect(mapStateToProps)(withTranslation('common')(NotificationsWithoutRedux));

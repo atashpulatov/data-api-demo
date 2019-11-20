@@ -210,8 +210,8 @@ export class _NavigationTree extends Component {
     const objects = myLibrary ? cache.myLibrary.objects : cache.environmentLibrary.objects;
     const cacheLoading = cache.myLibrary.isLoading || cache.environmentLibrary.isLoading;
     return (
-      <div className="navigation_tree__main_wrapper">
-        <div className="navigation_tree__title_bar">
+      <div className='navigation_tree__main_wrapper'>
+        <div className='navigation_tree__title_bar'>
           <span>{t('Import Data')}</span>
           <TopFilterPanel
             locale={i18n.language}

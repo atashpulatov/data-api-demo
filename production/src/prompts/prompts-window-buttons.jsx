@@ -9,11 +9,11 @@ export const _PromptWindowButtons = ({
   handleRun, isReprompt, closePopup, cancelImportRequest,
   handleBack, t = (text) => text, disableRunButton
 }) => (
-  <div className="popup-buttons popup-footer">
-      {!isReprompt && <Button id="back" onClick={() => cancelImportRequest() && handleBack()}>{t('Back')}</Button>}
-      <Button id="run" onClick={handleRun} disabled={disableRunButton}>{t('Run')} </Button>
-      <Button id="cancel" onClick={closePopup}>{t('Cancel')}</Button>
-    </div>
+  <div className='popup-buttons popup-footer'>
+    {!isReprompt && <Button id='back' onClick={() => cancelImportRequest() && handleBack()}>{t('Back')}</Button>}
+    <Button id='run' onClick={handleRun} disabled={disableRunButton}>{t('Run')} </Button>
+    <Button id='cancel' onClick={closePopup}>{t('Cancel')}</Button>
+  </div>
 );
 
 export const PromptWindowButtons = connect(() => ({}), { cancelImportRequest })(withTranslation('common')(_PromptWindowButtons));

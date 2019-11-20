@@ -89,12 +89,12 @@ export default class _DossierWindow extends React.Component {
     const dossierFinalName = (isEdit) ? editedObjectName : chosenObjectName;
     return (
       <div>
-        <h1 title={dossierFinalName} className="ant-col folder-browser-title">
+        <h1 title={dossierFinalName} className='ant-col folder-browser-title'>
           {`${t('Import Dossier')} > ${dossierFinalName}`}
         </h1>
-        <span className="dossier-window-information-frame">
-          <MSTRIcon clasName="dossier-window-information-icon" type="info-icon" />
-          <span className="dossier-window-information-text">
+        <span className='dossier-window-information-frame'>
+          <MSTRIcon clasName='dossier-window-information-icon' type='info-icon' />
+          <span className='dossier-window-information-text'>
             {`${t('This view supports the regular dossier manipulations. To import data, select a visualization.')}`}
           </span>
         </span>

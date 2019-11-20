@@ -12,7 +12,7 @@ export class PromptsContainer extends Component {
 
     render() {
       return (
-        <div ref={this.container} className="promptsContainer" style={{ height: '100vh', position: 'relative', overflow: 'hidden' }} />
+        <div ref={this.container} className='promptsContainer' style={{ height: '100vh', position: 'relative', overflow: 'hidden' }} />
       );
     }
 }

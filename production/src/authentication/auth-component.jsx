@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import './auth-component.css';
-import {
-  Form, Icon, Input, Button, Checkbox, Select,
-} from 'antd';
+import { Form, Icon, Input, Button, Checkbox, Select, } from 'antd';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { authenticationHelper } from './authentication-helper';
@@ -30,11 +28,11 @@ export class _Authenticate extends Component {
     return (
       <article>
         <header>
-          <h1 id="authenticate-message">
+          <h1 id='authenticate-message'>
             {t('Connect to MicroStrategy Environment')}
           </h1>
         </header>
-        <Form onSubmit={(event) => this.onLoginUser(event)} className="login-form grid-container padding">
+        <Form onSubmit={(event) => this.onLoginUser(event)} className='login-form grid-container padding'>
           <FormItem
             label={t('Username')}
           >
@@ -43,7 +41,7 @@ export class _Authenticate extends Component {
               rules: [{ required: true, message: t('Please input your username!') }],
             })(<Input
               prefix={
-                <Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />
+                <Icon type='user' style={{ color: 'rgba(0,0,0,.25)' }} />
               }
               placeholder={t('Username')}
             />)}
@@ -56,9 +54,9 @@ export class _Authenticate extends Component {
               rules: [{ message: t('Please input your Password!') }],
             })(<Input
               prefix={
-                <Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />
+                <Icon type='lock' style={{ color: 'rgba(0,0,0,.25)' }} />
               }
-              type="password"
+              type='password'
               placeholder={t('Password')}
             />)}
           </FormItem>
@@ -70,21 +68,21 @@ export class _Authenticate extends Component {
               rules: [{ required: true, message: t('Please input environment URL!'), type: 'url' }],
             })(<Input
               prefix={
-                <Icon type="link" style={{ color: 'rgba(0,0,0,.25)' }} />
+                <Icon type='link' style={{ color: 'rgba(0,0,0,.25)' }} />
               }
               placeholder={t('environment URL')}
             />)}
           </FormItem>
           <FormItem
-            label="Login mode"
+            label='Login mode'
           >
             {getFieldDecorator('loginMode', {
               initialValue: session.loginMode || '1',
               rules: [{ required: true }],
             })(<Select>
-              <Option value="1">Standard</Option>
-              <Option value="16">LDAP</Option>
-               </Select>)}
+              <Option value='1'>Standard</Option>
+              <Option value='16'>LDAP</Option>
+            </Select>)}
           </FormItem>
           <FormItem>
             {getFieldDecorator('isRememberMeOn', {
@@ -93,10 +91,10 @@ export class _Authenticate extends Component {
             })(<Checkbox>{t('Remember Me')}</Checkbox>)}
           </FormItem>
           <div
-            className="centered-fields-container"
+            className='centered-fields-container'
           >
             <FormItem>
-              <Button type="primary" htmlType="submit" className="login-form-button">
+              <Button type='primary' htmlType='submit' className='login-form-button'>
                 {t('Log in')}
               </Button>
             </FormItem>
@@ -107,18 +105,12 @@ export class _Authenticate extends Component {
   }
 }
 
-_Authenticate.defaultProps = {
-  t: (text) => text,
-};
+_Authenticate.defaultProps = { t: (text) => text, };
 
 function mapStateToProps(state) {
-  return {
-    session: state.sessionReducer,
-  };
+  return { session: state.sessionReducer, };
 }
 
-const mapDispatchToProps = {
-  resetState,
-};
+const mapDispatchToProps = { resetState, };
 
 export const Authenticate = connect(mapStateToProps, mapDispatchToProps)(Form.create()(withTranslation('common')(_Authenticate)));

@@ -21,7 +21,7 @@ export default function HomeContent({
   if (authToken) {
     homeComponent = shouldRenderSettings ? <SettingsComponent onBack={toggleRenderSettingsFlag} t={t} />
       : (
-        <div id="overlay">
+        <div id='overlay'>
           <Header IS_LOCALHOST={IS_LOCALHOST} loading={loadingReport} />
           <Tabs t={t}>
             {(reportArray && reportArray.length !== 0)
@@ -38,7 +38,7 @@ export default function HomeContent({
     );
   }
   return (
-    <div id="content">
+    <div id='content'>
       <Notifications />
       {homeComponent}
       <HomeDialog show={popupOpen} text={t('A MicroStrategy for Office Add-in dialog is open')} />

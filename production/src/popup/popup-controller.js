@@ -96,32 +96,32 @@ class PopupController {
       if (response.command !== REFRESH_CACHE_COMMAND) await this.closeDialog(dialog);
       if (response.command !== selectorProperties.commandError) await officeApiHelper.getExcelSessionStatus(); // checking excel session status
       switch (response.command) {
-        case selectorProperties.commandOk:
-          if (!reportParams) {
-            await this.handleOkCommand(response, reportParams);
-          } else {
-            const reportPreviousState = this._getReportsPreviousState(reportParams);
-            await this.saveReportWithParams(reportParams, response, reportPreviousState);
-          }
-          break;
-        case selectorProperties.commandOnUpdate:
-          if (!reportParams) {
-            await this.handleUpdateCommand(response);
-          } else {
-            const reportPreviousState = this._getReportsPreviousState(reportParams);
-            await this.saveReportWithParams(reportParams, response, reportPreviousState);
-          }
-          break;
-        case selectorProperties.commandCancel:
-          break;
-        case selectorProperties.commandError:
-          errorService.handleError(response.error);
-          break;
-        case REFRESH_CACHE_COMMAND:
-          this.handleRefreshCacheCommand();
-          break;
-        default:
-          break;
+      case selectorProperties.commandOk:
+        if (!reportParams) {
+          await this.handleOkCommand(response, reportParams);
+        } else {
+          const reportPreviousState = this._getReportsPreviousState(reportParams);
+          await this.saveReportWithParams(reportParams, response, reportPreviousState);
+        }
+        break;
+      case selectorProperties.commandOnUpdate:
+        if (!reportParams) {
+          await this.handleUpdateCommand(response);
+        } else {
+          const reportPreviousState = this._getReportsPreviousState(reportParams);
+          await this.saveReportWithParams(reportParams, response, reportPreviousState);
+        }
+        break;
+      case selectorProperties.commandCancel:
+        break;
+      case selectorProperties.commandError:
+        errorService.handleError(response.error);
+        break;
+      case REFRESH_CACHE_COMMAND:
+        this.handleRefreshCacheCommand();
+        break;
+      default:
+        break;
       }
     } catch (error) {
       console.error(error);

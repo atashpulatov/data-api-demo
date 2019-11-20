@@ -78,21 +78,21 @@ export class _Header extends Component {
       <>
         {isClearing
           && (
-            <div className="block-all-ui">
+            <div className='block-all-ui'>
               <LoadingText text={t('Clearing data')} />
             </div>
           )}
-        <header id="app-header">
-          <div className="mstr-logo">
-            <span id="profileImage">
+        <header id='app-header'>
+          <div className='mstr-logo'>
+            <span id='profileImage'>
               {/* TODO: Alt text for logo will be added later */}
               <img src={mstrLogo} />
             </span>
           </div>
-          <div className="header-buttons">
-            <Popover placement="bottom" content={t('More Items')} mouseEnterDelay={1}>
-              <Button className="settings-btn no-trigger-close" onClick={this.toggleSettings} disabled={loading}>
-                <MSTRIcon type="settings" />
+          <div className='header-buttons'>
+            <Popover placement='bottom' content={t('More Items')} mouseEnterDelay={1}>
+              <Button className='settings-btn no-trigger-close' onClick={this.toggleSettings} disabled={loading}>
+                <MSTRIcon type='settings' />
               </Button>
             </Popover>
             {isSettings && <SettingsMenu />}

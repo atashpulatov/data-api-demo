@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
 
 export default class CustomNotification extends Component {
-  state = {
-    isExpanded: false,
-  }
+  state = { isExpanded: false, }
 
   handleCollapse = () => {
-    this.setState(({ isExpanded }) => ({
-      isExpanded: !isExpanded,
-    }));
+    this.setState(({ isExpanded }) => ({ isExpanded: !isExpanded, }));
   };
 
   render() {
@@ -25,24 +21,24 @@ export default class CustomNotification extends Component {
     };
 
     return (
-      <section className="error__section">
-        <header className="error__header">{translatedContent}</header>
+      <section className='error__section'>
+        <header className='error__header'>{translatedContent}</header>
         {
           details && (
           <div>
-            <nav className="error__nav">
+            <nav className='error__nav'>
               <p
                 onClick={this.handleCollapse}
                 className={config.actionClass}
               >
                 {t(config.message)}
-                <span className="error__arrow" />
+                <span className='error__arrow' />
               </p>
             </nav>
             <div
               className={`${config.messageClass} error__text`}
             >
-              <p className="error__message">{details}</p>
+              <p className='error__message'>{details}</p>
             </div>
           </div>
           )

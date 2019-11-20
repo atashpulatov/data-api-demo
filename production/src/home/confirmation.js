@@ -70,24 +70,24 @@ export const _Confirmation = ({ reportArray, toggleSecuredFlag, toggleIsConfirmF
 
   return (
     <>
-      <div className="block-ui" onClick={() => toggleIsConfirmFlag(false)} />
-      <div className="confirm-container">
-        <div className="confirm-header">
-          <span className="confirm-header-icon"><img width="19px" height="18px" src={warningIcon} alt={t('Refresh failed icon')} /></span>
+      <div className='block-ui' onClick={() => toggleIsConfirmFlag(false)} />
+      <div className='confirm-container'>
+        <div className='confirm-header'>
+          <span className='confirm-header-icon'><img width='19px' height='18px' src={warningIcon} alt={t('Refresh failed icon')} /></span>
         </div>
-        <div className="confirm-message">
-          <div className="confirm-message-title">
+        <div className='confirm-message'>
+          <div className='confirm-message-title'>
             <div dangerouslySetInnerHTML={{ __html: t('Are you sure you want to <span>Clear Data</span>?') }} />
           </div>
-          <div className="confirm-message-text">
+          <div className='confirm-message-text'>
             {t('This removes all MicroStrategy data from the workbook.')}
             <br />
             <div dangerouslySetInnerHTML={{ __html: t('In order to re-import the data, you will have to click the <span>View Data</span> button, which will appear in the add-in panel.') }} />
           </div>
         </div>
-        <div className="confirm-buttons">
-          <button className="ant-btn" id="confirm-btn" onClick={secureData}>{t('OK')}</button>
-          <button className="ant-btn" id="cancel-btn" onClick={() => toggleIsConfirmFlag(false)}>{t('Cancel')}</button>
+        <div className='confirm-buttons'>
+          <button className='ant-btn' id='confirm-btn' onClick={secureData}>{t('OK')}</button>
+          <button className='ant-btn' id='cancel-btn' onClick={() => toggleIsConfirmFlag(false)}>{t('Cancel')}</button>
         </div>
       </div>
     </>
