@@ -4,7 +4,7 @@
   ],
   "parser": "babel-eslint",
   "parserOptions": {
-    "ecmaVersion": 9
+    "ecmaVersion": 2020
   },
   "env": {
     "browser": true,
@@ -16,5 +16,9 @@
     "microstrategy": true,
     "Office": true,
     "OfficeExtension": true
+  },
+  "rules": {
+    "semi": ["warn", "always"],
+    "jsx-quotes": ["warn", "prefer-double"]
   }
 }
