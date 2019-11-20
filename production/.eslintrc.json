@@ -17,8 +17,8 @@
     "Office": true,
     "OfficeExtension": true
   },
-  "rules": {
-    "semi": ["warn", "always"],
-    "jsx-quotes": ["warn", "prefer-double"]
+  "rules":{
+    "jsx-quotes": ["warn","prefer-double"],
+    "semi":["error", "always"]
   }
 }
