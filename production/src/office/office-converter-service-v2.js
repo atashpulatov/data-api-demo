@@ -105,9 +105,17 @@ class OfficeConverterServiceV2 {
    * @memberof OfficeConverterServiceV2
    */
   getTableSize(response, columnInformation, isCrosstab) {
+    const supportForms = true;
+    let columnsCount = columnInformation.length;
+    for (let index = 0; supportForms && index < columnInformation.length; index++) {
+      const element = columnInformation[index];
+      if (element.isAttribute && element.forms.length > 1) {
+        columnsCount = columnsCount + element.forms.length - 1;
+      }
+    }
     return {
       rows: response.data.paging.total,
-      columns: isCrosstab ? response.data.headers.columns[0].length : columnInformation.length,
+      columns: isCrosstab ? response.data.headers.columns[0].length : columnsCount,
     };
   }
 
