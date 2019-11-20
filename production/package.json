@@ -21,13 +21,6 @@
     "unload": "office-toolbox remove -m manifest.xml -a excel",
     "validate": "office-toolbox validate -m manifest.xml"
   },
-  "babel": {
-    "presets": [
-      [
-        "airbnb"
-      ]
-    ]
-  },
   "dependencies": {
     "@mstr/mstr-react-library": "^1.2.21",
     "@mstr/rc": "^0.15.2",
