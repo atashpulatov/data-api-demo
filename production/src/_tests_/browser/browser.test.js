@@ -10,7 +10,7 @@ import { browserActions } from '../../browser/browser-actions';
 import { browserStoreService } from '../../browser/browser-store-service';
 import { createCache, connectToCache, refreshCache } from '../../cache/cache-actions';
 
-describe('Browser', () => {
+describe.skip('Browser', () => {
   const mockedProps = {
     objects: reportsExample.result,
     projects: projectsExample,
@@ -132,7 +132,7 @@ describe('Browser', () => {
         initDB: createCache,
         connectToDB: connectToCache,
         refreshDB: refreshCache,
-      }
+      };
       // then
       expect(mapDispatchToProps).toEqual(givenActions);
     });
