@@ -182,14 +182,15 @@ export class _NavigationTree extends Component {
       objectId = target.id;
     }
 
+    let cubeStatus = true;
     if (objectType === mstrObjectEnum.mstrObjectType.dataset) {
       try {
-        const cubeStatus = await getCubeStatus(objectId, projectId) !== '0';
-        this.setState({ isPublished:cubeStatus });
+        cubeStatus = await getCubeStatus(objectId, projectId) !== '0';
       } catch (error) {
         Popup.handlePopupErrors(error);
       }
     }
+    this.setState({ isPublished:cubeStatus });
 
     selectObject({
       chosenObjectId: objectId,
