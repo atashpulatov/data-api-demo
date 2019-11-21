@@ -38,6 +38,25 @@ class OfficeConverterServiceV2 {
   }
 
   /**
+   * Get attribute forms names
+   *
+   * @param {JSON} e Object definition from response
+   * @return {Object} Contains arrays of columns and rows attributes forms names
+   * @memberof OfficeConverterServiceV2
+   */
+  getAttributesForms = (e) => {
+    const titles = [];
+    if (e.type === 'attribute' && e.forms.length > 1) {
+      for (let index = 0; index < e.forms.length; index++) {
+        const formName = e.forms[index].name;
+        titles.push(`'${e.name} ${formName}`);
+      }
+      return titles;
+    }
+    return false;
+  }
+
+  /**
    * Get attribute names for crosstab report
    *
    * @param {JSON} definition Object definition from response
@@ -82,15 +101,21 @@ class OfficeConverterServiceV2 {
     const columnTotals = [];
     const onElement = (array) => (e) => {
       if (array) array.push(e.subtotalAddress);
+      const supportForms = true;
+      const forms = this.getAttributesForms(e);
+      if (supportForms && forms) {
+        return forms;
+      }
       return `'${e.value.join(' ')}`;
     };
+
     if (this.isCrosstab(response)) {
       const rows = jsonHandler.renderHeaders(response.definition, 'rows', response.data.headers, onElement(rowTotals));
       const columns = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement(columnTotals));
       const subtotalAddress = [...rowTotals, ...columnTotals];
       return { rows, columns, subtotalAddress };
     }
-    const attributeTitles = jsonHandler.renderTitles(response.definition, 'rows', response.data.headers, onElement());
+    const attributeTitles = jsonHandler.renderTitles(response.definition, 'rows', response.data.headers, onElement(), true);
     const metricHeaders = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement());
     return { columns: [[...attributeTitles[0], ...metricHeaders[0]]] };
   }

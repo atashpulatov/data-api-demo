@@ -172,10 +172,18 @@ class NormalizedJsonHandler {
    * @memberof NormalizedJsonHandler
    * @return {Array}
    */
-  renderTitles = (definition, axis, headers, onElement) => {
+  renderTitles = (definition, axis, headers, onElement, supportForms) => {
     const columnTitles = headers[axis].map((headerCells) => {
       const mapFn = axis === 'rows' ? this.mapElementIndicesToNames : this.mapElementIndicesToElements;
       const axisElements = mapFn({ definition, axis, headerCells });
+      if (supportForms) {
+        let result = [];
+        for (let i = 0; i < axisElements.length; i++) {
+          const elements = onElement(axisElements[i]);
+          result = typeof elements === 'string' ? [...result, elements] : [...result, ...elements];
+        }
+        return result;
+      }
       return axisElements.map((e, axisIndex, elementIndex) => onElement(e, axisIndex, elementIndex));
     });
     if (columnTitles.length === 0) return [[]];
