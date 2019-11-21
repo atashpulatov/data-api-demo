@@ -347,3 +347,7 @@ button.add-data-btn:focus {
 .clear-data-inactive {
   color: rgba(0, 0, 0, 0.50);
 }
+
+.rename-popover-width{
+  max-width: 280px;
+}

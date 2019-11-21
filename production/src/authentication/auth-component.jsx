@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import './auth-component.css';
-import {
-  Form, Icon, Input, Button, Checkbox, Select,
-} from 'antd';
+import { Form, Icon, Input, Button, Checkbox, Select, } from 'antd';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { authenticationHelper } from './authentication-helper';
@@ -84,7 +82,7 @@ export class _Authenticate extends Component {
             })(<Select>
               <Option value="1">Standard</Option>
               <Option value="16">LDAP</Option>
-               </Select>)}
+            </Select>)}
           </FormItem>
           <FormItem>
             {getFieldDecorator('isRememberMeOn', {
@@ -107,18 +105,12 @@ export class _Authenticate extends Component {
   }
 }
 
-_Authenticate.defaultProps = {
-  t: (text) => text,
-};
+_Authenticate.defaultProps = { t: (text) => text, };
 
 function mapStateToProps(state) {
-  return {
-    session: state.sessionReducer,
-  };
+  return { session: state.sessionReducer, };
 }
 
-const mapDispatchToProps = {
-  resetState,
-};
+const mapDispatchToProps = { resetState, };
 
 export const Authenticate = connect(mapStateToProps, mapDispatchToProps)(Form.create()(withTranslation('common')(_Authenticate)));

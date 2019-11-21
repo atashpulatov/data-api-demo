@@ -1,13 +1,11 @@
 import React from 'react';
-import {CustomBreadcrumb} from '../../breadcrumbs/breadcrumb.jsx';
-import {mount} from 'enzyme';
+import { mount } from 'enzyme';
+import { CustomBreadcrumb } from '../../breadcrumbs/breadcrumb.jsx';
 
 describe('Breadcrumb', () => {
   it('should render dirName that is provided in object', () => {
     // given
-    const object = {
-      dirName: 'testName',
-    };
+    const object = { dirName: 'testName', };
     // when
     const componentWrapper = mount(<CustomBreadcrumb object={object} />);
     const linkCollection = componentWrapper.find('a');
@@ -16,9 +14,7 @@ describe('Breadcrumb', () => {
   });
   it('should render projectName that is provided in object', () => {
     // given
-    const object = {
-      projectName: 'testName',
-    };
+    const object = { projectName: 'testName', };
     // when
     const componentWrapper = mount(<CustomBreadcrumb object={object} />);
     const linkCollection = componentWrapper.find('a');

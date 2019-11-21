@@ -35,7 +35,7 @@ describe.skip('Browser', () => {
     const shallowedComponent = shallow(<_Browser />);
     // then
     const wrappedPopupButtons = shallowedComponent.find(PopupButtons);
-    expect(wrappedPopupButtons.length).toEqual(1);
+    expect(wrappedPopupButtons).toHaveLength(1);
   });
   it('should render empty ObjectTable', () => {
     // given
@@ -43,7 +43,7 @@ describe.skip('Browser', () => {
     const shallowedComponent = shallow(<_Browser />);
     // then
     const wrappedObjectTables = shallowedComponent.find(ObjectTable);
-    expect(wrappedObjectTables.length).toEqual(1);
+    expect(wrappedObjectTables).toHaveLength(1);
   });
   it('should render correctly', () => {
     // given
@@ -143,7 +143,7 @@ describe.skip('Browser', () => {
       // when
       const shallowedBrowser = shallow(<_Browser />);
       // then
-      expect(shallowedBrowser.find(TopFilterPanel).length).toEqual(1);
+      expect(shallowedBrowser.find(TopFilterPanel)).toHaveLength(1);
     });
   });
 

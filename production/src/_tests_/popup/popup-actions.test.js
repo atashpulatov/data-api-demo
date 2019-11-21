@@ -129,7 +129,7 @@ describe('Popup actions', () => {
     it('should call redux store stoplaoding and handle error when the session fails', async () => {
       // given
       const error = new Error('test error');
-      officeApiHelper.getExcelSessionStatus.mockImplementationOnce(() => { throw error });
+      officeApiHelper.getExcelSessionStatus.mockImplementationOnce(() => { throw error; });
       const listener = jest.fn();
       const reportArray = [
         {
@@ -161,7 +161,7 @@ describe('Popup actions', () => {
     const bindingId = 'bindingId';
     const report = { bindId: bindingId, objectType: 'whatever' };
     const error = new Error('test error');
-    officeApiHelper.getExcelSessionStatus.mockImplementationOnce(() => { throw error });
+    officeApiHelper.getExcelSessionStatus.mockImplementationOnce(() => { throw error; });
     const listener = jest.fn();
     // when
     await actions.callForEditDossier(report)(listener);
@@ -173,7 +173,7 @@ describe('Popup actions', () => {
     // given
     const bindingId = 'bindingId';
     const report = { bindId: bindingId, objectType: 'whatever' };
-    const returnedValue = { projectId: 'projectId', id: 'id', manipulationsXML: 'manipulationsXML' }
+    const returnedValue = { projectId: 'projectId', id: 'id', manipulationsXML: 'manipulationsXML' };
     officeStoreService.getReportFromProperties.mockReturnValueOnce(returnedValue);
     const listener = jest.fn();
     const instanceDefinitionMocked = { instanceId: 'instanceId' };
@@ -191,7 +191,7 @@ describe('Popup actions', () => {
     // given
     const bindingId = 'bindingId';
     const report = { bindId: bindingId, objectType: 'whatever' };
-    const returnedValue = { projectId: 'projectId', id: 'id', manipulationsXML: 'manipulationsXML' }
+    const returnedValue = { projectId: 'projectId', id: 'id', manipulationsXML: 'manipulationsXML' };
     officeStoreService.getReportFromProperties.mockReturnValueOnce(returnedValue);
     const listener = jest.fn();
     const instanceDefinitionMocked = { instanceId: 'instanceId' };
@@ -218,19 +218,19 @@ describe('Popup actions', () => {
       projectId: returnedValue.projectId,
       instanceId: instanceDefinitionMocked.instanceId,
       promptsAnswers: returnedValue.promptsAnswers[0]
-    }
+    };
     const configInstanceMocked = {
       objectId: returnedValue.id,
       projectId: returnedValue.projectId,
       body: returnedValue.body,
       instanceId: instanceDefinitionMocked.instanceId,
-    }
+    };
     await createInstance.mockReturnValueOnce(instanceDefinitionMocked);
     // when
     await actions.callForEdit(report)(listener);
     // then
-    await expect(answerPrompts).toBeCalledWith(configPromptsMocked)
-    await expect(getInstance).toBeCalledWith(configInstanceMocked)
+    await expect(answerPrompts).toBeCalledWith(configPromptsMocked);
+    await expect(getInstance).toBeCalledWith(configInstanceMocked);
   });
 
   it('should do certain operations if edited report is prompted and status is NOT 2', async () => {
@@ -245,7 +245,7 @@ describe('Popup actions', () => {
     // when
     await actions.callForEdit(report)(listener);
     // then
-    expect(returnedValue.instanceId).toEqual(instanceDefinitionMocked.instanceId)
+    expect(returnedValue.instanceId).toEqual(instanceDefinitionMocked.instanceId);
   });
 
   it('should call error service and dispatch stop loading when edit action fails', async () => {
@@ -253,7 +253,7 @@ describe('Popup actions', () => {
     const bindingId = 'bindingId';
     const report = { bindId: bindingId, objectType: 'whatever' };
     const error = new Error('test error');
-    officeApiHelper.getExcelSessionStatus.mockImplementationOnce(() => { throw error });
+    officeApiHelper.getExcelSessionStatus.mockImplementationOnce(() => { throw error; });
     const listener = jest.fn();
     // when
     await actions.callForEdit(report)(listener);
@@ -295,7 +295,7 @@ describe('Popup actions', () => {
     const bindingId = 'bindingId';
     const report = { bindId: bindingId, objectType: 'whatever' };
     const error = new Error('test error');
-    officeApiHelper.getExcelSessionStatus.mockImplementationOnce(() => { throw error });
+    officeApiHelper.getExcelSessionStatus.mockImplementationOnce(() => { throw error; });
     const listener = jest.fn();
     // when
     await actions.callForReprompt(report)(listener);

@@ -1,7 +1,7 @@
 import React from 'react';
-import {_Breadcrumbs} from '../../breadcrumbs/breadcrumbs.jsx';
-import {breadcrumbsService} from '../../breadcrumbs/breadcrumb-service';
-import {mount} from 'enzyme';
+import { mount } from 'enzyme';
+import { _Breadcrumbs } from '../../breadcrumbs/breadcrumbs.jsx';
+import { breadcrumbsService } from '../../breadcrumbs/breadcrumb-service';
 
 describe('Breadcrumbs', () => {
   const originalMethod = breadcrumbsService.getHistoryObjects;
@@ -13,9 +13,7 @@ describe('Breadcrumbs', () => {
   });
   it('should not render breadcrumbs', () => {
     // given
-    breadcrumbsService.getHistoryObjects.mockImplementation(() => {
-      return [];
-    });
+    breadcrumbsService.getHistoryObjects.mockImplementation(() => []);
     // when
     const componentWrapper = mount(<_Breadcrumbs />);
     // then
@@ -23,18 +21,16 @@ describe('Breadcrumbs', () => {
   });
   it('should render two breadcrumbs', () => {
     // given
-    breadcrumbsService.getHistoryObjects.mockImplementation(() => {
-      return [
-        {
-          projectId: 'testProjectId',
-          projectName: 'testProjectName',
-        },
-        {
-          dirId: 'testDirId1',
-          dirName: 'testDirName1',
-        },
-      ];
-    });
+    breadcrumbsService.getHistoryObjects.mockImplementation(() => [
+      {
+        projectId: 'testProjectId',
+        projectName: 'testProjectName',
+      },
+      {
+        dirId: 'testDirId1',
+        dirName: 'testDirName1',
+      },
+    ]);
     // when
     const componentWrapper = mount(<_Breadcrumbs />);
     // then
@@ -43,9 +39,7 @@ describe('Breadcrumbs', () => {
   });
   it('should render 100 breadcrumbs', () => {
     // given
-    breadcrumbsService.getHistoryObjects.mockImplementation(() => {
-      return breadCrumbsGenerator(100);
-    });
+    breadcrumbsService.getHistoryObjects.mockImplementation(() => breadCrumbsGenerator(100));
     // when
     const componentWrapper = mount(<_Breadcrumbs />);
     // then
@@ -55,7 +49,7 @@ describe('Breadcrumbs', () => {
 });
 
 function breadCrumbsGenerator(count) {
-  let breadcrumbArray = [
+  const breadcrumbArray = [
     {
       projectId: 'testProjectId',
       projectName: 'testProjectName',

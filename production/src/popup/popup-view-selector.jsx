@@ -232,7 +232,7 @@ function proceedToImport(props) {
 
 function renderProperComponent(popupType, methods, propsToPass, editedReport) {
   if (popupType === PopupTypeEnum.dataPreparation) {
-    const mstrData = { ...propsToPass, instanceId: editedReport.instanceId, promptsAnswers: editedReport.promptsAnswers }
+    const mstrData = { ...propsToPass, instanceId: editedReport.instanceId, promptsAnswers: editedReport.promptsAnswers };
     return (
       <AttributeSelectorWindow
         mstrData={mstrData}
@@ -333,7 +333,7 @@ function parsePopupState(popupState, promptsAnswers) {
   let dossierName;
   const { visualizationInfo } = popupState;
   if (visualizationInfo && visualizationInfo.dossierStructure) {
-    ({ dossierName } = popupState.visualizationInfo.dossierStructure)
+    ({ dossierName } = popupState.visualizationInfo.dossierStructure);
   }
   const reportData = {
     reportId: popupState.id,

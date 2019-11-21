@@ -42,9 +42,7 @@ describe('NotificationService', () => {
     };
     actionCreator.showNotificationAction = jest.fn().mockImplementation(() => mockedAction);
     // when
-    notificationService.displayNotification({
-      type: testType, content: testContent, details: testDetails, title: testTitle,
-    });
+    notificationService.displayNotification({ type: testType, content: testContent, details: testDetails, title: testTitle, });
     // then
     expect(actionCreator.showNotificationAction).toBeCalled();
     expect(actionCreator.showNotificationAction).toBeCalledWith(testTitle, testContent, testType, testDetails, null);
@@ -67,9 +65,7 @@ describe('NotificationService', () => {
     };
     actionCreator.showTranslatedNotification = jest.fn().mockImplementation(() => mockedAction);
     // when
-    notificationService.displayTranslatedNotification({
-      type: testType, content: testContent, details: testDetails, title: testTitle,
-    });
+    notificationService.displayTranslatedNotification({ type: testType, content: testContent, details: testDetails, title: testTitle, });
     // then
     expect(actionCreator.showTranslatedNotification).toBeCalled();
     expect(actionCreator.showTranslatedNotification).toBeCalledWith(testTitle, testContent, testType, testDetails, null);

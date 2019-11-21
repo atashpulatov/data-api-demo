@@ -63,6 +63,7 @@ class OfficeDisplayService {
     let officeTable;
 
     try {
+      excelContext = await officeApiHelper.getExcelContext();
       if (!isRefreshAll) {
         // /Reports/getDefinition (GET /reports/{reportId}) endpoint does not work for Reports with Object Prompt(?)
         // so we're using /Object_Management/getObject (GET /objects/{id}) instead
@@ -76,7 +77,6 @@ class OfficeDisplayService {
       console.group('Importing data performance');
       console.time('Total');
       console.time('Init excel');
-      excelContext = await officeApiHelper.getExcelContext();
       startCell = selectedCell || (await officeApiHelper.getSelectedCell(excelContext));
       console.timeEnd('Init excel');
 
@@ -181,8 +181,14 @@ class OfficeDisplayService {
       }
       throw error;
     } finally {
-      if (!isRefreshAll) this.dispatchPrintFinish();
-      excelContext.sync();
+      if (!isRefreshAll) {
+        reduxStore.dispatch({
+          type: officeProperties.actions.finishLoadingReport,
+          reportBindId: bindingId,
+        });
+        this.dispatchPrintFinish();
+      }
+      await excelContext.sync();
       console.groupEnd();
     }
   };
@@ -246,7 +252,9 @@ class OfficeDisplayService {
     reduxStore.dispatch({ type: officeProperties.actions.popupHidden });
     reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
     try {
+      if (reduxStoreState.sessionReducer.dialog.close) {
       reduxStoreState.sessionReducer.dialog.close();
+      }
     } catch (err) {
       if (!err.includes(ERROR_POPUP_CLOSED)) {
         throw err;
@@ -458,7 +466,7 @@ class OfficeDisplayService {
                 dossierName: dossierDefinition.name,
                 pageName: page.name
               }
-            }
+            };
           }
         }
       }

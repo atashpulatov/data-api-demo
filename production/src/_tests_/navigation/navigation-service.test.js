@@ -44,9 +44,7 @@ describe('NavigatorService', () => {
     const originalMethod = navigationService.getLoginRoute;
     // given
     try {
-      const expected = {
-        prop: 'expect',
-      };
+      const expected = { prop: 'expect', };
       navigationService.getLoginRoute = jest.fn();
       navigationService.getLoginRoute.mockReturnValueOnce(expected);
       // when
@@ -74,9 +72,7 @@ describe('NavigatorService', () => {
         type: sessionProperties.actions.loggedIn,
         authToken: 'token',
       });
-      const expected = {
-        prop: 'expect',
-      };
+      const expected = { prop: 'expect', };
       navigationService.getProjectsRoute = jest.fn();
       navigationService.getProjectsRoute.mockReturnValueOnce(expected);
       // when
@@ -110,9 +106,7 @@ describe('NavigatorService', () => {
           projectId: 'id',
           projectName: 'name',
         });
-        const expected = {
-          prop: 'expect',
-        };
+        const expected = { prop: 'expect', };
         navigationService.getObjectsRoute = jest.fn();
         navigationService.getObjectsRoute.mockReturnValueOnce(expected);
         // when
