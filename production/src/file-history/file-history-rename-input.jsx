@@ -26,7 +26,7 @@ export class _RenameInput extends React.Component {
     const { editable, value, fileName, bindingId, enableEdit } = this.props;
     const nameContainer = this.getNameContainer(editable, bindingId, fileName, value);
     return (
-      <Popover overlayClassName={`${editable ? 'hidden' : ''}`} placement="bottomLeft" content={value} mouseEnterDelay={1}>
+      <Popover overlayClassName={`${editable ? 'hidden' : 'rename-popover-width'}`} placement="bottomLeft" content={value} mouseEnterDelay={1}>
         <div className="object-name" onDoubleClick={enableEdit} style={{ position: 'relative' }}>
           {nameContainer}
         </div>
@@ -34,6 +34,7 @@ export class _RenameInput extends React.Component {
     );
   }
 }
+
 _RenameInput.defaultProps = { t: (text) => text, };
 
 export default withTranslation('common')(_RenameInput);
