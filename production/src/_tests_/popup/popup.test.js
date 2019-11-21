@@ -114,6 +114,6 @@ describe('Popup.js', () => {
     );
     // then
     const popupSelector = popupWrapped.find(_PopupViewSelector);
-    expect(popupSelector.children().length).toBe(0);
+    expect(popupSelector.children()).toHaveLength(0);
   });
 });

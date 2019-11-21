@@ -45,6 +45,6 @@ describe('_AttributeSelector', () => {
     const wrappedComponent = shallow(<_AttributeSelector mstrData={mstrData} handlePopupErrors={mockHandlePopupErrors} />);
     wrappedComponent.instance().handleUnauthorized(libraryError);
     // then
-    expect(mockHandlePopupErrors).toBeCalledWith(pupupExpectedError)
+    expect(mockHandlePopupErrors).toBeCalledWith(pupupExpectedError);
   });
 });

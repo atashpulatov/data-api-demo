@@ -37,7 +37,7 @@ class OfficeTableHelper {
 
     const officeTable = sheet.tables.add(tableRange, true); // create office table based on the range
     this.styleHeaders(officeTable, TABLE_HEADER_FONT_COLOR, TABLE_HEADER_FILL_COLOR);
-    return this.setOfficeTableProperties(officeTable, officeTableId, mstrTable, sheet, context)
+    return this.setOfficeTableProperties(officeTable, officeTableId, mstrTable, sheet, context);
   };
 
   /**
@@ -428,7 +428,7 @@ class OfficeTableHelper {
    * @memberOf OfficeTableHelper
    */
   setOfficeTableProperties = async (officeTable, officeTableId, mstrTable, sheet, context) => {
-    const { isCrosstab } = mstrTable
+    const { isCrosstab } = mstrTable;
     try {
       officeTable.load('name');
       officeTable.name = officeTableId;

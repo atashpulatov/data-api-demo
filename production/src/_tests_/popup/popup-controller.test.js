@@ -67,9 +67,7 @@ describe('PopupController', () => {
       chosenProject: reportData.projectId,
       chosenSubtype: objectTypes.getTypeValues('Report').subtype,
     };
-    const arg = {
-      message: JSON.stringify(actionObject),
-    };
+    const arg = { message: JSON.stringify(actionObject), };
     officeApiHelper.getOfficeSessionStatus = jest.fn();
     const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
     const expectedOptions = {
@@ -106,9 +104,7 @@ describe('PopupController', () => {
       dossierData: reportData.dossierData,
       chosenSubtype: objectTypes.getTypeValues('Report').subtype,
     };
-    const arg = {
-      message: JSON.stringify(actionObject),
-    };
+    const arg = { message: JSON.stringify(actionObject), };
     officeApiHelper.getOfficeSessionStatus = jest.fn();
     const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
     const expectedOptions = {
@@ -138,9 +134,7 @@ describe('PopupController', () => {
       body: {},
       reportName: 'testName',
     };
-    const arg = {
-      message: JSON.stringify(actionObject),
-    };
+    const arg = { message: JSON.stringify(actionObject), };
     officeApiHelper.getOfficeSessionStatus = jest.fn();
     const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
     const expectedOptions = {
@@ -169,9 +163,7 @@ describe('PopupController', () => {
       reportSubtype: objectTypes.getTypeValues('Report').subtype,
       body: {},
     };
-    const arg = {
-      message: JSON.stringify(actionObject),
-    };
+    const arg = { message: JSON.stringify(actionObject), };
     officeApiHelper.getOfficeSessionStatus = jest.fn();
     const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
     // when
@@ -206,9 +198,7 @@ describe('PopupController', () => {
       body: {},
       reportName: 'testName',
     };
-    const arg = {
-      message: JSON.stringify(actionObject),
-    };
+    const arg = { message: JSON.stringify(actionObject), };
     officeApiHelper.getOfficeSessionStatus = jest.fn();
     const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
     // when
@@ -229,15 +219,9 @@ describe('PopupController', () => {
     // given
     officeApiHelper.getExcelSessionStatus = jest.fn();
     const command = selectorProperties.commandError;
-    const error = {
-      response: {
-        status: 404,
-      },
-    };
+    const error = { response: { status: 404, }, };
     const expectedMessage = JSON.stringify({ command, error });
-    const givenArg = {
-      message: expectedMessage,
-    };
+    const givenArg = { message: expectedMessage, };
     officeApiHelper.getOfficeSessionStatus = jest.fn();
     const handleErrorSpy = jest.spyOn(errorService, 'handleError');
     const notifySpy = jest.spyOn(notificationService, 'displayNotification');
@@ -245,9 +229,7 @@ describe('PopupController', () => {
     await popupController.onMessageFromPopup(dialog, null, givenArg);
     // then
     expect(handleErrorSpy).toBeCalledWith(error);
-    expect(notifySpy).toBeCalledWith({
-      type: 'warning', content: 'The endpoint cannot be reached', details: '', onConfirm: null,
-    });
+    expect(notifySpy).toBeCalledWith({ type: 'warning', content: 'The endpoint cannot be reached', details: '', onConfirm: null, });
     expect(dialog.close).toBeCalled();
   });
 });

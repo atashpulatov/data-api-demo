@@ -10,9 +10,9 @@ const prepareButton = (disableActiveActions, button, t, isPublished = true, disa
   let disableReason;
   if (isPublished) {
     if (disableSecondary) {
-      disableReason = 'This option is not available for dossier'
-    } else { disableReason = 'This button is currently disabled because you didn’t select any data' }
-  } else { disableReason = NOT_PUBLISHED_CUBE }
+      disableReason = 'This option is not available for dossier';
+    } else { disableReason = 'This button is currently disabled because you didn’t select any data'; }
+  } else { disableReason = NOT_PUBLISHED_CUBE; }
   return ((disableActiveActions || disableSecondary || !isPublished)
     ? (
       <Popover className="button-tooltip" placement="topRight" content={t(`${disableReason}`)} mouseEnterDelay={1}>

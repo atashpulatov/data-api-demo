@@ -101,7 +101,7 @@ export function fetchVisualizationDefinition({ projectId, objectId, instanceId, 
     .set('x-mstr-projectid', projectId)
     .send(body || '')
     .withCredentials()
-    .then((res) => parseInstanceDefinition(res))
+    .then((res) => parseInstanceDefinition(res));
 }
 
 export function createDossierInstance(projectId, objectId, body = {}) {

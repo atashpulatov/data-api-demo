@@ -139,8 +139,6 @@ export class _RefreshAllPage extends Component {
   }
 }
 
-_RefreshAllPage.defaultProps = {
-  t: (text) => text,
-};
+_RefreshAllPage.defaultProps = { t: (text) => text, };
 
 export const RefreshAllPage = withTranslation('common')(_RefreshAllPage);

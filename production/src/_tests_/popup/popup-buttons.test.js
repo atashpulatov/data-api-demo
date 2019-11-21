@@ -67,7 +67,7 @@ describe('PopupButtons', () => {
     />);
     const tooltipSpan = buttonsWrapped.find('.button-tooltip');
     // then
-    expect(tooltipSpan.length).toBe(2);
+    expect(tooltipSpan).toHaveLength(2);
   });
 
   it('should render a tooltip span if the cube Isn’t  published', () => {
@@ -78,7 +78,7 @@ describe('PopupButtons', () => {
     />);
     const tooltipSpan = buttonsWrapped.find('.button-tooltip');
     // then
-    expect(tooltipSpan.length).toBe(2);
+    expect(tooltipSpan).toHaveLength(2);
   });
   it('should not render a tooltip span if the buttons are enabled', () => {
     // given
@@ -89,7 +89,7 @@ describe('PopupButtons', () => {
     />);
     const tooltipSpan = buttonsWrapped.find('.button-tooltip');
     // then
-    expect(tooltipSpan.length).toBe(0);
+    expect(tooltipSpan).toHaveLength(0);
   });
 
   it('should NOT display secondary button when hideSecondary prop is provided',
@@ -119,6 +119,6 @@ describe('PopupButtons', () => {
       const buttonsWrapped = shallow(<NotConnectedPopupButtons handleSecondary disableSecondary />);
       const tooltipSpan = buttonsWrapped.find('.button-tooltip');
       // then
-      expect(tooltipSpan.length).toBe(1);
+      expect(tooltipSpan).toHaveLength(1);
     });
 });

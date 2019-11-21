@@ -28,10 +28,10 @@ export const _Browser = ({
       DBConnection.cancel();
     }
   };
-  const connectToCacheMethod = () => {
+  const connectToCacheMethod = useCallback(() => {
     DBConnection = connectToDB();
     if (isMSIE) startDBListener();
-  };
+  });
   const refresh = () => {
     // eslint-disable-next-line no-unused-expressions
     DBConnection && DBConnection.cancel();
@@ -40,7 +40,7 @@ export const _Browser = ({
     });
   };
 
-  React.useEffect(() => connectToCacheMethod(), []);
+  React.useEffect(() => connectToCacheMethod(), [connectToCacheMethod]);
 
   return (
     <div className="browser-wrapper">

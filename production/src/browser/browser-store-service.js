@@ -17,7 +17,7 @@ class BrowserStoreService {
       settings.set(officeProperties.browsingFiltersApplied, browsingFiltersApplied);
       settings.saveAsync();
     } catch (ex) {
-      console.warn('Filters are not stored to office settings')
+      console.warn('Filters are not stored to office settings');
     }
   }
 

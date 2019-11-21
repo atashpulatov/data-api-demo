@@ -403,11 +403,7 @@ describe('OfficeApiHelper', () => {
       }));
       const mockSync = jest.fn();
       const context = {
-        workbook: {
-          getSelectedRange: jest.fn().mockImplementation(() => ({
-            getCell: getCellMock,
-          })),
-        },
+        workbook: { getSelectedRange: jest.fn().mockImplementation(() => ({ getCell: getCellMock, })), },
         sync: mockSync,
       };
       // when
@@ -429,11 +425,7 @@ describe('OfficeApiHelper', () => {
         address: loadMock(),
       }));
       const context = {
-        workbook: {
-          getSelectedRange: jest.fn().mockImplementation(() => ({
-            getCell: getCellMock,
-          })),
-        },
+        workbook: { getSelectedRange: jest.fn().mockImplementation(() => ({ getCell: getCellMock, })), },
         sync: mockSync,
       };
       // when

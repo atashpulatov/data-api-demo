@@ -40,12 +40,8 @@ function mapStateToProps(state) {
   };
 }
 
-const mapDispatchToProps = {
-  toggleRenderSettingsFlag,
-};
+const mapDispatchToProps = { toggleRenderSettingsFlag, };
 
-_Home.defaultProps = {
-  t: (text) => text,
-};
+_Home.defaultProps = { t: (text) => text, };
 
 export const Home = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_Home));

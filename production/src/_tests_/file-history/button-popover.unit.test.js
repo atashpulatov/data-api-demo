@@ -1,7 +1,7 @@
 import React from 'react';
-import {mount} from 'enzyme';
-import {ButtonPopover} from '../../file-history/button-popover';
-import {Button} from 'antd';
+import { mount } from 'enzyme';
+import { Button } from 'antd';
+import { ButtonPopover } from '../../file-history/button-popover';
 
 describe('ButtonPopover', () => {
   beforeEach(() => {

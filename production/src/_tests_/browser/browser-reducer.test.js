@@ -17,7 +17,7 @@ describe('Browser reducer', () => {
   });
   it('should return default state', () => {
     // given
-    const defaultState = 'defaultState'
+    const defaultState = 'defaultState';
     // when
     const browserState = browserReducer(defaultState, {});
     // then
@@ -87,7 +87,7 @@ describe('Browser reducer', () => {
   it('should save browsing filters to office settings', () => {
     // given
     jest.spyOn(browserStoreService, 'preserveBrowsingFilters');
-    const defaultState = 'defaultState'
+    const defaultState = 'defaultState';
     // when
     browserReducer(defaultState, {});
     // then

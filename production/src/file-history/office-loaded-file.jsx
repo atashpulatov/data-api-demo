@@ -221,44 +221,44 @@ export class _OfficeLoadedFile extends React.Component {
   getMstrIcon = (objectType) => {
     const { t } = this.props;
     switch (objectType.name) {
-      case mstrObjectEnum.mstrObjectType.report.name:
-        return (
-          <ButtonPopover
+    case mstrObjectEnum.mstrObjectType.report.name:
+      return (
+        <ButtonPopover
             placement="bottom"
             content={t('Report')}
             mouseEnterDelay={1}
           >
-            <span>
-              <img src={reportIcon} alt="report icon" />
-            </span>
-          </ButtonPopover>
-        );
-      case mstrObjectEnum.mstrObjectType.dataset.name:
-        return (
-          <ButtonPopover
+          <span>
+            <img src={reportIcon} alt="report icon" />
+          </span>
+        </ButtonPopover>
+      );
+    case mstrObjectEnum.mstrObjectType.dataset.name:
+      return (
+        <ButtonPopover
             placement="bottom"
             content={t('Dataset')}
             mouseEnterDelay={1}
           >
-            <span>
-              <img src={datasetIcon} alt="dataset icon" />
-            </span>
-          </ButtonPopover>
-        );
-      case mstrObjectEnum.mstrObjectType.visualization.name:
-        return (
-          <ButtonPopover
+          <span>
+            <img src={datasetIcon} alt="dataset icon" />
+          </span>
+        </ButtonPopover>
+      );
+    case mstrObjectEnum.mstrObjectType.visualization.name:
+      return (
+        <ButtonPopover
             placement="bottom"
             content={t('Dossier')}
             mouseEnterDelay={1}
           >
-            <span>
-              <img src={dossierIcon} alt="dossier icon" />
-            </span>
-          </ButtonPopover>
-        );
-      default:
-        break;
+          <span>
+            <img src={dossierIcon} alt="dossier icon" />
+          </span>
+        </ButtonPopover>
+      );
+    default:
+      break;
     }
     return <></>;
   };
@@ -289,8 +289,7 @@ export class _OfficeLoadedFile extends React.Component {
           content={t('Edit Data')}
           mouseEnterDelay={1}
         >
-          {
-            <span
+          <span
               aria-title="Edit button"
               role="button"
               tabIndex="0"
@@ -298,17 +297,15 @@ export class _OfficeLoadedFile extends React.Component {
               onClick={this.editAction}
               onKeyPress={this.editAction}
             >
-              <MSTRIcon type="edit" />
-            </span>
-          }
+            <MSTRIcon type="edit" />
+          </span>
         </ButtonPopover>
         <ButtonPopover
           placement="bottom"
           content={t('Refresh Data')}
           mouseEnterDelay={1}
         >
-          {
-            <span
+          <span
               aria-title="Refresh button"
               role="button"
               tabIndex="0"
@@ -316,8 +313,8 @@ export class _OfficeLoadedFile extends React.Component {
               onClick={this.refreshAction}
               onKeyPress={this.refreshAction}
             >
-              {!isLoading ? (
-                <MSTRIcon type="refresh" />
+            {!isLoading ? (
+              <MSTRIcon type="refresh" />
               ) : (
                 <img
                     width="12px"
@@ -326,8 +323,7 @@ export class _OfficeLoadedFile extends React.Component {
                     alt={t('Report loading icon')}
                   />
                 )}
-            </span>
-          }
+          </span>
         </ButtonPopover>
         <ButtonPopover
           placement="bottomRight"

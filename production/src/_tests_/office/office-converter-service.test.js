@@ -126,7 +126,7 @@ describe('OfficeConverterService', () => {
     testHelper.expectPropertiesDefined(result);
     expect(result.headers).toContain('Cost');
     expect(result.headers).toContain('Profit');
-    expect(result.rows.length).toEqual(0);
+    expect(result.rows).toHaveLength(0);
     testHelper.expectEqualsGivenReport(result, expectedReportPath);
   });
 
@@ -145,7 +145,7 @@ describe('OfficeConverterService', () => {
     expect(result.headers).toContain('Call Center');
     expect(result.headers).toContain('Revenue');
     expect(result.headers).toContain('Cost');
-    expect(result.rows.length).toEqual(0);
+    expect(result.rows).toHaveLength(0);
     testHelper.expectEqualsGivenReport(result, expectedReportPath);
   });
 });
