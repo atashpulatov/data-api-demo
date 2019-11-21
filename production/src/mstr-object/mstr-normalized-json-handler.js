@@ -116,7 +116,15 @@ class NormalizedJsonHandler {
       const tabularRows = [];
       for (let attributeIndex = 0; attributeIndex < rowElements.length; attributeIndex++) {
         const element = rowElements[attributeIndex];
-        tabularRows.push(onElement(element, rowIndex, attributeIndex));
+        const supportForms = true;
+        if (supportForms && element.value.length > 1) {
+          for (let index = 0; index < element.value.length; index++) {
+            const form = `'${element.value[index]}`;
+            tabularRows.push(form);
+          }
+        } else {
+          tabularRows.push(onElement(element, rowIndex, attributeIndex));
+        }
       }
       if (metricValues && metricValues.raw.length > 0) {
         result.push(tabularRows.concat(metricValues[valueMatrix][rowIndex]));
