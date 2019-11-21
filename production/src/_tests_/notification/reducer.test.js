@@ -5,9 +5,7 @@ import { reduxNotificationProperties } from '../../notification/notification-pro
 describe('Notification reducer', () => {
   it('should do nothing on not matching action and empty state', () => {
     // given
-    const emptyAction = {
-      type: 'notMatching',
-    };
+    const emptyAction = { type: 'notMatching', };
     // when
     const resultState = notificationReducer(undefined, emptyAction);
     // then

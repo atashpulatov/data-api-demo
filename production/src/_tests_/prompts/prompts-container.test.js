@@ -1,6 +1,6 @@
-import {PromptsContainer} from "../../prompts/prompts-container";
 import React from 'react';
-import {shallow, mount} from 'enzyme';
+import { shallow, mount } from 'enzyme';
+import { PromptsContainer } from '../../prompts/prompts-container';
 
 
 describe('PromptsContainer', () => {
@@ -15,5 +15,4 @@ describe('PromptsContainer', () => {
     expect(postMount).toBeCalled();
     expect(wrappedComponent.find('.promptsContainer').get(0)).toBeDefined();
   });
-
 });

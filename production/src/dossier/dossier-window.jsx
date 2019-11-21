@@ -76,7 +76,7 @@ export default class _DossierWindow extends React.Component {
     const { envUrl, token } = mstrData;
     const { reportId: editetObjectId, projectId: editedProjectId, instanceId: editedInstanceId, dossierName: editedObjectName, promptsAnswers: editedPromptsAnswers } = editedReport;
     const { isVisualisationSelected, promptsAnswers } = this.state;
-    const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME)
+    const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
     const propsToPass = {
       envUrl,
       token,

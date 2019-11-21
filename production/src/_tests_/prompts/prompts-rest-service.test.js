@@ -64,7 +64,7 @@ describe.skip('PromptsRestService', () => {
       );
       // then
       expect(result).toBeDefined();
-      expect(result.length).toEqual(1);
+      expect(result).toHaveLength(1);
       expect(result).toEqual(promptDef);
     });
 
@@ -77,7 +77,7 @@ describe.skip('PromptsRestService', () => {
       );
       // then
       expect(result).toBeDefined();
-      expect(result.length).toEqual(0);
+      expect(result).toHaveLength(0);
     });
   });
   describe('getReportInstacePrompts', () => {
@@ -92,7 +92,7 @@ describe.skip('PromptsRestService', () => {
       );
       // then
       expect(result).toBeDefined();
-      expect(result.length).toEqual(1);
+      expect(result).toHaveLength(1);
       expect(result).toEqual(promptDef);
     });
 
@@ -107,7 +107,7 @@ describe.skip('PromptsRestService', () => {
       );
       // then
       expect(result).toBeDefined();
-      expect(result.length).toEqual(0);
+      expect(result).toHaveLength(0);
     });
   });
 });

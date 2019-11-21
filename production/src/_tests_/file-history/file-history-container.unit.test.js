@@ -40,7 +40,7 @@ describe('FileHistoryContainer', () => {
     const wrappedListElements = wrappedComponent.find('div.file-history-container');
     // then
     expect(wrappedComponent.html()).not.toContain('No files loaded.');
-    expect(wrappedListElements.length).toEqual(mockFiles.length);
+    expect(wrappedListElements).toHaveLength(mockFiles.length);
   });
   it('should display refresh icon when refreshAll flag is false', () => {
     // given
@@ -206,7 +206,7 @@ describe('FileHistoryContainer', () => {
     // when
     const secureContainer = wrappedComponent.find('.secured-screen-container');
     // then
-    expect(secureContainer.length).toBe(0);
+    expect(secureContainer).toHaveLength(0);
   });
 
   it('should render lock screen if isSecured flag is set to false', () => {
@@ -226,7 +226,7 @@ describe('FileHistoryContainer', () => {
     // when
     const secureContainer = wrappedComponent.find('.secured-screen-container');
     // then
-    expect(secureContainer.length).toBe(1);
+    expect(secureContainer).toHaveLength(1);
   });
 
   it('should call showData method when show data button is clicked', () => {

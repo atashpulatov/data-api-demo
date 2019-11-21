@@ -10,6 +10,4 @@ function _getReportData(name) {
   return mockReport;
 }
 
-export default {
-  getReportData: _getReportData,
-};
+export default { getReportData: _getReportData, };

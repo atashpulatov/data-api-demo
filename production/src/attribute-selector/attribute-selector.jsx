@@ -27,8 +27,8 @@ export class _AttributeSelector extends Component {
         },
         text: '{"code":"ERR009","message":"The user\'s session has expired, please reauthenticate"}',
       }
-    }
-    handlePopupErrors(newErrorObject)
+    };
+    handlePopupErrors(newErrorObject);
   }
 
   render() {

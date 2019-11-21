@@ -458,7 +458,7 @@ class OfficeDisplayService {
                 dossierName: dossierDefinition.name,
                 pageName: page.name
               }
-            }
+            };
           }
         }
       }

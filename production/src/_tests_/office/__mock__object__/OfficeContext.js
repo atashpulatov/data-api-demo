@@ -2,15 +2,9 @@
 class OfficeContextMock {
   constructor() {
     this.workbook = {
-      worksheets: {
-        getActiveWorksheet: () => { },
-      },
-      bindings: {
-        add: () => { },
-      },
-      tables: {
-        load: () => { },
-      },
+      worksheets: { getActiveWorksheet: () => { }, },
+      bindings: { add: () => { }, },
+      tables: { load: () => { }, },
       getSelectedRange: () => ({
         load: () => { },
         address: 'txt!txt',

@@ -19,11 +19,7 @@ describe('HomeHelper', () => {
       // given
       jest.spyOn(homeHelper, 'getWindowLocation').mockReturnValueOnce({ origin: 'localhost' });
       sessionHelper.logOut = jest.fn();
-      jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({
-        sessionReducer: {
-          authToken: 'someToken',
-        },
-      });
+      jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({ sessionReducer: { authToken: 'someToken', }, });
       // when
       homeHelper.saveLoginValues();
       // then
@@ -36,14 +32,8 @@ describe('HomeHelper', () => {
         pathname: 'MicroStrategyLibrary/apps/addin-mstr-office/index.html?source=addin-mstr-office',
       });
       sessionHelper.logOut = jest.fn();
-      jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({
-        sessionReducer: {
-          authToken: 'someToken',
-        },
-      });
-      const expectedCalledUrl = {
-        envUrl: 'https://some-env.microstrategy.com/MicroStrategyLibrary/api',
-      };
+      jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({ sessionReducer: { authToken: 'someToken', }, });
+      const expectedCalledUrl = { envUrl: 'https://some-env.microstrategy.com/MicroStrategyLibrary/api', };
       // when
       homeHelper.saveLoginValues();
       // then

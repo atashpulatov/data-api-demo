@@ -229,15 +229,15 @@ describe('Home', () => {
 
     it('should check the event listeners if nextProps.isConfirm is true and props.isConfirm is false on shouldComponentUpdate', () => {
       // given
-      const nextProps = { isConfirm: true }
-      const props = { isConfirm: false }
+      const nextProps = { isConfirm: true };
+      const props = { isConfirm: false };
       document.removeEventListener = jest.fn();
       document.addEventListener = jest.fn();
 
       const wrapper = shallow(<_Header {...props} />);
 
       // when
-      wrapper.instance().shouldComponentUpdate(nextProps)
+      wrapper.instance().shouldComponentUpdate(nextProps);
       // then
       expect(document.removeEventListener).toBeCalledTimes(2);
       expect(document.addEventListener).toBeCalled();
@@ -245,17 +245,17 @@ describe('Home', () => {
 
     it('should check the event listeners if nextProps.isConfirm is false and props.isConfirm is true on shouldComponentUpdate', () => {
       // given
-      const nextProps = { isConfirm: false }
-      const props = { isConfirm: true }
+      const nextProps = { isConfirm: false };
+      const props = { isConfirm: true };
       document.removeEventListener = jest.fn();
       document.addEventListener = jest.fn();
 
       const wrapper = shallow(<_Header {...props} />);
 
       // when
-      wrapper.instance().shouldComponentUpdate(nextProps)
+      wrapper.instance().shouldComponentUpdate(nextProps);
       // then
-      expect(document.addEventListener).toBeCalled()
+      expect(document.addEventListener).toBeCalled();
       expect(document.removeEventListener).toBeCalled();
     });
   });

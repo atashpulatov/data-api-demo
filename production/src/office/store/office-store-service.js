@@ -148,7 +148,7 @@ class OfficeStoreService {
         const settings = this.getOfficeSettings();
         const reportsArray = [...this.getReportProperties()];
         const reportObj = reportsArray.find((element) => element.bindId === report.bindId);
-        const ObjectIndex = reportsArray.indexOf(reportObj)
+        const ObjectIndex = reportsArray.indexOf(reportObj);
         reportsArray[ObjectIndex].crosstabHeaderDimensions = report.crosstabHeaderDimensions;
         reportsArray[ObjectIndex].isCrosstab = report.isCrosstab;
         reportsArray[ObjectIndex].manipulationsXML = report.manipulationsXML;

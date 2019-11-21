@@ -21,7 +21,7 @@ describe('NavigationTree', () => {
     i18n,
     resetDBState: jest.fn(),
     fetchObjectsFromNetwork: jest.fn(),
-  }
+  };
 
   it('should render with props given', () => {
     // given
@@ -86,7 +86,7 @@ describe('NavigationTree', () => {
     const givenSubtype = mstrObjectEnum.mstrObjectType.dossier.subtypes[0];
     const mockHandlePopupErrors = jest.fn();
     jest.spyOn(mstrObjectRestService, 'isPrompted')
-      .mockImplementationOnce(() => { throw new Error() });
+      .mockImplementationOnce(() => { throw new Error(); });
     const wrappedComponent = shallow(
       <_NavigationTree
         mstrData={mstrData}
@@ -305,7 +305,7 @@ describe('NavigationTree', () => {
     const givenSubtype = mstrObjectEnum.mstrObjectType.report.subtypes[0];
     const mockHandlePopupErrors = jest.fn();
     jest.spyOn(mstrObjectRestService, 'isPrompted')
-      .mockImplementationOnce(() => { throw new Error() });
+      .mockImplementationOnce(() => { throw new Error(); });
     const wrappedComponent = shallow(
       <_NavigationTree
         mstrData={mstrData}

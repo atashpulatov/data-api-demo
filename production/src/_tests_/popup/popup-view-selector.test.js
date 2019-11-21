@@ -191,7 +191,7 @@ describe('PopupViewSelector', () => {
     const visualizationInfo = {
       chapterKey: props.chosenChapterKey,
       visualizationKey: props.visualizationKey,
-    }
+    };
     const okObject = {
       command: selectorProperties.commandOk,
       chosenObject: props.chosenObjectId,
@@ -201,7 +201,7 @@ describe('PopupViewSelector', () => {
       promptsAnswers: props.promptsAnswers,
       visualizationInfo,
       preparedInstanceId: props.preparedInstanceId,
-    }
+    };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
     shallow(<_PopupViewSelector
@@ -506,21 +506,21 @@ describe('PopupViewSelector', () => {
       promptsAnswers: ['test1', 'test2', 'test3'],
       preparePromptedReport: jest.fn()
     };
-    const returnedValue = { status: 2, instanceId: 'abc' }
+    const returnedValue = { status: 2, instanceId: 'abc' };
     createInstance.mockImplementationOnce(() => (returnedValue));
     const configPromptsMocked = {
       objectId: props.propsToPass.reportId,
       projectId: props.propsToPass.projectId,
       instanceId: returnedValue.instanceId,
       promptsAnswers: props.promptsAnswers[0]
-    }
+    };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
     await shallow(<_PopupViewSelector
       {...props}
     />);
     // then
-    expect(answerPrompts).toBeCalledWith(configPromptsMocked)
+    expect(answerPrompts).toBeCalledWith(configPromptsMocked);
   });
 
   it('should invoke implementations inside createBody when in obtainInstanceWithPromptsAnswers', async () => {
@@ -547,7 +547,7 @@ describe('PopupViewSelector', () => {
       },
     };
 
-    const returnedValue = { status: 3, instanceId: 'abc' }
+    const returnedValue = { status: 3, instanceId: 'abc' };
     createInstance.mockReturnValueOnce((returnedValue));
 
 
@@ -556,15 +556,15 @@ describe('PopupViewSelector', () => {
         attributes: ['1', '2'],
         metrics: ['1', '2'],
       },
-    }
+    };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
     shallow(<_PopupViewSelector
       {...props}
     />);
     // then
-    expect(body.template.attributes[0]).toEqual(props.editedReport.selectedAttributes[0])
-    expect(body.template.metrics[0]).toEqual(props.editedReport.selectedMetrics[0])
+    expect(body.template.attributes[0]).toEqual(props.editedReport.selectedAttributes[0]);
+    expect(body.template.metrics[0]).toEqual(props.editedReport.selectedMetrics[0]);
   });
 
 

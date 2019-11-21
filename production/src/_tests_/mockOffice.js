@@ -1,8 +1,6 @@
 export const mockOffice = {
   context: {
-    ui: {
-      messageParent: () => {},
-    },
+    ui: { messageParent: () => {}, },
     diagnostics: {},
   },
 };

@@ -13,9 +13,7 @@ describe('historyReducer', () => {
   });
 
   afterEach(() => {
-    historyStore.dispatch({
-      type: sessionProperties.actions.logOut,
-    });
+    historyStore.dispatch({ type: sessionProperties.actions.logOut, });
   });
 
   it('should save projectId on go into project (no dir saved)', () => {
@@ -37,9 +35,7 @@ describe('historyReducer', () => {
   it('should throw an error on go into project without id provided', () => {
     // when
     const wrongFunctionCall = () => {
-      historyStore.dispatch({
-        type: historyProperties.actions.goInsideProject,
-      });
+      historyStore.dispatch({ type: historyProperties.actions.goInsideProject, });
     };
     // then
     expect(wrongFunctionCall).toThrowError(HistoryError);
@@ -76,7 +72,7 @@ describe('historyReducer', () => {
     // then
     const dirArray = historyStore.getState().directoryArray;
     expect(dirArray).toBeTruthy();
-    expect(dirArray.length).toBe(1);
+    expect(dirArray).toHaveLength(1);
     expect(dirArray[0].dirId).toBe(givenDirId);
   });
 
@@ -100,16 +96,14 @@ describe('historyReducer', () => {
     // then
     const dirArray = historyStore.getState().directoryArray;
     expect(dirArray).toBeTruthy();
-    expect(dirArray.length).toBe(2);
+    expect(dirArray).toHaveLength(2);
     expect(dirArray[1].dirId).toBe(anotherDirId);
   });
 
   it('should throw error when navigating inside without folder', () => {
     // when
     const wrongFunctionCall = () => {
-      historyStore.dispatch({
-        type: historyProperties.actions.goInside,
-      });
+      historyStore.dispatch({ type: historyProperties.actions.goInside, });
     };
     // then
     expect(wrongFunctionCall).toThrowError(HistoryError);
@@ -162,13 +156,11 @@ describe('historyReducer', () => {
       dirName: recentName,
     });
     // when
-    historyStore.dispatch({
-      type: historyProperties.actions.goUp,
-    });
+    historyStore.dispatch({ type: historyProperties.actions.goUp, });
     // then
     const dirArray = historyStore.getState().directoryArray;
     expect(dirArray).toBeTruthy();
-    expect(dirArray.length).toBe(1);
+    expect(dirArray).toHaveLength(1);
     expect(dirArray[0].dirId).toBe(oldId);
     expect(dirArray[0].dirName).toBe(oldName);
   });
@@ -183,9 +175,7 @@ describe('historyReducer', () => {
       projectName: givenName,
     });
     // when
-    historyStore.dispatch({
-      type: historyProperties.actions.goUp,
-    });
+    historyStore.dispatch({ type: historyProperties.actions.goUp, });
     // then
     const { projectId } = historyStore.getState();
     expect(projectId).toBeFalsy();
@@ -216,9 +206,7 @@ describe('historyReducer', () => {
     });
     // when
     for (let i = 0; i < 5; i++) {
-      historyStore.dispatch({
-        type: historyProperties.actions.goUp,
-      });
+      historyStore.dispatch({ type: historyProperties.actions.goUp, });
     }
     // then
     const { project } = historyStore.getState();
@@ -235,9 +223,7 @@ describe('historyReducer', () => {
       dirName: givenDirName,
     });
     // when
-    historyStore.dispatch({
-      type: historyProperties.actions.goToProjects,
-    });
+    historyStore.dispatch({ type: historyProperties.actions.goToProjects, });
     // then
     const dirArray = historyStore.getState().directoryArray;
     expect(dirArray).toBeFalsy();
@@ -253,9 +239,7 @@ describe('historyReducer', () => {
       dirName: givenDirName,
     });
     // when
-    historyStore.dispatch({
-      type: sessionProperties.actions.logOut,
-    });
+    historyStore.dispatch({ type: sessionProperties.actions.logOut, });
     // then
     const dirArray = historyStore.getState().directoryArray;
     expect(dirArray).toBeFalsy();
