@@ -65,14 +65,18 @@ class OfficeConverterServiceV2 {
    */
   getAttributesName = (definition) => {
     const supportForms = true;
-    const columnsAttributes = definition.grid.columns.map((e) => `'${e.name}`);
-    // const rowsAttributes = definition.grid.rows.map((e) => `'${e.name}`);
-    let rowsAttributes = [];
-    for (let i = 0; i < definition.grid.rows.length; i++) {
-      const e = definition.grid.rows[i];
-      const forms = supportForms && this.getAttributesForms(e);
-      rowsAttributes = forms ? [...rowsAttributes, ...forms] : [...rowsAttributes, `'${e.name}`];
-    }
+    const getAttributeWithForms = (elements) => {
+      let names = [];
+      for (let i = 0; i < elements.length; i++) {
+        const e = elements[i];
+        const forms = supportForms && this.getAttributesForms(e);
+        names = forms ? [...names, ...forms] : [...names, `'${e.name}`];
+      }
+      return names;
+    };
+
+    const columnsAttributes = getAttributeWithForms(definition.grid.columns);
+    const rowsAttributes = getAttributeWithForms(definition.grid.rows);
     return { rowsAttributes, columnsAttributes };
   }
 
@@ -111,14 +115,14 @@ class OfficeConverterServiceV2 {
       const supportForms = true;
       const forms = this.getAttributesForms(e);
       if (supportForms && forms) {
-        return forms;
+        return forms; // attribute as row with forms
       }
-      return `'${e.value.join(' ')}`;
+      return e.value.length > 1 ? e.value : `'${e.value.join(' ')}`; // attribute as column with forms
     };
 
     if (this.isCrosstab(response)) {
       const rows = jsonHandler.renderHeaders(response.definition, 'rows', response.data.headers, onElement(rowTotals));
-      const columns = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement(columnTotals));
+      const columns = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement(columnTotals), true);
       const subtotalAddress = [...rowTotals, ...columnTotals];
       return { rows, columns, subtotalAddress };
     }

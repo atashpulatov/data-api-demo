@@ -149,13 +149,19 @@ class NormalizedJsonHandler {
    * @memberof NormalizedJsonHandler
    * @return {Array}
    */
-  renderHeaders = (definition, axis, headers, onElement) => {
+  renderHeaders = (definition, axis, headers, onElement, supportForms) => {
     if (headers[axis].length === 0) return [[]];
     const headersNormalized = axis === 'columns' ? this._transposeMatrix(headers[axis]) : headers[axis];
     const matrix = headersNormalized.map((headerCells, colIndex) => {
-      const axisElements = this.mapElementIndicesToElements({
-        definition, axis, headerCells, colIndex,
-      });
+      const axisElements = this.mapElementIndicesToElements({ definition, axis, headerCells, colIndex });
+      if (supportForms) {
+        let result = [];
+        for (let i = 0; i < axisElements.length; i++) {
+          const elements = onElement(axisElements[i]);
+          result = typeof elements === 'string' ? [...result, elements] : [...result, ...elements];
+        }
+        return result;
+      }
       return axisElements.map((e, axisIndex, elementIndex) => onElement(e, axisIndex, elementIndex));
     });
     return axis === 'columns' ? this._transposeMatrix(matrix) : matrix;
