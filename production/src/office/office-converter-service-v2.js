@@ -64,8 +64,15 @@ class OfficeConverterServiceV2 {
    * @memberof OfficeConverterServiceV2
    */
   getAttributesName = (definition) => {
+    const supportForms = true;
     const columnsAttributes = definition.grid.columns.map((e) => `'${e.name}`);
-    const rowsAttributes = definition.grid.rows.map((e) => `'${e.name}`);
+    // const rowsAttributes = definition.grid.rows.map((e) => `'${e.name}`);
+    let rowsAttributes = [];
+    for (let i = 0; i < definition.grid.rows.length; i++) {
+      const e = definition.grid.rows[i];
+      const forms = supportForms && this.getAttributesForms(e);
+      rowsAttributes = forms ? [...rowsAttributes, ...forms] : [...rowsAttributes, `'${e.name}`];
+    }
     return { rowsAttributes, columnsAttributes };
   }
 
@@ -132,6 +139,7 @@ class OfficeConverterServiceV2 {
   getTableSize(response, columnInformation, isCrosstab) {
     const supportForms = true;
     let columnsCount = columnInformation.length;
+    const columnHeader = response.data.headers.columns[0];
     for (let index = 0; supportForms && index < columnInformation.length; index++) {
       const element = columnInformation[index];
       if (element.isAttribute && element.forms.length > 1) {
@@ -140,7 +148,7 @@ class OfficeConverterServiceV2 {
     }
     return {
       rows: response.data.paging.total,
-      columns: isCrosstab ? response.data.headers.columns[0].length : columnsCount,
+      columns: isCrosstab ? (columnHeader ? columnHeader.length : 0) : columnsCount,
     };
   }
 
