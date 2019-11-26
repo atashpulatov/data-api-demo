@@ -9,6 +9,7 @@ import { sessionHelper } from '../storage/session-helper';
 import { errorService } from '../error/error-handler';
 import { clearCache } from '../cache/cache-actions';
 import DB from '../cache/pouch-db';
+import { officeContext } from '../office/office-context';
 
 const APP_VERSION = process.env.REACT_APP_MSTR_OFFICE_VERSION;
 
@@ -18,6 +19,7 @@ export const SettingsMenuHOC = ({ userFullName, userID, userInitials, isSecured,
 
   const prepareEmail = () => {
     const { host, platform, version } = window.Office.context.diagnostics;
+    const excelAPI = officeContext.getRequirementSet();
     const { userAgent } = navigator;
     const message = t('Please don’t change the text below. Type your message above this line.');
     const email = {
@@ -26,9 +28,10 @@ export const SettingsMenuHOC = ({ userFullName, userID, userInitials, isSecured,
       body: [
         '%0D%0A %0D%0A ',
         `----- ${message} ----- `,
-        `Platform: ${host}/${platform}`,
+        `Platform: ${platform} (${host})`,
+        `Excel API: ${excelAPI}`,
         `Excel version: ${version}`,
-        `MicroStrategy for Office version: ${APP_VERSION}`,
+        `MicroStrategy for Office version: ${APP_VERSION || `dev`}`,
         `User agent: ${userAgent}`,
       ].join('%0D%0A'),
     };
