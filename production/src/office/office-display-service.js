@@ -264,8 +264,11 @@ class OfficeDisplayService {
 
   async getInstaceDefinition(body, mstrObjectType, manipulationsXML, preparedInstanceId, projectId, objectId, dossierData, visualizationInfo, promptsAnswers) {
     let instanceDefinition;
-    if (body) {
-      body.template = body.requestedObjects;
+    if (body && body.requestedObjects) {
+      if(body.requestedObjects.attributes.length === 0  && body.requestedObjects.metrics.length === 0){
+        body.requestedObjects = undefined;
+      }
+        body.template = body.requestedObjects;
     }
     if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
       if (manipulationsXML) {

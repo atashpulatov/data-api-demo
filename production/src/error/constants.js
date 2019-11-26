@@ -92,7 +92,7 @@ export const errorMessageFactory = withDefaultValue({
   [errorTypes.CONNECTION_BROKEN_ERR]: () => CONNECTION_BROKEN,
   [errorTypes.UNAUTHORIZED_ERR]: ({ error }) => {
     if (
-      (error.response.body.code === 'ERR003')
+      (error.response.body && error.response.body.code === 'ERR003')
       && (error.response.body.iServerCode)
       && (iServerErrorMessages(error.response.body.iServerCode) === LOGIN_FAILURE)
     ) {
