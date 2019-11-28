@@ -18,7 +18,7 @@ class AuthenticationService {
     .then((res) => true)
 
   getSessions = async (envUrl, authToken) => await moduleProxy.request
-    .get(`${envUrl}/sessions/userInfo`)
+    .put(`${envUrl}/sessions`)
     .set('x-mstr-authtoken', authToken)
     .withCredentials()
     .then((res) => res)
