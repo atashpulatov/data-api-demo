@@ -182,10 +182,6 @@ class OfficeDisplayService {
       throw error;
     } finally {
       if (!isRefreshAll) {
-        reduxStore.dispatch({
-          type: officeProperties.actions.finishLoadingReport,
-          reportBindId: bindingId,
-        });
         this.dispatchPrintFinish();
       }
       await excelContext.sync();
