@@ -44,6 +44,8 @@ export class _PromptsWindow extends Component {
     window.removeEventListener('message', this.messageReceived);
   }
 
+  sleep = (milliseconds) => new Promise(resolve => setTimeout(resolve, milliseconds))
+
   preparePromptedReportInstance = async (reportId, projectId, promptsAnswers) => {
     const config = { objectId: reportId, projectId };
     const instanceDefinition = await createInstance(config);
@@ -66,7 +68,12 @@ export class _PromptsWindow extends Component {
       const config = { objectId, projectId, instanceId: currentInstanceDefinition.mid, promptsAnswers: promptsAnswers[count] };
       await postAnswerDossierPrompts(config);
       if (count === promptsAnswers.length - 1) {
-        currentInstanceDefinition = await getDossierStatus(objectId, currentInstanceDefinition.mid, projectId);
+        let dossierStatusResponse = await getDossierStatus(objectId, currentInstanceDefinition.mid, projectId);
+        while (dossierStatusResponse.statusCode === 202) {
+          await this.sleep(1000);
+          dossierStatusResponse = await getDossierStatus(objectId, currentInstanceDefinition.mid, projectId);
+        }
+        currentInstanceDefinition = dossierStatusResponse.body;
       }
       count += 1;
     }
