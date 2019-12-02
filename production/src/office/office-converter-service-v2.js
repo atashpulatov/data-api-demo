@@ -176,25 +176,25 @@ class OfficeConverterServiceV2 {
     return columns.map((element, index) => {
       const type = element.type ? element.type.toLowerCase() : null;
       switch (type) {
-        case 'metric':
-          return {
-            category: element.numberFormatting.category,
-            formatString: element.numberFormatting.formatString,
-            id: element.id,
-            index,
-            isAttribute: false,
-            name: element.name,
-          };
-        case 'attribute':
-          return {
-            attributeId: element.id,
-            attributeName: element.name,
-            forms: element.forms,
-            index,
-            isAttribute: true,
-          };
-        default:
-          return {};
+      case 'metric':
+        return {
+          category: element.numberFormatting.category,
+          formatString: element.numberFormatting.formatString,
+          id: element.id,
+          index,
+          isAttribute: false,
+          name: element.name,
+        };
+      case 'attribute':
+        return {
+          attributeId: element.id,
+          attributeName: element.name,
+          forms: element.forms,
+          index,
+          isAttribute: true,
+        };
+      default:
+        return {};
       }
     });
   }

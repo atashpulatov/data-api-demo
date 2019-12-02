@@ -232,7 +232,7 @@ describe('officeReducer', () => {
     });
     // then
     const officeStoreState = officeStore.getState().reportArray;
-    expect(officeStoreState.length).toEqual(2);
+    expect(officeStoreState).toHaveLength(2);
     expect(officeStoreState.includes(firstReport)).toBe(true);
     expect(officeStoreState.includes(secondReport)).toBe(false);
     expect(officeStoreState.includes(thirdReport)).toBe(true);
@@ -289,7 +289,7 @@ describe('officeReducer', () => {
     });
     // then
     const officeStoreState = officeStore.getState().reportArray;
-    expect(officeStoreState.length).toEqual(2);
+    expect(officeStoreState).toHaveLength(2);
     expect(officeStoreState[0]).toEqual(reportArrayNew[0]);
     expect(officeStoreState[1]).toEqual(reportArrayNew[1]);
   });

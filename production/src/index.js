@@ -21,7 +21,7 @@ function goReact() {
     <Suspense fallback={null}>
       {(window.location.href.indexOf('popupType') === -1)
         ? <LazySidebar />
-        : <LazyDialog />};
+        : <LazyDialog />}
     </Suspense>
   ), document.getElementById('root'), () => console.timeEnd('React loading time'));
 }

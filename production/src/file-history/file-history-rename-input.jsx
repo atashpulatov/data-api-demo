@@ -34,6 +34,7 @@ export class _RenameInput extends React.Component {
     );
   }
 }
-_RenameInput.defaultProps = { t: (text) => text };
+
+_RenameInput.defaultProps = { t: (text) => text, };
 
 export default withTranslation('common')(_RenameInput);

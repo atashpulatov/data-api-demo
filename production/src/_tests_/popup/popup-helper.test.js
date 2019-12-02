@@ -120,9 +120,7 @@ describe('Popup actions', () => {
     const mockStorageSetItem = jest
       .spyOn(localStorage, 'setItem')
       .mockImplementation(() => { });
-    const refreshReport = {
-      name: 'testName',
-    };
+    const refreshReport = { name: 'testName', };
     const index = 0;
     // when
     popupHelper.storageReportRefreshStart(refreshReport, index);
@@ -309,9 +307,7 @@ describe('Popup actions', () => {
   });
   it('handleRefreshError display proper notifications when isRefreshAll is false and error.code is ItemNotFound', () => {
     // given
-    const mockError = {
-      code: 'ItemNotFound',
-    };
+    const mockError = { code: 'ItemNotFound', };
     notificationService.displayNotification = jest.fn();
     // when
     popupHelper.handleRefreshError(mockError, 10, 2, false);
@@ -321,9 +317,7 @@ describe('Popup actions', () => {
   });
   it('handleRefreshError display proper notifications when isRefreshAll is false and error.code is NOT ItemNotFound', () => {
     // given
-    const mockError = {
-      code: 'testErrCode',
-    };
+    const mockError = { code: 'testErrCode', };
     errorService.handleError = jest.fn();
     // when
     popupHelper.handleRefreshError(mockError, 10, 2, false);

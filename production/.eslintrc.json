@@ -1,10 +1,10 @@
 {
   "extends": [
-    "react-app",
-    "airbnb"
+    "@mstr/eslint-config-mstr"
   ],
+  "parser": "babel-eslint",
   "parserOptions": {
-    "ecmaVersion": 9
+    "ecmaVersion": 2020
   },
   "env": {
     "browser": true,
@@ -17,109 +17,8 @@
     "Office": true,
     "OfficeExtension": true
   },
-  "rules": {
-    "no-restricted-syntax": [
-      "error",
-      {
-        "message": "for..in loops iterate over the entire prototype chain, which is virtually never what you want. Use Object.{keys,values,entries}, and iterate over the resulting array.",
-        "selector": "ForInStatement"
-      },
-      {
-        "message": "Labels are a form of GOTO; using them makes code confusing and hard to maintain and understand.",
-        "selector": "LabeledStatement"
-      },
-      {
-        "message": "`with` is disallowed in strict mode because it makes code impossible to predict and optimize.",
-        "selector": "WithStatement"
-      }
-    ],
-    "key-spacing": "off",
-    "max-len": [
-      "error",
-      150,
-      2
-    ],
-    "object-curly-spacing": [
-      "error",
-      "always"
-    ],
-    "indent": [
-      "error",
-      2,
-      {
-        "ignoredNodes": [
-          "JSXElement *",
-          "JSXElement"
-        ],
-        "SwitchCase": 1
-      }
-    ],
-    "comma-dangle": "off",
-    "quotes": [
-      "warn",
-      "single",
-      {
-        "allowTemplateLiterals": true
-      }
-    ],
-    "semi": 1,
-    "space-before-function-paren": "off",
-    "camelcase": [
-      "error",
-      {
-        "properties": "always"
-      }
-    ],
-    "no-multi-str": "off",
-    "no-invalid-this": "off",
-    "no-param-reassign": "off",
-    "consistent-return": "off",
-    "no-plusplus": "off",
-    "object-property-newline": "off",
-    "object-curly-newline": [
-      "error",
-      {
-        "multiline": true
-      }
-    ],
-    "import/prefer-default-export": "off",
-    "import/no-extraneous-dependencies": [
-      "error",
-      {
-        "devDependencies": true
-      }
-    ],
-    "react/no-multi-comp": [
-      "warn",
-      {
-        "ignoreStateless": true
-      }
-    ],
-    "react/no-did-update-set-state": "error",
-    "react/no-unknown-property": "error",
-    "react/no-unused-prop-types": "error",
-    "react/prop-types": "error",
-    "react/react-in-jsx-scope": "error",
-    "react/jsx-props-no-spreading": "off",
-    "react/jsx-no-bind": [
-      "error",
-      {
-        "allowArrowFunctions": true,
-        "allowBind": false,
-        "ignoreRefs": true
-      }
-    ],
-    "react/jsx-indent-props": [
-      "error",
-      "first"
-    ],
-    "react/require-default-props": "off",
-    "react/jsx-closing-bracket-location": "off",
-    "react/jsx-closing-tag-location": "off",
-    "react/jsx-first-prop-new-line": "off",
-    "react/jsx-one-expression-per-line": "off",
-    "react/jsx-filename-extension": "off",
-    "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn"
+  "rules":{
+    "jsx-quotes": ["warn","prefer-double"],
+    "semi":["error", "always"]
   }
 }

@@ -40,7 +40,7 @@ export default class _EmbeddedDossier extends React.Component {
       ...this.dossierData,
       chapterKey: payloadChapterKey,
       visualizationKey: payloadVisKey
-    }
+    };
     handleSelection(this.dossierData);
   }
 
@@ -50,7 +50,7 @@ export default class _EmbeddedDossier extends React.Component {
     const instance = {};
     try {
       if (instanceId) {
-        instance.mid = instanceId
+        instance.mid = instanceId;
       } else {
         instance.mid = await createDossierInstance(projectId, dossierId);
         if (promptsAnswers != null) {
@@ -67,13 +67,13 @@ export default class _EmbeddedDossier extends React.Component {
         }
       }
     } catch (e) {
-      handlePopupErrors(e)
+      handlePopupErrors(e);
     }
 
     this.dossierData = {
       ...this.dossierData,
       preparedInstanceId: instance.mid,
-    }
+    };
 
     const libraryUrl = envUrl.replace('api', 'app');
 

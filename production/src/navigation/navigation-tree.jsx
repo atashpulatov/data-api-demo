@@ -11,7 +11,6 @@ import './navigation-tree.css';
 import { connectToCache, listenToCache, REFRESH_CACHE_COMMAND, refreshCacheState, fetchObjectsFallback } from '../cache/cache-actions';
 import DB from '../cache/pouch-db';
 import { authenticationHelper } from '../authentication/authentication-helper';
-import { Popup } from '../popup/popup';
 
 const DB_TIMEOUT = 5000; // Interval for checking indexedDB changes on IE
 const SAFETY_FALLBACK = 7000; // Interval for falling back to network
@@ -173,7 +172,7 @@ export class _NavigationTree extends Component {
 
   // TODO: temporary solution
   onObjectChosen = async (objectId, projectId, subtype, objectName, target, myLibrary) => {
-    const { selectObject } = this.props;
+    const { selectObject, handlePopupErrors } = this.props;
     // If myLibrary is on, then selected object is a dossier.
     const objectType = myLibrary ? mstrObjectEnum.mstrObjectType.dossier : mstrObjectEnum.getMstrTypeBySubtype(subtype);
     let chosenLibraryDossier;
@@ -187,7 +186,7 @@ export class _NavigationTree extends Component {
       try {
         cubeStatus = await getCubeStatus(objectId, projectId) !== '0';
       } catch (error) {
-        Popup.handlePopupErrors(error);
+        handlePopupErrors(error);
       }
     }
     this.setState({ isPublished:cubeStatus });

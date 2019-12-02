@@ -59,7 +59,7 @@ export class Popup extends Component {
   };
 
   handlePopupErrors = (error) => {
-    const errorObj = error && { status: error.status, message: error.message, response: error.response, type: error.type }
+    const errorObj = error && { status: error.status, message: error.message, response: error.response, type: error.type };
     const messageObject = {
       command: selectorProperties.commandError,
       error: errorObj,

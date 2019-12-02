@@ -25,7 +25,7 @@ class AuthenticationHelper {
     const reduxStoreState = reduxStore.getState();
     const { authToken } = reduxStoreState.sessionReducer;
     const { envUrl } = reduxStoreState.sessionReducer;
-    return authenticationService.getSessions(envUrl, authToken);
+    return authenticationService.putSessions(envUrl, authToken);
   }
 }
 

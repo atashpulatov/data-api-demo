@@ -182,10 +182,6 @@ class OfficeDisplayService {
       throw error;
     } finally {
       if (!isRefreshAll) {
-        reduxStore.dispatch({
-          type: officeProperties.actions.finishLoadingReport,
-          reportBindId: bindingId,
-        });
         this.dispatchPrintFinish();
       }
       await excelContext.sync();
@@ -264,8 +260,11 @@ class OfficeDisplayService {
 
   async getInstaceDefinition(body, mstrObjectType, manipulationsXML, preparedInstanceId, projectId, objectId, dossierData, visualizationInfo, promptsAnswers) {
     let instanceDefinition;
-    if (body) {
-      body.template = body.requestedObjects;
+    if (body && body.requestedObjects) {
+      if(body.requestedObjects.attributes.length === 0  && body.requestedObjects.metrics.length === 0){
+        body.requestedObjects = undefined;
+      }
+        body.template = body.requestedObjects;
     }
     if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
       if (manipulationsXML) {
@@ -466,7 +465,7 @@ class OfficeDisplayService {
                 dossierName: dossierDefinition.name,
                 pageName: page.name
               }
-            }
+            };
           }
         }
       }

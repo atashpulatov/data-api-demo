@@ -7,6 +7,7 @@ import { PopupTypeEnum } from '../../home/popup-type-enum';
 import { officeApiHelper } from '../../office/office-api-helper';
 import { notificationService } from '../../notification/notification-service';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
+import { authenticationHelper } from '../../authentication/authentication-helper';
 
 describe('PopupController', () => {
   const dialog = {};
@@ -67,9 +68,7 @@ describe('PopupController', () => {
       chosenProject: reportData.projectId,
       chosenSubtype: objectTypes.getTypeValues('Report').subtype,
     };
-    const arg = {
-      message: JSON.stringify(actionObject),
-    };
+    const arg = { message: JSON.stringify(actionObject), };
     officeApiHelper.getOfficeSessionStatus = jest.fn();
     const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
     const expectedOptions = {
@@ -79,10 +78,14 @@ describe('PopupController', () => {
       isRefresh: false,
       mstrObjectType: mstrObjectEnum.mstrObjectType.report,
     };
+    const spyValidateAuthToken = jest
+      .spyOn(authenticationHelper, 'validateAuthToken')
+      .mockImplementationOnce(() => { });
     // when
     await popupController.onMessageFromPopup(dialog, null, arg);
     // then
     expect(dialog.close).toBeCalled();
+    expect(spyValidateAuthToken).toBeCalled();
     expect(mockPrint).toBeCalled();
     expect(mockPrint).toBeCalledWith(expectedOptions);
   });
@@ -106,9 +109,7 @@ describe('PopupController', () => {
       dossierData: reportData.dossierData,
       chosenSubtype: objectTypes.getTypeValues('Report').subtype,
     };
-    const arg = {
-      message: JSON.stringify(actionObject),
-    };
+    const arg = { message: JSON.stringify(actionObject), };
     officeApiHelper.getOfficeSessionStatus = jest.fn();
     const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
     const expectedOptions = {
@@ -119,10 +120,14 @@ describe('PopupController', () => {
       mstrObjectType: reportData.mstrObjectType,
       isRefresh: false,
     };
+    const spyValidateAuthToken = jest
+      .spyOn(authenticationHelper, 'validateAuthToken')
+      .mockImplementationOnce(() => { });
     // when
     await popupController.onMessageFromPopup(dialog, null, arg);
     // then
     expect(dialog.close).toBeCalled();
+    expect(spyValidateAuthToken).toBeCalled();
     expect(mockPrint).toBeCalled();
     expect(mockPrint).toBeCalledWith(expectedOptions);
   });
@@ -138,9 +143,7 @@ describe('PopupController', () => {
       body: {},
       reportName: 'testName',
     };
-    const arg = {
-      message: JSON.stringify(actionObject),
-    };
+    const arg = { message: JSON.stringify(actionObject), };
     officeApiHelper.getOfficeSessionStatus = jest.fn();
     const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
     const expectedOptions = {
@@ -150,10 +153,14 @@ describe('PopupController', () => {
       mstrObjectType: mstrObjectEnum.mstrObjectType.dataset,
       body: actionObject.body,
     };
+    const spyValidateAuthToken = jest
+      .spyOn(authenticationHelper, 'validateAuthToken')
+      .mockImplementationOnce(() => { });
     // when
     await popupController.onMessageFromPopup(dialog, null, arg);
     // then
     expect(dialog.close).toBeCalled();
+    expect(spyValidateAuthToken).toBeCalled();
     expect(mockPrint).toBeCalled();
     expect(mockPrint).toBeCalledWith(expectedOptions);
   });
@@ -169,15 +176,17 @@ describe('PopupController', () => {
       reportSubtype: objectTypes.getTypeValues('Report').subtype,
       body: {},
     };
-    const arg = {
-      message: JSON.stringify(actionObject),
-    };
+    const arg = { message: JSON.stringify(actionObject), };
     officeApiHelper.getOfficeSessionStatus = jest.fn();
     const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
+    const spyValidateAuthToken = jest
+      .spyOn(authenticationHelper, 'validateAuthToken')
+      .mockImplementationOnce(() => { });
     // when
     await popupController.onMessageFromPopup(dialog, null, arg);
     // then
     expect(dialog.close).toBeCalled();
+    expect(spyValidateAuthToken).toBeCalled();
     expect(mockPrint).toBeCalled();
 
     const expectedOptions = {
@@ -206,15 +215,17 @@ describe('PopupController', () => {
       body: {},
       reportName: 'testName',
     };
-    const arg = {
-      message: JSON.stringify(actionObject),
-    };
+    const arg = { message: JSON.stringify(actionObject), };
     officeApiHelper.getOfficeSessionStatus = jest.fn();
     const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
+    const spyValidateAuthToken = jest
+      .spyOn(authenticationHelper, 'validateAuthToken')
+      .mockImplementationOnce(() => { });
     // when
     await popupController.onMessageFromPopup(dialog, null, arg);
     // then
     expect(dialog.close).toBeCalled();
+    expect(spyValidateAuthToken).toBeCalled();
     expect(mockPrint).toBeCalled();
     expect(mockPrint).toBeCalledWith({
       dossierData: actionObject.dossierData,
@@ -229,25 +240,21 @@ describe('PopupController', () => {
     // given
     officeApiHelper.getExcelSessionStatus = jest.fn();
     const command = selectorProperties.commandError;
-    const error = {
-      response: {
-        status: 404,
-      },
-    };
+    const error = { response: { status: 404, }, };
     const expectedMessage = JSON.stringify({ command, error });
-    const givenArg = {
-      message: expectedMessage,
-    };
+    const givenArg = { message: expectedMessage, };
     officeApiHelper.getOfficeSessionStatus = jest.fn();
     const handleErrorSpy = jest.spyOn(errorService, 'handleError');
     const notifySpy = jest.spyOn(notificationService, 'displayNotification');
+    const spyValidateAuthToken = jest
+      .spyOn(authenticationHelper, 'validateAuthToken')
+      .mockImplementationOnce(() => { });
     // when
     await popupController.onMessageFromPopup(dialog, null, givenArg);
     // then
     expect(handleErrorSpy).toBeCalledWith(error);
-    expect(notifySpy).toBeCalledWith({
-      type: 'warning', content: 'The endpoint cannot be reached', details: '', onConfirm: null,
-    });
+    expect(spyValidateAuthToken).toBeCalled();
+    expect(notifySpy).toBeCalledWith({ type: 'warning', content: 'The endpoint cannot be reached', details: '', onConfirm: null, });
     expect(dialog.close).toBeCalled();
   });
 });

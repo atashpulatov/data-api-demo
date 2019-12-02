@@ -1,9 +1,9 @@
 import React from 'react';
-import {Provider} from 'react-redux';
-import {mount} from 'enzyme';
-import {reduxStore} from '../../store';
-import {LoadingPage} from '../../loading/loading-page';
-import {START_REPORT_LOADING} from '../../popup/popup-actions';
+import { Provider } from 'react-redux';
+import { mount } from 'enzyme';
+import { reduxStore } from '../../store';
+import { LoadingPage } from '../../loading/loading-page';
+import { START_REPORT_LOADING } from '../../popup/popup-actions';
 
 
 describe('Loading page', () => {
@@ -38,9 +38,7 @@ describe('Loading page', () => {
     const mockedTitle = 'Some report name';
     reduxStore.dispatch({
       type: START_REPORT_LOADING,
-      data: {
-        name: mockedTitle,
-      },
+      data: { name: mockedTitle, },
     });
     // when
     const componentWrapper = mount(
