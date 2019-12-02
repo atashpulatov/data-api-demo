@@ -261,6 +261,13 @@ class OfficeApiHelper {
     }
   }
 
+  /**
+   * Returns top left cell of selected range
+   *
+   * @param {Office} context Excel Context
+   * @memberof OfficeApiHelper
+   * @return {String} Address of the cell.
+   */
   getSelectedCell = async (context) => {
     const selectedRangeStart = context.workbook.getSelectedRange().getCell(0, 0);
     selectedRangeStart.load(officeProperties.officeAddress);
@@ -271,6 +278,13 @@ class OfficeApiHelper {
 
   getStartCell = (excelAdress) => excelAdress.match(/!(\w+\d+)(:|$)/)[1]
 
+  /**
+   * Adds binding to the Excel table
+   *
+   * @param {Office} namedItem Excel Table
+   * @param {String} bindingId
+   * @memberof OfficeApiHelper
+   */
   bindNamedItem = (namedItem, bindingId) => new Promise((resolve, reject) => Office.context.document.bindings.addFromNamedItemAsync(namedItem, 'table', { id: bindingId }, (result) => {
     if (result.status === 'succeeded') {
       console.log(`Added new binding with type: ${result.value.type} and id: ${result.value.id}`);
@@ -281,27 +295,17 @@ class OfficeApiHelper {
     }
   }))
 
+  /**
+   * Get object from store based on bindingId and remove it from workbook
+   *
+   * @param {Office} context Excel Context
+   * @param {Object} object Contains information obout the object
+   * @memberof OfficeApiHelper
+   */
   deleteObjectTableBody = async (context, object) => {
     const { isCrosstab, crosstabHeaderDimensions } = object;
-    context.runtime.enableEvents = false;
-    await context.sync();
     const tableObject = context.workbook.tables.getItem(object.bindId);
-    const tableRange = tableObject.getDataBodyRange();
-    context.trackedObjects.add(tableRange);
-    if (isCrosstab) {
-      const { rowsX, rowsY, columnsX, columnsY } = crosstabHeaderDimensions;
-      const crosstabRange = await this.getCrosstabRangeSafely(tableObject, crosstabHeaderDimensions, context);
-      const firstCell = crosstabRange.getCell(0, 0);
-      const columnsHeaders = firstCell.getOffsetRange(0, rowsX).getResizedRange(columnsY - 1, columnsX - 1);
-      const rowsHeaders = firstCell.getResizedRange((columnsY + rowsY), rowsX - 1);
-      columnsHeaders.clear(Excel.ClearApplyTo.contents);
-      rowsHeaders.clear(Excel.ClearApplyTo.contents);
-    }
-
-    tableRange.clear(Excel.ClearApplyTo.contents);
-    context.runtime.enableEvents = true;
-    await context.sync();
-    context.trackedObjects.remove(tableRange);
+    await this.deleteExcelTable(tableObject, context, isCrosstab, crosstabHeaderDimensions);
   }
 
   /**
@@ -611,7 +615,7 @@ class OfficeApiHelper {
     let headerArray = [];
     // reportStartingCell.unmerge(); // excel api have problem with handling merged cells which are partailly in range, we unmerged selected cell to avoid this problem
     const startingCell = reportStartingCell.getCell(0, 0).getOffsetRange(0, -rowOffset); // we call getCell in case multiple cells are selected
-    headerArray = mstrNormalizedJsonHandler._transposeMatrix(rows);
+    headerArray = mstrNormalizedJsonHandler.transposeMatrix(rows);
     const colOffset = !headerArray.length ? rows.length - 1 : headerArray[0].length - 1; // transposed array length is 0 if there is no attributes in rows
     const headerRange = startingCell.getResizedRange(colOffset, rowOffset - 1);
     this.insertHeadersValues(headerRange, rows, 'rows');
@@ -663,7 +667,37 @@ class OfficeApiHelper {
     headerTitlesRange.values = '  ';
 
     if (attributesNames.rowsAttributes.length) rowsTitlesRange.values = [attributesNames.rowsAttributes]; // we are not inserting row attributes names if they do not exist
-    columnssTitlesRange.values = mstrNormalizedJsonHandler._transposeMatrix([attributesNames.columnsAttributes]);
+    columnssTitlesRange.values = mstrNormalizedJsonHandler.transposeMatrix([attributesNames.columnsAttributes]);
+  }
+
+  /**
+  * Delete Excel table object from workbook. For crosstab reports will also clear the headers
+  *
+  * @param {Office} tableObject Address of the first cell in report (top left)
+  * @param {Office} context Contains arrays of attributes names in crosstab report
+  * @param {Boolean} isCrosstab Specify if object is a crosstab
+  * @param {Object} crosstabHeaderDimensions Contains dimensions of crosstab report headers
+  * @memberof OfficeApiHelper
+  */
+  async deleteExcelTable(tableObject, context, isCrosstab = false, crosstabHeaderDimensions = {}) {
+    context.runtime.enableEvents = false;
+    await context.sync();
+    const tableRange = tableObject.getDataBodyRange();
+    context.trackedObjects.add(tableRange);
+    if (isCrosstab) {
+      const { rowsX, rowsY, columnsX, columnsY } = crosstabHeaderDimensions;
+      const crosstabRange = await this.getCrosstabRangeSafely(tableObject, crosstabHeaderDimensions, context);
+      const firstCell = crosstabRange.getCell(0, 0);
+      const columnsHeaders = firstCell.getOffsetRange(0, rowsX).getResizedRange(columnsY - 1, columnsX - 1);
+      const rowsHeaders = firstCell.getResizedRange((columnsY + rowsY), rowsX - 1);
+      columnsHeaders.clear();
+      rowsHeaders.clear();
+    }
+    tableRange.clear();
+    tableObject.delete();
+    context.runtime.enableEvents = true;
+    await context.sync();
+    context.trackedObjects.remove(tableRange);
   }
 
   /**
