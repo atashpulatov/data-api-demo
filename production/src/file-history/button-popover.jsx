@@ -1,5 +1,6 @@
 import React from 'react';
 import { Popover } from 'antd';
+import PropTypes from 'prop-types';
 
 export class ButtonPopover extends React.Component {
   constructor(props) {
@@ -12,7 +13,8 @@ export class ButtonPopover extends React.Component {
   }
 
   showPopover = () => {
-    this.popoverTimeoutId = setTimeout(() => this.setState({ popoverVisible: true }), this.props.mouseEnterDelay * 1000);
+    const { mouseEnterDelay } = this.props;
+    this.popoverTimeoutId = setTimeout(() => this.setState({ popoverVisible: true }), mouseEnterDelay * 1000);
   }
 
   hidePopover = () => {
@@ -21,10 +23,20 @@ export class ButtonPopover extends React.Component {
   }
 
   render() {
+    const { placement, content, children } = this.props;
+    const { popoverVisible } = this.state;
     return (
-      <Popover visible={this.state.popoverVisible} placement={this.props.placement} content={this.props.content} onMouseEnter={this.showPopover} onMouseLeave={this.hidePopover} onClick={this.hidePopover}>
-        {this.props.children}
+      <Popover visible={popoverVisible} placement={placement} content={content} onMouseEnter={this.showPopover} onMouseLeave={this.hidePopover} onClick={this.hidePopover}>
+        {children}
       </Popover>
     );
   }
 }
+
+
+ButtonPopover.propTypes = {
+  mouseEnterDelay: PropTypes.number,
+  placement: PropTypes.string,
+  content: PropTypes.func,
+  children: PropTypes.element
+};

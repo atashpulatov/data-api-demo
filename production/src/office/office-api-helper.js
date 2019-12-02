@@ -690,12 +690,14 @@ class OfficeApiHelper {
    * @memberof OfficeApiHelper
    */
   formatCrosstabRange(range) {
-    range.format.borders.getItem('EdgeTop').color = this.EXCEL_XTABS_BORDER_COLOR;
-    range.format.borders.getItem('EdgeRight').color = this.EXCEL_XTABS_BORDER_COLOR;
-    range.format.borders.getItem('EdgeBottom').color = this.EXCEL_XTABS_BORDER_COLOR;
-    range.format.borders.getItem('EdgeLeft').color = this.EXCEL_XTABS_BORDER_COLOR;
-    range.format.borders.getItem('InsideVertical').color = this.EXCEL_XTABS_BORDER_COLOR;
-    range.format.borders.getItem('InsideHorizontal').color = this.EXCEL_XTABS_BORDER_COLOR;
+    const { getItem } = range.format.borders;
+    const { EXCEL_XTABS_BORDER_COLOR } = this;
+    getItem('EdgeTop').color = EXCEL_XTABS_BORDER_COLOR;
+    getItem('EdgeRight').color = EXCEL_XTABS_BORDER_COLOR;
+    getItem('EdgeBottom').color = EXCEL_XTABS_BORDER_COLOR;
+    getItem('EdgeLeft').color = EXCEL_XTABS_BORDER_COLOR;
+    getItem('InsideVertical').color = EXCEL_XTABS_BORDER_COLOR;
+    getItem('InsideHorizontal').color = EXCEL_XTABS_BORDER_COLOR;
   }
 
   /**

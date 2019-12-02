@@ -10,7 +10,7 @@ import mstrLogo from './assets/mstr_logo.png';
 import { SettingsMenu } from './settings-menu';
 import { Confirmation } from './confirmation';
 
-export class _Header extends Component {
+export class HeaderHOC extends Component {
   componentDidMount = async () => {
     sessionHelper.getUserInfo();
     this.addCloseSettingsListeners();
@@ -110,7 +110,7 @@ export class _Header extends Component {
   }
 }
 
-_Header.defaultProps = { t: (text) => text };
+HeaderHOC.defaultProps = { t: (text) => text };
 
 function mapStateToProps({ officeReducer }) {
   const { isSettings, isConfirm, isClearing } = officeReducer;
@@ -122,7 +122,7 @@ const mapDispatchToProps = {
   toggleIsConfirmFlag,
 };
 
-_Header.propTypes = {
+HeaderHOC.propTypes = {
   loading: PropTypes.bool,
   isConfirm: PropTypes.bool,
   isSettings: PropTypes.bool,
@@ -131,5 +131,5 @@ _Header.propTypes = {
   toggleIsConfirmFlag: PropTypes.func,
   t: PropTypes.func
 };
-const Header = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_Header));
+const Header = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(HeaderHOC));
 export default Header;

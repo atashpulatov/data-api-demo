@@ -40,9 +40,8 @@ export class AttributeSelectorWindow extends Component {
     handleBack();
   };
 
-  onTriggerUpdate = (reportId, projectId, reportSubtype, body, reportName) => {
+  onTriggerUpdate = (reportId, projectId, reportSubtype, body, reportName = this.props.mstrData.reportName) => {
     const { mstrData } = this.props;
-    if (reportName === undefined) reportName = mstrData.reportName;
     const { importSubtotal } = this.state;
     attributeSelectorHelpers.officeMessageParent(
       selectorProperties.commandOnUpdate,
@@ -114,7 +113,6 @@ export class AttributeSelectorWindow extends Component {
   }
 }
 
-// not sure about is required
 AttributeSelectorWindow.propTypes = {
   mstrData: PropTypes.shape({
     envUrl: PropTypes.string,

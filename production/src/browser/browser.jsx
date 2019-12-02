@@ -8,7 +8,6 @@ import { browserActions } from './browser-actions';
 import './browser.css';
 import { connectToCache, createCache, refreshCache } from '../cache/cache-actions';
 
-// eslint-disable-next-line no-underscore-dangle
 export const BrowserHOC = ({
   objects, projects, selected, onSelect, locale, sort, onSortChange, cache,
   filter, onFilterChange, myLibrary, onMyLibraryChange, t, connectToDB, initDB, refreshDB,

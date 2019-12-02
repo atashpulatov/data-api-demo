@@ -16,8 +16,7 @@ import { createInstance, answerPrompts, getInstance } from '../mstr-object/mstr-
 
 const { Office } = window;
 
-// eslint-disable-next-line no-underscore-dangle
-export const _PopupViewSelector = (props) => {
+export const PopupViewSelectorHOC = (props) => {
   let { popupType } = props;
 
   const { propsToPass, methods, importRequested, dossierOpenRequested, loading } = props;
@@ -324,7 +323,7 @@ const popupActions = {
   preparePromptedReport,
 };
 
-export const PopupViewSelector = connect(mapStateToProps, popupActions)(_PopupViewSelector);
+export const PopupViewSelector = connect(mapStateToProps, popupActions)(PopupViewSelectorHOC);
 
 function parsePopupState(popupState, promptsAnswers) {
   if (!popupState) {

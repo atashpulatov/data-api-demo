@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 export class _AttributeSelector extends Component {
   constructor(props) {
     super(props);
-    // this.state = { loading: false, };
     this.handleUnauthorized = this.handleUnauthorized.bind(this);
   }
 
@@ -63,7 +62,7 @@ export class _AttributeSelector extends Component {
     );
   }
 }
-// nor sure about is required
+
 _AttributeSelector.propTypes = {
   title: PropTypes.string,
   triggerUpdate: PropTypes.bool,
