@@ -16,6 +16,7 @@ import {
   fetchVisualizationDefinition,
   getDossierDefinition,
 } from '../mstr-object/mstr-object-rest-service';
+import { CLEAR_PROMPTS_ANSWERS } from '../navigation/navigation-tree-actions';
 import { reduxStore } from '../store';
 import { officeProperties } from './office-properties';
 import { officeStoreService } from './store/office-store-service';
@@ -162,6 +163,7 @@ class OfficeDisplayService {
       });
 
       console.timeEnd('Total');
+      reduxStore.dispatch({ type: CLEAR_PROMPTS_ANSWERS });
       reduxStore.dispatch({
         type: officeProperties.actions.finishLoadingReport,
         reportBindId: bindingId,
