@@ -109,7 +109,7 @@ describe('FileHistoryContainer', () => {
       startLoading={startLoadingMock}
       stopLoading={stopLoadingMock}
     />);
-    wrappedComponent.instance()._ismounted = false;
+    wrappedComponent.instance().ismounted = false;
     wrappedComponent.instance().setState = jest.fn((obj, callback) => setStateCallBack = callback || (() => { }));
     const refreshButton = wrappedComponent.find('Button .refresh-all-btn');
     // when
@@ -169,7 +169,7 @@ describe('FileHistoryContainer', () => {
     // then
     expect(tmp).toBeTruthy();
 
-    expect(tmp._ismounted).toBeFalsy();
+    expect(tmp.ismounted).toBeFalsy();
     expect(mockRemoveListener).toBeCalled();
   });
 

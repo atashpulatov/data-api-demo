@@ -35,7 +35,7 @@ describe('office loaded file', () => {
     />);
     wrappedComponent.instance().componentWillUnmount();
     // then
-    expect(wrappedComponent.instance()._ismounted).toBeFalsy();
+    expect(wrappedComponent.instance().ismounted).toBeFalsy();
   });
   it('should display dataset type icon', () => {
     // given
