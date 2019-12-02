@@ -20,9 +20,13 @@ const EXCEL_ROW_LIMIT = 1048576;
 const EXCEL_COL_LIMIT = 16384;
 const EXCEL_XTABS_BORDER_COLOR = '#a5a5a5';
 
-/* global Office Excel OfficeExtension */
+const { Office, Excel, OfficeExtension } = window;
 
 class OfficeApiHelper {
+  constructor(excelXtabsBorderColor) {
+    this.EXCEL_XTABS_BORDER_COLOR = excelXtabsBorderColor;
+  }
+
   getRange = (headerCount, startCell, rowCount = 0) => {
     if (!Number.isInteger(headerCount)) {
       throw new IncorrectInputTypeError();
@@ -140,16 +144,11 @@ class OfficeApiHelper {
   getTable = (context, bindingId) => context.workbook.bindings
     .getItem(bindingId).getTable()
 
-  getExcelContext = async () =>
-    // https://docs.microsoft.com/en-us/javascript/api/excel/excel.runoptions?view=office-js
-    await Excel.run({ delayForCellEdit: true }, async (context) => context)
+  getExcelContext = async () => Excel.run({ delayForCellEdit: true }, async (context) => context);
 
+  getOfficeContext = async () => Office.context
 
-  getOfficeContext = async () => await Office.context
-
-  getExcelSessionStatus = async () =>
-    // ToDo find better way to check session status
-    !!await this.getExcelContext()
+  getExcelSessionStatus = async () => !!await this.getExcelContext() // ToDo find better way to check session status
 
 
   findAvailableOfficeTableId = () => EXCEL_TABLE_NAME + uuid().split('-').join('')
@@ -211,7 +210,7 @@ class OfficeApiHelper {
           let format = '';
           if (!object.isAttribute) {
             if (object.category === 9) {
-              format = this._getNumberFormattingCategoryName(object);
+              format = this.getNumberFormattingCategoryName(object);
             } else {
               format = object.formatString;
 
@@ -232,7 +231,7 @@ class OfficeApiHelper {
     }
   }
 
-  _getNumberFormattingCategoryName = (metric) => {
+  getNumberFormattingCategoryName = (metric) => {
     switch (metric.category) {
     case -2:
       return 'Default';
@@ -611,7 +610,7 @@ class OfficeApiHelper {
     let headerArray = [];
     // reportStartingCell.unmerge(); // excel api have problem with handling merged cells which are partailly in range, we unmerged selected cell to avoid this problem
     const startingCell = reportStartingCell.getCell(0, 0).getOffsetRange(0, -rowOffset); // we call getCell in case multiple cells are selected
-    headerArray = mstrNormalizedJsonHandler._transposeMatrix(rows);
+    headerArray = mstrNormalizedJsonHandler.transposeMatrix(rows);
     const colOffset = !headerArray.length ? rows.length - 1 : headerArray[0].length - 1; // transposed array length is 0 if there is no attributes in rows
     const headerRange = startingCell.getResizedRange(colOffset, rowOffset - 1);
     this.insertHeadersValues(headerRange, rows, 'rows');
@@ -663,7 +662,7 @@ class OfficeApiHelper {
     headerTitlesRange.values = '  ';
 
     if (attributesNames.rowsAttributes.length) rowsTitlesRange.values = [attributesNames.rowsAttributes]; // we are not inserting row attributes names if they do not exist
-    columnssTitlesRange.values = mstrNormalizedJsonHandler._transposeMatrix([attributesNames.columnsAttributes]);
+    columnssTitlesRange.values = mstrNormalizedJsonHandler.transposeMatrix([attributesNames.columnsAttributes]);
   }
 
   /**
@@ -691,12 +690,12 @@ class OfficeApiHelper {
    * @memberof OfficeApiHelper
    */
   formatCrosstabRange(range) {
-    range.format.borders.getItem('EdgeTop').color = EXCEL_XTABS_BORDER_COLOR;
-    range.format.borders.getItem('EdgeRight').color = EXCEL_XTABS_BORDER_COLOR;
-    range.format.borders.getItem('EdgeBottom').color = EXCEL_XTABS_BORDER_COLOR;
-    range.format.borders.getItem('EdgeLeft').color = EXCEL_XTABS_BORDER_COLOR;
-    range.format.borders.getItem('InsideVertical').color = EXCEL_XTABS_BORDER_COLOR;
-    range.format.borders.getItem('InsideHorizontal').color = EXCEL_XTABS_BORDER_COLOR;
+    range.format.borders.getItem('EdgeTop').color = this.EXCEL_XTABS_BORDER_COLOR;
+    range.format.borders.getItem('EdgeRight').color = this.EXCEL_XTABS_BORDER_COLOR;
+    range.format.borders.getItem('EdgeBottom').color = this.EXCEL_XTABS_BORDER_COLOR;
+    range.format.borders.getItem('EdgeLeft').color = this.EXCEL_XTABS_BORDER_COLOR;
+    range.format.borders.getItem('InsideVertical').color = this.EXCEL_XTABS_BORDER_COLOR;
+    range.format.borders.getItem('InsideHorizontal').color = this.EXCEL_XTABS_BORDER_COLOR;
   }
 
   /**
@@ -733,4 +732,4 @@ class OfficeApiHelper {
   }
 }
 
-export const officeApiHelper = new OfficeApiHelper();
+export const officeApiHelper = new OfficeApiHelper(EXCEL_XTABS_BORDER_COLOR);

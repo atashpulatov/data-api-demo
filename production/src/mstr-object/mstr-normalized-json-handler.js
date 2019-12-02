@@ -141,12 +141,12 @@ class NormalizedJsonHandler {
    */
   renderHeaders = (definition, axis, headers, onElement) => {
     if (headers[axis].length === 0) return [[]];
-    const headersNormalized = axis === 'columns' ? this._transposeMatrix(headers[axis]) : headers[axis];
+    const headersNormalized = axis === 'columns' ? this.transposeMatrix(headers[axis]) : headers[axis];
     const matrix = headersNormalized.map((headerCells, colIndex) => {
       const axisElements = this.mapElementIndicesToElements({ definition, axis, headerCells, colIndex, });
       return axisElements.map((e, axisIndex, elementIndex) => onElement(e, axisIndex, elementIndex));
     });
-    return axis === 'columns' ? this._transposeMatrix(matrix) : matrix;
+    return axis === 'columns' ? this.transposeMatrix(matrix) : matrix;
   }
 
   /**
@@ -225,7 +225,7 @@ class NormalizedJsonHandler {
    * @memberof NormalizedJsonHandler
    * @return {Array} - Transposed 2D array
    */
-  _transposeMatrix = (matrix) => matrix[0].map((_, col) => matrix.map((row) => row[col]));
+  transposeMatrix = (matrix) => matrix[0].map((_, col) => matrix.map((row) => row[col]));
 }
 
 export default new NormalizedJsonHandler();

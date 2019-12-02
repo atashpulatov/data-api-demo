@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { AttributeMetricFilter, ErrorBoundary } from '@mstr/mstr-react-library';
 import { withTranslation } from 'react-i18next';
+import PropTypes from 'prop-types';
 
 export class _AttributeSelector extends Component {
   constructor(props) {
     super(props);
-    this.state = { loading: false, };
+    // this.state = { loading: false, };
     this.handleUnauthorized = this.handleUnauthorized.bind(this);
   }
 
@@ -62,7 +63,24 @@ export class _AttributeSelector extends Component {
     );
   }
 }
-
+// nor sure about is required
+_AttributeSelector.propTypes = {
+  title: PropTypes.string,
+  triggerUpdate: PropTypes.bool,
+  openModal: PropTypes.bool,
+  session: PropTypes.shape({}),
+  mstrData: PropTypes.shape({
+    reportId: PropTypes.string,
+    importSubtotal: PropTypes.bool
+  }),
+  resetTriggerUpdate: PropTypes.func,
+  attributesSelectedChange: PropTypes.func,
+  closeModal: PropTypes.func,
+  toggleSubtotal: PropTypes.func,
+  handlePopupErrors: PropTypes.func,
+  onTriggerUpdate: PropTypes.func,
+  t: PropTypes.func
+};
 _AttributeSelector.defaultProps = { t: (text) => text, };
 
 export const AttributeSelector = withTranslation('common')(_AttributeSelector);

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import '../home/home.css';
+import PropTypes from 'prop-types';
 import { selectorProperties } from './selector-properties';
 import { attributeSelectorHelpers } from './attribute-selector-helpers';
 import { AttributeSelector } from './attribute-selector';
@@ -39,8 +40,9 @@ export class AttributeSelectorWindow extends Component {
     handleBack();
   };
 
-  onTriggerUpdate = (reportId, projectId, reportSubtype, body, reportName = this.props.mstrData.reportName) => {
+  onTriggerUpdate = (reportId, projectId, reportSubtype, body, reportName) => {
     const { mstrData } = this.props;
+    if (reportName === undefined) reportName = mstrData.reportName;
     const { importSubtotal } = this.state;
     attributeSelectorHelpers.officeMessageParent(
       selectorProperties.commandOnUpdate,
@@ -111,3 +113,19 @@ export class AttributeSelectorWindow extends Component {
     );
   }
 }
+
+// not sure about is required
+AttributeSelectorWindow.propTypes = {
+  mstrData: PropTypes.shape({
+    envUrl: PropTypes.string,
+    token: PropTypes.string,
+    projectId: PropTypes.string,
+    reportName: PropTypes.string,
+    instanceId: PropTypes.string,
+    promptsAnswers: PropTypes.string,
+    reportType: PropTypes.string,
+    editRequested: PropTypes.bool
+  }).isRequired,
+  handleBack: PropTypes.func,
+  handlePopupErrors: PropTypes.func
+};

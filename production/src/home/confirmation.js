@@ -2,12 +2,12 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
+import PropTypes from 'prop-types';
 import warningIcon from '../loading/assets/icon_conflict.svg';
 import { officeApiHelper } from '../office/office-api-helper';
 import { toggleSecuredFlag, toggleIsConfirmFlag, toggleIsClearingFlag } from '../office/office-actions';
 import { errorService } from '../error/error-handler';
 import { notificationService } from '../notification/notification-service';
-import { ProtectedSheetError } from '../error/protected-sheets-error';
 
 export const _Confirmation = ({ reportArray, toggleSecuredFlag, toggleIsConfirmFlag, toggleIsClearingFlag, t }) => {
   useEffect(() => {
@@ -92,6 +92,14 @@ export const _Confirmation = ({ reportArray, toggleSecuredFlag, toggleIsConfirmF
       </div>
     </>
   );
+};
+
+_Confirmation.propTypes = {
+  reportArray: PropTypes.arrayOf(PropTypes.shape({})),
+  toggleSecuredFlag: PropTypes.func,
+  toggleIsConfirmFlag: PropTypes.func,
+  toggleIsClearingFlag: PropTypes.func,
+  t: PropTypes.func
 };
 
 _Confirmation.defaultProps = { t: (text) => text, };

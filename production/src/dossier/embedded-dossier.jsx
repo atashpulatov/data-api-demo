@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -176,7 +177,8 @@ _EmbeddedDossier.propTypes = {
     promptsAnswers: PropTypes.array || null
   }),
   handleSelection: PropTypes.func,
-  handlePopupErrors: PropTypes.func
+  handlePopupErrors: PropTypes.func,
+  handlePromptAnswer: PropTypes.func
 };
 
 _EmbeddedDossier.defaultProps = {
