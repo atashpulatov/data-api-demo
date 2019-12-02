@@ -95,6 +95,7 @@ class PopupController {
     try {
       if (response.command !== REFRESH_CACHE_COMMAND) await this.closeDialog(dialog);
       if (response.command !== selectorProperties.commandError) await officeApiHelper.getExcelSessionStatus(); // checking excel session status
+      await authenticationHelper.validateAuthToken();
       switch (response.command) {
       case selectorProperties.commandOk:
         if (!reportParams) {

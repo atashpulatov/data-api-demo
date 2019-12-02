@@ -156,7 +156,7 @@ export function getDossierStatus(dossierId, instanceId, projectId) {
     .set('x-mstr-authtoken', authToken)
     .set('x-mstr-projectid', projectId)
     .withCredentials()
-    .then((res) => res.body);
+    .then((res) => res);
 }
 
 export function getInstance({ objectId, projectId, mstrObjectType = reportObjectType, dossierData, body = {}, instanceId }) {
