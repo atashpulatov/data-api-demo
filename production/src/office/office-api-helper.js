@@ -23,16 +23,12 @@ const EXCEL_XTABS_BORDER_COLOR = '#a5a5a5';
 const { Office, Excel, OfficeExtension } = window;
 
 class OfficeApiHelper {
-  constructor(excelXtabsBorderColor) {
-    this.EXCEL_XTABS_BORDER_COLOR = excelXtabsBorderColor;
-  }
-
   getRange = (headerCount, startCell, rowCount = 0) => {
     if (!Number.isInteger(headerCount)) {
       throw new IncorrectInputTypeError();
     }
     const startCellArray = startCell.split(/(\d+)/);
-    headerCount += parseInt(this.lettersToNumber(startCellArray[0]) - 1);
+    headerCount += parseInt(this.lettersToNumber(startCellArray[0]) - 1, 10);
     const endColumnNum = headerCount;
     let endColumn = '';
     for (let firstNumber = ALPHABET_RANGE_START,
@@ -65,8 +61,8 @@ class OfficeApiHelper {
   offsetCellBy = (cell, rowOffset, colOffset) => {
     const cellArray = cell.split(/(\d+)/);
     const [column, row] = cellArray;
-    const endRow = parseInt(row) + parseInt(rowOffset);
-    const endColumn = this.numberToLetters(parseInt(this.lettersToNumber(column) + colOffset));
+    const endRow = parseInt(row, 10) + parseInt(rowOffset, 10);
+    const endColumn = this.numberToLetters(parseInt(this.lettersToNumber(column) + colOffset, 10));
     return `${endColumn}${endRow}`;
   }
 
@@ -94,10 +90,10 @@ class OfficeApiHelper {
       if (isCrosstab) {
         const tmpXtabDimensions = { ...crosstabHeaderDimensions, columnsY: crosstabHeaderDimensions.columnsY + 1, };
         crosstabRange = await this.getCrosstabRangeSafely(tableObject, tmpXtabDimensions, excelContext);
-        shouldSelect && crosstabRange.select();
+        if (shouldSelect) crosstabRange.select();
       } else {
         const tableRange = this.getBindingRange(excelContext, bindingId);
-        shouldSelect && tableRange.select();
+        if (shouldSelect) tableRange.select();
       }
       await excelContext.sync();
       return true;
@@ -192,41 +188,38 @@ class OfficeApiHelper {
   formatNumbers = (table, reportConvertedData, isCrosstab) => {
     const { columnInformation } = reportConvertedData;
     let filteredColumnInformation;
-    if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
-      try {
-        const { columns } = table;
-        if (isCrosstab) {
-          filteredColumnInformation = columnInformation.filter((e) => { // we store attribute informations in column information in crosstab attributes are in headers not excel table so we dont need them here.
-            if (e.isAttribute === false) return e;
-          });
-        } else {
-          filteredColumnInformation = columnInformation;
-        }
-        const offset = columnInformation.length - filteredColumnInformation.length;
-        for (const object of filteredColumnInformation) {
-          if (!Object.keys(object).length) continue; // Skips iteration if object is empty
+    const { columns } = table;
+    if (isCrosstab) {
+      // we store attribute informations in column information in crosstab attributes are
+      // in headers not excel table so we dont need them here.
+      filteredColumnInformation = columnInformation.filter((e) => !e.isAttribute);
+    } else {
+      filteredColumnInformation = columnInformation;
+    }
+    const offset = columnInformation.length - filteredColumnInformation.length;
+    for (const object of filteredColumnInformation) {
+      if (Object.keys(object).length) {
+        const columnRange = columns.getItemAt(object.index - offset).getDataBodyRange();
+        let format = '';
+        if (!object.isAttribute) {
+          if (object.category === 9) {
+            format = this.getNumberFormattingCategoryName(object);
+          } else {
+            format = object.formatString;
 
-          const columnRange = columns.getItemAt(object.index - offset).getDataBodyRange();
-          let format = '';
-          if (!object.isAttribute) {
-            if (object.category === 9) {
-              format = this.getNumberFormattingCategoryName(object);
-            } else {
-              format = object.formatString;
-
-              if (format.indexOf('$') !== -1) {
-                // Normalizing formatString from MicroStrategy when locale codes are used [$-\d+]
-                format = format.replace(/\[\$-/g, '[$$$$-').replace(/\$/g, '\\$').replace(/\\\$\\\$/g, '$').replace(/"/g, '');
-              }
-
-              // for fractions set General format
-              object.formatString.match(/# \?+?\/\?+?/) && (format = 'General');
+            if (format.indexOf('$') !== -1) {
+              // Normalizing formatString from MicroStrategy when locale codes are used [$-\d+]
+              format = format.replace(/\[\$-/g, '[$$$$-')
+                .replace(/\$/g, '\\$')
+                .replace(/\\\$\\\$/g, '$')
+                .replace(/"/g, '');
             }
+
+            // for fractions set General format
+            if (object.formatString.match(/# \?+?\/\?+?/)) (format = 'General');
           }
-          columnRange.numberFormat = format;
         }
-      } catch (error) {
-        throw errorService.handleError(error);
+        columnRange.numberFormat = format;
       }
     }
   }
@@ -499,7 +492,11 @@ class OfficeApiHelper {
       const topRange = officeTable.getRange().getRowsAbove(prevheaderDimensions.columnsY);
       context.trackedObjects.add(topRange);
       // Title headers
-      const titlesRange = officeTable.getRange().getCell(0, 0).getOffsetRange(0, -1).getResizedRange(-(prevheaderDimensions.columnsY), -(prevheaderDimensions.rowsX - 1));
+      const titlesRange = officeTable
+        .getRange()
+        .getCell(0, 0)
+        .getOffsetRange(0, -1)
+        .getResizedRange(-(prevheaderDimensions.columnsY), -(prevheaderDimensions.rowsX - 1));
       context.trackedObjects.add(titlesRange);
       // Check if ranges are valid before clearing
       await context.sync();
@@ -530,7 +527,9 @@ class OfficeApiHelper {
    */
   getTableStartCell = ({ startCell, instanceDefinition, prevOfficeTable, toCrosstabChange, fromCrosstabChange }) => {
     const { mstrTable: { isCrosstab, prevCrosstabDimensions, crosstabHeaderDimensions } } = instanceDefinition;
-    if (fromCrosstabChange) return this.offsetCellBy(startCell, -prevCrosstabDimensions.columnsY, -prevCrosstabDimensions.rowsX);
+    if (fromCrosstabChange) {
+      return this.offsetCellBy(startCell, -prevCrosstabDimensions.columnsY, -prevCrosstabDimensions.rowsX);
+    }
     if (!toCrosstabChange && (!isCrosstab || prevOfficeTable)) return startCell;
     const rowOffset = crosstabHeaderDimensions.columnsY;
     const colOffset = crosstabHeaderDimensions.rowsX;
@@ -592,7 +591,7 @@ class OfficeApiHelper {
     let contextPromises = [];
     for (const cell of subtotalCells) {
       const subtotalRowRange = this.getSubtotalRange(startCell, cell, mstrTable);
-      subtotalRowRange && (subtotalRowRange.format.font.bold = shouldBold);
+      if (subtotalRowRange) (subtotalRowRange.format.font.bold = shouldBold);
       contextPromises.push(context.sync());
       if (contextPromises.length % CONTEXT_LIMIT === 0) {
         await Promise.all(contextPromises);
@@ -612,10 +611,11 @@ class OfficeApiHelper {
   createRowsHeaders = (reportStartingCell, rows) => {
     const rowOffset = rows[0].length || 1; // we put 1 as offset if there are no attribue in rows
     let headerArray = [];
-    // reportStartingCell.unmerge(); // excel api have problem with handling merged cells which are partailly in range, we unmerged selected cell to avoid this problem
-    const startingCell = reportStartingCell.getCell(0, 0).getOffsetRange(0, -rowOffset); // we call getCell in case multiple cells are selected
+    // we call getCell in case multiple cells are selected
+    const startingCell = reportStartingCell.getCell(0, 0).getOffsetRange(0, -rowOffset);
     headerArray = mstrNormalizedJsonHandler.transposeMatrix(rows);
-    const colOffset = !headerArray.length ? rows.length - 1 : headerArray[0].length - 1; // transposed array length is 0 if there is no attributes in rows
+    // transposed array length is 0 if there is no attributes in rows
+    const colOffset = !headerArray.length ? rows.length - 1 : headerArray[0].length - 1;
     const headerRange = startingCell.getResizedRange(colOffset, rowOffset - 1);
     this.insertHeadersValues(headerRange, rows, 'rows');
     // TODO: Move merge cells after we import the whole table
@@ -636,8 +636,8 @@ class OfficeApiHelper {
     const reportStartingCell = sheet.getRange(cellAddress);
     const columnOffset = columns.length;
     const rowOffset = 0;
-    // reportStartingCell.unmerge(); // excel api have problem with handling merged cells which are partailly in range, we unmerged selected cell to avoid this problem
-    const startingCell = reportStartingCell.getCell(0, 0).getOffsetRange(-columnOffset, -rowOffset);// we call getCell in case multiple cells are selected
+    // we call getCell in case multiple cells are selected
+    const startingCell = reportStartingCell.getCell(0, 0).getOffsetRange(-columnOffset, -rowOffset);
     const directionVector = [1, 0];
     const headerRange = startingCell.getResizedRange(columns.length - 1, columns[0].length - 1);
     this.insertHeadersValues(headerRange, columns, 'columns');
@@ -665,7 +665,8 @@ class OfficeApiHelper {
     this.formatCrosstabRange(headerTitlesRange);
     headerTitlesRange.values = '  ';
 
-    if (attributesNames.rowsAttributes.length) rowsTitlesRange.values = [attributesNames.rowsAttributes]; // we are not inserting row attributes names if they do not exist
+    // we are not inserting row attributes names if they do not exist
+    if (attributesNames.rowsAttributes.length) rowsTitlesRange.values = [attributesNames.rowsAttributes];
     columnssTitlesRange.values = mstrNormalizedJsonHandler.transposeMatrix([attributesNames.columnsAttributes]);
   }
 
@@ -710,7 +711,8 @@ class OfficeApiHelper {
   insertHeadersValues(headerRange, headerArray, axis = 'rows') {
     headerRange.clear('contents'); // we are unmerging and removing formatting to avoid conflicts while merging cells
     headerRange.unmerge();
-    headerRange.values = axis === 'rows' && !headerArray[0].length ? '' : headerArray; // if there is no attributes in rows we insert empty string for whole range
+    // if there is no attributes in rows we insert empty string for whole range
+    headerRange.values = axis === 'rows' && !headerArray[0].length ? '' : headerArray;
     const hAlign = axis === 'rows' ? 'left' : 'center';
     headerRange.format.horizontalAlignment = Excel.HorizontalAlignment[hAlign];
     headerRange.format.verticalAlignment = Excel.VerticalAlignment.top;
@@ -723,9 +725,8 @@ class OfficeApiHelper {
    * @param {Office} range Range of the header
    * @memberof OfficeApiHelper
    */
-  formatCrosstabRange(range) {
+  formatCrosstabRange = (range) => {
     const { getItem } = range.format.borders;
-    const { EXCEL_XTABS_BORDER_COLOR } = this;
     getItem('EdgeTop').color = EXCEL_XTABS_BORDER_COLOR;
     getItem('EdgeRight').color = EXCEL_XTABS_BORDER_COLOR;
     getItem('EdgeBottom').color = EXCEL_XTABS_BORDER_COLOR;
@@ -748,11 +749,14 @@ class OfficeApiHelper {
       let currentCell = startingCell;
       for (let j = 0; j < headerArray[i].length - 1; j++) {
         if (headerArray[i][j] === headerArray[i][j + 1]) {
-          currentCell.getResizedRange(offsetForMoving2, offsetForMoving1).merge(); // increasing size of selected range for cells that will be merged
+          // increasing size of selected range for cells that will be merged
+          currentCell.getResizedRange(offsetForMoving2, offsetForMoving1).merge();
         }
-        currentCell = currentCell.getOffsetRange(offsetForMoving2, offsetForMoving1); // moving to next attributr value (cell)
+        // moving to next attributr value (cell)
+        currentCell = currentCell.getOffsetRange(offsetForMoving2, offsetForMoving1);
       }
-      startingCell = startingCell.getOffsetRange(offsetForMoving1, offsetForMoving2); // moving to next attribute (row/column)
+      // moving to next attribute (row/column)
+      startingCell = startingCell.getOffsetRange(offsetForMoving1, offsetForMoving2);
     }
   }
 
@@ -768,4 +772,4 @@ class OfficeApiHelper {
   }
 }
 
-export const officeApiHelper = new OfficeApiHelper(EXCEL_XTABS_BORDER_COLOR);
+export const officeApiHelper = new OfficeApiHelper();
