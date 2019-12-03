@@ -1,9 +1,7 @@
-const { Office, Excel } = window;
-
 class OfficeContext {
-  getOffice = () => Office
+  getOffice = () => window.Office
 
-  getExcel = () => Excel
+  getExcel = () => window.Excel
 
   /**
    * Returns the highest requirement set supported by the current platform.
@@ -14,8 +12,8 @@ class OfficeContext {
   getRequirementSet = () => {
     let isSupported = true;
     let api = 0;
-    while (isSupported && Office) {
-      isSupported = Office.context.requirements.isSetSupported('ExcelAPI', `1.${api}`);
+    while (isSupported && window.Office) {
+      isSupported = window.Office.context.requirements.isSetSupported('ExcelAPI', `1.${api}`);
       if (isSupported) api += 1;
     }
     return `1.${api - 1}`;

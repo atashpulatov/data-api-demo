@@ -2,7 +2,6 @@ import { CONTEXT_LIMIT } from '../mstr-object/mstr-object-rest-service';
 import { errorService } from '../error/error-handler';
 import { notificationService } from '../notification/notification-service';
 
-const { Office } = window;
 class OfficeFormattingHelper {
   /**
    * Applies Excel number formatting to imported object based on MSTR data type.
@@ -178,25 +177,21 @@ class OfficeFormattingHelper {
   }
 
   formatTable = async (table, isCrosstab, crosstabHeaderDimensions, context) => {
-    if (Office.context.requirements.isSetSupported('ExcelApi', 1.2)) {
-      if (isCrosstab) {
-        const { rowsX } = crosstabHeaderDimensions;
-        table.getDataBodyRange().getColumnsBefore(rowsX).format.autofitColumns();
-      }
-      try {
-        const { columns } = table;
-        columns.load('count');
+    if (isCrosstab) {
+      const { rowsX } = crosstabHeaderDimensions;
+      table.getDataBodyRange().getColumnsBefore(rowsX).format.autofitColumns();
+    }
+    try {
+      const { columns } = table;
+      columns.load('count');
+      await context.sync();
+      for (let index = 0; index < columns.count; index++) {
+        columns.getItemAt(index).getRange().format.autofitColumns();
+        // eslint-disable-next-line no-await-in-loop
         await context.sync();
-        for (let index = 0; index < columns.count; index++) {
-          columns.getItemAt(index).getRange().format.autofitColumns();
-          // eslint-disable-next-line no-await-in-loop
-          await context.sync();
-        }
-      } catch (error) {
-        console.log('Error when formatting - no columns autofit applied', error);
       }
-    } else {
-      notificationService.displayNotification({ type: 'warning', content: 'Unable to format table.' });
+    } catch (error) {
+      console.log('Error when formatting - no columns autofit applied', error);
     }
   }
 }

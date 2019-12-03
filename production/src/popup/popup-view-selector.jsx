@@ -13,9 +13,6 @@ import { PromptsWindow } from '../prompts/prompts-window';
 import { preparePromptedReport } from './popup-actions';
 import { createInstance, answerPrompts, getInstance } from '../mstr-object/mstr-object-rest-service';
 
-
-const { Office } = window;
-
 export const PopupViewSelectorHOC = (props) => {
   let { popupType } = props;
 
@@ -226,7 +223,7 @@ function proceedToImport(props) {
   }
   props.startLoading();
   props.startImport();
-  Office.context.ui.messageParent(JSON.stringify(okObject));
+  window.Office.context.ui.messageParent(JSON.stringify(okObject));
 }
 
 function renderProperComponent(popupType, methods, propsToPass, editedReport) {
