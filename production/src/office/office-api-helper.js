@@ -19,8 +19,6 @@ const EXCEL_ROW_LIMIT = 1048576;
 const EXCEL_COL_LIMIT = 16384;
 const EXCEL_XTABS_BORDER_COLOR = '#a5a5a5';
 
-const { Office, Excel, OfficeExtension } = window;
-
 class OfficeApiHelper {
   getRange = (headerCount, startCell, rowCount = 0) => {
     if (!Number.isInteger(headerCount)) {
@@ -67,7 +65,7 @@ class OfficeApiHelper {
 
   handleOfficeApiException = (error) => {
     console.error(`error: ${error}`);
-    if (error instanceof OfficeExtension.Error) {
+    if (error instanceof window.OfficeExtension.Error) {
       console.error(`Debug info: ${JSON.stringify(error.debugInfo)}`);
     } else {
       throw error;
@@ -139,9 +137,9 @@ class OfficeApiHelper {
   getTable = (context, bindingId) => context.workbook.bindings
     .getItem(bindingId).getTable()
 
-  getExcelContext = () => Excel.run({ delayForCellEdit: true }, (context) => Promise.resolve(context));
+  getExcelContext = async () => window.Excel.run({ delayForCellEdit: true }, async (context) => context);
 
-  getOfficeContext = () => Office.context
+  getOfficeContext = async () => window.Office.context
 
   getExcelSessionStatus = async () => !!await this.getExcelContext() // ToDo find better way to check session status
 
@@ -186,15 +184,17 @@ class OfficeApiHelper {
    * @param {String} bindingId
    * @memberof OfficeApiHelper
    */
-  bindNamedItem = (namedItem, bindingId) => new Promise((resolve, reject) => Office.context.document.bindings.addFromNamedItemAsync(namedItem, 'table', { id: bindingId }, (result) => {
-    if (result.status === 'succeeded') {
-      console.log(`Added new binding with type: ${result.value.type} and id: ${result.value.id}`);
-      resolve();
-    } else {
-      console.error(`Error: ${result.error.message}`);
-      reject(result.error);
-    }
-  }))
+  bindNamedItem = (namedItem, bindingId) => new Promise((resolve, reject) => {
+    window.Office.context.document.bindings.addFromNamedItemAsync(namedItem, 'table', { id: bindingId }, (result) => {
+      if (result.status === 'succeeded') {
+        console.log(`Added new binding with type: ${result.value.type} and id: ${result.value.id}`);
+        resolve();
+      } else {
+        console.error(`Error: ${result.error.message}`);
+        reject(result.error);
+      }
+    });
+  })
 
   /**
    * Get object from store based on bindingId and remove it from workbook
@@ -506,7 +506,7 @@ class OfficeApiHelper {
     const columnssTitlesRange = titlesBottomCell.getOffsetRange(-1, 0).getResizedRange(-(crosstabHeaderDimensions.columnsY - 1), 0);
 
     const headerTitlesRange = columnssTitlesRange.getBoundingRect(rowsTitlesRange);
-    headerTitlesRange.format.verticalAlignment = Excel.VerticalAlignment.bottom;
+    headerTitlesRange.format.verticalAlignment = window.Excel.VerticalAlignment.bottom;
     this.formatCrosstabRange(headerTitlesRange);
     headerTitlesRange.values = '  ';
 
@@ -559,8 +559,8 @@ class OfficeApiHelper {
     // if there is no attributes in rows we insert empty string for whole range
     headerRange.values = axis === 'rows' && !headerArray[0].length ? '' : headerArray;
     const hAlign = axis === 'rows' ? 'left' : 'center';
-    headerRange.format.horizontalAlignment = Excel.HorizontalAlignment[hAlign];
-    headerRange.format.verticalAlignment = Excel.VerticalAlignment.top;
+    headerRange.format.horizontalAlignment = window.Excel.HorizontalAlignment[hAlign];
+    headerRange.format.verticalAlignment = window.Excel.VerticalAlignment.top;
     this.formatCrosstabRange(headerRange);
   }
 
