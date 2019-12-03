@@ -23,6 +23,7 @@ const URL = `${window.location.href}`;
 /* global Office */
 
 class PopupController {
+  
   runPopupNavigation = async () => {
     await this.runPopup(PopupTypeEnum.navigationTree, 80, 80);
   };

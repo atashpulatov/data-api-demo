@@ -16,6 +16,7 @@ import { SessionHelper } from './storage/session-helper';
 import { NotificationService } from './notification/notification-service';
 import { AuthenticationHelper } from './authentication/authentication-helper';
 import { HomeHelper } from './home/home-helper';
+import {MstrObjectRestService} from './mstr-object/mstr-object-rest-service';
 
 const officeApiHelper = new OfficeApiHelper();
 officeApiHelper.init(reduxStore);
@@ -31,6 +32,8 @@ const authenticationHelper = new AuthenticationHelper();
 authenticationHelper.init(reduxStore, sessionHelper);
 const homeHelper = new HomeHelper();
 homeHelper.init(reduxStore, sessionHelper);
+const mstrObjectRestService = new MstrObjectRestService();
+mstrObjectRestService.init(reduxStore);
 
 // Code splitting https://reactjs.org/docs/code-splitting.html
 const LazySidebar = lazy(() => import('./entry-point/sidebar-entry-point'));

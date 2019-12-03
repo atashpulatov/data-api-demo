@@ -1,20 +1,7 @@
 import { officeApiHelper } from './office-api-helper';
 import officeTableHelper from './office-table-helper';
 import officeFormattingHelper from './office-formatting-helper';
-import {
-  DATA_LIMIT,
-  PROMISE_LIMIT,
-  IMPORT_ROW_LIMIT,
-  getObjectInfo,
-  getObjectDefinition,
-  createInstance,
-  getObjectContentGenerator,
-  answerPrompts,
-  modifyInstance,
-  createDossierInstance,
-  fetchVisualizationDefinition,
-  getDossierDefinition,
-} from '../mstr-object/mstr-object-rest-service';
+import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';
 import { CLEAR_PROMPTS_ANSWERS } from '../navigation/navigation-tree-actions';
 import { reduxStore } from '../store';
 import { officeProperties } from './office-properties';
@@ -30,6 +17,20 @@ import {
   ERROR_POPUP_CLOSED,
 } from '../error/constants';
 
+const {
+  DATA_LIMIT,
+  PROMISE_LIMIT,
+  IMPORT_ROW_LIMIT,
+  getObjectInfo,
+  getObjectDefinition,
+  createInstance,
+  getObjectContentGenerator,
+  answerPrompts,
+  modifyInstance,
+  createDossierInstance,
+  fetchVisualizationDefinition,
+  getDossierDefinition,
+} = mstrObjectRestService;
 
 class OfficeDisplayService {
   printObject = async ({

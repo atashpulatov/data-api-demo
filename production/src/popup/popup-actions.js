@@ -5,7 +5,7 @@ import { officeProperties } from '../office/office-properties';
 import { officeStoreService } from '../office/store/office-store-service';
 import { popupController } from './popup-controller';
 import { popupHelper } from './popup-helper';
-import { createInstance, answerPrompts, getInstance, createDossierInstance } from '../mstr-object/mstr-object-rest-service';
+import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { reduxStore } from '../store';
 
 export const CLEAR_WINDOW = 'POPUP_CLOSE_WINDOW';
@@ -15,6 +15,8 @@ export const RESET_STATE = 'RESET_STATE';
 export const SET_REPORT_N_FILTERS = 'SET_REPORT_N_FILTERS';
 export const SET_PREPARED_REPORT = 'SET_PREPARED_REPORT';
 // export const PRELOAD = 'PRELOAD';
+
+const { createInstance, answerPrompts, getInstance, createDossierInstance } = mstrObjectRestService;
 
 export function callForEdit(reportParams) {
   return async (dispatch) => {

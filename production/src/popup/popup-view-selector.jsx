@@ -11,10 +11,10 @@ import { NavigationTree } from '../navigation/navigation-tree';
 import { actions } from '../navigation/navigation-tree-actions';
 import { PromptsWindow } from '../prompts/prompts-window';
 import { preparePromptedReport } from './popup-actions';
-import { createInstance, answerPrompts, getInstance } from '../mstr-object/mstr-object-rest-service';
-
+import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 
 const { Office } = window;
+const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 
 export const PopupViewSelectorHOC = (props) => {
   let { popupType } = props;
