@@ -74,7 +74,41 @@ export function createDossierBasedOnReport(reportId, instanceId, projectId) {
     .then((res) => res.body);
 }
 
-export function createInstance({ objectId, projectId, mstrObjectType = reportObjectType, dossierData, body = {}, limit = 1, }) {
+function checkTableDimensions({ rows, columns }) {
+  if (rows >= EXCEL_ROW_LIMIT || columns >= EXCEL_COLUMN_LIMIT) {
+    throw new OutsideOfRangeError();
+  }
+  return { rows, columns };
+}
+
+function parseInstanceDefinition(res) {
+  const { body } = res;
+  if (res.status === 200 && body.status === 2) {
+    const { instanceId } = body;
+    const { status } = body;
+    return { instanceId, status };
+  }
+  const { instanceId, data, internal } = body;
+  if (data.paging.total === 0) throw new Error(NOT_SUPPORTED_NO_ATTRIBUTES);
+  const mstrTable = officeConverterServiceV2.createTable(body);
+  const { rows, columns } = checkTableDimensions(mstrTable.tableSize);
+  return {
+    instanceId,
+    rows,
+    columns,
+    mstrTable,
+    manipulationsXML: internal,
+  };
+}
+
+export function createInstance({
+  objectId,
+  projectId,
+  mstrObjectType = reportObjectType,
+  dossierData,
+  body = {},
+  limit = 1,
+}) {
   const storeState = reduxStore.getState();
   const { envUrl } = storeState.sessionReducer;
   const { authToken } = storeState.sessionReducer;
@@ -159,7 +193,14 @@ export function getDossierStatus(dossierId, instanceId, projectId) {
     .then((res) => res);
 }
 
-export function getInstance({ objectId, projectId, mstrObjectType = reportObjectType, dossierData, body = {}, instanceId }) {
+export function getInstance({
+  objectId,
+  projectId,
+  mstrObjectType = reportObjectType,
+  dossierData,
+  body = {},
+  instanceId
+}) {
   const storeState = reduxStore.getState();
   const { envUrl } = storeState.sessionReducer;
   const { authToken } = storeState.sessionReducer;
@@ -181,7 +222,28 @@ export function getInstance({ objectId, projectId, mstrObjectType = reportObject
     .then((res) => parseInstanceDefinition(res));
 }
 
-export function modifyInstance({ objectId, projectId, mstrObjectType = reportObjectType, dossierData, body = {}, instanceId }) {
+function getFullPath({ envUrl, limit, mstrObjectType, objectId, instanceId, version = 1, visualizationInfo = false, }) {
+  let path;
+  if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
+    const { chapterKey, visualizationKey } = visualizationInfo;
+    path = `${envUrl}/v2/dossiers/${objectId}/instances/${instanceId}/chapters/${chapterKey}/visualizations/${visualizationKey}`;
+  } else {
+    const api = version > 1 ? `v${version}/` : '';
+    path = `${envUrl}/${api}${mstrObjectType.request}/${objectId}/instances`;
+    path += instanceId ? `/${instanceId}` : '';
+    path += limit ? `?limit=${limit}` : '';
+  }
+  return path;
+}
+
+export function modifyInstance({
+  objectId,
+  projectId,
+  mstrObjectType = reportObjectType,
+  dossierData,
+  body = {},
+  instanceId
+}) {
   const storeState = reduxStore.getState();
   const { envUrl } = storeState.sessionReducer;
   const { authToken } = storeState.sessionReducer;
@@ -203,8 +265,24 @@ export function modifyInstance({ objectId, projectId, mstrObjectType = reportObj
     .then((res) => parseInstanceDefinition(res));
 }
 
-export function getObjectContentGenerator({ instanceDefinition, objectId, projectId, mstrObjectType, dossierData, limit = IMPORT_ROW_LIMIT, visualizationInfo, }) {
-  return fetchContentGenerator({ instanceDefinition, objectId, projectId, mstrObjectType, dossierData, limit, visualizationInfo, });
+export function getObjectContentGenerator({
+  instanceDefinition,
+  objectId,
+  projectId,
+  mstrObjectType,
+  dossierData,
+  limit = IMPORT_ROW_LIMIT,
+  visualizationInfo,
+}) {
+  return fetchContentGenerator({
+    instanceDefinition,
+    objectId,
+    projectId,
+    mstrObjectType,
+    dossierData,
+    limit,
+    visualizationInfo,
+  });
 }
 
 export function getObjectDefinition(objectId, projectId, mstrObjectType = reportObjectType) {
@@ -283,28 +361,16 @@ export function rePromptDossier(dossierId, instanceId, projectId) {
     .then((res) => res.body);
 }
 
-function checkTableDimensions({ rows, columns }) {
-  if (rows >= EXCEL_ROW_LIMIT || columns >= EXCEL_COLUMN_LIMIT) {
-    throw new OutsideOfRangeError();
-  }
-  return { rows, columns };
-}
 
-function getFullPath({ envUrl, limit, mstrObjectType, objectId, instanceId, version = 1, visualizationInfo = false, }) {
-  let path;
-  if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-    const { chapterKey, visualizationKey } = visualizationInfo;
-    path = `${envUrl}/v2/dossiers/${objectId}/instances/${instanceId}/chapters/${chapterKey}/visualizations/${visualizationKey}`;
-  } else {
-    const api = version > 1 ? `v${version}/` : '';
-    path = `${envUrl}/${api}${mstrObjectType.request}/${objectId}/instances`;
-    path += instanceId ? `/${instanceId}` : '';
-    path += limit ? `?limit=${limit}` : '';
-  }
-  return path;
-}
-
-async function* fetchContentGenerator({ instanceDefinition, objectId, projectId, mstrObjectType, dossierData, limit, visualizationInfo }) {
+async function* fetchContentGenerator({
+  instanceDefinition,
+  objectId,
+  projectId,
+  mstrObjectType,
+  dossierData,
+  limit,
+  visualizationInfo
+}) {
   const totalRows = instanceDefinition.rows;
   const { instanceId, mstrTable } = instanceDefinition;
   const { isCrosstab } = mstrTable;
@@ -331,6 +397,14 @@ async function* fetchContentGenerator({ instanceDefinition, objectId, projectId,
     if (e && e.axis === 'rows') (e.colIndex += offset);
   };
 
+  function fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = -1) {
+    return request
+      .get(`${fullPath}?offset=${offset}&limit=${limit}`)
+      .set('x-mstr-authtoken', authToken)
+      .set('x-mstr-projectid', projectId)
+      .withCredentials();
+  }
+
   while (fetchedRows < totalRows && fetchedRows < EXCEL_ROW_LIMIT) {
     let header;
     let crosstabSubtotal;
@@ -352,34 +426,6 @@ async function* fetchContentGenerator({ instanceDefinition, objectId, projectId,
       subtotalAddress: isCrosstab ? crosstabSubtotal : rowTotals,
     };
   }
-}
-
-function fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = -1) {
-  return request
-    .get(`${fullPath}?offset=${offset}&limit=${limit}`)
-    .set('x-mstr-authtoken', authToken)
-    .set('x-mstr-projectid', projectId)
-    .withCredentials();
-}
-
-function parseInstanceDefinition(res) {
-  const { body } = res;
-  if (res.status === 200 && body.status === 2) {
-    const { instanceId } = body;
-    const { status } = body;
-    return { instanceId, status };
-  }
-  const { instanceId, data, internal } = body;
-  if (data.paging.total === 0) throw new Error(NOT_SUPPORTED_NO_ATTRIBUTES);
-  const mstrTable = officeConverterServiceV2.createTable(body);
-  const { rows, columns } = checkTableDimensions(mstrTable.tableSize);
-  return {
-    instanceId,
-    rows,
-    columns,
-    mstrTable,
-    manipulationsXML: internal,
-  };
 }
 
 export default {
