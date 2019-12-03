@@ -5,9 +5,32 @@ import './index.css';
 import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import { authenticationService } from './authentication/auth-rest-service';
-import { homeHelper } from './home/home-helper';
+
 import i18next from './i18n';
 import * as serviceWorker from './serviceWorker';
+import { reduxStore } from './store';
+import { OfficeApiHelper } from './office/office-api-helper';
+import { OfficeStoreService } from './office/store/office-store-service';
+import { ErrorService } from './error/error-handler';
+import { SessionHelper } from './storage/session-helper';
+import { NotificationService } from './notification/notification-service';
+import { AuthenticationHelper } from './authentication/authentication-helper';
+import { HomeHelper } from './home/home-helper';
+
+const officeApiHelper = new OfficeApiHelper();
+officeApiHelper.init(reduxStore);
+const officeStoreService = new OfficeStoreService();
+officeStoreService.init(reduxStore);
+const notificationService = new NotificationService();
+notificationService.init(reduxStore);
+const sessionHelper = new SessionHelper();
+sessionHelper.init(reduxStore);
+const errorHandler = new ErrorService();
+errorHandler.init(sessionHelper, notificationService);
+const authenticationHelper = new AuthenticationHelper();
+authenticationHelper.init(reduxStore, sessionHelper);
+const homeHelper = new HomeHelper();
+homeHelper.init(reduxStore, sessionHelper);
 
 // Code splitting https://reactjs.org/docs/code-splitting.html
 const LazySidebar = lazy(() => import('./entry-point/sidebar-entry-point'));
@@ -55,6 +78,7 @@ function officeInitialize() {
       goReact();
     });
 }
+
 
 officeInitialize();
 

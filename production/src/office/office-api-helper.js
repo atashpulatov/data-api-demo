@@ -1,7 +1,6 @@
 import uuid from 'uuid/v4';
 import { IncorrectInputTypeError } from './incorrect-input-type';
 import { OutsideOfRangeError } from '../error/outside-of-range-error';
-import { reduxStore } from '../store';
 import { officeProperties } from './office-properties';
 import { officeStoreService } from './store/office-store-service';
 import { notificationService } from '../notification/notification-service';
@@ -22,7 +21,19 @@ const EXCEL_XTABS_BORDER_COLOR = '#a5a5a5';
 
 /* global Office Excel OfficeExtension */
 
-class OfficeApiHelper {
+export class OfficeApiHelper {
+  constructor() {
+    if (OfficeApiHelper.instance) {
+      return OfficeApiHelper.instance;
+    }
+    OfficeApiHelper.instance = this;
+    return this;
+  }
+
+  init = (reduxStore) => {
+    this.reduxStore = reduxStore;
+  }
+
   getRange = (headerCount, startCell, rowCount = 0) => {
     if (!Number.isInteger(headerCount)) {
       throw new IncorrectInputTypeError();
@@ -151,20 +162,11 @@ class OfficeApiHelper {
     // ToDo find better way to check session status
     !!await this.getExcelContext()
 
-
   findAvailableOfficeTableId = () => EXCEL_TABLE_NAME + uuid().split('-').join('')
 
-  loadExistingReportBindingsExcel = async () => {
-    const reportArray = await officeStoreService.getReportProperties();
-    reduxStore.dispatch({
-      type: officeProperties.actions.loadAllReports,
-      reportArray,
-    });
-  };
-
   getCurrentMstrContext = () => {
-    const { envUrl } = reduxStore.getState().sessionReducer;
-    const { username } = reduxStore.getState().sessionReducer;
+    const { envUrl } = this.reduxStore.getState().sessionReducer;
+    const { username } = this.reduxStore.getState().sessionReducer;
     return { envUrl, username };
   }
 
