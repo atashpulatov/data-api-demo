@@ -14,6 +14,8 @@ import { MstrListRestService } from './mstr-object/mstr-list-rest-service';
 import { PopupHelper } from './popup/popup-helper';
 import * as popupActionsModule from './popup/popup-actions';
 
+const EXCEL_XTABS_BORDER_COLOR = '#a5a5a5';
+
 export class DIContainer {
   constructor() {
     if (DIContainer.instance) {
@@ -24,8 +26,8 @@ export class DIContainer {
   }
 
   initializeDependencies = () => {
-    console.log(Excel);
-    this.officeApiHelper = new OfficeApiHelper();
+    console.log(`this is excel ${Excel}`);
+    this.officeApiHelper = new OfficeApiHelper(EXCEL_XTABS_BORDER_COLOR);
     this.officeApiHelper.init(reduxStore);
     this.officeStoreService = new OfficeStoreService();
     this.officeStoreService.init(reduxStore);

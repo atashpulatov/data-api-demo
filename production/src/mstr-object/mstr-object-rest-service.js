@@ -94,6 +94,8 @@ async function* fetchContentGenerator({
   };
 
   function fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = -1) {
+    console.log('sum limit');
+    console.log(limit);
     return request
       .get(`${fullPath}?offset=${offset}&limit=${limit}`)
       .set('x-mstr-authtoken', authToken)

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import uuid from 'uuid/v4';
 import { IncorrectInputTypeError } from './incorrect-input-type';
 import { OutsideOfRangeError } from '../error/outside-of-range-error';
@@ -17,7 +18,6 @@ const ASCII_CAPITAL_LETTER_INDEX = 65;
 const EXCEL_TABLE_NAME = 'table';
 const EXCEL_ROW_LIMIT = 1048576;
 const EXCEL_COL_LIMIT = 16384;
-const EXCEL_XTABS_BORDER_COLOR = '#a5a5a5';
 
 const { Office, Excel, OfficeExtension } = window;
 
@@ -771,4 +771,4 @@ export class OfficeApiHelper {
   }
 }
 
-export const officeApiHelper = new OfficeApiHelper(EXCEL_XTABS_BORDER_COLOR);
+export const officeApiHelper = new OfficeApiHelper();

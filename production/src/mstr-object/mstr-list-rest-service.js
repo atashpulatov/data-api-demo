@@ -29,7 +29,7 @@ export class MstrListRestService {
    */
   filterFunction = (object) => {
     if (object.subtype === DOSSIER_SUBTYPE) {
-      return this.filterDossiersByViewMedia(object.viewMedia);
+      return filterDossiersByViewMedia(object.viewMedia);
     }
     return true;
   }

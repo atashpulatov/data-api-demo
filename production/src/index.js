@@ -45,6 +45,7 @@ async function handleUnauthorized(envUrl, iSession) {
 function officeInitialize() {
   Office.onReady()
     .then(async () => {
+      console.log({Office, Excel});
       const envUrl = window.location.pathname.split('/apps/')[0];
       // If it is not popup we check user privileges
       const diContainer = new DIContainer();

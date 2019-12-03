@@ -1,7 +1,12 @@
 import { officeApiHelper } from './office-api-helper';
 import { officeTableHelper } from './office-table-helper';
 import { officeFormattingHelper } from './office-formatting-helper';
-import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
+import {
+  mstrObjectRestService,
+  DATA_LIMIT,
+  PROMISE_LIMIT,
+  IMPORT_ROW_LIMIT,
+} from '../mstr-object/mstr-object-rest-service';
 import { CLEAR_PROMPTS_ANSWERS } from '../navigation/navigation-tree-actions';
 import { officeProperties } from './office-properties';
 import { officeStoreService } from './store/office-store-service';
@@ -16,9 +21,6 @@ import {
 } from '../error/constants';
 
 const {
-  DATA_LIMIT,
-  PROMISE_LIMIT,
-  IMPORT_ROW_LIMIT,
   getObjectInfo,
   getObjectDefinition,
   createInstance,
@@ -312,6 +314,8 @@ export class OfficeDisplayService {
       const { excelContext, officeTable } = officeData;
       const { columns, rows, mstrTable } = instanceDefinition;
       const limit = Math.min(Math.floor(DATA_LIMIT / columns), IMPORT_ROW_LIMIT);
+      console.log('fetchInsertDataIntoExcel');
+      console.log(IMPORT_ROW_LIMIT);
       const configGenerator = { instanceDefinition, objectId, projectId, mstrObjectType, dossierData, limit, visualizationInfo, };
       const rowGenerator = getObjectContentGenerator(configGenerator);
       let rowIndex = 0;
