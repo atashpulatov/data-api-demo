@@ -1,10 +1,10 @@
 import { officeProperties } from '../office/office-properties';
 import { RunOutsideOfficeError } from '../error/run-outside-office-error';
 
-const { Office } = window;
 
 class BrowserStoreService {
   getOfficeSettings = () => {
+    const { Office } = window;
     if (Office === undefined || Office.context === undefined || Office.context.document === undefined) {
       throw new RunOutsideOfficeError();
     }
