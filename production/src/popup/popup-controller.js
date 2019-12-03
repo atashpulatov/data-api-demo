@@ -2,11 +2,6 @@ import { selectorProperties } from '../attribute-selector/selector-properties';
 import { officeDisplayService } from '../office/office-display-service';
 import { PopupTypeEnum } from '../home/popup-type-enum';
 import { notificationService } from '../notification/notification-service';
-import {
-  refreshReportsArray,
-  START_REPORT_LOADING,
-  STOP_REPORT_LOADING,
-} from './popup-actions';
 import { errorService } from '../error/error-handler';
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { officeProperties } from '../office/office-properties';
@@ -30,11 +25,13 @@ export class PopupController {
     return this;
   }
 
-  init = (reduxStore, sessionHelper) => {
+  init = (reduxStore, sessionHelper, popupAction) => {
     this.reduxStore = reduxStore;
     this.sessionHelper = sessionHelper;
+    this.popupAction = popupAction;
   }
-  
+
+
   runPopupNavigation = async () => {
     await this.runPopup(PopupTypeEnum.navigationTree, 80, 80);
   };
@@ -166,7 +163,7 @@ export class PopupController {
   }) => {
     if (reportId && projectId && reportSubtype && body && reportName) {
       this.reduxStore.dispatch({
-        type: START_REPORT_LOADING,
+        type: this.popupAction.START_REPORT_LOADING,
         data: { name: reportName },
       });
       const options = {
@@ -184,7 +181,7 @@ export class PopupController {
       if (result) {
         notificationService.displayNotification({ type: result.type, content: result.message });
       }
-      this.reduxStore.dispatch({ type: STOP_REPORT_LOADING });
+      this.reduxStore.dispatch({ type: this.popupAction.STOP_REPORT_LOADING });
     }
   };
 
@@ -205,7 +202,7 @@ export class PopupController {
     if (chosenObject) {
       this.reduxStore.dispatch({ type: officeProperties.actions.startLoading });
       this.reduxStore.dispatch({
-        type: START_REPORT_LOADING,
+        type: this.popupAction.START_REPORT_LOADING,
         data: { name: reportName },
       });
       const options = {
@@ -224,7 +221,7 @@ export class PopupController {
       if (result) {
         notificationService.displayNotification({ type: result.type, content: result.message });
       }
-      this.reduxStore.dispatch({ type: STOP_REPORT_LOADING });
+      this.reduxStore.dispatch({ type: this.popupAction.STOP_REPORT_LOADING });
     }
   };
 
@@ -269,7 +266,7 @@ export class PopupController {
       await officeStoreService.preserveReportValue(reportParams.bindId, 'instanceId', response.preparedInstanceId);
       await officeStoreService.preserveReportValue(reportParams.bindId, 'isEdit', false);
     }
-    const isErrorOnRefresh = await refreshReportsArray([reportParams], false)(this.reduxStore.dispatch);
+    const isErrorOnRefresh = await this.popupAction.refreshReportsArray([reportParams], false)(this.reduxStore.dispatch);
     if (isErrorOnRefresh) {
       await officeStoreService.preserveReportValue(reportParams.bindId, 'body', reportPreviousState.body);
     }

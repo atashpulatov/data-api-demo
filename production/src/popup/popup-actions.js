@@ -3,9 +3,9 @@ import { errorService } from '../error/error-handler';
 import { officeApiHelper } from '../office/office-api-helper';
 import { officeProperties } from '../office/office-properties';
 import { officeStoreService } from '../office/store/office-store-service';
-import { popupController } from './popup-controller';
 import { popupHelper } from './popup-helper';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
+import { popupController } from './popup-controller';
 
 export const CLEAR_WINDOW = 'POPUP_CLOSE_WINDOW';
 export const START_REPORT_LOADING = 'START_REPORT_LOADING';
@@ -14,7 +14,6 @@ export const RESET_STATE = 'RESET_STATE';
 export const SET_REPORT_N_FILTERS = 'SET_REPORT_N_FILTERS';
 export const SET_PREPARED_REPORT = 'SET_PREPARED_REPORT';
 // export const PRELOAD = 'PRELOAD';
-
 const { createInstance, answerPrompts, getInstance, createDossierInstance } = mstrObjectRestService;
 
 export function callForEdit(reportParams) {

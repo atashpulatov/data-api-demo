@@ -6,10 +6,10 @@ import './index.css';
 import React, {lazy, Suspense} from 'react';
 import ReactDOM from 'react-dom';
 import {authenticationService} from './authentication/auth-rest-service';
-import {initializeDependencies} from './dependency-manager';
 
 import i18next from './i18n';
 import * as serviceWorker from './serviceWorker';
+import {DIContainer} from './dependency-container';
 
 // Code splitting https://reactjs.org/docs/code-splitting.html
 const LazySidebar = lazy(() => import('./entry-point/sidebar-entry-point'));
@@ -47,9 +47,11 @@ function officeInitialize() {
     .then(async () => {
       const envUrl = window.location.pathname.split('/apps/')[0];
       // If it is not popup we check user privileges
-      const homeHelperLocal = initializeDependencies();
+      const diContainer = new DIContainer();
+      diContainer.initializeDependencies();
+      const homeHelper = diContainer.get('homeHelper');
       if (window.location.href.indexOf('popupType') === -1) {
-        const {iSession} = homeHelperLocal.getParsedCookies();
+        const {iSession} = homeHelper.getParsedCookies();
         const canUseOffice = await authenticationService.getOfficePrivilege(`${envUrl}/api`, iSession);
         if (!canUseOffice) {
           handleUnauthorized(envUrl, iSession);

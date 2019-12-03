@@ -17,6 +17,7 @@ export class PopupHelper {
   init = (popupController) => {
     this.popupController = popupController;
   }
+
   capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
   getPopupHeight = (reportArray, reportNumberToShow = 10) => {
