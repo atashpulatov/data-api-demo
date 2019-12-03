@@ -1,6 +1,5 @@
 import { CONTEXT_LIMIT } from '../mstr-object/mstr-object-rest-service';
 import { errorService } from '../error/error-handler';
-import { notificationService } from '../notification/notification-service';
 
 class OfficeFormattingHelper {
   /**
