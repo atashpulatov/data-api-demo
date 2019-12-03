@@ -1,45 +1,21 @@
+/* eslint-disable */
 import 'core-js/stable';
 import 'focus-visible/dist/focus-visible';
 import 'proxy-polyfill';
 import './index.css';
-import React, { lazy, Suspense } from 'react';
+import React, {lazy, Suspense} from 'react';
 import ReactDOM from 'react-dom';
-import { authenticationService } from './authentication/auth-rest-service';
+import {authenticationService} from './authentication/auth-rest-service';
+import {initializeDependencies} from './dependency-manager';
 
 import i18next from './i18n';
 import * as serviceWorker from './serviceWorker';
-import { reduxStore } from './store';
-import { OfficeApiHelper } from './office/office-api-helper';
-import { OfficeStoreService } from './office/store/office-store-service';
-import { ErrorService } from './error/error-handler';
-import { SessionHelper } from './storage/session-helper';
-import { NotificationService } from './notification/notification-service';
-import { AuthenticationHelper } from './authentication/authentication-helper';
-import { HomeHelper } from './home/home-helper';
-import {MstrObjectRestService} from './mstr-object/mstr-object-rest-service';
-
-const officeApiHelper = new OfficeApiHelper();
-officeApiHelper.init(reduxStore);
-const officeStoreService = new OfficeStoreService();
-officeStoreService.init(reduxStore);
-const notificationService = new NotificationService();
-notificationService.init(reduxStore);
-const sessionHelper = new SessionHelper();
-sessionHelper.init(reduxStore);
-const errorHandler = new ErrorService();
-errorHandler.init(sessionHelper, notificationService);
-const authenticationHelper = new AuthenticationHelper();
-authenticationHelper.init(reduxStore, sessionHelper);
-const homeHelper = new HomeHelper();
-homeHelper.init(reduxStore, sessionHelper);
-const mstrObjectRestService = new MstrObjectRestService();
-mstrObjectRestService.init(reduxStore);
 
 // Code splitting https://reactjs.org/docs/code-splitting.html
 const LazySidebar = lazy(() => import('./entry-point/sidebar-entry-point'));
 const LazyDialog = lazy(() => import('./entry-point/dialog-entry-point'));
 
-const { Office } = window;
+const {Office} = window;
 
 function goReact() {
   i18next.changeLanguage(i18next.options.resources[Office.context.displayLanguage] ? Office.context.displayLanguage : 'en-US');
@@ -71,8 +47,9 @@ function officeInitialize() {
     .then(async () => {
       const envUrl = window.location.pathname.split('/apps/')[0];
       // If it is not popup we check user privileges
+      const homeHelperLocal = initializeDependencies();
       if (window.location.href.indexOf('popupType') === -1) {
-        const { iSession } = homeHelper.getParsedCookies();
+        const {iSession} = homeHelperLocal.getParsedCookies();
         const canUseOffice = await authenticationService.getOfficePrivilege(`${envUrl}/api`, iSession);
         if (!canUseOffice) {
           handleUnauthorized(envUrl, iSession);
@@ -81,7 +58,6 @@ function officeInitialize() {
       goReact();
     });
 }
-
 
 officeInitialize();
 

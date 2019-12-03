@@ -152,7 +152,11 @@ export class OfficeApiHelper {
   getTable = (context, bindingId) => context.workbook.bindings
     .getItem(bindingId).getTable()
 
-  getExcelContext = () => Excel.run({ delayForCellEdit: true }, (context) => Promise.resolve(context));
+  getExcelContext = () => {
+    console.log('test');
+    console.log(Excel);
+    return Excel.run({ delayForCellEdit: true }, (context) => Promise.resolve(context));
+  }
 
   getOfficeContext = () => Office.context
 

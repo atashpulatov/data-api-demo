@@ -21,10 +21,12 @@ export class ErrorService {
     this.sessionHelper = sessionHelper;
     this.notificationService = notificationService;
   }
+
   handleError = (error, options = { reportName: 'Report', onConfirm: null, isLogout: false }) => {
     const { onConfirm, isLogout, ...parameters } = options;
     const errorType = this.getErrorType(error);
     const errorMessage = errorMessageFactory(errorType)({ error, ...parameters });
+    console.error(error);
     this.displayErrorNotification(error, errorType, errorMessage, onConfirm);
     this.checkForLogout(isLogout, errorType);
   }

@@ -1,13 +1,11 @@
 import { officeApiHelper } from './office-api-helper';
-import officeTableHelper from './office-table-helper';
-import officeFormattingHelper from './office-formatting-helper';
-import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';
+import { officeTableHelper } from './office-table-helper';
+import { officeFormattingHelper } from './office-formatting-helper';
+import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { CLEAR_PROMPTS_ANSWERS } from '../navigation/navigation-tree-actions';
-import { reduxStore } from '../store';
 import { officeProperties } from './office-properties';
 import { officeStoreService } from './store/office-store-service';
 import { errorService } from '../error/error-handler';
-import { popupController } from '../popup/popup-controller';
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { PopupTypeEnum } from '../home/popup-type-enum';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
@@ -32,7 +30,20 @@ const {
   getDossierDefinition,
 } = mstrObjectRestService;
 
-class OfficeDisplayService {
+export class OfficeDisplayService {
+  constructor() {
+    if (OfficeDisplayService.instance) {
+      return OfficeDisplayService.instance;
+    }
+    OfficeDisplayService.instance = this;
+    return this;
+  }
+
+  init = (reduxStore, popupController) => {
+    this.reduxStore = reduxStore;
+    this.popupController = popupController;
+  }
+
   printObject = async ({
     objectId,
     projectId,
@@ -163,8 +174,8 @@ class OfficeDisplayService {
       });
 
       console.timeEnd('Total');
-      reduxStore.dispatch({ type: CLEAR_PROMPTS_ANSWERS });
-      reduxStore.dispatch({
+      this.reduxStore.dispatch({ type: CLEAR_PROMPTS_ANSWERS });
+      this.reduxStore.dispatch({
         type: officeProperties.actions.finishLoadingReport,
         reportBindId: bindingId,
       });
@@ -239,9 +250,9 @@ class OfficeDisplayService {
    * @memberOf OfficeDisplayService
    */
   dispatchPrintFinish = () => {
-    const reduxStoreState = reduxStore.getState();
-    reduxStore.dispatch({ type: officeProperties.actions.popupHidden });
-    reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
+    const reduxStoreState = this.reduxStore.getState();
+    this.reduxStore.dispatch({ type: officeProperties.actions.popupHidden });
+    this.reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
     try {
       if (reduxStoreState.sessionReducer.dialog.close) {
         reduxStoreState.sessionReducer.dialog.close();
@@ -287,12 +298,12 @@ class OfficeDisplayService {
       const objectInfo = isPrompted
         ? await getObjectInfo(objectId, projectId, mstrObjectType)
         : await getObjectDefinition(objectId, projectId, mstrObjectType);
-      reduxStore.dispatch({
+      this.reduxStore.dispatch({
         type: officeProperties.actions.preLoadReport,
         preLoadReport: objectInfo,
       });
     }
-    await popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
+    await this.popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
   }
 
   async fetchInsertDataIntoExcel({ connectionData, officeData, instanceDefinition, isRefresh, tableColumnsChanged, visualizationInfo }) {

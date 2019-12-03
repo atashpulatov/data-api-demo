@@ -1,0 +1,38 @@
+import { reduxStore } from './store';
+import { OfficeApiHelper } from './office/office-api-helper';
+import { OfficeStoreService } from './office/store/office-store-service';
+import { ErrorService } from './error/error-handler';
+import { SessionHelper } from './storage/session-helper';
+import { NotificationService } from './notification/notification-service';
+import { AuthenticationHelper } from './authentication/authentication-helper';
+import { HomeHelper } from './home/home-helper';
+import { MstrObjectRestService } from './mstr-object/mstr-object-rest-service';
+import { PopupController } from './popup/popup-controller';
+import { OfficeDisplayService } from './office/office-display-service';
+import { MstrListRestService } from './mstr-object/mstr-list-rest-service';
+
+export const initializeDependencies = () => {
+  const officeApiHelper = new OfficeApiHelper();
+  officeApiHelper.init(reduxStore);
+  const officeStoreService = new OfficeStoreService();
+  officeStoreService.init(reduxStore);
+  const notificationService = new NotificationService();
+  notificationService.init(reduxStore);
+  const sessionHelper = new SessionHelper();
+  sessionHelper.init(reduxStore);
+  const errorHandler = new ErrorService();
+  errorHandler.init(sessionHelper, notificationService);
+  const authenticationHelper = new AuthenticationHelper();
+  authenticationHelper.init(reduxStore, sessionHelper);
+  const homeHelper = new HomeHelper();
+  homeHelper.init(reduxStore, sessionHelper);
+  const mstrObjectRestService = new MstrObjectRestService();
+  mstrObjectRestService.init(reduxStore);
+  const popupController = new PopupController();
+  popupController.init(reduxStore, sessionHelper);
+  const officeDisplayService = new OfficeDisplayService();
+  officeDisplayService.init(reduxStore, popupController);
+  const mstrListRestService = new MstrListRestService();
+  mstrListRestService.init(reduxStore);
+  return homeHelper;
+};

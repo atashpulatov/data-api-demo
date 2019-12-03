@@ -1,9 +1,7 @@
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { officeDisplayService } from '../office/office-display-service';
 import { PopupTypeEnum } from '../home/popup-type-enum';
-import { sessionHelper } from '../storage/session-helper';
 import { notificationService } from '../notification/notification-service';
-import { reduxStore } from '../store';
 import {
   refreshReportsArray,
   START_REPORT_LOADING,
@@ -22,7 +20,20 @@ const URL = `${window.location.href}`;
 
 /* global Office */
 
-class PopupController {
+export class PopupController {
+  constructor(excelXtabsBorderColor) {
+    this.EXCEL_XTABS_BORDER_COLOR = excelXtabsBorderColor;
+    if (PopupController.instance) {
+      return PopupController.instance;
+    }
+    PopupController.instance = this;
+    return this;
+  }
+
+  init = (reduxStore, sessionHelper) => {
+    this.reduxStore = reduxStore;
+    this.sessionHelper = sessionHelper;
+  }
   
   runPopupNavigation = async () => {
     await this.runPopup(PopupTypeEnum.navigationTree, 80, 80);
@@ -41,13 +52,13 @@ class PopupController {
   };
 
   runPopup = async (popupType, height, width, reportParams = null) => {
-    const session = sessionHelper.getSession();
+    const session = this.sessionHelper.getSession();
     try {
       await authenticationHelper.validateAuthToken();
     } catch (error) {
       console.error({ error });
 
-      reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
+      this.reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
       errorService.handleError(error);
       return;
     }
@@ -65,7 +76,7 @@ class PopupController {
         { height, width, displayInIframe: true },
         (asyncResult) => {
           const dialog = asyncResult.value;
-          sessionHelper.setDialog(dialog);
+          this.sessionHelper.setDialog(dialog);
           console.timeEnd('Popup load time');
           dialog.addEventHandler(Office.EventType.DialogMessageReceived,
             this.onMessageFromPopup.bind(null, dialog, reportParams));
@@ -74,14 +85,14 @@ class PopupController {
             // Event received on dialog close
             Office.EventType.DialogEventReceived,
             () => {
-              reduxStore.dispatch({ type: officeProperties.actions.popupHidden });
-              reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
+              this.reduxStore.dispatch({ type: officeProperties.actions.popupHidden });
+              this.reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
             }
           );
-          reduxStore.dispatch({ type: officeProperties.actions.popupShown });
+          this.reduxStore.dispatch({ type: officeProperties.actions.popupShown });
         });
     } catch (error) {
-      reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
+      this.reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
       errorService.handleError(error);
     }
   };
@@ -90,7 +101,7 @@ class PopupController {
     const { message } = arg;
     const response = JSON.parse(message);
     if (response.command === selectorProperties.commandBrowseUpdate) {
-      reduxStore.dispatch({ type: LOAD_BROWSING_STATE_CONST, browsingState: response.body });
+      this.reduxStore.dispatch({ type: LOAD_BROWSING_STATE_CONST, browsingState: response.body });
       return;
     }
     try {
@@ -130,14 +141,14 @@ class PopupController {
       errorService.handleError(error);
     } finally {
       if (response.command !== REFRESH_CACHE_COMMAND) {
-        reduxStore.dispatch({ type: officeProperties.actions.popupHidden });
-        reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
+        this.reduxStore.dispatch({ type: officeProperties.actions.popupHidden });
+        this.reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
       }
     }
   };
 
   handleRefreshCacheCommand = () => {
-    const { dispatch, getState } = reduxStore;
+    const { dispatch, getState } = this.reduxStore;
     refreshCache()(dispatch, getState);
   }
 
@@ -154,7 +165,7 @@ class PopupController {
     importSubtotal,
   }) => {
     if (reportId && projectId && reportSubtype && body && reportName) {
-      reduxStore.dispatch({
+      this.reduxStore.dispatch({
         type: START_REPORT_LOADING,
         data: { name: reportName },
       });
@@ -173,7 +184,7 @@ class PopupController {
       if (result) {
         notificationService.displayNotification({ type: result.type, content: result.message });
       }
-      reduxStore.dispatch({ type: STOP_REPORT_LOADING });
+      this.reduxStore.dispatch({ type: STOP_REPORT_LOADING });
     }
   };
 
@@ -192,8 +203,8 @@ class PopupController {
     bindingId,
   ) => {
     if (chosenObject) {
-      reduxStore.dispatch({ type: officeProperties.actions.startLoading });
-      reduxStore.dispatch({
+      this.reduxStore.dispatch({ type: officeProperties.actions.startLoading });
+      this.reduxStore.dispatch({
         type: START_REPORT_LOADING,
         data: { name: reportName },
       });
@@ -213,7 +224,7 @@ class PopupController {
       if (result) {
         notificationService.displayNotification({ type: result.type, content: result.message });
       }
-      reduxStore.dispatch({ type: STOP_REPORT_LOADING });
+      this.reduxStore.dispatch({ type: STOP_REPORT_LOADING });
     }
   };
 
@@ -231,7 +242,7 @@ class PopupController {
   };
 
   _getReportsPreviousState = (reportParams) => {
-    const currentReportArray = reduxStore.getState().officeReducer.reportArray;
+    const currentReportArray = this.reduxStore.getState().officeReducer.reportArray;
     const indexOfOriginalValues = currentReportArray.findIndex((report) => report.bindId === reportParams.bindId);
     const originalValues = currentReportArray[indexOfOriginalValues];
     return { ...originalValues };
@@ -258,7 +269,7 @@ class PopupController {
       await officeStoreService.preserveReportValue(reportParams.bindId, 'instanceId', response.preparedInstanceId);
       await officeStoreService.preserveReportValue(reportParams.bindId, 'isEdit', false);
     }
-    const isErrorOnRefresh = await refreshReportsArray([reportParams], false)(reduxStore.dispatch);
+    const isErrorOnRefresh = await refreshReportsArray([reportParams], false)(this.reduxStore.dispatch);
     if (isErrorOnRefresh) {
       await officeStoreService.preserveReportValue(reportParams.bindId, 'body', reportPreviousState.body);
     }

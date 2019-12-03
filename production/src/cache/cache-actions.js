@@ -1,7 +1,7 @@
 /* eslint-disable import/no-cycle */
 import { addNestedPropertiesToObjects } from '@mstr/rc';
 import DB from './pouch-db';
-import getObjectList, { fetchProjects, getMyLibraryObjectList } from '../mstr-object/mstr-list-rest-service';
+import {mstrListRestService} from '../mstr-object/mstr-list-rest-service';
 
 
 export const CREATE_CACHE = 'CREATE_CACHE';
@@ -20,6 +20,8 @@ export const MY_LIBRARY_DB_ID = 'my-library';
 export const ENV_LIBRARY_DB_ID = 'env-library';
 export const LOADING_DB = 'loading-';
 export const CURRENT_USER = 'user';
+
+const { getObjectList, fetchProjects, getMyLibraryObjectList } = mstrListRestService;
 
 export const objectListLoading = (isLoading) => ({
   type: SET_OBJECT_LIST_LOADING,
