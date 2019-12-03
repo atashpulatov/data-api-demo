@@ -125,7 +125,7 @@ describe('Normalized JSON Handler', () => {
     const matrix = [[0, 1], [2, 3], [4, 5]];
     const expectedMatrix = [[0, 2, 4], [1, 3, 5]];
     // when
-    const transposedMatrix = jsonHandler._transposeMatrix(matrix);
+    const transposedMatrix = jsonHandler.transposeMatrix(matrix);
     // then
     expect(transposedMatrix).toEqual(expectedMatrix);
   });
