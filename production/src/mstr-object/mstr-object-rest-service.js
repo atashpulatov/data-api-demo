@@ -411,8 +411,7 @@ async function* fetchContentGenerator({
     const response = await fetchObjectContent(fullPath, authToken, projectId, offset, limit);
     const { current } = response.body.data.paging;
     fetchedRows = current + offset;
-    const { row, rowTotals } = officeConverterServiceV2.getRows(response.body,
-      isCrosstab);
+    const { row, rowTotals } = officeConverterServiceV2.getRows(response.body, isCrosstab);
     if (isCrosstab) {
       header = officeConverterServiceV2.getHeaders(response.body);
       crosstabSubtotal = header.subtotalAddress;
