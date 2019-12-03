@@ -358,7 +358,7 @@ describe('office loaded file', () => {
     // then
     expect(fileHistoryHelper.deleteReport).not.toBeCalled();
   });
-  it('should invoke ONLY select method on button click', async () => {
+  it('should invoke ONLY select method on button click', () => {
     // given
     const onDeleteMocked = jest.fn();
     const onClickMocked = jest.fn();
@@ -472,7 +472,7 @@ describe('office loaded file', () => {
     expect(onRepromptMocked).toBeCalled();
     expect(onRepromptMocked).toBeCalledWith({ bindId: testBindingId, objectType });
   });
-  it('rename report should call officeStoreService.renameReport method when filename is given', async () => {
+  it('rename report should call officeStoreService.renameReport method when filename is given', () => {
     // given
     const givenFileName = 'name';
     const testBindingId = 'testBindingId';

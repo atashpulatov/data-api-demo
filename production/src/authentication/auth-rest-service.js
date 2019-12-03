@@ -7,7 +7,7 @@ class AuthenticationService {
     this.moduleProxy = proxy;
   }
 
-  async authenticate(username, password, envUrl, loginMode = 1) {
+  authenticate(username, password, envUrl, loginMode = 1) {
     return this.moduleProxy.request
       .post(`${envUrl}/auth/login`)
       .send({ username, password, loginMode })
@@ -15,7 +15,7 @@ class AuthenticationService {
       .then((res) => res.headers['x-mstr-authtoken']);
   }
 
-  async logout(envUrl, authToken) {
+  logout(envUrl, authToken) {
     return this.moduleProxy.request
       .post(`${envUrl}/auth/logout`)
       .set('x-mstr-authtoken', authToken)
@@ -23,7 +23,7 @@ class AuthenticationService {
       .then(() => true);
   }
 
-  async getSessions(envUrl, authToken) {
+  getSessions(envUrl, authToken) {
     return this.moduleProxy.request
       .get(`${envUrl}/sessions/userInfo`)
       .set('x-mstr-authtoken', authToken)
@@ -31,7 +31,7 @@ class AuthenticationService {
       .then((res) => res);
   }
 
-  async putSessions(envUrl, authToken) {
+  putSessions(envUrl, authToken) {
     return this.moduleProxy.request
       .put(`${envUrl}/sessions`)
       .set('x-mstr-authtoken', authToken)

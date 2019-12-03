@@ -7,7 +7,7 @@ import { START_REPORT_LOADING } from '../../popup/popup-actions';
 
 
 describe('Loading page', () => {
-  it('should render loading page component and its children', async () => {
+  it('should render loading page component and its children', () => {
     // given
     // when
     const componentWrapper = mount(
@@ -19,7 +19,7 @@ describe('Loading page', () => {
     expect(componentWrapper.children().length).toBeGreaterThan(0);
   });
 
-  it('should display default loading title', async () => {
+  it('should display default loading title', () => {
     // given
     const expectedTitle = 'Importing data';
     // when
@@ -33,7 +33,7 @@ describe('Loading page', () => {
     expect(componentWrapper.contains(headerWrapper.get(0))).toBe(true);
     expect(headerWrapper.text()).toContain(expectedTitle);
   });
-  it('should display current loading title from redux state', async () => {
+  it('should display current loading title from redux state', () => {
     // given
     const mockedTitle = 'Some report name';
     reduxStore.dispatch({
@@ -51,7 +51,7 @@ describe('Loading page', () => {
     expect(componentWrapper.contains(headerWrapper.get(0))).toBe(true);
     expect(headerWrapper.text()).toContain(mockedTitle);
   });
-  it('should display spinner component', async () => {
+  it('should display spinner component', () => {
     // given
     // when
     const componentWrapper = mount(

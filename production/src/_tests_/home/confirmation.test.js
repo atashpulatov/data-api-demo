@@ -49,7 +49,7 @@ describe('Confirmation', () => {
     expect(mockToggleSecuredFlag).toBeCalledWith(true);
   });
 
-  it('should fill clearErrors when secureData fails in ok button click', async () => {
+  it('should fill clearErrors when secureData fails in ok button click', () => {
     // given
     const mockSync = jest.fn();
     const error = new Error('test error');

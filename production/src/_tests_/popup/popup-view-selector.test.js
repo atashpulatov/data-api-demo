@@ -523,7 +523,7 @@ describe('PopupViewSelector', () => {
     expect(answerPrompts).toBeCalledWith(configPromptsMocked);
   });
 
-  it('should invoke implementations inside createBody when in obtainInstanceWithPromptsAnswers', async () => {
+  it('should invoke implementations inside createBody when in obtainInstanceWithPromptsAnswers', () => {
     // given
     const instanceId = 'instanceId';
     const props = {

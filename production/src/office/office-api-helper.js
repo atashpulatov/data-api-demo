@@ -130,7 +130,7 @@ class OfficeApiHelper {
      * @param {Object} t i18n translating function
      * @memberof OfficeApiHelper
      */
-  removeObjectAndDisplaytNotification = async (object, officeContext, t) => {
+  removeObjectAndDisplaytNotification = (object, officeContext, t) => {
     const { name } = object;
     this.removeObjectNotExistingInExcel(object, officeContext);
     const message = t('{{name}} has been removed from the workbook.', { name });
@@ -144,9 +144,9 @@ class OfficeApiHelper {
   getTable = (context, bindingId) => context.workbook.bindings
     .getItem(bindingId).getTable()
 
-  getExcelContext = async () => Excel.run({ delayForCellEdit: true }, async (context) => context);
+  getExcelContext = () => Excel.run({ delayForCellEdit: true }, (context) => context);
 
-  getOfficeContext = async () => Office.context
+  getOfficeContext = () => Office.context
 
   getExcelSessionStatus = async () => !!await this.getExcelContext() // ToDo find better way to check session status
 
@@ -339,7 +339,7 @@ class OfficeApiHelper {
       * @param {Office} excelContext Excel context
       * @memberof OfficeApiHelper
       */
-  getCurrentExcelSheet = async (excelContext) => excelContext.workbook.worksheets.getActiveWorksheet()
+  getCurrentExcelSheet = (excelContext) => excelContext.workbook.worksheets.getActiveWorksheet()
 
   /**
       * Returns true if specific worksheet is protected
@@ -650,7 +650,7 @@ class OfficeApiHelper {
   * @param {Object} crosstabHeaderDimensions Contains dimensions of crosstab report headers
   * @memberof OfficeApiHelper
   */
-  createRowsTitleHeaders = async (cellAddress, attributesNames, sheet, crosstabHeaderDimensions) => {
+  createRowsTitleHeaders = (cellAddress, attributesNames, sheet, crosstabHeaderDimensions) => {
     const reportStartingCell = sheet.getRange(cellAddress);
     const titlesBottomCell = reportStartingCell.getOffsetRange(0, -1);
     const rowsTitlesRange = titlesBottomCell.getResizedRange(0, -(crosstabHeaderDimensions.rowsX - 1));

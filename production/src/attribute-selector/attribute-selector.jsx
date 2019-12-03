@@ -3,7 +3,7 @@ import { AttributeMetricFilter, ErrorBoundary } from '@mstr/mstr-react-library';
 import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
-export class _AttributeSelector extends Component {
+export class AttributeSelectorHOC extends Component {
   constructor(props) {
     super(props);
     this.handleUnauthorized = this.handleUnauthorized.bind(this);
@@ -63,7 +63,7 @@ export class _AttributeSelector extends Component {
   }
 }
 
-_AttributeSelector.propTypes = {
+AttributeSelectorHOC.propTypes = {
   title: PropTypes.string,
   triggerUpdate: PropTypes.bool,
   openModal: PropTypes.bool,
@@ -80,6 +80,6 @@ _AttributeSelector.propTypes = {
   onTriggerUpdate: PropTypes.func,
   t: PropTypes.func
 };
-_AttributeSelector.defaultProps = { t: (text) => text, };
+AttributeSelectorHOC.defaultProps = { t: (text) => text, };
 
-export const AttributeSelector = withTranslation('common')(_AttributeSelector);
+export const AttributeSelector = withTranslation('common')(AttributeSelectorHOC);

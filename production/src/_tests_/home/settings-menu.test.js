@@ -29,7 +29,7 @@ describe('Settings Menu', () => {
     await expect(clearDB).toBeCalled();
   });
 
-  it('should handle error on logout', async () => {
+  it('should handle error on logout', () => {
     // given
     const logOutRestSpy = jest.spyOn(sessionHelper, 'logOutRest').mockImplementation(() => {
       throw new Error();

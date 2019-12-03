@@ -20,7 +20,7 @@ describe('sessionHelper', () => {
     jest.resetAllMocks();
   });
 
-  it('should throw error due to logOutError', async () => {
+  it('should throw error due to logOutError', () => {
     // given
     authenticationService.logout = jest.fn().mockImplementationOnce(() => {
       throw new Error();
@@ -31,7 +31,7 @@ describe('sessionHelper', () => {
     // then
     expect(logOutErrorSpy).toHaveBeenCalled();
   });
-  it('should call redirect logOutRedirect', async () => {
+  it('should call redirect logOutRedirect', () => {
     // given
     homeHelper.getWindowLocation = jest.fn().mockReturnValueOnce({ origin: 'origin' });
     sessionHelper.replaceWindowLocation = jest.fn();
@@ -41,7 +41,7 @@ describe('sessionHelper', () => {
     // then
     expect(replaceHelper).toBeCalled();
   });
-  it('should disable loading for localhost in logOutRedirect', async () => {
+  it('should disable loading for localhost in logOutRedirect', () => {
     // given
     const loadingHelper = jest.spyOn(sessionHelper, 'disableLoading');
     homeHelper.getWindowLocation = jest.fn().mockReturnValueOnce({ origin: 'localhost' });
@@ -51,7 +51,7 @@ describe('sessionHelper', () => {
     // then
     expect(loadingHelper).toBeCalled();
   });
-  it('should save authToken in redux on login', async () => {
+  it('should save authToken in redux on login', () => {
     // given
 
     reduxStore.dispatch = jest.fn();
@@ -63,7 +63,7 @@ describe('sessionHelper', () => {
     // then
     expect(dispatchSpy).toHaveBeenCalledWith({ type: sessionProperties.actions.loggedIn, authToken });
   });
-  it('should save envUrl in redux on login', async () => {
+  it('should save envUrl in redux on login', () => {
     // given
     reduxStore.dispatch = jest.fn();
     const dispatchSpy = jest.spyOn(reduxStore, 'dispatch');

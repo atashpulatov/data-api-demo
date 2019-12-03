@@ -11,7 +11,7 @@ import { SettingsMenu } from './settings-menu';
 import { Confirmation } from './confirmation';
 
 export class HeaderHOC extends Component {
-  componentDidMount = async () => {
+  componentDidMount = () => {
     sessionHelper.getUserInfo();
     this.addCloseSettingsListeners();
   }

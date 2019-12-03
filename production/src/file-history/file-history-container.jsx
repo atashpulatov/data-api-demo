@@ -18,7 +18,7 @@ import './file-history.css';
 import { ButtonPopover } from './button-popover';
 import { startLoading, stopLoading } from '../navigation/navigation-tree-actions';
 
-export class _FileHistoryContainer extends React.Component {
+export class FileHistoryContainerHOC extends React.Component {
   constructor(props) {
     super(props);
     if (officeStoreService.isFileSecured()) {
@@ -185,7 +185,7 @@ export class _FileHistoryContainer extends React.Component {
   }
 }
 
-_FileHistoryContainer.propTypes = {
+FileHistoryContainerHOC.propTypes = {
   loading: PropTypes.bool,
   refreshingAll: PropTypes.bool,
   isSecured: PropTypes.bool,
@@ -198,7 +198,7 @@ _FileHistoryContainer.propTypes = {
   t: PropTypes.func
 };
 
-_FileHistoryContainer.defaultProps = { t: (text) => text, };
+FileHistoryContainerHOC.defaultProps = { t: (text) => text, };
 
 function mapStateToProps({ officeReducer, historyReducer }) {
   return {
@@ -216,7 +216,7 @@ const mapDispatchToProps = {
   stopLoading,
 };
 
-const WrappedFileHistoryContainer = fileHistoryContainerHOC(_FileHistoryContainer);
+const WrappedFileHistoryContainer = fileHistoryContainerHOC(FileHistoryContainerHOC);
 
 export const FileHistoryContainer = connect(mapStateToProps,
   mapDispatchToProps)(withTranslation('common')(WrappedFileHistoryContainer));

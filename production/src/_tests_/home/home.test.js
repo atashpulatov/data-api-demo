@@ -20,7 +20,7 @@ describe('Home', () => {
     jest.resetAllMocks();
   });
 
-  it('should render home component and its children', async () => {
+  it('should render home component and its children', () => {
     // given
     // when
     const componentWrapper = mount(
@@ -108,7 +108,7 @@ describe('Home', () => {
     afterEach(() => {
       jest.resetAllMocks();
     });
-    it('should properly set header values', async () => {
+    it('should properly set header values', () => {
       // given
       // when
       const headerWrapper = mount(<HeaderHOC />);
@@ -116,7 +116,7 @@ describe('Home', () => {
       expect(headerWrapper.props('userInitials')).toBeTruthy();
       expect(headerWrapper.props('userFullName')).toBeTruthy();
     });
-    it('should properly set header values on localhost', async () => {
+    it('should properly set header values on localhost', () => {
       // given
       // when
       const homeWrapper = mount(
@@ -129,7 +129,7 @@ describe('Home', () => {
       expect(headerWrapper.props('userInitials')).toBeTruthy();
       expect(headerWrapper.props('userFullName')).toBeTruthy();
     });
-    it('should correctly render header elements', async () => {
+    it('should correctly render header elements', () => {
       // given
 
       // when
@@ -142,7 +142,7 @@ describe('Home', () => {
       expect(nameWrapper).toBeTruthy();
       expect(buttonWrapper).toBeTruthy();
     });
-    it('should correctly render profile-image in header', async () => {
+    it('should correctly render profile-image in header', () => {
       // given
 
       // when
@@ -152,7 +152,7 @@ describe('Home', () => {
       const imageWrapper = headerWrapper.find('#profile-image');
       expect(imageWrapper).toBeTruthy();
     });
-    it('should correctly render Initials in header', async () => {
+    it('should correctly render Initials in header', () => {
       // given
 
       // when
