@@ -1,6 +1,7 @@
 import request from 'superagent';
 import { reduxStore } from '../store';
 import filterDossiersByViewMedia from '../helpers/viewMediaHelper';
+import Queue from './queue';
 
 const SEARCH_ENDPOINT = 'searches/results';
 const PROJECTS_ENDPOINT = 'projects';
@@ -28,8 +29,8 @@ export function filterFunction(object) {
  * @param {Object} body - MSTR API response body
  * @returns {Array}
  */
-export function filterDossier(body) {
-  const { result } = body;
+export function filterDossier(result) {
+  // const { result } = body;
   return result.filter(filterFunction);
 }
 
@@ -130,6 +131,44 @@ export function fetchObjectList({ requestParams, callback = filterDossier, offse
     .then(callback);
 }
 
+export function fetchObjectListByProject({ requestParams, callback = filterDossier, offset = 0, limit = LIMIT }, projectId, resultArray) {
+  const { envUrl, authToken, typeQuery } = requestParams;
+  const url = `${envUrl}/${SEARCH_ENDPOINT}?limit=${limit}&offset=${offset}&type=${typeQuery}`;
+  return request
+    .get(url)
+    .set('x-mstr-authtoken', authToken)
+    .set('x-mstr-projectid', projectId)
+    .withCredentials()
+    .then(async (res) => {
+      resultArray = [...resultArray, ...res.body.result];
+      if (res.body.result.length === 7000) {
+        offset += limit;
+        return fetchObjectListByProject({ requestParams, filterDossier, offset, limit }, projectId, resultArray);
+      }
+      const filteredObjects = callback(resultArray);
+      return filteredObjects;
+    });
+}
+
+export async function fetchObjectListPaginationByProject(callback) {
+  const requestParams = getRequestParams();
+  const projects = await getProjectDictionary();
+  const projectIds = Object.keys(projects);
+  const queue = new Queue(callback);
+  const promiseList = [];
+  console.time('Fetching environment objects');
+  for (const id of projectIds) {
+    const promise = fetchObjectListByProject({ requestParams }, id, [])
+      .then((promiseResult) => queue.enqueue(promiseResult));
+    promiseList.push(promise);
+  }
+  return Promise.all(promiseList).then(() => {
+    console.timeEnd('Fetching environment objects');
+    // const flatObjects = Array.prototype.concat.apply([], objects);
+    // return callback(flatObjects);
+  });
+}
+
 /**
  * Fetches all objects available in my Library from MSTR API and filters out non-Dossier objects.
  *
@@ -180,5 +219,5 @@ export function getMyLibraryObjectList(callback = (res) => res) {
  * @class getObjectList
  */
 export default function getObjectList(callback) {
-  return fetchObjectListPagination(callback);
+  return fetchObjectListPaginationByProject(callback);
 }
