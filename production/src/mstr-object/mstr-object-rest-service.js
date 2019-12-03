@@ -3,11 +3,10 @@ import request from 'superagent';
 import { NOT_SUPPORTED_NO_ATTRIBUTES } from '../error/constants';
 import { OutsideOfRangeError } from '../error/outside-of-range-error';
 import { reduxStore } from '../store';
-import objectTypeEnum from './mstr-object-type-enum';
 import officeConverterServiceV2 from '../office/office-converter-service-v2';
 import mstrObjectEnum from './mstr-object-type-enum';
 
-const reportObjectType = objectTypeEnum.mstrObjectType.report;
+const reportObjectType = mstrObjectEnum.mstrObjectType.report;
 
 const API_VERSION = 2;
 const EXCEL_COLUMN_LIMIT = 16384;
