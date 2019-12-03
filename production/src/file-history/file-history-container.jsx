@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Button } from 'antd';
 import { MSTRIcon } from '@mstr/mstr-react-library';
 import { withTranslation } from 'react-i18next';
+import PropTypes from 'prop-types';
 import { OfficeLoadedFile } from './office-loaded-file';
 import { officeApiHelper } from '../office/office-api-helper';
 import { officeDisplayService } from '../office/office-display-service';
@@ -17,7 +18,7 @@ import './file-history.css';
 import { ButtonPopover } from './button-popover';
 import { startLoading, stopLoading } from '../navigation/navigation-tree-actions';
 
-export class _FileHistoryContainer extends React.Component {
+export class FileHistoryContainerHOC extends React.Component {
   constructor(props) {
     super(props);
     if (officeStoreService.isFileSecured()) {
@@ -27,12 +28,12 @@ export class _FileHistoryContainer extends React.Component {
   }
 
   componentDidMount() {
-    this._ismounted = true;
+    this.ismounted = true;
     this.addRemoveReportListener();
   }
 
   componentWillUnmount() {
-    this._ismounted = false;
+    this.ismounted = false;
     this.deleteRemoveReportListener();
   }
 
@@ -89,7 +90,7 @@ export class _FileHistoryContainer extends React.Component {
     if (allowRefreshAllClick) {
       this.setState({ allowRefreshAllClick: false }, async () => {
         await refreshAll(reportArray, true);
-        if (this._ismounted) this.setState({ allowRefreshAllClick: true });
+        if (this.ismounted) this.setState({ allowRefreshAllClick: true });
       });
     }
   };
@@ -184,7 +185,20 @@ export class _FileHistoryContainer extends React.Component {
   }
 }
 
-_FileHistoryContainer.defaultProps = { t: (text) => text, };
+FileHistoryContainerHOC.propTypes = {
+  loading: PropTypes.bool,
+  refreshingAll: PropTypes.bool,
+  isSecured: PropTypes.bool,
+  reportArray: PropTypes.arrayOf(PropTypes.shape({})),
+  toggleSecuredFlag: PropTypes.func,
+  startLoading: PropTypes.func,
+  stopLoading: PropTypes.func,
+  refreshReportsArray: PropTypes.func,
+  addDataAction: PropTypes.func,
+  t: PropTypes.func
+};
+
+FileHistoryContainerHOC.defaultProps = { t: (text) => text, };
 
 function mapStateToProps({ officeReducer, historyReducer }) {
   return {
@@ -202,7 +216,7 @@ const mapDispatchToProps = {
   stopLoading,
 };
 
-const WrappedFileHistoryContainer = fileHistoryContainerHOC(_FileHistoryContainer);
+const WrappedFileHistoryContainer = fileHistoryContainerHOC(FileHistoryContainerHOC);
 
 export const FileHistoryContainer = connect(mapStateToProps,
   mapDispatchToProps)(withTranslation('common')(WrappedFileHistoryContainer));

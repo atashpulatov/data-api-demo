@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { MSTRIcon } from '@mstr/mstr-react-library';
 import { withTranslation } from 'react-i18next';
 import { Dropdown, Menu } from 'antd';
+import PropTypes from 'prop-types';
 import { fileHistoryHelper } from './file-history-helper';
 import loadingSpinner from './assets/report_loading_spinner.gif';
 import {
@@ -36,11 +37,11 @@ export class _OfficeLoadedFile extends React.Component {
   }
 
   componentDidMount() {
-    this._ismounted = true;
+    this.ismounted = true;
   }
 
   componentWillUnmount() {
-    this._ismounted = false;
+    this.ismounted = false;
   }
 
   renameReport = /* istanbul ignore next */ async ({ target }) => {
@@ -121,7 +122,7 @@ export class _OfficeLoadedFile extends React.Component {
             isCrosstab,
             crosstabHeaderDimensions,
             message);
-          if (this._ismounted) this.setState({ allowDeleteClick: true, allowRefreshClick: true });
+          if (this.ismounted) this.setState({ allowDeleteClick: true, allowRefreshClick: true });
           stopLoading();
         } catch (error) {
           errorService.handleError(error);
@@ -432,6 +433,28 @@ const mapDispatchToProps = {
   callForEditDossier,
   startLoading,
   stopLoading
+};
+
+_OfficeLoadedFile.propTypes = {
+  fileName: PropTypes.string,
+  bindingId: PropTypes.string,
+  objectType: PropTypes.string,
+  loading: PropTypes.bool,
+  isLoading: PropTypes.bool,
+  isCrosstab: PropTypes.bool,
+  visualizationInfo: PropTypes.bool,
+  crosstabHeaderDimensions: PropTypes.bool,
+  isPrompted: PropTypes.bool,
+  refreshDate: PropTypes.instanceOf(Date),
+  startLoading: PropTypes.func,
+  stopLoading: PropTypes.func,
+  callForReprompt: PropTypes.func,
+  refreshReportsArray: PropTypes.func,
+  t: PropTypes.func,
+  onDelete: PropTypes.func,
+  callForEdit: PropTypes.func,
+  callForEditDossier: PropTypes.func,
+  onClick: PropTypes.func
 };
 
 export const OfficeLoadedFile = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_OfficeLoadedFile));
