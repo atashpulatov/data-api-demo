@@ -5,7 +5,6 @@ import { officeProperties } from '../office/office-properties';
 import { CANCEL_REQUEST_IMPORT, SWITCH_MY_LIBRARY, CANCEL_DOSSIER_OPEN } from '../navigation/navigation-tree-actions';
 import { officeApiHelper } from '../office/office-api-helper';
 import { errorService } from '../error/error-handler';
-import { ProtectedSheetError } from '../error/protected-sheets-error';
 
 export const fileHistoryContainerHOC = (Component) => {
   class _FileHistoryContainerHOC extends React.Component {

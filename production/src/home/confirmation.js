@@ -7,7 +7,6 @@ import { officeApiHelper } from '../office/office-api-helper';
 import { toggleSecuredFlag, toggleIsConfirmFlag, toggleIsClearingFlag } from '../office/office-actions';
 import { errorService } from '../error/error-handler';
 import { notificationService } from '../notification/notification-service';
-import { ProtectedSheetError } from '../error/protected-sheets-error';
 
 export const _Confirmation = ({ reportArray, toggleSecuredFlag, toggleIsConfirmFlag, toggleIsClearingFlag, t }) => {
   useEffect(() => {

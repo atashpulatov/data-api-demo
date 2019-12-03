@@ -22,7 +22,6 @@ import { officeStoreService } from '../office/store/office-store-service';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { startLoading, stopLoading } from '../navigation/navigation-tree-actions';
 import { errorService } from '../error/error-handler';
-import { ProtectedSheetError } from '../error/protected-sheets-error';
 
 
 export class _OfficeLoadedFile extends React.Component {

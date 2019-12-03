@@ -5,7 +5,6 @@ import {
   DATA_LIMIT,
   PROMISE_LIMIT,
   IMPORT_ROW_LIMIT,
-  CONTEXT_LIMIT,
   getObjectInfo,
   getObjectDefinition,
   createInstance,

@@ -13,7 +13,6 @@ import { officeStoreService } from '../office/store/office-store-service';
 import { toggleSecuredFlag } from '../office/office-actions';
 import { errorService } from '../error/error-handler';
 import restrictedArt from './assets/art_restricted_access_blue.svg';
-import { notificationService } from '../notification/notification-service';
 import './file-history.css';
 import { ButtonPopover } from './button-popover';
 import { startLoading, stopLoading } from '../navigation/navigation-tree-actions';

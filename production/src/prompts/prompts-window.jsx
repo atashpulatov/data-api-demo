@@ -255,7 +255,7 @@ export class _PromptsWindow extends Component {
 
   render() {
     const { handleBack } = this.props;
-    const { isReprompt, disableRunButton } = this.state;
+    const { isReprompt } = this.state;
     return (
       <div
         style={{ position: 'relative' }}
