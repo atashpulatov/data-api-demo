@@ -7,7 +7,7 @@ import { reduxStore } from '../../store';
 import { officeContext } from '../../office/office-context.js';
 import { selectorProperties } from '../../attribute-selector/selector-properties.js';
 import { PopupTypeEnum } from '../../home/popup-type-enum.js';
-import { _PopupViewSelector, PopupViewSelector } from '../../popup/popup-view-selector.jsx';
+import { PopupViewSelectorHOC, PopupViewSelector } from '../../popup/popup-view-selector.jsx';
 import { Office } from '../mockOffice';
 
 
@@ -113,7 +113,7 @@ describe('Popup.js', () => {
       </Provider>
     );
     // then
-    const popupSelector = popupWrapped.find(_PopupViewSelector);
+    const popupSelector = popupWrapped.find(PopupViewSelectorHOC);
     expect(popupSelector.children()).toHaveLength(0);
   });
 });

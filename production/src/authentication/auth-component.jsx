@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './auth-component.css';
+import PropTypes from 'prop-types';
 import { Form, Icon, Input, Button, Checkbox, Select, } from 'antd';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
@@ -8,7 +9,7 @@ import { resetState } from '../popup/popup-actions';
 
 const FormItem = Form.Item;
 
-export class _Authenticate extends Component {
+export class AuthenticateHOC extends Component {
   constructor(props) {
     super(props);
     localStorage.removeItem('refreshData');
@@ -104,8 +105,22 @@ export class _Authenticate extends Component {
     );
   }
 }
-
-_Authenticate.defaultProps = { t: (text) => text, };
+AuthenticateHOC.propTypes = {
+  form: PropTypes.shape({
+    validateFields: PropTypes.func,
+    getFieldDecorator: PropTypes.func
+  }),
+  session: PropTypes.shape({
+    username: PropTypes.string,
+    password: PropTypes.string,
+    envUrl: PropTypes.string,
+    loginMode: PropTypes.string,
+    isRememberMeOn: PropTypes.bool
+  }),
+  resetState: PropTypes.func,
+  t: PropTypes.func
+};
+AuthenticateHOC.defaultProps = { t: (text) => text, };
 
 function mapStateToProps(state) {
   return { session: state.sessionReducer, };
@@ -113,4 +128,4 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = { resetState, };
 
-export const Authenticate = connect(mapStateToProps, mapDispatchToProps)(Form.create()(withTranslation('common')(_Authenticate)));
+export const Authenticate = connect(mapStateToProps, mapDispatchToProps)(Form.create()(withTranslation('common')(AuthenticateHOC)));

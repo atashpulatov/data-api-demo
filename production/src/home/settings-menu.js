@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { Popover } from 'antd';
+import PropTypes from 'prop-types';
 import { toggleIsConfirmFlag, toggleRenderSettingsFlag, toggleIsSettingsFlag } from '../office/office-actions';
 import logo from './assets/mstr_logo.png';
 import { helper } from '../helpers/helpers';
@@ -13,7 +14,18 @@ import { officeContext } from '../office/office-context';
 
 const APP_VERSION = process.env.REACT_APP_MSTR_OFFICE_VERSION;
 
-export const SettingsMenuHOC = ({ userFullName, userID, userInitials, isSecured, reportArray, t, toggleIsConfirmFlag, toggleIsSettingsFlag, toggleRenderSettingsFlag, clearCache, }) => {
+export const SettingsMenuHOC = ({
+  userFullName,
+  userID,
+  userInitials,
+  isSecured,
+  reportArray,
+  t,
+  toggleIsConfirmFlag,
+  toggleIsSettingsFlag,
+  toggleRenderSettingsFlag,
+  clearCache,
+}) => {
   const userNameDisplay = userFullName || 'MicroStrategy user';
   const isSecuredActive = !isSecured && reportArray && reportArray.length > 0;
 
@@ -126,7 +138,6 @@ const mapDispatchToProps = {
   toggleRenderSettingsFlag,
   clearCache,
 };
-
 export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(SettingsMenuHOC));
 
 async function logout(preLogout) {
@@ -139,3 +150,16 @@ async function logout(preLogout) {
     errorService.handleError(error);
   }
 }
+
+SettingsMenuHOC.propTypes = {
+  userID: PropTypes.number,
+  userFullName: PropTypes.string,
+  userInitials: PropTypes.string,
+  isSecured: PropTypes.bool,
+  reportArray: PropTypes.arrayOf(PropTypes.shape({})),
+  toggleIsSettingsFlag: PropTypes.func,
+  toggleIsConfirmFlag: PropTypes.func,
+  toggleRenderSettingsFlag: PropTypes.func,
+  clearCache: PropTypes.func,
+  t: PropTypes.func
+};

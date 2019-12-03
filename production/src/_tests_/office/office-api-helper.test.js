@@ -440,7 +440,7 @@ describe('OfficeApiHelper', () => {
     });
   });
   describe('getStartCell', () => {
-    it('should return starting cell from range address(single cell)', async () => {
+    it('should return starting cell from range address(single cell)', () => {
       // given
       const range = 'Sheet1!A12';
       // when
@@ -448,7 +448,7 @@ describe('OfficeApiHelper', () => {
       // then
       expect(result).toEqual('A12');
     });
-    it('should return starting cell from range address(multiple cells)', async () => {
+    it('should return starting cell from range address(multiple cells)', () => {
       // given
       const range = 'Sheet1!ABC12:BDE15';
       // when
@@ -456,7 +456,7 @@ describe('OfficeApiHelper', () => {
       // then
       expect(result).toEqual('ABC12');
     });
-    it('should return starting cell with sheet name including !', async () => {
+    it('should return starting cell with sheet name including !', () => {
       // given
       const range = 'No!Sheet1!ABC12:BDE15';
       // when
