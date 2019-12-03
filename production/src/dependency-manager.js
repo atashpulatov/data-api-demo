@@ -10,6 +10,7 @@ import { MstrObjectRestService } from './mstr-object/mstr-object-rest-service';
 import { PopupController } from './popup/popup-controller';
 import { OfficeDisplayService } from './office/office-display-service';
 import { MstrListRestService } from './mstr-object/mstr-list-rest-service';
+import { PopupHelper } from './popup/popup-helper';
 
 export const initializeDependencies = () => {
   const officeApiHelper = new OfficeApiHelper();
@@ -34,5 +35,7 @@ export const initializeDependencies = () => {
   officeDisplayService.init(reduxStore, popupController);
   const mstrListRestService = new MstrListRestService();
   mstrListRestService.init(reduxStore);
+  const popupHelper = new PopupHelper();
+  popupHelper.init(popupController);
   return homeHelper;
 };
