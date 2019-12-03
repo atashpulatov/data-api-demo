@@ -7,6 +7,7 @@ import { PopupTypeEnum } from '../../home/popup-type-enum';
 import { officeApiHelper } from '../../office/office-api-helper';
 import { notificationService } from '../../notification/notification-service';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
+import { authenticationHelper } from '../../authentication/authentication-helper';
 
 describe('PopupController', () => {
   const dialog = {};
@@ -77,10 +78,14 @@ describe('PopupController', () => {
       isRefresh: false,
       mstrObjectType: mstrObjectEnum.mstrObjectType.report,
     };
+    const spyValidateAuthToken = jest
+      .spyOn(authenticationHelper, 'validateAuthToken')
+      .mockImplementationOnce(() => { });
     // when
     await popupController.onMessageFromPopup(dialog, null, arg);
     // then
     expect(dialog.close).toBeCalled();
+    expect(spyValidateAuthToken).toBeCalled();
     expect(mockPrint).toBeCalled();
     expect(mockPrint).toBeCalledWith(expectedOptions);
   });
@@ -115,10 +120,14 @@ describe('PopupController', () => {
       mstrObjectType: reportData.mstrObjectType,
       isRefresh: false,
     };
+    const spyValidateAuthToken = jest
+      .spyOn(authenticationHelper, 'validateAuthToken')
+      .mockImplementationOnce(() => { });
     // when
     await popupController.onMessageFromPopup(dialog, null, arg);
     // then
     expect(dialog.close).toBeCalled();
+    expect(spyValidateAuthToken).toBeCalled();
     expect(mockPrint).toBeCalled();
     expect(mockPrint).toBeCalledWith(expectedOptions);
   });
@@ -144,10 +153,14 @@ describe('PopupController', () => {
       mstrObjectType: mstrObjectEnum.mstrObjectType.dataset,
       body: actionObject.body,
     };
+    const spyValidateAuthToken = jest
+      .spyOn(authenticationHelper, 'validateAuthToken')
+      .mockImplementationOnce(() => { });
     // when
     await popupController.onMessageFromPopup(dialog, null, arg);
     // then
     expect(dialog.close).toBeCalled();
+    expect(spyValidateAuthToken).toBeCalled();
     expect(mockPrint).toBeCalled();
     expect(mockPrint).toBeCalledWith(expectedOptions);
   });
@@ -166,10 +179,14 @@ describe('PopupController', () => {
     const arg = { message: JSON.stringify(actionObject), };
     officeApiHelper.getOfficeSessionStatus = jest.fn();
     const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
+    const spyValidateAuthToken = jest
+      .spyOn(authenticationHelper, 'validateAuthToken')
+      .mockImplementationOnce(() => { });
     // when
     await popupController.onMessageFromPopup(dialog, null, arg);
     // then
     expect(dialog.close).toBeCalled();
+    expect(spyValidateAuthToken).toBeCalled();
     expect(mockPrint).toBeCalled();
 
     const expectedOptions = {
@@ -201,10 +218,14 @@ describe('PopupController', () => {
     const arg = { message: JSON.stringify(actionObject), };
     officeApiHelper.getOfficeSessionStatus = jest.fn();
     const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
+    const spyValidateAuthToken = jest
+      .spyOn(authenticationHelper, 'validateAuthToken')
+      .mockImplementationOnce(() => { });
     // when
     await popupController.onMessageFromPopup(dialog, null, arg);
     // then
     expect(dialog.close).toBeCalled();
+    expect(spyValidateAuthToken).toBeCalled();
     expect(mockPrint).toBeCalled();
     expect(mockPrint).toBeCalledWith({
       dossierData: actionObject.dossierData,
@@ -225,10 +246,14 @@ describe('PopupController', () => {
     officeApiHelper.getOfficeSessionStatus = jest.fn();
     const handleErrorSpy = jest.spyOn(errorService, 'handleError');
     const notifySpy = jest.spyOn(notificationService, 'displayNotification');
+    const spyValidateAuthToken = jest
+      .spyOn(authenticationHelper, 'validateAuthToken')
+      .mockImplementationOnce(() => { });
     // when
     await popupController.onMessageFromPopup(dialog, null, givenArg);
     // then
     expect(handleErrorSpy).toBeCalledWith(error);
+    expect(spyValidateAuthToken).toBeCalled();
     expect(notifySpy).toBeCalledWith({ type: 'warning', content: 'The endpoint cannot be reached', details: '', onConfirm: null, });
     expect(dialog.close).toBeCalled();
   });
