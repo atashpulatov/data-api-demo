@@ -5,7 +5,6 @@ import {
   DATA_LIMIT,
   PROMISE_LIMIT,
   IMPORT_ROW_LIMIT,
-  CONTEXT_LIMIT,
   getObjectInfo,
   getObjectDefinition,
   createInstance,
@@ -170,9 +169,11 @@ class OfficeDisplayService {
       });
       return { type: 'success', message: 'Data loaded successfully' };
     } catch (error) {
-      if (officeTable && !isRefresh) {
-        officeTable.showHeaders = true;
-        await officeApiHelper.deleteExcelTable(officeTable, excelContext, isCrosstab, instanceDefinition.mstrTable.crosstabHeaderDimensions);
+      if (officeTable) {
+        if (!isRefresh) {
+          officeTable.showHeaders = true;
+          await officeApiHelper.deleteExcelTable(officeTable, excelContext, isCrosstab, instanceDefinition.mstrTable.crosstabHeaderDimensions);
+        } else if (isCrosstab)officeTable.showHeaders = false; // hides table headers for crosstab if we fail on refresh
       }
       throw error;
     } finally {
@@ -343,7 +344,7 @@ class OfficeDisplayService {
       await Promise.all(contextPromises);
       console.timeEnd('Context sync');
       console.time('Column auto size');
-      await officeApiHelper.formatTable(officeTable, mstrTable.isCrosstab, mstrTable.crosstabHeaderDimensions, excelContext);
+      await officeFormattingHelper.formatTable(officeTable, mstrTable.isCrosstab, mstrTable.crosstabHeaderDimensions, excelContext);
       console.timeEnd('Column auto size');
       if (mstrTable.isCrosstab) officeTable.showHeaders = false;
       await excelContext.sync();
