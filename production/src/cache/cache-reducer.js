@@ -1,4 +1,12 @@
-import { SET_OBJECT_LIST_LOADING, SET_MY_LIBRARY_LOADING, ADD_MY_LIBRARY_OBJECTS, ADD_PROJECTS, ADD_ENV_OBJECTS, CLEAR_CACHE, REFRESH_CACHE, } from './cache-actions';
+import {
+  SET_OBJECT_LIST_LOADING,
+  SET_MY_LIBRARY_LOADING,
+  ADD_MY_LIBRARY_OBJECTS,
+  ADD_PROJECTS,
+  ADD_ENV_OBJECTS,
+  CLEAR_CACHE,
+  REFRESH_CACHE,
+} from './cache-actions';
 
 export const DEFAULT_STATE = {
   myLibrary: {
@@ -41,7 +49,9 @@ const cacheReducer = (state = DEFAULT_STATE, action) => {
       ...state,
       environmentLibrary: {
         ...state.environmentLibrary,
-        objects: action.data.append ? [...state.environmentLibrary.objects, ...action.data.objects] : action.data.objects
+        objects: action.data.append
+          ? [...state.environmentLibrary.objects, ...action.data.objects]
+          : action.data.objects
       },
     };
   case ADD_MY_LIBRARY_OBJECTS:

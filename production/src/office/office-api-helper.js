@@ -20,9 +20,13 @@ const EXCEL_ROW_LIMIT = 1048576;
 const EXCEL_COL_LIMIT = 16384;
 const EXCEL_XTABS_BORDER_COLOR = '#a5a5a5';
 
-/* global Office Excel OfficeExtension */
+const { Office, Excel, OfficeExtension } = window;
 
 class OfficeApiHelper {
+  constructor(excelXtabsBorderColor) {
+    this.EXCEL_XTABS_BORDER_COLOR = excelXtabsBorderColor;
+  }
+
   getRange = (headerCount, startCell, rowCount = 0) => {
     if (!Number.isInteger(headerCount)) {
       throw new IncorrectInputTypeError();
@@ -126,7 +130,7 @@ class OfficeApiHelper {
      * @param {Object} t i18n translating function
      * @memberof OfficeApiHelper
      */
-  removeObjectAndDisplaytNotification = async (object, officeContext, t) => {
+  removeObjectAndDisplaytNotification = (object, officeContext, t) => {
     const { name } = object;
     this.removeObjectNotExistingInExcel(object, officeContext);
     const message = t('{{name}} has been removed from the workbook.', { name });
@@ -140,16 +144,11 @@ class OfficeApiHelper {
   getTable = (context, bindingId) => context.workbook.bindings
     .getItem(bindingId).getTable()
 
-  getExcelContext = async () =>
-    // https://docs.microsoft.com/en-us/javascript/api/excel/excel.runoptions?view=office-js
-    await Excel.run({ delayForCellEdit: true }, async (context) => context)
+  getExcelContext = () => Excel.run({ delayForCellEdit: true }, (context) => context);
 
+  getOfficeContext = () => Office.context
 
-  getOfficeContext = async () => await Office.context
-
-  getExcelSessionStatus = async () =>
-    // ToDo find better way to check session status
-    !!await this.getExcelContext()
+  getExcelSessionStatus = async () => !!await this.getExcelContext() // ToDo find better way to check session status
 
 
   findAvailableOfficeTableId = () => EXCEL_TABLE_NAME + uuid().split('-').join('')
@@ -211,7 +210,7 @@ class OfficeApiHelper {
           let format = '';
           if (!object.isAttribute) {
             if (object.category === 9) {
-              format = this._getNumberFormattingCategoryName(object);
+              format = this.getNumberFormattingCategoryName(object);
             } else {
               format = object.formatString;
 
@@ -232,7 +231,7 @@ class OfficeApiHelper {
     }
   }
 
-  _getNumberFormattingCategoryName = (metric) => {
+  getNumberFormattingCategoryName = (metric) => {
     switch (metric.category) {
     case -2:
       return 'Default';
@@ -261,6 +260,13 @@ class OfficeApiHelper {
     }
   }
 
+  /**
+   * Returns top left cell of selected range
+   *
+   * @param {Office} context Excel Context
+   * @memberof OfficeApiHelper
+   * @return {String} Address of the cell.
+   */
   getSelectedCell = async (context) => {
     const selectedRangeStart = context.workbook.getSelectedRange().getCell(0, 0);
     selectedRangeStart.load(officeProperties.officeAddress);
@@ -271,6 +277,13 @@ class OfficeApiHelper {
 
   getStartCell = (excelAdress) => excelAdress.match(/!(\w+\d+)(:|$)/)[1]
 
+  /**
+   * Adds binding to the Excel table
+   *
+   * @param {Office} namedItem Excel Table
+   * @param {String} bindingId
+   * @memberof OfficeApiHelper
+   */
   bindNamedItem = (namedItem, bindingId) => new Promise((resolve, reject) => Office.context.document.bindings.addFromNamedItemAsync(namedItem, 'table', { id: bindingId }, (result) => {
     if (result.status === 'succeeded') {
       console.log(`Added new binding with type: ${result.value.type} and id: ${result.value.id}`);
@@ -281,27 +294,17 @@ class OfficeApiHelper {
     }
   }))
 
+  /**
+   * Get object from store based on bindingId and remove it from workbook
+   *
+   * @param {Office} context Excel Context
+   * @param {Object} object Contains information obout the object
+   * @memberof OfficeApiHelper
+   */
   deleteObjectTableBody = async (context, object) => {
     const { isCrosstab, crosstabHeaderDimensions } = object;
-    context.runtime.enableEvents = false;
-    await context.sync();
     const tableObject = context.workbook.tables.getItem(object.bindId);
-    const tableRange = tableObject.getDataBodyRange();
-    context.trackedObjects.add(tableRange);
-    if (isCrosstab) {
-      const { rowsX, rowsY, columnsX, columnsY } = crosstabHeaderDimensions;
-      const crosstabRange = await this.getCrosstabRangeSafely(tableObject, crosstabHeaderDimensions, context);
-      const firstCell = crosstabRange.getCell(0, 0);
-      const columnsHeaders = firstCell.getOffsetRange(0, rowsX).getResizedRange(columnsY - 1, columnsX - 1);
-      const rowsHeaders = firstCell.getResizedRange((columnsY + rowsY), rowsX - 1);
-      columnsHeaders.clear(Excel.ClearApplyTo.contents);
-      rowsHeaders.clear(Excel.ClearApplyTo.contents);
-    }
-
-    tableRange.clear(Excel.ClearApplyTo.contents);
-    context.runtime.enableEvents = true;
-    await context.sync();
-    context.trackedObjects.remove(tableRange);
+    await this.deleteExcelTable(tableObject, context, isCrosstab, crosstabHeaderDimensions);
   }
 
   /**
@@ -340,7 +343,7 @@ class OfficeApiHelper {
       * @param {Office} excelContext Excel context
       * @memberof OfficeApiHelper
       */
-  getCurrentExcelSheet = async (excelContext) => excelContext.workbook.worksheets.getActiveWorksheet()
+  getCurrentExcelSheet = (excelContext) => excelContext.workbook.worksheets.getActiveWorksheet()
 
   /**
       * Returns true if specific worksheet is protected
@@ -611,7 +614,7 @@ class OfficeApiHelper {
     let headerArray = [];
     // reportStartingCell.unmerge(); // excel api have problem with handling merged cells which are partailly in range, we unmerged selected cell to avoid this problem
     const startingCell = reportStartingCell.getCell(0, 0).getOffsetRange(0, -rowOffset); // we call getCell in case multiple cells are selected
-    headerArray = mstrNormalizedJsonHandler._transposeMatrix(rows);
+    headerArray = mstrNormalizedJsonHandler.transposeMatrix(rows);
     const colOffset = !headerArray.length ? rows.length - 1 : headerArray[0].length - 1; // transposed array length is 0 if there is no attributes in rows
     const headerRange = startingCell.getResizedRange(colOffset, rowOffset - 1);
     this.insertHeadersValues(headerRange, rows, 'rows');
@@ -651,7 +654,7 @@ class OfficeApiHelper {
   * @param {Object} crosstabHeaderDimensions Contains dimensions of crosstab report headers
   * @memberof OfficeApiHelper
   */
-  createRowsTitleHeaders = async (cellAddress, attributesNames, sheet, crosstabHeaderDimensions) => {
+  createRowsTitleHeaders = (cellAddress, attributesNames, sheet, crosstabHeaderDimensions) => {
     const reportStartingCell = sheet.getRange(cellAddress);
     const titlesBottomCell = reportStartingCell.getOffsetRange(0, -1);
     const rowsTitlesRange = titlesBottomCell.getResizedRange(0, -(crosstabHeaderDimensions.rowsX - 1));
@@ -663,7 +666,37 @@ class OfficeApiHelper {
     headerTitlesRange.values = '  ';
 
     if (attributesNames.rowsAttributes.length) rowsTitlesRange.values = [attributesNames.rowsAttributes]; // we are not inserting row attributes names if they do not exist
-    columnssTitlesRange.values = mstrNormalizedJsonHandler._transposeMatrix([attributesNames.columnsAttributes]);
+    columnssTitlesRange.values = mstrNormalizedJsonHandler.transposeMatrix([attributesNames.columnsAttributes]);
+  }
+
+  /**
+  * Delete Excel table object from workbook. For crosstab reports will also clear the headers
+  *
+  * @param {Office} tableObject Address of the first cell in report (top left)
+  * @param {Office} context Contains arrays of attributes names in crosstab report
+  * @param {Boolean} isCrosstab Specify if object is a crosstab
+  * @param {Object} crosstabHeaderDimensions Contains dimensions of crosstab report headers
+  * @memberof OfficeApiHelper
+  */
+  async deleteExcelTable(tableObject, context, isCrosstab = false, crosstabHeaderDimensions = {}) {
+    context.runtime.enableEvents = false;
+    await context.sync();
+    const tableRange = tableObject.getDataBodyRange();
+    context.trackedObjects.add(tableRange);
+    if (isCrosstab) {
+      const { rowsX, rowsY, columnsX, columnsY } = crosstabHeaderDimensions;
+      const crosstabRange = await this.getCrosstabRangeSafely(tableObject, crosstabHeaderDimensions, context);
+      const firstCell = crosstabRange.getCell(0, 0);
+      const columnsHeaders = firstCell.getOffsetRange(0, rowsX).getResizedRange(columnsY - 1, columnsX - 1);
+      const rowsHeaders = firstCell.getResizedRange((columnsY + rowsY), rowsX - 1);
+      columnsHeaders.clear();
+      rowsHeaders.clear();
+    }
+    tableRange.clear();
+    tableObject.delete();
+    context.runtime.enableEvents = true;
+    await context.sync();
+    context.trackedObjects.remove(tableRange);
   }
 
   /**
@@ -691,12 +724,14 @@ class OfficeApiHelper {
    * @memberof OfficeApiHelper
    */
   formatCrosstabRange(range) {
-    range.format.borders.getItem('EdgeTop').color = EXCEL_XTABS_BORDER_COLOR;
-    range.format.borders.getItem('EdgeRight').color = EXCEL_XTABS_BORDER_COLOR;
-    range.format.borders.getItem('EdgeBottom').color = EXCEL_XTABS_BORDER_COLOR;
-    range.format.borders.getItem('EdgeLeft').color = EXCEL_XTABS_BORDER_COLOR;
-    range.format.borders.getItem('InsideVertical').color = EXCEL_XTABS_BORDER_COLOR;
-    range.format.borders.getItem('InsideHorizontal').color = EXCEL_XTABS_BORDER_COLOR;
+    const { getItem } = range.format.borders;
+    const { EXCEL_XTABS_BORDER_COLOR } = this;
+    getItem('EdgeTop').color = EXCEL_XTABS_BORDER_COLOR;
+    getItem('EdgeRight').color = EXCEL_XTABS_BORDER_COLOR;
+    getItem('EdgeBottom').color = EXCEL_XTABS_BORDER_COLOR;
+    getItem('EdgeLeft').color = EXCEL_XTABS_BORDER_COLOR;
+    getItem('InsideVertical').color = EXCEL_XTABS_BORDER_COLOR;
+    getItem('InsideHorizontal').color = EXCEL_XTABS_BORDER_COLOR;
   }
 
   /**
@@ -733,4 +768,4 @@ class OfficeApiHelper {
   }
 }
 
-export const officeApiHelper = new OfficeApiHelper();
+export const officeApiHelper = new OfficeApiHelper(EXCEL_XTABS_BORDER_COLOR);
