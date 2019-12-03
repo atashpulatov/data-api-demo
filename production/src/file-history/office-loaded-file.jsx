@@ -273,7 +273,7 @@ export class _OfficeLoadedFile extends React.Component {
         >
           {!!isPrompted && (
             <span
-              aria-title="Reprompt button"
+              aria-label="Reprompt button"
               role="button"
               tabIndex="0"
               className="loading-button-container"
@@ -290,7 +290,7 @@ export class _OfficeLoadedFile extends React.Component {
           mouseEnterDelay={1}
         >
           <span
-              aria-title="Edit button"
+              aria-label="Edit button"
               role="button"
               tabIndex="0"
               className="loading-button-container"
@@ -306,7 +306,7 @@ export class _OfficeLoadedFile extends React.Component {
           mouseEnterDelay={1}
         >
           <span
-              aria-title="Refresh button"
+              aria-label="Refresh button"
               role="button"
               tabIndex="0"
               className="loading-button-container"
@@ -332,7 +332,7 @@ export class _OfficeLoadedFile extends React.Component {
           arrowPointAtCenter="true"
         >
           <span
-            aria-title="Delete button"
+            aria-label="Delete button"
             role="button"
             tabIndex="0"
             onClick={this.deleteAction}
@@ -438,13 +438,13 @@ const mapDispatchToProps = {
 _OfficeLoadedFile.propTypes = {
   fileName: PropTypes.string,
   bindingId: PropTypes.string,
-  objectType: PropTypes.string,
+  objectType: PropTypes.shape({}),
   loading: PropTypes.bool,
   isLoading: PropTypes.bool,
   isCrosstab: PropTypes.bool,
   visualizationInfo: PropTypes.bool,
-  crosstabHeaderDimensions: PropTypes.bool,
-  isPrompted: PropTypes.bool,
+  crosstabHeaderDimensions: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.bool]),
+  isPrompted: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
   refreshDate: PropTypes.instanceOf(Date),
   startLoading: PropTypes.func,
   stopLoading: PropTypes.func,
