@@ -30,7 +30,9 @@ export const SettingsMenuHOC = ({
   const isSecuredActive = !isSecured && reportArray && reportArray.length > 0;
 
   const prepareEmail = () => {
-    const { host, platform, version } = window.Office.context.diagnostics;
+    const { Office } = window;
+    if (!Office) return '#'; // If no Office return anchor url
+    const { host, platform, version } = Office.context.diagnostics;
     const excelAPI = officeContext.getRequirementSet();
     const { userAgent } = navigator;
     const message = t('Please don’t change the text below. Type your message above this line.');

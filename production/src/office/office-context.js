@@ -10,10 +10,11 @@ class OfficeContext {
    * @returns {String} Requirement set
    */
   getRequirementSet = () => {
+    const { Office } = window;
     let isSupported = true;
     let api = 0;
-    while (isSupported && window.Office) {
-      isSupported = window.Office.context.requirements.isSetSupported('ExcelAPI', `1.${api}`);
+    while (isSupported && !!Office) {
+      isSupported = Office.context.requirements.isSetSupported('ExcelAPI', `1.${api}`);
       if (isSupported) api += 1;
     }
     return `1.${api - 1}`;
