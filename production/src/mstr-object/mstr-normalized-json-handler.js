@@ -181,7 +181,7 @@ class NormalizedJsonHandler {
    * @memberof NormalizedJsonHandler
    * @return {Array}
    */
-  renderRows = (data, valueMatrix = 'raw') => (data.metricValues ? data.metricValues[valueMatrix] : Array(data.paging.current).fill(Array(data.headers.columns[0].length).fill(null)))
+  renderRows = (data, valueMatrix = 'raw') => ((data.metricValues && data.metricValues[valueMatrix].length) ? data.metricValues[valueMatrix] : Array(data.paging.current).fill(Array(data.headers.columns[0].length).fill(null)))
 
   /**
    * For keep-only/exclude on an attribute cell
