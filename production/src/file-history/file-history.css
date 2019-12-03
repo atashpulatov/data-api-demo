@@ -90,9 +90,7 @@ button.add-data-btn:focus {
   margin-bottom: 8px;
   overflow: hidden;
   text-overflow: ellipsis;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
+  user-select: none;
 }
 
 .ant-popover .ant-popover-inner-content {
@@ -136,10 +134,6 @@ button.add-data-btn:focus {
 }
 
 .ant-input.rename-input {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  -ms-appearance: none;
-  -o-appearance: none;
   appearance: none;
   height: 18px;
   padding: 1px;
@@ -168,10 +162,6 @@ button.add-data-btn:focus {
   display: inline-block;
   text-overflow: ellipsis;
   cursor: default;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   font-size: 14px;
   font-weight: 500;
@@ -211,9 +201,7 @@ button.add-data-btn:focus {
   padding: 0 4px;
   font-size: 12px;
   color: #888888;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
+  user-select: none;
 }
 
 .secured-screen-container {
@@ -273,20 +261,28 @@ button.add-data-btn:focus {
   border-radius: 2px;
 }
 
-.settings-list li {
-  padding: 8px 17px;
+.settings-list li  a{
+  padding: 8px 16px;
   font-size: 12px;
   cursor: default;
   line-height: 15px;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
+  user-select: none; 
+}
+
+.settings-list .not-linked-list{
+  padding: 8px 16px;
+  font-size: 12px;
+  cursor: default;
+  line-height: 15px;
   user-select: none;
 }
 
 .settings-list li:not(:first-child):not(:last-child):not(.clear-data-inactive):hover {
-  background: #f0f7Fe;
+  background: #F7F7F7;
+}
+
+.settings-list li:not(:first-child):not(:last-child):not(.clear-data-inactive):active {
+  background:  #F0F7FE ;
 }
 
 .settings-list li:focus {
@@ -337,10 +333,6 @@ button.add-data-btn:focus {
   font-weight: 300;
   font-size: 10px;
   text-align: center;
-  -moz-user-select: text;
-  -khtml-user-select: text;
-  -webkit-user-select: text;
-  -ms-user-select: text;
   user-select: text;
 }
 

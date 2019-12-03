@@ -45,7 +45,7 @@ export const SettingsMenuHOC = ({ userFullName, userID, userInitials, isSecured,
 
   return (
     <ul className="settings-list">
-      <li id="testid" className="user-data no-trigger-close">
+      <li id="testid" className="user-data no-trigger-close not-linked-list">
         {userInitials !== null
           ? <span className="no-trigger-close" id="initials" alt={t('User profile')}>{userInitials}</span>
           : <img className="no-trigger-close" id="profile-image" src={logo} alt={t('User profile')} />
@@ -58,18 +58,12 @@ export const SettingsMenuHOC = ({ userFullName, userID, userInitials, isSecured,
           )
           : <span id="userName" className="user-name no-trigger-close">{userNameDisplay}</span>}
       </li>
-      <li tabIndex="0" className={`no-trigger-close clear-data ${!isSecuredActive ? 'clear-data-inactive' : ''}`} onClick={isSecuredActive ? showConfirmationPopup : null}>
+      <li tabIndex="0" className={`no-trigger-close clear-data not-linked-list ${!isSecuredActive ? 'clear-data-inactive' : ''}`} onClick={isSecuredActive ? showConfirmationPopup : null}>
         <span className="no-trigger-close">
           {t('Clear Data')}
         </span>
       </li>
       <div className="separate-line" />
-      {/* TODO: <li tabIndex="0" className="no-trigger-close settings" onClick={() => toggleRenderSettingsFlag(true)}>
-        <span className="no-trigger-close">
-          {t('Settings')}
-        </span>
-      </li>
-      <div className="separate-line" /> */}
       <li className="privacy-policy">
         <a
           tabIndex="0"
@@ -108,7 +102,7 @@ export const SettingsMenuHOC = ({ userFullName, userID, userInitials, isSecured,
           {t('Contact Us')}
         </a>
       </li>
-      <li onClick={() => logout(() => clearCache(null, userID))}>
+      <li className="not-linked-list" onClick={() => logout(() => clearCache(null, userID))}>
         <span tabIndex="0" id="logOut" size="small">
           {t('Log Out')}
         </span>
