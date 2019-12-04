@@ -85,7 +85,7 @@ export class _NavigationTree extends Component {
     }
 
     const { resetDBState, fetchObjectsFromNetwork } = this.props;
-    resetDBState();
+    resetDBState(true);
     if (this.indexedDBSupport) {
       if (!this.isMSIE && this.DBOnChange) this.DBOnChange.cancel();
       window.Office.context.ui.messageParent(JSON.stringify({ command: REFRESH_CACHE_COMMAND }));
@@ -113,7 +113,7 @@ export class _NavigationTree extends Component {
       const { projects } = cache;
       if (projects.length === 0) {
         console.log('Cache failed, fetching from network');
-        resetDBState();
+        resetDBState(true);
         fetchObjectsFromNetwork();
       }
     }, SAFETY_FALLBACK);
