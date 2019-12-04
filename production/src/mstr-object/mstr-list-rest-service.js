@@ -29,8 +29,8 @@ export function filterFunction(object) {
  * @param {Object} body - MSTR API response body
  * @returns {Array}
  */
-export function filterDossier(result) {
-  // const { result } = body;
+export function filterDossier(body) {
+  const { result } = body;
   return result.filter(filterFunction);
 }
 
@@ -57,20 +57,6 @@ export function getRequestParams() {
 }
 
 /**
- * Get the totalItems value by fetching only 1 object.
- *
- * @param {Object} { limit = 1, callback = processTotalItems, requestParams }
- * @returns {Array} [totalItems, Promise]
- */
-export function fetchTotalItems({ limit = LIMIT, callback = (res) => res, requestParams }) {
-  const totalItemsCallback = (body) => {
-    callback(filterDossier(body));
-    return processTotalItems(body);
-  };
-  return fetchObjectList({ limit, callback: totalItemsCallback, requestParams });
-}
-
-/**
  * Get a projects dictionary with key:value {id:name} pairs
  *
  * @returns {Object} {ProjetId: projectName}
@@ -81,36 +67,7 @@ export function getProjectDictionary() {
 }
 
 /**
- * Uses request with limit of 1 to check for total number of objects of given subtypes and then
- * executes multiple requests to API to apply pagination.
- *
- * @param {Function} callback - function to be passed to fetchObjectList method
- * @returns {Array} of promises
- */
-export async function fetchObjectListPagination(callback) {
-  const requestParams = getRequestParams();
-  console.time('Fetching first batch of objects');
-  const total = await fetchTotalItems({ requestParams, callback, limit: 1000 });
-  console.timeEnd('Fetching first batch of objects');
-  const promiseList = [];
-  let offset = 1000;
-  console.time('Fetching environment objects');
-  while (offset <= total) {
-    const promise = fetchObjectList({ requestParams, offset });
-    promiseList.push(promise);
-    const results = await promise;
-    callback(results);
-    offset += LIMIT;
-  }
-  return Promise.all(promiseList).then(() => {
-    console.timeEnd('Fetching environment objects');
-    // const flatObjects = Array.prototype.concat.apply([], objects);
-    // return callback(flatObjects);
-  });
-}
-
-/**
- * Fetches object of given subtypes from MSTR API.
+ * Fetches object of given subtypes from MSTR API per project.
  *
  * @param {Object} { requestParams, callback = (res) => res, offset = 0, limit = LIMIT }
  * @param {Object} requestParams - Object containing environment url, authToken and
@@ -118,20 +75,12 @@ export async function fetchObjectListPagination(callback) {
  * @param {Function} callback - Function to be applied to the returned response body
  * @param {number} offset - Starting index of object to be fetched
  * @param {number} limit - Number of objects to be fetched per request
- * @returns
+ * @param {string} projectId - Id of the project to be fetched
+ * @param {Array} resultArray - Array of objects that is passed during reccurent function call for projects > 7000
+ * @returns {Array} of MSTR objects
  */
-export function fetchObjectList({ requestParams, callback = filterDossier, offset = 0, limit = LIMIT }) {
-  const { envUrl, authToken, typeQuery } = requestParams;
-  const url = `${envUrl}/${SEARCH_ENDPOINT}?limit=${limit}&offset=${offset}&type=${typeQuery}`;
-  return request
-    .get(url)
-    .set('x-mstr-authtoken', authToken)
-    .withCredentials()
-    .then((res) => res.body)
-    .then(callback);
-}
-
-export function fetchObjectListByProject({ requestParams, callback = filterDossier, offset = 0, limit = LIMIT }, projectId, resultArray) {
+export function fetchObjectListByProject({ requestParams, callback = filterDossier, offset = 0, limit = LIMIT },
+  projectId, resultArray) {
   const { envUrl, authToken, typeQuery } = requestParams;
   const url = `${envUrl}/${SEARCH_ENDPOINT}?limit=${limit}&offset=${offset}&type=${typeQuery}`;
   return request
@@ -139,18 +88,25 @@ export function fetchObjectListByProject({ requestParams, callback = filterDossi
     .set('x-mstr-authtoken', authToken)
     .set('x-mstr-projectid', projectId)
     .withCredentials()
-    .then(async (res) => {
+    .then((res) => {
       resultArray = [...resultArray, ...res.body.result];
       if (res.body.result.length === 7000) {
         offset += limit;
         return fetchObjectListByProject({ requestParams, filterDossier, offset, limit }, projectId, resultArray);
       }
-      const filteredObjects = callback(resultArray);
-      return filteredObjects;
+      return callback({ result: resultArray });
     });
 }
 
-export async function fetchObjectListPaginationByProject(callback) {
+/**
+ * Fetches all items from every (selected) project, once response is received -
+ * it is added to the queue to be cached
+ *
+ * @export
+ * @param {Function} callback - function that adds objects to cache
+ * @returns
+ */
+export async function fetchObjectListForSelectedProjects(callback) {
   const requestParams = getRequestParams();
   const projects = await getProjectDictionary();
   const projectIds = Object.keys(projects);
@@ -164,8 +120,6 @@ export async function fetchObjectListPaginationByProject(callback) {
   }
   return Promise.all(promiseList).then(() => {
     console.timeEnd('Fetching environment objects');
-    // const flatObjects = Array.prototype.concat.apply([], objects);
-    // return callback(flatObjects);
   });
 }
 
@@ -219,5 +173,5 @@ export function getMyLibraryObjectList(callback = (res) => res) {
  * @class getObjectList
  */
 export default function getObjectList(callback) {
-  return fetchObjectListPaginationByProject(callback);
+  return fetchObjectListForSelectedProjects(callback);
 }

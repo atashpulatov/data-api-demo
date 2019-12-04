@@ -76,7 +76,7 @@ export function fetchObjects(dispatch, cache) {
     console.time('Creating environment cache');
     dispatch(objectListLoading(true));
     cache.putData(LOADING_DB + ENV_LIBRARY_DB_ID, true);
-    getObjectList(async (objects) => {
+    getObjectList((objects) => {
       objects = addNestedPropertiesToObjects(objects, projects);
       return cache.putData(ENV_LIBRARY_DB_ID, objects, true);
     })
