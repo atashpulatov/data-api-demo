@@ -7,13 +7,10 @@ import { PopupButtons } from '../popup/popup-buttons';
 import { browserActions } from './browser-actions';
 import './browser.css';
 import { connectToCache, createCache, refreshCache } from '../cache/cache-actions';
-import { browserStoreService } from './browser-store-service';
 
-// eslint-disable-next-line no-underscore-dangle
-export const _Browser = ({
+export const BrowserHOC = ({
   objects, projects, selected, onSelect, locale, sort, onSortChange, cache,
   filter, onFilterChange, myLibrary, onMyLibraryChange, t, connectToDB, initDB, refreshDB,
-  loadBrowsingState,
 }) => {
   let DBConnection;
   const ua = window.navigator.userAgent;
@@ -75,7 +72,7 @@ export const _Browser = ({
   );
 };
 
-_Browser.propTypes = {
+BrowserHOC.propTypes = {
   objects: PropTypes.arrayOf(PropTypes.object).isRequired,
   projects: PropTypes.arrayOf(PropTypes.object).isRequired,
   selected: PropTypes.shape({
@@ -109,11 +106,10 @@ _Browser.propTypes = {
   initDB: PropTypes.func,
   connectToDB: PropTypes.func,
   refreshDB: PropTypes.func,
-  cache: PropTypes.object,
-  loadBrowsingState: PropTypes.func,
+  cache: PropTypes.shape({})
 };
 
-_Browser.defaultProps = { t: (text) => text };
+BrowserHOC.defaultProps = { t: (text) => text };
 
 export function mapStateToProps(state) {
   const cache = state.cacheReducer;
@@ -136,5 +132,5 @@ export const mapDispatchToProps = {
   refreshDB: refreshCache,
 };
 
-export const Browser = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_Browser));
+export const Browser = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(BrowserHOC));
 export default Browser;

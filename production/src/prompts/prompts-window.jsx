@@ -18,7 +18,6 @@ import {
 } from '../mstr-object/mstr-object-rest-service';
 import { authenticationHelper } from '../authentication/authentication-helper';
 
-const { Office } = window;
 const { microstrategy } = window;
 
 export class _PromptsWindow extends Component {
@@ -187,7 +186,7 @@ export class _PromptsWindow extends Component {
     const { stopLoading } = this.props;
     stopLoading();
     const cancelObject = { command: selectorProperties.commandCancel };
-    Office.context.ui.messageParent(JSON.stringify(cancelObject));
+    window.Office.context.ui.messageParent(JSON.stringify(cancelObject));
   };
 
   /**

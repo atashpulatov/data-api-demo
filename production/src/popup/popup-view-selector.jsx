@@ -13,11 +13,7 @@ import { PromptsWindow } from '../prompts/prompts-window';
 import { preparePromptedReport } from './popup-actions';
 import { createInstance, answerPrompts, getInstance } from '../mstr-object/mstr-object-rest-service';
 
-
-const { Office } = window;
-
-// eslint-disable-next-line no-underscore-dangle
-export const _PopupViewSelector = (props) => {
+export const PopupViewSelectorHOC = (props) => {
   let { popupType } = props;
 
   const { propsToPass, methods, importRequested, dossierOpenRequested, loading } = props;
@@ -227,7 +223,7 @@ function proceedToImport(props) {
   }
   props.startLoading();
   props.startImport();
-  Office.context.ui.messageParent(JSON.stringify(okObject));
+  window.Office.context.ui.messageParent(JSON.stringify(okObject));
 }
 
 function renderProperComponent(popupType, methods, propsToPass, editedReport) {
@@ -324,7 +320,7 @@ const popupActions = {
   preparePromptedReport,
 };
 
-export const PopupViewSelector = connect(mapStateToProps, popupActions)(_PopupViewSelector);
+export const PopupViewSelector = connect(mapStateToProps, popupActions)(PopupViewSelectorHOC);
 
 function parsePopupState(popupState, promptsAnswers) {
   if (!popupState) {
