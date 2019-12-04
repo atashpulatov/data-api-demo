@@ -22,35 +22,57 @@ const prepareButton = (disableActiveActions, button, t, isPublished = true, disa
 };
 
 export const NotConnectedPopupButtons = ({
-  handleOk, handleSecondary, handleCancel, handleBack,
-  loading, disableActiveActions, onPreviewClick, t = (text) => text, hideSecondary, disableSecondary, isPublished
-}) => (
-  <div className="popup-buttons popup-footer">
-    {(!hideSecondary && !handleSecondary)
-        && prepareButton(disableActiveActions, <Button id="data-preview" onClick={onPreviewClick} disabled={disableActiveActions}>
-          {t('Data Preview')}
-        </Button>, t, isPublished)}
+  handleOk,
+  handleSecondary,
+  handleCancel,
+  handleBack,
+  loading,
+  disableActiveActions,
+  onPreviewClick,
+  t = (text) => text,
+  hideSecondary,
+  disableSecondary,
+  isPublished
+}) => {
+  const dataPreviewButton = (
+    <Button id="data-preview" onClick={onPreviewClick} disabled={disableActiveActions}>
+      {t('Data Preview')}
+    </Button>
+  );
 
+  const backButton = (<Button id="back" onClick={handleBack}>{t('Back')}</Button>);
 
-    {handleBack && (<Button id="back" onClick={handleBack}>{t('Back')}</Button>)}
+  const importButton = (
+    <Button id="import" type={!handleSecondary ? 'primary' : ''} onClick={handleOk} loading={loading} disabled={disableActiveActions}>
+      {t('Import')}</Button>
+  );
 
-    {prepareButton(disableActiveActions,
-      <Button id="import" type={!handleSecondary ? 'primary' : ''} onClick={handleOk} loading={loading} disabled={disableActiveActions}>
-        {t('Import')}</Button>, t, isPublished)}
-
-    {!hideSecondary && handleSecondary && prepareButton(disableActiveActions, <Button
-        id="prepare"
-        type="primary"
-        disabled={disableActiveActions || loading || disableSecondary || !isPublished}
-        onClick={handleSecondary}>
+  const prepareDataButton = (
+    <Button
+  id="prepare"
+  type="primary"
+  disabled={disableActiveActions || loading || disableSecondary || !isPublished}
+  onClick={handleSecondary}>
       {t('Prepare Data')}
-    </Button>, t, isPublished, disableSecondary)}
+    </Button>
+  );
 
+  const cancelButton = (
     <Button id="cancel" onClick={handleCancel}>
       {t('Cancel')}
     </Button>
-  </div>
-);
+  );
+
+  return (
+    <div className="popup-buttons popup-footer">
+      {(!hideSecondary && !handleSecondary) && prepareButton(disableActiveActions, dataPreviewButton, t, isPublished)}
+      {handleBack && backButton}
+      {prepareButton(disableActiveActions, importButton, t, isPublished)}
+      {!hideSecondary && handleSecondary && prepareButton(disableActiveActions, prepareDataButton, t, isPublished, disableSecondary)}
+      {cancelButton}
+    </div>
+  );
+};
 
 NotConnectedPopupButtons.propTypes = {
   handleOk: PropTypes.func,
