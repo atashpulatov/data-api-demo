@@ -9,7 +9,10 @@ import {authenticationService} from './authentication/auth-rest-service';
 
 import i18next from './i18n';
 import * as serviceWorker from './serviceWorker';
-import {DIContainer} from './dependency-container';
+import {diContainer} from './dependency-container';
+import {HomeHelper} from './home/home-helper';
+import {reduxStore} from './store';
+import {sessionHelper} from './storage/session-helper';
 
 // Code splitting https://reactjs.org/docs/code-splitting.html
 const LazySidebar = lazy(() => import('./entry-point/sidebar-entry-point'));
@@ -45,12 +48,8 @@ async function handleUnauthorized(envUrl, iSession) {
 function officeInitialize() {
   Office.onReady()
     .then(async () => {
-      console.log({Office, Excel});
       const envUrl = window.location.pathname.split('/apps/')[0];
-      // If it is not popup we check user privileges
-      const diContainer = new DIContainer();
-      diContainer.initializeDependencies();
-      const homeHelper = diContainer.get('homeHelper');
+      const homeHelper = diContainer.initilizeSingle(HomeHelper, [reduxStore, sessionHelper]);
       if (window.location.href.indexOf('popupType') === -1) {
         const {iSession} = homeHelper.getParsedCookies();
         const canUseOffice = await authenticationService.getOfficePrivilege(`${envUrl}/api`, iSession);
@@ -59,6 +58,7 @@ function officeInitialize() {
         }
       }
       goReact();
+      diContainer.initializeDependencies();
     });
 }
 
