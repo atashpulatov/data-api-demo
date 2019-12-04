@@ -35,7 +35,7 @@ export const NotConnectedPopupButtons = ({
   isPublished
 }) => {
   const dataPreviewButton = (
-    <Button id="data-preview" onClick={onPreviewClick} disabled={disableActiveActions}>
+    <Button id="data-preview" onMouseDown={(e) => { e.preventDefault(); }} onClick={onPreviewClick} disabled={disableActiveActions}>
       {t('Data Preview')}
     </Button>
   );
