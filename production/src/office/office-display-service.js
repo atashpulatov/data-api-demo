@@ -5,7 +5,6 @@ import {
   DATA_LIMIT,
   PROMISE_LIMIT,
   IMPORT_ROW_LIMIT,
-  CONTEXT_LIMIT,
   getObjectInfo,
   getObjectDefinition,
   createInstance,
@@ -16,6 +15,7 @@ import {
   fetchVisualizationDefinition,
   getDossierDefinition,
 } from '../mstr-object/mstr-object-rest-service';
+import { CLEAR_PROMPTS_ANSWERS } from '../navigation/navigation-tree-actions';
 import { reduxStore } from '../store';
 import { officeProperties } from './office-properties';
 import { officeStoreService } from './store/office-store-service';
@@ -162,22 +162,18 @@ class OfficeDisplayService {
       });
 
       console.timeEnd('Total');
+      reduxStore.dispatch({ type: CLEAR_PROMPTS_ANSWERS });
       reduxStore.dispatch({
         type: officeProperties.actions.finishLoadingReport,
         reportBindId: bindingId,
       });
       return { type: 'success', message: 'Data loaded successfully' };
     } catch (error) {
-      if (officeTable && !isRefresh) {
-        let crosstabRange;
-        if (isCrosstab) {
-          const sheet = officeTable.worksheet;
-          crosstabRange = officeApiHelper.getCrosstabRange(officeTable.getRange().getCell(0, 0),
-            crosstabHeaderDimensions,
-            sheet);
-        }
-        officeTable.delete();
-        if (isCrosstab) (await crosstabRange.clear());
+      if (officeTable) {
+        if (!isRefresh) {
+          officeTable.showHeaders = true;
+          await officeApiHelper.deleteExcelTable(officeTable, excelContext, isCrosstab, instanceDefinition.mstrTable.crosstabHeaderDimensions);
+        } else if (isCrosstab)officeTable.showHeaders = false; // hides table headers for crosstab if we fail on refresh
       }
       throw error;
     } finally {
@@ -249,7 +245,7 @@ class OfficeDisplayService {
     reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
     try {
       if (reduxStoreState.sessionReducer.dialog.close) {
-      reduxStoreState.sessionReducer.dialog.close();
+        reduxStoreState.sessionReducer.dialog.close();
       }
     } catch (err) {
       if (!err.includes(ERROR_POPUP_CLOSED)) {
@@ -261,10 +257,10 @@ class OfficeDisplayService {
   async getInstaceDefinition(body, mstrObjectType, manipulationsXML, preparedInstanceId, projectId, objectId, dossierData, visualizationInfo, promptsAnswers) {
     let instanceDefinition;
     if (body && body.requestedObjects) {
-      if(body.requestedObjects.attributes.length === 0  && body.requestedObjects.metrics.length === 0){
+      if (body.requestedObjects.attributes.length === 0 && body.requestedObjects.metrics.length === 0) {
         body.requestedObjects = undefined;
       }
-        body.template = body.requestedObjects;
+      body.template = body.requestedObjects;
     }
     if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
       if (manipulationsXML) {
@@ -305,8 +301,7 @@ class OfficeDisplayService {
       const { objectId, projectId, dossierData, mstrObjectType } = connectionData;
       const { excelContext, officeTable } = officeData;
       const { columns, rows, mstrTable } = instanceDefinition;
-      const limit = Math.min(Math.floor(DATA_LIMIT / columns),
-        IMPORT_ROW_LIMIT);
+      const limit = Math.min(Math.floor(DATA_LIMIT / columns), IMPORT_ROW_LIMIT);
       const configGenerator = { instanceDefinition, objectId, projectId, mstrObjectType, dossierData, limit, visualizationInfo, };
       const rowGenerator = getObjectContentGenerator(configGenerator);
       let rowIndex = 0;
@@ -349,7 +344,7 @@ class OfficeDisplayService {
       await Promise.all(contextPromises);
       console.timeEnd('Context sync');
       console.time('Column auto size');
-      await officeApiHelper.formatTable(officeTable, mstrTable.isCrosstab, mstrTable.crosstabHeaderDimensions, excelContext);
+      await officeFormattingHelper.formatTable(officeTable, mstrTable.isCrosstab, mstrTable.crosstabHeaderDimensions, excelContext);
       console.timeEnd('Column auto size');
       if (mstrTable.isCrosstab) officeTable.showHeaders = false;
       await excelContext.sync();

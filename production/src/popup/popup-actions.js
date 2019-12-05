@@ -7,7 +7,6 @@ import { popupController } from './popup-controller';
 import { popupHelper } from './popup-helper';
 import { createInstance, answerPrompts, getInstance, createDossierInstance } from '../mstr-object/mstr-object-rest-service';
 import { reduxStore } from '../store';
-import { ProtectedSheetError } from '../error/protected-sheets-error';
 
 export const CLEAR_WINDOW = 'POPUP_CLOSE_WINDOW';
 export const START_REPORT_LOADING = 'START_REPORT_LOADING';

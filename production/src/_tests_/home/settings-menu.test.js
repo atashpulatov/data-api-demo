@@ -2,7 +2,6 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { sessionHelper } from '../../storage/session-helper';
 import { SettingsMenuHOC } from '../../home/settings-menu';
-import { Office } from '../mockOffice';
 import DB from '../../cache/pouch-db';
 
 describe('Settings Menu', () => {
@@ -29,7 +28,7 @@ describe('Settings Menu', () => {
     await expect(clearDB).toBeCalled();
   });
 
-  it('should handle error on logout', async () => {
+  it('should handle error on logout', () => {
     // given
     const logOutRestSpy = jest.spyOn(sessionHelper, 'logOutRest').mockImplementation(() => {
       throw new Error();

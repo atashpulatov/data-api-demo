@@ -1,9 +1,9 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { AttributeMetricFilter } from '@mstr/mstr-react-library';
-import { _AttributeSelector } from '../../attribute-selector/attribute-selector';
+import { AttributeSelectorHOC } from '../../attribute-selector/attribute-selector';
 
-describe('_AttributeSelector', () => {
+describe('AttributeSelectorHOC', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -15,7 +15,7 @@ describe('_AttributeSelector', () => {
       content: 'content',
     };
     // when
-    const selectorWrapped = shallow(<_AttributeSelector mstrData={mstrData} />);
+    const selectorWrapped = shallow(<AttributeSelectorHOC mstrData={mstrData} />);
     // then
     const attributeMetricFilterWrapped = selectorWrapped.find(AttributeMetricFilter).at(0);
     expect(attributeMetricFilterWrapped.prop('mstrData')).toEqual(mstrData);
@@ -42,7 +42,7 @@ describe('_AttributeSelector', () => {
       },
     };
     // when
-    const wrappedComponent = shallow(<_AttributeSelector mstrData={mstrData} handlePopupErrors={mockHandlePopupErrors} />);
+    const wrappedComponent = shallow(<AttributeSelectorHOC mstrData={mstrData} handlePopupErrors={mockHandlePopupErrors} />);
     wrappedComponent.instance().handleUnauthorized(libraryError);
     // then
     expect(mockHandlePopupErrors).toBeCalledWith(pupupExpectedError);

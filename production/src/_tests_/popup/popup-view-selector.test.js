@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { Office } from '../mockOffice';
 import { selectorProperties } from '../../attribute-selector/selector-properties';
-import { _PopupViewSelector, mapStateToProps } from '../../popup/popup-view-selector';
+import { PopupViewSelectorHOC, mapStateToProps } from '../../popup/popup-view-selector';
 import { PromptsWindow } from '../../prompts/prompts-window';
 import { PopupTypeEnum } from '../../home/popup-type-enum';
 import { NavigationTree } from '../../navigation/navigation-tree';
@@ -25,7 +25,7 @@ describe('PopupViewSelector', () => {
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    const componentWrapper = shallow(<_PopupViewSelector
+    const componentWrapper = shallow(<PopupViewSelectorHOC
       location={location}
       {...props}
       methods={{}}
@@ -44,7 +44,7 @@ describe('PopupViewSelector', () => {
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    const componentWrapper = shallow(<_PopupViewSelector
+    const componentWrapper = shallow(<PopupViewSelectorHOC
       location={location}
       {...props}
       methods={{}}
@@ -63,7 +63,7 @@ describe('PopupViewSelector', () => {
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    const componentWrapper = shallow(<_PopupViewSelector
+    const componentWrapper = shallow(<PopupViewSelectorHOC
       location={location}
       {...props}
       methods={{}}
@@ -83,7 +83,7 @@ describe('PopupViewSelector', () => {
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    const componentWrapper = shallow(<_PopupViewSelector
+    const componentWrapper = shallow(<PopupViewSelectorHOC
       location={location}
       {...props}
       methods={{}}
@@ -115,7 +115,7 @@ describe('PopupViewSelector', () => {
     const mockMessageParent = jest.spyOn(Office.context.ui, 'messageParent');
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    shallow(<_PopupViewSelector
+    shallow(<PopupViewSelectorHOC
       location={location}
       importRequested
       {...reduxMethods}
@@ -146,7 +146,7 @@ describe('PopupViewSelector', () => {
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    const selectorWrapped = shallow(<_PopupViewSelector
+    const selectorWrapped = shallow(<PopupViewSelectorHOC
       location={location}
       {...propsToPass}
       propsToPass={propsToPass}
@@ -204,7 +204,7 @@ describe('PopupViewSelector', () => {
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    shallow(<_PopupViewSelector
+    shallow(<PopupViewSelectorHOC
       location={location}
       {...props}
       methods={{}}
@@ -227,7 +227,7 @@ describe('PopupViewSelector', () => {
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    const selectorWrapped = shallow(<_PopupViewSelector
+    const selectorWrapped = shallow(<PopupViewSelectorHOC
       location={location}
       {...propsToPass}
       propsToPass={propsToPass}
@@ -265,7 +265,7 @@ describe('PopupViewSelector', () => {
     const mockMessageParent = jest.spyOn(Office.context.ui, 'messageParent');
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    shallow(<_PopupViewSelector
+    shallow(<PopupViewSelectorHOC
       location={location}
       {...propsToPass}
       authToken={{}}
@@ -302,7 +302,7 @@ describe('PopupViewSelector', () => {
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    const selectorWrapped = shallow(<_PopupViewSelector
+    const selectorWrapped = shallow(<PopupViewSelectorHOC
       location={location}
       {...props}
       methods={{}}
@@ -352,7 +352,7 @@ describe('PopupViewSelector', () => {
     const mockMessageParent = jest.spyOn(Office.context.ui, 'messageParent');
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    shallow(<_PopupViewSelector
+    shallow(<PopupViewSelectorHOC
       location={location}
       {...reduxMethods}
       {...props}
@@ -389,7 +389,7 @@ describe('PopupViewSelector', () => {
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    const selectorWrapped = shallow(<_PopupViewSelector
+    const selectorWrapped = shallow(<PopupViewSelectorHOC
       location={location}
       {...props}
       methods={{}}
@@ -415,7 +415,7 @@ describe('PopupViewSelector', () => {
     // when
 
     // eslint-disable-next-line react/jsx-pascal-case
-    const componentWrapper = shallow(<_PopupViewSelector
+    const componentWrapper = shallow(<PopupViewSelectorHOC
       location={location}
       {...props}
       methods={{}}
@@ -434,7 +434,7 @@ describe('PopupViewSelector', () => {
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    const componentWrapper = shallow(<_PopupViewSelector
+    const componentWrapper = shallow(<PopupViewSelectorHOC
       location={location}
       {...props}
       methods={{}}
@@ -453,7 +453,7 @@ describe('PopupViewSelector', () => {
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    const selectorWrapped = shallow(<_PopupViewSelector
+    const selectorWrapped = shallow(<PopupViewSelectorHOC
       location={location}
       {...propsToPass}
       propsToPass={propsToPass}
@@ -482,7 +482,7 @@ describe('PopupViewSelector', () => {
 
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    await shallow(<_PopupViewSelector
+    await shallow(<PopupViewSelectorHOC
       {...props}
     />);
     // then
@@ -516,14 +516,14 @@ describe('PopupViewSelector', () => {
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    await shallow(<_PopupViewSelector
+    await shallow(<PopupViewSelectorHOC
       {...props}
     />);
     // then
     expect(answerPrompts).toBeCalledWith(configPromptsMocked);
   });
 
-  it('should invoke implementations inside createBody when in obtainInstanceWithPromptsAnswers', async () => {
+  it('should invoke implementations inside createBody when in obtainInstanceWithPromptsAnswers', () => {
     // given
     const instanceId = 'instanceId';
     const props = {
@@ -559,7 +559,7 @@ describe('PopupViewSelector', () => {
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    shallow(<_PopupViewSelector
+    shallow(<PopupViewSelectorHOC
       {...props}
     />);
     // then
@@ -578,7 +578,7 @@ describe('PopupViewSelector', () => {
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    const selectorWrapped = shallow(<_PopupViewSelector
+    const selectorWrapped = shallow(<PopupViewSelectorHOC
       location={location}
       {...propsToPass}
       propsToPass={propsToPass}
@@ -600,7 +600,7 @@ describe('PopupViewSelector', () => {
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    const selectorWrapped = shallow(<_PopupViewSelector
+    const selectorWrapped = shallow(<PopupViewSelectorHOC
       location={location}
       {...propsToPass}
       propsToPass={propsToPass}
