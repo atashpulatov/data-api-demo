@@ -12,7 +12,8 @@ import {PopupController} from './popup/popup-controller';
 import {OfficeDisplayService} from './office/office-display-service';
 import {MstrListRestService} from './mstr-object/mstr-list-rest-service';
 import {PopupHelper} from './popup/popup-helper';
-import * as popupActionsModule from './popup/popup-actions';
+import {PopupActions, popupActions} from './popup/popup-actions';
+import {actionCreator} from './notification/action-creator';
 
 const EXCEL_XTABS_BORDER_COLOR = '#a5a5a5';
 
@@ -21,12 +22,12 @@ export class DIContainer {
     if (DIContainer.instance) {
       return DIContainer.instance;
     }
-    if(autoInitialize) this.initializeDependencies('inside constructor');
+    if (autoInitialize) this.initializeAll('inside constructor');
     DIContainer.instance = this;
     return this;
   }
 
-  initializeDependencies = (context) => {
+  initializeAll = (context) => {
     console.log('________INITIALIZING________');
     console.log(context);
     this.officeApiHelper = new OfficeApiHelper(EXCEL_XTABS_BORDER_COLOR);
@@ -34,33 +35,35 @@ export class DIContainer {
     this.officeStoreService = new OfficeStoreService();
     this.officeStoreService.init(reduxStore);
     this.notificationService = new NotificationService();
-    this.notificationService.init(reduxStore);
+    this.notificationService.init(reduxStore, actionCreator);
     this.sessionHelper = new SessionHelper();
     this.sessionHelper.init(reduxStore);
     this.errorHandler = new ErrorService();
     this.errorHandler.init(this.sessionHelper, this.notificationService);
     this.authenticationHelper = new AuthenticationHelper();
     this.authenticationHelper.init(reduxStore, this.sessionHelper);
-    // this.homeHelper = new HomeHelper();
-    // this.homeHelper.init(reduxStore, this.sessionHelper);
+    this.homeHelper = new HomeHelper();
+    this.homeHelper.init(reduxStore, this.sessionHelper);
     this.mstrObjectRestService = new MstrObjectRestService();
     this.mstrObjectRestService.init(reduxStore);
     this.popupController = new PopupController();
-    this.popupController.init(reduxStore, this.sessionHelper, popupActionsModule);
+    this.popupController.init(reduxStore, this.sessionHelper, popupActions);
     this.officeDisplayService = new OfficeDisplayService();
     this.officeDisplayService.init(reduxStore, this.popupController);
     this.mstrListRestService = new MstrListRestService();
     this.mstrListRestService.init(reduxStore);
     this.popupHelper = new PopupHelper();
     this.popupHelper.init(this.popupController);
+    this.popupActions = new PopupActions();
+    this.popupActions.init(this.authenticationHelper,this.errorHandler,this.officeApiHelper,this.officeStoreService,this.popupHelper,this.mstrObjectRestService,this.popupController);
     this.initialized = true;
   }
 
-  initilizeSingle = (classToInitialize, dependencies) => {
-    console.log(classToInitialize);
-    this[classToInitialize.constructor.name] = new classToInitialize();
-    this[classToInitialize.constructor.name].init(...dependencies);
-    return this[classToInitialize.constructor.name];
+  initilizeSingle = (ClassToInitialize, dependencies) => {
+    console.log(ClassToInitialize);
+    this[ClassToInitialize.constructor.name] = new ClassToInitialize();
+    this[ClassToInitialize.constructor.name].init(...dependencies);
+    return this[ClassToInitialize.constructor.name];
   }
 
   get = (dependency) => this[dependency]

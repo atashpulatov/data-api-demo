@@ -11,7 +11,7 @@ export class HomeHelper {
     this.reduxStore = reduxStore;
     this.sessionHelper = sessionHelper;
   }
-  
+
   saveLoginValues = () => {
     const token = this.reduxStore.getState().sessionReducer.authToken;
     const location = this.getWindowLocation();

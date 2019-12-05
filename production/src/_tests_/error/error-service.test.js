@@ -18,6 +18,9 @@ jest.mock('../../storage/session-helper');
 jest.useFakeTimers();
 
 describe('ErrorService', () => {
+  beforeAll(() => {
+    errorService.init(sessionHelper, notificationService);
+  });
   afterEach(() => {
     jest.clearAllMocks();
   });

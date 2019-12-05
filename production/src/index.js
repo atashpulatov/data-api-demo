@@ -58,7 +58,7 @@ function officeInitialize() {
         }
       }
       goReact();
-      diContainer.initializeDependencies();
+      diContainer.initializeAll();
     });
 }
 

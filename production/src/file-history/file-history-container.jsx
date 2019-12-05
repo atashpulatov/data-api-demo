@@ -8,7 +8,7 @@ import { OfficeLoadedFile } from './office-loaded-file';
 import { officeApiHelper } from '../office/office-api-helper';
 import { officeDisplayService } from '../office/office-display-service';
 import loadingSpinner from './assets/report_loading_spinner.gif';
-import { refreshReportsArray } from '../popup/popup-actions';
+import { popupActions } from '../popup/popup-actions';
 import { fileHistoryContainerHOC } from './file-history-container-HOC';
 import { officeStoreService } from '../office/store/office-store-service';
 import { toggleSecuredFlag } from '../office/office-actions';
@@ -210,7 +210,7 @@ function mapStateToProps({ officeReducer, historyReducer }) {
 }
 
 const mapDispatchToProps = {
-  refreshReportsArray,
+  refreshReportsArray: popupActions.refreshReportsArray,
   toggleSecuredFlag,
   startLoading,
   stopLoading,

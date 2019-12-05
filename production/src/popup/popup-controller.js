@@ -10,6 +10,10 @@ import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { officeStoreService } from '../office/store/office-store-service';
 import { LOAD_BROWSING_STATE_CONST } from '../browser/browser-actions';
 import { REFRESH_CACHE_COMMAND, refreshCache } from '../cache/cache-actions';
+import {
+  START_REPORT_LOADING,
+  STOP_REPORT_LOADING,
+} from './popup-actions';
 
 const URL = `${window.location.href}`;
 
@@ -30,7 +34,6 @@ export class PopupController {
     this.sessionHelper = sessionHelper;
     this.popupAction = popupAction;
   }
-
 
   runPopupNavigation = async () => {
     await this.runPopup(PopupTypeEnum.navigationTree, 80, 80);
@@ -163,7 +166,7 @@ export class PopupController {
   }) => {
     if (reportId && projectId && reportSubtype && body && reportName) {
       this.reduxStore.dispatch({
-        type: this.popupAction.START_REPORT_LOADING,
+        type: START_REPORT_LOADING,
         data: { name: reportName },
       });
       const options = {
@@ -181,7 +184,7 @@ export class PopupController {
       if (result) {
         notificationService.displayNotification({ type: result.type, content: result.message });
       }
-      this.reduxStore.dispatch({ type: this.popupAction.STOP_REPORT_LOADING });
+      this.reduxStore.dispatch({ type: STOP_REPORT_LOADING });
     }
   };
 
@@ -202,7 +205,7 @@ export class PopupController {
     if (chosenObject) {
       this.reduxStore.dispatch({ type: officeProperties.actions.startLoading });
       this.reduxStore.dispatch({
-        type: this.popupAction.START_REPORT_LOADING,
+        type: START_REPORT_LOADING,
         data: { name: reportName },
       });
       const options = {
@@ -221,7 +224,7 @@ export class PopupController {
       if (result) {
         notificationService.displayNotification({ type: result.type, content: result.message });
       }
-      this.reduxStore.dispatch({ type: this.popupAction.STOP_REPORT_LOADING });
+      this.reduxStore.dispatch({ type: STOP_REPORT_LOADING });
     }
   };
 

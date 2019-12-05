@@ -1,4 +1,3 @@
-import { actionCreator } from './action-creator';
 
 export class NotificationService {
   constructor() {
@@ -9,22 +8,23 @@ export class NotificationService {
     return this;
   }
 
-  init = (reduxStore) => {
+  init = (reduxStore, actionCreator) => {
     this.reduxStore = reduxStore;
+    this.actionCreator = actionCreator;
   }
 
   displayMessage = (type, content) => {
-    const action = actionCreator.showMessageAction(content, type);
+    const action = this.this.actionCreator.showMessageAction(content, type);
     this.reduxStore.dispatch(action);
   }
 
   displayNotification = ({ type, content, details, title = ' ', onConfirm = null }) => {
-    const action = actionCreator.showNotificationAction(title, content, type, details, onConfirm);
+    const action = this.actionCreator.showNotificationAction(title, content, type, details, onConfirm);
     this.reduxStore.dispatch(action);
   }
 
   displayTranslatedNotification = ({ type, content, details, title = ' ', onConfirm = null }) => {
-    const action = actionCreator.showTranslatedNotification(title, content, type, details, onConfirm);
+    const action = this.actionCreator.showTranslatedNotification(title, content, type, details, onConfirm);
     this.reduxStore.dispatch(action);
   }
 }
