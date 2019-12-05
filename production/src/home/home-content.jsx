@@ -8,6 +8,7 @@ import { Placeholder } from './placeholder';
 import { HomeDialog } from './home-dialog';
 import { Tabs } from './tabs';
 import SettingsComponent from '../settings/settings-component';
+import InternetConnectionError from '../popup/internet-connection-error';
 
 
 const URL = `${window.location.href}`;
@@ -41,6 +42,7 @@ export default function HomeContent({
     <div id="content">
       <Notifications />
       {homeComponent}
+      {!popupOpen && <InternetConnectionError />}
       <HomeDialog show={popupOpen} text={t('A MicroStrategy for Office Add-in dialog is open')} />
     </div>
   );

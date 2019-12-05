@@ -17,7 +17,6 @@ import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { officeStoreService } from '../office/store/office-store-service';
 import { LOAD_BROWSING_STATE_CONST } from '../browser/browser-actions';
 import { REFRESH_CACHE_COMMAND, refreshCache } from '../cache/cache-actions';
-import { InternetConnectionError } from '../error/internet-connection-error';
 
 const URL = `${window.location.href}`;
 
@@ -96,10 +95,6 @@ class PopupController {
     try {
       if (response.command !== REFRESH_CACHE_COMMAND) await this.closeDialog(dialog);
       if (response.command !== selectorProperties.commandError) await officeApiHelper.getExcelSessionStatus(); // checking excel session status
-      if (!window.navigator.onLine) {
-        reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
-        throw new InternetConnectionError();
-      }
       await authenticationHelper.validateAuthToken();
       switch (response.command) {
       case selectorProperties.commandOk:
