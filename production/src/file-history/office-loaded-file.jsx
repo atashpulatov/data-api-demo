@@ -85,14 +85,9 @@ export class _OfficeLoadedFile extends React.Component {
 
 
   deleteReport = async () => {
-    const { onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, fileName, t, } = this.props;
+    const { onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, fileName, t } = this.props;
     const message = t('{{name}} has been removed from the workbook.', { name: fileName });
-
-    await fileHistoryHelper.deleteReport(onDelete,
-      bindingId,
-      isCrosstab,
-      crosstabHeaderDimensions,
-      message);
+    await fileHistoryHelper.deleteReport(onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, message);
   }
 
   deleteAction = (e) => {
@@ -103,13 +98,7 @@ export class _OfficeLoadedFile extends React.Component {
       return;
     }
     startLoading();
-    const {
-      onDelete,
-      bindingId,
-      isCrosstab,
-      crosstabHeaderDimensions,
-      fileName,
-    } = this.props;
+    const { onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, fileName } = this.props;
     this.setState({ allowDeleteClick: false, allowRefreshClick: false },
       async () => {
         try {
@@ -117,11 +106,7 @@ export class _OfficeLoadedFile extends React.Component {
           await officeApiHelper.isCurrentReportSheetProtected(excelContext, bindingId);
           const message = t('{{name}} has been removed from the workbook.',
             { name: fileName });
-          await fileHistoryHelper.deleteReport(onDelete,
-            bindingId,
-            isCrosstab,
-            crosstabHeaderDimensions,
-            message);
+          await fileHistoryHelper.deleteReport(onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, message);
           if (this.ismounted) this.setState({ allowDeleteClick: true, allowRefreshClick: true });
           stopLoading();
         } catch (error) {
@@ -438,11 +423,11 @@ const mapDispatchToProps = {
 _OfficeLoadedFile.propTypes = {
   fileName: PropTypes.string,
   bindingId: PropTypes.string,
-  objectType: PropTypes.shape({}),
+  objectType: PropTypes.shape({ name: PropTypes.string }),
   loading: PropTypes.bool,
   isLoading: PropTypes.bool,
   isCrosstab: PropTypes.bool,
-  visualizationInfo: PropTypes.bool,
+  visualizationInfo: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.bool]),
   crosstabHeaderDimensions: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.bool]),
   isPrompted: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
   refreshDate: PropTypes.instanceOf(Date),
