@@ -188,7 +188,7 @@ describe('NavigationTree', () => {
     const givenProjectId = 'projectId';
     const givenSubtype = mstrObjectEnum.mstrObjectType.report.subtypes[0];
     const givenObjectName = 'objectName';
-    const givenTarget = {};
+    const givenTargetId = null;
     const givenMyLibrary = false;
     const mockSelectObject = jest.fn();
 
@@ -197,7 +197,7 @@ describe('NavigationTree', () => {
       selectObject={mockSelectObject}
     />);
     // when
-    wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype, givenObjectName, givenTarget, givenMyLibrary);
+    wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype, givenObjectName, givenTargetId, givenMyLibrary);
     // then
     const expectedObject = {
       chosenObjectId: givenObjectId,
@@ -216,7 +216,7 @@ describe('NavigationTree', () => {
     const givenProjectId = 'projectId';
     const givenSubtype = mstrObjectEnum.mstrObjectType.dossier.subtypes[0];
     const givenObjectName = 'objectName';
-    const givenTarget = { id: 'LibraryObjectId' };
+    const givenTargetId = 'LibraryObjectId';
     const givenMyLibrary = true;
     const mockSelectObject = jest.fn();
 
@@ -225,10 +225,10 @@ describe('NavigationTree', () => {
       selectObject={mockSelectObject}
     />);
     // when
-    wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype, givenObjectName, givenTarget, givenMyLibrary);
+    wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype, givenObjectName, givenTargetId, givenMyLibrary);
     // then
     const expectedObject = {
-      chosenObjectId: givenTarget.id,
+      chosenObjectId: givenTargetId,
       chosenObjectName: givenObjectName,
       chosenProjectId: givenProjectId,
       chosenSubtype: givenSubtype,
