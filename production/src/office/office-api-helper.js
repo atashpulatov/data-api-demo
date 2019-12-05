@@ -41,7 +41,7 @@ class OfficeApiHelper {
       throw new OutsideOfRangeError('The table you try to import exceeds the worksheet limits.');
     }
     return `${startCell}:${endColumn}${endRow}`;
-  }
+  };
 
   numberToLetters = (colNum) => {
     let colLetter = '';
@@ -53,7 +53,7 @@ class OfficeApiHelper {
         + colLetter;
     }
     return colLetter;
-  }
+  };
 
   offsetCellBy = (cell, rowOffset, colOffset) => {
     const cellArray = cell.split(/(\d+)/);

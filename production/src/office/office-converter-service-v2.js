@@ -7,14 +7,18 @@ import jsonHandler from '../mstr-object/mstr-normalized-json-handler';
  */
 class OfficeConverterServiceV2 {
   createTable(response) {
-    const columnInformation = this.getColumnInformation(response);
-    const isCrosstab = this.isCrosstab(response);
+    // If it is no attributes in columns and metrics in rows
+    const isFalsyCrosstab = response.definition.grid.metricsPosition.axis === 'rows'
+      && response.definition.grid.columns.length === 0;
+    const columnInformation = this.getColumnInformation(response, isFalsyCrosstab);
+    const isCrosstab = !isFalsyCrosstab && this.isCrosstab(response);
     return {
       tableSize: this.getTableSize(response, columnInformation, isCrosstab),
       columnInformation,
-      headers: this.getHeaders(response),
+      headers: this.getHeaders(response, isCrosstab, isFalsyCrosstab),
       id: response.k || response.id,
       isCrosstab,
+      isFalsyCrosstab,
       name: response.n || response.name,
       rows: this.getRows(response, isCrosstab),
       attributesNames: this.getAttributesName(response.definition),
@@ -58,13 +62,13 @@ class OfficeConverterServiceV2 {
    * @return {number[]}
    * @memberof OfficeConverterServiceV2
    */
-  getRows(response) {
+  getRows(response, isCrosstab) {
     const rowTotals = [];
     const onAttribute = (array) => (e) => {
       if (array) array.push(e.subtotalAddress);
       return `'${e.value.join(' ')}`;
     };
-    if (this.isCrosstab(response)) {
+    if (isCrosstab) {
       return { row: jsonHandler.renderRows(response.data) };
     }
     const row = jsonHandler.renderTabular(response.definition, response.data, onAttribute(rowTotals));
@@ -78,18 +82,22 @@ class OfficeConverterServiceV2 {
    * @return {Object}
    * @memberof OfficeConverterServiceV2
    */
-  getHeaders(response) {
+  getHeaders(response, isCrosstab, isFalsyCrosstab) {
     const rowTotals = [];
     const columnTotals = [];
     const onElement = (array) => (e) => {
       if (array) array.push(e.subtotalAddress);
       return `'${e.value.join(' ')}`;
     };
-    if (this.isCrosstab(response)) {
+    if (isCrosstab) {
       const rows = jsonHandler.renderHeaders(response.definition, 'rows', response.data.headers, onElement(rowTotals));
       const columns = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement(columnTotals));
       const subtotalAddress = [...rowTotals, ...columnTotals];
       return { rows, columns, subtotalAddress };
+    } if (isFalsyCrosstab) {
+      const attributeTitles = jsonHandler.renderTitles(response.definition, 'rows', response.data.headers, onElement());
+      const metricHeaders = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement());
+      return { columns: [[...attributeTitles[0], ...metricHeaders[0], '\' ']] };
     }
     const attributeTitles = jsonHandler.renderTitles(response.definition, 'rows', response.data.headers, onElement());
     const metricHeaders = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement());
@@ -119,13 +127,15 @@ class OfficeConverterServiceV2 {
    * @return {Object}
    * @memberof OfficeConverterServiceV2
    */
-  getColumnInformation(response) {
+  getColumnInformation(response, isFalsyCrosstab) {
     let columns;
     const onElement = (element) => element;
     const metricColumns = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement);
     const attributeColumns = jsonHandler.renderTitles(response.definition, 'rows', response.data.headers, onElement);
     if (!attributeColumns.length) {
       columns = metricColumns[metricColumns.length - 1];
+    } else if (isFalsyCrosstab) {
+      columns = [...attributeColumns[attributeColumns.length - 1], ...metricColumns[metricColumns.length - 1], []];
     } else {
       columns = [...attributeColumns[attributeColumns.length - 1], ...metricColumns[metricColumns.length - 1]];
     } // we return only columns attributes if there is no attributes in rows

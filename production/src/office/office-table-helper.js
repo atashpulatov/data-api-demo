@@ -253,7 +253,7 @@ class OfficeTableHelper {
       return officeApiHelper.getCrosstabRange(tableStartCell, crosstabHeaderDimensions, sheet);
     }
     return sheet.getRange(tableRange);
-  }
+  };
 
   /**
    * Create column and title headers for crosstab
