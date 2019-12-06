@@ -7,42 +7,6 @@ import { reduxStore } from '../../store';
 /* global Office */
 
 class OfficeStoreService {
-  addObjectToStore = ({
-    isRefresh,
-    instanceDefinition,
-    bindingId,
-    projectId,
-    envUrl,
-    body,
-    objectType,
-    isCrosstab,
-    isPrompted,
-    promptsAnswers,
-    subtotalInfo,
-    visualizationInfo,
-    objectId
-  }) => {
-    const { mstrTable, manipulationsXML } = instanceDefinition;
-    const report = {
-      id: objectId,
-      name: mstrTable.name,
-      bindId: bindingId,
-      projectId,
-      envUrl,
-      body,
-      isLoading: false,
-      objectType,
-      isPrompted,
-      isCrosstab,
-      subtotalInfo,
-      promptsAnswers,
-      crosstabHeaderDimensions: mstrTable.crosstabHeaderDimensions,
-      visualizationInfo,
-      manipulationsXML,
-    };
-    this.saveAndPreserveReportInStore(report, isRefresh);
-  }
-
   preserveReport = (report) => {
     try {
       const settings = this.getOfficeSettings();

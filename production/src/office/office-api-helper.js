@@ -115,20 +115,6 @@ class OfficeApiHelper {
     ]);
   }
 
-  /**
-     * Gets range of subtotal row based on subtotal cell
-     *
-     * @param {Office} object
-     * @param {Office} officeContext office context
-     * @param {Object} t i18n translating function
-     * @memberof OfficeApiHelper
-     */
-  removeObjectAndDisplaytNotification = (object, officeContext, t) => {
-    const { name } = object;
-    this.removeObjectNotExistingInExcel(object, officeContext);
-    const message = t('{{name}} has been removed from the workbook.', { name });
-    notificationService.displayTranslatedNotification({ type: 'success', content: message });
-  }
 
   getBindingRange = (context, bindingId) => context.workbook.bindings
     .getItem(bindingId).getTable()
@@ -196,6 +182,39 @@ class OfficeApiHelper {
     });
   })
 
+    /**
+     * Gets range of subtotal row based on subtotal cell
+     *
+     * @param {Office} object
+     * @param {Office} officeContext office context
+     * @param {Object} t i18n translating function
+     * @memberof OfficeApiHelper
+     */
+    removeObjectAndDisplaytNotification = (object, officeContext, t) => {
+      const { name } = object;
+      this.removeObjectNotExistingInExcel(object, officeContext);
+      const message = t('{{name}} has been removed from the workbook.', { name });
+      notificationService.displayTranslatedNotification({ type: 'success', content: message });
+    }
+
+    removeReportFromExcel = async (bindingId, isCrosstab, crosstabHeaderDimensions) => {
+      try {
+        await authenticationHelper.validateAuthToken();
+        const officeContext = await this.getOfficeContext();
+        await officeContext.document.bindings.releaseByIdAsync(bindingId, () => { console.log('released binding'); });
+        const excelContext = await this.getExcelContext();
+        const tableObject = excelContext.workbook.tables.getItem(bindingId);
+        this.deleteExcelTable(tableObject, excelContext, isCrosstab, crosstabHeaderDimensions);
+        await excelContext.sync();
+        return officeStoreService.removeReportFromStore(bindingId);
+      } catch (error) {
+        if (error.code === 'ItemNotFound') {
+          return officeStoreService.removeReportFromStore(bindingId);
+        }
+        return errorService.handleError(error);
+      }
+    };
+
   /**
    * Get object from store based on bindingId and remove it from workbook
    *
@@ -240,20 +259,20 @@ class OfficeApiHelper {
   }
 
   /**
-      * Returns current excel sheet
-      *
-      * @param {Office} excelContext Excel context
-      * @memberof OfficeApiHelper
-      */
+    * Returns current excel sheet
+    *
+    * @param {Office} excelContext Excel context
+    * @memberof OfficeApiHelper
+  */
   getCurrentExcelSheet = (excelContext) => excelContext.workbook.worksheets.getActiveWorksheet()
 
   /**
-      * Returns true if specific worksheet is protected
-      *
-      * @param {Office} excelContext Excel context
-      * @param {Office} sheet Excel Sheet
-      * @memberof OfficeApiHelper
-      */
+    * Returns true if specific worksheet is protected
+    *
+    * @param {Office} excelContext Excel context
+    * @param {Office} sheet Excel Sheet
+    * @memberof OfficeApiHelper
+  */
   isSheetProtected = async (excelContext, sheet) => {
     sheet.load('protection/protected');
     await excelContext.sync();
@@ -261,12 +280,12 @@ class OfficeApiHelper {
   }
 
   /**
-      * Returns true if specific worksheet is protected
-      *
-      * @param {Office} excelContext Excel context
-      * @param {Array} reportArray array of Mstr Tables
-      * @memberof OfficeApiHelper
-      */
+    * Returns true if specific worksheet is protected
+    *
+    * @param {Office} excelContext Excel context
+    * @param {Array} reportArray array of Mstr Tables
+    * @memberof OfficeApiHelper
+  */
   checkIfAnySheetProtected = async (excelContext, reportArray) => {
     for (const report of reportArray) {
       const sheet = await this.getExcelSheetFromTable(excelContext, report.bindId);
@@ -376,6 +395,7 @@ class OfficeApiHelper {
     for (let i = 0; i <= limit; i++) {
       try {
         table.getRange()[getFunction](i + 1);
+        // eslint-disable-next-line no-await-in-loop
         await context.sync();
       } catch (error) {
         return i;
@@ -531,7 +551,11 @@ class OfficeApiHelper {
     context.trackedObjects.add(tableRange);
     if (isCrosstab) {
       const { rowsX, rowsY, columnsX, columnsY } = crosstabHeaderDimensions;
+      this.clearEmptyCrosstabRow(tableObject); // Since showing Excel table header dont override the data but insert new row, we clear values from empty row in crosstab to prevent it
+      tableObject.showHeaders = true;
+      await context.sync();
       const crosstabRange = await this.getCrosstabRangeSafely(tableObject, crosstabHeaderDimensions, context);
+
       const firstCell = crosstabRange.getCell(0, 0);
       const columnsHeaders = firstCell.getOffsetRange(0, rowsX).getResizedRange(columnsY - 1, columnsX - 1);
       const rowsHeaders = firstCell.getResizedRange((columnsY + rowsY), rowsX - 1);
@@ -612,7 +636,7 @@ class OfficeApiHelper {
    * @memberof OfficeApiHelper
    */
   clearEmptyCrosstabRow = (officeTable) => {
-    const headerRange = officeTable.getRange().getRow(0).getOffsetRange(-1, 0);
+    const headerRange = officeTable.getDataBodyRange().getRow(0).getOffsetRange(-1, 0);
     headerRange.clear('Contents');
   }
 }
