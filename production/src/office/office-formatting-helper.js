@@ -23,8 +23,10 @@ class OfficeFormattingHelper {
       } else {
         filteredColumnInformation = columnInformation;
       }
+      console.log(filteredColumnInformation);
       const offset = columnInformation.length - filteredColumnInformation.length;
       for (const object of filteredColumnInformation) {
+        console.log('Object ', object);
         if (Object.keys(object).length) { // Skips iteration if object is empty
           const columnRange = columns.getItemAt(object.index - offset).getDataBodyRange();
           let format = '';
@@ -40,8 +42,9 @@ class OfficeFormattingHelper {
               // for fractions set General format
               if (object.formatString.match(/# \?+?\/\?+?/)) format = 'General';
             }
+            console.log('FORMAT ', format);
+            columnRange.numberFormat = format;
           }
-          columnRange.numberFormat = format;
         }
       }
 
@@ -66,13 +69,43 @@ class OfficeFormattingHelper {
   applyFalsyCrosstabFormatting = async (officeTable, instanceDefinition, excelContex, responseBody) => {
     try {
       console.time('Apply formatting');
-      const { columnInformation } = instanceDefinition.mstrTable;
-      let filteredColumnInformation;
+      const metricsIndex = responseBody.definition.grid.metricsPosition.index;
+      const metricsArray = responseBody.definition.grid.rows[metricsIndex].elements;
+      // indexArray -> array in form [ 0, 0, 1, 0] which contain indexes of elements in rows
+      const indexArray = responseBody.data.headers.rows;
+      const startRow = responseBody.data.paging.offset;
       const { columns } = officeTable;
-
-      console.log('Response Body', responseBody);
+      const columnRange = columns.getItemAt(indexArray.length).getDataBodyRange();
+      for (let i = 0, j = startRow; i < 1; i++, j++) {
+        const row = columnRange.getRow(j);
+        const object = metricsArray[indexArray[i][metricsIndex]].numberFormatting;
+        let format = '';
+        if (!object.isAttribute) {
+          if (object.category === 9) {
+            format = this.getNumberFormattingCategoryName(object);
+          } else {
+            format = object.formatString;
+            if (format.indexOf('$') !== -1) {
+              // Normalizing formatString from MicroStrategy when locale codes are used [$-\d+]
+              format = format.replace(/\[\$-/g, '[$$$$-')
+                .replace(/\$/g, '\\$')
+                .replace(/\\\$\\\$/g, '$')
+                .replace(/"/g, '');
+            }
+            // for fractions set General format
+            if (object.formatString.match(/# \?+?\/\?+?/)) format = 'General';
+          }
+        }
+        // row.numberFormat = format;
+        row.load('address');
+        await excelContex.sync();
+        console.log(row.address);
+      }
+      console.log('HERE');
+      await excelContex.sync();
     } catch (error) {
       console.log('Cannot apply formatting, skipping');
+      console.error(error);
       throw errorService.handleError(error);
     } finally {
       console.timeEnd('Apply formatting');
@@ -145,11 +178,18 @@ class OfficeFormattingHelper {
    * @return {Office} Range of subtotal row
    */
   getSubtotalRange = (startCell, cell, mstrTable) => {
-    const { headers } = mstrTable;
+    const { headers, isCrosstab } = mstrTable;
     const { axis } = cell;
     let offsets = {};
 
-    if (axis === 'rows') {
+    if (!isCrosstab) {
+      offsets = {
+        verticalFirstCell: cell.rowIndex + 1,
+        horizontalFirstCell: cell.attributeIndex,
+        verticalLastCell: cell.rowIndex + 1,
+        horizontalLastCell: mstrTable.tableSize.columns - 1,
+      };
+    } else if (axis === 'rows') {
       offsets = {
         verticalFirstCell: cell.colIndex,
         horizontalFirstCell: -(headers.rows[0].length - cell.attributeIndex),
@@ -162,13 +202,6 @@ class OfficeFormattingHelper {
         horizontalFirstCell: cell.colIndex,
         verticalLastCell: mstrTable.tableSize.rows,
         horizontalLastCell: cell.colIndex,
-      };
-    } else { // if not a crosstab
-      offsets = {
-        verticalFirstCell: cell.rowIndex + 1,
-        horizontalFirstCell: cell.attributeIndex,
-        verticalLastCell: cell.rowIndex + 1,
-        horizontalLastCell: mstrTable.tableSize.columns - 1,
       };
     }
     const firstSubtotalCell = startCell.getOffsetRange(offsets.verticalFirstCell, offsets.horizontalFirstCell);
