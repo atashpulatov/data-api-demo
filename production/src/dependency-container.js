@@ -60,7 +60,6 @@ export class DIContainer {
   }
 
   initilizeSingle = (ClassToInitialize, dependencies) => {
-    console.log(ClassToInitialize);
     this[ClassToInitialize.constructor.name] = new ClassToInitialize();
     this[ClassToInitialize.constructor.name].init(...dependencies);
     return this[ClassToInitialize.constructor.name];
