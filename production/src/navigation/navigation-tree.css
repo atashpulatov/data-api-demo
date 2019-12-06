@@ -28,6 +28,10 @@
   margin-left: 2px;
 }
 
+.navigation_tree__main_wrapper .ReactVirtualized__Table {
+  border-top: none;
+}
+
 .top-filter-panel {
   float: right;
   line-height: 1;
