@@ -17,16 +17,21 @@ const InternetConnectionError = ({ t }) => {
 
   const renderOfflineMessage = () => (status ? null : (
     <div className="overlay">
-      <div className="dialog">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-describedby="description"
+        aria-labelledby="title"
+        className="dialog">
         <div className="row">
           <div className="column icon">
             <Icon type="warning" theme="filled" style={{ color: '#faad14', fontSize:'18px' }} />
           </div>
           <div className="column infoText">
-            <div className="row" style={{ fontWeight:500 }}>
+            <div id="title" className="row" style={{ fontWeight:500 }}>
               {t('The internet connection appears to be offline.')}
             </div>
-            <div className="row">
+            <div id="description" className="row">
               {t('Please check your internet connection.')}
             </div>
           </div>
