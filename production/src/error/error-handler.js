@@ -9,14 +9,6 @@ import {
 const TIMEOUT = 2000;
 
 export class ErrorService {
-  constructor() {
-    if (ErrorService.instance) {
-      return ErrorService.instance;
-    }
-    ErrorService.instance = this;
-    return this;
-  }
-
   init = (sessionHelper, notificationService) => {
     this.sessionHelper = sessionHelper;
     this.notificationService = notificationService;

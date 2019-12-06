@@ -9,13 +9,6 @@ export const SET_PREPARED_REPORT = 'SET_PREPARED_REPORT';
 // export const PRELOAD = 'PRELOAD';
 
 export class PopupActions {
-  constructor() {
-    if (PopupActions.instance) {
-      return PopupActions.instance;
-    }
-    PopupActions.instance = this;
-    return this;
-  }
 
   init = (authenticationHelper,errorService, officeApiHelper, officeStoreService, popupHelper, mstrObjectRestService, popupController) => {
     this.authenticationHelper = authenticationHelper;

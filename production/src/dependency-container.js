@@ -1,61 +1,61 @@
 /* eslint-disable */
 import {reduxStore} from './store';
-import {OfficeApiHelper} from './office/office-api-helper';
-import {OfficeStoreService} from './office/store/office-store-service';
-import {ErrorService} from './error/error-handler';
-import {SessionHelper} from './storage/session-helper';
-import {NotificationService} from './notification/notification-service';
-import {AuthenticationHelper} from './authentication/authentication-helper';
-import {HomeHelper} from './home/home-helper';
-import {MstrObjectRestService} from './mstr-object/mstr-object-rest-service';
-import {PopupController} from './popup/popup-controller';
-import {OfficeDisplayService} from './office/office-display-service';
-import {MstrListRestService} from './mstr-object/mstr-list-rest-service';
-import {PopupHelper} from './popup/popup-helper';
-import {PopupActions, popupActions} from './popup/popup-actions';
+import {officeApiHelper, OfficeApiHelper} from './office/office-api-helper';
+import {officeStoreService} from './office/store/office-store-service';
+import {errorService} from './error/error-handler';
+import {sessionHelper} from './storage/session-helper';
+import {notificationService} from './notification/notification-service';
+import {authenticationHelper} from './authentication/authentication-helper';
+import {homeHelper} from './home/home-helper';
+import {mstrObjectRestService} from './mstr-object/mstr-object-rest-service';
+import {popupController} from './popup/popup-controller';
+import {officeDisplayService} from './office/office-display-service';
+import {mstrListRestService} from './mstr-object/mstr-list-rest-service';
+import {popupHelper} from './popup/popup-helper';
+import {popupActions} from './popup/popup-actions';
 import {actionCreator} from './notification/action-creator';
-
-const EXCEL_XTABS_BORDER_COLOR = '#a5a5a5';
 
 export class DIContainer {
   constructor(autoInitialize) {
-    if (DIContainer.instance) {
-      return DIContainer.instance;
-    }
-    if (autoInitialize) this.initializeAll('inside constructor');
-    DIContainer.instance = this;
-    return this;
+    if (autoInitialize) this.initializeAll();
   }
 
-  initializeAll = (context) => {
+  initializeAll = () => {
     console.log('________INITIALIZING________');
-    console.log(context);
-    this.officeApiHelper = new OfficeApiHelper(EXCEL_XTABS_BORDER_COLOR);
+    console.log('________DI CONTAINER________');
+    this.officeApiHelper = officeApiHelper;
     this.officeApiHelper.init(reduxStore);
-    this.officeStoreService = new OfficeStoreService();
+    this.officeStoreService = officeStoreService;
     this.officeStoreService.init(reduxStore);
-    this.notificationService = new NotificationService();
+    this.notificationService = notificationService;
     this.notificationService.init(reduxStore, actionCreator);
-    this.sessionHelper = new SessionHelper();
+    this.sessionHelper = sessionHelper;
     this.sessionHelper.init(reduxStore);
-    this.errorHandler = new ErrorService();
+    this.errorHandler = errorService;
     this.errorHandler.init(this.sessionHelper, this.notificationService);
-    this.authenticationHelper = new AuthenticationHelper();
+    this.authenticationHelper = authenticationHelper;
     this.authenticationHelper.init(reduxStore, this.sessionHelper);
-    this.homeHelper = new HomeHelper();
+    this.homeHelper = homeHelper;
     this.homeHelper.init(reduxStore, this.sessionHelper);
-    this.mstrObjectRestService = new MstrObjectRestService();
+    this.mstrObjectRestService = mstrObjectRestService
     this.mstrObjectRestService.init(reduxStore);
-    this.popupController = new PopupController();
+    this.popupController = popupController;
     this.popupController.init(reduxStore, this.sessionHelper, popupActions);
-    this.officeDisplayService = new OfficeDisplayService();
+    this.officeDisplayService = officeDisplayService;
     this.officeDisplayService.init(reduxStore, this.popupController);
-    this.mstrListRestService = new MstrListRestService();
+    this.mstrListRestService = mstrListRestService;
     this.mstrListRestService.init(reduxStore);
-    this.popupHelper = new PopupHelper();
+    this.popupHelper = popupHelper;
     this.popupHelper.init(this.popupController);
-    this.popupActions = new PopupActions();
-    this.popupActions.init(this.authenticationHelper,this.errorHandler,this.officeApiHelper,this.officeStoreService,this.popupHelper,this.mstrObjectRestService,this.popupController);
+    this.popupActions = popupActions;
+    this.popupActions.init(
+      this.authenticationHelper,
+      this.errorHandler,
+      this.officeApiHelper,
+      this.officeStoreService,
+      this.popupHelper,
+      this.mstrObjectRestService,
+      this.popupController);
     this.initialized = true;
   }
 

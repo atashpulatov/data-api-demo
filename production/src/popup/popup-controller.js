@@ -22,11 +22,6 @@ const URL = `${window.location.href}`;
 export class PopupController {
   constructor(excelXtabsBorderColor) {
     this.EXCEL_XTABS_BORDER_COLOR = excelXtabsBorderColor;
-    if (PopupController.instance) {
-      return PopupController.instance;
-    }
-    PopupController.instance = this;
-    return this;
   }
 
   init = (reduxStore, sessionHelper, popupAction) => {

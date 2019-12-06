@@ -33,13 +33,6 @@ const {
 } = mstrObjectRestService;
 
 export class OfficeDisplayService {
-  constructor() {
-    if (OfficeDisplayService.instance) {
-      return OfficeDisplayService.instance;
-    }
-    OfficeDisplayService.instance = this;
-    return this;
-  }
 
   init = (reduxStore, popupController) => {
     this.reduxStore = reduxStore;

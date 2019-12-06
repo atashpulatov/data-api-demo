@@ -1,11 +1,4 @@
 export class HomeHelper {
-  constructor() {
-    if (HomeHelper.instance) {
-      return HomeHelper.instance;
-    }
-    HomeHelper.instance = this;
-    return this;
-  }
 
   init = (reduxStore, sessionHelper) => {
     this.reduxStore = reduxStore;

@@ -19,16 +19,13 @@ const EXCEL_TABLE_NAME = 'table';
 const EXCEL_ROW_LIMIT = 1048576;
 const EXCEL_COL_LIMIT = 16384;
 
+const EXCEL_XTABS_BORDER_COLOR = '#a5a5a5';
+
 const {OfficeExtension} = window;
 
 export class OfficeApiHelper {
-  constructor(excelXtabsBorderColor) {
-    this.EXCEL_XTABS_BORDER_COLOR = excelXtabsBorderColor;
-    if (OfficeApiHelper.instance) {
-      return OfficeApiHelper.instance;
-    }
-    OfficeApiHelper.instance = this;
-    return this;
+  constructor() {
+    this.EXCEL_XTABS_BORDER_COLOR = EXCEL_XTABS_BORDER_COLOR;
   }
 
   init = (reduxStore) => {

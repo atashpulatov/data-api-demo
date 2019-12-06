@@ -2,13 +2,6 @@ import { authenticationService } from './auth-rest-service';
 import { errorService } from '../error/error-handler';
 
 export class AuthenticationHelper {
-  constructor() {
-    if (AuthenticationHelper.instance) {
-      return AuthenticationHelper.instance;
-    }
-    AuthenticationHelper.instance = this;
-    return this;
-  }
 
   init = (reduxStore, sessionHelper) => {
     this.reduxStore = reduxStore;

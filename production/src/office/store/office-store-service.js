@@ -5,13 +5,6 @@ import { errorService } from '../../error/error-handler';
 /* global Office */
 
 export class OfficeStoreService {
-  constructor() {
-    if (OfficeStoreService.instance) {
-      return OfficeStoreService.instance;
-    }
-    OfficeStoreService.instance = this;
-    return this;
-  }
 
   init = (reduxStore) => {
     this.reduxStore = reduxStore;

@@ -7,13 +7,6 @@ import { createCache } from '../cache/cache-actions';
 import DB from '../cache/pouch-db';
 
 export class SessionHelper {
-  constructor() {
-    if (SessionHelper.instance) {
-      return SessionHelper.instance;
-    }
-    SessionHelper.instance = this;
-    return this;
-  }
 
   init = (reduxStore) => {
     this.reduxStore = reduxStore;

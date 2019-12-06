@@ -1,12 +1,5 @@
 
 export class NotificationService {
-  constructor() {
-    if (NotificationService.instance) {
-      return NotificationService.instance;
-    }
-    NotificationService.instance = this;
-    return this;
-  }
 
   init = (reduxStore, actionCreator) => {
     this.reduxStore = reduxStore;

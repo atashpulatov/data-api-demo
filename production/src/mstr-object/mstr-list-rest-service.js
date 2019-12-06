@@ -9,14 +9,6 @@ const DOSSIER_SUBTYPE = 14081;
 const SUBTYPES = [768, 769, 774, 776, 779, DOSSIER_SUBTYPE];
 
 export class MstrListRestService {
-  constructor() {
-    if (MstrListRestService.instance) {
-      return MstrListRestService.instance;
-    }
-    MstrListRestService.instance = this;
-    return this;
-  }
-
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
   }
@@ -41,7 +33,7 @@ export class MstrListRestService {
    * @returns {Array}
    */
   filterDossier = (body) => {
-    const {result} = body;
+    const { result } = body;
     return result.filter(this.filterFunction);
   }
 
@@ -51,9 +43,7 @@ export class MstrListRestService {
    * @param {*} body
    * @returns
    */
-  processTotalItems = (body) => {
-    return body.totalItems;
-  }
+  processTotalItems = (body) => body.totalItems
 
   /**
    * Creates the request parameters from redux state
@@ -61,10 +51,10 @@ export class MstrListRestService {
    * @returns
    */
   getRequestParams = () => {
-    const {sessionReducer} = this.reduxStore.getState();
-    const {envUrl, authToken} = sessionReducer;
+    const { sessionReducer } = this.reduxStore.getState();
+    const { envUrl, authToken } = sessionReducer;
     const typeQuery = SUBTYPES.join('&type=');
-    return {envUrl, authToken, typeQuery};
+    return { envUrl, authToken, typeQuery };
   }
 
   /**
@@ -73,12 +63,12 @@ export class MstrListRestService {
    * @param {Object} { limit = 1, callback = processTotalItems, requestParams }
    * @returns {Array} [totalItems, Promise]
    */
-  fetchTotalItems = ({limit = LIMIT, callback = (res) => res, requestParams}) => {
+  fetchTotalItems = ({ limit = LIMIT, callback = (res) => res, requestParams }) => {
     const totalItemsCallback = (body) => {
       callback(this.filterDossier(body));
       return this.processTotalItems(body);
     };
-    return this.fetchObjectList({limit, callback: totalItemsCallback, requestParams});
+    return this.fetchObjectList({ limit, callback: totalItemsCallback, requestParams });
   }
 
   /**
@@ -86,10 +76,8 @@ export class MstrListRestService {
    *
    * @returns {Object} {ProjetId: projectName}
    */
-  getProjectDictionary = () => {
-    return this.fetchProjects()
-      .then((projects) => projects.reduce((dict, project) => ({...dict, [project.id]: project.name || ''}), {}));
-  }
+  getProjectDictionary = () => this.fetchProjects()
+      .then((projects) => projects.reduce((dict, project) => ({...dict, [project.id]: project.name || ''}), {}))
 
   /**
    * Uses request with limit of 1 to check for total number of objects of given subtypes and then
@@ -101,13 +89,13 @@ export class MstrListRestService {
   fetchObjectListPagination = async (callback) => {
     const requestParams = this.getRequestParams();
     console.time('Fetching first batch of objects');
-    const total = await this.fetchTotalItems({requestParams, callback, limit: 1000});
+    const total = await this.fetchTotalItems({ requestParams, callback, limit: 1000 });
     console.timeEnd('Fetching first batch of objects');
     const promiseList = [];
     let offset = 1000;
     console.time('Fetching environment objects');
     while (offset <= total) {
-      const promise = this.fetchObjectList({requestParams, offset});
+      const promise = this.fetchObjectList({ requestParams, offset });
       promiseList.push(promise);
       const results = await promise;
       callback(results);
@@ -131,8 +119,8 @@ export class MstrListRestService {
    * @param {number} limit - Number of objects to be fetched per request
    * @returns
    */
-  fetchObjectList = ({requestParams, callback = this.filterDossier, offset = 0, limit = LIMIT}) => {
-    const {envUrl, authToken, typeQuery} = requestParams;
+  fetchObjectList = ({ requestParams, callback = this.filterDossier, offset = 0, limit = LIMIT }) => {
+    const { envUrl, authToken, typeQuery } = requestParams;
     const url = `${envUrl}/${SEARCH_ENDPOINT}?limit=${limit}&offset=${offset}&type=${typeQuery}`;
     return request
       .get(url)
@@ -147,7 +135,7 @@ export class MstrListRestService {
    *
    */
   fetchMyLibraryObjectList = (callback = (res) => res) => {
-    const {envUrl, authToken} = this.getRequestParams();
+    const { envUrl, authToken } = this.getRequestParams();
     const url = `${envUrl}/${MY_LIBRARY_ENDPOINT}?outputFlag=FILTER_TOC`;
     return request
       .get(url)
@@ -164,7 +152,7 @@ export class MstrListRestService {
    * @returns
    */
   fetchProjects = (callback = (res) => res) => {
-    const {envUrl, authToken} = this.getRequestParams();
+    const { envUrl, authToken } = this.getRequestParams();
     const url = `${envUrl}/${PROJECTS_ENDPOINT}`;
     return request
       .get(url)
@@ -191,9 +179,7 @@ export class MstrListRestService {
    * @export
    * @class getObjectList
    */
-  getObjectList = (callback) => {
-    return this.fetchObjectListPagination(callback);
-  }
+  getObjectList = (callback) => this.fetchObjectListPagination(callback)
 }
 
 export const mstrListRestService = new MstrListRestService();
