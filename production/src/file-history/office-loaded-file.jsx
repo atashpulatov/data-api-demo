@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { MSTRIcon } from '@mstr/mstr-react-library';
 import { withTranslation } from 'react-i18next';
 import { Dropdown, Menu } from 'antd';
+import PropTypes from 'prop-types';
 import { fileHistoryHelper } from './file-history-helper';
 import loadingSpinner from './assets/report_loading_spinner.gif';
 import {
@@ -22,7 +23,6 @@ import { officeStoreService } from '../office/store/office-store-service';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { startLoading, stopLoading } from '../navigation/navigation-tree-actions';
 import { errorService } from '../error/error-handler';
-import { ProtectedSheetError } from '../error/protected-sheets-error';
 
 
 export class _OfficeLoadedFile extends React.Component {
@@ -37,11 +37,11 @@ export class _OfficeLoadedFile extends React.Component {
   }
 
   componentDidMount() {
-    this._ismounted = true;
+    this.ismounted = true;
   }
 
   componentWillUnmount() {
-    this._ismounted = false;
+    this.ismounted = false;
   }
 
   renameReport = /* istanbul ignore next */ async ({ target }) => {
@@ -122,7 +122,7 @@ export class _OfficeLoadedFile extends React.Component {
             isCrosstab,
             crosstabHeaderDimensions,
             message);
-          if (this._ismounted) this.setState({ allowDeleteClick: true, allowRefreshClick: true });
+          if (this.ismounted) this.setState({ allowDeleteClick: true, allowRefreshClick: true });
           stopLoading();
         } catch (error) {
           errorService.handleError(error);
@@ -164,7 +164,7 @@ export class _OfficeLoadedFile extends React.Component {
 
   editAction = (e) => {
     const { allowRefreshClick } = this.state;
-    const { isLoading, bindingId, objectType, callForEdit, fileName, loading, startLoading, stopLoading, callForEditDossier, t } = this.props;
+    const { isLoading, bindingId, objectType, callForEdit, fileName, loading, startLoading, stopLoading, callForEditDossier } = this.props;
     if (e) e.stopPropagation();
     if (!allowRefreshClick || loading) {
       return;
@@ -194,7 +194,7 @@ export class _OfficeLoadedFile extends React.Component {
 
   refreshAction = (e) => {
     if (e) e.stopPropagation();
-    const { isLoading, bindingId, objectType, refreshReportsArray, loading, fileName, startLoading, stopLoading, t } = this.props;
+    const { isLoading, bindingId, objectType, refreshReportsArray, loading, fileName, startLoading, stopLoading } = this.props;
     const { allowRefreshClick } = this.state;
     if (!allowRefreshClick || loading) {
       return;
@@ -273,7 +273,7 @@ export class _OfficeLoadedFile extends React.Component {
         >
           {!!isPrompted && (
             <span
-              aria-title="Reprompt button"
+              aria-label="Reprompt button"
               role="button"
               tabIndex="0"
               className="loading-button-container"
@@ -290,7 +290,7 @@ export class _OfficeLoadedFile extends React.Component {
           mouseEnterDelay={1}
         >
           <span
-              aria-title="Edit button"
+              aria-label="Edit button"
               role="button"
               tabIndex="0"
               className="loading-button-container"
@@ -306,7 +306,7 @@ export class _OfficeLoadedFile extends React.Component {
           mouseEnterDelay={1}
         >
           <span
-              aria-title="Refresh button"
+              aria-label="Refresh button"
               role="button"
               tabIndex="0"
               className="loading-button-container"
@@ -332,7 +332,7 @@ export class _OfficeLoadedFile extends React.Component {
           arrowPointAtCenter="true"
         >
           <span
-            aria-title="Delete button"
+            aria-label="Delete button"
             role="button"
             tabIndex="0"
             onClick={this.deleteAction}
@@ -433,6 +433,28 @@ const mapDispatchToProps = {
   callForEditDossier,
   startLoading,
   stopLoading
+};
+
+_OfficeLoadedFile.propTypes = {
+  fileName: PropTypes.string,
+  bindingId: PropTypes.string,
+  objectType: PropTypes.shape({}),
+  loading: PropTypes.bool,
+  isLoading: PropTypes.bool,
+  isCrosstab: PropTypes.bool,
+  visualizationInfo: PropTypes.bool,
+  crosstabHeaderDimensions: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.bool]),
+  isPrompted: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
+  refreshDate: PropTypes.instanceOf(Date),
+  startLoading: PropTypes.func,
+  stopLoading: PropTypes.func,
+  callForReprompt: PropTypes.func,
+  refreshReportsArray: PropTypes.func,
+  t: PropTypes.func,
+  onDelete: PropTypes.func,
+  callForEdit: PropTypes.func,
+  callForEditDossier: PropTypes.func,
+  onClick: PropTypes.func
 };
 
 export const OfficeLoadedFile = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_OfficeLoadedFile));

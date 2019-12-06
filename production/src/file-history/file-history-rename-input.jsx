@@ -4,7 +4,7 @@ import { withTranslation } from 'react-i18next';
 
 export class _RenameInput extends React.Component {
   getNameContainer(editable, bindingId, fileName, value) {
-    const { handleChange, renameReport } = this.props;
+    const { renameReport } = this.props;
     if (editable) {
       return (
         <Input
