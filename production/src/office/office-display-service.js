@@ -106,7 +106,7 @@ class OfficeDisplayService {
       ({ officeTable, newOfficeTableId, shouldFormat, tableColumnsChanged } = await officeTableHelper.getOfficeTable(isRefresh, excelContext, bindingId, instanceDefinition, startCell));
 
       // Apply formatting when table was created
-      if (shouldFormat) {
+      if (shouldFormat && !mstrTable.isFalsyCrosstab) {
         await officeFormattingHelper.applyFormatting(officeTable, instanceDefinition, isCrosstab, excelContext);
       }
 
@@ -309,7 +309,11 @@ class OfficeDisplayService {
       const subtotalsAddresses = [];
       console.time('Fetch data');
       // eslint-disable-next-line no-restricted-syntax, no-unused-vars
-      for await (const { row, header, subtotalAddress } of rowGenerator) {
+      for await (const { row, header, subtotalAddress, responseBody } of rowGenerator) {
+        if (mstrTable.isFalsyCrosstab) {
+          await officeFormattingHelper
+            .applyFalsyCrosstabFormatting(officeTable, instanceDefinition, excelContext, responseBody);
+        }
         console.groupCollapsed(`Importing rows: ${rowIndex} to ${Math.min(rowIndex + limit, rows)}`);
         console.timeEnd('Fetch data');
         excelContext.workbook.application.suspendApiCalculationUntilNextSync();

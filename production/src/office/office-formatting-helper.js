@@ -52,7 +52,32 @@ class OfficeFormattingHelper {
     } finally {
       console.timeEnd('Apply formatting');
     }
-  }
+  };
+
+  /**
+   * Applies Excel number formatting to imported Falsy Crosstab object based on MSTR data type.
+   *
+   * @param {Office} officeTable
+   * @param {Object} instanceDefinition
+   * @param {Office} excelContext
+   * @param {Object} responseBody
+   * @memberof OfficeFormattingHelper
+   */
+  applyFalsyCrosstabFormatting = async (officeTable, instanceDefinition, excelContex, responseBody) => {
+    try {
+      console.time('Apply formatting');
+      const { columnInformation } = instanceDefinition.mstrTable;
+      let filteredColumnInformation;
+      const { columns } = officeTable;
+
+      console.log('Response Body', responseBody);
+    } catch (error) {
+      console.log('Cannot apply formatting, skipping');
+      throw errorService.handleError(error);
+    } finally {
+      console.timeEnd('Apply formatting');
+    }
+  };
 
   /**
    * Return Excel number formatting based on MSTR data type
