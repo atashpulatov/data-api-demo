@@ -36,6 +36,7 @@ when 'redhat', 'centos', 'fedora', 'amazon'
 
 when 'mac_os_x'
   include_recipe 'java-osx'
+  include_recipe 'docker'
 else
 
 
