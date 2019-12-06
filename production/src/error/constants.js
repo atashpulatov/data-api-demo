@@ -18,7 +18,6 @@ export const errorTypes = {
   TABLE_REMOVED_FROM_EXCEL_ERR: 'tableRemovedFromExcel',
   GENERIC_OFFICE_ERR: 'genericOffice',
   PROTECTED_SHEET_ERR: 'protectedSheet',
-  CONNECTION_LOST_ERR:'connectionLost',
 };
 
 export const incomingErrorStrings = {
@@ -66,7 +65,6 @@ export const UNKNOWN_ERROR = 'Unknown error';
 export const LOGIN_FAILURE = 'Login failure';
 export const OBJ_REMOVED_FROM_EXCEL = 'This object does not exist in the workbook anymore.';
 export const PROTECTED_SHEET = 'The table you are trying to manipulate is in a protected sheet. To make a change, unprotect the sheet. You might be requested to enter a password.';
-export const CONNECTION_LOST = 'The Internet connection appears to be offline';
 
 // temporarily we map all those codes to one message; may be changed in the future
 const iServerErrorMessages = withDefaultValue({
@@ -111,6 +109,5 @@ export const errorMessageFactory = withDefaultValue({
   [errorTypes.TABLE_REMOVED_FROM_EXCEL_ERR]: ({ reportName }) => `${reportName} does not exist in the workbook anymore.`,
   [errorTypes.GENERIC_OFFICE_ERR]: ({ error }) => `Excel returned error: ${error.message}`,
   [errorTypes.PROTECTED_SHEET_ERR]: () => PROTECTED_SHEET,
-  [errorTypes.CONNECTION_LOST_ERR]: () => CONNECTION_LOST,
 },
 ({ error }) => error.message || UNKNOWN_ERROR);
