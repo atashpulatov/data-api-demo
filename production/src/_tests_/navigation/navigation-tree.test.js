@@ -9,7 +9,11 @@ import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { DEFAULT_STATE as CACHE_STATE } from '../../cache/cache-reducer';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 
-jest.mock('../../authentication/authentication-helper');
+jest.mock('../../authentication/authentication-helper', () => ({
+  authenticationHelper: {
+    validateAuthToken: jest.fn().mockImplementation(() => Promise.resolve('Magic'))
+  }
+}));
 
 describe('NavigationTree', () => {
   afterAll(() => {
@@ -184,7 +188,7 @@ describe('NavigationTree', () => {
     const givenProjectId = 'projectId';
     const givenSubtype = mstrObjectEnum.mstrObjectType.report.subtypes[0];
     const givenObjectName = 'objectName';
-    const givenTarget = {};
+    const givenTargetId = null;
     const givenMyLibrary = false;
     const mockSelectObject = jest.fn();
 
@@ -193,7 +197,7 @@ describe('NavigationTree', () => {
       selectObject={mockSelectObject}
     />);
     // when
-    wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype, givenObjectName, givenTarget, givenMyLibrary);
+    wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype, givenObjectName, givenTargetId, givenMyLibrary);
     // then
     const expectedObject = {
       chosenObjectId: givenObjectId,
@@ -212,7 +216,7 @@ describe('NavigationTree', () => {
     const givenProjectId = 'projectId';
     const givenSubtype = mstrObjectEnum.mstrObjectType.dossier.subtypes[0];
     const givenObjectName = 'objectName';
-    const givenTarget = { id: 'LibraryObjectId' };
+    const givenTargetId = 'LibraryObjectId';
     const givenMyLibrary = true;
     const mockSelectObject = jest.fn();
 
@@ -221,10 +225,10 @@ describe('NavigationTree', () => {
       selectObject={mockSelectObject}
     />);
     // when
-    wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype, givenObjectName, givenTarget, givenMyLibrary);
+    wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype, givenObjectName, givenTargetId, givenMyLibrary);
     // then
     const expectedObject = {
-      chosenObjectId: givenTarget.id,
+      chosenObjectId: givenTargetId,
       chosenObjectName: givenObjectName,
       chosenProjectId: givenProjectId,
       chosenSubtype: givenSubtype,
@@ -342,6 +346,16 @@ describe('NavigationTree', () => {
     />);
     // then
     expect(connectToDB).toHaveBeenCalled();
+  });
+
+  it('should not send error and call functionality properly', async () => {
+    // given
+    const mockHandlePopupErrors = jest.fn();
+    const wrappedComponent = shallow(<_NavigationTree {...mockFunctionsAndProps} handlePopupErrors={mockHandlePopupErrors} />);
+    // when
+    await wrappedComponent.instance().refresh();
+    // then
+    expect(mockFunctionsAndProps.resetDBState).toHaveBeenCalledWith(true);
   });
 
   it('should send error message on refresh when no session', async () => {
