@@ -80,7 +80,7 @@ export function getProjectDictionary() {
  * @returns {Array} of MSTR objects
  */
 export function fetchObjectListByProject({ requestParams, callback = filterDossier, offset = 0, limit = LIMIT },
-  projectId, resultArray) {
+  projectId, queue) {
   const { envUrl, authToken, typeQuery } = requestParams;
   const url = `${envUrl}/${SEARCH_ENDPOINT}?limit=${limit}&offset=${offset}&type=${typeQuery}`;
   return request
@@ -89,12 +89,12 @@ export function fetchObjectListByProject({ requestParams, callback = filterDossi
     .set('x-mstr-projectid', projectId)
     .withCredentials()
     .then((res) => {
-      resultArray = [...resultArray, ...res.body.result];
       if (res.body.result.length === 7000) {
         offset += limit;
-        return fetchObjectListByProject({ requestParams, filterDossier, offset, limit }, projectId, resultArray);
+        queue.enqueue(callback(res.body));
+        return fetchObjectListByProject({ requestParams, filterDossier, offset, limit }, projectId, queue);
       }
-      return callback({ result: resultArray });
+      return callback(res.body);
     });
 }
 
@@ -114,7 +114,7 @@ export async function fetchObjectListForSelectedProjects(callback) {
   const promiseList = [];
   console.time('Fetching environment objects');
   for (const id of projectIds) {
-    const promise = fetchObjectListByProject({ requestParams }, id, [])
+    const promise = fetchObjectListByProject({ requestParams }, id, queue)
       .then((promiseResult) => queue.enqueue(promiseResult));
     promiseList.push(promise);
   }

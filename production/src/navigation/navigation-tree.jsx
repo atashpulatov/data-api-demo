@@ -71,7 +71,7 @@ export class _NavigationTree extends Component {
       } else {
         [this.DB, this.DBOnChange] = connectToDB();
       }
-    }, isRefresh ? 500 : 0);
+    }, isRefresh ? 900 : 0);
     // Timeout to avoid reading old cache while it's cleared in the sidebar (IE)
   };
 

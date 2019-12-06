@@ -29,6 +29,8 @@ export default class AsyncQueue {
 
   /**
  * Removes the last element from the queue and runs the callback with it as an argument
+ * If the removed element has length < 7000 and is not the last in the queue - will append it
+ * to the next element in the queue and skip running the callback
  * @memberof AsyncQueue
  */
   async dequeue() {
@@ -36,7 +38,11 @@ export default class AsyncQueue {
       this.busy = true;
       while (this.queue.length && this.queue.length > 0) {
         const object = this.queue.pop();
-        await this.callback(object);
+        if (this.queue.length > 0 && object.length < 7000) {
+          this.queue[this.queue.length - 1] = this.queue[this.queue.length - 1].concat(object);
+        } else {
+          await this.callback(object);
+        }
       }
       this.busy = false;
     }

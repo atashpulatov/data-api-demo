@@ -34,7 +34,7 @@ describe('Logic for putting objects into cache using queue', () => {
     queueObject.enqueue(arrayToDequeue);
     // then
     expect(queueObject.queue).toEqual([]);
-    expect(callbackMock).toHaveBeenLastCalledWith(arrayToDequeue);
+    expect(callbackMock).toHaveBeenCalledWith(arrayToDequeue);
   });
   it('should not trigger dequeueing if no callback has been passed', () => {
     // given
@@ -56,5 +56,17 @@ describe('Logic for putting objects into cache using queue', () => {
     queueObject.dequeue();
     // then
     expect(callbackMock).not.toHaveBeenCalled();
+  });
+  it('should merge arrays to dequeue when their length is < 8000', () => {
+    // given
+    const callbackMock = jest.fn();
+    const initialArray = ['test', 'test2', 'test3'];
+    const expectedArray = initialArray.concat(initialArray);
+    const queueObject = new AsyncQueue(callbackMock);
+    queueObject.queue.unshift(initialArray);
+    // when
+    queueObject.enqueue(initialArray);
+    // then
+    expect(callbackMock).toHaveBeenCalledWith(expectedArray);
   });
 });
