@@ -16,10 +16,8 @@ end
 desc "package test docker"
 task :e2e_test_browser do
  
-  
-  shell_command! "yarn install", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/office-e2e-protractor"
-  shell_command! "npm run webdriver-update", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/office-e2e-protractor"
-  shell_command! "npm run test", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/office-e2e-protractor"
+  shell_command! "npm install", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser"
+  shell_command! "npm run test", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-borwser"
 
 end
 
