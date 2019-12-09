@@ -32,21 +32,21 @@ export class DIContainer {
     this.sessionHelper = sessionHelper;
     this.sessionHelper.init(reduxStore);
     this.errorHandler = errorService;
-    this.errorHandler.init(this.sessionHelper, this.notificationService);
+    this.errorHandler.init(sessionHelper, notificationService);
     this.authenticationHelper = authenticationHelper;
-    this.authenticationHelper.init(reduxStore, this.sessionHelper);
+    this.authenticationHelper.init(reduxStore, sessionHelper, );
     this.homeHelper = homeHelper;
-    this.homeHelper.init(reduxStore, this.sessionHelper);
+    this.homeHelper.init(reduxStore, sessionHelper);
     this.mstrObjectRestService = mstrObjectRestService
     this.mstrObjectRestService.init(reduxStore);
     this.popupController = popupController;
-    this.popupController.init(reduxStore, this.sessionHelper, popupActions);
+    this.popupController.init(reduxStore, sessionHelper, popupActions);
     this.officeDisplayService = officeDisplayService;
-    this.officeDisplayService.init(reduxStore, this.popupController);
+    this.officeDisplayService.init(reduxStore, popupController);
     this.mstrListRestService = mstrListRestService;
     this.mstrListRestService.init(reduxStore);
     this.popupHelper = popupHelper;
-    this.popupHelper.init(this.popupController);
+    this.popupHelper.init(popupController);
     this.popupActions = popupActions;
     this.popupActions.init(
       this.authenticationHelper,

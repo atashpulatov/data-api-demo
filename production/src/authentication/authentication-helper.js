@@ -1,11 +1,9 @@
-import { authenticationService } from './auth-rest-service';
-import { errorService } from '../error/error-handler';
-
 export class AuthenticationHelper {
-
-  init = (reduxStore, sessionHelper) => {
+  init = (reduxStore, sessionHelper, authenticationService, errorService) => {
     this.reduxStore = reduxStore;
     this.sessionHelper = sessionHelper;
+    this.authenticationService = authenticationService;
+    this.errorService = errorService;
   }
 
   loginUser = async (err, values) => {
@@ -15,11 +13,11 @@ export class AuthenticationHelper {
     try {
       this.sessionHelper.enableLoading();
       this.sessionHelper.saveLoginValues(values);
-      const authToken = await authenticationService
+      const authToken = await this.authenticationService
         .authenticate(values.username, values.password, values.envUrl, values.loginMode || 1);
       this.sessionHelper.logIn(authToken);
     } catch (error) {
-      errorService.handleError(error, { isLogout: true });
+      this.errorService.handleError(error, { isLogout: true });
     } finally {
       this.sessionHelper.disableLoading();
     }
@@ -29,7 +27,7 @@ export class AuthenticationHelper {
     const reduxStoreState = this.reduxStore.getState();
     const { authToken } = reduxStoreState.sessionReducer;
     const { envUrl } = reduxStoreState.sessionReducer;
-    return authenticationService.putSessions(envUrl, authToken);
+    return this.authenticationService.putSessions(envUrl, authToken);
   }
 }
 

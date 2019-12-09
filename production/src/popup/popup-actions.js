@@ -9,7 +9,6 @@ export const SET_PREPARED_REPORT = 'SET_PREPARED_REPORT';
 // export const PRELOAD = 'PRELOAD';
 
 export class PopupActions {
-
   init = (authenticationHelper,errorService, officeApiHelper, officeStoreService, popupHelper, mstrObjectRestService, popupController) => {
     this.authenticationHelper = authenticationHelper;
     this.errorService = errorService;

@@ -1,13 +1,12 @@
 
 export class NotificationService {
-
   init = (reduxStore, actionCreator) => {
     this.reduxStore = reduxStore;
     this.actionCreator = actionCreator;
   }
 
   displayMessage = (type, content) => {
-    const action = this.this.actionCreator.showMessageAction(content, type);
+    const action = this.actionCreator.showMessageAction(content, type);
     this.reduxStore.dispatch(action);
   }
 
