@@ -10,7 +10,6 @@ import {
 import { CLEAR_PROMPTS_ANSWERS } from '../navigation/navigation-tree-actions';
 import { officeProperties } from './office-properties';
 import { officeStoreService } from './store/office-store-service';
-import { popupController } from '../popup/popup-controller';
 import { PopupTypeEnum } from '../home/popup-type-enum';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import {
@@ -317,12 +316,12 @@ export class OfficeDisplayService {
        const objectInfo = isPrompted
          ? await getObjectInfo(objectId, projectId, mstrObjectType)
          : await getObjectDefinition(objectId, projectId, mstrObjectType);
-       reduxStore.dispatch({
+       this.reduxStore.dispatch({
          type: officeProperties.actions.preLoadReport,
          preLoadReport: objectInfo,
        });
      }
-     await popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
+     await this.popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
    }
 
    /**

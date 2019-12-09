@@ -13,7 +13,6 @@ import { PromptsWindow } from '../prompts/prompts-window';
 import { popupActions } from './popup-actions';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 
-const { Office } = window;
 const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 
 export const PopupViewSelectorHOC = (props) => {

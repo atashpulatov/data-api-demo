@@ -14,6 +14,7 @@ import {mstrListRestService} from './mstr-object/mstr-list-rest-service';
 import {popupHelper} from './popup/popup-helper';
 import {popupActions} from './popup/popup-actions';
 import {actionCreator} from './notification/action-creator';
+import {authenticationService} from './authentication/auth-rest-service';
 
 export class DIContainer {
   constructor(autoInitialize) {
@@ -34,7 +35,7 @@ export class DIContainer {
     this.errorHandler = errorService;
     this.errorHandler.init(sessionHelper, notificationService);
     this.authenticationHelper = authenticationHelper;
-    this.authenticationHelper.init(reduxStore, sessionHelper, );
+    this.authenticationHelper.init(reduxStore, sessionHelper, authenticationService, errorService);
     this.homeHelper = homeHelper;
     this.homeHelper.init(reduxStore, sessionHelper);
     this.mstrObjectRestService = mstrObjectRestService
