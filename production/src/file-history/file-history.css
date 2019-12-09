@@ -62,6 +62,8 @@ button.add-data-btn:focus {
   border-radius: 2px;
   margin: 5px 10px 10px 10px;
   padding: 16px 16px 16px 16px;
+  box-sizing: border-box;
+  border: 1px solid transparent;
 }
 
 .refresh-icons-row {
@@ -113,7 +115,7 @@ button.add-data-btn:focus {
 
 .file-history-container:focus {
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.20);
-  outline: 1px solid #1C91DC;
+  border: 1px solid #1C91DC;
 }
 
 .report-title {
