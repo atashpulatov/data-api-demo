@@ -1,20 +1,23 @@
-import { reduxStore } from '../store';
-import { sessionHelper } from '../storage/session-helper';
+export class HomeHelper {
 
-class HomeHelper {
+  init = (reduxStore, sessionHelper) => {
+    this.reduxStore = reduxStore;
+    this.sessionHelper = sessionHelper;
+  }
+
   saveLoginValues = () => {
-    const token = reduxStore.getState().sessionReducer.authToken;
+    const token = this.reduxStore.getState().sessionReducer.authToken;
     const location = this.getWindowLocation();
     if (location.origin.search('localhost') !== -1) {
       if (!token) {
-        sessionHelper.logOut();
+        this.sessionHelper.logOut();
       }
     } else {
       const currentPath = location.pathname;
       const pathBeginning = currentPath.split('/apps/')[0];
       const envUrl = `${location.origin}${pathBeginning}/api`;
       const values = { envUrl, };
-      sessionHelper.saveLoginValues(values);
+      this.sessionHelper.saveLoginValues(values);
       return values.envUrl;
     }
   };
@@ -36,7 +39,7 @@ class HomeHelper {
   saveTokenFromCookies = () => {
     const splittedCookiesJar = this.getParsedCookies();
     if (splittedCookiesJar.iSession) {
-      sessionHelper.logIn(splittedCookiesJar.iSession);
+      this.sessionHelper.logIn(splittedCookiesJar.iSession);
       return splittedCookiesJar.iSession;
     }
   };

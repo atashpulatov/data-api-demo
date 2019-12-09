@@ -1,15 +1,16 @@
+/* eslint-disable */
 import uuid from 'uuid/v4';
-import { IncorrectInputTypeError } from './incorrect-input-type';
-import { OutsideOfRangeError } from '../error/outside-of-range-error';
-import { reduxStore } from '../store';
-import { officeProperties } from './office-properties';
-import { officeStoreService } from './store/office-store-service';
-import { notificationService } from '../notification/notification-service';
-import { errorService } from '../error/error-handler';
+import {IncorrectInputTypeError} from './incorrect-input-type';
+import {OutsideOfRangeError} from '../error/outside-of-range-error';
+import {officeProperties} from './office-properties';
+import {officeStoreService} from './store/office-store-service';
+import {notificationService} from '../notification/notification-service';
+import {errorService} from '../error/error-handler';
 import mstrNormalizedJsonHandler from '../mstr-object/mstr-normalized-json-handler';
-import { authenticationHelper } from '../authentication/authentication-helper';
-import { OBJ_REMOVED_FROM_EXCEL } from '../error/constants';
-import { ProtectedSheetError } from '../error/protected-sheets-error';
+import {CONTEXT_LIMIT} from '../mstr-object/mstr-object-rest-service';
+import {authenticationHelper} from '../authentication/authentication-helper';
+import {OBJ_REMOVED_FROM_EXCEL} from '../error/constants';
+import {ProtectedSheetError} from '../error/protected-sheets-error';
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
@@ -17,9 +18,20 @@ const ASCII_CAPITAL_LETTER_INDEX = 65;
 const EXCEL_TABLE_NAME = 'table';
 const EXCEL_ROW_LIMIT = 1048576;
 const EXCEL_COL_LIMIT = 16384;
+
 const EXCEL_XTABS_BORDER_COLOR = '#a5a5a5';
 
-class OfficeApiHelper {
+const {OfficeExtension} = window;
+
+export class OfficeApiHelper {
+  constructor() {
+    this.EXCEL_XTABS_BORDER_COLOR = EXCEL_XTABS_BORDER_COLOR;
+  }
+
+  init = (reduxStore) => {
+    this.reduxStore = reduxStore;
+  }
+
   getRange = (headerCount, startCell, rowCount = 0) => {
     if (!Number.isInteger(headerCount)) {
       throw new IncorrectInputTypeError();
@@ -85,7 +97,7 @@ class OfficeApiHelper {
       const excelContext = await this.getExcelContext();
       const tableObject = excelContext.workbook.tables.getItem(bindingId);
       if (isCrosstab) {
-        const tmpXtabDimensions = { ...crosstabHeaderDimensions, columnsY: crosstabHeaderDimensions.columnsY + 1, };
+        const tmpXtabDimensions = {...crosstabHeaderDimensions, columnsY: crosstabHeaderDimensions.columnsY + 1, };
         crosstabRange = await this.getCrosstabRangeSafely(tableObject, tmpXtabDimensions, excelContext);
         if (shouldSelect) crosstabRange.select();
       } else {
@@ -96,9 +108,9 @@ class OfficeApiHelper {
       return true;
     } catch (error) {
       if (error.code === 'ItemNotFound') {
-        return notificationService.displayTranslatedNotification({ type: 'info', content: OBJ_REMOVED_FROM_EXCEL });
+        return notificationService.displayTranslatedNotification({type: 'info', content: OBJ_REMOVED_FROM_EXCEL});
       }
-      errorService.handleError(error, { reportName, onConfirm: deleteReport });
+      errorService.handleError(error, {reportName, onConfirm: deleteReport});
       return false;
     }
   };
@@ -129,21 +141,12 @@ class OfficeApiHelper {
 
   getExcelSessionStatus = async () => !!await this.getExcelContext() // ToDo find better way to check session status
 
-
   findAvailableOfficeTableId = () => EXCEL_TABLE_NAME + uuid().split('-').join('')
 
-  loadExistingReportBindingsExcel = async () => {
-    const reportArray = await officeStoreService.getReportProperties();
-    reduxStore.dispatch({
-      type: officeProperties.actions.loadAllReports,
-      reportArray,
-    });
-  };
-
   getCurrentMstrContext = () => {
-    const { envUrl } = reduxStore.getState().sessionReducer;
-    const { username } = reduxStore.getState().sessionReducer;
-    return { envUrl, username };
+    const {envUrl} = this.reduxStore.getState().sessionReducer;
+    const {username} = this.reduxStore.getState().sessionReducer;
+    return {envUrl, username};
   }
 
   /**
@@ -223,7 +226,7 @@ class OfficeApiHelper {
    * @memberof OfficeApiHelper
    */
   deleteObjectTableBody = async (context, object) => {
-    const { isCrosstab, crosstabHeaderDimensions } = object;
+    const {isCrosstab, crosstabHeaderDimensions} = object;
     const tableObject = context.workbook.tables.getItem(object.bindId);
     await this.deleteExcelTable(tableObject, context, isCrosstab, crosstabHeaderDimensions);
   }
@@ -238,7 +241,7 @@ class OfficeApiHelper {
    */
   removeObjectNotExistingInExcel = async (object, officeContext) => {
     officeStoreService.removeReportFromStore(object.bindId);
-    await officeContext.document.bindings.releaseByIdAsync(object.bindId, () => { console.log('released binding'); });
+    await officeContext.document.bindings.releaseByIdAsync(object.bindId, () => {console.log('released binding');});
   }
 
   /**
@@ -357,7 +360,7 @@ class OfficeApiHelper {
    * @return {Object}
    */
   getCrosstabRange = (cellAddress, headerDimensions, sheet) => {
-    const { columnsY, columnsX, rowsX, rowsY, } = headerDimensions;
+    const {columnsY, columnsX, rowsX, rowsY, } = headerDimensions;
     const cell = typeof cellAddress === 'string' ? sheet.getRange(cellAddress) : cellAddress;
     const bodyRange = cell.getOffsetRange(rowsY, columnsX - 1);
     const startingCell = cell.getCell(0, 0).getOffsetRange(-(columnsY), -rowsX);
@@ -374,7 +377,7 @@ class OfficeApiHelper {
    * @return {Object}
    */
   getCrosstabRangeSafely = async (table, headerDimensions, context) => {
-    const { columnsY, rowsX } = headerDimensions;
+    const {columnsY, rowsX} = headerDimensions;
     const validColumnsY = await this.getValidOffset(table, columnsY, 'getRowsAbove', context);
     const validRowsX = await this.getValidOffset(table, rowsX, 'getColumnsBefore', context);
     const startingCell = table.getRange().getCell(0, 0).getOffsetRange(-validColumnsY, -validRowsX);

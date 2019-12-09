@@ -5,7 +5,7 @@ import { Form, Icon, Input, Button, Checkbox, Select, } from 'antd';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { authenticationHelper } from './authentication-helper';
-import { resetState } from '../popup/popup-actions';
+import { popupActions } from '../popup/popup-actions';
 
 const FormItem = Form.Item;
 
@@ -126,6 +126,6 @@ function mapStateToProps(state) {
   return { session: state.sessionReducer, };
 }
 
-const mapDispatchToProps = { resetState, };
+const mapDispatchToProps = { resetState: popupActions.resetState, };
 
 export const Authenticate = connect(mapStateToProps, mapDispatchToProps)(Form.create()(withTranslation('common')(AuthenticateHOC)));
