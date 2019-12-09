@@ -48,6 +48,7 @@ function officeInitialize() {
     .then(async () => {
       const envUrl = window.location.pathname.split('/apps/')[0];
       const homeHelper = diContainer.initilizeSingle(HomeHelper, [reduxStore, sessionHelper]);
+
       if (window.location.href.indexOf('popupType') === -1) {
         const {iSession} = homeHelper.getParsedCookies();
         const canUseOffice = await authenticationService.getOfficePrivilege(`${envUrl}/api`, iSession);
