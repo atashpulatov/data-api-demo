@@ -2,6 +2,7 @@
   height: calc(100% - 125px);
   position: fixed;
   width: 100%;
+  overflow: hidden;
 }
 
 .navigation_tree__title_bar {
