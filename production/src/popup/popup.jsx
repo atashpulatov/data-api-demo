@@ -8,6 +8,7 @@ import { PopupViewSelector } from './popup-view-selector';
 import i18next from '../i18n';
 import { CLEAR_PROMPTS_ANSWERS, CANCEL_DOSSIER_OPEN } from '../navigation/navigation-tree-actions';
 import { reduxStore } from '../store';
+import InternetConnectionError from './internet-connection-error';
 
 /* global Office */
 
@@ -80,11 +81,14 @@ export class Popup extends Component {
       ? Office.context.displayLanguage
       : 'en-US');
     return (
-      <PopupViewSelector
+      <>
+        <PopupViewSelector
         popupType={popupType}
         propsToPass={propsToPass}
         methods={methods}
       />
+        <InternetConnectionError />
+      </>
     );
   }
 }

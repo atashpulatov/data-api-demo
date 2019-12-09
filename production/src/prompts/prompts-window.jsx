@@ -11,7 +11,6 @@ import { Notifications } from '../notification/notifications';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { authenticationHelper } from '../authentication/authentication-helper';
 
-const { Office } = window;
 const { microstrategy } = window;
 const {
   createInstance,
@@ -189,7 +188,7 @@ export class _PromptsWindow extends Component {
     const { stopLoading } = this.props;
     stopLoading();
     const cancelObject = { command: selectorProperties.commandCancel };
-    Office.context.ui.messageParent(JSON.stringify(cancelObject));
+    window.Office.context.ui.messageParent(JSON.stringify(cancelObject));
   };
 
   /**

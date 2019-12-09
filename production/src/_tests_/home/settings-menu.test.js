@@ -2,7 +2,6 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { sessionHelper } from '../../storage/session-helper';
 import { SettingsMenuHOC } from '../../home/settings-menu';
-import { Office } from '../mockOffice';
 import DB from '../../cache/pouch-db';
 
 describe('Settings Menu', () => {

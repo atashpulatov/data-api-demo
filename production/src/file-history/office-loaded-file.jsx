@@ -80,14 +80,9 @@ export class _OfficeLoadedFile extends React.Component {
 
 
   deleteReport = async () => {
-    const {onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, fileName, t, } = this.props;
-    const message = t('{{name}} has been removed from the workbook.', {name: fileName});
-
-    await fileHistoryHelper.deleteReport(onDelete,
-      bindingId,
-      isCrosstab,
-      crosstabHeaderDimensions,
-      message);
+    const { onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, fileName, t } = this.props;
+    const message = t('{{name}} has been removed from the workbook.', { name: fileName });
+    await fileHistoryHelper.deleteReport(onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, message);
   }
 
   deleteAction = (e) => {
@@ -98,26 +93,16 @@ export class _OfficeLoadedFile extends React.Component {
       return;
     }
     startLoading();
-    const {
-      onDelete,
-      bindingId,
-      isCrosstab,
-      crosstabHeaderDimensions,
-      fileName,
-    } = this.props;
-    this.setState({allowDeleteClick: false, allowRefreshClick: false},
+    const { onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, fileName } = this.props;
+    this.setState({ allowDeleteClick: false, allowRefreshClick: false },
       async () => {
         try {
           const excelContext = await officeApiHelper.getExcelContext();
           await officeApiHelper.isCurrentReportSheetProtected(excelContext, bindingId);
           const message = t('{{name}} has been removed from the workbook.',
-            {name: fileName});
-          await fileHistoryHelper.deleteReport(onDelete,
-            bindingId,
-            isCrosstab,
-            crosstabHeaderDimensions,
-            message);
-          if (this.ismounted) this.setState({allowDeleteClick: true, allowRefreshClick: true});
+            { name: fileName });
+          await fileHistoryHelper.deleteReport(onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, message);
+          if (this.ismounted) this.setState({ allowDeleteClick: true, allowRefreshClick: true });
           stopLoading();
         } catch (error) {
           errorService.handleError(error);
@@ -158,8 +143,8 @@ export class _OfficeLoadedFile extends React.Component {
   };
 
   editAction = (e) => {
-    const {allowRefreshClick} = this.state;
-    const {isLoading, bindingId, objectType, callForEdit, fileName, loading, startLoading, stopLoading, callForEditDossier, t} = this.props;
+    const { allowRefreshClick } = this.state;
+    const { isLoading, bindingId, objectType, callForEdit, fileName, loading, startLoading, stopLoading, callForEditDossier } = this.props;
     if (e) e.stopPropagation();
     if (!allowRefreshClick || loading) {
       return;
@@ -189,8 +174,8 @@ export class _OfficeLoadedFile extends React.Component {
 
   refreshAction = (e) => {
     if (e) e.stopPropagation();
-    const {isLoading, bindingId, objectType, refreshReportsArray, loading, fileName, startLoading, stopLoading, t} = this.props;
-    const {allowRefreshClick} = this.state;
+    const { isLoading, bindingId, objectType, refreshReportsArray, loading, fileName, startLoading, stopLoading } = this.props;
+    const { allowRefreshClick } = this.state;
     if (!allowRefreshClick || loading) {
       return;
     }
@@ -268,7 +253,7 @@ export class _OfficeLoadedFile extends React.Component {
         >
           {!!isPrompted && (
             <span
-              aria-title="Reprompt button"
+              aria-label="Reprompt button"
               role="button"
               tabIndex="0"
               className="loading-button-container"
@@ -285,13 +270,13 @@ export class _OfficeLoadedFile extends React.Component {
           mouseEnterDelay={1}
         >
           <span
-            aria-title="Edit button"
-            role="button"
-            tabIndex="0"
-            className="loading-button-container"
-            onClick={this.editAction}
-            onKeyPress={this.editAction}
-          >
+              aria-label="Edit button"
+              role="button"
+              tabIndex="0"
+              className="loading-button-container"
+              onClick={this.editAction}
+              onKeyPress={this.editAction}
+            >
             <MSTRIcon type="edit" />
           </span>
         </ButtonPopover>
@@ -301,13 +286,13 @@ export class _OfficeLoadedFile extends React.Component {
           mouseEnterDelay={1}
         >
           <span
-            aria-title="Refresh button"
-            role="button"
-            tabIndex="0"
-            className="loading-button-container"
-            onClick={this.refreshAction}
-            onKeyPress={this.refreshAction}
-          >
+              aria-label="Refresh button"
+              role="button"
+              tabIndex="0"
+              className="loading-button-container"
+              onClick={this.refreshAction}
+              onKeyPress={this.refreshAction}
+            >
             {!isLoading ? (
               <MSTRIcon type="refresh" />
             ) : (
@@ -327,7 +312,7 @@ export class _OfficeLoadedFile extends React.Component {
           arrowPointAtCenter="true"
         >
           <span
-            aria-title="Delete button"
+            aria-label="Delete button"
             role="button"
             tabIndex="0"
             onClick={this.deleteAction}
@@ -433,13 +418,13 @@ const mapDispatchToProps = {
 _OfficeLoadedFile.propTypes = {
   fileName: PropTypes.string,
   bindingId: PropTypes.string,
-  objectType: PropTypes.string,
+  objectType: PropTypes.shape({ name: PropTypes.string }),
   loading: PropTypes.bool,
   isLoading: PropTypes.bool,
   isCrosstab: PropTypes.bool,
-  visualizationInfo: PropTypes.bool,
-  crosstabHeaderDimensions: PropTypes.bool,
-  isPrompted: PropTypes.bool,
+  visualizationInfo: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.bool]),
+  crosstabHeaderDimensions: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.bool]),
+  isPrompted: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
   refreshDate: PropTypes.instanceOf(Date),
   startLoading: PropTypes.func,
   stopLoading: PropTypes.func,

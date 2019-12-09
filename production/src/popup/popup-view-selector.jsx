@@ -226,7 +226,7 @@ function proceedToImport(props) {
   }
   props.startLoading();
   props.startImport();
-  Office.context.ui.messageParent(JSON.stringify(okObject));
+  window.Office.context.ui.messageParent(JSON.stringify(okObject));
 }
 
 function renderProperComponent(popupType, methods, propsToPass, editedReport) {

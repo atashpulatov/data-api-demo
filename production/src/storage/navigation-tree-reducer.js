@@ -63,6 +63,17 @@ function getType(subtype) {
   return selectedType ? selectedType.name : DEFAULT_TYPE;
 }
 
+function cleanSelection(state) {
+  const newState = { ...state };
+  newState.sorter = initialState.sorter;
+  newState.chosenObjectId = initialState.chosenObjectId;
+  newState.chosenProjectId = initialState.chosenProjectId;
+  newState.chosenSubtype = initialState.chosenSubtype;
+  newState.chosenObjectName = initialState.chosenObjectName;
+  newState.chosenType = initialState.chosenType;
+  return newState;
+}
+
 export const navigationTree = (state = initialState, action) => {
   const { type, data } = action;
   switch (type) {
@@ -200,15 +211,9 @@ export const navigationTree = (state = initialState, action) => {
   }
   case CREATE_CACHE:
   case CLEAR_CACHE:
+    return cleanSelection(state);
   case REFRESH_CACHE: {
-    const newState = { ...state };
-    newState.sorter = initialState.sorter;
-    newState.chosenObjectId = initialState.chosenObjectId;
-    newState.chosenProjectId = initialState.chosenProjectId;
-    newState.chosenSubtype = initialState.chosenSubtype;
-    newState.chosenObjectName = initialState.chosenObjectName;
-    newState.chosenType = initialState.chosenType;
-    return newState;
+    return data ? cleanSelection(state) : state;
   }
   default: {
     return state;

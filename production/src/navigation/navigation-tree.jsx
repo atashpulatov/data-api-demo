@@ -93,8 +93,8 @@ export class _NavigationTree extends Component {
       return;
     }
 
-    const {resetDBState, fetchObjectsFromNetwork} = this.props;
-    resetDBState();
+    const { resetDBState, fetchObjectsFromNetwork } = this.props;
+    resetDBState(true);
     if (this.indexedDBSupport) {
       if (!this.isMSIE && this.DBOnChange) this.DBOnChange.cancel();
       window.Office.context.ui.messageParent(JSON.stringify({command: REFRESH_CACHE_COMMAND}));
@@ -122,7 +122,7 @@ export class _NavigationTree extends Component {
       const {projects} = cache;
       if (projects.length === 0) {
         console.log('Cache failed, fetching from network');
-        resetDBState();
+        resetDBState(true);
         fetchObjectsFromNetwork();
       }
     }, SAFETY_FALLBACK);
@@ -180,14 +180,14 @@ export class _NavigationTree extends Component {
   };
 
   // TODO: temporary solution
-  onObjectChosen = async (objectId, projectId, subtype, objectName, target, myLibrary) => {
-    const {selectObject, handlePopupErrors} = this.props;
+  onObjectChosen = async (objectId, projectId, subtype, objectName, targetId, myLibrary) => {
+    const { selectObject, handlePopupErrors } = this.props;
     // If myLibrary is on, then selected object is a dossier.
     const objectType = myLibrary ? mstrObjectEnum.mstrObjectType.dossier : mstrObjectEnum.getMstrTypeBySubtype(subtype);
     let chosenLibraryDossier;
     if (myLibrary) {
       chosenLibraryDossier = objectId;
-      objectId = target.id;
+      objectId = targetId;
     }
 
     let cubeStatus = true;
@@ -241,7 +241,7 @@ export class _NavigationTree extends Component {
             id: myLibrary ? chosenLibraryDossier : chosenObjectId,
             projectId: chosenProjectId,
           }}
-          onSelect={({id, projectId, subtype, name, target}) => this.onObjectChosen(id, projectId, subtype, name, target, myLibrary)}
+          onSelect={({ id, projectId, subtype, name, targetId }) => this.onObjectChosen(id, projectId, subtype, name, targetId, myLibrary)}
           sort={sorter}
           onSortChange={changeSorting}
           locale={i18n.language}

@@ -6,7 +6,6 @@ import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { OfficeLoadedFile } from './office-loaded-file';
 import { officeApiHelper } from '../office/office-api-helper';
-import { officeDisplayService } from '../office/office-display-service';
 import loadingSpinner from './assets/report_loading_spinner.gif';
 import { popupActions } from '../popup/popup-actions';
 import { fileHistoryContainerHOC } from './file-history-container-HOC';
@@ -98,11 +97,7 @@ export class FileHistoryContainerHOC extends React.Component {
   showData = async () => {
     try {
       await officeApiHelper.checkStatusOfSessions();
-      const {
-        reportArray,
-        refreshReportsArray,
-        toggleSecuredFlag,
-      } = this.props;
+      const { reportArray, refreshReportsArray, toggleSecuredFlag, } = this.props;
       this.refreshAllAction(reportArray, refreshReportsArray);
       toggleSecuredFlag(false);
     } catch (error) {
@@ -111,15 +106,7 @@ export class FileHistoryContainerHOC extends React.Component {
   };
 
   render() {
-    const {
-      reportArray = [],
-      loading,
-      refreshingAll,
-      refreshReportsArray,
-      isSecured,
-      addDataAction,
-      t,
-    } = this.props;
+    const { reportArray = [], loading, refreshingAll, refreshReportsArray, isSecured, addDataAction, t, } = this.props;
     return (
       <>
         {
@@ -170,7 +157,7 @@ export class FileHistoryContainerHOC extends React.Component {
               fileName={report.name}
               bindingId={report.bindId}
               onClick={officeApiHelper.onBindingObjectClick}
-              onDelete={officeDisplayService.removeReportFromExcel}
+              onDelete={officeApiHelper.removeReportFromExcel}
               isLoading={report.isLoading}
               isCrosstab={report.isCrosstab}
               crosstabHeaderDimensions={report.crosstabHeaderDimensions}

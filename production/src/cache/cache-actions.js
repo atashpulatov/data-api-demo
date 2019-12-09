@@ -50,10 +50,10 @@ export const addProjects = (objects) => ({
 
 export const clearStateCache = () => ({ type: CLEAR_CACHE, });
 
-export const refreshCacheAction = () => ({ type: REFRESH_CACHE, });
+export const refreshCacheAction = (shouldCleanSelection) => ({ type: REFRESH_CACHE, data: shouldCleanSelection });
 
-export const refreshCacheState = () => (dispatch) => {
-  dispatch(refreshCacheAction());
+export const refreshCacheState = (shouldCleanSelection) => (dispatch) => {
+  dispatch(refreshCacheAction(shouldCleanSelection));
 };
 
 export function fetchObjects(dispatch, cache) {
@@ -65,7 +65,10 @@ export function fetchObjects(dispatch, cache) {
     console.time('Creating my library cache');
     dispatch(myLibraryLoading(true));
     cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, true);
-    getMyLibraryObjectList((objects) => cache.putData(MY_LIBRARY_DB_ID, objects, true))
+    getMyLibraryObjectList((objects) => {
+      objects = addNestedPropertiesToObjects(objects, projects);
+      cache.putData(MY_LIBRARY_DB_ID, objects, true);
+    })
       .catch(console.error)
       .finally(() => {
         console.timeEnd('Creating my library cache');
@@ -100,7 +103,10 @@ export function fetchObjectsFallback() {
 
       // My Library
       dispatch(myLibraryLoading(true));
-      getMyLibraryObjectList((objects) => dispatch(addMyLibraryObjects(objects, true)))
+      getMyLibraryObjectList((objects) => {
+        objects = addNestedPropertiesToObjects(objects, projects);
+        dispatch(addMyLibraryObjects(objects, true));
+      })
         .catch(console.error)
         .finally(() => dispatch(myLibraryLoading(false)));
 
