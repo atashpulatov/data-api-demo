@@ -42,70 +42,13 @@ class OfficeFormattingHelper {
               // for fractions set General format
               if (object.formatString.match(/# \?+?\/\?+?/)) format = 'General';
             }
-            console.log('FORMAT ', format);
             columnRange.numberFormat = format;
           }
         }
       }
-
       await excelContext.sync();
     } catch (error) {
       console.log('Cannot apply formatting, skipping');
-      throw errorService.handleError(error);
-    } finally {
-      console.timeEnd('Apply formatting');
-    }
-  };
-
-  /**
-   * Applies Excel number formatting to imported Falsy Crosstab object based on MSTR data type.
-   *
-   * @param {Office} officeTable
-   * @param {Object} instanceDefinition
-   * @param {Office} excelContext
-   * @param {Object} responseBody
-   * @memberof OfficeFormattingHelper
-   */
-  applyFalsyCrosstabFormatting = async (officeTable, instanceDefinition, excelContex, responseBody) => {
-    try {
-      console.time('Apply formatting');
-      const metricsIndex = responseBody.definition.grid.metricsPosition.index;
-      const metricsArray = responseBody.definition.grid.rows[metricsIndex].elements;
-      // indexArray -> array in form [ 0, 0, 1, 0] which contain indexes of elements in rows
-      const indexArray = responseBody.data.headers.rows;
-      const startRow = responseBody.data.paging.offset;
-      const { columns } = officeTable;
-      const columnRange = columns.getItemAt(indexArray.length).getDataBodyRange();
-      for (let i = 0, j = startRow; i < 1; i++, j++) {
-        const row = columnRange.getRow(j);
-        const object = metricsArray[indexArray[i][metricsIndex]].numberFormatting;
-        let format = '';
-        if (!object.isAttribute) {
-          if (object.category === 9) {
-            format = this.getNumberFormattingCategoryName(object);
-          } else {
-            format = object.formatString;
-            if (format.indexOf('$') !== -1) {
-              // Normalizing formatString from MicroStrategy when locale codes are used [$-\d+]
-              format = format.replace(/\[\$-/g, '[$$$$-')
-                .replace(/\$/g, '\\$')
-                .replace(/\\\$\\\$/g, '$')
-                .replace(/"/g, '');
-            }
-            // for fractions set General format
-            if (object.formatString.match(/# \?+?\/\?+?/)) format = 'General';
-          }
-        }
-        // row.numberFormat = format;
-        row.load('address');
-        await excelContex.sync();
-        console.log(row.address);
-      }
-      console.log('HERE');
-      await excelContex.sync();
-    } catch (error) {
-      console.log('Cannot apply formatting, skipping');
-      console.error(error);
       throw errorService.handleError(error);
     } finally {
       console.timeEnd('Apply formatting');

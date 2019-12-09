@@ -309,13 +309,7 @@ class OfficeDisplayService {
       const subtotalsAddresses = [];
       console.time('Fetch data');
       // eslint-disable-next-line no-restricted-syntax, no-unused-vars
-      for await (const { row, header, subtotalAddress, responseBody } of rowGenerator) {
-        console.log('Response body', responseBody);
-        if (mstrTable.isFalsyCrosstab) {
-          await officeFormattingHelper
-            .applyFalsyCrosstabFormatting(officeTable, instanceDefinition, excelContext, responseBody);
-        }
-        console.log('HERE');
+      for await (const { row, header, subtotalAddress} of rowGenerator) {
         console.groupCollapsed(`Importing rows: ${rowIndex} to ${Math.min(rowIndex + limit, rows)}`);
         console.timeEnd('Fetch data');
         excelContext.workbook.application.suspendApiCalculationUntilNextSync();

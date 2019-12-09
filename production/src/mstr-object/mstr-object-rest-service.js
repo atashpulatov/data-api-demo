@@ -424,7 +424,6 @@ async function* fetchContentGenerator({
       row,
       header,
       subtotalAddress: isCrosstab ? crosstabSubtotal : rowTotals,
-      responseBody: response.body,
     };
   }
 }
