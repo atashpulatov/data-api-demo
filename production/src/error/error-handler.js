@@ -1,5 +1,3 @@
-import { sessionHelper } from '../storage/session-helper';
-import { notificationService } from '../notification/notification-service.js';
 import {
   errorTypes,
   httpStatusToErrorType,
@@ -10,11 +8,17 @@ import {
 
 const TIMEOUT = 2000;
 
-class ErrorService {
+export class ErrorService {
+  init = (sessionHelper, notificationService) => {
+    this.sessionHelper = sessionHelper;
+    this.notificationService = notificationService;
+  }
+
   handleError = (error, options = { reportName: 'Report', onConfirm: null, isLogout: false }) => {
     const { onConfirm, isLogout, ...parameters } = options;
     const errorType = this.getErrorType(error);
     const errorMessage = errorMessageFactory(errorType)({ error, ...parameters });
+    console.error(error);
     this.displayErrorNotification(error, errorType, errorMessage, onConfirm);
     this.checkForLogout(isLogout, errorType);
   }
@@ -27,9 +31,9 @@ class ErrorService {
     const errorDetails = (error.response && error.response.text) || error.message || '';
     const details = message !== errorDetails ? errorDetails : '';
     if (type === errorTypes.UNAUTHORIZED_ERR) {
-      return notificationService.displayNotification({ type: 'info', content: message });
+      return this.notificationService.displayNotification({ type: 'info', content: message });
     }
-    return notificationService.displayNotification({ type: 'warning', content: message, details, onConfirm, });
+    return this.notificationService.displayNotification({ type: 'warning', content: message, details, onConfirm, });
   }
 
   checkForLogout = (isLogout = false, errorType) => {
@@ -65,9 +69,9 @@ class ErrorService {
   }
 
   fullLogOut = () => {
-    sessionHelper.logOutRest();
-    sessionHelper.logOut();
-    sessionHelper.logOutRedirect();
+    this.sessionHelper.logOutRest();
+    this.sessionHelper.logOut();
+    this.sessionHelper.logOutRedirect();
   }
 }
 

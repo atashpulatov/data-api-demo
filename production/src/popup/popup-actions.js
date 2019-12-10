@@ -1,12 +1,4 @@
-import { authenticationHelper } from '../authentication/authentication-helper';
-import { errorService } from '../error/error-handler';
-import { officeApiHelper } from '../office/office-api-helper';
 import { officeProperties } from '../office/office-properties';
-import { officeStoreService } from '../office/store/office-store-service';
-import { popupController } from './popup-controller';
-import { popupHelper } from './popup-helper';
-import { createInstance, answerPrompts, getInstance, createDossierInstance } from '../mstr-object/mstr-object-rest-service';
-import { reduxStore } from '../store';
 
 export const CLEAR_WINDOW = 'POPUP_CLOSE_WINDOW';
 export const START_REPORT_LOADING = 'START_REPORT_LOADING';
@@ -16,17 +8,27 @@ export const SET_REPORT_N_FILTERS = 'SET_REPORT_N_FILTERS';
 export const SET_PREPARED_REPORT = 'SET_PREPARED_REPORT';
 // export const PRELOAD = 'PRELOAD';
 
-export function callForEdit(reportParams) {
-  return async (dispatch) => {
+export class PopupActions {
+  init = (authenticationHelper,errorService, officeApiHelper, officeStoreService, popupHelper, mstrObjectRestService, popupController) => {
+    this.authenticationHelper = authenticationHelper;
+    this.errorService = errorService;
+    this.officeApiHelper = officeApiHelper;
+    this.officeStoreService = officeStoreService;
+    this.popupHelper = popupHelper;
+    this.mstrObjectRestService = mstrObjectRestService;
+    this.popupController = popupController;
+  }
+
+  callForEdit = (reportParams) => async (dispatch) => {
     try {
       await Promise.all([
-        officeApiHelper.getExcelSessionStatus(),
-        authenticationHelper.validateAuthToken(),
+        this.officeApiHelper.getExcelSessionStatus(),
+        this.authenticationHelper.validateAuthToken(),
       ]);
-      const editedReport = officeStoreService.getReportFromProperties(reportParams.bindId);
+      const editedReport = this.officeStoreService.getReportFromProperties(reportParams.bindId);
       if (editedReport.isPrompted) {
         const config = { objectId: editedReport.id, projectId: editedReport.projectId };
-        let instanceDefinition = await createInstance(config);
+        let instanceDefinition = await this.mstrObjectRestService.createInstance(config);
         let count = 0;
         while (instanceDefinition.status === 2) {
           const { id, projectId, promptsAnswers } = editedReport;
@@ -36,14 +38,14 @@ export function callForEdit(reportParams) {
             instanceId: instanceDefinition.instanceId,
             promptsAnswers: promptsAnswers[count],
           };
-          await answerPrompts(configPrompts);
+          await this.mstrObjectRestService.answerPrompts(configPrompts);
           const configInstance = {
             objectId: editedReport.id,
             projectId: editedReport.projectId,
             body: editedReport.body,
             instanceId: instanceDefinition.instanceId,
           };
-          instanceDefinition = await getInstance(configInstance);
+          instanceDefinition = await this.mstrObjectRestService.getInstance(configInstance);
           count += 1;
         }
         editedReport.instanceId = instanceDefinition.instanceId;
@@ -53,77 +55,71 @@ export function callForEdit(reportParams) {
         type: SET_REPORT_N_FILTERS,
         editedReport,
       });
-      popupController.runEditFiltersPopup(reportParams);
+      this.popupController.runEditFiltersPopup(reportParams);
     } catch (error) {
-      reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
-      return errorService.handleError(error);
+      dispatch({ type: officeProperties.actions.stopLoading });
+      return this.errorService.handleError(error);
     }
-  };
-}
+  }
 
-export function callForReprompt(reportParams) {
-  return async (dispatch) => {
+  callForReprompt = (reportParams) => async (dispatch) => {
     try {
       await Promise.all([
-        officeApiHelper.getExcelSessionStatus(),
-        authenticationHelper.validateAuthToken(),
+        this.officeApiHelper.getExcelSessionStatus(),
+        this.authenticationHelper.validateAuthToken(),
       ]);
-      const editedReport = officeStoreService.getReportFromProperties(reportParams.bindId);
+      const editedReport = this.officeStoreService.getReportFromProperties(reportParams.bindId);
       editedReport.isPrompted = true;
       dispatch({
         type: SET_REPORT_N_FILTERS,
         editedReport,
       });
-      popupController.runRepromptPopup(reportParams);
+      this.popupController.runRepromptPopup(reportParams);
     } catch (error) {
-      reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
-      return errorService.handleError(error);
+      dispatch({ type: officeProperties.actions.stopLoading });
+      return this.errorService.handleError(error);
     }
-  };
-}
+  }
 
-export function preparePromptedReport(instanceId, reportData) {
-  return (dispatch) => dispatch({
+  preparePromptedReport = (instanceId, reportData) => (dispatch) => dispatch({
     type: SET_PREPARED_REPORT,
     instanceId,
     reportData,
-  });
-}
+  })
 
-export function refreshReportsArray(reportArray, isRefreshAll) {
-  return async (dispatch) => {
+  refreshReportsArray = (reportArray, isRefreshAll) => async (dispatch) => {
     try {
       await Promise.all([
-        officeApiHelper.getExcelSessionStatus(),
-        authenticationHelper.validateAuthToken(),
+        this.officeApiHelper.getExcelSessionStatus(),
+        this.authenticationHelper.validateAuthToken(),
       ]);
     } catch (error) {
-      reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
-      return errorService.handleError(error);
+      dispatch({ type: officeProperties.actions.stopLoading });
+      return this.errorService.handleError(error);
     }
     if (isRefreshAll) {
-      popupHelper.storagePrepareRefreshAllData(reportArray);
-      await popupHelper.runRefreshAllPopup(reportArray);
+      this.popupHelper.storagePrepareRefreshAllData(reportArray);
+      await this.popupHelper.runRefreshAllPopup(reportArray);
     }
     for (const [index, report] of reportArray.entries()) {
       let isError = true;
       try {
-        const excelContext = await officeApiHelper.getExcelContext();
-        await officeApiHelper.isCurrentReportSheetProtected(excelContext, report.bindId);
+        const excelContext = await this.officeApiHelper.getExcelContext();
+        await this.officeApiHelper.isCurrentReportSheetProtected(excelContext, report.bindId);
         // TODO: these two actions should be merged into one in the future
         dispatch({
           type: officeProperties.actions.startLoadingReport,
           reportBindId: report.bindId,
           isRefreshAll,
         });
-        isError = await popupHelper.printRefreshedReport(report.bindId,
+        isError = await this.popupHelper.printRefreshedReport(report.bindId,
           report.objectType,
           reportArray.length,
           index,
           isRefreshAll,
           report.promptsAnswers);
       } catch (error) {
-        popupHelper.handleRefreshError(error,
+        this.popupHelper.handleRefreshError(error,
           reportArray.length,
           index,
           isRefreshAll);
@@ -137,37 +133,30 @@ export function refreshReportsArray(reportArray, isRefreshAll) {
         });
       }
     }
-  };
-}
+  }
 
-export function callForEditDossier(reportParams) {
-  return async (dispatch) => {
+  callForEditDossier = (reportParams) => async (dispatch) => {
     try {
       await Promise.all([
-        officeApiHelper.getExcelSessionStatus(),
-        authenticationHelper.validateAuthToken(),
+        this.officeApiHelper.getExcelSessionStatus(),
+        this.authenticationHelper.validateAuthToken(),
       ]);
-      const editedDossier = officeStoreService.getReportFromProperties(reportParams.bindId);
+      const editedDossier = this.officeStoreService.getReportFromProperties(reportParams.bindId);
       const { projectId, id, manipulationsXML } = editedDossier;
-      const instanceId = await createDossierInstance(projectId, id, { ...manipulationsXML });
+      const instanceId = await this.mstrObjectRestService.createDossierInstance(projectId, id, { ...manipulationsXML });
       editedDossier.instanceId = instanceId;
       editedDossier.isEdit = true;
       dispatch({
         type: SET_REPORT_N_FILTERS,
         editedReport: editedDossier,
       });
-      popupController.runEditDossierPopup(reportParams);
+      this.popupController.runEditDossierPopup(reportParams);
     } catch (error) {
-      return errorService.handleError(error);
+      return this.errorService.handleError(error);
     }
-  };
+  }
+
+  resetState = () => (dispatch) => dispatch({ type: RESET_STATE, })
 }
 
-export function resetState() {
-  return (dispatch) => dispatch({ type: RESET_STATE, });
-}
-
-export const actions = {
-  refreshReportsArray,
-  resetState,
-};
+export const popupActions = new PopupActions();

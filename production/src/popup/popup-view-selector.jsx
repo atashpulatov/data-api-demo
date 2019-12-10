@@ -10,8 +10,10 @@ import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { NavigationTree } from '../navigation/navigation-tree';
 import { actions } from '../navigation/navigation-tree-actions';
 import { PromptsWindow } from '../prompts/prompts-window';
-import { preparePromptedReport } from './popup-actions';
-import { createInstance, answerPrompts, getInstance } from '../mstr-object/mstr-object-rest-service';
+import { popupActions } from './popup-actions';
+import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
+
+const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 
 export const PopupViewSelectorHOC = (props) => {
   let { popupType } = props;
@@ -315,12 +317,12 @@ export function mapStateToProps(state) {
   };
 }
 
-const popupActions = {
+const mapDispatchToProps = {
   ...actions,
-  preparePromptedReport,
+  preparePromptedReport: popupActions.preparePromptedReport,
 };
 
-export const PopupViewSelector = connect(mapStateToProps, popupActions)(PopupViewSelectorHOC);
+export const PopupViewSelector = connect(mapStateToProps, mapDispatchToProps)(PopupViewSelectorHOC);
 
 function parsePopupState(popupState, promptsAnswers) {
   if (!popupState) {

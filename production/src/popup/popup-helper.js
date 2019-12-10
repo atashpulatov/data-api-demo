@@ -1,12 +1,16 @@
 import { officeDisplayService } from '../office/office-display-service';
 import { officeStoreService } from '../office/store/office-store-service';
 import { notificationService } from '../notification/notification-service';
-import { popupController } from './popup-controller';
 import { errorService } from '../error/error-handler';
 import { PopupTypeEnum } from '../home/popup-type-enum';
 import objectTypeEnum from '../mstr-object/mstr-object-type-enum';
 
-class PopupHelper {
+export class PopupHelper {
+
+  init = (popupController) => {
+    this.popupController = popupController;
+  }
+
   capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
   getPopupHeight = (reportArray, reportNumberToShow = 10) => {
@@ -23,7 +27,7 @@ class PopupHelper {
 
   runRefreshAllPopup = async (reportArray, reportNumberToShow = 10) => {
     const popupHeight = this.getPopupHeight(reportArray, reportNumberToShow);
-    await popupController.runPopup(PopupTypeEnum.refreshAllPage, popupHeight, 28);
+    await this.popupController.runPopup(PopupTypeEnum.refreshAllPage, popupHeight, 28);
   };
 
   storagePrepareRefreshAllData = (reportArray) => {
