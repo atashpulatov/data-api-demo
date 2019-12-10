@@ -25,7 +25,7 @@ job 'stage-2-e2e-browser-test' do
     end
   end
 
-  assigned_node_string 'mstr-office-tes'
+  assigned_node_string 'mstr-office-test'
 
   builders do
     bash do
