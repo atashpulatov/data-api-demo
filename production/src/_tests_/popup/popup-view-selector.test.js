@@ -8,10 +8,12 @@ import { PopupTypeEnum } from '../../home/popup-type-enum';
 import { NavigationTree } from '../../navigation/navigation-tree';
 import { AttributeSelectorWindow } from '../../attribute-selector/attribute-selector-window';
 import { DossierWindow } from '../../dossier/dossier-window';
-import { createInstance, answerPrompts } from '../../mstr-object/mstr-object-rest-service';
+import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 
 jest.mock('../../mstr-object/mstr-object-rest-service');
 jest.mock('../../office/office-context');
+
+const { createInstance, answerPrompts } = mstrObjectRestService;
 
 describe('PopupViewSelector', () => {
   it('should render navigation tree when requested', () => {

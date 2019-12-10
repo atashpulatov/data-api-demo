@@ -2,9 +2,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { createDossierInstance, answerDossierPrompts } from '../mstr-object/mstr-object-rest-service';
+import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';
 
 const { microstrategy } = window;
+
+const { createDossierInstance, answerDossierPrompts } = mstrObjectRestService;
 
 export default class _EmbeddedDossier extends React.Component {
   constructor(props) {

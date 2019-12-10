@@ -4,14 +4,14 @@ import './home.css';
 import { withTranslation } from 'react-i18next';
 import { sessionHelper } from '../storage/session-helper';
 import HomeContent from './home-content';
-import { officeApiHelper } from '../office/office-api-helper';
 import { homeHelper } from './home-helper';
 import { toggleRenderSettingsFlag } from '../office/office-actions';
+import { officeStoreService } from '../office/store/office-store-service';
 
 export class _Home extends Component {
   componentDidMount = async () => {
     try {
-      await officeApiHelper.loadExistingReportBindingsExcel();
+      await officeStoreService.loadExistingReportBindingsExcel();
       homeHelper.saveLoginValues();
       homeHelper.saveTokenFromCookies();
       sessionHelper.disableLoading();
