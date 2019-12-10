@@ -31,11 +31,11 @@ const {
 } = mstrObjectRestService;
 
 export class OfficeDisplayService {
-
   init = (reduxStore, popupController) => {
     this.reduxStore = reduxStore;
     this.popupController = popupController;
   }
+
   /**
    * Main function in office Display Service responsible for import/refresh and display workflow. Whole workflow can splitted into steps.
    * 1.Get object definition
@@ -418,6 +418,7 @@ export class OfficeDisplayService {
   splitExcelRows = (excelRows) => {
     let splitRows = [excelRows];
     let isFitSize = false;
+    console.time('Split Rows');
     do {
       const tempSplit = [];
       let changed = false;
@@ -435,6 +436,7 @@ export class OfficeDisplayService {
       splitRows = [...tempSplit];
       if (!changed) isFitSize = true;
     } while (!isFitSize);
+    console.timeEnd('Split Rows');
     return splitRows;
   }
 
@@ -591,10 +593,12 @@ export class OfficeDisplayService {
       rowIndex += splitExcelRows[i].length;
       if (!tableColumnsChanged && isRefresh) { rowRange.clear('Contents'); }
       rowRange.values = splitExcelRows[i];
-      console.time(`Sync for ${splitExcelRows[i].length} rows`);
-      // eslint-disable-next-line no-await-in-loop
-      await excelContext.sync();
-      console.timeEnd(`Sync for ${splitExcelRows[i].length} rows`);
+      if (this.sizeOfObject(excelRows) > 5) {
+        console.time(`Sync for ${splitExcelRows[i].length} rows`);
+        // eslint-disable-next-line no-await-in-loop
+        await excelContext.sync();
+        console.timeEnd(`Sync for ${splitExcelRows[i].length} rows`);
+      }
     }
     console.groupEnd('Append rows');
   }
@@ -607,10 +611,8 @@ export class OfficeDisplayService {
    * @memberof officeDisplayService
    */
   getExcelRows(excelRows) {
-    console.time('Split Rows');
     let splitExcelRows = [excelRows];
     if (this.sizeOfObject(excelRows) > 5) { splitExcelRows = this.splitExcelRows(excelRows); }
-    console.timeEnd('Split Rows');
     return splitExcelRows;
   }
 }
