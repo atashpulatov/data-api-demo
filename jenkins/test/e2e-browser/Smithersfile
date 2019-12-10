@@ -1,7 +1,5 @@
-job 'stage-2-regression-test' do
-  description 'the second stage in the pipeline
-designed to execute all acceptance tests against a
-dedicated runtime environment managed by this job'
+job 'stage-2-e2e-browser-test' do
+  description 'run browser based e2e test for excel plugin'
 
   configure_common_items{}
 
@@ -27,7 +25,7 @@ dedicated runtime environment managed by this job'
     end
   end
 
-  assigned_node_string 'amazon_linux'
+  assigned_node_string 'mstr-office-tes'
 
   builders do
     bash do
@@ -35,11 +33,13 @@ dedicated runtime environment managed by this job'
 set +xe
 
 export PATH=/usr/local/sbin:/usr/local/bin:$PATH
+export TERM_PROGRAM=iTerm.app
+export WORKSPACE_SETTING=mac_test
 
-export WORKSPACE_SETTING=esxi_test
 source .ecosystem
 
-rake test
+rake deploy_tester_server[$APPLICATION_VERSION]
+rake e2e_test_browser
 '
     end
   end
@@ -55,11 +55,7 @@ rake test
     #   file_include_pattern 'acceptance_test.json'
     # end
 
-    parameterized_trigger do
-      job_short_names %w{
-        stage-3-demo
-      }
-    end
+   
   end
 
 end
