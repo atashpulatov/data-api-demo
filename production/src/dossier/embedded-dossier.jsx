@@ -2,7 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {mstrObjectRestService} from '../mstr-object/mstr-object-rest-service';
+import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 
 const { microstrategy } = window;
 
@@ -133,7 +133,7 @@ export default class _EmbeddedDossier extends React.Component {
       tocFeature: { enabled: true, },
       uiMessage: {
         enabled: true,
-        addToLibrary: false,
+        addToLibrary: true,
       },
       enableVizSelection: true,
       onMsgRouterReadyHandler: ({ MsgRouter }) => {
