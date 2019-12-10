@@ -1,10 +1,24 @@
 import { officeApiHelper } from './office-api-helper';
-import officeTableHelper from './office-table-helper';
-import officeFormattingHelper from './office-formatting-helper';
+import { officeTableHelper } from './office-table-helper';
+import { officeFormattingHelper } from './office-formatting-helper';
 import {
+  mstrObjectRestService,
   DATA_LIMIT,
   PROMISE_LIMIT,
   IMPORT_ROW_LIMIT,
+} from '../mstr-object/mstr-object-rest-service';
+import { CLEAR_PROMPTS_ANSWERS } from '../navigation/navigation-tree-actions';
+import { officeProperties } from './office-properties';
+import { officeStoreService } from './store/office-store-service';
+import { PopupTypeEnum } from '../home/popup-type-enum';
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import {
+  NOT_SUPPORTED_NO_ATTRIBUTES,
+  ALL_DATA_FILTERED_OUT,
+  ERROR_POPUP_CLOSED,
+} from '../error/constants';
+
+const {
   getObjectInfo,
   getObjectDefinition,
   createInstance,
@@ -14,22 +28,14 @@ import {
   createDossierInstance,
   fetchVisualizationDefinition,
   getDossierDefinition,
-} from '../mstr-object/mstr-object-rest-service';
-import { CLEAR_PROMPTS_ANSWERS } from '../navigation/navigation-tree-actions';
-import { reduxStore } from '../store';
-import { officeProperties } from './office-properties';
-import { officeStoreService } from './store/office-store-service';
-import { popupController } from '../popup/popup-controller';
-import { PopupTypeEnum } from '../home/popup-type-enum';
-import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import {
-  NOT_SUPPORTED_NO_ATTRIBUTES,
-  ALL_DATA_FILTERED_OUT,
-  ERROR_POPUP_CLOSED,
-} from '../error/constants';
+} = mstrObjectRestService;
 
+export class OfficeDisplayService {
 
-class OfficeDisplayService {
+  init = (reduxStore, popupController) => {
+    this.reduxStore = reduxStore;
+    this.popupController = popupController;
+  }
   /**
    * Main function in office Display Service responsible for import/refresh and display workflow. Whole workflow can splitted into steps.
    * 1.Get object definition
@@ -197,8 +203,8 @@ class OfficeDisplayService {
       }, isRefresh);
 
       console.timeEnd('Total');
-      reduxStore.dispatch({ type: CLEAR_PROMPTS_ANSWERS });
-      reduxStore.dispatch({
+      this.reduxStore.dispatch({ type: CLEAR_PROMPTS_ANSWERS });
+      this.reduxStore.dispatch({
         type: officeProperties.actions.finishLoadingReport,
         reportBindId: bindingId,
       });
@@ -227,9 +233,9 @@ class OfficeDisplayService {
    * @memberOf OfficeDisplayService
    */
   dispatchPrintFinish = () => {
-    const reduxStoreState = reduxStore.getState();
-    reduxStore.dispatch({ type: officeProperties.actions.popupHidden });
-    reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
+    const reduxStoreState = this.reduxStore.getState();
+    this.reduxStore.dispatch({ type: officeProperties.actions.popupHidden });
+    this.reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
     try {
       if (reduxStoreState.sessionReducer.dialog.close) {
         reduxStoreState.sessionReducer.dialog.close();
@@ -310,12 +316,12 @@ class OfficeDisplayService {
        const objectInfo = isPrompted
          ? await getObjectInfo(objectId, projectId, mstrObjectType)
          : await getObjectDefinition(objectId, projectId, mstrObjectType);
-       reduxStore.dispatch({
+       this.reduxStore.dispatch({
          type: officeProperties.actions.preLoadReport,
          preLoadReport: objectInfo,
        });
      }
-     await popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
+     await this.popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
    }
 
    /**

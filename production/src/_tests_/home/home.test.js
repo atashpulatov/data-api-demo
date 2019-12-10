@@ -4,16 +4,14 @@ import { mount, shallow } from 'enzyme';
 import { Home, _Home } from '../../home/home';
 import { HeaderHOC } from '../../home/header';
 import { sessionHelper } from '../../storage/session-helper';
-import { officeApiHelper } from '../../office/office-api-helper';
 import { reduxStore } from '../../store';
 import { homeHelper } from '../../home/home-helper';
-import HomeContent from '../../home/home-content';
 import { SettingsMenu } from '../../home/settings-menu';
+import {officeStoreService} from '../../office/store/office-store-service';
 
 jest.mock('../../storage/session-helper');
-jest.mock('../../office/office-api-helper');
+jest.mock('../../office/store/office-store-service');
 jest.mock('../../home/home-helper');
-
 
 describe('Home', () => {
   afterEach(() => {
@@ -43,7 +41,7 @@ describe('Home', () => {
     const tempPromise = Promise.resolve();
     const sessionHelperSpy = jest.spyOn(sessionHelper, 'disableLoading');
     const officeHelperSpy = jest
-      .spyOn(officeApiHelper, 'loadExistingReportBindingsExcel')
+      .spyOn(officeStoreService, 'loadExistingReportBindingsExcel')
       .mockImplementation(async () => null);
     sessionHelperSpy.mockClear();
     officeHelperSpy.mockClear();

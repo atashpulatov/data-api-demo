@@ -7,6 +7,9 @@ jest.mock('../../notification/action-creator');
 jest.mock('../../store');
 
 describe('NotificationService', () => {
+  beforeAll(()=> {
+    notificationService.init(reduxStore, actionCreator);
+  });
   it('should dispatch redux action to display message', () => {
     // given
     const testType = messageProperties.success;
