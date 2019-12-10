@@ -141,11 +141,8 @@ export default class DB {
    */
   static purge(dbToKeep) {
     return Dexie.getDatabaseNames((dbs) => {
-      console.log(dbToKeep);
-      console.log(dbs);
-      dbs.filter((db) => db !== dbToKeep);
-      console.log(dbs);
-      return Promise.all(dbs.map(Dexie.delete));
+      const dbsToDelete = dbs.filter((db) => db !== dbToKeep);
+      return Promise.all(dbsToDelete.map(Dexie.delete));
     });
   }
 
