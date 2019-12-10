@@ -1,6 +1,6 @@
 /* eslint-disable import/no-cycle */
 import { addNestedPropertiesToObjects } from '@mstr/rc';
-import DB from './pouch-db';
+import DB from './cache-db';
 import getObjectList, { fetchProjects, getMyLibraryObjectList } from '../mstr-object/mstr-list-rest-service';
 
 
@@ -57,20 +57,20 @@ export const refreshCacheState = (shouldCleanSelection) => (dispatch) => {
 export function fetchObjects(dispatch, cache) {
   // Projects
   fetchProjects((projects) => {
-    cache.putData(PROJECTS_DB_ID, projects, true).catch(console.error);
+    cache.putData(PROJECTS_DB_ID, projects).catch(console.error);
 
     // My library
     console.time('Creating my library cache');
     dispatch(myLibraryLoading(true));
-    cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, true);
+    cache.updateData(LOADING_DB + MY_LIBRARY_DB_ID, true);
     getMyLibraryObjectList((objects) => {
       objects = addNestedPropertiesToObjects(objects, projects);
-      cache.putData(MY_LIBRARY_DB_ID, objects, true);
+      cache.putData(MY_LIBRARY_DB_ID, objects);
     })
       .catch(console.error)
       .finally(() => {
         console.timeEnd('Creating my library cache');
-        cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, false).then(() => {
+        cache.updateData(LOADING_DB + MY_LIBRARY_DB_ID, false).then(() => {
           dispatch(myLibraryLoading(false));
         });
       });
@@ -78,15 +78,15 @@ export function fetchObjects(dispatch, cache) {
     // Environment library
     console.time('Creating environment cache');
     dispatch(objectListLoading(true));
-    cache.putData(LOADING_DB + ENV_LIBRARY_DB_ID, true);
+    cache.updateData(LOADING_DB + ENV_LIBRARY_DB_ID, true);
     getObjectList((objects) => {
       objects = addNestedPropertiesToObjects(objects, projects);
-      return cache.putData(ENV_LIBRARY_DB_ID, objects, true);
+      return cache.putData(ENV_LIBRARY_DB_ID, objects);
     })
       .catch(console.error)
       .finally(() => {
         console.timeEnd('Creating environment cache');
-        cache.putData(LOADING_DB + ENV_LIBRARY_DB_ID, false).then(() => {
+        cache.updateData(LOADING_DB + ENV_LIBRARY_DB_ID, false).then(() => {
           dispatch(objectListLoading(false));
         });
       });
@@ -121,21 +121,10 @@ export function fetchObjectsFallback() {
   };
 }
 
-export function initCache(cache, loading = false) {
-  console.log('Initializing cache');
-  return Promise.all([
-    cache.putData(PROJECTS_DB_ID, []),
-    cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, loading),
-    cache.putData(MY_LIBRARY_DB_ID, []),
-    cache.putData(LOADING_DB + ENV_LIBRARY_DB_ID, loading),
-    cache.putData(ENV_LIBRARY_DB_ID, []),
-  ]);
-}
-
 export function resetLoading(cache) {
   return Promise.all([
-    cache.putData(LOADING_DB + MY_LIBRARY_DB_ID, false),
-    cache.putData(LOADING_DB + ENV_LIBRARY_DB_ID, false),
+    cache.updateData(LOADING_DB + MY_LIBRARY_DB_ID, false),
+    cache.updateData(LOADING_DB + ENV_LIBRARY_DB_ID, false),
   ]);
 }
 
@@ -145,39 +134,23 @@ export function createCache(initUsername) {
     const { sessionReducer } = getState();
     const { userID } = sessionReducer;
     const user = initUsername || userID;
-    const cache = new DB();
-    // Clear PouchDB if user is different
-    cache.get(CURRENT_USER).then((doc) => {
-      if (doc.data !== userID) {
-        console.log('Creating cache for user', user);
-        return initCache(cache).then(() => {
-          cache.putData(CURRENT_USER, user).then(() => {
-            fetchObjects(dispatch, cache);
-          });
-        });
-      }
-      // If loading is active when starting the add-in with the same user,
-      // we disable loading to allow refresh.
-      return resetLoading(cache).catch(console.error);
-    }).catch((error) => {
-      if (error.name === 'not_found') {
-        console.log('Creating new cache for user', user);
-        return cache.instance
-          .put({ _id: CURRENT_USER, data: user })
-          .then(() => {
-            fetchObjects(dispatch, cache);
-          });
-      }
-      console.error(error);
+    const cache = new DB(user);
+    DB.purge(user).then(() => {
+      cache.callIfTableEmpty(() => {
+        fetchObjects(dispatch, cache);
+      });
     });
   };
 }
 
 export function refreshCache() {
-  return (dispatch) => {
-    const cache = new DB();
+  return (dispatch, getState) => {
+    // Create or get DB for current user
+    const { sessionReducer } = getState();
+    const { userID } = sessionReducer;
+    const cache = new DB(userID);
     // Overwrite cache
-    initCache(cache, true).then(() => {
+    cache.clearTable().then(() => {
       fetchObjects(dispatch, cache);
     });
   };
@@ -249,12 +222,13 @@ export function listenToCache(prevCache) {
 }
 
 export function clearCache(prevCache) {
-  return (dispatch) => {
-    const cache = prevCache || new DB();
+  return (dispatch, getState) => {
+    // Create or get DB for current user
+    const { sessionReducer } = getState();
+    const { userID } = sessionReducer;
+    const cache = prevCache || new DB(userID);
     dispatch(clearStateCache());
     console.log('Clearing cache');
-    return cache.putData(CURRENT_USER, null).then(() => {
-      initCache(cache);
-    }).catch(console.error);
+    return cache.clearTable().catch(console.error);
   };
 }

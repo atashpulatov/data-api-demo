@@ -9,7 +9,7 @@ import { helper } from '../helpers/helpers';
 import { sessionHelper } from '../storage/session-helper';
 import { errorService } from '../error/error-handler';
 import { clearCache } from '../cache/cache-actions';
-import DB from '../cache/pouch-db';
+import DB from '../cache/cache-db';
 import { officeContext } from '../office/office-context';
 
 const APP_VERSION = process.env.REACT_APP_MSTR_OFFICE_VERSION;

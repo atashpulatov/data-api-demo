@@ -8,8 +8,14 @@ import { actions } from './navigation-tree-actions';
 import { getCubeStatus, isPrompted as checkIfPrompted } from '../mstr-object/mstr-object-rest-service';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './navigation-tree.css';
-import { connectToCache, listenToCache, REFRESH_CACHE_COMMAND, refreshCacheState, fetchObjectsFallback } from '../cache/cache-actions';
-import DB from '../cache/pouch-db';
+import {
+  connectToCache,
+  listenToCache,
+  REFRESH_CACHE_COMMAND,
+  refreshCacheState,
+  fetchObjectsFallback
+} from '../cache/cache-actions';
+import DB from '../cache/cache-db';
 import { authenticationHelper } from '../authentication/authentication-helper';
 
 const DB_TIMEOUT = 5000; // Interval for checking indexedDB changes on IE

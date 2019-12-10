@@ -17,22 +17,22 @@ export default class AsyncQueue {
   }
 
   /**
- * Adds array of objects to the queue
- * @param {Array} object - array of mstr objects
- * @returns
- * @memberof AsyncQueue
- */
+   * Adds array of objects to the queue
+   * @param {Array} object - array of mstr objects
+   * @returns
+   * @memberof AsyncQueue
+   */
   enqueue(object) {
     this.queue.unshift(object);
     if (this.callback) return this.dequeue();
   }
 
   /**
- * Removes the last element from the queue and runs the callback with it as an argument
- * If the removed element has length < 7000 and is not the last in the queue - will append it
- * to the next element in the queue and skip running the callback
- * @memberof AsyncQueue
- */
+   * Removes the last element from the queue and runs the callback with it as an argument
+   * If the removed element has length < 7000 and is not the last in the queue - will append it
+   * to the next element in the queue and skip running the callback
+   * @memberof AsyncQueue
+   */
   async dequeue() {
     if (!this.busy) {
       this.busy = true;
