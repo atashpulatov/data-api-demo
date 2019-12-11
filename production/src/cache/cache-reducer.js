@@ -40,14 +40,11 @@ export const REFRESH_STATE = {
  * @param {*} uuid
  * @param {*} uuidArray
  */
-function isUuidAlreadyProcessed(uuid, uuidArray) {
-  return !!uuid && uuidArray.includes(uuid);
+function isUuidAlreadyProcessed(data, uuidArray) {
+  return data && data.uuid && uuidArray.includes(data.uuid);
 }
 
 const cacheReducer = (state = DEFAULT_STATE, action) => {
-  // const shouldSkip = isUuidAlreadyProcessed(action.data.uuid, state.uuidProcessed);
-
-
   switch (action && action.type) {
   case SET_MY_LIBRARY_LOADING:
     return {
@@ -60,6 +57,7 @@ const cacheReducer = (state = DEFAULT_STATE, action) => {
       environmentLibrary: { ...state.environmentLibrary, isLoading: action.data },
     };
   case ADD_ENV_OBJECTS:
+    if (isUuidAlreadyProcessed(action.data, state.uuidProcessed)) return state;
     return {
       ...state,
       environmentLibrary: {
@@ -68,6 +66,7 @@ const cacheReducer = (state = DEFAULT_STATE, action) => {
       },
     };
   case ADD_MY_LIBRARY_OBJECTS:
+    if (isUuidAlreadyProcessed(action.data, state.uuidProcessed)) return state;
     return {
       ...state,
       myLibrary: {
