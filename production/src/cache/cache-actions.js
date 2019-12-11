@@ -21,6 +21,8 @@ export const ENV_LIBRARY_DB_ID = 'env-library';
 export const LOADING_DB = 'loading-';
 export const CURRENT_USER = 'user';
 
+const { getObjectList, fetchProjects, getMyLibraryObjectList } = mstrListRestService;
+
 export const objectListLoading = (isLoading) => ({
   type: SET_OBJECT_LIST_LOADING,
   data: isLoading,

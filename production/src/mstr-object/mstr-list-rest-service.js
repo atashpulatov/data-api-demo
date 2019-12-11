@@ -1,5 +1,4 @@
 import request from 'superagent';
-import { reduxStore } from '../store';
 import filterDossiersByViewMedia from '../helpers/viewMediaHelper';
 import Queue from './queue';
 
@@ -10,63 +9,53 @@ const LIMIT = 7000;
 const DOSSIER_SUBTYPE = 14081;
 const SUBTYPES = [768, 769, 774, 776, 779, DOSSIER_SUBTYPE];
 
-/**
- * Uses imported helper function to check whether object is a Dossier, but only if it is the same subtype as Dossier
- *
- * @param {Object} object MicroStrategy Object (Resport, Dossier, Cube)
- * @returns {Boolean}
- */
-export function filterFunction(object) {
-  if (object.subtype === DOSSIER_SUBTYPE) {
-    return filterDossiersByViewMedia(object.viewMedia);
+export class MstrListRestService {
+  init = (reduxStore) => {
+    this.reduxStore = reduxStore;
   }
-  return true;
-}
 
-/**
- * Applies filtering function to body.result array of objects
- *
- * @param {Object} body - MSTR API response body
- * @returns {Array}
- */
-export function filterDossier(body) {
-  const { result } = body;
-  return result.filter(filterFunction);
-}
+  /**
+   * Uses imported helper function to check whether object is a Dossier, but only if it is the same subtype as Dossier
+   *
+   * @param {Object} object MicroStrategy Object (Resport, Dossier, Cube)
+   * @returns {Boolean}
+   */
+  filterFunction = (object) => {
+    if (object.subtype === DOSSIER_SUBTYPE) {
+      return filterDossiersByViewMedia(object.viewMedia);
+    }
+    return true;
+  }
 
-/**
- * Extracts the totalItems value from the response body
- *
- * @param {*} body
- * @returns
- */
-export function processTotalItems(body) {
-  return body.totalItems;
-}
+  /**
+   * Applies filtering function to body.result array of objects
+   *
+   * @param {Object} body - MSTR API response body
+   * @returns {Array}
+   */
+  filterDossier = (body) => {
+    const { result } = body;
+    return result.filter(this.filterFunction);
+  }
 
-/**
- * Creates the request parameters from redux state
- *
- * @returns
- */
-export function getRequestParams() {
-  const { sessionReducer } = reduxStore.getState();
-  const { envUrl, authToken } = sessionReducer;
-  const typeQuery = SUBTYPES.join('&type=');
-  return { envUrl, authToken, typeQuery };
-}
+  /**
+   * Extracts the totalItems value from the response body
+   *
+   * @param {*} body
+   * @returns
+   */
+  processTotalItems = (body) => body.totalItems
 
-/**
+  /**
  * Get a projects dictionary with key:value {id:name} pairs
  *
  * @returns {Object} {ProjetId: projectName}
  */
-export function getProjectDictionary() {
-  return fetchProjects()
-    .then((projects) => projects.reduce((dict, project) => ({ ...dict, [project.id]: project.name || '' }), {}));
-}
+  getProjectDictionary = () => this.fetchProjects()
+      .then((projects) => projects.reduce((dict, project) => ({ ...dict, [project.id]: project.name || '' }), {}));
+  }
 
-/**
+  /**
  * Fetches object of given subtypes from MSTR API per project.
  *
  * @param {Object} { requestParams, callback = (res) => res, offset = 0, limit = LIMIT }
@@ -79,26 +68,26 @@ export function getProjectDictionary() {
  * @param {Array} resultArray - Array of objects that is passed during reccurent function call for projects > 7000
  * @returns {Array} of MSTR objects
  */
-export function fetchObjectListByProject({ requestParams, callback = filterDossier, offset = 0, limit = LIMIT },
-  projectId, queue) {
-  const { envUrl, authToken, typeQuery } = requestParams;
-  const url = `${envUrl}/${SEARCH_ENDPOINT}?limit=${limit}&offset=${offset}&type=${typeQuery}`;
-  return request
-    .get(url)
-    .set('x-mstr-authtoken', authToken)
-    .set('x-mstr-projectid', projectId)
-    .withCredentials()
-    .then((res) => {
-      if (res.body.result.length === 7000) {
-        offset += limit;
-        queue.enqueue(callback(res.body));
-        return fetchObjectListByProject({ requestParams, filterDossier, offset, limit }, projectId, queue);
-      }
-      return callback(res.body);
-    });
-}
+  fetchObjectListByProject({ requestParams, callback = filterDossier, offset = 0, limit = LIMIT },
+    projectId, queue) {
+    const { envUrl, authToken, typeQuery } = requestParams;
+    const url = `${envUrl}/${SEARCH_ENDPOINT}?limit=${limit}&offset=${offset}&type=${typeQuery}`;
+    return request
+      .get(url)
+      .set('x-mstr-authtoken', authToken)
+      .set('x-mstr-projectid', projectId)
+      .withCredentials()
+      .then((res) => {
+        if (res.body.result.length === 7000) {
+          offset += limit;
+          queue.enqueue(callback(res.body));
+          return fetchObjectListByProject({ requestParams, filterDossier, offset, limit }, projectId, queue);
+        }
+        return callback(res.body);
+      });
+  }
 
-/**
+  /**
  * Fetches all items from every (selected) project, once response is received -
  * it is added to the queue to be cached
  *
@@ -106,15 +95,15 @@ export function fetchObjectListByProject({ requestParams, callback = filterDossi
  * @param {Function} callback - function that adds objects to cache
  * @returns
  */
-export async function fetchObjectListForSelectedProjects(callback) {
-  const requestParams = getRequestParams();
-  const projects = await getProjectDictionary();
+fetchObjectListForSelectedProjects = async (callback) => {
+  const requestParams = this.getRequestParams();
+  const projects = await this.getProjectDictionary();
   const projectIds = Object.keys(projects);
   const queue = new Queue(callback);
   const promiseList = [];
   console.time('Fetching environment objects');
   for (const id of projectIds) {
-    const promise = fetchObjectListByProject({ requestParams }, id, queue)
+    const promise = this.fetchObjectListByProject({ requestParams }, id, queue)
       .then((promiseResult) => queue.enqueue(promiseResult));
     promiseList.push(promise);
   }
@@ -123,48 +112,48 @@ export async function fetchObjectListForSelectedProjects(callback) {
   });
 }
 
-/**
- * Fetches all objects available in my Library from MSTR API and filters out non-Dossier objects.
- *
- */
-export function fetchMyLibraryObjectList(callback = (res) => res) {
-  const { envUrl, authToken } = getRequestParams();
-  const url = `${envUrl}/${MY_LIBRARY_ENDPOINT}?outputFlag=FILTER_TOC`;
-  return request
-    .get(url)
-    .set('x-mstr-authtoken', authToken)
-    .withCredentials()
-    .then((res) => res.body)
-    .then(callback);
-}
+  /**
+   * Fetches all objects available in my Library from MSTR API and filters out non-Dossier objects.
+   *
+   */
+  fetchMyLibraryObjectList = (callback = (res) => res) => {
+    const { envUrl, authToken } = this.getRequestParams();
+    const url = `${envUrl}/${MY_LIBRARY_ENDPOINT}?outputFlag=FILTER_TOC`;
+    return request
+      .get(url)
+      .set('x-mstr-authtoken', authToken)
+      .withCredentials()
+      .then((res) => res.body)
+      .then(callback);
+  }
 
-/**
- * Fetches all projects for the authenticated session.
- *
- * @param {Function} callback - Function to be applied to the returned response body
- * @returns
- */
-export function fetchProjects(callback = (res) => res) {
-  const { envUrl, authToken } = getRequestParams();
-  const url = `${envUrl}/${PROJECTS_ENDPOINT}`;
-  return request
-    .get(url)
-    .set('x-mstr-authtoken', authToken)
-    .withCredentials()
-    .then((res) => res.body)
-    .then(callback);
-}
+  /**
+   * Fetches all projects for the authenticated session.
+   *
+   * @param {Function} callback - Function to be applied to the returned response body
+   * @returns
+   */
+  fetchProjects = (callback = (res) => res) => {
+    const { envUrl, authToken } = this.getRequestParams();
+    const url = `${envUrl}/${PROJECTS_ENDPOINT}`;
+    return request
+      .get(url)
+      .set('x-mstr-authtoken', authToken)
+      .withCredentials()
+      .then((res) => res.body)
+      .then(callback);
+  }
 
-/**
- * Returns all objects available in my Library with filtered out non-Dossier objects.
- *
- */
-export function getMyLibraryObjectList(callback = (res) => res) {
-  const cbFilter = (res) => callback(res.filter((object) => filterDossiersByViewMedia(object.target.viewMedia)));
-  return fetchMyLibraryObjectList(cbFilter);
-}
+  /**
+   * Returns all objects available in my Library with filtered out non-Dossier objects.
+   *
+   */
+  getMyLibraryObjectList = (callback = (res) => res) => {
+    const cbFilter = (res) => callback(res.filter((object) => filterDossiersByViewMedia(object.target.viewMedia)));
+    return this.fetchMyLibraryObjectList(cbFilter);
+  }
 
-/**
+  /**
  * Logic for fetching a list of objects (Reports, Datasets and Dossiers) from MSTR API.
  * It takes a function that will be called when the pagination promise resolves.
  *
@@ -172,6 +161,7 @@ export function getMyLibraryObjectList(callback = (res) => res) {
  * @export
  * @class getObjectList
  */
-export default function getObjectList(callback) {
-  return fetchObjectListForSelectedProjects(callback);
+  getObjectList = (callback) => this.fetchObjectListForSelectedProjects(callback);
 }
+
+export const mstrListRestService = new MstrListRestService();

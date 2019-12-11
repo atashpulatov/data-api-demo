@@ -1,4 +1,3 @@
-import { reduxStore } from '../store';
 import { sessionProperties } from './session-properties';
 import { authenticationService } from '../authentication/auth-rest-service';
 import { userRestService } from '../home/user-rest-service';
@@ -7,28 +6,33 @@ import { homeHelper } from '../home/home-helper';
 import { createCache } from '../cache/cache-actions';
 import DB from '../cache/cache-db';
 
-class SessionHelper {
+export class SessionHelper {
+
+  init = (reduxStore) => {
+    this.reduxStore = reduxStore;
+  }
+
   enableLoading = () => {
-    reduxStore.dispatch({
+    this.reduxStore.dispatch({
       type: sessionProperties.actions.setLoading,
       loading: true,
     });
   }
 
   disableLoading = () => {
-    reduxStore.dispatch({
+    this.reduxStore.dispatch({
       type: sessionProperties.actions.setLoading,
       loading: false,
     });
   }
 
   logOut = () => {
-    reduxStore.dispatch({ type: sessionProperties.actions.logOut, });
+    this.reduxStore.dispatch({ type: sessionProperties.actions.logOut, });
   }
 
   logOutRest = async () => {
-    const { authToken } = reduxStore.getState().sessionReducer;
-    const { envUrl } = reduxStore.getState().sessionReducer;
+    const { authToken } = this.reduxStore.getState().sessionReducer;
+    const { envUrl } = this.reduxStore.getState().sessionReducer;
     try {
       await authenticationService.logout(envUrl, authToken);
     } catch (error) {
@@ -53,21 +57,21 @@ class SessionHelper {
   }
 
   saveLoginValues = (values) => {
-    reduxStore.dispatch({
+    this.reduxStore.dispatch({
       type: sessionProperties.actions.logIn,
       values,
     });
   }
 
   logIn = (authToken) => {
-    reduxStore.dispatch({
+    this.reduxStore.dispatch({
       type: sessionProperties.actions.loggedIn,
       authToken,
     });
   }
 
   getSession = () => {
-    const currentStore = reduxStore.getState();
+    const currentStore = this.reduxStore.getState();
     const projectId = currentStore.historyReducer.project
       ? currentStore.historyReducer.project.projectId
       : undefined;
@@ -83,19 +87,19 @@ class SessionHelper {
   getUserInfo = async () => {
     let userData = {};
     const IS_LOCALHOST = this.isLocalhost();
-    const envUrl = IS_LOCALHOST ? reduxStore.getState().sessionReducer.envUrl : homeHelper.saveLoginValues();
-    const authToken = IS_LOCALHOST ? reduxStore.getState().sessionReducer.authToken : homeHelper.saveTokenFromCookies();
+    const envUrl = IS_LOCALHOST ? this.reduxStore.getState().sessionReducer.envUrl : homeHelper.saveLoginValues();
+    const authToken = IS_LOCALHOST ? this.reduxStore.getState().sessionReducer.authToken : homeHelper.saveTokenFromCookies();
     try {
       userData = await userRestService.getUserInfo(authToken, envUrl);
       !userData.userInitials && sessionHelper.saveUserInfo(userData);
-      if (DB.getIndexedDBSupport()) createCache(userData.id)(reduxStore.dispatch, reduxStore.getState);
+      if (DB.getIndexedDBSupport()) createCache(userData.id)(this.reduxStore.dispatch, this.reduxStore.getState);
     } catch (error) {
       errorService.handleError(error, { isLogout: !IS_LOCALHOST });
     }
   }
 
   saveUserInfo = (values) => {
-    reduxStore.dispatch({
+    this.reduxStore.dispatch({
       type: sessionProperties.actions.getUserInfo,
       userFullName: values.fullName,
       userInitials: values.initials,
@@ -104,7 +108,7 @@ class SessionHelper {
   }
 
   setDialog = (dialog) => {
-    reduxStore.dispatch({
+    this.reduxStore.dispatch({
       type: sessionProperties.actions.setDialog,
       dialog,
     });

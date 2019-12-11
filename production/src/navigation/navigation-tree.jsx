@@ -5,7 +5,7 @@ import { ObjectTable, TopFilterPanel } from '@mstr/rc';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { PopupButtons } from '../popup/popup-buttons';
 import { actions } from './navigation-tree-actions';
-import { getCubeStatus, isPrompted as checkIfPrompted } from '../mstr-object/mstr-object-rest-service';
+import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './navigation-tree.css';
 import {
@@ -18,6 +18,9 @@ import DB from '../cache/cache-db';
 import { authenticationHelper } from '../authentication/authentication-helper';
 
 const SAFETY_FALLBACK = 7000; // Interval for falling back to network
+
+const { getCubeStatus, isPrompted } = mstrObjectRestService;
+const checkIfPrompted = isPrompted;
 
 export class _NavigationTree extends Component {
   constructor(props) {
@@ -103,17 +106,17 @@ export class _NavigationTree extends Component {
 
   handleOk = async () => {
     const { chosenSubtype, chosenObjectId, chosenProjectId, requestImport, requestDossierOpen } = this.props;
-    let isPrompted = false;
+    let isPromptedResponse = false;
     try {
       // If myLibrary is on, then selected object is a dossier.
       const objectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
       if ((objectType === mstrObjectEnum.mstrObjectType.report) || (objectType === mstrObjectEnum.mstrObjectType.dossier)) {
-        isPrompted = await checkIfPrompted(chosenObjectId, chosenProjectId, objectType.name);
+        isPromptedResponse = await checkIfPrompted(chosenObjectId, chosenProjectId, objectType.name);
       }
       if (objectType.name === mstrObjectEnum.mstrObjectType.dossier.name) {
         requestDossierOpen();
       } else {
-        requestImport(isPrompted);
+        requestImport(isPromptedResponse);
       }
     } catch (e) {
       const { handlePopupErrors } = this.props;
@@ -131,13 +134,13 @@ export class _NavigationTree extends Component {
 
   handleSecondary = async () => {
     const { chosenProjectId, chosenObjectId, chosenObjectName, chosenType, chosenSubtype, handlePrepare } = this.props;
-    let isPrompted = false;
+    let isPromptedResponse = false;
     try {
       const objectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
       if ((objectType === mstrObjectEnum.mstrObjectType.report) || (objectType === mstrObjectEnum.mstrObjectType.dossier)) {
-        isPrompted = await checkIfPrompted(chosenObjectId, chosenProjectId, objectType.name);
+        isPromptedResponse = await checkIfPrompted(chosenObjectId, chosenProjectId, objectType.name);
       }
-      handlePrepare(chosenProjectId, chosenObjectId, chosenSubtype, chosenObjectName, chosenType, isPrompted);
+      handlePrepare(chosenProjectId, chosenObjectId, chosenSubtype, chosenObjectName, chosenType, isPromptedResponse);
       this.setState({ previewDisplay: true });
     } catch (err) {
       const { handlePopupErrors } = this.props;
@@ -153,14 +156,14 @@ export class _NavigationTree extends Component {
   };
 
   // TODO: temporary solution
-  onObjectChosen = async (objectId, projectId, subtype, objectName, target, myLibrary) => {
+  onObjectChosen = async (objectId, projectId, subtype, objectName, targetId, myLibrary) => {
     const { selectObject, handlePopupErrors } = this.props;
     // If myLibrary is on, then selected object is a dossier.
     const objectType = myLibrary ? mstrObjectEnum.mstrObjectType.dossier : mstrObjectEnum.getMstrTypeBySubtype(subtype);
     let chosenLibraryDossier;
     if (myLibrary) {
       chosenLibraryDossier = objectId;
-      objectId = target.id;
+      objectId = targetId;
     }
 
     let cubeStatus = true;
@@ -171,7 +174,7 @@ export class _NavigationTree extends Component {
         handlePopupErrors(error);
       }
     }
-    this.setState({ isPublished:cubeStatus });
+    this.setState({ isPublished: cubeStatus });
 
     selectObject({
       chosenObjectId: objectId,
@@ -214,7 +217,7 @@ export class _NavigationTree extends Component {
             id: myLibrary ? chosenLibraryDossier : chosenObjectId,
             projectId: chosenProjectId,
           }}
-          onSelect={({ id, projectId, subtype, name, target }) => this.onObjectChosen(id, projectId, subtype, name, target, myLibrary)}
+          onSelect={({ id, projectId, subtype, name, targetId }) => this.onObjectChosen(id, projectId, subtype, name, targetId, myLibrary)}
           sort={sorter}
           onSortChange={changeSorting}
           locale={i18n.language}
