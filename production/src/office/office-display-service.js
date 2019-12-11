@@ -581,7 +581,8 @@ export class OfficeDisplayService {
    */
   async appendRowsToTable(excelRows, excelContext, officeTable, rowIndex, tableColumnsChanged, isRefresh) {
     console.group('Append rows');
-    const splitExcelRows = this.getExcelRows(excelRows);
+    const isOverLimit = this.sizeOfObject(excelRows) > 5;
+    const splitExcelRows = this.getExcelRows(excelRows, isOverLimit);
     for (let i = 0; i < splitExcelRows.length; i += 1) {
       excelContext.workbook.application.suspendApiCalculationUntilNextSync();
       // Get resize range: The number of rows/cols by which to expand the bottom-right corner,
@@ -593,7 +594,7 @@ export class OfficeDisplayService {
       rowIndex += splitExcelRows[i].length;
       if (!tableColumnsChanged && isRefresh) { rowRange.clear('Contents'); }
       rowRange.values = splitExcelRows[i];
-      if (this.sizeOfObject(excelRows) > 5) {
+      if (isOverLimit) {
         console.time(`Sync for ${splitExcelRows[i].length} rows`);
         // eslint-disable-next-line no-await-in-loop
         await excelContext.sync();
@@ -607,12 +608,13 @@ export class OfficeDisplayService {
    * Return Excel Rows that will be added to table if needed rows will be splitted into chunks that meets limit of 5MB
    *
    * @param {Array} excelRows Array of table data
+   * @param {Boolean} isOverLimit Specify if the passed Excel rows are over 5MB limit
    * @returns {Array} Array with sub-arrays with size not more than 5MB
    * @memberof officeDisplayService
    */
-  getExcelRows(excelRows) {
+  getExcelRows(excelRows, isOverLimit) {
     let splitExcelRows = [excelRows];
-    if (this.sizeOfObject(excelRows) > 5) { splitExcelRows = this.splitExcelRows(excelRows); }
+    if (isOverLimit) { splitExcelRows = this.splitExcelRows(excelRows); }
     return splitExcelRows;
   }
 }
