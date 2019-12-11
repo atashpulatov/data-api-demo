@@ -159,7 +159,6 @@ export function refreshCache() {
 }
 
 export function dispatchCacheResults({ type, data, uuid }, dispatch) {
-  console.log(`Cache processing: ${uuid} type: ${type}`);
   switch (type) {
   case PROJECTS_DB_ID:
     dispatch(addProjects(data));
