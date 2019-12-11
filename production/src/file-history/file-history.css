@@ -116,6 +116,7 @@ button.add-data-btn:focus {
 .file-history-container:focus {
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.20);
   border: 1px solid #1C91DC;
+  outline: none;
 }
 
 .report-title {
