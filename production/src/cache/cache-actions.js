@@ -165,10 +165,10 @@ export function dispatchCacheResults({ type, data, uuid }, dispatch) {
     dispatch(addProjects(data));
     break;
   case MY_LIBRARY_DB_ID:
-    dispatch(addMyLibraryObjects(data));
+    dispatch(addMyLibraryObjects({ data, uuid }));
     break;
   case ENV_LIBRARY_DB_ID:
-    dispatch(addEnvObjects(data));
+    dispatch(addEnvObjects({ data, uuid }));
     break;
   case LOADING_DB + MY_LIBRARY_DB_ID:
     dispatch(myLibraryLoading(data));

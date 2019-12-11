@@ -70,7 +70,6 @@ export default class DB {
       // this.db[table].each(callback);
     }
     this.db.on('changes', (changes) => {
-      console.log(changes);
       changes.forEach(({ obj }) => {
         callback(obj);
       });

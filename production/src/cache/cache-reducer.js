@@ -62,8 +62,9 @@ const cacheReducer = (state = DEFAULT_STATE, action) => {
       ...state,
       environmentLibrary: {
         ...state.environmentLibrary,
-        objects: [...state.environmentLibrary.objects, ...action.data]
+        objects: [...state.environmentLibrary.objects, ...action.data.data]
       },
+      uuidProcessed:[...state.uuidProcessed, action.data.uuid]
     };
   case ADD_MY_LIBRARY_OBJECTS:
     if (isUuidAlreadyProcessed(action.data, state.uuidProcessed)) return state;
@@ -71,8 +72,9 @@ const cacheReducer = (state = DEFAULT_STATE, action) => {
       ...state,
       myLibrary: {
         ...state.myLibrary,
-        objects: [...state.myLibrary.objects, ...action.data],
+        objects: [...state.myLibrary.objects, ...action.data.data],
       },
+      uuidProcessed:[...state.uuidProcessed, action.data.uuid]
     };
   case ADD_PROJECTS:
     return {
