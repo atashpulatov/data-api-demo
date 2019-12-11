@@ -116,7 +116,7 @@ export const SettingsMenuHOC = ({
           {t('Contact Us')}
         </a>
       </li>
-      <li className="not-linked-list" onClick={() => logout(() => clearCache(null, userID))}>
+      <li className="not-linked-list" onClick={() => logout(() => clearCache(userID))}>
         <span tabIndex="0" id="logOut" size="small">
           {t('Log Out')}
         </span>

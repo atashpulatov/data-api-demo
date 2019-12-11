@@ -10,7 +10,6 @@ import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './navigation-tree.css';
 import {
   connectToCache,
-  listenToCache,
   REFRESH_CACHE_COMMAND,
   refreshCacheState,
   fetchObjectsFallback
@@ -18,7 +17,6 @@ import {
 import DB from '../cache/cache-db';
 import { authenticationHelper } from '../authentication/authentication-helper';
 
-const DB_TIMEOUT = 5000; // Interval for checking indexedDB changes on IE
 const SAFETY_FALLBACK = 7000; // Interval for falling back to network
 
 export class _NavigationTree extends Component {
@@ -29,8 +27,6 @@ export class _NavigationTree extends Component {
       isPublished: true,
     };
     this.indexedDBSupport = DB.getIndexedDBSupport();
-    const ua = window.navigator.userAgent;
-    this.isMSIE = ua.indexOf('MSIE ') > 0 || !!navigator.userAgent.match(/Trident.*rv:11\./);
   }
 
   componentDidMount() {
@@ -68,17 +64,9 @@ export class _NavigationTree extends Component {
   }
 
   connectToCache = (isRefresh) => {
-    const { connectToDB, listenToDB } = this.props;
+    const { connectToDB } = this.props;
     this.startFallbackProtocol();
-    setTimeout(() => {
-      if (this.isMSIE) {
-        [this.DB, this.DBOnChange] = listenToDB();
-        this.DBOnChange.then(this.startDBListener);
-      } else {
-        [this.DB, this.DBOnChange] = connectToDB();
-      }
-    }, isRefresh ? 900 : 0);
-    // Timeout to avoid reading old cache while it's cleared in the sidebar (IE)
+    this.DB = connectToDB(isRefresh);
   };
 
   refresh = async () => {
@@ -93,23 +81,11 @@ export class _NavigationTree extends Component {
     const { resetDBState, fetchObjectsFromNetwork } = this.props;
     resetDBState(true);
     if (this.indexedDBSupport) {
-      if (!this.isMSIE && this.DBOnChange) this.DBOnChange.cancel();
+      await this.DB.close();
       window.Office.context.ui.messageParent(JSON.stringify({ command: REFRESH_CACHE_COMMAND }));
       this.connectToCache(true);
     } else {
       fetchObjectsFromNetwork();
-    }
-  };
-
-  startDBListener = () => {
-    const { cache, listenToDB } = this.props;
-    const { projects, myLibrary, environmentLibrary } = cache;
-    console.log(projects.length, myLibrary.objects.length, myLibrary.isLoading, environmentLibrary.objects.length, environmentLibrary.isLoading);
-    if (projects.length < 1 || myLibrary.isLoading || environmentLibrary.isLoading) {
-      setTimeout(() => {
-        [this.DB, this.DBOnChange] = listenToDB(this.DB);
-        this.DBOnChange.then(this.startDBListener);
-      }, DB_TIMEOUT);
     }
   };
 
@@ -276,7 +252,6 @@ export const mapStateToProps = ({ officeReducer, navigationTree, cacheReducer })
 const mapActionsToProps = {
   ...actions,
   connectToDB: connectToCache,
-  listenToDB: listenToCache,
   resetDBState: refreshCacheState,
   fetchObjectsFromNetwork: fetchObjectsFallback
 };

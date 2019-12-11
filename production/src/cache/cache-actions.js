@@ -31,14 +31,14 @@ export const myLibraryLoading = (isLoading) => ({
   data: isLoading,
 });
 
-export const addMyLibraryObjects = (objects, append = false) => ({
+export const addMyLibraryObjects = (objects) => ({
   type: ADD_MY_LIBRARY_OBJECTS,
-  data: { objects, append },
+  data: objects,
 });
 
-export const addEnvObjects = (objects, append = false) => ({
+export const addEnvObjects = (objects) => ({
   type: ADD_ENV_OBJECTS,
-  data: { objects, append },
+  data: objects,
 });
 
 export const addProjects = (objects) => ({
@@ -156,79 +156,51 @@ export function refreshCache() {
   };
 }
 
-export function dispatchCacheResults(result, dispatch) {
-  switch (result.id) {
+export function dispatchCacheResults({ type, data, uuid }, dispatch) {
+  console.log(`Cache processing: ${uuid} type: ${type}`);
+  switch (type) {
   case PROJECTS_DB_ID:
-    dispatch(addProjects(result.doc.data));
+    dispatch(addProjects(data));
     break;
   case MY_LIBRARY_DB_ID:
-    dispatch(addMyLibraryObjects(result.doc.data));
+    dispatch(addMyLibraryObjects(data));
     break;
   case ENV_LIBRARY_DB_ID:
-    dispatch(addEnvObjects(result.doc.data));
+    dispatch(addEnvObjects(data));
     break;
   case LOADING_DB + MY_LIBRARY_DB_ID:
-    dispatch(myLibraryLoading(result.doc.data));
+    dispatch(myLibraryLoading(data));
     break;
   case LOADING_DB + ENV_LIBRARY_DB_ID:
-    dispatch(objectListLoading(result.doc.data));
+    dispatch(objectListLoading(data));
     break;
   default:
     break;
   }
 }
 
-export function connectToCache(prevCache) {
-  return (dispatch) => {
-    const cache = prevCache || new DB();
-    if (!prevCache) {
-      dispatch(myLibraryLoading(true));
-      dispatch(objectListLoading(true));
-    }
-
-    const onChange = cache.onChange((results) => {
-      dispatchCacheResults(results, dispatch);
-    });
-    return [cache, onChange];
-  };
-}
-
-export function listenToCache(prevCache) {
-  return (dispatch) => {
-    const cache = prevCache || new DB();
-    if (!prevCache) {
-      dispatch(myLibraryLoading(true));
-      dispatch(objectListLoading(true));
-    }
-
-    const onChange = cache.get(PROJECTS_DB_ID).then((projects) => {
-      dispatch(addProjects(projects.data));
-      cache.get(ENV_LIBRARY_DB_ID).then((objects) => {
-        dispatch(addEnvObjects(objects.data));
-        cache.get(LOADING_DB + ENV_LIBRARY_DB_ID).then((loading) => {
-          dispatch(objectListLoading(loading.data));
-        });
-      });
-      cache.get(MY_LIBRARY_DB_ID).then((objects) => {
-        dispatch(addMyLibraryObjects(objects.data));
-        cache.get(LOADING_DB + MY_LIBRARY_DB_ID).then((loading) => {
-          dispatch(myLibraryLoading(loading.data));
-        });
-      });
-    });
-
-    return [cache, onChange];
-  };
-}
-
-export function clearCache(prevCache) {
+export function connectToCache(isRefresh) {
   return (dispatch, getState) => {
+    console.log('cache connected');
     // Create or get DB for current user
     const { sessionReducer } = getState();
     const { userID } = sessionReducer;
-    const cache = prevCache || new DB(userID);
+    const cache = new DB(userID);
+    dispatch(myLibraryLoading(true));
+    dispatch(objectListLoading(true));
+
+    cache.onChange((results) => {
+      dispatchCacheResults(results, dispatch);
+    }, isRefresh);
+    return cache;
+  };
+}
+
+export function clearCache(userID) {
+  return (dispatch) => {
+    const cache = new DB(userID);
     dispatch(clearStateCache());
     console.log('Clearing cache');
-    return cache.clearTable().catch(console.error);
+    return cache.delete().catch(console.error);
   };
 }

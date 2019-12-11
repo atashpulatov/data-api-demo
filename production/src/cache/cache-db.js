@@ -19,6 +19,7 @@ export default class DB {
    * @memberof DB
    */
   constructor(dbName = 'cache', stores = { cache: '$$uuid,type' }) {
+    if (!dbName) return;
     this.db = new Dexie(dbName);
     this.db.version(1).stores(stores);
     this.dbName = dbName;
@@ -61,11 +62,20 @@ export default class DB {
   * @param {Function} callback Function called on change
   * @memberof DB
   */
-  onChange(callback) {
+  onChange(callback, isRefresh = false, table = 'cache') {
+    if (!isRefresh) {
+      this.db[table].toArray(results => {
+        results.forEach(callback);
+      });
+      // this.db[table].each(callback);
+    }
     this.db.on('changes', (changes) => {
       console.log(changes);
-      callback(changes);
+      changes.forEach(({ obj }) => {
+        callback(obj);
+      });
     });
+    this.db.open();
   }
 
   /**
@@ -124,7 +134,6 @@ export default class DB {
    */
   callIfTableEmpty(callback, table = 'cache') {
     return this.db[table].count().then((count) => {
-      console.log('countantaotuanotu', count);
       if (count === 0) return callback();
       return Promise.resolve();
     });

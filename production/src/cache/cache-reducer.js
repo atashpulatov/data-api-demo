@@ -18,6 +18,7 @@ export const DEFAULT_STATE = {
     isLoading: false,
     objects: [],
   },
+  uuidProcessed:[]
 };
 
 export const REFRESH_STATE = {
@@ -30,9 +31,23 @@ export const REFRESH_STATE = {
     isLoading: true,
     objects: [],
   },
+  uuidProcessed:[]
 };
 
+/**
+ * Checks if UUID from cache key was already added to state
+ *
+ * @param {*} uuid
+ * @param {*} uuidArray
+ */
+function isUuidAlreadyProcessed(uuid, uuidArray) {
+  return !!uuid && uuidArray.includes(uuid);
+}
+
 const cacheReducer = (state = DEFAULT_STATE, action) => {
+  // const shouldSkip = isUuidAlreadyProcessed(action.data.uuid, state.uuidProcessed);
+
+
   switch (action && action.type) {
   case SET_MY_LIBRARY_LOADING:
     return {
@@ -49,9 +64,7 @@ const cacheReducer = (state = DEFAULT_STATE, action) => {
       ...state,
       environmentLibrary: {
         ...state.environmentLibrary,
-        objects: action.data.append
-          ? [...state.environmentLibrary.objects, ...action.data.objects]
-          : action.data.objects
+        objects: [...state.environmentLibrary.objects, ...action.data]
       },
     };
   case ADD_MY_LIBRARY_OBJECTS:
@@ -59,7 +72,7 @@ const cacheReducer = (state = DEFAULT_STATE, action) => {
       ...state,
       myLibrary: {
         ...state.myLibrary,
-        objects: action.data.append ? [...state.myLibrary.objects, ...action.data.objects] : action.data.objects
+        objects: [...state.myLibrary.objects, ...action.data],
       },
     };
   case ADD_PROJECTS:
