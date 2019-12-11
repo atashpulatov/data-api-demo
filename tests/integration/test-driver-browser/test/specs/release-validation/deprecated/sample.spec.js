@@ -8,6 +8,8 @@ import { objects as o} from '../../../constants/objects-list';
 import { waitForNotification, waitForPopup } from '../../../pageObjects/utils/wait-helper';
 import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
+import {selectors as s} from '../../../constants/selectors/popup-selectors';
+import {waitAndClick} from '../../../pageObjects/utils/click-helper';
 
 describe('Smart Folder - IMPORT -', function() {
 
@@ -45,25 +47,140 @@ describe('Smart Folder - IMPORT -', function() {
     // browser.pause(4444);
 
 
-    OfficeWorksheet.selectCell('A1');
+    // // OfficeWorksheet.selectCell('A1');
+    // PluginRightPanel.clickImportDataButton();
+    // PluginPopup.openPrompt(o.reports.valueDayPromptReport);
+    // PluginPopup.writeValueText('07/07/2015\uE004\uE004'); // function presses tab only once for re-prompt to work
+
+    // // should re-prompt a report
+    // waitForNotification();
+    // OfficeWorksheet.selectCell('A1');
+    // const oldCellA1 = $('#gridRows > div:nth-child(2) > div:nth-child(4) > div > div').getText();
+    // PluginRightPanel.repromptFirstObjectFromTheList();
+    // browser.pause(5555);
+    // PluginPopup.writeValueText('09/09/2016\uE004');
+    // waitForNotification();
+    // expect($(se.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.reportRefreshed);
+    // OfficeWorksheet.selectCell('A1');
+    // const newCellA1 = $('#gridRows > div:nth-child(2) > div:nth-child(4) > div > div').getText();
+    // expect(oldCellA1).not.toEqual(newCellA1);
+
+    //should click prepare data on selected report
+    // OfficeWorksheet.selectCell('A1');
+    // PluginRightPanel.clickImportDataButton();
+    // switchToPluginFrame();
+    // PluginPopup.preparePrompt(o.reports.numericPromptedReport);
+    // browser.pause(2222);
+
+
+    // PluginRightPanel.clickImportDataButton();
+    // switchToPluginFrame();
+    // PluginPopup.searchForObject('Basic Report (Cat, Subcat, Item ; Profit, Revenue)');
+    // PluginPopup.selectFirstObject();
+    // PluginPopup.clickPrepareData();
+
+    // // // should select one metric from many listed
+    // PluginPopup.selectFilters([['Region', ['Central', 'South']]]);
+
+    // PluginRightPanel.clickImportDataButton();
+    // switchToPluginFrame();
+    // browser.pause(1000);
+    // PluginPopup.clickHeader('Modified');
+
+    // PluginPopup.deleteFromSearch();
+
+    ///////////
+
+    // PluginRightPanel.clickImportDataButton();
+    // PluginPopup.openPrompt(o.reports.metricExpPromptedReport);
+    // waitAndClick($('div[title="- none -"]'));
+    // waitAndClick($('div[title="Revenue"]'));
+    // $(s.promptTextBox).setValue('1000\uE004\uE004\uE004\uE006');
+
+    // waitForNotification();
+    // OfficeWorksheet.selectCell('D2');
+    // const oldCellD2 = $('#gridRows > div:nth-child(2) > div:nth-child(4) > div > div').getText();
+    // PluginRightPanel.repromptFirstObjectFromTheList();
+    // browser.pause(5555);
+    // PluginPopup.writeAttrQualificationValue(10000);
+    
+    ////////////////
+
+    // PluginRightPanel.clickImportDataButton();
+    // PluginPopup.openPrompt(o.reports.multiplePromptsReport);
+    // PluginPopup.writeMultiPrompt('07/07/2015\uE004\uE004');
+
+    ////////////////
+    // PluginRightPanel.clickImportDataButton();
+    // PluginPopup.openPrompt(o.reports.attributePromptedReport);
+    // waitAndClick($('.mstrBGIcon_tbAdd'));
+    // PluginPopup.clickRun();
+    // waitForNotification();
+
+    // browser.pause(5555);
+    // PluginRightPanel.repromptFirstObjectFromTheList();
+    // browser.pause(5555);
+    // PluginPopup.removeAllSelected();
+    // PluginPopup.promptSelectObject('Music');
+
+
+    ///////////////////////////////////
+
+    // PluginRightPanel.clickImportDataButton();
+    // PluginPopup.importPromptDefault(o.reports.hierarchyExpPromptedReport);
+
+    // browser.pause(2222);
+    // waitForNotification();
+    // OfficeWorksheet.selectCell('A1');
+    // const oldCellC2 = $('#gridRows > div:nth-child(2) > div:nth-child(3) > div > div').getText();
+    // PluginRightPanel.repromptFirstObjectFromTheList();
+    // browser.pause(5555);
+    // PluginPopup.changeExpressionQualificationAndRun('Not In List');
+
+    /////////////////////////
+
+    // PluginRightPanel.clickImportDataButton();
+    // PluginPopup.importPromptDefaultNested(o.reports.nestedPrompt);
+
+    /////////////////////
+
+    // OfficeWorksheet.selectCell('A1048576');
+    // PluginRightPanel.clickImportDataButton();
+    // PluginPopup.importObject(o.reports.reportXML);
+    // waitForNotification();
+    // PluginRightPanel.closeNotification();
+
+    /////////////////////////
+
     PluginRightPanel.clickImportDataButton();
-    PluginPopup.openPrompt(o.reports.valueDayPromptReport);
-    PluginPopup.writeValueText('07/07/2015\uE004\uE004'); // function presses tab only once for re-prompt to work
+    PluginPopup.importObject(o.reports.secureDataFiltering);
+    waitForNotification();
 
-    // should re-prompt a report
-    // await waitForNotification();
-    // await OfficeWorksheet.selectCell('A1');
-    // const oldCellA1 = await $('#gridRows > div:nth-child(2) > div:nth-child(4) > div > div').getText();
-    // await PluginRightPanel.repromptFirstObjectFromTheList();
-    // await browser.sleep(5555);
-    // await PluginPopup.writeValueText('9/9/2016\uE004');
-    // await waitForNotification();
-    // await expect(se.notificationPopUp.getAttribute('textContent')).toEqual(dictionary.en.reportRefreshed);
-    // await OfficeWorksheet.selectCell('A1');
-    // const newCellA1 = await $('#gridRows > div:nth-child(2) > div:nth-child(4) > div > div').getText();
-    // await expect(oldCellA1).not.toEqual(newCellA1);
+    switchToPluginFrame();
+    PluginRightPanel.clickSettings();
+    PluginRightPanel.clearData();
 
+    /////////////////////
+    
+    // await switchToPluginFrame();
+    // const objects = await se.importedObjectList;
+    // const objectNames = await se.importedObjectNameList;
 
+    // // should hover over objects in the right panel
+    // await PluginRightPanel.hoverOverObjects(objects);
+
+    // // should hover over object names in the right panel
+    // await PluginRightPanel.hoverOverObjectNames(objectNames);
+
+    // // should click on objects in the right panel
+    // await PluginRightPanel.clickOnObject(objects[0], 'J1');
+    // await PluginRightPanel.clickOnObject(objects[1], 'F20');
+    // await PluginRightPanel.clickOnObject(objects[2], 'A20');
+    // await PluginRightPanel.clickOnObject(objects[3], 'A1');
+
+    //////////////////
+
+    browser.pause(5000);
 
   });
 });

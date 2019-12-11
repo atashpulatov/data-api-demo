@@ -9,7 +9,7 @@ export const selectors = {
   LDAPbutton: $('#LDAPModeLabel'),
   refreshBtn: '.loading-button-container .mstr-icon.refresh',
   refreshAllBtn: '.refresh-all-btn',
-  repromptBtn: $('.loading-button-container .mstr-icon.reprompt'),
+  repromptBtn: '.loading-button-container .mstr-icon.reprompt',
   deleteBtn: '.trash',
   importDataBtn: '#import-data-placeholder',
   pluginImage: $('.mstr-office-addin-logo'),
@@ -20,7 +20,7 @@ export const selectors = {
   username: $('#full-name'),
   notificationPopUp: '.ant-notification-notice-description',
   viewDataBtn: $('.show-data-btn'),
-  clearOkBtn: $('#confirm-btn'),
+  clearOkBtn: '#confirm-btn',
   importedObjectList: $$('.file-history-container'),
   importedObjectNameList: $$('.rename-container')
 };

@@ -18,9 +18,9 @@ const PluginRightPanel = function() {
     waitAndClick($(s.settingsBtn));
   };
 
-  this.logout = async function() {
-    await this.clickSettings();
-    await this.clickLogout();
+  this.logout = function() {
+    this.clickSettings();
+    this.clickLogout();
   };
 
   this.clickImportDataButton = function() {
@@ -29,8 +29,8 @@ const PluginRightPanel = function() {
     browser.pause(999);
   };
 
-  // TODO: test it
-  this.loginToPluginLDAP = async function(username, password) {
+    // TODO: needs to be refactor for webdriverIO - Currently it is not used
+    this.loginToPluginLDAP = async function(username, password) {
     await switchToPluginFrame();
     await s.LDAPbutton.waitAndClick(s.LDAPbutton);
     await s.usernameInput.sendKeys(username);
@@ -62,12 +62,13 @@ const PluginRightPanel = function() {
     waitAndClick($(s.deleteBtn));
   };
 
-  this.repromptFirstObjectFromTheList = async function() {
-    await switchToPluginFrame();
-    await browser.sleep(3333);
-    await waitAndClick(s.repromptBtn);
+  this.repromptFirstObjectFromTheList = function() {
+    switchToPluginFrame();
+    browser.pause(3333);
+    waitAndClick($(s.repromptBtn));
   };
 
+  // TODO: needs to be refactor for webdriverIO - Currently it is not used
   this.removeAllObjectsFromTheList = async function() {
     await switchToPluginFrame();
     const e = await $$('.trash').count();
@@ -76,9 +77,9 @@ const PluginRightPanel = function() {
     }
   };
 
-  this.closeNotification = async function() {
-    await switchToPluginFrame();
-    await waitAndClick($('span.ant-notification-notice-btn > button'));
+  this.closeNotification = function() {
+    switchToPluginFrame();
+    waitAndClick($('span.ant-notification-notice-btn > button'));
   };
 
   this.clickLoginRightPanelBtn = function() {
@@ -100,10 +101,10 @@ const PluginRightPanel = function() {
     }
   };
 
-  this.clearData = async function() {
-    const clearBtn = element(by.cssContainingText('.no-trigger-close', 'Clear Data'));
-    await waitAndClick(clearBtn);
-    await waitAndClick(s.clearOkBtn);
+  this.clearData = function() {
+    const clearBtn = $(`.no-trigger-close*=Clear Data`); // TODO: This method will not work with localisation (Don't use 'Clear Data')
+    waitAndClick(clearBtn);
+    waitAndClick($(s.clearOkBtn));
   };
 
   this.viewDataBtn = async function() {
@@ -123,9 +124,9 @@ const PluginRightPanel = function() {
     return version.substring('Version '.length);
   };
 
-  this.doubleClick = async function(element) {
-    await element.click();
-    await element.click();
+  this.doubleClick = function(element) {
+    element.click();
+    element.click();
   }
 
   //clicks on object in the right panel and asserts whether the object was selected in the worksheet

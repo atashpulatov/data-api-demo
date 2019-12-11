@@ -1,21 +1,14 @@
 import {switchToExcelFrame} from '../utils/iframe-helper';
 import {waitAndClick} from '../utils/click-helper';
 // import {protractor} from 'protractor';
-import {waitById} from '../utils/wait-helper';
 import {excelSelectors as exSe} from '../../constants/selectors/office-selectors';
 // const EC = protractor.ExpectedConditions;
 
 const OfficeWorksheet = function() {
   const pluginStartId = '#m_excelWebRenderer_ewaCtl_3D10BAF8-D37F-DCF9-711E-7D53E9DC4090MSTR.Group1'; // aws169915
 
-  this.openWorksheet = async function() {
-    await browser.get(worksheetUrl);
-  };
-
   this.openExcelHome = function() {
-    // await browser.get('https://www.office.com/launch/excel?auth=2');
     browser.url('https://www.office.com/launch/excel?auth=2');
-
   };
 
   // This method is not used at all. It is used to upload a manifest stored in the file system
@@ -51,18 +44,15 @@ const OfficeWorksheet = function() {
     }
   };
 
-
   this.addAdminManagedPlugin = function() {
-    // switchToExcelFrame();
     $(exSe.insertBtn).click();
     $(exSe.addInBtn).click();
     $(exSe.officeAddInsFrame).waitForExist(9999);
-    browser.pause(7777);
+    $(exSe.officeAddInsFrame).waitForExist(9999);
     browser.switchToFrame($(exSe.officeAddInsFrame));
     browser.pause(1111);
     waitAndClick($(exSe.adminManagedBtn));
-    browser.pause(6666);
-    $(exSe.adminManagedPlugin).click();
+    waitAndClick($(exSe.adminManagedPlugin));
     waitAndClick($(exSe.addBtn));
     browser.pause(2222);
   };

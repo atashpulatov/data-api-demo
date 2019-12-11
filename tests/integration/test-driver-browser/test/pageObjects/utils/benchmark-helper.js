@@ -1,6 +1,7 @@
 import PluginRightPanel from '../../pageObjects/plugin/plugin.right-panel';
 const fs = require('fs');
 
+// TODO: needs to be refactor for webdriverIO - Currently it is not used
 export async function writeDataIntoFile(data, outputFilePath) {
   await fs.readFile(outputFilePath, function(err, content) {
     if (err) throw err;
@@ -12,6 +13,7 @@ export async function writeDataIntoFile(data, outputFilePath) {
   });
 };
 
+// TODO: needs to be refactor for webdriverIO - Currently it is not used
 export async function getJsonData(averageImportingTime, serverVersion, rows, columns, clientCPUCores, numberOfExecutions, e2eTime, numberOfClicks) {
   const pluginVersion = await PluginRightPanel.getVersionOfThePlugin();
   const browserName = await browser.getCapabilities().then(function(res) {
