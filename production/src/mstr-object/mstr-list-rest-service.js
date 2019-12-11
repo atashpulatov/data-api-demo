@@ -47,28 +47,39 @@ export class MstrListRestService {
   processTotalItems = (body) => body.totalItems
 
   /**
- * Get a projects dictionary with key:value {id:name} pairs
- *
- * @returns {Object} {ProjetId: projectName}
- */
-  getProjectDictionary = () => this.fetchProjects()
-      .then((projects) => projects.reduce((dict, project) => ({ ...dict, [project.id]: project.name || '' }), {}));
+   * Creates the request parameters from redux state
+   *
+   * @returns
+   */
+  getRequestParams = () => {
+    const { sessionReducer } = this.reduxStore.getState();
+    const { envUrl, authToken } = sessionReducer;
+    const typeQuery = SUBTYPES.join('&type=');
+    return { envUrl, authToken, typeQuery };
   }
 
   /**
- * Fetches object of given subtypes from MSTR API per project.
- *
- * @param {Object} { requestParams, callback = (res) => res, offset = 0, limit = LIMIT }
- * @param {Object} requestParams - Object containing environment url, authToken and
- * subtypes of objects, for which to execute the request
- * @param {Function} callback - Function to be applied to the returned response body
- * @param {number} offset - Starting index of object to be fetched
- * @param {number} limit - Number of objects to be fetched per request
- * @param {string} projectId - Id of the project to be fetched
- * @param {Array} resultArray - Array of objects that is passed during reccurent function call for projects > 7000
- * @returns {Array} of MSTR objects
- */
-  fetchObjectListByProject({ requestParams, callback = filterDossier, offset = 0, limit = LIMIT },
+   * Get a projects dictionary with key:value {id:name} pairs
+   *
+   * @returns {Object} {ProjetId: projectName}
+   */
+  getProjectDictionary = () => this.fetchProjects()
+    .then((projects) => projects.reduce((dict, project) => ({ ...dict, [project.id]: project.name || '' }), {}));
+
+  /**
+   * Fetches object of given subtypes from MSTR API per project.
+   *
+   * @param {Object} { requestParams, callback = (res) => res, offset = 0, limit = LIMIT }
+   * @param {Object} requestParams - Object containing environment url, authToken and
+   * subtypes of objects, for which to execute the request
+   * @param {Function} callback - Function to be applied to the returned response body
+   * @param {number} offset - Starting index of object to be fetched
+   * @param {number} limit - Number of objects to be fetched per request
+   * @param {string} projectId - Id of the project to be fetched
+   * @param {Array} resultArray - Array of objects that is passed during reccurent function call for projects > 7000
+   * @returns {Array} of MSTR objects
+   */
+  fetchObjectListByProject({ requestParams, callback = this.filterDossier, offset = 0, limit = LIMIT },
     projectId, queue) {
     const { envUrl, authToken, typeQuery } = requestParams;
     const url = `${envUrl}/${SEARCH_ENDPOINT}?limit=${limit}&offset=${offset}&type=${typeQuery}`;
@@ -81,36 +92,36 @@ export class MstrListRestService {
         if (res.body.result.length === 7000) {
           offset += limit;
           queue.enqueue(callback(res.body));
-          return fetchObjectListByProject({ requestParams, filterDossier, offset, limit }, projectId, queue);
+          return this.fetchObjectListByProject({ requestParams, callback, offset, limit }, projectId, queue);
         }
         return callback(res.body);
       });
   }
 
   /**
- * Fetches all items from every (selected) project, once response is received -
- * it is added to the queue to be cached
- *
- * @export
- * @param {Function} callback - function that adds objects to cache
- * @returns
- */
-fetchObjectListForSelectedProjects = async (callback) => {
-  const requestParams = this.getRequestParams();
-  const projects = await this.getProjectDictionary();
-  const projectIds = Object.keys(projects);
-  const queue = new Queue(callback);
-  const promiseList = [];
-  console.time('Fetching environment objects');
-  for (const id of projectIds) {
-    const promise = this.fetchObjectListByProject({ requestParams }, id, queue)
-      .then((promiseResult) => queue.enqueue(promiseResult));
-    promiseList.push(promise);
+   * Fetches all items from every (selected) project, once response is received -
+   * it is added to the queue to be cached
+   *
+   * @export
+   * @param {Function} callback - function that adds objects to cache
+   * @returns
+   */
+  fetchObjectListForSelectedProjects = async (callback) => {
+    const requestParams = this.getRequestParams();
+    const projects = await this.getProjectDictionary();
+    const projectIds = Object.keys(projects);
+    const queue = new Queue(callback);
+    const promiseList = [];
+    console.time('Fetching environment objects');
+    for (const id of projectIds) {
+      const promise = this.fetchObjectListByProject({ requestParams }, id, queue)
+        .then((promiseResult) => queue.enqueue(promiseResult));
+      promiseList.push(promise);
+    }
+    return Promise.all(promiseList).then(() => {
+      console.timeEnd('Fetching environment objects');
+    });
   }
-  return Promise.all(promiseList).then(() => {
-    console.timeEnd('Fetching environment objects');
-  });
-}
 
   /**
    * Fetches all objects available in my Library from MSTR API and filters out non-Dossier objects.

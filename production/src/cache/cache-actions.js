@@ -1,7 +1,7 @@
 /* eslint-disable import/no-cycle */
 import { addNestedPropertiesToObjects } from '@mstr/rc';
 import DB from './cache-db';
-import getObjectList, { fetchProjects, getMyLibraryObjectList } from '../mstr-object/mstr-list-rest-service';
+import { mstrListRestService } from '../mstr-object/mstr-list-rest-service';
 
 
 export const CREATE_CACHE = 'CREATE_CACHE';
