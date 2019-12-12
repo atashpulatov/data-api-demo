@@ -122,7 +122,7 @@ async function obtainInstanceWithPromptsAnswers(propsToPass, props) {
   const preparedReport = {
     id: objectId,
     projectId,
-    name: propsToPass.reportName,
+    name: propsToPass.reportName || props.editedReport.reportName,
     objectType: mstrObjectEnum.mstrObjectType.report,
     instanceId: instanceDefinition.instanceId,
     promptsAnswers: props.promptsAnswers,
