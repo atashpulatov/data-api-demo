@@ -139,7 +139,7 @@ export default class DB {
    * @memberof DB
    */
   callIfTableEmpty(callback, table = 'cache') {
-    this.db[table].count().then((count) => {
+    return this.db[table].count().then((count) => {
       if (count === 0) callback();
     });
   }
@@ -150,7 +150,7 @@ export default class DB {
    *
    * @static
    * @param {String} dbToKeep Current authenticated user
-   * @returns
+   * @returns {Promise} Promise results of deleting dbs not of the auth. user
    * @memberof DB
    */
   static purge(dbToKeep) {

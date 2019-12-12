@@ -137,11 +137,15 @@ export function createCache(initUsername) {
     const { userID } = sessionReducer;
     const user = initUsername || userID;
     const cache = new DB(user);
-    DB.purge(user).then(() => {
-      cache.callIfTableEmpty(() => {
-        fetchObjects(dispatch, cache);
+    // We try to purge dbs not of the user and finally
+    // start fetching for the current user even if it fails.
+    DB.purge(user)
+      .catch(console.error)
+      .finally(() => {
+        cache.callIfTableEmpty(() => {
+          fetchObjects(dispatch, cache);
+        }).catch(console.error);
       });
-    });
   };
 }
 
@@ -154,7 +158,7 @@ export function refreshCache() {
     // Overwrite cache
     cache.clearTable().then(() => {
       fetchObjects(dispatch, cache);
-    });
+    }).catch(console.error);
   };
 }
 
