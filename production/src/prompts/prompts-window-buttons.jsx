@@ -11,7 +11,7 @@ export const _PromptWindowButtons = ({
 }) => (
   <div className="popup-buttons popup-footer">
     {!isReprompt && <Button id="back" onClick={() => cancelImportRequest() && handleBack()}>{t('Back')}</Button>}
-    <Button id="run" onClick={handleRun} disabled={disableRunButton}>{t('Run')} </Button>
+    <Button id="run" type="primary" onClick={handleRun} disabled={disableRunButton}>{t('Run')} </Button>
     <Button id="cancel" onClick={closePopup}>{t('Cancel')}</Button>
   </div>
 );

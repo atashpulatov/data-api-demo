@@ -1,7 +1,9 @@
 .navigation_tree__main_wrapper {
-  height: calc(100% - 125px);
+  height: 100%;
+  padding-bottom: 125px;
   position: fixed;
   width: 100%;
+  overflow: hidden;
 }
 
 .navigation_tree__title_bar {
