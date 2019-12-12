@@ -31,45 +31,34 @@ describe('Cache actions', () => {
     expect(action).toEqual(expectedAction);
   });
 
-  it('should return add myLibrary objects dispatch action with default append===false', () => {
+  it('should return add myLibrary objects dispatch action', () => {
     // given
-    const testResult = ['test'];
+    const data = ['test'];
+    const uuid = '55e30035-166b-4d01-8d82-bb2ef081d896';
     const expectedAction = {
       type: ADD_MY_LIBRARY_OBJECTS,
-      data: { objects: testResult, append: false },
+      data: { data, uuid },
     };
     // when
-    const action = addMyLibraryObjects(testResult);
-    // then
-    expect(action).toEqual(expectedAction);
-  });
-
-  it('should return add myLibrary objects dispatch action with append===true', () => {
-    // given
-    const testResult = ['test'];
-    const expectedAction = {
-      type: ADD_MY_LIBRARY_OBJECTS,
-      data: { objects: testResult, append: true },
-    };
-    // when
-    const action = addMyLibraryObjects(testResult, true);
+    const action = addMyLibraryObjects({ data, uuid });
     // then
     expect(action).toEqual(expectedAction);
   });
 
   it('should return add environment objects dispatch action', () => {
     // given
-    const testResult = ['test'];
+    const data = ['test'];
+    const uuid = '55e30035-166b-4d01-8d82-bb2ef081d896';
     const expectedAction = {
       type: ADD_ENV_OBJECTS,
       data: {
-        append: false,
-        objects: testResult
+        data,
+        uuid
       }
     };
 
     // when
-    const action = addEnvObjects(testResult);
+    const action = addEnvObjects({ data, uuid });
 
     // then
     expect(action).toEqual(expectedAction);
@@ -155,29 +144,5 @@ describe('Cache actions', () => {
 
     // then
     expect(hof).toBeInstanceOf(Function);
-  });
-
-  it('should initialize cache', async () => {
-    // given
-    const putMock = jest.fn().mockImplementation((string) => string);
-    const cacheMock = { putData: putMock };
-    const expectedResult = ['projects', 'loading-my-library', 'my-library', 'loading-env-library', 'env-library'];
-    // when
-    const result = await initCache(cacheMock);
-
-    // then
-    expect(result).toEqual(expectedResult);
-  });
-
-  it('should reset cache loading properly', async () => {
-    // given
-    const putMock = jest.fn().mockImplementation((string) => string);
-    const cacheMock = { putData: putMock };
-    const expectedResult = ['loading-my-library', 'loading-env-library'];
-    // when
-    const result = await resetLoading(cacheMock);
-
-    // then
-    expect(result).toEqual(expectedResult);
   });
 });
