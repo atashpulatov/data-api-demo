@@ -16,6 +16,8 @@ export default class DB {
    * Creates an instance of PouchDB with limited revision history.
    *
    * @param {String} dbName Name of db
+   * @param {Object} stores where each key represents the name of an object
+   * store and each value represents the primary and secondary indexes
    * @memberof DB
    */
   constructor(dbName = 'cache', stores = { cache: '$$uuid,type' }) {
@@ -60,6 +62,8 @@ export default class DB {
   * Listen to database changes and calls the passed function
   *
   * @param {Function} callback Function called on change
+  * @param {boolean} isRefresh representing whether refresh is in progress
+  * @param {String} table name of the table in DB
   * @memberof DB
   */
   onChange(callback, isRefresh = false, table = 'cache') {
@@ -67,7 +71,8 @@ export default class DB {
       this.db[table].toArray(results => {
         results.forEach(callback);
       });
-      // this.db[table].each(callback);
+      // this.db[table].each(callback); TODO: double check whether
+      // reading from cache sequentially will improve the performance
     }
     this.db.on('changes', (changes) => {
       changes.forEach(({ obj }) => {
@@ -90,6 +95,7 @@ export default class DB {
   /**
    * Delete all objects from table
    *
+   * @param {String} table name of the table that should be cleared
    * @returns {Promise} Promise containing response of deletion
    * @memberof DB
    */
@@ -100,8 +106,9 @@ export default class DB {
   /**
    * Takes data to put() into the database specified id
    *
-   * @param {Object} data Object to store in the document
-   * @param {Boolean} append Flag to append new data to array
+   * @param {String} type type of data
+   * @param {Object} data Object to store in the DB
+   * @param {String} table name of the table where the data should be stored
    * @returns {Promise} Promise containing result of put operation
    * @memberof DB
    */
@@ -112,9 +119,10 @@ export default class DB {
   /**
    * Takes data to update() into the database specified id
    *
-   * @param {Object} data Object to store in the document
-   * @param {Boolean} append Flag to append new data to array
-   * @returns {Promise} Promise containing result of put operation
+   * @param {String} type type of data
+   * @param {Object} data Object to store in the DB
+   * @param {String} table name of the table where the data should be updated
+   * @returns {Promise} Promise containing result of update operation
    * @memberof DB
    */
   updateData(type, data, table = 'cache') {
@@ -128,13 +136,11 @@ export default class DB {
    *
    * @param {MSTR} callback Function that fetches documents
    * @param {Object} table Table to check if empty
-   * @returns {Promise} Promise
    * @memberof DB
    */
   callIfTableEmpty(callback, table = 'cache') {
-    return this.db[table].count().then((count) => {
-      if (count === 0) return callback();
-      return Promise.resolve();
+    this.db[table].count().then((count) => {
+      if (count === 0) callback();
     });
   }
 
@@ -159,10 +165,10 @@ export default class DB {
    * Set to false to completely disable the cache (!)
    *
    * @static
-   * @returns Boolean
+   * @returns {boolean} representing whether IndexedDB is supported
    * @memberof DB
    */
   static getIndexedDBSupport() {
-    return window.indexedDB;
+    return !!window.indexedDB;
   }
 }

@@ -37,8 +37,9 @@ export const REFRESH_STATE = {
 /**
  * Checks if UUID from cache key was already added to state
  *
- * @param {*} uuid
- * @param {*} uuidArray
+ * @param {Object} data which should be added to state
+ * @param {Array} uuidArray of uuids which have already been added to state
+ * @returns {boolean} representing whether given data has already been added to state
  */
 function isUuidAlreadyProcessed(data, uuidArray) {
   return data && data.uuid && uuidArray.includes(data.uuid);

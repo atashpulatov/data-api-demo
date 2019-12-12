@@ -19,7 +19,7 @@ export default class AsyncQueue {
   /**
    * Adds array of objects to the queue
    * @param {Array} object - array of mstr objects
-   * @returns
+   * @returns {Promise|undefined} Promise of dequeueing, if provided callback
    * @memberof AsyncQueue
    */
   enqueue(object) {

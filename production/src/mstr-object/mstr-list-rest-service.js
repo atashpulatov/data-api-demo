@@ -105,7 +105,7 @@ export class MstrListRestService {
    *
    * @export
    * @param {Function} callback - function that adds objects to cache
-   * @returns
+   * @returns {Promise}
    */
   fetchObjectListForSelectedProjects = async (callback) => {
     const requestParams = this.getRequestParams();
@@ -170,9 +170,11 @@ export class MstrListRestService {
  * It takes a function that will be called when the pagination promise resolves.
  *
  * @param {Function} callback - Function to be applied to the returned response body
+ * @returns {Promise}
  * @export
  * @class getObjectList
  */
+  // TODO: refactor when adding project selection
   getObjectList = (callback) => this.fetchObjectListForSelectedProjects(callback);
 }
 
