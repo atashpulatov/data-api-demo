@@ -82,9 +82,7 @@ const PluginPopup = function() {
     }
   };
   this.clickHeader = function(headerName) {
-    // await waitAndClick(element(by.cssContainingText('.data-tip', `${headerName}`)));
     waitAndClick($(`.data-tip*=${headerName}`));
-
   };
 
   this.selectFirstObject = function() {
@@ -202,6 +200,8 @@ const PluginPopup = function() {
     browser.pause(1111);
     this.clickImport();
   };
+
+  // TODO: Refactor to webDriverIO. This method is only used in TC39453
   this.checkSorting = async function(order, headerName) {
     const columnHeaders = element.all(by.css(s.columnHeaders));
     const columnTitles = columnHeaders.all(by.css());
@@ -220,15 +220,16 @@ const PluginPopup = function() {
       }
     };
   };
-
+  
+  // TODO: Refactor to webDriverIO. This method is only used in TC39454
   this.checkDisplayedObjectNames = async function(searchedString) {
     for (let i = 0; i < s.displayedObjects.length; i++) {
       await expect(s.displayedObjects.get(i).getText().toContain(searchedString));
     }
   };
-  // checks if the filter was clicked
-  this.checkIfClicked = async function(filterName) {
-    expect(element(by.cssContainingText('.filter-title', filterName)).getCssValue('background-color')).toBe('#1890FF');
+  // Currently this method is not used
+  this.checkIfFilterIsClicked = function(filterName) {
+    expect($(`.filter-title*=${filterName}`).getCSSProperty('background-color').value).toEqual('#1890FF');
   };
   this.deleteFromSearch = function() {
     const searchedValue = $(s.searchInput).getAttribute('value');

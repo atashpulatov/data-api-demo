@@ -1,7 +1,5 @@
-// import {protractor} from 'protractor';
 import {switchToPluginFrame, switchToExcelFrame} from '../utils/iframe-helper';
 import {selectors as se} from '../../constants/selectors/plugin.right-panel-selectors';
-// const EC = protractor.ExpectedConditions;
 
 export function waitForNotification() {
   let popupExists = true;
@@ -22,17 +20,13 @@ export function waitForNotification() {
 
 export function waitForPopup(timeout = 29999) {
   switchToExcelFrame();
-  // browser.wait(function() {
-  //   const elm = $('#WACDialogPanel').isExisting();
-  //   return elm;
-  // }, timeout);
   $('#WACDialogPanel').waitForExist(timeout, false, `#WACDialogPanel` + ' was not found');
 
   browser.pause(2500);
   switchToPluginFrame();
 }
 
-// use $(selector).waitForDisplayed(ms, reverse, error) instead of this function
+// In webdriverIO use $(selector).waitForDisplayed(ms, reverse, error) instead of this function
 export async function waitById(id, timeout = 9999) {
   await browser.wait(async function() {
     const elm = await element(by.id(id)).isPresent();
@@ -40,6 +34,7 @@ export async function waitById(id, timeout = 9999) {
   }, timeout);
 };
 
+// use $(selector).waitForDisplayed(ms, reverse, error) instead of this function
 export async function waitByClass(className, timeout = 9999) {
   await browser.wait(async function() {
     const elm = await element(by.className(className)).isPresent();

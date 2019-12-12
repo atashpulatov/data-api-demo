@@ -15,6 +15,7 @@ describe('Smart Folder - IMPORT -', function() {
 
   beforeAll( () => {
     browser.setWindowSize(2200,900);
+    // browser.setWindowSize(1600,900);
     OfficeWorksheet.openExcelHome();
     const url = browser.getUrl();
     if (url.includes('login.microsoftonline')) {
@@ -152,34 +153,70 @@ describe('Smart Folder - IMPORT -', function() {
 
     /////////////////////////
 
-    PluginRightPanel.clickImportDataButton();
-    PluginPopup.importObject(o.reports.secureDataFiltering);
-    waitForNotification();
+    // PluginRightPanel.clickImportDataButton();
+    // PluginPopup.importObject(o.reports.secureDataFiltering);
+    // waitForNotification();
 
-    switchToPluginFrame();
-    PluginRightPanel.clickSettings();
-    PluginRightPanel.clearData();
+    // switchToPluginFrame();
+    // PluginRightPanel.clickSettings();
+    // PluginRightPanel.clearData();
+    // browser.pause(4000);
 
+    // // should log out
+    // switchToPluginFrame();
+    // PluginRightPanel.clickSettings();
+    // PluginRightPanel.clickLogout();
+    
+    // // should log in with Tim user
+    // PluginRightPanel.loginToPlugin('a', '');
+
+    // // should click "View Data" and close the "Refresh All Data" pop-up
+    // switchToPluginFrame();
+    // PluginRightPanel.viewDataBtn();
     /////////////////////
     
-    // await switchToPluginFrame();
-    // const objects = await se.importedObjectList;
-    // const objectNames = await se.importedObjectNameList;
+// should import a report
+OfficeWorksheet.selectCell('A1');
+PluginRightPanel.clickImportDataButton();
+PluginPopup.importObject(o.reports.reportXML);
+waitForNotification();
 
-    // // should hover over objects in the right panel
-    // await PluginRightPanel.hoverOverObjects(objects);
+// // should import a dataset to the adjacent column of the first object
+// OfficeWorksheet.selectCell('A20');
+//  PluginRightPanel.clickAddDataButton();
+//  PluginPopup.importObject(o.datasets.datasetSQL);
+//  waitForNotification();
 
-    // // should hover over object names in the right panel
-    // await PluginRightPanel.hoverOverObjectNames(objectNames);
+// // should import a report to the adjacent row of the second object
+//  OfficeWorksheet.selectCell('F20');
+//  PluginRightPanel.clickAddDataButton();
+//  PluginPopup.importObject(o.reports.reportXML);
+//  waitForNotification();
 
-    // // should click on objects in the right panel
-    // await PluginRightPanel.clickOnObject(objects[0], 'J1');
-    // await PluginRightPanel.clickOnObject(objects[1], 'F20');
-    // await PluginRightPanel.clickOnObject(objects[2], 'A20');
-    // await PluginRightPanel.clickOnObject(objects[3], 'A1');
+// // should import a dataset to a cell not adjacent to any imported objects
+//  OfficeWorksheet.selectCell('J1');
+//  PluginRightPanel.clickAddDataButton();
+//  PluginPopup.importObject(o.datasets.datasetSQL);
+//  waitForNotification();
 
-    //////////////////
+//  switchToPluginFrame();
+// const objects =  $$(se.importedObjectList);
+// const objectNames =  $$(se.importedObjectNameList);
 
+// // should hover over objects in the right panel
+// browser.pause(5000);
+//  PluginRightPanel.hoverOverObjects(objects);
+
+// // should hover over object names in the right panel
+//  PluginRightPanel.hoverOverObjectNames(objectNames);
+
+// should click on objects in the right panel
+//  PluginRightPanel.clickOnObject(objects[0], 'J1');
+//  PluginRightPanel.clickOnObject(objects[1], 'F20');
+//  PluginRightPanel.clickOnObject(objects[2], 'A20');
+//  PluginRightPanel.clickOnObject(objects[3], 'A1');
+
+    ////////////////////////
     browser.pause(5000);
 
   });
