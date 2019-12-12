@@ -4,7 +4,7 @@ import { userRestService } from '../home/user-rest-service';
 import { errorService } from '../error/error-handler';
 import { homeHelper } from '../home/home-helper';
 import { createCache } from '../cache/cache-actions';
-import DB from '../cache/pouch-db';
+import DB from '../cache/cache-db';
 
 export class SessionHelper {
 
