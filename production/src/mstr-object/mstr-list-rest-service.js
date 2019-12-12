@@ -55,7 +55,8 @@ export class MstrListRestService {
     const { sessionReducer } = this.reduxStore.getState();
     const { envUrl, authToken } = sessionReducer;
     const typeQuery = SUBTYPES.join('&type=');
-    return { envUrl, authToken, typeQuery };
+    const getAncestors = true;
+    return { envUrl, authToken, typeQuery, getAncestors };
   }
 
   /**
