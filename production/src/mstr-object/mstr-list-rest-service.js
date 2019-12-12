@@ -1,6 +1,6 @@
 import request from 'superagent';
 import filterDossiersByViewMedia from '../helpers/viewMediaHelper';
-import Queue from './queue';
+import Queue from '../cache/queue';
 
 const SEARCH_ENDPOINT = 'searches/results';
 const PROJECTS_ENDPOINT = 'projects';

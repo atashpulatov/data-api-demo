@@ -1,4 +1,4 @@
-import AsyncQueue from '../../mstr-object/queue';
+import AsyncQueue from '../../cache/queue';
 
 describe('Logic for putting objects into cache using queue', () => {
   it('should create a new queue object', () => {
