@@ -345,4 +345,5 @@ button.add-data-btn:focus {
 
 .rename-popover-width{
   max-width: 280px;
+  word-wrap: break-word;
 }
