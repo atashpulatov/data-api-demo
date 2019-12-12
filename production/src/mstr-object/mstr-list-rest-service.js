@@ -54,7 +54,8 @@ export class MstrListRestService {
     const { sessionReducer } = this.reduxStore.getState();
     const { envUrl, authToken } = sessionReducer;
     const typeQuery = SUBTYPES.join('&type=');
-    return { envUrl, authToken, typeQuery };
+    const getAncestors = true;
+    return { envUrl, authToken, typeQuery, getAncestors };
   }
 
   /**
@@ -77,7 +78,7 @@ export class MstrListRestService {
    * @returns {Object} {ProjetId: projectName}
    */
   getProjectDictionary = () => this.fetchProjects()
-      .then((projects) => projects.reduce((dict, project) => ({...dict, [project.id]: project.name || ''}), {}))
+    .then((projects) => projects.reduce((dict, project) => ({ ...dict, [project.id]: project.name || '' }), {}))
 
   /**
    * Uses request with limit of 1 to check for total number of objects of given subtypes and then
@@ -120,8 +121,8 @@ export class MstrListRestService {
    * @returns
    */
   fetchObjectList = ({ requestParams, callback = this.filterDossier, offset = 0, limit = LIMIT }) => {
-    const { envUrl, authToken, typeQuery } = requestParams;
-    const url = `${envUrl}/${SEARCH_ENDPOINT}?limit=${limit}&offset=${offset}&type=${typeQuery}`;
+    const { envUrl, authToken, typeQuery, getAncestors } = requestParams;
+    const url = `${envUrl}/${SEARCH_ENDPOINT}?limit=${limit}&offset=${offset}&type=${typeQuery}&getAncestors=${getAncestors}`;
     return request
       .get(url)
       .set('x-mstr-authtoken', authToken)
