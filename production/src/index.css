@@ -78,6 +78,7 @@ code {
     border-color: #D2D2D2;
     color: #444649;
     font-size: 14px;
+    min-width: 92px;
 }
 
 .ant-btn:hover {
