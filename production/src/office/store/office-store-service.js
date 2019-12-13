@@ -1,12 +1,15 @@
 import { officeProperties } from '../office-properties';
-import { officeApiHelper } from '../office-api-helper';
 import { RunOutsideOfficeError } from '../../error/run-outside-office-error';
 import { errorService } from '../../error/error-handler';
-import { reduxStore } from '../../store';
 
 /* global Office */
 
-class OfficeStoreService {
+export class OfficeStoreService {
+
+  init = (reduxStore) => {
+    this.reduxStore = reduxStore;
+  }
+
   addObjectToStore = ({
     isRefresh,
     instanceDefinition,
@@ -78,7 +81,7 @@ class OfficeStoreService {
       reportProperties[indexOfReport][key] = value;
       settings.set(officeProperties.loadedReportProperties, reportProperties);
       await settings.saveAsync();
-      await officeApiHelper.loadExistingReportBindingsExcel();
+      await this.loadExistingReportBindingsExcel();
     } catch (error) {
       errorService.handleError(error);
     }
@@ -114,6 +117,14 @@ class OfficeStoreService {
     } catch (error) {
       errorService.handleError(error);
     }
+  };
+
+  loadExistingReportBindingsExcel = async () => {
+    const reportArray = await this.getReportProperties();
+    this.reduxStore.dispatch({
+      type: officeProperties.actions.loadAllReports,
+      reportArray,
+    });
   };
 
   getOfficeSettings = () => {
@@ -157,7 +168,7 @@ class OfficeStoreService {
         errorService.handleError(error);
       }
     } else {
-      reduxStore.dispatch({
+      this.reduxStore.dispatch({
         type: officeProperties.actions.loadReport,
         report: {
           id: report.id,
@@ -182,7 +193,7 @@ class OfficeStoreService {
   };
 
   removeReportFromStore = (bindingId) => {
-    reduxStore.dispatch({
+    this.reduxStore.dispatch({
       type: officeProperties.actions.removeReport,
       reportBindId: bindingId,
     });

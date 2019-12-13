@@ -363,7 +363,7 @@ describe('NavigationTree Reducer', () => {
 
   it('should return new proper state in case of REFRESH_CACHE action', () => {
     // given
-    const action = { type: REFRESH_CACHE, };
+    const action = { type: REFRESH_CACHE, data: true };
 
     // when
     const newState = navigationTree({}, action);
@@ -377,6 +377,21 @@ describe('NavigationTree Reducer', () => {
     expect(newState.chosenType).toEqual('Data');
   });
 
+  it('should not return new proper state in case of REFRESH_CACHE action', () => {
+    // given
+    const action = { type: REFRESH_CACHE, };
+
+    // when
+    const newState = navigationTree({}, action);
+
+    // then
+    expect(newState.sorter).not.toEqual({});
+    expect(newState.chosenObjectId).not.toEqual(null);
+    expect(newState.chosenProjectId).not.toEqual(null);
+    expect(newState.chosenSubtype).not.toEqual(null);
+    expect(newState.chosenObjectName).not.toEqual('Prepare Data');
+    expect(newState.chosenType).not.toEqual('Data');
+  });
 
   it('should return new proper state in case of CHANGE_IS_PROMPTED action', () => {
     // given

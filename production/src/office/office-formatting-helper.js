@@ -190,6 +190,8 @@ class OfficeFormattingHelper {
         // eslint-disable-next-line no-await-in-loop
         await context.sync();
       }
+      if (isCrosstab) table.showHeaders = false;
+      await context.sync();
     } catch (error) {
       console.log('Error when formatting - no columns autofit applied', error);
     }

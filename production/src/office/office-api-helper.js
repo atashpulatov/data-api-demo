@@ -1,15 +1,16 @@
+/* eslint-disable */
 import uuid from 'uuid/v4';
-import { IncorrectInputTypeError } from './incorrect-input-type';
-import { OutsideOfRangeError } from '../error/outside-of-range-error';
-import { reduxStore } from '../store';
-import { officeProperties } from './office-properties';
-import { officeStoreService } from './store/office-store-service';
-import { notificationService } from '../notification/notification-service';
-import { errorService } from '../error/error-handler';
+import {IncorrectInputTypeError} from './incorrect-input-type';
+import {OutsideOfRangeError} from '../error/outside-of-range-error';
+import {officeProperties} from './office-properties';
+import {officeStoreService} from './store/office-store-service';
+import {notificationService} from '../notification/notification-service';
+import {errorService} from '../error/error-handler';
 import mstrNormalizedJsonHandler from '../mstr-object/mstr-normalized-json-handler';
-import { authenticationHelper } from '../authentication/authentication-helper';
-import { OBJ_REMOVED_FROM_EXCEL } from '../error/constants';
-import { ProtectedSheetError } from '../error/protected-sheets-error';
+import {CONTEXT_LIMIT} from '../mstr-object/mstr-object-rest-service';
+import {authenticationHelper} from '../authentication/authentication-helper';
+import {OBJ_REMOVED_FROM_EXCEL} from '../error/constants';
+import {ProtectedSheetError} from '../error/protected-sheets-error';
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
@@ -17,9 +18,20 @@ const ASCII_CAPITAL_LETTER_INDEX = 65;
 const EXCEL_TABLE_NAME = 'table';
 const EXCEL_ROW_LIMIT = 1048576;
 const EXCEL_COL_LIMIT = 16384;
+
 const EXCEL_XTABS_BORDER_COLOR = '#a5a5a5';
 
-class OfficeApiHelper {
+const {OfficeExtension} = window;
+
+export class OfficeApiHelper {
+  constructor() {
+    this.EXCEL_XTABS_BORDER_COLOR = EXCEL_XTABS_BORDER_COLOR;
+  }
+
+  init = (reduxStore) => {
+    this.reduxStore = reduxStore;
+  }
+
   getRange = (headerCount, startCell, rowCount = 0) => {
     if (!Number.isInteger(headerCount)) {
       throw new IncorrectInputTypeError();
@@ -85,7 +97,7 @@ class OfficeApiHelper {
       const excelContext = await this.getExcelContext();
       const tableObject = excelContext.workbook.tables.getItem(bindingId);
       if (isCrosstab) {
-        const tmpXtabDimensions = { ...crosstabHeaderDimensions, columnsY: crosstabHeaderDimensions.columnsY + 1, };
+        const tmpXtabDimensions = {...crosstabHeaderDimensions, columnsY: crosstabHeaderDimensions.columnsY + 1, };
         crosstabRange = await this.getCrosstabRangeSafely(tableObject, tmpXtabDimensions, excelContext);
         if (shouldSelect) crosstabRange.select();
       } else {
@@ -96,9 +108,9 @@ class OfficeApiHelper {
       return true;
     } catch (error) {
       if (error.code === 'ItemNotFound') {
-        return notificationService.displayTranslatedNotification({ type: 'info', content: OBJ_REMOVED_FROM_EXCEL });
+        return notificationService.displayTranslatedNotification({type: 'info', content: OBJ_REMOVED_FROM_EXCEL});
       }
-      errorService.handleError(error, { reportName, onConfirm: deleteReport });
+      errorService.handleError(error, {reportName, onConfirm: deleteReport});
       return false;
     }
   };
@@ -115,20 +127,6 @@ class OfficeApiHelper {
     ]);
   }
 
-  /**
-     * Gets range of subtotal row based on subtotal cell
-     *
-     * @param {Office} object
-     * @param {Office} officeContext office context
-     * @param {Object} t i18n translating function
-     * @memberof OfficeApiHelper
-     */
-  removeObjectAndDisplaytNotification = (object, officeContext, t) => {
-    const { name } = object;
-    this.removeObjectNotExistingInExcel(object, officeContext);
-    const message = t('{{name}} has been removed from the workbook.', { name });
-    notificationService.displayTranslatedNotification({ type: 'success', content: message });
-  }
 
   getBindingRange = (context, bindingId) => context.workbook.bindings
     .getItem(bindingId).getTable()
@@ -143,21 +141,12 @@ class OfficeApiHelper {
 
   getExcelSessionStatus = async () => !!await this.getExcelContext() // ToDo find better way to check session status
 
-
   findAvailableOfficeTableId = () => EXCEL_TABLE_NAME + uuid().split('-').join('')
 
-  loadExistingReportBindingsExcel = async () => {
-    const reportArray = await officeStoreService.getReportProperties();
-    reduxStore.dispatch({
-      type: officeProperties.actions.loadAllReports,
-      reportArray,
-    });
-  };
-
   getCurrentMstrContext = () => {
-    const { envUrl } = reduxStore.getState().sessionReducer;
-    const { username } = reduxStore.getState().sessionReducer;
-    return { envUrl, username };
+    const {envUrl} = this.reduxStore.getState().sessionReducer;
+    const {username} = this.reduxStore.getState().sessionReducer;
+    return {envUrl, username};
   }
 
   /**
@@ -196,6 +185,39 @@ class OfficeApiHelper {
     });
   })
 
+    /**
+     * Gets range of subtotal row based on subtotal cell
+     *
+     * @param {Office} object
+     * @param {Office} officeContext office context
+     * @param {Object} t i18n translating function
+     * @memberof OfficeApiHelper
+     */
+    removeObjectAndDisplaytNotification = (object, officeContext, t) => {
+      const { name } = object;
+      this.removeObjectNotExistingInExcel(object, officeContext);
+      const message = t('{{name}} has been removed from the workbook.', { name });
+      notificationService.displayTranslatedNotification({ type: 'success', content: message });
+    }
+
+    removeReportFromExcel = async (bindingId, isCrosstab, crosstabHeaderDimensions) => {
+      try {
+        await authenticationHelper.validateAuthToken();
+        const officeContext = await this.getOfficeContext();
+        await officeContext.document.bindings.releaseByIdAsync(bindingId, () => { console.log('released binding'); });
+        const excelContext = await this.getExcelContext();
+        const tableObject = excelContext.workbook.tables.getItem(bindingId);
+        this.deleteExcelTable(tableObject, excelContext, isCrosstab, crosstabHeaderDimensions);
+        await excelContext.sync();
+        return officeStoreService.removeReportFromStore(bindingId);
+      } catch (error) {
+        if (error.code === 'ItemNotFound') {
+          return officeStoreService.removeReportFromStore(bindingId);
+        }
+        return errorService.handleError(error);
+      }
+    };
+
   /**
    * Get object from store based on bindingId and remove it from workbook
    *
@@ -204,7 +226,7 @@ class OfficeApiHelper {
    * @memberof OfficeApiHelper
    */
   deleteObjectTableBody = async (context, object) => {
-    const { isCrosstab, crosstabHeaderDimensions } = object;
+    const {isCrosstab, crosstabHeaderDimensions} = object;
     const tableObject = context.workbook.tables.getItem(object.bindId);
     await this.deleteExcelTable(tableObject, context, isCrosstab, crosstabHeaderDimensions);
   }
@@ -219,7 +241,7 @@ class OfficeApiHelper {
    */
   removeObjectNotExistingInExcel = async (object, officeContext) => {
     officeStoreService.removeReportFromStore(object.bindId);
-    await officeContext.document.bindings.releaseByIdAsync(object.bindId, () => { console.log('released binding'); });
+    await officeContext.document.bindings.releaseByIdAsync(object.bindId, () => {console.log('released binding');});
   }
 
   /**
@@ -240,20 +262,20 @@ class OfficeApiHelper {
   }
 
   /**
-      * Returns current excel sheet
-      *
-      * @param {Office} excelContext Excel context
-      * @memberof OfficeApiHelper
-      */
+    * Returns current excel sheet
+    *
+    * @param {Office} excelContext Excel context
+    * @memberof OfficeApiHelper
+  */
   getCurrentExcelSheet = (excelContext) => excelContext.workbook.worksheets.getActiveWorksheet()
 
   /**
-      * Returns true if specific worksheet is protected
-      *
-      * @param {Office} excelContext Excel context
-      * @param {Office} sheet Excel Sheet
-      * @memberof OfficeApiHelper
-      */
+    * Returns true if specific worksheet is protected
+    *
+    * @param {Office} excelContext Excel context
+    * @param {Office} sheet Excel Sheet
+    * @memberof OfficeApiHelper
+  */
   isSheetProtected = async (excelContext, sheet) => {
     sheet.load('protection/protected');
     await excelContext.sync();
@@ -261,12 +283,12 @@ class OfficeApiHelper {
   }
 
   /**
-      * Returns true if specific worksheet is protected
-      *
-      * @param {Office} excelContext Excel context
-      * @param {Array} reportArray array of Mstr Tables
-      * @memberof OfficeApiHelper
-      */
+    * Returns true if specific worksheet is protected
+    *
+    * @param {Office} excelContext Excel context
+    * @param {Array} reportArray array of Mstr Tables
+    * @memberof OfficeApiHelper
+  */
   checkIfAnySheetProtected = async (excelContext, reportArray) => {
     for (const report of reportArray) {
       const sheet = await this.getExcelSheetFromTable(excelContext, report.bindId);
@@ -338,7 +360,7 @@ class OfficeApiHelper {
    * @return {Object}
    */
   getCrosstabRange = (cellAddress, headerDimensions, sheet) => {
-    const { columnsY, columnsX, rowsX, rowsY, } = headerDimensions;
+    const {columnsY, columnsX, rowsX, rowsY, } = headerDimensions;
     const cell = typeof cellAddress === 'string' ? sheet.getRange(cellAddress) : cellAddress;
     const bodyRange = cell.getOffsetRange(rowsY, columnsX - 1);
     const startingCell = cell.getCell(0, 0).getOffsetRange(-(columnsY), -rowsX);
@@ -355,7 +377,7 @@ class OfficeApiHelper {
    * @return {Object}
    */
   getCrosstabRangeSafely = async (table, headerDimensions, context) => {
-    const { columnsY, rowsX } = headerDimensions;
+    const {columnsY, rowsX} = headerDimensions;
     const validColumnsY = await this.getValidOffset(table, columnsY, 'getRowsAbove', context);
     const validRowsX = await this.getValidOffset(table, rowsX, 'getColumnsBefore', context);
     const startingCell = table.getRange().getCell(0, 0).getOffsetRange(-validColumnsY, -validRowsX);
@@ -376,6 +398,7 @@ class OfficeApiHelper {
     for (let i = 0; i <= limit; i++) {
       try {
         table.getRange()[getFunction](i + 1);
+        // eslint-disable-next-line no-await-in-loop
         await context.sync();
       } catch (error) {
         return i;
@@ -531,7 +554,11 @@ class OfficeApiHelper {
     context.trackedObjects.add(tableRange);
     if (isCrosstab) {
       const { rowsX, rowsY, columnsX, columnsY } = crosstabHeaderDimensions;
+      this.clearEmptyCrosstabRow(tableObject); // Since showing Excel table header dont override the data but insert new row, we clear values from empty row in crosstab to prevent it
+      tableObject.showHeaders = true;
+      await context.sync();
       const crosstabRange = await this.getCrosstabRangeSafely(tableObject, crosstabHeaderDimensions, context);
+
       const firstCell = crosstabRange.getCell(0, 0);
       const columnsHeaders = firstCell.getOffsetRange(0, rowsX).getResizedRange(columnsY - 1, columnsX - 1);
       const rowsHeaders = firstCell.getResizedRange((columnsY + rowsY), rowsX - 1);
@@ -612,7 +639,7 @@ class OfficeApiHelper {
    * @memberof OfficeApiHelper
    */
   clearEmptyCrosstabRow = (officeTable) => {
-    const headerRange = officeTable.getRange().getRow(0).getOffsetRange(-1, 0);
+    const headerRange = officeTable.getDataBodyRange().getRow(0).getOffsetRange(-1, 0);
     headerRange.clear('Contents');
   }
 }

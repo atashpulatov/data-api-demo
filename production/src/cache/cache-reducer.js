@@ -18,6 +18,7 @@ export const DEFAULT_STATE = {
     isLoading: false,
     objects: [],
   },
+  uuidProcessed:[]
 };
 
 export const REFRESH_STATE = {
@@ -30,7 +31,19 @@ export const REFRESH_STATE = {
     isLoading: true,
     objects: [],
   },
+  uuidProcessed:[]
 };
+
+/**
+ * Checks if UUID from cache key was already added to state
+ *
+ * @param {Object} data which should be added to state
+ * @param {Array} uuidArray of uuids which have already been added to state
+ * @returns {boolean} representing whether given data has already been added to state
+ */
+function isUuidAlreadyProcessed(data, uuidArray) {
+  return data && data.uuid && uuidArray.includes(data.uuid);
+}
 
 const cacheReducer = (state = DEFAULT_STATE, action) => {
   switch (action && action.type) {
@@ -45,22 +58,24 @@ const cacheReducer = (state = DEFAULT_STATE, action) => {
       environmentLibrary: { ...state.environmentLibrary, isLoading: action.data },
     };
   case ADD_ENV_OBJECTS:
+    if (isUuidAlreadyProcessed(action.data, state.uuidProcessed)) return state;
     return {
       ...state,
       environmentLibrary: {
         ...state.environmentLibrary,
-        objects: action.data.append
-          ? [...state.environmentLibrary.objects, ...action.data.objects]
-          : action.data.objects
+        objects: [...state.environmentLibrary.objects, ...action.data.data]
       },
+      uuidProcessed:[...state.uuidProcessed, action.data.uuid]
     };
   case ADD_MY_LIBRARY_OBJECTS:
+    if (isUuidAlreadyProcessed(action.data, state.uuidProcessed)) return state;
     return {
       ...state,
       myLibrary: {
         ...state.myLibrary,
-        objects: action.data.append ? [...state.myLibrary.objects, ...action.data.objects] : action.data.objects
+        objects: [...state.myLibrary.objects, ...action.data.data],
       },
+      uuidProcessed:[...state.uuidProcessed, action.data.uuid]
     };
   case ADD_PROJECTS:
     return {
