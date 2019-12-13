@@ -71,8 +71,7 @@ async function* fetchContentGenerator({
   const { instanceId, mstrTable } = instanceDefinition;
   const { isCrosstab } = mstrTable;
   const storeState = reduxStore.getState();
-  const { envUrl } = storeState.sessionReducer;
-  const { authToken } = storeState.sessionReducer;
+  const { envUrl, authToken } = storeState.sessionReducer;
   let fetchedRows = 0;
   let offset = 0;
   const fullPath = getFullPath({
@@ -131,8 +130,7 @@ export class MstrObjectRestService {
 
   answerDossierPrompts = ({ objectId, projectId, instanceId, promptsAnswers }) => {
     const storeState = this.reduxStore.getState();
-    const { envUrl } = storeState.sessionReducer;
-    const { authToken } = storeState.sessionReducer;
+    const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/promptsAnswers`;
     return request
       .post(fullPath)
@@ -145,8 +143,7 @@ export class MstrObjectRestService {
 
   answerPrompts = ({ objectId, projectId, instanceId, promptsAnswers }) => {
     const storeState = this.reduxStore.getState();
-    const { envUrl } = storeState.sessionReducer;
-    const { authToken } = storeState.sessionReducer;
+    const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/reports/${objectId}/instances/${instanceId}/promptsAnswers`;
     return request
       .post(fullPath)
@@ -160,8 +157,7 @@ export class MstrObjectRestService {
   createDossierBasedOnReport = (reportId, instanceId, projectId) => {
     // TODO: get rid of the getState
     const storeState = this.reduxStore.getState();
-    const { envUrl } = storeState.sessionReducer;
-    const { authToken } = storeState.sessionReducer;
+    const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/dossiers/instances`;
     const body = {
       objects: [
@@ -195,8 +191,7 @@ export class MstrObjectRestService {
     limit = 1,
   }) => {
     const storeState = this.reduxStore.getState();
-    const { envUrl } = storeState.sessionReducer;
-    const { authToken } = storeState.sessionReducer;
+    const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = getFullPath({ dossierData, envUrl, limit, mstrObjectType, objectId, version: API_VERSION });
 
     return request
@@ -210,8 +205,7 @@ export class MstrObjectRestService {
 
   fetchVisualizationDefinition = ({ projectId, objectId, instanceId, visualizationInfo, body, }) => {
     const storeState = this.reduxStore.getState();
-    const { envUrl } = storeState.sessionReducer;
-    const { authToken } = storeState.sessionReducer;
+    const { envUrl, authToken } = storeState.sessionReducer;
     const { chapterKey, visualizationKey } = visualizationInfo;
     const fullPath = `${envUrl}/v2/dossiers/${objectId}/instances/${instanceId}/chapters/${chapterKey}/visualizations/${visualizationKey}?limit=1&contentFlags=768`;
     return request
@@ -225,8 +219,7 @@ export class MstrObjectRestService {
 
   createDossierInstance = (projectId, objectId, body = {}) => {
     const storeState = this.reduxStore.getState();
-    const { envUrl } = storeState.sessionReducer;
-    const { authToken } = storeState.sessionReducer;
+    const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/dossiers/${objectId}/instances`;
     return request
       .post(fullPath)
@@ -239,8 +232,7 @@ export class MstrObjectRestService {
 
   getDossierDefinition = (projectId, objectId) => {
     const storeState = this.reduxStore.getState();
-    const { envUrl } = storeState.sessionReducer;
-    const { authToken } = storeState.sessionReducer;
+    const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/v2/dossiers/${objectId}/definition`;
     return request
       .get(fullPath)
@@ -253,8 +245,7 @@ export class MstrObjectRestService {
 
   deleteDossierInstance = (projectId, objectId, instanceId) => {
     const storeState = this.reduxStore.getState();
-    const { envUrl } = storeState.sessionReducer;
-    const { authToken } = storeState.sessionReducer;
+    const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}`;
     return request
       .delete(fullPath)
@@ -266,8 +257,7 @@ export class MstrObjectRestService {
 
   getDossierStatus = (dossierId, instanceId, projectId) => {
     const storeState = this.reduxStore.getState();
-    const { envUrl } = storeState.sessionReducer;
-    const { authToken } = storeState.sessionReducer;
+    const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/documents/${dossierId}/instances/${instanceId}/status`;
 
     return request
@@ -287,8 +277,7 @@ export class MstrObjectRestService {
     instanceId
   }) => {
     const storeState = this.reduxStore.getState();
-    const { envUrl } = storeState.sessionReducer;
-    const { authToken } = storeState.sessionReducer;
+    const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = getFullPath({
       dossierData,
       envUrl,
@@ -316,8 +305,7 @@ export class MstrObjectRestService {
     instanceId
   }) => {
     const storeState = this.reduxStore.getState();
-    const { envUrl } = storeState.sessionReducer;
-    const { authToken } = storeState.sessionReducer;
+    const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = getFullPath({
       dossierData,
       envUrl,
@@ -357,8 +345,7 @@ export class MstrObjectRestService {
 
   getObjectDefinition = (objectId, projectId, mstrObjectType = reportObjectType) => {
     const storeState = this.reduxStore.getState();
-    const { envUrl } = storeState.sessionReducer;
-    const { authToken } = storeState.sessionReducer;
+    const { envUrl, authToken } = storeState.sessionReducer;
     const api = API_VERSION > 1 ? 'v2/' : '';
     const fullPath = `${envUrl}/${api}${mstrObjectType.request}/${objectId}`;
 
@@ -372,8 +359,7 @@ export class MstrObjectRestService {
 
   getObjectInfo = (objectId, projectId, mstrObjectType = reportObjectType) => {
     const storeState = this.reduxStore.getState();
-    const { envUrl } = storeState.sessionReducer;
-    const { authToken } = storeState.sessionReducer;
+    const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/objects/${objectId}?type=${mstrObjectType.type}`;
 
     return request
@@ -386,8 +372,7 @@ export class MstrObjectRestService {
 
   isPrompted = (objectId, projectId, objectTypeName) => {
     const storeState = this.reduxStore.getState();
-    const { envUrl } = storeState.sessionReducer;
-    const { authToken } = storeState.sessionReducer;
+    const { envUrl, authToken } = storeState.sessionReducer;
     let typePath;
     if (objectTypeName === mstrObjectEnum.mstrObjectType.report.name) {
       typePath = 'reports';
@@ -405,8 +390,7 @@ export class MstrObjectRestService {
 
   getCubeStatus = (objectId, projectId) => {
     const storeState = this.reduxStore.getState();
-    const { envUrl } = storeState.sessionReducer;
-    const { authToken } = storeState.sessionReducer;
+    const { envUrl, authToken } = storeState.sessionReducer;
 
     const fullPath = `${envUrl}/cubes/${objectId}`;
     return request
@@ -419,8 +403,7 @@ export class MstrObjectRestService {
 
   rePromptDossier = (dossierId, instanceId, projectId) => {
     const storeState = this.reduxStore.getState();
-    const { envUrl } = storeState.sessionReducer;
-    const { authToken } = storeState.sessionReducer;
+    const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/documents/${dossierId}/instances/${instanceId}/rePrompt`;
 
     return request

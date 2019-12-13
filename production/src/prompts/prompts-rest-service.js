@@ -17,8 +17,7 @@ class PromptsRestService {
 
   getReportInstancePrompts(reportId, instanceId) {
     const storeState = reduxStore.getState();
-    const { envUrl } = storeState.sessionReducer;
-    const { authToken } = storeState.sessionReducer;
+    const { envUrl, authToken } = storeState.sessionReducer;
     const { projectId } = storeState.historyReducer.project;
 
     const fullPath = `${envUrl}/reports/${reportId}/instances/${instanceId}/prompts`;
@@ -27,8 +26,7 @@ class PromptsRestService {
 
   getReportPrompts(reportId, projectId) {
     const storeState = reduxStore.getState();
-    const { envUrl } = storeState.sessionReducer;
-    const { authToken } = storeState.sessionReducer;
+    const { envUrl, authToken } = storeState.sessionReducer;
     // const projectId = storeState.historyReducer.project.projectId;
 
     const fullPath = `${envUrl}/reports/${reportId}/prompts`;
