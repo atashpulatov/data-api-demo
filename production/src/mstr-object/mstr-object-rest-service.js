@@ -26,8 +26,7 @@ function checkTableDimensions({ rows, columns }) {
 function parseInstanceDefinition(res) {
   const { body } = res;
   if (res.status === 200 && body.status === 2) {
-    const { instanceId } = body;
-    const { status } = body;
+    const { instanceId, status } = body;
     return { instanceId, status };
   }
   const { instanceId, data, internal } = body;
