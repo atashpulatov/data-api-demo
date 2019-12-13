@@ -68,7 +68,6 @@ class OfficeTableHelper {
       if (isCrosstab) {
         try {
           const sheet = prevOfficeTable.worksheet;
-          const range = officeApiHelper.getCrosstabRange(startCell, crosstabHeaderDimensions, sheet);
           this.createCrosstabHeaders(startCell, mstrTable, sheet, crosstabHeaderDimensions);
         } catch (error) {
           console.log(error);
