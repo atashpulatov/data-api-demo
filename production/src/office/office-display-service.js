@@ -31,11 +31,11 @@ const {
 } = mstrObjectRestService;
 
 export class OfficeDisplayService {
-
   init = (reduxStore, popupController) => {
     this.reduxStore = reduxStore;
     this.popupController = popupController;
   }
+
   /**
    * Main function in office Display Service responsible for import/refresh and display workflow. Whole workflow can splitted into steps.
    * 1.Get object definition
@@ -418,6 +418,7 @@ export class OfficeDisplayService {
   splitExcelRows = (excelRows) => {
     let splitRows = [excelRows];
     let isFitSize = false;
+    console.time('Split Rows');
     do {
       const tempSplit = [];
       let changed = false;
@@ -435,6 +436,7 @@ export class OfficeDisplayService {
       splitRows = [...tempSplit];
       if (!changed) isFitSize = true;
     } while (!isFitSize);
+    console.timeEnd('Split Rows');
     return splitRows;
   }
 
@@ -579,7 +581,8 @@ export class OfficeDisplayService {
    */
   async appendRowsToTable(excelRows, excelContext, officeTable, rowIndex, tableColumnsChanged, isRefresh) {
     console.group('Append rows');
-    const splitExcelRows = this.getExcelRows(excelRows);
+    const isOverLimit = this.sizeOfObject(excelRows) > 5;
+    const splitExcelRows = this.getExcelRows(excelRows, isOverLimit);
     for (let i = 0; i < splitExcelRows.length; i += 1) {
       excelContext.workbook.application.suspendApiCalculationUntilNextSync();
       // Get resize range: The number of rows/cols by which to expand the bottom-right corner,
@@ -591,10 +594,12 @@ export class OfficeDisplayService {
       rowIndex += splitExcelRows[i].length;
       if (!tableColumnsChanged && isRefresh) { rowRange.clear('Contents'); }
       rowRange.values = splitExcelRows[i];
-      console.time(`Sync for ${splitExcelRows[i].length} rows`);
-      // eslint-disable-next-line no-await-in-loop
-      await excelContext.sync();
-      console.timeEnd(`Sync for ${splitExcelRows[i].length} rows`);
+      if (isOverLimit) {
+        console.time(`Sync for ${splitExcelRows[i].length} rows`);
+        // eslint-disable-next-line no-await-in-loop
+        await excelContext.sync();
+        console.timeEnd(`Sync for ${splitExcelRows[i].length} rows`);
+      }
     }
     console.groupEnd('Append rows');
   }
@@ -603,14 +608,13 @@ export class OfficeDisplayService {
    * Return Excel Rows that will be added to table if needed rows will be splitted into chunks that meets limit of 5MB
    *
    * @param {Array} excelRows Array of table data
+   * @param {Boolean} isOverLimit Specify if the passed Excel rows are over 5MB limit
    * @returns {Array} Array with sub-arrays with size not more than 5MB
    * @memberof officeDisplayService
    */
-  getExcelRows(excelRows) {
-    console.time('Split Rows');
+  getExcelRows(excelRows, isOverLimit) {
     let splitExcelRows = [excelRows];
-    if (this.sizeOfObject(excelRows) > 5) { splitExcelRows = this.splitExcelRows(excelRows); }
-    console.timeEnd('Split Rows');
+    if (isOverLimit) { splitExcelRows = this.splitExcelRows(excelRows); }
     return splitExcelRows;
   }
 }
