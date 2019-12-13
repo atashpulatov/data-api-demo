@@ -311,7 +311,7 @@ class OfficeTableHelper {
    * @memberOf OfficeTableHelper
    */
   async changeOfficeTableOnRefresh(excelContext, bindingId, instanceDefinition, startCell, officeTable, newOfficeTableId, shouldFormat) {
-    const { mstrTable, mstrTable:{ prevCrosstabDimensions, crosstabHeaderDimensions, isCrosstab }, columns, rows } = instanceDefinition;
+    const { mstrTable, mstrTable:{ prevCrosstabDimensions, crosstabHeaderDimensions, isCrosstab } } = instanceDefinition;
     const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindingId);
     // Since showing Excel table header dont override the data but insert new row, we clear values from empty row in crosstab to prevent it
     if (isCrosstab && !mstrTable.toCrosstabChange) officeApiHelper.clearEmptyCrosstabRow(prevOfficeTable);
@@ -320,12 +320,7 @@ class OfficeTableHelper {
     await excelContext.sync();
     let tableColumnsChanged = await this.checkColumnsChange(prevOfficeTable, excelContext, instanceDefinition);
     startCell = await this.getStartCell(prevOfficeTable, excelContext);
-    const safeHeaders = await officeApiHelper.getCrosstabHeadersSafely(prevOfficeTable, prevCrosstabDimensions.columnsY, excelContext, prevCrosstabDimensions.rowsX);
-    ({ tableColumnsChanged, startCell } = this.getStartCellForUpdatedCrosstab(isCrosstab, crosstabHeaderDimensions, safeHeaders, tableColumnsChanged, prevCrosstabDimensions, startCell));
-    officeApiHelper.getRange(columns, startCell, rows);
-    if (prevCrosstabDimensions) officeApiHelper.clearCrosstabRange(prevOfficeTable, crosstabHeaderDimensions, prevCrosstabDimensions, isCrosstab, excelContext);
-
-    await excelContext.sync();
+    ({ tableColumnsChanged, startCell } = await this.clearIfCrosstabHeadersChanged(prevOfficeTable, prevCrosstabDimensions, excelContext, isCrosstab, crosstabHeaderDimensions, tableColumnsChanged, startCell));
 
     if (tableColumnsChanged) {
       console.log('Instance definition changed, creating new table');
@@ -383,25 +378,30 @@ class OfficeTableHelper {
   }
 
   /**
-   * Gets start cell for crosstab if columns change
+   * Get top left cell from the excel table. For crosstabs return the first cell of Excel table not crosstab headers.
    *
-   * @param {Boolean} isCrosstab Specify if table is crosstab
-   * @param {Object}  crosstabHeaderDimensions contains dimension of crosstab headers (columnsY, cloumnsX, RowsY, RowsX)
-   * @param {Object}  safeHeaders Contains information about number of rows and columns headers that are valid for crosstab
-   * @param {Boolean} tableColumnsChanged Specify if the tablecolumns are changed
-   * @param {Object}  prevOfficeTable previous office table
-   * @param {Object}  prevCrosstabDimensions contains dimension of crosstab headers (columnsY, cloumnsX, RowsY, RowsX)
-   * @param {Object}  startCell Specify starting cell of the table
+   * @param {Object} prevOfficeTable previous office table
+   * @param {Object} prevCrosstabDimensions contains dimension of previous crosstab headers (columnsY, cloumnsX, RowsY, RowsX)
+   * @param {Object} excelContext
+   * @param {Boolean} isCrosstab  Specified if object is crosstab report
+   * @param {Object} crosstabHeaderDimensions contains dimension of crosstab headers (columnsY, cloumnsX, RowsY, RowsX)
+   * @param {Boolean} tableColumnsChanged Specify if table columns has been changed
+   * @param {string} startCell  Starting cell of Table
    *
    * @memberOf OfficeTableHelper
    */
-  getStartCellForUpdatedCrosstab(isCrosstab, crosstabHeaderDimensions, safeHeaders, tableColumnsChanged, prevCrosstabDimensions, startCell) {
+  async clearIfCrosstabHeadersChanged(prevOfficeTable, prevCrosstabDimensions, excelContext, isCrosstab, crosstabHeaderDimensions, tableColumnsChanged, startCell) {
+    const safeHeaders = await officeApiHelper.getCrosstabHeadersSafely(prevOfficeTable, prevCrosstabDimensions.columnsY, excelContext, prevCrosstabDimensions.rowsX);
     if (isCrosstab && crosstabHeaderDimensions && (safeHeaders.validRowsX !== crosstabHeaderDimensions.rowsX || safeHeaders.validColumnsY !== crosstabHeaderDimensions.columnsY)) {
       tableColumnsChanged = true;
       prevCrosstabDimensions.rowsX = safeHeaders.validRowsX;
       prevCrosstabDimensions.columnsY = safeHeaders.validColumnsY;
-      if (tableColumnsChanged) { startCell = officeApiHelper.offsetCellBy(startCell, -prevCrosstabDimensions.columnsY, -prevCrosstabDimensions.rowsX); }
+      if (tableColumnsChanged) {
+        startCell = officeApiHelper.offsetCellBy(startCell, -prevCrosstabDimensions.columnsY, -prevCrosstabDimensions.rowsX);
+      }
     }
+    if (prevCrosstabDimensions) { officeApiHelper.clearCrosstabRange(prevOfficeTable, crosstabHeaderDimensions, prevCrosstabDimensions, isCrosstab, excelContext); }
+    await excelContext.sync();
     return { tableColumnsChanged, startCell };
   }
 
