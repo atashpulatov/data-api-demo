@@ -386,12 +386,12 @@ class OfficeTableHelper {
    * Gets start cell for crosstab if columns change
    *
    * @param {Boolean} isCrosstab Specify if table is crosstab
-   * @param {Object} crosstabHeaderDimensions contains dimension of crosstab headers (columnsY, cloumnsX, RowsY, RowsX)
-   * @param {Object} safeHeaders Contains information about number of rows and columns headers that are valid for crosstab
+   * @param {Object}  crosstabHeaderDimensions contains dimension of crosstab headers (columnsY, cloumnsX, RowsY, RowsX)
+   * @param {Object}  safeHeaders Contains information about number of rows and columns headers that are valid for crosstab
    * @param {Boolean} tableColumnsChanged Specify if the tablecolumns are changed
-   * * @param {Object} prevOfficeTable previous office table
-   * @param {Object} prevCrosstabDimensions contains dimension of crosstab headers (columnsY, cloumnsX, RowsY, RowsX)
-   * @param {Object} startCell Specify the starting cell of the table
+   * @param {Object}  prevOfficeTable previous office table
+   * @param {Object}  prevCrosstabDimensions contains dimension of crosstab headers (columnsY, cloumnsX, RowsY, RowsX)
+   * @param {Object}  startCell Specify starting cell of the table
    *
    * @memberOf OfficeTableHelper
    */
