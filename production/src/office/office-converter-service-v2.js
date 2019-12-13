@@ -59,6 +59,7 @@ class OfficeConverterServiceV2 {
    * Gets raw table rows
    *
    * @param {JSON} response
+   * @param {Boolean} isCrosstab
    * @return {number[]}
    * @memberof OfficeConverterServiceV2
    */
