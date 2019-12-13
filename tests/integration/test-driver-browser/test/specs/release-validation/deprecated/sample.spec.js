@@ -13,9 +13,9 @@ import {waitAndClick} from '../../../pageObjects/utils/click-helper';
 
 describe('Smart Folder - IMPORT -', function() {
 
-  beforeAll( () => {
-    browser.setWindowSize(2200,900);
-    // browser.setWindowSize(1600,900);
+  beforeEach( () => {
+    // browser.setWindowSize(2200,900);
+    browser.setWindowSize(1900,900);
     OfficeWorksheet.openExcelHome();
     const url = browser.getUrl();
     if (url.includes('login.microsoftonline')) {
@@ -23,10 +23,10 @@ describe('Smart Folder - IMPORT -', function() {
     }
     OfficeWorksheet.createNewWorkbook();
     OfficeWorksheet.openPlugin();
-    PluginRightPanel.loginToPlugin('a', '');
+    PluginRightPanel.loginToPlugin('administrator', '');
   });
 
-  afterAll( () => {
+  afterEach( () => {
     browser.closeWindow();
     const handles =  browser.getWindowHandles();
     browser.switchToWindow(handles[0]);

@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@wdio/sync": "^5.16.5",
-    "allure-commandline": "^2.13.0"
+    "allure-commandline": "^2.13.0",
+    "chromedriver": "^79.0.0"
   }
 }
