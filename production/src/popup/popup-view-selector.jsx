@@ -38,7 +38,7 @@ export const PopupViewSelectorHOC = (props) => {
     && !propsToPass.forceChange
   ) {
     if (isInstanceWithPromptsAnswered(props)) {
-      if (popupType === PopupTypeEnum.repromptingWindow) { 
+      if (popupType === PopupTypeEnum.repromptingWindow) {
         popupType = PopupTypeEnum.editFilters;
         propsToPass.editRequested = true;
       }

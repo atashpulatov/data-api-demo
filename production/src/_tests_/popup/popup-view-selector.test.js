@@ -326,14 +326,10 @@ describe('PopupViewSelector', () => {
       });
   });
 
-  it('should proceed to import when prompts answered and no attributes, metrics and filters', () => {
+  it('should proceed to edit filters after reprompting', () => {
     // given
     const instanceId = 'instanceId';
     const location = { search: {}, };
-    const reduxMethods = {
-      startImport: jest.fn(),
-      startLoading: jest.fn(),
-    };
     const props = {
       popupType: PopupTypeEnum.repromptingWindow,
       authToken: 'token',
@@ -351,21 +347,17 @@ describe('PopupViewSelector', () => {
         whatever: 'whatever',
       },
     };
-    const mockMessageParent = jest.spyOn(Office.context.ui, 'messageParent');
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    shallow(<PopupViewSelectorHOC
+    const selectorWrapped = shallow(<PopupViewSelectorHOC
       location={location}
-      {...reduxMethods}
       {...props}
       authToken={{}}
       propsToPass={{}}
       methods={{}}
     />);
     // then
-    expect(reduxMethods.startLoading).toHaveBeenCalled();
-    expect(reduxMethods.startImport).toHaveBeenCalled();
-    expect(mockMessageParent).toHaveBeenCalled();
+    expect(selectorWrapped.find(AttributeSelectorWindow).get(0)).toBeTruthy();
   });
 
   it('should not clear attributes and metrics if going to edit filters from prompts window', () => {
