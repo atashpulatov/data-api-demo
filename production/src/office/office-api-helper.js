@@ -223,7 +223,7 @@ export class OfficeApiHelper {
    *
    * @param {Office} context Excel Context
    * @param {Object} object Contains information obout the object
-   * @param {Boolean} isClear specift if object should be cleared or deleted
+   * @param {Boolean} isClear specify if object should be cleared or deleted
    * @memberof OfficeApiHelper
    */
   deleteObjectTableBody = async (context, object, isClear) => {
@@ -411,7 +411,8 @@ export class OfficeApiHelper {
    * Clears the two crosstab report ranges
    *
    * @param {Office} officeTable Starting table body cell
-   * @param {Object} headerDimensions Contains information about crosstab headers dimensions
+   * @param {Object} crosstabHeaderDimensions Contains information about crosstab headers dimensions
+   * @param {Object} prevheaderDimensions Contains information about previous crosstab headers dimensions
    * @param {Office} context Excel context
    * @memberof OfficeApiHelper
    */
@@ -421,37 +422,39 @@ export class OfficeApiHelper {
       let topRange;
       let titlesRange;
 
-      if (prevheaderDimensions.rowsX) {
+      const { rowsX , columnsY } = prevheaderDimensions;
+
+      if (rowsX) {
         // Row headers
-        leftRange = officeTable.getRange().getColumnsBefore(prevheaderDimensions.rowsX);
+        leftRange = officeTable.getRange().getColumnsBefore(rowsX);
         context.trackedObjects.add(leftRange);
         // Title headers
-        titlesRange = officeTable.getRange().getCell(0, 0).getOffsetRange(0, -1).getResizedRange(-(prevheaderDimensions.columnsY), -(prevheaderDimensions.rowsX - 1));
+        titlesRange = officeTable.getRange().getCell(0, 0).getOffsetRange(0, -1).getResizedRange(-(columnsY), -(rowsX - 1));
         context.trackedObjects.add(titlesRange);
       }
 
       // Column headers
-      if (prevheaderDimensions.columnsY) {
-        topRange = officeTable.getRange().getRowsAbove(prevheaderDimensions.columnsY);
+      if (columnsY) {
+        topRange = officeTable.getRange().getRowsAbove(columnsY);
         context.trackedObjects.add(topRange);
       }
       // Check if ranges are valid before clearing
       await context.sync();
       if (isCrosstab && (crosstabHeaderDimensions === prevheaderDimensions)) {
-        if (prevheaderDimensions.columnsY) topRange.clear('contents');
-        if (prevheaderDimensions.rowsX) {
+        if (columnsY) topRange.clear('contents');
+        if (rowsX) {
           leftRange.clear('contents');
           titlesRange.clear('contents');
         }
       } else {
-        if (prevheaderDimensions.columnsY) topRange.clear();
-        if (prevheaderDimensions.rowsX) {
+        if (columnsY) topRange.clear();
+        if (rowsX) {
           leftRange.clear();
           titlesRange.clear();
         }
       }
-      if (prevheaderDimensions.columnsY) context.trackedObjects.remove([topRange]);
-      if (prevheaderDimensions.rowsX) {
+      if (columnsY) context.trackedObjects.remove([topRange]);
+      if (rowsX) {
         context.trackedObjects.remove([leftRange, titlesRange]);
       }
     } catch (error) {
@@ -553,9 +556,9 @@ export class OfficeApiHelper {
   * Returns the number of rows and columns headers that are valid for crosstab
   *
   * @param {Office} table Excel Object containig information about Excel Table
-  * @param {Object} columnsY Contains information about crosstab header columnsY direction
+  * @param {Number} columnsY Contains information about crosstab header columnsY direction
   * @param {Office} context Excel context
-  * @param {Object} rowsX Contains information about crosstab header rowsX direction
+  * @param {Number} rowsX Contains information about crosstab header rowsX direction
   * @memberof OfficeApiHelper
   */
   async getCrosstabHeadersSafely(table, columnsY, context, rowsX) {
@@ -571,7 +574,7 @@ export class OfficeApiHelper {
   * @param {Office} context Contains arrays of attributes names in crosstab report
   * @param {Boolean} isCrosstab Specify if object is a crosstab
   * @param {Object} crosstabHeaderDimensions Contains dimensions of crosstab report headers
-  * @param {Boolean} isClear specift if object should be cleared or deleted
+  * @param {Boolean} isClear Specify if object should be cleared or deleted. False by default
   * @memberof OfficeApiHelper
   */
   async deleteExcelTable(tableObject, context, isCrosstab = false, crosstabHeaderDimensions = {}, isClear = false) {

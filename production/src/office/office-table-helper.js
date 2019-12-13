@@ -18,7 +18,7 @@ class OfficeTableHelper {
    * @param {string} startCell  Top left corner cell
    * @param {string} officeTableId Excel Binding ID
    * @param {Object} prevOfficeTable Previous office table to refresh
-   * @param {Boolean} tableColumnsChanged Specify if table columns has been changed
+   * @param {Boolean} tableColumnsChanged Specify if table columns has been changed. False by default
    *
    * @memberOf OfficeTableHelper
    */
@@ -320,15 +320,8 @@ class OfficeTableHelper {
     await excelContext.sync();
     let tableColumnsChanged = await this.checkColumnsChange(prevOfficeTable, excelContext, instanceDefinition);
     startCell = await this.getStartCell(prevOfficeTable, excelContext);
-
     const safeHeaders = await officeApiHelper.getCrosstabHeadersSafely(prevOfficeTable, prevCrosstabDimensions.columnsY, excelContext, prevCrosstabDimensions.rowsX);
-    if (isCrosstab && crosstabHeaderDimensions && (safeHeaders.validRowsX !== crosstabHeaderDimensions.rowsX || safeHeaders.validColumnsY !== crosstabHeaderDimensions.columnsY)) {
-      tableColumnsChanged = true;
-      prevCrosstabDimensions.rowsX = safeHeaders.validRowsX;
-      prevCrosstabDimensions.columnsY = safeHeaders.validColumnsY;
-      if (tableColumnsChanged) startCell = officeApiHelper.offsetCellBy(startCell, -prevCrosstabDimensions.columnsY, -prevCrosstabDimensions.rowsX);
-    }
-
+    ({ tableColumnsChanged, startCell } = this.getStartCellForUpdatedCrosstab(isCrosstab, crosstabHeaderDimensions, safeHeaders, tableColumnsChanged, prevCrosstabDimensions, startCell));
     officeApiHelper.getRange(columns, startCell, rows);
     if (prevCrosstabDimensions) officeApiHelper.clearCrosstabRange(prevOfficeTable, crosstabHeaderDimensions, prevCrosstabDimensions, isCrosstab, excelContext);
 
@@ -381,12 +374,35 @@ class OfficeTableHelper {
     let tableStartCell = officeApiHelper.getTableStartCell({ startCell, sheet, instanceDefinition, prevOfficeTable, tableColumnsChanged });
     if (prevCrosstabDimensions && prevCrosstabDimensions !== crosstabHeaderDimensions && isCrosstab) {
       if (tableColumnsChanged) {
-        tableStartCell = officeApiHelper.offsetCellBy(tableStartCell, crosstabHeaderDimensions.columnsY, crosstabHeaderDimensions.rowsX);
+        tableStartCell = officeApiHelper.offsetCellBy(tableStartCell, columnsY, rowsX);
       } else {
         tableStartCell = officeApiHelper.offsetCellBy(tableStartCell, columnsY - prevColumnsY, rowsX - prevRowsX);
       }
     }
     return tableStartCell;
+  }
+
+  /**
+   * Gets start cell for crosstab if columns change
+   *
+   * @param {Boolean} isCrosstab Specify if table is crosstab
+   * @param {Object} crosstabHeaderDimensions contains dimension of crosstab headers (columnsY, cloumnsX, RowsY, RowsX)
+   * @param {Object} safeHeaders Contains information about number of rows and columns headers that are valid for crosstab
+   * @param {Boolean} tableColumnsChanged Specify if the tablecolumns are changed
+   * * @param {Object} prevOfficeTable previous office table
+   * @param {Object} prevCrosstabDimensions contains dimension of crosstab headers (columnsY, cloumnsX, RowsY, RowsX)
+   * @param {Object} startCell Specify the starting cell of the table
+   *
+   * @memberOf OfficeTableHelper
+   */
+  getStartCellForUpdatedCrosstab(isCrosstab, crosstabHeaderDimensions, safeHeaders, tableColumnsChanged, prevCrosstabDimensions, startCell) {
+    if (isCrosstab && crosstabHeaderDimensions && (safeHeaders.validRowsX !== crosstabHeaderDimensions.rowsX || safeHeaders.validColumnsY !== crosstabHeaderDimensions.columnsY)) {
+      tableColumnsChanged = true;
+      prevCrosstabDimensions.rowsX = safeHeaders.validRowsX;
+      prevCrosstabDimensions.columnsY = safeHeaders.validColumnsY;
+      if (tableColumnsChanged) { startCell = officeApiHelper.offsetCellBy(startCell, -prevCrosstabDimensions.columnsY, -prevCrosstabDimensions.rowsX); }
+    }
+    return { tableColumnsChanged, startCell };
   }
 
   /**
@@ -399,6 +415,7 @@ class OfficeTableHelper {
    * @param {Object} range range of the resized table
    * @param {Object} crosstabHeaderDimensions contains dimension of crosstab headers (columnsY, cloumnsX, RowsY, RowsX)
    * @param {Object} prevCrosstabDimensions contains dimension of  previous crosstab headers (columnsY, cloumnsX, RowsY, RowsX)
+   * @param {Boolean} isCrosstab specifies if the report is crosstab
    *
    * @memberOf OfficeTableHelper
    */
