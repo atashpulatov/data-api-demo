@@ -35,15 +35,15 @@ export const NotConnectedPopupButtons = ({
   isPublished
 }) => {
   const dataPreviewButton = (
-    <Button id="data-preview" onMouseDown={(e) => { e.preventDefault(); }} onClick={onPreviewClick} disabled={disableActiveActions}>
+    <Button id="data-preview" tabIndex={1} onMouseDown={(e) => { e.preventDefault(); }} onClick={onPreviewClick} disabled={disableActiveActions}>
       {t('Data Preview')}
     </Button>
   );
 
-  const backButton = (<Button id="back" onClick={handleBack}>{t('Back')}</Button>);
+  const backButton = (<Button id="back" tabIndex={0} onClick={handleBack}>{t('Back')}</Button>);
 
   const importButton = (
-    <Button id="import" type={!handleSecondary ? 'primary' : ''} onClick={handleOk} loading={loading} disabled={disableActiveActions}>
+    <Button id="import" tabIndex={2} type={!handleSecondary ? 'primary' : ''} onClick={handleOk} loading={loading} disabled={disableActiveActions}> 
       {t('Import')}</Button>
   );
 
@@ -51,6 +51,7 @@ export const NotConnectedPopupButtons = ({
     <Button
   id="prepare"
   type="primary"
+  tabIndex={3}
   disabled={disableActiveActions || loading || disableSecondary || !isPublished}
   onClick={handleSecondary}>
       {t('Prepare Data')}
@@ -58,7 +59,7 @@ export const NotConnectedPopupButtons = ({
   );
 
   const cancelButton = (
-    <Button id="cancel" onClick={handleCancel}>
+    <Button tabIndex={4} id="cancel" onClick={handleCancel}>
       {t('Cancel')}
     </Button>
   );
