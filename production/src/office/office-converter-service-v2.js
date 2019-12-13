@@ -79,6 +79,8 @@ class OfficeConverterServiceV2 {
    * Gets object with crosstab rows and column headers
    *
    * @param {JSON} response
+   * @param {Boolean} isCrosstab
+   * @param {Boolean}  isCrosstabular
    * @return {Object}
    * @memberof OfficeConverterServiceV2
    */
@@ -94,14 +96,10 @@ class OfficeConverterServiceV2 {
       const columns = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement(columnTotals));
       const subtotalAddress = [...rowTotals, ...columnTotals];
       return { rows, columns, subtotalAddress };
-    } if (isCrosstabular) {
-      const attributeTitles = jsonHandler.renderTitles(response.definition, 'rows', response.data.headers, onElement());
-      const metricHeaders = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement());
-      return { columns: [[...attributeTitles[0], ...metricHeaders[0], '\' ']] };
     }
     const attributeTitles = jsonHandler.renderTitles(response.definition, 'rows', response.data.headers, onElement());
     const metricHeaders = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement());
-    return { columns: [[...attributeTitles[0], ...metricHeaders[0]]] };
+    return isCrosstabular ? { columns: [[...attributeTitles[0], ...metricHeaders[0], '\' ']] } : { columns: [[...attributeTitles[0], ...metricHeaders[0]]] };
   }
 
   /**
@@ -124,6 +122,7 @@ class OfficeConverterServiceV2 {
    * Gets array with indexed column definition
    *
    * @param {JSON} response
+   * @param {Boolean} isCrosstabular
    * @return {Object}
    * @memberof OfficeConverterServiceV2
    */

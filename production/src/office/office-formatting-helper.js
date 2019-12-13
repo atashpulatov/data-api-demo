@@ -23,10 +23,8 @@ class OfficeFormattingHelper {
       } else {
         filteredColumnInformation = columnInformation;
       }
-      console.log(filteredColumnInformation);
       const offset = columnInformation.length - filteredColumnInformation.length;
       for (const object of filteredColumnInformation) {
-        console.log('Object ', object);
         if (Object.keys(object).length) { // Skips iteration if object is empty
           const columnRange = columns.getItemAt(object.index - offset).getDataBodyRange();
           let format = '';
