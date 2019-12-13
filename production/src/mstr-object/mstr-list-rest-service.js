@@ -1,5 +1,6 @@
 import request from 'superagent';
 import filterDossiersByViewMedia from '../helpers/viewMediaHelper';
+import Queue from '../cache/queue';
 
 const SEARCH_ENDPOINT = 'searches/results';
 const PROJECTS_ENDPOINT = 'projects';
@@ -59,58 +60,15 @@ export class MstrListRestService {
   }
 
   /**
-   * Get the totalItems value by fetching only 1 object.
-   *
-   * @param {Object} { limit = 1, callback = processTotalItems, requestParams }
-   * @returns {Array} [totalItems, Promise]
-   */
-  fetchTotalItems = ({ limit = LIMIT, callback = (res) => res, requestParams }) => {
-    const totalItemsCallback = (body) => {
-      callback(this.filterDossier(body));
-      return this.processTotalItems(body);
-    };
-    return this.fetchObjectList({ limit, callback: totalItemsCallback, requestParams });
-  }
-
-  /**
    * Get a projects dictionary with key:value {id:name} pairs
    *
    * @returns {Object} {ProjetId: projectName}
    */
   getProjectDictionary = () => this.fetchProjects()
-    .then((projects) => projects.reduce((dict, project) => ({ ...dict, [project.id]: project.name || '' }), {}))
+    .then((projects) => projects.reduce((dict, project) => ({ ...dict, [project.id]: project.name || '' }), {}));
 
   /**
-   * Uses request with limit of 1 to check for total number of objects of given subtypes and then
-   * executes multiple requests to API to apply pagination.
-   *
-   * @param {Function} callback - function to be passed to fetchObjectList method
-   * @returns {Array} of promises
-   */
-  fetchObjectListPagination = async (callback) => {
-    const requestParams = this.getRequestParams();
-    console.time('Fetching first batch of objects');
-    const total = await this.fetchTotalItems({ requestParams, callback, limit: 1000 });
-    console.timeEnd('Fetching first batch of objects');
-    const promiseList = [];
-    let offset = 1000;
-    console.time('Fetching environment objects');
-    while (offset <= total) {
-      const promise = this.fetchObjectList({ requestParams, offset });
-      promiseList.push(promise);
-      const results = await promise;
-      callback(results);
-      offset += LIMIT;
-    }
-    return Promise.all(promiseList).then(() => {
-      console.timeEnd('Fetching environment objects');
-      // const flatObjects = Array.prototype.concat.apply([], objects);
-      // return callback(flatObjects);
-    });
-  }
-
-  /**
-   * Fetches object of given subtypes from MSTR API.
+   * Fetches object of given subtypes from MSTR API per project.
    *
    * @param {Object} { requestParams, callback = (res) => res, offset = 0, limit = LIMIT }
    * @param {Object} requestParams - Object containing environment url, authToken and
@@ -118,17 +76,52 @@ export class MstrListRestService {
    * @param {Function} callback - Function to be applied to the returned response body
    * @param {number} offset - Starting index of object to be fetched
    * @param {number} limit - Number of objects to be fetched per request
-   * @returns
+   * @param {string} projectId - Id of the project to be fetched
+   * @param {Array} resultArray - Array of objects that is passed during reccurent function call for projects > 7000
+   * @returns {Array} of MSTR objects
    */
-  fetchObjectList = ({ requestParams, callback = this.filterDossier, offset = 0, limit = LIMIT }) => {
-    const { envUrl, authToken, typeQuery, getAncestors } = requestParams;
-    const url = `${envUrl}/${SEARCH_ENDPOINT}?limit=${limit}&offset=${offset}&type=${typeQuery}&getAncestors=${getAncestors}`;
+  fetchObjectListByProject({ requestParams, callback = this.filterDossier, offset = 0, limit = LIMIT },
+    projectId, queue) {
+    const { envUrl, authToken, typeQuery } = requestParams;
+    const url = `${envUrl}/${SEARCH_ENDPOINT}?limit=${limit}&offset=${offset}&type=${typeQuery}`;
     return request
       .get(url)
       .set('x-mstr-authtoken', authToken)
+      .set('x-mstr-projectid', projectId)
       .withCredentials()
-      .then((res) => res.body)
-      .then(callback);
+      .then((res) => {
+        if (res.body.result.length === 7000) {
+          offset += limit;
+          queue.enqueue(callback(res.body));
+          return this.fetchObjectListByProject({ requestParams, callback, offset, limit }, projectId, queue);
+        }
+        return callback(res.body);
+      });
+  }
+
+  /**
+   * Fetches all items from every (selected) project, once response is received -
+   * it is added to the queue to be cached
+   *
+   * @export
+   * @param {Function} callback - function that adds objects to cache
+   * @returns {Promise}
+   */
+  fetchObjectListForSelectedProjects = async (callback) => {
+    const requestParams = this.getRequestParams();
+    const projects = await this.getProjectDictionary();
+    const projectIds = Object.keys(projects);
+    const queue = new Queue(callback);
+    const promiseList = [];
+    console.time('Fetching environment objects');
+    for (const id of projectIds) {
+      const promise = this.fetchObjectListByProject({ requestParams }, id, queue)
+        .then((promiseResult) => queue.enqueue(promiseResult));
+      promiseList.push(promise);
+    }
+    return Promise.all(promiseList).then(() => {
+      console.timeEnd('Fetching environment objects');
+    });
   }
 
   /**
@@ -173,14 +166,16 @@ export class MstrListRestService {
   }
 
   /**
-   * Logic for fetching a list of objects (Reports, Datasets and Dossiers) from MSTR API.
-   * It takes a function that will be called when the pagination promise resolves.
-   *
-   * @param {Function} callback - Function to be applied to the returned response body
-   * @export
-   * @class getObjectList
-   */
-  getObjectList = (callback) => this.fetchObjectListPagination(callback)
+ * Logic for fetching a list of objects (Reports, Datasets and Dossiers) from MSTR API.
+ * It takes a function that will be called when the pagination promise resolves.
+ *
+ * @param {Function} callback - Function to be applied to the returned response body
+ * @returns {Promise}
+ * @export
+ * @class getObjectList
+ */
+  // TODO: refactor when adding project selection
+  getObjectList = (callback) => this.fetchObjectListForSelectedProjects(callback);
 }
 
 export const mstrListRestService = new MstrListRestService();
