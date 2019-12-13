@@ -7,18 +7,18 @@ import jsonHandler from '../mstr-object/mstr-normalized-json-handler';
  */
 class OfficeConverterServiceV2 {
   createTable(response) {
-    // If it is no attributes in columns and metrics in rows
-    const isFalsyCrosstab = response.definition.grid.metricsPosition.axis === 'rows'
+    // Crosstabular is a Crosstab report with metrics in Rows and nothing in columns, so we display it as tabular
+    const isCrosstabular = response.definition.grid.metricsPosition.axis === 'rows'
       && response.definition.grid.columns.length === 0;
-    const columnInformation = this.getColumnInformation(response, isFalsyCrosstab);
-    const isCrosstab = !isFalsyCrosstab && this.isCrosstab(response);
+    const columnInformation = this.getColumnInformation(response, isCrosstabular);
+    const isCrosstab = !isCrosstabular && this.isCrosstab(response);
     return {
       tableSize: this.getTableSize(response, columnInformation, isCrosstab),
       columnInformation,
-      headers: this.getHeaders(response, isCrosstab, isFalsyCrosstab),
+      headers: this.getHeaders(response, isCrosstab, isCrosstabular),
       id: response.k || response.id,
       isCrosstab,
-      isFalsyCrosstab,
+      isCrosstabular,
       name: response.n || response.name,
       rows: this.getRows(response, isCrosstab),
       attributesNames: this.getAttributesName(response.definition),
@@ -82,7 +82,7 @@ class OfficeConverterServiceV2 {
    * @return {Object}
    * @memberof OfficeConverterServiceV2
    */
-  getHeaders(response, isCrosstab, isFalsyCrosstab) {
+  getHeaders(response, isCrosstab, isCrosstabular) {
     const rowTotals = [];
     const columnTotals = [];
     const onElement = (array) => (e) => {
@@ -94,7 +94,7 @@ class OfficeConverterServiceV2 {
       const columns = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement(columnTotals));
       const subtotalAddress = [...rowTotals, ...columnTotals];
       return { rows, columns, subtotalAddress };
-    } if (isFalsyCrosstab) {
+    } if (isCrosstabular) {
       const attributeTitles = jsonHandler.renderTitles(response.definition, 'rows', response.data.headers, onElement());
       const metricHeaders = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement());
       return { columns: [[...attributeTitles[0], ...metricHeaders[0], '\' ']] };
@@ -127,14 +127,14 @@ class OfficeConverterServiceV2 {
    * @return {Object}
    * @memberof OfficeConverterServiceV2
    */
-  getColumnInformation(response, isFalsyCrosstab) {
+  getColumnInformation(response, isCrosstabular) {
     let columns;
     const onElement = (element) => element;
     const metricColumns = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement);
     const attributeColumns = jsonHandler.renderTitles(response.definition, 'rows', response.data.headers, onElement);
     if (!attributeColumns.length) {
       columns = metricColumns[metricColumns.length - 1];
-    } else if (isFalsyCrosstab) {
+    } else if (isCrosstabular) {
       columns = [...attributeColumns[attributeColumns.length - 1], ...metricColumns[metricColumns.length - 1], []];
     } else {
       columns = [...attributeColumns[attributeColumns.length - 1], ...metricColumns[metricColumns.length - 1]];

@@ -106,7 +106,7 @@ class OfficeDisplayService {
       ({ officeTable, newOfficeTableId, shouldFormat, tableColumnsChanged } = await officeTableHelper.getOfficeTable(isRefresh, excelContext, bindingId, instanceDefinition, startCell));
 
       // Apply formatting when table was created
-      if (shouldFormat && !mstrTable.isFalsyCrosstab) {
+      if (shouldFormat && !mstrTable.isCrosstabular) {
         await officeFormattingHelper.applyFormatting(officeTable, instanceDefinition, isCrosstab, excelContext);
       }
 
