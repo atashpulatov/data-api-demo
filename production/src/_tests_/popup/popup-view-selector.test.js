@@ -468,7 +468,8 @@ describe('PopupViewSelector', () => {
       propsToPass: {
         isPrompted: true,
         projectId: '1',
-        reportId: '1'
+        reportId: '1',
+        reportName: 'reportName',
       },
       preparePromptedReport: jest.fn()
     };
