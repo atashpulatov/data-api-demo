@@ -204,7 +204,22 @@ describe('Popup actions', () => {
     expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedReport: returnedValue });
   });
 
-  it('should do certain operations if edit action is called', async () => {
+  it('should run edit popup if edit action for not prompted object is called', async () => {
+    // given
+    const bindingId = 'bindingId';
+    const report = { bindId: bindingId, objectType: 'whatever' };
+    const returnedValue = { id: 'id', projectId: 'projectId', instanceId: 'instanceId', body: {}, promptsAnswers: [], isPrompted: false };
+    officeStoreService.getReportFromProperties.mockReturnValueOnce(returnedValue);
+    const listener = jest.fn();
+    // when
+    await actions.callForEdit(report)(listener);
+    // then
+    expect(officeStoreService.getReportFromProperties).toBeCalledWith(bindingId);
+    expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedReport: returnedValue });
+    expect(popupController.runEditFiltersPopup).toBeCalledWith(report);
+  });
+
+  it('should run reprompt popup if edit action for prompted object is called', async () => {
     // given
     const bindingId = 'bindingId';
     const report = { bindId: bindingId, objectType: 'whatever' };

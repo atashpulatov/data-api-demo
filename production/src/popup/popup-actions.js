@@ -31,7 +31,11 @@ export class PopupActions {
         type: SET_REPORT_N_FILTERS,
         editedReport,
       });
-      this.popupController.runRepromptPopup(reportParams);
+      if (editedReport.isPrompted) {
+        this.popupController.runRepromptPopup(reportParams);
+      } else {
+        this.popupController.runEditFiltersPopup(reportParams);
+      }
     } catch (error) {
       dispatch({ type: officeProperties.actions.stopLoading });
       return this.errorService.handleError(error);
