@@ -40,8 +40,8 @@ class OfficeFormattingHelper {
               // for fractions set General format
               if (object.formatString.match(/# \?+?\/\?+?/)) format = 'General';
             }
-            columnRange.numberFormat = format;
           }
+          columnRange.numberFormat = format;
         }
       }
       await excelContext.sync();
