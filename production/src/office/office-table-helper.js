@@ -381,12 +381,10 @@ class OfficeTableHelper {
    * Get top left cell from the excel table. For crosstabs return the first cell of Excel table not crosstab headers.
    *
    * @param {Object} prevOfficeTable previous office table
-   * @param {Object} prevCrosstabDimensions contains dimension of previous crosstab headers (columnsY, cloumnsX, RowsY, RowsX)
-   * @param {Object} excelContext
-   * @param {Boolean} isCrosstab  Specified if object is crosstab report
-   * @param {Object} crosstabHeaderDimensions contains dimension of crosstab headers (columnsY, cloumnsX, RowsY, RowsX)
+   * @param {Object} excelContext excel context
    * @param {Boolean} tableColumnsChanged Specify if table columns has been changed
    * @param {string} startCell  Starting cell of Table
+   * @param {Object} mstrTable  contains informations about mstr object
    *
    * @memberOf OfficeTableHelper
    */
@@ -411,12 +409,8 @@ class OfficeTableHelper {
    *
    * @param {Object} prevOfficeTable previous office table
    * @param {Object} context excelContext
-   * @param {number} columns number of columns in the table
-   * @param {number} rows number of rows in the table
    * @param {Object} range range of the resized table
-   * @param {Object} crosstabHeaderDimensions contains dimension of crosstab headers (columnsY, cloumnsX, RowsY, RowsX)
-   * @param {Object} prevCrosstabDimensions contains dimension of  previous crosstab headers (columnsY, cloumnsX, RowsY, RowsX)
-   * @param {Boolean} isCrosstab specifies if the report is crosstab
+   * @param {Object} instanceDefinition
    *
    * @memberOf OfficeTableHelper
    */
