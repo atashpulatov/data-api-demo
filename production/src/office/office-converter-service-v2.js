@@ -81,7 +81,7 @@ class OfficeConverterServiceV2 {
    *
    * @param {JSON} response
    * @param {Boolean} isCrosstab
-   * @param {Boolean}  isCrosstabular
+   * @param {Boolean} isCrosstabular Crosstabular is a Crosstab report with metrics in Rows and nothing in columns, so we display it as tabular
    * @return {Object}
    * @memberof OfficeConverterServiceV2
    */
@@ -123,7 +123,7 @@ class OfficeConverterServiceV2 {
    * Gets array with indexed column definition
    *
    * @param {JSON} response
-   * @param {Boolean} isCrosstabular
+   * @param {Boolean} isCrosstabular Crosstabular is a Crosstab report with metrics in Rows and nothing in columns, so we display it as tabular
    * @return {Object}
    * @memberof OfficeConverterServiceV2
    */
