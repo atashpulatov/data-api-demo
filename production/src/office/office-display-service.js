@@ -321,7 +321,7 @@ export class OfficeDisplayService {
          preLoadReport: objectInfo,
        });
      }
-     await this.popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
+     //  await this.popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
    }
 
    /**

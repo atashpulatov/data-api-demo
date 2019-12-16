@@ -3,6 +3,7 @@ import { CONTEXT_LIMIT } from '../mstr-object/mstr-object-rest-service';
 import { TABLE_OVERLAP } from '../error/constants';
 import { OverlappingTablesError } from '../error/overlapping-tables-error';
 import officeFormattingHelper from './office-formatting-helper';
+import PromptNotification, { CANCEL } from '../notification/prompt-notification';
 
 const DEFAULT_TABLE_STYLE = 'TableStyleLight11';
 const TABLE_HEADER_FONT_COLOR = '#000000';
@@ -174,9 +175,10 @@ class OfficeTableHelper {
     this.checkReportTypeChange(instanceDefinition);
     let officeTable;
     let shouldFormat = true;
-    let tableColumnsChanged;
+    let tableColumnsChanged = false;
+    let tableRowsChanged = false;
     if (isRefresh) {
-      ({ tableColumnsChanged, startCell, officeTable, shouldFormat } = await this.changeOfficeTableOnRefresh(
+      ({ tableColumnsChanged, tableRowsChanged, startCell, officeTable, shouldFormat } = await this.changeOfficeTableOnRefresh(
         excelContext, bindingId, instanceDefinition, startCell, officeTable, newOfficeTableId, shouldFormat
       ));
     } else {
@@ -188,6 +190,7 @@ class OfficeTableHelper {
       newOfficeTableId,
       shouldFormat,
       tableColumnsChanged,
+      tableRowsChanged
     };
   }
 
@@ -224,6 +227,17 @@ class OfficeTableHelper {
     await context.sync();
     const tableColumnsCount = tableColumns.count;
     return columns !== tableColumnsCount;
+  };
+
+  checkRowsChange = async (prevOfficeTable, context, instanceDefinition) => {
+    const { rows } = instanceDefinition;
+    console.log(`1.NUMBER OF ROWS IN INSTANCE DEFINITION: ${rows}`);
+    const tableRows = prevOfficeTable.rows;
+    tableRows.load('count');
+    await context.sync();
+    const tableRowsCount = tableRows.count;
+    console.log(`NUMBER OF COLUMNS BEFORE REFRESH: ${tableRowsCount}`);
+    return rows !== tableRowsCount;
   };
 
 
@@ -318,6 +332,7 @@ class OfficeTableHelper {
     prevOfficeTable.showHeaders = true;
     await excelContext.sync();
     const tableColumnsChanged = await this.checkColumnsChange(prevOfficeTable, excelContext, instanceDefinition);
+    const tableRowsChanged = await this.checkRowsChange(prevOfficeTable, excelContext, instanceDefinition);
     startCell = await this.getStartCell(prevOfficeTable, excelContext);
 
     officeApiHelper.getRange(columns, startCell, rows);
@@ -326,8 +341,11 @@ class OfficeTableHelper {
     }
     await excelContext.sync();
 
-    if (tableColumnsChanged) {
+    if (tableColumnsChanged || tableRowsChanged) {
       console.log('Instance definition changed, creating new table');
+      const userAction = await PromptNotification(); // TODO pass strings;
+      console.log(userAction);
+      if (userAction === CANCEL) throw new Error('Operation cancelled');
       officeTable = await this.createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId, prevOfficeTable);
     } else {
       shouldFormat = false;
@@ -335,7 +353,7 @@ class OfficeTableHelper {
       officeTable = await this.updateOfficeTable(instanceDefinition, excelContext, startCell, prevOfficeTable);
       console.timeEnd('Validate existing table');
     }
-    return { tableColumnsChanged, startCell, officeTable, shouldFormat };
+    return { tableColumnsChanged, tableRowsChanged, startCell, officeTable, shouldFormat };
   }
 
 

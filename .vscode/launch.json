@@ -9,8 +9,9 @@
             "type": "chrome",
             "request": "launch",
             "name": "Launch Chrome",
-            "url": "https://localhost:3000/",
-            "webRoot": "${workspaceRoot}/production/src/frontend/app",
+            // "url": "https://localhost:3000/",
+            "url": "https://microstrategy-my.sharepoint.com/:x:/r/personal/jkowalczyk_microstrategy_com/_layouts/15/Doc.aspx?sourcedoc=%7BB88F22D8-112F-4FDB-8509-DA176DBF7984%7D&file=Book%20197.xlsx&action=editnew&mobileredirect=true&wdNewAndOpenCt=1576248297803&wdPreviousSession=fe60cc9d-b1c5-4e53-913d-f4b1095fe06a&wdOrigin=OFFICECOM-WEB&START=&NEW=",
+            "webRoot": "${workspaceRoot}/production/src",
             "sourceMaps": true
         },
         {
