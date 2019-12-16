@@ -183,7 +183,7 @@ export class OfficeDisplayService {
       await officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
       officeStoreService.saveAndPreserveReportInStore({
         name: mstrTable.name,
-        manipulationsXML,
+        manipulationsXML: instanceDefinition.manipulationsXML,
         bindId: bindingId,
         projectId,
         envUrl,
