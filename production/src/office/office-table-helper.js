@@ -23,7 +23,7 @@ class OfficeTableHelper {
    * @memberOf OfficeTableHelper
    */
   createOfficeTable = async (instanceDefinition, context, startCell, officeTableId, prevOfficeTable, tableColumnsChanged = false) => {
-    const { rows, columns, mstrTable, mstrTable:{ isCrosstab, crosstabHeaderDimensions, prevCrosstabDimensions } } = instanceDefinition;
+    const { rows, columns, mstrTable, mstrTable:{ isCrosstab, crosstabHeaderDimensions } } = instanceDefinition;
 
     const sheet = this.getExcelWorksheet(prevOfficeTable, context);
     const tableStartCell = this.getTableStartCell(startCell, sheet, instanceDefinition, prevOfficeTable, tableColumnsChanged);
@@ -31,7 +31,7 @@ class OfficeTableHelper {
     const range = this.getObjectRange(isCrosstab, tableStartCell, crosstabHeaderDimensions, sheet, tableRange);
 
     context.trackedObjects.add(range);
-    await this.checkObjectRangeValidity(prevOfficeTable, context, columns, rows, range, isCrosstab, crosstabHeaderDimensions, prevCrosstabDimensions);
+    await this.checkObjectRangeValidity(prevOfficeTable, context, range, instanceDefinition);
     if (isCrosstab) {
       this.createCrosstabHeaders(tableStartCell, mstrTable, sheet, crosstabHeaderDimensions);
     }
@@ -311,7 +311,7 @@ class OfficeTableHelper {
    * @memberOf OfficeTableHelper
    */
   async changeOfficeTableOnRefresh(excelContext, bindingId, instanceDefinition, startCell, officeTable, newOfficeTableId, shouldFormat) {
-    const { mstrTable, mstrTable:{ prevCrosstabDimensions, crosstabHeaderDimensions, isCrosstab } } = instanceDefinition;
+    const { mstrTable, mstrTable:{ isCrosstab } } = instanceDefinition;
     const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindingId);
     // Since showing Excel table header dont override the data but insert new row, we clear values from empty row in crosstab to prevent it
     if (isCrosstab && !mstrTable.toCrosstabChange) officeApiHelper.clearEmptyCrosstabRow(prevOfficeTable);
@@ -320,7 +320,7 @@ class OfficeTableHelper {
     await excelContext.sync();
     let tableColumnsChanged = await this.checkColumnsChange(prevOfficeTable, excelContext, instanceDefinition);
     startCell = await this.getStartCell(prevOfficeTable, excelContext);
-    ({ tableColumnsChanged, startCell } = await this.clearIfCrosstabHeadersChanged(prevOfficeTable, prevCrosstabDimensions, excelContext, isCrosstab, crosstabHeaderDimensions, tableColumnsChanged, startCell));
+    ({ tableColumnsChanged, startCell } = await this.clearIfCrosstabHeadersChanged(prevOfficeTable, excelContext, tableColumnsChanged, startCell, mstrTable));
 
     if (tableColumnsChanged) {
       console.log('Instance definition changed, creating new table');
@@ -390,22 +390,23 @@ class OfficeTableHelper {
    *
    * @memberOf OfficeTableHelper
    */
-  async clearIfCrosstabHeadersChanged(prevOfficeTable, prevCrosstabDimensions, excelContext, isCrosstab, crosstabHeaderDimensions, tableColumnsChanged, startCell) {
-    const safeHeaders = await officeApiHelper.getCrosstabHeadersSafely(prevOfficeTable, prevCrosstabDimensions.columnsY, excelContext, prevCrosstabDimensions.rowsX);
-    if (isCrosstab && crosstabHeaderDimensions && (safeHeaders.validRowsX !== crosstabHeaderDimensions.rowsX || safeHeaders.validColumnsY !== crosstabHeaderDimensions.columnsY)) {
-      tableColumnsChanged = true;
-      prevCrosstabDimensions.rowsX = safeHeaders.validRowsX;
-      prevCrosstabDimensions.columnsY = safeHeaders.validColumnsY;
-      if (tableColumnsChanged) {
-        startCell = officeApiHelper.offsetCellBy(startCell, -prevCrosstabDimensions.columnsY, -prevCrosstabDimensions.rowsX);
-      }
-    }
-    if (prevCrosstabDimensions) { officeApiHelper.clearCrosstabRange(prevOfficeTable, crosstabHeaderDimensions, prevCrosstabDimensions, isCrosstab, excelContext); }
-    await excelContext.sync();
-    return { tableColumnsChanged, startCell };
-  }
+   clearIfCrosstabHeadersChanged = async (prevOfficeTable, excelContext, tableColumnsChanged, startCell, mstrTable) => {
+     const { prevCrosstabDimensions, crosstabHeaderDimensions, isCrosstab } = mstrTable;
+     const { validColumnsY, validRowsX } = await officeApiHelper.getCrosstabHeadersSafely(prevOfficeTable, prevCrosstabDimensions.columnsY, excelContext, prevCrosstabDimensions.rowsX);
+     if (isCrosstab && crosstabHeaderDimensions && (validRowsX !== crosstabHeaderDimensions.rowsX || validColumnsY !== crosstabHeaderDimensions.columnsY)) {
+       tableColumnsChanged = true;
+       prevCrosstabDimensions.rowsX = validRowsX;
+       prevCrosstabDimensions.columnsY = validColumnsY;
+       if (tableColumnsChanged) {
+         startCell = officeApiHelper.offsetCellBy(startCell, -prevCrosstabDimensions.columnsY, -prevCrosstabDimensions.rowsX);
+       }
+     }
+     if (prevCrosstabDimensions) { officeApiHelper.clearCrosstabRange(prevOfficeTable, crosstabHeaderDimensions, prevCrosstabDimensions, isCrosstab, excelContext); }
+     await excelContext.sync();
+     return { tableColumnsChanged, startCell };
+   }
 
-  /**
+   /**
    * Checks if the range for the table after refresh is cleared.
    *
    * @param {Object} prevOfficeTable previous office table
@@ -419,38 +420,39 @@ class OfficeTableHelper {
    *
    * @memberOf OfficeTableHelper
    */
-  async checkObjectRangeValidity(prevOfficeTable, context, columns, rows, range, isCrosstab, crosstabHeaderDimensions, prevCrosstabDimensions) {
-    if (prevOfficeTable) {
-      prevOfficeTable.rows.load('count');
-      await context.sync();
-      let addedColumns = Math.max(0, columns - prevOfficeTable.columns.count);
-      let addedRows = Math.max(0, rows - prevOfficeTable.rows.count);
-      if (isCrosstab && prevCrosstabDimensions) {
-        addedRows += (crosstabHeaderDimensions.columnsY - prevCrosstabDimensions.columnsY);
-        addedColumns += (crosstabHeaderDimensions.rowsX - prevCrosstabDimensions.rowsX);
-      }
-      if (addedColumns) {
-        const rightRange = prevOfficeTable
-          .getRange()
-          .getColumnsAfter(addedColumns);
-        await this.checkRangeValidity(context, rightRange);
-      }
-      if (addedRows) {
-        const bottomRange = prevOfficeTable
-          .getRange()
-          .getRowsBelow(addedRows)
-          .getResizedRange(0, addedColumns);
-        await this.checkRangeValidity(context, bottomRange);
-      }
-      context.runtime.enableEvents = false;
-      await context.sync();
-      prevOfficeTable.delete();
-      context.runtime.enableEvents = true;
-      await context.sync();
-    } else {
-      await this.checkRangeValidity(context, range);
-    }
-  }
+   async checkObjectRangeValidity(prevOfficeTable, context, range, instanceDefinition) {
+     const { rows, columns, mstrTable:{ isCrosstab, crosstabHeaderDimensions, prevCrosstabDimensions } } = instanceDefinition;
+     if (prevOfficeTable) {
+       prevOfficeTable.rows.load('count');
+       await context.sync();
+       let addedColumns = Math.max(0, columns - prevOfficeTable.columns.count);
+       let addedRows = Math.max(0, rows - prevOfficeTable.rows.count);
+       if (isCrosstab && prevCrosstabDimensions) {
+         addedRows += (crosstabHeaderDimensions.columnsY - prevCrosstabDimensions.columnsY);
+         addedColumns += (crosstabHeaderDimensions.rowsX - prevCrosstabDimensions.rowsX);
+       }
+       if (addedColumns) {
+         const rightRange = prevOfficeTable
+           .getRange()
+           .getColumnsAfter(addedColumns);
+         await this.checkRangeValidity(context, rightRange);
+       }
+       if (addedRows) {
+         const bottomRange = prevOfficeTable
+           .getRange()
+           .getRowsBelow(addedRows)
+           .getResizedRange(0, addedColumns);
+         await this.checkRangeValidity(context, bottomRange);
+       }
+       context.runtime.enableEvents = false;
+       await context.sync();
+       prevOfficeTable.delete();
+       context.runtime.enableEvents = true;
+       await context.sync();
+     } else {
+       await this.checkRangeValidity(context, range);
+     }
+   }
 
   /**
    * Set name of the table and format office table headers
