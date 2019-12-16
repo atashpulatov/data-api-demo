@@ -21,7 +21,6 @@ export function showNotification(buttons) {
 
   };
   notificationWithDefaultIcon.warning(notificationConfig);
-  return notificationWithDefaultIcon;
 }
 
 export default function PromptNotification(strings) {
