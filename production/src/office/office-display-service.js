@@ -141,7 +141,7 @@ export class OfficeDisplayService {
       ));
 
       // Apply formatting when table was created
-      if (shouldFormat) {
+      if (shouldFormat && !mstrTable.isCrosstabular) {
         await officeFormattingHelper.applyFormatting(officeTable, instanceDefinition, isCrosstab, excelContext);
       }
 
@@ -298,7 +298,6 @@ export class OfficeDisplayService {
       ? officeTableHelper.getCrosstabHeaderDimensions(instanceDefinition)
       : false;
     mstrTable.subtotalsAddresses = subtotalsAddresses;
-
     return { body, instanceDefinition, isCrosstab };
   }
 
