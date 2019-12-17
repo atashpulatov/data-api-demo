@@ -5,7 +5,6 @@ import { errorService } from '../../error/error-handler';
 /* global Office */
 
 export class OfficeStoreService {
-
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
   }
@@ -164,6 +163,11 @@ export class OfficeStoreService {
         reportsArray[ObjectIndex].isCrosstab = report.isCrosstab;
         reportsArray[ObjectIndex].manipulationsXML = report.manipulationsXML;
         reportsArray[ObjectIndex].visualizationInfo = report.visualizationInfo;
+        if (reportsArray[ObjectIndex].nameShouldUpdate) {
+          // If visualisation was changed, preserve new visualisation name.
+          reportsArray[ObjectIndex].name = report.name;
+          reportsArray[ObjectIndex].nameShouldUpdate = false;
+        }
         settings.set(officeProperties.loadedReportProperties, reportsArray);
       } catch (error) {
         errorService.handleError(error);
