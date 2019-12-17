@@ -38,7 +38,10 @@ export const PopupViewSelectorHOC = (props) => {
     && !propsToPass.forceChange
   ) {
     if (isInstanceWithPromptsAnswered(props)) {
-      if (popupType === PopupTypeEnum.repromptingWindow) { proceedToImport(props); }
+      if (popupType === PopupTypeEnum.repromptingWindow) {
+        popupType = PopupTypeEnum.editFilters;
+        propsToPass.editRequested = true;
+      }
     } else if (dossierOpenRequested) {
       // pass given prompts answers to dossierWindow
       propsToPass.promptsAnswers = props.promptsAnswers;
@@ -119,7 +122,7 @@ async function obtainInstanceWithPromptsAnswers(propsToPass, props) {
   const preparedReport = {
     id: objectId,
     projectId,
-    name: propsToPass.reportName,
+    name: propsToPass.reportName || props.editedReport.reportName,
     objectType: mstrObjectEnum.mstrObjectType.report,
     instanceId: instanceDefinition.instanceId,
     promptsAnswers: props.promptsAnswers,
