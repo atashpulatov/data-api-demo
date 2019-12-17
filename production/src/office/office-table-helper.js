@@ -347,7 +347,6 @@ class OfficeTableHelper {
    getStartCell = async(prevOfficeTable, excelContext) => {
      const headerCell = prevOfficeTable.getHeaderRowRange().getCell(0, 0);
      headerCell.load('address');
-     console.log('adjsaklşdjksaljdkasljklasjdkldjajdksjdljdaslkjdksaldkaljdaskljdklsakljdskljdaskl');
      await excelContext.sync();
      return officeApiHelper.getStartCell(headerCell.address);
    }
