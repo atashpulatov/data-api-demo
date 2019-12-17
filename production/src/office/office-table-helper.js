@@ -311,10 +311,11 @@ class OfficeTableHelper {
    * @memberOf OfficeTableHelper
    */
   async changeOfficeTableOnRefresh(excelContext, bindingId, instanceDefinition, startCell, officeTable, newOfficeTableId, shouldFormat) {
-    const { mstrTable, mstrTable:{ isCrosstab } } = instanceDefinition;
+    const { mstrTable, mstrTable:{ isCrosstab, prevCrosstabDimensions } } = instanceDefinition;
     const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindingId);
     // Since showing Excel table header dont override the data but insert new row, we clear values from empty row in crosstab to prevent it
-    if (isCrosstab && !mstrTable.toCrosstabChange) officeApiHelper.clearEmptyCrosstabRow(prevOfficeTable);
+    const crosstabEmptyRowExist = await officeApiHelper.getValidOffset(prevOfficeTable, prevCrosstabDimensions.columnsY, 'getRowsAbove', excelContext);
+    if (isCrosstab && !mstrTable.toCrosstabChange && crosstabEmptyRowExist) officeApiHelper.clearEmptyCrosstabRow(prevOfficeTable);
 
     prevOfficeTable.showHeaders = true;
     await excelContext.sync();
@@ -346,6 +347,7 @@ class OfficeTableHelper {
    getStartCell = async(prevOfficeTable, excelContext) => {
      const headerCell = prevOfficeTable.getHeaderRowRange().getCell(0, 0);
      headerCell.load('address');
+     console.log('adjsaklşdjksaljdkasljklasjdkldjajdksjdljdaslkjdksaldkaljdaskljdklsakljdskljdaskl');
      await excelContext.sync();
      return officeApiHelper.getStartCell(headerCell.address);
    }
