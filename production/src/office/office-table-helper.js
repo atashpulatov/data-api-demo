@@ -400,9 +400,7 @@ class OfficeTableHelper {
        tableColumnsChanged = true;
        prevCrosstabDimensions.rowsX = validRowsX;
        prevCrosstabDimensions.columnsY = validColumnsY;
-       if (tableColumnsChanged) {
-         startCell = officeApiHelper.offsetCellBy(startCell, -prevCrosstabDimensions.columnsY, -prevCrosstabDimensions.rowsX);
-       }
+       startCell = officeApiHelper.offsetCellBy(startCell, -prevCrosstabDimensions.columnsY, -prevCrosstabDimensions.rowsX);
      }
      if (prevCrosstabDimensions) { officeApiHelper.clearCrosstabRange(prevOfficeTable, crosstabHeaderDimensions, prevCrosstabDimensions, isCrosstab, excelContext); }
      await excelContext.sync();
