@@ -107,7 +107,7 @@ async function* fetchContentGenerator({
     fetchedRows = current + offset;
     const { row, rowTotals } = officeConverterServiceV2.getRows(response.body, isCrosstab);
     if (isCrosstab) {
-      header = officeConverterServiceV2.getHeaders(response.body);
+      header = officeConverterServiceV2.getHeaders(response.body, isCrosstab);
       crosstabSubtotal = header.subtotalAddress;
       if (offset !== 0) crosstabSubtotal.map(offsetCrosstabSubtotal);
     } else if (offset !== 0) {
