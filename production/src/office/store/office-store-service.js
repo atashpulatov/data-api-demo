@@ -159,14 +159,15 @@ export class OfficeStoreService {
         const reportsArray = [...this.getReportProperties()];
         const reportObj = reportsArray.find((element) => element.bindId === report.bindId);
         const ObjectIndex = reportsArray.indexOf(reportObj);
-        reportsArray[ObjectIndex].crosstabHeaderDimensions = report.crosstabHeaderDimensions;
-        reportsArray[ObjectIndex].isCrosstab = report.isCrosstab;
-        reportsArray[ObjectIndex].manipulationsXML = report.manipulationsXML;
-        if (reportsArray[ObjectIndex].visualizationInfo.nameShouldUpdate) {
+        const refreshedObject = reportsArray[ObjectIndex];
+        refreshedObject.crosstabHeaderDimensions = report.crosstabHeaderDimensions;
+        refreshedObject.isCrosstab = report.isCrosstab;
+        refreshedObject.manipulationsXML = report.manipulationsXML;
+        refreshedObject.visualizationInfo.dossierStructure = report.visualizationInfo.dossierStructure;
+        if (refreshedObject.visualizationInfo.nameShouldUpdate) {
           // If visualisation was changed, preserve new visualisation name and new dossierStructure.
-          reportsArray[ObjectIndex].name = report.name;
-          reportsArray[ObjectIndex].visualizationInfo.nameShouldUpdate = false;
-          reportsArray[ObjectIndex].visualizationInfo.dossierStructure = report.visualizationInfo.dossierStructure;
+          refreshedObject.name = report.name;
+          refreshedObject.visualizationInfo.nameShouldUpdate = false;
         }
         settings.set(officeProperties.loadedReportProperties, reportsArray);
       } catch (error) {
