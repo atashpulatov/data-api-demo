@@ -163,6 +163,7 @@ export class OfficeStoreService {
         reportsArray[ObjectIndex].crosstabHeaderDimensions = report.crosstabHeaderDimensions;
         reportsArray[ObjectIndex].isCrosstab = report.isCrosstab;
         reportsArray[ObjectIndex].manipulationsXML = report.manipulationsXML;
+        reportsArray[ObjectIndex].visualizationInfo = report.visualizationInfo;
         settings.set(officeProperties.loadedReportProperties, reportsArray);
       } catch (error) {
         errorService.handleError(error);

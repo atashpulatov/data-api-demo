@@ -295,6 +295,7 @@ export class _OfficeLoadedFile extends React.Component {
     const {dossierStructure = false} = visualizationInfo;
     const {editable, value} = this.state;
     const {dossierName, chapterName, pageName} = dossierStructure;
+    const isVisualisation = (objectType.name === mstrObjectEnum.mstrObjectType.visualization.name);
     const menu = (
       <Menu>
         <Menu.Item key="edit" onClick={(e) => {e.domEvent.stopPropagation(); this.editAction();}}>{t('Edit')}</Menu.Item>
@@ -331,7 +332,7 @@ export class _OfficeLoadedFile extends React.Component {
           </div>
 
 
-          {objectType.name === mstrObjectEnum.mstrObjectType.visualization.name && dossierStructure
+          {isVisualisation && dossierStructure
             && (
               <ButtonPopover
                 placement="bottom"
