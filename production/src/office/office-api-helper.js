@@ -1,5 +1,4 @@
 /* eslint-disable */
-import uuid from 'uuid/v4';
 import {IncorrectInputTypeError} from './incorrect-input-type';
 import {OutsideOfRangeError} from '../error/outside-of-range-error';
 import {officeProperties} from './office-properties';
@@ -15,7 +14,6 @@ import {ProtectedSheetError} from '../error/protected-sheets-error';
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
 const ASCII_CAPITAL_LETTER_INDEX = 65;
-const EXCEL_TABLE_NAME = 'table';
 const EXCEL_ROW_LIMIT = 1048576;
 const EXCEL_COL_LIMIT = 16384;
 
@@ -140,8 +138,6 @@ export class OfficeApiHelper {
   getOfficeContext = async () => window.Office.context
 
   getExcelSessionStatus = async () => !!await this.getExcelContext() // ToDo find better way to check session status
-
-  findAvailableOfficeTableId = () => EXCEL_TABLE_NAME + uuid().split('-').join('')
 
   getCurrentMstrContext = () => {
     const {envUrl} = this.reduxStore.getState().sessionReducer;

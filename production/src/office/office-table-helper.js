@@ -170,22 +170,24 @@ class OfficeTableHelper {
    */
   getOfficeTable = async (isRefresh, excelContext, bindingId, instanceDefinition, startCell) => {
     console.time('Create or get table');
-    const newOfficeTableId = bindingId || officeApiHelper.findAvailableOfficeTableId();
+    const { mstrTable } = instanceDefinition;
+    const excelCompatibleTableName = mstrTable.name.replace(/\W/g, '_');
+    const newOfficeTableName = bindingId || `${excelCompatibleTableName.slice(0, 241)}${Date.now().toString()}`;
     this.checkReportTypeChange(instanceDefinition);
     let officeTable;
     let shouldFormat = true;
     let tableColumnsChanged;
     if (isRefresh) {
       ({ tableColumnsChanged, startCell, officeTable, shouldFormat } = await this.changeOfficeTableOnRefresh(
-        excelContext, bindingId, instanceDefinition, startCell, officeTable, newOfficeTableId, shouldFormat
+        excelContext, bindingId, instanceDefinition, startCell, officeTable, newOfficeTableName, shouldFormat
       ));
     } else {
-      officeTable = await this.createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId);
+      officeTable = await this.createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableName);
     }
     console.timeEnd('Create or get table');
     return {
       officeTable,
-      newOfficeTableId,
+      newOfficeTableId: newOfficeTableName,
       shouldFormat,
       tableColumnsChanged,
     };
@@ -305,12 +307,12 @@ class OfficeTableHelper {
    * @param {Object} instanceDefinition
    * @param {Object} startCell  Top left corner cell
    * @param {Object} OfficeTable
-   * @param {String} newOfficeTableId new name for office table
+   * @param {String} newOfficeTableName new name for office table
    * @param {Boolean} shouldFormat
    *
    * @memberOf OfficeTableHelper
    */
-  async changeOfficeTableOnRefresh(excelContext, bindingId, instanceDefinition, startCell, officeTable, newOfficeTableId, shouldFormat) {
+  async changeOfficeTableOnRefresh(excelContext, bindingId, instanceDefinition, startCell, officeTable, newOfficeTableName, shouldFormat) {
     const { mstrTable, mstrTable:{ isCrosstab } } = instanceDefinition;
     const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindingId);
     // Since showing Excel table header dont override the data but insert new row, we clear values from empty row in crosstab to prevent it
@@ -324,7 +326,7 @@ class OfficeTableHelper {
 
     if (tableColumnsChanged) {
       console.log('Instance definition changed, creating new table');
-      officeTable = await this.createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId, prevOfficeTable, tableColumnsChanged);
+      officeTable = await this.createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableName, prevOfficeTable, tableColumnsChanged);
     } else {
       shouldFormat = false;
       console.time('Validate existing table');
