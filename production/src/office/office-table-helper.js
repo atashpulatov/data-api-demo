@@ -314,8 +314,12 @@ class OfficeTableHelper {
     const { mstrTable, mstrTable:{ isCrosstab, prevCrosstabDimensions } } = instanceDefinition;
     const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindingId);
     // Since showing Excel table header dont override the data but insert new row, we clear values from empty row in crosstab to prevent it
-    const crosstabEmptyRowExist = await officeApiHelper.getValidOffset(prevOfficeTable, prevCrosstabDimensions.columnsY, 'getRowsAbove', excelContext);
-    if (isCrosstab && !mstrTable.toCrosstabChange && crosstabEmptyRowExist) officeApiHelper.clearEmptyCrosstabRow(prevOfficeTable);
+    if (isCrosstab && !mstrTable.toCrosstabChange) {
+      const crosstabEmptyRowExist = await officeApiHelper.getValidOffset(prevOfficeTable, prevCrosstabDimensions.columnsY, 'getRowsAbove', excelContext);
+      if (crosstabEmptyRowExist) {
+        officeApiHelper.clearEmptyCrosstabRow(prevOfficeTable);
+      }
+    }
 
     prevOfficeTable.showHeaders = true;
     await excelContext.sync();
