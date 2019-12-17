@@ -306,7 +306,7 @@ export class _OfficeLoadedFile extends React.Component {
         <Menu.Item key="copy" onClick={this.copyValue}>{t('Copy Name')}</Menu.Item>
       </Menu>
     );
-    // If fileName was changed but it was not introduced by user (so fetched during edit) then update value===name to the new one.
+    // If fileName was changed but it was not introduced by user in editable mode (so fetched during edit) then update value to new fileName.
     if (!editable && (fileName !== value)) value = fileName;
     return (
       <Dropdown overlay={menu} trigger={['contextMenu']}>

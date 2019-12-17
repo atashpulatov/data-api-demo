@@ -162,11 +162,11 @@ export class OfficeStoreService {
         reportsArray[ObjectIndex].crosstabHeaderDimensions = report.crosstabHeaderDimensions;
         reportsArray[ObjectIndex].isCrosstab = report.isCrosstab;
         reportsArray[ObjectIndex].manipulationsXML = report.manipulationsXML;
-        reportsArray[ObjectIndex].visualizationInfo = report.visualizationInfo;
-        if (reportsArray[ObjectIndex].nameShouldUpdate) {
-          // If visualisation was changed, preserve new visualisation name.
+        if (reportsArray[ObjectIndex].visualizationInfo.nameShouldUpdate) {
+          // If visualisation was changed, preserve new visualisation name and new dossierStructure.
           reportsArray[ObjectIndex].name = report.name;
-          reportsArray[ObjectIndex].nameShouldUpdate = false;
+          reportsArray[ObjectIndex].visualizationInfo.nameShouldUpdate = false;
+          reportsArray[ObjectIndex].visualizationInfo.dossierStructure = report.visualizationInfo.dossierStructure;
         }
         settings.set(officeProperties.loadedReportProperties, reportsArray);
       } catch (error) {

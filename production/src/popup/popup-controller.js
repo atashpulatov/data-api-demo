@@ -262,7 +262,7 @@ export class PopupController {
     }
     if (response.isEdit) {
       if (reportPreviousState.visualizationInfo.visualizationKey !== response.visualizationInfo.visualizationKey) {
-        await officeStoreService.preserveReportValue(reportParams.bindId, 'nameShouldUpdate', true);
+        response.visualizationInfo.nameShouldUpdate = true;
         await officeStoreService.preserveReportValue(reportParams.bindId, 'visualizationInfo', response.visualizationInfo);
       }
       await officeStoreService.preserveReportValue(reportParams.bindId, 'instanceId', response.preparedInstanceId);
