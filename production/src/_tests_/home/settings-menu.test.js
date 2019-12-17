@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { sessionHelper } from '../../storage/session-helper';
 import { SettingsMenuHOC } from '../../home/settings-menu';
-import DB from '../../cache/pouch-db';
+import DB from '../../cache/cache-db';
 
 describe('Settings Menu', () => {
   afterEach(() => {

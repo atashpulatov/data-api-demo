@@ -43,7 +43,7 @@ export const ConfirmationHOC = ({ reportArray, toggleSecuredFlag, toggleIsConfir
               headers.format.font.color = 'white';
               await excelContext.sync();
             }
-            await officeApiHelper.deleteObjectTableBody(excelContext, report);
+            await officeApiHelper.deleteObjectTableBody(excelContext, report, true);
           } catch (error) {
             const officeError = errorService.handleError(error);
             clearErrors.push({ reportName, officeError });

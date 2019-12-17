@@ -9,7 +9,7 @@ export const SET_PREPARED_REPORT = 'SET_PREPARED_REPORT';
 // export const PRELOAD = 'PRELOAD';
 
 export class PopupActions {
-  init = (authenticationHelper,errorService, officeApiHelper, officeStoreService, popupHelper, mstrObjectRestService, popupController) => {
+  init = (authenticationHelper, errorService, officeApiHelper, officeStoreService, popupHelper, mstrObjectRestService, popupController) => {
     this.authenticationHelper = authenticationHelper;
     this.errorService = errorService;
     this.officeApiHelper = officeApiHelper;
@@ -26,55 +26,16 @@ export class PopupActions {
         this.authenticationHelper.validateAuthToken(),
       ]);
       const editedReport = this.officeStoreService.getReportFromProperties(reportParams.bindId);
+
+      dispatch({
+        type: SET_REPORT_N_FILTERS,
+        editedReport,
+      });
       if (editedReport.isPrompted) {
-        const config = { objectId: editedReport.id, projectId: editedReport.projectId };
-        let instanceDefinition = await this.mstrObjectRestService.createInstance(config);
-        let count = 0;
-        while (instanceDefinition.status === 2) {
-          const { id, projectId, promptsAnswers } = editedReport;
-          const configPrompts = {
-            objectId: id,
-            projectId,
-            instanceId: instanceDefinition.instanceId,
-            promptsAnswers: promptsAnswers[count],
-          };
-          await this.mstrObjectRestService.answerPrompts(configPrompts);
-          const configInstance = {
-            objectId: editedReport.id,
-            projectId: editedReport.projectId,
-            body: editedReport.body,
-            instanceId: instanceDefinition.instanceId,
-          };
-          instanceDefinition = await this.mstrObjectRestService.getInstance(configInstance);
-          count += 1;
-        }
-        editedReport.instanceId = instanceDefinition.instanceId;
+        this.popupController.runRepromptPopup(reportParams);
+      } else {
+        this.popupController.runEditFiltersPopup(reportParams);
       }
-
-      dispatch({
-        type: SET_REPORT_N_FILTERS,
-        editedReport,
-      });
-      this.popupController.runEditFiltersPopup(reportParams);
-    } catch (error) {
-      dispatch({ type: officeProperties.actions.stopLoading });
-      return this.errorService.handleError(error);
-    }
-  }
-
-  callForReprompt = (reportParams) => async (dispatch) => {
-    try {
-      await Promise.all([
-        this.officeApiHelper.getExcelSessionStatus(),
-        this.authenticationHelper.validateAuthToken(),
-      ]);
-      const editedReport = this.officeStoreService.getReportFromProperties(reportParams.bindId);
-      editedReport.isPrompted = true;
-      dispatch({
-        type: SET_REPORT_N_FILTERS,
-        editedReport,
-      });
-      this.popupController.runRepromptPopup(reportParams);
     } catch (error) {
       dispatch({ type: officeProperties.actions.stopLoading });
       return this.errorService.handleError(error);

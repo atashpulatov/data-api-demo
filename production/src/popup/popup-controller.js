@@ -13,6 +13,7 @@ import { REFRESH_CACHE_COMMAND, refreshCache } from '../cache/cache-actions';
 import {
   START_REPORT_LOADING,
   STOP_REPORT_LOADING,
+  RESET_STATE,
 } from './popup-actions';
 
 const URL = `${window.location.href}`;
@@ -80,6 +81,7 @@ export class PopupController {
             // Event received on dialog close
             Office.EventType.DialogEventReceived,
             () => {
+              this.reduxStore.dispatch({ type: RESET_STATE });
               this.reduxStore.dispatch({ type: officeProperties.actions.popupHidden });
               this.reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
             }
@@ -135,6 +137,7 @@ export class PopupController {
       console.error(error);
       errorService.handleError(error);
     } finally {
+      this.reduxStore.dispatch({ type: RESET_STATE });
       if (response.command !== REFRESH_CACHE_COMMAND) {
         this.reduxStore.dispatch({ type: officeProperties.actions.popupHidden });
         this.reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
