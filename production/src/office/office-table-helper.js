@@ -320,13 +320,11 @@ class OfficeTableHelper {
         officeApiHelper.clearEmptyCrosstabRow(prevOfficeTable);
       }
     }
-
     prevOfficeTable.showHeaders = true;
     await excelContext.sync();
     let tableColumnsChanged = await this.checkColumnsChange(prevOfficeTable, excelContext, instanceDefinition);
     startCell = await this.getStartCell(prevOfficeTable, excelContext);
     ({ tableColumnsChanged, startCell } = await this.clearIfCrosstabHeadersChanged(prevOfficeTable, excelContext, tableColumnsChanged, startCell, mstrTable));
-
     if (tableColumnsChanged) {
       console.log('Instance definition changed, creating new table');
       officeTable = await this.createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId, prevOfficeTable, tableColumnsChanged);
@@ -396,7 +394,9 @@ class OfficeTableHelper {
    clearIfCrosstabHeadersChanged = async (prevOfficeTable, excelContext, tableColumnsChanged, startCell, mstrTable) => {
      const { prevCrosstabDimensions, crosstabHeaderDimensions, isCrosstab } = mstrTable;
      const { validColumnsY, validRowsX } = await officeApiHelper.getCrosstabHeadersSafely(prevOfficeTable, prevCrosstabDimensions.columnsY, excelContext, prevCrosstabDimensions.rowsX);
-     if (isCrosstab && crosstabHeaderDimensions && (validRowsX !== crosstabHeaderDimensions.rowsX || validColumnsY !== crosstabHeaderDimensions.columnsY)) {
+     if (isCrosstab && crosstabHeaderDimensions && (validRowsX || validColumnsY)
+      && (validRowsX !== crosstabHeaderDimensions.rowsX
+      || validColumnsY !== crosstabHeaderDimensions.columnsY)) {
        tableColumnsChanged = true;
        prevCrosstabDimensions.rowsX = validRowsX;
        prevCrosstabDimensions.columnsY = validColumnsY;
