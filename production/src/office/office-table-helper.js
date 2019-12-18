@@ -473,7 +473,16 @@ class OfficeTableHelper {
         officeTable.getHeaderRowRange().values = [mstrTable.headers.columns[mstrTable.headers.columns.length - 1]];
       }
       sheet.activate();
+      officeTable.load('name');
+      console.log("1==============================================")
+      console.log(officeTable.name, officeTable);
+      officeTable.load('name');
+      console.log("2==============================================")
+      console.log(officeTable.name);
       await context.sync();
+      officeTable.load('name');
+      console.log("3==============================================")
+      console.log(officeTable.name);
       return officeTable;
     } catch (error) {
       await context.sync();
