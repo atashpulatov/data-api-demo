@@ -45,17 +45,20 @@ rake e2e_test_browser
   end
 
   publishers do
-    # html do
-    #   report_name 'Vagrant Logs'
-    #   report_directory_path "deploy/vagrant/esxi/test/logs"
-    #   index_file_name 'index.html'
-    # end
-    #
-    # cucumber do
-    #   file_include_pattern 'acceptance_test.json'
-    # end
-
-   
+    html do
+       report_name 'Browser e2e Test Report'
+       report_directory_path "tests/integration/test-driver-browser/allure-report"
+       index_file_name 'index.html'
+    end
+  
+    ext_mailer do
+      recipients_list 'dhornos@microstrategy.com,yzhai@microstrategy.com'
+      subject 'subject '$JOB_NAME - $BUILD_STATUS''
+      fail_trigger_recipients_list ''
+      fail_trigger_notify_developer 'true'
+      always_trigger 'true'
+      always_trigger_recipients_list ''
+    end
   end
 
 end

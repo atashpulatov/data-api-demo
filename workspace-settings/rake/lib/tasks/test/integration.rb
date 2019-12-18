@@ -1,7 +1,7 @@
 desc "package test docker"
 task :deploy_tester_server,[:build_no] do | t, args|
   
-  group_id = Common::Version.dependency_group_id
+  group_id = "#{$WORKSPACE_SETTINGS[:nexus][:base_coordinates][:group_id]}.#{Common::Version.application_branch}"
   artifact_id = "office-loader"
   version = args['build_no'] || Nexus.latest_artifact_version(artifact_id: artifact_id, group_id: group_id)
   download_mstr_office(group_id, version)
@@ -122,4 +122,51 @@ end
 def is_web_dossier_started?()
   cmd = shell_command("curl --connect-timeout 10 'http://localhost:8080/web-dossier/auth/ui/loginPage' -k --retry 1")
   !cmd.error?
+end
+
+
+def ci_metrics_system_test
+  json_path = "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/tests/acceptance/.reports/acceptance_test.json"
+  if ! File.exist?(json_path)
+    puts "Warning! No file #{json_path}"
+  else
+    test_result = JSON.parse(File.read(json_path))
+    features_num=test_result.size
+    return if features_num < 1
+    scenarios_num=0
+    pass_num=0
+    fail_num=0
+    duration=0
+    test_result.each { |feature|
+      scenarios=feature['elements'].select{|scenario|
+        scenario['type']=='scenario'
+      }
+      scenarios_num=scenarios_num+scenarios.size
+      scenarios.each{|scenario|
+        pass_flag=0
+        scenario['steps'].each{ |step|
+          nanosec=step['result']['duration']
+          sec= (nanosec/((10**9)*1.0)).round(2)
+          duration=(duration+sec).round(2)
+          if step['result']['status']!= 'passed'
+            pass_flag=1
+            if step['result']['status']== 'failed'
+              fail_num=fail_num+1
+              break
+            end
+          end
+        }
+        if pass_flag==0
+          pass_num=pass_num+1
+        end
+      }
+    }
+
+    metrics_system_test = {}
+    metrics_system_test['TOTAL_CASES'] = scenarios_num
+    metrics_system_test['PASSED'] = pass_num
+    metrics_system_test['FAILED'] = fail_num
+    metrics_system_test['DURATION'] = duration
+    puts "METRICS_SYSTEM_TEST=#{metrics_system_test.to_json}"
+  end
 end
