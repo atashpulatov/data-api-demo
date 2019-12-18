@@ -5,11 +5,14 @@
       "changeProcessCWD": true
     }
   ],
-  "eslint.autoFixOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.fixAll": true
+  },
   "editor.formatOnSave": false,
   "editor.tabSize": 2,
   "editor.detectIndentation": false,
   "editor.insertSpaces": true,
-  "editor.autoIndent": true,
+  "editor.autoIndent": "full",
   "terminal.integrated.cwd": "./production"
 }
