@@ -214,9 +214,26 @@ export class _OfficeLoadedFile extends React.Component {
     return <></>;
   };
 
-  renderIcons({t, isLoading}) {
+  triggerDuplicate() {
+  }
     return (
       <span className="object-icons">
+        <ButtonPopover
+          placement="bottom"
+          content={t('Duplicate')}
+          mouseEnterDelay={1}
+        >
+          <span
+              aria-label="Duplicate button"
+              role="button"
+              tabIndex="0"
+              className="loading-button-container"
+              onClick={this.triggerDuplicate}
+              onKeyPress={this.triggerDuplicate}
+            >
+            <MSTRIcon type="duplicate" />
+          </span>
+        </ButtonPopover>
         <ButtonPopover
           placement="bottom"
           content={t('Edit Data')}
@@ -297,9 +314,10 @@ export class _OfficeLoadedFile extends React.Component {
     const {dossierName, chapterName, pageName} = dossierStructure;
     const menu = (
       <Menu>
-        <Menu.Item key="edit" onClick={(e) => {e.domEvent.stopPropagation(); this.editAction();}}>{t('Edit')}</Menu.Item>
-        <Menu.Item key="refresh" onClick={(e) => {e.domEvent.stopPropagation(); this.refreshAction();}}>{t('Refresh')}</Menu.Item>
-        <Menu.Item key="remove" onClick={(e) => {e.domEvent.stopPropagation(); this.deleteAction();}}>{t('Remove')}</Menu.Item>
+        <Menu.Item key="duplicate" onClick={(e) => { e.domEvent.stopPropagation(); this.triggerDuplicate(); }}>{t('Duplicate')}</Menu.Item>
+        <Menu.Item key="edit" onClick={(e) => { e.domEvent.stopPropagation(); this.editAction(); }}>{t('Edit')}</Menu.Item>
+        <Menu.Item key="refresh" onClick={(e) => { e.domEvent.stopPropagation(); this.refreshAction(); }}>{t('Refresh')}</Menu.Item>
+        <Menu.Item key="remove" onClick={(e) => { e.domEvent.stopPropagation(); this.deleteAction(); }}>{t('Remove')}</Menu.Item>
         <Menu.Item key="rename" onClick={this.enableEdit}>{t('Rename')}</Menu.Item>
         <Menu.Item key="copy" onClick={this.copyValue}>{t('Copy Name')}</Menu.Item>
       </Menu>
