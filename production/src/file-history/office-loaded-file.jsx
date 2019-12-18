@@ -216,6 +216,8 @@ export class _OfficeLoadedFile extends React.Component {
 
   triggerDuplicate() {
   }
+
+  renderIcons({ t, isLoading }) {
     return (
       <span className="object-icons">
         <ButtonPopover
