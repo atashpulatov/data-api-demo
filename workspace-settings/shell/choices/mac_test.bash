@@ -7,5 +7,5 @@ function set_workspace_settings_to_mac_test() {
   export VAGRANT_CONTEXT="${VAGRANT_DEFAULT_PROVIDER}/test"
 
   export TEST_TYPES=integration
-  export HATS=dev:pipeline
+  export HATS=
 }

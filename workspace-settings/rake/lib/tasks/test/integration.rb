@@ -1,10 +1,3 @@
-
-desc "test project in #{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}"
-task :test do
-  good "Puts your test command here, for example mvn test or grable test: #{__FILE__}:#{__LINE__}"
-end
-
-
 desc "package test docker"
 task :deploy_tester_server,[:build_no] do | t, args|
   
@@ -28,11 +21,13 @@ task :e2e_test_browser do
  
   shell_command! "npm install", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser"
   shell_command! "npm run test", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser"
+  shell_command! "npm run report", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser"
+
 
 end
 
 desc "package test docker"
-task :tp do
+task :p do
   stop_test_web_service
   download_latest_web_dossier
   download_mstr_office
@@ -80,7 +75,7 @@ def download_mstr_office(group_id, version)
 end
 
 
-desc "package test docker"
+desc "run docker locally"
 task :r do
   # cmd = "docker run -it -p 8888:8080 --name office-tester mstr-dossier /bin/bash"
   do_start_local_web_dossier
@@ -91,7 +86,7 @@ def do_start_local_web_dossier
   shell_command! cmd
   wait_web_dossier_online
   good "web server online"
-  puts "please open https://localhost:8443/web-dossier/auth/ui/loginPage"
+  puts "please open https://127.0.0.1:8443/web-dossier/auth/ui/loginPage"
 end
 
 
@@ -107,13 +102,6 @@ def do_stop_local_web_dossier()
   shell_command cmd
 end
 
-desc "run docker"
-task :id do
-  cmd = "docker stop office-tester"
-  shell_command cmd
-  cmd = "docker container rm office-tester"
-  shell_command cmd
-end
 
 def wait_web_dossier_online()
   cnt = 0
