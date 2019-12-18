@@ -1,12 +1,14 @@
 import { officeProperties } from '../office-properties';
-import { officeApiHelper } from '../office-api-helper';
 import { RunOutsideOfficeError } from '../../error/run-outside-office-error';
 import { errorService } from '../../error/error-handler';
-import { reduxStore } from '../../store';
 
 /* global Office */
 
-class OfficeStoreService {
+export class OfficeStoreService {
+  init = (reduxStore) => {
+    this.reduxStore = reduxStore;
+  }
+
   addObjectToStore = ({
     isRefresh,
     instanceDefinition,
@@ -78,7 +80,7 @@ class OfficeStoreService {
       reportProperties[indexOfReport][key] = value;
       settings.set(officeProperties.loadedReportProperties, reportProperties);
       await settings.saveAsync();
-      await officeApiHelper.loadExistingReportBindingsExcel();
+      await this.loadExistingReportBindingsExcel();
     } catch (error) {
       errorService.handleError(error);
     }
@@ -116,6 +118,14 @@ class OfficeStoreService {
     }
   };
 
+  loadExistingReportBindingsExcel = async () => {
+    const reportArray = await this.getReportProperties();
+    this.reduxStore.dispatch({
+      type: officeProperties.actions.loadAllReports,
+      reportArray,
+    });
+  };
+
   getOfficeSettings = () => {
     if (Office === undefined || Office.context === undefined || Office.context.document === undefined) {
       throw new RunOutsideOfficeError();
@@ -149,15 +159,22 @@ class OfficeStoreService {
         const reportsArray = [...this.getReportProperties()];
         const reportObj = reportsArray.find((element) => element.bindId === report.bindId);
         const ObjectIndex = reportsArray.indexOf(reportObj);
-        reportsArray[ObjectIndex].crosstabHeaderDimensions = report.crosstabHeaderDimensions;
-        reportsArray[ObjectIndex].isCrosstab = report.isCrosstab;
-        reportsArray[ObjectIndex].manipulationsXML = report.manipulationsXML;
+        const refreshedObject = reportsArray[ObjectIndex];
+        refreshedObject.crosstabHeaderDimensions = report.crosstabHeaderDimensions;
+        refreshedObject.isCrosstab = report.isCrosstab;
+        refreshedObject.manipulationsXML = report.manipulationsXML;
+        refreshedObject.visualizationInfo.dossierStructure = report.visualizationInfo.dossierStructure;
+        if (refreshedObject.visualizationInfo.nameShouldUpdate) {
+          // If visualization was changed, preserve new visualization name and new dossierStructure.
+          refreshedObject.name = report.name;
+          refreshedObject.visualizationInfo.nameShouldUpdate = false;
+        }
         settings.set(officeProperties.loadedReportProperties, reportsArray);
       } catch (error) {
         errorService.handleError(error);
       }
     } else {
-      reduxStore.dispatch({
+      this.reduxStore.dispatch({
         type: officeProperties.actions.loadReport,
         report: {
           id: report.id,
@@ -182,7 +199,7 @@ class OfficeStoreService {
   };
 
   removeReportFromStore = (bindingId) => {
-    reduxStore.dispatch({
+    this.reduxStore.dispatch({
       type: officeProperties.actions.removeReport,
       reportBindId: bindingId,
     });

@@ -15,7 +15,7 @@ export default class _DossierWindow extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isVisualisationSelected: false,
+      isVisualizationSelected: false,
       chapterKey: '',
       visualizationKey: '',
       promptsAnswers: [],
@@ -39,7 +39,7 @@ export default class _DossierWindow extends React.Component {
       newValue = true;
     }
     this.setState({
-      isVisualisationSelected: newValue,
+      isVisualizationSelected: newValue,
       chapterKey,
       visualizationKey,
       promptsAnswers,
@@ -74,8 +74,8 @@ export default class _DossierWindow extends React.Component {
   render() {
     const { chosenObjectName, chosenObjectId, chosenProjectId, handleBack, t, mstrData, editedReport, handlePopupErrors } = this.props;
     const { envUrl, token } = mstrData;
-    const { reportId: editetObjectId, projectId: editedProjectId, instanceId: editedInstanceId, dossierName: editedObjectName, promptsAnswers: editedPromptsAnswers } = editedReport;
-    const { isVisualisationSelected, promptsAnswers } = this.state;
+    const { reportId: editetObjectId, projectId: editedProjectId, instanceId: editedInstanceId, dossierName: editedObjectName, promptsAnswers: editedPromptsAnswers, selectedViz } = editedReport;
+    const { isVisualizationSelected, promptsAnswers } = this.state;
     const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
     const propsToPass = {
       envUrl,
@@ -83,7 +83,7 @@ export default class _DossierWindow extends React.Component {
       dossierId: isEdit ? editetObjectId : chosenObjectId,
       projectId: isEdit ? editedProjectId : chosenProjectId,
       promptsAnswers: isEdit ? editedPromptsAnswers : promptsAnswers,
-
+      selectedViz: isEdit ? selectedViz : '',
     };
     if (isEdit) propsToPass.instanceId = editedInstanceId;
     const dossierFinalName = (isEdit) ? editedObjectName : chosenObjectName;
@@ -109,7 +109,7 @@ export default class _DossierWindow extends React.Component {
           handleBack={handleBack}
           handleCancel={this.handleCancel}
           hideSecondary
-          disableActiveActions={!isVisualisationSelected}
+          disableActiveActions={!isVisualizationSelected}
         />
       </div>
     );
@@ -133,7 +133,11 @@ _DossierWindow.propTypes = {
   editedReport: PropTypes.shape({
     reportId: PropTypes.string,
     projectId: PropTypes.string,
-    isEdit: PropTypes.bool
+    isEdit: PropTypes.bool,
+    instanceId: PropTypes.string,
+    dossierName: PropTypes.string,
+    promptsAnswers: PropTypes.array || null,
+    selectedViz: PropTypes.string,
   }),
 };
 
@@ -154,7 +158,11 @@ _DossierWindow.defaultProps = {
   editedReport: {
     reportId: undefined,
     projectId: undefined,
-    isEdit: false
+    isEdit: false,
+    instanceId: undefined,
+    dossierName: undefined,
+    promptsAnswers: null,
+    selectedViz: '',
   },
 };
 

@@ -8,10 +8,12 @@ import { PopupTypeEnum } from '../../home/popup-type-enum';
 import { NavigationTree } from '../../navigation/navigation-tree';
 import { AttributeSelectorWindow } from '../../attribute-selector/attribute-selector-window';
 import { DossierWindow } from '../../dossier/dossier-window';
-import { createInstance, answerPrompts } from '../../mstr-object/mstr-object-rest-service';
+import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 
 jest.mock('../../mstr-object/mstr-object-rest-service');
 jest.mock('../../office/office-context');
+
+const { createInstance, answerPrompts } = mstrObjectRestService;
 
 describe('PopupViewSelector', () => {
   it('should render navigation tree when requested', () => {
@@ -324,14 +326,10 @@ describe('PopupViewSelector', () => {
       });
   });
 
-  it('should proceed to import when prompts answered and no attributes, metrics and filters', () => {
+  it('should proceed to edit filters after reprompting', () => {
     // given
     const instanceId = 'instanceId';
     const location = { search: {}, };
-    const reduxMethods = {
-      startImport: jest.fn(),
-      startLoading: jest.fn(),
-    };
     const props = {
       popupType: PopupTypeEnum.repromptingWindow,
       authToken: 'token',
@@ -349,21 +347,17 @@ describe('PopupViewSelector', () => {
         whatever: 'whatever',
       },
     };
-    const mockMessageParent = jest.spyOn(Office.context.ui, 'messageParent');
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    shallow(<PopupViewSelectorHOC
+    const selectorWrapped = shallow(<PopupViewSelectorHOC
       location={location}
-      {...reduxMethods}
       {...props}
       authToken={{}}
       propsToPass={{}}
       methods={{}}
     />);
     // then
-    expect(reduxMethods.startLoading).toHaveBeenCalled();
-    expect(reduxMethods.startImport).toHaveBeenCalled();
-    expect(mockMessageParent).toHaveBeenCalled();
+    expect(selectorWrapped.find(AttributeSelectorWindow).get(0)).toBeTruthy();
   });
 
   it('should not clear attributes and metrics if going to edit filters from prompts window', () => {
@@ -474,7 +468,8 @@ describe('PopupViewSelector', () => {
       propsToPass: {
         isPrompted: true,
         projectId: '1',
-        reportId: '1'
+        reportId: '1',
+        reportName: 'reportName',
       },
       preparePromptedReport: jest.fn()
     };

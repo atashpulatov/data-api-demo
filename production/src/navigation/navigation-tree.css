@@ -1,7 +1,9 @@
 .navigation_tree__main_wrapper {
-  height: calc(100% - 125px);
+  height: 100%;
+  padding-bottom: 125px;
   position: fixed;
   width: 100%;
+  overflow: hidden;
 }
 
 .navigation_tree__title_bar {
@@ -27,6 +29,10 @@
 .ReactVirtualized__Table__rowColumn.radio>input {
   margin-left: 2px;
 }
+
+.ant-col-12 .filter-list .ant-empty{
+  margin-top:-10px;
+  }
 
 .navigation_tree__main_wrapper .ReactVirtualized__Table {
   border-top: none;

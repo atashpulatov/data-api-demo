@@ -397,7 +397,7 @@ describe('office loaded file', () => {
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile fileName="test" objectType={{ name: 'report' }} visualizationInfo={visualizationInfoMock} />);
     // then
-    expect(wrappedComponent.find(Popover)).toHaveLength(7);
+    expect(wrappedComponent.find(Popover)).toHaveLength(6);
   });
   it('should invoke edit method on button click', async () => {
     // given
@@ -436,42 +436,6 @@ describe('office loaded file', () => {
     expect(onEditMocked).toBeCalledWith({ bindId: testBindingId, objectType }, loading);
   });
 
-  it('should invoke re-prompt method on button click', async () => {
-    // given
-    const mockSync = jest.fn();
-    const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
-    const mockIsCurrentSheetProtected = jest.spyOn(officeApiHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
-    const onRepromptMocked = jest.fn();
-    const startLoadingMocked = jest.fn();
-    const mockEvent = { stopPropagation: jest.fn() };
-    const testBindingId = 'testBindingId';
-    const objectType = { name: 'report' };
-    jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => { });
-    const objectClickMock = jest.spyOn(officeApiHelper, 'onBindingObjectClick').mockImplementation(() => true);
-    const visualizationInfoMock = { dossierStructure: 'test' };
-    // when
-    const wrappedComponent = mount(<_OfficeLoadedFile
-      refreshDate={new Date()}
-      bindingId={testBindingId}
-      objectType={objectType}
-      fileName="test"
-      callForReprompt={onRepromptMocked}
-      isLoading={false}
-      startLoading={startLoadingMocked}
-      isPrompted
-      objectType={objectType}
-      visualizationInfo={visualizationInfoMock}
-    />);
-    const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
-    const repromptButton = wrappedIcons.at(0);
-    repromptButton.props().onClick(mockEvent);
-    // then
-    await expect(mockGetContext).toBeCalled();
-    await expect(mockIsCurrentSheetProtected).toBeCalled();
-    await expect(objectClickMock).toBeCalled();
-    expect(onRepromptMocked).toBeCalled();
-    expect(onRepromptMocked).toBeCalledWith({ bindId: testBindingId, objectType });
-  });
   it('rename report should call officeStoreService.renameReport method when filename is given', () => {
     // given
     const givenFileName = 'name';

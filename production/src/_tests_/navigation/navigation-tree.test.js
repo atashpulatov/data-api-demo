@@ -1,14 +1,15 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import {shallow} from 'enzyme';
 import i18n from '../../i18n';
-import { _NavigationTree, mapStateToProps } from '../../navigation/navigation-tree';
-import { selectorProperties } from '../../attribute-selector/selector-properties';
-import { Office } from '../mockOffice';
-import * as mstrObjectRestService from '../../mstr-object/mstr-object-rest-service';
+import {_NavigationTree, mapStateToProps} from '../../navigation/navigation-tree';
+import {selectorProperties} from '../../attribute-selector/selector-properties';
+import {Office} from '../mockOffice';
+import {mstrObjectRestService} from '../../mstr-object/mstr-object-rest-service';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
-import { DEFAULT_STATE as CACHE_STATE } from '../../cache/cache-reducer';
-import { authenticationHelper } from '../../authentication/authentication-helper';
+import {DEFAULT_STATE as CACHE_STATE} from '../../cache/cache-reducer';
+import {authenticationHelper} from '../../authentication/authentication-helper';
 
+jest.mock('../../mstr-object/mstr-object-rest-service');
 jest.mock('../../authentication/authentication-helper', () => ({
   authenticationHelper: {
     validateAuthToken: jest.fn().mockImplementation(() => Promise.resolve('Magic'))
@@ -29,6 +30,7 @@ describe('NavigationTree', () => {
     i18n,
     resetDBState: jest.fn(),
     fetchObjectsFromNetwork: jest.fn(),
+    handlePopupErrors: jest.fn(),
   };
 
   it('should render with props given', () => {
@@ -57,6 +59,7 @@ describe('NavigationTree', () => {
       token: 'token',
       projectId: 'projectId',
     };
+
     const actionObject = {
       command: selectorProperties.commandSecondary,
       chosenObjectId: 'objectId',
@@ -68,17 +71,25 @@ describe('NavigationTree', () => {
     const givenIsPrompted = 'customPromptAnswer';
     jest.spyOn(mstrObjectRestService, 'isPrompted')
       .mockImplementationOnce(async () => givenIsPrompted);
-    const wrappedComponent = shallow(<_NavigationTree
-      mstrData={mstrData}
-      handlePrepare={mockHandlePrepare}
-      {...actionObject}
-      {...mockFunctionsAndProps}
-    />);
+    const wrappedComponent = shallow(
+      <_NavigationTree
+        mstrData={mstrData}
+        handlePrepare={mockHandlePrepare}
+        {...actionObject}
+        {...mockFunctionsAndProps}
+      />
+    );
     // when
     await wrappedComponent.instance().handleSecondary();
     // then
-    expect(mockHandlePrepare).toBeCalledWith(actionObject.chosenProjectId, actionObject.chosenObjectId,
-      actionObject.chosenSubtype, actionObject.chosenObjectName, actionObject.chosenType, givenIsPrompted);
+    expect(mockHandlePrepare).toBeCalledWith(
+      actionObject.chosenProjectId,
+      actionObject.chosenObjectId,
+      actionObject.chosenSubtype,
+      actionObject.chosenObjectName,
+      actionObject.chosenType,
+      givenIsPrompted
+    );
     expect(wrappedComponent.state('previewDisplay')).toEqual(true);
   });
 
@@ -94,7 +105,7 @@ describe('NavigationTree', () => {
     const givenSubtype = mstrObjectEnum.mstrObjectType.dossier.subtypes[0];
     const mockHandlePopupErrors = jest.fn();
     jest.spyOn(mstrObjectRestService, 'isPrompted')
-      .mockImplementationOnce(() => { throw new Error(); });
+      .mockImplementationOnce(() => {throw new Error();});
     const wrappedComponent = shallow(
       <_NavigationTree
         mstrData={mstrData}
@@ -119,7 +130,7 @@ describe('NavigationTree', () => {
       token: 'token',
       projectId: 'projectId',
     };
-    const resultAction = { command: selectorProperties.commandCancel, };
+    const resultAction = {command: selectorProperties.commandCancel, };
     const office = jest.spyOn(Office.context.ui, 'messageParent');
     const wrappedComponent = shallow(<_NavigationTree
       mstrData={mstrData}
@@ -160,7 +171,7 @@ describe('NavigationTree', () => {
     // given
     const initialState = {
       navigationTree: {},
-      officeReducer: { preLoadReport: { name: 'Some name', }, },
+      officeReducer: {preLoadReport: {name: 'Some name', }, },
     };
     // then
     expect(mapStateToProps(initialState)).toEqual({
@@ -188,7 +199,7 @@ describe('NavigationTree', () => {
     const givenProjectId = 'projectId';
     const givenSubtype = mstrObjectEnum.mstrObjectType.report.subtypes[0];
     const givenObjectName = 'objectName';
-    const givenTarget = {};
+    const givenTargetId = null;
     const givenMyLibrary = false;
     const mockSelectObject = jest.fn();
 
@@ -197,7 +208,7 @@ describe('NavigationTree', () => {
       selectObject={mockSelectObject}
     />);
     // when
-    wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype, givenObjectName, givenTarget, givenMyLibrary);
+    wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype, givenObjectName, givenTargetId, givenMyLibrary);
     // then
     const expectedObject = {
       chosenObjectId: givenObjectId,
@@ -216,7 +227,7 @@ describe('NavigationTree', () => {
     const givenProjectId = 'projectId';
     const givenSubtype = mstrObjectEnum.mstrObjectType.dossier.subtypes[0];
     const givenObjectName = 'objectName';
-    const givenTarget = { id: 'LibraryObjectId' };
+    const givenTargetId = 'LibraryObjectId';
     const givenMyLibrary = true;
     const mockSelectObject = jest.fn();
 
@@ -225,10 +236,10 @@ describe('NavigationTree', () => {
       selectObject={mockSelectObject}
     />);
     // when
-    wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype, givenObjectName, givenTarget, givenMyLibrary);
+    wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype, givenObjectName, givenTargetId, givenMyLibrary);
     // then
     const expectedObject = {
-      chosenObjectId: givenTarget.id,
+      chosenObjectId: givenTargetId,
       chosenObjectName: givenObjectName,
       chosenProjectId: givenProjectId,
       chosenSubtype: givenSubtype,
@@ -313,7 +324,7 @@ describe('NavigationTree', () => {
     const givenSubtype = mstrObjectEnum.mstrObjectType.report.subtypes[0];
     const mockHandlePopupErrors = jest.fn();
     jest.spyOn(mstrObjectRestService, 'isPrompted')
-      .mockImplementationOnce(() => { throw new Error(); });
+      .mockImplementationOnce(() => {throw new Error();});
     const wrappedComponent = shallow(
       <_NavigationTree
         mstrData={mstrData}

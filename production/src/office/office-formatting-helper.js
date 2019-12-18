@@ -44,7 +44,6 @@ class OfficeFormattingHelper {
           columnRange.numberFormat = format;
         }
       }
-
       await excelContext.sync();
     } catch (error) {
       console.log('Cannot apply formatting, skipping');
@@ -52,7 +51,7 @@ class OfficeFormattingHelper {
     } finally {
       console.timeEnd('Apply formatting');
     }
-  }
+  };
 
   /**
    * Return Excel number formatting based on MSTR data type
@@ -120,11 +119,18 @@ class OfficeFormattingHelper {
    * @return {Office} Range of subtotal row
    */
   getSubtotalRange = (startCell, cell, mstrTable) => {
-    const { headers } = mstrTable;
+    const { headers, isCrosstab } = mstrTable;
     const { axis } = cell;
     let offsets = {};
 
-    if (axis === 'rows') {
+    if (!isCrosstab) {
+      offsets = {
+        verticalFirstCell: cell.rowIndex + 1,
+        horizontalFirstCell: cell.attributeIndex,
+        verticalLastCell: cell.rowIndex + 1,
+        horizontalLastCell: mstrTable.tableSize.columns - 1,
+      };
+    } else if (axis === 'rows') {
       offsets = {
         verticalFirstCell: cell.colIndex,
         horizontalFirstCell: -(headers.rows[0].length - cell.attributeIndex),
@@ -137,13 +143,6 @@ class OfficeFormattingHelper {
         horizontalFirstCell: cell.colIndex,
         verticalLastCell: mstrTable.tableSize.rows,
         horizontalLastCell: cell.colIndex,
-      };
-    } else { // if not a crosstab
-      offsets = {
-        verticalFirstCell: cell.rowIndex + 1,
-        horizontalFirstCell: cell.attributeIndex,
-        verticalLastCell: cell.rowIndex + 1,
-        horizontalLastCell: mstrTable.tableSize.columns - 1,
       };
     }
     const firstSubtotalCell = startCell.getOffsetRange(offsets.verticalFirstCell, offsets.horizontalFirstCell);
@@ -189,6 +188,8 @@ class OfficeFormattingHelper {
         // eslint-disable-next-line no-await-in-loop
         await context.sync();
       }
+      if (isCrosstab) table.showHeaders = false;
+      await context.sync();
     } catch (error) {
       console.log('Error when formatting - no columns autofit applied', error);
     }
