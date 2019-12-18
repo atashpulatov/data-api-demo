@@ -15,7 +15,7 @@ export default class _DossierWindow extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isVisualisationSelected: false,
+      isVisualizationSelected: false,
       chapterKey: '',
       visualizationKey: '',
       promptsAnswers: [],
@@ -39,7 +39,7 @@ export default class _DossierWindow extends React.Component {
       newValue = true;
     }
     this.setState({
-      isVisualisationSelected: newValue,
+      isVisualizationSelected: newValue,
       chapterKey,
       visualizationKey,
       promptsAnswers,
@@ -75,7 +75,7 @@ export default class _DossierWindow extends React.Component {
     const { chosenObjectName, chosenObjectId, chosenProjectId, handleBack, t, mstrData, editedReport, handlePopupErrors } = this.props;
     const { envUrl, token } = mstrData;
     const { reportId: editetObjectId, projectId: editedProjectId, instanceId: editedInstanceId, dossierName: editedObjectName, promptsAnswers: editedPromptsAnswers, selectedViz } = editedReport;
-    const { isVisualisationSelected, promptsAnswers } = this.state;
+    const { isVisualizationSelected, promptsAnswers } = this.state;
     const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
     const propsToPass = {
       envUrl,
@@ -109,7 +109,7 @@ export default class _DossierWindow extends React.Component {
           handleBack={handleBack}
           handleCancel={this.handleCancel}
           hideSecondary
-          disableActiveActions={!isVisualisationSelected}
+          disableActiveActions={!isVisualizationSelected}
         />
       </div>
     );

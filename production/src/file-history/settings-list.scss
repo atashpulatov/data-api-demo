@@ -2,6 +2,8 @@
   border-bottom: solid 1px #e4e4e4;
 }
 
+$text-color: #3F4042;
+
 .settings-list {
   position: absolute;
   right: 20px;
@@ -13,7 +15,7 @@
   padding: 6px 0 0 0;
   list-style: none;
   background: #fff;
-  color: #3F4042;
+  color: $text-color;
   box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.20);
   border-radius: 2px;
   li {
@@ -24,7 +26,7 @@
       line-height: 15px;
       user-select: none; 
       display: block;
-      color: #3f4042;
+      color: $text-color;
       cursor: default;
     }
     &:focus {
