@@ -37,6 +37,7 @@ export TERM_PROGRAM=iTerm.app
 export WORKSPACE_SETTING=mac_test
 
 source .ecosystem
+export HATS=pipeline:$HATS
 
 rake deploy_tester_server[$APPLICATION_VERSION]
 rake e2e_test_browser
@@ -50,15 +51,17 @@ rake e2e_test_browser
        report_directory_path "tests/integration/test-driver-browser/allure-report"
        index_file_name 'index.html'
     end
-  
+
     ext_mailer do
       recipients_list 'dhornos@microstrategy.com,yzhai@microstrategy.com'
-      subject 'subject '$JOB_NAME - $BUILD_STATUS''
+      subject '$JOB_NAME - $BUILD_STATUS'
+      content '$DEFAULT_CONTENT'
       fail_trigger_recipients_list ''
       fail_trigger_notify_developer 'true'
       always_trigger 'true'
       always_trigger_recipients_list ''
     end
+  
   end
 
 end

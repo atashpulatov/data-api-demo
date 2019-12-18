@@ -22,7 +22,7 @@ task :e2e_test_browser do
   shell_command! "npm install", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser"
   shell_command! "npm run test", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser"
   shell_command! "npm run report", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser"
-
+  ci_metrics_system_test
 
 end
 
@@ -81,6 +81,12 @@ task :r do
   do_start_local_web_dossier
 end
 
+desc "debug task"
+task :debug do
+  # cmd = "docker run -it -p 8888:8080 --name office-tester mstr-dossier /bin/bash"
+  ci_metrics_system_test
+end
+
 def do_start_local_web_dossier
   cmd = "docker run --rm -p 8080:8080 -p 8443:8443 --name office-tester -d mstr-dossier"
   shell_command! cmd
@@ -125,48 +131,33 @@ def is_web_dossier_started?()
 end
 
 
-def ci_metrics_system_test
-  json_path = "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/tests/acceptance/.reports/acceptance_test.json"
+def ci_metrics_system_test()
+  json_path = "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/tests/integration/test-driver-browser/allure-report/data/suites.json"
   if ! File.exist?(json_path)
     puts "Warning! No file #{json_path}"
   else
     test_result = JSON.parse(File.read(json_path))
-    features_num=test_result.size
-    return if features_num < 1
-    scenarios_num=0
-    pass_num=0
-    fail_num=0
-    duration=0
-    test_result.each { |feature|
-      scenarios=feature['elements'].select{|scenario|
-        scenario['type']=='scenario'
-      }
-      scenarios_num=scenarios_num+scenarios.size
-      scenarios.each{|scenario|
-        pass_flag=0
-        scenario['steps'].each{ |step|
-          nanosec=step['result']['duration']
-          sec= (nanosec/((10**9)*1.0)).round(2)
-          duration=(duration+sec).round(2)
-          if step['result']['status']!= 'passed'
-            pass_flag=1
-            if step['result']['status']== 'failed'
-              fail_num=fail_num+1
-              break
-            end
-          end
-        }
-        if pass_flag==0
-          pass_num=pass_num+1
+    scenarios_num = 0
+    pass_num = 0
+    fail_num = 0
+    duration = 0
+    test_result["children"].each do |ts|
+      ts["children"].each do |tc|
+        scenarios_num += 1;
+        duration += (tc["time"]["duration"]/1000).to_i
+        if tc["status"] == "passed"
+          pass_num +=1
+        else
+          fail_num +=1
         end
-      }
-    }
+      end
+    end
 
     metrics_system_test = {}
     metrics_system_test['TOTAL_CASES'] = scenarios_num
     metrics_system_test['PASSED'] = pass_num
     metrics_system_test['FAILED'] = fail_num
     metrics_system_test['DURATION'] = duration
-    puts "METRICS_SYSTEM_TEST=#{metrics_system_test.to_json}"
+    puts "\nMETRICS_SYSTEM_TEST=#{metrics_system_test.to_json}\n"
   end
 end
