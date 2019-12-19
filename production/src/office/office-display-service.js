@@ -89,7 +89,8 @@ export class OfficeDisplayService {
     visualizationInfo = false,
     preparedInstanceId,
     manipulationsXML = false,
-    isRefreshAll
+    isRefreshAll,
+    tableName,
   }) => {
     let newOfficeTableId;
     let shouldFormat;
@@ -98,6 +99,7 @@ export class OfficeDisplayService {
     let tableColumnsChanged;
     let instanceDefinition;
     let officeTable;
+    let bindId;
     try {
       excelContext = await officeApiHelper.getExcelContext();
       if (!isRefreshAll) {
@@ -135,8 +137,8 @@ export class OfficeDisplayService {
       }
 
       // Create or update table
-      ({ officeTable, newOfficeTableId, shouldFormat, tableColumnsChanged } = await officeTableHelper.getOfficeTable(
-        isRefresh, excelContext, bindingId, instanceDefinition, startCell
+      ({ officeTable, newOfficeTableId, shouldFormat, tableColumnsChanged, bindId } = await officeTableHelper.getOfficeTable(
+        isRefresh, excelContext, bindingId, instanceDefinition, startCell, tableName
       ));
 
       // Apply formatting when table was created
@@ -178,19 +180,13 @@ export class OfficeDisplayService {
       }
 
       // Save to store
-      console.groupCollapsed('=========================');
-      console.log('officeTable');
-      console.log(officeTable);
-      console.groupEnd('=========================');
-      bindingId = bindingId || newOfficeTableId;
-      console.log(newOfficeTableId, bindingId);
-      const bindId = officeTable.id;
-      await officeApiHelper.bindNamedItem(newOfficeTableId, bindingId, bindId);
+      bindingId = bindingId || bindId;
+      await officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
 
       officeStoreService.saveAndPreserveReportInStore({
         name: mstrTable.name,
         manipulationsXML: instanceDefinition.manipulationsXML,
-        bindId,
+        bindId:bindingId,
         projectId,
         envUrl,
         body,
@@ -206,13 +202,14 @@ export class OfficeDisplayService {
         id: objectId,
         isLoading:false,
         crosstabHeaderDimensions,
+        tableName:newOfficeTableId
       }, isRefresh);
 
       console.timeEnd('Total');
       this.reduxStore.dispatch({ type: CLEAR_PROMPTS_ANSWERS });
       this.reduxStore.dispatch({
         type: officeProperties.actions.finishLoadingReport,
-        reportBindId: bindId,
+        reportBindId: bindingId,
       });
       return { type: 'success', message: 'Data loaded successfully' };
     } catch (error) {

@@ -28,6 +28,7 @@ export class OfficeStoreService {
         crosstabHeaderDimensions: report.crosstabHeaderDimensions,
         visualizationInfo: report.visualizationInfo,
         manipulationsXML: report.manipulationsXML,
+        tableName:report.tableName,
       });
       settings.set(officeProperties.loadedReportProperties, reportProperties);
       settings.saveAsync();
@@ -158,6 +159,7 @@ export class OfficeStoreService {
           crosstabHeaderDimensions: report.crosstabHeaderDimensions,
           visualizationInfo: report.visualizationInfo,
           manipulationsXML: report.manipulationsXML,
+          tableName: report.tableName,
         },
       });
       this.preserveReport(report);

@@ -6,7 +6,6 @@ import { PopupTypeEnum } from '../home/popup-type-enum';
 import objectTypeEnum from '../mstr-object/mstr-object-type-enum';
 
 export class PopupHelper {
-
   init = (popupController) => {
     this.popupController = popupController;
   }
@@ -97,6 +96,7 @@ export class PopupHelper {
       visualizationInfo: refreshReport.visualizationInfo,
       manipulationsXML: refreshReport.manipulationsXML,
       preparedInstanceId: refreshReport.instanceId,
+      tableName:refreshReport.tableName,
     };
     const result = await officeDisplayService.printObject(options);
     if (result && result.type === 'warning') {

@@ -168,22 +168,22 @@ class OfficeTableHelper {
    *
    * @memberOf OfficeTableHelper
    */
-  getOfficeTable = async (isRefresh, excelContext, bindingId, instanceDefinition, startCell) => {
+  getOfficeTable = async (isRefresh, excelContext, bindingId, instanceDefinition, startCell, tableName) => {
     console.time('Create or get table');
     const { mstrTable } = instanceDefinition;
     let bindId;
     const excelCompatibleTableName = mstrTable.name.replace(/\W/g, '_');
-    const newOfficeTableName = bindingId || `${excelCompatibleTableName.slice(0, 241)}${Date.now().toString()}`;
+    const newOfficeTableName = tableName || `${excelCompatibleTableName.slice(0, 241)}_${Date.now().toString()}`;
     this.checkReportTypeChange(instanceDefinition);
     let officeTable;
     let shouldFormat = true;
     let tableColumnsChanged;
     if (isRefresh) {
-      ({ tableColumnsChanged, startCell, officeTable, shouldFormat } = await this.changeOfficeTableOnRefresh(
+      ({ tableColumnsChanged, startCell, officeTable, shouldFormat, bindId } = await this.changeOfficeTableOnRefresh(
         excelContext, bindingId, instanceDefinition, startCell, officeTable, newOfficeTableName, shouldFormat
       ));
     } else {
-      ({ officeTable } = await this.createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableName));
+      ({ officeTable, bindId } = await this.createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableName));
     }
     console.timeEnd('Create or get table');
     return {
