@@ -92,7 +92,6 @@ export class OfficeDisplayService {
     isRefreshAll,
     previousTableDimensions,
   }) => {
-    console.log(previousTableDimensions);
     let newOfficeTableId;
     let shouldFormat;
     let excelContext;

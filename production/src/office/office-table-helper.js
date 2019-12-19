@@ -219,7 +219,6 @@ class OfficeTableHelper {
    * @memberOf OfficeTableHelper
    */
   checkColumnsChange = async (prevOfficeTable, context, instanceDefinition, previousTableDimensions) => {
-    console.log(previousTableDimensions);
     const { columns } = instanceDefinition;
     const tableColumns = prevOfficeTable.columns;
     const prevTableColumns = previousTableDimensions.columns;
@@ -320,7 +319,6 @@ class OfficeTableHelper {
 
     prevOfficeTable.showHeaders = true;
     await excelContext.sync();
-    console.log(previousTableDimensions);
     let tableColumnsChanged = await this.checkColumnsChange(prevOfficeTable, excelContext, instanceDefinition, previousTableDimensions);
     startCell = await this.getStartCell(prevOfficeTable, excelContext);
     ({ tableColumnsChanged, startCell } = await this.clearIfCrosstabHeadersChanged(prevOfficeTable, excelContext, tableColumnsChanged, startCell, mstrTable));
