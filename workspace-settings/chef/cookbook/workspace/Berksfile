@@ -12,3 +12,4 @@ cookbook_from_git 'virtualbox', '0.8.11'
 cookbook 'java'
 
 cookbook 'seven_zip', '~> 2.0.0'
+cookbook_from_git 'docker', '0.1.33'

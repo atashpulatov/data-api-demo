@@ -43,7 +43,7 @@ export const NotConnectedPopupButtons = ({
   const backButton = (<Button id="back" onClick={handleBack}>{t('Back')}</Button>);
 
   const importButton = (
-    <Button id="import" type={!handleSecondary ? 'primary' : ''} onClick={handleOk} loading={loading} disabled={disableActiveActions}>
+    <Button id="import"  type={!handleSecondary ? 'primary' : ''} onClick={handleOk} loading={loading} disabled={disableActiveActions}> 
       {t('Import')}</Button>
   );
 
@@ -51,7 +51,7 @@ export const NotConnectedPopupButtons = ({
     <Button
   id="prepare"
   type="primary"
-  disabled={disableActiveActions || loading || disableSecondary || !isPublished}
+    disabled={disableActiveActions || loading || disableSecondary || !isPublished}
   onClick={handleSecondary}>
       {t('Prepare Data')}
     </Button>
@@ -65,8 +65,8 @@ export const NotConnectedPopupButtons = ({
 
   return (
     <div className="popup-buttons popup-footer">
+       {handleBack && backButton}
       {(!hideSecondary && !handleSecondary) && prepareButton(disableActiveActions, dataPreviewButton, t, isPublished)}
-      {handleBack && backButton}
       {prepareButton(disableActiveActions, importButton, t, isPublished)}
       {!hideSecondary && handleSecondary && prepareButton(disableActiveActions, prepareDataButton, t, isPublished, disableSecondary)}
       {cancelButton}

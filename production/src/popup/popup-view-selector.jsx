@@ -331,10 +331,16 @@ function parsePopupState(popupState, promptsAnswers) {
   if (!popupState) {
     return;
   }
+  let chapterKey;
+  let visualizationKey;
   let dossierName;
   const { visualizationInfo } = popupState;
-  if (visualizationInfo && visualizationInfo.dossierStructure) {
-    ({ dossierName } = popupState.visualizationInfo.dossierStructure);
+  if (visualizationInfo) {
+    ({ chapterKey, visualizationKey } = visualizationInfo);
+    const { dossierStructure } = visualizationInfo;
+    if (dossierStructure) {
+      ({ dossierName } = dossierStructure);
+    }
   }
   const reportData = {
     reportId: popupState.id,
@@ -346,7 +352,8 @@ function parsePopupState(popupState, promptsAnswers) {
     promptsAnswers: promptsAnswers || popupState.promptsAnswers,
     importSubtotal: popupState.importSubtotal,
     isEdit: popupState.isEdit,
-    dossierName
+    dossierName,
+    selectedViz: `${chapterKey}:${visualizationKey}`,
   };
   restoreFilters(popupState.body, reportData);
   return reportData;
