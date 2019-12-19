@@ -5,45 +5,8 @@ import { errorService } from '../../error/error-handler';
 /* global Office */
 
 export class OfficeStoreService {
-
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
-  }
-
-  addObjectToStore = ({
-    isRefresh,
-    instanceDefinition,
-    bindingId,
-    projectId,
-    envUrl,
-    body,
-    objectType,
-    isCrosstab,
-    isPrompted,
-    promptsAnswers,
-    subtotalInfo,
-    visualizationInfo,
-    objectId
-  }) => {
-    const { mstrTable, manipulationsXML } = instanceDefinition;
-    const report = {
-      id: objectId,
-      name: mstrTable.name,
-      bindId: bindingId,
-      projectId,
-      envUrl,
-      body,
-      isLoading: false,
-      objectType,
-      isPrompted,
-      isCrosstab,
-      subtotalInfo,
-      promptsAnswers,
-      crosstabHeaderDimensions: mstrTable.crosstabHeaderDimensions,
-      visualizationInfo,
-      manipulationsXML,
-    };
-    this.saveAndPreserveReportInStore(report, isRefresh);
   }
 
   preserveReport = (report) => {

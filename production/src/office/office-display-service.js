@@ -98,7 +98,7 @@ export class OfficeDisplayService {
     let tableColumnsChanged;
     let instanceDefinition;
     let officeTable;
-
+    let bindId;
     try {
       excelContext = await officeApiHelper.getExcelContext();
       if (!isRefreshAll) {
@@ -136,7 +136,7 @@ export class OfficeDisplayService {
       }
 
       // Create or update table
-      ({ officeTable, newOfficeTableId, shouldFormat, tableColumnsChanged } = await officeTableHelper.getOfficeTable(
+      ({ officeTable, newOfficeTableId, shouldFormat, tableColumnsChanged, bindId } = await officeTableHelper.getOfficeTable(
         isRefresh, excelContext, bindingId, instanceDefinition, startCell
       ));
 
@@ -180,11 +180,23 @@ export class OfficeDisplayService {
 
       // Save to store
       bindingId = bindingId || newOfficeTableId;
-      await officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
+      console.log(bindingId);
+      await officeApiHelper.bindNamedItem(newOfficeTableId, bindingId, bindId);
+      console.groupCollapsed('=========================');
+      console.log('mstrTable.name');
+      console.log(mstrTable.name);
+      console.log('mstrTable.id');
+      console.log(mstrTable.id);
+      console.log('bindingId');
+      console.log(bindingId);
+      console.log('newOfficeTableId');
+      console.log(newOfficeTableId);
+      console.groupEnd('=========================');
+
       officeStoreService.saveAndPreserveReportInStore({
         name: mstrTable.name,
         manipulationsXML: instanceDefinition.manipulationsXML,
-        bindId: bindingId,
+        bindId,
         projectId,
         envUrl,
         body,
@@ -206,7 +218,7 @@ export class OfficeDisplayService {
       this.reduxStore.dispatch({ type: CLEAR_PROMPTS_ANSWERS });
       this.reduxStore.dispatch({
         type: officeProperties.actions.finishLoadingReport,
-        reportBindId: bindingId,
+        reportBindId: bindId,
       });
       return { type: 'success', message: 'Data loaded successfully' };
     } catch (error) {
