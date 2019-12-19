@@ -14,6 +14,7 @@ import { toggleSecuredFlag } from '../office/office-actions';
 import { errorService } from '../error/error-handler';
 import restrictedArt from './assets/art_restricted_access_blue.svg';
 import './file-history.css';
+import './settings-list.scss';
 import { ButtonPopover } from './button-popover';
 import { startLoading, stopLoading } from '../navigation/navigation-tree-actions';
 

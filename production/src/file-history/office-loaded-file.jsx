@@ -113,35 +113,6 @@ export class _OfficeLoadedFile extends React.Component {
       });
   };
 
-  repromptAction = (e) => {
-    const {allowRefreshClick} = this.state;
-    const {loading, startLoading, stopLoading} = this.props;
-    if (e) e.stopPropagation();
-    if (!allowRefreshClick || loading) {
-      return;
-    }
-    startLoading();
-    const {isLoading, bindingId, objectType, callForReprompt, fileName, } = this.props;
-    if (!isLoading) {
-      this.setState({allowRefreshClick: false}, async () => {
-        try {
-          const excelContext = await officeApiHelper.getExcelContext();
-          await officeApiHelper.isCurrentReportSheetProtected(excelContext, bindingId);
-          // calling onBindingObjectClick to check whether the object exists in Excel
-          // before opening prompt popup
-          if (await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport, fileName)) {
-            await callForReprompt({bindId: bindingId, objectType});
-          }
-        } catch (error) {
-          errorService.handleError(error);
-        } finally {
-          this.setState({allowRefreshClick: true});
-          stopLoading();
-        }
-      });
-    }
-  };
-
   editAction = (e) => {
     const { allowRefreshClick } = this.state;
     const { isLoading, bindingId, objectType, callForEdit, fileName, loading, startLoading, stopLoading, callForEditDossier } = this.props;
@@ -243,27 +214,9 @@ export class _OfficeLoadedFile extends React.Component {
     return <></>;
   };
 
-  renderIcons(t, isPrompted, isLoading) {
+  renderIcons({t, isLoading}) {
     return (
       <span className="object-icons">
-        <ButtonPopover
-          placement="bottom"
-          content={t('Reprompt')}
-          mouseEnterDelay={1}
-        >
-          {!!isPrompted && (
-            <span
-              aria-label="Reprompt button"
-              role="button"
-              tabIndex="0"
-              className="loading-button-container"
-              onClick={this.repromptAction}
-              onKeyPress={this.repromptAction}
-            >
-              <MSTRIcon type="reprompt" />
-            </span>
-          )}
-        </ButtonPopover>
         <ButtonPopover
           placement="bottom"
           content={t('Edit Data')}
@@ -333,19 +286,19 @@ export class _OfficeLoadedFile extends React.Component {
       onClick,
       isLoading,
       objectType,
-      isPrompted,
       refreshDate,
       t,
       visualizationInfo = false,
       isCrosstab,
       crosstabHeaderDimensions
     } = this.props;
-    const {dossierStructure = false} = visualizationInfo;
-    const {editable, value} = this.state;
-    const {dossierName, chapterName, pageName} = dossierStructure;
+    const { dossierStructure = false } = visualizationInfo;
+    const { editable } = this.state;
+    let { value } = this.state;
+    const { dossierName, chapterName, pageName } = dossierStructure;
+    const isVisualization = (objectType.name === mstrObjectEnum.mstrObjectType.visualization.name);
     const menu = (
       <Menu>
-        {isPrompted && <Menu.Item key="reprompt" onClick={(e) => {e.domEvent.stopPropagation(); this.repromptAction();}}>{t('Reprompt')}</Menu.Item>}
         <Menu.Item key="edit" onClick={(e) => {e.domEvent.stopPropagation(); this.editAction();}}>{t('Edit')}</Menu.Item>
         <Menu.Item key="refresh" onClick={(e) => {e.domEvent.stopPropagation(); this.refreshAction();}}>{t('Refresh')}</Menu.Item>
         <Menu.Item key="remove" onClick={(e) => {e.domEvent.stopPropagation(); this.deleteAction();}}>{t('Remove')}</Menu.Item>
@@ -353,6 +306,8 @@ export class _OfficeLoadedFile extends React.Component {
         <Menu.Item key="copy" onClick={this.copyValue}>{t('Copy Name')}</Menu.Item>
       </Menu>
     );
+    // If fileName was changed but it was not introduced by user in editable mode (so fetched during edit) then update value to new fileName.
+    if (!editable && (fileName !== value)) value = fileName;
     return (
       <Dropdown overlay={menu} trigger={['contextMenu']}>
         <div
@@ -376,11 +331,11 @@ export class _OfficeLoadedFile extends React.Component {
                 </span>
               </span>
             </ButtonPopover>
-            {this.renderIcons(t, isPrompted, isLoading)}
+            {this.renderIcons({t, isLoading})}
           </div>
 
 
-          {objectType.name === mstrObjectEnum.mstrObjectType.visualization.name && dossierStructure
+          {isVisualization && dossierStructure
             && (
               <ButtonPopover
                 placement="bottom"
@@ -409,7 +364,6 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
   refreshReportsArray: popupActions.refreshReportsArray,
   callForEdit: popupActions.callForEdit,
-  callForReprompt: popupActions.callForReprompt,
   callForEditDossier: popupActions.callForEditDossier,
   startLoading,
   stopLoading
@@ -428,7 +382,6 @@ _OfficeLoadedFile.propTypes = {
   refreshDate: PropTypes.instanceOf(Date),
   startLoading: PropTypes.func,
   stopLoading: PropTypes.func,
-  callForReprompt: PropTypes.func,
   refreshReportsArray: PropTypes.func,
   t: PropTypes.func,
   onDelete: PropTypes.func,

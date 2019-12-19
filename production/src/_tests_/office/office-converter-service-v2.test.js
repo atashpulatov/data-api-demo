@@ -6,7 +6,7 @@ describe('Office converter service v2', () => {
   it('should return create a table', () => {
     // given
     const crosstabsResponse = response;
-    const expecteObjectKeys = ['tableSize', 'columnInformation', 'headers', 'id', 'isCrosstab', 'name', 'rows', 'attributesNames'];
+    const expecteObjectKeys = ['tableSize', 'columnInformation', 'headers', 'id', 'isCrosstab', 'isCrosstabular', 'name', 'rows', 'attributesNames'];
     // when
     const table = officeConverter.createTable(crosstabsResponse);
     // then
@@ -25,7 +25,7 @@ describe('Office converter service v2', () => {
     const crosstabsResponse = response;
     const expectedFirstRow = [3139, 17046.02, 4543, 2406, 20915.41, 3449];
     // when
-    const { row } = officeConverter.getRows(crosstabsResponse);
+    const { row } = officeConverter.getRows(crosstabsResponse, true);
     // then
     expect(row[0]).toEqual(expectedFirstRow);
   });
@@ -38,7 +38,7 @@ describe('Office converter service v2', () => {
     // then
     expect(isCrosstab).toEqual(expectedValue);
   });
-  it('should return row and column headers', () => {
+  it('should return row and column headers of crosstab report', () => {
     // given
     const crosstabsResponse = response;
     const expectedHeaders = {
@@ -59,7 +59,7 @@ describe('Office converter service v2', () => {
       subtotalAddress: [false, false, false, false, false, false, false, { attributeIndex: 1, axis: 'rows', colIndex: 3 }, false, false, false, false, false, false, false, { attributeIndex: 1, axis: 'rows', colIndex: 7 }, false, false, false, false, false, false, false, false, false, false, false, false],
     };
     // when
-    const headers = officeConverter.getHeaders(crosstabsResponse);
+    const headers = officeConverter.getHeaders(crosstabsResponse, true, false);
     // then
     expect(headers).toEqual(expectedHeaders);
   });
