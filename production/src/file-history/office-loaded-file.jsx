@@ -18,7 +18,7 @@ import { officeStoreService } from '../office/store/office-store-service';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { startLoading, stopLoading } from '../navigation/navigation-tree-actions';
 import { errorService } from '../error/error-handler';
-
+import OfficeLoadedPrompt from './office-loaded-prompt';
 
 export class _OfficeLoadedFile extends React.Component {
   constructor(props) {
@@ -28,6 +28,7 @@ export class _OfficeLoadedFile extends React.Component {
       allowRefreshClick: true,
       editable: false,
       value: props.fileName,
+      showOfficeLoadedPrompt: false,
     };
   }
 
@@ -215,6 +216,16 @@ export class _OfficeLoadedFile extends React.Component {
   };
 
   triggerDuplicate = () => {
+    this.setState({ showOfficeLoadedPrompt: true });
+  }
+
+  closePrompt = () => {
+    this.setState({ showOfficeLoadedPrompt: false });
+  }
+
+  answerHandler = (answer) => {
+    // TODO - handlers
+    this.closePrompt();
   }
 
   renderIcons({ t, isLoading }) {
@@ -312,7 +323,7 @@ export class _OfficeLoadedFile extends React.Component {
       crosstabHeaderDimensions
     } = this.props;
     const { dossierStructure = false } = visualizationInfo;
-    const { editable } = this.state;
+    const { editable, showOfficeLoadedPrompt } = this.state;
     let { value } = this.state;
     const { dossierName, chapterName, pageName } = dossierStructure;
     const isVisualization = (objectType.name === mstrObjectEnum.mstrObjectType.visualization.name);
@@ -330,29 +341,35 @@ export class _OfficeLoadedFile extends React.Component {
     if (!editable && (fileName !== value)) value = fileName;
     return (
       <Dropdown overlay={menu} trigger={['contextMenu']}>
-        <div
-          className="file-history-container"
-          type="flex"
-          justify="center"
-          role="listitem"
-          tabIndex="0"
-          onClick={() => onClick(bindingId, true, this.deleteReport, fileName, isCrosstab, crosstabHeaderDimensions)}
-        >
-          <div className="refresh-icons-row">
-            <ButtonPopover
+          <div
+            className="file-history-container"
+            type="flex"
+            justify="center"
+            role="listitem"
+            tabIndex="0"
+            onClick={() => onClick(bindingId, true, this.deleteReport, fileName, isCrosstab, crosstabHeaderDimensions)}
+           >
+          {showOfficeLoadedPrompt && (
+          <OfficeLoadedPrompt
+            answerHandler={this.answerHandler}
+            closeHandler={this.closePrompt}
+          />
+          )}
+            <div className="refresh-icons-row">
+              <ButtonPopover
               placement="bottom"
               content={t('Date and time of last modification')}
               mouseEnterDelay={1}
             >
-              <span>
-                <ClockIcon style={{ marginBottom: '2px' }} />
-                <span className="additional-data">
-                  {t('refreshed_date', { date: refreshDate })}
+                <span>
+                  <ClockIcon style={{ marginBottom: '2px' }} />
+                  <span className="additional-data">
+                    {t('refreshed_date', { date: refreshDate })}
+                  </span>
                 </span>
-              </span>
-            </ButtonPopover>
-            {this.renderIcons({ t, isLoading })}
-          </div>
+              </ButtonPopover>
+              {this.renderIcons({ t, isLoading })}
+            </div>
 
 
           {isVisualization && dossierStructure
@@ -365,11 +382,11 @@ export class _OfficeLoadedFile extends React.Component {
               </ButtonPopover>
             )}
 
-          <div className="object-title-row">
-            {this.getMstrIcon(objectType)}
-            <RenameInput bindingId={bindingId} fileName={fileName} editable={editable} value={value} enableEdit={this.enableEdit} handleChange={this.handleChange} renameReport={this.renameReport} />
+            <div className="object-title-row">
+              {this.getMstrIcon(objectType)}
+              <RenameInput bindingId={bindingId} fileName={fileName} editable={editable} value={value} enableEdit={this.enableEdit} handleChange={this.handleChange} renameReport={this.renameReport} />
+            </div>
           </div>
-        </div>
       </Dropdown>
     );
   }
