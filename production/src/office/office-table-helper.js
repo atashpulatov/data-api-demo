@@ -179,11 +179,11 @@ class OfficeTableHelper {
     let shouldFormat = true;
     let tableColumnsChanged;
     if (isRefresh) {
-      ({ tableColumnsChanged, startCell, officeTable, shouldFormat, bindId } = await this.changeOfficeTableOnRefresh(
+      ({ tableColumnsChanged, startCell, officeTable, shouldFormat } = await this.changeOfficeTableOnRefresh(
         excelContext, bindingId, instanceDefinition, startCell, officeTable, newOfficeTableName, shouldFormat
       ));
     } else {
-      ({ officeTable, bindId } = await this.createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableName));
+      ({ officeTable } = await this.createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableName));
     }
     console.timeEnd('Create or get table');
     return {
@@ -317,7 +317,6 @@ class OfficeTableHelper {
   async changeOfficeTableOnRefresh(excelContext, bindingId, instanceDefinition, startCell, officeTable, newOfficeTableName, shouldFormat) {
     const { mstrTable, mstrTable:{ isCrosstab } } = instanceDefinition;
     const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindingId);
-    let bindId;
     // Since showing Excel table header dont override the data but insert new row, we clear values from empty row in crosstab to prevent it
     if (isCrosstab && !mstrTable.toCrosstabChange) officeApiHelper.clearEmptyCrosstabRow(prevOfficeTable);
 
@@ -329,14 +328,14 @@ class OfficeTableHelper {
 
     if (tableColumnsChanged) {
       console.log('Instance definition changed, creating new table');
-      ({ officeTable, bindId } = await this.createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableName, prevOfficeTable, tableColumnsChanged));
+      ({ officeTable } = await this.createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableName, prevOfficeTable, tableColumnsChanged));
     } else {
       shouldFormat = false;
       console.time('Validate existing table');
       officeTable = await this.updateOfficeTable(instanceDefinition, excelContext, startCell, prevOfficeTable);
       console.timeEnd('Validate existing table');
     }
-    return { tableColumnsChanged, startCell, officeTable, shouldFormat, bindId };
+    return { tableColumnsChanged, startCell, officeTable, shouldFormat };
   }
 
 

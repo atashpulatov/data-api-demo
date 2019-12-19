@@ -98,7 +98,6 @@ export class OfficeDisplayService {
     let tableColumnsChanged;
     let instanceDefinition;
     let officeTable;
-    let bindId;
     try {
       excelContext = await officeApiHelper.getExcelContext();
       if (!isRefreshAll) {
@@ -136,7 +135,7 @@ export class OfficeDisplayService {
       }
 
       // Create or update table
-      ({ officeTable, newOfficeTableId, shouldFormat, tableColumnsChanged, bindId } = await officeTableHelper.getOfficeTable(
+      ({ officeTable, newOfficeTableId, shouldFormat, tableColumnsChanged } = await officeTableHelper.getOfficeTable(
         isRefresh, excelContext, bindingId, instanceDefinition, startCell
       ));
 
@@ -179,19 +178,14 @@ export class OfficeDisplayService {
       }
 
       // Save to store
-      bindingId = bindingId || newOfficeTableId;
-      console.log(bindingId);
-      await officeApiHelper.bindNamedItem(newOfficeTableId, bindingId, bindId);
       console.groupCollapsed('=========================');
-      console.log('mstrTable.name');
-      console.log(mstrTable.name);
-      console.log('mstrTable.id');
-      console.log(mstrTable.id);
-      console.log('bindingId');
-      console.log(bindingId);
-      console.log('newOfficeTableId');
-      console.log(newOfficeTableId);
+      console.log('officeTable');
+      console.log(officeTable);
       console.groupEnd('=========================');
+      bindingId = bindingId || newOfficeTableId;
+      console.log(newOfficeTableId, bindingId);
+      const bindId = officeTable.id;
+      await officeApiHelper.bindNamedItem(newOfficeTableId, bindingId, bindId);
 
       officeStoreService.saveAndPreserveReportInStore({
         name: mstrTable.name,
