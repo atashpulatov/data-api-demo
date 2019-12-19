@@ -3,6 +3,10 @@ DEPENDENCIES
     git: https://github.microstrategy.com/ecosystem-cookbooks/chef_commons.git
     revision: 2bfc28875ca15a3f40b432200d55da21722d3fc9
     tag: 1.1.13
+  docker
+    git: https://github.microstrategy.com/ecosystem-cookbooks/docker.git
+    revision: d800daf628aa2b032910b1c241487934e3273067
+    tag: 0.1.33
   extras
     git: https://github.microstrategy.com/ecosystem-cookbooks/extras.git
     revision: 7d5ecf262424d0aac3543a73cff50cafa22b0c56
@@ -36,10 +40,11 @@ GRAPH
   chef_commons (1.1.13)
     ark (>= 0.0.0)
   dmg (4.1.1)
+  docker (0.1.33)
   extras (0.1.61)
     dmg (>= 0.0.0)
   homebrew (5.0.8)
-  java (3.2.0)
+  java (4.3.0)
     homebrew (>= 0.0.0)
     windows (>= 0.0.0)
   java-osx (0.1.1)
@@ -53,4 +58,4 @@ GRAPH
   virtualbox (0.8.11)
     dmg (>= 0.0.0)
     windows (>= 0.0.0)
-  windows (5.2.3)
+  windows (6.0.1)
