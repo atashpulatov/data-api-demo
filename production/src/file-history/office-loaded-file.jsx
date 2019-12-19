@@ -214,7 +214,7 @@ export class _OfficeLoadedFile extends React.Component {
     return <></>;
   };
 
-  triggerDuplicate= () => {
+  triggerDuplicate = () => {
   }
 
   renderIcons({ t, isLoading }) {
