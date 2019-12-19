@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-register_workspace_setting 'test'
+# register_workspace_setting 'test'
 
 function set_workspace_settings_to_test() {
   export VAGRANT_DEFAULT_PROVIDER=virtualbox
