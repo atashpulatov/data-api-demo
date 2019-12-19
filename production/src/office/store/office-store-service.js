@@ -64,6 +64,7 @@ export class OfficeStoreService {
         crosstabHeaderDimensions: report.crosstabHeaderDimensions,
         visualizationInfo: report.visualizationInfo,
         manipulationsXML: report.manipulationsXML,
+        tableDimensions: report.tableDimensions,
       });
       settings.set(officeProperties.loadedReportProperties, reportProperties);
       settings.saveAsync();
@@ -162,12 +163,15 @@ export class OfficeStoreService {
         const refreshedObject = reportsArray[ObjectIndex];
         refreshedObject.crosstabHeaderDimensions = report.crosstabHeaderDimensions;
         refreshedObject.isCrosstab = report.isCrosstab;
-        refreshedObject.manipulationsXML = report.manipulationsXML;
-        refreshedObject.visualizationInfo.dossierStructure = report.visualizationInfo.dossierStructure;
-        if (refreshedObject.visualizationInfo.nameShouldUpdate) {
+        refreshedObject.tableDimensions = report.tableDimensions;
+        if (refreshedObject.visualizationInfo) {
+          refreshedObject.manipulationsXML = report.manipulationsXML;
+          refreshedObject.visualizationInfo.dossierStructure = report.visualizationInfo.dossierStructure;
+          if (refreshedObject.visualizationInfo.nameShouldUpdate) {
           // If visualization was changed, preserve new visualization name and new dossierStructure.
-          refreshedObject.name = report.name;
-          refreshedObject.visualizationInfo.nameShouldUpdate = false;
+            refreshedObject.name = report.name;
+            refreshedObject.visualizationInfo.nameShouldUpdate = false;
+          }
         }
         settings.set(officeProperties.loadedReportProperties, reportsArray);
       } catch (error) {
@@ -192,6 +196,7 @@ export class OfficeStoreService {
           crosstabHeaderDimensions: report.crosstabHeaderDimensions,
           visualizationInfo: report.visualizationInfo,
           manipulationsXML: report.manipulationsXML,
+          tableDimensions: report.tableDimensions,
         },
       });
       this.preserveReport(report);

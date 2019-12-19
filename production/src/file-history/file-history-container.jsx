@@ -108,6 +108,7 @@ export class FileHistoryContainerHOC extends React.Component {
 
   render() {
     const { reportArray = [], loading, refreshingAll, refreshReportsArray, isSecured, addDataAction, t, } = this.props;
+    console.log(reportArray);
     return (
       <>
         {
