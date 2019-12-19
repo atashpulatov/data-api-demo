@@ -29,6 +29,7 @@ export default function PromptNotification(strings) {
       label: 'Refresh away!',
       type: 'default',
       action: () => {
+        // TODO removeNotice
         resolve(OK);
       }
     },
@@ -36,7 +37,7 @@ export default function PromptNotification(strings) {
       label: 'Cancel',
       type: 'default',
       action: () => {
-        // removeNotice
+        // TODO removeNotice
         reject(CANCEL);
       }
     }]);

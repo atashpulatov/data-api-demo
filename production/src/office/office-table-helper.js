@@ -327,9 +327,10 @@ class OfficeTableHelper {
 
     if (tableColumnsChanged) {
       console.log('Instance definition changed, creating new table');
-      const userAction = await PromptNotification(); // TODO pass strings;
-      console.log(userAction);
-      if (userAction === CANCEL) throw new Error('Operation cancelled');
+      // commented as for now we do not have notification component implemented
+      // const userAction = await PromptNotification(); // TODO pass strings;
+      // console.log(userAction);
+      // if (userAction === CANCEL) throw new Error('Operation cancelled');
       officeTable = await this.createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId, prevOfficeTable);
     } else {
       shouldFormat = false;
