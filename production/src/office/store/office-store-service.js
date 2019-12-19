@@ -168,7 +168,7 @@ export class OfficeStoreService {
           refreshedObject.manipulationsXML = report.manipulationsXML;
           refreshedObject.visualizationInfo.dossierStructure = report.visualizationInfo.dossierStructure;
           if (refreshedObject.visualizationInfo.nameShouldUpdate) {
-          // If visualization was changed, preserve new visualization name and new dossierStructure.
+            // If visualization was changed, preserve new visualization name and new dossierStructure.
             refreshedObject.name = report.name;
             refreshedObject.visualizationInfo.nameShouldUpdate = false;
           }
