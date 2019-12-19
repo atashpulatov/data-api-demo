@@ -20,9 +20,15 @@ desc "package test docker"
 task :e2e_test_browser do
  
   shell_command! "npm install", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser"
-  shell_command! "npm run test", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser"
+  test_fail = false
+  begin
+    shell_command! "npm run test", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser"
+  rescue
+    test_fail = true
+  end
   shell_command! "npm run report", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser"
   ci_metrics_system_test
+  raise "test failed" if test_fail
 
 end
 
@@ -84,7 +90,7 @@ end
 desc "debug task"
 task :debug do
   # cmd = "docker run -it -p 8888:8080 --name office-tester mstr-dossier /bin/bash"
-  ci_metrics_system_test
+  # ci_metrics_system_test
 end
 
 def do_start_local_web_dossier
