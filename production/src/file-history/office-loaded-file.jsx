@@ -224,8 +224,38 @@ export class _OfficeLoadedFile extends React.Component {
   }
 
   answerHandler = (answer) => {
-    // TODO - handlers
     this.closePrompt();
+    const insertNewWorksheet = answer;
+    this.duplicateAction(insertNewWorksheet);
+  }
+
+  duplicateAction = (insertNewWorksheet) => {
+    const { isLoading, bindingId, objectType, callForDuplicate, loading, fileName, startLoading, stopLoading } = this.props;
+    const { allowRefreshClick } = this.state;
+    if (!allowRefreshClick || loading) {
+      return;
+    }
+    startLoading();
+    if (!isLoading) {
+      this.setState({ allowRefreshClick: false }, async () => {
+        try {
+          const excelContext = await officeApiHelper.getExcelContext();
+          await officeApiHelper.isCurrentReportSheetProtected(excelContext, bindingId);
+          if (await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport, fileName)) {
+            const options = {
+              reportParams: { bindId: bindingId, objectType },
+              insertNewWorksheet
+            };
+            await callForDuplicate(options);
+          }
+        } catch (error) {
+          errorService.handleError(error);
+        } finally {
+          this.setState({ allowRefreshClick: true });
+          stopLoading();
+        }
+      });
+    }
   }
 
   renderIcons({ t, isLoading }) {
@@ -403,7 +433,8 @@ const mapDispatchToProps = {
   callForEdit: popupActions.callForEdit,
   callForEditDossier: popupActions.callForEditDossier,
   startLoading,
-  stopLoading
+  stopLoading,
+  callForDuplicate: popupActions.callForDuplicate,
 };
 
 _OfficeLoadedFile.propTypes = {
@@ -424,7 +455,8 @@ _OfficeLoadedFile.propTypes = {
   onDelete: PropTypes.func,
   callForEdit: PropTypes.func,
   callForEditDossier: PropTypes.func,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+  callForDuplicate: PropTypes.func,
 };
 
 export const OfficeLoadedFile = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_OfficeLoadedFile));

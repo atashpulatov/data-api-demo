@@ -120,6 +120,41 @@ export class PopupHelper {
     }
     errorService.handleError(error);
   }
+
+  duplicateReport = async ({
+    bindingId,
+    objectType,
+    promptsAnswers,
+    insertNewWorksheet,
+  }) => {
+    const refreshReport = officeStoreService.getReportFromProperties(bindingId);
+    const mstrObjectType = objectTypeEnum.getMstrTypeByName(objectType);
+    const instanceId = null;
+
+    const options = {
+      dossierData: instanceId,
+      promptsAnswers: !promptsAnswers
+        ? refreshReport.promptsAnswers
+        : promptsAnswers,
+      objectId: refreshReport.id,
+      instanceId: refreshReport.instanceId,
+      projectId: refreshReport.projectId,
+      mstrObjectType,
+      body: refreshReport.body,
+      isCrosstab: refreshReport.isCrosstab,
+      crosstabHeaderDimensions: refreshReport.crosstabHeaderDimensions,
+      isPrompted: refreshReport.isPrompted,
+      subtotalInfo: refreshReport.subtotalInfo,
+      visualizationInfo: refreshReport.visualizationInfo,
+      manipulationsXML: refreshReport.manipulationsXML,
+      preparedInstanceId: refreshReport.instanceId,
+      insertNewWorksheet,
+    };
+    const result = await officeDisplayService.printObject(options);
+    if (result) {
+      notificationService.displayNotification({ type: result.type, content: result.message });
+    }
+  }
 }
 
 export const popupHelper = new PopupHelper();

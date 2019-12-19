@@ -1,4 +1,5 @@
 import { officeProperties } from '../office/office-properties';
+import { errorService } from '../error/error-handler';
 
 export const CLEAR_WINDOW = 'POPUP_CLOSE_WINDOW';
 export const START_REPORT_LOADING = 'START_REPORT_LOADING';
@@ -118,6 +119,34 @@ export class PopupActions {
   }
 
   resetState = () => (dispatch) => dispatch({ type: RESET_STATE, })
+
+  callForDuplicate = ({ reportParams, insertNewWorksheet }) => async (dispatch) => {
+    try {
+      await Promise.all([
+        this.officeApiHelper.getExcelSessionStatus(),
+        this.authenticationHelper.validateAuthToken(),
+      ]);
+    } catch (error) {
+      dispatch({ type: officeProperties.actions.stopLoading });
+      return this.errorService.handleError(error);
+    }
+    try {
+      const excelContext = await this.officeApiHelper.getExcelContext();
+      await this.officeApiHelper.isCurrentReportSheetProtected(excelContext, reportParams.bindId);
+      dispatch({ type: officeProperties.actions.startLoading });
+      const options = {
+        bindingId: reportParams.bindId,
+        objectType: reportParams.objectType,
+        promptsAnswers: reportParams.promptsAnswers,
+        insertNewWorksheet,
+      };
+      await this.popupHelper.duplicateReport(options);
+    } catch (error) {
+      errorService.handleError(error);
+    } finally {
+      dispatch({ type: officeProperties.actions.stopLoading });
+    }
+  };
 }
 
 export const popupActions = new PopupActions();
