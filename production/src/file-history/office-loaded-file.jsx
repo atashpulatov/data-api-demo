@@ -312,8 +312,10 @@ export class _OfficeLoadedFile extends React.Component {
       crosstabHeaderDimensions
     } = this.props;
     const { dossierStructure = false } = visualizationInfo;
-    const { editable, value } = this.state;
+    const { editable } = this.state;
+    let { value } = this.state;
     const { dossierName, chapterName, pageName } = dossierStructure;
+    const isVisualization = (objectType.name === mstrObjectEnum.mstrObjectType.visualization.name);
     const menu = (
       <Menu>
         <Menu.Item key="duplicate" onClick={(e) => { e.domEvent.stopPropagation(); this.triggerDuplicate(); }}>{t('Duplicate')}</Menu.Item>
@@ -324,6 +326,8 @@ export class _OfficeLoadedFile extends React.Component {
         <Menu.Item key="copy" onClick={this.copyValue}>{t('Copy Name')}</Menu.Item>
       </Menu>
     );
+    // If fileName was changed but it was not introduced by user in editable mode (so fetched during edit) then update value to new fileName.
+    if (!editable && (fileName !== value)) value = fileName;
     return (
       <Dropdown overlay={menu} trigger={['contextMenu']}>
         <div
@@ -351,7 +355,7 @@ export class _OfficeLoadedFile extends React.Component {
           </div>
 
 
-          {objectType.name === mstrObjectEnum.mstrObjectType.visualization.name && dossierStructure
+          {isVisualization && dossierStructure
             && (
               <ButtonPopover
                 placement="bottom"
