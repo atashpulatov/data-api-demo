@@ -6,7 +6,6 @@ import { PopupTypeEnum } from '../home/popup-type-enum';
 import objectTypeEnum from '../mstr-object/mstr-object-type-enum';
 
 export class PopupHelper {
-
   init = (popupController) => {
     this.popupController = popupController;
   }
@@ -129,15 +128,13 @@ export class PopupHelper {
   }) => {
     const refreshReport = officeStoreService.getReportFromProperties(bindingId);
     const mstrObjectType = objectTypeEnum.getMstrTypeByName(objectType);
-    const instanceId = null;
 
     const options = {
-      dossierData: instanceId,
+      dossierData: null,
       promptsAnswers: !promptsAnswers
         ? refreshReport.promptsAnswers
         : promptsAnswers,
       objectId: refreshReport.id,
-      instanceId: refreshReport.instanceId,
       projectId: refreshReport.projectId,
       mstrObjectType,
       body: refreshReport.body,

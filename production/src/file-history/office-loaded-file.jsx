@@ -215,7 +215,8 @@ export class _OfficeLoadedFile extends React.Component {
     return <></>;
   };
 
-  triggerDuplicate = () => {
+  triggerDuplicate = (e) => {
+    if (e) e.stopPropagation();
     this.setState({ showOfficeLoadedPrompt: true });
   }
 
@@ -370,7 +371,14 @@ export class _OfficeLoadedFile extends React.Component {
     // If fileName was changed but it was not introduced by user in editable mode (so fetched during edit) then update value to new fileName.
     if (!editable && (fileName !== value)) value = fileName;
     return (
-      <Dropdown overlay={menu} trigger={['contextMenu']}>
+      <>
+        {showOfficeLoadedPrompt && (
+          <OfficeLoadedPrompt
+            answerHandler={this.answerHandler}
+            closeHandler={this.closePrompt}
+          />
+        )}
+        <Dropdown overlay={menu} trigger={['contextMenu']}>
           <div
             className="file-history-container"
             type="flex"
@@ -379,12 +387,6 @@ export class _OfficeLoadedFile extends React.Component {
             tabIndex="0"
             onClick={() => onClick(bindingId, true, this.deleteReport, fileName, isCrosstab, crosstabHeaderDimensions)}
            >
-          {showOfficeLoadedPrompt && (
-          <OfficeLoadedPrompt
-            answerHandler={this.answerHandler}
-            closeHandler={this.closePrompt}
-          />
-          )}
             <div className="refresh-icons-row">
               <ButtonPopover
               placement="bottom"
@@ -402,7 +404,7 @@ export class _OfficeLoadedFile extends React.Component {
             </div>
 
 
-          {isVisualization && dossierStructure
+            {isVisualization && dossierStructure
             && (
               <ButtonPopover
                 placement="bottom"
@@ -417,7 +419,8 @@ export class _OfficeLoadedFile extends React.Component {
               <RenameInput bindingId={bindingId} fileName={fileName} editable={editable} value={value} enableEdit={this.enableEdit} handleChange={this.handleChange} renameReport={this.renameReport} />
             </div>
           </div>
-      </Dropdown>
+        </Dropdown>
+      </>
     );
   }
 }

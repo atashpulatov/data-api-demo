@@ -89,7 +89,8 @@ export class OfficeDisplayService {
     visualizationInfo = false,
     preparedInstanceId,
     manipulationsXML = false,
-    isRefreshAll
+    isRefreshAll,
+    insertNewWorksheet = false,
   }) => {
     let newOfficeTableId;
     let shouldFormat;
