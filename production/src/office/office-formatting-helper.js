@@ -39,7 +39,7 @@ class OfficeFormattingHelper {
    *
    * @param columnInformation
    * @param isCrosstab
-   * @memberOf OfficeFormattingHelper
+   * @memberof OfficeFormattingHelper
    * @return {Array} filteredColumnInformation
    */
   filterColumnInformation = (columnInformation, isCrosstab) => {
@@ -53,7 +53,7 @@ class OfficeFormattingHelper {
    * Return parsed format string
    *
    * @param {String} format given by MicroStrategy
-   * @memberOf OfficeFormattingHelper
+   * @memberof OfficeFormattingHelper
    * @return {String} parsed format
    */
   getFormat = ({ formatString, category }) => {
@@ -166,7 +166,7 @@ class OfficeFormattingHelper {
    * @param {Boolean} isCrosstab
    * @param {Office} crosstabHeaderDimensions
    * @param {Office} context
-   * @memberOf officeFormattingHelper
+   * @memberof officeFormattingHelper
    */
   formatTable = async (table, isCrosstab, crosstabHeaderDimensions, context) => {
     if (isCrosstab) {
