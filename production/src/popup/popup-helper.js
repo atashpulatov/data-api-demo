@@ -144,7 +144,6 @@ export class PopupHelper {
       subtotalInfo: refreshReport.subtotalInfo,
       visualizationInfo: refreshReport.visualizationInfo,
       manipulationsXML: refreshReport.manipulationsXML,
-      preparedInstanceId: refreshReport.instanceId,
       insertNewWorksheet,
     };
     const result = await officeDisplayService.printObject(options);
