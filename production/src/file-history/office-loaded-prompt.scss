@@ -31,14 +31,17 @@ div.component-wrapper {
   }
 
   div.ant-radio-group.ant-radio-group-outline {
-    padding: 20px 31px;
+    padding: 20px 0 20px 31px;
+    width: 100%;
+    label.ant-radio-wrapper {
+      display: block;
+    }
   }
   
   div.buttons-row {
-    padding-top: 20px;
-    padding-bottom: 20px; 
-    padding-left: 34px;
-    padding-right: 35px;
+    padding: 20px 0;
+    width: 100%;
+    text-align: center;
     display: inline-block;
     .ant-btn {
       margin: 0 5px;

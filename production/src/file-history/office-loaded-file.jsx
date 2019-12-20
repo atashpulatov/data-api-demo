@@ -376,6 +376,7 @@ export class _OfficeLoadedFile extends React.Component {
           <OfficeLoadedPrompt
             answerHandler={this.answerHandler}
             closeHandler={this.closePrompt}
+            t={t}
           />
         )}
         <Dropdown overlay={menu} trigger={['contextMenu']}>
