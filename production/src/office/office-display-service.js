@@ -126,7 +126,6 @@ export class OfficeDisplayService {
       ));
       const { mstrTable } = instanceDefinition;
       ({ crosstabHeaderDimensions } = mstrTable);
-      console.log(instanceDefinition);
       console.timeEnd('Instance definition');
 
       // Check if instance returned data
@@ -323,7 +322,7 @@ export class OfficeDisplayService {
          preLoadReport: objectInfo,
        });
      }
-     //  await this.popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
+     await this.popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
    }
 
    /**

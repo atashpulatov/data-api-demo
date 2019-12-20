@@ -225,7 +225,7 @@ class OfficeTableHelper {
     tableColumns.load('count');
     await context.sync();
     const tableColumnsCount = tableColumns.count;
-    return columns !== tableColumnsCount || prevTableColumns !== columns;
+    return columns !== tableColumnsCount || columns !== prevTableColumns;
   };
 
   /**
@@ -328,10 +328,9 @@ class OfficeTableHelper {
     ({ tableColumnsChanged, startCell } = await this.clearIfCrosstabHeadersChanged(prevOfficeTable, excelContext, tableColumnsChanged, startCell, mstrTable));
     if (tableColumnsChanged) {
       console.log('Instance definition changed, creating new table');
-      // commented as for now we do not have notification component implemented
-      // const userAction = await PromptNotification(); // TODO pass strings;
-      // console.log(userAction);
-      // if (userAction === CANCEL) throw new Error('Operation cancelled');
+      /*  commented as for now we do not have notification component implemented
+      const userAction = await PromptNotification(); // TODO pass strings;
+      if (userAction === CANCEL) throw new Error('Operation cancelled'); */
       officeTable = await this.createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId, prevOfficeTable);
     } else {
       shouldFormat = false;
