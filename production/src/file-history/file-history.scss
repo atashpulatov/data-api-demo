@@ -8,7 +8,6 @@
     box-shadow: 0 0;
     height: 25px;
     border: none;
-    margin-bottom: 16px;
     font-size: 12px;
     color: #1c91dc;
     padding: 1px;
@@ -79,7 +78,6 @@ button {
     &:focus {
       background: rgba(28, 145, 220, 0.2);
       border: 1px solid #1c91dc;
-      border-radius: 4px;
       color: #1c91dc;
     }
   }
@@ -242,19 +240,20 @@ span {
   background: rgba(255, 255, 255, 0.8);
 }
 
-.secured-header,
-.secured-info {
+%secured-shared {
   color: #4d5154;
   background: rgba(255, 255, 255, 0.5);
 }
 
 .secured-header {
+  @extend %secured-shared;
   padding: 20px 0;
   font-size: 20px;
   font-weight: 500;
 }
 
 .secured-info {
+  @extend %secured-shared;
   padding-bottom: 30px;
   font-size: 14px;
   font-weight: 300;
