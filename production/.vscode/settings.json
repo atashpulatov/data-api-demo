@@ -5,6 +5,7 @@
       "changeProcessCWD": true
     }
   ],
-  "eslint.autoFixOnSave": true,
-  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
 }
