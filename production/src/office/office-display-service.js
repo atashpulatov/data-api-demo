@@ -180,8 +180,27 @@ export class OfficeDisplayService {
       }
 
       // Save to store
+      officeTable.load('name');
+      await excelContext.sync();
+
+      console.group('bindingId');
+      console.log(bindingId);
+      console.groupEnd('bindingId');
+      console.group('bindId');
+      console.log(bindId);
+      console.groupEnd('bindId');
+      console.group('newOfficeTableId');
+      console.log(newOfficeTableId);
+      console.groupEnd('newOfficeTableId');
+      console.group('officeTable');
+      console.log(officeTable);
+      console.groupEnd('officeTable');
+      console.group('officeTable.name');
+      console.log(officeTable.name);
+      console.groupEnd('officeTable.name');
+
       bindingId = bindingId || bindId;
-      await officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
+      await officeApiHelper.bindNamedItem(officeTable.name, bindingId);
 
       officeStoreService.saveAndPreserveReportInStore({
         name: mstrTable.name,
