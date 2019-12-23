@@ -164,7 +164,7 @@ export class OfficeApiHelper {
     return startCell;
   }
 
-  createWorksheet= async (context) =>  {
+  createWorksheet = async (context) =>  {
       const sheets = context.workbook.worksheets;
       const sheet = sheets.add();
       sheet.load("name, position");
@@ -173,7 +173,6 @@ export class OfficeApiHelper {
       const cell = sheet.getCell(0,0);
       cell.load("address, value");
       await context.sync();
-      // return cell;
   }
 
   getStartCell = (excelAdress) => excelAdress.match(/!(\w+\d+)(:|$)/)[1]

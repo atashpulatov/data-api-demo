@@ -115,7 +115,9 @@ export class OfficeDisplayService {
       console.group('Importing data performance');
       console.time('Total');
       console.time('Init excel');
-      if (insertNewWorksheet) await officeApiHelper.createWorksheet(excelContext);
+      if (insertNewWorksheet) {
+        await officeApiHelper.createWorksheet(excelContext);
+      }
       startCell = selectedCell || (await officeApiHelper.getSelectedCell(excelContext));
       console.timeEnd('Init excel');
 
