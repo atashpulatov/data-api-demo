@@ -148,7 +148,7 @@ export class PopupHelper {
     };
     const result = await officeDisplayService.printObject(options);
     if (result) {
-      notificationService.displayNotification({ type: result.type, content: result.message });
+      notificationService.displayNotification({ type: result.type, content: 'Duplication successful' });
     }
   }
 }
