@@ -560,4 +560,32 @@ describe('office loaded file', () => {
     expect(wrappedComponent).toBeDefined();
     expect(wrappedComponent.exists(`#input-${testBindingId}`)).toBeTruthy();
   });
+
+  describe('duplicate button', () => {
+    it('should call openPrompt on duplicate button click', () => {
+      expect(1).toBeFalsy();
+    });
+
+    it('should render officeLoadedFile with OfficeLoadedPrompt when showOfficeLoadedPrompt is true', () => {
+      expect(1).toBeFalsy();
+    });
+
+    it('should call closePopup and duplicateAction on answered prompt', () => {
+      expect(1).toBeFalsy();
+    });
+  });
+
+  describe('OfficeLoadedPrompt', () => {
+    it('should render OfficeLoadedPrompt', () => {
+      expect(1).toBeFalsy();
+    });  
+
+    it('should call answerHandler with given answer on OK button click', () => {
+      expect(1).toBeFalsy();
+    });  
+
+    it('should call closeHandler on cancel button click', () => {
+      expect(1).toBeFalsy();
+    });  
+  });
 });
