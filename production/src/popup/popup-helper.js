@@ -6,6 +6,7 @@ import { PopupTypeEnum } from '../home/popup-type-enum';
 import objectTypeEnum from '../mstr-object/mstr-object-type-enum';
 
 export class PopupHelper {
+  
   init = (popupController) => {
     this.popupController = popupController;
   }
@@ -120,4 +121,5 @@ export class PopupHelper {
     errorService.handleError(error);
   }
 }
+
 export const popupHelper = new PopupHelper();

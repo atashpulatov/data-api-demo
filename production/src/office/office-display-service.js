@@ -66,6 +66,7 @@ export class OfficeDisplayService {
    * @param {Object} [parameter.preparedInstanceId] Instance created before import workflow.
    * @param {Object} [parameter.manipulationsXML=false] Dossier Manipulation for imported visualization
    * @param {Object} [parameter.isRefreshAll]
+   * @param {Boolean} [parameter.insertNewWorksheet] Flag for inserting new excel worksheet before import 
    * @returns {Object} Specify status of the import.
    * @memberof officeDisplayService
    */

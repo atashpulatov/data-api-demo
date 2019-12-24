@@ -343,6 +343,7 @@ export class OfficeApiHelper {
     }
   }
 
+  
   /**
    * Checks if the object existing in Excel workbook
    *

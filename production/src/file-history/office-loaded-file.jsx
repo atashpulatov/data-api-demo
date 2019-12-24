@@ -215,7 +215,7 @@ export class _OfficeLoadedFile extends React.Component {
     return <></>;
   };
 
-  triggerDuplicate = (e) => {
+  openPrompt = (e) => {
     if (e) e.stopPropagation();
     this.setState({ showOfficeLoadedPrompt: true });
   }
@@ -272,8 +272,8 @@ export class _OfficeLoadedFile extends React.Component {
               role="button"
               tabIndex="0"
               className="loading-button-container"
-              onClick={this.triggerDuplicate}
-              onKeyPress={this.triggerDuplicate}
+              onClick={this.openPrompt}
+              onKeyPress={this.openPrompt}
             >
             <MSTRIcon type="duplicate" />
           </span>
@@ -360,7 +360,7 @@ export class _OfficeLoadedFile extends React.Component {
     const isVisualization = (objectType.name === mstrObjectEnum.mstrObjectType.visualization.name);
     const menu = (
       <Menu>
-        <Menu.Item key="duplicate" onClick={(e) => { e.domEvent.stopPropagation(); this.triggerDuplicate(); }}>{t('Duplicate')}</Menu.Item>
+        <Menu.Item key="duplicate" onClick={(e) => { e.domEvent.stopPropagation(); this.openPrompt(); }}>{t('Duplicate')}</Menu.Item>
         <Menu.Item key="edit" onClick={(e) => { e.domEvent.stopPropagation(); this.editAction(); }}>{t('Edit')}</Menu.Item>
         <Menu.Item key="refresh" onClick={(e) => { e.domEvent.stopPropagation(); this.refreshAction(); }}>{t('Refresh')}</Menu.Item>
         <Menu.Item key="remove" onClick={(e) => { e.domEvent.stopPropagation(); this.deleteAction(); }}>{t('Remove')}</Menu.Item>
