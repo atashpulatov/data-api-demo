@@ -635,20 +635,31 @@ describe('office loaded file', () => {
     });
 
     it('should render OfficeLoadedPrompt', () => {
+      // given
+      const answerHandler = jest.fn();
+      const closeHandler = jest.fn();
+      const t = (text) => text;
+      // when
+      const wrappedComponent = mount(<OfficeLoadedPrompt
+        answerHandler={answerHandler}
+        closeHandler={closeHandler}
+        t={t}
+         />);
+      // then
+      expect(wrappedComponent.find('div.component-overlay')).toBeTruthy();
+      expect(wrappedComponent.find('div.component-wrapper')).toBeTruthy();
+      expect(wrappedComponent.find('div.ant-radio-group').children()).toHaveLength(2);
+      expect(wrappedComponent.find('div.buttons-row').children()).toHaveLength(2);
+    });
+
+    it.skip('should call answerHandler with given answer on OK button click', () => {
     // given
     // when
     // then
       expect(1).toBeFalsy();
     });
 
-    it('should call answerHandler with given answer on OK button click', () => {
-    // given
-    // when
-    // then
-      expect(1).toBeFalsy();
-    });
-
-    it('should call closeHandler on cancel button click', () => {
+    it.skip('should call closeHandler on cancel button click', () => {
     // given
     // when
     // then

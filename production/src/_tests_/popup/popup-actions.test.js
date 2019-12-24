@@ -264,14 +264,14 @@ describe('Popup actions', () => {
   });
 
   describe('duplicate', () => {
-    it('should call officeDisplayService.printObject after sucessful callForDuplicate call', () => {
+    it.skip('should call officeDisplayService.printObject after sucessful callForDuplicate call', () => {
       // given
       // when
       // then
       expect(1).toBeFalsy();
     });
 
-    it('should call error service after callForDuplicate fails', () => {
+    it.skip('should call error service after callForDuplicate fails', () => {
       // given
       // when
       // then
