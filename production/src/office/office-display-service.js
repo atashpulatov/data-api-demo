@@ -46,7 +46,7 @@ export class OfficeDisplayService {
    * 6.Fetch and insert data into Excel
    * 7.Table formatting
    * 8.Apply subtotal formatting
-   * 9.Get visualisation breadcrumbs
+   * 9.Get visualization breadcrumbs
    * 10.Store information about object to Redux and Excel
    *
    * @param {String} parameter.objectId
@@ -64,7 +64,7 @@ export class OfficeDisplayService {
    * @param {Object} [parameter.subtotalInfo=false] Contains previous subtotal addresses and boolean determining if we want to import with subtotal
    * @param {Object} [parameter.visualizationInfo=false]
    * @param {Object} [parameter.preparedInstanceId] Instance created before import workflow.
-   * @param {Object} [parameter.manipulationsXML=false] Dossier Manipulation for imported visualisation
+   * @param {Object} [parameter.manipulationsXML=false] Dossier Manipulation for imported visualization
    * @param {Object} [parameter.isRefreshAll]
    * @returns {Object} Specify status of the import.
    * @memberof officeDisplayService
@@ -474,9 +474,9 @@ export class OfficeDisplayService {
    *
    * @param {String} projectId
    * @param {String} objectId
-   * @param {String} visualizationKey visualisation id.
+   * @param {String} visualizationKey visualization id.
    * @param {Object} preparedInstanceId
-   * @returns {Object} Contains breadcrumbs fro visualisation.
+   * @returns {Object} Contains breadcrumbs fro visualization.
    * @memberof officeDisplayService
    */
   getVisualizationInfo = async (projectId, objectId, visualizationKey, preparedInstanceId) => {

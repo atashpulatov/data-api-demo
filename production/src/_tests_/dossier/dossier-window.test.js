@@ -38,7 +38,7 @@ describe('Dossierwindow', () => {
     // when
     componentWrapper.instance().handleSelection(dossierData);
     // then
-    expect(componentWrapper.instance().state.isVisualisationSelected).toBeFalsy();
+    expect(componentWrapper.instance().state.isVisualizationSelected).toBeFalsy();
   });
 
   it('should use handleSelection as selection', () => {
@@ -48,16 +48,16 @@ describe('Dossierwindow', () => {
     // when
     componentWrapper.instance().handleSelection(dossierData);
     // then
-    expect(componentWrapper.instance().state.isVisualisationSelected).toBeTruthy();
+    expect(componentWrapper.instance().state.isVisualizationSelected).toBeTruthy();
   });
 
   it('should use handleOk and run selectObject with given parameters', () => {
     // given
-    const componentState = { isVisualisationSelected: true, chapterKey: 'C40', visualizationKey: 'V78', promptsAnswers: [] };
+    const componentState = { isVisualizationSelected: true, chapterKey: 'C40', visualizationKey: 'V78', promptsAnswers: [] };
     const selectObject = jest.fn();
     const requestImport = jest.fn();
     const componentProps = { chosenObjectName: 'selectedObject', chosenObjectId: 'ABC123', chosenProjectId: 'DEF456', requestImport, selectObject };
-    const mockupVisualisationData = {
+    const mockupVisualizationData = {
       chosenObjectName: 'selectedObject',
       chosenObjectId: 'ABC123',
       chosenProjectId: 'DEF456',
@@ -75,7 +75,7 @@ describe('Dossierwindow', () => {
     // when
     componentWrapper.instance().handleOk();
     // then
-    expect(selectObject).toHaveBeenCalledWith(mockupVisualisationData);
+    expect(selectObject).toHaveBeenCalledWith(mockupVisualizationData);
     expect(requestImport).toHaveBeenCalled();
   });
 });

@@ -49,7 +49,7 @@ export default class _EmbeddedDossier extends React.Component {
 
   loadEmbeddedDossier = async (container) => {
     const { mstrData, handlePopupErrors } = this.props;
-    const { envUrl, token, dossierId, projectId, promptsAnswers, instanceId } = mstrData;
+    const { envUrl, token, dossierId, projectId, promptsAnswers, instanceId, selectedViz } = mstrData;
     const instance = {};
     try {
       if (instanceId) {
@@ -136,6 +136,7 @@ export default class _EmbeddedDossier extends React.Component {
         addToLibrary: true,
       },
       enableVizSelection: true,
+      selectedViz,
       onMsgRouterReadyHandler: ({ MsgRouter }) => {
         this.msgRouter = MsgRouter;
         this.msgRouter.registerEventHandler('onVizSelectionChanged', this.onVizSelectionHandler);
@@ -176,7 +177,8 @@ _EmbeddedDossier.propTypes = {
     dossierId: PropTypes.string,
     projectId: PropTypes.string,
     instanceId: PropTypes.string,
-    promptsAnswers: PropTypes.array || null
+    promptsAnswers: PropTypes.array || null,
+    selectedViz: PropTypes.string,
   }),
   handleSelection: PropTypes.func,
   handlePopupErrors: PropTypes.func,
@@ -190,7 +192,8 @@ _EmbeddedDossier.defaultProps = {
     dossierId: 'default id',
     projectId: 'default id',
     instanceId: 'default id',
-    promptsAnswers: null
+    promptsAnswers: null,
+    selectedViz: ''
   },
   handleSelection: () => { },
   handlePopupErrors: () => { }

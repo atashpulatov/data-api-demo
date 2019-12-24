@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-register_workspace_setting 'dev'
+# register_workspace_setting 'dev'
 
 function set_workspace_settings_to_dev() {
   export VAGRANT_DEFAULT_PROVIDER=virtualbox
