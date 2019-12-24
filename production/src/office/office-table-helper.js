@@ -394,7 +394,7 @@ class OfficeTableHelper {
    clearIfCrosstabHeadersChanged = async (prevOfficeTable, excelContext, tableColumnsChanged, startCell, mstrTable) => {
      const { prevCrosstabDimensions, crosstabHeaderDimensions, isCrosstab } = mstrTable;
      const { validColumnsY, validRowsX } = await officeApiHelper.getCrosstabHeadersSafely(prevOfficeTable, prevCrosstabDimensions.columnsY, excelContext, prevCrosstabDimensions.rowsX);
-     if (isCrosstab && crosstabHeaderDimensions && (validRowsX || validColumnsY)
+     if (isCrosstab && crosstabHeaderDimensions && prevCrosstabDimensions
       && (validRowsX !== crosstabHeaderDimensions.rowsX
       || validColumnsY !== crosstabHeaderDimensions.columnsY)) {
        tableColumnsChanged = true;
