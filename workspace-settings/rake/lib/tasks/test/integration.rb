@@ -2,6 +2,7 @@ desc "package test docker"
 task :deploy_tester_server,[:build_no] do | t, args|
   
   group_id = "#{$WORKSPACE_SETTINGS[:nexus][:base_coordinates][:group_id]}.#{Common::Version.application_branch}"
+  group_id = Common::Version.dependency_group_id
   artifact_id = "office-loader"
   version = args['build_no'] || Nexus.latest_artifact_version(artifact_id: artifact_id, group_id: group_id)
   download_mstr_office(group_id, version)
@@ -34,9 +35,9 @@ end
 
 desc "package test docker"
 task :p do
-  stop_test_web_service
-  download_latest_web_dossier
-  download_mstr_office
+  # stop_test_web_service
+  # download_latest_web_dossier
+  # download_mstr_office
   do_package_test_docker
   # cmd = "docker build -t mstr-dossier ."
   # shell_command! cmd, cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/e2e-webserver"
