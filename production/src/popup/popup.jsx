@@ -1,94 +1,77 @@
-import React, { Component } from 'react';
+import React from 'react';
 import * as queryString from 'query-string';
-import { libraryErrorController } from '@mstr/mstr-react-library';
-import { PopupTypeEnum } from '../home/popup-type-enum';
-import { officeContext } from '../office/office-context';
-import { selectorProperties } from '../attribute-selector/selector-properties';
-import { PopupViewSelector } from './popup-view-selector';
+import {libraryErrorController} from '@mstr/mstr-react-library';
+import {connect} from 'react-redux';
+import {PopupTypeEnum} from '../home/popup-type-enum';
+import {officeContext} from '../office/office-context';
+import {selectorProperties} from '../attribute-selector/selector-properties';
+import {PopupViewSelector} from './popup-view-selector';
 import i18next from '../i18n';
-import { CLEAR_PROMPTS_ANSWERS, CANCEL_DOSSIER_OPEN } from '../navigation/navigation-tree-actions';
-import { reduxStore } from '../store';
 import InternetConnectionError from './internet-connection-error';
+import {popupStateActions} from './popup-state-actions';
 
 /* global Office */
 
-export class Popup extends Component {
-  constructor(props) {
-    super(props);
-    const location = (props.location && props.location.search) || window.location.search;
-    const mstrData = queryString.parse(location);
-    this.state = { mstrData, };
-    libraryErrorController.initializeHttpErrorsHandling(this.handlePopupErrors);
-  }
+export const PopupNotConnected = ({location, mstrData, setMstrData, popupType, setPopupType, onPopupBack, }) => {
+  React.useEffect(() => {
+    const popupLocation = (location && location.search) || window.location.search;
+    const mstrDataToSet = queryString.parse(popupLocation);
+    console.log({location, mstrDataToSet});
+    setMstrData(mstrDataToSet);
+    libraryErrorController.initializeHttpErrorsHandling(handlePopupErrors);
+  }, [location, setMstrData]);
 
-  handlePrepare = (projectId,
-    reportId,
-    reportSubtype,
-    reportName,
-    reportType,
-    isPrompted) => {
-    this.setState({
-      mstrData: {
-        ...this.state.mstrData,
-        popupType: PopupTypeEnum.dataPreparation,
-        forceChange: false,
-        projectId,
-        reportId,
-        reportSubtype,
-        reportName,
-        reportType,
-        isPrompted,
-      },
-    });
+  const handlePrepare = () => {
+    setPopupType(PopupTypeEnum.dataPreparation);
   };
 
-  handleBack = (projectId, reportId, reportSubtype, forceChange = false) => {
-    this.setState({
-      mstrData: {
-        ...this.state.mstrData,
-        popupType: PopupTypeEnum.navigationTree,
-        forceChange,
-        projectId,
-        reportId,
-        reportSubtype,
-      },
-    },
-    () => {
-      reduxStore.dispatch({ type: CLEAR_PROMPTS_ANSWERS });
-      reduxStore.dispatch({ type: CANCEL_DOSSIER_OPEN });
-    });
+  const handleBack = () => {
+    onPopupBack();
   };
 
-  handlePopupErrors = (error) => {
-    const errorObj = error && { status: error.status, message: error.message, response: error.response, type: error.type };
+  const handlePopupErrors = (error) => {
+    const errorObj = error && {status: error.status, message: error.message, response: error.response, type: error.type};
     const messageObject = {
       command: selectorProperties.commandError,
       error: errorObj,
     };
-    officeContext
+    console.log(messageObject);
+    return; // FIXME: disabled temporarily cloding popup on error
+    officeContext 
       .getOffice()
       .context.ui.messageParent(JSON.stringify(messageObject));
   };
 
-  render() {
-    const { popupType, ...propsToPass } = this.state.mstrData;
-    const methods = {
-      handlePrepare: this.handlePrepare,
-      handleBack: this.handleBack,
-      handlePopupErrors: this.handlePopupErrors,
-    };
-    i18next.changeLanguage(i18next.options.resources[Office.context.displayLanguage]
-      ? Office.context.displayLanguage
-      : 'en-US');
-    return (
-      <>
-        <PopupViewSelector
+  const {...propsToPass} = mstrData;
+  const methods = {
+    handlePrepare,
+    handleBack,
+    handlePopupErrors,
+  };
+  i18next.changeLanguage(i18next.options.resources[Office.context.displayLanguage]
+    ? Office.context.displayLanguage
+    : 'en-US');
+  return (
+    <>
+      <PopupViewSelector
         popupType={popupType}
         propsToPass={propsToPass}
         methods={methods}
       />
-        <InternetConnectionError />
-      </>
-    );
-  }
-}
+      <InternetConnectionError />
+    </>
+  );
+};
+
+const mapStateToProps = ({popupStateReducer}) => ({
+  popupType: popupStateReducer.popupType,
+  mstrData: {...popupStateReducer},
+});
+
+const mapDispatchToProps = {
+  setPopupType: popupStateActions.setPopupType,
+  setMstrData: popupStateActions.setMstrData,
+  onPopupBack: popupStateActions.onPopupBack,
+};
+
+export const Popup = connect(mapStateToProps, mapDispatchToProps)(PopupNotConnected);
