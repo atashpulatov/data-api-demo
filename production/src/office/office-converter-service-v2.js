@@ -127,7 +127,8 @@ class OfficeConverterServiceV2 {
       if (supportForms && forms) {
         return forms; // attribute as row with forms
       }
-      return e.value.length > 1 ? e.value : `'${e.value.join(' ')}`; // attribute as column with forms
+      // attribute as column with forms
+      return e.value.length > 1 ? e.value.map((form) => `'${form}`) : `'${e.value.join(' ')}`;
     };
     if (isCrosstab) {
       const rows = jsonHandler.renderHeaders(response.definition, 'rows', response.data.headers, onElement(rowTotals));
