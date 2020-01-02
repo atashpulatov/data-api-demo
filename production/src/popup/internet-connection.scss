@@ -1,11 +1,12 @@
-.overlay{
+.internet-connection-overlay{
+  position: fixed;
   height: 100vh;
   width: 100vw;
-  position: fixed;
+  z-index: 100;
   background-color: rgba(255,255,255,0.3);
 }
 
-.dialog{
+.internet-connection-dialog{
   position: relative;
   display: flex;
   flex-direction: column;
@@ -22,7 +23,7 @@
   border-radius: 1%;
 }
 
-.row{
+.internet-connection-row{
   display: flex;
   flex-direction: row;
   align-items: stretch;
@@ -33,32 +34,32 @@
   font-size: 12px;
 }
 
-.top{
+.internet-connection-top{
   padding-left: 4px;
 }
 
-.column.icon{
+.internet-connection-column.icon{
   flex: 0 0 auto;
   width: 24px;
 
 }
 
-.icon {
+.internet-connection-icon {
   width: 24px;
   height: 24px;
 }
 
-.column {
+.internet-connection-column {
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
 }
 
-.infoText{
+.internet-connection-infoText{
   margin-left: 5px;
 }
 
-.loading-container {
+.internet-connection-loading-container {
   margin: 6px auto 0px auto;
   display: flex;
   align-items: center;
@@ -69,6 +70,6 @@
   padding-left: 3px;
 }
 
-.loading-container>img {
+.internet-connection-loading-container>img {
   vertical-align: middle;
 }
