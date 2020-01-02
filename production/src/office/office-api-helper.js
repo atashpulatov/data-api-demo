@@ -172,7 +172,7 @@ export class OfficeApiHelper {
   bindNamedItem = (namedItem, bindingId) => new Promise((resolve, reject) => {
     window.Office.context.document.bindings.addFromNamedItemAsync(namedItem, 'table', {id: bindingId}, (result) => {
       if (result.status === 'succeeded') {
-        console.log(`Added new binding with type: ${result.value.type} and id: ${result.value.id}`);
+        console.log(`Added new binding with type: ${result.value.type} and id: ${result.value.id}. bindingId however is ${bindingId}`);
         resolve();
       } else {
         console.error(`Error: ${result.error.message}`);
