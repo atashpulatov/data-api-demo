@@ -38,11 +38,6 @@ export class AttributeSelectorWindowNotConnected extends Component {
 
   handleCancel = () => attributeSelectorHelpers.officeMessageParent(selectorProperties.commandCancel);
 
-  handleBack = () => {
-    const { handleBack } = this.props;
-    handleBack();
-  };
-
   onTriggerUpdate = (reportId, projectId, reportSubtype, body, reportName = this.props.mstrData.reportName) => {
     const { mstrData } = this.props;
     const { importSubtotal } = this.state;
@@ -80,12 +75,12 @@ export class AttributeSelectorWindowNotConnected extends Component {
   };
 
   render() {
-    const { mstrData } = this.props;
+    const { mstrData, handleBack, reduxState, chosenObject } = this.props;
     const { session, triggerUpdate, openModal, attributesSelected, loading, } = this.state;
     const { toggleSubtotal } = this;
-    const typeName = mstrData.reportType.name
-      ? mstrData.reportType.name.charAt(0).toUpperCase() + mstrData.reportType.name.substring(1)
-      : mstrData.reportType.charAt(0).toUpperCase() + mstrData.reportType.substring(1);
+    console.log({reduxState});
+    const typeName = chosenObject.objectType.name
+      && chosenObject.objectType.name.charAt(0).toUpperCase() + chosenObject.objectType.name.substring(1)
 
     return (
       <div>
@@ -93,8 +88,6 @@ export class AttributeSelectorWindowNotConnected extends Component {
           // TODO: logic for a title
           title={`Import ${typeName} > ${mstrData.reportName}`}
           attributesSelectedChange={this.attributesBeingSelected}
-          mstrData={mstrData}
-          session={session}
           triggerUpdate={triggerUpdate}
           onTriggerUpdate={this.onTriggerUpdate}
           resetTriggerUpdate={this.resetTriggerUpdate}
@@ -105,7 +98,7 @@ export class AttributeSelectorWindowNotConnected extends Component {
         />
         <PopupButtons
           disableActiveActions={!attributesSelected}
-          handleBack={!mstrData.editRequested && this.handleBack}
+          handleBack={!mstrData.editRequested && handleBack}
           handleOk={this.handleOk}
           handleCancel={this.handleCancel}
           loading={loading}
@@ -130,7 +123,11 @@ AttributeSelectorWindowNotConnected.propTypes = {
   handleBack: PropTypes.func,
 };
 
-const mapStateToProps = (state) => ({ mstrData: { ...state.popupStateReducer }, });
+const mapStateToProps = (state) => ({ 
+  mstrData: { ...state.popupStateReducer }, 
+  reduxState: state,
+  chosenObject: state.navigationTree,
+});
 
 const mapDispatchToProps = {
   handleBack: popupStateActions.onPopupBack,

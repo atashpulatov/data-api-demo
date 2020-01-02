@@ -235,10 +235,10 @@ function proceedToImport(props) {
 function renderProperComponent(popupType, methods, propsToPass, editedReport) {
   if (popupType === PopupTypeEnum.dataPreparation) {
     const mstrData = { ...propsToPass, instanceId: editedReport.instanceId, promptsAnswers: editedReport.promptsAnswers };
-
+    console.log('hello');
     return (
       <AttributeSelectorWindow
-      mstrData={mstrData} />
+        mstrData={mstrData} />
     );
   }
   if (popupType === PopupTypeEnum.editFilters) {
@@ -248,7 +248,7 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
     };
     return (
       <AttributeSelectorWindow
-      mstrData={mstrData}
+        mstrData={mstrData}
         // handleBack={() => methods.handleBack(null, null, null, true)} // FIXME: Don't know how to adjust it just yet.
       />
     );
@@ -258,7 +258,7 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
       <NavigationTree
         mstrData={propsToPass}
         handlePopupErrors={popupHelper.handlePopupErrors}
-        handleDossierOpen={methods.handleDossierOpen}
+        // handleDossierOpen={methods.handleDossierOpen}
       />
     );
   }

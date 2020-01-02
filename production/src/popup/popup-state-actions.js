@@ -25,7 +25,7 @@ class PopupStateActions {
   onPrepareData = () => (dispatch) => {
     dispatch({
       type: SET_POPUP_TYPE,
-      payload: PopupTypeEnum.dataPreparation,
+      popupType: PopupTypeEnum.dataPreparation,
     });
   }
 

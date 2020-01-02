@@ -17,6 +17,7 @@ import {
 import DB from '../cache/cache-db';
 import { authenticationHelper } from '../authentication/authentication-helper';
 import {popupStateActions} from '../popup/popup-state-actions';
+import {popupHelper} from '../popup/popup-helper';
 
 const SAFETY_FALLBACK = 7000; // Interval for falling back to network
 
@@ -77,8 +78,7 @@ export class _NavigationTree extends Component {
     try {
       await authenticationHelper.validateAuthToken();
     } catch (error) {
-      const { handlePopupErrors } = this.props;
-      handlePopupErrors(error);
+      popupHelper.handlePopupErrors(error);
       return;
     }
 
@@ -120,8 +120,7 @@ export class _NavigationTree extends Component {
         requestImport(isPromptedResponse);
       }
     } catch (e) {
-      const { handlePopupErrors } = this.props;
-      handlePopupErrors(e);
+      popupHelper.handlePopupErrors(e);
     }
   };
 
@@ -144,8 +143,7 @@ export class _NavigationTree extends Component {
       handlePrepare(chosenProjectId, chosenObjectId, chosenSubtype, chosenObjectName, chosenType, isPromptedResponse);
       this.setState({ previewDisplay: true });
     } catch (err) {
-      const { handlePopupErrors } = this.props;
-      handlePopupErrors(err);
+      popupHelper.handlePopupErrors(err);
     }
   };
 
@@ -158,7 +156,7 @@ export class _NavigationTree extends Component {
 
   // TODO: temporary solution
   onObjectChosen = async (objectId, projectId, subtype, objectName, targetId, myLibrary) => {
-    const { selectObject, handlePopupErrors } = this.props;
+    const { selectObject } = this.props;
     // If myLibrary is on, then selected object is a dossier.
     const objectType = myLibrary ? mstrObjectEnum.mstrObjectType.dossier : mstrObjectEnum.getMstrTypeBySubtype(subtype);
     let chosenLibraryDossier;
@@ -172,7 +170,7 @@ export class _NavigationTree extends Component {
       try {
         cubeStatus = await getCubeStatus(objectId, projectId) !== '0';
       } catch (error) {
-        handlePopupErrors(error);
+        popupHelper.handlePopupErrors(error);
       }
     }
     this.setState({ isPublished: cubeStatus });
