@@ -110,13 +110,14 @@ class NormalizedJsonHandler {
     const { headers, metricValues } = data;
     const { rows } = headers;
     const result = [];
+    const { supportForms } = definition;
+
     for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
       const headerCells = rows[rowIndex];
       const rowElements = this.mapElementIndicesToElements({ definition, axis: 'rows', headerCells, rowIndex });
       const tabularRows = [];
       for (let attributeIndex = 0; attributeIndex < rowElements.length; attributeIndex++) {
         const element = rowElements[attributeIndex];
-        const supportForms = true;
         if (supportForms && element.value.length > 1) {
           for (let index = 0; index < element.value.length; index++) {
             const form = `'${element.value[index]}`;

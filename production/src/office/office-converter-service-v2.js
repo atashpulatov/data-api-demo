@@ -21,7 +21,7 @@ class OfficeConverterServiceV2 {
       isCrosstabular,
       name: response.n || response.name,
       rows: this.getRows(response, isCrosstab),
-      attributesNames: this.getAttributesName(response.definition),
+      attributesNames: this.getAttributesName(response.definition, response.supportForms),
     };
   }
 
@@ -68,8 +68,7 @@ class OfficeConverterServiceV2 {
    * @return {Object} Contains arrays of columns and rows attributes names
    * @memberof OfficeConverterServiceV2
    */
-  getAttributesName = (definition) => {
-    const supportForms = true;
+  getAttributesName = (definition, supportForms) => {
     const getAttributeWithForms = (elements) => {
       let names = [];
       for (let i = 0; i < elements.length; i++) {
@@ -102,6 +101,9 @@ class OfficeConverterServiceV2 {
     if (isCrosstab) {
       return { row: jsonHandler.renderRows(response.data) };
     }
+    if (response.definition) {
+      response.definition.supportForms = response.supportForms;
+    } 
     const row = jsonHandler.renderTabular(response.definition, response.data, onAttribute(rowTotals));
     return { row, rowTotals };
   }
@@ -118,9 +120,9 @@ class OfficeConverterServiceV2 {
   getHeaders(response, isCrosstab, isCrosstabular) {
     const rowTotals = [];
     const columnTotals = [];
+    const { supportForms } = response;
     const onElement = (array) => (e) => {
       if (array) array.push(e.subtotalAddress);
-      const supportForms = true;
       const forms = this.getAttributesForms(e);
       if (supportForms && forms) {
         return forms; // attribute as row with forms
@@ -129,11 +131,11 @@ class OfficeConverterServiceV2 {
     };
     if (isCrosstab) {
       const rows = jsonHandler.renderHeaders(response.definition, 'rows', response.data.headers, onElement(rowTotals));
-      const columns = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement(columnTotals), true);
+      const columns = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement(columnTotals), supportForms);
       const subtotalAddress = [...rowTotals, ...columnTotals];
       return { rows, columns, subtotalAddress };
     }
-    const attributeTitles = jsonHandler.renderTitles(response.definition, 'rows', response.data.headers, onElement(), true);
+    const attributeTitles = jsonHandler.renderTitles(response.definition, 'rows', response.data.headers, onElement(), supportForms);
     const metricHeaders = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement());
     return isCrosstabular ? { columns: [[...attributeTitles[0], ...metricHeaders[0], '\' ']] } : { columns: [[...attributeTitles[0], ...metricHeaders[0]]] };
   }
@@ -148,10 +150,9 @@ class OfficeConverterServiceV2 {
    * @memberof OfficeConverterServiceV2
    */
   getTableSize(response, columnInformation, isCrosstab) {
-    const supportForms = true;
     let columnsCount = columnInformation.length;
     const columnHeader = response.data.headers.columns[0];
-    for (let index = 0; supportForms && index < columnInformation.length; index++) {
+    for (let index = 0; response.supportForms && index < columnInformation.length; index++) {
       const element = columnInformation[index];
       if (element.isAttribute && element.forms.length > 1) {
         columnsCount = columnsCount + element.forms.length - 1;
