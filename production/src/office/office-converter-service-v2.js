@@ -8,7 +8,7 @@ import jsonHandler from '../mstr-object/mstr-normalized-json-handler';
 class OfficeConverterServiceV2 {
   createTable(response) {
     // Crosstabular is a Crosstab report with metrics in Rows and nothing in columns, so we display it as tabular
-    const isCrosstabular = response.definition.grid.metricsPosition.axis === 'rows'
+    const isCrosstabular = response.definition.metricsPosition && response.definition.grid.metricsPosition.axis === 'rows'
       && response.definition.grid.columns.length === 0;
     const columnInformation = this.getColumnInformation(response, isCrosstabular);
     const isCrosstab = !isCrosstabular && this.isCrosstab(response);

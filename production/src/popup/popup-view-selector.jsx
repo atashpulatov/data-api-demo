@@ -355,8 +355,28 @@ function parsePopupState(popupState, promptsAnswers) {
     dossierName,
     selectedViz: `${chapterKey}:${visualizationKey}`,
   };
-  restoreFilters(popupState.body, reportData);
+
+  if (promptsAnswers) {
+    comparePromptAnswers(popupState, promptsAnswers, reportData);
+  } else {
+    restoreFilters(popupState.body, reportData);
+  }
+
   return reportData;
+}
+
+function comparePromptAnswers(popupState, promptsAnswers, reportData) {
+  sortPromptsAnswers(popupState.promptsAnswers[0].answers);
+  sortPromptsAnswers(promptsAnswers[0].answers);
+  if (JSON.stringify(popupState.promptsAnswers) === JSON.stringify(promptsAnswers)) {
+    restoreFilters(popupState.body, reportData);
+  }
+}
+
+function sortPromptsAnswers(array) {
+  for (let i = 0; i < array.length; i++) {
+    array[i].values.sort();
+  }
 }
 
 function restoreFilters(body, reportData) {
