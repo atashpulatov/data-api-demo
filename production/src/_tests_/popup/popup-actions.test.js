@@ -1,4 +1,9 @@
-import * as actions from '../../popup/popup-actions';
+import {
+  popupActions as actions,
+  RESET_STATE,
+  SET_REPORT_N_FILTERS,
+  SET_PREPARED_REPORT
+} from '../../popup/popup-actions';
 import { popupHelper } from '../../popup/popup-helper';
 import { officeApiHelper } from '../../office/office-api-helper';
 import { authenticationHelper } from '../../authentication/authentication-helper';
@@ -6,8 +11,7 @@ import { officeProperties } from '../../office/office-properties';
 import { officeStoreService } from '../../office/store/office-store-service';
 import { errorService } from '../../error/error-handler';
 import { popupController } from '../../popup/popup-controller';
-import { reduxStore } from '../../store';
-import { createInstance, answerPrompts, getInstance, createDossierInstance } from '../../mstr-object/mstr-object-rest-service';
+import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 
 jest.mock('../../office/office-api-helper');
 jest.mock('../../authentication/authentication-helper');
@@ -17,7 +21,20 @@ jest.mock('../../error/error-handler');
 jest.mock('../../store');
 jest.mock('../../mstr-object/mstr-object-rest-service');
 
+const { createDossierInstance } = mstrObjectRestService;
+
 describe('Popup actions', () => {
+  beforeAll(() => {
+    actions.init(
+      authenticationHelper,
+      errorService,
+      officeApiHelper,
+      officeStoreService,
+      popupHelper,
+      mstrObjectRestService,
+      popupController
+    );
+  });
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -121,7 +138,7 @@ describe('Popup actions', () => {
       // when
       try {
         await actions.refreshReportsArray(reportArray, false)(listener);
-      } catch (error) { }
+      } catch (error) {}
       // then
       expect(popupHelper.handleRefreshError).toHaveBeenCalledWith(mockErrorObject, 1, 0, false);
     });
@@ -130,7 +147,7 @@ describe('Popup actions', () => {
       // given
       const error = new Error('test error');
       officeApiHelper.getExcelSessionStatus.mockImplementationOnce(() => { throw error; });
-      const listener = jest.fn();
+      const mockedDispatch = jest.fn();
       const reportArray = [
         {
           bindId: 'test',
@@ -139,10 +156,10 @@ describe('Popup actions', () => {
         },
       ];
       // when
-      await actions.refreshReportsArray(reportArray, false)(listener);
+      await actions.refreshReportsArray(reportArray, false)(mockedDispatch);
       // then
       expect(errorService.handleError).toBeCalledWith(error);
-      expect(reduxStore.dispatch).toBeCalledWith({ type: officeProperties.actions.stopLoading });
+      expect(mockedDispatch).toBeCalledWith({ type: officeProperties.actions.stopLoading });
     });
   });
   describe('resetState', () => {
@@ -152,7 +169,7 @@ describe('Popup actions', () => {
       // when
       actions.resetState(true)(listener);
       // then
-      expect(listener).toHaveBeenCalledWith({ type: actions.RESET_STATE });
+      expect(listener).toHaveBeenCalledWith({ type: RESET_STATE });
     });
   });
 
@@ -184,68 +201,37 @@ describe('Popup actions', () => {
     expect(officeApiHelper.getExcelSessionStatus).toBeCalled();
     expect(authenticationHelper.validateAuthToken).toBeCalled();
     expect(officeStoreService.getReportFromProperties).toBeCalledWith(bindingId);//
-    expect(listener).toHaveBeenCalledWith({ type: actions.SET_REPORT_N_FILTERS, editedReport: returnedValue });
+    expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedReport: returnedValue });
   });
 
-  it('should do certain operations when callForEditDossier action called', async () => {
+  it('should run edit popup if edit action for not prompted object is called', async () => {
     // given
     const bindingId = 'bindingId';
     const report = { bindId: bindingId, objectType: 'whatever' };
-    const returnedValue = { projectId: 'projectId', id: 'id', manipulationsXML: 'manipulationsXML' };
+    const returnedValue = { id: 'id', projectId: 'projectId', instanceId: 'instanceId', body: {}, promptsAnswers: [], isPrompted: false };
     officeStoreService.getReportFromProperties.mockReturnValueOnce(returnedValue);
     const listener = jest.fn();
-    const instanceDefinitionMocked = { instanceId: 'instanceId' };
-    await createDossierInstance.mockReturnValueOnce(instanceDefinitionMocked);
-    // when
-    await actions.callForEditDossier(report)(listener);
-    // then
-    expect(officeApiHelper.getExcelSessionStatus).toBeCalled();
-    expect(authenticationHelper.validateAuthToken).toBeCalled();
-    expect(officeStoreService.getReportFromProperties).toBeCalledWith(bindingId);//
-    expect(listener).toHaveBeenCalledWith({ type: actions.SET_REPORT_N_FILTERS, editedReport: returnedValue });
-  });
-
-  it('should do certain operations if edited report is prompted and status is 2', async () => {
-    // given
-    const bindingId = 'bindingId';
-    const report = { bindId: bindingId, objectType: 'whatever' };
-    const returnedValue = { id: 'id', projectId: 'projectId', body: {}, promptsAnswers: [], isPrompted: true };
-    officeStoreService.getReportFromProperties.mockReturnValueOnce(returnedValue);
-    const listener = jest.fn();
-    const instanceDefinitionMocked = { status: 2, instanceId: 'instanceId' };
-    const configPromptsMocked = {
-      objectId: returnedValue.id,
-      projectId: returnedValue.projectId,
-      instanceId: instanceDefinitionMocked.instanceId,
-      promptsAnswers: returnedValue.promptsAnswers[0]
-    };
-    const configInstanceMocked = {
-      objectId: returnedValue.id,
-      projectId: returnedValue.projectId,
-      body: returnedValue.body,
-      instanceId: instanceDefinitionMocked.instanceId,
-    };
-    await createInstance.mockReturnValueOnce(instanceDefinitionMocked);
     // when
     await actions.callForEdit(report)(listener);
     // then
-    await expect(answerPrompts).toBeCalledWith(configPromptsMocked);
-    await expect(getInstance).toBeCalledWith(configInstanceMocked);
+    expect(officeStoreService.getReportFromProperties).toBeCalledWith(bindingId);
+    expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedReport: returnedValue });
+    expect(popupController.runEditFiltersPopup).toBeCalledWith(report);
   });
 
-  it('should do certain operations if edited report is prompted and status is NOT 2', async () => {
+  it('should run reprompt popup if edit action for prompted object is called', async () => {
     // given
     const bindingId = 'bindingId';
     const report = { bindId: bindingId, objectType: 'whatever' };
     const returnedValue = { id: 'id', projectId: 'projectId', instanceId: 'instanceId', body: {}, promptsAnswers: [], isPrompted: true };
     officeStoreService.getReportFromProperties.mockReturnValueOnce(returnedValue);
     const listener = jest.fn();
-    const instanceDefinitionMocked = { status: 3, instanceId: 'instanceId' };
-    await createInstance.mockReturnValueOnce(instanceDefinitionMocked);
     // when
     await actions.callForEdit(report)(listener);
     // then
-    expect(returnedValue.instanceId).toEqual(instanceDefinitionMocked.instanceId);
+    expect(officeStoreService.getReportFromProperties).toBeCalledWith(bindingId);
+    expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedReport: returnedValue });
+    expect(popupController.runRepromptPopup).toBeCalledWith(report);
   });
 
   it('should call error service and dispatch stop loading when edit action fails', async () => {
@@ -254,12 +240,12 @@ describe('Popup actions', () => {
     const report = { bindId: bindingId, objectType: 'whatever' };
     const error = new Error('test error');
     officeApiHelper.getExcelSessionStatus.mockImplementationOnce(() => { throw error; });
-    const listener = jest.fn();
+    const mockedDispatch = jest.fn();
     // when
-    await actions.callForEdit(report)(listener);
+    await actions.callForEdit(report)(mockedDispatch);
     // then
     expect(errorService.handleError).toBeCalledWith(error);
-    expect(reduxStore.dispatch).toBeCalledWith({ type: officeProperties.actions.stopLoading });
+    expect(mockedDispatch).toBeCalledWith({ type: officeProperties.actions.stopLoading });
   });
 
   it('should set proper popupType when switch to edit requested', () => {
@@ -270,37 +256,6 @@ describe('Popup actions', () => {
     // when
     actions.preparePromptedReport(reportInstance, reportData)(listener);
     // then
-    expect(listener).toHaveBeenCalledWith({ type: actions.SET_PREPARED_REPORT, instanceId: reportInstance, reportData });
-  });
-
-  it('should do certain operations when reprompt action called', async () => {
-    // given
-    const bindingId = 'bindingId';
-    const report = { bindId: bindingId, objectType: 'whatever' };
-    const returnedValue = {};
-    officeStoreService.getReportFromProperties.mockReturnValueOnce(returnedValue);
-    const listener = jest.fn();
-    // when
-    await actions.callForReprompt(report)(listener);
-    // then
-    expect(officeApiHelper.getExcelSessionStatus).toBeCalled();
-    expect(authenticationHelper.validateAuthToken).toBeCalled();
-    expect(officeStoreService.getReportFromProperties).toBeCalledWith(bindingId);
-    expect(listener).toHaveBeenCalledWith({ type: actions.SET_REPORT_N_FILTERS, editedReport: returnedValue });
-    expect(popupController.runRepromptPopup).toBeCalledWith(report);
-  });
-
-  it('should call error service and dispatch stop loading when reprompt action fails', async () => {
-    // given
-    const bindingId = 'bindingId';
-    const report = { bindId: bindingId, objectType: 'whatever' };
-    const error = new Error('test error');
-    officeApiHelper.getExcelSessionStatus.mockImplementationOnce(() => { throw error; });
-    const listener = jest.fn();
-    // when
-    await actions.callForReprompt(report)(listener);
-    // then
-    expect(errorService.handleError).toBeCalledWith(error);
-    expect(reduxStore.dispatch).toBeCalledWith({ type: officeProperties.actions.stopLoading });
+    expect(listener).toHaveBeenCalledWith({ type: SET_PREPARED_REPORT, instanceId: reportInstance, reportData });
   });
 });

@@ -9,7 +9,6 @@ import { officeReducer } from './office/office-reducer';
 import { notificationReducer } from './notification/reducer';
 import { popupReducer } from './popup/popup-reducer';
 import cacheReducer from './cache/cache-reducer';
-import { browserReducer } from './browser/browser-reducer';
 
 const rootReducer = combineReducers({
   sessionReducer,

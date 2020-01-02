@@ -8,18 +8,19 @@ import { PromptsContainer } from './prompts-container';
 import { PromptWindowButtons } from './prompts-window-buttons';
 import { notificationService } from '../notification/notification-service';
 import { Notifications } from '../notification/notifications';
-import {
+import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
+import { authenticationHelper } from '../authentication/authentication-helper';
+
+const { microstrategy } = window;
+const {
   createInstance,
   createDossierBasedOnReport,
   rePromptDossier,
-  answerDossierPrompts as postAnswerDossierPrompts,
+  answerDossierPrompts,
   getDossierStatus,
   deleteDossierInstance,
-} from '../mstr-object/mstr-object-rest-service';
-import { authenticationHelper } from '../authentication/authentication-helper';
-
-const { Office } = window;
-const { microstrategy } = window;
+} = mstrObjectRestService;
+const postAnswerDossierPrompts = answerDossierPrompts;
 
 export class _PromptsWindow extends Component {
   constructor(props) {
@@ -187,7 +188,7 @@ export class _PromptsWindow extends Component {
     const { stopLoading } = this.props;
     stopLoading();
     const cancelObject = { command: selectorProperties.commandCancel };
-    Office.context.ui.messageParent(JSON.stringify(cancelObject));
+    window.Office.context.ui.messageParent(JSON.stringify(cancelObject));
   };
 
   /**
@@ -255,7 +256,7 @@ export class _PromptsWindow extends Component {
 
   render() {
     const { handleBack } = this.props;
-    const { isReprompt, disableRunButton } = this.state;
+    const { isReprompt } = this.state;
     return (
       <div
         style={{ position: 'relative' }}

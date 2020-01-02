@@ -4,6 +4,7 @@ export APPLICATION_SHORT_VERSION_PREFIX="11.2."
 export APPLICATION_LONG_VERSION_PREFIX="${APPLICATION_SHORT_VERSION_PREFIX}0000.2"
 
 export GROUP_ID_BASE='com.microstrategy'
+export BASE_BRANCH='m2020'
 export ARTIFACT_ID_BASE='mstr-office'
 
 export VAGRANT_BOXES_CENTOS_NAME='centos-6-7-x86_64'
@@ -18,6 +19,7 @@ export VAGRANT_BOXES_OSX_VERSION='1.0.0.next'
 jdk_version="jdk1.8.0_74"
 
 export NODE_HOME=/usr/local/nodejs-binary-10.16.3
+
 export PATH=$NODE_HOME/bin:$PATH
 
 if uname -a | grep -q "Darwin"; then

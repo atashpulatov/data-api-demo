@@ -3,14 +3,10 @@ import { connect } from 'react-redux';
 import { MSTRIcon } from '@mstr/mstr-react-library';
 import { withTranslation } from 'react-i18next';
 import { Dropdown, Menu } from 'antd';
+import PropTypes from 'prop-types';
 import { fileHistoryHelper } from './file-history-helper';
 import loadingSpinner from './assets/report_loading_spinner.gif';
-import {
-  refreshReportsArray,
-  callForEdit,
-  callForReprompt,
-  callForEditDossier,
-} from '../popup/popup-actions';
+import { popupActions } from '../popup/popup-actions';
 import RenameInput from './file-history-rename-input';
 import { officeApiHelper } from '../office/office-api-helper';
 import { ButtonPopover } from './button-popover';
@@ -22,7 +18,6 @@ import { officeStoreService } from '../office/store/office-store-service';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { startLoading, stopLoading } from '../navigation/navigation-tree-actions';
 import { errorService } from '../error/error-handler';
-import { ProtectedSheetError } from '../error/protected-sheets-error';
 
 
 export class _OfficeLoadedFile extends React.Component {
@@ -37,11 +32,11 @@ export class _OfficeLoadedFile extends React.Component {
   }
 
   componentDidMount() {
-    this._ismounted = true;
+    this.ismounted = true;
   }
 
   componentWillUnmount() {
-    this._ismounted = false;
+    this.ismounted = false;
   }
 
   renameReport = /* istanbul ignore next */ async ({ target }) => {
@@ -85,14 +80,9 @@ export class _OfficeLoadedFile extends React.Component {
 
 
   deleteReport = async () => {
-    const { onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, fileName, t, } = this.props;
+    const { onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, fileName, t } = this.props;
     const message = t('{{name}} has been removed from the workbook.', { name: fileName });
-
-    await fileHistoryHelper.deleteReport(onDelete,
-      bindingId,
-      isCrosstab,
-      crosstabHeaderDimensions,
-      message);
+    await fileHistoryHelper.deleteReport(onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, message);
   }
 
   deleteAction = (e) => {
@@ -103,13 +93,7 @@ export class _OfficeLoadedFile extends React.Component {
       return;
     }
     startLoading();
-    const {
-      onDelete,
-      bindingId,
-      isCrosstab,
-      crosstabHeaderDimensions,
-      fileName,
-    } = this.props;
+    const { onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, fileName } = this.props;
     this.setState({ allowDeleteClick: false, allowRefreshClick: false },
       async () => {
         try {
@@ -117,12 +101,8 @@ export class _OfficeLoadedFile extends React.Component {
           await officeApiHelper.isCurrentReportSheetProtected(excelContext, bindingId);
           const message = t('{{name}} has been removed from the workbook.',
             { name: fileName });
-          await fileHistoryHelper.deleteReport(onDelete,
-            bindingId,
-            isCrosstab,
-            crosstabHeaderDimensions,
-            message);
-          if (this._ismounted) this.setState({ allowDeleteClick: true, allowRefreshClick: true });
+          await fileHistoryHelper.deleteReport(onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, message);
+          if (this.ismounted) this.setState({ allowDeleteClick: true, allowRefreshClick: true });
           stopLoading();
         } catch (error) {
           errorService.handleError(error);
@@ -133,38 +113,9 @@ export class _OfficeLoadedFile extends React.Component {
       });
   };
 
-  repromptAction = (e) => {
-    const { allowRefreshClick } = this.state;
-    const { loading, startLoading, stopLoading } = this.props;
-    if (e) e.stopPropagation();
-    if (!allowRefreshClick || loading) {
-      return;
-    }
-    startLoading();
-    const { isLoading, bindingId, objectType, callForReprompt, fileName, } = this.props;
-    if (!isLoading) {
-      this.setState({ allowRefreshClick: false }, async () => {
-        try {
-          const excelContext = await officeApiHelper.getExcelContext();
-          await officeApiHelper.isCurrentReportSheetProtected(excelContext, bindingId);
-          // calling onBindingObjectClick to check whether the object exists in Excel
-          // before opening prompt popup
-          if (await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport, fileName)) {
-            await callForReprompt({ bindId: bindingId, objectType });
-          }
-        } catch (error) {
-          errorService.handleError(error);
-        } finally {
-          this.setState({ allowRefreshClick: true });
-          stopLoading();
-        }
-      });
-    }
-  };
-
   editAction = (e) => {
     const { allowRefreshClick } = this.state;
-    const { isLoading, bindingId, objectType, callForEdit, fileName, loading, startLoading, stopLoading, callForEditDossier, t } = this.props;
+    const { isLoading, bindingId, objectType, callForEdit, fileName, loading, startLoading, stopLoading, callForEditDossier } = this.props;
     if (e) e.stopPropagation();
     if (!allowRefreshClick || loading) {
       return;
@@ -194,7 +145,7 @@ export class _OfficeLoadedFile extends React.Component {
 
   refreshAction = (e) => {
     if (e) e.stopPropagation();
-    const { isLoading, bindingId, objectType, refreshReportsArray, loading, fileName, startLoading, stopLoading, t } = this.props;
+    const { isLoading, bindingId, objectType, refreshReportsArray, loading, fileName, startLoading, stopLoading } = this.props;
     const { allowRefreshClick } = this.state;
     if (!allowRefreshClick || loading) {
       return;
@@ -263,26 +214,27 @@ export class _OfficeLoadedFile extends React.Component {
     return <></>;
   };
 
-  renderIcons(t, isPrompted, isLoading) {
+  triggerDuplicate = () => {
+  }
+
+  renderIcons({ t, isLoading }) {
     return (
       <span className="object-icons">
         <ButtonPopover
           placement="bottom"
-          content={t('Reprompt')}
+          content={t('Duplicate')}
           mouseEnterDelay={1}
         >
-          {!!isPrompted && (
-            <span
-              aria-title="Reprompt button"
+          <span
+              aria-label="Duplicate button"
               role="button"
               tabIndex="0"
               className="loading-button-container"
-              onClick={this.repromptAction}
-              onKeyPress={this.repromptAction}
+              onClick={this.triggerDuplicate}
+              onKeyPress={this.triggerDuplicate}
             >
-              <MSTRIcon type="reprompt" />
-            </span>
-          )}
+            <MSTRIcon type="duplicate" />
+          </span>
         </ButtonPopover>
         <ButtonPopover
           placement="bottom"
@@ -290,7 +242,7 @@ export class _OfficeLoadedFile extends React.Component {
           mouseEnterDelay={1}
         >
           <span
-              aria-title="Edit button"
+              aria-label="Edit button"
               role="button"
               tabIndex="0"
               className="loading-button-container"
@@ -306,7 +258,7 @@ export class _OfficeLoadedFile extends React.Component {
           mouseEnterDelay={1}
         >
           <span
-              aria-title="Refresh button"
+              aria-label="Refresh button"
               role="button"
               tabIndex="0"
               className="loading-button-container"
@@ -315,14 +267,14 @@ export class _OfficeLoadedFile extends React.Component {
             >
             {!isLoading ? (
               <MSTRIcon type="refresh" />
-              ) : (
-                <img
-                    width="12px"
-                    height="12px"
-                    src={loadingSpinner}
-                    alt={t('Report loading icon')}
-                  />
-                )}
+            ) : (
+              <img
+                  width="12px"
+                  height="12px"
+                  src={loadingSpinner}
+                  alt={t('Report loading icon')}
+                />
+              )}
           </span>
         </ButtonPopover>
         <ButtonPopover
@@ -332,7 +284,7 @@ export class _OfficeLoadedFile extends React.Component {
           arrowPointAtCenter="true"
         >
           <span
-            aria-title="Delete button"
+            aria-label="Delete button"
             role="button"
             tabIndex="0"
             onClick={this.deleteAction}
@@ -353,7 +305,6 @@ export class _OfficeLoadedFile extends React.Component {
       onClick,
       isLoading,
       objectType,
-      isPrompted,
       refreshDate,
       t,
       visualizationInfo = false,
@@ -361,11 +312,13 @@ export class _OfficeLoadedFile extends React.Component {
       crosstabHeaderDimensions
     } = this.props;
     const { dossierStructure = false } = visualizationInfo;
-    const { editable, value } = this.state;
+    const { editable } = this.state;
+    let { value } = this.state;
     const { dossierName, chapterName, pageName } = dossierStructure;
+    const isVisualization = (objectType.name === mstrObjectEnum.mstrObjectType.visualization.name);
     const menu = (
       <Menu>
-        {isPrompted && <Menu.Item key="reprompt" onClick={(e) => { e.domEvent.stopPropagation(); this.repromptAction(); }}>{t('Reprompt')}</Menu.Item>}
+        <Menu.Item key="duplicate" onClick={(e) => { e.domEvent.stopPropagation(); this.triggerDuplicate(); }}>{t('Duplicate')}</Menu.Item>
         <Menu.Item key="edit" onClick={(e) => { e.domEvent.stopPropagation(); this.editAction(); }}>{t('Edit')}</Menu.Item>
         <Menu.Item key="refresh" onClick={(e) => { e.domEvent.stopPropagation(); this.refreshAction(); }}>{t('Refresh')}</Menu.Item>
         <Menu.Item key="remove" onClick={(e) => { e.domEvent.stopPropagation(); this.deleteAction(); }}>{t('Remove')}</Menu.Item>
@@ -373,6 +326,8 @@ export class _OfficeLoadedFile extends React.Component {
         <Menu.Item key="copy" onClick={this.copyValue}>{t('Copy Name')}</Menu.Item>
       </Menu>
     );
+    // If fileName was changed but it was not introduced by user in editable mode (so fetched during edit) then update value to new fileName.
+    if (!editable && (fileName !== value)) value = fileName;
     return (
       <Dropdown overlay={menu} trigger={['contextMenu']}>
         <div
@@ -396,11 +351,11 @@ export class _OfficeLoadedFile extends React.Component {
                 </span>
               </span>
             </ButtonPopover>
-            {this.renderIcons(t, isPrompted, isLoading)}
+            {this.renderIcons({ t, isLoading })}
           </div>
 
 
-          {objectType.name === mstrObjectEnum.mstrObjectType.visualization.name && dossierStructure
+          {isVisualization && dossierStructure
             && (
               <ButtonPopover
                 placement="bottom"
@@ -427,12 +382,32 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-  refreshReportsArray,
-  callForEdit,
-  callForReprompt,
-  callForEditDossier,
+  refreshReportsArray: popupActions.refreshReportsArray,
+  callForEdit: popupActions.callForEdit,
+  callForEditDossier: popupActions.callForEditDossier,
   startLoading,
   stopLoading
+};
+
+_OfficeLoadedFile.propTypes = {
+  fileName: PropTypes.string,
+  bindingId: PropTypes.string,
+  objectType: PropTypes.shape({ name: PropTypes.string }),
+  loading: PropTypes.bool,
+  isLoading: PropTypes.bool,
+  isCrosstab: PropTypes.bool,
+  visualizationInfo: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.bool]),
+  crosstabHeaderDimensions: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.bool]),
+  isPrompted: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
+  refreshDate: PropTypes.instanceOf(Date),
+  startLoading: PropTypes.func,
+  stopLoading: PropTypes.func,
+  refreshReportsArray: PropTypes.func,
+  t: PropTypes.func,
+  onDelete: PropTypes.func,
+  callForEdit: PropTypes.func,
+  callForEditDossier: PropTypes.func,
+  onClick: PropTypes.func
 };
 
 export const OfficeLoadedFile = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_OfficeLoadedFile));

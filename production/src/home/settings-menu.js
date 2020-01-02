@@ -2,23 +2,37 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { Popover } from 'antd';
+import PropTypes from 'prop-types';
 import { toggleIsConfirmFlag, toggleRenderSettingsFlag, toggleIsSettingsFlag } from '../office/office-actions';
 import logo from './assets/mstr_logo.png';
 import { helper } from '../helpers/helpers';
 import { sessionHelper } from '../storage/session-helper';
 import { errorService } from '../error/error-handler';
 import { clearCache } from '../cache/cache-actions';
-import DB from '../cache/pouch-db';
+import DB from '../cache/cache-db';
 import { officeContext } from '../office/office-context';
 
 const APP_VERSION = process.env.REACT_APP_MSTR_OFFICE_VERSION;
 
-export const SettingsMenuHOC = ({ userFullName, userID, userInitials, isSecured, reportArray, t, toggleIsConfirmFlag, toggleIsSettingsFlag, toggleRenderSettingsFlag, clearCache, }) => {
+export const SettingsMenuHOC = ({
+  userFullName,
+  userID,
+  userInitials,
+  isSecured,
+  reportArray,
+  t,
+  toggleIsConfirmFlag,
+  toggleIsSettingsFlag,
+  toggleRenderSettingsFlag,
+  clearCache,
+}) => {
   const userNameDisplay = userFullName || 'MicroStrategy user';
   const isSecuredActive = !isSecured && reportArray && reportArray.length > 0;
 
   const prepareEmail = () => {
-    const { host, platform, version } = window.Office.context.diagnostics;
+    const { Office } = window;
+    if (!Office) return '#'; // If no Office return anchor url
+    const { host, platform, version } = Office.context.diagnostics;
     const excelAPI = officeContext.getRequirementSet();
     const { userAgent } = navigator;
     const message = t('Please don’t change the text below. Type your message above this line.');
@@ -45,7 +59,7 @@ export const SettingsMenuHOC = ({ userFullName, userID, userInitials, isSecured,
 
   return (
     <ul className="settings-list">
-      <li id="testid" className="user-data no-trigger-close">
+      <li id="testid" className="user-data no-trigger-close not-linked-list">
         {userInitials !== null
           ? <span className="no-trigger-close" id="initials" alt={t('User profile')}>{userInitials}</span>
           : <img className="no-trigger-close" id="profile-image" src={logo} alt={t('User profile')} />
@@ -58,18 +72,12 @@ export const SettingsMenuHOC = ({ userFullName, userID, userInitials, isSecured,
           )
           : <span id="userName" className="user-name no-trigger-close">{userNameDisplay}</span>}
       </li>
-      <li tabIndex="0" className={`no-trigger-close clear-data ${!isSecuredActive ? 'clear-data-inactive' : ''}`} onClick={isSecuredActive ? showConfirmationPopup : null}>
+      <li tabIndex="0" className={`no-trigger-close clear-data not-linked-list ${!isSecuredActive ? 'clear-data-inactive' : ''}`} onClick={isSecuredActive ? showConfirmationPopup : null}>
         <span className="no-trigger-close">
           {t('Clear Data')}
         </span>
       </li>
       <div className="separate-line" />
-      {/* TODO: <li tabIndex="0" className="no-trigger-close settings" onClick={() => toggleRenderSettingsFlag(true)}>
-        <span className="no-trigger-close">
-          {t('Settings')}
-        </span>
-      </li>
-      <div className="separate-line" /> */}
       <li className="privacy-policy">
         <a
           tabIndex="0"
@@ -108,7 +116,7 @@ export const SettingsMenuHOC = ({ userFullName, userID, userInitials, isSecured,
           {t('Contact Us')}
         </a>
       </li>
-      <li onClick={() => logout(() => clearCache(null, userID))}>
+      <li className="not-linked-list" onClick={() => logout(() => clearCache(userID))}>
         <span tabIndex="0" id="logOut" size="small">
           {t('Log Out')}
         </span>
@@ -132,7 +140,6 @@ const mapDispatchToProps = {
   toggleRenderSettingsFlag,
   clearCache,
 };
-
 export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(SettingsMenuHOC));
 
 async function logout(preLogout) {
@@ -145,3 +152,16 @@ async function logout(preLogout) {
     errorService.handleError(error);
   }
 }
+
+SettingsMenuHOC.propTypes = {
+  userID: PropTypes.number,
+  userFullName: PropTypes.string,
+  userInitials: PropTypes.string,
+  isSecured: PropTypes.bool,
+  reportArray: PropTypes.arrayOf(PropTypes.shape({})),
+  toggleIsSettingsFlag: PropTypes.func,
+  toggleIsConfirmFlag: PropTypes.func,
+  toggleRenderSettingsFlag: PropTypes.func,
+  clearCache: PropTypes.func,
+  t: PropTypes.func
+};

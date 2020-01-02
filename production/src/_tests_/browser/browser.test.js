@@ -2,7 +2,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { ObjectTable, TopFilterPanel } from '@mstr/rc';
-import { _Browser, mapStateToProps, mapDispatchToProps } from '../../browser/browser';
+import { BrowserHOC, mapStateToProps, mapDispatchToProps } from '../../browser/browser';
 import { PopupButtons } from '../../popup/popup-buttons';
 import { reportsExample } from './objects';
 import { projectsExample } from './projects';
@@ -25,14 +25,14 @@ describe.skip('Browser', () => {
   it('should render empty container for filters and table of objects', () => {
     // given
     // when
-    const shallowedComponentMethod = () => shallow(<_Browser />);
+    const shallowedComponentMethod = () => shallow(<BrowserHOC />);
     // then
     expect(shallowedComponentMethod).not.toThrowError();
   });
   it('should render PopupButtons', () => {
     // given
     // when
-    const shallowedComponent = shallow(<_Browser />);
+    const shallowedComponent = shallow(<BrowserHOC />);
     // then
     const wrappedPopupButtons = shallowedComponent.find(PopupButtons);
     expect(wrappedPopupButtons).toHaveLength(1);
@@ -40,7 +40,7 @@ describe.skip('Browser', () => {
   it('should render empty ObjectTable', () => {
     // given
     // when
-    const shallowedComponent = shallow(<_Browser />);
+    const shallowedComponent = shallow(<BrowserHOC />);
     // then
     const wrappedObjectTables = shallowedComponent.find(ObjectTable);
     expect(wrappedObjectTables).toHaveLength(1);
@@ -48,7 +48,7 @@ describe.skip('Browser', () => {
   it('should render correctly', () => {
     // given
     // when
-    const shallowedComponent = shallow(<_Browser {...mockedProps} />);
+    const shallowedComponent = shallow(<BrowserHOC {...mockedProps} />);
     // then
     expect(shallowedComponent).toMatchSnapshot();
   });
@@ -58,7 +58,7 @@ describe.skip('Browser', () => {
     const onSortChange = jest.fn();
     const onSelect = jest.fn();
     // when
-    const shallowedComponent = shallow(<_Browser {...mockedProps} onSortChange={onSortChange} onSelect={onSelect} />);
+    const shallowedComponent = shallow(<BrowserHOC {...mockedProps} onSortChange={onSortChange} onSelect={onSelect} />);
     // then
     const wrappedObjectTables = shallowedComponent.find(ObjectTable);
     expect(wrappedObjectTables.prop('onSortChange')).toBe(onSortChange);
@@ -141,7 +141,7 @@ describe.skip('Browser', () => {
     it('should render filter panel correctly', () => {
       // given
       // when
-      const shallowedBrowser = shallow(<_Browser />);
+      const shallowedBrowser = shallow(<BrowserHOC />);
       // then
       expect(shallowedBrowser.find(TopFilterPanel)).toHaveLength(1);
     });
@@ -166,7 +166,7 @@ describe.skip('Browser', () => {
         .mockReturnValue(storedBrowsingState);
       const loadBrowsingState = jest.fn();
       // when
-      shallow(<_Browser {...{ loadBrowsingState }} />);
+      shallow(<BrowserHOC {...{ loadBrowsingState }} />);
       // then
       expect(useEffectSpy).toBeCalled();
       expect(browserStoreService.getBrowsingFilters).toBeCalled();

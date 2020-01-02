@@ -1,9 +1,12 @@
+/* eslint-disable no-await-in-loop */
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { createDossierInstance, answerDossierPrompts } from '../mstr-object/mstr-object-rest-service';
+import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 
 const { microstrategy } = window;
+
+const { createDossierInstance, answerDossierPrompts } = mstrObjectRestService;
 
 export default class _EmbeddedDossier extends React.Component {
   constructor(props) {
@@ -46,7 +49,7 @@ export default class _EmbeddedDossier extends React.Component {
 
   loadEmbeddedDossier = async (container) => {
     const { mstrData, handlePopupErrors } = this.props;
-    const { envUrl, token, dossierId, projectId, promptsAnswers, instanceId } = mstrData;
+    const { envUrl, token, dossierId, projectId, promptsAnswers, instanceId, selectedViz } = mstrData;
     const instance = {};
     try {
       if (instanceId) {
@@ -130,9 +133,10 @@ export default class _EmbeddedDossier extends React.Component {
       tocFeature: { enabled: true, },
       uiMessage: {
         enabled: true,
-        addToLibrary: false,
+        addToLibrary: true,
       },
       enableVizSelection: true,
+      selectedViz,
       onMsgRouterReadyHandler: ({ MsgRouter }) => {
         this.msgRouter = MsgRouter;
         this.msgRouter.registerEventHandler('onVizSelectionChanged', this.onVizSelectionHandler);
@@ -173,10 +177,12 @@ _EmbeddedDossier.propTypes = {
     dossierId: PropTypes.string,
     projectId: PropTypes.string,
     instanceId: PropTypes.string,
-    promptsAnswers: PropTypes.array || null
+    promptsAnswers: PropTypes.array || null,
+    selectedViz: PropTypes.string,
   }),
   handleSelection: PropTypes.func,
-  handlePopupErrors: PropTypes.func
+  handlePopupErrors: PropTypes.func,
+  handlePromptAnswer: PropTypes.func
 };
 
 _EmbeddedDossier.defaultProps = {
@@ -186,7 +192,8 @@ _EmbeddedDossier.defaultProps = {
     dossierId: 'default id',
     projectId: 'default id',
     instanceId: 'default id',
-    promptsAnswers: null
+    promptsAnswers: null,
+    selectedViz: ''
   },
   handleSelection: () => { },
   handlePopupErrors: () => { }

@@ -10,14 +10,12 @@ import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { NavigationTree } from '../navigation/navigation-tree';
 import { actions } from '../navigation/navigation-tree-actions';
 import { PromptsWindow } from '../prompts/prompts-window';
-import { preparePromptedReport } from './popup-actions';
-import { createInstance, answerPrompts, getInstance } from '../mstr-object/mstr-object-rest-service';
+import { popupActions } from './popup-actions';
+import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 
+const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 
-const { Office } = window;
-
-// eslint-disable-next-line no-underscore-dangle
-export const _PopupViewSelector = (props) => {
+export const PopupViewSelectorHOC = (props) => {
   let { popupType } = props;
 
   const { propsToPass, methods, importRequested, dossierOpenRequested, loading } = props;
@@ -40,7 +38,10 @@ export const _PopupViewSelector = (props) => {
     && !propsToPass.forceChange
   ) {
     if (isInstanceWithPromptsAnswered(props)) {
-      if (popupType === PopupTypeEnum.repromptingWindow) { proceedToImport(props); }
+      if (popupType === PopupTypeEnum.repromptingWindow) {
+        popupType = PopupTypeEnum.editFilters;
+        propsToPass.editRequested = true;
+      }
     } else if (dossierOpenRequested) {
       // pass given prompts answers to dossierWindow
       propsToPass.promptsAnswers = props.promptsAnswers;
@@ -121,7 +122,7 @@ async function obtainInstanceWithPromptsAnswers(propsToPass, props) {
   const preparedReport = {
     id: objectId,
     projectId,
-    name: propsToPass.reportName,
+    name: propsToPass.reportName || props.editedReport.reportName,
     objectType: mstrObjectEnum.mstrObjectType.report,
     instanceId: instanceDefinition.instanceId,
     promptsAnswers: props.promptsAnswers,
@@ -227,7 +228,7 @@ function proceedToImport(props) {
   }
   props.startLoading();
   props.startImport();
-  Office.context.ui.messageParent(JSON.stringify(okObject));
+  window.Office.context.ui.messageParent(JSON.stringify(okObject));
 }
 
 function renderProperComponent(popupType, methods, propsToPass, editedReport) {
@@ -319,21 +320,27 @@ export function mapStateToProps(state) {
   };
 }
 
-const popupActions = {
+const mapDispatchToProps = {
   ...actions,
-  preparePromptedReport,
+  preparePromptedReport: popupActions.preparePromptedReport,
 };
 
-export const PopupViewSelector = connect(mapStateToProps, popupActions)(_PopupViewSelector);
+export const PopupViewSelector = connect(mapStateToProps, mapDispatchToProps)(PopupViewSelectorHOC);
 
 function parsePopupState(popupState, promptsAnswers) {
   if (!popupState) {
     return;
   }
+  let chapterKey;
+  let visualizationKey;
   let dossierName;
   const { visualizationInfo } = popupState;
-  if (visualizationInfo && visualizationInfo.dossierStructure) {
-    ({ dossierName } = popupState.visualizationInfo.dossierStructure);
+  if (visualizationInfo) {
+    ({ chapterKey, visualizationKey } = visualizationInfo);
+    const { dossierStructure } = visualizationInfo;
+    if (dossierStructure) {
+      ({ dossierName } = dossierStructure);
+    }
   }
   const reportData = {
     reportId: popupState.id,
@@ -345,7 +352,8 @@ function parsePopupState(popupState, promptsAnswers) {
     promptsAnswers: promptsAnswers || popupState.promptsAnswers,
     importSubtotal: popupState.importSubtotal,
     isEdit: popupState.isEdit,
-    dossierName
+    dossierName,
+    selectedViz: `${chapterKey}:${visualizationKey}`,
   };
   restoreFilters(popupState.body, reportData);
   return reportData;

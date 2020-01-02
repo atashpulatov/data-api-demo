@@ -3,15 +3,15 @@ import { Button, Popover } from 'antd';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { MSTRIcon, LoadingText } from '@mstr/mstr-react-library';
+import PropTypes from 'prop-types';
 import { toggleIsSettingsFlag, toggleIsConfirmFlag } from '../office/office-actions';
 import { sessionHelper } from '../storage/session-helper';
 import mstrLogo from './assets/mstr_logo.png';
 import { SettingsMenu } from './settings-menu';
 import { Confirmation } from './confirmation';
 
-
-export class _Header extends Component {
-  componentDidMount = async () => {
+export class HeaderHOC extends Component {
+  componentDidMount = () => {
     sessionHelper.getUserInfo();
     this.addCloseSettingsListeners();
   }
@@ -21,11 +21,12 @@ export class _Header extends Component {
   }
 
   shouldComponentUpdate = (nextProps) => {
-    if (nextProps.isConfirm && !this.props.isConfirm) {
+    const { isConfirm } = this.props;
+    if (nextProps.isConfirm && !isConfirm) {
       this.removeCloseSettingsListeners();
       this.addCloseConfirmationListener();
     }
-    if (!nextProps.isConfirm && this.props.isConfirm) {
+    if (!nextProps.isConfirm && isConfirm) {
       this.addCloseSettingsListeners();
       this.removeCloseConfirmationListener();
     }
@@ -51,24 +52,28 @@ export class _Header extends Component {
   }
 
   toggleSettings = () => {
-    this.props.toggleIsSettingsFlag(!this.props.isSettings);
+    const { isSettings, toggleIsSettingsFlag } = this.props;
+    toggleIsSettingsFlag(!isSettings);
   }
 
   closeSettingsOnEsc = (e) => {
-    if (e.keyCode === 27 && this.props.isSettings) {
-      this.props.toggleIsSettingsFlag(false);
+    const { isSettings, toggleIsSettingsFlag } = this.props;
+    if (e.keyCode === 27 && isSettings) {
+      toggleIsSettingsFlag(false);
     }
   };
 
   closeSettingsOnClick = (e) => {
-    if (this.props.isSettings && !e.target.classList.contains('no-trigger-close')) {
-      this.props.toggleIsSettingsFlag(false);
+    const { isSettings, toggleIsSettingsFlag } = this.props;
+    if (isSettings && !e.target.classList.contains('no-trigger-close')) {
+      toggleIsSettingsFlag(false);
     }
   };
 
   closeConfirmationOnEsc = (e) => {
-    if (e.keyCode === 27 && this.props.isConfirm) {
-      this.props.toggleIsConfirmFlag(false);
+    const { isConfirm, toggleIsConfirmFlag } = this.props;
+    if (e.keyCode === 27 && isConfirm) {
+      toggleIsConfirmFlag(false);
     }
   }
 
@@ -86,7 +91,7 @@ export class _Header extends Component {
           <div className="mstr-logo">
             <span id="profileImage">
               {/* TODO: Alt text for logo will be added later */}
-              <img src={mstrLogo} />
+              <img src={mstrLogo} alt="microstrategy logo" />
             </span>
           </div>
           <div className="header-buttons">
@@ -105,7 +110,7 @@ export class _Header extends Component {
   }
 }
 
-_Header.defaultProps = { t: (text) => text };
+HeaderHOC.defaultProps = { t: (text) => text };
 
 function mapStateToProps({ officeReducer }) {
   const { isSettings, isConfirm, isClearing } = officeReducer;
@@ -117,5 +122,14 @@ const mapDispatchToProps = {
   toggleIsConfirmFlag,
 };
 
-const Header = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_Header));
+HeaderHOC.propTypes = {
+  loading: PropTypes.bool,
+  isConfirm: PropTypes.bool,
+  isSettings: PropTypes.bool,
+  isClearing: PropTypes.bool,
+  toggleIsSettingsFlag: PropTypes.func,
+  toggleIsConfirmFlag: PropTypes.func,
+  t: PropTypes.func
+};
+const Header = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(HeaderHOC));
 export default Header;

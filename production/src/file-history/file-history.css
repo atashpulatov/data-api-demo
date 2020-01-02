@@ -62,6 +62,8 @@ button.add-data-btn:focus {
   border-radius: 2px;
   margin: 5px 10px 10px 10px;
   padding: 16px 16px 16px 16px;
+  box-sizing: border-box;
+  border: 1px solid transparent;
 }
 
 .refresh-icons-row {
@@ -90,9 +92,7 @@ button.add-data-btn:focus {
   margin-bottom: 8px;
   overflow: hidden;
   text-overflow: ellipsis;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
+  user-select: none;
 }
 
 .ant-popover .ant-popover-inner-content {
@@ -115,7 +115,8 @@ button.add-data-btn:focus {
 
 .file-history-container:focus {
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.20);
-  outline: 1px solid #1C91DC;
+  border: 1px solid #1C91DC;
+  outline: none;
 }
 
 .report-title {
@@ -136,10 +137,6 @@ button.add-data-btn:focus {
 }
 
 .ant-input.rename-input {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  -ms-appearance: none;
-  -o-appearance: none;
   appearance: none;
   height: 18px;
   padding: 1px;
@@ -168,10 +165,6 @@ button.add-data-btn:focus {
   display: inline-block;
   text-overflow: ellipsis;
   cursor: default;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   font-size: 14px;
   font-weight: 500;
@@ -211,9 +204,7 @@ button.add-data-btn:focus {
   padding: 0 4px;
   font-size: 12px;
   color: #888888;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
+  user-select: none;
 }
 
 .secured-screen-container {
@@ -255,93 +246,10 @@ button.add-data-btn:focus {
   height: calc(100% - 50px);
 }
 
-/* settings context menu */
-
-.settings-list {
-  position: absolute;
-  right: 20px;
-  top: 20px;
-  z-index: 999;
-  min-width: 200px;
-  max-width: 220px;
-  width: max-content;
-  padding: 6px 0 0 0;
-  list-style: none;
-  background: #fff;
-  color: #3F4042;
-  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.20);
-  border-radius: 2px;
-}
-
-.settings-list li {
-  padding: 8px 17px;
-  font-size: 12px;
-  cursor: default;
-  line-height: 15px;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-.settings-list li:not(:first-child):not(:last-child):not(.clear-data-inactive):hover {
-  background: #f0f7Fe;
-}
-
-.settings-list li:focus {
-  outline: none;
-}
-
-.settings-list li a {
-  display: block;
-  color: #3f4042;
-  cursor: default;
-}
-
-.settings-list .privacy-policy {
-  margin-top: 8px;
-}
-
-.settings-list .user-data {
-  padding-bottom: 14px;
-  font-weight: 500;
-  border-bottom: solid 1px #e4e4e4;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-
-.settings-list .separate-line {
-  border-bottom: solid 1px #e4e4e4;
-}
-
 #app-header .user-name {
   padding-left: 13px;
   padding-right: 13px;
   line-height: 32px;
-}
-
-.settings-list .clear-data {
-  margin: 8px 0;
-}
-
-.settings-list .settings {
-  margin: 8px 0;
-}
-
-.settings-list .settings-version {
-  padding: 0 17px 12px 17px;
-  line-height: 31px;
-  color: #1c91dc;
-  font-weight: 300;
-  font-size: 10px;
-  text-align: center;
-  -moz-user-select: text;
-  -khtml-user-select: text;
-  -webkit-user-select: text;
-  -ms-user-select: text;
-  user-select: text;
 }
 
 .clear-data-inactive {
@@ -350,4 +258,5 @@ button.add-data-btn:focus {
 
 .rename-popover-width{
   max-width: 280px;
+  word-wrap: break-word;
 }

@@ -2,14 +2,14 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
+import PropTypes from 'prop-types';
 import warningIcon from '../loading/assets/icon_conflict.svg';
 import { officeApiHelper } from '../office/office-api-helper';
 import { toggleSecuredFlag, toggleIsConfirmFlag, toggleIsClearingFlag } from '../office/office-actions';
 import { errorService } from '../error/error-handler';
 import { notificationService } from '../notification/notification-service';
-import { ProtectedSheetError } from '../error/protected-sheets-error';
 
-export const _Confirmation = ({ reportArray, toggleSecuredFlag, toggleIsConfirmFlag, toggleIsClearingFlag, t }) => {
+export const ConfirmationHOC = ({ reportArray, toggleSecuredFlag, toggleIsConfirmFlag, toggleIsClearingFlag, t }) => {
   useEffect(() => {
     const ua = window.navigator.userAgent;
     // this is fix IE11 - it didn't handle z-index properties correctly
@@ -43,7 +43,7 @@ export const _Confirmation = ({ reportArray, toggleSecuredFlag, toggleIsConfirmF
               headers.format.font.color = 'white';
               await excelContext.sync();
             }
-            await officeApiHelper.deleteObjectTableBody(excelContext, report);
+            await officeApiHelper.deleteObjectTableBody(excelContext, report, true);
           } catch (error) {
             const officeError = errorService.handleError(error);
             clearErrors.push({ reportName, officeError });
@@ -94,7 +94,15 @@ export const _Confirmation = ({ reportArray, toggleSecuredFlag, toggleIsConfirmF
   );
 };
 
-_Confirmation.defaultProps = { t: (text) => text, };
+ConfirmationHOC.propTypes = {
+  reportArray: PropTypes.arrayOf(PropTypes.shape({})),
+  toggleSecuredFlag: PropTypes.func,
+  toggleIsConfirmFlag: PropTypes.func,
+  toggleIsClearingFlag: PropTypes.func,
+  t: PropTypes.func
+};
+
+ConfirmationHOC.defaultProps = { t: (text) => text, };
 
 function mapStateToProps({ officeReducer }) {
   return { reportArray: officeReducer.reportArray };
@@ -106,4 +114,4 @@ const mapDispatchToProps = {
   toggleIsClearingFlag,
 };
 
-export const Confirmation = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_Confirmation));
+export const Confirmation = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(ConfirmationHOC));
