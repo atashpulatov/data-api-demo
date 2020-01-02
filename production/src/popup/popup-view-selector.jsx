@@ -256,7 +256,6 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
   if (popupType === PopupTypeEnum.navigationTree) {
     return (
       <NavigationTree
-        mstrData={propsToPass}
         handlePopupErrors={popupHelper.handlePopupErrors}
         // handleDossierOpen={methods.handleDossierOpen}
       />

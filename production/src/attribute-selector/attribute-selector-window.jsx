@@ -38,8 +38,8 @@ export class AttributeSelectorWindowNotConnected extends Component {
 
   handleCancel = () => attributeSelectorHelpers.officeMessageParent(selectorProperties.commandCancel);
 
-  onTriggerUpdate = (reportId, projectId, reportSubtype, body, reportName = this.props.mstrData.reportName) => {
-    const { mstrData } = this.props;
+  onTriggerUpdate = (reportId, projectId, reportSubtype, body, reportName = this.props.chosenObject.chosenObjectName) => {
+    const { chosenObject } = this.props;
     const { importSubtotal } = this.state;
     attributeSelectorHelpers.officeMessageParent(
       selectorProperties.commandOnUpdate,
@@ -48,8 +48,8 @@ export class AttributeSelectorWindowNotConnected extends Component {
       reportSubtype,
       body,
       reportName,
-      mstrData.instanceId,
-      mstrData.promptsAnswers,
+      chosenObject.preparedInstanceId,
+      chosenObject.promptsAnswers,
       importSubtotal,
     );
   };
@@ -76,9 +76,10 @@ export class AttributeSelectorWindowNotConnected extends Component {
 
   render() {
     const { mstrData, handleBack, reduxState, chosenObject } = this.props;
-    const { session, triggerUpdate, openModal, attributesSelected, loading, } = this.state;
+    const { triggerUpdate, openModal, attributesSelected, loading, } = this.state;
     const { toggleSubtotal } = this;
     console.log({reduxState});
+    console.log(chosenObject);
     const typeName = chosenObject.objectType.name
       && chosenObject.objectType.name.charAt(0).toUpperCase() + chosenObject.objectType.name.substring(1)
 
@@ -86,7 +87,7 @@ export class AttributeSelectorWindowNotConnected extends Component {
       <div>
         <AttributeSelector
           // TODO: logic for a title
-          title={`Import ${typeName} > ${mstrData.reportName}`}
+          title={`Import ${typeName} > ${chosenObject.chosenObjectName}`}
           attributesSelectedChange={this.attributesBeingSelected}
           triggerUpdate={triggerUpdate}
           onTriggerUpdate={this.onTriggerUpdate}
