@@ -5,7 +5,7 @@ class OfficeFormattingHelper {
   /**
    * Applies Excel number formatting to imported object based on MSTR data type.
    *
-   * @param {Office} OfficeTable
+   * @param {Office} officeTable
    * @param {Object} instanceDefinition
    * @param {Boolean} isCrosstab
    * @param {Office} excelContext
@@ -15,33 +15,14 @@ class OfficeFormattingHelper {
     try {
       console.time('Apply formatting');
       const { columnInformation } = instanceDefinition.mstrTable;
-      let filteredColumnInformation;
-      const { columns } = officeTable;
-      if (isCrosstab) {
-        // we store attribute informations in column information in crosstab attributes are in headers not excel table so we dont need them here.
-        filteredColumnInformation = columnInformation.filter((e) => e.isAttribute === false);
-      } else {
-        filteredColumnInformation = columnInformation;
-      }
+      const filteredColumnInformation = this.filterColumnInformation(columnInformation, isCrosstab);
       const offset = columnInformation.length - filteredColumnInformation.length;
       for (const object of filteredColumnInformation) {
-        if (Object.keys(object).length) { // Skips iteration if object is empty
-          const columnRange = columns.getItemAt(object.index - offset).getDataBodyRange();
-          let format = '';
-          if (!object.isAttribute) {
-            if (object.category === 9) {
-              format = this.getNumberFormattingCategoryName(object);
-            } else {
-              format = object.formatString;
-              if (format.indexOf('$') !== -1) {
-                // Normalizing formatString from MicroStrategy when locale codes are used [$-\d+]
-                format = format.replace(/\[\$-/g, '[$$$$-').replace(/\$/g, '\\$').replace(/\\\$\\\$/g, '$').replace(/"/g, '');
-              }
-              // for fractions set General format
-              if (object.formatString.match(/# \?+?\/\?+?/)) format = 'General';
-            }
-          }
-          columnRange.numberFormat = format;
+        const columnRange = officeTable.columns.getItemAt(object.index - offset).getDataBodyRange();
+        if (!object.isAttribute) {
+          columnRange.numberFormat = this.getFormat(object);
+        } else {
+          columnRange.numberFormat = '';
         }
       }
       await excelContext.sync();
@@ -54,39 +35,39 @@ class OfficeFormattingHelper {
   };
 
   /**
-   * Return Excel number formatting based on MSTR data type
+   * Return filtered column information
    *
-   * @param {Object} metric Object containing information about data type of metric
+   * @param columnInformation
+   * @param isCrosstab
    * @memberof OfficeFormattingHelper
+   * @return {Array} filteredColumnInformation
    */
-  getNumberFormattingCategoryName = (metric) => {
-    switch (metric.category) {
-    case -2:
-      return 'Default';
-    case 9:
-      return 'General';
-    case 0:
-      return 'Fixed';
-    case 1:
-      return 'Currency';
-    case 2:
-      return 'Date';
-    case 3:
-      return 'Time';
-    case 4:
-      return 'Percentage';
-    case 5:
-      return 'Fraction';
-    case 6:
-      return 'Scientific';
-    case 7: // 'Custom'
-      return metric.formatString;
-    case 8:
-      return 'Special';
-    default:
-      return 'General';
+  filterColumnInformation = (columnInformation, isCrosstab) => {
+    if (isCrosstab) {
+      return columnInformation.filter((e) => (e.isAttribute === false) && (Object.keys(e).length !== 0));
     }
-  }
+    return columnInformation.filter((column) => Object.keys(column).length !== 0);
+  };
+
+  /**
+   * Return parsed format string
+   *
+   * @param {String} format given by MicroStrategy
+   * @memberof OfficeFormattingHelper
+   * @return {String} parsed format
+   */
+  getFormat = ({ formatString, category }) => {
+    if (category === 9) return 'General';
+    // For fractions set General format
+    if (formatString.match(/# \?+?\/\?+?/)) return 'General';
+    if (formatString.indexOf('$') !== -1) {
+      return formatString.replace(/\[\$-/g, '[$$$$-')
+        .replace(/\$/g, '\\$')
+        .replace(/\\\$\\\$/g, '$')
+        .replace(/"/g, '');
+    }
+    return formatString;
+  };
 
   /**
    * Applies Excel number formatting to imported object based on MSTR data type.
@@ -101,13 +82,15 @@ class OfficeFormattingHelper {
    */
   applySubtotalFormatting = async (isCrosstab, subtotalsAddresses, officeTable, excelContext, mstrTable, shouldbold = true) => {
     console.time('Subtotal Formatting');
-    if (isCrosstab) { subtotalsAddresses = new Set(subtotalsAddresses); }
-    const reportstartCell = officeTable.getRange().getCell(0, 0);
-    excelContext.trackedObjects.add(reportstartCell);
-    await this.formatSubtotals(reportstartCell, subtotalsAddresses, mstrTable, excelContext, shouldbold);
-    excelContext.trackedObjects.remove(reportstartCell);
+    if (isCrosstab) {
+      subtotalsAddresses = new Set(subtotalsAddresses);
+    }
+    const reportStartCell = officeTable.getRange().getCell(0, 0);
+    excelContext.trackedObjects.add(reportStartCell);
+    await this.formatSubtotals(reportStartCell, subtotalsAddresses, mstrTable, excelContext, shouldbold);
+    excelContext.trackedObjects.remove(reportStartCell);
     console.timeEnd('Subtotal Formatting');
-  }
+  };
 
   /**
    * Gets range of subtotal row or cell based on subtotal cell
@@ -148,17 +131,18 @@ class OfficeFormattingHelper {
     const firstSubtotalCell = startCell.getOffsetRange(offsets.verticalFirstCell, offsets.horizontalFirstCell);
     const lastSubtotalCell = startCell.getOffsetRange(offsets.verticalLastCell, offsets.horizontalLastCell);
     return firstSubtotalCell.getBoundingRect(lastSubtotalCell);
-  }
+  };
 
   /**
-   *Sets bold format for all subtotal rows
+   * Sets bold format for all subtotal rows
    *
    * @param {Office} startCell Starting table body cell
-   * @param {Office} subtotalCells 2d array of all starting subtotal row cells (each element contains row and colum number of subtotal cell in headers columns)
-   * @param {Object} mstrTable mstrTable object instance definition
+   * @param {Array} subtotalCells 2d array of all starting subtotal row cells
+   * (each element contains row and column number of subtotal cell in headers columns)
+   * @param {Object} mstrTable instance definition
    * @param {Office} context Excel context
+   * @param {Boolean} shouldBold
    * @memberof OfficeApiHelper
-   * @return {Promise} Context.sync
    */
   formatSubtotals = async (startCell, subtotalCells, mstrTable, context, shouldBold) => {
     let contextPromises = [];
@@ -172,8 +156,18 @@ class OfficeFormattingHelper {
         contextPromises = [];
       }
     }
-  }
+  };
 
+
+  /**
+   * Formatting table columns width
+   *
+   * @param {Office} table
+   * @param {Boolean} isCrosstab
+   * @param {Office} crosstabHeaderDimensions
+   * @param {Office} context
+   * @memberof officeFormattingHelper
+   */
   formatTable = async (table, isCrosstab, crosstabHeaderDimensions, context) => {
     if (isCrosstab) {
       const { rowsX } = crosstabHeaderDimensions;
@@ -193,7 +187,7 @@ class OfficeFormattingHelper {
     } catch (error) {
       console.log('Error when formatting - no columns autofit applied', error);
     }
-  }
+  };
 }
 export const officeFormattingHelper = new OfficeFormattingHelper();
 export default officeFormattingHelper;
