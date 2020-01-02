@@ -91,6 +91,7 @@ export class OfficeDisplayService {
     preparedInstanceId,
     manipulationsXML = false,
     isRefreshAll,
+    previousTableDimensions,
     insertNewWorksheet = false,
   }) => {
     let newOfficeTableId;
@@ -126,7 +127,7 @@ export class OfficeDisplayService {
       console.time('Instance definition');
       ({ body, instanceDefinition, isCrosstab } = await this.getInstaceDefinition(
         body, mstrObjectType, manipulationsXML, preparedInstanceId, projectId, objectId, dossierData,
-        visualizationInfo, promptsAnswers, crosstabHeaderDimensions, subtotalsAddresses
+        visualizationInfo, promptsAnswers, crosstabHeaderDimensions, subtotalsAddresses,
       ));
       const { mstrTable } = instanceDefinition;
       ({ crosstabHeaderDimensions } = mstrTable);
@@ -142,7 +143,7 @@ export class OfficeDisplayService {
 
       // Create or update table
       ({ officeTable, newOfficeTableId, shouldFormat, tableColumnsChanged } = await officeTableHelper.getOfficeTable(
-        isRefresh, excelContext, bindingId, instanceDefinition, startCell
+        isRefresh, excelContext, bindingId, instanceDefinition, startCell, previousTableDimensions
       ));
 
       // Apply formatting when table was created
@@ -205,6 +206,7 @@ export class OfficeDisplayService {
         id: objectId,
         isLoading:false,
         crosstabHeaderDimensions,
+        tableDimensions: { columns: instanceDefinition.columns }
       }, isRefresh);
 
       console.timeEnd('Total');
