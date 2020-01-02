@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
-import { AttributeMetricFilter, ErrorBoundary } from '@mstr/mstr-react-library';
-import { withTranslation } from 'react-i18next';
+import React, {Component} from 'react';
+import {AttributeMetricFilter, ErrorBoundary} from '@mstr/mstr-react-library';
+import {withTranslation} from 'react-i18next';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 
 export class AttributeSelectorHOC extends Component {
   constructor(props) {
@@ -16,7 +17,7 @@ export class AttributeSelectorHOC extends Component {
    * @param {Error} e -  Error thrown by mstrReactLibrary
    */
   handleUnauthorized(e) {
-    const { handlePopupErrors } = this.props;
+    const {handlePopupErrors} = this.props;
     const newErrorObject = {
       status: e.status,
       response: {
@@ -34,19 +35,19 @@ export class AttributeSelectorHOC extends Component {
   render() {
     const {
       title, session,
-      triggerUpdate, onTriggerUpdate, mstrData,
+      triggerUpdate, onTriggerUpdate, chosen, importSubtotal, editedReport,
       resetTriggerUpdate, attributesSelectedChange, t, openModal, closeModal, toggleSubtotal,
     } = this.props;
-    console.log({...this.props});
+
     return (
       <ErrorBoundary>
         <AttributeMetricFilter
           t={t}
           attributesSelectedChange={attributesSelectedChange}
-          key={mstrData.reportId}
+          key={chosen.id}
           title={title}
-          session={session}
-          mstrData={mstrData}
+          session={mapToLegacySession(session, chosen)}
+          mstrData={mapToLegacyMstrData(chosen, session, editedReport)}
           triggerUpdate={triggerUpdate}
           onTriggerUpdate={onTriggerUpdate}
           withDataPreview
@@ -55,13 +56,83 @@ export class AttributeSelectorHOC extends Component {
           openModal={openModal}
           closeModal={closeModal}
           toggleSubtotal={toggleSubtotal}
-          importSubtotal={mstrData.importSubtotal}
+          importSubtotal={importSubtotal}
           handleUnauthorized={this.handleUnauthorized}
         />
       </ErrorBoundary>
     );
   }
 }
+
+const mapToLegacyMstrData = (chosen, session, editedReport) => {
+  console.log(chosen);
+  console.log(editedReport);
+  const legacyObject = {
+    reportId: chosen.id,
+    envUrl: session.url,
+    projectId: chosen.projectId,
+    reportSubtype: chosen.subtype,
+    reportType: chosen.type,
+    reportName: chosen.name,
+    token: session.authToken,
+    selectedAttributes: editedReport && editedReport.body.requestedObjects.attributes.map((attribute) => attribute.id),
+    selectedMetrics: editedReport && editedReport.body.requestedObjects.metrics.map((attribute) => attribute.id),
+
+    // forceChange: false
+    // isPrompted: 0
+    // editRequested: false
+    // instanceId: undefined
+    // promptsAnswers: undefined
+  };
+  console.log(legacyObject);
+  return legacyObject;
+};
+
+// envUrl: "https://aqueduct-tech.customer.cloud.microstrategy.com/MicroStrategyLibrary/api"
+// et: ""
+// token: "kslnr5asnmnqaiauc5rmne5kvk"
+// editRequested: true
+// reportId: "F24F07F411E98BF500000080EFF5EDBD"
+// instanceId: undefined
+// projectId: "0730F68F4B8B4B52AA23F0AAB46F3CA8"
+// reportName: "basic report"
+// reportType: {type: 3, subtypes: Array(3), name: "report", request: "reports"}
+// reportSubtype: 779
+// promptsAnswers: null
+// importSubtotal: undefined
+// isEdit: undefined
+// dossierName: undefined
+// selectedAttributes: ["D8404BB6437A07581BF0F88B84B64070"]
+// selectedMetrics: ["3E653B5849B625073C1599B53BC59E2B"]
+
+const mapToLegacySession = (session, chosen) => {
+  return {
+    url: session.envUrl,
+    USE_PROXY: false,
+    authToken: session.authToken,
+    projectId: chosen.projectId,
+  };
+  // USE_PROXY: false
+  // url: "https://aqueduct-tech.customer.cloud.microstrategy.com/MicroStrategyLibrary/api"
+  // authToken: "5ok7qdpeavpbcnd804sb798qpf"
+  // projectId: "0730F68F4B8B4B52AA23F0AAB46F3CA8"
+};
+
+// {
+//   envUrl: "https://aqueduct-tech.customer.cloud.microstrategy.com/MicroStrategyLibrary/api"
+//   et: ""
+//   forceChange: false
+//   projectId: "0730F68F4B8B4B52AA23F0AAB46F3CA8"
+//   reportId: "F24F07F411E98BF500000080EFF5EDBD"
+//   reportSubtype: 768
+//   reportName: "basic report"
+//   reportType: "Report"
+//   isPrompted: 0
+//   token: "5ok7qdpeavpbcnd804sb798qpf"
+//   editRequested: false
+//   instanceId: undefined
+//   promptsAnswers: undefined
+// }
 
 AttributeSelectorHOC.propTypes = {
   title: PropTypes.string,
@@ -80,6 +151,31 @@ AttributeSelectorHOC.propTypes = {
   onTriggerUpdate: PropTypes.func,
   t: PropTypes.func
 };
-AttributeSelectorHOC.defaultProps = { t: (text) => text, };
+AttributeSelectorHOC.defaultProps = {t: (text) => text, };
 
-export const AttributeSelector = withTranslation('common')(AttributeSelectorHOC);
+const mapStateToProps = (state) => {
+  console.log(state);
+  const {navigationTree, popupStateReducer, popupReducer, sessionReducer} = state;
+  return {
+    chosen: getChoosen(navigationTree),
+    editedReport: popupReducer.editedReport,
+    importSubtotal: navigationTree.importSubtotal,
+    popupState: {...popupStateReducer},
+    session: {...sessionReducer},
+  }
+}
+// selectedAttributes: ["D8404BB6437A07581BF0F88B84B64070"]
+// selectedMetrics: ["3E653B5849B625073C1599B53BC59E2B"]
+const mapDispatchToProps = {};
+
+export const AttributeSelector = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(AttributeSelectorHOC));
+function getChoosen(navigationTree) {
+  return {
+    id: navigationTree.chosenObjectId,
+    name: navigationTree.chosenObjectName,
+    type: navigationTree.objectType.name,
+    subtype: navigationTree.chosenSubtype,
+    projectId: navigationTree.chosenProjectId,
+  };
+}
+

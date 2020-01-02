@@ -4,6 +4,8 @@ import { notificationService } from '../notification/notification-service';
 import { errorService } from '../error/error-handler';
 import { PopupTypeEnum } from '../home/popup-type-enum';
 import objectTypeEnum from '../mstr-object/mstr-object-type-enum';
+import { officeContext } from '../office/office-context';
+import { selectorProperties } from '../attribute-selector/selector-properties';
 
 export class PopupHelper {
   init = (popupController) => {
@@ -120,6 +122,19 @@ export class PopupHelper {
     }
     errorService.handleError(error);
   }
+
+  handlePopupErrors = (error) => {
+    const errorObj = error && { status: error.status, message: error.message, response: error.response, type: error.type };
+    const messageObject = {
+      command: selectorProperties.commandError,
+      error: errorObj,
+    };
+    console.log(messageObject);
+    return; // FIXME: disabled temporarily cloding popup on error
+    officeContext
+      .getOffice()
+      .context.ui.messageParent(JSON.stringify(messageObject));
+  };
 }
 
 export const popupHelper = new PopupHelper();

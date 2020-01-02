@@ -12,6 +12,7 @@ import { actions } from '../navigation/navigation-tree-actions';
 import { PromptsWindow } from '../prompts/prompts-window';
 import { popupActions } from './popup-actions';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
+import {popupHelper} from './popup-helper';
 
 const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 
@@ -112,7 +113,7 @@ async function obtainInstanceWithPromptsAnswers(propsToPass, props) {
     try {
       instanceDefinition = await getInstance(configAnsPrompts);
     } catch (error) {
-      props.methods.handlePopupErrors(error);
+      popupHelper.handlePopupErrors(error);
     }
     count += 1;
   }
@@ -234,12 +235,10 @@ function proceedToImport(props) {
 function renderProperComponent(popupType, methods, propsToPass, editedReport) {
   if (popupType === PopupTypeEnum.dataPreparation) {
     const mstrData = { ...propsToPass, instanceId: editedReport.instanceId, promptsAnswers: editedReport.promptsAnswers };
+
     return (
       <AttributeSelectorWindow
-        mstrData={mstrData}
-        handleBack={methods.handleBack}
-        handlePopupErrors={methods.handlePopupErrors}
-      />
+      mstrData={mstrData} />
     );
   }
   if (popupType === PopupTypeEnum.editFilters) {
@@ -249,18 +248,16 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
     };
     return (
       <AttributeSelectorWindow
-        mstrData={mstrData}
-        handleBack={() => methods.handleBack(null, null, null, true)}
-        handlePopupErrors={methods.handlePopupErrors}
+      mstrData={mstrData}
+        // handleBack={() => methods.handleBack(null, null, null, true)} // FIXME: Don't know how to adjust it just yet.
       />
     );
   }
   if (popupType === PopupTypeEnum.navigationTree) {
     return (
       <NavigationTree
-        handlePrepare={methods.handlePrepare}
         mstrData={propsToPass}
-        handlePopupErrors={methods.handlePopupErrors}
+        handlePopupErrors={popupHelper.handlePopupErrors}
         handleDossierOpen={methods.handleDossierOpen}
       />
     );
@@ -276,7 +273,7 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
       <PromptsWindow
         mstrData={propsToPass}
         handleBack={methods.handleBack}
-        handlePopupErrors={methods.handlePopupErrors}
+        handlePopupErrors={popupHelper.handlePopupErrors}
       />
     );
   }
@@ -290,7 +287,7 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
       <PromptsWindow
         mstrData={mstrData}
         handleBack={methods.handleBack}
-        handlePopupErrors={methods.handlePopupErrors}
+        handlePopupErrors={popupHelper.handlePopupErrors}
       />
     ); // use the same window as with prompting, but provide report info
   }
@@ -300,7 +297,7 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
         mstrData={propsToPass}
         editedReport={editedReport}
         handleBack={methods.handleBack}
-        handlePopupErrors={methods.handlePopupErrors}
+        handlePopupErrors={popupHelper.handlePopupErrors}
         t={propsToPass.t}
       />
     );

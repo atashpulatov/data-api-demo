@@ -16,6 +16,7 @@ import {
 } from '../cache/cache-actions';
 import DB from '../cache/cache-db';
 import { authenticationHelper } from '../authentication/authentication-helper';
+import {popupStateActions} from '../popup/popup-state-actions';
 
 const SAFETY_FALLBACK = 7000; // Interval for falling back to network
 
@@ -256,7 +257,8 @@ const mapActionsToProps = {
   ...actions,
   connectToDB: connectToCache,
   resetDBState: refreshCacheState,
-  fetchObjectsFromNetwork: fetchObjectsFallback
+  fetchObjectsFromNetwork: fetchObjectsFallback,
+  handlePrepare: popupStateActions.onPrepareData,
 };
 
 export const NavigationTree = connect(mapStateToProps, mapActionsToProps)(withTranslation('common')(_NavigationTree));

@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import '../home/home.css';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { selectorProperties } from './selector-properties';
 import { attributeSelectorHelpers } from './attribute-selector-helpers';
 import { AttributeSelector } from './attribute-selector';
 import { PopupButtons } from '../popup/popup-buttons';
+import { popupStateActions } from '../popup/popup-state-actions';
+import { popupHelper } from '../popup/popup-helper';
 
-export class AttributeSelectorWindow extends Component {
+export class AttributeSelectorWindowNotConnected extends Component {
   constructor(props) {
     super(props);
     const { mstrData } = this.props;
@@ -77,7 +80,7 @@ export class AttributeSelectorWindow extends Component {
   };
 
   render() {
-    const { mstrData, handlePopupErrors } = this.props;
+    const { mstrData } = this.props;
     const { session, triggerUpdate, openModal, attributesSelected, loading, } = this.state;
     const { toggleSubtotal } = this;
     const typeName = mstrData.reportType.name
@@ -98,7 +101,7 @@ export class AttributeSelectorWindow extends Component {
           openModal={openModal}
           closeModal={this.closeModal}
           toggleSubtotal={toggleSubtotal}
-          handlePopupErrors={handlePopupErrors}
+          handlePopupErrors={popupHelper.handlePopupErrors}
         />
         <PopupButtons
           disableActiveActions={!attributesSelected}
@@ -113,7 +116,7 @@ export class AttributeSelectorWindow extends Component {
   }
 }
 
-AttributeSelectorWindow.propTypes = {
+AttributeSelectorWindowNotConnected.propTypes = {
   mstrData: PropTypes.shape({
     envUrl: PropTypes.string,
     token: PropTypes.string,
@@ -125,5 +128,13 @@ AttributeSelectorWindow.propTypes = {
     editRequested: PropTypes.bool
   }).isRequired,
   handleBack: PropTypes.func,
-  handlePopupErrors: PropTypes.func
 };
+
+const mapStateToProps = (state) => ({ mstrData: { ...state.popupStateReducer }, });
+
+const mapDispatchToProps = {
+  handleBack: popupStateActions.onPopupBack,
+  handlePrepare: popupStateActions.onPrepareData,
+};
+
+export const AttributeSelectorWindow = connect(mapStateToProps, mapDispatchToProps)(AttributeSelectorWindowNotConnected);
