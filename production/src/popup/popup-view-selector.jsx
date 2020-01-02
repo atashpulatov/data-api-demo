@@ -13,6 +13,7 @@ import { PromptsWindow } from '../prompts/prompts-window';
 import { popupActions } from './popup-actions';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import {popupHelper} from './popup-helper';
+import {popupStateActions} from './popup-state-actions';
 
 const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 
@@ -232,23 +233,24 @@ function proceedToImport(props) {
   window.Office.context.ui.messageParent(JSON.stringify(okObject));
 }
 
-function renderProperComponent(popupType, methods, propsToPass, editedReport) {
+function renderProperComponent(popupType, methods, propsToPass, editedReport,) {
   if (popupType === PopupTypeEnum.dataPreparation) {
     const mstrData = { ...propsToPass, instanceId: editedReport.instanceId, promptsAnswers: editedReport.promptsAnswers };
     console.log('hello');
     return (
-      <AttributeSelectorWindow
-        mstrData={mstrData} />
+      <AttributeSelectorWindow />
     );
   }
   if (popupType === PopupTypeEnum.editFilters) {
+    console.log(editedReport);
     const mstrData = {
       ...propsToPass,
       ...editedReport,
     };
+    
+    console.log(mstrData);
     return (
       <AttributeSelectorWindow
-        mstrData={mstrData}
         // handleBack={() => methods.handleBack(null, null, null, true)} // FIXME: Don't know how to adjust it just yet.
       />
     );
@@ -256,7 +258,6 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport) {
   if (popupType === PopupTypeEnum.navigationTree) {
     return (
       <NavigationTree
-        handlePopupErrors={popupHelper.handlePopupErrors}
         // handleDossierOpen={methods.handleDossierOpen}
       />
     );
@@ -311,7 +312,7 @@ export function mapStateToProps(state) {
   return {
     ...state.navigationTree,
     authToken: state.sessionReducer.authToken,
-    editedReport: { ...(parsePopupState(popupState, promptsAnswers)) },
+    editedReport: { ...(popupHelper.parsePopupState(popupState, promptsAnswers)) },
     preparedInstance: state.popupReducer.preparedInstance,
     propsToPass: { ...state.popupStateReducer },
     popupType: state.popupStateReducer.popupType,
@@ -324,70 +325,3 @@ const mapDispatchToProps = {
 };
 
 export const PopupViewSelector = connect(mapStateToProps, mapDispatchToProps)(PopupViewSelectorHOC);
-
-function parsePopupState(popupState, promptsAnswers) {
-  if (!popupState) {
-    return;
-  }
-  let chapterKey;
-  let visualizationKey;
-  let dossierName;
-  const { visualizationInfo } = popupState;
-  if (visualizationInfo) {
-    ({ chapterKey, visualizationKey } = visualizationInfo);
-    const { dossierStructure } = visualizationInfo;
-    if (dossierStructure) {
-      ({ dossierName } = dossierStructure);
-    }
-  }
-  const reportData = {
-    reportId: popupState.id,
-    instanceId: popupState.instanceId,
-    projectId: popupState.projectId,
-    reportName: popupState.name,
-    reportType: popupState.objectType,
-    reportSubtype: popupState.objectType === 'report' ? 768 : 779,
-    promptsAnswers: promptsAnswers || popupState.promptsAnswers,
-    importSubtotal: popupState.importSubtotal,
-    isEdit: popupState.isEdit,
-    dossierName,
-    selectedViz: `${chapterKey}:${visualizationKey}`,
-  };
-  restoreFilters(popupState.body, reportData);
-  return reportData;
-}
-
-function restoreFilters(body, reportData) {
-  try {
-    if (body && body.requestedObjects) {
-      reportData.selectedAttributes = body.requestedObjects.attributes
-        && body.requestedObjects.attributes.map((attr) => attr.id);
-      reportData.selectedMetrics = body.requestedObjects.metrics
-        && body.requestedObjects.metrics.map((mtrc) => mtrc.id);
-    }
-    if (body && body.viewFilter) {
-      reportData.selectedFilters = parseFilters(body.viewFilter.operands);
-    }
-  } catch (error) {
-    console.warn(error);
-  } finally {
-    return reportData;
-  }
-}
-
-function parseFilters(filtersNodes) {
-  if (filtersNodes[0].operands) {
-    // equivalent to flatMap((node) => node.operands)
-    return parseFilters(filtersNodes.reduce((nodes, node) => nodes.concat(node.operands), []));
-  }
-  const elementNodes = filtersNodes.filter((node) => node.type === 'elements');
-  // equivalent to flatMap((node) => node.elements)
-  const elements = elementNodes.reduce((elements, node) => elements.concat(node.elements),
-    []);
-  const elementsIds = elements.map((elem) => elem.id);
-  return elementsIds.reduce((filters, elem) => {
-    const attrId = elem.split(':')[0];
-    filters[attrId] = !filters[attrId] ? [elem] : [...filters[attrId], elem];
-    return filters;
-  }, {});
-}

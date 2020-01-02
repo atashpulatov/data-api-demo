@@ -135,6 +135,72 @@ export class PopupHelper {
       .getOffice()
       .context.ui.messageParent(JSON.stringify(messageObject));
   };
+
+  parsePopupState(popupState, promptsAnswers) {
+    if (!popupState) {
+      return;
+    }
+    let chapterKey;
+    let visualizationKey;
+    let dossierName;
+    const { visualizationInfo } = popupState;
+    if (visualizationInfo) {
+      ({ chapterKey, visualizationKey } = visualizationInfo);
+      const { dossierStructure } = visualizationInfo;
+      if (dossierStructure) {
+        ({ dossierName } = dossierStructure);
+      }
+    }
+    const reportData = {
+      reportId: popupState.id,
+      instanceId: popupState.instanceId,
+      projectId: popupState.projectId,
+      reportName: popupState.name,
+      reportType: popupState.objectType,
+      reportSubtype: popupState.objectType === 'report' ? 768 : 779,
+      promptsAnswers: promptsAnswers || popupState.promptsAnswers,
+      importSubtotal: popupState.importSubtotal,
+      isEdit: popupState.isEdit,
+      dossierName,
+      selectedViz: `${chapterKey}:${visualizationKey}`,
+    };
+    return this.restoreFilters(popupState.body, reportData);
+  }
+
+  restoreFilters(body, reportData) {
+    try {
+      if (body && body.requestedObjects) {
+        reportData.selectedAttributes = body.requestedObjects.attributes
+          && body.requestedObjects.attributes.map((attr) => attr.id);
+        reportData.selectedMetrics = body.requestedObjects.metrics
+          && body.requestedObjects.metrics.map((mtrc) => mtrc.id);
+      }
+      if (body && body.viewFilter) {
+        reportData.selectedFilters = this.parseFilters(body.viewFilter.operands);
+      }
+    } catch (error) {
+      console.warn(error);
+    } finally {
+      return reportData;
+    }
+  }
+
+  parseFilters(filtersNodes) {
+    if (filtersNodes[0].operands) {
+      // equivalent to flatMap((node) => node.operands)
+      return this.parseFilters(filtersNodes.reduce((nodes, node) => nodes.concat(node.operands), []));
+    }
+    const elementNodes = filtersNodes.filter((node) => node.type === 'elements');
+    // equivalent to flatMap((node) => node.elements)
+    const elements = elementNodes.reduce((elements, node) => elements.concat(node.elements),
+      []);
+    const elementsIds = elements.map((elem) => elem.id);
+    return elementsIds.reduce((filters, elem) => {
+      const attrId = elem.split(':')[0];
+      filters[attrId] = !filters[attrId] ? [elem] : [...filters[attrId], elem];
+      return filters;
+    }, {});
+  }
 }
 
 export const popupHelper = new PopupHelper();

@@ -3,6 +3,7 @@ import {AttributeMetricFilter, ErrorBoundary} from '@mstr/mstr-react-library';
 import {withTranslation} from 'react-i18next';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import {popupHelper} from '../popup/popup-helper';
 
 export class AttributeSelectorHOC extends Component {
   constructor(props) {
@@ -38,7 +39,6 @@ export class AttributeSelectorHOC extends Component {
       triggerUpdate, onTriggerUpdate, chosen, importSubtotal, editedReport,
       resetTriggerUpdate, attributesSelectedChange, t, openModal, closeModal, toggleSubtotal,
     } = this.props;
-
     return (
       <ErrorBoundary>
         <AttributeMetricFilter
@@ -65,8 +65,6 @@ export class AttributeSelectorHOC extends Component {
 }
 
 const mapToLegacyMstrData = (chosen, session, editedReport) => {
-  console.log(chosen);
-  console.log(editedReport);
   const legacyObject = {
     reportId: chosen.id,
     envUrl: session.url,
@@ -75,8 +73,8 @@ const mapToLegacyMstrData = (chosen, session, editedReport) => {
     reportType: chosen.type,
     reportName: chosen.name,
     token: session.authToken,
-    selectedAttributes: editedReport && editedReport.body.requestedObjects.attributes.map((attribute) => attribute.id),
-    selectedMetrics: editedReport && editedReport.body.requestedObjects.metrics.map((attribute) => attribute.id),
+    selectedAttributes: editedReport.selectedAttributes,
+    selectedMetrics: editedReport.selectedMetrics,
 
     // forceChange: false
     // isPrompted: 0
@@ -154,11 +152,12 @@ AttributeSelectorHOC.propTypes = {
 AttributeSelectorHOC.defaultProps = {t: (text) => text, };
 
 const mapStateToProps = (state) => {
-  console.log(state);
   const {navigationTree, popupStateReducer, popupReducer, sessionReducer} = state;
+  const popupState = popupReducer.editedReport;
+  const { promptsAnswers } = navigationTree;
   return {
-    chosen: getChoosen(navigationTree),
-    editedReport: popupReducer.editedReport,
+    chosen: getChosen(navigationTree),
+    editedReport: { ...(popupHelper.parsePopupState(popupState, promptsAnswers)) },
     importSubtotal: navigationTree.importSubtotal,
     popupState: {...popupStateReducer},
     session: {...sessionReducer},
@@ -169,7 +168,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {};
 
 export const AttributeSelector = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(AttributeSelectorHOC));
-function getChoosen(navigationTree) {
+function getChosen(navigationTree) {
+  console.log(navigationTree);
   return {
     id: navigationTree.chosenObjectId,
     name: navigationTree.chosenObjectName,
@@ -178,4 +178,3 @@ function getChoosen(navigationTree) {
     projectId: navigationTree.chosenProjectId,
   };
 }
-
