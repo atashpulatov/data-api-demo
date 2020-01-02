@@ -66,7 +66,7 @@ export class OfficeDisplayService {
    * @param {Object} [parameter.preparedInstanceId] Instance created before import workflow.
    * @param {Object} [parameter.manipulationsXML=false] Dossier Manipulation for imported visualization
    * @param {Object} [parameter.isRefreshAll]
-   * @param {Boolean} [parameter.insertNewWorksheet] Flag for inserting new excel worksheet before import 
+   * @param {Boolean} [parameter.insertNewWorksheet] Flag for inserting new excel worksheet before import
    * @returns {Object} Specify status of the import.
    * @memberof officeDisplayService
    */
@@ -118,7 +118,7 @@ export class OfficeDisplayService {
       console.time('Total');
       console.time('Init excel');
       if (insertNewWorksheet) {
-        await officeApiHelper.createWorksheetAndSelectCellInIt(excelContext);
+        await officeApiHelper.createAndActivateNewWorksheet(excelContext);
       }
       startCell = selectedCell || (await officeApiHelper.getSelectedCell(excelContext));
       console.timeEnd('Init excel');

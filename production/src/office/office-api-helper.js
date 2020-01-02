@@ -164,17 +164,11 @@ export class OfficeApiHelper {
     return startCell;
   }
 
-  createWorksheetAndSelectCellInIt = async (context) =>  {
+  createAndActivateNewWorksheet = async (context) =>  {
       const sheets = context.workbook.worksheets;
       const sheet = sheets.add();
-      sheet.load("name, position");
       await context.sync();
-      //activate sheet
       sheet.activate();
-      await context.sync();
-      // get first cell
-      const cell = context.workbook.worksheets.getActiveWorksheet().getCell(0,0);
-      cell.load("address, value");
       await context.sync();
   }
 
