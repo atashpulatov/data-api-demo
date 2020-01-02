@@ -17,7 +17,7 @@ const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 
 export const PopupViewSelectorHOC = (props) => {
   let { popupType } = props;
-
+  console.log({ props });
   const { propsToPass, methods, importRequested, dossierOpenRequested, loading } = props;
   const isPrompted = propsToPass.isPrompted || props.isPrompted;
   if (!props.authToken || !propsToPass) {
@@ -317,6 +317,8 @@ export function mapStateToProps(state) {
     authToken: state.sessionReducer.authToken,
     editedReport: { ...(parsePopupState(popupState, promptsAnswers)) },
     preparedInstance: state.popupReducer.preparedInstance,
+    propsToPass: { ...state.popupStateReducer },
+    popupType: state.popupStateReducer.popupType,
   };
 }
 

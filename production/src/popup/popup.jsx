@@ -12,7 +12,7 @@ import {popupStateActions} from './popup-state-actions';
 
 /* global Office */
 
-export const PopupNotConnected = ({location, mstrData, setMstrData, popupType, setPopupType, onPopupBack, }) => {
+export const PopupNotConnected = ({location, mstrData, setMstrData, setPopupType, onPopupBack, }) => {
   React.useEffect(() => {
     const popupLocation = (location && location.search) || window.location.search;
     const mstrDataToSet = queryString.parse(popupLocation);
@@ -54,8 +54,6 @@ export const PopupNotConnected = ({location, mstrData, setMstrData, popupType, s
   return (
     <>
       <PopupViewSelector
-        popupType={popupType}
-        propsToPass={propsToPass}
         methods={methods}
       />
       <InternetConnectionError />

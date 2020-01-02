@@ -37,7 +37,7 @@ export class AttributeSelectorHOC extends Component {
       triggerUpdate, onTriggerUpdate, mstrData,
       resetTriggerUpdate, attributesSelectedChange, t, openModal, closeModal, toggleSubtotal,
     } = this.props;
-
+    console.log({...this.props});
     return (
       <ErrorBoundary>
         <AttributeMetricFilter
