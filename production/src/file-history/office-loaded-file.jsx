@@ -18,7 +18,7 @@ import { officeStoreService } from '../office/store/office-store-service';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { startLoading, stopLoading } from '../navigation/navigation-tree-actions';
 import { errorService } from '../error/error-handler';
-
+import OfficeLoadedPrompt from './office-loaded-prompt';
 
 export class _OfficeLoadedFile extends React.Component {
   constructor(props) {
@@ -28,6 +28,7 @@ export class _OfficeLoadedFile extends React.Component {
       allowRefreshClick: true,
       editable: false,
       value: props.fileName,
+      showOfficeLoadedPrompt: false,
     };
   }
 
@@ -214,7 +215,48 @@ export class _OfficeLoadedFile extends React.Component {
     return <></>;
   };
 
-  triggerDuplicate = () => {
+  openPrompt = (e) => {
+    if (e) e.stopPropagation();
+    this.setState({ showOfficeLoadedPrompt: true });
+  }
+
+  closePrompt = () => {
+    this.setState({ showOfficeLoadedPrompt: false });
+  }
+
+  answerHandler = (answer) => {
+    this.closePrompt();
+    const insertNewWorksheet = answer;
+    this.duplicateAction(insertNewWorksheet);
+  }
+
+  duplicateAction = (insertNewWorksheet) => {
+    const { isLoading, bindingId, objectType, callForDuplicate, loading, fileName, startLoading, stopLoading } = this.props;
+    const { allowRefreshClick } = this.state;
+    if (!allowRefreshClick || loading) {
+      return;
+    }
+    startLoading();
+    if (!isLoading) {
+      this.setState({ allowRefreshClick: false }, async () => {
+        try {
+          const excelContext = await officeApiHelper.getExcelContext();
+          await officeApiHelper.isCurrentReportSheetProtected(excelContext, bindingId);
+          if (await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport, fileName)) {
+            const options = {
+              reportParams: { bindId: bindingId, objectType },
+              insertNewWorksheet
+            };
+            await callForDuplicate(options);
+          }
+        } catch (error) {
+          errorService.handleError(error);
+        } finally {
+          this.setState({ allowRefreshClick: true });
+          stopLoading();
+        }
+      });
+    }
   }
 
   renderIcons({ t, isLoading }) {
@@ -230,8 +272,8 @@ export class _OfficeLoadedFile extends React.Component {
               role="button"
               tabIndex="0"
               className="loading-button-container"
-              onClick={this.triggerDuplicate}
-              onKeyPress={this.triggerDuplicate}
+              onClick={this.openPrompt}
+              onKeyPress={this.openPrompt}
             >
             <MSTRIcon type="duplicate" />
           </span>
@@ -312,13 +354,13 @@ export class _OfficeLoadedFile extends React.Component {
       crosstabHeaderDimensions
     } = this.props;
     const { dossierStructure = false } = visualizationInfo;
-    const { editable } = this.state;
+    const { editable, showOfficeLoadedPrompt } = this.state;
     let { value } = this.state;
     const { dossierName, chapterName, pageName } = dossierStructure;
     const isVisualization = (objectType.name === mstrObjectEnum.mstrObjectType.visualization.name);
     const menu = (
       <Menu>
-        <Menu.Item key="duplicate" onClick={(e) => { e.domEvent.stopPropagation(); this.triggerDuplicate(); }}>{t('Duplicate')}</Menu.Item>
+        <Menu.Item key="duplicate" onClick={(e) => { e.domEvent.stopPropagation(); this.openPrompt(); }}>{t('Duplicate')}</Menu.Item>
         <Menu.Item key="edit" onClick={(e) => { e.domEvent.stopPropagation(); this.editAction(); }}>{t('Edit')}</Menu.Item>
         <Menu.Item key="refresh" onClick={(e) => { e.domEvent.stopPropagation(); this.refreshAction(); }}>{t('Refresh')}</Menu.Item>
         <Menu.Item key="remove" onClick={(e) => { e.domEvent.stopPropagation(); this.deleteAction(); }}>{t('Remove')}</Menu.Item>
@@ -329,33 +371,41 @@ export class _OfficeLoadedFile extends React.Component {
     // If fileName was changed but it was not introduced by user in editable mode (so fetched during edit) then update value to new fileName.
     if (!editable && (fileName !== value)) value = fileName;
     return (
-      <Dropdown overlay={menu} trigger={['contextMenu']}>
-        <div
-          className="file-history-container"
-          type="flex"
-          justify="center"
-          role="listitem"
-          tabIndex="0"
-          onClick={() => onClick(bindingId, true, this.deleteReport, fileName, isCrosstab, crosstabHeaderDimensions)}
-        >
-          <div className="refresh-icons-row">
-            <ButtonPopover
+      <>
+        {showOfficeLoadedPrompt && (
+          <OfficeLoadedPrompt
+            answerHandler={this.answerHandler}
+            closeHandler={this.closePrompt}
+            t={t}
+          />
+        )}
+        <Dropdown overlay={menu} trigger={['contextMenu']}>
+          <div
+            className="file-history-container"
+            type="flex"
+            justify="center"
+            role="listitem"
+            tabIndex="0"
+            onClick={() => onClick(bindingId, true, this.deleteReport, fileName, isCrosstab, crosstabHeaderDimensions)}
+           >
+            <div className="refresh-icons-row">
+              <ButtonPopover
               placement="bottom"
               content={t('Date and time of last modification')}
               mouseEnterDelay={1}
             >
-              <span>
-                <ClockIcon style={{ marginBottom: '2px' }} />
-                <span className="additional-data">
-                  {t('refreshed_date', { date: refreshDate })}
+                <span>
+                  <ClockIcon style={{ marginBottom: '2px' }} />
+                  <span className="additional-data">
+                    {t('refreshed_date', { date: refreshDate })}
+                  </span>
                 </span>
-              </span>
-            </ButtonPopover>
-            {this.renderIcons({ t, isLoading })}
-          </div>
+              </ButtonPopover>
+              {this.renderIcons({ t, isLoading })}
+            </div>
 
 
-          {isVisualization && dossierStructure
+            {isVisualization && dossierStructure
             && (
               <ButtonPopover
                 placement="bottom"
@@ -365,12 +415,13 @@ export class _OfficeLoadedFile extends React.Component {
               </ButtonPopover>
             )}
 
-          <div className="object-title-row">
-            {this.getMstrIcon(objectType)}
-            <RenameInput bindingId={bindingId} fileName={fileName} editable={editable} value={value} enableEdit={this.enableEdit} handleChange={this.handleChange} renameReport={this.renameReport} />
+            <div className="object-title-row">
+              {this.getMstrIcon(objectType)}
+              <RenameInput bindingId={bindingId} fileName={fileName} editable={editable} value={value} enableEdit={this.enableEdit} handleChange={this.handleChange} renameReport={this.renameReport} />
+            </div>
           </div>
-        </div>
-      </Dropdown>
+        </Dropdown>
+      </>
     );
   }
 }
@@ -386,7 +437,8 @@ const mapDispatchToProps = {
   callForEdit: popupActions.callForEdit,
   callForEditDossier: popupActions.callForEditDossier,
   startLoading,
-  stopLoading
+  stopLoading,
+  callForDuplicate: popupActions.callForDuplicate,
 };
 
 _OfficeLoadedFile.propTypes = {
@@ -407,7 +459,8 @@ _OfficeLoadedFile.propTypes = {
   onDelete: PropTypes.func,
   callForEdit: PropTypes.func,
   callForEditDossier: PropTypes.func,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+  callForDuplicate: PropTypes.func,
 };
 
 export const OfficeLoadedFile = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_OfficeLoadedFile));
