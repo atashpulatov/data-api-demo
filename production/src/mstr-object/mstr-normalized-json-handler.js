@@ -140,6 +140,24 @@ class NormalizedJsonHandler {
   };
 
   /**
+   * Creates a 2D array with the attribute forms headers
+   *
+   * @param {Array} result - the forms headers
+   * @param {Array} axisElements - the axis elements
+   * @param {function} onElement - Callback function to process elements
+   *
+   * @memberof NormalizedJsonHandler
+   * @return {Array}
+   */
+  convertFroms = (result, axisElements, onElement) => {
+    for (let i = 0; i < axisElements.length; i++) {
+      const elements = onElement(axisElements[i]);
+      result = typeof elements === 'string' ? [...result, elements] : [...result, ...elements];
+    }
+    return result;
+  }
+
+  /**
    * Creates a 2D array with the crosstabs headers
    *
    * @param {Object} definition - Dataset definition
@@ -155,15 +173,7 @@ class NormalizedJsonHandler {
     const headersNormalized = axis === 'columns' ? this.transposeMatrix(headers[axis]) : headers[axis];
     const matrix = headersNormalized.map((headerCells, colIndex) => {
       const axisElements = this.mapElementIndicesToElements({ definition, axis, headerCells, colIndex });
-      if (supportForms) {
-        let result = [];
-        for (let i = 0; i < axisElements.length; i++) {
-          const elements = onElement(axisElements[i]);
-          result = typeof elements === 'string' ? [...result, elements] : [...result, ...elements];
-        }
-        return result;
-      }
-      return axisElements.map((e, axisIndex, elementIndex) => onElement(e, axisIndex, elementIndex));
+      return supportForms ? this.convertFroms([], axisElements, onElement) : axisElements.map((e, axisIndex, elementIndex) => onElement(e, axisIndex, elementIndex));
     });
     return axis === 'columns' ? this.transposeMatrix(matrix) : matrix;
   }
@@ -183,15 +193,8 @@ class NormalizedJsonHandler {
     const columnTitles = headers[axis].map((headerCells) => {
       const mapFn = axis === 'rows' ? this.mapElementIndicesToNames : this.mapElementIndicesToElements;
       const axisElements = mapFn({ definition, axis, headerCells });
-      if (supportForms) {
-        let result = [];
-        for (let i = 0; i < axisElements.length; i++) {
-          const elements = onElement(axisElements[i]);
-          result = typeof elements === 'string' ? [...result, elements] : [...result, ...elements];
-        }
-        return result;
-      }
-      return axisElements.map((e, axisIndex, elementIndex) => onElement(e, axisIndex, elementIndex));
+
+      return supportForms ? this.convertFroms([], axisElements, onElement) : axisElements.map((e, axisIndex, elementIndex) => onElement(e, axisIndex, elementIndex));
     });
     if (columnTitles.length === 0) return [[]];
     return columnTitles;

@@ -166,7 +166,7 @@ function toggleIsClearingFlag(action, state) {
   };
 }
 
-export const initialState = {
+const initialState = {
   loading: false,
   shouldRenderSettings: false,
   isConfirm: false,
