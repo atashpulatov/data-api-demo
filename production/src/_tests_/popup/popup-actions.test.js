@@ -12,6 +12,8 @@ import { officeStoreService } from '../../office/store/office-store-service';
 import { errorService } from '../../error/error-handler';
 import { popupController } from '../../popup/popup-controller';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
+import { notificationService } from '../../notification/notification-service';
+import { officeDisplayService } from '../../office/office-display-service';
 
 jest.mock('../../office/office-api-helper');
 jest.mock('../../authentication/authentication-helper');
@@ -32,7 +34,9 @@ describe('Popup actions', () => {
       officeStoreService,
       popupHelper,
       mstrObjectRestService,
-      popupController
+      popupController,
+      notificationService,
+      officeDisplayService,
     );
   });
   afterEach(() => {
@@ -257,5 +261,21 @@ describe('Popup actions', () => {
     actions.preparePromptedReport(reportInstance, reportData)(listener);
     // then
     expect(listener).toHaveBeenCalledWith({ type: SET_PREPARED_REPORT, instanceId: reportInstance, reportData });
+  });
+
+  describe('duplicate', () => {
+    it.skip('should call officeDisplayService.printObject after sucessful callForDuplicate call', () => {
+      // given
+      // when
+      // then
+      expect(1).toBeFalsy();
+    });
+
+    it.skip('should call error service after callForDuplicate fails', () => {
+      // given
+      // when
+      // then
+      expect(1).toBeFalsy();
+    });
   });
 });

@@ -82,12 +82,12 @@ export class Popup extends Component {
       : 'en-US');
     return (
       <>
+        <InternetConnectionError />
         <PopupViewSelector
         popupType={popupType}
         propsToPass={propsToPass}
         methods={methods}
       />
-        <InternetConnectionError />
       </>
     );
   }
