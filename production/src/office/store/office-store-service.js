@@ -64,6 +64,7 @@ export class OfficeStoreService {
         crosstabHeaderDimensions: report.crosstabHeaderDimensions,
         visualizationInfo: report.visualizationInfo,
         manipulationsXML: report.manipulationsXML,
+        tableDimensions: report.tableDimensions,
       });
       settings.set(officeProperties.loadedReportProperties, reportProperties);
       settings.saveAsync();
@@ -162,6 +163,7 @@ export class OfficeStoreService {
         const refreshedObject = reportsArray[ObjectIndex];
         refreshedObject.crosstabHeaderDimensions = report.crosstabHeaderDimensions;
         refreshedObject.isCrosstab = report.isCrosstab;
+        refreshedObject.tableDimensions = report.tableDimensions;
         if (refreshedObject.visualizationInfo) {
           refreshedObject.manipulationsXML = report.manipulationsXML;
           refreshedObject.visualizationInfo.dossierStructure = report.visualizationInfo.dossierStructure;
@@ -194,6 +196,7 @@ export class OfficeStoreService {
           crosstabHeaderDimensions: report.crosstabHeaderDimensions,
           visualizationInfo: report.visualizationInfo,
           manipulationsXML: report.manipulationsXML,
+          tableDimensions: report.tableDimensions,
         },
       });
       this.preserveReport(report);
