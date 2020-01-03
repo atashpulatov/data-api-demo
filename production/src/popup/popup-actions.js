@@ -27,6 +27,8 @@ export class PopupActions {
       ]);
       const editedReport = this.officeStoreService.getReportFromProperties(reportParams.bindId);
 
+      console.log({ editedReport });
+
       dispatch({
         type: SET_REPORT_N_FILTERS,
         editedReport,

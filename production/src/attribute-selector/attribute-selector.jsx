@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
-import {AttributeMetricFilter, ErrorBoundary} from '@mstr/mstr-react-library';
-import {withTranslation} from 'react-i18next';
+import React, { Component } from 'react';
+import { AttributeMetricFilter, ErrorBoundary } from '@mstr/mstr-react-library';
+import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import {popupHelper} from '../popup/popup-helper';
+import { connect } from 'react-redux';
+import { popupHelper } from '../popup/popup-helper';
 
 export class AttributeSelectorHOC extends Component {
   constructor(props) {
@@ -18,7 +18,7 @@ export class AttributeSelectorHOC extends Component {
    * @param {Error} e -  Error thrown by mstrReactLibrary
    */
   handleUnauthorized(e) {
-    const {handlePopupErrors} = this.props;
+    const { handlePopupErrors } = this.props;
     const newErrorObject = {
       status: e.status,
       response: {
@@ -65,14 +65,17 @@ export class AttributeSelectorHOC extends Component {
 }
 
 const mapToLegacyMstrData = (chosen, session, editedReport) => {
+  console.log({ chosen, session, editedReport });
+
   const legacyObject = {
-    reportId: chosen.id,
-    envUrl: session.url,
-    projectId: chosen.projectId,
-    reportSubtype: chosen.subtype,
-    reportType: chosen.type,
-    reportName: chosen.name,
+    reportId: chosen.id || editedReport.reportId,
+    envUrl: session.url || session.envUrl,
+    projectId: chosen.projectId || editedReport.projectId,
+    reportSubtype: chosen.subtype || editedReport.reportSubtype,
+    reportType: chosen.id ? chosen.type : editedReport.reportType,
+    reportName: chosen.name || editedReport.reportName,
     token: session.authToken,
+    authToken: session.authToken,
     selectedAttributes: editedReport.selectedAttributes,
     selectedMetrics: editedReport.selectedMetrics,
 
@@ -103,18 +106,17 @@ const mapToLegacyMstrData = (chosen, session, editedReport) => {
 // selectedAttributes: ["D8404BB6437A07581BF0F88B84B64070"]
 // selectedMetrics: ["3E653B5849B625073C1599B53BC59E2B"]
 
-const mapToLegacySession = (session, chosen) => {
-  return {
-    url: session.envUrl,
-    USE_PROXY: false,
-    authToken: session.authToken,
-    projectId: chosen.projectId,
-  };
-  // USE_PROXY: false
-  // url: "https://aqueduct-tech.customer.cloud.microstrategy.com/MicroStrategyLibrary/api"
-  // authToken: "5ok7qdpeavpbcnd804sb798qpf"
-  // projectId: "0730F68F4B8B4B52AA23F0AAB46F3CA8"
-};
+const mapToLegacySession = (session, chosen) => ({
+  url: session.envUrl,
+  USE_PROXY: false,
+  authToken: session.authToken,
+  projectId: chosen.projectId,
+})
+// USE_PROXY: false
+// url: "https://aqueduct-tech.customer.cloud.microstrategy.com/MicroStrategyLibrary/api"
+// authToken: "5ok7qdpeavpbcnd804sb798qpf"
+// projectId: "0730F68F4B8B4B52AA23F0AAB46F3CA8"
+;
 
 // {
 //   envUrl: "https://aqueduct-tech.customer.cloud.microstrategy.com/MicroStrategyLibrary/api"
@@ -149,20 +151,20 @@ AttributeSelectorHOC.propTypes = {
   onTriggerUpdate: PropTypes.func,
   t: PropTypes.func
 };
-AttributeSelectorHOC.defaultProps = {t: (text) => text, };
+AttributeSelectorHOC.defaultProps = { t: (text) => text, };
 
 const mapStateToProps = (state) => {
-  const {navigationTree, popupStateReducer, popupReducer, sessionReducer} = state;
+  const { navigationTree, popupStateReducer, popupReducer, sessionReducer } = state;
   const popupState = popupReducer.editedReport;
   const { promptsAnswers } = navigationTree;
   return {
     chosen: getChosen(navigationTree),
     editedReport: { ...(popupHelper.parsePopupState(popupState, promptsAnswers)) },
     importSubtotal: navigationTree.importSubtotal,
-    popupState: {...popupStateReducer},
-    session: {...sessionReducer},
-  }
-}
+    popupState: { ...popupStateReducer },
+    session: { ...sessionReducer },
+  };
+};
 // selectedAttributes: ["D8404BB6437A07581BF0F88B84B64070"]
 // selectedMetrics: ["3E653B5849B625073C1599B53BC59E2B"]
 const mapDispatchToProps = {};

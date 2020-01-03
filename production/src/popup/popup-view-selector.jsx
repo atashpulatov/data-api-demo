@@ -12,8 +12,8 @@ import { actions } from '../navigation/navigation-tree-actions';
 import { PromptsWindow } from '../prompts/prompts-window';
 import { popupActions } from './popup-actions';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
-import {popupHelper} from './popup-helper';
-import {popupStateActions} from './popup-state-actions';
+import { popupHelper } from './popup-helper';
+import { popupStateActions } from './popup-state-actions';
 
 const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 
@@ -247,18 +247,18 @@ function renderProperComponent(popupType, methods, propsToPass, editedReport,) {
       ...propsToPass,
       ...editedReport,
     };
-    
+
     console.log(mstrData);
     return (
       <AttributeSelectorWindow
-        // handleBack={() => methods.handleBack(null, null, null, true)} // FIXME: Don't know how to adjust it just yet.
+      // handleBack={() => methods.handleBack(null, null, null, true)} // FIXME: Don't know how to adjust it just yet.
       />
     );
   }
   if (popupType === PopupTypeEnum.navigationTree) {
     return (
       <NavigationTree
-        // handleDossierOpen={methods.handleDossierOpen}
+      // handleDossierOpen={methods.handleDossierOpen}
       />
     );
   }
