@@ -90,6 +90,9 @@ export class OfficeApiHelper {
   }
 
   onBindingObjectClick = async (bindingId, shouldSelect = true, deleteReport, reportName, isCrosstab, crosstabHeaderDimensions) => {
+    console.group('office-api-helper -> onBindingObjectClick');
+    console.log(bindingId);
+    console.groupEnd('office-api-helper -> onBindingObjectClick');
     let crosstabRange;
     try {
       const excelContext = await this.getExcelContext();
