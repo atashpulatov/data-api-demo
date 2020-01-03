@@ -149,7 +149,7 @@ class NormalizedJsonHandler {
    * @memberof NormalizedJsonHandler
    * @return {Array}
    */
-  convertFroms = (result, axisElements, onElement) => {
+  convertForms = (result, axisElements, onElement) => {
     for (let i = 0; i < axisElements.length; i++) {
       const elements = onElement(axisElements[i]);
       result = typeof elements === 'string' ? [...result, elements] : [...result, ...elements];
@@ -173,7 +173,7 @@ class NormalizedJsonHandler {
     const headersNormalized = axis === 'columns' ? this.transposeMatrix(headers[axis]) : headers[axis];
     const matrix = headersNormalized.map((headerCells, colIndex) => {
       const axisElements = this.mapElementIndicesToElements({ definition, axis, headerCells, colIndex });
-      return supportForms ? this.convertFroms([], axisElements, onElement) : axisElements.map((e, axisIndex, elementIndex) => onElement(e, axisIndex, elementIndex));
+      return supportForms ? this.convertForms([], axisElements, onElement) : axisElements.map((e, axisIndex, elementIndex) => onElement(e, axisIndex, elementIndex));
     });
     return axis === 'columns' ? this.transposeMatrix(matrix) : matrix;
   }
@@ -193,8 +193,7 @@ class NormalizedJsonHandler {
     const columnTitles = headers[axis].map((headerCells) => {
       const mapFn = axis === 'rows' ? this.mapElementIndicesToNames : this.mapElementIndicesToElements;
       const axisElements = mapFn({ definition, axis, headerCells });
-
-      return supportForms ? this.convertFroms([], axisElements, onElement) : axisElements.map((e, axisIndex, elementIndex) => onElement(e, axisIndex, elementIndex));
+      return supportForms ? this.convertForms([], axisElements, onElement) : axisElements.map((e, axisIndex, elementIndex) => onElement(e, axisIndex, elementIndex));
     });
     if (columnTitles.length === 0) return [[]];
     return columnTitles;
