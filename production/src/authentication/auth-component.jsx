@@ -45,6 +45,7 @@ export class AuthenticateHOC extends Component {
                 <Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />
               }
               placeholder={t('Username')}
+              maxLength="250"
             />)}
           </FormItem>
           <FormItem
