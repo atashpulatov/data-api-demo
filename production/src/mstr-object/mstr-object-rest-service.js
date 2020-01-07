@@ -23,13 +23,14 @@ function checkTableDimensions({ rows, columns }) {
   return { rows, columns };
 }
 
-function parseInstanceDefinition(res) {
+function parseInstanceDefinition(res, supportForms) {
   const { body } = res;
   if (res.status === 200 && body.status === 2) {
     const { instanceId, status } = body;
     return { instanceId, status };
   }
   const { instanceId, data, internal } = body;
+  body.supportForms = supportForms;
   if (data.paging.total === 0) throw new Error(NOT_SUPPORTED_NO_ATTRIBUTES);
   const mstrTable = officeConverterServiceV2.createTable(body);
   const { rows, columns } = checkTableDimensions(mstrTable.tableSize);
@@ -71,6 +72,7 @@ async function* fetchContentGenerator({
   const { isCrosstab } = mstrTable;
   const storeState = reduxStore.getState();
   const { envUrl, authToken } = storeState.sessionReducer;
+  const { supportForms } = storeState.officeReducer;
   let fetchedRows = 0;
   let offset = 0;
   const fullPath = getFullPath({
@@ -105,6 +107,7 @@ async function* fetchContentGenerator({
     const response = await fetchObjectContent(fullPath, authToken, projectId, offset, limit);
     const { current } = response.body.data.paging;
     fetchedRows = current + offset;
+    response.body.supportForms = supportForms;
     const { row, rowTotals } = officeConverterServiceV2.getRows(response.body, isCrosstab);
     if (isCrosstab) {
       header = officeConverterServiceV2.getHeaders(response.body, isCrosstab);
@@ -191,6 +194,7 @@ export class MstrObjectRestService {
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
+    const { supportForms } = storeState.officeReducer;
     const fullPath = getFullPath({ dossierData, envUrl, limit, mstrObjectType, objectId, version: API_VERSION });
 
     return request
@@ -199,7 +203,7 @@ export class MstrObjectRestService {
       .set('x-mstr-projectid', projectId)
       .send(body)
       .withCredentials()
-      .then((res) => parseInstanceDefinition(res));
+      .then((res) => parseInstanceDefinition(res, supportForms));
   }
 
   fetchVisualizationDefinition = ({ projectId, objectId, instanceId, visualizationInfo, body, }) => {

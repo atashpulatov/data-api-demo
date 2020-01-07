@@ -164,6 +164,14 @@ export class OfficeApiHelper {
     return startCell;
   }
 
+  createAndActivateNewWorksheet = async (context) =>  {
+      const sheets = context.workbook.worksheets;
+      const sheet = sheets.add();
+      await context.sync();
+      sheet.activate();
+      await context.sync();
+  }
+
   getStartCell = (excelAdress) => excelAdress.match(/!(\w+\d+)(:|$)/)[1]
 
   /**

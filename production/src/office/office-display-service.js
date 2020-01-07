@@ -66,6 +66,7 @@ export class OfficeDisplayService {
    * @param {Object} [parameter.preparedInstanceId] Instance created before import workflow.
    * @param {Object} [parameter.manipulationsXML=false] Dossier Manipulation for imported visualization
    * @param {Object} [parameter.isRefreshAll]
+   * @param {Boolean} [parameter.insertNewWorksheet] Flag for inserting new excel worksheet before import
    * @returns {Object} Specify status of the import.
    * @memberof officeDisplayService
    */
@@ -91,6 +92,7 @@ export class OfficeDisplayService {
     manipulationsXML = false,
     isRefreshAll,
     previousTableDimensions,
+    insertNewWorksheet = false,
   }) => {
     let newOfficeTableId;
     let shouldFormat;
@@ -115,6 +117,9 @@ export class OfficeDisplayService {
       console.group('Importing data performance');
       console.time('Total');
       console.time('Init excel');
+      if (insertNewWorksheet) {
+        await officeApiHelper.createAndActivateNewWorksheet(excelContext);
+      }
       startCell = selectedCell || (await officeApiHelper.getSelectedCell(excelContext));
       console.timeEnd('Init excel');
 
