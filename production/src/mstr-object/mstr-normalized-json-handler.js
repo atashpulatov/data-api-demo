@@ -110,7 +110,7 @@ class NormalizedJsonHandler {
     const { headers, metricValues } = data;
     const { rows } = headers;
     const result = [];
-    const { supportForms } = definition;
+    const { supportForms, grid } = definition;
 
     for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
       const headerCells = rows[rowIndex];
@@ -125,6 +125,16 @@ class NormalizedJsonHandler {
           }
         } else {
           tabularRows.push(onElement(element, rowIndex, attributeIndex));
+
+          // Add extra empty cell for subtotal when it's for multiple attribute forms
+          if (element.subtotal && element.subtotalAddress) {
+            const subtotalAttribute = grid.rows[element.subtotalAddress.attributeIndex];
+            if (supportForms && subtotalAttribute && subtotalAttribute.forms.length > 1) {
+              for (let idx = 0; idx < subtotalAttribute.forms.length - 1; idx++) {
+                tabularRows.push(`'`);
+              }
+            }
+          }
         }
       }
       if (metricValues && metricValues.raw.length > 0) {
