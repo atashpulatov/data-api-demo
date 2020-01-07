@@ -265,17 +265,17 @@ describe('OfficeApiHelper', () => {
   describe.skip('createBindingId', () => {
     it('should return proper bindingId', () => {
       // given
-      const reportId = 'someReportId';
-      const reportName = 'someReportName';
+      const chosenObjectId = 'someReportId';
+      const chosenObjectName = 'someReportName';
       const envUrl = 'someTestUrl';
       const projectId = 'someTestProjectId';
       const convertedReportDataMock = {
-        id: reportId,
-        name: reportName,
+        id: chosenObjectId,
+        name: chosenObjectName,
       };
       const separator = '_';
       const tableName = 'someTableName';
-      const expectedBindId = `${reportName}_${tableName}_${reportId}_${projectId}_${envUrl}`;
+      const expectedBindId = `${chosenObjectName}_${tableName}_${chosenObjectId}_${projectId}_${envUrl}`;
       // when
       const receivedBindId = officeApiHelper.createBindingId(convertedReportDataMock, tableName, projectId, envUrl, separator);
       // then
@@ -283,17 +283,17 @@ describe('OfficeApiHelper', () => {
     });
     it('should return proper bindingId with different separator', () => {
       // given
-      const reportId = 'someReportId';
-      const reportName = 'someReportName';
+      const chosenObjectId = 'someReportId';
+      const chosenObjectName = 'someReportName';
       const envUrl = 'someTestUrl';
       const projectId = 'someTestProjectId';
       const convertedReportDataMock = {
-        id: reportId,
-        name: reportName,
+        id: chosenObjectId,
+        name: chosenObjectName,
       };
       const separator = '-';
       const tableName = 'someTableName';
-      const expectedBindId = `${reportName}-${tableName}-${reportId}-${projectId}-${envUrl}`;
+      const expectedBindId = `${chosenObjectName}-${tableName}-${chosenObjectId}-${projectId}-${envUrl}`;
       // when
       const receivedBindId = officeApiHelper.createBindingId(convertedReportDataMock, tableName, projectId, envUrl, separator);
       // then
@@ -316,13 +316,13 @@ describe('OfficeApiHelper', () => {
     });
     it('should throw error due to missing tableName', () => {
       // given
-      const reportId = 'someReportId';
-      const reportName = 'someReportName';
+      const chosenObjectId = 'someReportId';
+      const chosenObjectName = 'someReportName';
       const envUrl = 'someTestUrl';
       const projectId = 'someTestProjectId';
       const convertedReportDataMock = {
-        id: reportId,
-        name: reportName,
+        id: chosenObjectId,
+        name: chosenObjectName,
       };
       const tableName = undefined;
       const separator = '-';
@@ -336,13 +336,13 @@ describe('OfficeApiHelper', () => {
     });
     it('should throw error due to missing projectId', () => {
       // given
-      const reportId = 'someReportId';
-      const reportName = 'someReportName';
+      const chosenObjectId = 'someReportId';
+      const chosenObjectName = 'someReportName';
       const envUrl = 'someTestUrl';
       const tableName = 'someTableName';
       const convertedReportDataMock = {
-        id: reportId,
-        name: reportName,
+        id: chosenObjectId,
+        name: chosenObjectName,
       };
       const projectId = undefined;
       const separator = '-';
@@ -356,13 +356,13 @@ describe('OfficeApiHelper', () => {
     });
     it('should throw error due to missing envUrl', () => {
       // given
-      const reportId = 'someReportId';
-      const reportName = 'someReportName';
+      const chosenObjectId = 'someReportId';
+      const chosenObjectName = 'someReportName';
       const projectId = 'someProjectId';
       const tableName = 'someTableName';
       const convertedReportDataMock = {
-        id: reportId,
-        name: reportName,
+        id: chosenObjectId,
+        name: chosenObjectName,
       };
 
       const envUrl = undefined;
@@ -377,16 +377,16 @@ describe('OfficeApiHelper', () => {
     });
     it('should return proper bindingId despite not providing separator', () => {
       // given
-      const reportId = 'someReportId';
-      const reportName = 'someReportName';
+      const chosenObjectId = 'someReportId';
+      const chosenObjectName = 'someReportName';
       const envUrl = 'someTestUrl';
       const projectId = 'someTestProjectId';
       const convertedReportDataMock = {
-        id: reportId,
-        name: reportName,
+        id: chosenObjectId,
+        name: chosenObjectName,
       };
       const tableName = 'someTableName';
-      const expectedBindId = `${reportName}_${tableName}_${reportId}_${projectId}_${envUrl}`;
+      const expectedBindId = `${chosenObjectName}_${tableName}_${chosenObjectId}_${projectId}_${envUrl}`;
       // when
       const receivedBindId = officeApiHelper.createBindingId(convertedReportDataMock, tableName, projectId, envUrl);
       // then

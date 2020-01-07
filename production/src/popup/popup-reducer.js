@@ -27,21 +27,21 @@ export const popupReducer = (state = initialState, action) => {
   case SET_REPORT_N_FILTERS: {
     return {
       ...state,
-      editedReport: action.editedReport,
+      editedObject: action.editedObject,
     };
   }
   case SET_PREPARED_REPORT: {
     return {
       ...state,
       preparedInstance: action.instanceId,
-      editedReport: action.reportData,
+      editedObject: action.chosenObjectData,
     };
   }
   case CLEAR_PROMPTS_ANSWERS: {
     return {
       ...state,
       preparedInstance: null,
-      editedReport: null,
+      editedObject: null,
     };
   }
   case RESET_STATE: {

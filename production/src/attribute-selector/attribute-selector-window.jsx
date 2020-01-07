@@ -16,8 +16,8 @@ export class AttributeSelectorWindowNotConnected extends Component {
     this.state = {
       session: {
         USE_PROXY: false,
-        url: mstrData.envUrl,
-        authToken: mstrData.token,
+        envUrl: mstrData.envUrl,
+        authToken: mstrData.authToken,
         projectId: mstrData.projectId,
       },
       openModal: false,
@@ -38,16 +38,16 @@ export class AttributeSelectorWindowNotConnected extends Component {
 
   handleCancel = () => attributeSelectorHelpers.officeMessageParent(selectorProperties.commandCancel);
 
-  onTriggerUpdate = (reportId, projectId, reportSubtype, body, reportName = this.props.chosenObject.chosenObjectName) => {
+  onTriggerUpdate = (chosenObjectId, projectId, chosenObjectSubtype, body, chosenObjectName = this.props.chosenObject.chosenObjectName) => {
     const { chosenObject } = this.props;
     const { importSubtotal } = this.state;
     attributeSelectorHelpers.officeMessageParent(
       selectorProperties.commandOnUpdate,
-      reportId,
+      chosenObjectId,
       projectId,
-      reportSubtype,
+      chosenObjectSubtype,
       body,
-      reportName,
+      chosenObjectName,
       chosenObject.preparedInstanceId,
       chosenObject.promptsAnswers,
       importSubtotal,
@@ -78,10 +78,10 @@ export class AttributeSelectorWindowNotConnected extends Component {
     const { mstrData, handleBack, reduxState, chosenObject } = this.props;
     const { triggerUpdate, openModal, attributesSelected, loading, } = this.state;
     const { toggleSubtotal } = this;
-    console.log({reduxState});
+    console.log({ reduxState });
     console.log(chosenObject);
     const typeName = chosenObject.objectType.name
-      && chosenObject.objectType.name.charAt(0).toUpperCase() + chosenObject.objectType.name.substring(1)
+      && chosenObject.objectType.name.charAt(0).toUpperCase() + chosenObject.objectType.name.substring(1);
 
     return (
       <div>
@@ -113,19 +113,19 @@ export class AttributeSelectorWindowNotConnected extends Component {
 AttributeSelectorWindowNotConnected.propTypes = {
   mstrData: PropTypes.shape({
     envUrl: PropTypes.string,
-    token: PropTypes.string,
+    authToken: PropTypes.string,
     projectId: PropTypes.string,
-    reportName: PropTypes.string,
+    chosenObjectName: PropTypes.string,
     instanceId: PropTypes.string,
     promptsAnswers: PropTypes.string,
-    reportType: PropTypes.string,
+    chosenObjectType: PropTypes.string,
     editRequested: PropTypes.bool
   }).isRequired,
   handleBack: PropTypes.func,
 };
 
-const mapStateToProps = (state) => ({ 
-  mstrData: { ...state.popupStateReducer }, 
+const mapStateToProps = (state) => ({
+  mstrData: { ...state.popupStateReducer },
   reduxState: state,
   chosenObject: state.navigationTree,
 });

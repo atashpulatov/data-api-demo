@@ -40,7 +40,7 @@ describe('NavigatorService', () => {
     expect(pathObject.state).not.toBeDefined();
   });
 
-  it('should call for login route when no token', () => {
+  it('should call for login route when no authToken', () => {
     const originalMethod = navigationService.getLoginRoute;
     // given
     try {
@@ -56,7 +56,7 @@ describe('NavigatorService', () => {
     }
   });
 
-  it('should call for projects route when env and token present', () => {
+  it('should call for projects route when env and authToken present', () => {
     const originalMethod = navigationService.getProjectsRoute;
     // given
     try {
@@ -70,7 +70,7 @@ describe('NavigatorService', () => {
       });
       reduxStore.dispatch({
         type: sessionProperties.actions.loggedIn,
-        authToken: 'token',
+        authToken: 'authToken',
       });
       const expected = { prop: 'expect', };
       navigationService.getProjectsRoute = jest.fn();
@@ -84,7 +84,7 @@ describe('NavigatorService', () => {
     }
   });
 
-  it('should call for projects route when env, token and project present',
+  it('should call for projects route when env, authToken and project present',
     () => {
       const originalMethod = navigationService.getObjectsRoute;
       // given
@@ -99,7 +99,7 @@ describe('NavigatorService', () => {
         });
         reduxStore.dispatch({
           type: sessionProperties.actions.loggedIn,
-          authToken: 'token',
+          authToken: 'authToken',
         });
         reduxStore.dispatch({
           type: historyProperties.actions.goInsideProject,

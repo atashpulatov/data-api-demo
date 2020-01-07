@@ -36,7 +36,7 @@ export class AttributeSelectorHOC extends Component {
   render() {
     const {
       title, session,
-      triggerUpdate, onTriggerUpdate, chosen, importSubtotal, editedReport,
+      triggerUpdate, onTriggerUpdate, chosen, importSubtotal, editedObject,
       resetTriggerUpdate, attributesSelectedChange, t, openModal, closeModal, toggleSubtotal,
     } = this.props;
     return (
@@ -47,7 +47,7 @@ export class AttributeSelectorHOC extends Component {
           key={chosen.id}
           title={title}
           session={mapToLegacySession(session, chosen)}
-          mstrData={mapToLegacyMstrData(chosen, session, editedReport)}
+          mstrData={mapToLegacyMstrData(chosen, session, editedObject)}
           triggerUpdate={triggerUpdate}
           onTriggerUpdate={onTriggerUpdate}
           withDataPreview
@@ -64,20 +64,20 @@ export class AttributeSelectorHOC extends Component {
   }
 }
 
-const mapToLegacyMstrData = (chosen, session, editedReport) => {
-  console.log({ chosen, session, editedReport });
+const mapToLegacyMstrData = (chosen, session, editedObject) => {
+  console.log({ chosen, session, editedObject });
 
   const legacyObject = {
-    reportId: chosen.id || editedReport.reportId,
-    envUrl: session.url || session.envUrl,
-    projectId: chosen.projectId || editedReport.projectId,
-    reportSubtype: chosen.subtype || editedReport.reportSubtype,
-    reportType: chosen.id ? chosen.type : editedReport.reportType,
-    reportName: chosen.name || editedReport.reportName,
+    reportId: chosen.id || editedObject.chosenObjectId,
+    envUrl: session.envUrl || session.envUrl,
+    projectId: chosen.projectId || editedObject.projectId,
+    reportSubtype: chosen.subtype || editedObject.chosenObjectSubtype,
+    reportType: chosen.id ? chosen.type : editedObject.chosenObjectType,
+    reportName: chosen.name || editedObject.chosenObjectName,
     token: session.authToken,
     authToken: session.authToken,
-    selectedAttributes: editedReport.selectedAttributes,
-    selectedMetrics: editedReport.selectedMetrics,
+    selectedAttributes: editedObject.selectedAttributes,
+    selectedMetrics: editedObject.selectedMetrics,
 
     // forceChange: false
     // isPrompted: 0
@@ -140,7 +140,7 @@ AttributeSelectorHOC.propTypes = {
   openModal: PropTypes.bool,
   session: PropTypes.shape({}),
   mstrData: PropTypes.shape({
-    reportId: PropTypes.string,
+    chosenObjectId: PropTypes.string,
     importSubtotal: PropTypes.bool
   }),
   resetTriggerUpdate: PropTypes.func,
@@ -155,11 +155,11 @@ AttributeSelectorHOC.defaultProps = { t: (text) => text, };
 
 const mapStateToProps = (state) => {
   const { navigationTree, popupStateReducer, popupReducer, sessionReducer } = state;
-  const popupState = popupReducer.editedReport;
+  const popupState = popupReducer.editedObject;
   const { promptsAnswers } = navigationTree;
   return {
     chosen: getChosen(navigationTree),
-    editedReport: { ...(popupHelper.parsePopupState(popupState, promptsAnswers)) },
+    editedObject: { ...(popupHelper.parsePopupState(popupState, promptsAnswers)) },
     importSubtotal: navigationTree.importSubtotal,
     popupState: { ...popupStateReducer },
     session: { ...sessionReducer },

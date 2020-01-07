@@ -49,7 +49,7 @@ export default class _EmbeddedDossier extends React.Component {
 
   loadEmbeddedDossier = async (container) => {
     const { mstrData, handlePopupErrors } = this.props;
-    const { envUrl, token, dossierId, projectId, promptsAnswers, instanceId, selectedViz } = mstrData;
+    const { envUrl, authToken, dossierId, projectId, promptsAnswers, instanceId, selectedViz } = mstrData;
     const instance = {};
     try {
       if (instanceId) {
@@ -90,7 +90,7 @@ export default class _EmbeddedDossier extends React.Component {
       customAuthenticationType: CustomAuthenticationType.AUTH_TOKEN,
       enableResponsive: true,
       getLoginToken() {
-        return Promise.resolve(token);
+        return Promise.resolve(authToken);
       },
       placeholder: container,
       dossierFeature: { readoOnly: true, },
@@ -173,7 +173,7 @@ export default class _EmbeddedDossier extends React.Component {
 _EmbeddedDossier.propTypes = {
   mstrData: PropTypes.shape({
     envUrl: PropTypes.string,
-    token: PropTypes.string,
+    authToken: PropTypes.string,
     dossierId: PropTypes.string,
     projectId: PropTypes.string,
     instanceId: PropTypes.string,
@@ -188,7 +188,7 @@ _EmbeddedDossier.propTypes = {
 _EmbeddedDossier.defaultProps = {
   mstrData: {
     envUrl: 'no env url',
-    token: null,
+    authToken: null,
     dossierId: 'default id',
     projectId: 'default id',
     instanceId: 'default id',

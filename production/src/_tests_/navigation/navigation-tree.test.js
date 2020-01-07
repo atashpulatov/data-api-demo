@@ -37,7 +37,7 @@ describe('NavigationTree', () => {
     // given
     const mstrData = {
       envUrl: 'env',
-      token: 'token',
+      authToken: 'authToken',
       projectId: 'projectId',
     };
     // when
@@ -56,7 +56,7 @@ describe('NavigationTree', () => {
     const mockHandlePrepare = jest.fn();
     const mstrData = {
       envUrl: 'env',
-      token: 'token',
+      authToken: 'authToken',
       projectId: 'projectId',
     };
 
@@ -97,7 +97,7 @@ describe('NavigationTree', () => {
     // given
     const mstrData = {
       envUrl: 'env',
-      token: 'token',
+      authToken: 'authToken',
       projectId: 'projectId',
     };
     const givenObjectId = 'objectId';
@@ -127,7 +127,7 @@ describe('NavigationTree', () => {
     const stopLoadingMocked = jest.fn();
     const mstrData = {
       envUrl: 'env',
-      token: 'token',
+      authToken: 'authToken',
       projectId: 'projectId',
     };
     const resultAction = {command: selectorProperties.commandCancel, };
@@ -148,7 +148,7 @@ describe('NavigationTree', () => {
     // given
     const mstrData = {
       envUrl: 'env',
-      token: 'token',
+      authToken: 'authToken',
       projectId: 'projectId',
     };
     const body = {};
@@ -253,7 +253,7 @@ describe('NavigationTree', () => {
     // given
     const mstrData = {
       envUrl: 'env',
-      token: 'token',
+      authToken: 'authToken',
       projectId: 'projectId',
     };
     const givenObjectId = 'objectId';
@@ -286,7 +286,7 @@ describe('NavigationTree', () => {
     // given
     const mstrData = {
       envUrl: 'env',
-      token: 'token',
+      authToken: 'authToken',
       projectId: 'projectId',
     };
     const givenObjectId = 'objectId';
@@ -316,7 +316,7 @@ describe('NavigationTree', () => {
     // given
     const mstrData = {
       envUrl: 'env',
-      token: 'token',
+      authToken: 'authToken',
       projectId: 'projectId',
     };
     const givenObjectId = 'objectId';
@@ -346,7 +346,7 @@ describe('NavigationTree', () => {
     const connectToDB = jest.fn();
     const mstrData = {
       envUrl: 'env',
-      token: 'token',
+      authToken: 'authToken',
       projectId: 'projectId',
       connectToDB,
     };

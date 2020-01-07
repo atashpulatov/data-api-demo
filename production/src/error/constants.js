@@ -106,7 +106,7 @@ export const errorMessageFactory = withDefaultValue({
   [errorTypes.OUTSIDE_OF_RANGE_ERR]: () => EXCEEDS_WORKSHEET_LIMITS,
   [errorTypes.OVERLAPPING_TABLES_ERR]: () => TABLE_OVERLAP,
   [errorTypes.RUN_OUTSIDE_OFFICE_ERR]: () => OUTSIDE_OF_OFFICE,
-  [errorTypes.TABLE_REMOVED_FROM_EXCEL_ERR]: ({ reportName }) => `${reportName} does not exist in the workbook anymore.`,
+  [errorTypes.TABLE_REMOVED_FROM_EXCEL_ERR]: ({ chosenObjectName }) => `${chosenObjectName} does not exist in the workbook anymore.`,
   [errorTypes.GENERIC_OFFICE_ERR]: ({ error }) => `Excel returned error: ${error.message}`,
   [errorTypes.PROTECTED_SHEET_ERR]: () => PROTECTED_SHEET,
 },

@@ -40,7 +40,7 @@ describe('PopupController', () => {
 
   it('should run edit popup with proper settings', () => {
     // given
-    const reportParams = 'reportData';
+    const reportParams = 'chosenObjectData';
     const popupType = PopupTypeEnum.editFilters;
     const size = 80;
     const runPopupSpy = jest
@@ -57,23 +57,23 @@ describe('PopupController', () => {
     // given
     officeApiHelper.getExcelSessionStatus = jest.fn();
     popupController._getReportsPreviousState = jest.fn();
-    const reportData = {
+    const chosenObjectData = {
       objectId: 'objectId',
       projectId: 'projectId',
       mstrObjectType: mstrObjectEnum.mstrObjectType.report,
     };
     const actionObject = {
       command: selectorProperties.commandOk,
-      chosenObject: reportData.objectId,
-      chosenProject: reportData.projectId,
+      chosenObject: chosenObjectData.objectId,
+      chosenProject: chosenObjectData.projectId,
       chosenSubtype: objectTypes.getTypeValues('Report').subtype,
     };
     const arg = { message: JSON.stringify(actionObject), };
     officeApiHelper.getOfficeSessionStatus = jest.fn();
     const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
     const expectedOptions = {
-      objectId: reportData.objectId,
-      projectId: reportData.projectId,
+      objectId: chosenObjectData.objectId,
+      projectId: chosenObjectData.projectId,
       bindingId: null,
       isRefresh: false,
       mstrObjectType: mstrObjectEnum.mstrObjectType.report,
@@ -93,7 +93,7 @@ describe('PopupController', () => {
   it('should handle ok command from popup for report with dossier data', async () => {
     // given
     officeApiHelper.getExcelSessionStatus = jest.fn();
-    const reportData = {
+    const chosenObjectData = {
       objectId: 'objectId',
       projectId: 'projectId',
       mstrObjectType: mstrObjectEnum.mstrObjectType.report,
@@ -104,9 +104,9 @@ describe('PopupController', () => {
     };
     const actionObject = {
       command: selectorProperties.commandOk,
-      chosenObject: reportData.objectId,
-      chosenProject: reportData.projectId,
-      dossierData: reportData.dossierData,
+      chosenObject: chosenObjectData.objectId,
+      chosenProject: chosenObjectData.projectId,
+      dossierData: chosenObjectData.dossierData,
       chosenSubtype: objectTypes.getTypeValues('Report').subtype,
     };
     const arg = { message: JSON.stringify(actionObject), };
@@ -114,10 +114,10 @@ describe('PopupController', () => {
     const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
     const expectedOptions = {
       bindingId: null,
-      dossierData: reportData.dossierData,
-      objectId: reportData.objectId,
-      projectId: reportData.projectId,
-      mstrObjectType: reportData.mstrObjectType,
+      dossierData: chosenObjectData.dossierData,
+      objectId: chosenObjectData.objectId,
+      projectId: chosenObjectData.projectId,
+      mstrObjectType: chosenObjectData.mstrObjectType,
       isRefresh: false,
     };
     const spyValidateAuthToken = jest
@@ -137,18 +137,18 @@ describe('PopupController', () => {
     officeApiHelper.getExcelSessionStatus = jest.fn();
     const actionObject = {
       command: selectorProperties.commandOnUpdate,
-      reportId: 'reportId',
+      chosenObjectId: 'chosenObjectId',
       projectId: 'projectId',
-      reportSubtype: objectTypes.getTypeValues('Cube').subtype,
+      chosenObjectSubtype: objectTypes.getTypeValues('Cube').subtype,
       body: {},
-      reportName: 'testName',
+      chosenObjectName: 'testName',
     };
     const arg = { message: JSON.stringify(actionObject), };
     officeApiHelper.getOfficeSessionStatus = jest.fn();
     const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
     const expectedOptions = {
       dossierData: undefined,
-      objectId: actionObject.reportId,
+      objectId: actionObject.chosenObjectId,
       projectId: actionObject.projectId,
       mstrObjectType: mstrObjectEnum.mstrObjectType.dataset,
       body: actionObject.body,
@@ -169,11 +169,11 @@ describe('PopupController', () => {
     // given
     officeApiHelper.getExcelSessionStatus = jest.fn();
     const actionObject = {
-      reportName: 'name',
+      chosenObjectName: 'name',
       command: selectorProperties.commandOnUpdate,
-      reportId: 'reportId',
+      chosenObjectId: 'chosenObjectId',
       projectId: 'projectId',
-      reportSubtype: objectTypes.getTypeValues('Report').subtype,
+      chosenObjectSubtype: objectTypes.getTypeValues('Report').subtype,
       body: {},
     };
     const arg = { message: JSON.stringify(actionObject), };
@@ -192,7 +192,7 @@ describe('PopupController', () => {
     const expectedOptions = {
       dossierData: undefined,
       mstrObjectType: mstrObjectEnum.mstrObjectType.report,
-      objectId: actionObject.reportId,
+      objectId: actionObject.chosenObjectId,
       projectId: actionObject.projectId,
       body: actionObject.body,
     };
@@ -205,15 +205,15 @@ describe('PopupController', () => {
     officeApiHelper.getExcelSessionStatus = jest.fn();
     const actionObject = {
       command: selectorProperties.commandOnUpdate,
-      reportId: 'reportId',
+      chosenObjectId: 'chosenObjectId',
       projectId: 'projectId',
       dossierData: {
         instanceId: 'instanceId',
         whatever: 'whatever',
       },
-      reportSubtype: objectTypes.getTypeValues('Report').subtype,
+      chosenObjectSubtype: objectTypes.getTypeValues('Report').subtype,
       body: {},
-      reportName: 'testName',
+      chosenObjectName: 'testName',
     };
     const arg = { message: JSON.stringify(actionObject), };
     officeApiHelper.getOfficeSessionStatus = jest.fn();
@@ -229,7 +229,7 @@ describe('PopupController', () => {
     expect(mockPrint).toBeCalled();
     expect(mockPrint).toBeCalledWith({
       dossierData: actionObject.dossierData,
-      objectId: actionObject.reportId,
+      objectId: actionObject.chosenObjectId,
       projectId: actionObject.projectId,
       mstrObjectType: mstrObjectEnum.mstrObjectType.report,
       body: actionObject.body,

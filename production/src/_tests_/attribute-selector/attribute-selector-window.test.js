@@ -12,7 +12,7 @@ jest.mock('../../attribute-selector/attribute-selector-helpers');
 describe('AttributeSelectorWindow', () => {
   it('should contain attribute selector', () => {
     // given
-    const mstrData = { reportType: 'report' };
+    const mstrData = { chosenObjectType: 'report' };
     // when
     const componentWrapper = shallow(<AttributeSelectorWindow
       mstrData={mstrData}
@@ -25,12 +25,12 @@ describe('AttributeSelectorWindow', () => {
   it('should pass mstr data', () => {
     // given
     const mstrData = {
-      reportId: 'id',
-      envUrl: 'url',
-      token: 'token',
+      chosenObjectId: 'id',
+      envUrl: 'envUrl',
+      authToken: 'authToken',
       projectId: 'proId',
-      reportSubtype: 'subtype',
-      reportType: 'report',
+      chosenObjectSubtype: 'subtype',
+      chosenObjectType: 'report',
     };
     // when
     const componentWrapper = shallow(<AttributeSelectorWindow
@@ -41,22 +41,22 @@ describe('AttributeSelectorWindow', () => {
     expect(selectorWrapped.prop('mstrData')).toEqual(mstrData);
     expect(selectorWrapped.prop('session')).toEqual({
       USE_PROXY: false,
-      url: mstrData.envUrl,
-      authToken: mstrData.token,
+      envUrl: mstrData.envUrl,
+      authToken: mstrData.authToken,
       projectId: mstrData.projectId,
     });
-    expect(selectorWrapped.prop('reportId')).not.toBeDefined();
-    expect(selectorWrapped.prop('reportSubtype')).not.toBeDefined();
+    expect(selectorWrapped.prop('chosenObjectId')).not.toBeDefined();
+    expect(selectorWrapped.prop('chosenObjectSubtype')).not.toBeDefined();
   });
 
   it('should call setState if toggleSubtotal is called with parameter', () => {
     // given
     const mstrData = {
-      envUrl: 'url',
-      token: 'token',
+      envUrl: 'envUrl',
+      authToken: 'authToken',
       projectId: 'proId',
-      reportId: 'repId',
-      reportType: 'report',
+      chosenObjectId: 'repId',
+      chosenObjectType: 'report',
     };
 
     const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
@@ -72,11 +72,11 @@ describe('AttributeSelectorWindow', () => {
   it('should call setState if toggleSubtotal is called WITHOUT parameter', () => {
     // given
     const mstrData = {
-      envUrl: 'url',
-      token: 'token',
+      envUrl: 'envUrl',
+      authToken: 'authToken',
       projectId: 'proId',
-      reportId: 'repId',
-      reportType: 'report',
+      chosenObjectId: 'repId',
+      chosenObjectType: 'report',
     };
 
     const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
@@ -92,11 +92,11 @@ describe('AttributeSelectorWindow', () => {
   it('should call setState if handleOk is called', () => {
     // given
     const mstrData = {
-      envUrl: 'url',
-      token: 'token',
+      envUrl: 'envUrl',
+      authToken: 'authToken',
       projectId: 'proId',
-      reportId: 'repId',
-      reportType: 'report',
+      chosenObjectId: 'repId',
+      chosenObjectType: 'report',
     };
 
     const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
@@ -112,12 +112,12 @@ describe('AttributeSelectorWindow', () => {
   it('should call attributeSelectorHelpers.officeMessageParent if onTriggerUpdate is called without report name', () => {
     // given
     const mstrData = {
-      envUrl: 'url',
-      token: 'token',
+      envUrl: 'envUrl',
+      authToken: 'authToken',
       projectId: 'proId',
-      reportId: 'repId',
-      reportName: '55',
-      reportType: 'report',
+      chosenObjectId: 'repId',
+      chosenObjectName: '55',
+      chosenObjectType: 'report',
       instanceId: 'instanceId',
       promptsAnswers: 'promptsAnswers',
       importSubtotal: true,
@@ -131,19 +131,19 @@ describe('AttributeSelectorWindow', () => {
 
     // then
     expect(spyMethod).toHaveBeenCalledWith(
-      selectorProperties.commandOnUpdate, 1, 2, 3, 4, mstrData.reportName, mstrData.instanceId, mstrData.promptsAnswers, mstrData.importSubtotal,
+      selectorProperties.commandOnUpdate, 1, 2, 3, 4, mstrData.chosenObjectName, mstrData.instanceId, mstrData.promptsAnswers, mstrData.importSubtotal,
     );
   });
 
   it('should call attributeSelectorHelpers.officeMessageParent if onTriggerUpdate is called with report name', () => {
     // given
     const mstrData = {
-      envUrl: 'url',
-      token: 'token',
+      envUrl: 'envUrl',
+      authToken: 'authToken',
       projectId: 'proId',
-      reportId: 'repId',
-      reportName: '55',
-      reportType: 'report',
+      chosenObjectId: 'repId',
+      chosenObjectName: '55',
+      chosenObjectType: 'report',
       instanceId: 'instanceId',
       promptsAnswers: 'promptsAnswers',
       importSubtotal: true,
@@ -164,11 +164,11 @@ describe('AttributeSelectorWindow', () => {
   it('should trigger handleCancel when Cancel was clicked', () => {
     // given
     const mstrData = {
-      envUrl: 'url',
-      token: 'token',
+      envUrl: 'envUrl',
+      authToken: 'authToken',
       projectId: 'proId',
-      reportId: 'repId',
-      reportType: 'report',
+      chosenObjectId: 'repId',
+      chosenObjectType: 'report',
     };
 
     const componentWrapper = mount(<Provider store={reduxStore}>
@@ -190,11 +190,11 @@ describe('AttributeSelectorWindow', () => {
   it('should trigger handleBack when Back was clicked', () => {
     // given
     const mstrData = {
-      envUrl: 'url',
-      token: 'token',
+      envUrl: 'envUrl',
+      authToken: 'authToken',
       projectId: 'proId',
-      reportId: 'repId',
-      reportType: 'report',
+      chosenObjectId: 'repId',
+      chosenObjectType: 'report',
     };
     const handleBack = jest.fn();
 
@@ -217,11 +217,11 @@ describe('AttributeSelectorWindow', () => {
   it('should trigger attribute-selector-helpers: officeMessageParent when Cancel is clicked', () => {
     // given
     const mstrData = {
-      envUrl: 'url',
-      token: 'token',
+      envUrl: 'envUrl',
+      authToken: 'authToken',
       projectId: 'proId',
-      reportId: 'repId',
-      reportType: 'report',
+      chosenObjectId: 'repId',
+      chosenObjectType: 'report',
     };
 
     const componentWrapper = shallow(<AttributeSelectorWindow
@@ -241,11 +241,11 @@ describe('AttributeSelectorWindow', () => {
   it('should change value of attributesSelected if attributesBeingSelected is being invoked', () => {
     // given
     const mstrData = {
-      envUrl: 'url',
-      token: 'token',
+      envUrl: 'envUrl',
+      authToken: 'authToken',
       projectId: 'proId',
-      reportType: 'report',
-      reportId: 'repId',
+      chosenObjectType: 'report',
+      chosenObjectId: 'repId',
     };
 
     const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
@@ -262,11 +262,11 @@ describe('AttributeSelectorWindow', () => {
   it('should change values if resetTriggerUpdate is being invoked', () => {
     // given
     const mstrData = {
-      envUrl: 'url',
-      token: 'token',
+      envUrl: 'envUrl',
+      authToken: 'authToken',
       projectId: 'proId',
-      reportId: 'repId',
-      reportType: 'report',
+      chosenObjectId: 'repId',
+      chosenObjectType: 'report',
     };
 
     const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
@@ -282,11 +282,11 @@ describe('AttributeSelectorWindow', () => {
   it('should change value of openModal if openModal is being invoked', () => {
     // given
     const mstrData = {
-      envUrl: 'url',
-      token: 'token',
+      envUrl: 'envUrl',
+      authToken: 'authToken',
       projectId: 'proId',
-      reportId: 'repId',
-      reportType: 'report',
+      chosenObjectId: 'repId',
+      chosenObjectType: 'report',
     };
 
     const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
@@ -300,11 +300,11 @@ describe('AttributeSelectorWindow', () => {
   it('should change value of openModal if closeModal is being invoked', () => {
     // given
     const mstrData = {
-      envUrl: 'url',
-      token: 'token',
+      envUrl: 'envUrl',
+      authToken: 'authToken',
       projectId: 'proId',
-      reportId: 'repId',
-      reportType: 'report',
+      chosenObjectId: 'repId',
+      chosenObjectType: 'report',
     };
 
     const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);

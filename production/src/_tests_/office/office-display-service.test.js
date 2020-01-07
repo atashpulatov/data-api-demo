@@ -23,7 +23,7 @@ describe.skip('OfficeDisplayService', () => {
   const excelTableNameMock = 'table';
 
   const mstrContext = {
-    envUrl: 'url',
+    envUrl: 'envUrl',
     projectId: 'pId'
   };
 
@@ -330,17 +330,17 @@ describe.skip('OfficeDisplayService', () => {
       officeContextMock.sync = jest.fn();
       officeContextMock.trackedObjects = { add: jest.fn() };
       const startCell = 'A1';
-      const reportName = 'someReportName';
+      const chosenObjectName = 'someReportName';
       // when
       const result = await officeDisplayService._createOfficeTable(
         reportV2,
         officeContextMock,
         startCell,
-        reportName
+        chosenObjectName
       );
       // then
       expect(getActiveWorksheetMock).toBeCalled();
-      expect(result.name).toEqual(reportName);
+      expect(result.name).toEqual(chosenObjectName);
     });
     it('should delete prevOfficeTable on refresh if table definition changed and range is available', async () => {
       // given
@@ -391,18 +391,18 @@ describe.skip('OfficeDisplayService', () => {
       officeContextMock.sync = jest.fn();
       officeContextMock.trackedObjects = { add: jest.fn() };
       const startCell = 'A1';
-      const reportName = 'someReportName';
+      const chosenObjectName = 'someReportName';
       // when
       const result = await officeDisplayService._createOfficeTable(
         givenReport,
         officeContextMock,
         startCell,
-        reportName,
+        chosenObjectName,
         mockedPrevTable
       );
       // then
       expect(mockedPrevTable.delete).toBeCalled();
-      expect(result.name).toEqual(reportName);
+      expect(result.name).toEqual(chosenObjectName);
     });
   });
   describe('_checkRangeValidity', async () => {

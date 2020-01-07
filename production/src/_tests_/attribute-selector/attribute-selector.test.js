@@ -11,7 +11,7 @@ describe('AttributeSelectorHOC', () => {
   it('should pass mstr to its children', () => {
     // given
     const mstrData = {
-      reportId: 'id',
+      chosenObjectId: 'id',
       content: 'content',
     };
     // when
@@ -19,13 +19,13 @@ describe('AttributeSelectorHOC', () => {
     // then
     const attributeMetricFilterWrapped = selectorWrapped.find(AttributeMetricFilter).at(0);
     expect(attributeMetricFilterWrapped.prop('mstrData')).toEqual(mstrData);
-    expect(attributeMetricFilterWrapped.key()).toEqual(mstrData.reportId);
+    expect(attributeMetricFilterWrapped.key()).toEqual(mstrData.chosenObjectId);
   });
 
   it('should call handlePopupErrors with proper object', () => {
     // given
     const mstrData = {
-      reportId: 'id',
+      chosenObjectId: 'id',
       content: 'content',
     };
     const libraryError = { status: 400, response: { key: 'value' } };

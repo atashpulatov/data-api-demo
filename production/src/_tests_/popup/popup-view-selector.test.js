@@ -23,7 +23,7 @@ describe('PopupViewSelector', () => {
       popupType: PopupTypeEnum.navigationTree,
       connectToDB: jest.fn(),
       propsToPass: {},
-      authToken: 'token',
+      authToken: 'authToken',
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
@@ -42,7 +42,7 @@ describe('PopupViewSelector', () => {
     const props = {
       popupType: PopupTypeEnum.dossierWindow,
       propsToPass: {},
-      authToken: 'token',
+      authToken: 'authToken',
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
@@ -61,7 +61,7 @@ describe('PopupViewSelector', () => {
     const props = {
       popupType: PopupTypeEnum.dataPreparation,
       propsToPass: {},
-      authToken: 'token',
+      authToken: 'authToken',
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
@@ -80,8 +80,8 @@ describe('PopupViewSelector', () => {
     const props = {
       popupType: PopupTypeEnum.editFilters,
       propsToPass: { passedProps: 'passedProps', },
-      editedReport: { reportContent: 'reportToEdit', },
-      authToken: 'token',
+      editedObject: { reportContent: 'reportToEdit', },
+      authToken: 'authToken',
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
@@ -96,8 +96,8 @@ describe('PopupViewSelector', () => {
     expect(attributeSelectorWrapped.at(0).prop('mstrData'))
       .toEqual({
         ...props.propsToPass,
-        ...props.editedReport,
-        token: props.authToken,
+        ...props.editedObject,
+        authToken: props.authToken,
       });
   });
 
@@ -140,7 +140,7 @@ describe('PopupViewSelector', () => {
     const propsToPass = {
       chosenObjectId: 'objectId',
       chosenProjectId: 'projectId',
-      authToken: 'token',
+      authToken: 'authToken',
       startImport: jest.fn(),
       startLoading: jest.fn(),
       importRequested: true,
@@ -169,23 +169,23 @@ describe('PopupViewSelector', () => {
       chosenProjectId: 'projectId',
       chosenSubtype: 'chosenSubtype',
       popupType: PopupTypeEnum.dataPreparation,
-      authToken: 'token',
+      authToken: 'authToken',
       dossierData: {
         instanceId: 'instanceId',
         isReprompt: true,
       },
-      editedReport: {
+      editedObject: {
         selectedAttributes: ['1', '2'],
         selectedMetrics: ['1', '2'],
         selectedFilters: {},
       },
       propsToPass: {
         envUrl: 'envUrl',
-        reportId: 'objectId',
+        chosenObjectId: 'objectId',
         projectId: 'projectId',
-        reportName: 'reportName',
-        reportType: 'reportType',
-        reportSubtype: 'reportSubtype',
+        chosenObjectName: 'chosenObjectName',
+        chosenObjectType: 'chosenObjectType',
+        chosenObjectSubtype: 'chosenObjectSubtype',
       },
       startImport: jest.fn(),
       startLoading: jest.fn(),
@@ -222,7 +222,7 @@ describe('PopupViewSelector', () => {
     const propsToPass = {
       chosenObjectId: 'objectId',
       chosenProjectId: 'projectId',
-      authToken: 'token',
+      authToken: 'authToken',
       startImport: jest.fn(),
       startLoading: jest.fn(),
       isPrompted: true,
@@ -285,14 +285,14 @@ describe('PopupViewSelector', () => {
     const location = { search: {}, };
     const props = {
       popupType: PopupTypeEnum.dataPreparation,
-      authToken: 'token',
+      authToken: 'authToken',
       propsToPass: {
         envUrl: 'envUrl',
-        reportId: 'objectId',
+        chosenObjectId: 'objectId',
         projectId: 'projectId',
-        reportName: 'reportName',
-        reportType: 'reportType',
-        reportSubtype: 'reportSubtype',
+        chosenObjectName: 'chosenObjectName',
+        chosenObjectType: 'chosenObjectType',
+        chosenObjectSubtype: 'chosenObjectSubtype',
       },
       startImport: jest.fn(),
       startLoading: jest.fn(),
@@ -313,16 +313,16 @@ describe('PopupViewSelector', () => {
     const attributeSelectorWrapped = selectorWrapped.find(AttributeSelectorWindow);
     expect(attributeSelectorWrapped.get(0)).toBeDefined();
     const mstrDataProp = attributeSelectorWrapped.at(0).prop('mstrData');
-    expect(mstrDataProp.reportName).toBeDefined();
-    expect(mstrDataProp.reportType).toBeDefined();
+    expect(mstrDataProp.chosenObjectName).toBeDefined();
+    expect(mstrDataProp.chosenObjectType).toBeDefined();
     expect(mstrDataProp.projectId).toBeDefined();
     expect(mstrDataProp.instanceId).toBeDefined();
 
     expect(mstrDataProp)
       .toEqual({
         ...props.propsToPass,
-        ...props.editedReport,
-        token: props.authToken,
+        ...props.editedObject,
+        authToken: props.authToken,
       });
   });
 
@@ -332,11 +332,11 @@ describe('PopupViewSelector', () => {
     const location = { search: {}, };
     const props = {
       popupType: PopupTypeEnum.repromptingWindow,
-      authToken: 'token',
+      authToken: 'authToken',
       propsToPass: { prop: 'prop', },
       preparedInstance: instanceId,
       isPrompted: true,
-      editedReport: {
+      editedObject: {
         instanceId,
         // selectedAttributes: undefined,
         selectedMetrics: [],
@@ -366,11 +366,11 @@ describe('PopupViewSelector', () => {
     const location = { search: {}, };
     const props = {
       popupType: PopupTypeEnum.editFilters,
-      authToken: 'token',
+      authToken: 'authToken',
       propsToPass: { prop: 'prop', },
       preparedInstance: instanceId,
       isPrompted: true,
-      editedReport: {
+      editedObject: {
         instanceId,
         selectedAttributes: 'notEmptyThing',
         selectedMetrics: 'notEmptyThing',
@@ -404,7 +404,7 @@ describe('PopupViewSelector', () => {
       popupType: PopupTypeEnum.navigationTree,
       connectToDB: jest.fn(),
       propsToPass: {},
-      authToken: 'token',
+      authToken: 'authToken',
     };
     // when
 
@@ -416,10 +416,10 @@ describe('PopupViewSelector', () => {
     />);
     // then
     const wrappedNavTree = componentWrapper.find(NavigationTree).at(0);
-    expect(wrappedNavTree.prop('mstrData').token).toEqual(props.authToken);
+    expect(wrappedNavTree.prop('mstrData').authToken).toEqual(props.authToken);
   });
 
-  it('should render not conent when no token provided', () => {
+  it('should render not conent when no authToken provided', () => {
     // given
     const location = { search: {}, };
     const props = {
@@ -442,7 +442,7 @@ describe('PopupViewSelector', () => {
     // given
     const location = { search: {}, };
     const propsToPass = {
-      authToken: 'token',
+      authToken: 'authToken',
       dossierOpenRequested: true,
     };
     // when
@@ -464,12 +464,12 @@ describe('PopupViewSelector', () => {
       dossierOpenRequested: false,
       methods: {},
       importRequested: false,
-      authToken: 'token',
+      authToken: 'authToken',
       propsToPass: {
         isPrompted: true,
         projectId: '1',
-        reportId: '1',
-        reportName: 'reportName',
+        chosenObjectId: '1',
+        chosenObjectName: 'chosenObjectName',
       },
       preparePromptedReport: jest.fn()
     };
@@ -492,11 +492,11 @@ describe('PopupViewSelector', () => {
       dossierOpenRequested: false,
       methods: {},
       importRequested: false,
-      authToken: 'token',
+      authToken: 'authToken',
       propsToPass: {
         isPrompted: true,
         projectId: '1',
-        reportId: '1',
+        chosenObjectId: '1',
       },
       promptsAnswers: ['test1', 'test2', 'test3'],
       preparePromptedReport: jest.fn()
@@ -504,7 +504,7 @@ describe('PopupViewSelector', () => {
     const returnedValue = { status: 2, instanceId: 'abc' };
     createInstance.mockImplementationOnce(() => (returnedValue));
     const configPromptsMocked = {
-      objectId: props.propsToPass.reportId,
+      objectId: props.propsToPass.chosenObjectId,
       projectId: props.propsToPass.projectId,
       instanceId: returnedValue.instanceId,
       promptsAnswers: props.promptsAnswers[0]
@@ -522,7 +522,7 @@ describe('PopupViewSelector', () => {
     // given
     const instanceId = 'instanceId';
     const props = {
-      editedReport: {
+      editedObject: {
         instanceId,
         selectedAttributes: ['1', '2'],
         selectedMetrics: ['1', '2'],
@@ -532,13 +532,13 @@ describe('PopupViewSelector', () => {
       dossierOpenRequested: false,
       methods: {},
       importRequested: false,
-      authToken: 'token',
+      authToken: 'authToken',
       promptsAnswers: ['test1', 'test2', 'test3'],
       preparePromptedReport: jest.fn(),
       propsToPass: {
         isPrompted: true,
         projectId: '1',
-        reportId: '1',
+        chosenObjectId: '1',
       },
     };
 
@@ -558,8 +558,8 @@ describe('PopupViewSelector', () => {
       {...props}
     />);
     // then
-    expect(body.template.attributes[0]).toEqual(props.editedReport.selectedAttributes[0]);
-    expect(body.template.metrics[0]).toEqual(props.editedReport.selectedMetrics[0]);
+    expect(body.template.attributes[0]).toEqual(props.editedObject.selectedAttributes[0]);
+    expect(body.template.metrics[0]).toEqual(props.editedObject.selectedMetrics[0]);
   });
 
 
@@ -567,7 +567,7 @@ describe('PopupViewSelector', () => {
     // given
     const location = { search: {}, };
     const propsToPass = {
-      authToken: 'token',
+      authToken: 'authToken',
       isPrompted: true,
       dossierOpenRequested: true,
     };
@@ -587,7 +587,7 @@ describe('PopupViewSelector', () => {
     // given
     const location = { search: {}, };
     const propsToPass = {
-      authToken: 'token',
+      authToken: 'authToken',
       isPrompted: true,
       dossierOpenRequested: true,
       promptsAnswers: ['whatever'],
@@ -625,37 +625,37 @@ describe('PopupViewSelector', () => {
     it('should parse edited report properties', () => {
       // given
       const reportInRedux = {
-        id: 'reportId',
+        id: 'chosenObjectId',
         projectId: 'projectId',
-        name: 'reportName',
+        name: 'chosenObjectName',
         objectType: 'report',
         body: reportBody,
       };
       const reduxState = {
         navigationTree: {},
-        sessionReducer: { authToken: 'token', },
-        popupReducer: { editedReport: reportInRedux, },
+        sessionReducer: { authToken: 'authToken', },
+        popupReducer: { editedObject: reportInRedux, },
       };
       // when
-      const { editedReport } = mapStateToProps(reduxState);
+      const { editedObject } = mapStateToProps(reduxState);
       // then
-      expect(editedReport.projectId).toEqual(reportInRedux.projectId);
-      expect(editedReport.reportSubtype).toEqual(768);
-      expect(editedReport.reportName).toEqual(reportInRedux.name);
-      expect(editedReport.reportType).toEqual(reportInRedux.objectType);
-      expect(editedReport.reportId).toEqual(reportInRedux.id);
+      expect(editedObject.projectId).toEqual(reportInRedux.projectId);
+      expect(editedObject.chosenObjectSubtype).toEqual(768);
+      expect(editedObject.chosenObjectName).toEqual(reportInRedux.name);
+      expect(editedObject.chosenObjectType).toEqual(reportInRedux.objectType);
+      expect(editedObject.chosenObjectId).toEqual(reportInRedux.id);
 
-      expect(editedReport.selectedAttributes).toEqual([attributeId]);
-      expect(editedReport.selectedMetrics).toEqual([metricId]);
-      expect(editedReport.selectedFilters).toEqual(filterValue);
+      expect(editedObject.selectedAttributes).toEqual([attributeId]);
+      expect(editedObject.selectedMetrics).toEqual([metricId]);
+      expect(editedObject.selectedFilters).toEqual(filterValue);
     });
 
     it('should parse edited report properties without filters', () => {
       // given
       const reportInRedux = {
-        id: 'reportId',
+        id: 'chosenObjectId',
         projectId: 'projectId',
-        name: 'reportName',
+        name: 'chosenObjectName',
         objectType: 'report',
         body: {
           ...reportBody,
@@ -664,47 +664,47 @@ describe('PopupViewSelector', () => {
       };
       const reduxState = {
         navigationTree: {},
-        sessionReducer: { authToken: 'token', },
-        popupReducer: { editedReport: reportInRedux, },
+        sessionReducer: { authToken: 'authToken', },
+        popupReducer: { editedObject: reportInRedux, },
       };
       // when
-      const { editedReport } = mapStateToProps(reduxState);
+      const { editedObject } = mapStateToProps(reduxState);
       // then
-      expect(editedReport.projectId).toEqual(reportInRedux.projectId);
-      expect(editedReport.reportSubtype).toEqual(768);
-      expect(editedReport.reportName).toEqual(reportInRedux.name);
-      expect(editedReport.reportType).toEqual(reportInRedux.objectType);
-      expect(editedReport.reportId).toEqual(reportInRedux.id);
+      expect(editedObject.projectId).toEqual(reportInRedux.projectId);
+      expect(editedObject.chosenObjectSubtype).toEqual(768);
+      expect(editedObject.chosenObjectName).toEqual(reportInRedux.name);
+      expect(editedObject.chosenObjectType).toEqual(reportInRedux.objectType);
+      expect(editedObject.chosenObjectId).toEqual(reportInRedux.id);
 
-      expect(editedReport.selectedAttributes).toEqual([attributeId]);
-      expect(editedReport.selectedMetrics).toEqual([metricId]);
-      expect(editedReport.selectedFilters).not.toBeDefined();
+      expect(editedObject.selectedAttributes).toEqual([attributeId]);
+      expect(editedObject.selectedMetrics).toEqual([metricId]);
+      expect(editedObject.selectedFilters).not.toBeDefined();
     });
 
     it('should parse complex report properties', () => {
       // given
       const reportInRedux = {
-        id: 'reportId',
+        id: 'chosenObjectId',
         projectId: 'projectId',
-        name: 'reportName',
+        name: 'chosenObjectName',
         objectType: 'report',
         body: reportComplexBody,
       };
       const reduxState = {
         navigationTree: {},
-        sessionReducer: { authToken: 'token', },
-        popupReducer: { editedReport: reportInRedux, },
+        sessionReducer: { authToken: 'authToken', },
+        popupReducer: { editedObject: reportInRedux, },
       };
       // when
-      const { editedReport } = mapStateToProps(reduxState);
+      const { editedObject } = mapStateToProps(reduxState);
       // then
-      expect(editedReport.projectId).toEqual(reportInRedux.projectId);
-      expect(editedReport.reportSubtype).toEqual(768);
-      expect(editedReport.reportName).toEqual(reportInRedux.name);
-      expect(editedReport.reportType).toEqual(reportInRedux.objectType);
-      expect(editedReport.reportId).toEqual(reportInRedux.id);
+      expect(editedObject.projectId).toEqual(reportInRedux.projectId);
+      expect(editedObject.chosenObjectSubtype).toEqual(768);
+      expect(editedObject.chosenObjectName).toEqual(reportInRedux.name);
+      expect(editedObject.chosenObjectType).toEqual(reportInRedux.objectType);
+      expect(editedObject.chosenObjectId).toEqual(reportInRedux.id);
 
-      expect(editedReport.selectedFilters).toEqual(complexFilterValue);
+      expect(editedObject.selectedFilters).toEqual(complexFilterValue);
     });
 
     it('should parse edited dataset properties', () => {
@@ -712,34 +712,34 @@ describe('PopupViewSelector', () => {
       const datesetInRedux = {
         id: 'datasetId',
         projectId: 'projectId',
-        name: 'reportName',
+        name: 'chosenObjectName',
         objectType: 'dataset',
         body: reportBody,
       };
       const reduxState = {
         navigationTree: {},
-        sessionReducer: { authToken: 'token', },
-        popupReducer: { editedReport: datesetInRedux, },
+        sessionReducer: { authToken: 'authToken', },
+        popupReducer: { editedObject: datesetInRedux, },
       };
       // when
-      const { editedReport } = mapStateToProps(reduxState);
+      const { editedObject } = mapStateToProps(reduxState);
       // then
-      expect(editedReport.projectId).toEqual(datesetInRedux.projectId);
-      expect(editedReport.reportSubtype).toEqual(779);
-      expect(editedReport.reportName).toEqual(datesetInRedux.name);
-      expect(editedReport.reportType).toEqual(datesetInRedux.objectType);
-      expect(editedReport.reportId).toEqual(datesetInRedux.id);
+      expect(editedObject.projectId).toEqual(datesetInRedux.projectId);
+      expect(editedObject.chosenObjectSubtype).toEqual(779);
+      expect(editedObject.chosenObjectName).toEqual(datesetInRedux.name);
+      expect(editedObject.chosenObjectType).toEqual(datesetInRedux.objectType);
+      expect(editedObject.chosenObjectId).toEqual(datesetInRedux.id);
 
-      expect(editedReport.selectedAttributes).toEqual([attributeId]);
-      expect(editedReport.selectedMetrics).toEqual([metricId]);
-      expect(editedReport.selectedFilters).toEqual(filterValue);
+      expect(editedObject.selectedAttributes).toEqual([attributeId]);
+      expect(editedObject.selectedMetrics).toEqual([metricId]);
+      expect(editedObject.selectedFilters).toEqual(filterValue);
     });
 
     it('should parse prepared instance id', () => {
       // given
       const reduxState = {
         navigationTree: {},
-        sessionReducer: { authToken: 'token', },
+        sessionReducer: { authToken: 'authToken', },
         popupReducer: { preparedInstance: 'preparedInstance', },
       };
       // when

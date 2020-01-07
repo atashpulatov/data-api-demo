@@ -9,7 +9,7 @@ describe('HomeHelper', () => {
     homeHelper.init(reduxStore, sessionHelper);
   });
   describe('saveLoginValues', () => {
-    it('should trigger logout because of missing token and running on localhost', () => {
+    it('should trigger logout because of missing authToken and running on localhost', () => {
       // given
       jest.spyOn(homeHelper, 'getWindowLocation').mockReturnValueOnce({origin: 'localhost'});
       sessionHelper.logOut = jest.fn();
@@ -28,7 +28,7 @@ describe('HomeHelper', () => {
       // then
       expect(sessionHelper.logOut).not.toBeCalled();
     });
-    it('prepare url and save it to store', () => {
+    it('prepare envUrl and save it to store', () => {
       // given
       jest.spyOn(homeHelper, 'getWindowLocation').mockReturnValueOnce({
         origin: 'https://some-env.microstrategy.com/',
@@ -76,7 +76,7 @@ describe('HomeHelper', () => {
       // then
       expect(sessionHelper.logIn).not.toBeCalled();
     });
-    it('should save token when there is iSession cookie', () => {
+    it('should save authToken when there is iSession cookie', () => {
       // given
       const cookieJarWithoutToken = {
         someCookie: 'someCookieValue',

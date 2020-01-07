@@ -151,37 +151,37 @@ export class PopupHelper {
         ({ dossierName } = dossierStructure);
       }
     }
-    const reportData = {
-      reportId: popupState.id,
+    const chosenObjectData = {
+      chosenObjectId: popupState.id,
       instanceId: popupState.instanceId,
       projectId: popupState.projectId,
-      reportName: popupState.name,
-      reportType: popupState.objectType,
-      reportSubtype: popupState.objectType === 'report' ? 768 : 779,
+      chosenObjectName: popupState.name,
+      chosenObjectType: popupState.objectType,
+      chosenObjectSubtype: popupState.objectType === 'report' ? 768 : 779,
       promptsAnswers: promptsAnswers || popupState.promptsAnswers,
       importSubtotal: popupState.importSubtotal,
       isEdit: popupState.isEdit,
       dossierName,
       selectedViz: `${chapterKey}:${visualizationKey}`,
     };
-    return this.restoreFilters(popupState.body, reportData);
+    return this.restoreFilters(popupState.body, chosenObjectData);
   }
 
-  restoreFilters(body, reportData) {
+  restoreFilters(body, chosenObjectData) {
     try {
       if (body && body.requestedObjects) {
-        reportData.selectedAttributes = body.requestedObjects.attributes
+        chosenObjectData.selectedAttributes = body.requestedObjects.attributes
           && body.requestedObjects.attributes.map((attr) => attr.id);
-        reportData.selectedMetrics = body.requestedObjects.metrics
+        chosenObjectData.selectedMetrics = body.requestedObjects.metrics
           && body.requestedObjects.metrics.map((mtrc) => mtrc.id);
       }
       if (body && body.viewFilter) {
-        reportData.selectedFilters = this.parseFilters(body.viewFilter.operands);
+        chosenObjectData.selectedFilters = this.parseFilters(body.viewFilter.operands);
       }
     } catch (error) {
       console.warn(error);
     } finally {
-      return reportData;
+      return chosenObjectData;
     }
   }
 

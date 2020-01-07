@@ -48,12 +48,12 @@ export default class _DossierWindow extends React.Component {
   }
 
   handleOk() {
-    const { chosenObjectName, chosenObjectId, chosenProjectId, requestImport, selectObject, editedReport } = this.props;
-    const { reportId, projectId, isEdit } = editedReport;
+    const { chosenObjectName, chosenObjectId, chosenProjectId, requestImport, selectObject, editedObject } = this.props;
+    const { projectId, isEdit } = editedObject;
     const { chapterKey, visualizationKey, promptsAnswers, preparedInstanceId } = this.state;
     const selectedVisualization = {
       chosenObjectName,
-      chosenObjectId: chosenObjectId || reportId,
+      chosenObjectId: chosenObjectId || editedObject.chosenObjectId,
       chosenProjectId: chosenProjectId || projectId,
       chosenSubtype: mstrObjectEnum.mstrObjectType.visualization.subtypes,
       objectType: mstrObjectEnum.mstrObjectType.visualization.type,
@@ -72,14 +72,14 @@ export default class _DossierWindow extends React.Component {
   }
 
   render() {
-    const { chosenObjectName, chosenObjectId, chosenProjectId, handleBack, t, mstrData, editedReport, handlePopupErrors } = this.props;
-    const { envUrl, token } = mstrData;
-    const { reportId: editetObjectId, projectId: editedProjectId, instanceId: editedInstanceId, dossierName: editedObjectName, promptsAnswers: editedPromptsAnswers, selectedViz } = editedReport;
+    const { chosenObjectName, chosenObjectId, chosenProjectId, handleBack, t, mstrData, editedObject, handlePopupErrors } = this.props;
+    const { envUrl, authToken } = mstrData;
+    const { editetObjectId, editedProjectId, editedInstanceId, editedObjectName, editedPromptsAnswers, selectedViz } = editedObject;
     const { isVisualizationSelected, promptsAnswers } = this.state;
     const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
     const propsToPass = {
       envUrl,
-      token,
+      token: authToken,
       dossierId: isEdit ? editetObjectId : chosenObjectId,
       projectId: isEdit ? editedProjectId : chosenProjectId,
       promptsAnswers: isEdit ? editedPromptsAnswers : promptsAnswers,
@@ -124,14 +124,14 @@ _DossierWindow.propTypes = {
   t: PropTypes.func,
   mstrData: PropTypes.shape({
     envUrl: PropTypes.string,
-    token: PropTypes.string,
+    authToken: PropTypes.string,
     promptsAnswers: PropTypes.array || null
   }),
   requestImport: PropTypes.func,
   selectObject: PropTypes.func,
   handlePopupErrors: PropTypes.func,
-  editedReport: PropTypes.shape({
-    reportId: PropTypes.string,
+  editedObject: PropTypes.shape({
+    chosenObjectId: PropTypes.string,
     projectId: PropTypes.string,
     isEdit: PropTypes.bool,
     instanceId: PropTypes.string,
@@ -149,14 +149,14 @@ _DossierWindow.defaultProps = {
   t: (text) => text,
   mstrData: {
     envUrl: 'no env url',
-    token: null,
+    authToken: null,
     promptsAnswers: null
   },
   requestImport: () => { },
   selectObject: () => { },
   handlePopupErrors: () => { },
-  editedReport: {
-    reportId: undefined,
+  editedObject: {
+    chosenObjectId: undefined,
     projectId: undefined,
     isEdit: false,
     instanceId: undefined,

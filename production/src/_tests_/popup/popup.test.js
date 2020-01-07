@@ -48,11 +48,11 @@ describe('Popup.js', () => {
     expect(messageParentMock).toBeCalledWith(expectedMessage);
   });
 
-  it('should set projectId, reportId and subtype on handlePrepare', () => {
+  it('should set projectId, chosenObjectId and subtype on handlePrepare', () => {
     // given
     const location = { search: {}, };
     const givenRecord = {
-      reportId: 'reportId',
+      chosenObjectId: 'chosenObjectId',
       projectId: 'projectId',
       subtype: 'subtype',
     };
@@ -60,22 +60,22 @@ describe('Popup.js', () => {
     // when
     popupWrapped.instance().handlePrepare(
       givenRecord.projectId,
-      givenRecord.reportId,
+      givenRecord.chosenObjectId,
       givenRecord.subtype
     );
     // then
     const { mstrData } = popupWrapped.state();
-    expect(mstrData.reportId).toEqual(givenRecord.reportId);
+    expect(mstrData.chosenObjectId).toEqual(givenRecord.chosenObjectId);
     expect(mstrData.projectId).toEqual(givenRecord.projectId);
-    expect(mstrData.reportSubtype).toEqual(givenRecord.subtype);
+    expect(mstrData.chosenObjectSubtype).toEqual(givenRecord.subtype);
     expect(mstrData.popupType).toEqual(PopupTypeEnum.dataPreparation);
   });
 
-  it('should set projectId, reportId and subtype on handleBack', () => {
+  it('should set projectId, chosenObjectId and subtype on handleBack', () => {
     // given
     const location = { search: {}, };
     const givenRecord = {
-      reportId: 'reportId',
+      chosenObjectId: 'chosenObjectId',
       projectId: 'projectId',
       subtype: 'subtype',
     };
@@ -83,14 +83,14 @@ describe('Popup.js', () => {
     // when
     popupWrapped.instance().handleBack(
       givenRecord.projectId,
-      givenRecord.reportId,
+      givenRecord.chosenObjectId,
       givenRecord.subtype
     );
     // then
     const { mstrData } = popupWrapped.state();
-    expect(mstrData.reportId).toEqual(givenRecord.reportId);
+    expect(mstrData.chosenObjectId).toEqual(givenRecord.chosenObjectId);
     expect(mstrData.projectId).toEqual(givenRecord.projectId);
-    expect(mstrData.reportSubtype).toEqual(givenRecord.subtype);
+    expect(mstrData.chosenObjectSubtype).toEqual(givenRecord.subtype);
   });
 
   it('should pass popupType on', () => {

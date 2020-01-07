@@ -153,7 +153,7 @@ export class MstrObjectRestService {
       .then((res) => res.status);
   }
 
-  createDossierBasedOnReport = (reportId, instanceId, projectId) => {
+  createDossierBasedOnReport = (chosenObjectId, instanceId, projectId) => {
     // TODO: get rid of the getState
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
@@ -162,7 +162,7 @@ export class MstrObjectRestService {
       objects: [
         {
           type: 3,
-          id: reportId,
+          id: chosenObjectId,
           newName: 'Temp Dossier',
         },
       ],

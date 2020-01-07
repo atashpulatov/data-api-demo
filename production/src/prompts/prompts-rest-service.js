@@ -15,21 +15,21 @@ class PromptsRestService {
       .then((res) => res.body);
   }
 
-  getReportInstancePrompts(reportId, instanceId) {
+  getReportInstancePrompts(objectId, instanceId) {
     const storeState = reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const { projectId } = storeState.historyReducer.project;
 
-    const fullPath = `${envUrl}/reports/${reportId}/instances/${instanceId}/prompts`;
+    const fullPath = `${envUrl}/reports/${objectId}/instances/${instanceId}/prompts`;
     return this.getPrompts(fullPath, authToken, projectId);
   }
 
-  getReportPrompts(reportId, projectId) {
+  getReportPrompts(objectId, projectId) {
     const storeState = reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     // const projectId = storeState.historyReducer.project.projectId;
 
-    const fullPath = `${envUrl}/reports/${reportId}/prompts`;
+    const fullPath = `${envUrl}/reports/${objectId}/prompts`;
     return this.getPrompts(fullPath, authToken, projectId);
   }
 }

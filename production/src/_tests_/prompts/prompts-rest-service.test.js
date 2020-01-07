@@ -57,10 +57,10 @@ describe.skip('PromptsRestService', () => {
   describe('getReportPrompts', () => {
     it('should return the list of prompts in a given report definition', async () => {
       // given
-      const reportId = '7D5A304811E9292DB6700080EF85EFFD';
+      const chosenObjectId = '7D5A304811E9292DB6700080EF85EFFD';
       // when
       const result = await promptsRestService.getReportPrompts(
-        reportId,
+        chosenObjectId,
       );
       // then
       expect(result).toBeDefined();
@@ -70,10 +70,10 @@ describe.skip('PromptsRestService', () => {
 
     it('should return an empty array when no prompts are available in a report definition', async () => {
       // given
-      const reportId = '315E4D8C11E9295022A10080EFD510B5';
+      const chosenObjectId = '315E4D8C11E9295022A10080EFD510B5';
       // when
       const result = await promptsRestService.getReportPrompts(
-        reportId,
+        chosenObjectId,
       );
       // then
       expect(result).toBeDefined();
@@ -83,12 +83,12 @@ describe.skip('PromptsRestService', () => {
   describe('getReportInstacePrompts', () => {
     it.skip('should return the list of prompts in a given report instance', async () => {
       // given
-      const reportId = '7D5A304811E9292DB6700080EF85EFFD';
-      const fullPath = `${envURL}/reports/${reportId}/instances`;
+      const chosenObjectId = '7D5A304811E9292DB6700080EF85EFFD';
+      const fullPath = `${envURL}/reports/${chosenObjectId}/instances`;
       const instanceId = await mstrObjectRestService._getInstanceId(fullPath, authToken, projectId);
       // when
       const result = await promptsRestService.getReportInstancePrompts(
-        reportId, instanceId,
+        chosenObjectId, instanceId,
       );
       // then
       expect(result).toBeDefined();
@@ -98,12 +98,12 @@ describe.skip('PromptsRestService', () => {
 
     it('should return an empty array when no prompts are available in a report instance', async () => {
       // given
-      const reportId = '315E4D8C11E9295022A10080EFD510B5';
-      const fullPath = `${envURL}/reports/${reportId}/instances`;
+      const chosenObjectId = '315E4D8C11E9295022A10080EFD510B5';
+      const fullPath = `${envURL}/reports/${chosenObjectId}/instances`;
       const instanceId = await mstrObjectRestService._getInstanceId(fullPath, authToken, projectId);
       // when
       const result = await promptsRestService.getReportInstancePrompts(
-        reportId, instanceId,
+        chosenObjectId, instanceId,
       );
       // then
       expect(result).toBeDefined();

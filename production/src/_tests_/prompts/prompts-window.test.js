@@ -15,7 +15,7 @@ describe('_PromptsWindow', () => {
       envUrl: 'env',
       token: 'token',
       projectId: 'projectId',
-      reportId: 'reportId',
+      chosenObjectId: 'chosenObjectId',
     };
     // when
     const wrappedComponent = shallow(<_PromptsWindow mstrData={mstrData} />);
@@ -30,7 +30,7 @@ describe('_PromptsWindow', () => {
       envUrl: 'env',
       token: 'token',
       projectId: 'projectId',
-      reportId: 'reportId',
+      chosenObjectId: 'chosenObjectId',
     };
     const addEventListener = jest.spyOn(window, 'addEventListener');
     // when
@@ -45,7 +45,7 @@ describe('_PromptsWindow', () => {
       envUrl: 'env',
       token: 'token',
       projectId: 'projectId',
-      reportId: 'reportId',
+      chosenObjectId: 'chosenObjectId',
     };
     const removeEventListener = jest.spyOn(window, 'removeEventListener');
     // when
@@ -61,7 +61,7 @@ describe('_PromptsWindow', () => {
       envUrl: 'env',
       token: 'token',
       projectId: 'projectId',
-      reportId: 'reportId',
+      chosenObjectId: 'chosenObjectId',
     };
     const ref = React.createRef();
     // when
@@ -81,7 +81,7 @@ describe('_PromptsWindow', () => {
       envUrl: 'env',
       token: 'token',
       projectId: 'projectId',
-      reportId: 'reportId',
+      chosenObjectId: 'chosenObjectId',
     };
     const givenMessage = { data: { value: { iServerErrorCode: 1234, message: 'test' } } };
     const displayNotificationSpy = jest.spyOn(notificationService, 'displayNotification');
@@ -99,7 +99,7 @@ describe('_PromptsWindow', () => {
       envUrl: 'env',
       token: 'token',
       projectId: 'projectId',
-      reportId: 'reportId',
+      chosenObjectId: 'chosenObjectId',
     };
     const displayNotificationSpy = jest.spyOn(notificationService, 'displayNotification');
     // when
@@ -115,7 +115,7 @@ describe('_PromptsWindow', () => {
       envUrl: 'env',
       token: 'token',
       projectId: 'projectId',
-      reportId: 'reportId',
+      chosenObjectId: 'chosenObjectId',
     };
     const handlePopupErrors = jest.fn();
     authenticationHelper.validateAuthToken = jest

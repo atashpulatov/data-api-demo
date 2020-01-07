@@ -14,7 +14,7 @@ export class ErrorService {
     this.notificationService = notificationService;
   }
 
-  handleError = (error, options = { reportName: 'Report', onConfirm: null, isLogout: false }) => {
+  handleError = (error, options = { chosenObjectName: 'Report', onConfirm: null, isLogout: false }) => {
     const { onConfirm, isLogout, ...parameters } = options;
     const errorType = this.getErrorType(error);
     const errorMessage = errorMessageFactory(errorType)({ error, ...parameters });
@@ -63,7 +63,7 @@ export class ErrorService {
     return httpStatusToErrorType(status);
   }
 
-  getErrorMessage = (error, options = { reportName: 'Report' }) => {
+  getErrorMessage = (error, options = { chosenObjectName: 'Report' }) => {
     const errorType = this.getErrorType(error);
     return errorMessageFactory(errorType)({ error, ...options });
   }

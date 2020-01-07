@@ -52,7 +52,7 @@ describe('PageBuilder', () => {
     expect(wrappedComponent.find('PlaceHolderHOC').get(0)).toBeDefined();
   });
 
-  it('should return page with two children as false because of non-existing auth token', () => {
+  it('should return page with two children as false because of non-existing auth authToken', () => {
     // given
     const givenProps = {
       loading: true,

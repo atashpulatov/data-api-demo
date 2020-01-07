@@ -27,7 +27,7 @@ export class _PromptsWindow extends Component {
     super(props);
     const { mstrData } = props;
     this.state = {
-      reportId: mstrData.reportId,
+      chosenObjectId: mstrData.chosenObjectId,
       loading: true,
       isReprompt: mstrData.isReprompt,
       promptsAnswers: mstrData.promptsAnswers,
@@ -47,16 +47,16 @@ export class _PromptsWindow extends Component {
 
   sleep = (milliseconds) => new Promise(resolve => setTimeout(resolve, milliseconds))
 
-  preparePromptedReportInstance = async (reportId, projectId, promptsAnswers) => {
-    const config = { objectId: reportId, projectId };
+  preparePromptedReportInstance = async (chosenObjectId, projectId, promptsAnswers) => {
+    const config = { objectId: chosenObjectId, projectId };
     const instanceDefinition = await createInstance(config);
-    let dossierInstanceDefinition = await createDossierBasedOnReport(reportId, instanceDefinition.instanceId, projectId);
+    let dossierInstanceDefinition = await createDossierBasedOnReport(chosenObjectId, instanceDefinition.instanceId, projectId);
     if (dossierInstanceDefinition.status === 2) {
-      dossierInstanceDefinition = await this.answerDossierPrompts(dossierInstanceDefinition, reportId, projectId, promptsAnswers);
+      dossierInstanceDefinition = await this.answerDossierPrompts(dossierInstanceDefinition, chosenObjectId, projectId, promptsAnswers);
     }
 
-    dossierInstanceDefinition = await rePromptDossier(reportId, dossierInstanceDefinition, projectId);
-    dossierInstanceDefinition.id = reportId;
+    dossierInstanceDefinition = await rePromptDossier(chosenObjectId, dossierInstanceDefinition, projectId);
+    dossierInstanceDefinition.id = chosenObjectId;
 
     return dossierInstanceDefinition;
   }
@@ -82,19 +82,19 @@ export class _PromptsWindow extends Component {
   }
 
   loadEmbeddedDossier = async (container) => {
-    const { loading, reportId, isReprompt } = this.state;
+    const { loading, chosenObjectId, isReprompt } = this.state;
     if (!loading) {
       return;
     }
     let { promptsAnswers } = this.state;
     const { promptsAnswered, mstrData, handlePopupErrors } = this.props;
-    const { envUrl, token, projectId } = mstrData;
+    const { envUrl, authToken, projectId } = mstrData;
 
     let instanceDefinition;
     const instance = {};
     try {
       if (isReprompt) {
-        instanceDefinition = await this.preparePromptedReportInstance(reportId, projectId, promptsAnswers);
+        instanceDefinition = await this.preparePromptedReportInstance(chosenObjectId, projectId, promptsAnswers);
         instance.id = instanceDefinition && instanceDefinition.id; // '00000000000000000000000000000000';
         instance.mid = instanceDefinition && instanceDefinition.mid;
       }
@@ -112,7 +112,7 @@ export class _PromptsWindow extends Component {
         }
       };
       const libraryUrl = envUrl.replace('api', 'app');
-      const url = `${libraryUrl}/${projectId}/${reportId}`;
+      const url = `${libraryUrl}/${projectId}/${chosenObjectId}`;
       const { CustomAuthenticationType } = microstrategy.dossier;
       const { EventType } = microstrategy.dossier;
 
@@ -124,7 +124,7 @@ export class _PromptsWindow extends Component {
         enableResponsive: true,
 
         getLoginToken() {
-          return Promise.resolve(token);
+          return Promise.resolve(authToken);
         },
         placeholder: container,
         onMsgRouterReadyHandler: ({ MsgRouter }) => {

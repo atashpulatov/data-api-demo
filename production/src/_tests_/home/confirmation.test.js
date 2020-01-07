@@ -58,10 +58,10 @@ describe('Confirmation', () => {
     jest.spyOn(officeApiHelper, 'getTable').mockImplementationOnce(() => { throw error; });
     jest.spyOn(errorService, 'handleError').mockImplementationOnce(() => { });
     const clearErrors = [];
-    const reportName = 'Test';
+    const chosenObjectName = 'Test';
     const returnValue = {};
     errorService.handleError.mockReturnValueOnce(() => returnValue);
-    clearErrors.push({ reportName, returnValue });
+    clearErrors.push({ chosenObjectName, returnValue });
 
     const mockToggleIsConfirmFlag = jest.fn();
     const mockToggleIsClearingFlag = jest.fn();
