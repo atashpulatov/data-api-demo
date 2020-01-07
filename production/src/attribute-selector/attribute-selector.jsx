@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { AttributeMetricFilter, ErrorBoundary } from '@mstr/mstr-react-library';
 import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
+import { reduxStore } from '../store';
 
 export class AttributeSelectorHOC extends Component {
   constructor(props) {
@@ -32,11 +33,14 @@ export class AttributeSelectorHOC extends Component {
   }
 
   render() {
+    const { officeReducer } = reduxStore.getState();
+    const { supportForms } = officeReducer;
     const {
       title, session,
       triggerUpdate, onTriggerUpdate, mstrData,
       resetTriggerUpdate, attributesSelectedChange, t, openModal, closeModal, toggleSubtotal,
     } = this.props;
+    const mstrDataOffice = { ...mstrData, supportForms };
 
     return (
       <ErrorBoundary>
@@ -46,7 +50,7 @@ export class AttributeSelectorHOC extends Component {
           key={mstrData.reportId}
           title={title}
           session={session}
-          mstrData={mstrData}
+          mstrData={mstrDataOffice}
           triggerUpdate={triggerUpdate}
           onTriggerUpdate={onTriggerUpdate}
           withDataPreview
