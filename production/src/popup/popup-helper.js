@@ -164,16 +164,38 @@ export class PopupHelper {
       dossierName,
       selectedViz: `${chapterKey}:${visualizationKey}`,
     };
+    if (promptsAnswers) {
+      return this.comparePromptAnswers(popupState, promptsAnswers, chosenObjectData);
+    } else {
+      return this.restoreFilters(popupState.body, chosenObjectData);
+    }
+  
+    // return this.restoreFilters(popupState.body, chosenObjectData);
+  }
+
+ comparePromptAnswers(popupState, promptsAnswers, chosenObjectData) {
+  this.sortPromptsAnswers(popupState.promptsAnswers[0].answers);
+  this.sortPromptsAnswers(promptsAnswers[0].answers);
+  if (JSON.stringify(popupState.promptsAnswers) === JSON.stringify(promptsAnswers)) {
     return this.restoreFilters(popupState.body, chosenObjectData);
   }
+  return chosenObjectData;
+}
+
+
+sortPromptsAnswers(array) {
+  for (let i = 0; i < array.length; i++) {
+    array[i].values.sort();
+  }
+}
 
   restoreFilters(body, chosenObjectData) {
     try {
       if (body && body.requestedObjects) {
         chosenObjectData.selectedAttributes = body.requestedObjects.attributes
-          && body.requestedObjects.attributes.map((attr) => attr.id);
+          && body.requestedObjects.attributes.map((attribute) => attribute.id);
         chosenObjectData.selectedMetrics = body.requestedObjects.metrics
-          && body.requestedObjects.metrics.map((mtrc) => mtrc.id);
+          && body.requestedObjects.metrics.map((metric) => metric.id);
       }
       if (body && body.viewFilter) {
         chosenObjectData.selectedFilters = this.parseFilters(body.viewFilter.operands);
