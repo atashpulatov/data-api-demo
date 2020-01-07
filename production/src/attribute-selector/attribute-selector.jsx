@@ -46,7 +46,7 @@ export class AttributeSelectorHOC extends Component {
           attributesSelectedChange={attributesSelectedChange}
           key={chosen.id}
           title={title}
-          session={mapToLegacySession(session, chosen)}
+          session={mapToLegacySession(chosen, session, editedObject)}
           mstrData={mapToLegacyMstrData(chosen, session, editedObject)}
           triggerUpdate={triggerUpdate}
           onTriggerUpdate={onTriggerUpdate}
@@ -106,11 +106,11 @@ const mapToLegacyMstrData = (chosen, session, editedObject) => {
 // selectedAttributes: ["D8404BB6437A07581BF0F88B84B64070"]
 // selectedMetrics: ["3E653B5849B625073C1599B53BC59E2B"]
 
-const mapToLegacySession = (session, chosen) => ({
+const mapToLegacySession = (chosen, session, editedObject) => ({
   url: session.envUrl,
   USE_PROXY: false,
   authToken: session.authToken,
-  projectId: chosen.projectId,
+  projectId: chosen.projectId || editedObject.projectId,
 })
 // USE_PROXY: false
 // url: "https://aqueduct-tech.customer.cloud.microstrategy.com/MicroStrategyLibrary/api"
