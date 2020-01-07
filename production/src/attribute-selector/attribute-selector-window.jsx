@@ -75,11 +75,11 @@ export class AttributeSelectorWindowNotConnected extends Component {
   };
 
   render() {
-    const { mstrData, handleBack, reduxState, chosenObject } = this.props;
+    const { mstrData, handleBack, reduxState, chosenObject, editedObject } = this.props;
     const { triggerUpdate, openModal, attributesSelected, loading, } = this.state;
     const { toggleSubtotal } = this;
-    console.log({ reduxState });
-    console.log(chosenObject);
+    const value = !!editedObject;
+    console.log({ editedObject });
     const typeName = chosenObject.objectType.name
       && chosenObject.objectType.name.charAt(0).toUpperCase() + chosenObject.objectType.name.substring(1);
 
@@ -99,7 +99,7 @@ export class AttributeSelectorWindowNotConnected extends Component {
         />
         <PopupButtons
           disableActiveActions={!attributesSelected}
-          handleBack={!mstrData.editRequested && handleBack}
+          handleBack={!editedObject && handleBack}
           handleOk={this.handleOk}
           handleCancel={this.handleCancel}
           loading={loading}
@@ -128,6 +128,7 @@ const mapStateToProps = (state) => ({
   mstrData: { ...state.popupStateReducer },
   reduxState: state,
   chosenObject: state.navigationTree,
+  editedObject: state.popupReducer.editedObject,
 });
 
 const mapDispatchToProps = {
