@@ -78,6 +78,7 @@ const mapToLegacyMstrData = (chosen, session, editedObject) => {
     authToken: session.authToken,
     selectedAttributes: editedObject.selectedAttributes,
     selectedMetrics: editedObject.selectedMetrics,
+    selectedFilters: editedObject.selectedFilters,
 
     // forceChange: false
     // isPrompted: 0
