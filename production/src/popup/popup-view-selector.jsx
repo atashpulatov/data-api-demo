@@ -267,9 +267,9 @@ function renderProperComponent(popupType, methods, propsToPass, editedObject,) {
   if (popupType === PopupTypeEnum.promptsWindow) {
     return (
       <PromptsWindow
-        mstrData={propsToPass}
-        handleBack={methods.handleBack}
-        handlePopupErrors={popupHelper.handlePopupErrors}
+        // mstrData={propsToPass}
+        // handleBack={methods.handleBack}
+        // handlePopupErrors={popupHelper.handlePopupErrors}
       />
     );
   }

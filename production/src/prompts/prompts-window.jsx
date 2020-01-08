@@ -89,8 +89,9 @@ export class _PromptsWindow extends Component {
       return;
     }
     let { promptsAnswers } = this.state;
-    const { promptsAnswered, mstrData } = this.props;
-    const { envUrl, authToken, projectId } = mstrData;
+    const { promptsAnswered, mstrData, session } = this.props;
+    const projectId = mstrData.chosenProjectId;
+    const { envUrl, authToken } = session;
     console.log('loadEmbeddedDossier');
     console.log({ props: this.props });
 
@@ -117,6 +118,7 @@ export class _PromptsWindow extends Component {
       };
       const libraryUrl = envUrl.replace('api', 'app');
       const url = `${libraryUrl}/${projectId}/${chosenObjectId}`;
+      console.log({ url });
       const { CustomAuthenticationType } = microstrategy.dossier;
       const { EventType } = microstrategy.dossier;
 
@@ -165,6 +167,7 @@ export class _PromptsWindow extends Component {
           promptsAnswered({ dossierData, promptsAnswers });// TEMP - dossierData should eventually be removed as data should be gathered via REST from report instance, not dossier
         });
     } catch (error) {
+      console.error({ error });
       popupHelper.handlePopupErrors(error);
     }
   }
@@ -259,7 +262,7 @@ export class _PromptsWindow extends Component {
 
   render() {
     console.log('in render');
-    console.log({ props: this.props, state:this.state });
+    console.log({ props: this.props, state: this.state });
     const { isReprompt } = this.state;
     return (
       <div
