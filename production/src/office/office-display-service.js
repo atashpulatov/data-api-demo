@@ -191,35 +191,29 @@ export class OfficeDisplayService {
 
       if (prevReportName) {
         console.time('Duplicate renaminig');
-        let newName;
 
-        const ReverseString = str => [...str].reverse().join('');
-        const reversedPrevName = ReverseString(prevReportName);
-        let [lastWord, ...rest] = reversedPrevName.split(' ');
-        rest = rest.join(' ');
-        lastWord = ReverseString(lastWord);
-        rest = ReverseString(rest);
+        const splitedName = prevReportName.split(' ');
+        const nrOfWords = splitedName.length;
 
+        const lastWordIndex = nrOfWords - 1;
+        const lastWord = splitedName[lastWordIndex];
         const lastWordAsNumber = Number(lastWord);
+
+        const secondLastWordIndex = nrOfWords - 2;
+        const secondLastWord = splitedName[secondLastWordIndex];
+
         if ((Number.isNaN(lastWordAsNumber)) && (lastWord !== 'copy')) {
-          // if the last word is not a number and is not a 'copy'
-          newName = `${rest} ${lastWord} copy`;
+          splitedName.push('copy');
         } else if (lastWord === 'copy') {
-          newName = `${rest} ${lastWord} 1`;
+          splitedName.push('1');
+        } else if (secondLastWord === 'copy') {
+          splitedName.pop();
+          splitedName.push(`${lastWordAsNumber + 1}`);
         } else {
-          // last word is a number
-          let secondLastWord;
-          const reversedRest = ReverseString(rest);
-          [secondLastWord, ...rest] = reversedRest.split(' ');
-          rest = rest.join(' ');
-          secondLastWord = ReverseString(secondLastWord);
-          rest = ReverseString(rest);
-          if (secondLastWord === 'copy') {
-            newName = `${rest} ${secondLastWord} ${lastWordAsNumber + 1}`;
-          } else {
-            newName = `${rest} ${secondLastWord} ${lastWord} copy`;
-          }
+          splitedName.push('copy');
         }
+
+        const newName = splitedName.join(' ');
 
         // 5. check if report with simillar name exist in reportsArray
         // if conflict
@@ -232,6 +226,7 @@ export class OfficeDisplayService {
         // go further
 
         mstrTable.name = newName;
+
         console.timeEnd('Duplicate renaminig');
       }
 
