@@ -14,7 +14,6 @@ export const PopupNotConnected = ({location, setMstrData}) => {
   React.useEffect(() => {
     const popupLocation = (location && location.search) || window.location.search;
     const mstrDataToSet = queryString.parse(popupLocation);
-    console.log({location, mstrDataToSet});
     setMstrData(mstrDataToSet);
     libraryErrorController.initializeHttpErrorsHandling(popupHelper.handlePopupErrors);
   }, [location, setMstrData]);

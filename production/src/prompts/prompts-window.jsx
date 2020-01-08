@@ -10,8 +10,8 @@ import { notificationService } from '../notification/notification-service';
 import { Notifications } from '../notification/notifications';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { authenticationHelper } from '../authentication/authentication-helper';
-import {popupStateActions} from '../popup/popup-state-actions';
-import {popupHelper} from '../popup/popup-helper';
+import { popupStateActions } from '../popup/popup-state-actions';
+import { popupHelper } from '../popup/popup-helper';
 
 const { microstrategy } = window;
 const {
@@ -89,8 +89,10 @@ export class _PromptsWindow extends Component {
       return;
     }
     let { promptsAnswers } = this.state;
-    const { promptsAnswered, mstrData, handlePopupErrors } = this.props;
+    const { promptsAnswered, mstrData } = this.props;
     const { envUrl, authToken, projectId } = mstrData;
+    console.log('loadEmbeddedDossier');
+    console.log({ props: this.props });
 
     let instanceDefinition;
     const instance = {};
@@ -163,7 +165,7 @@ export class _PromptsWindow extends Component {
           promptsAnswered({ dossierData, promptsAnswers });// TEMP - dossierData should eventually be removed as data should be gathered via REST from report instance, not dossier
         });
     } catch (error) {
-      handlePopupErrors(error);
+      popupHelper.handlePopupErrors(error);
     }
   }
 
@@ -172,7 +174,6 @@ export class _PromptsWindow extends Component {
    * Session status is checked, and log out is performed if session expired.
    */
   handleRun = async () => {
-    const { handlePopupErrors } = this.props;
     try {
       await authenticationHelper.validateAuthToken();
       if (this.embeddedDocument) {
@@ -182,7 +183,7 @@ export class _PromptsWindow extends Component {
         }
       }
     } catch (error) {
-      handlePopupErrors(error);
+      popupHelper.handlePopupErrors(error);
     }
   }
 
@@ -257,7 +258,8 @@ export class _PromptsWindow extends Component {
   }
 
   render() {
-    const { handleBack } = this.props;
+    console.log('in render');
+    console.log({ props: this.props, state:this.state });
     const { isReprompt } = this.state;
     return (
       <div
@@ -271,7 +273,6 @@ export class _PromptsWindow extends Component {
 
         <div style={{ position: 'absolute', bottom: '0' }}>
           <PromptWindowButtons
-            handleBack={handleBack}
             handleRun={this.handleRun}
             isReprompt={isReprompt}
             closePopup={this.closePopup}
@@ -296,9 +297,6 @@ export const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = {
-  ...actions,
-  handleBack: popupStateActions.onPopupBack,
-};
+const mapDispatchToProps = { ...actions, };
 
 export const PromptsWindow = connect(mapStateToProps, mapDispatchToProps)(_PromptsWindow);

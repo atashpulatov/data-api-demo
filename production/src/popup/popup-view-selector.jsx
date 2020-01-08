@@ -19,7 +19,6 @@ const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 
 export const PopupViewSelectorHOC = (props) => {
   let { popupType } = props;
-  console.log({ props });
   const { propsToPass, methods, importRequested, dossierOpenRequested, loading } = props;
   const isPrompted = propsToPass.isPrompted || props.isPrompted;
   if (!props.authToken || !propsToPass) {
@@ -236,19 +235,16 @@ function proceedToImport(props) {
 function renderProperComponent(popupType, methods, propsToPass, editedObject,) {
   if (popupType === PopupTypeEnum.dataPreparation) {
     const mstrData = { ...propsToPass, instanceId: editedObject.instanceId, promptsAnswers: editedObject.promptsAnswers };
-    console.log('hello');
     return (
       <AttributeSelectorWindow />
     );
   }
   if (popupType === PopupTypeEnum.editFilters) {
-    console.log(editedObject);
     const mstrData = {
       ...propsToPass,
       ...editedObject,
     };
 
-    console.log(mstrData);
     return (
       <AttributeSelectorWindow
       // handleBack={() => methods.handleBack(null, null, null, true)} // FIXME: Don't know how to adjust it just yet.
