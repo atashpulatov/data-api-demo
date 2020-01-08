@@ -93,6 +93,7 @@ export class OfficeDisplayService {
     isRefreshAll,
     previousTableDimensions,
     insertNewWorksheet = false,
+    prevReportName = undefined,
   }) => {
     let newOfficeTableId;
     let shouldFormat;
@@ -187,6 +188,53 @@ export class OfficeDisplayService {
       // Save to store
       bindingId = bindingId || newOfficeTableId;
       await officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
+
+      if (prevReportName) {
+        console.time('Duplicate renaminig');
+        let newName;
+
+        const ReverseString = str => [...str].reverse().join('');
+        const reversedPrevName = ReverseString(prevReportName);
+        let [lastWord, ...rest] = reversedPrevName.split(' ');
+        rest = rest.join(' ');
+        lastWord = ReverseString(lastWord);
+        rest = ReverseString(rest);
+
+        const lastWordAsNumber = Number(lastWord);
+        if ((Number.isNaN(lastWordAsNumber)) && (lastWord !== 'copy')) {
+          // if the last word is not a number and is not a 'copy'
+          newName = `${rest} ${lastWord} copy`;
+        } else if (lastWord === 'copy') {
+          newName = `${rest} ${lastWord} 1`;
+        } else {
+          // last word is a number
+          let secondLastWord;
+          const reversedRest = ReverseString(rest);
+          [secondLastWord, ...rest] = reversedRest.split(' ');
+          rest = rest.join(' ');
+          secondLastWord = ReverseString(secondLastWord);
+          rest = ReverseString(rest);
+          if (secondLastWord === 'copy') {
+            newName = `${rest} ${secondLastWord} ${lastWordAsNumber + 1}`;
+          } else {
+            newName = `${rest} ${secondLastWord} ${lastWord} copy`;
+          }
+        }
+
+        // 5. check if report with simillar name exist in reportsArray
+        // if conflict
+        // if last word is 'copy' - add 1
+        // and run check again
+
+        // if last word is a number
+        // incrase number and run check again
+
+        // go further
+
+        mstrTable.name = newName;
+        console.timeEnd('Duplicate renaminig');
+      }
+
       officeStoreService.saveAndPreserveReportInStore({
         name: mstrTable.name,
         manipulationsXML: instanceDefinition.manipulationsXML,

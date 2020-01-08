@@ -138,25 +138,26 @@ export class PopupActions {
       dispatch({ type: officeProperties.actions.startLoading });
       const { bindId: bindingId, objectType, promptsAnswers } = reportParams;
 
-      const refreshReport = this.officeStoreService.getReportFromProperties(bindingId);
+      const prevReport = this.officeStoreService.getReportFromProperties(bindingId);
       const mstrObjectType = objectTypeEnum.getMstrTypeByName(objectType);
 
       const options = {
         dossierData: null,
         promptsAnswers: !promptsAnswers
-          ? refreshReport.promptsAnswers
+          ? prevReport.promptsAnswers
           : promptsAnswers,
-        objectId: refreshReport.id,
-        projectId: refreshReport.projectId,
+        objectId: prevReport.id,
+        projectId: prevReport.projectId,
         mstrObjectType,
-        body: refreshReport.body,
-        isCrosstab: refreshReport.isCrosstab,
-        crosstabHeaderDimensions: refreshReport.crosstabHeaderDimensions,
-        isPrompted: refreshReport.isPrompted,
-        subtotalInfo: refreshReport.subtotalInfo,
-        visualizationInfo: refreshReport.visualizationInfo,
-        manipulationsXML: refreshReport.manipulationsXML,
+        body: prevReport.body,
+        isCrosstab: prevReport.isCrosstab,
+        crosstabHeaderDimensions: prevReport.crosstabHeaderDimensions,
+        isPrompted: prevReport.isPrompted,
+        subtotalInfo: prevReport.subtotalInfo,
+        visualizationInfo: prevReport.visualizationInfo,
+        manipulationsXML: prevReport.manipulationsXML,
         insertNewWorksheet,
+        prevReportName: prevReport.name,
       };
       const result = await this.officeDisplayService.printObject(options);
       if (result) {
