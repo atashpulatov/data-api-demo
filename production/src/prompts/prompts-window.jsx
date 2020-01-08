@@ -10,6 +10,8 @@ import { notificationService } from '../notification/notification-service';
 import { Notifications } from '../notification/notifications';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { authenticationHelper } from '../authentication/authentication-helper';
+import {popupStateActions} from '../popup/popup-state-actions';
+import {popupHelper} from '../popup/popup-helper';
 
 const { microstrategy } = window;
 const {
@@ -280,6 +282,23 @@ export class _PromptsWindow extends Component {
   }
 }
 
-export const mapStateToProps = (state) => ({ ...state.promptsPopup });
+export const mapStateToProps = (state) => {
+  const { navigationTree, popupStateReducer, popupReducer, sessionReducer } = state;
+  const popupState = popupReducer.editedObject;
+  const { promptsAnswers, importSubtotal, ...mstrData } = navigationTree;
+  return {
+    ...state.promptsPopup,
+    mstrData,
+    importSubtotal,
+    editedObject: { ...(popupHelper.parsePopupState(popupState, promptsAnswers)) },
+    popupState: { ...popupStateReducer },
+    session: { ...sessionReducer },
+  };
+};
 
-export const PromptsWindow = connect(mapStateToProps, actions)(_PromptsWindow);
+const mapDispatchToProps = {
+  ...actions,
+  handleBack: popupStateActions.onPopupBack,
+};
+
+export const PromptsWindow = connect(mapStateToProps, mapDispatchToProps)(_PromptsWindow);

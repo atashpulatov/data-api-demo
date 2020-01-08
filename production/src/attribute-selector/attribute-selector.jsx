@@ -65,8 +65,6 @@ export class AttributeSelectorHOC extends Component {
 }
 
 const mapToLegacyMstrData = (chosen, session, editedObject) => {
-  console.log({ chosen, session, editedObject });
-
   const legacyObject = {
     reportId: chosen.id || editedObject.chosenObjectId,
     envUrl: session.envUrl || session.envUrl,
@@ -79,61 +77,16 @@ const mapToLegacyMstrData = (chosen, session, editedObject) => {
     selectedAttributes: editedObject.selectedAttributes,
     selectedMetrics: editedObject.selectedMetrics,
     selectedFilters: editedObject.selectedFilters,
-
-    // forceChange: false
-    // isPrompted: 0
-    // editRequested: false
-    // instanceId: undefined
-    // promptsAnswers: undefined
   };
-  console.log(legacyObject);
   return legacyObject;
 };
-
-// envUrl: "https://aqueduct-tech.customer.cloud.microstrategy.com/MicroStrategyLibrary/api"
-// et: ""
-// token: "kslnr5asnmnqaiauc5rmne5kvk"
-// editRequested: true
-// reportId: "F24F07F411E98BF500000080EFF5EDBD"
-// instanceId: undefined
-// projectId: "0730F68F4B8B4B52AA23F0AAB46F3CA8"
-// reportName: "basic report"
-// reportType: {type: 3, subtypes: Array(3), name: "report", request: "reports"}
-// reportSubtype: 779
-// promptsAnswers: null
-// importSubtotal: undefined
-// isEdit: undefined
-// dossierName: undefined
-// selectedAttributes: ["D8404BB6437A07581BF0F88B84B64070"]
-// selectedMetrics: ["3E653B5849B625073C1599B53BC59E2B"]
 
 const mapToLegacySession = (chosen, session, editedObject) => ({
   url: session.envUrl,
   USE_PROXY: false,
   authToken: session.authToken,
   projectId: chosen.projectId || editedObject.projectId,
-})
-// USE_PROXY: false
-// url: "https://aqueduct-tech.customer.cloud.microstrategy.com/MicroStrategyLibrary/api"
-// authToken: "5ok7qdpeavpbcnd804sb798qpf"
-// projectId: "0730F68F4B8B4B52AA23F0AAB46F3CA8"
-;
-
-// {
-//   envUrl: "https://aqueduct-tech.customer.cloud.microstrategy.com/MicroStrategyLibrary/api"
-//   et: ""
-//   forceChange: false
-//   projectId: "0730F68F4B8B4B52AA23F0AAB46F3CA8"
-//   reportId: "F24F07F411E98BF500000080EFF5EDBD"
-//   reportSubtype: 768
-//   reportName: "basic report"
-//   reportType: "Report"
-//   isPrompted: 0
-//   token: "5ok7qdpeavpbcnd804sb798qpf"
-//   editRequested: false
-//   instanceId: undefined
-//   promptsAnswers: undefined
-// }
+});
 
 AttributeSelectorHOC.propTypes = {
   title: PropTypes.string,
@@ -157,27 +110,16 @@ AttributeSelectorHOC.defaultProps = { t: (text) => text, };
 const mapStateToProps = (state) => {
   const { navigationTree, popupStateReducer, popupReducer, sessionReducer } = state;
   const popupState = popupReducer.editedObject;
-  const { promptsAnswers } = navigationTree;
+  const { promptsAnswers, importSubtotal, ...chosen } = navigationTree;
   return {
-    chosen: getChosen(navigationTree),
+    chosen,
+    importSubtotal,
     editedObject: { ...(popupHelper.parsePopupState(popupState, promptsAnswers)) },
-    importSubtotal: navigationTree.importSubtotal,
     popupState: { ...popupStateReducer },
     session: { ...sessionReducer },
   };
 };
-// selectedAttributes: ["D8404BB6437A07581BF0F88B84B64070"]
-// selectedMetrics: ["3E653B5849B625073C1599B53BC59E2B"]
+
 const mapDispatchToProps = {};
 
 export const AttributeSelector = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(AttributeSelectorHOC));
-function getChosen(navigationTree) {
-  console.log(navigationTree);
-  return {
-    id: navigationTree.chosenObjectId,
-    name: navigationTree.chosenObjectName,
-    type: navigationTree.objectType.name,
-    subtype: navigationTree.chosenSubtype,
-    projectId: navigationTree.chosenProjectId,
-  };
-}
