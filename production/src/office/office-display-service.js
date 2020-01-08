@@ -185,13 +185,11 @@ export class OfficeDisplayService {
         console.timeEnd('Get dossier structure');
       }
 
-      // Save to store
-      bindingId = bindingId || newOfficeTableId;
-      await officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
-
+      // assign new name in duplicate workflow
       if (prevReportName) {
         console.time('Duplicate renaminig');
 
+        // prepare new name
         const splitedName = prevReportName.split(' ');
         const nrOfWords = splitedName.length;
 
@@ -213,23 +211,39 @@ export class OfficeDisplayService {
           splitedName.push('copy');
         }
 
-        const newName = splitedName.join(' ');
+        let newName = splitedName.join(' ');
+        // END - prepare new name
 
-        // 5. check if report with simillar name exist in reportsArray
-        // if conflict
-        // if last word is 'copy' - add 1
-        // and run check again
+        // check current names
+        const reportsArray = [...officeStoreService.getReportProperties()];
 
-        // if last word is a number
-        // incrase number and run check again
+        const reportsArrayNames = [];
+        for (const report of reportsArray) {
+          reportsArrayNames.push(report.name);
+        }
 
-        // go further
+        while (reportsArrayNames.includes(newName)) {
+          console.log('there is a report with the same name');
+          if (splitedName[splitedName.length - 1] === 'copy') {
+            splitedName.push(1);
+          } else {
+            const last = splitedName.pop();
+            const last2Number = Number(last);
+            splitedName.push(`${last2Number + 1}`);
+          }
+          newName = splitedName.join(' ');
+        }
+        console.log('there is no report with the same name');
+        // End - check current names
 
         mstrTable.name = newName;
 
         console.timeEnd('Duplicate renaminig');
       }
 
+      // Save to store
+      bindingId = bindingId || newOfficeTableId;
+      await officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
       officeStoreService.saveAndPreserveReportInStore({
         name: mstrTable.name,
         manipulationsXML: instanceDefinition.manipulationsXML,
