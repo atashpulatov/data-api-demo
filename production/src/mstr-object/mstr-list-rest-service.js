@@ -82,8 +82,8 @@ export class MstrListRestService {
    */
   fetchObjectListByProject({ requestParams, callback = this.filterDossier, offset = 0, limit = LIMIT },
     projectId, queue) {
-    const { envUrl, authToken, typeQuery } = requestParams;
-    const url = `${envUrl}/${SEARCH_ENDPOINT}?limit=${limit}&offset=${offset}&type=${typeQuery}`;
+    const { envUrl, authToken, typeQuery, getAncestors } = requestParams;
+    const url = `${envUrl}/${SEARCH_ENDPOINT}?limit=${limit}&offset=${offset}&type=${typeQuery}&getAncestors=${getAncestors}`;
     return request
       .get(url)
       .set('x-mstr-authtoken', authToken)
