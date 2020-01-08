@@ -33,8 +33,7 @@ export class AttributeSelectorHOC extends Component {
   }
 
   render() {
-    const { officeReducer } = reduxStore.getState();
-    const { supportForms } = officeReducer;
+    const { officeReducer: { supportForms } } = reduxStore.getState();
     const {
       title, session,
       triggerUpdate, onTriggerUpdate, mstrData,
