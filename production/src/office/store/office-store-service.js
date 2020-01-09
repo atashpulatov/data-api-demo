@@ -155,6 +155,19 @@ export class OfficeStoreService {
 
   saveAndPreserveReportInStore = (report, isRefresh) => {
     if (isRefresh) {
+      window.Excel.run((context) => {
+        const worksheet = context.workbook.worksheets.getActiveWorksheet();
+        console.log(worksheet.onChanged.add(() => {
+          console.log('frilghrlgjhsdjgb***************');
+          console.log(worksheet);
+        }));
+        // const eventResult = worksheet.onDeleted.add();
+        console.log('rrrrrrrrrrrr');
+        return context.sync()
+          .then(() => {
+            console.log("Event handler successfully registered for onSelectionChanged event in the worksheet.");
+          });
+      }).catch();
       try {
         const settings = this.getOfficeSettings();
         const reportsArray = [...this.getReportProperties()];
