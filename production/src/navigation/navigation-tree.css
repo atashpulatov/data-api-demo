@@ -36,7 +36,7 @@
   border-top: none;
 }
 
-.filter-panel-container .ant-row .ant-col-12 .ant-empty.empty-selector{
+.filter-panel-container .ant-row .ant-col-12 .filter-list.ant-list .ant-empty.empty-selector{
   margin-top:-10px;
 }
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './internet-connection.scss';
 import { Icon } from 'antd';
 import { withTranslation } from 'react-i18next';
+import loadingAnimation from './assets/loading-animation';
 
 const InternetConnectionError = ({ t }) => {
   const [status, setStatus] = useState(window.navigator.onLine);
@@ -38,7 +39,7 @@ const InternetConnectionError = ({ t }) => {
         </div>
         <div className="internet-connection-row">
           <div className="internet-connection-loading-container">
-            <img style={{ width:'1.8em', height:'1.8em' }} src="./assets/small_loading.gif" alt="Loading icon" />
+            <img style={{ width:'1.8em', height:'1.8em' }} src={loadingAnimation} alt="Loading icon" />
             <span>{t('Trying to connect...')}</span>
           </div>
         </div>
