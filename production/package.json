@@ -22,16 +22,6 @@
     "unload": "office-toolbox remove -m manifest.xml -a excel",
     "validate": "office-toolbox validate -m manifest.xml"
   },
-  "watch": {
-    "deploy": {
-      "patterns": ["src"],
-      "extensions": "js,jsx",
-      "quiet": true,
-      "legacyWatch": true,
-      "delay": 2500,
-      "runOnChangeOnly": true
-    }
-  },
   "dependencies": {
     "@mstr/mstr-react-library": "^1.2.28",
     "@mstr/rc": "^0.21.6",
