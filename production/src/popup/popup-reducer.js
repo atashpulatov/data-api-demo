@@ -10,8 +10,6 @@ import { CLEAR_PROMPTS_ANSWERS } from '../navigation/navigation-tree-actions';
 export const initialState = {};
 
 export const popupReducer = (state = initialState, action) => {
-  console.log({ state, action });
-
   const { type, data } = action;
   switch (type) {
   case START_REPORT_LOADING: {

@@ -75,8 +75,6 @@ function cleanSelection(state) {
 }
 
 export const navigationTree = (state = initialState, action) => {
-  console.log({ state, action });
-
   const { type, data } = action;
   switch (type) {
   case SELECT_OBJECT: {

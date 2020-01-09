@@ -18,6 +18,8 @@ import { popupStateActions } from './popup-state-actions';
 const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 
 export const PopupViewSelectorHOC = (props) => {
+  console.log({ props });
+
   let { popupType } = props;
   const { propsToPass, methods, importRequested, dossierOpenRequested, loading } = props;
   const isPrompted = propsToPass.isPrompted || props.isPrompted;

@@ -16,8 +16,8 @@ import {
 } from '../cache/cache-actions';
 import DB from '../cache/cache-db';
 import { authenticationHelper } from '../authentication/authentication-helper';
-import {popupStateActions} from '../popup/popup-state-actions';
-import {popupHelper} from '../popup/popup-helper';
+import { popupStateActions } from '../popup/popup-state-actions';
+import { popupHelper } from '../popup/popup-helper';
 
 const SAFETY_FALLBACK = 7000; // Interval for falling back to network
 
@@ -134,10 +134,14 @@ export class _NavigationTree extends Component {
 
   handleSecondary = async () => {
     const { chosenProjectId, chosenObjectId, chosenObjectName, chosenType, chosenSubtype, handlePrepare } = this.props;
+    console.log({ props: this.props });
+
     let isPromptedResponse = false;
     try {
       const objectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
       if ((objectType === mstrObjectEnum.mstrObjectType.report) || (objectType === mstrObjectEnum.mstrObjectType.dossier)) {
+        console.log('im in');
+        
         isPromptedResponse = await checkIfPrompted(chosenObjectId, chosenProjectId, objectType.name);
       }
       handlePrepare(chosenProjectId, chosenObjectId, chosenSubtype, chosenObjectName, chosenType, isPromptedResponse);
