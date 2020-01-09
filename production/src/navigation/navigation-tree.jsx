@@ -133,18 +133,18 @@ export class _NavigationTree extends Component {
   };
 
   handleSecondary = async () => {
-    const { chosenProjectId, chosenObjectId, chosenObjectName, chosenType, chosenSubtype, handlePrepare } = this.props;
+    const { chosenProjectId, chosenObjectId, chosenObjectName, chosenType, chosenSubtype, handlePrepare, setObjectData } = this.props;
     console.log({ props: this.props });
 
-    let isPromptedResponse = false;
     try {
       const objectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
       if ((objectType === mstrObjectEnum.mstrObjectType.report) || (objectType === mstrObjectEnum.mstrObjectType.dossier)) {
         console.log('im in');
-        
-        isPromptedResponse = await checkIfPrompted(chosenObjectId, chosenProjectId, objectType.name);
+
+        const isPromptedResponse = await checkIfPrompted(chosenObjectId, chosenProjectId, objectType.name);
+        setObjectData({ isPrompted: isPromptedResponse });
       }
-      handlePrepare(chosenProjectId, chosenObjectId, chosenSubtype, chosenObjectName, chosenType, isPromptedResponse);
+      handlePrepare();
       this.setState({ previewDisplay: true });
     } catch (err) {
       popupHelper.handlePopupErrors(err);
@@ -261,6 +261,7 @@ const mapActionsToProps = {
   resetDBState: refreshCacheState,
   fetchObjectsFromNetwork: fetchObjectsFallback,
   handlePrepare: popupStateActions.onPrepareData,
+  setObjectData: popupStateActions.setObjectData,
 };
 
 export const NavigationTree = connect(mapStateToProps, mapActionsToProps)(withTranslation('common')(_NavigationTree));
