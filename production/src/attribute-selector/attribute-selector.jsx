@@ -77,6 +77,7 @@ const mapToLegacyMstrData = (mstrData, session, editedObject) => {
     reportName: mstrData.chosenObjectName || editedObject.chosenObjectName,
     token: session.authToken,
     authToken: session.authToken,
+    promptsAnswers: editedObject && editedObject.promptsAnswers,
     selectedAttributes: editedObject.selectedAttributes,
     selectedMetrics: editedObject.selectedMetrics,
     selectedFilters: editedObject.selectedFilters,
