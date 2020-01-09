@@ -121,7 +121,7 @@ AttributeSelectorWindow.propTypes = {
     reportName: PropTypes.string,
     instanceId: PropTypes.string,
     promptsAnswers: PropTypes.string,
-    reportType: PropTypes.string,
+    reportType: PropTypes.object,
     editRequested: PropTypes.bool
   }).isRequired,
   handleBack: PropTypes.func,
