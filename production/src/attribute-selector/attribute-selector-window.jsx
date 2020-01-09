@@ -75,11 +75,13 @@ export class AttributeSelectorWindowNotConnected extends Component {
   };
 
   render() {
-    const { mstrData, handleBack, chosenObject, editedObject } = this.props;
+    const { handleBack, chosenObject, editedObject } = this.props;
     const { triggerUpdate, openModal, attributesSelected, loading, } = this.state;
     const { toggleSubtotal } = this;
     const typeName = chosenObject.objectType.name
       && chosenObject.objectType.name.charAt(0).toUpperCase() + chosenObject.objectType.name.substring(1);
+
+    console.log({ props: this.props });
 
     return (
       <div>

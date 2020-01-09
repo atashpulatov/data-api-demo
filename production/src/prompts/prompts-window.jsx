@@ -10,7 +10,6 @@ import { notificationService } from '../notification/notification-service';
 import { Notifications } from '../notification/notifications';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { authenticationHelper } from '../authentication/authentication-helper';
-import { popupStateActions } from '../popup/popup-state-actions';
 import { popupHelper } from '../popup/popup-helper';
 
 const { microstrategy } = window;

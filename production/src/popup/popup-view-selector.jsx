@@ -48,7 +48,7 @@ export const PopupViewSelectorHOC = (props) => {
       propsToPass.promptsAnswers = props.promptsAnswers;
       popupType = PopupTypeEnum.dossierWindow;
     } else {
-      obtainInstanceWithPromptsAnswers(propsToPass, props);
+      obtainInstanceWithPromptsAnswers(props);
       return <div />;
     }
   } else if (promptedReportSubmitted(props) || (dossierOpenRequested && !!isPrompted)) {
@@ -95,9 +95,11 @@ function arePromptsAnswered(props) {
   return !!props.dossierData && !!props.dossierData.instanceId;
 }
 
-async function obtainInstanceWithPromptsAnswers(propsToPass, props) {
-  const projectId = propsToPass.projectId || props.editedObject.projectId;
-  const objectId = propsToPass.chosenObjectId || props.editedObject.chosenObjectId;
+async function obtainInstanceWithPromptsAnswers(props) {
+  console.log({ props });
+
+  const projectId = props.chosenProjectId || props.editedObject.chosenProjectId;
+  const objectId = props.chosenObjectId || props.editedObject.chosenObjectId;
   const configInstace = { objectId, projectId };
   let instanceDefinition = await createInstance(configInstace);
   let count = 0;
@@ -123,13 +125,13 @@ async function obtainInstanceWithPromptsAnswers(propsToPass, props) {
   const preparedReport = {
     id: objectId,
     projectId,
-    name: propsToPass.chosenObjectName || props.editedObject.chosenObjectName,
+    name: props.chosenObjectName || props.editedObject.chosenObjectName,
     objectType: mstrObjectEnum.mstrObjectType.report,
     instanceId: instanceDefinition.instanceId,
     promptsAnswers: props.promptsAnswers,
     body,
   };
-  console.log({ preparedReport, propsToPass });
+  console.log({ preparedReport });
   props.preparePromptedReport(instanceDefinition.instanceId, preparedReport);
 }
 
@@ -232,7 +234,8 @@ function proceedToImport(props) {
   window.Office.context.ui.messageParent(JSON.stringify(okObject));
 }
 
-function renderProperComponent(popupType, methods, propsToPass, editedObject,) {
+function renderProperComponent(popupType, methods, propsToPass, editedObject) {
+  console.log({ popupType, methods, propsToPass, editedObject });
   if (popupType === PopupTypeEnum.dataPreparation) {
     const mstrData = { ...propsToPass, instanceId: editedObject.instanceId, promptsAnswers: editedObject.promptsAnswers };
     return (
@@ -267,9 +270,9 @@ function renderProperComponent(popupType, methods, propsToPass, editedObject,) {
   if (popupType === PopupTypeEnum.promptsWindow) {
     return (
       <PromptsWindow
-        // mstrData={propsToPass}
-        // handleBack={methods.handleBack}
-        // handlePopupErrors={popupHelper.handlePopupErrors}
+      // mstrData={propsToPass}
+      // handleBack={methods.handleBack}
+      // handlePopupErrors={popupHelper.handlePopupErrors}
       />
     );
   }
