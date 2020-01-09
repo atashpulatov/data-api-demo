@@ -75,7 +75,6 @@ class OfficeTableHelper {
         }
       }
       context.workbook.application.suspendApiCalculationUntilNextSync();
-      this.clearTableFilters(prevOfficeTable);
       if (!mstrTable.isCrosstab) {
         prevOfficeTable.getHeaderRowRange().values = [mstrTable.headers.columns[mstrTable.headers.columns.length - 1]];
       }
