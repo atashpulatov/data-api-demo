@@ -67,30 +67,30 @@ export class AttributeSelectorHOC extends Component {
   }
 }
 
-const mapToLegacyMstrData = (chosen, session, editedObject) => {
+const mapToLegacyMstrData = (mstrData, session, editedObject) => {
   const legacyObject = {
-    reportId: chosen.id || editedObject.chosenObjectId,
+    reportId: mstrData.chosenObjectId || editedObject.chosenObjectId,
     envUrl: session.envUrl || session.envUrl,
-    projectId: chosen.projectId || editedObject.projectId,
-    reportSubtype: chosen.subtype || editedObject.chosenObjectSubtype,
-    reportType: chosen.id ? chosen.type : editedObject.chosenObjectType,
-    reportName: chosen.name || editedObject.chosenObjectName,
+    projectId: mstrData.chosenProjectId || editedObject.projectId,
+    reportSubtype: mstrData.chosenSubtype || editedObject.chosenObjectSubtype,
+    reportType: mstrData.chosenObjectId ? mstrData.objectType.name : editedObject.chosenObjectType,
+    reportName: mstrData.chosenObjectName || editedObject.chosenObjectName,
     token: session.authToken,
     authToken: session.authToken,
     selectedAttributes: editedObject.selectedAttributes,
     selectedMetrics: editedObject.selectedMetrics,
     selectedFilters: editedObject.selectedFilters,
   };
-  console.log({ legacyObject, chosen, session, editedObject });
+  console.log({ legacyObject, chosen: mstrData, session, editedObject });
 
   return legacyObject;
 };
 
-const mapToLegacySession = (chosen, session, editedObject) => ({
+const mapToLegacySession = (mstrData, session, editedObject) => ({
   url: session.envUrl,
   USE_PROXY: false,
   authToken: session.authToken,
-  projectId: chosen.projectId || editedObject.projectId,
+  projectId: mstrData.chosenProjectId || editedObject.projectId,
 });
 
 AttributeSelectorHOC.propTypes = {

@@ -17,9 +17,20 @@
     "start:web": "office-addin-debugging start manifest.xml web",
     "stop": "office-addin-debugging stop manifest.xml",
     "dev-certs-install": "office-addin-dev-certs install",
+    "deploy": "./aws-deploy.sh y 10.250.150.207",
     "sideload": "office-toolbox sideload -m manifest.xml -a excel",
     "unload": "office-toolbox remove -m manifest.xml -a excel",
     "validate": "office-toolbox validate -m manifest.xml"
+  },
+  "watch": {
+    "deploy": {
+      "patterns": ["src"],
+      "extensions": "js,jsx",
+      "quiet": true,
+      "legacyWatch": true,
+      "delay": 2500,
+      "runOnChangeOnly": true
+    }
   },
   "dependencies": {
     "@mstr/mstr-react-library": "^1.2.28",

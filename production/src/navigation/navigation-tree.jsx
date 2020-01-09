@@ -139,8 +139,6 @@ export class _NavigationTree extends Component {
     try {
       const objectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
       if ((objectType === mstrObjectEnum.mstrObjectType.report) || (objectType === mstrObjectEnum.mstrObjectType.dossier)) {
-        console.log('im in');
-
         const isPromptedResponse = await checkIfPrompted(chosenObjectId, chosenProjectId, objectType.name);
         setObjectData({ isPrompted: isPromptedResponse });
       }
