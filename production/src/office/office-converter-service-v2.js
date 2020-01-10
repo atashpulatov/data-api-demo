@@ -128,16 +128,16 @@ class OfficeConverterServiceV2 {
         return forms; // attribute as row with forms
       }
       // attribute as column with forms
-      return e.value.length > 1 ? e.value.map((form) => `'${form}`) : `'${e.value.join(' ')}`;
+      return supportForms && e.value.length > 1 ? e.value.map((form) => `'${form}`) : `'${e.value.join(' ')}`;
     };
     if (isCrosstab) {
-      const rows = jsonHandler.renderHeaders(response.definition, 'rows', response.data.headers, onElement(rowTotals));
+      const rows = jsonHandler.renderHeaders(response.definition, 'rows', response.data.headers, onElement(rowTotals), supportForms);
       const columns = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement(columnTotals), supportForms);
       const subtotalAddress = [...rowTotals, ...columnTotals];
       return { rows, columns, subtotalAddress };
     }
     const attributeTitles = jsonHandler.renderTitles(response.definition, 'rows', response.data.headers, onElement(), supportForms);
-    const metricHeaders = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement());
+    const metricHeaders = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement(), supportForms);
     return isCrosstabular ? { columns: [[...attributeTitles[0], ...metricHeaders[0], '\' ']] } : { columns: [[...attributeTitles[0], ...metricHeaders[0]]] };
   }
 
