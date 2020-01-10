@@ -166,30 +166,31 @@ export class PopupHelper {
     };
     if (promptsAnswers) {
       return this.comparePromptAnswers(popupState, promptsAnswers, chosenObjectData);
-    } else {
-      return this.restoreFilters(popupState.body, chosenObjectData);
     }
-  
+    return this.restoreFilters(popupState.body, chosenObjectData);
+
+
     // return this.restoreFilters(popupState.body, chosenObjectData);
   }
 
- comparePromptAnswers(popupState, promptsAnswers, chosenObjectData) {
-  this.sortPromptsAnswers(popupState.promptsAnswers[0].answers);
-  this.sortPromptsAnswers(promptsAnswers[0].answers);
-  if (JSON.stringify(popupState.promptsAnswers) === JSON.stringify(promptsAnswers)) {
-    return this.restoreFilters(popupState.body, chosenObjectData);
+  comparePromptAnswers(popupState, promptsAnswers, chosenObjectData) {
+    this.sortPromptsAnswers(popupState.promptsAnswers[0].answers);
+    this.sortPromptsAnswers(promptsAnswers[0].answers);
+    if (JSON.stringify(popupState.promptsAnswers) === JSON.stringify(promptsAnswers)) {
+      return this.restoreFilters(popupState.body, chosenObjectData);
+    }
+    return chosenObjectData;
   }
-  return chosenObjectData;
-}
 
 
-sortPromptsAnswers(array) {
-  for (let i = 0; i < array.length; i++) {
-    array[i].values.sort();
+  sortPromptsAnswers(array) {
+    for (let i = 0; i < array.length; i++) {
+      array[i].values.sort();
+    }
   }
-}
 
   restoreFilters(body, chosenObjectData) {
+    console.log({body, chosenObjectData});
     try {
       if (body && body.requestedObjects) {
         chosenObjectData.selectedAttributes = body.requestedObjects.attributes
@@ -198,6 +199,7 @@ sortPromptsAnswers(array) {
           && body.requestedObjects.metrics.map((metric) => metric.id);
       }
       if (body && body.viewFilter) {
+        console.log({viewFilter: body.viewFilter});
         chosenObjectData.selectedFilters = this.parseFilters(body.viewFilter.operands);
       }
     } catch (error) {
@@ -208,6 +210,7 @@ sortPromptsAnswers(array) {
   }
 
   parseFilters(filtersNodes) {
+    console.log(filtersNodes);
     if (filtersNodes[0].operands) {
       // equivalent to flatMap((node) => node.operands)
       return this.parseFilters(filtersNodes.reduce((nodes, node) => nodes.concat(node.operands), []));

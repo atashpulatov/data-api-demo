@@ -21,7 +21,7 @@ export const PopupViewSelectorHOC = (props) => {
   console.log({ props });
 
   let { popupType } = props;
-  const { propsToPass, methods, importRequested, dossierOpenRequested, loading } = props;
+  const { propsToPass, methods, importRequested, dossierOpenRequested, loading, setObjectData } = props;
   const isPrompted = propsToPass.isPrompted || props.isPrompted;
   if (!props.authToken || !propsToPass) {
     console.log('Waiting for token to be passed');
@@ -62,7 +62,7 @@ export const PopupViewSelectorHOC = (props) => {
     propsToPass.promptsAnswers = null;
     popupType = PopupTypeEnum.dossierWindow;
   }
-  return renderProperComponent(popupType, methods, propsToPass, localEditReport);
+  return renderProperComponent(popupType, methods, propsToPass, localEditReport, setObjectData);
 };
 
 function wasReportJustImported(props) {
@@ -236,7 +236,7 @@ function proceedToImport(props) {
   window.Office.context.ui.messageParent(JSON.stringify(okObject));
 }
 
-function renderProperComponent(popupType, methods, propsToPass, editedObject) {
+function renderProperComponent(popupType, methods, propsToPass, editedObject, setObjectData) {
   console.log({ popupType, methods, propsToPass, editedObject });
   if (popupType === PopupTypeEnum.dataPreparation) {
     const mstrData = { ...propsToPass, instanceId: editedObject.instanceId, promptsAnswers: editedObject.promptsAnswers };
@@ -284,11 +284,12 @@ function renderProperComponent(popupType, methods, propsToPass, editedObject) {
       ...editedObject,
       isReprompt: true,
     };
+    setObjectData({ isReprompt: true });
     return (
       <PromptsWindow
-        mstrData={mstrData}
-        handleBack={methods.handleBack}
-        handlePopupErrors={popupHelper.handlePopupErrors}
+        // mstrData={mstrData}
+        // handleBack={methods.handleBack}
+        // handlePopupErrors={popupHelper.handlePopupErrors}
       />
     ); // use the same window as with prompting, but provide report info
   }
@@ -310,6 +311,7 @@ function renderProperComponent(popupType, methods, propsToPass, editedObject) {
 export function mapStateToProps(state) {
   const popupState = state.popupReducer.editedObject;
   const { promptsAnswers } = state.navigationTree;
+  console.log({ promptsAnswers, state });
   return {
     ...state.navigationTree,
     authToken: state.sessionReducer.authToken,
@@ -323,6 +325,7 @@ export function mapStateToProps(state) {
 const mapDispatchToProps = {
   ...actions,
   preparePromptedReport: popupActions.preparePromptedReport,
+  setObjectData: popupStateActions.setObjectData,
 };
 
 export const PopupViewSelector = connect(mapStateToProps, mapDispatchToProps)(PopupViewSelectorHOC);
