@@ -68,7 +68,8 @@ describe('Office converter service v2', () => {
     const crosstabsResponse = { ...response, supportForms: true };
     const expectedHeaders = {
       columns: [
-        [['\'BWI', '\'1'], ['\'BWI', '\'1'], ['\'BWI', '\'1'], ['\'DCA', '\'2'], ['\'DCA', '\'2'], ['\'DCA', '\'2']],
+        ['\'BWI', '\'BWI', '\'BWI', '\'DCA', '\'DCA', '\'DCA'],
+        ['\'1', '\'1', '\'1', '\'2', '\'2', '\'2'],
         ['\'Flights Delayed', '\'Avg Delay (min)', '\'On-Time', '\'Flights Delayed', '\'Avg Delay (min)', '\'On-Time'],
       ],
       rows: [
