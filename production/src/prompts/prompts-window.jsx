@@ -51,6 +51,7 @@ export class _PromptsWindow extends Component {
   preparePromptedReportInstance = async (chosenObjectId, projectId, promptsAnswers) => {
     const config = { objectId: chosenObjectId, projectId };
     const instanceDefinition = await createInstance(config);
+    console.log({ instanceDefinition });
     let dossierInstanceDefinition = await createDossierBasedOnReport(chosenObjectId, instanceDefinition.instanceId, projectId);
     if (dossierInstanceDefinition.status === 2) {
       dossierInstanceDefinition = await this.answerDossierPrompts(dossierInstanceDefinition, chosenObjectId, projectId, promptsAnswers);
@@ -66,6 +67,7 @@ export class _PromptsWindow extends Component {
     const instanceId = instanceDefinition.mid;
     let currentInstanceDefinition = instanceDefinition;
     let count = 0;
+    console.log({ instanceDefinition, objectId, projectId, promptsAnswers });
     while (currentInstanceDefinition.status === 2 && count < promptsAnswers.length) {
       const config = { objectId, projectId, instanceId: currentInstanceDefinition.mid, promptsAnswers: promptsAnswers[count] };
       await postAnswerDossierPrompts(config);
@@ -87,36 +89,41 @@ export class _PromptsWindow extends Component {
     if (!loading) {
       return;
     }
-    let { promptsAnswers } = this.state;
-    const { promptsAnswered, mstrData, session } = this.props;
-    const projectId = mstrData.chosenProjectId;
+    let { promptsAnswers: promptsAnswersLocal } = this.state;
+    const { promptsAnswered, mstrData, session, editedObject } = this.props;
+    console.log({ promptsAnswersLocal, edited: editedObject.promptsAnswers });
+    promptsAnswersLocal = promptsAnswersLocal || editedObject.promptsAnswers;
+    const chosenObjectIdLocal = !!chosenObjectId || editedObject.chosenObjectId;
+    const projectId = !!mstrData.chosenProjectId || editedObject.projectId;
     const { envUrl, authToken } = session;
     console.log('loadEmbeddedDossier');
-    console.log({ props: this.props });
+    console.log({ props: this.props, state:this.state });
+    console.log({ chosenObjectIdLocal, projectId, promptsAnswersLocal });
 
     let instanceDefinition;
     const instance = {};
     try {
-      if (isReprompt) {
-        instanceDefinition = await this.preparePromptedReportInstance(chosenObjectId, projectId, promptsAnswers);
+      if (promptsAnswersLocal) {
+        console.log('about to instanceDefinition');
+        instanceDefinition = await this.preparePromptedReportInstance(chosenObjectIdLocal, projectId, promptsAnswersLocal);
         instance.id = instanceDefinition && instanceDefinition.id; // '00000000000000000000000000000000';
         instance.mid = instanceDefinition && instanceDefinition.mid;
       }
 
       let msgRouter = null;
-      promptsAnswers = null;
+      promptsAnswersLocal = null;
       const promptsAnsweredHandler = function promptsAnswerFn(_promptsAnswers) {
         if (!_promptsAnswers) {
           return;
         }
-        if (promptsAnswers) {
-          promptsAnswers.push(_promptsAnswers);
+        if (promptsAnswersLocal) {
+          promptsAnswersLocal.push(_promptsAnswers);
         } else {
-          promptsAnswers = [_promptsAnswers];
+          promptsAnswersLocal = [_promptsAnswers];
         }
       };
       const libraryUrl = envUrl.replace('api', 'app');
-      const url = `${libraryUrl}/${projectId}/${chosenObjectId}`;
+      const url = `${libraryUrl}/${projectId}/${chosenObjectIdLocal}`;
       console.log({ url });
       const { CustomAuthenticationType } = microstrategy.dossier;
       const { EventType } = microstrategy.dossier;
@@ -163,7 +170,7 @@ export class _PromptsWindow extends Component {
           deleteDossierInstance(projectId, objectId, instanceId);
 
           msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, promptsAnsweredHandler);
-          promptsAnswered({ dossierData, promptsAnswers });// TEMP - dossierData should eventually be removed as data should be gathered via REST from report instance, not dossier
+          promptsAnswered({ dossierData, promptsAnswers: promptsAnswersLocal });// TEMP - dossierData should eventually be removed as data should be gathered via REST from report instance, not dossier
         });
     } catch (error) {
       console.error({ error });

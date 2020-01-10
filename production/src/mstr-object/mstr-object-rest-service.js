@@ -376,7 +376,6 @@ export class MstrObjectRestService {
   isPrompted = (objectId, projectId, objectTypeName) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
-    console.log({ envUrl, authToken, objectId, projectId, objectTypeName });
 
     let typePath;
     if (objectTypeName === mstrObjectEnum.mstrObjectType.report.name) {

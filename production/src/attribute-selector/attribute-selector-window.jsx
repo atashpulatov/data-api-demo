@@ -81,8 +81,6 @@ export class AttributeSelectorWindowNotConnected extends Component {
     const typeName = chosenObject.objectType.name
       && chosenObject.objectType.name.charAt(0).toUpperCase() + chosenObject.objectType.name.substring(1);
 
-    console.log({ props: this.props });
-
     return (
       <div>
         <AttributeSelector

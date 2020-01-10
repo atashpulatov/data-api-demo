@@ -134,7 +134,6 @@ export class _NavigationTree extends Component {
 
   handleSecondary = async () => {
     const { chosenProjectId, chosenObjectId, chosenObjectName, chosenType, chosenSubtype, handlePrepare, setObjectData } = this.props;
-    console.log({ props: this.props });
 
     try {
       const objectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);

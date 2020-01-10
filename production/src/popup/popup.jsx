@@ -15,10 +15,11 @@ export const PopupNotConnected = ({ location, setMstrData }) => {
   React.useEffect(() => {
     const popupLocation = (location && location.search) || window.location.search;
     const mstrDataToSet = queryString.parse(popupLocation);
-    console.log({ mstrDataToSet });
     if (mstrDataToSet.popupType === PopupTypeEnum.repromptingWindow) {
+      console.log('dupa');
       mstrDataToSet.isReprompt = true;
     }
+    console.log({ mstrDataToSet });
     setMstrData(mstrDataToSet);
     libraryErrorController.initializeHttpErrorsHandling(popupHelper.handlePopupErrors);
   }, [location, setMstrData]);
