@@ -210,7 +210,7 @@ export class PopupHelper {
   }
 
   parseFilters(filtersNodes) {
-    console.log(filtersNodes);
+    console.log({filtersNodes});
     if (filtersNodes[0].operands) {
       // equivalent to flatMap((node) => node.operands)
       return this.parseFilters(filtersNodes.reduce((nodes, node) => nodes.concat(node.operands), []));

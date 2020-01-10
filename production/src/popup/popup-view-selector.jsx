@@ -284,7 +284,6 @@ function renderProperComponent(popupType, methods, propsToPass, editedObject, se
       ...editedObject,
       isReprompt: true,
     };
-    setObjectData({ isReprompt: true });
     return (
       <PromptsWindow
         // mstrData={mstrData}
