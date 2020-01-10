@@ -67,7 +67,7 @@ export class OfficeDisplayService {
    * @param {Object} [parameter.manipulationsXML=false] Dossier Manipulation for imported visualization
    * @param {Object} [parameter.isRefreshAll]
    * @param {Boolean} [parameter.insertNewWorksheet] Flag for inserting new excel worksheet before import
-   * @param {Boolean} [parameter.originalObjectName] Name of original object to create orignalNane + copy during duplicate workflow
+   * @param {Boolean} [parameter.originalObjectName] Name of original object to create originalName + copy during duplicate workflow
    * @returns {Object} Specify status of the import.
    * @memberof officeDisplayService
    */
@@ -94,7 +94,7 @@ export class OfficeDisplayService {
     isRefreshAll,
     previousTableDimensions,
     insertNewWorksheet = false,
-    originalObjectName = undefined,
+    originalObjectName,
   }) => {
     let newOfficeTableId;
     let shouldFormat;
@@ -187,11 +187,11 @@ export class OfficeDisplayService {
 
       // assign new name in duplicate workflow
       if (originalObjectName) {
-        console.time('Duplicate renaminig');
+        console.time('Duplicate renaming');
         const nameCandidate = this.prepareNewNameForDuplicatedObject(originalObjectName);
         const finalNewName = this.checkAndSolveNameConflicts(nameCandidate);
         mstrTable.name = finalNewName;
-        console.timeEnd('Duplicate renaminig');
+        console.timeEnd('Duplicate renaming');
       }
 
       // Save to store
