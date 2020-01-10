@@ -13,6 +13,7 @@ describe('AttributeSelectorHOC', () => {
     const mstrData = {
       reportId: 'id',
       content: 'content',
+      supportForms: true,
     };
     // when
     const selectorWrapped = shallow(<AttributeSelectorHOC mstrData={mstrData} />);
