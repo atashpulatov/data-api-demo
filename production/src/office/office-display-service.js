@@ -67,6 +67,7 @@ export class OfficeDisplayService {
    * @param {Object} [parameter.manipulationsXML=false] Dossier Manipulation for imported visualization
    * @param {Object} [parameter.isRefreshAll]
    * @param {Boolean} [parameter.insertNewWorksheet] Flag for inserting new excel worksheet before import
+   * @param {Boolean} [parameter.originalObjectName] Name of original object to create orignalNane + copy during duplicate workflow
    * @returns {Object} Specify status of the import.
    * @memberof officeDisplayService
    */

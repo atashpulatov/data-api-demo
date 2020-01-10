@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { mount } from 'enzyme';
 import { Popover } from 'antd';
 import { _OfficeLoadedFile } from '../../file-history/office-loaded-file';
@@ -8,7 +7,6 @@ import { fileHistoryHelper } from '../../file-history/file-history-helper';
 import { officeApiHelper } from '../../office/office-api-helper';
 import { officeStoreService } from '../../office/store/office-store-service';
 import { errorService } from '../../error/error-handler';
-import OfficeLoadedPrompt from '../../file-history/office-loaded-prompt';
 
 describe('office loaded file', () => {
   it('should display provided file name', () => {
@@ -97,10 +95,10 @@ describe('office loaded file', () => {
     />);
     const wrappedIcons = wrappedComponent.find('MSTRIcon');
     // then
-    const refreshButton = wrappedIcons.at(2);
+    const refreshButton = wrappedIcons.at(1);
     expect(wrappedIcons.length).toBeGreaterThan(0);
     expect(refreshButton.props().type).toEqual('refresh');
-    const deleteButton = wrappedIcons.at(3);
+    const deleteButton = wrappedIcons.at(2);
     expect(deleteButton.props().type).toEqual('trash');
   });
   it('refresh method should not do anything if in loading state', () => {
@@ -149,7 +147,7 @@ describe('office loaded file', () => {
       visualizationInfo={visualizationInfoMock}
     />);
     const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
-    const refreshButton = wrappedIcons.at(2);
+    const refreshButton = wrappedIcons.at(1);
     refreshButton.props().onClick(mockEvent);
     // then
     await expect(mockGetContext).toBeCalled();
@@ -212,7 +210,7 @@ describe('office loaded file', () => {
       visualizationInfo={visualizationInfoMock}
     />);
     const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
-    const refreshButton = wrappedIcons.at(2);
+    const refreshButton = wrappedIcons.at(1);
     refreshButton.props().onClick(mockEvent);
     // then
     await expect(mockGetContext).toBeCalled();
@@ -245,7 +243,7 @@ describe('office loaded file', () => {
     />);
     wrappedComponent.setState({ allowRefreshClick: false });
     const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
-    const refreshButton = wrappedIcons.at(2);
+    const refreshButton = wrappedIcons.at(1);
     refreshButton.props().onClick(mockEvent);
     // then
     expect(onRefreshMocked).not.toBeCalled();
@@ -290,7 +288,7 @@ describe('office loaded file', () => {
     />);
     wrappedComponent.setState({ allowDeleteClick: true });
     const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
-    const deleteButton = wrappedIcons.at(3);
+    const deleteButton = wrappedIcons.at(2);
     deleteButton.props().onClick(mockEvent);
     // then
     await expect(mockGetContext).toBeCalled();
@@ -348,7 +346,7 @@ describe('office loaded file', () => {
     />);
     wrappedComponent.setState({ allowDeleteClick: false });
     const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
-    const deleteButton = wrappedIcons.at(3);
+    const deleteButton = wrappedIcons.at(2);
     // when
     deleteButton.props().onClick(mockEvent);
     // then
@@ -393,7 +391,7 @@ describe('office loaded file', () => {
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile fileName="test" objectType={{ name: 'report' }} visualizationInfo={visualizationInfoMock} />);
     // then
-    expect(wrappedComponent.find(Popover)).toHaveLength(7);
+    expect(wrappedComponent.find(Popover)).toHaveLength(6);
   });
   it('should invoke edit method on button click', async () => {
     // given
@@ -422,7 +420,7 @@ describe('office loaded file', () => {
       visualizationInfo={visualizationInfoMock}
     />);
     const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
-    const editButton = wrappedIcons.at(1);
+    const editButton = wrappedIcons.at(0);
     editButton.props().onClick(mockEvent);
     // then
     await expect(mockGetContext).toBeCalled();
@@ -561,109 +559,5 @@ describe('office loaded file', () => {
     // then
     expect(wrappedComponent).toBeDefined();
     expect(wrappedComponent.exists(`#input-${testBindingId}`)).toBeTruthy();
-  });
-
-  describe('duplicate button and officeLoadedPrompt', () => {
-    beforeAll(() => {
-      ReactDOM.createPortal = jest.fn((element, node) => element);
-    });
-
-    afterEach(() => {
-      ReactDOM.createPortal.mockClear();
-    });
-
-    it('should call openPrompt on duplicate button click', () => {
-      // given
-      const startLoadingMocked = jest.fn();
-      const stopLoadingMocked = jest.fn();
-      const objectType = { name: 'report' };
-      const mockEvent = { stopPropagation: jest.fn() };
-      const wrappedComponent = mount(<_OfficeLoadedFile
-        isLoading={false}
-        startLoading={startLoadingMocked}
-        stopLoading={stopLoadingMocked}
-        objectType={objectType}
-         />);
-      // const openPromptSpy = jest.spyOn(wrappedComponent.instance(), 'openPrompt');
-      const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
-      const duplicateButton = wrappedIcons.at(0);
-      // when
-      duplicateButton.props().onClick(mockEvent);
-      // then
-      // expect(openPromptSpy).toBeCalled();
-      expect(mockEvent.stopPropagation).toBeCalled();
-      expect(wrappedComponent.state().showOfficeLoadedPrompt).toEqual(true);
-    });
-
-    it('should render officeLoadedFile with OfficeLoadedPrompt when showOfficeLoadedPrompt is true', () => {
-      // given
-      const startLoadingMocked = jest.fn();
-      const stopLoadingMocked = jest.fn();
-      const objectType = { name: 'report' };
-      const wrappedComponent = mount(<_OfficeLoadedFile
-        isLoading={false}
-        startLoading={startLoadingMocked}
-        stopLoading={stopLoadingMocked}
-        objectType={objectType}
-         />);
-      // when
-      wrappedComponent.setState({ showOfficeLoadedPrompt: true });
-      // then
-      expect(wrappedComponent.find(OfficeLoadedPrompt)).toBeTruthy();
-    });
-
-    it('should call closePopup and duplicateAction on answered prompt', () => {
-      // given
-      const startLoadingMocked = jest.fn();
-      const stopLoadingMocked = jest.fn();
-      const objectType = { name: 'report' };
-      const mockedAnswer = 'answer';
-      const wrappedComponent = mount(<_OfficeLoadedFile
-        isLoading={false}
-        startLoading={startLoadingMocked}
-        stopLoading={stopLoadingMocked}
-        objectType={objectType}
-         />);
-      const closePromptSpy = jest.spyOn(wrappedComponent.instance(), 'closePrompt');
-      const duplicateActionSpy = jest.spyOn(wrappedComponent.instance(), 'duplicateAction');
-      // when
-      wrappedComponent.instance().answerHandler(mockedAnswer);
-      // then
-      expect(wrappedComponent.state().showOfficeLoadedPrompt).toEqual(false);
-      expect(closePromptSpy).toBeCalled();
-      expect(duplicateActionSpy).toBeCalledWith(mockedAnswer);
-    });
-
-    it('should render OfficeLoadedPrompt', () => {
-      // given
-      const answerHandler = jest.fn();
-      const closeHandler = jest.fn();
-      const t = (text) => text;
-      // when
-      const wrappedComponent = mount(<OfficeLoadedPrompt
-        answerHandler={answerHandler}
-        closeHandler={closeHandler}
-        t={t}
-         />);
-      // then
-      expect(wrappedComponent.find('div.component-overlay')).toBeTruthy();
-      expect(wrappedComponent.find('div.component-wrapper')).toBeTruthy();
-      expect(wrappedComponent.find('div.ant-radio-group').children()).toHaveLength(2);
-      expect(wrappedComponent.find('div.buttons-row').children()).toHaveLength(2);
-    });
-
-    it.skip('should call answerHandler with given answer on OK button click', () => {
-    // given
-    // when
-    // then
-      expect(1).toBeFalsy();
-    });
-
-    it.skip('should call closeHandler on cancel button click', () => {
-    // given
-    // when
-    // then
-      expect(1).toBeFalsy();
-    });
   });
 });

@@ -1,5 +1,4 @@
 import { officeProperties } from '../office/office-properties';
-import objectTypeEnum from '../mstr-object/mstr-object-type-enum';
 
 export const CLEAR_WINDOW = 'POPUP_CLOSE_WINDOW';
 export const START_REPORT_LOADING = 'START_REPORT_LOADING';
@@ -10,7 +9,7 @@ export const SET_PREPARED_REPORT = 'SET_PREPARED_REPORT';
 // export const PRELOAD = 'PRELOAD';
 
 export class PopupActions {
-  init = (authenticationHelper, errorService, officeApiHelper, officeStoreService, popupHelper, mstrObjectRestService, popupController, notificationService, officeDisplayService) => {
+  init = (authenticationHelper, errorService, officeApiHelper, officeStoreService, popupHelper, mstrObjectRestService, popupController) => {
     this.authenticationHelper = authenticationHelper;
     this.errorService = errorService;
     this.officeApiHelper = officeApiHelper;
@@ -18,8 +17,6 @@ export class PopupActions {
     this.popupHelper = popupHelper;
     this.mstrObjectRestService = mstrObjectRestService;
     this.popupController = popupController;
-    this.notificationService = notificationService;
-    this.officeDisplayService = officeDisplayService;
   }
 
   callForEdit = (reportParams) => async (dispatch) => {
@@ -121,54 +118,6 @@ export class PopupActions {
   }
 
   resetState = () => (dispatch) => dispatch({ type: RESET_STATE, })
-
-  callForDuplicate = ({ reportParams, insertNewWorksheet }) => async (dispatch) => {
-    try {
-      await Promise.all([
-        this.officeApiHelper.getExcelSessionStatus(),
-        this.authenticationHelper.validateAuthToken(),
-      ]);
-    } catch (error) {
-      dispatch({ type: officeProperties.actions.stopLoading });
-      return this.errorService.handleError(error);
-    }
-    try {
-      const excelContext = await this.officeApiHelper.getExcelContext();
-      await this.officeApiHelper.isCurrentReportSheetProtected(excelContext, reportParams.bindId);
-      dispatch({ type: officeProperties.actions.startLoading });
-      const { bindId: bindingId, objectType, promptsAnswers } = reportParams;
-
-      const originalObject = this.officeStoreService.getReportFromProperties(bindingId);
-      const mstrObjectType = objectTypeEnum.getMstrTypeByName(objectType);
-
-      const options = {
-        dossierData: null,
-        promptsAnswers: !promptsAnswers
-          ? originalObject.promptsAnswers
-          : promptsAnswers,
-        objectId: originalObject.id,
-        projectId: originalObject.projectId,
-        mstrObjectType,
-        body: originalObject.body,
-        isCrosstab: originalObject.isCrosstab,
-        crosstabHeaderDimensions: originalObject.crosstabHeaderDimensions,
-        isPrompted: originalObject.isPrompted,
-        subtotalInfo: originalObject.subtotalInfo,
-        visualizationInfo: originalObject.visualizationInfo,
-        manipulationsXML: originalObject.manipulationsXML,
-        insertNewWorksheet,
-        originalObjectName: originalObject.name,
-      };
-      const result = await this.officeDisplayService.printObject(options);
-      if (result) {
-        this.notificationService.displayNotification({ type: result.type, content: 'Duplication successful' });
-      }
-    } catch (error) {
-      this.errorService.handleError(error);
-    } finally {
-      dispatch({ type: officeProperties.actions.stopLoading });
-    }
-  };
 }
 
 export const popupActions = new PopupActions();
