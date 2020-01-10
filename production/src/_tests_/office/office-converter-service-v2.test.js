@@ -38,9 +38,34 @@ describe('Office converter service v2', () => {
     // then
     expect(isCrosstab).toEqual(expectedValue);
   });
-  it('should return row and column headers of crosstab report', () => {
+  it('should return row and column headers of crosstab report without attribute forms', () => {
     // given
     const crosstabsResponse = response;
+    const expectedHeaders = {
+      columns: [
+        ['\'BWI 1', '\'BWI 1', '\'BWI 1', '\'DCA 2', '\'DCA 2', '\'DCA 2'],
+        ['\'Flights Delayed', '\'Avg Delay (min)', '\'On-Time', '\'Flights Delayed', '\'Avg Delay (min)', '\'On-Time'],
+      ],
+      rows: [
+        ['\'2009', '\'January'],
+        ['\'2009', '\'February'],
+        ['\'2009', '\'March'],
+        ['\'2009', '\'Total'],
+        ['\'2010', '\'January'],
+        ['\'2010', '\'February'],
+        ['\'2010', '\'March'],
+        ['\'2010', '\'Total'],
+      ],
+      subtotalAddress: [false, false, false, false, false, false, false, { attributeIndex: 1, axis: 'rows', colIndex: 3 }, false, false, false, false, false, false, false, { attributeIndex: 1, axis: 'rows', colIndex: 7 }, false, false, false, false, false, false, false, false, false, false, false, false],
+    };
+    // when
+    const headers = officeConverter.getHeaders(crosstabsResponse, true, false);
+    // then
+    expect(headers).toEqual(expectedHeaders);
+  });
+  it('should return row and column headers of crosstab report with attribute forms', () => {
+    // given
+    const crosstabsResponse = { ...response, supportForms: true };
     const expectedHeaders = {
       columns: [
         [['\'BWI', '\'1'], ['\'BWI', '\'1'], ['\'BWI', '\'1'], ['\'DCA', '\'2'], ['\'DCA', '\'2'], ['\'DCA', '\'2']],
