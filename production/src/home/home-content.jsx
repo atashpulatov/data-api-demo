@@ -44,7 +44,6 @@ export default function HomeContent({
       {homeComponent}
       {!popupOpen && <InternetConnectionError />}
       <HomeDialog show={popupOpen} text={t('A MicroStrategy for Office Add-in dialog is open')} />
-      <div id="office-loaded-prompt-container" />
     </div>
   );
 }

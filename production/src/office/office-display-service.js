@@ -67,6 +67,7 @@ export class OfficeDisplayService {
    * @param {Object} [parameter.manipulationsXML=false] Dossier Manipulation for imported visualization
    * @param {Object} [parameter.isRefreshAll]
    * @param {Boolean} [parameter.insertNewWorksheet] Flag for inserting new excel worksheet before import
+   * @param {Boolean} [parameter.originalObjectName] Name of original object to create originalName + copy during duplicate workflow
    * @returns {Object} Specify status of the import.
    * @memberof officeDisplayService
    */
@@ -93,6 +94,7 @@ export class OfficeDisplayService {
     isRefreshAll,
     previousTableDimensions,
     insertNewWorksheet = false,
+    originalObjectName,
   }) => {
     let newOfficeTableId;
     let shouldFormat;
@@ -181,6 +183,15 @@ export class OfficeDisplayService {
         console.time('Get dossier structure');
         visualizationInfo = await this.getVisualizationInfo(projectId, objectId, visualizationInfo.visualizationKey, preparedInstanceId) || visualizationInfo;
         console.timeEnd('Get dossier structure');
+      }
+
+      // assign new name in duplicate workflow
+      if (originalObjectName) {
+        console.time('Duplicate renaming');
+        const nameCandidate = this.prepareNewNameForDuplicatedObject(originalObjectName);
+        const finalNewName = this.checkAndSolveNameConflicts(nameCandidate);
+        mstrTable.name = finalNewName;
+        console.timeEnd('Duplicate renaming');
       }
 
       // Save to store
@@ -622,6 +633,58 @@ export class OfficeDisplayService {
     if (isOverLimit) { splitExcelRows = this.splitExcelRows(excelRows); }
     return splitExcelRows;
   }
+
+  prepareNewNameForDuplicatedObject(originalObjectName) {
+    const splitedName = originalObjectName.split(' ');
+    const nrOfWords = splitedName.length;
+
+    const lastWordIndex = nrOfWords - 1;
+    const lastWord = splitedName[lastWordIndex];
+    const lastWordAsNumber = Number(lastWord);
+
+    const secondLastWordIndex = nrOfWords - 2;
+    const secondLastWord = splitedName[secondLastWordIndex];
+
+    if ((Number.isNaN(lastWordAsNumber)) && (lastWord !== 'copy')) {
+      splitedName.push('copy');
+    } else if (lastWord === 'copy') {
+      splitedName.push('1');
+    } else if (secondLastWord === 'copy') {
+      splitedName.pop();
+      splitedName.push(`${lastWordAsNumber + 1}`);
+    } else {
+      splitedName.push('copy');
+    }
+
+    const nameCandidate = splitedName.join(' ');
+
+    return nameCandidate;
+  }
+
+  checkAndSolveNameConflicts(nameCandidate) {
+    const splitedName = nameCandidate.split(' ');
+    let finalNameCandidate = nameCandidate;
+
+    const reportsArray = [...officeStoreService.getReportProperties()];
+    const reportsArrayNames = [];
+    for (const report of reportsArray) {
+      reportsArrayNames.push(report.name);
+    }
+
+    while (reportsArrayNames.includes(finalNameCandidate)) {
+      if (splitedName[splitedName.length - 1] === 'copy') {
+        splitedName.push(1);
+      } else {
+        const last = splitedName.pop();
+        const last2Number = Number(last);
+        splitedName.push(`${last2Number + 1}`);
+      }
+      finalNameCandidate = splitedName.join(' ');
+    }
+    return finalNameCandidate;
+  }
 }
+
+
 export const officeDisplayService = new OfficeDisplayService();
 export default officeDisplayService;
