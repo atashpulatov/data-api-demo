@@ -30,8 +30,10 @@ desc "package test docker"
 task :e2e_test_browser do
   test_dir = "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser"
   if is_windows_jenkins_env?
+    short_dir = "c://test-driver-browser"
+    FileUtils.rm_rf test_dir if Dir.exist? short_dir
     FileUtils.cp_r test_dir "c://"
-    test_dir = "c://test-driver-browser"
+    test_dir = short_dir
   end
   shell_command! "npm install", cwd: test_dir
   test_fail = false
