@@ -93,8 +93,8 @@ export class _PromptsWindow extends Component {
     const { promptsAnswered, mstrData, session, editedObject } = this.props;
     console.log({ promptsAnswersLocal, edited: editedObject.promptsAnswers });
     promptsAnswersLocal = promptsAnswersLocal || editedObject.promptsAnswers;
-    const chosenObjectIdLocal = !!chosenObjectId || editedObject.chosenObjectId;
-    const projectId = !!mstrData.chosenProjectId || editedObject.projectId;
+    const chosenObjectIdLocal = chosenObjectId || editedObject.chosenObjectId;
+    const projectId = mstrData.chosenProjectId || editedObject.projectId;
     const { envUrl, authToken } = session;
     console.log('loadEmbeddedDossier');
     console.log({ props: this.props, state:this.state });
