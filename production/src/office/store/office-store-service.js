@@ -122,11 +122,12 @@ export class OfficeStoreService {
       try {
         const settings = this.getOfficeSettings();
         const reportsArray = [...this.getReportProperties()];
-        const reportObj = reportsArray.find((element) => element.bindId === report.bindId);
+        const reportObj = reportsArray.find((element) => element.bindId === report.oldTableId);
         const ObjectIndex = reportsArray.indexOf(reportObj);
         const refreshedObject = reportsArray[ObjectIndex];
         refreshedObject.crosstabHeaderDimensions = report.crosstabHeaderDimensions;
         refreshedObject.isCrosstab = report.isCrosstab;
+        refreshedObject.bindId = report.bindId;
         if (refreshedObject.visualizationInfo) {
           refreshedObject.manipulationsXML = report.manipulationsXML;
           refreshedObject.visualizationInfo.dossierStructure = report.visualizationInfo.dossierStructure;

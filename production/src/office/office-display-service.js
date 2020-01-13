@@ -140,7 +140,9 @@ export class OfficeDisplayService {
       ({ officeTable, newOfficeTableId, shouldFormat, tableColumnsChanged, bindId } = await officeTableHelper.getOfficeTable(
         isRefresh, excelContext, bindingId, instanceDefinition, startCell, tableName
       ));
-
+      console.group('________________________ officeDisplayService bindId');
+      console.log(bindId);
+      console.groupEnd('________________________ officeDisplayService bindId');
       // Apply formatting when table was created
       if (shouldFormat && !mstrTable.isCrosstabular) {
         await officeFormattingHelper.applyFormatting(officeTable, instanceDefinition, isCrosstab, excelContext);
@@ -182,10 +184,18 @@ export class OfficeDisplayService {
       // Save to store
       officeTable.load('name');
       await excelContext.sync();
+      const tablename = officeTable.name;
+
+
+      let tableid = bindingId;
+      if (!bindingId || (bindId && (bindingId !== bindId))) tableid = bindId;
 
       console.group('bindingId');
       console.log(bindingId);
       console.groupEnd('bindingId');
+      console.group('tableid');
+      console.log(tableid);
+      console.groupEnd('tableid');
       console.group('bindId');
       console.log(bindId);
       console.groupEnd('bindId');
@@ -198,14 +208,13 @@ export class OfficeDisplayService {
       console.group('officeTable.name');
       console.log(officeTable.name);
       console.groupEnd('officeTable.name');
-
-      bindingId = bindingId || bindId;
-      await officeApiHelper.bindNamedItem(officeTable.name, bindingId);
+      await officeApiHelper.bindNamedItem(tablename, tableid);
 
       officeStoreService.saveAndPreserveReportInStore({
         name: mstrTable.name,
         manipulationsXML: instanceDefinition.manipulationsXML,
-        bindId:bindingId,
+        bindId:tableid,
+        oldTableId:bindingId,
         projectId,
         envUrl,
         body,
@@ -228,7 +237,7 @@ export class OfficeDisplayService {
       this.reduxStore.dispatch({ type: CLEAR_PROMPTS_ANSWERS });
       this.reduxStore.dispatch({
         type: officeProperties.actions.finishLoadingReport,
-        reportBindId: bindingId,
+        reportBindId: tableid,
       });
       return { type: 'success', message: 'Data loaded successfully' };
     } catch (error) {

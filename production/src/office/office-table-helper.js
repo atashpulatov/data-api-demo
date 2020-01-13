@@ -329,16 +329,17 @@ class OfficeTableHelper {
     let tableColumnsChanged = await this.checkColumnsChange(prevOfficeTable, excelContext, instanceDefinition);
     startCell = await this.getStartCell(prevOfficeTable, excelContext);
     ({ tableColumnsChanged, startCell } = await this.clearIfCrosstabHeadersChanged(prevOfficeTable, excelContext, tableColumnsChanged, startCell, mstrTable));
+    let bindId;
     if (tableColumnsChanged) {
       console.log('Instance definition changed, creating new table');
-      ({ officeTable } = await this.createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableName, prevOfficeTable, tableColumnsChanged));
+      ({ officeTable, bindId } = await this.createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableName, prevOfficeTable, tableColumnsChanged));
     } else {
       shouldFormat = false;
       console.time('Validate existing table');
       officeTable = await this.updateOfficeTable(instanceDefinition, excelContext, startCell, prevOfficeTable);
       console.timeEnd('Validate existing table');
     }
-    return { tableColumnsChanged, startCell, officeTable, shouldFormat };
+    return { tableColumnsChanged, startCell, officeTable, shouldFormat, bindId };
   }
 
 
