@@ -183,7 +183,6 @@ export class OfficeDisplayService {
       officeTable.load('name');
       await excelContext.sync();
 
-      console.group('office-display-service');
       console.group('bindingId');
       console.log(bindingId);
       console.groupEnd('bindingId');
@@ -199,10 +198,8 @@ export class OfficeDisplayService {
       console.group('officeTable.name');
       console.log(officeTable.name);
       console.groupEnd('officeTable.name');
-      console.groupEnd('office-display-service');
 
-
-      bindingId = bindingId || bindId; // here bindId is the new ID created during reinsertion of table and we need to use THAT !!!!
+      bindingId = bindingId || bindId;
       await officeApiHelper.bindNamedItem(officeTable.name, bindingId);
 
       officeStoreService.saveAndPreserveReportInStore({
