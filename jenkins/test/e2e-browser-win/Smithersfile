@@ -37,7 +37,7 @@ job 'stage-2-e2e-browser-test-win' do
       script '#!/usr/bin/env bash
 set +xe
 export PATH=/usr/local/sbin:/usr/local/bin:$PATH
-export WORKSPACE_SETTING=win_test
+export WORKSPACE_SETTING=windows_test
 
 source .ecosystem
 export HATS=pipeline:$HATS
