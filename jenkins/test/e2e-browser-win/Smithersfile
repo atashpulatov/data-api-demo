@@ -16,17 +16,11 @@ job 'stage-2-e2e-browser-test-win' do
         description 'the version of the application to deploy and test'
       end
 
-      upstream_parameter do
-        upstream_job_name 'stage-1-dev'
-        name 'APPLICATION_COMMIT_HASH'
-        description 'the git commit hash paired with the application version (tip: choose the same list item index as the application version)'
-      end
     end
   end
 
   scm do
     git do
-      commit_hash '${APPLICATION_COMMIT_HASH}'
     end
   end
 
