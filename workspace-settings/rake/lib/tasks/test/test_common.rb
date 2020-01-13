@@ -31,8 +31,8 @@ task :e2e_test_browser do
   test_dir = "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser"
   if is_windows_jenkins_env?
     short_dir = "c://test-driver-browser"
-    FileUtils.rm_rf test_dir if Dir.exist? short_dir
-    FileUtils.cp_r test_dir "c://"
+    FileUtils.rm_rf short_dir if Dir.exist? short_dir
+    FileUtils.cp_r(test_dir,"c://")
     test_dir = short_dir
   end
   shell_command! "npm install", cwd: test_dir
@@ -47,7 +47,7 @@ task :e2e_test_browser do
   if is_windows_jenkins_env?
     report_dir = "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser/allure-report"
     FileUtils.rm_rf report_dir if Dir.exist? report_dir
-    FileUtils.cp_r "#{test_dir}/allure-report" "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser"
+    FileUtils.cp_r("#{test_dir}/allure-report","#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser")
   end
   raise "test failed" if test_fail
 
