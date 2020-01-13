@@ -6,6 +6,6 @@ function set_workspace_settings_to_windows_test() {
   export VAGRANT_DEFAULT_PROVIDER=aws
   export VAGRANT_CONTEXT="${VAGRANT_DEFAULT_PROVIDER}/test"
 
-  export TEST_TYPES=integration
+  export TEST_TYPES=integration_win
   export HATS=
 }

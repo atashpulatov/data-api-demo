@@ -7,7 +7,7 @@ cookbook_from_git 'nodejs', '0.1.10'
 
 cookbook_from_git 'java-osx', '0.1.1'
 cookbook_from_git 'java-windows', '1.0.3'
-cookbook_from_git 'virtualbox', '0.8.11'
+cookbook_from_git 'java_ecosystem', '0.1.18'
 
 cookbook 'java'
 

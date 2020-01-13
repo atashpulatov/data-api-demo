@@ -20,15 +20,15 @@ DEPENDENCIES
     git: https://github.microstrategy.com/ecosystem-cookbooks/java-windows.git
     revision: f3ca5c50a7474f465c2709eeb9588a572701957c
     tag: 1.0.3
+  java_ecosystem
+    git: https://github.microstrategy.com/ecosystem-cookbooks/java_ecosystem.git
+    revision: 538dbe2ac03558faca247dd670a5c42ba96cc6cb
+    tag: 0.1.18
   nodejs
     git: https://github.microstrategy.com/ecosystem-cookbooks/nodejs.git
     revision: e39da16a582f0781eb9488b6542556fc4b0311f3
     tag: 0.1.10
   seven_zip (~> 2.0.0)
-  virtualbox
-    git: https://github.microstrategy.com/ecosystem-cookbooks/virtualbox.git
-    revision: 3f809e122c3f9b23c1500fcf3288fd44ac9f7ed0
-    tag: 0.8.11
 
 GRAPH
   ark (4.0.0)
@@ -50,12 +50,13 @@ GRAPH
   java-osx (0.1.1)
   java-windows (1.0.3)
     windows (>= 0.0.0)
+  java_ecosystem (0.1.17)
+    java (>= 0.0.0)
+    java-osx (>= 0.0.0)
+    java-windows (>= 0.0.0)
   mingw (2.1.0)
     seven_zip (>= 0.0.0)
   nodejs (0.1.10)
   seven_zip (2.0.2)
     windows (>= 1.2.2)
-  virtualbox (0.8.11)
-    dmg (>= 0.0.0)
-    windows (>= 0.0.0)
   windows (6.0.1)
