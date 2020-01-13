@@ -28,18 +28,31 @@ end
 ######################################common e2e test rake task######################################
 desc "package test docker"
 task :e2e_test_browser do
- 
-  shell_command! "npm install", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser"
+  test_dir = "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser"
+  if is_windows_jenkins_env?
+    FileUtils.cp_r test_dir "c://"
+    test_dir = "c://test-driver-browser"
+  end
+  shell_command! "npm install", cwd: test_dir
   test_fail = false
   begin
-    shell_command! "npm run test", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser"
+    shell_command! "npm run test", cwd: test_dir
   rescue
     test_fail = true
   end
-  shell_command! "npm run report", cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser"
+  shell_command! "npm run report", cwd: test_dir
   ci_metrics_system_test
+  if is_windows_jenkins_env?
+    report_dir = "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser/allure-report"
+    FileUtils.rm_rf report_dir if Dir.exist? report_dir
+    FileUtils.cp_r "#{test_dir}/allure-report" "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser"
+  end
   raise "test failed" if test_fail
 
+end
+
+def is_windows_jenkins_env?
+  return ENV['USER'] == "jenkins" && ENV['TEST_TYPES'] == "integration_win"
 end
 
 
