@@ -19,7 +19,6 @@ import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { startLoading, stopLoading } from '../navigation/navigation-tree-actions';
 import { errorService } from '../error/error-handler';
 
-
 export class _OfficeLoadedFile extends React.Component {
   constructor(props) {
     super(props);
@@ -214,28 +213,9 @@ export class _OfficeLoadedFile extends React.Component {
     return <></>;
   };
 
-  triggerDuplicate = () => {
-  }
-
   renderIcons({ t, isLoading }) {
     return (
       <span className="object-icons">
-        <ButtonPopover
-          placement="bottom"
-          content={t('Duplicate')}
-          mouseEnterDelay={1}
-        >
-          <span
-              aria-label="Duplicate button"
-              role="button"
-              tabIndex="0"
-              className="loading-button-container"
-              onClick={this.triggerDuplicate}
-              onKeyPress={this.triggerDuplicate}
-            >
-            <MSTRIcon type="duplicate" />
-          </span>
-        </ButtonPopover>
         <ButtonPopover
           placement="bottom"
           content={t('Edit Data')}
@@ -318,7 +298,6 @@ export class _OfficeLoadedFile extends React.Component {
     const isVisualization = (objectType.name === mstrObjectEnum.mstrObjectType.visualization.name);
     const menu = (
       <Menu>
-        <Menu.Item key="duplicate" onClick={(e) => { e.domEvent.stopPropagation(); this.triggerDuplicate(); }}>{t('Duplicate')}</Menu.Item>
         <Menu.Item key="edit" onClick={(e) => { e.domEvent.stopPropagation(); this.editAction(); }}>{t('Edit')}</Menu.Item>
         <Menu.Item key="refresh" onClick={(e) => { e.domEvent.stopPropagation(); this.refreshAction(); }}>{t('Refresh')}</Menu.Item>
         <Menu.Item key="remove" onClick={(e) => { e.domEvent.stopPropagation(); this.deleteAction(); }}>{t('Remove')}</Menu.Item>
@@ -329,33 +308,33 @@ export class _OfficeLoadedFile extends React.Component {
     // If fileName was changed but it was not introduced by user in editable mode (so fetched during edit) then update value to new fileName.
     if (!editable && (fileName !== value)) value = fileName;
     return (
-      <Dropdown overlay={menu} trigger={['contextMenu']}>
-        <div
-          className="file-history-container"
-          type="flex"
-          justify="center"
-          role="listitem"
-          tabIndex="0"
-          onClick={() => onClick(bindingId, true, this.deleteReport, fileName, isCrosstab, crosstabHeaderDimensions)}
-        >
-          <div className="refresh-icons-row">
-            <ButtonPopover
+        <Dropdown overlay={menu} trigger={['contextMenu']}>
+          <div
+            className="file-history-container"
+            type="flex"
+            justify="center"
+            role="listitem"
+            tabIndex="0"
+            onClick={() => onClick(bindingId, true, this.deleteReport, fileName, isCrosstab, crosstabHeaderDimensions)}
+           >
+            <div className="refresh-icons-row">
+              <ButtonPopover
               placement="bottom"
               content={t('Date and time of last modification')}
               mouseEnterDelay={1}
             >
-              <span>
-                <ClockIcon style={{ marginBottom: '2px' }} />
-                <span className="additional-data">
-                  {t('refreshed_date', { date: refreshDate })}
+                <span>
+                  <ClockIcon style={{ marginBottom: '2px' }} />
+                  <span className="additional-data">
+                    {t('refreshed_date', { date: refreshDate })}
+                  </span>
                 </span>
-              </span>
-            </ButtonPopover>
-            {this.renderIcons({ t, isLoading })}
-          </div>
+              </ButtonPopover>
+              {this.renderIcons({ t, isLoading })}
+            </div>
 
 
-          {isVisualization && dossierStructure
+            {isVisualization && dossierStructure
             && (
               <ButtonPopover
                 placement="bottom"
@@ -365,12 +344,12 @@ export class _OfficeLoadedFile extends React.Component {
               </ButtonPopover>
             )}
 
-          <div className="object-title-row">
-            {this.getMstrIcon(objectType)}
-            <RenameInput bindingId={bindingId} fileName={fileName} editable={editable} value={value} enableEdit={this.enableEdit} handleChange={this.handleChange} renameReport={this.renameReport} />
+            <div className="object-title-row">
+              {this.getMstrIcon(objectType)}
+              <RenameInput bindingId={bindingId} fileName={fileName} editable={editable} value={value} enableEdit={this.enableEdit} handleChange={this.handleChange} renameReport={this.renameReport} />
+            </div>
           </div>
-        </div>
-      </Dropdown>
+        </Dropdown>
     );
   }
 }
@@ -386,7 +365,7 @@ const mapDispatchToProps = {
   callForEdit: popupActions.callForEdit,
   callForEditDossier: popupActions.callForEditDossier,
   startLoading,
-  stopLoading
+  stopLoading,
 };
 
 _OfficeLoadedFile.propTypes = {
@@ -407,7 +386,7 @@ _OfficeLoadedFile.propTypes = {
   onDelete: PropTypes.func,
   callForEdit: PropTypes.func,
   callForEditDossier: PropTypes.func,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
 };
 
 export const OfficeLoadedFile = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_OfficeLoadedFile));

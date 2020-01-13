@@ -3,6 +3,7 @@ import { CONTEXT_LIMIT } from '../mstr-object/mstr-object-rest-service';
 import { TABLE_OVERLAP } from '../error/constants';
 import { OverlappingTablesError } from '../error/overlapping-tables-error';
 import officeFormattingHelper from './office-formatting-helper';
+import PromptNotification, { CANCEL } from '../notification/prompt-notification';
 
 const DEFAULT_TABLE_STYLE = 'TableStyleLight11';
 const TABLE_HEADER_FONT_COLOR = '#000000';
@@ -74,7 +75,6 @@ class OfficeTableHelper {
         }
       }
       context.workbook.application.suspendApiCalculationUntilNextSync();
-      this.clearTableFilters(prevOfficeTable);
       if (!mstrTable.isCrosstab) {
         prevOfficeTable.getHeaderRowRange().values = [mstrTable.headers.columns[mstrTable.headers.columns.length - 1]];
       }
@@ -168,16 +168,16 @@ class OfficeTableHelper {
    *
    * @memberOf OfficeTableHelper
    */
-  getOfficeTable = async (isRefresh, excelContext, bindingId, instanceDefinition, startCell) => {
+  getOfficeTable = async (isRefresh, excelContext, bindingId, instanceDefinition, startCell, previousTableDimensions) => {
     console.time('Create or get table');
     const newOfficeTableId = bindingId || officeApiHelper.findAvailableOfficeTableId();
     this.checkReportTypeChange(instanceDefinition);
     let officeTable;
     let shouldFormat = true;
-    let tableColumnsChanged;
+    let tableColumnsChanged = false;
     if (isRefresh) {
       ({ tableColumnsChanged, startCell, officeTable, shouldFormat } = await this.changeOfficeTableOnRefresh(
-        excelContext, bindingId, instanceDefinition, startCell, officeTable, newOfficeTableId, shouldFormat
+        excelContext, bindingId, instanceDefinition, startCell, officeTable, newOfficeTableId, shouldFormat, previousTableDimensions
       ));
     } else {
       officeTable = await this.createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId);
@@ -217,15 +217,15 @@ class OfficeTableHelper {
    *
    * @memberOf OfficeTableHelper
    */
-  checkColumnsChange = async (prevOfficeTable, context, instanceDefinition) => {
+  checkColumnsChange = async (prevOfficeTable, context, instanceDefinition, previousTableDimensions) => {
     const { columns } = instanceDefinition;
     const tableColumns = prevOfficeTable.columns;
+    const prevTableColumns = previousTableDimensions.columns;
     tableColumns.load('count');
     await context.sync();
     const tableColumnsCount = tableColumns.count;
-    return columns !== tableColumnsCount;
+    return columns !== tableColumnsCount || columns !== prevTableColumns;
   };
-
 
   /**
    * Get excel worksheet of previous office table or acxtive if no table was passed.
@@ -310,7 +310,7 @@ class OfficeTableHelper {
    *
    * @memberOf OfficeTableHelper
    */
-  async changeOfficeTableOnRefresh(excelContext, bindingId, instanceDefinition, startCell, officeTable, newOfficeTableId, shouldFormat) {
+  async changeOfficeTableOnRefresh(excelContext, bindingId, instanceDefinition, startCell, officeTable, newOfficeTableId, shouldFormat, previousTableDimensions) {
     const { mstrTable, mstrTable:{ isCrosstab, prevCrosstabDimensions } } = instanceDefinition;
     const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindingId);
     // Since showing Excel table header dont override the data but insert new row, we clear values from empty row in crosstab to prevent it
@@ -322,16 +322,19 @@ class OfficeTableHelper {
     }
     prevOfficeTable.showHeaders = true;
     await excelContext.sync();
-    let tableColumnsChanged = await this.checkColumnsChange(prevOfficeTable, excelContext, instanceDefinition);
+    let tableColumnsChanged = await this.checkColumnsChange(prevOfficeTable, excelContext, instanceDefinition, previousTableDimensions);
     startCell = await this.getStartCell(prevOfficeTable, excelContext);
     ({ tableColumnsChanged, startCell } = await this.clearIfCrosstabHeadersChanged(prevOfficeTable, excelContext, tableColumnsChanged, startCell, mstrTable));
     if (tableColumnsChanged) {
       console.log('Instance definition changed, creating new table');
-      officeTable = await this.createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId, prevOfficeTable, tableColumnsChanged);
+      /*  commented as for now we do not have notification component implemented
+      const userAction = await PromptNotification(); // TODO pass strings;
+      if (userAction === CANCEL) throw new Error('Operation cancelled'); */
+      officeTable = await this.createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId, prevOfficeTable);
     } else {
       shouldFormat = false;
       console.time('Validate existing table');
-      officeTable = await this.updateOfficeTable(instanceDefinition, excelContext, startCell, prevOfficeTable);
+      officeTable = await this.updateOfficeTable(instanceDefinition, excelContext, startCell, prevOfficeTable, tableColumnsChanged);
       console.timeEnd('Validate existing table');
     }
     return { tableColumnsChanged, startCell, officeTable, shouldFormat };
@@ -394,7 +397,7 @@ class OfficeTableHelper {
    clearIfCrosstabHeadersChanged = async (prevOfficeTable, excelContext, tableColumnsChanged, startCell, mstrTable) => {
      const { prevCrosstabDimensions, crosstabHeaderDimensions, isCrosstab } = mstrTable;
      const { validColumnsY, validRowsX } = await officeApiHelper.getCrosstabHeadersSafely(prevOfficeTable, prevCrosstabDimensions.columnsY, excelContext, prevCrosstabDimensions.rowsX);
-     if (isCrosstab && crosstabHeaderDimensions && (validRowsX || validColumnsY)
+     if (isCrosstab && crosstabHeaderDimensions && prevCrosstabDimensions
       && (validRowsX !== crosstabHeaderDimensions.rowsX
       || validColumnsY !== crosstabHeaderDimensions.columnsY)) {
        tableColumnsChanged = true;

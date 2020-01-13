@@ -95,10 +95,10 @@ describe('office loaded file', () => {
     />);
     const wrappedIcons = wrappedComponent.find('MSTRIcon');
     // then
-    const refreshButton = wrappedIcons.at(2);
+    const refreshButton = wrappedIcons.at(1);
     expect(wrappedIcons.length).toBeGreaterThan(0);
     expect(refreshButton.props().type).toEqual('refresh');
-    const deleteButton = wrappedIcons.at(3);
+    const deleteButton = wrappedIcons.at(2);
     expect(deleteButton.props().type).toEqual('trash');
   });
   it('refresh method should not do anything if in loading state', () => {
@@ -147,7 +147,7 @@ describe('office loaded file', () => {
       visualizationInfo={visualizationInfoMock}
     />);
     const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
-    const refreshButton = wrappedIcons.at(2);
+    const refreshButton = wrappedIcons.at(1);
     refreshButton.props().onClick(mockEvent);
     // then
     await expect(mockGetContext).toBeCalled();
@@ -210,7 +210,7 @@ describe('office loaded file', () => {
       visualizationInfo={visualizationInfoMock}
     />);
     const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
-    const refreshButton = wrappedIcons.at(2);
+    const refreshButton = wrappedIcons.at(1);
     refreshButton.props().onClick(mockEvent);
     // then
     await expect(mockGetContext).toBeCalled();
@@ -243,7 +243,7 @@ describe('office loaded file', () => {
     />);
     wrappedComponent.setState({ allowRefreshClick: false });
     const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
-    const refreshButton = wrappedIcons.at(2);
+    const refreshButton = wrappedIcons.at(1);
     refreshButton.props().onClick(mockEvent);
     // then
     expect(onRefreshMocked).not.toBeCalled();
@@ -288,7 +288,7 @@ describe('office loaded file', () => {
     />);
     wrappedComponent.setState({ allowDeleteClick: true });
     const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
-    const deleteButton = wrappedIcons.at(3);
+    const deleteButton = wrappedIcons.at(2);
     deleteButton.props().onClick(mockEvent);
     // then
     await expect(mockGetContext).toBeCalled();
@@ -346,7 +346,7 @@ describe('office loaded file', () => {
     />);
     wrappedComponent.setState({ allowDeleteClick: false });
     const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
-    const deleteButton = wrappedIcons.at(3);
+    const deleteButton = wrappedIcons.at(2);
     // when
     deleteButton.props().onClick(mockEvent);
     // then
@@ -391,7 +391,7 @@ describe('office loaded file', () => {
     // when
     const wrappedComponent = mount(<_OfficeLoadedFile fileName="test" objectType={{ name: 'report' }} visualizationInfo={visualizationInfoMock} />);
     // then
-    expect(wrappedComponent.find(Popover)).toHaveLength(7);
+    expect(wrappedComponent.find(Popover)).toHaveLength(6);
   });
   it('should invoke edit method on button click', async () => {
     // given
@@ -420,7 +420,7 @@ describe('office loaded file', () => {
       visualizationInfo={visualizationInfoMock}
     />);
     const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
-    const editButton = wrappedIcons.at(1);
+    const editButton = wrappedIcons.at(0);
     editButton.props().onClick(mockEvent);
     // then
     await expect(mockGetContext).toBeCalled();
