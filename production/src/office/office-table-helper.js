@@ -215,7 +215,7 @@ class OfficeTableHelper {
     let shouldFormat = true;
     let tableColumnsChanged;
     if (isRefresh) {
-      ({ tableColumnsChanged, startCell, officeTable, shouldFormat, bindingId } = await this.changeOfficeTableOnRefresh(
+      ({ tableColumnsChanged, startCell, officeTable, shouldFormat, bindId } = await this.changeOfficeTableOnRefresh(
         excelContext, bindingId, instanceDefinition, startCell, officeTable, newOfficeTableName, shouldFormat
       ));
     } else {
@@ -223,7 +223,8 @@ class OfficeTableHelper {
     }
     console.timeEnd('Create or get table');
     console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-    console.log(bindingId); // WE NEED TO PASS THIS ALONG !!!!!
+    bindId = officeTable.id;
+    console.log(bindId);
     return {
       officeTable,
       newOfficeTableId: newOfficeTableName,
@@ -383,9 +384,6 @@ class OfficeTableHelper {
       console.groupEnd('bindingId');
       console.groupEnd('office-table-helper / changeOfficeTableOnRefresh / if (tableColumnsChanged)');
       bindingId = officeTable.id;
-      console.group('bindingId after assignment');
-      console.log(bindingId);
-      console.groupEnd('bindingId after assignment');
     } else {
       shouldFormat = false;
       console.time('Validate existing table');
