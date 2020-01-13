@@ -17,7 +17,7 @@ task :deploy_tester_server,[:build_no] do | t, args|
   web_dossier_war = "#{tomcat_dir}\\webapps\\web-dossier.war"
   FileUtils.rm_rf web_dossier_dir if Dir.exists? web_dossier_dir
   FileUtils.rm web_dossier_war if File.exists? web_dossier_war
-  tomcat_config_dir = "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home].gsub("/","\\")}\\integration\\e2e-webserver"
+  tomcat_config_dir = "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home].gsub("/","\\")}\\integration\\e2e-webserver-mac"
   tomcat_config_win_dir = "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home].gsub("/","\\")}\\integration\\e2e-webserver-windows"
   FileUtils.cp("#{tomcat_config_win_dir}\\server.xml","#{tomcat_dir}\\conf\\server.xml")
   FileUtils.cp("#{tomcat_config_dir}\\mstr-office.jks","#{tomcat_dir}\\conf\\mstr-office.jks")
