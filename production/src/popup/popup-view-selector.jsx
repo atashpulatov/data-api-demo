@@ -100,7 +100,13 @@ function arePromptsAnswered(props) {
 async function obtainInstanceWithPromptsAnswers(props) {
   console.log({ props });
 
-  const projectId = props.chosenProjectId || props.editedObject.chosenProjectId;
+if(props.editedObject.chosenProjectId){
+  console.log('_________________________________________');
+  console.log('this is the case where chosenProjectId exists');
+  console.log('_________________________________________');
+}
+
+  const projectId = props.chosenProjectId || props.editedObject.chosenProjectId || props.editedObject.projectId;
   const objectId = props.chosenObjectId || props.editedObject.chosenObjectId;
   const configInstace = { objectId, projectId };
   let instanceDefinition = await createInstance(configInstace);
