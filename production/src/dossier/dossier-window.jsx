@@ -10,6 +10,7 @@ import { actions } from '../navigation/navigation-tree-actions';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './dossier.css';
 import { DEFAULT_PROJECT_NAME, } from '../storage/navigation-tree-reducer';
+import {popupHelper} from '../popup/popup-helper';
 
 export default class _DossierWindow extends React.Component {
   constructor(props) {
@@ -162,10 +163,13 @@ _DossierWindow.defaultProps = {
 
 function mapStateToProps(state) {
   const { chosenObjectName, chosenObjectId, chosenProjectId } = state.navigationTree;
+  const popupState = state.popupReducer.editedObject;
+  const { promptsAnswers } = state.navigationTree;
   return {
     chosenObjectName,
     chosenObjectId,
     chosenProjectId,
+    editedObject: { ...(popupHelper.parsePopupState(popupState, promptsAnswers)) },
   };
 }
 

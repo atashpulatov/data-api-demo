@@ -32,10 +32,7 @@ const renderProperComponent = (popupType) => {
   case PopupTypeEnum.dossierWindow:
     return (
       <DossierWindow
-          // mstrData={propsToPass}
-          // editedObject={editedObject}
-        // handleBack={methods.handleBack}
-        // handlePopupErrors={popupHelper.handlePopupErrors}
+        // mstrData={propsToPass}
         // t={propsToPass.t}
         />
     );
