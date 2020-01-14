@@ -86,7 +86,6 @@ export class PopupActions {
           isRefreshAll);
         if (!isRefreshAll) return true;
       } finally {
-        console.log('??????????????//', report.bindId);
         isRefreshAll && dispatch({
           type: officeProperties.actions.finishLoadingReport,
           reportBindId: report.bindId,

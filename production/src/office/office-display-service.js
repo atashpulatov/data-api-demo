@@ -249,17 +249,17 @@ export class OfficeDisplayService {
     }
   }
 
-   bindOfficeTable = async(officeTable, excelContext, bindingId, bindId) => {
-     officeTable.load('name');
-     await excelContext.sync();
-     const tablename = officeTable.name;
-     let tableid = bindingId;
-     if (!bindingId || (bindId && (bindingId !== bindId))) { tableid = bindId; }
-     await officeApiHelper.bindNamedItem(tablename, tableid);
-     return tableid;
-   }
+  bindOfficeTable = async(officeTable, excelContext, bindingId, bindId) => {
+    officeTable.load('name');
+    await excelContext.sync();
+    const tablename = officeTable.name;
+    let tableid = bindingId;
+    if (!bindingId || (bindId && (bindingId !== bindId))) { tableid = bindId; }
+    await officeApiHelper.bindNamedItem(tablename, tableid);
+    return tableid;
+  }
 
-   /**
+  /**
    * Create Instance definition object which stores data neede to continue import.
    * If instance of object does not exist new one will be created
    *
@@ -276,42 +276,43 @@ export class OfficeDisplayService {
    * @returns {Object} Object containing officeTable and subtotalAddresses
    * @memberof officeDisplayService
    */
-   async getInstaceDefinition(body, mstrObjectType, manipulationsXML, preparedInstanceId, projectId, objectId, dossierData, visualizationInfo, promptsAnswers, crosstabHeaderDimensions, subtotalsAddresses) {
-     let instanceDefinition;
-     if (body && body.requestedObjects) {
-       if (body.requestedObjects.attributes.length === 0 && body.requestedObjects.metrics.length === 0) {
-         body.requestedObjects = undefined;
-       }
-       body.template = body.requestedObjects;
-     }
-     if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-       if (manipulationsXML) {
-         if (!body) { body = {}; }
-         body.manipulations = manipulationsXML.manipulations;
-         body.promptAnswers = manipulationsXML.promptAnswers;
-       }
-       const instanceId = preparedInstanceId || (await createDossierInstance(projectId, objectId, body));
-       const config = { projectId, objectId, instanceId, mstrObjectType, dossierData, body, visualizationInfo };
-       const temp = await fetchVisualizationDefinition(config);
-       instanceDefinition = { ...temp, instanceId };
-     } else {
-       const config = { objectId, projectId, mstrObjectType, dossierData, body };
-       instanceDefinition = await createInstance(config);
-     }
-     // Status 2 = report has open prompts to be answered before data can be returned
-     if (instanceDefinition.status === 2) {
-       instanceDefinition = await this.answerPrompts(instanceDefinition, objectId, projectId, promptsAnswers, dossierData, body);
-     }
 
-     const { mstrTable } = instanceDefinition;
-     const { isCrosstab } = mstrTable;
-     mstrTable.prevCrosstabDimensions = crosstabHeaderDimensions;
-     mstrTable.crosstabHeaderDimensions = isCrosstab
-       ? officeTableHelper.getCrosstabHeaderDimensions(instanceDefinition)
-       : false;
-     mstrTable.subtotalsAddresses = subtotalsAddresses;
-     return { body, instanceDefinition, isCrosstab };
-   }
+  async getInstaceDefinition(body, mstrObjectType, manipulationsXML, preparedInstanceId, projectId, objectId, dossierData, visualizationInfo, promptsAnswers, crosstabHeaderDimensions, subtotalsAddresses) {
+    let instanceDefinition;
+    if (body && body.requestedObjects) {
+      if (body.requestedObjects.attributes.length === 0 && body.requestedObjects.metrics.length === 0) {
+        body.requestedObjects = undefined;
+      }
+      body.template = body.requestedObjects;
+    }
+    if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
+      if (manipulationsXML) {
+        if (!body) { body = {}; }
+        body.manipulations = manipulationsXML.manipulations;
+        body.promptAnswers = manipulationsXML.promptAnswers;
+      }
+      const instanceId = preparedInstanceId || (await createDossierInstance(projectId, objectId, body));
+      const config = { projectId, objectId, instanceId, mstrObjectType, dossierData, body, visualizationInfo };
+      const temp = await fetchVisualizationDefinition(config);
+      instanceDefinition = { ...temp, instanceId };
+    } else {
+      const config = { objectId, projectId, mstrObjectType, dossierData, body };
+      instanceDefinition = await createInstance(config);
+    }
+    // Status 2 = report has open prompts to be answered before data can be returned
+    if (instanceDefinition.status === 2) {
+      instanceDefinition = await this.answerPrompts(instanceDefinition, objectId, projectId, promptsAnswers, dossierData, body);
+    }
+
+    const { mstrTable } = instanceDefinition;
+    const { isCrosstab } = mstrTable;
+    mstrTable.prevCrosstabDimensions = crosstabHeaderDimensions;
+    mstrTable.crosstabHeaderDimensions = isCrosstab
+      ? officeTableHelper.getCrosstabHeaderDimensions(instanceDefinition)
+      : false;
+    mstrTable.subtotalsAddresses = subtotalsAddresses;
+    return { body, instanceDefinition, isCrosstab };
+  }
 
    /**
    * Gets object definition, dispatch data to Redux and display loading popup.
