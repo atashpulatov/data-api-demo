@@ -329,7 +329,8 @@ export class _OfficeLoadedFile extends React.Component {
               mouseEnterDelay={1}
             >
                 <span>
-                  <ClockIcon style={{ marginBottom: '2px' }} />
+                  <ClockIcon style={{position:'relative', top:'2.5px', marginTop: '0' }} 
+                  />
                   <span className="additional-data">
                     {t('refreshed_date', { date: refreshDate })}
                   </span>
