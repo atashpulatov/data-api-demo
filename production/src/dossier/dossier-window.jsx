@@ -10,7 +10,7 @@ import { actions } from '../navigation/navigation-tree-actions';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './dossier.css';
 import { DEFAULT_PROJECT_NAME, } from '../storage/navigation-tree-reducer';
-import {popupHelper} from '../popup/popup-helper';
+import { popupHelper } from '../popup/popup-helper';
 
 export default class _DossierWindow extends React.Component {
   constructor(props) {
@@ -73,8 +73,9 @@ export default class _DossierWindow extends React.Component {
   }
 
   render() {
-    const { chosenObjectName, chosenObjectId, chosenProjectId, t, mstrData, editedObject } = this.props;
-    const { envUrl, authToken } = mstrData;
+    const { chosenObjectName, chosenObjectId, chosenProjectId, t, editedObject, session } = this.props;
+    console.log({ session });
+    const { envUrl, authToken } = session;
     const { editetObjectId, editedProjectId, editedInstanceId, editedObjectName, editedPromptsAnswers, selectedViz } = editedObject;
     const { isVisualizationSelected, promptsAnswers } = this.state;
     const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
@@ -170,6 +171,7 @@ function mapStateToProps(state) {
     chosenObjectId,
     chosenProjectId,
     editedObject: { ...(popupHelper.parsePopupState(popupState, promptsAnswers)) },
+    session: { ...state.sessionReducer },
   };
 }
 
