@@ -71,14 +71,10 @@ export class SessionHelper {
 
   getSession = () => {
     const currentStore = this.reduxStore.getState();
-    const projectId = currentStore.historyReducer.project
-      ? currentStore.historyReducer.project.projectId
-      : undefined;
     const session = {
       USE_PROXY: false,
       envUrl: currentStore.sessionReducer.envUrl,
       authToken: currentStore.sessionReducer.authToken,
-      projectId,
     };
     return session;
   }

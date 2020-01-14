@@ -188,10 +188,9 @@ FileHistoryContainerHOC.propTypes = {
 
 FileHistoryContainerHOC.defaultProps = { t: (text) => text, };
 
-function mapStateToProps({ officeReducer, historyReducer }) {
+function mapStateToProps({ officeReducer }) {
   return {
     reportArray: officeReducer.reportArray,
-    project: historyReducer.project,
     refreshingAll: officeReducer.isRefreshAll,
     isSecured: officeReducer.isSecured,
   };

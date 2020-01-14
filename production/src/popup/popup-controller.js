@@ -8,7 +8,7 @@ import { officeProperties } from '../office/office-properties';
 import { officeApiHelper } from '../office/office-api-helper';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { officeStoreService } from '../office/store/office-store-service';
-import { LOAD_BROWSING_STATE_CONST } from '../browser/browser-actions';
+import { LOAD_BROWSING_STATE_CONST } from '../navigation/navigation-tree-actions';
 import { REFRESH_CACHE_COMMAND, refreshCache } from '../cache/cache-actions';
 import {
   START_REPORT_LOADING,

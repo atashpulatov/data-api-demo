@@ -17,6 +17,7 @@ export const CANCEL_DOSSIER_OPEN = 'CANCEL_DOSSIER_OPEN';
 export const CHANGE_FILTER = 'CHANGE_FILTER';
 export const SWITCH_MY_LIBRARY = 'SWITCH_MY_LIBRARY';
 export const CHANGE_IS_PROMPTED = 'CHANGE_IS_PROMPTED';
+export const LOAD_BROWSING_STATE_CONST = 'LOAD_BROWSING_STATE_CONST';
 
 export function selectObject(data) {
   return (dispatch) => dispatch({

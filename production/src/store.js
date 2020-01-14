@@ -23,7 +23,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['historyReducer', 'officeReducer', 'notificationReducer', 'cacheReducer'],
+  blacklist: ['officeReducer', 'notificationReducer', 'cacheReducer'],
 };
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
