@@ -248,75 +248,34 @@ function proceedToImport(props) {
   window.Office.context.ui.messageParent(JSON.stringify(okObject));
 }
 
-function renderProperComponent(popupType, methods, propsToPass, editedObject, setObjectData) {
-  console.log({ popupType, methods, propsToPass, editedObject });
-  if (popupType === PopupTypeEnum.dataPreparation) {
-    const mstrData = { ...propsToPass, instanceId: editedObject.instanceId, promptsAnswers: editedObject.promptsAnswers };
-    return (
-      <AttributeSelectorWindow />
-    );
-  }
-  if (popupType === PopupTypeEnum.editFilters) {
-    const mstrData = {
-      ...propsToPass,
-      ...editedObject,
-    };
-
-    return (
-      <AttributeSelectorWindow
-      // handleBack={() => methods.handleBack(null, null, null, true)} // FIXME: Don't know how to adjust it just yet.
-      />
-    );
-  }
-  if (popupType === PopupTypeEnum.navigationTree) {
-    return (
-      <NavigationTree
-      // handleDossierOpen={methods.handleDossierOpen}
-      />
-    );
-  }
-  if (popupType === PopupTypeEnum.loadingPage) {
+function renderProperComponent(popupType, methods, propsToPass, editedObject) {
+  switch (popupType) {
+  case PopupTypeEnum.dataPreparation:
+    return <AttributeSelectorWindow />;
+  case PopupTypeEnum.editFilters:
+    return <AttributeSelectorWindow />;
+  case PopupTypeEnum.navigationTree:
+    return <NavigationTree />;
+  case PopupTypeEnum.loadingPage:
     return <LoadingPage />;
-  }
-  if (popupType === PopupTypeEnum.refreshAllPage) {
+  case PopupTypeEnum.refreshAllPage:
     return <RefreshAllPage />;
-  }
-  if (popupType === PopupTypeEnum.promptsWindow) {
-    return (
-      <PromptsWindow
-      // mstrData={propsToPass}
-      // handleBack={methods.handleBack}
-      // handlePopupErrors={popupHelper.handlePopupErrors}
-      />
-    );
-  }
-  if (popupType === PopupTypeEnum.repromptingWindow) {
-    const mstrData = {
-      ...propsToPass,
-      ...editedObject,
-      isReprompt: true,
-    };
-    return (
-      <PromptsWindow
-        // mstrData={mstrData}
-        // handleBack={methods.handleBack}
-        // handlePopupErrors={popupHelper.handlePopupErrors}
-      />
-    ); // use the same window as with prompting, but provide report info
-  }
-  if (popupType === PopupTypeEnum.dossierWindow) {
+  case PopupTypeEnum.promptsWindow:
+  case PopupTypeEnum.repromptingWindow:
+    return <PromptsWindow />;
+  case PopupTypeEnum.dossierWindow:
     return (
       <DossierWindow
-        mstrData={propsToPass}
-        editedObject={editedObject}
-        handleBack={methods.handleBack}
-        handlePopupErrors={popupHelper.handlePopupErrors}
-        t={propsToPass.t}
-      />
+    mstrData={propsToPass}
+    editedObject={editedObject}
+    handleBack={methods.handleBack}
+    handlePopupErrors={popupHelper.handlePopupErrors}
+    t={propsToPass.t}
+  />
     );
+  default:
+    return null;
   }
-  // TODO: do some error handling here
-  return null;
 }
 
 export function mapStateToProps(state) {
