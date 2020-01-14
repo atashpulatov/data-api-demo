@@ -41,6 +41,5 @@ when 'windows'
   include_recipe 'workspace::tomcat_windows'
   
 else
-
-
+  
 end
