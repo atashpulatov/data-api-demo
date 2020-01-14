@@ -30,9 +30,9 @@ desc "package test docker"
 task :e2e_test_browser do
   test_dir = "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser"
   if is_windows_jenkins_env?
-    short_dir = "c://test-driver-browser"
+    short_dir = "/c/test-driver-browser"
     FileUtils.rm_rf short_dir if Dir.exist? short_dir
-    FileUtils.cp_r(test_dir,"c://")
+    shell_command! "cp -r #{test_dir} /c"
     test_dir = short_dir
   end
   shell_command! "npm install", cwd: test_dir
@@ -47,7 +47,7 @@ task :e2e_test_browser do
   if is_windows_jenkins_env?
     report_dir = "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser/allure-report"
     FileUtils.rm_rf report_dir if Dir.exist? report_dir
-    FileUtils.cp_r("#{test_dir}/allure-report","#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser")
+    shell_command! "cp -r #{test_dir}/allure-report #{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser"
   end
   raise "test failed" if test_fail
 
@@ -56,7 +56,6 @@ end
 def is_windows_jenkins_env?
   return ENV['USER'] == "jenkins" && ENV['TEST_TYPES'] == "integration_win"
 end
-
 
 ######################################common web dossier check code######################################
 def wait_web_dossier_online()
