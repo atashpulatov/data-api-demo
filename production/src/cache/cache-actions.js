@@ -137,6 +137,7 @@ export function createCache(initUsername) {
     const { userID } = sessionReducer;
     const user = initUsername || userID;
     const cache = new DB(user);
+    resetLoading(cache);
     // We try to purge dbs not of the user and finally
     // start fetching for the current user even if it fails.
     DB.purge(user)
