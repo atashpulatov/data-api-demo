@@ -30,9 +30,9 @@ desc "package test docker"
 task :e2e_test_browser do
   test_dir = "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser"
   if is_windows_jenkins_env?
-    short_dir = "/c/test-driver-browser"
+    short_dir = "c:/test-driver-browser"
     FileUtils.rm_rf short_dir if Dir.exist? short_dir
-    shell_command! "cp -r #{test_dir} /c"
+    shell_command! "cp -r #{test_dir} c:/"
     test_dir = short_dir
   end
   shell_command! "npm install", cwd: test_dir
@@ -43,12 +43,12 @@ task :e2e_test_browser do
     test_fail = true
   end
   shell_command! "npm run report", cwd: test_dir
-  ci_metrics_system_test
   if is_windows_jenkins_env?
     report_dir = "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser/allure-report"
     FileUtils.rm_rf report_dir if Dir.exist? report_dir
     shell_command! "cp -r #{test_dir}/allure-report #{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser"
   end
+  ci_metrics_system_test
   raise "test failed" if test_fail
 
 end
