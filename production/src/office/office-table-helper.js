@@ -171,8 +171,8 @@ class OfficeTableHelper {
   getOfficeTable = async (isRefresh, excelContext, bindingId, instanceDefinition, startCell, tableName) => {
     console.time('Create or get table');
     const { mstrTable } = instanceDefinition;
-    let bindId;
     const excelCompatibleTableName = mstrTable.name.replace(/\W/g, '_');
+    let bindId;
     const newOfficeTableName = tableName || `${excelCompatibleTableName.slice(0, 241)}_${Date.now().toString()}`;
     this.checkReportTypeChange(instanceDefinition);
     let officeTable;
@@ -325,6 +325,7 @@ class OfficeTableHelper {
       }
     }
     prevOfficeTable.showHeaders = true;
+    prevOfficeTable.load('name');
     await excelContext.sync();
     let tableColumnsChanged = await this.checkColumnsChange(prevOfficeTable, excelContext, instanceDefinition);
     startCell = await this.getStartCell(prevOfficeTable, excelContext);
@@ -332,6 +333,7 @@ class OfficeTableHelper {
     let bindId;
     if (tableColumnsChanged) {
       console.log('Instance definition changed, creating new table');
+      newOfficeTableName = prevOfficeTable.name;
       ({ officeTable, bindId } = await this.createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableName, prevOfficeTable, tableColumnsChanged));
     } else {
       shouldFormat = false;
