@@ -166,7 +166,15 @@ function toggleIsClearingFlag(action, state) {
   };
 }
 
-export const officeReducer = (state = { loading: false, shouldRenderSettings: false, isConfirm: false, isSettings: false }, action) => {
+const initialState = {
+  loading: false,
+  shouldRenderSettings: false,
+  isConfirm: false,
+  isSettings: false,
+  supportForms: true
+};
+
+export const officeReducer = (state = initialState, action) => {
   switch (action.type) {
   case officeProperties.actions.preLoadReport:
     return onPreLoadReport(action, state);

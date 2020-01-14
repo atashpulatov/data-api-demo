@@ -30,12 +30,14 @@
   margin-left: 2px;
 }
 
-.ant-col-12 .filter-list .ant-empty{
-  margin-top:-10px;
-  }
+
 
 .navigation_tree__main_wrapper .ReactVirtualized__Table {
   border-top: none;
+}
+
+.filter-panel-container .ant-row .ant-col-12 .filter-list.ant-list .ant-empty.empty-selector{
+  margin-top:-10px;
 }
 
 .top-filter-panel {

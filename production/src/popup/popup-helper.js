@@ -97,6 +97,7 @@ export class PopupHelper {
       manipulationsXML: refreshReport.manipulationsXML,
       preparedInstanceId: refreshReport.instanceId,
       tableName:refreshReport.tableName,
+      previousTableDimensions: refreshReport.tableDimensions,
     };
     const result = await officeDisplayService.printObject(options);
     if (result && result.type === 'warning') {
