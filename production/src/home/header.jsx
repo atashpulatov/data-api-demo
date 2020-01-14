@@ -91,7 +91,10 @@ export class HeaderHOC extends Component {
           <div className="mstr-logo">
             <span id="profileImage">
               {/* TODO: Alt text for logo will be added later */}
-              <img src={mstrLogo} alt="microstrategy logo" />
+              <img src={mstrLogo}
+                   alt="microstrategy logo"
+                   style={{ position: "absolute", top:'1.55em' }}
+              />
             </span>
           </div>
           <div className="header-buttons">

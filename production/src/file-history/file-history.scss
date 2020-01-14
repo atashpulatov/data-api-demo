@@ -164,12 +164,26 @@ li {
   }
 }
 
-.refresh-all-btn {
-  .mstr-icon,
-  img {
-    margin-right: 63px;
-    vertical-align: sub;
-  }
+.icon-align{
+  position: relative;
+  max-width: 14px;
+  max-height: 13px;
+  margin-bottom: -1em;
+}
+
+.refresh-all-btn{
+  bottom: 1.95em;
+  left: 20.5em;
+}
+
+.spinner-all-icon{
+  bottom: 32px;
+  left: 20.65em;
+}
+
+.mstr-icon-refresh-all{
+position: relative;
+bottom:2.5px;
 }
 
 .refresh-all-label {

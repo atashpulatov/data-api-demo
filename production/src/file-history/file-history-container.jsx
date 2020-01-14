@@ -126,6 +126,7 @@ export class FileHistoryContainerHOC extends React.Component {
           className="add-data-btn floating-button"
           onClick={() => addDataAction()}
           disabled={loading}
+          style={{ position:'relative', paddingTop: '1px' }}
         >
           {t('Add Data')}
         </Button>
@@ -135,19 +136,31 @@ export class FileHistoryContainerHOC extends React.Component {
             content={t('Refresh All Data')}
             mouseEnterDelay={1}
           >
-            <Button
-              id="refresh-all-btn"
-              className="refresh-all-btn"
-              style={{ float: 'right' }}
-              onClick={() => this.refreshAllAction(reportArray, refreshReportsArray)}
-              disabled={loading}
-            >
-              {!refreshingAll ? (
-                <MSTRIcon type="refresh" />
-              ) : (
-                <img width="12px" height="12px" src={loadingSpinner} alt={t('Report loading icon')} />
-                )}
-            </Button>
+            { !refreshingAll ? (
+              <div
+                aria-label="Refresh All button"
+                role="button"
+                tabIndex={0}
+                id="refresh-all-btn"
+                className="refresh-all-btn icon-align"
+                onClick={() => this.refreshAllAction(reportArray, refreshReportsArray)}
+                onKeyPress={() => this.refreshAllAction(reportArray, refreshReportsArray)}
+                disabled={loading}
+              >
+                <div className="mstr-icon-refresh-all">
+                  <MSTRIcon type="refresh" />
+                </div>
+              </div>
+            ) : (
+              <div className="spinner-all-icon icon-align">
+                <img
+                  width="12px"
+                  height="12px"
+                  src={loadingSpinner}
+                  alt={t("Report loading icon")}
+                />
+              </div>
+            )}
           </ButtonPopover>
         </span>
         <div role="list" className="tables-container">
