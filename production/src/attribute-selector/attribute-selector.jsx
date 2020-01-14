@@ -34,11 +34,13 @@ export class AttributeSelectorHOC extends Component {
   }
 
   render() {
+    const { officeReducer: { supportForms } } = reduxStore.getState();
     const {
       title, session,
       triggerUpdate, onTriggerUpdate, chosen, importSubtotal, editedObject,
       resetTriggerUpdate, attributesSelectedChange, t, openModal, closeModal, toggleSubtotal,
     } = this.props;
+    const mstrDataOffice = { ...mstrData, supportForms };
 
     return (
       <ErrorBoundary>

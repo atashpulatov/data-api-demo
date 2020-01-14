@@ -169,10 +169,12 @@ class OfficeFormattingHelper {
    * @memberof officeFormattingHelper
    */
   formatTable = async (table, isCrosstab, crosstabHeaderDimensions, context) => {
+    console.time('Column auto size');
     if (isCrosstab) {
       const { rowsX } = crosstabHeaderDimensions;
       table.getDataBodyRange().getColumnsBefore(rowsX).format.autofitColumns();
     }
+
     try {
       const { columns } = table;
       columns.load('count');
@@ -187,6 +189,7 @@ class OfficeFormattingHelper {
     } catch (error) {
       console.log('Error when formatting - no columns autofit applied', error);
     }
+    console.timeEnd('Column auto size');
   };
 }
 export const officeFormattingHelper = new OfficeFormattingHelper();
