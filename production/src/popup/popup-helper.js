@@ -129,7 +129,8 @@ export class PopupHelper {
       command: selectorProperties.commandError,
       error: errorObj,
     };
-    console.log(messageObject);
+    console.error(error);
+    console.error(messageObject);
     return; // FIXME: disabled temporarily cloding popup on error
     officeContext
       .getOffice()
@@ -190,7 +191,6 @@ export class PopupHelper {
   }
 
   restoreFilters(body, chosenObjectData) {
-    console.log({body, chosenObjectData});
     try {
       if (body && body.requestedObjects) {
         chosenObjectData.selectedAttributes = body.requestedObjects.attributes
@@ -199,7 +199,6 @@ export class PopupHelper {
           && body.requestedObjects.metrics.map((metric) => metric.id);
       }
       if (body && body.viewFilter) {
-        console.log({viewFilter: body.viewFilter});
         chosenObjectData.selectedFilters = this.parseFilters(body.viewFilter.operands);
       }
     } catch (error) {
@@ -210,7 +209,6 @@ export class PopupHelper {
   }
 
   parseFilters(filtersNodes) {
-    console.log({filtersNodes});
     if (filtersNodes[0].operands) {
       // equivalent to flatMap((node) => node.operands)
       return this.parseFilters(filtersNodes.reduce((nodes, node) => nodes.concat(node.operands), []));

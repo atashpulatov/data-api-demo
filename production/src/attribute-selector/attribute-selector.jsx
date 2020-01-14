@@ -40,8 +40,6 @@ export class AttributeSelectorHOC extends Component {
       resetTriggerUpdate, attributesSelectedChange, t, openModal, closeModal, toggleSubtotal,
     } = this.props;
 
-    console.log({ props: this.props });
-
     return (
       <ErrorBoundary>
         <AttributeMetricFilter
@@ -84,7 +82,6 @@ const mapToLegacyMstrData = (mstrData, session, editedObject) => {
     selectedMetrics: editedObject.selectedMetrics,
     selectedFilters: editedObject.selectedFilters,
   };
-  console.log({ legacyObject, chosen: mstrData, session, editedObject });
 
   return legacyObject;
 };
@@ -119,7 +116,6 @@ const mapStateToProps = (state) => {
   const { navigationTree, popupStateReducer, popupReducer, sessionReducer } = state;
   const popupState = popupReducer.editedObject;
   const { promptsAnswers, importSubtotal, ...chosen } = navigationTree;
-  console.log({ state });
 
   return {
     chosen,

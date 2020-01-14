@@ -44,7 +44,6 @@ export class _NavigationTree extends Component {
     }
   }
 
-
   componentDidUpdate() {
     const { sorter, objectType, myLibrary, myLibraryFilter, envFilter } = this.props;
     const propsToSave = {
@@ -133,7 +132,7 @@ export class _NavigationTree extends Component {
   };
 
   handleSecondary = async () => {
-    const { chosenProjectId, chosenObjectId, chosenObjectName, chosenType, chosenSubtype, handlePrepare, setObjectData } = this.props;
+    const { chosenProjectId, chosenObjectId, chosenSubtype, handlePrepare, setObjectData } = this.props;
 
     try {
       const objectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);

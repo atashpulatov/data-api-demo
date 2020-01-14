@@ -1,245 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { actions } from '../navigation/navigation-tree-actions';
+import { popupHelper } from './popup-helper';
+import { popupViewSelectorHelper } from './popup-view-selector-helper';
 import { AttributeSelectorWindow } from '../attribute-selector/attribute-selector-window';
-import { selectorProperties } from '../attribute-selector/selector-properties';
 import { DossierWindow } from '../dossier/dossier-window';
-import { PopupTypeEnum } from '../home/popup-type-enum';
 import { LoadingPage } from '../loading/loading-page';
 import { RefreshAllPage } from '../loading/refresh-all-page';
-import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { NavigationTree } from '../navigation/navigation-tree';
-import { actions } from '../navigation/navigation-tree-actions';
 import { PromptsWindow } from '../prompts/prompts-window';
+import { PopupTypeEnum } from '../home/popup-type-enum';
 import { popupActions } from './popup-actions';
-import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
-import { popupHelper } from './popup-helper';
-import { popupStateActions } from './popup-state-actions';
 
-const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
-
-export const PopupViewSelectorHOC = (props) => {
-  let { popupType } = props;
-
-  console.log({ popupType });
-  const { importRequested, dossierOpenRequested, loading, isPrompted, authToken } = props;
-  if (!authToken) {
-    console.log('Waiting for token to be passed');
-    return null;
-  }
-  const localEditReport = { ...props.editedObject };
-  if (
-    (importRequested && !isPrompted)
-    || (importRequested && arePromptsAnswered(props))
-  ) {
-    proceedToImport(props);
-  } else if (
-    !!isPrompted
-    && arePromptsAnswered(props)
-  ) {
-    if (isInstanceWithPromptsAnswered(props)) {
-      if (popupType === PopupTypeEnum.repromptingWindow) {
-        popupType = PopupTypeEnum.editFilters;
-      }
-    } else if (dossierOpenRequested) {
-      // pass given prompts answers to dossierWindow
-      popupType = PopupTypeEnum.dossierWindow;
-    } else {
-      obtainInstanceWithPromptsAnswers(props);
-      return <div />;
-    }
-  } else if (promptedReportSubmitted(props) || (dossierOpenRequested && !!isPrompted)) {
-    popupType = PopupTypeEnum.promptsWindow;
-  } else if ((dossierOpenRequested) && (!loading)) {
-    // open dossier without prompts
-    popupType = PopupTypeEnum.dossierWindow;
-  }
-  return renderProperComponent(popupType, localEditReport);
-};
-
-function wasReportJustImported(props) {
-  const isNullOrEmpty = (obj) => {
-    const stringifiedObj = JSON.stringify(obj);
-    return !obj || stringifiedObj === '{}' || stringifiedObj === '[]';
-  };
-  return (
-    !!props.editedObject
-    && isNullOrEmpty(props.editedObject.selectedAttributes)
-    && isNullOrEmpty(props.editedObject.selectedMetrics)
-    && isNullOrEmpty(props.editedObject.selectedFilters)
-  );
-}
-
-function promptedReportSubmitted(props) {
-  return (
-    !!(props.propsToPass.isPrompted || props.isPrompted)
-    && (props.importRequested || props.popupType === PopupTypeEnum.dataPreparation)
-  );
-}
-
-function isInstanceWithPromptsAnswered(props) {
-  return (
-    !!props.editedObject
-    && !!props.editedObject.instanceId
-    && props.preparedInstance === props.editedObject.instanceId
-  );
-}
-
-function arePromptsAnswered(props) {
-  return !!props.dossierData && !!props.dossierData.instanceId;
-}
-
-async function obtainInstanceWithPromptsAnswers(props) {
-  console.log({ props });
-
-  if (props.editedObject.chosenProjectId) {
-    console.log('_________________________________________');
-    console.log('this is the case where chosenProjectId exists');
-    console.log('_________________________________________');
-  }
-
-  if (props.editedObject.projectId) {
-    console.log('_________________________________________');
-    console.log('this is the case where projectId exists');
-    console.log('_________________________________________');
-  }
-
-  const projectId = props.chosenProjectId || props.editedObject.chosenProjectId || props.editedObject.projectId;
-  const objectId = props.chosenObjectId || props.editedObject.chosenObjectId;
-  const configInstace = { objectId, projectId };
-  let instanceDefinition = await createInstance(configInstace);
-  let count = 0;
-  while (instanceDefinition.status === 2) {
-    const configPrompts = {
-      objectId,
-      projectId,
-      instanceId: instanceDefinition.instanceId,
-      promptsAnswers: props.promptsAnswers[count],
-    };
-    await answerPrompts(configPrompts);
-    const configAnsPrompts = { objectId, projectId, instanceId: instanceDefinition.instanceId };
-    try {
-      instanceDefinition = await getInstance(configAnsPrompts);
-    } catch (error) {
-      popupHelper.handlePopupErrors(error);
-    }
-    count += 1;
-  }
-  const body = createBody(props.editedObject && props.editedObject.selectedAttributes,
-    props.editedObject && props.editedObject.selectedMetrics,
-    props.editedObject && props.editedObject.selectedFilters);
-  const preparedReport = {
-    id: objectId,
-    projectId,
-    name: props.chosenObjectName || props.editedObject.chosenObjectName,
-    objectType: mstrObjectEnum.mstrObjectType.report,
-    instanceId: instanceDefinition.instanceId,
-    promptsAnswers: props.promptsAnswers,
-    body,
-  };
-  console.log({ preparedReport });
-  props.preparePromptedReport(instanceDefinition.instanceId, preparedReport);
-}
-
-// TODO: get this method from library
-function createBody(attributes, metrics, filters, instanceId) {
-  // temporary line below.
-  // Once the rest structure is unified for both endpoints,
-  // this conditional won't be needed anymore.
-  const restObjectType = !instanceId ? 'requestedObjects' : 'template';
-  const body = {
-    [restObjectType]: {
-      attributes: [],
-      metrics: [],
-    },
-  };
-  if (attributes && attributes.length > 0) {
-    attributes.forEach((att) => {
-      body[restObjectType].attributes.push({ id: att });
-    });
-  }
-  if (metrics && metrics.length > 0) {
-    metrics.forEach((met) => {
-      body[restObjectType].metrics.push({ id: met });
-    });
-  }
-  if (filters && Object.keys(filters).length > 0) {
-    body.viewFilter = composeFilter(filters);
-  }
-  return body;
-}
-
-// TODO: remove once create body is from library
-function composeFilter(selectedFilters) {
-  let branch;
-  const filterOperands = [];
-  const addItem = (item) => {
-    branch.operands[1].elements.push({ id: item, });
-  };
-  for (const att in selectedFilters) {
-    if (selectedFilters[att].length) {
-      branch = {
-        operator: 'In',
-        operands: [],
-      };
-      branch.operands.push({
-        type: 'attribute',
-        id: att,
-      });
-      branch.operands.push({
-        type: 'elements',
-        elements: [],
-      });
-      selectedFilters[att].forEach(addItem);
-      filterOperands.push(branch);
-    }
-  }
-  const operandsLength = filterOperands.length;
-  if (!operandsLength) {
-    return;
-  }
-  return operandsLength === 1
-    ? filterOperands[0]
-    : { operator: 'And', operands: filterOperands };
-}
-
-function proceedToImport(props) {
-  let visualizationInfo;
-  if (props.chosenChapterKey) {
-    visualizationInfo = {
-      chapterKey: props.chosenChapterKey,
-      visualizationKey: props.chosenVisualizationKey,
-    };
-  }
-  const okObject = {
-    command: selectorProperties.commandOk,
-    chosenObject: props.chosenObjectId,
-    chosenProject: props.chosenProjectId,
-    chosenSubtype: props.chosenSubtype,
-    isPrompted: props.isPrompted,
-    promptsAnswers: props.promptsAnswers,
-    visualizationInfo,
-    preparedInstanceId: props.preparedInstanceId,
-    isEdit: props.isEdit,
-  };
-  if (props.dossierData) {
-    okObject.dossierData = {
-      ...props.dossierData,
-      chosenObjectName: props.chosenObjectName,
-    };
-    const { isReprompt } = props.dossierData;
-    // skip this part if report contains no selected attribiutes/metrics/filters
-    if (isReprompt && !wasReportJustImported(props)) {
-      okObject.command = selectorProperties.commandOnUpdate;
-      const { selectedAttributes, selectedMetrics, selectedFilters } = props.editedObject;
-      okObject.body = createBody(selectedAttributes, selectedMetrics, selectedFilters, false);
-    }
-  }
-  props.startLoading();
-  props.startImport();
-  window.Office.context.ui.messageParent(JSON.stringify(okObject));
-}
-
-function renderProperComponent(popupType, editedObject) {
+const renderProperComponent = (popupType, editedObject) => {
   switch (popupType) {
   case PopupTypeEnum.dataPreparation:
     return <AttributeSelectorWindow />;
@@ -254,25 +27,36 @@ function renderProperComponent(popupType, editedObject) {
   case PopupTypeEnum.promptsWindow:
   case PopupTypeEnum.repromptingWindow:
     return <PromptsWindow />;
+  case PopupTypeEnum.emptyDiv:
+    return <div />;
   case PopupTypeEnum.dossierWindow:
     return (
       <DossierWindow
-    // mstrData={propsToPass}
-    editedObject={editedObject}
-    // handleBack={methods.handleBack}
-    // handlePopupErrors={popupHelper.handlePopupErrors}
-    // t={propsToPass.t}
-  />
+          // mstrData={propsToPass}
+          editedObject={editedObject}
+        // handleBack={methods.handleBack}
+        // handlePopupErrors={popupHelper.handlePopupErrors}
+        // t={propsToPass.t}
+        />
     );
   default:
     return null;
   }
-}
+};
+
+export const PopupViewSelectorNotConnected = (props) => {
+  const { authToken, editedObject, popupType: popupTypeProps } = props;
+  if (!authToken) {
+    console.log('Waiting for token to be passed');
+    return null;
+  }
+  const popupType = popupViewSelectorHelper.setPopupType(props, popupTypeProps);
+  return renderProperComponent(popupType, { ...editedObject });
+};
 
 export function mapStateToProps(state) {
   const popupState = state.popupReducer.editedObject;
   const { promptsAnswers } = state.navigationTree;
-  console.log({ promptsAnswers, state });
   return {
     ...state.navigationTree,
     authToken: state.sessionReducer.authToken,
@@ -286,7 +70,6 @@ export function mapStateToProps(state) {
 const mapDispatchToProps = {
   ...actions,
   preparePromptedReport: popupActions.preparePromptedReport,
-  setObjectData: popupStateActions.setObjectData,
 };
 
-export const PopupViewSelector = connect(mapStateToProps, mapDispatchToProps)(PopupViewSelectorHOC);
+export const PopupViewSelector = connect(mapStateToProps, mapDispatchToProps)(PopupViewSelectorNotConnected);

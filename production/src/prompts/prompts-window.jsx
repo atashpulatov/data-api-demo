@@ -51,7 +51,6 @@ export class _PromptsWindow extends Component {
   preparePromptedReportInstance = async (chosenObjectId, projectId, promptsAnswers) => {
     const config = { objectId: chosenObjectId, projectId };
     const instanceDefinition = await createInstance(config);
-    console.log({ instanceDefinition });
     let dossierInstanceDefinition = await createDossierBasedOnReport(chosenObjectId, instanceDefinition.instanceId, projectId);
     if (dossierInstanceDefinition.status === 2) {
       dossierInstanceDefinition = await this.answerDossierPrompts(dossierInstanceDefinition, chosenObjectId, projectId, promptsAnswers);
@@ -67,7 +66,6 @@ export class _PromptsWindow extends Component {
     const instanceId = instanceDefinition.mid;
     let currentInstanceDefinition = instanceDefinition;
     let count = 0;
-    console.log({ instanceDefinition, objectId, projectId, promptsAnswers });
     while (currentInstanceDefinition.status === 2 && count < promptsAnswers.length) {
       const config = { objectId, projectId, instanceId: currentInstanceDefinition.mid, promptsAnswers: promptsAnswers[count] };
       await postAnswerDossierPrompts(config);
@@ -91,20 +89,15 @@ export class _PromptsWindow extends Component {
     }
     let { promptsAnswers: promptsAnswersLocal } = this.state;
     const { promptsAnswered, mstrData, session, editedObject } = this.props;
-    console.log({ promptsAnswersLocal, edited: editedObject.promptsAnswers });
     promptsAnswersLocal = promptsAnswersLocal || editedObject.promptsAnswers;
     const chosenObjectIdLocal = chosenObjectId || editedObject.chosenObjectId;
-    const projectId = mstrData.chosenProjectId || editedObject.projectId;
+    const projectId = mstrData.chosenProjectId || editedObject.projectId; //FIXME: potential problem with projectId
     const { envUrl, authToken } = session;
-    console.log('loadEmbeddedDossier');
-    console.log({ props: this.props, state:this.state });
-    console.log({ chosenObjectIdLocal, projectId, promptsAnswersLocal });
 
     let instanceDefinition;
     const instance = {};
     try {
       if (promptsAnswersLocal) {
-        console.log('about to instanceDefinition');
         instanceDefinition = await this.preparePromptedReportInstance(chosenObjectIdLocal, projectId, promptsAnswersLocal);
         instance.id = instanceDefinition && instanceDefinition.id; // '00000000000000000000000000000000';
         instance.mid = instanceDefinition && instanceDefinition.mid;
@@ -124,7 +117,6 @@ export class _PromptsWindow extends Component {
       };
       const libraryUrl = envUrl.replace('api', 'app');
       const url = `${libraryUrl}/${projectId}/${chosenObjectIdLocal}`;
-      console.log({ url });
       const { CustomAuthenticationType } = microstrategy.dossier;
       const { EventType } = microstrategy.dossier;
 
@@ -267,8 +259,6 @@ export class _PromptsWindow extends Component {
   }
 
   render() {
-    console.log('in render');
-    console.log({ props: this.props, state: this.state });
     const { isReprompt } = this.state;
     return (
       <div
