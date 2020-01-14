@@ -217,8 +217,8 @@ export class OfficeDisplayService {
         id: objectId,
         isLoading: false,
         crosstabHeaderDimensions,
-        tableName:newOfficeTableId
-        tableDimensions: { columns: instanceDefinition.columns }
+        tableName:newOfficeTableId,
+        tableDimensions: { columns: instanceDefinition.columns },
       }, isRefresh);
 
       console.timeEnd('Total');
@@ -331,7 +331,7 @@ export class OfficeDisplayService {
     return { body, instanceDefinition, isCrosstab };
   }
 
-   /**
+  /**
    * Gets object definition, dispatch data to Redux and display loading popup.
    *
    * @param {Object} mstrObjectType
