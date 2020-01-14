@@ -19,7 +19,7 @@ const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 
 export const PopupViewSelectorHOC = (props) => {
   let { popupType } = props;
-  
+
   console.log({ popupType });
   const { propsToPass, methods, importRequested, dossierOpenRequested, loading, setObjectData } = props;
   const isPrompted = propsToPass.isPrompted || props.isPrompted;
@@ -100,11 +100,17 @@ function arePromptsAnswered(props) {
 async function obtainInstanceWithPromptsAnswers(props) {
   console.log({ props });
 
-if(props.editedObject.chosenProjectId){
-  console.log('_________________________________________');
-  console.log('this is the case where chosenProjectId exists');
-  console.log('_________________________________________');
-}
+  if (props.editedObject.chosenProjectId) {
+    console.log('_________________________________________');
+    console.log('this is the case where chosenProjectId exists');
+    console.log('_________________________________________');
+  }
+
+  if (props.editedObject.projectId) {
+    console.log('_________________________________________');
+    console.log('this is the case where projectId exists');
+    console.log('_________________________________________');
+  }
 
   const projectId = props.chosenProjectId || props.editedObject.chosenProjectId || props.editedObject.projectId;
   const objectId = props.chosenObjectId || props.editedObject.chosenObjectId;
