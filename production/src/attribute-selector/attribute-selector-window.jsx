@@ -14,12 +14,6 @@ export class AttributeSelectorWindowNotConnected extends Component {
     super(props);
     const { mstrData } = this.props;
     this.state = {
-      session: {
-        USE_PROXY: false,
-        envUrl: mstrData.envUrl,
-        authToken: mstrData.authToken,
-        projectId: mstrData.projectId,
-      },
       openModal: false,
       triggerUpdate: false,
       loading: false,
@@ -124,7 +118,6 @@ AttributeSelectorWindowNotConnected.propTypes = {
 
 const mapStateToProps = (state) => ({
   mstrData: { ...state.popupStateReducer },
-  reduxState: state,
   chosenObject: state.navigationTree,
   editedObject: state.popupReducer.editedObject,
 });

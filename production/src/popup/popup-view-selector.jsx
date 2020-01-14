@@ -12,7 +12,7 @@ import { PromptsWindow } from '../prompts/prompts-window';
 import { PopupTypeEnum } from '../home/popup-type-enum';
 import { popupActions } from './popup-actions';
 
-const renderProperComponent = (popupType, editedObject) => {
+const renderProperComponent = (popupType) => {
   switch (popupType) {
   case PopupTypeEnum.dataPreparation:
     return <AttributeSelectorWindow />;
@@ -33,7 +33,7 @@ const renderProperComponent = (popupType, editedObject) => {
     return (
       <DossierWindow
           // mstrData={propsToPass}
-          editedObject={editedObject}
+          // editedObject={editedObject}
         // handleBack={methods.handleBack}
         // handlePopupErrors={popupHelper.handlePopupErrors}
         // t={propsToPass.t}
@@ -45,13 +45,13 @@ const renderProperComponent = (popupType, editedObject) => {
 };
 
 export const PopupViewSelectorNotConnected = (props) => {
-  const { authToken, editedObject, popupType: popupTypeProps } = props;
+  const { authToken, popupType: popupTypeProps } = props;
   if (!authToken) {
     console.log('Waiting for token to be passed');
     return null;
   }
   const popupType = popupViewSelectorHelper.setPopupType(props, popupTypeProps);
-  return renderProperComponent(popupType, { ...editedObject });
+  return renderProperComponent(popupType);
 };
 
 export function mapStateToProps(state) {
