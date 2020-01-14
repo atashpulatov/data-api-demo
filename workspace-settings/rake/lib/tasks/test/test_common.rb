@@ -31,13 +31,12 @@ task :e2e_test_browser do
   test_dir = "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser"
   npm_install_dir= test_dir
   if is_windows_jenkins_env?# we need to copy the test driver to the root dir of c because of there is a path length limitation of windows
-    short_dir = "c:/test-driver-browser" #npm run test only works for such forat
+    short_dir = "c:/test-driver-browser" 
     FileUtils.rm_rf short_dir if Dir.exist? short_dir
     shell_command! "cp -r #{test_dir} c:/"
     test_dir = short_dir
-    npm_install_dir = "c:\\test-driver-browser" #npm install only works with such format
   end
-  shell_command! "npm install", cwd: npm_install_dir
+  shell_command! "npm install", cwd: test_dir
   test_fail = false
   begin
     shell_command! "npm run test", cwd: test_dir
