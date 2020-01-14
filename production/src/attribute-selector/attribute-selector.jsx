@@ -34,13 +34,11 @@ export class AttributeSelectorHOC extends Component {
   }
 
   render() {
-    const { officeReducer: { supportForms } } = reduxStore.getState();
     const {
       title, session,
-      triggerUpdate, onTriggerUpdate, chosen, importSubtotal, editedObject,
+      triggerUpdate, onTriggerUpdate, chosen, importSubtotal, editedObject, supportForms,
       resetTriggerUpdate, attributesSelectedChange, t, openModal, closeModal, toggleSubtotal,
     } = this.props;
-    const mstrDataOffice = { ...mstrData, supportForms };
 
     return (
       <ErrorBoundary>
@@ -50,7 +48,7 @@ export class AttributeSelectorHOC extends Component {
           key={chosen.id}
           title={title}
           session={mapToLegacySession(chosen, session, editedObject)}
-          mstrData={mapToLegacyMstrData(chosen, session, editedObject)}
+          mstrData={{ ...mapToLegacyMstrData(chosen, session, editedObject), supportForms }}
           triggerUpdate={triggerUpdate}
           onTriggerUpdate={onTriggerUpdate}
           withDataPreview
@@ -115,13 +113,14 @@ AttributeSelectorHOC.propTypes = {
 AttributeSelectorHOC.defaultProps = { t: (text) => text, };
 
 const mapStateToProps = (state) => {
-  const { navigationTree, popupStateReducer, popupReducer, sessionReducer } = state;
+  const { navigationTree, popupStateReducer, popupReducer, sessionReducer, officeReducer } = state;
   const popupState = popupReducer.editedObject;
   const { promptsAnswers, importSubtotal, ...chosen } = navigationTree;
-
+  const { supportForms } = officeReducer;
   return {
     chosen,
     importSubtotal,
+    supportForms,
     editedObject: { ...(popupHelper.parsePopupState(popupState, promptsAnswers)) },
     popupState: { ...popupStateReducer },
     session: { ...sessionReducer },
