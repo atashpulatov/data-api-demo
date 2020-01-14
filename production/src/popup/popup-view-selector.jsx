@@ -30,12 +30,7 @@ const renderProperComponent = (popupType) => {
   case PopupTypeEnum.emptyDiv:
     return <div />;
   case PopupTypeEnum.dossierWindow:
-    return (
-      <DossierWindow
-        // mstrData={propsToPass}
-        // t={propsToPass.t}
-        />
-    );
+    return <DossierWindow />; // TODO: Might be missing {t}
   default:
     return null;
   }
