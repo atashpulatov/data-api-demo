@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
+import {popupHelper} from '../popup/popup-helper';
 
 const { microstrategy } = window;
 
@@ -48,7 +49,7 @@ export default class _EmbeddedDossier extends React.Component {
   }
 
   loadEmbeddedDossier = async (container) => {
-    const { mstrData, handlePopupErrors } = this.props;
+    const { mstrData } = this.props;
     const { envUrl, authToken, dossierId, projectId, promptsAnswers, instanceId, selectedViz } = mstrData;
     const instance = {};
     try {
@@ -69,8 +70,8 @@ export default class _EmbeddedDossier extends React.Component {
           }
         }
       }
-    } catch (e) {
-      handlePopupErrors(e);
+    } catch (error) {
+      popupHelper.handlePopupErrors(error);
     }
 
     this.dossierData = {
@@ -181,7 +182,6 @@ _EmbeddedDossier.propTypes = {
     selectedViz: PropTypes.string,
   }),
   handleSelection: PropTypes.func,
-  handlePopupErrors: PropTypes.func,
   handlePromptAnswer: PropTypes.func
 };
 
@@ -196,7 +196,6 @@ _EmbeddedDossier.defaultProps = {
     selectedViz: ''
   },
   handleSelection: () => { },
-  handlePopupErrors: () => { }
 };
 
 export const EmbeddedDossier = connect()(_EmbeddedDossier);

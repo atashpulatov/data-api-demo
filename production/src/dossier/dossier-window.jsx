@@ -72,7 +72,7 @@ export default class _DossierWindow extends React.Component {
   }
 
   render() {
-    const { chosenObjectName, chosenObjectId, chosenProjectId, handleBack, t, mstrData, editedObject, handlePopupErrors } = this.props;
+    const { chosenObjectName, chosenObjectId, chosenProjectId, t, mstrData, editedObject } = this.props;
     const { envUrl, authToken } = mstrData;
     const { editetObjectId, editedProjectId, editedInstanceId, editedObjectName, editedPromptsAnswers, selectedViz } = editedObject;
     const { isVisualizationSelected, promptsAnswers } = this.state;
@@ -102,11 +102,9 @@ export default class _DossierWindow extends React.Component {
           mstrData={propsToPass}
           handleSelection={this.handleSelection}
           handlePromptAnswer={this.handlePromptAnswer}
-          handlePopupErrors={handlePopupErrors}
         />
         <PopupButtons
           handleOk={this.handleOk}
-          handleBack={handleBack}
           handleCancel={this.handleCancel}
           hideSecondary
           disableActiveActions={!isVisualizationSelected}
@@ -120,7 +118,6 @@ _DossierWindow.propTypes = {
   chosenObjectId: PropTypes.string,
   chosenObjectName: PropTypes.string,
   chosenProjectId: PropTypes.string,
-  handleBack: PropTypes.func,
   t: PropTypes.func,
   mstrData: PropTypes.shape({
     envUrl: PropTypes.string,
@@ -129,7 +126,6 @@ _DossierWindow.propTypes = {
   }),
   requestImport: PropTypes.func,
   selectObject: PropTypes.func,
-  handlePopupErrors: PropTypes.func,
   editedObject: PropTypes.shape({
     chosenObjectId: PropTypes.string,
     projectId: PropTypes.string,
@@ -145,7 +141,6 @@ _DossierWindow.defaultProps = {
   chosenObjectId: 'default id',
   chosenObjectName: DEFAULT_PROJECT_NAME,
   chosenProjectId: 'default id',
-  handleBack: () => { },
   t: (text) => text,
   mstrData: {
     envUrl: 'no env url',
@@ -154,7 +149,6 @@ _DossierWindow.defaultProps = {
   },
   requestImport: () => { },
   selectObject: () => { },
-  handlePopupErrors: () => { },
   editedObject: {
     chosenObjectId: undefined,
     projectId: undefined,
