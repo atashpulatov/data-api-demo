@@ -21,14 +21,11 @@ export const PopupViewSelectorHOC = (props) => {
   let { popupType } = props;
 
   console.log({ popupType });
-  const { propsToPass, methods, importRequested, dossierOpenRequested, loading, setObjectData } = props;
-  const isPrompted = propsToPass.isPrompted || props.isPrompted;
-  if (!props.authToken || !propsToPass) {
+  const { importRequested, dossierOpenRequested, loading, isPrompted, authToken } = props;
+  if (!authToken) {
     console.log('Waiting for token to be passed');
     return null;
   }
-  propsToPass.authToken = props.authToken;
-  propsToPass.editRequested = popupType === PopupTypeEnum.editFilters;
   const localEditReport = { ...props.editedObject };
   if (
     (importRequested && !isPrompted)
@@ -38,16 +35,13 @@ export const PopupViewSelectorHOC = (props) => {
   } else if (
     !!isPrompted
     && arePromptsAnswered(props)
-    && !propsToPass.forceChange
   ) {
     if (isInstanceWithPromptsAnswered(props)) {
       if (popupType === PopupTypeEnum.repromptingWindow) {
         popupType = PopupTypeEnum.editFilters;
-        propsToPass.editRequested = true;
       }
     } else if (dossierOpenRequested) {
       // pass given prompts answers to dossierWindow
-      propsToPass.promptsAnswers = props.promptsAnswers;
       popupType = PopupTypeEnum.dossierWindow;
     } else {
       obtainInstanceWithPromptsAnswers(props);
@@ -55,14 +49,11 @@ export const PopupViewSelectorHOC = (props) => {
     }
   } else if (promptedReportSubmitted(props) || (dossierOpenRequested && !!isPrompted)) {
     popupType = PopupTypeEnum.promptsWindow;
-    propsToPass.projectId = props.chosenProjectId;
-    propsToPass.chosenObjectId = props.chosenObjectId;
   } else if ((dossierOpenRequested) && (!loading)) {
     // open dossier without prompts
-    propsToPass.promptsAnswers = null;
     popupType = PopupTypeEnum.dossierWindow;
   }
-  return renderProperComponent(popupType, methods, propsToPass, localEditReport, setObjectData);
+  return renderProperComponent(popupType, localEditReport);
 };
 
 function wasReportJustImported(props) {
@@ -248,7 +239,7 @@ function proceedToImport(props) {
   window.Office.context.ui.messageParent(JSON.stringify(okObject));
 }
 
-function renderProperComponent(popupType, methods, propsToPass, editedObject) {
+function renderProperComponent(popupType, editedObject) {
   switch (popupType) {
   case PopupTypeEnum.dataPreparation:
     return <AttributeSelectorWindow />;
@@ -266,11 +257,11 @@ function renderProperComponent(popupType, methods, propsToPass, editedObject) {
   case PopupTypeEnum.dossierWindow:
     return (
       <DossierWindow
-    mstrData={propsToPass}
+    // mstrData={propsToPass}
     editedObject={editedObject}
-    handleBack={methods.handleBack}
-    handlePopupErrors={popupHelper.handlePopupErrors}
-    t={propsToPass.t}
+    // handleBack={methods.handleBack}
+    // handlePopupErrors={popupHelper.handlePopupErrors}
+    // t={propsToPass.t}
   />
     );
   default:
