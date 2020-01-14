@@ -106,7 +106,7 @@ export default class _DossierWindow extends React.Component {
         />
         <PopupButtons
           handleOk={this.handleOk}
-          handleBack={isEdit && handleBack}
+          handleBack={!isEdit && handleBack}
           handleCancel={this.handleCancel}
           hideSecondary
           disableActiveActions={!isVisualizationSelected}
