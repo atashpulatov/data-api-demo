@@ -55,7 +55,7 @@ export default class _EmbeddedDossier extends React.Component {
       if (instanceId) {
         instance.mid = instanceId;
       } else {
-        const body = { persistViewState: true, };
+        const body = { disableManipulationsAutoSaving: true, persistViewState: true };
         instance.mid = await createDossierInstance(projectId, dossierId, body);
         if (promptsAnswers != null) {
           let count = 0;
