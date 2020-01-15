@@ -93,13 +93,12 @@ export class HeaderHOC extends Component {
               {/* TODO: Alt text for logo will be added later */}
               <img src={mstrLogo}
                    alt="microstrategy logo"
-                   style={{ position: 'absolute', top:'24.8px' }}
               />
             </span>
           </div>
           <div className="header-buttons">
             <Popover placement="bottom" content={t('More Items')} mouseEnterDelay={1}>
-              <Button className="settings-btn no-trigger-close" onClick={this.toggleSettings} disabled={loading} style={{ minWidth:'unset' }}>
+              <Button className="settings-btn no-trigger-close" onClick={this.toggleSettings} disabled={loading}>
                 <MSTRIcon type="settings" />
               </Button>
             </Popover>

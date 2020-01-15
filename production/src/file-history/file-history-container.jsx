@@ -126,7 +126,6 @@ export class FileHistoryContainerHOC extends React.Component {
           className="add-data-btn floating-button"
           onClick={() => addDataAction()}
           disabled={loading}
-          style={{ position:'relative', paddingTop: '1px' }}
         >
           {t('Add Data')}
         </Button>

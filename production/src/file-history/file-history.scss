@@ -89,6 +89,23 @@ button {
   }
 }
 
+.loading-button-container img{
+    position: relative;
+    right: 2px;
+    margin-right: 2px;
+}
+
+.add-data-btn{
+  position: relative;
+   padding-top: 1px;
+}
+
+.refresh-icons-row span img{
+  position:relative;
+   top:2.5px;
+   margin-top: 0;
+}
+
 .clear-data-inactive {
   color: rgba(0, 0, 0, 0.5);
 }

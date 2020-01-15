@@ -252,11 +252,6 @@ export class _OfficeLoadedFile extends React.Component {
                   width="12px"
                   height="12px"
                   src={loadingSpinner}
-                  style={{
-                    position: "relative",
-                    right: "2px",
-                    marginRight: '2px',
-                  }}
                   alt={t('Report loading icon')}
                 />
               )}
