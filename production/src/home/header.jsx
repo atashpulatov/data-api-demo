@@ -93,7 +93,7 @@ export class HeaderHOC extends Component {
               {/* TODO: Alt text for logo will be added later */}
               <img src={mstrLogo}
                    alt="microstrategy logo"
-                   style={{ position: "absolute", top:'1.55em' }}
+                   style={{ position: 'absolute', top:'24.8px' }}
               />
             </span>
           </div>
