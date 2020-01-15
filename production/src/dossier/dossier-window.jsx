@@ -74,21 +74,20 @@ export default class _DossierWindow extends React.Component {
 
   render() {
     const { chosenObjectName, chosenObjectId, chosenProjectId, t, editedObject, session } = this.props;
-    console.log({ session });
+    console.log({ editedObject });
     const { envUrl, authToken } = session;
-    const { editetObjectId, editedProjectId, editedInstanceId, editedObjectName, editedPromptsAnswers, selectedViz } = editedObject;
     const { isVisualizationSelected, promptsAnswers } = this.state;
     const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
     const propsToPass = {
       envUrl,
       token: authToken,
-      dossierId: isEdit ? editetObjectId : chosenObjectId,
-      projectId: isEdit ? editedProjectId : chosenProjectId,
-      promptsAnswers: isEdit ? editedPromptsAnswers : promptsAnswers,
-      selectedViz: isEdit ? selectedViz : '',
+      dossierId: isEdit ? editedObject.chosenObjectId : chosenObjectId,
+      projectId: isEdit ? editedObject.projectId : chosenProjectId,
+      promptsAnswers: isEdit ? editedObject.promptsAnswers : promptsAnswers,
+      selectedViz: isEdit ? editedObject.selectedViz : '',
     };
-    if (isEdit) propsToPass.instanceId = editedInstanceId;
-    const dossierFinalName = (isEdit) ? editedObjectName : chosenObjectName;
+    if (isEdit) propsToPass.instanceId = editedObject.instanceId;
+    const dossierFinalName = (isEdit) ? editedObject.chosenObjectName : chosenObjectName;
     return (
       <div>
         <h1 title={dossierFinalName} className="ant-col folder-browser-title">

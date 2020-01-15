@@ -36,7 +36,7 @@ export class AttributeSelectorHOC extends Component {
   render() {
     const {
       title, session,
-      triggerUpdate, onTriggerUpdate, chosen, importSubtotal, editedObject, supportForms,
+      triggerUpdate, onTriggerUpdate, chosenObject, importSubtotal, editedObject, supportForms,
       resetTriggerUpdate, attributesSelectedChange, t, openModal, closeModal, toggleSubtotal,
     } = this.props;
 
@@ -45,10 +45,10 @@ export class AttributeSelectorHOC extends Component {
         <AttributeMetricFilter
           t={t}
           attributesSelectedChange={attributesSelectedChange}
-          key={chosen.id}
+          key={chosenObject.id}
           title={title}
-          session={mapToLegacySession(chosen, session, editedObject)}
-          mstrData={{ ...mapToLegacyMstrData(chosen, session, editedObject), supportForms }}
+          session={mapToLegacySession(chosenObject, session, editedObject)}
+          mstrData={{ ...mapToLegacyMstrData(chosenObject, session, editedObject), supportForms }}
           triggerUpdate={triggerUpdate}
           onTriggerUpdate={onTriggerUpdate}
           withDataPreview
@@ -115,10 +115,10 @@ AttributeSelectorHOC.defaultProps = { t: (text) => text, };
 const mapStateToProps = (state) => {
   const { navigationTree, popupStateReducer, popupReducer, sessionReducer, officeReducer } = state;
   const popupState = popupReducer.editedObject;
-  const { promptsAnswers, importSubtotal, ...chosen } = navigationTree;
+  const { promptsAnswers, importSubtotal, ...chosenObject } = navigationTree;
   const { supportForms } = officeReducer;
   return {
-    chosen,
+    chosenObject,
     importSubtotal,
     supportForms,
     editedObject: { ...(popupHelper.parsePopupState(popupState, promptsAnswers)) },
