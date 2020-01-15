@@ -46,8 +46,12 @@ def tomcat_dir()
 end
 
 def start_tomcat()
-  cmd = "cmd /c catalina.bat start"
-  shell_command! cmd, cwd: "#{tomcat_dir}\\bin"
+  # cmd = "cmd /c catalina.bat start"
+  # shell_command! cmd, cwd: "#{tomcat_dir}\\bin"
+  #using system function to start tomcat, to fix the process block issue on some windows machine
+  Dir.chdir("#{tomcat_dir}\\bin"){
+    system("catalina.bat start")
+  }
   wait_web_dossier_online
 end
 
