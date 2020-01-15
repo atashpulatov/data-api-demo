@@ -151,7 +151,7 @@ function mapStateToProps(state) {
   const { chosenObjectName, chosenObjectId, chosenProjectId, promptsAnswers } = state.navigationTree;
   const popupState = state.popupReducer.editedObject;
   return {
-    chosenObjectName : popupState ? popupState.chosenObjectName : chosenObjectName,
+    chosenObjectName: popupState ? popupState.chosenObjectName : chosenObjectName,
     chosenObjectId: popupState ? popupState.chosenObjectId : chosenObjectId,
     chosenProjectId: popupState ? popupState.projectId : chosenProjectId,
     editedObject: { ...(popupHelper.parsePopupState(popupState, promptsAnswers)) },

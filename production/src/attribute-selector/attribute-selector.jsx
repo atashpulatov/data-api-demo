@@ -65,18 +65,18 @@ export class AttributeSelectorHOC extends Component {
   }
 }
 
-const mapToLegacyMstrData = (mstrData, session, editedObject) => {
+const mapToLegacyMstrData = (chosenObject, session, editedObject) => {
   const legacyObject = {
-    reportId: mstrData.chosenObjectId || editedObject.chosenObjectId,
+    reportId: chosenObject.chosenObjectId || editedObject.chosenObjectId,
     envUrl: session.envUrl || session.envUrl,
-    projectId: mstrData.chosenProjectId || editedObject.projectId,
-    reportSubtype: mstrData.chosenSubtype || editedObject.chosenObjectSubtype,
-    reportType: mstrData.chosenObjectId ? mstrData.objectType.name : editedObject.chosenObjectType,
-    reportName: mstrData.chosenObjectName || editedObject.chosenObjectName,
+    projectId: chosenObject.chosenProjectId || editedObject.projectId,
+    reportSubtype: chosenObject.chosenSubtype || editedObject.chosenObjectSubtype,
+    reportType: chosenObject.chosenObjectId ? chosenObject.objectType.name : editedObject.chosenObjectType,
+    reportName: chosenObject.chosenObjectName || editedObject.chosenObjectName,
     token: session.authToken,
     authToken: session.authToken,
     instanceId: editedObject && editedObject.instanceId,
-    isPrompted: mstrData && mstrData.isPrompted,
+    isPrompted: chosenObject && chosenObject.isPrompted,
     promptsAnswers: editedObject && editedObject.promptsAnswers,
     selectedAttributes: editedObject.selectedAttributes,
     selectedMetrics: editedObject.selectedMetrics,
