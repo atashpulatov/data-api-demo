@@ -93,7 +93,6 @@ export default class _EmbeddedDossier extends React.Component {
         return Promise.resolve(token);
       },
       placeholder: container,
-      dossierFeature: { readoOnly: true, },
       enableCollaboration: false,
       filterFeature: {
         enabled: true,
