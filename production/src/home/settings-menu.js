@@ -13,6 +13,7 @@ import DB from '../cache/cache-db';
 import { officeContext } from '../office/office-context';
 
 const APP_VERSION = process.env.REACT_APP_MSTR_OFFICE_VERSION;
+const { displayLanguage } = window.Office.context;
 
 export const SettingsMenuHOC = ({
   userFullName,
@@ -57,7 +58,7 @@ export const SettingsMenuHOC = ({
     toggleIsSettingsFlag(false);
   };
 
-  const locale = (Office.context.displayLanguage || navigator.language).toLowerCase();
+  const locale = (displayLanguage || navigator.language).toLowerCase();
 
   return (
     <ul className="settings-list">
