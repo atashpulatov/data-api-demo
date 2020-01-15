@@ -18,8 +18,8 @@ class OfficeTableHelper {
    * @param {Object} context ExcelContext
    * @param {string} startCell  Top left corner cell
    * @param {string} newOfficeTableName Excel Binding ID
-   * @param {Object} [prevOfficeTable] Previous office table to refresh
-   * @param {Boolean} [tableColumnsChanged] Specify if table columns has been changed. False by default
+   * @param {Object} prevOfficeTable Previous office table to refresh
+   * @param {Boolean} tableColumnsChanged Specify if table columns has been changed. False by default
    *
    * @memberOf OfficeTableHelper
    */
@@ -460,7 +460,7 @@ class OfficeTableHelper {
       }
       sheet.activate();
       await context.sync();
-      return { officeTable, bindId:officeTable.id };
+      return { officeTable, bindId: officeTable.id };
     } catch (error) {
       await context.sync();
       throw error;
