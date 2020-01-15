@@ -3,7 +3,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
-import {popupHelper} from '../popup/popup-helper';
+import { popupHelper } from '../popup/popup-helper';
+import { DEFAULT_PROJECT_NAME } from '../storage/navigation-tree-reducer';
 
 const { microstrategy } = window;
 
@@ -198,4 +199,24 @@ _EmbeddedDossier.defaultProps = {
   handleSelection: () => { },
 };
 
-export const EmbeddedDossier = connect()(_EmbeddedDossier);
+const mapStateToProps = (state) => {
+  const { chosenObjectName, chosenObjectId, chosenProjectId } = state.navigationTree;
+  const popupState = state.popupReducer.editedObject;
+  const { promptsAnswers } = state.navigationTree;
+  const session = { ...state.sessionReducer };
+  const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
+  const editedObject = { ...(popupHelper.parsePopupState(popupState, promptsAnswers)) };
+  const mstrData = {
+    envUrl: session.envUrl,
+    token: session.authToken,
+    dossierId: isEdit ? editedObject.chosenObjectId : chosenObjectId,
+    projectId: isEdit ? editedObject.projectId : chosenProjectId,
+    promptsAnswers: isEdit ? editedObject.promptsAnswers : promptsAnswers,
+    selectedViz: isEdit ? editedObject.selectedViz : '',
+    instanceId: editedObject.instanceId,
+  };
+  console.log({ mstrData });
+  return { mstrData, };
+};
+
+export const EmbeddedDossier = connect(mapStateToProps)(_EmbeddedDossier);

@@ -50,12 +50,12 @@ export default class _DossierWindow extends React.Component {
 
   handleOk() {
     const { chosenObjectName, chosenObjectId, chosenProjectId, requestImport, selectObject, editedObject } = this.props;
-    const { projectId, isEdit } = editedObject;
+    const { isEdit } = editedObject;
     const { chapterKey, visualizationKey, promptsAnswers, preparedInstanceId } = this.state;
     const selectedVisualization = {
       chosenObjectName,
-      chosenObjectId: chosenObjectId || editedObject.chosenObjectId,
-      chosenProjectId: chosenProjectId || projectId,
+      chosenObjectId,
+      chosenProjectId,
       chosenSubtype: mstrObjectEnum.mstrObjectType.visualization.subtypes,
       objectType: mstrObjectEnum.mstrObjectType.visualization.type,
       chosenChapterKey: chapterKey,
@@ -73,25 +73,12 @@ export default class _DossierWindow extends React.Component {
   }
 
   render() {
-    const { chosenObjectName, chosenObjectId, chosenProjectId, t, editedObject, session } = this.props;
-    console.log({ editedObject });
-    const { envUrl, authToken } = session;
-    const { isVisualizationSelected, promptsAnswers } = this.state;
-    const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
-    const propsToPass = {
-      envUrl,
-      token: authToken,
-      dossierId: isEdit ? editedObject.chosenObjectId : chosenObjectId,
-      projectId: isEdit ? editedObject.projectId : chosenProjectId,
-      promptsAnswers: isEdit ? editedObject.promptsAnswers : promptsAnswers,
-      selectedViz: isEdit ? editedObject.selectedViz : '',
-    };
-    if (isEdit) propsToPass.instanceId = editedObject.instanceId;
-    const dossierFinalName = (isEdit) ? editedObject.chosenObjectName : chosenObjectName;
+    const { chosenObjectName, t, editedObject } = this.props;
+    const { isVisualizationSelected } = this.state;
     return (
       <div>
-        <h1 title={dossierFinalName} className="ant-col folder-browser-title">
-          {`${t('Import Dossier')} > ${dossierFinalName}`}
+        <h1 title={chosenObjectName} className="ant-col folder-browser-title">
+          {`${t('Import Dossier')} > ${chosenObjectName}`}
         </h1>
         <span className="dossier-window-information-frame">
           <MSTRIcon clasName="dossier-window-information-icon" type="info-icon" />
@@ -100,7 +87,6 @@ export default class _DossierWindow extends React.Component {
           </span>
         </span>
         <EmbeddedDossier
-          mstrData={propsToPass}
           handleSelection={this.handleSelection}
           handlePromptAnswer={this.handlePromptAnswer}
         />
@@ -162,15 +148,13 @@ _DossierWindow.defaultProps = {
 };
 
 function mapStateToProps(state) {
-  const { chosenObjectName, chosenObjectId, chosenProjectId } = state.navigationTree;
+  const { chosenObjectName, chosenObjectId, chosenProjectId, promptsAnswers } = state.navigationTree;
   const popupState = state.popupReducer.editedObject;
-  const { promptsAnswers } = state.navigationTree;
   return {
-    chosenObjectName,
-    chosenObjectId,
-    chosenProjectId,
+    chosenObjectName : popupState ? popupState.chosenObjectName : chosenObjectName,
+    chosenObjectId: popupState ? popupState.chosenObjectId : chosenObjectId,
+    chosenProjectId: popupState ? popupState.projectId : chosenProjectId,
     editedObject: { ...(popupHelper.parsePopupState(popupState, promptsAnswers)) },
-    session: { ...state.sessionReducer },
   };
 }
 
