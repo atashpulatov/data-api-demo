@@ -15,7 +15,6 @@ import { popupActions } from './popup-actions';
 const renderProperComponent = (popupType) => {
   switch (popupType) {
   case PopupTypeEnum.dataPreparation:
-    return <AttributeSelectorWindow />;
   case PopupTypeEnum.editFilters:
     return <AttributeSelectorWindow />;
   case PopupTypeEnum.navigationTree:
