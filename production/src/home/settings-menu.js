@@ -57,6 +57,8 @@ export const SettingsMenuHOC = ({
     toggleIsSettingsFlag(false);
   };
 
+  const locale = (Office.context.displayLanguage || navigator.language).toLowerCase();
+
   return (
     <ul className="settings-list">
       <li id="testid" className="user-data no-trigger-close not-linked-list">
@@ -101,7 +103,7 @@ export const SettingsMenuHOC = ({
       <li>
         <a
           tabIndex="0"
-          href="https://www.microstrategy.com/producthelp/Current/Office/index.htm"
+          href={`https://www.microstrategy.com/producthelp/Current/Office/${locale}/index.htm`}
           target="_blank"
           rel="noopener noreferrer"
         >
