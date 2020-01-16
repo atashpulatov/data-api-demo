@@ -96,6 +96,7 @@ export class PopupHelper {
       visualizationInfo: refreshReport.visualizationInfo,
       manipulationsXML: refreshReport.manipulationsXML,
       preparedInstanceId: refreshReport.instanceId,
+      tableName:refreshReport.tableName,
       previousTableDimensions: refreshReport.tableDimensions,
     };
     const result = await officeDisplayService.printObject(options);
