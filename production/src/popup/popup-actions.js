@@ -86,7 +86,7 @@ export class PopupActions {
           isRefreshAll);
         if (!isRefreshAll) return true;
       } finally {
-        dispatch({
+        isRefreshAll && dispatch({
           type: officeProperties.actions.finishLoadingReport,
           reportBindId: report.bindId,
           isRefreshAll: false,
@@ -104,7 +104,7 @@ export class PopupActions {
       ]);
       const editedDossier = this.officeStoreService.getReportFromProperties(reportParams.bindId);
       const { projectId, id, manipulationsXML } = editedDossier;
-      const instanceId = await this.mstrObjectRestService.createDossierInstance(projectId, id, { ...manipulationsXML });
+      const instanceId = await this.mstrObjectRestService.createDossierInstance(projectId, id, { ...manipulationsXML, disableManipulationsAutoSaving: true, persistViewState: true });
       editedDossier.instanceId = instanceId;
       editedDossier.isEdit = true;
       dispatch({

@@ -57,7 +57,8 @@ export default class _EmbeddedDossier extends React.Component {
       if (instanceId) {
         instance.mid = instanceId;
       } else {
-        instance.mid = await createDossierInstance(projectId, dossierId);
+        const body = { disableManipulationsAutoSaving: true, persistViewState: true };
+        instance.mid = await createDossierInstance(projectId, dossierId, body);
         if (promptsAnswers != null) {
           let count = 0;
           while (count < promptsAnswers.length) {
@@ -95,7 +96,6 @@ export default class _EmbeddedDossier extends React.Component {
         return Promise.resolve(authToken);
       },
       placeholder: container,
-      dossierFeature: { readoOnly: true, },
       enableCollaboration: false,
       filterFeature: {
         enabled: true,

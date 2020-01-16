@@ -92,6 +92,7 @@ export class OfficeDisplayService {
     preparedInstanceId,
     manipulationsXML = false,
     isRefreshAll,
+    tableName,
     previousTableDimensions,
     insertNewWorksheet = false,
     originalObjectName,
@@ -103,7 +104,7 @@ export class OfficeDisplayService {
     let tableColumnsChanged;
     let instanceDefinition;
     let officeTable;
-
+    let bindId;
     try {
       excelContext = await officeApiHelper.getExcelContext();
       if (!isRefreshAll) {
@@ -144,10 +145,10 @@ export class OfficeDisplayService {
       }
 
       // Create or update table
-      ({ officeTable, newOfficeTableId, shouldFormat, tableColumnsChanged } = await officeTableHelper.getOfficeTable(
-        isRefresh, excelContext, bindingId, instanceDefinition, startCell, previousTableDimensions
-      ));
+      ({ officeTable, newOfficeTableId, shouldFormat, tableColumnsChanged, bindId } = await officeTableHelper.getOfficeTable(
+        isRefresh, excelContext, bindingId, instanceDefinition, startCell, tableName, previousTableDimensions
 
+      ));
       // Apply formatting when table was created
       if (shouldFormat && !mstrTable.isCrosstabular) {
         await officeFormattingHelper.applyFormatting(officeTable, instanceDefinition, isCrosstab, excelContext);
@@ -185,6 +186,7 @@ export class OfficeDisplayService {
         console.timeEnd('Get dossier structure');
       }
 
+      const tableid = await this.bindOfficeTable(officeTable, excelContext, bindingId, bindId);
       // assign new name in duplicate workflow
       if (originalObjectName) {
         console.time('Duplicate renaming');
@@ -195,12 +197,11 @@ export class OfficeDisplayService {
       }
 
       // Save to store
-      bindingId = bindingId || newOfficeTableId;
-      await officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
       officeStoreService.saveAndPreserveReportInStore({
         name: mstrTable.name,
         manipulationsXML: instanceDefinition.manipulationsXML,
-        bindId: bindingId,
+        bindId:tableid,
+        oldTableId:bindingId,
         projectId,
         envUrl,
         body,
@@ -216,14 +217,15 @@ export class OfficeDisplayService {
         id: objectId,
         isLoading: false,
         crosstabHeaderDimensions,
-        tableDimensions: { columns: instanceDefinition.columns }
+        tableName:newOfficeTableId,
+        tableDimensions: { columns: instanceDefinition.columns },
       }, isRefresh);
 
       console.timeEnd('Total');
       this.reduxStore.dispatch({ type: CLEAR_PROMPTS_ANSWERS });
       this.reduxStore.dispatch({
         type: officeProperties.actions.finishLoadingReport,
-        reportBindId: bindingId,
+        reportBindId: tableid,
       });
       return { type: 'success', message: 'Data loaded successfully' };
     } catch (error) {
@@ -264,6 +266,16 @@ export class OfficeDisplayService {
     }
   }
 
+  bindOfficeTable = async(officeTable, excelContext, bindingId, bindId) => {
+    officeTable.load('name');
+    await excelContext.sync();
+    const tablename = officeTable.name;
+    let tableid = bindingId;
+    if (!bindingId || (bindId && (bindingId !== bindId))) { tableid = bindId; }
+    await officeApiHelper.bindNamedItem(tablename, tableid);
+    return tableid;
+  }
+
   /**
    * Create Instance definition object which stores data neede to continue import.
    * If instance of object does not exist new one will be created
@@ -281,6 +293,7 @@ export class OfficeDisplayService {
    * @returns {Object} Object containing officeTable and subtotalAddresses
    * @memberof officeDisplayService
    */
+
   async getInstaceDefinition(body, mstrObjectType, manipulationsXML, preparedInstanceId, projectId, objectId, dossierData, visualizationInfo, promptsAnswers, crosstabHeaderDimensions, subtotalsAddresses) {
     let instanceDefinition;
     if (body && body.requestedObjects) {
