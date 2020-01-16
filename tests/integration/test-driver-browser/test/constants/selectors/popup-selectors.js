@@ -10,7 +10,7 @@ export const selectors = {
   prepareBtn: '#prepare',
   cancelBtn: '#cancel',
   runBtn: '#run',
-  firstObject: '#root > div > div.object-table > div > div:nth-child(1) > div > div.ReactVirtualized__Grid.ReactVirtualized__Table__Grid > div > div:nth-child(1)',
+  firstObject: '#root > div > div.object-table > div.object-table-container > div:nth-child(1) > div > div.ReactVirtualized__Grid.ReactVirtualized__Table__Grid > div > div > div',
   secondObject: $('#root > div > div.object-table > div.object-table-container > div:nth-child(1) > div > div.ReactVirtualized__Grid.ReactVirtualized__Table__Grid > div > div:nth-child(2)'),
   backBtn: '#back',
   dataPreviewBtn: '#data-preview',
