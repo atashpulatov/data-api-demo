@@ -104,7 +104,7 @@ export class PopupActions {
       ]);
       const editedDossier = this.officeStoreService.getReportFromProperties(reportParams.bindId);
       const { projectId, id, manipulationsXML } = editedDossier;
-      const instanceId = await this.mstrObjectRestService.createDossierInstance(projectId, id, { ...manipulationsXML });
+      const instanceId = await this.mstrObjectRestService.createDossierInstance(projectId, id, { ...manipulationsXML, disableManipulationsAutoSaving: true, persistViewState: true });
       editedDossier.instanceId = instanceId;
       editedDossier.isEdit = true;
       dispatch({
