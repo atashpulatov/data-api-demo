@@ -11,14 +11,20 @@ import { PrepareDataButton } from './prepare-data-button';
 import { ImportButton } from './import-button';
 import { CancelButton } from './cancel-button';
 
-const getDisableReason = (isPublished, disableSecondary) => {
-  if (isPublished) {
-    if (disableSecondary) {
-      return 'This option is not available for dossier';
-    }
+const getDisableReason = (isPublished, disableSecondary, disableActiveActions) => {
+  const disableReasonForImport = getDisableReasonImport(isPublished, disableActiveActions);
+  return disableSecondary
+    ? 'This option is not available for dossier'
+    : disableReasonForImport;
+};
+
+const getDisableReasonImport = (isPublished, disableActiveActions) => {
+  if (!isPublished && isPublished !== undefined) {
+    return NOT_PUBLISHED_CUBE;
+  }
+  if (disableActiveActions) {
     return NO_DATA_SELECTED;
   }
-  return NOT_PUBLISHED_CUBE;
 };
 
 export const NotConnectedPopupButtons = ({
@@ -34,33 +40,26 @@ export const NotConnectedPopupButtons = ({
   disableSecondary,
   isPublished
 }) => {
-  const disableReason = getDisableReason(isPublished, disableSecondary);
+  const disableReason = getDisableReason(isPublished, disableSecondary, disableActiveActions);
+  const disableReasonForImport = getDisableReasonImport(isPublished, disableActiveActions);
   return (
     <div className="popup-buttons popup-footer">
       {handleBack && <BackButton handleBack={handleBack} t={t} />}
       {(!hideSecondary && !handleSecondary) && (
       <DataPreviewButton
-        isPublished={isPublished}
-        disableSecondary={disableSecondary}
-        disableActiveActions={disableActiveActions}
+        loading={loading}
         onPreviewClick={onPreviewClick}
         disableReason={disableReason}
         t={t} />
       )}
       <ImportButton
         loading={loading}
-        isPublished={isPublished}
-        disableSecondary={disableSecondary}
-        disableActiveActions={disableActiveActions}
         handleSecondary={handleSecondary}
         handleOk={handleOk}
-        disableReason={disableReason}
+        disableReason={disableReasonForImport}
         t={t} />
       {!hideSecondary && handleSecondary && (
       <PrepareDataButton
-        isPublished={isPublished}
-        disableSecondary={disableSecondary}
-        disableActiveActions={disableActiveActions}
         loading={loading}
         handleSecondary={handleSecondary}
         disableReason={disableReason}

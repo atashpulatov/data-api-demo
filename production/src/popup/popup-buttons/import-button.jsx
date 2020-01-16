@@ -1,18 +1,22 @@
 import React from 'react';
 import { Button, Popover } from 'antd';
 
-export const ImportButton = ({ isPublished, disableReason, disableSecondary, disableActiveActions, handleSecondary, handleOk, loading, t }) => {
+export const ImportButton = ({ disableReason, handleSecondary, handleOk, loading, t }) => {
   const internalButton = (
-    <Button id="import" type={!handleSecondary ? 'primary' : ''} onClick={handleOk} loading={loading} disabled={disableActiveActions}>
-      {t('Import')}</Button>
+    <Button id="import"
+            type={!handleSecondary ? 'primary' : ''}
+            onClick={handleOk}
+            loading={loading}
+            disabled={!!disableReason || loading}>
+      {t('Import')}
+    </Button>
   );
 
-  return ((disableActiveActions || disableSecondary || !isPublished)
+  return disableReason
     ? (
       <Popover className="button-tooltip" placement="topRight" content={t(`${disableReason}`)} mouseEnterDelay={1}>
         {internalButton}
       </Popover>
     )
-    : internalButton
-  );
+    : internalButton;
 };
