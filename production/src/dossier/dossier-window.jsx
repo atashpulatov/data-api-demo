@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { MSTRIcon } from '@mstr/mstr-react-library';
-import { PopupButtons } from '../popup/popup-buttons';
+import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { EmbeddedDossier } from './embedded-dossier';
 import { actions } from '../navigation/navigation-tree-actions';

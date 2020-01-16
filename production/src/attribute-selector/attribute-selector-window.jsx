@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { selectorProperties } from './selector-properties';
 import { attributeSelectorHelpers } from './attribute-selector-helpers';
 import { AttributeSelector } from './attribute-selector';
-import { PopupButtons } from '../popup/popup-buttons';
+import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
 import { popupStateActions } from '../popup/popup-state-actions';
 import { popupHelper } from '../popup/popup-helper';
 
