@@ -27,7 +27,8 @@ if uname -a | grep -q "Darwin"; then
   export PATH=/usr/local/git/bin:$JAVA_HOME/bin:$PATH
 elif uname -a | grep -q "MSYS"; then
   export JAVA_HOME=/c/java/$jdk_version
-  export PATH=/c/node/node-v8.11.1-win-x64:$JAVA_HOME/bin:$PATH
+  export DOCKER_HOME=/C/Program\ Files/Docker/Docker/Resources/
+  export PATH=/c/node/node-v10.16.3-win-x64:$JAVA_HOME/bin:$DOCKER_HOME/bin:$PATH
 else
   export JAVA_HOME=/usr/java/$jdk_version
   export PATH=$JAVA_HOME/bin:$PATH
