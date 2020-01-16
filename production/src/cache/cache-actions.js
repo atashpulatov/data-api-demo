@@ -104,7 +104,7 @@ export function fetchObjectsFallback() {
       // My Library
       dispatch(myLibraryLoading(true));
       getMyLibraryObjectList((objects) => {
-        objects = addNestedPropertiesToObjects(objects, projects);
+        objects = { data: addNestedPropertiesToObjects(objects, projects) };
         dispatch(addMyLibraryObjects(objects, true));
       })
         .catch(console.error)
@@ -113,7 +113,7 @@ export function fetchObjectsFallback() {
       // Environment library
       dispatch(objectListLoading(true));
       getObjectList((objects) => {
-        objects = addNestedPropertiesToObjects(objects, projects);
+        objects = { data: addNestedPropertiesToObjects(objects, projects) };
         dispatch(addEnvObjects(objects, true));
       })
         .catch(console.error)
@@ -207,6 +207,6 @@ export function clearCache(userID) {
     const cache = new DB(userID);
     dispatch(clearStateCache());
     console.log('Clearing cache');
-    return cache.delete().catch(console.error);
+    return cache.clearTable().catch(console.error);
   };
 }
