@@ -98,7 +98,7 @@ export class HeaderHOC extends Component {
           </div>
           <div className="header-buttons">
             <Popover placement="bottom" content={t('More Items')} mouseEnterDelay={1}>
-              <Button className="settings-btn no-trigger-close" onClick={this.toggleSettings} disabled={loading}>
+              <Button id="settings-button" className="settings-btn no-trigger-close" onClick={this.toggleSettings} disabled={loading}>
                 <MSTRIcon type="settings" />
               </Button>
             </Popover>

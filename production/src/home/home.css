@@ -214,8 +214,9 @@ hr {
   top: 24.8px;
 }
 
-.header-buttons .settings-btn.no-trigger-close {
+#settings-button{
   min-width: unset;
+  left: 0;
 }
 
 @keyframes fadein {

@@ -13,7 +13,6 @@ import DB from '../cache/cache-db';
 import { officeContext } from '../office/office-context';
 
 const APP_VERSION = process.env.REACT_APP_MSTR_OFFICE_VERSION;
-const { displayLanguage } = window.Office.context;
 
 export const SettingsMenuHOC = ({
   userFullName,
@@ -29,7 +28,6 @@ export const SettingsMenuHOC = ({
 }) => {
   const userNameDisplay = userFullName || 'MicroStrategy user';
   const isSecuredActive = !isSecured && reportArray && reportArray.length > 0;
-
   const prepareEmail = () => {
     const { Office } = window;
     if (!Office) return '#'; // If no Office return anchor url
@@ -58,7 +56,6 @@ export const SettingsMenuHOC = ({
     toggleIsSettingsFlag(false);
   };
 
-  const locale = (displayLanguage || navigator.language).toLowerCase();
 
   return (
     <ul className="settings-list">
@@ -104,7 +101,7 @@ export const SettingsMenuHOC = ({
       <li>
         <a
           tabIndex="0"
-          href={`https://www.microstrategy.com/producthelp/Current/Office/${locale}/index.htm`}
+          href="https://www.microstrategy.com/producthelp/Current/Office/en-us/index.htm"
           target="_blank"
           rel="noopener noreferrer"
         >

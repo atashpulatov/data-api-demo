@@ -89,18 +89,18 @@ button {
   }
 }
 
-.loading-button-container img{
+
+.loading-button-container #report-loading-icon{
     position: relative;
     right: 2px;
     margin-right: 2px;
 }
-
-.add-data-btn{
+#add-data-btn-container{
   position: relative;
    padding-top: 1px;
 }
 
-.refresh-icons-row span img{
+.refresh-icons-row .additional-data-wrapper svg{
   position:relative;
    top:2.5px;
    margin-top: 0;

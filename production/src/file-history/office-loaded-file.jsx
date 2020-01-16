@@ -249,6 +249,7 @@ export class _OfficeLoadedFile extends React.Component {
               <MSTRIcon type="refresh" />
             ) : (
               <img
+                  id="report-loading-icon"
                   width="12px"
                   height="12px"
                   src={loadingSpinner}
@@ -323,8 +324,8 @@ export class _OfficeLoadedFile extends React.Component {
               content={t('Date and time of last modification')}
               mouseEnterDelay={1}
             >
-                <span>
-                  <ClockIcon style={{ position:'relative', top:'2.5px', marginTop: '0' }} />
+                <span className="additional-data-wrapper">
+                  <ClockIcon />
                   <span className="additional-data">
                     {t('refreshed_date', { date: refreshDate })}
                   </span>
