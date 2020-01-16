@@ -61,7 +61,11 @@ export class OfficeDisplayService {
    * @param {Boolean} parameter.isPrompted
    * @param {Object} [parameter.promptsAnswers]
    * @param {Object} [parameter.crosstabHeaderDimensions=false] Contains crosstab header dimensions
-   * @param {Object} [parameter.subtotalInfo=false] Contains previous subtotal addresses and boolean determining if we want to import with subtotal
+   * @param {Object} [parameter.subtotalsInfo] Contains information if subtotals are defined in the response, if they are visible, also includes the subtotalsAdresses and subtotal value we set for toggle in prepare data.
+   * @param {Object} [parameter.subtotalsInfo.subtotalsDefined=false] information that if the subtotals are defined in response
+   * @param {Object} [parameter.subtotalsInfo.subtotalsVisible=false] information that if the subtotals are visible in response
+   * @param {Object} [parameter.subtotalsInfo.subtotalsAddresses=false] Contains information of subtotal adresses.
+   * @param {Object} [parameter.subtotalsInfo.importSubtotal=false] information that if the subtotals will be imported from the prepare data
    * @param {Object} [parameter.visualizationInfo=false]
    * @param {Object} [parameter.preparedInstanceId] Instance created before import workflow.
    * @param {Object} [parameter.manipulationsXML=false] Dossier Manipulation for imported visualization
@@ -83,9 +87,11 @@ export class OfficeDisplayService {
     isPrompted,
     promptsAnswers,
     crosstabHeaderDimensions = false,
-    subtotalInfo: {
-      importSubtotal = true,
+    subtotalsInfo : {
+      subtotalsDefined = false,
+      subtotalsVisible = false,
       subtotalsAddresses = false,
+      importSubtotal = true,
     } = false,
     visualizationInfo = false,
     preparedInstanceId,
@@ -125,9 +131,9 @@ export class OfficeDisplayService {
 
       // Get mstr instance definition
       console.time('Instance definition');
-      ({ body, instanceDefinition, isCrosstab } = await this.getInstaceDefinition(
+      ({ body, instanceDefinition, isCrosstab, subtotalsDefined, subtotalsVisible } = await this.getInstaceDefinition(
         body, mstrObjectType, manipulationsXML, preparedInstanceId, projectId, objectId, dossierData,
-        visualizationInfo, promptsAnswers, crosstabHeaderDimensions, subtotalsAddresses,
+        visualizationInfo, promptsAnswers, crosstabHeaderDimensions, subtotalsAddresses, subtotalsDefined, subtotalsVisible
       ));
       const { mstrTable } = instanceDefinition;
       ({ crosstabHeaderDimensions } = mstrTable);
@@ -165,10 +171,9 @@ export class OfficeDisplayService {
         visualizationInfo,
       }));
 
-      console.time('Column auto size');
-      await officeFormattingHelper.formatTable(officeTable, isCrosstab, crosstabHeaderDimensions, excelContext);
-      console.timeEnd('Column auto size');
-
+      if (shouldFormat) await officeFormattingHelper.formatTable(officeTable, isCrosstab, crosstabHeaderDimensions, excelContext);
+      mstrTable.subtotalsInfo.subtotalsAddresses = subtotalsAddresses;
+      mstrTable.subtotalsInfo.importSubtotal = importSubtotal;
 
       if (subtotalsAddresses.length) {
         // Removing duplicated subtotal addresses from headers
@@ -198,10 +203,7 @@ export class OfficeDisplayService {
         isCrosstab,
         isPrompted,
         promptsAnswers,
-        subtotalInfo: {
-          importSubtotal,
-          subtotalsAddresses,
-        },
+        subtotalsInfo: instanceDefinition.mstrTable.subtotalsInfo,
         visualizationInfo,
         id: objectId,
         isLoading:false,
@@ -268,10 +270,12 @@ export class OfficeDisplayService {
    * @param {Object} [promptsAnswers]
    * @param {Object} [crosstabHeaderDimensions] Contains previous dimensions of crosstab headers.
    * @param {Array} [subtotalsAddresses] Contains previous subtotal addresses
+   * @param {Boolean} subtotalsDefined Information if the report has subtotals
+   * @param {Boolean} subtotalsVisible Information if the subtotals are visible
    * @returns {Object} Object containing officeTable and subtotalAddresses
    * @memberof officeDisplayService
    */
-  async getInstaceDefinition(body, mstrObjectType, manipulationsXML, preparedInstanceId, projectId, objectId, dossierData, visualizationInfo, promptsAnswers, crosstabHeaderDimensions, subtotalsAddresses) {
+  async getInstaceDefinition(body, mstrObjectType, manipulationsXML, preparedInstanceId, projectId, objectId, dossierData, visualizationInfo, promptsAnswers, crosstabHeaderDimensions, subtotalsAddresses, subtotalsDefined, subtotalsVisible) {
     let instanceDefinition;
     if (body && body.requestedObjects) {
       if (body.requestedObjects.attributes.length === 0 && body.requestedObjects.metrics.length === 0) {
@@ -304,8 +308,10 @@ export class OfficeDisplayService {
     mstrTable.crosstabHeaderDimensions = isCrosstab
       ? officeTableHelper.getCrosstabHeaderDimensions(instanceDefinition)
       : false;
-    mstrTable.subtotalsAddresses = subtotalsAddresses;
-    return { body, instanceDefinition, isCrosstab };
+    mstrTable.subtotalsInfo.subtotalsAddresses = subtotalsAddresses;
+    subtotalsDefined = mstrTable.subtotalsInfo.subtotalsDefined;
+    subtotalsVisible = mstrTable.subtotalsInfo.subtotalsVisible;
+    return { body, instanceDefinition, isCrosstab, subtotalsDefined, subtotalsVisible };
   }
 
   /**

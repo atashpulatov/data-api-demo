@@ -21,7 +21,7 @@ export class AttributeSelectorWindow extends Component {
       triggerUpdate: false,
       loading: false,
       attributesSelected: false,
-      importSubtotal: true,
+      importSubtotal: mstrData.subtotalsInfo ? mstrData.subtotalsInfo.importSubtotal : false,
     };
   }
 
@@ -43,6 +43,7 @@ export class AttributeSelectorWindow extends Component {
   onTriggerUpdate = (reportId, projectId, reportSubtype, body, reportName = this.props.mstrData.reportName) => {
     const { mstrData } = this.props;
     const { importSubtotal } = this.state;
+    const subtotalsInfo = { importSubtotal };
     attributeSelectorHelpers.officeMessageParent(
       selectorProperties.commandOnUpdate,
       reportId,
@@ -52,7 +53,7 @@ export class AttributeSelectorWindow extends Component {
       reportName,
       mstrData.instanceId,
       mstrData.promptsAnswers,
-      importSubtotal,
+      subtotalsInfo,
     );
   };
 
@@ -122,7 +123,9 @@ AttributeSelectorWindow.propTypes = {
     instanceId: PropTypes.string,
     promptsAnswers: PropTypes.string,
     reportType: PropTypes.object,
-    editRequested: PropTypes.bool
+    editRequested: PropTypes.bool,
+    subtotalsInfo: PropTypes.object,
+    importSubtotal: PropTypes.bool
   }).isRequired,
   handleBack: PropTypes.func,
   handlePopupErrors: PropTypes.func

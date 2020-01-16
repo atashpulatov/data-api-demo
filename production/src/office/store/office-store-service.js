@@ -59,7 +59,7 @@ export class OfficeStoreService {
         objectType: report.objectType,
         isCrosstab: report.isCrosstab,
         isPrompted: report.isPrompted,
-        subtotalInfo: report.subtotalInfo,
+        subtotalsInfo: report.subtotalsInfo,
         promptsAnswers: report.promptsAnswers,
         crosstabHeaderDimensions: report.crosstabHeaderDimensions,
         visualizationInfo: report.visualizationInfo,
@@ -164,6 +164,9 @@ export class OfficeStoreService {
         refreshedObject.crosstabHeaderDimensions = report.crosstabHeaderDimensions;
         refreshedObject.isCrosstab = report.isCrosstab;
         refreshedObject.tableDimensions = report.tableDimensions;
+        if (refreshedObject.subtotalsInfo) {
+          refreshedObject.subtotalsInfo = report.subtotalsInfo;
+        }
         if (refreshedObject.visualizationInfo) {
           refreshedObject.manipulationsXML = report.manipulationsXML;
           refreshedObject.visualizationInfo.dossierStructure = report.visualizationInfo.dossierStructure;
@@ -191,7 +194,7 @@ export class OfficeStoreService {
           objectType: report.objectType,
           isCrosstab: report.isCrosstab,
           isPrompted: report.isPrompted,
-          subtotalInfo: report.subtotalInfo,
+          subtotalsInfo: report.subtotalsInfo,
           promptsAnswers: report.promptsAnswers,
           crosstabHeaderDimensions: report.crosstabHeaderDimensions,
           visualizationInfo: report.visualizationInfo,

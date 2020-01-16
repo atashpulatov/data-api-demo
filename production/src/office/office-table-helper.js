@@ -54,7 +54,7 @@ class OfficeTableHelper {
    */
   updateOfficeTable = async (instanceDefinition, context, startCell, prevOfficeTable) => {
     try {
-      const { rows, mstrTable, mstrTable:{ isCrosstab, subtotalsAddresses } } = instanceDefinition;
+      const { rows, mstrTable, mstrTable:{ isCrosstab, subtotalsInfo:{ subtotalsAddresses } } } = instanceDefinition;
       const crosstabHeaderDimensions = this.getCrosstabHeaderDimensions(instanceDefinition);
 
       prevOfficeTable.rows.load('count');
