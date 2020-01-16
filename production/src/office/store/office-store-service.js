@@ -130,9 +130,7 @@ export class OfficeStoreService {
         refreshedObject.isCrosstab = report.isCrosstab;
         refreshedObject.bindId = report.bindId;
         refreshedObject.tableDimensions = report.tableDimensions;
-        if (refreshedObject.subtotalsInfo) {
-          refreshedObject.subtotalsInfo = report.subtotalsInfo;
-        }
+        refreshedObject.subtotalsInfo = report.subtotalsInfo;
         if (refreshedObject.visualizationInfo) {
           refreshedObject.manipulationsXML = report.manipulationsXML;
           refreshedObject.visualizationInfo.dossierStructure = report.visualizationInfo.dossierStructure;

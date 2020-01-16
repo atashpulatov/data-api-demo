@@ -134,7 +134,7 @@ export class OfficeDisplayService {
 
       // Get mstr instance definition
       console.time('Instance definition');
-      ({ body, instanceDefinition, isCrosstab, subtotalsDefined, subtotalsVisible } = await this.getInstaceDefinition(
+      ({ body, instanceDefinition, isCrosstab } = await this.getInstaceDefinition(
         body, mstrObjectType, manipulationsXML, preparedInstanceId, projectId, objectId, dossierData,
         visualizationInfo, promptsAnswers, crosstabHeaderDimensions, subtotalsAddresses, subtotalsDefined, subtotalsVisible
       ));
@@ -172,6 +172,7 @@ export class OfficeDisplayService {
         startCell,
         tableColumnsChanged,
         visualizationInfo,
+        importSubtotal
       }));
 
       if (shouldFormat) await officeFormattingHelper.formatTable(officeTable, isCrosstab, crosstabHeaderDimensions, excelContext);
@@ -215,7 +216,7 @@ export class OfficeDisplayService {
         isCrosstab,
         isPrompted,
         promptsAnswers,
-        subtotalsInfo: instanceDefinition.mstrTable.subtotalsInfo,
+        subtotalsInfo: mstrTable.subtotalsInfo,
         visualizationInfo,
         id: objectId,
         isLoading: false,
@@ -332,8 +333,7 @@ export class OfficeDisplayService {
       ? officeTableHelper.getCrosstabHeaderDimensions(instanceDefinition)
       : false;
     mstrTable.subtotalsInfo.subtotalsAddresses = subtotalsAddresses;
-    subtotalsDefined = mstrTable.subtotalsInfo.subtotalsDefined;
-    subtotalsVisible = mstrTable.subtotalsInfo.subtotalsVisible;
+    ({ subtotalsDefined, subtotalsVisible } = mstrTable.subtotalsInfo);
     return { body, instanceDefinition, isCrosstab, subtotalsDefined, subtotalsVisible };
   }
 
@@ -371,7 +371,7 @@ export class OfficeDisplayService {
   * @returns {Object} Object containing officeTable and subtotalAddresses
   * @memberof officeDisplayService
   */
-  async fetchInsertDataIntoExcel({ connectionData, officeData, instanceDefinition, isRefresh, tableColumnsChanged, visualizationInfo }) {
+  async fetchInsertDataIntoExcel({ connectionData, officeData, instanceDefinition, isRefresh, tableColumnsChanged, visualizationInfo, importSubtotal }) {
     try {
       const { objectId, projectId, dossierData, mstrObjectType } = connectionData;
       const { excelContext, officeTable } = officeData;
@@ -389,7 +389,7 @@ export class OfficeDisplayService {
         console.timeEnd('Fetch data');
         excelContext.workbook.application.suspendApiCalculationUntilNextSync();
         await this.appendRows(officeData, row, rowIndex, isRefresh, tableColumnsChanged, contextPromises, header, mstrTable);
-        this.getSubtotalCoordinates(subtotalAddress, subtotalsAddresses);
+        if (importSubtotal) this.getSubtotalCoordinates(subtotalAddress, subtotalsAddresses);
         rowIndex += row.length;
         await this.syncChangesToExcel(contextPromises, false);
         console.groupEnd();

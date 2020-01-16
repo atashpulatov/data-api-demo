@@ -120,7 +120,6 @@ describe('AttributeSelectorWindow', () => {
       reportType: 'report',
       instanceId: 'instanceId',
       promptsAnswers: 'promptsAnswers',
-      importSubtotal: true,
       subtotalsInfo:{ importSubtotal:true },
     };
 
