@@ -12,6 +12,11 @@ class OfficeConverterServiceV2 {
     const isCrosstabular = grid.metricsPosition && grid.metricsPosition.axis === 'rows' && grid.columns.length === 0;
     const columnInformation = this.getColumnInformation(response, isCrosstabular);
     const isCrosstab = !isCrosstabular && this.isCrosstab(response);
+    let subtotalsInfo = {};
+    const subtotals = this.getSubtotalsInformation(response);
+    if (subtotals) {
+      subtotalsInfo = { subtotalsDefined: subtotals.defined, subtotalsVisible: subtotals.visible };
+    }
     return {
       tableSize: this.getTableSize(response, columnInformation, isCrosstab),
       columnInformation,
@@ -22,7 +27,24 @@ class OfficeConverterServiceV2 {
       name: response.n || response.name,
       rows: this.getRows(response, isCrosstab),
       attributesNames: this.getAttributesName(response.definition, response.supportForms),
+      subtotalsInfo,
     };
+  }
+
+  /**
+   * Gets subtotals defined or visible information from the response.
+   *
+   * @param {JSON} response
+   * @return {Object}
+   * @memberof OfficeConverterServiceV2
+   */
+  getSubtotalsInformation = (response) => {
+    try {
+      const { subtotals } = response.definition.grid;
+      return subtotals;
+    } catch (error) {
+      return false;
+    }
   }
 
   /**

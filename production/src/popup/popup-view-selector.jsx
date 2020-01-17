@@ -127,6 +127,7 @@ async function obtainInstanceWithPromptsAnswers(propsToPass, props) {
     instanceId: instanceDefinition.instanceId,
     promptsAnswers: props.promptsAnswers,
     body,
+    subtotalsInfo: props.editedReport.subtotalsInfo,
   };
   console.log({ preparedReport, propsToPass });
   props.preparePromptedReport(instanceDefinition.instanceId, preparedReport);
@@ -350,7 +351,7 @@ function parsePopupState(popupState, promptsAnswers) {
     reportType: popupState.objectType,
     reportSubtype: popupState.objectType === 'report' ? 768 : 779,
     promptsAnswers: promptsAnswers || popupState.promptsAnswers,
-    importSubtotal: popupState.importSubtotal,
+    subtotalsInfo: popupState.subtotalsInfo,
     isEdit: popupState.isEdit,
     dossierName,
     selectedViz: `${chapterKey}:${visualizationKey}`,
