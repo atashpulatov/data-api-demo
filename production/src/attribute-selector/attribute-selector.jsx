@@ -4,6 +4,7 @@ import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { popupHelper } from '../popup/popup-helper';
+import { switchImportSubtotals } from '../navigation/navigation-tree-actions';
 
 export class AttributeSelectorHOC extends Component {
   constructor(props) {
@@ -37,7 +38,7 @@ export class AttributeSelectorHOC extends Component {
     const {
       title, session,
       triggerUpdate, onTriggerUpdate, chosenObject, importSubtotal, editedObject, supportForms,
-      resetTriggerUpdate, attributesSelectedChange, t, openModal, closeModal, toggleSubtotal,
+      resetTriggerUpdate, attributesSelectedChange, t, openModal, closeModal, switchImportSubtotals,
     } = this.props;
 
     return (
@@ -56,8 +57,8 @@ export class AttributeSelectorHOC extends Component {
           withFolderTree={false}
           openModal={openModal}
           closeModal={closeModal}
-          toggleSubtotal={toggleSubtotal}
-          importSubtotal={mstrData.subtotalsInfo && mstrData.subtotalsInfo.importSubtotal}
+          toggleSubtotal={switchImportSubtotals}
+          importSubtotal={editedObject.subtotalsInfo ? editedObject.subtotalsInfo.importSubtotal : importSubtotal}
           handleUnauthorized={this.handleUnauthorized}
         />
       </ErrorBoundary>
@@ -100,7 +101,7 @@ AttributeSelectorHOC.propTypes = {
   session: PropTypes.shape({}),
   mstrData: PropTypes.shape({
     chosenObjectId: PropTypes.string,
-    subtotalsInfo: PropTypes.shape({ importSubtotal: PropTypes.bool })
+    // subtotalsInfo: PropTypes.shape({ importSubtotal: PropTypes.bool })
   }),
   resetTriggerUpdate: PropTypes.func,
   attributesSelectedChange: PropTypes.func,
@@ -114,19 +115,19 @@ AttributeSelectorHOC.defaultProps = { t: (text) => text, };
 
 const mapStateToProps = (state) => {
   const { navigationTree, popupStateReducer, popupReducer, sessionReducer, officeReducer } = state;
-  const popupState = popupReducer.editedObject;
+  const { editedObject } = popupReducer;
   const { promptsAnswers, importSubtotal, ...chosenObject } = navigationTree;
   const { supportForms } = officeReducer;
   return {
     chosenObject,
-    importSubtotal,
     supportForms,
-    editedObject: { ...(popupHelper.parsePopupState(popupState, promptsAnswers)) },
+    editedObject: { ...(popupHelper.parsePopupState(editedObject, promptsAnswers)) },
     popupState: { ...popupStateReducer },
     session: { ...sessionReducer },
+    importSubtotal,
   };
 };
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = { switchImportSubtotals };
 
 export const AttributeSelector = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(AttributeSelectorHOC));

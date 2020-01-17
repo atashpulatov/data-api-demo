@@ -161,7 +161,7 @@ export class PopupHelper {
       chosenObjectType: popupState.objectType,
       chosenObjectSubtype: popupState.objectType === 'report' ? 768 : 779,
       promptsAnswers: promptsAnswers || popupState.promptsAnswers,
-      importSubtotal: popupState.importSubtotal,
+      subtotalsInfo: popupState.subtotalsInfo,
       isEdit: popupState.isEdit,
       dossierName,
       selectedViz: `${chapterKey}:${visualizationKey}`,

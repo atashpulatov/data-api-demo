@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { actions } from '../navigation/navigation-tree-actions';
+import { actions, switchImportSubtotals } from '../navigation/navigation-tree-actions';
 import { popupHelper } from './popup-helper';
 import { popupViewSelectorHelper } from './popup-view-selector-helper';
 import { AttributeSelectorWindow } from '../attribute-selector/attribute-selector-window';
@@ -46,12 +46,12 @@ export const PopupViewSelectorNotConnected = (props) => {
 };
 
 export function mapStateToProps(state) {
-  const popupState = state.popupReducer.editedObject;
+  const { editedObject } = state.popupReducer;
   const { promptsAnswers } = state.navigationTree;
   return {
     ...state.navigationTree,
     authToken: state.sessionReducer.authToken,
-    editedObject: { ...(popupHelper.parsePopupState(popupState, promptsAnswers)) },
+    editedObject: { ...(popupHelper.parsePopupState(editedObject, promptsAnswers)) },
     preparedInstance: state.popupReducer.preparedInstance,
     propsToPass: { ...state.popupStateReducer },
     popupType: state.popupStateReducer.popupType,

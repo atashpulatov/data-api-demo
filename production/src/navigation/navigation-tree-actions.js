@@ -16,6 +16,7 @@ export const REQUEST_DOSSIER_OPEN = 'REQUEST_DOSSIER_OPEN';
 export const CANCEL_DOSSIER_OPEN = 'CANCEL_DOSSIER_OPEN';
 export const CHANGE_FILTER = 'CHANGE_FILTER';
 export const SWITCH_MY_LIBRARY = 'SWITCH_MY_LIBRARY';
+export const SWITCH_IMPORT_SUBTOTALS = 'SWITCH_IMPORT_SUBTOTALS';
 export const CHANGE_IS_PROMPTED = 'CHANGE_IS_PROMPTED';
 export const LOAD_BROWSING_STATE_CONST = 'LOAD_BROWSING_STATE_CONST';
 
@@ -92,6 +93,10 @@ export function requestDossierOpen(data) {
 
 export function switchMyLibrary() {
   return (dispatch) => dispatch({ type: SWITCH_MY_LIBRARY });
+}
+
+export function switchImportSubtotals(data) {
+  return (dispatch) => dispatch({ type: SWITCH_IMPORT_SUBTOTALS, data });
 }
 
 export function changeFilter(data) {
