@@ -27,7 +27,7 @@ const getDisableReasonImport = (isPublished, disableActiveActions) => {
   }
 };
 
-export const NotConnectedPopupButtons = ({
+export const PopupButtonsNotConnected = ({
   handleOk,
   handleSecondary,
   handleCancel,
@@ -70,7 +70,7 @@ export const NotConnectedPopupButtons = ({
   );
 };
 
-NotConnectedPopupButtons.propTypes = {
+PopupButtonsNotConnected.propTypes = {
   handleOk: PropTypes.func,
   handleSecondary: PropTypes.func,
   handleCancel: PropTypes.func,
@@ -88,4 +88,4 @@ function mapStateToProps({ navigationTree }) {
   return { isPrompted: navigationTree.isPrompted };
 }
 
-export const PopupButtons = connect(mapStateToProps)(withTranslation('common')(NotConnectedPopupButtons));
+export const PopupButtons = connect(mapStateToProps)(withTranslation('common')(PopupButtonsNotConnected));

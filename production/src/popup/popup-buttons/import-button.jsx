@@ -1,6 +1,8 @@
 import React from 'react';
 import { Button, Popover } from 'antd';
 
+import PropTypes from 'prop-types';
+
 export const ImportButton = ({ disableReason, handleSecondary, handleOk, loading, t }) => {
   const internalButton = (
     <Button id="import"
@@ -19,4 +21,12 @@ export const ImportButton = ({ disableReason, handleSecondary, handleOk, loading
       </Popover>
     )
     : internalButton;
+};
+
+ImportButton.propTypes = {
+  handleSecondary: PropTypes.func,
+  handleOk: PropTypes.func,
+  t: PropTypes.func,
+  loading: PropTypes.bool,
+  disableReason: PropTypes.string,
 };

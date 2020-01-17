@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Popover } from 'antd';
+import PropTypes from 'prop-types';
 
 export const DataPreviewButton = ({ disableReason, loading, onPreviewClick, t }) => {
   const internalButton = (
@@ -17,4 +18,11 @@ export const DataPreviewButton = ({ disableReason, loading, onPreviewClick, t })
       </Popover>
     )
     : internalButton;
+};
+
+DataPreviewButton.propTypes = {
+  onPreviewClick: PropTypes.func,
+  t: PropTypes.func,
+  loading: PropTypes.bool,
+  disableReason: PropTypes.string,
 };
