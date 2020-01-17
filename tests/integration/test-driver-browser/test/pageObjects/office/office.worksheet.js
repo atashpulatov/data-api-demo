@@ -9,6 +9,23 @@ const OfficeWorksheet = function() {
     browser.url('https://www.office.com/launch/excel?auth=2');
   };
 
+  this.uploadPlugin = function() {
+    // const pathToManifest = '/Users/dhornos/Documents/GITHUB-repositories/mstr-office/tests/integration/test-driver-browser/Tiannan UB Library (170407).xml'
+    const pathToManifest = '/Users/dhornos/Documents/GITHUB-repositories/mstr-office/tests/integration/test-driver-browser/yi_localhost_ip.xml'
+    switchToExcelFrame();
+    $(exSe.insertBtn).click();
+    $(exSe.addInBtn).click();
+    $(exSe.officeAddInsFrame).waitForExist(9999);
+    $(exSe.officeAddInsFrame).waitForExist(9999);
+    browser.switchToFrame($(exSe.officeAddInsFrame));
+    browser.pause(1111);
+    waitAndClick($(exSe.adminManagedBtn));
+    waitAndClick($(exSe.uploadAddInBtn));
+    $(exSe.manifestInput).waitForExist(9999);
+    $(exSe.manifestInput).setValue(pathToManifest);
+    waitAndClick($(exSe.confirmUpload));
+  };
+
   this.openPlugin = function() {
     switchToExcelFrame();
     try {

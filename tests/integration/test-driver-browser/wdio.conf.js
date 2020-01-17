@@ -17,7 +17,8 @@ exports.config = {
   // directory is where your package.json resides, so `wdio` will be called from there.
   //
   specs: [
-    './test/specs/release-validation/deprecated/sample.spec.js'
+    './test/specs/performance/import-UB-dataset.spec.js'
+    // './test/specs/release-validation/deprecated/sample.spec.js',
   ],
   suites: {
   test: [
@@ -130,7 +131,7 @@ exports.config = {
   
   //
   // The number of times to retry the entire specfile when it fails as a whole
-  specFileRetries: 3,
+  specFileRetries: 0,
   //
   // Test reporter for stdout.
   // The only one supported by default is 'dot'
