@@ -75,7 +75,6 @@ export class AttributeSelectorWindowNotConnected extends Component {
     const { toggleSubtotal } = this;
     const typeName = chosenObject.objectType.name
       && chosenObject.objectType.name.charAt(0).toUpperCase() + chosenObject.objectType.name.substring(1);
-    console.log({ editedObject, handleBack, typeName });
     return (
       <div>
         <AttributeSelector
@@ -118,7 +117,6 @@ AttributeSelectorWindowNotConnected.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-  console.log({ state });
   return {
     mstrData: { ...state.popupStateReducer },
     chosenObject: state.navigationTree,
