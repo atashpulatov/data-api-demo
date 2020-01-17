@@ -170,10 +170,10 @@ class OfficeTableHelper {
    */
   getOfficeTable = async (isRefresh, excelContext, bindingId, instanceDefinition, startCell, tableName, previousTableDimensions) => {
     console.time('Create or get table');
+    let bindId;
     const { mstrTable } = instanceDefinition;
     const excelCompatibleTableName = mstrTable.name.replace(/\W/g, '_');
-    let bindId;
-    const newOfficeTableName = tableName || `${excelCompatibleTableName.slice(0, 241)}_${Date.now().toString()}`;
+    const newOfficeTableName = tableName || `_${excelCompatibleTableName.slice(0, 241)}_${Date.now().toString()}`;
     this.checkReportTypeChange(instanceDefinition);
     let officeTable;
     let shouldFormat = true;
