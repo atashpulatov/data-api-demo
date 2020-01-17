@@ -2,7 +2,7 @@ import { officeContext } from '../office/office-context';
 
 class AttributeSelectorHelpers {
   officeMessageParent = (
-    command, reportId, projectId, reportSubtype, body, reportName, instanceId, promptsAnswers, importSubtotal,
+    command, reportId, projectId, reportSubtype, body, reportName, instanceId, promptsAnswers, subtotalsInfo,
   ) => {
     const updateObject = {
       command,
@@ -14,7 +14,7 @@ class AttributeSelectorHelpers {
       instanceId,
       promptsAnswers,
       isPrompted: !!promptsAnswers,
-      importSubtotal
+      subtotalsInfo
     };
     const Office = officeContext.getOffice();
     Office.context.ui.messageParent(JSON.stringify(updateObject));
