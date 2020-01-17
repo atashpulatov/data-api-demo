@@ -57,7 +57,7 @@ export class AttributeSelectorHOC extends Component {
           openModal={openModal}
           closeModal={closeModal}
           toggleSubtotal={toggleSubtotal}
-          importSubtotal={importSubtotal}
+          importSubtotal={mstrData.subtotalsInfo && mstrData.subtotalsInfo.importSubtotal}
           handleUnauthorized={this.handleUnauthorized}
         />
       </ErrorBoundary>
@@ -100,7 +100,7 @@ AttributeSelectorHOC.propTypes = {
   session: PropTypes.shape({}),
   mstrData: PropTypes.shape({
     chosenObjectId: PropTypes.string,
-    importSubtotal: PropTypes.bool
+    subtotalsInfo: PropTypes.shape({ importSubtotal: PropTypes.bool })
   }),
   resetTriggerUpdate: PropTypes.func,
   attributesSelectedChange: PropTypes.func,

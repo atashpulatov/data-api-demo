@@ -1,4 +1,4 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import thunk from 'redux-thunk';
@@ -26,7 +26,12 @@ const persistConfig = {
   blacklist: ['officeReducer', 'notificationReducer', 'cacheReducer'],
 };
 const persistedReducer = persistReducer(persistConfig, rootReducer);
-
-export const reduxStore = createStore(persistedReducer,
-  applyMiddleware(thunk));
+let middleWare;
+if (process.env.NODE_ENV === 'development') {
+  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+  middleWare = composeEnhancers(applyMiddleware(thunk));
+} else {
+  middleWare = applyMiddleware(thunk);
+}
+export const reduxStore = createStore(persistedReducer, middleWare);
 export const reduxPersistor = persistStore(reduxStore);

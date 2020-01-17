@@ -94,7 +94,7 @@ export class PopupHelper {
       isRefresh: true,
       isPrompted: refreshReport.isPrompted,
       isRefreshAll,
-      subtotalInfo: refreshReport.subtotalInfo,
+      subtotalsInfo: refreshReport.subtotalsInfo,
       visualizationInfo: refreshReport.visualizationInfo,
       manipulationsXML: refreshReport.manipulationsXML,
       preparedInstanceId: refreshReport.instanceId,

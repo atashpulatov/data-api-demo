@@ -471,6 +471,7 @@ describe('PopupViewSelector', () => {
         chosenObjectId: '1',
         chosenObjectName: 'chosenObjectName',
       },
+      editedReport: {},
       preparePromptedReport: jest.fn()
     };
     createInstance.mockImplementationOnce(() => ({ status: 3, instanceId: 'abc' }));

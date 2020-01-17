@@ -18,7 +18,7 @@ export class AttributeSelectorWindowNotConnected extends Component {
       triggerUpdate: false,
       loading: false,
       attributesSelected: false,
-      importSubtotal: true,
+      importSubtotal: mstrData.subtotalsInfo ? mstrData.subtotalsInfo.importSubtotal : false,
     };
   }
 
@@ -35,6 +35,7 @@ export class AttributeSelectorWindowNotConnected extends Component {
   onTriggerUpdate = (chosenObjectId, projectId, chosenObjectSubtype, body, chosenObjectName = this.props.chosenObject.chosenObjectName) => {
     const { chosenObject } = this.props;
     const { importSubtotal } = this.state;
+    const subtotalsInfo = { importSubtotal };
     attributeSelectorHelpers.officeMessageParent(
       selectorProperties.commandOnUpdate,
       chosenObjectId,
@@ -44,7 +45,7 @@ export class AttributeSelectorWindowNotConnected extends Component {
       chosenObjectName,
       chosenObject.preparedInstanceId,
       chosenObject.promptsAnswers,
-      importSubtotal,
+      subtotalsInfo,
     );
   };
 
@@ -111,7 +112,8 @@ AttributeSelectorWindowNotConnected.propTypes = {
     instanceId: PropTypes.string,
     promptsAnswers: PropTypes.string,
     chosenObjectType: PropTypes.string,
-    editRequested: PropTypes.bool
+    editRequested: PropTypes.bool,
+    subtotalsInfo: PropTypes.shape({ importSubtotal: PropTypes.bool, }),
   }).isRequired,
   handleBack: PropTypes.func,
 };
