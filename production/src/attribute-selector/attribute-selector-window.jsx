@@ -28,7 +28,6 @@ export class AttributeSelectorWindowNotConnected extends Component {
 
   onTriggerUpdate = (chosenObjectId, projectId, chosenObjectSubtype, body, chosenObjectName = this.props.chosenObject.chosenObjectName) => {
     const { chosenObject, editedObject, importSubtotal } = this.props;
-    console.log({ importSubtotal, editedObject });
     const subtotalsInfo = {
       importSubtotal:editedObject.subtotalsInfo
         ? editedObject.subtotalsInfo.importSubtotal
