@@ -86,7 +86,7 @@ export class PopupActions {
           isRefreshAll);
         if (!isRefreshAll) return true;
       } finally {
-        dispatch({
+        isRefreshAll && dispatch({
           type: officeProperties.actions.finishLoadingReport,
           reportBindId: report.bindId,
           isRefreshAll: false,
