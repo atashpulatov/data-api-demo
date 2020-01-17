@@ -6,6 +6,7 @@ import {
 import { CLEAR_WINDOW } from '../popup/popup-actions';
 import { LOAD_BROWSING_STATE_CONST } from '../browser/browser-actions';
 import { CREATE_CACHE, CLEAR_CACHE, REFRESH_CACHE } from '../cache/cache-actions';
+import { sessionProperties } from './session-properties';
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
 export const DEFAULT_TYPE = 'Data';
@@ -54,7 +55,7 @@ export const initialState = {
   dossierOpenRequested: false,
   envFilter: {},
   myLibraryFilter: {},
-  myLibrary: false,
+  myLibrary: true,
   chosenLibraryDossier: null,
 };
 
@@ -214,6 +215,14 @@ export const navigationTree = (state = initialState, action) => {
     return cleanSelection(state);
   case REFRESH_CACHE: {
     return data ? cleanSelection(state) : state;
+  }
+  case sessionProperties.actions.logIn:
+  case sessionProperties.actions.logOut: {
+    const newState = { ...state };
+    newState.envFilter = {};
+    newState.myLibraryFilter = {};
+    newState.myLibrary = true;
+    return newState;
   }
   default: {
     return state;
