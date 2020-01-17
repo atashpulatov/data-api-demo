@@ -26,11 +26,11 @@ const postAnswerDossierPrompts = answerDossierPrompts;
 export class _PromptsWindow extends Component {
   constructor(props) {
     super(props);
-    const { mstrData } = props;
+    const { mstrData, popupState } = props;
     this.state = {
       chosenObjectId: mstrData.chosenObjectId,
       loading: true,
-      isReprompt: mstrData.isReprompt,
+      isReprompt: popupState.isReprompt,
       promptsAnswers: mstrData.promptsAnswers,
     };
 

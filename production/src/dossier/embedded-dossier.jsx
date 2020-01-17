@@ -215,8 +215,7 @@ const mapStateToProps = (state) => {
     selectedViz: isEdit ? editedObject.selectedViz : '',
     instanceId: editedObject.instanceId,
   };
-  console.log({ mstrData });
-  return { mstrData, };
+  return { mstrData };
 };
 
 export const EmbeddedDossier = connect(mapStateToProps)(_EmbeddedDossier);

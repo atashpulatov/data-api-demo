@@ -11,6 +11,7 @@ import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './dossier.css';
 import { DEFAULT_PROJECT_NAME, } from '../storage/navigation-tree-reducer';
 import { popupHelper } from '../popup/popup-helper';
+import { popupStateActions } from '../popup/popup-state-actions';
 
 export default class _DossierWindow extends React.Component {
   constructor(props) {
@@ -73,7 +74,8 @@ export default class _DossierWindow extends React.Component {
   }
 
   render() {
-    const { chosenObjectName, t, editedObject } = this.props;
+    const { chosenObjectName, t, handleBack } = this.props;
+    const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
     const { isVisualizationSelected } = this.state;
     return (
       <div>
@@ -93,6 +95,7 @@ export default class _DossierWindow extends React.Component {
         <PopupButtons
           handleOk={this.handleOk}
           handleCancel={this.handleCancel}
+          handleBack={!isEdit && handleBack}
           hideSecondary
           disableActiveActions={!isVisualizationSelected}
         />
@@ -161,6 +164,7 @@ function mapStateToProps(state) {
 const mapActionsToProps = {
   requestImport: actions.requestImport,
   selectObject: actions.selectObject,
+  handleBack: popupStateActions.onPopupBack,
 };
 
 export const DossierWindow = connect(mapStateToProps, mapActionsToProps)(withTranslation('common')(_DossierWindow));

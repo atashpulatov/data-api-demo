@@ -68,11 +68,11 @@ export class AttributeSelectorWindowNotConnected extends Component {
   };
 
   render() {
-    const { handleBack, chosenObject, editedObject } = this.props;
+    const { handleBack, chosenObject, editedObject, mstrData } = this.props;
     const { triggerUpdate, openModal, attributesSelected, loading, } = this.state;
+    const { isPrompted } = mstrData;
     const typeName = chosenObject.objectType.name
       && chosenObject.objectType.name.charAt(0).toUpperCase() + chosenObject.objectType.name.substring(1);
-
     return (
       <div>
         <AttributeSelector
@@ -88,7 +88,7 @@ export class AttributeSelectorWindowNotConnected extends Component {
         />
         <PopupButtons
           disableActiveActions={!attributesSelected}
-          handleBack={!editedObject && handleBack}
+          handleBack={(!editedObject || isPrompted) && handleBack}
           handleOk={this.handleOk}
           handleCancel={this.handleCancel}
           loading={loading}
