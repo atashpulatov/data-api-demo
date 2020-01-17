@@ -120,7 +120,7 @@ describe('AttributeSelectorWindow', () => {
       reportType: 'report',
       instanceId: 'instanceId',
       promptsAnswers: 'promptsAnswers',
-      importSubtotal: true,
+      subtotalsInfo:{ importSubtotal:true },
     };
 
     const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
@@ -131,7 +131,7 @@ describe('AttributeSelectorWindow', () => {
 
     // then
     expect(spyMethod).toHaveBeenCalledWith(
-      selectorProperties.commandOnUpdate, 1, 2, 3, 4, mstrData.reportName, mstrData.instanceId, mstrData.promptsAnswers, mstrData.importSubtotal,
+      selectorProperties.commandOnUpdate, 1, 2, 3, 4, mstrData.reportName, mstrData.instanceId, mstrData.promptsAnswers, mstrData.subtotalsInfo,
     );
   });
 
@@ -146,7 +146,7 @@ describe('AttributeSelectorWindow', () => {
       reportType: 'report',
       instanceId: 'instanceId',
       promptsAnswers: 'promptsAnswers',
-      importSubtotal: true,
+      subtotalsInfo:{ importSubtotal:true },
     };
 
     const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
@@ -157,7 +157,7 @@ describe('AttributeSelectorWindow', () => {
 
     // then
     expect(spyMethod).toHaveBeenCalledWith(
-      selectorProperties.commandOnUpdate, 1, 2, 3, 4, 5, mstrData.instanceId, mstrData.promptsAnswers, mstrData.importSubtotal,
+      selectorProperties.commandOnUpdate, 1, 2, 3, 4, 5, mstrData.instanceId, mstrData.promptsAnswers, mstrData.subtotalsInfo,
     );
   });
 
