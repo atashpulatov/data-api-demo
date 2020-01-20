@@ -10,7 +10,6 @@ import { Tabs } from './tabs';
 import SettingsComponent from '../settings/settings-component';
 import InternetConnectionError from '../popup/internet-connection-error';
 
-
 const URL = `${window.location.href}`;
 const IS_LOCALHOST = URL.includes('localhost');
 

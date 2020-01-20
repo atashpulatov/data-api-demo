@@ -6,7 +6,7 @@ import { sessionHelper } from '../storage/session-helper';
 import { fileHistoryContainerHOC } from '../file-history/file-history-container-HOC';
 import { ReactComponent as FolderArt } from './assets/folder-art.svg';
 
-export const PlaceHolderHOC = ({ loading, t, addDataAction }) => {
+export const PlaceHolderNotConnected = ({ loading, t, addDataAction }) => {
   sessionHelper.disableLoading();
   return (
     <div className="get-started-container">
@@ -17,10 +17,10 @@ export const PlaceHolderHOC = ({ loading, t, addDataAction }) => {
     </div>
   );
 };
-PlaceHolderHOC.propTypes = {
+PlaceHolderNotConnected.propTypes = {
   loading: PropTypes.bool,
   addDataAction: PropTypes.func,
   t: PropTypes.func
 };
 
-export const Placeholder = fileHistoryContainerHOC(withTranslation('common')(PlaceHolderHOC));
+export const Placeholder = fileHistoryContainerHOC(withTranslation('common')(PlaceHolderNotConnected));

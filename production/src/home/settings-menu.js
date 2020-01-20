@@ -14,7 +14,7 @@ import { officeContext } from '../office/office-context';
 
 const APP_VERSION = process.env.REACT_APP_MSTR_OFFICE_VERSION;
 
-export const SettingsMenuHOC = ({
+export const SettingsMenuNotConnected = ({
   userFullName,
   userID,
   userInitials,
@@ -126,7 +126,7 @@ export const SettingsMenuHOC = ({
   );
 };
 
-SettingsMenuHOC.defaultProps = { t: (text) => text, };
+SettingsMenuNotConnected.defaultProps = { t: (text) => text, };
 
 function mapStateToProps({ sessionReducer, officeReducer }) {
   const { userFullName, userInitials, userID } = sessionReducer;
@@ -140,7 +140,7 @@ const mapDispatchToProps = {
   toggleRenderSettingsFlag,
   clearCache,
 };
-export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(SettingsMenuHOC));
+export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(SettingsMenuNotConnected));
 
 async function logout(preLogout) {
   try {
@@ -153,7 +153,7 @@ async function logout(preLogout) {
   }
 }
 
-SettingsMenuHOC.propTypes = {
+SettingsMenuNotConnected.propTypes = {
   userID: PropTypes.number,
   userFullName: PropTypes.string,
   userInitials: PropTypes.string,

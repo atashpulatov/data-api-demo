@@ -3,6 +3,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
+import { popupHelper } from '../popup/popup-helper';
+import { DEFAULT_PROJECT_NAME } from '../storage/navigation-tree-reducer';
 
 const { microstrategy } = window;
 
@@ -48,8 +50,8 @@ export default class _EmbeddedDossier extends React.Component {
   }
 
   loadEmbeddedDossier = async (container) => {
-    const { mstrData, handlePopupErrors } = this.props;
-    const { envUrl, token, dossierId, projectId, promptsAnswers, instanceId, selectedViz } = mstrData;
+    const { mstrData } = this.props;
+    const { envUrl, authToken, dossierId, projectId, promptsAnswers, instanceId, selectedViz } = mstrData;
     const instance = {};
     try {
       if (instanceId) {
@@ -70,8 +72,8 @@ export default class _EmbeddedDossier extends React.Component {
           }
         }
       }
-    } catch (e) {
-      handlePopupErrors(e);
+    } catch (error) {
+      popupHelper.handlePopupErrors(error);
     }
 
     this.dossierData = {
@@ -91,7 +93,7 @@ export default class _EmbeddedDossier extends React.Component {
       customAuthenticationType: CustomAuthenticationType.AUTH_TOKEN,
       enableResponsive: true,
       getLoginToken() {
-        return Promise.resolve(token);
+        return Promise.resolve(authToken);
       },
       placeholder: container,
       enableCollaboration: false,
@@ -173,7 +175,7 @@ export default class _EmbeddedDossier extends React.Component {
 _EmbeddedDossier.propTypes = {
   mstrData: PropTypes.shape({
     envUrl: PropTypes.string,
-    token: PropTypes.string,
+    authToken: PropTypes.string,
     dossierId: PropTypes.string,
     projectId: PropTypes.string,
     instanceId: PropTypes.string,
@@ -181,14 +183,13 @@ _EmbeddedDossier.propTypes = {
     selectedViz: PropTypes.string,
   }),
   handleSelection: PropTypes.func,
-  handlePopupErrors: PropTypes.func,
   handlePromptAnswer: PropTypes.func
 };
 
 _EmbeddedDossier.defaultProps = {
   mstrData: {
     envUrl: 'no env url',
-    token: null,
+    authToken: null,
     dossierId: 'default id',
     projectId: 'default id',
     instanceId: 'default id',
@@ -196,7 +197,25 @@ _EmbeddedDossier.defaultProps = {
     selectedViz: ''
   },
   handleSelection: () => { },
-  handlePopupErrors: () => { }
 };
 
-export const EmbeddedDossier = connect()(_EmbeddedDossier);
+const mapStateToProps = (state) => {
+  const { chosenObjectName, chosenObjectId, chosenProjectId } = state.navigationTree;
+  const popupState = state.popupReducer.editedObject;
+  const { promptsAnswers } = state.navigationTree;
+  const session = { ...state.sessionReducer };
+  const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
+  const editedObject = { ...(popupHelper.parsePopupState(popupState, promptsAnswers)) };
+  const mstrData = {
+    envUrl: session.envUrl,
+    token: session.authToken,
+    dossierId: isEdit ? editedObject.chosenObjectId : chosenObjectId,
+    projectId: isEdit ? editedObject.projectId : chosenProjectId,
+    promptsAnswers: isEdit ? editedObject.promptsAnswers : promptsAnswers,
+    selectedViz: isEdit ? editedObject.selectedViz : '',
+    instanceId: editedObject.instanceId,
+  };
+  return { mstrData };
+};
+
+export const EmbeddedDossier = connect(mapStateToProps)(_EmbeddedDossier);

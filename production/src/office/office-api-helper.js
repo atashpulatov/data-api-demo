@@ -88,7 +88,7 @@ export class OfficeApiHelper {
     return letters.split('').reduce((r, a) => r * ALPHABET_RANGE_END + parseInt(a, 36) - 9, 0);
   }
 
-  onBindingObjectClick = async (bindingId, shouldSelect = true, deleteReport, reportName, isCrosstab, crosstabHeaderDimensions) => {
+  onBindingObjectClick = async (bindingId, shouldSelect = true, deleteReport, chosenObjectName, isCrosstab, crosstabHeaderDimensions) => {
     let crosstabRange;
     try {
       const excelContext = await this.getExcelContext();
@@ -107,7 +107,7 @@ export class OfficeApiHelper {
       if (error.code === 'ItemNotFound') {
         return notificationService.displayTranslatedNotification({ type: 'info', content: OBJ_REMOVED_FROM_EXCEL });
       }
-      errorService.handleError(error, { reportName, onConfirm: deleteReport });
+      errorService.handleError(error, {chosenObjectName, onConfirm: deleteReport});
       return false;
     }
   };

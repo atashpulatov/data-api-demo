@@ -3,7 +3,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { Popover } from 'antd';
 import { reduxStore } from '../../store';
-import { FileHistoryContainerHOC, FileHistoryContainer } from '../../file-history/file-history-container';
+import { FileHistoryContainerNotConnected, FileHistoryContainer } from '../../file-history/file-history-container';
 import { sessionHelper } from '../../storage/session-helper';
 import { popupController } from '../../popup/popup-controller';
 import * as LoadedFilesConstans from '../../file-history/office-loaded-file';
@@ -18,7 +18,7 @@ describe('FileHistoryContainer', () => {
     const visualizationInfoMock = { dossierStructure: 'test', };
     // when
     const wrappedComponent = mount(<Provider store={reduxStore}>
-      <FileHistoryContainerHOC
+      <FileHistoryContainerNotConnected
         project="testProject"
         reportArray={mockReportArray}
         visualizationInfo={visualizationInfoMock}
@@ -32,7 +32,7 @@ describe('FileHistoryContainer', () => {
     const mockFiles = createMockFilesArray();
     // when
     const wrappedComponent = mount(<Provider store={reduxStore}>
-      <FileHistoryContainerHOC
+      <FileHistoryContainerNotConnected
         reportArray={mockFiles}
         project="testProject"
       />
@@ -48,7 +48,7 @@ describe('FileHistoryContainer', () => {
     const mockReportArray = createMockFilesArray();
     // when
     const wrappedComponent = mount(<Provider store={reduxStore}>
-      <FileHistoryContainerHOC
+      <FileHistoryContainerNotConnected
         project="testProject"
         refreshingAll={refreshingAll}
         reportArray={mockReportArray}
@@ -63,7 +63,7 @@ describe('FileHistoryContainer', () => {
     const mockReportArray = createMockFilesArray();
     // when
     const wrappedComponent = mount(<Provider store={reduxStore}>
-      <FileHistoryContainerHOC
+      <FileHistoryContainerNotConnected
         project="testProject"
         refreshingAll={refreshingAll}
         reportArray={mockReportArray}
@@ -80,7 +80,7 @@ describe('FileHistoryContainer', () => {
     const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
     const mockReportArray = createMockFilesArray();
     const wrappedComponent = mount(<Provider store={reduxStore}>
-      <FileHistoryContainerHOC
+      <FileHistoryContainerNotConnected
         project="testProject"
         reportArray={mockReportArray}
         refreshReportsArray={refreshAllmock}
@@ -102,7 +102,7 @@ describe('FileHistoryContainer', () => {
     const startLoadingMock = jest.fn();
     const stopLoadingMock = jest.fn();
     LoadedFilesConstans.OfficeLoadedFile = () => <div />;
-    const wrappedComponent = mount(<FileHistoryContainerHOC
+    const wrappedComponent = mount(<FileHistoryContainerNotConnected
       project="testProject"
       reportArray={mockReportArray}
       refreshReportsArray={jest.fn()}
@@ -154,7 +154,7 @@ describe('FileHistoryContainer', () => {
     const mockReportArray = createMockFilesArray();
     const mockRefreshReportArray = jest.fn();
     const mockToggleSecured = jest.fn();
-    const wrappedComponent = mount(<FileHistoryContainerHOC
+    const wrappedComponent = mount(<FileHistoryContainerNotConnected
       project="testProject"
       refreshingAll={refreshAllmock}
       reportArray={mockReportArray}
@@ -179,7 +179,7 @@ describe('FileHistoryContainer', () => {
     const mockReportArray = createMockFilesArray();
     // when
     const wrappedComponent = mount(<Provider store={reduxStore}>
-      <FileHistoryContainerHOC
+      <FileHistoryContainerNotConnected
         project="testProject"
         refreshingAll={refreshingAll}
         reportArray={mockReportArray}
@@ -195,7 +195,7 @@ describe('FileHistoryContainer', () => {
     const mockReportArray = createMockFilesArray();
     const mockRefreshReportArray = jest.fn();
     const mockToggleSecured = jest.fn();
-    const wrappedComponent = mount(<FileHistoryContainerHOC
+    const wrappedComponent = mount(<FileHistoryContainerNotConnected
       project="testProject"
       refreshingAll={refreshAllmock}
       reportArray={mockReportArray}
@@ -215,7 +215,7 @@ describe('FileHistoryContainer', () => {
     const mockReportArray = createMockFilesArray();
     const mockRefreshReportArray = jest.fn();
     const mockToggleSecured = jest.fn();
-    const wrappedComponent = mount(<FileHistoryContainerHOC
+    const wrappedComponent = mount(<FileHistoryContainerNotConnected
       project="testProject"
       refreshingAll={refreshAllmock}
       reportArray={mockReportArray}
@@ -235,7 +235,7 @@ describe('FileHistoryContainer', () => {
     const mockReportArray = createMockFilesArray();
     const mockRefreshReportArray = jest.fn();
     const mockToggleSecured = jest.fn();
-    const wrappedComponent = mount(<FileHistoryContainerHOC
+    const wrappedComponent = mount(<FileHistoryContainerNotConnected
       project="testProject"
       refreshingAll={refreshAllmock}
       reportArray={mockReportArray}
@@ -258,7 +258,7 @@ describe('FileHistoryContainer', () => {
     const mockReportArray = createMockFilesArray();
     const mockRefreshReportArray = jest.fn();
     const mockToggleSecured = jest.fn();
-    const wrappedComponent = shallow(<FileHistoryContainerHOC
+    const wrappedComponent = shallow(<FileHistoryContainerNotConnected
       project="testProject"
       refreshingAll={refreshAllmock}
       reportArray={mockReportArray}
@@ -285,7 +285,7 @@ describe('FileHistoryContainer', () => {
     const mockRefreshReportArray = jest.fn();
     const mockToggleSecured = jest.fn();
     // when
-    const wrappedComponent = mount(<FileHistoryContainerHOC
+    const wrappedComponent = mount(<FileHistoryContainerNotConnected
       project="testProject"
       refreshingAll={refreshAllmock}
       reportArray={mockReportArray}

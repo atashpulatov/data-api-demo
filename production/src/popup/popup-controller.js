@@ -8,7 +8,7 @@ import { officeProperties } from '../office/office-properties';
 import { officeApiHelper } from '../office/office-api-helper';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { officeStoreService } from '../office/store/office-store-service';
-import { LOAD_BROWSING_STATE_CONST } from '../browser/browser-actions';
+import { LOAD_BROWSING_STATE_CONST } from '../navigation/navigation-tree-actions';
 import { REFRESH_CACHE_COMMAND, refreshCache } from '../cache/cache-actions';
 import {
   START_REPORT_LOADING,
@@ -152,29 +152,29 @@ export class PopupController {
 
   handleUpdateCommand = async ({
     dossierData,
-    reportId,
+    chosenObjectId,
     projectId,
-    reportSubtype,
+    chosenObjectSubtype,
     body,
-    reportName,
+    chosenObjectName,
     promptsAnswers,
     isPrompted,
     instanceId,
     subtotalsInfo,
   }) => {
-    if (reportId && projectId && reportSubtype && body && reportName) {
+    if (chosenObjectId && projectId && chosenObjectSubtype && body && chosenObjectName) {
       this.reduxStore.dispatch({
         type: START_REPORT_LOADING,
-        data: { name: reportName },
+        data: { name: chosenObjectName },
       });
       const options = {
         isPrompted,
         promptsAnswers,
         dossierData,
-        objectId: reportId,
+        objectId: chosenObjectId,
         projectId,
         instanceId,
-        mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(reportSubtype),
+        mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(chosenObjectSubtype),
         body,
         subtotalsInfo,
       };
@@ -194,7 +194,7 @@ export class PopupController {
       chosenSubtype,
       isPrompted,
       promptsAnswers,
-      reportName,
+      chosenObjectName,
       visualizationInfo,
       preparedInstanceId,
     },
@@ -204,7 +204,7 @@ export class PopupController {
       this.reduxStore.dispatch({ type: officeProperties.actions.startLoading });
       this.reduxStore.dispatch({
         type: START_REPORT_LOADING,
-        data: { name: reportName },
+        data: { name: chosenObjectName },
       });
       const options = {
         dossierData,
