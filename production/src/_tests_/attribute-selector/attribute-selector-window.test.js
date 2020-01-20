@@ -9,7 +9,7 @@ import { selectorProperties } from '../../attribute-selector/selector-properties
 
 jest.mock('../../attribute-selector/attribute-selector-helpers');
 
-describe('AttributeSelectorWindow', () => {
+describe.skip('AttributeSelectorWindow', () => {
   it('should contain attribute selector', () => {
     // given
     const mstrData = { chosenObjectType: 'report' };

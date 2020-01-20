@@ -289,7 +289,7 @@ describe.skip('OfficeDisplayService', () => {
     expect(officeStoreService.deleteReport).not.toBeCalled();
   });
 
-  describe('_createOfficeTable', async () => {
+  describe.skip('_createOfficeTable', async () => {
     it('should return officeTable proper name and invoke required methods', async () => {
       // given
       const mockedTable = {
@@ -405,7 +405,7 @@ describe.skip('OfficeDisplayService', () => {
       expect(result.name).toEqual(chosenObjectName);
     });
   });
-  describe('_checkRangeValidity', async () => {
+  describe.skip('_checkRangeValidity', async () => {
     it('should return null when data range is empty', async () => {
       // given
       jest.spyOn(officeDisplayService, '_checkRangeValidity').mockRestore();
@@ -456,7 +456,7 @@ describe.skip('OfficeDisplayService', () => {
       }
     });
   });
-  describe('_FetchInsertDataIntoExcel', () => {
+  describe.skip('_FetchInsertDataIntoExcel', () => {
     it('should call getObjectGenerator', () => {
       // given
       const mockConnectionData = {
@@ -482,7 +482,7 @@ describe.skip('OfficeDisplayService', () => {
       expect(mockGetObjectContentGenerator).toBeCalled();
     });
   });
-  describe('_appendRowsToTable', () => {
+  describe.skip('_appendRowsToTable', () => {
     it('should not call range.clear on import', () => {
       // given
       const mockClear = jest.fn();
@@ -503,7 +503,7 @@ describe.skip('OfficeDisplayService', () => {
     });
   });
 
-  describe.skip('delete report', () => {
+  describe.skip.skip('delete report', () => {
     it('should fail', () => {
       // given
       // when
