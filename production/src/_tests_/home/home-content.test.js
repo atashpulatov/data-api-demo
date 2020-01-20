@@ -148,7 +148,7 @@ describe('PageBuilder', () => {
 
     // then
     expect(wrappedComponent.find('FileHistoryContainerHOC').get(0)).toBeDefined();
-    expect(wrappedComponent.find('.ant-btn[disabled]')).toHaveLength(3);
+    expect(wrappedComponent.find('.ant-btn[disabled]')).toHaveLength(2);
   });
   it('should disable logout and add data buttons while a popup is open', () => {
     // given
@@ -168,7 +168,7 @@ describe('PageBuilder', () => {
     // then
     expect(wrappedComponent.find('FileHistoryContainerHOC').get(0)).toBeDefined();
     expect(wrappedComponent.find('.dialog-container').get(0)).toBeDefined();
-    expect(wrappedComponent.find('.ant-btn[disabled]')).toHaveLength(3);
+    expect(wrappedComponent.find('.ant-btn[disabled]')).toHaveLength(2);
   });
   it('should disable settings and add data buttons while a popup is open and a report is loading', () => {
     // given
@@ -188,6 +188,6 @@ describe('PageBuilder', () => {
     // then
     expect(wrappedComponent.find('FileHistoryContainerHOC').get(0)).toBeDefined();
     expect(wrappedComponent.find('.dialog-container').get(0)).toBeDefined();
-    expect(wrappedComponent.find('.ant-btn[disabled]')).toHaveLength(3);
+    expect(wrappedComponent.find('.ant-btn[disabled]')).toHaveLength(2);
   });
 });
