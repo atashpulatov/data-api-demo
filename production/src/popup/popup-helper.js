@@ -130,9 +130,6 @@ export class PopupHelper {
       command: selectorProperties.commandError,
       error: errorObj,
     };
-    console.error(error);
-    console.error(messageObject);
-    return; // FIXME: disabled temporarily cloding popup on error
     officeContext
       .getOffice()
       .context.ui.messageParent(JSON.stringify(messageObject));
