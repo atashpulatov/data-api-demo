@@ -11,7 +11,7 @@ import { officeApiHelper } from '../office/office-api-helper';
 import { errorService } from '../error/error-handler';
 
 export const fileHistoryContainerHOC = Component => {
-  class FileHistoryContainerNotConnected extends React.Component {
+  class _FileHistoryContainerNotConnected extends React.Component {
     constructor() {
       super();
       this.state = { allowAddDataClick: true };
@@ -53,5 +53,5 @@ export const fileHistoryContainerHOC = Component => {
     }
   }
 
-  return FileHistoryContainerNotConnected;
+  return _FileHistoryContainerNotConnected;
 };
