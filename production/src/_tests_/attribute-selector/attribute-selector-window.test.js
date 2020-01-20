@@ -13,11 +13,13 @@ describe('AttributeSelectorWindow', () => {
   it('should contain attribute selector', () => {
     // given
     const mstrData = { chosenObjectType: 'report' };
+    const chosenObject = { objectType: { name: 'dossier' } };
     // when
     const componentWrapper = mount(
       <Provider store={reduxStore}>
-        <AttributeSelectorWindow
-          mstrData={mstrData}
+        <AttributeSelectorWindowNotConnected
+          mstrData
+          chosenObject
         />
       </Provider>
     );
@@ -140,7 +142,7 @@ describe('AttributeSelectorWindow', () => {
     // when
     const componentWrapper = shallow(
       <AttributeSelectorWindowNotConnected
-        mstrData={mstrData}
+        mstrData
         chosenObject={chosenObject}
       />
     );
@@ -169,7 +171,11 @@ describe('AttributeSelectorWindow', () => {
     const importSubtotal = true;
 
     // when
-    const componentWrapper = shallow(<AttributeSelectorWindowNotConnected mstrData={mstrData} chosenObject={chosenObject} />);
+    const componentWrapper = shallow(
+      <AttributeSelectorWindowNotConnected
+        mstrData={mstrData}
+        chosenObject={chosenObject} />
+    );
     const spyMethod = jest.spyOn(attributeSelectorHelpers, 'officeMessageParent');
     componentWrapper.instance().onTriggerUpdate(1, 2, 3, 4, 5);
 
@@ -186,10 +192,16 @@ describe('AttributeSelectorWindow', () => {
       authToken: 'authToken',
       projectId: 'proId'
     };
+    const chosenObject = {
+      chosenObjectName: '55',
+      promptsAnswers: 'promptsAnswers',
+      objectType: { name: 'dossier' }
+    };
     // when
     const componentWrapper = mount(<Provider store={reduxStore}>
-      <AttributeSelectorWindow
-        mstrData={mstrData}
+      <AttributeSelectorWindowNotConnected
+        mstrData
+        chosenObject
       />
     </Provider>);
     const spyMethod = jest.spyOn(attributeSelectorHelpers, 'officeMessageParent');
@@ -210,23 +222,29 @@ describe('AttributeSelectorWindow', () => {
       chosenObjectId: 'repId',
       chosenObjectType: 'report',
     };
+    const chosenObject = { chosenObjectName: '55' };
     const handleBack = jest.fn();
-
-    const componentWrapper = mount(<Provider store={reduxStore}>
-      <AttributeSelectorWindow
-        mstrData={mstrData}
-        handleBack={handleBack}
-      />
-    </Provider>);
+    // when
+    const componentWrapper = mount(
+      <Provider store={reduxStore}>
+        <AttributeSelectorWindowNotConnected
+          mstrData
+          chosenObject
+          handleBack={handleBack}
+        />
+      </Provider>
+    );
 
     const wrappedCancelButton = componentWrapper.find('Button #back');
-
-    // when
     wrappedCancelButton.simulate('click');
 
     // then
     expect(handleBack).toBeCalled();
+    //
+    // expect(componentWrapper.props("editedObject")).toEqual(editedObject);
+    // expect(wrappedCancelButton.length).toBe(1);
   });
+
 
   it('should trigger attribute-selector-helpers: officeMessageParent when Cancel is clicked', () => {
     // given
@@ -268,8 +286,8 @@ describe('AttributeSelectorWindow', () => {
 
 
     const componentWrapper = shallow(<AttributeSelectorWindowNotConnected
-      mstrData={mstrData}
-      chosenObject={chosenObject}
+      mstrData
+      chosenObject
     />);
     // when
     const attributesBeingSelectedSpy = jest.spyOn(componentWrapper.instance(), 'attributesBeingSelected');
@@ -294,8 +312,8 @@ describe('AttributeSelectorWindow', () => {
 
     // when
     const componentWrapper = shallow(<AttributeSelectorWindowNotConnected
-      mstrData={mstrData}
-      chosenObject={chosenObject}
+      mstrData
+      chosenObject
     />);
     const resetTriggerUpdateSpy = jest.spyOn(componentWrapper.instance(), 'resetTriggerUpdate');
     componentWrapper.instance().resetTriggerUpdate();
@@ -318,8 +336,8 @@ describe('AttributeSelectorWindow', () => {
     // when
 
     const componentWrapper = shallow(<AttributeSelectorWindowNotConnected
-      mstrData={mstrData}
-      chosenObject={chosenObject}
+      mstrData
+      chosenObject
     />);
     const openModalSpy = jest.spyOn(componentWrapper.instance(), 'openModal');
 
@@ -342,8 +360,8 @@ describe('AttributeSelectorWindow', () => {
 
     // when
     const componentWrapper = shallow(<AttributeSelectorWindowNotConnected
-      mstrData={mstrData}
-      chosenObject={chosenObject}
+      mstrData
+      chosenObject
     />);
     const attributesBeingSelectedSpy = jest.spyOn(componentWrapper.instance(), 'closeModal');
     componentWrapper.instance().closeModal();
