@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { Office } from '../mockOffice';
 import { selectorProperties } from '../../attribute-selector/selector-properties';
-import { PopupViewSelectorHOC, mapStateToProps } from '../../popup/popup-view-selector';
+import { PopupViewSelectorNotConnected, mapStateToProps } from '../../popup/popup-view-selector';
 import { PromptsWindow } from '../../prompts/prompts-window';
 import { PopupTypeEnum } from '../../home/popup-type-enum';
 import { NavigationTree } from '../../navigation/navigation-tree';
@@ -27,7 +27,7 @@ describe.skip('PopupViewSelector', () => {
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    const componentWrapper = shallow(<PopupViewSelectorHOC
+    const componentWrapper = shallow(<PopupViewSelectorNotConnected
       location={location}
       {...props}
       methods={{}}
@@ -46,7 +46,7 @@ describe.skip('PopupViewSelector', () => {
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    const componentWrapper = shallow(<PopupViewSelectorHOC
+    const componentWrapper = shallow(<PopupViewSelectorNotConnected
       location={location}
       {...props}
       methods={{}}
@@ -65,7 +65,7 @@ describe.skip('PopupViewSelector', () => {
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    const componentWrapper = shallow(<PopupViewSelectorHOC
+    const componentWrapper = shallow(<PopupViewSelectorNotConnected
       location={location}
       {...props}
       methods={{}}
@@ -85,7 +85,7 @@ describe.skip('PopupViewSelector', () => {
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    const componentWrapper = shallow(<PopupViewSelectorHOC
+    const componentWrapper = shallow(<PopupViewSelectorNotConnected
       location={location}
       {...props}
       methods={{}}
@@ -117,7 +117,7 @@ describe.skip('PopupViewSelector', () => {
     const mockMessageParent = jest.spyOn(Office.context.ui, 'messageParent');
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    shallow(<PopupViewSelectorHOC
+    shallow(<PopupViewSelectorNotConnected
       location={location}
       importRequested
       {...reduxMethods}
@@ -148,7 +148,7 @@ describe.skip('PopupViewSelector', () => {
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    const selectorWrapped = shallow(<PopupViewSelectorHOC
+    const selectorWrapped = shallow(<PopupViewSelectorNotConnected
       location={location}
       {...propsToPass}
       propsToPass={propsToPass}
@@ -206,7 +206,7 @@ describe.skip('PopupViewSelector', () => {
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    shallow(<PopupViewSelectorHOC
+    shallow(<PopupViewSelectorNotConnected
       location={location}
       {...props}
       methods={{}}
@@ -229,7 +229,7 @@ describe.skip('PopupViewSelector', () => {
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    const selectorWrapped = shallow(<PopupViewSelectorHOC
+    const selectorWrapped = shallow(<PopupViewSelectorNotConnected
       location={location}
       {...propsToPass}
       propsToPass={propsToPass}
@@ -267,7 +267,7 @@ describe.skip('PopupViewSelector', () => {
     const mockMessageParent = jest.spyOn(Office.context.ui, 'messageParent');
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    shallow(<PopupViewSelectorHOC
+    shallow(<PopupViewSelectorNotConnected
       location={location}
       {...propsToPass}
       authToken={{}}
@@ -304,7 +304,7 @@ describe.skip('PopupViewSelector', () => {
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    const selectorWrapped = shallow(<PopupViewSelectorHOC
+    const selectorWrapped = shallow(<PopupViewSelectorNotConnected
       location={location}
       {...props}
       methods={{}}
@@ -349,7 +349,7 @@ describe.skip('PopupViewSelector', () => {
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    const selectorWrapped = shallow(<PopupViewSelectorHOC
+    const selectorWrapped = shallow(<PopupViewSelectorNotConnected
       location={location}
       {...props}
       authToken={{}}
@@ -383,7 +383,7 @@ describe.skip('PopupViewSelector', () => {
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    const selectorWrapped = shallow(<PopupViewSelectorHOC
+    const selectorWrapped = shallow(<PopupViewSelectorNotConnected
       location={location}
       {...props}
       methods={{}}
@@ -409,7 +409,7 @@ describe.skip('PopupViewSelector', () => {
     // when
 
     // eslint-disable-next-line react/jsx-pascal-case
-    const componentWrapper = shallow(<PopupViewSelectorHOC
+    const componentWrapper = shallow(<PopupViewSelectorNotConnected
       location={location}
       {...props}
       methods={{}}
@@ -428,7 +428,7 @@ describe.skip('PopupViewSelector', () => {
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    const componentWrapper = shallow(<PopupViewSelectorHOC
+    const componentWrapper = shallow(<PopupViewSelectorNotConnected
       location={location}
       {...props}
       methods={{}}
@@ -447,7 +447,7 @@ describe.skip('PopupViewSelector', () => {
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    const selectorWrapped = shallow(<PopupViewSelectorHOC
+    const selectorWrapped = shallow(<PopupViewSelectorNotConnected
       location={location}
       {...propsToPass}
       propsToPass={propsToPass}
@@ -478,7 +478,7 @@ describe.skip('PopupViewSelector', () => {
 
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    await shallow(<PopupViewSelectorHOC
+    await shallow(<PopupViewSelectorNotConnected
       {...props}
     />);
     // then
@@ -512,7 +512,7 @@ describe.skip('PopupViewSelector', () => {
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    await shallow(<PopupViewSelectorHOC
+    await shallow(<PopupViewSelectorNotConnected
       {...props}
     />);
     // then
@@ -555,7 +555,7 @@ describe.skip('PopupViewSelector', () => {
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    shallow(<PopupViewSelectorHOC
+    shallow(<PopupViewSelectorNotConnected
       {...props}
     />);
     // then
@@ -574,7 +574,7 @@ describe.skip('PopupViewSelector', () => {
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    const selectorWrapped = shallow(<PopupViewSelectorHOC
+    const selectorWrapped = shallow(<PopupViewSelectorNotConnected
       location={location}
       {...propsToPass}
       propsToPass={propsToPass}
@@ -596,7 +596,7 @@ describe.skip('PopupViewSelector', () => {
     };
     // when
     // eslint-disable-next-line react/jsx-pascal-case
-    const selectorWrapped = shallow(<PopupViewSelectorHOC
+    const selectorWrapped = shallow(<PopupViewSelectorNotConnected
       location={location}
       {...propsToPass}
       propsToPass={propsToPass}

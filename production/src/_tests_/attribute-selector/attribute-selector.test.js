@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import { AttributeMetricFilter } from '@mstr/mstr-react-library';
 import { AttributeSelectorNotConnected } from '../../attribute-selector/attribute-selector';
 
-describe.skip('AttributeSelectorHOC', () => {
+describe.skip('AttributeSelectorNotConnected', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
