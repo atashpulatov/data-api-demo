@@ -2,7 +2,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { shallow, mount } from 'enzyme';
 import { reduxStore } from '../../store';
-import { AttributeSelectorWindow } from '../../attribute-selector/attribute-selector-window';
+import { AttributeSelectorWindow, AttributeSelectorWindowNotConnected } from '../../attribute-selector/attribute-selector-window';
 import { AttributeSelector } from '../../attribute-selector/attribute-selector';
 import { attributeSelectorHelpers } from '../../attribute-selector/attribute-selector-helpers';
 import { selectorProperties } from '../../attribute-selector/selector-properties';
@@ -14,9 +14,13 @@ describe('AttributeSelectorWindow', () => {
     // given
     const mstrData = { chosenObjectType: 'report' };
     // when
-    const componentWrapper = shallow(<AttributeSelectorWindow
-      mstrData={mstrData}
-    />);
+    const componentWrapper = mount(
+      <Provider store={reduxStore}>
+        <AttributeSelectorWindow
+          mstrData={mstrData}
+        />
+      </Provider>
+    );
     // then
     const selectorWrapper = componentWrapper.find(AttributeSelector);
     expect(selectorWrapper.get(0)).toBeDefined();
@@ -28,23 +32,23 @@ describe('AttributeSelectorWindow', () => {
       chosenObjectId: 'id',
       envUrl: 'envUrl',
       authToken: 'authToken',
-      projectId: 'proId',
-      chosenObjectSubtype: 'subtype',
-      chosenObjectType: 'report',
+      projectId: 'proId'
+    };
+    const chosenObject = {
+      chosenObjectName: '55',
+      promptsAnswers: 'promptsAnswers',
+      objectType: { name: 'dossier' }
     };
     // when
-    const componentWrapper = shallow(<AttributeSelectorWindow
+    const componentWrapper = shallow(<AttributeSelectorWindowNotConnected
       mstrData={mstrData}
+      chosenObject={chosenObject}
     />);
     // then
     const selectorWrapped = componentWrapper.find(AttributeSelector).at(0);
-    expect(selectorWrapped.prop('mstrData')).toEqual(mstrData);
-    expect(selectorWrapped.prop('session')).toEqual({
-      USE_PROXY: false,
-      envUrl: mstrData.envUrl,
-      authToken: mstrData.authToken,
-      projectId: mstrData.projectId,
-    });
+    expect(selectorWrapped.prop('mstrData')).not.toBeDefined();
+    expect(selectorWrapped.prop('session')).not.toBeDefined();
+    expect(selectorWrapped.prop('title')).toEqual(`Import Dossier > 55`);
     expect(selectorWrapped.prop('chosenObjectId')).not.toBeDefined();
     expect(selectorWrapped.prop('chosenObjectSubtype')).not.toBeDefined();
   });
@@ -54,15 +58,19 @@ describe('AttributeSelectorWindow', () => {
     const mstrData = {
       envUrl: 'envUrl',
       authToken: 'authToken',
-      projectId: 'proId',
-      chosenObjectId: 'repId',
-      chosenObjectType: 'report',
+      projectId: 'proId'
+
     };
 
-    const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
-    const spyMethod = jest.spyOn(componentWrapper.instance(), 'setState');
-
+    const chosenObject = { chosenObjectName: '55' };
     // when
+    const componentWrapper = shallow(
+      <AttributeSelectorWindowNotConnected
+        mstrData
+        chosenObject
+      />
+    );
+    const spyMethod = jest.spyOn(componentWrapper.instance(), 'setState');
     componentWrapper.instance().toggleSubtotal(true);
 
     // then
@@ -74,15 +82,18 @@ describe('AttributeSelectorWindow', () => {
     const mstrData = {
       envUrl: 'envUrl',
       authToken: 'authToken',
-      projectId: 'proId',
-      chosenObjectId: 'repId',
-      chosenObjectType: 'report',
+      projectId: 'proId'
     };
-
-    const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
-    const spyMethod = jest.spyOn(componentWrapper.instance(), 'setState');
+    const chosenObject = { chosenObjectName: '55' };
 
     // when
+    const componentWrapper = shallow(
+      <AttributeSelectorWindowNotConnected
+        mstrData
+        chosenObject
+      />
+    );
+    const spyMethod = jest.spyOn(componentWrapper.instance(), 'setState');
     componentWrapper.instance().toggleSubtotal();
 
     // then
@@ -94,15 +105,18 @@ describe('AttributeSelectorWindow', () => {
     const mstrData = {
       envUrl: 'envUrl',
       authToken: 'authToken',
-      projectId: 'proId',
-      chosenObjectId: 'repId',
-      chosenObjectType: 'report',
+      projectId: 'proId'
     };
-
-    const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
-    const spyMethod = jest.spyOn(componentWrapper.instance(), 'setState');
+    const chosenObject = { chosenObjectName: '55' };
 
     // when
+    const componentWrapper = shallow(
+      <AttributeSelectorWindowNotConnected
+        mstrData
+        chosenObject
+      />
+    );
+    const spyMethod = jest.spyOn(componentWrapper.instance(), 'setState');
     componentWrapper.instance().handleOk();
 
     // then
@@ -115,23 +129,27 @@ describe('AttributeSelectorWindow', () => {
       envUrl: 'envUrl',
       authToken: 'authToken',
       projectId: 'proId',
-      chosenObjectId: 'repId',
-      chosenObjectName: '55',
-      chosenObjectType: 'report',
-      instanceId: 'instanceId',
-      promptsAnswers: 'promptsAnswers',
-      subtotalsInfo:{ importSubtotal:true },
+      preparedInstanceId: 'instanceId',
     };
 
-    const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
-    const spyMethod = jest.spyOn(attributeSelectorHelpers, 'officeMessageParent');
-
+    const chosenObject = {
+      chosenObjectName: '55',
+      promptsAnswers: 'promptsAnswers',
+    };
+    const importSubtotal = true;
     // when
+    const componentWrapper = shallow(
+      <AttributeSelectorWindowNotConnected
+        mstrData={mstrData}
+        chosenObject={chosenObject}
+      />
+    );
+    const spyMethod = jest.spyOn(attributeSelectorHelpers, 'officeMessageParent');
     componentWrapper.instance().onTriggerUpdate(1, 2, 3, 4);
 
     // then
     expect(spyMethod).toHaveBeenCalledWith(
-      selectorProperties.commandOnUpdate, 1, 2, 3, 4, mstrData.reportName, mstrData.instanceId, mstrData.promptsAnswers, mstrData.subtotalsInfo,
+      selectorProperties.commandOnUpdate, 1, 2, 3, 4, chosenObject.chosenObjectName, mstrData.instanceId, chosenObject.promptsAnswers, importSubtotal
     );
   });
 
@@ -141,23 +159,23 @@ describe('AttributeSelectorWindow', () => {
       envUrl: 'envUrl',
       authToken: 'authToken',
       projectId: 'proId',
-      chosenObjectId: 'repId',
-      chosenObjectName: '55',
-      chosenObjectType: 'report',
-      instanceId: 'instanceId',
-      promptsAnswers: 'promptsAnswers',
-      subtotalsInfo:{ importSubtotal:true },
+      preparedInstanceId: 'instanceId',
     };
 
-    const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
-    const spyMethod = jest.spyOn(attributeSelectorHelpers, 'officeMessageParent');
+    const chosenObject = {
+      chosenObjectName: '55',
+      promptsAnswers: 'promptsAnswers',
+    };
+    const importSubtotal = true;
 
     // when
+    const componentWrapper = shallow(<AttributeSelectorWindowNotConnected mstrData={mstrData} chosenObject={chosenObject} />);
+    const spyMethod = jest.spyOn(attributeSelectorHelpers, 'officeMessageParent');
     componentWrapper.instance().onTriggerUpdate(1, 2, 3, 4, 5);
 
     // then
     expect(spyMethod).toHaveBeenCalledWith(
-      selectorProperties.commandOnUpdate, 1, 2, 3, 4, 5, mstrData.instanceId, mstrData.promptsAnswers, mstrData.subtotalsInfo,
+      selectorProperties.commandOnUpdate, 1, 2, 3, 4, 5, mstrData.instanceId, chosenObject.promptsAnswers, importSubtotal,
     );
   });
 
@@ -166,11 +184,9 @@ describe('AttributeSelectorWindow', () => {
     const mstrData = {
       envUrl: 'envUrl',
       authToken: 'authToken',
-      projectId: 'proId',
-      chosenObjectId: 'repId',
-      chosenObjectType: 'report',
+      projectId: 'proId'
     };
-
+    // when
     const componentWrapper = mount(<Provider store={reduxStore}>
       <AttributeSelectorWindow
         mstrData={mstrData}
@@ -179,8 +195,6 @@ describe('AttributeSelectorWindow', () => {
     const spyMethod = jest.spyOn(attributeSelectorHelpers, 'officeMessageParent');
 
     const wrappedCancelButton = componentWrapper.find('Button #cancel');
-
-    // when
     wrappedCancelButton.simulate('click');
 
     // then
@@ -219,41 +233,47 @@ describe('AttributeSelectorWindow', () => {
     const mstrData = {
       envUrl: 'envUrl',
       authToken: 'authToken',
-      projectId: 'proId',
-      chosenObjectId: 'repId',
-      chosenObjectType: 'report',
+      projectId: 'proId'
     };
+    const chosenObject = { chosenObjectName: '55' };
 
-    const componentWrapper = shallow(<AttributeSelectorWindow
-      mstrData={mstrData}
+
+    // when
+    const componentWrapper = shallow(<AttributeSelectorWindowNotConnected
+      mstrData
+      chosenObject
     />);
 
     const officeMessageParentSpy = jest.spyOn(attributeSelectorHelpers, 'officeMessageParent');
     officeMessageParentSpy.mockClear();
-
-    // when
     componentWrapper.instance().handleCancel();
 
     // then
     expect(officeMessageParentSpy).toHaveBeenCalledTimes(1);
   });
 
+
   it('should change value of attributesSelected if attributesBeingSelected is being invoked', () => {
     // given
     const mstrData = {
       envUrl: 'envUrl',
       authToken: 'authToken',
-      projectId: 'proId',
-      chosenObjectType: 'report',
-      chosenObjectId: 'repId',
+      projectId: 'proId'
     };
 
-    const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
+    const chosenObject = {
+      chosenObjectName: '55',
+      promptsAnswers: 'promptsAnswers',
+    };
 
+
+    const componentWrapper = shallow(<AttributeSelectorWindowNotConnected
+      mstrData={mstrData}
+      chosenObject={chosenObject}
+    />);
+    // when
     const attributesBeingSelectedSpy = jest.spyOn(componentWrapper.instance(), 'attributesBeingSelected');
     expect(componentWrapper.instance().state.attributesSelected).toBeFalsy();
-
-    // when
     componentWrapper.instance().attributesBeingSelected(true);
 
     // then
@@ -264,16 +284,20 @@ describe('AttributeSelectorWindow', () => {
     const mstrData = {
       envUrl: 'envUrl',
       authToken: 'authToken',
-      projectId: 'proId',
-      chosenObjectId: 'repId',
-      chosenObjectType: 'report',
+      projectId: 'proId'
     };
 
-    const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
-
-    const resetTriggerUpdateSpy = jest.spyOn(componentWrapper.instance(), 'resetTriggerUpdate');
+    const chosenObject = {
+      chosenObjectName: '55',
+      promptsAnswers: 'promptsAnswers',
+    };
 
     // when
+    const componentWrapper = shallow(<AttributeSelectorWindowNotConnected
+      mstrData={mstrData}
+      chosenObject={chosenObject}
+    />);
+    const resetTriggerUpdateSpy = jest.spyOn(componentWrapper.instance(), 'resetTriggerUpdate');
     componentWrapper.instance().resetTriggerUpdate();
     // then
     expect(componentWrapper.instance().state.triggerUpdate).toBeFalsy();
@@ -284,15 +308,21 @@ describe('AttributeSelectorWindow', () => {
     const mstrData = {
       envUrl: 'envUrl',
       authToken: 'authToken',
-      projectId: 'proId',
-      chosenObjectId: 'repId',
-      chosenObjectType: 'report',
+      projectId: 'proId'
     };
 
-    const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
+    const chosenObject = {
+      chosenObjectName: '55',
+      promptsAnswers: 'promptsAnswers',
+    };
+    // when
+
+    const componentWrapper = shallow(<AttributeSelectorWindowNotConnected
+      mstrData={mstrData}
+      chosenObject={chosenObject}
+    />);
     const openModalSpy = jest.spyOn(componentWrapper.instance(), 'openModal');
 
-    // when
     componentWrapper.instance().openModal();
     // then
     expect(componentWrapper.instance().state.openModal).toBeTruthy();
@@ -302,15 +332,20 @@ describe('AttributeSelectorWindow', () => {
     const mstrData = {
       envUrl: 'envUrl',
       authToken: 'authToken',
-      projectId: 'proId',
-      chosenObjectId: 'repId',
-      chosenObjectType: 'report',
+      projectId: 'proId'
     };
 
-    const componentWrapper = shallow(<AttributeSelectorWindow mstrData={mstrData} />);
-    const attributesBeingSelectedSpy = jest.spyOn(componentWrapper.instance(), 'closeModal');
+    const chosenObject = {
+      chosenObjectName: '55',
+      promptsAnswers: 'promptsAnswers',
+    };
 
     // when
+    const componentWrapper = shallow(<AttributeSelectorWindowNotConnected
+      mstrData={mstrData}
+      chosenObject={chosenObject}
+    />);
+    const attributesBeingSelectedSpy = jest.spyOn(componentWrapper.instance(), 'closeModal');
     componentWrapper.instance().closeModal();
 
     // then
