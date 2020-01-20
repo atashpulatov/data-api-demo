@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { popupHelper } from '../popup/popup-helper';
 import { switchImportSubtotals } from '../navigation/navigation-tree-actions';
 
-export class AttributeSelectorHOC extends Component {
+export class AttributeSelectorNotConnected extends Component {
   constructor(props) {
     super(props);
     this.handleUnauthorized = this.handleUnauthorized.bind(this);
@@ -94,7 +94,7 @@ const mapToLegacySession = (mstrData, session, editedObject) => ({
   projectId: mstrData.chosenProjectId || editedObject.projectId,
 });
 
-AttributeSelectorHOC.propTypes = {
+AttributeSelectorNotConnected.propTypes = {
   title: PropTypes.string,
   triggerUpdate: PropTypes.bool,
   openModal: PropTypes.bool,
@@ -111,7 +111,7 @@ AttributeSelectorHOC.propTypes = {
   onTriggerUpdate: PropTypes.func,
   t: PropTypes.func
 };
-AttributeSelectorHOC.defaultProps = { t: (text) => text, };
+AttributeSelectorNotConnected.defaultProps = { t: (text) => text, };
 
 const mapStateToProps = (state) => {
   const { navigationTree, popupStateReducer, popupReducer, sessionReducer, officeReducer } = state;
@@ -130,4 +130,4 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = { switchImportSubtotals };
 
-export const AttributeSelector = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(AttributeSelectorHOC));
+export const AttributeSelector = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(AttributeSelectorNotConnected));

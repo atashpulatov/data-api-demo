@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { AttributeMetricFilter } from '@mstr/mstr-react-library';
-import { AttributeSelectorHOC } from '../../attribute-selector/attribute-selector';
+import { AttributeSelectorNotConnected } from '../../attribute-selector/attribute-selector';
 
 describe.skip('AttributeSelectorHOC', () => {
   afterEach(() => {
@@ -16,7 +16,7 @@ describe.skip('AttributeSelectorHOC', () => {
       supportForms: true,
     };
     // when
-    const selectorWrapped = shallow(<AttributeSelectorHOC mstrData={mstrData} />);
+    const selectorWrapped = shallow(<AttributeSelectorNotConnected mstrData={mstrData} />);
     // then
     const attributeMetricFilterWrapped = selectorWrapped.find(AttributeMetricFilter).at(0);
     expect(attributeMetricFilterWrapped.prop('mstrData')).toEqual(mstrData);
@@ -43,7 +43,7 @@ describe.skip('AttributeSelectorHOC', () => {
       },
     };
     // when
-    const wrappedComponent = shallow(<AttributeSelectorHOC mstrData={mstrData} handlePopupErrors={mockHandlePopupErrors} />);
+    const wrappedComponent = shallow(<AttributeSelectorNotConnected mstrData={mstrData} handlePopupErrors={mockHandlePopupErrors} />);
     wrappedComponent.instance().handleUnauthorized(libraryError);
     // then
     expect(mockHandlePopupErrors).toBeCalledWith(pupupExpectedError);
