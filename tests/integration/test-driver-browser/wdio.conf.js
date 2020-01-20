@@ -17,6 +17,7 @@ exports.config = {
   // directory is where your package.json resides, so `wdio` will be called from there.
   //
   specs: [
+    // './test/specs/performance/sample.spec.js'
     './test/specs/performance/import-UB-dataset.spec.js'
     // './test/specs/release-validation/deprecated/sample.spec.js',
   ],

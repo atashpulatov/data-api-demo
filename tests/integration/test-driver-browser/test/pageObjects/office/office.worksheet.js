@@ -9,9 +9,9 @@ const OfficeWorksheet = function() {
     browser.url('https://www.office.com/launch/excel?auth=2');
   };
 
-  this.uploadPlugin = function() {
-    // const pathToManifest = '/Users/dhornos/Documents/GITHUB-repositories/mstr-office/tests/integration/test-driver-browser/Tiannan UB Library (170407).xml'
-    const pathToManifest = '/Users/dhornos/Documents/GITHUB-repositories/mstr-office/tests/integration/test-driver-browser/yi_localhost_ip.xml'
+  this.uploadAndOpenPlugin = function() {
+    const pathToManifest = '/Users/dhornos/Documents/GITHUB-repositories/mstr-office/tests/integration/test-driver-browser/test/specs/performance/manifest.xml'
+    // const pathToManifest = '/Users/dhornos/Documents/GITHUB-repositories/mstr-office/tests/integration/test-driver-browser/yi_localhost_ip.xml'
     switchToExcelFrame();
     $(exSe.insertBtn).click();
     $(exSe.addInBtn).click();
@@ -24,6 +24,13 @@ const OfficeWorksheet = function() {
     $(exSe.manifestInput).waitForExist(9999);
     $(exSe.manifestInput).setValue(pathToManifest);
     waitAndClick($(exSe.confirmUpload));
+    browser.pause(2222);
+
+    switchToExcelFrame();
+    $(exSe.uploadPluginNotification).click();
+    // $('img[src^="https://174770"]').waitForDisplayed(7777);
+    $('img[src^="https://env-174770"]').click();
+    browser.pause(5555);
   };
 
   this.openPlugin = function() {

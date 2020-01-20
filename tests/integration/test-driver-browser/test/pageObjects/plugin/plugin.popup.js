@@ -62,6 +62,15 @@ const PluginPopup = function() {
     waitAndClick($(s.allFilters));
   };
 
+  this.selectObjectElementsInPrepareData = function(elements) {
+    $('#search-toolbar > div > span > input').waitForExist(7777);
+    for (let i = 0; i < elements.length; i++) {
+      $('#search-toolbar > div > span > input').clearValue();
+      $('#search-toolbar > div > span > input').setValue(`${elements[i]}`);
+      waitAndClick($(`input[name="${elements[i]}"]`));
+      $('#search-toolbar > div > span > input').clearValue();
+    }
+  };
   this.selectObjectElements = function(elements) {
     for (let i = 0; i < elements.length; i++) {
       waitAndClick($(`input[name="${elements[i]}"]`));
