@@ -20,6 +20,8 @@ describe('Smart Folder - IMPORT -', function() {
   let e2eTime = 0;
   const inputFilePath = './test/specs/performance/sample.xml'
   const outputFilePath = './test/specs/performance/manifest.xml'
+  const pathToManifest = __dirname+'\\manifest.xml';
+
 
   function writeDataIntoFile(newEnv) {
     var xmlContent;
@@ -72,7 +74,7 @@ describe('Smart Folder - IMPORT -', function() {
     }
     OfficeWorksheet.createNewWorkbook();
     writeDataIntoFile("174770");
-    OfficeWorksheet.uploadAndOpenPlugin();
+    OfficeWorksheet.uploadAndOpenPlugin(pathToManifest);
     PluginRightPanel.loginToPlugin('administrator', '');
 
   });

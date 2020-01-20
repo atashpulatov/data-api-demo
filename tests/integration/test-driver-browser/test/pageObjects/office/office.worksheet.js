@@ -9,14 +9,11 @@ const OfficeWorksheet = function() {
     browser.url('https://www.office.com/launch/excel?auth=2');
   };
 
-  this.uploadAndOpenPlugin = function() {
-    const pathToManifest = '/Users/dhornos/Documents/GITHUB-repositories/mstr-office/tests/integration/test-driver-browser/test/specs/performance/manifest.xml'
-    // const pathToManifest = '/Users/dhornos/Documents/GITHUB-repositories/mstr-office/tests/integration/test-driver-browser/yi_localhost_ip.xml'
+  this.uploadAndOpenPlugin = function(pathToManifest) {
     switchToExcelFrame();
     $(exSe.insertBtn).click();
     $(exSe.addInBtn).click();
-    $(exSe.officeAddInsFrame).waitForExist(9999);
-    $(exSe.officeAddInsFrame).waitForExist(9999);
+    $(exSe.officeAddInsFrame).waitForExist(19999);
     browser.switchToFrame($(exSe.officeAddInsFrame));
     browser.pause(1111);
     waitAndClick($(exSe.adminManagedBtn));
@@ -28,7 +25,6 @@ const OfficeWorksheet = function() {
 
     switchToExcelFrame();
     $(exSe.uploadPluginNotification).click();
-    // $('img[src^="https://174770"]').waitForDisplayed(7777);
     $('img[src^="https://env-174770"]').click();
     browser.pause(5555);
   };
