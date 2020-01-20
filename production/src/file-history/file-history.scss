@@ -89,6 +89,23 @@ button {
   }
 }
 
+
+.loading-button-container #report-loading-icon{
+    position: relative;
+    right: 2px;
+    margin-right: 2px;
+}
+#add-data-btn-container{
+  position: relative;
+   padding-top: 1px;
+}
+
+.refresh-icons-row .additional-data-wrapper svg{
+  position:relative;
+   top:2.5px;
+   margin-top: 0;
+}
+
 .clear-data-inactive {
   color: rgba(0, 0, 0, 0.5);
 }
@@ -164,12 +181,26 @@ li {
   }
 }
 
-.refresh-all-btn {
-  .mstr-icon,
-  img {
-    margin-right: 5px;
-    vertical-align: sub;
-  }
+.icon-align{
+  position: relative;
+  max-width: 14px;
+  max-height: 13px;
+  margin-bottom: -16px;
+}
+
+.refresh-all-btn{
+  bottom: 27.2px;
+  left: 287px;
+}
+
+.spinner-all-icon{
+  bottom: 32px;
+  left: 289px;
+}
+
+.mstr-icon-refresh-all{
+position: relative;
+bottom:2.5px;
 }
 
 .refresh-all-label {

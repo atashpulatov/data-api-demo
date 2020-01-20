@@ -55,7 +55,7 @@ describe('FileHistoryContainer', () => {
       />
     </Provider>);
     // then
-    expect(wrappedComponent.exists('Button .refresh-all-btn MSTRIcon')).toBeTruthy();
+    expect(wrappedComponent.exists('.refresh-all-btn.icon-align .mstr-icon-refresh-all MSTRIcon')).toBeTruthy();
   });
   it('should display refresh all spinner when refreshAll flag is true', () => {
     // given
@@ -70,7 +70,7 @@ describe('FileHistoryContainer', () => {
       />
     </Provider>);
     // then
-    expect(wrappedComponent.exists('Button .refresh-all-btn img')).toBeTruthy();
+    expect(wrappedComponent.exists('.spinner-all-icon.icon-align img')).toBeTruthy();
   });
   it('should run onRefreshAll when refreshAll is clicked', async () => {
     // given
@@ -87,7 +87,7 @@ describe('FileHistoryContainer', () => {
         startLoading={startLoadingMock}
       />
     </Provider>);
-    const refreshButton = wrappedComponent.find('Button .refresh-all-btn');
+    const refreshButton = wrappedComponent.find('.refresh-all-btn');
     // when
     refreshButton.simulate('click');
     // then
@@ -111,7 +111,7 @@ describe('FileHistoryContainer', () => {
     />);
     wrappedComponent.instance().ismounted = false;
     wrappedComponent.instance().setState = jest.fn((obj, callback) => setStateCallBack = callback || (() => { }));
-    const refreshButton = wrappedComponent.find('Button .refresh-all-btn');
+    const refreshButton = wrappedComponent.find('.refresh-all-btn');
     // when
     refreshButton.simulate('click');
     await setStateCallBack();
