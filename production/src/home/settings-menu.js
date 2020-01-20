@@ -28,7 +28,6 @@ export const SettingsMenuHOC = ({
 }) => {
   const userNameDisplay = userFullName || 'MicroStrategy user';
   const isSecuredActive = !isSecured && reportArray && reportArray.length > 0;
-
   const prepareEmail = () => {
     const { Office } = window;
     if (!Office) return '#'; // If no Office return anchor url
@@ -56,6 +55,7 @@ export const SettingsMenuHOC = ({
     toggleIsConfirmFlag(true);
     toggleIsSettingsFlag(false);
   };
+
 
   return (
     <ul className="settings-list">
@@ -101,7 +101,7 @@ export const SettingsMenuHOC = ({
       <li>
         <a
           tabIndex="0"
-          href=" https://www2.microstrategy.com/producthelp/Current/Office/index.htm"
+          href="https://www.microstrategy.com/producthelp/Current/Office/en-us/index.htm"
           target="_blank"
           rel="noopener noreferrer"
         >
