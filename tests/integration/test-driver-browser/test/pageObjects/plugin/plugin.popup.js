@@ -9,8 +9,18 @@ const PluginPopup = function() {
   }
 
   this.searchForObject = function(objectName) {
+    switchToPluginFrame();
     $(s.searchInput).clearValue();
     $(s.searchInput).setValue(objectName);
+  };
+
+  this.clearSearchInput = () => {
+    switchToPluginFrame();
+    waitAndClick(s.clearSearchInput);
+  };
+
+  this.checkIfSearchIsEmpty = () => {
+    return s.searchInput.getValue == undefined;
   };
 
   this.clickImport = function() {
@@ -32,6 +42,42 @@ const PluginPopup = function() {
   this.clickDataPreview = function() {
     waitAndClick($(s.dataPreviewBtn));
   };
+
+  this.clickFilterButton = async () => {
+    await switchToPopupFrame();
+    await waitAndClick(s.filterButton);
+  };
+
+  this.tickFilterCheckBox = (section, item) => {
+    waitAndClick(element(By.css('.category-list-header[aria-label="' + section + '"] + .category-list-table > .category-list-row > .checkbox-cell > label > input[aria-label="Checkbox for ' + item + '."] + span')));
+  }
+
+  this.getTableRows = () => {
+    w = s.tableRows.getWebElements();
+    return w;
+  };
+
+  this.checkIfColumnIsExactly = async (columnToCheck, expectedValue) => {
+    const rows = await this.getTableRows();
+    for (let row of rows) {
+      const columnValue = await row.findElement(By.css(columnToCheck)).then(async (element) => {return element.getAttribute('Title')});
+      if(columnValue != expectedValue) return false;
+    }; 
+    await browser.sleep(1111);
+    return true;
+  };
+
+  this.checkIfNamesContainString = async (stringToCheck) => {
+    const rows = await this.getTableRows();
+    for (let row of rows) {
+      const columnValue = await row.findElement(By.css(s.columnName)).then(async (element) => {return element.getAttribute('Title')});
+      if (columnValue.toLowerCase().indexOf(stringToCheck) == -1) return false;
+    }; 
+    await browser.sleep(1111);
+    return true;
+  };
+
+
 
   this.clickViewSelected = function() {
     waitAndClick($(s.viewSelected));

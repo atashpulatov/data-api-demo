@@ -3,6 +3,7 @@ export const objects = {
         reportXML: 'Report accessing XML file',
         notSupportedFeatures: 'Report with Page by, Advanced Sorting, Thresholds, Outline, Banding, Merge cells & Multiform attributes',
         seasonalReport: 'Seasonal Report',
+        seasonalReportID: 'F3DA2FE611E75A9600000080EFC5B53B',
         basicReport: '100_report',
         metricExpPromptedReport: 'Report with prompt - Expression prompt (Metric Qualification Prompt on Revenue) | Not required | Not default',
         attributeExprPromptedReport: 'Report with prompt - Expression prompt (Attribute Qualification Prompt on Year) | Required | Not default',
