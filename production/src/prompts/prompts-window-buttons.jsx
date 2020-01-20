@@ -1,9 +1,10 @@
 import React from 'react';
 import { Button } from 'antd';
 import { connect } from 'react-redux';
-import '../popup/popup-buttons.css';
+import '../popup/popup-buttons/popup-buttons.css';
 import { withTranslation } from 'react-i18next';
 import { cancelImportRequest } from '../navigation/navigation-tree-actions';
+import {popupStateActions} from '../popup/popup-state-actions';
 
 export const _PromptWindowButtons = ({
   handleRun, isReprompt, closePopup, cancelImportRequest,
@@ -16,4 +17,4 @@ export const _PromptWindowButtons = ({
   </div>
 );
 
-export const PromptWindowButtons = connect(() => ({}), { cancelImportRequest })(withTranslation('common')(_PromptWindowButtons));
+export const PromptWindowButtons = connect(() => ({}), { cancelImportRequest, handleBack: popupStateActions.onPopupBack })(withTranslation('common')(_PromptWindowButtons));

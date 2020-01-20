@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { ObjectTable, TopFilterPanel } from '@mstr/rc';
 import { selectorProperties } from '../attribute-selector/selector-properties';
-import { PopupButtons } from '../popup/popup-buttons';
+import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
 import { actions } from './navigation-tree-actions';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
@@ -16,6 +16,8 @@ import {
 } from '../cache/cache-actions';
 import DB from '../cache/cache-db';
 import { authenticationHelper } from '../authentication/authentication-helper';
+import { popupStateActions } from '../popup/popup-state-actions';
+import { popupHelper } from '../popup/popup-helper';
 
 const SAFETY_FALLBACK = 7000; // Interval for falling back to network
 
@@ -41,7 +43,6 @@ export class _NavigationTree extends Component {
       fetchObjectsFromNetwork();
     }
   }
-
 
   componentDidUpdate() {
     const { sorter, objectType, myLibrary, myLibraryFilter, envFilter } = this.props;
@@ -76,8 +77,7 @@ export class _NavigationTree extends Component {
     try {
       await authenticationHelper.validateAuthToken();
     } catch (error) {
-      const { handlePopupErrors } = this.props;
-      handlePopupErrors(error);
+      popupHelper.handlePopupErrors(error);
       return;
     }
 
@@ -119,8 +119,7 @@ export class _NavigationTree extends Component {
         requestImport(isPromptedResponse);
       }
     } catch (e) {
-      const { handlePopupErrors } = this.props;
-      handlePopupErrors(e);
+      popupHelper.handlePopupErrors(e);
     }
   };
 
@@ -133,18 +132,18 @@ export class _NavigationTree extends Component {
   };
 
   handleSecondary = async () => {
-    const { chosenProjectId, chosenObjectId, chosenObjectName, chosenType, chosenSubtype, handlePrepare } = this.props;
-    let isPromptedResponse = false;
+    const { chosenProjectId, chosenObjectId, chosenSubtype, handlePrepare, setObjectData } = this.props;
+
     try {
       const objectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
       if ((objectType === mstrObjectEnum.mstrObjectType.report) || (objectType === mstrObjectEnum.mstrObjectType.dossier)) {
-        isPromptedResponse = await checkIfPrompted(chosenObjectId, chosenProjectId, objectType.name);
+        const isPromptedResponse = await checkIfPrompted(chosenObjectId, chosenProjectId, objectType.name);
+        setObjectData({ isPrompted: isPromptedResponse });
       }
-      handlePrepare(chosenProjectId, chosenObjectId, chosenSubtype, chosenObjectName, chosenType, isPromptedResponse);
+      handlePrepare();
       this.setState({ previewDisplay: true });
     } catch (err) {
-      const { handlePopupErrors } = this.props;
-      handlePopupErrors(err);
+      popupHelper.handlePopupErrors(err);
     }
   };
 
@@ -157,7 +156,7 @@ export class _NavigationTree extends Component {
 
   // TODO: temporary solution
   onObjectChosen = async (objectId, projectId, subtype, objectName, targetId, myLibrary) => {
-    const { selectObject, handlePopupErrors } = this.props;
+    const { selectObject } = this.props;
     // If myLibrary is on, then selected object is a dossier.
     const objectType = myLibrary ? mstrObjectEnum.mstrObjectType.dossier : mstrObjectEnum.getMstrTypeBySubtype(subtype);
     let chosenLibraryDossier;
@@ -171,7 +170,7 @@ export class _NavigationTree extends Component {
       try {
         cubeStatus = await getCubeStatus(objectId, projectId) !== '0';
       } catch (error) {
-        handlePopupErrors(error);
+        popupHelper.handlePopupErrors(error);
       }
     }
     this.setState({ isPublished: cubeStatus });
@@ -256,7 +255,9 @@ const mapActionsToProps = {
   ...actions,
   connectToDB: connectToCache,
   resetDBState: refreshCacheState,
-  fetchObjectsFromNetwork: fetchObjectsFallback
+  fetchObjectsFromNetwork: fetchObjectsFallback,
+  handlePrepare: popupStateActions.onPrepareData,
+  setObjectData: popupStateActions.setObjectData,
 };
 
 export const NavigationTree = connect(mapStateToProps, mapActionsToProps)(withTranslation('common')(_NavigationTree));

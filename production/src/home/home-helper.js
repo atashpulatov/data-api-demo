@@ -1,15 +1,14 @@
 export class HomeHelper {
-
   init = (reduxStore, sessionHelper) => {
     this.reduxStore = reduxStore;
     this.sessionHelper = sessionHelper;
   }
 
   saveLoginValues = () => {
-    const token = this.reduxStore.getState().sessionReducer.authToken;
+    const { authToken } = this.reduxStore.getState().sessionReducer;
     const location = this.getWindowLocation();
     if (location.origin.search('localhost') !== -1) {
-      if (!token) {
+      if (!authToken) {
         this.sessionHelper.logOut();
       }
     } else {

@@ -48,6 +48,7 @@ export const NOT_SUPPORTED_NO_ATTRIBUTES = 'This object cannot be imported. Eith
 export const NOT_SUPPORTED_SERVER_ERR = 'This object cannot be imported. Objects with cross tabs, totals, or subtotals are not supported in this version of MicroStrategy for Office.';
 export const NOT_SUPPORTED_PROMPTS_REFRESH = 'Objects with prompts cannot be refreshed in this version of MicroStrategy for Office.';
 export const NOT_PUBLISHED_CUBE = 'This object cannot be imported. The Intelligent Cube is not published.';
+export const NO_DATA_SELECTED = 'This button is currently disabled because you didn’t select any data';
 export const NOT_IN_METADATA = 'The object does not exist in the metadata.';
 export const PROJECT_ROW_LIMIT = 'The object exceeds project rows limitation';
 export const TABLE_OVERLAP = 'The required data range in the worksheet is not empty';
@@ -106,7 +107,7 @@ export const errorMessageFactory = withDefaultValue({
   [errorTypes.OUTSIDE_OF_RANGE_ERR]: () => EXCEEDS_WORKSHEET_LIMITS,
   [errorTypes.OVERLAPPING_TABLES_ERR]: () => TABLE_OVERLAP,
   [errorTypes.RUN_OUTSIDE_OFFICE_ERR]: () => OUTSIDE_OF_OFFICE,
-  [errorTypes.TABLE_REMOVED_FROM_EXCEL_ERR]: ({ reportName }) => `${reportName} does not exist in the workbook anymore.`,
+  [errorTypes.TABLE_REMOVED_FROM_EXCEL_ERR]: ({ chosenObjectName }) => `${chosenObjectName} does not exist in the workbook anymore.`,
   [errorTypes.GENERIC_OFFICE_ERR]: ({ error }) => `Excel returned error: ${error.message}`,
   [errorTypes.PROTECTED_SHEET_ERR]: () => PROTECTED_SHEET,
 },

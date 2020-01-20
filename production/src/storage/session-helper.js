@@ -7,7 +7,6 @@ import { createCache } from '../cache/cache-actions';
 import DB from '../cache/cache-db';
 
 export class SessionHelper {
-
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
   }
@@ -72,14 +71,10 @@ export class SessionHelper {
 
   getSession = () => {
     const currentStore = this.reduxStore.getState();
-    const projectId = currentStore.historyReducer.project
-      ? currentStore.historyReducer.project.projectId
-      : undefined;
     const session = {
       USE_PROXY: false,
-      url: currentStore.sessionReducer.envUrl,
+      envUrl: currentStore.sessionReducer.envUrl,
       authToken: currentStore.sessionReducer.authToken,
-      projectId,
     };
     return session;
   }

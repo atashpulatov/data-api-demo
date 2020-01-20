@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import { sessionHelper } from '../../storage/session-helper';
-import { SettingsMenuHOC } from '../../home/settings-menu';
+import { SettingsMenuNotConnected } from '../../home/settings-menu';
 import DB from '../../cache/cache-db';
 
 describe('Settings Menu', () => {
@@ -16,7 +16,7 @@ describe('Settings Menu', () => {
     const indexedDBSpy = jest.spyOn(DB, 'getIndexedDBSupport').mockImplementation(() => true);
     const logOutSpy = jest.spyOn(sessionHelper, 'logOut');
     const logOutRedirectSpy = jest.spyOn(sessionHelper, 'logOutRedirect');
-    const menuWrapper = mount(<SettingsMenuHOC clearCache={clearDB} />);
+    const menuWrapper = mount(<SettingsMenuNotConnected clearCache={clearDB} />);
     const buttonWrapper = menuWrapper.find('#logOut');
     // when
     buttonWrapper.simulate('click');
@@ -33,7 +33,7 @@ describe('Settings Menu', () => {
     const logOutRestSpy = jest.spyOn(sessionHelper, 'logOutRest').mockImplementation(() => {
       throw new Error();
     });
-    const menuWrapper = mount(<SettingsMenuHOC />);
+    const menuWrapper = mount(<SettingsMenuNotConnected />);
     const buttonWrapper = menuWrapper.find('#logOut');
     // when
     buttonWrapper.simulate('click');

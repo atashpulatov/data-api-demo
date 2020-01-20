@@ -201,7 +201,7 @@ describe('Popup actions', () => {
     expect(officeApiHelper.getExcelSessionStatus).toBeCalled();
     expect(authenticationHelper.validateAuthToken).toBeCalled();
     expect(officeStoreService.getReportFromProperties).toBeCalledWith(bindingId);//
-    expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedReport: returnedValue });
+    expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedObject: returnedValue });
   });
 
   it('should run edit popup if edit action for not prompted object is called', async () => {
@@ -215,7 +215,7 @@ describe('Popup actions', () => {
     await actions.callForEdit(report)(listener);
     // then
     expect(officeStoreService.getReportFromProperties).toBeCalledWith(bindingId);
-    expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedReport: returnedValue });
+    expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedObject: returnedValue });
     expect(popupController.runEditFiltersPopup).toBeCalledWith(report);
   });
 
@@ -230,7 +230,7 @@ describe('Popup actions', () => {
     await actions.callForEdit(report)(listener);
     // then
     expect(officeStoreService.getReportFromProperties).toBeCalledWith(bindingId);
-    expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedReport: returnedValue });
+    expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedObject: returnedValue });
     expect(popupController.runRepromptPopup).toBeCalledWith(report);
   });
 
@@ -251,11 +251,11 @@ describe('Popup actions', () => {
   it('should set proper popupType when switch to edit requested', () => {
     // given
     const reportInstance = 'instanceId';
-    const reportData = 'reportData';
+    const chosenObjectData = 'chosenObjectData';
     const listener = jest.fn();
     // when
-    actions.preparePromptedReport(reportInstance, reportData)(listener);
+    actions.preparePromptedReport(reportInstance, chosenObjectData)(listener);
     // then
-    expect(listener).toHaveBeenCalledWith({ type: SET_PREPARED_REPORT, instanceId: reportInstance, reportData });
+    expect(listener).toHaveBeenCalledWith({ type: SET_PREPARED_REPORT, instanceId: reportInstance, chosenObjectData });
   });
 });

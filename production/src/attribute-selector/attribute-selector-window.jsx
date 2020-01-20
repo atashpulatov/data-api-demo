@@ -1,32 +1,23 @@
 import React, { Component } from 'react';
 import '../home/home.css';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { selectorProperties } from './selector-properties';
 import { attributeSelectorHelpers } from './attribute-selector-helpers';
 import { AttributeSelector } from './attribute-selector';
-import { PopupButtons } from '../popup/popup-buttons';
+import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
+import { popupStateActions } from '../popup/popup-state-actions';
+import { popupHelper } from '../popup/popup-helper';
 
-export class AttributeSelectorWindow extends Component {
+export class AttributeSelectorWindowNotConnected extends Component {
   constructor(props) {
     super(props);
-    const { mstrData } = this.props;
     this.state = {
-      session: {
-        USE_PROXY: false,
-        url: mstrData.envUrl,
-        authToken: mstrData.token,
-        projectId: mstrData.projectId,
-      },
       openModal: false,
       triggerUpdate: false,
       loading: false,
       attributesSelected: false,
-      importSubtotal: mstrData.subtotalsInfo ? mstrData.subtotalsInfo.importSubtotal : false,
     };
-  }
-
-  toggleSubtotal = (isSubtotal) => {
-    this.setState({ importSubtotal: isSubtotal });
   }
 
   handleOk = () => {
@@ -35,24 +26,22 @@ export class AttributeSelectorWindow extends Component {
 
   handleCancel = () => attributeSelectorHelpers.officeMessageParent(selectorProperties.commandCancel);
 
-  handleBack = () => {
-    const { handleBack } = this.props;
-    handleBack();
-  };
-
-  onTriggerUpdate = (reportId, projectId, reportSubtype, body, reportName = this.props.mstrData.reportName) => {
-    const { mstrData } = this.props;
-    const { importSubtotal } = this.state;
-    const subtotalsInfo = { importSubtotal };
+  onTriggerUpdate = (chosenObjectId, projectId, chosenObjectSubtype, body, chosenObjectName = this.props.chosenObject.chosenObjectName) => {
+    const { chosenObject, editedObject, importSubtotal } = this.props;
+    const subtotalsInfo = {
+      importSubtotal:editedObject.subtotalsInfo
+        ? editedObject.subtotalsInfo.importSubtotal
+        : importSubtotal
+    };
     attributeSelectorHelpers.officeMessageParent(
       selectorProperties.commandOnUpdate,
-      reportId,
+      chosenObjectId,
       projectId,
-      reportSubtype,
+      chosenObjectSubtype,
       body,
-      reportName,
-      mstrData.instanceId,
-      mstrData.promptsAnswers,
+      chosenObjectName,
+      chosenObject.preparedInstanceId,
+      chosenObject.promptsAnswers,
       subtotalsInfo,
     );
   };
@@ -78,32 +67,27 @@ export class AttributeSelectorWindow extends Component {
   };
 
   render() {
-    const { mstrData, handlePopupErrors } = this.props;
-    const { session, triggerUpdate, openModal, attributesSelected, loading, } = this.state;
-    const { toggleSubtotal } = this;
-    const typeName = mstrData.reportType.name
-      ? mstrData.reportType.name.charAt(0).toUpperCase() + mstrData.reportType.name.substring(1)
-      : mstrData.reportType.charAt(0).toUpperCase() + mstrData.reportType.substring(1);
-
+    const { handleBack, chosenObject, editedObject, mstrData } = this.props;
+    const { triggerUpdate, openModal, attributesSelected, loading, } = this.state;
+    const { isPrompted } = mstrData;
+    const typeName = chosenObject.objectType.name
+      && chosenObject.objectType.name.charAt(0).toUpperCase() + chosenObject.objectType.name.substring(1);
     return (
       <div>
         <AttributeSelector
           // TODO: logic for a title
-          title={`Import ${typeName} > ${mstrData.reportName}`}
+          title={`Import ${typeName} > ${chosenObject.chosenObjectName}`}
           attributesSelectedChange={this.attributesBeingSelected}
-          mstrData={mstrData}
-          session={session}
           triggerUpdate={triggerUpdate}
           onTriggerUpdate={this.onTriggerUpdate}
           resetTriggerUpdate={this.resetTriggerUpdate}
           openModal={openModal}
           closeModal={this.closeModal}
-          toggleSubtotal={toggleSubtotal}
-          handlePopupErrors={handlePopupErrors}
+          handlePopupErrors={popupHelper.handlePopupErrors}
         />
         <PopupButtons
           disableActiveActions={!attributesSelected}
-          handleBack={!mstrData.editRequested && this.handleBack}
+          handleBack={(!editedObject || isPrompted) && handleBack}
           handleOk={this.handleOk}
           handleCancel={this.handleCancel}
           loading={loading}
@@ -114,19 +98,33 @@ export class AttributeSelectorWindow extends Component {
   }
 }
 
-AttributeSelectorWindow.propTypes = {
+AttributeSelectorWindowNotConnected.propTypes = {
   mstrData: PropTypes.shape({
     envUrl: PropTypes.string,
-    token: PropTypes.string,
+    authToken: PropTypes.string,
     projectId: PropTypes.string,
-    reportName: PropTypes.string,
+    chosenObjectName: PropTypes.string,
     instanceId: PropTypes.string,
     promptsAnswers: PropTypes.string,
-    reportType: PropTypes.object,
+    chosenObjectType: PropTypes.string,
     editRequested: PropTypes.bool,
-    subtotalsInfo: PropTypes.object,
-    importSubtotal: PropTypes.bool
   }).isRequired,
   handleBack: PropTypes.func,
-  handlePopupErrors: PropTypes.func
 };
+
+const mapStateToProps = (state) => {
+  const { importSubtotal, ...chosenObject } = state.navigationTree;
+  return {
+    mstrData: { ...state.popupStateReducer },
+    chosenObject,
+    importSubtotal,
+    editedObject: state.popupReducer.editedObject,
+  };
+};
+
+const mapDispatchToProps = {
+  handleBack: popupStateActions.onPopupBack,
+  handlePrepare: popupStateActions.onPrepareData,
+};
+
+export const AttributeSelectorWindow = connect(mapStateToProps, mapDispatchToProps)(AttributeSelectorWindowNotConnected);
