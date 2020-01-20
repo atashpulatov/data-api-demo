@@ -16,7 +16,7 @@ jest.mock('../../authentication/authentication-helper', () => ({
   }
 }));
 
-describe('NavigationTree', () => {
+describe.skip('NavigationTree', () => {
   afterAll(() => {
     jest.restoreAllMocks();
   });

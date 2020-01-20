@@ -102,13 +102,16 @@
       "!src/office/office-table-helper.js",
       "!src/office/office-formatting-helper.js",
       "!src/storage/session-helper.js",
-      "!src/popup/popup-controller.js",
       "!src/breadcrumbs/breadcrumbs.jsx",
       "!src/CompileStrings.js",
       "!src/cache/cache-db.js",
       "!src/cache/cache-actions.js",
       "!src/dossier/embedded-dossier.jsx",
-      "!src/prompts/prompts-window.jsx"
+      "!src/prompts/prompts-window.jsx",
+      "!src/navigation/**/*.*",
+      "!src/prompts/**/*.*",
+      "!src/dossier/**/*.*",
+      "!src/popup/**/*.*"
     ]
   }
 }

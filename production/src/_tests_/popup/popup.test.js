@@ -11,7 +11,7 @@ import { PopupViewSelectorHOC, PopupViewSelector } from '../../popup/popup-view-
 import { Office } from '../mockOffice';
 
 
-describe('Popup.js', () => {
+describe.skip('Popup.js', () => {
   const messageParentMock = jest.fn();
   beforeAll(() => {
     jest.spyOn(officeContext, 'getOffice')

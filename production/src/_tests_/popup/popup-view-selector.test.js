@@ -15,7 +15,7 @@ jest.mock('../../office/office-context');
 
 const { createInstance, answerPrompts } = mstrObjectRestService;
 
-describe('PopupViewSelector', () => {
+describe.skip('PopupViewSelector', () => {
   it('should render navigation tree when requested', () => {
     // given
     const location = { search: {}, };

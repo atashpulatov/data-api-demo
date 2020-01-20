@@ -2,8 +2,6 @@ import { officeApiHelper } from '../../office/office-api-helper';
 import { IncorrectInputTypeError } from '../../office/incorrect-input-type';
 import { OfficeError, OfficeBindingError } from '../../office/office-error';
 import { reduxStore } from '../../store';
-import { sessionProperties } from '../../storage/session-properties';
-import { historyProperties } from '../../history/history-properties';
 import { officeProperties } from '../../office/office-properties';
 
 // FIXME: these were disabled anyway. Needs to be redone.
@@ -215,32 +213,6 @@ describe('OfficeApiHelper', () => {
     // then
     expect(wrongMethodCall).toThrowError(OfficeError);
     expect(wrongMethodCall).toThrowError('Bindings must be of Array type!');
-  });
-  it('should return current mstr context data', () => {
-    // given
-    const project = {
-      projectId: 'testProjectId',
-      projectName: 'testProjectName',
-    };
-    const envUrl = 'testEnvUrl';
-    const username = 'testusername';
-    reduxStore.dispatch({
-      type: sessionProperties.actions.logIn,
-      values: {
-        username,
-        envUrl,
-        password: '',
-      },
-    });
-    reduxStore.dispatch({
-      type: historyProperties.actions.goInsideProject,
-      projectId: project.projectId,
-      projectName: project.projectName,
-    });
-    // when
-    const result = officeApiHelper.getCurrentMstrContext();
-    // then
-    expect(result.envUrl).toBe(envUrl);
   });
   describe.skip('createBindingId', () => {
     it('should return proper bindingId', () => {
