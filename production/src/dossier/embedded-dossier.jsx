@@ -41,11 +41,9 @@ export default class _EmbeddedDossier extends React.Component {
    */
   onIframeLoad = (iframe) => {
     iframe.addEventListener('load', () => {
-      console.log('iframe load event');
       const embeddedDocument = iframe.contentDocument;
       this.embeddedDocument = embeddedDocument;
       if (!this.isLoginPage(embeddedDocument)) {
-        console.log('not a login page');
         const fileLocation = window.location.origin
           + window.location.pathname.replace('index.html', 'javascript/mshtmllib.js');
         this.applyFile(embeddedDocument, fileLocation);
@@ -80,7 +78,6 @@ export default class _EmbeddedDossier extends React.Component {
   applyFile = (_document, fileLocation) => {
     const script = _document.createElement('script');
     script.src = fileLocation;
-    console.log(fileLocation);
     if (_document) {
       const title = _document.head.getElementsByTagName('title')[0];
       _document.head.insertBefore(script, title);
@@ -197,7 +194,6 @@ export default class _EmbeddedDossier extends React.Component {
       for (const mutation of mutationList) {
         if (mutation.addedNodes && mutation.addedNodes.length && mutation.addedNodes[0].nodeName === 'IFRAME') {
           const iframe = mutation.addedNodes[0];
-          console.log('iframe added');
           callback(iframe);
         }
       }
