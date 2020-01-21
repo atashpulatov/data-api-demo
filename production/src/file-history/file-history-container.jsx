@@ -18,7 +18,7 @@ import './settings-list.scss';
 import { ButtonPopover } from './button-popover';
 import { startLoading, stopLoading } from '../navigation/navigation-tree-actions';
 
-export class FileHistoryContainerHOC extends React.Component {
+export class FileHistoryContainerNotConnected extends React.Component {
   constructor(props) {
     super(props);
     if (officeStoreService.isFileSecured()) {
@@ -135,19 +135,31 @@ export class FileHistoryContainerHOC extends React.Component {
             content={t('Refresh All Data')}
             mouseEnterDelay={1}
           >
-            <Button
-              id="refresh-all-btn"
-              className="refresh-all-btn"
-              style={{ float: 'right' }}
-              onClick={() => this.refreshAllAction(reportArray, refreshReportsArray)}
-              disabled={loading}
-            >
-              {!refreshingAll ? (
-                <MSTRIcon type="refresh" />
-              ) : (
-                <img width="12px" height="12px" src={loadingSpinner} alt={t('Report loading icon')} />
-                )}
-            </Button>
+            { !refreshingAll ? (
+              <div
+                aria-label="Refresh All button"
+                role="button"
+                tabIndex={0}
+                id="refresh-all-btn"
+                className="refresh-all-btn icon-align"
+                onClick={() => this.refreshAllAction(reportArray, refreshReportsArray)}
+                onKeyPress={() => this.refreshAllAction(reportArray, refreshReportsArray)}
+                disabled={loading}
+              >
+                <div className="mstr-icon-refresh-all">
+                  <MSTRIcon type="refresh" />
+                </div>
+              </div>
+            ) : (
+              <div className="spinner-all-icon icon-align">
+                <img
+                  width="12px"
+                  height="12px"
+                  src={loadingSpinner}
+                  alt={t("Report loading icon")}
+                />
+              </div>
+            )}
           </ButtonPopover>
         </span>
         <div role="list" className="tables-container">
@@ -173,7 +185,7 @@ export class FileHistoryContainerHOC extends React.Component {
   }
 }
 
-FileHistoryContainerHOC.propTypes = {
+FileHistoryContainerNotConnected.propTypes = {
   loading: PropTypes.bool,
   refreshingAll: PropTypes.bool,
   isSecured: PropTypes.bool,
@@ -186,12 +198,11 @@ FileHistoryContainerHOC.propTypes = {
   t: PropTypes.func
 };
 
-FileHistoryContainerHOC.defaultProps = { t: (text) => text, };
+FileHistoryContainerNotConnected.defaultProps = { t: (text) => text, };
 
-function mapStateToProps({ officeReducer, historyReducer }) {
+function mapStateToProps({ officeReducer }) {
   return {
     reportArray: officeReducer.reportArray,
-    project: historyReducer.project,
     refreshingAll: officeReducer.isRefreshAll,
     isSecured: officeReducer.isSecured,
   };
@@ -204,7 +215,7 @@ const mapDispatchToProps = {
   stopLoading,
 };
 
-const WrappedFileHistoryContainer = fileHistoryContainerHOC(FileHistoryContainerHOC);
+const WrappedFileHistoryContainer = fileHistoryContainerHOC(FileHistoryContainerNotConnected);
 
 export const FileHistoryContainer = connect(mapStateToProps,
   mapDispatchToProps)(withTranslation('common')(WrappedFileHistoryContainer));

@@ -2,7 +2,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { mount, shallow } from 'enzyme';
 import { Home, _Home } from '../../home/home';
-import { HeaderHOC } from '../../home/header';
+import { HeaderNotConnected } from '../../home/header';
 import { sessionHelper } from '../../storage/session-helper';
 import { reduxStore } from '../../store';
 import { homeHelper } from '../../home/home-helper';
@@ -109,7 +109,7 @@ describe('Home', () => {
     it('should properly set header values', () => {
       // given
       // when
-      const headerWrapper = mount(<HeaderHOC />);
+      const headerWrapper = mount(<HeaderNotConnected />);
       // then
       expect(headerWrapper.props('userInitials')).toBeTruthy();
       expect(headerWrapper.props('userFullName')).toBeTruthy();
@@ -122,7 +122,7 @@ describe('Home', () => {
           <Home />
         </Provider>,
       );
-      const headerWrapper = mount(<HeaderHOC />);
+      const headerWrapper = mount(<HeaderNotConnected />);
       // then
       expect(headerWrapper.props('userInitials')).toBeTruthy();
       expect(headerWrapper.props('userFullName')).toBeTruthy();
@@ -131,7 +131,7 @@ describe('Home', () => {
       // given
 
       // when
-      const headerWrapper = mount(<HeaderHOC />);
+      const headerWrapper = mount(<HeaderNotConnected />);
       // then
       const imageWrapper = headerWrapper.find('#profileImage');
       const nameWrapper = headerWrapper.find('.header-name');
@@ -144,7 +144,7 @@ describe('Home', () => {
       // given
 
       // when
-      const headerWrapper = mount(<HeaderHOC />);
+      const headerWrapper = mount(<HeaderNotConnected />);
       headerWrapper.setProps({ userInitials: null });
       // then
       const imageWrapper = headerWrapper.find('#profile-image');
@@ -154,7 +154,7 @@ describe('Home', () => {
       // given
 
       // when
-      const headerWrapper = mount(<HeaderHOC />);
+      const headerWrapper = mount(<HeaderNotConnected />);
       headerWrapper.setProps({ userInitials: 'n' });
       // then
       const imageWrapper = headerWrapper.find('#initials');
@@ -164,7 +164,7 @@ describe('Home', () => {
       // given
       const isSettings = true;
       // when
-      const headerWrapper = shallow(<HeaderHOC isSettings={isSettings} />);
+      const headerWrapper = shallow(<HeaderNotConnected isSettings={isSettings} />);
       // then
       expect(headerWrapper.contains(<SettingsMenu />)).toBe(true);
     });
@@ -172,14 +172,14 @@ describe('Home', () => {
       // given
       const isSettings = false;
       // when
-      const headerWrapper = mount(<HeaderHOC isSettings={isSettings} />);
+      const headerWrapper = mount(<HeaderNotConnected isSettings={isSettings} />);
       // then
       expect(headerWrapper.contains(<SettingsMenu />)).toBe(false);
     });
     it('should change isSettings flag when button settings is clicked', () => {
       // given
       const mockToggle = jest.fn();
-      const headerWrapper = mount(<HeaderHOC isSettings={false} isConfirm={false} toggleIsSettingsFlag={mockToggle} />);
+      const headerWrapper = mount(<HeaderNotConnected isSettings={false} isConfirm={false} toggleIsSettingsFlag={mockToggle} />);
       const buttonWrapper = headerWrapper.find('Button .settings-btn');
       const mockToggleSettings = jest.spyOn(headerWrapper.instance(), 'toggleSettings');
       headerWrapper.instance().forceUpdate();
@@ -195,7 +195,7 @@ describe('Home', () => {
         map[event] = cb;
       });
       const mockToggle = jest.fn();
-      shallow(<HeaderHOC isSettings toggleIsSettingsFlag={mockToggle} />);
+      shallow(<HeaderNotConnected isSettings toggleIsSettingsFlag={mockToggle} />);
       // when
       map.click({ target: { classList: { contains: () => false, }, }, });
       // then
@@ -208,7 +208,7 @@ describe('Home', () => {
         map[event] = cb;
       });
       const mockToggle = jest.fn();
-      shallow(<HeaderHOC isSettings toggleIsSettingsFlag={mockToggle} />);
+      shallow(<HeaderNotConnected isSettings toggleIsSettingsFlag={mockToggle} />);
       // when
       map.keyup({ keyCode: 27 });
       // then
@@ -218,7 +218,7 @@ describe('Home', () => {
     it('should unregister event listeners when unmounting component', () => {
       // given
       document.removeEventListener = jest.fn();
-      const headerWrapper = shallow(<HeaderHOC />);
+      const headerWrapper = shallow(<HeaderNotConnected />);
       // when
       headerWrapper.unmount();
       // then
@@ -232,7 +232,7 @@ describe('Home', () => {
       document.removeEventListener = jest.fn();
       document.addEventListener = jest.fn();
 
-      const wrapper = shallow(<HeaderHOC {...props} />);
+      const wrapper = shallow(<HeaderNotConnected {...props} />);
 
       // when
       wrapper.instance().shouldComponentUpdate(nextProps);
@@ -248,7 +248,7 @@ describe('Home', () => {
       document.removeEventListener = jest.fn();
       document.addEventListener = jest.fn();
 
-      const wrapper = shallow(<HeaderHOC {...props} />);
+      const wrapper = shallow(<HeaderNotConnected {...props} />);
 
       // when
       wrapper.instance().shouldComponentUpdate(nextProps);

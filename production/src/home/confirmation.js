@@ -9,7 +9,7 @@ import { toggleSecuredFlag, toggleIsConfirmFlag, toggleIsClearingFlag } from '..
 import { errorService } from '../error/error-handler';
 import { notificationService } from '../notification/notification-service';
 
-export const ConfirmationHOC = ({ reportArray, toggleSecuredFlag, toggleIsConfirmFlag, toggleIsClearingFlag, t }) => {
+export const ConfirmationNotConnected = ({ reportArray, toggleSecuredFlag, toggleIsConfirmFlag, toggleIsClearingFlag, t }) => {
   useEffect(() => {
     const ua = window.navigator.userAgent;
     // this is fix IE11 - it didn't handle z-index properties correctly
@@ -94,7 +94,7 @@ export const ConfirmationHOC = ({ reportArray, toggleSecuredFlag, toggleIsConfir
   );
 };
 
-ConfirmationHOC.propTypes = {
+ConfirmationNotConnected.propTypes = {
   reportArray: PropTypes.arrayOf(PropTypes.shape({})),
   toggleSecuredFlag: PropTypes.func,
   toggleIsConfirmFlag: PropTypes.func,
@@ -102,7 +102,7 @@ ConfirmationHOC.propTypes = {
   t: PropTypes.func
 };
 
-ConfirmationHOC.defaultProps = { t: (text) => text, };
+ConfirmationNotConnected.defaultProps = { t: (text) => text, };
 
 function mapStateToProps({ officeReducer }) {
   return { reportArray: officeReducer.reportArray };
@@ -114,4 +114,4 @@ const mapDispatchToProps = {
   toggleIsClearingFlag,
 };
 
-export const Confirmation = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(ConfirmationHOC));
+export const Confirmation = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(ConfirmationNotConnected));

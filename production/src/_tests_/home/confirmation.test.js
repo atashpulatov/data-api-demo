@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import { ConfirmationHOC } from '../../home/confirmation';
+import { ConfirmationNotConnected } from '../../home/confirmation';
 import { officeApiHelper } from '../../office/office-api-helper';
 import { errorService } from '../../error/error-handler';
 
@@ -26,7 +26,7 @@ describe('Confirmation', () => {
     const mockToggleIsClearingFlag = jest.fn();
     const mockToggleSecuredFlag = jest.fn();
     const mockReportArray = createMockFilesArray();
-    const confirmationWrapper = mount(<ConfirmationHOC
+    const confirmationWrapper = mount(<ConfirmationNotConnected
       reportArray={mockReportArray}
       isSecured={false}
       toggleIsConfirmFlag={mockToggleIsConfirmFlag}
@@ -58,16 +58,16 @@ describe('Confirmation', () => {
     jest.spyOn(officeApiHelper, 'getTable').mockImplementationOnce(() => { throw error; });
     jest.spyOn(errorService, 'handleError').mockImplementationOnce(() => { });
     const clearErrors = [];
-    const reportName = 'Test';
+    const chosenObjectName = 'Test';
     const returnValue = {};
     errorService.handleError.mockReturnValueOnce(() => returnValue);
-    clearErrors.push({ reportName, returnValue });
+    clearErrors.push({ chosenObjectName, returnValue });
 
     const mockToggleIsConfirmFlag = jest.fn();
     const mockToggleIsClearingFlag = jest.fn();
     const mockToggleSecuredFlag = jest.fn();
     const mockReportArray = createMockFilesArray();
-    const confirmationWrapper = mount(<ConfirmationHOC
+    const confirmationWrapper = mount(<ConfirmationNotConnected
       reportArray={mockReportArray}
       isSecured={false}
       toggleIsConfirmFlag={mockToggleIsConfirmFlag}
@@ -97,7 +97,7 @@ describe('Confirmation', () => {
     const mockToggleIsClearingFlag = jest.fn();
     const mockToggleSecuredFlag = jest.fn();
     const mockReportArray = createMockFilesArray();
-    const confirmationWrapper = mount(<ConfirmationHOC
+    const confirmationWrapper = mount(<ConfirmationNotConnected
       reportArray={mockReportArray}
       isSecured={false}
       toggleIsConfirmFlag={mockToggleIsConfirmFlag}
@@ -131,7 +131,7 @@ describe('Confirmation', () => {
     const mockToggleIsClearingFlag = jest.fn();
     const mockToggleSecuredFlag = jest.fn();
     const mockReportArray = createMockFilesArray();
-    const confirmationWrapper = mount(<ConfirmationHOC
+    const confirmationWrapper = mount(<ConfirmationNotConnected
       reportArray={mockReportArray}
       isSecured={false}
       toggleIsConfirmFlag={mockToggleIsConfirmFlag}
@@ -151,7 +151,7 @@ describe('Confirmation', () => {
   it('should set isConfirm flag to false when Cancel is clicked', async () => {
     // given
     const mockToggleIsConfirmFlag = jest.fn();
-    const confirmationWrapper = mount(<ConfirmationHOC
+    const confirmationWrapper = mount(<ConfirmationNotConnected
       isSecured={false}
       toggleIsConfirmFlag={mockToggleIsConfirmFlag}
     />);

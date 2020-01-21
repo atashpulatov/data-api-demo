@@ -2,10 +2,10 @@ export const selectorProperties = {
   /**
      * propertyAlias: propertyName,
      */
-  envUrl: 'url',
-  token: 'authToken',
+  envUrl: 'envUrl',
+  authToken: 'authToken',
   projectId: 'projectId',
-  reportId: 'reportId',
+  chosenObjectId: 'chosenObjectId',
   triggerUpdate: 'triggerUpdate',
   commandOk: 'command_ok',
   commandSecondary: 'command_secondary',
