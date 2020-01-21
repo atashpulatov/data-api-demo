@@ -138,7 +138,8 @@ describe('AttributeSelectorWindow', () => {
       preparedInstanceId: 'instanceId',
     };
 
-    const editedObject = { subtotalsInfo: { importSubtotal: true } };
+    const displayAttrFormNames = 'Automatic';
+    const editedObject = { subtotalsInfo: { importSubtotal: true }, displayAttrFormNames };
     const importSubtotal = true;
     // when
     const componentWrapper = shallow(
@@ -152,7 +153,7 @@ describe('AttributeSelectorWindow', () => {
     componentWrapper.instance().onTriggerUpdate(1, 2, 3, 4);
     // then
     expect(spyMethod).toHaveBeenCalledWith(
-      selectorProperties.commandOnUpdate, 1, 2, 3, 4, chosenObject.chosenObjectName, chosenObject.preparedInstanceId, chosenObject.promptsAnswers, { importSubtotal }
+      selectorProperties.commandOnUpdate, 1, 2, 3, 4, chosenObject.chosenObjectName, chosenObject.preparedInstanceId, chosenObject.promptsAnswers, { importSubtotal }, displayAttrFormNames
     );
   });
 
@@ -169,8 +170,8 @@ describe('AttributeSelectorWindow', () => {
       promptsAnswers: 'promptsAnswers',
       preparedInstanceId: 'instanceId',
     };
-    const editedObject = { subtotalsInfo: { importSubtotal: true } };
-
+    const displayAttrFormNames = 'Automatic';
+    const editedObject = { subtotalsInfo: { importSubtotal: true }, displayAttrFormNames };
 
     const importSubtotal = true;
 
@@ -187,7 +188,7 @@ describe('AttributeSelectorWindow', () => {
 
     // then
     expect(spyMethod).toHaveBeenCalledWith(
-      selectorProperties.commandOnUpdate, 1, 2, 3, 4, 5, chosenObject.preparedInstanceId, chosenObject.promptsAnswers, { importSubtotal }
+      selectorProperties.commandOnUpdate, 1, 2, 3, 4, 5, chosenObject.preparedInstanceId, chosenObject.promptsAnswers, { importSubtotal }, displayAttrFormNames
     );
   });
 
