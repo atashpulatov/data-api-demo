@@ -37,28 +37,6 @@ export default class _EmbeddedDossier extends React.Component {
   }
 
   /**
-   * Watches container for child addition and runs callback in case an iframe was added
-   * @param {*} container
-   * @param {*} callback
-   */
-  watchForIframeAddition(container, callback) {
-    const config = { childList: true };
-    const onMutation = (mutationList) => {
-      for (const mutation of mutationList) {
-        if (mutation.addedNodes && mutation.addedNodes.length && mutation.addedNodes[0].nodeName === 'IFRAME') {
-          const iframe = mutation.addedNodes[0];
-          console.log('iframe added');
-          callback(iframe);
-        }
-      }
-    };
-    const observer = new MutationObserver(onMutation);
-    observer.observe(container, config);
-  }
-
-  isLoginPage = (document) => document.URL.includes('embeddedLogin.jsp');
-
-  /**
    * This function is called after a child (iframe) is added into mbedded dossier container
    */
   onIframeLoad = (iframe) => {
@@ -74,19 +52,6 @@ export default class _EmbeddedDossier extends React.Component {
       }
     });
   };
-
-  /**
-   * This function applies an external css file to a document
-   */
-  applyFile = (_document, fileLocation) => {
-    const script = _document.createElement('script');
-    script.src = fileLocation;
-    console.log(fileLocation);
-    if (_document) {
-      const title = _document.head.getElementsByTagName('title')[0];
-      _document.head.insertBefore(script, title);
-    }
-  }
 
   /**
  * Handles the event throwed after new vizualization selection.
@@ -105,6 +70,21 @@ export default class _EmbeddedDossier extends React.Component {
       visualizationKey: payloadVisKey
     };
     handleSelection(this.dossierData);
+  }
+
+  isLoginPage = (document) => document.URL.includes('embeddedLogin.jsp');
+
+  /**
+   * This function applies an external script file to a document
+   */
+  applyFile = (_document, fileLocation) => {
+    const script = _document.createElement('script');
+    script.src = fileLocation;
+    console.log(fileLocation);
+    if (_document) {
+      const title = _document.head.getElementsByTagName('title')[0];
+      _document.head.insertBefore(script, title);
+    }
   }
 
   loadEmbeddedDossier = async (container) => {
@@ -204,6 +184,26 @@ export default class _EmbeddedDossier extends React.Component {
       },
     };
     this.embeddedDossier = await microstrategy.dossier.create(props);
+  }
+
+  /**
+   * Watches container for child addition and runs callback in case an iframe was added
+   * @param {*} container
+   * @param {*} callback
+   */
+  watchForIframeAddition(container, callback) {
+    const config = { childList: true };
+    const onMutation = (mutationList) => {
+      for (const mutation of mutationList) {
+        if (mutation.addedNodes && mutation.addedNodes.length && mutation.addedNodes[0].nodeName === 'IFRAME') {
+          const iframe = mutation.addedNodes[0];
+          console.log('iframe added');
+          callback(iframe);
+        }
+      }
+    };
+    const observer = new MutationObserver(onMutation);
+    observer.observe(container, config);
   }
 
   promptsAnsweredHandler(promptsAnswers) {
