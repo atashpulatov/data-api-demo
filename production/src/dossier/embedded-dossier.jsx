@@ -6,7 +6,7 @@ import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { popupHelper } from '../popup/popup-helper';
 import { DEFAULT_PROJECT_NAME } from '../storage/navigation-tree-reducer';
 
-const { microstrategy } = window;
+const { microstrategy, Office } = window;
 
 const { createDossierInstance, answerDossierPrompts } = mstrObjectRestService;
 
@@ -22,12 +22,70 @@ export default class _EmbeddedDossier extends React.Component {
   }
 
   componentDidMount() {
+    // DE158588 - Not able to open dossier in embedding api on excel desktop in windows
+    const isOfficeOnline = Office.context ? Office.context.platform === Office.PlatformType.OfficeOnline : false;
+    const isIE = /Trident\/|MSIE /.test(window.navigator.userAgent);
+    if (!isOfficeOnline && isIE) {
+      this.watchForIframeAddition(this.container.current, this.onIframeLoad);
+    }
     this.loadEmbeddedDossier(this.container.current);
   }
 
   componentWillUnmount() {
     this.msgRouter.removeEventhandler('onVizSelectionChanged', this.onVizSelectionHandler);
     this.msgRouter.removeEventhandler('onPromptAnswered', this.promptsAnsweredHandler);
+  }
+
+  /**
+   * Watches container for child addition and runs callback in case an iframe was added
+   * @param {*} container
+   * @param {*} callback
+   */
+  watchForIframeAddition(container, callback) {
+    const config = { childList: true };
+    const onMutation = (mutationList) => {
+      for (const mutation of mutationList) {
+        if (mutation.addedNodes && mutation.addedNodes.length && mutation.addedNodes[0].nodeName === 'IFRAME') {
+          const iframe = mutation.addedNodes[0];
+          console.log('iframe added');
+          callback(iframe);
+        }
+      }
+    };
+    const observer = new MutationObserver(onMutation);
+    observer.observe(container, config);
+  }
+
+  isLoginPage = (document) => document.URL.includes('embeddedLogin.jsp');
+
+  /**
+   * This function is called after a child (iframe) is added into mbedded dossier container
+   */
+  onIframeLoad = (iframe) => {
+    iframe.addEventListener('load', () => {
+      console.log('iframe load event');
+      const embeddedDocument = iframe.contentDocument;
+      this.embeddedDocument = embeddedDocument;
+      if (!this.isLoginPage(embeddedDocument)) {
+        console.log('not a login page');
+        const fileLocation = window.location.origin
+          + window.location.pathname.replace('index.html', 'javascript/mshtmllib.js');
+        this.applyFile(embeddedDocument, fileLocation);
+      }
+    });
+  };
+
+  /**
+   * This function applies an external css file to a document
+   */
+  applyFile = (_document, fileLocation) => {
+    const script = _document.createElement('script');
+    script.src = fileLocation;
+    console.log(fileLocation);
+    if (_document) {
+      const title = _document.head.getElementsByTagName('title')[0];
+      _document.head.insertBefore(script, title);
+    }
   }
 
   /**

@@ -1,11 +1,12 @@
-/* eslint-disable*/
+/* eslint-disable */
 
-/** 
+/**
  * History API's pushState & replaceState are nullified by Office.js
  * https://github.com/OfficeDev/office-js/issues/429
- * 
+ *
  * In mshtml (IWebBrowser2) used in Windows Excel Desktop both methods are not working.
  * In order to replace them we need to delete them from the window scope and apply a polyfill.
+ * On the Excel side we detect Excel Desktop and IE 11 before loading the script.
  */
 if (window.history.__proto__.replaceState) delete window.history.__proto__.replaceState;
 if (window.history.__proto__.pushState) delete window.history.__proto__.pushState;
