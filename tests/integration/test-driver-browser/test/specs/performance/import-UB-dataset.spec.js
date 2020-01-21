@@ -12,29 +12,31 @@ describe('Smart Folder - IMPORT -', function() {
   const objectName = 'Platform Analytics Cube';
   let totalAddedImportingTime = 0;
   let numberOfExecutions = 0;
-  const serverVersion = 'Update 3'
-  const rows = 5000;
-  const columns = 15;
-  const clientCPUCores = 6;
-  const numberOfClicks = 10;
-  let e2eTime = 0;
-  const inputFilePath = './test/specs/performance/sample.xml'
-  const outputFilePath = './test/specs/performance/manifest.xml'
-  const pathToManifest = __dirname+'\\manifest.xml';
+  const numberOfClicks = 15;
+  const sampleManifestFilePath = './test/specs/performance/sampleManifest.xml';
+  const outputManifestFilePath = './test/specs/performance/manifest.xml';
+  const csvFilePath = './test/specs/performance/UB.csv';
+  // const pathToManifest = __dirname+'\\manifest.xml'; // This is for Windows
+  const pathToManifest = __dirname+'/manifest.xml'; // This is for Mac
+  const testCaseID = 'TC123456'; // TODO:
+  const testCaseName = 'User exports SLS Dossier from Library Web'; // TODO:
+  const testCaseLink = 'https://rally1.rallydev.com/#/123456/detail/testcase/123456'; // TODO:
+  let startTimestamp = 0;
+  let endTimestamp = 0;
+  const webServerEnvironmentID = process.env.USERENV;
 
-
-  function writeDataIntoFile(newEnv) {
+  function createManifestFile(newEnv) {
     var xmlContent;
-    fs.readFile(inputFilePath, 'utf8', function(err, content) {
+    fs.readFile(sampleManifestFilePath, 'utf8', function(err, content) {
       if (err) throw err;
-      xmlContent = content.replace(/173736/gi, newEnv);
-      fs.writeFile(outputFilePath, xmlContent, function(err) {
+      xmlContent = content.replace(/env-173736/gi, newEnv); // 173736 is the number of the environment of the sample manifest file
+      fs.writeFile(outputManifestFilePath, xmlContent, function(err) {
         if (err) throw err;
       });
     });
   };
 
-  function importObjectAndGetTotalTime(){
+  function importUBObjectAndGetTotalTime(){
     switchToPluginFrame();
     PluginPopup.searchForObject(objectName);
     browser.pause(500);
@@ -52,6 +54,7 @@ describe('Smart Folder - IMPORT -', function() {
       const popupDiv = $('#WACDialogPanel').isExisting();
       if (!popupDiv) {
         if (! $('#WACDialogPanel').isExisting()) {
+          waitForNotification();
           popupExists = false;
         }
       }
@@ -64,29 +67,54 @@ describe('Smart Folder - IMPORT -', function() {
 
   }
 
+  function getFormattedDate() {
+    var date = new Date();
+    var str = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " +  date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + ":" + date.getMilliseconds();
+  
+    return str;
+  }
+
+  // function getData(averageImportingTime, testCaseName, testCaseLink, startTimestamp, endTimestamp, numberOfClicks){
+  //       const data = {
+  //     'Test Case ID': testCaseID,
+  //     'Test Case Name': testCaseName,
+  //     'Test Case Link': testCaseLink,
+  //     'Start Timestamp': startTimestamp,
+  //     'End Timestamp': endTimestamp,
+  //     'NumberOfClicks': numberOfClicks,
+  //     'Performance': averageImportingTime,
+  //   };
+  //   return data;
+  // }
+
   beforeAll( () => {
     browser.setWindowSize(1500,900);
-
+    startTimestamp = getFormattedDate();
     OfficeWorksheet.openExcelHome();
     const url = browser.getUrl();
     if (url.includes('login.microsoftonline')) {
       OfficeLogin.login('test3@mstrtesting.onmicrosoft.com', 'FordFocus2019');
     }
     OfficeWorksheet.createNewWorkbook();
-    writeDataIntoFile("174770");
+    createManifestFile(webServerEnvironmentID);
     OfficeWorksheet.uploadAndOpenPlugin(pathToManifest);
     PluginRightPanel.loginToPlugin('administrator', '');
-
   });
 
   afterAll( () => {
-    if (numberOfExecutions == 3) {
-      const averageImportingTime = totalAddedImportingTime / 3;
+    endTimestamp = getFormattedDate();
+    if (numberOfExecutions == 1) {
+      const averageImportingTime = totalAddedImportingTime / 1;
       console.log('Preparing performance data');
-      // const data = getJsonData(averageImportingTime, serverVersion, rows, columns, clientCPUCores, numberOfExecutions, e2eTime, numberOfClicks);
-      // console.log('Saving performance data');
-      // writeDataIntoFile(data, 'specs/performance/performanceDataOutput.json');
-      // console.log('Performance data saved');
+      // const data = getData(averageImportingTime, testCaseName, testCaseLink, startTimestamp, endTimestamp, numberOfClicks)
+      const stringOfData = `\n${testCaseID},${testCaseName},${testCaseLink},${startTimestamp},${endTimestamp},${numberOfClicks},${averageImportingTime}`;
+
+      console.log('Saving performance data');
+      fs.appendFile(csvFilePath, stringOfData, (err) => {
+        if (err) throw err;
+        console.log('The data was appended to CSV file!');
+      });
+      console.log('Performance data saved');
 
       console.log(averageImportingTime);
     }
@@ -96,54 +124,23 @@ describe('Smart Folder - IMPORT -', function() {
   });
   
     it('Import object selecting attributes and metrics', () => {
-    // should import a report in the first sheet and log the E2E time
-    const beginE2E = Date.now();
+    // should import a report in the first sheet and take the time it toook it to import it
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
-    totalAddedImportingTime += importObjectAndGetTotalTime();
-    numberOfExecutions++;
-    const endE2E = Date.now();
-    e2eTime = (((endE2E - beginE2E) / 1000));
-
-    OfficeWorksheet.openNewSheet();
-    PluginRightPanel.clickAddDataButton();
-    totalAddedImportingTime += importObjectAndGetTotalTime();
+    totalAddedImportingTime += importUBObjectAndGetTotalTime();
     numberOfExecutions++;
 
-    OfficeWorksheet.openNewSheet();
-    PluginRightPanel.clickAddDataButton();
-    totalAddedImportingTime += importObjectAndGetTotalTime();
-    numberOfExecutions++;
+    // OfficeWorksheet.openNewSheet();
+    // PluginRightPanel.clickAddDataButton();
+    // totalAddedImportingTime += importUBObjectAndGetTotalTime();
+    // numberOfExecutions++;
 
+    // OfficeWorksheet.openNewSheet();
+    // PluginRightPanel.clickAddDataButton();
+    // totalAddedImportingTime += importUBObjectAndGetTotalTime();
+    // numberOfExecutions++;
 
     browser.pause(5000);
-    // waitForNotification();
   });
-
-
-  // it('Import object (1st time)', () => {
-  //   // should import a report in the first sheet and log the E2E time
-  //   const beginE2E = Date.now();
-  //   OfficeWorksheet.selectCell('A1');
-  //   PluginRightPanel.clickImportDataButton();
-  //   totalAddedImportingTime += PluginPopup.importObjectAndGetTotalTime(objectName);
-  //   numberOfExecutions++;
-  //   const endE2E = Date.now();
-  //   e2eTime = (((endE2E - beginE2E) / 1000));
-  // });
-  // it('Import object (2nd time)', () => {
-  //   // should import a report in the second sheet
-  //   OfficeWorksheet.openNewSheet();
-  //   PluginRightPanel.clickAddDataButton();
-  //   totalAddedImportingTime += PluginPopup.importObjectAndGetTotalTime(objectName);
-  //   numberOfExecutions++;
-  // });
-  // it('Import object (3rd time)', () => {
-  //   // should import a report in the third sheet
-  //   OfficeWorksheet.openNewSheet();
-  //   PluginRightPanel.clickAddDataButton();
-  //   totalAddedImportingTime += PluginPopup.importObjectAndGetTotalTime(objectName);
-  //   numberOfExecutions++;
-  // });
 });
 

@@ -25,6 +25,9 @@ exports.config = {
   test: [
     './test/specs/release-validation/test/*.js'
   ],
+  UB: [
+    './test/specs/performance/import-UB-dataset.spec.js'
+  ],
   },
   // Patterns to exclude.
   exclude: [
@@ -132,7 +135,7 @@ exports.config = {
   
   //
   // The number of times to retry the entire specfile when it fails as a whole
-  specFileRetries: 0,
+  specFileRetries: 3,
   //
   // Test reporter for stdout.
   // The only one supported by default is 'dot'

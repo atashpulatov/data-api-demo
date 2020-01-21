@@ -11,20 +11,46 @@ describe('Smart Folder - IMPORT -', function() {
   const inputFilePath = './test/specs/performance/sample.xml'
   const outputFilePath = './test/specs/performance/UB.csv'
   
-  function writeDataIntoFile(data, outputFilePath) {
-    fs.readFile(outputFilePath, { encoding : 'latin1' }, function(err, content) {
-      if (err) throw err;
-      // const parseJson = JSON.parse(content);
-      console.log(content);
-      // const parseJson = content;
-      // parseJson.push(data);
-      // fs.writeFile(outputFilePath, parseJson, function(err) {
-      //   if (err) throw err;
-      // });
-    });
-  };
+  // function writeDataIntoFile(data, outputFilePath) {
+  //   fs.readFile(outputFilePath, { encoding : 'latin1' }, function(err, content) {
+  //     if (err) throw err;
+  //     // const parseJson = JSON.parse(content);
+  //     console.log(content);
+  //     // const parseJson = content;
+  //     // parseJson.push(data);
+  //     // fs.writeFile(outputFilePath, parseJson, function(err) {
+  //     //   if (err) throw err;
+  //     // });
+  //   });
+  // };
 
-  beforeAll( () => {
+//   function processData(allText) {
+//     var allTextLines = allText.split(/\r\n|\n/);
+//     var headers = allTextLines[0].split(',');
+//     var lines = [];
+
+//     for (var i=1; i<allTextLines.length; i++) {
+//         var data = allTextLines[i].split(',');
+//         if (data.length == headers.length) {
+
+//             var tarr = [];
+//             for (var j=0; j<headers.length; j++) {
+//                 tarr.push(headers[j]+":"+data[j]);
+//             }
+//             lines.push(tarr);
+//         }
+//     }
+// console.log(lines);
+// }
+
+function getFormattedDate() {
+  var date = new Date();
+  var str = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " +  date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + ":" + date.getMilliseconds();
+
+  return str;
+}
+
+  beforeEach( () => {
     // jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
     browser.setWindowSize(1500,900);
 
@@ -33,7 +59,7 @@ describe('Smart Folder - IMPORT -', function() {
 
   });
 
-  afterAll( () => {
+  afterEach( () => {
   });
   
   it('Import object selecting attributes and metrics', () => {
@@ -48,10 +74,31 @@ describe('Smart Folder - IMPORT -', function() {
     //   'Performance': performance,
     // };
 
-    // const str = `${testCaseID},${testCaseName},${testCaseLink},${startTimestamp},${endTimestamp},${numberOfClicks},${performance}`;
-    const str = 'TC333333,Max Data Points for Bar Chart with 5 sec max,https://rally1.rallydev.com/#/333333/detail/testcase/333333,2019-11-13 16:21:29.384989,2019-11-13 16:22:38.366499,2';
+    // const str = `\n${testCaseID},${testCaseName},${testCaseLink},${startTimestamp},${endTimestamp},${numberOfClicks},${performance}`;
+    const jsonData = '\nTC333333,Max Data Points for Bar Chart with 5 sec max,https://rally1.rallydev.com/#/333333/detail/testcase/333333,2019-11-13 16:21:29.384989,2019-11-13 16:22:38.366499,2';
 
-    writeDataIntoFile(str, outputFilePath);
+
+    // const data = "heading1,heading2,heading3,heading4,heading5\nvalue1_1,value2_1,value3_1,value4_1,value5_1\nvalue1_2,value2_2,value3_2,value4_2,value5_2"; 
+
+    // processData(data);
+
+//     const csv = json2csv.Parse(jsonData);
+// fs.appendFile('./test/specs/performance/UB.csv', csv, (err) => {
+//   if (err) console.error('Couldn\'t append the data');
+//   console.log('The data was appended to file!');
+// });
+
+console.log(getFormattedDate());
+
+console.log(process.env.USERENV);
+
+fs.appendFile('./test/specs/performance/UB.csv', jsonData, (err) => {
+  if (err) throw err;
+  console.log('The "data to append" was appended to file!');
+});
+
+// console.log('date is:');
+//   console.log(Date.now());
 
   });
 });

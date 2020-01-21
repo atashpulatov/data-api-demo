@@ -1,6 +1,4 @@
-Test Case ID,Test Case Name,Test Case Link,Start Timestamp,End Timestamp,Number of Clicks
-TC123456,User exports SLS Dossier from Library Web,https://rally1.rallydev.com/#/123456/detail/testcase/123456,%Y-%m-%d %H:%M:%S.%f,%Y-%m-%d %H:%M:%S.%f,3
-TC654321,User exports SLS Dossier from Library Web,https://rally1.rallydev.com/#/123456/detail/testcase/123456,YYYY-MM-DD HH:MM:SS.XXXXX,YYYY-MM-DD HH:MM:SS.XXXXX,4
-TC111111,User opens object and waits for it to render,https://rally1.rallydev.com/#/111111/detail/testcase/111111,YYYY-MM-DD HH:MM:SS.XXXXX,YYYY-MM-DD HH:MM:SS.XXXXX,3
-TC222222,Max Objects Objects Deleted from Library in 5s,https://rally1.rallydev.com/#/222222/detail/testcase/222222,YYYY-MM-DD HH:MM:SS.XXXXX,YYYY-MM-DD HH:MM:SS.XXXXX,2
-TC333333,Max Data Points for Bar Chart with 5 sec max,https://rally1.rallydev.com/#/333333/detail/testcase/333333,2019-11-13 16:21:29.384989,2019-11-13 16:22:38.366499,2
+Test Case ID,Test Case Name,Test Case Link,Start Timestamp,End Timestamp,Number of Clicks,Performance
+TC123456,User exports SLS Dossier from Library Web,https://rally1.rallydev.com/#/123456/detail/testcase/123456,%Y-%m-%d %H:%M:%S.%f,%Y-%m-%d %H:%M:%S.%f,3,23.791
+TC123456,User exports SLS Dossier from Library Web,https://rally1.rallydev.com/#/123456/detail/testcase/123456,2020-1-21 13:53:51:697,2020-1-21 13:54:59:413,15,2.099
+TC123456,User exports SLS Dossier from Library Web,https://rally1.rallydev.com/#/123456/detail/testcase/123456,2020-1-21 13:59:57:916,2020-1-21 14:1:24:125,15,29.149

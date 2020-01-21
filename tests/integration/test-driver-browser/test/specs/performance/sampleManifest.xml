@@ -14,7 +14,7 @@
     <ProviderName>MicroStrategy Inc.</ProviderName>
     <DefaultLocale>en-US</DefaultLocale>
     <!-- The display name of your add-in. Used on the store and various places of the Office UI such as the add-ins dialog. -->
-    <DisplayName DefaultValue="173736" />
+    <DisplayName DefaultValue="env-173736" />
     <Description DefaultValue="New plugin to insert data from MicroStrategy into Microsoft Office products."/>
 
     <!-- Icon for your add-in. Used on installation screens and the add-ins dialog. -->
@@ -128,7 +128,7 @@
             </bt:Urls>
             <!-- ShortStrings max characters==125. -->
             <bt:ShortStrings>
-                <bt:String id="MSTR.TaskpaneButton.Label" DefaultValue="173736" />
+                <bt:String id="MSTR.TaskpaneButton.Label" DefaultValue="env-173736" />
                 <bt:String id="MSTR.GroupMicroStrategy.Label" DefaultValue="MicroStrategy" />
                 <bt:String id="MSTR.GetStarted.Title" DefaultValue="MicroStrategy Office Client loaded" />
                 <bt:String id="MSTR.OfficeTab.Label" DefaultValue="MicroStrategy" />
