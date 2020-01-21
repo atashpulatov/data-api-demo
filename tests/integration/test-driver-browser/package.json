@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "sh ./test/specs/performance/startScript.sh",
+    "test": "rimraf ./allure-results && wdio wdio.conf.js",
     "report": "allure generate allure-results --clean ",
     "test-suite": "rimraf ./allure-results && wdio wdio.conf.js --suite",
-    "test-UB": "sh ./test/specs/performance/startScript.sh"
+    "test-UB": "rm -r -f ./allure-results && ./node_modules/.bin/wdio wdio.conf.js --suite UB --USERENV"
   },
   "author": "",
   "license": "MIT",

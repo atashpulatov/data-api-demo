@@ -23,7 +23,7 @@ describe('Smart Folder - IMPORT -', function() {
   const testCaseLink = 'https://rally1.rallydev.com/#/53987408409d/detail/testcase/362684441788';
   let startTimestamp = 0;
   let endTimestamp = 0;
-  const webServerEnvironmentID = process.env.USERENV;
+  const webServerEnvironmentID = process.argv[process.argv.length-1];
 
   function createManifestFile(newEnv) {
     var xmlContent;
@@ -89,6 +89,7 @@ describe('Smart Folder - IMPORT -', function() {
 
   beforeAll( () => {
     browser.setWindowSize(1500,900);
+    console.log(webServerEnvironmentID);
     startTimestamp = getFormattedDate();
     OfficeWorksheet.openExcelHome();
     const url = browser.getUrl();
