@@ -18,9 +18,9 @@ describe('Smart Folder - IMPORT -', function() {
   const csvFilePath = './test/specs/performance/UB.csv';
   // const pathToManifest = __dirname+'\\manifest.xml'; // This is for Windows
   const pathToManifest = __dirname+'/manifest.xml'; // This is for Mac
-  const testCaseID = 'TC123456'; // TODO:
-  const testCaseName = 'User exports SLS Dossier from Library Web'; // TODO:
-  const testCaseLink = 'https://rally1.rallydev.com/#/123456/detail/testcase/123456'; // TODO:
+  const testCaseID = 'TC60456';
+  const testCaseName = 'Universal Benchmarking for Excel plugin from Chrome Browser | PerBuild';
+  const testCaseLink = 'https://rally1.rallydev.com/#/53987408409d/detail/testcase/362684441788';
   let startTimestamp = 0;
   let endTimestamp = 0;
   const webServerEnvironmentID = process.env.USERENV;

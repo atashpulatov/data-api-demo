@@ -1,4 +1,1 @@
 Test Case ID,Test Case Name,Test Case Link,Start Timestamp,End Timestamp,Number of Clicks,Performance
-TC123456,User exports SLS Dossier from Library Web,https://rally1.rallydev.com/#/123456/detail/testcase/123456,%Y-%m-%d %H:%M:%S.%f,%Y-%m-%d %H:%M:%S.%f,3,23.791
-TC123456,User exports SLS Dossier from Library Web,https://rally1.rallydev.com/#/123456/detail/testcase/123456,2020-1-21 13:53:51:697,2020-1-21 13:54:59:413,15,2.099
-TC123456,User exports SLS Dossier from Library Web,https://rally1.rallydev.com/#/123456/detail/testcase/123456,2020-1-21 13:59:57:916,2020-1-21 14:1:24:125,15,29.149
