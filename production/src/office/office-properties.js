@@ -32,4 +32,33 @@ export const officeProperties = new Proxy({
     toggleRenderSettingsFlag: 'TOGGLE_RENDER_SETTINGS_FLAG',
     toggleIsClearingFlag: 'TOGGLE_IS_CLEARING_FLAG',
   },
+  displayAttrFormNames: {
+    automatic: 'AUTOMATIC',
+    showAttrNameOnce : 'SHOW_ATTR_NAME_ONCE',
+    formNameOnly: 'FORM_NAME_ONLY',
+    on: 'ON',
+    off: 'OFF',
+  },
+  displayAttrFormNamesOptions: [
+    {
+      value: 'AUTOMATIC',
+      displayName : 'Automatic',
+    },
+    {
+      value: 'SHOW_ATTR_NAME_ONCE',
+      displayName : 'Show attribute name once',
+    },
+    {
+      value: 'FORM_NAME_ONLY',
+      displayName : 'Form name only',
+    },
+    {
+      value: 'ON',
+      displayName : 'On',
+    },
+    {
+      value: 'OFF',
+      displayName : 'Off',
+    },
+  ]
 }, propsProxy);
