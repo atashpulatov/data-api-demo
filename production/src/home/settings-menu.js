@@ -147,9 +147,10 @@ async function logout(preLogout) {
     await sessionHelper.logOutRest();
     sessionHelper.logOut();
     if (DB.getIndexedDBSupport()) await preLogout();
-    sessionHelper.logOutRedirect();
   } catch (error) {
     errorService.handleError(error);
+  } finally {
+    sessionHelper.logOutRedirect();
   }
 }
 
