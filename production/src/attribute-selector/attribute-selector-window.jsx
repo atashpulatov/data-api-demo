@@ -27,12 +27,13 @@ export class AttributeSelectorWindowNotConnected extends Component {
   handleCancel = () => attributeSelectorHelpers.officeMessageParent(selectorProperties.commandCancel);
 
   onTriggerUpdate = (chosenObjectId, projectId, chosenObjectSubtype, body, chosenObjectName = this.props.chosenObject.chosenObjectName) => {
-    const { chosenObject, editedObject, importSubtotal } = this.props;
+    const { chosenObject, editedObject, importSubtotal, displayAttrFormNames } = this.props;
     const subtotalsInfo = {
       importSubtotal:editedObject.subtotalsInfo
         ? editedObject.subtotalsInfo.importSubtotal
         : importSubtotal
     };
+    const displayAttrFormNamesSet = editedObject.displayAttrFormNames || displayAttrFormNames;
     attributeSelectorHelpers.officeMessageParent(
       selectorProperties.commandOnUpdate,
       chosenObjectId,
@@ -43,6 +44,7 @@ export class AttributeSelectorWindowNotConnected extends Component {
       chosenObject.preparedInstanceId,
       chosenObject.promptsAnswers,
       subtotalsInfo,
+      displayAttrFormNamesSet
     );
   };
 
@@ -113,11 +115,12 @@ AttributeSelectorWindowNotConnected.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-  const { importSubtotal, ...chosenObject } = state.navigationTree;
+  const { importSubtotal, displayAttrFormNames, ...chosenObject } = state.navigationTree;
   return {
     mstrData: { ...state.popupStateReducer },
     chosenObject,
     importSubtotal,
+    displayAttrFormNames,
     editedObject: state.popupReducer.editedObject,
   };
 };
