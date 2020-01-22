@@ -37,7 +37,8 @@ export default class _EmbeddedDossier extends React.Component {
   }
 
   /**
-   * This function is called after a child (iframe) is added into mbedded dossier container
+   * This function is called after the embedded dossier iframe is added into the DOM
+   * @param {*} iframe
    */
   onIframeLoad = (iframe) => {
     iframe.addEventListener('load', () => {
@@ -70,10 +71,16 @@ export default class _EmbeddedDossier extends React.Component {
     handleSelection(this.dossierData);
   }
 
+  /**
+   * This function checks whether the content of embedded document is loginPage
+   * @param {*} _document
+   */
   isLoginPage = (document) => document.URL.includes('embeddedLogin.jsp');
 
   /**
-   * This function applies an external script file to a document
+   * This function applies an external script file to a embedded document
+   * @param {*} _document
+   * @param {*} fileLocation
    */
   applyFile = (_document, fileLocation) => {
     const script = _document.createElement('script');
@@ -184,7 +191,7 @@ export default class _EmbeddedDossier extends React.Component {
   }
 
   /**
-   * Watches container for child addition and runs callback in case an iframe was added
+   * Watches container for child addition and runs callback in case of iframe being added
    * @param {*} container
    * @param {*} callback
    */
