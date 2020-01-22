@@ -7,8 +7,9 @@ import {
 } from '../../popup/popup-actions';
 
 import { initialState, popupReducer } from '../../popup/popup-reducer';
+import { SWITCH_IMPORT_SUBTOTALS } from '../../navigation/navigation-tree-actions';
 
-describe.skip('Popup Reducer', () => {
+describe('Popup Reducer', () => {
   it('should return proper state in case of START_REPORT_LOADING action', () => {
     // given
     const action = {
@@ -55,7 +56,9 @@ describe.skip('Popup Reducer', () => {
   it('should return proper state in case of SET_PREPARED_REPORT action', () => {
     // given
     const instanceId = 'id';
-    const chosenObjectData = 'data';
+    const chosenObjectData = {
+      newData: 'data'
+    };
     const action = {
       type: SET_PREPARED_REPORT,
       instanceId,
@@ -65,5 +68,50 @@ describe.skip('Popup Reducer', () => {
     const newState = popupReducer(initialState, action);
     // then
     expect(newState).toEqual({ preparedInstance: instanceId, editedObject: chosenObjectData });
+  });
+
+  it('should return proper state in case of SWITCH_IMPORT_SUBTOTALS action, no initial subtotalsInfo', () => {
+    // given
+    const action = {
+      type: SWITCH_IMPORT_SUBTOTALS,
+      data: { newSubtotalProperty: 'testNewSubtotalProperty', },
+    };
+
+    initialState.editedObject = {};
+
+    // when
+    const newState = popupReducer(initialState, action);
+
+    // then
+    expect(newState).toEqual({ ...initialState, editedObject: {} });
+  });
+
+  it('should return proper state in case of SWITCH_IMPORT_SUBTOTALS action', () => {
+    // given
+    const action = {
+      type: SWITCH_IMPORT_SUBTOTALS,
+      data: { newSubtotalProperty: 'testNewSubtotalProperty', },
+    };
+
+    initialState.editedObject = {
+      subtotalsInfo: {
+        initialSubtotalProperty: 'testInitialSubtotalProperty'
+      }
+    };
+
+    const resultState = {
+      subtotalsInfo: {
+        importSubtotal: {
+          newSubtotalProperty: 'testNewSubtotalProperty'
+        },
+        initialSubtotalProperty: 'testInitialSubtotalProperty'
+      }
+    };
+
+    // when
+    const newState = popupReducer(initialState, action);
+
+    // then
+    expect(newState).toEqual({ ...initialState, editedObject: resultState });
   });
 });
