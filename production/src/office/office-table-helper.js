@@ -173,7 +173,7 @@ class OfficeTableHelper {
     let bindId;
     const { mstrTable } = instanceDefinition;
     const excelCompatibleTableName = mstrTable.name.replace(/(•|‼| |!|#|\$|%|&|'|\(|\)|\*|\+|,|-|\/|:|;|<|=|>|@|\^|`|\{|\||\}|~|¢|£|¥|¬|«|»)/g, '_');
-    const newOfficeTableName = tableName || `_${excelCompatibleTableName.slice(0, 241)}_${Date.now().toString()}`;
+    const newOfficeTableName = tableName || `_${excelCompatibleTableName.slice(0, 239)}_${Date.now().toString()}`;
     this.checkReportTypeChange(instanceDefinition);
     let officeTable;
     let shouldFormat = true;

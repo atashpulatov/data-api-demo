@@ -101,7 +101,7 @@ export const SettingsMenuNotConnected = ({
       <li>
         <a
           tabIndex="0"
-          href="https://www.microstrategy.com/producthelp/Current/Office/en-us/index.htm"
+          href="https://www2.microstrategy.com/producthelp/Current/Office/index.htm"
           target="_blank"
           rel="noopener noreferrer"
         >

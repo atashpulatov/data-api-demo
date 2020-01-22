@@ -256,7 +256,7 @@ export class PopupController {
     await officeStoreService.preserveReportValue(reportParams.bindId,
       'body',
       response.body);
-    if (reportPreviousState.subtotalsInfo && reportPreviousState.subtotalsInfo.importSubtotal !== response.subtotalsInfo.importSubtotal) {
+    if (!response.visualizationInfo && reportPreviousState.subtotalsInfo.importSubtotal !== response.subtotalsInfo.importSubtotal) {
       const subtotalsInformation = { ...reportPreviousState.subtotalsInfo };
       subtotalsInformation.importSubtotal = response.subtotalsInfo.importSubtotal;
       await officeStoreService.preserveReportValue(reportParams.bindId,
