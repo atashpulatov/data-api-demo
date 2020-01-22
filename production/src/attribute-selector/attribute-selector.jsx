@@ -4,7 +4,8 @@ import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { popupHelper } from '../popup/popup-helper';
-import { switchImportSubtotals } from '../navigation/navigation-tree-actions';
+import { switchImportSubtotals, updateDisplayAttrForm } from '../navigation/navigation-tree-actions';
+import { officeProperties } from '../office/office-properties';
 
 export class AttributeSelectorNotConnected extends Component {
   constructor(props) {
@@ -36,10 +37,12 @@ export class AttributeSelectorNotConnected extends Component {
 
   render() {
     const {
-      title, session,
+      title, session, displayAttrFormNames, updateDisplayAttrForm,
       triggerUpdate, onTriggerUpdate, chosenObject, importSubtotal, editedObject, supportForms,
       resetTriggerUpdate, attributesSelectedChange, t, openModal, closeModal, switchImportSubtotals,
     } = this.props;
+    const defaultAttrFormNames = officeProperties.displayAttrFormNames.automatic;
+    const displayAttrFormSet = editedObject.displayAttrFormNames || displayAttrFormNames || defaultAttrFormNames;
 
     return (
       <ErrorBoundary>
@@ -60,6 +63,9 @@ export class AttributeSelectorNotConnected extends Component {
           toggleSubtotal={switchImportSubtotals}
           importSubtotal={editedObject.subtotalsInfo ? editedObject.subtotalsInfo.importSubtotal : importSubtotal}
           handleUnauthorized={this.handleUnauthorized}
+          onDisplayAttrFormNamesUpdate={updateDisplayAttrForm}
+          displayAttrFormNames={displayAttrFormSet}
+          displayAttrFormNamesOptions={officeProperties.displayAttrFormNamesOptions}
         />
       </ErrorBoundary>
     );
@@ -106,7 +112,7 @@ AttributeSelectorNotConnected.propTypes = {
   resetTriggerUpdate: PropTypes.func,
   attributesSelectedChange: PropTypes.func,
   closeModal: PropTypes.func,
-  toggleSubtotal: PropTypes.func,
+  updateDisplayAttrForm: PropTypes.func,
   handlePopupErrors: PropTypes.func,
   onTriggerUpdate: PropTypes.func,
   t: PropTypes.func
@@ -116,7 +122,7 @@ AttributeSelectorNotConnected.defaultProps = { t: (text) => text, };
 const mapStateToProps = (state) => {
   const { navigationTree, popupStateReducer, popupReducer, sessionReducer, officeReducer } = state;
   const { editedObject } = popupReducer;
-  const { promptsAnswers, importSubtotal, ...chosenObject } = navigationTree;
+  const { promptsAnswers, importSubtotal, displayAttrFormNames, ...chosenObject } = navigationTree;
   const { supportForms } = officeReducer;
   return {
     chosenObject,
@@ -128,6 +134,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = { switchImportSubtotals };
+const mapDispatchToProps = { switchImportSubtotals, updateDisplayAttrForm };
 
 export const AttributeSelector = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(AttributeSelectorNotConnected));

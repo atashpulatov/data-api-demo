@@ -94,6 +94,7 @@ function onLoadAllReports(action, state) {
   }
   action.reportArray.forEach((report) => {
     checkReportData(report);
+    report.displayAttrFormNames = report.displayAttrFormNames ? report.displayAttrFormNames : officeProperties.displayAttrFormNames.automatic;
   });
   return {
     ...state,

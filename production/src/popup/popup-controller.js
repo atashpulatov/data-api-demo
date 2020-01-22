@@ -161,6 +161,7 @@ export class PopupController {
     isPrompted,
     instanceId,
     subtotalsInfo,
+    displayAttrFormNames
   }) => {
     if (chosenObjectId && projectId && chosenObjectSubtype && body && chosenObjectName) {
       this.reduxStore.dispatch({
@@ -177,6 +178,7 @@ export class PopupController {
         mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(chosenObjectSubtype),
         body,
         subtotalsInfo,
+        displayAttrFormNames
       };
       const result = await officeDisplayService.printObject(options);
       if (result) {
@@ -243,7 +245,8 @@ export class PopupController {
     const currentReportArray = this.reduxStore.getState().officeReducer.reportArray;
     const indexOfOriginalValues = currentReportArray.findIndex((report) => report.bindId === reportParams.bindId);
     const originalValues = currentReportArray[indexOfOriginalValues];
-    return { ...originalValues };
+    const { displayAttrFormNames } = officeProperties;
+    return originalValues.displayAttrFormNames ? { ...originalValues } : { ...originalValues, displayAttrFormNames: displayAttrFormNames.automatic };
   }
 
   saveReportWithParams = async (reportParams, response, reportPreviousState) => {
@@ -256,6 +259,11 @@ export class PopupController {
       await officeStoreService.preserveReportValue(reportParams.bindId,
         'subtotalsInfo',
         subtotalsInformation);
+    }
+    if (reportPreviousState.displayAttrFormNames !== response.displayAttrFormNames) {
+      await officeStoreService.preserveReportValue(reportParams.bindId,
+        'displayAttrFormNames',
+        response.displayAttrFormNames);
     }
     if (response.promptsAnswers) {
       // Include new promptsAnswers in case of Re-prompt workflow
