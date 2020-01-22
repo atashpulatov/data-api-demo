@@ -9,6 +9,7 @@ import { PopupButtons } from "../popup/popup-buttons/popup-buttons";
 import { popupStateActions } from "../popup/popup-state-actions";
 import { popupHelper } from "../popup/popup-helper";
 
+export const DEFAULT_PROJECT_NAME = 'Prepare Data';
 export class AttributeSelectorWindowNotConnected extends Component {
   constructor(props) {
     super(props);
@@ -78,19 +79,16 @@ export class AttributeSelectorWindowNotConnected extends Component {
   };
 
   render() {
-    const { handleBack, chosenObject, editedObject, mstrData } = this.props;
-    const {
-      triggerUpdate,
-      openModal,
-      attributesSelected,
-      loading
-    } = this.state;
+    const { handleBack, chosenObject, mstrData } = this.props;
+    const { triggerUpdate, openModal, attributesSelected, loading, } = this.state;
     const { isPrompted } = mstrData;
-    const typeName =
+    const { chosenObjectName } = chosenObject;
+   const typeName =
       chosenObject.objectType &&
       chosenObject.objectType.name &&
       chosenObject.objectType.name.charAt(0).toUpperCase() +
         chosenObject.objectType.name.substring(1);
+    const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
     return (
       <div>
         <AttributeSelector
@@ -106,7 +104,7 @@ export class AttributeSelectorWindowNotConnected extends Component {
         />
         <PopupButtons
           disableActiveActions={!attributesSelected}
-          handleBack={(!editedObject || isPrompted) && handleBack}
+          handleBack={(!isEdit || isPrompted) && handleBack}
           handleOk={this.handleOk}
           handleCancel={this.handleCancel}
           loading={loading}
@@ -118,15 +116,18 @@ export class AttributeSelectorWindowNotConnected extends Component {
 }
 
 AttributeSelectorWindowNotConnected.propTypes = {
+  chosenObject: PropTypes.shape({
+    chosenObjectName: PropTypes.string,
+    objectType: PropTypes.string,
+  }),
   mstrData: PropTypes.shape({
     envUrl: PropTypes.string,
     authToken: PropTypes.string,
     projectId: PropTypes.string,
-    chosenObjectName: PropTypes.string,
     instanceId: PropTypes.string,
     promptsAnswers: PropTypes.string,
-    chosenObjectType: PropTypes.string,
-    editRequested: PropTypes.bool
+    isPrompted: PropTypes.bool,
+    editRequested: PropTypes.bool,
   }).isRequired,
   handleBack: PropTypes.func
 };
