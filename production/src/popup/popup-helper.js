@@ -100,6 +100,7 @@ export class PopupHelper {
       preparedInstanceId: refreshReport.instanceId,
       tableName:refreshReport.tableName,
       previousTableDimensions: refreshReport.tableDimensions,
+      displayAttrFormNames: refreshReport.displayAttrFormNames,
     };
     const result = await officeDisplayService.printObject(options);
     if (result && result.type === 'warning') {
@@ -162,6 +163,7 @@ export class PopupHelper {
       isEdit: popupState.isEdit,
       dossierName,
       selectedViz: `${chapterKey}:${visualizationKey}`,
+      displayAttrFormNames: popupState.displayAttrFormNames
     };
     if (promptsAnswers) {
       return this.comparePromptAnswers(popupState, promptsAnswers, chosenObjectData);
@@ -207,7 +209,7 @@ export class PopupHelper {
   }
 
   parseFilters(filtersNodes) {
-    if (filtersNodes[0].operands) {
+    if (filtersNodes && filtersNodes[0].operands) {
       // equivalent to flatMap((node) => node.operands)
       return this.parseFilters(filtersNodes.reduce((nodes, node) => nodes.concat(node.operands), []));
     }

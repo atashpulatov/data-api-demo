@@ -5,7 +5,7 @@ import {
   SET_REPORT_N_FILTERS,
   SET_PREPARED_REPORT,
 } from './popup-actions';
-import { CLEAR_PROMPTS_ANSWERS, SWITCH_IMPORT_SUBTOTALS } from '../navigation/navigation-tree-actions';
+import { CLEAR_PROMPTS_ANSWERS, SWITCH_IMPORT_SUBTOTALS, UPDATE_DISPLAY_ATTR_FORM } from '../navigation/navigation-tree-actions';
 
 export const initialState = {};
 
@@ -52,6 +52,16 @@ export const popupReducer = (state = initialState, action) => {
     const editedObject = { ...state.editedObject };
     if (editedObject.subtotalsInfo) {
       editedObject.subtotalsInfo.importSubtotal = data;
+    }
+    return {
+      ...state,
+      editedObject
+    };
+  }
+  case UPDATE_DISPLAY_ATTR_FORM: {
+    const editedObject = { ...state.editedObject };
+    if (editedObject.displayAttrFormNames) {
+      editedObject.displayAttrFormNames = data;
     }
     return {
       ...state,

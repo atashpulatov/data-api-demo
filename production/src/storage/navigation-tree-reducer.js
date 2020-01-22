@@ -2,7 +2,7 @@ import {
   SELECT_FOLDER, SELECT_OBJECT, SET_DATA_SOURCE, START_IMPORT, CHANGE_SORTING, CHANGE_SEARCHING, UPDATE_SCROLL,
   UPDATE_SIZE, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED, CLEAR_PROMPTS_ANSWERS, REQUEST_DOSSIER_OPEN,
   CANCEL_DOSSIER_OPEN, SWITCH_MY_LIBRARY, CHANGE_FILTER, CHANGE_IS_PROMPTED,
-  LOAD_BROWSING_STATE_CONST,
+  LOAD_BROWSING_STATE_CONST, UPDATE_DISPLAY_ATTR_FORM,
   SWITCH_IMPORT_SUBTOTALS
 } from '../navigation/navigation-tree-actions';
 import { CLEAR_WINDOW } from '../popup/popup-actions';
@@ -199,6 +199,11 @@ export const navigationTree = (state = initialState, action) => {
   case SWITCH_IMPORT_SUBTOTALS: {
     const newState = { ...state };
     newState.importSubtotal = data;
+    return newState;
+  }
+  case UPDATE_DISPLAY_ATTR_FORM: {
+    const newState = { ...state };
+    newState.displayAttrFormNames = data;
     return newState;
   }
   case CHANGE_FILTER: {
