@@ -5,6 +5,7 @@ export const SET_POPUP_TYPE = 'SET_POPUP_TYPE';
 export const SET_MSTR_DATA = 'SET_MSTR_DATA';
 export const SET_OBJECT_DATA = 'SET_OBJECT_DATA';
 export const ON_POPUP_BACK = 'ON_POPUP_BACK';
+export const CLEAR_POPUP_STATE = 'CLEAR_POPUP_STATE';
 
 class PopupStateActions {
   setPopupType = (popupType) => (dispatch) => dispatch({
@@ -26,6 +27,12 @@ class PopupStateActions {
     dispatch({
       type: SET_POPUP_TYPE,
       popupType: PopupTypeEnum.dataPreparation,
+    });
+  }
+
+  onClearPopupState = () => (dispatch) => {
+    dispatch({
+      type: CLEAR_POPUP_STATE,
     });
   }
 
