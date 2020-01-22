@@ -8,7 +8,7 @@
     "start": "HTTPS=true react-scripts start",
     "start:windows": "set HTTPS=true&&react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --silent --noStackTrace",
+    "test": "react-scripts test --silent ",
     "test:debug": "react-scripts test --debug",
     "test:coverage": "CI=true react-scripts test  --silent --coverage --noStackTrace --forceExit --ci --json --outputFile=./coverage/test-results.json",
     "eject": "react-scripts eject",
@@ -67,6 +67,7 @@
     "office-addin-debugging": "^3.0.20",
     "office-addin-dev-certs": "^1.4.13",
     "office-toolbox": "^0.3.0",
+    "redux-mock-store": "^1.5.4",
     "typescript": "^3.7.3",
     "webpack-cli": "^3.3.10"
   },
