@@ -131,6 +131,7 @@ const mapStateToProps = (state) => {
     popupState: { ...popupStateReducer },
     session: { ...sessionReducer },
     importSubtotal,
+    displayAttrFormNames
   };
 };
 
