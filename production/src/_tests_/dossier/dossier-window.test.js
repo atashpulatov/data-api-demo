@@ -6,7 +6,7 @@ import { selectorProperties } from '../../attribute-selector/selector-properties
 import { Office } from '../mockOffice';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 
-describe.skip('Dossierwindow', () => {
+describe('Dossierwindow', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });

@@ -67,6 +67,7 @@
     "office-addin-debugging": "^3.0.20",
     "office-addin-dev-certs": "^1.4.13",
     "office-toolbox": "^0.3.0",
+    "redux-mock-store": "^1.5.4",
     "typescript": "^3.7.3",
     "webpack-cli": "^3.3.10"
   },

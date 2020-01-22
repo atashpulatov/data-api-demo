@@ -45,7 +45,7 @@ export const PopupViewSelectorNotConnected = (props) => {
   return renderProperComponent(popupType);
 };
 
-export function mapStateToProps(state) {
+function mapStateToProps(state) {
   const { editedObject } = state.popupReducer;
   const { promptsAnswers } = state.navigationTree;
   return {
