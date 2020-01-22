@@ -26,9 +26,7 @@ class NormalizedJsonHandler {
     const rawElement = definition.grid[axis][attributeIndex].elements[elementIndex];
     const { name, formValues, subtotal } = rawElement;
     if (!subtotal) {
-      return {
-        ...rawElement, value: formValues || [name], subtotalAddress: false,
-      };
+      return { ...rawElement, value: formValues || [name], subtotalAddress: false, };
     }
     return {
       ...rawElement,
@@ -110,7 +108,8 @@ class NormalizedJsonHandler {
     const { headers, metricValues } = data;
     const { rows } = headers;
     const result = [];
-    const { supportForms, grid } = definition;
+    const { attrforms, grid } = definition;
+    const supportForms = attrforms ? attrforms.supportForms : false;
 
     for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
       const headerCells = rows[rowIndex];
