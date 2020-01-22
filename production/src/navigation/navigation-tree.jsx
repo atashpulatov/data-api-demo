@@ -59,18 +59,10 @@ export class _NavigationTree extends Component {
     }));
   }
 
-  componentWillUnmount() {
-    try {
-      this.DB.close();
-    } catch (error) {
-      // Ignoring error
-    }
-  }
-
   connectToCache = (isRefresh) => {
     const { connectToDB } = this.props;
     this.startFallbackProtocol();
-    this.DB = connectToDB(isRefresh);
+    connectToDB(isRefresh);
   };
 
   refresh = async () => {
@@ -84,7 +76,6 @@ export class _NavigationTree extends Component {
     const { resetDBState, fetchObjectsFromNetwork } = this.props;
     resetDBState(true);
     if (this.indexedDBSupport) {
-      await this.DB.close();
       window.Office.context.ui.messageParent(JSON.stringify({ command: REFRESH_CACHE_COMMAND }));
       this.connectToCache(true);
     } else {
@@ -133,7 +124,6 @@ export class _NavigationTree extends Component {
 
   handleSecondary = async () => {
     const { chosenProjectId, chosenObjectId, chosenSubtype, handlePrepare, setObjectData } = this.props;
-
     try {
       const objectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
       if ((objectType === mstrObjectEnum.mstrObjectType.report) || (objectType === mstrObjectEnum.mstrObjectType.dossier)) {
@@ -196,7 +186,7 @@ export class _NavigationTree extends Component {
     return (
       <div className="navigation_tree__main_wrapper">
         <div className="navigation_tree__title_bar">
-          <span>{t('Import Data')}</span>
+          <span>{t('Import Data')}</span>
           <TopFilterPanel
             locale={i18n.language}
             objects={objects}
