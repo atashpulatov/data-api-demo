@@ -23,14 +23,14 @@ function checkTableDimensions({ rows, columns }) {
   return { rows, columns };
 }
 
-function parseInstanceDefinition(res, supportForms) {
+function parseInstanceDefinition(res, attrforms) {
   const { body } = res;
   if (res.status === 200 && body.status === 2) {
     const { instanceId, status } = body;
     return { instanceId, status };
   }
   const { instanceId, data, internal } = body;
-  body.supportForms = supportForms;
+  body.attrforms = attrforms;
   if (data.paging.total === 0) throw new Error(NOT_SUPPORTED_NO_ATTRIBUTES);
   const mstrTable = officeConverterServiceV2.createTable(body);
   const { rows, columns } = checkTableDimensions(mstrTable.tableSize);
@@ -65,7 +65,8 @@ async function* fetchContentGenerator({
   dossierData,
   limit,
   visualizationInfo,
-  reduxStore
+  reduxStore,
+  displayAttrFormNames
 }) {
   const totalRows = instanceDefinition.rows;
   const { instanceId, mstrTable } = instanceDefinition;
@@ -73,6 +74,8 @@ async function* fetchContentGenerator({
   const storeState = reduxStore.getState();
   const { envUrl, authToken } = storeState.sessionReducer;
   const { supportForms } = storeState.officeReducer;
+  const attrforms = { supportForms, displayAttrFormNames };
+
   let fetchedRows = 0;
   let offset = 0;
   const fullPath = getFullPath({
@@ -107,7 +110,7 @@ async function* fetchContentGenerator({
     const response = await fetchObjectContent(fullPath, authToken, projectId, offset, limit);
     const { current } = response.body.data.paging;
     fetchedRows = current + offset;
-    response.body.supportForms = supportForms;
+    response.body.attrforms = attrforms;
     const { row, rowTotals } = officeConverterServiceV2.getRows(response.body, isCrosstab);
     if (isCrosstab) {
       header = officeConverterServiceV2.getHeaders(response.body, isCrosstab);
@@ -191,10 +194,12 @@ export class MstrObjectRestService {
     dossierData,
     body = {},
     limit = 1,
+    displayAttrFormNames
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const { supportForms } = storeState.officeReducer;
+    const attrforms = { supportForms, displayAttrFormNames };
     const fullPath = getFullPath({ dossierData, envUrl, limit, mstrObjectType, objectId, version: API_VERSION });
 
     return request
@@ -203,7 +208,7 @@ export class MstrObjectRestService {
       .set('x-mstr-projectid', projectId)
       .send(body)
       .withCredentials()
-      .then((res) => parseInstanceDefinition(res, supportForms));
+      .then((res) => parseInstanceDefinition(res, attrforms));
   }
 
   fetchVisualizationDefinition = ({ projectId, objectId, instanceId, visualizationInfo, body, }) => {
@@ -335,6 +340,7 @@ export class MstrObjectRestService {
     dossierData,
     limit = IMPORT_ROW_LIMIT,
     visualizationInfo,
+    displayAttrFormNames
   }) => fetchContentGenerator({
     instanceDefinition,
     objectId,
@@ -344,6 +350,7 @@ export class MstrObjectRestService {
     limit,
     visualizationInfo,
     reduxStore: this.reduxStore,
+    displayAttrFormNames
   })
 
   getObjectDefinition = (objectId, projectId, mstrObjectType = reportObjectType) => {

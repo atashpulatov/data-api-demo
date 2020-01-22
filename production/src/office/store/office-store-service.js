@@ -30,6 +30,7 @@ export class OfficeStoreService {
         manipulationsXML: report.manipulationsXML,
         tableName:report.tableName,
         tableDimensions: report.tableDimensions,
+        displayAttrFormNames: report.displayAttrFormNames,
       });
       settings.set(officeProperties.loadedReportProperties, reportProperties);
       settings.saveAsync();
@@ -131,6 +132,7 @@ export class OfficeStoreService {
         refreshedObject.bindId = report.bindId;
         refreshedObject.tableDimensions = report.tableDimensions;
         refreshedObject.subtotalsInfo = report.subtotalsInfo;
+        refreshedObject.displayAttrFormNames = report.displayAttrFormNames;
         if (refreshedObject.visualizationInfo) {
           refreshedObject.manipulationsXML = report.manipulationsXML;
           refreshedObject.visualizationInfo.dossierStructure = report.visualizationInfo.dossierStructure;
@@ -165,6 +167,7 @@ export class OfficeStoreService {
           manipulationsXML: report.manipulationsXML,
           tableName: report.tableName,
           tableDimensions: report.tableDimensions,
+          displayAttrFormNames: report.displayAttrFormNames,
         },
       });
       this.preserveReport(report);

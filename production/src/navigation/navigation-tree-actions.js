@@ -19,6 +19,7 @@ export const SWITCH_MY_LIBRARY = 'SWITCH_MY_LIBRARY';
 export const SWITCH_IMPORT_SUBTOTALS = 'SWITCH_IMPORT_SUBTOTALS';
 export const CHANGE_IS_PROMPTED = 'CHANGE_IS_PROMPTED';
 export const LOAD_BROWSING_STATE_CONST = 'LOAD_BROWSING_STATE_CONST';
+export const UPDATE_DISPLAY_ATTR_FORM = 'UPDATE_DISPLAY_ATTR_FORM';
 
 export function selectObject(data) {
   return (dispatch) => dispatch({
@@ -97,6 +98,10 @@ export function switchMyLibrary() {
 
 export function switchImportSubtotals(data) {
   return (dispatch) => dispatch({ type: SWITCH_IMPORT_SUBTOTALS, data });
+}
+
+export function updateDisplayAttrForm(data) {
+  return (dispatch) => dispatch({ type: UPDATE_DISPLAY_ATTR_FORM, data });
 }
 
 export function changeFilter(data) {
