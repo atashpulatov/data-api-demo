@@ -1,14 +1,14 @@
-import * as listRestService from '../../mstr-object/mstr-list-rest-service';
+import {mstrListRestService} from '../../mstr-object/mstr-list-rest-service';
 import mockApiResponseWithDossiers from '../mockApiResponseWithDossiers';
-import { reduxStore } from '../../store';
+import {reduxStore} from '../../store';
 
 describe('Logic for fetching list of objects from MSTR API', () => {
-  it.skip('should apply filter function to response body.result and return array with non-Dossier type 14081 objects filtered out', () => { // disabled for 11.2
+  it('should apply filter function to response body.result and return array with non-Dossier type 14081 objects filtered out', () => {
     // given
     const response = mockApiResponseWithDossiers;
     const filteredOutId = '0089BFF447598FEABECC32AB64840016';
     // when
-    const filteredElements = listRestService.filterDossier(response);
+    const filteredElements = mstrListRestService.filterDossier(response);
     const isBadDossier = filteredElements.filter((element) => element.id === filteredOutId);
     // then
     expect(isBadDossier).toEqual([]);
@@ -16,10 +16,10 @@ describe('Logic for fetching list of objects from MSTR API', () => {
 
   it('should return true for all non-type-14081 objects and for Dossiers, false for all other type 14081 objects', () => {
     // given
-    const { result } = mockApiResponseWithDossiers;
+    const {result} = mockApiResponseWithDossiers;
     const expectedElement = [true, true, true, true, true, false, true];
     // when
-    const elements = result.map(listRestService.filterFunction);
+    const elements = result.map(mstrListRestService.filterFunction);
     // then
     expect(elements).toEqual(expectedElement);
   });
@@ -29,7 +29,7 @@ describe('Logic for fetching list of objects from MSTR API', () => {
     const response = mockApiResponseWithDossiers;
     const expectedTotal = 7;
     // when
-    const element = listRestService.processTotalItems(response);
+    const element = mstrListRestService.processTotalItems(response);
     // then
     expect(element).toEqual(expectedTotal);
   });
@@ -38,13 +38,13 @@ describe('Logic for fetching list of objects from MSTR API', () => {
     // given
     jest.spyOn(reduxStore, 'getState').mockImplementation(() => ({
       sessionReducer: {
-        envUrl: 'url',
-        authToken: 'token',
+        envUrl: 'envUrl',
+        authToken: 'authToken',
       },
     }));
-    const expectedParameters = { authToken: 'token', envUrl: 'url', typeQuery: '768&type=769&type=774&type=776&type=779&type=14081' };
+    const expectedParameters = {authToken: 'authToken', envUrl: 'envUrl', typeQuery: '768&type=769&type=774&type=776&type=779&type=14081'};
     // when
-    const params = listRestService.getRequestParams(expectedParameters);
+    const params = mstrListRestService.getRequestParams(expectedParameters);
 
     // then
     expect(params).toEqual(params);

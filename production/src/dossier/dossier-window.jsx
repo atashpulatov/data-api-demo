@@ -3,18 +3,21 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { MSTRIcon } from '@mstr/mstr-react-library';
-import { PopupButtons } from '../popup/popup-buttons';
+import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { EmbeddedDossier } from './embedded-dossier';
 import { actions } from '../navigation/navigation-tree-actions';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './dossier.css';
+import { DEFAULT_PROJECT_NAME, } from '../storage/navigation-tree-reducer';
+import { popupHelper } from '../popup/popup-helper';
+import { popupStateActions } from '../popup/popup-state-actions';
 
 export default class _DossierWindow extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isVisualisationSelected: false,
+      isVisualizationSelected: false,
       chapterKey: '',
       visualizationKey: '',
       promptsAnswers: [],
@@ -22,6 +25,7 @@ export default class _DossierWindow extends React.Component {
     };
     this.handleSelection = this.handleSelection.bind(this);
     this.handleOk = this.handleOk.bind(this);
+    this.handlePromptAnswer = this.handlePromptAnswer.bind(this);
   }
 
   handleCancel() {
@@ -37,7 +41,7 @@ export default class _DossierWindow extends React.Component {
       newValue = true;
     }
     this.setState({
-      isVisualisationSelected: newValue,
+      isVisualizationSelected: newValue,
       chapterKey,
       visualizationKey,
       promptsAnswers,
@@ -46,9 +50,11 @@ export default class _DossierWindow extends React.Component {
   }
 
   handleOk() {
-    const { chosenObjectId, chosenProjectId, requestImport, selectObject } = this.props;
+    const { chosenObjectName, chosenObjectId, chosenProjectId, requestImport, selectObject, editedObject } = this.props;
+    const { isEdit } = editedObject;
     const { chapterKey, visualizationKey, promptsAnswers, preparedInstanceId } = this.state;
     const selectedVisualization = {
+      chosenObjectName,
       chosenObjectId,
       chosenProjectId,
       chosenSubtype: mstrObjectEnum.mstrObjectType.visualization.subtypes,
@@ -57,21 +63,20 @@ export default class _DossierWindow extends React.Component {
       chosenVisualizationKey: visualizationKey,
       promptsAnswers,
       preparedInstanceId,
+      isEdit,
     };
     selectObject(selectedVisualization);
     requestImport();
   }
 
+  handlePromptAnswer(newAnswerws, newInstanceId) {
+    this.setState({ promptsAnswers: newAnswerws, preparedInstanceId: newInstanceId });
+  }
+
   render() {
-    const { chosenObjectName, chosenObjectId, chosenProjectId, handleBack, t, mstrData, handlePopupErrors } = this.props;
-    const { isVisualisationSelected } = this.state;
-    const propsToPass = {
-      envUrl: mstrData.envUrl,
-      token: mstrData.token,
-      dossierId: chosenObjectId,
-      projectId: chosenProjectId,
-      promptsAnswers: mstrData.promptsAnswers
-    };
+    const { chosenObjectName, t, handleBack } = this.props;
+    const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
+    const { isVisualizationSelected } = this.state;
     return (
       <div>
         <h1 title={chosenObjectName} className="ant-col folder-browser-title">
@@ -84,16 +89,15 @@ export default class _DossierWindow extends React.Component {
           </span>
         </span>
         <EmbeddedDossier
-          mstrData={propsToPass}
           handleSelection={this.handleSelection}
-          handlePopupErrors={handlePopupErrors}
+          handlePromptAnswer={this.handlePromptAnswer}
         />
         <PopupButtons
           handleOk={this.handleOk}
-          handleBack={handleBack}
           handleCancel={this.handleCancel}
+          handleBack={!isEdit && handleBack}
           hideSecondary
-          disableActiveActions={!isVisualisationSelected}
+          disableActiveActions={!isVisualizationSelected}
         />
       </div>
     );
@@ -104,41 +108,63 @@ _DossierWindow.propTypes = {
   chosenObjectId: PropTypes.string,
   chosenObjectName: PropTypes.string,
   chosenProjectId: PropTypes.string,
-  handleBack: PropTypes.func,
   t: PropTypes.func,
   mstrData: PropTypes.shape({
     envUrl: PropTypes.string,
-    token: PropTypes.string,
+    authToken: PropTypes.string,
     promptsAnswers: PropTypes.array || null
   }),
   requestImport: PropTypes.func,
   selectObject: PropTypes.func,
-  handlePopupErrors: PropTypes.func,
+  editedObject: PropTypes.shape({
+    chosenObjectId: PropTypes.string,
+    projectId: PropTypes.string,
+    isEdit: PropTypes.bool,
+    instanceId: PropTypes.string,
+    dossierName: PropTypes.string,
+    promptsAnswers: PropTypes.array || null,
+    selectedViz: PropTypes.string,
+  }),
 };
 
 _DossierWindow.defaultProps = {
   chosenObjectId: 'default id',
-  chosenObjectName: 'default name',
+  chosenObjectName: DEFAULT_PROJECT_NAME,
   chosenProjectId: 'default id',
-  handleBack: () => { },
   t: (text) => text,
   mstrData: {
     envUrl: 'no env url',
-    token: null,
+    authToken: null,
     promptsAnswers: null
   },
   requestImport: () => { },
   selectObject: () => { },
-  handlePopupErrors: () => { },
+  editedObject: {
+    chosenObjectId: undefined,
+    projectId: undefined,
+    isEdit: false,
+    instanceId: undefined,
+    dossierName: undefined,
+    promptsAnswers: null,
+    selectedViz: '',
+  },
 };
 
 function mapStateToProps(state) {
-  const { chosenObjectName, chosenObjectId, chosenProjectId } = state.navigationTree;
+  const { chosenObjectName, chosenObjectId, chosenProjectId, promptsAnswers } = state.navigationTree;
+  const popupState = state.popupReducer.editedObject;
   return {
-    chosenObjectName,
-    chosenObjectId,
-    chosenProjectId,
+    chosenObjectName: popupState ? popupState.chosenObjectName : chosenObjectName,
+    chosenObjectId: popupState ? popupState.chosenObjectId : chosenObjectId,
+    chosenProjectId: popupState ? popupState.projectId : chosenProjectId,
+    editedObject: { ...(popupHelper.parsePopupState(popupState, promptsAnswers)) },
   };
 }
 
-export const DossierWindow = connect(mapStateToProps, actions)(withTranslation('common')(_DossierWindow));
+const mapActionsToProps = {
+  requestImport: actions.requestImport,
+  selectObject: actions.selectObject,
+  handleBack: popupStateActions.onPopupBack,
+};
+
+export const DossierWindow = connect(mapStateToProps, mapActionsToProps)(withTranslation('common')(_DossierWindow));

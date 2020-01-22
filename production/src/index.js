@@ -1,63 +1,64 @@
+/* eslint-disable */
 import 'core-js/stable';
 import 'focus-visible/dist/focus-visible';
 import 'proxy-polyfill';
 import './index.css';
-import React from 'react';
+import React, {lazy, Suspense} from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/lib/integration/react';
-import { Home } from './home/home.jsx';
-import { reduxStore, reduxPersistor } from './store';
-import { authenticationService } from './authentication/auth-rest-service.js';
-import { homeHelper } from './home/home-helper.js';
-import i18next from './i18n';
-import { Popup } from './popup/popup';
-import * as serviceWorker from './serviceWorker';
+import {authenticationService} from './authentication/auth-rest-service';
 
-const { Office } = window;
+import i18next from './i18n';
+import * as serviceWorker from './serviceWorker';
+import {diContainer} from './dependency-container';
+import {HomeHelper} from './home/home-helper';
+import {reduxStore} from './store';
+import {sessionHelper} from './storage/session-helper';
+
+// Code splitting https://reactjs.org/docs/code-splitting.html
+const LazySidebar = lazy(() => import('./entry-point/sidebar-entry-point'));
+const LazyDialog = lazy(() => import('./entry-point/dialog-entry-point'));
+
+function goReact() {
+  i18next.changeLanguage(i18next.options.resources[window.Office.context.displayLanguage] ? window.Office.context.displayLanguage : 'en-US');
+  ReactDOM.render((
+    <Suspense fallback={null}>
+      {(window.location.href.indexOf('popupType') === -1)
+        ? <LazySidebar />
+        : <LazyDialog />}
+    </Suspense>
+  ), document.getElementById('root'), () => console.timeEnd('React loading time'));
+}
+
+async function handleUnauthorized(envUrl, iSession) {
+  try {
+    const res = await authenticationService.logout(`${envUrl}/api`, iSession);
+    const locale = window.Office.context.displayLanguage || navigator.language;
+    if (res) {
+      setInterval(() => {
+        window.location.replace(`${envUrl}/static/loader-mstr-office/no-privilege.html?locale=${locale}`);
+      }, 200);
+    }
+  } catch (error) {
+    // Ignore error
+  }
+}
 
 function officeInitialize() {
-  Office.onReady()
+  window.Office.onReady()
     .then(async () => {
       const envUrl = window.location.pathname.split('/apps/')[0];
-      // If it is not popup we check user privileges
+      const homeHelper = diContainer.initilizeSingle(HomeHelper, [reduxStore, sessionHelper]);
+
       if (window.location.href.indexOf('popupType') === -1) {
-        const { iSession } = homeHelper.getParsedCookies();
+        const {iSession} = homeHelper.getParsedCookies();
         const canUseOffice = await authenticationService.getOfficePrivilege(`${envUrl}/api`, iSession);
         if (!canUseOffice) {
           handleUnauthorized(envUrl, iSession);
         }
       }
       goReact();
+      diContainer.initializeAll();
     });
-}
-
-async function handleUnauthorized(envUrl, iSession) {
-  try {
-    const res = await authenticationService.logout(`${envUrl}/api`, iSession);
-    const locale = Office.context.displayLanguage || navigator.language;
-    res && setInterval(() => {
-      window.location.replace(`${envUrl}/static/loader-mstr-office/no-privilege.html?locale=${locale}`);
-    }, 200);
-  } catch (error) {
-    // Ignore error
-  }
-}
-
-function goReact() {
-  i18next.changeLanguage(i18next.options.resources[Office.context.displayLanguage] ? Office.context.displayLanguage : 'en-US');
-
-  if (window.location.href.indexOf('popupType') === -1) {
-    ReactDOM.render(<Provider store={reduxStore}>
-      <PersistGate persistor={reduxPersistor}>
-        <Home loading={false} />
-      </PersistGate>
-    </Provider>,
-      document.getElementById('root'), () => console.timeEnd('React loading time'));
-  } else {
-    ReactDOM.render(<Provider store={reduxStore}><Popup /></Provider>,
-      document.getElementById('root'), () => console.timeEnd('React loading time'));
-  }
 }
 
 officeInitialize();

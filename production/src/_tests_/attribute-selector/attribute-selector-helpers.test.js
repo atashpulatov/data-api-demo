@@ -7,13 +7,7 @@ describe('AttributeSelectorHelpers', () => {
   it('should call for office messageParent if officeMessageParent', () => {
     // given
     const messageParentMock = jest.fn();
-    const getOfficeSpy = jest.spyOn(officeContext, 'getOffice').mockImplementation(() => ({
-      context: {
-        ui: {
-          messageParent: messageParentMock,
-        },
-      },
-    }));
+    const getOfficeSpy = jest.spyOn(officeContext, 'getOffice').mockImplementation(() => ({ context: { ui: { messageParent: messageParentMock, }, }, }));
 
     // when
     attributeSelectorHelpers.officeMessageParent('simple_command');

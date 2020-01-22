@@ -2,13 +2,14 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
+import PropTypes from 'prop-types';
 import warningIcon from '../loading/assets/icon_conflict.svg';
 import { officeApiHelper } from '../office/office-api-helper';
 import { toggleSecuredFlag, toggleIsConfirmFlag, toggleIsClearingFlag } from '../office/office-actions';
 import { errorService } from '../error/error-handler';
 import { notificationService } from '../notification/notification-service';
 
-export const _Confirmation = ({ reportArray, toggleSecuredFlag, toggleIsConfirmFlag, toggleIsClearingFlag, t }) => {
+export const ConfirmationNotConnected = ({ reportArray, toggleSecuredFlag, toggleIsConfirmFlag, toggleIsClearingFlag, t }) => {
   useEffect(() => {
     const ua = window.navigator.userAgent;
     // this is fix IE11 - it didn't handle z-index properties correctly
@@ -26,10 +27,11 @@ export const _Confirmation = ({ reportArray, toggleSecuredFlag, toggleIsConfirmF
     const clearErrors = [];
     try {
       toggleIsClearingFlag(true);
-      toggleIsConfirmFlag(false);
+      toggleIsConfirmFlag(); // Switch off isConfirm popup
       const excelContext = await officeApiHelper.getExcelContext();
+      await officeApiHelper.checkIfAnySheetProtected(excelContext, reportArray);
       for (const report of reportArray) {
-        if (await officeApiHelper.checkIfObjectExist(t, report, excelContext)) {
+        if (await officeApiHelper.checkIfObjectExist(report, excelContext)) {
           try {
             reportName = report.name;
             if (report.isCrosstab) {
@@ -41,7 +43,7 @@ export const _Confirmation = ({ reportArray, toggleSecuredFlag, toggleIsConfirmF
               headers.format.font.color = 'white';
               await excelContext.sync();
             }
-            await officeApiHelper.deleteObjectTableBody(excelContext, report);
+            await officeApiHelper.deleteObjectTableBody(excelContext, report, true);
           } catch (error) {
             const officeError = errorService.handleError(error);
             clearErrors.push({ reportName, officeError });
@@ -50,7 +52,6 @@ export const _Confirmation = ({ reportArray, toggleSecuredFlag, toggleIsConfirmF
           counter++;
         }
       }
-      toggleIsConfirmFlag(false);
       if (clearErrors.length > 0) {
         displayClearDataError(clearErrors);
       } else if (counter !== reportArray.length) toggleSecuredFlag(true);
@@ -58,7 +59,6 @@ export const _Confirmation = ({ reportArray, toggleSecuredFlag, toggleIsConfirmF
       errorService.handleError(error);
     } finally {
       toggleIsClearingFlag(false);
-      toggleIsConfirmFlag(true);
     }
   };
 
@@ -94,7 +94,15 @@ export const _Confirmation = ({ reportArray, toggleSecuredFlag, toggleIsConfirmF
   );
 };
 
-_Confirmation.defaultProps = { t: (text) => text, };
+ConfirmationNotConnected.propTypes = {
+  reportArray: PropTypes.arrayOf(PropTypes.shape({})),
+  toggleSecuredFlag: PropTypes.func,
+  toggleIsConfirmFlag: PropTypes.func,
+  toggleIsClearingFlag: PropTypes.func,
+  t: PropTypes.func
+};
+
+ConfirmationNotConnected.defaultProps = { t: (text) => text, };
 
 function mapStateToProps({ officeReducer }) {
   return { reportArray: officeReducer.reportArray };
@@ -106,4 +114,4 @@ const mapDispatchToProps = {
   toggleIsClearingFlag,
 };
 
-export const Confirmation = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_Confirmation));
+export const Confirmation = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(ConfirmationNotConnected));

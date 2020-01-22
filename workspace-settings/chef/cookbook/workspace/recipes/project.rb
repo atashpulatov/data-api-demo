@@ -24,7 +24,6 @@ when 'redhat', 'centos', 'fedora', 'amazon'
     EOH
     only_if "echo $USER | grep jenkins"
   end
-
   bash 'update jenkins folder permissions' do
     user 'root'
     code <<-EOH
@@ -36,7 +35,11 @@ when 'redhat', 'centos', 'fedora', 'amazon'
 
 when 'mac_os_x'
   include_recipe 'java-osx'
+  include_recipe 'docker'
+when 'windows'
+  include_recipe 'java_ecosystem'
+  include_recipe 'workspace::tomcat_windows'
+  
 else
-
-
+  
 end

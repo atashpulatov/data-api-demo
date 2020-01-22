@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
 
 export default class CustomNotification extends Component {
-  state = {
-    isExpanded: false,
-  }
+  state = { isExpanded: false, }
 
   handleCollapse = () => {
-    this.setState(({ isExpanded }) => ({
-      isExpanded: !isExpanded,
-    }));
+    this.setState(({ isExpanded }) => ({ isExpanded: !isExpanded, }));
   };
 
   render() {

@@ -1,11 +1,12 @@
 import React from 'react';
 import { Button } from 'antd';
 import { withTranslation } from 'react-i18next';
+import PropTypes from 'prop-types';
 import { sessionHelper } from '../storage/session-helper';
 import { fileHistoryContainerHOC } from '../file-history/file-history-container-HOC';
 import { ReactComponent as FolderArt } from './assets/folder-art.svg';
 
-export const _Placeholder = ({ loading, t, addDataAction }) => {
+export const PlaceHolderNotConnected = ({ loading, t, addDataAction }) => {
   sessionHelper.disableLoading();
   return (
     <div className="get-started-container">
@@ -16,5 +17,10 @@ export const _Placeholder = ({ loading, t, addDataAction }) => {
     </div>
   );
 };
+PlaceHolderNotConnected.propTypes = {
+  loading: PropTypes.bool,
+  addDataAction: PropTypes.func,
+  t: PropTypes.func
+};
 
-export const Placeholder = fileHistoryContainerHOC(withTranslation('common')(_Placeholder));
+export const Placeholder = fileHistoryContainerHOC(withTranslation('common')(PlaceHolderNotConnected));

@@ -12,16 +12,16 @@ describe('OfficeStoreService', () => {
         saveAsync: jest.fn(),
       });
 
-    jest.spyOn(officeStoreService, '_getReportProperties');
+    jest.spyOn(officeStoreService, 'getReportProperties');
   });
 
   beforeEach(() => {
-    officeStoreService._getReportProperties
+    officeStoreService.getReportProperties
       .mockReturnValue(mockReportProperties[1].slice());
   });
 
   afterEach(() => {
-    officeStoreService._getReportProperties.mockClear();
+    officeStoreService.getReportProperties.mockClear();
   });
 
   it('should save report properties to office settings', () => {
@@ -31,10 +31,10 @@ describe('OfficeStoreService', () => {
     // when
     officeStoreService.preserveReport(givenReport);
     // then
-    expect(officeStoreService._getReportProperties).toBeCalled();
+    expect(officeStoreService.getReportProperties).toBeCalled();
     expect(settings.saveAsync).toBeCalled();
   });
-  it('should delete report properties from office settings', async () => {
+  it('should delete report properties from office settings', () => {
     // given
     const settings = officeStoreService.getOfficeSettings();
     const givenBindingId = 'testBindId1';
@@ -43,7 +43,7 @@ describe('OfficeStoreService', () => {
     // then
     expect(settings.saveAsync).toBeCalled();
   });
-  it('should rename the report from office settings', async () => {
+  it('should rename the report from office settings', () => {
     // given
     const settings = officeStoreService.getOfficeSettings();
     const givenBindingId = 'testBindId1';
@@ -53,7 +53,7 @@ describe('OfficeStoreService', () => {
     // then
     expect(settings.saveAsync).toBeCalled();
   });
-  it('should return a report found by bindingId', async () => {
+  it('should return a report found by bindingId', () => {
     // given
     const givenBindingId = 'testBindId2';
     // when
@@ -64,7 +64,7 @@ describe('OfficeStoreService', () => {
     expect(result.projectId).toEqual('testProjectId2');
   });
 
-  it('should save isSecured flag in settings', async () => {
+  it('should save isSecured flag in settings', () => {
     // given
     const settings = officeStoreService.getOfficeSettings();
     // when
@@ -73,7 +73,7 @@ describe('OfficeStoreService', () => {
     expect(settings.set).toBeCalledWith(officeProperties.isSecured, true);
   });
 
-  it('should return proper value from office when isFileSecured is called', async () => {
+  it('should return proper value from office when isFileSecured is called', () => {
     // given
     jest.spyOn(officeStoreService, 'getOfficeSettings')
       .mockReturnValue({

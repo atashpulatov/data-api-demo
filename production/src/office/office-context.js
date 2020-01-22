@@ -1,9 +1,24 @@
-/* global Office Excel */
-
 class OfficeContext {
-    getOffice = () => Office
+  getOffice = () => window.Office
 
-    getExcel = () => Excel
+  getExcel = () => window.Excel
+
+  /**
+   * Returns the highest requirement set supported by the current platform.
+   *
+   * @memberof OfficeContext
+   * @returns {String} Requirement set
+   */
+  getRequirementSet = () => {
+    const { Office } = window;
+    let isSupported = true;
+    let api = 0;
+    while (isSupported && !!Office) {
+      isSupported = Office.context.requirements.isSetSupported('ExcelAPI', `1.${api}`);
+      if (isSupported) api += 1;
+    }
+    return `1.${api - 1}`;
+  }
 }
 
 export const officeContext = new OfficeContext();

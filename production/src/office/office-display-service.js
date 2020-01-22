@@ -1,9 +1,24 @@
 import { officeApiHelper } from './office-api-helper';
+import { officeTableHelper } from './office-table-helper';
+import { officeFormattingHelper } from './office-formatting-helper';
 import {
+  mstrObjectRestService,
   DATA_LIMIT,
   PROMISE_LIMIT,
   IMPORT_ROW_LIMIT,
-  CONTEXT_LIMIT,
+} from '../mstr-object/mstr-object-rest-service';
+import { CLEAR_PROMPTS_ANSWERS } from '../navigation/navigation-tree-actions';
+import { officeProperties } from './office-properties';
+import { officeStoreService } from './store/office-store-service';
+import { PopupTypeEnum } from '../home/popup-type-enum';
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import {
+  NOT_SUPPORTED_NO_ATTRIBUTES,
+  ALL_DATA_FILTERED_OUT,
+  ERROR_POPUP_CLOSED,
+} from '../error/constants';
+
+const {
   getObjectInfo,
   getObjectDefinition,
   createInstance,
@@ -13,64 +28,55 @@ import {
   createDossierInstance,
   fetchVisualizationDefinition,
   getDossierDefinition,
-} from '../mstr-object/mstr-object-rest-service';
-import { CLEAR_PROMPTS_ANSWERS } from '../navigation/navigation-tree-actions';
-import { reduxStore } from '../store';
-import { officeProperties } from './office-properties';
-import { officeStoreService } from './store/office-store-service';
-import { errorService } from '../error/error-handler';
-import { popupController } from '../popup/popup-controller';
-import { authenticationHelper } from '../authentication/authentication-helper';
-import { PopupTypeEnum } from '../home/popup-type-enum';
-import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import {
-  NOT_SUPPORTED_NO_ATTRIBUTES,
-  ALL_DATA_FILTERED_OUT,
-  TABLE_OVERLAP,
-  ERROR_POPUP_CLOSED,
-} from '../error/constants';
-import { OverlappingTablesError } from '../error/overlapping-tables-error';
+} = mstrObjectRestService;
 
-const DEFAULT_TABLE_STYLE = 'TableStyleLight11';
-const TABLE_HEADER_FONT_COLOR = '#000000';
-const TABLE_HEADER_FILL_COLOR = '#ffffff';
+export class OfficeDisplayService {
+  init = (reduxStore, popupController) => {
+    this.reduxStore = reduxStore;
+    this.popupController = popupController;
+  }
 
-class OfficeDisplayService {
-  printObject = async (options) => {
-    const {
-      isRefreshAll = false,
-      isPrompted,
-      objectId,
-      projectId,
-      mstrObjectType,
-    } = options;
-    if (!isRefreshAll) {
-      // /Reports/getDefinition (GET /reports/{reportId}) endpoint does not work for Reports with Object Prompt(?)
-      // so we're using /Object_Management/getObject (GET /objects/{id}) instead
-      // should probably open an DE
-      if (mstrObjectType.name !== mstrObjectEnum.mstrObjectType.visualization.name) {
-        const objectInfo = isPrompted
-          ? await getObjectInfo(objectId,
-            projectId,
-            mstrObjectType)
-          : await getObjectDefinition(objectId,
-            projectId,
-            mstrObjectType);
-        reduxStore.dispatch({
-          type: officeProperties.actions.preLoadReport,
-          preLoadReport: objectInfo,
-        });
-      }
-      await popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
-    }
-    try {
-      return await this._printObject(options);
-    } finally {
-      if (!isRefreshAll) this._dispatchPrintFinish();
-    }
-  };
-
-  _printObject = async ({
+  /**
+   * Main function in office Display Service responsible for import/refresh and display workflow. Whole workflow can splitted into steps.
+   * 1.Get object definition
+   * 2.Get active cell in Excel(only for import)
+   * 3.Create Instance and InstaceDefinition object Containing information needed for import
+   * 4.Create Excel Table
+   * 5.Apply number formatting to Excel cells
+   * 6.Fetch and insert data into Excel
+   * 7.Table formatting
+   * 8.Apply subtotal formatting
+   * 9.Get visualization breadcrumbs
+   * 10.Store information about object to Redux and Excel
+   *
+   * @param {String} parameter.objectId
+   * @param {String} parameter.projectId
+   * @param {Object} [parameter.mstrObjectType = mstrObjectEnum.mstrObjectType.report ]
+   * @param {Object|Boolean} parameter.selectedCell Address of current active cell or true in case of true for refresh
+   * @param {String} parameter.bindingId  Binding to Excel Table
+   * @param {Boolean} parameter.isRefresh
+   * @param {Object} [parameter.dossierData]
+   * @param {Object} [parameter.body]
+   * @param {Boolean} parameter.isCrosstab
+   * @param {Boolean} parameter.isPrompted
+   * @param {Object} [parameter.promptsAnswers]
+   * @param {Object} [parameter.crosstabHeaderDimensions=false] Contains crosstab header dimensions
+   * @param {Object} [parameter.subtotalsInfo] Contains information if subtotals are defined in the response, if they are visible, also includes the subtotalsAdresses and subtotal value we set for toggle in prepare data.
+   * @param {Object} [parameter.subtotalsInfo.subtotalsDefined=false] information that if the subtotals are defined in response
+   * @param {Object} [parameter.subtotalsInfo.subtotalsVisible=false] information that if the subtotals are visible in response
+   * @param {Object} [parameter.subtotalsInfo.subtotalsAddresses=false] Contains information of subtotal adresses.
+   * @param {Object} [parameter.subtotalsInfo.importSubtotal=false] information that if the subtotals will be imported from the prepare data
+   * @param {Object} [parameter.visualizationInfo=false]
+   * @param {Object} [parameter.preparedInstanceId] Instance created before import workflow.
+   * @param {Object} [parameter.manipulationsXML=false] Dossier Manipulation for imported visualization
+   * @param {Object} [parameter.isRefreshAll]
+   * @param {Boolean} [parameter.insertNewWorksheet] Flag for inserting new excel worksheet before import
+   * @param {Boolean} [parameter.originalObjectName] Name of original object to create originalName + copy during duplicate workflow
+   * @param {String} [parameter.displayAttrFormNames] Name of the display attribute names option
+   * @returns {Object} Specify status of the import.
+   * @memberof officeDisplayService
+   */
+  printObject = async ({
     objectId,
     projectId,
     mstrObjectType = mstrObjectEnum.mstrObjectType.report,
@@ -83,24 +89,38 @@ class OfficeDisplayService {
     isPrompted,
     promptsAnswers,
     crosstabHeaderDimensions = false,
-    subtotalInfo: {
-      importSubtotal = true,
+    subtotalsInfo : {
+      subtotalsDefined = false,
+      subtotalsVisible = false,
       subtotalsAddresses = false,
+      importSubtotal = true,
     } = false,
     visualizationInfo = false,
     preparedInstanceId,
     manipulationsXML = false,
+    isRefreshAll,
+    tableName,
+    previousTableDimensions,
+    insertNewWorksheet = false,
+    originalObjectName,
+    displayAttrFormNames = officeProperties.displayAttrFormNames.automatic
   }) => {
-    let officeTable;
     let newOfficeTableId;
     let shouldFormat;
     let excelContext;
     let startCell;
     let tableColumnsChanged;
     let instanceDefinition;
-    // TODO: Uncomment this as far as DE150758 will be resolved (Can not get definition for prompted dossier)
-    // let dossierStructure;
+    let officeTable;
+    let bindId;
     try {
+      excelContext = await officeApiHelper.getExcelContext();
+      if (!isRefreshAll) {
+        // /Reports/getDefinition (GET /reports/{reportId}) endpoint does not work for Reports with Object Prompt(?)
+        // so we're using /Object_Management/getObject (GET /objects/{id}) instead
+        // should probably open an DE
+        await this.getObjectInformation(mstrObjectType, isPrompted, objectId, projectId);
+      }
       const objectType = mstrObjectType;
       const { envUrl } = officeApiHelper.getCurrentMstrContext();
 
@@ -108,71 +128,46 @@ class OfficeDisplayService {
       console.group('Importing data performance');
       console.time('Total');
       console.time('Init excel');
-      excelContext = await officeApiHelper.getExcelContext();
+      if (insertNewWorksheet) {
+        await officeApiHelper.createAndActivateNewWorksheet(excelContext);
+      }
       startCell = selectedCell || (await officeApiHelper.getSelectedCell(excelContext));
       console.timeEnd('Init excel');
 
       // Get mstr instance definition
       console.time('Instance definition');
-      if (body) {
-        body.template = body.requestedObjects;
-      }
-      if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-        // !TODO: include promptsAnswers in instance body to get prompted data
-        if (manipulationsXML) {
-          if (!body) body = {};
-          body.manipulations = manipulationsXML.manipulations;
-          body.promptAnswers = manipulationsXML.promptAnswers;
-        }
-        const instanceId = preparedInstanceId || (await createDossierInstance(projectId, objectId, body));
-        const config = { projectId, objectId, instanceId, mstrObjectType, dossierData, body, visualizationInfo };
-        const temp = await fetchVisualizationDefinition(config);
-        instanceDefinition = { ...temp, instanceId };
-      } else {
-        const config = { objectId, projectId, mstrObjectType, dossierData, body };
-        instanceDefinition = await createInstance(config);
-      }
-      // Status 2 = report has open prompts to be answered before data can be returned
-      if (instanceDefinition.status === 2) {
-        instanceDefinition = await this._answerPrompts(instanceDefinition, objectId, projectId, promptsAnswers, dossierData, body);
-      }
+      ({ body, instanceDefinition, isCrosstab } = await this.getInstaceDefinition(
+        body, mstrObjectType, manipulationsXML, preparedInstanceId, projectId, objectId, dossierData,
+        visualizationInfo, promptsAnswers, crosstabHeaderDimensions, subtotalsAddresses, subtotalsDefined,
+        subtotalsVisible, displayAttrFormNames
+      ));
       const { mstrTable } = instanceDefinition;
-      isCrosstab = mstrTable.isCrosstab;
-      mstrTable.prevCrosstabDimensions = crosstabHeaderDimensions;
-      mstrTable.crosstabHeaderDimensions = isCrosstab
-        ? this._getCrosstabHeaderDimensions(instanceDefinition)
-        : false;
-      mstrTable.subtotalsAddresses = subtotalsAddresses;
+      ({ crosstabHeaderDimensions } = mstrTable);
       console.timeEnd('Instance definition');
 
       // Check if instance returned data
-      if (
-        !instanceDefinition
-        || instanceDefinition.mstrTable.rows.length === 0
-      ) {
+      if (!instanceDefinition || mstrTable.rows.length === 0) {
         return {
           type: 'warning',
-          message: isPrompted
-            ? ALL_DATA_FILTERED_OUT
-            : NOT_SUPPORTED_NO_ATTRIBUTES,
+          message: isPrompted ? ALL_DATA_FILTERED_OUT : NOT_SUPPORTED_NO_ATTRIBUTES,
         };
       }
 
-      // TODO: If isRefresh check if new instance definition is same as before
-
       // Create or update table
-      ({ officeTable, newOfficeTableId, shouldFormat, tableColumnsChanged } = await this._getOfficeTable(isRefresh, excelContext, bindingId, instanceDefinition, startCell));
+      ({ officeTable, newOfficeTableId, shouldFormat, tableColumnsChanged, bindId } = await officeTableHelper.getOfficeTable(
+        isRefresh, excelContext, bindingId, instanceDefinition, startCell, tableName, previousTableDimensions
 
+      ));
       // Apply formatting when table was created
-      if (shouldFormat) {
-        await this._applyFormatting(officeTable, instanceDefinition, isCrosstab, excelContext);
+      if (shouldFormat && !mstrTable.isCrosstabular) {
+        await officeFormattingHelper.applyFormatting(officeTable, instanceDefinition, isCrosstab, excelContext);
       }
 
       // Fetch, convert and insert with promise generator
       console.time('Fetch and insert into excel');
       const connectionData = { objectId, projectId, dossierData, mstrObjectType, body };
       const officeData = { officeTable, excelContext, startCell, newOfficeTableId };
-      ({ officeTable, subtotalsAddresses } = await this._fetchInsertDataIntoExcel({
+      ({ officeTable, subtotalsAddresses } = await this.fetchInsertDataIntoExcel({
         connectionData,
         officeData,
         instanceDefinition,
@@ -180,31 +175,44 @@ class OfficeDisplayService {
         startCell,
         tableColumnsChanged,
         visualizationInfo,
+        importSubtotal,
+        displayAttrFormNames
       }));
+
+      if (shouldFormat) await officeFormattingHelper.formatTable(officeTable, isCrosstab, crosstabHeaderDimensions, excelContext);
+      mstrTable.subtotalsInfo.subtotalsAddresses = subtotalsAddresses;
+      mstrTable.subtotalsInfo.importSubtotal = importSubtotal;
+
       if (subtotalsAddresses.length) {
         // Removing duplicated subtotal addresses from headers
-        await this.applySubtotalFormatting(isCrosstab, subtotalsAddresses, officeTable, excelContext, mstrTable);
+        await officeFormattingHelper.applySubtotalFormatting(isCrosstab, subtotalsAddresses, officeTable, excelContext, instanceDefinition.mstrTable);
       }
 
       // Get visualization path from dossier definition.
       // Used to show in sidebar placeholder
+      if (objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
+        mstrTable.id = objectId;
+        console.time('Get dossier structure');
+        visualizationInfo = await this.getVisualizationInfo(projectId, objectId, visualizationInfo.visualizationKey, preparedInstanceId) || visualizationInfo;
+        console.timeEnd('Get dossier structure');
+      }
 
-      // TODO: Uncomment this as far as DE150758 will be resolved (Can not get definition for prompted dossier)
-      // if (objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-      //   console.time('Get dossier structure');
-      //   mstrTable.id = objectId;
-      //   dossierStructure = await this.getDossierStructure(projectId, objectId, visualizationInfo, preparedInstanceId);
-      //   visualizationInfo.dossierStructure = dossierStructure;
-      //   console.timeEnd('Get dossier structure');
-      // }
+      const tableid = await this.bindOfficeTable(officeTable, excelContext, bindingId, bindId);
+      // assign new name in duplicate workflow
+      if (originalObjectName) {
+        console.time('Duplicate renaming');
+        const nameCandidate = this.prepareNewNameForDuplicatedObject(originalObjectName);
+        const finalNewName = this.checkAndSolveNameConflicts(nameCandidate);
+        mstrTable.name = finalNewName;
+        console.timeEnd('Duplicate renaming');
+      }
 
       // Save to store
-      bindingId = bindingId || newOfficeTableId;
-      await officeApiHelper.bindNamedItem(newOfficeTableId, bindingId);
-      this._addToStore({
-        isRefresh,
-        instanceDefinition,
-        bindingId,
+      officeStoreService.saveAndPreserveReportInStore({
+        name: mstrTable.name,
+        manipulationsXML: instanceDefinition.manipulationsXML,
+        bindId:tableid,
+        oldTableId:bindingId,
         projectId,
         envUrl,
         body,
@@ -212,269 +220,38 @@ class OfficeDisplayService {
         isCrosstab,
         isPrompted,
         promptsAnswers,
-        subtotalInfo: {
-          importSubtotal,
-          subtotalsAddresses,
-        },
+        subtotalsInfo: mstrTable.subtotalsInfo,
         visualizationInfo,
-        objectId,
-      });
+        id: objectId,
+        isLoading: false,
+        crosstabHeaderDimensions,
+        tableName:newOfficeTableId,
+        tableDimensions: { columns: instanceDefinition.columns },
+        displayAttrFormNames
+      }, isRefresh);
 
       console.timeEnd('Total');
-      reduxStore.dispatch({ type: CLEAR_PROMPTS_ANSWERS });
-      reduxStore.dispatch({
+      this.reduxStore.dispatch({ type: CLEAR_PROMPTS_ANSWERS });
+      this.reduxStore.dispatch({
         type: officeProperties.actions.finishLoadingReport,
-        reportBindId: bindingId,
+        reportBindId: tableid,
       });
       return { type: 'success', message: 'Data loaded successfully' };
     } catch (error) {
-      if (officeTable && !isRefresh) {
-        let crosstabRange;
-        if (isCrosstab) {
-          const sheet = officeTable.worksheet;
-          crosstabRange = officeApiHelper.getCrosstabRange(officeTable.getRange().getCell(0, 0),
-            crosstabHeaderDimensions,
-            sheet);
-        }
-        officeTable.delete();
-        if (isCrosstab) (await crosstabRange.clear());
+      if (officeTable) {
+        if (!isRefresh) {
+          officeTable.showHeaders = true;
+          await officeApiHelper.deleteExcelTable(officeTable, excelContext, isCrosstab, instanceDefinition.mstrTable.crosstabHeaderDimensions);
+        } else if (isCrosstab) officeTable.showHeaders = false; // hides table headers for crosstab if we fail on refresh
       }
       throw error;
     } finally {
-      excelContext.sync();
+      if (!isRefreshAll) {
+        this.dispatchPrintFinish();
+      }
+      await excelContext.sync();
       console.groupEnd();
     }
-  };
-
-  removeReportFromStore = (bindingId) => {
-    reduxStore.dispatch({
-      type: officeProperties.actions.removeReport,
-      reportBindId: bindingId,
-    });
-    officeStoreService.deleteReport(bindingId);
-    return true;
-  };
-
-  removeReportFromExcel = async (
-    bindingId,
-    isCrosstab,
-    crosstabHeaderDimensions,
-    isRefresh,
-  ) => {
-    let crosstabRange;
-    try {
-      await authenticationHelper.validateAuthToken();
-      const officeContext = await officeApiHelper.getOfficeContext();
-      try {
-        await officeContext.document.bindings.releaseByIdAsync(bindingId,
-          () => {
-            console.log('released binding');
-          });
-        const excelContext = await officeApiHelper.getExcelContext();
-        const tableObject = excelContext.workbook.tables.getItem(bindingId);
-        if (isCrosstab) {
-          officeApiHelper.clearEmptyCrosstabRow(tableObject); // Since showing Excel table header dont override the data but insert new row, we clear values from empty row in crosstab to prevent it
-          tableObject.showHeaders = true;
-          crosstabRange = await officeApiHelper.getCrosstabRangeSafely(tableObject,
-            crosstabHeaderDimensions,
-            excelContext);
-          excelContext.trackedObjects.add(crosstabRange);
-        }
-        await tableObject.clearFilters();
-        // since we are removing table from Excel, we don't need event to be emitted
-        excelContext.runtime.enableEvents = false;
-        await excelContext.sync();
-        await tableObject.delete();
-        if (isCrosstab) {
-          await crosstabRange.clear();
-          excelContext.trackedObjects.remove(crosstabRange);
-        }
-        excelContext.runtime.enableEvents = true;
-        await excelContext.sync();
-        return !isRefresh && this.removeReportFromStore(bindingId);
-      } catch (e) {
-        if (e.code === 'ItemNotFound') {
-          return !isRefresh && this.removeReportFromStore(bindingId);
-        }
-        throw e;
-      }
-    } catch (error) {
-      return errorService.handleError(error);
-    }
-  };
-
-  /**
-   * Creates an office table if it's a new import or if the number of columns of an existing table changes.
-   * If we are refreshing a table and the new definiton range is not empty we keep the original table.
-   *
-   * @param {Object} instanceDefinition
-   * @param {Object} context ExcelContext
-   * @param {string} startCell  Top left corner cell
-   * @param {string} officeTableId Excel Binding ID
-   * @param {Object} prevOfficeTable Previous office table to refresh
-   *
-   * @memberOf OfficeDisplayService
-   */
-  _createOfficeTable = async (instanceDefinition, context, startCell, officeTableId, prevOfficeTable) => {
-    const { rows, columns, mstrTable } = instanceDefinition;
-    const { isCrosstab, toCrosstabChange, fromCrosstabChange, prevCrosstabDimensions, crosstabHeaderDimensions } = mstrTable;
-    const { rowsX: prevRowsX, columnsY: prevColumnsY } = prevCrosstabDimensions;
-    const { rowsX, columnsY } = crosstabHeaderDimensions;
-    let range;
-    const sheet = prevOfficeTable ? prevOfficeTable.worksheet : context.workbook.worksheets.getActiveWorksheet();
-    let tableStartCell = officeApiHelper.getTableStartCell({ startCell, sheet, instanceDefinition, prevOfficeTable, toCrosstabChange, fromCrosstabChange });
-    if (prevCrosstabDimensions && prevCrosstabDimensions !== crosstabHeaderDimensions && isCrosstab) {
-      tableStartCell = officeApiHelper.offsetCellBy(tableStartCell, columnsY - prevColumnsY, rowsX - prevRowsX);
-    }
-    const tableRange = officeApiHelper.getRange(columns, tableStartCell, rows);
-    if (isCrosstab) {
-      range = officeApiHelper.getCrosstabRange(tableStartCell, crosstabHeaderDimensions, sheet);
-    } else {
-      range = sheet.getRange(tableRange);
-    }
-    context.trackedObjects.add(range);
-    if (prevOfficeTable) {
-      prevOfficeTable.rows.load('count');
-      await context.sync();
-      const addedColumns = Math.max(0, columns - prevOfficeTable.columns.count);
-      const addedRows = Math.max(0, rows - prevOfficeTable.rows.count);
-
-      if (addedColumns) {
-        const rightRange = prevOfficeTable
-          .getRange()
-          .getColumnsAfter(addedColumns);
-        await this._checkRangeValidity(context, rightRange);
-      }
-
-      if (addedRows) {
-        const bottomRange = prevOfficeTable
-          .getRange()
-          .getRowsBelow(addedRows)
-          .getResizedRange(0, addedColumns);
-        await this._checkRangeValidity(context, bottomRange);
-      }
-
-      context.runtime.enableEvents = false;
-      await context.sync();
-      prevOfficeTable.delete();
-      context.runtime.enableEvents = true;
-      await context.sync();
-    } else {
-      await this._checkRangeValidity(context, range);
-    }
-    if (isCrosstab) {
-      officeApiHelper.createColumnsHeaders(tableStartCell, mstrTable.headers.columns, sheet, range);
-      officeApiHelper.createRowsTitleHeaders(tableStartCell, mstrTable.attributesNames, sheet, crosstabHeaderDimensions);
-    }
-    const officeTable = sheet.tables.add(tableRange, true);
-    this._styleHeaders(officeTable, TABLE_HEADER_FONT_COLOR, TABLE_HEADER_FILL_COLOR);
-    try {
-      officeTable.load('name');
-      officeTable.name = officeTableId;
-      if (isCrosstab) {
-        officeTable.showFilterButton = false;
-        officeTable.showHeaders = false;
-      } else {
-        officeTable.getHeaderRowRange().values = [mstrTable.headers.columns[mstrTable.headers.columns.length - 1]];
-      }
-      sheet.activate();
-      await context.sync();
-      return officeTable;
-    } catch (error) {
-      await context.sync();
-      throw error;
-    }
-  };
-
-  _updateOfficeTable = async (
-    instanceDefinition,
-    context,
-    startCell,
-    prevOfficeTable,
-  ) => {
-    try {
-      const { rows, mstrTable } = instanceDefinition;
-      const { isCrosstab, subtotalsAddresses } = mstrTable;
-      const crosstabHeaderDimensions = this._getCrosstabHeaderDimensions(instanceDefinition);
-
-      prevOfficeTable.rows.load('count');
-      await context.sync();
-      if (subtotalsAddresses.length) await this.applySubtotalFormatting(isCrosstab, subtotalsAddresses, prevOfficeTable, context, mstrTable, false);
-      const addedRows = Math.max(0, rows - prevOfficeTable.rows.count);
-      // If the new table has more rows during update check validity
-      if (addedRows) {
-        const bottomRange = prevOfficeTable.getRange().getRowsBelow(addedRows);
-        await this._checkRangeValidity(context, bottomRange);
-      }
-
-      if (mstrTable.isCrosstab) {
-        try {
-          const range = officeApiHelper.getCrosstabRange(startCell, crosstabHeaderDimensions, prevOfficeTable.worksheet);
-          officeApiHelper.createColumnsHeaders(startCell, mstrTable.headers.columns, prevOfficeTable.worksheet, range);
-          officeApiHelper.createRowsTitleHeaders(startCell, mstrTable.attributesNames, prevOfficeTable.worksheet, crosstabHeaderDimensions);
-        } catch (error) {
-          console.log(error);
-        }
-      }
-      context.workbook.application.suspendApiCalculationUntilNextSync();
-      prevOfficeTable.clearFilters();
-      prevOfficeTable.sort.clear();
-      if (!mstrTable.isCrosstab) {
-        prevOfficeTable.getHeaderRowRange().values = [
-          mstrTable.headers.columns[mstrTable.headers.columns.length - 1],
-        ];
-      }
-      await context.sync();
-      await this._updateRows(prevOfficeTable, context, rows);
-      return prevOfficeTable;
-    } catch (error) {
-      await context.sync();
-      throw error;
-    }
-  };
-
-  _getCrosstabHeaderDimensions = (instanceDefinition) => {
-    const { mstrTable } = instanceDefinition;
-    const { isCrosstab, headers } = mstrTable;
-    return {
-      columnsY: isCrosstab ? headers.columns.length : 0,
-      columnsX: isCrosstab ? headers.columns[0].length : 0,
-      rowsX: isCrosstab ? (headers.rows[0].length || 1) : 0, // if there is no attributes in rows we need to setup 1 for offset for column attributes names
-      rowsY: isCrosstab ? instanceDefinition.rows : 0,
-    };
-  }
-
-  _updateRows = async (prevOfficeTable, context, rows) => {
-    const tableRows = prevOfficeTable.rows;
-    tableRows.load('count');
-    await context.sync();
-    const tableRowCount = tableRows.count;
-    // Delete extra rows if new report is smaller
-    if (rows < tableRowCount) {
-      prevOfficeTable
-        .getRange()
-        .getRow(rows + 1)
-        .getResizedRange(tableRowCount - rows, 0)
-        .clear();
-      await context.sync();
-      tableRows.load('items');
-      await context.sync();
-      const rowsToRemove = tableRows.items;
-      for (let i = tableRowCount - 1; i >= rows; i--) {
-        rowsToRemove[i].delete();
-        if (i === rows || i % CONTEXT_LIMIT === 0) {
-          await context.sync();
-        }
-      }
-    }
-  }
-
-  _styleHeaders = (officeTable, fontColor, fillColor) => {
-    officeTable.style = DEFAULT_TABLE_STYLE;
-    // Temporarily disabling header formatting
-    // const headerRowRange = officeTable.getHeaderRowRange();
-    // headerRowRange.format.fill.color = fillColor;
-    // headerRowRange.format.font.color = fontColor;
   };
 
   /**
@@ -483,12 +260,14 @@ class OfficeDisplayService {
    *
    * @memberOf OfficeDisplayService
    */
-  _dispatchPrintFinish = () => {
-    const reduxStoreState = reduxStore.getState();
-    reduxStore.dispatch({ type: officeProperties.actions.popupHidden });
-    reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
+  dispatchPrintFinish = () => {
+    const reduxStoreState = this.reduxStore.getState();
+    this.reduxStore.dispatch({ type: officeProperties.actions.popupHidden });
+    this.reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
     try {
-      reduxStoreState.sessionReducer.dialog.close();
+      if (reduxStoreState.sessionReducer.dialog.close) {
+        reduxStoreState.sessionReducer.dialog.close();
+      }
     } catch (err) {
       if (!err.includes(ERROR_POPUP_CLOSED)) {
         throw err;
@@ -496,172 +275,132 @@ class OfficeDisplayService {
     }
   }
 
-  _addToStore = ({
-    isRefresh,
-    instanceDefinition,
-    bindingId,
-    projectId,
-    envUrl,
-    body,
-    objectType,
-    isCrosstab,
-    isPrompted,
-    promptsAnswers,
-    subtotalInfo,
-    visualizationInfo,
-    objectId
-  }) => {
-    const { mstrTable, manipulationsXML } = instanceDefinition;
-    const report = {
-      id: objectId,
-      name: mstrTable.name,
-      bindId: bindingId,
-      projectId,
-      envUrl,
-      body,
-      isLoading: false,
-      objectType,
-      isPrompted,
-      isCrosstab,
-      subtotalInfo,
-      promptsAnswers,
-      crosstabHeaderDimensions: mstrTable.crosstabHeaderDimensions,
-      visualizationInfo,
-      manipulationsXML,
-    };
-    officeStoreService.saveAndPreserveReportInStore(report, isRefresh);
+  bindOfficeTable = async(officeTable, excelContext, bindingId, bindId) => {
+    officeTable.load('name');
+    await excelContext.sync();
+    const tablename = officeTable.name;
+    let tableid = bindingId;
+    if (!bindingId || (bindId && (bindingId !== bindId))) { tableid = bindId; }
+    await officeApiHelper.bindNamedItem(tablename, tableid);
+    return tableid;
   }
 
-  _applyFormatting = async (
-    officeTable,
-    instanceDefinition,
-    isCrosstab,
-    excelContext,
-  ) => {
-    try {
-      console.time('Apply formatting');
-      officeApiHelper.formatNumbers(officeTable,
-        instanceDefinition.mstrTable,
-        isCrosstab);
-      await excelContext.sync();
-    } catch (error) {
-      // TODO: Inform the user?
-      console.log('Cannot apply formatting, skipping');
-    } finally {
-      console.timeEnd('Apply formatting');
+  /**
+   * Create Instance definition object which stores data neede to continue import.
+   * If instance of object does not exist new one will be created
+   *
+   * @param {Object} [body] Contains requested objects and filters
+   * @param {Object} mstrObjectType Contains objectId, projectId, dossierData, mstrObjectType used in request
+   * @param {Object} [preparedInstanceId] Instance Id of the object
+   * @param {String} projectId
+   * @param {String} objectId
+   * @param {Object} [dossierData]
+   * @param {Object} [visualizationInfo]
+   * @param {Object} [promptsAnswers]
+   * @param {Object} [crosstabHeaderDimensions] Contains previous dimensions of crosstab headers.
+   * @param {Array} [subtotalsAddresses] Contains previous subtotal addresses
+   * @param {Boolean} subtotalsDefined Information if the report has subtotals
+   * @param {Boolean} subtotalsVisible Information if the subtotals are visible
+   * @returns {Object} Object containing officeTable and subtotalAddresses
+   * @memberof officeDisplayService
+   */
+  async getInstaceDefinition(body, mstrObjectType, manipulationsXML, preparedInstanceId, projectId, objectId, dossierData, visualizationInfo, promptsAnswers, crosstabHeaderDimensions, subtotalsAddresses, subtotalsDefined, subtotalsVisible, displayAttrFormNames) {
+    let instanceDefinition;
+    if (body && body.requestedObjects) {
+      if (body.requestedObjects.attributes.length === 0 && body.requestedObjects.metrics.length === 0) {
+        body.requestedObjects = undefined;
+      }
+      body.template = body.requestedObjects;
     }
-  }
-
-  _getOfficeTable = async (isRefresh, excelContext, bindingId, instanceDefinition, startCell) => {
-    console.time('Create or get table');
-    const newOfficeTableId = bindingId || officeApiHelper.findAvailableOfficeTableId();
-    const { mstrTable, columns, rows } = instanceDefinition;
-    const { prevCrosstabDimensions, crosstabHeaderDimensions, isCrosstab } = mstrTable;
-    mstrTable.toCrosstabChange = !prevCrosstabDimensions && isCrosstab;
-    mstrTable.fromCrosstabChange = prevCrosstabDimensions && !isCrosstab;
-    let officeTable;
-    let shouldFormat = true;
-    let tableColumnsChanged;
-    if (isRefresh) {
-      const prevOfficeTable = await officeApiHelper.getTable(excelContext,
-        bindingId);
-      if (isCrosstab && !mstrTable.toCrosstabChange) officeApiHelper.clearEmptyCrosstabRow(prevOfficeTable); // Since showing Excel table header dont override the data but insert new row, we clear values from empty row in crosstab to prevent it
-      prevOfficeTable.showHeaders = true;
-      await excelContext.sync();
-      tableColumnsChanged = await this._checkColumnsChange(prevOfficeTable, excelContext, instanceDefinition);
-      const headerCell = prevOfficeTable.getHeaderRowRange().getCell(0, 0);
-      headerCell.load('address');
-      await excelContext.sync();
-      startCell = officeApiHelper.getStartCell(headerCell.address);
-      officeApiHelper.getRange(columns, startCell, rows);
-      if (prevCrosstabDimensions) {
-        officeApiHelper.clearCrosstabRange(prevOfficeTable, crosstabHeaderDimensions, prevCrosstabDimensions, isCrosstab, excelContext);
+    if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
+      if (manipulationsXML) {
+        if (!body) { body = {}; }
+        body.manipulations = manipulationsXML.manipulations;
+        body.promptAnswers = manipulationsXML.promptAnswers;
       }
-      await excelContext.sync();
-      if (tableColumnsChanged) {
-        console.log('Instance definition changed, creating new table');
-        officeTable = await this._createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId, prevOfficeTable);
-      } else {
-        shouldFormat = false;
-        console.time('Validate existing table');
-        officeTable = await this._updateOfficeTable(instanceDefinition, excelContext, startCell, prevOfficeTable);
-        console.timeEnd('Validate existing table');
-      }
+      const instanceId = preparedInstanceId || (await createDossierInstance(projectId, objectId, body));
+      const config = { projectId, objectId, instanceId, mstrObjectType, dossierData, body, visualizationInfo };
+      const temp = await fetchVisualizationDefinition(config);
+      instanceDefinition = { ...temp, instanceId };
     } else {
-      officeTable = await this._createOfficeTable(instanceDefinition, excelContext, startCell, newOfficeTableId);
+      const config = { objectId, projectId, mstrObjectType, dossierData, body, displayAttrFormNames };
+      instanceDefinition = await createInstance(config);
     }
-    console.timeEnd('Create or get table');
-    return {
-      officeTable,
-      newOfficeTableId,
-      shouldFormat,
-      tableColumnsChanged,
-    };
+    // Status 2 = report has open prompts to be answered before data can be returned
+    if (instanceDefinition.status === 2) {
+      instanceDefinition = await this.answerPrompts(instanceDefinition, objectId, projectId, promptsAnswers, dossierData, body);
+    }
+
+    const { mstrTable } = instanceDefinition;
+    const { isCrosstab } = mstrTable;
+    mstrTable.prevCrosstabDimensions = crosstabHeaderDimensions;
+    mstrTable.crosstabHeaderDimensions = isCrosstab
+      ? officeTableHelper.getCrosstabHeaderDimensions(instanceDefinition)
+      : false;
+    mstrTable.subtotalsInfo.subtotalsAddresses = subtotalsAddresses;
+    ({ subtotalsDefined, subtotalsVisible } = mstrTable.subtotalsInfo);
+    return { body, instanceDefinition, isCrosstab, subtotalsDefined, subtotalsVisible };
   }
 
-  applySubtotalFormatting = async (isCrosstab, subtotalsAddresses, officeTable, excelContext, mstrTable, shouldbold = true) => {
-    console.time('Subtotal Formatting');
-    if (isCrosstab) { subtotalsAddresses = new Set(subtotalsAddresses); }
-    const reportstartCell = officeTable.getRange().getCell(0, 0);
-    excelContext.trackedObjects.add(reportstartCell);
-    await officeApiHelper.formatSubtotals(reportstartCell, subtotalsAddresses, mstrTable, excelContext, shouldbold);
-    excelContext.trackedObjects.remove(reportstartCell);
-    console.timeEnd('Subtotal Formatting');
+  /**
+   * Gets object definition, dispatch data to Redux and display loading popup.
+   *
+   * @param {Object} mstrObjectType
+   * @param {Object} isPrompted
+   * @param {String} objectId
+   * @param {String} projectId
+   * @memberof officeDisplayService
+   */
+  getObjectInformation = async (mstrObjectType, isPrompted, objectId, projectId) => {
+    if (mstrObjectType.name !== mstrObjectEnum.mstrObjectType.visualization.name) {
+      const objectInfo = isPrompted
+        ? await getObjectInfo(objectId, projectId, mstrObjectType)
+        : await getObjectDefinition(objectId, projectId, mstrObjectType);
+      this.reduxStore.dispatch({
+        type: officeProperties.actions.preLoadReport,
+        preLoadReport: objectInfo,
+      });
+    }
+    await this.popupController.runPopup(PopupTypeEnum.loadingPage, 22, 28);
   }
 
-  async _fetchInsertDataIntoExcel({ connectionData, officeData, instanceDefinition, isRefresh, tableColumnsChanged, visualizationInfo }) {
+  /**
+  * Fetch Data from Microstrategy and insert it into the Excel table. For crosstab also creates row headers
+  *
+  * @param {Object} parameter.connectionData Contains objectId, projectId, dossierData, mstrObjectType used in request
+  * @param {Object} parameter.officeData Contains Excel context and Excel table reference.
+  * @param {Boolean} parameter.isRefresh
+  * @param {Boolean} parameter.tableColumnsChanged
+  * @param {Object} parameter.instanceDefinition
+  * @param {Object} [parameter.visualizationInfo]
+  * @returns {Object} Object containing officeTable and subtotalAddresses
+  * @memberof officeDisplayService
+  */
+  async fetchInsertDataIntoExcel({ connectionData, officeData, instanceDefinition, isRefresh, tableColumnsChanged, visualizationInfo, importSubtotal, displayAttrFormNames }) {
     try {
       const { objectId, projectId, dossierData, mstrObjectType } = connectionData;
       const { excelContext, officeTable } = officeData;
       const { columns, rows, mstrTable } = instanceDefinition;
-      const limit = Math.min(Math.floor(DATA_LIMIT / columns),
-        IMPORT_ROW_LIMIT);
-      const configGenerator = { instanceDefinition, objectId, projectId, mstrObjectType, dossierData, limit, visualizationInfo, };
+      const limit = Math.min(Math.floor(DATA_LIMIT / columns), IMPORT_ROW_LIMIT);
+      const configGenerator = { instanceDefinition, objectId, projectId, mstrObjectType, dossierData, limit, visualizationInfo, displayAttrFormNames };
       const rowGenerator = getObjectContentGenerator(configGenerator);
       let rowIndex = 0;
-      let contextPromises = [];
+      const contextPromises = [];
       const subtotalsAddresses = [];
+
       console.time('Fetch data');
-      // eslint-disable-next-line no-restricted-syntax, no-unused-vars
       for await (const { row, header, subtotalAddress } of rowGenerator) {
         console.groupCollapsed(`Importing rows: ${rowIndex} to ${Math.min(rowIndex + limit, rows)}`);
         console.timeEnd('Fetch data');
         excelContext.workbook.application.suspendApiCalculationUntilNextSync();
-        console.group('Append rows');
-        await this._appendRowsToTable(officeTable, row, rowIndex, isRefresh, tableColumnsChanged, excelContext);
-        console.groupEnd('Append rows');
-        if (mstrTable.isCrosstab) {
-          console.time('Append crosstab rows');
-          this._appendCrosstabRowsToRange(officeTable, header.rows, rowIndex, isRefresh, excelContext);
-          contextPromises.push(excelContext.sync());
-          console.timeEnd('Append crosstab rows');
-        }
-        console.time('Get subtotals coordinates');
-        for (let i = 0; i < subtotalAddress.length; i += 1) {
-          // eslint removed Boolean(subtotalAddress[i])
-          if (subtotalAddress[i]) subtotalsAddresses.push(subtotalAddress[i]);
-        }
-        console.timeEnd('Get subtotals coordinates');
+        await this.appendRows(officeData, row, rowIndex, isRefresh, tableColumnsChanged, contextPromises, header, mstrTable);
+        if (importSubtotal) this.getSubtotalCoordinates(subtotalAddress, subtotalsAddresses);
         rowIndex += row.length;
-        const promiseLength = contextPromises.length;
-        if (promiseLength % PROMISE_LIMIT === 0) {
-          console.time('Waiting for pending context syncs');
-          await Promise.all(contextPromises);
-          console.timeEnd('Waiting for pending context syncs');
-          contextPromises = [];
-        }
-        console.time('Fetch data');
+        await this.syncChangesToExcel(contextPromises, false);
         console.groupEnd();
       }
       console.timeEnd('Fetch and insert into excel');
-      console.time('Context sync');
-      await Promise.all(contextPromises);
-      console.timeEnd('Context sync');
-      console.time('Column auto size');
-      await officeApiHelper.formatTable(officeTable, mstrTable.isCrosstab, mstrTable.crosstabHeaderDimensions, excelContext);
-      console.timeEnd('Column auto size');
-      if (mstrTable.isCrosstab) officeTable.showHeaders = false;
-      await excelContext.sync();
+      await this.syncChangesToExcel(contextPromises, true);
       return { officeTable, subtotalsAddresses };
     } catch (error) {
       console.log(error);
@@ -669,35 +408,44 @@ class OfficeDisplayService {
     }
   }
 
-  _appendCrosstabRowsToRange = (officeTable, headerRows, rowIndex) => {
+  /**
+  * Appends crosstab row headers to imported object.
+  *
+  * @param {Office} officeTable Reference to Ecxcel table.
+  * @param {Array} header Contains data for crosstab row headers.
+  * @param {Number} rowIndex Specify from row we should append rows
+  * @memberof officeDisplayService
+  */
+  appendCrosstabRowsToRange = (officeTable, headerRows, rowIndex) => {
+    console.time('Append crosstab rows');
     const startCell = officeTable
       .getDataBodyRange()
       .getRow(0)
       .getCell(0, 0)
       .getOffsetRange(rowIndex, 0);
     officeApiHelper.createRowsHeaders(startCell, headerRows);
+    console.timeEnd('Append crosstab rows');
   }
 
-  _appendRowsToTable = async (officeTable, excelRows, rowIndex, isRefresh = false, tableColumnsChanged, excelContext) => {
-    console.time('Split Rows');
-    let splitExcelRows = [excelRows];
-    if (this.sizeOfObject(excelRows) > 5) splitExcelRows = this.splitExcelRows(excelRows);
-    console.timeEnd('Split Rows');
-    // Get resize range: The number of rows/cols by which to expand the bottom-right corner,
-    // relative to the current range.
-    for (let i = 0; i < splitExcelRows.length; i += 1) {
-      excelContext.workbook.application.suspendApiCalculationUntilNextSync();
-      const rowRange = officeTable
-        .getDataBodyRange()
-        .getRow(rowIndex)
-        .getResizedRange(splitExcelRows[i].length - 1, 0);
-      rowIndex += splitExcelRows[i].length;
-      if (!tableColumnsChanged && isRefresh) rowRange.clear('Contents');
-      rowRange.values = splitExcelRows[i];
-      console.time(`Sync for ${splitExcelRows[i].length} rows`);
-      await excelContext.sync();
-      console.timeEnd(`Sync for ${splitExcelRows[i].length} rows`);
-    }
+  /**
+   * Appends rows with data and attributes to object in Excel.
+   *
+   * @param {Office} officeData Contains Excel context and Excel table reference.
+   * @param {Array} excelRows Array of table data
+   * @param {Number} rowIndex Specify from row we should append rows
+   * @param {Boolean} isRefresh
+   * @param {Boolean} tableColumnsChanged
+   * @param {Array} contextPromises Array excel context sync promises.
+   * @param {Object} header Contains data for crosstab headers.
+   * @param {Object} mstrTable Contains informations about mstr object
+   * @memberof officeDisplayService
+   */
+  appendRows = async (officeData, excelRows, rowIndex, isRefresh = false, tableColumnsChanged, contextPromises, header, mstrTable) => {
+    const { excelContext, officeTable } = officeData;
+    await this.appendRowsToTable(excelRows, excelContext, officeTable, rowIndex, tableColumnsChanged, isRefresh);
+
+    if (mstrTable.isCrosstab) { this.appendCrosstabRowsToRange(officeTable, header.rows, rowIndex); }
+    contextPromises.push(excelContext.sync());
   }
 
   /**
@@ -710,6 +458,7 @@ class OfficeDisplayService {
   splitExcelRows = (excelRows) => {
     let splitRows = [excelRows];
     let isFitSize = false;
+    console.time('Split Rows');
     do {
       const tempSplit = [];
       let changed = false;
@@ -727,6 +476,7 @@ class OfficeDisplayService {
       splitRows = [...tempSplit];
       if (!changed) isFitSize = true;
     } while (!isFitSize);
+    console.timeEnd('Split Rows');
     return splitRows;
   }
 
@@ -760,47 +510,50 @@ class OfficeDisplayService {
     return bytes / 1000000;
   }
 
-  _checkColumnsChange = async (prevOfficeTable, context, instanceDefinition) => {
-    const { columns } = instanceDefinition;
-    const tableColumns = prevOfficeTable.columns;
-    tableColumns.load('count');
-    await context.sync();
-    const tableColumnsCount = tableColumns.count;
-    return columns !== tableColumnsCount;
-  };
-
-  _checkRangeValidity = async (context, excelRange) => {
-    // Pass true so only cells with values count as used
-    const usedDataRange = excelRange.getUsedRangeOrNullObject(true);
-    await context.sync();
-    if (!usedDataRange.isNullObject) {
-      throw new OverlappingTablesError(TABLE_OVERLAP);
-    }
-  };
-
-  getDossierStructure = async (projectId, objectId, visualizationInfo, preparedInstanceId) => {
-    const { visualizationKey, chapterKey } = visualizationInfo;
+  /**
+   * Check size of passed object in MB
+   *
+   * @param {String} projectId
+   * @param {String} objectId
+   * @param {String} visualizationKey visualization id.
+   * @param {Object} preparedInstanceId
+   * @returns {Object} Contains breadcrumbs fro visualization.
+   * @memberof officeDisplayService
+   */
+  getVisualizationInfo = async (projectId, objectId, visualizationKey, preparedInstanceId) => {
     const dossierDefinition = await getDossierDefinition(projectId, objectId, preparedInstanceId);
-    const dossierStructure = { dossierName: dossierDefinition.name };
-    const chapter = dossierDefinition.chapters.find((el) => el.key === chapterKey);
-    dossierStructure.chapterName = chapter.name;
-    const { pages } = chapter;
-    if (pages.length === 1) {
-      dossierStructure.pageName = chapter.pages[0].name;
-    } else {
-      for (let i = 0; i < pages.length; i++) {
-        for (let j = 0; j < pages[i].visualizations.length; j++) {
-          if (pages[i].visualizations[j].key === visualizationKey) {
-            dossierStructure.pageName = pages[i].name;
+    for (const chapter of dossierDefinition.chapters) {
+      for (const page of chapter.pages) {
+        for (const visualization of page.visualizations) {
+          if (visualization.key === visualizationKey) {
+            return {
+              chapterKey: chapter.key,
+              visualizationKey,
+              dossierStructure: {
+                chapterName: chapter.name,
+                dossierName: dossierDefinition.name,
+                pageName: page.name
+              }
+            };
           }
         }
       }
     }
-    return dossierStructure;
+    return undefined;
   }
 
-
-  _answerPrompts = async (instanceDefinition, objectId, projectId, promptsAnswers, dossierData, body) => {
+  /**
+   * Answers prompts and modify instance of the object.
+   *
+   * @param {Object} instanceDefinition
+   * @param {String} objectId
+   * @param {String} projectId
+   * @param {Object} promptsAnswers Stored prompt answers
+   * @param {Object} dossierData
+   * @param {Object} body Contains requested objects and filters.
+   * @memberof officeDisplayService
+   */
+  answerPrompts = async (instanceDefinition, objectId, projectId, promptsAnswers, dossierData, body) => {
     try {
       let count = 0;
       while (instanceDefinition.status === 2 && count < promptsAnswers.length) {
@@ -818,6 +571,144 @@ class OfficeDisplayService {
       throw error;
     }
   }
+
+  /**
+   * Appends rows with data to Excel table only.
+   *
+   * @param {Array} subtotalAddress Array containig object with coordinates of subtotals in rows currently processed.
+   * @param {Array} subtotalsAddresses Array containig object with coordinates of subtotals of object.
+   * @memberof officeDisplayService
+   */
+  getSubtotalCoordinates = (subtotalAddress, subtotalsAddresses) => {
+    console.time('Get subtotals coordinates');
+    for (let i = 0; i < subtotalAddress.length; i += 1) {
+      // eslint removed Boolean(subtotalAddress[i])
+      if (subtotalAddress[i]) { subtotalsAddresses.push(subtotalAddress[i]); }
+    }
+    console.timeEnd('Get subtotals coordinates');
+  }
+
+  /**
+   * Synchronise all changes to Excel up to this point. Clears stored promises after sync.
+   *
+   * @param {Array} contextPromises Array excel context sync promises.
+   * @param {Boolean} finalsync Specify whether this will be last sync after inserting data into table.
+   * @memberof officeDisplayService
+   */
+  syncChangesToExcel = async (contextPromises, finalsync) => {
+    if (contextPromises.length % PROMISE_LIMIT === 0) {
+      console.time('Waiting for pending context syncs');
+      await Promise.all(contextPromises);
+      console.timeEnd('Waiting for pending context syncs');
+      contextPromises = [];
+    } else if (finalsync) {
+      console.time('Context sync');
+      await Promise.all(contextPromises);
+      console.timeEnd('Context sync');
+    }
+  }
+
+  /**
+   * Appends rows with data to Excel table only.
+   *
+   * @param {Array} excelRows Array of table data
+   * @param {Office} excelContext
+   * @param {Office} officeTable reference to Excel table
+   * @param {Number} rowIndex Specify from row we should append rows
+   * @param {Boolean} tableColumnsChanged
+   * @param {Boolean} isRefresh
+   * @memberof officeDisplayService
+   */
+  async appendRowsToTable(excelRows, excelContext, officeTable, rowIndex, tableColumnsChanged, isRefresh) {
+    console.group('Append rows');
+    const isOverLimit = this.sizeOfObject(excelRows) > 5;
+    const splitExcelRows = this.getExcelRows(excelRows, isOverLimit);
+    for (let i = 0; i < splitExcelRows.length; i += 1) {
+      excelContext.workbook.application.suspendApiCalculationUntilNextSync();
+      // Get resize range: The number of rows/cols by which to expand the bottom-right corner,
+      // relative to the current range.
+      const rowRange = officeTable
+        .getDataBodyRange()
+        .getRow(rowIndex)
+        .getResizedRange(splitExcelRows[i].length - 1, 0);
+      rowIndex += splitExcelRows[i].length;
+      if (!tableColumnsChanged && isRefresh) { rowRange.clear('Contents'); }
+      rowRange.values = splitExcelRows[i];
+      if (isOverLimit) {
+        console.time(`Sync for ${splitExcelRows[i].length} rows`);
+        // eslint-disable-next-line no-await-in-loop
+        await excelContext.sync();
+        console.timeEnd(`Sync for ${splitExcelRows[i].length} rows`);
+      }
+    }
+    console.groupEnd('Append rows');
+  }
+
+  /**
+   * Return Excel Rows that will be added to table if needed rows will be splitted into chunks that meets limit of 5MB
+   *
+   * @param {Array} excelRows Array of table data
+   * @param {Boolean} isOverLimit Specify if the passed Excel rows are over 5MB limit
+   * @returns {Array} Array with sub-arrays with size not more than 5MB
+   * @memberof officeDisplayService
+   */
+  getExcelRows(excelRows, isOverLimit) {
+    let splitExcelRows = [excelRows];
+    if (isOverLimit) { splitExcelRows = this.splitExcelRows(excelRows); }
+    return splitExcelRows;
+  }
+
+  prepareNewNameForDuplicatedObject(originalObjectName) {
+    const splitedName = originalObjectName.split(' ');
+    const nrOfWords = splitedName.length;
+
+    const lastWordIndex = nrOfWords - 1;
+    const lastWord = splitedName[lastWordIndex];
+    const lastWordAsNumber = Number(lastWord);
+
+    const secondLastWordIndex = nrOfWords - 2;
+    const secondLastWord = splitedName[secondLastWordIndex];
+
+    if ((Number.isNaN(lastWordAsNumber)) && (lastWord !== 'copy')) {
+      splitedName.push('copy');
+    } else if (lastWord === 'copy') {
+      splitedName.push('1');
+    } else if (secondLastWord === 'copy') {
+      splitedName.pop();
+      splitedName.push(`${lastWordAsNumber + 1}`);
+    } else {
+      splitedName.push('copy');
+    }
+
+    const nameCandidate = splitedName.join(' ');
+
+    return nameCandidate;
+  }
+
+  checkAndSolveNameConflicts(nameCandidate) {
+    const splitedName = nameCandidate.split(' ');
+    let finalNameCandidate = nameCandidate;
+
+    const reportsArray = [...officeStoreService.getReportProperties()];
+    const reportsArrayNames = [];
+    for (const report of reportsArray) {
+      reportsArrayNames.push(report.name);
+    }
+
+    while (reportsArrayNames.includes(finalNameCandidate)) {
+      if (splitedName[splitedName.length - 1] === 'copy') {
+        splitedName.push(1);
+      } else {
+        const last = splitedName.pop();
+        const last2Number = Number(last);
+        splitedName.push(`${last2Number + 1}`);
+      }
+      finalNameCandidate = splitedName.join(' ');
+    }
+    return finalNameCandidate;
+  }
 }
+
+
 export const officeDisplayService = new OfficeDisplayService();
 export default officeDisplayService;
