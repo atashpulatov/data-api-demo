@@ -186,6 +186,7 @@
   "Remove": "Ta bort",
   "Subtotals and Totals": "Delsummar och Totals",
   "Import Dossier": "Importera Dossier-objekt",
-  "This is a crosstab report. To preserve its structure, select all attributes and metrics.": "*This is a crosstab report. To preserve its structure, select all attributes and metrics.*",
-  "This object does not exist in the workbook anymore.": "*This object does not exist in the workbook anymore.*"
+  "This is a crosstab report. To preserve its structure, select all attributes and metrics.": "Det här är en korstabellrapport. För att bevara dess struktur, välj alla attribut och mätvärden.",
+  "This object does not exist in the workbook anymore.": "Detta objekt finns inte längre i arbetsboken.",
+  "The table you are trying to manipulate is in a protected sheet. To make a change, unprotect the sheet. You might be requested to enter a password.": "Tabellen du försöker manipulera finns i ett skyddat ark. För att göra en ändring, avlägsna skyddet från arket. Du kan bli ombedd att ange ett lösenord."
 }
