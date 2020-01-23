@@ -179,7 +179,7 @@ export class _OfficeLoadedFile extends React.Component {
             mouseEnterDelay={1}
           >
           <span>
-            <img src={reportIcon} alt="report icon" />
+            <img src={reportIcon} alt={t('report icon')} />
           </span>
         </ButtonPopover>
       );
@@ -191,7 +191,7 @@ export class _OfficeLoadedFile extends React.Component {
             mouseEnterDelay={1}
           >
           <span>
-            <img src={datasetIcon} alt="dataset icon" />
+            <img src={datasetIcon} alt={t('dataset icon')} />
           </span>
         </ButtonPopover>
       );
@@ -203,7 +203,7 @@ export class _OfficeLoadedFile extends React.Component {
             mouseEnterDelay={1}
           >
           <span>
-            <img src={dossierIcon} alt="dossier icon" />
+            <img src={dossierIcon} alt={t('dossier icon')} />
           </span>
         </ButtonPopover>
       );
@@ -309,8 +309,8 @@ export class _OfficeLoadedFile extends React.Component {
     // If fileName was changed but it was not introduced by user in editable mode (so fetched during edit) then update value to new fileName.
     if (!editable && (fileName !== value)) value = fileName;
     return (
-        <Dropdown overlay={menu} trigger={['contextMenu']}>
-          <div
+      <Dropdown overlay={menu} trigger={['contextMenu']}>
+        <div
             className="file-history-container"
             type="flex"
             justify="center"
@@ -318,24 +318,24 @@ export class _OfficeLoadedFile extends React.Component {
             tabIndex="0"
             onClick={() => onClick(bindingId, true, this.deleteReport, fileName, isCrosstab, crosstabHeaderDimensions)}
            >
-            <div className="refresh-icons-row">
-              <ButtonPopover
+          <div className="refresh-icons-row">
+            <ButtonPopover
               placement="bottom"
               content={t('Date and time of last modification')}
               mouseEnterDelay={1}
             >
-                <span className="additional-data-wrapper">
-                  <ClockIcon />
-                  <span className="additional-data">
-                    {t('refreshed_date', { date: refreshDate })}
-                  </span>
+              <span className="additional-data-wrapper">
+                <ClockIcon />
+                <span className="additional-data">
+                  {t('refreshed_date', { date: refreshDate })}
                 </span>
-              </ButtonPopover>
-              {this.renderIcons({ t, isLoading })}
-            </div>
+              </span>
+            </ButtonPopover>
+            {this.renderIcons({ t, isLoading })}
+          </div>
 
 
-            {isVisualization && dossierStructure
+          {isVisualization && dossierStructure
             && (
               <ButtonPopover
                 placement="bottom"
@@ -345,12 +345,12 @@ export class _OfficeLoadedFile extends React.Component {
               </ButtonPopover>
             )}
 
-            <div className="object-title-row">
-              {this.getMstrIcon(objectType)}
-              <RenameInput bindingId={bindingId} fileName={fileName} editable={editable} value={value} enableEdit={this.enableEdit} handleChange={this.handleChange} renameReport={this.renameReport} />
-            </div>
+          <div className="object-title-row">
+            {this.getMstrIcon(objectType)}
+            <RenameInput bindingId={bindingId} fileName={fileName} editable={editable} value={value} enableEdit={this.enableEdit} handleChange={this.handleChange} renameReport={this.renameReport} />
           </div>
-        </Dropdown>
+        </div>
+      </Dropdown>
     );
   }
 }
