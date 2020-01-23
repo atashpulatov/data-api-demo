@@ -1,13 +1,13 @@
-import React, { Component } from "react";
-import "../home/home.css";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { selectorProperties } from "./selector-properties";
-import { attributeSelectorHelpers } from "./attribute-selector-helpers";
-import { AttributeSelector } from "./attribute-selector";
-import { PopupButtons } from "../popup/popup-buttons/popup-buttons";
-import { popupStateActions } from "../popup/popup-state-actions";
-import { popupHelper } from "../popup/popup-helper";
+import React, { Component } from 'react';
+import '../home/home.css';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { selectorProperties } from './selector-properties';
+import { attributeSelectorHelpers } from './attribute-selector-helpers';
+import { AttributeSelector } from './attribute-selector';
+import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
+import { popupStateActions } from '../popup/popup-state-actions';
+import { popupHelper } from '../popup/popup-helper';
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
 export class AttributeSelectorWindowNotConnected extends Component {
@@ -25,10 +25,9 @@ export class AttributeSelectorWindowNotConnected extends Component {
     this.setState({ triggerUpdate: true, loading: true });
   };
 
-  handleCancel = () =>
-    attributeSelectorHelpers.officeMessageParent(
-      selectorProperties.commandCancel
-    );
+  handleCancel = () => attributeSelectorHelpers.officeMessageParent(
+    selectorProperties.commandCancel
+  );
 
   onTriggerUpdate = (
     chosenObjectId,
@@ -79,21 +78,20 @@ export class AttributeSelectorWindowNotConnected extends Component {
   };
 
   render() {
-    const { handleBack, chosenObject, mstrData } = this.props;
+    const { handleBack, chosenObject, mstrData, objectName } = this.props;
     const { triggerUpdate, openModal, attributesSelected, loading, } = this.state;
     const { isPrompted } = mstrData;
     const { chosenObjectName } = chosenObject;
-   const typeName =
-      chosenObject.objectType &&
-      chosenObject.objectType.name &&
-      chosenObject.objectType.name.charAt(0).toUpperCase() +
-        chosenObject.objectType.name.substring(1);
+    const typeName = chosenObject.objectType
+      && chosenObject.objectType.name
+      && chosenObject.objectType.name.charAt(0).toUpperCase()
+        + chosenObject.objectType.name.substring(1);
     const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
     return (
       <div>
         <AttributeSelector
           // TODO: logic for a title
-          title={`Import ${typeName} > ${chosenObject.chosenObjectName}`}
+          title={`Import ${typeName} > ${objectName}`}
           attributesSelectedChange={this.attributesBeingSelected}
           triggerUpdate={triggerUpdate}
           onTriggerUpdate={this.onTriggerUpdate}
@@ -120,6 +118,7 @@ AttributeSelectorWindowNotConnected.propTypes = {
     chosenObjectName: PropTypes.string,
     objectType: PropTypes.string,
   }),
+  objectName: PropTypes.string,
   mstrData: PropTypes.shape({
     envUrl: PropTypes.string,
     authToken: PropTypes.string,
@@ -134,9 +133,11 @@ AttributeSelectorWindowNotConnected.propTypes = {
 
 const mapStateToProps = state => {
   const { importSubtotal, displayAttrFormNames, ...chosenObject } = state.navigationTree;
+  const { editedObject } = state.popupReducer;
   return {
     mstrData: { ...state.popupStateReducer },
     chosenObject,
+    objectName: editedObject ? editedObject.name : chosenObject.chosenObjectName,
     importSubtotal,
     displayAttrFormNames,
     editedObject: state.popupReducer.editedObject

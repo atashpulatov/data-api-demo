@@ -8,7 +8,9 @@ import { popupHelper } from './popup-helper';
 /* global Office */
 
 export const Popup = () => {
-  libraryErrorController.initializeHttpErrorsHandling(popupHelper.handlePopupErrors);
+  React.useEffect(() => {
+    libraryErrorController.initializeHttpErrorsHandling(popupHelper.handlePopupErrors);
+  }, []);
 
   i18next.changeLanguage(i18next.options.resources[Office.context.displayLanguage]
     ? Office.context.displayLanguage
