@@ -3,34 +3,39 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { ObjectTable, TopFilterPanel } from '@mstr/rc';
 import { selectorProperties } from '../attribute-selector/selector-properties';
-import { PopupButtons } from '../popup/popup-buttons';
+import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
 import { actions } from './navigation-tree-actions';
-import { isPrompted as checkIfPrompted } from '../mstr-object/mstr-object-rest-service';
+import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './navigation-tree.css';
-import { connectToCache, clearCache, createCache, listenToCache, REFRESH_CACHE_COMMAND, refreshCacheState, fetchObjectsFallback } from '../cache/cache-actions';
-import DB from '../cache/pouch-db';
-import { sessionHelper } from '../storage/session-helper';
+import {
+  connectToCache,
+  REFRESH_CACHE_COMMAND,
+  refreshCacheState,
+  fetchObjectsFallback
+} from '../cache/cache-actions';
+import DB from '../cache/cache-db';
 import { authenticationHelper } from '../authentication/authentication-helper';
-import { errorService } from '../error/error-handler';
+import { popupStateActions } from '../popup/popup-state-actions';
+import { popupHelper } from '../popup/popup-helper';
 
-const DB_TIMEOUT = 5000; // Interval for checking indexedDB changes on IE
 const SAFETY_FALLBACK = 7000; // Interval for falling back to network
+
+const { getCubeStatus, isPrompted } = mstrObjectRestService;
+const checkIfPrompted = isPrompted;
 
 export class _NavigationTree extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      triggerUpdate: false,
       previewDisplay: false,
+      isPublished: true,
     };
     this.indexedDBSupport = DB.getIndexedDBSupport();
-    const ua = window.navigator.userAgent;
-    this.isMSIE = ua.indexOf('MSIE ') > 0 || !!navigator.userAgent.match(/Trident.*rv:11\./);
   }
 
   componentDidMount() {
-    const { resetDBState, fetchObjectsFromNetwork } = this.props
+    const { resetDBState, fetchObjectsFromNetwork } = this.props;
     resetDBState();
     if (this.indexedDBSupport) {
       this.connectToCache();
@@ -38,7 +43,6 @@ export class _NavigationTree extends Component {
       fetchObjectsFromNetwork();
     }
   }
-
 
   componentDidUpdate() {
     const { sorter, objectType, myLibrary, myLibraryFilter, envFilter } = this.props;
@@ -55,58 +59,27 @@ export class _NavigationTree extends Component {
     }));
   }
 
-  componentWillUnmount() {
-    try {
-      this.DB.close();
-    } catch (error) {
-      // Ignoring error
-    }
-  }
-
-  connectToCache = () => {
-    const { connectToDB, listenToDB } = this.props;
+  connectToCache = (isRefresh) => {
+    const { connectToDB } = this.props;
     this.startFallbackProtocol();
-    setTimeout(() => {
-      if (this.isMSIE) {
-        [this.DB, this.DBOnChange] = listenToDB();
-        this.DBOnChange.then(this.startDBListener)
-      } else {
-        [this.DB, this.DBOnChange] = connectToDB();
-      }
-    }, 1000);
+    connectToDB(isRefresh);
   };
 
   refresh = async () => {
     try {
       await authenticationHelper.validateAuthToken();
     } catch (error) {
-      const { handlePopupErrors } = this.props;
-      handlePopupErrors(error);
+      popupHelper.handlePopupErrors(error);
       return;
     }
 
-    const { resetDBState, fetchObjectsFromNetwork } = this.props
-    resetDBState();
+    const { resetDBState, fetchObjectsFromNetwork } = this.props;
+    resetDBState(true);
     if (this.indexedDBSupport) {
-      if (!this.isMSIE && this.DBOnChange) this.DBOnChange.cancel();
-      this.DB.clear().then(() => {
-        window.Office.context.ui.messageParent(JSON.stringify({ command: REFRESH_CACHE_COMMAND }));
-        this.connectToCache(this.DB);
-      }).catch(() => this.startFallbackProtocol());
+      window.Office.context.ui.messageParent(JSON.stringify({ command: REFRESH_CACHE_COMMAND }));
+      this.connectToCache(true);
     } else {
       fetchObjectsFromNetwork();
-    }
-  };
-
-  startDBListener = () => {
-    const { cache, listenToDB } = this.props;
-    const { projects, myLibrary, environmentLibrary } = cache;
-    console.log(projects.length, myLibrary.objects.length, myLibrary.isLoading, environmentLibrary.objects.length, environmentLibrary.isLoading)
-    if (projects.length < 1 || myLibrary.isLoading || environmentLibrary.isLoading) {
-      setTimeout(() => {
-        [this.DB, this.DBOnChange] = listenToDB(this.DB);
-        this.DBOnChange.then(this.startDBListener);
-      }, DB_TIMEOUT);
     }
   };
 
@@ -116,29 +89,28 @@ export class _NavigationTree extends Component {
       const { projects } = cache;
       if (projects.length === 0) {
         console.log('Cache failed, fetching from network');
-        resetDBState();
+        resetDBState(true);
         fetchObjectsFromNetwork();
       }
     }, SAFETY_FALLBACK);
   }
 
   handleOk = async () => {
-    const { chosenSubtype, chosenObjectId, chosenProjectId, requestImport, requestDossierOpen, changeIsPrompted } = this.props;
-    let isPrompted = false;
+    const { chosenSubtype, chosenObjectId, chosenProjectId, requestImport, requestDossierOpen } = this.props;
+    let isPromptedResponse = false;
     try {
       // If myLibrary is on, then selected object is a dossier.
       const objectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
       if ((objectType === mstrObjectEnum.mstrObjectType.report) || (objectType === mstrObjectEnum.mstrObjectType.dossier)) {
-        isPrompted = await checkIfPrompted(chosenObjectId, chosenProjectId, objectType.name);
+        isPromptedResponse = await checkIfPrompted(chosenObjectId, chosenProjectId, objectType.name);
       }
       if (objectType.name === mstrObjectEnum.mstrObjectType.dossier.name) {
         requestDossierOpen();
       } else {
-        requestImport(isPrompted);
+        requestImport(isPromptedResponse);
       }
     } catch (e) {
-      const { handlePopupErrors } = this.props;
-      handlePopupErrors(e);
+      popupHelper.handlePopupErrors(e);
     }
   };
 
@@ -151,18 +123,17 @@ export class _NavigationTree extends Component {
   };
 
   handleSecondary = async () => {
-    const { chosenProjectId, chosenObjectId, chosenObjectName, chosenType, chosenSubtype, handlePrepare, changeIsPrompted } = this.props;
-    let isPrompted = false;
+    const { chosenProjectId, chosenObjectId, chosenSubtype, handlePrepare, setObjectData } = this.props;
     try {
       const objectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
       if ((objectType === mstrObjectEnum.mstrObjectType.report) || (objectType === mstrObjectEnum.mstrObjectType.dossier)) {
-        isPrompted = await checkIfPrompted(chosenObjectId, chosenProjectId, objectType.name);
+        const isPromptedResponse = await checkIfPrompted(chosenObjectId, chosenProjectId, objectType.name);
+        setObjectData({ isPrompted: isPromptedResponse });
       }
-      handlePrepare(chosenProjectId, chosenObjectId, chosenSubtype, chosenObjectName, chosenType, isPrompted);
+      handlePrepare();
       this.setState({ previewDisplay: true });
     } catch (err) {
-      const { handlePopupErrors } = this.props;
-      handlePopupErrors(err);
+      popupHelper.handlePopupErrors(err);
     }
   };
 
@@ -174,15 +145,26 @@ export class _NavigationTree extends Component {
   };
 
   // TODO: temporary solution
-  onObjectChosen = async (objectId, projectId, subtype, objectName, target, myLibrary) => {
+  onObjectChosen = async (objectId, projectId, subtype, objectName, targetId, myLibrary) => {
     const { selectObject } = this.props;
     // If myLibrary is on, then selected object is a dossier.
     const objectType = myLibrary ? mstrObjectEnum.mstrObjectType.dossier : mstrObjectEnum.getMstrTypeBySubtype(subtype);
     let chosenLibraryDossier;
     if (myLibrary) {
       chosenLibraryDossier = objectId;
-      objectId = target.id;
+      objectId = targetId;
     }
+
+    let cubeStatus = true;
+    if (objectType === mstrObjectEnum.mstrObjectType.dataset) {
+      try {
+        cubeStatus = await getCubeStatus(objectId, projectId) !== '0';
+      } catch (error) {
+        popupHelper.handlePopupErrors(error);
+      }
+    }
+    this.setState({ isPublished: cubeStatus });
+
     selectObject({
       chosenObjectId: objectId,
       chosenObjectName: objectName,
@@ -195,16 +177,16 @@ export class _NavigationTree extends Component {
 
   render() {
     const {
-      chosenObjectId, chosenProjectId, changeSorting, loading, chosenLibraryDossier, searchText, sorter, requestPerformed,
+      chosenObjectId, chosenProjectId, changeSorting, loading, chosenLibraryDossier, searchText, sorter,
       changeSearching, objectType, cache, envFilter, myLibraryFilter, myLibrary, switchMyLibrary, changeFilter, t, i18n,
     } = this.props;
-    const { previewDisplay } = this.state;
+    const { previewDisplay, isPublished } = this.state;
     const objects = myLibrary ? cache.myLibrary.objects : cache.environmentLibrary.objects;
     const cacheLoading = cache.myLibrary.isLoading || cache.environmentLibrary.isLoading;
     return (
       <div className="navigation_tree__main_wrapper">
         <div className="navigation_tree__title_bar">
-          <span>{t('Import Data')}</span>
+          <span>{t('Import Data')}</span>
           <TopFilterPanel
             locale={i18n.language}
             objects={objects}
@@ -224,7 +206,7 @@ export class _NavigationTree extends Component {
             id: myLibrary ? chosenLibraryDossier : chosenObjectId,
             projectId: chosenProjectId,
           }}
-          onSelect={({ id, projectId, subtype, name, target }) => this.onObjectChosen(id, projectId, subtype, name, target, myLibrary)}
+          onSelect={({ id, projectId, subtype, name, targetId }) => this.onObjectChosen(id, projectId, subtype, name, targetId, myLibrary)}
           sort={sorter}
           onSortChange={changeSorting}
           locale={i18n.language}
@@ -235,12 +217,13 @@ export class _NavigationTree extends Component {
           isLoading={cacheLoading} />
         <PopupButtons
           loading={loading}
-          disableActiveActions={!chosenObjectId}
+          disableActiveActions={!chosenObjectId || !isPublished}
           handleOk={this.handleOk}
           handleSecondary={this.handleSecondary}
           handleCancel={this.handleCancel}
           previewDisplay={previewDisplay}
           disableSecondary={objectType && objectType.name === mstrObjectEnum.mstrObjectType.dossier.name}
+          isPublished={isPublished}
         />
       </div>
     );
@@ -260,12 +243,11 @@ export const mapStateToProps = ({ officeReducer, navigationTree, cacheReducer })
 
 const mapActionsToProps = {
   ...actions,
-  initDB: createCache,
   connectToDB: connectToCache,
-  listenToDB: listenToCache,
-  clearDB: clearCache,
   resetDBState: refreshCacheState,
-  fetchObjectsFromNetwork: fetchObjectsFallback
+  fetchObjectsFromNetwork: fetchObjectsFallback,
+  handlePrepare: popupStateActions.onPrepareData,
+  setObjectData: popupStateActions.setObjectData,
 };
 
 export const NavigationTree = connect(mapStateToProps, mapActionsToProps)(withTranslation('common')(_NavigationTree));

@@ -140,4 +140,42 @@ describe('NavigationTree Actions', () => {
     // then
     expect(listener).toHaveBeenCalledWith({ type: actions.REQUEST_DOSSIER_OPEN });
   });
+
+  it('should dispatch proper changeIsPrompted action', () => {
+    // given
+    const listener = jest.fn();
+    const data = 'whatever';
+    // when
+    actions.changeIsPrompted(data)(listener);
+    // then
+    expect(listener).toHaveBeenCalledWith({ type: actions.CHANGE_IS_PROMPTED, data });
+  });
+
+  it('should dispatch proper stopLoading action', () => {
+    // given
+    const listener = jest.fn();
+    // when
+    actions.stopLoading()(listener);
+    // then
+    expect(listener).toHaveBeenCalledWith({ type: officeProperties.actions.stopLoading });
+  });
+
+  it('should dispatch proper switchMyLibrary action', () => {
+    // given
+    const listener = jest.fn();
+    // when
+    actions.switchMyLibrary()(listener);
+    // then
+    expect(listener).toHaveBeenCalledWith({ type: actions.SWITCH_MY_LIBRARY });
+  });
+
+  it('should dispatch proper changeFilter action', () => {
+    // given
+    const listener = jest.fn();
+    const data = 'whatever';
+    // when
+    actions.changeFilter(data)(listener);
+    // then
+    expect(listener).toHaveBeenCalledWith({ type: actions.CHANGE_FILTER, data });
+  });
 });

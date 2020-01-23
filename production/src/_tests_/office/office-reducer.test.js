@@ -32,13 +32,11 @@ describe('officeReducer', () => {
 
   beforeEach(() => {
     // default state should be empty
-    expect(officeStore.getState()).toEqual({ loading: false, shouldRenderSettings: false, isSettings: false, isConfirm: false });
+    expect(officeStore.getState()).toEqual({ loading: false, shouldRenderSettings: false, isSettings: false, isConfirm: false, supportForms: true });
   });
 
   afterEach(() => {
-    officeStore.dispatch({
-      type: officeProperties.actions.removeAllReports,
-    });
+    officeStore.dispatch({ type: officeProperties.actions.removeAllReports, });
   });
 
   it('should throw an error on missing report.id', () => {
@@ -183,9 +181,7 @@ describe('officeReducer', () => {
       type: officeProperties.actions.loadReport,
       report: secondReport,
     });
-    officeStore.dispatch({
-      type: officeProperties.actions.removeAllReports,
-    });
+    officeStore.dispatch({ type: officeProperties.actions.removeAllReports, });
     // then
     const officeStoreState = officeStore.getState();
     const storedReport = officeStoreState.reportArray;
@@ -236,7 +232,7 @@ describe('officeReducer', () => {
     });
     // then
     const officeStoreState = officeStore.getState().reportArray;
-    expect(officeStoreState.length).toEqual(2);
+    expect(officeStoreState).toHaveLength(2);
     expect(officeStoreState.includes(firstReport)).toBe(true);
     expect(officeStoreState.includes(secondReport)).toBe(false);
     expect(officeStoreState.includes(thirdReport)).toBe(true);
@@ -246,9 +242,7 @@ describe('officeReducer', () => {
     // given
     // when
     const wrongDispatch = () => {
-      officeStore.dispatch({
-        type: officeProperties.actions.removeReport,
-      });
+      officeStore.dispatch({ type: officeProperties.actions.removeReport, });
     };
     // then
     expect(wrongDispatch).toThrowError(OfficeError);
@@ -295,7 +289,7 @@ describe('officeReducer', () => {
     });
     // then
     const officeStoreState = officeStore.getState().reportArray;
-    expect(officeStoreState.length).toEqual(2);
+    expect(officeStoreState).toHaveLength(2);
     expect(officeStoreState[0]).toEqual(reportArrayNew[0]);
     expect(officeStoreState[1]).toEqual(reportArrayNew[1]);
   });
@@ -303,9 +297,7 @@ describe('officeReducer', () => {
     // given
     // when
     const wrongDispatch = () => {
-      officeStore.dispatch({
-        type: officeProperties.actions.loadAllReports,
-      });
+      officeStore.dispatch({ type: officeProperties.actions.loadAllReports, });
     };
     // then
     expect(wrongDispatch).toThrowError(OfficeError);
@@ -445,5 +437,29 @@ describe('officeReducer', () => {
     const newState = officeReducer(oldState, action);
     // then
     expect(newState).toEqual({ isSettings: false, shouldRenderSettings: true });
+  });
+  it('should set preLoadReport to given value on preLoadReport', () => {
+    // given
+    const oldState = { preLoadReport: false };
+    const action = {
+      type: officeProperties.actions.preLoadReport,
+      preLoadReport: true,
+    };
+    // when
+    const newState = officeReducer(oldState, action);
+    // then
+    expect(newState.preLoadReport).toBe(true);
+  });
+  it('should set isClearing to given value on toggleIsClearingFlag', () => {
+    // given
+    const oldState = { isClearing: false };
+    const action = {
+      type: officeProperties.actions.toggleIsClearingFlag,
+      isClearing: true,
+    };
+    // when
+    const newState = officeReducer(oldState, action);
+    // then
+    expect(newState.isClearing).toBe(true);
   });
 });

@@ -51,7 +51,8 @@ rake update_ready_for_pr
 
     parameterized_trigger do
       job_short_names %w{
-        stage-2-regression-test
+        stage-2-e2e-browser-test-mac
+        stage-2-e2e-browser-test-win
       }
     end
   end

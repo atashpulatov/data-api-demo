@@ -1,9 +1,8 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import { sessionHelper } from '../../storage/session-helper';
-import { SettingsMenuHOC } from '../../home/settings-menu';
-import { Office } from '../mockOffice';
-import DB from '../../cache/pouch-db';
+import { SettingsMenuNotConnected } from '../../home/settings-menu';
+import DB from '../../cache/cache-db';
 
 describe('Settings Menu', () => {
   afterEach(() => {
@@ -14,10 +13,10 @@ describe('Settings Menu', () => {
     // given
     const clearDB = jest.fn();
     const logOutRestSpy = jest.spyOn(sessionHelper, 'logOutRest').mockImplementation(() => { });
+    const indexedDBSpy = jest.spyOn(DB, 'getIndexedDBSupport').mockImplementation(() => true);
     const logOutSpy = jest.spyOn(sessionHelper, 'logOut');
     const logOutRedirectSpy = jest.spyOn(sessionHelper, 'logOutRedirect');
-    const indexedDBSpy = jest.spyOn(DB, 'getIndexedDBSupport').mockImplementation(() => true);
-    const menuWrapper = mount(<SettingsMenuHOC clearCache={clearDB} />);
+    const menuWrapper = mount(<SettingsMenuNotConnected clearCache={clearDB} />);
     const buttonWrapper = menuWrapper.find('#logOut');
     // when
     buttonWrapper.simulate('click');
@@ -29,12 +28,12 @@ describe('Settings Menu', () => {
     await expect(clearDB).toBeCalled();
   });
 
-  it('should handle error on logout', async () => {
+  it('should handle error on logout', () => {
     // given
     const logOutRestSpy = jest.spyOn(sessionHelper, 'logOutRest').mockImplementation(() => {
       throw new Error();
     });
-    const menuWrapper = mount(<SettingsMenuHOC />);
+    const menuWrapper = mount(<SettingsMenuNotConnected />);
     const buttonWrapper = menuWrapper.find('#logOut');
     // when
     buttonWrapper.simulate('click');

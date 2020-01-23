@@ -1,16 +1,18 @@
 import { officeProperties } from '../office-properties';
-import { officeApiHelper } from '../office-api-helper';
 import { RunOutsideOfficeError } from '../../error/run-outside-office-error';
 import { errorService } from '../../error/error-handler';
-import { reduxStore } from '../../store';
 
 /* global Office */
 
-class OfficeStoreService {
+export class OfficeStoreService {
+  init = (reduxStore) => {
+    this.reduxStore = reduxStore;
+  }
+
   preserveReport = (report) => {
     try {
       const settings = this.getOfficeSettings();
-      const reportProperties = this._getReportProperties();
+      const reportProperties = this.getReportProperties();
       reportProperties.unshift({
         id: report.id,
         name: report.name,
@@ -21,11 +23,14 @@ class OfficeStoreService {
         objectType: report.objectType,
         isCrosstab: report.isCrosstab,
         isPrompted: report.isPrompted,
-        subtotalInfo: report.subtotalInfo,
+        subtotalsInfo: report.subtotalsInfo,
         promptsAnswers: report.promptsAnswers,
         crosstabHeaderDimensions: report.crosstabHeaderDimensions,
         visualizationInfo: report.visualizationInfo,
         manipulationsXML: report.manipulationsXML,
+        tableName:report.tableName,
+        tableDimensions: report.tableDimensions,
+        displayAttrFormNames: report.displayAttrFormNames,
       });
       settings.set(officeProperties.loadedReportProperties, reportProperties);
       settings.saveAsync();
@@ -37,12 +42,12 @@ class OfficeStoreService {
   preserveReportValue = async (bindId, key, value) => {
     try {
       const settings = this.getOfficeSettings();
-      const reportProperties = this._getReportProperties();
+      const reportProperties = this.getReportProperties();
       const indexOfReport = reportProperties.findIndex((oldReport) => (oldReport.bindId === bindId));
       reportProperties[indexOfReport][key] = value;
       settings.set(officeProperties.loadedReportProperties, reportProperties);
       await settings.saveAsync();
-      await officeApiHelper.loadExistingReportBindingsExcel();
+      await this.loadExistingReportBindingsExcel();
     } catch (error) {
       errorService.handleError(error);
     }
@@ -51,7 +56,7 @@ class OfficeStoreService {
   deleteReport = (bindingId) => {
     try {
       const settings = this.getOfficeSettings();
-      const reportProperties = this._getReportProperties();
+      const reportProperties = this.getReportProperties();
       const indexOfReport = reportProperties.findIndex((report) => (report.bindId === bindingId));
       reportProperties.splice(indexOfReport, 1);
       settings.set(officeProperties.loadedReportProperties, reportProperties);
@@ -62,11 +67,11 @@ class OfficeStoreService {
   }
 
   getReportFromProperties = (bindingId) => {
-    const reportProperties = this._getReportProperties();
+    const reportProperties = this.getReportProperties();
     return reportProperties.find((report) => report.bindId === bindingId);
   };
 
-  _getReportProperties = () => {
+  getReportProperties = () => {
     try {
       const settings = this.getOfficeSettings();
       if (!(settings.get(officeProperties.loadedReportProperties))) {
@@ -78,6 +83,14 @@ class OfficeStoreService {
     } catch (error) {
       errorService.handleError(error);
     }
+  };
+
+  loadExistingReportBindingsExcel = async () => {
+    const reportArray = await this.getReportProperties();
+    this.reduxStore.dispatch({
+      type: officeProperties.actions.loadAllReports,
+      reportArray,
+    });
   };
 
   getOfficeSettings = () => {
@@ -110,16 +123,31 @@ class OfficeStoreService {
     if (isRefresh) {
       try {
         const settings = this.getOfficeSettings();
-        const reportsArray = [...this._getReportProperties()];
-        const reportObj = reportsArray.find((element) => element.bindId === report.bindId);
-        reportsArray[reportsArray.indexOf(reportObj)].crosstabHeaderDimensions = report.crosstabHeaderDimensions;
-        reportsArray[reportsArray.indexOf(reportObj)].isCrosstab = report.isCrosstab;
+        const reportsArray = [...this.getReportProperties()];
+        const reportObj = reportsArray.find((element) => element.bindId === report.oldTableId);
+        const ObjectIndex = reportsArray.indexOf(reportObj);
+        const refreshedObject = reportsArray[ObjectIndex];
+        refreshedObject.crosstabHeaderDimensions = report.crosstabHeaderDimensions;
+        refreshedObject.isCrosstab = report.isCrosstab;
+        refreshedObject.bindId = report.bindId;
+        refreshedObject.tableDimensions = report.tableDimensions;
+        refreshedObject.subtotalsInfo = report.subtotalsInfo;
+        refreshedObject.displayAttrFormNames = report.displayAttrFormNames;
+        if (refreshedObject.visualizationInfo) {
+          refreshedObject.manipulationsXML = report.manipulationsXML;
+          refreshedObject.visualizationInfo.dossierStructure = report.visualizationInfo.dossierStructure;
+          if (refreshedObject.visualizationInfo.nameShouldUpdate) {
+            // If visualization was changed, preserve new visualization name and new dossierStructure.
+            refreshedObject.name = report.name;
+            refreshedObject.visualizationInfo.nameShouldUpdate = false;
+          }
+        }
         settings.set(officeProperties.loadedReportProperties, reportsArray);
       } catch (error) {
         errorService.handleError(error);
       }
     } else {
-      reduxStore.dispatch({
+      this.reduxStore.dispatch({
         type: officeProperties.actions.loadReport,
         report: {
           id: report.id,
@@ -132,15 +160,27 @@ class OfficeStoreService {
           objectType: report.objectType,
           isCrosstab: report.isCrosstab,
           isPrompted: report.isPrompted,
-          subtotalInfo: report.subtotalInfo,
+          subtotalsInfo: report.subtotalsInfo,
           promptsAnswers: report.promptsAnswers,
           crosstabHeaderDimensions: report.crosstabHeaderDimensions,
           visualizationInfo: report.visualizationInfo,
           manipulationsXML: report.manipulationsXML,
+          tableName: report.tableName,
+          tableDimensions: report.tableDimensions,
+          displayAttrFormNames: report.displayAttrFormNames,
         },
       });
       this.preserveReport(report);
     }
+  };
+
+  removeReportFromStore = (bindingId) => {
+    this.reduxStore.dispatch({
+      type: officeProperties.actions.removeReport,
+      reportBindId: bindingId,
+    });
+    this.deleteReport(bindingId);
+    return true;
   };
 }
 

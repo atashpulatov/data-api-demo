@@ -1,7 +1,7 @@
 import React from 'react';
-import {mount} from 'enzyme';
-import {ButtonPopover} from '../../file-history/button-popover';
-import {Button} from 'antd';
+import { mount } from 'enzyme';
+import { Button } from 'antd';
+import { ButtonPopover } from '../../file-history/button-popover';
 
 describe('ButtonPopover', () => {
   beforeEach(() => {
@@ -11,7 +11,7 @@ describe('ButtonPopover', () => {
     jest.resetAllMocks();
   });
 
-  it('should render home component and its children', async () => {
+  it('should render home component and its children', () => {
     // given
     // when
     const componentWrapper = mount(
@@ -34,7 +34,7 @@ describe('ButtonPopover', () => {
     // then
     expect(clearTimeout).toHaveBeenCalled();
   });
-  it('should set popoverVisible to true after mouseEnter event', async () => {
+  it('should set popoverVisible to true after mouseEnter event', () => {
     // given
     ButtonPopover.prototype.setState = jest.fn(ButtonPopover.prototype.setState);
     const componentWrapper = mount(

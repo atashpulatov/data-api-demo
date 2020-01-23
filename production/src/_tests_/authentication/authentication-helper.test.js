@@ -3,6 +3,7 @@ import { authenticationService } from '../../authentication/auth-rest-service';
 import { notificationService } from '../../notification/notification-service';
 import { errorService } from '../../error/error-handler';
 import { authenticationHelper } from '../../authentication/authentication-helper';
+import { reduxStore } from '../../store';
 
 jest.mock('../../error/error-handler');
 jest.mock('../../notification/notification-service');
@@ -10,6 +11,9 @@ jest.mock('../../authentication/auth-rest-service');
 jest.mock('../../storage/session-helper');
 
 describe('loginUser', () => {
+  beforeAll(() => {
+    authenticationHelper.init(reduxStore, sessionHelper, authenticationService, errorService);
+  });
   it('should return if error occured', () => {
     // given
     const givenError = {};
@@ -47,11 +51,12 @@ describe('loginUser', () => {
       envUrl: 'testEnvUrl',
       loginMode: '1',
     };
+    const authenticate = jest.spyOn(authenticationService, 'authenticate');
     // when
     authenticationHelper.loginUser(givenError, givenValues);
     // then
-    expect(authenticationService.authenticate).toBeCalled();
-    expect(authenticationService.authenticate)
+    expect(authenticate).toBeCalled();
+    expect(authenticate)
       .toBeCalledWith(givenValues.username,
         givenValues.password,
         givenValues.envUrl,
@@ -96,9 +101,9 @@ describe('loginUser', () => {
     expect(errorService.handleError).toBeCalledWith(testError, { isLogout: true });
     expect(sessionHelper.disableLoading).toBeCalled();
   });
-  it('should call getSession on validating token', async () => {
+  it('should call putSessions on validating authToken', () => {
     // given
-    const authenticateMock = jest.spyOn(authenticationService, 'getSessions');
+    const authenticateMock = jest.spyOn(authenticationService, 'putSessions');
     // when
     authenticationHelper.validateAuthToken();
     // then

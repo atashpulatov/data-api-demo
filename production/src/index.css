@@ -20,7 +20,7 @@ code {
 
 .ant-popover .ant-popover-inner-content {
     min-width: 38px;
-    max-width: 280px;
+    max-width: none;
     padding: 8px;
     text-align: left;
     background-color: #404040;
@@ -30,11 +30,11 @@ code {
     overflow-wrap: break-word;
 }
 
-.ant-popover-placement-bottom>.ant-popover-content>.ant-popover-arrow,
-.ant-popover-placement-bottomRight>.ant-popover-content>.ant-popover-arrow,
-.ant-popover-placement-topRight>.ant-popover-content>.ant-popover-arrow,
-.ant-popover-placement-topLeft>.ant-popover-content>.ant-popover-arrow,
-.ant-popover-placement-top>.ant-popover-content>.ant-popover-arrow {
+.ant-popover-placement-bottom>.ant-popover-content>div.ant-popover-arrow,
+.ant-popover-placement-bottomRight>.ant-popover-content>div.ant-popover-arrow,
+.ant-popover-placement-topRight>.ant-popover-content>div.ant-popover-arrow,
+.ant-popover-placement-topLeft>.ant-popover-content>div.ant-popover-arrow,
+.ant-popover-placement-top>.ant-popover-content>div.ant-popover-arrow {
     border-color: #404040;
 }
 
@@ -78,6 +78,7 @@ code {
     border-color: #D2D2D2;
     color: #444649;
     font-size: 14px;
+    min-width: 92px;
 }
 
 .ant-btn:hover {

@@ -1,8 +1,11 @@
 import React from 'react';
-import {Placeholder} from '../../home/placeholder';
-import {sessionHelper} from '../../storage/session-helper';
-import {mount} from 'enzyme';
-import {popupController} from '../../popup/popup-controller';
+import { mount } from 'enzyme';
+import { Placeholder } from '../../home/placeholder';
+import { sessionHelper } from '../../storage/session-helper';
+import { popupController } from '../../popup/popup-controller';
+import { officeApiHelper } from '../../office/office-api-helper';
+
+
 jest.mock('../../storage/session-helper');
 
 describe('Placeholder', () => {
@@ -18,10 +21,13 @@ describe('Placeholder', () => {
     expect(wrappedComponent).toBeDefined();
     expect(sessionHelperSpy).toHaveBeenCalled();
   });
-  it('should open popup on button click', () => {
+  it('should open popup on button click', async () => {
     // given
     const sessionHelperSpy = jest.spyOn(sessionHelper, 'disableLoading');
     sessionHelperSpy.mockClear();
+    const mockSync = jest.fn();
+    const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
+    const mockIsCurrentSheetProtected = jest.spyOn(officeApiHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
     const clickSpy = jest.spyOn(popupController, 'runPopupNavigation');
     const wrappedComponent = mount(<Placeholder />);
     const wrappedButton = wrappedComponent.find('button');
@@ -30,6 +36,8 @@ describe('Placeholder', () => {
     wrappedButton.simulate('click');
     // then
     expect(wrappedButton).toBeDefined();
-    expect(clickSpy).toHaveBeenCalled();
+    await expect(mockGetContext).toBeCalled();
+    await expect(mockIsCurrentSheetProtected).toBeCalled();
+    await expect(clickSpy).toHaveBeenCalled();
   });
 });

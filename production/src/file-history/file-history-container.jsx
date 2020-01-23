@@ -3,22 +3,22 @@ import { connect } from 'react-redux';
 import { Button } from 'antd';
 import { MSTRIcon } from '@mstr/mstr-react-library';
 import { withTranslation } from 'react-i18next';
+import PropTypes from 'prop-types';
 import { OfficeLoadedFile } from './office-loaded-file';
 import { officeApiHelper } from '../office/office-api-helper';
-import { officeDisplayService } from '../office/office-display-service';
 import loadingSpinner from './assets/report_loading_spinner.gif';
-import { refreshReportsArray } from '../popup/popup-actions';
+import { popupActions } from '../popup/popup-actions';
 import { fileHistoryContainerHOC } from './file-history-container-HOC';
 import { officeStoreService } from '../office/store/office-store-service';
 import { toggleSecuredFlag } from '../office/office-actions';
 import { errorService } from '../error/error-handler';
 import restrictedArt from './assets/art_restricted_access_blue.svg';
-import { notificationService } from '../notification/notification-service';
-import './file-history.css';
+import './file-history.scss';
+import './settings-list.scss';
 import { ButtonPopover } from './button-popover';
 import { startLoading, stopLoading } from '../navigation/navigation-tree-actions';
 
-export class _FileHistoryContainer extends React.Component {
+export class FileHistoryContainerNotConnected extends React.Component {
   constructor(props) {
     super(props);
     if (officeStoreService.isFileSecured()) {
@@ -28,12 +28,12 @@ export class _FileHistoryContainer extends React.Component {
   }
 
   componentDidMount() {
-    this._ismounted = true;
+    this.ismounted = true;
     this.addRemoveReportListener();
   }
 
   componentWillUnmount() {
-    this._ismounted = false;
+    this.ismounted = false;
     this.deleteRemoveReportListener();
   }
 
@@ -49,7 +49,7 @@ export class _FileHistoryContainer extends React.Component {
           await officeApiHelper.checkStatusOfSessions();
           const { reportArray, t } = this.props;
           const reportToDelete = reportArray.find((report) => report.bindId === e.tableName);
-          officeApiHelper.removeObjectAndDisplaytNotification(reportToDelete, officeContext, t)
+          officeApiHelper.removeObjectAndDisplaytNotification(reportToDelete, officeContext, t);
           stopLoading();
         });
       } else if (officeContext.requirements.isSetSupported('ExcelApi', 1.7)) {
@@ -57,12 +57,12 @@ export class _FileHistoryContainer extends React.Component {
           startLoading();
           await officeApiHelper.checkStatusOfSessions();
           excelContext.workbook.tables.load('items');
-          await excelContext.sync()
-          const reportsOfSheets = excelContext.workbook.tables.items
+          await excelContext.sync();
+          const reportsOfSheets = excelContext.workbook.tables.items;
           const { reportArray, t } = this.props;
           const reportsToBeDeleted = reportArray.filter((report) => !reportsOfSheets.find((table) => table.name === report.bindId));
           for (const report of reportsToBeDeleted) {
-            officeApiHelper.removeObjectAndDisplaytNotification(report, officeContext, t)
+            officeApiHelper.removeObjectAndDisplaytNotification(report, officeContext, t);
           }
           stopLoading();
         });
@@ -90,7 +90,7 @@ export class _FileHistoryContainer extends React.Component {
     if (allowRefreshAllClick) {
       this.setState({ allowRefreshAllClick: false }, async () => {
         await refreshAll(reportArray, true);
-        if (this._ismounted) this.setState({ allowRefreshAllClick: true });
+        if (this.ismounted) this.setState({ allowRefreshAllClick: true });
       });
     }
   };
@@ -98,11 +98,7 @@ export class _FileHistoryContainer extends React.Component {
   showData = async () => {
     try {
       await officeApiHelper.checkStatusOfSessions();
-      const {
-        reportArray,
-        refreshReportsArray,
-        toggleSecuredFlag,
-      } = this.props;
+      const { reportArray, refreshReportsArray, toggleSecuredFlag, } = this.props;
       this.refreshAllAction(reportArray, refreshReportsArray);
       toggleSecuredFlag(false);
     } catch (error) {
@@ -111,15 +107,7 @@ export class _FileHistoryContainer extends React.Component {
   };
 
   render() {
-    const {
-      reportArray = [],
-      loading,
-      refreshingAll,
-      refreshReportsArray,
-      isSecured,
-      addDataAction,
-      t,
-    } = this.props;
+    const { reportArray = [], loading, refreshingAll, refreshReportsArray, isSecured, addDataAction, t, } = this.props;
     return (
       <>
         {
@@ -147,19 +135,31 @@ export class _FileHistoryContainer extends React.Component {
             content={t('Refresh All Data')}
             mouseEnterDelay={1}
           >
-            <Button
-              id="refresh-all-btn"
-              className="refresh-all-btn"
-              style={{ float: 'right' }}
-              onClick={() => this.refreshAllAction(reportArray, refreshReportsArray)}
-              disabled={loading}
-            >
-              {!refreshingAll ? (
-                <MSTRIcon type="refresh" />
-              ) : (
-                <img width="12px" height="12px" src={loadingSpinner} alt={t('Report loading icon')} />
-                )}
-            </Button>
+            { !refreshingAll ? (
+              <div
+                aria-label="Refresh All button"
+                role="button"
+                tabIndex={0}
+                id="refresh-all-btn"
+                className="refresh-all-btn icon-align"
+                onClick={() => this.refreshAllAction(reportArray, refreshReportsArray)}
+                onKeyPress={() => this.refreshAllAction(reportArray, refreshReportsArray)}
+                disabled={loading}
+              >
+                <div className="mstr-icon-refresh-all">
+                  <MSTRIcon type="refresh" />
+                </div>
+              </div>
+            ) : (
+              <div className="spinner-all-icon icon-align">
+                <img
+                  width="12px"
+                  height="12px"
+                  src={loadingSpinner}
+                  alt={t("Report loading icon")}
+                />
+              </div>
+            )}
           </ButtonPopover>
         </span>
         <div role="list" className="tables-container">
@@ -170,7 +170,7 @@ export class _FileHistoryContainer extends React.Component {
               fileName={report.name}
               bindingId={report.bindId}
               onClick={officeApiHelper.onBindingObjectClick}
-              onDelete={officeDisplayService.removeReportFromExcel}
+              onDelete={officeApiHelper.removeReportFromExcel}
               isLoading={report.isLoading}
               isCrosstab={report.isCrosstab}
               crosstabHeaderDimensions={report.crosstabHeaderDimensions}
@@ -185,25 +185,37 @@ export class _FileHistoryContainer extends React.Component {
   }
 }
 
-_FileHistoryContainer.defaultProps = { t: (text) => text, };
+FileHistoryContainerNotConnected.propTypes = {
+  loading: PropTypes.bool,
+  refreshingAll: PropTypes.bool,
+  isSecured: PropTypes.bool,
+  reportArray: PropTypes.arrayOf(PropTypes.shape({})),
+  toggleSecuredFlag: PropTypes.func,
+  startLoading: PropTypes.func,
+  stopLoading: PropTypes.func,
+  refreshReportsArray: PropTypes.func,
+  addDataAction: PropTypes.func,
+  t: PropTypes.func
+};
 
-function mapStateToProps({ officeReducer, historyReducer }) {
+FileHistoryContainerNotConnected.defaultProps = { t: (text) => text, };
+
+function mapStateToProps({ officeReducer }) {
   return {
     reportArray: officeReducer.reportArray,
-    project: historyReducer.project,
     refreshingAll: officeReducer.isRefreshAll,
     isSecured: officeReducer.isSecured,
   };
 }
 
 const mapDispatchToProps = {
-  refreshReportsArray,
+  refreshReportsArray: popupActions.refreshReportsArray,
   toggleSecuredFlag,
   startLoading,
   stopLoading,
 };
 
-const WrappedFileHistoryContainer = fileHistoryContainerHOC(_FileHistoryContainer);
+const WrappedFileHistoryContainer = fileHistoryContainerHOC(FileHistoryContainerNotConnected);
 
 export const FileHistoryContainer = connect(mapStateToProps,
   mapDispatchToProps)(withTranslation('common')(WrappedFileHistoryContainer));

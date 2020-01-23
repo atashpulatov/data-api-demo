@@ -1,31 +1,33 @@
-import { sessionHelper } from '../storage/session-helper';
-import { authenticationService } from './auth-rest-service';
-import { errorService } from '../error/error-handler';
-import { reduxStore } from '../store';
+export class AuthenticationHelper {
+  init = (reduxStore, sessionHelper, authenticationService, errorService) => {
+    this.reduxStore = reduxStore;
+    this.sessionHelper = sessionHelper;
+    this.authenticationService = authenticationService;
+    this.errorService = errorService;
+  }
 
-class AuthenticationHelper {
   loginUser = async (err, values) => {
     if (err) {
       return;
     }
     try {
-      sessionHelper.enableLoading();
-      sessionHelper.saveLoginValues(values);
-      const authToken = await authenticationService
+      this.sessionHelper.enableLoading();
+      this.sessionHelper.saveLoginValues(values);
+      const authToken = await this.authenticationService
         .authenticate(values.username, values.password, values.envUrl, values.loginMode || 1);
-      sessionHelper.logIn(authToken);
+      this.sessionHelper.logIn(authToken);
     } catch (error) {
-      errorService.handleError(error, { isLogout: true });
+      this.errorService.handleError(error, { isLogout: true });
     } finally {
-      sessionHelper.disableLoading();
+      this.sessionHelper.disableLoading();
     }
   }
 
   validateAuthToken = () => {
-    const reduxStoreState = reduxStore.getState();
+    const reduxStoreState = this.reduxStore.getState();
     const { authToken } = reduxStoreState.sessionReducer;
     const { envUrl } = reduxStoreState.sessionReducer;
-    return authenticationService.getSessions(envUrl, authToken);
+    return this.authenticationService.putSessions(envUrl, authToken);
   }
 }
 

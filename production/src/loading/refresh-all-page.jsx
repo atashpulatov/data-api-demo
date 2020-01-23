@@ -120,7 +120,7 @@ export class _RefreshAllPage extends Component {
               {this.getIcon(res)}
               {(res.isError || helper.isOverflown(res.name, window.innerWidth - 90))
                 ? (
-                  <Popover placement="topLeft" overlayClassName={res.isError === true ? 'tooltip-card' : ''} content={this.getTooltipContent(res)}>
+                  <Popover placement="topLeft" overlayClassName={res.isError === true ? 'tooltip-card' : 'rename-popover-width'} content={this.getTooltipContent(res)}>
                     <span className="report-name">{res.name}</span>
                   </Popover>
                 )
@@ -139,8 +139,6 @@ export class _RefreshAllPage extends Component {
   }
 }
 
-_RefreshAllPage.defaultProps = {
-  t: (text) => text,
-};
+_RefreshAllPage.defaultProps = { t: (text) => text, };
 
 export const RefreshAllPage = withTranslation('common')(_RefreshAllPage);

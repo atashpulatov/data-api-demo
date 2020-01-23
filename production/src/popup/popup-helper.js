@@ -1,12 +1,17 @@
 import { officeDisplayService } from '../office/office-display-service';
 import { officeStoreService } from '../office/store/office-store-service';
 import { notificationService } from '../notification/notification-service';
-import { popupController } from './popup-controller';
 import { errorService } from '../error/error-handler';
 import { PopupTypeEnum } from '../home/popup-type-enum';
 import objectTypeEnum from '../mstr-object/mstr-object-type-enum';
+import { officeContext } from '../office/office-context';
+import { selectorProperties } from '../attribute-selector/selector-properties';
 
-class PopupHelper {
+export class PopupHelper {
+  init = (popupController) => {
+    this.popupController = popupController;
+  }
+
   capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
   getPopupHeight = (reportArray, reportNumberToShow = 10) => {
@@ -23,7 +28,7 @@ class PopupHelper {
 
   runRefreshAllPopup = async (reportArray, reportNumberToShow = 10) => {
     const popupHeight = this.getPopupHeight(reportArray, reportNumberToShow);
-    await popupController.runPopup(PopupTypeEnum.refreshAllPage, popupHeight, 28);
+    await this.popupController.runPopup(PopupTypeEnum.refreshAllPage, popupHeight, 28);
   };
 
   storagePrepareRefreshAllData = (reportArray) => {
@@ -89,9 +94,13 @@ class PopupHelper {
       isRefresh: true,
       isPrompted: refreshReport.isPrompted,
       isRefreshAll,
-      subtotalInfo: refreshReport.subtotalInfo,
+      subtotalsInfo: refreshReport.subtotalsInfo,
       visualizationInfo: refreshReport.visualizationInfo,
       manipulationsXML: refreshReport.manipulationsXML,
+      preparedInstanceId: refreshReport.instanceId,
+      tableName:refreshReport.tableName,
+      previousTableDimensions: refreshReport.tableDimensions,
+      displayAttrFormNames: refreshReport.displayAttrFormNames,
     };
     const result = await officeDisplayService.printObject(options);
     if (result && result.type === 'warning') {
@@ -114,6 +123,106 @@ class PopupHelper {
       return notificationService.displayNotification({ type: 'info', content: 'Data is not relevant anymore. You can delete it from the list' });
     }
     errorService.handleError(error);
+  }
+
+  handlePopupErrors = (error) => {
+    const errorObj = error && { status: error.status, message: error.message, response: error.response, type: error.type };
+    const messageObject = {
+      command: selectorProperties.commandError,
+      error: errorObj,
+    };
+    officeContext
+      .getOffice()
+      .context.ui.messageParent(JSON.stringify(messageObject));
+  };
+
+  parsePopupState(popupState, promptsAnswers) {
+    if (!popupState) {
+      return;
+    }
+    let chapterKey;
+    let visualizationKey;
+    let dossierName;
+    const { visualizationInfo } = popupState;
+    if (visualizationInfo) {
+      ({ chapterKey, visualizationKey } = visualizationInfo);
+      const { dossierStructure } = visualizationInfo;
+      if (dossierStructure) {
+        ({ dossierName } = dossierStructure);
+      }
+    }
+    const chosenObjectData = {
+      chosenObjectId: popupState.id,
+      instanceId: popupState.instanceId,
+      projectId: popupState.projectId,
+      chosenObjectName: popupState.name,
+      chosenObjectType: popupState.objectType,
+      chosenObjectSubtype: popupState.objectType === 'report' ? 768 : 779,
+      promptsAnswers: promptsAnswers || popupState.promptsAnswers,
+      subtotalsInfo: popupState.subtotalsInfo,
+      isEdit: popupState.isEdit,
+      dossierName,
+      selectedViz: `${chapterKey}:${visualizationKey}`,
+      displayAttrFormNames: popupState.displayAttrFormNames
+    };
+    if (promptsAnswers) {
+      return this.comparePromptAnswers(popupState, promptsAnswers, chosenObjectData);
+    }
+    return this.restoreFilters(popupState.body, chosenObjectData);
+
+
+    // return this.restoreFilters(popupState.body, chosenObjectData);
+  }
+
+  comparePromptAnswers(popupState, promptsAnswers, chosenObjectData) {
+    this.sortPromptsAnswers(popupState.promptsAnswers[0].answers);
+    this.sortPromptsAnswers(promptsAnswers[0].answers);
+    if (JSON.stringify(popupState.promptsAnswers) === JSON.stringify(promptsAnswers)) {
+      return this.restoreFilters(popupState.body, chosenObjectData);
+    }
+    return chosenObjectData;
+  }
+
+
+  sortPromptsAnswers(array) {
+    for (let i = 0; i < array.length; i++) {
+      array[i].values.sort();
+    }
+  }
+
+  restoreFilters(body, chosenObjectData) {
+    try {
+      if (body && body.requestedObjects) {
+        chosenObjectData.selectedAttributes = body.requestedObjects.attributes
+          && body.requestedObjects.attributes.map((attribute) => attribute.id);
+        chosenObjectData.selectedMetrics = body.requestedObjects.metrics
+          && body.requestedObjects.metrics.map((metric) => metric.id);
+      }
+      if (body && body.viewFilter) {
+        chosenObjectData.selectedFilters = this.parseFilters(body.viewFilter.operands);
+      }
+    } catch (error) {
+      console.warn(error);
+    } finally {
+      return chosenObjectData;
+    }
+  }
+
+  parseFilters(filtersNodes) {
+    if (filtersNodes && filtersNodes[0].operands) {
+      // equivalent to flatMap((node) => node.operands)
+      return this.parseFilters(filtersNodes.reduce((nodes, node) => nodes.concat(node.operands), []));
+    }
+    const elementNodes = filtersNodes.filter((node) => node.type === 'elements');
+    // equivalent to flatMap((node) => node.elements)
+    const elements = elementNodes.reduce((elements, node) => elements.concat(node.elements),
+      []);
+    const elementsIds = elements.map((elem) => elem.id);
+    return elementsIds.reduce((filters, elem) => {
+      const attrId = elem.split(':')[0];
+      filters[attrId] = !filters[attrId] ? [elem] : [...filters[attrId], elem];
+      return filters;
+    }, {});
   }
 }
 
