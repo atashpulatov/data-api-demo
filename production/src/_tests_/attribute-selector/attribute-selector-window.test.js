@@ -37,14 +37,15 @@ describe('AttributeSelectorWindow', () => {
       projectId: 'proId'
     };
     const chosenObject = {
-      chosenObjectName: '55',
       promptsAnswers: 'promptsAnswers',
       objectType: { name: 'dossier' }
     };
+    const objectName = '55';
     // when
     const componentWrapper = shallow(<AttributeSelectorWindowNotConnected
       mstrData={mstrData}
       chosenObject={chosenObject}
+      objectName={objectName}
     />);
     // then
     const selectorWrapped = componentWrapper.find(AttributeSelector).at(0);
