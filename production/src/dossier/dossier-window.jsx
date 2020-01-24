@@ -11,6 +11,7 @@ import './dossier.css';
 import { DEFAULT_PROJECT_NAME, } from '../storage/navigation-tree-reducer';
 import { popupHelper } from '../popup/popup-helper';
 import { popupStateActions } from '../popup/popup-state-actions';
+import { officeContext } from '../office/office-context';
 
 export default class _DossierWindow extends React.Component {
   constructor(props) {
@@ -52,10 +53,6 @@ export default class _DossierWindow extends React.Component {
     const { chosenObjectName, chosenObjectId, chosenProjectId, editedObject } = this.props;
     const { isEdit } = editedObject;
     const { chapterKey, visualizationKey, promptsAnswers, preparedInstanceId } = this.state;
-    const visualizationInfo = {
-      chapterKey,
-      visualizationKey,
-    };
     const okObject = {
       command: selectorProperties.commandOk,
       chosenObjectName,
@@ -64,11 +61,14 @@ export default class _DossierWindow extends React.Component {
       chosenSubtype: mstrObjectEnum.mstrObjectType.visualization.subtypes,
       isPrompted: false,
       promptsAnswers,
-      visualizationInfo,
+      visualizationInfo: {
+        chapterKey,
+        visualizationKey,
+      },
       preparedInstanceId,
       isEdit,
     };
-    const { Office } = window;
+    const Office = officeContext.getOffice();
     Office.context.ui.messageParent(JSON.stringify(okObject));
   }
 
