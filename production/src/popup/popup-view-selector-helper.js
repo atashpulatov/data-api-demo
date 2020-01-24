@@ -63,10 +63,11 @@ export class PopupViewSelectorHelper {
   arePromptsAnswered = (props) => !!props.dossierData && !!props.dossierData.instanceId
 
   obtainInstanceWithPromptsAnswers = async (props) => {
-    const projectId = props.chosenProjectId || props.editedObject.chosenProjectId || props.editedObject.projectId;
-    const objectId = props.chosenObjectId || props.editedObject.chosenObjectId;
+    const { editedObject, chosenProjectId, chosenObjectId } = props;
+    const projectId = chosenProjectId || editedObject.chosenProjectId || editedObject.projectId;
+    const objectId = chosenObjectId || editedObject.chosenObjectId;
     const defaultAttrFormNames = officeProperties.displayAttrFormNames.automatic;
-    const displayAttrFormNames = (props.editedObject && props.editedObject.displayAttrFormNames) || defaultAttrFormNames;
+    const displayAttrFormNames = (editedObject && editedObject.displayAttrFormNames) || defaultAttrFormNames;
     const configInstace = { objectId, projectId };
     let instanceDefinition = await createInstance(configInstace);
     let count = 0;
