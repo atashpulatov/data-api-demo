@@ -12,7 +12,7 @@ import { ImportButton } from './import-button';
 import { CancelButton } from './cancel-button';
 
 const getDisableReason = (isPublished, disableSecondary, disableActiveActions) => {
-  const disableReasonForImport = getDisableReasonImport(isPublished, disableActiveActions,);
+  const disableReasonForImport = getDisableReasonImport(isPublished, disableActiveActions);
   return disableSecondary
     ? 'This option is not available for dossier'
     : disableReasonForImport;
