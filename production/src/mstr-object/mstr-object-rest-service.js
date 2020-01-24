@@ -211,9 +211,11 @@ export class MstrObjectRestService {
       .then((res) => parseInstanceDefinition(res, attrforms));
   }
 
-  fetchVisualizationDefinition = ({ projectId, objectId, instanceId, visualizationInfo, body, }) => {
+  fetchVisualizationDefinition = ({ projectId, objectId, instanceId, visualizationInfo, body, displayAttrFormNames }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
+    const { supportForms } = storeState.officeReducer;
+    const attrforms = { supportForms, displayAttrFormNames };
     const { chapterKey, visualizationKey } = visualizationInfo;
     const fullPath = `${envUrl}/v2/dossiers/${objectId}/instances/${instanceId}/chapters/${chapterKey}/visualizations/${visualizationKey}?limit=1&contentFlags=768`;
     return request
@@ -222,7 +224,7 @@ export class MstrObjectRestService {
       .set('x-mstr-projectid', projectId)
       .send(body || '')
       .withCredentials()
-      .then((res) => parseInstanceDefinition(res));
+      .then((res) => parseInstanceDefinition(res, attrforms));
   }
 
   createDossierInstance = (projectId, objectId, body = {}) => {
@@ -282,10 +284,13 @@ export class MstrObjectRestService {
     mstrObjectType = reportObjectType,
     dossierData,
     body = {},
-    instanceId
+    instanceId,
+    displayAttrFormNames
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
+    const { supportForms } = storeState.officeReducer;
+    const attrforms = { supportForms, displayAttrFormNames };
     const fullPath = getFullPath({
       dossierData,
       envUrl,
@@ -301,7 +306,7 @@ export class MstrObjectRestService {
       .set('x-mstr-projectid', projectId)
       .send(body)
       .withCredentials()
-      .then((res) => parseInstanceDefinition(res));
+      .then((res) => parseInstanceDefinition(res, attrforms));
   }
 
   modifyInstance = ({
@@ -310,10 +315,13 @@ export class MstrObjectRestService {
     mstrObjectType = reportObjectType,
     dossierData,
     body = {},
-    instanceId
+    instanceId,
+    displayAttrFormNames
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
+    const { supportForms } = storeState.officeReducer;
+    const attrforms = { supportForms, displayAttrFormNames };
     const fullPath = getFullPath({
       dossierData,
       envUrl,
@@ -329,7 +337,7 @@ export class MstrObjectRestService {
       .set('x-mstr-projectid', projectId)
       .send(body)
       .withCredentials()
-      .then((res) => parseInstanceDefinition(res));
+      .then((res) => parseInstanceDefinition(res, attrforms));
   }
 
   getObjectContentGenerator = ({
