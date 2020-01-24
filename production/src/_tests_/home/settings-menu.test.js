@@ -42,7 +42,7 @@ describe('Settings Menu', () => {
     expect(logOutRestSpy).toThrowError();
   });
 
-  it('should return true', () => {
+  it('should return true on throw error', () => {
     // given
     Object.defineProperty(global, 'document', {
       writable: true,
