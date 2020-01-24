@@ -3,6 +3,7 @@ import { mount } from 'enzyme';
 import { sessionHelper } from '../../storage/session-helper';
 import { SettingsMenuNotConnected } from '../../home/settings-menu';
 import DB from '../../cache/cache-db';
+import { helper } from '../../helpers/helpers';
 
 describe('Settings Menu', () => {
   afterEach(() => {
@@ -39,5 +40,30 @@ describe('Settings Menu', () => {
     buttonWrapper.simulate('click');
     // then
     expect(logOutRestSpy).toThrowError();
+  });
+
+  it('should return true', () => {
+    // given
+    Object.defineProperty(global, 'document', {
+      writable: true,
+      value: {
+        createElement: () => ({
+          style: {}, focus: jest.fn(), select: jest.fn(),
+          parentNode: { removeChild: jest.fn() }
+        }),
+        parentNode: { removeChild: jest.fn() },
+        execCommand: jest.fn(),
+        body: {
+          appendChild: () => {
+            throw new Error();
+          },
+          removeChild: jest.fn()
+        }
+      },
+    });
+    // when
+    const returnValue = helper.isOverflown();
+    // then
+    expect(returnValue).toBe(true);
   });
 });
