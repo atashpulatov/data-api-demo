@@ -14,7 +14,7 @@ import { popupHelper } from '../popup/popup-helper';
 import { popupStateActions } from '../popup/popup-state-actions';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 
-export default class _DossierWindow extends React.Component {
+export default class DossierWindowNotConnected extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -37,7 +37,7 @@ export default class _DossierWindow extends React.Component {
   }
 
   async handleSelection(dossierData) {
-    const { chosenObjectName, chosenObjectId, chosenProjectId } = this.props;
+    const { chosenObjectId, chosenProjectId } = this.props;
     const { chapterKey, visualizationKey, promptsAnswers, preparedInstanceId } = dossierData;
     let newValue = false;
     if ((chapterKey !== '') && (visualizationKey !== '')) {
@@ -79,8 +79,8 @@ export default class _DossierWindow extends React.Component {
     requestImport();
   }
 
-  handlePromptAnswer(newAnswerws, newInstanceId) {
-    this.setState({ promptsAnswers: newAnswerws, preparedInstanceId: newInstanceId });
+  handlePromptAnswer(newAnswers, newInstanceId) {
+    this.setState({ promptsAnswers: newAnswers, preparedInstanceId: newInstanceId });
   }
 
   render() {
@@ -116,7 +116,7 @@ export default class _DossierWindow extends React.Component {
   }
 }
 
-_DossierWindow.propTypes = {
+DossierWindowNotConnected.propTypes = {
   chosenObjectId: PropTypes.string,
   chosenObjectName: PropTypes.string,
   chosenProjectId: PropTypes.string,
@@ -128,6 +128,7 @@ _DossierWindow.propTypes = {
   }),
   requestImport: PropTypes.func,
   selectObject: PropTypes.func,
+  handleBack: PropTypes.func,
   editedObject: PropTypes.shape({
     chosenObjectId: PropTypes.string,
     projectId: PropTypes.string,
@@ -139,7 +140,7 @@ _DossierWindow.propTypes = {
   }),
 };
 
-_DossierWindow.defaultProps = {
+DossierWindowNotConnected.defaultProps = {
   chosenObjectId: 'default id',
   chosenObjectName: DEFAULT_PROJECT_NAME,
   chosenProjectId: 'default id',
@@ -151,6 +152,7 @@ _DossierWindow.defaultProps = {
   },
   requestImport: () => { },
   selectObject: () => { },
+  handleBack: () => { },
   editedObject: {
     chosenObjectId: undefined,
     projectId: undefined,
@@ -179,4 +181,4 @@ const mapActionsToProps = {
   handleBack: popupStateActions.onPopupBack,
 };
 
-export const DossierWindow = connect(mapStateToProps, mapActionsToProps)(withTranslation('common')(_DossierWindow));
+export const DossierWindow = connect(mapStateToProps, mapActionsToProps)(withTranslation('common')(DossierWindowNotConnected));

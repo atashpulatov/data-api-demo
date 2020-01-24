@@ -222,7 +222,7 @@ export class _OfficeLoadedFile extends React.Component {
           mouseEnterDelay={1}
         >
           <span
-              aria-label="Edit button"
+              aria-label={t('Edit button')}
               role="button"
               tabIndex="0"
               className="loading-button-container"
@@ -238,7 +238,7 @@ export class _OfficeLoadedFile extends React.Component {
           mouseEnterDelay={1}
         >
           <span
-              aria-label="Refresh button"
+              aria-label={t('Refresh button')}
               role="button"
               tabIndex="0"
               className="loading-button-container"
@@ -265,7 +265,7 @@ export class _OfficeLoadedFile extends React.Component {
           arrowPointAtCenter="true"
         >
           <span
-            aria-label="Delete button"
+            aria-label={t('Delete button')}
             role="button"
             tabIndex="0"
             onClick={this.deleteAction}
@@ -378,7 +378,6 @@ _OfficeLoadedFile.propTypes = {
   isCrosstab: PropTypes.bool,
   visualizationInfo: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.bool]),
   crosstabHeaderDimensions: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.bool]),
-  isPrompted: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
   refreshDate: PropTypes.instanceOf(Date),
   startLoading: PropTypes.func,
   stopLoading: PropTypes.func,
