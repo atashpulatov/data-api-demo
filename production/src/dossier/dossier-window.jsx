@@ -12,8 +12,9 @@ import { DEFAULT_PROJECT_NAME, } from '../storage/navigation-tree-reducer';
 import { popupHelper } from '../popup/popup-helper';
 import { popupStateActions } from '../popup/popup-state-actions';
 import { officeContext } from '../office/office-context';
+import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 
-export default class _DossierWindow extends React.Component {
+export default class DossierWindowNotConnected extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,6 +23,7 @@ export default class _DossierWindow extends React.Component {
       visualizationKey: '',
       promptsAnswers: [],
       preparedInstanceId: '',
+      isVisualizationSupported: true,
     };
     this.handleSelection = this.handleSelection.bind(this);
     this.handleOk = this.handleOk.bind(this);
@@ -34,18 +36,26 @@ export default class _DossierWindow extends React.Component {
     Office.context.ui.messageParent(JSON.stringify(cancelObject));
   }
 
-  handleSelection(dossierData) {
+  async handleSelection(dossierData) {
+    const { chosenObjectId, chosenProjectId } = this.props;
     const { chapterKey, visualizationKey, promptsAnswers, preparedInstanceId } = dossierData;
     let newValue = false;
     if ((chapterKey !== '') && (visualizationKey !== '')) {
       newValue = true;
+    }
+    let isVisualizationSupported = true;
+    try {
+      await mstrObjectRestService.fetchVisualizationDefinition({ projectId:chosenProjectId, objectId:chosenObjectId, instanceId:preparedInstanceId, visualizationInfo:{ chapterKey, visualizationKey } });
+    } catch (error) {
+      isVisualizationSupported = false;
     }
     this.setState({
       isVisualizationSelected: newValue,
       chapterKey,
       visualizationKey,
       promptsAnswers,
-      preparedInstanceId
+      preparedInstanceId,
+      isVisualizationSupported
     });
   }
 
@@ -72,14 +82,14 @@ export default class _DossierWindow extends React.Component {
     Office.context.ui.messageParent(JSON.stringify(okObject));
   }
 
-  handlePromptAnswer(newAnswerws, newInstanceId) {
-    this.setState({ promptsAnswers: newAnswerws, preparedInstanceId: newInstanceId });
+  handlePromptAnswer(newAnswers, newInstanceId) {
+    this.setState({ promptsAnswers: newAnswers, preparedInstanceId: newInstanceId });
   }
 
   render() {
     const { chosenObjectName, t, handleBack } = this.props;
     const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
-    const { isVisualizationSelected } = this.state;
+    const { isVisualizationSelected, isVisualizationSupported } = this.state;
     return (
       <div>
         <h1 title={chosenObjectName} className="ant-col folder-browser-title">
@@ -101,13 +111,15 @@ export default class _DossierWindow extends React.Component {
           handleBack={!isEdit && handleBack}
           hideSecondary
           disableActiveActions={!isVisualizationSelected}
+          isPublished={isVisualizationSupported}
+          disableSecondary={!isVisualizationSupported}
         />
       </div>
     );
   }
 }
 
-_DossierWindow.propTypes = {
+DossierWindowNotConnected.propTypes = {
   chosenObjectId: PropTypes.string,
   chosenObjectName: PropTypes.string,
   chosenProjectId: PropTypes.string,
@@ -117,6 +129,7 @@ _DossierWindow.propTypes = {
     authToken: PropTypes.string,
     promptsAnswers: PropTypes.array || null
   }),
+  handleBack: PropTypes.func,
   editedObject: PropTypes.shape({
     chosenObjectId: PropTypes.string,
     projectId: PropTypes.string,
@@ -128,7 +141,7 @@ _DossierWindow.propTypes = {
   }),
 };
 
-_DossierWindow.defaultProps = {
+DossierWindowNotConnected.defaultProps = {
   chosenObjectId: 'default id',
   chosenObjectName: DEFAULT_PROJECT_NAME,
   chosenProjectId: 'default id',
@@ -138,6 +151,7 @@ _DossierWindow.defaultProps = {
     authToken: null,
     promptsAnswers: null
   },
+  handleBack: () => { },
   editedObject: {
     chosenObjectId: undefined,
     projectId: undefined,
@@ -162,4 +176,4 @@ function mapStateToProps(state) {
 
 const mapActionsToProps = { handleBack: popupStateActions.onPopupBack, };
 
-export const DossierWindow = connect(mapStateToProps, mapActionsToProps)(withTranslation('common')(_DossierWindow));
+export const DossierWindow = connect(mapStateToProps, mapActionsToProps)(withTranslation('common')(DossierWindowNotConnected));

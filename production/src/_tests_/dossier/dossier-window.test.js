@@ -1,11 +1,14 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { default as _DossierWindow } from '../../dossier/dossier-window';
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import DossierWindowNotConnected, { DossierWindow } from '../../dossier/dossier-window';
 import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
 import { selectorProperties } from '../../attribute-selector/selector-properties';
 import { Office } from '../mockOffice';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { officeContext } from '../../office/office-context';
+import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 
 describe('Dossierwindow', () => {
   afterEach(() => {
@@ -15,7 +18,8 @@ describe('Dossierwindow', () => {
   it('should render PopupButtons', () => {
     // given
     // when
-    const componentWrapper = shallow(<_DossierWindow />);
+    const componentWrapper = shallow(<DossierWindowNotConnected />);
+
     // then
     const popupButtonsWrapped = componentWrapper.find(PopupButtons);
     expect(popupButtonsWrapped.get(0)).toBeDefined();
@@ -25,7 +29,7 @@ describe('Dossierwindow', () => {
     // given
     const cancelObject = { command: selectorProperties.commandCancel, };
     const office = jest.spyOn(Office.context.ui, 'messageParent');
-    const wrappedComponent = shallow(<_DossierWindow />);
+    const wrappedComponent = shallow(<DossierWindowNotConnected />);
     // when
     wrappedComponent.instance().handleCancel();
     // then
@@ -35,26 +39,38 @@ describe('Dossierwindow', () => {
   it('should use handleSelection as unselection', () => {
     // given
     const dossierData = { chapterKey: 'C40', visualizationKey: '' };
-    const componentWrapper = shallow(<_DossierWindow />);
+    const componentWrapper = shallow(<DossierWindowNotConnected />);
     // when
     componentWrapper.instance().handleSelection(dossierData);
     // then
     expect(componentWrapper.instance().state.isVisualizationSelected).toBeFalsy();
   });
 
-  it('should use handleSelection as selection', () => {
+  it('should use handleSelection as selection', async () => {
     // given
     const dossierData = { chapterKey: 'C40', visualizationKey: 'V78' };
-    const componentWrapper = shallow(<_DossierWindow />);
+    const componentWrapper = shallow(<DossierWindowNotConnected />);
+    mstrObjectRestService.fetchVisualizationDefinition = jest.fn();
     // when
-    componentWrapper.instance().handleSelection(dossierData);
+    await componentWrapper.instance().handleSelection(dossierData);
     // then
     expect(componentWrapper.instance().state.isVisualizationSelected).toBeTruthy();
   });
 
+  it('handlePromptAnswer newInstanceId setup correct state', async () => {
+    // given
+    const newAnswers = 'newAnswers';
+    const newInstanceId = 'newInstanceId';
+    const componentWrapper = shallow(<DossierWindowNotConnected />);
+    // when
+    componentWrapper.instance().handlePromptAnswer(newAnswers, newInstanceId);
+    // then
+    expect(componentWrapper.instance().state.promptsAnswers).toBe(newAnswers);
+    expect(componentWrapper.instance().state.preparedInstanceId).toBe(newInstanceId);
+  });
+
   it('should use handleOk and run messageParent with given parameters', () => {
     // given
-
     const messageParentMock = jest.fn();
     const getOfficeSpy = jest.spyOn(officeContext, 'getOffice').mockImplementation(() => ({ context: { ui: { messageParent: messageParentMock, }, }, }));
 
@@ -76,7 +92,7 @@ describe('Dossierwindow', () => {
       preparedInstanceId: '',
       isEdit: false,
     };
-    const componentWrapper = shallow(<_DossierWindow />);
+    const componentWrapper = shallow(<DossierWindowNotConnected />);
     componentWrapper.setProps(componentProps);
     componentWrapper.setState(componentState);
     // when
@@ -84,5 +100,81 @@ describe('Dossierwindow', () => {
     // then
     expect(getOfficeSpy).toHaveBeenCalled();
     expect(messageParentMock).toHaveBeenCalledWith(JSON.stringify(mockupOkObject));
+  });
+
+
+  describe('DossierWindow.js mapStateToProps and mapActionsToProps test', () => {
+    const mockStore = configureMockStore([thunk]);
+    let store;
+    let componentWrapper;
+
+    beforeEach(() => {
+      const initialState = {
+        popupReducer:{},
+        navigationTree:{
+          chosenObjectName: 'objectName',
+          chosenObjectId: 'objectId',
+          chosenProjectId: 'projectId',
+        },
+        popupStateReducer: {
+          popupType: 'testPopupType',
+          otherDefinedProperty: 'testOtherProperty'
+        }
+      };
+      store = mockStore(initialState);
+      componentWrapper = shallow(<DossierWindow store={store} />);
+    });
+
+    it('should use mapStateToProps', () => {
+      // given
+      const childrenProps = componentWrapper.props().children.props;
+      // when
+      // then
+      expect(childrenProps.chosenObjectName).toBe('objectName');
+      expect(childrenProps.chosenObjectId).toBe('objectId');
+      expect(childrenProps.chosenProjectId).toBe('projectId');
+    });
+
+    it('should use mapActionsToProps', () => {
+      // given
+      const childrenProps = componentWrapper.props().children.props;
+      // when
+      // then
+      expect(childrenProps.handleBack).toBeDefined();
+    });
+    describe('DossierWindow.js mapStateToProps with edited object test', () => {
+      beforeEach(() => {
+        const initialState = {
+          popupReducer:{
+            editedObject:{
+              chosenObjectName: 'editedObjectName',
+              chosenObjectId: 'editedObjectId',
+              projectId: 'editedProjectId',
+            }
+          },
+          navigationTree:{
+            chosenObjectName: 'objectName',
+            chosenObjectId: 'objectId',
+            chosenProjectId: 'projectId',
+          },
+          popupStateReducer: {
+            popupType: 'testPopupType',
+            otherDefinedProperty: 'testOtherProperty'
+          }
+        };
+        store = mockStore(initialState);
+        componentWrapper = shallow(<DossierWindow store={store} />);
+      });
+
+      it('should use mapStateToProps with editedObject', () => {
+        // given
+        const childrenProps = componentWrapper.props().children.props;
+        // when
+        // then
+        expect(childrenProps.chosenObjectName).toBe('editedObjectName');
+        expect(childrenProps.chosenObjectId).toBe('editedObjectId');
+        expect(childrenProps.chosenProjectId).toBe('editedProjectId');
+      });
+    });
   });
 });

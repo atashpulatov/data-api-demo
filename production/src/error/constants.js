@@ -66,6 +66,7 @@ export const UNKNOWN_ERROR = 'Unknown error';
 export const LOGIN_FAILURE = 'Login failure';
 export const OBJ_REMOVED_FROM_EXCEL = 'This object does not exist in the workbook anymore.';
 export const PROTECTED_SHEET = 'The table you are trying to manipulate is in a protected sheet. To make a change, unprotect the sheet. You might be requested to enter a password.';
+export const NOT_SUPPORTED_VIZ = 'Selected visualization cannot be imported in current version of the Add-in';
 
 // temporarily we map all those codes to one message; may be changed in the future
 const iServerErrorMessages = withDefaultValue({
