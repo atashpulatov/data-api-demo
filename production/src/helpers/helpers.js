@@ -10,7 +10,6 @@ class Helper {
       measureReportName.parentNode.removeChild(measureReportName);
       return result;
     } catch (error) {
-      console.log(error);
       return true;
     }
   }
