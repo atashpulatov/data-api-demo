@@ -15,6 +15,7 @@ import {
   STOP_REPORT_LOADING,
   RESET_STATE,
 } from './popup-actions';
+import { SET_MSTR_DATA } from './popup-state-actions';
 
 const URL = `${window.location.href}`;
 
@@ -40,6 +41,7 @@ export class PopupController {
   };
 
   runRepromptPopup = async (reportParams) => {
+    this.reduxStore.dispatch({ type: SET_MSTR_DATA, payload: { isReprompt: true } });
     await this.runPopup(PopupTypeEnum.repromptingWindow, 80, 80, reportParams);
   };
 
@@ -49,6 +51,7 @@ export class PopupController {
 
   runPopup = async (popupType, height, width, reportParams = null) => {
     const session = this.sessionHelper.getSession();
+    this.reduxStore.dispatch({ type: SET_MSTR_DATA, payload: { popupType } });
     try {
       await authenticationHelper.validateAuthToken();
     } catch (error) {

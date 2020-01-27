@@ -3,6 +3,7 @@ import { PopupTypeEnum } from '../home/popup-type-enum';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { popupHelper } from './popup-helper';
+import { officeProperties } from '../office/office-properties';
 
 const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 
@@ -62,8 +63,11 @@ export class PopupViewSelectorHelper {
   arePromptsAnswered = (props) => !!props.dossierData && !!props.dossierData.instanceId
 
   obtainInstanceWithPromptsAnswers = async (props) => {
-    const projectId = props.chosenProjectId || props.editedObject.chosenProjectId || props.editedObject.projectId;
-    const objectId = props.chosenObjectId || props.editedObject.chosenObjectId;
+    const { editedObject, chosenProjectId, chosenObjectId } = props;
+    const projectId = chosenProjectId || editedObject.chosenProjectId || editedObject.projectId;
+    const objectId = chosenObjectId || editedObject.chosenObjectId;
+    const defaultAttrFormNames = officeProperties.displayAttrFormNames.automatic;
+    const displayAttrFormNames = (editedObject && editedObject.displayAttrFormNames) || defaultAttrFormNames;
     const configInstace = { objectId, projectId };
     let instanceDefinition = await createInstance(configInstace);
     let count = 0;
@@ -75,7 +79,7 @@ export class PopupViewSelectorHelper {
         promptsAnswers: props.promptsAnswers[count],
       };
       await answerPrompts(configPrompts);
-      const configAnsPrompts = { objectId, projectId, instanceId: instanceDefinition.instanceId };
+      const configAnsPrompts = { objectId, projectId, instanceId: instanceDefinition.instanceId, displayAttrFormNames };
       try {
         instanceDefinition = await getInstance(configAnsPrompts);
       } catch (error) {

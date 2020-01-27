@@ -166,11 +166,12 @@ DossierWindowNotConnected.defaultProps = {
 function mapStateToProps(state) {
   const { chosenObjectName, chosenObjectId, chosenProjectId, promptsAnswers } = state.navigationTree;
   const popupState = state.popupReducer.editedObject;
+  const editedObject = { ...(popupHelper.parsePopupState(popupState, promptsAnswers)) };
   return {
-    chosenObjectName: popupState ? popupState.chosenObjectName : chosenObjectName,
-    chosenObjectId: popupState ? popupState.chosenObjectId : chosenObjectId,
-    chosenProjectId: popupState ? popupState.projectId : chosenProjectId,
-    editedObject: { ...(popupHelper.parsePopupState(popupState, promptsAnswers)) },
+    chosenObjectName: popupState ? editedObject.chosenObjectName : chosenObjectName,
+    chosenObjectId: popupState ? editedObject.chosenObjectId : chosenObjectId,
+    chosenProjectId: popupState ? editedObject.projectId : chosenProjectId,
+    editedObject,
   };
 }
 

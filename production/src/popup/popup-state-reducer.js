@@ -1,4 +1,4 @@
-import {SET_POPUP_TYPE, SET_MSTR_DATA, SET_OBJECT_DATA, ON_POPUP_BACK} from './popup-state-actions';
+import {SET_POPUP_TYPE, SET_MSTR_DATA, SET_OBJECT_DATA, ON_POPUP_BACK, CLEAR_POPUP_STATE} from './popup-state-actions';
 import {PopupTypeEnum} from '../home/popup-type-enum';
 
 export const initialState = {};
@@ -29,6 +29,9 @@ export const popupStateReducer = (state = initialState, action) => {
         ...state,
         popupType: PopupTypeEnum.navigationTree,
       };
+    }
+    case CLEAR_POPUP_STATE: {
+      return initialState;
     }
     default:
       return state;
