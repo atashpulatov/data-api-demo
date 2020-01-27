@@ -6,12 +6,12 @@ import { MSTRIcon } from '@mstr/mstr-react-library';
 import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { EmbeddedDossier } from './embedded-dossier';
-import { actions } from '../navigation/navigation-tree-actions';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './dossier.css';
 import { DEFAULT_PROJECT_NAME, } from '../storage/navigation-tree-reducer';
 import { popupHelper } from '../popup/popup-helper';
 import { popupStateActions } from '../popup/popup-state-actions';
+import { officeContext } from '../office/office-context';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 
 export default class DossierWindowNotConnected extends React.Component {
@@ -60,23 +60,26 @@ export default class DossierWindowNotConnected extends React.Component {
   }
 
   handleOk() {
-    const { chosenObjectName, chosenObjectId, chosenProjectId, requestImport, selectObject, editedObject } = this.props;
+    const { chosenObjectName, chosenObjectId, chosenProjectId, editedObject } = this.props;
     const { isEdit } = editedObject;
     const { chapterKey, visualizationKey, promptsAnswers, preparedInstanceId } = this.state;
-    const selectedVisualization = {
+    const okObject = {
+      command: selectorProperties.commandOk,
       chosenObjectName,
-      chosenObjectId,
-      chosenProjectId,
+      chosenObject: chosenObjectId,
+      chosenProject: chosenProjectId,
       chosenSubtype: mstrObjectEnum.mstrObjectType.visualization.subtypes,
-      objectType: mstrObjectEnum.mstrObjectType.visualization.type,
-      chosenChapterKey: chapterKey,
-      chosenVisualizationKey: visualizationKey,
+      isPrompted: false,
       promptsAnswers,
+      visualizationInfo: {
+        chapterKey,
+        visualizationKey,
+      },
       preparedInstanceId,
       isEdit,
     };
-    selectObject(selectedVisualization);
-    requestImport();
+    const Office = officeContext.getOffice();
+    Office.context.ui.messageParent(JSON.stringify(okObject));
   }
 
   handlePromptAnswer(newAnswers, newInstanceId) {
@@ -126,8 +129,6 @@ DossierWindowNotConnected.propTypes = {
     authToken: PropTypes.string,
     promptsAnswers: PropTypes.array || null
   }),
-  requestImport: PropTypes.func,
-  selectObject: PropTypes.func,
   handleBack: PropTypes.func,
   editedObject: PropTypes.shape({
     chosenObjectId: PropTypes.string,
@@ -150,8 +151,6 @@ DossierWindowNotConnected.defaultProps = {
     authToken: null,
     promptsAnswers: null
   },
-  requestImport: () => { },
-  selectObject: () => { },
   handleBack: () => { },
   editedObject: {
     chosenObjectId: undefined,
@@ -176,10 +175,6 @@ function mapStateToProps(state) {
   };
 }
 
-const mapActionsToProps = {
-  requestImport: actions.requestImport,
-  selectObject: actions.selectObject,
-  handleBack: popupStateActions.onPopupBack,
-};
+const mapActionsToProps = { handleBack: popupStateActions.onPopupBack, };
 
 export const DossierWindow = connect(mapStateToProps, mapActionsToProps)(withTranslation('common')(DossierWindowNotConnected));

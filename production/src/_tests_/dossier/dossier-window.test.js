@@ -7,6 +7,7 @@ import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
 import { selectorProperties } from '../../attribute-selector/selector-properties';
 import { Office } from '../mockOffice';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
+import { officeContext } from '../../office/office-context';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 
 describe('Dossierwindow', () => {
@@ -68,21 +69,26 @@ describe('Dossierwindow', () => {
     expect(componentWrapper.instance().state.preparedInstanceId).toBe(newInstanceId);
   });
 
-  it('should use handleOk and run selectObject with given parameters', () => {
+  it('should use handleOk and run messageParent with given parameters', () => {
     // given
+    const messageParentMock = jest.fn();
+    const getOfficeSpy = jest.spyOn(officeContext, 'getOffice').mockImplementation(() => ({ context: { ui: { messageParent: messageParentMock, }, }, }));
+
     const componentState = { isVisualizationSelected: true, chapterKey: 'C40', visualizationKey: 'V78', promptsAnswers: [] };
-    const selectObject = jest.fn();
-    const requestImport = jest.fn();
-    const componentProps = { chosenObjectName: 'selectedObject', chosenObjectId: 'ABC123', chosenProjectId: 'DEF456', requestImport, selectObject };
-    const mockupVisualizationData = {
+    const componentProps = { chosenObjectName: 'selectedObject', chosenObjectId: 'ABC123', chosenProjectId: 'DEF456' };
+
+    const mockupOkObject = {
+      command: 'command_ok',
       chosenObjectName: 'selectedObject',
-      chosenObjectId: 'ABC123',
-      chosenProjectId: 'DEF456',
+      chosenObject: 'ABC123',
+      chosenProject: 'DEF456',
       chosenSubtype: mstrObjectEnum.mstrObjectType.visualization.subtypes,
-      objectType: mstrObjectEnum.mstrObjectType.visualization.type,
-      chosenChapterKey: 'C40',
-      chosenVisualizationKey: 'V78',
+      isPrompted: false,
       promptsAnswers: [],
+      visualizationInfo: {
+        chapterKey: 'C40',
+        visualizationKey: 'V78',
+      },
       preparedInstanceId: '',
       isEdit: false,
     };
@@ -92,8 +98,8 @@ describe('Dossierwindow', () => {
     // when
     componentWrapper.instance().handleOk();
     // then
-    expect(selectObject).toHaveBeenCalledWith(mockupVisualizationData);
-    expect(requestImport).toHaveBeenCalled();
+    expect(getOfficeSpy).toHaveBeenCalled();
+    expect(messageParentMock).toHaveBeenCalledWith(JSON.stringify(mockupOkObject));
   });
 
 
@@ -134,8 +140,6 @@ describe('Dossierwindow', () => {
       const childrenProps = componentWrapper.props().children.props;
       // when
       // then
-      expect(childrenProps.requestImport).toBeDefined();
-      expect(childrenProps.selectObject).toBeDefined();
       expect(childrenProps.handleBack).toBeDefined();
     });
   });
