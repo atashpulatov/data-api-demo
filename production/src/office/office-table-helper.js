@@ -405,13 +405,16 @@ class OfficeTableHelper {
    clearIfCrosstabHeadersChanged = async (prevOfficeTable, excelContext, tableColumnsChanged, startCell, mstrTable) => {
      const { prevCrosstabDimensions, crosstabHeaderDimensions, isCrosstab } = mstrTable;
      const { validColumnsY, validRowsX } = await officeApiHelper.getCrosstabHeadersSafely(prevOfficeTable, prevCrosstabDimensions.columnsY, excelContext, prevCrosstabDimensions.rowsX);
-     if (isCrosstab && crosstabHeaderDimensions && prevCrosstabDimensions
-      && (validRowsX !== crosstabHeaderDimensions.rowsX
-      || validColumnsY !== crosstabHeaderDimensions.columnsY)) {
-       tableColumnsChanged = true;
-       prevCrosstabDimensions.rowsX = validRowsX;
-       prevCrosstabDimensions.columnsY = validColumnsY;
-       startCell = officeApiHelper.offsetCellBy(startCell, -prevCrosstabDimensions.columnsY, -prevCrosstabDimensions.rowsX);
+     if (isCrosstab && crosstabHeaderDimensions && prevCrosstabDimensions) {
+       if (validRowsX !== crosstabHeaderDimensions.rowsX
+      || validColumnsY !== crosstabHeaderDimensions.columnsY) {
+         tableColumnsChanged = true;
+         prevCrosstabDimensions.rowsX = validRowsX;
+         prevCrosstabDimensions.columnsY = validColumnsY;
+         startCell = officeApiHelper.offsetCellBy(startCell, -prevCrosstabDimensions.columnsY, -prevCrosstabDimensions.rowsX);
+       } else if (tableColumnsChanged) {
+         startCell = officeApiHelper.offsetCellBy(startCell, -prevCrosstabDimensions.columnsY, -prevCrosstabDimensions.rowsX);
+       }
      }
      if (prevCrosstabDimensions) { officeApiHelper.clearCrosstabRange(prevOfficeTable, crosstabHeaderDimensions, prevCrosstabDimensions, isCrosstab, excelContext); }
      await excelContext.sync();
