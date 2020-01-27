@@ -138,39 +138,42 @@ describe('Dossierwindow', () => {
       expect(childrenProps.selectObject).toBeDefined();
       expect(childrenProps.handleBack).toBeDefined();
     });
-    describe('DossierWindow.js mapStateToProps with edited object test', () => {
-      beforeEach(() => {
-        const initialState = {
-          popupReducer:{
-            editedObject:{
-              chosenObjectName: 'editedObjectName',
-              chosenObjectId: 'editedObjectId',
-              projectId: 'editedProjectId',
-            }
-          },
-          navigationTree:{
-            chosenObjectName: 'objectName',
-            chosenObjectId: 'objectId',
-            chosenProjectId: 'projectId',
-          },
-          popupStateReducer: {
-            popupType: 'testPopupType',
-            otherDefinedProperty: 'testOtherProperty'
+  });
+  describe('DossierWindow.js mapStateToProps with edited object test', () => {
+    const mockStore = configureMockStore([thunk]);
+    let store;
+    let componentWrapper;
+    beforeEach(() => {
+      const initialState = {
+        popupReducer:{
+          editedObject:{
+            chosenObjectName: 'editedObjectName',
+            chosenObjectId: 'editedObjectId',
+            projectId: 'editedProjectId',
           }
-        };
-        store = mockStore(initialState);
-        componentWrapper = shallow(<DossierWindow store={store} />);
-      });
+        },
+        navigationTree:{
+          chosenObjectName: 'objectName',
+          chosenObjectId: 'objectId',
+          chosenProjectId: 'projectId',
+        },
+        popupStateReducer: {
+          popupType: 'testPopupType',
+          otherDefinedProperty: 'testOtherProperty'
+        }
+      };
+      store = mockStore(initialState);
+      componentWrapper = shallow(<DossierWindow store={store} />);
+    });
 
-      it('should use mapStateToProps with editedObject', () => {
-        // given
-        const childrenProps = componentWrapper.props().children.props;
-        // when
-        // then
-        expect(childrenProps.chosenObjectName).toBe('editedObjectName');
-        expect(childrenProps.chosenObjectId).toBe('editedObjectId');
-        expect(childrenProps.chosenProjectId).toBe('editedProjectId');
-      });
+    it('should use mapStateToProps with editedObject', () => {
+      // given
+      const childrenProps = componentWrapper.props().children.props;
+      // when
+      // then
+      expect(childrenProps.chosenObjectName).toBe('editedObjectName');
+      expect(childrenProps.chosenObjectId).toBe('editedObjectId');
+      expect(childrenProps.chosenProjectId).toBe('editedProjectId');
     });
   });
 });
