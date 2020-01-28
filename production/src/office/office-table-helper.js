@@ -30,7 +30,6 @@ class OfficeTableHelper {
     const tableStartCell = this.getTableStartCell(startCell, sheet, instanceDefinition, prevOfficeTable, tableColumnsChanged);
     const tableRange = officeApiHelper.getRange(columns, tableStartCell, rows);
     const range = this.getObjectRange(isCrosstab, tableStartCell, crosstabHeaderDimensions, sheet, tableRange);
-
     context.trackedObjects.add(range);
     await this.checkObjectRangeValidity(prevOfficeTable, context, range, instanceDefinition);
     if (isCrosstab) {
@@ -405,15 +404,19 @@ class OfficeTableHelper {
    clearIfCrosstabHeadersChanged = async (prevOfficeTable, excelContext, tableColumnsChanged, startCell, mstrTable) => {
      const { prevCrosstabDimensions, crosstabHeaderDimensions, isCrosstab } = mstrTable;
      const { validColumnsY, validRowsX } = await officeApiHelper.getCrosstabHeadersSafely(prevOfficeTable, prevCrosstabDimensions.columnsY, excelContext, prevCrosstabDimensions.rowsX);
-     if (isCrosstab && crosstabHeaderDimensions && prevCrosstabDimensions
-      && (validRowsX !== crosstabHeaderDimensions.rowsX
-      || validColumnsY !== crosstabHeaderDimensions.columnsY)) {
-       tableColumnsChanged = true;
-       prevCrosstabDimensions.rowsX = validRowsX;
-       prevCrosstabDimensions.columnsY = validColumnsY;
-       startCell = officeApiHelper.offsetCellBy(startCell, -prevCrosstabDimensions.columnsY, -prevCrosstabDimensions.rowsX);
+     if (isCrosstab && crosstabHeaderDimensions && prevCrosstabDimensions) {
+       if (validRowsX !== crosstabHeaderDimensions.rowsX
+      || validColumnsY !== crosstabHeaderDimensions.columnsY) {
+         tableColumnsChanged = true;
+         prevCrosstabDimensions.rowsX = validRowsX;
+         prevCrosstabDimensions.columnsY = validColumnsY;
+       } if (tableColumnsChanged) {
+         startCell = officeApiHelper.offsetCellBy(startCell, -prevCrosstabDimensions.columnsY, -prevCrosstabDimensions.rowsX);
+       }
      }
-     if (prevCrosstabDimensions) { officeApiHelper.clearCrosstabRange(prevOfficeTable, crosstabHeaderDimensions, prevCrosstabDimensions, isCrosstab, excelContext); }
+     if (prevCrosstabDimensions) {
+       officeApiHelper.clearCrosstabRange(prevOfficeTable, crosstabHeaderDimensions, prevCrosstabDimensions, isCrosstab, excelContext);
+     }
      await excelContext.sync();
      return { tableColumnsChanged, startCell };
    }
