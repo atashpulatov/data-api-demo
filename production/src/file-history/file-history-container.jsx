@@ -48,7 +48,7 @@ export class FileHistoryContainerNotConnected extends React.Component {
           startLoading();
           await officeApiHelper.checkStatusOfSessions();
           const { reportArray, t } = this.props;
-          const reportToDelete = reportArray.find((report) => report.bindId === e.tableName);
+          const reportToDelete = reportArray.find((report) => report.bindId === e.tableId);
           officeApiHelper.removeObjectAndDisplaytNotification(reportToDelete, officeContext, t);
           stopLoading();
         });
