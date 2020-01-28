@@ -50,12 +50,12 @@ export const popupReducer = (state = initialState, action) => {
   }
   case SWITCH_IMPORT_SUBTOTALS: {
     const editedObject = { ...state.editedObject };
-    if (editedObject.subtotalsInfo) {
+    if (editedObject && editedObject.subtotalsInfo) {
       editedObject.subtotalsInfo.importSubtotal = data;
     }
     return {
       ...state,
-      editedObject
+      editedObject: !state.editedObject ? state.editedObject : editedObject
     };
   }
   case UPDATE_DISPLAY_ATTR_FORM: {
