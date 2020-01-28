@@ -30,7 +30,6 @@ class OfficeTableHelper {
     const tableStartCell = this.getTableStartCell(startCell, sheet, instanceDefinition, prevOfficeTable, tableColumnsChanged);
     const tableRange = officeApiHelper.getRange(columns, tableStartCell, rows);
     const range = this.getObjectRange(isCrosstab, tableStartCell, crosstabHeaderDimensions, sheet, tableRange);
-
     context.trackedObjects.add(range);
     await this.checkObjectRangeValidity(prevOfficeTable, context, range, instanceDefinition);
     if (isCrosstab) {
@@ -411,12 +410,13 @@ class OfficeTableHelper {
          tableColumnsChanged = true;
          prevCrosstabDimensions.rowsX = validRowsX;
          prevCrosstabDimensions.columnsY = validColumnsY;
-         startCell = officeApiHelper.offsetCellBy(startCell, -prevCrosstabDimensions.columnsY, -prevCrosstabDimensions.rowsX);
-       } else if (tableColumnsChanged) {
+       } if (tableColumnsChanged) {
          startCell = officeApiHelper.offsetCellBy(startCell, -prevCrosstabDimensions.columnsY, -prevCrosstabDimensions.rowsX);
        }
      }
-     if (prevCrosstabDimensions) { officeApiHelper.clearCrosstabRange(prevOfficeTable, crosstabHeaderDimensions, prevCrosstabDimensions, isCrosstab, excelContext); }
+     if (prevCrosstabDimensions) {
+       officeApiHelper.clearCrosstabRange(prevOfficeTable, crosstabHeaderDimensions, prevCrosstabDimensions, isCrosstab, excelContext);
+     }
      await excelContext.sync();
      return { tableColumnsChanged, startCell };
    }
