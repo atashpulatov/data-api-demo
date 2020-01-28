@@ -22,7 +22,7 @@
     "validate": "office-toolbox validate -m manifest.xml"
   },
   "dependencies": {
-    "@mstr/mstr-react-library": "^1.5.1",
+    "@mstr/mstr-react-library": "^1.5.2",
     "@mstr/rc": "^0.23.8",
     "antd": "^3.26.2",
     "core-js": "^3.5.0",
