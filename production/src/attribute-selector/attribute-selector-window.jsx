@@ -38,11 +38,11 @@ export class AttributeSelectorWindowNotConnected extends Component {
   ) => {
     const { chosenObject, editedObject, importSubtotal, displayAttrFormNames } = this.props;
     const subtotalsInfo = {
-      importSubtotal: editedObject.subtotalsInfo
+      importSubtotal: (editedObject && editedObject.subtotalsInfo)
         ? editedObject.subtotalsInfo.importSubtotal
         : importSubtotal
     };
-    const displayAttrFormNamesSet = editedObject.displayAttrFormNames || displayAttrFormNames;
+    const displayAttrFormNamesSet = editedObject && (editedObject.displayAttrFormNames || displayAttrFormNames);
     attributeSelectorHelpers.officeMessageParent(
       selectorProperties.commandOnUpdate,
       chosenObjectId,
