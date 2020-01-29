@@ -238,11 +238,33 @@ export class OfficeDisplayService {
       });
       return { type: 'success', message: 'Data loaded successfully' };
     } catch (error) {
+      const isError = true;
       if (officeTable) {
         if (!isRefresh) {
           officeTable.showHeaders = true;
-          await officeApiHelper.deleteExcelTable(officeTable, excelContext, isCrosstab, instanceDefinition.mstrTable.crosstabHeaderDimensions);
-        } else if (isCrosstab) officeTable.showHeaders = false; // hides table headers for crosstab if we fail on refresh
+          await officeApiHelper.deleteExcelTable(
+            officeTable,
+            excelContext,
+            isCrosstab,
+            instanceDefinition.mstrTable.crosstabHeaderDimensions
+          );
+        } else if (isCrosstab) {
+          // hides table headers for crosstab if we fail on refresh
+          officeTable.showHeaders = false;
+        }
+        this.reduxStore.dispatch({
+          type: officeProperties.actions.finishLoadingReport,
+          reportBindId: bindId,
+          isRefreshAll: false,
+          isError,
+        });
+      } else {
+        this.reduxStore.dispatch({
+          type: officeProperties.actions.finishLoadingReport,
+          reportBindId: bindingId,
+          isRefreshAll: false,
+          isError,
+        });
       }
       throw error;
     } finally {
