@@ -2,7 +2,7 @@
 import { addNestedPropertiesToObjects } from '@mstr/rc';
 import DB from './cache-db';
 import { mstrListRestService } from '../mstr-object/mstr-list-rest-service';
-
+import { SAVE_MY_LIBRARY_OWNERS } from '../storage/navigation-tree-reducer';
 
 export const CREATE_CACHE = 'CREATE_CACHE';
 export const CLEAR_CACHE = 'CLEAR_CACHE';
@@ -56,6 +56,11 @@ export const refreshCacheState = (shouldCleanSelection) => (dispatch) => {
   dispatch(refreshCacheAction(shouldCleanSelection));
 };
 
+export const saveMyLibraryOwners = (objects) => ({
+  type: SAVE_MY_LIBRARY_OWNERS,
+  data: objects.map(item => item.ownerId),
+});
+
 export function fetchObjects(dispatch, cache) {
   // Projects
   fetchProjects((projects) => {
@@ -67,6 +72,7 @@ export function fetchObjects(dispatch, cache) {
     cache.updateData(LOADING_DB + MY_LIBRARY_DB_ID, true);
     getMyLibraryObjectList((objects) => {
       objects = addNestedPropertiesToObjects(objects, projects);
+      dispatch(saveMyLibraryOwners(objects));
       cache.putData(MY_LIBRARY_DB_ID, objects);
     })
       .catch(console.error)
@@ -105,6 +111,7 @@ export function fetchObjectsFallback() {
       dispatch(myLibraryLoading(true));
       getMyLibraryObjectList((objects) => {
         objects = { data: addNestedPropertiesToObjects(objects, projects) };
+        dispatch(saveMyLibraryOwners(objects));
         dispatch(addMyLibraryObjects(objects, true));
       })
         .catch(console.error)
