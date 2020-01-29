@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@mstr/mstr-react-library": "^1.5.2",
-    "@mstr/rc": "^0.23.8",
+    "@mstr/rc": "^0.24.2",
     "antd": "^3.26.2",
     "core-js": "^3.5.0",
     "dexie": "^2.0.4",

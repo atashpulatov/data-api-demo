@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { actions, switchImportSubtotals } from '../navigation/navigation-tree-actions';
+import { actions } from '../navigation/navigation-tree-actions';
 import { popupHelper } from './popup-helper';
 import { popupViewSelectorHelper } from './popup-view-selector-helper';
 import { AttributeSelectorWindow } from '../attribute-selector/attribute-selector-window';
