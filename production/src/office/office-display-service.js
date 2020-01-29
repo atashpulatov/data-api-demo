@@ -246,12 +246,15 @@ export class OfficeDisplayService {
         if (!isRefresh) {
           officeTable.showHeaders = true;
           await officeApiHelper.deleteExcelTable(officeTable, excelContext, isCrosstab, instanceDefinition.mstrTable.crosstabHeaderDimensions);
-        } else if (isCrosstab) officeTable.showHeaders = false; // hides table headers for crosstab if we fail on refresh
+        }
       }
       throw error;
     } finally {
       if (!isRefreshAll) {
         this.dispatchPrintFinish();
+      }
+      if (isCrosstab && officeTable) {
+        officeTable.showHeaders = false;
       }
       await excelContext.sync();
       console.groupEnd();
