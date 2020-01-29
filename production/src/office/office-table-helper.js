@@ -2,8 +2,7 @@ import { officeApiHelper } from './office-api-helper';
 import { CONTEXT_LIMIT } from '../mstr-object/mstr-object-rest-service';
 import { TABLE_OVERLAP } from '../error/constants';
 import { OverlappingTablesError } from '../error/overlapping-tables-error';
-import officeFormattingHelper from './office-formatting-helper';
-import PromptNotification, { CANCEL } from '../notification/prompt-notification';
+import { officeFormattingHelper } from './office-formatting-helper';
 
 const DEFAULT_TABLE_STYLE = 'TableStyleLight11';
 const TABLE_HEADER_FONT_COLOR = '#000000';
