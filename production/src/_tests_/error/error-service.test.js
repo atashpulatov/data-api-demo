@@ -26,13 +26,13 @@ describe('ErrorService', () => {
   });
 
   describe('getRestErrorType', () => {
-    it('should return null if not handled', () => {
+    it('should return UNKNOWN_ERR if not handled', () => {
       // given
       const error = { response: {} };
       // when
       const result = errorService.getRestErrorType(error);
       // then
-      expect(result).toBe(null);
+      expect(result).toBe(errorTypes.UNKNOWN_ERR);
     });
     it('should return ENV_NOT_FOUND_ERR type due to response with 404 code', () => {
       // given
@@ -69,6 +69,15 @@ describe('ErrorService', () => {
       // then
       expect(resultType).toBe(errorTypes.UNAUTHORIZED_ERR);
     });
+    it('should return INTERNAL_SERVER_ERR type due to response 403 code', () => {
+      // given
+      const response = { status: 403 };
+      const error = { response };
+      // when
+      const resultType = errorService.getRestErrorType(error);
+      // then
+      expect(resultType).toBe(errorTypes.INTERNAL_SERVER_ERR);
+    });
     it('should return ENV_NOT_FOUND_ERR type due to response 404 code', () => {
       // given
       const response = { status: 404 };
@@ -95,6 +104,33 @@ describe('ErrorService', () => {
       const resultType = errorService.getRestErrorType(error);
       // then
       expect(resultType).toBe(errorTypes.INTERNAL_SERVER_ERR);
+    });
+    it('should return INTERNAL_SERVER_ERR type due to status 501 code', () => {
+      // given
+      const response = { status: 501 };
+      const error = { response };
+      // when
+      const resultType = errorService.getRestErrorType(error);
+      // then
+      expect(resultType).toBe(errorTypes.INTERNAL_SERVER_ERR);
+    });
+    it('should return INTERNAL_SERVER_ERR type due to status 502 code', () => {
+      // given
+      const response = { status: 502 };
+      const error = { response };
+      // when
+      const resultType = errorService.getRestErrorType(error);
+      // then
+      expect(resultType).toBe(errorTypes.INTERNAL_SERVER_ERR);
+    });
+    it('should return UNKNOWN_ERR type due to unhandled status code', () => {
+      // given
+      const response = { status: 510 };
+      const error = { response };
+      // when
+      const resultType = errorService.getRestErrorType(error);
+      // then
+      expect(resultType).toBe(errorTypes.UNKNOWN_ERR);
     });
   });
   describe('handleError for rest error', () => {
