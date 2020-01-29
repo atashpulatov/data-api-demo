@@ -110,8 +110,10 @@ describe('Dossierwindow', () => {
 
     beforeEach(() => {
       const initialState = {
-        popupReducer:{},
-        navigationTree:{
+        popupReducer: {},
+        officeReducer: { supportForms: true },
+        sessionReducer: { attrFormPrivilege: true },
+        navigationTree: {
           chosenObjectName: 'objectName',
           chosenObjectId: 'objectId',
           chosenProjectId: 'projectId',

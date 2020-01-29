@@ -51,7 +51,7 @@ function mapStateToProps(state) {
   const { editedObject } = popupReducer;
   const { supportForms } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
-  const objectType = editedObject ? editedObject.objectType : 'report';
+  const objectType = editedObject && editedObject.objectType ? editedObject.objectType : 'report';
   const isReport = objectType && (objectType === 'report' || objectType.name === 'report');
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   return {

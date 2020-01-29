@@ -31,9 +31,6 @@ describe.skip('OfficeDisplayService', () => {
     givenReport.mstrTable = officeConverterService.createTable(givenReport);
 
     jest
-      .spyOn(officeApiHelper, 'findAvailableOfficeTableId')
-      .mockReturnValue(excelTableNameMock);
-    jest
       .spyOn(officeApiHelper, 'getCurrentMstrContext')
       .mockReturnValue(mstrContext);
     jest.spyOn(officeApiHelper, 'getOfficeContext').mockReturnValue({ document: { bindings: { releaseByIdAsync: jest.fn() } } });
