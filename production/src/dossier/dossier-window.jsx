@@ -47,7 +47,12 @@ export default class DossierWindowNotConnected extends React.Component {
     try {
       await mstrObjectRestService.fetchVisualizationDefinition({ projectId:chosenProjectId, objectId:chosenObjectId, instanceId:preparedInstanceId, visualizationInfo:{ chapterKey, visualizationKey } });
     } catch (error) {
-      isVisualizationSupported = false;
+      if (error.response.body.code === 'ERR009') {
+        // Close popup if session expired
+        popupHelper.handlePopupErrors(error);
+      } else {
+        isVisualizationSupported = false;
+      }
     }
     this.setState({
       isVisualizationSelected: newValue,
