@@ -276,14 +276,32 @@ export class PopupController {
     if (response.isEdit) {
       if (reportPreviousState.visualizationInfo.visualizationKey !== response.visualizationInfo.visualizationKey) {
         response.visualizationInfo.nameShouldUpdate = true;
-        await officeStoreService.preserveReportValue(reportParams.bindId, 'visualizationInfo', response.visualizationInfo);
+        response.visualizationInfo.formatShouldUpdate = true;
+        await officeStoreService.preserveReportValue(
+          reportParams.bindId, 
+          'visualizationInfo', 
+          response.visualizationInfo
+        );
       }
       await officeStoreService.preserveReportValue(reportParams.bindId, 'instanceId', response.preparedInstanceId);
       await officeStoreService.preserveReportValue(reportParams.bindId, 'isEdit', false);
     }
     const isErrorOnRefresh = await this.popupAction.refreshReportsArray([reportParams], false)(this.reduxStore.dispatch);
     if (isErrorOnRefresh) {
-      await officeStoreService.preserveReportValue(reportParams.bindId, 'body', reportPreviousState.body);
+      if (reportPreviousState.objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
+        await officeStoreService.preserveReportValue(
+          reportParams.bindId,
+          'manipulationsXML',
+          reportPreviousState.manipulationsXML
+        );
+        await officeStoreService.preserveReportValue(
+          reportParams.bindId,
+          'visualizationInfo',
+          reportPreviousState.visualizationInfo
+        );
+      } else {
+        await officeStoreService.preserveReportValue(reportParams.bindId, 'body', reportPreviousState.body);
+      }
     }
   }
 }

@@ -158,6 +158,10 @@ export class OfficeDisplayService {
         isRefresh, excelContext, bindingId, instanceDefinition, startCell, tableName, previousTableDimensions
 
       ));
+
+      // Apply formating for changed vizualization
+      shouldFormat = (shouldFormat || visualizationInfo.formatShouldUpdate);
+
       // Apply formatting when table was created
       if (shouldFormat && !mstrTable.isCrosstabular) {
         await officeFormattingHelper.applyFormatting(officeTable, instanceDefinition, isCrosstab, excelContext);
@@ -270,6 +274,9 @@ export class OfficeDisplayService {
     } finally {
       if (!isRefreshAll) {
         this.dispatchPrintFinish();
+      }
+      if (isCrosstab && officeTable) {
+        officeTable.showHeaders = false;
       }
       await excelContext.sync();
       console.groupEnd();

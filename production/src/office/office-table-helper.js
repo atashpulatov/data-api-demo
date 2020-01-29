@@ -2,8 +2,7 @@ import { officeApiHelper } from './office-api-helper';
 import { CONTEXT_LIMIT } from '../mstr-object/mstr-object-rest-service';
 import { TABLE_OVERLAP } from '../error/constants';
 import { OverlappingTablesError } from '../error/overlapping-tables-error';
-import officeFormattingHelper from './office-formatting-helper';
-import PromptNotification, { CANCEL } from '../notification/prompt-notification';
+import { officeFormattingHelper } from './office-formatting-helper';
 
 const DEFAULT_TABLE_STYLE = 'TableStyleLight11';
 const TABLE_HEADER_FONT_COLOR = '#000000';
@@ -30,7 +29,6 @@ class OfficeTableHelper {
     const tableStartCell = this.getTableStartCell(startCell, sheet, instanceDefinition, prevOfficeTable, tableColumnsChanged);
     const tableRange = officeApiHelper.getRange(columns, tableStartCell, rows);
     const range = this.getObjectRange(isCrosstab, tableStartCell, crosstabHeaderDimensions, sheet, tableRange);
-
     context.trackedObjects.add(range);
     await this.checkObjectRangeValidity(prevOfficeTable, context, range, instanceDefinition);
     if (isCrosstab) {
@@ -172,7 +170,7 @@ class OfficeTableHelper {
     console.time('Create or get table');
     let bindId;
     const { mstrTable } = instanceDefinition;
-    const excelCompatibleTableName = mstrTable.name.replace(/(.|•|‼| |!|#|\$|%|&|'|\(|\)|\*|\+|,|-|\/|:|;|<|=|>|@|\^|`|\{|\||\}|~|¢|£|¥|¬|«|»)/g, '_');
+    const excelCompatibleTableName = mstrTable.name.replace(/(\.|•|‼| |!|#|\$|%|&|'|\(|\)|\*|\+|,|-|\/|:|;|<|=|>|@|\^|`|\{|\||\}|~|¢|£|¥|¬|«|»)/g, '_');
     const newOfficeTableName = tableName || `_${excelCompatibleTableName.slice(0, 239)}_${Date.now().toString()}`;
     this.checkReportTypeChange(instanceDefinition);
     let officeTable;
@@ -405,15 +403,19 @@ class OfficeTableHelper {
    clearIfCrosstabHeadersChanged = async (prevOfficeTable, excelContext, tableColumnsChanged, startCell, mstrTable) => {
      const { prevCrosstabDimensions, crosstabHeaderDimensions, isCrosstab } = mstrTable;
      const { validColumnsY, validRowsX } = await officeApiHelper.getCrosstabHeadersSafely(prevOfficeTable, prevCrosstabDimensions.columnsY, excelContext, prevCrosstabDimensions.rowsX);
-     if (isCrosstab && crosstabHeaderDimensions && prevCrosstabDimensions
-      && (validRowsX !== crosstabHeaderDimensions.rowsX
-      || validColumnsY !== crosstabHeaderDimensions.columnsY)) {
-       tableColumnsChanged = true;
-       prevCrosstabDimensions.rowsX = validRowsX;
-       prevCrosstabDimensions.columnsY = validColumnsY;
-       startCell = officeApiHelper.offsetCellBy(startCell, -prevCrosstabDimensions.columnsY, -prevCrosstabDimensions.rowsX);
+     if (isCrosstab && crosstabHeaderDimensions && prevCrosstabDimensions) {
+       if (validRowsX !== crosstabHeaderDimensions.rowsX
+      || validColumnsY !== crosstabHeaderDimensions.columnsY) {
+         tableColumnsChanged = true;
+         prevCrosstabDimensions.rowsX = validRowsX;
+         prevCrosstabDimensions.columnsY = validColumnsY;
+       } if (tableColumnsChanged) {
+         startCell = officeApiHelper.offsetCellBy(startCell, -prevCrosstabDimensions.columnsY, -prevCrosstabDimensions.rowsX);
+       }
      }
-     if (prevCrosstabDimensions) { officeApiHelper.clearCrosstabRange(prevOfficeTable, crosstabHeaderDimensions, prevCrosstabDimensions, isCrosstab, excelContext); }
+     if (prevCrosstabDimensions) {
+       officeApiHelper.clearCrosstabRange(prevOfficeTable, crosstabHeaderDimensions, prevCrosstabDimensions, isCrosstab, excelContext);
+     }
      await excelContext.sync();
      return { tableColumnsChanged, startCell };
    }

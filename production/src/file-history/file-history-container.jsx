@@ -48,7 +48,7 @@ export class FileHistoryContainerNotConnected extends React.Component {
           startLoading();
           await officeApiHelper.checkStatusOfSessions();
           const { reportArray, t } = this.props;
-          const reportToDelete = reportArray.find((report) => report.bindId === e.tableName);
+          const reportToDelete = reportArray.find((report) => report.bindId === e.tableId);
           officeApiHelper.removeObjectAndDisplaytNotification(reportToDelete, officeContext, t);
           stopLoading();
         });
@@ -137,7 +137,7 @@ export class FileHistoryContainerNotConnected extends React.Component {
           >
             { !refreshingAll ? (
               <div
-                aria-label="Refresh All button"
+                aria-label={t('Refresh All button')}
                 role="button"
                 tabIndex={0}
                 id="refresh-all-btn"
@@ -156,7 +156,7 @@ export class FileHistoryContainerNotConnected extends React.Component {
                   width="12px"
                   height="12px"
                   src={loadingSpinner}
-                  alt={t("Report loading icon")}
+                  alt={t('Report loading icon')}
                 />
               </div>
             )}
