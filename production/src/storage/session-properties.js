@@ -20,5 +20,6 @@ export const sessionProperties = new Proxy({
     setLoading: 'SESSION_SET_LOADING',
     getUserInfo: 'SESSION_GET_USERINFO',
     setDialog: 'SESSION_SET_DIALOG',
+    setAttrFormPrivilege: 'SESSION_SET_ATTR_FORM_PRIVILEGE'
   },
 }, propsProxy);
