@@ -283,14 +283,19 @@ export class _PromptsWindow extends Component {
 }
 
 export const mapStateToProps = (state) => {
-  const { navigationTree, popupStateReducer, popupReducer, sessionReducer } = state;
+  const { navigationTree, popupStateReducer, popupReducer, sessionReducer, officeReducer } = state;
   const popupState = popupReducer.editedObject;
   const { promptsAnswers, importSubtotal, ...mstrData } = navigationTree;
+  const { supportForms } = officeReducer;
+  const { attrFormPrivilege } = sessionReducer;
+  const objectType = popupState ? popupState.objectType : 'report';
+  const isReport = objectType && (objectType === 'report' || objectType.name === 'report');
+  const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   return {
     ...state.promptsPopup,
     mstrData,
     importSubtotal,
-    editedObject: { ...(popupHelper.parsePopupState(popupState, promptsAnswers)) },
+    editedObject: { ...(popupHelper.parsePopupState(popupState, promptsAnswers, formsPrivilege)) },
     popupState: { ...popupStateReducer },
     session: { ...sessionReducer },
   };

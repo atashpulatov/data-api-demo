@@ -88,6 +88,7 @@ const mapToLegacyMstrData = (chosenObject, session, editedObject) => {
     selectedAttributes: editedObject.selectedAttributes,
     selectedMetrics: editedObject.selectedMetrics,
     selectedFilters: editedObject.selectedFilters,
+    selectedAttrForms: editedObject.selectedAttrForms,
   };
 
   return legacyObject;
@@ -98,6 +99,7 @@ const mapToLegacySession = (mstrData, session, editedObject) => ({
   USE_PROXY: false,
   authToken: session.authToken,
   projectId: mstrData.chosenProjectId || editedObject.projectId,
+  attrFormPrivilege: session.attrFormPrivilege
 });
 
 AttributeSelectorNotConnected.propTypes = {
@@ -124,10 +126,14 @@ const mapStateToProps = (state) => {
   const { editedObject } = popupReducer;
   const { promptsAnswers, importSubtotal, displayAttrFormNames, ...chosenObject } = navigationTree;
   const { supportForms } = officeReducer;
+  const { attrFormPrivilege } = sessionReducer;
+  const objectType = editedObject ? editedObject.objectType : 'report';
+  const isReport = objectType && (objectType === 'report' || objectType.name === 'report');
+  const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   return {
     chosenObject,
     supportForms,
-    editedObject: { ...(popupHelper.parsePopupState(editedObject, promptsAnswers)) },
+    editedObject: { ...(popupHelper.parsePopupState(editedObject, promptsAnswers, formsPrivilege)) },
     popupState: { ...popupStateReducer },
     session: { ...sessionReducer },
     importSubtotal,

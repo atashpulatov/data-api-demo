@@ -104,7 +104,7 @@ export class OfficeApiHelper {
       await excelContext.sync();
       return true;
     } catch (error) {
-      if (error.code === 'ItemNotFound') {
+      if (error && error.code === 'ItemNotFound') {
         return notificationService.displayTranslatedNotification({ type: 'info', content: OBJ_REMOVED_FROM_EXCEL });
       }
       errorService.handleError(error, {chosenObjectName, onConfirm: deleteReport});
@@ -214,7 +214,7 @@ export class OfficeApiHelper {
         await excelContext.sync();
         return officeStoreService.removeReportFromStore(bindingId);
       } catch (error) {
-        if (error.code === 'ItemNotFound') {
+        if (error && error.code === 'ItemNotFound') {
           return officeStoreService.removeReportFromStore(bindingId);
         }
         return errorService.handleError(error);

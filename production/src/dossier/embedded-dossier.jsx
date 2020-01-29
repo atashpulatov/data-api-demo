@@ -261,12 +261,18 @@ _EmbeddedDossier.defaultProps = {
 };
 
 const mapStateToProps = (state) => {
-  const { chosenObjectName, chosenObjectId, chosenProjectId } = state.navigationTree;
-  const popupState = state.popupReducer.editedObject;
+  const { navigationTree, popupReducer, sessionReducer, officeReducer } = state;
+  const { chosenObjectName, chosenObjectId, chosenProjectId } = navigationTree;
+  const popupState = popupReducer.editedObject;
   const { promptsAnswers } = state.navigationTree;
+  const { supportForms } = officeReducer;
+  const { attrFormPrivilege } = sessionReducer;
+  const objectType = popupState ? popupState.objectType : 'report';
+  const isReport = objectType && (objectType === 'report' || objectType.name === 'report');
+  const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   const session = { ...state.sessionReducer };
   const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
-  const editedObject = { ...(popupHelper.parsePopupState(popupState, promptsAnswers)) };
+  const editedObject = { ...(popupHelper.parsePopupState(popupState, promptsAnswers, formsPrivilege)) };
   const mstrData = {
     envUrl: session.envUrl,
     token: session.authToken,
