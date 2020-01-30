@@ -188,15 +188,18 @@ export class PopupHelper {
 
   restoreFilters(body, chosenObjectData, formsPrivilege) {
     try {
-      if (body && body.requestedObjects) {
-        chosenObjectData.selectedAttributes = body.requestedObjects.attributes
-          && body.requestedObjects.attributes.map((attribute) => attribute.id);
-        chosenObjectData.selectedMetrics = body.requestedObjects.metrics
-          && body.requestedObjects.metrics.map((metric) => metric.id);
-        chosenObjectData.selectedAttrForms = formsPrivilege ? this.getAttrFormKeys(body.requestedObjects.attributes) : null;
-      }
-      if (body && body.viewFilter) {
-        chosenObjectData.selectedFilters = this.parseFilters(body.viewFilter.operands);
+      if (body) {
+        const { requestedObjects, viewFilter } = body;
+        if (requestedObjects) {
+          chosenObjectData.selectedAttributes = body.requestedObjects.attributes
+            && body.requestedObjects.attributes.map((attribute) => attribute.id);
+          chosenObjectData.selectedMetrics = body.requestedObjects.metrics
+            && body.requestedObjects.metrics.map((metric) => metric.id);
+          chosenObjectData.selectedAttrForms = formsPrivilege ? this.getAttrFormKeys(body.requestedObjects.attributes) : [];
+        }
+        if (viewFilter) {
+          chosenObjectData.selectedFilters = this.parseFilters(body.viewFilter.operands);
+        }
       }
     } catch (error) {
       console.warn(error);
