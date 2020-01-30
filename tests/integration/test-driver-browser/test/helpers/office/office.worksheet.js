@@ -32,14 +32,17 @@ const OfficeWorksheet = function() {
   this.openPlugin = function() {
     switchToExcelFrame();
     try {
-      $('img[src^="https://127.0.0.1"]').waitForDisplayed(7777);
-      $('img[src^="https://127.0.0.1"]').click();
+      // $('img[src^="https://127.0.0.1"]').waitForDisplayed(7777);
+      // $('img[src^="https://127.0.0.1"]').click();173736
+      $('img[src^="https://env-173736"]').waitForDisplayed(7777);
+      $('img[src^="https://env-173736"]').click();
       browser.pause(5555);
     } catch (error) {
       this.addAdminManagedPlugin();
       switchToExcelFrame();
       $(exSe.uploadPluginNotification).click();
-      $('img[src^="https://127.0.0.1"]').click(); // this is an alternative selector to start the plugin
+      // $('img[src^="https://127.0.0.1"]').click(); // this is an alternative selector to start the plugin
+      $('img[src^="https://env-173736"]').click(); // this is an alternative selector to start the plugin
       browser.pause(5555);
     }
   };
