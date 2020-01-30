@@ -215,7 +215,7 @@ hr {
 }
 
 #settings-button{
-  min-width: unset;
+  min-width: inherit;
   left: 0;
 }
 
