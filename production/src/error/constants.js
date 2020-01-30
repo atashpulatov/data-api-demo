@@ -18,6 +18,7 @@ export const errorTypes = {
   TABLE_REMOVED_FROM_EXCEL_ERR: 'tableRemovedFromExcel',
   GENERIC_OFFICE_ERR: 'genericOffice',
   PROTECTED_SHEET_ERR: 'protectedSheet',
+  UNKNOWN_ERR: 'unknown',
 };
 
 export const incomingErrorStrings = {
@@ -35,11 +36,14 @@ export const stringMessageToErrorType = withDefaultValue({
 }, errorTypes.GENERIC_OFFICE_ERR);
 
 export const httpStatusToErrorType = withDefaultValue({
-  404: errorTypes.ENV_NOT_FOUND_ERR,
   400: errorTypes.BAD_REQUEST_ERR,
   401: errorTypes.UNAUTHORIZED_ERR,
+  403: errorTypes.INTERNAL_SERVER_ERR, // TODO: Proper error for forbidden access
+  404: errorTypes.ENV_NOT_FOUND_ERR,
   500: errorTypes.INTERNAL_SERVER_ERR,
-}, null);
+  501: errorTypes.INTERNAL_SERVER_ERR,
+  502: errorTypes.INTERNAL_SERVER_ERR,
+}, errorTypes.UNKNOWN_ERR);
 
 export const GENERIC_SERVER_ERR = 'This object cannot be imported.';
 export const ALL_DATA_FILTERED_OUT = 'No data returned for this view. This might be because the applied prompt excludes all data.';
