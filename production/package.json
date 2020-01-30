@@ -22,8 +22,8 @@
     "validate": "office-toolbox validate -m manifest.xml"
   },
   "dependencies": {
-    "@mstr/mstr-react-library": "^1.4.0",
-    "@mstr/rc": "^0.23.8",
+    "@mstr/mstr-react-library": "^1.5.2",
+    "@mstr/rc": "^0.24.4",
     "antd": "^3.26.2",
     "core-js": "^3.5.0",
     "dexie": "^2.0.4",
@@ -109,10 +109,7 @@
       "!src/cache/cache-actions.js",
       "!src/dossier/embedded-dossier.jsx",
       "!src/prompts/prompts-window.jsx",
-      "!src/navigation/**/*.*",
-      "!src/prompts/**/*.*",
-      "!src/dossier/**/*.*",
-      "!src/popup/**/*.*"
+      "!src/navigation/**/*.*"
     ]
   }
 }

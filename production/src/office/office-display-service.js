@@ -158,6 +158,10 @@ export class OfficeDisplayService {
         isRefresh, excelContext, bindingId, instanceDefinition, startCell, tableName, previousTableDimensions
 
       ));
+
+      // Apply formating for changed vizualization
+      shouldFormat = (shouldFormat || visualizationInfo.formatShouldUpdate);
+
       // Apply formatting when table was created
       if (shouldFormat && !mstrTable.isCrosstabular) {
         await officeFormattingHelper.applyFormatting(officeTable, instanceDefinition, isCrosstab, excelContext);
@@ -238,16 +242,41 @@ export class OfficeDisplayService {
       });
       return { type: 'success', message: 'Data loaded successfully' };
     } catch (error) {
+      const isError = true;
       if (officeTable) {
         if (!isRefresh) {
           officeTable.showHeaders = true;
-          await officeApiHelper.deleteExcelTable(officeTable, excelContext, isCrosstab, instanceDefinition.mstrTable.crosstabHeaderDimensions);
-        } else if (isCrosstab) officeTable.showHeaders = false; // hides table headers for crosstab if we fail on refresh
+          await officeApiHelper.deleteExcelTable(
+            officeTable,
+            excelContext,
+            isCrosstab,
+            instanceDefinition.mstrTable.crosstabHeaderDimensions
+          );
+        } else if (isCrosstab) {
+          // hides table headers for crosstab if we fail on refresh
+          officeTable.showHeaders = false;
+        }
+        this.reduxStore.dispatch({
+          type: officeProperties.actions.finishLoadingReport,
+          reportBindId: bindId,
+          isRefreshAll: false,
+          isError,
+        });
+      } else {
+        this.reduxStore.dispatch({
+          type: officeProperties.actions.finishLoadingReport,
+          reportBindId: bindingId,
+          isRefreshAll: false,
+          isError,
+        });
       }
       throw error;
     } finally {
       if (!isRefreshAll) {
         this.dispatchPrintFinish();
+      }
+      if (isCrosstab && officeTable) {
+        officeTable.showHeaders = false;
       }
       await excelContext.sync();
       console.groupEnd();
@@ -319,7 +348,7 @@ export class OfficeDisplayService {
         body.promptAnswers = manipulationsXML.promptAnswers;
       }
       const instanceId = preparedInstanceId || (await createDossierInstance(projectId, objectId, body));
-      const config = { projectId, objectId, instanceId, mstrObjectType, dossierData, body, visualizationInfo };
+      const config = { projectId, objectId, instanceId, mstrObjectType, dossierData, body, visualizationInfo, displayAttrFormNames };
       const temp = await fetchVisualizationDefinition(config);
       instanceDefinition = { ...temp, instanceId };
     } else {
@@ -328,7 +357,7 @@ export class OfficeDisplayService {
     }
     // Status 2 = report has open prompts to be answered before data can be returned
     if (instanceDefinition.status === 2) {
-      instanceDefinition = await this.answerPrompts(instanceDefinition, objectId, projectId, promptsAnswers, dossierData, body);
+      instanceDefinition = await this.answerPrompts(instanceDefinition, objectId, projectId, promptsAnswers, dossierData, body, displayAttrFormNames);
     }
 
     const { mstrTable } = instanceDefinition;
@@ -553,13 +582,13 @@ export class OfficeDisplayService {
    * @param {Object} body Contains requested objects and filters.
    * @memberof officeDisplayService
    */
-  answerPrompts = async (instanceDefinition, objectId, projectId, promptsAnswers, dossierData, body) => {
+  answerPrompts = async (instanceDefinition, objectId, projectId, promptsAnswers, dossierData, body, displayAttrFormNames) => {
     try {
       let count = 0;
       while (instanceDefinition.status === 2 && count < promptsAnswers.length) {
         const config = { objectId, projectId, instanceId: instanceDefinition.instanceId, promptsAnswers: promptsAnswers[count] };
         await answerPrompts(config);
-        const configInstance = { objectId, projectId, dossierData, body, instanceId: instanceDefinition.instanceId };
+        const configInstance = { objectId, projectId, dossierData, body, instanceId: instanceDefinition.instanceId, displayAttrFormNames };
         if (count === promptsAnswers.length - 1) {
           instanceDefinition = await modifyInstance(configInstance);
         }

@@ -1,26 +1,16 @@
 import React from 'react';
-import * as queryString from 'query-string';
 import { libraryErrorController } from '@mstr/mstr-react-library';
-import { connect } from 'react-redux';
 import { PopupViewSelector } from './popup-view-selector';
 import i18next from '../i18n';
 import InternetConnectionError from './internet-connection-error';
-import { popupStateActions } from './popup-state-actions';
 import { popupHelper } from './popup-helper';
-import { PopupTypeEnum } from '../home/popup-type-enum';
 
 /* global Office */
 
-export const PopupNotConnected = ({ location, setMstrData }) => {
+export const Popup = () => {
   React.useEffect(() => {
-    const popupLocation = (location && location.search) || window.location.search;
-    const mstrDataToSet = queryString.parse(popupLocation);
-    if (mstrDataToSet.popupType === PopupTypeEnum.repromptingWindow) {
-      mstrDataToSet.isReprompt = true;
-    }
-    setMstrData(mstrDataToSet);
     libraryErrorController.initializeHttpErrorsHandling(popupHelper.handlePopupErrors);
-  }, [location, setMstrData]);
+  }, []);
 
   i18next.changeLanguage(i18next.options.resources[Office.context.displayLanguage]
     ? Office.context.displayLanguage
@@ -32,12 +22,3 @@ export const PopupNotConnected = ({ location, setMstrData }) => {
     </>
   );
 };
-
-const mapStateToProps = ({ popupStateReducer }) => ({
-  popupType: popupStateReducer.popupType,
-  mstrData: { ...popupStateReducer },
-});
-
-const mapDispatchToProps = { setMstrData: popupStateActions.setMstrData, };
-
-export const Popup = connect(mapStateToProps, mapDispatchToProps)(PopupNotConnected);

@@ -3,7 +3,7 @@ job 'stage-0-monitor' do
 
   configure_common_items{}
 
-  assigned_node_string 'amazon_linux'
+  assigned_node_string 'amazon_linux_T3'
 
   triggers do
     timer_trigger do
@@ -21,8 +21,8 @@ job 'stage-0-monitor' do
 set +xe
 
 export PATH=/usr/local/sbin:/usr/local/bin:$PATH
-
-export WORKSPACE_SETTING=aws_dev
+export ENABLE_BASELINE_WORKSPACE_CHEF=false
+export WORKSPACE_SETTING=fake
 source .ecosystem
 
 rake monitor_DB_change

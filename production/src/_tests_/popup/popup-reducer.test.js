@@ -56,9 +56,7 @@ describe('Popup Reducer', () => {
   it('should return proper state in case of SET_PREPARED_REPORT action', () => {
     // given
     const instanceId = 'id';
-    const chosenObjectData = {
-      newData: 'data'
-    };
+    const chosenObjectData = { newData: 'data' };
     const action = {
       type: SET_PREPARED_REPORT,
       instanceId,
@@ -93,17 +91,11 @@ describe('Popup Reducer', () => {
       data: { newSubtotalProperty: 'testNewSubtotalProperty', },
     };
 
-    initialState.editedObject = {
-      subtotalsInfo: {
-        initialSubtotalProperty: 'testInitialSubtotalProperty'
-      }
-    };
+    initialState.editedObject = { subtotalsInfo: { initialSubtotalProperty: 'testInitialSubtotalProperty' } };
 
     const resultState = {
       subtotalsInfo: {
-        importSubtotal: {
-          newSubtotalProperty: 'testNewSubtotalProperty'
-        },
+        importSubtotal: { newSubtotalProperty: 'testNewSubtotalProperty' },
         initialSubtotalProperty: 'testInitialSubtotalProperty'
       }
     };
@@ -113,5 +105,22 @@ describe('Popup Reducer', () => {
 
     // then
     expect(newState).toEqual({ ...initialState, editedObject: resultState });
+  });
+
+  it('should return undefined editedObject after SWITCH_IMPORT_SUBTOTALS action was called on undefined editedObject', () => {
+    // given
+    const action = {
+      type: SWITCH_IMPORT_SUBTOTALS,
+      data: { newSubtotalProperty: 'testNewSubtotalProperty', },
+    };
+
+    initialState.editedObject = undefined;
+    initialState.else = '123';
+
+    // when
+    const newState = popupReducer(initialState, action);
+
+    // then
+    expect(newState).toEqual({ ...initialState, editedObject: undefined });
   });
 });

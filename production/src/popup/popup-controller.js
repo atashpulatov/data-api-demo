@@ -15,6 +15,7 @@ import {
   STOP_REPORT_LOADING,
   RESET_STATE,
 } from './popup-actions';
+import { SET_MSTR_DATA } from './popup-state-actions';
 
 const URL = `${window.location.href}`;
 
@@ -40,6 +41,7 @@ export class PopupController {
   };
 
   runRepromptPopup = async (reportParams) => {
+    this.reduxStore.dispatch({ type: SET_MSTR_DATA, payload: { isReprompt: true } });
     await this.runPopup(PopupTypeEnum.repromptingWindow, 80, 80, reportParams);
   };
 
@@ -49,6 +51,7 @@ export class PopupController {
 
   runPopup = async (popupType, height, width, reportParams = null) => {
     const session = this.sessionHelper.getSession();
+    this.reduxStore.dispatch({ type: SET_MSTR_DATA, payload: { popupType } });
     try {
       await authenticationHelper.validateAuthToken();
     } catch (error) {
@@ -273,14 +276,32 @@ export class PopupController {
     if (response.isEdit) {
       if (reportPreviousState.visualizationInfo.visualizationKey !== response.visualizationInfo.visualizationKey) {
         response.visualizationInfo.nameShouldUpdate = true;
-        await officeStoreService.preserveReportValue(reportParams.bindId, 'visualizationInfo', response.visualizationInfo);
+        response.visualizationInfo.formatShouldUpdate = true;
+        await officeStoreService.preserveReportValue(
+          reportParams.bindId, 
+          'visualizationInfo', 
+          response.visualizationInfo
+        );
       }
       await officeStoreService.preserveReportValue(reportParams.bindId, 'instanceId', response.preparedInstanceId);
       await officeStoreService.preserveReportValue(reportParams.bindId, 'isEdit', false);
     }
     const isErrorOnRefresh = await this.popupAction.refreshReportsArray([reportParams], false)(this.reduxStore.dispatch);
     if (isErrorOnRefresh) {
-      await officeStoreService.preserveReportValue(reportParams.bindId, 'body', reportPreviousState.body);
+      if (reportPreviousState.objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
+        await officeStoreService.preserveReportValue(
+          reportParams.bindId,
+          'manipulationsXML',
+          reportPreviousState.manipulationsXML
+        );
+        await officeStoreService.preserveReportValue(
+          reportParams.bindId,
+          'visualizationInfo',
+          reportPreviousState.visualizationInfo
+        );
+      } else {
+        await officeStoreService.preserveReportValue(reportParams.bindId, 'body', reportPreviousState.body);
+      }
     }
   }
 }
