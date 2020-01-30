@@ -35,3 +35,12 @@ if (process.env.NODE_ENV === 'development') {
 }
 export const reduxStore = createStore(persistedReducer, middleWare);
 export const reduxPersistor = persistStore(reduxStore);
+
+if (localStorage) {
+  const version = localStorage.getItem('version');
+  const APP_VERSION = process.env.REACT_APP_MSTR_OFFICE_VERSION;
+  if (APP_VERSION !== version) {
+    reduxPersistor.purge();
+    localStorage.setItem('version', APP_VERSION);
+  }
+}

@@ -8,7 +8,34 @@ import { CLEAR_WINDOW } from '../../popup/popup-actions';
 import { CREATE_CACHE, CLEAR_CACHE, REFRESH_CACHE } from '../../cache/cache-actions';
 
 describe('NavigationTree Reducer', () => {
-  it('should return new proper state in case of SELECT_OBJECT action', () => {
+  it('should return new proper state in case of SELECT_OBJECT action for myLibrary', () => {
+    // given
+    const action = {
+      type: SELECT_OBJECT,
+      data: {
+        chosenObjectId: '1',
+        chosenProjectId: '2',
+        chosenSubtype: '3',
+        chosenObjectName: 'Prepare Data',
+        chosenType: 'Data',
+        chosenChapterKey: null,
+        objectType: undefined,
+        chosenVisualizationKey: null,
+        preparedInstanceId: null,
+        chosenLibraryDossier: null,
+        requestPerformed: false,
+      },
+    };
+
+    // when
+    const newState = navigationTree({ myLibrary: true }, action);
+
+    // then
+    expect(newState.chosenLibraryElement).toEqual(action.data);
+    expect(newState.chosenObjectId).toEqual(action.data.chosenObjectId);
+  });
+
+  it('should return new proper state in case of SELECT_OBJECT action for non myLibrary', () => {
     // given
     const action = {
       type: SELECT_OBJECT,
@@ -31,7 +58,8 @@ describe('NavigationTree Reducer', () => {
     const newState = navigationTree({}, action);
 
     // then
-    expect(newState).toEqual(action.data);
+    expect(newState.chosenEnvElement).toEqual(action.data);
+    expect(newState.chosenObjectId).toEqual(action.data.chosenObjectId);
   });
 
   it('should return new proper state in case of SELECT_OBJECT action with datasource', () => {
@@ -113,6 +141,7 @@ describe('NavigationTree Reducer', () => {
       preparedInstanceId: null,
       chosenLibraryDossier: null,
       requestPerformed: false,
+      chosenEnvElement: action.data
     });
   });
 
@@ -406,27 +435,31 @@ describe('NavigationTree Reducer', () => {
     // given
     const action = { type: SWITCH_MY_LIBRARY };
     // when
-    const newState = navigationTree({ myLibrary: false }, action);
+    const newState = navigationTree({
+      myLibrary: false,
+      chosenLibraryElement: { chosenObjectId: '1' }
+    }, action);
     // then
     expect(newState.myLibrary).toEqual(true);
+    expect(newState.chosenObjectId).toEqual('1');
   });
 
   it('should return new proper state in case of CHANGE_FILTER action - it shoudl update myLibraryFilter', () => {
     // given
-    const testData = 'test data';
+    const testData = { owners: ['test data'] };
     const action = { type: CHANGE_FILTER, data: testData };
     // when
-    const newState = navigationTree({ myLibrary: true }, action);
+    const newState = navigationTree({ myLibrary: true, envFilter: { owners: [] } }, action);
     // then
     expect(newState.myLibraryFilter).toEqual(testData);
   });
 
   it('should return new proper state in case of CHANGE_FILTER action - it shoudl update envFilter', () => {
     // given
-    const testData = 'test data';
+    const testData = { owners: ['test data'] };
     const action = { type: CHANGE_FILTER, data: testData };
     // when
-    const newState = navigationTree({ myLibrary: false }, action);
+    const newState = navigationTree({ myLibrary: false, myLibraryOwners: {} }, action);
     // then
     expect(newState.envFilter).toEqual(testData);
   });
