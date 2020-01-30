@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import { AttributeMetricFilter, ErrorBoundary } from '@mstr/mstr-react-library';
 import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
-import { reduxStore } from '../store';
+import { connect } from 'react-redux';
+import { popupHelper } from '../popup/popup-helper';
+import { switchImportSubtotals, updateDisplayAttrForm } from '../navigation/navigation-tree-actions';
+import { officeProperties } from '../office/office-properties';
 
-export class AttributeSelectorHOC extends Component {
+export class AttributeSelectorNotConnected extends Component {
   constructor(props) {
     super(props);
     this.handleUnauthorized = this.handleUnauthorized.bind(this);
@@ -33,23 +36,23 @@ export class AttributeSelectorHOC extends Component {
   }
 
   render() {
-    const { officeReducer: { supportForms } } = reduxStore.getState();
     const {
-      title, session,
-      triggerUpdate, onTriggerUpdate, mstrData,
-      resetTriggerUpdate, attributesSelectedChange, t, openModal, closeModal, toggleSubtotal,
+      title, session, displayAttrFormNames, updateDisplayAttrForm,
+      triggerUpdate, onTriggerUpdate, chosenObject, importSubtotal, editedObject, supportForms,
+      resetTriggerUpdate, attributesSelectedChange, t, openModal, closeModal, switchImportSubtotals,
     } = this.props;
-    const mstrDataOffice = { ...mstrData, supportForms };
+    const defaultAttrFormNames = officeProperties.displayAttrFormNames.automatic;
+    const displayAttrFormSet = editedObject.displayAttrFormNames || displayAttrFormNames || defaultAttrFormNames;
 
     return (
       <ErrorBoundary>
         <AttributeMetricFilter
           t={t}
           attributesSelectedChange={attributesSelectedChange}
-          key={mstrData.reportId}
+          key={chosenObject.id}
           title={title}
-          session={session}
-          mstrData={mstrDataOffice}
+          session={mapToLegacySession(chosenObject, session, editedObject)}
+          mstrData={{ ...mapToLegacyMstrData(chosenObject, session, editedObject), supportForms }}
           triggerUpdate={triggerUpdate}
           onTriggerUpdate={onTriggerUpdate}
           withDataPreview
@@ -57,32 +60,81 @@ export class AttributeSelectorHOC extends Component {
           withFolderTree={false}
           openModal={openModal}
           closeModal={closeModal}
-          toggleSubtotal={toggleSubtotal}
-          importSubtotal={mstrData.importSubtotal}
+          toggleSubtotal={switchImportSubtotals}
+          importSubtotal={editedObject.subtotalsInfo ? editedObject.subtotalsInfo.importSubtotal : importSubtotal}
           handleUnauthorized={this.handleUnauthorized}
+          onDisplayAttrFormNamesUpdate={updateDisplayAttrForm}
+          displayAttrFormNames={displayAttrFormSet}
+          displayAttrFormNamesOptions={officeProperties.displayAttrFormNamesOptions}
         />
       </ErrorBoundary>
     );
   }
 }
 
-AttributeSelectorHOC.propTypes = {
+const mapToLegacyMstrData = (chosenObject, session, editedObject) => {
+  const legacyObject = {
+    reportId: chosenObject.chosenObjectId || editedObject.chosenObjectId,
+    envUrl: session.envUrl || session.envUrl,
+    projectId: chosenObject.chosenProjectId || editedObject.projectId,
+    reportSubtype: chosenObject.chosenSubtype || editedObject.chosenObjectSubtype,
+    reportType: chosenObject.chosenObjectId ? chosenObject.objectType.name : editedObject.chosenObjectType,
+    reportName: chosenObject.chosenObjectName || editedObject.chosenObjectName,
+    token: session.authToken,
+    authToken: session.authToken,
+    instanceId: editedObject && editedObject.instanceId,
+    isPrompted: chosenObject && chosenObject.isPrompted,
+    promptsAnswers: editedObject && editedObject.promptsAnswers,
+    selectedAttributes: editedObject.selectedAttributes,
+    selectedMetrics: editedObject.selectedMetrics,
+    selectedFilters: editedObject.selectedFilters,
+  };
+
+  return legacyObject;
+};
+
+const mapToLegacySession = (mstrData, session, editedObject) => ({
+  url: session.envUrl,
+  USE_PROXY: false,
+  authToken: session.authToken,
+  projectId: mstrData.chosenProjectId || editedObject.projectId,
+});
+
+AttributeSelectorNotConnected.propTypes = {
   title: PropTypes.string,
   triggerUpdate: PropTypes.bool,
   openModal: PropTypes.bool,
   session: PropTypes.shape({}),
   mstrData: PropTypes.shape({
-    reportId: PropTypes.string,
-    importSubtotal: PropTypes.bool
+    chosenObjectId: PropTypes.string,
+    // subtotalsInfo: PropTypes.shape({ importSubtotal: PropTypes.bool })
   }),
   resetTriggerUpdate: PropTypes.func,
   attributesSelectedChange: PropTypes.func,
   closeModal: PropTypes.func,
-  toggleSubtotal: PropTypes.func,
+  updateDisplayAttrForm: PropTypes.func,
   handlePopupErrors: PropTypes.func,
   onTriggerUpdate: PropTypes.func,
   t: PropTypes.func
 };
-AttributeSelectorHOC.defaultProps = { t: (text) => text, };
+AttributeSelectorNotConnected.defaultProps = { t: (text) => text, };
 
-export const AttributeSelector = withTranslation('common')(AttributeSelectorHOC);
+const mapStateToProps = (state) => {
+  const { navigationTree, popupStateReducer, popupReducer, sessionReducer, officeReducer } = state;
+  const { editedObject } = popupReducer;
+  const { promptsAnswers, importSubtotal, displayAttrFormNames, ...chosenObject } = navigationTree;
+  const { supportForms } = officeReducer;
+  return {
+    chosenObject,
+    supportForms,
+    editedObject: { ...(popupHelper.parsePopupState(editedObject, promptsAnswers)) },
+    popupState: { ...popupStateReducer },
+    session: { ...sessionReducer },
+    importSubtotal,
+    displayAttrFormNames
+  };
+};
+
+const mapDispatchToProps = { switchImportSubtotals, updateDisplayAttrForm };
+
+export const AttributeSelector = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(AttributeSelectorNotConnected));

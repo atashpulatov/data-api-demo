@@ -1,4 +1,5 @@
 import jsonHandler from '../mstr-object/mstr-normalized-json-handler';
+import { officeProperties } from './office-properties';
 
 /**
  * Service to parse JSON response from REST API v2
@@ -12,6 +13,11 @@ class OfficeConverterServiceV2 {
     const isCrosstabular = grid.metricsPosition && grid.metricsPosition.axis === 'rows' && grid.columns.length === 0;
     const columnInformation = this.getColumnInformation(response, isCrosstabular);
     const isCrosstab = !isCrosstabular && this.isCrosstab(response);
+    let subtotalsInfo = {};
+    const subtotals = this.getSubtotalsInformation(response);
+    if (subtotals) {
+      subtotalsInfo = { subtotalsDefined: subtotals.defined, subtotalsVisible: subtotals.visible };
+    }
     return {
       tableSize: this.getTableSize(response, columnInformation, isCrosstab),
       columnInformation,
@@ -21,8 +27,25 @@ class OfficeConverterServiceV2 {
       isCrosstabular,
       name: response.n || response.name,
       rows: this.getRows(response, isCrosstab),
-      attributesNames: this.getAttributesName(response.definition, response.supportForms),
+      attributesNames: this.getAttributesName(response.definition, response.attrforms),
+      subtotalsInfo,
     };
+  }
+
+  /**
+   * Gets subtotals defined or visible information from the response.
+   *
+   * @param {JSON} response
+   * @return {Object}
+   * @memberof OfficeConverterServiceV2
+   */
+  getSubtotalsInformation = (response) => {
+    try {
+      const { subtotals } = response.definition.grid;
+      return subtotals;
+    } catch (error) {
+      return false;
+    }
   }
 
   /**
@@ -43,18 +66,46 @@ class OfficeConverterServiceV2 {
   }
 
   /**
-   * Get attribute forms names
+   * Get attribute title names with attribute forms
    *
-   * @param {JSON} e Object definition from response
+   * @param {JSON} e Object definition element from response
+   * @param {String} attrforms Dispay attribute form names setting inside office-properties.js
    * @return {Object} Contains arrays of columns and rows attributes forms names
    * @memberof OfficeConverterServiceV2
    */
-  getAttributesForms = (e) => {
+  getAttributesTitleWithForms = (e, attrforms) => {
+    const supportForms = attrforms ? attrforms.supportForms : false;
+    const nameSet = attrforms && attrforms.displayAttrFormNames;
+    const { displayAttrFormNames } = officeProperties;
     const titles = [];
-    if (e.type === 'attribute' && e.forms.length > 1) {
+    if (supportForms && e.type === 'attribute' && e.forms.length >= 0) {
+      const singleForm = e.forms.length === 1;
       for (let index = 0; index < e.forms.length; index++) {
         const formName = e.forms[index].name;
-        titles.push(`'${e.name} ${formName}`);
+        let title;
+        switch (nameSet) {
+        case displayAttrFormNames.automatic:
+          title = singleForm ? `'${e.name}` : `'${e.name} ${formName}`;
+          titles.push(title);
+          break;
+        case displayAttrFormNames.on:
+          titles.push(`'${e.name} ${formName}`);
+          break;
+        case displayAttrFormNames.off:
+          titles.push(`'${e.name}`);
+          break;
+        case displayAttrFormNames.formNameOnly:
+          titles.push(`'${formName}`);
+          break;
+        case displayAttrFormNames.showAttrNameOnce:
+          title = index === 0 ? `'${e.name} ${formName}` : `'${formName}`;
+          titles.push(title);
+          break;
+        default:
+          title = singleForm ? `'${e.name}` : `'${e.name} ${formName}`;
+          titles.push(title);
+          break;
+        }
       }
       return titles;
     }
@@ -68,13 +119,13 @@ class OfficeConverterServiceV2 {
    * @return {Object} Contains arrays of columns and rows attributes names
    * @memberof OfficeConverterServiceV2
    */
-  getAttributesName = (definition, supportForms) => {
+  getAttributesName = (definition, attrforms) => {
     const getAttributeWithForms = (elements) => {
       let names = [];
       for (let i = 0; i < elements.length; i++) {
-        const e = elements[i];
-        const forms = supportForms && this.getAttributesForms(e);
-        names = forms ? [...names, ...forms] : [...names, `'${e.name}`];
+        const element = elements[i];
+        const forms = this.getAttributesTitleWithForms(element, attrforms);
+        names = forms ? [...names, ...forms] : [...names, `'${element.name}`];
       }
       return names;
     };
@@ -94,6 +145,7 @@ class OfficeConverterServiceV2 {
    */
   getRows(response, isCrosstab) {
     const rowTotals = [];
+    const { attrforms } = response;
     const onAttribute = (array) => (e) => {
       if (array) array.push(e.subtotalAddress);
       return `'${e.value.join(' ')}`;
@@ -102,7 +154,7 @@ class OfficeConverterServiceV2 {
       return { row: jsonHandler.renderRows(response.data) };
     }
     if (response.definition) {
-      response.definition.supportForms = response.supportForms;
+      response.definition.attrforms = attrforms;
     }
     const row = jsonHandler.renderTabular(response.definition, response.data, onAttribute(rowTotals));
     return { row, rowTotals };
@@ -120,12 +172,14 @@ class OfficeConverterServiceV2 {
   getHeaders(response, isCrosstab, isCrosstabular) {
     const rowTotals = [];
     const columnTotals = [];
-    const { supportForms } = response;
+    const { attrforms } = response;
+    const supportForms = attrforms ? attrforms.supportForms : false;
     const onElement = (array) => (e) => {
       if (array) array.push(e.subtotalAddress);
-      const forms = this.getAttributesForms(e);
-      if (supportForms && forms) {
-        return forms; // attribute as row with forms
+      // attribute as row with forms
+      const forms = this.getAttributesTitleWithForms(e, attrforms);
+      if (forms) {
+        return forms;
       }
       // attribute as column with forms
       return supportForms && e.value.length > 1 ? e.value.map((form) => `'${form}`) : `'${e.value.join(' ')}`;
@@ -153,7 +207,9 @@ class OfficeConverterServiceV2 {
   getTableSize(response, columnInformation, isCrosstab) {
     let columnsCount = columnInformation.length;
     const columnHeader = response.data.headers.columns[0];
-    for (let index = 0; response.supportForms && index < columnInformation.length; index++) {
+    const { attrforms } = response;
+    const supportForms = attrforms ? attrforms.supportForms : false;
+    for (let index = 0; supportForms && index < columnInformation.length; index++) {
       const element = columnInformation[index];
       if (element.isAttribute && element.forms.length > 1) {
         columnsCount = columnsCount + element.forms.length - 1;

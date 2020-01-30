@@ -1,13 +1,15 @@
 import React from 'react';
-import {shallow} from 'enzyme';
+import { shallow } from 'enzyme';
 import i18n from '../../i18n';
-import {_NavigationTree, mapStateToProps} from '../../navigation/navigation-tree';
-import {selectorProperties} from '../../attribute-selector/selector-properties';
-import {Office} from '../mockOffice';
-import {mstrObjectRestService} from '../../mstr-object/mstr-object-rest-service';
+import { _NavigationTree, mapStateToProps } from '../../navigation/navigation-tree';
+import { selectorProperties } from '../../attribute-selector/selector-properties';
+import { Office } from '../mockOffice';
+import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
-import {DEFAULT_STATE as CACHE_STATE} from '../../cache/cache-reducer';
-import {authenticationHelper} from '../../authentication/authentication-helper';
+import { DEFAULT_STATE as CACHE_STATE } from '../../cache/cache-reducer';
+import { authenticationHelper } from '../../authentication/authentication-helper';
+import { popupHelper } from '../../popup/popup-helper';
+import DB from '../../cache/cache-db';
 
 jest.mock('../../mstr-object/mstr-object-rest-service');
 jest.mock('../../authentication/authentication-helper', () => ({
@@ -37,14 +39,14 @@ describe('NavigationTree', () => {
     // given
     const mstrData = {
       envUrl: 'env',
-      token: 'token',
+      authToken: 'authToken',
       projectId: 'projectId',
     };
     // when
+
     const wrappedComponent = shallow(<_NavigationTree
       mstrData={mstrData}
-      {...mockFunctionsAndProps}
-    />);
+      {...mockFunctionsAndProps} />);
     // then
     expect(wrappedComponent.instance()).toBeDefined();
     expect(wrappedComponent.find('TopFilterPanel').get(0)).toBeDefined();
@@ -56,10 +58,9 @@ describe('NavigationTree', () => {
     const mockHandlePrepare = jest.fn();
     const mstrData = {
       envUrl: 'env',
-      token: 'token',
+      authToken: 'authToken',
       projectId: 'projectId',
     };
-
     const actionObject = {
       command: selectorProperties.commandSecondary,
       chosenObjectId: 'objectId',
@@ -67,6 +68,7 @@ describe('NavigationTree', () => {
       chosenSubtype: mstrObjectEnum.mstrObjectType.report.subtypes[0],
       chosenObjectName: 'Prepare Data',
       chosenType: 'Data',
+      setObjectData: jest.fn(),
     };
     const givenIsPrompted = 'customPromptAnswer';
     jest.spyOn(mstrObjectRestService, 'isPrompted')
@@ -82,14 +84,7 @@ describe('NavigationTree', () => {
     // when
     await wrappedComponent.instance().handleSecondary();
     // then
-    expect(mockHandlePrepare).toBeCalledWith(
-      actionObject.chosenProjectId,
-      actionObject.chosenObjectId,
-      actionObject.chosenSubtype,
-      actionObject.chosenObjectName,
-      actionObject.chosenType,
-      givenIsPrompted
-    );
+    expect(mockHandlePrepare).toBeCalled();
     expect(wrappedComponent.state('previewDisplay')).toEqual(true);
   });
 
@@ -97,15 +92,15 @@ describe('NavigationTree', () => {
     // given
     const mstrData = {
       envUrl: 'env',
-      token: 'token',
+      authToken: 'authToken',
       projectId: 'projectId',
     };
     const givenObjectId = 'objectId';
     const givenProjectId = 'projectId';
     const givenSubtype = mstrObjectEnum.mstrObjectType.dossier.subtypes[0];
-    const mockHandlePopupErrors = jest.fn();
+    popupHelper.handlePopupErrors = jest.fn();
     jest.spyOn(mstrObjectRestService, 'isPrompted')
-      .mockImplementationOnce(() => {throw new Error();});
+      .mockImplementationOnce(() => { throw new Error(); });
     const wrappedComponent = shallow(
       <_NavigationTree
         mstrData={mstrData}
@@ -113,13 +108,12 @@ describe('NavigationTree', () => {
         chosenProjectId={givenProjectId}
         chosenSubtype={givenSubtype}
         {...mockFunctionsAndProps}
-        handlePopupErrors={mockHandlePopupErrors}
       />
     );
     // when
     wrappedComponent.instance().handleSecondary();
     // then
-    expect(mockHandlePopupErrors).toBeCalled();
+    expect(popupHelper.handlePopupErrors).toBeCalled();
   });
 
   it('should call proper method on cancel action', () => {
@@ -127,10 +121,10 @@ describe('NavigationTree', () => {
     const stopLoadingMocked = jest.fn();
     const mstrData = {
       envUrl: 'env',
-      token: 'token',
+      authToken: 'authToken',
       projectId: 'projectId',
     };
-    const resultAction = {command: selectorProperties.commandCancel, };
+    const resultAction = { command: selectorProperties.commandCancel, };
     const office = jest.spyOn(Office.context.ui, 'messageParent');
     const wrappedComponent = shallow(<_NavigationTree
       mstrData={mstrData}
@@ -148,7 +142,7 @@ describe('NavigationTree', () => {
     // given
     const mstrData = {
       envUrl: 'env',
-      token: 'token',
+      authToken: 'authToken',
       projectId: 'projectId',
     };
     const body = {};
@@ -171,7 +165,7 @@ describe('NavigationTree', () => {
     // given
     const initialState = {
       navigationTree: {},
-      officeReducer: {preLoadReport: {name: 'Some name', }, },
+      officeReducer: { preLoadReport: { name: 'Some name', }, },
     };
     // then
     expect(mapStateToProps(initialState)).toEqual({
@@ -253,7 +247,7 @@ describe('NavigationTree', () => {
     // given
     const mstrData = {
       envUrl: 'env',
-      token: 'token',
+      authToken: 'authToken',
       projectId: 'projectId',
     };
     const givenObjectId = 'objectId';
@@ -286,7 +280,7 @@ describe('NavigationTree', () => {
     // given
     const mstrData = {
       envUrl: 'env',
-      token: 'token',
+      authToken: 'authToken',
       projectId: 'projectId',
     };
     const givenObjectId = 'objectId';
@@ -316,15 +310,15 @@ describe('NavigationTree', () => {
     // given
     const mstrData = {
       envUrl: 'env',
-      token: 'token',
+      authToken: 'authToken',
       projectId: 'projectId',
     };
     const givenObjectId = 'objectId';
     const givenProjectId = 'projectId';
     const givenSubtype = mstrObjectEnum.mstrObjectType.report.subtypes[0];
-    const mockHandlePopupErrors = jest.fn();
+    popupHelper.handlePopupErrors = jest.fn();
     jest.spyOn(mstrObjectRestService, 'isPrompted')
-      .mockImplementationOnce(() => {throw new Error();});
+      .mockImplementationOnce(() => { throw new Error(); });
     const wrappedComponent = shallow(
       <_NavigationTree
         mstrData={mstrData}
@@ -332,28 +326,29 @@ describe('NavigationTree', () => {
         chosenProjectId={givenProjectId}
         chosenSubtype={givenSubtype}
         {...mockFunctionsAndProps}
-        handlePopupErrors={mockHandlePopupErrors}
       />
     );
     // when
     wrappedComponent.instance().handleOk();
     // then
-    expect(mockHandlePopupErrors).toBeCalled();
+    expect(popupHelper.handlePopupErrors).toBeCalled();
   });
 
-  it.skip('should connect on DB when navigation-tree is mounted', () => {
+  it('should connect on DB when navigation-tree is mounted', () => {
     // given
     const connectToDB = jest.fn();
     const mstrData = {
       envUrl: 'env',
-      token: 'token',
-      projectId: 'projectId',
-      connectToDB,
+      authToken: 'authToken',
+      projectId: 'projectId'
     };
+    DB.getIndexedDBSupport = jest.fn();
+    DB.getIndexedDBSupport.mockReturnValue(true);
     // when
     shallow(<_NavigationTree
       mstrData={mstrData}
       {...mockFunctionsAndProps}
+      connectToDB={connectToDB}
     />);
     // then
     expect(connectToDB).toHaveBeenCalled();
@@ -361,8 +356,9 @@ describe('NavigationTree', () => {
 
   it('should not send error and call functionality properly', async () => {
     // given
-    const mockHandlePopupErrors = jest.fn();
-    const wrappedComponent = shallow(<_NavigationTree {...mockFunctionsAndProps} handlePopupErrors={mockHandlePopupErrors} />);
+    const connectToDB = jest.fn();
+    popupHelper.handlePopupErrors = jest.fn();
+    const wrappedComponent = shallow(<_NavigationTree {...mockFunctionsAndProps} connectToDB={connectToDB} />);
     // when
     await wrappedComponent.instance().refresh();
     // then
@@ -372,13 +368,14 @@ describe('NavigationTree', () => {
   it('should send error message on refresh when no session', async () => {
     // given
     // const asyncMock = jest.fn().mockRejectedValue(new Error('Async error'));
+    const connectToDB = jest.fn();
     const givenError = new Error('Session error');
     authenticationHelper.validateAuthToken.mockRejectedValue(givenError);
-    const mockHandlePopupErrors = jest.fn();
-    const wrappedComponent = shallow(<_NavigationTree {...mockFunctionsAndProps} handlePopupErrors={mockHandlePopupErrors} />);
+    popupHelper.handlePopupErrors = jest.fn();
+    const wrappedComponent = shallow(<_NavigationTree {...mockFunctionsAndProps} connectToDB={connectToDB} />);
     // when
     await wrappedComponent.instance().refresh();
     // then
-    await expect(mockHandlePopupErrors).toBeCalled();
+    await expect(popupHelper.handlePopupErrors).toBeCalled();
   });
 });

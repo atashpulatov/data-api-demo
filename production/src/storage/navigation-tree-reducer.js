@@ -1,14 +1,17 @@
 import {
   SELECT_FOLDER, SELECT_OBJECT, SET_DATA_SOURCE, START_IMPORT, CHANGE_SORTING, CHANGE_SEARCHING, UPDATE_SCROLL,
   UPDATE_SIZE, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED, CLEAR_PROMPTS_ANSWERS, REQUEST_DOSSIER_OPEN,
-  CANCEL_DOSSIER_OPEN, SWITCH_MY_LIBRARY, CHANGE_FILTER, CHANGE_IS_PROMPTED
+  CANCEL_DOSSIER_OPEN, SWITCH_MY_LIBRARY, CHANGE_FILTER, CHANGE_IS_PROMPTED,
+  LOAD_BROWSING_STATE_CONST, UPDATE_DISPLAY_ATTR_FORM,
+  SWITCH_IMPORT_SUBTOTALS
 } from '../navigation/navigation-tree-actions';
 import { CLEAR_WINDOW } from '../popup/popup-actions';
-import { LOAD_BROWSING_STATE_CONST } from '../browser/browser-actions';
 import { CREATE_CACHE, CLEAR_CACHE, REFRESH_CACHE } from '../cache/cache-actions';
+import { sessionProperties } from './session-properties';
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
 export const DEFAULT_TYPE = 'Data';
+export const SAVE_MY_LIBRARY_OWNERS = 'SAVE_MY_LIBRARY_OWNERS';
 
 // TODO: use some global store, redux one probably will be the best choice, or maybe some const global value
 // TODO: use mstrObjectType instead of this array
@@ -54,8 +57,11 @@ export const initialState = {
   dossierOpenRequested: false,
   envFilter: {},
   myLibraryFilter: {},
-  myLibrary: false,
+  myLibrary: true,
   chosenLibraryDossier: null,
+  chosenLibraryElement: {},
+  chosenEnvElement: {},
+  myLibraryOwners: {},
 };
 
 function getType(subtype) {
@@ -74,23 +80,41 @@ function cleanSelection(state) {
   return newState;
 }
 
+function makeSelection(newState, data) {
+  newState.requestPerformed = data.requestPerformed || false;
+  newState.chosenObjectId = data.chosenObjectId || null;
+  newState.chosenProjectId = data.chosenProjectId || null;
+  newState.chosenSubtype = data.chosenSubtype || null;
+  newState.chosenObjectName = data.chosenObjectName || DEFAULT_PROJECT_NAME;
+  newState.chosenType = getType(data.chosenSubtype);
+  newState.objectType = data.objectType;
+  newState.chosenChapterKey = data.chosenChapterKey || null;
+  newState.chosenVisualizationKey = data.chosenVisualizationKey || null;
+  newState.preparedInstanceId = data.preparedInstanceId || null;
+  newState.isEdit = data.isEdit;
+  newState.chosenLibraryDossier = data.chosenLibraryDossier || null;
+  return newState;
+}
+
 export const navigationTree = (state = initialState, action) => {
   const { type, data } = action;
   switch (type) {
   case SELECT_OBJECT: {
     const newState = { ...state };
-    newState.requestPerformed = data.requestPerformed || false;
-    newState.chosenObjectId = data.chosenObjectId || null;
-    newState.chosenProjectId = data.chosenProjectId || null;
-    newState.chosenSubtype = data.chosenSubtype || null;
-    newState.chosenObjectName = data.chosenObjectName || DEFAULT_PROJECT_NAME;
-    newState.chosenType = getType(data.chosenSubtype);
-    newState.objectType = data.objectType;
-    newState.chosenChapterKey = data.chosenChapterKey || null;
-    newState.chosenVisualizationKey = data.chosenVisualizationKey || null;
-    newState.preparedInstanceId = data.preparedInstanceId || null;
-    newState.isEdit = data.isEdit;
-    newState.chosenLibraryDossier = data.chosenLibraryDossier || null;
+    if (newState.myLibrary) {
+      newState.chosenLibraryElement = data;
+    } else {
+      newState.chosenEnvElement = data;
+    }
+    return makeSelection(newState, data);
+  }
+  case SAVE_MY_LIBRARY_OWNERS: {
+    const tempObject = {};
+    const newState = { ...state };
+    data.forEach(item => {
+      tempObject[item] = true;
+    });
+    newState.myLibraryOwners = tempObject;
     return newState;
   }
   case UPDATE_SCROLL: {
@@ -192,14 +216,28 @@ export const navigationTree = (state = initialState, action) => {
   case SWITCH_MY_LIBRARY: {
     const newState = { ...state };
     newState.myLibrary = !state.myLibrary;
+    return makeSelection(newState, newState.myLibrary ? newState.chosenLibraryElement : newState.chosenEnvElement);
+  }
+  case SWITCH_IMPORT_SUBTOTALS: {
+    const newState = { ...state };
+    newState.importSubtotal = data;
+    return newState;
+  }
+  case UPDATE_DISPLAY_ATTR_FORM: {
+    const newState = { ...state };
+    newState.displayAttrFormNames = data;
     return newState;
   }
   case CHANGE_FILTER: {
     const newState = { ...state };
-    if (state.myLibrary) {
-      newState.myLibraryFilter = data;
+    newState.envFilter = data;
+    newState.myLibraryFilter = data;
+    if (newState.myLibrary) {
+      newState.envFilter.owners = state.envFilter.owners
+        ? state.envFilter.owners.filter(item => !newState.myLibraryOwners[item] || data.owners.includes(item))
+        : data.owners;
     } else {
-      newState.envFilter = data;
+      newState.myLibraryFilter.owners = data.owners.filter(item => newState.myLibraryOwners[item]);
     }
     return newState;
   }
@@ -214,6 +252,14 @@ export const navigationTree = (state = initialState, action) => {
     return cleanSelection(state);
   case REFRESH_CACHE: {
     return data ? cleanSelection(state) : state;
+  }
+  case sessionProperties.actions.logIn:
+  case sessionProperties.actions.logOut: {
+    const newState = { ...state };
+    newState.envFilter = {};
+    newState.myLibraryFilter = {};
+    newState.myLibrary = true;
+    return newState;
   }
   default: {
     return state;

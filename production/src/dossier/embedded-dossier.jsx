@@ -3,8 +3,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
+import { popupHelper } from '../popup/popup-helper';
+import { DEFAULT_PROJECT_NAME } from '../storage/navigation-tree-reducer';
 
-const { microstrategy } = window;
+const { microstrategy, Office } = window;
 
 const { createDossierInstance, answerDossierPrompts } = mstrObjectRestService;
 
@@ -20,6 +22,12 @@ export default class _EmbeddedDossier extends React.Component {
   }
 
   componentDidMount() {
+    // DE158588 - Not able to open dossier in embedding api on excel desktop in windows
+    const isOfficeOnline = Office.context ? Office.context.platform === Office.PlatformType.OfficeOnline : false;
+    const isIE = /Trident\/|MSIE /.test(window.navigator.userAgent);
+    if (!isOfficeOnline && isIE) {
+      this.watchForIframeAddition(this.container.current, this.onIframeLoad);
+    }
     this.loadEmbeddedDossier(this.container.current);
   }
 
@@ -27,6 +35,22 @@ export default class _EmbeddedDossier extends React.Component {
     this.msgRouter.removeEventhandler('onVizSelectionChanged', this.onVizSelectionHandler);
     this.msgRouter.removeEventhandler('onPromptAnswered', this.promptsAnsweredHandler);
   }
+
+  /**
+   * This function is called after the embedded dossier iframe is added into the DOM
+   * @param {*} iframe
+   */
+  onIframeLoad = (iframe) => {
+    iframe.addEventListener('load', () => {
+      const embeddedDocument = iframe.contentDocument;
+      this.embeddedDocument = embeddedDocument;
+      if (!this.isLoginPage(embeddedDocument)) {
+        const fileLocation = window.location.origin
+          + window.location.pathname.replace('index.html', 'javascript/mshtmllib.js');
+        this.applyFile(embeddedDocument, fileLocation);
+      }
+    });
+  };
 
   /**
  * Handles the event throwed after new vizualization selection.
@@ -47,15 +71,36 @@ export default class _EmbeddedDossier extends React.Component {
     handleSelection(this.dossierData);
   }
 
+  /**
+   * This function checks whether the content of embedded document is loginPage
+   * @param {*} _document
+   */
+  isLoginPage = (document) => document.URL.includes('embeddedLogin.jsp');
+
+  /**
+   * This function applies an external script file to a embedded document
+   * @param {*} _document
+   * @param {*} fileLocation
+   */
+  applyFile = (_document, fileLocation) => {
+    const script = _document.createElement('script');
+    script.src = fileLocation;
+    if (_document) {
+      const title = _document.head.getElementsByTagName('title')[0];
+      _document.head.insertBefore(script, title);
+    }
+  }
+
   loadEmbeddedDossier = async (container) => {
-    const { mstrData, handlePopupErrors } = this.props;
-    const { envUrl, token, dossierId, projectId, promptsAnswers, instanceId, selectedViz } = mstrData;
+    const { mstrData } = this.props;
+    const { envUrl, authToken, dossierId, projectId, promptsAnswers, instanceId, selectedViz } = mstrData;
     const instance = {};
     try {
       if (instanceId) {
         instance.mid = instanceId;
       } else {
-        instance.mid = await createDossierInstance(projectId, dossierId);
+        const body = { disableManipulationsAutoSaving: true, persistViewState: true };
+        instance.mid = await createDossierInstance(projectId, dossierId, body);
         if (promptsAnswers != null) {
           let count = 0;
           while (count < promptsAnswers.length) {
@@ -69,8 +114,8 @@ export default class _EmbeddedDossier extends React.Component {
           }
         }
       }
-    } catch (e) {
-      handlePopupErrors(e);
+    } catch (error) {
+      popupHelper.handlePopupErrors(error);
     }
 
     this.dossierData = {
@@ -90,7 +135,7 @@ export default class _EmbeddedDossier extends React.Component {
       customAuthenticationType: CustomAuthenticationType.AUTH_TOKEN,
       enableResponsive: true,
       getLoginToken() {
-        return Promise.resolve(token);
+        return Promise.resolve(authToken);
       },
       placeholder: container,
       enableCollaboration: false,
@@ -145,6 +190,25 @@ export default class _EmbeddedDossier extends React.Component {
     this.embeddedDossier = await microstrategy.dossier.create(props);
   }
 
+  /**
+   * Watches container for child addition and runs callback in case of iframe being added
+   * @param {*} container
+   * @param {*} callback
+   */
+  watchForIframeAddition(container, callback) {
+    const config = { childList: true };
+    const onMutation = (mutationList) => {
+      for (const mutation of mutationList) {
+        if (mutation.addedNodes && mutation.addedNodes.length && mutation.addedNodes[0].nodeName === 'IFRAME') {
+          const iframe = mutation.addedNodes[0];
+          callback(iframe);
+        }
+      }
+    };
+    const observer = new MutationObserver(onMutation);
+    observer.observe(container, config);
+  }
+
   promptsAnsweredHandler(promptsAnswers) {
     const { handlePromptAnswer } = this.props;
     if (this.embeddedDossier) {
@@ -172,7 +236,7 @@ export default class _EmbeddedDossier extends React.Component {
 _EmbeddedDossier.propTypes = {
   mstrData: PropTypes.shape({
     envUrl: PropTypes.string,
-    token: PropTypes.string,
+    authToken: PropTypes.string,
     dossierId: PropTypes.string,
     projectId: PropTypes.string,
     instanceId: PropTypes.string,
@@ -180,14 +244,13 @@ _EmbeddedDossier.propTypes = {
     selectedViz: PropTypes.string,
   }),
   handleSelection: PropTypes.func,
-  handlePopupErrors: PropTypes.func,
   handlePromptAnswer: PropTypes.func
 };
 
 _EmbeddedDossier.defaultProps = {
   mstrData: {
     envUrl: 'no env url',
-    token: null,
+    authToken: null,
     dossierId: 'default id',
     projectId: 'default id',
     instanceId: 'default id',
@@ -195,7 +258,25 @@ _EmbeddedDossier.defaultProps = {
     selectedViz: ''
   },
   handleSelection: () => { },
-  handlePopupErrors: () => { }
 };
 
-export const EmbeddedDossier = connect()(_EmbeddedDossier);
+const mapStateToProps = (state) => {
+  const { chosenObjectName, chosenObjectId, chosenProjectId } = state.navigationTree;
+  const popupState = state.popupReducer.editedObject;
+  const { promptsAnswers } = state.navigationTree;
+  const session = { ...state.sessionReducer };
+  const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
+  const editedObject = { ...(popupHelper.parsePopupState(popupState, promptsAnswers)) };
+  const mstrData = {
+    envUrl: session.envUrl,
+    token: session.authToken,
+    dossierId: isEdit ? editedObject.chosenObjectId : chosenObjectId,
+    projectId: isEdit ? editedObject.projectId : chosenProjectId,
+    promptsAnswers: isEdit ? editedObject.promptsAnswers : promptsAnswers,
+    selectedViz: isEdit ? editedObject.selectedViz : '',
+    instanceId: editedObject.instanceId,
+  };
+  return { mstrData };
+};
+
+export const EmbeddedDossier = connect(mapStateToProps)(_EmbeddedDossier);

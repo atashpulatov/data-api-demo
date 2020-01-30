@@ -52,7 +52,7 @@ source "${ECOSYSTEM_ROOT_PATHS_SHELL_LIB_CONTROL_HOME}/bootstrap.bash"
 cd "${ECOSYSTEM_ROOT_PATHS_HOME}"
 if ! git branch | grep '\*' | grep -q detached ; then
   warn "
-#####################################################################################################
+######################################################################################################
                       WARNING ECO.ROOT IS ON A BRANCH NOT A SPECIFIC VERSION(TAG)
                     YOUR WARRANTY IS VOID, IE YOUR ARE ON YOUR OWN WITHOUT SUPPORT
 #####################################################################################################

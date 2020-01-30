@@ -1,6 +1,6 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-import { NotConnectedPopupButtons } from '../../popup/popup-buttons';
+import { shallow, mount } from 'enzyme';
+import { PopupButtonsNotConnected } from '../../popup/popup-buttons/popup-buttons';
 
 
 describe('PopupButtons', () => {
@@ -9,7 +9,7 @@ describe('PopupButtons', () => {
       // given
       const secondaryAction = jest.fn();
       // when
-      const buttonsWrapped = shallow(<NotConnectedPopupButtons />);
+      const buttonsWrapped = shallow(<PopupButtonsNotConnected />);
       // then
       expect(buttonsWrapped.exists('#prepare')).not.toBeTruthy();
     });
@@ -18,7 +18,7 @@ describe('PopupButtons', () => {
     // given
     const secondaryAction = jest.fn();
     // when
-    const buttonsWrapped = shallow(<NotConnectedPopupButtons
+    const buttonsWrapped = mount(<PopupButtonsNotConnected
       handleSecondary={secondaryAction}
       hideSecondary={false}
     />);
@@ -30,7 +30,7 @@ describe('PopupButtons', () => {
     // given
     const handleBack = jest.fn();
     // when
-    const buttonsWrapped = shallow(<NotConnectedPopupButtons
+    const buttonsWrapped = mount(<PopupButtonsNotConnected
       handleBack={handleBack}
     />);
     // thenfix
@@ -41,7 +41,7 @@ describe('PopupButtons', () => {
     // given
     const handleBack = jest.fn();
     // when
-    const buttonsWrapped = shallow(<NotConnectedPopupButtons />);
+    const buttonsWrapped = shallow(<PopupButtonsNotConnected />);
     // thenfix
     expect(buttonsWrapped.exists('#backCancel')).toBeFalsy();
   });
@@ -49,10 +49,10 @@ describe('PopupButtons', () => {
   it('should call secondary action when prepare data clicked', () => {
     // given
     const secondaryAction = jest.fn();
-    const buttonsWrapped = shallow(<NotConnectedPopupButtons
+    const buttonsWrapped = mount(<PopupButtonsNotConnected
       handleSecondary={secondaryAction}
     />);
-    const secondaryButton = buttonsWrapped.find('#prepare');
+    const secondaryButton = buttonsWrapped.find('Button#prepare');
     // when
     secondaryButton.simulate('click');
     // then
@@ -62,21 +62,20 @@ describe('PopupButtons', () => {
     // given
     const disableActiveActions = true;
     // when
-    const buttonsWrapped = shallow(<NotConnectedPopupButtons
+    const buttonsWrapped = mount(<PopupButtonsNotConnected
       disableActiveActions={disableActiveActions}
     />);
-    const tooltipSpan = buttonsWrapped.find('.button-tooltip');
+    const tooltipSpan = buttonsWrapped.find('Popover.button-tooltip');
     // then
     expect(tooltipSpan).toHaveLength(2);
   });
 
   it('should render a tooltip span if the cube Isn’t  published', () => {
-    // given
     // when
-    const buttonsWrapped = shallow(<NotConnectedPopupButtons
+    const buttonsWrapped = mount(<PopupButtonsNotConnected
       isPublished={false}
     />);
-    const tooltipSpan = buttonsWrapped.find('.button-tooltip');
+    const tooltipSpan = buttonsWrapped.find('Popover.button-tooltip');
     // then
     expect(tooltipSpan).toHaveLength(2);
   });
@@ -84,7 +83,7 @@ describe('PopupButtons', () => {
     // given
     const disableActiveActions = false;
     // when
-    const buttonsWrapped = shallow(<NotConnectedPopupButtons
+    const buttonsWrapped = shallow(<PopupButtonsNotConnected
       disableActiveActions={disableActiveActions}
     />);
     const tooltipSpan = buttonsWrapped.find('.button-tooltip');
@@ -94,9 +93,8 @@ describe('PopupButtons', () => {
 
   it('should NOT display secondary button when hideSecondary prop is provided',
     () => {
-      // given
       // when
-      const buttonsWrapped = shallow(<NotConnectedPopupButtons hideSecondary />);
+      const buttonsWrapped = mount(<PopupButtonsNotConnected hideSecondary />);
       // then
       expect(buttonsWrapped.exists('#data-preview')).not.toBeTruthy();
       expect(buttonsWrapped.exists('#import')).toBeTruthy();
@@ -104,9 +102,8 @@ describe('PopupButtons', () => {
 
   it('should display secondary button when hideSecondary prop is not provided',
     () => {
-      // given
       // when
-      const buttonsWrapped = shallow(<NotConnectedPopupButtons hideSecondary={false} />);
+      const buttonsWrapped = mount(<PopupButtonsNotConnected hideSecondary={false} />);
       // then
       expect(buttonsWrapped.exists('#data-preview')).toBeTruthy();
       expect(buttonsWrapped.exists('#import')).toBeTruthy();
@@ -114,10 +111,9 @@ describe('PopupButtons', () => {
 
   it('should display only secondary button tooltip when disableSecondary prop is provided ',
     () => {
-      // given
       // when
-      const buttonsWrapped = shallow(<NotConnectedPopupButtons handleSecondary disableSecondary />);
-      const tooltipSpan = buttonsWrapped.find('.button-tooltip');
+      const buttonsWrapped = mount(<PopupButtonsNotConnected handleSecondary disableSecondary />);
+      const tooltipSpan = buttonsWrapped.find('Popover.button-tooltip');
       // then
       expect(tooltipSpan).toHaveLength(1);
     });

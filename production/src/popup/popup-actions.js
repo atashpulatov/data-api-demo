@@ -25,13 +25,13 @@ export class PopupActions {
         this.officeApiHelper.getExcelSessionStatus(),
         this.authenticationHelper.validateAuthToken(),
       ]);
-      const editedReport = this.officeStoreService.getReportFromProperties(reportParams.bindId);
+      const editedObject = this.officeStoreService.getReportFromProperties(reportParams.bindId);
 
       dispatch({
         type: SET_REPORT_N_FILTERS,
-        editedReport,
+        editedObject,
       });
-      if (editedReport.isPrompted) {
+      if (editedObject.isPrompted) {
         this.popupController.runRepromptPopup(reportParams);
       } else {
         this.popupController.runEditFiltersPopup(reportParams);
@@ -42,10 +42,10 @@ export class PopupActions {
     }
   }
 
-  preparePromptedReport = (instanceId, reportData) => (dispatch) => dispatch({
+  preparePromptedReport = (instanceId, chosenObjectData) => (dispatch) => dispatch({
     type: SET_PREPARED_REPORT,
     instanceId,
-    reportData,
+    chosenObjectData,
   })
 
   refreshReportsArray = (reportArray, isRefreshAll) => async (dispatch) => {
@@ -86,7 +86,7 @@ export class PopupActions {
           isRefreshAll);
         if (!isRefreshAll) return true;
       } finally {
-        dispatch({
+        isRefreshAll && dispatch({
           type: officeProperties.actions.finishLoadingReport,
           reportBindId: report.bindId,
           isRefreshAll: false,
@@ -104,12 +104,12 @@ export class PopupActions {
       ]);
       const editedDossier = this.officeStoreService.getReportFromProperties(reportParams.bindId);
       const { projectId, id, manipulationsXML } = editedDossier;
-      const instanceId = await this.mstrObjectRestService.createDossierInstance(projectId, id, { ...manipulationsXML });
+      const instanceId = await this.mstrObjectRestService.createDossierInstance(projectId, id, { ...manipulationsXML, disableManipulationsAutoSaving: true, persistViewState: true });
       editedDossier.instanceId = instanceId;
       editedDossier.isEdit = true;
       dispatch({
         type: SET_REPORT_N_FILTERS,
-        editedReport: editedDossier,
+        editedObject: editedDossier,
       });
       this.popupController.runEditDossierPopup(reportParams);
     } catch (error) {
