@@ -15,7 +15,7 @@ import {
   STOP_REPORT_LOADING,
   RESET_STATE,
 } from './popup-actions';
-import { SET_MSTR_DATA } from './popup-state-actions';
+import { CLEAR_POPUP_STATE, SET_MSTR_DATA } from './popup-state-actions';
 
 const URL = `${window.location.href}`;
 
@@ -33,6 +33,7 @@ export class PopupController {
   }
 
   runPopupNavigation = async () => {
+    this.reduxStore.dispatch({ type: CLEAR_POPUP_STATE });
     await this.runPopup(PopupTypeEnum.navigationTree, 80, 80);
   };
 
@@ -278,8 +279,8 @@ export class PopupController {
         response.visualizationInfo.nameShouldUpdate = true;
         response.visualizationInfo.formatShouldUpdate = true;
         await officeStoreService.preserveReportValue(
-          reportParams.bindId, 
-          'visualizationInfo', 
+          reportParams.bindId,
+          'visualizationInfo',
           response.visualizationInfo
         );
       }
