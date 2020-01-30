@@ -479,10 +479,8 @@ class OfficeTableHelper {
    */
   async checkObjectRangeValidityOnRefresh(prevOfficeTable, context, instanceDefinition) {
     const { rows, columns, mstrTable, mstrTable:{ isCrosstab, crosstabHeaderDimensions, prevCrosstabDimensions } } = instanceDefinition;
-    const prevColumnsY = prevCrosstabDimensions.columnsY;
-    const prevRowsX = prevCrosstabDimensions.rowsX;
-    const crosstabColumnsY = crosstabHeaderDimensions.columnsY;
-    const crosstabRowsX = crosstabHeaderDimensions.rowsX;
+    const { columnsY: prevColumnsY, rowsX: prevRowsX } = prevCrosstabDimensions;
+    const { columnsY: crosstabColumnsY, rowsX: crosstabRowsX } = crosstabHeaderDimensions;
 
     prevOfficeTable.rows.load('count');
     await context.sync();
@@ -490,8 +488,8 @@ class OfficeTableHelper {
     let addedColumns = Math.max(0, columns - prevOfficeTable.columns.count);
     let addedRows = Math.max(0, rows - prevOfficeTable.rows.count);
     if (isCrosstab && prevCrosstabDimensions && prevColumnsY === crosstabColumnsY && prevRowsX === crosstabRowsX) {
-      addedRows += (crosstabHeaderDimensions.columnsY - prevCrosstabDimensions.columnsY);
-      addedColumns += (crosstabHeaderDimensions.rowsX - prevCrosstabDimensions.rowsX);
+      addedRows += (crosstabColumnsY - prevColumnsY);
+      addedColumns += (crosstabRowsX - prevRowsX);
     }
 
     await this.checkExtendedRange(addedColumns, prevOfficeTable, mstrTable, context, addedRows);
