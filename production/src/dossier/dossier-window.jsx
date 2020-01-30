@@ -174,8 +174,8 @@ function mapStateToProps(state) {
   const { editedObject } = popupReducer;
   const { supportForms } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
-  const objectType = editedObject && editedObject.objectType ? editedObject.objectType : 'report';
-  const isReport = objectType && (objectType === 'report' || objectType.name === 'report');
+  const objectType = editedObject && editedObject.objectType ? editedObject.objectType : mstrObjectEnum.mstrObjectType.report.name;
+  const isReport = objectType && (objectType === mstrObjectEnum.mstrObjectType.report.name || objectType.name === mstrObjectEnum.mstrObjectType.report.name);
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   const editedObjectParse = { ...(popupHelper.parsePopupState(editedObject, promptsAnswers, formsPrivilege)) };
   return {

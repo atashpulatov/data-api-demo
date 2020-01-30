@@ -11,6 +11,7 @@ import { Notifications } from '../notification/notifications';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { popupHelper } from '../popup/popup-helper';
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 
 const { microstrategy } = window;
 const {
@@ -288,8 +289,8 @@ export const mapStateToProps = (state) => {
   const { promptsAnswers, importSubtotal, ...mstrData } = navigationTree;
   const { supportForms } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
-  const objectType = popupState && popupState.objectType ? popupState.objectType : 'report';
-  const isReport = objectType && (objectType === 'report' || objectType.name === 'report');
+  const objectType = popupState && popupState.objectType ? popupState.objectType : mstrObjectEnum.mstrObjectType.report.name;
+  const isReport = objectType && (objectType === mstrObjectEnum.mstrObjectType.report.name || objectType.name === mstrObjectEnum.mstrObjectType.report.name);
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   return {
     ...state.promptsPopup,

@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { popupHelper } from '../popup/popup-helper';
 import { switchImportSubtotals, updateDisplayAttrForm } from '../navigation/navigation-tree-actions';
 import { officeProperties } from '../office/office-properties';
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 
 export class AttributeSelectorNotConnected extends Component {
   constructor(props) {
@@ -127,8 +128,8 @@ const mapStateToProps = (state) => {
   const { promptsAnswers, importSubtotal, displayAttrFormNames, ...chosenObject } = navigationTree;
   const { supportForms } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
-  const objectType = editedObject && editedObject.objectType ? editedObject.objectType : 'report';
-  const isReport = objectType && (objectType === 'report' || objectType.name === 'report');
+  const objectType = editedObject && editedObject.objectType ? editedObject.objectType : mstrObjectEnum.mstrObjectType.report.name;
+  const isReport = objectType && (objectType === mstrObjectEnum.mstrObjectType.report.name || objectType.name === mstrObjectEnum.mstrObjectType.report.name);
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   return {
     chosenObject,

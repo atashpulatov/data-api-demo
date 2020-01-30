@@ -11,6 +11,7 @@ import { NavigationTree } from '../navigation/navigation-tree';
 import { PromptsWindow } from '../prompts/prompts-window';
 import { PopupTypeEnum } from '../home/popup-type-enum';
 import { popupActions } from './popup-actions';
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 
 const renderProperComponent = (popupType) => {
   switch (popupType) {
@@ -46,21 +47,20 @@ export const PopupViewSelectorNotConnected = (props) => {
 };
 
 function mapStateToProps(state) {
-  const { navigationTree, popupReducer, sessionReducer, officeReducer } = state;
+  const { navigationTree, popupReducer: { editedObject, preparedInstance }, sessionReducer: { attrFormPrivilege, authToken }, officeReducer, popupStateReducer } = state;
   const { promptsAnswers } = navigationTree;
-  const { editedObject } = popupReducer;
   const { supportForms } = officeReducer;
-  const { attrFormPrivilege } = sessionReducer;
-  const objectType = editedObject && editedObject.objectType ? editedObject.objectType : 'report';
-  const isReport = objectType && (objectType === 'report' || objectType.name === 'report');
+  const { popupType } = popupStateReducer;
+  const objectType = editedObject && editedObject.objectType ? editedObject.objectType : mstrObjectEnum.mstrObjectType.report.name;
+  const isReport = objectType && (objectType === mstrObjectEnum.mstrObjectType.report.name || objectType.name === mstrObjectEnum.mstrObjectType.report.name);
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   return {
-    ...state.navigationTree,
-    authToken: state.sessionReducer.authToken,
+    ...navigationTree,
+    authToken,
     editedObject: { ...(popupHelper.parsePopupState(editedObject, promptsAnswers, formsPrivilege)) },
-    preparedInstance: state.popupReducer.preparedInstance,
-    propsToPass: { ...state.popupStateReducer },
-    popupType: state.popupStateReducer.popupType,
+    preparedInstance,
+    propsToPass: { ...popupStateReducer },
+    popupType,
     formsPrivilege
   };
 }

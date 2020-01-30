@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { popupHelper } from '../popup/popup-helper';
 import { DEFAULT_PROJECT_NAME } from '../storage/navigation-tree-reducer';
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 
 const { microstrategy, Office } = window;
 
@@ -261,21 +262,19 @@ _EmbeddedDossier.defaultProps = {
 };
 
 const mapStateToProps = (state) => {
-  const { navigationTree, popupReducer, sessionReducer, officeReducer } = state;
+  const { navigationTree, popupReducer, sessionReducer: { attrFormPrivilege, envUrl, authToken }, officeReducer } = state;
   const { chosenObjectName, chosenObjectId, chosenProjectId } = navigationTree;
   const popupState = popupReducer.editedObject;
   const { promptsAnswers } = state.navigationTree;
   const { supportForms } = officeReducer;
-  const { attrFormPrivilege } = sessionReducer;
-  const objectType = popupState && popupState.objectType ? popupState.objectType : 'report';
-  const isReport = objectType && (objectType === 'report' || objectType.name === 'report');
+  const objectType = popupState && popupState.objectType ? popupState.objectType : mstrObjectEnum.mstrObjectType.report.name;
+  const isReport = objectType && (objectType === mstrObjectEnum.mstrObjectType.report.name || objectType.name === mstrObjectEnum.mstrObjectType.report.name);
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
-  const session = { ...state.sessionReducer };
   const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
   const editedObject = { ...(popupHelper.parsePopupState(popupState, promptsAnswers, formsPrivilege)) };
   const mstrData = {
-    envUrl: session.envUrl,
-    token: session.authToken,
+    envUrl,
+    token: authToken,
     dossierId: isEdit ? editedObject.chosenObjectId : chosenObjectId,
     projectId: isEdit ? editedObject.projectId : chosenProjectId,
     promptsAnswers: isEdit ? editedObject.promptsAnswers : promptsAnswers,
