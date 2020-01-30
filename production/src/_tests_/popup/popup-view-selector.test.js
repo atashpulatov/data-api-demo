@@ -86,7 +86,7 @@ describe('PopupViewSelectorNotConnected mapStateToProps and mapDispatchToProps t
   beforeEach(() => {
     const initialState = {
       popupReducer: {
-        editedObject: 'testEditedObject',
+        editedObject : { objectType: 'report' },
         preparedInstance: 'testPreparedInstance'
       },
       popupStateReducer: {
@@ -99,8 +99,10 @@ describe('PopupViewSelectorNotConnected mapStateToProps and mapDispatchToProps t
         otherNavigationTreeProperty: 'testOtherNavigationTreeProperty'
       },
       sessionReducer: {
-        authToken: 'testAuthToken'
+        authToken: 'testAuthToken',
+        attrFormPrivilege: true
       },
+      officeReducer: { supportForms: true }
     };
 
     store = mockStore(initialState);
@@ -118,7 +120,7 @@ describe('PopupViewSelectorNotConnected mapStateToProps and mapDispatchToProps t
     // then
     expect(componentWrapper.props().authToken).toBe('testAuthToken');
     expect(componentWrapper.props().otherNavigationTreeProperty).toBe('testOtherNavigationTreeProperty');
-    expect(parsePopupState).toBeCalledWith('testEditedObject', 'testPromptsAnswers');
+    expect(parsePopupState).toBeCalledWith({ objectType: 'report' }, 'testPromptsAnswers', true);
     // editedObject not fully tested, only that popupHelper.parsePopupState is executed (mocking not working)
     expect(componentWrapper.props().preparedInstance).toBe('testPreparedInstance');
     expect(componentWrapper.props().propsToPass).toHaveProperty('otherPopupStateReducerProperty', 'testOtherValue');

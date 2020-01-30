@@ -11,6 +11,7 @@ import { NavigationTree } from '../navigation/navigation-tree';
 import { PromptsWindow } from '../prompts/prompts-window';
 import { PopupTypeEnum } from '../home/popup-type-enum';
 import { popupActions } from './popup-actions';
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 
 const renderProperComponent = (popupType) => {
   switch (popupType) {
@@ -46,15 +47,21 @@ export const PopupViewSelectorNotConnected = (props) => {
 };
 
 function mapStateToProps(state) {
-  const { editedObject } = state.popupReducer;
-  const { promptsAnswers } = state.navigationTree;
+  const { navigationTree, popupReducer: { editedObject, preparedInstance }, sessionReducer: { attrFormPrivilege, authToken }, officeReducer, popupStateReducer } = state;
+  const { promptsAnswers } = navigationTree;
+  const { supportForms } = officeReducer;
+  const { popupType } = popupStateReducer;
+  const objectType = editedObject && editedObject.objectType ? editedObject.objectType : mstrObjectEnum.mstrObjectType.report.name;
+  const isReport = objectType && (objectType === mstrObjectEnum.mstrObjectType.report.name || objectType.name === mstrObjectEnum.mstrObjectType.report.name);
+  const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   return {
-    ...state.navigationTree,
-    authToken: state.sessionReducer.authToken,
-    editedObject: { ...(popupHelper.parsePopupState(editedObject, promptsAnswers)) },
-    preparedInstance: state.popupReducer.preparedInstance,
-    propsToPass: { ...state.popupStateReducer },
-    popupType: state.popupStateReducer.popupType,
+    ...navigationTree,
+    authToken,
+    editedObject: { ...(popupHelper.parsePopupState(editedObject, promptsAnswers, formsPrivilege)) },
+    preparedInstance,
+    propsToPass: { ...popupStateReducer },
+    popupType,
+    formsPrivilege
   };
 }
 

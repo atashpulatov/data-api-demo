@@ -13,6 +13,7 @@ import { Confirmation } from './confirmation';
 export class HeaderNotConnected extends Component {
   componentDidMount = () => {
     sessionHelper.getUserInfo();
+    sessionHelper.getUserAttributeFormPrivilege();
     this.addCloseSettingsListeners();
   }
 

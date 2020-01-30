@@ -15,6 +15,8 @@ export const sessionReducer = (state = {}, action) => {
     return onGetUserInfo(action, state);
   case sessionProperties.actions.setDialog:
     return onSetDialog(action, state);
+  case sessionProperties.actions.setAttrFormPrivilege:
+    return onSetAttrFormPrivilege(action, state);
   default:
     break;
   }
@@ -76,5 +78,12 @@ function onSetDialog(action, state) {
   return {
     ...state,
     dialog: action.dialog,
+  };
+}
+
+function onSetAttrFormPrivilege(action, state) {
+  return {
+    ...state,
+    attrFormPrivilege: action.attrFormPrivilege,
   };
 }

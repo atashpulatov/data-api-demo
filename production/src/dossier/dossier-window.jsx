@@ -169,14 +169,20 @@ DossierWindowNotConnected.defaultProps = {
 };
 
 function mapStateToProps(state) {
-  const { chosenObjectName, chosenObjectId, chosenProjectId, promptsAnswers } = state.navigationTree;
-  const popupState = state.popupReducer.editedObject;
-  const editedObject = { ...(popupHelper.parsePopupState(popupState, promptsAnswers)) };
+  const { navigationTree, popupReducer, sessionReducer, officeReducer } = state;
+  const { chosenObjectName, chosenObjectId, chosenProjectId, promptsAnswers } = navigationTree;
+  const { editedObject } = popupReducer;
+  const { supportForms } = officeReducer;
+  const { attrFormPrivilege } = sessionReducer;
+  const objectType = editedObject && editedObject.objectType ? editedObject.objectType : mstrObjectEnum.mstrObjectType.report.name;
+  const isReport = objectType && (objectType === mstrObjectEnum.mstrObjectType.report.name || objectType.name === mstrObjectEnum.mstrObjectType.report.name);
+  const formsPrivilege = supportForms && attrFormPrivilege && isReport;
+  const editedObjectParse = { ...(popupHelper.parsePopupState(editedObject, promptsAnswers, formsPrivilege)) };
   return {
-    chosenObjectName: popupState ? editedObject.chosenObjectName : chosenObjectName,
-    chosenObjectId: popupState ? editedObject.chosenObjectId : chosenObjectId,
-    chosenProjectId: popupState ? editedObject.projectId : chosenProjectId,
-    editedObject,
+    chosenObjectName: editedObject ? editedObjectParse.chosenObjectName : chosenObjectName,
+    chosenObjectId: editedObject ? editedObjectParse.chosenObjectId : chosenObjectId,
+    chosenProjectId: editedObject ? editedObjectParse.projectId : chosenProjectId,
+    editedObject: editedObjectParse,
   };
 }
 

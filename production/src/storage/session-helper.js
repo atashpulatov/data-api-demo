@@ -93,12 +93,32 @@ export class SessionHelper {
     }
   }
 
+  getUserAttributeFormPrivilege = async () => {
+    let canChooseAttrForm = false;
+    const IS_LOCALHOST = this.isLocalhost();
+    const envUrl = IS_LOCALHOST ? this.reduxStore.getState().sessionReducer.envUrl : homeHelper.saveLoginValues();
+    const authToken = IS_LOCALHOST ? this.reduxStore.getState().sessionReducer.authToken : homeHelper.saveTokenFromCookies();
+    try {
+      canChooseAttrForm = await authenticationService.getAttributeFormPrivilege(envUrl, authToken);
+      sessionHelper.setAttrFormPrivilege(canChooseAttrForm);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   saveUserInfo = (values) => {
     this.reduxStore.dispatch({
       type: sessionProperties.actions.getUserInfo,
       userFullName: values.fullName,
       userInitials: values.initials,
       userID: values.id,
+    });
+  }
+
+  setAttrFormPrivilege = (value) => {
+    this.reduxStore.dispatch({
+      type: sessionProperties.actions.setAttrFormPrivilege,
+      attrFormPrivilege: value,
     });
   }
 

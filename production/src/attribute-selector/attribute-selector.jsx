@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { popupHelper } from '../popup/popup-helper';
 import { switchImportSubtotals, updateDisplayAttrForm } from '../navigation/navigation-tree-actions';
 import { officeProperties } from '../office/office-properties';
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 
 export class AttributeSelectorNotConnected extends Component {
   constructor(props) {
@@ -88,6 +89,7 @@ const mapToLegacyMstrData = (chosenObject, session, editedObject) => {
     selectedAttributes: editedObject.selectedAttributes,
     selectedMetrics: editedObject.selectedMetrics,
     selectedFilters: editedObject.selectedFilters,
+    selectedAttrForms: editedObject.selectedAttrForms,
   };
 
   return legacyObject;
@@ -98,6 +100,7 @@ const mapToLegacySession = (mstrData, session, editedObject) => ({
   USE_PROXY: false,
   authToken: session.authToken,
   projectId: mstrData.chosenProjectId || editedObject.projectId,
+  attrFormPrivilege: session.attrFormPrivilege
 });
 
 AttributeSelectorNotConnected.propTypes = {
@@ -120,14 +123,17 @@ AttributeSelectorNotConnected.propTypes = {
 AttributeSelectorNotConnected.defaultProps = { t: (text) => text, };
 
 const mapStateToProps = (state) => {
-  const { navigationTree, popupStateReducer, popupReducer, sessionReducer, officeReducer } = state;
+  const { navigationTree: { promptsAnswers, importSubtotal, displayAttrFormNames, ...chosenObject }, popupStateReducer, popupReducer, sessionReducer, officeReducer } = state;
   const { editedObject } = popupReducer;
-  const { promptsAnswers, importSubtotal, displayAttrFormNames, ...chosenObject } = navigationTree;
   const { supportForms } = officeReducer;
+  const { attrFormPrivilege } = sessionReducer;
+  const objectType = editedObject && editedObject.objectType ? editedObject.objectType : mstrObjectEnum.mstrObjectType.report.name;
+  const isReport = objectType && (objectType === mstrObjectEnum.mstrObjectType.report.name || objectType.name === mstrObjectEnum.mstrObjectType.report.name);
+  const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   return {
     chosenObject,
     supportForms,
-    editedObject: { ...(popupHelper.parsePopupState(editedObject, promptsAnswers)) },
+    editedObject: { ...(popupHelper.parsePopupState(editedObject, promptsAnswers, formsPrivilege)) },
     popupState: { ...popupStateReducer },
     session: { ...sessionReducer },
     importSubtotal,

@@ -118,7 +118,7 @@ export class PopupHelper {
       const errorMessage = errorService.getErrorMessage(error);
       return this.storageReportRefreshFinish(errorMessage, true, index, length);
     }
-    if (error.code === 'ItemNotFound') {
+    if (error && error.code === 'ItemNotFound') {
       return notificationService.displayNotification({ type: 'info', content: 'Data is not relevant anymore. You can delete it from the list' });
     }
     errorService.handleError(error);
@@ -135,7 +135,7 @@ export class PopupHelper {
       .context.ui.messageParent(JSON.stringify(messageObject));
   };
 
-  parsePopupState(popupState, promptsAnswers) {
+  parsePopupState(popupState, promptsAnswers, formsPrivilege) {
     if (!popupState) {
       return;
     }
@@ -165,19 +165,16 @@ export class PopupHelper {
       displayAttrFormNames: popupState.displayAttrFormNames
     };
     if (promptsAnswers) {
-      return this.comparePromptAnswers(popupState, promptsAnswers, chosenObjectData);
+      return this.comparePromptAnswers(popupState, promptsAnswers, chosenObjectData, formsPrivilege);
     }
-    return this.restoreFilters(popupState.body, chosenObjectData);
-
-
-    // return this.restoreFilters(popupState.body, chosenObjectData);
+    return this.restoreFilters(popupState.body, chosenObjectData, formsPrivilege);
   }
 
-  comparePromptAnswers(popupState, promptsAnswers, chosenObjectData) {
+  comparePromptAnswers(popupState, promptsAnswers, chosenObjectData, formsPrivilege) {
     this.sortPromptsAnswers(popupState.promptsAnswers[0].answers);
     this.sortPromptsAnswers(promptsAnswers[0].answers);
     if (JSON.stringify(popupState.promptsAnswers) === JSON.stringify(promptsAnswers)) {
-      return this.restoreFilters(popupState.body, chosenObjectData);
+      return this.restoreFilters(popupState.body, chosenObjectData, formsPrivilege);
     }
     return chosenObjectData;
   }
@@ -189,16 +186,20 @@ export class PopupHelper {
     }
   }
 
-  restoreFilters(body, chosenObjectData) {
+  restoreFilters(body, chosenObjectData, formsPrivilege) {
     try {
-      if (body && body.requestedObjects) {
-        chosenObjectData.selectedAttributes = body.requestedObjects.attributes
-          && body.requestedObjects.attributes.map((attribute) => attribute.id);
-        chosenObjectData.selectedMetrics = body.requestedObjects.metrics
-          && body.requestedObjects.metrics.map((metric) => metric.id);
-      }
-      if (body && body.viewFilter) {
-        chosenObjectData.selectedFilters = this.parseFilters(body.viewFilter.operands);
+      if (body) {
+        const { requestedObjects, viewFilter } = body;
+        if (requestedObjects) {
+          chosenObjectData.selectedAttributes = body.requestedObjects.attributes
+            && body.requestedObjects.attributes.map((attribute) => attribute.id);
+          chosenObjectData.selectedMetrics = body.requestedObjects.metrics
+            && body.requestedObjects.metrics.map((metric) => metric.id);
+          chosenObjectData.selectedAttrForms = formsPrivilege ? this.getAttrFormKeys(body.requestedObjects.attributes) : [];
+        }
+        if (viewFilter) {
+          chosenObjectData.selectedFilters = this.parseFilters(body.viewFilter.operands);
+        }
       }
     } catch (error) {
       console.warn(error);
@@ -207,8 +208,18 @@ export class PopupHelper {
     }
   }
 
+  getAttrFormKeys = (attributes) => {
+    const checkedForms = [];
+    attributes && [...attributes].forEach((attribute) => {
+      attribute.forms && [...attribute.forms].forEach((form) => {
+        checkedForms.push(`${attribute.id}-${form.id}`);
+      });
+    });
+    return checkedForms;
+  }
+
   parseFilters(filtersNodes) {
-    if (filtersNodes && filtersNodes[0].operands) {
+    if (filtersNodes && filtersNodes[0] && filtersNodes[0].operands) {
       // equivalent to flatMap((node) => node.operands)
       return this.parseFilters(filtersNodes.reduce((nodes, node) => nodes.concat(node.operands), []));
     }
