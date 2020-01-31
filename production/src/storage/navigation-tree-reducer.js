@@ -230,11 +230,11 @@ export const navigationTree = (state = initialState, action) => {
   }
   case CHANGE_FILTER: {
     const newState = { ...state };
-    newState.envFilter = data;
-    newState.myLibraryFilter = data;
+    newState.envFilter = { ...data };
+    newState.myLibraryFilter = { ...data };
     if (newState.myLibrary) {
       newState.envFilter.owners = state.envFilter.owners
-        ? state.envFilter.owners.filter(item => !newState.myLibraryOwners[item] || data.owners.includes(item))
+        ? [...state.envFilter.owners.filter(item => !newState.myLibraryOwners[item]), ...data.owners]
         : data.owners;
     } else {
       newState.myLibraryFilter.owners = data.owners.filter(item => newState.myLibraryOwners[item]);
