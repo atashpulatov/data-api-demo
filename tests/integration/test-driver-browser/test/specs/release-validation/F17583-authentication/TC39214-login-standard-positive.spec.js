@@ -1,8 +1,8 @@
-import OfficeLogin from '../../../pageObjects/office/office.login';
-import OfficeWorksheet from '../../../pageObjects/office/office.worksheet';
-import PluginRightPanel from '../../../pageObjects/plugin/plugin.right-panel';
+import OfficeLogin from '../../../helpers/office/office.login';
+import OfficeWorksheet from '../../../helpers/office/office.worksheet';
+import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
-import { switchToPluginFrame } from '../../../pageObjects/utils/iframe-helper';
+import { switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
 
 describe('Login - ', function() {
   beforeAll(async () => {

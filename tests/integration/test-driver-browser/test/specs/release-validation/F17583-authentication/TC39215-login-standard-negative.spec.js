@@ -1,9 +1,9 @@
-import OfficeLogin from '../../../pageObjects/office/office.login';
-import OfficeWorksheet from '../../../pageObjects/office/office.worksheet';
-import PluginRightPanel from '../../../pageObjects/plugin/plugin.right-panel';
-import { waitAndClick } from '../../../pageObjects/utils/click-helper';
+import OfficeLogin from '../../../helpers/office/office.login';
+import OfficeWorksheet from '../../../helpers/office/office.worksheet';
+import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
+import { waitAndClick } from '../../../helpers/utils/click-helper';
 import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
-import { switchToPluginFrame } from '../../../pageObjects/utils/iframe-helper';
+import { switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 
 

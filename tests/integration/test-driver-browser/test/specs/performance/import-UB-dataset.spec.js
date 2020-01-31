@@ -1,11 +1,11 @@
-import OfficeLogin from '../../pageObjects/office/office.login';
-import OfficeWorksheet from '../../pageObjects/office/office.worksheet';
-import PluginRightPanel from '../../pageObjects/plugin/plugin.right-panel';
-import PluginPopup from '../../pageObjects/plugin/plugin.popup';
-import {switchToPluginFrame, switchToExcelFrame} from '../../pageObjects/utils/iframe-helper';
-import {writeDataIntoFile, getJsonData} from '../../pageObjects/utils/benchmark-helper';
+import OfficeLogin from '../../helpers/office/office.login';
+import OfficeWorksheet from '../../helpers/office/office.worksheet';
+import PluginRightPanel from '../../helpers/plugin/plugin.right-panel';
+import PluginPopup from '../../helpers/plugin/plugin.popup';
+import {switchToPluginFrame, switchToExcelFrame} from '../../helpers/utils/iframe-helper';
+import {writeDataIntoFile, getJsonData} from '../../helpers/utils/benchmark-helper';
 import { objects as o} from '../../constants/objects-list';
-import { waitForNotification, waitForPopup } from '../../pageObjects/utils/wait-helper';
+import { waitForNotification, waitForPopup } from '../../helpers/utils/wait-helper';
 const fs = require('fs');
 
 describe('Smart Folder - IMPORT -', function() {

@@ -1,8 +1,8 @@
-import OfficeLogin from '../../../pageObjects/office/office.login';
-import OfficeWorksheet from '../../../pageObjects/office/office.worksheet';
-import PluginRightPanel from '../../../pageObjects/plugin/plugin.right-panel';
-import PluginPopup from '../../../pageObjects/plugin/plugin.popup';
-import { waitForNotification } from '../../../pageObjects/utils/wait-helper';
+import OfficeLogin from '../../../helpers/office/office.login';
+import OfficeWorksheet from '../../../helpers/office/office.worksheet';
+import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
+import PluginPopup from '../../../helpers/plugin/plugin.popup';
+import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { browser } from 'protractor';
 import { objects as o } from '../../../constants/objects-list';

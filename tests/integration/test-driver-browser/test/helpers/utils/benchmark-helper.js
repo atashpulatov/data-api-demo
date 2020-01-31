@@ -1,4 +1,4 @@
-import PluginRightPanel from '../../pageObjects/plugin/plugin.right-panel';
+import PluginRightPanel from '../../helpers/plugin/plugin.right-panel';
 const fs = require('fs');
 
 // TODO: needs to be refactor for webdriverIO - Currently it is not used

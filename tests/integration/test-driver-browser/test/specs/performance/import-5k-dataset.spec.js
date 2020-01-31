@@ -1,9 +1,9 @@
-import OfficeLogin from '../../pageObjects/office/office.login';
-import OfficeWorksheet from '../../pageObjects/office/office.worksheet';
-import PluginRightPanel from '../../pageObjects/plugin/plugin.right-panel';
-import PluginPopup from '../../pageObjects/plugin/plugin.popup';
-import {switchToPluginFrame} from '../../pageObjects/utils/iframe-helper';
-import {writeDataIntoFile, getJsonData} from '../../pageObjects/utils/benchmark-helper';
+import OfficeLogin from '../../helpers/office/office.login';
+import OfficeWorksheet from '../../helpers/office/office.worksheet';
+import PluginRightPanel from '../../helpers/plugin/plugin.right-panel';
+import PluginPopup from '../../helpers/plugin/plugin.popup';
+import {switchToPluginFrame} from '../../helpers/utils/iframe-helper';
+import {writeDataIntoFile, getJsonData} from '../../helpers/utils/benchmark-helper';
 
 describe('Smart Folder - IMPORT -', function() {
   const objectName = '5k Sales Records.csv';

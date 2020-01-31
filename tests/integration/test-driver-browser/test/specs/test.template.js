@@ -1,6 +1,6 @@
-import OfficeLogin from '../../../pageObjects/office/office.login';
-import OfficeWorksheet from '../../../pageObjects/office/office.worksheet';
-import PluginRightPanel from '../../../pageObjects/plugin/plugin.right-panel';
+import OfficeLogin from '../../../helpers/office/office.login';
+import OfficeWorksheet from '../../../helpers/office/office.worksheet';
+import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 
 describe('this is a template that has setup hooks for creating tests', function() {
   beforeAll(async () => {
