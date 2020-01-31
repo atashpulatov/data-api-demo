@@ -92,8 +92,8 @@ export default class DossierWindowNotConnected extends React.Component {
   }
 
   render() {
-    const { chosenObjectName, t, handleBack } = this.props;
-    const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
+    const { chosenObjectName, t, handleBack, editedObject } = this.props;
+    const { isEdit } = editedObject;
     const { isVisualizationSelected, isVisualizationSupported } = this.state;
     return (
       <div>
@@ -179,7 +179,7 @@ function mapStateToProps(state) {
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   const editedObjectParse = { ...(popupHelper.parsePopupState(editedObject, promptsAnswers, formsPrivilege)) };
   return {
-    chosenObjectName: editedObject ? editedObjectParse.chosenObjectName : chosenObjectName,
+    chosenObjectName: editedObject ? editedObjectParse.dossierName : chosenObjectName,
     chosenObjectId: editedObject ? editedObjectParse.chosenObjectId : chosenObjectId,
     chosenProjectId: editedObject ? editedObjectParse.projectId : chosenProjectId,
     editedObject: editedObjectParse,
