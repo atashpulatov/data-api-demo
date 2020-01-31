@@ -33,8 +33,10 @@ export default class _EmbeddedDossier extends React.Component {
   }
 
   componentWillUnmount() {
-    this.msgRouter.removeEventhandler('onVizSelectionChanged', this.onVizSelectionHandler);
-    this.msgRouter.removeEventhandler('onPromptAnswered', this.promptsAnsweredHandler);
+    if (this.msgRouter) {
+      this.msgRouter.removeEventhandler('onVizSelectionChanged', this.onVizSelectionHandler);
+      this.msgRouter.removeEventhandler('onPromptAnswered', this.promptsAnsweredHandler);
+    }
   }
 
   /**
