@@ -114,14 +114,32 @@ describe('ErrorService', () => {
       // then
       expect(resultType).toBe(errorTypes.INTERNAL_SERVER_ERR);
     });
-    it('should return INTERNAL_SERVER_ERR type due to status 502 code', () => {
+    it('should return CONNECTION_BROKEN_ERR type due to status 502 code', () => {
       // given
       const response = { status: 502 };
       const error = { response };
       // when
       const resultType = errorService.getRestErrorType(error);
       // then
-      expect(resultType).toBe(errorTypes.INTERNAL_SERVER_ERR);
+      expect(resultType).toBe(errorTypes.CONNECTION_BROKEN_ERR);
+    });
+    it('should return CONNECTION_BROKEN_ERR type due to status 503 code', () => {
+      // given
+      const response = { status: 503 };
+      const error = { response };
+      // when
+      const resultType = errorService.getRestErrorType(error);
+      // then
+      expect(resultType).toBe(errorTypes.CONNECTION_BROKEN_ERR);
+    });
+    it('should return CONNECTION_BROKEN_ERR type due to status 504 code', () => {
+      // given
+      const response = { status: 504 };
+      const error = { response };
+      // when
+      const resultType = errorService.getRestErrorType(error);
+      // then
+      expect(resultType).toBe(errorTypes.CONNECTION_BROKEN_ERR);
     });
     it('should return UNKNOWN_ERR type due to unhandled status code', () => {
       // given
