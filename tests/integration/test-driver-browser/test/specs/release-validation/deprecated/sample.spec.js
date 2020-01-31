@@ -1,34 +1,34 @@
-import OfficeLogin from '../../../pageObjects/office/office.login';
-import OfficeWorksheet from '../../../pageObjects/office/office.worksheet';
-import PluginRightPanel from '../../../pageObjects/plugin/plugin.right-panel';
-import PluginPopup from '../../../pageObjects/plugin/plugin.popup';
-import {switchToPluginFrame} from '../../../pageObjects/utils/iframe-helper';
-import {writeDataIntoFile, getJsonData} from '../../../pageObjects/utils/benchmark-helper';
-import { objects as o} from '../../../constants/objects-list';
-import { waitForNotification, waitForPopup } from '../../../pageObjects/utils/wait-helper';
+import OfficeLogin from '../../../helpers/office/office.login';
+import OfficeWorksheet from '../../../helpers/office/office.worksheet';
+import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
+import PluginPopup from '../../../helpers/plugin/plugin.popup';
+import { switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
+import { writeDataIntoFile, getJsonData } from '../../../helpers/utils/benchmark-helper';
+import { objects as o } from '../../../constants/objects-list';
+import { waitForNotification, waitForPopup } from '../../../helpers/utils/wait-helper';
 import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
-import {selectors as s} from '../../../constants/selectors/popup-selectors';
-import {waitAndClick} from '../../../pageObjects/utils/click-helper';
+import { selectors as s } from '../../../constants/selectors/popup-selectors';
+import { waitAndClick } from '../../../helpers/utils/click-helper';
+import settings from '../../../config';
 
-describe('Smart Folder - IMPORT -', function() {
-
-  beforeEach( () => {
+describe('Smart Folder - IMPORT -', () => {
+  beforeEach(() => {
     // browser.setWindowSize(2200,900);
-    browser.setWindowSize(1900,900);
+    browser.setWindowSize(1900, 900);
     OfficeWorksheet.openExcelHome();
     const url = browser.getUrl();
     if (url.includes('login.microsoftonline')) {
-      OfficeLogin.login('test3@mstrtesting.onmicrosoft.com', 'FordFocus2019');
+      OfficeLogin.login(settings.officeOnline.username, settings.officeOnline.password);
     }
     OfficeWorksheet.createNewWorkbook();
     OfficeWorksheet.openPlugin();
-    PluginRightPanel.loginToPlugin('administrator', '');
+    PluginRightPanel.loginToPlugin(settings.env.username, '');
   });
 
-  afterEach( () => {
+  afterEach(() => {
     browser.closeWindow();
-    const handles =  browser.getWindowHandles();
+    const handles = browser.getWindowHandles();
     browser.switchToWindow(handles[0]);
   });
 
@@ -66,7 +66,7 @@ describe('Smart Folder - IMPORT -', function() {
     // const newCellA1 = $('#gridRows > div:nth-child(2) > div:nth-child(4) > div > div').getText();
     // expect(oldCellA1).not.toEqual(newCellA1);
 
-    //should click prepare data on selected report
+    // should click prepare data on selected report
     // OfficeWorksheet.selectCell('A1');
     // PluginRightPanel.clickImportDataButton();
     // switchToPluginFrame();
@@ -90,7 +90,7 @@ describe('Smart Folder - IMPORT -', function() {
 
     // PluginPopup.deleteFromSearch();
 
-    ///////////
+    // /////////
 
     // PluginRightPanel.clickImportDataButton();
     // PluginPopup.openPrompt(o.reports.metricExpPromptedReport);
@@ -104,14 +104,14 @@ describe('Smart Folder - IMPORT -', function() {
     // PluginRightPanel.repromptFirstObjectFromTheList();
     // browser.pause(5555);
     // PluginPopup.writeAttrQualificationValue(10000);
-    
-    ////////////////
+
+    // //////////////
 
     // PluginRightPanel.clickImportDataButton();
     // PluginPopup.openPrompt(o.reports.multiplePromptsReport);
     // PluginPopup.writeMultiPrompt('07/07/2015\uE004\uE004');
 
-    ////////////////
+    // //////////////
     // PluginRightPanel.clickImportDataButton();
     // PluginPopup.openPrompt(o.reports.attributePromptedReport);
     // waitAndClick($('.mstrBGIcon_tbAdd'));
@@ -125,7 +125,7 @@ describe('Smart Folder - IMPORT -', function() {
     // PluginPopup.promptSelectObject('Music');
 
 
-    ///////////////////////////////////
+    // /////////////////////////////////
 
     // PluginRightPanel.clickImportDataButton();
     // PluginPopup.importPromptDefault(o.reports.hierarchyExpPromptedReport);
@@ -138,12 +138,12 @@ describe('Smart Folder - IMPORT -', function() {
     // browser.pause(5555);
     // PluginPopup.changeExpressionQualificationAndRun('Not In List');
 
-    /////////////////////////
+    // ///////////////////////
 
     // PluginRightPanel.clickImportDataButton();
     // PluginPopup.importPromptDefaultNested(o.reports.nestedPrompt);
 
-    /////////////////////
+    // ///////////////////
 
     // OfficeWorksheet.selectCell('A1048576');
     // PluginRightPanel.clickImportDataButton();
@@ -151,7 +151,7 @@ describe('Smart Folder - IMPORT -', function() {
     // waitForNotification();
     // PluginRightPanel.closeNotification();
 
-    /////////////////////////
+    // ///////////////////////
 
     // PluginRightPanel.clickImportDataButton();
     // PluginPopup.importObject(o.reports.secureDataFiltering);
@@ -166,59 +166,57 @@ describe('Smart Folder - IMPORT -', function() {
     // switchToPluginFrame();
     // PluginRightPanel.clickSettings();
     // PluginRightPanel.clickLogout();
-    
+
     // // should log in with Tim user
     // PluginRightPanel.loginToPlugin('a', '');
 
     // // should click "View Data" and close the "Refresh All Data" pop-up
     // switchToPluginFrame();
     // PluginRightPanel.viewDataBtn();
-    /////////////////////
-    
-// should import a report
-OfficeWorksheet.selectCell('A1');
-PluginRightPanel.clickImportDataButton();
-PluginPopup.importObject(o.reports.reportXML);
-waitForNotification();
+    // ///////////////////
 
-// // should import a dataset to the adjacent column of the first object
-// OfficeWorksheet.selectCell('A20');
-//  PluginRightPanel.clickAddDataButton();
-//  PluginPopup.importObject(o.datasets.datasetSQL);
-//  waitForNotification();
+    // should import a report
+    OfficeWorksheet.selectCell('A1');
+    PluginRightPanel.clickImportDataButton();
+    PluginPopup.importObject(o.reports.reportXML);
+    waitForNotification();
 
-// // should import a report to the adjacent row of the second object
-//  OfficeWorksheet.selectCell('F20');
-//  PluginRightPanel.clickAddDataButton();
-//  PluginPopup.importObject(o.reports.reportXML);
-//  waitForNotification();
+    // // should import a dataset to the adjacent column of the first object
+    // OfficeWorksheet.selectCell('A20');
+    //  PluginRightPanel.clickAddDataButton();
+    //  PluginPopup.importObject(o.datasets.datasetSQL);
+    //  waitForNotification();
 
-// // should import a dataset to a cell not adjacent to any imported objects
-//  OfficeWorksheet.selectCell('J1');
-//  PluginRightPanel.clickAddDataButton();
-//  PluginPopup.importObject(o.datasets.datasetSQL);
-//  waitForNotification();
+    // // should import a report to the adjacent row of the second object
+    //  OfficeWorksheet.selectCell('F20');
+    //  PluginRightPanel.clickAddDataButton();
+    //  PluginPopup.importObject(o.reports.reportXML);
+    //  waitForNotification();
 
-//  switchToPluginFrame();
-// const objects =  $$(se.importedObjectList);
-// const objectNames =  $$(se.importedObjectNameList);
+    // // should import a dataset to a cell not adjacent to any imported objects
+    //  OfficeWorksheet.selectCell('J1');
+    //  PluginRightPanel.clickAddDataButton();
+    //  PluginPopup.importObject(o.datasets.datasetSQL);
+    //  waitForNotification();
 
-// // should hover over objects in the right panel
-// browser.pause(5000);
-//  PluginRightPanel.hoverOverObjects(objects);
+    //  switchToPluginFrame();
+    // const objects =  $$(se.importedObjectList);
+    // const objectNames =  $$(se.importedObjectNameList);
 
-// // should hover over object names in the right panel
-//  PluginRightPanel.hoverOverObjectNames(objectNames);
+    // // should hover over objects in the right panel
+    // browser.pause(5000);
+    //  PluginRightPanel.hoverOverObjects(objects);
 
-// should click on objects in the right panel
-//  PluginRightPanel.clickOnObject(objects[0], 'J1');
-//  PluginRightPanel.clickOnObject(objects[1], 'F20');
-//  PluginRightPanel.clickOnObject(objects[2], 'A20');
-//  PluginRightPanel.clickOnObject(objects[3], 'A1');
+    // // should hover over object names in the right panel
+    //  PluginRightPanel.hoverOverObjectNames(objectNames);
 
-    ////////////////////////
+    // should click on objects in the right panel
+    //  PluginRightPanel.clickOnObject(objects[0], 'J1');
+    //  PluginRightPanel.clickOnObject(objects[1], 'F20');
+    //  PluginRightPanel.clickOnObject(objects[2], 'A20');
+    //  PluginRightPanel.clickOnObject(objects[3], 'A1');
+
+    // //////////////////////
     browser.pause(5000);
-
   });
 });
-

@@ -12,4 +12,4 @@ const settings = {
   }
 }
 
-export default settings
+export default settings;
