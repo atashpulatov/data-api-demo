@@ -42,7 +42,9 @@ export const httpStatusToErrorType = withDefaultValue({
   404: errorTypes.ENV_NOT_FOUND_ERR,
   500: errorTypes.INTERNAL_SERVER_ERR,
   501: errorTypes.INTERNAL_SERVER_ERR,
-  502: errorTypes.INTERNAL_SERVER_ERR,
+  502: errorTypes.CONNECTION_BROKEN_ERR,
+  503: errorTypes.CONNECTION_BROKEN_ERR,
+  504: errorTypes.CONNECTION_BROKEN_ERR,
 }, errorTypes.UNKNOWN_ERR);
 
 export const GENERIC_SERVER_ERR = 'This object cannot be imported.';
@@ -82,6 +84,7 @@ const iServerErrorMessages = withDefaultValue({
   '-2147205488': PROJECT_ROW_LIMIT,
   '-2147216373': NOT_IN_METADATA,
   '-2147216959': LOGIN_FAILURE,
+  '-2147207419': CONNECTION_BROKEN,
 }, GENERIC_SERVER_ERR);
 
 export const errorMessageFactory = withDefaultValue({
