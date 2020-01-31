@@ -121,15 +121,15 @@ export class FileHistoryContainerNotConnected extends React.Component {
             </div>
           )
         }
-        <Button
+        <div className="refresh-button-container">
+          <Button
           id="add-data-btn-container"
           className="add-data-btn floating-button"
           onClick={() => addDataAction()}
           disabled={loading}
         >
-          {t('Add Data')}
-        </Button>
-        <span className="refresh-button-container">
+            {t('Add Data')}
+          </Button>
           <ButtonPopover
             placement="bottom"
             content={t('Refresh All Data')}
@@ -141,17 +141,17 @@ export class FileHistoryContainerNotConnected extends React.Component {
                 role="button"
                 tabIndex={0}
                 id="refresh-all-btn"
-                className="refresh-all-btn icon-align"
+                className="refresh-all-btn"
                 onClick={() => this.refreshAllAction(reportArray, refreshReportsArray)}
                 onKeyPress={() => this.refreshAllAction(reportArray, refreshReportsArray)}
                 disabled={loading}
               >
-                <div className="mstr-icon-refresh-all">
+                <div className="mstr-icon-refresh-all icon-align">
                   <MSTRIcon type="refresh" />
                 </div>
               </div>
             ) : (
-              <div className="spinner-all-icon icon-align">
+              <div className="spinner-all-icon">
                 <img
                   width="12px"
                   height="12px"
@@ -161,7 +161,7 @@ export class FileHistoryContainerNotConnected extends React.Component {
               </div>
             )}
           </ButtonPopover>
-        </span>
+        </div>
         <div role="list" className="tables-container">
           {reportArray.map((report) => (
             <OfficeLoadedFile
