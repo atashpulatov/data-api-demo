@@ -3,9 +3,9 @@ import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
-import { selectors as s } from '../../../constants/selectors/popup-selectors'; 
+import { selectors as s } from '../../../constants/selectors/popup-selectors';
 
-describe('Smart Folder - ', function() {
+describe('Smart Folder - ', () => {
   beforeAll(async () => {
     await OfficeWorksheet.openExcelHome();
     const url = await browser.getCurrentUrl();
@@ -49,7 +49,7 @@ describe('Smart Folder - ', function() {
     await expect(s.noDataIcon.isDisplayed()).toBe(true);
 
     // should enter an invalid dataset name into "Search objects" field
-  
+
     await browser.sleep(1000);
     await PluginPopup.searchForObject(invalidObjectName);
     await expect(s.noDataIcon.isDisplayed()).toBe(true);

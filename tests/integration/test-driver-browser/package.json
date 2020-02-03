@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "rimraf ./allure-results && wdio wdio.conf.js",
-    "eslint": "eslint ./test --ext .js",
+    "eslint": "eslint --fix ./test --ext .js",
     "report": "allure generate allure-results --clean ",
     "test-suite": "rimraf ./allure-results && wdio wdio.conf.js --suite",
     "test-UB": "rm -r -f ./allure-results && ./node_modules/.bin/wdio wdio.conf.js --suite UB --USERENV"

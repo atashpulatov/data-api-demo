@@ -3,11 +3,11 @@ import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
-import { objects as o} from '../../../constants/objects-list';
+import { objects as o } from '../../../constants/objects-list';
 import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 
-describe('Error Handling - IMPORT', function() {
+describe('Error Handling - IMPORT', () => {
   beforeAll(async () => {
     await browser.driver.manage().window().maximize();
     await OfficeWorksheet.openExcelHome();
@@ -27,7 +27,6 @@ describe('Error Handling - IMPORT', function() {
   });
 
   it('[TC35252] - report above/nex to table', async () => {
-
     // should display proper error message for importing report above cells covering currently imported one
     await OfficeWorksheet.selectCell('A3');
     await PluginRightPanel.clickImportDataButton();
@@ -51,5 +50,5 @@ describe('Error Handling - IMPORT', function() {
     await waitForNotification();
     await expect(se.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.rangeNotEmpty);
     await PluginRightPanel.closeNotification();
-});
+  });
 })

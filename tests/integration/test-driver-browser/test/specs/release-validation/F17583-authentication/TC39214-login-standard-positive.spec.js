@@ -4,7 +4,7 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
 
-describe('Login - ', function() {
+describe('Login - ', () => {
   beforeAll(async () => {
     await OfficeWorksheet.openExcelHome();
     const url = await browser.getCurrentUrl();

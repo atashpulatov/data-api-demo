@@ -8,7 +8,7 @@ import { objects as o } from '../../../constants/objects-list';
 import { selectors as s } from '../../../constants/selectors/popup-selectors';
 import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
 
-describe('[TC40294] Prompt | Value | Date & Time | Not required | No Default Answer', function() {
+describe('[TC40294] Prompt | Value | Date & Time | Not required | No Default Answer', () => {
   beforeAll(async () => {
     await OfficeWorksheet.openExcelHome();
     const url = await browser.getCurrentUrl();

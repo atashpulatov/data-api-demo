@@ -10,7 +10,7 @@ import { objects as o } from '../../../constants/objects-list';
 import { selectors as s } from '../../../constants/selectors/popup-selectors';
 
 
-describe('Prepare Data - ', function() {
+describe('Prepare Data - ', () => {
   beforeAll(async () => {
     await OfficeWorksheet.openExcelHome();
     const url = await browser.getCurrentUrl();

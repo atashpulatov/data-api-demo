@@ -7,11 +7,12 @@ import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { objects as o } from '../../../constants/objects-list';
 import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { switchToPluginFrame, switchToPopupFrame } from '../../../helpers/utils/iframe-helper';
-import {selectors as s} from '../../../constants/selectors/popup-selectors';
+import { selectors as s } from '../../../constants/selectors/popup-selectors';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
-const  EC = protractor.ExpectedConditions;
 
-describe('Prompt | Value | Text | Not required | No default answer', function() {
+const EC = protractor.ExpectedConditions;
+
+describe('Prompt | Value | Text | Not required | No default answer', () => {
   beforeAll(async () => {
     await OfficeWorksheet.openExcelHome();
     const url = await browser.getCurrentUrl();
@@ -28,8 +29,7 @@ describe('Prompt | Value | Text | Not required | No default answer', function() 
     await browser.switchTo().window(handles[0]);
   });
   it('[TC40314] prompt with prepare data on metric qualification', async () => {
-    
-    //should click prepare data on selected report
+    // should click prepare data on selected report
     await OfficeWorksheet.selectCell('A1');
     await PluginRightPanel.clickImportDataButton();
     await switchToPluginFrame();
@@ -40,14 +40,14 @@ describe('Prompt | Value | Text | Not required | No default answer', function() 
     await waitAndClick($('div[title="Revenue"]'));
     await s.promptTextBox.sendKeys('10000\uE004\uE004\uE004\uE006');
     await switchToPopupFrame();
-    await browser.wait(EC.presenceOf(s.importBtn),5555);
+    await browser.wait(EC.presenceOf(s.importBtn), 5555);
 
-    //should select filters
+    // should select filters
     await switchToPopupFrame();
     await PluginPopup.selectObjectElements(['Region', 'Profit']);
-    await PluginPopup.selectFilters([['Region', ['Central','Web']]]);
+    await PluginPopup.selectFilters([['Region', ['Central', 'Web']]]);
     await PluginPopup.clickImport();
     await waitForNotification();
     await expect(se.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   });
-}); 
+});

@@ -1,5 +1,5 @@
-import {switchToPluginFrame, switchToExcelFrame} from '../utils/iframe-helper';
-import {selectors as se} from '../../constants/selectors/plugin.right-panel-selectors';
+import { switchToPluginFrame, switchToExcelFrame } from './iframe-helper';
+import { selectors as se } from '../../constants/selectors/plugin.right-panel-selectors';
 
 export function waitForNotification() {
   let popupExists = true;
@@ -28,16 +28,16 @@ export function waitForPopup(timeout = 29999) {
 
 // In webdriverIO use $(selector).waitForDisplayed(ms, reverse, error) instead of this function
 export async function waitById(id, timeout = 9999) {
-  await browser.wait(async function() {
+  await browser.wait(async () => {
     const elm = await element(by.id(id)).isPresent();
     return elm;
   }, timeout);
-};
+}
 
 // use $(selector).waitForDisplayed(ms, reverse, error) instead of this function
 export async function waitByClass(className, timeout = 9999) {
-  await browser.wait(async function() {
+  await browser.wait(async () => {
     const elm = await element(by.className(className)).isPresent();
     return elm;
   }, timeout);
-};
+}

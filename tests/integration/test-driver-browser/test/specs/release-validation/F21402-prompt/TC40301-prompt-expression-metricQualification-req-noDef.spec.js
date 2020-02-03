@@ -7,10 +7,10 @@ import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
 import { objects as o } from '../../../constants/objects-list';
 import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
-import {selectors as s} from '../../../constants/selectors/popup-selectors';
+import { selectors as s } from '../../../constants/selectors/popup-selectors';
 
 
-describe('[TC40301] Prompt | Expression | Metric Qualification | Required | No Default Answer', function() { // WORK IN PROGRESS
+describe('[TC40301] Prompt | Expression | Metric Qualification | Required | No Default Answer', () => { // WORK IN PROGRESS
   beforeAll(async () => {
     await OfficeWorksheet.openExcelHome();
     const url = await browser.getCurrentUrl();
@@ -39,4 +39,3 @@ describe('[TC40301] Prompt | Expression | Metric Qualification | Required | No D
     await expect(se.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   });
 });
-

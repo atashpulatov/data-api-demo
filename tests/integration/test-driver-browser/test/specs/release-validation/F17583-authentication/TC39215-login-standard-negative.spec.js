@@ -7,7 +7,7 @@ import { switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 
 
-describe('Error Handling - LOGIN - ', function() {
+describe('Error Handling - LOGIN - ', () => {
   beforeAll(async () => {
     await OfficeWorksheet.openExcelHome();
     const url = await browser.getCurrentUrl();

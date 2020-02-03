@@ -8,7 +8,7 @@ import { objects as o } from '../../../constants/objects-list';
 import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
 
 
-describe('Right Panel - ', function() {
+describe('Right Panel - ', () => {
   beforeAll(async () => {
     await OfficeWorksheet.openExcelHome();
     const url = await browser.getCurrentUrl();
@@ -52,7 +52,7 @@ describe('Right Panel - ', function() {
     await PluginRightPanel.refreshAll();
     await waitForPopup();
     const refreshedObjects = await element.all(by.css('.report-name')); // const refreshedObjects = $$('.report-name'); <- webdriverio
-    await expect(refreshedObjects.length).toEqual(3);
+    await expect(refreshedObjects).toHaveLength(3);
     await browser.sleep(4444);
   });
 });

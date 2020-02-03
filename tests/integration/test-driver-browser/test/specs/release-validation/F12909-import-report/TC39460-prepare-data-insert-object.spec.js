@@ -8,7 +8,7 @@ import { selectors as se } from '../../../constants/selectors/plugin.right-panel
 import { objects as o } from '../../../constants/objects-list';
 
 
-describe('Prepare Data - ', function() {
+describe('Prepare Data - ', () => {
   beforeAll(async () => {
     await OfficeWorksheet.openExcelHome();
     const url = await browser.getCurrentUrl();

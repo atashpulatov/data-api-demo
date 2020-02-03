@@ -9,7 +9,7 @@ import { objects as o } from '../../../constants/objects-list';
 import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
 
 
-describe('[TC49527] Re-prompt after import | AttributeElement | Required | No Default', function() {
+describe('[TC49527] Re-prompt after import | AttributeElement | Required | No Default', () => {
   beforeAll(async () => {
     await OfficeWorksheet.openExcelHome();
     const url = await browser.getCurrentUrl();

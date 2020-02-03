@@ -7,10 +7,11 @@ import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { objects as o } from '../../../constants/objects-list';
 import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { switchToPluginFrame, switchToPopupFrame } from '../../../helpers/utils/iframe-helper';
-import {selectors as s} from '../../../constants/selectors/popup-selectors';
-const  EC = protractor.ExpectedConditions;
+import { selectors as s } from '../../../constants/selectors/popup-selectors';
 
-describe('Prompt | Value | Text | Not required | No default answer', function() {
+const EC = protractor.ExpectedConditions;
+
+describe('Prompt | Value | Text | Not required | No default answer', () => {
   beforeAll(async () => {
     await OfficeWorksheet.openExcelHome();
     const url = await browser.getCurrentUrl();
@@ -27,8 +28,7 @@ describe('Prompt | Value | Text | Not required | No default answer', function() 
     await browser.switchTo().window(handles[0]);
   });
   it('[TC40313] prompt with prepare data on attribute qualification', async () => {
-    
-    //should click prepare data on selected report
+    // should click prepare data on selected report
     await OfficeWorksheet.selectCell('A1');
     await PluginRightPanel.clickImportDataButton();
     await switchToPluginFrame();
@@ -37,14 +37,14 @@ describe('Prompt | Value | Text | Not required | No default answer', function() 
     // should input value and click run button
     await $('#id_mstr51_txt').sendKeys('2014\uE004\uE004\uE004\uE006');
     await switchToPopupFrame();
-    await browser.wait(EC.presenceOf(s.importBtn),5555);
+    await browser.wait(EC.presenceOf(s.importBtn), 5555);
 
-    //should select filters
+    // should select filters
     await switchToPopupFrame();
     await PluginPopup.selectObjectElements(['Region', 'Profit']);
-    await PluginPopup.selectFilters([['Region', ['Central','Web']]]);
+    await PluginPopup.selectFilters([['Region', ['Central', 'Web']]]);
     await PluginPopup.clickImport();
     await waitForNotification();
     await expect(se.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   });
-}); 
+});

@@ -1,4 +1,4 @@
-const request = require('request').defaults({jar: true});
+const request = require('request').defaults({ jar: true });
 const btoa = require('btoa');
 const data = require('./data.json');
 
@@ -8,12 +8,12 @@ module.exports = function login() {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Accept': 'application/json',
+      Accept: 'application/json',
     },
     json: {
-      'loginMode': 1,
-      'username': 'a',
-      'password': '',
+      loginMode: 1,
+      username: 'a',
+      password: '',
     },
     withCredentials: false,
   };
@@ -22,11 +22,10 @@ module.exports = function login() {
     if (!error) {
       console.log(`Response Body: ${JSON.stringify(response.headers['x-mstr-authtoken'])}`);
       return addResults(response.headers['x-mstr-authtoken']);
-    } else {
-      console.error('error');
-      console.error(`Updating data request has failed: Error: ${error}`);
-      throw error;
     }
+    console.error('error');
+    console.error(`Updating data request has failed: Error: ${error}`);
+    throw error;
   });
 };
 
@@ -42,33 +41,33 @@ const addResults = function addResults(authToken) {
     headers: {
       'Content-Type': 'application/json',
       'X-MSTR-ProjectID': 'B7CA92F04B9FAE8D941C3E9B7E0CD754',
-      'Accept': 'application/json',
+      Accept: 'application/json',
       'X-MSTR-AuthToken': authToken,
-      'updatePolicy': 'Replace',
+      updatePolicy: 'Replace',
     },
     json: {
-      'data': base64EncodedData,
-      'name': 'Table',
-      'columnHeaders': [
+      data: base64EncodedData,
+      name: 'Table',
+      columnHeaders: [
         {
-          'name': 'Version',
-          'dataType': 'string',
+          name: 'Version',
+          dataType: 'string',
         },
         {
-          'name': 'Time',
-          'dataType': 'DOUBLE',
+          name: 'Time',
+          dataType: 'DOUBLE',
         },
         {
-          'name': 'OS',
-          'dataType': 'string',
+          name: 'OS',
+          dataType: 'string',
         },
         {
-          'name': 'Browser',
-          'dataType': 'string',
+          name: 'Browser',
+          dataType: 'string',
         },
         {
-          'name': 'Rows',
-          'dataType': 'INTEGER',
+          name: 'Rows',
+          dataType: 'INTEGER',
         },
       ],
     },
@@ -78,10 +77,9 @@ const addResults = function addResults(authToken) {
     if (!error) {
       console.log(`Response Body: ${JSON.stringify(body)}`);
       return body;
-    } else {
-      console.error('error');
-      console.error(`Updating data request has failed: Error: ${error}`);
-      throw error;
     }
+    console.error('error');
+    console.error(`Updating data request has failed: Error: ${error}`);
+    throw error;
   });
 };

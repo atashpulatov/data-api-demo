@@ -8,7 +8,7 @@ import { objects as o } from '../../../constants/objects-list';
 import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
 
 
-describe('[TC40302] Prompt | Expression | Attribute Qualification | Not Required | No Default Answer', function() {
+describe('[TC40302] Prompt | Expression | Attribute Qualification | Not Required | No Default Answer', () => {
   beforeAll(async () => {
     await OfficeWorksheet.openExcelHome();
     const url = await browser.getCurrentUrl();
@@ -35,4 +35,3 @@ describe('[TC40302] Prompt | Expression | Attribute Qualification | Not Required
     await expect(se.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   });
 });
-

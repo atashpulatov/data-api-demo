@@ -1,11 +1,11 @@
-import {switchToPluginFrame, switchToPopupFrame, switchToExcelFrame} from '../utils/iframe-helper';
-import {waitAndClick} from '../utils/click-helper';
-import {selectors as s} from '../../constants/selectors/plugin.right-panel-selectors';
-import {excelSelectors as exSe} from '../../constants/selectors/office-selectors';
+import { switchToPluginFrame, switchToPopupFrame, switchToExcelFrame } from '../utils/iframe-helper';
+import { waitAndClick } from '../utils/click-helper';
+import { selectors as s } from '../../constants/selectors/plugin.right-panel-selectors';
+import { excelSelectors as exSe } from '../../constants/selectors/office-selectors';
 
 const PluginRightPanel = function() {
   this.clickLoginPopUpBtn = function() {
-     waitAndClick($(s.loginPopUpBtn));
+    waitAndClick($(s.loginPopUpBtn));
   };
 
   this.clickLogout = function() {
@@ -27,8 +27,8 @@ const PluginRightPanel = function() {
     browser.pause(999);
   };
 
-    // Currently it is not used
-    this.loginToPluginLDAP = function(username, password) {
+  // Currently it is not used
+  this.loginToPluginLDAP = function(username, password) {
     switchToPluginFrame();
     waitAndClick($(s.LDAPbutton));
     $(s.usernameInput).setValue(username);
@@ -81,15 +81,15 @@ const PluginRightPanel = function() {
   };
 
   this.clickLoginRightPanelBtn = function() {
-   waitAndClick($(s.loginRightPanelBtn));
+    waitAndClick($(s.loginRightPanelBtn));
   };
 
   this.loginToPlugin = function(username, password) {
     switchToPluginFrame();
     $(s.loginRightPanelBtn).waitForDisplayed(7777);
-    if ( $(s.loginRightPanelBtn).isExisting()) {
+    if ($(s.loginRightPanelBtn).isExisting()) {
       this.clickLoginRightPanelBtn();
-      const handles =  browser.getWindowHandles();
+      const handles = browser.getWindowHandles();
       browser.switchToWindow(handles[2]); // TODO: create help function to switch tabs
       $(s.usernameInput).setValue(username);
       $(s.passwordInput).setValue(password);
@@ -121,7 +121,7 @@ const PluginRightPanel = function() {
     element.click();
   }
 
-  //clicks on object in the right panel and asserts whether the object was selected in the worksheet
+  // clicks on object in the right panel and asserts whether the object was selected in the worksheet
   this.clickOnObject = function(object, cellValue) {
     waitAndClick(object);
     switchToExcelFrame();
@@ -130,7 +130,7 @@ const PluginRightPanel = function() {
     switchToPluginFrame(); // TODO: Not sure if this is necessary
   };
 
-  //hovers over objects in the right panel and assert whether the box shadow color is changed
+  // hovers over objects in the right panel and assert whether the box shadow color is changed
   this.hoverOverObjects = function(objects) {
     for (let i = 0; i < objects.length; i++) {
       objects[i].moveTo();
@@ -139,13 +139,13 @@ const PluginRightPanel = function() {
     }
   };
 
-  //hovers over object names in the right panel and assert whether the backgroiund color changed
+  // hovers over object names in the right panel and assert whether the backgroiund color changed
   this.hoverOverObjectNames = function(objectNames) {
     for (let i = 0; i < objectNames.length; i++) {
       objectNames[i].moveTo();
       browser.pause(1000);
       expect(objectNames[i].getCSSProperty('background-color').value).toEqual('rgba(235,235,235,1)');
-    };
+    }
   };
 };
 

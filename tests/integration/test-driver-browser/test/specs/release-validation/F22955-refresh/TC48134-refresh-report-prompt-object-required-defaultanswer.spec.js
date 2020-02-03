@@ -8,7 +8,7 @@ import { objects as o } from '../../../constants/objects-list';
 import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
 
 
-describe('Refresh - ', function() {
+describe('Refresh - ', () => {
   beforeAll(async () => {
     await OfficeWorksheet.openExcelHome();
     const url = await browser.getCurrentUrl();
@@ -26,7 +26,7 @@ describe('Refresh - ', function() {
     await browser.switchTo().window(handles[0]);
   });
 
-it('[TC48134] Refresh a report with prompt - Object|Required|Default answer', async () => {
+  it('[TC48134] Refresh a report with prompt - Object|Required|Default answer', async () => {
     // should import a report
     await OfficeWorksheet.selectCell('A1');
     await PluginRightPanel.clickImportDataButton();

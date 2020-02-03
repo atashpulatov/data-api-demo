@@ -7,7 +7,7 @@ import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { objects as o } from '../../../constants/objects-list';
 import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
 
-describe('Import report', function() {
+describe('Import report', () => {
   beforeAll(async () => {
     await OfficeWorksheet.openExcelHome();
     const url = await browser.getCurrentUrl();
@@ -26,8 +26,6 @@ describe('Import report', function() {
   });
 
   it('Displaying graph and grid/graph reports on Smart folder', async () => {
-
-
     // checks proper importing of a raport with graph
     await OfficeWorksheet.selectCell('A1');
     await PluginRightPanel.clickImportDataButton();

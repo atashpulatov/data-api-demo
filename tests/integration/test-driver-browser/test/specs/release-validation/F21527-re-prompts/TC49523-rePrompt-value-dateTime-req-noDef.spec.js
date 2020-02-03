@@ -8,7 +8,7 @@ import { objects as o } from '../../../constants/objects-list';
 import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
 
 
-describe('[TC49523] Re-Prompt after import | Value | Date & Time | Not required | No Default Answer', function() {
+describe('[TC49523] Re-Prompt after import | Value | Date & Time | Not required | No Default Answer', () => {
   beforeAll(async () => {
     await OfficeWorksheet.openExcelHome();
     const url = await browser.getCurrentUrl();
