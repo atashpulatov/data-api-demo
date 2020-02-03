@@ -1,9 +1,8 @@
-import {switchToPluginFrame, switchToPromptFrame, switchToPopupFrame, switchToExcelFrame} from '../utils/iframe-helper';
-import {waitAndClick} from '../utils/click-helper';
-import {selectors as s} from '../../constants/selectors/popup-selectors';
+import { switchToPluginFrame, switchToPromptFrame, switchToPopupFrame, switchToExcelFrame } from '../utils/iframe-helper';
+import { waitAndClick } from '../utils/click-helper';
+import { selectors as s } from '../../constants/selectors/popup-selectors';
 
 const PluginPopup = function() {
-
   this.closeRefreshAll = function() {
     waitAndClick($(s.closeRefreshAll));
   }
@@ -47,7 +46,7 @@ const PluginPopup = function() {
   };
 
   this.clickPromptArrow = function() {
-    waitAndClick($(s.promptArrow));   
+    waitAndClick($(s.promptArrow));
   };
 
   this.selectAllAttributes = function() {
@@ -62,6 +61,15 @@ const PluginPopup = function() {
     waitAndClick($(s.allFilters));
   };
 
+  this.selectObjectElementsInPrepareData = function(elements) {
+    $('#search-toolbar > div > span > input').waitForExist(7777);
+    for (let i = 0; i < elements.length; i++) {
+      $('#search-toolbar > div > span > input').clearValue();
+      $('#search-toolbar > div > span > input').setValue(`${elements[i]}`);
+      waitAndClick($(`input[name="${elements[i]}"]`));
+      $('#search-toolbar > div > span > input').clearValue();
+    }
+  };
   this.selectObjectElements = function(elements) {
     for (let i = 0; i < elements.length; i++) {
       waitAndClick($(`input[name="${elements[i]}"]`));
@@ -71,7 +79,7 @@ const PluginPopup = function() {
   this.changePromptQualificationItem = (value) => {
     witchToPopupFrame();
     waitAndClick($('div[title="- none -"]'));
-    waitAndClick($('div[title=' + value + '"]'));
+    waitAndClick($(`div[title=${value}"]`));
   };
 
   this.selectFilters = function(names) {
@@ -131,9 +139,7 @@ const PluginPopup = function() {
     switchToPluginFrame();
   }
 
-  this.isViewSelected = () => {
-    return ($(s.viewSelected).getAttribute('class') === 'ant-switch ant-switch-checked');
-  }
+  this.isViewSelected = () => ($(s.viewSelected).getAttribute('class') === 'ant-switch ant-switch-checked')
 
   this.openPrompt = (objectName) => {
     this.importObject(objectName);
@@ -148,7 +154,7 @@ const PluginPopup = function() {
     $('#mstrdossierPromptEditor').waitForExist(7777);
     waitAndClick($(s.valueInput), 5555);
     $(s.valueInput).clearValue();
-    $(s.valueInput).setValue(value + '\uE004\uE006');
+    $(s.valueInput).setValue(`${value}\uE004\uE006`);
   };
 
   this.writeAttrQualificationValue = (value) => {
@@ -156,7 +162,7 @@ const PluginPopup = function() {
     $('#mstrdossierPromptEditor').waitForExist(3333);
     $(s.attrQualificationInput).click();
     $(s.attrQualificationInput).clearValue();
-    $(s.attrQualificationInput).setValue(value + '\uE004\uE004\uE006');
+    $(s.attrQualificationInput).setValue(`${value}\uE004\uE004\uE006`);
   };
 
   this.writeMultiPrompt = (value) => {
@@ -164,7 +170,7 @@ const PluginPopup = function() {
     $('#mstrdossierPromptEditor').waitForExist(3333);
     $(s.calendarInput).click();
     $(s.calendarInput).clearValue();
-    $(s.calendarInput).setValue(value + '\uE004\uE004\uE006');
+    $(s.calendarInput).setValue(`${value}\uE004\uE004\uE006`);
   };
 
   this.removeAllSelected = () => {
@@ -208,19 +214,19 @@ const PluginPopup = function() {
     for (let i = 0; i < columnTitles.length; i++) {
       if (columnTitles.get(i) === headerName) {
         switch (order) {
-          case 'up':
-            await expect(columnHeaders.get(i).element(by.css(s.sortedUp)).isPresent()).toBe(true);
-            break;
-          case 'down':
-            await expect(columnHeaders.get(i).element(by.css(s.sortedDown)).isPresent()).toBe(true);
-            break;
-          default:
-            break;
+        case 'up':
+          await expect(columnHeaders.get(i).element(by.css(s.sortedUp)).isPresent()).toBe(true);
+          break;
+        case 'down':
+          await expect(columnHeaders.get(i).element(by.css(s.sortedDown)).isPresent()).toBe(true);
+          break;
+        default:
+          break;
         }
       }
-    };
+    }
   };
-  
+
   // TODO: Refactor to webDriverIO. This method is only used in TC39454
   this.checkDisplayedObjectNames = async function(searchedString) {
     for (let i = 0; i < s.displayedObjects.length; i++) {
@@ -247,7 +253,7 @@ const PluginPopup = function() {
       switchToExcelFrame();
       const popupDiv = $('#WACDialogPanel').isExisting();
       if (!popupDiv) {
-        if (! $('#WACDialogPanel').isExisting()) {
+        if (!$('#WACDialogPanel').isExisting()) {
           popupExists = false;
         }
       }

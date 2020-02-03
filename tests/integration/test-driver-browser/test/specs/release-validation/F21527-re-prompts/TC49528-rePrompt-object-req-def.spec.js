@@ -1,15 +1,15 @@
-import OfficeLogin from '../../../pageObjects/office/office.login';
-import OfficeWorksheet from '../../../pageObjects/office/office.worksheet';
-import PluginRightPanel from '../../../pageObjects/plugin/plugin.right-panel';
-import PluginPopup from '../../../pageObjects/plugin/plugin.popup';
-import { waitForNotification } from '../../../pageObjects/utils/wait-helper';
-import { dictionary } from '../../../dictionaries/dictionary';
 import { browser } from 'protractor';
+import OfficeLogin from '../../../helpers/office/office.login';
+import OfficeWorksheet from '../../../helpers/office/office.worksheet';
+import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
+import PluginPopup from '../../../helpers/plugin/plugin.popup';
+import { waitForNotification } from '../../../helpers/utils/wait-helper';
+import { dictionary } from '../../../dictionaries/dictionary';
 import { objects as o } from '../../../constants/objects-list';
 import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
 
 
-describe('[TC49528] Re-prompt after import | Object | Required | Default', function() {
+describe('[TC49528] Re-prompt after import | Object | Required | Default', () => {
   beforeAll(async () => {
     await OfficeWorksheet.openExcelHome();
     const url = await browser.getCurrentUrl();

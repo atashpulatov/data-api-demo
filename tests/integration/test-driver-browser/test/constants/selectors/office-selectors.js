@@ -13,7 +13,7 @@ export const excelSelectors = {
   newDocumentBtn: '#NewDocumentsButton',
   excelWorkbookBtn: '#ExcelOnline',
   adminManagedBtn: '#Admin\\ Managed > a',
-  adminManagedPlugin: 'div[aria-label^="env-169915"]',
+  adminManagedPlugin: 'div[aria-label^="yi_local_ip"]',
   addBtn: '#BtnAction',
   uploadPluginNotification: '.ModalCalloutControlOverlay'
 

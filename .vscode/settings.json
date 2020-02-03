@@ -3,6 +3,10 @@
     {
       "directory": "./production",
       "changeProcessCWD": true
+    },
+    {
+      "directory": "./tests/integration/test-driver-browser",
+      "changeProcessCWD": true
     }
   ],
   "editor.codeActionsOnSave": {

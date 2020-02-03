@@ -1,11 +1,11 @@
-import OfficeLogin from '../../pageObjects/office/office.login';
-import OfficeWorksheet from '../../pageObjects/office/office.worksheet';
-import PluginRightPanel from '../../pageObjects/plugin/plugin.right-panel';
-import PluginPopup from '../../pageObjects/plugin/plugin.popup';
-import {switchToPluginFrame} from '../../pageObjects/utils/iframe-helper';
-import {writeDataIntoFile, getJsonData} from '../../pageObjects/utils/benchmark-helper';
+import OfficeLogin from '../../helpers/office/office.login';
+import OfficeWorksheet from '../../helpers/office/office.worksheet';
+import PluginRightPanel from '../../helpers/plugin/plugin.right-panel';
+import PluginPopup from '../../helpers/plugin/plugin.popup';
+import { switchToPluginFrame } from '../../helpers/utils/iframe-helper';
+import { writeDataIntoFile, getJsonData } from '../../helpers/utils/benchmark-helper';
 
-describe('Smart Folder - IMPORT -', function() {
+describe('Smart Folder - IMPORT -', () => {
   const objectName = '5k Sales Records.csv';
   let totalAddedImportingTime = 0;
   let numberOfExecutions = 0;
@@ -15,8 +15,8 @@ describe('Smart Folder - IMPORT -', function() {
   const clientCPUCores = 6;
   const numberOfClicks = 10;
   let e2eTime = 0;
-  beforeAll( () => {
-    browser.setWindowSize(2200,900);
+  beforeAll(() => {
+    browser.setWindowSize(2200, 900);
     OfficeWorksheet.openExcelHome();
     const url = browser.getUrl();
     if (url.includes('login.microsoftonline')) {
@@ -27,8 +27,8 @@ describe('Smart Folder - IMPORT -', function() {
     PluginRightPanel.loginToPlugin('a', '');
   });
 
-  afterAll( () => {
-    if (numberOfExecutions == 3) {
+  afterAll(() => {
+    if (numberOfExecutions === 3) {
       const averageImportingTime = totalAddedImportingTime / 3;
       console.log('Preparing performance data');
       const data = getJsonData(averageImportingTime, serverVersion, rows, columns, clientCPUCores, numberOfExecutions, e2eTime, numberOfClicks);
@@ -37,7 +37,7 @@ describe('Smart Folder - IMPORT -', function() {
       console.log('Performance data saved');
     }
     browser.closeWindow();
-    const handles =  browser.getWindowHandles();
+    const handles = browser.getWindowHandles();
     browser.switchToWindow(handles[0]);
   });
 
@@ -66,4 +66,3 @@ describe('Smart Folder - IMPORT -', function() {
     numberOfExecutions++;
   });
 });
-
