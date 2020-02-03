@@ -16,9 +16,6 @@ $primary-blue: #1c91dc;
 
 .refresh-button-container {
   width: 100%;
-  #add-data-btn-container {
-    position: relative;
-  }
   button.ant-btn {
     &.add-data-btn {
       border-radius: 4px;
