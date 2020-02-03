@@ -23,7 +23,7 @@ describe('Smart Folder - IMPORT -', () => {
     }
     OfficeWorksheet.createNewWorkbook();
     OfficeWorksheet.openPlugin();
-    PluginRightPanel.loginToPlugin(settings.env.username, '');
+    PluginRightPanel.loginToPlugin(settings.env.username, settings.env.password);
   });
 
   afterEach(() => {
