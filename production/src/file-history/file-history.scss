@@ -16,10 +16,8 @@ $primary-blue: #1c91dc;
 
 .refresh-button-container {
   width: 100%;
-  position: relative;
-  #add-data-btn-container{
+  #add-data-btn-container {
     position: relative;
-     padding-top: 1px;
   }
   button.ant-btn {
     &.add-data-btn {
@@ -107,16 +105,16 @@ $primary-blue: #1c91dc;
   user-select: none;
 }
 
-.loading-button-container #report-loading-icon{
-    position: relative;
-    right: 2px;
-    margin-right: 2px;
+.loading-button-container #report-loading-icon {
+  position: relative;
+  right: 2px;
+  margin-right: 2px;
 }
 
-.refresh-icons-row .additional-data-wrapper svg{
-  position:relative;
-   top:2.5px;
-   margin-top: 0;
+.refresh-icons-row .additional-data-wrapper svg {
+  position: relative;
+  top: 2.5px;
+  margin-top: 0;
 }
 
 .clear-data-inactive {
@@ -194,7 +192,7 @@ li {
   }
 }
 
-.icon-align{
+.icon-align {
   position: relative;
   max-width: 14px;
   max-height: 13px;
