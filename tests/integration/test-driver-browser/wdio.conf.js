@@ -22,12 +22,12 @@ exports.config = {
     // './test/specs/release-validation/deprecated/sample.spec.js',
   ],
   suites: {
-  test: [
-    './test/specs/release-validation/test/*.js'
-  ],
-  UB: [
-    './test/specs/performance/import-UB-dataset.spec.js'
-  ],
+    test: [
+      './test/specs/release-validation/test/*.js'
+    ],
+    UB: [
+      './test/specs/performance/UB-standalone-version/import-UB-dataset.spec.js'
+    ],
   },
   // Patterns to exclude.
   exclude: [
@@ -56,8 +56,8 @@ exports.config = {
   // https://docs.saucelabs.com/reference/platforms-configurator
   //
   capabilities: [{
-  maxInstances: 1,
-  browserName:
+    maxInstances: 1,
+    browserName:
   'chrome',
   }],
   // {
@@ -123,7 +123,7 @@ exports.config = {
   // commands. Instead, they hook themselves up into the test process.
   services:
   ['selenium-standalone'],
-  
+
   // Framework you want to run your specs with.
   // The following are supported: Mocha, Jasmine, and Cucumber
   // see also: https://webdriver.io/docs/frameworks.html
@@ -132,35 +132,32 @@ exports.config = {
   // before running any tests.
   framework:
   'jasmine',
-  
+
   //
   // The number of times to retry the entire specfile when it fails as a whole
-  specFileRetries: 3,
+  specFileRetries: 0,
   //
   // Test reporter for stdout.
   // The only one supported by default is 'dot'
   // see also: https://webdriver.io/docs/dot-reporter.html
   reporters:
   [['allure', { outputDir: 'allure-results' }]],
-  
+
   //
   // Options to be passed to Jasmine.
   jasmineNodeOpts:
   {
   //
   // Jasmine default timeout
-  defaultTimeoutInterval: 60000,
-  //
-  // The Jasmine framework allows interception of each assertion in order to log the state of the application
-  // or website depending on the result. For example, it is pretty handy to take a screenshot every time
-  // an assertion fails.
-  expectationResultHandler:
-  
-  function (passed, assertion) {
-  // do something
-  }
-  }
-  ,
+    defaultTimeoutInterval: 60000,
+    //
+    // The Jasmine framework allows interception of each assertion in order to log the state of the application
+    // or website depending on the result. For example, it is pretty handy to take a screenshot every time
+    // an assertion fails.
+    expectationResultHandler (passed, assertion) {
+      // do something
+    }
+  },
   // =====
   // Hooks
   // =====
@@ -182,8 +179,8 @@ exports.config = {
   * @param {Array.<Object>} capabilities list of capabilities details
   * @param {Array.<String>} specs List of spec file paths that are to be run
   */
-  beforeSession: function (config, capabilities, specs) {
-  require('@babel/register');
+  beforeSession (config, capabilities, specs) {
+    require('@babel/register');
   },
   /**
   * Gets executed before test execution begins. At this point you can access to all global
@@ -226,13 +223,13 @@ exports.config = {
   /**
   * Function to be executed after a test (in Mocha/Jasmine).
   */
-  afterTest: function (test, context, { error, result, duration, passed, retries }) {
-  if (!passed) {
-  browser.takeScreenshot();
-  }
+  afterTest (test, context, { error, result, duration, passed, retries }) {
+    if (!passed) {
+      browser.takeScreenshot();
+    }
   },
-  
-  
+
+
   /**
   * Hook that gets executed after the suite has ended
   * @param {Object} suite suite details
@@ -280,7 +277,6 @@ exports.config = {
   * @param {String} oldSessionId session ID of the old session
   * @param {String} newSessionId session ID of the new session
   */
-  //onReload: function(oldSessionId, newSessionId) {
-  //}
-  }
-  
+  // onReload: function(oldSessionId, newSessionId) {
+  // }
+}

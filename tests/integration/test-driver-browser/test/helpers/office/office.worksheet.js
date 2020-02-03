@@ -1,17 +1,17 @@
-import {switchToExcelFrame} from '../utils/iframe-helper';
-import {waitAndClick} from '../utils/click-helper';
-import {excelSelectors as exSe} from '../../constants/selectors/office-selectors';
+import { switchToExcelFrame } from '../utils/iframe-helper';
+import { waitAndClick } from '../utils/click-helper';
+import { excelSelectors as exSe } from '../../constants/selectors/office-selectors';
 import settings from '../../config';
 
 const OfficeWorksheet = function() {
   const pluginStartId = '#m_excelWebRenderer_ewaCtl_3D10BAF8-D37F-DCF9-711E-7D53E9DC4090MSTR.Group1'; // aws169915
-  const pluginIcon = `img[src^="${settings.env.hostname}"]`
+  const pluginIcon = `img[src^="https://${settings.env.hostname}"]`
 
   this.openExcelHome = function() {
     browser.url(settings.officeOnline.url);
   };
 
-  this.uploadAndOpenPlugin = function(pathToManifest) {
+  this.uploadAndOpenPlugin = function(pathToManifest, webServerEnvironmentID) {
     switchToExcelFrame();
     $(exSe.insertBtn).click();
     $(exSe.addInBtn).click();
@@ -27,7 +27,7 @@ const OfficeWorksheet = function() {
 
     switchToExcelFrame();
     $(exSe.uploadPluginNotification).click();
-    $(pluginIcon).click();
+    $(`img[src^="https://${webServerEnvironmentID}"]`).click();
     browser.pause(5555);
   };
 
@@ -66,7 +66,7 @@ const OfficeWorksheet = function() {
     waitAndClick($(exSe.mainMenuBtn));
     waitAndClick($(exSe.newDocumentBtn));
     waitAndClick($(exSe.excelWorkbookBtn));
-    const handles =  browser.getWindowHandles();
+    const handles = browser.getWindowHandles();
     browser.switchToWindow(handles[1]); // TODO: create help function to switch tabs
     browser.pause(5000); // TODO: replace with waiting for the excelsheet to be loaded
   };
@@ -79,9 +79,9 @@ const OfficeWorksheet = function() {
   this.selectCell = function(cellId) {
     switchToExcelFrame();
     $(exSe.cellInput).click();
-    browser.keys('\uE003'); //Press Backspace
-    $(exSe.cellInput).setValue(cellId); 
-    browser.keys('\uE007'); //Press Enter
+    browser.keys('\uE003'); // Press Backspace
+    $(exSe.cellInput).setValue(cellId);
+    browser.keys('\uE007'); // Press Enter
   };
 };
 

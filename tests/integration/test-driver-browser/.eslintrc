@@ -1,4 +1,12 @@
 {
   "parser": "babel-eslint",
-  "extends": ["@mstr/eslint-config-mstr"]
+  "extends": ["@mstr/eslint-config-mstr"],
+  "globals": {
+    "browser": true,
+    "$": true,
+    "$$": true
+  },
+"rules":{
+  "no-console": "off",
+}
 }
