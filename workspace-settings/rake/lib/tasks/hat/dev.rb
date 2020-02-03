@@ -306,7 +306,7 @@ def get_unit_test_metrics(working_dir)
   metrics_unit['UNIT_TEST_FAILURES'] = total_failures
   metrics_unit['UNIT_TEST_SUCCESSES'] = total_passed
   metrics_unit['UNIT_TEST_DURATION'] = total_duration
-  puts "\nMETRICS_UNIT=#{metrics_unit.to_json}"
+  puts "\nMETRICS_UNIT=#{metrics_unit.to_json}\n" #to make sure the metrics is in one line, with out any invisible characters. 
 end
 
 def write_row_to_compare_table(mf, name, node)
