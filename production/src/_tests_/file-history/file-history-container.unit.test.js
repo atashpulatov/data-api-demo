@@ -55,7 +55,7 @@ describe('FileHistoryContainer', () => {
       />
     </Provider>);
     // then
-    expect(wrappedComponent.exists('.refresh-all-btn.icon-align .mstr-icon-refresh-all MSTRIcon')).toBeTruthy();
+    expect(wrappedComponent.exists('.refresh-all-btn .mstr-icon-refresh-all MSTRIcon')).toBeTruthy();
   });
   it('should display refresh all spinner when refreshAll flag is true', () => {
     // given
@@ -70,7 +70,7 @@ describe('FileHistoryContainer', () => {
       />
     </Provider>);
     // then
-    expect(wrappedComponent.exists('.spinner-all-icon.icon-align img')).toBeTruthy();
+    expect(wrappedComponent.exists('.spinner-all-icon img')).toBeTruthy();
   });
   it('should run onRefreshAll when refreshAll is clicked', async () => {
     // given

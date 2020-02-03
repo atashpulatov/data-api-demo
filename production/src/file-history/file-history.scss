@@ -4,20 +4,48 @@ $primary-blue: #1c91dc;
   border: 1px solid $primary-blue;
 }
 
-.ant-btn {
-  &.refresh-all-btn,
-  &.refresh-all-btn:hover,
-  &.refresh-all-btn:focus,
-  .refresh-all-btn & {
-    color: $primary-blue;
-    float: right;
-    background: #fff;
-    box-shadow: 0 0;
-    height: 25px;
-    border: none;
-    font-size: 12px;
-    padding: 1px;
-    margin: 10px 42px 10px 0px;
+%icon-position {
+  color: $primary-blue;
+  float: right;
+  background: #fff;
+  box-shadow: 0 0;
+  border: none;
+  margin-top: 16px;
+  margin-right: 49px;
+}
+
+.refresh-button-container {
+  width: 100%;
+  button.ant-btn {
+    &.add-data-btn {
+      border-radius: 4px;
+      max-width: 70%;
+      height: 25px;
+      margin: 10px 0px 10px 10px;
+      &:focus {
+        @extend %border-thin-primary-color;
+        color: $primary-blue;
+        background: rgba(28, 145, 220, 0.2);
+      }
+    }
+  }
+  .refresh-all-btn {
+    @extend %icon-position;
+    .mstr-icon-refresh-all {
+      &:focus {
+        @extend %border-thin-primary-color;
+        color: $primary-blue;
+        background: rgba(28, 145, 220, 0.2);
+      }
+    }
+  }
+  .spinner-all-icon {
+    @extend %icon-position;
+    &:focus {
+      @extend %border-thin-primary-color;
+      color: $primary-blue;
+      background: rgba(28, 145, 220, 0.2);
+    }
   }
 }
 
@@ -74,36 +102,16 @@ $primary-blue: #1c91dc;
   user-select: none;
 }
 
-button {
-  &.add-data-btn {
-    border-radius: 4px;
-    max-width: 70%;
-    height: 25px;
-    margin: 10px 0px 10px 10px;
-
-    &:focus {
-      @extend %border-thin-primary-color;
-      color: $primary-blue;
-      background: rgba(28, 145, 220, 0.2);
-    }
-  }
-}
-
-
-.loading-button-container #report-loading-icon{
-    position: relative;
-    right: 2px;
-    margin-right: 2px;
-}
-#add-data-btn-container{
+.loading-button-container #report-loading-icon {
   position: relative;
-   padding-top: 1px;
+  right: 2px;
+  margin-right: 2px;
 }
 
-.refresh-icons-row .additional-data-wrapper svg{
-  position:relative;
-   top:2.5px;
-   margin-top: 0;
+.refresh-icons-row .additional-data-wrapper svg {
+  position: relative;
+  top: 2.5px;
+  margin-top: 0;
 }
 
 .clear-data-inactive {
@@ -181,30 +189,11 @@ li {
   }
 }
 
-.icon-align{
+.icon-align {
   position: relative;
   max-width: 14px;
   max-height: 13px;
   margin-bottom: -16px;
-}
-
-.refresh-all-btn{
-  bottom: 27.2px;
-  left: 287px;
-}
-
-.spinner-all-icon{
-  bottom: 32px;
-  left: 289px;
-}
-
-.mstr-icon-refresh-all{
-position: relative;
-bottom:2.5px;
-}
-
-.refresh-all-label {
-  vertical-align: text-top;
 }
 
 .report-title {
