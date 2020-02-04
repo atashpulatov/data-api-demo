@@ -26,7 +26,6 @@ export const objects = {
     numberFormating: 'Number Formatting',
     grpahReport: 'report graph',
     gridReport: 'Grid/graph',
-
   },
 
   datasets: {
