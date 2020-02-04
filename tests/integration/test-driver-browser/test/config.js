@@ -18,9 +18,9 @@ const settings = {
  *
  * @returns {string}
  */
-function getEnvironment(){
+function getEnvironment() {
   const env = process.argv[process.argv.length - 1];
-  if(env.includes('env-')){
+  if (env.includes('env-')) {
     return env;
   }
   return '127.0.0.1';
