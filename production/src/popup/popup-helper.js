@@ -200,12 +200,11 @@ export class PopupHelper {
         if (viewFilter) {
           chosenObjectData.selectedFilters = this.parseFilters(body.viewFilter.operands);
         }
-        return chosenObjectData;
       }
     } catch (error) {
       console.warn(error);
-      return chosenObjectData;
     }
+    return chosenObjectData;
   }
 
   getAttrFormKeys = (attributes) => {
