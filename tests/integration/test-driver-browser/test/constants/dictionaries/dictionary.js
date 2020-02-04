@@ -3,6 +3,7 @@ export const dictionary = {
     importSuccess: 'Data loaded successfully',
     reportRemoved: 'Report removed',
     reportRefreshed: 'Report refreshed',
+    visualizationRefreshed: 'Visualization refreshed',
     excelLimit: 'The table you try to import exceeds the worksheet limits',
     rangeNotEmpty: 'The required data range in the worksheet is not empty',
     loginError: 'Incorrect username and/or password. Please try again',
