@@ -100,6 +100,7 @@ const PluginPopup = function() {
 
   this.importObject = function(objectName) {
     switchToPluginFrame();
+    browser.pause(500);
     this.switchLibrary(false);
     this.searchForObject(objectName);
     browser.pause(500);
@@ -273,13 +274,15 @@ const PluginPopup = function() {
 
   this.openDossier = function(dossierName) {
     this.importObject(dossierName);
-    browser.pause(5000);
+    browser.pause(30000);
   }
 
   this.selectAndImportVizualiation = function(visContainerId) {
     switchToPromptFrame();
-    const visSelctor = $(visContainerId).$('.mstrmojo-VizBox-selector');
-    waitAndClick(visSelctor);
+    const visContainer = $(visContainerId);
+    const visSelctor = visContainer.$('.mstrmojo-VizBox-selector');
+    visSelctor.click();
+    browser.pause(5000);
     switchToPluginFrame();
     this.clickImport();
   }
