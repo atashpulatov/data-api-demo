@@ -24,136 +24,124 @@ describe('IMPORT diferent types of vizualizations', () => {
     browser.switchToWindow(handles[0]);
   });
 
-  it('Import heat map visualization', () => {
+  it('Should import all visualizations', () => {
+    const dossierObject = o.dossiers.complexDossier;
+
+    // it should import heatMap visualization
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
-    const dossierObject = o.dossiers.complexDossier;
     PluginPopup.openDossier(dossierObject.name);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.heatMap);
     waitForNotification();
     browser.pause(5000);
-  });
-  it('Import grid visualization', () => {
-    OfficeWorksheet.selectCell('A1');
-    PluginRightPanel.clickImportDataButton();
-    const dossierObject = o.dossiers.complexDossier;
+
+    // it should import grid visualization
+    OfficeWorksheet.selectCell('J1');
+    PluginRightPanel.clickAddDataButton();
     PluginPopup.openDossier(dossierObject.name);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.grid);
     waitForNotification();
     browser.pause(5000);
-  });
-  it('Import barChart visualization', () => {
-    OfficeWorksheet.selectCell('A1');
-    PluginRightPanel.clickImportDataButton();
-    const dossierObject = o.dossiers.complexDossier;
+
+    // it should import barChart visualization
+    OfficeWorksheet.selectCell('S1');
+    PluginRightPanel.clickAddDataButton();
     PluginPopup.openDossier(dossierObject.name);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.barChart);
     waitForNotification();
     browser.pause(5000);
-  });
-  it('Import lineChart visualization', () => {
-    OfficeWorksheet.selectCell('A1');
-    PluginRightPanel.clickImportDataButton();
-    const dossierObject = o.dossiers.complexDossier;
+
+    // it should import lineChart visualization
+    OfficeWorksheet.selectCell('AA1');
+    PluginRightPanel.clickAddDataButton();
     PluginPopup.openDossier(dossierObject.name);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.lineChart);
     waitForNotification();
     browser.pause(5000);
-  });
-  it('Import areaChart visualization', () => {
-    OfficeWorksheet.selectCell('A1');
-    PluginRightPanel.clickImportDataButton();
-    const dossierObject = o.dossiers.complexDossier;
+
+    // it should import areaChart visualization
+    OfficeWorksheet.selectCell('AJ1');
+    PluginRightPanel.clickAddDataButton();
     PluginPopup.openDossier(dossierObject.name);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.areaChart);
     waitForNotification();
     browser.pause(5000);
-  });
-  it('Import bubbleChart visualization', () => {
-    OfficeWorksheet.selectCell('A1');
-    PluginRightPanel.clickImportDataButton();
-    const dossierObject = o.dossiers.complexDossier;
+
+    // it should import bubbleChart visualization
+    OfficeWorksheet.selectCell('AS1');
+    PluginRightPanel.clickAddDataButton();
     PluginPopup.openDossier(dossierObject.name);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.bubbleChart);
     waitForNotification();
     browser.pause(5000);
-  });
-  it('Import pieChart visualization', () => {
-    OfficeWorksheet.selectCell('A1');
-    PluginRightPanel.clickImportDataButton();
-    const dossierObject = o.dossiers.complexDossier;
+
+    // it should import pieChart visualization
+    OfficeWorksheet.selectCell('BA1');
+    PluginRightPanel.clickAddDataButton();
     PluginPopup.openDossier(dossierObject.name);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.pieChart);
     waitForNotification();
     browser.pause(5000);
-  });
-  it('Import comboChart visualization', () => {
-    OfficeWorksheet.selectCell('A1');
-    PluginRightPanel.clickImportDataButton();
-    const dossierObject = o.dossiers.complexDossier;
+
+    // it should import comboChart visualization
+    OfficeWorksheet.selectCell('BJ1');
+    PluginRightPanel.clickAddDataButton();
     PluginPopup.openDossier(dossierObject.name);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.comboChart);
     waitForNotification();
     browser.pause(5000);
-  });
-  it('Import geospatialService visualization', () => {
-    OfficeWorksheet.selectCell('A1');
-    PluginRightPanel.clickImportDataButton();
-    const dossierObject = o.dossiers.complexDossier;
+
+    // it should import geospatialService visualization
+    OfficeWorksheet.selectCell('BS1');
+    PluginRightPanel.clickAddDataButton();
     PluginPopup.openDossier(dossierObject.name);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.geospatialService);
     waitForNotification();
     browser.pause(5000);
-  });
-  it('Import network visualization', () => {
-    OfficeWorksheet.selectCell('A1');
-    PluginRightPanel.clickImportDataButton();
-    const dossierObject = o.dossiers.complexDossier;
+
+    // it should import network visualization
+    OfficeWorksheet.selectCell('CA1');
+    PluginRightPanel.clickAddDataButton();
     PluginPopup.openDossier(dossierObject.name);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.network);
     waitForNotification();
     browser.pause(5000);
-  });
-  it('Import histogram visualization', () => {
-    OfficeWorksheet.selectCell('A1');
-    PluginRightPanel.clickImportDataButton();
-    const dossierObject = o.dossiers.complexDossier;
+
+    // it should import histogram visualization
+    OfficeWorksheet.selectCell('CJ1');
+    PluginRightPanel.clickAddDataButton();
     PluginPopup.openDossier(dossierObject.name);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.histogram);
     waitForNotification();
     browser.pause(5000);
-  });
-  it('Import boxPlot visualization', () => {
-    OfficeWorksheet.selectCell('A1');
-    PluginRightPanel.clickImportDataButton();
-    const dossierObject = o.dossiers.complexDossier;
+
+    // it should import boxPlot visualization
+    OfficeWorksheet.selectCell('CS1');
+    PluginRightPanel.clickAddDataButton();
     PluginPopup.openDossier(dossierObject.name);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.boxPlot);
     waitForNotification();
     browser.pause(5000);
-  });
-  it('Import waterfall visualization', () => {
-    OfficeWorksheet.selectCell('A1');
-    PluginRightPanel.clickImportDataButton();
-    const dossierObject = o.dossiers.complexDossier;
+
+    // it should import waterfall visualization
+    OfficeWorksheet.selectCell('DA1');
+    PluginRightPanel.clickAddDataButton();
     PluginPopup.openDossier(dossierObject.name);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.waterfall);
     waitForNotification();
     browser.pause(5000);
-  });
-  it('Import map visualization', () => {
-    OfficeWorksheet.selectCell('A1');
-    PluginRightPanel.clickImportDataButton();
-    const dossierObject = o.dossiers.complexDossier;
+
+    // it should import map visualization
+    OfficeWorksheet.selectCell('DJ1');
+    PluginRightPanel.clickAddDataButton();
     PluginPopup.openDossier(dossierObject.name);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.map);
     waitForNotification();
     browser.pause(5000);
-  });
-  it('Import KPI visualization', () => {
-    OfficeWorksheet.selectCell('A1');
-    PluginRightPanel.clickImportDataButton();
-    const dossierObject = o.dossiers.complexDossier;
+
+    // it should import KPI visualization
+    OfficeWorksheet.selectCell('DS1');
+    PluginRightPanel.clickAddDataButton();
     PluginPopup.openDossier(dossierObject.name);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.KPI);
     waitForNotification();
