@@ -133,6 +133,7 @@ export class OfficeStoreService {
         refreshedObject.tableDimensions = report.tableDimensions;
         refreshedObject.subtotalsInfo = report.subtotalsInfo;
         refreshedObject.displayAttrFormNames = report.displayAttrFormNames;
+        refreshedObject.preparedInstanceId = null;
         if (refreshedObject.visualizationInfo) {
           refreshedObject.manipulationsXML = report.manipulationsXML;
           refreshedObject.visualizationInfo.dossierStructure = report.visualizationInfo.dossierStructure;
