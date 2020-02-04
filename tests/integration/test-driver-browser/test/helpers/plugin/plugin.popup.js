@@ -269,7 +269,7 @@ const PluginPopup = function() {
   this.switchLibrary = function(newState) {
     const myLibrarySwitch = $(s.myLibrary);
     const checked = myLibrarySwitch.getAttribute('aria-checked');
-    if (checked !== newState) waitAndClick(myLibrarySwitch);
+    if ((checked === 'true') !== newState) waitAndClick(myLibrarySwitch)
   }
 
   this.openDossier = function(dossierName) {
