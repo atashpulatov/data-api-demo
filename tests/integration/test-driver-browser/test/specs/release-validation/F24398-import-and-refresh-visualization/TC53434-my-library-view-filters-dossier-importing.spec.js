@@ -38,7 +38,8 @@ describe('TC53434 - [MyLibrary] My Library view, Filters, Dossier importing', ()
     PluginRightPanel.clickImportDataButton();
     switchToPluginFrame();
     waitAndClick($('#Filter'));
-    browser.keys('\uE004\uE004\uE004\uE00d\uE00c');
+    $('label[title=\'Administrator\']').click();
+    browser.keys('\uE00c');
     PluginPopup.switchLibrary();
     PluginPopup.switchLibrary();
     PluginPopup.importObject('Dossier for interactive components');
