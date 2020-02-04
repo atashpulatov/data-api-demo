@@ -1,5 +1,5 @@
 import { switchToPluginFrame, switchToPromptFrame, switchToPopupFrame, switchToExcelFrame } from '../utils/iframe-helper';
-import { waitAndClick } from '../utils/click-helper';
+import { waitAndClick, waitAndRightClick } from '../utils/click-helper';
 import { selectors as s } from '../../constants/selectors/popup-selectors';
 
 const PluginPopup = function() {
@@ -285,6 +285,15 @@ const PluginPopup = function() {
     browser.pause(5000);
     switchToPluginFrame();
     this.clickImport();
+  }
+
+  this.doManipulations = (visAttirbuteId) => {
+    switchToPromptFrame();
+    const visContainer = $(`${visAttirbuteId} > table > tbody > tr:nth-child(1) > td:nth-child(1)`);
+    // waitAndRightClick(visContainer);
+    visContainer.click({ button:'right' });
+    browser.pause(5000);
+    switchToPluginFrame();
   }
 };
 
