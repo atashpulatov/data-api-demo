@@ -100,6 +100,7 @@ const PluginPopup = function() {
 
   this.importObject = function(objectName) {
     switchToPluginFrame();
+    this.switchLibrary(false);
     this.searchForObject(objectName);
     browser.pause(500);
     this.selectFirstObject();
@@ -263,6 +264,25 @@ const PluginPopup = function() {
     console.log(`Total time importing "${objectName}":  ${timeSpent} secs`);
     return timeSpent;
   };
+
+  this.switchLibrary = function(newState) {
+    const myLibrarySwitch = $(s.myLibrary);
+    const checked = myLibrarySwitch.getAttribute('aria-checked');
+    if (checked !== newState) waitAndClick(myLibrarySwitch);
+  }
+
+  this.openDossier = function(dossierName) {
+    this.importObject(dossierName);
+    browser.pause(5000);
+  }
+
+  this.selectAndImportVizualiation = function(visContainerId) {
+    switchToPromptFrame();
+    const visSelctor = $(visContainerId).$('.mstrmojo-VizBox-selector');
+    waitAndClick(visSelctor);
+    switchToPluginFrame();
+    this.clickImport();
+  }
 };
 
 export default new PluginPopup();

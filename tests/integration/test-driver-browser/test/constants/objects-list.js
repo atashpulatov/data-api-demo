@@ -37,6 +37,28 @@ export const objects = {
     notSupportedCube: 'multi table cube'
   },
 
-  dossiers: {},
+  dossiers: {
+    complexDossier: {
+      name: 'Complex dossier (20 visualizations)',
+      // TODO: Pages
+      visualizations: {
+        heatMap: '#mstr195',
+        grid: '#mstr231',
+        barChart: '#mstr275',
+        lineChart: '#mstr463',
+        areaChart: '#mstr440',
+        bubbleChart: '#mstr509',
+        pieChart: '#mstr314',
+        comboChart: '#mstr576',
+        geospatialService: '#mstr342',
+        network: '#mstr650',
+        histogram: '#mstr135',
+        boxPlot: '#mstr216',
+        waterfall: '#mstr252',
+        map: '#mstr291',
+        KPI: '#mstr328',
+      },
+    },
+  },
 
 };
