@@ -6,7 +6,7 @@ const settings = {
     url:'https://www.office.com/launch/excel?auth=2',
   },
   env: {
-    hostname: '127.0.0.1', // use 127.0.0.1 when running library on localhost or use environment ID, for ex: 'env-173736'
+    hostname: 'env-173736', // use 127.0.0.1 when running library on localhost or use environment ID, for ex: 'env-173736'
     username: 'a',
     password: '',
   }
