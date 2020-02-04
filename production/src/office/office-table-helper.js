@@ -478,19 +478,15 @@ class OfficeTableHelper {
    * @memberOf OfficeTableHelper
    */
   async checkObjectRangeValidityOnRefresh(prevOfficeTable, context, instanceDefinition) {
-    const { rows, columns, mstrTable, mstrTable:{ isCrosstab, crosstabHeaderDimensions, prevCrosstabDimensions } } = instanceDefinition;
-    const { columnsY: prevColumnsY, rowsX: prevRowsX } = prevCrosstabDimensions;
-    const { columnsY: crosstabColumnsY, rowsX: crosstabRowsX } = crosstabHeaderDimensions;
+    const { rows, columns, mstrTable } = instanceDefinition;
 
     prevOfficeTable.rows.load('count');
     await context.sync();
 
     let addedColumns = Math.max(0, columns - prevOfficeTable.columns.count);
     let addedRows = Math.max(0, rows - prevOfficeTable.rows.count);
-    if (isCrosstab && prevCrosstabDimensions && prevColumnsY === crosstabColumnsY && prevRowsX === crosstabRowsX) {
-      addedRows += (crosstabColumnsY - prevColumnsY);
-      addedColumns += (crosstabRowsX - prevRowsX);
-    }
+
+    ({ addedRows, addedColumns } = this.checkCrosstabAddedRowsAndColumns(mstrTable, addedRows, addedColumns));
 
     await this.checkExtendedRange(addedColumns, prevOfficeTable, mstrTable, context, addedRows);
     context.runtime.enableEvents = false;
@@ -498,6 +494,32 @@ class OfficeTableHelper {
     prevOfficeTable.delete();
     context.runtime.enableEvents = true;
     await context.sync();
+  }
+
+  /**
+   * checks the added rows and columns for crosstab.
+   *
+   * @param {Object} mstrTable contains informations about mstr object
+   * @param {number} addedColumns excelContext
+   * @param {number} addedRows shows the number of added rows to the table
+   *
+   * @memberOf OfficeTableHelper
+   */
+  checkCrosstabAddedRowsAndColumns = (mstrTable, addedRows, addedColumns) => {
+    const { isCrosstab, crosstabHeaderDimensions, prevCrosstabDimensions } = mstrTable;
+    const { columnsY: prevColumnsY, rowsX: prevRowsX } = prevCrosstabDimensions;
+    const { columnsY: crosstabColumnsY, rowsX: crosstabRowsX } = crosstabHeaderDimensions;
+
+    if (isCrosstab) {
+      if (!prevCrosstabDimensions) {
+        addedRows += crosstabColumnsY;
+        addedColumns += crosstabRowsX;
+      } else if (prevColumnsY === crosstabColumnsY && prevRowsX === crosstabRowsX) {
+        addedRows += (crosstabColumnsY - prevColumnsY);
+        addedColumns += (crosstabRowsX - prevRowsX);
+      }
+    }
+    return { addedRows, addedColumns };
   }
 
   /**
