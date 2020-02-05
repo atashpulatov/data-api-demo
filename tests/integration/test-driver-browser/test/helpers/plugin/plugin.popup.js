@@ -296,6 +296,7 @@ const PluginPopup = function() {
     waitAndClick($(s.totalButton));
     waitAndClick($(s.okButton));
     browser.pause(4000);
+    expect($(`#mstr121 > table > tbody > tr:nth-child(2) > td:nth-child(1)`).getText()).toEqual('Total');
     switchToPluginFrame();
   }
 
@@ -317,7 +318,7 @@ const PluginPopup = function() {
     switchToPluginFrame();
   }
 
-  this.drillVisualisation = (objectId) => {
+  this.drillByCategory = (objectId) => {
     switchToPromptFrame();
     waitAndRightClick($(`${objectId}`));
     browser.pause(1000);

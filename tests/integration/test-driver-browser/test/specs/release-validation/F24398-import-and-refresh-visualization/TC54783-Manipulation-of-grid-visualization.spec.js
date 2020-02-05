@@ -33,7 +33,7 @@ describe('IMPORT diferent types of vizualizations', () => {
     PluginPopup.showTotals(dossierObject.visualizations.visualization1.yearAttribute);
     PluginPopup.sortAscending(dossierObject.visualizations.visualization1.profitMetric);
     PluginPopup.sortDescending(dossierObject.visualizations.visualization1.revenueMetric);
-    PluginPopup.drillVisualisation(dossierObject.visualizations.visualization1.yearAttribute);
+    PluginPopup.drillByCategory(dossierObject.visualizations.visualization1.yearAttribute);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.visualization1.name);
     waitForNotification();
     browser.pause(5000);
