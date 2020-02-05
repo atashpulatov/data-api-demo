@@ -70,6 +70,6 @@ export const objects = {
         }
       },
     },
-  },
-
+    interactiveDossier: { name: 'Dossier for interactive components', },
+  }
 };
