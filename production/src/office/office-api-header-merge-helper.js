@@ -23,10 +23,6 @@ class OfficeApiHeaderMergeHelper {
    * @memberof OfficeApiHeaderMergeHelper
    */
   mergeHeaderRows = (attributes, titlesRange) => {
-    if (!this.validateAttributes(attributes)) {
-      return;
-    }
-
     this.mergeHeaderItems(attributes, titlesRange, this.handleMergeRowsFunc);
   };
 
@@ -39,10 +35,6 @@ class OfficeApiHeaderMergeHelper {
    * @memberof OfficeApiHeaderMergeHelper
    */
   mergeHeaderColumns = (attributes, titlesRange) => {
-    if (!this.validateAttributes(attributes)) {
-      return;
-    }
-
     this.mergeHeaderItems(attributes, titlesRange, this.handleMergeColumnsFunc);
   };
 
@@ -64,6 +56,8 @@ class OfficeApiHeaderMergeHelper {
    * 2. Calculate start-length pairs of each Excel range to be merged (e.g. [[1, 3]]).
    * 3. For each start-length pair call handleMergeRowsFunc or handleMergeColumnsFunc to merge and center cells.
    *
+   * Do nothing for an empty list of attributes names.
+   *
    * @param {string[]} attributes - Names of attributes for rows.
    * @param {Object} titlesRange - Excel range containing attributes titles.
    * @param {Function} handleMergeFunc - function used for merging.
@@ -71,6 +65,10 @@ class OfficeApiHeaderMergeHelper {
    * @memberof OfficeApiHeaderMergeHelper
    */
   mergeHeaderItems = (attributes, titlesRange, handleMergeFunc) => {
+    if (!this.validateAttributes(attributes)) {
+      return;
+    }
+
     const intervalStarts = this.calculateIntervalStarts(attributes);
     const intervals = this.calculateIntervals(intervalStarts, attributes.length);
 
