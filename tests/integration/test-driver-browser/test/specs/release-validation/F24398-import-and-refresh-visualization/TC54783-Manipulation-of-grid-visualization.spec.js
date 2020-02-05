@@ -29,7 +29,7 @@ describe('IMPORT diferent types of vizualizations', () => {
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
     const dossierObject = o.dossiers.visualizationManipulation;
-    PluginPopup.openDossier(dossierObject.name);
+    PluginPopup.openDossier(dossierObject.name, 10000);
     PluginPopup.doManipulations(dossierObject.visualizations.visualization1.attributeId);
     //    PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.Visualization1);
     //    waitForNotification();

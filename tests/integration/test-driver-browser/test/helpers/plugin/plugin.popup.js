@@ -77,7 +77,7 @@ const PluginPopup = function() {
   };
 
   this.changePromptQualificationItem = (value) => {
-    witchToPopupFrame();
+    switchToPopupFrame();
     waitAndClick($('div[title="- none -"]'));
     waitAndClick($(`div[title=${value}"]`));
   };
@@ -100,7 +100,7 @@ const PluginPopup = function() {
 
   this.importObject = function(objectName) {
     switchToPluginFrame();
-    browser.pause(500);
+    browser.pause(1000);
     this.switchLibrary(false);
     this.searchForObject(objectName);
     browser.pause(500);
@@ -272,17 +272,18 @@ const PluginPopup = function() {
     if ((checked === 'true') !== newState) waitAndClick(myLibrarySwitch)
   }
 
-  this.openDossier = function(dossierName) {
+  this.openDossier = function(dossierName, timeToLoadDossier = 10000) {
     this.importObject(dossierName);
-    browser.pause(30000);
+    browser.pause(timeToLoadDossier);
   }
 
   this.selectAndImportVizualiation = function(visContainerId) {
     switchToPromptFrame();
-    const visContainer = $(visContainerId);
-    const visSelctor = visContainer.$('.mstrmojo-VizBox-selector');
+    const visSelctor = $(visContainerId).$('.mstrmojo-VizBox-selector');
     visSelctor.click();
-    browser.pause(5000);
+
+    // TODO: wait untli import button is enabled and click it
+    browser.pause(2500);
     switchToPluginFrame();
     this.clickImport();
   }
