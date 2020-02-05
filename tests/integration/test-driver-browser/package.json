@@ -9,8 +9,7 @@
     "report": "allure generate allure-results --clean ",
     "test-suite": "rimraf ./allure-results && wdio wdio.conf.js --suite",
     "test-UB": "rimraf ./allure-results && ./node_modules/.bin/wdio wdio.conf.js --suite UB --USERENV",
-    "rally": "node rally/updateRallyTCResult.js -c",
-    "parameters": "node rally/new/getCmd.js -c"
+    "rally": "node rally/updateRallyTCResult.js -c"
   },
   "author": "",
   "license": "MIT",
