@@ -9,6 +9,7 @@ import { dictionary } from '../../../constants/dictionaries/dictionary';
 import settings from '../../../config';
 
 describe('IMPORT diferent types of vizualizations', () => {
+  const { name, timeToOpen, visualizations } = o.dossiers.complexDossier;
   beforeAll(() => {
     browser.setWindowSize(1500, 900);
     OfficeWorksheet.openExcelHome();
@@ -24,6 +25,7 @@ describe('IMPORT diferent types of vizualizations', () => {
   beforeEach(() => {
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
+    PluginPopup.openDossier(name, timeToOpen);
   });
 
   afterEach(() => {
@@ -39,121 +41,91 @@ describe('IMPORT diferent types of vizualizations', () => {
   })
 
   it('Should import heatMap visualization', () => {
-    const dossierObject = o.dossiers.complexDossier;
-    PluginPopup.openDossier(dossierObject.name, dossierObject.timeToOpen);
-    PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.heatMap);
+    PluginPopup.selectAndImportVizualiation(visualizations.heatMap);
     waitForNotification();
     expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   })
 
   it('Should import grid visualization', () => {
-    const dossierObject = o.dossiers.complexDossier;
-    PluginPopup.openDossier(dossierObject.name, dossierObject.timeToOpen);
-    PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.grid);
+    PluginPopup.selectAndImportVizualiation(visualizations.grid);
     waitForNotification();
     expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   })
 
   it('Should import barChart visualization', () => {
-    const dossierObject = o.dossiers.complexDossier;
-    PluginPopup.openDossier(dossierObject.name, dossierObject.timeToOpen);
-    PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.barChart);
+    PluginPopup.selectAndImportVizualiation(visualizations.barChart);
     waitForNotification();
     expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   })
 
   it('Should import lineChart visualization', () => {
-    const dossierObject = o.dossiers.complexDossier;
-    PluginPopup.openDossier(dossierObject.name, dossierObject.timeToOpen);
-    PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.lineChart);
+    PluginPopup.selectAndImportVizualiation(visualizations.lineChart);
     waitForNotification();
     expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   })
 
   it('Should import areaChart visualization', () => {
-    const dossierObject = o.dossiers.complexDossier;
-    PluginPopup.openDossier(dossierObject.name, dossierObject.timeToOpen);
-    PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.areaChart);
+    PluginPopup.selectAndImportVizualiation(visualizations.areaChart);
     waitForNotification();
     expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   })
 
   it('Should import bubbleChart visualization', () => {
-    const dossierObject = o.dossiers.complexDossier;
-    PluginPopup.openDossier(dossierObject.name, dossierObject.timeToOpen);
-    PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.bubbleChart);
+    PluginPopup.selectAndImportVizualiation(visualizations.bubbleChart);
     waitForNotification();
     expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   })
 
   it('Should import pieChart visualization', () => {
-    const dossierObject = o.dossiers.complexDossier;
-    PluginPopup.openDossier(dossierObject.name, dossierObject.timeToOpen);
-    PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.pieChart);
+    PluginPopup.selectAndImportVizualiation(visualizations.pieChart);
     waitForNotification();
     expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   })
 
   it('Should import comboChart visualization', () => {
-    const dossierObject = o.dossiers.complexDossier;
-    PluginPopup.openDossier(dossierObject.name, dossierObject.timeToOpen);
-    PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.comboChart);
+    PluginPopup.selectAndImportVizualiation(visualizations.comboChart);
     waitForNotification();
     expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   })
 
   it('Should import geospatialService visualization', () => {
-    const dossierObject = o.dossiers.complexDossier;
-    PluginPopup.openDossier(dossierObject.name, dossierObject.timeToOpen);
-    PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.geospatialService);
+    PluginPopup.selectAndImportVizualiation(visualizations.geospatialService);
     waitForNotification();
     expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   })
 
   it('Should import network visualization', () => {
-    const dossierObject = o.dossiers.complexDossier;
-    PluginPopup.openDossier(dossierObject.name, dossierObject.timeToOpen);
-    PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.network);
+    PluginPopup.selectAndImportVizualiation(visualizations.network);
     waitForNotification();
     expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   })
 
   it('Should import histogram visualization', () => {
-    const dossierObject = o.dossiers.complexDossier;
-    PluginPopup.openDossier(dossierObject.name, dossierObject.timeToOpen);
-    PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.histogram);
+    PluginPopup.selectAndImportVizualiation(visualizations.histogram);
     waitForNotification();
     expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   })
 
   it('Should import boxPlot visualization', () => {
-    const dossierObject = o.dossiers.complexDossier;
-    PluginPopup.openDossier(dossierObject.name, dossierObject.timeToOpen);
-    PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.boxPlot);
+    PluginPopup.selectAndImportVizualiation(visualizations.boxPlot);
     waitForNotification();
     expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   })
 
   it('Should import waterfall visualization', () => {
-    const dossierObject = o.dossiers.complexDossier;
-    PluginPopup.openDossier(dossierObject.name, dossierObject.timeToOpen);
-    PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.waterfall);
+    PluginPopup.selectAndImportVizualiation(visualizations.waterfall);
     waitForNotification();
     expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   })
 
   it('Should import map visualization', () => {
-    const dossierObject = o.dossiers.complexDossier;
-    PluginPopup.openDossier(dossierObject.name, dossierObject.timeToOpen);
-    PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.map);
+    PluginPopup.selectAndImportVizualiation(visualizations.map);
     waitForNotification();
     expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   })
 
   it('Should import KPI visualization', () => {
-    const dossierObject = o.dossiers.complexDossier;
-    PluginPopup.openDossier(dossierObject.name, dossierObject.timeToOpen);
-    PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.KPI);
+    PluginPopup.selectAndImportVizualiation(visualizations.KPI);
     waitForNotification();
     expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   });
