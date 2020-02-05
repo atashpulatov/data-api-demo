@@ -25,15 +25,26 @@ describe('IMPORT diferent types of vizualizations', () => {
     browser.switchToWindow(handles[0]);
   });
 
-  it('Import grid visualization', () => {
+  it('[TC54783] Manipulation of grid visualization such as totals, ordering and drilling', () => {
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
     const dossierObject = o.dossiers.visualizationManipulation;
     PluginPopup.openDossier(dossierObject.name);
-    PluginPopup.showTotals(dossierObject.visualizations.visualization1.yearAttribute);
-    PluginPopup.sortAscending(dossierObject.visualizations.visualization1.profitMetric);
-    PluginPopup.sortDescending(dossierObject.visualizations.visualization1.revenueMetric);
-    PluginPopup.drillVisualisation(dossierObject.visualizations.visualization1.yearAttribute);
+    const yearAttribute = dossierObject.visualizations.visualization1.getTableItemAt(1, 1);
+    const profitMetric = dossierObject.visualizations.visualization1.getTableItemAt(1, 3);
+    const revenueMetric = dossierObject.visualizations.visualization1.getTableItemAt(1, 4);
+    const totalText = dossierObject.visualizations.visualization1.getTableItemAt(2, 1);
+    const profitText = dossierObject.visualizations.visualization1.getTableItemAt(3, 3);
+    const revenueText = dossierObject.visualizations.visualization1.getTableItemAt(3, 4);
+    const categoryText = dossierObject.visualizations.visualization1.getTableItemAt(3, 1);
+    PluginPopup.showTotals(yearAttribute);
+    expect($(totalText).getText()).toEqual('Total');
+    PluginPopup.sortAscending(profitMetric);
+    expect($(profitText).getText()).toEqual('$150,472');
+    PluginPopup.sortDescending(revenueMetric);
+    expect($(revenueText).getText()).toEqual('$1,553,525');
+    PluginPopup.drillByCategory(yearAttribute);
+    expect($(categoryText).getText()).toEqual('Books');
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.visualization1.name);
     waitForNotification();
     browser.pause(5000);
