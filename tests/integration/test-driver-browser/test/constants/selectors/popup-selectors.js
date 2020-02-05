@@ -47,16 +47,20 @@ export const selectors = {
   drillButton:'div=Drill',
   categoryButton:'div=Category',
   dossierWindow:{
+    visualizationName: '.mstrd-NavBarTitle-item-active .mstrd-DossierTitle',
+    filterCount: '.mstrd-FilterSummaryBar-filterCount',
     buttonToC: 'li.mstrd-NavItemWrapper.mstrd-ToCNavItemContainer.mstr-navbar-item > div > div',
-    getTocItemAt: (index) => `div.mstrd-DropdownMenu-content > div > ul > li:nth-child(${index}) > a > div`,
+    getTocItemAt: (index) => `div.mstrd-DropdownMenu-content > div > ul > li:nth-child(${index})`,
     buttonBookmarks: 'li.mstrd-NavItemWrapper.mstrd-BookmarkNavItem.mstr-navbar-item > div > div',
-    getBookmarkItemAt: (index) => `div.mstrd-BookmarkDropdownMenuContainer-myBookmarks > ul > div:nth-child(${index}) > li > div > div > div`,
+    getBookmarkItemAt: (index) => `div.mstrd-BookmarkDropdownMenuContainer-myBookmarks > ul > div:nth-child(${index})`,
     buttonRefreshDossier: 'div.mstr-nav-icon.icon-resetfile',
     buttonConfirmRefresh: '.mstrd-DeleteDossier-button',
     buttonFilters: 'li.mstrd-FilterNavItemContainer',
     filtersMenu:{
+      getFilterAt: (index) => `div.mstrd-FilterPanel-content > ul > li:nth-child(${index})`,
+      selectFilterValueAt: (index) => `div.mstrd-FilterItemsList > div > div > div > div:nth-child(${index})`,
+      getSliderInput: (position) => (position === 'left' ? '.mstrd-SliderSummary-left-input' : '.mstrd-SliderSummary-right-input'),
       buttonApplyFilters : 'div.mstrd-FilterPanelFooterContainer-apply',
-      selectFilterValueAt: (index) => `div.mstrd-FilterItemsList > div > div > div > div:nth-child(${index}) > label > span.mstrd-Checkbox-label`
     }
   }
 };
