@@ -29,7 +29,7 @@ describe('IMPORT diferent types of vizualizations', () => {
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
     const dossierObject = o.dossiers.visualizationManipulation;
-    PluginPopup.openDossier(dossierObject.name);
+    PluginPopup.openDossier(dossierObject.name, 10000);
     PluginPopup.showTotals(dossierObject.visualizations.visualization1.yearAttribute);
     PluginPopup.sortAscending(dossierObject.visualizations.visualization1.profitMetric);
     PluginPopup.sortDescending(dossierObject.visualizations.visualization1.revenueMetric);
