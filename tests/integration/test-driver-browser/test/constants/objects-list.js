@@ -65,9 +65,7 @@ export const objects = {
         visualization1 : {
           name: '#mstr106',
           gridTableId:'#mstr121',
-          yearAttribute:`#mstr121 > table > tbody > tr:nth-child(1) > td:nth-child(1)`,
-          profitMetric:'#mstr121 > table > tbody > tr:nth-child(1) > td:nth-child(3)',
-          revenueMetric:'#mstr121 > table > tbody > tr:nth-child(1) > td:nth-child(4)',
+          getTableItemAt: (firstIndex, secondIndex) => `#mstr121 > table > tbody > tr:nth-child(${firstIndex}) > td:nth-child(${secondIndex})`,
         }
       },
     },

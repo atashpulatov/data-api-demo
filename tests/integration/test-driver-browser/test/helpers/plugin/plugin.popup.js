@@ -297,8 +297,6 @@ const PluginPopup = function() {
     waitAndClick($(s.totalButton));
     waitAndClick($(s.okButton));
     browser.pause(4000);
-    expect($(`#mstr121 > table > tbody > tr:nth-child(2) > td:nth-child(1)`).getText()).toEqual('Total');
-    switchToPluginFrame();
   }
 
   this.sortAscending = (objectId) => {
@@ -307,7 +305,6 @@ const PluginPopup = function() {
     browser.pause(1000);
     waitAndClick($(s.sortAscendingButton));
     browser.pause(4000);
-    switchToPluginFrame();
   }
 
   this.sortDescending = (objectId) => {
@@ -316,7 +313,6 @@ const PluginPopup = function() {
     browser.pause(1000);
     waitAndClick($(s.sortDescendingButton));
     browser.pause(4000);
-    switchToPluginFrame();
   }
 
   this.drillByCategory = (objectId) => {
@@ -327,7 +323,6 @@ const PluginPopup = function() {
     browser.pause(1000);
     waitAndClick($(s.categoryButton));
     browser.pause(4000);
-    switchToPluginFrame();
   }
 };
 
