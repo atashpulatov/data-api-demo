@@ -33,6 +33,7 @@ describe('Dossier top menu buttons', () => {
     PluginPopup.openDossier(dossierObject.name);
     switchToPromptFrame();
     const { dossierWindow } = selectors;
+
     // Change Page/Chapter
     waitAndClick($(dossierWindow.buttonToC), 1000);
     waitAndClick($(dossierWindow.getTocItemAt(4)), 1000);
@@ -42,21 +43,25 @@ describe('Dossier top menu buttons', () => {
     waitAndClick($(dossierWindow.getTocItemAt(2)), 1000);
     browser.pause(1000);
     expect($(dossierWindow.visualizationName).getText()).toEqual('Chapter 1: Three vizualizations');
+
     // Apply Bookmark
     waitAndClick($(dossierWindow.buttonBookmarks), 1000);
     waitAndClick($(dossierWindow.getBookmarkItemAt(1)), 1000);
     browser.pause(3000);
     expect($(dossierWindow.visualizationName).getText()).toEqual('Chapter 1: Pie Chart');
+
     // Refresh Dossier
     waitAndClick($(dossierWindow.buttonRefreshDossier), 1000);
     waitAndClick($(dossierWindow.buttonConfirmRefresh), 1000);
     browser.pause(1000);
     expect($(dossierWindow.visualizationName).getText()).toEqual('Chapter 1: Three vizualizations');
+
     // Filtes
     waitAndClick($(dossierWindow.buttonFilters), 1000);
     waitAndClick($(dossierWindow.filtersMenu.getFilterAt(1)), 1000);
     waitAndClick($(dossierWindow.filtersMenu.selectFilterValueAt(2)), 1000);
     waitAndClick($(dossierWindow.filtersMenu.getFilterAt(1)), 1000);
+
     const maxValueInput = $(`${dossierWindow.filtersMenu.getFilterAt(2)} ${dossierWindow.filtersMenu.getSliderInput('right')} > input`)
     maxValueInput.doubleClick();
     browser.keys('\uE003'); // Press Backspace
@@ -64,6 +69,5 @@ describe('Dossier top menu buttons', () => {
     waitAndClick($(dossierWindow.filtersMenu.buttonApplyFilters), 1000);
     browser.pause(1000);
     expect($(dossierWindow.filterCount).getText()).toEqual('FILTERS (2)');
-    browser.pause(3000);
   });
 });
