@@ -2,12 +2,14 @@ import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
+import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { objects as o } from '../../../constants/objects-list';
-import { waitForNotification, waitForPopup } from '../../../helpers/utils/wait-helper';
+import { waitForNotification } from '../../../helpers/utils/wait-helper';
+import { dictionary } from '../../../constants/dictionaries/dictionary';
 import settings from '../../../config';
 
 describe('IMPORT diferent types of vizualizations', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     browser.setWindowSize(1500, 900);
     OfficeWorksheet.openExcelHome();
     const url = browser.getUrl();
@@ -18,133 +20,141 @@ describe('IMPORT diferent types of vizualizations', () => {
     OfficeWorksheet.openPlugin();
     PluginRightPanel.loginToPlugin(settings.env.username, settings.env.password);
   });
+
+  beforeEach(() => {
+    OfficeWorksheet.selectCell('A1');
+    PluginRightPanel.clickImportDataButton();
+  });
+
   afterEach(() => {
+    browser.pause(100);
+    PluginRightPanel.removeFirstObjectFromTheList();
+    browser.pause(1000);
+  });
+
+  afterAll(() => {
     browser.closeWindow();
     const handles = browser.getWindowHandles();
     browser.switchToWindow(handles[0]);
-  });
+  })
 
-  it('Should import all visualizations', () => {
+  it('Should import heatMap visualization', () => {
     const dossierObject = o.dossiers.complexDossier;
-
-    // it should import heatMap visualization
-    OfficeWorksheet.selectCell('A1');
-    PluginRightPanel.clickImportDataButton();
-    PluginPopup.openDossier(dossierObject.name);
+    PluginPopup.openDossier(dossierObject.name, dossierObject.timeToOpen);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.heatMap);
     waitForNotification();
-    browser.pause(5000);
+    expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+  })
 
-    // it should import grid visualization
-    OfficeWorksheet.selectCell('J1');
-    PluginRightPanel.clickAddDataButton();
-    PluginPopup.openDossier(dossierObject.name);
+  it('Should import grid visualization', () => {
+    const dossierObject = o.dossiers.complexDossier;
+    PluginPopup.openDossier(dossierObject.name, dossierObject.timeToOpen);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.grid);
     waitForNotification();
-    browser.pause(5000);
+    expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+  })
 
-    // it should import barChart visualization
-    OfficeWorksheet.selectCell('S1');
-    PluginRightPanel.clickAddDataButton();
-    PluginPopup.openDossier(dossierObject.name);
+  it('Should import barChart visualization', () => {
+    const dossierObject = o.dossiers.complexDossier;
+    PluginPopup.openDossier(dossierObject.name, dossierObject.timeToOpen);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.barChart);
     waitForNotification();
-    browser.pause(5000);
+    expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+  })
 
-    // it should import lineChart visualization
-    OfficeWorksheet.selectCell('AA1');
-    PluginRightPanel.clickAddDataButton();
-    PluginPopup.openDossier(dossierObject.name);
+  it('Should import lineChart visualization', () => {
+    const dossierObject = o.dossiers.complexDossier;
+    PluginPopup.openDossier(dossierObject.name, dossierObject.timeToOpen);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.lineChart);
     waitForNotification();
-    browser.pause(5000);
+    expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+  })
 
-    // it should import areaChart visualization
-    OfficeWorksheet.selectCell('AJ1');
-    PluginRightPanel.clickAddDataButton();
-    PluginPopup.openDossier(dossierObject.name);
+  it('Should import areaChart visualization', () => {
+    const dossierObject = o.dossiers.complexDossier;
+    PluginPopup.openDossier(dossierObject.name, dossierObject.timeToOpen);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.areaChart);
     waitForNotification();
-    browser.pause(5000);
+    expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+  })
 
-    // it should import bubbleChart visualization
-    OfficeWorksheet.selectCell('AS1');
-    PluginRightPanel.clickAddDataButton();
-    PluginPopup.openDossier(dossierObject.name);
+  it('Should import bubbleChart visualization', () => {
+    const dossierObject = o.dossiers.complexDossier;
+    PluginPopup.openDossier(dossierObject.name, dossierObject.timeToOpen);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.bubbleChart);
     waitForNotification();
-    browser.pause(5000);
+    expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+  })
 
-    // it should import pieChart visualization
-    OfficeWorksheet.selectCell('BA1');
-    PluginRightPanel.clickAddDataButton();
-    PluginPopup.openDossier(dossierObject.name);
+  it('Should import pieChart visualization', () => {
+    const dossierObject = o.dossiers.complexDossier;
+    PluginPopup.openDossier(dossierObject.name, dossierObject.timeToOpen);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.pieChart);
     waitForNotification();
-    browser.pause(5000);
+    expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+  })
 
-    // it should import comboChart visualization
-    OfficeWorksheet.selectCell('BJ1');
-    PluginRightPanel.clickAddDataButton();
-    PluginPopup.openDossier(dossierObject.name);
+  it('Should import comboChart visualization', () => {
+    const dossierObject = o.dossiers.complexDossier;
+    PluginPopup.openDossier(dossierObject.name, dossierObject.timeToOpen);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.comboChart);
     waitForNotification();
-    browser.pause(5000);
+    expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+  })
 
-    // it should import geospatialService visualization
-    OfficeWorksheet.selectCell('BS1');
-    PluginRightPanel.clickAddDataButton();
-    PluginPopup.openDossier(dossierObject.name);
+  it('Should import geospatialService visualization', () => {
+    const dossierObject = o.dossiers.complexDossier;
+    PluginPopup.openDossier(dossierObject.name, dossierObject.timeToOpen);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.geospatialService);
     waitForNotification();
-    browser.pause(5000);
+    expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+  })
 
-    // it should import network visualization
-    OfficeWorksheet.selectCell('CA1');
-    PluginRightPanel.clickAddDataButton();
-    PluginPopup.openDossier(dossierObject.name);
+  it('Should import network visualization', () => {
+    const dossierObject = o.dossiers.complexDossier;
+    PluginPopup.openDossier(dossierObject.name, dossierObject.timeToOpen);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.network);
     waitForNotification();
-    browser.pause(5000);
+    expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+  })
 
-    // it should import histogram visualization
-    OfficeWorksheet.selectCell('CJ1');
-    PluginRightPanel.clickAddDataButton();
-    PluginPopup.openDossier(dossierObject.name);
+  it('Should import histogram visualization', () => {
+    const dossierObject = o.dossiers.complexDossier;
+    PluginPopup.openDossier(dossierObject.name, dossierObject.timeToOpen);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.histogram);
     waitForNotification();
-    browser.pause(5000);
+    expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+  })
 
-    // it should import boxPlot visualization
-    OfficeWorksheet.selectCell('CS1');
-    PluginRightPanel.clickAddDataButton();
-    PluginPopup.openDossier(dossierObject.name);
+  it('Should import boxPlot visualization', () => {
+    const dossierObject = o.dossiers.complexDossier;
+    PluginPopup.openDossier(dossierObject.name, dossierObject.timeToOpen);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.boxPlot);
     waitForNotification();
-    browser.pause(5000);
+    expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+  })
 
-    // it should import waterfall visualization
-    OfficeWorksheet.selectCell('DA1');
-    PluginRightPanel.clickAddDataButton();
-    PluginPopup.openDossier(dossierObject.name);
+  it('Should import waterfall visualization', () => {
+    const dossierObject = o.dossiers.complexDossier;
+    PluginPopup.openDossier(dossierObject.name, dossierObject.timeToOpen);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.waterfall);
     waitForNotification();
-    browser.pause(5000);
+    expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+  })
 
-    // it should import map visualization
-    OfficeWorksheet.selectCell('DJ1');
-    PluginRightPanel.clickAddDataButton();
-    PluginPopup.openDossier(dossierObject.name);
+  it('Should import map visualization', () => {
+    const dossierObject = o.dossiers.complexDossier;
+    PluginPopup.openDossier(dossierObject.name, dossierObject.timeToOpen);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.map);
     waitForNotification();
-    browser.pause(5000);
+    expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+  })
 
-    // it should import KPI visualization
-    OfficeWorksheet.selectCell('DS1');
-    PluginRightPanel.clickAddDataButton();
-    PluginPopup.openDossier(dossierObject.name);
+  it('Should import KPI visualization', () => {
+    const dossierObject = o.dossiers.complexDossier;
+    PluginPopup.openDossier(dossierObject.name, dossierObject.timeToOpen);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.KPI);
     waitForNotification();
-    browser.pause(5000);
+    expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   });
 });

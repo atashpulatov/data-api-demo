@@ -39,6 +39,7 @@ export const objects = {
   dossiers: {
     complexDossier: {
       name: 'Complex dossier (20 visualizations)',
+      timeToOpen: 10000,
       // TODO: Pages
       visualizations: {
         heatMap: '#mstr191',
