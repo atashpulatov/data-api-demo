@@ -274,7 +274,7 @@ const PluginPopup = function() {
 
   this.openDossier = function(dossierName) {
     this.importObject(dossierName);
-    browser.pause(30000);
+    browser.pause(5000);
   }
 
   this.selectAndImportVizualiation = function(visContainerId) {
@@ -287,12 +287,44 @@ const PluginPopup = function() {
     this.clickImport();
   }
 
-  this.doManipulations = (visAttirbuteId) => {
+  this.showTotals = (objectId) => {
     switchToPromptFrame();
-    const visContainer = $(`${visAttirbuteId} > table > tbody > tr:nth-child(1) > td:nth-child(1)`);
-    // waitAndRightClick(visContainer);
-    visContainer.click({ button:'right' });
-    browser.pause(5000);
+    waitAndRightClick($(`${objectId}`));
+    browser.pause(1000);
+    waitAndClick($(s.showTotalsButton));
+    browser.pause(1000);
+    waitAndClick($(s.totalButton));
+    waitAndClick($(s.okButton));
+    browser.pause(4000);
+    switchToPluginFrame();
+  }
+
+  this.sortAscending = (objectId) => {
+    switchToPromptFrame();
+    waitAndRightClick($(`${objectId}`));
+    browser.pause(1000);
+    waitAndClick($(s.sortAscendingButton));
+    browser.pause(4000);
+    switchToPluginFrame();
+  }
+
+  this.sortDescending = (objectId) => {
+    switchToPromptFrame();
+    waitAndRightClick($(`${objectId}`));
+    browser.pause(1000);
+    waitAndClick($(s.sortDescendingButton));
+    browser.pause(4000);
+    switchToPluginFrame();
+  }
+
+  this.drillVisualisation = (objectId) => {
+    switchToPromptFrame();
+    waitAndRightClick($(`${objectId}`));
+    browser.pause(1000);
+    waitAndClick($(s.drillButton));
+    browser.pause(1000);
+    waitAndClick($(s.categoryButton));
+    browser.pause(4000);
     switchToPluginFrame();
   }
 };

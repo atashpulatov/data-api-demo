@@ -30,9 +30,12 @@ describe('IMPORT diferent types of vizualizations', () => {
     PluginRightPanel.clickImportDataButton();
     const dossierObject = o.dossiers.visualizationManipulation;
     PluginPopup.openDossier(dossierObject.name);
-    PluginPopup.doManipulations(dossierObject.visualizations.visualization1.attributeId);
-    //    PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.Visualization1);
-    //    waitForNotification();
-    //    browser.pause(5000);
+    PluginPopup.showTotals(dossierObject.visualizations.visualization1.yearAttribute);
+    PluginPopup.sortAscending(dossierObject.visualizations.visualization1.profitMetric);
+    PluginPopup.sortDescending(dossierObject.visualizations.visualization1.revenueMetric);
+    PluginPopup.drillVisualisation(dossierObject.visualizations.visualization1.yearAttribute);
+    PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.visualization1.name);
+    waitForNotification();
+    browser.pause(5000);
   });
 });

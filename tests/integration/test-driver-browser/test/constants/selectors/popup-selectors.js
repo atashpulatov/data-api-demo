@@ -38,4 +38,11 @@ export const selectors = {
   // promptArrow: element(by.className('mstrBGIcon_tbAdd')),
   promptArrow: '.mstrBGIcon_tbAdd',
   promptTextBox: '#id_mstr38_txt',
+  showTotalsButton:'div=Show Totals',
+  totalButton:'span=Total',
+  okButton:'div=OK',
+  sortAscendingButton:'div=Sort Ascending',
+  sortDescendingButton:'div=Sort Descending',
+  drillButton:'div=Drill',
+  categoryButton:'div=Category',
 };
