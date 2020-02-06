@@ -256,13 +256,15 @@ export class OfficeDisplayService {
           // hides table headers for crosstab if we fail on refresh
           officeTable.showHeaders = false;
         }
+      }
+      if (bindId) {
         this.reduxStore.dispatch({
           type: officeProperties.actions.finishLoadingReport,
           reportBindId: bindId,
           isRefreshAll: false,
           isError,
         });
-      } else {
+      } else if (bindingId) {
         this.reduxStore.dispatch({
           type: officeProperties.actions.finishLoadingReport,
           reportBindId: bindingId,
