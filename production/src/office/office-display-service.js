@@ -363,8 +363,8 @@ export class OfficeDisplayService {
       try {
         temporaryInstanceDefinition = await fetchVisualizationDefinition(config);
       } catch (error) {
-        if (error.message && error.message.includes(incomingErrorStrings.INVALID_VIS_KEY)) {
-          error.type = errorTypes.INVALID_VIS_KEY;
+        if (error.message && error.message.includes(incomingErrorStrings.INVALID_VIZ_KEY)) {
+          error.type = errorTypes.INVALID_VIZ_KEY;
         }
         throw error;
       }

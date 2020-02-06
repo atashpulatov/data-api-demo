@@ -13,7 +13,7 @@ import {
   errorTypes,
   SESSION_EXPIRED,
   WRONG_CREDENTIALS,
-  INVALID_VIS_KEY_MESSAGE,
+  INVALID_VIZ_KEY_MESSAGE,
 } from '../../error/constants';
 
 jest.mock('../../storage/session-helper');
@@ -377,15 +377,15 @@ describe('ErrorService', () => {
       expect(notificationSpy).toBeCalled();
       expect(notificationSpy).toBeCalledWith({ content: TABLE_OVERLAP, details: 'A table can\'t overlap another table. ', onConfirm: null, type: 'warning', });
     });
-    it('should display INVALID_VIS_KEY_MESSAGE notification on INVALID_VIS_KEY error', () => {
+    it('should display INVALID_VIZ_KEY_MESSAGE notification on INVALID_VIZ_KEY error', () => {
       // given
-      const error = { response: { status: 404, }, type: errorTypes.INVALID_VIS_KEY };
+      const error = { response: { status: 404, }, type: errorTypes.INVALID_VIZ_KEY };
       const spyMethod = jest.spyOn(notificationService, 'displayNotification');
       // when
       errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith({ content: INVALID_VIS_KEY_MESSAGE, details: '', onConfirm: null, type: 'warning', });
+      expect(spyMethod).toBeCalledWith({ content: INVALID_VIZ_KEY_MESSAGE, details: '', onConfirm: null, type: 'warning', });
     });
   });
   describe('getOfficeErrorType', () => {
