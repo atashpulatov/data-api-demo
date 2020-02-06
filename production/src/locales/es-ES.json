@@ -210,5 +210,7 @@
   "Automatic": "Automático",
   "Show attribute name once": "Mostrar el nombre del atributo una vez",
   "On": "Activado",
-  "Off": "Desactivado"
+  "Off": "Desactivado",
+  "You are trying to perform an operation on a visualization which is either not supported or has been moved to another chapter/page or deleted from the dossier.": "*You are trying to perform an operation on a visualization which is either not supported or has been moved to another chapter/page or deleted from the dossier.*",
+  "Seems like the dossier has been removed.": "*Seems like the dossier has been removed.*"
 }
