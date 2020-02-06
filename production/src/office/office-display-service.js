@@ -351,7 +351,13 @@ export class OfficeDisplayService {
         body.manipulations = manipulationsXML.manipulations;
         body.promptAnswers = manipulationsXML.promptAnswers;
       }
-      const instanceId = preparedInstanceId || (await createDossierInstance(projectId, objectId, body));
+      let instanceId;
+      try {
+        instanceId = preparedInstanceId || (await createDossierInstance(projectId, objectId, body));
+      } catch (error) {
+        error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
+        throw error;
+      }
       const config = { projectId, objectId, instanceId, mstrObjectType, dossierData, body, visualizationInfo, displayAttrFormNames };
       let temporaryInstanceDefinition;
       try {
