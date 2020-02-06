@@ -16,6 +16,8 @@ import {
   NOT_SUPPORTED_NO_ATTRIBUTES,
   ALL_DATA_FILTERED_OUT,
   ERROR_POPUP_CLOSED,
+  incomingErrorStrings,
+  errorTypes
 } from '../error/constants';
 
 const {
@@ -351,8 +353,16 @@ export class OfficeDisplayService {
       }
       const instanceId = preparedInstanceId || (await createDossierInstance(projectId, objectId, body));
       const config = { projectId, objectId, instanceId, mstrObjectType, dossierData, body, visualizationInfo, displayAttrFormNames };
-      const temp = await fetchVisualizationDefinition(config);
-      instanceDefinition = { ...temp, instanceId };
+      let temporaryInstanceDefinition;
+      try {
+        temporaryInstanceDefinition = await fetchVisualizationDefinition(config);
+      } catch (error) {
+        if (error.message && error.message.includes(incomingErrorStrings.INVALID_VIS_KEY)) {
+          error.type = errorTypes.INVALID_VIS_KEY;
+        }
+        throw error;
+      }
+      instanceDefinition = { ...temporaryInstanceDefinition, instanceId };
     } else {
       const config = { objectId, projectId, mstrObjectType, dossierData, body, displayAttrFormNames };
       instanceDefinition = await createInstance(config);
