@@ -177,6 +177,7 @@ export function dispatchCacheResults({ type, data, uuid }, dispatch) {
     dispatch(addProjects(data));
     break;
   case MY_LIBRARY_DB_ID:
+    dispatch(saveMyLibraryOwners(data));
     dispatch(addMyLibraryObjects({ data, uuid }));
     break;
   case ENV_LIBRARY_DB_ID:
@@ -205,9 +206,6 @@ export function connectToCache(isRefresh) {
 
     cache.onChange((results) => {
       dispatchCacheResults(results, dispatch);
-      if (results.type === MY_LIBRARY_DB_ID) {
-        dispatch(saveMyLibraryOwners(results.data));
-      }
     }, isRefresh);
     return cache;
   };
