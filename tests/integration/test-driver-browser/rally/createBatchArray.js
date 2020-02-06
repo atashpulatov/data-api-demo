@@ -2,8 +2,7 @@ const getRallyTCURL = require('./getRallyTCURL');
 
 const today = new Date();
 
-
-// Update Rally Test Case Result using the retrieved Test Case URL and the corresponding test result
+/** Update Rally Test Case Result using the retrieved Test Case URL and the corresponding test result */
 module.exports = async function createBatchArray(testCaseArray) {
   const batch = [];
   for (let i = 0; i < testCaseArray.length; i++) {
@@ -17,14 +16,14 @@ module.exports = async function createBatchArray(testCaseArray) {
         Method: 'POST',
         Body: {
           testcaseresult: {
-            Build:build,
-            Date:today,
+            Build: build,
+            Date: today,
             Testcase: tcUrl.split('v2.0')[1],
-            Verdict:verdict,
+            Verdict: verdict,
             c_Browsertype: browser,
             Tester: owner,
             c_ProductionRelease: release,
-            Duration:duration,
+            Duration: duration,
             //      'Notes': notes,
             //      'c_ExportApplication': exportApp,
             //      'c_ClientOS': clientOS,

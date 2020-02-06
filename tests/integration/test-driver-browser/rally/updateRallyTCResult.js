@@ -30,7 +30,7 @@ updateRallyTCResult()
   .then(result => {
     const jsonResult = JSON.parse(result);
     const { Errors } = jsonResult.BatchResult;
-    if (Errors.length) {
+    if (Errors.length > 0) {
       throw new Error(Errors)
     }
     console.log('Rally request completed')

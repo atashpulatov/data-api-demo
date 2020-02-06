@@ -17,8 +17,8 @@ function getRallyTCUrl(testCaseId) {
           const bodyJson = JSON.parse(body);
           const tcUrl = bodyJson.QueryResult.Results[0]._ref;
           resolve(tcUrl);
-        } catch (error) {
-          reject(error);
+        } catch (err) {
+          reject(err);
         }
       } else {
         console.error(`Sending request to Rally REST Server has failed. Test Case ID: ${testCaseId} Error: ${error}`);

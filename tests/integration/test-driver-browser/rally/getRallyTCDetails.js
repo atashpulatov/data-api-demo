@@ -15,8 +15,8 @@ module.exports = function getRallyTCDetails(tcUrl) {
         try {
           const bodyJson = JSON.parse(body);
           resolve(bodyJson);
-        } catch (error) {
-          reject(error);
+        } catch (err) {
+          reject(err);
         }
       } else {
         console.error(`Sending request to Rally REST Server has failed.`);
@@ -24,4 +24,4 @@ module.exports = function getRallyTCDetails(tcUrl) {
       }
     });
   });
-};
+}
