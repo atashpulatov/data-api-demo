@@ -107,7 +107,7 @@ export class OfficeApiHelper {
       if (error && error.code === 'ItemNotFound') {
         return notificationService.displayTranslatedNotification({ type: 'info', content: OBJ_REMOVED_FROM_EXCEL });
       }
-      errorService.handleError(error, {chosenObjectName, onConfirm: deleteReport});
+      errorService.handleError(error, { chosenObjectName, onConfirm: deleteReport });
       return false;
     }
   };
@@ -443,7 +443,7 @@ export class OfficeApiHelper {
       }
       // Check if ranges are valid before clearing
       await context.sync();
-      if (isCrosstab && (crosstabHeaderDimensions === prevheaderDimensions)) {
+      if (isCrosstab && (JSON.stringify(crosstabHeaderDimensions) === JSON.stringify(prevheaderDimensions))) {
         if (columnsY) topRange.clear('contents');
         if (rowsX) {
           leftRange.clear('contents');
