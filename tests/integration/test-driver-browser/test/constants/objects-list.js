@@ -70,5 +70,9 @@ export const objects = {
       },
     },
     interactiveDossier: { name: 'Dossier for interactive components', },
+    customVisualizations: {
+      name: 'Custom Visualizations',
+      visualizations: { GoogleTimeline: '#mstr114', }
+    },
   }
 };
