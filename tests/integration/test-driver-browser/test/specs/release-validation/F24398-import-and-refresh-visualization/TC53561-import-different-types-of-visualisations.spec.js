@@ -23,12 +23,6 @@ describe('IMPORT diferent types of vizualizations', () => {
     PluginRightPanel.loginToPlugin(settings.env.username, settings.env.password);
   });
 
-  afterAll(() => {
-    browser.closeWindow();
-    const handles = browser.getWindowHandles();
-    browser.switchToWindow(handles[0]);
-  })
-
   // Create test for each visType defined in visualizations
   Object.keys(visualizations).forEach(visType => {
     it(`should import ${visType} visualization`, () => {
