@@ -34,7 +34,7 @@ export const selectors = {
   sortedUp: '.ant-table-column-sorter-up.on',
   sortedDown: '.ant-table-column-sorter-up.on',
   noDataIcon: $('.ant-table-placeholder'),
-  myLibrary: 'div.mstr-switch',
+  myLibrary: '#root > div > div.navigation_tree__title_bar > div > div.mstr-switch-container > div.mstr-switch',
   closeRefreshAll: '#WACDialogTitlePanel > a',
   // promptArrow: element(by.className('mstrBGIcon_tbAdd')),
   promptArrow: '.mstrBGIcon_tbAdd',
