@@ -205,6 +205,9 @@ export function connectToCache(isRefresh) {
 
     cache.onChange((results) => {
       dispatchCacheResults(results, dispatch);
+      if (results.type === MY_LIBRARY_DB_ID) {
+        dispatch(saveMyLibraryOwners(results.data));
+      }
     }, isRefresh);
     return cache;
   };
