@@ -19,6 +19,7 @@ export const errorTypes = {
   GENERIC_OFFICE_ERR: 'genericOffice',
   PROTECTED_SHEET_ERR: 'protectedSheet',
   UNKNOWN_ERR: 'unknown',
+  INVALID_VIZ_KEY: 'invalidVizKey',
 };
 
 export const incomingErrorStrings = {
@@ -26,6 +27,7 @@ export const incomingErrorStrings = {
   TABLE_OVERLAP: 'A table can\'t overlap another table. ',
   BINDING_NOT_VALID: 'This object binding is no longer valid due to previous updates.',
   CONNECTION_BROKEN: 'Possible causes: the network is offline,',
+  INVALID_VIZ_KEY: 'Invalid visualization key',
 };
 
 export const stringMessageToErrorType = withDefaultValue({
@@ -73,6 +75,7 @@ export const LOGIN_FAILURE = 'Login failure';
 export const OBJ_REMOVED_FROM_EXCEL = 'This object does not exist in the workbook anymore.';
 export const PROTECTED_SHEET = 'The table you are trying to manipulate is in a protected sheet. To make a change, unprotect the sheet. You might be requested to enter a password.';
 export const NOT_SUPPORTED_VIZ = 'Selected visualization cannot be imported in current version of the Add-in';
+export const INVALID_VIZ_KEY_MESSAGE = 'You are trying to perform an operation on a visualization which is either not supported or has been moved to another chapter/page or deleted from the dossier.';
 
 // temporarily we map all those codes to one message; may be changed in the future
 const iServerErrorMessages = withDefaultValue({
@@ -95,6 +98,9 @@ export const errorMessageFactory = withDefaultValue({
       && error.response.body
       && (error.response.body.iServerCode === -2147216373)
     ) {
+      if (error.mstrObjectType) {
+        return `Seems like the ${error.mstrObjectType} has been removed.`;
+      }
       return NOT_IN_METADATA;
     }
     return ENDPOINT_NOT_REACHED;
@@ -119,5 +125,6 @@ export const errorMessageFactory = withDefaultValue({
   [errorTypes.TABLE_REMOVED_FROM_EXCEL_ERR]: ({ chosenObjectName }) => `${chosenObjectName} does not exist in the workbook anymore.`,
   [errorTypes.GENERIC_OFFICE_ERR]: ({ error }) => `Excel returned error: ${error.message}`,
   [errorTypes.PROTECTED_SHEET_ERR]: () => PROTECTED_SHEET,
+  [errorTypes.INVALID_VIZ_KEY]: () => INVALID_VIZ_KEY_MESSAGE,
 },
 ({ error }) => error.message || UNKNOWN_ERROR);

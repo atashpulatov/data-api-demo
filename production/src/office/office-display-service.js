@@ -16,6 +16,8 @@ import {
   NOT_SUPPORTED_NO_ATTRIBUTES,
   ALL_DATA_FILTERED_OUT,
   ERROR_POPUP_CLOSED,
+  incomingErrorStrings,
+  errorTypes
 } from '../error/constants';
 
 const {
@@ -256,13 +258,15 @@ export class OfficeDisplayService {
           // hides table headers for crosstab if we fail on refresh
           officeTable.showHeaders = false;
         }
+      }
+      if (bindId) {
         this.reduxStore.dispatch({
           type: officeProperties.actions.finishLoadingReport,
           reportBindId: bindId,
           isRefreshAll: false,
           isError,
         });
-      } else {
+      } else if (bindingId) {
         this.reduxStore.dispatch({
           type: officeProperties.actions.finishLoadingReport,
           reportBindId: bindingId,
@@ -347,10 +351,24 @@ export class OfficeDisplayService {
         body.manipulations = manipulationsXML.manipulations;
         body.promptAnswers = manipulationsXML.promptAnswers;
       }
-      const instanceId = preparedInstanceId || (await createDossierInstance(projectId, objectId, body));
+      let instanceId;
+      try {
+        instanceId = preparedInstanceId || (await createDossierInstance(projectId, objectId, body));
+      } catch (error) {
+        error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
+        throw error;
+      }
       const config = { projectId, objectId, instanceId, mstrObjectType, dossierData, body, visualizationInfo, displayAttrFormNames };
-      const temp = await fetchVisualizationDefinition(config);
-      instanceDefinition = { ...temp, instanceId };
+      let temporaryInstanceDefinition;
+      try {
+        temporaryInstanceDefinition = await fetchVisualizationDefinition(config);
+      } catch (error) {
+        if (error.message && error.message.includes(incomingErrorStrings.INVALID_VIZ_KEY)) {
+          error.type = errorTypes.INVALID_VIZ_KEY;
+        }
+        throw error;
+      }
+      instanceDefinition = { ...temporaryInstanceDefinition, instanceId };
     } else {
       const config = { objectId, projectId, mstrObjectType, dossierData, body, displayAttrFormNames };
       instanceDefinition = await createInstance(config);
