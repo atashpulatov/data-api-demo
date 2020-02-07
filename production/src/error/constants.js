@@ -52,7 +52,7 @@ export const httpStatusToErrorType = withDefaultValue({
 export const GENERIC_SERVER_ERR = 'This object cannot be imported.';
 export const ALL_DATA_FILTERED_OUT = 'No data returned for this view. This might be because the applied prompt excludes all data.';
 export const EMPTY_REPORT = 'This object does not contain any data.';
-export const NOT_SUPPORTED_NO_ATTRIBUTES = 'This object cannot be imported. Either you do not have necessary permissions to view it, or it is empty.';
+export const NO_DATA_RETURNED = 'This object cannot be imported. Either you do not have necessary permissions to view it, or it is empty.';
 export const NOT_SUPPORTED_SERVER_ERR = 'This object cannot be imported. Objects with cross tabs, totals, or subtotals are not supported in this version of MicroStrategy for Office.';
 export const NOT_SUPPORTED_PROMPTS_REFRESH = 'Objects with prompts cannot be refreshed in this version of MicroStrategy for Office.';
 export const NOT_PUBLISHED_CUBE = 'This object cannot be imported. The Intelligent Cube is not published.';
@@ -88,7 +88,7 @@ const iServerErrorMessages = withDefaultValue({
   '-2147216373': NOT_IN_METADATA,
   '-2147216959': LOGIN_FAILURE,
   '-2147207419': CONNECTION_BROKEN,
-  '-2147213784': NOT_SUPPORTED_NO_ATTRIBUTES,
+  '-2147213784': NO_DATA_RETURNED,
 }, GENERIC_SERVER_ERR);
 
 export const errorMessageFactory = withDefaultValue({

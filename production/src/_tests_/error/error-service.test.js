@@ -14,7 +14,7 @@ import {
   SESSION_EXPIRED,
   WRONG_CREDENTIALS,
   INVALID_VIZ_KEY_MESSAGE,
-  NOT_SUPPORTED_NO_ATTRIBUTES,
+  NO_DATA_RETURNED,
 } from '../../error/constants';
 
 jest.mock('../../storage/session-helper');
@@ -334,7 +334,7 @@ describe('ErrorService', () => {
       expect(spyMethod).toBeCalled();
       expect(spyMethod).toBeCalledWith({ content: NOT_IN_METADATA, details: '', onConfirm: null, type: 'warning', });
     });
-    it('should display NOT_SUPPORTED_NO_ATTRIBUTES on server error with -2147213784 iServerCode', () => {
+    it('should display NO_DATA_RETURNED on server error with -2147213784 iServerCode', () => {
       // given
       const response = { status: 403, body: { iServerCode: '-2147213784' } };
       const error = { response };
@@ -343,7 +343,7 @@ describe('ErrorService', () => {
       errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith({ content: NOT_SUPPORTED_NO_ATTRIBUTES, details: '', onConfirm: null, type: 'warning', });
+      expect(spyMethod).toBeCalledWith({ content: NO_DATA_RETURNED, details: '', onConfirm: null, type: 'warning', });
     });
     it('should display notification on dossier removed from metadata', () => {
       // given
