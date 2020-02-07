@@ -77,7 +77,7 @@ const PluginPopup = function() {
   };
 
   this.changePromptQualificationItem = (value) => {
-    witchToPopupFrame();
+    switchToPopupFrame();
     waitAndClick($('div[title="- none -"]'));
     waitAndClick($(`div[title=${value}"]`));
   };
