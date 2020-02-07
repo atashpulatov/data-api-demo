@@ -42,7 +42,7 @@ task :deploy_tester_server,[:build_no] do | t, args|
   
 end
 def tomcat_dir()
-  "C:\\apache\\apache-tomcat-8.5.50"
+  "C:\\apache\\apache-tomcat-9.0.30"
 end
 
 def start_tomcat()
