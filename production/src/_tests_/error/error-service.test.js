@@ -12,6 +12,7 @@ import {
   errorTypes,
   SESSION_EXPIRED,
   WRONG_CREDENTIALS,
+  NOT_SUPPORTED_NO_ATTRIBUTES,
 } from '../../error/constants';
 
 jest.mock('../../storage/session-helper');
@@ -330,6 +331,17 @@ describe('ErrorService', () => {
       // then
       expect(spyMethod).toBeCalled();
       expect(spyMethod).toBeCalledWith({ content: NOT_IN_METADATA, details: '', onConfirm: null, type: 'warning', });
+    });
+    it('shoudl display NOT_SUPPORTED_NO_ATTRIBUTES on server error with -2147213784 iServerCode', () => {
+      // given
+      const response = { status: 403, body: { iServerCode: '-2147213784' } };
+      const error = { response };
+      const spyMethod = jest.spyOn(notificationService, 'displayNotification');
+      // when
+      errorService.handleError(error);
+      // then
+      expect(spyMethod).toBeCalled();
+      expect(spyMethod).toBeCalledWith({ content: NOT_SUPPORTED_NO_ATTRIBUTES, details: '', onConfirm: null, type: 'warning', });
     });
     it('should logout on UnauthorizedError', () => {
       // given
