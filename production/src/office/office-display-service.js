@@ -13,7 +13,7 @@ import { officeStoreService } from './store/office-store-service';
 import { PopupTypeEnum } from '../home/popup-type-enum';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import {
-  NOT_SUPPORTED_NO_ATTRIBUTES,
+  NO_DATA_RETURNED,
   ALL_DATA_FILTERED_OUT,
   ERROR_POPUP_CLOSED,
   incomingErrorStrings,
@@ -151,7 +151,7 @@ export class OfficeDisplayService {
       if (!instanceDefinition || mstrTable.rows.length === 0) {
         return {
           type: 'warning',
-          message: isPrompted ? ALL_DATA_FILTERED_OUT : NOT_SUPPORTED_NO_ATTRIBUTES,
+          message: isPrompted ? ALL_DATA_FILTERED_OUT : NO_DATA_RETURNED,
         };
       }
 

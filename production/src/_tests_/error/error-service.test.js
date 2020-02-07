@@ -14,6 +14,7 @@ import {
   SESSION_EXPIRED,
   WRONG_CREDENTIALS,
   INVALID_VIZ_KEY_MESSAGE,
+  NO_DATA_RETURNED,
 } from '../../error/constants';
 
 jest.mock('../../storage/session-helper');
@@ -332,6 +333,17 @@ describe('ErrorService', () => {
       // then
       expect(spyMethod).toBeCalled();
       expect(spyMethod).toBeCalledWith({ content: NOT_IN_METADATA, details: '', onConfirm: null, type: 'warning', });
+    });
+    it('should display NO_DATA_RETURNED on server error with -2147213784 iServerCode', () => {
+      // given
+      const response = { status: 403, body: { iServerCode: '-2147213784' } };
+      const error = { response };
+      const spyMethod = jest.spyOn(notificationService, 'displayNotification');
+      // when
+      errorService.handleError(error);
+      // then
+      expect(spyMethod).toBeCalled();
+      expect(spyMethod).toBeCalledWith({ content: NO_DATA_RETURNED, details: '', onConfirm: null, type: 'warning', });
     });
     it('should display notification on dossier removed from metadata', () => {
       // given
