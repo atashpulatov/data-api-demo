@@ -131,6 +131,7 @@ export default class _EmbeddedDossier extends React.Component {
         }
       }
     } catch (error) {
+      error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
       popupHelper.handlePopupErrors(error);
     }
 

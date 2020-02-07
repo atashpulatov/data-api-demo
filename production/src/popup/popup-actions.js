@@ -1,4 +1,5 @@
 import { officeProperties } from '../office/office-properties';
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 
 export const CLEAR_WINDOW = 'POPUP_CLOSE_WINDOW';
 export const START_REPORT_LOADING = 'START_REPORT_LOADING';
@@ -113,6 +114,7 @@ export class PopupActions {
       });
       this.popupController.runEditDossierPopup(reportParams);
     } catch (error) {
+      error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
       return this.errorService.handleError(error);
     }
   }
