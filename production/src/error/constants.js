@@ -85,6 +85,7 @@ const iServerErrorMessages = withDefaultValue({
   '-2147216373': NOT_IN_METADATA,
   '-2147216959': LOGIN_FAILURE,
   '-2147207419': CONNECTION_BROKEN,
+  '-2147213784': NOT_SUPPORTED_NO_ATTRIBUTES,
 }, GENERIC_SERVER_ERR);
 
 export const errorMessageFactory = withDefaultValue({
