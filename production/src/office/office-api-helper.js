@@ -583,6 +583,7 @@ export class OfficeApiHelper {
   async deleteExcelTable(tableObject, context, isCrosstab = false, crosstabHeaderDimensions = {}, isClear = false) {
     context.runtime.enableEvents = false;
     await context.sync();
+    const isClearContentOnly = isClear ? 'contents' : '';
     const tableRange = tableObject.getDataBodyRange();
     context.trackedObjects.add(tableRange);
     if (isCrosstab) {
@@ -595,11 +596,11 @@ export class OfficeApiHelper {
       const firstCell = crosstabRange.getCell(0, 0);
       const columnsHeaders = firstCell.getOffsetRange(0, rowsX).getResizedRange(columnsY - 1, columnsX - 1);
       const rowsHeaders = firstCell.getResizedRange((columnsY + rowsY), rowsX - 1);
-      columnsHeaders.clear();
-      rowsHeaders.clear();
+      columnsHeaders.clear(isClearContentOnly);
+      rowsHeaders.clear(isClearContentOnly);
     }
-    tableRange.clear();
-    if (!isClear) tableObject.delete();
+    tableRange.clear(isClearContentOnly);
+    if (!isClear) { tableObject.delete(); }
     context.runtime.enableEvents = true;
     await context.sync();
     context.trackedObjects.remove(tableRange);
