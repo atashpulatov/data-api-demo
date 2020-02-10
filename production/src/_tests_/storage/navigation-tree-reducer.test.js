@@ -290,19 +290,19 @@ describe('NavigationTree Reducer', () => {
     expect(newState.importRequested).toBeFalsy();
   });
 
-  it('should return new proper state in case of CHANGE_SORTING action', () => {
-    // given
-    const action = {
-      type: CHANGE_SORTING,
-      data: 'mock',
-    };
+  // it('should return new proper state in case of CHANGE_SORTING action', () => {
+  //   // given
+  //   const action = {
+  //     type: CHANGE_SORTING,
+  //     data: 'mock',
+  //   };
 
-    // when
-    const newState = navigationTree({}, action);
+  //   // when
+  //   const newState = navigationTree({}, action);
 
-    // then
-    expect(newState.sorter).toEqual(action.data);
-  });
+  //   // then
+  //   expect(newState.sorter).toEqual(action.data);
+  // });
 
   it('should return new proper state in case of CHANGE_SEARCHING action', () => {
     // given
@@ -366,7 +366,7 @@ describe('NavigationTree Reducer', () => {
     const newState = navigationTree({}, action);
 
     // then
-    expect(newState.sorter).toEqual({});
+    // expect(newState.sorter).toEqual({});
     expect(newState.chosenObjectId).toEqual(null);
     expect(newState.chosenProjectId).toEqual(null);
     expect(newState.chosenSubtype).toEqual(null);
@@ -382,7 +382,7 @@ describe('NavigationTree Reducer', () => {
     const newState = navigationTree({}, action);
 
     // then
-    expect(newState.sorter).toEqual({});
+    // expect(newState.sorter).toEqual({});
     expect(newState.chosenObjectId).toEqual(null);
     expect(newState.chosenProjectId).toEqual(null);
     expect(newState.chosenSubtype).toEqual(null);
@@ -398,7 +398,7 @@ describe('NavigationTree Reducer', () => {
     const newState = navigationTree({}, action);
 
     // then
-    expect(newState.sorter).toEqual({});
+    // expect(newState.sorter).toEqual({});
     expect(newState.chosenObjectId).toEqual(null);
     expect(newState.chosenProjectId).toEqual(null);
     expect(newState.chosenSubtype).toEqual(null);
@@ -414,7 +414,7 @@ describe('NavigationTree Reducer', () => {
     const newState = navigationTree({}, action);
 
     // then
-    expect(newState.sorter).not.toEqual({});
+    // expect(newState.sorter).not.toEqual({});
     expect(newState.chosenObjectId).not.toEqual(null);
     expect(newState.chosenProjectId).not.toEqual(null);
     expect(newState.chosenSubtype).not.toEqual(null);

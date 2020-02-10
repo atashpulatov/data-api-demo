@@ -66,16 +66,16 @@ describe('NavigationTree Actions', () => {
     // then
     expect(listener).toHaveBeenCalledWith({ type: officeProperties.actions.startLoading });
   });
-  it('should dispatch proper changeSorting action', () => {
-    // given
-    const listener = jest.fn();
+  // it('should dispatch proper changeSorting action', () => {
+  //   // given
+  //   const listener = jest.fn();
 
-    // when
-    actions.changeSorting(true)(listener);
+  //   // when
+  //   actions.changeSorting(true)(listener);
 
-    // then
-    expect(listener).toHaveBeenCalledWith({ type: actions.CHANGE_SORTING, data: true });
-  });
+  //   // then
+  //   expect(listener).toHaveBeenCalledWith({ type: actions.CHANGE_SORTING, data: true });
+  // });
   it('should dispatch proper changeSearching action', () => {
     // given
     const listener = jest.fn();

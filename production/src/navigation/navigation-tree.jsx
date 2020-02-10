@@ -30,6 +30,7 @@ export class _NavigationTree extends Component {
     this.state = {
       previewDisplay: false,
       isPublished: true,
+      sorter: {},
     };
     this.indexedDBSupport = DB.getIndexedDBSupport();
   }
@@ -144,6 +145,10 @@ export class _NavigationTree extends Component {
     window.Office.context.ui.messageParent(JSON.stringify(cancelObject));
   };
 
+  handleChangeSorting = (newSorter) => {
+    this.setState({ sorter: newSorter });
+  };
+
   // TODO: temporary solution
   onObjectChosen = async (objectId, projectId, subtype, objectName, targetId, myLibrary) => {
     const { selectObject } = this.props;
@@ -177,10 +182,10 @@ export class _NavigationTree extends Component {
 
   render() {
     const {
-      chosenObjectId, chosenProjectId, changeSorting, loading, chosenLibraryDossier, searchText, sorter,
+      chosenObjectId, chosenProjectId, /* changeSorting, */ loading, chosenLibraryDossier, searchText, /* sorter, */
       changeSearching, objectType, cache, envFilter, myLibraryFilter, myLibrary, switchMyLibrary, changeFilter, t, i18n,
     } = this.props;
-    const { previewDisplay, isPublished } = this.state;
+    const { previewDisplay, isPublished, sorter } = this.state;
     const objects = myLibrary ? cache.myLibrary.objects : cache.environmentLibrary.objects;
     const cacheLoading = cache.myLibrary.isLoading || cache.environmentLibrary.isLoading;
     return (
@@ -208,7 +213,7 @@ export class _NavigationTree extends Component {
           }}
           onSelect={({ id, projectId, subtype, name, targetId }) => this.onObjectChosen(id, projectId, subtype, name, targetId, myLibrary)}
           sort={sorter}
-          onSortChange={changeSorting}
+          onSortChange={this.handleChangeSorting}
           locale={i18n.language}
           searchText={searchText}
           myLibrary={myLibrary}
