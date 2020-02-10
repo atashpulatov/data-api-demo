@@ -1,6 +1,6 @@
 // import {$$} from 'protractor';
 
-export const selectors = {
+export const popupSelectors = {
   // TODO group selectors based on location
   tableOfObjects: '#WACDialogPanel',
   searchInput: '.search-field__input',

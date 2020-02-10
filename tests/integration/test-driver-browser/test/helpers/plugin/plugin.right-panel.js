@@ -1,19 +1,19 @@
 import { switchToPluginFrame, switchToPopupFrame, switchToExcelFrame } from '../utils/iframe-helper';
 import { waitAndClick } from '../utils/click-helper';
-import { selectors as s } from '../../constants/selectors/plugin.right-panel-selectors';
+import { rightPanelSelectors } from '../../constants/selectors/plugin.right-panel-selectors';
 import { excelSelectors as exSe } from '../../constants/selectors/office-selectors';
 
 const PluginRightPanel = function() {
   this.clickLoginPopUpBtn = function() {
-    waitAndClick($(s.loginPopUpBtn));
+    waitAndClick($(rightPanelSelectors.loginPopUpBtn));
   };
 
   this.clickLogout = function() {
-    waitAndClick($(s.logoutBtn));
+    waitAndClick($(rightPanelSelectors.logoutBtn));
   };
 
   this.clickSettings = function() {
-    waitAndClick($(s.settingsBtn));
+    waitAndClick($(rightPanelSelectors.settingsBtn));
   };
 
   this.logout = function() {
@@ -23,47 +23,47 @@ const PluginRightPanel = function() {
 
   this.clickImportDataButton = function() {
     switchToPluginFrame();
-    waitAndClick($(s.importDataBtn));
+    waitAndClick($(rightPanelSelectors.importDataBtn));
     browser.pause(999);
   };
 
   // Currently it is not used
   this.loginToPluginLDAP = function(username, password) {
     switchToPluginFrame();
-    waitAndClick($(s.LDAPbutton));
-    $(s.usernameInput).setValue(username);
-    $(s.passwordInput).setValue(password);
+    waitAndClick($(rightPanelSelectors.LDAPbutton));
+    $(rightPanelSelectors.usernameInput).setValue(username);
+    $(rightPanelSelectors.passwordInput).setValue(password);
     this.clickloginToPlugin();
     browser.pause(4444);
   };
 
   this.clickAddDataButton = function() {
     switchToPluginFrame();
-    waitAndClick($(s.addDataBtn));
+    waitAndClick($(rightPanelSelectors.addDataBtn));
     browser.pause(999);
   };
 
   this.refreshFirstObjectFromTheList = function() {
     switchToPluginFrame();
     // browser.pause(4444); // to do: see if we can change to some wait method
-    waitAndClick($(s.refreshBtn));
+    waitAndClick($(rightPanelSelectors.refreshBtn));
   };
 
   this.refreshAll = function() {
     switchToPluginFrame();
-    waitAndClick($(s.refreshAllBtn));
+    waitAndClick($(rightPanelSelectors.refreshAllBtn));
   };
 
   this.removeFirstObjectFromTheList = function() {
     switchToPluginFrame();
     browser.pause(3333);
-    waitAndClick($(s.deleteBtn));
+    waitAndClick($(rightPanelSelectors.deleteBtn));
   };
 
   this.repromptFirstObjectFromTheList = function() {
     switchToPluginFrame();
     browser.pause(3333);
-    waitAndClick($(s.repromptBtn));
+    waitAndClick($(rightPanelSelectors.repromptBtn));
   };
 
   // Currently it is not used
@@ -81,18 +81,18 @@ const PluginRightPanel = function() {
   };
 
   this.clickLoginRightPanelBtn = function() {
-    waitAndClick($(s.loginRightPanelBtn));
+    waitAndClick($(rightPanelSelectors.loginRightPanelBtn));
   };
 
   this.loginToPlugin = function(username, password) {
     switchToPluginFrame();
-    $(s.loginRightPanelBtn).waitForDisplayed(7777);
-    if ($(s.loginRightPanelBtn).isExisting()) {
+    $(rightPanelSelectors.loginRightPanelBtn).waitForDisplayed(7777);
+    if ($(rightPanelSelectors.loginRightPanelBtn).isExisting()) {
       this.clickLoginRightPanelBtn();
       const handles = browser.getWindowHandles();
       browser.switchToWindow(handles[2]); // TODO: create help function to switch tabs
-      $(s.usernameInput).setValue(username);
-      $(s.passwordInput).setValue(password);
+      $(rightPanelSelectors.usernameInput).setValue(username);
+      $(rightPanelSelectors.passwordInput).setValue(password);
       this.clickLoginPopUpBtn();
       browser.pause(2222);
       browser.switchToWindow(handles[1]); // TODO: create help function to switch tabs
@@ -102,11 +102,11 @@ const PluginRightPanel = function() {
   this.clearData = function() {
     const clearBtn = $(`.no-trigger-close*=Clear Data`); // TODO: This method will not work with localisation (Don't use 'Clear Data')
     waitAndClick(clearBtn);
-    waitAndClick($(s.clearOkBtn));
+    waitAndClick($(rightPanelSelectors.clearOkBtn));
   };
 
   this.viewDataBtn = function() {
-    waitAndClick($(s.viewDataBtn));
+    waitAndClick($(rightPanelSelectors.viewDataBtn));
   };
 
   this.getVersionOfThePlugin = function() {

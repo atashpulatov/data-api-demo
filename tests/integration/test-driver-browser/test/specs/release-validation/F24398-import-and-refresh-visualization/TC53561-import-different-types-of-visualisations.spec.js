@@ -2,14 +2,14 @@ import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
-import { objects as o } from '../../../constants/objects-list';
+import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
+import { objectsList } from '../../../constants/objects-list';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 import settings from '../../../config';
 
 describe('F24398 - Import and refresh visualization', () => {
-  const { name, timeToOpen, visualizations } = o.dossiers.complexDossier;
+  const { name, timeToOpen, visualizations } = objectsList.dossiers.complexDossier;
 
   beforeAll(() => {
     browser.setWindowSize(1500, 900);
@@ -33,7 +33,7 @@ describe('F24398 - Import and refresh visualization', () => {
       // test
       PluginPopup.selectAndImportVizualiation(visualizations[visType]);
       waitForNotification();
-      expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+      expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
       // afterEach
       browser.pause(100);
       PluginRightPanel.removeFirstObjectFromTheList();

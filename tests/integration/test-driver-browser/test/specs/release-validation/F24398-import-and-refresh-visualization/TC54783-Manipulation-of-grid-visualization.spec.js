@@ -2,7 +2,7 @@ import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { objects as o } from '../../../constants/objects-list';
+import { objectsList } from '../../../constants/objects-list';
 import { waitForNotification, waitForPopup } from '../../../helpers/utils/wait-helper';
 import settings from '../../../config';
 
@@ -27,7 +27,7 @@ describe('F24398 - Import and refresh visualization', () => {
   it('[TC54783] Manipulation of grid visualization such as totals, ordering and drilling', () => {
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
-    const dossierObject = o.dossiers.visualizationManipulation;
+    const dossierObject = objectsList.dossiers.visualizationManipulation;
     PluginPopup.openDossier(dossierObject.name);
     const yearAttribute = dossierObject.visualizations.visualization1.getTableItemAt(1, 1);
     const profitMetric = dossierObject.visualizations.visualization1.getTableItemAt(1, 3);

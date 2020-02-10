@@ -1,4 +1,4 @@
-export const objects = {
+export const objectsList = {
   reports: {
     reportXML: 'Report accessing XML file',
     notSupportedFeatures: 'Report with Page by, Advanced Sorting, Thresholds, Outline, Banding, Merge cells & Multiform attributes',

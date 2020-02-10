@@ -2,11 +2,12 @@ import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { objects as o } from '../../../constants/objects-list';
+import { objectsList } from '../../../constants/objects-list';
 import settings from '../../../config';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
 import { switchToPromptFrame } from '../../../helpers/utils/iframe-helper';
-import { selectors } from '../../../constants/selectors/popup-selectors';
+import { popupSelectors } from '../../../constants/selectors/popup-selectors';
+import pluginPopup from '../../../helpers/plugin/plugin.popup';
 
 describe('F24398 - import and refresh visualization', () => {
   beforeEach(() => {
@@ -29,10 +30,10 @@ describe('F24398 - import and refresh visualization', () => {
   it('[TC53627] Dossier top menu buttons', () => {
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
-    const dossierObject = o.dossiers.interactiveDossier;
+    const dossierObject = objectsList.dossiers.interactiveDossier;
     PluginPopup.openDossier(dossierObject.name);
     switchToPromptFrame();
-    const { dossierWindow } = selectors;
+    const { dossierWindow } = popupSelectors;
 
     // Change Page/Chapter
     waitAndClick($(dossierWindow.buttonToC), 1000);
@@ -51,21 +52,14 @@ describe('F24398 - import and refresh visualization', () => {
     expect($(dossierWindow.visualizationName).getText()).toEqual('Chapter 1: Pie Chart');
 
     // Refresh Dossier
-    waitAndClick($(dossierWindow.buttonRefreshDossier), 1000);
-    waitAndClick($(dossierWindow.buttonConfirmRefresh), 1000);
+
     browser.pause(1000);
-    expect($(dossierWindow.visualizationName).getText()).toEqual('Chapter 1: Three vizualizations');
+    expect($(dossierWindow.visualizationName).getText()).toEqual('Chapter 1: Pie Chart');
 
     // Filtes
     waitAndClick($(dossierWindow.buttonFilters), 1000);
-    waitAndClick($(dossierWindow.filtersMenu.getFilterAt(1)), 1000);
-    waitAndClick($(dossierWindow.filtersMenu.selectFilterValueAt(2)), 1000);
-    waitAndClick($(dossierWindow.filtersMenu.getFilterAt(1)), 1000);
-
-    const maxValueInput = $(`${dossierWindow.filtersMenu.getFilterAt(2)} ${dossierWindow.filtersMenu.getSliderInput('right')} > input`)
-    maxValueInput.doubleClick();
-    browser.keys('\uE003'); // Press Backspace
-    maxValueInput.setValue('150000')
+    pluginPopup.selectValuesFromDossierListFilter(1, [1, 2])
+    pluginPopup.setValueOnDossierSliderFilter(2, 'right', '150000')
     waitAndClick($(dossierWindow.filtersMenu.buttonApplyFilters), 1000);
     browser.pause(1000);
     expect($(dossierWindow.filterCount).getText()).toEqual('FILTERS (2)');
