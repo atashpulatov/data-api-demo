@@ -8,7 +8,7 @@ import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 import settings from '../../../config';
 
-describe('IMPORT diferent types of vizualizations', () => {
+describe('F24398 - Import and refresh visualization', () => {
   const { name, timeToOpen, visualizations } = o.dossiers.complexDossier;
 
   beforeAll(() => {
@@ -25,7 +25,7 @@ describe('IMPORT diferent types of vizualizations', () => {
 
   // Create test for each visType defined in visualizations
   Object.keys(visualizations).forEach(visType => {
-    it(`should import ${visType} visualization`, () => {
+    it(`[TC53561] import different types of visualisations should import ${visType} visualization`, () => {
       // beforeEach
       OfficeWorksheet.selectCell('A1');
       PluginRightPanel.clickImportDataButton();

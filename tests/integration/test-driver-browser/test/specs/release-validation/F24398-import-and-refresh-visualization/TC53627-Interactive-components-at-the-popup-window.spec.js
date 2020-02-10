@@ -8,7 +8,7 @@ import { waitAndClick } from '../../../helpers/utils/click-helper';
 import { switchToPromptFrame } from '../../../helpers/utils/iframe-helper';
 import { selectors } from '../../../constants/selectors/popup-selectors';
 
-describe('Dossier top menu buttons', () => {
+describe('F24398 - import and refresh visualization', () => {
   beforeEach(() => {
     browser.setWindowSize(1500, 900);
     OfficeWorksheet.openExcelHome();
@@ -26,7 +26,7 @@ describe('Dossier top menu buttons', () => {
     browser.switchToWindow(handles[0]);
   });
 
-  it('Dossier top menu buttons', () => {
+  it('[TC53627] Dossier top menu buttons', () => {
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
     const dossierObject = o.dossiers.interactiveDossier;

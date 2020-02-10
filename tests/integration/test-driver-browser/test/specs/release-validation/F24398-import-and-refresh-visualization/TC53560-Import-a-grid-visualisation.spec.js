@@ -9,7 +9,7 @@ import { dictionary } from '../../../constants/dictionaries/dictionary';
 import settings from '../../../config';
 import { switchToExcelFrame } from '../../../helpers/utils/iframe-helper';
 
-describe('F24398 - import and refresh visualization', () => {
+describe('F24398 - Import and refresh visualization', () => {
   beforeEach(() => {
     browser.setWindowSize(2200, 900);
     OfficeWorksheet.openExcelHome();
@@ -28,7 +28,7 @@ describe('F24398 - import and refresh visualization', () => {
     browser.switchToWindow(handles[0]);
   });
 
-  it('TC53560 - Importing grid visualisations - basic scenario', () => {
+  it('[TC53560] - Importing grid visualisations - basic scenario', () => {
     const dossierObject = o.dossiers.complexDossier;
     const D16 = $('#gridRows > div:nth-child(16) > div:nth-child(4) > div > div');
 

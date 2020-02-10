@@ -5,9 +5,8 @@ import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { objects as o } from '../../../constants/objects-list';
 import { waitForNotification, waitForPopup } from '../../../helpers/utils/wait-helper';
 import settings from '../../../config';
-import pluginPopup from '../../../helpers/plugin/plugin.popup';
 
-describe('IMPORT diferent types of vizualizations', () => {
+describe('F24398 - Import and refresh visualization', () => {
   beforeEach(() => {
     browser.setWindowSize(1500, 900);
     OfficeWorksheet.openExcelHome();
