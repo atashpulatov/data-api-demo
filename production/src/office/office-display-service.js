@@ -493,7 +493,7 @@ export class OfficeDisplayService {
       let changed = false;
       for (let i = 0; i < splitRows.length; i += 1) {
         // 5 MB is a limit for excel
-        if (this.sizeOfObject(splitRows[i]) > 5) {
+        if (this.checkIfSizeOverLimit(splitRows[i])) {
           const { length } = splitRows[i];
           tempSplit.push(splitRows[i].slice(0, length / 2));
           tempSplit.push(splitRows[i].slice(length / 2, length));
@@ -513,10 +513,10 @@ export class OfficeDisplayService {
    * Check size of passed object in MB
    *
    * @param {Object} object Item to check size of
-   * @returns {number} Size of passed object in MB
+   * @returns {Boolean} information whether the size of passed object is bigger than 5MB
    * @memberof officeDisplayService
    */
-  sizeOfObject = (chunk) => {
+  checkIfSizeOverLimit = (chunk) => {
     let bytes = 0;
     for (let i = 0; i < chunk.length; i++) {
       for (let j = 0; j < chunk[0].length; j++) {
@@ -527,9 +527,10 @@ export class OfficeDisplayService {
         } else {
           bytes += 2;
         }
+        if (bytes / 1000000 > 5) return true; // we return true when the size is bigger than 5MB
       }
     }
-    return bytes / 1000000;
+    return false;
   }
 
   /**
@@ -643,16 +644,16 @@ export class OfficeDisplayService {
    */
   async appendRowsToTable(excelRows, excelContext, officeTable, rowIndex, tableColumnsChanged, isRefresh) {
     console.group('Append rows');
-    const isOverLimit = this.sizeOfObject(excelRows) > 5;
+    const isOverLimit = this.checkIfSizeOverLimit(excelRows);
     const splitExcelRows = this.getExcelRows(excelRows, isOverLimit);
     for (let i = 0; i < splitExcelRows.length; i += 1) {
       excelContext.workbook.application.suspendApiCalculationUntilNextSync();
       // Get resize range: The number of rows/cols by which to expand the bottom-right corner,
       // relative to the current range.
       const rowRange = officeTable
-      .getDataBodyRange()
-      .getRow(rowIndex)
-      .getResizedRange(splitExcelRows[i].length - 1, 0);
+        .getDataBodyRange()
+        .getRow(rowIndex)
+        .getResizedRange(splitExcelRows[i].length - 1, 0);
       rowIndex += splitExcelRows[i].length;
       if (!tableColumnsChanged && isRefresh) { rowRange.clear('Contents'); }
       rowRange.values = splitExcelRows[i];
