@@ -209,6 +209,16 @@ hr {
   position: relative;
 }
 
+#app-header .mstr-logo #profileImage img {
+  position: absolute;
+  top: 24.8px;
+}
+
+#settings-button{
+  min-width: inherit;
+  left: 0;
+}
+
 @keyframes fadein {
   from {
     opacity: 0;

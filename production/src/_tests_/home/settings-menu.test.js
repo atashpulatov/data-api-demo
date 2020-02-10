@@ -1,8 +1,10 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import { sessionHelper } from '../../storage/session-helper';
-import { SettingsMenuHOC } from '../../home/settings-menu';
+import { SettingsMenuNotConnected } from '../../home/settings-menu';
 import DB from '../../cache/cache-db';
+import { helper } from '../../helpers/helpers';
+import { officeContext } from '../../office/office-context';
 
 describe('Settings Menu', () => {
   afterEach(() => {
@@ -16,7 +18,7 @@ describe('Settings Menu', () => {
     const indexedDBSpy = jest.spyOn(DB, 'getIndexedDBSupport').mockImplementation(() => true);
     const logOutSpy = jest.spyOn(sessionHelper, 'logOut');
     const logOutRedirectSpy = jest.spyOn(sessionHelper, 'logOutRedirect');
-    const menuWrapper = mount(<SettingsMenuHOC clearCache={clearDB} />);
+    const menuWrapper = mount(<SettingsMenuNotConnected clearCache={clearDB} />);
     const buttonWrapper = menuWrapper.find('#logOut');
     // when
     buttonWrapper.simulate('click');
@@ -33,11 +35,52 @@ describe('Settings Menu', () => {
     const logOutRestSpy = jest.spyOn(sessionHelper, 'logOutRest').mockImplementation(() => {
       throw new Error();
     });
-    const menuWrapper = mount(<SettingsMenuHOC />);
+    const menuWrapper = mount(<SettingsMenuNotConnected />);
     const buttonWrapper = menuWrapper.find('#logOut');
     // when
     buttonWrapper.simulate('click');
     // then
     expect(logOutRestSpy).toThrowError();
+  });
+
+  it('should return true on throw error', () => {
+    // given
+    Object.defineProperty(global, 'document', {
+      writable: true,
+      value: {
+        createElement: () => ({
+          style: {}, focus: jest.fn(), select: jest.fn(),
+          parentNode: { removeChild: jest.fn() }
+        }),
+        parentNode: { removeChild: jest.fn() },
+        execCommand: jest.fn(),
+        body: {
+          appendChild: () => {
+            throw new Error();
+          },
+          removeChild: jest.fn()
+        }
+      },
+    });
+    // when
+    const returnValue = helper.isOverflown();
+    // then
+    expect(returnValue).toBe(true);
+  });
+
+
+  it('component should be wrapped with settings-list classname', () => {
+    // given
+    window.Office = {
+      context: {
+        ui: { messageParent: () => { }, },
+        diagnostics: { host: 'host', platform: 'platform', version: 'version' },
+        requirements: { isSetSupported: jest.fn() }
+      }
+    };
+    // when"
+    const menuWrapper = shallow(<SettingsMenuNotConnected userFullName="userFullName" userInitials={null} userID={1} />);
+    // then
+    expect(menuWrapper.props().className).toBe('settings-list');
   });
 });

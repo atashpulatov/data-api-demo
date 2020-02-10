@@ -9,42 +9,6 @@ export class OfficeStoreService {
     this.reduxStore = reduxStore;
   }
 
-  addObjectToStore = ({
-    isRefresh,
-    instanceDefinition,
-    bindingId,
-    projectId,
-    envUrl,
-    body,
-    objectType,
-    isCrosstab,
-    isPrompted,
-    promptsAnswers,
-    subtotalInfo,
-    visualizationInfo,
-    objectId
-  }) => {
-    const { mstrTable, manipulationsXML } = instanceDefinition;
-    const report = {
-      id: objectId,
-      name: mstrTable.name,
-      bindId: bindingId,
-      projectId,
-      envUrl,
-      body,
-      isLoading: false,
-      objectType,
-      isPrompted,
-      isCrosstab,
-      subtotalInfo,
-      promptsAnswers,
-      crosstabHeaderDimensions: mstrTable.crosstabHeaderDimensions,
-      visualizationInfo,
-      manipulationsXML,
-    };
-    this.saveAndPreserveReportInStore(report, isRefresh);
-  }
-
   preserveReport = (report) => {
     try {
       const settings = this.getOfficeSettings();
@@ -59,12 +23,14 @@ export class OfficeStoreService {
         objectType: report.objectType,
         isCrosstab: report.isCrosstab,
         isPrompted: report.isPrompted,
-        subtotalInfo: report.subtotalInfo,
+        subtotalsInfo: report.subtotalsInfo,
         promptsAnswers: report.promptsAnswers,
         crosstabHeaderDimensions: report.crosstabHeaderDimensions,
         visualizationInfo: report.visualizationInfo,
         manipulationsXML: report.manipulationsXML,
+        tableName:report.tableName,
         tableDimensions: report.tableDimensions,
+        displayAttrFormNames: report.displayAttrFormNames,
       });
       settings.set(officeProperties.loadedReportProperties, reportProperties);
       settings.saveAsync();
@@ -158,12 +124,16 @@ export class OfficeStoreService {
       try {
         const settings = this.getOfficeSettings();
         const reportsArray = [...this.getReportProperties()];
-        const reportObj = reportsArray.find((element) => element.bindId === report.bindId);
+        const reportObj = reportsArray.find((element) => element.bindId === report.oldTableId);
         const ObjectIndex = reportsArray.indexOf(reportObj);
         const refreshedObject = reportsArray[ObjectIndex];
         refreshedObject.crosstabHeaderDimensions = report.crosstabHeaderDimensions;
         refreshedObject.isCrosstab = report.isCrosstab;
+        refreshedObject.bindId = report.bindId;
         refreshedObject.tableDimensions = report.tableDimensions;
+        refreshedObject.subtotalsInfo = report.subtotalsInfo;
+        refreshedObject.displayAttrFormNames = report.displayAttrFormNames;
+        refreshedObject.preparedInstanceId = null;
         if (refreshedObject.visualizationInfo) {
           refreshedObject.manipulationsXML = report.manipulationsXML;
           refreshedObject.visualizationInfo.dossierStructure = report.visualizationInfo.dossierStructure;
@@ -191,12 +161,14 @@ export class OfficeStoreService {
           objectType: report.objectType,
           isCrosstab: report.isCrosstab,
           isPrompted: report.isPrompted,
-          subtotalInfo: report.subtotalInfo,
+          subtotalsInfo: report.subtotalsInfo,
           promptsAnswers: report.promptsAnswers,
           crosstabHeaderDimensions: report.crosstabHeaderDimensions,
           visualizationInfo: report.visualizationInfo,
           manipulationsXML: report.manipulationsXML,
+          tableName: report.tableName,
           tableDimensions: report.tableDimensions,
+          displayAttrFormNames: report.displayAttrFormNames,
         },
       });
       this.preserveReport(report);

@@ -1,10 +1,10 @@
-import OfficeLogin from '../../../pageObjects/office/office.login';
-import OfficeWorksheet from '../../../pageObjects/office/office.worksheet';
-import PluginRightPanel from '../../../pageObjects/plugin/plugin.right-panel';
-import PluginPopup from '../../../pageObjects/plugin/plugin.popup';
-import { switchToPluginFrame } from '../../../pageObjects/utils/iframe-helper';
+import OfficeLogin from '../../../helpers/office/office.login';
+import OfficeWorksheet from '../../../helpers/office/office.worksheet';
+import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
+import PluginPopup from '../../../helpers/plugin/plugin.popup';
+import { switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
 
-describe('Smart Folder - SORT - ', function() {
+describe('Smart Folder - SORT - ', () => {
   beforeAll(async () => {
     await OfficeWorksheet.openExcelHome();
     const url = await browser.getCurrentUrl();

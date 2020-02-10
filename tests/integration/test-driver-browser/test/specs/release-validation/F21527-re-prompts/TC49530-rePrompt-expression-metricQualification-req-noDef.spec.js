@@ -1,15 +1,15 @@
-import OfficeLogin from '../../../pageObjects/office/office.login';
-import OfficeWorksheet from '../../../pageObjects/office/office.worksheet';
-import PluginRightPanel from '../../../pageObjects/plugin/plugin.right-panel';
-import PluginPopup from '../../../pageObjects/plugin/plugin.popup';
-import {waitForNotification} from '../../../pageObjects/utils/wait-helper';
-import {dictionary} from '../../../constants/dictionaries/dictionary';
-import {waitAndClick} from '../../../pageObjects/utils/click-helper';
-import {objects as o} from '../../../constants/objects-list';
-import {selectors as se} from '../../../constants/selectors/plugin.right-panel-selectors';
-import {selectors as s} from '../../../constants/selectors/popup-selectors';
+import OfficeLogin from '../../../helpers/office/office.login';
+import OfficeWorksheet from '../../../helpers/office/office.worksheet';
+import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
+import PluginPopup from '../../../helpers/plugin/plugin.popup';
+import { waitForNotification } from '../../../helpers/utils/wait-helper';
+import { dictionary } from '../../../constants/dictionaries/dictionary';
+import { waitAndClick } from '../../../helpers/utils/click-helper';
+import { objects as o } from '../../../constants/objects-list';
+import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
+import { selectors as s } from '../../../constants/selectors/popup-selectors';
 
-describe('[TC49530] Re-Prompt after import | Expression | Metric Qualification | Required | No Default Answer', function() { // WORK IN PROGRESS
+describe('[TC49530] Re-Prompt after import | Expression | Metric Qualification | Required | No Default Answer', () => { // WORK IN PROGRESS
   beforeAll(async () => {
     await OfficeWorksheet.openExcelHome();
     const url = await browser.getCurrentUrl();
@@ -49,4 +49,3 @@ describe('[TC49530] Re-Prompt after import | Expression | Metric Qualification |
     await expect(oldCellD2).not.toEqual(newCellD2);
   });
 });
-

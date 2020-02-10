@@ -6,7 +6,8 @@ export const SELECT_FOLDER = 'NAV_TREE_SELECT_FOLDER';
 export const REQUEST_IMPORT = 'REQUEST_IMPORT';
 export const PROMPTS_ANSWERED = 'PROMPTS_ANSWERED';
 export const START_IMPORT = 'NAV_TREE_START_IMPORT';
-export const CHANGE_SORTING = 'NAV_TREE_CHANGE_SORTING';
+// DE159475; disabled until sorting fix in object-table
+// export const CHANGE_SORTING = 'NAV_TREE_CHANGE_SORTING';
 export const CHANGE_SEARCHING = 'NAV_TREE_CHANGE_SEARCHING';
 export const UPDATE_SCROLL = 'NAV_TREE_UPDATE_SCROLL';
 export const UPDATE_SIZE = 'NAV_TREE_UPDATE_SIZE';
@@ -16,7 +17,10 @@ export const REQUEST_DOSSIER_OPEN = 'REQUEST_DOSSIER_OPEN';
 export const CANCEL_DOSSIER_OPEN = 'CANCEL_DOSSIER_OPEN';
 export const CHANGE_FILTER = 'CHANGE_FILTER';
 export const SWITCH_MY_LIBRARY = 'SWITCH_MY_LIBRARY';
+export const SWITCH_IMPORT_SUBTOTALS = 'SWITCH_IMPORT_SUBTOTALS';
 export const CHANGE_IS_PROMPTED = 'CHANGE_IS_PROMPTED';
+export const LOAD_BROWSING_STATE_CONST = 'LOAD_BROWSING_STATE_CONST';
+export const UPDATE_DISPLAY_ATTR_FORM = 'UPDATE_DISPLAY_ATTR_FORM';
 
 export function selectObject(data) {
   return (dispatch) => dispatch({
@@ -69,9 +73,9 @@ export function stopLoading() {
   return (dispatch) => dispatch({ type: officeProperties.actions.stopLoading });
 }
 
-export function changeSorting(data) {
-  return (dispatch) => dispatch({ type: CHANGE_SORTING, data });
-}
+// export function changeSorting(data) {
+//   return (dispatch) => dispatch({ type: CHANGE_SORTING, data });
+// }
 
 export function changeSearching(data) {
   return (dispatch) => dispatch({ type: CHANGE_SEARCHING, data });
@@ -93,8 +97,16 @@ export function switchMyLibrary() {
   return (dispatch) => dispatch({ type: SWITCH_MY_LIBRARY });
 }
 
+export function switchImportSubtotals(data) {
+  return (dispatch) => dispatch({ type: SWITCH_IMPORT_SUBTOTALS, data });
+}
+
+export function updateDisplayAttrForm(data) {
+  return (dispatch) => dispatch({ type: UPDATE_DISPLAY_ATTR_FORM, data });
+}
+
 export function changeFilter(data) {
   return (dispatch) => dispatch({ type: CHANGE_FILTER, data });
 }
 
-export const actions = { selectFolder, selectObject, setDataSource, requestImport, promptsAnswered, startImport, startLoading, stopLoading, changeSearching, changeSorting, updateScroll, updateSize, requestDossierOpen, switchMyLibrary, changeFilter };
+export const actions = { selectFolder, selectObject, setDataSource, requestImport, promptsAnswered, startImport, startLoading, stopLoading, changeSearching, /* changeSorting, */ updateScroll, updateSize, requestDossierOpen, switchMyLibrary, changeFilter };

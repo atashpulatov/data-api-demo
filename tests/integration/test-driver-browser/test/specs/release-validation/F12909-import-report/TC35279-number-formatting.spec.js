@@ -1,11 +1,12 @@
-import OfficeLogin from '../../../pageObjects/office/office.login';
-import OfficeWorksheet from '../../../pageObjects/office/office.worksheet';
-import PluginRightPanel from '../../../pageObjects/plugin/plugin.right-panel';
-import PluginPopup from '../../../pageObjects/plugin/plugin.popup';
-import { waitForNotification } from '../../../pageObjects/utils/wait-helper';
-import { objects as o} from '../../../constants/objects-list';
+import OfficeLogin from '../../../helpers/office/office.login';
+import OfficeWorksheet from '../../../helpers/office/office.worksheet';
+import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
+import PluginPopup from '../../../helpers/plugin/plugin.popup';
+import { waitForNotification } from '../../../helpers/utils/wait-helper';
+import { objects as o } from '../../../constants/objects-list';
 import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
+
 const B2 = $('#gridRows > div:nth-child(2) > div:nth-child(2) > div > div');
 const C2 = $('#gridRows > div:nth-child(2) > div:nth-child(3) > div > div');
 const D2 = $('#gridRows > div:nth-child(2) > div:nth-child(4) > div > div');
@@ -18,7 +19,7 @@ const J2 = $('#gridRows > div:nth-child(2) > div:nth-child(10) > div > div');
 const K2 = $('#gridRows > div:nth-child(2) > div:nth-child(11) > div > div');
 const L2 = $('#gridRows > div:nth-child(2) > div:nth-child(12) > div > div');
 
-describe('Import report', function() {
+describe('Import report', () => {
   beforeAll(async () => {
     browser.driver.manage().window().maximize();
     await OfficeWorksheet.openExcelHome();
@@ -38,7 +39,6 @@ describe('Import report', function() {
   });
 
   it('Number Formatting', async () => {
-
     // should import Number Formatting object
     await OfficeWorksheet.selectCell('A1');
     await PluginRightPanel.clickImportDataButton();
@@ -46,7 +46,7 @@ describe('Import report', function() {
     await waitForNotification();
     await browser.sleep(2000);
 
-    // should check if each section has specific number formating 
+    // should check if each section has specific number formating
     await OfficeWorksheet.selectCell('B2');
     const B2 = await se.B2.getText();
     await expect(B2).toContain('$4,560.00');
@@ -70,7 +70,7 @@ describe('Import report', function() {
     await OfficeWorksheet.selectCell('G2');
     const G2 = await se.G2.getText();
     await expect(G2).toContain('1.27E+08');
-    
+
     await OfficeWorksheet.selectCell('H2');
     const H2 = await se.H2.getText();
     await expect(H2).toContain('1.23');
@@ -90,6 +90,5 @@ describe('Import report', function() {
     await OfficeWorksheet.selectCell('L2');
     const L2 = await se.L2.getText();
     await expect(L2).toContain('1,232 PLN ');
-
   });
 });

@@ -9,7 +9,7 @@ import { popupActions } from '../popup/popup-actions';
 
 const FormItem = Form.Item;
 
-export class AuthenticateHOC extends Component {
+export class AuthenticateNotConnected extends Component {
   constructor(props) {
     super(props);
     localStorage.removeItem('refreshData');
@@ -106,7 +106,7 @@ export class AuthenticateHOC extends Component {
     );
   }
 }
-AuthenticateHOC.propTypes = {
+AuthenticateNotConnected.propTypes = {
   form: PropTypes.shape({
     validateFields: PropTypes.func,
     getFieldDecorator: PropTypes.func
@@ -121,7 +121,7 @@ AuthenticateHOC.propTypes = {
   resetState: PropTypes.func,
   t: PropTypes.func
 };
-AuthenticateHOC.defaultProps = { t: (text) => text, };
+AuthenticateNotConnected.defaultProps = { t: (text) => text, };
 
 function mapStateToProps(state) {
   return { session: state.sessionReducer, };
@@ -129,4 +129,4 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = { resetState: popupActions.resetState, };
 
-export const Authenticate = connect(mapStateToProps, mapDispatchToProps)(Form.create()(withTranslation('common')(AuthenticateHOC)));
+export const Authenticate = connect(mapStateToProps, mapDispatchToProps)(Form.create()(withTranslation('common')(AuthenticateNotConnected)));

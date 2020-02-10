@@ -5,8 +5,9 @@ import jsonHandler from '../../mstr-object/mstr-normalized-json-handler';
 describe('Office converter service v2', () => {
   it('should return create a table', () => {
     // given
-    const crosstabsResponse = response;
-    const expecteObjectKeys = ['tableSize', 'columnInformation', 'headers', 'id', 'isCrosstab', 'isCrosstabular', 'name', 'rows', 'attributesNames'];
+    const attrforms = { supportForms: false, displayAttrFormNames: 'Automatic' };
+    const crosstabsResponse = { ...response, attrforms };
+    const expecteObjectKeys = ['tableSize', 'columnInformation', 'headers', 'id', 'isCrosstab', 'isCrosstabular', 'name', 'rows', 'attributesNames', 'subtotalsInfo'];
     // when
     const table = officeConverter.createTable(crosstabsResponse);
     // then
@@ -40,7 +41,8 @@ describe('Office converter service v2', () => {
   });
   it('should return row and column headers of crosstab report without attribute forms', () => {
     // given
-    const crosstabsResponse = response;
+    const attrforms = { supportForms: false, displayAttrFormNames: 'Automatic' };
+    const crosstabsResponse = { ...response, attrforms };
     const expectedHeaders = {
       columns: [
         ['\'BWI 1', '\'BWI 1', '\'BWI 1', '\'DCA 2', '\'DCA 2', '\'DCA 2'],
@@ -65,7 +67,8 @@ describe('Office converter service v2', () => {
   });
   it('should return row and column headers of crosstab report with attribute forms', () => {
     // given
-    const crosstabsResponse = { ...response, supportForms: true };
+    const attrforms = { supportForms: true, displayAttrFormNames: 'Automatic' };
+    const crosstabsResponse = { ...response, attrforms };
     const expectedHeaders = {
       columns: [
         ['\'BWI', '\'BWI', '\'BWI', '\'DCA', '\'DCA', '\'DCA'],
@@ -91,7 +94,8 @@ describe('Office converter service v2', () => {
   });
   it('should getTableSize', () => {
     // given
-    const crosstabsResponse = response;
+    const attrforms = { supportForms: false, displayAttrFormNames: 'Automatic' };
+    const crosstabsResponse = { ...response, attrforms };
     const isCrosstab = officeConverter.isCrosstab(crosstabsResponse);
     const columnInformation = officeConverter.getColumnInformation(crosstabsResponse);
     const expectedValue = { columns: 6, rows: 8 };
@@ -126,7 +130,7 @@ describe('Office converter service v2', () => {
   it('should run handler for tabular data', () => {
     // given
     const renderTabularSpy = jest.spyOn(jsonHandler, 'renderTabular');
-    const mockResponse = { definition: {}, data: { headers: { rows: {} } } };
+    const mockResponse = { definition: { attrforms : { supportForms: false, displayAttrFormNames: 'Automatic' } }, data: { headers: { rows: {} } } };
     // when
     const returnedValue = officeConverter.getRows(mockResponse);
     // then

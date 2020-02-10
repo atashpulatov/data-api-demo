@@ -1,8 +1,9 @@
 /* eslint-disable import/no-cycle */
 import { addNestedPropertiesToObjects } from '@mstr/rc';
 import DB from './cache-db';
+import i18next from '../i18n';
 import { mstrListRestService } from '../mstr-object/mstr-list-rest-service';
-
+import { SAVE_MY_LIBRARY_OWNERS } from '../storage/navigation-tree-reducer';
 
 export const CREATE_CACHE = 'CREATE_CACHE';
 export const CLEAR_CACHE = 'CLEAR_CACHE';
@@ -56,6 +57,11 @@ export const refreshCacheState = (shouldCleanSelection) => (dispatch) => {
   dispatch(refreshCacheAction(shouldCleanSelection));
 };
 
+export const saveMyLibraryOwners = (objects) => ({
+  type: SAVE_MY_LIBRARY_OWNERS,
+  data: objects.map(item => item.ownerId),
+});
+
 export function fetchObjects(dispatch, cache) {
   // Projects
   fetchProjects((projects) => {
@@ -66,7 +72,8 @@ export function fetchObjects(dispatch, cache) {
     dispatch(myLibraryLoading(true));
     cache.updateData(LOADING_DB + MY_LIBRARY_DB_ID, true);
     getMyLibraryObjectList((objects) => {
-      objects = addNestedPropertiesToObjects(objects, projects);
+      objects = addNestedPropertiesToObjects(objects, projects, i18next.language);
+      dispatch(saveMyLibraryOwners(objects));
       cache.putData(MY_LIBRARY_DB_ID, objects);
     })
       .catch(console.error)
@@ -82,7 +89,7 @@ export function fetchObjects(dispatch, cache) {
     dispatch(objectListLoading(true));
     cache.updateData(LOADING_DB + ENV_LIBRARY_DB_ID, true);
     getObjectList((objects) => {
-      objects = addNestedPropertiesToObjects(objects, projects);
+      objects = addNestedPropertiesToObjects(objects, projects, i18next.language);
       return cache.putData(ENV_LIBRARY_DB_ID, objects);
     })
       .catch(console.error)
@@ -104,7 +111,8 @@ export function fetchObjectsFallback() {
       // My Library
       dispatch(myLibraryLoading(true));
       getMyLibraryObjectList((objects) => {
-        objects = addNestedPropertiesToObjects(objects, projects);
+        objects = { data: addNestedPropertiesToObjects(objects, projects, i18next.language) };
+        dispatch(saveMyLibraryOwners(objects));
         dispatch(addMyLibraryObjects(objects, true));
       })
         .catch(console.error)
@@ -113,7 +121,7 @@ export function fetchObjectsFallback() {
       // Environment library
       dispatch(objectListLoading(true));
       getObjectList((objects) => {
-        objects = addNestedPropertiesToObjects(objects, projects);
+        objects = { data: addNestedPropertiesToObjects(objects, projects, i18next.language) };
         dispatch(addEnvObjects(objects, true));
       })
         .catch(console.error)
@@ -137,6 +145,7 @@ export function createCache(initUsername) {
     const { userID } = sessionReducer;
     const user = initUsername || userID;
     const cache = new DB(user);
+    resetLoading(cache);
     // We try to purge dbs not of the user and finally
     // start fetching for the current user even if it fails.
     DB.purge(user)
@@ -168,6 +177,7 @@ export function dispatchCacheResults({ type, data, uuid }, dispatch) {
     dispatch(addProjects(data));
     break;
   case MY_LIBRARY_DB_ID:
+    dispatch(saveMyLibraryOwners(data));
     dispatch(addMyLibraryObjects({ data, uuid }));
     break;
   case ENV_LIBRARY_DB_ID:
@@ -206,6 +216,6 @@ export function clearCache(userID) {
     const cache = new DB(userID);
     dispatch(clearStateCache());
     console.log('Clearing cache');
-    return cache.delete().catch(console.error);
+    return cache.clearTable().catch(console.error);
   };
 }

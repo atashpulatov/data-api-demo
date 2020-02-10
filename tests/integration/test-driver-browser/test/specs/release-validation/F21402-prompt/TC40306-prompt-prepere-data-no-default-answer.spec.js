@@ -1,19 +1,19 @@
-import OfficeLogin from '../../../pageObjects/office/office.login';
-import OfficeWorksheet from '../../../pageObjects/office/office.worksheet';
-import PluginRightPanel from '../../../pageObjects/plugin/plugin.right-panel';
-import PluginPopup from '../../../pageObjects/plugin/plugin.popup';
-import { waitForNotification, waitByClass } from '../../../pageObjects/utils/wait-helper';
+import OfficeLogin from '../../../helpers/office/office.login';
+import OfficeWorksheet from '../../../helpers/office/office.worksheet';
+import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
+import PluginPopup from '../../../helpers/plugin/plugin.popup';
+import { waitForNotification, waitByClass, waitById } from '../../../helpers/utils/wait-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { objects as o } from '../../../constants/objects-list';
 import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
-import { switchToPluginFrame, switchToPromptFrame, switchToPopupFrame } from '../../../pageObjects/utils/iframe-helper';
-import {selectors as s} from '../../../constants/selectors/popup-selectors';
-import {waitById} from '../../../pageObjects/utils/wait-helper.js';
-import pluginPopup from '../../../pageObjects/plugin/plugin.popup';
+import { switchToPluginFrame, switchToPromptFrame, switchToPopupFrame } from '../../../helpers/utils/iframe-helper';
+import { selectors as s } from '../../../constants/selectors/popup-selectors';
+
+import pluginPopup from '../../../helpers/plugin/plugin.popup';
 
 
-// this test case is not finished yet 
-describe('Prompt | Value | Text | Not required | No default answer', function() {
+// this test case is not finished yet
+describe('Prompt | Value | Text | Not required | No default answer', () => {
   beforeAll(async () => {
     await OfficeWorksheet.openExcelHome();
     const url = await browser.getCurrentUrl();
@@ -30,8 +30,7 @@ describe('Prompt | Value | Text | Not required | No default answer', function() 
     await browser.switchTo().window(handles[0]);
   });
   it('[TC40306] prompted reports functionality', async () => {
-    
-    //should click prepare data on selected report
+    // should click prepare data on selected report
     await OfficeWorksheet.selectCell('A1');
     await PluginRightPanel.clickImportDataButton();
     await switchToPluginFrame();
@@ -44,9 +43,9 @@ describe('Prompt | Value | Text | Not required | No default answer', function() 
     await switchToPopupFrame();
     await browser.sleep(2222);
 
-    //should select filters
+    // should select filters
     await PluginPopup.selectObjectElements(['Region', 'Profit']);
-    await PluginPopup.selectFilters([['Region', ['Central','Web']]]);
+    await PluginPopup.selectFilters([['Region', ['Central', 'Web']]]);
     await PluginPopup.clickImport();
     await waitForNotification();
     await expect(se.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.importSuccess);

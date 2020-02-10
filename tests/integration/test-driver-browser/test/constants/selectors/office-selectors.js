@@ -13,8 +13,9 @@ export const excelSelectors = {
   newDocumentBtn: '#NewDocumentsButton',
   excelWorkbookBtn: '#ExcelOnline',
   adminManagedBtn: '#Admin\\ Managed > a',
-  adminManagedPlugin: 'div[aria-label^="env-173736"]',
+  adminManagedPlugin: 'div[aria-label^="yi_local_ip"]',
   addBtn: '#BtnAction',
-  uploadPluginNotification: '.ModalCalloutControlOverlay'
+  uploadPluginNotification: '.ModalCalloutControlOverlay',
+  excelFormulaBar: '#formulaBarTextDivId'
 
 }

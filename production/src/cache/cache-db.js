@@ -22,8 +22,9 @@ export default class DB {
    */
   constructor(dbName = 'cache', stores = { cache: '$$uuid,type' }) {
     if (!dbName) return;
-    this.db = new Dexie(dbName);
+    this.db = new Dexie(window.location.host + dbName);
     this.db.version(1).stores(stores);
+    this.db.on('blocked', console.error);
     this.dbName = dbName;
   }
 
@@ -155,7 +156,7 @@ export default class DB {
    */
   static purge(dbToKeep) {
     return Dexie.getDatabaseNames((dbs) => {
-      const dbsToDelete = dbs.filter((db) => db !== dbToKeep);
+      const dbsToDelete = dbs.filter((db) => db.includes(window.location.host) && !db.includes(dbToKeep));
       return Promise.all(dbsToDelete.map(Dexie.delete));
     });
   }

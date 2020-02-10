@@ -2,6 +2,7 @@ import { errorService } from '../../error/error-handler';
 import { notificationService } from '../../notification/notification-service';
 import { OutsideOfRangeError } from '../../error/outside-of-range-error';
 import { sessionHelper } from '../../storage/session-helper';
+import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import {
   NOT_PUBLISHED_CUBE,
   NOT_SUPPORTED_SERVER_ERR,
@@ -12,6 +13,8 @@ import {
   errorTypes,
   SESSION_EXPIRED,
   WRONG_CREDENTIALS,
+  INVALID_VIZ_KEY_MESSAGE,
+  NO_DATA_RETURNED,
 } from '../../error/constants';
 
 jest.mock('../../storage/session-helper');
@@ -26,13 +29,13 @@ describe('ErrorService', () => {
   });
 
   describe('getRestErrorType', () => {
-    it('should return null if not handled', () => {
+    it('should return UNKNOWN_ERR if not handled', () => {
       // given
       const error = { response: {} };
       // when
       const result = errorService.getRestErrorType(error);
       // then
-      expect(result).toBe(null);
+      expect(result).toBe(errorTypes.UNKNOWN_ERR);
     });
     it('should return ENV_NOT_FOUND_ERR type due to response with 404 code', () => {
       // given
@@ -69,6 +72,15 @@ describe('ErrorService', () => {
       // then
       expect(resultType).toBe(errorTypes.UNAUTHORIZED_ERR);
     });
+    it('should return INTERNAL_SERVER_ERR type due to response 403 code', () => {
+      // given
+      const response = { status: 403 };
+      const error = { response };
+      // when
+      const resultType = errorService.getRestErrorType(error);
+      // then
+      expect(resultType).toBe(errorTypes.INTERNAL_SERVER_ERR);
+    });
     it('should return ENV_NOT_FOUND_ERR type due to response 404 code', () => {
       // given
       const response = { status: 404 };
@@ -95,6 +107,51 @@ describe('ErrorService', () => {
       const resultType = errorService.getRestErrorType(error);
       // then
       expect(resultType).toBe(errorTypes.INTERNAL_SERVER_ERR);
+    });
+    it('should return INTERNAL_SERVER_ERR type due to status 501 code', () => {
+      // given
+      const response = { status: 501 };
+      const error = { response };
+      // when
+      const resultType = errorService.getRestErrorType(error);
+      // then
+      expect(resultType).toBe(errorTypes.INTERNAL_SERVER_ERR);
+    });
+    it('should return CONNECTION_BROKEN_ERR type due to status 502 code', () => {
+      // given
+      const response = { status: 502 };
+      const error = { response };
+      // when
+      const resultType = errorService.getRestErrorType(error);
+      // then
+      expect(resultType).toBe(errorTypes.CONNECTION_BROKEN_ERR);
+    });
+    it('should return CONNECTION_BROKEN_ERR type due to status 503 code', () => {
+      // given
+      const response = { status: 503 };
+      const error = { response };
+      // when
+      const resultType = errorService.getRestErrorType(error);
+      // then
+      expect(resultType).toBe(errorTypes.CONNECTION_BROKEN_ERR);
+    });
+    it('should return CONNECTION_BROKEN_ERR type due to status 504 code', () => {
+      // given
+      const response = { status: 504 };
+      const error = { response };
+      // when
+      const resultType = errorService.getRestErrorType(error);
+      // then
+      expect(resultType).toBe(errorTypes.CONNECTION_BROKEN_ERR);
+    });
+    it('should return UNKNOWN_ERR type due to unhandled status code', () => {
+      // given
+      const response = { status: 510 };
+      const error = { response };
+      // when
+      const resultType = errorService.getRestErrorType(error);
+      // then
+      expect(resultType).toBe(errorTypes.UNKNOWN_ERR);
     });
   });
   describe('handleError for rest error', () => {
@@ -277,6 +334,28 @@ describe('ErrorService', () => {
       expect(spyMethod).toBeCalled();
       expect(spyMethod).toBeCalledWith({ content: NOT_IN_METADATA, details: '', onConfirm: null, type: 'warning', });
     });
+    it('should display NO_DATA_RETURNED on server error with -2147213784 iServerCode', () => {
+      // given
+      const response = { status: 403, body: { iServerCode: '-2147213784' } };
+      const error = { response };
+      const spyMethod = jest.spyOn(notificationService, 'displayNotification');
+      // when
+      errorService.handleError(error);
+      // then
+      expect(spyMethod).toBeCalled();
+      expect(spyMethod).toBeCalledWith({ content: NO_DATA_RETURNED, details: '', onConfirm: null, type: 'warning', });
+    });
+    it('should display notification on dossier removed from metadata', () => {
+      // given
+      const response = { status: 404, body: { iServerCode: -2147216373 } };
+      const error = { response, mstrObjectType: mstrObjectEnum.mstrObjectType.dossier.name };
+      const spyMethod = jest.spyOn(notificationService, 'displayNotification');
+      // when
+      errorService.handleError(error);
+      // then
+      expect(spyMethod).toBeCalled();
+      expect(spyMethod).toBeCalledWith({ content: `Seems like the ${error.mstrObjectType} has been removed.`, details: '', onConfirm: null, type: 'warning', });
+    });
     it('should logout on UnauthorizedError', () => {
       // given
       const error = {
@@ -309,6 +388,16 @@ describe('ErrorService', () => {
       // then
       expect(notificationSpy).toBeCalled();
       expect(notificationSpy).toBeCalledWith({ content: TABLE_OVERLAP, details: 'A table can\'t overlap another table. ', onConfirm: null, type: 'warning', });
+    });
+    it('should display INVALID_VIZ_KEY_MESSAGE notification on INVALID_VIZ_KEY error', () => {
+      // given
+      const error = { response: { status: 404, }, type: errorTypes.INVALID_VIZ_KEY };
+      const spyMethod = jest.spyOn(notificationService, 'displayNotification');
+      // when
+      errorService.handleError(error);
+      // then
+      expect(spyMethod).toBeCalled();
+      expect(spyMethod).toBeCalledWith({ content: INVALID_VIZ_KEY_MESSAGE, details: '', onConfirm: null, type: 'warning', });
     });
   });
   describe('getOfficeErrorType', () => {

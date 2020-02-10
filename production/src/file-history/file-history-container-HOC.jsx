@@ -11,7 +11,7 @@ import { officeApiHelper } from '../office/office-api-helper';
 import { errorService } from '../error/error-handler';
 
 export const fileHistoryContainerHOC = Component => {
-  class _FileHistoryContainerHOC extends React.Component {
+  class _FileHistoryContainerNotConnected extends React.Component {
     constructor() {
       super();
       this.state = { allowAddDataClick: true };
@@ -34,7 +34,7 @@ export const fileHistoryContainerHOC = Component => {
 
         // Prevent navigation tree from going straight into importing previously selected item.
         if (navigationTree.importRequested) reduxStore.dispatch({ type: CANCEL_REQUEST_IMPORT });
-        if (navigationTree.myLibrary) reduxStore.dispatch({ type: SWITCH_MY_LIBRARY });
+        // if (navigationTree.myLibrary) reduxStore.dispatch({ type: SWITCH_MY_LIBRARY });
         if (navigationTree.dossierOpenRequested) reduxStore.dispatch({ type: CANCEL_DOSSIER_OPEN });
         reduxStore.dispatch({ type: officeProperties.actions.startLoading });
         if (allowAddDataClick) {
@@ -53,5 +53,5 @@ export const fileHistoryContainerHOC = Component => {
     }
   }
 
-  return _FileHistoryContainerHOC;
+  return _FileHistoryContainerNotConnected;
 };

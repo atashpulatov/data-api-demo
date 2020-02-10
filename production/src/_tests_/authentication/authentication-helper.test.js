@@ -101,7 +101,7 @@ describe('loginUser', () => {
     expect(errorService.handleError).toBeCalledWith(testError, { isLogout: true });
     expect(sessionHelper.disableLoading).toBeCalled();
   });
-  it('should call putSessions on validating token', () => {
+  it('should call putSessions on validating authToken', () => {
     // given
     const authenticateMock = jest.spyOn(authenticationService, 'putSessions');
     // when

@@ -46,6 +46,7 @@ describe('Normalized JSON Handler', () => {
   it('should render tabular data', () => {
     // given
     const { definition, data } = reportV2;
+    definition.attrforms = { supportForms: false, displayAttrFormNames: 'Automatic' };
     const onElement = (element) => element.value[0];
     const expectedFirstRow = ['2009', 'January', 3139, 17046.02, 4543, 2406, 20915.41, 3449];
     // when

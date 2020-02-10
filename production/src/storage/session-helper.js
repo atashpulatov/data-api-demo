@@ -7,7 +7,6 @@ import { createCache } from '../cache/cache-actions';
 import DB from '../cache/cache-db';
 
 export class SessionHelper {
-
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
   }
@@ -72,14 +71,10 @@ export class SessionHelper {
 
   getSession = () => {
     const currentStore = this.reduxStore.getState();
-    const projectId = currentStore.historyReducer.project
-      ? currentStore.historyReducer.project.projectId
-      : undefined;
     const session = {
       USE_PROXY: false,
-      url: currentStore.sessionReducer.envUrl,
+      envUrl: currentStore.sessionReducer.envUrl,
       authToken: currentStore.sessionReducer.authToken,
-      projectId,
     };
     return session;
   }
@@ -98,12 +93,32 @@ export class SessionHelper {
     }
   }
 
+  getUserAttributeFormPrivilege = async () => {
+    let canChooseAttrForm = false;
+    const IS_LOCALHOST = this.isLocalhost();
+    const envUrl = IS_LOCALHOST ? this.reduxStore.getState().sessionReducer.envUrl : homeHelper.saveLoginValues();
+    const authToken = IS_LOCALHOST ? this.reduxStore.getState().sessionReducer.authToken : homeHelper.saveTokenFromCookies();
+    try {
+      canChooseAttrForm = await authenticationService.getAttributeFormPrivilege(envUrl, authToken);
+      sessionHelper.setAttrFormPrivilege(canChooseAttrForm);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   saveUserInfo = (values) => {
     this.reduxStore.dispatch({
       type: sessionProperties.actions.getUserInfo,
       userFullName: values.fullName,
       userInitials: values.initials,
       userID: values.id,
+    });
+  }
+
+  setAttrFormPrivilege = (value) => {
+    this.reduxStore.dispatch({
+      type: sessionProperties.actions.setAttrFormPrivilege,
+      attrFormPrivilege: value,
     });
   }
 

@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop */
 import request from 'superagent';
-import { NOT_SUPPORTED_NO_ATTRIBUTES } from '../error/constants';
+import { NO_DATA_RETURNED } from '../error/constants';
 import { OutsideOfRangeError } from '../error/outside-of-range-error';
 import officeConverterServiceV2 from '../office/office-converter-service-v2';
 import mstrObjectEnum from './mstr-object-type-enum';
@@ -23,15 +23,15 @@ function checkTableDimensions({ rows, columns }) {
   return { rows, columns };
 }
 
-function parseInstanceDefinition(res, supportForms) {
+function parseInstanceDefinition(res, attrforms) {
   const { body } = res;
   if (res.status === 200 && body.status === 2) {
     const { instanceId, status } = body;
     return { instanceId, status };
   }
   const { instanceId, data, internal } = body;
-  body.supportForms = supportForms;
-  if (data.paging.total === 0) throw new Error(NOT_SUPPORTED_NO_ATTRIBUTES);
+  body.attrforms = attrforms;
+  if (data.paging.total === 0) throw new Error(NO_DATA_RETURNED);
   const mstrTable = officeConverterServiceV2.createTable(body);
   const { rows, columns } = checkTableDimensions(mstrTable.tableSize);
   return {
@@ -65,7 +65,8 @@ async function* fetchContentGenerator({
   dossierData,
   limit,
   visualizationInfo,
-  reduxStore
+  reduxStore,
+  displayAttrFormNames
 }) {
   const totalRows = instanceDefinition.rows;
   const { instanceId, mstrTable } = instanceDefinition;
@@ -73,6 +74,8 @@ async function* fetchContentGenerator({
   const storeState = reduxStore.getState();
   const { envUrl, authToken } = storeState.sessionReducer;
   const { supportForms } = storeState.officeReducer;
+  const attrforms = { supportForms, displayAttrFormNames };
+
   let fetchedRows = 0;
   let offset = 0;
   const fullPath = getFullPath({
@@ -107,7 +110,7 @@ async function* fetchContentGenerator({
     const response = await fetchObjectContent(fullPath, authToken, projectId, offset, limit);
     const { current } = response.body.data.paging;
     fetchedRows = current + offset;
-    response.body.supportForms = supportForms;
+    response.body.attrforms = attrforms;
     const { row, rowTotals } = officeConverterServiceV2.getRows(response.body, isCrosstab);
     if (isCrosstab) {
       header = officeConverterServiceV2.getHeaders(response.body, isCrosstab);
@@ -156,7 +159,7 @@ export class MstrObjectRestService {
       .then((res) => res.status);
   }
 
-  createDossierBasedOnReport = (reportId, instanceId, projectId) => {
+  createDossierBasedOnReport = (chosenObjectId, instanceId, projectId) => {
     // TODO: get rid of the getState
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
@@ -165,7 +168,7 @@ export class MstrObjectRestService {
       objects: [
         {
           type: 3,
-          id: reportId,
+          id: chosenObjectId,
           newName: 'Temp Dossier',
         },
       ],
@@ -191,10 +194,12 @@ export class MstrObjectRestService {
     dossierData,
     body = {},
     limit = 1,
+    displayAttrFormNames
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const { supportForms } = storeState.officeReducer;
+    const attrforms = { supportForms, displayAttrFormNames };
     const fullPath = getFullPath({ dossierData, envUrl, limit, mstrObjectType, objectId, version: API_VERSION });
 
     return request
@@ -203,12 +208,14 @@ export class MstrObjectRestService {
       .set('x-mstr-projectid', projectId)
       .send(body)
       .withCredentials()
-      .then((res) => parseInstanceDefinition(res, supportForms));
+      .then((res) => parseInstanceDefinition(res, attrforms));
   }
 
-  fetchVisualizationDefinition = ({ projectId, objectId, instanceId, visualizationInfo, body, }) => {
+  fetchVisualizationDefinition = ({ projectId, objectId, instanceId, visualizationInfo, body, displayAttrFormNames }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
+    const { supportForms } = storeState.officeReducer;
+    const attrforms = { supportForms, displayAttrFormNames };
     const { chapterKey, visualizationKey } = visualizationInfo;
     const fullPath = `${envUrl}/v2/dossiers/${objectId}/instances/${instanceId}/chapters/${chapterKey}/visualizations/${visualizationKey}?limit=1&contentFlags=768`;
     return request
@@ -217,7 +224,7 @@ export class MstrObjectRestService {
       .set('x-mstr-projectid', projectId)
       .send(body || '')
       .withCredentials()
-      .then((res) => parseInstanceDefinition(res));
+      .then((res) => parseInstanceDefinition(res, attrforms));
   }
 
   createDossierInstance = (projectId, objectId, body = {}) => {
@@ -277,10 +284,13 @@ export class MstrObjectRestService {
     mstrObjectType = reportObjectType,
     dossierData,
     body = {},
-    instanceId
+    instanceId,
+    displayAttrFormNames
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
+    const { supportForms } = storeState.officeReducer;
+    const attrforms = { supportForms, displayAttrFormNames };
     const fullPath = getFullPath({
       dossierData,
       envUrl,
@@ -296,7 +306,7 @@ export class MstrObjectRestService {
       .set('x-mstr-projectid', projectId)
       .send(body)
       .withCredentials()
-      .then((res) => parseInstanceDefinition(res));
+      .then((res) => parseInstanceDefinition(res, attrforms));
   }
 
   modifyInstance = ({
@@ -305,10 +315,13 @@ export class MstrObjectRestService {
     mstrObjectType = reportObjectType,
     dossierData,
     body = {},
-    instanceId
+    instanceId,
+    displayAttrFormNames
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
+    const { supportForms } = storeState.officeReducer;
+    const attrforms = { supportForms, displayAttrFormNames };
     const fullPath = getFullPath({
       dossierData,
       envUrl,
@@ -324,7 +337,7 @@ export class MstrObjectRestService {
       .set('x-mstr-projectid', projectId)
       .send(body)
       .withCredentials()
-      .then((res) => parseInstanceDefinition(res));
+      .then((res) => parseInstanceDefinition(res, attrforms));
   }
 
   getObjectContentGenerator = ({
@@ -335,6 +348,7 @@ export class MstrObjectRestService {
     dossierData,
     limit = IMPORT_ROW_LIMIT,
     visualizationInfo,
+    displayAttrFormNames
   }) => fetchContentGenerator({
     instanceDefinition,
     objectId,
@@ -344,6 +358,7 @@ export class MstrObjectRestService {
     limit,
     visualizationInfo,
     reduxStore: this.reduxStore,
+    displayAttrFormNames
   })
 
   getObjectDefinition = (objectId, projectId, mstrObjectType = reportObjectType) => {
@@ -376,6 +391,7 @@ export class MstrObjectRestService {
   isPrompted = (objectId, projectId, objectTypeName) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
+
     let typePath;
     if (objectTypeName === mstrObjectEnum.mstrObjectType.report.name) {
       typePath = 'reports';

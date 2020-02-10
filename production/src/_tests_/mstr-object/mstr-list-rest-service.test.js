@@ -38,11 +38,11 @@ describe('Logic for fetching list of objects from MSTR API', () => {
     // given
     jest.spyOn(reduxStore, 'getState').mockImplementation(() => ({
       sessionReducer: {
-        envUrl: 'url',
-        authToken: 'token',
+        envUrl: 'envUrl',
+        authToken: 'authToken',
       },
     }));
-    const expectedParameters = {authToken: 'token', envUrl: 'url', typeQuery: '768&type=769&type=774&type=776&type=779&type=14081'};
+    const expectedParameters = {authToken: 'authToken', envUrl: 'envUrl', typeQuery: '768&type=769&type=774&type=776&type=779&type=14081'};
     // when
     const params = mstrListRestService.getRequestParams(expectedParameters);
 

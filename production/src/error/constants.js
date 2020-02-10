@@ -18,6 +18,8 @@ export const errorTypes = {
   TABLE_REMOVED_FROM_EXCEL_ERR: 'tableRemovedFromExcel',
   GENERIC_OFFICE_ERR: 'genericOffice',
   PROTECTED_SHEET_ERR: 'protectedSheet',
+  UNKNOWN_ERR: 'unknown',
+  INVALID_VIZ_KEY: 'invalidVizKey',
 };
 
 export const incomingErrorStrings = {
@@ -25,6 +27,7 @@ export const incomingErrorStrings = {
   TABLE_OVERLAP: 'A table can\'t overlap another table. ',
   BINDING_NOT_VALID: 'This object binding is no longer valid due to previous updates.',
   CONNECTION_BROKEN: 'Possible causes: the network is offline,',
+  INVALID_VIZ_KEY: 'Invalid visualization key',
 };
 
 export const stringMessageToErrorType = withDefaultValue({
@@ -35,19 +38,25 @@ export const stringMessageToErrorType = withDefaultValue({
 }, errorTypes.GENERIC_OFFICE_ERR);
 
 export const httpStatusToErrorType = withDefaultValue({
-  404: errorTypes.ENV_NOT_FOUND_ERR,
   400: errorTypes.BAD_REQUEST_ERR,
   401: errorTypes.UNAUTHORIZED_ERR,
+  403: errorTypes.INTERNAL_SERVER_ERR, // TODO: Proper error for forbidden access
+  404: errorTypes.ENV_NOT_FOUND_ERR,
   500: errorTypes.INTERNAL_SERVER_ERR,
-}, null);
+  501: errorTypes.INTERNAL_SERVER_ERR,
+  502: errorTypes.CONNECTION_BROKEN_ERR,
+  503: errorTypes.CONNECTION_BROKEN_ERR,
+  504: errorTypes.CONNECTION_BROKEN_ERR,
+}, errorTypes.UNKNOWN_ERR);
 
 export const GENERIC_SERVER_ERR = 'This object cannot be imported.';
 export const ALL_DATA_FILTERED_OUT = 'No data returned for this view. This might be because the applied prompt excludes all data.';
 export const EMPTY_REPORT = 'This object does not contain any data.';
-export const NOT_SUPPORTED_NO_ATTRIBUTES = 'This object cannot be imported. Either you do not have necessary permissions to view it, or it is empty.';
+export const NO_DATA_RETURNED = 'This object cannot be imported. Either you do not have necessary permissions to view it, or it is empty.';
 export const NOT_SUPPORTED_SERVER_ERR = 'This object cannot be imported. Objects with cross tabs, totals, or subtotals are not supported in this version of MicroStrategy for Office.';
 export const NOT_SUPPORTED_PROMPTS_REFRESH = 'Objects with prompts cannot be refreshed in this version of MicroStrategy for Office.';
 export const NOT_PUBLISHED_CUBE = 'This object cannot be imported. The Intelligent Cube is not published.';
+export const NO_DATA_SELECTED = 'This button is currently disabled because you didn’t select any data';
 export const NOT_IN_METADATA = 'The object does not exist in the metadata.';
 export const PROJECT_ROW_LIMIT = 'The object exceeds project rows limitation';
 export const TABLE_OVERLAP = 'The required data range in the worksheet is not empty';
@@ -65,6 +74,8 @@ export const UNKNOWN_ERROR = 'Unknown error';
 export const LOGIN_FAILURE = 'Login failure';
 export const OBJ_REMOVED_FROM_EXCEL = 'This object does not exist in the workbook anymore.';
 export const PROTECTED_SHEET = 'The table you are trying to manipulate is in a protected sheet. To make a change, unprotect the sheet. You might be requested to enter a password.';
+export const NOT_SUPPORTED_VIZ = 'Selected visualization cannot be imported in current version of the Add-in';
+export const INVALID_VIZ_KEY_MESSAGE = 'You are trying to perform an operation on a visualization which is either not supported or has been moved to another chapter/page or deleted from the dossier.';
 
 // temporarily we map all those codes to one message; may be changed in the future
 const iServerErrorMessages = withDefaultValue({
@@ -76,6 +87,8 @@ const iServerErrorMessages = withDefaultValue({
   '-2147205488': PROJECT_ROW_LIMIT,
   '-2147216373': NOT_IN_METADATA,
   '-2147216959': LOGIN_FAILURE,
+  '-2147207419': CONNECTION_BROKEN,
+  '-2147213784': NO_DATA_RETURNED,
 }, GENERIC_SERVER_ERR);
 
 export const errorMessageFactory = withDefaultValue({
@@ -85,6 +98,9 @@ export const errorMessageFactory = withDefaultValue({
       && error.response.body
       && (error.response.body.iServerCode === -2147216373)
     ) {
+      if (error.mstrObjectType) {
+        return `Seems like the ${error.mstrObjectType} has been removed.`;
+      }
       return NOT_IN_METADATA;
     }
     return ENDPOINT_NOT_REACHED;
@@ -106,8 +122,9 @@ export const errorMessageFactory = withDefaultValue({
   [errorTypes.OUTSIDE_OF_RANGE_ERR]: () => EXCEEDS_WORKSHEET_LIMITS,
   [errorTypes.OVERLAPPING_TABLES_ERR]: () => TABLE_OVERLAP,
   [errorTypes.RUN_OUTSIDE_OFFICE_ERR]: () => OUTSIDE_OF_OFFICE,
-  [errorTypes.TABLE_REMOVED_FROM_EXCEL_ERR]: ({ reportName }) => `${reportName} does not exist in the workbook anymore.`,
+  [errorTypes.TABLE_REMOVED_FROM_EXCEL_ERR]: ({ chosenObjectName }) => `${chosenObjectName} does not exist in the workbook anymore.`,
   [errorTypes.GENERIC_OFFICE_ERR]: ({ error }) => `Excel returned error: ${error.message}`,
   [errorTypes.PROTECTED_SHEET_ERR]: () => PROTECTED_SHEET,
+  [errorTypes.INVALID_VIZ_KEY]: () => INVALID_VIZ_KEY_MESSAGE,
 },
 ({ error }) => error.message || UNKNOWN_ERROR);
