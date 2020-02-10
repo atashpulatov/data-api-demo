@@ -234,7 +234,7 @@ export class PopupController {
 
   loadPending = (wrapped) => async (...args) => {
     this.runPopup(PopupTypeEnum.loadingPage, 30, 40);
-    return await wrapped(...args);
+    return wrapped(...args);
   };
 
   closeDialog = (dialog) => {
@@ -284,7 +284,7 @@ export class PopupController {
           response.visualizationInfo
         );
       }
-      await officeStoreService.preserveReportValue(reportParams.bindId, 'instanceId', response.preparedInstanceId);
+      await officeStoreService.preserveReportValue(reportParams.bindId, 'preparedInstanceId', response.preparedInstanceId);
       await officeStoreService.preserveReportValue(reportParams.bindId, 'isEdit', false);
     }
     const isErrorOnRefresh = await this.popupAction.refreshReportsArray([reportParams], false)(this.reduxStore.dispatch);

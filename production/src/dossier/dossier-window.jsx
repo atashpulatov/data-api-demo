@@ -13,6 +13,7 @@ import { popupHelper } from '../popup/popup-helper';
 import { popupStateActions } from '../popup/popup-state-actions';
 import { officeContext } from '../office/office-context';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
+import { authenticationHelper } from '../authentication/authentication-helper';
 
 export default class DossierWindowNotConnected extends React.Component {
   constructor(props) {
@@ -30,7 +31,14 @@ export default class DossierWindowNotConnected extends React.Component {
     this.handlePromptAnswer = this.handlePromptAnswer.bind(this);
   }
 
-  handleCancel() {
+  validateSession = () => {
+    authenticationHelper.validateAuthToken()
+      .catch(error => {
+        popupHelper.handlePopupErrors(error);
+      });
+  }
+
+  handleCancel = () => {
     const { Office } = window;
     const cancelObject = { command: selectorProperties.commandCancel, };
     Office.context.ui.messageParent(JSON.stringify(cancelObject));
@@ -47,7 +55,7 @@ export default class DossierWindowNotConnected extends React.Component {
     try {
       await mstrObjectRestService.fetchVisualizationDefinition({ projectId:chosenProjectId, objectId:chosenObjectId, instanceId:preparedInstanceId, visualizationInfo:{ chapterKey, visualizationKey } });
     } catch (error) {
-      if (error.response.body.code === 'ERR009') {
+      if (error.response && error.response.body.code === 'ERR009') {
         // Close popup if session expired
         popupHelper.handlePopupErrors(error);
       } else {
@@ -109,6 +117,7 @@ export default class DossierWindowNotConnected extends React.Component {
         <EmbeddedDossier
           handleSelection={this.handleSelection}
           handlePromptAnswer={this.handlePromptAnswer}
+          handleLoadEvent={this.validateSession}
         />
         <PopupButtons
           handleOk={this.handleOk}

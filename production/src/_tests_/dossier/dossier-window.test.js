@@ -9,6 +9,7 @@ import { Office } from '../mockOffice';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { officeContext } from '../../office/office-context';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
+import { authenticationHelper } from '../../authentication/authentication-helper';
 
 describe('Dossierwindow', () => {
   afterEach(() => {
@@ -55,6 +56,16 @@ describe('Dossierwindow', () => {
     await componentWrapper.instance().handleSelection(dossierData);
     // then
     expect(componentWrapper.instance().state.isVisualizationSelected).toBeTruthy();
+  });
+
+  it('validateSession should call validateAuthToken', async () => {
+    // given
+    const componentWrapper = shallow(<DossierWindowNotConnected />);
+    const validateTokenSpy = jest.spyOn(authenticationHelper, 'validateAuthToken');
+    // when
+    await componentWrapper.instance().validateSession();
+    // then
+    expect(validateTokenSpy).toHaveBeenCalled();
   });
 
   it('handlePromptAnswer newInstanceId setup correct state', async () => {

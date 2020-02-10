@@ -13,9 +13,11 @@ import { officeStoreService } from './store/office-store-service';
 import { PopupTypeEnum } from '../home/popup-type-enum';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import {
-  NOT_SUPPORTED_NO_ATTRIBUTES,
+  NO_DATA_RETURNED,
   ALL_DATA_FILTERED_OUT,
   ERROR_POPUP_CLOSED,
+  incomingErrorStrings,
+  errorTypes
 } from '../error/constants';
 
 const {
@@ -149,7 +151,7 @@ export class OfficeDisplayService {
       if (!instanceDefinition || mstrTable.rows.length === 0) {
         return {
           type: 'warning',
-          message: isPrompted ? ALL_DATA_FILTERED_OUT : NOT_SUPPORTED_NO_ATTRIBUTES,
+          message: isPrompted ? ALL_DATA_FILTERED_OUT : NO_DATA_RETURNED,
         };
       }
 
@@ -256,13 +258,15 @@ export class OfficeDisplayService {
           // hides table headers for crosstab if we fail on refresh
           officeTable.showHeaders = false;
         }
+      }
+      if (bindId) {
         this.reduxStore.dispatch({
           type: officeProperties.actions.finishLoadingReport,
           reportBindId: bindId,
           isRefreshAll: false,
           isError,
         });
-      } else {
+      } else if (bindingId) {
         this.reduxStore.dispatch({
           type: officeProperties.actions.finishLoadingReport,
           reportBindId: bindingId,
@@ -347,10 +351,24 @@ export class OfficeDisplayService {
         body.manipulations = manipulationsXML.manipulations;
         body.promptAnswers = manipulationsXML.promptAnswers;
       }
-      const instanceId = preparedInstanceId || (await createDossierInstance(projectId, objectId, body));
+      let instanceId;
+      try {
+        instanceId = preparedInstanceId || (await createDossierInstance(projectId, objectId, body));
+      } catch (error) {
+        error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
+        throw error;
+      }
       const config = { projectId, objectId, instanceId, mstrObjectType, dossierData, body, visualizationInfo, displayAttrFormNames };
-      const temp = await fetchVisualizationDefinition(config);
-      instanceDefinition = { ...temp, instanceId };
+      let temporaryInstanceDefinition;
+      try {
+        temporaryInstanceDefinition = await fetchVisualizationDefinition(config);
+      } catch (error) {
+        if (error.message && error.message.includes(incomingErrorStrings.INVALID_VIZ_KEY)) {
+          error.type = errorTypes.INVALID_VIZ_KEY;
+        }
+        throw error;
+      }
+      instanceDefinition = { ...temporaryInstanceDefinition, instanceId };
     } else {
       const config = { objectId, projectId, mstrObjectType, dossierData, body, displayAttrFormNames };
       instanceDefinition = await createInstance(config);

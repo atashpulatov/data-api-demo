@@ -210,5 +210,8 @@
   "Automatic": "Automatico",
   "Show attribute name once": "Mostra nome attributo una volta",
   "On": "Attivato",
-  "Off": "Disattivato"
+  "Off": "Disattivato",
+  "To preserve this crosstab report, select all objects without changing their forms.": "*To preserve this crosstab report, select all objects without changing their forms.*",
+  "You are trying to perform an operation on a visualization which is either not supported or has been moved to another chapter/page or deleted from the dossier.": "*You are trying to perform an operation on a visualization which is either not supported or has been moved to another chapter/page or deleted from the dossier.*",
+  "Seems like the dossier has been removed.": "*Seems like the dossier has been removed.*"
 }

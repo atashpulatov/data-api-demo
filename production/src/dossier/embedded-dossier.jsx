@@ -11,6 +11,25 @@ const { microstrategy, Office } = window;
 
 const { createDossierInstance, answerDossierPrompts } = mstrObjectRestService;
 
+/**
+ * Watches container for child addition and runs callback in case an iframe was added
+ * @param {*} container
+ * @param {*} callback
+ */
+export function watchForIframeAddition(container, callback) {
+  const config = { childList: true };
+  const onMutation = (mutationList) => {
+    for (const mutation of mutationList) {
+      if (mutation.addedNodes && mutation.addedNodes.length && mutation.addedNodes[0].nodeName === 'IFRAME') {
+        const iframe = mutation.addedNodes[0];
+        callback(iframe);
+      }
+    }
+  };
+  const observer = new MutationObserver(onMutation);
+  observer.observe(container, config);
+}
+
 export default class _EmbeddedDossier extends React.Component {
   constructor(props) {
     super(props);
@@ -23,12 +42,7 @@ export default class _EmbeddedDossier extends React.Component {
   }
 
   componentDidMount() {
-    // DE158588 - Not able to open dossier in embedding api on excel desktop in windows
-    const isOfficeOnline = Office.context ? Office.context.platform === Office.PlatformType.OfficeOnline : false;
-    const isIE = /Trident\/|MSIE /.test(window.navigator.userAgent);
-    if (!isOfficeOnline && isIE) {
-      this.watchForIframeAddition(this.container.current, this.onIframeLoad);
-    }
+    watchForIframeAddition(this.container.current, this.onIframeLoad);
     this.loadEmbeddedDossier(this.container.current);
   }
 
@@ -45,12 +59,17 @@ export default class _EmbeddedDossier extends React.Component {
    */
   onIframeLoad = (iframe) => {
     iframe.addEventListener('load', () => {
-      const embeddedDocument = iframe.contentDocument;
-      this.embeddedDocument = embeddedDocument;
-      if (!this.isLoginPage(embeddedDocument)) {
+      const { contentDocument } = iframe;
+      const { handleLoadEvent } = this.props;
+      // DE160793 - Throw session expired error when dossier redirects to login (iframe 'load' event)
+      handleLoadEvent();
+      // DE158588 - Not able to open dossier in embedding api on excel desktop in windows
+      const isOfficeOnline = Office.context ? Office.context.platform === Office.PlatformType.OfficeOnline : false;
+      const isIE = /Trident\/|MSIE /.test(window.navigator.userAgent);
+      if (!isOfficeOnline && isIE) {
         const fileLocation = window.location.origin
           + window.location.pathname.replace('index.html', 'javascript/mshtmllib.js');
-        this.applyFile(embeddedDocument, fileLocation);
+        this.applyFile(contentDocument, fileLocation);
       }
     });
   };
@@ -73,12 +92,6 @@ export default class _EmbeddedDossier extends React.Component {
     };
     handleSelection(this.dossierData);
   }
-
-  /**
-   * This function checks whether the content of embedded document is loginPage
-   * @param {*} _document
-   */
-  isLoginPage = (document) => document.URL.includes('embeddedLogin.jsp');
 
   /**
    * This function applies an external script file to a embedded document
@@ -118,6 +131,7 @@ export default class _EmbeddedDossier extends React.Component {
         }
       }
     } catch (error) {
+      error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
       popupHelper.handlePopupErrors(error);
     }
 
@@ -193,25 +207,6 @@ export default class _EmbeddedDossier extends React.Component {
     this.embeddedDossier = await microstrategy.dossier.create(props);
   }
 
-  /**
-   * Watches container for child addition and runs callback in case of iframe being added
-   * @param {*} container
-   * @param {*} callback
-   */
-  watchForIframeAddition(container, callback) {
-    const config = { childList: true };
-    const onMutation = (mutationList) => {
-      for (const mutation of mutationList) {
-        if (mutation.addedNodes && mutation.addedNodes.length && mutation.addedNodes[0].nodeName === 'IFRAME') {
-          const iframe = mutation.addedNodes[0];
-          callback(iframe);
-        }
-      }
-    };
-    const observer = new MutationObserver(onMutation);
-    observer.observe(container, config);
-  }
-
   promptsAnsweredHandler(promptsAnswers) {
     const { handlePromptAnswer } = this.props;
     if (this.embeddedDossier) {
@@ -247,7 +242,8 @@ _EmbeddedDossier.propTypes = {
     selectedViz: PropTypes.string,
   }),
   handleSelection: PropTypes.func,
-  handlePromptAnswer: PropTypes.func
+  handlePromptAnswer: PropTypes.func,
+  handleLoadEvent: PropTypes.func
 };
 
 _EmbeddedDossier.defaultProps = {

@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop */
 import request from 'superagent';
-import { NOT_SUPPORTED_NO_ATTRIBUTES } from '../error/constants';
+import { NO_DATA_RETURNED } from '../error/constants';
 import { OutsideOfRangeError } from '../error/outside-of-range-error';
 import officeConverterServiceV2 from '../office/office-converter-service-v2';
 import mstrObjectEnum from './mstr-object-type-enum';
@@ -31,7 +31,7 @@ function parseInstanceDefinition(res, attrforms) {
   }
   const { instanceId, data, internal } = body;
   body.attrforms = attrforms;
-  if (data.paging.total === 0) throw new Error(NOT_SUPPORTED_NO_ATTRIBUTES);
+  if (data.paging.total === 0) throw new Error(NO_DATA_RETURNED);
   const mstrTable = officeConverterServiceV2.createTable(body);
   const { rows, columns } = checkTableDimensions(mstrTable.tableSize);
   return {
