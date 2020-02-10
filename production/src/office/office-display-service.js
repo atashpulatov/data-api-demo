@@ -89,7 +89,7 @@ export class OfficeDisplayService {
     isPrompted,
     promptsAnswers,
     crosstabHeaderDimensions = false,
-    subtotalsInfo : {
+    subtotalsInfo: {
       subtotalsDefined = false,
       subtotalsVisible = false,
       subtotalsAddresses = false,
@@ -215,8 +215,8 @@ export class OfficeDisplayService {
       officeStoreService.saveAndPreserveReportInStore({
         name: mstrTable.name,
         manipulationsXML: instanceDefinition.manipulationsXML,
-        bindId:tableid,
-        oldTableId:bindingId,
+        bindId: tableid,
+        oldTableId: bindingId,
         projectId,
         envUrl,
         body,
@@ -229,7 +229,7 @@ export class OfficeDisplayService {
         id: objectId,
         isLoading: false,
         crosstabHeaderDimensions,
-        tableName:newOfficeTableId,
+        tableName: newOfficeTableId,
         tableDimensions: { columns: instanceDefinition.columns },
         displayAttrFormNames
       }, isRefresh);
@@ -304,7 +304,7 @@ export class OfficeDisplayService {
     }
   }
 
-  bindOfficeTable = async(officeTable, excelContext, bindingId, bindId) => {
+  bindOfficeTable = async (officeTable, excelContext, bindingId, bindId) => {
     officeTable.load('name');
     await excelContext.sync();
     const tablename = officeTable.name;
@@ -516,26 +516,19 @@ export class OfficeDisplayService {
    * @returns {number} Size of passed object in MB
    * @memberof officeDisplayService
    */
-  sizeOfObject = (object) => {
-    const objectList = [];
-    const stack = [object];
+  sizeOfObject = (chunk) => {
     let bytes = 0;
-    while (stack.length) {
-      const value = stack.pop();
-      if (typeof value === 'boolean') {
-        bytes += 4;
-      } else if (typeof value === 'string') {
-        bytes += value.length * 2;
-      } else if (typeof value === 'number') {
-        bytes += 8;
-      } else if (typeof value === 'object' && objectList.indexOf(value) === -1) {
-        objectList.push(value);
-        for (const i in value) {
-          stack.push(value[i]);
+    for (let i = 0; i < chunk.length; i++) {
+      for (let j = 0; j < chunk[0].length; j++) {
+        if (typeof chunk[i][j] === 'string') {
+          bytes += chunk[i][j].length * 2;
+        } else if (typeof chunk[i][j] === 'number') {
+          bytes += 8;
+        } else {
+          bytes += 2;
         }
       }
     }
-    // Formating bytes to MB in decimal
     return bytes / 1000000;
   }
 
@@ -657,9 +650,9 @@ export class OfficeDisplayService {
       // Get resize range: The number of rows/cols by which to expand the bottom-right corner,
       // relative to the current range.
       const rowRange = officeTable
-        .getDataBodyRange()
-        .getRow(rowIndex)
-        .getResizedRange(splitExcelRows[i].length - 1, 0);
+      .getDataBodyRange()
+      .getRow(rowIndex)
+      .getResizedRange(splitExcelRows[i].length - 1, 0);
       rowIndex += splitExcelRows[i].length;
       if (!tableColumnsChanged && isRefresh) { rowRange.clear('Contents'); }
       rowRange.values = splitExcelRows[i];
