@@ -17,12 +17,15 @@ exports.config = {
   // directory is where your package.json resides, so `wdio` will be called from there.
   //
   specs: [
-    './test/specs/release-validation/deprecated/sample.spec.js'
+    './test/specs/release-validation/deprecated/sample.spec.js',
   ],
   suites: {
   test: [
     './test/specs/release-validation/test/*.js'
   ],
+  filterPanel: [
+    './test/specs/release-validation/F24086-filter-panel/*.spec.js'
+  ]
   },
   // Patterns to exclude.
   exclude: [
@@ -110,7 +113,7 @@ exports.config = {
   //
   // Default request retries count
   connectionRetryCount:
-  3,
+  1,
   //
   // Test runner services
   // Services take over a specific job you don't want to take care of. They enhance
@@ -130,7 +133,7 @@ exports.config = {
   
   //
   // The number of times to retry the entire specfile when it fails as a whole
-  specFileRetries: 3,
+  specFileRetries: 0,
   //
   // Test reporter for stdout.
   // The only one supported by default is 'dot'
