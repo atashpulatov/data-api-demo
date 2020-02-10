@@ -192,6 +192,7 @@ export const navigationTree = (state = initialState, action) => {
     newState.loading = true;
     return newState;
   }
+  // DE159475; disabled until sorting fix in object-table
   // case CHANGE_SORTING: {
   //   const newState = { ...state };
   //   newState.sorter = data;

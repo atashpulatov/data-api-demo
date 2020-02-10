@@ -6,6 +6,7 @@ export const SELECT_FOLDER = 'NAV_TREE_SELECT_FOLDER';
 export const REQUEST_IMPORT = 'REQUEST_IMPORT';
 export const PROMPTS_ANSWERED = 'PROMPTS_ANSWERED';
 export const START_IMPORT = 'NAV_TREE_START_IMPORT';
+// DE159475; disabled until sorting fix in object-table
 // export const CHANGE_SORTING = 'NAV_TREE_CHANGE_SORTING';
 export const CHANGE_SEARCHING = 'NAV_TREE_CHANGE_SEARCHING';
 export const UPDATE_SCROLL = 'NAV_TREE_UPDATE_SCROLL';
