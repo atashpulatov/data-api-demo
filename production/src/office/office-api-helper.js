@@ -9,6 +9,7 @@ import { CONTEXT_LIMIT } from '../mstr-object/mstr-object-rest-service';
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { OBJ_REMOVED_FROM_EXCEL } from '../error/constants';
 import { ProtectedSheetError } from '../error/protected-sheets-error';
+import { mergeHeaderColumns, mergeHeaderRows } from './office-api-header-merge-helper';
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
@@ -107,7 +108,7 @@ export class OfficeApiHelper {
       if (error && error.code === 'ItemNotFound') {
         return notificationService.displayTranslatedNotification({ type: 'info', content: OBJ_REMOVED_FROM_EXCEL });
       }
-      errorService.handleError(error, {chosenObjectName, onConfirm: deleteReport});
+      errorService.handleError(error, { chosenObjectName, onConfirm: deleteReport });
       return false;
     }
   };
@@ -443,7 +444,7 @@ export class OfficeApiHelper {
       }
       // Check if ranges are valid before clearing
       await context.sync();
-      if (isCrosstab && (crosstabHeaderDimensions === prevheaderDimensions)) {
+      if (isCrosstab && (JSON.stringify(crosstabHeaderDimensions) === JSON.stringify(prevheaderDimensions))) {
         if (columnsY) topRange.clear('contents');
         if (rowsX) {
           leftRange.clear('contents');
@@ -543,17 +544,22 @@ export class OfficeApiHelper {
     const reportStartingCell = sheet.getRange(cellAddress);
     const titlesBottomCell = reportStartingCell.getOffsetRange(0, -1);
     const rowsTitlesRange = titlesBottomCell.getResizedRange(0, -(crosstabHeaderDimensions.rowsX - 1));
-    const columnssTitlesRange = titlesBottomCell.getOffsetRange(-1, 0).getResizedRange(-(crosstabHeaderDimensions.columnsY - 1), 0);
+    const columnsTitlesRange = titlesBottomCell.getOffsetRange(-1, 0).getResizedRange(-(crosstabHeaderDimensions.columnsY - 1), 0);
 
-    const headerTitlesRange = columnssTitlesRange.getBoundingRect(rowsTitlesRange);
+    const headerTitlesRange = columnsTitlesRange.getBoundingRect(rowsTitlesRange);
     headerTitlesRange.format.verticalAlignment = window.Excel.VerticalAlignment.bottom;
     this.formatCrosstabRange(headerTitlesRange);
     headerTitlesRange.values = '  ';
 
     // we are not inserting row attributes names if they do not exist
-    if (attributesNames.rowsAttributes.length) rowsTitlesRange.values = [attributesNames.rowsAttributes];
-    columnssTitlesRange.values = mstrNormalizedJsonHandler.transposeMatrix([attributesNames.columnsAttributes]);
-  }
+    if (attributesNames.rowsAttributes.length) {
+      rowsTitlesRange.values = [attributesNames.rowsAttributes];
+      mergeHeaderRows(attributesNames.rowsAttributes, rowsTitlesRange);
+    }
+
+    columnsTitlesRange.values = mstrNormalizedJsonHandler.transposeMatrix([attributesNames.columnsAttributes]);
+    mergeHeaderColumns(attributesNames.columnsAttributes, columnsTitlesRange);
+  };
 
   /**
   * Returns the number of rows and columns headers that are valid for crosstab
@@ -583,6 +589,7 @@ export class OfficeApiHelper {
   async deleteExcelTable(tableObject, context, isCrosstab = false, crosstabHeaderDimensions = {}, isClear = false) {
     context.runtime.enableEvents = false;
     await context.sync();
+    const isClearContentOnly = isClear ? 'contents' : '';
     const tableRange = tableObject.getDataBodyRange();
     context.trackedObjects.add(tableRange);
     if (isCrosstab) {
@@ -595,11 +602,11 @@ export class OfficeApiHelper {
       const firstCell = crosstabRange.getCell(0, 0);
       const columnsHeaders = firstCell.getOffsetRange(0, rowsX).getResizedRange(columnsY - 1, columnsX - 1);
       const rowsHeaders = firstCell.getResizedRange((columnsY + rowsY), rowsX - 1);
-      columnsHeaders.clear();
-      rowsHeaders.clear();
+      columnsHeaders.clear(isClearContentOnly);
+      rowsHeaders.clear(isClearContentOnly);
     }
-    tableRange.clear();
-    if (!isClear) tableObject.delete();
+    tableRange.clear(isClearContentOnly);
+    if (!isClear) { tableObject.delete(); }
     context.runtime.enableEvents = true;
     await context.sync();
     context.trackedObjects.remove(tableRange);

@@ -6,7 +6,8 @@
   "scripts": {
     "test": "rimraf ./allure-results && wdio wdio.conf.js",
     "eslint": "eslint --fix ./test --ext .js",
-    "report": "allure generate allure-results --clean && allure open",
+    "report": "allure generate allure-results --clean",
+    "report-and-open": "allure generate allure-results --clean && allure open",
     "test-suite": "rimraf ./allure-results && wdio wdio.conf.js --suite",
     "test-UB": "rimraf ./allure-results && ./node_modules/.bin/wdio wdio.conf.js --suite UB --USERENV",
     "rally": "node -r dotenv/config ./rally/updateRallyTCResult.js -c"

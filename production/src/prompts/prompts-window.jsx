@@ -92,7 +92,7 @@ export class _PromptsWindow extends Component {
     const { promptsAnswered, mstrData, session, editedObject } = this.props;
     promptsAnswersLocal = promptsAnswersLocal || editedObject.promptsAnswers;
     const chosenObjectIdLocal = chosenObjectId || editedObject.chosenObjectId;
-    const projectId = mstrData.chosenProjectId || editedObject.projectId; //FIXME: potential problem with projectId
+    const projectId = mstrData.chosenProjectId || editedObject.projectId; // FIXME: potential problem with projectId
     const { envUrl, authToken } = session;
 
     let instanceDefinition;
@@ -231,7 +231,22 @@ export class _PromptsWindow extends Component {
 
   messageReceived = (message = {}) => {
     if (message.data && message.data.value && message.data.value.iServerErrorCode) {
-      notificationService.displayNotification({ type: 'warning', content: 'This object cannot be imported.', details: message.data.value.message });
+      const newErrorObject = {
+        status: message.data.value.statusCode,
+        response: {
+          body: {
+            code: message.data.value.errorCode,
+            iServerCode: message.data.value.iServerErrorCode,
+            message: message.data.value.message,
+          },
+          text: JSON.stringify({
+            code: message.data.value.errorCode,
+            iServerCode: message.data.value.iServerErrorCode,
+            message: message.data.value.message
+          }),
+        }
+      };
+      popupHelper.handlePopupErrors(newErrorObject);
     }
   };
 
