@@ -11,6 +11,7 @@ mstr-office.sublime-project
 .build
 .gradle
 .idea
+.env
 
 .vagrant
 overrides.*
