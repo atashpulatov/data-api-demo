@@ -1,5 +1,5 @@
 import { switchToPluginFrame, switchToPromptFrame, switchToPopupFrame, switchToExcelFrame } from '../utils/iframe-helper';
-import { waitAndClick } from '../utils/click-helper';
+import { waitAndClick, waitAndRightClick } from '../utils/click-helper';
 import { selectors as s } from '../../constants/selectors/popup-selectors';
 
 const PluginPopup = function() {
@@ -100,6 +100,8 @@ const PluginPopup = function() {
 
   this.importObject = function(objectName) {
     switchToPluginFrame();
+    browser.pause(1000);
+    this.switchLibrary(false);
     this.searchForObject(objectName);
     browser.pause(500);
     this.selectFirstObject();
@@ -263,6 +265,66 @@ const PluginPopup = function() {
     console.log(`Total time importing "${objectName}":  ${timeSpent} secs`);
     return timeSpent;
   };
+
+  this.switchLibrary = function(newState) {
+    const myLibrarySwitch = $(s.myLibrary);
+    myLibrarySwitch.waitForExist(5000);
+    const checked = myLibrarySwitch.getAttribute('aria-checked');
+    if ((checked === 'true') !== newState) waitAndClick(myLibrarySwitch)
+  }
+
+  this.openDossier = function(dossierName, timeToLoadDossier = 10000) {
+    this.importObject(dossierName);
+    browser.pause(timeToLoadDossier);
+  }
+
+  this.selectAndImportVizualiation = function(visContainerId) {
+    switchToPromptFrame();
+    const visSelctor = $(visContainerId).$('.mstrmojo-VizBox-selector');
+    visSelctor.click();
+
+    // TODO: wait untli import button is enabled and click it
+    browser.pause(2500);
+    switchToPluginFrame();
+    this.clickImport();
+  }
+
+  this.showTotals = (objectId) => {
+    switchToPromptFrame();
+    waitAndRightClick($(`${objectId}`));
+    browser.pause(1000);
+    waitAndClick($(s.showTotalsButton));
+    browser.pause(1000);
+    waitAndClick($(s.totalButton));
+    waitAndClick($(s.okButton));
+    browser.pause(4000);
+  }
+
+  this.sortAscending = (objectId) => {
+    switchToPromptFrame();
+    waitAndRightClick($(`${objectId}`));
+    browser.pause(1000);
+    waitAndClick($(s.sortAscendingButton));
+    browser.pause(4000);
+  }
+
+  this.sortDescending = (objectId) => {
+    switchToPromptFrame();
+    waitAndRightClick($(`${objectId}`));
+    browser.pause(1000);
+    waitAndClick($(s.sortDescendingButton));
+    browser.pause(4000);
+  }
+
+  this.drillByCategory = (objectId) => {
+    switchToPromptFrame();
+    waitAndRightClick($(`${objectId}`));
+    browser.pause(1000);
+    waitAndClick($(s.drillButton));
+    browser.pause(1000);
+    waitAndClick($(s.categoryButton));
+    browser.pause(4000);
+  }
 };
 
 export default new PluginPopup();
