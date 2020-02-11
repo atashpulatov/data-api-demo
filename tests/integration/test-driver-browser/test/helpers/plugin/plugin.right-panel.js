@@ -1,7 +1,7 @@
 import { switchToPluginFrame, switchToPopupFrame, switchToExcelFrame } from '../utils/iframe-helper';
 import { waitAndClick } from '../utils/click-helper';
 import { rightPanelSelectors } from '../../constants/selectors/plugin.right-panel-selectors';
-import { excelSelectors as exSe } from '../../constants/selectors/office-selectors';
+import { excelSelectors } from '../../constants/selectors/office-selectors';
 
 const PluginRightPanel = function() {
   this.clickLoginPopUpBtn = function() {
@@ -125,7 +125,7 @@ const PluginRightPanel = function() {
   this.clickOnObject = function(object, cellValue) {
     waitAndClick(object);
     switchToExcelFrame();
-    expect($(exSe.cellInput).getValue()).toEqual(cellValue);
+    expect($(excelSelectors.cellInput).getValue()).toEqual(cellValue);
     browser.pause(3000); // TODO: Not sure if this is necessary
     switchToPluginFrame(); // TODO: Not sure if this is necessary
   };

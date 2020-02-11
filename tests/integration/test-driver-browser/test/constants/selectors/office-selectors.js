@@ -1,4 +1,5 @@
 export const excelSelectors = {
+  getExcelCell: (column, row) => `#gridRows > div:nth-child(${row}) > div:nth-child(${column})`,
   A2: $('#gridRows > div:nth-child(2) > div:nth-child(1)'),
   E2: $('#gridRows > div:nth-child(2) > div:nth-child(5)'),
   cellInput: '#m_excelWebRenderer_ewaCtl_NameBox',

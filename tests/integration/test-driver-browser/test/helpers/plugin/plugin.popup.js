@@ -357,6 +357,7 @@ const PluginPopup = function() {
     browser.keys('\uE003'); // Press Backspace
     maxValueInput.setValue(value)
   }
+
   /**
    * Refresh Dossier to default state
    *
@@ -366,6 +367,30 @@ const PluginPopup = function() {
     const { dossierWindow } = popupSelectors;
     waitAndClick($(dossierWindow.buttonRefreshDossier), 1000);
     waitAndClick($(dossierWindow.buttonConfirmRefresh), 1000);
+  }
+
+  /**
+   * Refresh Dossier to default state
+   *
+   * @param {Number} index Index of the bookmark in dossier (starts from 1)
+   * @memberof PluginPopup
+   */
+  this.applyDossierBookmark = (index) => {
+    const { dossierWindow } = popupSelectors;
+    waitAndClick($(dossierWindow.buttonBookmarks), 1000);
+    waitAndClick($(dossierWindow.getBookmarkItemAt(index)), 1000);
+  }
+
+  /**
+   * Go to page/chapter in dossier
+   *
+   * @param {Number} index Index of the page/chapter item in dossier (starts from 1)
+   * @memberof PluginPopup
+   */
+  this.goToDossierPageOrChapter = (index) => {
+    const { dossierWindow } = popupSelectors;
+    waitAndClick($(dossierWindow.buttonToC), 1000);
+    waitAndClick($(dossierWindow.getTocItemAt(index)), 1000);
   }
 };
 

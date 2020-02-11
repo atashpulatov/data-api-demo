@@ -12,15 +12,7 @@ describe('F24398 - Import and refresh visualization', () => {
   const { name, timeToOpen, visualizations } = objectsList.dossiers.complexDossier;
 
   beforeAll(() => {
-    browser.setWindowSize(1500, 900);
-    OfficeWorksheet.openExcelHome();
-    const url = browser.getUrl();
-    if (url.includes('login.microsoftonline')) {
-      OfficeLogin.login(settings.officeOnline.username, settings.officeOnline.password);
-    }
-    OfficeWorksheet.createNewWorkbook();
-    OfficeWorksheet.openPlugin();
-    PluginRightPanel.loginToPlugin(settings.env.username, settings.env.password);
+    OfficeLogin.openExcelAndLoginToPlugin();
   });
 
   // Create test for each visType defined in visualizations
