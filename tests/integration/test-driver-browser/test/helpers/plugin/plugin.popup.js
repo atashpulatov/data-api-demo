@@ -4,66 +4,66 @@ import { popupSelectors } from '../../constants/selectors/popup-selectors';
 import { waitForNotification } from '../utils/wait-helper'
 import pluginRightPanel from './plugin.right-panel';
 
-const PluginPopup = function() {
-  this.closeRefreshAll = function() {
+const PluginPopup = function () {
+  this.closeRefreshAll = function () {
     waitAndClick($(popupSelectors.closeRefreshAll));
   }
 
-  this.searchForObject = function(objectName) {
+  this.searchForObject = function (objectName) {
     $(popupSelectors.searchInput).clearValue();
     $(popupSelectors.searchInput).setValue(objectName);
   };
 
-  this.clickImport = function() {
+  this.clickImport = function () {
     waitAndClick($(popupSelectors.importBtn));
   };
 
-  this.clickPrepareData = function() {
+  this.clickPrepareData = function () {
     waitAndClick($(popupSelectors.prepareBtn));
   };
 
-  this.clickCancel = function() {
+  this.clickCancel = function () {
     waitAndClick($(popupSelectors.cancelBtn));
   };
 
-  this.clickBack = function() {
+  this.clickBack = function () {
     waitAndClick($(popupSelectors.backBtn));
   };
 
-  this.clickDataPreview = function() {
+  this.clickDataPreview = function () {
     waitAndClick($(popupSelectors.dataPreviewBtn));
   };
 
-  this.clickViewSelected = function() {
+  this.clickViewSelected = function () {
     waitAndClick($(popupSelectors.viewSelected));
   };
 
-  this.closePreview = function() {
+  this.closePreview = function () {
     waitAndClick($(popupSelectors.closePreviewBtn));
   };
 
-  this.clickRun = function() {
+  this.clickRun = function () {
     switchToPopupFrame();
     waitAndClick($(popupSelectors.runBtn));
   };
 
-  this.clickPromptArrow = function() {
+  this.clickPromptArrow = function () {
     waitAndClick($(popupSelectors.promptArrow));
   };
 
-  this.selectAllAttributes = function() {
+  this.selectAllAttributes = function () {
     waitAndClick($(popupSelectors.allAttributes));
   };
 
-  this.selectAllMetrics = function() {
+  this.selectAllMetrics = function () {
     waitAndClick($(popupSelectors.allMetrics));
   };
 
-  this.selectAllFilters = function() {
+  this.selectAllFilters = function () {
     waitAndClick($(popupSelectors.allFilters));
   };
 
-  this.selectObjectElementsInPrepareData = function(elements) {
+  this.selectObjectElementsInPrepareData = function (elements) {
     $('#search-toolbar > div > span > input').waitForExist(7777);
     for (let i = 0; i < elements.length; i++) {
       $('#search-toolbar > div > span > input').clearValue();
@@ -72,7 +72,7 @@ const PluginPopup = function() {
       $('#search-toolbar > div > span > input').clearValue();
     }
   };
-  this.selectObjectElements = function(elements) {
+  this.selectObjectElements = function (elements) {
     for (let i = 0; i < elements.length; i++) {
       waitAndClick($(`input[name="${elements[i]}"]`));
     }
@@ -84,23 +84,23 @@ const PluginPopup = function() {
     waitAndClick($(`div[title=${value}"]`));
   };
 
-  this.selectFilters = function(names) {
+  this.selectFilters = function (names) {
     for (const [filterKey, filterInstances] of names) {
       const filter = $(`.filter-title*=${filterKey}`);
       waitAndClick(filter);
       this.selectObjectElements(filterInstances);
     }
   };
-  this.clickHeader = function(headerName) {
+  this.clickHeader = function (headerName) {
     waitAndClick($(`.data-tip*=${headerName}`));
   };
 
-  this.selectFirstObject = function() {
+  this.selectFirstObject = function () {
     browser.pause(2222);
     waitAndClick($(popupSelectors.firstObject));
   };
 
-  this.importObject = function(objectName, myLibrarySwitch) {
+  this.importObject = function (objectName, myLibrarySwitch) {
     switchToPluginFrame();
     browser.pause(4000);
     this.switchLibrary(myLibrarySwitch);
@@ -110,7 +110,7 @@ const PluginPopup = function() {
     this.clickImport();
   };
 
-  this.preparePrompt = function(objectName) {
+  this.preparePrompt = function (objectName) {
     switchToPluginFrame();
     this.searchForObject(objectName);
     browser.pause(500);
@@ -199,7 +199,7 @@ const PluginPopup = function() {
     waitAndClick($('.mstrToolButtonRounded'));
   };
 
-  this.prepareObject = function(objectName, elements, filters) {
+  this.prepareObject = function (objectName, elements, filters) {
     switchToPluginFrame();
     this.searchForObject(objectName);
     browser.pause(1111);
@@ -212,43 +212,43 @@ const PluginPopup = function() {
   };
 
   // TODO: Refactor to webDriverIO. This method is only used in TC39453
-  this.checkSorting = async function(order, headerName) {
+  this.checkSorting = async function (order, headerName) {
     const columnHeaders = element.all(by.css(popupSelectors.columnHeaders));
     const columnTitles = columnHeaders.all(by.css());
     for (let i = 0; i < columnTitles.length; i++) {
       if (columnTitles.get(i) === headerName) {
         switch (order) {
-        case 'up':
-          await expect(columnHeaders.get(i).element(by.css(popupSelectors.sortedUp)).isPresent()).toBe(true);
-          break;
-        case 'down':
-          await expect(columnHeaders.get(i).element(by.css(popupSelectors.sortedDown)).isPresent()).toBe(true);
-          break;
-        default:
-          break;
+          case 'up':
+            await expect(columnHeaders.get(i).element(by.css(popupSelectors.sortedUp)).isPresent()).toBe(true);
+            break;
+          case 'down':
+            await expect(columnHeaders.get(i).element(by.css(popupSelectors.sortedDown)).isPresent()).toBe(true);
+            break;
+          default:
+            break;
         }
       }
     }
   };
 
   // TODO: Refactor to webDriverIO. This method is only used in TC39454
-  this.checkDisplayedObjectNames = async function(searchedString) {
+  this.checkDisplayedObjectNames = async function (searchedString) {
     for (let i = 0; i < popupSelectors.displayedObjects.length; i++) {
       await expect(popupSelectors.displayedObjects.get(i).getText().toContain(searchedString));
     }
   };
   // Currently this method is not used
-  this.checkIfFilterIsClicked = function(filterName) {
+  this.checkIfFilterIsClicked = function (filterName) {
     expect($(`.filter-title*=${filterName}`).getCSSProperty('background-color').value).toEqual('#1890FF');
   };
-  this.deleteFromSearch = function() {
+  this.deleteFromSearch = function () {
     const searchedValue = $(popupSelectors.searchInput).getAttribute('value');
     for (let i = 0; i < searchedValue.length; i++) {
       $(popupSelectors.searchInput).setValue('\uE003');
     }
   };
 
-  this.importObjectAndGetTotalTime = function(objectName) {
+  this.importObjectAndGetTotalTime = function (objectName) {
     this.importObject(objectName);
     const begin = Date.now();
     browser.pause(2000);
@@ -268,19 +268,19 @@ const PluginPopup = function() {
     return timeSpent;
   };
 
-  this.switchLibrary = function(newState) {
+  this.switchLibrary = function (newState) {
     const myLibrarySwitch = $(popupSelectors.myLibrary);
     myLibrarySwitch.waitForExist(5000);
     const checked = myLibrarySwitch.getAttribute('aria-checked');
     if ((checked === 'true') !== newState) waitAndClick(myLibrarySwitch)
   }
 
-  this.openDossier = function(dossierName, timeToLoadDossier = 10000, myLibrarySwitch = false) {
+  this.openDossier = function (dossierName, timeToLoadDossier = 10000, myLibrarySwitch = false) {
     this.importObject(dossierName, myLibrarySwitch);
     browser.pause(timeToLoadDossier);
   }
 
-  this.selectAndImportVizualiation = function(visContainerId) {
+  this.selectAndImportVizualiation = function (visContainerId) {
     switchToPromptFrame();
     const visSelctor = $(visContainerId).$('.mstrmojo-VizBox-selector');
     visSelctor.click();
@@ -326,7 +326,7 @@ const PluginPopup = function() {
       }
     }
   }
-
+  // TODO: prepares data for the first object
   this.prepareData = (objectName) => {
     switchToPluginFrame();
     browser.pause(1000);
