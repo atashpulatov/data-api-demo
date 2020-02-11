@@ -1,6 +1,8 @@
 import { switchToPluginFrame, switchToPromptFrame, switchToPopupFrame, switchToExcelFrame } from '../utils/iframe-helper';
 import { waitAndClick, waitAndRightClick } from '../utils/click-helper';
 import { popupSelectors } from '../../constants/selectors/popup-selectors';
+import { waitForNotification } from '../utils/wait-helper'
+import pluginRightPanel from './plugin.right-panel';
 
 const PluginPopup = function() {
   this.closeRefreshAll = function() {
@@ -307,6 +309,41 @@ const PluginPopup = function() {
     waitAndClick($(popupSelectors.sortAscendingButton));
     browser.pause(4000);
   }
+
+  // TODO:
+  // method is used to select attributes(to check checkboxes) and attribute forms.
+  // parameters: JSON object, containing attributes as keys and attribute forms as values
+  this.selectAttributesAndAttributeForms = (elements) => {
+    for (const [attribute, attributeForm] of Object.entries(elements)) {
+      waitAndClick($(`${popupSelectors.attributeCheckBox}=${attribute}`));
+      if (attributeForm && attributeForm.length > 0) {
+        browser.pause(500);
+        waitAndClick($(`${popupSelectors.firstClosedAttributeFormSwitcher}`));
+        for (let i = 0; i < attributeForm.length; i++) {
+          browser.pause(500);
+          waitAndClick($(`${popupSelectors.attributeCheckBox}=${attributeForm[i]}`));
+        }
+      }
+    }
+  }
+
+  this.prepareData = (objectName) => {
+    switchToPluginFrame();
+    browser.pause(1000);
+    this.switchLibrary(false);
+    this.searchForObject(objectName);
+    browser.pause(500);
+    this.selectFirstObject();
+    this.clickPrepareData();
+  }
+
+  this.selectAttributeFormVisualisation = (type) => {
+    waitAndClick($(popupSelectors.attributeFormDropdown));
+    browser.pause(500);
+    waitAndClick($(`${popupSelectors.attributeFormDropDownItem}=${type}`));
+    browser.pause(500);
+  }
+
 
   this.sortDescending = (objectId) => {
     switchToPromptFrame();
