@@ -62,7 +62,7 @@ export class _NavigationTree extends Component {
 
   connectToCacheSafely = (isRefresh) => {
     const { connectToDB, fetchObjectsFromNetwork } = this.props;
-    // this.startFallbackProtocol();
+    this.startFallbackProtocol();
     connectToDB(isRefresh).catch(() => {
       console.log('Cannot connect to cache, fetching from network');
       fetchObjectsFromNetwork();
