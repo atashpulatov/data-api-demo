@@ -98,10 +98,10 @@ const PluginPopup = function() {
     waitAndClick($(popupSelectors.firstObject));
   };
 
-  this.importObject = function(objectName) {
+  this.importObject = function(objectName, myLibrarySwitch) {
     switchToPluginFrame();
-    browser.pause(1000);
-    this.switchLibrary(false);
+    browser.pause(4000);
+    this.switchLibrary(myLibrarySwitch);
     this.searchForObject(objectName);
     browser.pause(500);
     this.selectFirstObject();
@@ -273,8 +273,8 @@ const PluginPopup = function() {
     if ((checked === 'true') !== newState) waitAndClick(myLibrarySwitch)
   }
 
-  this.openDossier = function(dossierName, timeToLoadDossier = 10000) {
-    this.importObject(dossierName);
+  this.openDossier = function(dossierName, timeToLoadDossier = 10000, myLibrarySwitch = false) {
+    this.importObject(dossierName, myLibrarySwitch);
     browser.pause(timeToLoadDossier);
   }
 
