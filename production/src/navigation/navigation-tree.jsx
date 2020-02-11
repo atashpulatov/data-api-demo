@@ -39,7 +39,7 @@ export class _NavigationTree extends Component {
     const { resetDBState, fetchObjectsFromNetwork } = this.props;
     resetDBState();
     if (this.indexedDBSupport) {
-      this.connectToCache();
+      this.connectToCacheSafely();
     } else {
       fetchObjectsFromNetwork();
     }
@@ -60,10 +60,13 @@ export class _NavigationTree extends Component {
     }));
   }
 
-  connectToCache = (isRefresh) => {
-    const { connectToDB } = this.props;
+  connectToCacheSafely = (isRefresh) => {
+    const { connectToDB, fetchObjectsFromNetwork } = this.props;
     this.startFallbackProtocol();
-    connectToDB(isRefresh);
+    connectToDB(isRefresh).catch(() => {
+      console.log('Cannot connect to cache, fetching from network');
+      fetchObjectsFromNetwork();
+    });
   };
 
   refresh = async () => {
@@ -78,7 +81,7 @@ export class _NavigationTree extends Component {
     resetDBState(true);
     if (this.indexedDBSupport) {
       window.Office.context.ui.messageParent(JSON.stringify({ command: REFRESH_CACHE_COMMAND }));
-      this.connectToCache(true);
+      this.connectToCacheSafely(true);
     } else {
       fetchObjectsFromNetwork();
     }
