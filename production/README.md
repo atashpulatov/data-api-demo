@@ -31,6 +31,10 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 Run ESLint static code analysis.
 
+###  `./aws-deploy.sh`
+
+Script to upload a local build to a cloud environment. Can take two extra parameters `build  y/n` and iServer ip (e.g., `./aws-deploy.sh y 0.0.0.0`).
+
 ## Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
