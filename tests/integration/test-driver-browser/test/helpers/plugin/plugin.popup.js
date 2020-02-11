@@ -38,6 +38,10 @@ const PluginPopup = function () {
     waitAndClick($(popupSelectors.viewSelected));
   };
 
+  this.clickSubtotalToggler = function () {
+    waitAndClick($(popupSelectors.subtotalToggler));
+  }
+
   this.closePreview = function () {
     waitAndClick($(popupSelectors.closePreviewBtn));
   };
