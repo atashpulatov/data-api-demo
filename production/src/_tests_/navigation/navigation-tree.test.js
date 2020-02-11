@@ -12,11 +12,7 @@ import { popupHelper } from '../../popup/popup-helper';
 import DB from '../../cache/cache-db';
 
 jest.mock('../../mstr-object/mstr-object-rest-service');
-jest.mock('../../authentication/authentication-helper', () => ({
-  authenticationHelper: {
-    validateAuthToken: jest.fn().mockImplementation(() => Promise.resolve('Magic'))
-  }
-}));
+jest.mock('../../authentication/authentication-helper', () => ({ authenticationHelper: { validateAuthToken: jest.fn().mockImplementation(() => Promise.resolve('Magic')) } }));
 
 describe('NavigationTree', () => {
   afterAll(() => {
@@ -336,7 +332,7 @@ describe('NavigationTree', () => {
 
   it('should connect on DB when navigation-tree is mounted', () => {
     // given
-    const connectToDB = jest.fn();
+    const connectToDB = jest.fn().mockReturnValue(Promise.resolve());
     const mstrData = {
       envUrl: 'env',
       authToken: 'authToken',
@@ -354,9 +350,29 @@ describe('NavigationTree', () => {
     expect(connectToDB).toHaveBeenCalled();
   });
 
+  it('should fetch from network when navigation-tree is mounted and db is not supported', () => {
+    // given
+    const connectToDB = jest.fn().mockReturnValue(Promise.resolve());
+    const mstrData = {
+      envUrl: 'env',
+      authToken: 'authToken',
+      projectId: 'projectId'
+    };
+    DB.getIndexedDBSupport = jest.fn();
+    DB.getIndexedDBSupport.mockReturnValue(false);
+    // when
+    shallow(<_NavigationTree
+      mstrData={mstrData}
+      {...mockFunctionsAndProps}
+      connectToDB={connectToDB}
+    />);
+    // then
+    expect(mockFunctionsAndProps.fetchObjectsFromNetwork).toHaveBeenCalled();
+  });
+
   it('should not send error and call functionality properly', async () => {
     // given
-    const connectToDB = jest.fn();
+    const connectToDB = jest.fn().mockReturnValue(Promise.resolve());
     popupHelper.handlePopupErrors = jest.fn();
     const wrappedComponent = shallow(<_NavigationTree {...mockFunctionsAndProps} connectToDB={connectToDB} />);
     // when
@@ -368,7 +384,7 @@ describe('NavigationTree', () => {
   it('should send error message on refresh when no session', async () => {
     // given
     // const asyncMock = jest.fn().mockRejectedValue(new Error('Async error'));
-    const connectToDB = jest.fn();
+    const connectToDB = jest.fn().mockReturnValue(Promise.resolve());
     const givenError = new Error('Session error');
     authenticationHelper.validateAuthToken.mockRejectedValue(givenError);
     popupHelper.handlePopupErrors = jest.fn();
