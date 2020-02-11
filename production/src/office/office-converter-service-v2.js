@@ -254,10 +254,11 @@ class OfficeConverterServiceV2 {
           name: element.name,
         };
       case 'attribute':
+      case 'consolidation':
         return {
           attributeId: element.id,
           attributeName: element.name,
-          forms: element.forms,
+          forms: element.forms ? element.forms : [],
           index,
           isAttribute: true,
         };
