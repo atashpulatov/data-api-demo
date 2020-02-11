@@ -7,7 +7,7 @@ export class HomeHelper {
   saveLoginValues = () => {
     const { authToken } = this.reduxStore.getState().sessionReducer;
     const location = this.getWindowLocation();
-    if (location.origin.search('localhost') !== -1) {
+    if (this.sessionHelper.isDevelopment()) {
       if (!authToken) {
         this.sessionHelper.logOut();
       }

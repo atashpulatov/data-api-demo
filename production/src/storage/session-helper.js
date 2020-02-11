@@ -40,13 +40,15 @@ export class SessionHelper {
   }
 
   logOutRedirect = () => {
-    const { origin } = homeHelper.getWindowLocation();
-    if (!origin.includes('localhost')) {
+    const isDevelopment = this.isDevelopment();
+    if (!isDevelopment) {
       const currentPath = window.location.pathname;
       const pathBeginning = currentPath.split('/apps/')[0];
       const loginParams = 'source=addin-mstr-office';
       this.replaceWindowLocation(pathBeginning, loginParams);
     } else {
+      // Reload page to close any pending indexedDB transactions on dev mode
+      document.location.reload();
       this.disableLoading();
       // Reload to avoid stale cache issues on localhost when changing users
       window.location.reload();
@@ -134,6 +136,15 @@ export class SessionHelper {
   getUrl = () => window.location.href
 
   isLocalhost = () => this.getUrl().includes('localhost')
+
+  isDevelopment = () => {
+    try {
+      const isDevelopment = process.env.NODE_ENV === 'development';
+      return isDevelopment;
+    } catch (error) {
+      return false;
+    }
+  }
 }
 
 export const sessionHelper = new SessionHelper();
