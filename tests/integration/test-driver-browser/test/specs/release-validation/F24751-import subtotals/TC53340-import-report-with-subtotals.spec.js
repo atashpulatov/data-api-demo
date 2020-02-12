@@ -30,7 +30,6 @@ describe('F24751 Import report with or without subtotals', () => {
     // step5 - select all metrics and all attributes
     PluginPopup.selectAllAttributes();
     PluginPopup.selectAllMetrics();
-    // TODO: expect subtotals toggle to be visible and set to true
     expect($(popupSelectors.subtotalToggler).getAttribute('aria-checked')).toEqual('true');
     // step6 - click import
     PluginPopup.clickImport();
