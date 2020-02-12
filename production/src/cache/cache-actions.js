@@ -65,7 +65,7 @@ export const saveMyLibraryOwners = (objects) => ({
 export function fetchObjects(dispatch, cache) {
   // Projects
   fetchProjects((projects) => {
-    cache.putData(PROJECTS_DB_ID, projects).catch(console.error);
+    cache.putData(PROJECTS_DB_ID, projects);
 
     // My library
     console.time('Creating my library cache');
@@ -90,7 +90,7 @@ export function fetchObjects(dispatch, cache) {
     cache.updateData(LOADING_DB + ENV_LIBRARY_DB_ID, true);
     getObjectList((objects) => {
       objects = addNestedPropertiesToObjects(objects, projects, i18next.language);
-      return cache.putData(ENV_LIBRARY_DB_ID, objects);
+      cache.putData(ENV_LIBRARY_DB_ID, objects);
     })
       .catch(console.error)
       .finally(() => {
@@ -111,8 +111,8 @@ export function fetchObjectsFallback() {
       // My Library
       dispatch(myLibraryLoading(true));
       getMyLibraryObjectList((objects) => {
-        objects = { data: addNestedPropertiesToObjects(objects, projects, i18next.language) };
         dispatch(saveMyLibraryOwners(objects));
+        objects = { data: addNestedPropertiesToObjects(objects, projects, i18next.language) };
         dispatch(addMyLibraryObjects(objects, true));
       })
         .catch(console.error)
@@ -145,7 +145,7 @@ export function createCache(initUsername) {
     const { userID } = sessionReducer;
     const user = initUsername || userID;
     const cache = new DB(user);
-    resetLoading(cache);
+    resetLoading(cache).catch(console.error);
     // We try to purge dbs not of the user and finally
     // start fetching for the current user even if it fails.
     DB.purge(user)
@@ -204,10 +204,9 @@ export function connectToCache(isRefresh) {
     dispatch(myLibraryLoading(true));
     dispatch(objectListLoading(true));
 
-    cache.onChange((results) => {
+    return cache.onChange((results) => {
       dispatchCacheResults(results, dispatch);
     }, isRefresh);
-    return cache;
   };
 }
 

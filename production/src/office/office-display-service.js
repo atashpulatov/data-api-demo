@@ -91,7 +91,7 @@ export class OfficeDisplayService {
     isPrompted,
     promptsAnswers,
     crosstabHeaderDimensions = false,
-    subtotalsInfo : {
+    subtotalsInfo: {
       subtotalsDefined = false,
       subtotalsVisible = false,
       subtotalsAddresses = false,
@@ -217,8 +217,8 @@ export class OfficeDisplayService {
       officeStoreService.saveAndPreserveReportInStore({
         name: mstrTable.name,
         manipulationsXML: instanceDefinition.manipulationsXML,
-        bindId:tableid,
-        oldTableId:bindingId,
+        bindId: tableid,
+        oldTableId: bindingId,
         projectId,
         envUrl,
         body,
@@ -231,7 +231,7 @@ export class OfficeDisplayService {
         id: objectId,
         isLoading: false,
         crosstabHeaderDimensions,
-        tableName:newOfficeTableId,
+        tableName: newOfficeTableId,
         tableDimensions: { columns: instanceDefinition.columns },
         displayAttrFormNames
       }, isRefresh);
@@ -308,7 +308,7 @@ export class OfficeDisplayService {
     }
   }
 
-  bindOfficeTable = async(officeTable, excelContext, bindingId, bindId) => {
+  bindOfficeTable = async (officeTable, excelContext, bindingId, bindId) => {
     officeTable.load('name');
     await excelContext.sync();
     const tablename = officeTable.name;
@@ -511,7 +511,7 @@ export class OfficeDisplayService {
       let changed = false;
       for (let i = 0; i < splitRows.length; i += 1) {
         // 5 MB is a limit for excel
-        if (this.sizeOfObject(splitRows[i]) > 5) {
+        if (this.checkIfSizeOverLimit(splitRows[i])) {
           const { length } = splitRows[i];
           tempSplit.push(splitRows[i].slice(0, length / 2));
           tempSplit.push(splitRows[i].slice(length / 2, length));
@@ -531,30 +531,24 @@ export class OfficeDisplayService {
    * Check size of passed object in MB
    *
    * @param {Object} object Item to check size of
-   * @returns {number} Size of passed object in MB
+   * @returns {Boolean} information whether the size of passed object is bigger than 5MB
    * @memberof officeDisplayService
    */
-  sizeOfObject = (object) => {
-    const objectList = [];
-    const stack = [object];
+  checkIfSizeOverLimit = (chunk) => {
     let bytes = 0;
-    while (stack.length) {
-      const value = stack.pop();
-      if (typeof value === 'boolean') {
-        bytes += 4;
-      } else if (typeof value === 'string') {
-        bytes += value.length * 2;
-      } else if (typeof value === 'number') {
-        bytes += 8;
-      } else if (typeof value === 'object' && objectList.indexOf(value) === -1) {
-        objectList.push(value);
-        for (const i in value) {
-          stack.push(value[i]);
+    for (let i = 0; i < chunk.length; i++) {
+      for (let j = 0; j < chunk[0].length; j++) {
+        if (typeof chunk[i][j] === 'string') {
+          bytes += chunk[i][j].length * 2;
+        } else if (typeof chunk[i][j] === 'number') {
+          bytes += 8;
+        } else {
+          bytes += 2;
         }
+        if (bytes / 1000000 > 5) return true; // we return true when the size is bigger than 5MB
       }
     }
-    // Formating bytes to MB in decimal
-    return bytes / 1000000;
+    return false;
   }
 
   /**
@@ -668,7 +662,7 @@ export class OfficeDisplayService {
    */
   async appendRowsToTable(excelRows, excelContext, officeTable, rowIndex, tableColumnsChanged, isRefresh) {
     console.group('Append rows');
-    const isOverLimit = this.sizeOfObject(excelRows) > 5;
+    const isOverLimit = this.checkIfSizeOverLimit(excelRows);
     const splitExcelRows = this.getExcelRows(excelRows, isOverLimit);
     for (let i = 0; i < splitExcelRows.length; i += 1) {
       excelContext.workbook.application.suspendApiCalculationUntilNextSync();
