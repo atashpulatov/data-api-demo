@@ -83,6 +83,15 @@ const OfficeWorksheet = function() {
     $(exSe.cellInput).setValue(cellId);
     browser.keys('\uE007'); // Press Enter
   };
+
+  this.changeTextInCell = function(cellId, text) {
+    switchToExcelFrame();
+    this.selectCell(cellId);
+    $(exSe.excelFormulaBar).click();
+    browser.keys('\uE003'); // Press Backspace
+    $(exSe.excelFormulaBar).setValue(text);
+    browser.keys('\uE007'); // Press Enter
+  };
 };
 
 export default new OfficeWorksheet();

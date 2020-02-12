@@ -45,7 +45,7 @@ const PluginRightPanel = function() {
 
   this.refreshFirstObjectFromTheList = function() {
     switchToPluginFrame();
-    browser.pause(4444); // to do: see if we can change to some wait method
+    // browser.pause(4444); // to do: see if we can change to some wait method
     waitAndClick($(s.refreshBtn));
   };
 

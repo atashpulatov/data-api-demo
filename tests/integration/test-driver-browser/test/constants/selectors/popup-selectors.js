@@ -1,6 +1,7 @@
 // import {$$} from 'protractor';
 
 export const selectors = {
+  // TODO group selectors based on location
   tableOfObjects: '#WACDialogPanel',
   searchInput: '.search-field__input',
   valueInput: '#id_mstr20_txt',
@@ -33,9 +34,33 @@ export const selectors = {
   sortedUp: '.ant-table-column-sorter-up.on',
   sortedDown: '.ant-table-column-sorter-up.on',
   noDataIcon: $('.ant-table-placeholder'),
-  myLibrary: $('.mstr-switch'),
+  myLibrary: '#root > div > div.navigation_tree__title_bar > div > div.mstr-switch-container > div.mstr-switch',
   closeRefreshAll: '#WACDialogTitlePanel > a',
   // promptArrow: element(by.className('mstrBGIcon_tbAdd')),
   promptArrow: '.mstrBGIcon_tbAdd',
   promptTextBox: '#id_mstr38_txt',
+  showTotalsButton:'div=Show Totals',
+  totalButton:'span=Total',
+  okButton:'div=OK',
+  sortAscendingButton:'div=Sort Ascending',
+  sortDescendingButton:'div=Sort Descending',
+  drillButton:'div=Drill',
+  categoryButton:'div=Category',
+  dossierWindow:{
+    visualizationName: '.mstrd-NavBarTitle-item-active .mstrd-DossierTitle',
+    filterCount: '.mstrd-FilterSummaryBar-filterCount',
+    buttonToC: 'li.mstrd-NavItemWrapper.mstrd-ToCNavItemContainer.mstr-navbar-item > div > div',
+    getTocItemAt: (index) => `div.mstrd-DropdownMenu-content > div > ul > li:nth-child(${index})`,
+    buttonBookmarks: 'li.mstrd-NavItemWrapper.mstrd-BookmarkNavItem.mstr-navbar-item > div > div',
+    getBookmarkItemAt: (index) => `div.mstrd-BookmarkDropdownMenuContainer-myBookmarks > ul > div:nth-child(${index})`,
+    buttonRefreshDossier: 'div.mstr-nav-icon.icon-resetfile',
+    buttonConfirmRefresh: '.mstrd-DeleteDossier-button',
+    buttonFilters: 'li.mstrd-FilterNavItemContainer',
+    filtersMenu:{
+      getFilterAt: (index) => `div.mstrd-FilterPanel-content > ul > li:nth-child(${index})`,
+      selectFilterValueAt: (index) => `div.mstrd-FilterItemsList > div > div > div > div:nth-child(${index})`,
+      getSliderInput: (position) => (position === 'left' ? '.mstrd-SliderSummary-left-input' : '.mstrd-SliderSummary-right-input'),
+      buttonApplyFilters : 'div.mstrd-FilterPanelFooterContainer-apply',
+    }
+  }
 };

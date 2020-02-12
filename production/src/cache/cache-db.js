@@ -71,7 +71,7 @@ export default class DB {
     if (!isRefresh) {
       this.db[table].toArray(results => {
         results.forEach(callback);
-      });
+      }).catch(console.error);
       // this.db[table].each(callback); TODO: double check whether
       // reading from cache sequentially will improve the performance
     }
@@ -80,7 +80,7 @@ export default class DB {
         callback(obj);
       });
     });
-    this.db.open();
+    return this.db.open();
   }
 
   /**

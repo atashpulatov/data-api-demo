@@ -26,7 +26,6 @@ export const objects = {
     numberFormating: 'Number Formatting',
     grpahReport: 'report graph',
     gridReport: 'Grid/graph',
-
   },
 
   datasets: {
@@ -37,6 +36,43 @@ export const objects = {
     notSupportedCube: 'multi table cube'
   },
 
-  dossiers: {},
-
+  dossiers: {
+    complexDossier: {
+      name: 'Complex dossier (20 visualizations)',
+      timeToOpen: 10000,
+      // TODO: Pages
+      visualizations: {
+        heatMap: '#mstr191',
+        grid: '#mstr227',
+        barChart: '#mstr271',
+        lineChart: '#mstr459',
+        areaChart: '#mstr436',
+        bubbleChart: '#mstr505',
+        pieChart: '#mstr310',
+        comboChart: '#mstr572',
+        geospatialService: '#mstr338',
+        network: '#mstr646',
+        histogram: '#mstr131',
+        boxPlot: '#mstr212',
+        waterfall: '#mstr248',
+        map: '#mstr324',
+        KPI: '#mstr287',
+      },
+    },
+    visualizationManipulation:{
+      name:'Visualization manipulation',
+      visualizations: {
+        visualization1 : {
+          name: '#mstr106',
+          gridTableId:'#mstr121',
+          getTableItemAt: (firstIndex, secondIndex) => `#mstr121 > table > tbody > tr:nth-child(${firstIndex}) > td:nth-child(${secondIndex})`,
+        }
+      },
+    },
+    interactiveDossier: { name: 'Dossier for interactive components', },
+    customVisualizations: {
+      name: 'Custom Visualizations',
+      visualizations: { GoogleTimeline: '#mstr114', }
+    },
+  }
 };
