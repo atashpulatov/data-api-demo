@@ -203,12 +203,8 @@ const PluginPopup = function () {
     waitAndClick($('.mstrToolButtonRounded'));
   };
 
-  this.prepareObject = function (objectName, elements, filters) {
-    switchToPluginFrame();
-    this.searchForObject(objectName);
-    browser.pause(1111);
-    this.selectFirstObject();
-    this.clickPrepareData();
+  this.prepareObject = function(objectName, elements, filters) {
+    this.openPrepareData(objectName);
     this.selectObjectElements(elements);
     this.selectFilters(filters);
     browser.pause(1111);
@@ -222,14 +218,14 @@ const PluginPopup = function () {
     for (let i = 0; i < columnTitles.length; i++) {
       if (columnTitles.get(i) === headerName) {
         switch (order) {
-          case 'up':
-            await expect(columnHeaders.get(i).element(by.css(popupSelectors.sortedUp)).isPresent()).toBe(true);
-            break;
-          case 'down':
-            await expect(columnHeaders.get(i).element(by.css(popupSelectors.sortedDown)).isPresent()).toBe(true);
-            break;
-          default:
-            break;
+        case 'up':
+          await expect(columnHeaders.get(i).element(by.css(popupSelectors.sortedUp)).isPresent()).toBe(true);
+          break;
+        case 'down':
+          await expect(columnHeaders.get(i).element(by.css(popupSelectors.sortedDown)).isPresent()).toBe(true);
+          break;
+        default:
+          break;
         }
       }
     }
@@ -330,16 +326,6 @@ const PluginPopup = function () {
       }
     }
   }
-  // TODO: prepares data for the first object
-  this.prepareData = (objectName) => {
-    switchToPluginFrame();
-    browser.pause(1000);
-    this.switchLibrary(false);
-    this.searchForObject(objectName);
-    browser.pause(500);
-    this.selectFirstObject();
-    this.clickPrepareData();
-  }
 
   this.selectAttributeFormVisualisation = (type) => {
     waitAndClick($(popupSelectors.attributeFormDropdown));
@@ -432,7 +418,16 @@ const PluginPopup = function () {
     const { dossierWindow } = popupSelectors;
     waitAndClick($(dossierWindow.buttonToC), 1000);
     waitAndClick($(dossierWindow.getTocItemAt(index)), 1000);
-  }
+  };
+
+  this.openPrepareData = function (objectName, isObjectFromLibrary = false) {
+    switchToPluginFrame();
+    this.switchLibrary(isObjectFromLibrary);
+    this.searchForObject(objectName);
+    browser.pause(1111);
+    this.selectFirstObject();
+    this.clickPrepareData();
+  };
 };
 
 export default new PluginPopup();
