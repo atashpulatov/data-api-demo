@@ -17,7 +17,7 @@ export const popupSelectors = {
   dataPreviewBtn: '#data-preview',
   promptRemoveAllSelected: '.mstrListCartCellAddRemoveButtons div:last-child .mstrToolButtonRounded',
   viewSelected: '#view-selected-switch',
-  subtotalToggler: '.subtotal-label',
+  subtotalToggler: '.subtotal-container > #view-selected-switch',
   closePreviewBtn: '#close-preview-section > button',
   expressionInList: '.mstrExprBase > .mstrExprEditorFunc > a:nth-child(2)',
   nameHeader: $('#popup > div > div.ant-col-sm-18.ant-col-lg-19 > div.ant-table-wrapper.table-container.object-browser > div > div > div > div > div > div.ant-table-header > table > thead > tr > th:nth-child(3) > div'),

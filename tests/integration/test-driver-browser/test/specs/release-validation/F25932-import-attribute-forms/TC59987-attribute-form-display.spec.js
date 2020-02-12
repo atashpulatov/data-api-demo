@@ -30,7 +30,7 @@ describe('TC59987 - Import attribute forms', () => {
   it('Display attribute forms', () => {
     const objectName = '06 Sort by Revenue Rank - Month Report Filter';
     PluginRightPanel.clickImportDataButton();
-    PluginPopup.prepareData(objectName);
+    PluginPopup.prepareObject(objectName);
     PluginPopup.selectAllMetrics();
     PluginPopup.selectAttributesAndAttributeForms({ Region: ['ID'] });
     PluginPopup.selectAttributeFormVisualisation('On');
