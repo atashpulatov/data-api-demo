@@ -5,10 +5,10 @@ import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { waitForNotification, waitForPopup, waitByClass, waitById } from '../../../helpers/utils/wait-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { switchToPluginFrame, switchToExcelFrame } from '../../../helpers/utils/iframe-helper';
-import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
-import { selectors as s } from '../../../constants/selectors/popup-selectors';
-import { objects as o } from '../../../constants/objects-list';
-import { excelSelectors as ex } from '../../../constants/selectors/office-selectors'
+import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
+import { popupSelectors } from '../../../constants/selectors/popup-selectors';
+import { objectsList } from '../../../constants/objects-list';
+import { excelSelectors } from '../../../constants/selectors/office-selectors'
 
 const EC = protractor.ExpectedConditions;
 const clearingLoadingClass = 'loading-text-container';
@@ -37,17 +37,17 @@ describe('[TC54263] Secure data - clearing data', () => {
     // should import 'Revenue by Region and Category - secure data' report
     await OfficeWorksheet.selectCell('A1');
     await PluginRightPanel.clickImportDataButton();
-    await PluginPopup.importObject(o.reports.secureDataFiltering);
+    await PluginPopup.importObject(objectsList.reports.secureDataFiltering);
     await waitForNotification();
-    await expect(se.notificationPopUp.getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
+    await expect(rightPanelSelectors.notificationPopUp.getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
 
     // should import 'Secure data - always working' report
     await switchToExcelFrame();
     await OfficeWorksheet.selectCell('E1');
     await PluginRightPanel.clickAddDataButton();
-    await PluginPopup.importObject(o.reports.secureDataAlwaysWorking);
+    await PluginPopup.importObject(objectsList.reports.secureDataAlwaysWorking);
     await waitForNotification();
-    await expect(se.notificationPopUp.getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
+    await expect(rightPanelSelectors.notificationPopUp.getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
 
     // should clear data
     await switchToPluginFrame();
@@ -57,8 +57,8 @@ describe('[TC54263] Secure data - clearing data', () => {
 
     // should assert data was cleared
     await switchToExcelFrame();
-    await browser.wait(EC.textToBePresentInElement(ex.A2, ''), 10000);
-    await browser.wait(EC.textToBePresentInElement(ex.E2, ''), 5000);
+    await browser.wait(EC.textToBePresentInElement(excelSelectors.A2, ''), 10000);
+    await browser.wait(EC.textToBePresentInElement(excelSelectors.E2, ''), 5000);
 
     // should log out
     await switchToPluginFrame();
@@ -73,13 +73,13 @@ describe('[TC54263] Secure data - clearing data', () => {
     await PluginRightPanel.viewDataBtn();
     await waitForPopup();
     await switchToExcelFrame();
-    await browser.actions().mouseMove(s.closeRefreshAll).perform();
-    await browser.actions().click(s.closeRefreshAll).perform();
+    await browser.actions().mouseMove(popupSelectors.closeRefreshAll).perform();
+    await browser.actions().click(popupSelectors.closeRefreshAll).perform();
 
     // should assert data was refreshed
     await switchToExcelFrame();
-    await browser.wait(EC.textToBePresentInElement(ex.A2, 'Central'), 5000);
-    await browser.wait(EC.textToBePresentInElement(ex.E2, 'Albania'), 5000);
+    await browser.wait(EC.textToBePresentInElement(excelSelectors.A2, 'Central'), 5000);
+    await browser.wait(EC.textToBePresentInElement(excelSelectors.E2, 'Albania'), 5000);
 
     // should clear data
     await switchToPluginFrame();
@@ -89,8 +89,8 @@ describe('[TC54263] Secure data - clearing data', () => {
 
     // should assert data was cleared
     await switchToExcelFrame();
-    await browser.wait(EC.textToBePresentInElement(ex.E2, ''), 5000);
-    await browser.wait(EC.textToBePresentInElement(ex.A2, ''), 10000);
+    await browser.wait(EC.textToBePresentInElement(excelSelectors.E2, ''), 5000);
+    await browser.wait(EC.textToBePresentInElement(excelSelectors.A2, ''), 10000);
 
     // should log out
     await switchToPluginFrame();
@@ -105,13 +105,13 @@ describe('[TC54263] Secure data - clearing data', () => {
     await PluginRightPanel.viewDataBtn();
     await waitForPopup();
     await switchToExcelFrame();
-    await browser.actions().mouseMove(s.closeRefreshAll).perform();
-    await browser.actions().click(s.closeRefreshAll).perform();
+    await browser.actions().mouseMove(popupSelectors.closeRefreshAll).perform();
+    await browser.actions().click(popupSelectors.closeRefreshAll).perform();
 
     // assert data was refreshed
     await switchToExcelFrame();
-    await browser.wait(EC.textToBePresentInElement(ex.A2, 'Mid-Atlantic'), 5000);
-    await browser.wait(EC.textToBePresentInElement(ex.E2, 'Albania'), 5000);
+    await browser.wait(EC.textToBePresentInElement(excelSelectors.A2, 'Mid-Atlantic'), 5000);
+    await browser.wait(EC.textToBePresentInElement(excelSelectors.E2, 'Albania'), 5000);
 
     // should clear data
     await switchToPluginFrame();
@@ -121,8 +121,8 @@ describe('[TC54263] Secure data - clearing data', () => {
 
     // should assert data was cleared
     await switchToExcelFrame();
-    await browser.wait(EC.textToBePresentInElement(ex.A2, ''), 5000);
-    await browser.wait(EC.textToBePresentInElement(ex.E2, ''), 5000);
+    await browser.wait(EC.textToBePresentInElement(excelSelectors.A2, ''), 5000);
+    await browser.wait(EC.textToBePresentInElement(excelSelectors.E2, ''), 5000);
 
     // should log out
     await switchToPluginFrame();
@@ -137,11 +137,11 @@ describe('[TC54263] Secure data - clearing data', () => {
     await PluginRightPanel.viewDataBtn();
     await waitForPopup();
     await switchToExcelFrame();
-    await browser.actions().mouseMove(s.closeRefreshAll).perform();
-    await browser.actions().click(s.closeRefreshAll).perform();
+    await browser.actions().mouseMove(popupSelectors.closeRefreshAll).perform();
+    await browser.actions().click(popupSelectors.closeRefreshAll).perform();
 
     // assert data was refreshed
-    await browser.wait(EC.textToBePresentInElement(ex.A2, ''), 5000);
-    await browser.wait(EC.textToBePresentInElement(ex.E2, 'Albania'), 5000);
+    await browser.wait(EC.textToBePresentInElement(excelSelectors.A2, ''), 5000);
+    await browser.wait(EC.textToBePresentInElement(excelSelectors.E2, 'Albania'), 5000);
   });
 });

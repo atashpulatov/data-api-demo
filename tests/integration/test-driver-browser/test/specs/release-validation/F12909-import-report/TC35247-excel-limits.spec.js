@@ -4,8 +4,8 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
-import { objects as o } from '../../../constants/objects-list';
-import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
+import { objectsList } from '../../../constants/objects-list';
+import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 
 
 describe('Error Handling - IMPORT - ', () => {
@@ -29,9 +29,9 @@ describe('Error Handling - IMPORT - ', () => {
   it('[TC35247] Importing objects exceeding Excel limits', async () => {
     // should display a correct error message when importing a report exceeding Excel row limit
     await PluginRightPanel.clickImportDataButton();
-    await PluginPopup.importObject(o.reports.report1_5M);
+    await PluginPopup.importObject(objectsList.reports.report1_5M);
     await waitForNotification();
-    await expect(se.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.excelLimit);
+    await expect(rightPanelSelectors.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.excelLimit);
     await PluginRightPanel.closeNotification();
   });
 });
