@@ -54,6 +54,11 @@ const PluginRightPanel = function() {
     waitAndClick($(rightPanelSelectors.refreshAllBtn));
   };
 
+  this.edit = function () {
+    switchToPluginFrame();
+    waitAndClick($('.edit'));
+  }
+
   this.removeFirstObjectFromTheList = function() {
     switchToPluginFrame();
     browser.pause(3333);
