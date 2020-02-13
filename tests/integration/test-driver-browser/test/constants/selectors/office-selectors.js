@@ -16,6 +16,5 @@ export const excelSelectors = {
   adminManagedPlugin: 'div[aria-label^="yi_local_ip"]',
   addBtn: '#BtnAction',
   uploadPluginNotification: '.ModalCalloutControlOverlay',
-  excelFormulaBar: '#formulaBarTextDivId',
-  longReportNameWithInvalidCharactersIdSelector: '#_01___________________________________Report_for_testing_binding_and_special_characters______________________________________________________________________Report_for_testing_binding_and_special_characters_________________________testtestt_1581330334481-Menu'
+  excelFormulaBar: '#formulaBarTextDivId'
 }
