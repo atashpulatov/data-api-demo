@@ -59,14 +59,17 @@ export const popupReducer = (state = initialState, action) => {
     };
   }
   case UPDATE_DISPLAY_ATTR_FORM: {
-    const editedObject = { ...state.editedObject };
-    if (editedObject.displayAttrFormNames) {
-      editedObject.displayAttrFormNames = data;
+    if (state.editedObject) {
+      const editedObject = { ...state.editedObject };
+      if (editedObject.displayAttrFormNames) {
+        editedObject.displayAttrFormNames = data;
+      }
+      return {
+        ...state,
+        editedObject
+      };
     }
-    return {
-      ...state,
-      editedObject
-    };
+    return state;
   }
   case RESET_STATE: {
     return { ...initialState, };
