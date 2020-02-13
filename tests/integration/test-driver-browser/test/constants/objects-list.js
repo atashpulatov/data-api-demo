@@ -26,6 +26,7 @@ export const objectsList = {
     numberFormating: 'Number Formatting',
     grpahReport: 'report graph',
     gridReport: 'Grid/graph',
+    basicSubtotalsReport: 'Report Totals Subtotals 1',
   },
 
   datasets: {

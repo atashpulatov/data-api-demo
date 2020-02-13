@@ -8,7 +8,7 @@ import settings from '../../../config';
 import { switchToExcelFrame } from '../../../helpers/utils/iframe-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
-// /test/constants/selectors/popup-selectors.js
+import { objectsList } from '../../../constants/objects-list';
 
 describe('F24751 Import report with or without subtotals', () => {
   it('[TC53340] - Set subtotals toggle ON during import report with subtotals', () => {
@@ -26,19 +26,16 @@ describe('F24751 Import report with or without subtotals', () => {
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
     // step2 + step3 + step4 - turn my library toggle off, select a report with subtotals press prepare data
-    PluginPopup.openPrepareData('Report Totals Subtotals 1', false);
+    PluginPopup.openPrepareData(objectsList.basicSubtotalsReport, false);
     // step5 - select all metrics and all attributes
     PluginPopup.selectAllAttributes();
     PluginPopup.selectAllMetrics();
     expect($(popupSelectors.subtotalToggler).getAttribute('aria-checked')).toEqual('true');
     // step6 - click import
     PluginPopup.clickImport();
-    // step7 - data imported correctly
-    // Assert that import is successfully imported and cell D18 contains "1/1/2013"
+    // step7 - data imported
     waitForNotification();
-    // expect succesfull notification
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
-    // expect total to be bolded and contain correct data
     switchToExcelFrame();
     const B13 = $('#gridRows > div:nth-child(13) > div:nth-child(2) > div > div');
     expect(B13.getText()).toEqual('Total');
