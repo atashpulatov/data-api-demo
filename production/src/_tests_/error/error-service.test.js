@@ -354,7 +354,7 @@ describe('ErrorService', () => {
       errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
-      expect(spyMethod).toBeCalledWith({ content: `Seems like the ${error.mstrObjectType} has been removed.`, details: '', onConfirm: null, type: 'warning', });
+      expect(spyMethod).toBeCalledWith({ content: `This ${error.mstrObjectType} was deleted.`, details: '', onConfirm: null, type: 'warning', });
     });
     it('should logout on UnauthorizedError', () => {
       // given

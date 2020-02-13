@@ -48,6 +48,8 @@ export class SessionHelper {
       this.replaceWindowLocation(pathBeginning, loginParams);
     } else {
       this.disableLoading();
+      // Reload to avoid stale cache issues on localhost when changing users
+      window.location.reload();
     }
   };
 
