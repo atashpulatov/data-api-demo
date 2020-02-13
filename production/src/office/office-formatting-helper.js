@@ -13,9 +13,10 @@ class OfficeFormattingHelper {
    */
   applyFormatting = async (officeTable, instanceDefinition, isCrosstab, excelContext) => {
     try {
+      console.time('Apply formatting');
       const { columnInformation } = instanceDefinition.mstrTable;
       const filteredColumnInformation = this.filterColumnInformation(columnInformation, isCrosstab);
-      let attributeColumnNumber = 0;
+      let attributeColumnNumber = 0; // this is number of all atrribute/consolidations columns in Excel
 
       columnInformation.forEach(element => {
         if (element.isAttribute) {
