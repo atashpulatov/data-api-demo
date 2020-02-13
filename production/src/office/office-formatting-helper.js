@@ -13,12 +13,23 @@ class OfficeFormattingHelper {
    */
   applyFormatting = async (officeTable, instanceDefinition, isCrosstab, excelContext) => {
     try {
-      console.time('Apply formatting');
       const { columnInformation } = instanceDefinition.mstrTable;
       const filteredColumnInformation = this.filterColumnInformation(columnInformation, isCrosstab);
-      const offset = columnInformation.length - filteredColumnInformation.length;
-      for (const object of filteredColumnInformation) {
-        const columnRange = officeTable.columns.getItemAt(object.index - offset).getDataBodyRange();
+      let attributeColumnNumber = 0;
+
+      columnInformation.forEach(element => {
+        if (element.isAttribute) {
+          attributeColumnNumber += (element.forms && element.forms.length) ? element.forms.length : 1;
+        } else {
+          attributeColumnNumber++;
+        }
+      });
+      const offset = isCrosstab ? columnInformation.length - filteredColumnInformation.length : attributeColumnNumber - columnInformation.length;
+
+      for (let i = filteredColumnInformation.length - 1; i >= 0; i--) {
+        const object = filteredColumnInformation[i];
+        const objectIndex = isCrosstab ? object.index - offset : object.index + offset;
+        const columnRange = officeTable.columns.getItemAt(objectIndex).getDataBodyRange();
         if (!object.isAttribute) {
           columnRange.numberFormat = this.getFormat(object);
         } else {
@@ -27,8 +38,8 @@ class OfficeFormattingHelper {
       }
       await excelContext.sync();
     } catch (error) {
+      console.error(error);
       console.log('Cannot apply formatting, skipping');
-      throw errorService.handleError(error);
     } finally {
       console.timeEnd('Apply formatting');
     }
