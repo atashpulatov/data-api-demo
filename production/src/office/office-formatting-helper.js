@@ -13,6 +13,7 @@ class OfficeFormattingHelper {
    */
   applyFormatting = async (officeTable, instanceDefinition, isCrosstab, excelContext) => {
     try {
+      console.time('Apply formatting');
       const { columnInformation } = instanceDefinition.mstrTable;
       const filteredColumnInformation = this.filterColumnInformation(columnInformation, isCrosstab);
       let attributeColumnNumber = 0;
