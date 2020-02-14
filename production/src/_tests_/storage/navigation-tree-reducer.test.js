@@ -444,7 +444,7 @@ describe('NavigationTree Reducer', () => {
     expect(newState.chosenObjectId).toEqual('1');
   });
 
-  it('should return new proper state in case of CHANGE_FILTER action - it shoudl update myLibraryFilter', () => {
+  it('should return new proper state in case of CHANGE_FILTER action - it should update myLibraryFilter', () => {
     // given
     const testData = { owners: ['test data'], shouldClear: false };
     const action = { type: CHANGE_FILTER, data: testData };
@@ -454,7 +454,7 @@ describe('NavigationTree Reducer', () => {
     expect(newState.myLibraryFilter).toEqual(testData);
   });
 
-  it('should return new proper state in case of CHANGE_FILTER action - it shoudl update envFilter', () => {
+  it('should return new proper state in case of CHANGE_FILTER action - it should update envFilter', () => {
     // given
     const testData = { owners: ['test data'], shouldClear: false };
     const action = { type: CHANGE_FILTER, data: testData };
@@ -464,7 +464,7 @@ describe('NavigationTree Reducer', () => {
     expect(newState.envFilter).toEqual(testData);
   });
 
-  it('should return new proper state in case of CHANGE_FILTER action called with shouldClear flag set to true - it shoudl update envFilter', () => {
+  it('should return new proper state in case of CHANGE_FILTER action called with shouldClear flag set to true - it should update envFilter', () => {
     // given
     const testData = { owners: [], shouldClear: true };
     const action = { type: CHANGE_FILTER, data: testData };
