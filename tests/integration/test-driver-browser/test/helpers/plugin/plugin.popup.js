@@ -50,15 +50,28 @@ const PluginPopup = function() {
 
   this.copyObjectsID = () => {
     const rows = this.getTableRows();
+    const idsArray = [];
     for (let row of rows) {
       const expandButton = row.$(s.expandButton);
       expandButton.click();
       // browser.pause(2000);
       const idField = row.$(s.idDetail);
       idField.click();
-      console.log(idField.getText());
+      idsArray.push(idField.getText());
     }; 
+    return idsArray;
   };
+
+  this.pasteToSearchBox = () => {
+    const searchBox = $(s.searchInput);
+    searchBox.setValue(["Shift","Insert"]);
+  
+  };
+
+  this.compareClipboardToRow = (stringToCompare) => {
+    const searchBox = $(s.searchInput);
+    return searchBox.getText() === stringToCompare;
+  }
 
   this.expandRows = () => {
     const rows = this.getTableRows();
