@@ -6,10 +6,12 @@ import { switchToPluginFrame, switchToExcelFrame } from '../../../helpers/utils/
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
 import settings from '../../../config';
+import { objects } from '../../../constants/objects-list';
+import { selectors } from '../../../constants/selectors/plugin.right-panel-selectors';
+import { removeTimestampFromTableName } from '../../../helpers/utils/tableName-helper';
 
 describe('F28550 - Excel Connector Hardening: Rename Excel table without losing binding', () => {
   beforeEach(() => {
-    // browser.setWindowSize(2200,900);
     browser.setWindowSize(1600, 900);
     OfficeWorksheet.openExcelHome();
     const url = browser.getUrl();
@@ -29,15 +31,15 @@ describe('F28550 - Excel Connector Hardening: Rename Excel table without losing 
   it('[TC59464] - Checking binding for newly imported report', () => {
     OfficeWorksheet.selectCell('A3');
     PluginRightPanel.clickImportDataButton();
-    // browser.pause(5000); // usually it works without these two pauses, but sometimes they help...
+    browser.pause(4000);
     switchToPluginFrame();
-    PluginPopup.importObject('01. • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«». • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&\'()*+,-:;<=>@/`testtesttes/km123456', false);
-    // browser.pause(5000); // usually it works without these two pauses, but sometimes they help...
+    PluginPopup.importObject(objects.reports.longReportWithInvalidCharacters, false);
+    browser.pause(4000);
     waitForNotification();
     switchToExcelFrame();
     waitAndClick($('#m_excelWebRenderer_ewaCtl_NameBox-Medium > a'), 4000);
     const importedTableName = $('[id^=_01___________________________________Report_for_testing_binding_and_special_characters]> span').getText();
-    const normalizedTableName = importedTableName.replace(/\d{13}\b/, 'TIMESTAMP'); // searches for 13 digits at the end of the string and replaces them with "TIMESTAMP" - this is to make the string universal for testing purposes
+    const normalizedTableName = removeTimestampFromTableName(importedTableName);
     expect(normalizedTableName).toEqual('_01___________________________________Report_for_testing_binding_and_special_characters______________________________________________________________________Report_for_testing_binding_and_special_characters_________________________testtestt_TIMESTAMP');
   });
 });
