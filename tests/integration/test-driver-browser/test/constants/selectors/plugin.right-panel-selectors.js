@@ -1,4 +1,4 @@
-export const selectors = {
+export const rightPanelSelectors = {
   usernameInput: '#username',
   passwordInput: '#password',
   loginPopUpBtn: '#loginButton',

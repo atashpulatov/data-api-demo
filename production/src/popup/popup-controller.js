@@ -8,7 +8,7 @@ import { officeProperties } from '../office/office-properties';
 import { officeApiHelper } from '../office/office-api-helper';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { officeStoreService } from '../office/store/office-store-service';
-import { LOAD_BROWSING_STATE_CONST } from '../navigation/navigation-tree-actions';
+import { LOAD_BROWSING_STATE_CONST, changeSorting } from '../navigation/navigation-tree-actions';
 import { REFRESH_CACHE_COMMAND, refreshCache } from '../cache/cache-actions';
 import {
   START_REPORT_LOADING,
@@ -33,6 +33,8 @@ export class PopupController {
   }
 
   runPopupNavigation = async () => {
+    // DE159475; clear sorting before popup display until it's fixed in object-table
+    this.reduxStore.dispatch(changeSorting({}));
     this.reduxStore.dispatch({ type: CLEAR_POPUP_STATE });
     await this.runPopup(PopupTypeEnum.navigationTree, 80, 80);
   };

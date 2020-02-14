@@ -240,10 +240,10 @@ export class MstrObjectRestService {
       .then((res) => res.body.mid);
   }
 
-  getDossierDefinition = (projectId, objectId) => {
+  getDossierInstanceDefinition = (projectId, objectId, dossierInstanceId) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/v2/dossiers/${objectId}/definition`;
+    const fullPath = `${envUrl}/v2/dossiers/${objectId}/instances/${dossierInstanceId}/definition`;
     return request
       .get(fullPath)
       .set('x-mstr-authtoken', authToken)

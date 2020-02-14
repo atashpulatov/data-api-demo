@@ -4,10 +4,10 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { waitForNotification, waitByClass, waitById } from '../../../helpers/utils/wait-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
-import { objects as o } from '../../../constants/objects-list';
-import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
+import { objectsList } from '../../../constants/objects-list';
+import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { switchToPluginFrame, switchToPromptFrame, switchToPopupFrame } from '../../../helpers/utils/iframe-helper';
-import { selectors as s } from '../../../constants/selectors/popup-selectors';
+import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 
 import pluginPopup from '../../../helpers/plugin/plugin.popup';
 
@@ -34,11 +34,11 @@ describe('Prompt | Value | Text | Not required | No default answer', () => {
     await OfficeWorksheet.selectCell('A1');
     await PluginRightPanel.clickImportDataButton();
     await switchToPluginFrame();
-    await PluginPopup.preparePrompt(o.reports.promptedDateTimeNoDefault);
+    await PluginPopup.preparePrompt(objectsList.reports.promptedDateTimeNoDefault);
     await browser.sleep(2222);
 
     // should input values into prompt popup
-    await s.valueInput.sendKeys('11/07/2016\uE004\uE00402\uE00402\uE00402\uE004\uE004\uE006');
+    await popupSelectors.valueInput.sendKeys('11/07/2016\uE004\uE00402\uE00402\uE00402\uE004\uE004\uE006');
     await browser.sleep(2222);
     await switchToPopupFrame();
     await browser.sleep(2222);
@@ -48,6 +48,6 @@ describe('Prompt | Value | Text | Not required | No default answer', () => {
     await PluginPopup.selectFilters([['Region', ['Central', 'Web']]]);
     await PluginPopup.clickImport();
     await waitForNotification();
-    await expect(se.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+    await expect(rightPanelSelectors.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   });
 });

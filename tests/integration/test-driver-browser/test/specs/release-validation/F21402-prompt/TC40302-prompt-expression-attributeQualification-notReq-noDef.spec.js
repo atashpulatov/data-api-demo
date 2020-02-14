@@ -4,8 +4,8 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
-import { objects as o } from '../../../constants/objects-list';
-import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
+import { objectsList } from '../../../constants/objects-list';
+import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 
 
 describe('[TC40302] Prompt | Expression | Attribute Qualification | Not Required | No Default Answer', () => {
@@ -29,9 +29,9 @@ describe('[TC40302] Prompt | Expression | Attribute Qualification | Not Required
   it('[TC40302] should import a report', async () => {
     await OfficeWorksheet.selectCell('A1');
     await PluginRightPanel.clickImportDataButton();
-    await PluginPopup.openPrompt(o.reports.attributeExprPromptedReport);
+    await PluginPopup.openPrompt(objectsList.reports.attributeExprPromptedReport);
     await $('#id_mstr51_txt').sendKeys('2015\uE004\uE004\uE004\uE006'); // sends value, tab, enter to press Run
     await waitForNotification();
-    await expect(se.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+    await expect(rightPanelSelectors.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   });
 });
