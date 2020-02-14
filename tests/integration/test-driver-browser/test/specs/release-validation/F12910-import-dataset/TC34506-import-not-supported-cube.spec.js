@@ -4,8 +4,8 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
-import { objects as o } from '../../../constants/objects-list';
-import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
+import { objectsList } from '../../../constants/objects-list';
+import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 
 
 describe('Error Handling - IMPORT - ', () => {
@@ -30,9 +30,9 @@ describe('Error Handling - IMPORT - ', () => {
     // should display a correct error message when importing not supported cube
     await OfficeWorksheet.selectCell('A1');
     await PluginRightPanel.clickImportDataButton();
-    await PluginPopup.importObject(o.datasets.notSupportedCube);
+    await PluginPopup.importObject(objectsList.datasets.notSupportedCube);
     await waitForNotification();
-    await expect(se.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.emptyObject);
+    await expect(rightPanelSelectors.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.emptyObject);
     await PluginRightPanel.closeNotification();
   });
 });

@@ -4,8 +4,8 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
-import { objects as o } from '../../../constants/objects-list';
-import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
+import { objectsList } from '../../../constants/objects-list';
+import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 
 
 describe('Error Handling - IMPORT - ', () => {
@@ -29,9 +29,9 @@ describe('Error Handling - IMPORT - ', () => {
   it('[TC39688] Importing not supported objects', async () => {
     // should display a correct error message for an unpublished cube
     await PluginRightPanel.clickImportDataButton();
-    await PluginPopup.importObject(o.datasets.notPublished);
+    await PluginPopup.importObject(objectsList.datasets.notPublished);
     await waitForNotification();
-    await expect(se.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.notPublished);
+    await expect(rightPanelSelectors.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.notPublished);
     await PluginRightPanel.closeNotification();
   });
 });
