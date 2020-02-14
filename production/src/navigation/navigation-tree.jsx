@@ -204,6 +204,7 @@ export class _NavigationTree extends Component {
             isLoading={cacheLoading}
             myLibrary={myLibrary}
             filter={myLibrary ? myLibraryFilter : envFilter}
+            searchText={searchText}
             onRefresh={() => this.refresh()}
             onSwitch={switchMyLibrary} />
         </div>
