@@ -10,7 +10,7 @@ export const SET_PREPARED_REPORT = 'SET_PREPARED_REPORT';
 // export const PRELOAD = 'PRELOAD';
 
 export class PopupActions {
-  init = (authenticationHelper, errorService, officeApiHelper, officeStoreService, popupHelper, mstrObjectRestService, popupController, officeDisplayService) => {
+  init = (authenticationHelper, errorService, officeApiHelper, officeStoreService, popupHelper, mstrObjectRestService, popupController) => {
     this.authenticationHelper = authenticationHelper;
     this.errorService = errorService;
     this.officeApiHelper = officeApiHelper;
@@ -18,7 +18,6 @@ export class PopupActions {
     this.popupHelper = popupHelper;
     this.mstrObjectRestService = mstrObjectRestService;
     this.popupController = popupController;
-    this.officeDisplayService = officeDisplayService;
   }
 
   callForEdit = (reportParams) => async (dispatch) => {
@@ -109,8 +108,7 @@ export class PopupActions {
       const instanceId = await this.mstrObjectRestService.createDossierInstance(projectId, id, { ...manipulationsXML, disableManipulationsAutoSaving: true, persistViewState: true });
       editedDossier.instanceId = instanceId;
       editedDossier.isEdit = true;
-      editedDossier.visualizationInfo = await this.officeDisplayService
-        .getVisualizationInfo(projectId, id, visualizationInfo.visualizationKey, instanceId);
+      editedDossier.visualizationInfo = await this.mstrObjectRestService.getVisualizationInfo(projectId, id, visualizationInfo.visualizationKey, instanceId);
       dispatch({
         type: SET_REPORT_N_FILTERS,
         editedObject: editedDossier,

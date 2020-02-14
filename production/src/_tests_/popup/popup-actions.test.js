@@ -12,7 +12,6 @@ import { officeStoreService } from '../../office/store/office-store-service';
 import { errorService } from '../../error/error-handler';
 import { popupController } from '../../popup/popup-controller';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
-import { officeDisplayService } from '../../office/office-display-service';
 
 jest.mock('../../office/office-api-helper');
 jest.mock('../../authentication/authentication-helper');
@@ -21,7 +20,6 @@ jest.mock('../../popup/popup-controller');
 jest.mock('../../error/error-handler');
 jest.mock('../../store');
 jest.mock('../../mstr-object/mstr-object-rest-service');
-jest.mock('../../office/office-display-service');
 
 const { createDossierInstance } = mstrObjectRestService;
 
@@ -35,7 +33,6 @@ describe('Popup actions', () => {
       popupHelper,
       mstrObjectRestService,
       popupController,
-      officeDisplayService
     );
   });
   afterEach(() => {
@@ -211,7 +208,7 @@ describe('Popup actions', () => {
     const instanceDefinitionMocked = { instanceId: 'instanceId' };
     const listener = jest.fn();
     officeStoreService.getReportFromProperties.mockReturnValueOnce(returnedValue);
-    officeDisplayService.getVisualizationInfo.mockReturnValueOnce(visInfo);
+    mstrObjectRestService.getVisualizationInfo.mockReturnValueOnce(visInfo);
     createDossierInstance.mockReturnValueOnce(instanceDefinitionMocked);
     // when
     await actions.callForEditDossier(report)(listener);
