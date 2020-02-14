@@ -2,12 +2,8 @@ import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
-import { objects as o } from '../../../constants/objects-list';
+import { objectsList } from '../../../constants/objects-list';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
-import { dictionary } from '../../../constants/dictionaries/dictionary';
-import settings from '../../../config';
-import { switchToExcelFrame } from '../../../helpers/utils/iframe-helper';
 
 describe('IMPORT diferent types of vizualizations', () => {
   beforeAll(() => {
@@ -25,7 +21,7 @@ describe('IMPORT diferent types of vizualizations', () => {
     // beforeEach
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
-    const dossierObject = o.dossiers.complexDossier;
+    const dossierObject = objectsList.dossiers.complexDossier;
     PluginPopup.openDossier(dossierObject.name, null, false);
     // test
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.heatMap);

@@ -4,7 +4,6 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
-import settings from '../../../config';
 import { switchToExcelFrame } from '../../../helpers/utils/iframe-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
@@ -13,15 +12,7 @@ import { objectsList } from '../../../constants/objects-list';
 describe('F24751 Import report with or without subtotals', () => {
   it('[TC53340] - Set subtotals toggle ON during import report with subtotals', () => {
     // step0 - open plugin
-    browser.setWindowSize(1500, 900);
-    OfficeWorksheet.openExcelHome();
-    const url = browser.getUrl();
-    if (url.includes('login.microsoftonline')) {
-      OfficeLogin.login(settings.officeOnline.username, settings.officeOnline.password);
-    }
-    OfficeWorksheet.createNewWorkbook();
-    OfficeWorksheet.openPlugin();
-    PluginRightPanel.loginToPlugin(settings.env.username, settings.env.password);
+    OfficeLogin.openExcelAndLoginToPlugin();
     // step1 - press import data button
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();

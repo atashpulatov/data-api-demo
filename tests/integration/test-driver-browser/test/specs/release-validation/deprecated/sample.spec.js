@@ -2,28 +2,12 @@ import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
-import { writeDataIntoFile, getJsonData } from '../../../helpers/utils/benchmark-helper';
 import { objectsList } from '../../../constants/objects-list';
-import { waitForNotification, waitForPopup } from '../../../helpers/utils/wait-helper';
-import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
-import { dictionary } from '../../../constants/dictionaries/dictionary';
-import { popupSelectors } from '../../../constants/selectors/popup-selectors';
-import { waitAndClick } from '../../../helpers/utils/click-helper';
-import settings from '../../../config';
+import { waitForNotification } from '../../../helpers/utils/wait-helper';
 
 describe('Smart Folder - IMPORT -', () => {
   beforeEach(() => {
-    // browser.setWindowSize(2200,900);
-    browser.setWindowSize(1900, 900);
-    OfficeWorksheet.openExcelHome();
-    const url = browser.getUrl();
-    if (url.includes('login.microsoftonline')) {
-      OfficeLogin.login(settings.officeOnline.username, settings.officeOnline.password);
-    }
-    OfficeWorksheet.createNewWorkbook();
-    OfficeWorksheet.openPlugin();
-    PluginRightPanel.loginToPlugin(settings.env.username, settings.env.password);
+    OfficeLogin.openExcelAndLoginToPlugin();
   });
 
   afterEach(() => {

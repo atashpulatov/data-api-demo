@@ -4,20 +4,10 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { switchToPluginFrame, switchToExcelFrame } from '../../../helpers/utils/iframe-helper';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
-import settings from '../../../config';
-
 
 describe('TC54788 - Import subtotals', () => {
   beforeEach(() => {
-    browser.setWindowSize(1900, 900);
-    OfficeWorksheet.openExcelHome();
-    const url = browser.getUrl();
-    if (url.includes('login.microsoftonline')) {
-      OfficeLogin.login(settings.officeOnline.username, settings.officeOnline.password);
-    }
-    OfficeWorksheet.createNewWorkbook();
-    OfficeWorksheet.openPlugin();
-    PluginRightPanel.loginToPlugin(settings.env.username, settings.env.password);
+    OfficeLogin.openExcelAndLoginToPlugin();
   });
 
   afterEach(() => {
