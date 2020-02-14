@@ -56,7 +56,8 @@ export class DIContainer {
       this.officeStoreService,
       this.popupHelper,
       this.mstrObjectRestService,
-      this.popupController);
+      this.popupController,
+      this.officeDisplayService);
     this.initialized = true;
   }
 

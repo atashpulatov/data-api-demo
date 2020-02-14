@@ -12,6 +12,7 @@ import { officeStoreService } from '../../office/store/office-store-service';
 import { errorService } from '../../error/error-handler';
 import { popupController } from '../../popup/popup-controller';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
+import { officeDisplayService } from '../../office/office-display-service';
 
 jest.mock('../../office/office-api-helper');
 jest.mock('../../authentication/authentication-helper');
@@ -20,6 +21,7 @@ jest.mock('../../popup/popup-controller');
 jest.mock('../../error/error-handler');
 jest.mock('../../store');
 jest.mock('../../mstr-object/mstr-object-rest-service');
+jest.mock('../../office/office-display-service');
 
 const { createDossierInstance } = mstrObjectRestService;
 
@@ -32,7 +34,8 @@ describe('Popup actions', () => {
       officeStoreService,
       popupHelper,
       mstrObjectRestService,
-      popupController
+      popupController,
+      officeDisplayService
     );
   });
   afterEach(() => {
@@ -190,17 +193,32 @@ describe('Popup actions', () => {
     // given
     const bindingId = 'bindingId';
     const report = { bindId: bindingId, objectType: 'whatever' };
-    const returnedValue = { projectId: 'projectId', id: 'id', manipulationsXML: 'manipulationsXML' };
-    officeStoreService.getReportFromProperties.mockReturnValueOnce(returnedValue);
-    const listener = jest.fn();
+    const returnedValue = {
+      projectId: 'projectId',
+      id: 'id',
+      manipulationsXML: 'manipulationsXML',
+      visualizationInfo: {
+        pageKey: 'page',
+        chapterKey: 'chapterKey',
+        visualizationKey: 'visKey',
+      }
+    };
+    const visInfo = {
+      pageKey: 'page',
+      chapterKey: 'chapterKey',
+      visualizationKey: 'visKey'
+    };
     const instanceDefinitionMocked = { instanceId: 'instanceId' };
-    await createDossierInstance.mockReturnValueOnce(instanceDefinitionMocked);
+    const listener = jest.fn();
+    officeStoreService.getReportFromProperties.mockReturnValueOnce(returnedValue);
+    officeDisplayService.getVisualizationInfo.mockReturnValueOnce(visInfo);
+    createDossierInstance.mockReturnValueOnce(instanceDefinitionMocked);
     // when
     await actions.callForEditDossier(report)(listener);
     // then
     expect(officeApiHelper.getExcelSessionStatus).toBeCalled();
     expect(authenticationHelper.validateAuthToken).toBeCalled();
-    expect(officeStoreService.getReportFromProperties).toBeCalledWith(bindingId);//
+    expect(officeStoreService.getReportFromProperties).toBeCalledWith(bindingId);
     expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedObject: returnedValue });
   });
 
