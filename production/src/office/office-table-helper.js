@@ -541,7 +541,7 @@ class OfficeTableHelper {
         .getRange()
         .getColumnsAfter(addedColumns);
       if (isCrosstab) {
-        rightRange = rightRange.getOffsetRange(-prevCrosstabDimensions.columnsY, -prevCrosstabDimensions.rowsX).getResizedRange(-prevCrosstabDimensions.rowsY, 0);
+        rightRange = rightRange.getOffsetRange(-prevCrosstabDimensions.columnsY, 0).getResizedRange(prevCrosstabDimensions.columnsY, 0);
       }
 
       await this.checkRangeValidity(context, rightRange);
@@ -552,7 +552,7 @@ class OfficeTableHelper {
         .getRowsBelow(addedRows)
         .getResizedRange(0, addedColumns);
       if (isCrosstab) {
-        bottomRange = bottomRange.getOffsetRange(0, -prevCrosstabDimensions.rowsX).getResizedRange(0, 0);
+        bottomRange = bottomRange.getOffsetRange(0, -prevCrosstabDimensions.rowsX).getResizedRange(0, prevCrosstabDimensions.rowsX);
       }
 
       await this.checkRangeValidity(context, bottomRange);
