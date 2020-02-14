@@ -109,7 +109,7 @@ export default class _EmbeddedDossier extends React.Component {
 
   loadEmbeddedDossier = async (container) => {
     const { mstrData } = this.props;
-    const { envUrl, authToken, dossierId, projectId, promptsAnswers, instanceId, selectedViz } = mstrData;
+    const { envUrl, authToken, dossierId, projectId, promptsAnswers, instanceId, selectedViz, visualizationInfo } = mstrData;
     const instance = {};
     try {
       if (instanceId) {
@@ -287,6 +287,7 @@ const mapStateToProps = (state) => {
     dossierId: isEdit ? editedObject.chosenObjectId : chosenObjectId,
     projectId: isEdit ? editedObject.projectId : chosenProjectId,
     promptsAnswers: isEdit ? editedObject.promptsAnswers : promptsAnswers,
+    visualizationInfo: editedObject.visualizationInfo,
     selectedViz: isEdit ? editedObject.selectedViz : '',
     instanceId: editedObject.instanceId,
   };

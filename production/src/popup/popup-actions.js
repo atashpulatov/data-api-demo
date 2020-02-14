@@ -1,6 +1,6 @@
 import { officeProperties } from '../office/office-properties';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import officeDisplayService from '../office/office-display-service';
+import { officeDisplayService } from '../office/office-display-service';
 
 export const CLEAR_WINDOW = 'POPUP_CLOSE_WINDOW';
 export const START_REPORT_LOADING = 'START_REPORT_LOADING';
@@ -105,7 +105,7 @@ export class PopupActions {
         this.authenticationHelper.validateAuthToken(),
       ]);
       const editedDossier = this.officeStoreService.getReportFromProperties(reportParams.bindId);
-      const { projectId, id, manipulationsXML } = editedDossier;
+      const { projectId, id, manipulationsXML, visualizationInfo } = editedDossier;
       const instanceId = await this.mstrObjectRestService.createDossierInstance(projectId, id, { ...manipulationsXML, disableManipulationsAutoSaving: true, persistViewState: true });
       editedDossier.instanceId = instanceId;
       editedDossier.isEdit = true;
