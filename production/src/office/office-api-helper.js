@@ -5,7 +5,6 @@ import { officeStoreService } from './store/office-store-service';
 import { notificationService } from '../notification/notification-service';
 import { errorService } from '../error/error-handler';
 import mstrNormalizedJsonHandler from '../mstr-object/mstr-normalized-json-handler';
-import { CONTEXT_LIMIT } from '../mstr-object/mstr-object-rest-service';
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { OBJ_REMOVED_FROM_EXCEL } from '../error/constants';
 import { ProtectedSheetError } from '../error/protected-sheets-error';

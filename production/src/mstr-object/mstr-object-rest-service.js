@@ -128,10 +128,48 @@ async function* fetchContentGenerator({
   }
 }
 
+
 export class MstrObjectRestService {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
   }
+
+  /**
+   * Check size of passed object in MB
+   *
+   * @param {String} projectId
+   * @param {String} objectId
+   * @param {String} visualizationKey visualization id.
+   * @param {Object} dossierInstance
+   * @returns {Object} Contains breadcrumbs fro visualization.
+   * @memberof MstrObjectRestService
+   */
+  getVisualizationInfo = async (projectId, objectId, visualizationKey, dossierInstance) => {
+    try {
+      const dossierDefinition = await this.getDossierInstanceDefinition(projectId, objectId, dossierInstance);
+      for (const chapter of dossierDefinition.chapters) {
+        for (const page of chapter.pages) {
+          for (const visualization of page.visualizations) {
+            if (visualization.key === visualizationKey) {
+              return {
+                chapterKey: chapter.key,
+                pageKey: page.key,
+                visualizationKey,
+                dossierStructure: {
+                  chapterName: chapter.name,
+                  dossierName: dossierDefinition.name,
+                  pageName: page.name
+                }
+              };
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.log('Cannot fetch dossier structure, skipping');
+      return undefined;
+    }
+  };
 
   answerDossierPrompts = ({ objectId, projectId, instanceId, promptsAnswers }) => {
     const storeState = this.reduxStore.getState();
