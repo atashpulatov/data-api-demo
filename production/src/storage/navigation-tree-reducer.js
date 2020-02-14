@@ -1,5 +1,5 @@
 import {
-  SELECT_FOLDER, SELECT_OBJECT, SET_DATA_SOURCE, START_IMPORT, /* CHANGE_SORTING, */ CHANGE_SEARCHING, UPDATE_SCROLL,
+  SELECT_FOLDER, SELECT_OBJECT, SET_DATA_SOURCE, START_IMPORT, CHANGE_SORTING, CHANGE_SEARCHING, UPDATE_SCROLL,
   UPDATE_SIZE, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED, CLEAR_PROMPTS_ANSWERS, REQUEST_DOSSIER_OPEN,
   CANCEL_DOSSIER_OPEN, SWITCH_MY_LIBRARY, CHANGE_FILTER, CHANGE_IS_PROMPTED,
   LOAD_BROWSING_STATE_CONST, UPDATE_DISPLAY_ATTR_FORM,
@@ -46,7 +46,7 @@ export const initialState = {
   loading: false,
   scrollPosition: null,
   pageSize: null,
-  // sorter: {},
+  sorter: {},
   searchText: '',
   importRequested: false,
   dossierData: null,
@@ -192,12 +192,11 @@ export const navigationTree = (state = initialState, action) => {
     newState.loading = true;
     return newState;
   }
-  // DE159475; disabled until sorting fix in object-table
-  // case CHANGE_SORTING: {
-  //   const newState = { ...state };
-  //   newState.sorter = data;
-  //   return newState;
-  // }
+  case CHANGE_SORTING: {
+    const newState = { ...state };
+    newState.sorter = data;
+    return newState;
+  }
   case CHANGE_SEARCHING: {
     const newState = { ...state };
     newState.searchText = data;
