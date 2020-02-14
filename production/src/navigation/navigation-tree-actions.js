@@ -6,8 +6,7 @@ export const SELECT_FOLDER = 'NAV_TREE_SELECT_FOLDER';
 export const REQUEST_IMPORT = 'REQUEST_IMPORT';
 export const PROMPTS_ANSWERED = 'PROMPTS_ANSWERED';
 export const START_IMPORT = 'NAV_TREE_START_IMPORT';
-// DE159475; disabled until sorting fix in object-table
-// export const CHANGE_SORTING = 'NAV_TREE_CHANGE_SORTING';
+export const CHANGE_SORTING = 'NAV_TREE_CHANGE_SORTING';
 export const CHANGE_SEARCHING = 'NAV_TREE_CHANGE_SEARCHING';
 export const UPDATE_SCROLL = 'NAV_TREE_UPDATE_SCROLL';
 export const UPDATE_SIZE = 'NAV_TREE_UPDATE_SIZE';
@@ -73,9 +72,9 @@ export function stopLoading() {
   return (dispatch) => dispatch({ type: officeProperties.actions.stopLoading });
 }
 
-// export function changeSorting(data) {
-//   return (dispatch) => dispatch({ type: CHANGE_SORTING, data });
-// }
+export function changeSorting(data) {
+  return (dispatch) => dispatch({ type: CHANGE_SORTING, data });
+}
 
 export function changeSearching(data) {
   return (dispatch) => dispatch({ type: CHANGE_SEARCHING, data });
@@ -109,4 +108,4 @@ export function changeFilter(data) {
   return (dispatch) => dispatch({ type: CHANGE_FILTER, data });
 }
 
-export const actions = { selectFolder, selectObject, setDataSource, requestImport, promptsAnswered, startImport, startLoading, stopLoading, changeSearching, /* changeSorting, */ updateScroll, updateSize, requestDossierOpen, switchMyLibrary, changeFilter };
+export const actions = { selectFolder, selectObject, setDataSource, requestImport, promptsAnswered, startImport, startLoading, stopLoading, changeSearching, changeSorting, updateScroll, updateSize, requestDossierOpen, switchMyLibrary, changeFilter };
