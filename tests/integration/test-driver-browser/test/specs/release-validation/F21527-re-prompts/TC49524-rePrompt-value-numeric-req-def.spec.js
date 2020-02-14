@@ -4,8 +4,8 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
-import { objects as o } from '../../../constants/objects-list';
-import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
+import { objectsList } from '../../../constants/objects-list';
+import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 
 
 describe('[TC49524] Re-Prompt after import | Value | Numeric | Required | Default answer', () => {
@@ -21,7 +21,7 @@ describe('[TC49524] Re-Prompt after import | Value | Numeric | Required | Defaul
 
     await OfficeWorksheet.selectCell('A1');
     await PluginRightPanel.clickImportDataButton();
-    await PluginPopup.importPromptDefault(o.reports.numericPromptedReport);
+    await PluginPopup.importPromptDefault(objectsList.reports.numericPromptedReport);
   });
 
   afterAll(async () => {
@@ -38,7 +38,7 @@ describe('[TC49524] Re-Prompt after import | Value | Numeric | Required | Defaul
     await browser.sleep(5555);
     await PluginPopup.writeValueText('2016');
     await waitForNotification();
-    await expect(se.notificationPopUp.getAttribute('textContent')).toEqual(dictionary.en.reportRefreshed);
+    await expect(rightPanelSelectors.notificationPopUp.getAttribute('textContent')).toEqual(dictionary.en.reportRefreshed);
     await OfficeWorksheet.selectCell('A1');
     const newCellA2 = await $('#gridRows > div:nth-child(2) > div:nth-child(1) > div > div').getText();
     await expect(oldCellA2).not.toEqual(newCellA2);

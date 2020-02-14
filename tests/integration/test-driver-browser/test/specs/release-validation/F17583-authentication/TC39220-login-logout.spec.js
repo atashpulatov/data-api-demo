@@ -1,7 +1,7 @@
 import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
-import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
+import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
 
 
@@ -29,7 +29,7 @@ describe('Login - ', () => {
     await switchToPluginFrame();
     await PluginRightPanel.logout();
     await browser.sleep(2222);
-    await expect(se.pluginImage.isDisplayed()).toBe(true);
-    await expect(se.loginRightPanelBtn.isDisplayed()).toBe(true);
+    await expect(rightPanelSelectors.pluginImage.isDisplayed()).toBe(true);
+    await expect(rightPanelSelectors.loginRightPanelBtn.isDisplayed()).toBe(true);
   });
 });
