@@ -1,4 +1,4 @@
-export const objects = {
+export const objectsList = {
   reports: {
     reportXML: 'Report accessing XML file',
     notSupportedFeatures: 'Report with Page by, Advanced Sorting, Thresholds, Outline, Banding, Merge cells & Multiform attributes',
@@ -26,6 +26,7 @@ export const objects = {
     numberFormating: 'Number Formatting',
     grpahReport: 'report graph',
     gridReport: 'Grid/graph',
+    basicSubtotalsReport: 'Report Totals Subtotals 1',
   },
 
   datasets: {

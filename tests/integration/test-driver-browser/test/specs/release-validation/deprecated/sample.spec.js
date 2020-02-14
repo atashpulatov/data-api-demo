@@ -2,28 +2,12 @@ import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
-import { writeDataIntoFile, getJsonData } from '../../../helpers/utils/benchmark-helper';
-import { objects as o } from '../../../constants/objects-list';
-import { waitForNotification, waitForPopup } from '../../../helpers/utils/wait-helper';
-import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
-import { dictionary } from '../../../constants/dictionaries/dictionary';
-import { selectors as s } from '../../../constants/selectors/popup-selectors';
-import { waitAndClick } from '../../../helpers/utils/click-helper';
-import settings from '../../../config';
+import { objectsList } from '../../../constants/objects-list';
+import { waitForNotification } from '../../../helpers/utils/wait-helper';
 
 describe('Smart Folder - IMPORT -', () => {
   beforeEach(() => {
-    // browser.setWindowSize(2200,900);
-    browser.setWindowSize(1900, 900);
-    OfficeWorksheet.openExcelHome();
-    const url = browser.getUrl();
-    if (url.includes('login.microsoftonline')) {
-      OfficeLogin.login(settings.officeOnline.username, settings.officeOnline.password);
-    }
-    OfficeWorksheet.createNewWorkbook();
-    OfficeWorksheet.openPlugin();
-    PluginRightPanel.loginToPlugin(settings.env.username, settings.env.password);
+    OfficeLogin.openExcelAndLoginToPlugin();
   });
 
   afterEach(() => {
@@ -178,7 +162,7 @@ describe('Smart Folder - IMPORT -', () => {
     // should import a report
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
-    PluginPopup.importObject(o.reports.reportXML);
+    PluginPopup.importObject(objectsList.reports.reportXML);
     waitForNotification();
 
     // // should import a dataset to the adjacent column of the first object

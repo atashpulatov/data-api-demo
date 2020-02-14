@@ -4,8 +4,8 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
-import { objects as o } from '../../../constants/objects-list';
-import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
+import { objectsList } from '../../../constants/objects-list';
+import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 
 
 describe('[TC40296] Prompt | Value | Text | Not required | Default answer', () => {
@@ -29,8 +29,8 @@ describe('[TC40296] Prompt | Value | Text | Not required | Default answer', () =
   it('[TC40296] should import a report', async () => {
     await OfficeWorksheet.selectCell('A1');
     await PluginRightPanel.clickImportDataButton();
-    await PluginPopup.importPromptDefault(o.reports.textPromptedReport);
+    await PluginPopup.importPromptDefault(objectsList.reports.textPromptedReport);
     await waitForNotification();
-    await expect(se.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+    await expect(rightPanelSelectors.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   });
 });
