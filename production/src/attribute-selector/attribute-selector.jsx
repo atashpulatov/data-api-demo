@@ -38,7 +38,7 @@ export class AttributeSelectorNotConnected extends Component {
 
   render() {
     const {
-      title, session, displayAttrFormNames, updateDisplayAttrForm,
+      title, session, displayAttrFormNames, updateDisplayAttrForm, isEdit,
       triggerUpdate, onTriggerUpdate, chosenObject, importSubtotal, editedObject, supportForms,
       resetTriggerUpdate, attributesSelectedChange, t, openModal, closeModal, switchImportSubtotals,
     } = this.props;
@@ -53,7 +53,7 @@ export class AttributeSelectorNotConnected extends Component {
           key={chosenObject.id}
           title={title}
           session={mapToLegacySession(chosenObject, session, editedObject)}
-          mstrData={{ ...mapToLegacyMstrData(chosenObject, session, editedObject), supportForms }}
+          mstrData={{ ...mapToLegacyMstrData(chosenObject, session, editedObject), supportForms, isEdit }}
           triggerUpdate={triggerUpdate}
           onTriggerUpdate={onTriggerUpdate}
           withDataPreview
@@ -118,7 +118,8 @@ AttributeSelectorNotConnected.propTypes = {
   updateDisplayAttrForm: PropTypes.func,
   handlePopupErrors: PropTypes.func,
   onTriggerUpdate: PropTypes.func,
-  t: PropTypes.func
+  t: PropTypes.func,
+  isEdit: PropTypes.bool
 };
 AttributeSelectorNotConnected.defaultProps = { t: (text) => text, };
 
