@@ -8,6 +8,7 @@ import {
 import { CLEAR_WINDOW } from '../popup/popup-actions';
 import { CREATE_CACHE, CLEAR_CACHE, REFRESH_CACHE } from '../cache/cache-actions';
 import { sessionProperties } from './session-properties';
+import { CLEAR_POPUP_STATE } from '../popup/popup-state-actions';
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
 export const DEFAULT_TYPE = 'Data';
@@ -100,6 +101,9 @@ export const navigationTree = (state = initialState, action) => {
   const { type, data } = action;
   switch (type) {
   case SELECT_OBJECT: {
+    if (!data.chosenObjectId) {
+      return state;
+    }
     const newState = { ...state };
     if (newState.myLibrary) {
       newState.chosenLibraryElement = data;
@@ -263,6 +267,9 @@ export const navigationTree = (state = initialState, action) => {
     newState.myLibraryFilter = {};
     newState.myLibrary = true;
     return newState;
+  }
+  case CLEAR_POPUP_STATE: {
+    return { ...state, searchText: '' };
   }
   default: {
     return state;
