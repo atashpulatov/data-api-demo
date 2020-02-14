@@ -571,7 +571,7 @@ export class OfficeDisplayService {
             if (visualization.key === visualizationKey) {
               return {
                 chapterKey: chapter.key,
-                pageKey: page.key
+                pageKey: page.key,
                 visualizationKey,
                 dossierStructure: {
                   chapterName: chapter.name,
@@ -588,7 +588,6 @@ export class OfficeDisplayService {
       return undefined;
     }
   }
-
 
   /**
    * Answers prompts and modify instance of the object.
