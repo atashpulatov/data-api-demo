@@ -237,7 +237,7 @@ export const navigationTree = (state = initialState, action) => {
       newState.envFilter.shouldClear = false;
       newState.myLibraryFilter.shouldClear = false;
     } else if (newState.myLibrary) {
-      newState.envFilter.owners = state.envFilter.owners && state.envFilter.owners !== []
+      newState.envFilter.owners = state.envFilter.owners
         ? [...state.envFilter.owners.filter(item => !newState.myLibraryOwners[item]), ...data.owners]
         : data.owners;
     } else {
