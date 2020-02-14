@@ -122,7 +122,7 @@ describe('NavigationTree Reducer', () => {
     // given
     const action = {
       type: SELECT_OBJECT,
-      data: {},
+      data: { chosenObjectId: 'something' },
     };
 
     // when
@@ -130,7 +130,7 @@ describe('NavigationTree Reducer', () => {
 
     // then
     expect(newState).toEqual({
-      chosenObjectId: null,
+      chosenObjectId: 'something',
       chosenProjectId: null,
       chosenSubtype: null,
       chosenObjectName: 'Prepare Data',
