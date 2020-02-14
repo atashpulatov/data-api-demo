@@ -4,7 +4,6 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { switchToPluginFrame, switchToExcelFrame } from '../../../helpers/utils/iframe-helper';
 import { writeDataIntoFile, getJsonData } from '../../../helpers/utils/benchmark-helper';
-import { objects as o } from '../../../constants/objects-list';
 import { waitForNotification, waitForPopup } from '../../../helpers/utils/wait-helper';
 
 const fs = require('fs');
