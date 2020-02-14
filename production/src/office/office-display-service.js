@@ -29,7 +29,7 @@ const {
   modifyInstance,
   createDossierInstance,
   fetchVisualizationDefinition,
-  getDossierDefinition,
+  getDossierInstanceDefinition,
 } = mstrObjectRestService;
 
 export class OfficeDisplayService {
@@ -198,8 +198,9 @@ export class OfficeDisplayService {
       // Used to show in sidebar placeholder
       if (objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
         mstrTable.id = objectId;
+        const dossierInstance = preparedInstanceId || instanceDefinition.instanceId;
         console.time('Get dossier structure');
-        visualizationInfo = await this.getVisualizationInfo(projectId, objectId, visualizationInfo.visualizationKey, preparedInstanceId) || visualizationInfo;
+        visualizationInfo = await this.getVisualizationInfo(projectId, objectId, visualizationInfo.visualizationKey, dossierInstance) || visualizationInfo;
         console.timeEnd('Get dossier structure');
       }
 
@@ -557,30 +558,34 @@ export class OfficeDisplayService {
    * @param {String} projectId
    * @param {String} objectId
    * @param {String} visualizationKey visualization id.
-   * @param {Object} preparedInstanceId
+   * @param {Object} dossierInstance
    * @returns {Object} Contains breadcrumbs fro visualization.
    * @memberof officeDisplayService
    */
-  getVisualizationInfo = async (projectId, objectId, visualizationKey, preparedInstanceId) => {
-    const dossierDefinition = await getDossierDefinition(projectId, objectId, preparedInstanceId);
-    for (const chapter of dossierDefinition.chapters) {
-      for (const page of chapter.pages) {
-        for (const visualization of page.visualizations) {
-          if (visualization.key === visualizationKey) {
-            return {
-              chapterKey: chapter.key,
-              visualizationKey,
-              dossierStructure: {
-                chapterName: chapter.name,
-                dossierName: dossierDefinition.name,
-                pageName: page.name
-              }
-            };
+  getVisualizationInfo = async (projectId, objectId, visualizationKey, dossierInstance) => {
+    try {
+      const dossierDefinition = await getDossierInstanceDefinition(projectId, objectId, dossierInstance);
+      for (const chapter of dossierDefinition.chapters) {
+        for (const page of chapter.pages) {
+          for (const visualization of page.visualizations) {
+            if (visualization.key === visualizationKey) {
+              return {
+                chapterKey: chapter.key,
+                visualizationKey,
+                dossierStructure: {
+                  chapterName: chapter.name,
+                  dossierName: dossierDefinition.name,
+                  pageName: page.name
+                }
+              };
+            }
           }
         }
       }
+    } catch (error) {
+      console.log('Cannot fetch dossier structure, skipping');
+      return undefined;
     }
-    return undefined;
   }
 
   /**
