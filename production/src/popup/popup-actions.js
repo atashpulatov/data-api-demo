@@ -1,5 +1,6 @@
 import { officeProperties } from '../office/office-properties';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import officeDisplayService from '../office/office-display-service';
 
 export const CLEAR_WINDOW = 'POPUP_CLOSE_WINDOW';
 export const START_REPORT_LOADING = 'START_REPORT_LOADING';
@@ -108,6 +109,8 @@ export class PopupActions {
       const instanceId = await this.mstrObjectRestService.createDossierInstance(projectId, id, { ...manipulationsXML, disableManipulationsAutoSaving: true, persistViewState: true });
       editedDossier.instanceId = instanceId;
       editedDossier.isEdit = true;
+      editedDossier.visualizationInfo = await officeDisplayService
+        .getVisualizationInfo(projectId, id, visualizationInfo.visualizationKey, instanceId);
       dispatch({
         type: SET_REPORT_N_FILTERS,
         editedObject: editedDossier,

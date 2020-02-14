@@ -141,8 +141,14 @@ export default class _EmbeddedDossier extends React.Component {
     };
 
     const libraryUrl = envUrl.replace('api', 'app');
+    let url = `${libraryUrl}/${projectId}/${dossierId}`;
+    let selectedVizChecked = selectedViz;
 
-    const url = `${libraryUrl}/${projectId}/${dossierId}`;
+    if (selectedViz && visualizationInfo) {
+      const { chapterKey, pageKey, visualizationKey } = visualizationInfo;
+      selectedVizChecked = `${chapterKey}:${visualizationKey}`;
+      url = `${libraryUrl}/${projectId}/${dossierId}/${pageKey}`;
+    }
     const { CustomAuthenticationType } = microstrategy.dossier;
 
     const props = {
@@ -197,7 +203,7 @@ export default class _EmbeddedDossier extends React.Component {
         addToLibrary: true,
       },
       enableVizSelection: true,
-      selectedViz,
+      selectedViz: selectedVizChecked,
       onMsgRouterReadyHandler: ({ MsgRouter }) => {
         this.msgRouter = MsgRouter;
         this.msgRouter.registerEventHandler('onVizSelectionChanged', this.onVizSelectionHandler);
@@ -240,6 +246,11 @@ _EmbeddedDossier.propTypes = {
     instanceId: PropTypes.string,
     promptsAnswers: PropTypes.array || null,
     selectedViz: PropTypes.string,
+    visualizationInfo: {
+      chapterKey: PropTypes.string,
+      pageKey: PropTypes.string,
+      visualizationKey: PropTypes.string,
+    }
   }),
   handleSelection: PropTypes.func,
   handlePromptAnswer: PropTypes.func,

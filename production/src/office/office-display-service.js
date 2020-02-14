@@ -259,7 +259,7 @@ export class OfficeDisplayService {
           officeTable.showHeaders = false;
         }
       }
-      if (bindId) {
+      if (bindingId && bindId) {
         this.reduxStore.dispatch({
           type: officeProperties.actions.finishLoadingReport,
           reportBindId: bindId,
@@ -561,27 +561,28 @@ export class OfficeDisplayService {
    * @returns {Object} Contains breadcrumbs fro visualization.
    * @memberof officeDisplayService
    */
-  getVisualizationInfo = async (projectId, objectId, visualizationKey, preparedInstanceId) => {
-    const dossierDefinition = await getDossierDefinition(projectId, objectId, preparedInstanceId);
-    for (const chapter of dossierDefinition.chapters) {
-      for (const page of chapter.pages) {
-        for (const visualization of page.visualizations) {
-          if (visualization.key === visualizationKey) {
-            return {
-              chapterKey: chapter.key,
-              visualizationKey,
-              dossierStructure: {
-                chapterName: chapter.name,
-                dossierName: dossierDefinition.name,
-                pageName: page.name
-              }
-            };
-          }
-        }
-      }
-    }
-    return undefined;
-  }
+   getVisualizationInfo = async (projectId, objectId, visualizationKey, preparedInstanceId) => {
+     const dossierDefinition = await getDossierDefinition(projectId, objectId, preparedInstanceId);
+     for (const chapter of dossierDefinition.chapters) {
+       for (const page of chapter.pages) {
+         for (const visualization of page.visualizations) {
+           if (visualization.key === visualizationKey) {
+             return {
+               chapterKey: chapter.key,
+               pageKey: page.key,
+               visualizationKey,
+               dossierStructure: {
+                 chapterName: chapter.name,
+                 dossierName: dossierDefinition.name,
+                 pageName: page.name
+               }
+             };
+           }
+         }
+       }
+     }
+     return undefined;
+   };
 
   /**
    * Answers prompts and modify instance of the object.
