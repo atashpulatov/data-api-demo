@@ -267,9 +267,7 @@ export const navigationTree = (state = initialState, action) => {
     return newState;
   }
   case CLEAR_POPUP_STATE: {
-    const newState = { ...state };
-    newState.searchText = '';
-    return newState;
+    return { ...state, searchText: '' };
   }
   default: {
     return state;
