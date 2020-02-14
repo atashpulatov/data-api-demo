@@ -1,6 +1,7 @@
 import { switchToPluginFrame, switchToPromptFrame, switchToPopupFrame, switchToExcelFrame } from '../utils/iframe-helper';
 import { waitAndClick, waitAndRightClick } from '../utils/click-helper';
 import { selectors as s } from '../../constants/selectors/popup-selectors';
+import { selectors } from '../../constants/selectors/plugin.right-panel-selectors';
 
 const PluginPopup = function() {
   this.closeRefreshAll = function() {
@@ -42,6 +43,31 @@ const PluginPopup = function() {
     waitAndClick($(s.dataPreviewBtn));
   };
 
+  this.getTableRows = () => {
+    const w = $$(s.tableRows);
+    return w;
+  };
+
+  this.copyObjectsID = () => {
+    const rows = this.getTableRows();
+    for (let row of rows) {
+      const expandButton = row.$(s.expandButton);
+      expandButton.click();
+      // browser.pause(2000);
+      const idField = row.$(s.idDetail);
+      idField.click();
+      console.log(idField.getText());
+    }; 
+  };
+
+  this.expandRows = () => {
+    const rows = this.getTableRows();
+    for (let row of rows) {
+      const expandButton = row.$(s.expandButton);
+      expandButton.click();
+    }; 
+  };
+
   this.clickFilterButton = async () => {
     await switchToPopupFrame();
     await waitAndClick(s.filterButton);
@@ -50,11 +76,6 @@ const PluginPopup = function() {
   this.tickFilterCheckBox = (section, item) => {
     waitAndClick(element(By.css('.category-list-header[aria-label="' + section + '"] + .category-list-table > .category-list-row > .checkbox-cell > label > input[aria-label="Checkbox for ' + item + '."] + span')));
   }
-
-  this.getTableRows = () => {
-    w = s.tableRows.getWebElements();
-    return w;
-  };
 
   this.checkIfColumnIsExactly = async (columnToCheck, expectedValue) => {
     const rows = await this.getTableRows();
@@ -313,6 +334,7 @@ const PluginPopup = function() {
   };
 
   this.switchLibrary = function(newState) {
+    switchToPluginFrame();
     const myLibrarySwitch = $(s.myLibrary);
     myLibrarySwitch.waitForExist(5000);
     const checked = myLibrarySwitch.getAttribute('aria-checked');
@@ -323,6 +345,17 @@ const PluginPopup = function() {
     this.importObject(dossierName);
     browser.pause(timeToLoadDossier);
   }
+
+  this.clickFilterButton = () => {
+    switchToPluginFrame();
+    const filterButton = $(s.filterButton);
+    filterButton.click();
+  };
+
+  this.tickFilterCheckBox = (section, item) => {
+    waitAndClick($('.category-list-header[aria-label="' + section + '"] + .category-list-table > .category-list-row > .checkbox-cell > label > input[aria-label="Checkbox for ' + item + '."] + span'));
+  };
+
 
   this.selectAndImportVizualiation = function(visContainerId) {
     switchToPromptFrame();
