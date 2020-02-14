@@ -7,58 +7,60 @@ import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { objectsList } from '../../../constants/objects-list';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
+import settings from '../../../config';
 
-
-describe('Prepare Data - ', () => {
-  beforeAll(async () => {
-    await OfficeWorksheet.openExcelHome();
-    const url = await browser.getCurrentUrl();
+describe('F12909 - Ability to import a report from MicroStrategy report', () => {
+  beforeEach(() => {
+    browser.setWindowSize(1500, 900);
+    OfficeWorksheet.openExcelHome();
+    const url = browser.getUrl();
     if (url.includes('login.microsoftonline')) {
-      await OfficeLogin.login(officeCredentials.username, officeCredentials.password);
+      OfficeLogin.login(settings.officeOnline.username, settings.officeOnline.password);
     }
-    await OfficeWorksheet.createNewWorkbook();
-    await OfficeWorksheet.openPlugin();
-    await PluginRightPanel.loginToPlugin('a', '');
+    OfficeWorksheet.createNewWorkbook();
+    OfficeWorksheet.openPlugin();
+    PluginRightPanel.loginToPlugin(settings.env.username, settings.env.password);
+  });
+  afterEach(() => {
+    browser.closeWindow();
+    const handles = browser.getWindowHandles();
+    browser.switchToWindow(handles[0]);
   });
 
-  afterAll(async () => {
-    await browser.close();
-    const handles = await browser.getAllWindowHandles();
-    await browser.switchTo().window(handles[0]);
-  });
-  it('[TC39600] Data preview', async () => {
+  it('[TC39600] Data preview', () => {
     // should import a report
-    await switchToExcelFrame();
-    await OfficeWorksheet.selectCell('A1');
-    await PluginRightPanel.clickImportDataButton();
-    await PluginPopup.importObject(objectsList.reports.seasonalReport);
-    await waitForNotification();
-    await expect(rightPanelSelectors.notificationPopUp.getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
+    switchToExcelFrame();
+    OfficeWorksheet.selectCell('A1');
+    PluginRightPanel.clickImportDataButton();
+    PluginPopup.importObject(objectsList.reports.seasonalReport);
+    waitForNotification();
+    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
 
     // should select a supported report
-    await OfficeWorksheet.selectCell('Y1');
-    await switchToPluginFrame();
-    await PluginRightPanel.clickAddDataButton();
-    await switchToPluginFrame();
-    await PluginPopup.searchForObject(objectsList.reports.basicReport);
-    await PluginPopup.selectFirstObject();
-    await PluginPopup.clickPrepareData();
+    OfficeWorksheet.selectCell('Y1');
+    switchToPluginFrame();
+    PluginRightPanel.clickAddDataButton();
+    switchToPluginFrame();
+    PluginPopup.searchForObject(objectsList.reports.basicReport);
+    PluginPopup.selectFirstObject();
+    PluginPopup.clickPrepareData();
 
     // should select some metrics, attributes and values for filters
-    await PluginPopup.selectObjectElements(['Units Sold', 'Region']);
-    await PluginPopup.selectFilters([['Region', ['Europe', 'Asia']]]);
+    PluginPopup.selectObjectElements(['Units Sold']);
+    PluginPopup.selectAttributeIndex(6);
+    PluginPopup.selectFilters([['Region', ['Europe', 'Asia']]]);
 
     // should click "Data Preview"
-    await PluginPopup.clickDataPreview();
-    await browser.sleep(2000);
-    await expect($('#rcDialogTitle0').isDisplayed()).toBe(true);
+    PluginPopup.clickDataPreview();
+    browser.pause(2000);
+    expect($('#rcDialogTitle0').isDisplayed()).toBe(true);
 
     // should click "Close Preview"
-    await PluginPopup.closePreview();
-    await browser.sleep(2000);
-    await expect($('#rcDialogTitle0').isDisplayed()).toBe(false);
+    PluginPopup.closePreview();
+    browser.pause(2000);
+    expect($('#rcDialogTitle0').isDisplayed()).toBe(false);
 
     // should click "Cancel"
-    await PluginPopup.clickCancel();
+    PluginPopup.clickCancel();
   });
 });

@@ -6,32 +6,33 @@ import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { objectsList } from '../../../constants/objects-list';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
+import settings from '../../../config';
 
-
-describe('Error Handling - IMPORT - ', () => {
-  beforeAll(async () => {
-    await OfficeWorksheet.openExcelHome();
-    const url = await browser.getCurrentUrl();
+describe('F12909 - Ability to import a report from MicroStrategy report', () => {
+  beforeEach(() => {
+    browser.setWindowSize(1500, 900);
+    OfficeWorksheet.openExcelHome();
+    const url = browser.getUrl();
     if (url.includes('login.microsoftonline')) {
-      await OfficeLogin.login(officeCredentials.username, officeCredentials.password);
+      OfficeLogin.login(settings.officeOnline.username, settings.officeOnline.password);
     }
-    await OfficeWorksheet.createNewWorkbook();
-    await OfficeWorksheet.openPlugin();
-    await PluginRightPanel.loginToPlugin('a', '');
+    OfficeWorksheet.createNewWorkbook();
+    OfficeWorksheet.openPlugin();
+    PluginRightPanel.loginToPlugin(settings.env.username, settings.env.password);
+  });
+  afterEach(() => {
+    browser.closeWindow();
+    const handles = browser.getWindowHandles();
+    browser.switchToWindow(handles[0]);
   });
 
-  afterAll(async () => {
-    await browser.close();
-    const handles = await browser.getAllWindowHandles();
-    await browser.switchTo().window(handles[0]);
-  });
 
-  it('[TC36826] Importing not supported objects', async () => {
+  it('[TC36826] Importing not supported objects', () => {
     // should display a correct error message for a report with all data filtered out
-    await PluginRightPanel.clickImportDataButton();
-    await PluginPopup.importObject(objectsList.reports.filtered);
-    await waitForNotification();
-    await expect(rightPanelSelectors.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.emptyObject);
-    await PluginRightPanel.closeNotification();
+    PluginRightPanel.clickImportDataButton();
+    PluginPopup.importObject(objectsList.reports.filtered);
+    waitForNotification();
+    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.emptyObject);
+    PluginRightPanel.closeNotification();
   });
 });

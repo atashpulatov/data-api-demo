@@ -4,80 +4,80 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { switchToPluginFrame, switchToExcelFrame } from '../../../helpers/utils/iframe-helper';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
-import { dictionary } from '../../../constants/dictionaries/dictionary.js';
+import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { objectsList } from '../../../constants/objects-list';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
+import settings from '../../../config';
 
-describe('Smart Folder - IMPORT - ', () => {
-  beforeAll(async () => {
-    await OfficeWorksheet.openExcelHome();
-    const url = await browser.getCurrentUrl();
+describe('F12909 - Ability to import a report from MicroStrategy report', () => {
+  beforeEach(() => {
+    browser.setWindowSize(1500, 900);
+    OfficeWorksheet.openExcelHome();
+    const url = browser.getUrl();
     if (url.includes('login.microsoftonline')) {
-      await OfficeLogin.login(officeCredentials.username, officeCredentials.password);
+      OfficeLogin.login(settings.officeOnline.username, settings.officeOnline.password);
     }
-    await OfficeWorksheet.createNewWorkbook();
-    await OfficeWorksheet.openPlugin();
-    await PluginRightPanel.loginToPlugin('a', '');
+    OfficeWorksheet.createNewWorkbook();
+    OfficeWorksheet.openPlugin();
+    PluginRightPanel.loginToPlugin(settings.env.username, settings.env.password);
+  });
+  afterEach(() => {
+    browser.closeWindow();
+    const handles = browser.getWindowHandles();
+    browser.switchToWindow(handles[0]);
   });
 
-  afterAll(async () => {
-    await browser.close();
-    const handles = await browser.getAllWindowHandles();
-    await browser.switchTo().window(handles[0]);
-  });
-
-
-  it('[TC39603] Import multiple objects', async () => {
+  it('[TC39603] Import multiple objects', () => {
     // first worksheet
     // should import a supported report
-    await switchToExcelFrame();
-    await OfficeWorksheet.selectCell('A1');
-    await switchToPluginFrame();
-    await PluginRightPanel.clickImportDataButton();
-    await PluginPopup.importObject(objectsList.reports.reportXML);
-    await waitForNotification();
-    await expect(rightPanelSelectors.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+    switchToExcelFrame();
+    OfficeWorksheet.selectCell('A1');
+    switchToPluginFrame();
+    PluginRightPanel.clickImportDataButton();
+    PluginPopup.importObject(objectsList.reports.reportXML);
+    waitForNotification();
+    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
 
     // should import a supported dataset
-    await OfficeWorksheet.selectCell('Y1');
-    await switchToPluginFrame();
-    await PluginRightPanel.clickAddDataButton();
-    await PluginPopup.importObject(objectsList.datasets.datasetSQL);
-    await waitForNotification();
-    await expect(rightPanelSelectors.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+    OfficeWorksheet.selectCell('Y1');
+    switchToPluginFrame();
+    PluginRightPanel.clickAddDataButton();
+    PluginPopup.importObject(objectsList.datasets.datasetSQL);
+    waitForNotification();
+    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
 
     // Second worksheet
     // should import a supported report on a second sheet
-    await OfficeWorksheet.openNewSheet();
-    await switchToPluginFrame();
-    await PluginRightPanel.clickAddDataButton();
-    await PluginPopup.importObject(objectsList.reports.reportXML);
-    await waitForNotification();
-    await expect(rightPanelSelectors.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+    OfficeWorksheet.openNewSheet();
+    switchToPluginFrame();
+    PluginRightPanel.clickAddDataButton();
+    PluginPopup.importObject(objectsList.reports.reportXML);
+    waitForNotification();
+    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
 
     // should import a supported dataset on a second sheet
-    await OfficeWorksheet.selectCell('Y1');
-    await switchToPluginFrame();
-    await PluginRightPanel.clickAddDataButton();
-    await PluginPopup.importObject(objectsList.datasets.datasetSQL);
-    await waitForNotification();
-    await expect(rightPanelSelectors.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+    OfficeWorksheet.selectCell('Y1');
+    switchToPluginFrame();
+    PluginRightPanel.clickAddDataButton();
+    PluginPopup.importObject(objectsList.datasets.datasetSQL);
+    waitForNotification();
+    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
 
     // Third worksheet
     // should import a supported report on a third sheet
-    await OfficeWorksheet.openNewSheet();
-    await switchToPluginFrame();
-    await PluginRightPanel.clickAddDataButton();
-    await PluginPopup.importObject(objectsList.reports.reportXML);
-    await waitForNotification();
-    await expect(rightPanelSelectors.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+    OfficeWorksheet.openNewSheet();
+    switchToPluginFrame();
+    PluginRightPanel.clickAddDataButton();
+    PluginPopup.importObject(objectsList.reports.reportXML);
+    waitForNotification();
+    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
 
     // should import a supported dataset on a third sheet
-    await OfficeWorksheet.selectCell('Y1');
-    await switchToPluginFrame();
-    await PluginRightPanel.clickAddDataButton();
-    await PluginPopup.importObject(objectsList.datasets.datasetSQL);
-    await waitForNotification();
-    await expect(rightPanelSelectors.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+    OfficeWorksheet.selectCell('Y1');
+    switchToPluginFrame();
+    PluginRightPanel.clickAddDataButton();
+    PluginPopup.importObject(objectsList.datasets.datasetSQL);
+    waitForNotification();
+    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   });
 });
