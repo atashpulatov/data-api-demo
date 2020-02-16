@@ -7,6 +7,7 @@ import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { objectsList } from '../../../constants/objects-list';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import settings from '../../../config';
+import { excelSelectors } from '../../../constants/selectors/office-selectors';
 
 
 describe('F12909 - Ability to import a report from MicroStrategy report', () => {
@@ -39,7 +40,7 @@ describe('F12909 - Ability to import a report from MicroStrategy report', () => 
     //  assert that cell D19 contain the value 44.659
     OfficeWorksheet.selectCell('D19');
     browser.pause(2000);
-    const cellD19 = $('#gridRows > div:nth-child(19) > div:nth-child(4) > div > div').getText();
+    const cellD19 = $(excelSelectors.getCell(4, 19)).getText();
     expect(cellD19).toBe('44.659');
   });
 });

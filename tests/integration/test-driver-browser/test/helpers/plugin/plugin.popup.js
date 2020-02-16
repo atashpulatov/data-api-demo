@@ -114,6 +114,21 @@ const PluginPopup = function () {
     this.clickImport();
   };
 
+  this.importAnyObject = function(objectName, index) {
+    switchToPluginFrame();
+    browser.pause(500);
+    this.switchLibrary(false);
+    this.searchForObject(objectName);
+    browser.pause(500);
+    waitAndClick($(s.anyObject(index)));
+    this.clickImport();
+  };
+
+  this.selectAnyObject = function(index) {
+    browser.pause(2222);
+    waitAndClick($(s.anyObject(index)));
+  };
+
   this.preparePrompt = function (objectName) {
     switchToPluginFrame();
     this.searchForObject(objectName);
@@ -125,6 +140,11 @@ const PluginPopup = function () {
     $('#mstrdossierPromptEditor').waitForExist(7777);
   }
 
+  this.selectAttributeIndex = function(index) {
+    for (let i = 0; i < index.length; i++) {
+      waitAndClick($(selectors.attributeSelector(index[i])));
+    }
+  };
 
   this.importPromptDefault = (objectName) => {
     this.importObject(objectName);
