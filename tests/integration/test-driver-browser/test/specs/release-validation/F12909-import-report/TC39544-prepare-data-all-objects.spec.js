@@ -7,7 +7,7 @@ import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { objectsList } from '../../../constants/objects-list';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
-import { selectors } from '../../../constants/selectors/popup-selectors';
+import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 import settings from '../../../config';
 
 
@@ -50,57 +50,57 @@ describe('F12909 - Ability to import a report from MicroStrategy report', () => 
 
     // should select one metric from many listed
     PluginPopup.selectObjectElements(['Month Index']);
-    expect($(selectors.selectorTitle(2)).getText()).toEqual('METRICS (1/2)');
+    expect($(popupSelectors.selectorTitle(2)).getText()).toEqual('METRICS (1/2)');
 
     // should select one more metric from many listed
     PluginPopup.selectObjectElements(['Revenue']);
-    expect($(selectors.selectorTitle(2)).getText()).toEqual('METRICS (2/2)');
+    expect($(popupSelectors.selectorTitle(2)).getText()).toEqual('METRICS (2/2)');
 
     // should click on "All" object in metrics column
     PluginPopup.selectAllMetrics();
-    expect($(selectors.selectorTitle(2)).getText()).toEqual('METRICS (0/2)');
+    expect($(popupSelectors.selectorTitle(2)).getText()).toEqual('METRICS (0/2)');
 
     // should click on "All" object in metrics column again
     PluginPopup.selectAllMetrics();
-    expect($(selectors.selectorTitle(2)).getText()).toEqual('METRICS (2/2)');
+    expect($(popupSelectors.selectorTitle(2)).getText()).toEqual('METRICS (2/2)');
 
     // should click on "All" object in attributes column
     PluginPopup.selectAllAttributes();
-    expect($(selectors.selectorTitle(1)).getText()).toEqual('ATTRIBUTES (2/2)');
+    expect($(popupSelectors.selectorTitle(1)).getText()).toEqual('ATTRIBUTES (2/2)');
 
     // should click on "All" object in attributes column again
     PluginPopup.selectAllAttributes();
-    expect($(selectors.selectorTitle(1)).getText()).toEqual('ATTRIBUTES (0/2)');
+    expect($(popupSelectors.selectorTitle(1)).getText()).toEqual('ATTRIBUTES (0/2)');
 
     // should select one attribute from many listed
     PluginPopup.selectAttributeIndex(1);
-    expect($(selectors.selectorTitle(1)).getText()).toEqual('ATTRIBUTES (1/2)');
+    expect($(popupSelectors.selectorTitle(1)).getText()).toEqual('ATTRIBUTES (1/2)');
 
     // should select one more attribute from many listed
     PluginPopup.selectAttributeIndex(2);
-    expect($(selectors.selectorTitle(1)).getText()).toEqual('ATTRIBUTES (2/2)');
+    expect($(popupSelectors.selectorTitle(1)).getText()).toEqual('ATTRIBUTES (2/2)');
 
     // should click on one of the filters and select (All) object in the last column
     PluginPopup.selectFilters([['Month', []]]);
     PluginPopup.selectAllFilters();
-    expect($(selectors.selectorFilter).getText()).toEqual('FILTERS (1/2)');
+    expect($(popupSelectors.selectorFilter).getText()).toEqual('FILTERS (1/2)');
 
     // should select (All) object in the last column once again
     PluginPopup.selectAllFilters();
-    expect($(selectors.selectorFilter).getText()).toEqual('FILTERS (0/2)');
+    expect($(popupSelectors.selectorFilter).getText()).toEqual('FILTERS (0/2)');
 
     // should select one of attribute filter values in the last columnn
     PluginPopup.selectObjectElements(['Jan 2014']);
-    expect($(selectors.selectorFilter).getText()).toEqual('FILTERS (1/2)');
+    expect($(popupSelectors.selectorFilter).getText()).toEqual('FILTERS (1/2)');
 
     // should select one more of attribute filter values in the last columnn
     PluginPopup.selectObjectElements(['Feb 2014']);
-    expect($(selectors.selectorFilter).getText()).toEqual('FILTERS (1/2)');
+    expect($(popupSelectors.selectorFilter).getText()).toEqual('FILTERS (1/2)');
 
     // // should click on a different filter and select (All) object in the last column
     PluginPopup.selectFilters([['Month of Year', []]]);
     browser.pause(2000);
     PluginPopup.selectAllFilters();
-    expect($(selectors.selectorFilter).getText()).toEqual('FILTERS (2/2)');
+    expect($(popupSelectors.selectorFilter).getText()).toEqual('FILTERS (2/2)');
   });
 });

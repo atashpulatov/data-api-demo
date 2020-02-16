@@ -4,7 +4,7 @@ import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { objectsList } from '../../../constants/objects-list';
-import { selectors } from '../../../constants/selectors/popup-selectors';
+import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 import settings from '../../../config';
 
 describe('F12909 - Ability to import a report from MicroStrategy report', () => {
@@ -34,7 +34,6 @@ describe('F12909 - Ability to import a report from MicroStrategy report', () => 
     PluginPopup.searchForObject(objectsList.datasets.notPublished);
     browser.pause(500);
     PluginPopup.selectFirstObject();
-    expect($(selectors.importBtn).isEnabled()).toBe(false);
-
+    expect($(popupSelectors.importBtn).isEnabled()).toBe(false);
   });
 });
