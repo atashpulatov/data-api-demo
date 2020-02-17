@@ -1,8 +1,6 @@
 import { switchToPluginFrame, switchToPromptFrame, switchToPopupFrame, switchToExcelFrame } from '../utils/iframe-helper';
 import { waitAndClick, waitAndRightClick } from '../utils/click-helper';
 import { popupSelectors } from '../../constants/selectors/popup-selectors';
-import { waitForNotification } from '../utils/wait-helper'
-import pluginRightPanel from './plugin.right-panel';
 
 const PluginPopup = function () {
   this.closeRefreshAll = function () {
