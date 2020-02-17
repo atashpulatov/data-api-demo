@@ -18,5 +18,6 @@ export const excelSelectors = {
   addBtn: '#BtnAction',
   uploadPluginNotification: '.ModalCalloutControlOverlay',
   excelFormulaBar: '#formulaBarTextDivId',
-  nameBoxDropdownButton: '#m_excelWebRenderer_ewaCtl_NameBox-Medium > a'
+  nameBoxDropdownButton: '#m_excelWebRenderer_ewaCtl_NameBox-Medium > a',
+  nameBoxListContent: '[id^=WacAirSpace] > div > div > div > ul'
 }

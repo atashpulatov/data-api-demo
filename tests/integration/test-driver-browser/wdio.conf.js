@@ -17,7 +17,7 @@ exports.config = {
   // directory is where your package.json resides, so `wdio` will be called from there.
   //
   specs: [
-    './test/specs/release-validation/deprecated/sample.spec.js',
+    './test/specs/release-validation/TF7862-regression/TC59466-binding-importing-the-same-report-twice.spec.js',
   ],
   suites: {
     test: [
@@ -133,7 +133,7 @@ exports.config = {
 
   //
   // The number of times to retry the entire specfile when it fails as a whole
-  specFileRetries: 3,
+  specFileRetries: 0,
   //
   // Test reporter for stdout.
   // The only one supported by default is 'dot'
@@ -147,7 +147,7 @@ exports.config = {
   {
   //
   // Jasmine default timeout
-    defaultTimeoutInterval: 60000,
+    defaultTimeoutInterval: 160000,
     //
     // The Jasmine framework allows interception of each assertion in order to log the state of the application
     // or website depending on the result. For example, it is pretty handy to take a screenshot every time
