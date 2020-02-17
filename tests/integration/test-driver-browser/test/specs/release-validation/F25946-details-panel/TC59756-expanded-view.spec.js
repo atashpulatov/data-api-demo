@@ -46,8 +46,9 @@ describe('Smart Folder - IMPORT -', () => {
     expect(idsArray[0]).not.toEqual(idsArray[1]);
     PluginPopup.pasteToSearchBox();
     expect(PluginPopup.compareClipboardToRow(idsArray[1])).toBe(true);
+    PluginPopup.importFirstObject();
     waitForNotification();
-
-    browser.pause(5000);
+    expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+    browser.pause(1000);
   });
 });

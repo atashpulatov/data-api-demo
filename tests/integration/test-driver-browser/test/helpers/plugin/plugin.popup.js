@@ -70,7 +70,9 @@ const PluginPopup = function() {
 
   this.compareClipboardToRow = (stringToCompare) => {
     const searchBox = $(s.searchInput);
-    return searchBox.getText() === stringToCompare;
+    browser.pause(1111);
+    console.log(searchBox.getValue());
+    return searchBox.getValue() === stringToCompare;
   }
 
   this.expandRows = () => {
@@ -187,6 +189,11 @@ const PluginPopup = function() {
     this.selectFirstObject();
     this.clickImport();
   };
+
+  this.importFirstObject = () => {
+    this.selectFirstObject();
+    this.clickImport();
+  }
 
   this.preparePrompt = function(objectName) {
     switchToPluginFrame();
