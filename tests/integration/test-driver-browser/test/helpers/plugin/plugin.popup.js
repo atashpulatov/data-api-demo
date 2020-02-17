@@ -120,13 +120,13 @@ const PluginPopup = function () {
     this.switchLibrary(false);
     this.searchForObject(objectName);
     browser.pause(500);
-    waitAndClick($(s.anyObject(index)));
+    waitAndClick($(popupSelectors.anyObject(index)));
     this.clickImport();
   };
 
   this.selectAnyObject = function(index) {
     browser.pause(2222);
-    waitAndClick($(s.anyObject(index)));
+    waitAndClick($(popupSelectors.anyObject(index)));
   };
 
   this.preparePrompt = function (objectName) {
