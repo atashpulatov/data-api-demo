@@ -99,6 +99,7 @@ export class AttributeSelectorWindowNotConnected extends Component {
           openModal={openModal}
           closeModal={this.closeModal}
           handlePopupErrors={popupHelper.handlePopupErrors}
+          isEdit={isEdit}
         />
         <PopupButtons
           disableActiveActions={!attributesSelected}
@@ -125,8 +126,7 @@ AttributeSelectorWindowNotConnected.propTypes = {
     projectId: PropTypes.string,
     instanceId: PropTypes.string,
     promptsAnswers: PropTypes.string,
-    isPrompted: PropTypes.bool,
-    editRequested: PropTypes.bool,
+    isPrompted: PropTypes.bool
   }).isRequired,
   handleBack: PropTypes.func
 };

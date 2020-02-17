@@ -4,10 +4,10 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
-import { objects as o } from '../../../constants/objects-list';
-import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
+import { objectsList } from '../../../constants/objects-list';
+import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { switchToPluginFrame, switchToPopupFrame } from '../../../helpers/utils/iframe-helper';
-import { selectors as s } from '../../../constants/selectors/popup-selectors';
+import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 
 
 // this test case is not finished yet
@@ -32,10 +32,10 @@ describe('Prompt | Value | Text | Not required | No default answer', () => {
     await OfficeWorksheet.selectCell('A1');
     await PluginRightPanel.clickImportDataButton();
     await switchToPluginFrame();
-    await PluginPopup.preparePrompt(o.reports.bigDecimalPromptedReport);
+    await PluginPopup.preparePrompt(objectsList.reports.bigDecimalPromptedReport);
 
     // should input values into prompt popup
-    await s.valueInput.sendKeys('1820\uE004\uE004\uE006');
+    await popupSelectors.valueInput.sendKeys('1820\uE004\uE004\uE006');
 
     // should select filters and import report
     await switchToPopupFrame();
@@ -43,6 +43,6 @@ describe('Prompt | Value | Text | Not required | No default answer', () => {
     await PluginPopup.selectFilters([['Customer ID BIG DECIMAL', ['1820']]]);
     await PluginPopup.clickImport();
     await waitForNotification();
-    await expect(se.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+    await expect(rightPanelSelectors.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   });
 });

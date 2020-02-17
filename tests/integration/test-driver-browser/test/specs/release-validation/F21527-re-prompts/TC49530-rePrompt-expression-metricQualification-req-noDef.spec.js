@@ -5,9 +5,9 @@ import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
-import { objects as o } from '../../../constants/objects-list';
-import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
-import { selectors as s } from '../../../constants/selectors/popup-selectors';
+import { objectsList } from '../../../constants/objects-list';
+import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
+import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 
 describe('[TC49530] Re-Prompt after import | Expression | Metric Qualification | Required | No Default Answer', () => { // WORK IN PROGRESS
   beforeAll(async () => {
@@ -22,10 +22,10 @@ describe('[TC49530] Re-Prompt after import | Expression | Metric Qualification |
 
     await OfficeWorksheet.selectCell('A1');
     await PluginRightPanel.clickImportDataButton();
-    await PluginPopup.openPrompt(o.reports.metricExpPromptedReport);
+    await PluginPopup.openPrompt(objectsList.reports.metricExpPromptedReport);
     await waitAndClick($('div[title="- none -"]'));
     await waitAndClick($('div[title="Revenue"]'));
-    await s.promptTextBox.sendKeys('1000\uE004\uE004\uE004\uE006');
+    await popupSelectors.promptTextBox.sendKeys('1000\uE004\uE004\uE004\uE006');
   });
 
   afterAll(async () => {
@@ -43,7 +43,7 @@ describe('[TC49530] Re-Prompt after import | Expression | Metric Qualification |
     await browser.sleep(5555);
     await PluginPopup.writeAttrQualificationValue(10000);
     await waitForNotification();
-    await expect(se.notificationPopUp.getAttribute('textContent')).toEqual(dictionary.en.reportRefreshed);
+    await expect(rightPanelSelectors.notificationPopUp.getAttribute('textContent')).toEqual(dictionary.en.reportRefreshed);
     await OfficeWorksheet.selectCell('A1');
     const newCellD2 = await $('#gridRows > div:nth-child(2) > div:nth-child(4) > div > div').getText();
     await expect(oldCellD2).not.toEqual(newCellD2);

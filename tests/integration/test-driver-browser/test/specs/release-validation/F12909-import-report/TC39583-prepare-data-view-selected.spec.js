@@ -5,9 +5,8 @@ import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { switchToPluginFrame, switchToExcelFrame } from '../../../helpers/utils/iframe-helper';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
-import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
-import { objects as o } from '../../../constants/objects-list';
-import { selectors as s } from '../../../constants/selectors/popup-selectors';
+import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
+import { objectsList } from '../../../constants/objects-list';
 
 
 describe('Prepare Data - ', () => {
@@ -33,9 +32,9 @@ describe('Prepare Data - ', () => {
     await switchToExcelFrame();
     await OfficeWorksheet.selectCell('A1');
     await PluginRightPanel.clickImportDataButton();
-    await PluginPopup.importObject(o.reports.seasonalReport);
+    await PluginPopup.importObject(objectsList.reports.seasonalReport);
     await waitForNotification();
-    await expect(se.notificationPopUp.getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
+    await expect(rightPanelSelectors.notificationPopUp.getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
 
     // should select a supported report
     await switchToExcelFrame();
@@ -43,7 +42,7 @@ describe('Prepare Data - ', () => {
     await switchToPluginFrame();
     await PluginRightPanel.clickAddDataButton();
     await switchToPluginFrame();
-    await PluginPopup.searchForObject(o.reports.basicReport);
+    await PluginPopup.searchForObject(objectsList.reports.basicReport);
     await PluginPopup.selectFirstObject();
     await PluginPopup.clickPrepareData();
 
