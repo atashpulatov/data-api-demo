@@ -154,7 +154,8 @@ const PluginRightPanel = function() {
   };
 
   this.SelectNthPlaceholder = function(number) {
-    return $(`#overlay > div > section > div > div.tables-container > div:nth-child(${number})`);
+    switchToPluginFrame();
+    return $(`${rightPanelSelectors.placeholderContainer} > div:nth-child(${number})`);
   }
 };
 

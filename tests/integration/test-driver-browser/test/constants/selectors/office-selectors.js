@@ -17,5 +17,6 @@ export const excelSelectors = {
   adminManagedPlugin: 'div[aria-label^="yi_local_ip"]',
   addBtn: '#BtnAction',
   uploadPluginNotification: '.ModalCalloutControlOverlay',
-  excelFormulaBar: '#formulaBarTextDivId'
+  excelFormulaBar: '#formulaBarTextDivId',
+  nameBoxDropdownButton: '#m_excelWebRenderer_ewaCtl_NameBox-Medium > a'
 }
