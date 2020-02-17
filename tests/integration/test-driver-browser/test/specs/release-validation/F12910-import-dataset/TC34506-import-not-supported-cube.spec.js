@@ -6,33 +6,27 @@ import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { objectsList } from '../../../constants/objects-list';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
+import officeLogin from '../../../helpers/office/office.login';
 
 
-describe('Error Handling - IMPORT - ', () => {
-  beforeAll(async () => {
-    await OfficeWorksheet.openExcelHome();
-    const url = await browser.getCurrentUrl();
-    if (url.includes('login.microsoftonline')) {
-      await OfficeLogin.login(officeCredentials.username, officeCredentials.password);
-    }
-    await OfficeWorksheet.createNewWorkbook();
-    await OfficeWorksheet.openPlugin();
-    await PluginRightPanel.loginToPlugin('a', '');
+describe('[F12910] - Ability to import a dataset from MicroStrategy', () => {
+  beforeEach(() => {
+   officeLogin.openExcelAndLoginToPlugin();
   });
 
-  afterAll(async () => {
-    await browser.close();
-    const handles = await browser.getAllWindowHandles();
-    await browser.switchTo().window(handles[0]);
+   afterEach(() => {
+    browser.closeWindow();
+    const handles = browser.getWindowHandles();
+    browser.switchToWindow(handles[0]);
   });
 
-  it('[TC34506] [Insert Objects] [Error Handling] Importing a not supported cubes', async () => {
+  it('[TC34506] [Insert Objects] [Error Handling] Importing a not supported cubes', () => {
     // should display a correct error message when importing not supported cube
-    await OfficeWorksheet.selectCell('A1');
-    await PluginRightPanel.clickImportDataButton();
-    await PluginPopup.importObject(objectsList.datasets.notSupportedCube);
-    await waitForNotification();
-    await expect(rightPanelSelectors.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.emptyObject);
-    await PluginRightPanel.closeNotification();
+    OfficeWorksheet.selectCell('A1');
+    PluginRightPanel.clickImportDataButton();
+    PluginPopup.importObject(objectsList.datasets.notSupportedCube);
+    waitForNotification();
+    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.emptyObject);
+    PluginRightPanel.closeNotification();
   });
 });

@@ -2,6 +2,7 @@ import { switchToPluginFrame, switchToPopupFrame, switchToExcelFrame } from '../
 import { waitAndClick } from '../utils/click-helper';
 import { rightPanelSelectors } from '../../constants/selectors/plugin.right-panel-selectors';
 import { excelSelectors } from '../../constants/selectors/office-selectors';
+import pluginPopup from './plugin.popup';
 
 const PluginRightPanel = function() {
   this.clickLoginPopUpBtn = function() {
@@ -57,7 +58,7 @@ const PluginRightPanel = function() {
   this.edit = function () {
     switchToPluginFrame();
     waitAndClick($('.edit'));
-  }
+  };
 
   this.removeFirstObjectFromTheList = function() {
     switchToPluginFrame();

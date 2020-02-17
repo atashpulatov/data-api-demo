@@ -27,3 +27,17 @@ export function switchToPopupFrame() {
   $('iframe[src*="api&et="]').waitForExist(9999);
   browser.switchToFrame($('iframe[src*="api&et="]'));
 }
+
+export function switchToPromptFrameForEditDossier() {
+  switchToPluginFrame();
+  const editFrame = '#root > div > div:nth-child(3) > iframe';
+  $(editFrame).waitForExist(9999);
+  browser.switchToFrame($(editFrame));
+}
+
+export function switchToPromptFrameForEdit() {
+  switchToPluginFrame();
+  const editFrame = '#root > div > div.promptsContainer > iframe';
+  $(editFrame).waitForExist(9999);
+  browser.switchToFrame($(editFrame));
+}

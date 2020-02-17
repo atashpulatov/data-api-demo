@@ -47,7 +47,7 @@ const PluginPopup = function () {
   };
 
   this.clickRun = function () {
-    switchToPopupFrame();
+    switchToPromptFrame();
     waitAndClick($(popupSelectors.runBtn));
   };
 
@@ -79,6 +79,12 @@ const PluginPopup = function () {
   this.selectObjectElements = function (elements) {
     for (let i = 0; i < elements.length; i++) {
       waitAndClick($(`input[name="${elements[i]}"]`));
+    }
+  };
+
+  this.selectAttributeIndex = function(index) {
+    for (let i = 0; i < index.length; i++) {
+      waitAndClick($(selectors.attributeSelector(index[i])));
     }
   };
 
