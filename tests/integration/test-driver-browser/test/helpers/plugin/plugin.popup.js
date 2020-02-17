@@ -289,7 +289,7 @@ const PluginPopup = function () {
   this.selectAndImportVizualiation = function (visContainerId) {
     switchToPromptFrame();
     browser.pause(10000);
-    const visSelector = $(visContainerId).$('.mstrmojo-VizBox-selector');
+    const visSelector = $(visContainerId).$(popupSelectors.visualizationSelector);
     visSelector.waitForExist(15000);
     browser.pause(3000);
     visSelector.click();
@@ -302,7 +302,7 @@ const PluginPopup = function () {
   this.editAndImportVizualization = function (visContainerId) {
     switchToPromptFrameForEditDossier();
     browser.pause(10000);
-    const visSelector = $(visContainerId).$('.mstrmojo-VizBox-selector');
+    const visSelector = $(visContainerId).$(popupSelectors.visualizationSelector);
     visSelector.waitForExist(15000);
     browser.pause(3000);
     visSelector.click();
