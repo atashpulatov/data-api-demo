@@ -13,15 +13,7 @@ import settings from '../../../config';
 
 describe('F12909 - Ability to import a report from MicroStrategy report', () => {
   beforeEach(() => {
-    browser.setWindowSize(1500, 900);
-    OfficeWorksheet.openExcelHome();
-    const url = browser.getUrl();
-    if (url.includes('login.microsoftonline')) {
-      OfficeLogin.login(settings.officeOnline.username, settings.officeOnline.password);
-    }
-    OfficeWorksheet.createNewWorkbook();
-    OfficeWorksheet.openPlugin();
-    PluginRightPanel.loginToPlugin(settings.env.username, settings.env.password);
+    OfficeLogin.openExcelAndLoginToPlugin();
   });
   afterEach(() => {
     browser.closeWindow();
