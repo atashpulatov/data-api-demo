@@ -128,7 +128,7 @@ class NormalizedJsonHandler {
           // Add extra empty cell for subtotal when it's for multiple attribute forms
           if (element.subtotal && element.subtotalAddress) {
             const subtotalAttribute = grid.rows[element.subtotalAddress.attributeIndex];
-            if (supportForms && subtotalAttribute && subtotalAttribute.forms.length > 1) {
+            if (supportForms && subtotalAttribute && subtotalAttribute.forms && subtotalAttribute.forms.length > 1) {
               for (let idx = 0; idx < subtotalAttribute.forms.length - 1; idx++) {
                 tabularRows.push(`'`);
               }
