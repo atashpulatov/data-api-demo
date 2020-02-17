@@ -3,11 +3,10 @@ import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { switchToPluginFrame, switchToExcelFrame, switchToRightPanelFrame } from '../../../helpers/utils/iframe-helper';
-import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
 import settings from '../../../config';
-import pluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import { removeTimestampFromTableName } from '../../../helpers/utils/tableName-helper';
+import { getTextOfNthObjectOnNameBoxList } from '../../../helpers/utils/excelManipulation-helper';
 
 
 describe('F28550 - Excel Connector Hardening: Rename Excel table without losing binding', () => {
@@ -41,19 +40,17 @@ describe('F28550 - Excel Connector Hardening: Rename Excel table without losing 
     expect(normalizedFirstTableName).toEqual('_01_Basic_Report_TIMESTAMP');
     browser.keys('\uE00C');
     switchToPluginFrame();
-    pluginRightPanel.clickOnObject(PluginRightPanel.SelectNthPlaceholder(1), 'A2');
+    PluginRightPanel.clickOnObject(PluginRightPanel.SelectNthPlaceholder(1), 'A2');
     OfficeWorksheet.selectCell('H2');
     switchToRightPanelFrame();
     PluginRightPanel.clickAddDataButton();
     PluginPopup.importObject('01 Basic Report', false);
     browser.pause(10000);
-    switchToExcelFrame();
-    waitAndClick($('#m_excelWebRenderer_ewaCtl_NameBox-Medium > a'), 4000);
-    const importedSecondTableName = $('[id^=WacAirSpace] > div > div > div > ul > li:nth-child(2) > a > span').getText(); // more complicated selector the above due to both <li> elements having the same id (apart from the timestamp, which we cannot predict)
+    const importedSecondTableName = getTextOfNthObjectOnNameBoxList(2);
     const normalizedSecondTableName = removeTimestampFromTableName(importedSecondTableName);
     expect(normalizedSecondTableName).toEqual('_01_Basic_Report_TIMESTAMP');
     browser.keys('\uE00C');
     switchToPluginFrame();
-    pluginRightPanel.clickOnObject(PluginRightPanel.SelectNthPlaceholder(1), 'H2');
+    PluginRightPanel.clickOnObject(PluginRightPanel.SelectNthPlaceholder(1), 'H2');
   });
 });

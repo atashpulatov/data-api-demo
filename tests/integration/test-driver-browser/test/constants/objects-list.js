@@ -26,8 +26,12 @@ export const objectsList = {
     numberFormating: 'Number Formatting',
     grpahReport: 'report graph',
     gridReport: 'Grid/graph',
-    longReportWithInvalidCharacters: '01. • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«». • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&\'()*+,-:;<=>@/`testtesttes/km123456',
     basicSubtotalsReport: 'Report Totals Subtotals 1',
+    longReportWithInvalidCharacters: {
+      sourceName: '01. • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«». • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&\'()*+,-:;<=>@/`testtesttes/km123456',
+      excelTableNameStart:'_01___________________________________Report_for_testing_binding_and_special_characters',
+      excelTableFullName:'_01___________________________________Report_for_testing_binding_and_special_characters______________________________________________________________________Report_for_testing_binding_and_special_characters_________________________testtestt_TIMESTAMP'
+    }
   },
 
   datasets: {

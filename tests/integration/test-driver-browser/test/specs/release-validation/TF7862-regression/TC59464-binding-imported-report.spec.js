@@ -6,8 +6,7 @@ import { switchToPluginFrame, switchToExcelFrame } from '../../../helpers/utils/
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
 import settings from '../../../config';
-import { objects } from '../../../constants/objects-list';
-import { selectors } from '../../../constants/selectors/plugin.right-panel-selectors';
+import { objectsList } from '../../../constants/objects-list';
 import { removeTimestampFromTableName } from '../../../helpers/utils/tableName-helper';
 
 describe('F28550 - Excel Connector Hardening: Rename Excel table without losing binding', () => {
@@ -29,17 +28,18 @@ describe('F28550 - Excel Connector Hardening: Rename Excel table without losing 
   });
 
   it('[TC59464] - Checking binding for newly imported report', () => {
+    const { longReportWithInvalidCharacters } = objectsList.reports;
     OfficeWorksheet.selectCell('A3');
     PluginRightPanel.clickImportDataButton();
     browser.pause(4000);
     switchToPluginFrame();
-    PluginPopup.importObject(objects.reports.longReportWithInvalidCharacters, false);
+    PluginPopup.importObject(longReportWithInvalidCharacters.sourceName, false);
     browser.pause(4000);
     waitForNotification();
     switchToExcelFrame();
     waitAndClick($('#m_excelWebRenderer_ewaCtl_NameBox-Medium > a'), 4000);
-    const importedTableName = $('[id^=_01___________________________________Report_for_testing_binding_and_special_characters]> span').getText();
+    const importedTableName = $(`[id^=${longReportWithInvalidCharacters.excelTableNameStart}]> span`).getText();
     const normalizedTableName = removeTimestampFromTableName(importedTableName);
-    expect(normalizedTableName).toEqual('_01___________________________________Report_for_testing_binding_and_special_characters______________________________________________________________________Report_for_testing_binding_and_special_characters_________________________testtestt_TIMESTAMP');
+    expect(normalizedTableName).toEqual(longReportWithInvalidCharacters.excelTableFullName);
   });
 });
