@@ -26,4 +26,6 @@ export const excelSelectors = {
   replaceWithSelector : '#replaceWith',
   replaceAllBtn: '#buttonarea > button:nth-child(4)',
   refreshAllfinished:'.refresh-header',
+  nameBoxDropdownButton: '#m_excelWebRenderer_ewaCtl_NameBox-Medium > a',
+  nameBoxListContent: '[id^=WacAirSpace] > div > div > div > ul',
 }

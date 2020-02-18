@@ -152,6 +152,11 @@ const PluginRightPanel = function() {
       expect(objectNames[i].getCSSProperty('background-color').value).toEqual('rgba(235,235,235,1)');
     }
   };
+
+  this.SelectNthPlaceholder = function(number) {
+    switchToPluginFrame();
+    return $(`${rightPanelSelectors.placeholderContainer} > div:nth-child(${number})`);
+  }
 };
 
 export default new PluginRightPanel();

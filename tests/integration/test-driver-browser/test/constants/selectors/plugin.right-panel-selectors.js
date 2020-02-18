@@ -24,4 +24,5 @@ export const rightPanelSelectors = {
   importedObjectList: '.file-history-container',
   importedObjectNameList: '.rename-container',
   editBtn: '.edit',
+  placeholderContainer: '#overlay > div > section > div > div.tables-container'
 };
