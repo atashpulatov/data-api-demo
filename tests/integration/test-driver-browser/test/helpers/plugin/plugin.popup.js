@@ -147,16 +147,16 @@ class PluginPopup {
     }
   }
 
-  importPromptDefault = (objectName) => {
+  importPromptDefault (objectName) {
     this.importObject(objectName);
     browser.pause(5555); // temp solution
     $(popupSelectors.runBtn).waitForExist(3333);
     switchToPromptFrame();
     $('#mstrdossierPromptEditor').waitForExist(3333);
     this.clickRun();
-  };
+  }
 
-  importPromptDefaultNested = (objectName) => {
+  importPromptDefaultNested (objectName) {
     this.importObject(objectName);
     browser.pause(5555); // temp solution
     for (; $(popupSelectors.runBtn).isExisting();) {
@@ -232,6 +232,11 @@ class PluginPopup {
     this.selectFilters(filters);
     browser.pause(1111);
     this.clickImport();
+  }
+
+  searchForPreparedObject (objectName) {
+    $(popupSelectors.prepareSearchInput).clearValue();
+    $(popupSelectors.prepareSearchInput).setValue(objectName);
   }
 
   // TODO: Refactor to webDriverIO. This method is only used in TC39453
