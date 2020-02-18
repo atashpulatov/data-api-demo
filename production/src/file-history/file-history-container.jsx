@@ -60,7 +60,11 @@ export class FileHistoryContainerNotConnected extends React.Component {
           await excelContext.sync();
           const reportsOfSheets = excelContext.workbook.tables.items;
           const { reportArray, t } = this.props;
-          const reportsToBeDeleted = reportArray.filter((report) => !reportsOfSheets.find((table) => table.name === report.bindId));
+
+          const reportsToBeDeleted = reportArray.filter(
+            (report) => !reportsOfSheets.find((table) => table.name === report.bindId)
+          );
+
           for (const report of reportsToBeDeleted) {
             officeApiHelper.removeObjectAndDisplaytNotification(report, officeContext, t);
           }
@@ -90,7 +94,7 @@ export class FileHistoryContainerNotConnected extends React.Component {
     if (allowRefreshAllClick) {
       this.setState({ allowRefreshAllClick: false }, async () => {
         await refreshAll(reportArray, true);
-        if (this.ismounted) this.setState({ allowRefreshAllClick: true });
+        if (this.ismounted) { this.setState({ allowRefreshAllClick: true }); }
       });
     }
   };
@@ -107,7 +111,9 @@ export class FileHistoryContainerNotConnected extends React.Component {
   };
 
   render() {
-    const { reportArray = [], loading, refreshingAll, refreshReportsArray, isSecured, addDataAction, t, } = this.props;
+    const {
+      reportArray = [], loading, refreshingAll, refreshReportsArray, isSecured, addDataAction, t,
+    } = this.props;
     return (
       <>
         {

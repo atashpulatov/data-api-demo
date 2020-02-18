@@ -36,7 +36,9 @@ export class AttributeSelectorWindowNotConnected extends Component {
     body,
     chosenObjectName = this.props.chosenObject.chosenObjectName
   ) => {
-    const { chosenObject, editedObject, importSubtotal, displayAttrFormNames } = this.props;
+    const {
+      chosenObject, editedObject, importSubtotal, displayAttrFormNames
+    } = this.props;
     const subtotalsInfo = {
       importSubtotal: (editedObject && editedObject.subtotalsInfo)
         ? editedObject.subtotalsInfo.importSubtotal
@@ -78,8 +80,12 @@ export class AttributeSelectorWindowNotConnected extends Component {
   };
 
   render() {
-    const { handleBack, chosenObject, mstrData, objectName } = this.props;
-    const { triggerUpdate, openModal, attributesSelected, loading, } = this.state;
+    const {
+      handleBack, chosenObject, mstrData, objectName
+    } = this.props;
+    const {
+      triggerUpdate, openModal, attributesSelected, loading,
+    } = this.state;
     const { isPrompted } = mstrData;
     const { chosenObjectName } = chosenObject;
     const typeName = chosenObject.objectType

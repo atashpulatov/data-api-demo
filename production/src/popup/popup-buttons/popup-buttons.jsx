@@ -20,7 +20,7 @@ const getDisableReason = (isPublished, disableSecondary, disableActiveActions) =
 
 const getDisableReasonImport = (isPublished, disableActiveActions, disableSecondary) => {
   if (!isPublished && isPublished !== undefined) {
-    if (disableSecondary) return NOT_SUPPORTED_VIZ;
+    if (disableSecondary) { return NOT_SUPPORTED_VIZ; }
     return NOT_PUBLISHED_CUBE;
   }
   if (disableActiveActions) {

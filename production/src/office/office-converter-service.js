@@ -2,17 +2,17 @@
 
 class OfficeConverterService {
   createTable(jsonReport) {
-    const headers = this._getHeaders(jsonReport);
+    const headers = this.getHeaders(jsonReport);
     return {
       id: jsonReport.id,
       name: jsonReport.name,
       headers,
       rows: this.getRows(jsonReport, headers),
-      columnInformation: this._getColumnInformation(jsonReport),
+      columnInformation: this.getColumnInformation(jsonReport),
     };
   }
 
-  _getHeaders(jsonReport) {
+  getHeaders = (jsonReport) => {
     const headers = [];
     const { attributes } = jsonReport.result.definition;
     const { metrics } = jsonReport.result.definition;
@@ -27,10 +27,10 @@ class OfficeConverterService {
     return headers;
   }
 
-  _parseTreeToArray(node, headers, level = 0) {
+  parseTreeToArray(node, headers, level = 0) {
     let rows = [];
     if (node.children === undefined) {
-      const row = this._parseLastAttributeAndMetrics(node, headers.slice(level));
+      const row = this.parseLastAttributeAndMetrics(node, headers.slice(level));
       rows.push(row);
     } else {
       node.children.forEach((child) => {
@@ -42,7 +42,7 @@ class OfficeConverterService {
             attributeFormsCount++;
           }
         }
-        let childRows = this._parseTreeToArray(child, headers,
+        let childRows = this.parseTreeToArray(child, headers,
           level + attributeFormsCount);
         childRows = childRows.map((childRow) => {
           for (const key in formValues) {
@@ -61,7 +61,7 @@ class OfficeConverterService {
     return rows;
   }
 
-  _parseLastAttributeAndMetrics(node, headers) {
+  parseLastAttributeAndMetrics = (node, headers) => {
     const row = {};
     // Parsing last attribute
     const { formValues } = node.element;
@@ -91,12 +91,12 @@ class OfficeConverterService {
       data = (jsonReport.result.data.root.children) || [];
     }
     data.forEach((rootNode) => {
-      rows = rows.concat(this._parseTreeToArray(rootNode, headers));
+      rows = rows.concat(this.parseTreeToArray(rootNode, headers));
     });
     return rows;
   }
 
-  _getColumnInformation(jsonReport) {
+  getColumnInformation = (jsonReport) => {
     const columnInformation = [];
     let index = 0;
 

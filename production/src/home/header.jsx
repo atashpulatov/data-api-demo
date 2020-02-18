@@ -79,7 +79,9 @@ export class HeaderNotConnected extends Component {
   }
 
   render() {
-    const { loading, t, isSettings, isConfirm, isClearing } = this.props;
+    const {
+      loading, t, isSettings, isConfirm, isClearing
+    } = this.props;
     return (
       <>
         {isClearing

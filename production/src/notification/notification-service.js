@@ -10,12 +10,16 @@ export class NotificationService {
     this.reduxStore.dispatch(action);
   }
 
-  displayNotification = ({ type, content, details, title = ' ', onConfirm = null }) => {
+  displayNotification = ({
+    type, content, details, title = ' ', onConfirm = null
+  }) => {
     const action = this.actionCreator.showNotificationAction(title, content, type, details, onConfirm);
     this.reduxStore.dispatch(action);
   }
 
-  displayTranslatedNotification = ({ type, content, details, title = ' ', onConfirm = null }) => {
+  displayTranslatedNotification = ({
+    type, content, details, title = ' ', onConfirm = null
+  }) => {
     const action = this.actionCreator.showTranslatedNotification(title, content, type, details, onConfirm);
     this.reduxStore.dispatch(action);
   }

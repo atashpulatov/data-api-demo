@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import './auth-component.css';
 import PropTypes from 'prop-types';
-import { Form, Icon, Input, Button, Checkbox, Select, } from 'antd';
+import {
+  Form, Icon, Input, Button, Checkbox, Select,
+} from 'antd';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { authenticationHelper } from './authentication-helper';
@@ -18,8 +20,8 @@ export class AuthenticateNotConnected extends Component {
 
   onLoginUser = async (event) => {
     event.preventDefault();
-    const { validateFields } = this.props.form;
-    await validateFields(async (err, values) => authenticationHelper.loginUser(err, values));
+    const { form } = this.props;
+    await form.validateFields(async (err, values) => authenticationHelper.loginUser(err, values));
   }
 
   render() {

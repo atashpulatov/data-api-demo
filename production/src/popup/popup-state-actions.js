@@ -31,9 +31,7 @@ class PopupStateActions {
   }
 
   onClearPopupState = () => (dispatch) => {
-    dispatch({
-      type: CLEAR_POPUP_STATE,
-    });
+    dispatch({ type: CLEAR_POPUP_STATE, });
   }
 
   onPopupBack = () => (dispatch) => {

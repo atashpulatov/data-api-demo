@@ -30,7 +30,7 @@ export function watchForIframeAddition(container, callback) {
   observer.observe(container, config);
 }
 
-export default class _EmbeddedDossier extends React.Component {
+export default class EmbeddedDossierNotConnected extends React.Component {
   constructor(props) {
     super(props);
     this.container = React.createRef();
@@ -109,7 +109,10 @@ export default class _EmbeddedDossier extends React.Component {
 
   loadEmbeddedDossier = async (container) => {
     const { mstrData } = this.props;
-    const { envUrl, authToken, dossierId, projectId, promptsAnswers, instanceId, selectedViz, visualizationInfo } = mstrData;
+    const {
+      envUrl, authToken, dossierId, projectId, promptsAnswers,
+      instanceId, selectedViz, visualizationInfo
+    } = mstrData;
     const instance = {};
     try {
       if (instanceId) {
@@ -232,12 +235,15 @@ export default class _EmbeddedDossier extends React.Component {
       We need to calculate actual height, regarding the size of other elements:
       58px for header, 9px for header margin and 68px for buttons
       */
-      <div ref={this.container} style={{ position: 'relative', top: '0', left: '0', height: 'calc(100vh - 135px)' }} />
+      <div ref={this.container}
+           style={{
+ position: 'relative', top: '0', left: '0', height: 'calc(100vh - 135px)'
+}} />
     );
   }
 }
 
-_EmbeddedDossier.propTypes = {
+EmbeddedDossierNotConnected.propTypes = {
   mstrData: PropTypes.shape({
     envUrl: PropTypes.string,
     authToken: PropTypes.string,
@@ -257,7 +263,7 @@ _EmbeddedDossier.propTypes = {
   handleLoadEvent: PropTypes.func
 };
 
-_EmbeddedDossier.defaultProps = {
+EmbeddedDossierNotConnected.defaultProps = {
   mstrData: {
     envUrl: 'no env url',
     authToken: null,
@@ -271,13 +277,17 @@ _EmbeddedDossier.defaultProps = {
 };
 
 const mapStateToProps = (state) => {
-  const { navigationTree, popupReducer, sessionReducer: { attrFormPrivilege, envUrl, authToken }, officeReducer } = state;
+  const {
+    navigationTree,
+    popupReducer,
+    sessionReducer: { attrFormPrivilege, envUrl, authToken },
+    officeReducer
+  } = state;
   const { chosenObjectName, chosenObjectId, chosenProjectId } = navigationTree;
   const popupState = popupReducer.editedObject;
   const { promptsAnswers } = state.navigationTree;
   const { supportForms } = officeReducer;
-  const objectType = popupState && popupState.objectType ? popupState.objectType : mstrObjectEnum.mstrObjectType.report.name;
-  const isReport = objectType && (objectType === mstrObjectEnum.mstrObjectType.report.name || objectType.name === mstrObjectEnum.mstrObjectType.report.name);
+  const isReport = popupState && popupState.objectType === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
   const editedObject = { ...(popupHelper.parsePopupState(popupState, promptsAnswers, formsPrivilege)) };
@@ -294,4 +304,4 @@ const mapStateToProps = (state) => {
   return { mstrData };
 };
 
-export const EmbeddedDossier = connect(mapStateToProps)(_EmbeddedDossier);
+export const EmbeddedDossier = connect(mapStateToProps)(EmbeddedDossierNotConnected);

@@ -46,14 +46,21 @@ export default class DossierWindowNotConnected extends React.Component {
 
   async handleSelection(dossierData) {
     const { chosenObjectId, chosenProjectId } = this.props;
-    const { chapterKey, visualizationKey, promptsAnswers, preparedInstanceId } = dossierData;
+    const {
+      chapterKey, visualizationKey, promptsAnswers, preparedInstanceId
+    } = dossierData;
     let newValue = false;
     if ((chapterKey !== '') && (visualizationKey !== '')) {
       newValue = true;
     }
     let isVisualizationSupported = true;
     try {
-      await mstrObjectRestService.fetchVisualizationDefinition({ projectId:chosenProjectId, objectId:chosenObjectId, instanceId:preparedInstanceId, visualizationInfo:{ chapterKey, visualizationKey } });
+      await mstrObjectRestService.fetchVisualizationDefinition({
+        projectId:chosenProjectId,
+        objectId:chosenObjectId,
+        instanceId:preparedInstanceId,
+        visualizationInfo:{ chapterKey, visualizationKey }
+      });
     } catch (error) {
       if (error.response && error.response.body.code === 'ERR009') {
         // Close popup if session expired
@@ -73,9 +80,13 @@ export default class DossierWindowNotConnected extends React.Component {
   }
 
   handleOk() {
-    const { chosenObjectName, chosenObjectId, chosenProjectId, editedObject } = this.props;
+    const {
+      chosenObjectName, chosenObjectId, chosenProjectId, editedObject
+    } = this.props;
     const { isEdit } = editedObject;
-    const { chapterKey, visualizationKey, promptsAnswers, preparedInstanceId } = this.state;
+    const {
+      chapterKey, visualizationKey, promptsAnswers, preparedInstanceId
+    } = this.state;
     const okObject = {
       command: selectorProperties.commandOk,
       chosenObjectName,
@@ -100,7 +111,9 @@ export default class DossierWindowNotConnected extends React.Component {
   }
 
   render() {
-    const { chosenObjectName, t, handleBack, editedObject } = this.props;
+    const {
+      chosenObjectName, t, handleBack, editedObject
+    } = this.props;
     const { isEdit } = editedObject;
     const { isVisualizationSelected, isVisualizationSupported } = this.state;
     return (
@@ -178,13 +191,16 @@ DossierWindowNotConnected.defaultProps = {
 };
 
 function mapStateToProps(state) {
-  const { navigationTree, popupReducer, sessionReducer, officeReducer } = state;
-  const { chosenObjectName, chosenObjectId, chosenProjectId, promptsAnswers } = navigationTree;
+  const {
+    navigationTree, popupReducer, sessionReducer, officeReducer
+  } = state;
+  const {
+    chosenObjectName, chosenObjectId, chosenProjectId, promptsAnswers
+  } = navigationTree;
   const { editedObject } = popupReducer;
   const { supportForms } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
-  const objectType = editedObject && editedObject.objectType ? editedObject.objectType : mstrObjectEnum.mstrObjectType.report.name;
-  const isReport = objectType && (objectType === mstrObjectEnum.mstrObjectType.report.name || objectType.name === mstrObjectEnum.mstrObjectType.report.name);
+  const isReport = editedObject && editedObject.objectType === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   const editedObjectParse = { ...(popupHelper.parsePopupState(editedObject, promptsAnswers, formsPrivilege)) };
   return {

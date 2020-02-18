@@ -30,7 +30,7 @@ export const SettingsMenuNotConnected = ({
   const isSecuredActive = !isSecured && reportArray && reportArray.length > 0;
   const prepareEmail = () => {
     const { Office } = window;
-    if (!Office) return '#'; // If no Office return anchor url
+    if (!Office) { return '#'; } // If no Office return anchor url
     const { host, platform, version } = Office.context.diagnostics;
     const excelAPI = officeContext.getRequirementSet();
     const { userAgent } = navigator;
@@ -131,7 +131,9 @@ SettingsMenuNotConnected.defaultProps = { t: (text) => text, };
 function mapStateToProps({ sessionReducer, officeReducer }) {
   const { userFullName, userInitials, userID } = sessionReducer;
   const { isSecured, reportArray } = officeReducer;
-  return { userFullName, userInitials, isSecured, reportArray, userID };
+  return {
+    userFullName, userInitials, isSecured, reportArray, userID
+  };
 }
 
 const mapDispatchToProps = {
@@ -146,7 +148,7 @@ async function logout(preLogout) {
   try {
     await sessionHelper.logOutRest();
     sessionHelper.logOut();
-    if (DB.getIndexedDBSupport()) await preLogout();
+    if (DB.getIndexedDBSupport()) { await preLogout(); }
   } catch (error) {
     errorService.handleError(error);
   } finally {

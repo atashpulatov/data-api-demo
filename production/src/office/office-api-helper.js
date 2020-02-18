@@ -41,7 +41,7 @@ export class OfficeApiHelper {
       secondNumber = ALPHABET_RANGE_END;
       (headerCount -= firstNumber) >= 0;
       firstNumber = secondNumber, secondNumber *= ALPHABET_RANGE_END) {
-      endColumn = String.fromCharCode(parseInt((headerCount % secondNumber) / firstNumber)
+      endColumn = String.fromCharCode(parseInt((headerCount % secondNumber) / firstNumber, 10) // ASK SEDANO
         + ASCII_CAPITAL_LETTER_INDEX)
         + endColumn;
     }
@@ -56,8 +56,11 @@ export class OfficeApiHelper {
     let colLetter = '';
     let firstNumber = ALPHABET_RANGE_START;
     let secondNumber = ALPHABET_RANGE_END;
-    for (firstNumber, secondNumber; (colNum -= firstNumber) >= 0; firstNumber = secondNumber, secondNumber *= ALPHABET_RANGE_END) {
-      colLetter = String.fromCharCode(parseInt((colNum % secondNumber) / firstNumber)
+    for (firstNumber, secondNumber;
+      (colNum -= firstNumber) >= 0;
+      firstNumber = secondNumber,
+      secondNumber *= ALPHABET_RANGE_END) {
+      colLetter = String.fromCharCode(parseInt((colNum % secondNumber) / firstNumber, 10)
         + ASCII_CAPITAL_LETTER_INDEX)
         + colLetter;
     }
@@ -88,19 +91,27 @@ export class OfficeApiHelper {
     return letters.split('').reduce((r, a) => r * ALPHABET_RANGE_END + parseInt(a, 36) - 9, 0);
   }
 
-  onBindingObjectClick = async (bindingId, shouldSelect = true, deleteReport, chosenObjectName, isCrosstab, crosstabHeaderDimensions) => {
+  onBindingObjectClick = async (
+    bindingId,
+    shouldSelect = true,
+    deleteReport,
+    chosenObjectName,
+    isCrosstab,
+    crosstabHeaderDimensions) => {
     let crosstabRange;
     try {
       const excelContext = await this.getExcelContext();
       const tableObject = excelContext.workbook.tables.getItem(bindingId);
+
       if (isCrosstab) {
         const tmpXtabDimensions = { ...crosstabHeaderDimensions, columnsY: crosstabHeaderDimensions.columnsY + 1, };
         crosstabRange = await this.getCrosstabRangeSafely(tableObject, tmpXtabDimensions, excelContext);
-        if (shouldSelect) crosstabRange.select();
+        if (shouldSelect) { crosstabRange.select(); }
       } else {
         const tableRange = this.getBindingRange(excelContext, bindingId);
-        if (shouldSelect) tableRange.select();
+        if (shouldSelect) { tableRange.select(); }
       }
+
       await excelContext.sync();
       return true;
     } catch (error) {
@@ -364,7 +375,9 @@ export class OfficeApiHelper {
    * @return {Object}
    */
   getCrosstabRange = (cellAddress, headerDimensions, sheet) => {
-    const { columnsY, columnsX, rowsX, rowsY, } = headerDimensions;
+    const {
+      columnsY, columnsX, rowsX, rowsY,
+    } = headerDimensions;
     const cell = typeof cellAddress === 'string' ? sheet.getRange(cellAddress) : cellAddress;
     const bodyRange = cell.getOffsetRange(rowsY, columnsX - 1);
     const startingCell = cell.getCell(0, 0).getOffsetRange(-(columnsY), -rowsX);
@@ -432,7 +445,12 @@ export class OfficeApiHelper {
         leftRange = officeTable.getRange().getColumnsBefore(rowsX);
         context.trackedObjects.add(leftRange);
         // Title headers
-        titlesRange = officeTable.getRange().getCell(0, 0).getOffsetRange(0, -1).getResizedRange(-(columnsY), -(rowsX - 1));
+        titlesRange = officeTable
+          .getRange()
+          .getCell(0, 0)
+          .getOffsetRange(0, -1)
+          .getResizedRange(-(columnsY), -(rowsX - 1));
+
         context.trackedObjects.add(titlesRange);
       }
 
@@ -444,19 +462,19 @@ export class OfficeApiHelper {
       // Check if ranges are valid before clearing
       await context.sync();
       if (isCrosstab && (JSON.stringify(crosstabHeaderDimensions) === JSON.stringify(prevheaderDimensions))) {
-        if (columnsY) topRange.clear('contents');
+        if (columnsY) { topRange.clear('contents'); }
         if (rowsX) {
           leftRange.clear('contents');
           titlesRange.clear('contents');
         }
       } else {
-        if (columnsY) topRange.clear();
+        if (columnsY) { topRange.clear(); }
         if (rowsX) {
           leftRange.clear();
           titlesRange.clear();
         }
       }
-      if (columnsY) context.trackedObjects.remove([topRange]);
+      if (columnsY) { context.trackedObjects.remove([topRange]); }
       if (rowsX) {
         context.trackedObjects.remove([leftRange, titlesRange]);
       }
@@ -476,11 +494,22 @@ export class OfficeApiHelper {
    * @return {Object}
    */
   getTableStartCell = ({ startCell, instanceDefinition, prevOfficeTable }) => {
-    const { mstrTable: { isCrosstab, prevCrosstabDimensions, crosstabHeaderDimensions, toCrosstabChange, fromCrosstabChange, } } = instanceDefinition;
+    const {
+      mstrTable: {
+        isCrosstab,
+        prevCrosstabDimensions,
+        crosstabHeaderDimensions,
+        toCrosstabChange,
+        fromCrosstabChange,
+      }
+    } = instanceDefinition;
+
     if (fromCrosstabChange) {
       return this.offsetCellBy(startCell, -prevCrosstabDimensions.columnsY, -prevCrosstabDimensions.rowsX);
     }
-    if (!toCrosstabChange && (!isCrosstab || prevOfficeTable)) return startCell;
+
+    if (!toCrosstabChange && (!isCrosstab || prevOfficeTable)) { return startCell; }
+
     const rowOffset = crosstabHeaderDimensions.columnsY;
     const colOffset = crosstabHeaderDimensions.rowsX;
     return this.offsetCellBy(startCell, rowOffset, colOffset);
@@ -543,7 +572,10 @@ export class OfficeApiHelper {
     const reportStartingCell = sheet.getRange(cellAddress);
     const titlesBottomCell = reportStartingCell.getOffsetRange(0, -1);
     const rowsTitlesRange = titlesBottomCell.getResizedRange(0, -(crosstabHeaderDimensions.rowsX - 1));
-    const columnsTitlesRange = titlesBottomCell.getOffsetRange(-1, 0).getResizedRange(-(crosstabHeaderDimensions.columnsY - 1), 0);
+
+    const columnsTitlesRange = titlesBottomCell
+      .getOffsetRange(-1, 0)
+      .getResizedRange(-(crosstabHeaderDimensions.columnsY - 1), 0);
 
     const headerTitlesRange = columnsTitlesRange.getBoundingRect(rowsTitlesRange);
     headerTitlesRange.format.verticalAlignment = window.Excel.VerticalAlignment.bottom;
@@ -592,8 +624,11 @@ export class OfficeApiHelper {
     const tableRange = tableObject.getDataBodyRange();
     context.trackedObjects.add(tableRange);
     if (isCrosstab) {
-      const { rowsX, rowsY, columnsX, columnsY } = crosstabHeaderDimensions;
-      this.clearEmptyCrosstabRow(tableObject); // Since showing Excel table header dont override the data but insert new row, we clear values from empty row in crosstab to prevent it
+      const {
+        rowsX, rowsY, columnsX, columnsY
+      } = crosstabHeaderDimensions;
+      // Since showing Excel table header dont override the data but insert new row,
+      // we clear values from empty row in crosstab to prevent itthis.clearEmptyCrosstabRow(tableObject);
       tableObject.showHeaders = true;
       await context.sync();
       const crosstabRange = await this.getCrosstabRangeSafely(tableObject, crosstabHeaderDimensions, context);

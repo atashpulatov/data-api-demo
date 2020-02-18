@@ -88,7 +88,7 @@ function openAuthDialog(url) {
                     window.location.replace(`${url}/static/loader-mstr-office/no-privilege.html?locale=${locale}`);
                 });
             } else {
-                if (!popup.closed) setTimeout(listenAuthToken, 1000)
+                if (!popup.closed)setTimeout(listenAuthToken, 1000)
             }
         }).catch((e) => {
             console.log(e);

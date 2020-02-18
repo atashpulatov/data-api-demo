@@ -1,3 +1,4 @@
+/* eslint-disable react/no-danger */
 /* eslint-disable no-underscore-dangle */
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
@@ -9,7 +10,13 @@ import { toggleSecuredFlag, toggleIsConfirmFlag, toggleIsClearingFlag } from '..
 import { errorService } from '../error/error-handler';
 import { notificationService } from '../notification/notification-service';
 
-export const ConfirmationNotConnected = ({ reportArray, toggleSecuredFlag, toggleIsConfirmFlag, toggleIsClearingFlag, t }) => {
+export const ConfirmationNotConnected = ({
+  reportArray,
+  toggleSecuredFlag,
+  toggleIsConfirmFlag,
+  toggleIsClearingFlag,
+  t
+}) => {
   useEffect(() => {
     const ua = window.navigator.userAgent;
     // this is fix IE11 - it didn't handle z-index properties correctly
@@ -36,7 +43,9 @@ export const ConfirmationNotConnected = ({ reportArray, toggleSecuredFlag, toggl
             reportName = report.name;
             if (report.isCrosstab) {
               const officeTable = await officeApiHelper.getTable(excelContext, report.bindId);
-              officeApiHelper.clearEmptyCrosstabRow(officeTable); // Since showing Excel table header dont override the data but insert new row, we clear values from empty row in crosstab to prevent it
+              // Since showing Excel table header dont override the data but insert new row,
+              // we clear values from empty row in crosstab to prevent it
+              officeApiHelper.clearEmptyCrosstabRow(officeTable);
               officeTable.showHeaders = true;
               officeTable.showFilterButton = false;
               const headers = officeTable.getHeaderRowRange();
@@ -54,7 +63,7 @@ export const ConfirmationNotConnected = ({ reportArray, toggleSecuredFlag, toggl
       }
       if (clearErrors.length > 0) {
         displayClearDataError(clearErrors);
-      } else if (counter !== reportArray.length) toggleSecuredFlag(true);
+      } else if (counter !== reportArray.length) { toggleSecuredFlag(true); }
     } catch (error) {
       errorService.handleError(error);
     } finally {

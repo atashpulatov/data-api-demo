@@ -45,7 +45,9 @@ export class _NavigationTree extends Component {
   }
 
   componentDidUpdate() {
-    const { sorter, objectType, myLibrary, myLibraryFilter, envFilter } = this.props;
+    const {
+      sorter, objectType, myLibrary, myLibraryFilter, envFilter
+    } = this.props;
     const propsToSave = {
       sorter,
       objectType,
@@ -99,12 +101,15 @@ export class _NavigationTree extends Component {
   }
 
   handleOk = async () => {
-    const { chosenSubtype, chosenObjectId, chosenProjectId, requestImport, requestDossierOpen } = this.props;
+    const {
+      chosenSubtype, chosenObjectId, chosenProjectId, requestImport, requestDossierOpen
+    } = this.props;
     let isPromptedResponse = false;
     try {
       // If myLibrary is on, then selected object is a dossier.
       const objectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
-      if ((objectType === mstrObjectEnum.mstrObjectType.report) || (objectType === mstrObjectEnum.mstrObjectType.dossier)) {
+      if ((objectType === mstrObjectEnum.mstrObjectType.report)
+      || (objectType === mstrObjectEnum.mstrObjectType.dossier)) {
         isPromptedResponse = await checkIfPrompted(chosenObjectId, chosenProjectId, objectType.name);
       }
       if (objectType.name === mstrObjectEnum.mstrObjectType.dossier.name) {
@@ -126,10 +131,14 @@ export class _NavigationTree extends Component {
   };
 
   handleSecondary = async () => {
-    const { chosenProjectId, chosenObjectId, chosenSubtype, handlePrepare, setObjectData } = this.props;
+    const {
+      chosenProjectId, chosenObjectId, chosenSubtype, handlePrepare, setObjectData
+    } = this.props;
     try {
       const objectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
-      if ((objectType === mstrObjectEnum.mstrObjectType.report) || (objectType === mstrObjectEnum.mstrObjectType.dossier)) {
+
+      if ((objectType === mstrObjectEnum.mstrObjectType.report)
+      || (objectType === mstrObjectEnum.mstrObjectType.dossier)) {
         const isPromptedResponse = await checkIfPrompted(chosenObjectId, chosenProjectId, objectType.name);
         setObjectData({ isPrompted: isPromptedResponse });
       }
@@ -147,8 +156,9 @@ export class _NavigationTree extends Component {
     window.Office.context.ui.messageParent(JSON.stringify(cancelObject));
   };
 
-  // TODO: temporary solution
-  onObjectChosen = async (objectId, projectId, subtype, objectName, targetId, myLibrary) => {
+  onObjectChosen = async ({
+    id:objectId, projectId, subtype, name:objectName, targetId, myLibrary
+  }) => {
     const { selectObject } = this.props;
     // If myLibrary is on, then selected object is a dossier.
     const objectType = myLibrary ? mstrObjectEnum.mstrObjectType.dossier : mstrObjectEnum.getMstrTypeBySubtype(subtype);
@@ -210,7 +220,7 @@ export class _NavigationTree extends Component {
             id: myLibrary ? chosenLibraryDossier : chosenObjectId,
             projectId: chosenProjectId,
           }}
-          onSelect={({ id, projectId, subtype, name, targetId }) => this.onObjectChosen(id, projectId, subtype, name, targetId, myLibrary)}
+          onSelect={this.onObjectChosen}
           sort={sorter}
           onSortChange={changeSorting}
           locale={i18n.language}

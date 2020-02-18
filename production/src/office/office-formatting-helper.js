@@ -1,5 +1,4 @@
 import { CONTEXT_LIMIT } from '../mstr-object/mstr-object-rest-service';
-import { errorService } from '../error/error-handler';
 
 class OfficeFormattingHelper {
   /**
@@ -17,6 +16,7 @@ class OfficeFormattingHelper {
       const { columnInformation } = instanceDefinition.mstrTable;
       const filteredColumnInformation = this.filterColumnInformation(columnInformation, isCrosstab);
       let attributeColumnNumber = 0; // this is number of all atrribute/consolidations columns in Excel
+      let offset = 0;
 
       columnInformation.forEach(element => {
         if (element.isAttribute) {
@@ -25,18 +25,25 @@ class OfficeFormattingHelper {
           attributeColumnNumber++;
         }
       });
-      const offset = isCrosstab ? columnInformation.length - filteredColumnInformation.length : attributeColumnNumber - columnInformation.length;
+
+      if (isCrosstab) {
+        offset = columnInformation.length - filteredColumnInformation.length;
+      } else {
+        offset = attributeColumnNumber - columnInformation.length;
+      }
 
       for (let i = filteredColumnInformation.length - 1; i >= 0; i--) {
         const object = filteredColumnInformation[i];
         const objectIndex = isCrosstab ? object.index - offset : object.index + offset;
         const columnRange = officeTable.columns.getItemAt(objectIndex).getDataBodyRange();
+
         if (!object.isAttribute) {
           columnRange.numberFormat = this.getFormat(object);
         } else {
           columnRange.numberFormat = '';
         }
       }
+
       await excelContext.sync();
     } catch (error) {
       console.error(error);
@@ -69,9 +76,9 @@ class OfficeFormattingHelper {
    * @return {String} parsed format
    */
   getFormat = ({ formatString, category }) => {
-    if (category === 9) return 'General';
+    if (category === 9) { return 'General'; }
     // For fractions set General format
-    if (formatString.match(/# \?+?\/\?+?/)) return 'General';
+    if (formatString.match(/# \?+?\/\?+?/)) { return 'General'; }
     if (formatString.indexOf('$') !== -1) {
       return formatString.replace(/\[\$-/g, '[$$$$-')
         .replace(/\$/g, '\\$')
@@ -92,7 +99,13 @@ class OfficeFormattingHelper {
    * @param {Boolean} [shouldbold=true] Specify whether the values in cells should be bold
    * @memberof OfficeFormattingHelper
    */
-  applySubtotalFormatting = async (isCrosstab, subtotalsAddresses, officeTable, excelContext, mstrTable, shouldbold = true) => {
+  applySubtotalFormatting = async (
+    isCrosstab,
+    subtotalsAddresses,
+    officeTable,
+    excelContext,
+    mstrTable,
+    shouldbold = true) => {
     console.time('Subtotal Formatting');
     if (isCrosstab) {
       subtotalsAddresses = new Set(subtotalsAddresses);
@@ -160,7 +173,7 @@ class OfficeFormattingHelper {
     let contextPromises = [];
     for (const cell of subtotalCells) {
       const subtotalRowRange = this.getSubtotalRange(startCell, cell, mstrTable);
-      if (subtotalRowRange) subtotalRowRange.format.font.bold = shouldBold;
+      if (subtotalRowRange) { subtotalRowRange.format.font.bold = shouldBold; }
       contextPromises.push(context.sync());
       if (contextPromises.length % CONTEXT_LIMIT === 0) {
         // eslint-disable-next-line no-await-in-loop
@@ -196,7 +209,7 @@ class OfficeFormattingHelper {
         // eslint-disable-next-line no-await-in-loop
         await context.sync();
       }
-      if (isCrosstab) table.showHeaders = false;
+      if (isCrosstab) { table.showHeaders = false; }
       await context.sync();
     } catch (error) {
       console.log('Error when formatting - no columns autofit applied', error);

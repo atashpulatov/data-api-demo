@@ -124,12 +124,19 @@ AttributeSelectorNotConnected.propTypes = {
 AttributeSelectorNotConnected.defaultProps = { t: (text) => text, };
 
 const mapStateToProps = (state) => {
-  const { navigationTree: { promptsAnswers, importSubtotal, displayAttrFormNames, ...chosenObject }, popupStateReducer, popupReducer, sessionReducer, officeReducer } = state;
+  const {
+    navigationTree: {
+      promptsAnswers, importSubtotal, displayAttrFormNames, ...chosenObject
+    },
+    popupStateReducer,
+    popupReducer,
+    sessionReducer,
+    officeReducer
+  } = state;
   const { editedObject } = popupReducer;
   const { supportForms } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
-  const objectType = editedObject && editedObject.objectType ? editedObject.objectType : mstrObjectEnum.mstrObjectType.report.name;
-  const isReport = objectType && (objectType === mstrObjectEnum.mstrObjectType.report.name || objectType.name === mstrObjectEnum.mstrObjectType.report.name);
+  const isReport = editedObject && editedObject.objectType === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   return {
     chosenObject,

@@ -78,7 +78,7 @@ export class PopupHelper {
     promptsAnswers,
   ) => {
     const refreshReport = officeStoreService.getReportFromProperties(bindingId);
-    if (isRefreshAll) this.storageReportRefreshStart(refreshReport, index);
+    if (isRefreshAll) { this.storageReportRefreshStart(refreshReport, index); }
     const mstrObjectType = objectTypeEnum.getMstrTypeByName(objectType);
     const instanceId = null;
     // TODO: Pass proper isPrompted value – promptsAnswers could probably serve as such,
@@ -131,7 +131,13 @@ export class PopupHelper {
   }
 
   handlePopupErrors = (error) => {
-    const errorObj = error && { status: error.status, message: error.message, response: error.response, type: error.type };
+    const errorObj = error
+     && {
+       status: error.status,
+       message: error.message,
+       response: error.response,
+       type: error.type
+     };
     const messageObject = {
       command: selectorProperties.commandError,
       error: errorObj,
@@ -191,11 +197,11 @@ export class PopupHelper {
       if (body) {
         const { requestedObjects, viewFilter } = body;
         if (requestedObjects) {
-          chosenObjectData.selectedAttributes = body.requestedObjects.attributes
-            && body.requestedObjects.attributes.map((attribute) => attribute.id);
-          chosenObjectData.selectedMetrics = body.requestedObjects.metrics
-            && body.requestedObjects.metrics.map((metric) => metric.id);
-          chosenObjectData.selectedAttrForms = formsPrivilege ? this.getAttrFormKeys(body.requestedObjects.attributes) : [];
+          let { selectedAttributes, selectedMetrics, selectedAttrForms } = chosenObjectData;
+          const { attributes, metrics } = body.requestedObjects;
+          selectedAttributes = attributes && attributes.map((attribute) => attribute.id);
+          selectedMetrics = metrics && metrics.map((metric) => metric.id);
+          selectedAttrForms = formsPrivilege ? this.getAttrFormKeys(attributes) : [];
         }
         if (viewFilter) {
           chosenObjectData.selectedFilters = this.parseFilters(body.viewFilter.operands);

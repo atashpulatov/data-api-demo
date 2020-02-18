@@ -3,7 +3,7 @@ import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import 'jest-localstorage-mock';
 import 'regenerator-runtime/runtime';
-import {diContainer} from './dependency-container';
+import { diContainer } from './dependency-container';
 
 jest.mock('@mstr/rc', () => ({
   // eslint-disable-next-line react/react-in-jsx-scope

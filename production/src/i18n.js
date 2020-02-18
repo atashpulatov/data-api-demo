@@ -88,7 +88,7 @@ const config = {
   interpolation: {
     escapeValue: false, // react already safes from xss
     format(value, format, lng) {
-      if (value instanceof Date) return moment(value).format(format);
+      if (value instanceof Date) { return moment(value).format(format); }
       return value;
     },
   },

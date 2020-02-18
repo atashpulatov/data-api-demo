@@ -21,7 +21,7 @@ export default class DB {
    * @memberof DB
    */
   constructor(dbName = 'cache', stores = { cache: '$$uuid,type' }) {
-    if (!dbName) return;
+    if (!dbName) { return; }
     this.db = new Dexie(window.location.host + dbName);
     this.db.version(1).stores(stores);
     this.db.on('blocked', console.error);
@@ -141,7 +141,7 @@ export default class DB {
    */
   callIfTableEmpty(callback, table = 'cache') {
     return this.db[table].count().then((count) => {
-      if (count === 0) callback();
+      if (count === 0) { callback(); }
     });
   }
 
