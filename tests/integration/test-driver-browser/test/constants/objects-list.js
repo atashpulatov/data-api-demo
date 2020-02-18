@@ -85,5 +85,14 @@ export const objectsList = {
       name: 'Custom Visualizations',
       visualizations: { GoogleTimeline: '#mstr114', }
     },
+
+    userActivityDossier:{
+      name:'User Activity',
+      visualizations:{
+        accounts:'#mstr162',
+        dailyActiveAccounts:'#mstr131',
+      }
+    }
+
   }
 };
