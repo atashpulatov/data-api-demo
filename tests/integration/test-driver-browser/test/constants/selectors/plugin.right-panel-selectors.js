@@ -22,5 +22,6 @@ export const rightPanelSelectors = {
   viewDataBtn: '.show-data-btn',
   clearOkBtn: '#confirm-btn',
   importedObjectList: '.file-history-container',
-  importedObjectNameList: '.rename-container'
+  importedObjectNameList: '.rename-container',
+  placeholderContainer: '#overlay > div > section > div > div.tables-container'
 };

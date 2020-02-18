@@ -29,7 +29,6 @@ const {
   modifyInstance,
   createDossierInstance,
   fetchVisualizationDefinition,
-  getDossierInstanceDefinition,
 } = mstrObjectRestService;
 
 export class OfficeDisplayService {
@@ -200,7 +199,7 @@ export class OfficeDisplayService {
         mstrTable.id = objectId;
         const dossierInstance = preparedInstanceId || instanceDefinition.instanceId;
         console.time('Get dossier structure');
-        visualizationInfo = await this.getVisualizationInfo(projectId, objectId, visualizationInfo.visualizationKey, dossierInstance) || visualizationInfo;
+        visualizationInfo = await mstrObjectRestService.getVisualizationInfo(projectId, objectId, visualizationInfo.visualizationKey, dossierInstance) || visualizationInfo;
         console.timeEnd('Get dossier structure');
       }
 
@@ -260,7 +259,7 @@ export class OfficeDisplayService {
           officeTable.showHeaders = false;
         }
       }
-      if (bindId) {
+      if (bindingId && bindId) {
         this.reduxStore.dispatch({
           type: officeProperties.actions.finishLoadingReport,
           reportBindId: bindId,
@@ -552,41 +551,6 @@ export class OfficeDisplayService {
     return false;
   }
 
-  /**
-   * Check size of passed object in MB
-   *
-   * @param {String} projectId
-   * @param {String} objectId
-   * @param {String} visualizationKey visualization id.
-   * @param {Object} dossierInstance
-   * @returns {Object} Contains breadcrumbs fro visualization.
-   * @memberof officeDisplayService
-   */
-  getVisualizationInfo = async (projectId, objectId, visualizationKey, dossierInstance) => {
-    try {
-      const dossierDefinition = await getDossierInstanceDefinition(projectId, objectId, dossierInstance);
-      for (const chapter of dossierDefinition.chapters) {
-        for (const page of chapter.pages) {
-          for (const visualization of page.visualizations) {
-            if (visualization.key === visualizationKey) {
-              return {
-                chapterKey: chapter.key,
-                visualizationKey,
-                dossierStructure: {
-                  chapterName: chapter.name,
-                  dossierName: dossierDefinition.name,
-                  pageName: page.name
-                }
-              };
-            }
-          }
-        }
-      }
-    } catch (error) {
-      console.log('Cannot fetch dossier structure, skipping');
-      return undefined;
-    }
-  }
 
   /**
    * Answers prompts and modify instance of the object.
