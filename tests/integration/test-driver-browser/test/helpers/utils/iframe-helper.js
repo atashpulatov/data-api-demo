@@ -16,6 +16,13 @@ export function switchToPromptFrame() {
   browser.switchToFrame($('iframe[src*="app.embedded=true"]'));
 }
 
+export function switchToPromptFrameForEditDossier() {
+  switchToPluginFrame();
+  const editFrame = '#root > div > div:nth-child(3) > iframe';
+  $(editFrame).waitForExist(9999);
+  browser.switchToFrame($(editFrame));
+}
+
 export function switchToRightPanelFrame() {
   switchToExcelFrame();
   $('iframe[src*="loader-mstr-office"]').waitForExist(9999);

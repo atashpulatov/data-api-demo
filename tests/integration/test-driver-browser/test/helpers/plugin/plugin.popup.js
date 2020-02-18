@@ -1,11 +1,16 @@
-import { switchToPluginFrame, switchToPromptFrame, switchToPopupFrame, switchToExcelFrame } from '../utils/iframe-helper';
+import { switchToPluginFrame, switchToPromptFrame, switchToPopupFrame, switchToExcelFrame, switchToPromptFrameForEditDossier } from '../utils/iframe-helper';
 import { waitAndClick, waitAndRightClick } from '../utils/click-helper';
 import { popupSelectors } from '../../constants/selectors/popup-selectors';
 import { waitForNotification } from '../utils/wait-helper'
 import pluginRightPanel from './plugin.right-panel';
+import { excelSelectors } from '../../constants/selectors/office-selectors';
 
 const PluginPopup = function () {
   this.closeRefreshAll = function () {
+    switchToPluginFrame();
+    $(excelSelectors.refreshAllfinished).waitForDisplayed(5000, false);
+    browser.pause(3000);
+    switchToExcelFrame();
     waitAndClick($(popupSelectors.closeRefreshAll));
   }
 
@@ -15,7 +20,7 @@ const PluginPopup = function () {
   };
 
   this.clickImport = function () {
-    waitAndClick($(popupSelectors.importBtn));
+    waitAndClick($(popupSelectors.importBtn), 10000);
   };
 
   this.clickPrepareData = function () {
@@ -108,6 +113,7 @@ const PluginPopup = function () {
     switchToPluginFrame();
     browser.pause(4000);
     this.switchLibrary(myLibrarySwitch);
+    browser.pause(1000);
     this.searchForObject(objectName);
     browser.pause(500);
     this.selectFirstObject();
@@ -282,9 +288,24 @@ const PluginPopup = function () {
 
   this.selectAndImportVizualiation = function (visContainerId) {
     switchToPromptFrame();
-    const visSelctor = $(visContainerId).$('.mstrmojo-VizBox-selector');
-    visSelctor.click();
+    browser.pause(10000);
+    const visSelector = $(visContainerId).$(popupSelectors.visualizationSelector);
+    visSelector.waitForExist(15000);
+    browser.pause(3000);
+    visSelector.click();
+    // TODO: wait untli import button is enabled and click it
+    browser.pause(2500);
+    switchToPluginFrame();
+    this.clickImport();
+  }
 
+  this.editAndImportVizualization = function (visContainerId) {
+    switchToPromptFrameForEditDossier();
+    browser.pause(10000);
+    const visSelector = $(visContainerId).$(popupSelectors.visualizationSelector);
+    visSelector.waitForExist(15000);
+    browser.pause(3000);
+    visSelector.click();
     // TODO: wait untli import button is enabled and click it
     browser.pause(2500);
     switchToPluginFrame();
