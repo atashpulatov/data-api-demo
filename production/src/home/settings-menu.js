@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { Popover } from 'antd';
 import PropTypes from 'prop-types';
-import { toggleIsConfirmFlag, toggleRenderSettingsFlag, toggleIsSettingsFlag } from '../office/office-actions';
+import { toggleIsConfirmFlag, toggleIsSettingsFlag } from '../office/office-actions';
 import logo from './assets/mstr_logo.png';
-import { helper } from '../helpers/helpers';
+import { OverflowHelper } from '../helpers/helpers';
 import { sessionHelper } from '../storage/session-helper';
 import { errorService } from '../error/error-handler';
 import { clearCache } from '../cache/cache-actions';
@@ -23,7 +23,6 @@ export const SettingsMenuNotConnected = ({
   t,
   toggleIsConfirmFlag,
   toggleIsSettingsFlag,
-  toggleRenderSettingsFlag,
   clearCache,
 }) => {
   const userNameDisplay = userFullName || 'MicroStrategy user';
@@ -64,7 +63,7 @@ export const SettingsMenuNotConnected = ({
           ? <span className="no-trigger-close" id="initials" alt={t('User profile')}>{userInitials}</span>
           : <img className="no-trigger-close" id="profile-image" src={logo} alt={t('User profile')} />
           /* TODO: When rest api returns profileImage use it as source */}
-        {helper.isOverflown(userNameDisplay, 130)
+        {OverflowHelper.isOverflown(userNameDisplay, 130)
           ? (
             <Popover placement="bottom" content={userNameDisplay} mouseEnterDelay={1}>
               <span id="userName" className="user-name no-trigger-close">{userNameDisplay}</span>
@@ -139,7 +138,6 @@ function mapStateToProps({ sessionReducer, officeReducer }) {
 const mapDispatchToProps = {
   toggleIsSettingsFlag,
   toggleIsConfirmFlag,
-  toggleRenderSettingsFlag,
   clearCache,
 };
 export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(SettingsMenuNotConnected));
@@ -164,7 +162,6 @@ SettingsMenuNotConnected.propTypes = {
   reportArray: PropTypes.arrayOf(PropTypes.shape({})),
   toggleIsSettingsFlag: PropTypes.func,
   toggleIsConfirmFlag: PropTypes.func,
-  toggleRenderSettingsFlag: PropTypes.func,
   clearCache: PropTypes.func,
   t: PropTypes.func
 };

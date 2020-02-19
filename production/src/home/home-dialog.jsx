@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { ReactComponent as InfoIcon } from './assets/icon-info.svg';
 
 export const HomeDialog = ({ show = false, text }) => (
@@ -13,3 +14,8 @@ export const HomeDialog = ({ show = false, text }) => (
     )
     : null
 );
+
+HomeDialog.propTypes = {
+  show: PropTypes.bool,
+  text: PropTypes.string,
+};

@@ -108,10 +108,7 @@ AttributeSelectorNotConnected.propTypes = {
   triggerUpdate: PropTypes.bool,
   openModal: PropTypes.bool,
   session: PropTypes.shape({}),
-  mstrData: PropTypes.shape({
-    chosenObjectId: PropTypes.string,
-    // subtotalsInfo: PropTypes.shape({ importSubtotal: PropTypes.bool })
-  }),
+  mstrData: PropTypes.shape({ chosenObjectId: PropTypes.string, }),
   resetTriggerUpdate: PropTypes.func,
   attributesSelectedChange: PropTypes.func,
   closeModal: PropTypes.func,
@@ -119,8 +116,20 @@ AttributeSelectorNotConnected.propTypes = {
   handlePopupErrors: PropTypes.func,
   onTriggerUpdate: PropTypes.func,
   t: PropTypes.func,
-  isEdit: PropTypes.bool
+  isEdit: PropTypes.bool,
+  importSubtotal: PropTypes.bool,
+  switchImportSubtotals: PropTypes.func,
+  displayAttrFormNames: PropTypes.bool,
+  chosenObject: PropTypes.shape({ id: PropTypes.string, }),
+  editedObject: PropTypes.shape({
+    displayAttrFormNames: PropTypes.bool,
+    subtotalsInfo: PropTypes.shape({ importSubtotal: PropTypes.bool, }),
+    projectId: PropTypes.string,
+    promptsAnswers: PropTypes.arrayOf(PropTypes.shape({}))
+  }),
+  supportForms: PropTypes.bool,
 };
+
 AttributeSelectorNotConnected.defaultProps = { t: (text) => text, };
 
 const mapStateToProps = (state) => {

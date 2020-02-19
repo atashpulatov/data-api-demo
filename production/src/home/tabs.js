@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export const Tabs = ({ t, children }) => (
   <div className="tabs">
@@ -14,3 +15,8 @@ export const Tabs = ({ t, children }) => (
     </section>
   </div>
 );
+
+Tabs.propTypes = {
+  t: PropTypes.func,
+  children: PropTypes.element,
+};

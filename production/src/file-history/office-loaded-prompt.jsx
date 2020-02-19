@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Radio, Button } from 'antd';
 import './office-loaded-prompt.scss';
 
@@ -33,3 +34,9 @@ export default function OfficeLoadedPrompt({ answerHandler, closeHandler, t }) {
     </div>
   );
 }
+
+OfficeLoadedPrompt.propTypes = {
+  t: PropTypes.func,
+  answerHandler: PropTypes.func,
+  closeHandler: PropTypes.func,
+};

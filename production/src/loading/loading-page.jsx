@@ -1,8 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { LoadingText } from '@mstr/mstr-react-library';
 import './loading-page.css';
 import { withTranslation } from 'react-i18next';
+
 
 const LoadingPageNotConnected = ({ name, t = (text) => text }) => {
   const displayName = name || t('data');
@@ -12,6 +14,11 @@ const LoadingPageNotConnected = ({ name, t = (text) => text }) => {
       <LoadingText text={t('Please wait until the import is complete.')} />
     </dialog>
   );
+};
+
+LoadingPageNotConnected.propTypes = {
+  name: PropTypes.string,
+  t: PropTypes.func,
 };
 
 const mapStateToProps = ({ popupReducer }) => ({ name: popupReducer.refreshingReport });

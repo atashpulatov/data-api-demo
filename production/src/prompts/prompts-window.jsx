@@ -332,7 +332,6 @@ PromptsWindowNotConnected.propTypes = {
     chosenObjectId: PropTypes.string,
     projectId: PropTypes.string,
     promptsAnswers: PropTypes.arrayOf(PropTypes.shape({}))
-
   }),
 };
 

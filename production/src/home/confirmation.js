@@ -79,7 +79,7 @@ export const ConfirmationNotConnected = ({
 
   return (
     <>
-      <div className="block-ui" onClick={() => toggleIsConfirmFlag(false)} />
+      <div className="block-ui" role="button" onClick={() => toggleIsConfirmFlag(false)} />
       <div className="confirm-container">
         <div className="confirm-header">
           <span className="confirm-header-icon"><img width="19px" height="18px" src={warningIcon} alt={t('Refresh failed icon')} /></span>
@@ -95,8 +95,8 @@ export const ConfirmationNotConnected = ({
           </div>
         </div>
         <div className="confirm-buttons">
-          <button className="ant-btn" id="confirm-btn" onClick={secureData}>{t('OK')}</button>
-          <button className="ant-btn" id="cancel-btn" onClick={() => toggleIsConfirmFlag(false)}>{t('Cancel')}</button>
+          <button className="ant-btn" id="confirm-btn" type="button" onClick={secureData}>{t('OK')}</button>
+          <button className="ant-btn" id="cancel-btn" type="button" onClick={() => toggleIsConfirmFlag(false)}>{t('Cancel')}</button>
         </div>
       </div>
     </>

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { ObjectTable, TopFilterPanel } from '@mstr/rc';
@@ -24,7 +25,7 @@ const SAFETY_FALLBACK = 7000; // Interval for falling back to network
 const { getCubeStatus, isPrompted } = mstrObjectRestService;
 const checkIfPrompted = isPrompted;
 
-export class _NavigationTree extends Component {
+export class NavigationTreeNotConnected extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -244,7 +245,49 @@ export class _NavigationTree extends Component {
   }
 }
 
-_NavigationTree.defaultProps = { t: (text) => text };
+NavigationTreeNotConnected.propTypes = {
+  stopLoading: PropTypes.bool,
+  loading: PropTypes.bool,
+  cache: PropTypes.shape({
+    chosenObjectId: PropTypes.string,
+    projects: PropTypes.PropTypes.shape({ length: PropTypes.string }),
+    myLibrary: PropTypes.PropTypes.shape({
+      objects: PropTypes.arrayOf(PropTypes.shape({})),
+      isLoading: PropTypes.bool,
+    }),
+    environmentLibrary: PropTypes.PropTypes.shape({
+      objects: PropTypes.arrayOf(PropTypes.shape({})),
+      isLoading: PropTypes.bool,
+    }),
+  }),
+  resetDBState: PropTypes.func,
+  fetchObjectsFromNetwork: PropTypes.func,
+  sorter: PropTypes.func,
+  objectType: PropTypes.string,
+  myLibrary: PropTypes.bool,
+  myLibraryFilter: PropTypes.arrayOf(PropTypes.string),
+  envFilter: PropTypes.arrayOf(PropTypes.string),
+  connectToDB: PropTypes.func,
+  chosenSubtype: PropTypes.string,
+  chosenObjectId: PropTypes.string,
+  chosenProjectId: PropTypes.string,
+  requestImport: PropTypes.func,
+  requestDossierOpen: PropTypes.func,
+  handlePrepare: PropTypes.func,
+  setObjectData: PropTypes.func,
+  selectObject: PropTypes.func,
+  changeSorting: PropTypes.func,
+  chosenLibraryDossier: PropTypes.string,
+  searchText: PropTypes.string,
+  changeSearching: PropTypes.func,
+  i18n: PropTypes.PropTypes.shape({ language: PropTypes.string }),
+  switchMyLibrary: PropTypes.func,
+  changeFilter: PropTypes.func,
+  t: PropTypes.func,
+};
+
+
+NavigationTreeNotConnected.defaultProps = { t: (text) => text };
 
 export const mapStateToProps = ({ officeReducer, navigationTree, cacheReducer }) => {
   const object = officeReducer.preLoadReport;
@@ -264,4 +307,4 @@ const mapActionsToProps = {
   setObjectData: popupStateActions.setObjectData,
 };
 
-export const NavigationTree = connect(mapStateToProps, mapActionsToProps)(withTranslation('common')(_NavigationTree));
+export const NavigationTree = connect(mapStateToProps, mapActionsToProps)(withTranslation('common')(NavigationTreeNotConnected));

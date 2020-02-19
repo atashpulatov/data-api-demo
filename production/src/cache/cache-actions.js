@@ -1,4 +1,3 @@
-/* eslint-disable import/no-cycle */
 import { addNestedPropertiesToObjects } from '@mstr/rc';
 import DB from './cache-db';
 import i18next from '../i18n';

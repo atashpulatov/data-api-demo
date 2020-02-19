@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 export default class CustomNotification extends Component {
-  state = { isExpanded: false, }
+  constructor(props) {
+    super(props);
+    this.state = { isExpanded: false };
+  }
 
   handleCollapse = () => {
     this.setState(({ isExpanded }) => ({ isExpanded: !isExpanded, }));
@@ -47,3 +51,9 @@ export default class CustomNotification extends Component {
     );
   }
 }
+
+CustomNotification.propTypes = {
+  details: PropTypes.string,
+  translatedContent: PropTypes.string,
+  t: PropTypes.func
+};

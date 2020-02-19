@@ -17,14 +17,11 @@ const fetchStrings = async (database, password, sqlString) => {
     options: { encrypt: false, },
   };
 
-  try {
-    const pool = await sql.connect(config);
-    const result = await pool.request().query(sqlString);
-    sql.close();
-    return result.recordset;
-  } catch (err) {
-    throw err;
-  }
+
+  const pool = await sql.connect(config);
+  const result = await pool.request().query(sqlString);
+  sql.close();
+  return result.recordset;
 };
 
 const getObjectFromRow = (row, columnPostfix) => {
@@ -85,7 +82,7 @@ const exportToResourceFile = async (outputFileFolder) => {
       if (colPostfixList.length === 1) {
         webPostfix = colPostfixes;
       } else {
-        webPostfix = colPostfixList[0];
+        [webPostfix] = colPostfixList;
       }
       for (const row of webRows) {
         const obj = getObjectFromRow(row, webPostfix, 'Web');

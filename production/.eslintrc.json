@@ -28,6 +28,7 @@
       "asyncArrow": "always"
     }],
     "curly" :["error", "all"],
-    "object-curly-newline": ["error", {"multiline": true, "minProperties":4}]
+    "object-curly-newline": ["error", {"multiline": true, "minProperties":4}],
+    "no-redeclare": ["error", { "builtinGlobals": false }]
   }
 }

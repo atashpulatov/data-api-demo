@@ -34,16 +34,21 @@ export class AttributeSelectorWindowNotConnected extends Component {
     projectId,
     chosenObjectSubtype,
     body,
-    chosenObjectName = this.props.chosenObject.chosenObjectName
+    chosenObjectName
   ) => {
+    const { chosenObject:{ chosenObjectName:objectName } } = this.props;
+    chosenObjectName = chosenObjectName || objectName;
+
     const {
       chosenObject, editedObject, importSubtotal, displayAttrFormNames
     } = this.props;
+
     const subtotalsInfo = {
       importSubtotal: (editedObject && editedObject.subtotalsInfo)
         ? editedObject.subtotalsInfo.importSubtotal
         : importSubtotal
     };
+
     const displayAttrFormNamesSet = editedObject && (editedObject.displayAttrFormNames || displayAttrFormNames);
     attributeSelectorHelpers.officeMessageParent(
       selectorProperties.commandOnUpdate,
@@ -124,6 +129,8 @@ AttributeSelectorWindowNotConnected.propTypes = {
   chosenObject: PropTypes.shape({
     chosenObjectName: PropTypes.string,
     objectType: PropTypes.string,
+    preparedInstanceId: PropTypes.string,
+    promptsAnswers: PropTypes.string,
   }),
   objectName: PropTypes.string,
   mstrData: PropTypes.shape({
@@ -134,7 +141,15 @@ AttributeSelectorWindowNotConnected.propTypes = {
     promptsAnswers: PropTypes.string,
     isPrompted: PropTypes.bool
   }).isRequired,
-  handleBack: PropTypes.func
+  handleBack: PropTypes.func,
+  importSubtotal: PropTypes.bool,
+  displayAttrFormNames: PropTypes.bool,
+  editedObject: PropTypes.shape({
+    displayAttrFormNames: PropTypes.bool,
+    subtotalsInfo: PropTypes.shape({ importSubtotal: PropTypes.bool, }),
+    projectId: PropTypes.string,
+    promptsAnswers: PropTypes.arrayOf(PropTypes.shape({}))
+  }),
 };
 
 const mapStateToProps = state => {
