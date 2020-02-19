@@ -193,12 +193,21 @@ describe('NavigationTree', () => {
     const givenMyLibrary = false;
     const mockSelectObject = jest.fn();
 
+    const givenObject = {
+      id: givenObjectId,
+      projectId: givenProjectId,
+      subtype: givenSubtype,
+      name: givenObjectName,
+      targetId: givenTargetId,
+      myLibrary: givenMyLibrary,
+    };
+
     const wrappedComponent = shallow(<NavigationTreeNotConnected
       {...mockFunctionsAndProps}
       selectObject={mockSelectObject}
     />);
     // when
-    wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype, givenObjectName, givenTargetId, givenMyLibrary);
+    wrappedComponent.instance().onObjectChosen(givenObject);
     // then
     const expectedObject = {
       chosenObjectId: givenObjectId,
@@ -221,12 +230,21 @@ describe('NavigationTree', () => {
     const givenMyLibrary = true;
     const mockSelectObject = jest.fn();
 
+    const givenObject = {
+      id: givenObjectId,
+      projectId: givenProjectId,
+      subtype: givenSubtype,
+      name: givenObjectName,
+      targetId: givenTargetId,
+      myLibrary: givenMyLibrary,
+    };
+
     const wrappedComponent = shallow(<NavigationTreeNotConnected
       {...mockFunctionsAndProps}
       selectObject={mockSelectObject}
     />);
     // when
-    wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype, givenObjectName, givenTargetId, givenMyLibrary);
+    wrappedComponent.instance().onObjectChosen(givenObject);
     // then
     const expectedObject = {
       chosenObjectId: givenTargetId,

@@ -141,7 +141,7 @@ export class SessionHelper {
 
   isDevelopment = () => {
     try {
-      const isDevelopment = process.env.NODE_ENV === 'development';
+      const isDevelopment = ['development', 'test'].includes(process.env.NODE_ENV);
       return isDevelopment;
     } catch (error) {
       return false;
