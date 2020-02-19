@@ -4,7 +4,7 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import settings from '../../../config';
 
-describe('F25968 - Dynamically update numbers of objects displayed next to categories in filter panel', () => {
+describe('F24086 Improved browsing by adding filters', () => {
   beforeEach(() => {
     OfficeWorksheet.openExcelHome();
     const url = browser.getUrl();
@@ -22,19 +22,22 @@ describe('F25968 - Dynamically update numbers of objects displayed next to categ
     browser.switchToWindow(handles[0]);
   });
 
-  it('TC58932 - Deselecting/selecting filters with no objects', () => {
+  it('TC53430 Refreshing and filtering during refresh', () => {
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
     PluginPopup.switchLibrary(false);
     PluginPopup.selectFirstObject();
     PluginPopup.clickRefreshObjectTable();
+    applyFilters();
+    PluginPopup.selectFirstObject();
+    browser.keys(['End']);
     browser.debug();
-    // PluginPopup.clickFilterButton();
-    // PluginPopup.clickAllButton('Owner');
-    // PluginPopup.clickSelectAll();
-    // PluginPopup.tickFilterCheckBox('Type', 'Report');
-    // PluginPopup.uncheckDisabledElement('michal');
-    // PluginPopup.uncheckDisabledElement('michal');
     // expect($('.all-panel__content .category-list-row.disabled input').isSelected()).toBe(false);
   });
 });
+function applyFilters() {
+  PluginPopup.clickFilterButton();
+  PluginPopup.clickAllButton('Owner');
+  PluginPopup.clickSelectAll();
+  PluginPopup.tickFilterCheckBox('Type', 'Report');
+}
