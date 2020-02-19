@@ -47,7 +47,7 @@ const PluginPopup = function () {
   };
 
   this.clickRun = function () {
-    switchToPromptFrame();
+    switchToPluginFrame();
     waitAndClick($(popupSelectors.runBtn));
   };
 

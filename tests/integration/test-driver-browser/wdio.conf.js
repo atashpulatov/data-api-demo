@@ -17,8 +17,8 @@ exports.config = {
   // directory is where your package.json resides, so `wdio` will be called from there.
   //
   specs: [
-    './test/specs/release-validation/deprecated/sample.spec.js',
-  ],
+    './test/specs/release-validation/F22955-refresh/TC48135-refresh-report-prompt-nested-prompts.spec.js',
+  ], 
   suites: {
     test: [
       './test/specs/release-validation/test/*.js'
@@ -147,7 +147,7 @@ exports.config = {
   {
   //
   // Jasmine default timeout
-    defaultTimeoutInterval: 60000,
+    defaultTimeoutInterval: 160000,
     //
     // The Jasmine framework allows interception of each assertion in order to log the state of the application
     // or website depending on the result. For example, it is pretty handy to take a screenshot every time
