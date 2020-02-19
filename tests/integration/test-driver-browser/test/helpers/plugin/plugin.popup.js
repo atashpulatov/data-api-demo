@@ -52,7 +52,7 @@ const PluginPopup = function () {
   };
 
   this.clickRun = function () {
-    switchToPopupFrame();
+    switchToPluginFrame();
     waitAndClick($(popupSelectors.runBtn));
   };
 
@@ -203,7 +203,7 @@ const PluginPopup = function () {
 
   this.promptSelectObject = (objectName) => {
     switchToPromptFrame();
-    $('#mstrdossierPromptEditor').waitForExist(3333);
+    $('#mstrdossierPromptEditor').waitForExist(7777);
     waitAndClick($(`.mstrListBlockItem*=${objectName}`));
     browser.pause(2222);
     waitAndClick($('.mstrToolButtonRounded'));

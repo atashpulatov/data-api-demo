@@ -49,6 +49,12 @@ const PluginRightPanel = function() {
     waitAndClick($(rightPanelSelectors.refreshBtn));
   };
 
+  this.refreshObject = function(selector) {
+    switchToPluginFrame();
+    const refreshBtn = rightPanelSelectors.getRefreshBtnForObject(selector);
+    waitAndClick($(refreshBtn));
+  }
+
   this.refreshAll = function() {
     switchToPluginFrame();
     waitAndClick($(rightPanelSelectors.refreshAllBtn));
