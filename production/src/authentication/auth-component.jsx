@@ -15,7 +15,7 @@ export class AuthenticateNotConnected extends Component {
   constructor(props) {
     super(props);
     localStorage.removeItem('refreshData');
-    this.props.resetState();
+    props.resetState();
   }
 
   onLoginUser = async (event) => {

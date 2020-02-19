@@ -16,7 +16,10 @@ import reportIcon from './assets/icon_Report_blue_32.png';
 import { ReactComponent as ClockIcon } from './assets/icon_clock.svg';
 import { officeStoreService } from '../office/store/office-store-service';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import { startLoading, stopLoading } from '../navigation/navigation-tree-actions';
+import {
+  startLoading as startLoadingImported,
+  stopLoading as stopLoadingImported
+} from '../navigation/navigation-tree-actions';
 import { errorService } from '../error/error-handler';
 
 export class OfficeLoadedFileNotConnected extends React.Component {
@@ -390,8 +393,8 @@ const mapDispatchToProps = {
   refreshReportsArray: popupActions.refreshReportsArray,
   callForEdit: popupActions.callForEdit,
   callForEditDossier: popupActions.callForEditDossier,
-  startLoading,
-  stopLoading,
+  startLoading: startLoadingImported,
+  stopLoading: stopLoadingImported,
 };
 
 OfficeLoadedFileNotConnected.propTypes = {

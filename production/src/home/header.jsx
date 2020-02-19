@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { MSTRIcon, LoadingText } from '@mstr/mstr-react-library';
 import PropTypes from 'prop-types';
-import { toggleIsSettingsFlag, toggleIsConfirmFlag } from '../office/office-actions';
+import { toggleIsSettingsFlag as toggleIsSettingsFlagImported, toggleIsConfirmFlag as toggleIsConfirmFlagImported } from '../office/office-actions';
 import { sessionHelper } from '../storage/session-helper';
 import mstrLogo from './assets/mstr_logo.png';
 import { SettingsMenu } from './settings-menu';
@@ -123,8 +123,8 @@ function mapStateToProps({ officeReducer }) {
 }
 
 const mapDispatchToProps = {
-  toggleIsSettingsFlag,
-  toggleIsConfirmFlag,
+  toggleIsSettingsFlag: toggleIsSettingsFlagImported,
+  toggleIsConfirmFlag: toggleIsConfirmFlagImported,
 };
 
 HeaderNotConnected.propTypes = {

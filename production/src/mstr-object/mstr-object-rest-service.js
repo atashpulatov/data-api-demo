@@ -98,13 +98,6 @@ async function* fetchContentGenerator({
     if (e && e.axis === 'rows') { (e.colIndex += offset); }
   };
 
-  function fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = -1) {
-    return request
-      .get(`${fullPath}?offset=${offset}&limit=${limit}`)
-      .set('x-mstr-authtoken', authToken)
-      .set('x-mstr-projectid', projectId)
-      .withCredentials();
-  }
 
   while (fetchedRows < totalRows && fetchedRows < EXCEL_ROW_LIMIT) {
     let header;
@@ -128,6 +121,15 @@ async function* fetchContentGenerator({
       subtotalAddress: isCrosstab ? crosstabSubtotal : rowTotals,
     };
   }
+}
+
+
+function fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = -1) {
+  return request
+    .get(`${fullPath}?offset=${offset}&limit=${limit}`)
+    .set('x-mstr-authtoken', authToken)
+    .set('x-mstr-projectid', projectId)
+    .withCredentials();
 }
 
 

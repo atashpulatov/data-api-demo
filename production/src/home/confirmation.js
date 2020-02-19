@@ -6,7 +6,11 @@ import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import warningIcon from '../loading/assets/icon_conflict.svg';
 import { officeApiHelper } from '../office/office-api-helper';
-import { toggleSecuredFlag, toggleIsConfirmFlag, toggleIsClearingFlag } from '../office/office-actions';
+import {
+  toggleSecuredFlag as toggleSecuredFlagImported,
+  toggleIsConfirmFlag as toggleIsConfirmFlagImported,
+  toggleIsClearingFlag as toggleIsClearingFlagImported
+} from '../office/office-actions';
 import { errorService } from '../error/error-handler';
 import { notificationService } from '../notification/notification-service';
 
@@ -118,9 +122,9 @@ function mapStateToProps({ officeReducer }) {
 }
 
 const mapDispatchToProps = {
-  toggleSecuredFlag,
-  toggleIsConfirmFlag,
-  toggleIsClearingFlag,
+  toggleSecuredFlag: toggleSecuredFlagImported,
+  toggleIsConfirmFlag: toggleIsConfirmFlagImported,
+  toggleIsClearingFlag: toggleIsClearingFlagImported,
 };
 
 export const Confirmation = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(ConfirmationNotConnected));
