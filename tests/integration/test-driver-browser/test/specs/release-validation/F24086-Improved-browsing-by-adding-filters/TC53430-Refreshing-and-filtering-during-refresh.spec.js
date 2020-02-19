@@ -26,8 +26,9 @@ describe('F24086 Improved browsing by adding filters', () => {
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
     PluginPopup.switchLibrary(false);
-    PluginPopup.selectFirstObject();
-    // PluginPopup.clickRefreshObjectTable();
+    browser.debug();
+    // PluginPopup.selectFirstObject();
+    PluginPopup.clickRefreshObjectTable();
     // apply filters
     PluginPopup.clickFilterButton();
     PluginPopup.clickAllButton('Owner');
