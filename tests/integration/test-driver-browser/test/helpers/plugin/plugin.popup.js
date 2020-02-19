@@ -345,6 +345,15 @@ const PluginPopup = function() {
     console.log(`Total time importing "${objectName}":  ${timeSpent} secs`);
     return timeSpent;
   };
+  // object table START
+  this.scrollTable = (keyNames) => {
+    const scrollContainer = $(s.objectTable.scrollContainer);
+    waitAndClick(scrollContainer);
+    browser.keys(keyNames);
+  };
+  // object table END
+
+  // filter panel START
 
   this.getMyLibraryState = () => {
     const myLibrarySwitch = $(s.myLibrary);
@@ -400,6 +409,8 @@ const PluginPopup = function() {
   this.uncheckDisabledElement = (checkboxTitle) => {
     waitAndClick($(`.all-panel__content .category-list-row.disabled label[title="${checkboxTitle}"]`));
   };
+
+  // filter panel END
 
   this.selectAndImportVizualiation = function(visContainerId) {
     switchToPromptFrame();
