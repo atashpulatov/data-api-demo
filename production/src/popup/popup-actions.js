@@ -56,7 +56,7 @@ export class PopupActions {
   })
 
   refreshReportsArray = (reportArray, isRefreshAll) => async (dispatch) => {
-    const { popupHelper, officeApiHelper } = this.popupHelper;
+    const { popupHelper, officeApiHelper } = this;
     try {
       await Promise.all([
         this.officeApiHelper.getExcelSessionStatus(),
