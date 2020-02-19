@@ -455,8 +455,8 @@ def get_test_coverage_metrics
   coverage_file = "#{base_coverage_dir}/clover.xml"
   cov_doc = Hash.from_xml(File.read(coverage_file))
 
-  total_line = cov_doc['coverage']['project']['metrics']['loc'].to_i
-  total_line_covered = cov_doc['coverage']['project']['metrics']['ncloc'].to_i
+  total_line = cov_doc['coverage']['project']['metrics']['statements'].to_i
+  total_line_covered = cov_doc['coverage']['project']['metrics']['coveredstatements'].to_i
 
   total_method = cov_doc['coverage']['project']['metrics']['methods'].to_i
   total_method_covered = cov_doc['coverage']['project']['metrics']['coveredmethods'].to_i
