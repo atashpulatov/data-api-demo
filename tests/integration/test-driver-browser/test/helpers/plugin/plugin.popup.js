@@ -1,4 +1,4 @@
-import { switchToPluginFrame, switchToPromptFrame, switchToPopupFrame, switchToExcelFrame, switchToPromptFrameForEditDossier } from '../utils/iframe-helper';
+import { switchToPluginFrame, switchToPromptFrame, switchToPopupFrame, switchToExcelFrame, switchToPromptFrameForEditDossier, switchToPromptFrameForEditReport } from '../utils/iframe-helper';
 import { waitAndClick, waitAndRightClick } from '../utils/click-helper';
 import { popupSelectors } from '../../constants/selectors/popup-selectors';
 import { waitForNotification } from '../utils/wait-helper'
@@ -203,6 +203,15 @@ const PluginPopup = function () {
 
   this.promptSelectObject = (objectName) => {
     switchToPromptFrame();
+    $('#mstrdossierPromptEditor').waitForExist(7777);
+    waitAndClick($(`.mstrListBlockItem*=${objectName}`));
+    browser.pause(2222);
+    waitAndClick($('.mstrToolButtonRounded'));
+  };
+
+  this.promptSelectObjectForEdit = (objectName) => {
+    switchToPromptFrameForEditReport();
+    browser.pause(10000);
     $('#mstrdossierPromptEditor').waitForExist(7777);
     waitAndClick($(`.mstrListBlockItem*=${objectName}`));
     browser.pause(2222);

@@ -26,5 +26,7 @@ export const rightPanelSelectors = {
   editBtn: '.edit',
   placeholderContainer: '#overlay > div > section > div > div.tables-container',
   selectObject: (index) => `#overlay > div > section > div > div.tables-container > div:nth-child(${index})`,
+  getEdithBtnForObject: (index) => `#overlay > div > section > div > div.tables-container > div:nth-child(${index}) > div.refresh-icons-row > span.object-icons > span:nth-child(1)`,
   getRefreshBtnForObject: (index) => `#overlay > div > section > div > div.tables-container > div:nth-child(${index}) > div.refresh-icons-row > span.object-icons > span:nth-child(2)`,
+  getRemoveBtnForObject: (index) => `#overlay > div > section > div > div.tables-container > div:nth-child(${index}) > div.refresh-icons-row > span.object-icons > span:nth-child(3)`,
 };

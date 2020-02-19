@@ -49,10 +49,43 @@ const PluginRightPanel = function() {
     waitAndClick($(rightPanelSelectors.refreshBtn));
   };
 
-  this.refreshObject = function(selector) {
+  /**
+   * Clicks to refresh button for imported object. Will work when there are more than one report imported.
+   *
+   * @param {Number} index indicates the report represented in the plugin. Starts with 1 which indicates the last imported object.
+   *
+   * @memberof PluginRightPanel
+   */
+  this.refreshObject = function(index) {
     switchToPluginFrame();
-    const refreshBtn = rightPanelSelectors.getRefreshBtnForObject(selector);
+    const refreshBtn = rightPanelSelectors.getRefreshBtnForObject(index);
     waitAndClick($(refreshBtn));
+  }
+
+  /**
+   * Clicks to edit button for imported object. Will work when there are more than one object imported.
+   *
+   * @param {Number} index indicates the report represented in the plugin. Starts with 1 which indicates the last imported object.
+   *
+   * @memberof PluginRightPanel
+   */
+  this.editObject = function(index) {
+    switchToPluginFrame();
+    const editBtn = rightPanelSelectors.getEdithBtnForObject(index);
+    waitAndClick($(editBtn));
+  }
+
+  /**
+   * Clicks to remove button for imported object. Will work when there are more than one object imported.
+   *
+   * @param {Number} index indicates the report represented in the plugin. Starts with 1 which indicates the last imported object.
+   *
+   * @memberof PluginRightPanel
+   */
+  this.removeObject = function(index) {
+    switchToPluginFrame();
+    const removeBtn = rightPanelSelectors.getRemoveBtnForObject(index);
+    waitAndClick($(removeBtn));
   }
 
   this.refreshAll = function() {
