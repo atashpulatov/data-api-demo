@@ -391,7 +391,7 @@ export class OfficeDisplayService {
   }
 
   /**
-   * Returns error type based on error get from visualization importing.
+   * Returns an error type based on error get from visualization importing.
    *
    * @param {Object} error
    * @return {String || undefined} errorType
