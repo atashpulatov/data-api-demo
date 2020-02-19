@@ -1,13 +1,12 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { _PromptsWindow } from '../../prompts/prompts-window';
-import { notificationService } from '../../notification/notification-service';
+import { PromptsWindowNotConnected } from '../../prompts/prompts-window';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { popupHelper } from '../../popup/popup-helper';
 
 jest.mock('../../popup/popup-helper');
 
-describe('_PromptsWindow', () => {
+describe('PromptsWindowNotConnected', () => {
   const mstrData = {
     envUrl: 'env',
     token: 'token',
@@ -24,7 +23,7 @@ describe('_PromptsWindow', () => {
   it('should render with props given', () => {
     // given
     // when
-    const wrappedComponent = shallow(<_PromptsWindow mstrData={mstrData} popupState={popupState} />);
+    const wrappedComponent = shallow(<PromptsWindowNotConnected mstrData={mstrData} popupState={popupState} />);
     // then
     expect(wrappedComponent.instance()).toBeDefined();
     expect(wrappedComponent.find('PromptsContainer').get(0)).toBeDefined();
@@ -34,7 +33,7 @@ describe('_PromptsWindow', () => {
     // given
     const addEventListener = jest.spyOn(window, 'addEventListener');
     // when
-    shallow(<_PromptsWindow mstrData={mstrData} popupState={popupState} />);
+    shallow(<PromptsWindowNotConnected mstrData={mstrData} popupState={popupState} />);
     // then
     expect(addEventListener).toHaveBeenCalled();
   });
@@ -43,7 +42,7 @@ describe('_PromptsWindow', () => {
     // given
     const removeEventListener = jest.spyOn(window, 'removeEventListener');
     // when
-    const wrappedComponent = shallow(<_PromptsWindow mstrData={mstrData} popupState={popupState} />);
+    const wrappedComponent = shallow(<PromptsWindowNotConnected mstrData={mstrData} popupState={popupState} />);
     wrappedComponent.unmount();
     // then
     expect(removeEventListener).toHaveBeenCalled();
@@ -53,7 +52,7 @@ describe('_PromptsWindow', () => {
     // given
     const ref = React.createRef();
     // when
-    const wrappedComponent = shallow(<_PromptsWindow mstrData={mstrData} popupState={popupState} />);
+    const wrappedComponent = shallow(<PromptsWindowNotConnected mstrData={mstrData} popupState={popupState} />);
     const watchForIframeAddition = jest.spyOn(wrappedComponent.instance(), 'watchForIframeAddition').mockImplementation(() => true);
     const loadEmbeddedDossier = jest.spyOn(wrappedComponent.instance(), 'loadEmbeddedDossier').mockImplementation(() => true);
     const onIframeLoad = jest.spyOn(wrappedComponent.instance(), 'onIframeLoad').mockImplementation(() => true);
@@ -68,7 +67,7 @@ describe('_PromptsWindow', () => {
     popupHelper.handlePopupErrors = jest.fn();
     const givenMessage = { data: { value: { statusCode: 201, iServerErrorCode: 1234, message: 'test' } } };
     // when
-    const wrappedComponent = shallow(<_PromptsWindow mstrData={mstrData} popupState={popupState} />);
+    const wrappedComponent = shallow(<PromptsWindowNotConnected mstrData={mstrData} popupState={popupState} />);
     wrappedComponent.instance().messageReceived(givenMessage);
     // then
     const expectedObject = {
@@ -93,7 +92,7 @@ describe('_PromptsWindow', () => {
     // given
     popupHelper.handlePopupErrors = jest.fn();
     // when
-    const wrappedComponent = shallow(<_PromptsWindow mstrData={mstrData} popupState={popupState} />);
+    const wrappedComponent = shallow(<PromptsWindowNotConnected mstrData={mstrData} popupState={popupState} />);
     wrappedComponent.instance().messageReceived();
     // then
     expect(popupHelper.handlePopupErrors).not.toBeCalled();
@@ -108,7 +107,7 @@ describe('_PromptsWindow', () => {
         throw Error();
       });
     // when
-    const wrappedComponent = shallow(<_PromptsWindow
+    const wrappedComponent = shallow(<PromptsWindowNotConnected
       mstrData={mstrData}
       popupState={popupState}
     />);
