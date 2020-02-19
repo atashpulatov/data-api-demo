@@ -5,7 +5,7 @@ import { Popover } from 'antd';
 import PropTypes from 'prop-types';
 import { toggleIsConfirmFlag, toggleIsSettingsFlag } from '../office/office-actions';
 import logo from './assets/mstr_logo.png';
-import { OverflowHelper } from '../helpers/helpers';
+import overflowHelper from '../helpers/helpers';
 import { sessionHelper } from '../storage/session-helper';
 import { errorService } from '../error/error-handler';
 import { clearCache } from '../cache/cache-actions';
@@ -63,7 +63,7 @@ export const SettingsMenuNotConnected = ({
           ? <span className="no-trigger-close" id="initials" alt={t('User profile')}>{userInitials}</span>
           : <img className="no-trigger-close" id="profile-image" src={logo} alt={t('User profile')} />
           /* TODO: When rest api returns profileImage use it as source */}
-        {OverflowHelper.isOverflown(userNameDisplay, 130)
+        {overflowHelper.isOverflown(userNameDisplay, 130)
           ? (
             <Popover placement="bottom" content={userNameDisplay} mouseEnterDelay={1}>
               <span id="userName" className="user-name no-trigger-close">{userNameDisplay}</span>

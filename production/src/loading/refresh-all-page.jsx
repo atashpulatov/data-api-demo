@@ -4,7 +4,7 @@ import { Popover } from 'antd';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import { ReactComponent as WarningIcon } from './assets/icon_conflict.svg';
-import OverflowHelper from '../helpers/helpers';
+import overflowHelper from '../helpers/helpers';
 
 import './refresh-all-page.css';
 
@@ -121,7 +121,7 @@ export class RefreshAllPageNotConnected extends Component {
           && results.map((res) => (
             <div className="result-container" key={res.key}>
               {this.getIcon(res)}
-              {(res.isError || OverflowHelper.isOverflown(res.name, window.innerWidth - 90))
+              {(res.isError || overflowHelper.isOverflown(res.name, window.innerWidth - 90))
                 ? (
                   <Popover placement="topLeft" overlayClassName={res.isError === true ? 'tooltip-card' : 'rename-popover-width'} content={this.getTooltipContent(res)}>
                     <span className="report-name">{res.name}</span>

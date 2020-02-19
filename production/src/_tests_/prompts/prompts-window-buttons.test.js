@@ -32,7 +32,7 @@ describe('PromptWindowButtons', () => {
     const buttonsWrapper = shallow(
       <PromptWindowButtonsNotConnected
       isReprompt={false}
-      cancelImportRequest={cancelImportRequestMock}
+      cancelImport={cancelImportRequestMock}
       handleBack={handleBack}
         />
     );

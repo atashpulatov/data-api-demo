@@ -22,4 +22,6 @@ OverflowHelperNotConnected.propTypes = {
   t: PropTypes.func,
 };
 
-export const OverflowHelper = new OverflowHelperNotConnected();
+const overflowHelper = new OverflowHelperNotConnected();
+
+export default overflowHelper;
