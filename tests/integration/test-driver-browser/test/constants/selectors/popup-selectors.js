@@ -36,6 +36,7 @@ export const selectors = {
   noDataIcon: $('.ant-table-placeholder'),
   myLibrary: '#root > div > div.navigation_tree__title_bar > div > div.mstr-switch-container > div.mstr-switch',
   closeRefreshAll: '#WACDialogTitlePanel > a',
+  refreshObjectTable: 'button.refresh-button',
   clearSearchInput: $('.search-field__clear-button'),
   filterButton: $('.filter-button'),
   columnOwner: $('.ReactVirtualized__Table__row > div[aria-colindex="5"] > span'),

@@ -43,6 +43,10 @@ const PluginPopup = function() {
     waitAndClick($(s.dataPreviewBtn));
   };
 
+  this.clickRefreshObjectTable = function() {
+    waitAndClick($(s.refreshObjectTable));
+  }
+
   this.getTableRows = () => {
     const w = $$(s.tableRows);
     return w;
@@ -448,6 +452,8 @@ const PluginPopup = function() {
     waitAndClick($(s.categoryButton));
     browser.pause(4000);
   }
+
+  
 };
 
 export default new PluginPopup();
