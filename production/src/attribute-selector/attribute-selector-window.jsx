@@ -101,7 +101,6 @@ export class AttributeSelectorWindowNotConnected extends Component {
     return (
       <div>
         <AttributeSelector
-          // TODO: logic for a title
           title={`Import ${typeName} > ${objectName}`}
           attributesSelectedChange={this.attributesBeingSelected}
           triggerUpdate={triggerUpdate}

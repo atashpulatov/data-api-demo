@@ -73,8 +73,13 @@ export const SettingsMenuNotConnected = ({
           )
           : <span id="userName" className="user-name no-trigger-close">{userNameDisplay}</span>}
       </li>
-      <li tabIndex="0" className={`no-trigger-close clear-data not-linked-list ${!isSecuredActive ? 'clear-data-inactive' : ''}`} onClick={isSecuredActive ? showConfirmationPopup : null}>
-        <span className="no-trigger-close">
+      <li className={`no-trigger-close clear-data not-linked-list ${!isSecuredActive ? 'clear-data-inactive' : ''}`}>
+        <span
+        className="no-trigger-close"
+        tabIndex="0"
+        role="button"
+        onClick={isSecuredActive ? showConfirmationPopup : null}
+        onKeyUp={isSecuredActive ? showConfirmationPopup : null}>
           {t('Clear Data')}
         </span>
       </li>
@@ -117,8 +122,13 @@ export const SettingsMenuNotConnected = ({
           {t('Contact Us')}
         </a>
       </li>
-      <li className="not-linked-list" onClick={() => logout(() => clearCache(userID))}>
-        <span tabIndex="0" id="logOut" size="small">
+      <li className="not-linked-list">
+        <span tabIndex="0"
+              id="logOut"
+              size="small"
+              role="button"
+              onClick={() => logout(() => clearCache(userID))}
+              onKeyUp={() => logout(() => clearCache(userID))}>
           {t('Log Out')}
         </span>
       </li>

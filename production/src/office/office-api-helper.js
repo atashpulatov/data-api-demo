@@ -33,39 +33,37 @@ export class OfficeApiHelper {
     if (!Number.isInteger(headerCount)) {
       throw new IncorrectInputTypeError();
     }
+
     const startCellArray = startCell.split(/(\d+)/);
     headerCount += parseInt(this.lettersToNumber(startCellArray[0]) - 1, 10);
-    const endColumnNum = headerCount;
-    let endColumn = '';
-    for (let firstNumber = ALPHABET_RANGE_START,
-      secondNumber = ALPHABET_RANGE_END;
-      (headerCount -= firstNumber) >= 0;
-      firstNumber = secondNumber, secondNumber *= ALPHABET_RANGE_END) {
-      endColumn = String.fromCharCode(parseInt((headerCount % secondNumber) / firstNumber, 10) // ASK SEDANO
-        + ASCII_CAPITAL_LETTER_INDEX)
-        + endColumn;
-    }
+
+    const endColumn = this.numberToLetters(headerCount);
     const endRow = Number(startCellArray[1]) + rowCount;
-    if (endRow > EXCEL_ROW_LIMIT || endColumnNum > EXCEL_COL_LIMIT) {
+
+    if (endRow > EXCEL_ROW_LIMIT || headerCount > EXCEL_COL_LIMIT) {
       throw new OutsideOfRangeError('The table you try to import exceeds the worksheet limits.');
     }
     return `${startCell}:${endColumn}${endRow}`;
   };
 
-  numberToLetters = (colNum) => {
-    let colLetter = '';
+  numberToLetters=(headerCount) => {
+    let result = '';
     let firstNumber = ALPHABET_RANGE_START;
     let secondNumber = ALPHABET_RANGE_END;
-    for (firstNumber, secondNumber;
-      (colNum -= firstNumber) >= 0;
-      firstNumber = secondNumber,
-      secondNumber *= ALPHABET_RANGE_END) {
-      colLetter = String.fromCharCode(parseInt((colNum % secondNumber) / firstNumber, 10)
+
+    headerCount -= firstNumber;
+    while (headerCount >= 0) {
+      result = String.fromCharCode(parseInt((headerCount % secondNumber) / firstNumber, 10)
         + ASCII_CAPITAL_LETTER_INDEX)
-        + colLetter;
+        + result;
+
+      firstNumber = secondNumber;
+      secondNumber *= ALPHABET_RANGE_END;
+      headerCount -= firstNumber;
     }
-    return colLetter;
-  };
+
+    return result;
+  }
 
   offsetCellBy = (cell, rowOffset, colOffset) => {
     const cellArray = cell.split(/(\d+)/);
@@ -591,6 +589,7 @@ export class OfficeApiHelper {
     columnsTitlesRange.values = mstrNormalizedJsonHandler.transposeMatrix([attributesNames.columnsAttributes]);
     mergeHeaderColumns(attributesNames.columnsAttributes, columnsTitlesRange);
   };
+
 
   /**
   * Returns the number of rows and columns headers that are valid for crosstab

@@ -247,7 +247,7 @@ export class OfficeLoadedFileNotConnected extends React.Component {
               tabIndex="0"
               className="loading-button-container"
               onClick={this.editAction}
-              onKeyPress={this.editAction}
+              onKeyUp={this.editAction}
             >
             <MSTRIcon type="edit" />
           </span>
@@ -263,7 +263,7 @@ export class OfficeLoadedFileNotConnected extends React.Component {
               tabIndex="0"
               className="loading-button-container"
               onClick={this.refreshAction}
-              onKeyPress={this.refreshAction}
+              onKeyUp={this.refreshAction}
             >
             {!isLoading ? (
               <MSTRIcon type="refresh" />
@@ -289,7 +289,7 @@ export class OfficeLoadedFileNotConnected extends React.Component {
             role="button"
             tabIndex="0"
             onClick={this.deleteAction}
-            onKeyPress={this.deleteAction}
+            onKeyUp={this.deleteAction}
           >
             <MSTRIcon type="trash" />
           </span>
@@ -335,9 +335,10 @@ export class OfficeLoadedFileNotConnected extends React.Component {
             className="file-history-container"
             type="flex"
             justify="center"
-            role="listitem"
+            role="button"
             tabIndex="0"
             onClick={() => onClick(bindingId, true, this.deleteReport, fileName, isCrosstab, crosstabHeaderDimensions)}
+            onKeyUp={(e) => e.key === 'Enter' && onClick(bindingId, true, this.deleteReport, fileName, isCrosstab, crosstabHeaderDimensions)}
            >
           <div className="refresh-icons-row">
             <ButtonPopover

@@ -18,5 +18,5 @@ export const Tabs = ({ t, children }) => (
 
 Tabs.propTypes = {
   t: PropTypes.func,
-  children: PropTypes.element,
+  children: PropTypes.arrayOf(PropTypes.element),
 };

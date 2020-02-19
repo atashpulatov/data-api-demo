@@ -51,10 +51,10 @@ export default function HomeContent({
 HomeContent.propTypes = {
   loading: PropTypes.bool,
   popupOpen: PropTypes.bool,
-  loadingReport: PropTypes.func,
+  loadingReport: PropTypes.bool,
   t: PropTypes.func,
   toggleRenderSettingsFlag: PropTypes.func,
   authToken: PropTypes.string,
   shouldRenderSettings: PropTypes.bool,
-  reportArray: PropTypes.shape({ length: PropTypes.number, }),
+  reportArray: PropTypes.arrayOf(PropTypes.shape({ length: PropTypes.number, })),
 };

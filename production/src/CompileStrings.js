@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 const fs = require('fs-extra');
 const sql = require('mssql');
 const path = require('path');

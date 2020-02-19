@@ -142,7 +142,7 @@ export class PopupViewSelectorHelper {
     const addItem = (item) => {
       branch.operands[1].elements.push({ id: item, });
     };
-    for (const att in selectedFilters) {
+    for (const att of selectedFilters) {
       if (selectedFilters[att].length) {
         branch = {
           operator: 'In',

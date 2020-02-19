@@ -31,13 +31,16 @@ export default class CustomNotification extends Component {
           details && (
           <div>
             <nav className="error__nav">
-              <p
+              <div
                 onClick={this.handleCollapse}
+                onKeyUp={(e) => e.key === 'Enter' && this.handleCollapse}
                 className={config.actionClass}
+                role="button"
+                tabIndex="0"
               >
                 {t(config.message)}
                 <span className="error__arrow" />
-              </p>
+              </div>
             </nav>
             <div
               className={`${config.messageClass} error__text`}

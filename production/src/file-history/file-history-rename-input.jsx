@@ -37,11 +37,11 @@ export class RenameInputNotConnected extends React.Component {
   }
 }
 RenameInputNotConnected.propTypes = {
-  editable: PropTypes.string,
+  editable: PropTypes.bool,
   value: PropTypes.string,
   fileName: PropTypes.string,
   bindingId: PropTypes.string,
-  enableEdit: PropTypes.bool,
+  enableEdit: PropTypes.func,
   renameReport: PropTypes.func,
 };
 
