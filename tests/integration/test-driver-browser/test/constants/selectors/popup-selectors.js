@@ -51,6 +51,7 @@ export const popupSelectors = {
   sortDescendingButton:'div=Sort Descending',
   drillButton:'div=Drill',
   categoryButton:'div=Category',
+  visualizationSelector:'.mstrmojo-VizBox-selector',
   dossierWindow:{
     visualizationName: '.mstrd-NavBarTitle-item-active .mstrd-DossierTitle',
     filterCount: '.mstrd-FilterSummaryBar-filterCount',

@@ -16,6 +16,14 @@ export const excelSelectors = {
   addBtn: '#BtnAction',
   uploadPluginNotification: '.ModalCalloutControlOverlay',
   excelFormulaBar: '#formulaBarTextDivId',
+  findAndSelectBtn : '#m_excelWebRenderer_ewaCtl_Editing\\2e FindAndReplace-Large',
+  goToBtn : '#m_excelWebRenderer_ewaCtl_FindAndReplace\\2e Goto-Menu16',
+  goToSelector: '#gotoRef',
+  replaceSelector: '#m_excelWebRenderer_ewaCtl_FindAndReplace\\2e Replace-Menu16',
+  findWhatSelector:'#findWhat',
+  replaceWithSelector : '#replaceWith',
+  replaceAllBtn: '#buttonarea > button:nth-child(4)',
+  refreshAllfinished:'.refresh-header',
   nameBoxDropdownButton: '#m_excelWebRenderer_ewaCtl_NameBox-Medium > a',
-  nameBoxListContent: '[id^=WacAirSpace] > div > div > div > ul'
+  nameBoxListContent: '[id^=WacAirSpace] > div > div > div > ul',
 }
