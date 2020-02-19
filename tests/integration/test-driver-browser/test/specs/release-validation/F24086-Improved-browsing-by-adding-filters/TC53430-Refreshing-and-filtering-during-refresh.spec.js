@@ -27,17 +27,15 @@ describe('F24086 Improved browsing by adding filters', () => {
     PluginRightPanel.clickImportDataButton();
     PluginPopup.switchLibrary(false);
     PluginPopup.selectFirstObject();
-    PluginPopup.clickRefreshObjectTable();
-    applyFilters();
-    PluginPopup.selectFirstObject();
-    browser.keys(['End']);
-    browser.debug();
+    // PluginPopup.clickRefreshObjectTable();
+    // apply filters
+    PluginPopup.clickFilterButton();
+    PluginPopup.clickAllButton('Owner');
+    PluginPopup.clickSelectAll();
+    PluginPopup.tickFilterCheckBox('Type', 'Report');
+    // // scroll bottom
+    PluginPopup.scrollTable(['End']);
+    browser.pause(9999);
     // expect($('.all-panel__content .category-list-row.disabled input').isSelected()).toBe(false);
   });
 });
-function applyFilters() {
-  PluginPopup.clickFilterButton();
-  PluginPopup.clickAllButton('Owner');
-  PluginPopup.clickSelectAll();
-  PluginPopup.tickFilterCheckBox('Type', 'Report');
-}
