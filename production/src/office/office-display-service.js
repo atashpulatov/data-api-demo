@@ -157,7 +157,6 @@ export class OfficeDisplayService {
       // Create or update table
       ({ officeTable, newOfficeTableId, shouldFormat, tableColumnsChanged, bindId } = await officeTableHelper.getOfficeTable(
         isRefresh, excelContext, bindingId, instanceDefinition, startCell, tableName, previousTableDimensions
-
       ));
 
       // Apply formating for changed vizualization
@@ -313,7 +312,9 @@ export class OfficeDisplayService {
     await excelContext.sync();
     const tablename = officeTable.name;
     let tableid = bindingId;
-    if (!bindingId || (bindId && (bindingId !== bindId))) { tableid = bindId; }
+    if (!bindingId || (bindId && (bindingId !== bindId))) {
+      tableid = bindId;
+    }
     await officeApiHelper.bindNamedItem(tablename, tableid);
     return tableid;
   }
@@ -347,7 +348,9 @@ export class OfficeDisplayService {
     }
     if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
       if (manipulationsXML) {
-        if (!body) { body = {}; }
+        if (!body) {
+          body = {};
+        }
         body.manipulations = manipulationsXML.manipulations;
         body.promptAnswers = manipulationsXML.promptAnswers;
       }
@@ -363,9 +366,7 @@ export class OfficeDisplayService {
       try {
         temporaryInstanceDefinition = await fetchVisualizationDefinition(config);
       } catch (error) {
-        if (error.message && error.message.includes(incomingErrorStrings.INVALID_VIZ_KEY)) {
-          error.type = errorTypes.INVALID_VIZ_KEY;
-        }
+        error.type = this.getVisualizationErrorType(error);
         throw error;
       }
       instanceDefinition = { ...temporaryInstanceDefinition, instanceId };
@@ -388,6 +389,31 @@ export class OfficeDisplayService {
     ({ subtotalsDefined, subtotalsVisible } = mstrTable.subtotalsInfo);
     return { body, instanceDefinition, isCrosstab, subtotalsDefined, subtotalsVisible };
   }
+
+  /**
+   * Returns an error type based on error get from visualization importing.
+   *
+   * @param {Object} error
+   * @return {String || undefined} errorType
+   * @memberOf officeDisplayService
+   */
+  getVisualizationErrorType = (error) => {
+    if (!error) {
+      return;
+    }
+
+    let errorType = error.type;
+    if ((error.message && error.message.includes(incomingErrorStrings.INVALID_VIZ_KEY))
+      || (error.response
+        && error.response.body
+        && error.response.body.message
+        && error.response.body.message.includes(incomingErrorStrings.INVALID_VIZ_KEY))
+    ) {
+      errorType = errorTypes.INVALID_VIZ_KEY;
+    }
+
+    return errorType;
+  };
 
   /**
    * Gets object definition, dispatch data to Redux and display loading popup.
