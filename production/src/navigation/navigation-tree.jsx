@@ -246,11 +246,11 @@ export class NavigationTreeNotConnected extends Component {
 }
 
 NavigationTreeNotConnected.propTypes = {
-  stopLoading: PropTypes.bool,
+  stopLoading: PropTypes.func,
   loading: PropTypes.bool,
   cache: PropTypes.shape({
     chosenObjectId: PropTypes.string,
-    projects: PropTypes.PropTypes.shape({ length: PropTypes.string }),
+    projects: PropTypes.arrayOf(PropTypes.shape({})),
     myLibrary: PropTypes.PropTypes.shape({
       objects: PropTypes.arrayOf(PropTypes.shape({})),
       isLoading: PropTypes.bool,
@@ -262,11 +262,11 @@ NavigationTreeNotConnected.propTypes = {
   }),
   resetDBState: PropTypes.func,
   fetchObjectsFromNetwork: PropTypes.func,
-  sorter: PropTypes.func,
-  objectType: PropTypes.string,
+  sorter: PropTypes.oneOfType(PropTypes.arrayOf(PropTypes.string), PropTypes.shape({})),
+  objectType: PropTypes.oneOfType(PropTypes.arrayOf(PropTypes.string), PropTypes.shape({})),
   myLibrary: PropTypes.bool,
-  myLibraryFilter: PropTypes.arrayOf(PropTypes.string),
-  envFilter: PropTypes.arrayOf(PropTypes.string),
+  myLibraryFilter: PropTypes.oneOfType(PropTypes.arrayOf(PropTypes.string), PropTypes.shape({})),
+  envFilter: PropTypes.oneOfType(PropTypes.arrayOf(PropTypes.string), PropTypes.shape({})),
   connectToDB: PropTypes.func,
   chosenSubtype: PropTypes.string,
   chosenObjectId: PropTypes.string,

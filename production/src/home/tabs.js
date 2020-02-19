@@ -18,5 +18,6 @@ export const Tabs = ({ t, children }) => (
 
 Tabs.propTypes = {
   t: PropTypes.func,
-  children: PropTypes.arrayOf(PropTypes.element),
+  // eslint-disable-next-line react/forbid-prop-types
+  children: PropTypes.any,
 };

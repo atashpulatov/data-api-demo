@@ -2,8 +2,8 @@ import { officeContext } from '../office/office-context';
 
 class AttributeSelectorHelpers {
   officeMessageParent = (
-    command, chosenObjectId, projectId, chosenObjectSubtype, body, instanceId,
-    chosenObjectName, promptsAnswers, subtotalsInfo, displayAttrFormNamesSet
+    command, chosenObjectId, projectId, chosenObjectSubtype, body,
+    chosenObjectName, instanceId, promptsAnswers, subtotalsInfo, displayAttrFormNamesSet
   ) => {
     const updateObject = {
       command,
