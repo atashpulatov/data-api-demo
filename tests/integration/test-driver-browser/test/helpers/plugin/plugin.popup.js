@@ -17,8 +17,14 @@ class PluginPopup {
     $(popupSelectors.searchInput).setValue(objectName);
   }
 
-  // TODO: search [attributes || metrics || filters]
-  this.searchForElements = function (elementName) {
+  /**
+   * Searches for attribute or metric inside the popup report preparation
+   *
+   * @param {String} elementName indicates the attribute or metric name that will be searched
+   *
+   * @memberof PluginPopup
+   **/
+  searchForElements = function (elementName) {
     $(popupSelectors.searchInputPrepareDataPopup).clearValue();
     $(popupSelectors.searchInputPrepareDataPopup).setValue(elementName);
   };
