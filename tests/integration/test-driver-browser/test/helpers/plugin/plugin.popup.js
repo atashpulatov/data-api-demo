@@ -311,7 +311,7 @@ class PluginPopup {
 
   switchLibrary (newState) {
     const myLibrarySwitch = $(popupSelectors.myLibrary);
-    myLibrarySwitch.waitForExist(15000);
+    myLibrarySwitch.waitForExist(5000);
     const checked = myLibrarySwitch.getAttribute('aria-checked');
     if ((checked === 'true') !== newState) waitAndClick(myLibrarySwitch)
   }
