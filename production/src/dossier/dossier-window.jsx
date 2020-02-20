@@ -29,6 +29,7 @@ export default class DossierWindowNotConnected extends React.Component {
     this.handleSelection = this.handleSelection.bind(this);
     this.handleOk = this.handleOk.bind(this);
     this.handlePromptAnswer = this.handlePromptAnswer.bind(this);
+    this.handleInstanceIdUpadate = this.handleInstanceIdUpadate.bind(this);
   }
 
   validateSession = () => {
@@ -95,8 +96,24 @@ export default class DossierWindowNotConnected extends React.Component {
     Office.context.ui.messageParent(JSON.stringify(okObject));
   }
 
-  handlePromptAnswer(newAnswers, newInstanceId) {
-    this.setState({ promptsAnswers: newAnswers, preparedInstanceId: newInstanceId });
+  /**
+ * Store new instance id in state.
+ * Unselect visualization after instanceId changed.
+ */
+  handleInstanceIdUpadate(newInstanceId) {
+    this.setState({
+      preparedInstanceId: newInstanceId,
+      isVisualizationSelected: false,
+      chapterKey: '',
+      visualizationKey: '',
+    });
+  }
+
+  /**
+ * Store new prompts answers in state
+ */
+  handlePromptAnswer(newAnswers) {
+    this.setState({ promptsAnswers: newAnswers });
   }
 
   render() {
@@ -117,6 +134,7 @@ export default class DossierWindowNotConnected extends React.Component {
         <EmbeddedDossier
           handleSelection={this.handleSelection}
           handlePromptAnswer={this.handlePromptAnswer}
+          handleInstanceIdUpadate={this.handleInstanceIdUpadate}
           handleLoadEvent={this.validateSession}
         />
         <PopupButtons
