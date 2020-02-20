@@ -23,6 +23,6 @@ export const rightPanelSelectors = {
   clearOkBtn: '#confirm-btn',
   importedObjectList: '.file-history-container',
   importedObjectNameList: '.rename-container',
-  editBtn: '.mstr-icon.edit',
+  editBtn: '.edit',
   placeholderContainer: '#overlay > div > section > div > div.tables-container'
 };
