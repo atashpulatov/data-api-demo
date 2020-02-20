@@ -121,7 +121,7 @@ class PluginPopup {
     waitAndClick($(popupSelectors.firstObject));
   }
 
-  importObject (objectName, myLibrarySwitch) {
+  this.switchLibraryAndImportObject(objectName, myLibrarySwitch) {
     switchToPluginFrame();
     browser.pause(4000);
     this.switchLibrary(myLibrarySwitch);
@@ -131,6 +131,14 @@ class PluginPopup {
     this.selectFirstObject();
     this.clickImport();
   }
+
+  importObject(objectName, myLibrarySwitch) {
+    switchToPluginFrame();
+    this.searchForObject(objectName);
+    browser.pause(500);
+    this.selectFirstObject();
+    this.clickImport();
+  };
 
   importAnyObject (objectName, index) {
     switchToPluginFrame();
