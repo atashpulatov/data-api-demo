@@ -71,5 +71,12 @@ export const selectors = {
       getSliderInput: (position) => (position === 'left' ? '.mstrd-SliderSummary-left-input' : '.mstrd-SliderSummary-right-input'),
       buttonApplyFilters : 'div.mstrd-FilterPanelFooterContainer-apply',
     }
+  },
+  filterPanel: {
+    expandButton: '.expand-btn',
+    selectAllButton: '.all-panel__buttons button:first-of-type',
+  },
+  objectTable: { 
+    scrollContainer: '.ReactVirtualized__Grid.ReactVirtualized__Table__Grid', 
   }
 };

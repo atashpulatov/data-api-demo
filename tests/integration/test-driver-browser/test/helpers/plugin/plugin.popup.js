@@ -345,14 +345,27 @@ const PluginPopup = function() {
     console.log(`Total time importing "${objectName}":  ${timeSpent} secs`);
     return timeSpent;
   };
+  // object table START
+  this.scrollTable = (keyNames) => {
+    const scrollContainer = $(s.objectTable.scrollContainer);
+    waitAndClick(scrollContainer);
+    browser.keys(keyNames);
+  };
+  // object table END
+
+  // filter panel START
+
+  this.getMyLibraryState = () => {
+    const myLibrarySwitch = $(s.myLibrary);
+    myLibrarySwitch.waitForExist(5000);
+    return myLibrarySwitch.getAttribute('aria-checked') === 'true';
+  };
 
   this.switchLibrary = function(newState) {
     switchToPluginFrame();
-    const myLibrarySwitch = $(s.myLibrary);
-    myLibrarySwitch.waitForExist(5000);
-    const checked = myLibrarySwitch.getAttribute('aria-checked');
-    if ((checked === 'true') !== newState) waitAndClick(myLibrarySwitch)
-  }
+    const checked = this.getMyLibraryState();
+    if ((checked === true) !== newState) waitAndClick($(s.myLibrary))
+  };
 
   this.openDossier = function(dossierName, timeToLoadDossier = 10000) {
     this.importObject(dossierName);
@@ -369,6 +382,35 @@ const PluginPopup = function() {
     waitAndClick($('.category-list-header[aria-label="' + section + '"] + .category-list-table > .category-list-row > .checkbox-cell > label > input[aria-label="Checkbox for ' + item + '."] + span'));
   };
 
+  this.clickAllButton = (section) => {
+    switch (section) {
+    case 'Application':
+      waitAndClick($$(s.filterPanel.expandButton)[0]);
+      break;
+    case 'Owner':
+      if (this.getMyLibraryState()) {
+        waitAndClick($$(s.filterPanel.expandButton)[0]);
+      } else {
+        waitAndClick($$(s.filterPanel.expandButton)[1]);
+      }
+      break;
+    case 'Modified':
+      waitAndClick($('.mstr-date-range-selector-container .expand-btn'));
+      break;
+    default:
+      break;
+    }
+  };
+
+  this.clickSelectAll = () => {
+    waitAndClick($(s.filterPanel.selectAllButton));
+  };
+
+  this.uncheckDisabledElement = (checkboxTitle) => {
+    waitAndClick($(`.all-panel__content .category-list-row.disabled label[title="${checkboxTitle}"]`));
+  };
+
+  // filter panel END
 
   this.selectAndImportVizualiation = function(visContainerId) {
     switchToPromptFrame();
