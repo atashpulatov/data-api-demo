@@ -38,9 +38,12 @@ describe('F24086 Improved browsing by adding filters', () => {
     PluginPopup.clickAllButton('Owner');
     PluginPopup.clickSelectAll();
     PluginPopup.tickFilterCheckBox('Type', 'Report');
+    browser.pause(150);
+    expect($('div.FilterResult > strong=938')).toBeDefined();
+    browser.debug();
     // // scroll bottom
-    browser.pause(999);
-    PluginPopup.clickFilterButton();
+    // browser.pause(999);
+    // PluginPopup.clickFilterButton();
     browser.pause(999);
 
     PluginPopup.scrollTable(['End']);
@@ -67,7 +70,8 @@ describe('F24086 Improved browsing by adding filters', () => {
     $('div=SQL Pass Performance').click();
     PluginPopup.clickRefreshObjectTable();
     browser.pause(999);
-    PluginPopup.searchForObject('something not existing');
+    PluginPopup.searchForObject('something not existing'); // TODO: Assert no objects message
+    expect($('p=None of the objects matched your search.')).toBeDefined();
     browser.pause(5000);
     $('button.search-field__clear-button').click();
     browser.pause(5000);
@@ -76,12 +80,11 @@ describe('F24086 Improved browsing by adding filters', () => {
     $('div=SQL Pass Performance').click();
     PluginPopup.clickRefreshObjectTable();
     PluginPopup.clickFilterButton();
-    browser.pause(2000);
+    browser.pause(2000); // FIXME: very time dependent
     PluginPopup.tickFilterCheckBox('Type', 'Dossier');
     PluginPopup.clickAllButton('Owner');
     PluginPopup.clickSelectAll();
     browser.debug();
-    browser.pause(9999);
     // expect($('.all-panel__content .category-list-row.disabled input').isSelected()).toBe(false);
   });
 });
