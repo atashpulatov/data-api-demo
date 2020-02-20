@@ -229,9 +229,9 @@ class PluginPopup {
     waitAndClick($(`.mstrListBlockItem*=${objectName}`));
     browser.pause(2222);
     waitAndClick($('.mstrToolButtonRounded'));
-  };
+  }
 
-  this.promptSelectObjectForEdit = (objectName) => {
+  promptSelectObjectForEdit = (objectName) => {
     switchToPromptFrameForEditReport();
     browser.pause(10000);
     $('#mstrdossierPromptEditor').waitForExist(7777);
@@ -337,7 +337,7 @@ class PluginPopup {
     this.clickImport();
   }
 
-  this.editAndImportVizualization = function (visContainerId) {
+  editAndImportVizualization = function (visContainerId) {
     switchToPromptFrameForEditDossier();
     browser.pause(10000);
     const visSelector = $(visContainerId).$(popupSelectors.visualizationSelector);
