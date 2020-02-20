@@ -77,6 +77,6 @@ export const selectors = {
     selectAllButton: '.all-panel__buttons button:first-of-type',
   },
   objectTable: { 
-    scrollContainer: '.ReactVirtualized__Grid__innerScrollContainer', 
+    scrollContainer: '.ReactVirtualized__Grid.ReactVirtualized__Table__Grid', 
   }
 };
