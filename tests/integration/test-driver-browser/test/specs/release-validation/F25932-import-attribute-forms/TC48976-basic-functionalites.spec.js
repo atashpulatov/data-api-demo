@@ -13,7 +13,7 @@ import officeLogin from '../../../helpers/office/office.login';
 describe('TC48976 - perform-basic-functionalities', () => {
   beforeAll(() => {
     // Invalid credentials
-    officeLogin.openExcelAndLoginToPlugin('Invalid username', 'Invalid password', false)
+    officeLogin.openExcelAndLoginToPlugin(1700, 'Invalid username', 'Invalid password', false)
     waitAndClick($('#ActionLinkContainer'));
 
     // Credentials without office privileges

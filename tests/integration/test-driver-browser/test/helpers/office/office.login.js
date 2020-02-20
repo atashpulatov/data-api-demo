@@ -25,9 +25,10 @@ const OfficeLogin = function () {
   this.openExcelAndLoginToPlugin = (
     username = settings.env.username,
     password = settings.env.password,
+    width = 1500,
     isValidCredentials = true
   ) => {
-    browser.setWindowSize(1500, 900);
+    browser.setWindowSize(width, 900);
     OfficeWorksheet.openExcelHome();
     const url = browser.getUrl();
     if (url.includes('login.microsoftonline')) {
