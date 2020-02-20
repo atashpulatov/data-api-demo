@@ -17,6 +17,18 @@ class PluginPopup {
     $(popupSelectors.searchInput).setValue(objectName);
   }
 
+  /**
+   * Searches for attribute or metric inside the popup report preparation
+   *
+   * @param {String} elementName indicates the attribute or metric name that will be searched
+   *
+   * @memberof PluginPopup
+   **/
+  searchForElements = function (elementName) {
+    $(popupSelectors.searchInputPrepareDataPopup).clearValue();
+    $(popupSelectors.searchInputPrepareDataPopup).setValue(elementName);
+  };
+
   clickImport () {
     waitAndClick($(popupSelectors.importBtn));
   }

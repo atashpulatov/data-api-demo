@@ -6,6 +6,7 @@ export const popupSelectors = {
   searchInput: '.search-field__input',
   prepareSearchInput: '#search-toolbar > div > span > input',
   valueInput: '#id_mstr20_txt',
+  searchInputPrepareDataPopup: '.ant-input.ant-input-sm',
   attrQualificationInput: '#id_mstr38_txt',
   calendarInput: '#id_mstr24_txt',
   importBtn: '#import',
