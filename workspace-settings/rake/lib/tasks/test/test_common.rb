@@ -39,7 +39,7 @@ task :e2e_test_browser do
   shell_command! "npm install", cwd: test_dir
   test_fail = false
   begin
-    shell_command! "npm run test", cwd: test_dir
+    shell_command! "npm run test-suite acceptance", cwd: test_dir
   rescue
     test_fail = true
   end
