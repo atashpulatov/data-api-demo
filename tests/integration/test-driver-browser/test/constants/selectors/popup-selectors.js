@@ -36,7 +36,7 @@ export const selectors = {
   noDataIcon: $('.ant-table-placeholder'),
   myLibrary: '#root > div > div.navigation_tree__title_bar > div > div.mstr-switch-container > div.mstr-switch',
   closeRefreshAll: '#WACDialogTitlePanel > a',
-  refreshObjectTable: 'button.refresh-button',
+  refreshObjectTable: '.refresh-button',
   objectTable: 'ReactVirtualized__Grid ReactVirtualized__Table__Grid',
   clearSearchInput: $('.search-field__clear-button'),
   filterButton: $('.filter-button'),
@@ -78,7 +78,5 @@ export const selectors = {
     expandButton: '.expand-btn',
     selectAllButton: '.all-panel__buttons button:first-of-type',
   },
-  objectTable: { 
-    scrollContainer: '.ReactVirtualized__Grid__innerScrollContainer', 
-  }
+  objectTable: { scrollContainer: '.ReactVirtualized__Grid__innerScrollContainer', }
 };

@@ -6,6 +6,7 @@ import settings from '../../../config';
 
 describe('F24086 Improved browsing by adding filters', () => {
   beforeEach(() => {
+    browser.setWindowSize(1500, 1100);
     OfficeWorksheet.openExcelHome();
     const url = browser.getUrl();
     if (url.includes('login.microsoftonline')) {
@@ -26,15 +27,22 @@ describe('F24086 Improved browsing by adding filters', () => {
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
     PluginPopup.switchLibrary(false);
-    browser.debug();
-    // PluginPopup.selectFirstObject();
+    // browser.debug();
+    PluginPopup.selectFirstObject();
     PluginPopup.clickRefreshObjectTable();
     // apply filters
+    browser.pause(9999);
     PluginPopup.clickFilterButton();
+    // browser.debug();
+    browser.pause(999);
     PluginPopup.clickAllButton('Owner');
     PluginPopup.clickSelectAll();
     PluginPopup.tickFilterCheckBox('Type', 'Report');
     // // scroll bottom
+    browser.pause(999);
+    PluginPopup.clickFilterButton();
+    browser.pause(9999);
+
     PluginPopup.scrollTable(['End']);
     browser.pause(9999);
     // expect($('.all-panel__content .category-list-row.disabled input').isSelected()).toBe(false);
