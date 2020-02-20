@@ -57,7 +57,7 @@ describe('TC48976 - perform-basic-functionalities', () => {
     browser.switchToWindow(handles[0]);
   });
 
-  it('Display attribute forms', () => {
+  it('perform-basic-functionalities', () => {
     const firstObject = '#overlay > div > section > div > div.tables-container > div:nth-child(1)';
     const firstRefreshIcon = $('#overlay > div > section > div > div.tables-container > div:nth-child(1) > div.refresh-icons-row > span.object-icons > span:nth-child(2) > span');
     const datasetFilter = 'label=Dataset';
