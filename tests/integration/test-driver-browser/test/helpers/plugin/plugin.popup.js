@@ -49,8 +49,8 @@ class PluginPopup {
     waitAndClick($(popupSelectors.closePreviewBtn));
   }
 
-  clickRun () {
-    switchToPluginFrame();
+  this.clickRun = function () {
+    switchToPromptFrameForEditDossier();
     waitAndClick($(popupSelectors.runBtn));
   }
 
@@ -334,6 +334,7 @@ class PluginPopup {
     // TODO: wait untli import button is enabled and click it
     browser.pause(2500);
     switchToPluginFrame();
+    $(popupSelectors.importBtn).waitForExist(5000);
     this.clickImport();
   }
 
@@ -486,7 +487,44 @@ class PluginPopup {
     browser.pause(1111);
     this.selectFirstObject();
     this.clickPrepareData();
+  };
+
+  importDefaultPromptedVisualisation(visContainerId) {
+    // reprompt
+    switchToPromptFrameForEditDossier();
+    $('#mstrdossierPromptEditor').waitForExist(10000);
+    this.clickRun();
+    browser.pause(6000);
+    // select vis
+    switchToPromptFrameForEditDossier();
+    // for dossiers containing one vis: if no visContainerId, select the only existing vis
+    let visSelector;
+    if (typeof visContainerId === 'undefined') {
+      visSelector = $('.mstrmojo-VizBox-selector');
+    } else {
+      visSelector = $(visContainerId).$('.mstrmojo-VizBox-selector');
+    }
+    visSelector.waitForExist(6000);
+    browser.pause(3000);
+    visSelector.click();
+    browser.pause(2500);
+    switchToPluginFrame();
+    $(popupSelectors.importBtn).waitForExist(5000);
+    this.clickImport();
   }
-}
+
+  repromptDefaultVisualisation(visContainerId) {
+    // edit
+    pluginRightPanel.edit();
+    browser.pause(5000);
+    switchToPromptFrameForEditDossier();
+    // click reprompt icon
+    $(popupSelectors.dossierWindow.repromptDossier).waitForExist(5000);
+    $(popupSelectors.dossierWindow.repromptDossier).click();
+    browser.pause(3000);
+    // reprompt and import
+    this.importDefaultPromptedVisualisation(visContainerId);
+  }
+};
 
 export default new PluginPopup();

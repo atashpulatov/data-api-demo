@@ -11,7 +11,7 @@ export const popupSelectors = {
   importBtn: '#import',
   prepareBtn: '#prepare',
   cancelBtn: '#cancel',
-  runBtn: '#run',
+  runBtn: '#id_mstr2 > tbody > tr:nth-child(3) > td > div > label.mstrPromptEditorButtonRun',
   firstObject: '#root > div > div.object-table > div.object-table-container > div:nth-child(1) > div > div.ReactVirtualized__Grid.ReactVirtualized__Table__Grid > div > div > div',
   secondObject: $('#root > div > div.object-table > div.object-table-container > div:nth-child(1) > div > div.ReactVirtualized__Grid.ReactVirtualized__Table__Grid > div > div:nth-child(2)'),
   anyObject: (index) => `div.ReactVirtualized__Grid.ReactVirtualized__Table__Grid > div > div:nth-child(${index}) > div`,
@@ -71,6 +71,7 @@ export const popupSelectors = {
       selectFilterValueAt: (index) => `div.mstrd-FilterItemsList > div > div > div > div:nth-child(${index})`,
       getSliderInput: (position) => (position === 'left' ? '.mstrd-SliderSummary-left-input' : '.mstrd-SliderSummary-right-input'),
       buttonApplyFilters : 'div.mstrd-FilterPanelFooterContainer-apply',
-    }
+    },
+    repromptDossier: 'div.mstr-nav-icon.icon-reprompt'
   }
 };
