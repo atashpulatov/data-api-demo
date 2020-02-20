@@ -23,6 +23,7 @@ import {
 const {
   getObjectInfo,
   getObjectDefinition,
+  getVisualizationInfo,
   createInstance,
   getObjectContentGenerator,
   answerPrompts,
@@ -114,6 +115,7 @@ export class OfficeDisplayService {
     let instanceDefinition;
     let officeTable;
     let bindId;
+    let updatedVisualizationInfo;
     try {
       excelContext = await officeApiHelper.getExcelContext();
       if (!isRefreshAll) {
@@ -137,11 +139,14 @@ export class OfficeDisplayService {
 
       // Get mstr instance definition
       console.time('Instance definition');
-      ({ body, instanceDefinition, isCrosstab } = await this.getInstaceDefinition(
+      ({ body, instanceDefinition, isCrosstab, updatedVisualizationInfo } = await this.getInstaceDefinition(
         body, mstrObjectType, manipulationsXML, preparedInstanceId, projectId, objectId, dossierData,
         visualizationInfo, promptsAnswers, crosstabHeaderDimensions, subtotalsAddresses, subtotalsDefined,
         subtotalsVisible, displayAttrFormNames
       ));
+      if (visualizationInfo && updatedVisualizationInfo) {
+        visualizationInfo.chapterKey = updatedVisualizationInfo.chapterKey;
+      }
       const { mstrTable } = instanceDefinition;
       ({ crosstabHeaderDimensions } = mstrTable);
       console.timeEnd('Instance definition');
@@ -157,7 +162,6 @@ export class OfficeDisplayService {
       // Create or update table
       ({ officeTable, newOfficeTableId, shouldFormat, tableColumnsChanged, bindId } = await officeTableHelper.getOfficeTable(
         isRefresh, excelContext, bindingId, instanceDefinition, startCell, tableName, previousTableDimensions
-
       ));
 
       // Apply formating for changed vizualization
@@ -313,7 +317,9 @@ export class OfficeDisplayService {
     await excelContext.sync();
     const tablename = officeTable.name;
     let tableid = bindingId;
-    if (!bindingId || (bindId && (bindingId !== bindId))) { tableid = bindId; }
+    if (!bindingId || (bindId && (bindingId !== bindId))) {
+      tableid = bindId;
+    }
     await officeApiHelper.bindNamedItem(tablename, tableid);
     return tableid;
   }
@@ -339,6 +345,7 @@ export class OfficeDisplayService {
    */
   async getInstaceDefinition(body, mstrObjectType, manipulationsXML, preparedInstanceId, projectId, objectId, dossierData, visualizationInfo, promptsAnswers, crosstabHeaderDimensions, subtotalsAddresses, subtotalsDefined, subtotalsVisible, displayAttrFormNames) {
     let instanceDefinition;
+    let updatedVisualizationInfo;
     if (body && body.requestedObjects) {
       if (body.requestedObjects.attributes.length === 0 && body.requestedObjects.metrics.length === 0) {
         body.requestedObjects = undefined;
@@ -347,7 +354,9 @@ export class OfficeDisplayService {
     }
     if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
       if (manipulationsXML) {
-        if (!body) { body = {}; }
+        if (!body) {
+          body = {};
+        }
         body.manipulations = manipulationsXML.manipulations;
         body.promptAnswers = manipulationsXML.promptAnswers;
       }
@@ -358,14 +367,13 @@ export class OfficeDisplayService {
         error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
         throw error;
       }
-      const config = { projectId, objectId, instanceId, mstrObjectType, dossierData, body, visualizationInfo, displayAttrFormNames };
+      updatedVisualizationInfo = await getVisualizationInfo(projectId, objectId, visualizationInfo.visualizationKey, instanceId);
+      const config = { projectId, objectId, instanceId, mstrObjectType, dossierData, body, visualizationInfo: updatedVisualizationInfo, displayAttrFormNames };
       let temporaryInstanceDefinition;
       try {
         temporaryInstanceDefinition = await fetchVisualizationDefinition(config);
       } catch (error) {
-        if (error.message && error.message.includes(incomingErrorStrings.INVALID_VIZ_KEY)) {
-          error.type = errorTypes.INVALID_VIZ_KEY;
-        }
+        error.type = this.getVisualizationErrorType(error);
         throw error;
       }
       instanceDefinition = { ...temporaryInstanceDefinition, instanceId };
@@ -386,8 +394,33 @@ export class OfficeDisplayService {
       : false;
     mstrTable.subtotalsInfo.subtotalsAddresses = subtotalsAddresses;
     ({ subtotalsDefined, subtotalsVisible } = mstrTable.subtotalsInfo);
-    return { body, instanceDefinition, isCrosstab, subtotalsDefined, subtotalsVisible };
+    return { body, instanceDefinition, isCrosstab, subtotalsDefined, subtotalsVisible, updatedVisualizationInfo };
   }
+
+  /**
+   * Returns an error type based on error get from visualization importing.
+   *
+   * @param {Object} error
+   * @return {String || undefined} errorType
+   * @memberOf officeDisplayService
+   */
+  getVisualizationErrorType = (error) => {
+    if (!error) {
+      return;
+    }
+
+    let errorType = error.type;
+    if ((error.message && error.message.includes(incomingErrorStrings.INVALID_VIZ_KEY))
+      || (error.response
+        && error.response.body
+        && error.response.body.message
+        && error.response.body.message.includes(incomingErrorStrings.INVALID_VIZ_KEY))
+    ) {
+      errorType = errorTypes.INVALID_VIZ_KEY;
+    }
+
+    return errorType;
+  };
 
   /**
    * Gets object definition, dispatch data to Redux and display loading popup.

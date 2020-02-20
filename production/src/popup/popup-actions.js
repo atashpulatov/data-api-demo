@@ -106,9 +106,12 @@ export class PopupActions {
       const editedDossier = this.officeStoreService.getReportFromProperties(reportParams.bindId);
       const { projectId, id, manipulationsXML, visualizationInfo } = editedDossier;
       const instanceId = await this.mstrObjectRestService.createDossierInstance(projectId, id, { ...manipulationsXML, disableManipulationsAutoSaving: true, persistViewState: true });
+      const updatedVisualizationInfo = await this.mstrObjectRestService.getVisualizationInfo(projectId, id, visualizationInfo.visualizationKey, instanceId);
       editedDossier.instanceId = instanceId;
       editedDossier.isEdit = true;
-      editedDossier.visualizationInfo = await this.mstrObjectRestService.getVisualizationInfo(projectId, id, visualizationInfo.visualizationKey, instanceId);
+      if (updatedVisualizationInfo) {
+        editedDossier.visualizationInfo = updatedVisualizationInfo;
+      }
       dispatch({
         type: SET_REPORT_N_FILTERS,
         editedObject: editedDossier,
