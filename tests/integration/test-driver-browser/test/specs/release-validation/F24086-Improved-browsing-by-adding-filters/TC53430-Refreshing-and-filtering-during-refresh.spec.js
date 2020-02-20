@@ -39,8 +39,9 @@ describe('F24086 Improved browsing by adding filters', () => {
     PluginPopup.clickSelectAll();
     PluginPopup.tickFilterCheckBox('Type', 'Report');
     browser.pause(150);
-    expect($('div.FilterResult > strong=938')).toBeDefined();
-    browser.debug();
+    // browser.debug();
+    expect($('div.FilterResult > strong').getText()).toEqual('938');
+    // browser.debug();
     // // scroll bottom
     // browser.pause(999);
     // PluginPopup.clickFilterButton();
@@ -84,7 +85,6 @@ describe('F24086 Improved browsing by adding filters', () => {
     PluginPopup.tickFilterCheckBox('Type', 'Dossier');
     PluginPopup.clickAllButton('Owner');
     PluginPopup.clickSelectAll();
-    browser.debug();
     // expect($('.all-panel__content .category-list-row.disabled input').isSelected()).toBe(false);
   });
 });
