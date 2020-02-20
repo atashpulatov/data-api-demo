@@ -10,7 +10,7 @@ import { objectsList as o } from '../../../constants/objects-list';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 
-describe('TC59987 - Import attribute forms', () => {
+describe('TS41441 - perform-basic-functionalities', () => {
   beforeAll(() => {
     browser.setWindowSize(1700, 900);
     OfficeWorksheet.openExcelHome();
