@@ -17,7 +17,8 @@ import {
   ALL_DATA_FILTERED_OUT,
   ERROR_POPUP_CLOSED,
   incomingErrorStrings,
-  errorTypes
+  errorTypes,
+  INVALID_VIZ_KEY_MESSAGE
 } from '../error/constants';
 
 const {
@@ -368,6 +369,9 @@ export class OfficeDisplayService {
         throw error;
       }
       updatedVisualizationInfo = await getVisualizationInfo(projectId, objectId, visualizationInfo.visualizationKey, instanceId);
+      if (!updatedVisualizationInfo) {
+        throw new Error(INVALID_VIZ_KEY_MESSAGE);
+      }
       const config = { projectId, objectId, instanceId, mstrObjectType, dossierData, body, visualizationInfo: updatedVisualizationInfo, displayAttrFormNames };
       let temporaryInstanceDefinition;
       try {
