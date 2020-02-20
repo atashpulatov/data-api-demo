@@ -21,7 +21,7 @@ exports.config = {
   ],
   suites: {
     test: [
-      './test/specs/release-validation/test/*.js'
+      './test/specs/release-validation/F24086-temp/*.spec.js'
     ],
     UB: [
       './test/specs/performance/UB-standalone-version/import-UB-dataset.spec.js'
@@ -147,7 +147,7 @@ exports.config = {
   {
   //
   // Jasmine default timeout
-    defaultTimeoutInterval: 60000,
+    defaultTimeoutInterval: 600000,
     //
     // The Jasmine framework allows interception of each assertion in order to log the state of the application
     // or website depending on the result. For example, it is pretty handy to take a screenshot every time
