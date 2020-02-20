@@ -1,7 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import { waitAndClick, waitAndRightClick } from '../utils/click-helper';
 import { popupSelectors } from '../../constants/selectors/popup-selectors';
-import { switchToPluginFrame, switchToPromptFrame, switchToPopupFrame, switchToExcelFrame, switchToPromptFrameForEditDossier } from '../utils/iframe-helper';
+import { switchToPluginFrame, switchToPromptFrame, switchToPopupFrame, switchToExcelFrame, switchToPromptFrameForEditDossier, switchToPromptFrameForEditReport } from '../utils/iframe-helper';
 import { waitForNotification } from '../utils/wait-helper'
 import pluginRightPanel from './plugin.right-panel';
 import { excelSelectors } from '../../constants/selectors/office-selectors';
@@ -61,8 +61,8 @@ class PluginPopup {
     waitAndClick($(popupSelectors.closePreviewBtn));
   }
 
-  clickRun() {
-    switchToPopupFrame();
+ clickRun() {
+    switchToPromptFrameForEditDossier();
     waitAndClick($(popupSelectors.runBtn));
   }
 
@@ -123,16 +123,13 @@ class PluginPopup {
 
   importObject(objectName, myLibrarySwitch) {
     switchToPluginFrame();
-    browser.pause(4000);
-    this.switchLibrary(myLibrarySwitch);
-    browser.pause(1000);
     this.searchForObject(objectName);
     browser.pause(500);
     this.selectFirstObject();
     this.clickImport();
-  }
+  };
 
-  importAnyObject(objectName, index) {
+  importAnyObject (objectName, index) {
     switchToPluginFrame();
     browser.pause(500);
     this.switchLibrary(false);
@@ -237,7 +234,16 @@ class PluginPopup {
 
   promptSelectObject(objectName) {
     switchToPromptFrame();
-    $('#mstrdossierPromptEditor').waitForExist(3333);
+    $('#mstrdossierPromptEditor').waitForExist(7777);
+    waitAndClick($(`.mstrListBlockItem*=${objectName}`));
+    browser.pause(2222);
+    waitAndClick($('.mstrToolButtonRounded'));
+  }
+
+  promptSelectObjectForEdit = (objectName) => {
+    switchToPromptFrameForEditReport();
+    browser.pause(10000);
+    $('#mstrdossierPromptEditor').waitForExist(7777);
     waitAndClick($(`.mstrListBlockItem*=${objectName}`));
     browser.pause(2222);
     waitAndClick($('.mstrToolButtonRounded'));
@@ -337,6 +343,7 @@ class PluginPopup {
     // TODO: wait untli import button is enabled and click it
     browser.pause(2500);
     switchToPluginFrame();
+    $(popupSelectors.importBtn).waitForExist(5000);
     this.clickImport();
   }
 
@@ -489,7 +496,44 @@ class PluginPopup {
     browser.pause(1111);
     this.selectFirstObject();
     this.clickPrepareData();
+  };
+
+  importDefaultPromptedVisualisation(visContainerId) {
+    // reprompt
+    switchToPromptFrameForEditDossier();
+    $('#mstrdossierPromptEditor').waitForExist(10000);
+    this.clickRun();
+    browser.pause(6000);
+    // select vis
+    switchToPromptFrameForEditDossier();
+    // for dossiers containing one vis: if no visContainerId, select the only existing vis
+    let visSelector;
+    if (typeof visContainerId === 'undefined') {
+      visSelector = $('.mstrmojo-VizBox-selector');
+    } else {
+      visSelector = $(visContainerId).$('.mstrmojo-VizBox-selector');
+    }
+    visSelector.waitForExist(6000);
+    browser.pause(3000);
+    visSelector.click();
+    browser.pause(2500);
+    switchToPluginFrame();
+    $(popupSelectors.importBtn).waitForExist(5000);
+    this.clickImport();
   }
-}
+
+  repromptDefaultVisualisation(visContainerId) {
+    // edit
+    pluginRightPanel.edit();
+    browser.pause(5000);
+    switchToPromptFrameForEditDossier();
+    // click reprompt icon
+    $(popupSelectors.dossierWindow.repromptDossier).waitForExist(5000);
+    $(popupSelectors.dossierWindow.repromptDossier).click();
+    browser.pause(3000);
+    // reprompt and import
+    this.importDefaultPromptedVisualisation(visContainerId);
+  }
+};
 
 export default new PluginPopup();

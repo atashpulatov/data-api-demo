@@ -50,7 +50,47 @@ class PluginRightPanel {
     waitAndClick($(rightPanelSelectors.refreshBtn));
   }
 
-  refreshAll() {
+
+  /**
+   * Clicks to refresh button for imported object. Will work when there are more than one report imported.
+   *
+   * @param {Number} index indicates the report represented in the plugin. Starts with 1 which indicates the last imported object.
+   *
+   * @memberof PluginRightPanel
+   */
+  refreshObject(index) {
+    switchToPluginFrame();
+    const refreshBtn = rightPanelSelectors.getRefreshBtnForObject(index);
+    waitAndClick($(refreshBtn));
+  }
+
+  /**
+   * Clicks to edit button for imported object. Will work when there are more than one object imported.
+   *
+   * @param {Number} index indicates the report represented in the plugin. Starts with 1 which indicates the last imported object.
+   *
+   * @memberof PluginRightPanel
+   */
+  editObject(index) {
+    switchToPluginFrame();
+    const editBtn = rightPanelSelectors.getEdithBtnForObject(index);
+    waitAndClick($(editBtn));
+  }
+
+  /**
+   * Clicks to remove button for imported object. Will work when there are more than one object imported.
+   *
+   * @param {Number} index indicates the report represented in the plugin. Starts with 1 which indicates the last imported object.
+   *
+   * @memberof PluginRightPanel
+   */
+  removeObject(index) {
+    switchToPluginFrame();
+    const removeBtn = rightPanelSelectors.getRemoveBtnForObject(index);
+    waitAndClick($(removeBtn));
+  }
+
+  refreshAll () {
     switchToPluginFrame();
     waitAndClick($(rightPanelSelectors.refreshAllBtn));
   }
@@ -164,6 +204,7 @@ class PluginRightPanel {
     switchToPluginFrame();
     return $(`${rightPanelSelectors.placeholderContainer} > div:nth-child(${number})`);
   }
+
 }
 
 export default new PluginRightPanel();

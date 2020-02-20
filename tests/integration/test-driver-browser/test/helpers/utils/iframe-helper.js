@@ -23,6 +23,13 @@ export function switchToPromptFrameForEditDossier() {
   browser.switchToFrame($(editFrame));
 }
 
+export function switchToPromptFrameForEditReport() {
+  switchToPluginFrame();
+  const editFrame = '#root > div > div.promptsContainer > iframe';
+  $(editFrame).waitForExist(9999);
+  browser.switchToFrame($(editFrame));
+}
+
 export function switchToRightPanelFrame() {
   switchToExcelFrame();
   $('iframe[src*="loader-mstr-office"]').waitForExist(9999);

@@ -12,7 +12,7 @@ export const popupSelectors = {
   importBtn: '#import',
   prepareBtn: '#prepare',
   cancelBtn: '#cancel',
-  runBtn: '#run',
+  runBtn: '#id_mstr2 > tbody > tr:nth-child(3) > td > div > label.mstrPromptEditorButtonRun',
   firstObject: '#root > div > div.object-table > div.object-table-container > div:nth-child(1) > div > div.ReactVirtualized__Grid.ReactVirtualized__Table__Grid > div > div > div',
   secondObject: $('#root > div > div.object-table > div.object-table-container > div:nth-child(1) > div > div.ReactVirtualized__Grid.ReactVirtualized__Table__Grid > div > div:nth-child(2)'),
   anyObject: (index) => `div.ReactVirtualized__Grid.ReactVirtualized__Table__Grid > div > div:nth-child(${index}) > div`,
@@ -53,6 +53,10 @@ export const popupSelectors = {
   drillButton:'div=Drill',
   categoryButton:'div=Category',
   visualizationSelector:'.mstrmojo-VizBox-selector',
+  prepareData:{ getAttributeAt: (index) => `#root > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div:nth-child(1) > div > div.checkbox-list.all-showed > div > div > div:nth-child(2) > div > div > div:nth-child(${index}) > label > span:nth-child(3)` },
+  smartFolderTable:
+  { availableObjectNumber: '#root > div > div.object-table > div.FilterResult', // Contains string and number, e.g. 1280 results
+  },
   dossierWindow:{
     visualizationName: '.mstrd-NavBarTitle-item-active .mstrd-DossierTitle',
     filterCount: '.mstrd-FilterSummaryBar-filterCount',
@@ -68,6 +72,7 @@ export const popupSelectors = {
       selectFilterValueAt: (index) => `div.mstrd-FilterItemsList > div > div > div > div:nth-child(${index})`,
       getSliderInput: (position) => (position === 'left' ? '.mstrd-SliderSummary-left-input' : '.mstrd-SliderSummary-right-input'),
       buttonApplyFilters : 'div.mstrd-FilterPanelFooterContainer-apply',
-    }
+    },
+    repromptDossier: 'div.mstr-nav-icon.icon-reprompt'
   }
 };
