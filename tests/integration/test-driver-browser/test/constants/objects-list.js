@@ -44,7 +44,8 @@ export const objectsList = {
     basicDataset: '100_dataset',
     notPublished: 'not published dataset',
     cubeLimitProject: '1,5M Sales Records.csv',
-    notSupportedCube: 'multi table cube'
+    notSupportedCube: 'multi table cube',
+    salesRecords1k: '1k Sales Records.csv',
   },
 
   dossiers: {

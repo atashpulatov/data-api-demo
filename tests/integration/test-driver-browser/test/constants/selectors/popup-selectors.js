@@ -52,6 +52,10 @@ export const popupSelectors = {
   drillButton:'div=Drill',
   categoryButton:'div=Category',
   visualizationSelector:'.mstrmojo-VizBox-selector',
+  prepareData:{ getAttributeAt: (index) => `#root > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div:nth-child(1) > div > div.checkbox-list.all-showed > div > div > div:nth-child(2) > div > div > div:nth-child(${index}) > label > span:nth-child(3)` },
+  smartFolderTable:
+  { availableObjectNumber: '#root > div > div.object-table > div.FilterResult', // Contains string and number, e.g. 1280 results
+  },
   dossierWindow:{
     visualizationName: '.mstrd-NavBarTitle-item-active .mstrd-DossierTitle',
     filterCount: '.mstrd-FilterSummaryBar-filterCount',
