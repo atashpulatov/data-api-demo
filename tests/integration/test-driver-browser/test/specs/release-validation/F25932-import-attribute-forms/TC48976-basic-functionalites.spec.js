@@ -1,4 +1,3 @@
-import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
@@ -9,44 +8,26 @@ import settings from '../../../config';
 import { objectsList as o } from '../../../constants/objects-list';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
+import officeLogin from '../../../helpers/office/office.login';
 
 describe('TC48976 - perform-basic-functionalities', () => {
   beforeAll(() => {
-    browser.setWindowSize(1700, 900);
-    OfficeWorksheet.openExcelHome();
-    const url = browser.getUrl();
-    if (url.includes('login.microsoftonline')) {
-      OfficeLogin.login(settings.officeOnline.username, settings.officeOnline.password);
-    }
-    OfficeWorksheet.createNewWorkbook();
-    OfficeWorksheet.openPlugin();
-    switchToPluginFrame();
-    $(rightPanelSelectors.loginRightPanelBtn).waitForDisplayed(7777);
-    if ($(rightPanelSelectors.loginRightPanelBtn).isExisting()) {
-      PluginRightPanel.clickLoginRightPanelBtn();
-      const handles = browser.getWindowHandles();
-      browser.switchToWindow(handles[2]); // TODO: create help function to switch tabs
-      $(rightPanelSelectors.usernameInput).setValue('Invalid Username');
-      $(rightPanelSelectors.passwordInput).setValue('Invalid Password');
-      PluginRightPanel.clickLoginPopUpBtn();
-      browser.pause(2222);
-      waitAndClick($('#ActionLinkContainer'));
-      $(rightPanelSelectors.usernameInput).setValue('b');
-      $(rightPanelSelectors.passwordInput).setValue('');
-      PluginRightPanel.clickLoginPopUpBtn();
-      browser.switchToWindow(handles[1]);
-    }
-    browser.pause(2222);
+    // Invalid credentials
+    officeLogin.openExcelAndLoginToPlugin('Invalid username', 'Invalid password', false)
+    waitAndClick($('#ActionLinkContainer'));
+
+    // Credentials without office privileges
+    PluginRightPanel.enterCredentialsAndPressLoginBtn('b', '');
+    const handles = browser.getWindowHandles();
+    browser.switchToWindow(handles[1]);
     switchToRightPanelFrame();
     waitAndClick($('#accept-cookies-btn'));
-    browser.pause(2222);
+    $(rightPanelSelectors.loginRightPanelBtn).waitForDisplayed(2000, false);
     PluginRightPanel.clickLoginRightPanelBtn();
-    const handles = browser.getWindowHandles();
-    browser.switchToWindow(handles[2]);
-    $(rightPanelSelectors.usernameInput).setValue('a');
-    $(rightPanelSelectors.passwordInput).setValue('');
-    PluginRightPanel.clickLoginPopUpBtn();
-    browser.pause(2222);
+    browser.switchToWindow(browser.getWindowHandles()[2]);
+
+    // Valid credentials
+    PluginRightPanel.enterCredentialsAndPressLoginBtn('a', '');
     browser.switchToWindow(handles[1]);
   });
 
@@ -63,9 +44,11 @@ describe('TC48976 - perform-basic-functionalities', () => {
     const datasetFilter = 'label=Dataset';
     const removeIcon = '.mstr-icon.trash';
     const O3 = '#gridRows > div:nth-child(3) > div:nth-child(15) > div > div';
+
     switchToRightPanelFrame();
     $(rightPanelSelectors.importDataBtn).waitForDisplayed(3000, false);
     PluginRightPanel.clickImportDataButton();
+
     switchToPluginFrame();
     $(popupSelectors.myLibrary).waitForDisplayed(2000, false);
     PluginPopup.switchLibrary(false);
@@ -91,10 +74,12 @@ describe('TC48976 - perform-basic-functionalities', () => {
     PluginPopup.clickImport();
     waitForNotification();
     browser.pause(1000);
+
     OfficeWorksheet.selectCellAlternatively('M1');
     browser.pause(1000);
     PluginRightPanel.clickAddDataButton();
     switchToPluginFrame();
+
     PluginPopup.switchLibrary(false);
     waitAndClick($('#Filter'));
     $(datasetFilter).waitForDisplayed(1000, false)
@@ -121,10 +106,12 @@ describe('TC48976 - perform-basic-functionalities', () => {
     PluginPopup.clickImport();
     waitForNotification();
     switchToExcelFrame();
+
     OfficeWorksheet.selectCell('O3')
     expect($(O3).getText()).toEqual('2/23/2015');
     browser.pause(1000);
     switchToRightPanelFrame();
+
     waitAndClick($(firstObject));
     $(rightPanelSelectors.importedObjectNameList).doubleClick();
     $(rightPanelSelectors.importedObjectNameList).moveTo();
@@ -137,6 +124,7 @@ describe('TC48976 - perform-basic-functionalities', () => {
     ($(rightPanelSelectors.editBtn)).waitForDisplayed(5000, false);
     PluginRightPanel.edit();
     browser.pause(1000);
+
     switchToPluginFrame();
     browser.pause(1000);
     PluginPopup.selectObjectElements(['Country', 'Item Type', 'Sales Channel', 'Ship Date', 'Units Sold']);
@@ -147,6 +135,7 @@ describe('TC48976 - perform-basic-functionalities', () => {
     waitAndClick($(removeIcon));
     browser.pause(2000);
     switchToPluginFrame();
+
     PluginRightPanel.logout();
     browser.pause(2000);
   });

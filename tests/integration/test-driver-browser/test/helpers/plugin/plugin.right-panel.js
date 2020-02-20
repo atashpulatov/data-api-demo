@@ -5,31 +5,31 @@ import { rightPanelSelectors } from '../../constants/selectors/plugin.right-pane
 import { excelSelectors } from '../../constants/selectors/office-selectors';
 
 class PluginRightPanel {
-  clickLoginPopUpBtn () {
+  clickLoginPopUpBtn() {
     waitAndClick($(rightPanelSelectors.loginPopUpBtn));
   }
 
-  clickLogout () {
+  clickLogout() {
     waitAndClick($(rightPanelSelectors.logoutBtn));
   }
 
-  clickSettings () {
+  clickSettings() {
     waitAndClick($(rightPanelSelectors.settingsBtn));
   }
 
-  logout () {
+  logout() {
     this.clickSettings();
     this.clickLogout();
   }
 
-  clickImportDataButton () {
+  clickImportDataButton() {
     switchToPluginFrame();
     waitAndClick($(rightPanelSelectors.importDataBtn));
     browser.pause(999);
   }
 
   // Currently it is not used
-  loginToPluginLDAP (username, password) {
+  loginToPluginLDAP(username, password) {
     switchToPluginFrame();
     waitAndClick($(rightPanelSelectors.LDAPbutton));
     $(rightPanelSelectors.usernameInput).setValue(username);
@@ -38,42 +38,42 @@ class PluginRightPanel {
     browser.pause(4444);
   }
 
-  clickAddDataButton () {
+  clickAddDataButton() {
     switchToPluginFrame();
     waitAndClick($(rightPanelSelectors.addDataBtn));
     browser.pause(999);
   }
 
-  refreshFirstObjectFromTheList () {
+  refreshFirstObjectFromTheList() {
     switchToPluginFrame();
     // browser.pause(4444); // to do: see if we can change to some wait method
     waitAndClick($(rightPanelSelectors.refreshBtn));
   }
 
-  refreshAll () {
+  refreshAll() {
     switchToPluginFrame();
     waitAndClick($(rightPanelSelectors.refreshAllBtn));
   }
 
-  edit () {
+  edit() {
     switchToPluginFrame();
     waitAndClick($('.edit'));
   }
 
-  removeFirstObjectFromTheList () {
+  removeFirstObjectFromTheList() {
     switchToPluginFrame();
     browser.pause(3333);
     waitAndClick($(rightPanelSelectors.deleteBtn));
   }
 
-  repromptFirstObjectFromTheList () {
+  repromptFirstObjectFromTheList() {
     switchToPluginFrame();
     browser.pause(3333);
     waitAndClick($(rightPanelSelectors.repromptBtn));
   }
 
   // Currently it is not used
-  removeAllObjectsFromTheList () {
+  removeAllObjectsFromTheList() {
     switchToPluginFrame();
     const e = $$('.trash').count();
     for (let i = 0; i < e; i++) {
@@ -81,54 +81,60 @@ class PluginRightPanel {
     }
   }
 
-  closeNotification () {
+  closeNotification() {
     switchToPluginFrame();
     waitAndClick($('span.ant-notification-notice-btn > button'));
   }
 
-  clickLoginRightPanelBtn () {
+  clickLoginRightPanelBtn() {
     waitAndClick($(rightPanelSelectors.loginRightPanelBtn));
   }
 
-  loginToPlugin (username, password) {
+  loginToPlugin(username, password, isValidCredentials) {
     switchToPluginFrame();
     $(rightPanelSelectors.loginRightPanelBtn).waitForDisplayed(7777);
     if ($(rightPanelSelectors.loginRightPanelBtn).isExisting()) {
       this.clickLoginRightPanelBtn();
       const handles = browser.getWindowHandles();
       browser.switchToWindow(handles[2]); // TODO: create help function to switch tabs
-      $(rightPanelSelectors.usernameInput).setValue(username);
-      $(rightPanelSelectors.passwordInput).setValue(password);
-      this.clickLoginPopUpBtn();
-      browser.pause(2222);
-      browser.switchToWindow(handles[1]); // TODO: create help function to switch tabs
+      this.enterCredentialsAndPressLoginBtn(username, password);
+      if (isValidCredentials) {
+        browser.switchToWindow(handles[1]); // TODO: create help function to switch tabs
+      }
     }
   }
 
-  clearData () {
+  enterCredentialsAndPressLoginBtn(username, password) {
+    $(rightPanelSelectors.usernameInput).setValue(username);
+    $(rightPanelSelectors.passwordInput).setValue(password);
+    this.clickLoginPopUpBtn();
+    browser.pause(2222);
+  }
+
+  clearData() {
     const clearBtn = $(`.no-trigger-close*=Clear Data`); // TODO: This method will not work with localisation (Don't use 'Clear Data')
     waitAndClick(clearBtn);
     waitAndClick($(rightPanelSelectors.clearOkBtn));
   }
 
-  viewDataBtn () {
+  viewDataBtn() {
     waitAndClick($(rightPanelSelectors.viewDataBtn));
   }
 
-  getVersionOfThePlugin () {
+  getVersionOfThePlugin() {
     switchToPluginFrame();
     this.clickSettings();
     const version = $('.settings-version').getText();
     return version.substring('Version '.length);
   }
 
-  doubleClick (element) {
+  doubleClick(element) {
     element.click();
     element.click();
   }
 
   // clicks on object in the right panel and asserts whether the object was selected in the worksheet
-  clickOnObject (object, cellValue) {
+  clickOnObject(object, cellValue) {
     waitAndClick(object);
     switchToExcelFrame();
     expect($(excelSelectors.cellInput).getValue()).toEqual(cellValue);
@@ -137,7 +143,7 @@ class PluginRightPanel {
   }
 
   // hovers over objects in the right panel and assert whether the box shadow color is changed
-  hoverOverObjects (objects) {
+  hoverOverObjects(objects) {
     for (let i = 0; i < objects.length; i++) {
       objects[i].moveTo();
       browser.pause(1000);
@@ -146,18 +152,18 @@ class PluginRightPanel {
   }
 
   // hovers over object names in the right panel and assert whether the backgroiund color changed
-  hoverOverObjectNames (objectNames) {
+  hoverOverObjectNames(objectNames) {
     for (let i = 0; i < objectNames.length; i++) {
       objectNames[i].moveTo();
       browser.pause(1000);
       expect(objectNames[i].getCSSProperty('background-color').value).toEqual('rgba(235,235,235,1)');
     }
-  };
+  }
 
-  this.SelectNthPlaceholder = function(number) {
+  SelectNthPlaceholder(number) {
     switchToPluginFrame();
     return $(`${rightPanelSelectors.placeholderContainer} > div:nth-child(${number})`);
-  };
-};
+  }
+}
 
 export default new PluginRightPanel();
