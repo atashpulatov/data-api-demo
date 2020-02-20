@@ -1,7 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import { waitAndClick, waitAndRightClick } from '../utils/click-helper';
 import { popupSelectors } from '../../constants/selectors/popup-selectors';
-import { switchToPluginFrame, switchToPromptFrame, switchToPopupFrame, switchToExcelFrame, switchToPromptFrameForEditDossier } from '../utils/iframe-helper';
+import { switchToPluginFrame, switchToPromptFrame, switchToPopupFrame, switchToExcelFrame, switchToPromptFrameForEditDossier, switchToPromptFrameForEditReport } from '../utils/iframe-helper';
 import { waitForNotification } from '../utils/wait-helper'
 import pluginRightPanel from './plugin.right-panel';
 import { excelSelectors } from '../../constants/selectors/office-selectors';
@@ -50,7 +50,7 @@ class PluginPopup {
   }
 
   clickRun () {
-    switchToPopupFrame();
+    switchToPluginFrame();
     waitAndClick($(popupSelectors.runBtn));
   }
 
@@ -225,7 +225,16 @@ class PluginPopup {
 
   promptSelectObject (objectName) {
     switchToPromptFrame();
-    $('#mstrdossierPromptEditor').waitForExist(3333);
+    $('#mstrdossierPromptEditor').waitForExist(7777);
+    waitAndClick($(`.mstrListBlockItem*=${objectName}`));
+    browser.pause(2222);
+    waitAndClick($('.mstrToolButtonRounded'));
+  };
+
+  this.promptSelectObjectForEdit = (objectName) => {
+    switchToPromptFrameForEditReport();
+    browser.pause(10000);
+    $('#mstrdossierPromptEditor').waitForExist(7777);
     waitAndClick($(`.mstrListBlockItem*=${objectName}`));
     browser.pause(2222);
     waitAndClick($('.mstrToolButtonRounded'));
