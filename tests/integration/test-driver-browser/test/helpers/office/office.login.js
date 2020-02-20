@@ -22,7 +22,7 @@ const OfficeLogin = function() {
    *
    * @memberof OfficeLogin
    */
-  this.openExcelAndLoginToPlugin = () => {
+  this.openExcelAndLoginToPlugin = (pluginUsername = settings.env.username, pluginPassword = settings.env.password) => {
     browser.setWindowSize(1500, 900);
     OfficeWorksheet.openExcelHome();
     const url = browser.getUrl();
@@ -31,7 +31,7 @@ const OfficeLogin = function() {
     }
     OfficeWorksheet.createNewWorkbook();
     OfficeWorksheet.openPlugin();
-    pluginRightPanel.loginToPlugin(settings.env.username, settings.env.password);
+    pluginRightPanel.loginToPlugin(pluginUsername, pluginPassword);
   }
 };
 

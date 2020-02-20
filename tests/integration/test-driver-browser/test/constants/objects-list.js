@@ -27,6 +27,16 @@ export const objectsList = {
     grpahReport: 'report graph',
     gridReport: 'Grid/graph',
     basicSubtotalsReport: 'Report Totals Subtotals 1',
+    longReportWithInvalidCharacters: {
+      sourceName: '01. • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«». • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&\'()*+,-:;<=>@/`testtesttes/km123456',
+      excelTableNameStart:'_01___________________________________Report_for_testing_binding_and_special_characters',
+      excelTableFullName:'_01___________________________________Report_for_testing_binding_and_special_characters______________________________________________________________________Report_for_testing_binding_and_special_characters_________________________testtestt_TIMESTAMP'
+    },
+    basic01Report:{
+      sourceName: '01 Basic Report',
+      excelTableNameStart:'_01_Basic_Report',
+      excelTableFullName:'_01_Basic_Report_TIMESTAMP'
+    }
   },
 
   datasets: {
@@ -34,7 +44,8 @@ export const objectsList = {
     basicDataset: '100_dataset',
     notPublished: 'not published dataset',
     cubeLimitProject: '1,5M Sales Records.csv',
-    notSupportedCube: 'multi table cube'
+    notSupportedCube: 'multi table cube',
+    salesRecords1k: '1k Sales Records.csv',
   },
 
   dossiers: {
@@ -75,5 +86,17 @@ export const objectsList = {
       name: 'Custom Visualizations',
       visualizations: { GoogleTimeline: '#mstr114', }
     },
+
+    userActivityDossier:{
+      name:'User Activity',
+      visualizations:{
+        accounts:'#mstr162',
+        dailyActiveAccounts:'#mstr131',
+      }
+    },
+    promptedDossier: {
+      name:'Prompted dossier - don\'t add to Library',
+      visualizations: { vis1: '#mstr106' }
+    }
   }
 };
