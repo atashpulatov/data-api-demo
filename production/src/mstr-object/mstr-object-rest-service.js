@@ -139,13 +139,14 @@ export class MstrObjectRestService {
   }
 
   /**
-   * Check size of passed object in MB
+   * Get Visualization key, page key, chapter key, and dossier structure with names from dossier hierarchy
+   * In case if visualization Key is not found in dossier it returns undefined
    *
    * @param {String} projectId
    * @param {String} objectId
    * @param {String} visualizationKey visualization id.
    * @param {Object} dossierInstance
-   * @returns {Object} Contains breadcrumbs fro visualization.
+   * @returns {Object} Contains info for visualization.
    * @memberof MstrObjectRestService
    */
   getVisualizationInfo = async (projectId, objectId, visualizationKey, dossierInstance) => {
