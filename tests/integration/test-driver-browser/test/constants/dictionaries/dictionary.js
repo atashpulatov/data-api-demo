@@ -11,8 +11,7 @@ export const dictionary = {
     notPublished: 'This object cannot be imported. The Intelligent Cube is not published',
     emptyObject: 'This object cannot be imported. Either you do not have necessary permissions to view it, or it is empty',
     worksheetLimits: 'The table you try to import exceeds the worksheet limits',
-    projectLimits: 'The object exceeds project rows limitation',
-    visualizationRemoved: 'Grid has been removed from the workbook.'
+    projectLimits: 'The object exceeds project rows limitation'
   },
   de: {
     importSuccess: 'Data loaded successfully',
