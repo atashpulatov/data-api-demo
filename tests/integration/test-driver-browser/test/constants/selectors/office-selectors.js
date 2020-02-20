@@ -1,7 +1,5 @@
 export const excelSelectors = {
-  getExcelCell: (column, row) => `#gridRows > div:nth-child(${row}) > div:nth-child(${column})`,
-  A2: $('#gridRows > div:nth-child(2) > div:nth-child(1)'),
-  E2: $('#gridRows > div:nth-child(2) > div:nth-child(5)'),
+  getCell: (column, row) => `#gridRows > div:nth-child(${row}) > div:nth-child(${column})`,
   cellInput: '#m_excelWebRenderer_ewaCtl_NameBox',
   insertBtn: '#m_excelWebRenderer_ewaCtl_Ribbon\\2e Insert-title',
   addInBtn: '#m_excelWebRenderer_ewaCtl_Apps\\2e AppsForOffice-Large',

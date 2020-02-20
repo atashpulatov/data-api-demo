@@ -6,31 +6,25 @@ import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { objectsList } from '../../../constants/objects-list';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
+import settings from '../../../config';
 
-describe('Smart Folder - IMPORT - ', () => {
-  beforeAll(async () => {
-    await OfficeWorksheet.openExcelHome();
-    const url = await browser.getCurrentUrl();
-    if (url.includes('login.microsoftonline')) {
-      await OfficeLogin.login(officeCredentials.username, officeCredentials.password);
-    }
-    await OfficeWorksheet.createNewWorkbook();
-    await OfficeWorksheet.openPlugin();
-    await PluginRightPanel.loginToPlugin('a', '');
+describe('F12909 - Ability to import a report from MicroStrategy report', () => {
+  beforeEach(() => {
+    OfficeLogin.openExcelAndLoginToPlugin();
+  });
+  afterEach(() => {
+    browser.closeWindow();
+    const handles = browser.getWindowHandles();
+    browser.switchToWindow(handles[0]);
   });
 
-  afterAll(async () => {
-    await browser.close();
-    const handles = await browser.getAllWindowHandles();
-    await browser.switchTo().window(handles[0]);
-  });
 
-  it('[TC35407] Import report with not supported features', async () => {
+  it('[TC35407] Import report with not supported features', () => {
     // should import a report
-    await OfficeWorksheet.selectCell('A1');
-    await PluginRightPanel.clickImportDataButton();
-    await PluginPopup.importObject(objectsList.reports.notSupportedFeatures);
-    await waitForNotification();
-    await expect(rightPanelSelectors.notificationPopUp.getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
+    OfficeWorksheet.selectCell('A1');
+    PluginRightPanel.clickImportDataButton();
+    PluginPopup.importObject(objectsList.reports.notSupportedFeatures);
+    waitForNotification();
+    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
   });
 });
