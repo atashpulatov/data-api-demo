@@ -3,11 +3,13 @@ import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { objectsList } from '../../../constants/objects-list';
-import { waitForNotification } from '../../../helpers/utils/wait-helper';
+import { waitForNotification, waitForPopup } from '../../../helpers/utils/wait-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { switchToPluginFrame, switchToPromptFrame, switchToPopupFrame, switchToExcelFrame } from '../../../helpers/utils/iframe-helper';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
+import { waitAndClick } from '../../../helpers/utils/click-helper';
+
 
 describe('TS41441 - E2E Sanity checks', () => {
   beforeEach(() => {
@@ -20,11 +22,10 @@ describe('TS41441 - E2E Sanity checks', () => {
     browser.switchToWindow(handles[0]);
   });
 
-  it('[TC49134] [E2E] Error handling | Subtotals | Crosstabs | Formatting | Secure Data - Additional Checks', () => {
+  it('[TC49134] [E2E] Error handling', () => {
     // should try to import a report of 1,5M rows that exceeds the excelsheet limits
-    OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
-    PluginPopup.importObject(objectsList.reports.report1_5M);
+    PluginPopup.switchLibraryAndImportObject(objectsList.reports.report1_5M, false);
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.excelLimit);
     PluginRightPanel.closeNotification();
@@ -37,7 +38,7 @@ describe('TS41441 - E2E Sanity checks', () => {
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.excelLimit);
     PluginRightPanel.closeNotification();
 
-    // should try to import a small report but placed in the last row of the excelsheet limits
+    // should try to import a small report but placed in the last column of the excelsheet limits
     OfficeWorksheet.selectCell('XFD1');
     PluginRightPanel.clickImportDataButton();
     PluginPopup.importObject(objectsList.reports.reportXML);
@@ -45,7 +46,7 @@ describe('TS41441 - E2E Sanity checks', () => {
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.excelLimit);
     PluginRightPanel.closeNotification();
 
-    // should try to import a report of 1,5M rows that exceeds the project row limitation
+    // should try to import a report of over 100k that exceeds the project row limitation
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
     PluginPopup.importObject(objectsList.reports.over100k);
@@ -54,41 +55,38 @@ describe('TS41441 - E2E Sanity checks', () => {
     PluginRightPanel.closeNotification();
 
     // should import a report with not supported features
-    OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
     PluginPopup.importObject(objectsList.reports.notSupportedFeatures);
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
 
-    // should try to import a report with not supported features
-    OfficeWorksheet.selectCell('A1');
-    PluginRightPanel.clickImportDataButton();
+    // should try to import a report in a non empty range
+    PluginRightPanel.clickAddDataButton();
     PluginPopup.importObject(objectsList.reports.reportXML);
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.rangeNotEmpty);
     PluginRightPanel.closeNotification();
+  });
 
+  it('[TC49134] [E2E] Subtotals | Crosstabs', () => {
     // should open a new sheet & import a report with totals/subtotals
-    OfficeWorksheet.openNewSheet();
-    OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
-    PluginPopup.importObject(objectsList.reports.basicSubtotalsReport);
+    PluginPopup.switchLibraryAndImportObject('Report with Totals and Subtotals', false);
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
 
     // should open a new sheet & import a report with crosstabs
     OfficeWorksheet.openNewSheet();
-    OfficeWorksheet.selectCell('A1');
-    PluginRightPanel.clickImportDataButton();
-    PluginPopup.importObject(objectsList.reports.basicSubtotalsReport);
+    PluginRightPanel.clickAddDataButton();
+    PluginPopup.importObject('Report with Crosstab');
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+  });
 
-    // should open a new sheet & import a report with crosstabs
-    OfficeWorksheet.openNewSheet();
-    OfficeWorksheet.selectCell('A1');
+  it('[TC49134] [E2E] Formatting | Secure Data - Additional Checks', () => {
+    // should open a new sheet & import a report with number formatting
     PluginRightPanel.clickImportDataButton();
-    PluginPopup.importObject(objectsList.reports.numberFormating);
+    PluginPopup.switchLibraryAndImportObject(objectsList.reports.numberFormating, false);
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
 
@@ -101,16 +99,15 @@ describe('TS41441 - E2E Sanity checks', () => {
     */
 
     // should clear data
+    browser.pause(1000);
     switchToPluginFrame();
     PluginRightPanel.clickSettings();
     PluginRightPanel.clearData();
-    // TODO: click OK button, for the question: Are you sure you want to Clear Data?
     browser.pause(4000);
 
     // should assert data was cleared
     switchToExcelFrame();
-    // expect(C10.getText()).toEqual('');
-    // expect(C10.getText()).toEqual('');
+
 
     // should log out
     switchToPluginFrame();
@@ -118,19 +115,18 @@ describe('TS41441 - E2E Sanity checks', () => {
     PluginRightPanel.clickLogout();
 
     // should log in with Tim user
-    PluginRightPanel.loginToPlugin('Tim', '');
+    PluginRightPanel.loginToPlugin('a', '');
 
     // should click "View Data" and close the "Refresh All Data" pop-up
     switchToPluginFrame();
     PluginRightPanel.viewDataBtn();
     switchToExcelFrame();
-    // TODO: wait for popup to show "Refreshing complete!" message
-    browser.actions().mouseMove(popupSelectors.closeRefreshAll).perform();
-    browser.actions().click(popupSelectors.closeRefreshAll).perform();
+
+    // waitForRefreshAllToFinish();
+    browser.pause(10000); // TODO: wait for popup to show "Refreshing complete!" message, instead of waiting
+    waitAndClick($(popupSelectors.closeRefreshAll));
 
     // should assert data was refreshed
     switchToExcelFrame();
-    // expect(C10.getText()).toEqual('$764,341');
-    // expect(C10.getText()).toEqual('$764,341');
   });
 });

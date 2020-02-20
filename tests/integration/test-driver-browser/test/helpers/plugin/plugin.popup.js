@@ -104,10 +104,18 @@ const PluginPopup = function () {
     waitAndClick($(popupSelectors.firstObject));
   };
 
-  this.importObject = function (objectName, myLibrarySwitch) {
+  this.switchLibraryAndImportObject = function (objectName, myLibrarySwitch) {
     switchToPluginFrame();
     browser.pause(4000);
     this.switchLibrary(myLibrarySwitch);
+    this.searchForObject(objectName);
+    browser.pause(500);
+    this.selectFirstObject();
+    this.clickImport();
+  };
+
+  this.importObject = function (objectName, myLibrarySwitch) {
+    switchToPluginFrame();
     this.searchForObject(objectName);
     browser.pause(500);
     this.selectFirstObject();
