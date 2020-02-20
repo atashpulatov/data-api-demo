@@ -44,14 +44,12 @@ describe('F24398 - Import and refresh visualization', () => {
     switchToRightPanelFrame();
     PluginPopup.repromptDefaultVisualisation()
     waitForNotification();
-    // commented as we're getting an error message now on env-173736 and the error message is read instead of visualizationRefreshed
     expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.visualizationRefreshed);
 
     browser.pause(3000);
 
     // It should delete the visualization
     PluginRightPanel.removeFirstObjectFromTheList();
-    // /* commented as we're getting an error message now on env-173736 and the error message is read instead of visualizationRemoved
     expect($(se.notificationPopUp).getAttribute('textContent')).toContain('Visualization 1 has been removed from the workbook.');
 
 
@@ -65,7 +63,6 @@ describe('F24398 - Import and refresh visualization', () => {
     browser.pause(2000);
 
     // It should log out
-    // /* commented as clicking logOut is impossible with the error message we're getting on env-173736
     switchToRightPanelFrame();
     PluginRightPanel.logout();
   });
