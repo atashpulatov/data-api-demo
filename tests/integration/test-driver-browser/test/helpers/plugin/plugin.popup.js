@@ -410,6 +410,10 @@ const PluginPopup = function() {
     waitAndClick($(s.filterPanel.selectAllButton));
   };
 
+  this.clickClearAll = () => {
+    waitAndClick($(s.filterPanel.clearAllButton));
+  };
+
   this.uncheckDisabledElement = (checkboxTitle) => {
     waitAndClick($(`.all-panel__content .category-list-row.disabled label[title="${checkboxTitle}"]`));
   };

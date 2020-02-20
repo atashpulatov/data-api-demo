@@ -31,19 +31,54 @@ describe('F24086 Improved browsing by adding filters', () => {
     PluginPopup.selectFirstObject();
     PluginPopup.clickRefreshObjectTable();
     // apply filters
-    browser.pause(9999);
-    PluginPopup.clickFilterButton();
-    // browser.debug();
     browser.pause(999);
+    PluginPopup.clickFilterButton();
+    browser.pause(999);
+    // browser.debug();
     PluginPopup.clickAllButton('Owner');
     PluginPopup.clickSelectAll();
     PluginPopup.tickFilterCheckBox('Type', 'Report');
     // // scroll bottom
     browser.pause(999);
     PluginPopup.clickFilterButton();
-    browser.pause(9999);
+    browser.pause(999);
 
     PluginPopup.scrollTable(['End']);
+    browser.pause(999);
+
+    $('div=SQL Pass Performance').click();
+    browser.pause(999);
+    PluginPopup.clickHeader('Name');
+    browser.pause(999);
+    PluginPopup.clickFilterButton();
+    browser.pause(999);
+    PluginPopup.clickAllButton('Owner');
+    PluginPopup.clickClearAll();
+    PluginPopup.clickFilterButton();
+    PluginPopup.scrollTable(['End']);
+    browser.pause(999);
+    $('div=Zip Code Validation').click();
+    browser.pause(999);
+    PluginPopup.clickRefreshObjectTable();
+    PluginPopup.clickFilterButton();
+    browser.pause(9999);
+    PluginPopup.scrollTable(['End']);
+    browser.pause(999);
+    $('div=SQL Pass Performance').click();
+    PluginPopup.clickRefreshObjectTable();
+    browser.pause(999);
+    PluginPopup.searchForObject('something not existing');
+    browser.pause(999);
+    PluginPopup.clickFilterButton();
+    browser.pause(999);
+    PluginPopup.clickFilterButton();
+    browser.pause(999);
+    PluginPopup.searchForObject('');
+    browser.pause(999);
+    PluginPopup.scrollTable(['End']);
+    browser.pause(9999);
+    $('div=SQL Pass Performance').click();
+    browser.debug();
     browser.pause(9999);
     // expect($('.all-panel__content .category-list-row.disabled input').isSelected()).toBe(false);
   });

@@ -77,6 +77,7 @@ export const selectors = {
   filterPanel: {
     expandButton: '.expand-btn',
     selectAllButton: '.all-panel__buttons button:first-of-type',
+    clearAllButton: 'button.all-panel__button=Clear All',
   },
   objectTable: { 
     scrollContainer: '.ReactVirtualized__Grid.ReactVirtualized__Table__Grid', 
