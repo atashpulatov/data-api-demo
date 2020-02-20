@@ -92,7 +92,10 @@ export const objectsList = {
         accounts:'#mstr162',
         dailyActiveAccounts:'#mstr131',
       }
+    },
+    promptedDossier: {
+      name:'Prompted dossier - don\'t add to Library',
+      visualizations: { vis1: '#mstr106' }
     }
-
   }
 };
