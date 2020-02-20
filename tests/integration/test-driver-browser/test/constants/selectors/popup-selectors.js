@@ -5,6 +5,7 @@ export const popupSelectors = {
   tableOfObjects: '#WACDialogPanel',
   searchInput: '.search-field__input',
   valueInput: '#id_mstr20_txt',
+  searchInputPrepareDataPopup: '.ant-input.ant-input-sm',
   attrQualificationInput: '#id_mstr38_txt',
   calendarInput: '#id_mstr24_txt',
   importBtn: '#import',

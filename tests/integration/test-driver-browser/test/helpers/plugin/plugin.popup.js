@@ -19,6 +19,12 @@ const PluginPopup = function () {
     $(popupSelectors.searchInput).setValue(objectName);
   };
 
+  // TODO: search [attributes || metrics || filters]
+  this.searchForElements = function (elementName) {
+    $(popupSelectors.searchInputPrepareDataPopup).clearValue();
+    $(popupSelectors.searchInputPrepareDataPopup).setValue(elementName);
+  };
+
   this.clickImport = function () {
     waitAndClick($(popupSelectors.importBtn), 10000);
   };
@@ -224,14 +230,14 @@ const PluginPopup = function () {
     for (let i = 0; i < columnTitles.length; i++) {
       if (columnTitles.get(i) === headerName) {
         switch (order) {
-        case 'up':
-          await expect(columnHeaders.get(i).element(by.css(popupSelectors.sortedUp)).isPresent()).toBe(true);
-          break;
-        case 'down':
-          await expect(columnHeaders.get(i).element(by.css(popupSelectors.sortedDown)).isPresent()).toBe(true);
-          break;
-        default:
-          break;
+          case 'up':
+            await expect(columnHeaders.get(i).element(by.css(popupSelectors.sortedUp)).isPresent()).toBe(true);
+            break;
+          case 'down':
+            await expect(columnHeaders.get(i).element(by.css(popupSelectors.sortedDown)).isPresent()).toBe(true);
+            break;
+          default:
+            break;
         }
       }
     }
@@ -276,7 +282,7 @@ const PluginPopup = function () {
 
   this.switchLibrary = function (newState) {
     const myLibrarySwitch = $(popupSelectors.myLibrary);
-    myLibrarySwitch.waitForExist(5000);
+    myLibrarySwitch.waitForExist(15000);
     const checked = myLibrarySwitch.getAttribute('aria-checked');
     if ((checked === 'true') !== newState) waitAndClick(myLibrarySwitch)
   }

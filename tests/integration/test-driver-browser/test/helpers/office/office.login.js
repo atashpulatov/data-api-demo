@@ -22,8 +22,8 @@ const OfficeLogin = function() {
    *
    * @memberof OfficeLogin
    */
-  this.openExcelAndLoginToPlugin = () => {
-    browser.setWindowSize(1500, 900);
+  this.openExcelAndLoginToPlugin = (pluginUsername = settings.env.username, pluginPassword = settings.env.password) => {
+    browser.setWindowSize(1700, 900);
     OfficeWorksheet.openExcelHome();
     const url = browser.getUrl();
     if (url.includes('login.microsoftonline')) {
@@ -31,7 +31,7 @@ const OfficeLogin = function() {
     }
     OfficeWorksheet.createNewWorkbook();
     OfficeWorksheet.openPlugin();
-    pluginRightPanel.loginToPlugin(settings.env.username, settings.env.password);
+    pluginRightPanel.loginToPlugin(pluginUsername, pluginPassword);
   }
 };
 
