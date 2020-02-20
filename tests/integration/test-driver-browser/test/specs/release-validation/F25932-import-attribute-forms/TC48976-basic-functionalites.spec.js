@@ -10,7 +10,7 @@ import { objectsList as o } from '../../../constants/objects-list';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 
-describe('TS41441 - perform-basic-functionalities', () => {
+describe('TC48976 - perform-basic-functionalities', () => {
   beforeAll(() => {
     browser.setWindowSize(1700, 900);
     OfficeWorksheet.openExcelHome();
