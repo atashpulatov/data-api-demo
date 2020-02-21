@@ -97,11 +97,12 @@ export default class DossierWindowNotConnected extends React.Component {
   }
 
   /**
- * Store new instance id in state.
- * Unselect visualization after instanceId changed.
- *
- * @param {String} newInstanceId
- */
+  * Store new instance id in state.
+  * Unselect visualization after instanceId changed.
+  *
+  * @param {String} newInstanceId
+  * @memberof DossierWindowNotConnected
+  */
   handleInstanceIdChange(newInstanceId) {
     this.setState({
       preparedInstanceId: newInstanceId,
@@ -112,10 +113,11 @@ export default class DossierWindowNotConnected extends React.Component {
   }
 
   /**
- * Store new prompts answers in state
- *
- * @param {Array} newAnswers
- */
+  * Store new prompts answers in state
+  *
+  * @param {Array} newAnswers
+  * @memberof DossierWindowNotConnected
+  */
   handlePromptAnswer(newAnswers) {
     this.setState({ promptsAnswers: newAnswers });
   }

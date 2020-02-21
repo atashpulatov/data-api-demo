@@ -217,10 +217,11 @@ export default class _EmbeddedDossier extends React.Component {
   }
 
   /**
- * Update the promptsAnswers in dossierData and also in parent component.
- *
- * @param {Array} promptsAnswers
- */
+  * Update the promptsAnswers in dossierData and also in parent component.
+  *
+  * @param {Array} promptsAnswers
+  * @memberof _EmbeddedDossier
+  */
   promptsAnsweredHandler(promptsAnswers) {
     const { handlePromptAnswer } = this.props;
     this.dossierData.promptsAnswers = promptsAnswers;
@@ -228,12 +229,13 @@ export default class _EmbeddedDossier extends React.Component {
   }
 
   /**
- * Update the instanceId in dossierData and also in parent component.
- * InstanceId is changing as result of reset button click, switch to
- * bookmark or new prompts answers given.
- *
- * @param {String} newInstanceId
- */
+  * Update the instanceId in dossierData and also in parent component.
+  * InstanceId is changing as result of reset button click, switch to
+  * bookmark or new prompts answers given.
+  *
+  * @param {String} newInstanceId
+  * @memberof _EmbeddedDossier
+  */
   instanceIdChangeHandler(newInstanceId) {
     const { handleInstanceIdChange } = this.props;
     this.dossierData.preparedInstanceId = newInstanceId;
