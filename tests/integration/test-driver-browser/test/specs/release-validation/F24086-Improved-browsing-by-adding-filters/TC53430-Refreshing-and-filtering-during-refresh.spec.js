@@ -27,64 +27,73 @@ describe('F24086 Improved browsing by adding filters', () => {
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
     PluginPopup.switchLibrary(false);
-    // browser.debug();
     PluginPopup.selectFirstObject();
-    PluginPopup.clickRefreshObjectTable();
     // apply filters
-    browser.pause(999);
+
+    PluginPopup.clickRefreshObjectTable();
+    browser.waitUntil(() => {
+      return ($('button.loading').isExisting());
+    });
+    browser.waitUntil(() => {
+      return !($('button.loading').isExisting());
+    });
+
     PluginPopup.clickFilterButton();
-    browser.pause(999);
-    // browser.debug();
     PluginPopup.clickAllButton('Owner');
     PluginPopup.clickSelectAll();
     PluginPopup.tickFilterCheckBox('Type', 'Report');
-    browser.pause(150);
-    // browser.debug();
-    expect($('div.FilterResult > strong').getText()).toEqual('938');
-    // browser.debug();
-    // // scroll bottom
-    // browser.pause(999);
-    // PluginPopup.clickFilterButton();
-    browser.pause(999);
+    expect($('div.FilterResult > strong').getText()).toEqual('938'); // TODO: get number of elements and compare
 
     PluginPopup.scrollTable(['End']);
-    browser.pause(999);
-
+    $('div=SQL Pass Performance').waitForDisplayed(1000); // TODO: Check if whole row is highlighted
     $('div=SQL Pass Performance').click();
-    browser.pause(999);
     PluginPopup.clickHeader('Name');
-    browser.pause(999);
     PluginPopup.clickFilterButton();
-    browser.pause(999);
     PluginPopup.clickAllButton('Owner');
     PluginPopup.clickClearAll();
-    PluginPopup.clickFilterButton();
+    PluginPopup.clickFilterButton(); // TODO: Sorting is preserved check
     PluginPopup.scrollTable(['End']);
-    browser.pause(999);
+    $('div=Zip Code Validation').waitForDisplayed(1000)
     $('div=Zip Code Validation').click();
-    browser.pause(999);
     PluginPopup.clickRefreshObjectTable();
-    PluginPopup.clickFilterButton();
-    browser.pause(5000);
+    browser.waitUntil(() => {
+      return ($('button.loading').isExisting());
+    });
+    browser.waitUntil(() => {
+      return !($('button.loading').isExisting());
+    });
     PluginPopup.scrollTable(['End']);
-    browser.pause(999);
-    $('div=SQL Pass Performance').click();
+    $('div=SQL Pass Performance').waitForDisplayed(1000);
+    $('div=SQL Pass Performance').click(); // TODO: Check if filters are preserved
     PluginPopup.clickRefreshObjectTable();
-    browser.pause(999);
-    PluginPopup.searchForObject('something not existing'); // TODO: Assert no objects message
-    expect($('p=None of the objects matched your search.')).toBeDefined();
-    browser.pause(5000);
+    browser.waitUntil(() => {
+      return ($('button.loading').isExisting());
+    });
+    browser.waitUntil(() => {
+      return !($('button.loading').isExisting());
+    });
+    PluginPopup.searchForObject('something not existing');
+    $('p=None of the objects matched your search.').waitForDisplayed(1000);
     $('button.search-field__clear-button').click();
-    browser.pause(5000);
     PluginPopup.scrollTable(['End']);
-    browser.pause(999);
+    $('div=SQL Pass Performance').waitForDisplayed(1000);
     $('div=SQL Pass Performance').click();
+    browser.debug();
     PluginPopup.clickRefreshObjectTable();
+    browser.waitUntil(() => {
+      return ($('button.loading').isExisting());
+    });
+    browser.waitUntil(() => {
+      $('category-list-row disabled');
+    })
     PluginPopup.clickFilterButton();
-    browser.pause(2000); // FIXME: very time dependent
     PluginPopup.tickFilterCheckBox('Type', 'Dossier');
     PluginPopup.clickAllButton('Owner');
     PluginPopup.clickSelectAll();
+    browser.waitUntil(() => {
+      return !($('button.loading').isExisting());
+    });
+    // TODO: Check if filters are preserved after fetching is finished
     // expect($('.all-panel__content .category-list-row.disabled input').isSelected()).toBe(false);
   });
 });
