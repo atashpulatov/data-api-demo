@@ -95,22 +95,6 @@ export default class _EmbeddedDossier extends React.Component {
   }
 
   /**
- * Update the instanceId in dossierData and also in parent component.
- * InstanceId is changing as result of reset button click, switch to
- * bookmark or new prompts answers given. New instanceId is taken by
- * getDossierInstanceId from embedding SDK.
- */
-  instanceIdChangeHandler() {
-    const { handleInstanceIdChange } = this.props;
-    if (this.embeddedDossier) {
-      this.embeddedDossier.getDossierInstanceId().then((newInstanceId) => {
-        this.dossierData.preparedInstanceId = newInstanceId;
-        handleInstanceIdChange(newInstanceId);
-      });
-    }
-  }
-
-  /**
    * This function applies an external script file to a embedded document
    * @param {*} _document
    * @param {*} fileLocation
@@ -238,6 +222,17 @@ export default class _EmbeddedDossier extends React.Component {
     const { handlePromptAnswer } = this.props;
     this.dossierData.promptsAnswers = promptsAnswers;
     handlePromptAnswer(promptsAnswers);
+  }
+
+  /**
+ * Update the instanceId in dossierData and also in parent component.
+ * InstanceId is changing as result of reset button click, switch to
+ * bookmark or new prompts answers given.
+ */
+  instanceIdChangeHandler(newInstanceId) {
+    const { handleInstanceIdChange } = this.props;
+    this.dossierData.preparedInstanceId = newInstanceId;
+    handleInstanceIdChange(newInstanceId);
   }
 
   render() {
