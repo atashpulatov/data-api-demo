@@ -240,7 +240,7 @@ class PluginPopup {
     waitAndClick($('.mstrToolButtonRounded'));
   }
 
-  promptSelectObjectForEdit = (objectName) => {
+  promptSelectObjectForEdit(objectName) {
     switchToPromptFrameForEditReport();
     browser.pause(10000);
     $('#mstrdossierPromptEditor').waitForExist(7777);

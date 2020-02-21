@@ -22,12 +22,15 @@ describe('F24398 - Import and refresh visualization', () => {
       OfficeWorksheet.selectCell('A1');
       PluginRightPanel.clickImportDataButton();
       PluginPopup.openDossier(name, timeToOpen);
+      
       // test
       PluginPopup.selectAndImportVizualiation(visualizations[visType]);
       waitForNotification();
       expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+      
       // afterEach
       browser.pause(100);
+      console.log(`${visType} successfully imported`);
       PluginRightPanel.removeFirstObjectFromTheList();
       browser.pause(1000);
     })
