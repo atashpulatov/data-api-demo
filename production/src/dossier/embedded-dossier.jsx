@@ -38,6 +38,7 @@ export default class _EmbeddedDossier extends React.Component {
     this.onVizSelectionHandler = this.onVizSelectionHandler.bind(this);
     this.dossierData = { promptsAnswers: props.mstrData.promptsAnswers, };
     this.promptsAnsweredHandler = this.promptsAnsweredHandler.bind(this);
+    this.instanceIdChangeHandler = this.instanceIdChangeHandler.bind(this);
     this.embeddedDossier = null;
   }
 
