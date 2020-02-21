@@ -27,3 +27,9 @@ export function switchToPopupFrame() {
   $('iframe[src*="api&et="]').waitForExist(9999);
   browser.switchToFrame($('iframe[src*="api&et="]'));
 }
+
+export function switchToRefreshAllFrame() {
+  switchToExcelFrame();
+  $('iframe[src*="refresh-all-page"]').waitForExist(9999);
+  browser.switchToFrame($('iframe[src*="refresh-all-page"]'));
+}

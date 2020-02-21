@@ -1,12 +1,14 @@
-import { switchToPluginFrame, switchToPromptFrame, switchToPopupFrame, switchToExcelFrame } from '../utils/iframe-helper';
+import { switchToPluginFrame, switchToPromptFrame, switchToPopupFrame, switchToExcelFrame, switchToRefreshAllFrame } from '../utils/iframe-helper';
 import { waitAndClick, waitAndRightClick } from '../utils/click-helper';
 import { selectors as s } from '../../constants/selectors/popup-selectors';
-import { selectors } from '../../constants/selectors/plugin.right-panel-selectors';
 
 const PluginPopup = function() {
-  this.closeRefreshAll = function() {
+  this.closeRefreshAll = (timeout = 9999) => {
+    switchToRefreshAllFrame();
+    $('.finished-header').waitForExist(timeout);
+    switchToExcelFrame();
     waitAndClick($(s.closeRefreshAll));
-  }
+  };
 
   this.searchForObject = function(objectName) {
     switchToPluginFrame();
@@ -347,9 +349,25 @@ const PluginPopup = function() {
   };
   // object table START
   this.scrollTable = (keyNames) => {
-    const scrollContainer = $(s.objectTable.scrollContainer);
-    waitAndClick(scrollContainer);
+    waitAndClick($(s.objectTable.scrollContainer));
     browser.keys(keyNames);
+    browser.pause(1999); // time to scroll to the bottom of the list
+  };
+
+  this.selectLastObject = () => {
+    const renderedObjects = $$('[role="option"]');
+    const lastObject = renderedObjects[renderedObjects.length - 1];
+    waitAndClick(lastObject);
+  };
+
+  this.importVisualization = () => {
+    switchToPromptFrame();
+    browser.pause(13000); // temp solution, time for dossier to load
+    $('.mstrmojo-VizBox-selector').click();
+
+    browser.pause(2500);
+    switchToPluginFrame();
+    this.clickImport();
   };
   // object table END
 
@@ -370,7 +388,7 @@ const PluginPopup = function() {
   this.openDossier = function(dossierName, timeToLoadDossier = 10000) {
     this.importObject(dossierName);
     browser.pause(timeToLoadDossier);
-  }
+  };
 
   this.clickFilterButton = () => {
     switchToPluginFrame();
@@ -408,6 +426,10 @@ const PluginPopup = function() {
 
   this.uncheckDisabledElement = (checkboxTitle) => {
     waitAndClick($(`.all-panel__content .category-list-row.disabled label[title="${checkboxTitle}"]`));
+  };
+
+  this.checkAllPanelElement = (checkboxTitle) => {
+    waitAndClick($(`.all-panel__content input[aria-label="Checkbox for ${checkboxTitle}"] + .checkmark`));
   };
 
   // filter panel END

@@ -92,6 +92,12 @@ const OfficeWorksheet = function() {
     $(exSe.excelFormulaBar).setValue(text);
     browser.keys('\uE007'); // Press Enter
   };
+
+  this.clearExcelRange = (cellRange) => {
+    this.selectCell(cellRange);
+    browser.pause(1999);
+    browser.keys(['Backspace']);
+  };
 };
 
 export default new OfficeWorksheet();

@@ -35,7 +35,7 @@ export const selectors = {
   sortedDown: '.ant-table-column-sorter-up.on',
   noDataIcon: $('.ant-table-placeholder'),
   myLibrary: '#root > div > div.navigation_tree__title_bar > div > div.mstr-switch-container > div.mstr-switch',
-  closeRefreshAll: '#WACDialogTitlePanel > a',
+  closeRefreshAll: '.WACGlyph.WACDialogCloseAnchor',
   clearSearchInput: $('.search-field__clear-button'),
   filterButton: $('.filter-button'),
   columnOwner: $('.ReactVirtualized__Table__row > div[aria-colindex="5"] > span'),
@@ -76,7 +76,7 @@ export const selectors = {
     expandButton: '.expand-btn',
     selectAllButton: '.all-panel__buttons button:first-of-type',
   },
-  objectTable: { 
+  objectTable: {
     scrollContainer: '.ReactVirtualized__Grid.ReactVirtualized__Table__Grid', 
   }
 };
