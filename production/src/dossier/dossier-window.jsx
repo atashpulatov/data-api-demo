@@ -29,7 +29,7 @@ export default class DossierWindowNotConnected extends React.Component {
     this.handleSelection = this.handleSelection.bind(this);
     this.handleOk = this.handleOk.bind(this);
     this.handlePromptAnswer = this.handlePromptAnswer.bind(this);
-    this.handleInstanceIdUpadate = this.handleInstanceIdUpadate.bind(this);
+    this.handleInstanceIdChange = this.handleInstanceIdChange.bind(this);
   }
 
   validateSession = () => {
@@ -100,7 +100,7 @@ export default class DossierWindowNotConnected extends React.Component {
  * Store new instance id in state.
  * Unselect visualization after instanceId changed.
  */
-  handleInstanceIdUpadate(newInstanceId) {
+  handleInstanceIdChange(newInstanceId) {
     this.setState({
       preparedInstanceId: newInstanceId,
       isVisualizationSelected: false,
@@ -134,7 +134,7 @@ export default class DossierWindowNotConnected extends React.Component {
         <EmbeddedDossier
           handleSelection={this.handleSelection}
           handlePromptAnswer={this.handlePromptAnswer}
-          handleInstanceIdUpadate={this.handleInstanceIdUpadate}
+          handleInstanceIdChange={this.handleInstanceIdChange}
           handleLoadEvent={this.validateSession}
         />
         <PopupButtons

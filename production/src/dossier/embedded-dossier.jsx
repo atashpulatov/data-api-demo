@@ -50,6 +50,7 @@ export default class _EmbeddedDossier extends React.Component {
     if (this.msgRouter) {
       this.msgRouter.removeEventhandler('onVizSelectionChanged', this.onVizSelectionHandler);
       this.msgRouter.removeEventhandler('onPromptAnswered', this.promptsAnsweredHandler);
+      this.msgRouter.removeEventhandler('onDossierInstanceIDChange', this.instanceIdChangeHandler);
     }
   }
 
@@ -99,12 +100,12 @@ export default class _EmbeddedDossier extends React.Component {
  * bookmark or new prompts answers given. New instanceId is taken by
  * getDossierInstanceId from embedding SDK.
  */
-  onInstanceIdUpdate() {
-    const { handleInstanceIdUpadate } = this.props;
+  instanceIdChangeHandler() {
+    const { handleInstanceIdChange } = this.props;
     if (this.embeddedDossier) {
       this.embeddedDossier.getDossierInstanceId().then((newInstanceId) => {
         this.dossierData.preparedInstanceId = newInstanceId;
-        handleInstanceIdUpadate(newInstanceId);
+        handleInstanceIdChange(newInstanceId);
       });
     }
   }
@@ -224,10 +225,7 @@ export default class _EmbeddedDossier extends React.Component {
         this.msgRouter = MsgRouter;
         this.msgRouter.registerEventHandler('onVizSelectionChanged', this.onVizSelectionHandler);
         this.msgRouter.registerEventHandler('onPromptAnswered', this.promptsAnsweredHandler);
-
-        // TODO: Replace onBookmarkEnter and onResetClick with real events from embedded SDK.
-        this.msgRouter.registerEventHandler('onResetClick', this.onInstanceIdUpdate);
-        this.msgRouter.registerEventHandler('onBookmarkEnter', this.onInstanceIdUpdate);
+        this.msgRouter.registerEventHandler('onDossierInstanceIDChange', this.instanceIdChangeHandler);
       },
     };
     this.embeddedDossier = await microstrategy.dossier.create(props);
@@ -235,11 +233,9 @@ export default class _EmbeddedDossier extends React.Component {
 
   /**
  * Update the promptsAnswers in dossierData and also in parent component.
- * Call onInstanceIdUpdate becouse reprompt results in change of instanceId.
  */
   promptsAnsweredHandler(promptsAnswers) {
     const { handlePromptAnswer } = this.props;
-    this.onInstanceIdUpdate();
     this.dossierData.promptsAnswers = promptsAnswers;
     handlePromptAnswer(promptsAnswers);
   }
@@ -273,7 +269,7 @@ _EmbeddedDossier.propTypes = {
   }),
   handleSelection: PropTypes.func,
   handlePromptAnswer: PropTypes.func,
-  handleInstanceIdUpadate: PropTypes.func,
+  handleInstanceIdChange: PropTypes.func,
   handleLoadEvent: PropTypes.func
 };
 

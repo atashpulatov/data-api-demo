@@ -68,12 +68,12 @@ describe('Dossierwindow', () => {
     expect(validateTokenSpy).toHaveBeenCalled();
   });
 
-  it('handleInstanceIdUpadate set new instanceId and clear viz data in state', async () => {
+  it('handleInstanceIdChange set new instanceId and clear viz data in state', async () => {
     // given
     const newInstanceId = 'newInstanceId';
     const componentWrapper = shallow(<DossierWindowNotConnected />);
     // when
-    componentWrapper.instance().handleInstanceIdUpadate(newInstanceId);
+    componentWrapper.instance().handleInstanceIdChange(newInstanceId);
     // then
     expect(componentWrapper.instance().state.preparedInstanceId).toBe(newInstanceId);
     expect(componentWrapper.instance().state.isVisualizationSelected).toBe(false);
