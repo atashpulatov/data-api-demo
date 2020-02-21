@@ -21,7 +21,10 @@ exports.config = {
   ],
   suites: {
     test: [
-      './test/specs/release-validation/test/*.js'
+      './test/specs/release-validation/test/*.js',
+    ],
+    expand: [
+      './test/specs/release-validation/F25946-details-panel/TC59756-expanded-view.spec.js'
     ],
     UB: [
       './test/specs/performance/UB-standalone-version/import-UB-dataset.spec.js'

@@ -31,7 +31,7 @@ describe('Smart Folder - IMPORT -', () => {
     await PluginRightPanel.clickImportDataButton();
     await PluginPopup.importObject(o.reports.reportXML);
     await waitForNotification();
-    await expect(se.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+    await expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
 
     // assert that cell G19 contain the value 1,081
     await OfficeWorksheet.selectCell('G19');

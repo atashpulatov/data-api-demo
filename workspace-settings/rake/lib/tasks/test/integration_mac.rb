@@ -5,6 +5,7 @@ desc "package test docker"
 task :deploy_tester_server,[:build_no] do | t, args|
   
   group_id = "#{$WORKSPACE_SETTINGS[:nexus][:base_coordinates][:group_id]}.#{Common::Version.application_branch}"
+  group_id = "com.microstrategy.m2020"
   # group_id = Common::Version.dependency_group_id
   artifact_id = "office-loader"
   version = args['build_no'] || Nexus.latest_artifact_version(artifact_id: artifact_id, group_id: group_id)
