@@ -17,17 +17,17 @@ class PluginPopup {
     $(popupSelectors.searchInput).setValue(objectName);
   }
 
-  /**
+  /*
    * Searches for attribute or metric inside the popup report preparation
    *
    * @param {String} elementName indicates the attribute or metric name that will be searched
    *
    * @memberof PluginPopup
-   **/
+   */
   searchForElements(elementName) {
     $(popupSelectors.searchInputPrepareDataPopup).clearValue();
     $(popupSelectors.searchInputPrepareDataPopup).setValue(elementName);
-  };
+  }
 
   clickImport() {
     waitAndClick($(popupSelectors.importBtn));
@@ -61,7 +61,7 @@ class PluginPopup {
     waitAndClick($(popupSelectors.closePreviewBtn));
   }
 
- clickRun() {
+  clickRun() {
     switchToPromptFrameForEditDossier();
     waitAndClick($(popupSelectors.runBtn));
   }
@@ -127,7 +127,7 @@ class PluginPopup {
     browser.pause(500);
     this.selectFirstObject();
     this.clickImport();
-  };
+  }
 
   importAnyObject (objectName, index) {
     switchToPluginFrame();
@@ -496,7 +496,7 @@ class PluginPopup {
     browser.pause(1111);
     this.selectFirstObject();
     this.clickPrepareData();
-  };
+  }
 
   importDefaultPromptedVisualisation(visContainerId) {
     // reprompt
@@ -534,6 +534,6 @@ class PluginPopup {
     // reprompt and import
     this.importDefaultPromptedVisualisation(visContainerId);
   }
-};
+}
 
 export default new PluginPopup();
