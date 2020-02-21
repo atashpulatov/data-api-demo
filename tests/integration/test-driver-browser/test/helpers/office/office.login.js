@@ -3,12 +3,12 @@ import OfficeWorksheet from './office.worksheet';
 import settings from '../../config';
 import pluginRightPanel from '../plugin/plugin.right-panel';
 
-const OfficeLogin = function() {
+const OfficeLogin = function () {
   const usernameInput = '#i0116';
   const nextBtn = '#idSIButton9';
   const passwordInput = '#i0118';
 
-  this.login = function(username, password) {
+  this.login = function (username, password) {
     $(usernameInput).setValue(username);
     waitAndClick($(nextBtn));
     browser.pause(1666);
@@ -22,8 +22,13 @@ const OfficeLogin = function() {
    *
    * @memberof OfficeLogin
    */
-  this.openExcelAndLoginToPlugin = () => {
-    browser.setWindowSize(1500, 900);
+  this.openExcelAndLoginToPlugin = (
+    username = settings.env.username,
+    password = settings.env.password,
+    width = 1500,
+    isValidCredentials = true
+  ) => {
+    browser.setWindowSize(width, 900);
     OfficeWorksheet.openExcelHome();
     const url = browser.getUrl();
     if (url.includes('login.microsoftonline')) {
@@ -31,8 +36,9 @@ const OfficeLogin = function() {
     }
     OfficeWorksheet.createNewWorkbook();
     OfficeWorksheet.openPlugin();
-    pluginRightPanel.loginToPlugin(settings.env.username, settings.env.password);
+    pluginRightPanel.loginToPlugin(username, password, isValidCredentials);
   }
 };
+
 
 export default new OfficeLogin();

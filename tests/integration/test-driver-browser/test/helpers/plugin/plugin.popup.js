@@ -1,73 +1,89 @@
-import { switchToPluginFrame, switchToPromptFrame, switchToPopupFrame, switchToExcelFrame } from '../utils/iframe-helper';
+/* eslint-disable class-methods-use-this */
 import { waitAndClick, waitAndRightClick } from '../utils/click-helper';
 import { popupSelectors } from '../../constants/selectors/popup-selectors';
+import { switchToPluginFrame, switchToPromptFrame, switchToPopupFrame, switchToExcelFrame, switchToPromptFrameForEditDossier, switchToPromptFrameForEditReport } from '../utils/iframe-helper';
 import { waitForNotification } from '../utils/wait-helper'
 import pluginRightPanel from './plugin.right-panel';
+import { excelSelectors } from '../../constants/selectors/office-selectors';
 
-const PluginPopup = function () {
-  this.closeRefreshAll = function () {
+
+class PluginPopup {
+  closeRefreshAll() {
     waitAndClick($(popupSelectors.closeRefreshAll));
   }
 
-  this.searchForObject = function (objectName) {
+  searchForObject(objectName) {
     $(popupSelectors.searchInput).clearValue();
     $(popupSelectors.searchInput).setValue(objectName);
+  }
+
+  /**
+   * Searches for attribute or metric inside the popup report preparation
+   *
+   * @param {String} elementName indicates the attribute or metric name that will be searched
+   *
+   * @memberof PluginPopup
+   **/
+  searchForElements(elementName) {
+    $(popupSelectors.searchInputPrepareDataPopup).clearValue();
+    $(popupSelectors.searchInputPrepareDataPopup).setValue(elementName);
   };
 
-  this.clickImport = function () {
+  clickImport() {
     waitAndClick($(popupSelectors.importBtn));
-  };
+  }
 
-  this.clickPrepareData = function () {
+  clickPrepareData() {
     waitAndClick($(popupSelectors.prepareBtn));
-  };
+  }
 
-  this.clickCancel = function () {
+  clickCancel() {
     waitAndClick($(popupSelectors.cancelBtn));
-  };
+  }
 
-  this.clickBack = function () {
+  clickBack() {
     waitAndClick($(popupSelectors.backBtn));
-  };
+  }
 
-  this.clickDataPreview = function () {
+  clickDataPreview() {
     waitAndClick($(popupSelectors.dataPreviewBtn));
-  };
+  }
 
-  this.clickViewSelected = function () {
+  clickViewSelected() {
     waitAndClick($(popupSelectors.viewSelected));
-  };
+  }
 
-  this.clickSubtotalToggler = function () {
+  clickSubtotalToggler() {
     waitAndClick($(popupSelectors.subtotalToggler));
   }
 
-  this.closePreview = function () {
+  closePreview() {
     waitAndClick($(popupSelectors.closePreviewBtn));
-  };
+  }
 
-  this.clickRun = function () {
-    switchToPluginFrame();
+ clickRun() {
+    // switchToPluginFrame();
+    switchToPromptFrameForEditDossier();
     waitAndClick($(popupSelectors.runBtn));
-  };
+  }
 
-  this.clickPromptArrow = function () {
+  clickPromptArrow() {
     waitAndClick($(popupSelectors.promptArrow));
-  };
+  }
 
-  this.selectAllAttributes = function () {
+  selectAllAttributes() {
     waitAndClick($(popupSelectors.allAttributes));
-  };
+  }
 
-  this.selectAllMetrics = function () {
+  selectAllMetrics() {
     waitAndClick($(popupSelectors.allMetrics));
-  };
+  }
 
-  this.selectAllFilters = function () {
+  selectAllFilters() {
     waitAndClick($(popupSelectors.allFilters));
-  };
+  }
 
-  this.selectObjectElementsInPrepareData = function (elements) {
+  selectObjectElementsInPrepareData(elements) {
     $('#search-toolbar > div > span > input').waitForExist(7777);
     for (let i = 0; i < elements.length; i++) {
       $('#search-toolbar > div > span > input').clearValue();
@@ -75,52 +91,67 @@ const PluginPopup = function () {
       waitAndClick($(`input[name="${elements[i]}"]`));
       $('#search-toolbar > div > span > input').clearValue();
     }
-  };
-  this.selectObjectElements = function (elements) {
+  }
+
+  selectObjectElements(elements) {
     for (let i = 0; i < elements.length; i++) {
       waitAndClick($(`input[name="${elements[i]}"]`));
     }
-  };
+  }
 
-  this.selectAttributeIndex = function(index) {
-    for (let i = 0; i < index.length; i++) {
-      waitAndClick($(selectors.attributeSelector(index[i])));
-    }
-  };
+selectAttributeIndex(index) {
+  for (let i = 0; i < index.length; i++) {
+    waitAndClick($(selectors.attributeSelector(index[i])));
+  }
+};
 
-  this.changePromptQualificationItem = (value) => {
+  changePromptQualificationItem(value) {
     switchToPopupFrame();
     waitAndClick($('div[title="- none -"]'));
     waitAndClick($(`div[title=${value}"]`));
-  };
+  }
 
-  this.selectFilters = function (names) {
+  selectFilters(names) {
     for (const [filterKey, filterInstances] of names) {
       const filter = $(`.filter-title*=${filterKey}`);
       waitAndClick(filter);
       this.selectObjectElements(filterInstances);
     }
-  };
-  this.clickHeader = function (headerName) {
-    waitAndClick($(`.data-tip*=${headerName}`));
-  };
+  }
 
-  this.selectFirstObject = function () {
+  clickHeader(headerName) {
+    waitAndClick($(`.data-tip*=${headerName}`));
+  }
+
+  selectFirstObject() {
     browser.pause(2222);
     waitAndClick($(popupSelectors.firstObject));
-  };
+  }
 
-  this.importObject = function (objectName, myLibrarySwitch) {
+  importObject(objectName, myLibrarySwitch) {
     switchToPluginFrame();
-    browser.pause(4000);
-    this.switchLibrary(myLibrarySwitch);
     this.searchForObject(objectName);
     browser.pause(500);
     this.selectFirstObject();
     this.clickImport();
   };
 
-  this.preparePrompt = function (objectName) {
+  importAnyObject (objectName, index) {
+    switchToPluginFrame();
+    browser.pause(500);
+    this.switchLibrary(false);
+    this.searchForObject(objectName);
+    browser.pause(500);
+    waitAndClick($(popupSelectors.anyObject(index)));
+    this.clickImport();
+  }
+
+  selectAnyObject(index) {
+    browser.pause(2222);
+    waitAndClick($(popupSelectors.anyObject(index)));
+  }
+
+  preparePrompt(objectName) {
     switchToPluginFrame();
     this.searchForObject(objectName);
     browser.pause(500);
@@ -131,17 +162,22 @@ const PluginPopup = function () {
     $('#mstrdossierPromptEditor').waitForExist(7777);
   }
 
+  selectAttributeIndex(index) {
+    for (let i = 0; i < index.length; i++) {
+      waitAndClick($(popupSelectors.attributeSelector(index[i])));
+    }
+  }
 
-  this.importPromptDefault = (objectName) => {
+  importPromptDefault(objectName) {
     this.importObject(objectName);
     browser.pause(5555); // temp solution
     $(popupSelectors.runBtn).waitForExist(3333);
     switchToPromptFrame();
     $('#mstrdossierPromptEditor').waitForExist(3333);
     this.clickRun();
-  };
+  }
 
-  this.importPromptDefaultNested = (objectName) => {
+  importPromptDefaultNested(objectName) {
     this.importObject(objectName);
     browser.pause(5555); // temp solution
     for (; $(popupSelectors.runBtn).isExisting();) {
@@ -153,108 +189,126 @@ const PluginPopup = function () {
     switchToPluginFrame();
   }
 
-  this.isViewSelected = () => ($(popupSelectors.viewSelected).getAttribute('class') === 'ant-switch ant-switch-checked')
+  isViewSelected() {
+    return $(popupSelectors.viewSelected).getAttribute('class') === 'ant-switch ant-switch-checked';
+  }
 
-  this.openPrompt = (objectName) => {
+  openPrompt(objectName) {
     this.importObject(objectName);
     browser.pause(9999); // temp solution
     switchToPromptFrame();
     $('#mstrdossierPromptEditor').waitForExist(7777);
-  };
+  }
 
 
-  this.writeValueText = (value) => {
+  writeValueText(value) {
     switchToPromptFrame();
     $('#mstrdossierPromptEditor').waitForExist(7777);
     waitAndClick($(popupSelectors.valueInput), 5555);
     $(popupSelectors.valueInput).clearValue();
     $(popupSelectors.valueInput).setValue(`${value}\uE004\uE006`);
-  };
+  }
 
-  this.writeAttrQualificationValue = (value) => {
+  writeAttrQualificationValue(value) {
     switchToPromptFrame();
     $('#mstrdossierPromptEditor').waitForExist(3333);
     $(popupSelectors.attrQualificationInput).click();
     $(popupSelectors.attrQualificationInput).clearValue();
     $(popupSelectors.attrQualificationInput).setValue(`${value}\uE004\uE004\uE006`);
-  };
+  }
 
-  this.writeMultiPrompt = (value) => {
+  writeMultiPrompt(value) {
     switchToPromptFrame();
     $('#mstrdossierPromptEditor').waitForExist(3333);
     $(popupSelectors.calendarInput).click();
     $(popupSelectors.calendarInput).clearValue();
     $(popupSelectors.calendarInput).setValue(`${value}\uE004\uE004\uE006`);
-  };
+  }
 
-  this.removeAllSelected = () => {
+  removeAllSelected() {
     switchToPromptFrame();
     $('#mstrdossierPromptEditor').waitForExist(3333);
     $(popupSelectors.promptRemoveAllSelected).click();
-  };
+  }
 
-  this.changeExpressionQualificationAndRun = (value) => {
+  changeExpressionQualificationAndRun(value) {
     switchToPromptFrame();
     $('#mstrdossierPromptEditor').waitForExist(3333);
     $(popupSelectors.expressionInList).click();
     waitAndClick($(`.mstrListBlockItemName*=${value}`));
     this.clickRun();
-  };
+  }
 
-  this.promptSelectObject = (objectName) => {
+  promptSelectObject(objectName) {
     switchToPromptFrame();
-    $('#mstrdossierPromptEditor').waitForExist(3333);
+    $('#mstrdossierPromptEditor').waitForExist(7777);
     waitAndClick($(`.mstrListBlockItem*=${objectName}`));
     browser.pause(2222);
     waitAndClick($('.mstrToolButtonRounded'));
-  };
+  }
 
-  this.prepareObject = function(objectName, elements, filters) {
+  promptSelectObjectForEdit = (objectName) => {
+    switchToPromptFrameForEditReport();
+    browser.pause(10000);
+    $('#mstrdossierPromptEditor').waitForExist(7777);
+    waitAndClick($(`.mstrListBlockItem*=${objectName}`));
+    browser.pause(2222);
+    waitAndClick($('.mstrToolButtonRounded'));
+  }
+
+  prepareObject(objectName, elements, filters) {
     this.openPrepareData(objectName);
     this.selectObjectElements(elements);
     this.selectFilters(filters);
     browser.pause(1111);
     this.clickImport();
-  };
+  }
+
+  searchForPreparedObject(objectName) {
+    $(popupSelectors.prepareSearchInput).clearValue();
+    $(popupSelectors.prepareSearchInput).setValue(objectName);
+  }
 
   // TODO: Refactor to webDriverIO. This method is only used in TC39453
-  this.checkSorting = async function (order, headerName) {
-    const columnHeaders = element.all(by.css(popupSelectors.columnHeaders));
-    const columnTitles = columnHeaders.all(by.css());
-    for (let i = 0; i < columnTitles.length; i++) {
-      if (columnTitles.get(i) === headerName) {
-        switch (order) {
-        case 'up':
-          await expect(columnHeaders.get(i).element(by.css(popupSelectors.sortedUp)).isPresent()).toBe(true);
-          break;
-        case 'down':
-          await expect(columnHeaders.get(i).element(by.css(popupSelectors.sortedDown)).isPresent()).toBe(true);
-          break;
-        default:
-          break;
-        }
-      }
-    }
-  };
+  // async checkSorting (order, headerName) {
+  //   const columnHeaders = element.all(by.css(popupSelectors.columnHeaders));
+  //   const columnTitles = columnHeaders.all(by.css());
+  //   for (let i = 0; i < columnTitles.length; i++) {
+  //     if (columnTitles.get(i) === headerName) {
+  //       switch (order) {
+  //       case 'up':
+  //         await expect(columnHeaders.get(i).element(by.css(popupSelectors.sortedUp)).isPresent()).toBe(true);
+  //         break;
+  //       case 'down':
+  //         await expect(columnHeaders.get(i).element(by.css(popupSelectors.sortedDown)).isPresent()).toBe(true);
+  //         break;
+  //       default:
+  //         break;
+  //       }
+  //     }
+  //   }
+  // }
 
   // TODO: Refactor to webDriverIO. This method is only used in TC39454
-  this.checkDisplayedObjectNames = async function (searchedString) {
+  async checkDisplayedObjectNames(searchedString) {
     for (let i = 0; i < popupSelectors.displayedObjects.length; i++) {
       await expect(popupSelectors.displayedObjects.get(i).getText().toContain(searchedString));
     }
-  };
+  }
+
   // Currently this method is not used
-  this.checkIfFilterIsClicked = function (filterName) {
+  checkIfFilterIsClicked(filterName) {
     expect($(`.filter-title*=${filterName}`).getCSSProperty('background-color').value).toEqual('#1890FF');
-  };
-  this.deleteFromSearch = function () {
+  }
+
+  deleteFromSearch() {
     const searchedValue = $(popupSelectors.searchInput).getAttribute('value');
     for (let i = 0; i < searchedValue.length; i++) {
       $(popupSelectors.searchInput).setValue('\uE003');
     }
-  };
+  }
 
-  this.importObjectAndGetTotalTime = function (objectName) {
+  importObjectAndGetTotalTime(objectName) {
     this.importObject(objectName);
     const begin = Date.now();
     browser.pause(2000);
@@ -272,32 +326,48 @@ const PluginPopup = function () {
     const timeSpent = ((end - begin) / 1000);
     console.log(`Total time importing "${objectName}":  ${timeSpent} secs`);
     return timeSpent;
-  };
+  }
 
-  this.switchLibrary = function (newState) {
+  switchLibrary(newState) {
     const myLibrarySwitch = $(popupSelectors.myLibrary);
     myLibrarySwitch.waitForExist(5000);
     const checked = myLibrarySwitch.getAttribute('aria-checked');
     if ((checked === 'true') !== newState) waitAndClick(myLibrarySwitch)
   }
 
-  this.openDossier = function (dossierName, timeToLoadDossier = 10000, myLibrarySwitch = false) {
+  openDossier(dossierName, timeToLoadDossier = 10000, myLibrarySwitch = false) {
     this.importObject(dossierName, myLibrarySwitch);
     browser.pause(timeToLoadDossier);
   }
 
-  this.selectAndImportVizualiation = function (visContainerId) {
+  selectAndImportVizualiation(visContainerId) {
     switchToPromptFrame();
-    const visSelctor = $(visContainerId).$('.mstrmojo-VizBox-selector');
-    visSelctor.click();
+    browser.pause(10000);
+    const visSelector = $(visContainerId).$(popupSelectors.visualizationSelector);
+    visSelector.waitForExist(15000);
+    browser.pause(3000);
+    visSelector.click();
+    // TODO: wait untli import button is enabled and click it
+    browser.pause(2500);
+    switchToPluginFrame();
+    $(popupSelectors.importBtn).waitForExist(5000);
+    this.clickImport();
+  }
 
+  editAndImportVizualization(visContainerId) {
+    switchToPromptFrameForEditDossier();
+    browser.pause(10000);
+    const visSelector = $(visContainerId).$(popupSelectors.visualizationSelector);
+    visSelector.waitForExist(15000);
+    browser.pause(3000);
+    visSelector.click();
     // TODO: wait untli import button is enabled and click it
     browser.pause(2500);
     switchToPluginFrame();
     this.clickImport();
   }
 
-  this.showTotals = (objectId) => {
+  showTotals(objectId) {
     switchToPromptFrame();
     waitAndRightClick($(`${objectId}`));
     browser.pause(1000);
@@ -308,7 +378,7 @@ const PluginPopup = function () {
     browser.pause(4000);
   }
 
-  this.sortAscending = (objectId) => {
+  sortAscending(objectId) {
     switchToPromptFrame();
     waitAndRightClick($(`${objectId}`));
     browser.pause(1000);
@@ -319,7 +389,7 @@ const PluginPopup = function () {
   // TODO:
   // method is used to select attributes(to check checkboxes) and attribute forms.
   // parameters: JSON object, containing attributes as keys and attribute forms as values
-  this.selectAttributesAndAttributeForms = (elements) => {
+  selectAttributesAndAttributeForms(elements) {
     for (const [attribute, attributeForm] of Object.entries(elements)) {
       waitAndClick($(`${popupSelectors.attributeCheckBox}=${attribute}`));
       if (attributeForm && attributeForm.length > 0) {
@@ -333,7 +403,7 @@ const PluginPopup = function () {
     }
   }
 
-  this.selectAttributeFormVisualisation = (type) => {
+  selectAttributeFormVisualisation(type) {
     waitAndClick($(popupSelectors.attributeFormDropdown));
     browser.pause(500);
     waitAndClick($(`${popupSelectors.attributeFormDropDownItem}=${type}`));
@@ -341,7 +411,7 @@ const PluginPopup = function () {
   }
 
 
-  this.sortDescending = (objectId) => {
+  sortDescending(objectId) {
     switchToPromptFrame();
     waitAndRightClick($(`${objectId}`));
     browser.pause(1000);
@@ -349,7 +419,7 @@ const PluginPopup = function () {
     browser.pause(4000);
   }
 
-  this.drillByCategory = (objectId) => {
+  drillByCategory(objectId) {
     switchToPromptFrame();
     waitAndRightClick($(`${objectId}`));
     browser.pause(1000);
@@ -366,7 +436,7 @@ const PluginPopup = function () {
    * @param {Array} valuesIndexes Indexes of elements to toggle (starts from 1)
    * @memberof PluginPopup
    */
-  this.selectValuesFromDossierListFilter = (filterIndex, valuesIndexes) => {
+  selectValuesFromDossierListFilter(filterIndex, valuesIndexes) {
     const { dossierWindow } = popupSelectors;
     waitAndClick($(dossierWindow.filtersMenu.getFilterAt(filterIndex)), 1000);
     valuesIndexes.forEach(valueIndex => {
@@ -383,7 +453,7 @@ const PluginPopup = function () {
    * @param {String} value value that will be inserted to input
    * @memberof PluginPopup
    */
-  this.setValueOnDossierSliderFilter = (filterIndex, position, value) => {
+  setValueOnDossierSliderFilter(filterIndex, position, value) {
     const { dossierWindow } = popupSelectors;
     const maxValueInput = $(`${dossierWindow.filtersMenu.getFilterAt(filterIndex)} ${dossierWindow.filtersMenu.getSliderInput(position)} > input`)
     maxValueInput.doubleClick();
@@ -396,7 +466,7 @@ const PluginPopup = function () {
    *
    * @memberof PluginPopup
    */
-  this.refreshDossier = () => {
+  refreshDossier() {
     const { dossierWindow } = popupSelectors;
     waitAndClick($(dossierWindow.buttonRefreshDossier), 1000);
     waitAndClick($(dossierWindow.buttonConfirmRefresh), 1000);
@@ -408,7 +478,7 @@ const PluginPopup = function () {
    * @param {Number} index Index of the bookmark in dossier (starts from 1)
    * @memberof PluginPopup
    */
-  this.applyDossierBookmark = (index) => {
+  applyDossierBookmark(index) {
     const { dossierWindow } = popupSelectors;
     waitAndClick($(dossierWindow.buttonBookmarks), 1000);
     waitAndClick($(dossierWindow.getBookmarkItemAt(index)), 1000);
@@ -420,13 +490,13 @@ const PluginPopup = function () {
    * @param {Number} index Index of the page/chapter item in dossier (starts from 1)
    * @memberof PluginPopup
    */
-  this.goToDossierPageOrChapter = (index) => {
+  goToDossierPageOrChapter(index) {
     const { dossierWindow } = popupSelectors;
     waitAndClick($(dossierWindow.buttonToC), 1000);
     waitAndClick($(dossierWindow.getTocItemAt(index)), 1000);
-  };
+  }
 
-  this.openPrepareData = function (objectName, isObjectFromLibrary = false) {
+  openPrepareData(objectName, isObjectFromLibrary = false) {
     switchToPluginFrame();
     this.switchLibrary(isObjectFromLibrary);
     this.searchForObject(objectName);
@@ -434,6 +504,43 @@ const PluginPopup = function () {
     this.selectFirstObject();
     this.clickPrepareData();
   };
+
+  importDefaultPromptedVisualisation(visContainerId) {
+    // reprompt
+    switchToPromptFrameForEditDossier();
+    $('#mstrdossierPromptEditor').waitForExist(10000);
+    this.clickRun();
+    browser.pause(6000);
+    // select vis
+    switchToPromptFrameForEditDossier();
+    // for dossiers containing one vis: if no visContainerId, select the only existing vis
+    let visSelector;
+    if (typeof visContainerId === 'undefined') {
+      visSelector = $('.mstrmojo-VizBox-selector');
+    } else {
+      visSelector = $(visContainerId).$('.mstrmojo-VizBox-selector');
+    }
+    visSelector.waitForExist(6000);
+    browser.pause(3000);
+    visSelector.click();
+    browser.pause(2500);
+    switchToPluginFrame();
+    $(popupSelectors.importBtn).waitForExist(5000);
+    this.clickImport();
+  }
+
+  repromptDefaultVisualisation(visContainerId) {
+    // edit
+    pluginRightPanel.edit();
+    browser.pause(5000);
+    switchToPromptFrameForEditDossier();
+    // click reprompt icon
+    $(popupSelectors.dossierWindow.repromptDossier).waitForExist(5000);
+    $(popupSelectors.dossierWindow.repromptDossier).click();
+    browser.pause(3000);
+    // reprompt and import
+    this.importDefaultPromptedVisualisation(visContainerId);
+  }
 };
 
 export default new PluginPopup();

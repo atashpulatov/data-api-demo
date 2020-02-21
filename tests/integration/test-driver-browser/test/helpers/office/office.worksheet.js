@@ -76,6 +76,35 @@ const OfficeWorksheet = function() {
     $(excelSelectors.newSheetBtn).click();
   };
 
+  this.selectCellAlternatively = function(cellId) {
+    switchToExcelFrame();
+    waitAndClick($(excelSelectors.findAndSelectBtn));
+    waitAndClick($(excelSelectors.goToBtn));
+    browser.pause(2000);
+    waitAndClick($(excelSelectors.goToSelector));
+    browser.pause(2000);
+    $(excelSelectors.goToSelector).clearValue();
+    $(excelSelectors.goToSelector).setValue(cellId);
+    browser.keys('\uE007'); // Press Enter
+  }
+
+  this.replaceAllThatMatches = function(textToReplace, value) {
+    switchToExcelFrame();
+    waitAndClick($(excelSelectors.findAndSelectBtn));
+    waitAndClick($(excelSelectors.replaceSelector));
+    browser.pause(2000);
+    waitAndClick($(excelSelectors.findWhatSelector));
+    browser.pause(1000);
+    $(excelSelectors.findWhatSelector).clearValue();
+    $(excelSelectors.findWhatSelector).setValue(textToReplace);
+    waitAndClick($(excelSelectors.replaceWithSelector));
+    browser.pause(2000);
+    $(excelSelectors.replaceWithSelector).clearValue();
+    $(excelSelectors.replaceWithSelector).setValue(value);
+    waitAndClick($(excelSelectors.replaceAllBtn));
+    browser.keys('\uE00C'); // Press esc
+  }
+
   this.selectCell = function(cellId) {
     switchToExcelFrame();
     $(excelSelectors.cellInput).click();

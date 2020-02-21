@@ -8,7 +8,7 @@ export const rightPanelSelectors = {
   addDataBtn: '#add-data-btn-container',
   LDAPbutton: '#LDAPModeLabel',
   refreshBtn: '.loading-button-container .mstr-icon.refresh',
-  refreshAllBtn: '.refresh-all-btn',
+  refreshAllBtn: '#refresh-all-btn',
   repromptBtn: '.loading-button-container .mstr-icon.reprompt',
   deleteBtn: '.trash',
   importDataBtn: '#import-data-placeholder',
@@ -22,5 +22,11 @@ export const rightPanelSelectors = {
   viewDataBtn: '.show-data-btn',
   clearOkBtn: '#confirm-btn',
   importedObjectList: '.file-history-container',
-  importedObjectNameList: '.rename-container'
+  importedObjectNameList: '.rename-container',
+  editBtn: '.edit',
+  placeholderContainer: '#overlay > div > section > div > div.tables-container',
+  selectObject: (index) => `#overlay > div > section > div > div.tables-container > div:nth-child(${index})`,
+  getEdithBtnForObject: (index) => `#overlay > div > section > div > div.tables-container > div:nth-child(${index}) > div.refresh-icons-row > span.object-icons > span:nth-child(1)`,
+  getRefreshBtnForObject: (index) => `#overlay > div > section > div > div.tables-container > div:nth-child(${index}) > div.refresh-icons-row > span.object-icons > span:nth-child(2)`,
+  getRemoveBtnForObject: (index) => `#overlay > div > section > div > div.tables-container > div:nth-child(${index}) > div.refresh-icons-row > span.object-icons > span:nth-child(3)`,
 };
