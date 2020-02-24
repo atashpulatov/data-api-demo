@@ -48,8 +48,7 @@ export class AttributeSelectorWindowNotConnected extends Component {
         ? editedObject.subtotalsInfo.importSubtotal
         : importSubtotal
     };
-
-    const displayAttrFormNamesSet = editedObject && (editedObject.displayAttrFormNames || displayAttrFormNames);
+    const displayAttrFormNamesSet = (editedObject && editedObject.displayAttrFormNames) || displayAttrFormNames;
     attributeSelectorHelpers.officeMessageParent(
       selectorProperties.commandOnUpdate,
       chosenObjectId,

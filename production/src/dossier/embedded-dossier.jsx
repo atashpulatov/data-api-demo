@@ -38,6 +38,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     this.onVizSelectionHandler = this.onVizSelectionHandler.bind(this);
     this.dossierData = { promptsAnswers: props.mstrData.promptsAnswers, };
     this.promptsAnsweredHandler = this.promptsAnsweredHandler.bind(this);
+    this.instanceIdChangeHandler = this.instanceIdChangeHandler.bind(this);
     this.embeddedDossier = null;
   }
 
@@ -50,6 +51,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     if (this.msgRouter) {
       this.msgRouter.removeEventhandler('onVizSelectionChanged', this.onVizSelectionHandler);
       this.msgRouter.removeEventhandler('onPromptAnswered', this.promptsAnsweredHandler);
+      this.msgRouter.removeEventhandler('onDossierInstanceIDChange', this.instanceIdChangeHandler);
     }
   }
 
@@ -211,21 +213,36 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         this.msgRouter = MsgRouter;
         this.msgRouter.registerEventHandler('onVizSelectionChanged', this.onVizSelectionHandler);
         this.msgRouter.registerEventHandler('onPromptAnswered', this.promptsAnsweredHandler);
+        this.msgRouter.registerEventHandler('onDossierInstanceIDChange', this.instanceIdChangeHandler);
       },
     };
     this.embeddedDossier = await microstrategy.dossier.create(props);
   }
 
+  /**
+  * Update the promptsAnswers in dossierData and also in parent component.
+  *
+  * @param {Array} promptsAnswers
+  * @memberof _EmbeddedDossier
+  */
   promptsAnsweredHandler(promptsAnswers) {
     const { handlePromptAnswer } = this.props;
-    if (this.embeddedDossier) {
-      this.embeddedDossier.getDossierInstanceId().then((newInstanceId) => {
-        this.dossierData.preparedInstanceId = newInstanceId;
-        handlePromptAnswer(promptsAnswers, newInstanceId);
-      });
-    } else {
-      handlePromptAnswer(promptsAnswers);
-    }
+    this.dossierData.promptsAnswers = promptsAnswers;
+    handlePromptAnswer(promptsAnswers);
+  }
+
+  /**
+  * Update the instanceId in dossierData and also in parent component.
+  * InstanceId is changing as result of reset button click, switch to
+  * bookmark or new prompts answers given.
+  *
+  * @param {String} newInstanceId
+  * @memberof _EmbeddedDossier
+  */
+  instanceIdChangeHandler(newInstanceId) {
+    const { handleInstanceIdChange } = this.props;
+    this.dossierData.preparedInstanceId = newInstanceId;
+    handleInstanceIdChange(newInstanceId);
   }
 
   render() {
@@ -260,6 +277,7 @@ EmbeddedDossierNotConnected.propTypes = {
   }),
   handleSelection: PropTypes.func,
   handlePromptAnswer: PropTypes.func,
+  handleInstanceIdChange: PropTypes.func,
   handleLoadEvent: PropTypes.func
 };
 
