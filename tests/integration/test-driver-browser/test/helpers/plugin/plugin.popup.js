@@ -17,7 +17,7 @@ class PluginPopup {
     $(popupSelectors.searchInput).setValue(objectName);
   }
 
-  /*
+  /**
    * Searches for attribute or metric inside the popup report preparation
    *
    * @param {String} elementName indicates the attribute or metric name that will be searched
@@ -61,8 +61,13 @@ class PluginPopup {
     waitAndClick($(popupSelectors.closePreviewBtn));
   }
 
-  clickRun() {
+  clickRunForPromptedDossier() {
     switchToPromptFrameForEditDossier();
+    waitAndClick($(popupSelectors.runBtn));
+  }
+
+  clickRun() {
+    switchToPluginFrame();
     waitAndClick($(popupSelectors.runBtn));
   }
 
@@ -121,9 +126,17 @@ class PluginPopup {
     waitAndClick($(popupSelectors.firstObject));
   }
 
-  importObject(objectName, myLibrarySwitch) {
+  switchLibraryAndImportObject(objectName, myLibrarySwitch) {
     switchToPluginFrame();
     this.switchLibrary(myLibrarySwitch);
+    this.searchForObject(objectName);
+    browser.pause(500);
+    this.selectFirstObject();
+    this.clickImport();
+  }
+
+  importObject(objectName, myLibrarySwitch) {
+    switchToPluginFrame();
     this.searchForObject(objectName);
     browser.pause(500);
     this.selectFirstObject();
