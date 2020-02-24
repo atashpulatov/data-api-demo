@@ -28,6 +28,13 @@ class PluginRightPanel {
     browser.pause(999);
   }
 
+  clickImportDataButtonTODOTMP() {
+    switchToPluginFrame();
+    $(rightPanelSelectors.importDataBtn).waitForDisplayed(3000, false);
+    waitAndClick($(rightPanelSelectors.importDataBtn));
+    browser.pause(999);
+  }
+
   // Currently it is not used
   loginToPluginLDAP(username, password) {
     switchToPluginFrame();

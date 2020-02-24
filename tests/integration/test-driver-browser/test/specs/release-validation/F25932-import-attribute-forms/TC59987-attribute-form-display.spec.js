@@ -6,7 +6,6 @@ import { switchToPluginFrame, switchToExcelFrame } from '../../../helpers/utils/
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
-import settings from '../../../config';
 
 describe('TC59987 - Import attribute forms', () => {
   beforeEach(() => {
@@ -21,8 +20,9 @@ describe('TC59987 - Import attribute forms', () => {
 
   it('Display attribute forms', () => {
     const objectName = '06 Sort by Revenue Rank - Month Report Filter';
+    switchToPluginFrame();
     PluginRightPanel.clickImportDataButton();
-    PluginPopup.prepareObject(objectName);
+    PluginPopup.openPrepareData(objectName);
     PluginPopup.selectAllMetrics();
     PluginPopup.selectAttributesAndAttributeForms({ Region: ['ID'] });
     PluginPopup.selectAttributeFormVisualisation('On');
