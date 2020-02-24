@@ -77,7 +77,7 @@ export const objectsList = {
         visualization1 : {
           name: '#mstr106',
           gridTableId:'#mstr121',
-          getTableItemAt: (firstIndex, secondIndex) => `#mstr121 > table > tbody > tr:nth-child(${firstIndex}) > td:nth-child(${secondIndex})`,
+          getTableItemAt: (firstIndex, secondIndex) => `#mstr149 > table > tbody > tr:nth-child(${firstIndex}) > td:nth-child(${secondIndex})`,
         }
       },
     },
