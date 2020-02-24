@@ -30,6 +30,8 @@ export default class DossierWindowNotConnected extends React.Component {
     this.handleOk = this.handleOk.bind(this);
     this.handlePromptAnswer = this.handlePromptAnswer.bind(this);
     this.handleInstanceIdChange = this.handleInstanceIdChange.bind(this);
+
+    this.previousSelectionBackup = [];
   }
 
   validateSession = () => {
@@ -99,17 +101,38 @@ export default class DossierWindowNotConnected extends React.Component {
   /**
   * Store new instance id in state.
   * Unselect visualization after instanceId changed.
+  * Restore backuped viz selection info in case of return to previous instance.
+  * Above happens on reprompt button click followed by cancel button click in reprompt popup.
   *
   * @param {String} newInstanceId
   * @memberof DossierWindowNotConnected
   */
   handleInstanceIdChange(newInstanceId) {
-    this.setState({
-      preparedInstanceId: newInstanceId,
-      isVisualizationSelected: false,
-      chapterKey: '',
-      visualizationKey: '',
-    });
+    const { preparedInstanceId, isVisualizationSelected, chapterKey, visualizationKey, isVisualizationSupported } = this.state;
+
+    const backup = this.previousSelectionBackup.find(el => el.preparedInstanceId === newInstanceId);
+
+    if (preparedInstanceId !== newInstanceId && !backup) {
+      // Make a backup of last selection info.
+      this.previousSelectionBackup.unshift({
+        preparedInstanceId,
+        isVisualizationSelected,
+        chapterKey,
+        visualizationKey,
+        isVisualizationSupported,
+      });
+      // Clear selection of viz and update instance id.
+      this.setState({
+        preparedInstanceId: newInstanceId,
+        isVisualizationSelected: false,
+        chapterKey: '',
+        visualizationKey: '',
+        isVisualizationSupported: true,
+      });
+    } else {
+      // Restore backuped viz selection info in case of return to prev instance
+      this.setState({ ...backup });
+    }
   }
 
   /**
