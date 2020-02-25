@@ -42,12 +42,6 @@ export function switchToPopupFrame() {
   browser.switchToFrame($('iframe[src*="api&et="]'));
 }
 
-export function switchToPromptFrameForEditDossier() {
-  switchToPluginFrame();
-  const editFrame = '#root > div > div:nth-child(3) > iframe';
-  $(editFrame).waitForExist(9999);
-  browser.switchToFrame($(editFrame));
-}
 
 export function switchToPromptFrameForEdit() {
   switchToPluginFrame();
