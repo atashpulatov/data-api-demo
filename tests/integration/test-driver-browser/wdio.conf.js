@@ -17,14 +17,22 @@ exports.config = {
   // directory is where your package.json resides, so `wdio` will be called from there.
   //
   specs: [
-    './test/specs/release-validation/F22955-refresh/TC48135-refresh-report-prompt-nested-prompts.spec.js',
-  ], 
+    './test/specs/release-validation/F22954-editing/TC48354-edit-prompt-value-dateTime-req-noDef.spec.js',
+  ],
   suites: {
     test: [
       './test/specs/release-validation/test/*.js'
     ],
     UB: [
       './test/specs/performance/UB-standalone-version/import-UB-dataset.spec.js'
+    ],
+    dossiers: [
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/*.spec.js',
+    ],
+    acceptance: [
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC61046-E2E-with-edit-andchange-text.spec.js',
+      './test/specs/release-validation/F25932-import-attribute-forms/TC59987-attribute-form-display.spec.js',
+      './test/specs/release-validation/F24751-import subtotals/TC54788-import-subtotals.spec.js',
     ],
   },
   // Patterns to exclude.
@@ -147,7 +155,7 @@ exports.config = {
   {
   //
   // Jasmine default timeout
-    defaultTimeoutInterval: 160000,
+    defaultTimeoutInterval: 600000,
     //
     // The Jasmine framework allows interception of each assertion in order to log the state of the application
     // or website depending on the result. For example, it is pretty handy to take a screenshot every time
