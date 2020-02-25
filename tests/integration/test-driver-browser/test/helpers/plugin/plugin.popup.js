@@ -1,6 +1,6 @@
 /* eslint-disable class-methods-use-this */
-import { waitAndClick, waitAndRightClick } from "../utils/click-helper";
-import { popupSelectors } from "../../constants/selectors/popup-selectors";
+import { waitAndClick, waitAndRightClick } from '../utils/click-helper';
+import { popupSelectors } from '../../constants/selectors/popup-selectors';
 import {
   switchToPluginFrame,
   switchToPromptFrame,
@@ -8,10 +8,10 @@ import {
   switchToExcelFrame,
   switchToPromptFrameForEditDossier,
   switchToPromptFrameForEditReport
-} from "../utils/iframe-helper";
-import { waitForNotification } from "../utils/wait-helper";
-import pluginRightPanel from "./plugin.right-panel";
-import { excelSelectors } from "../../constants/selectors/office-selectors";
+} from '../utils/iframe-helper';
+import { waitForNotification } from '../utils/wait-helper';
+import pluginRightPanel from './plugin.right-panel';
+import { excelSelectors } from '../../constants/selectors/office-selectors';
 
 class PluginPopup {
   closeRefreshAll() {
@@ -67,7 +67,7 @@ class PluginPopup {
     waitAndClick($(popupSelectors.closePreviewBtn));
   }
 
- clickRun() {
+  clickRun() {
     switchToPluginFrame();
     $(popupSelectors.runBtn).waitForExist(3333);
     waitAndClick($(popupSelectors.runBtn));
@@ -105,10 +105,10 @@ class PluginPopup {
     }
   }
 
-selectAttributeIndex(index) {
-  for (let i = 0; i < index.length; i++) {
-    waitAndClick($(selectors.attributeSelector(index[i])));
-  }
+  selectAttributeIndex(index) {
+    for (let i = 0; i < index.length; i++) {
+      waitAndClick($(selectors.attributeSelector(index[i])));
+    }
   }
 
   changePromptQualificationItem(value) {
@@ -166,7 +166,7 @@ selectAttributeIndex(index) {
     this.clickPrepareData();
     browser.pause(9999); // temp solution
     switchToPromptFrame();
-    $("#mstrdossierPromptEditor").waitForExist(7777);
+    $('#mstrdossierPromptEditor').waitForExist(7777);
   }
 
   selectAttributeIndex(index) {
@@ -180,7 +180,7 @@ selectAttributeIndex(index) {
     browser.pause(5555); // temp solution
     $(popupSelectors.runBtn).waitForExist(3333);
     switchToPromptFrame();
-    $("#mstrdossierPromptEditor").waitForExist(3333);
+    $('#mstrdossierPromptEditor').waitForExist(3333);
     this.clickRun();
   }
 
@@ -189,19 +189,19 @@ selectAttributeIndex(index) {
     browser.pause(5555);
     while (true) {
       browser.pause(3000);
-      switchToPluginFrame(); 
+      switchToPluginFrame();
       if ($(popupSelectors.runBtn).isExisting()) {
-      this.clickRun();
+        this.clickRun();
       } else {
         break;
+      }
     }
-  }
   }
 
   isViewSelected() {
     return (
-      $(popupSelectors.viewSelected).getAttribute("class") ===
-      "ant-switch ant-switch-checked"
+      $(popupSelectors.viewSelected).getAttribute('class') ===
+      'ant-switch ant-switch-checked'
     );
   }
 
@@ -209,12 +209,12 @@ selectAttributeIndex(index) {
     this.importObject(objectName, false);
     browser.pause(9999); // temp solution
     switchToPromptFrame();
-    $("#mstrdossierPromptEditor").waitForExist(7777);
+    $('#mstrdossierPromptEditor').waitForExist(7777);
   }
 
   writeValueText(value) {
     switchToPromptFrame();
-    $("#mstrdossierPromptEditor").waitForExist(7777);
+    $('#mstrdossierPromptEditor').waitForExist(7777);
     waitAndClick($(popupSelectors.valueInput), 5555);
     $(popupSelectors.valueInput).clearValue();
     $(popupSelectors.valueInput).setValue(`${value}\uE004\uE006`);
@@ -222,7 +222,7 @@ selectAttributeIndex(index) {
 
   writeAttrQualificationValue(value) {
     switchToPromptFrame();
-    $("#mstrdossierPromptEditor").waitForExist(3333);
+    $('#mstrdossierPromptEditor').waitForExist(3333);
     $(popupSelectors.attrQualificationInput).click();
     $(popupSelectors.attrQualificationInput).clearValue();
     $(popupSelectors.attrQualificationInput).setValue(
@@ -232,7 +232,7 @@ selectAttributeIndex(index) {
 
   writeMultiPrompt(value) {
     switchToPromptFrame();
-    $("#mstrdossierPromptEditor").waitForExist(3333);
+    $('#mstrdossierPromptEditor').waitForExist(3333);
     $(popupSelectors.calendarInput).click();
     $(popupSelectors.calendarInput).clearValue();
     $(popupSelectors.calendarInput).setValue(`${value}\uE004\uE004\uE006`);
@@ -240,13 +240,13 @@ selectAttributeIndex(index) {
 
   removeAllSelected() {
     switchToPromptFrame();
-    $("#mstrdossierPromptEditor").waitForExist(3333);
+    $('#mstrdossierPromptEditor').waitForExist(3333);
     $(popupSelectors.promptRemoveAllSelected).click();
   }
 
   changeExpressionQualificationAndRun(value) {
     switchToPromptFrame();
-    $("#mstrdossierPromptEditor").waitForExist(3333);
+    $('#mstrdossierPromptEditor').waitForExist(3333);
     $(popupSelectors.expressionInList).click();
     waitAndClick($(`.mstrListBlockItemName*=${value}`));
     this.clickRun();
@@ -254,19 +254,19 @@ selectAttributeIndex(index) {
 
   promptSelectObject(objectName) {
     switchToPromptFrame();
-    $("#mstrdossierPromptEditor").waitForExist(7777);
+    $('#mstrdossierPromptEditor').waitForExist(7777);
     waitAndClick($(`.mstrListBlockItem*=${objectName}`));
     browser.pause(2222);
-    waitAndClick($(".mstrToolButtonRounded"));
+    waitAndClick($('.mstrToolButtonRounded'));
   }
 
   promptSelectObjectForEdit(objectName) {
     switchToPromptFrameForEditReport();
     browser.pause(10000);
-    $("#mstrdossierPromptEditor").waitForExist(7777);
+    $('#mstrdossierPromptEditor').waitForExist(7777);
     waitAndClick($(`.mstrListBlockItem*=${objectName}`));
     browser.pause(2222);
-    waitAndClick($(".mstrToolButtonRounded"));
+    waitAndClick($('.mstrToolButtonRounded'));
   }
 
   prepareObject(objectName, elements, filters) {
@@ -317,14 +317,14 @@ selectAttributeIndex(index) {
   // Currently this method is not used
   checkIfFilterIsClicked(filterName) {
     expect(
-      $(`.filter-title*=${filterName}`).getCSSProperty("background-color").value
-    ).toEqual("#1890FF");
+      $(`.filter-title*=${filterName}`).getCSSProperty('background-color').value
+    ).toEqual('#1890FF');
   }
 
   deleteFromSearch() {
-    const searchedValue = $(popupSelectors.searchInput).getAttribute("value");
+    const searchedValue = $(popupSelectors.searchInput).getAttribute('value');
     for (let i = 0; i < searchedValue.length; i++) {
-      $(popupSelectors.searchInput).setValue("\uE003");
+      $(popupSelectors.searchInput).setValue('\uE003');
     }
   }
 
@@ -335,9 +335,9 @@ selectAttributeIndex(index) {
     let popupExists = true;
     while (popupExists) {
       switchToExcelFrame();
-      const popupDiv = $("#WACDialogPanel").isExisting();
+      const popupDiv = $('#WACDialogPanel').isExisting();
       if (!popupDiv) {
-        if (!$("#WACDialogPanel").isExisting()) {
+        if (!$('#WACDialogPanel').isExisting()) {
           popupExists = false;
         }
       }
@@ -351,8 +351,8 @@ selectAttributeIndex(index) {
   switchLibrary(newState) {
     const myLibrarySwitch = $(popupSelectors.myLibrary);
     myLibrarySwitch.waitForExist(5000);
-    const checked = myLibrarySwitch.getAttribute("aria-checked");
-    if ((checked === "true") !== newState) waitAndClick(myLibrarySwitch);
+    const checked = myLibrarySwitch.getAttribute('aria-checked');
+    if ((checked === 'true') !== newState) waitAndClick(myLibrarySwitch);
   }
 
   openDossier(dossierName, timeToLoadDossier = 10000, myLibrarySwitch = false) {
@@ -489,7 +489,7 @@ selectAttributeIndex(index) {
       )} ${dossierWindow.filtersMenu.getSliderInput(position)} > input`
     );
     maxValueInput.doubleClick();
-    browser.keys("\uE003"); // Press Backspace
+    browser.keys('\uE003'); // Press Backspace
     maxValueInput.setValue(value);
   }
 
@@ -540,17 +540,17 @@ selectAttributeIndex(index) {
   importDefaultPromptedVisualisation(visContainerId) {
     // reprompt
     switchToPromptFrameForEditDossier();
-    $("#mstrdossierPromptEditor").waitForExist(10000);
+    $('#mstrdossierPromptEditor').waitForExist(10000);
     this.clickRun();
     browser.pause(6000);
     // select vis
     switchToPromptFrameForEditDossier();
     // for dossiers containing one vis: if no visContainerId, select the only existing vis
     let visSelector;
-    if (typeof visContainerId === "undefined") {
-      visSelector = $(".mstrmojo-VizBox-selector");
+    if (typeof visContainerId === 'undefined') {
+      visSelector = $('.mstrmojo-VizBox-selector');
     } else {
-      visSelector = $(visContainerId).$(".mstrmojo-VizBox-selector");
+      visSelector = $(visContainerId).$('.mstrmojo-VizBox-selector');
     }
     visSelector.waitForExist(6000);
     browser.pause(3000);
