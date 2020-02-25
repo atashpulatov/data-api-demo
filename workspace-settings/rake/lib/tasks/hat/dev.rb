@@ -153,6 +153,7 @@ task :stage_0_test do
   if ENV["ghprbTargetBranch"].nil?
     raise "ghprbTargetBranch environment should not be nil"
   end
+  generate_eslint_report
   run_test("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
   get_unit_test_metrics("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
   get_test_coverage_metrics
@@ -167,7 +168,6 @@ task :stage_0_test do
     run_test(base_repo_path)
     generate_comparison_report_html
     generate_comparison_report_markdown
-    generate_eslint_report
   rescue Exception => e
     message = "Waring: Failed to run test with base branch and generate report, caught exception #{e}!"
     warn(message)
@@ -252,8 +252,7 @@ def generate_comparison_report_html
 end
 
 def generate_eslint_report
-  eslint_report_path = "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/.eslint/index.html"
-  shell_command "npm run eslint \"src/**\" -f html -o #{eslint_report_path}", cwd: $WORKSPACE_SETTINGS[:paths][:project][:production][:home]
+  shell_command "npm run eslint:html", cwd: $WORKSPACE_SETTINGS[:paths][:project][:production][:home]
 end
 
 

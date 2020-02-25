@@ -119,7 +119,9 @@ export default class DossierWindowNotConnected extends React.Component {
   * @memberof DossierWindowNotConnected
   */
   handleInstanceIdChange(newInstanceId) {
-    const { preparedInstanceId, isVisualizationSelected, chapterKey, visualizationKey, isVisualizationSupported } = this.state;
+    const {
+      preparedInstanceId, isVisualizationSelected, chapterKey, visualizationKey, isVisualizationSupported
+    } = this.state;
 
     const backup = this.previousSelectionBackup.find(el => el.preparedInstanceId === newInstanceId);
 
