@@ -9,6 +9,7 @@ import { Office } from '../mockOffice';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { officeContext } from '../../office/office-context';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
+import { authenticationHelper } from '../../authentication/authentication-helper';
 
 describe('Dossierwindow', () => {
   afterEach(() => {
@@ -57,16 +58,37 @@ describe('Dossierwindow', () => {
     expect(componentWrapper.instance().state.isVisualizationSelected).toBeTruthy();
   });
 
-  it('handlePromptAnswer newInstanceId setup correct state', async () => {
+  it('validateSession should call validateAuthToken', async () => {
     // given
-    const newAnswers = 'newAnswers';
+    const componentWrapper = shallow(<DossierWindowNotConnected />);
+    const validateTokenSpy = jest.spyOn(authenticationHelper, 'validateAuthToken');
+    // when
+    await componentWrapper.instance().validateSession();
+    // then
+    expect(validateTokenSpy).toHaveBeenCalled();
+  });
+
+  it('handleInstanceIdChange set new instanceId and clear viz data in state', async () => {
+    // given
     const newInstanceId = 'newInstanceId';
     const componentWrapper = shallow(<DossierWindowNotConnected />);
     // when
-    componentWrapper.instance().handlePromptAnswer(newAnswers, newInstanceId);
+    componentWrapper.instance().handleInstanceIdChange(newInstanceId);
+    // then
+    expect(componentWrapper.instance().state.preparedInstanceId).toBe(newInstanceId);
+    expect(componentWrapper.instance().state.isVisualizationSelected).toBe(false);
+    expect(componentWrapper.instance().state.chapterKey).toBe('');
+    expect(componentWrapper.instance().state.visualizationKey).toBe('');
+  });
+
+  it('handlePromptAnswer setup correct state', async () => {
+    // given
+    const newAnswers = 'newAnswers';
+    const componentWrapper = shallow(<DossierWindowNotConnected />);
+    // when
+    componentWrapper.instance().handlePromptAnswer(newAnswers);
     // then
     expect(componentWrapper.instance().state.promptsAnswers).toBe(newAnswers);
-    expect(componentWrapper.instance().state.preparedInstanceId).toBe(newInstanceId);
   });
 
   it('should use handleOk and run messageParent with given parameters', () => {

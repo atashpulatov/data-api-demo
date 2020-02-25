@@ -32,7 +32,9 @@ export class ErrorService {
     if (type === errorTypes.UNAUTHORIZED_ERR) {
       return this.notificationService.displayNotification({ type: 'info', content: message });
     }
-    return this.notificationService.displayNotification({ type: 'warning', content: message, details, onConfirm, });
+    return this.notificationService.displayNotification({
+      type: 'warning', content: message, details, onConfirm,
+    });
   }
 
   checkForLogout = (isLogout = false, errorType) => {

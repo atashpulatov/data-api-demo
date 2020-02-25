@@ -1,4 +1,4 @@
-export const objects = {
+export const objectsList = {
   reports: {
     reportXML: 'Report accessing XML file',
     notSupportedFeatures: 'Report with Page by, Advanced Sorting, Thresholds, Outline, Banding, Merge cells & Multiform attributes',
@@ -26,7 +26,17 @@ export const objects = {
     numberFormating: 'Number Formatting',
     grpahReport: 'report graph',
     gridReport: 'Grid/graph',
-
+    basicSubtotalsReport: 'Report Totals Subtotals 1',
+    longReportWithInvalidCharacters: {
+      sourceName: '01. • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«». • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&\'()*+,-:;<=>@/`testtesttes/km123456',
+      excelTableNameStart:'_01___________________________________Report_for_testing_binding_and_special_characters',
+      excelTableFullName:'_01___________________________________Report_for_testing_binding_and_special_characters______________________________________________________________________Report_for_testing_binding_and_special_characters_________________________testtestt_TIMESTAMP'
+    },
+    basic01Report:{
+      sourceName: '01 Basic Report',
+      excelTableNameStart:'_01_Basic_Report',
+      excelTableFullName:'_01_Basic_Report_TIMESTAMP'
+    }
   },
 
   datasets: {
@@ -37,6 +47,52 @@ export const objects = {
     notSupportedCube: 'multi table cube'
   },
 
-  dossiers: {},
+  dossiers: {
+    complexDossier: {
+      name: 'Complex dossier (20 visualizations)',
+      timeToOpen: 10000,
+      // TODO: Pages
+      visualizations: {
+        heatMap: '#mstr191',
+        grid: '#mstr227',
+        barChart: '#mstr271',
+        lineChart: '#mstr459',
+        areaChart: '#mstr436',
+        bubbleChart: '#mstr505',
+        pieChart: '#mstr310',
+        comboChart: '#mstr572',
+        geospatialService: '#mstr338',
+        network: '#mstr646',
+        histogram: '#mstr131',
+        boxPlot: '#mstr212',
+        waterfall: '#mstr248',
+        map: '#mstr324',
+        KPI: '#mstr287',
+      },
+    },
+    visualizationManipulation:{
+      name:'Visualization manipulation',
+      visualizations: {
+        visualization1 : {
+          name: '#mstr106',
+          gridTableId:'#mstr121',
+          getTableItemAt: (firstIndex, secondIndex) => `#mstr121 > table > tbody > tr:nth-child(${firstIndex}) > td:nth-child(${secondIndex})`,
+        }
+      },
+    },
+    interactiveDossier: { name: 'Dossier for interactive components', },
+    customVisualizations: {
+      name: 'Custom Visualizations',
+      visualizations: { GoogleTimeline: '#mstr114', }
+    },
 
+    userActivityDossier:{
+      name:'User Activity',
+      visualizations:{
+        accounts:'#mstr162',
+        dailyActiveAccounts:'#mstr131',
+      }
+    }
+
+  }
 };

@@ -5,10 +5,10 @@ import { officeStoreService } from './store/office-store-service';
 import { notificationService } from '../notification/notification-service';
 import { errorService } from '../error/error-handler';
 import mstrNormalizedJsonHandler from '../mstr-object/mstr-normalized-json-handler';
-import { CONTEXT_LIMIT } from '../mstr-object/mstr-object-rest-service';
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { OBJ_REMOVED_FROM_EXCEL } from '../error/constants';
 import { ProtectedSheetError } from '../error/protected-sheets-error';
+import { mergeHeaderColumns, mergeHeaderRows } from './office-api-header-merge-helper';
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
@@ -33,36 +33,37 @@ export class OfficeApiHelper {
     if (!Number.isInteger(headerCount)) {
       throw new IncorrectInputTypeError();
     }
+
     const startCellArray = startCell.split(/(\d+)/);
     headerCount += parseInt(this.lettersToNumber(startCellArray[0]) - 1, 10);
-    const endColumnNum = headerCount;
-    let endColumn = '';
-    for (let firstNumber = ALPHABET_RANGE_START,
-      secondNumber = ALPHABET_RANGE_END;
-      (headerCount -= firstNumber) >= 0;
-      firstNumber = secondNumber, secondNumber *= ALPHABET_RANGE_END) {
-      endColumn = String.fromCharCode(parseInt((headerCount % secondNumber) / firstNumber)
-        + ASCII_CAPITAL_LETTER_INDEX)
-        + endColumn;
-    }
+
+    const endColumn = this.numberToLetters(headerCount);
     const endRow = Number(startCellArray[1]) + rowCount;
-    if (endRow > EXCEL_ROW_LIMIT || endColumnNum > EXCEL_COL_LIMIT) {
+
+    if (endRow > EXCEL_ROW_LIMIT || headerCount > EXCEL_COL_LIMIT) {
       throw new OutsideOfRangeError('The table you try to import exceeds the worksheet limits.');
     }
     return `${startCell}:${endColumn}${endRow}`;
   };
 
-  numberToLetters = (colNum) => {
-    let colLetter = '';
+  numberToLetters=(headerCount) => {
+    let result = '';
     let firstNumber = ALPHABET_RANGE_START;
     let secondNumber = ALPHABET_RANGE_END;
-    for (firstNumber, secondNumber; (colNum -= firstNumber) >= 0; firstNumber = secondNumber, secondNumber *= ALPHABET_RANGE_END) {
-      colLetter = String.fromCharCode(parseInt((colNum % secondNumber) / firstNumber)
+
+    headerCount -= firstNumber;
+    while (headerCount >= 0) {
+      result = String.fromCharCode(parseInt((headerCount % secondNumber) / firstNumber, 10)
         + ASCII_CAPITAL_LETTER_INDEX)
-        + colLetter;
+        + result;
+
+      firstNumber = secondNumber;
+      secondNumber *= ALPHABET_RANGE_END;
+      headerCount -= firstNumber;
     }
-    return colLetter;
-  };
+
+    return result;
+  }
 
   offsetCellBy = (cell, rowOffset, colOffset) => {
     const cellArray = cell.split(/(\d+)/);
@@ -88,26 +89,34 @@ export class OfficeApiHelper {
     return letters.split('').reduce((r, a) => r * ALPHABET_RANGE_END + parseInt(a, 36) - 9, 0);
   }
 
-  onBindingObjectClick = async (bindingId, shouldSelect = true, deleteReport, chosenObjectName, isCrosstab, crosstabHeaderDimensions) => {
+  onBindingObjectClick = async (
+    bindingId,
+    shouldSelect = true,
+    deleteReport,
+    chosenObjectName,
+    isCrosstab,
+    crosstabHeaderDimensions) => {
     let crosstabRange;
     try {
       const excelContext = await this.getExcelContext();
       const tableObject = excelContext.workbook.tables.getItem(bindingId);
+
       if (isCrosstab) {
         const tmpXtabDimensions = { ...crosstabHeaderDimensions, columnsY: crosstabHeaderDimensions.columnsY + 1, };
         crosstabRange = await this.getCrosstabRangeSafely(tableObject, tmpXtabDimensions, excelContext);
-        if (shouldSelect) crosstabRange.select();
+        if (shouldSelect) { crosstabRange.select(); }
       } else {
         const tableRange = this.getBindingRange(excelContext, bindingId);
-        if (shouldSelect) tableRange.select();
+        if (shouldSelect) { tableRange.select(); }
       }
+
       await excelContext.sync();
       return true;
     } catch (error) {
       if (error && error.code === 'ItemNotFound') {
         return notificationService.displayTranslatedNotification({ type: 'info', content: OBJ_REMOVED_FROM_EXCEL });
       }
-      errorService.handleError(error, {chosenObjectName, onConfirm: deleteReport});
+      errorService.handleError(error, { chosenObjectName, onConfirm: deleteReport });
       return false;
     }
   };
@@ -364,7 +373,9 @@ export class OfficeApiHelper {
    * @return {Object}
    */
   getCrosstabRange = (cellAddress, headerDimensions, sheet) => {
-    const { columnsY, columnsX, rowsX, rowsY, } = headerDimensions;
+    const {
+      columnsY, columnsX, rowsX, rowsY,
+    } = headerDimensions;
     const cell = typeof cellAddress === 'string' ? sheet.getRange(cellAddress) : cellAddress;
     const bodyRange = cell.getOffsetRange(rowsY, columnsX - 1);
     const startingCell = cell.getCell(0, 0).getOffsetRange(-(columnsY), -rowsX);
@@ -432,7 +443,12 @@ export class OfficeApiHelper {
         leftRange = officeTable.getRange().getColumnsBefore(rowsX);
         context.trackedObjects.add(leftRange);
         // Title headers
-        titlesRange = officeTable.getRange().getCell(0, 0).getOffsetRange(0, -1).getResizedRange(-(columnsY), -(rowsX - 1));
+        titlesRange = officeTable
+          .getRange()
+          .getCell(0, 0)
+          .getOffsetRange(0, -1)
+          .getResizedRange(-(columnsY), -(rowsX - 1));
+
         context.trackedObjects.add(titlesRange);
       }
 
@@ -443,20 +459,20 @@ export class OfficeApiHelper {
       }
       // Check if ranges are valid before clearing
       await context.sync();
-      if (isCrosstab && (crosstabHeaderDimensions === prevheaderDimensions)) {
-        if (columnsY) topRange.clear('contents');
+      if (isCrosstab && (JSON.stringify(crosstabHeaderDimensions) === JSON.stringify(prevheaderDimensions))) {
+        if (columnsY) { topRange.clear('contents'); }
         if (rowsX) {
           leftRange.clear('contents');
           titlesRange.clear('contents');
         }
       } else {
-        if (columnsY) topRange.clear();
+        if (columnsY) { topRange.clear(); }
         if (rowsX) {
           leftRange.clear();
           titlesRange.clear();
         }
       }
-      if (columnsY) context.trackedObjects.remove([topRange]);
+      if (columnsY) { context.trackedObjects.remove([topRange]); }
       if (rowsX) {
         context.trackedObjects.remove([leftRange, titlesRange]);
       }
@@ -476,11 +492,22 @@ export class OfficeApiHelper {
    * @return {Object}
    */
   getTableStartCell = ({ startCell, instanceDefinition, prevOfficeTable }) => {
-    const { mstrTable: { isCrosstab, prevCrosstabDimensions, crosstabHeaderDimensions, toCrosstabChange, fromCrosstabChange, } } = instanceDefinition;
+    const {
+      mstrTable: {
+        isCrosstab,
+        prevCrosstabDimensions,
+        crosstabHeaderDimensions,
+        toCrosstabChange,
+        fromCrosstabChange,
+      }
+    } = instanceDefinition;
+
     if (fromCrosstabChange) {
       return this.offsetCellBy(startCell, -prevCrosstabDimensions.columnsY, -prevCrosstabDimensions.rowsX);
     }
-    if (!toCrosstabChange && (!isCrosstab || prevOfficeTable)) return startCell;
+
+    if (!toCrosstabChange && (!isCrosstab || prevOfficeTable)) { return startCell; }
+
     const rowOffset = crosstabHeaderDimensions.columnsY;
     const colOffset = crosstabHeaderDimensions.rowsX;
     return this.offsetCellBy(startCell, rowOffset, colOffset);
@@ -543,17 +570,26 @@ export class OfficeApiHelper {
     const reportStartingCell = sheet.getRange(cellAddress);
     const titlesBottomCell = reportStartingCell.getOffsetRange(0, -1);
     const rowsTitlesRange = titlesBottomCell.getResizedRange(0, -(crosstabHeaderDimensions.rowsX - 1));
-    const columnssTitlesRange = titlesBottomCell.getOffsetRange(-1, 0).getResizedRange(-(crosstabHeaderDimensions.columnsY - 1), 0);
 
-    const headerTitlesRange = columnssTitlesRange.getBoundingRect(rowsTitlesRange);
+    const columnsTitlesRange = titlesBottomCell
+      .getOffsetRange(-1, 0)
+      .getResizedRange(-(crosstabHeaderDimensions.columnsY - 1), 0);
+
+    const headerTitlesRange = columnsTitlesRange.getBoundingRect(rowsTitlesRange);
     headerTitlesRange.format.verticalAlignment = window.Excel.VerticalAlignment.bottom;
     this.formatCrosstabRange(headerTitlesRange);
     headerTitlesRange.values = '  ';
 
     // we are not inserting row attributes names if they do not exist
-    if (attributesNames.rowsAttributes.length) rowsTitlesRange.values = [attributesNames.rowsAttributes];
-    columnssTitlesRange.values = mstrNormalizedJsonHandler.transposeMatrix([attributesNames.columnsAttributes]);
-  }
+    if (attributesNames.rowsAttributes.length) {
+      rowsTitlesRange.values = [attributesNames.rowsAttributes];
+      mergeHeaderRows(attributesNames.rowsAttributes, rowsTitlesRange);
+    }
+
+    columnsTitlesRange.values = mstrNormalizedJsonHandler.transposeMatrix([attributesNames.columnsAttributes]);
+    mergeHeaderColumns(attributesNames.columnsAttributes, columnsTitlesRange);
+  };
+
 
   /**
   * Returns the number of rows and columns headers that are valid for crosstab
@@ -583,11 +619,15 @@ export class OfficeApiHelper {
   async deleteExcelTable(tableObject, context, isCrosstab = false, crosstabHeaderDimensions = {}, isClear = false) {
     context.runtime.enableEvents = false;
     await context.sync();
+    const isClearContentOnly = isClear ? 'contents' : '';
     const tableRange = tableObject.getDataBodyRange();
     context.trackedObjects.add(tableRange);
     if (isCrosstab) {
-      const { rowsX, rowsY, columnsX, columnsY } = crosstabHeaderDimensions;
-      this.clearEmptyCrosstabRow(tableObject); // Since showing Excel table header dont override the data but insert new row, we clear values from empty row in crosstab to prevent it
+      const {
+        rowsX, rowsY, columnsX, columnsY
+      } = crosstabHeaderDimensions;
+      // Since showing Excel table header dont override the data but insert new row,
+      // we clear values from empty row in crosstab to prevent itthis.clearEmptyCrosstabRow(tableObject);
       tableObject.showHeaders = true;
       await context.sync();
       const crosstabRange = await this.getCrosstabRangeSafely(tableObject, crosstabHeaderDimensions, context);
@@ -595,11 +635,11 @@ export class OfficeApiHelper {
       const firstCell = crosstabRange.getCell(0, 0);
       const columnsHeaders = firstCell.getOffsetRange(0, rowsX).getResizedRange(columnsY - 1, columnsX - 1);
       const rowsHeaders = firstCell.getResizedRange((columnsY + rowsY), rowsX - 1);
-      columnsHeaders.clear();
-      rowsHeaders.clear();
+      columnsHeaders.clear(isClearContentOnly);
+      rowsHeaders.clear(isClearContentOnly);
     }
-    tableRange.clear();
-    if (!isClear) tableObject.delete();
+    tableRange.clear(isClearContentOnly);
+    if (!isClear) { tableObject.delete(); }
     context.runtime.enableEvents = true;
     await context.sync();
     context.trackedObjects.remove(tableRange);

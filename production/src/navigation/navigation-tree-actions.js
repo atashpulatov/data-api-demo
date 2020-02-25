@@ -108,4 +108,20 @@ export function changeFilter(data) {
   return (dispatch) => dispatch({ type: CHANGE_FILTER, data });
 }
 
-export const actions = { selectFolder, selectObject, setDataSource, requestImport, promptsAnswered, startImport, startLoading, stopLoading, changeSearching, changeSorting, updateScroll, updateSize, requestDossierOpen, switchMyLibrary, changeFilter };
+export const actions = {
+  selectFolder,
+  selectObject,
+  setDataSource,
+  requestImport,
+  promptsAnswered,
+  startImport,
+  startLoading,
+  stopLoading,
+  changeSearching,
+  changeSorting,
+  updateScroll,
+  updateSize,
+  requestDossierOpen,
+  switchMyLibrary,
+  changeFilter
+};

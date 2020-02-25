@@ -34,15 +34,21 @@ export class AttributeSelectorWindowNotConnected extends Component {
     projectId,
     chosenObjectSubtype,
     body,
-    chosenObjectName = this.props.chosenObject.chosenObjectName
+    chosenObjectName
   ) => {
-    const { chosenObject, editedObject, importSubtotal, displayAttrFormNames } = this.props;
+    const { chosenObject:{ chosenObjectName:objectName } } = this.props;
+    chosenObjectName = chosenObjectName || objectName;
+
+    const {
+      chosenObject, editedObject, importSubtotal, displayAttrFormNames
+    } = this.props;
+
     const subtotalsInfo = {
       importSubtotal: (editedObject && editedObject.subtotalsInfo)
         ? editedObject.subtotalsInfo.importSubtotal
         : importSubtotal
     };
-    const displayAttrFormNamesSet = editedObject && (editedObject.displayAttrFormNames || displayAttrFormNames);
+    const displayAttrFormNamesSet = (editedObject && editedObject.displayAttrFormNames) || displayAttrFormNames;
     attributeSelectorHelpers.officeMessageParent(
       selectorProperties.commandOnUpdate,
       chosenObjectId,
@@ -78,8 +84,12 @@ export class AttributeSelectorWindowNotConnected extends Component {
   };
 
   render() {
-    const { handleBack, chosenObject, mstrData, objectName } = this.props;
-    const { triggerUpdate, openModal, attributesSelected, loading, } = this.state;
+    const {
+      handleBack, chosenObject, mstrData, objectName
+    } = this.props;
+    const {
+      triggerUpdate, openModal, attributesSelected, loading,
+    } = this.state;
     const { isPrompted } = mstrData;
     const { chosenObjectName } = chosenObject;
     const typeName = chosenObject.objectType
@@ -90,7 +100,6 @@ export class AttributeSelectorWindowNotConnected extends Component {
     return (
       <div>
         <AttributeSelector
-          // TODO: logic for a title
           title={`Import ${typeName} > ${objectName}`}
           attributesSelectedChange={this.attributesBeingSelected}
           triggerUpdate={triggerUpdate}
@@ -99,6 +108,7 @@ export class AttributeSelectorWindowNotConnected extends Component {
           openModal={openModal}
           closeModal={this.closeModal}
           handlePopupErrors={popupHelper.handlePopupErrors}
+          isEdit={isEdit}
         />
         <PopupButtons
           disableActiveActions={!attributesSelected}
@@ -117,6 +127,8 @@ AttributeSelectorWindowNotConnected.propTypes = {
   chosenObject: PropTypes.shape({
     chosenObjectName: PropTypes.string,
     objectType: PropTypes.string,
+    preparedInstanceId: PropTypes.string,
+    promptsAnswers: PropTypes.string,
   }),
   objectName: PropTypes.string,
   mstrData: PropTypes.shape({
@@ -125,10 +137,17 @@ AttributeSelectorWindowNotConnected.propTypes = {
     projectId: PropTypes.string,
     instanceId: PropTypes.string,
     promptsAnswers: PropTypes.string,
-    isPrompted: PropTypes.bool,
-    editRequested: PropTypes.bool,
+    isPrompted: PropTypes.bool
   }).isRequired,
-  handleBack: PropTypes.func
+  handleBack: PropTypes.func,
+  importSubtotal: PropTypes.bool,
+  displayAttrFormNames: PropTypes.bool,
+  editedObject: PropTypes.shape({
+    displayAttrFormNames: PropTypes.bool,
+    subtotalsInfo: PropTypes.shape({ importSubtotal: PropTypes.bool, }),
+    projectId: PropTypes.string,
+    promptsAnswers: PropTypes.arrayOf(PropTypes.shape({}))
+  }),
 };
 
 const mapStateToProps = state => {

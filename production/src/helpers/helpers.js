@@ -1,5 +1,7 @@
-class Helper {
-  isOverflown(text, containerWidth) {
+import PropTypes from 'prop-types';
+
+class OverflowHelperNotConnected {
+  isOverflown = (text, containerWidth) => {
     try {
       const measureReportName = document.createElement('SPAN');
       measureReportName.textContent = text;
@@ -15,4 +17,11 @@ class Helper {
   }
 }
 
-export const helper = new Helper();
+OverflowHelperNotConnected.propTypes = {
+  name: PropTypes.string,
+  t: PropTypes.func,
+};
+
+const overflowHelper = new OverflowHelperNotConnected();
+
+export default overflowHelper;

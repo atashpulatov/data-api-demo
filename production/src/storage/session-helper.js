@@ -40,14 +40,18 @@ export class SessionHelper {
   }
 
   logOutRedirect = () => {
-    const { origin } = homeHelper.getWindowLocation();
-    if (!origin.includes('localhost')) {
+    const isDevelopment = this.isDevelopment();
+    if (!isDevelopment) {
       const currentPath = window.location.pathname;
       const pathBeginning = currentPath.split('/apps/')[0];
       const loginParams = 'source=addin-mstr-office';
       this.replaceWindowLocation(pathBeginning, loginParams);
     } else {
+      // Reload page to close any pending indexedDB transactions on dev mode
+      document.location.reload();
       this.disableLoading();
+      // Reload to avoid stale cache issues on localhost when changing users
+      window.location.reload();
     }
   };
 
@@ -82,12 +86,13 @@ export class SessionHelper {
   getUserInfo = async () => {
     let userData = {};
     const IS_LOCALHOST = this.isLocalhost();
-    const envUrl = IS_LOCALHOST ? this.reduxStore.getState().sessionReducer.envUrl : homeHelper.saveLoginValues();
-    const authToken = IS_LOCALHOST ? this.reduxStore.getState().sessionReducer.authToken : homeHelper.saveTokenFromCookies();
+    const { reduxStore } = this;
+    const envUrl = IS_LOCALHOST ? reduxStore.getState().sessionReducer.envUrl : homeHelper.saveLoginValues();
+    const authToken = IS_LOCALHOST ? reduxStore.getState().sessionReducer.authToken : homeHelper.saveTokenFromCookies();
     try {
       userData = await userRestService.getUserInfo(authToken, envUrl);
       !userData.userInitials && sessionHelper.saveUserInfo(userData);
-      if (DB.getIndexedDBSupport()) createCache(userData.id)(this.reduxStore.dispatch, this.reduxStore.getState);
+      if (DB.getIndexedDBSupport()) { createCache(userData.id)(this.reduxStore.dispatch, this.reduxStore.getState); }
     } catch (error) {
       errorService.handleError(error, { isLogout: !IS_LOCALHOST });
     }
@@ -96,8 +101,9 @@ export class SessionHelper {
   getUserAttributeFormPrivilege = async () => {
     let canChooseAttrForm = false;
     const IS_LOCALHOST = this.isLocalhost();
-    const envUrl = IS_LOCALHOST ? this.reduxStore.getState().sessionReducer.envUrl : homeHelper.saveLoginValues();
-    const authToken = IS_LOCALHOST ? this.reduxStore.getState().sessionReducer.authToken : homeHelper.saveTokenFromCookies();
+    const { reduxStore } = this;
+    const envUrl = IS_LOCALHOST ? reduxStore.getState().sessionReducer.envUrl : homeHelper.saveLoginValues();
+    const authToken = IS_LOCALHOST ? reduxStore.getState().sessionReducer.authToken : homeHelper.saveTokenFromCookies();
     try {
       canChooseAttrForm = await authenticationService.getAttributeFormPrivilege(envUrl, authToken);
       sessionHelper.setAttrFormPrivilege(canChooseAttrForm);
@@ -132,6 +138,15 @@ export class SessionHelper {
   getUrl = () => window.location.href
 
   isLocalhost = () => this.getUrl().includes('localhost')
+
+  isDevelopment = () => {
+    try {
+      const isDevelopment = ['development', 'test'].includes(process.env.NODE_ENV);
+      return isDevelopment;
+    } catch (error) {
+      return false;
+    }
+  }
 }
 
 export const sessionHelper = new SessionHelper();

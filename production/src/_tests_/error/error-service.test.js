@@ -2,6 +2,7 @@ import { errorService } from '../../error/error-handler';
 import { notificationService } from '../../notification/notification-service';
 import { OutsideOfRangeError } from '../../error/outside-of-range-error';
 import { sessionHelper } from '../../storage/session-helper';
+import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import {
   NOT_PUBLISHED_CUBE,
   NOT_SUPPORTED_SERVER_ERR,
@@ -12,6 +13,8 @@ import {
   errorTypes,
   SESSION_EXPIRED,
   WRONG_CREDENTIALS,
+  INVALID_VIZ_KEY_MESSAGE,
+  NO_DATA_RETURNED,
 } from '../../error/constants';
 
 jest.mock('../../storage/session-helper');
@@ -331,6 +334,28 @@ describe('ErrorService', () => {
       expect(spyMethod).toBeCalled();
       expect(spyMethod).toBeCalledWith({ content: NOT_IN_METADATA, details: '', onConfirm: null, type: 'warning', });
     });
+    it('should display NO_DATA_RETURNED on server error with -2147213784 iServerCode', () => {
+      // given
+      const response = { status: 403, body: { iServerCode: '-2147213784' } };
+      const error = { response };
+      const spyMethod = jest.spyOn(notificationService, 'displayNotification');
+      // when
+      errorService.handleError(error);
+      // then
+      expect(spyMethod).toBeCalled();
+      expect(spyMethod).toBeCalledWith({ content: NO_DATA_RETURNED, details: '', onConfirm: null, type: 'warning', });
+    });
+    it('should display notification on dossier removed from metadata', () => {
+      // given
+      const response = { status: 404, body: { iServerCode: -2147216373 } };
+      const error = { response, mstrObjectType: mstrObjectEnum.mstrObjectType.dossier.name };
+      const spyMethod = jest.spyOn(notificationService, 'displayNotification');
+      // when
+      errorService.handleError(error);
+      // then
+      expect(spyMethod).toBeCalled();
+      expect(spyMethod).toBeCalledWith({ content: `This ${error.mstrObjectType} was deleted.`, details: '', onConfirm: null, type: 'warning', });
+    });
     it('should logout on UnauthorizedError', () => {
       // given
       const error = {
@@ -363,6 +388,16 @@ describe('ErrorService', () => {
       // then
       expect(notificationSpy).toBeCalled();
       expect(notificationSpy).toBeCalledWith({ content: TABLE_OVERLAP, details: 'A table can\'t overlap another table. ', onConfirm: null, type: 'warning', });
+    });
+    it('should display INVALID_VIZ_KEY_MESSAGE notification on INVALID_VIZ_KEY error', () => {
+      // given
+      const error = { response: { status: 404, }, type: errorTypes.INVALID_VIZ_KEY };
+      const spyMethod = jest.spyOn(notificationService, 'displayNotification');
+      // when
+      errorService.handleError(error);
+      // then
+      expect(spyMethod).toBeCalled();
+      expect(spyMethod).toBeCalledWith({ content: INVALID_VIZ_KEY_MESSAGE, details: '', onConfirm: null, type: 'warning', });
     });
   });
   describe('getOfficeErrorType', () => {

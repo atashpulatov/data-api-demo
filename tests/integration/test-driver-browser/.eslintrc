@@ -1,12 +1,32 @@
 {
+  "extends": [
+    "@mstr/eslint-config-mstr"
+  ],
   "parser": "babel-eslint",
-  "extends": ["@mstr/eslint-config-mstr"],
+  "parserOptions": {
+    "ecmaVersion": 2020
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "jest": true
+  },
   "globals": {
     "browser": true,
     "$": true,
     "$$": true
   },
-"rules":{
-  "no-console": "off",
-}
+  "rules": {
+    "jsx-quotes": ["warn", "prefer-double"],
+    "semi": ["error", "always"],
+    "no-console": "off",
+    "no-await-in-loop": "off",
+    "space-before-function-paren": ["error", {
+      "anonymous": "always",
+      "named": "never",
+      "asyncArrow": "always"
+    }],
+    "curly" :["error", "all"],
+    "object-curly-newline": ["error", {"multiline": true, "minProperties":4}]
+  }
 }

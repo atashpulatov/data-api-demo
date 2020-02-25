@@ -1,7 +1,5 @@
 import { officeApiHelper } from '../../office/office-api-helper';
 import { IncorrectInputTypeError } from '../../office/incorrect-input-type';
-import { OfficeError, OfficeBindingError } from '../../office/office-error';
-import { reduxStore } from '../../store';
 import { officeProperties } from '../../office/office-properties';
 
 // FIXME: these were disabled anyway. Needs to be redone.
@@ -141,7 +139,6 @@ describe('OfficeApiHelper', () => {
     // then
     expect(callThatThrows).toThrowError();
   });
-
 
 
   describe('getSelectedCell', () => {

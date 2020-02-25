@@ -10,13 +10,16 @@ import loadingSpinner from './assets/report_loading_spinner.gif';
 import { popupActions } from '../popup/popup-actions';
 import { fileHistoryContainerHOC } from './file-history-container-HOC';
 import { officeStoreService } from '../office/store/office-store-service';
-import { toggleSecuredFlag } from '../office/office-actions';
+import { toggleSecuredFlag as toggleSecuredFlagImported } from '../office/office-actions';
 import { errorService } from '../error/error-handler';
 import restrictedArt from './assets/art_restricted_access_blue.svg';
 import './file-history.scss';
 import './settings-list.scss';
 import { ButtonPopover } from './button-popover';
-import { startLoading, stopLoading } from '../navigation/navigation-tree-actions';
+import {
+  startLoading as startLoadingImported,
+  stopLoading as stopLoadingImported
+} from '../navigation/navigation-tree-actions';
 
 export class FileHistoryContainerNotConnected extends React.Component {
   constructor(props) {
@@ -60,7 +63,11 @@ export class FileHistoryContainerNotConnected extends React.Component {
           await excelContext.sync();
           const reportsOfSheets = excelContext.workbook.tables.items;
           const { reportArray, t } = this.props;
-          const reportsToBeDeleted = reportArray.filter((report) => !reportsOfSheets.find((table) => table.name === report.bindId));
+
+          const reportsToBeDeleted = reportArray.filter(
+            (report) => !reportsOfSheets.find((table) => table.name === report.bindId)
+          );
+
           for (const report of reportsToBeDeleted) {
             officeApiHelper.removeObjectAndDisplaytNotification(report, officeContext, t);
           }
@@ -90,7 +97,7 @@ export class FileHistoryContainerNotConnected extends React.Component {
     if (allowRefreshAllClick) {
       this.setState({ allowRefreshAllClick: false }, async () => {
         await refreshAll(reportArray, true);
-        if (this.ismounted) this.setState({ allowRefreshAllClick: true });
+        if (this.ismounted) { this.setState({ allowRefreshAllClick: true }); }
       });
     }
   };
@@ -107,7 +114,9 @@ export class FileHistoryContainerNotConnected extends React.Component {
   };
 
   render() {
-    const { reportArray = [], loading, refreshingAll, refreshReportsArray, isSecured, addDataAction, t, } = this.props;
+    const {
+      reportArray = [], loading, refreshingAll, refreshReportsArray, isSecured, addDataAction, t,
+    } = this.props;
     return (
       <>
         {
@@ -210,9 +219,9 @@ function mapStateToProps({ officeReducer }) {
 
 const mapDispatchToProps = {
   refreshReportsArray: popupActions.refreshReportsArray,
-  toggleSecuredFlag,
-  startLoading,
-  stopLoading,
+  toggleSecuredFlag: toggleSecuredFlagImported,
+  startLoading: startLoadingImported,
+  stopLoading: stopLoadingImported,
 };
 
 const WrappedFileHistoryContainer = fileHistoryContainerHOC(FileHistoryContainerNotConnected);

@@ -1,8 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Input, Popover } from 'antd';
 import { withTranslation } from 'react-i18next';
 
-export class _RenameInput extends React.Component {
+export class RenameInputNotConnected extends React.Component {
   getNameContainer(editable, bindingId, fileName, value) {
     const { renameReport } = this.props;
     if (editable) {
@@ -21,9 +22,10 @@ export class _RenameInput extends React.Component {
     return <div className="rename-container" id={`rename-container-${bindingId}`}>{value}</div>;
   }
 
-
   render() {
-    const { editable, value, fileName, bindingId, enableEdit } = this.props;
+    const {
+      editable, value, fileName, bindingId, enableEdit
+    } = this.props;
     const nameContainer = this.getNameContainer(editable, bindingId, fileName, value);
     return (
       <Popover overlayClassName={`${editable ? 'hidden' : 'rename-popover-width'}`} placement="bottomLeft" content={value} mouseEnterDelay={1}>
@@ -34,7 +36,13 @@ export class _RenameInput extends React.Component {
     );
   }
 }
+RenameInputNotConnected.propTypes = {
+  editable: PropTypes.bool,
+  value: PropTypes.string,
+  fileName: PropTypes.string,
+  bindingId: PropTypes.string,
+  enableEdit: PropTypes.func,
+  renameReport: PropTypes.func,
+};
 
-_RenameInput.defaultProps = { t: (text) => text, };
-
-export default withTranslation('common')(_RenameInput);
+export default withTranslation('common')(RenameInputNotConnected);

@@ -1,13 +1,12 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { _PromptsWindow } from '../../prompts/prompts-window';
-import { notificationService } from '../../notification/notification-service';
+import { PromptsWindowNotConnected } from '../../prompts/prompts-window';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { popupHelper } from '../../popup/popup-helper';
 
 jest.mock('../../popup/popup-helper');
 
-describe('_PromptsWindow', () => {
+describe('PromptsWindowNotConnected', () => {
   const mstrData = {
     envUrl: 'env',
     token: 'token',
@@ -15,9 +14,7 @@ describe('_PromptsWindow', () => {
     chosenObjectId: 'chosenObjectId',
   };
 
-  const popupState = {
-    isReprompt: false
-  };
+  const popupState = { isReprompt: false };
 
   afterEach(() => {
     jest.restoreAllMocks();
@@ -26,7 +23,7 @@ describe('_PromptsWindow', () => {
   it('should render with props given', () => {
     // given
     // when
-    const wrappedComponent = shallow(<_PromptsWindow mstrData={mstrData} popupState={popupState} />);
+    const wrappedComponent = shallow(<PromptsWindowNotConnected mstrData={mstrData} popupState={popupState} />);
     // then
     expect(wrappedComponent.instance()).toBeDefined();
     expect(wrappedComponent.find('PromptsContainer').get(0)).toBeDefined();
@@ -36,7 +33,7 @@ describe('_PromptsWindow', () => {
     // given
     const addEventListener = jest.spyOn(window, 'addEventListener');
     // when
-    shallow(<_PromptsWindow mstrData={mstrData} popupState={popupState} />);
+    shallow(<PromptsWindowNotConnected mstrData={mstrData} popupState={popupState} />);
     // then
     expect(addEventListener).toHaveBeenCalled();
   });
@@ -45,7 +42,7 @@ describe('_PromptsWindow', () => {
     // given
     const removeEventListener = jest.spyOn(window, 'removeEventListener');
     // when
-    const wrappedComponent = shallow(<_PromptsWindow mstrData={mstrData} popupState={popupState} />);
+    const wrappedComponent = shallow(<PromptsWindowNotConnected mstrData={mstrData} popupState={popupState} />);
     wrappedComponent.unmount();
     // then
     expect(removeEventListener).toHaveBeenCalled();
@@ -55,7 +52,7 @@ describe('_PromptsWindow', () => {
     // given
     const ref = React.createRef();
     // when
-    const wrappedComponent = shallow(<_PromptsWindow mstrData={mstrData} popupState={popupState} />);
+    const wrappedComponent = shallow(<PromptsWindowNotConnected mstrData={mstrData} popupState={popupState} />);
     const watchForIframeAddition = jest.spyOn(wrappedComponent.instance(), 'watchForIframeAddition').mockImplementation(() => true);
     const loadEmbeddedDossier = jest.spyOn(wrappedComponent.instance(), 'loadEmbeddedDossier').mockImplementation(() => true);
     const onIframeLoad = jest.spyOn(wrappedComponent.instance(), 'onIframeLoad').mockImplementation(() => true);
@@ -65,30 +62,40 @@ describe('_PromptsWindow', () => {
     expect(loadEmbeddedDossier).toHaveBeenCalledWith(ref);
   });
 
-  it('displayNotification should be called on proper messageReceived', () => {
+  it('handlePopupErrors should be called on proper messageReceived', () => {
     // given
-    const givenMessage = { data: { value: { iServerErrorCode: 1234, message: 'test' } } };
-    const displayNotificationSpy = jest.spyOn(notificationService, 'displayNotification');
+    popupHelper.handlePopupErrors = jest.fn();
+    const givenMessage = { data: { value: { statusCode: 201, iServerErrorCode: 1234, message: 'test' } } };
     // when
-    const wrappedComponent = shallow(<_PromptsWindow mstrData={mstrData} popupState={popupState} />);
+    const wrappedComponent = shallow(<PromptsWindowNotConnected mstrData={mstrData} popupState={popupState} />);
     wrappedComponent.instance().messageReceived(givenMessage);
     // then
     const expectedObject = {
-      type: 'warning',
-      content: 'This object cannot be imported.',
-      details: givenMessage.data.value.message
+      status: givenMessage.data.value.statusCode,
+      response: {
+        body: {
+          code: givenMessage.data.value.errorCode,
+          iServerCode: givenMessage.data.value.iServerErrorCode,
+          message: givenMessage.data.value.message,
+        },
+        text: JSON.stringify({
+          code: givenMessage.data.value.errorCode,
+          iServerCode: givenMessage.data.value.iServerErrorCode,
+          message: givenMessage.data.value.message
+        }),
+      }
     };
-    expect(displayNotificationSpy).toBeCalledWith(expectedObject);
+    expect(popupHelper.handlePopupErrors).toBeCalledWith(expectedObject);
   });
 
-  it('displayNotification should not be called on diffrent messageReceived', () => {
+  it('handlePopupErrors should not be called on diffrent messageReceived', () => {
     // given
-    const displayNotificationSpy = jest.spyOn(notificationService, 'displayNotification');
+    popupHelper.handlePopupErrors = jest.fn();
     // when
-    const wrappedComponent = shallow(<_PromptsWindow mstrData={mstrData} popupState={popupState} />);
+    const wrappedComponent = shallow(<PromptsWindowNotConnected mstrData={mstrData} popupState={popupState} />);
     wrappedComponent.instance().messageReceived();
     // then
-    expect(displayNotificationSpy).not.toBeCalled();
+    expect(popupHelper.handlePopupErrors).not.toBeCalled();
   });
 
   it('handleRun should call handlePopupErrors on not valid auth token ', async () => {
@@ -100,7 +107,7 @@ describe('_PromptsWindow', () => {
         throw Error();
       });
     // when
-    const wrappedComponent = shallow(<_PromptsWindow
+    const wrappedComponent = shallow(<PromptsWindowNotConnected
       mstrData={mstrData}
       popupState={popupState}
     />);

@@ -7,6 +7,12 @@ import objectTypeEnum from '../mstr-object/mstr-object-type-enum';
 import { officeContext } from '../office/office-context';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 
+
+function sortPromptsAnswers(array) {
+  for (let i = 0; i < array.length; i++) {
+    array[i].values.sort();
+  }
+}
 export class PopupHelper {
   init = (popupController) => {
     this.popupController = popupController;
@@ -72,7 +78,7 @@ export class PopupHelper {
     promptsAnswers,
   ) => {
     const refreshReport = officeStoreService.getReportFromProperties(bindingId);
-    if (isRefreshAll) this.storageReportRefreshStart(refreshReport, index);
+    if (isRefreshAll) { this.storageReportRefreshStart(refreshReport, index); }
     const mstrObjectType = objectTypeEnum.getMstrTypeByName(objectType);
     const instanceId = null;
     // TODO: Pass proper isPrompted value – promptsAnswers could probably serve as such,
@@ -83,7 +89,7 @@ export class PopupHelper {
         ? refreshReport.promptsAnswers
         : promptsAnswers,
       objectId: refreshReport.id,
-      instanceId: refreshReport.instanceId,
+      preparedInstanceId: refreshReport.preparedInstanceId,
       projectId: refreshReport.projectId,
       mstrObjectType,
       selectedCell: true,
@@ -125,7 +131,13 @@ export class PopupHelper {
   }
 
   handlePopupErrors = (error) => {
-    const errorObj = error && { status: error.status, message: error.message, response: error.response, type: error.type };
+    const errorObj = error
+     && {
+       status: error.status,
+       message: error.message,
+       response: error.response,
+       type: error.type
+     };
     const messageObject = {
       command: selectorProperties.commandError,
       error: errorObj,
@@ -160,6 +172,7 @@ export class PopupHelper {
       promptsAnswers: promptsAnswers || popupState.promptsAnswers,
       subtotalsInfo: popupState.subtotalsInfo,
       isEdit: popupState.isEdit,
+      visualizationInfo,
       dossierName,
       selectedViz: `${chapterKey}:${visualizationKey}`,
       displayAttrFormNames: popupState.displayAttrFormNames
@@ -171,8 +184,8 @@ export class PopupHelper {
   }
 
   comparePromptAnswers(popupState, promptsAnswers, chosenObjectData, formsPrivilege) {
-    this.sortPromptsAnswers(popupState.promptsAnswers[0].answers);
-    this.sortPromptsAnswers(promptsAnswers[0].answers);
+    sortPromptsAnswers(popupState.promptsAnswers[0].answers);
+    sortPromptsAnswers(promptsAnswers[0].answers);
     if (JSON.stringify(popupState.promptsAnswers) === JSON.stringify(promptsAnswers)) {
       return this.restoreFilters(popupState.body, chosenObjectData, formsPrivilege);
     }
@@ -180,22 +193,16 @@ export class PopupHelper {
   }
 
 
-  sortPromptsAnswers(array) {
-    for (let i = 0; i < array.length; i++) {
-      array[i].values.sort();
-    }
-  }
-
   restoreFilters(body, chosenObjectData, formsPrivilege) {
     try {
       if (body) {
         const { requestedObjects, viewFilter } = body;
         if (requestedObjects) {
-          chosenObjectData.selectedAttributes = body.requestedObjects.attributes
-            && body.requestedObjects.attributes.map((attribute) => attribute.id);
-          chosenObjectData.selectedMetrics = body.requestedObjects.metrics
-            && body.requestedObjects.metrics.map((metric) => metric.id);
-          chosenObjectData.selectedAttrForms = formsPrivilege ? this.getAttrFormKeys(body.requestedObjects.attributes) : [];
+          let { selectedAttributes, selectedMetrics, selectedAttrForms } = chosenObjectData;
+          const { attributes, metrics } = body.requestedObjects;
+          selectedAttributes = attributes && attributes.map((attribute) => attribute.id);
+          selectedMetrics = metrics && metrics.map((metric) => metric.id);
+          selectedAttrForms = formsPrivilege ? this.getAttrFormKeys(attributes) : [];
         }
         if (viewFilter) {
           chosenObjectData.selectedFilters = this.parseFilters(body.viewFilter.operands);
@@ -203,9 +210,8 @@ export class PopupHelper {
       }
     } catch (error) {
       console.warn(error);
-    } finally {
-      return chosenObjectData;
     }
+    return chosenObjectData;
   }
 
   getAttrFormKeys = (attributes) => {
@@ -225,9 +231,8 @@ export class PopupHelper {
     }
     const elementNodes = filtersNodes.filter((node) => node.type === 'elements');
     // equivalent to flatMap((node) => node.elements)
-    const elements = elementNodes.reduce((elements, node) => elements.concat(node.elements),
-      []);
-    const elementsIds = elements.map((elem) => elem.id);
+    const reducedElements = elementNodes.reduce((elements, node) => elements.concat(node.elements), []);
+    const elementsIds = reducedElements.map((elem) => elem.id);
     return elementsIds.reduce((filters, elem) => {
       const attrId = elem.split(':')[0];
       filters[attrId] = !filters[attrId] ? [elem] : [...filters[attrId], elem];

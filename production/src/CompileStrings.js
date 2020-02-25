@@ -1,3 +1,5 @@
+/* eslint-disable import/no-unresolved */
+/* eslint-disable import/no-extraneous-dependencies */
 const fs = require('fs-extra');
 const sql = require('mssql');
 const path = require('path');
@@ -5,7 +7,7 @@ const path = require('path');
 const STRING_SERVER = '10.27.10.36'; // TS_SPHINX
 const HASH_DSN_DB = { LOCALIZATION_WEB: 'STRING_WEB', };
 
-const fetchStrings = async function (database, password, sqlString) {
+const fetchStrings = async (database, password, sqlString) => {
   // const pool = await sql.connect('mssql://username:password@localhost/database')
   // const result = await sql.query`select * from mytable where id = ${value}`
 
@@ -17,17 +19,14 @@ const fetchStrings = async function (database, password, sqlString) {
     options: { encrypt: false, },
   };
 
-  try {
-    const pool = await sql.connect(config);
-    const result = await pool.request().query(sqlString);
-    sql.close();
-    return result.recordset;
-  } catch (err) {
-    throw err;
-  }
+
+  const pool = await sql.connect(config);
+  const result = await pool.request().query(sqlString);
+  sql.close();
+  return result.recordset;
 };
 
-const getObjectFromRow = function (row, columnPostfix) {
+const getObjectFromRow = (row, columnPostfix) => {
   const engMessage = row.String_English;
 
   const columnName = `String_${columnPostfix}`;
@@ -45,7 +44,7 @@ const getObjectFromRow = function (row, columnPostfix) {
   };
 };
 
-const exportToResourceFile = async function (outputFileFolder) {
+const exportToResourceFile = async (outputFileFolder) => {
   // TODO ryu: Check if file exists before this?
   // const file = await fs.readFile(path.join(__dirname, '/../files/pwd.txt'))
   const password = process.env.STRING_DB_PASSWORD;
@@ -85,7 +84,7 @@ const exportToResourceFile = async function (outputFileFolder) {
       if (colPostfixList.length === 1) {
         webPostfix = colPostfixes;
       } else {
-        webPostfix = colPostfixList[0];
+        [webPostfix] = colPostfixList;
       }
       for (const row of webRows) {
         const obj = getObjectFromRow(row, webPostfix, 'Web');
@@ -98,11 +97,10 @@ const exportToResourceFile = async function (outputFileFolder) {
     }
 
     await fs.ensureDir(outputFileFolder);
-    await Promise.all(Object.keys(acceptLanguageDict).map((locale) =>
-    // return fs.writeJson(path.join(resourceFilesFolder, `${locale}.js`),
-    //   wholeDescriptors[locale], 'utf8')
-
-      fs.writeFile(path.join(outputFileFolder, `${locale}.json`), JSON.stringify(wholeDescriptors[locale], null, 2), 'utf8')));
+    await Promise.all(Object.keys(acceptLanguageDict).map(
+      (locale) => fs.writeFile(path.join(outputFileFolder, `${locale}.json`),
+        JSON.stringify(wholeDescriptors[locale], null, 2), 'utf8')
+    ));
     console.log(`Completed exporting all resources files to ${outputFileFolder}!`);
   } catch (e) {
     console.log('No connection to strings DB. Skipping this step');
@@ -110,7 +108,3 @@ const exportToResourceFile = async function (outputFileFolder) {
 };
 
 exportToResourceFile('./src/locales/');
-
-// module.exports = {
-//     exportToResourceFile,
-// }

@@ -6,12 +6,15 @@ import {
   SWITCH_IMPORT_SUBTOTALS
 } from '../navigation/navigation-tree-actions';
 import { CLEAR_WINDOW } from '../popup/popup-actions';
-import { CREATE_CACHE, CLEAR_CACHE, REFRESH_CACHE } from '../cache/cache-actions';
+import {
+  CREATE_CACHE, CLEAR_CACHE, REFRESH_CACHE, SAVE_MY_LIBRARY_OWNERS
+} from '../cache/cache-actions';
 import { sessionProperties } from './session-properties';
+import { CLEAR_POPUP_STATE } from '../popup/popup-state-actions';
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
 export const DEFAULT_TYPE = 'Data';
-export const SAVE_MY_LIBRARY_OWNERS = 'SAVE_MY_LIBRARY_OWNERS';
+
 
 // TODO: use some global store, redux one probably will be the best choice, or maybe some const global value
 // TODO: use mstrObjectType instead of this array
@@ -100,6 +103,9 @@ export const navigationTree = (state = initialState, action) => {
   const { type, data } = action;
   switch (type) {
   case SELECT_OBJECT: {
+    if (!data.chosenObjectId) {
+      return state;
+    }
     const newState = { ...state };
     if (newState.myLibrary) {
       newState.chosenLibraryElement = data;
@@ -232,7 +238,10 @@ export const navigationTree = (state = initialState, action) => {
     const newState = { ...state };
     newState.envFilter = { ...data };
     newState.myLibraryFilter = { ...data };
-    if (newState.myLibrary) {
+    if (data.shouldClear) {
+      newState.envFilter.shouldClear = false;
+      newState.myLibraryFilter.shouldClear = false;
+    } else if (newState.myLibrary) {
       newState.envFilter.owners = state.envFilter.owners
         ? [...state.envFilter.owners.filter(item => !newState.myLibraryOwners[item]), ...data.owners]
         : data.owners;
@@ -260,6 +269,9 @@ export const navigationTree = (state = initialState, action) => {
     newState.myLibraryFilter = {};
     newState.myLibrary = true;
     return newState;
+  }
+  case CLEAR_POPUP_STATE: {
+    return { ...state, searchText: '' };
   }
   default: {
     return state;

@@ -20,6 +20,7 @@ const LazyDialog = lazy(() => import('./entry-point/dialog-entry-point'));
 
 function goReact() {
   i18next.changeLanguage(i18next.options.resources[window.Office.context.displayLanguage] ? window.Office.context.displayLanguage : 'en-US');
+  console.log(`Running react in ${sessionHelper.isDevelopment() ? 'development' : 'production'} mode`);
   ReactDOM.render((
     <Suspense fallback={null}>
       {(window.location.href.indexOf('popupType') === -1)

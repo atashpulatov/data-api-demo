@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { Provider } from 'react-redux';
 import { message } from 'antd';
-import { NotificationsWithoutRedux, Notifications } from '../../notification/notifications';
+import { NotificationsNotConnected, Notifications } from '../../notification/notifications';
 import { actionCreator } from '../../notification/action-creator';
 import { reduxStore } from '../../store';
 
@@ -12,7 +12,7 @@ describe('Notifications', () => {
   it('should return empty component', () => {
     // given
     // when
-    const wrappedComponent = mount(<NotificationsWithoutRedux />);
+    const wrappedComponent = mount(<NotificationsNotConnected />);
     // then
     expect(wrappedComponent.instance()).toBeDefined();
   });
@@ -24,7 +24,7 @@ describe('Notifications', () => {
         <Notifications />
       </Provider>
     );
-    const wrappedComponentAlone = wrappedComponent.find('NotificationsWithoutRedux');
+    const wrappedComponentAlone = wrappedComponent.find('NotificationsNotConnected');
     const spyMethod = jest.spyOn(wrappedComponentAlone.instance(), 'displayMessage');
     // when
     reduxStore.dispatch(action);
@@ -42,7 +42,7 @@ describe('Notifications', () => {
         <Notifications />
       </Provider>
     );
-    const wrappedComponentAlone = wrappedComponent.find('NotificationsWithoutRedux');
+    const wrappedComponentAlone = wrappedComponent.find('NotificationsNotConnected');
     const spyMethod = jest.spyOn(wrappedComponentAlone.instance(), 'displayNotification');
     // when
     reduxStore.dispatch(action);
@@ -58,7 +58,7 @@ describe('Notifications', () => {
         <Notifications />
       </Provider>
     );
-    const wrappedComponentAlone = wrappedComponent.find('NotificationsWithoutRedux');
+    const wrappedComponentAlone = wrappedComponent.find('NotificationsNotConnected');
     const spyMethod = jest.spyOn(wrappedComponentAlone.instance(), 'displayNotification');
     // when
     reduxStore.dispatch(action);
@@ -74,7 +74,7 @@ describe('Notifications', () => {
         <Notifications />
       </Provider>
     );
-    const wrappedComponentAlone = wrappedComponent.find('NotificationsWithoutRedux');
+    const wrappedComponentAlone = wrappedComponent.find('NotificationsNotConnected');
     const spyMethod = jest.spyOn(wrappedComponentAlone.instance(), 'displayNotification');
     // when
     reduxStore.dispatch(action);
@@ -90,7 +90,7 @@ describe('Notifications', () => {
         <Notifications />
       </Provider>
     );
-    const wrappedComponentAlone = wrappedComponent.find('NotificationsWithoutRedux');
+    const wrappedComponentAlone = wrappedComponent.find('NotificationsNotConnected');
     const spyMethod = jest.spyOn(wrappedComponentAlone.instance(), 'displayNotification');
     // when
     reduxStore.dispatch(action);
@@ -106,7 +106,7 @@ describe('Notifications', () => {
         <Notifications />
       </Provider>
     );
-    const wrappedComponentAlone = wrappedComponent.find('NotificationsWithoutRedux');
+    const wrappedComponentAlone = wrappedComponent.find('NotificationsNotConnected');
     const spyMethod = jest.spyOn(wrappedComponentAlone.instance(), 'displayNotification');
     // when
     reduxStore.dispatch(action);

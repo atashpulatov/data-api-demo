@@ -3,7 +3,7 @@ import { shallow, mount } from 'enzyme';
 import { sessionHelper } from '../../storage/session-helper';
 import { SettingsMenuNotConnected } from '../../home/settings-menu';
 import DB from '../../cache/cache-db';
-import { helper } from '../../helpers/helpers';
+import overflowHelper from '../../helpers/helpers';
 import { officeContext } from '../../office/office-context';
 
 describe('Settings Menu', () => {
@@ -63,7 +63,7 @@ describe('Settings Menu', () => {
       },
     });
     // when
-    const returnValue = helper.isOverflown();
+    const returnValue = overflowHelper.isOverflown();
     // then
     expect(returnValue).toBe(true);
   });

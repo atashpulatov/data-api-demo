@@ -6,9 +6,11 @@
   "scripts": {
     "test": "rimraf ./allure-results && wdio wdio.conf.js",
     "eslint": "eslint --fix ./test --ext .js",
-    "report": "allure generate allure-results --clean ",
+    "report": "allure generate allure-results --clean",
+    "report-and-open": "allure generate allure-results --clean && allure open",
     "test-suite": "rimraf ./allure-results && wdio wdio.conf.js --suite",
-    "test-UB": "rimraf ./allure-results && ./node_modules/.bin/wdio wdio.conf.js --suite UB --USERENV"
+    "test-UB": "rimraf ./allure-results && ./node_modules/.bin/wdio wdio.conf.js --suite UB --USERENV",
+    "rally": "node -r dotenv/config ./rally/updateRallyTCResult.js -c"
   },
   "author": "",
   "license": "MIT",
@@ -37,6 +39,8 @@
   "dependencies": {
     "@wdio/sync": "^5.16.5",
     "allure-commandline": "^2.13.0",
-    "chromedriver": "^79.0.0"
+    "chromedriver": "^79.0.0",
+    "dotenv": "^8.2.0",
+    "request": "^2.88.0"
   }
 }

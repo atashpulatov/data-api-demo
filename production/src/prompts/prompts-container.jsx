@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 export class PromptsContainer extends Component {
   constructor() {
@@ -7,7 +8,8 @@ export class PromptsContainer extends Component {
   }
 
     componentDidMount = () => {
-      this.props.postMount(this.container.current);
+      const { postMount } = this.props;
+      postMount(this.container.current);
     }
 
     render() {
@@ -16,3 +18,5 @@ export class PromptsContainer extends Component {
       );
     }
 }
+
+PromptsContainer.propTypes = { postMount: PropTypes.func };

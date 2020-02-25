@@ -24,7 +24,7 @@ export default class AsyncQueue {
    */
   enqueue(object) {
     this.queue.unshift(object);
-    if (this.callback) return this.dequeue();
+    if (this.callback) { return this.dequeue(); }
   }
 
   /**

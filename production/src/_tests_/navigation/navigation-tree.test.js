@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import i18n from '../../i18n';
-import { _NavigationTree, mapStateToProps } from '../../navigation/navigation-tree';
+import { NavigationTreeNotConnected, mapStateToProps } from '../../navigation/navigation-tree';
 import { selectorProperties } from '../../attribute-selector/selector-properties';
 import { Office } from '../mockOffice';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
@@ -12,11 +12,7 @@ import { popupHelper } from '../../popup/popup-helper';
 import DB from '../../cache/cache-db';
 
 jest.mock('../../mstr-object/mstr-object-rest-service');
-jest.mock('../../authentication/authentication-helper', () => ({
-  authenticationHelper: {
-    validateAuthToken: jest.fn().mockImplementation(() => Promise.resolve('Magic'))
-  }
-}));
+jest.mock('../../authentication/authentication-helper', () => ({ authenticationHelper: { validateAuthToken: jest.fn().mockImplementation(() => Promise.resolve('Magic')) } }));
 
 describe('NavigationTree', () => {
   afterAll(() => {
@@ -44,7 +40,7 @@ describe('NavigationTree', () => {
     };
     // when
 
-    const wrappedComponent = shallow(<_NavigationTree
+    const wrappedComponent = shallow(<NavigationTreeNotConnected
       mstrData={mstrData}
       {...mockFunctionsAndProps} />);
     // then
@@ -74,7 +70,7 @@ describe('NavigationTree', () => {
     jest.spyOn(mstrObjectRestService, 'isPrompted')
       .mockImplementationOnce(async () => givenIsPrompted);
     const wrappedComponent = shallow(
-      <_NavigationTree
+      <NavigationTreeNotConnected
         mstrData={mstrData}
         handlePrepare={mockHandlePrepare}
         {...actionObject}
@@ -102,7 +98,7 @@ describe('NavigationTree', () => {
     jest.spyOn(mstrObjectRestService, 'isPrompted')
       .mockImplementationOnce(() => { throw new Error(); });
     const wrappedComponent = shallow(
-      <_NavigationTree
+      <NavigationTreeNotConnected
         mstrData={mstrData}
         chosenObjectId={givenObjectId}
         chosenProjectId={givenProjectId}
@@ -126,7 +122,7 @@ describe('NavigationTree', () => {
     };
     const resultAction = { command: selectorProperties.commandCancel, };
     const office = jest.spyOn(Office.context.ui, 'messageParent');
-    const wrappedComponent = shallow(<_NavigationTree
+    const wrappedComponent = shallow(<NavigationTreeNotConnected
       mstrData={mstrData}
       stopLoading={stopLoadingMocked}
       cache={CACHE_STATE}
@@ -151,7 +147,7 @@ describe('NavigationTree', () => {
       body,
     };
     const mockMessageParent = jest.spyOn(Office.context.ui, 'messageParent');
-    const wrappedComponent = shallow(<_NavigationTree
+    const wrappedComponent = shallow(<NavigationTreeNotConnected
       mstrData={mstrData}
       {...mockFunctionsAndProps}
     />);
@@ -197,12 +193,21 @@ describe('NavigationTree', () => {
     const givenMyLibrary = false;
     const mockSelectObject = jest.fn();
 
-    const wrappedComponent = shallow(<_NavigationTree
+    const givenObject = {
+      id: givenObjectId,
+      projectId: givenProjectId,
+      subtype: givenSubtype,
+      name: givenObjectName,
+      targetId: givenTargetId,
+      myLibrary: givenMyLibrary,
+    };
+
+    const wrappedComponent = shallow(<NavigationTreeNotConnected
       {...mockFunctionsAndProps}
       selectObject={mockSelectObject}
     />);
     // when
-    wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype, givenObjectName, givenTargetId, givenMyLibrary);
+    wrappedComponent.instance().onObjectChosen(givenObject);
     // then
     const expectedObject = {
       chosenObjectId: givenObjectId,
@@ -225,12 +230,21 @@ describe('NavigationTree', () => {
     const givenMyLibrary = true;
     const mockSelectObject = jest.fn();
 
-    const wrappedComponent = shallow(<_NavigationTree
+    const givenObject = {
+      id: givenObjectId,
+      projectId: givenProjectId,
+      subtype: givenSubtype,
+      name: givenObjectName,
+      targetId: givenTargetId,
+      myLibrary: givenMyLibrary,
+    };
+
+    const wrappedComponent = shallow(<NavigationTreeNotConnected
       {...mockFunctionsAndProps}
       selectObject={mockSelectObject}
     />);
     // when
-    wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype, givenObjectName, givenTargetId, givenMyLibrary);
+    wrappedComponent.instance().onObjectChosen(givenObject);
     // then
     const expectedObject = {
       chosenObjectId: givenTargetId,
@@ -259,7 +273,7 @@ describe('NavigationTree', () => {
     jest.spyOn(mstrObjectRestService, 'isPrompted')
       .mockImplementationOnce(async () => givenIsPrompted);
     const wrappedComponent = shallow(
-      <_NavigationTree
+      <NavigationTreeNotConnected
         mstrData={mstrData}
         chosenObjectId={givenObjectId}
         chosenProjectId={givenProjectId}
@@ -289,7 +303,7 @@ describe('NavigationTree', () => {
     const mockRequestImport = jest.fn();
     const mockRequestDossierOpen = jest.fn();
     const wrappedComponent = shallow(
-      <_NavigationTree
+      <NavigationTreeNotConnected
         mstrData={mstrData}
         chosenObjectId={givenObjectId}
         chosenProjectId={givenProjectId}
@@ -320,7 +334,7 @@ describe('NavigationTree', () => {
     jest.spyOn(mstrObjectRestService, 'isPrompted')
       .mockImplementationOnce(() => { throw new Error(); });
     const wrappedComponent = shallow(
-      <_NavigationTree
+      <NavigationTreeNotConnected
         mstrData={mstrData}
         chosenObjectId={givenObjectId}
         chosenProjectId={givenProjectId}
@@ -336,7 +350,7 @@ describe('NavigationTree', () => {
 
   it('should connect on DB when navigation-tree is mounted', () => {
     // given
-    const connectToDB = jest.fn();
+    const connectToDB = jest.fn().mockReturnValue(Promise.resolve());
     const mstrData = {
       envUrl: 'env',
       authToken: 'authToken',
@@ -345,7 +359,7 @@ describe('NavigationTree', () => {
     DB.getIndexedDBSupport = jest.fn();
     DB.getIndexedDBSupport.mockReturnValue(true);
     // when
-    shallow(<_NavigationTree
+    shallow(<NavigationTreeNotConnected
       mstrData={mstrData}
       {...mockFunctionsAndProps}
       connectToDB={connectToDB}
@@ -354,11 +368,31 @@ describe('NavigationTree', () => {
     expect(connectToDB).toHaveBeenCalled();
   });
 
+  it('should fetch from network when navigation-tree is mounted and db is not supported', () => {
+    // given
+    const connectToDB = jest.fn().mockReturnValue(Promise.resolve());
+    const mstrData = {
+      envUrl: 'env',
+      authToken: 'authToken',
+      projectId: 'projectId'
+    };
+    DB.getIndexedDBSupport = jest.fn();
+    DB.getIndexedDBSupport.mockReturnValue(false);
+    // when
+    shallow(<NavigationTreeNotConnected
+      mstrData={mstrData}
+      {...mockFunctionsAndProps}
+      connectToDB={connectToDB}
+    />);
+    // then
+    expect(mockFunctionsAndProps.fetchObjectsFromNetwork).toHaveBeenCalled();
+  });
+
   it('should not send error and call functionality properly', async () => {
     // given
-    const connectToDB = jest.fn();
+    const connectToDB = jest.fn().mockReturnValue(Promise.resolve());
     popupHelper.handlePopupErrors = jest.fn();
-    const wrappedComponent = shallow(<_NavigationTree {...mockFunctionsAndProps} connectToDB={connectToDB} />);
+    const wrappedComponent = shallow(<NavigationTreeNotConnected {...mockFunctionsAndProps} connectToDB={connectToDB} />);
     // when
     await wrappedComponent.instance().refresh();
     // then
@@ -368,11 +402,11 @@ describe('NavigationTree', () => {
   it('should send error message on refresh when no session', async () => {
     // given
     // const asyncMock = jest.fn().mockRejectedValue(new Error('Async error'));
-    const connectToDB = jest.fn();
+    const connectToDB = jest.fn().mockReturnValue(Promise.resolve());
     const givenError = new Error('Session error');
     authenticationHelper.validateAuthToken.mockRejectedValue(givenError);
     popupHelper.handlePopupErrors = jest.fn();
-    const wrappedComponent = shallow(<_NavigationTree {...mockFunctionsAndProps} connectToDB={connectToDB} />);
+    const wrappedComponent = shallow(<NavigationTreeNotConnected {...mockFunctionsAndProps} connectToDB={connectToDB} />);
     // when
     await wrappedComponent.instance().refresh();
     // then

@@ -21,7 +21,9 @@ class NormalizedJsonHandler {
    * @memberof JSONHandler
    * @return {Object}
    */
-  lookupElement = ({ definition, axis, attributeIndex, elementIndex, rowIndex = -1, colIndex = -1 }) => {
+  lookupElement = ({
+    definition, axis, attributeIndex, elementIndex, rowIndex = -1, colIndex = -1
+  }) => {
     const { crossTab } = definition.grid;
     const rawElement = definition.grid[axis][attributeIndex].elements[elementIndex];
     const { name, formValues, subtotal } = rawElement;
@@ -60,7 +62,9 @@ class NormalizedJsonHandler {
    * @memberof NormalizedJsonHandler
    * @return {Array}
    */
-  mapElementIndicesToElements = ({ definition, axis, headerCells: elementIndices, rowIndex = -1, colIndex = -1 }) => {
+  mapElementIndicesToElements = ({
+    definition, axis, headerCells: elementIndices, rowIndex = -1, colIndex = -1
+  }) => {
     const result = [];
     for (let attributeIndex = 0; attributeIndex < elementIndices.length; attributeIndex++) {
       const elementIndex = elementIndices[attributeIndex];
@@ -68,7 +72,9 @@ class NormalizedJsonHandler {
         result.push({ value: [''] });
       } else {
         // For elementsIndices tuple, each subscript is an attribute index and each value is an element index.
-        result.push(this.lookupElement({ definition, axis, attributeIndex, elementIndex, rowIndex, colIndex }));
+        result.push(this.lookupElement({
+          definition, axis, attributeIndex, elementIndex, rowIndex, colIndex
+        }));
       }
     }
     return result;
@@ -113,7 +119,9 @@ class NormalizedJsonHandler {
 
     for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
       const headerCells = rows[rowIndex];
-      const rowElements = this.mapElementIndicesToElements({ definition, axis: 'rows', headerCells, rowIndex });
+      const rowElements = this.mapElementIndicesToElements({
+        definition, axis: 'rows', headerCells, rowIndex
+      });
       const tabularRows = [];
       for (let attributeIndex = 0; attributeIndex < rowElements.length; attributeIndex++) {
         const element = rowElements[attributeIndex];
@@ -128,7 +136,7 @@ class NormalizedJsonHandler {
           // Add extra empty cell for subtotal when it's for multiple attribute forms
           if (element.subtotal && element.subtotalAddress) {
             const subtotalAttribute = grid.rows[element.subtotalAddress.attributeIndex];
-            if (supportForms && subtotalAttribute && subtotalAttribute.forms.length > 1) {
+            if (supportForms && subtotalAttribute && subtotalAttribute.forms && subtotalAttribute.forms.length > 1) {
               for (let idx = 0; idx < subtotalAttribute.forms.length - 1; idx++) {
                 tabularRows.push(`'`);
               }
@@ -178,11 +186,15 @@ class NormalizedJsonHandler {
    * @return {Array}
    */
   renderHeaders = (definition, axis, headers, onElement, supportForms) => {
-    if (headers[axis].length === 0) return [[]];
+    if (headers[axis].length === 0) { return [[]]; }
     const headersNormalized = axis === 'columns' ? this.transposeMatrix(headers[axis]) : headers[axis];
     const matrix = headersNormalized.map((headerCells, colIndex) => {
-      const axisElements = this.mapElementIndicesToElements({ definition, axis, headerCells, colIndex });
-      return supportForms ? this.convertForms([], axisElements, onElement) : axisElements.map((e, axisIndex, elementIndex) => onElement(e, axisIndex, elementIndex));
+      const axisElements = this.mapElementIndicesToElements({
+        definition, axis, headerCells, colIndex
+      });
+      return supportForms
+        ? this.convertForms([], axisElements, onElement)
+        : axisElements.map((e, axisIndex, elementIndex) => onElement(e, axisIndex, elementIndex));
     });
     return axis === 'columns' ? this.transposeMatrix(matrix) : matrix;
   }
@@ -202,9 +214,11 @@ class NormalizedJsonHandler {
     const columnTitles = headers[axis].map((headerCells) => {
       const mapFn = axis === 'rows' ? this.mapElementIndicesToNames : this.mapElementIndicesToElements;
       const axisElements = mapFn({ definition, axis, headerCells });
-      return supportForms ? this.convertForms([], axisElements, onElement) : axisElements.map((e, axisIndex, elementIndex) => onElement(e, axisIndex, elementIndex));
+      return supportForms
+        ? this.convertForms([], axisElements, onElement)
+        : axisElements.map((e, axisIndex, elementIndex) => onElement(e, axisIndex, elementIndex));
     });
-    if (columnTitles.length === 0) return [[]];
+    if (columnTitles.length === 0) { return [[]]; }
     return columnTitles;
   }
 

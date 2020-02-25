@@ -9,7 +9,9 @@ const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 
 export class PopupViewSelectorHelper {
   setPopupType = (props, popupType) => {
-    const { importRequested, dossierOpenRequested, loading, isPrompted } = props;
+    const {
+      importRequested, dossierOpenRequested, loading, isPrompted
+    } = props;
     if (
       (importRequested && !isPrompted)
       || (importRequested && this.arePromptsAnswered(props))
@@ -79,7 +81,9 @@ export class PopupViewSelectorHelper {
         promptsAnswers: props.promptsAnswers[count],
       };
       await answerPrompts(configPrompts);
-      const configAnsPrompts = { objectId, projectId, instanceId: instanceDefinition.instanceId, displayAttrFormNames };
+      const configAnsPrompts = {
+        objectId, projectId, instanceId: instanceDefinition.instanceId, displayAttrFormNames
+      };
       try {
         instanceDefinition = await getInstance(configAnsPrompts);
       } catch (error) {
@@ -138,7 +142,7 @@ export class PopupViewSelectorHelper {
     const addItem = (item) => {
       branch.operands[1].elements.push({ id: item, });
     };
-    for (const att in selectedFilters) {
+    for (const att of selectedFilters) {
       if (selectedFilters[att].length) {
         branch = {
           operator: 'In',

@@ -15,7 +15,7 @@ class OfficeContext {
     let api = 0;
     while (isSupported && !!Office) {
       isSupported = Office.context.requirements.isSetSupported('ExcelAPI', `1.${api}`);
-      if (isSupported) api += 1;
+      if (isSupported) { api += 1; }
     }
     return `1.${api - 1}`;
   }

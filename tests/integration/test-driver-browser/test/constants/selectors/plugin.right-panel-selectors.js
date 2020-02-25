@@ -1,4 +1,4 @@
-export const selectors = {
+export const rightPanelSelectors = {
   usernameInput: '#username',
   passwordInput: '#password',
   loginPopUpBtn: '#loginButton',
@@ -8,7 +8,7 @@ export const selectors = {
   addDataBtn: '#add-data-btn-container',
   LDAPbutton: '#LDAPModeLabel',
   refreshBtn: '.loading-button-container .mstr-icon.refresh',
-  refreshAllBtn: '.refresh-all-btn',
+  refreshAllBtn: '#refresh-all-btn',
   repromptBtn: '.loading-button-container .mstr-icon.reprompt',
   deleteBtn: '.trash',
   importDataBtn: '#import-data-placeholder',
@@ -22,5 +22,7 @@ export const selectors = {
   viewDataBtn: '.show-data-btn',
   clearOkBtn: '#confirm-btn',
   importedObjectList: '.file-history-container',
-  importedObjectNameList: '.rename-container'
+  importedObjectNameList: '.rename-container',
+  editBtn: '.edit',
+  placeholderContainer: '#overlay > div > section > div > div.tables-container'
 };

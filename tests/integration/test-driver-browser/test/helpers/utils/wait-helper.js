@@ -1,5 +1,5 @@
 import { switchToPluginFrame, switchToExcelFrame } from './iframe-helper';
-import { selectors as se } from '../../constants/selectors/plugin.right-panel-selectors';
+import { rightPanelSelectors as se } from '../../constants/selectors/plugin.right-panel-selectors';
 
 export function waitForNotification() {
   let popupExists = true;
@@ -15,12 +15,12 @@ export function waitForNotification() {
     }
     browser.pause(777);
   }
-  $(se.notificationPopUp).waitForExist(6666, false, `${se.notificationPopUp}` + ' was not found');
+  $(se.notificationPopUp).waitForExist(6666, false, `${se.notificationPopUp} was not found`);
 }
 
 export function waitForPopup(timeout = 29999) {
   switchToExcelFrame();
-  $('#WACDialogPanel').waitForExist(timeout, false, `#WACDialogPanel` + ' was not found');
+  $('#WACDialogPanel').waitForExist(timeout, false, `#WACDialogPanel was not found`);
 
   browser.pause(2500);
   switchToPluginFrame();

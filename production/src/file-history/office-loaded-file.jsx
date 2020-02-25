@@ -16,10 +16,13 @@ import reportIcon from './assets/icon_Report_blue_32.png';
 import { ReactComponent as ClockIcon } from './assets/icon_clock.svg';
 import { officeStoreService } from '../office/store/office-store-service';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import { startLoading, stopLoading } from '../navigation/navigation-tree-actions';
+import {
+  startLoading as startLoadingImported,
+  stopLoading as stopLoadingImported
+} from '../navigation/navigation-tree-actions';
 import { errorService } from '../error/error-handler';
 
-export class _OfficeLoadedFile extends React.Component {
+export class OfficeLoadedFileNotConnected extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -42,7 +45,7 @@ export class _OfficeLoadedFile extends React.Component {
     const { bindingId, fileName } = this.props;
     const newName = target.value || fileName;
     this.setState({ value: newName });
-    if (newName && bindingId) await officeStoreService.preserveReportValue(bindingId, 'name', newName);
+    if (newName && bindingId) { await officeStoreService.preserveReportValue(bindingId, 'name', newName); }
     this.setEditable(false);
   };
 
@@ -59,7 +62,7 @@ export class _OfficeLoadedFile extends React.Component {
   }
 
   enableEdit = (e) => {
-    if (e.domEvent) e.domEvent.stopPropagation();
+    if (e.domEvent) { e.domEvent.stopPropagation(); }
     const { bindingId } = this.props;
     this.selectTextAsync(`input-${bindingId}`);
     this.setEditable(true);
@@ -79,20 +82,26 @@ export class _OfficeLoadedFile extends React.Component {
 
 
   deleteReport = async () => {
-    const { onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, fileName, t } = this.props;
+    const {
+      onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, fileName, t
+    } = this.props;
     const message = t('{{name}} has been removed from the workbook.', { name: fileName });
     await fileHistoryHelper.deleteReport(onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, message);
   }
 
   deleteAction = (e) => {
     const { allowDeleteClick } = this.state;
-    const { t, loading, startLoading, stopLoading } = this.props;
-    if (e) e.stopPropagation();
+    const {
+      t, loading, startLoading, stopLoading
+    } = this.props;
+    if (e) { e.stopPropagation(); }
     if (!allowDeleteClick || loading) {
       return;
     }
     startLoading();
-    const { onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, fileName } = this.props;
+    const {
+      onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, fileName
+    } = this.props;
     this.setState({ allowDeleteClick: false, allowRefreshClick: false },
       async () => {
         try {
@@ -101,7 +110,7 @@ export class _OfficeLoadedFile extends React.Component {
           const message = t('{{name}} has been removed from the workbook.',
             { name: fileName });
           await fileHistoryHelper.deleteReport(onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, message);
-          if (this.ismounted) this.setState({ allowDeleteClick: true, allowRefreshClick: true });
+          if (this.ismounted) { this.setState({ allowDeleteClick: true, allowRefreshClick: true }); }
           stopLoading();
         } catch (error) {
           errorService.handleError(error);
@@ -114,12 +123,17 @@ export class _OfficeLoadedFile extends React.Component {
 
   editAction = (e) => {
     const { allowRefreshClick } = this.state;
-    const { isLoading, bindingId, objectType, callForEdit, fileName, loading, startLoading, stopLoading, callForEditDossier } = this.props;
-    if (e) e.stopPropagation();
+    const {
+      isLoading, bindingId, objectType, callForEdit, fileName,
+      loading, startLoading, stopLoading, callForEditDossier
+    } = this.props;
+
+    if (e) { e.stopPropagation(); }
     if (!allowRefreshClick || loading) {
       return;
     }
     startLoading();
+
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
@@ -143,13 +157,19 @@ export class _OfficeLoadedFile extends React.Component {
   };
 
   refreshAction = (e) => {
-    if (e) e.stopPropagation();
-    const { isLoading, bindingId, objectType, refreshReportsArray, loading, fileName, startLoading, stopLoading } = this.props;
+    if (e) { e.stopPropagation(); }
+    const {
+      isLoading, bindingId, objectType, refreshReportsArray,
+      loading, fileName, startLoading, stopLoading
+    } = this.props;
+
     const { allowRefreshClick } = this.state;
     if (!allowRefreshClick || loading) {
       return;
     }
+
     startLoading();
+
     if (!isLoading) {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
@@ -227,7 +247,7 @@ export class _OfficeLoadedFile extends React.Component {
               tabIndex="0"
               className="loading-button-container"
               onClick={this.editAction}
-              onKeyPress={this.editAction}
+              onKeyUp={this.editAction}
             >
             <MSTRIcon type="edit" />
           </span>
@@ -243,7 +263,7 @@ export class _OfficeLoadedFile extends React.Component {
               tabIndex="0"
               className="loading-button-container"
               onClick={this.refreshAction}
-              onKeyPress={this.refreshAction}
+              onKeyUp={this.refreshAction}
             >
             {!isLoading ? (
               <MSTRIcon type="refresh" />
@@ -269,7 +289,7 @@ export class _OfficeLoadedFile extends React.Component {
             role="button"
             tabIndex="0"
             onClick={this.deleteAction}
-            onKeyPress={this.deleteAction}
+            onKeyUp={this.deleteAction}
           >
             <MSTRIcon type="trash" />
           </span>
@@ -306,17 +326,19 @@ export class _OfficeLoadedFile extends React.Component {
         <Menu.Item key="copy" onClick={this.copyValue}>{t('Copy Name')}</Menu.Item>
       </Menu>
     );
-    // If fileName was changed but it was not introduced by user in editable mode (so fetched during edit) then update value to new fileName.
-    if (!editable && (fileName !== value)) value = fileName;
+    // If fileName was changed but it was not introduced by user in editable mode
+    // (so fetched during edit) then update value to new fileName.
+    if (!editable && (fileName !== value)) { value = fileName; }
     return (
       <Dropdown overlay={menu} trigger={['contextMenu']}>
         <div
             className="file-history-container"
             type="flex"
             justify="center"
-            role="listitem"
+            role="button"
             tabIndex="0"
             onClick={() => onClick(bindingId, true, this.deleteReport, fileName, isCrosstab, crosstabHeaderDimensions)}
+            onKeyUp={(e) => e.key === 'Enter' && onClick(bindingId, true, this.deleteReport, fileName, isCrosstab, crosstabHeaderDimensions)}
            >
           <div className="refresh-icons-row">
             <ButtonPopover
@@ -347,7 +369,14 @@ export class _OfficeLoadedFile extends React.Component {
 
           <div className="object-title-row">
             {this.getMstrIcon(objectType)}
-            <RenameInput bindingId={bindingId} fileName={fileName} editable={editable} value={value} enableEdit={this.enableEdit} handleChange={this.handleChange} renameReport={this.renameReport} />
+            <RenameInput
+            bindingId={bindingId}
+            fileName={fileName}
+            editable={editable}
+            value={value}
+            enableEdit={this.enableEdit}
+            handleChange={this.handleChange}
+            renameReport={this.renameReport} />
           </div>
         </div>
       </Dropdown>
@@ -355,7 +384,7 @@ export class _OfficeLoadedFile extends React.Component {
   }
 }
 
-_OfficeLoadedFile.defaultProps = { t: (text) => text, };
+OfficeLoadedFileNotConnected.defaultProps = { t: (text) => text, };
 
 function mapStateToProps(state) {
   return { loading: state.officeReducer.loading, };
@@ -365,11 +394,11 @@ const mapDispatchToProps = {
   refreshReportsArray: popupActions.refreshReportsArray,
   callForEdit: popupActions.callForEdit,
   callForEditDossier: popupActions.callForEditDossier,
-  startLoading,
-  stopLoading,
+  startLoading: startLoadingImported,
+  stopLoading: stopLoadingImported,
 };
 
-_OfficeLoadedFile.propTypes = {
+OfficeLoadedFileNotConnected.propTypes = {
   fileName: PropTypes.string,
   bindingId: PropTypes.string,
   objectType: PropTypes.shape({ name: PropTypes.string }),
@@ -389,4 +418,4 @@ _OfficeLoadedFile.propTypes = {
   onClick: PropTypes.func,
 };
 
-export const OfficeLoadedFile = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_OfficeLoadedFile));
+export const OfficeLoadedFile = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(OfficeLoadedFileNotConnected));

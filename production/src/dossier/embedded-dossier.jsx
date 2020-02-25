@@ -11,7 +11,26 @@ const { microstrategy, Office } = window;
 
 const { createDossierInstance, answerDossierPrompts } = mstrObjectRestService;
 
-export default class _EmbeddedDossier extends React.Component {
+/**
+ * Watches container for child addition and runs callback in case an iframe was added
+ * @param {*} container
+ * @param {*} callback
+ */
+export function watchForIframeAddition(container, callback) {
+  const config = { childList: true };
+  const onMutation = (mutationList) => {
+    for (const mutation of mutationList) {
+      if (mutation.addedNodes && mutation.addedNodes.length && mutation.addedNodes[0].nodeName === 'IFRAME') {
+        const iframe = mutation.addedNodes[0];
+        callback(iframe);
+      }
+    }
+  };
+  const observer = new MutationObserver(onMutation);
+  observer.observe(container, config);
+}
+
+export default class EmbeddedDossierNotConnected extends React.Component {
   constructor(props) {
     super(props);
     this.container = React.createRef();
@@ -19,16 +38,12 @@ export default class _EmbeddedDossier extends React.Component {
     this.onVizSelectionHandler = this.onVizSelectionHandler.bind(this);
     this.dossierData = { promptsAnswers: props.mstrData.promptsAnswers, };
     this.promptsAnsweredHandler = this.promptsAnsweredHandler.bind(this);
+    this.instanceIdChangeHandler = this.instanceIdChangeHandler.bind(this);
     this.embeddedDossier = null;
   }
 
   componentDidMount() {
-    // DE158588 - Not able to open dossier in embedding api on excel desktop in windows
-    const isOfficeOnline = Office.context ? Office.context.platform === Office.PlatformType.OfficeOnline : false;
-    const isIE = /Trident\/|MSIE /.test(window.navigator.userAgent);
-    if (!isOfficeOnline && isIE) {
-      this.watchForIframeAddition(this.container.current, this.onIframeLoad);
-    }
+    watchForIframeAddition(this.container.current, this.onIframeLoad);
     this.loadEmbeddedDossier(this.container.current);
   }
 
@@ -36,6 +51,7 @@ export default class _EmbeddedDossier extends React.Component {
     if (this.msgRouter) {
       this.msgRouter.removeEventhandler('onVizSelectionChanged', this.onVizSelectionHandler);
       this.msgRouter.removeEventhandler('onPromptAnswered', this.promptsAnsweredHandler);
+      this.msgRouter.removeEventhandler('onDossierInstanceIDChange', this.instanceIdChangeHandler);
     }
   }
 
@@ -45,12 +61,17 @@ export default class _EmbeddedDossier extends React.Component {
    */
   onIframeLoad = (iframe) => {
     iframe.addEventListener('load', () => {
-      const embeddedDocument = iframe.contentDocument;
-      this.embeddedDocument = embeddedDocument;
-      if (!this.isLoginPage(embeddedDocument)) {
+      const { contentDocument } = iframe;
+      const { handleLoadEvent } = this.props;
+      // DE160793 - Throw session expired error when dossier redirects to login (iframe 'load' event)
+      handleLoadEvent();
+      // DE158588 - Not able to open dossier in embedding api on excel desktop in windows
+      const isOfficeOnline = Office.context ? Office.context.platform === Office.PlatformType.OfficeOnline : false;
+      const isIE = /Trident\/|MSIE /.test(window.navigator.userAgent);
+      if (!isOfficeOnline && isIE) {
         const fileLocation = window.location.origin
           + window.location.pathname.replace('index.html', 'javascript/mshtmllib.js');
-        this.applyFile(embeddedDocument, fileLocation);
+        this.applyFile(contentDocument, fileLocation);
       }
     });
   };
@@ -75,12 +96,6 @@ export default class _EmbeddedDossier extends React.Component {
   }
 
   /**
-   * This function checks whether the content of embedded document is loginPage
-   * @param {*} _document
-   */
-  isLoginPage = (document) => document.URL.includes('embeddedLogin.jsp');
-
-  /**
    * This function applies an external script file to a embedded document
    * @param {*} _document
    * @param {*} fileLocation
@@ -96,7 +111,10 @@ export default class _EmbeddedDossier extends React.Component {
 
   loadEmbeddedDossier = async (container) => {
     const { mstrData } = this.props;
-    const { envUrl, authToken, dossierId, projectId, promptsAnswers, instanceId, selectedViz } = mstrData;
+    const {
+      envUrl, authToken, dossierId, projectId, promptsAnswers,
+      instanceId, selectedViz, visualizationInfo
+    } = mstrData;
     const instance = {};
     try {
       if (instanceId) {
@@ -118,6 +136,7 @@ export default class _EmbeddedDossier extends React.Component {
         }
       }
     } catch (error) {
+      error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
       popupHelper.handlePopupErrors(error);
     }
 
@@ -127,8 +146,14 @@ export default class _EmbeddedDossier extends React.Component {
     };
 
     const libraryUrl = envUrl.replace('api', 'app');
+    let url = `${libraryUrl}/${projectId}/${dossierId}`;
+    let selectedVizChecked = selectedViz;
 
-    const url = `${libraryUrl}/${projectId}/${dossierId}`;
+    if (selectedViz && visualizationInfo) {
+      const { chapterKey, pageKey, visualizationKey } = visualizationInfo;
+      selectedVizChecked = `${chapterKey}:${visualizationKey}`;
+      url = `${libraryUrl}/${projectId}/${dossierId}/${pageKey}`;
+    }
     const { CustomAuthenticationType } = microstrategy.dossier;
 
     const props = {
@@ -183,45 +208,50 @@ export default class _EmbeddedDossier extends React.Component {
         addToLibrary: true,
       },
       enableVizSelection: true,
-      selectedViz,
+      selectedViz: selectedVizChecked,
       onMsgRouterReadyHandler: ({ MsgRouter }) => {
         this.msgRouter = MsgRouter;
         this.msgRouter.registerEventHandler('onVizSelectionChanged', this.onVizSelectionHandler);
         this.msgRouter.registerEventHandler('onPromptAnswered', this.promptsAnsweredHandler);
+        this.msgRouter.registerEventHandler('onDossierInstanceIDChange', this.instanceIdChangeHandler);
       },
     };
     this.embeddedDossier = await microstrategy.dossier.create(props);
   }
 
   /**
-   * Watches container for child addition and runs callback in case of iframe being added
-   * @param {*} container
-   * @param {*} callback
-   */
-  watchForIframeAddition(container, callback) {
-    const config = { childList: true };
-    const onMutation = (mutationList) => {
-      for (const mutation of mutationList) {
-        if (mutation.addedNodes && mutation.addedNodes.length && mutation.addedNodes[0].nodeName === 'IFRAME') {
-          const iframe = mutation.addedNodes[0];
-          callback(iframe);
-        }
+  * Update the promptsAnswers in dossierData and also in parent component.
+  * Update the selectedViz in parent component in case of simple reprompt
+  * to keep the import button enabled.
+  *
+  * @param {Array} promptsAnswers
+  * @memberof _EmbeddedDossier
+  */
+  async promptsAnsweredHandler(promptsAnswers) {
+    const { handlePromptAnswer } = this.props;
+    this.dossierData.promptsAnswers = promptsAnswers;
+    handlePromptAnswer(promptsAnswers);
+
+    if (this.embeddedDossier) {
+      const payload = await this.embeddedDossier.getSelectedVizKeys();
+      if (Object.keys(payload).length > 0) {
+        this.onVizSelectionHandler(payload);
       }
-    };
-    const observer = new MutationObserver(onMutation);
-    observer.observe(container, config);
+    }
   }
 
-  promptsAnsweredHandler(promptsAnswers) {
-    const { handlePromptAnswer } = this.props;
-    if (this.embeddedDossier) {
-      this.embeddedDossier.getDossierInstanceId().then((newInstanceId) => {
-        this.dossierData.preparedInstanceId = newInstanceId;
-        handlePromptAnswer(promptsAnswers, newInstanceId);
-      });
-    } else {
-      handlePromptAnswer(promptsAnswers);
-    }
+  /**
+  * Update the instanceId in dossierData and also in parent component.
+  * InstanceId is changing as result of reset button click, switch to
+  * bookmark or new prompts answers given.
+  *
+  * @param {String} newInstanceId
+  * @memberof _EmbeddedDossier
+  */
+  instanceIdChangeHandler(newInstanceId) {
+    const { handleInstanceIdChange } = this.props;
+    this.dossierData.preparedInstanceId = newInstanceId;
+    handleInstanceIdChange(newInstanceId);
   }
 
   render() {
@@ -231,12 +261,15 @@ export default class _EmbeddedDossier extends React.Component {
       We need to calculate actual height, regarding the size of other elements:
       58px for header, 9px for header margin and 68px for buttons
       */
-      <div ref={this.container} style={{ position: 'relative', top: '0', left: '0', height: 'calc(100vh - 135px)' }} />
+      <div ref={this.container}
+           style={{
+ position: 'relative', top: '0', left: '0', height: 'calc(100vh - 135px)'
+}} />
     );
   }
 }
 
-_EmbeddedDossier.propTypes = {
+EmbeddedDossierNotConnected.propTypes = {
   mstrData: PropTypes.shape({
     envUrl: PropTypes.string,
     authToken: PropTypes.string,
@@ -245,12 +278,19 @@ _EmbeddedDossier.propTypes = {
     instanceId: PropTypes.string,
     promptsAnswers: PropTypes.array || null,
     selectedViz: PropTypes.string,
+    visualizationInfo: {
+      chapterKey: PropTypes.string,
+      pageKey: PropTypes.string,
+      visualizationKey: PropTypes.string,
+    }
   }),
   handleSelection: PropTypes.func,
-  handlePromptAnswer: PropTypes.func
+  handlePromptAnswer: PropTypes.func,
+  handleInstanceIdChange: PropTypes.func,
+  handleLoadEvent: PropTypes.func
 };
 
-_EmbeddedDossier.defaultProps = {
+EmbeddedDossierNotConnected.defaultProps = {
   mstrData: {
     envUrl: 'no env url',
     authToken: null,
@@ -264,13 +304,17 @@ _EmbeddedDossier.defaultProps = {
 };
 
 const mapStateToProps = (state) => {
-  const { navigationTree, popupReducer, sessionReducer: { attrFormPrivilege, envUrl, authToken }, officeReducer } = state;
+  const {
+    navigationTree,
+    popupReducer,
+    sessionReducer: { attrFormPrivilege, envUrl, authToken },
+    officeReducer
+  } = state;
   const { chosenObjectName, chosenObjectId, chosenProjectId } = navigationTree;
   const popupState = popupReducer.editedObject;
   const { promptsAnswers } = state.navigationTree;
   const { supportForms } = officeReducer;
-  const objectType = popupState && popupState.objectType ? popupState.objectType : mstrObjectEnum.mstrObjectType.report.name;
-  const isReport = objectType && (objectType === mstrObjectEnum.mstrObjectType.report.name || objectType.name === mstrObjectEnum.mstrObjectType.report.name);
+  const isReport = popupState && popupState.objectType === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
   const editedObject = { ...(popupHelper.parsePopupState(popupState, promptsAnswers, formsPrivilege)) };
@@ -280,10 +324,11 @@ const mapStateToProps = (state) => {
     dossierId: isEdit ? editedObject.chosenObjectId : chosenObjectId,
     projectId: isEdit ? editedObject.projectId : chosenProjectId,
     promptsAnswers: isEdit ? editedObject.promptsAnswers : promptsAnswers,
+    visualizationInfo: editedObject.visualizationInfo,
     selectedViz: isEdit ? editedObject.selectedViz : '',
     instanceId: editedObject.instanceId,
   };
   return { mstrData };
 };
 
-export const EmbeddedDossier = connect(mapStateToProps)(_EmbeddedDossier);
+export const EmbeddedDossier = connect(mapStateToProps)(EmbeddedDossierNotConnected);
