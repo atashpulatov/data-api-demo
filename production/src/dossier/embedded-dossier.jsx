@@ -221,14 +221,23 @@ export default class EmbeddedDossierNotConnected extends React.Component {
 
   /**
   * Update the promptsAnswers in dossierData and also in parent component.
+  * Update the selectedViz in parent component in case of simple reprompt
+  * to keep the import button enabled.
   *
   * @param {Array} promptsAnswers
   * @memberof _EmbeddedDossier
   */
-  promptsAnsweredHandler(promptsAnswers) {
+  async promptsAnsweredHandler(promptsAnswers) {
     const { handlePromptAnswer } = this.props;
     this.dossierData.promptsAnswers = promptsAnswers;
     handlePromptAnswer(promptsAnswers);
+
+    if (this.embeddedDossier) {
+      const payload = await this.embeddedDossier.getSelectedVizKeys();
+      if (Object.keys(payload).length > 0) {
+        this.onVizSelectionHandler(payload);
+      }
+    }
   }
 
   /**
