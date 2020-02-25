@@ -153,6 +153,7 @@ task :stage_0_test do
   if ENV["ghprbTargetBranch"].nil?
     raise "ghprbTargetBranch environment should not be nil"
   end
+  install_dependencies("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
   generate_eslint_report
   run_test("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
   get_unit_test_metrics("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
@@ -164,6 +165,7 @@ task :stage_0_test do
     message = nil
     #checkout the code in base branch
     init_base_branch_repo(ENV["ghprbTargetBranch"])
+    install_dependencies(base_repo_path)
     #run test with base branch
     run_test(base_repo_path)
     generate_comparison_report_html
@@ -179,6 +181,7 @@ end
 
 desc "run the unit test and collect code coverage in stage_1 dev job"
 task :stage_1_test do
+  install_dependencies("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
   run_test("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
   get_unit_test_metrics("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
   get_test_coverage_metrics
@@ -193,7 +196,6 @@ task :debug do
 end
 
 def run_test(working_dir)
-  install_dependencies(working_dir)
   shell_command! "npm run test:coverage", cwd: "#{working_dir}/production"
 end
 
