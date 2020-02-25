@@ -10,7 +10,7 @@ import pluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 
 describe('F25930 - Faster display of data sources by caching object list', () => {
   beforeEach(() => {
-    officeLogin.openExcelAndLoginToPlugin
+    officeLogin.openExcelAndLoginToPlugin();
   });
 
   afterEach(() => {
