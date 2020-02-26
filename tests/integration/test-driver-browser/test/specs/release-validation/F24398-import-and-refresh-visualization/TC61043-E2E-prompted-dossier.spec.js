@@ -42,7 +42,7 @@ describe('F24398 - Import and refresh visualization', () => {
 
     // It should edit grid visualization and confirm that the visualization was refreshed
     switchToRightPanelFrame();
-    PluginPopup.repromptDefaultVisualisation()
+    PluginPopup.repromptDefaultVisualisation();
     waitForNotification();
     expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.visualizationRefreshed);
 

@@ -50,7 +50,7 @@ describe('IMPORT diferent types of vizualizations', () => {
     OfficeWorksheet.selectCell('G3');
     PluginRightPanel.clickAddDataButton();
     const secondReport = objectsList.reports.attributePromptedReport;
-    PluginPopup.importObject(secondReport, false);
+    PluginPopup.switchLibraryAndImportObject(secondReport, false);
     PluginPopup.promptSelectObject('Electronics');
     PluginPopup.clickRun();
     waitForNotification();
@@ -89,7 +89,7 @@ describe('IMPORT diferent types of vizualizations', () => {
     OfficeWorksheet.selectCell('N3');
     PluginRightPanel.clickAddDataButton();
     const thirdReport = objectsList.reports.objectPromptedReport;
-    PluginPopup.importObject(thirdReport, false);
+    PluginPopup.switchLibraryAndImportObject(thirdReport, false);
     browser.pause(5000);
     PluginPopup.clickRun();
     waitForNotification();
@@ -115,7 +115,7 @@ describe('IMPORT diferent types of vizualizations', () => {
     OfficeWorksheet.selectCell('R3');
     PluginRightPanel.clickAddDataButton();
     const FourthReport = objectsList.datasets.datasetSQL;
-    PluginPopup.importObject(FourthReport, false);
+    PluginPopup.switchLibraryAndImportObject(FourthReport, false);
     waitForNotification();
     browser.pause(2000);
 

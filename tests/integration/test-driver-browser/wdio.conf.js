@@ -17,22 +17,37 @@ exports.config = {
   // directory is where your package.json resides, so `wdio` will be called from there.
   //
   specs: [
-    './test/specs/release-validation/deprecated/sample.spec.js',
+    //   './test/specs/release-validation/deprecated/sample.spec.js',
   ],
   suites: {
-    test: [
-      './test/specs/release-validation/test/*.js'
+    'F24398-import-and-refresh-visualization': [
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53434-my-library-view-filters-dossier-importing.spec.js',
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53560-Import-a-grid-visualisation.spec.js',
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53561-import-different-types-of-visualisations.spec.js',
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53620-Refreshing-a-visualisation.spec.js',
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53627-Interactive-components-at-the-popup-window.spec.js',
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC54783-Manipulation-of-grid-visualization.spec.js',
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC60974-importing-custom-visualisation.spec.js',
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC61043-E2E-prompted-dossier.spec.js',
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC61046-E2E-with-edit-change-text.spec.js',
     ],
-    UB: [
-      './test/specs/performance/UB-standalone-version/import-UB-dataset.spec.js'
-    ],
-    dossiers: [
-      './test/specs/release-validation/F24398-import-and-refresh-visualization/*.spec.js',
-    ],
-    acceptance: [
-      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC61046-E2E-with-edit-andchange-text.spec.js',
-      './test/specs/release-validation/F25932-import-attribute-forms/TC59987-attribute-form-display.spec.js',
+    'F24751-import subtotals': [
+      './test/specs/release-validation/F24751-import subtotals/TC53340-import-report-with-subtotals.spec.js',
       './test/specs/release-validation/F24751-import subtotals/TC54788-import-subtotals.spec.js',
+    ],
+    'F25930-faster-display': [
+      './test/specs/release-validation/F25930-faster-display/TC54961-E2E-scenario.spec.js',
+    ],
+    'F25932-import-attribute-forms': [
+      './test/specs/release-validation/F25932-import-attribute-forms/TC59987-attribute-form-display.spec.js',
+    ],
+    'TF7862-regression': [
+      './test/specs/release-validation/TF7862-regression/TC59466-binding-importing-the-same-report-twice.spec.js',
+      './test/specs/release-validation/TF7862-regression/TC59464-binding-imported-report.spec.js',
+    ],
+    'TS41441-E2E Sanity checks': [
+      './test/specs/release-validation/TS41441-E2E Sanity checks/TC49100-E2E-Import-Prompted-Reports-Import-multiple-objects-Refresh-All-Re-Prompt-Refresh-Edit-Prompts.spec.js',
+      './test/specs/release-validation/TS41441-E2E Sanity checks/TC48976-basic-functionalites.spec.js',
     ],
   },
   // Patterns to exclude.

@@ -2,10 +2,7 @@
 import { waitAndClick, waitAndRightClick } from '../utils/click-helper';
 import { popupSelectors } from '../../constants/selectors/popup-selectors';
 import { switchToPluginFrame, switchToPromptFrame, switchToPopupFrame, switchToExcelFrame, switchToPromptFrameForEditDossier, switchToPromptFrameForEditReport } from '../utils/iframe-helper';
-import { waitForNotification } from '../utils/wait-helper'
 import pluginRightPanel from './plugin.right-panel';
-import { excelSelectors } from '../../constants/selectors/office-selectors';
-
 
 class PluginPopup {
   closeRefreshAll() {
@@ -63,7 +60,7 @@ class PluginPopup {
 
   clickRunForPromptedDossier() {
     switchToPromptFrameForEditDossier();
-    waitAndClick($(popupSelectors.runBtn));
+    waitAndClick($(popupSelectors.runBtnForPromptedDossier));
   }
 
   clickRun() {
@@ -128,18 +125,17 @@ class PluginPopup {
 
   switchLibraryAndImportObject(objectName, myLibrarySwitch) {
     switchToPluginFrame();
+    browser.pause(4000);
     this.switchLibrary(myLibrarySwitch);
+    browser.pause(1000);
     this.searchForObject(objectName);
     browser.pause(500);
     this.selectFirstObject();
     this.clickImport();
   }
 
-  importObject(objectName, myLibrarySwitch) {
+  importObject(objectName) {
     switchToPluginFrame();
-    browser.pause(4000);
-    this.switchLibrary(myLibrarySwitch);
-    browser.pause(1000);
     this.searchForObject(objectName);
     browser.pause(500);
     this.selectFirstObject();
@@ -346,7 +342,7 @@ class PluginPopup {
   }
 
   openDossier(dossierName, timeToLoadDossier = 10000, myLibrarySwitch = false) {
-    this.importObject(dossierName, myLibrarySwitch);
+    this.switchLibraryAndImportObject(dossierName, myLibrarySwitch);
     browser.pause(timeToLoadDossier);
   }
 
@@ -519,7 +515,7 @@ class PluginPopup {
     // reprompt
     switchToPromptFrameForEditDossier();
     $('#mstrdossierPromptEditor').waitForExist(10000);
-    this.clickRun();
+    this.clickRunForPromptedDossier();
     browser.pause(6000);
     // select vis
     switchToPromptFrameForEditDossier();

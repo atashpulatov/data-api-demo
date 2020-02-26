@@ -13,6 +13,7 @@ export const popupSelectors = {
   prepareBtn: '#prepare',
   cancelBtn: '#cancel',
   runBtn: '#run',
+  runBtnForPromptedDossier: '#id_mstr2 > tbody > tr:nth-child(3) > td > div > label.mstrPromptEditorButtonRun',
   firstObject: '#root > div > div.object-table > div.object-table-container > div:nth-child(1) > div > div.ReactVirtualized__Grid.ReactVirtualized__Table__Grid > div > div > div',
   secondObject: $('#root > div > div.object-table > div.object-table-container > div:nth-child(1) > div > div.ReactVirtualized__Grid.ReactVirtualized__Table__Grid > div > div:nth-child(2)'),
   anyObject: (index) => `div.ReactVirtualized__Grid.ReactVirtualized__Table__Grid > div > div:nth-child(${index}) > div`,
