@@ -40,7 +40,7 @@ describe('TC48976 - perform-basic-functionalities', () => {
     browser.switchToWindow(handles[0]);
   });
 
-  it('perform-basic-functionalities', () => {
+  it('[TC48976] - perform-basic-functionalities', () => {
     const firstObject = '#overlay > div > section > div > div.tables-container > div:nth-child(1)';
     const firstRefreshIcon = $('#overlay > div > section > div > div.tables-container > div:nth-child(1) > div.refresh-icons-row > span.object-icons > span:nth-child(2) > span');
     const datasetFilter = 'label=Dataset';
@@ -80,7 +80,7 @@ describe('TC48976 - perform-basic-functionalities', () => {
     browser.pause(1000);
 
     // Select empty cell
-    OfficeWorksheet.selectCellAlternatively('M1');
+    OfficeWorksheet.selectCell('M1');
     browser.pause(1000);
     PluginRightPanel.clickAddDataButton();
     switchToPluginFrame();
