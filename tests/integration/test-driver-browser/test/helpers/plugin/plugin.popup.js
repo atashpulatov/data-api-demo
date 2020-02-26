@@ -123,6 +123,7 @@ class PluginPopup {
 
   importObject(objectName, myLibrarySwitch) {
     switchToPluginFrame();
+    this.switchLibrary(myLibrarySwitch);
     this.searchForObject(objectName);
     browser.pause(500);
     this.selectFirstObject();

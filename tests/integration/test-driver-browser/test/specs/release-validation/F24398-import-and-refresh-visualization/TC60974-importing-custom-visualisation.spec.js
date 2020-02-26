@@ -27,7 +27,7 @@ describe('F24398 - Import and refresh visualization', () => {
     // It should import grid visualization
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
-    PluginPopup.importObject(dossierObject.name);
+    PluginPopup.importObject(dossierObject.name, null, false);
     browser.pause(5555);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.GoogleTimeline);
 
