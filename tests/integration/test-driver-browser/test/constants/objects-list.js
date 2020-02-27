@@ -43,7 +43,7 @@ export const objectsList = {
     datasetSQL: 'DATA_IMPORT_SQL_STATEMENT',
     basicDataset: '100_dataset',
     notPublished: 'not published dataset',
-    cubeLimitProject: '1,5M Sales Records.csv',
+    cubeLimitProject: 'Limit Project 1,5M Sales Records.csv',
     notSupportedCube: 'multi table cube',
     salesRecords1k: '1k Sales Records.csv',
   },

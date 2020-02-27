@@ -1,7 +1,14 @@
 /* eslint-disable class-methods-use-this */
 import { waitAndClick, waitAndRightClick } from '../utils/click-helper';
 import { popupSelectors } from '../../constants/selectors/popup-selectors';
-import { switchToPluginFrame, switchToPromptFrame, switchToPopupFrame, switchToExcelFrame, switchToPromptFrameForEditDossier, switchToPromptFrameForEditReport } from '../utils/iframe-helper';
+import {
+  switchToPluginFrame,
+  switchToPromptFrame,
+  switchToPopupFrame,
+  switchToExcelFrame,
+  switchToPromptFrameForEditDossier,
+  switchToPromptFrameForEditReport
+} from '../utils/iframe-helper';
 import pluginRightPanel from './plugin.right-panel';
 
 class PluginPopup {
@@ -65,6 +72,7 @@ class PluginPopup {
 
   clickRun() {
     switchToPluginFrame();
+    $(popupSelectors.runBtn).waitForExist(3333);
     waitAndClick($(popupSelectors.runBtn));
   }
 
@@ -123,7 +131,7 @@ class PluginPopup {
     waitAndClick($(popupSelectors.firstObject));
   }
 
-  switchLibraryAndImportObject(objectName, myLibrarySwitch) {
+  switchLibraryAndImportObject(objectName, myLibrarySwitch = false) {
     switchToPluginFrame();
     browser.pause(4000);
     this.switchLibrary(myLibrarySwitch);
@@ -142,7 +150,7 @@ class PluginPopup {
     this.clickImport();
   }
 
-  importAnyObject (objectName, index) {
+  importAnyObject(objectName, index) {
     switchToPluginFrame();
     browser.pause(500);
     this.switchLibrary(false);
@@ -185,14 +193,16 @@ class PluginPopup {
 
   importPromptDefaultNested(objectName) {
     this.importObject(objectName);
-    browser.pause(5555); // temp solution
-    for (; $(popupSelectors.runBtn).isExisting();) {
-      switchToPromptFrame();
-      $('#mstrdossierPromptEditor').waitForExist(7777);
-      this.clickRun();
-      browser.pause(3333);
+    browser.pause(5555);
+    while (true) {
+      browser.pause(3000);
+      switchToPluginFrame();
+      if ($(popupSelectors.runBtn).isExisting()) {
+        this.clickRun();
+      } else {
+        break;
+      }
     }
-    switchToPluginFrame();
   }
 
   isViewSelected() {
@@ -200,12 +210,11 @@ class PluginPopup {
   }
 
   openPrompt(objectName) {
-    this.importObject(objectName);
+    this.switchLibraryAndImportObject(objectName, false);
     browser.pause(9999); // temp solution
     switchToPromptFrame();
     $('#mstrdossierPromptEditor').waitForExist(7777);
   }
-
 
   writeValueText(value) {
     switchToPromptFrame();
@@ -329,7 +338,7 @@ class PluginPopup {
       }
     }
     const end = Date.now();
-    const timeSpent = ((end - begin) / 1000);
+    const timeSpent = (end - begin) / 1000;
     console.log(`Total time importing "${objectName}":  ${timeSpent} secs`);
     return timeSpent;
   }
@@ -338,7 +347,7 @@ class PluginPopup {
     const myLibrarySwitch = $(popupSelectors.myLibrary);
     myLibrarySwitch.waitForExist(5000);
     const checked = myLibrarySwitch.getAttribute('aria-checked');
-    if ((checked === 'true') !== newState) waitAndClick(myLibrarySwitch)
+    if ((checked === 'true') !== newState) waitAndClick(myLibrarySwitch);
   }
 
   openDossier(dossierName, timeToLoadDossier = 10000, myLibrarySwitch = false) {
@@ -416,7 +425,6 @@ class PluginPopup {
     browser.pause(500);
   }
 
-
   sortDescending(objectId) {
     switchToPromptFrame();
     waitAndRightClick($(`${objectId}`));
@@ -461,10 +469,10 @@ class PluginPopup {
    */
   setValueOnDossierSliderFilter(filterIndex, position, value) {
     const { dossierWindow } = popupSelectors;
-    const maxValueInput = $(`${dossierWindow.filtersMenu.getFilterAt(filterIndex)} ${dossierWindow.filtersMenu.getSliderInput(position)} > input`)
+    const maxValueInput = $(`${dossierWindow.filtersMenu.getFilterAt(filterIndex)} ${dossierWindow.filtersMenu.getSliderInput(position)} > input`);
     maxValueInput.doubleClick();
     browser.keys('\uE003'); // Press Backspace
-    maxValueInput.setValue(value)
+    maxValueInput.setValue(value);
   }
 
   /**
