@@ -1,20 +1,15 @@
 import OfficeLogin from '../../../helpers/office/office.login';
-import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
-import settings from '../../../config';
 import {
-  switchToExcelFrame,
   switchToPluginFrame,
-  switchToPromptFrame,
   switchToPromptFrameForEdit
 } from '../../../helpers/utils/iframe-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 import { objectsList } from '../../../constants/objects-list';
-// /test/constants/selectors/popup-selectors.js
 
 describe('F22954 Ability to edit data already imported to the workbook', () => {
   beforeEach(() => {

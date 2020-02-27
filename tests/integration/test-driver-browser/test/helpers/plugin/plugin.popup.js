@@ -192,7 +192,7 @@ class PluginPopup {
   }
 
   importPromptDefaultNested(objectName) {
-    this.importObject(objectName);
+    this.switchLibraryAndImportObject(objectName, false);
     browser.pause(5555);
     while (true) {
       browser.pause(3000);

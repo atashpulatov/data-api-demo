@@ -1,4 +1,3 @@
-import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
@@ -24,7 +23,7 @@ describe('[F12910] - Ability to import a dataset from MicroStrategy', () => {
     // should display a correct error message when importing not supported cube
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
-    PluginPopup.importObject(objectsList.datasets.notSupportedCube);
+    PluginPopup.switchLibraryAndImportObject(objectsList.datasets.notSupportedCube);
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.emptyObject);
     PluginRightPanel.closeNotification();

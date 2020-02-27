@@ -20,6 +20,19 @@ exports.config = {
     //   './test/specs/release-validation/deprecated/sample.spec.js',
   ],
   suites: {
+    'F12910-import-dataset': [
+      './test/specs/release-validation/F12910-import-dataset/TC34506-import-not-supported-cube.spec.js',
+      './test/specs/release-validation/F12910-import-dataset/TC35249-cubes-limits-project.spec.js',
+    ],
+    'F22954-editing': [
+      './test/specs/release-validation/F22954-editing/TC48354-edit-prompt-value-dateTime-req-noDef.spec.js',
+    ],
+    'F22955-refresh': [
+      './test/specs/release-validation/F22955-refresh/TC48131-refresh-report.spec.js',
+      './test/specs/release-validation/F22955-refresh/TC48134-refresh-report-prompt-object-required-defaultanswer.spec.js',
+      './test/specs/release-validation/F22955-refresh/TC48135-refresh-report-prompt-nested-prompts.spec.js',
+      './test/specs/release-validation/F22955-refresh/TC48136-refresh-report-prompt-multiple-prompts.spec.js',
+    ],
     'F24398-import-and-refresh-visualization': [
       './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53434-my-library-view-filters-dossier-importing.spec.js',
       './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53560-Import-a-grid-visualisation.spec.js',

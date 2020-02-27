@@ -3,7 +3,6 @@ import { switchToPluginFrame, switchToPopupFrame, switchToExcelFrame } from '../
 import { waitAndClick } from '../utils/click-helper';
 import { rightPanelSelectors } from '../../constants/selectors/plugin.right-panel-selectors';
 import { excelSelectors } from '../../constants/selectors/office-selectors';
-import pluginPopup from './plugin.popup';
 
 class PluginRightPanel {
   clickLoginPopUpBtn() {
@@ -99,7 +98,7 @@ class PluginRightPanel {
   edit() {
     switchToPluginFrame();
     waitAndClick($('.edit'));
-  };
+  }
 
   removeFirstObjectFromTheList() {
     switchToPluginFrame();
