@@ -65,7 +65,7 @@ describe('TC48976 - perform-basic-functionalities', () => {
     PluginPopup.clickPrepareData();
     PluginPopup.selectAllAttributes();
     PluginPopup.selectAllMetrics();
-    PluginPopup.selectFilters([['Sales Channel', []]])
+    PluginPopup.selectFilters([['Sales Channel', ['Online']]])
     browser.pause(500);
     PluginPopup.searchForElements('Item Type');
     PluginPopup.searchForElements('Invalid metric');
@@ -117,7 +117,7 @@ describe('TC48976 - perform-basic-functionalities', () => {
     // Assertion after "Region" filter addition
     switchToExcelFrame();
     OfficeWorksheet.selectCell('O3')
-    expect($(O3).getText()).toEqual('2/23/2015');
+    expect($(O3).getText()).toEqual('23/02/2015');
     browser.pause(1000);
 
     switchToRightPanelFrame();
