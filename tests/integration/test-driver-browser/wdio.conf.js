@@ -48,6 +48,9 @@ exports.config = {
     'TS41441-E2E Sanity checks': [
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC49100-E2E-Import-Prompted-Reports-Import-multiple-objects-Refresh-All-Re-Prompt-Refresh-Edit-Prompts.spec.js',
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC48976-basic-functionalites.spec.js',
+      './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-I.spec.js',
+      './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-II.spec.js',
+      './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-III.spec.js',
     ],
   },
   // Patterns to exclude.
