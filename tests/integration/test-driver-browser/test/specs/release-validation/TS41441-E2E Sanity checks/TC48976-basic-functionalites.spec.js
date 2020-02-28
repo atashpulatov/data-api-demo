@@ -45,7 +45,7 @@ describe('TC48976 - perform-basic-functionalities', () => {
     const firstRefreshIcon = $('#overlay > div > section > div > div.tables-container > div:nth-child(1) > div.refresh-icons-row > span.object-icons > span:nth-child(2) > span');
     const datasetFilter = 'label=Dataset';
     const removeIcon = '.mstr-icon.trash';
-    const O3 = '#gridRows > div:nth-child(3) > div:nth-child(15) > div > div';
+    const P3 = '#gridRows > div:nth-child(3) > div:nth-child(16) > div > div';
 
     switchToRightPanelFrame();
     $(rightPanelSelectors.importDataBtn).waitForDisplayed(3000, false);
@@ -116,8 +116,8 @@ describe('TC48976 - perform-basic-functionalities', () => {
 
     // Assertion after "Region" filter addition
     switchToExcelFrame();
-    OfficeWorksheet.selectCell('O3')
-    expect($(O3).getText()).toEqual('23/02/2015');
+    OfficeWorksheet.selectCell('P3')
+    expect($(P3).getText()).toEqual('868214595');
     browser.pause(1000);
 
     switchToRightPanelFrame();

@@ -36,6 +36,6 @@ describe('F24398 - Import and refresh visualization', () => {
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
     switchToExcelFrame();
     OfficeWorksheet.selectCell('D18');
-    expect(D18.getText()).toEqual('1/1/2013');
+    expect(D18.getText()).toEqual('01/01/2013');
   });
 });
