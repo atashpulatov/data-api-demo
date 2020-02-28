@@ -22,7 +22,7 @@ describe('TS41441 - E2E Sanity checks', () => {
     browser.switchToWindow(handles[0]);
   });
 
-  it('[TC49134] [E2E] Error handling', () => {
+  it('[TC49134] Part I - Error handling', () => {
     // should try to import a report of 1,5M rows that exceeds the excelsheet limits
     PluginRightPanel.clickImportDataButton();
     PluginPopup.switchLibraryAndImportObject(objectsList.reports.report1_5M, false);
@@ -66,67 +66,5 @@ describe('TS41441 - E2E Sanity checks', () => {
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.rangeNotEmpty);
     PluginRightPanel.closeNotification();
-  });
-
-  it('[TC49134] [E2E] Subtotals | Crosstabs', () => {
-    // should open a new sheet & import a report with totals/subtotals
-    PluginRightPanel.clickImportDataButton();
-    PluginPopup.switchLibraryAndImportObject('Report with Totals and Subtotals', false);
-    waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
-
-    // should open a new sheet & import a report with crosstabs
-    OfficeWorksheet.openNewSheet();
-    PluginRightPanel.clickAddDataButton();
-    PluginPopup.importObject('Report with Crosstab');
-    waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
-  });
-
-  it('[TC49134] [E2E] Formatting | Secure Data - Additional Checks', () => {
-    // should open a new sheet & import a report with number formatting
-    PluginRightPanel.clickImportDataButton();
-    PluginPopup.switchLibraryAndImportObject(objectsList.reports.numberFormating, false);
-    waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
-
-    /* TODO: For the already imported objects apply some additional Excel formatting, available options are:
-    - applying table formatting
-    - different number formats
-    - conditional formatting
-    - table styles (only for Excel Desktop version)
-    - cell content alignment and fonts
-    */
-
-    // should clear data
-    browser.pause(1000);
-    switchToPluginFrame();
-    PluginRightPanel.clickSettings();
-    PluginRightPanel.clearData();
-    browser.pause(4000);
-
-    // should assert data was cleared
-    switchToExcelFrame();
-
-
-    // should log out
-    switchToPluginFrame();
-    PluginRightPanel.clickSettings();
-    PluginRightPanel.clickLogout();
-
-    // should log in with Tim user
-    PluginRightPanel.loginToPlugin('a', '');
-
-    // should click "View Data" and close the "Refresh All Data" pop-up
-    switchToPluginFrame();
-    PluginRightPanel.viewDataBtn();
-    switchToExcelFrame();
-
-    // waitForRefreshAllToFinish();
-    browser.pause(10000); // TODO: wait for popup to show "Refreshing complete!" message, instead of waiting
-    waitAndClick($(popupSelectors.closeRefreshAll));
-
-    // should assert data was refreshed
-    switchToExcelFrame();
   });
 });

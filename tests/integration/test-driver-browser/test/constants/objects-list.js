@@ -43,7 +43,7 @@ export const objectsList = {
     datasetSQL: 'DATA_IMPORT_SQL_STATEMENT',
     basicDataset: '100_dataset',
     notPublished: 'not published dataset',
-    cubeLimitProject: '1,5M Sales Records.csv',
+    cubeLimitProject: 'Limit Project 1,5M Sales Records.csv',
     notSupportedCube: 'multi table cube',
     salesRecords1k: '1k Sales Records.csv',
   },
@@ -77,11 +77,11 @@ export const objectsList = {
         visualization1 : {
           name: '#mstr106',
           gridTableId:'#mstr121',
-          getTableItemAt: (firstIndex, secondIndex) => `#mstr121 > table > tbody > tr:nth-child(${firstIndex}) > td:nth-child(${secondIndex})`,
+          getTableItemAt: (firstIndex, secondIndex) => `#mstr149 > table > tbody > tr:nth-child(${firstIndex}) > td:nth-child(${secondIndex})`,
         }
       },
     },
-    interactiveDossier: { name: 'Dossier for interactive components', },
+    interactiveDossier: { name: 'Automation Dossier for interactive components', },
     customVisualizations: {
       name: 'Custom Visualizations',
       visualizations: { GoogleTimeline: '#mstr114', }

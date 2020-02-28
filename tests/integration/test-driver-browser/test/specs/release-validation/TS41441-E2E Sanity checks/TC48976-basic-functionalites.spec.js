@@ -1,19 +1,20 @@
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { switchToPluginFrame, switchToExcelFrame, switchToRightPanelFrame, switchToPopupFrame, switchToPromptFrame } from '../../../helpers/utils/iframe-helper';
+import { switchToPluginFrame, switchToExcelFrame, switchToRightPanelFrame } from '../../../helpers/utils/iframe-helper';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
-import settings from '../../../config';
-import { objectsList as o } from '../../../constants/objects-list';
+import { objectsList } from '../../../constants/objects-list';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import officeLogin from '../../../helpers/office/office.login';
 
 describe('TC48976 - perform-basic-functionalities', () => {
   beforeAll(() => {
+    const acceptBtn = '#accept-cookies-btn';
+
     // Invalid credentials
-    officeLogin.openExcelAndLoginToPlugin(1700, 'Invalid username', 'Invalid password', false)
+    officeLogin.openExcelAndLoginToPlugin('Invalid username', 'Invalid password', 1700, false)
     waitAndClick($('#ActionLinkContainer'));
 
     // Credentials without office privileges
@@ -21,7 +22,8 @@ describe('TC48976 - perform-basic-functionalities', () => {
     const handles = browser.getWindowHandles();
     browser.switchToWindow(handles[1]);
     switchToRightPanelFrame();
-    waitAndClick($('#accept-cookies-btn'));
+    $(acceptBtn).waitForDisplayed(3000, false);
+    waitAndClick($(acceptBtn));
     $(rightPanelSelectors.loginRightPanelBtn).waitForDisplayed(2000, false);
     PluginRightPanel.clickLoginRightPanelBtn();
     browser.switchToWindow(browser.getWindowHandles()[2]);
@@ -38,30 +40,32 @@ describe('TC48976 - perform-basic-functionalities', () => {
     browser.switchToWindow(handles[0]);
   });
 
-  it('perform-basic-functionalities', () => {
+  it('[TC48976] - perform-basic-functionalities', () => {
     const firstObject = '#overlay > div > section > div > div.tables-container > div:nth-child(1)';
     const firstRefreshIcon = $('#overlay > div > section > div > div.tables-container > div:nth-child(1) > div.refresh-icons-row > span.object-icons > span:nth-child(2) > span');
     const datasetFilter = 'label=Dataset';
     const removeIcon = '.mstr-icon.trash';
-    const O3 = '#gridRows > div:nth-child(3) > div:nth-child(15) > div > div';
+    const P3 = '#gridRows > div:nth-child(3) > div:nth-child(16) > div > div';
 
     switchToRightPanelFrame();
     $(rightPanelSelectors.importDataBtn).waitForDisplayed(3000, false);
     PluginRightPanel.clickImportDataButton();
 
     switchToPluginFrame();
-    $(popupSelectors.myLibrary).waitForDisplayed(2000, false);
+    $(popupSelectors.myLibrary).waitForDisplayed(3000, false);
     PluginPopup.switchLibrary(false);
-    PluginPopup.searchForObject(o.reports.filtered);
+    PluginPopup.searchForObject(objectsList.reports.filtered);
     PluginPopup.searchForObject('Invalid report');
     browser.pause(500);
     $(popupSelectors.searchInput).clearValue();
-    PluginPopup.searchForObject(o.reports.report1k);
+
+    // Import report and select elements (attributes & metrics & filters)
+    PluginPopup.searchForObject(objectsList.reports.report1k);
     PluginPopup.selectFirstObject();
     PluginPopup.clickPrepareData();
     PluginPopup.selectAllAttributes();
     PluginPopup.selectAllMetrics();
-    PluginPopup.selectFilters([['Sales Channel', []]])
+    PluginPopup.selectFilters([['Sales Channel', ['Online']]])
     browser.pause(500);
     PluginPopup.searchForElements('Item Type');
     PluginPopup.searchForElements('Invalid metric');
@@ -75,19 +79,23 @@ describe('TC48976 - perform-basic-functionalities', () => {
     waitForNotification();
     browser.pause(1000);
 
-    OfficeWorksheet.selectCellAlternatively('M1');
+    // Select empty cell
+    OfficeWorksheet.selectCell('M1');
     browser.pause(1000);
     PluginRightPanel.clickAddDataButton();
     switchToPluginFrame();
 
+    $(popupSelectors.myLibrary).waitForDisplayed(3000, false);
     PluginPopup.switchLibrary(false);
     waitAndClick($('#Filter'));
     $(datasetFilter).waitForDisplayed(1000, false)
     waitAndClick($(datasetFilter));
-    PluginPopup.searchForObject(o.datasets.cubeLimitProject);
+    PluginPopup.searchForObject(objectsList.datasets.cubeLimitProject);
     PluginPopup.searchForObject('Invalid Object')
     $(popupSelectors.searchInput).clearValue();
-    PluginPopup.searchForObject(o.datasets.basicDataset);
+
+    // Import dataset and select elements (attributes & metrics & filters)
+    PluginPopup.searchForObject(objectsList.datasets.basicDataset);
     PluginPopup.selectFirstObject();
     PluginPopup.clickPrepareData();
     PluginPopup.selectAllAttributes();
@@ -105,13 +113,14 @@ describe('TC48976 - perform-basic-functionalities', () => {
     browser.pause(1000);
     PluginPopup.clickImport();
     waitForNotification();
+
+    // Assertion after "Region" filter addition
     switchToExcelFrame();
-
-    OfficeWorksheet.selectCell('O3')
-    expect($(O3).getText()).toEqual('2/23/2015');
+    OfficeWorksheet.selectCell('P3')
+    expect($(P3).getText()).toEqual('868214595');
     browser.pause(1000);
-    switchToRightPanelFrame();
 
+    switchToRightPanelFrame();
     waitAndClick($(firstObject));
     $(rightPanelSelectors.importedObjectNameList).doubleClick();
     $(rightPanelSelectors.importedObjectNameList).moveTo();
@@ -121,6 +130,8 @@ describe('TC48976 - perform-basic-functionalities', () => {
     waitAndClick(firstRefreshIcon);
     browser.pause(5000);
     waitAndClick($(firstObject));
+
+    // Edit dataset
     ($(rightPanelSelectors.editBtn)).waitForDisplayed(5000, false);
     PluginRightPanel.edit();
     browser.pause(1000);
@@ -131,11 +142,14 @@ describe('TC48976 - perform-basic-functionalities', () => {
     PluginPopup.selectFilters([['Country', ['Angola', 'Albania', 'Bangladesh']]])
     PluginPopup.clickImport();
     waitForNotification();
+
+    // Remove object from object list
     $(removeIcon).moveTo();
     waitAndClick($(removeIcon));
     browser.pause(2000);
-    switchToPluginFrame();
 
+    // Logout
+    switchToPluginFrame();
     PluginRightPanel.logout();
     browser.pause(2000);
   });

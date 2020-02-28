@@ -4,7 +4,7 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { objectsList } from '../../../constants/objects-list';
 import { waitForNotification, waitForPopup } from '../../../helpers/utils/wait-helper';
-import { switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
+import { switchToPluginFrame, switchToExcelFrame } from '../../../helpers/utils/iframe-helper';
 import pluginPopup from '../../../helpers/plugin/plugin.popup';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
@@ -32,6 +32,7 @@ describe('IMPORT diferent types of vizualizations', () => {
     PluginPopup.openPrepareData(firstReport, false);
     PluginPopup.promptSelectObject('Books');
     PluginPopup.promptSelectObject('Electronics');
+    switchToPluginFrame();
     PluginPopup.clickRun();
     browser.pause(3000);
     PluginPopup.selectAttributesAndAttributeForms({ Year: [], Region:[] });
@@ -49,7 +50,7 @@ describe('IMPORT diferent types of vizualizations', () => {
     OfficeWorksheet.selectCell('G3');
     PluginRightPanel.clickAddDataButton();
     const secondReport = objectsList.reports.attributePromptedReport;
-    PluginPopup.importObject(secondReport, false);
+    PluginPopup.switchLibraryAndImportObject(secondReport, false);
     PluginPopup.promptSelectObject('Electronics');
     PluginPopup.clickRun();
     waitForNotification();
@@ -88,7 +89,7 @@ describe('IMPORT diferent types of vizualizations', () => {
     OfficeWorksheet.selectCell('N3');
     PluginRightPanel.clickAddDataButton();
     const thirdReport = objectsList.reports.objectPromptedReport;
-    PluginPopup.importObject(thirdReport, false);
+    PluginPopup.switchLibraryAndImportObject(thirdReport, false);
     browser.pause(5000);
     PluginPopup.clickRun();
     waitForNotification();
@@ -114,14 +115,15 @@ describe('IMPORT diferent types of vizualizations', () => {
     OfficeWorksheet.selectCell('R3');
     PluginRightPanel.clickAddDataButton();
     const FourthReport = objectsList.datasets.datasetSQL;
-    PluginPopup.importObject(FourthReport, false);
+    PluginPopup.switchLibraryAndImportObject(FourthReport, false);
     waitForNotification();
     browser.pause(2000);
 
     // Refresh all
     PluginRightPanel.refreshAll();
     waitForPopup();
-    browser.pause(3000);
+    browser.pause(7000);
+    switchToExcelFrame();
     PluginPopup.closeRefreshAll();
     browser.pause(3000);
 

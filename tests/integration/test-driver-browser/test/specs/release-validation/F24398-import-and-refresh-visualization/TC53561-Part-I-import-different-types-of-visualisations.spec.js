@@ -15,21 +15,32 @@ describe('F24398 - Import and refresh visualization', () => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
 
-  // Create test for each visType defined in visualizations
-  Object.keys(visualizations).forEach(visType => {
-    it(`[TC53561] import different types of visualisations should import ${visType} visualization`, () => {
-      // beforeEach
+  it(`[TC53561] import different types of visualisations: heatmap, grid, barchart, linechart, areachart`, () => {
+    let isFirstReport = true;
+    const onlyFiveVisualizations = Object.keys(visualizations).slice(0, 4).map(key => ({ [key]:visualizations[key] }));
+
+    Object.keys(onlyFiveVisualizations).forEach(i => {
       OfficeWorksheet.selectCell('A1');
-      PluginRightPanel.clickImportDataButton();
+      if (isFirstReport) {
+        PluginRightPanel.clickImportDataButton();
+        isFirstReport = false;
+      } else {
+        PluginRightPanel.clickAddDataButton();
+      }
       PluginPopup.openDossier(name, timeToOpen);
+
       // test
-      PluginPopup.selectAndImportVizualiation(visualizations[visType]);
+      const visType = Object.keys(onlyFiveVisualizations[i])[0];
+      const visSelector = onlyFiveVisualizations[i][visType];
+      PluginPopup.selectAndImportVizualiation(visSelector);
       waitForNotification();
       expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+
       // afterEach
       browser.pause(100);
-      PluginRightPanel.removeFirstObjectFromTheList();
+      console.log(`${visType} successfully imported`);
+      OfficeWorksheet.openNewSheet();
       browser.pause(1000);
-    })
-  });
+    });
+  })
 });
