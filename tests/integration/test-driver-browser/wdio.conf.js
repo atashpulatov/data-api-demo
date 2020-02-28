@@ -36,7 +36,9 @@ exports.config = {
     'F24398-import-and-refresh-visualization': [
       './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53434-my-library-view-filters-dossier-importing.spec.js',
       './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53560-Import-a-grid-visualisation.spec.js',
-      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53561-import-different-types-of-visualisations.spec.js',
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53561-Part-I-import-different-types-of-visualisations.spec.js',
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53561-Part-II-import-different-types-of-visualisations.spec.js',
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53561-Part-III-import-different-types-of-visualisations.spec.js',
       './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53620-Refreshing-a-visualisation.spec.js',
       './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53627-Interactive-components-at-the-popup-window.spec.js',
       './test/specs/release-validation/F24398-import-and-refresh-visualization/TC54783-Manipulation-of-grid-visualization.spec.js',
