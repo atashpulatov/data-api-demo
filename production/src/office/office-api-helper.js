@@ -99,11 +99,11 @@ export class OfficeApiHelper {
     let crosstabRange;
     try {
       const excelContext = await this.getExcelContext();
-      const tableObject = excelContext.workbook.tables.getItem(bindingId);
+      const officeTable = excelContext.workbook.tables.getItem(bindingId);
 
       if (isCrosstab) {
         const tmpXtabDimensions = { ...crosstabHeaderDimensions, columnsY: crosstabHeaderDimensions.columnsY + 1, };
-        crosstabRange = await this.getCrosstabRangeSafely(tableObject, tmpXtabDimensions, excelContext);
+        crosstabRange = await this.getCrosstabRangeSafely(officeTable, tmpXtabDimensions, excelContext);
         if (shouldSelect) { crosstabRange.select(); }
       } else {
         const tableRange = this.getBindingRange(excelContext, bindingId);
@@ -134,14 +134,14 @@ export class OfficeApiHelper {
   }
 
 
-  getBindingRange = (context, bindingId) => context.workbook.bindings
+  getBindingRange = (excelContext, bindingId) => excelContext.workbook.bindings
     .getItem(bindingId).getTable()
     .getRange()
 
-  getTable = (context, bindingId) => context.workbook.bindings
+  getTable = (excelContext, bindingId) => excelContext.workbook.bindings
     .getItem(bindingId).getTable()
 
-  getExcelContext = async () => window.Excel.run({ delayForCellEdit: true }, async (context) => context);
+  getExcelContext = async () => window.Excel.run({ delayForCellEdit: true }, async (excelContext) => excelContext);
 
   getOfficeContext = async () => window.Office.context
 
@@ -156,24 +156,24 @@ export class OfficeApiHelper {
   /**
    * Returns top left cell of selected range
    *
-   * @param {Office} context Excel Context
+   * @param {Office} excelContext Excel Context
    * @memberof OfficeApiHelper
    * @return {String} Address of the cell.
    */
-  getSelectedCell = async (context) => {
-    const selectedRangeStart = context.workbook.getSelectedRange().getCell(0, 0);
+  getSelectedCell = async (excelContext) => {
+    const selectedRangeStart = excelContext.workbook.getSelectedRange().getCell(0, 0);
     selectedRangeStart.load(officeProperties.officeAddress);
-    await context.sync();
+    await excelContext.sync();
     const startCell = this.getStartCellOfRange(selectedRangeStart.address);
     return startCell;
   }
 
-  createAndActivateNewWorksheet = async (context) => {
-    const sheets = context.workbook.worksheets;
+  createAndActivateNewWorksheet = async (excelContext) => {
+    const sheets = excelContext.workbook.worksheets;
     const sheet = sheets.add();
-    await context.sync();
+    await excelContext.sync();
     sheet.activate();
-    await context.sync();
+    await excelContext.sync();
   }
 
   getStartCellOfRange = (excelAdress) => excelAdress.match(/!(\w+\d+)(:|$)/)[1]
@@ -218,8 +218,8 @@ export class OfficeApiHelper {
         const officeContext = await this.getOfficeContext();
         await officeContext.document.bindings.releaseByIdAsync(bindingId, () => { console.log('released binding'); });
         const excelContext = await this.getExcelContext();
-        const tableObject = excelContext.workbook.tables.getItem(bindingId);
-        this.deleteExcelTable(tableObject, excelContext, isCrosstab, crosstabHeaderDimensions);
+        const officeTable = excelContext.workbook.tables.getItem(bindingId);
+        this.deleteExcelTable(officeTable, excelContext, isCrosstab, crosstabHeaderDimensions);
         await excelContext.sync();
         return officeStoreService.removeReportFromStore(bindingId);
       } catch (error) {
@@ -233,15 +233,15 @@ export class OfficeApiHelper {
   /**
    * Get object from store based on bindingId and remove it from workbook
    *
-   * @param {Office} context Excel Context
+   * @param {Office} excelContext Excel Context
    * @param {Object} object Contains information obout the object
    * @param {Boolean} isClear specify if object should be cleared or deleted
    * @memberof OfficeApiHelper
    */
-  deleteObjectTableBody = async (context, object, isClear) => {
+  deleteObjectTableBody = async (excelContext, object, isClear) => {
     const { isCrosstab, crosstabHeaderDimensions } = object;
-    const tableObject = context.workbook.tables.getItem(object.bindId);
-    await this.deleteExcelTable(tableObject, context, isCrosstab, crosstabHeaderDimensions, isClear);
+    const officeTable = excelContext.workbook.tables.getItem(object.bindId);
+    await this.deleteExcelTable(officeTable, excelContext, isCrosstab, crosstabHeaderDimensions, isClear);
   }
 
   /**
@@ -266,9 +266,9 @@ export class OfficeApiHelper {
     */
   getExcelSheetFromTable = async (excelContext, bindId) => {
     try {
-      const table = excelContext.workbook.tables.getItem(bindId);
+      const officeTable = excelContext.workbook.tables.getItem(bindId);
       await excelContext.sync();
-      return table.getRange().worksheet;
+      return officeTable.getRange().worksheet;
     } catch (error) {
       return false;
     }
@@ -385,35 +385,35 @@ export class OfficeApiHelper {
   /**
    * Gets the total range of crosstab report - it sums table body range and headers ranges
    *
-   * @param {Office} table Excel table
+   * @param {Office} officeTable Excel table
    * @param {Object} headerDimensions Contains information about crosstab headers dimensions
    * @param {Office} context Excel context
    * @memberof OfficeApiHelper
    * @return {Object}
    */
-  getCrosstabRangeSafely = async (table, headerDimensions, context) => {
+  getCrosstabRangeSafely = async (officeTable, headerDimensions, context) => {
     const { columnsY, rowsX } = headerDimensions;
-    const { validColumnsY, validRowsX } = await this.getCrosstabHeadersSafely(table, columnsY, context, rowsX);
-    const startingCell = table.getRange().getCell(0, 0).getOffsetRange(-validColumnsY, -validRowsX);
-    return startingCell.getBoundingRect(table.getRange());
+    const { validColumnsY, validRowsX } = await this.getCrosstabHeadersSafely(officeTable, columnsY, context, rowsX);
+    const startingCell = officeTable.getRange().getCell(0, 0).getOffsetRange(-validColumnsY, -validRowsX);
+    return startingCell.getBoundingRect(officeTable.getRange());
   }
 
   /**
    * Gets the biggest valid range by checking axis by axis
    *
-   * @param {Office} table Excel table
+   * @param {Office} officeTable Excel table
    * @param {Number} limit Number of rows or columns to check
    * @param {String} getFunction Excel range function 'getRowsAbove'|'getColumnsBefore'
-   * @param {Office} context Excel context
+   * @param {Office} excelContext Excel context
    * @memberof OfficeApiHelper
    * @return {Number}
    */
-  getValidOffset = async (table, limit, getFunction, context) => {
+  getValidOffset = async (officeTable, limit, getFunction, excelContext) => {
     for (let i = 0; i <= limit; i++) {
       try {
-        table.getRange()[getFunction](i + 1);
+        officeTable.getRange()[getFunction](i + 1);
         // eslint-disable-next-line no-await-in-loop
-        await context.sync();
+        await excelContext.sync();
       } catch (error) {
         return i;
       }
@@ -427,21 +427,22 @@ export class OfficeApiHelper {
    * @param {Office} officeTable Starting table body cell
    * @param {Object} crosstabHeaderDimensions Contains information about crosstab headers dimensions
    * @param {Object} prevheaderDimensions Contains information about previous crosstab headers dimensions
-   * @param {Office} context Excel context
+   * @param {Office} excelContext Excel context
    * @memberof OfficeApiHelper
    */
-  clearCrosstabRange = async (officeTable, crosstabHeaderDimensions, prevheaderDimensions, isCrosstab, context) => {
+  clearCrosstabRange = async (officeTable, mstrTable, excelContext, isClear = false) => {
     try {
+      const { prevCrosstabDimensions, crosstabHeaderDimensions, isCrosstab } = mstrTable;
       let leftRange;
       let topRange;
       let titlesRange;
 
-      const { rowsX, columnsY } = prevheaderDimensions;
+      const { rowsX, columnsY } = prevCrosstabDimensions;
 
       if (rowsX) {
         // Row headers
         leftRange = officeTable.getRange().getColumnsBefore(rowsX);
-        context.trackedObjects.add(leftRange);
+        excelContext.trackedObjects.add(leftRange);
         // Title headers
         titlesRange = officeTable
           .getRange()
@@ -449,17 +450,17 @@ export class OfficeApiHelper {
           .getOffsetRange(0, -1)
           .getResizedRange(-(columnsY), -(rowsX - 1));
 
-        context.trackedObjects.add(titlesRange);
+        excelContext.trackedObjects.add(titlesRange);
       }
 
       // Column headers
       if (columnsY) {
         topRange = officeTable.getRange().getRowsAbove(columnsY);
-        context.trackedObjects.add(topRange);
+        excelContext.trackedObjects.add(topRange);
       }
       // Check if ranges are valid before clearing
-      await context.sync();
-      if (isCrosstab && (JSON.stringify(crosstabHeaderDimensions) === JSON.stringify(prevheaderDimensions))) {
+      await excelContext.sync();
+      if (isClear || (isCrosstab && (JSON.stringify(crosstabHeaderDimensions) === JSON.stringify(prevCrosstabDimensions)))) {
         if (columnsY) { topRange.clear('contents'); }
         if (rowsX) {
           leftRange.clear('contents');
@@ -472,9 +473,9 @@ export class OfficeApiHelper {
           titlesRange.clear();
         }
       }
-      if (columnsY) { context.trackedObjects.remove([topRange]); }
+      if (columnsY) { excelContext.trackedObjects.remove([topRange]); }
       if (rowsX) {
-        context.trackedObjects.remove([leftRange, titlesRange]);
+        excelContext.trackedObjects.remove([leftRange, titlesRange]);
       }
     } catch (error) {
       officeTable.showHeaders = false;
@@ -609,40 +610,49 @@ export class OfficeApiHelper {
   /**
   * Delete Excel table object from workbook. For crosstab reports will also clear the headers
   *
-  * @param {Office} tableObject Address of the first cell in report (top left)
-  * @param {Office} context Contains arrays of attributes names in crosstab report
+  * @param {Office} officeTable Address of the first cell in report (top left)
+  * @param {Office} excelContext
   * @param {Boolean} isCrosstab Specify if object is a crosstab
   * @param {Object} crosstabHeaderDimensions Contains dimensions of crosstab report headers
   * @param {Boolean} isClear Specify if object should be cleared or deleted. False by default
   * @memberof OfficeApiHelper
   */
-  async deleteExcelTable(tableObject, context, isCrosstab = false, crosstabHeaderDimensions = {}, isClear = false) {
-    context.runtime.enableEvents = false;
-    await context.sync();
+  async deleteExcelTable(officeTable, excelContext, isCrosstab = false, crosstabHeaderDimensions = {}, isClear = false) {
+    excelContext.runtime.enableEvents = false;
+    await excelContext.sync();
     const isClearContentOnly = isClear ? 'contents' : '';
-    const tableRange = tableObject.getDataBodyRange();
-    context.trackedObjects.add(tableRange);
+    const tableRange = officeTable.getDataBodyRange();
+    excelContext.trackedObjects.add(tableRange);
     if (isCrosstab) {
-      const {
-        rowsX, rowsY, columnsX, columnsY
-      } = crosstabHeaderDimensions;
-      // Since showing Excel table header dont override the data but insert new row,
-      // we clear values from empty row in crosstab to prevent itthis.clearEmptyCrosstabRow(tableObject);
-      tableObject.showHeaders = true;
-      await context.sync();
-      const crosstabRange = await this.getCrosstabRangeSafely(tableObject, crosstabHeaderDimensions, context);
+      this.clearEmptyCrosstabRow(officeTable);
+      officeTable.showHeaders = true;
+      await excelContext.sync();
 
-      const firstCell = crosstabRange.getCell(0, 0);
-      const columnsHeaders = firstCell.getOffsetRange(0, rowsX).getResizedRange(columnsY - 1, columnsX - 1);
-      const rowsHeaders = firstCell.getResizedRange((columnsY + rowsY), rowsX - 1);
-      columnsHeaders.clear(isClearContentOnly);
-      rowsHeaders.clear(isClearContentOnly);
+      await this.clearCrosstabRange(
+        officeTable,
+        {
+          crosstabHeaderDimensions:{},
+          isCrosstab,
+          prevCrosstabDimensions:crosstabHeaderDimensions
+        },
+        excelContext,
+        isClear
+      );
+      await excelContext.sync();
+
+      // const crosstabRange = await this.getCrosstabRangeSafely(officeTable, crosstabHeaderDimensions, excelContext);
+
+      // const firstCell = crosstabRange.getCell(0, 0);
+      // const columnsHeaders = firstCell.getOffsetRange(0, rowsX).getResizedRange(columnsY - 1, columnsX - 1);
+      // const rowsHeaders = firstCell.getResizedRange((columnsY + rowsY), rowsX - 1);
+      // columnsHeaders.clear(isClearContentOnly);
+      // rowsHeaders.clear(isClearContentOnly);
     }
     tableRange.clear(isClearContentOnly);
-    if (!isClear) { tableObject.delete(); }
-    context.runtime.enableEvents = true;
-    await context.sync();
-    context.trackedObjects.remove(tableRange);
+    if (!isClear) { officeTable.delete(); }
+    excelContext.runtime.enableEvents = true;
+    await excelContext.sync();
+    excelContext.trackedObjects.remove(tableRange);
   }
 
   /**
@@ -707,6 +717,8 @@ export class OfficeApiHelper {
 
   /**
    * Clear the empty row in Crosstab Report
+   * Since showing Excel table header dont override the data but insert new row,
+   * we clear values from empty row in crosstab to prevent it
    *
    * @param {Office} officeTable Excel Object containig information about Excel Table
    * @memberof OfficeApiHelper

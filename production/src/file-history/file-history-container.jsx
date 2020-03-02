@@ -65,7 +65,7 @@ export class FileHistoryContainerNotConnected extends React.Component {
           const { reportArray, t } = this.props;
 
           const reportsToBeDeleted = reportArray.filter(
-            (report) => !reportsOfSheets.find((table) => table.name === report.bindId)
+            (report) => !reportsOfSheets.find((officeTable) => officeTable.name === report.bindId)
           );
 
           for (const report of reportsToBeDeleted) {

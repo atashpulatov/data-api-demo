@@ -47,11 +47,10 @@ export const ConfirmationNotConnected = ({
             reportName = report.name;
             if (report.isCrosstab) {
               const officeTable = await officeApiHelper.getTable(excelContext, report.bindId);
-              // Since showing Excel table header dont override the data but insert new row,
-              // we clear values from empty row in crosstab to prevent it
               officeApiHelper.clearEmptyCrosstabRow(officeTable);
               officeTable.showHeaders = true;
               officeTable.showFilterButton = false;
+
               const headers = officeTable.getHeaderRowRange();
               headers.format.font.color = 'white';
               await excelContext.sync();

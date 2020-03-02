@@ -10,7 +10,7 @@ class OfficeFormattingHelper {
    * @param {Office} excelContext
    * @memberof OfficeFormattingHelper
    */
-  applyFormatting = async (officeTable, instanceDefinition, excelContext) => {
+  applyFormatting = async ({ officeTable, excelContext }, instanceDefinition,) => {
     try {
       console.time('Apply formatting');
       const { columnInformation, isCrosstab } = instanceDefinition.mstrTable;
@@ -99,20 +99,19 @@ class OfficeFormattingHelper {
    * @param {Boolean} [shouldbold=true] Specify whether the values in cells should be bold
    * @memberof OfficeFormattingHelper
    */
-  applySubtotalFormatting = async (
-    officeTable,
-    excelContext,
-    mstrTable,
-    shouldbold = true) => {
+  applySubtotalFormatting = async ({ excelContext, officeTable }, mstrTable, shouldbold = true) => {
     const { isCrosstab } = mstrTable;
     let { subtotalsInfo:{ subtotalsAddresses } } = mstrTable;
+    let reportStartCell;
 
     console.time('Subtotal Formatting');
     if (isCrosstab) {
       subtotalsAddresses = new Set(subtotalsAddresses);
+      reportStartCell = officeTable.getDataBodyRange().getCell(0, 0);
+    } else {
+      reportStartCell = officeTable.getRange().getCell(0, 0);
     }
 
-    const reportStartCell = officeTable.getRange().getCell(0, 0);
     excelContext.trackedObjects.add(reportStartCell);
     await this.formatSubtotals(reportStartCell, subtotalsAddresses, mstrTable, excelContext, shouldbold);
     excelContext.trackedObjects.remove(reportStartCell);
@@ -167,16 +166,16 @@ class OfficeFormattingHelper {
    * @param {Array} subtotalCells 2d array of all starting subtotal row cells
    * (each element contains row and column number of subtotal cell in headers columns)
    * @param {Object} mstrTable instance definition
-   * @param {Office} context Excel context
+   * @param {Office} excelContext Excel context
    * @param {Boolean} shouldBold
    * @memberof OfficeApiHelper
    */
-  formatSubtotals = async (startCell, subtotalCells, mstrTable, context, shouldBold) => {
+  formatSubtotals = async (startCell, subtotalCells, mstrTable, excelContext, shouldBold) => {
     let contextPromises = [];
     for (const cell of subtotalCells) {
       const subtotalRowRange = this.getSubtotalRange(startCell, cell, mstrTable);
       if (subtotalRowRange) { subtotalRowRange.format.font.bold = shouldBold; }
-      contextPromises.push(context.sync());
+      contextPromises.push(excelContext.sync());
       if (contextPromises.length % CONTEXT_LIMIT === 0) {
         // eslint-disable-next-line no-await-in-loop
         await Promise.all(contextPromises);
@@ -192,28 +191,28 @@ class OfficeFormattingHelper {
    * @param {Office} table
    * @param {Boolean} isCrosstab
    * @param {Office} crosstabHeaderDimensions
-   * @param {Office} context
+   * @param {Office} excelContext
    * @memberof officeFormattingHelper
    */
-  formatTable = async (table, mstrTable, context) => {
+  formatTable = async ({ officeTable, excelContext }, mstrTable) => {
     const { crosstabHeaderDimensions, isCrosstab } = mstrTable;
     console.time('Column auto size');
     if (isCrosstab) {
       const { rowsX } = crosstabHeaderDimensions;
-      table.getDataBodyRange().getColumnsBefore(rowsX).format.autofitColumns();
+      officeTable.getDataBodyRange().getColumnsBefore(rowsX).format.autofitColumns();
     }
 
     try {
-      const { columns } = table;
+      const { columns } = officeTable;
       columns.load('count');
-      await context.sync();
+      await excelContext.sync();
       for (let index = 0; index < columns.count; index++) {
         columns.getItemAt(index).getRange().format.autofitColumns();
         // eslint-disable-next-line no-await-in-loop
-        await context.sync();
+        await excelContext.sync();
       }
-      if (isCrosstab) { table.showHeaders = false; }
-      await context.sync();
+      if (isCrosstab) { officeTable.showHeaders = false; }
+      await excelContext.sync();
     } catch (error) {
       console.log('Error when formatting - no columns autofit applied', error);
     }

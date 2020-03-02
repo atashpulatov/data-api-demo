@@ -13,7 +13,7 @@ const EXCEL_ROW_LIMIT = 1048576;
 export const CONTEXT_LIMIT = 500; // Maximum number of Excel operations before context syncing.
 export const DATA_LIMIT = 200000; // 200000 is around 1mb of MSTR JSON response
 export const IMPORT_ROW_LIMIT = 20000; // Maximum number of rows to fetch during data import.
-export const PROMISE_LIMIT = 10; // Number of concurrent context.sync() promises during data import.
+export const PROMISE_LIMIT = 10; // Number of concurrent excelContext.sync() promises during data import.
 
 
 function checkTableDimensions({ rows, columns }) {

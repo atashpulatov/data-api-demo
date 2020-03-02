@@ -120,7 +120,7 @@ export class OfficeDisplayService {
     let tableColumnsChanged;
     let instanceDefinition;
     let officeTable;
-    let bindId;
+    let newBindingId = bindingId;
     try {
       excelContext = await officeApiHelper.getExcelContext();
 
@@ -168,7 +168,7 @@ export class OfficeDisplayService {
 
       // Create or update table
       ({
-        officeTable, newOfficeTableName, shouldFormat, tableColumnsChanged, bindId
+        officeTable, newOfficeTableName, shouldFormat, tableColumnsChanged, newBindingId
       } = await officeTableHelper
         .getOfficeTable(
           isRefresh,
@@ -181,21 +181,21 @@ export class OfficeDisplayService {
           visualizationInfo
         ));
 
-
-      // Apply formatting when table was created
-      if (shouldFormat && !mstrTable.isCrosstabular) {
-        await officeFormattingHelper.applyFormatting(officeTable, instanceDefinition, excelContext);
-      }
-
-      // Fetch, convert and insert with promise generator
-      console.time('Fetch and insert into excel');
       const officeData = {
         officeTable,
         excelContext,
         startCell,
       };
 
-      officeTable = await this.fetchInsertDataIntoExcel({
+      // Apply formatting when table was created
+      if (shouldFormat && !mstrTable.isCrosstabular) {
+        await officeFormattingHelper.applyFormatting(officeData, instanceDefinition);
+      }
+
+      // Fetch, convert and insert with promise generator
+      console.time('Fetch and insert into excel');
+
+      await this.fetchInsertDataIntoExcel({
         connectionData,
         officeData,
         instanceDefinition,
@@ -208,19 +208,17 @@ export class OfficeDisplayService {
       });
 
       if (shouldFormat) {
-        await officeFormattingHelper.formatTable(officeTable, mstrTable, excelContext);
+        await officeFormattingHelper.formatTable(officeData, mstrTable);
       }
 
       if (mstrTable.subtotalsInfo.subtotalsAddresses.length) {
         // Removing duplicated subtotal addresses from headers
-        await officeFormattingHelper.applySubtotalFormatting(
-          officeTable,
-          excelContext,
-          instanceDefinition.mstrTable
-        );
+        await officeFormattingHelper.applySubtotalFormatting(officeData, instanceDefinition.mstrTable);
       }
 
-      const tableid = await this.bindOfficeTable(officeTable, excelContext, bindingId, bindId);
+      await this.bindOfficeTable(officeData, newBindingId);
+
+
       // assign new name in duplicate workflow
       if (originalObjectName) {
         console.time('Duplicate renaming');
@@ -234,7 +232,7 @@ export class OfficeDisplayService {
       officeStoreService.saveAndPreserveReportInStore({
         name: mstrTable.name,
         manipulationsXML: instanceDefinition.manipulationsXML,
-        bindId: tableid,
+        bindId: newBindingId,
         oldTableId: bindingId,
         projectId,
         envUrl : officeApiHelper.getCurrentMstrContext(),
@@ -257,7 +255,7 @@ export class OfficeDisplayService {
       this.reduxStore.dispatch({ type: CLEAR_PROMPTS_ANSWERS });
       this.reduxStore.dispatch({
         type: officeProperties.actions.finishLoadingReport,
-        reportBindId: tableid,
+        reportBindId: newBindingId,
       });
       return {
         type: 'success',
@@ -279,10 +277,10 @@ export class OfficeDisplayService {
           officeTable.showHeaders = false;
         }
       }
-      if (bindingId && bindId) {
+      if (bindingId && newBindingId) {
         this.reduxStore.dispatch({
           type: officeProperties.actions.finishLoadingReport,
-          reportBindId: bindId,
+          reportBindId: newBindingId,
           isRefreshAll: false,
           isError,
         });
@@ -329,16 +327,11 @@ export class OfficeDisplayService {
     }
   }
 
-  bindOfficeTable = async (officeTable, excelContext, bindingId, bindId) => {
+  bindOfficeTable = async ({ officeTable, excelContext }, newBindingId) => {
     officeTable.load('name');
     await excelContext.sync();
     const tablename = officeTable.name;
-    let tableid = bindingId;
-    if (!bindingId || (bindId && (bindingId !== bindId))) {
-      tableid = bindId;
-    }
-    await officeApiHelper.bindNamedItem(tablename, tableid);
-    return tableid;
+    await officeApiHelper.bindNamedItem(tablename, newBindingId);
   }
 
   savePreviousObjectData = (instanceDefinition, crosstabHeaderDimensions, subtotalsAddresses) => {
@@ -547,7 +540,7 @@ export class OfficeDisplayService {
       const {
         objectId, projectId, dossierData, mstrObjectType
       } = connectionData;
-      const { excelContext, officeTable } = officeData;
+      const { excelContext } = officeData;
       const { columns, rows, mstrTable } = instanceDefinition;
       const limit = Math.min(Math.floor(DATA_LIMIT / columns), IMPORT_ROW_LIMIT);
       const configGenerator = {
@@ -595,7 +588,6 @@ export class OfficeDisplayService {
       mstrTable.subtotalsInfo.importSubtotal = importSubtotal;
 
       await this.syncChangesToExcel(contextPromises, true);
-      return officeTable;
     } catch (error) {
       console.log(error);
       throw error;
