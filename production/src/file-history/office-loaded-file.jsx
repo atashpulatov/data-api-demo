@@ -41,7 +41,7 @@ export class OfficeLoadedFileNotConnected extends React.Component {
     this.ismounted = false;
   }
 
-  renameReport = /* istanbul ignore next */ async ({ target }) => {
+  renameReport = async ({ target }) => {
     const { bindingId, fileName } = this.props;
     const newName = target.value || fileName;
     this.setState({ value: newName });
@@ -69,7 +69,7 @@ export class OfficeLoadedFileNotConnected extends React.Component {
   }
 
 
-  copyValue = /* istanbul ignore next */ (e) => {
+  copyValue = (e) => {
     const { value } = this.state;
     e.domEvent.stopPropagation();
     const text = document.createElement('textarea');

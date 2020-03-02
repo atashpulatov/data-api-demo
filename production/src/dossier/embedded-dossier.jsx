@@ -314,7 +314,7 @@ const mapStateToProps = (state) => {
   const popupState = popupReducer.editedObject;
   const { promptsAnswers } = state.navigationTree;
   const { supportForms } = officeReducer;
-  const isReport = popupState && popupState.objectType === mstrObjectEnum.mstrObjectType.report.name;
+  const isReport = popupState && popupState.objectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
   const editedObject = { ...(popupHelper.parsePopupState(popupState, promptsAnswers, formsPrivilege)) };

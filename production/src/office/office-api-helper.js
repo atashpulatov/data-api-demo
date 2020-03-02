@@ -164,7 +164,7 @@ export class OfficeApiHelper {
     const selectedRangeStart = context.workbook.getSelectedRange().getCell(0, 0);
     selectedRangeStart.load(officeProperties.officeAddress);
     await context.sync();
-    const startCell = this.getStartCell(selectedRangeStart.address);
+    const startCell = this.getStartCellOfRange(selectedRangeStart.address);
     return startCell;
   }
 
@@ -176,7 +176,7 @@ export class OfficeApiHelper {
     await context.sync();
   }
 
-  getStartCell = (excelAdress) => excelAdress.match(/!(\w+\d+)(:|$)/)[1]
+  getStartCellOfRange = (excelAdress) => excelAdress.match(/!(\w+\d+)(:|$)/)[1]
 
   /**
    * Adds binding to the Excel table

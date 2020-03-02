@@ -10,10 +10,10 @@ class OfficeFormattingHelper {
    * @param {Office} excelContext
    * @memberof OfficeFormattingHelper
    */
-  applyFormatting = async (officeTable, instanceDefinition, isCrosstab, excelContext) => {
+  applyFormatting = async (officeTable, instanceDefinition, excelContext) => {
     try {
       console.time('Apply formatting');
-      const { columnInformation } = instanceDefinition.mstrTable;
+      const { columnInformation, isCrosstab } = instanceDefinition.mstrTable;
       const filteredColumnInformation = this.filterColumnInformation(columnInformation, isCrosstab);
       let attributeColumnNumber = 0; // this is number of all atrribute/consolidations columns in Excel
       let offset = 0;
@@ -100,16 +100,18 @@ class OfficeFormattingHelper {
    * @memberof OfficeFormattingHelper
    */
   applySubtotalFormatting = async (
-    isCrosstab,
-    subtotalsAddresses,
     officeTable,
     excelContext,
     mstrTable,
     shouldbold = true) => {
+    const { isCrosstab } = mstrTable;
+    let { subtotalsInfo:{ subtotalsAddresses } } = mstrTable;
+
     console.time('Subtotal Formatting');
     if (isCrosstab) {
       subtotalsAddresses = new Set(subtotalsAddresses);
     }
+
     const reportStartCell = officeTable.getRange().getCell(0, 0);
     excelContext.trackedObjects.add(reportStartCell);
     await this.formatSubtotals(reportStartCell, subtotalsAddresses, mstrTable, excelContext, shouldbold);
@@ -193,7 +195,8 @@ class OfficeFormattingHelper {
    * @param {Office} context
    * @memberof officeFormattingHelper
    */
-  formatTable = async (table, isCrosstab, crosstabHeaderDimensions, context) => {
+  formatTable = async (table, mstrTable, context) => {
+    const { crosstabHeaderDimensions, isCrosstab } = mstrTable;
     console.time('Column auto size');
     if (isCrosstab) {
       const { rowsX } = crosstabHeaderDimensions;
