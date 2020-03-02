@@ -15,6 +15,7 @@ import {popupHelper} from './popup/popup-helper';
 import {popupActions} from './popup/popup-actions';
 import {actionCreator} from './notification/action-creator';
 import {authenticationService} from './authentication/auth-rest-service';
+import {operationBus} from './operation-bus';
 
 export class DIContainer {
   constructor(autoInitialize) {
@@ -57,6 +58,8 @@ export class DIContainer {
       this.popupHelper,
       this.mstrObjectRestService,
       this.popupController);
+    this.operationBus = operationBus;
+    this.operationBus.init(reduxStore);
     this.initialized = true;
   }
 
