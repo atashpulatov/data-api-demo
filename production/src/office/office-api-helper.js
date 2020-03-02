@@ -1,6 +1,6 @@
 import { IncorrectInputTypeError } from './incorrect-input-type';
 import { OutsideOfRangeError } from '../error/outside-of-range-error';
-import { officeProperties } from './office-properties';
+import { officeProperties } from './store/office-properties';
 import { officeStoreService } from './store/office-store-service';
 import { notificationService } from '../notification/notification-service';
 import { errorService } from '../error/error-handler';

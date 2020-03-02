@@ -1,7 +1,7 @@
 import React from 'react';
 import { popupController } from '../popup/popup-controller';
 import { reduxStore } from '../store';
-import { officeProperties } from '../office/office-properties';
+import { officeProperties } from '../office/store/office-properties';
 import {
   CANCEL_REQUEST_IMPORT,
   SWITCH_MY_LIBRARY,

@@ -1,5 +1,5 @@
 import jsonHandler from '../mstr-object/mstr-normalized-json-handler';
-import { officeProperties } from './office-properties';
+import { officeProperties } from './store/office-properties';
 
 /**
  * Service to parse JSON response from REST API v2

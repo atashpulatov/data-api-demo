@@ -1,4 +1,4 @@
-import { officeProperties } from '../office/office-properties';
+import { officeProperties } from '../office/store/office-properties';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 
 export const CLEAR_WINDOW = 'POPUP_CLOSE_WINDOW';

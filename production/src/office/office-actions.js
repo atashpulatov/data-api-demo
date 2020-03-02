@@ -1,4 +1,4 @@
-import { officeProperties } from './office-properties';
+import { officeProperties } from './store/office-properties';
 import { officeStoreService } from './store/office-store-service';
 
 export function toggleSecuredFlag(isSecured) {

@@ -1,4 +1,4 @@
-import { officeProperties } from '../../office/office-properties';
+import { officeProperties } from '../../office/store/office-properties';
 import * as actions from '../../office/office-actions';
 
 describe('Office Actions', () => {

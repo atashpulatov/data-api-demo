@@ -1,6 +1,6 @@
 import { officeApiHelper } from '../../office/office-api-helper';
 import { IncorrectInputTypeError } from '../../office/incorrect-input-type';
-import { officeProperties } from '../../office/office-properties';
+import { officeProperties } from '../../office/store/office-properties';
 
 // FIXME: these were disabled anyway. Needs to be redone.
 describe('OfficeApiHelper', () => {

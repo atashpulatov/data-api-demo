@@ -8,7 +8,7 @@ import {
   switchImportSubtotals as switchImportSubtotalsImported,
   updateDisplayAttrForm as updateDisplayAttrFormImported
 } from '../navigation/navigation-tree-actions';
-import { officeProperties } from '../office/office-properties';
+import { officeProperties } from '../office/store/office-properties';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 
 export class AttributeSelectorNotConnected extends Component {

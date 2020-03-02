@@ -1,6 +1,7 @@
 import { officeApiHelper } from './office-api-helper';
-import { officeTableHelper } from './office-table-helper';
-import { officeFormattingHelper } from './office-formatting-helper';
+import officeTableHelper from './office-table/office-table-helper';
+import officeTableService from './office-table/office-table-service';
+import officeFormattingData from './office-formatting/office-formatting-data';
 import {
   mstrObjectRestService,
   DATA_LIMIT,
@@ -8,7 +9,7 @@ import {
   IMPORT_ROW_LIMIT,
 } from '../mstr-object/mstr-object-rest-service';
 import { CLEAR_PROMPTS_ANSWERS } from '../navigation/navigation-tree-actions';
-import { officeProperties } from './office-properties';
+import { officeProperties } from './store/office-properties';
 import { officeStoreService } from './store/office-store-service';
 import { PopupTypeEnum } from '../home/popup-type-enum';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
@@ -20,6 +21,8 @@ import {
   errorTypes,
   INVALID_VIZ_KEY_MESSAGE
 } from '../error/constants';
+import officeFormattingSubtotals from './office-formatting/office-formatting-subtotals';
+import officeFormattingTable from './office-formatting/office-formatting-table';
 
 const {
   getObjectInfo,
@@ -169,7 +172,7 @@ export class OfficeDisplayService {
       // Create or update table
       ({
         officeTable, newOfficeTableName, shouldFormat, tableColumnsChanged, newBindingId
-      } = await officeTableHelper
+      } = await officeTableService
         .getOfficeTable(
           isRefresh,
           excelContext,
@@ -189,7 +192,7 @@ export class OfficeDisplayService {
 
       // Apply formatting when table was created
       if (shouldFormat && !mstrTable.isCrosstabular) {
-        await officeFormattingHelper.applyFormatting(officeData, instanceDefinition);
+        await officeFormattingData.applyFormatting(officeData, instanceDefinition);
       }
 
       // Fetch, convert and insert with promise generator
@@ -208,12 +211,12 @@ export class OfficeDisplayService {
       });
 
       if (shouldFormat) {
-        await officeFormattingHelper.formatTable(officeData, mstrTable);
+        await officeFormattingTable.formatTable(officeData, mstrTable);
       }
 
       if (mstrTable.subtotalsInfo.subtotalsAddresses.length) {
         // Removing duplicated subtotal addresses from headers
-        await officeFormattingHelper.applySubtotalFormatting(officeData, instanceDefinition.mstrTable);
+        await officeFormattingSubtotals.applySubtotalFormatting(officeData, instanceDefinition.mstrTable);
       }
 
       await this.bindOfficeTable(officeData, newBindingId);
