@@ -14,7 +14,7 @@ import officeImportService from './import/office-import-service';
 import officeDuplicateService from './office-duplicate-service';
 
 import { CLEAR_PROMPTS_ANSWERS } from '../navigation/navigation-tree-actions';
-import { NO_DATA_RETURNED, ALL_DATA_FILTERED_OUT, ERROR_POPUP_CLOSED } from '../error/constants';
+import { NO_DATA_RETURNED, ALL_DATA_FILTERED_OUT } from '../error/constants';
 
 
 export class OfficeDisplayService {

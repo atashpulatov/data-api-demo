@@ -18,8 +18,6 @@ const EXCEL_COL_LIMIT = 16384;
 
 const EXCEL_XTABS_BORDER_COLOR = '#a5a5a5';
 
-const { OfficeExtension } = window;
-
 export class OfficeApiHelper {
   constructor() {
     this.EXCEL_XTABS_BORDER_COLOR = EXCEL_XTABS_BORDER_COLOR;

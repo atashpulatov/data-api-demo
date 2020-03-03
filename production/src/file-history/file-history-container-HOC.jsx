@@ -4,7 +4,6 @@ import { reduxStore } from '../store';
 import { officeProperties } from '../office/store/office-properties';
 import {
   CANCEL_REQUEST_IMPORT,
-  SWITCH_MY_LIBRARY,
   CANCEL_DOSSIER_OPEN
 } from '../navigation/navigation-tree-actions';
 import { officeApiHelper } from '../office/api/office-api-helper';
