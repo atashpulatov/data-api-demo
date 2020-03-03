@@ -3,7 +3,7 @@ import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
-import { selectors as s } from '../../../constants/selectors/popup-selectors';
+import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 
 describe('Smart Folder - ', () => {
   beforeAll(async () => {
@@ -46,18 +46,18 @@ describe('Smart Folder - ', () => {
     // should enter an invalid report name into "Search objects" field
     await browser.sleep(1000);
     await PluginPopup.searchForObject(invalidObjectName);
-    await expect(s.noDataIcon.isDisplayed()).toBe(true);
+    await expect(popupSelectors.noDataIcon.isDisplayed()).toBe(true);
 
     // should enter an invalid dataset name into "Search objects" field
 
     await browser.sleep(1000);
     await PluginPopup.searchForObject(invalidObjectName);
-    await expect(s.noDataIcon.isDisplayed()).toBe(true);
+    await expect(popupSelectors.noDataIcon.isDisplayed()).toBe(true);
 
     // should click "Cancel" button
     await PluginPopup.clickCancel();
     await browser.sleep(3333);
     await switchToPluginFrame();
-    await expect(s.cancelBtn.isPresent()).toBe(false);
+    await expect(popupSelectors.cancelBtn.isPresent()).toBe(false);
   });
 });

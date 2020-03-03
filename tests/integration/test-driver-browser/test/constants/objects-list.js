@@ -1,4 +1,4 @@
-export const objects = {
+export const objectsList = {
   reports: {
     reportXML: 'Report accessing XML file',
     notSupportedFeatures: 'Report with Page by, Advanced Sorting, Thresholds, Outline, Banding, Merge cells & Multiform attributes',
@@ -26,15 +26,26 @@ export const objects = {
     numberFormating: 'Number Formatting',
     grpahReport: 'report graph',
     gridReport: 'Grid/graph',
-    detailsReport: '0 -- Response Predictor Dataset',
+    basicSubtotalsReport: 'Report Totals Subtotals 1',
+    longReportWithInvalidCharacters: {
+      sourceName: '01. • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«». • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&\'()*+,-:;<=>@/`testtesttes/km123456',
+      excelTableNameStart:'_01___________________________________Report_for_testing_binding_and_special_characters',
+      excelTableFullName:'_01___________________________________Report_for_testing_binding_and_special_characters______________________________________________________________________Report_for_testing_binding_and_special_characters_________________________testtestt_TIMESTAMP'
+    },
+    basic01Report:{
+      sourceName: '01 Basic Report',
+      excelTableNameStart:'_01_Basic_Report',
+      excelTableFullName:'_01_Basic_Report_TIMESTAMP'
+    }
   },
 
   datasets: {
     datasetSQL: 'DATA_IMPORT_SQL_STATEMENT',
     basicDataset: '100_dataset',
     notPublished: 'not published dataset',
-    cubeLimitProject: '1,5M Sales Records.csv',
-    notSupportedCube: 'multi table cube'
+    cubeLimitProject: 'Limit Project 1,5M Sales Records.csv',
+    notSupportedCube: 'multi table cube',
+    salesRecords1k: '1k Sales Records.csv',
   },
 
   dossiers: {
@@ -66,14 +77,26 @@ export const objects = {
         visualization1 : {
           name: '#mstr106',
           gridTableId:'#mstr121',
-          getTableItemAt: (firstIndex, secondIndex) => `#mstr121 > table > tbody > tr:nth-child(${firstIndex}) > td:nth-child(${secondIndex})`,
+          getTableItemAt: (firstIndex, secondIndex) => `#mstr149 > table > tbody > tr:nth-child(${firstIndex}) > td:nth-child(${secondIndex})`,
         }
       },
     },
-    interactiveDossier: { name: 'Dossier for interactive components', },
+    interactiveDossier: { name: 'Automation Dossier for interactive components', },
     customVisualizations: {
       name: 'Custom Visualizations',
       visualizations: { GoogleTimeline: '#mstr114', }
     },
+
+    userActivityDossier:{
+      name:'User Activity',
+      visualizations:{
+        accounts:'#mstr162',
+        dailyActiveAccounts:'#mstr131',
+      }
+    },
+    promptedDossier: {
+      name:'Prompted dossier - don\'t add to Library',
+      visualizations: { vis1: '#mstr106' }
+    }
   }
 };
