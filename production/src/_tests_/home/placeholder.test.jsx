@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 import { Placeholder } from '../../home/placeholder';
 import { sessionHelper } from '../../storage/session-helper';
 import { popupController } from '../../popup/popup-controller';
-import { officeApiHelper } from '../../office/office-api-helper';
+import { officeApiHelper } from '../../office/api/office-api-helper';
 
 
 jest.mock('../../storage/session-helper');

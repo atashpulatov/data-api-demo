@@ -4,7 +4,7 @@ import { Popover } from 'antd';
 import { OfficeLoadedFileNotConnected } from '../../file-history/office-loaded-file';
 import { reduxStore } from '../../store';
 import { fileHistoryHelper } from '../../file-history/file-history-helper';
-import { officeApiHelper } from '../../office/office-api-helper';
+import { officeApiHelper } from '../../office/api/office-api-helper';
 import { officeStoreService } from '../../office/store/office-store-service';
 import { errorService } from '../../error/error-handler';
 

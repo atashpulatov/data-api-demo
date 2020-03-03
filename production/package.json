@@ -98,12 +98,8 @@
       "!src/index.js",
       "!src/entry-point/*.*",
       "!src/serviceWorker.js",
-      "!src/office/office-api-helper.js",
       "!src/office/office-context.js",
-      "!src/office/office-display-service.js",
       "!src/office/store/office-store-service.js",
-      "!src/office/office-table-helper.js",
-      "!src/office/office-formatting-helper.js",
       "!src/storage/session-helper.js",
       "!src/breadcrumbs/breadcrumbs.jsx",
       "!src/CompileStrings.js",
@@ -111,7 +107,13 @@
       "!src/cache/cache-actions.js",
       "!src/dossier/embedded-dossier.jsx",
       "!src/prompts/prompts-window.jsx",
-      "!src/navigation/**/*.*"
+      "!src/office/office-display-service.js",
+      "!src/office/office-duplicate-service.js",
+      "!src/navigation/**/*.*",
+      "!src/office/format/*.*",
+      "!src/office/api/*.*",
+      "!src/office/table/*.*",
+      "!src/office/import/*.*"
     ]
   }
 }

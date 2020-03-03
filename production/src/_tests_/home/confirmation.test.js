@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import { ConfirmationNotConnected } from '../../home/confirmation';
-import { officeApiHelper } from '../../office/office-api-helper';
+import { officeApiHelper } from '../../office/api/office-api-helper';
 import { errorService } from '../../error/error-handler';
 
 describe('Confirmation', () => {

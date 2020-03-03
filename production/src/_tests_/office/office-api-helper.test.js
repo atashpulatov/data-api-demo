@@ -187,12 +187,12 @@ describe('OfficeApiHelper', () => {
       expect(mockSync).toBeCalled();
     });
   });
-  describe('getStartCell', () => {
+  describe('getStartCellOfRange', () => {
     it('should return starting cell from range address(single cell)', () => {
       // given
       const range = 'Sheet1!A12';
       // when
-      const result = officeApiHelper.getStartCell(range);
+      const result = officeApiHelper.getStartCellOfRange(range);
       // then
       expect(result).toEqual('A12');
     });
@@ -200,7 +200,7 @@ describe('OfficeApiHelper', () => {
       // given
       const range = 'Sheet1!ABC12:BDE15';
       // when
-      const result = officeApiHelper.getStartCell(range);
+      const result = officeApiHelper.getStartCellOfRange(range);
       // then
       expect(result).toEqual('ABC12');
     });
@@ -208,7 +208,7 @@ describe('OfficeApiHelper', () => {
       // given
       const range = 'No!Sheet1!ABC12:BDE15';
       // when
-      const result = officeApiHelper.getStartCell(range);
+      const result = officeApiHelper.getStartCellOfRange(range);
       // then
       expect(result).toEqual('ABC12');
     });

@@ -53,16 +53,16 @@ describe('PopupViewSelectorNotConnected', () => {
   ${PopupTypeEnum.repromptingWindow} | ${PromptsWindow}
   ${PopupTypeEnum.dossierWindow}     | ${DossierWindow}
   `('should render $expectedComponent when setPopupType returns $popupType', ({ popupType, expectedComponent }) => {
-    // given
-    const setPopupType = jest.spyOn(popupViewSelectorHelper, 'setPopupType').mockImplementation(() => popupType);
+  // given
+  const setPopupType = jest.spyOn(popupViewSelectorHelper, 'setPopupType').mockImplementation(() => popupType);
 
-    // when
-    const componentWrapper = shallow(<PopupViewSelectorNotConnected authToken="testAuthToken" />);
+  // when
+  const componentWrapper = shallow(<PopupViewSelectorNotConnected authToken="testAuthToken" />);
 
-    // then
-    expect(setPopupType).toBeCalled();
-    expect(componentWrapper.find(expectedComponent).get(0)).toBeDefined();
-  });
+  // then
+  expect(setPopupType).toBeCalled();
+  expect(componentWrapper.find(expectedComponent).get(0)).toBeDefined();
+});
 
   it('should render empty <div /> when authToken provided and popupType equals PopupTypeEnum.emptyDiv', () => {
     // given
@@ -86,7 +86,7 @@ describe('PopupViewSelectorNotConnected mapStateToProps and mapDispatchToProps t
   beforeEach(() => {
     const initialState = {
       popupReducer: {
-        editedObject : { objectType: 'report' },
+        editedObject : { objectType:{ name: 'report' } },
         preparedInstance: 'testPreparedInstance'
       },
       popupStateReducer: {
@@ -120,7 +120,7 @@ describe('PopupViewSelectorNotConnected mapStateToProps and mapDispatchToProps t
     // then
     expect(componentWrapper.props().authToken).toBe('testAuthToken');
     expect(componentWrapper.props().otherNavigationTreeProperty).toBe('testOtherNavigationTreeProperty');
-    expect(parsePopupState).toBeCalledWith({ objectType: 'report' }, 'testPromptsAnswers', true);
+    expect(parsePopupState).toBeCalledWith({ objectType:{ name: 'report' } }, 'testPromptsAnswers', true);
     // editedObject not fully tested, only that popupHelper.parsePopupState is executed (mocking not working)
     expect(componentWrapper.props().preparedInstance).toBe('testPreparedInstance');
     expect(componentWrapper.props().propsToPass).toHaveProperty('otherPopupStateReducerProperty', 'testOtherValue');

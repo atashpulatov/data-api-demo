@@ -279,9 +279,6 @@ export class OfficeDisplayService {
       }
       throw error;
     } finally {
-      // if (!isRefreshAll) {
-      //   this.dispatchPrintFinish();
-      // }
       if (instanceDefinition.mstrTable.isCrosstab && officeTable) {
         officeTable.showHeaders = false;
       }
@@ -289,27 +286,6 @@ export class OfficeDisplayService {
       console.groupEnd();
     }
   };
-
-  /**
-   * Function closes popup; used when  importing report
-   * it swallows error from office if dialog has been closed by user
-   *
-   * @memberOf OfficeDisplayService
-   */
-  dispatchPrintFinish = () => {
-    const reduxStoreState = this.reduxStore.getState();
-    this.reduxStore.dispatch({ type: officeProperties.actions.popupHidden });
-    this.reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
-    try {
-      if (reduxStoreState.sessionReducer.dialog.close) {
-        reduxStoreState.sessionReducer.dialog.close();
-      }
-    } catch (err) {
-      if (!err.includes(ERROR_POPUP_CLOSED)) {
-        throw err;
-      }
-    }
-  }
 
   bindOfficeTable = async ({ officeTable, excelContext }, newBindingId) => {
     officeTable.load('name');
