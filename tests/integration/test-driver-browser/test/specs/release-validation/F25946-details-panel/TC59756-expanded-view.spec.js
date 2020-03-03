@@ -14,8 +14,6 @@ import settings from '../../../config';
 
 describe('Smart Folder - IMPORT -', () => {
   beforeEach(() => {
-    // browser.setWindowSize(2200,900);
-    //browser.setWindowSize(1900, 900);
     OfficeWorksheet.openExcelHome();
     const url = browser.getUrl();
     if (url.includes('login.microsoftonline')) {
@@ -33,7 +31,6 @@ describe('Smart Folder - IMPORT -', () => {
   });
 
   it('Import object (1st time)', () => {
-
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
     PluginPopup.switchLibrary(false);
@@ -41,7 +38,7 @@ describe('Smart Folder - IMPORT -', () => {
     PluginPopup.tickFilterCheckBox('Application', 'MicroStrategy Tutorial');
     PluginPopup.clickFilterButton();
     PluginPopup.searchForObject(o.reports.detailsReport);
-    browser.pause(1000);
+    browser.pause(1000); // We need to wait for search to be completed to get filtered rows
     const idsArray = PluginPopup.copyObjectsID();
     expect(idsArray[0]).not.toEqual(idsArray[1]);
     PluginPopup.pasteToSearchBox();
@@ -49,6 +46,5 @@ describe('Smart Folder - IMPORT -', () => {
     PluginPopup.importFirstObject();
     waitForNotification();
     expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
-    browser.pause(1000);
   });
 });
