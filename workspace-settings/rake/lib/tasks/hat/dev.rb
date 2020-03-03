@@ -254,7 +254,7 @@ def generate_comparison_report_html
 end
 
 def generate_eslint_report
-  shell_command "npm run eslint:html", cwd: $WORKSPACE_SETTINGS[:paths][:project][:production][:home]
+  shell_command! "npm run eslint:html", cwd: $WORKSPACE_SETTINGS[:paths][:project][:production][:home]
 end
 
 
