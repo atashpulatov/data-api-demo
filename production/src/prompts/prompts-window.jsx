@@ -313,8 +313,8 @@ export class PromptsWindowNotConnected extends Component {
 }
 
 PromptsWindowNotConnected.propTypes = {
-  stopLoading: PropTypes.bool,
-  promptsAnswered: PropTypes.arrayOf(PropTypes.shape({})),
+  stopLoading: PropTypes.func,
+  promptsAnswered: PropTypes.func,
   mstrData: PropTypes.shape({
     chosenObjectId: PropTypes.string,
     chosenProjectId: PropTypes.string,

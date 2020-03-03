@@ -278,11 +278,11 @@ EmbeddedDossierNotConnected.propTypes = {
     instanceId: PropTypes.string,
     promptsAnswers: PropTypes.array || null,
     selectedViz: PropTypes.string,
-    visualizationInfo: {
+    visualizationInfo: PropTypes.shape({
       chapterKey: PropTypes.string,
       pageKey: PropTypes.string,
       visualizationKey: PropTypes.string,
-    }
+    })
   }),
   handleSelection: PropTypes.func,
   handlePromptAnswer: PropTypes.func,

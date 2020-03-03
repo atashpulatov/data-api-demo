@@ -122,10 +122,10 @@ AttributeSelectorNotConnected.propTypes = {
   isEdit: PropTypes.bool,
   importSubtotal: PropTypes.bool,
   switchImportSubtotals: PropTypes.func,
-  displayAttrFormNames: PropTypes.bool,
+  displayAttrFormNames: PropTypes.string,
   chosenObject: PropTypes.shape({ id: PropTypes.string, }),
   editedObject: PropTypes.shape({
-    displayAttrFormNames: PropTypes.bool,
+    displayAttrFormNames: PropTypes.string,
     subtotalsInfo: PropTypes.shape({ importSubtotal: PropTypes.bool, }),
     projectId: PropTypes.string,
     promptsAnswers: PropTypes.arrayOf(PropTypes.shape({}))
