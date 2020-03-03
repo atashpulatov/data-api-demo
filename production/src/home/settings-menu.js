@@ -167,7 +167,7 @@ async function logout(preLogout) {
 }
 
 SettingsMenuNotConnected.propTypes = {
-  userID: PropTypes.number,
+  userID: PropTypes.string,
   userFullName: PropTypes.string,
   userInitials: PropTypes.string,
   isSecured: PropTypes.bool,
