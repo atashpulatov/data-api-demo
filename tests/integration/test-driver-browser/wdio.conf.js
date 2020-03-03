@@ -33,6 +33,9 @@ exports.config = {
       './test/specs/release-validation/F22955-refresh/TC48135-refresh-report-prompt-nested-prompts.spec.js',
       './test/specs/release-validation/F22955-refresh/TC48136-refresh-report-prompt-multiple-prompts.spec.js',
     ],
+    'F24087-improve-scrolling-performance': [
+      './test/specs/release-validation/F24087-improve-scrolling-performance/TC54976-E2E-scenario.spec.js',
+    ],
     'F24398-import-and-refresh-visualization': [
       './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53434-my-library-view-filters-dossier-importing.spec.js',
       './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53560-Import-a-grid-visualisation.spec.js',
