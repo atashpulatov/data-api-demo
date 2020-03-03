@@ -1,4 +1,4 @@
-import { officeApiHelper } from '../office-api-helper';
+import { officeApiHelper } from '../api/office-api-helper';
 import officeTableHelper from './office-table-helper';
 
 const DEFAULT_TABLE_STYLE = 'TableStyleLight11';

@@ -1,6 +1,6 @@
 import { CONTEXT_LIMIT } from '../../mstr-object/mstr-object-rest-service';
 import officeTableHelper from './office-table-helper';
-import officeFormattingSubtotals from '../office-formatting/office-formatting-subtotals';
+import officeFormatData from '../format/office-format-subtotals';
 
 class OfficeTableUpdate {
   /**
@@ -21,7 +21,7 @@ class OfficeTableUpdate {
       prevOfficeTable.rows.load('count');
       await excelContext.sync();
       if (subtotalsAddresses.length) {
-        await officeFormattingSubtotals.applySubtotalFormatting(
+        await officeFormatData.applySubtotalFormatting(
           { officeTable:prevOfficeTable, excelContext },
           mstrTable,
           false

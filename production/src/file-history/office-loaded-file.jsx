@@ -8,7 +8,7 @@ import { fileHistoryHelper } from './file-history-helper';
 import loadingSpinner from './assets/report_loading_spinner.gif';
 import { popupActions } from '../popup/popup-actions';
 import RenameInput from './file-history-rename-input';
-import { officeApiHelper } from '../office/office-api-helper';
+import { officeApiHelper } from '../office/api/office-api-helper';
 import { ButtonPopover } from './button-popover';
 import datasetIcon from './assets/icon_Dataset_32.png';
 import dossierIcon from './assets/icon_Dossier_32.png';

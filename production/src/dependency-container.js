@@ -1,6 +1,6 @@
 /* eslint-disable */
 import {reduxStore} from './store';
-import {officeApiHelper, OfficeApiHelper} from './office/office-api-helper';
+import {officeApiHelper} from './office//api/office-api-helper';
 import {officeStoreService} from './office/store/office-store-service';
 import {errorService} from './error/error-handler';
 import {sessionHelper} from './storage/session-helper';
@@ -43,7 +43,7 @@ export class DIContainer {
     this.popupController = popupController;
     this.popupController.init(reduxStore, sessionHelper, popupActions);
     this.officeDisplayService = officeDisplayService;
-    this.officeDisplayService.init(reduxStore, popupController);
+    this.officeDisplayService.init(reduxStore);
     this.mstrListRestService = mstrListRestService;
     this.mstrListRestService.init(reduxStore);
     this.popupHelper = popupHelper;

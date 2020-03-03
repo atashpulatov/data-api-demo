@@ -1,4 +1,4 @@
-class OfficeFormattingTable {
+class OfficeFormatTable {
   /**
    * Formatting table columns width
    *
@@ -33,5 +33,5 @@ class OfficeFormattingTable {
     console.timeEnd('Column auto size');
   };
 }
-const officeFormattingTable = new OfficeFormattingTable();
-export default officeFormattingTable;
+const officeFormatTable = new OfficeFormatTable();
+export default officeFormatTable;

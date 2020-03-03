@@ -1,4 +1,4 @@
-import { officeApiHelper } from '../office-api-helper';
+import { officeApiHelper } from '../api/office-api-helper';
 import { TABLE_OVERLAP } from '../../error/constants';
 import { OverlappingTablesError } from '../../error/overlapping-tables-error';
 

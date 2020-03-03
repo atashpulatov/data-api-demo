@@ -7,7 +7,7 @@ import {
   SWITCH_MY_LIBRARY,
   CANCEL_DOSSIER_OPEN
 } from '../navigation/navigation-tree-actions';
-import { officeApiHelper } from '../office/office-api-helper';
+import { officeApiHelper } from '../office/api/office-api-helper';
 import { errorService } from '../error/error-handler';
 
 export const fileHistoryContainerHOC = Component => {

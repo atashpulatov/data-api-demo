@@ -1,6 +1,4 @@
-import { CONTEXT_LIMIT } from '../../mstr-object/mstr-object-rest-service';
-
-class OfficeFormattingData {
+class OfficeFormatData {
   /**
    * Applies Excel number formatting to imported object based on MSTR data type.
    *
@@ -8,7 +6,7 @@ class OfficeFormattingData {
    * @param {Object} instanceDefinition
    * @param {Boolean} isCrosstab
    * @param {Office} excelContext
-   * @memberof OfficeFormattingData
+   * @memberof OfficeFormatData
    */
   applyFormatting = async ({ officeTable, excelContext }, instanceDefinition,) => {
     try {
@@ -58,7 +56,7 @@ class OfficeFormattingData {
    *
    * @param columnInformation
    * @param isCrosstab
-   * @memberof OfficeFormattingHelper
+   * @memberof OfficeFormatData
    * @return {Array} filteredColumnInformation
    */
   filterColumnInformation = (columnInformation, isCrosstab) => {
@@ -72,7 +70,7 @@ class OfficeFormattingData {
    * Return parsed format string
    *
    * @param {String} format given by MicroStrategy
-   * @memberof OfficeFormattingHelper
+   * @memberof OfficeFormatData
    * @return {String} parsed format
    */
   getFormat = ({ formatString, category }) => {
@@ -88,5 +86,5 @@ class OfficeFormattingData {
     return formatString;
   };
 }
-const officeFormattingData = new OfficeFormattingData();
-export default officeFormattingData;
+const officeFormatData = new OfficeFormatData();
+export default officeFormatData;

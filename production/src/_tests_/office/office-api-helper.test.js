@@ -1,4 +1,4 @@
-import { officeApiHelper } from '../../office/office-api-helper';
+import { officeApiHelper } from '../../office/api/office-api-helper';
 import { IncorrectInputTypeError } from '../../office/incorrect-input-type';
 import { officeProperties } from '../../office/store/office-properties';
 

@@ -1,13 +1,13 @@
-import { IncorrectInputTypeError } from './incorrect-input-type';
-import { OutsideOfRangeError } from '../error/outside-of-range-error';
-import { officeProperties } from './store/office-properties';
-import { officeStoreService } from './store/office-store-service';
-import { notificationService } from '../notification/notification-service';
-import { errorService } from '../error/error-handler';
-import mstrNormalizedJsonHandler from '../mstr-object/mstr-normalized-json-handler';
-import { authenticationHelper } from '../authentication/authentication-helper';
-import { OBJ_REMOVED_FROM_EXCEL } from '../error/constants';
-import { ProtectedSheetError } from '../error/protected-sheets-error';
+import { IncorrectInputTypeError } from '../incorrect-input-type';
+import { OutsideOfRangeError } from '../../error/outside-of-range-error';
+import { officeProperties } from '../store/office-properties';
+import { officeStoreService } from '../store/office-store-service';
+import { notificationService } from '../../notification/notification-service';
+import { errorService } from '../../error/error-handler';
+import mstrNormalizedJsonHandler from '../../mstr-object/mstr-normalized-json-handler';
+import { authenticationHelper } from '../../authentication/authentication-helper';
+import { OBJ_REMOVED_FROM_EXCEL } from '../../error/constants';
+import { ProtectedSheetError } from '../../error/protected-sheets-error';
 import { mergeHeaderColumns, mergeHeaderRows } from './office-api-header-merge-helper';
 
 const ALPHABET_RANGE_START = 1;

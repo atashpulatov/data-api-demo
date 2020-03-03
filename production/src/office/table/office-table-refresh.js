@@ -1,4 +1,4 @@
-import { officeApiHelper } from '../office-api-helper';
+import { officeApiHelper } from '../api/office-api-helper';
 import officeTableCreate from './office-table-create';
 import officeTableUpdate from './office-table-update';
 

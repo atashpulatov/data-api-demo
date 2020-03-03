@@ -5,7 +5,7 @@ import { notificationService } from '../notification/notification-service';
 import { errorService } from '../error/error-handler';
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { officeProperties } from '../office/store/office-properties';
-import { officeApiHelper } from '../office/office-api-helper';
+import { officeApiHelper } from '../office/api/office-api-helper';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { officeStoreService } from '../office/store/office-store-service';
 import { LOAD_BROWSING_STATE_CONST, changeSorting } from '../navigation/navigation-tree-actions';

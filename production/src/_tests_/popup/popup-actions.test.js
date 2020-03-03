@@ -5,7 +5,7 @@ import {
   SET_PREPARED_REPORT
 } from '../../popup/popup-actions';
 import { popupHelper } from '../../popup/popup-helper';
-import { officeApiHelper } from '../../office/office-api-helper';
+import { officeApiHelper } from '../../office/api/office-api-helper';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { officeProperties } from '../../office/store/office-properties';
 import { officeStoreService } from '../../office/store/office-store-service';

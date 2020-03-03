@@ -1,5 +1,5 @@
-import { officeProperties } from './store/office-properties';
-import { officeStoreService } from './store/office-store-service';
+import { officeProperties } from './office-properties';
+import { officeStoreService } from './office-store-service';
 
 export function toggleSecuredFlag(isSecured) {
   officeStoreService.toggleFileSecuredFlag(isSecured);
