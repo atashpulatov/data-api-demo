@@ -201,7 +201,7 @@ export class OfficeDisplayService {
         await officeFormatData.applySubtotalFormatting(officeData, instanceDefinition.mstrTable);
       }
 
-      await this.bindOfficeTable(officeData, newBindingId);
+      await officeTableService.bindOfficeTable(officeData, newBindingId);
 
 
       // assign new name in duplicate workflow
@@ -286,13 +286,6 @@ export class OfficeDisplayService {
       console.groupEnd();
     }
   };
-
-  bindOfficeTable = async ({ officeTable, excelContext }, newBindingId) => {
-    officeTable.load('name');
-    await excelContext.sync();
-    const tablename = officeTable.name;
-    await officeApiHelper.bindNamedItem(tablename, newBindingId);
-  }
 
   savePreviousObjectData = (instanceDefinition, crosstabHeaderDimensions, subtotalsAddresses) => {
     const { mstrTable } = instanceDefinition;

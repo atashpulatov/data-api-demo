@@ -1,5 +1,6 @@
 import officeTableCreate from './office-table-create';
 import officeTableRefresh from './office-table-refresh';
+import { officeApiHelper } from '../api/office-api-helper';
 
 class OfficeTableService {
   /**
@@ -98,6 +99,13 @@ class OfficeTableService {
     }
     const excelCompatibleTableName = mstrTable.name.replace(/(\.|•|‼| |!|#|\$|%|&|'|\(|\)|\*|\+|,|-|\/|:|;|<|=|>|@|\^|`|\{|\||\}|~|¢|£|¥|¬|«|»)/g, '_');
     return `_${excelCompatibleTableName.slice(0, 239)}_${Date.now().toString()}`;
+  }
+
+  bindOfficeTable = async ({ officeTable, excelContext }, newBindingId) => {
+    officeTable.load('name');
+    await excelContext.sync();
+    const tablename = officeTable.name;
+    await officeApiHelper.bindNamedItem(tablename, newBindingId);
   }
 }
 const officeTableService = new OfficeTableService();
