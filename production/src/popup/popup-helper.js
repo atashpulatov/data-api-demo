@@ -13,7 +13,7 @@ function sortPromptsAnswers(array) {
     array[i].values.sort();
   }
 }
-export class PopupHelper {
+class PopupHelper {
   init = (popupController) => {
     this.popupController = popupController;
   }

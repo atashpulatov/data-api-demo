@@ -2,7 +2,7 @@ import { officeApiHelper } from '../api/office-api-helper';
 import { PROMISE_LIMIT } from '../../mstr-object/mstr-object-rest-service';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 
-export class OfficeInsertService {
+class OfficeInsertService {
   /**
    * Synchronise all changes to Excel up to this point. Clears stored promises after sync.
    *

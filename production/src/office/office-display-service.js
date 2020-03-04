@@ -19,7 +19,7 @@ import { officeApiWorksheetHelper } from './api/office-api-worksheet-helper';
 import { officeApiRemoveHelper } from './api/office-api-remove-helper';
 
 
-export class OfficeDisplayService {
+class OfficeDisplayService {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
   }
@@ -155,14 +155,16 @@ export class OfficeDisplayService {
         tableColumnsChanged,
         newBindingId
       } = await officeTableService.getOfficeTable(
-        isRefresh,
-        excelContext,
-        bindingId,
-        instanceDefinition,
-        startCell,
-        tableName,
-        previousTableDimensions,
-        visualizationInfo
+        {
+          isRefresh,
+          excelContext,
+          bindingId,
+          instanceDefinition,
+          startCell,
+          tableName,
+          previousTableDimensions,
+          visualizationInfo
+        }
       ));
 
 

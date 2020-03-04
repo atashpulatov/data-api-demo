@@ -16,7 +16,7 @@ import {popupActions} from './popup/popup-actions';
 import {actionCreator} from './notification/action-creator';
 import {authenticationService} from './authentication/auth-rest-service';
 
-export class DIContainer {
+class DIContainer {
   constructor(autoInitialize) {
     if (autoInitialize) this.initializeAll();
   }

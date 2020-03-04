@@ -15,14 +15,16 @@ class OfficeTableService {
    *
    */
   getOfficeTable = async (
-    isRefresh,
-    excelContext,
-    bindingId,
-    instanceDefinition,
-    startCell,
-    tableName,
-    previousTableDimensions,
-    visualizationInfo
+    {
+      isRefresh,
+      excelContext,
+      bindingId,
+      instanceDefinition,
+      startCell,
+      tableName,
+      previousTableDimensions,
+      visualizationInfo
+    }
   ) => {
     console.time('Create or get table');
     let newBindingId;
@@ -44,15 +46,17 @@ class OfficeTableService {
         shouldFormat,
         newBindingId
       } = await officeTableRefresh.changeOfficeTableOnRefresh(
-        excelContext,
-        bindingId,
-        instanceDefinition,
-        startCell,
-        officeTable,
-        newOfficeTableName,
-        shouldFormat,
-        previousTableDimensions,
-        visualizationInfo
+        {
+          excelContext,
+          bindingId,
+          instanceDefinition,
+          startCell,
+          officeTable,
+          newOfficeTableName,
+          shouldFormat,
+          previousTableDimensions,
+          visualizationInfo
+        }
       ));
     } else {
       ({ officeTable, newBindingId } = await officeTableCreate.createOfficeTable(
@@ -85,7 +89,7 @@ class OfficeTableService {
   }
 
   /**
-   * TODO
+   * TODO Do JSDOC in all refatored files
    *
    * @param {Object} instanceDefinition
    *

@@ -4,7 +4,7 @@ import { errorService } from '../../error/error-handler';
 
 /* global Office */
 
-export class OfficeStoreService {
+class OfficeStoreService {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
   }

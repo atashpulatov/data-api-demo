@@ -21,7 +21,7 @@ const URL = `${window.location.href}`;
 
 /* global Office */
 
-export class PopupController {
+class PopupController {
   constructor(excelXtabsBorderColor) {
     this.EXCEL_XTABS_BORDER_COLOR = excelXtabsBorderColor;
   }

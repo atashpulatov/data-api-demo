@@ -19,15 +19,17 @@ class OfficeTableRefresh {
    *
    */
   async changeOfficeTableOnRefresh(
-    excelContext,
-    bindingId,
-    instanceDefinition,
-    startCell,
-    officeTable,
-    newOfficeTableName,
-    shouldFormat,
-    previousTableDimensions,
-    visualizationInfo
+    {
+      excelContext,
+      bindingId,
+      instanceDefinition,
+      startCell,
+      officeTable,
+      newOfficeTableName,
+      shouldFormat,
+      previousTableDimensions,
+      visualizationInfo
+    }
   ) {
     const { mstrTable, mstrTable:{ isCrosstab, prevCrosstabDimensions } } = instanceDefinition;
     const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindingId);

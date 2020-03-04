@@ -12,7 +12,7 @@ const {
   fetchVisualizationDefinition,
 } = mstrObjectRestService;
 
-export class MstrObjectInstance {
+class MstrObjectInstance {
   /**
    * Create Instance definition object which stores data neede to continue import.
    * If instance of object does not exist new one will be created
@@ -42,7 +42,7 @@ export class MstrObjectInstance {
 
     if (body && body.requestedObjects) {
       if (body.requestedObjects.attributes.length === 0 && body.requestedObjects.metrics.length === 0) {
-        body.requestedObjects = undefined;
+        delete body.requestedObjects;
       }
       body.template = body.requestedObjects;
     }

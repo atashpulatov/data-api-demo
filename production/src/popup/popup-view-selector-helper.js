@@ -7,7 +7,7 @@ import { officeProperties } from '../office/store/office-properties';
 
 const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 
-export class PopupViewSelectorHelper {
+class PopupViewSelectorHelper {
   setPopupType = (props, popupType) => {
     const {
       importRequested, dossierOpenRequested, loading, isPrompted

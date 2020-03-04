@@ -9,8 +9,7 @@ export const RESET_STATE = 'RESET_STATE';
 export const SET_REPORT_N_FILTERS = 'SET_REPORT_N_FILTERS';
 export const SET_PREPARED_REPORT = 'SET_PREPARED_REPORT';
 // export const PRELOAD = 'PRELOAD';
-
-export class PopupActions {
+class PopupActions {
   init = (authenticationHelper,
     errorService,
     officeApiHelper,

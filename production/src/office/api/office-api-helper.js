@@ -13,7 +13,7 @@ const ASCII_CAPITAL_LETTER_INDEX = 65;
 const EXCEL_ROW_LIMIT = 1048576;
 const EXCEL_COL_LIMIT = 16384;
 
-export class OfficeApiHelper {
+class OfficeApiHelper {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
   }

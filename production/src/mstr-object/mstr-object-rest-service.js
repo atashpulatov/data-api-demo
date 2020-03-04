@@ -133,7 +133,7 @@ function fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = 
 }
 
 
-export class MstrObjectRestService {
+class MstrObjectRestService {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
   }
