@@ -1,5 +1,6 @@
 import { officeApiHelper } from '../api/office-api-helper';
 import officeTableHelper from './office-table-helper';
+import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 
 const DEFAULT_TABLE_STYLE = 'TableStyleLight11';
 const TABLE_HEADER_FONT_COLOR = '#000000';
@@ -17,7 +18,6 @@ class OfficeTableCreate {
    * @param {Object} prevOfficeTable Previous office table to refresh
    * @param {Boolean} tableColumnsChanged Specify if table columns has been changed. False by default
    *
-   * @memberOf OfficeTableHelper
    */
   createOfficeTable = async (
     instanceDefinition,
@@ -61,7 +61,6 @@ class OfficeTableCreate {
    * @param {string} fontColor
    * @param {string} fillColor
    *
-   * @memberOf OfficeTableHelper
    */
   styleHeaders = (officeTable, fontColor, fillColor) => {
     officeTable.style = DEFAULT_TABLE_STYLE;
@@ -78,7 +77,6 @@ class OfficeTableCreate {
    * @param {Object} prevOfficeTable previous office table
    * @param {Object} excelContext excelContext
    *
-   * @memberOf OfficeTableHelper
    */
   getExcelWorksheet = (prevOfficeTable, excelContext) => {
     if (prevOfficeTable) {
@@ -96,12 +94,11 @@ class OfficeTableCreate {
    * @param {Object} sheet  excel worksheet
    * @param {Object} tableRange range of the table
    *
-   * @memberOf OfficeTableHelper
    */
   getObjectRange = (tableStartCell, sheet, tableRange, mstrTable) => {
     const { isCrosstab, crosstabHeaderDimensions } = mstrTable;
     if (isCrosstab) {
-      return officeApiHelper.getCrosstabRange(tableStartCell, crosstabHeaderDimensions, sheet);
+      return officeApiCrosstabHelper.getCrosstabRange(tableStartCell, crosstabHeaderDimensions, sheet);
     }
     return sheet.getRange(tableRange);
   };
@@ -115,7 +112,6 @@ class OfficeTableCreate {
    * @param {Object} prevOfficeTable previous office table
    * @param {Boolean} tableColumnsChanged Specify if table columns has been changed
    *
-   * @memberOf OfficeTableHelper
    */
   getTableStartCell = (startCell, sheet, instanceDefinition, prevOfficeTable, tableColumnsChanged) => {
     const { mstrTable } = instanceDefinition;
@@ -153,7 +149,6 @@ class OfficeTableCreate {
    * @param {Object} sheet  excel worksheet
    * @param {Object} excelContext excelContext
    *
-   * @memberOf OfficeTableHelper
    */
   setOfficeTableProperties = async (officeTable, newOfficeTableName, mstrTable, sheet, excelContext) => {
     const { isCrosstab } = mstrTable;

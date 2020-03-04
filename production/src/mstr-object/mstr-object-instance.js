@@ -30,7 +30,6 @@ export class MstrObjectInstance {
    * @param {Boolean} subtotalsDefined Information if the report has subtotals
    * @param {Boolean} subtotalsVisible Information if the subtotals are visible
    * @returns {Object} Object containing officeTable and subtotalAddresses
-   * @memberof officeDisplayService
    */
   async getInstaceDefinition(
     connectionData,
@@ -79,7 +78,6 @@ export class MstrObjectInstance {
    *
    * @param {Object} error
    * @return {String || undefined} errorType
-   * @memberOf mstrObjectInstanceHelper
    */
   getVisualizationErrorType = (error) => {
     if (!error) {
@@ -175,7 +173,6 @@ export class MstrObjectInstance {
    * @param {Object} promptsAnswers Stored prompt answers
    * @param {Object} dossierData
    * @param {Object} body Contains requested objects and filters.
-   * @memberof officeDisplayService
    */
   modifyInstanceWithPrompt = async (
     instanceDefinition,

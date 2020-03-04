@@ -6,7 +6,6 @@ class OfficeContext {
   /**
    * Returns the highest requirement set supported by the current platform.
    *
-   * @memberof OfficeContext
    * @returns {String} Requirement set
    */
   getRequirementSet = () => {

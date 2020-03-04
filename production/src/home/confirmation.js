@@ -1,5 +1,4 @@
 /* eslint-disable react/no-danger */
-/* eslint-disable no-underscore-dangle */
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
@@ -13,6 +12,9 @@ import {
 } from '../office/store/office-actions';
 import { errorService } from '../error/error-handler';
 import { notificationService } from '../notification/notification-service';
+import { officeApiCrosstabHelper } from '../office/api/office-api-crosstab-helper';
+import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
+import { officeApiRemoveHelper } from '../office/api/office-api-remove-helper';
 
 export const ConfirmationNotConnected = ({
   reportArray,
@@ -40,14 +42,14 @@ export const ConfirmationNotConnected = ({
       toggleIsClearingFlag(true);
       toggleIsConfirmFlag(); // Switch off isConfirm popup
       const excelContext = await officeApiHelper.getExcelContext();
-      await officeApiHelper.checkIfAnySheetProtected(excelContext, reportArray);
+      await officeApiWorksheetHelper.checkIfAnySheetProtected(excelContext, reportArray);
       for (const report of reportArray) {
-        if (await officeApiHelper.checkIfObjectExist(report, excelContext)) {
+        if (await officeApiRemoveHelper.checkIfObjectExist(report, excelContext)) {
           try {
             reportName = report.name;
             if (report.isCrosstab) {
               const officeTable = await officeApiHelper.getTable(excelContext, report.bindId);
-              officeApiHelper.clearEmptyCrosstabRow(officeTable);
+              officeApiCrosstabHelper.clearEmptyCrosstabRow(officeTable);
               officeTable.showHeaders = true;
               officeTable.showFilterButton = false;
 
@@ -55,7 +57,7 @@ export const ConfirmationNotConnected = ({
               headers.format.font.color = 'white';
               await excelContext.sync();
             }
-            await officeApiHelper.deleteObjectTableBody(excelContext, report, true);
+            await officeApiRemoveHelper.removeOfficeTableBody(excelContext, report, true);
           } catch (error) {
             const officeError = errorService.handleError(error);
             clearErrors.push({ reportName, officeError });

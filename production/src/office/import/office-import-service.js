@@ -19,7 +19,6 @@ class OfficeImportService {
   * @param {Object} parameter.instanceDefinition
   * @param {Object} [parameter.visualizationInfo]
   * @returns {Object} Object containing officeTable and subtotalAddresses
-  * @memberof officeImportService
   */
   async fetchInsertDataIntoExcel({
     connectionData,
@@ -89,7 +88,6 @@ class OfficeImportService {
    *
    * @param {Array} subtotalAddress Array containig object with coordinates of subtotals in rows currently processed.
    * @param {Array} subtotalsAddresses Array containig object with coordinates of subtotals of object.
-   * @memberof officeImportService
    */
   getSubtotalCoordinates = (subtotalAddress, subtotalsAddresses) => {
     console.time('Get subtotals coordinates');

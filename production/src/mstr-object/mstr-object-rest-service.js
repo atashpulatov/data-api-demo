@@ -147,7 +147,6 @@ export class MstrObjectRestService {
    * @param {String} visualizationKey visualization id.
    * @param {Object} dossierInstance
    * @returns {Object} Contains info for visualization.
-   * @memberof MstrObjectRestService
    */
   getVisualizationInfo = async (projectId, objectId, visualizationKey, dossierInstance) => {
     try {

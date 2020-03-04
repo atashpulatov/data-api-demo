@@ -1,6 +1,7 @@
 import { officeApiHelper } from '../api/office-api-helper';
 import officeTableCreate from './office-table-create';
 import officeTableUpdate from './office-table-update';
+import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 
 
 class OfficeTableRefresh {
@@ -16,7 +17,6 @@ class OfficeTableRefresh {
    * @param {String} newOfficeTableName new name for office table
    * @param {Boolean} shouldFormat
    *
-   * @memberOf OfficeTableHelper
    */
   async changeOfficeTableOnRefresh(
     excelContext,
@@ -33,9 +33,15 @@ class OfficeTableRefresh {
     const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindingId);
 
     if (isCrosstab && !mstrTable.toCrosstabChange) {
-      const crosstabEmptyRowExist = await officeApiHelper.getValidOffset(prevOfficeTable, prevCrosstabDimensions.columnsY, 'getRowsAbove', excelContext);
+      const crosstabEmptyRowExist = await officeApiCrosstabHelper.getValidOffset(
+        prevOfficeTable,
+        prevCrosstabDimensions.columnsY,
+        'getRowsAbove',
+        excelContext
+      );
+
       if (crosstabEmptyRowExist) {
-        officeApiHelper.clearEmptyCrosstabRow(prevOfficeTable);
+        officeApiCrosstabHelper.clearEmptyCrosstabRow(prevOfficeTable);
       }
     }
     prevOfficeTable.showHeaders = true;
@@ -95,7 +101,6 @@ class OfficeTableRefresh {
    * @param {Object} excelContext excelContext
    * @param {Object} instanceDefinition
    *
-   * @memberOf OfficeTableHelper
    */
   checkColumnsChange = async (prevOfficeTable, excelContext, instanceDefinition, previousTableDimensions) => {
     const { columns } = instanceDefinition;
@@ -113,7 +118,6 @@ class OfficeTableRefresh {
    * @param {Object} prevOfficeTable previous office table
    * @param {Object} excelContext
    *
-   * @memberOf OfficeTableHelper
    */
    getStartCellOnRefresh = async (prevOfficeTable, excelContext) => {
      const headerCell = prevOfficeTable.getHeaderRowRange().getCell(0, 0);
@@ -131,11 +135,10 @@ class OfficeTableRefresh {
    * @param {string} startCell  Starting cell of Table
    * @param {Object} mstrTable  contains informations about mstr object
    *
-   * @memberOf OfficeTableHelper
    */
    clearIfCrosstabHeadersChanged = async (prevOfficeTable, excelContext, tableColumnsChanged, startCell, mstrTable) => {
      const { prevCrosstabDimensions, crosstabHeaderDimensions, isCrosstab } = mstrTable;
-     const { validColumnsY, validRowsX } = await officeApiHelper.getCrosstabHeadersSafely(
+     const { validColumnsY, validRowsX } = await officeApiCrosstabHelper.getCrosstabHeadersSafely(
        prevOfficeTable,
        prevCrosstabDimensions.columnsY,
        excelContext,
@@ -158,7 +161,7 @@ class OfficeTableRefresh {
      }
 
      if (prevCrosstabDimensions) {
-       officeApiHelper.clearCrosstabRange(prevOfficeTable, mstrTable, excelContext);
+       officeApiCrosstabHelper.clearCrosstabRange(prevOfficeTable, mstrTable, excelContext);
      }
 
      await excelContext.sync();

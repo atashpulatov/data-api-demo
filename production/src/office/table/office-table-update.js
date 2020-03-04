@@ -11,7 +11,6 @@ class OfficeTableUpdate {
    * @param {string} startCell  Top left corner cell
    * @param {Object} prevOfficeTable Previous office table to refresh
    *
-   * @memberOf OfficeTableHelper
    */
   updateOfficeTable = async (instanceDefinition, excelContext, startCell, prevOfficeTable) => {
     try {
@@ -61,7 +60,6 @@ class OfficeTableUpdate {
    * @param {Object} excelContext ExcelContext
    * @param {number} rows  number of rows in the object
    *
-   * @memberOf OfficeTableHelper
    */
   updateRows = async (prevOfficeTable, excelContext, rows) => {
     const tableRows = prevOfficeTable.rows;

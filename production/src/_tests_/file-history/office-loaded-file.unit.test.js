@@ -7,6 +7,7 @@ import { fileHistoryHelper } from '../../file-history/file-history-helper';
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { officeStoreService } from '../../office/store/office-store-service';
 import { errorService } from '../../error/error-handler';
+import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
 
 describe('office loaded file', () => {
   it('should display provided file name', () => {
@@ -131,7 +132,7 @@ describe('office loaded file', () => {
     const mockEvent = { stopPropagation: jest.fn() };
     const mockSync = jest.fn();
     const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
-    const mockIsCurrentSheetProtected = jest.spyOn(officeApiHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
+    const mockIsCurrentSheetProtected = jest.spyOn(officeApiWorksheetHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
     const objectClickMock = jest.spyOn(officeApiHelper, 'onBindingObjectClick').mockImplementation(() => true);
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
@@ -161,7 +162,7 @@ describe('office loaded file', () => {
     const startLoadingMocked = jest.fn();
     const stopLoadingMocked = jest.fn();
     const mockEvent = { stopPropagation: jest.fn() };
-    const mockIsCurrentSheetProtected = jest.spyOn(officeApiHelper, 'isCurrentReportSheetProtected').mockImplementation(() => { throw new Error(); });
+    const mockIsCurrentSheetProtected = jest.spyOn(officeApiWorksheetHelper, 'isCurrentReportSheetProtected').mockImplementation(() => { throw new Error(); });
     const mockHandleError = jest.spyOn(errorService, 'handleError').mockImplementation(() => { });
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
@@ -191,7 +192,7 @@ describe('office loaded file', () => {
     const mockEvent = { stopPropagation: jest.fn() };
     const mockSync = jest.fn();
     const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
-    const mockIsCurrentSheetProtected = jest.spyOn(officeApiHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
+    const mockIsCurrentSheetProtected = jest.spyOn(officeApiWorksheetHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
     const testBindingId = 'testBindingId';
     const objectType = { name: 'report' };
     jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => { });
@@ -271,7 +272,7 @@ describe('office loaded file', () => {
     const mockEvent = { stopPropagation: jest.fn() };
     const mockSync = jest.fn();
     const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
-    const mockIsCurrentSheetProtected = jest.spyOn(officeApiHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
+    const mockIsCurrentSheetProtected = jest.spyOn(officeApiWorksheetHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
     const wrappedComponent = mount(<OfficeLoadedFileNotConnected
@@ -303,7 +304,7 @@ describe('office loaded file', () => {
     const stopLoadingMocked = jest.fn();
     const testBindingId = 'testBindingId';
     const mockEvent = { stopPropagation: jest.fn() };
-    const mockIsCurrentSheetProtected = jest.spyOn(officeApiHelper, 'isCurrentReportSheetProtected').mockImplementation(() => { throw new Error(); });
+    const mockIsCurrentSheetProtected = jest.spyOn(officeApiWorksheetHelper, 'isCurrentReportSheetProtected').mockImplementation(() => { throw new Error(); });
     const mockHandleError = jest.spyOn(errorService, 'handleError').mockImplementation(() => { });
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
@@ -397,7 +398,7 @@ describe('office loaded file', () => {
     // given
     const mockSync = jest.fn();
     const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
-    const mockIsCurrentSheetProtected = jest.spyOn(officeApiHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
+    const mockIsCurrentSheetProtected = jest.spyOn(officeApiWorksheetHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
     const onEditMocked = jest.fn();
     const startLoadingMocked = jest.fn();
     const mockEvent = { stopPropagation: jest.fn() };

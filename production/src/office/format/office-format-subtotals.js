@@ -10,7 +10,6 @@ class OfficeFormatSubtotals {
    * @param {Office} excelContext ExcelContext
    * @param {Object} mstrTable contains informations about mstr object
    * @param {Boolean} [shouldbold=true] Specify whether the values in cells should be bold
-   * @memberof OfficeFormattingHelper
    */
   applySubtotalFormatting = async ({ excelContext, officeTable }, mstrTable, shouldbold = true) => {
     const { isCrosstab } = mstrTable;
@@ -37,7 +36,6 @@ class OfficeFormatSubtotals {
    * @param {Office} startCell Starting table body cell
    * @param {Office} cell Starting subtotal row cell
    * @param {Object} mstrTable contains informations about mstr object
-   * @memberof OfficeFormattingHelper
    * @return {Office} Range of subtotal row
    */
   getSubtotalRange = (startCell, cell, mstrTable) => {
@@ -81,7 +79,6 @@ class OfficeFormatSubtotals {
    * @param {Object} mstrTable instance definition
    * @param {Office} excelContext Excel context
    * @param {Boolean} shouldBold
-   * @memberof OfficeApiHelper
    */
   formatSubtotals = async (startCell, subtotalCells, mstrTable, excelContext, shouldBold) => {
     let contextPromises = [];

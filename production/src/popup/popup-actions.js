@@ -1,5 +1,6 @@
 import { officeProperties } from '../office/store/office-properties';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
 
 export const CLEAR_WINDOW = 'POPUP_CLOSE_WINDOW';
 export const START_REPORT_LOADING = 'START_REPORT_LOADING';
@@ -79,7 +80,7 @@ export class PopupActions {
         // eslint-disable-next-line no-await-in-loop
         const excelContext = await officeApiHelper.getExcelContext();
         // eslint-disable-next-line no-await-in-loop
-        await officeApiHelper.isCurrentReportSheetProtected(excelContext, report.bindId);
+        await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, report.bindId);
         // TODO: these two actions should be merged into one in the future
 
         dispatch({

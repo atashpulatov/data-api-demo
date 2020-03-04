@@ -5,7 +5,6 @@ class OfficeInsertSplitHelper {
    * @param {Array} excelRows Array of table data
    * @param {Boolean} isOverLimit Specify if the passed Excel rows are over 5MB limit
    * @returns {Array} Array with sub-arrays with size not more than 5MB
-   * @memberof officeImportService
    */
   getExcelRows(excelRows, isOverLimit) {
     let splitExcelRows = [excelRows];
@@ -18,7 +17,6 @@ class OfficeInsertSplitHelper {
    *
    * @param {Array} excelRows Array of table data
    * @returns {Array} Array with sub-arrays with size not more than 5MB
-   * @memberof officeImportService
    */
   splitExcelRows = (excelRows) => {
     let splitRows = [excelRows];
@@ -50,7 +48,6 @@ class OfficeInsertSplitHelper {
    *
    * @param {Object} object Item to check size of
    * @returns {Boolean} information whether the size of passed object is bigger than 5MB
-   * @memberof officeImportService
    */
   checkIfSizeOverLimit = (chunk) => {
     let bytes = 0;

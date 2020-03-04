@@ -1,5 +1,6 @@
 import { officeApiHelper } from '../api/office-api-helper';
 import { PROMISE_LIMIT } from '../../mstr-object/mstr-object-rest-service';
+import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 
 export class OfficeInsertService {
   /**
@@ -7,7 +8,6 @@ export class OfficeInsertService {
    *
    * @param {Array} contextPromises Array excel context sync promises.
    * @param {Boolean} finalsync Specify whether this will be last sync after inserting data into table.
-   * @memberof officeImportService
    */
   syncChangesToExcel = async (contextPromises, finalsync) => {
     if (contextPromises.length % PROMISE_LIMIT === 0) {
@@ -33,7 +33,6 @@ export class OfficeInsertService {
    * @param {Array} contextPromises Array excel context sync promises.
    * @param {Object} header Contains data for crosstab headers.
    * @param {Object} mstrTable Contains informations about mstr object
-   * @memberof officeImportService
    */
   appendRows = async (
     officeData,
@@ -60,7 +59,6 @@ export class OfficeInsertService {
    * @param {Number} rowIndex Specify from row we should append rows
    * @param {Boolean} tableColumnsChanged
    * @param {Boolean} isRefresh
-   * @memberof officeImportService
    */
   async appendRowsToTable(excelRows, excelContext, officeTable, rowIndex, tableColumnsChanged, isRefresh) {
     console.group('Append rows');
@@ -93,7 +91,6 @@ export class OfficeInsertService {
   * @param {Office} officeTable Reference to Ecxcel table.
   * @param {Array} header Contains data for crosstab row headers.
   * @param {Number} rowIndex Specify from row we should append rows
-  * @memberof officeImportService
   */
  appendCrosstabRowsToRange = (officeTable, headerRows, rowIndex) => {
    console.time('Append crosstab rows');
@@ -102,7 +99,7 @@ export class OfficeInsertService {
      .getRow(0)
      .getCell(0, 0)
      .getOffsetRange(rowIndex, 0);
-   officeApiHelper.createRowsHeaders(startCell, headerRows);
+   officeApiCrosstabHelper.createRowsHeaders(startCell, headerRows);
    console.timeEnd('Append crosstab rows');
  }
 
@@ -112,7 +109,6 @@ export class OfficeInsertService {
    * @param {Array} excelRows Array of table data
    * @param {Boolean} isOverLimit Specify if the passed Excel rows are over 5MB limit
    * @returns {Array} Array with sub-arrays with size not more than 5MB
-   * @memberof officeImportService
    */
  getExcelRows(excelRows, isOverLimit) {
    let splitExcelRows = [excelRows];
@@ -125,7 +121,6 @@ export class OfficeInsertService {
    *
    * @param {Array} excelRows Array of table data
    * @returns {Array} Array with sub-arrays with size not more than 5MB
-   * @memberof officeImportService
    */
   splitExcelRows = (excelRows) => {
     let splitRows = [excelRows];
@@ -157,7 +152,6 @@ export class OfficeInsertService {
    *
    * @param {Object} object Item to check size of
    * @returns {Boolean} information whether the size of passed object is bigger than 5MB
-   * @memberof officeImportService
    */
   checkIfSizeOverLimit = (chunk) => {
     let bytes = 0;

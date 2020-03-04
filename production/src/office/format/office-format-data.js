@@ -6,7 +6,6 @@ class OfficeFormatData {
    * @param {Object} instanceDefinition
    * @param {Boolean} isCrosstab
    * @param {Office} excelContext
-   * @memberof OfficeFormatData
    */
   applyFormatting = async ({ officeTable, excelContext }, instanceDefinition,) => {
     try {
@@ -56,7 +55,6 @@ class OfficeFormatData {
    *
    * @param columnInformation
    * @param isCrosstab
-   * @memberof OfficeFormatData
    * @return {Array} filteredColumnInformation
    */
   filterColumnInformation = (columnInformation, isCrosstab) => {
@@ -70,7 +68,6 @@ class OfficeFormatData {
    * Return parsed format string
    *
    * @param {String} format given by MicroStrategy
-   * @memberof OfficeFormatData
    * @return {String} parsed format
    */
   getFormat = ({ formatString, category }) => {

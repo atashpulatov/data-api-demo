@@ -15,6 +15,8 @@ import officeFormatSubtotals from './format/office-format-subtotals';
 
 import { CLEAR_PROMPTS_ANSWERS } from '../navigation/navigation-tree-actions';
 import { NO_DATA_RETURNED, ALL_DATA_FILTERED_OUT } from '../error/constants';
+import { officeApiWorksheetHelper } from './api/office-api-worksheet-helper';
+import { officeApiRemoveHelper } from './api/office-api-remove-helper';
 
 
 export class OfficeDisplayService {
@@ -65,7 +67,6 @@ export class OfficeDisplayService {
    * Name of original object to create originalName + copy during duplicate workflow
    * @param {String} [parameter.displayAttrFormNames] Name of the display attribute names option
    * @returns {Object} Specify status of the import.
-   * @memberof officeDisplayService
    */
   printObject = async ({
     objectId,
@@ -251,7 +252,7 @@ export class OfficeDisplayService {
       if (officeTable) {
         if (!isRefresh) {
           officeTable.showHeaders = true;
-          await officeApiHelper.deleteExcelTable(
+          await officeApiRemoveHelper.removeExcelTable(
             officeTable,
             excelContext,
             isCrosstab,
@@ -298,7 +299,7 @@ export class OfficeDisplayService {
 
   getStartCell = async (insertNewWorksheet, excelContext, startCell, selectedCell) => {
     if (insertNewWorksheet) {
-      await officeApiHelper.createAndActivateNewWorksheet(excelContext);
+      await officeApiWorksheetHelper.createAndActivateNewWorksheet(excelContext);
     }
     startCell = selectedCell || (await officeApiHelper.getSelectedCell(excelContext));
     return startCell;

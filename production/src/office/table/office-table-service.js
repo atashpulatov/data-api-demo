@@ -13,7 +13,6 @@ class OfficeTableService {
    * @param {Object} instanceDefinition
    * @param {string} startCell  Top left corner cell
    *
-   * @memberOf OfficeTableHelper
    */
   getOfficeTable = async (
     isRefresh,
@@ -78,7 +77,6 @@ class OfficeTableService {
    *
    * @param {Object} instanceDefinition
    *
-   * @memberOf OfficeTableHelper
    */
   checkReportTypeChange=(instanceDefinition) => {
     const { mstrTable, mstrTable: { prevCrosstabDimensions, isCrosstab } } = instanceDefinition;
@@ -91,7 +89,6 @@ class OfficeTableService {
    *
    * @param {Object} instanceDefinition
    *
-   * @memberOf OfficeTableHelper
    */
   createTableName = (mstrTable, tableName) => {
     if (tableName) {

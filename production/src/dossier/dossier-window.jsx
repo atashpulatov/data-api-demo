@@ -116,7 +116,6 @@ export default class DossierWindowNotConnected extends React.Component {
   * Above happens on reprompt button click followed by cancel button click in reprompt popup.
   *
   * @param {String} newInstanceId
-  * @memberof DossierWindowNotConnected
   */
   handleInstanceIdChange(newInstanceId) {
     const {
@@ -152,7 +151,6 @@ export default class DossierWindowNotConnected extends React.Component {
   * Store new prompts answers in state
   *
   * @param {Array} newAnswers
-  * @memberof DossierWindowNotConnected
   */
   handlePromptAnswer(newAnswers) {
     this.setState({ promptsAnswers: newAnswers });

@@ -225,7 +225,6 @@ export default class EmbeddedDossierNotConnected extends React.Component {
   * to keep the import button enabled.
   *
   * @param {Array} promptsAnswers
-  * @memberof _EmbeddedDossier
   */
   async promptsAnsweredHandler(promptsAnswers) {
     const { handlePromptAnswer } = this.props;
@@ -246,7 +245,6 @@ export default class EmbeddedDossierNotConnected extends React.Component {
   * bookmark or new prompts answers given.
   *
   * @param {String} newInstanceId
-  * @memberof _EmbeddedDossier
   */
   instanceIdChangeHandler(newInstanceId) {
     const { handleInstanceIdChange } = this.props;

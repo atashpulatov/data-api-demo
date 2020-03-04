@@ -1,6 +1,7 @@
 import { officeApiHelper } from '../api/office-api-helper';
 import { TABLE_OVERLAP } from '../../error/constants';
 import { OverlappingTablesError } from '../../error/overlapping-tables-error';
+import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 
 
 class OfficeTableHelper {
@@ -10,7 +11,6 @@ class OfficeTableHelper {
    * @param {Object} excelContext excelContext
    * @param {Object} excelRange range in which table will be inserted
    *
-   * @memberOf OfficeTableHelper
    */
   checkRangeValidity = async (excelContext, excelRange) => {
     // Pass true so only cells with values count as used
@@ -30,11 +30,11 @@ class OfficeTableHelper {
    * @param {Object} range range of the table
    * @param {Object} crosstabHeaderDimensions contains dimension of crosstab headers (columnsY, cloumnsX, RowsY, RowsX)
    *
-   * @memberOf OfficeTableHelper
    */
    createCrosstabHeaders = (tableStartCell, mstrTable, sheet, crosstabHeaderDimensions) => {
-     officeApiHelper.createColumnsHeaders(tableStartCell, mstrTable.headers.columns, sheet);
-     officeApiHelper.createRowsTitleHeaders(tableStartCell, mstrTable.attributesNames, sheet, crosstabHeaderDimensions);
+     const { attributesNames, headers:{ columns } } = mstrTable;
+     officeApiCrosstabHelper.createColumnsHeaders(tableStartCell, columns, sheet);
+     officeApiCrosstabHelper.createRowsTitleHeaders(tableStartCell, attributesNames, sheet, crosstabHeaderDimensions);
    }
 
    /**
@@ -45,7 +45,6 @@ class OfficeTableHelper {
    * @param {Object} range range of the resized table
    * @param {Object} instanceDefinition
    *
-   * @memberOf OfficeTableHelper
    */
    async checkObjectRangeValidity(prevOfficeTable, context, range, instanceDefinition) {
      if (prevOfficeTable) {
@@ -61,7 +60,6 @@ class OfficeTableHelper {
    * @param {Object} prevOfficeTable previous office table
    * @param {Object} excelContext excelContext
    * @param {Object} instanceDefinition
-   * @memberOf OfficeTableHelper
    */
    async checkObjectRangeValidityOnRefresh(prevOfficeTable, excelContext, instanceDefinition) {
      const { rows, columns, mstrTable } = instanceDefinition;
@@ -89,7 +87,6 @@ class OfficeTableHelper {
    * @param {number} addedColumns excelContext
    * @param {number} addedRows shows the number of added rows to the table
    *
-   * @memberOf OfficeTableHelper
    */
   checkCrosstabAddedRowsAndColumns = (mstrTable, addedRows, addedColumns) => {
     const { isCrosstab, crosstabHeaderDimensions, prevCrosstabDimensions } = mstrTable;
@@ -117,7 +114,6 @@ class OfficeTableHelper {
    * @param {Object} context excelContext
    * @param {number} addedRows shows the number of added rows to the table
    *
-   * @memberOf OfficeTableHelper
    */
   async checkExtendedRange(addedColumns, prevOfficeTable, mstrTable, context, addedRows) {
     const { isCrosstab, prevCrosstabDimensions } = mstrTable;
@@ -156,7 +152,6 @@ class OfficeTableHelper {
    *
    * @param {Object} instanceDefinition
    *
-   * @memberOf OfficeTableHelper
    */
   getCrosstabHeaderDimensions = (instanceDefinition) => {
     const { mstrTable } = instanceDefinition;

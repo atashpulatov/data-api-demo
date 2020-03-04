@@ -37,7 +37,6 @@ class OfficeConverterServiceV2 {
    *
    * @param {JSON} response
    * @return {Object}
-   * @memberof OfficeConverterServiceV2
    */
   getSubtotalsInformation = (response) => {
     try {
@@ -53,7 +52,6 @@ class OfficeConverterServiceV2 {
    *
    * @param {JSON} response
    * @return {Boolean}
-   * @memberof OfficeConverterServiceV2
    */
   isCrosstab = (response) => {
     try {
@@ -71,7 +69,6 @@ class OfficeConverterServiceV2 {
    * @param {JSON} e Object definition element from response
    * @param {String} attrforms Dispay attribute form names setting inside office-properties.js
    * @return {Object} Contains arrays of columns and rows attributes forms names
-   * @memberof OfficeConverterServiceV2
    */
   getAttributesTitleWithForms = (e, attrforms) => {
     const supportForms = attrforms ? attrforms.supportForms : false;
@@ -117,7 +114,6 @@ class OfficeConverterServiceV2 {
    *
    * @param {JSON} definition Object definition from response
    * @return {Object} Contains arrays of columns and rows attributes names
-   * @memberof OfficeConverterServiceV2
    */
   getAttributesName = (definition, attrforms) => {
     const getAttributeWithForms = (elements) => {
@@ -141,7 +137,6 @@ class OfficeConverterServiceV2 {
    * @param {JSON} response
    * @param {Boolean} isCrosstab
    * @return {number[]}
-   * @memberof OfficeConverterServiceV2
    */
   getRows=(response, isCrosstab) => {
     const rowTotals = [];
@@ -167,7 +162,7 @@ class OfficeConverterServiceV2 {
    * @param {Boolean} isCrosstab
    * @param {Boolean} isCrosstabular Crosstabular is a Crosstab report with metrics in Rows and nothing in columns
    * @return {Object}
-   * @memberof OfficeConverterServiceV2
+
    */
   getHeaders(response, isCrosstab, isCrosstabular) {
     const rowTotals = [];
@@ -202,7 +197,6 @@ class OfficeConverterServiceV2 {
    * @param {Object} columnInformation - Array with indexed column definition for metrics and attributes
    * @param {Boolean} isCrosstab
    * @return {Number}
-   * @memberof OfficeConverterServiceV2
    */
   getTableSize = (response, columnInformation, isCrosstab) => {
     let columnsCount = columnInformation.length;
@@ -236,7 +230,6 @@ class OfficeConverterServiceV2 {
    * @param {JSON} response
    * @param {Boolean} isCrosstabular Crosstabular is a Crosstab report with metrics in Rows and nothing in columns
    * @return {Object}
-   * @memberof OfficeConverterServiceV2
    */
   getColumnInformation=(response, isCrosstabular) => {
     let columns;

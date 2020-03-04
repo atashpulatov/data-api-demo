@@ -20,6 +20,7 @@ import {
   startLoading as startLoadingImported,
   stopLoading as stopLoadingImported
 } from '../navigation/navigation-tree-actions';
+import { officeApiRemoveHelper } from '../office/api/office-api-remove-helper';
 
 export class FileHistoryContainerNotConnected extends React.Component {
   constructor(props) {
@@ -52,7 +53,7 @@ export class FileHistoryContainerNotConnected extends React.Component {
           await officeApiHelper.checkStatusOfSessions();
           const { reportArray, t } = this.props;
           const reportToDelete = reportArray.find((report) => report.bindId === e.tableId);
-          officeApiHelper.removeObjectAndDisplaytNotification(reportToDelete, officeContext, t);
+          officeApiRemoveHelper.removeObjectAndDisplaytNotification(reportToDelete, officeContext, t);
           stopLoading();
         });
       } else if (officeContext.requirements.isSetSupported('ExcelApi', 1.7)) {
@@ -69,7 +70,7 @@ export class FileHistoryContainerNotConnected extends React.Component {
           );
 
           for (const report of reportsToBeDeleted) {
-            officeApiHelper.removeObjectAndDisplaytNotification(report, officeContext, t);
+            officeApiRemoveHelper.removeObjectAndDisplaytNotification(report, officeContext, t);
           }
           stopLoading();
         });
@@ -179,7 +180,7 @@ export class FileHistoryContainerNotConnected extends React.Component {
               fileName={report.name}
               bindingId={report.bindId}
               onClick={officeApiHelper.onBindingObjectClick}
-              onDelete={officeApiHelper.removeReportFromExcel}
+              onDelete={officeApiRemoveHelper.removeReportFromExcel}
               isLoading={report.isLoading}
               isCrosstab={report.isCrosstab}
               crosstabHeaderDimensions={report.crosstabHeaderDimensions}

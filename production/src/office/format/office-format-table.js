@@ -6,7 +6,6 @@ class OfficeFormatTable {
    * @param {Boolean} isCrosstab
    * @param {Office} crosstabHeaderDimensions
    * @param {Office} excelContext
-   * @memberof officeFormattingHelper
    */
   formatTable = async ({ officeTable, excelContext }, mstrTable) => {
     const { crosstabHeaderDimensions, isCrosstab } = mstrTable;
