@@ -1,4 +1,3 @@
-import { officeApiHelper } from '../api/office-api-helper';
 import { TABLE_OVERLAP } from '../../error/constants';
 import { OverlappingTablesError } from '../../error/overlapping-tables-error';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
