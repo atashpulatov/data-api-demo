@@ -43,3 +43,5 @@ when 'windows'
 else
   
 end
+
+include_recipe 'workspace::client_test_env'

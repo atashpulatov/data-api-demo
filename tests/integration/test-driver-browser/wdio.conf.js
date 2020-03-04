@@ -50,6 +50,9 @@ exports.config = {
       './test/specs/release-validation/F24751-import subtotals/TC53340-import-report-with-subtotals.spec.js',
       './test/specs/release-validation/F24751-import subtotals/TC54788-import-subtotals.spec.js',
     ],
+    'F25946-details-panel': [
+      './test/specs/release-validation/F25946-details-panel/TC59756-expanded-view.spec.js'
+    ],
     'F25930-faster-display': [
       './test/specs/release-validation/F25930-faster-display/TC54961-E2E-scenario.spec.js',
     ],
