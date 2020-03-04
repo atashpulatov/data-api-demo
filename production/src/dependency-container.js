@@ -1,6 +1,6 @@
 /* eslint-disable */
 import {reduxStore} from './store';
-import {officeApiHelper} from './office//api/office-api-helper';
+import {officeApiHelper} from './office/api/office-api-helper';
 import {officeStoreService} from './office/store/office-store-service';
 import {errorService} from './error/error-handler';
 import {sessionHelper} from './storage/session-helper';

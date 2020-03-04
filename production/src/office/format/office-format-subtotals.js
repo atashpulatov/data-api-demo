@@ -1,6 +1,6 @@
 import { CONTEXT_LIMIT } from '../../mstr-object/mstr-object-rest-service';
 
-class OfficeFormatData {
+class OfficeFormatSubtotals {
   /**
    * Applies Excel number formatting to imported object based on MSTR data type.
    *
@@ -97,5 +97,5 @@ class OfficeFormatData {
     }
   };
 }
-const officeFormatData = new OfficeFormatData();
-export default officeFormatData;
+const officeFormatSubtotals = new OfficeFormatSubtotals();
+export default officeFormatSubtotals;

@@ -458,7 +458,9 @@ export class OfficeApiHelper {
       }
       // Check if ranges are valid before clearing
       await excelContext.sync();
-      if (isClear || (isCrosstab && (JSON.stringify(crosstabHeaderDimensions) === JSON.stringify(prevCrosstabDimensions)))) {
+
+      if (isClear
+        || (isCrosstab && (JSON.stringify(crosstabHeaderDimensions) === JSON.stringify(prevCrosstabDimensions)))) {
         if (columnsY) { topRange.clear('contents'); }
         if (rowsX) {
           leftRange.clear('contents');
@@ -471,6 +473,7 @@ export class OfficeApiHelper {
           titlesRange.clear();
         }
       }
+
       if (columnsY) { excelContext.trackedObjects.remove([topRange]); }
       if (rowsX) {
         excelContext.trackedObjects.remove([leftRange, titlesRange]);
@@ -615,7 +618,7 @@ export class OfficeApiHelper {
   * @param {Boolean} isClear Specify if object should be cleared or deleted. False by default
   * @memberof OfficeApiHelper
   */
-  async deleteExcelTable(officeTable, excelContext, isCrosstab = false, crosstabHeaderDimensions = {}, isClear = false) {
+  async deleteExcelTable(officeTable, excelContext, isCrosstab, crosstabHeaderDimensions = {}, isClear = false) {
     excelContext.runtime.enableEvents = false;
     await excelContext.sync();
     const isClearContentOnly = isClear ? 'contents' : '';
@@ -637,14 +640,6 @@ export class OfficeApiHelper {
         isClear
       );
       await excelContext.sync();
-
-      // const crosstabRange = await this.getCrosstabRangeSafely(officeTable, crosstabHeaderDimensions, excelContext);
-
-      // const firstCell = crosstabRange.getCell(0, 0);
-      // const columnsHeaders = firstCell.getOffsetRange(0, rowsX).getResizedRange(columnsY - 1, columnsX - 1);
-      // const rowsHeaders = firstCell.getResizedRange((columnsY + rowsY), rowsX - 1);
-      // columnsHeaders.clear(isClearContentOnly);
-      // rowsHeaders.clear(isClearContentOnly);
     }
     tableRange.clear(isClearContentOnly);
     if (!isClear) { officeTable.delete(); }

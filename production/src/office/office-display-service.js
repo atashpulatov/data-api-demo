@@ -8,10 +8,10 @@ import mstrObjectInstance from '../mstr-object/mstr-object-instance';
 import officeTableHelper from './table/office-table-helper';
 import officeTableService from './table/office-table-service';
 import officeFormattingData from './format/office-format-data';
-import officeFormatData from './format/office-format-subtotals';
 import officeFormatTable from './format/office-format-table';
 import officeImportService from './import/office-import-service';
 import officeDuplicateService from './office-duplicate-service';
+import officeFormatSubtotals from './format/office-format-subtotals';
 
 import { CLEAR_PROMPTS_ANSWERS } from '../navigation/navigation-tree-actions';
 import { NO_DATA_RETURNED, ALL_DATA_FILTERED_OUT } from '../error/constants';
@@ -198,7 +198,7 @@ export class OfficeDisplayService {
 
       if (mstrTable.subtotalsInfo.subtotalsAddresses.length) {
         // Removing duplicated subtotal addresses from headers
-        await officeFormatData.applySubtotalFormatting(officeData, instanceDefinition.mstrTable);
+        await officeFormatSubtotals.applySubtotalFormatting(officeData, instanceDefinition.mstrTable);
       }
 
       await officeTableService.bindOfficeTable(officeData, newBindingId);

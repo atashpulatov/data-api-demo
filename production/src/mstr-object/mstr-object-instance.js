@@ -128,7 +128,12 @@ export class MstrObjectInstance {
       throw error;
     }
 
-    const updatedVisualizationInfo = await getVisualizationInfo(projectId, objectId, visualizationInfo.visualizationKey, instanceId);
+    const updatedVisualizationInfo = await getVisualizationInfo(
+      projectId,
+      objectId,
+      visualizationInfo.visualizationKey,
+      instanceId
+    );
 
     if (!updatedVisualizationInfo) {
       throw new Error(INVALID_VIZ_KEY_MESSAGE);
