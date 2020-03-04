@@ -4,7 +4,7 @@ import { sessionProperties } from '../../storage/session-properties';
 import { sessionHelper } from '../../storage/session-helper';
 import { errorService } from '../../error/error-handler';
 import { authenticationService } from '../../authentication/auth-rest-service';
-import { homeHelper } from '../../home/home-helper';
+import { HomeHelper } from '../../home/home-helper';
 import { reduxStore } from '../../store';
 
 describe('sessionHelper', () => {
@@ -45,7 +45,7 @@ describe('sessionHelper', () => {
     // given
     jest.spyOn(sessionHelper, 'isDevelopment').mockReturnValueOnce(true);
     const loadingHelper = jest.spyOn(sessionHelper, 'disableLoading');
-    homeHelper.getWindowLocation = jest.fn().mockReturnValueOnce({ origin: 'localhost' });
+    HomeHelper.getWindowLocation = jest.fn().mockReturnValueOnce({ origin: 'localhost' });
 
     // when
     sessionHelper.logOutRedirect();

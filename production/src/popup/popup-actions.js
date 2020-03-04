@@ -1,5 +1,6 @@
-import { officeProperties } from '../office/office-properties';
+import { officeProperties } from '../office/store/office-properties';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
 
 export const CLEAR_WINDOW = 'POPUP_CLOSE_WINDOW';
 export const START_REPORT_LOADING = 'START_REPORT_LOADING';
@@ -8,8 +9,7 @@ export const RESET_STATE = 'RESET_STATE';
 export const SET_REPORT_N_FILTERS = 'SET_REPORT_N_FILTERS';
 export const SET_PREPARED_REPORT = 'SET_PREPARED_REPORT';
 // export const PRELOAD = 'PRELOAD';
-
-export class PopupActions {
+class PopupActions {
   init = (authenticationHelper,
     errorService,
     officeApiHelper,
@@ -76,10 +76,8 @@ export class PopupActions {
       let isError = true;
       const reportsNumber = reportArray.length;
       try {
-        // eslint-disable-next-line no-await-in-loop
         const excelContext = await officeApiHelper.getExcelContext();
-        // eslint-disable-next-line no-await-in-loop
-        await officeApiHelper.isCurrentReportSheetProtected(excelContext, report.bindId);
+        await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, report.bindId);
         // TODO: these two actions should be merged into one in the future
 
         dispatch({
@@ -88,7 +86,6 @@ export class PopupActions {
           isRefreshAll,
         });
 
-        // eslint-disable-next-line no-await-in-loop
         const { bindId, objectType, promptsAnswers } = report;
         isError = await popupHelper.printRefreshedReport(
           bindId,

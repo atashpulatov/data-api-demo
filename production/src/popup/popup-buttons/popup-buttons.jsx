@@ -75,9 +75,12 @@ PopupButtonsNotConnected.propTypes = {
   handleOk: PropTypes.func,
   handleSecondary: PropTypes.func,
   handleCancel: PropTypes.func,
-  handleBack: PropTypes.func,
   t: PropTypes.func,
   loading: PropTypes.bool,
+  handleBack: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.func
+  ]),
   disableActiveActions: PropTypes.bool,
   onPreviewClick: PropTypes.func,
   hideSecondary: PropTypes.bool,

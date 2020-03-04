@@ -1,5 +1,5 @@
 import * as actions from '../../navigation/navigation-tree-actions';
-import { officeProperties } from '../../office/office-properties';
+import { officeProperties } from '../../office/store/office-properties';
 
 describe('NavigationTree Actions', () => {
   it('should dispatch proper selectObject action', () => {

@@ -1,5 +1,4 @@
-
-export class NotificationService {
+class NotificationService {
   init = (reduxStore, actionCreator) => {
     this.reduxStore = reduxStore;
     this.actionCreator = actionCreator;

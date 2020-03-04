@@ -1,4 +1,3 @@
-/* eslint-disable no-await-in-loop */
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -225,7 +224,6 @@ export default class EmbeddedDossierNotConnected extends React.Component {
   * to keep the import button enabled.
   *
   * @param {Array} promptsAnswers
-  * @memberof _EmbeddedDossier
   */
   async promptsAnsweredHandler(promptsAnswers) {
     const { handlePromptAnswer } = this.props;
@@ -246,7 +244,6 @@ export default class EmbeddedDossierNotConnected extends React.Component {
   * bookmark or new prompts answers given.
   *
   * @param {String} newInstanceId
-  * @memberof _EmbeddedDossier
   */
   instanceIdChangeHandler(newInstanceId) {
     const { handleInstanceIdChange } = this.props;
@@ -278,11 +275,11 @@ EmbeddedDossierNotConnected.propTypes = {
     instanceId: PropTypes.string,
     promptsAnswers: PropTypes.array || null,
     selectedViz: PropTypes.string,
-    visualizationInfo: {
+    visualizationInfo: PropTypes.shape({
       chapterKey: PropTypes.string,
       pageKey: PropTypes.string,
       visualizationKey: PropTypes.string,
-    }
+    })
   }),
   handleSelection: PropTypes.func,
   handlePromptAnswer: PropTypes.func,
@@ -314,7 +311,7 @@ const mapStateToProps = (state) => {
   const popupState = popupReducer.editedObject;
   const { promptsAnswers } = state.navigationTree;
   const { supportForms } = officeReducer;
-  const isReport = popupState && popupState.objectType === mstrObjectEnum.mstrObjectType.report.name;
+  const isReport = popupState && popupState.objectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
   const editedObject = { ...(popupHelper.parsePopupState(popupState, promptsAnswers, formsPrivilege)) };

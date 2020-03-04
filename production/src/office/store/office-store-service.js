@@ -1,10 +1,10 @@
-import { officeProperties } from '../office-properties';
+import { officeProperties } from './office-properties';
 import { RunOutsideOfficeError } from '../../error/run-outside-office-error';
 import { errorService } from '../../error/error-handler';
 
 /* global Office */
 
-export class OfficeStoreService {
+class OfficeStoreService {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
   }

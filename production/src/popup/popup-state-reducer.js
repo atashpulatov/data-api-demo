@@ -6,7 +6,7 @@ import { PopupTypeEnum } from '../home/popup-type-enum';
 export const initialState = {};
 
 export const popupStateReducer = (state = initialState, action) => {
-  const { type, data } = action;
+  const { type } = action;
   switch (type) {
   case SET_POPUP_TYPE: {
     return {

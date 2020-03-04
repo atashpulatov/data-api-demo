@@ -1,18 +1,20 @@
 /* eslint-disable react/no-danger */
-/* eslint-disable no-underscore-dangle */
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import warningIcon from '../loading/assets/icon_conflict.svg';
-import { officeApiHelper } from '../office/office-api-helper';
+import { officeApiHelper } from '../office/api/office-api-helper';
 import {
   toggleSecuredFlag as toggleSecuredFlagImported,
   toggleIsConfirmFlag as toggleIsConfirmFlagImported,
   toggleIsClearingFlag as toggleIsClearingFlagImported
-} from '../office/office-actions';
+} from '../office/store/office-actions';
 import { errorService } from '../error/error-handler';
 import { notificationService } from '../notification/notification-service';
+import { officeApiCrosstabHelper } from '../office/api/office-api-crosstab-helper';
+import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
+import { officeApiRemoveHelper } from '../office/api/office-api-remove-helper';
 
 export const ConfirmationNotConnected = ({
   reportArray,
@@ -40,23 +42,22 @@ export const ConfirmationNotConnected = ({
       toggleIsClearingFlag(true);
       toggleIsConfirmFlag(); // Switch off isConfirm popup
       const excelContext = await officeApiHelper.getExcelContext();
-      await officeApiHelper.checkIfAnySheetProtected(excelContext, reportArray);
+      await officeApiWorksheetHelper.checkIfAnySheetProtected(excelContext, reportArray);
       for (const report of reportArray) {
-        if (await officeApiHelper.checkIfObjectExist(report, excelContext)) {
+        if (await officeApiRemoveHelper.checkIfObjectExist(report, excelContext)) {
           try {
             reportName = report.name;
             if (report.isCrosstab) {
               const officeTable = await officeApiHelper.getTable(excelContext, report.bindId);
-              // Since showing Excel table header dont override the data but insert new row,
-              // we clear values from empty row in crosstab to prevent it
-              officeApiHelper.clearEmptyCrosstabRow(officeTable);
+              officeApiCrosstabHelper.clearEmptyCrosstabRow(officeTable);
               officeTable.showHeaders = true;
               officeTable.showFilterButton = false;
+
               const headers = officeTable.getHeaderRowRange();
               headers.format.font.color = 'white';
               await excelContext.sync();
             }
-            await officeApiHelper.deleteObjectTableBody(excelContext, report, true);
+            await officeApiRemoveHelper.removeOfficeTableBody(excelContext, report, true);
           } catch (error) {
             const officeError = errorService.handleError(error);
             clearErrors.push({ reportName, officeError });

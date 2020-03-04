@@ -8,7 +8,7 @@ import {
   switchImportSubtotals as switchImportSubtotalsImported,
   updateDisplayAttrForm as updateDisplayAttrFormImported
 } from '../navigation/navigation-tree-actions';
-import { officeProperties } from '../office/office-properties';
+import { officeProperties } from '../office/store/office-properties';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 
 export class AttributeSelectorNotConnected extends Component {
@@ -122,10 +122,10 @@ AttributeSelectorNotConnected.propTypes = {
   isEdit: PropTypes.bool,
   importSubtotal: PropTypes.bool,
   switchImportSubtotals: PropTypes.func,
-  displayAttrFormNames: PropTypes.bool,
+  displayAttrFormNames: PropTypes.string,
   chosenObject: PropTypes.shape({ id: PropTypes.string, }),
   editedObject: PropTypes.shape({
-    displayAttrFormNames: PropTypes.bool,
+    displayAttrFormNames: PropTypes.string,
     subtotalsInfo: PropTypes.shape({ importSubtotal: PropTypes.bool, }),
     projectId: PropTypes.string,
     promptsAnswers: PropTypes.arrayOf(PropTypes.shape({}))
@@ -148,7 +148,7 @@ const mapStateToProps = (state) => {
   const { editedObject } = popupReducer;
   const { supportForms } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
-  const isReport = editedObject && editedObject.objectType === mstrObjectEnum.mstrObjectType.report.name;
+  const isReport = editedObject && editedObject.objectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   return {
     chosenObject,

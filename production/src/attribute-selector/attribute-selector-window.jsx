@@ -126,9 +126,9 @@ export class AttributeSelectorWindowNotConnected extends Component {
 AttributeSelectorWindowNotConnected.propTypes = {
   chosenObject: PropTypes.shape({
     chosenObjectName: PropTypes.string,
-    objectType: PropTypes.string,
+    objectType: PropTypes.shape({ name: PropTypes.string }),
     preparedInstanceId: PropTypes.string,
-    promptsAnswers: PropTypes.string,
+    promptsAnswers: PropTypes.arrayOf(PropTypes.shape({})),
   }),
   objectName: PropTypes.string,
   mstrData: PropTypes.shape({
@@ -137,13 +137,13 @@ AttributeSelectorWindowNotConnected.propTypes = {
     projectId: PropTypes.string,
     instanceId: PropTypes.string,
     promptsAnswers: PropTypes.string,
-    isPrompted: PropTypes.bool
+    isPrompted: PropTypes.number
   }).isRequired,
   handleBack: PropTypes.func,
   importSubtotal: PropTypes.bool,
-  displayAttrFormNames: PropTypes.bool,
+  displayAttrFormNames: PropTypes.string,
   editedObject: PropTypes.shape({
-    displayAttrFormNames: PropTypes.bool,
+    displayAttrFormNames: PropTypes.string,
     subtotalsInfo: PropTypes.shape({ importSubtotal: PropTypes.bool, }),
     projectId: PropTypes.string,
     promptsAnswers: PropTypes.arrayOf(PropTypes.shape({}))

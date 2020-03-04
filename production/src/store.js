@@ -6,7 +6,7 @@ import storage from 'redux-persist/lib/storage';
 import thunk from 'redux-thunk';
 import { sessionReducer } from './storage/session-reducer';
 import { navigationTree } from './storage/navigation-tree-reducer';
-import { officeReducer } from './office/office-reducer';
+import { officeReducer } from './office/store/office-reducer';
 import { notificationReducer } from './notification/reducer';
 import { popupReducer } from './popup/popup-reducer';
 import cacheReducer from './cache/cache-reducer';

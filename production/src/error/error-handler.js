@@ -8,7 +8,7 @@ import {
 
 const TIMEOUT = 2000;
 
-export class ErrorService {
+class ErrorService {
   init = (sessionHelper, notificationService) => {
     this.sessionHelper = sessionHelper;
     this.notificationService = notificationService;
