@@ -1,24 +1,23 @@
-/* eslint-disable */
-import {reduxStore} from './store';
-import {officeApiHelper} from './office/api/office-api-helper';
-import {officeStoreService} from './office/store/office-store-service';
-import {errorService} from './error/error-handler';
-import {sessionHelper} from './storage/session-helper';
-import {notificationService} from './notification/notification-service';
-import {authenticationHelper} from './authentication/authentication-helper';
-import {homeHelper} from './home/home-helper';
-import {mstrObjectRestService} from './mstr-object/mstr-object-rest-service';
-import {popupController} from './popup/popup-controller';
-import {officeDisplayService} from './office/office-display-service';
-import {mstrListRestService} from './mstr-object/mstr-list-rest-service';
-import {popupHelper} from './popup/popup-helper';
-import {popupActions} from './popup/popup-actions';
-import {actionCreator} from './notification/action-creator';
-import {authenticationService} from './authentication/auth-rest-service';
+import { reduxStore } from './store';
+import { officeApiHelper } from './office/api/office-api-helper';
+import { officeStoreService } from './office/store/office-store-service';
+import { errorService } from './error/error-handler';
+import { sessionHelper } from './storage/session-helper';
+import { notificationService } from './notification/notification-service';
+import { authenticationHelper } from './authentication/authentication-helper';
+import { homeHelper } from './home/home-helper';
+import { mstrObjectRestService } from './mstr-object/mstr-object-rest-service';
+import { popupController } from './popup/popup-controller';
+import { officeDisplayService } from './office/office-display-service';
+import { mstrListRestService } from './mstr-object/mstr-list-rest-service';
+import { popupHelper } from './popup/popup-helper';
+import { popupActions } from './popup/popup-actions';
+import { actionCreator } from './notification/action-creator';
+import { authenticationService } from './authentication/auth-rest-service';
 
 class DIContainer {
   constructor(autoInitialize) {
-    if (autoInitialize) this.initializeAll();
+    if (autoInitialize) { this.initializeAll(); }
   }
 
   initializeAll = () => {
@@ -38,7 +37,7 @@ class DIContainer {
     this.authenticationHelper.init(reduxStore, sessionHelper, authenticationService, errorService);
     this.homeHelper = homeHelper;
     this.homeHelper.init(reduxStore, sessionHelper);
-    this.mstrObjectRestService = mstrObjectRestService
+    this.mstrObjectRestService = mstrObjectRestService;
     this.mstrObjectRestService.init(reduxStore);
     this.popupController = popupController;
     this.popupController.init(reduxStore, sessionHelper, popupActions);
@@ -56,7 +55,8 @@ class DIContainer {
       this.officeStoreService,
       this.popupHelper,
       this.mstrObjectRestService,
-      this.popupController);
+      this.popupController
+    );
     this.initialized = true;
   }
 

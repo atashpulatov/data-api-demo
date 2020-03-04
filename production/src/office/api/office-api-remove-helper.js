@@ -4,6 +4,7 @@ import { notificationService } from '../../notification/notification-service';
 import { errorService } from '../../error/error-handler';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { officeApiCrosstabHelper } from './office-api-crosstab-helper';
+import { officeApiHelper } from './office-api-helper';
 
 class OfficeApiRemoveHelper {
     /**
@@ -23,9 +24,9 @@ class OfficeApiRemoveHelper {
     removeReportFromExcel = async (bindingId, isCrosstab, crosstabHeaderDimensions) => {
       try {
         await authenticationHelper.validateAuthToken();
-        const officeContext = await this.getOfficeContext();
+        const officeContext = await officeApiHelper.getOfficeContext();
         await officeContext.document.bindings.releaseByIdAsync(bindingId, () => { console.log('released binding'); });
-        const excelContext = await this.getExcelContext();
+        const excelContext = await officeApiHelper.getExcelContext();
         const officeTable = excelContext.workbook.tables.getItem(bindingId);
         this.removeExcelTable(officeTable, excelContext, isCrosstab, crosstabHeaderDimensions);
         await excelContext.sync();
@@ -72,9 +73,9 @@ class OfficeApiRemoveHelper {
    * @return {Boolean}
    */
   checkIfObjectExist = async (object, excelContext) => {
-    const officeContext = await this.getOfficeContext();
+    const officeContext = await officeApiHelper.getOfficeContext();
     try {
-      await this.getTable(excelContext, object.bindId);
+      await officeApiHelper.getTable(excelContext, object.bindId);
       await excelContext.sync();
       return true;
     } catch (error) {

@@ -2,7 +2,7 @@ import { sessionProperties } from './session-properties';
 import { authenticationService } from '../authentication/auth-rest-service';
 import { userRestService } from '../home/user-rest-service';
 import { errorService } from '../error/error-handler';
-import { homeHelper } from '../home/home-helper';
+import { HomeHelper } from '../home/home-helper';
 import { createCache } from '../cache/cache-actions';
 import DB from '../cache/cache-db';
 
@@ -87,8 +87,8 @@ class SessionHelper {
     let userData = {};
     const IS_LOCALHOST = this.isLocalhost();
     const { reduxStore } = this;
-    const envUrl = IS_LOCALHOST ? reduxStore.getState().sessionReducer.envUrl : homeHelper.saveLoginValues();
-    const authToken = IS_LOCALHOST ? reduxStore.getState().sessionReducer.authToken : homeHelper.saveTokenFromCookies();
+    const envUrl = IS_LOCALHOST ? reduxStore.getState().sessionReducer.envUrl : HomeHelper.saveLoginValues();
+    const authToken = IS_LOCALHOST ? reduxStore.getState().sessionReducer.authToken : HomeHelper.saveTokenFromCookies();
     try {
       userData = await userRestService.getUserInfo(authToken, envUrl);
       !userData.userInitials && sessionHelper.saveUserInfo(userData);
@@ -102,8 +102,8 @@ class SessionHelper {
     let canChooseAttrForm = false;
     const IS_LOCALHOST = this.isLocalhost();
     const { reduxStore } = this;
-    const envUrl = IS_LOCALHOST ? reduxStore.getState().sessionReducer.envUrl : homeHelper.saveLoginValues();
-    const authToken = IS_LOCALHOST ? reduxStore.getState().sessionReducer.authToken : homeHelper.saveTokenFromCookies();
+    const envUrl = IS_LOCALHOST ? reduxStore.getState().sessionReducer.envUrl : HomeHelper.saveLoginValues();
+    const authToken = IS_LOCALHOST ? reduxStore.getState().sessionReducer.authToken : HomeHelper.saveTokenFromCookies();
     try {
       canChooseAttrForm = await authenticationService.getAttributeFormPrivilege(envUrl, authToken);
       sessionHelper.setAttrFormPrivilege(canChooseAttrForm);

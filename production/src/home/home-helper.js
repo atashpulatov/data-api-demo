@@ -1,4 +1,4 @@
-class HomeHelper {
+export class HomeHelper {
   init = (reduxStore, sessionHelper) => {
     this.reduxStore = reduxStore;
     this.sessionHelper = sessionHelper;
