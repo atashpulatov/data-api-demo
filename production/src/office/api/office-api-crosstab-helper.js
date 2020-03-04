@@ -51,7 +51,6 @@ class OfficeApiCrosstabHelper {
     for (let i = 0; i <= limit; i++) {
       try {
         officeTable.getRange()[getFunction](i + 1);
-        // eslint-disable-next-line no-await-in-loop
         await excelContext.sync();
       } catch (error) {
         return i;

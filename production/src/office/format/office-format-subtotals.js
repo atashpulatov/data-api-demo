@@ -9,9 +9,9 @@ class OfficeFormatSubtotals {
    * @param {Office} officeTable
    * @param {Office} excelContext ExcelContext
    * @param {Object} mstrTable contains informations about mstr object
-   * @param {Boolean} [shouldbold=true] Specify whether the values in cells should be bold
+   * @param {Boolean} [shouldBold=true] Specify whether the values in cells should be bold
    */
-  applySubtotalFormatting = async ({ excelContext, officeTable }, mstrTable, shouldbold = true) => {
+  applySubtotalFormatting = async ({ excelContext, officeTable }, mstrTable, shouldBold = true) => {
     const { isCrosstab } = mstrTable;
     let { subtotalsInfo:{ subtotalsAddresses } } = mstrTable;
     let reportStartCell;
@@ -25,7 +25,7 @@ class OfficeFormatSubtotals {
     }
 
     excelContext.trackedObjects.add(reportStartCell);
-    await this.formatSubtotals(reportStartCell, subtotalsAddresses, mstrTable, excelContext, shouldbold);
+    await this.formatSubtotals(reportStartCell, subtotalsAddresses, mstrTable, excelContext, shouldBold);
     excelContext.trackedObjects.remove(reportStartCell);
     console.timeEnd('Subtotal Formatting');
   };
@@ -87,7 +87,6 @@ class OfficeFormatSubtotals {
       if (subtotalRowRange) { subtotalRowRange.format.font.bold = shouldBold; }
       contextPromises.push(excelContext.sync());
       if (contextPromises.length % CONTEXT_LIMIT === 0) {
-        // eslint-disable-next-line no-await-in-loop
         await Promise.all(contextPromises);
         contextPromises = [];
       }

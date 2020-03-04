@@ -176,7 +176,7 @@ class OfficeDisplayService {
 
       // Apply number formatting after table was created
       if (shouldFormat && !mstrTable.isCrosstabular) {
-        await officeFormattingData.applyFormatting(officeData, instanceDefinition);
+        await officeFormattingData.applyFormatting({ ...officeData, instanceDefinition });
       }
 
       // Fetch, convert and insert with promise generator

@@ -7,7 +7,7 @@ class OfficeFormatData {
    * @param {Boolean} isCrosstab
    * @param {Office} excelContext
    */
-  applyFormatting = async ({ officeTable, excelContext }, instanceDefinition,) => {
+  applyFormatting = async ({ officeTable, excelContext, instanceDefinition }) => {
     try {
       console.time('Apply formatting');
       const { columnInformation, isCrosstab } = instanceDefinition.mstrTable;
@@ -59,7 +59,7 @@ class OfficeFormatData {
    */
   filterColumnInformation = (columnInformation, isCrosstab) => {
     if (isCrosstab) {
-      return columnInformation.filter((e) => (e.isAttribute === false) && (Object.keys(e).length !== 0));
+      return columnInformation.filter((e) => (!e.isAttribute) && (Object.keys(e).length !== 0));
     }
     return columnInformation.filter((column) => Object.keys(column).length !== 0);
   };

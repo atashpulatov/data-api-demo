@@ -21,7 +21,6 @@ class OfficeFormatTable {
       await excelContext.sync();
       for (let index = 0; index < columns.count; index++) {
         columns.getItemAt(index).getRange().format.autofitColumns();
-        // eslint-disable-next-line no-await-in-loop
         await excelContext.sync();
       }
       if (isCrosstab) { officeTable.showHeaders = false; }

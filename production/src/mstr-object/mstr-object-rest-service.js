@@ -1,4 +1,3 @@
-/* eslint-disable no-await-in-loop */
 import request from 'superagent';
 import { NO_DATA_RETURNED } from '../error/constants';
 import { OutsideOfRangeError } from '../error/outside-of-range-error';

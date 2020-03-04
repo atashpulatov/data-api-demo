@@ -54,7 +54,7 @@ class MstrObjectInstance {
 
     if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
       ({ body, visualizationInfo, instanceDefinition } = await this.getDossierInstanceDefinition(
-        config, visualizationInfo,
+        { ...config, visualizationInfo }
       ));
     } else {
       instanceDefinition = await createInstance(config);
@@ -63,7 +63,7 @@ class MstrObjectInstance {
 
     // Status 2 = report has open prompts to be answered before data can be returned
     if (instanceDefinition.status === 2) {
-      instanceDefinition = await this.modifyInstanceWithPrompt(instanceDefinition, config);
+      instanceDefinition = await this.modifyInstanceWithPrompt({ instanceDefinition, ...config });
     }
 
     return {
@@ -106,8 +106,8 @@ class MstrObjectInstance {
       displayAttrFormNames,
       manipulationsXML,
       preparedInstanceId,
+      visualizationInfo,
     },
-    visualizationInfo,
   ) {
     if (manipulationsXML) {
       if (!body) {
@@ -175,8 +175,8 @@ class MstrObjectInstance {
    * @param {Object} body Contains requested objects and filters.
    */
   modifyInstanceWithPrompt = async (
-    instanceDefinition,
     {
+      instanceDefinition,
       objectId,
       projectId,
       promptsAnswers,

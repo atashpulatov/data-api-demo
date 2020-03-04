@@ -77,7 +77,6 @@ class OfficeInsertService {
       rowRange.values = splitExcelRows[i];
       if (isOverLimit) {
         console.time(`Sync for ${splitExcelRows[i].length} rows`);
-        // eslint-disable-next-line no-await-in-loop
         await excelContext.sync();
         console.timeEnd(`Sync for ${splitExcelRows[i].length} rows`);
       }

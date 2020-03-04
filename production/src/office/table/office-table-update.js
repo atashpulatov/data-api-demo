@@ -80,7 +80,6 @@ class OfficeTableUpdate {
       for (let i = tableRowCount - 1; i >= rows; i--) {
         rowsToRemove[i].delete();
         if (i === rows || i % CONTEXT_LIMIT === 0) {
-          // eslint-disable-next-line no-await-in-loop
           await excelContext.sync();
         }
       }

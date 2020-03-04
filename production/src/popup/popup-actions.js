@@ -76,9 +76,7 @@ class PopupActions {
       let isError = true;
       const reportsNumber = reportArray.length;
       try {
-        // eslint-disable-next-line no-await-in-loop
         const excelContext = await officeApiHelper.getExcelContext();
-        // eslint-disable-next-line no-await-in-loop
         await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, report.bindId);
         // TODO: these two actions should be merged into one in the future
 
@@ -88,7 +86,6 @@ class PopupActions {
           isRefreshAll,
         });
 
-        // eslint-disable-next-line no-await-in-loop
         const { bindId, objectType, promptsAnswers } = report;
         isError = await popupHelper.printRefreshedReport(
           bindId,

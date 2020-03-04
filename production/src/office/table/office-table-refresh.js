@@ -72,12 +72,14 @@ class OfficeTableRefresh {
 
       newOfficeTableName = prevOfficeTable.name;
       ({ officeTable, newBindingId } = await officeTableCreate.createOfficeTable(
-        instanceDefinition,
-        excelContext,
-        startCell,
-        newOfficeTableName,
-        prevOfficeTable,
-        tableColumnsChanged,
+        {
+          instanceDefinition,
+          excelContext,
+          startCell,
+          newOfficeTableName,
+          prevOfficeTable,
+          tableColumnsChanged,
+        }
       ));
     } else {
       shouldFormat = visualizationInfo.formatShouldUpdate || false;

@@ -60,10 +60,12 @@ class OfficeTableService {
       ));
     } else {
       ({ officeTable, newBindingId } = await officeTableCreate.createOfficeTable(
-        instanceDefinition,
-        excelContext,
-        startCell,
-        newOfficeTableName
+        {
+          instanceDefinition,
+          excelContext,
+          startCell,
+          newOfficeTableName
+        }
       ));
     }
     console.timeEnd('Create or get table');
