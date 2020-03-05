@@ -515,8 +515,7 @@ class PluginPopup {
    * @returns {Array} array of rows
    */
   getTableRows() {
-    const w = $$(popupSelectors.tableRows);
-    return w;
+    return $$(popupSelectors.tableRows);
   }
 
   /**
