@@ -21,7 +21,7 @@ export const objectReducer = (state = initialState, action) => {
 function importRequested(state, payload) {
   return [
     ...state,
-    payload.object
+    payload.object,
   ];
 }
 
