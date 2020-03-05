@@ -3,7 +3,7 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
 import { objectsList } from '../../../constants/objects-list';
-import { waitForNotification, waitForPopup } from '../../../helpers/utils/wait-helper';
+import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 
