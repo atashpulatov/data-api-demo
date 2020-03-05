@@ -14,7 +14,7 @@ describe('objectReducer', () => {
       // given
       const action = {
         type: IMPORT_REQUESTED,
-        payload: initialObject,
+        payload: { object: initialObject, }
       };
       // when
       const resultState = objectReducer(initialState, action);
@@ -25,7 +25,7 @@ describe('objectReducer', () => {
       // given
       const action = {
         type: IMPORT_REQUESTED,
-        payload: initialObject,
+        payload: { object: initialObject, }
       };
       const modifiedInitialState = [{
         objectWorkingId: 'someOtherString234',
