@@ -17,18 +17,22 @@ export const objectReducer = (state = initialState, action) => {
 };
 
 function importRequested(state, payload) {
-  return [
-    ...state,
-    payload.object,
-  ];
+  return {
+    objects: [
+      ...state.objects,
+      payload.object,
+    ]
+  };
 }
 
 function updateObject(state, updatedObject) {
-  return state.map((object) => (object.objectWorkingId === updatedObject.objectWorkingId
-    ? { ...object, ...updatedObject }
-    : object));
+  return {
+    objects: state.map((object) => (object.objectWorkingId === updatedObject.objectWorkingId
+      ? { ...object, ...updatedObject }
+      : object))
+  };
 }
 
 function deleteObject(state, objectWorkingId) {
-  return state.splice(state.findIndex(object => object.objectWorkingId === objectWorkingId), 1);
+  return { objects: state.splice(state.findIndex(object => object.objectWorkingId === objectWorkingId), 1) };
 }

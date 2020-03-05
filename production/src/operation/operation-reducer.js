@@ -14,10 +14,12 @@ export const operationReducer = (state = initialState, action) => {
 };
 
 function importRequested(state, payload) {
-  return [
-    ...state,
-    payload.operation,
-  ];
+  return {
+    operations: [
+      ...state.operaions,
+      payload.operation,
+    ]
+  };
 }
 
 function markStepCompleted(state, { objectWorkingId, completedStep }) {
