@@ -6,9 +6,12 @@ export const MARK_STEP_COMPLETED = 'MARK_STEP_COMPLETED';
 export const SET_TOTAL_ROWS = 'SET_TOTAL_ROWS';
 export const SET_LOADED_ROWS = 'SET_LOADED_ROWS';
 
-export const importRequested = (payload) => ({
+export const importRequested = (object) => ({
   type: IMPORT_REQUESTED,
-  payload,
+  payload: {
+    operation: createOperation(IMPORT_REQUESTED),
+    object,
+  },
 });
 
 export const markStepCompleted = (objectWorkingId, completedStep) => ({
@@ -18,3 +21,12 @@ export const markStepCompleted = (objectWorkingId, completedStep) => ({
     completedStep,
   }
 });
+
+function createOperation(type) {
+  return {
+    operationType: operationTypes[type],
+    objectWorkingId: Date.now(),
+  };
+}
+
+const operationTypes = { IMPORT_REQUESTED: 'CREATE', };

@@ -18,8 +18,11 @@ export const objectReducer = (state = initialState, action) => {
   }
 };
 
-function importRequested(state, object) {
-  return [...state, object];
+function importRequested(state, payload) {
+  return [
+    ...state,
+    payload.object
+  ];
 }
 
 function updateObject(state, updatedObject) {
