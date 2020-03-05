@@ -7,30 +7,30 @@ describe('OperationBus', () => {
   });
 
   beforeEach(() => {
-    fakeStore.simulateActionChange('justSomeAction');
+    fakeStore.simulateStepChange('justSomeStep');
   });
 
-  it('does not call subscriber when actions do not match', () => {
+  it('does not call subscriber when steps do not match', () => {
     // given
     operationBus.init(fakeStore);
     const subscriber = jest.fn();
-    const subscribedAction = 'subscribed';
-    const postedAction = 'posted';
-    operationBus.subscribe(subscribedAction, subscriber);
+    const subscribedStep = 'subscribed';
+    const postedStep = 'posted';
+    operationBus.subscribe(subscribedStep, subscriber);
     // when
-    fakeStore.simulateActionChange(postedAction);
+    fakeStore.simulateStepChange(postedStep);
     // then
     expect(subscriber).not.toBeCalled();
   });
 
-  it('not call subscriber when actions do not match', () => {
+  it('not call subscriber when steps do not match', () => {
     // given
     operationBus.init(fakeStore);
     const subscriber = jest.fn();
-    const subscribedAction = 'subscribed';
-    operationBus.subscribe(subscribedAction, subscriber);
+    const subscribedStep = 'subscribed';
+    operationBus.subscribe(subscribedStep, subscriber);
     // when
-    fakeStore.simulateActionChange(subscribedAction);
+    fakeStore.simulateStepChange(subscribedStep);
     // then
     expect(subscriber).toBeCalled();
   });

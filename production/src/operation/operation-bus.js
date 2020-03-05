@@ -13,17 +13,17 @@ class OperationBus {
     const currentOperation = this.store.getState().operationReducer
       && this.store.getState().operationReducer.operations[0];
     if (!this.previousOperation || !currentOperation
-      || this.previousOperation.actionsQueue[0] === currentOperation.actionsQueue[0]) {
+      || this.previousOperation.stepsQueue[0] === currentOperation.stepsQueue[0]) {
       return;
     }
-    const nextAction = currentOperation.actionsQueue[0];
-    const subscribedCallback = this.subscribedCallbacksMap[nextAction];
+    const nextStep = currentOperation.stepsQueue[0];
+    const subscribedCallback = this.subscribedCallbacksMap[nextStep];
     subscribedCallback && subscribedCallback();
     this.previousOperation = currentOperation;
   }
 
-  subscribe = (actionName, callback) => {
-    this.subscribedCallbacksMap[actionName] = callback;
+  subscribe = (stepName, callback) => {
+    this.subscribedCallbacksMap[stepName] = callback;
   }
 }
 
