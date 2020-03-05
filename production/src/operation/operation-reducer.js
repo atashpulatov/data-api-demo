@@ -17,6 +17,21 @@ function importRequested(state, payload) {
 
 }
 
-function markStepCompleted(state, paylaod) {
-
+function markStepCompleted(state, { objectWorkingId, completedStep }) {
+  const processedOperation = state.operations.find((operation) => operation.objectWorkingId === objectWorkingId);
+  const { stepsQueue } = processedOperation;
+  if (processedOperation.stepsQueue[0] !== completedStep) {
+    // FIXME: Add class/message for this error
+    throw new Error();
+  }
+  if (stepsQueue.lenght === 1) {
+    state.operations.splice(
+      state.operations.findIndex(
+        (operation) => operation.objectWorkingId === objectWorkingId
+      ), 1
+    );
+  } else {
+    stepsQueue.shift();
+  }
+  return { ...state };
 }
