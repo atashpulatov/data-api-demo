@@ -1,4 +1,4 @@
-import { operationBus } from '../../operation-bus';
+import { operationBus } from '../../operation/operation-bus';
 import { fakeStore } from './fake-store';
 
 describe('OperationBus', () => {
