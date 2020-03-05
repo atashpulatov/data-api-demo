@@ -510,11 +510,19 @@ class PluginPopup {
     waitAndClick($(dossierWindow.getTocItemAt(index)), 1000);
   }
 
+  /**
+   * Gets rows from Table of Objects
+   * @returns {Array} array of rows
+   */
   getTableRows() {
     const w = $$(popupSelectors.tableRows);
     return w;
   }
 
+  /**
+   * copies IDs of rows in table of objects by expanding Details panel and copying IDs
+   * @returns {String[]} array of IDs
+   */
   copyObjectsID() {
     const rows = this.getTableRows();
     const idsArray = [];
@@ -528,20 +536,35 @@ class PluginPopup {
     return idsArray;
   }
 
+  /**
+   * Clicks Filter button, that opens Filter Panel
+   */
   clickFilterButton() {
     $(popupSelectors.filterButton).click();
   }
 
-  tickFilterCheckBox(section, item) {
-    $(popupSelectors.filterCheckbox(section, item)).click();
+  /**
+   * Sets checkbox to checked
+   * @param {String} category category in which the checbox is, like 'Application'
+   * @param {String} item name of the chosen checkBox, like 'MicroStrategy Tutorial'
+   */
+  tickFilterCheckBox(category, item) {
+    $(popupSelectors.filterCheckbox(category, item)).click();
   }
 
+  /**
+   * Pastes clipboard's content to Search box, using 'Shift' + 'Insert' key combination
+   */
   pasteToSearchBox() {
     const searchBox = $(popupSelectors.searchInput);
     searchBox.setValue(['Shift', 'Insert']);
   }
 
-  compareClipboardToRow(stringToCompare) {
+  /**
+   * Compares value of Search box to a given string
+   * @param {String} stringToCompare
+   */
+  compareSearchBoxToString(stringToCompare) {
     const searchBox = $(popupSelectors.searchInput);
     browser.pause(1111);
     return searchBox.getValue() === stringToCompare;

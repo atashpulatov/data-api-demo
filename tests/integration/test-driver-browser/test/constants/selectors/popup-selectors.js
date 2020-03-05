@@ -19,7 +19,7 @@ export const popupSelectors = {
   anyObject: (index) => `div.ReactVirtualized__Grid.ReactVirtualized__Table__Grid > div > div:nth-child(${index}) > div`,
   selectorTitle: (index) => `div:nth-child(${index}) > div > div.selector-title`,
   attributeSelector: (index) => `  #root > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div:nth-child(1) > div > div.checkbox-list.all-showed > div > div > div > ul > li:nth-child(${index}) > span.ant-tree-checkbox > span`,
-  filterCheckbox: (section, item) => `.category-list-header[aria-label="${section}"] + .category-list-table > .category-list-row > .checkbox-cell > label > input[aria-label="Checkbox for ${item}."] + span`,
+  filterCheckbox: (category, item) => `.category-list-header[aria-label="${category}"] + .category-list-table > .category-list-row > .checkbox-cell > label > input[aria-label="Checkbox for ${item}."] + span`,
   selectorFilter: '#root > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-12 > div > div:nth-child(1) > div.selector-title',
   backBtn: '#back',
   dataPreviewBtn: '#data-preview',

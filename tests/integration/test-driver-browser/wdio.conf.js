@@ -157,7 +157,7 @@ exports.config = {
   //
   // Default request retries count
   connectionRetryCount:
-  1,
+  3,
   //
   // Test runner services
   // Services take over a specific job you don't want to take care of. They enhance
@@ -177,7 +177,7 @@ exports.config = {
 
   //
   // The number of times to retry the entire specfile when it fails as a whole
-  specFileRetries: 0,
+  specFileRetries: 3,
   //
   // Test reporter for stdout.
   // The only one supported by default is 'dot'
