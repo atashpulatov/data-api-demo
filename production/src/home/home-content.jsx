@@ -54,7 +54,7 @@ HomeContent.propTypes = {
   loadingReport: PropTypes.bool,
   t: PropTypes.func,
   toggleRenderSettingsFlag: PropTypes.func,
-  authToken: PropTypes.string,
+  authToken: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   shouldRenderSettings: PropTypes.bool,
   reportArray: PropTypes.arrayOf(PropTypes.shape({ length: PropTypes.number, })),
 };
