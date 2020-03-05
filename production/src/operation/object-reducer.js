@@ -27,12 +27,12 @@ function importRequested(state, payload) {
 
 function updateObject(state, updatedObject) {
   return {
-    objects: state.map((object) => (object.objectWorkingId === updatedObject.objectWorkingId
+    objects: state.objects.map((object) => (object.objectWorkingId === updatedObject.objectWorkingId
       ? { ...object, ...updatedObject }
       : object))
   };
 }
 
 function deleteObject(state, objectWorkingId) {
-  return { objects: state.splice(state.findIndex(object => object.objectWorkingId === objectWorkingId), 1) };
+  return { objects: state.objects.splice(state.findIndex(object => object.objectWorkingId === objectWorkingId), 1) };
 }
