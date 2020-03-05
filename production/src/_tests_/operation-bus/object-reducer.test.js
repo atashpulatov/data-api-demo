@@ -1,6 +1,6 @@
 import { IMPORT_REQUESTED } from '../../operation/operation-actions';
 import { objectReducer } from '../../operation/object-reducer';
-import { UPDATE_OBJECT } from '../../operation/object-actions';
+import { UPDATE_OBJECT, GET_OBJECT_DATA, DELETE_OBJECT } from '../../operation/object-actions';
 
 describe('objectReducer', () => {
   const initialObject = {
@@ -95,7 +95,6 @@ describe('objectReducer', () => {
     it('should add one property to object on multi element array', () => {
       // given
       const objectName = 'someName';
-
       const action = {
         type: UPDATE_OBJECT,
         payload: { objectWorkingId: 'someOtherString23', objectName },
@@ -118,9 +117,6 @@ describe('objectReducer', () => {
       // then
       expect(resultState[1]).toEqual({ ...initialState.multipleObjects[1], objectName, someProp });
     });
-  });
-  describe('getObjectData', () => {
-    
   });
   describe('deleteObject', () => {
 
