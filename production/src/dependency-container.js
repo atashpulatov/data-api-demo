@@ -14,7 +14,7 @@ import { popupHelper } from './popup/popup-helper';
 import { popupActions } from './popup/popup-actions';
 import { actionCreator } from './notification/action-creator';
 import { authenticationService } from './authentication/auth-rest-service';
-import { operationBus } from './operation-bus';
+import { operationBus } from './operation/operation-bus';
 
 class DIContainer {
   constructor(autoInitialize) {
