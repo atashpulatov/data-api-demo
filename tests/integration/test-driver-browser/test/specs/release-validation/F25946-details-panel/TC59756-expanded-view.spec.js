@@ -1,27 +1,15 @@
 import OfficeLogin from '../../../helpers/office/office.login';
-import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
-import { writeDataIntoFile, getJsonData } from '../../../helpers/utils/benchmark-helper';
-import { objects as o } from '../../../constants/objects-list';
+import { objectsList } from '../../../constants/objects-list';
 import { waitForNotification, waitForPopup } from '../../../helpers/utils/wait-helper';
-import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
+import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
-import { selectors as s } from '../../../constants/selectors/popup-selectors';
-import { waitAndClick } from '../../../helpers/utils/click-helper';
-import settings from '../../../config';
 
-describe('Smart Folder - IMPORT -', () => {
+describe('Expanded view E2E workflow - IMPORT -', () => {
   beforeEach(() => {
-    OfficeWorksheet.openExcelHome();
-    const url = browser.getUrl();
-    if (url.includes('login.microsoftonline')) {
-      OfficeLogin.login(settings.officeOnline.username, settings.officeOnline.password);
-    }
-    OfficeWorksheet.createNewWorkbook();
-    OfficeWorksheet.openPlugin();
-    PluginRightPanel.loginToPlugin(settings.env.username, settings.env.password);
+    OfficeLogin.openExcelAndLoginToPlugin();
   });
 
   afterEach(() => {
@@ -30,21 +18,22 @@ describe('Smart Folder - IMPORT -', () => {
     browser.switchToWindow(handles[0]);
   });
 
-  it('Import object (1st time)', () => {
-    OfficeWorksheet.selectCell('A1');
+  it('Imports an object after checking details', () => {
     PluginRightPanel.clickImportDataButton();
+    switchToPluginFrame();
     PluginPopup.switchLibrary(false);
     PluginPopup.clickFilterButton();
     PluginPopup.tickFilterCheckBox('Application', 'MicroStrategy Tutorial');
     PluginPopup.clickFilterButton();
-    PluginPopup.searchForObject(o.reports.detailsReport);
+    PluginPopup.searchForObject(objectsList.reports.detailsReport);
     browser.pause(1000); // We need to wait for search to be completed to get filtered rows
     const idsArray = PluginPopup.copyObjectsID();
     expect(idsArray[0]).not.toEqual(idsArray[1]);
     PluginPopup.pasteToSearchBox();
     expect(PluginPopup.compareClipboardToRow(idsArray[1])).toBe(true);
-    PluginPopup.importFirstObject();
+    PluginPopup.selectFirstObject();
+    PluginPopup.clickImport();
     waitForNotification();
-    expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   });
 });

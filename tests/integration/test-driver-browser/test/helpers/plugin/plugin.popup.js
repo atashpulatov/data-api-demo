@@ -510,6 +510,43 @@ class PluginPopup {
     waitAndClick($(dossierWindow.getTocItemAt(index)), 1000);
   }
 
+  getTableRows() {
+    const w = $$(popupSelectors.tableRows);
+    return w;
+  }
+
+  copyObjectsID() {
+    const rows = this.getTableRows();
+    const idsArray = [];
+    for (const row of rows) {
+      const expandButton = row.$(popupSelectors.expandButton);
+      expandButton.click();
+      const idField = row.$(popupSelectors.idDetail);
+      idField.click();
+      idsArray.push(idField.getText());
+    }
+    return idsArray;
+  }
+
+  clickFilterButton() {
+    $(popupSelectors.filterButton).click();
+  }
+
+  tickFilterCheckBox(section, item) {
+    $(popupSelectors.filterCheckbox(section, item)).click();
+  }
+
+  pasteToSearchBox() {
+    const searchBox = $(popupSelectors.searchInput);
+    searchBox.setValue(['Shift', 'Insert']);
+  }
+
+  compareClipboardToRow(stringToCompare) {
+    const searchBox = $(popupSelectors.searchInput);
+    browser.pause(1111);
+    return searchBox.getValue() === stringToCompare;
+  }
+
   openPrepareData(objectName, isObjectFromLibrary = false) {
     switchToPluginFrame();
     this.switchLibrary(isObjectFromLibrary);

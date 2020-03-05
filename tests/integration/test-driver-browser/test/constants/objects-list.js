@@ -16,6 +16,7 @@ export const objectsList = {
     hierarchyPromptedReport: 'Report with prompt - Hierarchy prompt | Not required | Default',
     multiplePromptsReport: 'Report with multiple prompts.',
     report1k: '1k report',
+    detailsReport: '0 -- Response Predictor Dataset',
     report1_5M: '1,5M Sales Records',
     filtered: 'All data filtered',
     secureDataFiltering: 'Revenue by Region and Category - secure data',
