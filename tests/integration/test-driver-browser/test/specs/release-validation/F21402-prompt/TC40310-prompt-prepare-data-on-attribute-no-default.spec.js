@@ -4,10 +4,9 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
-import { objects as o } from '../../../constants/objects-list';
-import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
+import { objectsList } from '../../../constants/objects-list';
+import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { switchToPluginFrame, switchToPopupFrame } from '../../../helpers/utils/iframe-helper';
-import { selectors as s } from '../../../constants/selectors/popup-selectors';
 
 
 // this test case is not finished yet
@@ -32,7 +31,7 @@ describe('Prompt | Value | Text | Not required | No default answer', () => {
     await OfficeWorksheet.selectCell('A1');
     await PluginRightPanel.clickImportDataButton();
     await switchToPluginFrame();
-    await PluginPopup.preparePrompt(o.reports.attributePromptedReport);
+    await PluginPopup.preparePrompt(objectsList.reports.attributePromptedReport);
 
     // should select one category and click run
     await PluginPopup.clickPromptArrow();
@@ -44,6 +43,6 @@ describe('Prompt | Value | Text | Not required | No default answer', () => {
     await PluginPopup.selectFilters([['Year', ['2014', '2015']]]);
     await PluginPopup.clickImport();
     await waitForNotification();
-    await expect(se.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+    await expect(rightPanelSelectors.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   });
 });

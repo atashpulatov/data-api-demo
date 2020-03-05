@@ -1,5 +1,5 @@
 import { switchToPluginFrame, switchToExcelFrame } from './iframe-helper';
-import { selectors as se } from '../../constants/selectors/plugin.right-panel-selectors';
+import { rightPanelSelectors as se } from '../../constants/selectors/plugin.right-panel-selectors';
 
 export function waitForNotification() {
   let popupExists = true;

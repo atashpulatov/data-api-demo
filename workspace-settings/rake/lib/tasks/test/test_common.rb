@@ -26,7 +26,7 @@ def download_mstr_office(group_id, version, target_dir)
 end
 
 ######################################common e2e test rake task######################################
-desc "package test docker"
+desc "run browser based test"
 task :e2e_test_browser do
   test_dir = "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser"
   npm_install_dir= test_dir
@@ -39,7 +39,7 @@ task :e2e_test_browser do
   shell_command! "npm install", cwd: test_dir
   test_fail = false
   begin
-    shell_command! "npm run test", cwd: test_dir
+    shell_command! "npm run test-suite acceptance", cwd: test_dir
   rescue
     test_fail = true
   end
@@ -50,6 +50,20 @@ task :e2e_test_browser do
     shell_command! "cp -r #{test_dir}/allure-report #{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser"
   end
   ci_metrics_system_test
+  raise "test failed" if test_fail
+
+end
+
+desc "run client based e2e test"
+task :e2e_test_client do
+  test_dir = "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-client"
+  shell_command! "mvn clean", cwd: test_dir
+  test_fail = false
+  begin
+    shell_command! "mvn clean -Dtest=LogInLogOutTests test", cwd: test_dir
+  rescue
+    test_fail = true
+  end
   raise "test failed" if test_fail
 
 end
