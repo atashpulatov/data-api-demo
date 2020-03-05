@@ -555,6 +555,20 @@ class PluginPopup {
     // reprompt and import
     this.importDefaultPromptedVisualisation(visContainerId);
   }
+
+  /**
+   * Scrolls down ObjectTable by the given number of pages
+   *
+   * @param {number} count Number of pages to scroll down
+   * @memberof PluginPopup
+   */
+  scrollTableDownByPages(count) {
+    const scrollContainer = $(popupSelectors.objectTable.scrollContainer);
+    waitAndClick(scrollContainer);
+    for (let page = 0; page < count; page++) {
+      browser.keys(['PageDown']);
+    }
+  }
 }
 
 export default new PluginPopup();

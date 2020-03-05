@@ -80,5 +80,6 @@ export const popupSelectors = {
       buttonApplyFilters : 'div.mstrd-FilterPanelFooterContainer-apply',
     },
     repromptDossier: 'div.mstr-nav-icon.icon-reprompt'
-  }
+  },
+  objectTable: { scrollContainer: '.ReactVirtualized__Grid.ReactVirtualized__Table__Grid' }
 };
