@@ -18,7 +18,7 @@ describe('TC54788 - Import subtotals', () => {
   it('Enable and disable subtotals', () => {
     const objectName = 'Subtotals - display all types';
     PluginRightPanel.clickImportDataButton();
-    PluginPopup.prepareObject(objectName);
+    PluginPopup.openPrepareData(objectName);
     PluginPopup.selectAllAttributes();
     PluginPopup.selectAllMetrics();
     PluginPopup.selectFilters([['Region', []]]);
@@ -33,8 +33,6 @@ describe('TC54788 - Import subtotals', () => {
     PluginRightPanel.edit();
     browser.pause(1000);
     switchToPluginFrame();
-    PluginPopup.selectAllAttributes();
-    PluginPopup.selectAllMetrics();
     PluginPopup.clickSubtotalToggler();
     PluginPopup.clickImport();
     waitForNotification();
@@ -43,6 +41,7 @@ describe('TC54788 - Import subtotals', () => {
     const B9 = '#gridRows > div:nth-child(9) > div:nth-child(2) > div > div'
     OfficeWorksheet.selectCell('B9')
     expect($(B9).getText()).toEqual('$3,902,762')
+    browser.pause(1000);
     switchToPluginFrame();
     PluginRightPanel.logout();
     browser.pause(3000);

@@ -3,7 +3,6 @@ import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { switchToPluginFrame, switchToExcelFrame } from '../../../helpers/utils/iframe-helper';
-import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
 import { objectsList } from '../../../constants/objects-list';
 import { removeTimestampFromTableName } from '../../../helpers/utils/tableName-helper';
@@ -22,14 +21,18 @@ describe('F28550 - Excel Connector Hardening: Rename Excel table without losing 
   it('[TC59464] - Checking binding for newly imported report', () => {
     const { longReportWithInvalidCharacters } = objectsList.reports;
     OfficeWorksheet.selectCell('A2');
+
     PluginRightPanel.clickImportDataButton();
     browser.pause(4000);
+
     switchToPluginFrame();
-    PluginPopup.importObject(longReportWithInvalidCharacters.sourceName, false);
+    PluginPopup.switchLibrary(false);
+    PluginPopup.importObject(longReportWithInvalidCharacters.sourceName);
     browser.pause(4000);
-    waitForNotification();
+
     switchToExcelFrame();
     waitAndClick($(excelSelectors.nameBoxDropdownButton), 4000);
+
     const importedTableName = $(`[id^=${longReportWithInvalidCharacters.excelTableNameStart}]> span`).getText();
     const normalizedTableName = removeTimestampFromTableName(importedTableName);
     expect(normalizedTableName).toEqual(longReportWithInvalidCharacters.excelTableFullName);

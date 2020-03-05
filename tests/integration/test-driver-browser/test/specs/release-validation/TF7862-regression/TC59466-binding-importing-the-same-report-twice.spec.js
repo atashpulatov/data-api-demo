@@ -24,25 +24,32 @@ describe('F28550 - Excel Connector Hardening: Rename Excel table without losing 
     const { basic01Report } = objectsList.reports;
     OfficeWorksheet.selectCell('A2');
     PluginRightPanel.clickImportDataButton();
+
     switchToPluginFrame();
-    PluginPopup.importObject(basic01Report.sourceName, false);
+    PluginPopup.switchLibrary(false);
+    PluginPopup.importObject(basic01Report.sourceName);
     browser.pause(10000);
+
     switchToExcelFrame();
     waitAndClick($(excelSelectors.nameBoxDropdownButton), 4000);
     const importedFirstTableName = $(`[id^=${basic01Report.excelTableNameStart}]> span`).getText(); // searches for the beginning of the id's string only because of changing timestamps at the end
     const normalizedFirstTableName = removeTimestampFromTableName(importedFirstTableName);
     expect(normalizedFirstTableName).toEqual(basic01Report.excelTableFullName);
+
     browser.keys('\uE00C');
     PluginRightPanel.clickOnObject(PluginRightPanel.SelectNthPlaceholder(1), 'A2');
-    OfficeWorksheet.selectCell('H2');
+    OfficeWorksheet.selectCell('I2');
+
     switchToRightPanelFrame();
     PluginRightPanel.clickAddDataButton();
-    PluginPopup.importObject(basic01Report.sourceName, false);
+    PluginPopup.importObject(basic01Report.sourceName);
     browser.pause(10000);
+
     const importedSecondTableName = getTextOfNthObjectOnNameBoxList(2);
     const normalizedSecondTableName = removeTimestampFromTableName(importedSecondTableName);
     expect(normalizedSecondTableName).toEqual(basic01Report.excelTableFullName);
+
     browser.keys('\uE00C'); // Escape key
-    PluginRightPanel.clickOnObject(PluginRightPanel.SelectNthPlaceholder(1), 'H2');
+    PluginRightPanel.clickOnObject(PluginRightPanel.SelectNthPlaceholder(1), 'I2');
   });
 });

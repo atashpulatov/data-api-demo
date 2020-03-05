@@ -1,11 +1,15 @@
 /* eslint-disable class-methods-use-this */
 import { waitAndClick, waitAndRightClick } from '../utils/click-helper';
 import { popupSelectors } from '../../constants/selectors/popup-selectors';
-import { switchToPluginFrame, switchToPromptFrame, switchToPopupFrame, switchToExcelFrame, switchToPromptFrameForEditDossier, switchToPromptFrameForEditReport } from '../utils/iframe-helper';
-import { waitForNotification } from '../utils/wait-helper'
+import {
+  switchToPluginFrame,
+  switchToPromptFrame,
+  switchToPopupFrame,
+  switchToExcelFrame,
+  switchToPromptFrameForEditDossier,
+  switchToPromptFrameForEditReport
+} from '../utils/iframe-helper';
 import pluginRightPanel from './plugin.right-panel';
-import { excelSelectors } from '../../constants/selectors/office-selectors';
-
 
 class PluginPopup {
   closeRefreshAll() {
@@ -23,11 +27,11 @@ class PluginPopup {
    * @param {String} elementName indicates the attribute or metric name that will be searched
    *
    * @memberof PluginPopup
-   **/
+   */
   searchForElements(elementName) {
     $(popupSelectors.searchInputPrepareDataPopup).clearValue();
     $(popupSelectors.searchInputPrepareDataPopup).setValue(elementName);
-  };
+  }
 
   clickImport() {
     waitAndClick($(popupSelectors.importBtn));
@@ -61,8 +65,14 @@ class PluginPopup {
     waitAndClick($(popupSelectors.closePreviewBtn));
   }
 
- clickRun() {
+  clickRunForPromptedDossier() {
     switchToPromptFrameForEditDossier();
+    waitAndClick($(popupSelectors.runBtnForPromptedDossier));
+  }
+
+  clickRun() {
+    switchToPluginFrame();
+    $(popupSelectors.runBtn).waitForExist(3333);
     waitAndClick($(popupSelectors.runBtn));
   }
 
@@ -121,15 +131,26 @@ class PluginPopup {
     waitAndClick($(popupSelectors.firstObject));
   }
 
-  importObject(objectName, myLibrarySwitch) {
+  switchLibraryAndImportObject(objectName, myLibrarySwitch = false) {
+    switchToPluginFrame();
+    browser.pause(4000);
+    this.switchLibrary(myLibrarySwitch);
+    browser.pause(1000);
+    this.searchForObject(objectName);
+    browser.pause(500);
+    this.selectFirstObject();
+    this.clickImport();
+  }
+
+  importObject(objectName) {
     switchToPluginFrame();
     this.searchForObject(objectName);
     browser.pause(500);
     this.selectFirstObject();
     this.clickImport();
-  };
+  }
 
-  importAnyObject (objectName, index) {
+  importAnyObject(objectName, index) {
     switchToPluginFrame();
     browser.pause(500);
     this.switchLibrary(false);
@@ -171,15 +192,17 @@ class PluginPopup {
   }
 
   importPromptDefaultNested(objectName) {
-    this.importObject(objectName);
-    browser.pause(5555); // temp solution
-    for (; $(popupSelectors.runBtn).isExisting();) {
-      switchToPromptFrame();
-      $('#mstrdossierPromptEditor').waitForExist(7777);
-      this.clickRun();
-      browser.pause(3333);
+    this.switchLibraryAndImportObject(objectName, false);
+    browser.pause(5555);
+    while (true) {
+      browser.pause(3000);
+      switchToPluginFrame();
+      if ($(popupSelectors.runBtn).isExisting()) {
+        this.clickRun();
+      } else {
+        break;
+      }
     }
-    switchToPluginFrame();
   }
 
   isViewSelected() {
@@ -187,12 +210,11 @@ class PluginPopup {
   }
 
   openPrompt(objectName) {
-    this.importObject(objectName);
+    this.switchLibraryAndImportObject(objectName, false);
     browser.pause(9999); // temp solution
     switchToPromptFrame();
     $('#mstrdossierPromptEditor').waitForExist(7777);
   }
-
 
   writeValueText(value) {
     switchToPromptFrame();
@@ -240,7 +262,7 @@ class PluginPopup {
     waitAndClick($('.mstrToolButtonRounded'));
   }
 
-  promptSelectObjectForEdit = (objectName) => {
+  promptSelectObjectForEdit(objectName) {
     switchToPromptFrameForEditReport();
     browser.pause(10000);
     $('#mstrdossierPromptEditor').waitForExist(7777);
@@ -316,7 +338,7 @@ class PluginPopup {
       }
     }
     const end = Date.now();
-    const timeSpent = ((end - begin) / 1000);
+    const timeSpent = (end - begin) / 1000;
     console.log(`Total time importing "${objectName}":  ${timeSpent} secs`);
     return timeSpent;
   }
@@ -325,11 +347,11 @@ class PluginPopup {
     const myLibrarySwitch = $(popupSelectors.myLibrary);
     myLibrarySwitch.waitForExist(5000);
     const checked = myLibrarySwitch.getAttribute('aria-checked');
-    if ((checked === 'true') !== newState) waitAndClick(myLibrarySwitch)
+    if ((checked === 'true') !== newState) waitAndClick(myLibrarySwitch);
   }
 
   openDossier(dossierName, timeToLoadDossier = 10000, myLibrarySwitch = false) {
-    this.importObject(dossierName, myLibrarySwitch);
+    this.switchLibraryAndImportObject(dossierName, myLibrarySwitch);
     browser.pause(timeToLoadDossier);
   }
 
@@ -403,7 +425,6 @@ class PluginPopup {
     browser.pause(500);
   }
 
-
   sortDescending(objectId) {
     switchToPromptFrame();
     waitAndRightClick($(`${objectId}`));
@@ -448,10 +469,10 @@ class PluginPopup {
    */
   setValueOnDossierSliderFilter(filterIndex, position, value) {
     const { dossierWindow } = popupSelectors;
-    const maxValueInput = $(`${dossierWindow.filtersMenu.getFilterAt(filterIndex)} ${dossierWindow.filtersMenu.getSliderInput(position)} > input`)
+    const maxValueInput = $(`${dossierWindow.filtersMenu.getFilterAt(filterIndex)} ${dossierWindow.filtersMenu.getSliderInput(position)} > input`);
     maxValueInput.doubleClick();
     browser.keys('\uE003'); // Press Backspace
-    maxValueInput.setValue(value)
+    maxValueInput.setValue(value);
   }
 
   /**
@@ -496,13 +517,13 @@ class PluginPopup {
     browser.pause(1111);
     this.selectFirstObject();
     this.clickPrepareData();
-  };
+  }
 
   importDefaultPromptedVisualisation(visContainerId) {
     // reprompt
     switchToPromptFrameForEditDossier();
     $('#mstrdossierPromptEditor').waitForExist(10000);
-    this.clickRun();
+    this.clickRunForPromptedDossier();
     browser.pause(6000);
     // select vis
     switchToPromptFrameForEditDossier();
@@ -534,6 +555,6 @@ class PluginPopup {
     // reprompt and import
     this.importDefaultPromptedVisualisation(visContainerId);
   }
-};
+}
 
 export default new PluginPopup();

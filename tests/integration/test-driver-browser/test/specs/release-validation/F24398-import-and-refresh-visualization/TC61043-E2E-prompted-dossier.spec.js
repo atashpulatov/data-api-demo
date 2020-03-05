@@ -36,13 +36,13 @@ describe('F24398 - Import and refresh visualization', () => {
     browser.pause(1000);
     switchToExcelFrame();
     browser.pause(3000);
-    OfficeWorksheet.selectCellAlternatively('D9');
+    OfficeWorksheet.selectCell('D9');
     browser.pause(2000);
     expect($(D9).getText()).toEqual('$560,033');
 
     // It should edit grid visualization and confirm that the visualization was refreshed
     switchToRightPanelFrame();
-    PluginPopup.repromptDefaultVisualisation()
+    PluginPopup.repromptDefaultVisualisation();
     waitForNotification();
     expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.visualizationRefreshed);
 
@@ -53,7 +53,7 @@ describe('F24398 - Import and refresh visualization', () => {
 
     // It should confirm that the visualization was deleted
     switchToExcelFrame();
-    OfficeWorksheet.selectCellAlternatively('D9');
+    OfficeWorksheet.selectCell('D9');
     browser.pause(2000);
     const cellText = '#formulaBarTextDivId_textElement > div > br';
     switchToExcelFrame();

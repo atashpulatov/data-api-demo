@@ -24,7 +24,7 @@ class PluginRightPanel {
 
   clickImportDataButton() {
     switchToPluginFrame();
-    waitAndClick($(rightPanelSelectors.importDataBtn));
+    waitAndClick($(rightPanelSelectors.importDataBtn), 20000);
     browser.pause(999);
   }
 
@@ -132,7 +132,7 @@ class PluginRightPanel {
 
   loginToPlugin(username, password, isValidCredentials) {
     switchToPluginFrame();
-    $(rightPanelSelectors.loginRightPanelBtn).waitForDisplayed(7777);
+    $(rightPanelSelectors.loginRightPanelBtn).waitForDisplayed(17777);
     if ($(rightPanelSelectors.loginRightPanelBtn).isExisting()) {
       this.clickLoginRightPanelBtn();
       const handles = browser.getWindowHandles();
@@ -204,7 +204,6 @@ class PluginRightPanel {
     switchToPluginFrame();
     return $(`${rightPanelSelectors.placeholderContainer} > div:nth-child(${number})`);
   }
-
 }
 
 export default new PluginRightPanel();

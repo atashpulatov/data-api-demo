@@ -38,7 +38,7 @@ task :browser_e2e_push_results,[:build_no] do | t, args|
     end
 end
 
-desc "package test docker"
+desc "run browser based test"
 task :e2e_test_browser do
   test_dir = get_browser_test_dir()
   npm_install_dir= test_dir
@@ -63,6 +63,20 @@ task :e2e_test_browser do
   end
   ci_metrics_system_test
   raise "test failed" if test_fail
+end
+
+desc "run client based e2e test"
+task :e2e_test_client do
+  test_dir = "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-client"
+  shell_command! "mvn clean", cwd: test_dir
+  test_fail = false
+  begin
+    shell_command! "mvn clean -Dtest=LogInLogOutTests test", cwd: test_dir
+  rescue
+    test_fail = true
+  end
+  raise "test failed" if test_fail
+
 end
 
 def is_windows_jenkins_env?
