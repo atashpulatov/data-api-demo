@@ -11,10 +11,10 @@ export const importRequested = (payload) => ({
   payload,
 });
 
-export const markStepCompleted = (objectWorkingId, completedAction) => ({
+export const markStepCompleted = (objectWorkingId, completedStep) => ({
   type: MARK_STEP_COMPLETED,
   payload: {
     objectWorkingId,
-    completedAction
+    completedStep,
   }
 });

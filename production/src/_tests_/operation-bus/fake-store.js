@@ -9,8 +9,8 @@ class FakeStore {
     this.listener = listener;
   }
 
-  simulateActionChange = (actionName) => {
-    const subscribedOperation = { actionsQueue: [actionName], };
+  simulateStepChange = (stepName) => {
+    const subscribedOperation = { stepsQueue: [stepName], };
     this.state.operationReducer.operations = [subscribedOperation];
     this.listener();
   }
