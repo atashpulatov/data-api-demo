@@ -7,7 +7,7 @@ import { waitForNotification, waitForPopup } from '../../../helpers/utils/wait-h
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 
-describe('Expanded view E2E workflow', () => {
+describe('TC59756 - Expanded view E2E workflow', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
