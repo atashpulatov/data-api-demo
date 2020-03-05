@@ -4,7 +4,6 @@ import { sessionHelper } from '../../storage/session-helper';
 import { SettingsMenuNotConnected } from '../../home/settings-menu';
 import DB from '../../cache/cache-db';
 import overflowHelper from '../../helpers/helpers';
-import { officeContext } from '../../office/office-context';
 
 describe('Settings Menu', () => {
   afterEach(() => {

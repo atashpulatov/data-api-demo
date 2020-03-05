@@ -116,7 +116,6 @@ export default class DossierWindowNotConnected extends React.Component {
   * Above happens on reprompt button click followed by cancel button click in reprompt popup.
   *
   * @param {String} newInstanceId
-  * @memberof DossierWindowNotConnected
   */
   handleInstanceIdChange(newInstanceId) {
     const {
@@ -152,7 +151,6 @@ export default class DossierWindowNotConnected extends React.Component {
   * Store new prompts answers in state
   *
   * @param {Array} newAnswers
-  * @memberof DossierWindowNotConnected
   */
   handlePromptAnswer(newAnswers) {
     this.setState({ promptsAnswers: newAnswers });
@@ -249,7 +247,7 @@ function mapStateToProps(state) {
   const { editedObject } = popupReducer;
   const { supportForms } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
-  const isReport = editedObject && editedObject.objectType === mstrObjectEnum.mstrObjectType.report.name;
+  const isReport = editedObject && editedObject.objectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   const editedObjectParse = { ...(popupHelper.parsePopupState(editedObject, promptsAnswers, formsPrivilege)) };
   return {

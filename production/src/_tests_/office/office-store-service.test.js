@@ -1,7 +1,7 @@
 import { mockReports } from '../mockData';
 import { officeStoreService } from '../../office/store/office-store-service';
 import { mockReportProperties } from './__mock__object__/office-settings-report-properties';
-import { officeProperties } from '../../office/office-properties';
+import { officeProperties } from '../../office/store/office-properties';
 
 describe('OfficeStoreService', () => {
   beforeAll(() => {

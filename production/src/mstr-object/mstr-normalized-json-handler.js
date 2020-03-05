@@ -18,7 +18,6 @@ class NormalizedJsonHandler {
    * @param {number} attributeIndex - Array index that corresponds to an attribute
    * @param {number} elementIndex - Array index that corresponds to an attribue element
    *
-   * @memberof JSONHandler
    * @return {Object}
    */
   lookupElement = ({
@@ -44,7 +43,6 @@ class NormalizedJsonHandler {
    * @param {string} axis - 'rows' or 'columns'
    * @param {number} attributeIndex - Array index that corresponds to an attribute
    *
-   * @memberof JSONHandler
    * @return {Object}
    */
   lookupAttributeName = (definition, axis, attributeIndex) => {
@@ -59,7 +57,6 @@ class NormalizedJsonHandler {
    * @param {Object} definition - Dataset definition
    * @param {string} axis - 'rows' or 'columns'
    * @param {number} elementIndices - Array index that corresponds to an attribue element
-   * @memberof NormalizedJsonHandler
    * @return {Array}
    */
   mapElementIndicesToElements = ({
@@ -86,7 +83,6 @@ class NormalizedJsonHandler {
    * @param {Object} definition - Dataset definition
    * @param {string} axis - 'rows' or 'columns'
    * @param {number} elementIndices - Array index that corresponds to an attribue element
-   * @memberof NormalizedJsonHandler
    * @return {Array}
    */
   mapElementIndicesToNames = ({ definition, axis, headerCells: elementIndices }) => {
@@ -106,7 +102,6 @@ class NormalizedJsonHandler {
    * @param {function} onElement - Callback function to process elements
    * @param {String} valueMatrix - Cell value ("raw*", "formatted", "extras")
    *
-   * @memberof NormalizedJsonHandler
    * @return {Array}
    */
   renderTabular = (definition, data, onElement, valueMatrix = 'raw') => {
@@ -163,7 +158,6 @@ class NormalizedJsonHandler {
    * @param {Array} axisElements - the axis elements
    * @param {function} onElement - Callback function to process elements
    *
-   * @memberof NormalizedJsonHandler
    * @return {Array}
    */
   convertForms = (result, axisElements, onElement) => {
@@ -182,7 +176,6 @@ class NormalizedJsonHandler {
    * @param {Array} headers - Header data from response
    * @param {function} onElement - Callback function to process elements
    *
-   * @memberof NormalizedJsonHandler
    * @return {Array}
    */
   renderHeaders = (definition, axis, headers, onElement, supportForms) => {
@@ -207,7 +200,6 @@ class NormalizedJsonHandler {
    * @param {Array} headers - header data from response
    * @param {function} onElement - Callback function to process elements
    *
-   * @memberof NormalizedJsonHandler
    * @return {Array}
    */
   renderTitles = (definition, axis, headers, onElement, supportForms) => {
@@ -230,7 +222,6 @@ class NormalizedJsonHandler {
    * @param {Object} data - Metric values object
    * @param {String} valueMatrix - Cell value ("raw*", "formatted", "extras")
    *
-   * @memberof NormalizedJsonHandler
    * @return {Array}
    */
   renderRows = (data, valueMatrix = 'raw') => ((data.metricValues && data.metricValues[valueMatrix].length) ? data.metricValues[valueMatrix] : Array(data.paging.current).fill(Array(data.headers.columns[0].length).fill(null)))
@@ -243,7 +234,6 @@ class NormalizedJsonHandler {
    * @param {number} attributeIndex - Array index that corresponds to an attribute
    * @param {number} headerIndex - Array index that corresponds to the header
    *
-   * @memberof NormalizedJsonHandler
    * @return {Array}
    */
   getElementIdForGivenHeaderCell = (definition, axis, attributeIndex, headerIndex) => {
@@ -260,7 +250,6 @@ class NormalizedJsonHandler {
    * @param {number} mvZoneRowIndex - Metric value row index
    * @param {number} mvZoneColumnIndex - Metric value column index
    *
-   * @memberof NormalizedJsonHandler
    * @return {Array}
    */
   getElementIdListForGivenMetricCell = (headers, mvZoneRowIndex, mvZoneColumnIndex) => {
@@ -274,7 +263,6 @@ class NormalizedJsonHandler {
    *
    * @param {Array} matrix - 2D Array
    *
-   * @memberof NormalizedJsonHandler
    * @return {Array} - Transposed 2D array
    */
   transposeMatrix = (matrix) => matrix[0].map((_, col) => matrix.map((row) => row[col]));

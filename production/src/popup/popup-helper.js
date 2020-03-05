@@ -13,7 +13,7 @@ function sortPromptsAnswers(array) {
     array[i].values.sort();
   }
 }
-export class PopupHelper {
+class PopupHelper {
   init = (popupController) => {
     this.popupController = popupController;
   }
@@ -198,11 +198,10 @@ export class PopupHelper {
       if (body) {
         const { requestedObjects, viewFilter } = body;
         if (requestedObjects) {
-          let { selectedAttributes, selectedMetrics, selectedAttrForms } = chosenObjectData;
           const { attributes, metrics } = body.requestedObjects;
-          selectedAttributes = attributes && attributes.map((attribute) => attribute.id);
-          selectedMetrics = metrics && metrics.map((metric) => metric.id);
-          selectedAttrForms = formsPrivilege ? this.getAttrFormKeys(attributes) : [];
+          chosenObjectData.selectedAttributes = attributes && attributes.map((attribute) => attribute.id);
+          chosenObjectData.selectedMetrics = metrics && metrics.map((metric) => metric.id);
+          chosenObjectData.selectedAttrForms = formsPrivilege ? this.getAttrFormKeys(attributes) : [];
         }
         if (viewFilter) {
           chosenObjectData.selectedFilters = this.parseFilters(body.viewFilter.operands);

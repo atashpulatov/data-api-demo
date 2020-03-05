@@ -313,8 +313,8 @@ export class PromptsWindowNotConnected extends Component {
 }
 
 PromptsWindowNotConnected.propTypes = {
-  stopLoading: PropTypes.bool,
-  promptsAnswered: PropTypes.arrayOf(PropTypes.shape({})),
+  stopLoading: PropTypes.func,
+  promptsAnswered: PropTypes.func,
   mstrData: PropTypes.shape({
     chosenObjectId: PropTypes.string,
     chosenProjectId: PropTypes.string,
@@ -343,7 +343,7 @@ export const mapStateToProps = (state) => {
   const { promptsAnswers, importSubtotal, ...mstrData } = navigationTree;
   const { supportForms } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
-  const isReport = popupState && popupState.objectType === mstrObjectEnum.mstrObjectType.report.name;
+  const isReport = popupState && popupState.objectType.name === mstrObjectEnum.mstrObjectType.report.name;
 
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   return {

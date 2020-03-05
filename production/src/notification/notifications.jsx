@@ -102,7 +102,7 @@ NotificationsNotConnected.propTypes = {
   content: PropTypes.string,
   t: PropTypes.func,
   details: PropTypes.string,
-  translated : PropTypes.string,
+  translated : PropTypes.bool,
   messageType : PropTypes.string,
   currentObject : PropTypes.string,
   onConfirm:PropTypes.func,

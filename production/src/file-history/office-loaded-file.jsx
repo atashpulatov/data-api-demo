@@ -8,7 +8,7 @@ import { fileHistoryHelper } from './file-history-helper';
 import loadingSpinner from './assets/report_loading_spinner.gif';
 import { popupActions } from '../popup/popup-actions';
 import RenameInput from './file-history-rename-input';
-import { officeApiHelper } from '../office/office-api-helper';
+import { officeApiHelper } from '../office/api/office-api-helper';
 import { ButtonPopover } from './button-popover';
 import datasetIcon from './assets/icon_Dataset_32.png';
 import dossierIcon from './assets/icon_Dossier_32.png';
@@ -21,6 +21,7 @@ import {
   stopLoading as stopLoadingImported
 } from '../navigation/navigation-tree-actions';
 import { errorService } from '../error/error-handler';
+import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
 
 export class OfficeLoadedFileNotConnected extends React.Component {
   constructor(props) {
@@ -41,7 +42,7 @@ export class OfficeLoadedFileNotConnected extends React.Component {
     this.ismounted = false;
   }
 
-  renameReport = /* istanbul ignore next */ async ({ target }) => {
+  renameReport = async ({ target }) => {
     const { bindingId, fileName } = this.props;
     const newName = target.value || fileName;
     this.setState({ value: newName });
@@ -69,7 +70,7 @@ export class OfficeLoadedFileNotConnected extends React.Component {
   }
 
 
-  copyValue = /* istanbul ignore next */ (e) => {
+  copyValue = (e) => {
     const { value } = this.state;
     e.domEvent.stopPropagation();
     const text = document.createElement('textarea');
@@ -106,7 +107,7 @@ export class OfficeLoadedFileNotConnected extends React.Component {
       async () => {
         try {
           const excelContext = await officeApiHelper.getExcelContext();
-          await officeApiHelper.isCurrentReportSheetProtected(excelContext, bindingId);
+          await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindingId);
           const message = t('{{name}} has been removed from the workbook.',
             { name: fileName });
           await fileHistoryHelper.deleteReport(onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, message);
@@ -138,7 +139,8 @@ export class OfficeLoadedFileNotConnected extends React.Component {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
           const excelContext = await officeApiHelper.getExcelContext();
-          await officeApiHelper.isCurrentReportSheetProtected(excelContext, bindingId);
+          await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindingId);
+
           if (await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport, fileName)) {
             if (objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
               (await callForEditDossier({ bindId: bindingId, objectType }, loading));
@@ -174,7 +176,8 @@ export class OfficeLoadedFileNotConnected extends React.Component {
       this.setState({ allowRefreshClick: false }, async () => {
         try {
           const excelContext = await officeApiHelper.getExcelContext();
-          await officeApiHelper.isCurrentReportSheetProtected(excelContext, bindingId);
+
+          await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindingId);
           if (await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport, fileName)) {
             (await refreshReportsArray([{ bindId: bindingId, objectType }], false));
           }

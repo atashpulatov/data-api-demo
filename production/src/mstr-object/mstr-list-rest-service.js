@@ -9,7 +9,7 @@ const LIMIT = 7000;
 const DOSSIER_SUBTYPE = 14081;
 const SUBTYPES = [768, 769, 774, 776, 779, DOSSIER_SUBTYPE];
 
-export class MstrListRestService {
+class MstrListRestService {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
   }
