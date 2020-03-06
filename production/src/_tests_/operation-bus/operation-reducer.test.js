@@ -38,22 +38,29 @@ describe('operation reducer', () => {
       }]
     }
   };
+
   it('should have default state', () => {
     // given
     const unhandledAction = { type: 'someType', };
+
     // when
     const resultState = operationReducer(undefined, unhandledAction);
+
     // then
     expect(resultState).toEqual({ operations: [] });
   });
+
   it('should return state if no action is matched', () => {
     // given
     const unhandledAction = { type: 'someType', };
+
     // when
     const resultState = operationReducer(initialState.multipleOperations, unhandledAction);
+
     // then
     expect(resultState).toBe(initialState.multipleOperations);
   });
+
   describe('importRequested', () => {
     it('should add operation when operations are empty', () => {
       // given
@@ -63,11 +70,14 @@ describe('operation reducer', () => {
         payload: { operation: someOperation, },
       };
       const expectedState = { operations: [someOperation] };
+
       // when
       const resultState = operationReducer(initialState.empty, action);
+
       // then
       expect(resultState).toEqual(expectedState);
     });
+
     it('should add operation to existing operations', () => {
       // given
       const someOperation = {};
@@ -76,12 +86,15 @@ describe('operation reducer', () => {
         payload: { operation: someOperation, },
       };
       const expectedState = { operations: [...initialState.singleOperation.operations, someOperation] };
+
       // when
       const resultState = operationReducer(initialState.singleOperation, action);
+
       // then
       expect(resultState).toEqual(expectedState);
     });
   });
+
   describe('markStepCompleted', () => {
 
   });
