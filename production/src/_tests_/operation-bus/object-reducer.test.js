@@ -1,6 +1,6 @@
 import { IMPORT_REQUESTED } from '../../operation/operation-actions';
 import { objectReducer } from '../../operation/object-reducer';
-import { UPDATE_OBJECT } from '../../operation/object-actions';
+import { UPDATE_OBJECT, DELETE_OBJECT } from '../../operation/object-actions';
 
 describe('objectReducer', () => {
   const initialObject = {
@@ -8,148 +8,168 @@ describe('objectReducer', () => {
     envUrl: 'someURL',
     objectId: 'someId',
   };
-  const initialState = [];
+  const initialState = {
+    empty: { objects:[] },
+    singleObject:{
+      objects: [{
+        objectWorkingId: 'someOtherString234',
+        envUrl: 'someURL24',
+        objectId: 'someDiffId',
+      }]
+    },
+    multipleObjects:   {
+      objects:[{
+        objectWorkingId: 'someOtherString2',
+        envUrl: 'someURL24',
+        objectId: 'someDiffId',
+      },
+      {
+        objectWorkingId: 'someOtherString23',
+        envUrl: 'someURL24',
+        objectId: 'someDiffId',
+      },
+      {
+        objectWorkingId: 'someOtherString234',
+        envUrl: 'someURL24',
+        objectId: 'someDiffId',
+      }]
+    }
+  };
   describe('importRequested', () => {
     it('should add first object to array and return new array', () => {
       // given
       const action = {
         type: IMPORT_REQUESTED,
-        payload: initialObject,
+        payload: { object: initialObject, }
       };
       // when
-      const resultState = objectReducer(initialState, action);
+      const resultState = objectReducer(initialState.empty, action);
       // then
-      expect(resultState).toEqual([initialObject]);
+      expect(resultState).toEqual({ objects: [initialObject] });
     });
     it('should add object to array and return new array', () => {
       // given
       const action = {
         type: IMPORT_REQUESTED,
-        payload: initialObject,
+        payload: { object: initialObject, }
       };
-      const modifiedInitialState = [{
-        objectWorkingId: 'someOtherString234',
-        envUrl: 'someURL24',
-        objectId: 'someDiffId',
-      }];
       // when
-      const resultState = objectReducer(modifiedInitialState, action);
+      const resultState = objectReducer(initialState.singleObject, action);
       // then
-      expect(resultState).toEqual([...modifiedInitialState, initialObject]);
+      expect(resultState).toEqual({ objects: [...initialState.singleObject.objects, initialObject] });
     });
   });
   describe('updateObject', () => {
     it('should return same array if element not found', () => {
       const objectName = 'someName';
-      const modifiedInitialState = [{
-        objectWorkingId: 'someOtherString234',
-        envUrl: 'someURL24',
-        objectId: 'someDiffId',
-      }];
       const action = {
         type: UPDATE_OBJECT,
         payload: { objectWorkingId: 'someOtherString23', objectName },
       };
       // when
-      const resultState = objectReducer(modifiedInitialState, action);
+      const resultState = objectReducer(initialState.singleObject, action);
       // then
-      expect(resultState).toEqual(modifiedInitialState);
+      expect(resultState).toEqual(initialState.singleObject);
     });
     it('should add one property to object on single element array', () => {
       // given
       const objectName = 'someName';
-      const modifiedInitialState = [{
-        objectWorkingId: 'someOtherString234',
-        envUrl: 'someURL24',
-        objectId: 'someDiffId',
-      }];
       const action = {
         type: UPDATE_OBJECT,
         payload: { objectWorkingId: 'someOtherString234', objectName },
       };
       // when
-      const resultState = objectReducer(modifiedInitialState, action);
+      const resultState = objectReducer(initialState.singleObject, action);
       // then
-      expect(resultState[0]).toEqual({ ...modifiedInitialState[0], objectName });
+      expect(resultState.objects[0]).toEqual({ ...initialState.singleObject.objects[0], objectName });
     });
     it('should add two properties to object on single element array', () => {
       // given
       const objectName = 'someName';
       const someProp = 'someProp';
-      const modifiedInitialState = [{
-        objectWorkingId: 'someOtherString234',
-        envUrl: 'someURL24',
-        objectId: 'someDiffId',
-      }];
       const action = {
         type: UPDATE_OBJECT,
         payload: { objectWorkingId: 'someOtherString234', objectName, someProp },
       };
       // when
-      const resultState = objectReducer(modifiedInitialState, action);
+      const resultState = objectReducer(initialState.singleObject, action);
       // then
-      expect(resultState[0]).toEqual({ ...modifiedInitialState[0], objectName, someProp });
+      expect(resultState.objects[0]).toEqual({ ...initialState.singleObject.objects[0], objectName, someProp });
     });
     it('should add one property to object on multi element array', () => {
       // given
       const objectName = 'someName';
-      const modifiedInitialState = [{
-        objectWorkingId: 'someOtherString2',
-        envUrl: 'someURL24',
-        objectId: 'someDiffId',
-      },
-      {
-        objectWorkingId: 'someOtherString23',
-        envUrl: 'someURL24',
-        objectId: 'someDiffId',
-      },
-      {
-        objectWorkingId: 'someOtherString234',
-        envUrl: 'someURL24',
-        objectId: 'someDiffId',
-      }];
       const action = {
         type: UPDATE_OBJECT,
         payload: { objectWorkingId: 'someOtherString23', objectName },
       };
       // when
-      const resultState = objectReducer(modifiedInitialState, action);
+      const resultState = objectReducer(initialState.multipleObjects, action);
       // then
-      expect(resultState[1]).toEqual({ ...modifiedInitialState[1], objectName });
+      expect(resultState.objects[1]).toEqual({ ...initialState.multipleObjects.objects[1], objectName });
     });
     it('should add two properties to object on multi element array', () => {
       // given
       const objectName = 'someName';
       const someProp = 'someProp';
-      const modifiedInitialState = [{
-        objectWorkingId: 'someOtherString2',
-        envUrl: 'someURL24',
-        objectId: 'someDiffId',
-      },
-      {
-        objectWorkingId: 'someOtherString23',
-        envUrl: 'someURL24',
-        objectId: 'someDiffId',
-      },
-      {
-        objectWorkingId: 'someOtherString234',
-        envUrl: 'someURL24',
-        objectId: 'someDiffId',
-      }];
       const action = {
         type: UPDATE_OBJECT,
         payload: { objectWorkingId: 'someOtherString23', objectName, someProp },
       };
       // when
-      const resultState = objectReducer(modifiedInitialState, action);
+      const resultState = objectReducer(initialState.multipleObjects, action);
       // then
-      expect(resultState[1]).toEqual({ ...modifiedInitialState[1], objectName, someProp });
+      expect(resultState.objects[1]).toEqual({ ...initialState.multipleObjects.objects[1], objectName, someProp });
     });
   });
-  describe('getObjectData', () => {
-
-  });
   describe('deleteObject', () => {
-
+    it('should not remove any objects if array is empty', () => {
+      // given
+      const someId = 'some id';
+      const action = {
+        type: DELETE_OBJECT,
+        payload: someId,
+      };
+      // when
+      const resultState = objectReducer(initialState.empty, action);
+      // then
+      expect(resultState).toEqual(initialState.empty);
+    });
+    it('should not remove any objects if id doesnt exist in array', () => {
+      // given
+      const someId = 'some id';
+      const action = {
+        type: DELETE_OBJECT,
+        payload: someId,
+      };
+      // when
+      const resultState = objectReducer(initialState.multipleObjects, action);
+      // then
+      expect(resultState).toEqual(initialState.multipleObjects);
+    });
+    it('should remove object if id exists in array', () => {
+      // given
+      const someId = 'someOtherString23';
+      const action = {
+        type: DELETE_OBJECT,
+        payload: someId,
+      };
+      // when
+      const resultState = objectReducer(initialState.multipleObjects, action);
+      // then
+      expect(resultState.objects).toHaveLength(2);
+    });
+    it('should remove last object if id exists in array', () => {
+      // given
+      const someId = 'someOtherString234';
+      const action = {
+        type: DELETE_OBJECT,
+        payload: someId,
+      };
+      // when
+      const resultState = objectReducer(initialState.singleObject, action);
+      // then
+      expect(resultState.objects).toHaveLength(0);
+    });
   });
 });
