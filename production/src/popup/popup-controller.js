@@ -16,6 +16,9 @@ import {
   RESET_STATE,
 } from './popup-actions';
 import { CLEAR_POPUP_STATE, SET_MSTR_DATA } from './popup-state-actions';
+import { importRequested, markStepCompleted } from '../operation/operation-actions';
+
+import { GET_INSTANCE_DEFINITION, GET_OFFICE_TABLE, TEST_PRINT_OBJECT } from '../operation/operation-steps';
 
 const URL = `${window.location.href}`;
 
@@ -228,7 +231,14 @@ class PopupController {
         visualizationInfo,
         preparedInstanceId,
       };
-      const result = await officeDisplayService.printObject(options);
+
+      this.reduxStore.dispatch(importRequested(options));
+
+      // const result = await officeDisplayService.printObject(options);
+      const result = {
+        type: 'success',
+        message: 'Data loaded successfully'
+      };
       if (result) {
         notificationService.displayNotification({ type: result.type, content: result.message });
       }

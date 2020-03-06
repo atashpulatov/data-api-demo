@@ -5,6 +5,7 @@ class OperationBus {
     this.subscribedCallbacksMap = {};
     // eslint-disable-next-line prefer-destructuring
     const currentOperation = this.store.getState().operationReducer
+    && this.store.getState().operationReducer.operations
       && this.store.getState().operationReducer.operations[0];
     this.previousOperation = currentOperation && JSON.parse(JSON.stringify(currentOperation));
     this.store.subscribe(this.listener);
@@ -12,6 +13,7 @@ class OperationBus {
 
   listener = () => {
     const currentOperation = this.store.getState().operationReducer
+      && this.store.getState().operationReducer.operations
       && this.store.getState().operationReducer.operations[0];
     if (!currentOperation) {
       this.previousOperation = null;
@@ -32,6 +34,7 @@ class OperationBus {
 }
 
 const didOperationChange = (previousOperation, currentOperation) => {
+  console.log('previousOperation, currentOperation:', previousOperation, currentOperation);
   if (previousOperation
     && previousOperation.stepsQueue[0] === currentOperation.stepsQueue[0]) {
     return false;

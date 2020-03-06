@@ -2,6 +2,12 @@ import { mstrObjectRestService } from './mstr-object-rest-service';
 import mstrObjectEnum from './mstr-object-type-enum';
 import { incomingErrorStrings, errorTypes, INVALID_VIZ_KEY_MESSAGE } from '../error/constants';
 
+import { GET_INSTANCE_DEFINITION, GET_OFFICE_TABLE, TEST_PRINT_OBJECT } from '../operation/operation-steps';
+import { importRequested, markStepCompleted } from '../operation/operation-actions';
+import { updateObject, deleteObject } from '../operation/object-actions';
+import { officeApiHelper } from '../office/api/office-api-helper';
+import { officeDisplayService } from '../office/office-display-service';
+
 
 const {
   getVisualizationInfo,
@@ -13,6 +19,10 @@ const {
 } = mstrObjectRestService;
 
 class MstrObjectInstance {
+  init = (reduxStore) => {
+    this.reduxStore = reduxStore;
+  }
+
   /**
    * Create Instance definition object which stores data neede to continue import.
    * If instance of object does not exist new one will be created
@@ -31,47 +41,94 @@ class MstrObjectInstance {
    * @param {Boolean} subtotalsVisible Information if the subtotals are visible
    * @returns {Object} Object containing officeTable and subtotalAddresses
    */
-  async getInstaceDefinition(
-    connectionData,
-    visualizationInfo,
-    displayAttrFormNames
-  ) {
-    let instanceDefinition;
-    let { body } = connectionData;
-    const { mstrObjectType } = connectionData;
+   getInstaceDefinition = async () => {
+     console.log('this.reduxStore.getState().objectReducer:', this.reduxStore.getState().objectReducer);
+     const [ObjectData] = this.reduxStore.getState().objectReducer.objects;
+     console.log('this.reduxStore.getState().objectReducer:', this.reduxStore.getState().objectReducer);
+     const {
+       objectWorkingId, displayAttrFormNames, insertNewWorksheet, selectedCell, crosstabHeaderDimensions, subtotalsAddresses
+     } = ObjectData;
+     console.log('ObjectData:', ObjectData);
+     let { visualizationInfo, startCell } = ObjectData;
+     console.log('ObjectData:', ObjectData);
 
-    if (body && body.requestedObjects) {
-      if (body.requestedObjects.attributes.length === 0 && body.requestedObjects.metrics.length === 0) {
-        delete body.requestedObjects;
-      }
-      body.template = body.requestedObjects;
-    }
+     const connectionData = {
+       objectId:       ObjectData.objectId,
+       projectId:       ObjectData.projectId,
+       dossierData:       ObjectData.dossierData,
+       mstrObjectType:       ObjectData.mstrObjectType,
+       body:       ObjectData.body,
+       preparedInstanceId:       ObjectData.preparedInstanceId,
+       manipulationsXML:       ObjectData.manipulationsXML,
+       promptsAnswers:       ObjectData.promptsAnswers,
+     };
+     console.log('connectionData:', connectionData);
 
-    const config = {
-      ...connectionData,
-      displayAttrFormNames,
-    };
+     const excelContext = await officeApiHelper.getExcelContext();
 
-    if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-      ({ body, visualizationInfo, instanceDefinition } = await this.getDossierInstanceDefinition(
-        { ...config, visualizationInfo }
-      ));
-    } else {
-      instanceDefinition = await createInstance(config);
-    }
+     // Get excel context and initial cell
+     console.group('Importing data performance');
+     console.time('Total');
+     console.time('Init excel');
+     startCell = await officeDisplayService.getStartCell(insertNewWorksheet, excelContext, startCell, selectedCell);
+
+     let instanceDefinition;
+     let { body } = connectionData;
+     const { mstrObjectType } = connectionData;
+
+     if (body && body.requestedObjects) {
+       if (body.requestedObjects.attributes.length === 0 && body.requestedObjects.metrics.length === 0) {
+         delete body.requestedObjects;
+       }
+       body.template = body.requestedObjects;
+     }
+
+     const config = {
+       ...connectionData,
+       displayAttrFormNames,
+     };
+
+     if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
+       ({ body, visualizationInfo, instanceDefinition } = await this.getDossierInstanceDefinition(
+         { ...config, visualizationInfo }
+       ));
+     } else {
+       instanceDefinition = await createInstance(config);
+     }
 
 
-    // Status 2 = report has open prompts to be answered before data can be returned
-    if (instanceDefinition.status === 2) {
-      instanceDefinition = await this.modifyInstanceWithPrompt({ instanceDefinition, ...config });
-    }
+     // Status 2 = report has open prompts to be answered before data can be returned
+     if (instanceDefinition.status === 2) {
+       instanceDefinition = await this.modifyInstanceWithPrompt({ instanceDefinition, ...config });
+     }
+     const updatedObject = {
+       objectWorkingId,
+       body,
+       instanceDefinition,
+       visualizationInfo,
+       startCell,
+       excelContext,
+     };
 
-    return {
-      body,
-      instanceDefinition,
-      visualizationInfo,
-    };
-  }
+     officeDisplayService.savePreviousObjectData(instanceDefinition, crosstabHeaderDimensions, subtotalsAddresses);
+
+
+     // Check if instance returned data
+     //  if (mstrTable.rows.length === 0) {
+     //    return {
+     //      type: 'warning',
+     //      message: isPrompted ? ALL_DATA_FILTERED_OUT : NO_DATA_RETURNED,
+     //    };
+     //  }
+
+     this.reduxStore.dispatch(updateObject(updatedObject));
+     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, GET_INSTANCE_DEFINITION));
+     // return {
+     //   body,
+     //   instanceDefinition,
+     //   visualizationInfo,
+     // };
+   }
 
   /**
    * Returns an error type based on error get from visualization importing.

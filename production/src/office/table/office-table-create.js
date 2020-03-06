@@ -123,7 +123,7 @@ class OfficeTableCreate {
    */
   getTableStartCell = (startCell, sheet, instanceDefinition, prevOfficeTable, tableColumnsChanged) => {
     const { mstrTable } = instanceDefinition;
-    const { isCrosstab, prevCrosstabDimensions, crosstabHeaderDimensions } = mstrTable;
+    const { isCrosstab, prevCrosstabDimensions = false, crosstabHeaderDimensions = false } = mstrTable;
     const { rowsX: prevRowsX, columnsY: prevColumnsY } = prevCrosstabDimensions;
     const { rowsX, columnsY } = crosstabHeaderDimensions;
 

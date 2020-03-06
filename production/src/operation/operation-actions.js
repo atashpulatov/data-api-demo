@@ -1,3 +1,4 @@
+import { GET_INSTANCE_DEFINITION, GET_OFFICE_TABLE, TEST_PRINT_OBJECT } from './operation-steps';
 
 export const IMPORT_REQUESTED = 'IMPORT_REQUESTED';
 export const EDIT_REQUESTED = 'EDIT_REQUESTED';
@@ -30,6 +31,7 @@ function createOperation(type, objectWorkingId) {
   return {
     operationType: operationTypes[type],
     objectWorkingId,
+    stepsQueue: [GET_INSTANCE_DEFINITION, GET_OFFICE_TABLE, TEST_PRINT_OBJECT]
   };
 }
 

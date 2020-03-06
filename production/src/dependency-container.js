@@ -15,6 +15,8 @@ import { popupActions } from './popup/popup-actions';
 import { actionCreator } from './notification/action-creator';
 import { authenticationService } from './authentication/auth-rest-service';
 import { operationBus } from './operation/operation-bus';
+import mstrObjectInstance from './mstr-object/mstr-object-instance';
+import officeTableService from './office/table/office-table-service';
 
 class DIContainer {
   constructor(autoInitialize) {
@@ -24,6 +26,8 @@ class DIContainer {
   initializeAll = () => {
     console.log('________INITIALIZING________');
     console.log('________DI CONTAINER________');
+    this.operationBus = operationBus;
+    this.operationBus.init(reduxStore);
     this.officeApiHelper = officeApiHelper;
     this.officeApiHelper.init(reduxStore);
     this.officeStoreService = officeStoreService;
@@ -43,9 +47,13 @@ class DIContainer {
     this.popupController = popupController;
     this.popupController.init(reduxStore, sessionHelper, popupActions);
     this.officeDisplayService = officeDisplayService;
-    this.officeDisplayService.init(reduxStore);
+    this.officeDisplayService.init(reduxStore, operationBus);
     this.mstrListRestService = mstrListRestService;
     this.mstrListRestService.init(reduxStore);
+    this.mstrObjectInstance = mstrObjectInstance;
+    this.mstrObjectInstance.init(reduxStore);
+    this.officeTableService = officeTableService;
+    this.officeTableService.init(reduxStore);
     this.popupHelper = popupHelper;
     this.popupHelper.init(popupController);
     this.popupActions = popupActions;
@@ -58,8 +66,6 @@ class DIContainer {
       this.mstrObjectRestService,
       this.popupController
     );
-    this.operationBus = operationBus;
-    this.operationBus.init(reduxStore);
     this.initialized = true;
   }
 

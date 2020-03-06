@@ -18,10 +18,15 @@ import { NO_DATA_RETURNED, ALL_DATA_FILTERED_OUT } from '../error/constants';
 import { officeApiWorksheetHelper } from './api/office-api-worksheet-helper';
 import { officeApiRemoveHelper } from './api/office-api-remove-helper';
 
+import { GET_INSTANCE_DEFINITION, GET_OFFICE_TABLE, TEST_PRINT_OBJECT } from '../operation/operation-steps';
+import { importRequested, markStepCompleted, deleteObject } from '../operation/operation-actions';
 
 class OfficeDisplayService {
-  init = (reduxStore) => {
+  init = (reduxStore, operationBus) => {
     this.reduxStore = reduxStore;
+    operationBus.subscribe(GET_INSTANCE_DEFINITION, mstrObjectInstance.getInstaceDefinition);
+    operationBus.subscribe(GET_OFFICE_TABLE, officeTableService.getOfficeTable);
+    operationBus.subscribe(TEST_PRINT_OBJECT, this.printObject);
   }
 
   /**
@@ -68,104 +73,133 @@ class OfficeDisplayService {
    * @param {String} [parameter.displayAttrFormNames] Name of the display attribute names option
    * @returns {Object} Specify status of the import.
    */
-  printObject = async ({
-    objectId,
-    projectId,
-    mstrObjectType = mstrObjectEnum.mstrObjectType.report,
-    selectedCell,
-    bindingId,
-    isRefresh,
-    dossierData,
-    body,
-    isCrosstab,
-    isPrompted,
-    promptsAnswers,
-    crosstabHeaderDimensions = false,
-    subtotalsInfo: {
-      subtotalsDefined = false,
-      subtotalsVisible = false,
-      subtotalsAddresses = false,
-      importSubtotal = true,
-    } = false,
-    visualizationInfo = false,
-    preparedInstanceId,
-    manipulationsXML = false,
-    isRefreshAll,
-    tableName,
-    previousTableDimensions,
-    insertNewWorksheet = false,
-    originalObjectName,
-    displayAttrFormNames = officeProperties.displayAttrFormNames.automatic
-  }) => {
-    let newOfficeTableName;
-    let shouldFormat;
-    let excelContext;
-    let startCell;
-    let tableColumnsChanged;
-    let instanceDefinition;
-    let officeTable;
-    let newBindingId = bindingId;
+  printObject = async (
+  // objectId,
+  // projectId,
+  // mstrObjectType = mstrObjectEnum.mstrObjectType.report,
+  // selectedCell,
+  // bindingId,
+  // isRefresh,
+  // dossierData,
+  // body,
+  // isCrosstab,
+  // isPrompted,
+  // promptsAnswers,
+  // crosstabHeaderDimensions = false,
+  // subtotalsInfo: {
+  //   subtotalsDefined = false,
+  //   subtotalsVisible = false,
+  //   subtotalsAddresses = false,
+  //   importSubtotal = true,
+  // } = false,
+  // visualizationInfo = false,
+  // preparedInstanceId,
+  // manipulationsXML = false,
+  // isRefreshAll,
+  // tableName,
+  // previousTableDimensions,
+  // insertNewWorksheet = false,
+  // originalObjectName,
+  // displayAttrFormNames = officeProperties.displayAttrFormNames.automatic
+  ) => {
+    // let newOfficeTableName;
+    // let shouldFormat;
+    // let excelContext;
+    // let startCell;
+    // let tableColumnsChanged;
+    // let instanceDefinition;
+    // let officeTable;
+    // const newBindingId = bindingId;
+    const [ObjectData] = this.reduxStore.getState().objectReducer.objects;
+    const {
+      isRefresh,
+      excelContext,
+      bindingId,
+      instanceDefinition,
+      officeTable,
+      shouldFormat,
+      tableColumnsChanged,
+      visualizationInfo,
+      importSubtotal,
+      displayAttrFormNames,
+      objectWorkingId,
+      objectId,
+      projectId,
+      dossierData,
+      mstrObjectType,
+      body,
+      preparedInstanceId,
+      manipulationsXML,
+      promptsAnswers,
+      newBindingId,
+      originalObjectName,
+      isPrompted,
+      newOfficeTableName,
+    } = ObjectData;
+    const { startCell } = ObjectData;
+    const { mstrTable } = instanceDefinition;
+    const isCrosstab = mstrTable;
     try {
-      excelContext = await officeApiHelper.getExcelContext();
+      // excelContext = await officeApiHelper.getExcelContext();
 
-      // Get excel context and initial cell
-      console.group('Importing data performance');
-      console.time('Total');
-      console.time('Init excel');
-      startCell = await this.getStartCell(insertNewWorksheet, excelContext, startCell, selectedCell);
-      console.timeEnd('Init excel');
+      // // Get excel context and initial cell
+      // console.group('Importing data performance');
+      // console.time('Total');
+      // console.time('Init excel');
+      // startCell = await this.getStartCell(insertNewWorksheet, excelContext, startCell, selectedCell);
+      // console.timeEnd('Init excel');
 
-      const connectionData = {
-        objectId,
-        projectId,
-        dossierData,
-        mstrObjectType,
-        body,
-        preparedInstanceId,
-        manipulationsXML,
-        promptsAnswers,
-      };
+      // const connectionData = {
+      //   objectId,
+      //   projectId,
+      //   dossierData,
+      //   mstrObjectType,
+      //   body,
+      //   preparedInstanceId,
+      //   manipulationsXML,
+      //   promptsAnswers,
+      // };
 
-      // Get mstr instance definition
-      console.time('Instance definition');
-      ({ body, instanceDefinition, visualizationInfo } = await mstrObjectInstance.getInstaceDefinition(
-        connectionData,
-        visualizationInfo,
-        displayAttrFormNames
-      ));
-      console.timeEnd('Instance definition');
+      // // Get mstr instance definition
+      // console.time('Instance definition');
+      // ({ body, instanceDefinition, visualizationInfo } = await mstrObjectInstance.getInstaceDefinition(
+      //   connectionData,
+      //   visualizationInfo,
+      //   displayAttrFormNames
+      // ));
+      // console.timeEnd('Instance definition');
 
 
-      this.savePreviousObjectData(instanceDefinition, crosstabHeaderDimensions, subtotalsAddresses);
-      const { mstrTable } = instanceDefinition;
+      // this.savePreviousObjectData(instanceDefinition, crosstabHeaderDimensions, subtotalsAddresses);
 
-      // Check if instance returned data
-      if (mstrTable.rows.length === 0) {
-        return {
-          type: 'warning',
-          message: isPrompted ? ALL_DATA_FILTERED_OUT : NO_DATA_RETURNED,
-        };
-      }
+
+      // // Check if instance returned data
+      // if (mstrTable.rows.length === 0) {
+      //   return {
+      //     type: 'warning',
+      //     message: isPrompted ? ALL_DATA_FILTERED_OUT : NO_DATA_RETURNED,
+      //   };
+      // }
 
       // Create or update table
-      ({
-        officeTable,
-        newOfficeTableName,
-        shouldFormat,
-        tableColumnsChanged,
-        newBindingId
-      } = await officeTableService.getOfficeTable(
-        {
-          isRefresh,
-          excelContext,
-          bindingId,
-          instanceDefinition,
-          startCell,
-          tableName,
-          previousTableDimensions,
-          visualizationInfo
-        }
-      ));
+      // ({
+      //   officeTable,
+      //   newOfficeTableName,
+      //   shouldFormat,
+      //   tableColumnsChanged,
+      //   newBindingId
+      // } = await officeTableService.getOfficeTable(
+      //   {
+      //     isRefresh,
+      //     excelContext,
+      //     bindingId,
+      //     instanceDefinition,
+      //     startCell,
+      //     tableName,
+      //     previousTableDimensions,
+      //     visualizationInfo
+      //   }
+      // ));
 
 
       const officeData = {
@@ -183,7 +217,16 @@ class OfficeDisplayService {
       console.time('Fetch and insert into excel');
 
       await officeImportService.fetchInsertDataIntoExcel({
-        connectionData,
+        connectionData: {
+          objectId,
+          projectId,
+          dossierData,
+          mstrObjectType,
+          body,
+          preparedInstanceId,
+          manipulationsXML,
+          promptsAnswers,
+        },
         officeData,
         instanceDefinition,
         isRefresh,

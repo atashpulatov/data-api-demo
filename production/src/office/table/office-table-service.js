@@ -2,7 +2,15 @@ import officeTableCreate from './office-table-create';
 import officeTableRefresh from './office-table-refresh';
 import { officeApiHelper } from '../api/office-api-helper';
 
+import { importRequested, markStepCompleted } from '../../operation/operation-actions';
+import { updateObject, deleteObject } from '../../operation/object-actions';
+import { GET_INSTANCE_DEFINITION, GET_OFFICE_TABLE, TEST_PRINT_OBJECT } from '../../operation/operation-steps';
+
 class OfficeTableService {
+  init = (reduxStore) => {
+    this.reduxStore = reduxStore;
+  }
+
   /**
    * Creates an office table if it's a new import or if the number of columns of an existing table changes.
    * If we are refreshing a table and the new definiton range is not empty we keep the original table.
@@ -15,18 +23,31 @@ class OfficeTableService {
    *
    */
   getOfficeTable = async (
-    {
+  // {
+  //   isRefresh,
+  //   excelContext,
+  //   bindingId,
+  //   instanceDefinition,
+  //   startCell,
+  //   tableName,
+  //   previousTableDimensions,
+  //   visualizationInfo
+  // }
+  ) => {
+    console.time('Create or get table');
+    const [ObjectData] = this.reduxStore.getState().objectReducer.objects;
+    const {
       isRefresh,
       excelContext,
       bindingId,
       instanceDefinition,
-      startCell,
       tableName,
       previousTableDimensions,
-      visualizationInfo
-    }
-  ) => {
-    console.time('Create or get table');
+      visualizationInfo,
+      objectWorkingId,
+    } = ObjectData;
+    let { startCell } = ObjectData;
+
     let newBindingId;
     const { mstrTable } = instanceDefinition;
 
@@ -69,13 +90,26 @@ class OfficeTableService {
       ));
     }
     console.timeEnd('Create or get table');
-    return {
+
+    const updatedObject = {
+      objectWorkingId,
       officeTable,
       newOfficeTableName,
       shouldFormat,
       tableColumnsChanged,
       newBindingId,
+      instanceDefinition,
     };
+
+    this.reduxStore.dispatch(updateObject(updatedObject));
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, GET_OFFICE_TABLE));
+    // return {
+    //   officeTable,
+    //   newOfficeTableName,
+    //   shouldFormat,
+    //   tableColumnsChanged,
+    //   newBindingId,
+    // };
   }
 
   /**

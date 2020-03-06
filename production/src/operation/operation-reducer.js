@@ -24,6 +24,7 @@ function importRequested(state, payload) {
 
 function markStepCompleted(state, { objectWorkingId, completedStep }) {
   const processedOperation = state.operations.find((operation) => operation.objectWorkingId === objectWorkingId);
+
   const { stepsQueue } = processedOperation;
   if (processedOperation.stepsQueue[0] !== completedStep) {
     // FIXME: Add class/message for this error

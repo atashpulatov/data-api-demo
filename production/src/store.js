@@ -11,6 +11,8 @@ import { notificationReducer } from './notification/reducer';
 import { popupReducer } from './popup/popup-reducer';
 import cacheReducer from './cache/cache-reducer';
 import { popupStateReducer } from './popup/popup-state-reducer';
+import { operationReducer } from './operation/operation-reducer';
+import { objectReducer } from './operation/object-reducer';
 
 const rootReducer = combineReducers({
   sessionReducer,
@@ -20,12 +22,14 @@ const rootReducer = combineReducers({
   popupReducer,
   popupStateReducer,
   cacheReducer,
+  operationReducer,
+  objectReducer,
 });
 
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['officeReducer', 'notificationReducer', 'cacheReducer'],
+  blacklist: ['officeReducer', 'notificationReducer', 'cacheReducer', 'operationReducer', 'objectReducer'],
 };
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 let middleWare;
