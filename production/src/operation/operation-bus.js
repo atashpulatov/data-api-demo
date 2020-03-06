@@ -12,8 +12,7 @@ class OperationBus {
   listener = () => {
     const currentOperation = this.store.getState().operationReducer
       && this.store.getState().operationReducer.operations[0];
-    if (!this.previousOperation || !currentOperation
-      || this.previousOperation.stepsQueue[0] === currentOperation.stepsQueue[0]) {
+    if (!didOperationChange(this.previousOperation, currentOperation)) {
       return;
     }
     const nextStep = currentOperation.stepsQueue[0];
@@ -26,5 +25,16 @@ class OperationBus {
     this.subscribedCallbacksMap[stepName] = callback;
   }
 }
+
+const didOperationChange = (previousOperation, currentOperation) => {
+  if (!currentOperation) {
+    return false;
+  }
+  if (previousOperation
+    && previousOperation.stepsQueue[0] === currentOperation.stepsQueue[0]) {
+    return false;
+  }
+  return true;
+};
 
 export const operationBus = new OperationBus();
