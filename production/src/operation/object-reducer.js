@@ -1,8 +1,7 @@
 import { UPDATE_OBJECT, DELETE_OBJECT } from './object-actions';
 import { IMPORT_REQUESTED } from './operation-actions';
 
-const initialState = [];
-
+const initialState = { objects: [] };
 export const objectReducer = (state = initialState, action) => {
   switch (action.type) {
   case IMPORT_REQUESTED:
@@ -16,8 +15,13 @@ export const objectReducer = (state = initialState, action) => {
   }
 };
 
-function importRequested(state, object) {
-  return [...state, object];
+function importRequested(state, payload) {
+  return {
+    objects: [
+      ...state.objects,
+      payload.object,
+    ]
+  };
 }
 
 function updateObject(state, updatedObject) {
