@@ -147,5 +147,17 @@ describe('objectReducer', () => {
       // then
       expect(resultState).toEqual(initialState.multipleObjects);
     });
+    it('should remove object if id exists in array', () => {
+      // given
+      const someId = 'someOtherString23';
+      const action = {
+        type: DELETE_OBJECT,
+        payload: someId,
+      };
+      // when
+      const resultState = objectReducer(initialState.multipleObjects, action);
+      // then
+      expect(resultState.objects).toHaveLength(2);
+    });
   });
 });
