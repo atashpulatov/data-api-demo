@@ -35,9 +35,10 @@ function updateObject(state, updatedObject) {
 
 function deleteObject(state, objectWorkingId) {
   const objectToRemoveIndex = state.objects.findIndex(object => object.objectWorkingId === objectWorkingId);
+  console.log(objectToRemoveIndex);
   if (objectToRemoveIndex !== -1) {
     const newObjects = [...state.objects];
-    newObjects.splice(objectToRemoveIndex, objectToRemoveIndex && 1);
+    newObjects.splice(objectToRemoveIndex, 1);
     return { objects: newObjects };
   }
   return state;

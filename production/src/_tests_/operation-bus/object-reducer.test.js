@@ -159,5 +159,17 @@ describe('objectReducer', () => {
       // then
       expect(resultState.objects).toHaveLength(2);
     });
+    it('should remove last object if id exists in array', () => {
+      // given
+      const someId = 'someOtherString234';
+      const action = {
+        type: DELETE_OBJECT,
+        payload: someId,
+      };
+      // when
+      const resultState = objectReducer(initialState.singleObject, action);
+      // then
+      expect(resultState.objects).toHaveLength(0);
+    });
   });
 });
