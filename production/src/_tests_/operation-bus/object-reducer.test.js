@@ -49,7 +49,7 @@ describe('objectReducer', () => {
     // when
     const resultState = objectReducer(initialState.multipleObjects, unhandledAction);
     // then
-    expect(resultState).toEqual(initialState.multipleObjects);
+    expect(resultState).toBe(initialState.multipleObjects);
   });
   describe('importRequested', () => {
     it('should add first object to array and return new array', () => {
