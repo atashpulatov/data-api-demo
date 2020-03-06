@@ -1,6 +1,6 @@
 import { IMPORT_REQUESTED, MARK_STEP_COMPLETED } from './operation-actions';
 
-const initialState = {};
+const initialState = { operations: [] };
 
 export const operationReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -16,7 +16,7 @@ export const operationReducer = (state = initialState, action) => {
 function importRequested(state, payload) {
   return {
     operations: [
-      ...state.operaions,
+      ...state.operations,
       payload.operation,
     ]
   };
