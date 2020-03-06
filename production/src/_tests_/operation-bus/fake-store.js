@@ -10,13 +10,21 @@ class FakeStore {
   }
 
   resetState = () => {
-    this.state = { operationReducer: { operations: [], } };
+    this.state = { operationReducer: { operations: [{ stepsQueue: [], }], } };
     this.listener && this.listener();
   }
 
-  simulateStepChange = (stepName) => {
-    const subscribedOperation = { stepsQueue: [stepName], };
-    this.state.operationReducer.operations = [subscribedOperation];
+  addStep = (stepName) => {
+    const operation = this.state.operationReducer.operations[0];
+    operation.stepsQueue = [...operation.stepsQueue, stepName];
+    console.log(JSON.stringify(this.state));
+
+    this.listener();
+  }
+
+  removeFirstStep = () => {
+    const operation = this.state.operationReducer.operations[0];
+    operation.stepsQueue.shift();
     this.listener();
   }
 }
