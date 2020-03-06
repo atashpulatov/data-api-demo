@@ -20,7 +20,6 @@ exports.config = {
     //   './test/specs/release-validation/deprecated/sample.spec.js',
   ],
   suites: {
-    test: ['./test/specs/release-validation/F25968-object-numbers/TC54853-refresh-button-filter-panel.spec.js'],
     'F12910-import-dataset': [
       './test/specs/release-validation/F12910-import-dataset/TC34506-import-not-supported-cube.spec.js',
       './test/specs/release-validation/F12910-import-dataset/TC35249-cubes-limits-project.spec.js',
@@ -33,6 +32,9 @@ exports.config = {
       './test/specs/release-validation/F22955-refresh/TC48134-refresh-report-prompt-object-required-defaultanswer.spec.js',
       './test/specs/release-validation/F22955-refresh/TC48135-refresh-report-prompt-nested-prompts.spec.js',
       './test/specs/release-validation/F22955-refresh/TC48136-refresh-report-prompt-multiple-prompts.spec.js',
+    ],
+    'F24087-improve-scrolling-performance': [
+      './test/specs/release-validation/F24087-improve-scrolling-performance/TC54976-E2E-scenario.spec.js',
     ],
     'F24398-import-and-refresh-visualization': [
       './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53434-my-library-view-filters-dossier-importing.spec.js',
@@ -178,7 +180,7 @@ exports.config = {
 
   //
   // The number of times to retry the entire specfile when it fails as a whole
-  specFileRetries: 0,
+  specFileRetries: 3,
   //
   // Test reporter for stdout.
   // The only one supported by default is 'dot'

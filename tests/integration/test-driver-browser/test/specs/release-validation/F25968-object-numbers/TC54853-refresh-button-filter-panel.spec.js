@@ -2,9 +2,9 @@ import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import settings from '../../../config';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { switchToRightPanelFrame, switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
+import { objectsList } from '../../../constants/objects-list';
 
 describe('F25968 - Dynamically update numbers of objects displayed next to categories in filter panel', () => {
   beforeEach(() => {
@@ -39,7 +39,7 @@ describe('F25968 - Dynamically update numbers of objects displayed next to categ
     PluginPopup.clickFilterButton();
     PluginPopup.clickAllButton('Modified');
     PluginPopup.checkAllPanelElement('Last Quarter.');
-    PluginPopup.importObject('Demo Report');
+    PluginPopup.importObject(objectsList.reports.basicReport);
     waitForNotification();
     PluginRightPanel.clickSettings();
     browser.pause(1555); // wait for success notification to disappear

@@ -7,12 +7,20 @@ import {
   switchToPopupFrame,
   switchToExcelFrame,
   switchToPromptFrameForEditDossier,
-  switchToPromptFrameForEditReport
+  switchToPromptFrameForEditReport,
+  switchToRefreshAllFrame
 } from '../utils/iframe-helper';
 import pluginRightPanel from './plugin.right-panel';
 
 class PluginPopup {
-  closeRefreshAll() {
+  /**
+   * Waits for the 'Refreshing complete!' message and only then closes refreshAll popup
+   * @param {number} timeout increase/decrease timeout depending on the amount of refreshed objects
+   */
+  closeRefreshAll(timeout = 9999) {
+    switchToRefreshAllFrame();
+    $('.finished-header').waitForExist(timeout);
+    switchToExcelFrame();
     waitAndClick($(popupSelectors.closeRefreshAll));
   }
 
