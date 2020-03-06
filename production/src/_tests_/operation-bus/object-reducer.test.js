@@ -1,6 +1,6 @@
 import { IMPORT_REQUESTED } from '../../operation/operation-actions';
 import { objectReducer } from '../../operation/object-reducer';
-import { UPDATE_OBJECT, GET_OBJECT_DATA, DELETE_OBJECT } from '../../operation/object-actions';
+import { UPDATE_OBJECT, DELETE_OBJECT } from '../../operation/object-actions';
 
 describe('objectReducer', () => {
   const initialObject = {
@@ -9,27 +9,31 @@ describe('objectReducer', () => {
     objectId: 'someId',
   };
   const initialState = {
-    empty: [],
-    singleObject:[{
-      objectWorkingId: 'someOtherString234',
-      envUrl: 'someURL24',
-      objectId: 'someDiffId',
-    }],
-    multipleObjects:   [{
-      objectWorkingId: 'someOtherString2',
-      envUrl: 'someURL24',
-      objectId: 'someDiffId',
+    empty: { objects:[] },
+    singleObject:{
+      objects: [{
+        objectWorkingId: 'someOtherString234',
+        envUrl: 'someURL24',
+        objectId: 'someDiffId',
+      }]
     },
-    {
-      objectWorkingId: 'someOtherString23',
-      envUrl: 'someURL24',
-      objectId: 'someDiffId',
-    },
-    {
-      objectWorkingId: 'someOtherString234',
-      envUrl: 'someURL24',
-      objectId: 'someDiffId',
-    }]
+    multipleObjects:   {
+      objects:[{
+        objectWorkingId: 'someOtherString2',
+        envUrl: 'someURL24',
+        objectId: 'someDiffId',
+      },
+      {
+        objectWorkingId: 'someOtherString23',
+        envUrl: 'someURL24',
+        objectId: 'someDiffId',
+      },
+      {
+        objectWorkingId: 'someOtherString234',
+        envUrl: 'someURL24',
+        objectId: 'someDiffId',
+      }]
+    }
   };
   describe('importRequested', () => {
     it('should add first object to array and return new array', () => {
@@ -41,7 +45,7 @@ describe('objectReducer', () => {
       // when
       const resultState = objectReducer(initialState.empty, action);
       // then
-      expect(resultState).toEqual([initialObject]);
+      expect(resultState).toEqual({ objects: [initialObject] });
     });
     it('should add object to array and return new array', () => {
       // given
@@ -52,7 +56,7 @@ describe('objectReducer', () => {
       // when
       const resultState = objectReducer(initialState.singleObject, action);
       // then
-      expect(resultState).toEqual([...initialState.singleObject, initialObject]);
+      expect(resultState).toEqual({ objects: [...initialState.singleObject.objects, initialObject] });
     });
   });
   describe('updateObject', () => {
@@ -77,7 +81,7 @@ describe('objectReducer', () => {
       // when
       const resultState = objectReducer(initialState.singleObject, action);
       // then
-      expect(resultState[0]).toEqual({ ...initialState.singleObject[0], objectName });
+      expect(resultState.objects[0]).toEqual({ ...initialState.singleObject.objects[0], objectName });
     });
     it('should add two properties to object on single element array', () => {
       // given
@@ -90,7 +94,7 @@ describe('objectReducer', () => {
       // when
       const resultState = objectReducer(initialState.singleObject, action);
       // then
-      expect(resultState[0]).toEqual({ ...initialState.singleObject[0], objectName, someProp });
+      expect(resultState.objects[0]).toEqual({ ...initialState.singleObject.objects[0], objectName, someProp });
     });
     it('should add one property to object on multi element array', () => {
       // given
@@ -102,7 +106,7 @@ describe('objectReducer', () => {
       // when
       const resultState = objectReducer(initialState.multipleObjects, action);
       // then
-      expect(resultState[1]).toEqual({ ...initialState.multipleObjects[1], objectName });
+      expect(resultState.objects[1]).toEqual({ ...initialState.multipleObjects.objects[1], objectName });
     });
     it('should add two properties to object on multi element array', () => {
       // given
@@ -115,7 +119,7 @@ describe('objectReducer', () => {
       // when
       const resultState = objectReducer(initialState.multipleObjects, action);
       // then
-      expect(resultState[1]).toEqual({ ...initialState.multipleObjects[1], objectName, someProp });
+      expect(resultState.objects[1]).toEqual({ ...initialState.multipleObjects.objects[1], objectName, someProp });
     });
   });
   describe('deleteObject', () => {
