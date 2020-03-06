@@ -20,6 +20,7 @@ describe('F25968 - Dynamically update numbers of objects displayed next to categ
   it('TC54853 refresh button and filter panel', () => {
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
+    switchToPluginFrame();
     PluginPopup.clickFilterButton();
     PluginPopup.tickFilterCheckBox('Owner', 'a');
     PluginPopup.tickFilterCheckBox('Owner', 'Administrator');
@@ -37,6 +38,7 @@ describe('F25968 - Dynamically update numbers of objects displayed next to categ
     PluginRightPanel.clickAddDataButton();
     switchToPluginFrame();
     PluginPopup.switchLibrary(false);
+    switchToPluginFrame();
     PluginPopup.clickFilterButton();
     PluginPopup.clickAllButton('Modified');
     PluginPopup.checkAllPanelElement('Last Quarter.');

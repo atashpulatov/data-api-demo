@@ -351,18 +351,6 @@ class PluginPopup {
     return timeSpent;
   }
 
-  // getMyLibraryState() {
-  //   const myLibrarySwitch = $(popupSelectors.myLibrary);
-  //   myLibrarySwitch.waitForExist(5000);
-  //   return myLibrarySwitch.getAttribute('aria-checked') === 'true';
-  // }
-
-  // switchLibrary(newState) {
-  //   switchToPluginFrame();
-  //   const checked = this.getMyLibraryState();
-  //   if ((checked === true) !== newState) waitAndClick($(popupSelectors.myLibrary))
-  // }
-
   switchLibrary(newState) {
     const myLibrarySwitch = $(popupSelectors.myLibrary);
     myLibrarySwitch.waitForExist(5000);
@@ -559,7 +547,6 @@ class PluginPopup {
    * Clicks Filter button, that opens Filter Panel
    */
   clickFilterButton() {
-    switchToPluginFrame();
     $(popupSelectors.filterButton).click();
   }
 
