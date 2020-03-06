@@ -688,6 +688,20 @@ class PluginPopup {
   checkAllPanelElement(checkboxTitle) {
     waitAndClick($(`.all-panel__content input[aria-label="Checkbox for ${checkboxTitle}"] + .checkmark`));
   }
+
+  /*
+   * Scrolls down ObjectTable by the given number of pages
+   *
+   * @param {number} count Number of pages to scroll down
+   * @memberof PluginPopup
+   */
+  scrollTableDownByPages(count) {
+    const scrollContainer = $(popupSelectors.objectTable.scrollContainer);
+    waitAndClick(scrollContainer);
+    for (let page = 0; page < count; page++) {
+      browser.keys(['PageDown']);
+    }
+  }
 }
 
 export default new PluginPopup();

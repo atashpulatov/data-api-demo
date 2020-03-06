@@ -49,8 +49,8 @@ export const popupSelectors = {
   noDataIcon: $('.ant-table-placeholder'),
   myLibrary: '#root > div > div.navigation_tree__title_bar > div > div.mstr-switch-container > div.mstr-switch',
   closeRefreshAll: '.WACGlyph.WACDialogCloseAnchor',
-  clearSearchInput: $('.search-field__clear-button'),
-  columnOwner: $('.ReactVirtualized__Table__row > div[aria-colindex="5"] > span'),
+  clearSearchInput: '.search-field__clear-button',
+  columnOwner: '.ReactVirtualized__Table__row > div[aria-colindex="5"] > span',
   columnProject: 'div[aria-colindex="6"] > span',
   columnName: 'div[aria-colindex="3"] > span',
   tableRows: '.position-relative',
@@ -94,7 +94,7 @@ export const popupSelectors = {
     selectAllButton: '.all-panel__buttons button:first-of-type',
   },
   objectTable: {
-    scrollContainer: '.ReactVirtualized__Grid.ReactVirtualized__Table__Grid', 
+    scrollContainer: '.ReactVirtualized__Grid.ReactVirtualized__Table__Grid',
   },
   repromptDossier: 'div.mstr-nav-icon.icon-reprompt'
 };

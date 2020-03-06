@@ -4,7 +4,6 @@ const fs = require('fs');
 
 const cmd = process.argv;
 
-
 function parseReportData(report) {
   const filePath = path.resolve(report);
   const results = (JSON.parse(fs.readFileSync(filePath)));
@@ -47,20 +46,20 @@ function getBrowser(report) {
 
 function getBuild() {
   let build;
-  if (!cmd[3]) {
+  if (!cmd[4]) {
     build = '11.2.0000.22202'
   } else {
-    build = cmd[3];
+    build = cmd[4];
   }
   return build;
 }
 
 function getRelease() {
   let release;
-  if (!cmd[4]) {
-    release = '11.2.1'
+  if (!cmd[5]) {
+    release = '11.2.x'
   } else {
-    release = cmd[4];
+    release = cmd[5];
   }
   return release;
 }
@@ -85,6 +84,12 @@ function getReportData() {
 }
 
 
-getReportData();
+function getTestsWithVerdict(tests, passed) {
+  if (passed) {
+    return tests.filter(test => test.verdict === 'Pass');
+  }
+  return tests.filter(test => test.verdict === 'Fail');
+}
 
 exports.getReportData = getReportData;
+exports.getTestsWithVerdict = getTestsWithVerdict;
