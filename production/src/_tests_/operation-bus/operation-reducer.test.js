@@ -1,4 +1,4 @@
-import { IMPORT_REQUESTED } from '../../operation/operation-actions';
+import { IMPORT_REQUESTED, MARK_STEP_COMPLETED } from '../../operation/operation-actions';
 import { operationReducer } from '../../operation/operation-reducer';
 
 describe('operation reducer', () => {
@@ -13,6 +13,7 @@ describe('operation reducer', () => {
       operations: [{
         objectWorkingId: 'someOtherString234',
         operationType: 'someType24',
+        stepsQueue: ['step1', 'step2', 'step3'],
         totalRows: 100000,
         loadedRows: 0,
       }]
@@ -21,18 +22,21 @@ describe('operation reducer', () => {
       operations:[{
         objectWorkingId: 'someOtherString2',
         operationType: 'someType',
+        stepsQueue: ['step1', 'step2', 'step3'],
         totalRows: 100000,
         loadedRows: 0,
       },
       {
         objectWorkingId: 'someOtherString23',
         operationType: 'someOtherType',
+        stepsQueue: ['step2a', 'step3a', 'step4'],
         totalRows: 100000,
         loadedRows: 2000,
       },
       {
         objectWorkingId: 'someOtherString234',
         operationType: 'someNextType',
+        stepsQueue: ['step1', 'step2', 'step3'],
         totalRows: 100000,
         loadedRows: 1000,
       }]
