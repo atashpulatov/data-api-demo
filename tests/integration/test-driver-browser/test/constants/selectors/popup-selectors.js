@@ -87,7 +87,8 @@ export const popupSelectors = {
       selectFilterValueAt: (index) => `div.mstrd-FilterItemsList > div > div > div > div:nth-child(${index})`,
       getSliderInput: (position) => (position === 'left' ? '.mstrd-SliderSummary-left-input' : '.mstrd-SliderSummary-right-input'),
       buttonApplyFilters : 'div.mstrd-FilterPanelFooterContainer-apply',
-    }
+    },
+    repromptDossier: 'div.mstr-nav-icon.icon-reprompt'
   },
   filterPanel: {
     expandButton: '.expand-btn',
@@ -98,5 +99,4 @@ export const popupSelectors = {
   objectTable: {
     scrollContainer: '.ReactVirtualized__Grid.ReactVirtualized__Table__Grid',
   },
-  repromptDossier: 'div.mstr-nav-icon.icon-reprompt'
 };
