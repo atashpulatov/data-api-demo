@@ -12,7 +12,7 @@ describe('OperationBus', () => {
 
   it('does not call subscriber when current step empty', () => {
     // given
-    fakeStore.simulateStepChange('justSomeStep');
+    fakeStore.addStep('justSomeStep');
     operationBus.init(fakeStore);
     const subscriber = jest.fn();
     const subscribedStep = 'subscribed';
@@ -34,13 +34,13 @@ describe('OperationBus', () => {
     operationBus.subscribe(subscribedStep, subscriber);
 
     // when
-    fakeStore.simulateStepChange(postedStep);
+    fakeStore.addStep(postedStep);
 
     // then
     expect(subscriber).not.toBeCalled();
   });
 
-  it('not call subscriber when steps do not match [previous step empty]', () => {
+  it('calls subscriber when matching step added', () => {
     // given
     operationBus.init(fakeStore);
     const subscriber = jest.fn();
@@ -48,22 +48,23 @@ describe('OperationBus', () => {
     operationBus.subscribe(subscribedStep, subscriber);
 
     // when
-    fakeStore.simulateStepChange(subscribedStep);
+    fakeStore.addStep(subscribedStep);
 
     // then
     expect(subscriber).toBeCalled();
   });
 
-  it('not call subscriber when steps do not match [previous step present]', () => {
+  it('calls subscriber when matching step is next', () => {
     // given
-    fakeStore.simulateStepChange('justSomeStep');
+    fakeStore.addStep('justSomeStep');
     operationBus.init(fakeStore);
     const subscriber = jest.fn();
     const subscribedStep = 'subscribed';
     operationBus.subscribe(subscribedStep, subscriber);
+    fakeStore.addStep(subscribedStep);
 
     // when
-    fakeStore.simulateStepChange(subscribedStep);
+    fakeStore.removeFirstStep();
 
     // then
     expect(subscriber).toBeCalled();
