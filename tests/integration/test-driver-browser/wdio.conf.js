@@ -62,6 +62,10 @@ exports.config = {
     'F25932-import-attribute-forms': [
       './test/specs/release-validation/F25932-import-attribute-forms/TC59987-attribute-form-display.spec.js',
     ],
+    'F25968-object-numbers': [
+      './test/specs/release-validation/F25968-object-numbers/TC54853-refresh-button-filter-panel.spec.js',
+      './test/specs/release-validation/F25968-object-numbers/TC58932-select-deselect-no-objects.spec.js',
+    ],
     'TF7862-regression': [
       './test/specs/release-validation/TF7862-regression/TC59466-binding-importing-the-same-report-twice.spec.js',
       './test/specs/release-validation/TF7862-regression/TC59464-binding-imported-report.spec.js',

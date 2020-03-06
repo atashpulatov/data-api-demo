@@ -679,7 +679,7 @@ class PluginPopup {
   }
 
   checkAllPanelElement(checkboxTitle) {
-    waitAndClick($(`.all-panel__content input[aria-label="Checkbox for ${checkboxTitle}"] + .checkmark`));
+    waitAndClick($(popupSelectors.filterPanel.getAllPanelCheckbox(checkboxTitle)));
   }
 
   clickSelectAll() {
@@ -687,7 +687,7 @@ class PluginPopup {
   }
 
   uncheckDisabledElement(checkboxTitle) {
-    waitAndClick($(`.all-panel__content .category-list-row.disabled label[title="${checkboxTitle}"]`));
+    waitAndClick($(popupSelectors.filterPanel.getAllPanelDisabledCheckbox(checkboxTitle)));
   }
 
   /**
