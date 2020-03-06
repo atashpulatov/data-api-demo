@@ -50,8 +50,9 @@ export const popupSelectors = {
   myLibrary: '#root > div > div.navigation_tree__title_bar > div > div.mstr-switch-container > div.mstr-switch',
   closeRefreshAll: '#WACDialogTitlePanel > a',
   clearSearchInput: '.search-field__clear-button',
-  columnOwner: '.ReactVirtualized__Table__row > div[aria-colindex="5"] > span',
-  columnProject: 'div[aria-colindex="6"] > span',
+  columnOwner: '.ReactVirtualized__Table__row > div[aria-colindex="4"] > span',
+  columnProject: 'div[aria-colindex="5"] > span',
+  columnModified: 'div[aria-colindex="6"] > span',
   columnName: 'div[aria-colindex="3"] > span',
   tableRows: '.position-relative',
   idDetail: '.details-table > table tr:nth-child(2) p',
@@ -89,6 +90,10 @@ export const popupSelectors = {
       buttonApplyFilters : 'div.mstrd-FilterPanelFooterContainer-apply',
     },
     repromptDossier: 'div.mstr-nav-icon.icon-reprompt'
+  },
+  filterPanel: {
+    dates: '.mstr-date-picker input',
+    clearAll: '.filter-panel__button'
   },
   objectTable: { scrollContainer: '.ReactVirtualized__Grid.ReactVirtualized__Table__Grid' }
 };

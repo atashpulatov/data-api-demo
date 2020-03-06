@@ -73,6 +73,9 @@ exports.config = {
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-II.spec.js',
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-III.spec.js',
     ],
+    'F24086-Improved-browsing-by-adding-filters': [
+      './test/specs/release-validation/F24086-filter-panel/TC54856-filtering-with-type-owner-certified-date.spec.js',
+    ]
   },
   // Patterns to exclude.
   exclude: [
@@ -180,7 +183,7 @@ exports.config = {
 
   //
   // The number of times to retry the entire specfile when it fails as a whole
-  specFileRetries: 3,
+  specFileRetries: 0,
   //
   // Test reporter for stdout.
   // The only one supported by default is 'dot'

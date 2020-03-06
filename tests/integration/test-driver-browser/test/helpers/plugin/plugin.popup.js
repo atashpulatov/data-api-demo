@@ -539,7 +539,7 @@ class PluginPopup {
    * Clicks Filter button, that opens Filter Panel
    */
   clickFilterButton() {
-    $(popupSelectors.filterButton).click();
+    waitAndClick($(popupSelectors.filterButton));
   }
 
   /**
@@ -627,6 +627,53 @@ class PluginPopup {
     for (let page = 0; page < count; page++) {
       browser.keys(['PageDown']);
     }
+  }
+
+  filterByDate(dateFrom, dateTo) {
+    const dateFromInput = $$(popupSelectors.filterPanel.dates)[0];
+    const dateToInput = $$(popupSelectors.filterPanel.dates)[1];
+    dateFromInput.click();
+    for (let i = 0; i < 10; i++) {
+      browser.keys(['Backspace']);
+    }
+    browser.keys(dateFrom);
+
+    dateToInput.click();
+    for (let i = 0; i < 10; i++) {
+      browser.keys(['Backspace']);
+    }
+    browser.keys(dateTo);
+  }
+
+  scrollTable(keyNames) {
+    waitAndClick($(popupSelectors.objectTable.scrollContainer));
+    browser.keys(keyNames);
+    browser.pause(1999); // time to scroll to the bottom of the list
+  }
+
+  selectLastObject() {
+    const renderedObjects = $$('[role="option"]');
+    const lastObject = renderedObjects[renderedObjects.length - 1];
+    waitAndClick(lastObject);
+  }
+
+  clearAll() {
+    const clearAllButton = $(popupSelectors.filterPanel.clearAll);
+    waitAndClick(clearAllButton);
+  }
+
+  getFirstRowTimestamp() {
+    const date = $(popupSelectors.columnModified).getAttribute('Title').split(' ')[0].split('/');
+    const preparedDate = new Date(date[2], date[0], date[1]);
+    return Date.parse(preparedDate);
+  }
+
+  assertFirstObjectDateIsInTheRange(dateFrom, dateTo) {
+    dateFrom = Date.parse(dateFrom);
+    dateTo = Date.parse(dateTo);
+
+    const rowTimestamp = PluginPopup.getFirstRowTimestamp();
+    return rowTimestamp >= dateFrom && rowTimestamp <= dateTo;
   }
 }
 
