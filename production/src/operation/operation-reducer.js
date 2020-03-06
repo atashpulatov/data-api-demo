@@ -30,13 +30,14 @@ function markStepCompleted(state, { objectWorkingId, completedStep }) {
     throw new Error();
   }
   if (stepsQueue.lenght === 1) {
-    state.operations.splice(
-      state.operations.findIndex(
-        (operation) => operation.objectWorkingId === objectWorkingId
-      ), 1
-    );
+    removeOperation(state, objectWorkingId);
   } else {
     stepsQueue.shift();
   }
   return { ...state };
+}
+
+function removeOperation(state, objectWorkingId) {
+  // TODO: throw some meaningful error
+  state.operations.splice(state.operations.findIndex((operation) => operation.objectWorkingId === objectWorkingId), 1);
 }

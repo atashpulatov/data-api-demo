@@ -26,6 +26,7 @@ function importRequested(state, payload) {
 }
 
 function updateObject(state, updatedObject) {
+  // TODO: throw some meaningful error
   return {
     objects: state.objects.map((object) => (object.objectWorkingId === updatedObject.objectWorkingId
       ? { ...object, ...updatedObject }
@@ -35,10 +36,8 @@ function updateObject(state, updatedObject) {
 
 function deleteObject(state, objectWorkingId) {
   const objectToRemoveIndex = state.objects.findIndex(object => object.objectWorkingId === objectWorkingId);
-  if (objectToRemoveIndex !== -1) {
-    const newObjects = [...state.objects];
-    newObjects.splice(objectToRemoveIndex, 1);
-    return { objects: newObjects };
-  }
-  return state;
+  // TODO: throw some meaningful error
+  const newObjects = [...state.objects];
+  newObjects.splice(objectToRemoveIndex, 1);
+  return { objects: newObjects };
 }
