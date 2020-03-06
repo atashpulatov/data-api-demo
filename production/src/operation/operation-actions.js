@@ -6,13 +6,17 @@ export const MARK_STEP_COMPLETED = 'MARK_STEP_COMPLETED';
 export const SET_TOTAL_ROWS = 'SET_TOTAL_ROWS';
 export const SET_LOADED_ROWS = 'SET_LOADED_ROWS';
 
-export const importRequested = (object) => ({
-  type: IMPORT_REQUESTED,
-  payload: {
-    operation: createOperation(IMPORT_REQUESTED),
-    object,
-  },
-});
+export const importRequested = (object) => {
+  const objectWorkingId = Date.now();
+  object.objectWorkingId = objectWorkingId;
+  return {
+    type: IMPORT_REQUESTED,
+    payload: {
+      operation: createOperation(IMPORT_REQUESTED, objectWorkingId),
+      object,
+    },
+  };
+};
 
 export const markStepCompleted = (objectWorkingId, completedStep) => ({
   type: MARK_STEP_COMPLETED,
@@ -22,10 +26,10 @@ export const markStepCompleted = (objectWorkingId, completedStep) => ({
   }
 });
 
-function createOperation(type) {
+function createOperation(type, objectWorkingId) {
   return {
     operationType: operationTypes[type],
-    objectWorkingId: Date.now(),
+    objectWorkingId,
   };
 }
 

@@ -1,7 +1,7 @@
 import { UPDATE_OBJECT, DELETE_OBJECT } from './object-actions';
 import { IMPORT_REQUESTED } from './operation-actions';
 
-const initialState = [];
+const initialState = { objects: [] };
 
 export const objectReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -35,7 +35,6 @@ function updateObject(state, updatedObject) {
 
 function deleteObject(state, objectWorkingId) {
   const objectToRemoveIndex = state.objects.findIndex(object => object.objectWorkingId === objectWorkingId);
-  console.log(objectToRemoveIndex);
   if (objectToRemoveIndex !== -1) {
     const newObjects = [...state.objects];
     newObjects.splice(objectToRemoveIndex, 1);
