@@ -162,7 +162,7 @@ async function logout(preLogout) {
   } catch (error) {
     errorService.handleError(error);
   } finally {
-    sessionHelper.logOutRedirect();
+    sessionHelper.logOutRedirect(true);
   }
 }
 
