@@ -2,18 +2,11 @@ import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import settings from '../../../config';
+import { switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
 
 describe('F25968 - Dynamically update numbers of objects displayed next to categories in filter panel', () => {
   beforeEach(() => {
-    OfficeWorksheet.openExcelHome();
-    const url = browser.getUrl();
-    if (url.includes('login.microsoftonline')) {
-      OfficeLogin.login(settings.officeOnline.username, settings.officeOnline.password);
-    }
-    OfficeWorksheet.createNewWorkbook();
-    OfficeWorksheet.openPlugin();
-    PluginRightPanel.loginToPlugin(settings.env.username, settings.env.password);
+    OfficeLogin.openExcelAndLoginToPlugin();
   });
 
   afterEach(() => {
@@ -25,13 +18,14 @@ describe('F25968 - Dynamically update numbers of objects displayed next to categ
   it('TC58932 - Deselecting/selecting filters with no objects', () => {
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
+    switchToPluginFrame();
     PluginPopup.switchLibrary(false);
     PluginPopup.clickFilterButton();
     PluginPopup.clickAllButton('Owner');
     PluginPopup.clickSelectAll();
-    PluginPopup.tickFilterCheckBox('Type', 'Report');
-    PluginPopup.uncheckDisabledElement('michal');
-    PluginPopup.uncheckDisabledElement('michal');
+    PluginPopup.tickFilterCheckBox('Certified Status', 'Certified');
+    PluginPopup.uncheckDisabledElement('MSTR User');
+    PluginPopup.uncheckDisabledElement('MSTR User');
     expect($('.all-panel__content .category-list-row.disabled input').isSelected()).toBe(false);
   });
 });

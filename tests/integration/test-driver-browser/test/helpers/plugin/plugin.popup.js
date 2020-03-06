@@ -351,6 +351,12 @@ class PluginPopup {
     return timeSpent;
   }
 
+  getMyLibraryState() {
+    const myLibrarySwitch = $(popupSelectors.myLibrary);
+    myLibrarySwitch.waitForExist(5000);
+    return myLibrarySwitch.getAttribute('aria-checked') === 'true';
+  }
+
   switchLibrary(newState) {
     const myLibrarySwitch = $(popupSelectors.myLibrary);
     myLibrarySwitch.waitForExist(5000);
@@ -674,6 +680,14 @@ class PluginPopup {
 
   checkAllPanelElement(checkboxTitle) {
     waitAndClick($(`.all-panel__content input[aria-label="Checkbox for ${checkboxTitle}"] + .checkmark`));
+  }
+
+  clickSelectAll() {
+    waitAndClick($(popupSelectors.filterPanel.selectAllButton));
+  }
+
+  uncheckDisabledElement(checkboxTitle) {
+    waitAndClick($(`.all-panel__content .category-list-row.disabled label[title="${checkboxTitle}"]`));
   }
 
   /**
