@@ -351,24 +351,24 @@ class PluginPopup {
     return timeSpent;
   }
 
-  getMyLibraryState() {
-    const myLibrarySwitch = $(popupSelectors.myLibrary);
-    myLibrarySwitch.waitForExist(5000);
-    return myLibrarySwitch.getAttribute('aria-checked') === 'true';
-  }
-
-  switchLibrary(newState) {
-    switchToPluginFrame();
-    const checked = this.getMyLibraryState();
-    if ((checked === true) !== newState) waitAndClick($(popupSelectors.myLibrary))
-  }
-
-  // switchLibrary(newState) {
+  // getMyLibraryState() {
   //   const myLibrarySwitch = $(popupSelectors.myLibrary);
   //   myLibrarySwitch.waitForExist(5000);
-  //   const checked = myLibrarySwitch.getAttribute('aria-checked');
-  //   if ((checked === 'true') !== newState) waitAndClick(myLibrarySwitch);
+  //   return myLibrarySwitch.getAttribute('aria-checked') === 'true';
   // }
+
+  // switchLibrary(newState) {
+  //   switchToPluginFrame();
+  //   const checked = this.getMyLibraryState();
+  //   if ((checked === true) !== newState) waitAndClick($(popupSelectors.myLibrary))
+  // }
+
+  switchLibrary(newState) {
+    const myLibrarySwitch = $(popupSelectors.myLibrary);
+    myLibrarySwitch.waitForExist(5000);
+    const checked = myLibrarySwitch.getAttribute('aria-checked');
+    if ((checked === 'true') !== newState) waitAndClick(myLibrarySwitch);
+  }
 
   openDossier(dossierName, timeToLoadDossier = 10000, myLibrarySwitch = false) {
     this.switchLibraryAndImportObject(dossierName, myLibrarySwitch);

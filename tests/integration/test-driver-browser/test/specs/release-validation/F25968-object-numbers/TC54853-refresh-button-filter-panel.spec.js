@@ -35,6 +35,7 @@ describe('F25968 - Dynamically update numbers of objects displayed next to categ
     browser.pause(2222);
     OfficeWorksheet.selectCell('Z1');
     PluginRightPanel.clickAddDataButton();
+    switchToPluginFrame();
     PluginPopup.switchLibrary(false);
     PluginPopup.clickFilterButton();
     PluginPopup.clickAllButton('Modified');
