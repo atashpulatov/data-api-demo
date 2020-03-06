@@ -92,9 +92,9 @@ class SessionHelper {
   getUserInfo = async () => {
     let userData = {};
     const isDevelopment = this.isDevelopment();
-    const { reduxStore } = this;
-    const envUrl = isDevelopment ? reduxStore.getState().sessionReducer.envUrl : HomeHelper.saveLoginValues();
-    const authToken = isDevelopment ? reduxStore.getState().sessionReducer.authToken : HomeHelper.saveTokenFromCookies();
+    const { getState } = this.reduxStore;
+    const envUrl = isDevelopment ? getState().sessionReducer.envUrl : HomeHelper.saveLoginValues();
+    const authToken = isDevelopment ? getState().sessionReducer.authToken : HomeHelper.saveTokenFromCookies();
     try {
       userData = await userRestService.getUserInfo(authToken, envUrl);
       !userData.userInitials && sessionHelper.saveUserInfo(userData);
