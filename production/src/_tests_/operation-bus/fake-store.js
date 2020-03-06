@@ -1,12 +1,17 @@
 class FakeStore {
   constructor() {
-    this.state = { operationReducer: { operations: [], } };
+    this.resetState();
   }
 
   getState = () => this.state
 
   subscribe = (listener) => {
     this.listener = listener;
+  }
+
+  resetState = () => {
+    this.state = { operationReducer: { operations: [], } };
+    this.listener && this.listener();
   }
 
   simulateStepChange = (stepName) => {
