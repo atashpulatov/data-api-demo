@@ -95,6 +95,7 @@ export const popupSelectors = {
     selectAllButton: '.all-panel__buttons button:first-of-type',
     getAllPanelCheckbox: (checkboxTitle) => `.all-panel__content input[aria-label="Checkbox for ${checkboxTitle}"] + .checkmark`,
     getAllPanelDisabledCheckbox: (checkboxTitle) => `.all-panel__content .category-list-row.disabled label[title="${checkboxTitle}"]`,
+    disabledCheckboxAllPanel: '.all-panel__content .category-list-row.disabled input',
   },
   objectTable: {
     scrollContainer: '.ReactVirtualized__Grid.ReactVirtualized__Table__Grid',

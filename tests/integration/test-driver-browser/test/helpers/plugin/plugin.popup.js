@@ -351,6 +351,9 @@ class PluginPopup {
     return timeSpent;
   }
 
+  /**
+   * returns boolean based on the myLibrary switch state
+   */
   getMyLibraryState() {
     const myLibrarySwitch = $(popupSelectors.myLibrary);
     myLibrarySwitch.waitForExist(5000);
@@ -648,6 +651,9 @@ class PluginPopup {
     waitAndClick(lastObject);
   }
 
+  /**
+   * Imports the first available visualization from a selected dossier
+   */
   importVisualization() {
     switchToPromptFrame();
     browser.pause(13000); // temp solution, time for dossier to load
@@ -658,6 +664,10 @@ class PluginPopup {
     this.clickImport();
   }
 
+  /**
+   * Opens all panel for the given section
+   * @param {string} section name of the section to open all panel for, e.g 'Application'
+   */
   clickAllButton(section) {
     switch (section) {
     case 'Application':
@@ -678,15 +688,26 @@ class PluginPopup {
     }
   }
 
-  checkAllPanelElement(checkboxTitle) {
+  /**
+   * Clicks a checkbox on all panel by given checkboxTitle
+   * @param {string} checkboxTitle title of the checkbox on the allPanel
+   */
+  clickAllPanelElement(checkboxTitle) {
     waitAndClick($(popupSelectors.filterPanel.getAllPanelCheckbox(checkboxTitle)));
   }
 
+  /**
+   * Clicks selectAll button for open allPanel
+   */
   clickSelectAll() {
     waitAndClick($(popupSelectors.filterPanel.selectAllButton));
   }
 
-  uncheckDisabledElement(checkboxTitle) {
+  /**
+   * Clicks a disabled checkbox on all panel by given checkboxTitle
+   * @param {string} checkboxTitle title of the checkbox on the allPanel
+   */
+  clickDisabledElement(checkboxTitle) {
     waitAndClick($(popupSelectors.filterPanel.getAllPanelDisabledCheckbox(checkboxTitle)));
   }
 

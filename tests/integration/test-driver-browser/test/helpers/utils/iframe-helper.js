@@ -42,6 +42,9 @@ export function switchToPopupFrame() {
   browser.switchToFrame($('iframe[src*="api&et="]'));
 }
 
+/**
+ * switches to refreshAll popup frame
+ */
 export function switchToRefreshAllFrame() {
   switchToExcelFrame();
   $('iframe[src*="refresh-all-page"]').waitForExist(9999);

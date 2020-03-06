@@ -5,6 +5,7 @@ import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { switchToRightPanelFrame, switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
 import { objectsList } from '../../../constants/objects-list';
+import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 
 describe('F25968 - Dynamically update numbers of objects displayed next to categories in filter panel', () => {
   beforeEach(() => {
@@ -18,9 +19,12 @@ describe('F25968 - Dynamically update numbers of objects displayed next to categ
   });
 
   it('TC54853 refresh button and filter panel', () => {
+    // open import data popup
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
     switchToPluginFrame();
+
+    // apply filters and import the last visualization from the list
     PluginPopup.clickFilterButton();
     PluginPopup.tickFilterCheckBox('Owner', 'a');
     PluginPopup.tickFilterCheckBox('Owner', 'Administrator');
@@ -30,29 +34,36 @@ describe('F25968 - Dynamically update numbers of objects displayed next to categ
     PluginPopup.clickImport();
     PluginPopup.importVisualization();
     waitForNotification();
+
+    // delete data from excel range and refresh 
     OfficeWorksheet.clearExcelRange('A2:F15');
     PluginRightPanel.refreshFirstObjectFromTheList();
     waitForNotification();
     browser.pause(2222);
+
+    // apply date filtering and import a basic report
     OfficeWorksheet.selectCell('Z1');
     PluginRightPanel.clickAddDataButton();
     switchToPluginFrame();
     PluginPopup.switchLibrary(false);
-    switchToPluginFrame();
     PluginPopup.clickFilterButton();
     PluginPopup.clickAllButton('Modified');
-    PluginPopup.checkAllPanelElement('Last Quarter.');
+    PluginPopup.clickAllPanelElement('Last Quarter.');
     PluginPopup.importObject(objectsList.reports.basicReport);
     waitForNotification();
+
+    // clear data then view data
     PluginRightPanel.clickSettings();
     browser.pause(1555); // wait for success notification to disappear
     PluginRightPanel.clearData();
     PluginRightPanel.viewDataBtn();
     PluginPopup.closeRefreshAll();
     switchToRightPanelFrame();
+
+    // logout
     PluginRightPanel.clickSettings();
     PluginRightPanel.clickLogout();
     browser.pause(1999); // wait for login view to be rendered
-    expect($('#login-btn').isExisting()).toBe(true);
+    expect($(rightPanelSelectors.loginRightPanelBtn).isExisting()).toBe(true);
   });
 });
