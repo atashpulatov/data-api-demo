@@ -39,27 +39,27 @@ class SessionHelper {
     }
   }
 
-/**
- * Redirect to user to the login page. If it's development mode
- * we can optionally refresh to avoid stale cache issues when
- * changing users.
- *
- * @param {Boolean} shouldReload Reload on logout when in development
- */
-logOutRedirect = (shouldReload = false) => {
-  const isDevelopment = this.isDevelopment();
-  if (!isDevelopment) {
-    const currentPath = window.location.pathname;
-    const pathBeginning = currentPath.split('/apps/')[0];
-    const loginParams = 'source=addin-mstr-office';
-    this.replaceWindowLocation(pathBeginning, loginParams);
-  } else {
-    this.disableLoading();
-    if (shouldReload) {
-      window.location.reload();
+  /**
+   * Redirect to user to the login page. If it's development mode
+   * we can optionally refresh to avoid stale cache issues when
+   * changing users.
+   *
+   * @param {Boolean} shouldReload Reload on logout when in development
+   */
+  logOutRedirect = (shouldReload = false) => {
+    const isDevelopment = this.isDevelopment();
+    if (!isDevelopment) {
+      const currentPath = window.location.pathname;
+      const pathBeginning = currentPath.split('/apps/')[0];
+      const loginParams = 'source=addin-mstr-office';
+      this.replaceWindowLocation(pathBeginning, loginParams);
+    } else {
+      this.disableLoading();
+      if (shouldReload) {
+        window.location.reload();
+      }
     }
-  }
-};
+  };
 
   replaceWindowLocation = (pathBeginning, loginParams) => {
     window.location.replace(`${pathBeginning}/static/loader-mstr-office/index.html?${loginParams}`);
