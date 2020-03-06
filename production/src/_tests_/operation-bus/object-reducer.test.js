@@ -35,6 +35,22 @@ describe('objectReducer', () => {
       }]
     }
   };
+  it('should have default state if provided undefined', () => {
+    // given
+    const unhandledAction = { type: 'some action' };
+    // when
+    const resultState = objectReducer(undefined, unhandledAction);
+    // then
+    expect(resultState).toEqual({ objects: [] });
+  });
+  it('should return the same state if action not handled by reducer', () => {
+    // given
+    const unhandledAction = { type: 'some action' };
+    // when
+    const resultState = objectReducer(initialState.multipleObjects, unhandledAction);
+    // then
+    expect(resultState).toEqual(initialState.multipleObjects);
+  });
   describe('importRequested', () => {
     it('should add first object to array and return new array', () => {
       // given
