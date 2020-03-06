@@ -123,6 +123,29 @@ describe('objectReducer', () => {
     });
   });
   describe('deleteObject', () => {
-
+    it('should not remove any objects if array is empty', () => {
+      // given
+      const someId = 'some id';
+      const action = {
+        type: DELETE_OBJECT,
+        payload: someId,
+      };
+      // when
+      const resultState = objectReducer(initialState.empty, action);
+      // then
+      expect(resultState).toEqual(initialState.empty);
+    });
+    it('should not remove any objects if id doesnt exist in array', () => {
+      // given
+      const someId = 'some id';
+      const action = {
+        type: DELETE_OBJECT,
+        payload: someId,
+      };
+      // when
+      const resultState = objectReducer(initialState.multipleObjects, action);
+      // then
+      expect(resultState).toEqual(initialState.multipleObjects);
+    });
   });
 });
