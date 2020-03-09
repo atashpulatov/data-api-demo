@@ -2,11 +2,12 @@ import { mstrObjectRestService } from './mstr-object-rest-service';
 import mstrObjectEnum from './mstr-object-type-enum';
 import { incomingErrorStrings, errorTypes, INVALID_VIZ_KEY_MESSAGE } from '../error/constants';
 
-import { GET_INSTANCE_DEFINITION, GET_OFFICE_TABLE, TEST_PRINT_OBJECT } from '../operation/operation-steps';
-import { importRequested, markStepCompleted } from '../operation/operation-actions';
-import { updateObject, deleteObject } from '../operation/object-actions';
+import { GET_INSTANCE_DEFINITION } from '../operation/operation-steps';
+import { markStepCompleted } from '../operation/operation-actions';
+import { updateObject } from '../operation/object-actions';
 import { officeApiHelper } from '../office/api/office-api-helper';
-import { officeDisplayService } from '../office/office-display-service';
+import officeTableHelper from '../office/table/office-table-helper';
+import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
 
 
 const {
@@ -42,15 +43,17 @@ class MstrObjectInstance {
    * @returns {Object} Object containing officeTable and subtotalAddresses
    */
    getInstaceDefinition = async () => {
-     console.log('this.reduxStore.getState().objectReducer:', this.reduxStore.getState().objectReducer);
      const [ObjectData] = this.reduxStore.getState().objectReducer.objects;
-     console.log('this.reduxStore.getState().objectReducer:', this.reduxStore.getState().objectReducer);
      const {
-       objectWorkingId, displayAttrFormNames, insertNewWorksheet, selectedCell, crosstabHeaderDimensions, subtotalsAddresses
+       objectWorkingId,
+       displayAttrFormNames,
+       insertNewWorksheet,
+       selectedCell,
+       crosstabHeaderDimensions,
+       subtotalsInfo:{ subtotalsAddresses } = false,
      } = ObjectData;
      console.log('ObjectData:', ObjectData);
      let { visualizationInfo, startCell } = ObjectData;
-     console.log('ObjectData:', ObjectData);
 
      const connectionData = {
        objectId:       ObjectData.objectId,
@@ -62,15 +65,13 @@ class MstrObjectInstance {
        manipulationsXML:       ObjectData.manipulationsXML,
        promptsAnswers:       ObjectData.promptsAnswers,
      };
-     console.log('connectionData:', connectionData);
 
      const excelContext = await officeApiHelper.getExcelContext();
 
      // Get excel context and initial cell
      console.group('Importing data performance');
      console.time('Total');
-     console.time('Init excel');
-     startCell = await officeDisplayService.getStartCell(insertNewWorksheet, excelContext, startCell, selectedCell);
+     startCell = await this.getStartCell(insertNewWorksheet, excelContext, startCell, selectedCell);
 
      let instanceDefinition;
      let { body } = connectionData;
@@ -101,18 +102,18 @@ class MstrObjectInstance {
      if (instanceDefinition.status === 2) {
        instanceDefinition = await this.modifyInstanceWithPrompt({ instanceDefinition, ...config });
      }
+
+     this.savePreviousObjectData(instanceDefinition, crosstabHeaderDimensions, subtotalsAddresses);
+
      const updatedObject = {
        objectWorkingId,
+       envUrl : officeApiHelper.getCurrentMstrContext(),
        body,
        instanceDefinition,
        visualizationInfo,
        startCell,
        excelContext,
      };
-
-     officeDisplayService.savePreviousObjectData(instanceDefinition, crosstabHeaderDimensions, subtotalsAddresses);
-
-
      // Check if instance returned data
      //  if (mstrTable.rows.length === 0) {
      //    return {
@@ -268,6 +269,23 @@ class MstrObjectInstance {
       console.error(error);
       throw error;
     }
+  }
+
+  savePreviousObjectData = (instanceDefinition, crosstabHeaderDimensions, subtotalsAddresses) => {
+    const { mstrTable } = instanceDefinition;
+    mstrTable.prevCrosstabDimensions = crosstabHeaderDimensions;
+    mstrTable.crosstabHeaderDimensions = mstrTable.isCrosstab
+      ? officeTableHelper.getCrosstabHeaderDimensions(instanceDefinition)
+      : false;
+    mstrTable.subtotalsInfo.subtotalsAddresses = subtotalsAddresses;
+  }
+
+  getStartCell = async (insertNewWorksheet, excelContext, startCell, selectedCell) => {
+    if (insertNewWorksheet) {
+      await officeApiWorksheetHelper.createAndActivateNewWorksheet(excelContext);
+    }
+    startCell = selectedCell || (await officeApiHelper.getSelectedCell(excelContext));
+    return startCell;
   }
 }
 

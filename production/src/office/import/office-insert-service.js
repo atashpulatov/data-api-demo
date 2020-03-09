@@ -35,7 +35,8 @@ class OfficeInsertService {
    * @param {Object} mstrTable Contains informations about mstr object
    */
   appendRows = async (
-    officeData,
+    officeTable,
+    excelContext,
     excelRows,
     rowIndex,
     isRefresh = false,
@@ -43,7 +44,6 @@ class OfficeInsertService {
     contextPromises,
     header,
     mstrTable) => {
-    const { excelContext, officeTable } = officeData;
     await this.appendRowsToTable(excelRows, excelContext, officeTable, rowIndex, tableColumnsChanged, isRefresh);
 
     if (mstrTable.isCrosstab) { this.appendCrosstabRowsToRange(officeTable, header.rows, rowIndex); }

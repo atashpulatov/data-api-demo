@@ -1,4 +1,11 @@
+import { FORMAT_OFFICE_TABLE, } from '../../operation/operation-steps';
+import { markStepCompleted } from '../../operation/operation-actions';
+
 class OfficeFormatTable {
+  init = (reduxStore) => {
+    this.reduxStore = reduxStore;
+  }
+
   /**
    * Formatting table columns width
    *
@@ -7,8 +14,16 @@ class OfficeFormatTable {
    * @param {Office} crosstabHeaderDimensions
    * @param {Office} excelContext
    */
-  formatTable = async ({ officeTable, excelContext }, mstrTable) => {
-    const { crosstabHeaderDimensions, isCrosstab } = mstrTable;
+  formatTable = async () => {
+    const [ObjectData] = this.reduxStore.getState().objectReducer.objects;
+    const {
+      excelContext,
+      instanceDefinition,
+      officeTable,
+      objectWorkingId,
+    } = ObjectData;
+
+    const { crosstabHeaderDimensions, isCrosstab } = instanceDefinition.mstrTable;
     console.time('Column auto size');
     if (isCrosstab) {
       const { rowsX } = crosstabHeaderDimensions;
@@ -28,6 +43,8 @@ class OfficeFormatTable {
     } catch (error) {
       console.log('Error when formatting - no columns autofit applied', error);
     }
+
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, FORMAT_OFFICE_TABLE));
     console.timeEnd('Column auto size');
   };
 }

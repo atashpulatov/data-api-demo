@@ -17,6 +17,10 @@ import { authenticationService } from './authentication/auth-rest-service';
 import { operationBus } from './operation/operation-bus';
 import mstrObjectInstance from './mstr-object/mstr-object-instance';
 import officeTableService from './office/table/office-table-service';
+import officeFormatData from './office/format/office-format-data';
+import officeImportService from './office/import/office-import-service';
+import officeFormatSubtotals from './office/format/office-format-subtotals';
+import officeFormatTable from './office/format/office-format-table';
 
 class DIContainer {
   constructor(autoInitialize) {
@@ -54,8 +58,17 @@ class DIContainer {
     this.mstrObjectInstance.init(reduxStore);
     this.officeTableService = officeTableService;
     this.officeTableService.init(reduxStore);
+    this.officeFormatData = officeFormatData;
+    this.officeFormatData.init(reduxStore);
+    this.officeImportService = officeImportService;
+    this.officeImportService.init(reduxStore);
+    this.officeFormatSubtotals = officeFormatSubtotals;
+    this.officeFormatSubtotals.init(reduxStore);
+    this.officeFormatTable = officeFormatTable;
+    this.officeFormatTable.init(reduxStore);
+
     this.popupHelper = popupHelper;
-    this.popupHelper.init(popupController);
+    this.popupHelper.init(popupController, reduxStore);
     this.popupActions = popupActions;
     this.popupActions.init(
       this.authenticationHelper,

@@ -1,33 +1,42 @@
 import { officeApiHelper } from './api/office-api-helper';
-import { officeProperties } from './store/office-properties';
 import { officeStoreService } from './store/office-store-service';
 
-import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import mstrObjectInstance from '../mstr-object/mstr-object-instance';
-
 import officeTableHelper from './table/office-table-helper';
 import officeTableService from './table/office-table-service';
-import officeFormattingData from './format/office-format-data';
+import officeFormatData from './format/office-format-data';
 import officeFormatTable from './format/office-format-table';
 import officeImportService from './import/office-import-service';
-import officeDuplicateService from './office-duplicate-service';
 import officeFormatSubtotals from './format/office-format-subtotals';
-
-import { CLEAR_PROMPTS_ANSWERS } from '../navigation/navigation-tree-actions';
-import { NO_DATA_RETURNED, ALL_DATA_FILTERED_OUT } from '../error/constants';
+import officeDuplicateService from './office-duplicate-service';
 import { officeApiWorksheetHelper } from './api/office-api-worksheet-helper';
-import { officeApiRemoveHelper } from './api/office-api-remove-helper';
 
-import { GET_INSTANCE_DEFINITION, GET_OFFICE_TABLE, TEST_PRINT_OBJECT } from '../operation/operation-steps';
-import { importRequested, markStepCompleted, deleteObject } from '../operation/operation-actions';
+
+import {
+  GET_INSTANCE_DEFINITION,
+  GET_OFFICE_TABLE,
+  FORMAT_DATA,
+  FETCH_INSERT_DATA,
+  FORMAT_OFFICE_TABLE,
+  FORMAT_SUBTOTALS,
+  BIND_OFFICE_TABLE,
+  SAVE_OBJECT_IN_EXCEL
+} from '../operation/operation-steps';
+
 
 class OfficeDisplayService {
   init = (reduxStore, operationBus) => {
     this.reduxStore = reduxStore;
     operationBus.subscribe(GET_INSTANCE_DEFINITION, mstrObjectInstance.getInstaceDefinition);
     operationBus.subscribe(GET_OFFICE_TABLE, officeTableService.getOfficeTable);
-    operationBus.subscribe(TEST_PRINT_OBJECT, this.printObject);
+    operationBus.subscribe(FORMAT_DATA, officeFormatData.applyFormatting);
+    operationBus.subscribe(FORMAT_OFFICE_TABLE, officeFormatTable.formatTable);
+    operationBus.subscribe(FETCH_INSERT_DATA, officeImportService.fetchInsertDataIntoExcel);
+    operationBus.subscribe(FORMAT_SUBTOTALS, officeFormatSubtotals.applySubtotalFormattingRedux);
+    operationBus.subscribe(BIND_OFFICE_TABLE, officeTableService.bindOfficeTable);
+    operationBus.subscribe(SAVE_OBJECT_IN_EXCEL, officeStoreService.saveAndPreserveReportInStore);
   }
+
 
   /**
    * Main function in office Display Service responsible for import/refresh and display workflow.
@@ -110,245 +119,228 @@ class OfficeDisplayService {
     // let instanceDefinition;
     // let officeTable;
     // const newBindingId = bindingId;
-    const [ObjectData] = this.reduxStore.getState().objectReducer.objects;
-    const {
-      isRefresh,
-      excelContext,
-      bindingId,
-      instanceDefinition,
-      officeTable,
-      shouldFormat,
-      tableColumnsChanged,
-      visualizationInfo,
-      importSubtotal,
-      displayAttrFormNames,
-      objectWorkingId,
-      objectId,
-      projectId,
-      dossierData,
-      mstrObjectType,
-      body,
-      preparedInstanceId,
-      manipulationsXML,
-      promptsAnswers,
-      newBindingId,
-      originalObjectName,
-      isPrompted,
-      newOfficeTableName,
-    } = ObjectData;
-    const { startCell } = ObjectData;
-    const { mstrTable } = instanceDefinition;
-    const isCrosstab = mstrTable;
-    try {
-      // excelContext = await officeApiHelper.getExcelContext();
+    // const [ObjectData] = this.reduxStore.getState().objectReducer.objects;
+    // const {
+    //   isRefresh,
+    //   excelContext,
+    //   bindingId,
+    //   instanceDefinition,
+    //   officeTable,
+    //   shouldFormat,
+    //   tableColumnsChanged,
+    //   visualizationInfo,
+    //   importSubtotal,
+    //   displayAttrFormNames,
+    //   objectWorkingId,
+    //   objectId,
+    //   projectId,
+    //   dossierData,
+    //   mstrObjectType,
+    //   body,
+    //   preparedInstanceId,
+    //   manipulationsXML,
+    //   promptsAnswers,
+    //   newBindingId,
+    //   originalObjectName,
+    //   isPrompted,
+    //   newOfficeTableName,
+    // } = ObjectData;
+    // const { startCell } = ObjectData;
+    // const { mstrTable } = instanceDefinition;
+    // const isCrosstab = mstrTable;
+    // try {
+    // excelContext = await officeApiHelper.getExcelContext();
 
-      // // Get excel context and initial cell
-      // console.group('Importing data performance');
-      // console.time('Total');
-      // console.time('Init excel');
-      // startCell = await this.getStartCell(insertNewWorksheet, excelContext, startCell, selectedCell);
-      // console.timeEnd('Init excel');
+    // // Get excel context and initial cell
+    // console.group('Importing data performance');
+    // console.time('Total');
+    // console.time('Init excel');
+    // startCell = await this.getStartCell(insertNewWorksheet, excelContext, startCell, selectedCell);
+    // console.timeEnd('Init excel');
 
-      // const connectionData = {
-      //   objectId,
-      //   projectId,
-      //   dossierData,
-      //   mstrObjectType,
-      //   body,
-      //   preparedInstanceId,
-      //   manipulationsXML,
-      //   promptsAnswers,
-      // };
+    // const connectionData = {
+    //   objectId,
+    //   projectId,
+    //   dossierData,
+    //   mstrObjectType,
+    //   body,
+    //   preparedInstanceId,
+    //   manipulationsXML,
+    //   promptsAnswers,
+    // };
 
-      // // Get mstr instance definition
-      // console.time('Instance definition');
-      // ({ body, instanceDefinition, visualizationInfo } = await mstrObjectInstance.getInstaceDefinition(
-      //   connectionData,
-      //   visualizationInfo,
-      //   displayAttrFormNames
-      // ));
-      // console.timeEnd('Instance definition');
-
-
-      // this.savePreviousObjectData(instanceDefinition, crosstabHeaderDimensions, subtotalsAddresses);
+    // // Get mstr instance definition
+    // console.time('Instance definition');
+    // ({ body, instanceDefinition, visualizationInfo } = await mstrObjectInstance.getInstaceDefinition(
+    //   connectionData,
+    //   visualizationInfo,
+    //   displayAttrFormNames
+    // ));
+    // console.timeEnd('Instance definition');
 
 
-      // // Check if instance returned data
-      // if (mstrTable.rows.length === 0) {
-      //   return {
-      //     type: 'warning',
-      //     message: isPrompted ? ALL_DATA_FILTERED_OUT : NO_DATA_RETURNED,
-      //   };
-      // }
-
-      // Create or update table
-      // ({
-      //   officeTable,
-      //   newOfficeTableName,
-      //   shouldFormat,
-      //   tableColumnsChanged,
-      //   newBindingId
-      // } = await officeTableService.getOfficeTable(
-      //   {
-      //     isRefresh,
-      //     excelContext,
-      //     bindingId,
-      //     instanceDefinition,
-      //     startCell,
-      //     tableName,
-      //     previousTableDimensions,
-      //     visualizationInfo
-      //   }
-      // ));
+    // this.savePreviousObjectData(instanceDefinition, crosstabHeaderDimensions, subtotalsAddresses);
 
 
-      const officeData = {
-        officeTable,
-        excelContext,
-        startCell,
-      };
+    // // Check if instance returned data
+    // if (mstrTable.rows.length === 0) {
+    //   return {
+    //     type: 'warning',
+    //     message: isPrompted ? ALL_DATA_FILTERED_OUT : NO_DATA_RETURNED,
+    //   };
+    // }
 
-      // Apply number formatting after table was created
-      if (shouldFormat && !mstrTable.isCrosstabular) {
-        await officeFormattingData.applyFormatting({ ...officeData, instanceDefinition });
-      }
-
-      // Fetch, convert and insert with promise generator
-      console.time('Fetch and insert into excel');
-
-      await officeImportService.fetchInsertDataIntoExcel({
-        connectionData: {
-          objectId,
-          projectId,
-          dossierData,
-          mstrObjectType,
-          body,
-          preparedInstanceId,
-          manipulationsXML,
-          promptsAnswers,
-        },
-        officeData,
-        instanceDefinition,
-        isRefresh,
-        startCell,
-        tableColumnsChanged,
-        visualizationInfo,
-        importSubtotal,
-        displayAttrFormNames
-      });
-
-      if (shouldFormat) {
-        // excel column width autoresize
-        await officeFormatTable.formatTable(officeData, mstrTable);
-      }
-
-      if (mstrTable.subtotalsInfo.subtotalsAddresses.length) {
-        // Removing duplicated subtotal addresses from headers
-        await officeFormatSubtotals.applySubtotalFormatting(officeData, instanceDefinition.mstrTable);
-      }
-
-      await officeTableService.bindOfficeTable(officeData, newBindingId);
+    // Create or update table
+    // ({
+    //   officeTable,
+    //   newOfficeTableName,
+    //   shouldFormat,
+    //   tableColumnsChanged,
+    //   newBindingId
+    // } = await officeTableService.getOfficeTable(
+    //   {
+    //     isRefresh,
+    //     excelContext,
+    //     bindingId,
+    //     instanceDefinition,
+    //     startCell,
+    //     tableName,
+    //     previousTableDimensions,
+    //     visualizationInfo
+    //   }
+    // ));
 
 
-      // assign new name in duplicate workflow
-      if (originalObjectName) {
-        console.time('Duplicate renaming');
-        const nameCandidate = officeDuplicateService.prepareNewNameForDuplicatedObject(originalObjectName);
-        const finalNewName = officeDuplicateService.checkAndSolveNameConflicts(nameCandidate);
-        mstrTable.name = finalNewName;
-        console.timeEnd('Duplicate renaming');
-      }
+    // const officeData = {
+    //   officeTable,
+    //   excelContext,
+    //   startCell,
+    // };
 
-      // Save to store
-      officeStoreService.saveAndPreserveReportInStore({
-        name: mstrTable.name,
-        manipulationsXML: instanceDefinition.manipulationsXML,
-        bindId: newBindingId,
-        oldTableId: bindingId,
-        projectId,
-        envUrl : officeApiHelper.getCurrentMstrContext(),
-        body,
-        objectType: mstrObjectType,
-        isCrosstab: mstrTable.isCrosstab,
-        isPrompted,
-        promptsAnswers,
-        subtotalsInfo: mstrTable.subtotalsInfo,
-        visualizationInfo,
-        id: objectId,
-        isLoading: false,
-        crosstabHeaderDimensions: mstrTable.crosstabHeaderDimensions,
-        tableName: newOfficeTableName,
-        tableDimensions: { columns: instanceDefinition.columns },
-        displayAttrFormNames
-      }, isRefresh);
+    // // Apply number formatting after table was created
+    // if (shouldFormat && !mstrTable.isCrosstabular) {
+    //   await officeFormattingData.applyFormatting({ ...officeData, instanceDefinition });
+    // }
 
-      console.timeEnd('Total');
-      this.reduxStore.dispatch({ type: CLEAR_PROMPTS_ANSWERS });
-      this.reduxStore.dispatch({
-        type: officeProperties.actions.finishLoadingReport,
-        reportBindId: newBindingId,
-      });
-      return {
-        type: 'success',
-        message: 'Data loaded successfully'
-      };
-    } catch (error) {
-      const isError = true;
-      if (officeTable) {
-        if (!isRefresh) {
-          officeTable.showHeaders = true;
-          await officeApiRemoveHelper.removeExcelTable(
-            officeTable,
-            excelContext,
-            isCrosstab,
-            instanceDefinition.mstrTable.crosstabHeaderDimensions
-          );
-        } else if (instanceDefinition.mstrTable.isCrosstab) {
-          // hides table headers for crosstab if we fail on refresh
-          officeTable.showHeaders = false;
-        }
-      }
-      if (bindingId && newBindingId) {
-        this.reduxStore.dispatch({
-          type: officeProperties.actions.finishLoadingReport,
-          reportBindId: newBindingId,
-          isRefreshAll: false,
-          isError,
-        });
-      } else if (bindingId) {
-        this.reduxStore.dispatch({
-          type: officeProperties.actions.finishLoadingReport,
-          reportBindId: bindingId,
-          isRefreshAll: false,
-          isError,
-        });
-      }
-      throw error;
-    } finally {
-      if (instanceDefinition.mstrTable.isCrosstab && officeTable) {
-        officeTable.showHeaders = false;
-      }
-      await excelContext.sync();
-      console.groupEnd();
-    }
+    // // Fetch, convert and insert with promise generator
+    // console.time('Fetch and insert into excel');
+
+    // await officeImportService.fetchInsertDataIntoExcel({
+    //   connectionData: {
+    //     objectId,
+    //     projectId,
+    //     dossierData,
+    //     mstrObjectType,
+    //     body,
+    //     preparedInstanceId,
+    //     manipulationsXML,
+    //     promptsAnswers,
+    //   },
+    //   officeData,
+    //   instanceDefinition,
+    //   isRefresh,
+    //   startCell,
+    //   tableColumnsChanged,
+    //   visualizationInfo,
+    //   importSubtotal,
+    //   displayAttrFormNames
+    // });
+
+    // if (shouldFormat) {
+    //   // excel column width autoresize
+    //   await officeFormatTable.formatTable(officeData, mstrTable);
+    // }
+
+    // if (mstrTable.subtotalsInfo.subtotalsAddresses.length) {
+    //   // Removing duplicated subtotal addresses from headers
+    //   await officeFormatSubtotals.applySubtotalFormatting(officeData, instanceDefinition.mstrTable);
+    // }
+
+    // await officeTableService.bindOfficeTable(officeData, newBindingId);
+
+    // // TODO move it somewhere
+    // // assign new name in duplicate workflow
+    // if (originalObjectName) {
+    //   console.time('Duplicate renaming');
+    //   const nameCandidate = officeDuplicateService.prepareNewNameForDuplicatedObject(originalObjectName);
+    //   const finalNewName = officeDuplicateService.checkAndSolveNameConflicts(nameCandidate);
+    //   mstrTable.name = finalNewName;
+    //   console.timeEnd('Duplicate renaming');
+    // }
+
+    // Save to store
+    //   officeStoreService.saveAndPreserveReportInStore({
+    //     name: mstrTable.name,
+    //     manipulationsXML: instanceDefinition.manipulationsXML,
+    //     bindId: newBindingId,
+    //     oldTableId: bindingId,
+    //     projectId,
+    //     envUrl : officeApiHelper.getCurrentMstrContext(),
+    //     body,
+    //     objectType: mstrObjectType,
+    //     isCrosstab: mstrTable.isCrosstab,
+    //     isPrompted,
+    //     promptsAnswers,
+    //     subtotalsInfo: mstrTable.subtotalsInfo,
+    //     visualizationInfo,
+    //     id: objectId,
+    //     isLoading: false,
+    //     crosstabHeaderDimensions: mstrTable.crosstabHeaderDimensions,
+    //     tableName: newOfficeTableName,
+    //     tableDimensions: { columns: instanceDefinition.columns },
+    //     displayAttrFormNames
+    //   }, isRefresh);
+
+    //   console.timeEnd('Total');
+    //   this.reduxStore.dispatch({ type: CLEAR_PROMPTS_ANSWERS });
+    //   this.reduxStore.dispatch({
+    //     type: officeProperties.actions.finishLoadingReport,
+    //     reportBindId: newBindingId,
+    //   });
+    //   return {
+    //     type: 'success',
+    //     message: 'Data loaded successfully'
+    //   };
+    // } catch (error) {
+    //   const isError = true;
+    //   if (officeTable) {
+    //     if (!isRefresh) {
+    //       officeTable.showHeaders = true;
+    //       await officeApiRemoveHelper.removeExcelTable(
+    //         officeTable,
+    //         excelContext,
+    //         isCrosstab,
+    //         instanceDefinition.mstrTable.crosstabHeaderDimensions
+    //       );
+    //     } else if (instanceDefinition.mstrTable.isCrosstab) {
+    //       // hides table headers for crosstab if we fail on refresh
+    //       officeTable.showHeaders = false;
+    //     }
+    //   }
+    //   if (bindingId && newBindingId) {
+    //     this.reduxStore.dispatch({
+    //       type: officeProperties.actions.finishLoadingReport,
+    //       reportBindId: newBindingId,
+    //       isRefreshAll: false,
+    //       isError,
+    //     });
+    //   } else if (bindingId) {
+    //     this.reduxStore.dispatch({
+    //       type: officeProperties.actions.finishLoadingReport,
+    //       reportBindId: bindingId,
+    //       isRefreshAll: false,
+    //       isError,
+    //     });
+    //   }
+    //   throw error;
+    // } finally {
+    //   if (instanceDefinition.mstrTable.isCrosstab && officeTable) {
+    //     officeTable.showHeaders = false;
+    //   }
+    //   await excelContext.sync();
+    //   console.groupEnd();
+  // }
   };
-
-  savePreviousObjectData = (instanceDefinition, crosstabHeaderDimensions, subtotalsAddresses) => {
-    const { mstrTable } = instanceDefinition;
-    mstrTable.prevCrosstabDimensions = crosstabHeaderDimensions;
-    mstrTable.crosstabHeaderDimensions = mstrTable.isCrosstab
-      ? officeTableHelper.getCrosstabHeaderDimensions(instanceDefinition)
-      : false;
-    mstrTable.subtotalsInfo.subtotalsAddresses = subtotalsAddresses;
-  }
-
-  getStartCell = async (insertNewWorksheet, excelContext, startCell, selectedCell) => {
-    if (insertNewWorksheet) {
-      await officeApiWorksheetHelper.createAndActivateNewWorksheet(excelContext);
-    }
-    startCell = selectedCell || (await officeApiHelper.getSelectedCell(excelContext));
-    return startCell;
-  }
 }
 
 

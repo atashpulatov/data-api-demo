@@ -2,9 +2,9 @@ import officeTableCreate from './office-table-create';
 import officeTableRefresh from './office-table-refresh';
 import { officeApiHelper } from '../api/office-api-helper';
 
-import { importRequested, markStepCompleted } from '../../operation/operation-actions';
-import { updateObject, deleteObject } from '../../operation/object-actions';
-import { GET_INSTANCE_DEFINITION, GET_OFFICE_TABLE, TEST_PRINT_OBJECT } from '../../operation/operation-steps';
+import { GET_OFFICE_TABLE, BIND_OFFICE_TABLE } from '../../operation/operation-steps';
+import { markStepCompleted } from '../../operation/operation-actions';
+import { updateObject } from '../../operation/object-actions';
 
 class OfficeTableService {
   init = (reduxStore) => {
@@ -22,18 +22,7 @@ class OfficeTableService {
    * @param {string} startCell  Top left corner cell
    *
    */
-  getOfficeTable = async (
-  // {
-  //   isRefresh,
-  //   excelContext,
-  //   bindingId,
-  //   instanceDefinition,
-  //   startCell,
-  //   tableName,
-  //   previousTableDimensions,
-  //   visualizationInfo
-  // }
-  ) => {
+  getOfficeTable = async () => {
     console.time('Create or get table');
     const [ObjectData] = this.reduxStore.getState().objectReducer.objects;
     const {
@@ -138,11 +127,21 @@ class OfficeTableService {
     return `_${excelCompatibleTableName.slice(0, 239)}_${Date.now().toString()}`;
   }
 
-  bindOfficeTable = async ({ officeTable, excelContext }, newBindingId) => {
+  bindOfficeTable = async () => {
+    const [ObjectData] = this.reduxStore.getState().objectReducer.objects;
+    const {
+      newBindingId,
+      excelContext,
+      officeTable,
+      objectWorkingId
+    } = ObjectData;
+
     officeTable.load('name');
     await excelContext.sync();
     const tablename = officeTable.name;
     await officeApiHelper.bindNamedItem(tablename, newBindingId);
+
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, BIND_OFFICE_TABLE));
   }
 }
 const officeTableService = new OfficeTableService();

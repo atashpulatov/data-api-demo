@@ -1,6 +1,41 @@
 import { CONTEXT_LIMIT } from '../../mstr-object/mstr-object-rest-service';
+import { FORMAT_SUBTOTALS } from '../../operation/operation-steps';
+import { markStepCompleted } from '../../operation/operation-actions';
 
 class OfficeFormatSubtotals {
+  init = (reduxStore) => {
+    this.reduxStore = reduxStore;
+  }
+
+
+  /**
+   * Applies Excel number formatting to imported object based on MSTR data type.
+   *
+   * @param {Boolean} isCrosstab
+   * @param {Array} subtotalsAddresses Array containing object with cell coordinates
+   * @param {Office} officeTable
+   * @param {Office} excelContext ExcelContext
+   * @param {Object} mstrTable contains informations about mstr object
+   * @param {Boolean} [shouldBold=true] Specify whether the values in cells should be bold
+   */
+  applySubtotalFormattingRedux = async () => {
+    const [ObjectData] = this.reduxStore.getState().objectReducer.objects;
+    const {
+      officeTable,
+      instanceDefinition,
+      excelContext,
+      objectWorkingId,
+    } = ObjectData;
+    const { mstrTable } = instanceDefinition;
+
+
+    if (mstrTable.subtotalsInfo.subtotalsAddresses.length) {
+      // Removing duplicated subtotal addresses from headers
+      await this.applySubtotalFormatting({ excelContext, officeTable }, mstrTable);
+    }
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, FORMAT_SUBTOTALS));
+  };
+
   /**
    * Applies Excel number formatting to imported object based on MSTR data type.
    *

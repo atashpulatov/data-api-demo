@@ -1,4 +1,11 @@
+import { FORMAT_DATA, } from '../../operation/operation-steps';
+import { markStepCompleted } from '../../operation/operation-actions';
+
 class OfficeFormatData {
+  init = (reduxStore) => {
+    this.reduxStore = reduxStore;
+  }
+
   /**
    * Applies Excel number formatting to imported object based on MSTR data type.
    *
@@ -7,10 +14,18 @@ class OfficeFormatData {
    * @param {Boolean} isCrosstab
    * @param {Office} excelContext
    */
-  applyFormatting = async ({ officeTable, excelContext, instanceDefinition }) => {
+  applyFormatting = async () => {
     try {
       console.time('Apply formatting');
+      const [ObjectData] = this.reduxStore.getState().objectReducer.objects;
+      const {
+        excelContext,
+        instanceDefinition,
+        officeTable,
+        objectWorkingId
+      } = ObjectData;
       const { columnInformation, isCrosstab } = instanceDefinition.mstrTable;
+
       const filteredColumnInformation = this.filterColumnInformation(columnInformation, isCrosstab);
       let attributeColumnNumber = 0; // this is number of all atrribute/consolidations columns in Excel
       let offset = 0;
@@ -42,6 +57,7 @@ class OfficeFormatData {
       }
 
       await excelContext.sync();
+      this.reduxStore.dispatch(markStepCompleted(objectWorkingId, FORMAT_DATA));
     } catch (error) {
       console.error(error);
       console.log('Cannot apply formatting, skipping');

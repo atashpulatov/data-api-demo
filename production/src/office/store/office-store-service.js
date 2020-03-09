@@ -2,6 +2,9 @@ import { officeProperties } from './office-properties';
 import { RunOutsideOfficeError } from '../../error/run-outside-office-error';
 import { errorService } from '../../error/error-handler';
 
+import { SAVE_OBJECT_IN_EXCEL } from '../../operation/operation-steps';
+import { markStepCompleted } from '../../operation/operation-actions';
+
 /* global Office */
 
 class OfficeStoreService {
@@ -9,7 +12,7 @@ class OfficeStoreService {
     this.reduxStore = reduxStore;
   }
 
-  preserveReport = (report) => {
+  preserveReport = async (report) => {
     try {
       const settings = this.getOfficeSettings();
       const reportProperties = this.getReportProperties();
@@ -31,6 +34,7 @@ class OfficeStoreService {
         tableName:report.tableName,
         tableDimensions: report.tableDimensions,
         displayAttrFormNames: report.displayAttrFormNames,
+        refreshDate: report.refreshDate,
       });
       settings.set(officeProperties.loadedReportProperties, reportProperties);
       settings.saveAsync();
@@ -119,7 +123,36 @@ class OfficeStoreService {
     }
   }
 
-  saveAndPreserveReportInStore = (report, isRefresh) => {
+  saveAndPreserveReportInStore = async () => {
+    const [ObjectData] = this.reduxStore.getState().objectReducer.objects;
+    const { instanceDefinition, isRefresh, objectWorkingId } = ObjectData;
+    const { mstrTable } = instanceDefinition;
+    const tableDimensions = { columns: instanceDefinition.columns };
+    const refreshDate = new Date();
+
+    const report = {
+      id: ObjectData.objectId,
+      name: mstrTable.name,
+      bindId: ObjectData.newBindingId,
+      projectId: ObjectData.projectId,
+      envUrl: ObjectData.envUrl,
+      body: ObjectData.body,
+      isLoading: false,
+      objectType: ObjectData.mstrObjectType,
+      isCrosstab: mstrTable.isCrosstab,
+      isPrompted: ObjectData.isPrompted,
+      subtotalsInfo: mstrTable.subtotalsInfo,
+      promptsAnswers: ObjectData.promptsAnswers,
+      crosstabHeaderDimensions: mstrTable.crosstabHeaderDimensions,
+      visualizationInfo: ObjectData.visualizationInfo,
+      manipulationsXML: instanceDefinition.manipulationsXML,
+      tableName: ObjectData.newOfficeTableName,
+      tableDimensions,
+      displayAttrFormNames: ObjectData.displayAttrFormNames,
+      oldTableId: ObjectData.bindingId,
+      refreshDate
+    };
+
     if (isRefresh) {
       try {
         const settings = this.getOfficeSettings();
@@ -133,6 +166,7 @@ class OfficeStoreService {
         refreshedObject.tableDimensions = report.tableDimensions;
         refreshedObject.subtotalsInfo = report.subtotalsInfo;
         refreshedObject.displayAttrFormNames = report.displayAttrFormNames;
+        refreshedObject.refreshDate = report.refreshDate;
         refreshedObject.preparedInstanceId = null;
         if (refreshedObject.visualizationInfo) {
           refreshedObject.manipulationsXML = report.manipulationsXML;
@@ -148,31 +182,20 @@ class OfficeStoreService {
         errorService.handleError(error);
       }
     } else {
-      this.reduxStore.dispatch({
-        type: officeProperties.actions.loadReport,
-        report: {
-          id: report.id,
-          name: report.name,
-          bindId: report.bindId,
-          projectId: report.projectId,
-          envUrl: report.envUrl,
-          body: report.body,
-          isLoading: report.isLoading,
-          objectType: report.objectType,
-          isCrosstab: report.isCrosstab,
-          isPrompted: report.isPrompted,
-          subtotalsInfo: report.subtotalsInfo,
-          promptsAnswers: report.promptsAnswers,
-          crosstabHeaderDimensions: report.crosstabHeaderDimensions,
-          visualizationInfo: report.visualizationInfo,
-          manipulationsXML: report.manipulationsXML,
-          tableName: report.tableName,
-          tableDimensions: report.tableDimensions,
-          displayAttrFormNames: report.displayAttrFormNames,
-        },
-      });
-      this.preserveReport(report);
+      // this.reduxStore.dispatch({
+      //   type: officeProperties.actions.loadReport,
+      //   report
+      // });
+      await this.preserveReport(report);
     }
+    console.timeEnd('Total');
+    console.groupEnd();
+
+    // this.reduxStore.dispatch({
+    //   type: officeProperties.actions.finishLoadingReport,
+    //   reportBindId: newBindingId,
+    // });
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, SAVE_OBJECT_IN_EXCEL));
   };
 
   removeReportFromStore = (bindingId) => {

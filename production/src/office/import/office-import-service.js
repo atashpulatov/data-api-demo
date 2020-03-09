@@ -1,14 +1,18 @@
 
-import {
-  mstrObjectRestService,
-  DATA_LIMIT,
-  IMPORT_ROW_LIMIT,
-} from '../../mstr-object/mstr-object-rest-service';
+import { mstrObjectRestService, DATA_LIMIT, IMPORT_ROW_LIMIT, } from '../../mstr-object/mstr-object-rest-service';
 import officeInsertService from './office-insert-service';
+
+import { FETCH_INSERT_DATA } from '../../operation/operation-steps';
+import { markStepCompleted } from '../../operation/operation-actions';
+import { updateObject } from '../../operation/object-actions';
 
 const { getObjectContentGenerator } = mstrObjectRestService;
 
 class OfficeImportService {
+  init = (reduxStore) => {
+    this.reduxStore = reduxStore;
+  }
+
   /**
   * Fetch Data from Microstrategy and insert it into the Excel table. For crosstab also creates row headers
   *
@@ -20,67 +24,95 @@ class OfficeImportService {
   * @param {Object} [parameter.visualizationInfo]
   * @returns {Object} Object containing officeTable and subtotalAddresses
   */
-  async fetchInsertDataIntoExcel({
-    connectionData,
-    officeData,
-    instanceDefinition,
-    isRefresh,
-    tableColumnsChanged,
-    visualizationInfo,
-    importSubtotal,
-    displayAttrFormNames
-  }) {
-    try {
-      const { excelContext } = officeData;
-      const { columns, rows, mstrTable } = instanceDefinition;
-      const limit = Math.min(Math.floor(DATA_LIMIT / columns), IMPORT_ROW_LIMIT);
-      const configGenerator = {
-        ...connectionData,
-        instanceDefinition,
-        limit,
-        visualizationInfo,
-        displayAttrFormNames
-      };
+   fetchInsertDataIntoExcel = async () => {
+     try {
+       const [ObjectData] = this.reduxStore.getState().objectReducer.objects;
+       const {
+         objectId,
+         projectId,
+         dossierData,
+         mstrObjectType,
+         body,
+         preparedInstanceId,
+         manipulationsXML,
+         promptsAnswers,
+         instanceDefinition,
+         isRefresh,
+         tableColumnsChanged,
+         visualizationInfo,
+         displayAttrFormNames,
+         officeTable,
+         excelContext,
+         objectWorkingId,
+       } = ObjectData;
 
-      const rowGenerator = getObjectContentGenerator(configGenerator);
-      let rowIndex = 0;
-      const contextPromises = [];
-      const subtotalsAddresses = [];
 
-      console.time('Fetch data');
-      for await (const { row, header, subtotalAddress } of rowGenerator) {
-        console.groupCollapsed(`Importing rows: ${rowIndex} to ${Math.min(rowIndex + limit, rows)}`);
-        console.timeEnd('Fetch data');
+       const { columns, rows, mstrTable } = instanceDefinition;
+       const { subtotalsInfo: { importSubtotal = true } } = mstrTable;
+       const limit = Math.min(Math.floor(DATA_LIMIT / columns), IMPORT_ROW_LIMIT);
+       const configGenerator = {
+         objectId,
+         projectId,
+         dossierData,
+         mstrObjectType,
+         body,
+         preparedInstanceId,
+         manipulationsXML,
+         promptsAnswers,
+         instanceDefinition,
+         limit,
+         visualizationInfo,
+         displayAttrFormNames
+       };
 
-        excelContext.workbook.application.suspendApiCalculationUntilNextSync();
+       const rowGenerator = getObjectContentGenerator(configGenerator);
+       let rowIndex = 0;
+       const contextPromises = [];
+       const subtotalsAddresses = [];
 
-        await officeInsertService.appendRows(
-          officeData,
-          row,
-          rowIndex,
-          isRefresh,
-          tableColumnsChanged,
-          contextPromises,
-          header,
-          mstrTable
-        );
-        if (importSubtotal) { this.getSubtotalCoordinates(subtotalAddress, subtotalsAddresses); }
-        rowIndex += row.length;
+       console.time('Fetch data');
+       for await (const { row, header, subtotalAddress } of rowGenerator) {
+         console.groupCollapsed(`Importing rows: ${rowIndex} to ${Math.min(rowIndex + limit, rows)}`);
+         console.timeEnd('Fetch data');
 
-        await officeInsertService.syncChangesToExcel(contextPromises, false);
-        console.groupEnd();
-      }
-      console.timeEnd('Fetch and insert into excel');
+         excelContext.workbook.application.suspendApiCalculationUntilNextSync();
 
-      mstrTable.subtotalsInfo.subtotalsAddresses = subtotalsAddresses;
-      mstrTable.subtotalsInfo.importSubtotal = importSubtotal;
+         await officeInsertService.appendRows(
+           officeTable,
+           excelContext,
+           row,
+           rowIndex,
+           isRefresh,
+           tableColumnsChanged,
+           contextPromises,
+           header,
+           mstrTable
+         );
+         if (importSubtotal) { this.getSubtotalCoordinates(subtotalAddress, subtotalsAddresses); }
+         rowIndex += row.length;
 
-      await officeInsertService.syncChangesToExcel(contextPromises, true);
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  }
+         await officeInsertService.syncChangesToExcel(contextPromises, false);
+         console.groupEnd();
+       }
+       console.timeEnd('Fetch and insert into excel');
+
+       mstrTable.subtotalsInfo.subtotalsAddresses = subtotalsAddresses;
+       mstrTable.subtotalsInfo.importSubtotal = importSubtotal;
+
+       await officeInsertService.syncChangesToExcel(contextPromises, true);
+
+       const updatedObject = {
+         objectWorkingId,
+         instanceDefinition,
+       };
+
+       this.reduxStore.dispatch(updateObject(updatedObject));
+       this.reduxStore.dispatch(markStepCompleted(objectWorkingId, FETCH_INSERT_DATA));
+     } catch (error) {
+       console.log(error);
+       throw error;
+     }
+   }
 
 
   /**

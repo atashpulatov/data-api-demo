@@ -6,6 +6,7 @@ import { PopupTypeEnum } from '../home/popup-type-enum';
 import objectTypeEnum from '../mstr-object/mstr-object-type-enum';
 import { officeContext } from '../office/office-context';
 import { selectorProperties } from '../attribute-selector/selector-properties';
+import { importRequested, markStepCompleted } from '../operation/operation-actions';
 
 
 function sortPromptsAnswers(array) {
@@ -14,8 +15,9 @@ function sortPromptsAnswers(array) {
   }
 }
 class PopupHelper {
-  init = (popupController) => {
+  init = (popupController, reduxStore) => {
     this.popupController = popupController;
+    this.reduxStore = reduxStore;
   }
 
   capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
@@ -89,25 +91,35 @@ class PopupHelper {
         ? refreshReport.promptsAnswers
         : promptsAnswers,
       objectId: refreshReport.id,
-      preparedInstanceId: refreshReport.preparedInstanceId,
+      preparedInstanceId: refreshReport.preparedInstanceId || false,
       projectId: refreshReport.projectId,
       mstrObjectType,
       selectedCell: true,
       bindingId,
       body: refreshReport.body,
       isCrosstab: refreshReport.isCrosstab,
-      crosstabHeaderDimensions: refreshReport.crosstabHeaderDimensions,
+      crosstabHeaderDimensions: refreshReport.crosstabHeaderDimensions || false,
       isRefresh: true,
       isPrompted: refreshReport.isPrompted,
       isRefreshAll,
       subtotalsInfo: refreshReport.subtotalsInfo,
-      visualizationInfo: refreshReport.visualizationInfo,
-      manipulationsXML: refreshReport.manipulationsXML,
+      visualizationInfo: refreshReport.visualizationInfo || false,
+      manipulationsXML: refreshReport.manipulationsXML || false,
       tableName:refreshReport.tableName,
-      previousTableDimensions: refreshReport.tableDimensions,
+      previousTableDimensions: refreshReport.tableDimensions || false,
       displayAttrFormNames: refreshReport.displayAttrFormNames,
     };
-    const result = await officeDisplayService.printObject(options);
+
+    this.reduxStore.dispatch(importRequested(options));
+
+    // const result = await officeDisplayService.printObject(options);
+    const result = {
+      type: 'success',
+      message: 'Data loaded successfully'
+    };
+    // if (result) {
+    //   notificationService.displayNotification({ type: result.type, content: result.message });
+    // }
     if (result && result.type === 'warning') {
       throw new Error(result.message);
     }

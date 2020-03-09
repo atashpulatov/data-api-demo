@@ -30,11 +30,6 @@ function toggleSetLoadingStatus(action, state, status) {
   const indexOfElement = state.reportArray.findIndex((report) => (report.bindId === action.reportBindId));
   const newReportArray = [...state.reportArray];
   newReportArray[indexOfElement].isLoading = status;
-  if (!status && !action.isError) {
-    const currentDate = new Date();
-    newReportArray[indexOfElement].refreshDate = currentDate;
-    officeStoreService.preserveReportValue(state.reportArray[indexOfElement].bindId, 'refreshDate', currentDate);
-  }
   return {
     ...state,
     loading: status,
@@ -78,7 +73,6 @@ function onPreLoadReport(action, state) {
 }
 
 function onLoadReport(action, state) {
-  checkReportData(action.report);
   return {
     ...state,
     loading: false,
