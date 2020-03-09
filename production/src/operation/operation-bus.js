@@ -7,7 +7,7 @@ class OperationBus {
     const currentOperation = this.store.getState().operationReducer
     && this.store.getState().operationReducer.operations
       && this.store.getState().operationReducer.operations[0];
-    this.previousOperation = currentOperation && JSON.parse(JSON.stringify(currentOperation));
+    this.previousOperationCopy = currentOperation && JSON.stringify(currentOperation);
     this.store.subscribe(this.listener);
   }
 
@@ -16,16 +16,16 @@ class OperationBus {
       && this.store.getState().operationReducer.operations
       && this.store.getState().operationReducer.operations[0];
     if (!currentOperation) {
-      this.previousOperation = null;
+      this.previousOperationCopy = null;
       return;
     }
-    if (!didOperationChange(this.previousOperation, currentOperation)) {
+    if (!didOperationChange(this.previousOperationCopy, currentOperation)) {
       return;
     }
     const nextStep = currentOperation.stepsQueue[0];
     const subscribedCallback = this.subscribedCallbacksMap[nextStep];
     subscribedCallback && subscribedCallback();
-    this.previousOperation = JSON.parse(JSON.stringify(currentOperation));
+    this.previousOperationCopy = JSON.stringify(currentOperation);
   }
 
   subscribe = (stepName, callback) => {
@@ -33,13 +33,7 @@ class OperationBus {
   }
 }
 
-const didOperationChange = (previousOperation, currentOperation) => {
-  console.log('previousOperation, currentOperation:', previousOperation, currentOperation);
-  if (previousOperation
-    && previousOperation.stepsQueue[0] === currentOperation.stepsQueue[0]) {
-    return false;
-  }
-  return true;
-};
+const didOperationChange = (previousOperationCopy, currentOperation) => !previousOperationCopy
+    || previousOperationCopy !== JSON.stringify(currentOperation);
 
 export const operationBus = new OperationBus();

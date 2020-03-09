@@ -2,7 +2,6 @@ import { UPDATE_OBJECT, DELETE_OBJECT } from './object-actions';
 import { IMPORT_REQUESTED } from './operation-actions';
 
 const initialState = { objects: [] };
-
 export const objectReducer = (state = initialState, action) => {
   switch (action.type) {
   case IMPORT_REQUESTED:
