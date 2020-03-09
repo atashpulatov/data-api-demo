@@ -352,7 +352,8 @@ class PluginPopup {
   }
 
   /**
-   * returns boolean based on the myLibrary switch state
+   * Returns a boolean based on the myLibrary switch state
+   * @returns {boolean} true if myLibrary is on, false if myLibrary is off
    */
   getMyLibraryState() {
     const myLibrarySwitch = $(popupSelectors.myLibrary);
