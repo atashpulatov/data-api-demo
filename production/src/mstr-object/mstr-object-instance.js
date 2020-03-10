@@ -52,7 +52,6 @@ class MstrObjectInstance {
        crosstabHeaderDimensions,
        subtotalsInfo:{ subtotalsAddresses } = false,
      } = ObjectData;
-     console.log('ObjectData:', ObjectData);
      let { visualizationInfo, startCell } = ObjectData;
 
      const connectionData = {

@@ -4,6 +4,7 @@ import { errorService } from '../../error/error-handler';
 
 import { SAVE_OBJECT_IN_EXCEL } from '../../operation/operation-steps';
 import { markStepCompleted } from '../../operation/operation-actions';
+import { deleteObject } from '../../operation/object-actions';
 
 /* global Office */
 
@@ -196,6 +197,7 @@ class OfficeStoreService {
       reportBindId: ObjectData.newBindingId,
     });
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, SAVE_OBJECT_IN_EXCEL));
+    this.reduxStore.dispatch(deleteObject(objectWorkingId));
   };
 
   removeReportFromStore = (bindingId) => {
