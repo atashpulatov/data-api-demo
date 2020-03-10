@@ -24,18 +24,20 @@ function importRequested(state, payload) {
   };
 }
 
-function updateObject(state, updatedObject) {
-  // TODO: throw some meaningful error
-  return {
-    objects: state.objects.map((object) => (object.objectWorkingId === updatedObject.objectWorkingId
-      ? { ...object, ...updatedObject }
-      : object))
-  };
+function updateObject(state, updatedObjectProps) {
+  const objectToUpdateIndex = state.objects
+    .findIndex(object => object.objectWorkingId === updatedObjectProps.objectWorkingId);
+  if (objectToUpdateIndex === -1) { throw new Error(); }
+  const newObjects = [...state.objects];
+  const updatedObject = { ...state.objects[objectToUpdateIndex], ...updatedObjectProps };
+  newObjects.splice(objectToUpdateIndex, 1, updatedObject);
+  return { objects:newObjects };
 }
 
 function deleteObject(state, objectWorkingId) {
-  const objectToRemoveIndex = state.objects.findIndex(object => object.objectWorkingId === objectWorkingId);
-  // TODO: throw some meaningful error
+  const objectToRemoveIndex = state.objects
+    .findIndex(object => object.objectWorkingId === objectWorkingId);
+  if (objectToRemoveIndex === -1) { throw new Error(); }
   const newObjects = [...state.objects];
   newObjects.splice(objectToRemoveIndex, 1);
   return { objects: newObjects };

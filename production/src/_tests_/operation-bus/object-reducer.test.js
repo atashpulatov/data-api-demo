@@ -89,19 +89,19 @@ describe('objectReducer', () => {
   });
 
   describe('updateObject', () => {
-    it('should return same array if element not found', () => {
+    it('should throw error if element with id does not exist', () => {
       // given
       const objectName = 'someName';
       const action = {
         type: UPDATE_OBJECT,
-        payload: { objectWorkingId: 'someOtherString23', objectName },
+        payload: { objectWorkingId: 'nonExistingId', objectName },
       };
 
       // when
-      const resultState = objectReducer(initialState.singleObject, action);
+      const throwingCall = () => objectReducer(initialState.singleObject, action);
 
       // then
-      expect(resultState).toEqual(initialState.singleObject);
+      expect(throwingCall).toThrow();
     });
 
     it('should add one property to object on single element array', () => {
@@ -168,7 +168,7 @@ describe('objectReducer', () => {
   });
 
   describe('deleteObject', () => {
-    it('should not remove any objects if array is empty', () => {
+    it('should throw error if object does not exist in array', () => {
       // given
       const someId = 'some id';
       const action = {
@@ -177,25 +177,10 @@ describe('objectReducer', () => {
       };
 
       // when
-      const resultState = objectReducer(initialState.empty, action);
+      const throwingCall = () => objectReducer(initialState.empty, action);
 
       // then
-      expect(resultState).toEqual(initialState.empty);
-    });
-
-    it('should not remove any objects if id doesnt exist in array', () => {
-      // given
-      const someId = 'some id';
-      const action = {
-        type: DELETE_OBJECT,
-        payload: someId,
-      };
-
-      // when
-      const resultState = objectReducer(initialState.multipleObjects, action);
-
-      // then
-      expect(resultState).toEqual(initialState.multipleObjects);
+      expect(throwingCall).toThrow();
     });
 
     it('should remove object if id exists in array', () => {

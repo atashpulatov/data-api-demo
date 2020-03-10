@@ -22,8 +22,8 @@ class OperationBus {
     }
     const nextStep = currentOperation.stepsQueue[0];
     const subscribedCallback = this.subscribedCallbacksMap[nextStep];
-    subscribedCallback && subscribedCallback();
     this.previousOperationCopy = JSON.stringify(currentOperation);
+    subscribedCallback && subscribedCallback();
   }
 
   subscribe = (stepName, callback) => {
