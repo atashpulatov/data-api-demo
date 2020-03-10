@@ -4,7 +4,6 @@ import { errorService } from '../../error/error-handler';
 
 import { SAVE_OBJECT_IN_EXCEL } from '../../operation/operation-steps';
 import { markStepCompleted } from '../../operation/operation-actions';
-import { deleteObject } from '../../operation/object-actions';
 
 /* global Office */
 
