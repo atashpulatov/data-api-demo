@@ -28,7 +28,7 @@ class OperationBus {
     const subscribedCallback = this.subscribedCallbacksMap[nextStep];
     this.previousOperationCopy = JSON.stringify(currentOperation);
     if (subscribedCallback) {
-      const currentObject = getCurrentObject(currentOperation.objectWorkingId);
+      const currentObject = this.getCurrentObject(currentOperation.objectWorkingId);
       subscribedCallback(currentObject);
     }
   }
@@ -36,12 +36,13 @@ class OperationBus {
   subscribe = (stepName, callback) => {
     this.subscribedCallbacksMap[stepName] = callback;
   }
+
+  getCurrentObject = (objectWorkingId) => {
+    const { objects } = this.store.getState().objectReducer;
+    return objects.find(object => object.objectWorkingId === objectWorkingId);
+  };
 }
 
-const getCurrentObject = (objectWorkingId) => {
-  const { objects } = this.store.getState().objectReducer;
-  return objects.find(object => object.objectWorkingId === objectWorkingId);
-};
 
 const didOperationChange = (previousOperationCopy, currentOperation) => !previousOperationCopy
     || previousOperationCopy !== JSON.stringify(currentOperation);
