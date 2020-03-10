@@ -14,16 +14,15 @@ class OfficeFormatData {
    * @param {Boolean} isCrosstab
    * @param {Office} excelContext
    */
-  applyFormatting = async () => {
+  applyFormatting = async (objectData) => {
     try {
       console.time('Apply formatting');
-      const [ObjectData] = this.reduxStore.getState().objectReducer.objects;
       const {
         excelContext,
         instanceDefinition,
         officeTable,
         objectWorkingId
-      } = ObjectData;
+      } = objectData;
       const { columnInformation, isCrosstab } = instanceDefinition.mstrTable;
 
       const filteredColumnInformation = this.filterColumnInformation(columnInformation, isCrosstab);

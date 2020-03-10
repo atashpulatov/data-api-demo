@@ -124,33 +124,32 @@ class OfficeStoreService {
     }
   }
 
-  saveAndPreserveReportInStore = async () => {
-    const [ObjectData] = this.reduxStore.getState().objectReducer.objects;
-    const { instanceDefinition, isRefresh, objectWorkingId } = ObjectData;
+  saveAndPreserveReportInStore = async (objectData) => {
+    const { instanceDefinition, isRefresh, objectWorkingId } = objectData;
     const { mstrTable } = instanceDefinition;
     const tableDimensions = { columns: instanceDefinition.columns };
     const refreshDate = new Date();
 
     const report = {
-      id: ObjectData.objectId,
+      id: objectData.objectId,
       name: mstrTable.name,
-      bindId: ObjectData.newBindingId,
-      projectId: ObjectData.projectId,
-      envUrl: ObjectData.envUrl,
-      body: ObjectData.body,
+      bindId: objectData.newBindingId,
+      projectId: objectData.projectId,
+      envUrl: objectData.envUrl,
+      body: objectData.body,
       isLoading: false,
-      objectType: ObjectData.mstrObjectType,
+      objectType: objectData.mstrObjectType,
       isCrosstab: mstrTable.isCrosstab,
-      isPrompted: ObjectData.isPrompted,
+      isPrompted: objectData.isPrompted,
       subtotalsInfo: mstrTable.subtotalsInfo,
-      promptsAnswers: ObjectData.promptsAnswers,
+      promptsAnswers: objectData.promptsAnswers,
       crosstabHeaderDimensions: mstrTable.crosstabHeaderDimensions,
-      visualizationInfo: ObjectData.visualizationInfo,
+      visualizationInfo: objectData.visualizationInfo,
       manipulationsXML: instanceDefinition.manipulationsXML,
-      tableName: ObjectData.newOfficeTableName,
+      tableName: objectData.newOfficeTableName,
       tableDimensions,
-      displayAttrFormNames: ObjectData.displayAttrFormNames,
-      oldTableId: ObjectData.bindingId,
+      displayAttrFormNames: objectData.displayAttrFormNames,
+      oldTableId: objectData.bindingId,
       refreshDate
     };
 
@@ -194,10 +193,9 @@ class OfficeStoreService {
 
     this.reduxStore.dispatch({
       type: officeProperties.actions.finishLoadingReport,
-      reportBindId: ObjectData.newBindingId,
+      reportBindId: objectData.newBindingId,
     });
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, SAVE_OBJECT_IN_EXCEL));
-    this.reduxStore.dispatch(deleteObject(objectWorkingId));
   };
 
   removeReportFromStore = (bindingId) => {

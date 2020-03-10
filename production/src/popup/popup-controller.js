@@ -10,13 +10,9 @@ import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { officeStoreService } from '../office/store/office-store-service';
 import { LOAD_BROWSING_STATE_CONST, changeSorting } from '../navigation/navigation-tree-actions';
 import { REFRESH_CACHE_COMMAND, refreshCache } from '../cache/cache-actions';
-import {
-  START_REPORT_LOADING,
-  STOP_REPORT_LOADING,
-  RESET_STATE,
-} from './popup-actions';
+import { START_REPORT_LOADING, STOP_REPORT_LOADING, RESET_STATE } from './popup-actions';
 import { CLEAR_POPUP_STATE, SET_MSTR_DATA } from './popup-state-actions';
-import { importRequested, markStepCompleted } from '../operation/operation-actions';
+import { importRequested } from '../operation/operation-actions';
 
 
 const URL = `${window.location.href}`;

@@ -42,8 +42,7 @@ class MstrObjectInstance {
    * @param {Boolean} subtotalsVisible Information if the subtotals are visible
    * @returns {Object} Object containing officeTable and subtotalAddresses
    */
-   getInstaceDefinition = async () => {
-     const [ObjectData] = this.reduxStore.getState().objectReducer.objects;
+   getInstaceDefinition = async (objectData) => {
      const {
        objectWorkingId,
        displayAttrFormNames,
@@ -51,18 +50,18 @@ class MstrObjectInstance {
        selectedCell,
        crosstabHeaderDimensions,
        subtotalsInfo:{ subtotalsAddresses } = false,
-     } = ObjectData;
-     let { visualizationInfo, startCell } = ObjectData;
+     } = objectData;
+     let { visualizationInfo, startCell } = objectData;
 
      const connectionData = {
-       objectId:       ObjectData.objectId,
-       projectId:       ObjectData.projectId,
-       dossierData:       ObjectData.dossierData,
-       mstrObjectType:       ObjectData.mstrObjectType,
-       body:       ObjectData.body,
-       preparedInstanceId:       ObjectData.preparedInstanceId,
-       manipulationsXML:       ObjectData.manipulationsXML,
-       promptsAnswers:       ObjectData.promptsAnswers,
+       objectId: objectData.objectId,
+       projectId: objectData.projectId,
+       dossierData: objectData.dossierData,
+       mstrObjectType: objectData.mstrObjectType,
+       body: objectData.body,
+       preparedInstanceId: objectData.preparedInstanceId,
+       manipulationsXML: objectData.manipulationsXML,
+       promptsAnswers: objectData.promptsAnswers,
      };
 
      const excelContext = await officeApiHelper.getExcelContext();
@@ -123,11 +122,6 @@ class MstrObjectInstance {
 
      this.reduxStore.dispatch(updateObject(updatedObject));
      this.reduxStore.dispatch(markStepCompleted(objectWorkingId, GET_INSTANCE_DEFINITION));
-     // return {
-     //   body,
-     //   instanceDefinition,
-     //   visualizationInfo,
-     // };
    }
 
   /**

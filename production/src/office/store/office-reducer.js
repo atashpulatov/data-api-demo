@@ -1,6 +1,5 @@
 import { officeProperties } from './office-properties';
 import { OfficeError } from '../office-error';
-import { officeStoreService } from './office-store-service';
 
 function checkReportData(report) {
   if (!report) {

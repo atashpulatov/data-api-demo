@@ -1,15 +1,11 @@
-import { officeApiHelper } from './api/office-api-helper';
-import { officeStoreService } from './store/office-store-service';
 
+import { officeStoreService } from './store/office-store-service';
 import mstrObjectInstance from '../mstr-object/mstr-object-instance';
-import officeTableHelper from './table/office-table-helper';
 import officeTableService from './table/office-table-service';
 import officeFormatData from './format/office-format-data';
 import officeFormatTable from './format/office-format-table';
 import officeImportService from './import/office-import-service';
 import officeFormatSubtotals from './format/office-format-subtotals';
-import officeDuplicateService from './office-duplicate-service';
-import { officeApiWorksheetHelper } from './api/office-api-worksheet-helper';
 
 
 import {
@@ -258,15 +254,6 @@ class OfficeDisplayService {
 
     // await officeTableService.bindOfficeTable(officeData, newBindingId);
 
-    // // TODO move it somewhere
-    // // assign new name in duplicate workflow
-    // if (originalObjectName) {
-    //   console.time('Duplicate renaming');
-    //   const nameCandidate = officeDuplicateService.prepareNewNameForDuplicatedObject(originalObjectName);
-    //   const finalNewName = officeDuplicateService.checkAndSolveNameConflicts(nameCandidate);
-    //   mstrTable.name = finalNewName;
-    //   console.timeEnd('Duplicate renaming');
-    // }
 
     // Save to store
     //   officeStoreService.saveAndPreserveReportInStore({

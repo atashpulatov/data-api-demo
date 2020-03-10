@@ -18,14 +18,13 @@ class OfficeFormatSubtotals {
    * @param {Object} mstrTable contains informations about mstr object
    * @param {Boolean} [shouldBold=true] Specify whether the values in cells should be bold
    */
-  applySubtotalFormattingRedux = async () => {
-    const [ObjectData] = this.reduxStore.getState().objectReducer.objects;
+  applySubtotalFormattingRedux = async (objectData) => {
     const {
       officeTable,
       instanceDefinition,
       excelContext,
       objectWorkingId,
-    } = ObjectData;
+    } = objectData;
     const { mstrTable } = instanceDefinition;
 
 

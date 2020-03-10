@@ -14,14 +14,13 @@ class OfficeFormatTable {
    * @param {Office} crosstabHeaderDimensions
    * @param {Office} excelContext
    */
-  formatTable = async () => {
-    const [ObjectData] = this.reduxStore.getState().objectReducer.objects;
+  formatTable = async (objectData) => {
     const {
       excelContext,
       instanceDefinition,
       officeTable,
       objectWorkingId,
-    } = ObjectData;
+    } = objectData;
 
     const { crosstabHeaderDimensions, isCrosstab } = instanceDefinition.mstrTable;
     console.time('Column auto size');

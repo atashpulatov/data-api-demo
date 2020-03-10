@@ -1,6 +1,16 @@
 import { officeStoreService } from './store/office-store-service';
 
 class OfficeDuplicateService {
+  assignNewName = (originalObjectName, mstrTable) => {
+    if (originalObjectName) {
+      console.time('Duplicate renaming');
+      const nameCandidate = this.prepareNewNameForDuplicatedObject(originalObjectName);
+      const finalNewName = this.checkAndSolveNameConflicts(nameCandidate);
+      mstrTable.name = finalNewName;
+      console.timeEnd('Duplicate renaming');
+    }
+  }
+
   prepareNewNameForDuplicatedObject = (originalObjectName) => {
     const splitedName = originalObjectName.split(' ');
     const nrOfWords = splitedName.length;

@@ -24,9 +24,8 @@ class OfficeImportService {
   * @param {Object} [parameter.visualizationInfo]
   * @returns {Object} Object containing officeTable and subtotalAddresses
   */
-   fetchInsertDataIntoExcel = async () => {
+   fetchInsertDataIntoExcel = async (objectData) => {
      try {
-       const [ObjectData] = this.reduxStore.getState().objectReducer.objects;
        const {
          objectId,
          projectId,
@@ -44,7 +43,7 @@ class OfficeImportService {
          officeTable,
          excelContext,
          objectWorkingId,
-       } = ObjectData;
+       } = objectData;
 
 
        const { columns, rows, mstrTable } = instanceDefinition;

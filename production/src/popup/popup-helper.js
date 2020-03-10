@@ -1,4 +1,3 @@
-import { officeDisplayService } from '../office/office-display-service';
 import { officeStoreService } from '../office/store/office-store-service';
 import { notificationService } from '../notification/notification-service';
 import { errorService } from '../error/error-handler';
@@ -6,7 +5,7 @@ import { PopupTypeEnum } from '../home/popup-type-enum';
 import objectTypeEnum from '../mstr-object/mstr-object-type-enum';
 import { officeContext } from '../office/office-context';
 import { selectorProperties } from '../attribute-selector/selector-properties';
-import { importRequested, markStepCompleted } from '../operation/operation-actions';
+import { importRequested } from '../operation/operation-actions';
 
 
 function sortPromptsAnswers(array) {
