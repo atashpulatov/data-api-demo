@@ -672,7 +672,10 @@ class PluginPopup {
     dateFrom = Date.parse(dateFrom);
     dateTo = Date.parse(dateTo);
 
-    const rowTimestamp = PluginPopup.getFirstRowTimestamp();
+    const rowTimestamp = this.getFirstRowTimestamp();
+    console.log(rowTimestamp);
+    console.log(dateFrom);
+    console.log(dateTo);
     return rowTimestamp >= dateFrom && rowTimestamp <= dateTo;
   }
 }

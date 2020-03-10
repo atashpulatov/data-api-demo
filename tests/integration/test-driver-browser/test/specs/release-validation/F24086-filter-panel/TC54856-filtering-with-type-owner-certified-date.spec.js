@@ -43,12 +43,10 @@ describe('F24087 - Improve performance of scrolling through the object list', ()
     PluginPopup.clickFilterButton();
 
     PluginPopup.clickHeader('Modified');
-    const rowTimestamp = PluginPopup.getFirstRowTimestamp();
-    expect(rowTimestamp >= dateFrom && rowTimestamp <= dateTo).toBe(true);
+    expect(PluginPopup.assertFirstObjectDateIsInTheRange(dateFrom, dateTo)).toBe(true);
 
     PluginPopup.clickHeader('Modified');
-    const rowTimestamp = PluginPopup.getFirstRowTimestamp();
-    expect(rowTimestamp >= dateFrom && rowTimestamp <= dateTo).toBe(true);
+    expect(PluginPopup.assertFirstObjectDateIsInTheRange(dateFrom, dateTo)).toBe(true);
 
     PluginPopup.selectLastObject();
     PluginPopup.switchLibrary(false);
