@@ -25,9 +25,7 @@ function importRequested(state, payload) {
 }
 
 function updateObject(state, updatedObjectProps) {
-  const objectToUpdateIndex = state.objects
-    .findIndex(object => object.objectWorkingId === updatedObjectProps.objectWorkingId);
-  if (objectToUpdateIndex === -1) { throw new Error(); }
+  const objectToUpdateIndex = getObjectIndex(state.objects, updatedObjectProps.objectWorkingId);
   const newObjects = [...state.objects];
   const updatedObject = { ...state.objects[objectToUpdateIndex], ...updatedObjectProps };
   newObjects.splice(objectToUpdateIndex, 1, updatedObject);
@@ -35,10 +33,17 @@ function updateObject(state, updatedObjectProps) {
 }
 
 function deleteObject(state, objectWorkingId) {
-  const objectToRemoveIndex = state.objects
-    .findIndex(object => object.objectWorkingId === objectWorkingId);
-  if (objectToRemoveIndex === -1) { throw new Error(); }
+  const objectToRemoveIndex = getObjectIndex(state.objects, objectWorkingId);
   const newObjects = [...state.objects];
   newObjects.splice(objectToRemoveIndex, 1);
   return { objects: newObjects };
+}
+
+function getObjectIndex(objects, objectWorkingId) {
+  const objectToUpdateIndex = objects
+    .findIndex(object => object.objectWorkingId === objectWorkingId);
+  if (objectToUpdateIndex === -1) {
+    throw new Error();
+  }
+  return objectToUpdateIndex;
 }
