@@ -182,19 +182,19 @@ class OfficeStoreService {
         errorService.handleError(error);
       }
     } else {
-      // this.reduxStore.dispatch({
-      //   type: officeProperties.actions.loadReport,
-      //   report
-      // });
+      this.reduxStore.dispatch({
+        type: officeProperties.actions.loadReport,
+        report
+      });
       await this.preserveReport(report);
     }
     console.timeEnd('Total');
     console.groupEnd();
 
-    // this.reduxStore.dispatch({
-    //   type: officeProperties.actions.finishLoadingReport,
-    //   reportBindId: newBindingId,
-    // });
+    this.reduxStore.dispatch({
+      type: officeProperties.actions.finishLoadingReport,
+      reportBindId: ObjectData.newBindingId,
+    });
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, SAVE_OBJECT_IN_EXCEL));
   };
 
