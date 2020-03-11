@@ -5,7 +5,7 @@ import { PopupTypeEnum } from '../home/popup-type-enum';
 import objectTypeEnum from '../mstr-object/mstr-object-type-enum';
 import { officeContext } from '../office/office-context';
 import { selectorProperties } from '../attribute-selector/selector-properties';
-import { importRequested } from '../operation/operation-actions';
+import { importRequested, markStepCompleted } from '../operation/operation-actions';
 
 
 function sortPromptsAnswers(array) {
@@ -111,6 +111,7 @@ class PopupHelper {
 
     this.reduxStore.dispatch(importRequested(options));
 
+
     // const result = await officeDisplayService.printObject(options);
     const result = {
       type: 'success',
@@ -129,6 +130,36 @@ class PopupHelper {
     this.storageReportRefreshFinish('ok', false, index, length);
     return false;
   };
+
+
+  // printRefreshedReportRedux = async () => {
+  //   const options = {
+  //     dossierData: instanceId,
+  //     promptsAnswers: !promptsAnswers
+  //       ? refreshReport.promptsAnswers
+  //       : promptsAnswers,
+  //     objectId: refreshReport.id,
+  //     preparedInstanceId: refreshReport.preparedInstanceId || false,
+  //     projectId: refreshReport.projectId,
+  //     mstrObjectType,
+  //     selectedCell: true,
+  //     bindingId,
+  //     body: refreshReport.body,
+  //     isCrosstab: refreshReport.isCrosstab,
+  //     crosstabHeaderDimensions: refreshReport.crosstabHeaderDimensions || false,
+  //     isRefresh: true,
+  //     isPrompted: refreshReport.isPrompted,
+  //     isRefreshAll,
+  //     subtotalsInfo: refreshReport.subtotalsInfo,
+  //     visualizationInfo: refreshReport.visualizationInfo || false,
+  //     manipulationsXML: refreshReport.manipulationsXML || false,
+  //     tableName:refreshReport.tableName,
+  //     previousTableDimensions: refreshReport.tableDimensions || false,
+  //     displayAttrFormNames: refreshReport.displayAttrFormNames,
+  //   };
+
+  //   this.reduxStore.dispatch(markStepCompleted(objectWorkingId, REFRESH_STORED_OBJECT));
+  // };
 
   handleRefreshError(error, length, index, isRefreshAll) {
     if (isRefreshAll) {

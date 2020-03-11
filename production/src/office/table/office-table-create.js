@@ -42,6 +42,7 @@ class OfficeTableCreate {
     );
 
     const tableRange = officeApiHelper.getRange(columns, tableStartCell, rows);
+    console.log('tableRange:', tableRange);
     const range = this.getObjectRange(tableStartCell, worksheet, tableRange, mstrTable);
     excelContext.trackedObjects.add(range);
     await officeTableHelper.checkObjectRangeValidity(prevOfficeTable, excelContext, range, instanceDefinition);
@@ -51,6 +52,7 @@ class OfficeTableCreate {
     }
 
     const officeTable = worksheet.tables.add(tableRange, true); // create office table based on the range
+    console.log('officeTable:', officeTable);
     this.styleHeaders(officeTable, TABLE_HEADER_FONT_COLOR, TABLE_HEADER_FILL_COLOR);
     return this.setOfficeTableProperties({
       officeTable,

@@ -1,4 +1,4 @@
-import { IMPORT_REQUESTED, MARK_STEP_COMPLETED } from './operation-actions';
+import { IMPORT_REQUESTED, EDIT_REQUESTED, MARK_STEP_COMPLETED } from './operation-actions';
 
 const initialState = { operations: [] };
 
@@ -6,6 +6,8 @@ export const operationReducer = (state = initialState, action) => {
   switch (action.type) {
   case IMPORT_REQUESTED:
     return importRequested(state, action.payload);
+  case EDIT_REQUESTED:
+    return editRequested(state, action.payload);
   case MARK_STEP_COMPLETED:
     return markStepCompleted(state, action.payload);
   default:
@@ -21,10 +23,20 @@ function importRequested(state, payload) {
     ]
   };
 }
+function editRequested(state, payload) {
+  return {
+    operations: [
+      ...state.operations,
+      payload.operation
+    ]
+  };
+}
 
 function markStepCompleted(state, { objectWorkingId, completedStep }) {
   const processedOperation = state.operations.find((operation) => operation.objectWorkingId === objectWorkingId);
   const { stepsQueue } = processedOperation;
+  console.log('stepsQueue:', stepsQueue);
+  console.log('completedStep:', completedStep);
 
   if (processedOperation.stepsQueue[0] !== completedStep) {
     // FIXME: Add class/message for this error

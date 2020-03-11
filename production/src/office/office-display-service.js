@@ -6,9 +6,12 @@ import officeFormatData from './format/office-format-data';
 import officeFormatTable from './format/office-format-table';
 import officeImportService from './import/office-import-service';
 import officeFormatSubtotals from './format/office-format-subtotals';
+import { popupController } from '../popup/popup-controller';
 
 
 import {
+  SAVE_MODIFIED_OBJECT,
+  REFRESH_STORED_OBJECT,
   GET_INSTANCE_DEFINITION,
   GET_OFFICE_TABLE,
   FORMAT_DATA,
@@ -23,6 +26,10 @@ import {
 class OfficeDisplayService {
   init = (reduxStore, operationBus) => {
     this.reduxStore = reduxStore;
+
+    operationBus.subscribe(SAVE_MODIFIED_OBJECT, popupController.saveReportWithParams);
+    // operationBus.subscribe(REFRESH_STORED_OBJECT, officeStoreService.saveAndPreserveReportInStore);
+
     operationBus.subscribe(GET_INSTANCE_DEFINITION, mstrObjectInstance.getInstaceDefinition);
     operationBus.subscribe(GET_OFFICE_TABLE, officeTableService.getOfficeTable);
     operationBus.subscribe(FORMAT_DATA, officeFormatData.applyFormatting);

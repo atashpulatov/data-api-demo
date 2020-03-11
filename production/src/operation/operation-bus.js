@@ -13,8 +13,8 @@ class OperationBus {
 
   listener = () => {
     const currentOperation = this.store.getState().operationReducer
-      && this.store.getState().operationReducer.operations
-      && this.store.getState().operationReducer.operations[0];
+    && this.store.getState().operationReducer.operations
+    && this.store.getState().operationReducer.operations[0];
 
     if (!currentOperation) {
       this.previousOperationCopy = null;
@@ -25,11 +25,12 @@ class OperationBus {
     }
 
     const nextStep = currentOperation.stepsQueue[0];
-    const subscribedCallback = this.subscribedCallbacksMap[nextStep];
+    console.log('123nextStep:', nextStep);
     this.previousOperationCopy = JSON.stringify(currentOperation);
+    const subscribedCallback = this.subscribedCallbacksMap[nextStep];
     if (subscribedCallback) {
       const currentObject = this.getCurrentObject(currentOperation.objectWorkingId);
-      subscribedCallback(currentObject);
+      subscribedCallback(currentObject, currentOperation.response);
     }
   }
 
@@ -44,7 +45,10 @@ class OperationBus {
 }
 
 
-const didOperationChange = (previousOperationCopy, currentOperation) => !previousOperationCopy
-    || previousOperationCopy !== JSON.stringify(currentOperation);
-
+const didOperationChange = (previousOperationCopy, currentOperation) => {
+  console.log('previousOperationCopy, currentOperation:', previousOperationCopy, JSON.stringify(currentOperation));
+  console.log('!previousOperationCopy    || previousOperationCopy !== JSON.stringify(currentOperation);:', !previousOperationCopy || previousOperationCopy !== JSON.stringify(currentOperation));
+  console.log('previousOperationCopy !== JSON.stringify(currentOperation):', previousOperationCopy !== JSON.stringify(currentOperation));
+  return !previousOperationCopy || previousOperationCopy !== JSON.stringify(currentOperation);
+};
 export const operationBus = new OperationBus();

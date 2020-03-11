@@ -23,74 +23,78 @@ class OfficeTableService {
    *
    */
   getOfficeTable = async (objectData) => {
-    console.time('Create or get table');
-    const {
-      isRefresh,
-      excelContext,
-      bindingId,
-      instanceDefinition,
-      tableName,
-      previousTableDimensions,
-      visualizationInfo,
-      objectWorkingId,
-    } = objectData;
-    let { startCell } = objectData;
+    try {
+      console.time('Create or get table');
+      const {
+        isRefresh,
+        excelContext,
+        bindingId,
+        instanceDefinition,
+        tableName,
+        previousTableDimensions,
+        visualizationInfo,
+        objectWorkingId,
+      } = objectData;
+      let { startCell } = objectData;
 
-    let newBindingId;
-    const { mstrTable } = instanceDefinition;
+      let newBindingId;
+      const { mstrTable } = instanceDefinition;
 
-    const newOfficeTableName = this.createTableName(mstrTable, tableName);
+      const newOfficeTableName = this.createTableName(mstrTable, tableName);
 
-    this.checkReportTypeChange(instanceDefinition);
+      this.checkReportTypeChange(instanceDefinition);
 
-    let officeTable;
-    let shouldFormat = true;
-    let tableColumnsChanged = false;
+      let officeTable;
+      let shouldFormat = true;
+      let tableColumnsChanged = false;
 
-    if (isRefresh) {
-      ({
-        tableColumnsChanged,
-        startCell,
-        officeTable,
-        shouldFormat,
-        newBindingId
-      } = await officeTableRefresh.changeOfficeTableOnRefresh(
-        {
-          excelContext,
-          bindingId,
-          instanceDefinition,
+      if (isRefresh) {
+        ({
+          tableColumnsChanged,
           startCell,
           officeTable,
-          newOfficeTableName,
           shouldFormat,
-          previousTableDimensions,
-          visualizationInfo
-        }
-      ));
-    } else {
-      ({ officeTable, newBindingId } = await officeTableCreate.createOfficeTable(
-        {
-          instanceDefinition,
-          excelContext,
-          startCell,
-          newOfficeTableName
-        }
-      ));
+          newBindingId
+        } = await officeTableRefresh.changeOfficeTableOnRefresh(
+          {
+            excelContext,
+            bindingId,
+            instanceDefinition,
+            startCell,
+            officeTable,
+            newOfficeTableName,
+            shouldFormat,
+            previousTableDimensions,
+            visualizationInfo
+          }
+        ));
+      } else {
+        ({ officeTable, newBindingId } = await officeTableCreate.createOfficeTable(
+          {
+            instanceDefinition,
+            excelContext,
+            startCell,
+            newOfficeTableName
+          }
+        ));
+      }
+      console.timeEnd('Create or get table');
+
+      const updatedObject = {
+        objectWorkingId,
+        officeTable,
+        newOfficeTableName,
+        shouldFormat,
+        tableColumnsChanged,
+        newBindingId,
+        instanceDefinition,
+      };
+
+      this.reduxStore.dispatch(updateObject(updatedObject));
+      this.reduxStore.dispatch(markStepCompleted(objectWorkingId, GET_OFFICE_TABLE));
+    } catch (error) {
+      console.log('error:', error);
     }
-    console.timeEnd('Create or get table');
-
-    const updatedObject = {
-      objectWorkingId,
-      officeTable,
-      newOfficeTableName,
-      shouldFormat,
-      tableColumnsChanged,
-      newBindingId,
-      instanceDefinition,
-    };
-
-    this.reduxStore.dispatch(updateObject(updatedObject));
-    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, GET_OFFICE_TABLE));
   }
 
   /**

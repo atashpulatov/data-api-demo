@@ -40,6 +40,8 @@ function deleteObject(state, objectWorkingId) {
 }
 
 function getObjectIndex(objects, objectWorkingId) {
+  console.log('getObjectIndexobjectWorkingId:', objectWorkingId);
+  console.log('getObjectIndexobjects:', objects);
   const objectToUpdateIndex = objects
     .findIndex(object => object.objectWorkingId === objectWorkingId);
   if (objectToUpdateIndex === -1) {

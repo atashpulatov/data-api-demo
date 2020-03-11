@@ -68,6 +68,7 @@ class OfficeTableRefresh {
 
     let newBindingId = bindingId;
     if (tableColumnsChanged) {
+      console.log('tableColumnsChanged:', tableColumnsChanged);
       console.log('Instance definition changed, creating new table');
 
       newOfficeTableName = prevOfficeTable.name;

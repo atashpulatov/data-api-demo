@@ -35,6 +35,7 @@ class OfficeStoreService {
         tableDimensions: report.tableDimensions,
         displayAttrFormNames: report.displayAttrFormNames,
         refreshDate: report.refreshDate,
+        objectWorkingId: report.objectWorkingId,
       });
       settings.set(officeProperties.loadedReportProperties, reportProperties);
       settings.saveAsync();
@@ -124,7 +125,7 @@ class OfficeStoreService {
   }
 
   saveAndPreserveReportInStore = async (objectData) => {
-    const { instanceDefinition, isRefresh, objectWorkingId } = objectData;
+    const { instanceDefinition, isRefresh } = objectData;
     const { mstrTable } = instanceDefinition;
     const tableDimensions = { columns: instanceDefinition.columns };
     const refreshDate = new Date();
@@ -149,6 +150,7 @@ class OfficeStoreService {
       tableDimensions,
       displayAttrFormNames: objectData.displayAttrFormNames,
       oldTableId: objectData.bindingId,
+      objectWorkingId: objectData.objectWorkingId,
       refreshDate
     };
 
@@ -167,6 +169,7 @@ class OfficeStoreService {
         refreshedObject.displayAttrFormNames = report.displayAttrFormNames;
         refreshedObject.refreshDate = report.refreshDate;
         refreshedObject.preparedInstanceId = null;
+        refreshedObject.objectWorkingId = report.objectWorkingId; // Revert when we connect reducer to excel settings
         if (refreshedObject.visualizationInfo) {
           refreshedObject.manipulationsXML = report.manipulationsXML;
           refreshedObject.visualizationInfo.dossierStructure = report.visualizationInfo.dossierStructure;
@@ -194,7 +197,7 @@ class OfficeStoreService {
       type: officeProperties.actions.finishLoadingReport,
       reportBindId: objectData.newBindingId,
     });
-    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, SAVE_OBJECT_IN_EXCEL));
+    this.reduxStore.dispatch(markStepCompleted(objectData.objectWorkingId, SAVE_OBJECT_IN_EXCEL));
   };
 
   removeReportFromStore = (bindingId) => {

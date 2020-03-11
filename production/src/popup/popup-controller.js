@@ -12,7 +12,9 @@ import { LOAD_BROWSING_STATE_CONST, changeSorting } from '../navigation/navigati
 import { REFRESH_CACHE_COMMAND, refreshCache } from '../cache/cache-actions';
 import { START_REPORT_LOADING, STOP_REPORT_LOADING, RESET_STATE } from './popup-actions';
 import { CLEAR_POPUP_STATE, SET_MSTR_DATA } from './popup-state-actions';
-import { importRequested } from '../operation/operation-actions';
+import { importRequested, editRequested, markStepCompleted } from '../operation/operation-actions';
+import { SAVE_MODIFIED_OBJECT } from '../operation/operation-steps';
+import { updateObject } from '../operation/object-actions';
 
 
 const URL = `${window.location.href}`;
@@ -125,7 +127,8 @@ class PopupController {
           await this.handleUpdateCommand(response);
         } else {
           const reportPreviousState = this.getReportsPreviousState(reportParams);
-          await this.saveReportWithParams(reportParams, response, reportPreviousState);
+          this.reduxStore.dispatch(editRequested(reportPreviousState.objectWorkingId, response));
+          // await this.saveReportWithParams(reportParams, response, reportPreviousState);
         }
         break;
       case selectorProperties.commandCancel:
@@ -186,10 +189,13 @@ class PopupController {
         subtotalsInfo,
         displayAttrFormNames
       };
-      const result = await officeDisplayService.printObject(options);
-      if (result) {
-        notificationService.displayNotification({ type: result.type, content: result.message });
-      }
+
+      this.reduxStore.dispatch(importRequested(options));
+
+      // const result = await officeDisplayService.printObject(options);
+      // if (result) {
+      //   notificationService.displayNotification({ type: result.type, content: result.message });
+      // }
       this.reduxStore.dispatch({ type: STOP_REPORT_LOADING });
     }
   };
@@ -265,49 +271,63 @@ class PopupController {
     return { ...originalValues, displayAttrFormNames: displayAttrFormNames.automatic };
   }
 
-  saveReportWithParams = async (reportParams, response, reportPreviousState) => {
-    const { preserveReportValue } = officeStoreService;
+  saveReportWithParams = async (objectData, response) => {
+    const { objectWorkingId } = objectData;
 
-    await preserveReportValue(reportParams.bindId, 'body', response.body);
+
+    const updatedObject = {
+      objectWorkingId,
+      body: response.body
+    };
+
+    // await preserveReportValue(reportParams.bindId, 'body', response.body);
 
     if (!response.visualizationInfo
-      && reportPreviousState.subtotalsInfo.importSubtotal !== response.subtotalsInfo.importSubtotal) {
-      const subtotalsInformation = { ...reportPreviousState.subtotalsInfo };
+      && objectData.subtotalsInfo.importSubtotal !== response.subtotalsInfo.importSubtotal) {
+      const subtotalsInformation = { ...objectData.subtotalsInfo };
       subtotalsInformation.importSubtotal = response.subtotalsInfo.importSubtotal;
-      await preserveReportValue(reportParams.bindId, 'subtotalsInfo', subtotalsInformation);
+      // await preserveReportValue(reportParams.bindId, 'subtotalsInfo', subtotalsInformation);
+      updatedObject.subtotalsInfo = subtotalsInformation;
     }
 
-    if (reportPreviousState.displayAttrFormNames !== response.displayAttrFormNames) {
-      await preserveReportValue(reportParams.bindId, 'displayAttrFormNames', response.displayAttrFormNames);
+    if (objectData.displayAttrFormNames !== response.displayAttrFormNames) {
+      // await preserveReportValue(reportParams.bindId, 'displayAttrFormNames', response.displayAttrFormNames);
+      updatedObject.displayAttrFormNames = response.displayAttrFormNames;
     }
 
     if (response.promptsAnswers) {
       // Include new promptsAnswers in case of Re-prompt workflow
-      reportParams.promptsAnswers = response.promptsAnswers;
-      await preserveReportValue(reportParams.bindId, 'promptsAnswers', response.promptsAnswers);
+      // reportParams.promptsAnswers = response.promptsAnswers;
+      // await preserveReportValue(reportParams.bindId, 'promptsAnswers', response.promptsAnswers);
+      updatedObject.promptsAnswers = response.promptsAnswers;
     }
 
     if (response.isEdit) {
-      if (reportPreviousState.visualizationInfo.visualizationKey !== response.visualizationInfo.visualizationKey) {
+      if (objectData.visualizationInfo.visualizationKey !== response.visualizationInfo.visualizationKey) {
         response.visualizationInfo.nameShouldUpdate = true;
         response.visualizationInfo.formatShouldUpdate = true;
-        await preserveReportValue(reportParams.bindId, 'visualizationInfo', response.visualizationInfo);
+        // await preserveReportValue(reportParams.bindId, 'visualizationInfo', response.visualizationInfo);
+        updatedObject.displayAttrFormNames = response.displayAttrFormNames;
       }
-      await preserveReportValue(reportParams.bindId, 'preparedInstanceId', response.preparedInstanceId);
-      await preserveReportValue(reportParams.bindId, 'isEdit', false);
+      // await preserveReportValue(reportParams.bindId, 'preparedInstanceId', response.preparedInstanceId);
+      // await preserveReportValue(reportParams.bindId, 'isEdit', false);
+      updatedObject.preparedInstanceId = response.preparedInstanceId;
+      updatedObject.isEdit = false;
     }
 
-    const { reduxStore, popupAction } = this;
-    const isErrorOnRefresh = await popupAction.refreshReportsArray([reportParams], false)(reduxStore.dispatch);
+    this.reduxStore.dispatch(updateObject(updatedObject));
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, SAVE_MODIFIED_OBJECT));
+    // const { reduxStore, popupAction } = this;
+    // const isErrorOnRefresh = await popupAction.refreshReportsArray([reportParams], false)(reduxStore.dispatch);
 
-    if (isErrorOnRefresh) {
-      if (reportPreviousState.objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-        await preserveReportValue(reportParams.bindId, 'manipulationsXML', reportPreviousState.manipulationsXML);
-        await preserveReportValue(reportParams.bindId, 'visualizationInfo', reportPreviousState.visualizationInfo);
-      } else {
-        await preserveReportValue(reportParams.bindId, 'body', reportPreviousState.body);
-      }
-    }
+    // if (isErrorOnRefresh) {
+    //   if (reportPreviousState.objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
+    //     await preserveReportValue(reportParams.bindId, 'manipulationsXML', reportPreviousState.manipulationsXML);
+    //     await preserveReportValue(reportParams.bindId, 'visualizationInfo', reportPreviousState.visualizationInfo);
+    //   } else {
+    //     await preserveReportValue(reportParams.bindId, 'body', reportPreviousState.body);
+    //   }
+    // }
   }
 }
 
