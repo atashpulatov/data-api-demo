@@ -49,14 +49,10 @@ describe('F24086 - Improved browsing by adding filters', () => {
 
     PluginPopup.selectLastObject();
     PluginPopup.switchLibrary(false);
-
     PluginPopup.clickFilterButton();
-
     PluginPopup.scrollTable(['End']);
     browser.pause(2222); // made to assure the table has been scrolled to the bottom
-
     PluginPopup.selectLastObject();
-
     PluginPopup.clickHeader('Owner');
 
     /* Open the filter panel and select some filters for 'Application', 'Type', 'Owner' */
@@ -68,9 +64,7 @@ describe('F24086 - Improved browsing by adding filters', () => {
     /* Scroll down and select any object from the list */
     PluginPopup.scrollTable(['End']);
     browser.pause(2222); // made to assure the table has been scrolled to the bottom
-
     PluginPopup.selectLastObject();
-
     PluginPopup.switchLibrary(true);
     PluginPopup.switchLibrary(false);
 
