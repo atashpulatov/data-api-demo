@@ -654,6 +654,8 @@ class PluginPopup {
   selectLastObject() {
     const renderedObjects = $$('[role="option"]');
     const lastObject = renderedObjects[renderedObjects.length - 1];
+    browser.pause(1111);
+
     waitAndClick(lastObject);
   }
 
@@ -673,9 +675,6 @@ class PluginPopup {
     dateTo = Date.parse(dateTo);
 
     const rowTimestamp = this.getFirstRowTimestamp();
-    console.log(rowTimestamp);
-    console.log(dateFrom);
-    console.log(dateTo);
     return rowTimestamp >= dateFrom && rowTimestamp <= dateTo;
   }
 }

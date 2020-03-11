@@ -36,10 +36,8 @@ describe('F24087 - Improve performance of scrolling through the object list', ()
     /* Open filters and select some filters from the Modified category */
     PluginPopup.clickFilterButton();
     PluginPopup.filterByDate('5/12/2006', '3/7/2018');
-    let dateFrom = new Date(2006, 5, 12);
-    dateFrom = Date.parse(dateFrom);
-    let dateTo = new Date(2018, 3, 7);
-    dateTo = Date.parse(dateTo);
+    const dateFrom = new Date(2006, 5, 12);
+    const dateTo = new Date(2018, 3, 7);
     PluginPopup.clickFilterButton();
 
     PluginPopup.clickHeader('Modified');
@@ -50,23 +48,28 @@ describe('F24087 - Improve performance of scrolling through the object list', ()
 
     PluginPopup.selectLastObject();
     PluginPopup.switchLibrary(false);
+
     PluginPopup.clickFilterButton();
+
     PluginPopup.scrollTable(['End']);
     PluginPopup.selectLastObject();
 
     PluginPopup.clickHeader('Owner');
 
+    /* Open the filter panel and select some filters for 'Application', 'Type', 'Owner' */
     PluginPopup.clickFilterButton();
     PluginPopup.tickFilterCheckBox('Owner', 'MSTR User');
     PluginPopup.tickFilterCheckBox('Application', 'MicroStrategy Tutorial');
     PluginPopup.tickFilterCheckBox('Type', 'Report');
 
+    /* Scroll down and select any object from the list */
     PluginPopup.scrollTable(['End']);
     PluginPopup.selectLastObject();
 
     PluginPopup.switchLibrary(true);
     PluginPopup.switchLibrary(false);
 
+    /* Open filter panel & click 'Clear All' button in the bottom right corner */
     PluginPopup.clickFilterButton();
     PluginPopup.clearAll();
 
