@@ -5,7 +5,7 @@ import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 
-describe('F24087 - Improve performance of scrolling through the object list', () => {
+describe('F24086 - Improved browsing by adding filters', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
@@ -16,7 +16,7 @@ describe('F24087 - Improve performance of scrolling through the object list', ()
     browser.switchToWindow(handles[0]);
   });
 
-  it('[TC54976][Object Table] End to End scenario on Excel implementation | E2E', () => {
+  it('[TC54856][Object filtering] Filtering object list with faceted search for Type, Owner, Certified, and Date Modified', () => {
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
 
