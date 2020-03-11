@@ -25,7 +25,6 @@ class OperationBus {
     }
 
     const nextStep = currentOperation.stepsQueue[0];
-    console.log('123nextStep:', nextStep);
     this.previousOperationCopy = JSON.stringify(currentOperation);
     const subscribedCallback = this.subscribedCallbacksMap[nextStep];
     if (subscribedCallback) {
@@ -45,10 +44,7 @@ class OperationBus {
 }
 
 
-const didOperationChange = (previousOperationCopy, currentOperation) => {
-  console.log('previousOperationCopy, currentOperation:', previousOperationCopy, JSON.stringify(currentOperation));
-  console.log('!previousOperationCopy    || previousOperationCopy !== JSON.stringify(currentOperation);:', !previousOperationCopy || previousOperationCopy !== JSON.stringify(currentOperation));
-  console.log('previousOperationCopy !== JSON.stringify(currentOperation):', previousOperationCopy !== JSON.stringify(currentOperation));
-  return !previousOperationCopy || previousOperationCopy !== JSON.stringify(currentOperation);
-};
+const didOperationChange = (previousOperationCopy, currentOperation) => !previousOperationCopy
+      || previousOperationCopy !== JSON.stringify(currentOperation);
+
 export const operationBus = new OperationBus();

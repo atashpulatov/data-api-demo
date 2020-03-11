@@ -1,11 +1,13 @@
 import { UPDATE_OBJECT, DELETE_OBJECT } from './object-actions';
-import { IMPORT_REQUESTED } from './operation-actions';
+import { IMPORT_REQUESTED, EDIT_REQUESTED } from './operation-actions';
 
 const initialState = { objects: [] };
 export const objectReducer = (state = initialState, action) => {
   switch (action.type) {
   case IMPORT_REQUESTED:
     return importRequested(state, action.payload);
+  case EDIT_REQUESTED:
+    return editRequested(state, action.payload);
   case UPDATE_OBJECT:
     return updateObject(state, action.payload);
   case DELETE_OBJECT:
@@ -24,6 +26,11 @@ function importRequested(state, payload) {
   };
 }
 
+function editRequested(state, payload) {
+  const props = { objectWorkingId: payload.objectWorkingId, response: payload.response };
+  return updateObject(state, props);
+}
+
 function updateObject(state, updatedObjectProps) {
   const objectToUpdateIndex = getObjectIndex(state.objects, updatedObjectProps.objectWorkingId);
   const newObjects = [...state.objects];
@@ -40,8 +47,6 @@ function deleteObject(state, objectWorkingId) {
 }
 
 function getObjectIndex(objects, objectWorkingId) {
-  console.log('getObjectIndexobjectWorkingId:', objectWorkingId);
-  console.log('getObjectIndexobjects:', objects);
   const objectToUpdateIndex = objects
     .findIndex(object => object.objectWorkingId === objectWorkingId);
   if (objectToUpdateIndex === -1) {

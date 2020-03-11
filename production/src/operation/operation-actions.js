@@ -36,11 +36,11 @@ export const importRequested = (object) => {
 };
 
 export const editRequested = (objectWorkingId, response) => ({
-
   type: EDIT_REQUESTED,
   payload: {
-    operation: createOperation(EDIT_REQUESTED, objectWorkingId, response),
-    objectWorkingId
+    operation: createOperation(EDIT_REQUESTED, objectWorkingId),
+    objectWorkingId,
+    response
   },
 });
 
@@ -52,12 +52,11 @@ export const markStepCompleted = (objectWorkingId, completedStep) => ({
   }
 });
 
-function createOperation(type, objectWorkingId, response) {
+function createOperation(type, objectWorkingId) {
   if (type === EDIT_REQUESTED) {
     return {
       operationType: operationTypes[type],
       objectWorkingId,
-      response,
       stepsQueue: [
         SAVE_MODIFIED_OBJECT,
         GET_INSTANCE_DEFINITION,

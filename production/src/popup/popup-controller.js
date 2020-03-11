@@ -271,8 +271,8 @@ class PopupController {
     return { ...originalValues, displayAttrFormNames: displayAttrFormNames.automatic };
   }
 
-  saveReportWithParams = async (objectData, response) => {
-    const { objectWorkingId } = objectData;
+  saveReportWithParams = async (objectData) => {
+    const { objectWorkingId, response } = objectData;
 
 
     const updatedObject = {
