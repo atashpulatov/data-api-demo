@@ -31,6 +31,7 @@ describe('F24087 - Improve performance of scrolling through the object list', ()
     expect($(popupSelectors.columnOwner).getAttribute('Title')).toEqual('Administrator');
 
     PluginPopup.scrollTable(['End']);
+    browser.pause(2222); // made to assure the table has been scrolled to the bottom
     PluginPopup.selectLastObject();
 
     /* Open filters and select some filters from the Modified category */
@@ -52,6 +53,8 @@ describe('F24087 - Improve performance of scrolling through the object list', ()
     PluginPopup.clickFilterButton();
 
     PluginPopup.scrollTable(['End']);
+    browser.pause(2222); // made to assure the table has been scrolled to the bottom
+
     PluginPopup.selectLastObject();
 
     PluginPopup.clickHeader('Owner');
@@ -64,6 +67,8 @@ describe('F24087 - Improve performance of scrolling through the object list', ()
 
     /* Scroll down and select any object from the list */
     PluginPopup.scrollTable(['End']);
+    browser.pause(2222); // made to assure the table has been scrolled to the bottom
+
     PluginPopup.selectLastObject();
 
     PluginPopup.switchLibrary(true);
@@ -72,7 +77,9 @@ describe('F24087 - Improve performance of scrolling through the object list', ()
     /* Open filter panel & click 'Clear All' button in the bottom right corner */
     PluginPopup.clickFilterButton();
     PluginPopup.clearAll();
-
-    browser.pause(3333);
+    expect($(popupSelectors.filterCheckbox('Owner', 'MSTR User')).isSelected()).toBe(false);
+    expect($(popupSelectors.filterCheckbox('Owner', 'Administrator')).isSelected()).toBe(false);
+    expect($(popupSelectors.filterCheckbox('Application', 'MicroStrategy Tutorial')).isSelected()).toBe(false);
+    expect($(popupSelectors.filterCheckbox('Type', 'Report')).isSelected()).toBe(false);
   });
 });

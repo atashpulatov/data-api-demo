@@ -726,6 +726,12 @@ class PluginPopup {
     }
   }
 
+  /**
+   * Sets Date modified in the filter panel
+   *
+   * @param {String} dateFrom
+   * @param {String} dateTo
+   */
   filterByDate(dateFrom, dateTo) {
     const dateFromInput = $$(popupSelectors.filterPanel.dates)[0];
     const dateToInput = $$(popupSelectors.filterPanel.dates)[1];
@@ -742,31 +748,29 @@ class PluginPopup {
     browser.keys(dateTo);
   }
 
-  scrollTable(keyNames) {
-    waitAndClick($(popupSelectors.objectTable.scrollContainer));
-    browser.keys(keyNames);
-    browser.pause(1999); // time to scroll to the bottom of the list
-  }
-
-  selectLastObject() {
-    const renderedObjects = $$('[role="option"]');
-    const lastObject = renderedObjects[renderedObjects.length - 1];
-    browser.pause(1111);
-
-    waitAndClick(lastObject);
-  }
-
+  /**
+   * Clicks the 'Clear all' button in the filter panel
+   */
   clearAll() {
     const clearAllButton = $(popupSelectors.filterPanel.clearAll);
     waitAndClick(clearAllButton);
   }
 
+  /**
+   * Returns the timestamp for the Date modified of the first object in the table
+   */
   getFirstRowTimestamp() {
     const date = $(popupSelectors.columnModified).getAttribute('Title').split(' ')[0].split('/');
     const preparedDate = new Date(date[2], date[0], date[1]);
     return Date.parse(preparedDate);
   }
 
+  /**
+   * Asserts the date modified of the first object is between passed dates
+   *
+   * @param {Date} dateFrom
+   * @param {Date} dateTo
+   */
   assertFirstObjectDateIsInTheRange(dateFrom, dateTo) {
     dateFrom = Date.parse(dateFrom);
     dateTo = Date.parse(dateTo);
