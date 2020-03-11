@@ -7,12 +7,20 @@ import {
   switchToPopupFrame,
   switchToExcelFrame,
   switchToPromptFrameForEditDossier,
-  switchToPromptFrameForEditReport
+  switchToPromptFrameForEditReport,
+  switchToRefreshAllFrame
 } from '../utils/iframe-helper';
 import pluginRightPanel from './plugin.right-panel';
 
 class PluginPopup {
-  closeRefreshAll() {
+  /**
+   * Waits for the 'Refreshing complete!' message and only then closes refreshAll popup
+   * @param {number} timeout increase/decrease timeout depending on the amount of refreshed objects
+   */
+  closeRefreshAll(timeout = 9999) {
+    switchToRefreshAllFrame();
+    $('.finished-header').waitForExist(timeout);
+    switchToExcelFrame();
     waitAndClick($(popupSelectors.closeRefreshAll));
   }
 
@@ -343,6 +351,16 @@ class PluginPopup {
     return timeSpent;
   }
 
+  /**
+   * Returns a boolean based on the myLibrary switch state
+   * @returns {boolean} true if myLibrary is on, false if myLibrary is off
+   */
+  getMyLibraryState() {
+    const myLibrarySwitch = $(popupSelectors.myLibrary);
+    myLibrarySwitch.waitForExist(5000);
+    return myLibrarySwitch.getAttribute('aria-checked') === 'true';
+  }
+
   switchLibrary(newState) {
     const myLibrarySwitch = $(popupSelectors.myLibrary);
     myLibrarySwitch.waitForExist(5000);
@@ -613,6 +631,85 @@ class PluginPopup {
     browser.pause(3000);
     // reprompt and import
     this.importDefaultPromptedVisualisation(visContainerId);
+  }
+
+  /**
+   * Scrolls the table by passing key strings ('End', 'Page Down' etc.)
+   * @param {string[]} keyNames array of key strings e.g. ['End']
+   */
+  scrollTable(keyNames) {
+    waitAndClick($(popupSelectors.objectTable.scrollContainer));
+    browser.keys(keyNames);
+    browser.pause(1999); // time to scroll to the bottom of the list
+  }
+
+  /**
+   * Selects the last visible object from the tableOfObjects
+   */
+  selectLastObject() {
+    const renderedObjects = $$('[role="option"]');
+    const lastObject = renderedObjects[renderedObjects.length - 1];
+    waitAndClick(lastObject);
+  }
+
+  /**
+   * Imports the first available visualization from a selected dossier
+   */
+  importVisualization() {
+    switchToPromptFrame();
+    browser.pause(13000); // temp solution, time for dossier to load
+    $('.mstrmojo-VizBox-selector').click();
+
+    browser.pause(2500);
+    switchToPluginFrame();
+    this.clickImport();
+  }
+
+  /**
+   * Opens all panel for the given section
+   * @param {string} section name of the section to open all panel for, e.g 'Application'
+   */
+  clickAllButton(section) {
+    switch (section) {
+    case 'Application':
+      waitAndClick($$(popupSelectors.filterPanel.expandButton)[0]);
+      break;
+    case 'Owner':
+      if (this.getMyLibraryState()) {
+        waitAndClick($$(popupSelectors.filterPanel.expandButton)[0]);
+      } else {
+        waitAndClick($$(popupSelectors.filterPanel.expandButton)[1]);
+      }
+      break;
+    case 'Modified':
+      waitAndClick($('.mstr-date-range-selector-container .expand-btn'));
+      break;
+    default:
+      break;
+    }
+  }
+
+  /**
+   * Clicks a checkbox on all panel by given checkboxTitle
+   * @param {string} checkboxTitle title of the checkbox on the allPanel
+   */
+  clickAllPanelElement(checkboxTitle) {
+    waitAndClick($(popupSelectors.filterPanel.getAllPanelCheckbox(checkboxTitle)));
+  }
+
+  /**
+   * Clicks selectAll button for open allPanel
+   */
+  clickSelectAll() {
+    waitAndClick($(popupSelectors.filterPanel.selectAllButton));
+  }
+
+  /**
+   * Clicks a disabled checkbox on all panel by given checkboxTitle
+   * @param {string} checkboxTitle title of the checkbox on the allPanel
+   */
+  clickDisabledElement(checkboxTitle) {
+    waitAndClick($(popupSelectors.filterPanel.getAllPanelDisabledCheckbox(checkboxTitle)));
   }
 
   /**

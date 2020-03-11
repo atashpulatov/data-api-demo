@@ -4,7 +4,7 @@ export const rightPanelSelectors = {
   loginPopUpBtn: '#loginButton',
   loginRightPanelBtn: '#login-btn',
   logoutBtn: '#logOut',
-  settingsBtn: '#app-header > div.header-buttons > button',
+  settingsBtn: '#settings-button',
   addDataBtn: '#add-data-btn-container',
   LDAPbutton: '#LDAPModeLabel',
   refreshBtn: '.loading-button-container .mstr-icon.refresh',

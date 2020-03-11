@@ -48,7 +48,7 @@ export const popupSelectors = {
   sortedDown: '.ant-table-column-sorter-up.on',
   noDataIcon: $('.ant-table-placeholder'),
   myLibrary: '#root > div > div.navigation_tree__title_bar > div > div.mstr-switch-container > div.mstr-switch',
-  closeRefreshAll: '#WACDialogTitlePanel > a',
+  closeRefreshAll: '.WACGlyph.WACDialogCloseAnchor',
   clearSearchInput: '.search-field__clear-button',
   columnOwner: '.ReactVirtualized__Table__row > div[aria-colindex="4"] > span',
   columnProject: 'div[aria-colindex="5"] > span',
@@ -92,8 +92,13 @@ export const popupSelectors = {
     repromptDossier: 'div.mstr-nav-icon.icon-reprompt'
   },
   filterPanel: {
+    expandButton: '.expand-btn',
+    selectAllButton: '.all-panel__buttons button:first-of-type',
+    getAllPanelCheckbox: (checkboxTitle) => `.all-panel__content input[aria-label="Checkbox for ${checkboxTitle}"] + .checkmark`,
+    getAllPanelDisabledCheckbox: (checkboxTitle) => `.all-panel__content .category-list-row.disabled label[title="${checkboxTitle}"]`,
+    disabledCheckboxAllPanel: '.all-panel__content .category-list-row.disabled input',
     dates: '.mstr-date-picker input',
     clearAll: '.filter-panel__button'
   },
-  objectTable: { scrollContainer: '.ReactVirtualized__Grid.ReactVirtualized__Table__Grid' }
+  objectTable: { scrollContainer: '.ReactVirtualized__Grid.ReactVirtualized__Table__Grid', },
 };
