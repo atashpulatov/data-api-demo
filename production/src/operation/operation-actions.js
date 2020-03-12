@@ -34,14 +34,32 @@ export const importRequested = (object) => {
   };
 };
 
-export const editRequested = (objectWorkingId, response) => ({
-  type: EDIT_REQUESTED,
-  payload: {
-    operation: createOperation(EDIT_REQUESTED, objectWorkingId),
-    objectWorkingId,
-    response
-  },
-});
+export const refreshRequested = (objectData) => {
+  const backupObjectData = JSON.parse(JSON.stringify(objectData));
+  const { objectWorkingId } = backupObjectData;
+  return {
+    type: REFRESH_REQUESTED,
+    payload: {
+      operation: createOperation(REFRESH_REQUESTED, objectWorkingId),
+      objectWorkingId,
+      backupObjectData: objectData
+    },
+  };
+};
+
+export const editRequested = (objectData, response) => {
+  const backupObjectData = JSON.parse(JSON.stringify(objectData));
+  const { objectWorkingId } = backupObjectData;
+  return {
+    type: EDIT_REQUESTED,
+    payload: {
+      operation: createOperation(EDIT_REQUESTED, objectWorkingId),
+      objectWorkingId,
+      response,
+      backupObjectData: objectData
+    },
+  };
+};
 
 export const markStepCompleted = (objectWorkingId, completedStep) => ({
   type: MARK_STEP_COMPLETED,

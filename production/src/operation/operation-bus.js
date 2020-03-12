@@ -7,7 +7,7 @@ class OperationBus {
     const currentOperation = this.store.getState().operationReducer
     && this.store.getState().operationReducer.operations
       && this.store.getState().operationReducer.operations[0];
-    this.previousOperationCopy = currentOperation && JSON.stringify(currentOperation);
+    this.previousOperationCopy = this.copyOperationInfo(currentOperation);
     this.store.subscribe(this.listener);
   }
 
@@ -20,12 +20,13 @@ class OperationBus {
       this.previousOperationCopy = null;
       return;
     }
-    if (!didOperationChange(this.previousOperationCopy, currentOperation)) {
+
+    if (this.didOperationNotChange(this.previousOperationCopy, currentOperation)) {
       return;
     }
 
     const nextStep = currentOperation.stepsQueue[0];
-    this.previousOperationCopy = JSON.stringify(currentOperation);
+    this.previousOperationCopy = this.copyOperationInfo(currentOperation);
     const subscribedCallback = this.subscribedCallbacksMap[nextStep];
     if (subscribedCallback) {
       const currentObject = this.getCurrentObject(currentOperation.objectWorkingId);
@@ -40,11 +41,30 @@ class OperationBus {
   getCurrentObject = (objectWorkingId) => {
     const { objects } = this.store.getState().objectReducer;
     return objects.find(object => object.objectWorkingId === objectWorkingId);
-  };
+  }
+
+  copyOperationInfo =(currentOperation) => {
+    if (currentOperation) {
+      const stepsQueue = JSON.stringify(currentOperation.stepsQueue);
+      return {
+        operationType: currentOperation.operationType,
+        objectWorkingId: currentOperation.objectWorkingId,
+        stepsQueue,
+      };
+    }
+    return undefined;
+  }
+
+  didOperationNotChange = (previousOperationCopy, currentOperation) => {
+    if (previousOperationCopy) {
+      const currentOperationToCompare = this.copyOperationInfo(currentOperation);
+      return previousOperationCopy.operationType === currentOperationToCompare.operationType
+       && previousOperationCopy.objectWorkingId === currentOperationToCompare.objectWorkingId
+       && previousOperationCopy.stepsQueue === currentOperationToCompare.stepsQueue;
+    }
+    return false;
+  }
 }
 
-
-const didOperationChange = (previousOperationCopy, currentOperation) => !previousOperationCopy
-      || previousOperationCopy !== JSON.stringify(currentOperation);
 
 export const operationBus = new OperationBus();

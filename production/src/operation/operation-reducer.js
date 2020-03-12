@@ -55,8 +55,6 @@ function markStepCompleted(state, { objectWorkingId, completedStep }) {
   const processedOperationIndex = getProcessedOperationIndex(state.operations, objectWorkingId);
   const processedOperation = state.operations[processedOperationIndex];
   const { stepsQueue } = processedOperation;
-  console.log('stepsQueue:', stepsQueue);
-  console.log('completedStep:', completedStep);
 
   if (processedOperation.stepsQueue[0] !== completedStep) {
     throw new Error();

@@ -18,6 +18,7 @@
     "OfficeExtension": true
   },
   "rules": {
+    "key-spacing": ["error", { "afterColon": true }],
     "jsx-quotes": ["warn", "prefer-double"],
     "semi": ["error", "always"],
     "no-console": "off",

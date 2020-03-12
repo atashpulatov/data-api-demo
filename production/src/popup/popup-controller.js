@@ -127,7 +127,7 @@ class PopupController {
           await this.handleUpdateCommand(response);
         } else {
           const reportPreviousState = this.getReportsPreviousState(reportParams);
-          this.reduxStore.dispatch(editRequested(reportPreviousState.objectWorkingId, response));
+          this.reduxStore.dispatch(editRequested(reportPreviousState, response));
           // await this.saveReportWithParams(reportParams, response, reportPreviousState);
         }
         break;
@@ -233,6 +233,7 @@ class PopupController {
         preparedInstanceId,
       };
 
+      console.log('options:', options);
       this.reduxStore.dispatch(importRequested(options));
 
       // const result = await officeDisplayService.printObject(options);

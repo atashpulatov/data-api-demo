@@ -46,5 +46,4 @@ export const operationStepsMap = {
     BIND_OFFICE_TABLE,
     SAVE_OBJECT_IN_EXCEL,
   ],
-
 };

@@ -31,7 +31,7 @@ class OfficeStoreService {
         crosstabHeaderDimensions: report.crosstabHeaderDimensions,
         visualizationInfo: report.visualizationInfo,
         manipulationsXML: report.manipulationsXML,
-        tableName:report.tableName,
+        tableName: report.tableName,
         tableDimensions: report.tableDimensions,
         displayAttrFormNames: report.displayAttrFormNames,
         refreshDate: report.refreshDate,
