@@ -10,7 +10,7 @@ import { popupController } from '../popup/popup-controller';
 
 
 import {
-  SAVE_MODIFIED_OBJECT,
+  MODIFY_OBJECT,
   REFRESH_STORED_OBJECT,
   GET_INSTANCE_DEFINITION,
   GET_OFFICE_TABLE,
@@ -27,7 +27,7 @@ class OfficeDisplayService {
   init = (reduxStore, operationBus) => {
     this.reduxStore = reduxStore;
 
-    operationBus.subscribe(SAVE_MODIFIED_OBJECT, popupController.saveReportWithParams);
+    operationBus.subscribe(MODIFY_OBJECT, popupController.saveReportWithParams);
     // operationBus.subscribe(REFRESH_STORED_OBJECT, officeStoreService.saveAndPreserveReportInStore);
 
     operationBus.subscribe(GET_INSTANCE_DEFINITION, mstrObjectInstance.getInstaceDefinition);

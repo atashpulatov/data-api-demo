@@ -53,10 +53,8 @@ export const editRequested = (objectData, response) => {
   return {
     type: EDIT_REQUESTED,
     payload: {
-      operation: createOperation(EDIT_REQUESTED, objectWorkingId),
+      operation: createOperation(EDIT_REQUESTED, objectWorkingId, { backupObjectData, response }),
       objectWorkingId,
-      response,
-      backupObjectData: objectData
     },
   };
 };
@@ -79,11 +77,14 @@ export const backupObject = (objectWorkingId, objectToBackup) => ({
   payload: { objectWorkingId, objectToBackup }
 });
 
-function createOperation(operationRequest, objectWorkingId) {
+function createOperation(operationRequest, objectWorkingId, objectData = {}) {
+  const { backupObjectData, response } = objectData;
   const operationType = operationTypes[operationRequest];
   return {
     operationType,
     objectWorkingId,
-    stepsQueue: operationStepsMap[operationType]
+    stepsQueue: operationStepsMap[operationType],
+    backupObjectData,
+    response,
   };
 }

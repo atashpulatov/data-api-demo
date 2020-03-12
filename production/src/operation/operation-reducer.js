@@ -1,5 +1,5 @@
 import {
-  IMPORT_REQUESTED, EDIT_REQUESTED, MARK_STEP_COMPLETED, CANCEL_OPERATION, BACKUP_OBJECT
+  IMPORT_REQUESTED, EDIT_REQUESTED, REFRESH_REQUESTED, MARK_STEP_COMPLETED, CANCEL_OPERATION, BACKUP_OBJECT
 } from './operation-actions';
 
 const initialState = { operations: [] };
@@ -8,14 +8,22 @@ export const operationReducer = (state = initialState, action) => {
   switch (action.type) {
   case IMPORT_REQUESTED:
     return importRequested(state, action.payload);
+
+  case REFRESH_REQUESTED:
+    return refreshRequested(state, action.payload);
+
   case EDIT_REQUESTED:
     return editRequested(state, action.payload);
+
   case MARK_STEP_COMPLETED:
     return markStepCompleted(state, action.payload);
+
   case CANCEL_OPERATION:
     return cancelOperation(state, action.payload);
+
   case BACKUP_OBJECT:
     return backupObject(state, action.payload);
+
   default:
     return state;
   }
@@ -42,11 +50,22 @@ function importRequested(state, payload) {
     ]
   };
 }
+
+function refreshRequested(state, payload) {
+  return {
+    operations: [
+      ...state.operations,
+      payload.operation,
+      payload.backupObjectData,
+    ]
+  };
+}
+
 function editRequested(state, payload) {
   return {
     operations: [
       ...state.operations,
-      payload.operation
+      payload.operation,
     ]
   };
 }

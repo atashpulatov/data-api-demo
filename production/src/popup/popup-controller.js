@@ -13,7 +13,7 @@ import { REFRESH_CACHE_COMMAND, refreshCache } from '../cache/cache-actions';
 import { START_REPORT_LOADING, STOP_REPORT_LOADING, RESET_STATE } from './popup-actions';
 import { CLEAR_POPUP_STATE, SET_MSTR_DATA } from './popup-state-actions';
 import { importRequested, editRequested, markStepCompleted } from '../operation/operation-actions';
-import { SAVE_MODIFIED_OBJECT } from '../operation/operation-steps';
+import { MODIFY_OBJECT } from '../operation/operation-steps';
 import { updateObject } from '../operation/object-actions';
 
 
@@ -272,34 +272,26 @@ class PopupController {
     return { ...originalValues, displayAttrFormNames: displayAttrFormNames.automatic };
   }
 
-  saveReportWithParams = async (objectData) => {
-    const { objectWorkingId, response } = objectData;
-
+  saveReportWithParams = async (objectData, response) => {
+    const { objectWorkingId } = objectData;
 
     const updatedObject = {
       objectWorkingId,
       body: response.body
     };
 
-    // await preserveReportValue(reportParams.bindId, 'body', response.body);
-
     if (!response.visualizationInfo
       && objectData.subtotalsInfo.importSubtotal !== response.subtotalsInfo.importSubtotal) {
       const subtotalsInformation = { ...objectData.subtotalsInfo };
       subtotalsInformation.importSubtotal = response.subtotalsInfo.importSubtotal;
-      // await preserveReportValue(reportParams.bindId, 'subtotalsInfo', subtotalsInformation);
       updatedObject.subtotalsInfo = subtotalsInformation;
     }
 
     if (objectData.displayAttrFormNames !== response.displayAttrFormNames) {
-      // await preserveReportValue(reportParams.bindId, 'displayAttrFormNames', response.displayAttrFormNames);
       updatedObject.displayAttrFormNames = response.displayAttrFormNames;
     }
 
     if (response.promptsAnswers) {
-      // Include new promptsAnswers in case of Re-prompt workflow
-      // reportParams.promptsAnswers = response.promptsAnswers;
-      // await preserveReportValue(reportParams.bindId, 'promptsAnswers', response.promptsAnswers);
       updatedObject.promptsAnswers = response.promptsAnswers;
     }
 
@@ -307,19 +299,15 @@ class PopupController {
       if (objectData.visualizationInfo.visualizationKey !== response.visualizationInfo.visualizationKey) {
         response.visualizationInfo.nameShouldUpdate = true;
         response.visualizationInfo.formatShouldUpdate = true;
-        // await preserveReportValue(reportParams.bindId, 'visualizationInfo', response.visualizationInfo);
         updatedObject.displayAttrFormNames = response.displayAttrFormNames;
       }
-      // await preserveReportValue(reportParams.bindId, 'preparedInstanceId', response.preparedInstanceId);
-      // await preserveReportValue(reportParams.bindId, 'isEdit', false);
+
       updatedObject.preparedInstanceId = response.preparedInstanceId;
       updatedObject.isEdit = false;
     }
 
     this.reduxStore.dispatch(updateObject(updatedObject));
-    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, SAVE_MODIFIED_OBJECT));
-    // const { reduxStore, popupAction } = this;
-    // const isErrorOnRefresh = await popupAction.refreshReportsArray([reportParams], false)(reduxStore.dispatch);
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, MODIFY_OBJECT));
 
     // if (isErrorOnRefresh) {
     //   if (reportPreviousState.objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
