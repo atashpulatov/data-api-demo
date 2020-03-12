@@ -43,6 +43,15 @@ describe('Notification reducer', () => {
     }
   };
 
+  it('should get default state if one is not provided', () => {
+    // given
+    const action = {};
+    // when
+    const resultState = notificationReducer(undefined, action);
+    // then
+    expect(resultState).toEqual({ notifications: [] });
+  });
+
   describe('create', () => {
     it('should return the same state if type is not matched', () => {
       // given
