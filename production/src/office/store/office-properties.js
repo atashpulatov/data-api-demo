@@ -34,7 +34,7 @@ export const officeProperties = new Proxy({
   },
   displayAttrFormNames: {
     automatic: 'AUTOMATIC',
-    showAttrNameOnce : 'SHOW_ATTR_NAME_ONCE',
+    showAttrNameOnce: 'SHOW_ATTR_NAME_ONCE',
     formNameOnly: 'FORM_NAME_ONLY',
     on: 'ON',
     off: 'OFF',
@@ -42,23 +42,23 @@ export const officeProperties = new Proxy({
   displayAttrFormNamesOptions: [
     {
       value: 'AUTOMATIC',
-      displayName : 'Automatic',
+      displayName: 'Automatic',
     },
     {
       value: 'SHOW_ATTR_NAME_ONCE',
-      displayName : 'Show attribute name once',
+      displayName: 'Show attribute name once',
     },
     {
       value: 'FORM_NAME_ONLY',
-      displayName : 'Form name only',
+      displayName: 'Form name only',
     },
     {
       value: 'ON',
-      displayName : 'On',
+      displayName: 'On',
     },
     {
       value: 'OFF',
-      displayName : 'Off',
+      displayName: 'Off',
     },
   ]
 }, propsProxy);

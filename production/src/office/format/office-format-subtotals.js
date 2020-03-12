@@ -47,7 +47,7 @@ class OfficeFormatSubtotals {
    */
   applySubtotalFormatting = async ({ excelContext, officeTable }, mstrTable, shouldBold = true) => {
     const { isCrosstab } = mstrTable;
-    let { subtotalsInfo:{ subtotalsAddresses } } = mstrTable;
+    let { subtotalsInfo: { subtotalsAddresses } } = mstrTable;
     let reportStartCell;
 
     console.time('Subtotal Formatting');

@@ -31,7 +31,7 @@ class OfficeTableHelper {
    *
    */
    createCrosstabHeaders = (tableStartCell, mstrTable, sheet, crosstabHeaderDimensions) => {
-     const { attributesNames, headers:{ columns } } = mstrTable;
+     const { attributesNames, headers: { columns } } = mstrTable;
      officeApiCrosstabHelper.createColumnsHeaders(tableStartCell, columns, sheet);
      officeApiCrosstabHelper.createRowsTitleHeaders(tableStartCell, attributesNames, sheet, crosstabHeaderDimensions);
    }

@@ -107,9 +107,9 @@ class OfficeApiRemoveHelper {
        await officeApiCrosstabHelper.clearCrosstabRange(
          officeTable,
          {
-           crosstabHeaderDimensions:{},
+           crosstabHeaderDimensions: {},
            isCrosstab,
-           prevCrosstabDimensions:crosstabHeaderDimensions
+           prevCrosstabDimensions: crosstabHeaderDimensions
          },
          excelContext,
          isClear

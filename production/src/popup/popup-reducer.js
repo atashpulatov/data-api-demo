@@ -12,69 +12,69 @@ export const initialState = {};
 export const popupReducer = (state = initialState, action) => {
   const { type, data } = action;
   switch (type) {
-  case START_REPORT_LOADING: {
-    return {
-      ...state,
-      refreshingReport: data.name,
-    };
-  }
-  case STOP_REPORT_LOADING: {
-    return {
-      ...state,
-      refreshingReport: undefined,
-    };
-  }
-  case SET_REPORT_N_FILTERS: {
-    return {
-      ...state,
-      editedObject: action.editedObject,
-    };
-  }
-  case SET_PREPARED_REPORT: {
-    const oldEditedObject = { ...state.editedObject };
-    return {
-      ...state,
-      preparedInstance: action.instanceId,
-      editedObject: {
-        ...oldEditedObject,
-        ...action.chosenObjectData,
-      },
-    };
-  }
-  case CLEAR_PROMPTS_ANSWERS: {
-    return {
-      ...state,
-      preparedInstance: null,
-      editedObject: null,
-    };
-  }
-  case SWITCH_IMPORT_SUBTOTALS: {
-    const editedObject = { ...state.editedObject };
-    if (editedObject && editedObject.subtotalsInfo) {
-      editedObject.subtotalsInfo.importSubtotal = data;
+    case START_REPORT_LOADING: {
+      return {
+        ...state,
+        refreshingReport: data.name,
+      };
     }
-    return {
-      ...state,
-      editedObject: !state.editedObject ? state.editedObject : editedObject
-    };
-  }
-  case UPDATE_DISPLAY_ATTR_FORM: {
-    if (state.editedObject) {
+    case STOP_REPORT_LOADING: {
+      return {
+        ...state,
+        refreshingReport: undefined,
+      };
+    }
+    case SET_REPORT_N_FILTERS: {
+      return {
+        ...state,
+        editedObject: action.editedObject,
+      };
+    }
+    case SET_PREPARED_REPORT: {
+      const oldEditedObject = { ...state.editedObject };
+      return {
+        ...state,
+        preparedInstance: action.instanceId,
+        editedObject: {
+          ...oldEditedObject,
+          ...action.chosenObjectData,
+        },
+      };
+    }
+    case CLEAR_PROMPTS_ANSWERS: {
+      return {
+        ...state,
+        preparedInstance: null,
+        editedObject: null,
+      };
+    }
+    case SWITCH_IMPORT_SUBTOTALS: {
       const editedObject = { ...state.editedObject };
-      if (editedObject.displayAttrFormNames) {
-        editedObject.displayAttrFormNames = data;
+      if (editedObject && editedObject.subtotalsInfo) {
+        editedObject.subtotalsInfo.importSubtotal = data;
       }
       return {
         ...state,
-        editedObject
+        editedObject: !state.editedObject ? state.editedObject : editedObject
       };
     }
-    return state;
-  }
-  case RESET_STATE: {
-    return { ...initialState, };
-  }
-  default:
-    return state;
+    case UPDATE_DISPLAY_ATTR_FORM: {
+      if (state.editedObject) {
+        const editedObject = { ...state.editedObject };
+        if (editedObject.displayAttrFormNames) {
+          editedObject.displayAttrFormNames = data;
+        }
+        return {
+          ...state,
+          editedObject
+        };
+      }
+      return state;
+    }
+    case RESET_STATE: {
+      return { ...initialState, };
+    }
+    default:
+      return state;
   }
 };

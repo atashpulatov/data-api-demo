@@ -49,7 +49,7 @@ class MstrObjectInstance {
        insertNewWorksheet,
        selectedCell,
        crosstabHeaderDimensions,
-       subtotalsInfo:{ subtotalsAddresses } = false,
+       subtotalsInfo: { subtotalsAddresses } = false,
      } = objectData;
      let { visualizationInfo, startCell } = objectData;
 
@@ -105,7 +105,7 @@ class MstrObjectInstance {
 
      const updatedObject = {
        objectWorkingId,
-       envUrl : officeApiHelper.getCurrentMstrContext(),
+       envUrl: officeApiHelper.getCurrentMstrContext(),
        body,
        instanceDefinition,
        visualizationInfo,
@@ -193,7 +193,7 @@ class MstrObjectInstance {
       projectId,
       objectId,
       instanceId,
-      mstrObjectType : mstrObjectEnum.mstrObjectType.dossier.name,
+      mstrObjectType: mstrObjectEnum.mstrObjectType.dossier.name,
       dossierData,
       body,
       visualizationInfo,

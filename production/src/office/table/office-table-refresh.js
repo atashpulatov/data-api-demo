@@ -31,7 +31,7 @@ class OfficeTableRefresh {
       visualizationInfo
     }
   ) {
-    const { mstrTable, mstrTable:{ isCrosstab, prevCrosstabDimensions } } = instanceDefinition;
+    const { mstrTable, mstrTable: { isCrosstab, prevCrosstabDimensions } } = instanceDefinition;
     const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindingId);
 
     if (isCrosstab && !mstrTable.toCrosstabChange) {

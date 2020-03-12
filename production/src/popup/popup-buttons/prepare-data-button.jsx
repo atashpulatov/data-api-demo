@@ -7,10 +7,10 @@ export const PrepareDataButton = ({
 }) => {
   const internalButton = (
     <Button
-          id="prepare"
-          type="primary"
-          disabled={!!disableReason || loading}
-          onClick={handleSecondary}>
+      id="prepare"
+      type="primary"
+      disabled={!!disableReason || loading}
+      onClick={handleSecondary}>
       {t('Prepare Data')}
     </Button>
   );

@@ -14,14 +14,14 @@ class OfficeTableUpdate {
    */
   updateOfficeTable = async (instanceDefinition, excelContext, startCell, prevOfficeTable) => {
     try {
-      const { rows, mstrTable, mstrTable:{ isCrosstab, subtotalsInfo:{ subtotalsAddresses } } } = instanceDefinition;
+      const { rows, mstrTable, mstrTable: { isCrosstab, subtotalsInfo: { subtotalsAddresses } } } = instanceDefinition;
       const crosstabHeaderDimensions = officeTableHelper.getCrosstabHeaderDimensions(instanceDefinition);
 
       prevOfficeTable.rows.load('count');
       await excelContext.sync();
       if (subtotalsAddresses.length) {
         await officeFormatSubtotals.applySubtotalFormatting(
-          { officeTable:prevOfficeTable, excelContext },
+          { officeTable: prevOfficeTable, excelContext },
           mstrTable,
           false
         );

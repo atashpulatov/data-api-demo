@@ -81,27 +81,27 @@ class OfficeConverterServiceV2 {
         const formName = e.forms[index].name;
         let title;
         switch (nameSet) {
-        case displayAttrFormNames.automatic:
-          title = singleForm ? `'${e.name}` : `'${e.name} ${formName}`;
-          titles.push(title);
-          break;
-        case displayAttrFormNames.on:
-          titles.push(`'${e.name} ${formName}`);
-          break;
-        case displayAttrFormNames.off:
-          titles.push(`'${e.name}`);
-          break;
-        case displayAttrFormNames.formNameOnly:
-          titles.push(`'${formName}`);
-          break;
-        case displayAttrFormNames.showAttrNameOnce:
-          title = index === 0 ? `'${e.name} ${formName}` : `'${formName}`;
-          titles.push(title);
-          break;
-        default:
-          title = singleForm ? `'${e.name}` : `'${e.name} ${formName}`;
-          titles.push(title);
-          break;
+          case displayAttrFormNames.automatic:
+            title = singleForm ? `'${e.name}` : `'${e.name} ${formName}`;
+            titles.push(title);
+            break;
+          case displayAttrFormNames.on:
+            titles.push(`'${e.name} ${formName}`);
+            break;
+          case displayAttrFormNames.off:
+            titles.push(`'${e.name}`);
+            break;
+          case displayAttrFormNames.formNameOnly:
+            titles.push(`'${formName}`);
+            break;
+          case displayAttrFormNames.showAttrNameOnce:
+            title = index === 0 ? `'${e.name} ${formName}` : `'${formName}`;
+            titles.push(title);
+            break;
+          default:
+            title = singleForm ? `'${e.name}` : `'${e.name} ${formName}`;
+            titles.push(title);
+            break;
         }
       }
       return titles;
@@ -246,26 +246,26 @@ class OfficeConverterServiceV2 {
     return columns.map((element, index) => {
       const type = element.type ? element.type.toLowerCase() : null;
       switch (type) {
-      case 'metric':
-        return {
-          category: element.numberFormatting.category,
-          formatString: element.numberFormatting.formatString,
-          id: element.id,
-          index,
-          isAttribute: false,
-          name: element.name,
-        };
-      case 'attribute':
-      case 'consolidation':
-        return {
-          attributeId: element.id,
-          attributeName: element.name,
-          forms: element.forms ? element.forms : [],
-          index,
-          isAttribute: true,
-        };
-      default:
-        return {};
+        case 'metric':
+          return {
+            category: element.numberFormatting.category,
+            formatString: element.numberFormatting.formatString,
+            id: element.id,
+            index,
+            isAttribute: false,
+            name: element.name,
+          };
+        case 'attribute':
+        case 'consolidation':
+          return {
+            attributeId: element.id,
+            attributeName: element.name,
+            forms: element.forms ? element.forms : [],
+            index,
+            isAttribute: true,
+          };
+        default:
+          return {};
       }
     });
   }

@@ -75,11 +75,11 @@ export const SettingsMenuNotConnected = ({
       </li>
       <li className={`no-trigger-close clear-data not-linked-list ${!isSecuredActive ? 'clear-data-inactive' : ''}`}>
         <span
-        className="no-trigger-close"
-        tabIndex="0"
-        role="button"
-        onClick={isSecuredActive ? showConfirmationPopup : null}
-        onKeyUp={isSecuredActive ? showConfirmationPopup : null}>
+          className="no-trigger-close"
+          tabIndex="0"
+          role="button"
+          onClick={isSecuredActive ? showConfirmationPopup : null}
+          onKeyUp={isSecuredActive ? showConfirmationPopup : null}>
           {t('Clear Data')}
         </span>
       </li>
@@ -123,12 +123,13 @@ export const SettingsMenuNotConnected = ({
         </a>
       </li>
       <li className="not-linked-list">
-        <span tabIndex="0"
-              id="logOut"
-              size="small"
-              role="button"
-              onClick={() => logout(() => clearCache(userID))}
-              onKeyUp={() => logout(() => clearCache(userID))}>
+        <span
+          tabIndex="0"
+          id="logOut"
+          size="small"
+          role="button"
+          onClick={() => logout(() => clearCache(userID))}
+          onKeyUp={() => logout(() => clearCache(userID))}>
           {t('Log Out')}
         </span>
       </li>
@@ -148,7 +149,7 @@ function mapStateToProps({ sessionReducer, officeReducer }) {
 }
 
 const mapDispatchToProps = {
-  toggleIsSettingsFlag : toggleIsSettingsFlagImported,
+  toggleIsSettingsFlag: toggleIsSettingsFlagImported,
   toggleIsConfirmFlag: toggleIsConfirmFlagImported,
   clearCache: clearCacheImported,
 };

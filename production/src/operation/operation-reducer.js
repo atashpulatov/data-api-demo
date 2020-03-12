@@ -6,26 +6,26 @@ const initialState = { operations: [] };
 
 export const operationReducer = (state = initialState, action) => {
   switch (action.type) {
-  case IMPORT_REQUESTED:
-    return importRequested(state, action.payload);
+    case IMPORT_REQUESTED:
+      return importRequested(state, action.payload);
 
-  case REFRESH_REQUESTED:
-    return refreshRequested(state, action.payload);
+    case REFRESH_REQUESTED:
+      return refreshRequested(state, action.payload);
 
-  case EDIT_REQUESTED:
-    return editRequested(state, action.payload);
+    case EDIT_REQUESTED:
+      return editRequested(state, action.payload);
 
-  case MARK_STEP_COMPLETED:
-    return markStepCompleted(state, action.payload);
+    case MARK_STEP_COMPLETED:
+      return markStepCompleted(state, action.payload);
 
-  case CANCEL_OPERATION:
-    return cancelOperation(state, action.payload);
+    case CANCEL_OPERATION:
+      return cancelOperation(state, action.payload);
 
-  case BACKUP_OBJECT:
-    return backupObject(state, action.payload);
+    case BACKUP_OBJECT:
+      return backupObject(state, action.payload);
 
-  default:
-    return state;
+    default:
+      return state;
   }
 };
 

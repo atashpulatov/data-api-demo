@@ -4,16 +4,16 @@ import { IMPORT_REQUESTED, EDIT_REQUESTED } from './operation-actions';
 const initialState = { objects: [] };
 export const objectReducer = (state = initialState, action) => {
   switch (action.type) {
-  case IMPORT_REQUESTED:
-    return importRequested(state, action.payload);
-  case EDIT_REQUESTED:
-    return editRequested(state, action.payload);
-  case UPDATE_OBJECT:
-    return updateObject(state, action.payload);
-  case DELETE_OBJECT:
-    return deleteObject(state, action.payload);
-  default:
-    return state;
+    case IMPORT_REQUESTED:
+      return importRequested(state, action.payload);
+    case EDIT_REQUESTED:
+      return editRequested(state, action.payload);
+    case UPDATE_OBJECT:
+      return updateObject(state, action.payload);
+    case DELETE_OBJECT:
+      return deleteObject(state, action.payload);
+    default:
+      return state;
   }
 };
 
@@ -36,7 +36,7 @@ function updateObject(state, updatedObjectProps) {
   const newObjects = [...state.objects];
   const updatedObject = { ...state.objects[objectToUpdateIndex], ...updatedObjectProps };
   newObjects.splice(objectToUpdateIndex, 1, updatedObject);
-  return { objects:newObjects };
+  return { objects: newObjects };
 }
 
 function deleteObject(state, objectWorkingId) {

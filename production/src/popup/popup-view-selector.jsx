@@ -15,24 +15,24 @@ import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 
 const renderProperComponent = (popupType) => {
   switch (popupType) {
-  case PopupTypeEnum.dataPreparation:
-  case PopupTypeEnum.editFilters:
-    return <AttributeSelectorWindow />;
-  case PopupTypeEnum.navigationTree:
-    return <NavigationTree />;
-  case PopupTypeEnum.loadingPage:
-    return <LoadingPage />;
-  case PopupTypeEnum.refreshAllPage:
-    return <RefreshAllPage />;
-  case PopupTypeEnum.promptsWindow:
-  case PopupTypeEnum.repromptingWindow:
-    return <PromptsWindow />;
-  case PopupTypeEnum.emptyDiv:
-    return <div />;
-  case PopupTypeEnum.dossierWindow:
-    return <DossierWindow />; // TODO: Might be missing {t}
-  default:
-    return null;
+    case PopupTypeEnum.dataPreparation:
+    case PopupTypeEnum.editFilters:
+      return <AttributeSelectorWindow />;
+    case PopupTypeEnum.navigationTree:
+      return <NavigationTree />;
+    case PopupTypeEnum.loadingPage:
+      return <LoadingPage />;
+    case PopupTypeEnum.refreshAllPage:
+      return <RefreshAllPage />;
+    case PopupTypeEnum.promptsWindow:
+    case PopupTypeEnum.repromptingWindow:
+      return <PromptsWindow />;
+    case PopupTypeEnum.emptyDiv:
+      return <div />;
+    case PopupTypeEnum.dossierWindow:
+      return <DossierWindow />; // TODO: Might be missing {t}
+    default:
+      return null;
   }
 };
 

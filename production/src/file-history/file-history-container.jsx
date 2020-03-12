@@ -133,11 +133,11 @@ export class FileHistoryContainerNotConnected extends React.Component {
         }
         <div className="refresh-button-container">
           <Button
-          id="add-data-btn-container"
-          className="add-data-btn floating-button"
-          onClick={() => addDataAction()}
-          disabled={loading}
-        >
+            id="add-data-btn-container"
+            className="add-data-btn floating-button"
+            onClick={() => addDataAction()}
+            disabled={loading}
+          >
             {t('Add Data')}
           </Button>
           <ButtonPopover

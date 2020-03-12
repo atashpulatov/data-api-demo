@@ -104,7 +104,7 @@ class PopupHelper {
       subtotalsInfo: refreshReport.subtotalsInfo,
       visualizationInfo: refreshReport.visualizationInfo || false,
       manipulationsXML: refreshReport.manipulationsXML || false,
-      tableName:refreshReport.tableName,
+      tableName: refreshReport.tableName,
       previousTableDimensions: refreshReport.tableDimensions || false,
       displayAttrFormNames: refreshReport.displayAttrFormNames,
     };

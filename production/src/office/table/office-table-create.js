@@ -29,7 +29,7 @@ class OfficeTableCreate {
       tableColumnsChanged = false
     }) => {
     const {
-      rows, columns, mstrTable, mstrTable:{ isCrosstab, crosstabHeaderDimensions }
+      rows, columns, mstrTable, mstrTable: { isCrosstab, crosstabHeaderDimensions }
     } = instanceDefinition;
 
     const worksheet = this.getExcelWorksheet(prevOfficeTable, excelContext);

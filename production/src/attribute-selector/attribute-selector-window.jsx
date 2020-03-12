@@ -36,7 +36,7 @@ export class AttributeSelectorWindowNotConnected extends Component {
     body,
     chosenObjectName
   ) => {
-    const { chosenObject:{ chosenObjectName:objectName } } = this.props;
+    const { chosenObject: { chosenObjectName: objectName } } = this.props;
     chosenObjectName = chosenObjectName || objectName;
 
     const {

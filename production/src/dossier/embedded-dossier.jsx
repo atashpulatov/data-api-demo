@@ -258,10 +258,11 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       We need to calculate actual height, regarding the size of other elements:
       58px for header, 9px for header margin and 68px for buttons
       */
-      <div ref={this.container}
-           style={{
- position: 'relative', top: '0', left: '0', height: 'calc(100vh - 135px)'
-}} />
+      <div
+        ref={this.container}
+        style={{
+          position: 'relative', top: '0', left: '0', height: 'calc(100vh - 135px)'
+        }} />
     );
   }
 }

@@ -85,7 +85,7 @@ export const ConfirmationNotConnected = ({
   return (
     <>
       <div
-      className="block-ui" />
+        className="block-ui" />
       <div className="confirm-container">
         <div className="confirm-header">
           <span className="confirm-header-icon"><img width="19px" height="18px" src={warningIcon} alt={t('Refresh failed icon')} /></span>

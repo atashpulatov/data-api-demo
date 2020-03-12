@@ -40,26 +40,29 @@ export class AuthenticateNotConnected extends Component {
             {getFieldDecorator('username', {
               initialValue: session.username,
               rules: [{ required: true, message: t('Please input your username!') }],
-            })(<Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                      placeholder={t('Username')}
-                      maxLength={250}
+            })(<Input
+              prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+              placeholder={t('Username')}
+              maxLength={250}
             />)}
           </FormItem>
           <FormItem label={t('Password')}>
             {getFieldDecorator('password', {
               initialValue: session.password || '',
               rules: [{ message: t('Please input your Password!') }],
-            })(<Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                      type="password"
-                      placeholder={t('Password')}
+            })(<Input
+              prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+              type="password"
+              placeholder={t('Password')}
             />)}
           </FormItem>
           <FormItem label={t('Environment URL')}>
             {getFieldDecorator('envUrl', {
               initialValue: session.envUrl || '',
               rules: [{ required: true, message: t('Please input environment URL!'), type: 'url' }],
-            })(<Input prefix={<Icon type="link" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                      placeholder={t('environment URL')}
+            })(<Input
+              prefix={<Icon type="link" style={{ color: 'rgba(0,0,0,.25)' }} />}
+              placeholder={t('environment URL')}
             />)}
           </FormItem>
           <FormItem label="Login mode">
