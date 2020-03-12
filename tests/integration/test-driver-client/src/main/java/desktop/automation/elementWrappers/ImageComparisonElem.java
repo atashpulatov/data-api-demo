@@ -38,7 +38,7 @@ public class ImageComparisonElem implements AnyInterfaceElement {
     static {
         OS os = OS.getOSType();
         if (os.equals(OS.MAC))
-            System.load(new File("libs/libopencv_java411.dylib").getAbsolutePath());
+            System.load(new File("libs/libopencv_java420.dylib").getAbsolutePath());
         else if (os.equals(OS.WINDOWS))
             System.load(new File("libs/opencv_java412.dll").getAbsolutePath());
         else

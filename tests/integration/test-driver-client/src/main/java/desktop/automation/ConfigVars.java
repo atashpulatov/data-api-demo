@@ -15,7 +15,7 @@ public class ConfigVars {
             ;
 
     //hosts and host selection
-    public static final DriverType DESIRED_DRIVER_TYPE = DriverType.WINDOWS_DESKTOP;
+    public static final DriverType DESIRED_DRIVER_TYPE = DriverType.MAC_DESKTOP;
     public static final String WINDOWS_REMOTE_HOST = "localhost";
 
     //Windows specific
