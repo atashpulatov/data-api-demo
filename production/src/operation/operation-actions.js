@@ -1,26 +1,25 @@
 import {
-  SAVE_MODIFIED_OBJECT,
-  REFRESH_STORED_OBJECT,
-  GET_INSTANCE_DEFINITION,
-  GET_OFFICE_TABLE,
-  FORMAT_DATA,
-  FETCH_INSERT_DATA,
-  FORMAT_OFFICE_TABLE,
-  FORMAT_SUBTOTALS,
-  BIND_OFFICE_TABLE,
-  SAVE_OBJECT_IN_EXCEL,
+  operationStepsMap,
+  IMPORT_OPERATION,
+  EDIT_OPERATION,
+  REFRESH_OPERATION,
 } from './operation-steps';
 
 export const IMPORT_REQUESTED = 'IMPORT_REQUESTED';
 export const EDIT_REQUESTED = 'EDIT_REQUESTED';
+export const REFRESH_REQUESTED = 'REFRESH_REQUESTED';
 
 export const MARK_STEP_COMPLETED = 'MARK_STEP_COMPLETED';
+export const CANCEL_OPERATION = 'CANCEL_OPERATION';
+export const BACKUP_OBJECT = 'BACKUP_OBJECT';
 export const SET_TOTAL_ROWS = 'SET_TOTAL_ROWS';
 export const SET_LOADED_ROWS = 'SET_LOADED_ROWS';
 
+// TODO check if needed to map
 const operationTypes = {
-  IMPORT_REQUESTED: 'CREATE',
-  EDIT_REQUESTED: 'EDIT'
+  IMPORT_REQUESTED: IMPORT_OPERATION,
+  EDIT_REQUESTED: EDIT_OPERATION,
+  REFRESH_REQUESTED: REFRESH_OPERATION,
 };
 
 export const importRequested = (object) => {
@@ -52,36 +51,21 @@ export const markStepCompleted = (objectWorkingId, completedStep) => ({
   }
 });
 
-function createOperation(type, objectWorkingId) {
-  if (type === EDIT_REQUESTED) {
-    return {
-      operationType: operationTypes[type],
-      objectWorkingId,
-      stepsQueue: [
-        SAVE_MODIFIED_OBJECT,
-        GET_INSTANCE_DEFINITION,
-        GET_OFFICE_TABLE,
-        FORMAT_DATA,
-        FETCH_INSERT_DATA,
-        FORMAT_OFFICE_TABLE,
-        FORMAT_SUBTOTALS,
-        BIND_OFFICE_TABLE,
-        SAVE_OBJECT_IN_EXCEL,
-      ]
-    };
-  }
+export const cancelOperation = (objectWorkingId) => ({
+  type: CANCEL_OPERATION,
+  payload: { objectWorkingId }
+});
+
+export const backupObject = (objectWorkingId, objectToBackup) => ({
+  type: BACKUP_OBJECT,
+  payload: { objectWorkingId, objectToBackup }
+});
+
+function createOperation(operationRequest, objectWorkingId) {
+  const operationType = operationTypes[operationRequest];
   return {
-    operationType: operationTypes[type],
+    operationType,
     objectWorkingId,
-    stepsQueue: [
-      GET_INSTANCE_DEFINITION,
-      GET_OFFICE_TABLE,
-      FORMAT_DATA,
-      FETCH_INSERT_DATA,
-      FORMAT_OFFICE_TABLE,
-      FORMAT_SUBTOTALS,
-      BIND_OFFICE_TABLE,
-      SAVE_OBJECT_IN_EXCEL,
-    ]
+    stepsQueue: operationStepsMap[operationType]
   };
 }

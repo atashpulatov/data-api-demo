@@ -1,4 +1,6 @@
-import { IMPORT_REQUESTED, EDIT_REQUESTED, MARK_STEP_COMPLETED } from './operation-actions';
+import {
+  IMPORT_REQUESTED, EDIT_REQUESTED, MARK_STEP_COMPLETED, CANCEL_OPERATION, BACKUP_OBJECT
+} from './operation-actions';
 
 const initialState = { operations: [] };
 
@@ -10,10 +12,27 @@ export const operationReducer = (state = initialState, action) => {
     return editRequested(state, action.payload);
   case MARK_STEP_COMPLETED:
     return markStepCompleted(state, action.payload);
+  case CANCEL_OPERATION:
+    return cancelOperation(state, action.payload);
+  case BACKUP_OBJECT:
+    return backupObject(state, action.payload);
   default:
     return state;
   }
 };
+
+function backupObject(state, { objectWorkingId, objectToBackup }) {
+  const processedOperationIndex = getProcessedOperationIndex(state.operations, objectWorkingId);
+  const processedOperation = state.operations[processedOperationIndex];
+  processedOperation.objectBackup = objectToBackup;
+  return { ...state };
+}
+
+function cancelOperation(state, { objectWorkingId }) {
+  const processedOperationIndex = getProcessedOperationIndex(state.operations, objectWorkingId);
+  state.operations.splice(processedOperationIndex, 1);
+  return { ...state };
+}
 
 function importRequested(state, payload) {
   return {
@@ -33,24 +52,26 @@ function editRequested(state, payload) {
 }
 
 function markStepCompleted(state, { objectWorkingId, completedStep }) {
-  const processedOperation = state.operations.find((operation) => operation.objectWorkingId === objectWorkingId);
+  const processedOperationIndex = getProcessedOperationIndex(state.operations, objectWorkingId);
+  const processedOperation = state.operations[processedOperationIndex];
   const { stepsQueue } = processedOperation;
   console.log('stepsQueue:', stepsQueue);
   console.log('completedStep:', completedStep);
 
   if (processedOperation.stepsQueue[0] !== completedStep) {
-    // FIXME: Add class/message for this error
     throw new Error();
   }
   if (stepsQueue.length === 1) {
-    removeOperation(state, objectWorkingId);
+    state.operations.splice(processedOperationIndex, 1);
   } else {
     stepsQueue.shift();
   }
   return { ...state };
 }
 
-function removeOperation(state, objectWorkingId) {
-  // TODO: throw some meaningful error
-  state.operations.splice(state.operations.findIndex((operation) => operation.objectWorkingId === objectWorkingId), 1);
+function getProcessedOperationIndex(operations, objectWorkingId) {
+  const processedOperationIndex = operations
+    .findIndex((operation) => operation.objectWorkingId === objectWorkingId);
+  if (processedOperationIndex === -1) { throw new Error(); }
+  return processedOperationIndex;
 }

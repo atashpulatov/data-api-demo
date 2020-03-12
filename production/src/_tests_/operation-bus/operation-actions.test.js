@@ -1,5 +1,5 @@
 import {
-  importRequested, IMPORT_REQUESTED, markStepCompleted, MARK_STEP_COMPLETED
+  importRequested, IMPORT_REQUESTED, markStepCompleted, MARK_STEP_COMPLETED, CANCEL_OPERATION, cancelOperation, backupObject, BACKUP_OBJECT
 } from '../../operation/operation-actions';
 
 describe('OperationActions', () => {
@@ -13,10 +13,8 @@ describe('OperationActions', () => {
     // then
     expect(importAction.type).toEqual(IMPORT_REQUESTED);
     expect(importAction.payload.object).toBe(exampleObject);
-    expect(importAction.payload.operation).toEqual({
-      objectWorkingId: exampleObject.objectWorkingId,
-      operationType: 'CREATE',
-    });
+    expect(importAction.payload.operation.objectWorkingId).toEqual(exampleObject.objectWorkingId,);
+    expect(importAction.payload.operation.operationType).toEqual('CREATE',);
   });
 
   it('returns MARK_STEP_COMPLETED action on markStepCompleted call', () => {
@@ -30,5 +28,29 @@ describe('OperationActions', () => {
     expect(completedAction.type).toEqual(MARK_STEP_COMPLETED);
     expect(completedAction.payload.objectWorkingId).toBe(exampleId);
     expect(completedAction.payload.completedStep).toBe(exampleStep);
+  });
+
+  it('returns CANCEL_OPERATION action on cancelOperation call', () => {
+    // given
+    const exampleId = 'exampleId';
+
+    // when
+    const cancelAction = cancelOperation(exampleId);
+    // then
+    expect(cancelAction.type).toEqual(CANCEL_OPERATION);
+    expect(cancelAction.payload.objectWorkingId).toBe(exampleId);
+  });
+
+  it('returns BACKUP_OBJECT action on backupObject call', () => {
+    // given
+    const objectWorkingId = 'exampleId';
+    const objectToBkp = { objectWorkingId };
+
+    // when
+    const backupAction = backupObject(objectWorkingId, objectToBkp);
+    // then
+    expect(backupAction.type).toEqual(BACKUP_OBJECT);
+    expect(backupAction.payload.objectWorkingId).toBe(objectWorkingId);
+    expect(backupAction.payload.objectToBackup).toBe(objectToBkp);
   });
 });
