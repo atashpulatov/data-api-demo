@@ -727,6 +727,66 @@ class PluginPopup {
   }
 
   /**
+   * Expands given number of rows starting at the beginning of visible rows in Table of Objects
+   *
+   * @param {number} amount Number of rows to expand
+   */
+  expandFirstRows(amount) {
+    $(popupSelectors.expandButton).waitForExist({ timeout: 3000 });
+    const expandButtons = $$(popupSelectors.expandButton);
+    for (let i = 0; i < amount; i++) {
+      expandButtons[i].waitForExist({ timeout: 3000 });
+      expandButtons[i].click()
+    }
+  }
+
+  /**
+   * Hovers over the location element in details table to show the tooltip
+   * and gets the tooltip text
+   *
+   * @returns {String} tooltip text for the location element
+   * @memberof PluginPopup
+   */
+  getLocationTooltipText() {
+    $(popupSelectors.locationDetail).moveTo();
+    browser.pause(1000); // Wait for DOM to update and show tooltip on hover
+    return $(popupSelectors.locationDetailTooltip).getText();
+  }
+
+  /**
+   * Gets the text for the location element in details table
+   *
+   * @returns {String} text for the location element
+   * @memberof PluginPopup
+   */
+  getLocationText() {
+    return $(popupSelectors.locationDetail).getText();
+  }
+
+  /**
+   * Hovers over the description element in details table to show the tooltip
+   * and gets the tooltip text
+   *
+   * @returns {String} tooltip text for the description element
+   * @memberof PluginPopup
+   */
+  getDescriptionTooltipText() {
+    $(popupSelectors.descriptionDetail).moveTo();
+    browser.pause(1000); // Wait for DOM to update and show tooltip on hover
+    return $(popupSelectors.descriptionDetailTooltip).getText();
+  }
+
+  /**
+   * Gets the text for the description element in details table
+   *
+   * @returns {String} text for the description element
+   * @memberof PluginPopup
+   */
+  getDescriptionText() {
+    return $(popupSelectors.descriptionDetail).getText();
+  }
+
+  /**
    * Sets Date modified in the filter panel
    *
    * @param {String} dateFrom
