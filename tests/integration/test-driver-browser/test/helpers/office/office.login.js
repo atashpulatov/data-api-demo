@@ -28,7 +28,7 @@ const OfficeLogin = function () {
     width = 1500,
     isValidCredentials = true
   ) => {
-    browser.setWindowSize(width, 900);
+    browser.setWindowSize(width, 1100);
     OfficeWorksheet.openExcelHome();
     const url = browser.getUrl();
     if (url.includes('login.microsoftonline')) {
