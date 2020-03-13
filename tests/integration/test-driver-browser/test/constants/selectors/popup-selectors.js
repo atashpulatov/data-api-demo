@@ -56,6 +56,7 @@ export const popupSelectors = {
   tableRows: '.position-relative',
   idDetail: '.details-table > table tr:nth-child(2) p',
   filterButton:'.filter-button',
+  filterResults: '.FilterResult > strong',
   // promptArrow: element(by.className('mstrBGIcon_tbAdd')),
   promptArrow: '.mstrBGIcon_tbAdd',
   promptTextBox: '#id_mstr38_txt',

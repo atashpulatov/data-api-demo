@@ -760,6 +760,8 @@ class PluginPopup {
    * @param {number} amount Number of rows to expand
    */
   expandFirstAndLastRows(amount) {
+    const filterResults = this.getFilterResults();
+    amount = filterResults < amount ? filterResults : amount;
     this.expandFirstRows(amount);
     this.scrollTable(['End']);
     this.expandLastRows(amount);
@@ -794,11 +796,18 @@ class PluginPopup {
    * Returns true if rows at the beginning and the end of Table of Objects are collapsed. Otherwise returns false
    */
   areAllRowsCollapsed() {
-    let openedRows = PluginPopup.findAmountOfOpenRows();
+    let openedRows = this.findAmountOfOpenRows();
     if (openedRows > 0) return false;
-    PluginPopup.scrollTable(['End']);
-    openedRows = PluginPopup.findAmountOfOpenRows();
+    this.scrollTable(['End']);
+    openedRows = this.findAmountOfOpenRows();
     return !(openedRows > 0);
+  }
+
+  /**
+   * Returns number of objects displayed in Table of Objects
+   */
+  getFilterResults() {
+    return $(popupSelectors.filterResults).getText();
   }
 }
 

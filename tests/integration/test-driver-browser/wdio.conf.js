@@ -54,7 +54,7 @@ exports.config = {
       './test/specs/release-validation/F24751-import subtotals/TC54788-import-subtotals.spec.js',
     ],
     'F25946-details-panel': [
-      // './test/specs/release-validation/F25946-details-panel/TC59756-expanded-view.spec.js',
+      './test/specs/release-validation/F25946-details-panel/TC59756-expanded-view.spec.js',
       './test/specs/release-validation/F25946-details-panel/TC59677-altering-table-with-rows-expanded.spec.js',
     ],
     'F25930-faster-display': [
