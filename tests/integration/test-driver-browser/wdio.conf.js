@@ -77,6 +77,9 @@ exports.config = {
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-II.spec.js',
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-III.spec.js',
     ],
+    'F2-test' :[
+      './test/specs/release-validation/F25946-details-panel/TC59725-accessibility-withing-details-panel.spec.js'
+    ],
   },
   // Patterns to exclude.
   exclude: [
@@ -184,7 +187,7 @@ exports.config = {
 
   //
   // The number of times to retry the entire specfile when it fails as a whole
-  specFileRetries: 3,
+  specFileRetries: 0,
   //
   // Test reporter for stdout.
   // The only one supported by default is 'dot'
