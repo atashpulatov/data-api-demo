@@ -32,7 +32,7 @@ describe('Popup actions', () => {
       officeStoreService,
       popupHelper,
       mstrObjectRestService,
-      popupController
+      popupController,
     );
   });
   afterEach(() => {
@@ -190,17 +190,32 @@ describe('Popup actions', () => {
     // given
     const bindingId = 'bindingId';
     const report = { bindId: bindingId, objectType: 'whatever' };
-    const returnedValue = { projectId: 'projectId', id: 'id', manipulationsXML: 'manipulationsXML' };
-    officeStoreService.getReportFromProperties.mockReturnValueOnce(returnedValue);
-    const listener = jest.fn();
+    const returnedValue = {
+      projectId: 'projectId',
+      id: 'id',
+      manipulationsXML: 'manipulationsXML',
+      visualizationInfo: {
+        pageKey: 'page',
+        chapterKey: 'chapterKey',
+        visualizationKey: 'visKey',
+      }
+    };
+    const visInfo = {
+      pageKey: 'page',
+      chapterKey: 'chapterKey',
+      visualizationKey: 'visKey'
+    };
     const instanceDefinitionMocked = { instanceId: 'instanceId' };
-    await createDossierInstance.mockReturnValueOnce(instanceDefinitionMocked);
+    const listener = jest.fn();
+    officeStoreService.getReportFromProperties.mockReturnValueOnce(returnedValue);
+    mstrObjectRestService.getVisualizationInfo.mockReturnValueOnce(visInfo);
+    createDossierInstance.mockReturnValueOnce(instanceDefinitionMocked);
     // when
     await actions.callForEditDossier(report)(listener);
     // then
     expect(officeApiHelper.getExcelSessionStatus).toBeCalled();
     expect(authenticationHelper.validateAuthToken).toBeCalled();
-    expect(officeStoreService.getReportFromProperties).toBeCalledWith(bindingId);//
+    expect(officeStoreService.getReportFromProperties).toBeCalledWith(bindingId);
     expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedObject: returnedValue });
   });
 

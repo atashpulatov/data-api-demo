@@ -8,16 +8,7 @@ import settings from '../../../config';
 
 describe('F24398 - Import and refresh visualization', () => {
   beforeEach(() => {
-    // browser.setWindowSize(2200,900);
-    browser.setWindowSize(1900, 900);
-    OfficeWorksheet.openExcelHome();
-    const url = browser.getUrl();
-    if (url.includes('login.microsoftonline')) {
-      OfficeLogin.login(settings.officeOnline.username, settings.officeOnline.password);
-    }
-    OfficeWorksheet.createNewWorkbook();
-    OfficeWorksheet.openPlugin();
-    PluginRightPanel.loginToPlugin(settings.env.username, settings.env.password);
+    OfficeLogin.openExcelAndLoginToPlugin();
   });
 
   afterEach(() => {

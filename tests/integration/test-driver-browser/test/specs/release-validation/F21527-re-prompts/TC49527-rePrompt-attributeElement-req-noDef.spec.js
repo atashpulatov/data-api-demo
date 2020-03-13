@@ -5,8 +5,8 @@ import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
-import { objects as o } from '../../../constants/objects-list';
-import { selectors as se } from '../../../constants/selectors/plugin.right-panel-selectors';
+import { objectsList } from '../../../constants/objects-list';
+import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 
 
 describe('[TC49527] Re-prompt after import | AttributeElement | Required | No Default', () => {
@@ -22,7 +22,7 @@ describe('[TC49527] Re-prompt after import | AttributeElement | Required | No De
 
     await OfficeWorksheet.selectCell('A1');
     await PluginRightPanel.clickImportDataButton();
-    await PluginPopup.openPrompt(o.reports.attributePromptedReport);
+    await PluginPopup.openPrompt(objectsList.reports.attributePromptedReport);
     await waitAndClick($('.mstrBGIcon_tbAdd'));
     await PluginPopup.clickRun();
     await waitForNotification();
@@ -43,7 +43,7 @@ describe('[TC49527] Re-prompt after import | AttributeElement | Required | No De
     await PluginPopup.clickRun();
     await browser.sleep(5555);
     await waitForNotification();
-    await expect(se.notificationPopUp.getAttribute('textContent')).toEqual(dictionary.en.reportRefreshed);
+    await expect(rightPanelSelectors.notificationPopUp.getAttribute('textContent')).toEqual(dictionary.en.reportRefreshed);
     await OfficeWorksheet.selectCell('A1');
     const cellA1 = await $('#gridRows > div:nth-child(2) > div:nth-child(3) > div > div').getText();
     await expect(cellA1).toBe('Music');

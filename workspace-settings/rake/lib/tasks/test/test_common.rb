@@ -26,9 +26,21 @@ def download_mstr_office(group_id, version, target_dir)
 end
 
 ######################################common e2e test rake task######################################
-desc "package test docker"
+desc "publish test result for browser e2e"
+task :browser_e2e_push_results,[:build_no] do | t, args|
+    test_dir = get_browser_test_dir()
+    build_no = args['build_no']
+    unless build_no.nil?
+      info "publish e2e test result to Rally"
+      shell_command! "npm run rally pass #{build_no}", cwd: test_dir
+    else
+      info "no build number specified, no test result will be published"
+    end
+end
+
+desc "run browser based test"
 task :e2e_test_browser do
-  test_dir = "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser"
+  test_dir = get_browser_test_dir()
   npm_install_dir= test_dir
   if is_windows_jenkins_env?# we need to copy the test driver to the root dir of c because of there is a path length limitation of windows
     short_dir = "c:/test-driver-browser" 
@@ -39,7 +51,7 @@ task :e2e_test_browser do
   shell_command! "npm install", cwd: test_dir
   test_fail = false
   begin
-    shell_command! "npm run test", cwd: test_dir
+    shell_command! "npm run test-suite acceptance", cwd: test_dir
   rescue
     test_fail = true
   end
@@ -50,6 +62,19 @@ task :e2e_test_browser do
     shell_command! "cp -r #{test_dir}/allure-report #{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser"
   end
   ci_metrics_system_test
+  raise "test failed" if test_fail
+end
+
+desc "run client based e2e test"
+task :e2e_test_client do
+  test_dir = "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-client"
+  shell_command! "mvn clean", cwd: test_dir
+  test_fail = false
+  begin
+    shell_command! "mvn clean -Dtest=LogInLogOutTests test", cwd: test_dir
+  rescue
+    test_fail = true
+  end
   raise "test failed" if test_fail
 
 end
@@ -78,6 +103,10 @@ end
 def is_web_dossier_started?()
   cmd = shell_command("curl --connect-timeout 10 http://localhost:8080/web-dossier/auth/ui/loginPage -k --retry 1")
   !cmd.error?
+end
+
+def get_browser_test_dir()
+   "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser"
 end
 
 

@@ -1,6 +1,6 @@
 import { switchToExcelFrame } from '../utils/iframe-helper';
 import { waitAndClick } from '../utils/click-helper';
-import { excelSelectors as exSe } from '../../constants/selectors/office-selectors';
+import { excelSelectors } from '../../constants/selectors/office-selectors';
 import settings from '../../config';
 
 const OfficeWorksheet = function() {
@@ -13,20 +13,20 @@ const OfficeWorksheet = function() {
 
   this.uploadAndOpenPlugin = function(pathToManifest, webServerEnvironmentID) {
     switchToExcelFrame();
-    $(exSe.insertBtn).click();
-    $(exSe.addInBtn).click();
-    $(exSe.officeAddInsFrame).waitForExist(19999);
-    browser.switchToFrame($(exSe.officeAddInsFrame));
+    $(excelSelectors.insertBtn).click();
+    $(excelSelectors.addInBtn).click();
+    $(excelSelectors.officeAddInsFrame).waitForExist(19999);
+    browser.switchToFrame($(excelSelectors.officeAddInsFrame));
     browser.pause(1111);
-    waitAndClick($(exSe.adminManagedBtn));
-    waitAndClick($(exSe.uploadAddInBtn));
-    $(exSe.manifestInput).waitForExist(9999);
-    $(exSe.manifestInput).setValue(pathToManifest);
-    waitAndClick($(exSe.confirmUpload));
+    waitAndClick($(excelSelectors.adminManagedBtn));
+    waitAndClick($(excelSelectors.uploadAddInBtn));
+    $(excelSelectors.manifestInput).waitForExist(9999);
+    $(excelSelectors.manifestInput).setValue(pathToManifest);
+    waitAndClick($(excelSelectors.confirmUpload));
     browser.pause(2222);
 
     switchToExcelFrame();
-    $(exSe.uploadPluginNotification).click();
+    $(excelSelectors.uploadPluginNotification).click();
     $(`img[src^="https://${webServerEnvironmentID}"]`).click();
     browser.pause(5555);
   };
@@ -42,7 +42,7 @@ const OfficeWorksheet = function() {
     } catch (error) {
       this.addAdminManagedPlugin();
       switchToExcelFrame();
-      $(exSe.uploadPluginNotification).click();
+      $(excelSelectors.uploadPluginNotification).click();
       // $('img[src^="https://127.0.0.1"]').click(); // this is an alternative selector to start the plugin
       $(pluginIcon).click(); // this is an alternative selector to start the plugin
       browser.pause(5555);
@@ -50,22 +50,22 @@ const OfficeWorksheet = function() {
   };
 
   this.addAdminManagedPlugin = function() {
-    $(exSe.insertBtn).click();
-    $(exSe.addInBtn).click();
-    $(exSe.officeAddInsFrame).waitForExist(9999);
-    $(exSe.officeAddInsFrame).waitForExist(9999);
-    browser.switchToFrame($(exSe.officeAddInsFrame));
+    $(excelSelectors.insertBtn).click();
+    $(excelSelectors.addInBtn).click();
+    $(excelSelectors.officeAddInsFrame).waitForExist(9999);
+    $(excelSelectors.officeAddInsFrame).waitForExist(9999);
+    browser.switchToFrame($(excelSelectors.officeAddInsFrame));
     browser.pause(1111);
-    waitAndClick($(exSe.adminManagedBtn));
-    waitAndClick($(exSe.adminManagedPlugin));
-    waitAndClick($(exSe.addBtn));
+    waitAndClick($(excelSelectors.adminManagedBtn));
+    waitAndClick($(excelSelectors.adminManagedPlugin));
+    waitAndClick($(excelSelectors.addBtn));
     browser.pause(2222);
   };
 
   this.createNewWorkbook = function() {
-    waitAndClick($(exSe.mainMenuBtn));
-    waitAndClick($(exSe.newDocumentBtn));
-    waitAndClick($(exSe.excelWorkbookBtn));
+    waitAndClick($(excelSelectors.mainMenuBtn));
+    waitAndClick($(excelSelectors.newDocumentBtn));
+    waitAndClick($(excelSelectors.excelWorkbookBtn));
     const handles = browser.getWindowHandles();
     browser.switchToWindow(handles[1]); // TODO: create help function to switch tabs
     browser.pause(5000); // TODO: replace with waiting for the excelsheet to be loaded
@@ -73,24 +73,59 @@ const OfficeWorksheet = function() {
 
   this.openNewSheet = function() {
     switchToExcelFrame();
-    $(exSe.newSheetBtn).click();
+    $(excelSelectors.newSheetBtn).click();
   };
+
+  this.selectCellAlternatively = function(cellId) {
+    switchToExcelFrame();
+    waitAndClick($(excelSelectors.findAndSelectBtn));
+    waitAndClick($(excelSelectors.goToBtn));
+    browser.pause(2000);
+    waitAndClick($(excelSelectors.goToSelector));
+    browser.pause(2000);
+    $(excelSelectors.goToSelector).clearValue();
+    $(excelSelectors.goToSelector).setValue(cellId);
+    browser.keys('\uE007'); // Press Enter
+  }
+
+  this.replaceAllThatMatches = function(textToReplace, value) {
+    switchToExcelFrame();
+    waitAndClick($(excelSelectors.findAndSelectBtn));
+    waitAndClick($(excelSelectors.replaceSelector));
+    browser.pause(2000);
+    waitAndClick($(excelSelectors.findWhatSelector));
+    browser.pause(1000);
+    $(excelSelectors.findWhatSelector).clearValue();
+    $(excelSelectors.findWhatSelector).setValue(textToReplace);
+    waitAndClick($(excelSelectors.replaceWithSelector));
+    browser.pause(2000);
+    $(excelSelectors.replaceWithSelector).clearValue();
+    $(excelSelectors.replaceWithSelector).setValue(value);
+    waitAndClick($(excelSelectors.replaceAllBtn));
+    browser.keys('\uE00C'); // Press esc
+  }
 
   this.selectCell = function(cellId) {
     switchToExcelFrame();
-    $(exSe.cellInput).click();
+    $(excelSelectors.cellInput).click();
     browser.keys('\uE003'); // Press Backspace
-    $(exSe.cellInput).setValue(cellId);
+    $(excelSelectors.cellInput).setValue(cellId);
     browser.keys('\uE007'); // Press Enter
   };
 
   this.changeTextInCell = function(cellId, text) {
     switchToExcelFrame();
     this.selectCell(cellId);
-    $(exSe.excelFormulaBar).click();
+    $(excelSelectors.excelFormulaBar).click();
     browser.keys('\uE003'); // Press Backspace
-    $(exSe.excelFormulaBar).setValue(text);
+    $(excelSelectors.excelFormulaBar).setValue(text);
     browser.keys('\uE007'); // Press Enter
+  };
+
+  this.clearExcelRange = (cellRange) => {
+    this.selectCell(cellRange);
+    browser.pause(1999);
+    browser.keys(['Backspace']);
   };
 };
 
