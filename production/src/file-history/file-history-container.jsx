@@ -21,6 +21,7 @@ import {
   stopLoading as stopLoadingImported
 } from '../navigation/navigation-tree-actions';
 import { officeApiRemoveHelper } from '../office/api/office-api-remove-helper';
+import { sessionHelper } from '../storage/session-helper';
 
 export class FileHistoryContainerNotConnected extends React.Component {
   constructor(props) {
@@ -103,6 +104,21 @@ export class FileHistoryContainerNotConnected extends React.Component {
     }
   };
 
+  removeAllAction = (reportArray) => {
+    const { startLoading } = this.props;
+    startLoading();
+    const { allowRefreshAllClick } = this.state;
+    if (allowRefreshAllClick) {
+      for (let index = 0; index < reportArray.length; index++) {
+        const object = reportArray[index];
+        this.setState({ allowRefreshAllClick: false }, async () => {
+          await officeApiRemoveHelper.removeReportFromExcel(object.bindId, object.isCrosstab, object.crosstabHeaderDimensions);
+          if (this.ismounted) { this.setState({ allowRefreshAllClick: true }); }
+        });
+      }
+    }
+  };
+
   showData = async () => {
     try {
       await officeApiHelper.checkStatusOfSessions();
@@ -131,6 +147,27 @@ export class FileHistoryContainerNotConnected extends React.Component {
             </div>
           )
         }
+        {sessionHelper.isDevelopment
+         && (
+           <div className="refresh-button-container">
+             <Button
+               className="add-data-btn floating-button"
+               onClick={() => sessionHelper.importSeasonalReport()}
+               disabled={loading}
+             >
+            Seasonal
+             </Button>
+
+             <Button
+               style={{ width: '50px' }}
+               className="add-data-btn floating-button"
+               onClick={() => this.removeAllAction(reportArray)}
+               disabled={loading}
+             >
+            Kill All
+             </Button>
+           </div>
+         )}
         <div className="refresh-button-container">
           <Button
             id="add-data-btn-container"
@@ -140,6 +177,7 @@ export class FileHistoryContainerNotConnected extends React.Component {
           >
             {t('Add Data')}
           </Button>
+
           <ButtonPopover
             placement="bottom"
             content={t('Refresh All Data')}

@@ -5,6 +5,7 @@ import { errorService } from '../error/error-handler';
 import { HomeHelper } from '../home/home-helper';
 import { createCache } from '../cache/cache-actions';
 import DB from '../cache/cache-db';
+import { importRequested } from '../operation/operation-actions';
 
 class SessionHelper {
   init = (reduxStore) => {
@@ -153,6 +154,28 @@ class SessionHelper {
       return false;
     }
   }
+
+  importSeasonalReport = async () => {
+    const options = {
+      bindingId: null,
+      dossierData: undefined,
+      isPrompted: 0,
+      isRefresh: false,
+      mstrObjectType: {
+        name: 'report',
+        request: 'reports',
+        subtypes: [768, 769, 774],
+        type: 3,
+      },
+      objectId: 'F3DA2FE611E75A9600000080EFC5B53B',
+      objectWorkingId: 1584090384002,
+      preparedInstanceId: null,
+      projectId: 'B7CA92F04B9FAE8D941C3E9B7E0CD754',
+      promptsAnswers: null,
+      visualizationInfo: undefined,
+    };
+    this.reduxStore.dispatch(importRequested(options));
+  };
 }
 
 export const sessionHelper = new SessionHelper();

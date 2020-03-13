@@ -32,6 +32,7 @@ function editRequested(state, payload) {
 }
 
 function updateObject(state, updatedObjectProps) {
+  console.log('updatedObjectProps:', updatedObjectProps);
   const objectToUpdateIndex = getObjectIndex(state.objects, updatedObjectProps.objectWorkingId);
   const newObjects = [...state.objects];
   const updatedObject = { ...state.objects[objectToUpdateIndex], ...updatedObjectProps };

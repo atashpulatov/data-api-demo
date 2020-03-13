@@ -83,7 +83,7 @@ function createOperation(operationRequest, objectWorkingId, objectData = {}) {
   return {
     operationType,
     objectWorkingId,
-    stepsQueue: operationStepsMap[operationType],
+    stepsQueue: JSON.parse(JSON.stringify(operationStepsMap[operationType])),
     backupObjectData,
     response,
   };

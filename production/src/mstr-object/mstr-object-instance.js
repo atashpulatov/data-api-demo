@@ -112,6 +112,8 @@ class MstrObjectInstance {
        startCell,
        excelContext,
      };
+
+     // TODO add when error handlind added
      // Check if instance returned data
      //  if (mstrTable.rows.length === 0) {
      //    return {
