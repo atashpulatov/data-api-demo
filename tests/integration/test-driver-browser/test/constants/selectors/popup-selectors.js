@@ -47,7 +47,7 @@ export const popupSelectors = {
   sortedUp: '.ant-table-column-sorter-up.on',
   sortedDown: '.ant-table-column-sorter-up.on',
   noDataIcon: $('.ant-table-placeholder'),
-  myLibrary: '#root > div > div.navigation_tree__title_bar > div > div.mstr-switch-container > div.mstr-switch',
+  myLibrary: '.mstr-switch',
   closeRefreshAll: '.WACGlyph.WACDialogCloseAnchor',
   clearSearchInput: '.search-field__clear-button',
   columnOwner: '.ReactVirtualized__Table__row > div[aria-colindex="5"] > span',
@@ -63,11 +63,13 @@ export const popupSelectors = {
   totalButton:'span=Total',
   okButton:'div=OK',
   expandButton: '.details-indicator',
+  expandButtonOpen: '.details-indicator-opened',
   sortAscendingButton:'div=Sort Ascending',
   sortDescendingButton:'div=Sort Descending',
   drillButton:'div=Drill',
   categoryButton:'div=Category',
   visualizationSelector:'.mstrmojo-VizBox-selector',
+  refreshButton: '.refresh-button',
   prepareData:{ getAttributeAt: (index) => `#root > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div:nth-child(1) > div > div.checkbox-list.all-showed > div > div > div:nth-child(2) > div > div > div:nth-child(${index}) > label > span:nth-child(3)` },
   smartFolderTable:
   { availableObjectNumber: '#root > div > div.object-table > div.FilterResult', // Contains string and number, e.g. 1280 results
@@ -97,7 +99,5 @@ export const popupSelectors = {
     getAllPanelDisabledCheckbox: (checkboxTitle) => `.all-panel__content .category-list-row.disabled label[title="${checkboxTitle}"]`,
     disabledCheckboxAllPanel: '.all-panel__content .category-list-row.disabled input',
   },
-  objectTable: {
-    scrollContainer: '.ReactVirtualized__Grid.ReactVirtualized__Table__Grid',
-  },
+  objectTable: { scrollContainer: '.ReactVirtualized__Grid.ReactVirtualized__Table__Grid', },
 };
