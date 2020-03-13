@@ -23,29 +23,21 @@ describe('TC59677 - Altering Table of Objects with rows expanded', () => {
     PluginPopup.expandFirstAndLastRows(2);
     PluginPopup.clickRefreshButton();
     PluginPopup.waitForRefresh();
-    expect(PluginPopup.findAmountOfOpenRows()).toEqual(0);
-    PluginPopup.scrollTable(['End']);
-    expect(PluginPopup.findAmountOfOpenRows()).toEqual(0);
+    expect(PluginPopup.areAllRowsCollapsed()).toEqual(true);
 
     PluginPopup.expandFirstAndLastRows(2);
     PluginPopup.searchForObject(objectsList.reports.detailsReport);
     browser.pause(1000);
-    expect(PluginPopup.findAmountOfOpenRows()).toEqual(0);
-    PluginPopup.scrollTable(['End']);
-    expect(PluginPopup.findAmountOfOpenRows()).toEqual(0);
+    expect(PluginPopup.areAllRowsCollapsed()).toEqual(true);
 
     PluginPopup.expandFirstAndLastRows(1);
     PluginPopup.clickFilterButton();
     PluginPopup.tickFilterCheckBox('Application', 'MicroStrategy Tutorial');
     PluginPopup.clickFilterButton();
-    expect(PluginPopup.findAmountOfOpenRows()).toEqual(0);
-    PluginPopup.scrollTable(['End']);
-    expect(PluginPopup.findAmountOfOpenRows()).toEqual(0);
+    expect(PluginPopup.areAllRowsCollapsed()).toEqual(true);
 
     PluginPopup.expandFirstAndLastRows(1);
     PluginPopup.clickHeader('Owner');
-    expect(PluginPopup.findAmountOfOpenRows()).toEqual(0);
-    PluginPopup.scrollTable(['End']);
-    expect(PluginPopup.findAmountOfOpenRows()).toEqual(0);
+    expect(PluginPopup.areAllRowsCollapsed()).toEqual(true);
   });
 });

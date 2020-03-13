@@ -789,6 +789,17 @@ class PluginPopup {
     const openRows = $$(popupSelectors.expandButtonOpen);
     return openRows.length;
   }
+
+  /**
+   * Returns true if rows at the beginning and the end of Table of Objects are collapsed. Otherwise returns false
+   */
+  areAllRowsCollapsed() {
+    let openedRows = PluginPopup.findAmountOfOpenRows();
+    if (openedRows > 0) return false;
+    PluginPopup.scrollTable(['End']);
+    openedRows = PluginPopup.findAmountOfOpenRows();
+    return !(openedRows > 0);
+  }
 }
 
 export default new PluginPopup();
