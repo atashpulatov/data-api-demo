@@ -7,13 +7,12 @@ import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 class OfficeTableRefresh {
   /**
    * Creates an office table if the number of columns of an existing table changes.
-   * If the new definiton range is not empty we keep the original table.
+   * If the new definition range is not empty we keep the original table.
    *
    * @param {Object} excelContext
    * @param {String} bindingId
    * @param {Object} instanceDefinition
    * @param {Object} startCell  Top left corner cell
-   * @param {Object} OfficeTable
    * @param {String} newOfficeTableName new name for office table
    * @param {Boolean} shouldFormat
    *
@@ -24,7 +23,6 @@ class OfficeTableRefresh {
       bindingId,
       instanceDefinition,
       startCell,
-      officeTable,
       newOfficeTableName,
       shouldFormat,
       previousTableDimensions,
@@ -67,6 +65,7 @@ class OfficeTableRefresh {
     ));
 
     let newBindingId = bindingId;
+    let officeTable;
     if (tableColumnsChanged) {
       console.log('tableColumnsChanged:', tableColumnsChanged);
       console.log('Instance definition changed, creating new table');
@@ -90,7 +89,6 @@ class OfficeTableRefresh {
         excelContext,
         startCell,
         prevOfficeTable,
-        tableColumnsChanged
       );
       console.timeEnd('Validate existing table');
     }

@@ -50,22 +50,7 @@ class DIContainer {
     this.mstrObjectRestService.init(reduxStore);
     this.popupController = popupController;
     this.popupController.init(reduxStore, sessionHelper, popupActions);
-    this.officeDisplayService = officeDisplayService;
-    this.officeDisplayService.init(reduxStore, operationBus);
-    this.mstrListRestService = mstrListRestService;
-    this.mstrListRestService.init(reduxStore);
-    this.mstrObjectInstance = mstrObjectInstance;
-    this.mstrObjectInstance.init(reduxStore);
-    this.officeTableService = officeTableService;
-    this.officeTableService.init(reduxStore);
-    this.officeFormatData = officeFormatData;
-    this.officeFormatData.init(reduxStore);
-    this.officeImportService = officeImportService;
-    this.officeImportService.init(reduxStore);
-    this.officeFormatSubtotals = officeFormatSubtotals;
-    this.officeFormatSubtotals.init(reduxStore);
-    this.officeFormatTable = officeFormatTable;
-    this.officeFormatTable.init(reduxStore);
+    this.initializeOfficeDisplayServices();
 
     this.popupHelper = popupHelper;
     this.popupHelper.init(popupController, reduxStore);
@@ -89,6 +74,25 @@ class DIContainer {
   }
 
   get = (dependency) => this[dependency]
+
+  initializeOfficeDisplayServices() {
+    this.officeDisplayService = officeDisplayService;
+    this.officeDisplayService.init(reduxStore, operationBus);
+    this.mstrListRestService = mstrListRestService;
+    this.mstrListRestService.init(reduxStore);
+    this.mstrObjectInstance = mstrObjectInstance;
+    this.mstrObjectInstance.init(reduxStore);
+    this.officeTableService = officeTableService;
+    this.officeTableService.init(reduxStore);
+    this.officeFormatData = officeFormatData;
+    this.officeFormatData.init(reduxStore);
+    this.officeImportService = officeImportService;
+    this.officeImportService.init(reduxStore);
+    this.officeFormatSubtotals = officeFormatSubtotals;
+    this.officeFormatSubtotals.init(reduxStore);
+    this.officeFormatTable = officeFormatTable;
+    this.officeFormatTable.init(reduxStore);
+  }
 }
 
 export const diContainer = new DIContainer(false);
