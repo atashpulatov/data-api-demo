@@ -725,6 +725,28 @@ class PluginPopup {
       browser.keys(['PageDown']);
     }
   }
+
+  /**
+   * Checks how many rows are expanded to display Details Panel, and returns the number
+   *
+   * @return {number} Number of expanded rows
+   */
+  findAmountOfOpenRows() {
+    const openRows = $$(popupSelectors.expandButtonOpen);
+    return openRows.length;
+  }
+
+  /**
+   * Returns true if rows at the beginning and the end of Table of Objects are collapsed. Otherwise returns false
+   */
+  areAllRowsCollapsed() {
+    let openedRows = this.findAmountOfOpenRows();
+    if (openedRows > 0) return false;
+    this.scrollTable(['End']);
+    openedRows = this.findAmountOfOpenRows();
+    return !(openedRows > 0);
+  }
 }
+
 
 export default new PluginPopup();

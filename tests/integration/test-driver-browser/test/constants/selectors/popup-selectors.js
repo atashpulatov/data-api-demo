@@ -56,6 +56,7 @@ export const popupSelectors = {
   tableRows: '.position-relative',
   idDetail: '.details-table > table tr:nth-child(2) p',
   filterButton:'.filter-button',
+  expandButtonOpen: '.details-indicator-opened',
   // promptArrow: element(by.className('mstrBGIcon_tbAdd')),
   promptArrow: '.mstrBGIcon_tbAdd',
   promptTextBox: '#id_mstr38_txt',
@@ -97,7 +98,5 @@ export const popupSelectors = {
     getAllPanelDisabledCheckbox: (checkboxTitle) => `.all-panel__content .category-list-row.disabled label[title="${checkboxTitle}"]`,
     disabledCheckboxAllPanel: '.all-panel__content .category-list-row.disabled input',
   },
-  objectTable: {
-    scrollContainer: '.ReactVirtualized__Grid.ReactVirtualized__Table__Grid',
-  },
+  objectTable: { scrollContainer: '.ReactVirtualized__Grid.ReactVirtualized__Table__Grid', },
 };
