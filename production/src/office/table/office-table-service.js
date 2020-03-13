@@ -61,7 +61,6 @@ class OfficeTableService {
             bindingId,
             instanceDefinition,
             startCell,
-            officeTable,
             newOfficeTableName,
             shouldFormat,
             previousTableDimensions,
