@@ -1,5 +1,5 @@
-import {
-  UPDATE_OBJECT, updateObject, DELETE_OBJECT, deleteObject
+ import {
+  UPDATE_OBJECT, updateObject, DELETE_OBJECT, deleteObject, RESTORE_ALL_OBJECTS, restoreAllObjects
 } from '../../operation/object-actions';
 
 describe('updateObject', () => {
@@ -30,6 +30,23 @@ describe('deleteObject', () => {
 
     // when
     const resultAction = deleteObject(exampleObjectWorkingId);
+
+    // then
+    expect(resultAction).toEqual(expectedAction);
+  });
+});
+
+describe('restoreAllObjects', () => {
+  it('populates action with proper fields', () => {
+    // given
+    const objects = ['test'];
+    const expectedAction = {
+      type: RESTORE_ALL_OBJECTS,
+      payload: objects,
+    };
+
+    // when
+    const resultAction = restoreAllObjects(objects);
 
     // then
     expect(resultAction).toEqual(expectedAction);

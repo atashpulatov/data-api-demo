@@ -1,7 +1,7 @@
-import { UPDATE_OBJECT, DELETE_OBJECT } from './object-actions';
-import { IMPORT_REQUESTED, EDIT_REQUESTED } from './operation-actions';
+import {UPDATE_OBJECT, DELETE_OBJECT, RESTORE_ALL_OBJECTS} from './object-actions';
+import {IMPORT_REQUESTED, EDIT_REQUESTED} from './operation-actions';
 
-const initialState = { objects: [] };
+const initialState = {objects: []};
 export const objectReducer = (state = initialState, action) => {
   switch (action.type) {
     case IMPORT_REQUESTED:
@@ -12,6 +12,8 @@ export const objectReducer = (state = initialState, action) => {
       return updateObject(state, action.payload);
     case DELETE_OBJECT:
       return deleteObject(state, action.payload);
+    case RESTORE_ALL_OBJECTS:
+      return restoreAllObjects(action.payload);
     default:
       return state;
   }
@@ -27,7 +29,7 @@ function importRequested(state, payload) {
 }
 
 function editRequested(state, payload) {
-  const props = { objectWorkingId: payload.objectWorkingId, response: payload.response };
+  const props = {objectWorkingId: payload.objectWorkingId, response: payload.response};
   return updateObject(state, props);
 }
 
@@ -35,16 +37,20 @@ function updateObject(state, updatedObjectProps) {
   console.log('updatedObjectProps:', updatedObjectProps);
   const objectToUpdateIndex = getObjectIndex(state.objects, updatedObjectProps.objectWorkingId);
   const newObjects = [...state.objects];
-  const updatedObject = { ...state.objects[objectToUpdateIndex], ...updatedObjectProps };
+  const updatedObject = {...state.objects[objectToUpdateIndex], ...updatedObjectProps};
   newObjects.splice(objectToUpdateIndex, 1, updatedObject);
-  return { objects: newObjects };
+  return {objects: newObjects};
 }
 
 function deleteObject(state, objectWorkingId) {
   const objectToRemoveIndex = getObjectIndex(state.objects, objectWorkingId);
   const newObjects = [...state.objects];
   newObjects.splice(objectToRemoveIndex, 1);
-  return { objects: newObjects };
+  return {objects: newObjects};
+}
+
+function restoreAllObjects(payload) {
+  return {objects: [...payload]};
 }
 
 function getObjectIndex(objects, objectWorkingId) {

@@ -1,5 +1,6 @@
 import { propsProxy } from '../../home/enum-props-proxy';
 
+// TODO: rethink the name and the place of these properties
 export const officeProperties = new Proxy({
   /**
        * propertyAlias: propertyName,

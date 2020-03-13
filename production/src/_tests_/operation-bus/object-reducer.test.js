@@ -1,6 +1,6 @@
 import { IMPORT_REQUESTED } from '../../operation/operation-actions';
 import { objectReducer } from '../../operation/object-reducer';
-import { UPDATE_OBJECT, DELETE_OBJECT } from '../../operation/object-actions';
+import { UPDATE_OBJECT, DELETE_OBJECT, RESTORE_ALL_OBJECTS } from '../../operation/object-actions';
 
 describe('objectReducer', () => {
   const initialObject = {
@@ -211,6 +211,23 @@ describe('objectReducer', () => {
 
       // then
       expect(resultState.objects).toHaveLength(0);
+    });
+  });
+
+  describe('restoreAllObjects', () => {
+    it('replaces objects in state on RESTORE_ALL_OBJECTS', () => {
+      // given
+      const payload = ['test'];
+      const action = {
+        type: RESTORE_ALL_OBJECTS,
+        payload,
+      };
+
+      // when
+      const resultState = objectReducer(initialState.singleObject, action);
+
+      // then
+      expect(resultState.objects).toEqual(payload);
     });
   });
 });
