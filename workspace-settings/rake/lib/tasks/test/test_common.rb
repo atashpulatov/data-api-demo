@@ -71,7 +71,7 @@ task :e2e_test_client do
   shell_command! "mvn clean", cwd: test_dir
   test_fail = false
   begin
-    shell_command! "mvn clean -Dtest=LogInLogOutTests test", cwd: test_dir
+    shell_command! "mvn clean -DdriverType=#{get_env_driverType} -Dtest=LogInLogOutTests test", cwd: test_dir
   rescue
     test_fail = true
   end
@@ -83,6 +83,14 @@ def is_windows_jenkins_env?
   return ENV['USER'] == "jenkins" && ENV['TEST_TYPES'] == "integration_win"
 end
 
+def get_env_driverType 
+  case ENV['TEST_TYPES']
+  when 'integration_win'
+    return "WINDOWS_DESKTOP"
+  when 'integration_mac'
+    return "MAC_DESKTOP"
+  end
+end
 ######################################common web dossier check code######################################
 def wait_web_dossier_online()
   cnt = 0
