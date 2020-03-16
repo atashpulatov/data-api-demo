@@ -1,6 +1,7 @@
 import OfficeLogin from '../../../helpers/office/office.login';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
+import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
 
 const ELLIPSIS = '...';
@@ -17,8 +18,8 @@ const ELLIPSIS = '...';
  */
 function isTooltipCorrect(displayed, tooltip) {
   const ellipsisIndex = displayed.indexOf(ELLIPSIS);
-  if (ellipsisIndex < 0) {
-    return tooltip === 'Click to Copy';
+  if (ellipsisIndex === -1) {
+    return tooltip === dictionary.en.clickToCopy;
   }
 
   const [start, end] = displayed.split(ELLIPSIS);
