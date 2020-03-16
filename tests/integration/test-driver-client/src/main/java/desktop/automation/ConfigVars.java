@@ -13,9 +13,9 @@ public class ConfigVars {
     public static final boolean SKIP_STANDARD_INITIALIZATION_AND_TEAR_DOWN = false;
     //enabling image debugging stores cropped images during runtime, be careful as not to overflow the memory, decrease the performance and pollute the git commits
     public static final boolean DEBUG_IMAGE_COMPARISON = true;
-    public static final String EXCEL_ADD_IN_TEST_USER_NAME = "c";
+    public static final String EXCEL_ADD_IN_TEST_USER_NAME = "a";
     public static final String EXCEL_ADD_IN_TEST_USER_PASS = null;
-    public static final String EXCEL_ADD_IN_TEST_USER_INITIALS = "C";
+    public static final String EXCEL_ADD_IN_TEST_USER_INITIALS = "A";
 
     //Browser specific
     private static final String BROWSER_TYPE_SYSTEM_PROPERTY = System.getProperty("browserType");
