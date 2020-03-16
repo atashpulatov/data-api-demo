@@ -45,6 +45,15 @@ Below you can find information and links describe process of sideloading the add
 
 #### Office for Mac
 
+##### Automated
+
+Run the following command in production.
+```
+npm run sideload
+```
+
+##### Manually
+
 You need to copy manifest file to Office location in Library like so
 ```
 cp mstr-office/production/office-react-manifest.xml ~/Library/Containers/com.microsoft.Excel/documents/wef
@@ -95,7 +104,7 @@ Are you sure you want to continue connecting (yes/no)? yes
 Type **yes** when prompted.
 
 #### Dossier or prompts are not working
-Make sure embeddinglib.js is present in your environment.[More information](production/public/javascript/README.md).
+Make sure embeddinglib.js is present in your environment. [More information](production/public/javascript/README.md).
 
 ## Running the tests
 
