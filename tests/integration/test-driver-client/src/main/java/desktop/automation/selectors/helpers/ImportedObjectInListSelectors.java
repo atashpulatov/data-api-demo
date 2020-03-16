@@ -42,7 +42,7 @@ public class ImportedObjectInListSelectors {
                 IMPORTED_OBJECT_EDIT_ELEM = By.xpath(".//AXButton[1]");
                 IMPORTED_OBJECT_REFRESH_ELEM = By.xpath(".//AXButton[2]");
                 IMPORTED_OBJECT_DELETE_ELEM = By.xpath(".//AXButton[3]");
-                CONTEXT_MENU_COPY_NAME_BTN = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup[@AXTitle='MicroStrategy']/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup/AXMenu[0]/AXMenuItem[@AXTitle='Copy Name']");
+                CONTEXT_MENU_COPY_NAME_BTN = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup/AXMenu[0]/AXMenuItem[@AXTitle='Copy Name']");
                 break;
             case WINDOWS_DESKTOP:
                 IMPORTED_OBJECT_DATE_ELEM = null;
