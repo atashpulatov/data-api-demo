@@ -156,6 +156,11 @@ export class PromptsWindowNotConnected extends Component {
         props.instance = instance;
       }
 
+      if (!microstrategy || !microstrategy.dossier) {
+        console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment');
+        return;
+      }
+
       microstrategy.dossier
         .create(props)
         .then(async (dossierPage) => {

@@ -215,7 +215,11 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         this.msgRouter.registerEventHandler('onDossierInstanceIDChange', this.instanceIdChangeHandler);
       },
     };
-    this.embeddedDossier = await microstrategy.dossier.create(props);
+    if (microstrategy && microstrategy.dossier) {
+      this.embeddedDossier = await microstrategy.dossier.create(props);
+    } else {
+      console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment');
+    }
   }
 
   /**
