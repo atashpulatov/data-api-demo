@@ -100,6 +100,11 @@ class PluginPopup {
     waitAndClick($(popupSelectors.allFilters));
   }
 
+  waitUntilActionIsFinished(selector) {
+    browser.waitUntil(() => ($(selector).isExisting()));
+    browser.waitUntil(() => !($(selector).isExisting()));
+  }
+
   selectObjectElementsInPrepareData(elements) {
     $('#search-toolbar > div > span > input').waitForExist(7777);
     for (let i = 0; i < elements.length; i++) {

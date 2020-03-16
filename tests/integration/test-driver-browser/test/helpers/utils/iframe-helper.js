@@ -4,6 +4,12 @@ export function switchToPluginFrame() {
   browser.switchToFrame($('.AddinIframe'));
 }
 
+export function switchToDialogFrame() {
+  switchToExcelFrame();
+  $('#WACDialogPanel .AddinIframe').waitForExist(9999);
+  browser.switchToFrame($('#WACDialogPanel .AddinIframe'));
+}
+
 export function switchToExcelFrame() {
   browser.switchToFrame(null);
   $('#WebApplicationFrame').waitForExist(9999);
