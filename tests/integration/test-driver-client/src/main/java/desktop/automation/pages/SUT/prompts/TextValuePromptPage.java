@@ -11,7 +11,7 @@ public class TextValuePromptPage extends BasePromptPage {
     }
 
     @Override
-    public void answerPromptCorretly() {
+    public void answerPromptCorrectly() {
         WebElement runBtn = machine.getTextValuePromptPage().getRunBtnElem();
         runBtn.click();
     }

@@ -1,15 +1,12 @@
 package desktop.automation.pages.SUT;
 
 import desktop.automation.driver.wrappers.Machine;
+import desktop.automation.elementWrappers.DossierBookmark;
 import desktop.automation.elementWrappers.DossierChapterAndPages;
 import desktop.automation.elementWrappers.DossierVisualizationElem;
 import desktop.automation.elementWrappers.WebDriverElemWrapper;
 import desktop.automation.selectors.SUT.ImportDossierPageSelectors;
-import org.checkerframework.checker.nullness.compatqual.NullableDecl;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
@@ -20,7 +17,7 @@ public abstract class ImportDossierPage extends ImportDossierPageSelectors {
         this.machine = machine;
     }
 
-    public abstract void assertImportPopUpTitleIsAsExpected(String expectedObjectName);
+    public abstract void assertImportPopUpTitleIsAsExpected(String expectedDossierName);
 
     public WebDriverElemWrapper getTableOfContentsBtnElem(){
         machine.focusOnPromptPopUpFrameForBrowser();
@@ -71,34 +68,22 @@ public abstract class ImportDossierPage extends ImportDossierPageSelectors {
 
     public abstract List<DossierChapterAndPages> getDossierChapterAndPagesListElems();
 
-    public void waitForDossierFrameToBeReady() {
-        waitForDossierFrameToBeReady(machine.TWO_UNITS);
-    }
-
-    public void waitForDossierFrameToBeReady(WebDriverWait wait){
-        wait.until(getDossierFrameReadyExpectedCondition());
-    }
-
-    private ExpectedCondition<Boolean> getDossierFrameReadyExpectedCondition(){
-        return new ExpectedCondition<Boolean>() {
-            @NullableDecl
-            @Override
-            public Boolean apply(@NullableDecl WebDriver driver) {
-                //condition implies that at least one visualization is present in view
-                if (getDossierVisualizationElems().isEmpty())
-                    return false;
-
-                try {
-                    findLoadingSpinner();
-                    return false;
-                } catch (org.openqa.selenium.NoSuchElementException e){
-                    return true;
-                }
-            }
-        };
-    }
-
     public WebElement findLoadingSpinner(){
         return machine.driver.findElement(DOSSIER_LOADING_SPINNER_ELEM);
     }
+
+    public WebDriverElemWrapper getAddNewBookMarkBtnWithBookmarksElem(){
+        return machine.waitAndFindElemWrapper(ADD_NEW_BOOKMARK_BTN_WITH_BOOKMARKS);
+    }
+
+    public WebDriverElemWrapper getAddNewBookMarkBtnNoBookmarksElem(){
+        return machine.waitAndFindElemWrapper(ADD_NEW_BOOKMARK_BTN_NO_BOOKMARKS);
+    }
+
+    public List<DossierBookmark> openBookmarksAndGetBookmarks(){
+        getBookmarksBtnElem().click();
+        return getBookmarks();
+    }
+
+    public abstract List<DossierBookmark> getBookmarks();
 }

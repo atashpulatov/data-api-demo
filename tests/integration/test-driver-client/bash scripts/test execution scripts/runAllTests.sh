@@ -1,4 +1,4 @@
 #!/bin/bash
 
 cd ../..
-mvn clean -Dtest="desktop.automation.functional.all.**" test 
+mvn clean -Dtest="desktop.automation.functional.maintained.**" test

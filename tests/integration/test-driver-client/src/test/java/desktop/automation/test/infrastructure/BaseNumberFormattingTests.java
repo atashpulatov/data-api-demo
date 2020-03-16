@@ -2,7 +2,7 @@ package desktop.automation.test.infrastructure;
 
 import desktop.automation.helpers.ImportPrepareDataHelper;
 import desktop.automation.helpers.ImportPrepareDataHelperArgumments;
-import desktop.automation.helpers.PowerPoint;
+import desktop.automation.helpers.windows.PowerPoint;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -25,7 +25,9 @@ public abstract class BaseNumberFormattingTests extends BaseLoggedInTests {
             //import Number Formatting report if not imported
             if (!isNumberFormattingReportImported) {
                 ImportPrepareDataHelperArgumments argumments = new ImportPrepareDataHelperArgumments.Builder(machine)
-                        .withObjectName("Number Formatting").isFirstImport(true).build();
+                        .withObjectName("Number Formatting")
+                        .isFirstImport(true)
+                        .build();
                 ImportPrepareDataHelper.importObject(argumments);
 
                 //excel jumps back to cell A1 if goToCell call is made to quickly, since the table hasn't finished loading

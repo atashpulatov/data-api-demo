@@ -1,6 +1,6 @@
 package desktop.automation.test.infrastructure.web.driver.rules;
 
-import desktop.automation.driver.wrappers.DriverType;
+import desktop.automation.driver.wrappers.enums.DriverType;
 import desktop.automation.test.infrastructure.BaseCommonTests;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
@@ -21,8 +21,8 @@ public class RepeatRule implements TestRule {
                     if (DESIRED_DRIVER_TYPE.equals(DriverType.BROWSER)) {
                         System.out.println("caught org.openqa.selenium.WebDriverException exception for browser");
                         System.out.println(e.getMessage());
-                        String connectionExceptionMessageStart = "java.net.ConnectException";
-                        if (e.getMessage().startsWith(connectionExceptionMessageStart)) {
+
+                        if (isDirverConnectionLostException(e)) {
                             BaseCommonTests.resetBrowser();
                             statement.evaluate();
                         }
@@ -34,5 +34,10 @@ public class RepeatRule implements TestRule {
                 }
             }
         };
+    }
+
+    private static boolean isDirverConnectionLostException(org.openqa.selenium.WebDriverException e){
+        String connectionExceptionMessageStart = "java.net.ConnectException";
+        return e.getMessage().startsWith(connectionExceptionMessageStart);
     }
 }

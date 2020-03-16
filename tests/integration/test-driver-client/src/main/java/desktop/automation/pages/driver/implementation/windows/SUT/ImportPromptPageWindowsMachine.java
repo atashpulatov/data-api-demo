@@ -4,7 +4,7 @@ import desktop.automation.driver.wrappers.Machine;
 import desktop.automation.elementWrappers.AnyInterfaceElement;
 import desktop.automation.elementWrappers.ImageComparisonElem;
 import desktop.automation.elementWrappers.WebDriverElemWrapper;
-import desktop.automation.elementWrappers.windows.WebElementWithGetValue;
+import desktop.automation.elementWrappers.driver.implementations.windows.WebElementWithGetValue;
 import desktop.automation.pages.SUT.ImportPromptPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -17,6 +17,11 @@ public class ImportPromptPageWindowsMachine extends ImportPromptPage {
 
     public ImportPromptPageWindowsMachine(Machine machine) {
         super(machine);
+    }
+
+    @Override
+    protected WebDriverElemWrapper getMyLibrarySwitchElement() {
+        return machine.waitAndFindElemWrapper(MY_LIBRARY_SWITCH_ELEM);
     }
 
     @Override

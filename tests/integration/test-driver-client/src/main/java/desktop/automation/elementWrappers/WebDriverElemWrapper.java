@@ -45,11 +45,7 @@ public class WebDriverElemWrapper implements AnyInterfaceElement {
 
     @Override
     public String getText() {
-        if (machine.isBrowser()) {
-            return driverElement.getAttribute("value");
-        }
-        else
-            return driverElement.getText();
+            return machine.isBrowser() ? driverElement.getAttribute("value") : driverElement.getText();
     }
 
     public WebElement getDriverElement() {
@@ -59,5 +55,4 @@ public class WebDriverElemWrapper implements AnyInterfaceElement {
     public static void setMachine(Machine machine){
         WebDriverElemWrapper.machine = machine;
     }
-
 }

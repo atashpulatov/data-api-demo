@@ -1,7 +1,7 @@
 package desktop.automation.elementWrappers;
 
 import desktop.automation.driver.wrappers.Machine;
-import desktop.automation.driver.wrappers.OS;
+import desktop.automation.driver.wrappers.enums.OS;
 import desktop.automation.exceptions.ImageBasedElemNotFound;
 import desktop.automation.exceptions.NotImplementedForDriverWrapperException;
 import org.opencv.core.Mat;
@@ -119,10 +119,6 @@ public class ImageComparisonElem implements AnyInterfaceElement {
         }
 
         return res;
-    }
-
-    public Mat getStandardizedImage() {
-        return standardizedImage;
     }
 
     public int getX() {

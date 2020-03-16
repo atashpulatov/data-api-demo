@@ -2,7 +2,7 @@ package desktop.automation.pages.driver.implementation.mac.SUT;
 
 import desktop.automation.driver.wrappers.MacMachine;
 import desktop.automation.elementWrappers.WebDriverElemWrapper;
-import desktop.automation.elementWrappers.mac.WebElementWithBooleanAXValue;
+import desktop.automation.elementWrappers.driver.implementations.mac.WebElementWithBooleanAXValue;
 import desktop.automation.pages.SUT.PrepareDataPromptPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -27,10 +27,9 @@ public class PrepareDataPromptPageMacMachine extends PrepareDataPromptPage {
     private static final By ATTRIBUTE_TITLE_COUNT_SEPARATOR = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[3]/AXStaticText[3]");
     private static final By ATTRIBUTE_TITLE_TOTAL_COUNT = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[3]/AXStaticText[4]");
     private static final By ATTRIBUTE_TITLE_CLOSE_PARENTHESES = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[3]/AXStaticText[5]");
-    private static final String ATTRIBUTE_BASE =
-//            "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXTable[0]/AXUnknown[0]/AXGroup[%d]/AXGroup[0]"
-            "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXTitle='Office Add-ins - env-182059.customer.cloud.microstrategy.com' and @AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXOutline[0]/AXRow[%d]"
-    ;
+    private static final String ATTRIBUTE_BASE_REPORT ="/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXOutline[0]/AXRow[%d]";
+    private static final String ATTRIBUTE_BASE_DATASET = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXTable[0]/AXUnknown[0]/AXGroup[%d]/AXGroup[0]/AXCheckBox[0]";
+
     private static final String ATTRIBUTE_CHECKBOX_BASE = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXTable[0]/AXUnknown[0]/AXGroup[%d]/AXGroup[0]/AXCheckBox[0]";
     private static final By FIRST_ATTRIBUTE = By.xpath(String.format(ATTRIBUTE_BASE, 0));
 
@@ -40,12 +39,10 @@ public class PrepareDataPromptPageMacMachine extends PrepareDataPromptPage {
     private static final By METRIC_TITLE_COUNT_SEPARATOR = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[5]/AXStaticText[3]");
     private static final By METRIC_TITLE_TOTAL_COUNT = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[5]/AXStaticText[4]");
     private static final By METRIC_TITLE_CLOSE_PARENTHESES = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[5]/AXStaticText[5]");
-    private static final String METRIC_BASE =
-            "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXTable[0]/AXUnknown[0]/AXGroup[%d]/AXGroup[0]/AXCheckBox"
-            ;
+    private static final String METRIC_BASE_DATASET = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXTable[1]/AXUnknown[0]/AXGroup[%d]/AXGroup[0]/AXCheckBox";
+    private static final String METRIC_BASE_REPORT ="/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXTable[0]/AXUnknown[0]/AXGroup[%d]/AXGroup[0]/AXCheckBox";
 
     private static final String METRIC_CHECKBOX_BASE = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXTable[1]/AXUnknown[0]/AXGroup[%d]/AXGroup[0]/AXCheckBox[0]";
-    private static final By FIRST_METRIC = By.xpath(String.format(METRIC_BASE, 0));
 
     private static final By FILTERS_TITLE_START = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[7]/AXStaticText[0]");
     private static final By FILTERS_TITLE_OPEN_PARENTHESES = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[7]/AXStaticText[1]");
@@ -53,22 +50,19 @@ public class PrepareDataPromptPageMacMachine extends PrepareDataPromptPage {
     private static final By FILTERS_TITLE_COUNT_SEPARATOR = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[7]/AXStaticText[3]");
     private static final By FILTERS_TITLE_TOTAL_COUNT = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[7]/AXStaticText[4]");
     private static final By FILTERS_TITLE_CLOSE_PARENTHESES = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[7]/AXStaticText[5]");
-    private static final String FILTER_BASE = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXOutline[1]/AXRow[%d]";
+    private static final String FILTER_BASE_DATASET = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXOutline[0]/AXRow[%d]";
+    private static final String FILTER_BASE_REPORT = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXOutline[1]/AXRow[%d]";
 
-    private static final By FIRST_FILTER = By.xpath(String.format(FILTER_BASE, 0));
-    private static final String FILTER_VALUE_BASE = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXTable[1]/AXUnknown[0]/AXGroup[%d]/AXGroup[0]";
-    private static final By FIRST_FILTER_VALUE = By.xpath(String.format(FILTER_VALUE_BASE, 0));
+    private static final String FILTER_VALUE_BASE_DATASET = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXTable[2]/AXUnknown[0]/AXGroup[%d]/AXGroup[0]";
+    private static final String FILTER_VALUE_BASE_REPORT = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXTable[1]/AXUnknown[0]/AXGroup[%d]/AXGroup[0]";
 
-    private static final By CROSSTAB_NOTIFICATION = By.xpath(
-//            "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[3]/AXStaticText[@AXValue='This is a crosstab report. To preserve its structure, select all attributes and metrics.']"
-            "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[0]/AXStaticText[@AXValue='To preserve this crosstab report, select all objects without changing their forms.']"
-    );
-    private static final By ATTRIBUTE_ALL_CHECKBOX_FOR_CROSSTAB = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[6]/AXGroup[0]/AXCheckBox[0]");
-    private static final By METRIC_ALL_CHECKBOX_FOR_CROSSTAB = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[8]/AXGroup[0]/AXCheckBox[0]");
-    private static final By FILTER_VALUE_ALL_CHECKBOX_FOR_CROSSTAB = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[11]/AXGroup[0]/AXCheckBox[0]");
-    private static final By ATTRIBUTE_ALL_CHECKBOX = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[5]/AXGroup[0]/AXCheckBox[0]");
-    private static final By METRIC_ALL_CHECKBOX = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[7]/AXGroup[0]/AXCheckBox[0]");
-    private static final By FILTER_VALUE_ALL_CHECKBOX = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[10]/AXGroup[0]/AXCheckBox[0]");
+    private static final By ATTRIBUTE_ALL_CHECKBOX_DATASET = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[4]/AXGroup[0]/AXCheckBox[0]");
+    private static final String ATTRIBUTE_ALL_CHECKBOX_BASE_REPORT = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[%d]/AXGroup[0]/AXCheckBox[0]";
+
+    private static final By METRIC_ALL_CHECKBOX_DATASET = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[6]/AXGroup[0]/AXCheckBox[0]");
+    private static final String METRIC_ALL_CHECKBOX_BASE_REPORT = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[%d]/AXGroup[0]/AXCheckBox[0]";
+    private static final By FILTER_VALUE_ALL_CHECKBOX_DATASET = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[9]/AXGroup[0]/AXCheckBox[0]");
+    private static final String FILTER_VALUE_ALL_CHECKBOX_BASE_REPORT = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[%d]/AXGroup[0]/AXCheckBox[0]";
 
     private static final String FILTER_VALUE_CHECKBOX_BASE = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXTable[2]/AXUnknown[0]/AXGroup[%d]/AXGroup[0]/AXCheckBox[0]";
 
@@ -111,13 +105,7 @@ public class PrepareDataPromptPageMacMachine extends PrepareDataPromptPage {
         }
     }
 
-    public WebElement getTitle(boolean isDataset, String objectName){
-        By selector = By.xpath(String.format(TITLE_BASE, isDataset ? "Import Dataset" :"Import Report", objectName));
-
-        return machine.waitAndFind(selector);
-    }
-
-    public void assertAttributeTitleLoadedCorrecty(int countSelected, int totalCount){
+    public void assertAttributeTitleLoadedCorrectly(int countSelected, int totalCount){
         //TODO verify method works
         String expected = String.format("ATTRIBUTES(%d/%d)", countSelected, totalCount);
 
@@ -180,10 +168,6 @@ public class PrepareDataPromptPageMacMachine extends PrepareDataPromptPage {
         return res;
     }
 
-//"/AXApplication[@AXTitle='Excel']/AXWindow[@AXTitle='Office Add-ins - env-175469.customer.cloud.microstrategy.com' and @AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[5]/AXGroup[0]/AXCheckBox[0]"
-//"/AXApplication[@AXTitle='Excel']/AXWindow[@AXTitle='Office Add-ins - env-175469.customer.cloud.microstrategy.com' and @AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[7]/AXGroup[0]/AXCheckBox[0]"
-//"/AXApplication[@AXTitle='Excel']/AXWindow[@AXTitle='Office Add-ins - env-175469.customer.cloud.microstrategy.com' and @AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[10]/AXGroup[0]/AXCheckBox[0]"
-
     @Override
     public WebDriverElemWrapper[] getMetrics(int[] metrics) {
         WebDriverElemWrapper[] res = new WebDriverElemWrapper[metrics.length];
@@ -224,7 +208,7 @@ public class PrepareDataPromptPageMacMachine extends PrepareDataPromptPage {
         if (index == -1)
             return getAttributeAllCheckboxElem();
         else
-            return machine.waitAndFindElemWrapper(By.xpath(String.format(ATTRIBUTE_BASE, index)));
+            return machine.waitAndFindElemWrapper(By.xpath(String.format(isDataset ? ATTRIBUTE_BASE_DATASET : ATTRIBUTE_BASE_REPORT, index)));
     }
 
     public void assertMetricTitleLoadedCorrectly(int selected, int total){
@@ -235,6 +219,7 @@ public class PrepareDataPromptPageMacMachine extends PrepareDataPromptPage {
                 .append(getMetricTitleStartElem().getText())
                 .append(getMetricTitleOpenParenthesesElem().getText())
                 .append(getMetricTitleSelectedCountElem().getText())
+                .append(getMetricTitleCountSeparatorElem().getText())
                 .append(getMetricTitleTotalCountElem().getText())
                 .append(getMetricTitleCloseParenthesesElem().getText())
                 .toString();
@@ -254,7 +239,7 @@ public class PrepareDataPromptPageMacMachine extends PrepareDataPromptPage {
         return machine.waitAndFind(METRIC_TITLE_SELECTED_COUNT);
     }
 
-    public WebElement getMetricTitleCoutnSeparatorElem(){
+    public WebElement getMetricTitleCountSeparatorElem(){
         return machine.waitAndFind(METRIC_TITLE_COUNT_SEPARATOR);
     }
 
@@ -270,7 +255,7 @@ public class PrepareDataPromptPageMacMachine extends PrepareDataPromptPage {
         if (index == -1)
             return getMetricAllCheckboxElem();
         else
-            return machine.waitAndFindElemWrapper(By.xpath(String.format(METRIC_BASE, index)));
+            return machine.waitAndFindElemWrapper(By.xpath(String.format(isDataset ? METRIC_BASE_DATASET : METRIC_BASE_REPORT, index)));
     }
 
     public void assertFiltersTitleLoadedCorrectly(int selected, int total){
@@ -314,29 +299,31 @@ public class PrepareDataPromptPageMacMachine extends PrepareDataPromptPage {
     }
 
     public WebDriverElemWrapper getFilterElemByIndex(int index){
-        String selector = String.format(FILTER_BASE, index);
+        String selector = String.format(isDataset ? FILTER_BASE_DATASET : FILTER_BASE_REPORT, index);
 
         return machine.waitAndFindElemWrapper(By.xpath(selector));
     }
 
-    public WebDriverElemWrapper getCrosstabNotificationElem(){
-        return machine.waitAndFindElemWrapper(CROSSTAB_NOTIFICATION, machine.QUARTER_UNIT);
-    }
+    private int getElemIncrement(){
+        int res = 1;
 
-    private boolean isCrosstabReport(){
-        try {
-            getCrosstabNotificationElem();
-            return true;
-        } catch (org.openqa.selenium.TimeoutException e){
-            return false;
-        }
+        if (isCrosstabReport())
+            res++;
+
+        return res;
     }
 
     public WebDriverElemWrapper getAttributeAllCheckboxElem(){
-        if (isCrosstabReport())
-            return machine.waitAndFindElemWrapper(ATTRIBUTE_ALL_CHECKBOX_FOR_CROSSTAB);
-        else
-            return machine.waitAndFindElemWrapper(ATTRIBUTE_ALL_CHECKBOX);
+        return isDataset ? getAttributeAllCheckboxElemDataset() : getAttributeAllCheckboxElemReport();
+    }
+
+    private WebDriverElemWrapper getAttributeAllCheckboxElemDataset(){
+        return machine.waitAndFindElemWrapper(ATTRIBUTE_ALL_CHECKBOX_DATASET);
+    }
+
+    private WebDriverElemWrapper getAttributeAllCheckboxElemReport(){
+        By selector = By.xpath(String.format(ATTRIBUTE_ALL_CHECKBOX_BASE_REPORT, 4 + getElemIncrement()));
+        return machine.waitAndFindElemWrapper(selector);
     }
 
     public WebElement getFilterValueElemFirst(){
@@ -366,21 +353,17 @@ public class PrepareDataPromptPageMacMachine extends PrepareDataPromptPage {
         if (index == -1)
             return getFilterValueAllCheckboxElem();
         else
-            return machine.waitAndFindElemWrapper(By.xpath(String.format(FILTER_VALUE_BASE, index)));
+            return machine.waitAndFindElemWrapper(By.xpath(String.format(isDataset ? FILTER_VALUE_BASE_DATASET : FILTER_VALUE_BASE_REPORT, index)));
     }
 
     public WebDriverElemWrapper getMetricAllCheckboxElem(){
-        if (isCrosstabReport())
-            return machine.waitAndFindElemWrapper(METRIC_ALL_CHECKBOX_FOR_CROSSTAB);
-        else
-            return machine.waitAndFindElemWrapper(METRIC_ALL_CHECKBOX);
+        By selector = isDataset ? METRIC_ALL_CHECKBOX_DATASET : By.xpath(String.format(METRIC_ALL_CHECKBOX_BASE_REPORT, 6 + getElemIncrement()));
+        return machine.waitAndFindElemWrapper(selector);
     }
 
     public WebDriverElemWrapper getFilterValueAllCheckboxElem(){
-        if (isCrosstabReport())
-            return machine.waitAndFindElemWrapper(FILTER_VALUE_ALL_CHECKBOX_FOR_CROSSTAB);
-        else
-            return machine.waitAndFindElemWrapper(FILTER_VALUE_ALL_CHECKBOX);
+        By selector = isDataset ? FILTER_VALUE_ALL_CHECKBOX_DATASET : By.xpath(String.format(FILTER_VALUE_ALL_CHECKBOX_BASE_REPORT, 9 + getElemIncrement()));
+        return machine.waitAndFindElemWrapper(selector);
     }
 
     public WebElementWithBooleanAXValue getViewSelectedSwitchElem(){

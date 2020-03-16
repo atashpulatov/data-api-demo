@@ -5,7 +5,7 @@ import desktop.automation.elementWrappers.AnyInterfaceElement;
 import desktop.automation.elementWrappers.ImageComparisonElem;
 import desktop.automation.exceptions.NotImplementedForDriverWrapperException;
 
-public abstract class BasePromptWithSingleSelectionListPage extends BasePromptWithSelectionListPage {
+public abstract class BasePromptWithSingleSelectionListPage extends BasePromptPage {
     public BasePromptWithSingleSelectionListPage(Machine machine) {
         super(machine);
     }

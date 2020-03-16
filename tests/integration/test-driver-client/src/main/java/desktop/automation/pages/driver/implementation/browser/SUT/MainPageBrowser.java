@@ -3,7 +3,7 @@ package desktop.automation.pages.driver.implementation.browser.SUT;
 import desktop.automation.driver.wrappers.Browser;
 import desktop.automation.elementWrappers.AnyInterfaceElement;
 import desktop.automation.elementWrappers.WebDriverElemWrapper;
-import desktop.automation.elementWrappers.mac.enums.FontValue;
+import desktop.automation.elementWrappers.enums.FontValue;
 import desktop.automation.exceptions.NotImplementedForDriverWrapperException;
 import desktop.automation.pages.SUT.MainPage;
 import org.openqa.selenium.*;
@@ -23,6 +23,8 @@ public class MainPageBrowser extends MainPage {
     private static final By ROWS_HEIGHT_MENU_ITEM_ELEM = By.cssSelector("#m_excelWebRenderer_ewaCtl_gridMenuId #ContextMenu\\.RowHeight-Menu16");
     private static final By FONT_INPUT_ELEM = By.cssSelector("#m_excelWebRenderer_ewaCtl_Font\\.FontName");
     private static final By FONT_INPUT_DROP_DOWN_ELEM = By.cssSelector("#m_excelWebRenderer_ewaCtl_Font\\.FontName-Medium > a");
+    private static final By CELL_FORMATTING_MENU_DROP_DOWN_ELEM = By.xpath("//span[contains(@id,'m_excelWebRenderer_ewaCtl_Number')]/a");
+    private static final By CELL_FORMATTING_MENU_MORE_NUMBER_FORMATS_OPTION_ELEM = By.id("m_excelWebRenderer_ewaCtl_Number.NumberFormatDialog-Menu32");
 
     public MainPageBrowser(Browser browser) {
         super(browser);
@@ -32,11 +34,6 @@ public class MainPageBrowser extends MainPage {
     public AnyInterfaceElement getMoreItemsMenuElem() {
         machine.waitForAddInFrameReadyForBrowser();
         return machine.waitAndFindElemWrapper(MORE_ITEMS_MENU_BTN);
-    }
-
-    @Override
-    public AnyInterfaceElement getOfficeAddInLogoElem() {
-        return getOfficeAddInLogoWebDriverElem();
     }
 
     @Override
@@ -57,12 +54,6 @@ public class MainPageBrowser extends MainPage {
     }
 
     @Override
-    public AnyInterfaceElement getSessionExpiredNotificationElem() {
-        machine.focusOnAddInFrameForBrowser();
-        return machine.waitAndFindElemWrapper(SESSION_EXPIRED_NOTIFICATION);
-    }
-
-    @Override
     public void goToCell(String cell) {
         cell = cell.toUpperCase();
 
@@ -79,9 +70,6 @@ public class MainPageBrowser extends MainPage {
             cellInputValue = cellInput.getText();
         } while (!cellInputValue.equals(cell) && i++ < 3);
     }
-
-    private static final By CELL_FORMATTING_MENU_DROP_DOWN_ELEM = By.xpath("//span[contains(@id,'m_excelWebRenderer_ewaCtl_Number')]/a");
-    private static final By CELL_FORMATTING_MENU_MORE_NUMBER_FORMATS_OPTION_ELEM = By.id("m_excelWebRenderer_ewaCtl_Number.NumberFormatDialog-Menu32");
 
     @Override
     public String getCurrentlySelectedCellValue(String cell) {
@@ -139,11 +127,6 @@ public class MainPageBrowser extends MainPage {
     }
 
     @Override
-    public void assertHeaderPresent(String header) {
-        throw new NotImplementedForDriverWrapperException();
-    }
-
-    @Override
     protected By getHeaderSelector(String header)  {
         String selector = String.format(COLUMN_HEADER_ELEM_BASE, header.toUpperCase());
         return By.xpath(selector);
@@ -153,12 +136,7 @@ public class MainPageBrowser extends MainPage {
         Dimension initialHeaderSize = getHeaderElem(header).getDriverElement().getSize();
         openHeaderContextMenu(header);
 
-        try {
-            Integer.parseInt(header);
-            getHideRowsMenuItemElem().click();
-        } catch (NumberFormatException e){
-            getHideColumnsMenuItemElem().click();
-        }
+        (isRowHeader(header) ? getHideRowsMenuItemElem() : getHideColumnsMenuItemElem()).click();
 
         waitForHeaderSizeToChange(initialHeaderSize, header);
     }

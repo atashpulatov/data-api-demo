@@ -4,18 +4,11 @@ import desktop.automation.driver.wrappers.Machine;
 import desktop.automation.elementWrappers.WebDriverElemWrapper;
 import desktop.automation.pages.nonSUT.PreSUTPage;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 
-import static desktop.automation.ConfigVars.EXCEL_ADD_IN_NAME_IN_HOME_TAB;
 
 public class PreSUTPageWindowsMachine extends PreSUTPage {
     public PreSUTPageWindowsMachine(Machine machine) {
         super(machine);
-    }
-
-    @Override
-    public WebElement getAddInStartElem() {
-        return machine.waitAndFind(By.xpath("//Button[@Name=\"" + EXCEL_ADD_IN_NAME_IN_HOME_TAB + "\"]"));
     }
 
     @Override

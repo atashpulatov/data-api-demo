@@ -1,11 +1,10 @@
 package desktop.automation.pages.SUT.prompts.bases;
 
 import desktop.automation.driver.wrappers.Machine;
+import desktop.automation.elementWrappers.WebDriverElemWrapper;
 import desktop.automation.selectors.SUT.prompts.PromptSelectors;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
-
-import java.util.List;
 
 public abstract class BasePromptPage extends PromptSelectors {
     protected Machine machine;
@@ -20,13 +19,21 @@ public abstract class BasePromptPage extends PromptSelectors {
     }
 
     public void clickRunBtnAndAssertImportFLow(){
+        clickRunBtnAndAssertImportFLow(40);
+    }
+
+    public void clickRunBtnAndAssertImportFLow(int importTimeout){
         getRunBtnElem().click();
-        machine.getImportingDataSingleRefreshPopUpPage().assertImportSingleFlow(40);
+        machine.getImportingDataSingleRefreshPopUpPage().assertImportSingleFlow(importTimeout);
     }
 
     public void clickRunBtnAndAssertRefreshFlowSingle(boolean isDataset){
+        clickRunBtnAndAssertRefreshFlowSingle(isDataset, 40);
+    }
+
+    public void clickRunBtnAndAssertRefreshFlowSingle(boolean isDataset, int refreshTimeout){
         getRunBtnElem().click();
-        machine.getImportingDataSingleRefreshPopUpPage().assertRefreshSingleFlow(isDataset, 40);
+        machine.getImportingDataSingleRefreshPopUpPage().assertRefreshSingleFlow(isDataset, refreshTimeout);
     }
 
     public boolean isRunEnabled(){
@@ -47,17 +54,13 @@ public abstract class BasePromptPage extends PromptSelectors {
         return machine.isButtonEnabled(getCancelBtnElem());
     }
 
-    public RemoteWebElement getNumericPromptOutOfRangeMessage(){
-        List<WebElement> all = machine.driver.findElements(NUMERIC_OUT_OF_RANGE_MESSAGE_ELEM);
-
-        return (RemoteWebElement) all.get(all.size() - 1);
+    public WebDriverElemWrapper getNumericPromptOutOfRangeMessage(){
+        return machine.waitAndFindElemWrapper(NUMERIC_OUT_OF_RANGE_MESSAGE_ELEM);
     }
 
-    public RemoteWebElement getPromptRequiresAnswerMessageElem(){
-        List<WebElement> all = machine.driver.findElements(PROMPT_REQUIRES_ANS_MESSAGE_ELEM);
-
-        return (RemoteWebElement) all.get(all.size() - 1);
+    public WebDriverElemWrapper getPromptRequiresAnswerMessageElem(){
+        return machine.waitAndFindElemWrapper(PROMPT_REQUIRES_ANS_MESSAGE_ELEM);
     }
 
-    abstract public void answerPromptCorretly();
+    abstract public void answerPromptCorrectly();
 }

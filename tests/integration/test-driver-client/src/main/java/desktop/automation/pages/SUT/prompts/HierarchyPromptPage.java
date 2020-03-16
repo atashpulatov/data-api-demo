@@ -13,7 +13,7 @@ public abstract class HierarchyPromptPage extends BasePromptWithSingleSelectionL
     }
 
     @Override
-    public void answerPromptCorretly() {
+    public void answerPromptCorrectly() {
         machine.getHierarchyPromptPage().getAddAllBtnElem().click();
         machine.getHierarchyPromptPage().getRunBtnElem().click();
     }
@@ -22,11 +22,17 @@ public abstract class HierarchyPromptPage extends BasePromptWithSingleSelectionL
 
     public void assertPromptOpen(){
         machine.focusOnPromptPopUpFrameForBrowser();
-        machine.assertNotPresent(ADD_ALL_BTN_ELEM);
+        getAddAllBtnElem();
     }
 
     public void assertPromptNotOpen(){
-        machine.focusOnPromptPopUpFrameForBrowser();
-        machine.assertNotPresent(ADD_ALL_BTN_ELEM);
+        boolean isPopPresent = false;
+        try {
+            machine.focusOnPromptPopUpFrameForBrowser();
+            isPopPresent = true;
+        }catch (Throwable ignored) {}
+
+        if (isPopPresent)
+            machine.assertNotPresent(ADD_ALL_BTN_ELEM);
     }
 }

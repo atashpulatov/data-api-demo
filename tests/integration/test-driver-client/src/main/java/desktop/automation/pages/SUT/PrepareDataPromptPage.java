@@ -15,8 +15,8 @@ import static junit.framework.TestCase.assertEquals;
 
 
 public abstract class PrepareDataPromptPage extends PrepareDataPromptPageSelectors {
-    //TODO copied logic from MacAutomation project, abstract the key methods fro PrepareDataPage and and utilize single ImportPrepareDataHelper
     protected Machine machine;
+    protected boolean isDataset;
     public PrepareDataPromptPage(Machine machine) {
         this.machine = machine;
     }
@@ -68,7 +68,7 @@ public abstract class PrepareDataPromptPage extends PrepareDataPromptPageSelecto
     }
 
     public void clickFilterAndFilterValues(AnyInterfaceElement filterElem, int[] filterValues){
-//        filterElem.click();
+        filterElem.click();
         WebDriverElemWrapper[] filterValueElems = getFilterValues(filterValues);
         for (WebDriverElemWrapper filterValueElem : filterValueElems) {
             filterValueElem.click();
@@ -91,14 +91,14 @@ public abstract class PrepareDataPromptPage extends PrepareDataPromptPageSelecto
         return machine.waitAndFindElemWrapper(IMPORT_BTN);
     }
 
-    public void clickImportDataBtnAndAssertImportFlow(){
+    public void clickImportDataBtnAndAssertImportFlow(int timeout){
         getImportBtn().click();
-        machine.getImportingDataSingleRefreshPopUpPage().assertImportSingleFlow(180);
+        machine.getImportingDataSingleRefreshPopUpPage().assertImportSingleFlow(timeout);
     }
 
-    public void clickImportDataBtnAndAssertRefreshFlowSingle(boolean isDataset){
+    public void clickImportDataBtnAndAssertRefreshFlowSingle(boolean isDataset, int timeout){
         getImportBtn().click();
-        machine.getImportingDataSingleRefreshPopUpPage().assertRefreshSingleFlow(isDataset, 180);
+        machine.getImportingDataSingleRefreshPopUpPage().assertRefreshSingleFlow(isDataset, timeout);
     }
 
     public WebDriverElemWrapper getCancelBtn(){
@@ -116,5 +116,26 @@ public abstract class PrepareDataPromptPage extends PrepareDataPromptPageSelecto
 
     public WebDriverElemWrapper getFilterExcludesAllDataMessage(){
         return machine.waitAndFindElemWrapper(FILTER_EXCLUDES_ALL_DATA_ERROR_MESSAGE);
+    }
+
+    public WebDriverElemWrapper getDisplayAttributeFormNamesLinkElem(){
+        return machine.waitAndFindElemWrapper(DISPLAY_ATTRIBUTE_FORM_NAMES_LINK_ELEM, machine.QUARTER_UNIT);
+    }
+
+    public WebDriverElemWrapper getCrosstabNotificationElem(){
+        return machine.waitAndFindElemWrapper(CROSSTAB_NOTIFICATION, machine.QUARTER_UNIT);
+    }
+
+    public boolean isCrosstabReport(){
+        try {
+            getCrosstabNotificationElem();
+            return true;
+        } catch (org.openqa.selenium.TimeoutException e){
+            return false;
+        }
+    }
+
+    public void setDataset(boolean dataset) {
+        isDataset = dataset;
     }
 }
