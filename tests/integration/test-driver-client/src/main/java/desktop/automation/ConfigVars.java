@@ -28,7 +28,7 @@ public class ConfigVars {
     public static final String EXCEL_ADD_IN_NAME_IN_HOME_TAB_BROWSER = "env-182059";
 
     //Mac desktop specific
-    public static final String EXCEL_ADD_IN_NAME_IN_HOME_TAB_MAC_DESKTOP = "Import Data";
+    public static final String EXCEL_ADD_IN_NAME_IN_HOME_TAB_MAC_DESKTOP = "yi_local_ip";
 
     //Windows desktop specific
     public static final String WINDOWS_HOST = "localhost";

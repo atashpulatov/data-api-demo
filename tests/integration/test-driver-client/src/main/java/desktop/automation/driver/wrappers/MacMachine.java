@@ -69,7 +69,7 @@ public class MacMachine extends Machine {
             try {
                 driver = new AppiumDriver(new URL(host), caps);
             } catch (org.openqa.selenium.WebDriverException e){
-                if (e.getMessage().startsWith("Connection refused (Connection refused)")) {
+                if (e.getMessage().startsWith("Connection refused")) {
                     try {
                         Runtime.getRuntime().exec("open /Applications/AppiumForMac.app").waitFor();
                         Thread.sleep(3_000);
