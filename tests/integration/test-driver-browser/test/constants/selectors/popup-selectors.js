@@ -14,6 +14,8 @@ export const popupSelectors = {
   cancelBtn: '#cancel',
   runBtn: '#run',
   runBtnForPromptedDossier: '#id_mstr2 > tbody > tr:nth-child(3) > td > div > label.mstrPromptEditorButtonRun',
+  buttonLoading: 'button.loading',
+  emptySearchResults: 'p=None of the objects matched your search.',
   firstObject: '#root > div > div.object-table > div.object-table-container > div:nth-child(1) > div > div.ReactVirtualized__Grid.ReactVirtualized__Table__Grid > div > div > div',
   secondObject: $('#root > div > div.object-table > div.object-table-container > div:nth-child(1) > div > div.ReactVirtualized__Grid.ReactVirtualized__Table__Grid > div > div:nth-child(2)'),
   anyObject: (index) => `div.ReactVirtualized__Grid.ReactVirtualized__Table__Grid > div > div:nth-child(${index}) > div`,
@@ -100,6 +102,7 @@ export const popupSelectors = {
     getAllPanelCheckbox: (checkboxTitle) => `.all-panel__content input[aria-label="Checkbox for ${checkboxTitle}"] + .checkmark`,
     getAllPanelDisabledCheckbox: (checkboxTitle) => `.all-panel__content .category-list-row.disabled label[title="${checkboxTitle}"]`,
     disabledCheckboxAllPanel: '.all-panel__content .category-list-row.disabled input',
+    categoryListRowDisabled: 'category-list-row disabled',
     dates: '.mstr-date-picker input',
     clearAll: '.filter-panel__button'
   },

@@ -3,6 +3,7 @@ import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { switchToDialogFrame } from '../../../helpers/utils/iframe-helper';
+import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 
 describe('F24086 Improved browsing by adding filters', () => {
   beforeEach(() => {
@@ -22,7 +23,7 @@ describe('F24086 Improved browsing by adding filters', () => {
     // apply filters
     PluginPopup.clickRefreshButton();
     const filterResultBefore = PluginPopup.getFilterResults();
-    PluginPopup.waitUntilActionIsFinished('button.loading');
+    PluginPopup.waitUntilActionIsFinished(popupSelectors.buttonLoading);
     PluginPopup.clickFilterButton();
     PluginPopup.clickAllButton('Owner');
     PluginPopup.clickSelectAll();
@@ -41,27 +42,29 @@ describe('F24086 Improved browsing by adding filters', () => {
     PluginPopup.selectLastObject();
 
     PluginPopup.clickRefreshButton();
-    PluginPopup.waitUntilActionIsFinished('button.loading');
+    PluginPopup.waitUntilActionIsFinished(popupSelectors.buttonLoading);
     PluginPopup.scrollTable(['End']);
     PluginPopup.selectLastObject();
 
     PluginPopup.clickRefreshButton();
-    PluginPopup.waitUntilActionIsFinished('button.loading');
+    PluginPopup.waitUntilActionIsFinished(popupSelectors.buttonLoading);
     PluginPopup.searchForObject('something not existing');
-    $('p=None of the objects matched your search.').waitForDisplayed(1000);
-    $('button.search-field__clear-button').click();
+    $(popupSelectors.emptySearchResults).waitForDisplayed(1000);
+    $(popupSelectors.clearSearchInput).click();
     PluginPopup.scrollTable(['End']);
     PluginPopup.selectLastObject();
 
     PluginPopup.clickRefreshButton();
-    browser.waitUntil(() => ($('button.loading').isExisting()));
+    browser.waitUntil(() => ($(popupSelectors.buttonLoading).isExisting()));
     PluginPopup.clickFilterButton();
-    PluginPopup.waitUntilActionIsFinished('category-list-row disabled');
+    // browser.debug();
+    // PluginPopup.waitUntilActionIsFinished(popupSelectors.filterPanel.disabledCheckboxAllPanel);
+    browser.waitUntil(() => !($(popupSelectors.filterPanel.categoryListRowDisabled)));
     PluginPopup.tickFilterCheckBox('Type', 'Dossier');
     PluginPopup.clickAllButton('Owner');
     PluginPopup.clickSelectAll();
-    browser.waitUntil(() => !($('button.loading').isExisting()));
     browser.debug();
+    browser.waitUntil(() => !($(popupSelectors.buttonLoading).isExisting()));
     // TODO: Check if filters are preserved after fetching is finished
     // expect($('.all-panel__content .category-list-row.disabled input').isSelected()).toBe(false);
   });
