@@ -727,6 +727,90 @@ class PluginPopup {
   }
 
   /**
+   * Expands given number of rows starting at the beginning of visible rows in Table of Objects
+   *
+   * @param {number} amount Number of rows to expand
+   */
+  expandFirstRows(amount) {
+    $(popupSelectors.expandButton).waitForExist({ timeout: 3000 });
+    const expandButtons = $$(popupSelectors.expandButton);
+    for (let i = 0; i < amount; i++) {
+      expandButtons[i].waitForExist({ timeout: 3000 });
+      expandButtons[i].click()
+    }
+  }
+
+  /**
+   * Expands given number of rows starting from the end of visible rows in Table of Objects
+   *
+   * @param {number} amount Number of rows to expand
+   */
+  expandLastRows(amount) {
+    $(popupSelectors.expandButton).waitForExist({ timeout: 3000 });
+    const expandButtons = $$(popupSelectors.expandButton);
+    for (let i = expandButtons.length - 1; i > expandButtons.length - 1 - amount; i--) {
+      expandButtons[i].waitForExist({ timeout: 3000 });
+      expandButtons[i].click()
+    }
+  }
+
+  /**
+   * Expands given number of rows at the beginning and end of Table of Objects
+   *
+   * @param {number} amount Number of rows to expand
+   */
+  expandFirstAndLastRows(amount) {
+    const filterResults = this.getFilterResults();
+    amount = filterResults < amount ? filterResults : amount;
+    this.expandFirstRows(amount);
+    this.scrollTable(['End']);
+    this.expandLastRows(amount);
+  }
+
+  /**
+   * Clicks the Refresh button located at the top bar of Table of Objects
+   */
+  clickRefreshButton() {
+    waitAndClick($(popupSelectors.refreshButton));
+  }
+
+  /**
+   *  Waits for the Refresh to finish by checking if spinner animation of Refresh button ended
+   */
+  waitForRefresh() {
+    $(popupSelectors.refreshButton).waitForExist({ timeout: 5000 });
+    browser.pause(500);
+  }
+
+  /**
+   * Checks how many rows are expanded to display Details Panel, and returns the number
+   *
+   * @return {number} Number of expanded rows
+   */
+  findAmountOfOpenRows() {
+    const openRows = $$(popupSelectors.expandButtonOpen);
+    return openRows.length;
+  }
+
+  /**
+   * Returns true if rows at the beginning and the end of Table of Objects are collapsed. Otherwise returns false
+   */
+  areAllRowsCollapsed() {
+    let openedRows = this.findAmountOfOpenRows();
+    if (openedRows > 0) return false;
+    this.scrollTable(['End']);
+    openedRows = this.findAmountOfOpenRows();
+    return !(openedRows > 0);
+  }
+
+  /**
+   * Returns number of objects displayed in Table of Objects
+   */
+  getFilterResults() {
+    return $(popupSelectors.filterResults).getText();
+  }
+
+  /**
    * Sets Date modified in the filter panel
    *
    * @param {String} dateFrom
