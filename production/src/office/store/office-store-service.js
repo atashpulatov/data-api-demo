@@ -1,9 +1,10 @@
-import { officeProperties } from './office-properties';
-import { RunOutsideOfficeError } from '../../error/run-outside-office-error';
-import { errorService } from '../../error/error-handler';
+import {officeProperties} from './office-properties';
+import {RunOutsideOfficeError} from '../../error/run-outside-office-error';
+import {errorService} from '../../error/error-handler';
 
-import { SAVE_OBJECT_IN_EXCEL } from '../../operation/operation-steps';
-import { markStepCompleted } from '../../operation/operation-actions';
+import {SAVE_OBJECT_IN_EXCEL} from '../../operation/operation-steps';
+import {markStepCompleted} from '../../operation/operation-actions';
+import {RESTORE_ALL_OBJECTS} from '../../operation/object-actions';
 
 /* global Office */
 
@@ -124,10 +125,29 @@ class OfficeStoreService {
     }
   }
 
+  restoreObjectsFromExcelStore = () => {
+    const settings = this.getOfficeSettings();
+    const objects = settings.get(officeProperties.storedObjects);
+    objects && this.reduxStore.dispatch({
+      type: RESTORE_ALL_OBJECTS,
+      objects,
+    });
+  };
+
+  saveObjectsInExcelStore = () => {
+    const objects = this.reduxStore.getState().objectReducer.objects;
+    const settings = this.getOfficeSettings();
+    settings.set(officeProperties.storedObjects, objects);
+    // TODO: check if needed
+    // settings.saveAsync();
+    // TODO: uncomment below
+    // this.reduxStore.dispatch(markStepCompleted(objectData.objectWorkingId, SAVE_OBJECT_IN_EXCEL));
+  }
+
   saveAndPreserveReportInStore = async (objectData) => {
-    const { instanceDefinition, isRefresh } = objectData;
-    const { mstrTable } = instanceDefinition;
-    const tableDimensions = { columns: instanceDefinition.columns };
+    const {instanceDefinition, isRefresh} = objectData;
+    const {mstrTable} = instanceDefinition;
+    const tableDimensions = {columns: instanceDefinition.columns};
     const refreshDate = new Date();
 
     const report = {

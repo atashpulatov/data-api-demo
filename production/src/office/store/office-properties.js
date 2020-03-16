@@ -1,5 +1,6 @@
 import { propsProxy } from '../../home/enum-props-proxy';
 
+// TODO: rethink the name and the place of these properties
 export const officeProperties = new Proxy({
   /**
        * propertyAlias: propertyName,
@@ -8,6 +9,8 @@ export const officeProperties = new Proxy({
   officeAddress: 'address',
   workbookBindings: 'bindings',
   bindingItems: 'items',
+  storedObjects: 'storedObjects',
+  //TODO: remove below after refactor
   loadedReportProperties: 'reportProperties',
   isSecured: 'isSecured',
   isClearing: 'isClearing',
