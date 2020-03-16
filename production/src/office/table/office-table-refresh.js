@@ -9,7 +9,7 @@ class OfficeTableRefresh {
    * Creates an office table if the number of columns of an existing table changes.
    * If the new definition range is not empty we keep the original table.
    *
-   * @param {Object} excelContext
+   * @param {Office} excelContext
    * @param {String} bindingId
    * @param {Object} instanceDefinition
    * @param {Object} startCell  Top left corner cell
@@ -29,21 +29,18 @@ class OfficeTableRefresh {
       visualizationInfo
     }
   ) {
-    const { mstrTable, mstrTable: { isCrosstab, prevCrosstabDimensions } } = instanceDefinition;
+    const { mstrTable, mstrTable: { isCrosstab, prevCrosstabDimensions, toCrosstabChange } } = instanceDefinition;
+
     const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindingId);
 
-    if (isCrosstab && !mstrTable.toCrosstabChange) {
-      const crosstabEmptyRowExist = await officeApiCrosstabHelper.getValidOffset(
-        prevOfficeTable,
-        prevCrosstabDimensions.columnsY,
-        'getRowsAbove',
-        excelContext
-      );
+    await this.clearEmptyCrosstabRow(
+      isCrosstab,
+      toCrosstabChange,
+      prevOfficeTable,
+      prevCrosstabDimensions,
+      excelContext,
+    );
 
-      if (crosstabEmptyRowExist) {
-        officeApiCrosstabHelper.clearEmptyCrosstabRow(prevOfficeTable);
-      }
-    }
     prevOfficeTable.showHeaders = true;
     prevOfficeTable.load('name');
     await excelContext.sync();
@@ -52,8 +49,9 @@ class OfficeTableRefresh {
       prevOfficeTable,
       excelContext,
       instanceDefinition,
-      previousTableDimensions
+      previousTableDimensions,
     );
+
     startCell = await this.getStartCellOnRefresh(prevOfficeTable, excelContext);
 
     ({ tableColumnsChanged, startCell } = await this.clearIfCrosstabHeadersChanged(
@@ -61,7 +59,7 @@ class OfficeTableRefresh {
       excelContext,
       tableColumnsChanged,
       startCell,
-      mstrTable
+      mstrTable,
     ));
 
     let newBindingId = bindingId;
@@ -92,10 +90,26 @@ class OfficeTableRefresh {
       );
       console.timeEnd('Validate existing table');
     }
+
     return {
       tableColumnsChanged, startCell, officeTable, shouldFormat, newBindingId
     };
   }
+
+  clearEmptyCrosstabRow = async (isCrosstab, toCrosstabChange, prevOfficeTable, prevCrosstabDimensions, excelContext) => {
+    if (isCrosstab && !toCrosstabChange) {
+      const crosstabEmptyRowExist = await officeApiCrosstabHelper.getValidOffset(
+        prevOfficeTable,
+        prevCrosstabDimensions.columnsY,
+        'getRowsAbove',
+        excelContext
+      );
+
+      if (crosstabEmptyRowExist) {
+        officeApiCrosstabHelper.clearEmptyCrosstabRow(prevOfficeTable);
+      }
+    }
+  };
 
   /**
    * Compares if the number of columns in table has changed.
@@ -109,9 +123,12 @@ class OfficeTableRefresh {
     const { columns } = instanceDefinition;
     const tableColumns = prevOfficeTable.columns;
     const prevTableColumns = previousTableDimensions.columns;
+
     tableColumns.load('count');
     await excelContext.sync();
+
     const tableColumnsCount = tableColumns.count;
+
     return columns !== tableColumnsCount || columns !== prevTableColumns;
   };
 
@@ -136,7 +153,7 @@ class OfficeTableRefresh {
    * @param {Object} excelContext excel context
    * @param {Boolean} tableColumnsChanged Specify if table columns has been changed
    * @param {string} startCell  Starting cell of Table
-   * @param {Object} mstrTable  contains informations about mstr object
+   * @param {Object} mstrTable  contains information about mstr object
    *
    */
    clearIfCrosstabHeadersChanged = async (prevOfficeTable, excelContext, tableColumnsChanged, startCell, mstrTable) => {
@@ -154,7 +171,8 @@ class OfficeTableRefresh {
          tableColumnsChanged = true;
          prevCrosstabDimensions.rowsX = validRowsX;
          prevCrosstabDimensions.columnsY = validColumnsY;
-       } if (tableColumnsChanged) {
+       }
+       if (tableColumnsChanged) {
          startCell = officeApiHelper.offsetCellBy(
            startCell,
            -prevCrosstabDimensions.columnsY,

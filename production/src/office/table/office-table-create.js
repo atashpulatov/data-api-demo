@@ -1,5 +1,5 @@
 import { officeApiHelper } from '../api/office-api-helper';
-import officeTableHelper from './office-table-helper';
+import officeTableHelperRange from './office-table-helper-range';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 
 const DEFAULT_TABLE_STYLE = 'TableStyleLight11';
@@ -45,10 +45,10 @@ class OfficeTableCreate {
     console.log('tableRange:', tableRange);
     const range = this.getObjectRange(tableStartCell, worksheet, tableRange, mstrTable);
     excelContext.trackedObjects.add(range);
-    await officeTableHelper.checkObjectRangeValidity(prevOfficeTable, excelContext, range, instanceDefinition);
+    await officeTableHelperRange.checkObjectRangeValidity(prevOfficeTable, excelContext, range, instanceDefinition);
 
     if (isCrosstab) {
-      officeTableHelper.createCrosstabHeaders(tableStartCell, mstrTable, worksheet, crosstabHeaderDimensions);
+      officeApiCrosstabHelper.createCrosstabHeaders(tableStartCell, mstrTable, worksheet, crosstabHeaderDimensions);
     }
 
     const officeTable = worksheet.tables.add(tableRange, true); // create office table based on the range

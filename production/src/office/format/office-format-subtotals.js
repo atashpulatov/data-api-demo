@@ -15,7 +15,7 @@ class OfficeFormatSubtotals {
    * @param {Array} subtotalsAddresses Array containing object with cell coordinates
    * @param {Office} officeTable
    * @param {Office} excelContext ExcelContext
-   * @param {Object} mstrTable contains informations about mstr object
+   * @param {Object} mstrTable contains information about mstr object
    * @param {Boolean} [shouldBold=true] Specify whether the values in cells should be bold
    */
   applySubtotalFormattingRedux = async (objectData) => {
@@ -42,7 +42,7 @@ class OfficeFormatSubtotals {
    * @param {Array} subtotalsAddresses Array containing object with cell coordinates
    * @param {Office} officeTable
    * @param {Office} excelContext ExcelContext
-   * @param {Object} mstrTable contains informations about mstr object
+   * @param {Object} mstrTable contains information about mstr object
    * @param {Boolean} [shouldBold=true] Specify whether the values in cells should be bold
    */
   applySubtotalFormatting = async ({ excelContext, officeTable }, mstrTable, shouldBold = true) => {

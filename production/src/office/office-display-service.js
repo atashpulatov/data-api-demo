@@ -30,7 +30,7 @@ class OfficeDisplayService {
     operationBus.subscribe(MODIFY_OBJECT, popupController.saveReportWithParams);
     // operationBus.subscribe(REFRESH_STORED_OBJECT, officeStoreService.saveAndPreserveReportInStore);
 
-    operationBus.subscribe(GET_INSTANCE_DEFINITION, mstrObjectInstance.getInstaceDefinition);
+    operationBus.subscribe(GET_INSTANCE_DEFINITION, mstrObjectInstance.getInstanceDefinition);
     operationBus.subscribe(GET_OFFICE_TABLE, officeTableService.getOfficeTable);
     operationBus.subscribe(FORMAT_DATA, officeFormatData.applyFormatting);
     operationBus.subscribe(FORMAT_OFFICE_TABLE, officeFormatTable.formatTable);
@@ -174,7 +174,7 @@ class OfficeDisplayService {
 
     // // Get mstr instance definition
     // console.time('Instance definition');
-    // ({ body, instanceDefinition, visualizationInfo } = await mstrObjectInstance.getInstaceDefinition(
+    // ({ body, instanceDefinition, visualizationInfo } = await mstrObjectInstance.getInstanceDefinition(
     //   connectionData,
     //   visualizationInfo,
     //   displayAttrFormNames
