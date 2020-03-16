@@ -1,7 +1,7 @@
 import OfficeLogin from '../../../helpers/office/office.login';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
+import { switchToDialogFrame } from '../../../helpers/utils/iframe-helper';
 import { objectsList } from '../../../constants/objects-list';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
@@ -20,7 +20,7 @@ describe('TC59756 - Expanded view E2E workflow', () => {
 
   it('opens Detail panel using', () => {
     PluginRightPanel.clickImportDataButton();
-    switchToPluginFrame();
+    switchToDialogFrame();
     PluginPopup.switchLibrary(false);
     // expand 1 row
     PluginPopup.selectFirstObject();

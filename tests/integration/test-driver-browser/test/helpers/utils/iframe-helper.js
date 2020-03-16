@@ -15,6 +15,11 @@ export function switchToPromptFrame() {
   $('iframe[src*="app.embedded=true"]').waitForExist(9999);
   browser.switchToFrame($('iframe[src*="app.embedded=true"]'));
 }
+export function switchToDialogFrame() {
+  switchToExcelFrame();
+  $('#WACDialogPanel .AddinIframe').waitForExist(9999);
+  browser.switchToFrame($('#WACDialogPanel .AddinIframe'));
+}
 
 export function switchToPromptFrameForEditDossier() {
   switchToPluginFrame();
