@@ -9,10 +9,8 @@ import { LOAD_BROWSING_STATE_CONST, changeSorting } from '../navigation/navigati
 import { REFRESH_CACHE_COMMAND, refreshCache } from '../cache/cache-actions';
 import { START_REPORT_LOADING, STOP_REPORT_LOADING, RESET_STATE } from './popup-actions';
 import { CLEAR_POPUP_STATE, SET_MSTR_DATA } from './popup-state-actions';
-import { importRequested, editRequested, markStepCompleted } from '../operation/operation-actions';
-import { MODIFY_OBJECT } from '../operation/operation-steps';
-import { updateObject } from '../operation/object-actions';
-
+import { importRequested, editRequested } from '../operation/operation-actions';
+import stepSaveReportWithParams from './step-save-report-with-params';
 
 const URL = `${window.location.href}`;
 
@@ -116,7 +114,7 @@ class PopupController {
             await this.handleOkCommand(response, reportParams);
           } else {
             const reportPreviousState = this.getReportsPreviousState(reportParams);
-            await this.saveReportWithParams(reportParams, response, reportPreviousState);
+            await stepSaveReportWithParams.saveReportWithParams(reportParams, response, reportPreviousState);
           }
           break;
         case selectorProperties.commandOnUpdate:
@@ -125,7 +123,7 @@ class PopupController {
           } else {
             const reportPreviousState = this.getReportsPreviousState(reportParams);
             this.reduxStore.dispatch(editRequested(reportPreviousState, response));
-          // await this.saveReportWithParams(reportParams, response, reportPreviousState);
+          // await stepSaveReportWithParams.saveReportWithParams(reportParams, response, reportPreviousState);
           }
           break;
         case selectorProperties.commandCancel:
@@ -267,53 +265,6 @@ class PopupController {
       return { ...originalValues };
     }
     return { ...originalValues, displayAttrFormNames: displayAttrFormNames.automatic };
-  }
-
-  saveReportWithParams = async (objectData, response) => {
-    const { objectWorkingId } = objectData;
-
-    const updatedObject = {
-      objectWorkingId,
-      body: response.body
-    };
-
-    if (!response.visualizationInfo
-      && objectData.subtotalsInfo.importSubtotal !== response.subtotalsInfo.importSubtotal) {
-      const subtotalsInformation = { ...objectData.subtotalsInfo };
-      subtotalsInformation.importSubtotal = response.subtotalsInfo.importSubtotal;
-      updatedObject.subtotalsInfo = subtotalsInformation;
-    }
-
-    if (objectData.displayAttrFormNames !== response.displayAttrFormNames) {
-      updatedObject.displayAttrFormNames = response.displayAttrFormNames;
-    }
-
-    if (response.promptsAnswers) {
-      updatedObject.promptsAnswers = response.promptsAnswers;
-    }
-
-    if (response.isEdit) {
-      if (objectData.visualizationInfo.visualizationKey !== response.visualizationInfo.visualizationKey) {
-        response.visualizationInfo.nameShouldUpdate = true;
-        response.visualizationInfo.formatShouldUpdate = true;
-        updatedObject.displayAttrFormNames = response.displayAttrFormNames;
-      }
-
-      updatedObject.preparedInstanceId = response.preparedInstanceId;
-      updatedObject.isEdit = false;
-    }
-
-    this.reduxStore.dispatch(updateObject(updatedObject));
-    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, MODIFY_OBJECT));
-
-    // if (isErrorOnRefresh) {
-    //   if (reportPreviousState.objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-    //     await preserveReportValue(reportParams.bindId, 'manipulationsXML', reportPreviousState.manipulationsXML);
-    //     await preserveReportValue(reportParams.bindId, 'visualizationInfo', reportPreviousState.visualizationInfo);
-    //   } else {
-    //     await preserveReportValue(reportParams.bindId, 'body', reportPreviousState.body);
-    //   }
-    // }
   }
 }
 

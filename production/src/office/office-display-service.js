@@ -1,14 +1,13 @@
 
 import { officeStoreService } from './store/office-store-service';
-import mstrObjectInstance from '../mstr-object/mstr-object-instance';
-import officeFormatData from './format/office-format-data';
-import officeFormatTable from './format/office-format-table';
-import officeImportService from './import/office-import-service';
-import officeFormatSubtotals from './format/office-format-subtotals';
+import stepGetInstanceDefinition from '../mstr-object/step-get-instance-definition';
+import stepApplyFormatting from './format/step-apply-formatting';
+import stepFormatTable from './format/step-format-table';
+import stepFetchInsertDataIntoExcel from './import/step-fetch-insert-data-into-excel';
 import stepBindOfficeTable from './table/step-bind-office-table';
 import stepGetOfficeTable from './table/step-get-office-table';
-import { popupController } from '../popup/popup-controller';
-
+import stepSaveReportWithParams from '../popup/step-save-report-with-params';
+import stepApplySubtotalFormatting from './format/step-apply-subtotal-formatting';
 
 import {
   MODIFY_OBJECT,
@@ -28,15 +27,15 @@ class OfficeDisplayService {
   init = (reduxStore, operationBus) => {
     this.reduxStore = reduxStore;
 
-    operationBus.subscribe(MODIFY_OBJECT, popupController.saveReportWithParams);
+    operationBus.subscribe(MODIFY_OBJECT, stepSaveReportWithParams.saveReportWithParams);
     // operationBus.subscribe(REFRESH_STORED_OBJECT, officeStoreService.saveAndPreserveReportInStore);
 
-    operationBus.subscribe(GET_INSTANCE_DEFINITION, mstrObjectInstance.getInstanceDefinition);
+    operationBus.subscribe(GET_INSTANCE_DEFINITION, stepGetInstanceDefinition.getInstanceDefinition);
     operationBus.subscribe(GET_OFFICE_TABLE, stepGetOfficeTable.getOfficeTable);
-    operationBus.subscribe(FORMAT_DATA, officeFormatData.applyFormatting);
-    operationBus.subscribe(FORMAT_OFFICE_TABLE, officeFormatTable.formatTable);
-    operationBus.subscribe(FETCH_INSERT_DATA, officeImportService.fetchInsertDataIntoExcel);
-    operationBus.subscribe(FORMAT_SUBTOTALS, officeFormatSubtotals.applySubtotalFormattingRedux);
+    operationBus.subscribe(FORMAT_DATA, stepApplyFormatting.applyFormatting);
+    operationBus.subscribe(FORMAT_OFFICE_TABLE, stepFormatTable.formatTable);
+    operationBus.subscribe(FETCH_INSERT_DATA, stepFetchInsertDataIntoExcel.fetchInsertDataIntoExcel);
+    operationBus.subscribe(FORMAT_SUBTOTALS, stepApplySubtotalFormatting.applySubtotalFormattingRedux);
     operationBus.subscribe(BIND_OFFICE_TABLE, stepBindOfficeTable.bindOfficeTable);
     operationBus.subscribe(SAVE_OBJECT_IN_EXCEL, officeStoreService.saveObjectsInExcelStore);
     //TODO: remove below after refactor

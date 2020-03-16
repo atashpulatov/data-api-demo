@@ -1,7 +1,7 @@
 import { FORMAT_DATA, } from '../../operation/operation-steps';
 import { markStepCompleted } from '../../operation/operation-actions';
 
-class OfficeFormatData {
+class StepApplyFormatting {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
   }
@@ -98,5 +98,5 @@ class OfficeFormatData {
     return formatString;
   };
 }
-const officeFormatData = new OfficeFormatData();
-export default officeFormatData;
+const stepApplyFormatting = new StepApplyFormatting();
+export default stepApplyFormatting;

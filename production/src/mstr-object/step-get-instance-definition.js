@@ -19,7 +19,7 @@ const {
   fetchVisualizationDefinition,
 } = mstrObjectRestService;
 
-class MstrObjectInstance {
+class StepGetInstanceDefinition {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
   }
@@ -284,5 +284,5 @@ class MstrObjectInstance {
   }
 }
 
-const mstrObjectInstance = new MstrObjectInstance();
-export default mstrObjectInstance;
+const stepGetInstanceDefinition = new StepGetInstanceDefinition();
+export default stepGetInstanceDefinition;

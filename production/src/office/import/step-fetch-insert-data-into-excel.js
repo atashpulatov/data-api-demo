@@ -8,7 +8,7 @@ import { updateObject } from '../../operation/object-actions';
 
 const { getObjectContentGenerator } = mstrObjectRestService;
 
-class OfficeImportService {
+class StepFetchInsertDataIntoExcel {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
   }
@@ -130,5 +130,5 @@ class OfficeImportService {
   }
 }
 
-const officeImportService = new OfficeImportService();
-export default officeImportService;
+const stepFetchInsertDataIntoExcel = new StepFetchInsertDataIntoExcel();
+export default stepFetchInsertDataIntoExcel;

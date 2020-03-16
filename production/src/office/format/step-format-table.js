@@ -1,7 +1,7 @@
 import { FORMAT_OFFICE_TABLE, } from '../../operation/operation-steps';
 import { markStepCompleted } from '../../operation/operation-actions';
 
-class OfficeFormatTable {
+class StepFormatTable {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
   }
@@ -47,5 +47,5 @@ class OfficeFormatTable {
     console.timeEnd('Column auto size');
   };
 }
-const officeFormatTable = new OfficeFormatTable();
-export default officeFormatTable;
+const stepFormatTable = new StepFormatTable();
+export default stepFormatTable;

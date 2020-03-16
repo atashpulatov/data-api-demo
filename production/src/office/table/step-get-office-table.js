@@ -5,7 +5,7 @@ import { GET_OFFICE_TABLE } from '../../operation/operation-steps';
 import { markStepCompleted } from '../../operation/operation-actions';
 import { updateObject } from '../../operation/object-actions';
 
-class OfficeTableService {
+class StepGetOfficeTable {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
   };
@@ -126,5 +126,5 @@ class OfficeTableService {
   };
 }
 
-const officeTableService = new OfficeTableService();
-export default officeTableService;
+const stepGetOfficeTable = new StepGetOfficeTable();
+export default stepGetOfficeTable;

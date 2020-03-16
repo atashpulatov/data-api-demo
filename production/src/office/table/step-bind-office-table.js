@@ -3,7 +3,7 @@ import { officeApiHelper } from '../api/office-api-helper';
 import { BIND_OFFICE_TABLE } from '../../operation/operation-steps';
 import { markStepCompleted } from '../../operation/operation-actions';
 
-class OfficeTableService {
+class StepBindOfficeTable {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
   };
@@ -25,5 +25,5 @@ class OfficeTableService {
   };
 }
 
-const officeTableService = new OfficeTableService();
-export default officeTableService;
+const stepBindOfficeTable = new StepBindOfficeTable();
+export default stepBindOfficeTable;
