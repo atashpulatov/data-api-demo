@@ -66,7 +66,7 @@ Simply follow instruction from official [Microsoft page](https://docs.microsoft.
 
 ### Troubleshooting
 
-#### You received below error
+#### Permission denied
 ```
 git@github.microstrategy.com: Permission denied (publickey).
 fatal: Could not read from remote repository.
@@ -79,7 +79,7 @@ Of you have key in some custom path you should provide the path as below
 ```
 ssh-add /custom/path/to/ssh/key
 ```
-#### You received below error
+#### Host verification failed
 ```
 Host key verification failed.
 fatal: Could not read from remote repository.
@@ -93,6 +93,9 @@ ECDSA key fingerprint is SHA256:--------------------------------------------.
 Are you sure you want to continue connecting (yes/no)? yes
 ``` 
 Type **yes** when prompted.
+
+#### Dossier or prompts are not working
+Make sure embeddinglib.js is present in your environment.[More information](production/public/javascript/README.md).
 
 ## Running the tests
 
