@@ -1,11 +1,12 @@
 
 import { officeStoreService } from './store/office-store-service';
 import mstrObjectInstance from '../mstr-object/mstr-object-instance';
-import officeTableService from './table/office-table-service';
 import officeFormatData from './format/office-format-data';
 import officeFormatTable from './format/office-format-table';
 import officeImportService from './import/office-import-service';
 import officeFormatSubtotals from './format/office-format-subtotals';
+import stepBindOfficeTable from './table/step-bind-office-table';
+import stepGetOfficeTable from './table/step-get-office-table';
 import { popupController } from '../popup/popup-controller';
 
 
@@ -31,12 +32,12 @@ class OfficeDisplayService {
     // operationBus.subscribe(REFRESH_STORED_OBJECT, officeStoreService.saveAndPreserveReportInStore);
 
     operationBus.subscribe(GET_INSTANCE_DEFINITION, mstrObjectInstance.getInstanceDefinition);
-    operationBus.subscribe(GET_OFFICE_TABLE, officeTableService.getOfficeTable);
+    operationBus.subscribe(GET_OFFICE_TABLE, stepGetOfficeTable.getOfficeTable);
     operationBus.subscribe(FORMAT_DATA, officeFormatData.applyFormatting);
     operationBus.subscribe(FORMAT_OFFICE_TABLE, officeFormatTable.formatTable);
     operationBus.subscribe(FETCH_INSERT_DATA, officeImportService.fetchInsertDataIntoExcel);
     operationBus.subscribe(FORMAT_SUBTOTALS, officeFormatSubtotals.applySubtotalFormattingRedux);
-    operationBus.subscribe(BIND_OFFICE_TABLE, officeTableService.bindOfficeTable);
+    operationBus.subscribe(BIND_OFFICE_TABLE, stepBindOfficeTable.bindOfficeTable);
     operationBus.subscribe(SAVE_OBJECT_IN_EXCEL, officeStoreService.saveAndPreserveReportInStore);
   }
 

@@ -96,7 +96,13 @@ class OfficeTableRefresh {
     };
   }
 
-  clearEmptyCrosstabRow = async (isCrosstab, toCrosstabChange, prevOfficeTable, prevCrosstabDimensions, excelContext) => {
+  clearEmptyCrosstabRow = async (
+    isCrosstab,
+    toCrosstabChange,
+    prevOfficeTable,
+    prevCrosstabDimensions,
+    excelContext
+  ) => {
     if (isCrosstab && !toCrosstabChange) {
       const crosstabEmptyRowExist = await officeApiCrosstabHelper.getValidOffset(
         prevOfficeTable,
