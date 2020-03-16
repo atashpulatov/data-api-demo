@@ -2,19 +2,12 @@ import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
+import { switchToRightPanelFrame, switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
 import settings from '../../../config';
 
 describe('F24086 Improved browsing by adding filters', () => {
   beforeEach(() => {
-    browser.setWindowSize(1500, 1100);
-    OfficeWorksheet.openExcelHome();
-    const url = browser.getUrl();
-    if (url.includes('login.microsoftonline')) {
-      OfficeLogin.login(settings.officeOnline.username, settings.officeOnline.password);
-    }
-    OfficeWorksheet.createNewWorkbook();
-    OfficeWorksheet.openPlugin();
-    PluginRightPanel.loginToPlugin(settings.env.username, settings.env.password);
+    OfficeLogin.openExcelAndLoginToPlugin();
   });
 
   afterEach(() => {
@@ -26,6 +19,7 @@ describe('F24086 Improved browsing by adding filters', () => {
   it('TC53430 Refreshing and filtering during refresh', () => {
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
+    switchToPluginFrame();
     PluginPopup.switchLibrary(false);
     PluginPopup.selectFirstObject();
     // apply filters
@@ -42,10 +36,7 @@ describe('F24086 Improved browsing by adding filters', () => {
     PluginPopup.clickAllButton('Owner');
     PluginPopup.clickSelectAll();
     PluginPopup.tickFilterCheckBox('Type', 'Report');
-    expect($('div.FilterResult > strong').getText()).toEqual('938'); // TODO: get number of elements and compare
-
-    PluginPopup.scrollTable(['End']);
-    $('div=SQL Pass Performance').waitForDisplayed(1000); // TODO: Check if whole row is highlighted
+    expect($('div.FilterResult > strong').getText())($('button.loading').isExisting())scrollTab!($('button.loading').!($('button.loading').isExisting()) highlighted
     $('div=SQL Pass Performance').click();
     PluginPopup.clickHeader('Name');
     PluginPopup.clickFilterButton();
@@ -65,25 +56,13 @@ describe('F24086 Improved browsing by adding filters', () => {
     PluginPopup.scrollTable(['End']);
     $('div=SQL Pass Performance').waitForDisplayed(1000);
     $('div=SQL Pass Performance').click(); // TODO: Check if filters are preserved
-    PluginPopup.clickRefreshObjectTable();
-    browser.waitUntil(() => {
-      return ($('button.loading').isExisting());
-    });
-    browser.waitUntil(() => {
-      return !($('button.loading').isExisting());
-    });
-    PluginPopup.searchForObject('something not existing');
+    PluginPopup.clickRefreshObjectTable(($('button.loading').isExisting()).loading')($('button.loading').isExisting()).loading').isExisting());
+    }!($('button.loading').isExisting())g');
     $('p=None of the objects matched your search.').waitForDisplayed(1000);
     $('button.search-field__clear-button').click();
-    PluginPopup.scrollTable(['End']);
-    $('div=SQL Pass Performance').waitForDisplayed(1000);
-    $('div=SQL Pass Performance').click();
-    browser.debug();
-    PluginPopup.clickRefreshObjectTable();
-    browser.waitUntil(() => {
-      return ($('button.loading').isExisting());
-    });
-    browser.waitUntil(() => {
+    PluginPopup.scrollTable(['En($('button.loading').isExisting())(1000);
+    $('div=SQL Pass Per!($('button.loading').i($('button.loading').isExisting())ntil(() => {
+      return ($('b!($('button.loading').isExisting())til(() => {
       $('category-list-row disabled');
     })
     PluginPopup.clickFilterButton();
@@ -91,9 +70,5 @@ describe('F24086 Improved browsing by adding filters', () => {
     PluginPopup.clickAllButton('Owner');
     PluginPopup.clickSelectAll();
     browser.waitUntil(() => {
-      return !($('button.loading').isExisting());
-    });
-    // TODO: Check if filters are preserved after fetching is finished
-    // expect($('.all-panel__content .category-list-row.disabled input').isSelected()).toBe(false);
-  });
-});
+      return !($('button.loading')($('button.loading').isExisting())e preserved after fetching is finished
+    // expect($('.all-panel__content .category-list-row.dis($('button.loading').isExisting())button.loading').isExisting())!($('button.loading').isExisting())
