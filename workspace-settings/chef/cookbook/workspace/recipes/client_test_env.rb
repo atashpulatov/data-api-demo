@@ -31,18 +31,27 @@ when 'windows'
       action :install
     end
   end
+
 when 'mac_os_x'
   brew_file = "/usr/local/Homebrew/Library/Taps/homebrew/homebrew-core/Formula/opencv-mstr-office.rb"
+  manifest_file = "/Users/#{ENV["USER"]}/Library/Containers/com.microsoft.Excel/Data/Documents/wef/yi_localhost_ip.xml"
+  
   unless File.exists? brew_file
     cookbook_file brew_file do
       source "opencv-mstr-office.rb"
-      
-    end 
+        end 
     execute "install open-CV" do 
       command "brew install --build-from-source opencv-mstr-office"
       user ENV["USER"]
     end
   end
+  
+  unless File.exists? manifest_file
+      cookbook_file manifest_file do 
+        source "yi_localhost_ip.xml"
+    end
+  end
+  
   unless Dir.exists? "/Applications/AppiumForMac.app" 
     remote_file "/opt/appium_for_mac_0.3.0" do
       source "https://nexus.internal.microstrategy.com/repository/filerepo/io/appium/appium-for-mac/0.3.0/appium-for-mac-0.3.0.zip"
