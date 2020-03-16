@@ -146,6 +146,22 @@ class OfficeApiCrosstabHelper {
   }
 
   /**
+   * Create column and title headers for crosstab.
+   *
+   * @param {string} tableStartCell  Top left corner cell of the table
+   * @param {Object} mstrTable  contains information about mstr object
+   * @param {Object} sheet  excel worksheet
+   * @param {Object} crosstabHeaderDimensions contains dimension of crosstab headers (columnsY, cloumnsX, RowsY, RowsX)
+   */
+  createCrosstabHeaders = (tableStartCell, mstrTable, sheet, crosstabHeaderDimensions) => {
+    const { attributesNames, headers: { columns } } = mstrTable;
+
+    this.createColumnsHeaders(tableStartCell, columns, sheet);
+
+    this.createRowsTitleHeaders(tableStartCell, attributesNames, sheet, crosstabHeaderDimensions);
+  };
+
+  /**
    *Prepares parameters for createHeaders
    *
    * @param {Office} cellAddress Address of the first cell in report (top left)
@@ -280,6 +296,32 @@ class OfficeApiCrosstabHelper {
     const headerRange = officeTable.getDataBodyRange().getRow(0).getOffsetRange(-1, 0);
     headerRange.clear('Contents');
   }
+
+  /**
+   * Gets dimensions od the headers of crosstab report.
+   *
+   * @param {Object} instanceDefinition
+   */
+  getCrosstabHeaderDimensions = (instanceDefinition) => {
+    const { rows, mstrTable: { isCrosstab, headers } } = instanceDefinition;
+
+    if (isCrosstab) {
+      return {
+        columnsY: headers.columns.length,
+        columnsX: headers.columns[0].length,
+        // if there is no attributes in rows we need to setup 1 for offset for column attributes names
+        rowsX: headers.rows[0].length || 1,
+        rowsY: rows,
+      };
+    }
+
+    return {
+      columnsY: 0,
+      columnsX: 0,
+      rowsX: 0,
+      rowsY: 0,
+    };
+  };
 }
 
 export const officeApiCrosstabHelper = new OfficeApiCrosstabHelper();

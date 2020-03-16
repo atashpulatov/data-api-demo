@@ -6,8 +6,8 @@ import { GET_INSTANCE_DEFINITION } from '../operation/operation-steps';
 import { markStepCompleted } from '../operation/operation-actions';
 import { updateObject } from '../operation/object-actions';
 import { officeApiHelper } from '../office/api/office-api-helper';
-import officeTableHelper from '../office/table/office-table-helper';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
+import { officeApiCrosstabHelper } from '../office/api/office-api-crosstab-helper';
 
 
 const {
@@ -42,7 +42,7 @@ class MstrObjectInstance {
    * @param {Boolean} subtotalsVisible Information if the subtotals are visible
    * @returns {Object} Object containing officeTable and subtotalAddresses
    */
-   getInstaceDefinition = async (objectData) => {
+   getInstanceDefinition = async (objectData) => {
      const {
        objectWorkingId,
        displayAttrFormNames,
@@ -270,7 +270,7 @@ class MstrObjectInstance {
     const { mstrTable } = instanceDefinition;
     mstrTable.prevCrosstabDimensions = crosstabHeaderDimensions;
     mstrTable.crosstabHeaderDimensions = mstrTable.isCrosstab
-      ? officeTableHelper.getCrosstabHeaderDimensions(instanceDefinition)
+      ? officeApiCrosstabHelper.getCrosstabHeaderDimensions(instanceDefinition)
       : false;
     mstrTable.subtotalsInfo.subtotalsAddresses = subtotalsAddresses;
   }

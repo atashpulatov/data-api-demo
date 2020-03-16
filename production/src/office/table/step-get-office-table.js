@@ -1,15 +1,14 @@
 import officeTableCreate from './office-table-create';
 import officeTableRefresh from './office-table-refresh';
-import { officeApiHelper } from '../api/office-api-helper';
 
-import { GET_OFFICE_TABLE, BIND_OFFICE_TABLE } from '../../operation/operation-steps';
+import { GET_OFFICE_TABLE } from '../../operation/operation-steps';
 import { markStepCompleted } from '../../operation/operation-actions';
 import { updateObject } from '../../operation/object-actions';
 
 class OfficeTableService {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
-  }
+  };
 
   /**
    * Creates an office table if it's a new import or if the number of columns of an existing table changes.
@@ -68,7 +67,10 @@ class OfficeTableService {
           }
         ));
       } else {
-        ({ officeTable, newBindingId } = await officeTableCreate.createOfficeTable(
+        ({
+          officeTable,
+          newBindingId
+        } = await officeTableCreate.createOfficeTable(
           {
             instanceDefinition,
             excelContext,
@@ -94,7 +96,7 @@ class OfficeTableService {
     } catch (error) {
       console.log('error:', error);
     }
-  }
+  };
 
   /**
    * Checks if the report changes to or from crosstab
@@ -102,11 +104,11 @@ class OfficeTableService {
    * @param {Object} instanceDefinition
    *
    */
-  checkReportTypeChange=(instanceDefinition) => {
+  checkReportTypeChange = (instanceDefinition) => {
     const { mstrTable, mstrTable: { prevCrosstabDimensions, isCrosstab } } = instanceDefinition;
     mstrTable.toCrosstabChange = !prevCrosstabDimensions && isCrosstab;
     mstrTable.fromCrosstabChange = prevCrosstabDimensions && !isCrosstab;
-  }
+  };
 
   /**
    * TODO Do JSDOC in all refatored files
@@ -119,24 +121,10 @@ class OfficeTableService {
       return tableName;
     }
     const excelCompatibleTableName = mstrTable.name.replace(/(\.|•|‼| |!|#|\$|%|&|'|\(|\)|\*|\+|,|-|\/|:|;|<|=|>|@|\^|`|\{|\||\}|~|¢|£|¥|¬|«|»)/g, '_');
-    return `_${excelCompatibleTableName.slice(0, 239)}_${Date.now().toString()}`;
-  }
-
-  bindOfficeTable = async (ObjectData) => {
-    const {
-      newBindingId,
-      excelContext,
-      officeTable,
-      objectWorkingId
-    } = ObjectData;
-
-    officeTable.load('name');
-    await excelContext.sync();
-    const tablename = officeTable.name;
-    await officeApiHelper.bindNamedItem(tablename, newBindingId);
-
-    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, BIND_OFFICE_TABLE));
-  }
+    return `_${excelCompatibleTableName.slice(0, 239)}_${Date.now()
+      .toString()}`;
+  };
 }
+
 const officeTableService = new OfficeTableService();
 export default officeTableService;
