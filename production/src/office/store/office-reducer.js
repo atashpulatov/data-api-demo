@@ -13,36 +13,52 @@ export const officeReducer = (state = initialState, action) => {
   switch (action.type) {
     case officeProperties.actions.preLoadReport:
       return onPreLoadReport(action, state);
+
     case officeProperties.actions.loadReport:
       return onLoadReport(action, state);
+
     case officeProperties.actions.removeAllReports:
       return onRemoveAllReports(action, state);
+
     case officeProperties.actions.removeReport:
       return onRemoveReport(action, state);
+
     case officeProperties.actions.loadAllReports:
       return onLoadAllReports(action, state);
+
     case officeProperties.actions.startLoadingReport:
       return onStartLoadingReport(action, state);
+
     case officeProperties.actions.finishLoadingReport:
       return onFinishLoadingReport(action, state);
+
     case officeProperties.actions.popupShown:
       return onPopupShown(state);
+
     case officeProperties.actions.popupHidden:
       return onPopupHidden(state);
+
     case officeProperties.actions.startLoading:
       return onStartLoading(state);
+
     case officeProperties.actions.stopLoading:
       return onStopLoading(state);
+
     case officeProperties.actions.toggleSecuredFlag:
       return toggleSecuredFlag(action, state);
+
     case officeProperties.actions.toggleIsSettingsFlag:
       return toggleIsSettingsFlag(action, state);
+
     case officeProperties.actions.toggleIsConfirmFlag:
       return toggleIsConfirmFlag(action, state);
+
     case officeProperties.actions.toggleRenderSettingsFlag:
       return toggleRenderSettingsFlag(action, state);
+
     case officeProperties.actions.toggleIsClearingFlag:
       return toggleIsClearingFlag(action, state);
+
     default:
       break;
   }
