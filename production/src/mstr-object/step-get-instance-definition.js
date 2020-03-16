@@ -2,7 +2,7 @@ import { mstrObjectRestService } from './mstr-object-rest-service';
 import mstrObjectEnum from './mstr-object-type-enum';
 import { incomingErrorStrings, errorTypes, INVALID_VIZ_KEY_MESSAGE } from '../error/constants';
 
-import { GET_INSTANCE_DEFINITION } from '../operation/operation-steps';
+import { GET_INSTANCE_DEFINITION, IMPORT_OPERATION } from '../operation/operation-steps';
 import { markStepCompleted } from '../operation/operation-actions';
 import { updateObject } from '../operation/object-actions';
 import { officeApiHelper } from '../office/api/office-api-helper';
@@ -42,12 +42,11 @@ class StepGetInstanceDefinition {
    * @param {Boolean} subtotalsVisible Information if the subtotals are visible
    * @returns {Object} Object containing officeTable and subtotalAddresses
    */
-   getInstanceDefinition = async (objectData) => {
+   getInstanceDefinition = async (objectData, { operationType }) => {
      const {
        objectWorkingId,
        displayAttrFormNames,
        insertNewWorksheet,
-       selectedCell,
        crosstabHeaderDimensions,
        subtotalsInfo: { subtotalsAddresses } = false,
      } = objectData;
@@ -69,7 +68,7 @@ class StepGetInstanceDefinition {
      // Get excel context and initial cell
      console.group('Importing data performance');
      console.time('Total');
-     startCell = await this.getStartCell(insertNewWorksheet, excelContext, startCell, selectedCell);
+     startCell = await this.getStartCell(insertNewWorksheet, excelContext, operationType);
 
      let instanceDefinition;
      let { body } = connectionData;
@@ -268,19 +267,18 @@ class StepGetInstanceDefinition {
 
   savePreviousObjectData = (instanceDefinition, crosstabHeaderDimensions, subtotalsAddresses) => {
     const { mstrTable } = instanceDefinition;
-    mstrTable.prevCrosstabDimensions = crosstabHeaderDimensions;
+    mstrTable.prevCrosstabDimensions = crosstabHeaderDimensions || false;
     mstrTable.crosstabHeaderDimensions = mstrTable.isCrosstab
       ? officeApiCrosstabHelper.getCrosstabHeaderDimensions(instanceDefinition)
       : false;
     mstrTable.subtotalsInfo.subtotalsAddresses = subtotalsAddresses;
   }
 
-  getStartCell = async (insertNewWorksheet, excelContext, startCell, selectedCell) => {
+  getStartCell = async (insertNewWorksheet, excelContext, operationType) => {
     if (insertNewWorksheet) {
       await officeApiWorksheetHelper.createAndActivateNewWorksheet(excelContext);
     }
-    startCell = selectedCell || (await officeApiHelper.getSelectedCell(excelContext));
-    return startCell;
+    return operationType !== IMPORT_OPERATION || officeApiHelper.getSelectedCell(excelContext);
   }
 }
 

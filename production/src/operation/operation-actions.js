@@ -34,6 +34,17 @@ export const importRequested = (object) => {
   };
 };
 
+export const refreshRequestedTMP = (object) => {
+  const objectWorkingId = Date.now();
+  object.objectWorkingId = objectWorkingId;
+  return {
+    type: IMPORT_REQUESTED,
+    payload: {
+      operation: createOperation(REFRESH_REQUESTED, objectWorkingId),
+      object,
+    },
+  };
+};
 export const refreshRequested = (objectData) => {
   const backupObjectData = JSON.parse(JSON.stringify(objectData));
   const { objectWorkingId } = backupObjectData;
@@ -47,13 +58,13 @@ export const refreshRequested = (objectData) => {
   };
 };
 
-export const editRequested = (objectData, response) => {
+export const editRequested = (objectData, objectEditedData) => {
   const backupObjectData = JSON.parse(JSON.stringify(objectData));
   const { objectWorkingId } = backupObjectData;
   return {
     type: EDIT_REQUESTED,
     payload: {
-      operation: createOperation(EDIT_REQUESTED, objectWorkingId, { backupObjectData, response }),
+      operation: createOperation(EDIT_REQUESTED, objectWorkingId, { backupObjectData, objectEditedData }),
       objectWorkingId,
     },
   };
@@ -78,13 +89,13 @@ export const backupObject = (objectWorkingId, objectToBackup) => ({
 });
 
 function createOperation(operationRequest, objectWorkingId, objectData = {}) {
-  const { backupObjectData, response } = objectData;
+  const { backupObjectData, objectEditedData } = objectData;
   const operationType = operationTypes[operationRequest];
   return {
     operationType,
     objectWorkingId,
     stepsQueue: JSON.parse(JSON.stringify(operationStepsMap[operationType])),
     backupObjectData,
-    response,
+    objectEditedData,
   };
 }

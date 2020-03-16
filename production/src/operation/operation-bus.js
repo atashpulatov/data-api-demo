@@ -30,7 +30,7 @@ class OperationBus {
     const subscribedCallback = this.subscribedCallbacksMap[nextStep];
     if (subscribedCallback) {
       const currentObject = this.getCurrentObject(currentOperation.objectWorkingId);
-      subscribedCallback(currentObject, currentOperation.response);
+      subscribedCallback(currentObject, currentOperation);
     }
   }
 

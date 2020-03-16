@@ -10,7 +10,7 @@ import { REFRESH_CACHE_COMMAND, refreshCache } from '../cache/cache-actions';
 import { START_REPORT_LOADING, STOP_REPORT_LOADING, RESET_STATE } from './popup-actions';
 import { CLEAR_POPUP_STATE, SET_MSTR_DATA } from './popup-state-actions';
 import { importRequested, editRequested } from '../operation/operation-actions';
-import stepSaveReportWithParams from './step-save-report-with-params';
+
 
 const URL = `${window.location.href}`;
 
@@ -114,7 +114,8 @@ class PopupController {
             await this.handleOkCommand(response, reportParams);
           } else {
             const reportPreviousState = this.getReportsPreviousState(reportParams);
-            await stepSaveReportWithParams.saveReportWithParams(reportParams, response, reportPreviousState);
+            this.reduxStore.dispatch(editRequested(reportPreviousState, response));
+          // await stepSaveReportWithParams.saveReportWithParams(reportParams, response, reportPreviousState);
           }
           break;
         case selectorProperties.commandOnUpdate:
@@ -221,14 +222,12 @@ class PopupController {
         projectId: chosenProject,
         mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype),
         bindingId,
-        isRefresh: false,
         isPrompted,
         promptsAnswers,
         visualizationInfo,
         preparedInstanceId,
       };
 
-      console.log('options:', options);
       this.reduxStore.dispatch(importRequested(options));
 
       // const result = await officeDisplayService.printObject(options);

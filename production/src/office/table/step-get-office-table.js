@@ -1,7 +1,7 @@
 import officeTableCreate from './office-table-create';
 import officeTableRefresh from './office-table-refresh';
 
-import { GET_OFFICE_TABLE } from '../../operation/operation-steps';
+import { GET_OFFICE_TABLE, IMPORT_OPERATION } from '../../operation/operation-steps';
 import { markStepCompleted } from '../../operation/operation-actions';
 import { updateObject } from '../../operation/object-actions';
 
@@ -21,11 +21,10 @@ class StepGetOfficeTable {
    * @param {string} startCell  Top left corner cell
    *
    */
-  getOfficeTable = async (objectData) => {
+  getOfficeTable = async (objectData, { operationType }) => {
     try {
       console.time('Create or get table');
       const {
-        isRefresh,
         excelContext,
         bindingId,
         instanceDefinition,
@@ -47,7 +46,7 @@ class StepGetOfficeTable {
       let shouldFormat = true;
       let tableColumnsChanged = false;
 
-      if (isRefresh) {
+      if (operationType !== IMPORT_OPERATION) {
         ({
           tableColumnsChanged,
           startCell,
@@ -59,7 +58,6 @@ class StepGetOfficeTable {
             excelContext,
             bindingId,
             instanceDefinition,
-            startCell,
             newOfficeTableName,
             shouldFormat,
             previousTableDimensions,
@@ -89,6 +87,7 @@ class StepGetOfficeTable {
         tableColumnsChanged,
         newBindingId,
         instanceDefinition,
+        startCell,
       };
 
       this.reduxStore.dispatch(updateObject(updatedObject));

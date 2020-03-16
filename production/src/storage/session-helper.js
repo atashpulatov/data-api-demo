@@ -160,7 +160,6 @@ class SessionHelper {
       bindingId: null,
       dossierData: undefined,
       isPrompted: 0,
-      isRefresh: false,
       mstrObjectType: {
         name: 'report',
         request: 'reports',

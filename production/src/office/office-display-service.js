@@ -37,8 +37,8 @@ class OfficeDisplayService {
     operationBus.subscribe(FETCH_INSERT_DATA, stepFetchInsertDataIntoExcel.fetchInsertDataIntoExcel);
     operationBus.subscribe(FORMAT_SUBTOTALS, stepApplySubtotalFormatting.applySubtotalFormattingRedux);
     operationBus.subscribe(BIND_OFFICE_TABLE, stepBindOfficeTable.bindOfficeTable);
-    operationBus.subscribe(SAVE_OBJECT_IN_EXCEL, officeStoreService.saveObjectsInExcelStore);
-    //TODO: remove below after refactor
+    // operationBus.subscribe(SAVE_OBJECT_IN_EXCEL, officeStoreService.saveObjectsInExcelStore);
+    // TODO: remove below after refactor
     operationBus.subscribe(SAVE_OBJECT_IN_EXCEL, officeStoreService.saveAndPreserveReportInStore);
   }
 

@@ -1,6 +1,7 @@
 import { PROMISE_LIMIT } from '../../mstr-object/mstr-object-rest-service';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import officeInsertSplitHelper from './office-insert-split-helper';
+import { IMPORT_OPERATION } from '../../operation/operation-steps';
 
 class OfficeInsertService {
   /**
@@ -39,12 +40,12 @@ class OfficeInsertService {
     excelContext,
     excelRows,
     rowIndex,
-    isRefresh = false,
+    operationType,
     tableColumnsChanged,
     contextPromises,
     header,
     mstrTable) => {
-    await this.appendRowsToTable(excelRows, excelContext, officeTable, rowIndex, tableColumnsChanged, isRefresh);
+    await this.appendRowsToTable(excelRows, excelContext, officeTable, rowIndex, tableColumnsChanged, operationType);
 
     if (mstrTable.isCrosstab) { this.appendCrosstabRowsToRange(officeTable, header.rows, rowIndex); }
     contextPromises.push(excelContext.sync());
@@ -60,7 +61,7 @@ class OfficeInsertService {
    * @param {Boolean} tableColumnsChanged
    * @param {Boolean} isRefresh
    */
-  appendRowsToTable = async (excelRows, excelContext, officeTable, rowIndex, tableColumnsChanged, isRefresh) => {
+  appendRowsToTable = async (excelRows, excelContext, officeTable, rowIndex, tableColumnsChanged, operationType) => {
     console.group('Append rows');
     const isOverLimit = officeInsertSplitHelper.checkIfSizeOverLimit(excelRows);
     const splitExcelRows = officeInsertSplitHelper.getExcelRows(excelRows, isOverLimit);
@@ -73,7 +74,7 @@ class OfficeInsertService {
         .getRow(rowIndex)
         .getResizedRange(splitExcelRows[i].length - 1, 0);
       rowIndex += splitExcelRows[i].length;
-      if (!tableColumnsChanged && isRefresh) { rowRange.clear('Contents'); }
+      if (!tableColumnsChanged && operationType !== IMPORT_OPERATION) { rowRange.clear('Contents'); }
       rowRange.values = splitExcelRows[i];
       if (isOverLimit) {
         console.time(`Sync for ${splitExcelRows[i].length} rows`);

@@ -22,7 +22,6 @@ class OfficeTableRefresh {
       excelContext,
       bindingId,
       instanceDefinition,
-      startCell,
       newOfficeTableName,
       shouldFormat,
       previousTableDimensions,
@@ -52,7 +51,7 @@ class OfficeTableRefresh {
       previousTableDimensions,
     );
 
-    startCell = await this.getStartCellOnRefresh(prevOfficeTable, excelContext);
+    let startCell = await this.getStartCellOnRefresh(prevOfficeTable, excelContext);
 
     ({ tableColumnsChanged, startCell } = await this.clearIfCrosstabHeadersChanged(
       prevOfficeTable,
@@ -65,7 +64,6 @@ class OfficeTableRefresh {
     let newBindingId = bindingId;
     let officeTable;
     if (tableColumnsChanged) {
-      console.log('tableColumnsChanged:', tableColumnsChanged);
       console.log('Instance definition changed, creating new table');
 
       newOfficeTableName = prevOfficeTable.name;

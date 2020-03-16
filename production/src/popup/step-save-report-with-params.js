@@ -7,37 +7,40 @@ class StepSaveReportWithParams {
     this.reduxStore = reduxStore;
   };
 
-  saveReportWithParams = async (objectData, response) => {
-    const { objectWorkingId } = objectData;
+  saveReportWithParams = (objectData, { objectEditedData }) => {
+    const { objectWorkingId, instanceDefinition: { mstrTable } } = objectData;
 
     const updatedObject = {
       objectWorkingId,
-      body: response.body
+      body: objectEditedData.body,
+      bindingId: objectData.newBindingId,
+      prevOfficeTable: objectData.officeTable,
+      previousTableDimensions: { columns: objectData.instanceDefinition.columns },
     };
 
-    if (!response.visualizationInfo
-      && objectData.subtotalsInfo.importSubtotal !== response.subtotalsInfo.importSubtotal) {
-      const subtotalsInformation = { ...objectData.subtotalsInfo };
-      subtotalsInformation.importSubtotal = response.subtotalsInfo.importSubtotal;
-      updatedObject.subtotalsInfo = subtotalsInformation;
+    if (!objectEditedData.visualizationInfo
+      && mstrTable.subtotalsInfo.importSubtotal !== objectEditedData.subtotalsInfo.importSubtotal) {
+      const subtotalsInformation = { ...mstrTable.subtotalsInfo };
+      subtotalsInformation.importSubtotal = objectEditedData.subtotalsInfo.importSubtotal;
+      updatedObject.instanceDefinition.mstrTable.subtotalsInfo = subtotalsInformation;
     }
 
-    if (objectData.displayAttrFormNames !== response.displayAttrFormNames) {
-      updatedObject.displayAttrFormNames = response.displayAttrFormNames;
+    if (objectData.displayAttrFormNames !== objectEditedData.displayAttrFormNames) {
+      updatedObject.displayAttrFormNames = objectEditedData.displayAttrFormNames;
     }
 
-    if (response.promptsAnswers) {
-      updatedObject.promptsAnswers = response.promptsAnswers;
+    if (objectEditedData.promptsAnswers) {
+      updatedObject.promptsAnswers = objectEditedData.promptsAnswers;
     }
 
-    if (response.isEdit) {
-      if (objectData.visualizationInfo.visualizationKey !== response.visualizationInfo.visualizationKey) {
-        response.visualizationInfo.nameShouldUpdate = true;
-        response.visualizationInfo.formatShouldUpdate = true;
-        updatedObject.displayAttrFormNames = response.displayAttrFormNames;
+    if (objectEditedData.isEdit) {
+      if (objectData.visualizationInfo.visualizationKey !== objectEditedData.visualizationInfo.visualizationKey) {
+        objectEditedData.visualizationInfo.nameShouldUpdate = true;
+        objectEditedData.visualizationInfo.formatShouldUpdate = true;
+        updatedObject.displayAttrFormNames = objectEditedData.displayAttrFormNames;
       }
 
-      updatedObject.preparedInstanceId = response.preparedInstanceId;
+      updatedObject.preparedInstanceId = objectEditedData.preparedInstanceId;
       updatedObject.isEdit = false;
     }
 
@@ -52,7 +55,7 @@ class StepSaveReportWithParams {
     //     await preserveReportValue(reportParams.bindId, 'body', reportPreviousState.body);
     //   }
     // }
-  };
+  }
 }
 
 export const stepSaveReportWithParams = new StepSaveReportWithParams();

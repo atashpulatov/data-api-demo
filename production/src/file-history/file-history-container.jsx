@@ -105,7 +105,7 @@ export class FileHistoryContainerNotConnected extends React.Component {
   };
 
   removeAllAction = (reportArray) => {
-    const { startLoading } = this.props;
+    const { startLoading, stopLoading } = this.props;
     startLoading();
     const { allowRefreshAllClick } = this.state;
     if (allowRefreshAllClick) {
@@ -113,10 +113,10 @@ export class FileHistoryContainerNotConnected extends React.Component {
         const object = reportArray[index];
         this.setState({ allowRefreshAllClick: false }, async () => {
           await officeApiRemoveHelper.removeReportFromExcel(object.bindId, object.isCrosstab, object.crosstabHeaderDimensions);
-          if (this.ismounted) { this.setState({ allowRefreshAllClick: true }); }
         });
       }
     }
+    stopLoading();
   };
 
   showData = async () => {

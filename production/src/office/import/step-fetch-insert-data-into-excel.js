@@ -24,7 +24,7 @@ class StepFetchInsertDataIntoExcel {
   * @param {Object} [parameter.visualizationInfo]
   * @returns {Object} Object containing officeTable and subtotalAddresses
   */
-   fetchInsertDataIntoExcel = async (objectData) => {
+   fetchInsertDataIntoExcel = async (objectData, { operationType }) => {
      try {
        const {
          objectId,
@@ -36,7 +36,6 @@ class StepFetchInsertDataIntoExcel {
          manipulationsXML,
          promptsAnswers,
          instanceDefinition,
-         isRefresh,
          tableColumnsChanged,
          visualizationInfo,
          displayAttrFormNames,
@@ -81,7 +80,7 @@ class StepFetchInsertDataIntoExcel {
            excelContext,
            row,
            rowIndex,
-           isRefresh,
+           operationType,
            tableColumnsChanged,
            contextPromises,
            header,

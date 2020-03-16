@@ -59,8 +59,7 @@ getSelectedCell = async (excelContext) => {
   const selectedRangeStart = excelContext.workbook.getSelectedRange().getCell(0, 0);
   selectedRangeStart.load(officeProperties.officeAddress);
   await excelContext.sync();
-  const startCell = this.getStartCellOfRange(selectedRangeStart.address);
-  return startCell;
+  return this.getStartCellOfRange(selectedRangeStart.address);
 }
 
 getStartCellOfRange = (excelAdress) => excelAdress.match(/!(\w+\d+)(:|$)/)[1]

@@ -5,7 +5,7 @@ import { PopupTypeEnum } from '../home/popup-type-enum';
 import objectTypeEnum from '../mstr-object/mstr-object-type-enum';
 import { officeContext } from '../office/office-context';
 import { selectorProperties } from '../attribute-selector/selector-properties';
-import { importRequested, markStepCompleted } from '../operation/operation-actions';
+import { refreshRequestedTMP, refreshRequested } from '../operation/operation-actions';
 
 
 function sortPromptsAnswers(array) {
@@ -109,7 +109,7 @@ class PopupHelper {
       displayAttrFormNames: refreshReport.displayAttrFormNames,
     };
 
-    this.reduxStore.dispatch(importRequested(options));
+    this.reduxStore.dispatch(refreshRequestedTMP(options));
 
 
     // const result = await officeDisplayService.printObject(options);
