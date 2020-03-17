@@ -1,6 +1,7 @@
 import { officeApiHelper } from '../api/office-api-helper';
 import officeTableHelperRange from './office-table-helper-range';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
+import getOfficeTableHelper from './get-office-table-helper';
 
 const DEFAULT_TABLE_STYLE = 'TableStyleLight11';
 const TABLE_HEADER_FONT_COLOR = '#000000';
@@ -24,13 +25,15 @@ class OfficeTableCreate {
       instanceDefinition,
       excelContext,
       startCell,
-      newOfficeTableName,
+      tableName,
       prevOfficeTable,
       tableColumnsChanged = false
     }) => {
     const {
       rows, columns, mstrTable, mstrTable: { isCrosstab, crosstabHeaderDimensions }
     } = instanceDefinition;
+
+    const newOfficeTableName = getOfficeTableHelper.createTableName(mstrTable, tableName);
 
     const worksheet = this.getExcelWorksheet(prevOfficeTable, excelContext);
     const tableStartCell = this.getTableStartCell(

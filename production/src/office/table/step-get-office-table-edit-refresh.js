@@ -1,9 +1,10 @@
 import officeTableRefresh from './office-table-refresh';
-
+import getOfficeTableHelper from './get-office-table-helper';
+import officeTableCreate from './office-table-create';
+import officeTableUpdate from './office-table-update';
 import { GET_OFFICE_TABLE_EDIT_REFRESH } from '../../operation/operation-steps';
 import { markStepCompleted } from '../../operation/operation-actions';
 import { updateObject } from '../../operation/object-actions';
-import getOfficeTableHelper from './get-office-table-helper';
 
 class StepGetOfficeTableEditRefresh {
   init = (reduxStore) => {
@@ -35,30 +36,43 @@ class StepGetOfficeTableEditRefresh {
       } = objectData;
 
       const { mstrTable } = instanceDefinition;
-
-      const newOfficeTableName = getOfficeTableHelper.createTableName(mstrTable, tableName);
+      const newOfficeTableName = tableName;
+      let shouldFormat;
+      let newBindingId = bindingId;
+      let officeTable;
 
       getOfficeTableHelper.checkReportTypeChange(mstrTable);
-
-      const {
-        tableColumnsChanged,
-        startCell,
-        officeTable,
-        shouldFormat,
-        newBindingId
-      } = await officeTableRefresh.changeOfficeTableOnRefresh(
-        {
-          excelContext,
-          bindingId,
-          instanceDefinition,
-          newOfficeTableName,
-          shouldFormat,
-          previousTableDimensions,
-          visualizationInfo
-        }
+      const { tableColumnsChanged, prevOfficeTable, startCell } = await officeTableRefresh.getExistingOfficeTableData(
+        excelContext,
+        bindingId,
+        instanceDefinition,
+        previousTableDimensions
       );
 
-      console.timeEnd('Create or get table - edit or refresh');
+      if (tableColumnsChanged) {
+        console.log('Instance definition changed, creating new table');
+
+        ({ officeTable, newBindingId } = await officeTableCreate.createOfficeTable(
+          {
+            instanceDefinition,
+            excelContext,
+            startCell,
+            tableName,
+            prevOfficeTable,
+            tableColumnsChanged,
+          }
+        ));
+      } else {
+        shouldFormat = visualizationInfo.formatShouldUpdate || false;
+
+        officeTable = await officeTableUpdate.updateOfficeTable(
+          instanceDefinition,
+          excelContext,
+          startCell,
+          prevOfficeTable,
+        );
+      }
+
 
       const updatedObject = {
         objectWorkingId,
@@ -75,6 +89,8 @@ class StepGetOfficeTableEditRefresh {
       this.reduxStore.dispatch(markStepCompleted(objectWorkingId, GET_OFFICE_TABLE_EDIT_REFRESH));
     } catch (error) {
       console.log('error:', error);
+    } finally {
+      console.timeEnd('Create or get table - edit or refresh');
     }
   };
 }

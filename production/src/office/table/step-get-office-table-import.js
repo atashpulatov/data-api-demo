@@ -1,9 +1,7 @@
 import officeTableCreate from './office-table-create';
-
 import { GET_OFFICE_TABLE_IMPORT } from '../../operation/operation-steps';
 import { markStepCompleted } from '../../operation/operation-actions';
 import { updateObject } from '../../operation/object-actions';
-import getOfficeTableHelper from './get-office-table-helper';
 
 class StepGetOfficeTableImport {
   init = (reduxStore) => {
@@ -32,21 +30,16 @@ class StepGetOfficeTableImport {
         startCell,
       } = objectData;
 
-      const { mstrTable } = instanceDefinition;
-
-      const newOfficeTableName = getOfficeTableHelper.createTableName(mstrTable, tableName);
-
-      getOfficeTableHelper.checkReportTypeChange(mstrTable);
-
       const {
         officeTable,
-        newBindingId
+        newBindingId,
+        newOfficeTableName,
       } = await officeTableCreate.createOfficeTable(
         {
           instanceDefinition,
           excelContext,
           startCell,
-          newOfficeTableName
+          tableName
         }
       );
       console.timeEnd('Create or get table - import');

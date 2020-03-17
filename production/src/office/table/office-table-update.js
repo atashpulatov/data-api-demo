@@ -15,6 +15,7 @@ class OfficeTableUpdate {
    */
   updateOfficeTable = async (instanceDefinition, excelContext, startCell, prevOfficeTable) => {
     try {
+      console.time('Validate existing table');
       const { rows, mstrTable, mstrTable: { isCrosstab, subtotalsInfo: { subtotalsAddresses } } } = instanceDefinition;
       const crosstabHeaderDimensions = officeApiCrosstabHelper.getCrosstabHeaderDimensions(instanceDefinition);
 
@@ -42,15 +43,19 @@ class OfficeTableUpdate {
         }
       }
       excelContext.workbook.application.suspendApiCalculationUntilNextSync();
+
       if (!mstrTable.isCrosstab) {
         prevOfficeTable.getHeaderRowRange().values = [mstrTable.headers.columns[mstrTable.headers.columns.length - 1]];
       }
       await excelContext.sync();
+
       await this.updateRows(prevOfficeTable, excelContext, rows);
       return prevOfficeTable;
     } catch (error) {
       await excelContext.sync();
       throw error;
+    } finally {
+      console.timeEnd('Validate existing table');
     }
   };
 
