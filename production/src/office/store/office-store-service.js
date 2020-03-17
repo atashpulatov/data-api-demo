@@ -44,10 +44,9 @@ class OfficeStoreService {
       objectWorkingId: objectData.objectWorkingId,
       refreshDate
     };
-    console.log('bindId:', report.bindId);
-    console.log('oldTableId:', report.oldTableId);
 
     if (operationType !== IMPORT_OPERATION) {
+      // TODO remove after connecting right panel to object reducer
       try {
         const settings = this.getOfficeSettings();
         const reportsArray = [...this.getReportProperties()];
@@ -73,10 +72,8 @@ class OfficeStoreService {
           }
         }
 
-        console.log('refreshedObject:', refreshedObject);
         settings.set(officeProperties.loadedReportProperties, reportsArray);
         settings.saveAsync((saveAsync) => console.log(`Refresh ${saveAsync.status}`));
-        console.log('settings.set(officeProperties.loadedReportProperties, reportsArray);:', settings.get(officeProperties.loadedReportProperties));
         await this.loadExistingReportBindingsExcel();
       } catch (error) {
         errorService.handleError(error);

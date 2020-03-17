@@ -68,6 +68,7 @@ class StepFetchInsertDataIntoExcel {
        const contextPromises = [];
        const subtotalsAddresses = [];
 
+       console.time('Fetch and insert into excel');
        console.time('Fetch data');
        for await (const { row, header, subtotalAddress } of rowGenerator) {
          console.groupCollapsed(`Importing rows: ${rowIndex} to ${Math.min(rowIndex + limit, rows)}`);
