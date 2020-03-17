@@ -34,8 +34,9 @@ when 'windows'
 
 when 'mac_os_x'
   brew_file = "/usr/local/Homebrew/Library/Taps/homebrew/homebrew-core/Formula/opencv-mstr-office.rb"
-  manifest_file = "/var/lib/jenkins/Library/Containers/com.microsoft.Excel/Data/Documents/wef/yi_localhost_ip.xml"
-  
+  manifest_dir = "#{ENV["HOME"]}/Library/Containers/com.microsoft.Excel/Data/Documents/wef"
+  manifest_file = "#{manifest_dir}/yi_localhost_ip.xml"
+
   unless File.exists? brew_file
     cookbook_file brew_file do
       source "opencv-mstr-office.rb"
@@ -46,6 +47,11 @@ when 'mac_os_x'
     end
   end
   
+  unless Dir.exists? manifest_dir 
+    directory manifest_dir do 
+      action :create
+    end
+  end
   unless File.exists? manifest_file
       cookbook_file manifest_file do 
         source "yi_localhost_ip.xml"
