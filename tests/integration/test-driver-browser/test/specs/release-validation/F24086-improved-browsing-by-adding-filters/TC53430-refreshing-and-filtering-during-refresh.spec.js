@@ -57,15 +57,16 @@ describe('F24086 Improved browsing by adding filters', () => {
     PluginPopup.clickRefreshButton();
     browser.waitUntil(() => ($(popupSelectors.buttonLoading).isExisting()));
     PluginPopup.clickFilterButton();
-    // browser.debug();
-    // PluginPopup.waitUntilActionIsFinished(popupSelectors.filterPanel.disabledCheckboxAllPanel);
-    browser.waitUntil(() => !($(popupSelectors.filterPanel.categoryListRowDisabled)));
+    PluginPopup.waitUntilActionIsFinished(popupSelectors.filterPanel.categoryListRowDisabled);
     PluginPopup.tickFilterCheckBox('Type', 'Dossier');
     PluginPopup.clickAllButton('Owner');
     PluginPopup.clickSelectAll();
-    browser.debug();
     browser.waitUntil(() => !($(popupSelectors.buttonLoading).isExisting()));
     // TODO: Check if filters are preserved after fetching is finished
-    // expect($('.all-panel__content .category-list-row.disabled input').isSelected()).toBe(false);
+    // browser.debug();
+    expect($(popupSelectors.filterCheckboxState('Type', 'Dossier')).isSelected()).toBe(true);
+    expect($(popupSelectors.filterCheckboxState('Owner', 'Administrator')).isSelected()).toBe(true);
+    expect($(popupSelectors.filterCheckboxState('Owner', 'a')).isSelected()).toBe(true);
+    expect($(popupSelectors.filterPanel.getAllPanelCheckboxState('MSTR User')).isSelected()).toBe(true);
   });
 });

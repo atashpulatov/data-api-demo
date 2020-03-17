@@ -867,6 +867,17 @@ class PluginPopup {
     const rowTimestamp = this.getFirstRowTimestamp();
     return rowTimestamp >= dateFrom && rowTimestamp <= dateTo;
   }
+
+  /**
+   * Returns true if checkbox is checked, false if not
+   * @param {String} category Category in which checkbox is located, f.e. "Type"
+   * @param {String} item Name of an item we want to check, f.e. "MicroStrategy Tutorial"
+   * @return {Boolean}
+   */
+  getCheckboxState(category, item) {
+    return $(popupSelectors.filterCheckbox('Type', 'Dossier')).isSelected();
+  }
+
 }
 
 export default new PluginPopup();
