@@ -62,9 +62,9 @@ describe('F24086 Improved browsing by adding filters', () => {
     PluginPopup.clickAllButton('Owner');
     PluginPopup.clickSelectAll();
     browser.waitUntil(() => !($(popupSelectors.buttonLoading).isExisting()));
-    expect($(popupSelectors.filterCheckboxState('Type', 'Dossier')).isSelected()).toBe(true);
-    expect($(popupSelectors.filterCheckboxState('Owner', 'Administrator')).isSelected()).toBe(true);
-    expect($(popupSelectors.filterCheckboxState('Owner', 'a')).isSelected()).toBe(true);
-    expect($(popupSelectors.filterPanel.getAllPanelCheckboxState('MSTR User')).isSelected()).toBe(true);
+    expect(PluginPopup.getCheckboxState('Type', 'Dossier')).toBe(true);
+    expect(PluginPopup.getCheckboxState('Owner', 'Administrator')).toBe(true);
+    expect(PluginPopup.getCheckboxState('Owner', 'a')).toBe(true);
+    expect(PluginPopup.getAllPanelCheckboxState('MSTR User')).toBe(true);
   });
 });

@@ -100,6 +100,14 @@ class PluginPopup {
     waitAndClick($(popupSelectors.allFilters));
   }
 
+  /**
+   * Waits for element to show up and dissapear
+   * useful to validate that action has been started and finished
+   *
+   * @param {String} selector a css selector to validate
+   * @memberof PluginPopup
+   */
+
   waitUntilActionIsFinished(selector) {
     browser.waitUntil(() => ($(selector).isExisting()));
     browser.waitUntil(() => !($(selector).isExisting()));
@@ -875,9 +883,17 @@ class PluginPopup {
    * @return {Boolean}
    */
   getCheckboxState(category, item) {
-    return $(popupSelectors.filterCheckbox('Type', 'Dossier')).isSelected();
+    return $(popupSelectors.filterCheckboxState(category, item)).isSelected();
   }
 
+  /**
+   * Returns true if checkbox in All Panel is checked, false if not
+   * @param {String} item Name of an item we want to check, f.e. "MicroStrategy Tutorial"
+   * @return {Boolean}
+   */
+  getAllPanelCheckboxState(item) {
+    return $(popupSelectors.filterPanel.getAllPanelCheckboxState(item)).isSelected();
+  }
 }
 
 export default new PluginPopup();
