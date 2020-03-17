@@ -77,6 +77,7 @@ class OfficeStoreService {
         settings.set(officeProperties.loadedReportProperties, reportsArray);
         settings.saveAsync((saveAsync) => console.log(`Refresh ${saveAsync.status}`));
         console.log('settings.set(officeProperties.loadedReportProperties, reportsArray);:', settings.get(officeProperties.loadedReportProperties));
+        await this.loadExistingReportBindingsExcel();
       } catch (error) {
         errorService.handleError(error);
       }
