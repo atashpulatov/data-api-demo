@@ -22,11 +22,13 @@ describe('TC59756 - Expanded view E2E workflow', () => {
     PluginRightPanel.clickImportDataButton();
     switchToDialogFrame();
     PluginPopup.switchLibrary(false);
+
     // expand 1 row
     PluginPopup.selectFirstObject();
     browser.keys('ArrowDown');
     browser.keys('Enter');
     expect(PluginPopup.areAllRowsCollapsed()).toEqual(false);
+
     // hide details panel
     browser.keys('Enter');
     expect(PluginPopup.areAllRowsCollapsed()).toEqual(true);

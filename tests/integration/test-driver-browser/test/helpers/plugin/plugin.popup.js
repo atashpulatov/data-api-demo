@@ -868,5 +868,4 @@ class PluginPopup {
   }
 }
 
-
 export default new PluginPopup();
