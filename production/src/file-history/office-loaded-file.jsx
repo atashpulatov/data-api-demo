@@ -84,10 +84,11 @@ export class OfficeLoadedFileNotConnected extends React.Component {
 
   deleteReport = async () => {
     const {
-      onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, fileName, t
+      onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, fileName, t, objectWorkingId
     } = this.props;
+
     const message = t('{{name}} has been removed from the workbook.', { name: fileName });
-    await fileHistoryHelper.deleteReport(onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, message);
+    await fileHistoryHelper.deleteReport(onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, objectWorkingId, message);
   }
 
   deleteAction = (e) => {
@@ -101,7 +102,7 @@ export class OfficeLoadedFileNotConnected extends React.Component {
     }
     startLoading();
     const {
-      onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, fileName
+      onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, fileName, objectWorkingId
     } = this.props;
     this.setState({ allowDeleteClick: false, allowRefreshClick: false },
       async () => {
@@ -110,7 +111,7 @@ export class OfficeLoadedFileNotConnected extends React.Component {
           await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindingId);
           const message = t('{{name}} has been removed from the workbook.',
             { name: fileName });
-          await fileHistoryHelper.deleteReport(onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, message);
+          await fileHistoryHelper.deleteReport(onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, objectWorkingId, message);
           if (this.ismounted) { this.setState({ allowDeleteClick: true, allowRefreshClick: true }); }
           stopLoading();
         } catch (error) {
@@ -313,7 +314,7 @@ export class OfficeLoadedFileNotConnected extends React.Component {
       t,
       visualizationInfo = false,
       isCrosstab,
-      crosstabHeaderDimensions
+      crosstabHeaderDimensions,
     } = this.props;
     const { dossierStructure = false } = visualizationInfo;
     const { editable } = this.state;

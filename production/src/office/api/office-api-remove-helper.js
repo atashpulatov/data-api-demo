@@ -21,7 +21,7 @@ class OfficeApiRemoveHelper {
       notificationService.displayTranslatedNotification({ type: 'success', content: message });
     }
 
-    removeReportFromExcel = async (bindingId, isCrosstab, crosstabHeaderDimensions) => {
+    removeReportFromExcel = async (bindingId, isCrosstab, crosstabHeaderDimensions, objectWorkingId) => {
       try {
         await authenticationHelper.validateAuthToken();
         const officeContext = await officeApiHelper.getOfficeContext();
@@ -30,10 +30,10 @@ class OfficeApiRemoveHelper {
         const officeTable = excelContext.workbook.tables.getItem(bindingId);
         this.removeExcelTable(officeTable, excelContext, isCrosstab, crosstabHeaderDimensions);
         await excelContext.sync();
-        return officeStoreService.removeReportFromStore(bindingId);
+        return officeStoreService.removeReportFromStore(bindingId, objectWorkingId);
       } catch (error) {
         if (error && error.code === 'ItemNotFound') {
-          return officeStoreService.removeReportFromStore(bindingId);
+          return officeStoreService.removeReportFromStore(bindingId, objectWorkingId);
         }
         return errorService.handleError(error);
       }

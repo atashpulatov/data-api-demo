@@ -4,7 +4,7 @@ import { errorService } from '../../error/error-handler';
 
 import { SAVE_OBJECT_IN_EXCEL, IMPORT_OPERATION } from '../../operation/operation-steps';
 import { markStepCompleted } from '../../operation/operation-actions';
-import { restoreAllObjects } from '../../operation/object-actions';
+import { restoreAllObjects, deleteObject } from '../../operation/object-actions';
 
 /* global Office */
 
@@ -144,13 +144,23 @@ class OfficeStoreService {
     }
   }
 
-  deleteReport = (bindingId) => {
+  deleteReport = (bindingId, objectWorkingId) => {
     try {
       const settings = this.getOfficeSettings();
+      if (objectWorkingId) {
+        const storedObjects = settings.get(officeProperties.storedObjects);
+        const indexOfReport = storedObjects.findIndex((report) => (report.objectWorkingId === objectWorkingId));
+        storedObjects.splice(indexOfReport, 1);
+        settings.set(officeProperties.storedObjects, storedObjects);
+      }
+
+
+      // TODO remove after connecting object reducer to right panel
       const reportProperties = this.getReportProperties();
-      const indexOfReport = reportProperties.findIndex((report) => (report.bindId === bindingId));
-      reportProperties.splice(indexOfReport, 1);
+      const indexOfReport2 = reportProperties.findIndex((report) => (report.bindId === bindingId));
+      reportProperties.splice(indexOfReport2, 1);
       settings.set(officeProperties.loadedReportProperties, reportProperties);
+
       settings.saveAsync();
     } catch (error) {
       errorService.handleError(error);
@@ -217,6 +227,14 @@ class OfficeStoreService {
     objects && this.reduxStore.dispatch(restoreAllObjects(objects));
   };
 
+  // TODO remove
+  clearObjectReducerFromSettings = async () => {
+    const settings = this.getOfficeSettings();
+    settings.set(officeProperties.storedObjects, []);
+    await settings.saveAsync();
+  };
+
+
   saveObjectsInExcelStore = async () => {
     const { objects } = this.reduxStore.getState().objectReducer;
     const settings = this.getOfficeSettings();
@@ -228,12 +246,15 @@ class OfficeStoreService {
   }
 
 
-  removeReportFromStore = (bindingId) => {
+  removeReportFromStore = (bindingId, objectWorkingId) => {
+    this.reduxStore.dispatch(deleteObject(objectWorkingId));
+
+    // TODO remove dispatch
     this.reduxStore.dispatch({
       type: officeProperties.actions.removeReport,
       reportBindId: bindingId,
     });
-    this.deleteReport(bindingId);
+    this.deleteReport(bindingId, objectWorkingId);
     return true;
   };
 }

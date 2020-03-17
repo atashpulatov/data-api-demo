@@ -112,7 +112,12 @@ export class FileHistoryContainerNotConnected extends React.Component {
       for (let index = 0; index < reportArray.length; index++) {
         const object = reportArray[index];
         this.setState({ allowRefreshAllClick: false }, async () => {
-          await officeApiRemoveHelper.removeReportFromExcel(object.bindId, object.isCrosstab, object.crosstabHeaderDimensions);
+          await officeApiRemoveHelper.removeReportFromExcel(
+            object.bindId,
+            object.isCrosstab,
+            object.crosstabHeaderDimensions,
+            object.objectWorkingId
+          );
         });
       }
     }
@@ -157,7 +162,6 @@ export class FileHistoryContainerNotConnected extends React.Component {
              >
             Seasonal
              </Button>
-
              <Button
                style={{ width: '50px' }}
                className="add-data-btn floating-button"
@@ -225,6 +229,7 @@ export class FileHistoryContainerNotConnected extends React.Component {
               objectType={report.objectType}
               refreshDate={report.refreshDate}
               visualizationInfo={report.visualizationInfo}
+              objectWorkingId={report.objectWorkingId}
             />
           ))}
         </div>
