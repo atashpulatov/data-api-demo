@@ -5,7 +5,8 @@ import stepApplyFormatting from './format/step-apply-formatting';
 import stepFormatTable from './format/step-format-table';
 import stepFetchInsertDataIntoExcel from './import/step-fetch-insert-data-into-excel';
 import stepBindOfficeTable from './table/step-bind-office-table';
-import stepGetOfficeTable from './table/step-get-office-table';
+import stepGetOfficeTableEditRefresh from './table/step-get-office-table-edit-refresh';
+import stepGetOfficeTableImport from './table/step-get-office-table-import';
 import stepSaveReportWithParams from '../popup/step-save-report-with-params';
 import stepApplySubtotalFormatting from './format/step-apply-subtotal-formatting';
 
@@ -13,7 +14,8 @@ import {
   MODIFY_OBJECT,
   REFRESH_STORED_OBJECT,
   GET_INSTANCE_DEFINITION,
-  GET_OFFICE_TABLE,
+  GET_OFFICE_TABLE_IMPORT,
+  GET_OFFICE_TABLE_EDIT_REFRESH,
   FORMAT_DATA,
   FETCH_INSERT_DATA,
   FORMAT_OFFICE_TABLE,
@@ -31,7 +33,8 @@ class OfficeDisplayService {
     // operationBus.subscribe(REFRESH_STORED_OBJECT, officeStoreService.saveAndPreserveReportInStore);
 
     operationBus.subscribe(GET_INSTANCE_DEFINITION, stepGetInstanceDefinition.getInstanceDefinition);
-    operationBus.subscribe(GET_OFFICE_TABLE, stepGetOfficeTable.getOfficeTable);
+    operationBus.subscribe(GET_OFFICE_TABLE_IMPORT, stepGetOfficeTableImport.getOfficeTableImport);
+    operationBus.subscribe(GET_OFFICE_TABLE_EDIT_REFRESH, stepGetOfficeTableEditRefresh.getOfficeTableEditRefresh);
     operationBus.subscribe(FORMAT_DATA, stepApplyFormatting.applyFormatting);
     operationBus.subscribe(FORMAT_OFFICE_TABLE, stepFormatTable.formatTable);
     operationBus.subscribe(FETCH_INSERT_DATA, stepFetchInsertDataIntoExcel.fetchInsertDataIntoExcel);

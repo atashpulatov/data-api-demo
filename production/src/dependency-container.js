@@ -21,7 +21,8 @@ import stepApplyFormatting from './office/format/step-apply-formatting';
 import stepFormatTable from './office/format/step-format-table';
 import stepFetchInsertDataIntoExcel from './office/import/step-fetch-insert-data-into-excel';
 import stepBindOfficeTable from './office/table/step-bind-office-table';
-import stepGetOfficeTable from './office/table/step-get-office-table';
+import stepGetOfficeTableEditRefresh from './office/table/step-get-office-table-edit-refresh';
+import stepGetOfficeTableImport from './office/table/step-get-office-table-import';
 import stepSaveReportWithParams from './popup/step-save-report-with-params';
 import stepApplySubtotalFormatting from './office/format/step-apply-subtotal-formatting';
 
@@ -95,8 +96,10 @@ class DIContainer {
     this.stepFetchInsertDataIntoExcel.init(reduxStore);
     this.stepBindOfficeTable = stepBindOfficeTable;
     this.stepBindOfficeTable.init(reduxStore);
-    this.stepGetOfficeTable = stepGetOfficeTable;
-    this.stepGetOfficeTable.init(reduxStore);
+    this.stepGetOfficeTableEditRefresh = stepGetOfficeTableEditRefresh;
+    this.stepGetOfficeTableEditRefresh.init(reduxStore);
+    this.stepGetOfficeTableImport = stepGetOfficeTableImport;
+    this.stepGetOfficeTableImport.init(reduxStore);
     this.stepSaveReportWithParams = stepSaveReportWithParams;
     this.stepSaveReportWithParams.init(reduxStore);
     this.stepApplySubtotalFormatting = stepApplySubtotalFormatting;
