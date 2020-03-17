@@ -27,5 +27,5 @@ class GetOfficeTableHelper {
   };
 }
 
-const getOfficeTableHelper = new GetOfficeTableHelper;
+const getOfficeTableHelper = new GetOfficeTableHelper();
 export default getOfficeTableHelper;
