@@ -635,7 +635,7 @@ class PluginPopup {
 
   /**
    * Scrolls the table by passing key strings ('End', 'Page Down' etc.)
-   * @param {string[]} keyNames array of key strings e.g. ['End']
+   * @param {String[]} keyNames array of key strings e.g. ['End']
    */
   scrollTable(keyNames) {
     waitAndClick($(popupSelectors.objectTable.scrollContainer));
@@ -667,7 +667,7 @@ class PluginPopup {
 
   /**
    * Opens all panel for the given section
-   * @param {string} section name of the section to open all panel for, e.g 'Application'
+   * @param {String} section name of the section to open all panel for, e.g 'Application'
    */
   clickAllButton(section) {
     switch (section) {
@@ -691,7 +691,7 @@ class PluginPopup {
 
   /**
    * Clicks a checkbox on all panel by given checkboxTitle
-   * @param {string} checkboxTitle title of the checkbox on the allPanel
+   * @param {String} checkboxTitle title of the checkbox on the allPanel
    */
   clickAllPanelElement(checkboxTitle) {
     waitAndClick($(popupSelectors.filterPanel.getAllPanelCheckbox(checkboxTitle)));
@@ -706,7 +706,7 @@ class PluginPopup {
 
   /**
    * Clicks a disabled checkbox on all panel by given checkboxTitle
-   * @param {string} checkboxTitle title of the checkbox on the allPanel
+   * @param {String} checkboxTitle title of the checkbox on the allPanel
    */
   clickDisabledElement(checkboxTitle) {
     waitAndClick($(popupSelectors.filterPanel.getAllPanelDisabledCheckbox(checkboxTitle)));
@@ -715,7 +715,7 @@ class PluginPopup {
   /**
    * Scrolls down ObjectTable by the given number of pages
    *
-   * @param {number} count Number of pages to scroll down
+   * @param {Number} count Number of pages to scroll down
    * @memberof PluginPopup
    */
   scrollTableDownByPages(count) {
@@ -729,7 +729,7 @@ class PluginPopup {
   /**
    * Expands given number of rows starting at the beginning of visible rows in Table of Objects
    *
-   * @param {number} amount Number of rows to expand
+   * @param {Number} amount Number of rows to expand
    */
   expandFirstRows(amount) {
     $(popupSelectors.expandButton).waitForExist({ timeout: 3000 });
@@ -741,49 +741,75 @@ class PluginPopup {
   }
 
   /**
-   * Hovers over the location element in details table to show the tooltip
-   * and gets the tooltip text
+   * Expands given number of rows starting from the end of visible rows in Table of Objects
    *
-   * @returns {String} tooltip text for the location element
-   * @memberof PluginPopup
+   * @param {Number} amount Number of rows to expand
    */
-  getLocationTooltipText() {
-    $(popupSelectors.locationDetail).moveTo();
-    browser.pause(1000); // Wait for DOM to update and show tooltip on hover
-    return $(popupSelectors.locationDetailTooltip).getText();
+  expandLastRows(amount) {
+    $(popupSelectors.expandButton).waitForExist({ timeout: 3000 });
+    const expandButtons = $$(popupSelectors.expandButton);
+    for (let i = expandButtons.length - 1; i > expandButtons.length - 1 - amount; i--) {
+      expandButtons[i].waitForExist({ timeout: 3000 });
+      expandButtons[i].click()
+    }
   }
 
   /**
-   * Gets the text for the location element in details table
+   * Expands given number of rows at the beginning and end of Table of Objects
    *
-   * @returns {String} text for the location element
-   * @memberof PluginPopup
+   * @param {Number} amount Number of rows to expand
    */
-  getLocationText() {
-    return $(popupSelectors.locationDetail).getText();
+  expandFirstAndLastRows(amount) {
+    const filterResults = this.getFilterResults();
+    amount = filterResults < amount ? filterResults : amount;
+    this.expandFirstRows(amount);
+    this.scrollTable(['End']);
+    this.expandLastRows(amount);
   }
 
   /**
-   * Hovers over the description element in details table to show the tooltip
-   * and gets the tooltip text
-   *
-   * @returns {String} tooltip text for the description element
-   * @memberof PluginPopup
+   * Clicks the Refresh button located at the top bar of Table of Objects
    */
-  getDescriptionTooltipText() {
-    $(popupSelectors.descriptionDetail).moveTo();
-    browser.pause(1000); // Wait for DOM to update and show tooltip on hover
-    return $(popupSelectors.descriptionDetailTooltip).getText();
+  clickRefreshButton() {
+    waitAndClick($(popupSelectors.refreshButton));
   }
 
   /**
-   * Gets the text for the description element in details table
-   *
-   * @returns {String} text for the description element
-   * @memberof PluginPopup
+   *  Waits for the Refresh to finish by checking if spinner animation of Refresh button ended
    */
-  getDescriptionText() {
-    return $(popupSelectors.descriptionDetail).getText();
+  waitForRefresh() {
+    $(popupSelectors.refreshButton).waitForExist({ timeout: 5000 });
+    browser.pause(500);
+  }
+
+  /**
+   * Checks how many rows are expanded to display Details Panel, and returns the number
+   *
+   * @return {Number} Number of expanded rows
+   */
+  findAmountOfOpenRows() {
+    const openRows = $$(popupSelectors.expandButtonOpen);
+    return openRows.length;
+  }
+
+  /**
+   * Returns true if rows at the beginning and the end of Table of Objects are collapsed. Otherwise returns false
+   * @return {Boolean}
+   */
+  areAllRowsCollapsed() {
+    let openedRows = this.findAmountOfOpenRows();
+    if (openedRows > 0) return false;
+    this.scrollTable(['End']);
+    openedRows = this.findAmountOfOpenRows();
+    return !(openedRows > 0);
+  }
+
+  /**
+   * Returns number of objects displayed in Table of Objects as text
+   * @return {String}
+   */
+  getFilterResults() {
+    return $(popupSelectors.filterResults).getText();
   }
 
   /**
@@ -818,6 +844,7 @@ class PluginPopup {
 
   /**
    * Returns the timestamp for the Date modified of the first object in the table
+   * @return {Number}
    */
   getFirstRowTimestamp() {
     const date = $(popupSelectors.columnModified).getAttribute('Title').split(' ')[0].split('/');
@@ -830,6 +857,7 @@ class PluginPopup {
    *
    * @param {Date} dateFrom
    * @param {Date} dateTo
+   * @return {Boolean}
    */
   assertFirstObjectDateIsInTheRange(dateFrom, dateTo) {
     dateFrom = Date.parse(dateFrom);
@@ -837,6 +865,52 @@ class PluginPopup {
 
     const rowTimestamp = this.getFirstRowTimestamp();
     return rowTimestamp >= dateFrom && rowTimestamp <= dateTo;
+  }
+
+  /**
+    * Hovers over the location element in details table to show the tooltip
+    * and gets the tooltip text
+    *
+    * @returns {String} tooltip text for the location element
+    * @memberof PluginPopup
+    */
+  getLocationTooltipText() {
+    $(popupSelectors.locationDetail).moveTo();
+    browser.pause(1000); // Wait for DOM to update and show tooltip on hover
+    return $(popupSelectors.locationDetailTooltip).getText();
+  }
+
+  /**
+    * Gets the text for the location element in details table
+    *
+    * @returns {String} text for the location element
+    * @memberof PluginPopup
+    */
+  getLocationText() {
+    return $(popupSelectors.locationDetail).getText();
+  }
+
+  /**
+    * Hovers over the description element in details table to show the tooltip
+    * and gets the tooltip text
+    *
+    * @returns {String} tooltip text for the description element
+    * @memberof PluginPopup
+    */
+  getDescriptionTooltipText() {
+    $(popupSelectors.descriptionDetail).moveTo();
+    browser.pause(1000); // Wait for DOM to update and show tooltip on hover
+    return $(popupSelectors.descriptionDetailTooltip).getText();
+  }
+
+  /**
+    * Gets the text for the description element in details table
+    *
+    * @returns {String} text for the description element
+    * @memberof PluginPopup
+    */
+  getDescriptionText() {
+    return $(popupSelectors.descriptionDetail).getText();
   }
 }
 
