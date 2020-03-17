@@ -61,6 +61,7 @@ class OfficeStoreService {
         refreshedObject.displayAttrFormNames = report.displayAttrFormNames;
         refreshedObject.refreshDate = report.refreshDate;
         refreshedObject.preparedInstanceId = null;
+        refreshedObject.body = report.body;
         refreshedObject.objectWorkingId = report.objectWorkingId; // Revert when we connect reducer to excel settings
         if (refreshedObject.visualizationInfo) {
           refreshedObject.manipulationsXML = report.manipulationsXML;
