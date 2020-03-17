@@ -34,7 +34,7 @@ when 'windows'
 
 when 'mac_os_x'
   brew_file = "/usr/local/Homebrew/Library/Taps/homebrew/homebrew-core/Formula/opencv-mstr-office.rb"
-  manifest_file = "/private/var/lib/jenkins/Library/Containers/com.microsoft.Excel/Data/Documents/wef/yi_localhost_ip.xml"
+  manifest_file = "/var/lib/jenkins/Library/Containers/com.microsoft.Excel/Data/Documents/wef/yi_localhost_ip.xml"
   
   unless File.exists? brew_file
     cookbook_file brew_file do
