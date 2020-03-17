@@ -47,16 +47,18 @@ export const popupSelectors = {
   sortedUp: '.ant-table-column-sorter-up.on',
   sortedDown: '.ant-table-column-sorter-up.on',
   noDataIcon: $('.ant-table-placeholder'),
-  myLibrary: '#root > div > div.navigation_tree__title_bar > div > div.mstr-switch-container > div.mstr-switch',
+  myLibrary: '.mstr-switch[aria-label="My Library"]',
   closeRefreshAll: '.WACGlyph.WACDialogCloseAnchor',
   clearSearchInput: '.search-field__clear-button',
-  columnOwner: '.ReactVirtualized__Table__row > div[aria-colindex="5"] > span',
-  columnProject: 'div[aria-colindex="6"] > span',
+  columnOwner: '.ReactVirtualized__Table__row > div[aria-colindex="4"] > span',
+  columnProject: 'div[aria-colindex="5"] > span',
+  columnModified: 'div[aria-colindex="6"] > span',
   columnName: 'div[aria-colindex="3"] > span',
   tableRows: '.position-relative',
   idDetail: '.details-table > table tr:nth-child(2) p',
   filterButton:'.filter-button',
   expandButtonOpen: '.details-indicator-opened',
+  filterResults: '.FilterResult > strong',
   // promptArrow: element(by.className('mstrBGIcon_tbAdd')),
   promptArrow: '.mstrBGIcon_tbAdd',
   promptTextBox: '#id_mstr38_txt',
@@ -69,6 +71,7 @@ export const popupSelectors = {
   drillButton:'div=Drill',
   categoryButton:'div=Category',
   visualizationSelector:'.mstrmojo-VizBox-selector',
+  refreshButton: '.refresh-button',
   prepareData:{ getAttributeAt: (index) => `#root > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div:nth-child(1) > div > div.checkbox-list.all-showed > div > div > div:nth-child(2) > div > div > div:nth-child(${index}) > label > span:nth-child(3)` },
   smartFolderTable:
   { availableObjectNumber: '#root > div > div.object-table > div.FilterResult', // Contains string and number, e.g. 1280 results
@@ -97,6 +100,8 @@ export const popupSelectors = {
     getAllPanelCheckbox: (checkboxTitle) => `.all-panel__content input[aria-label="Checkbox for ${checkboxTitle}"] + .checkmark`,
     getAllPanelDisabledCheckbox: (checkboxTitle) => `.all-panel__content .category-list-row.disabled label[title="${checkboxTitle}"]`,
     disabledCheckboxAllPanel: '.all-panel__content .category-list-row.disabled input',
+    dates: '.mstr-date-picker input',
+    clearAll: '.filter-panel__button'
   },
   objectTable: { scrollContainer: '.ReactVirtualized__Grid.ReactVirtualized__Table__Grid', },
 };

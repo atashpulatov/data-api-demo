@@ -56,6 +56,7 @@ exports.config = {
     'F25946-details-panel': [
       './test/specs/release-validation/F25946-details-panel/TC59756-expanded-view.spec.js',
       './test/specs/release-validation/F25946-details-panel/TC59725-accessibility-withing-details-panel.spec.js',
+      './test/specs/release-validation/F25946-details-panel/TC59677-altering-table-with-rows-expanded.spec.js',
     ],
     'F25930-faster-display': [
       './test/specs/release-validation/F25930-faster-display/TC54961-E2E-scenario.spec.js',
@@ -78,6 +79,9 @@ exports.config = {
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-II.spec.js',
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-III.spec.js',
     ],
+    'F24086-Improved-browsing-by-adding-filters': [
+      './test/specs/release-validation/F24086-filter-panel/TC54856-filtering-with-type-owner-certified-date.spec.js',
+    ]
   },
   // Patterns to exclude.
   exclude: [
