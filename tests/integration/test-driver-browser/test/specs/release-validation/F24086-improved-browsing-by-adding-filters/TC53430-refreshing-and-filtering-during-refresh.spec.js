@@ -37,7 +37,7 @@ describe('F24086 Improved browsing by adding filters', () => {
     PluginPopup.clickFilterButton();
     PluginPopup.clickAllButton('Owner');
     PluginPopup.clearAll();
-    PluginPopup.clickFilterButton(); // TODO: Sorting is preserved check
+    PluginPopup.clickFilterButton();
     PluginPopup.scrollTable(['End']);
     PluginPopup.selectLastObject();
 
@@ -62,8 +62,6 @@ describe('F24086 Improved browsing by adding filters', () => {
     PluginPopup.clickAllButton('Owner');
     PluginPopup.clickSelectAll();
     browser.waitUntil(() => !($(popupSelectors.buttonLoading).isExisting()));
-    // TODO: Check if filters are preserved after fetching is finished
-    // browser.debug();
     expect($(popupSelectors.filterCheckboxState('Type', 'Dossier')).isSelected()).toBe(true);
     expect($(popupSelectors.filterCheckboxState('Owner', 'Administrator')).isSelected()).toBe(true);
     expect($(popupSelectors.filterCheckboxState('Owner', 'a')).isSelected()).toBe(true);
