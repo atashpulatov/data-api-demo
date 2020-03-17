@@ -6,14 +6,19 @@ export const objectReducer = (state = initialState, action) => {
   switch (action.type) {
     case IMPORT_REQUESTED:
       return importRequested(state, action.payload);
+
     case EDIT_REQUESTED:
       return editRequested(state, action.payload);
+
     case UPDATE_OBJECT:
       return updateObject(state, action.payload);
+
     case DELETE_OBJECT:
       return deleteObject(state, action.payload);
+
     case RESTORE_ALL_OBJECTS:
       return restoreAllObjects(action.payload);
+
     default:
       return state;
   }
