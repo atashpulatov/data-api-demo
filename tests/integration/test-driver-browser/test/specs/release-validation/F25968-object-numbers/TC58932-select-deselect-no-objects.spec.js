@@ -4,8 +4,9 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
+import {waitAndClick} from '../../../helpers/utils/click-helper';
 
-describe('F25968 - Dynamically update numbers of objects displayed next to categories in filter panel', () => {
+describe('TC58932 - Deselecting/selecting filters with no objects', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
@@ -20,6 +21,7 @@ describe('F25968 - Dynamically update numbers of objects displayed next to categ
     // open import data popup
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
+    browser.pause(800);
     switchToPluginFrame();
 
     // apply filters
@@ -27,11 +29,17 @@ describe('F25968 - Dynamically update numbers of objects displayed next to categ
     PluginPopup.clickFilterButton();
     PluginPopup.clickAllButton('Owner');
     PluginPopup.clickSelectAll();
+    // PluginPopup.tickFilterCheckBox('Type', 'Report');
     PluginPopup.tickFilterCheckBox('Certified Status', 'Certified');
-    PluginPopup.clickDisabledElement('MSTR User');
 
-    // try to select a disabled checkbox
-    PluginPopup.clickDisabledElement('MSTR User');
-    expect($(popupSelectors.filterPanel.disabledCheckboxAllPanel).isSelected()).toBe(false);
+    // find empty owner
+    const someEmptyElement = $(popupSelectors.filterPanel.disabledCheckboxAllPanel);
+
+    // deselect empty owner
+    someEmptyElement.click();
+
+    // try to select it again
+    someEmptyElement.click();
+    expect(someEmptyElement.isSelected()).toBe(false);
   });
 });
