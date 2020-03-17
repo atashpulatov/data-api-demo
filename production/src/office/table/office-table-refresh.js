@@ -28,17 +28,11 @@ class OfficeTableRefresh {
       visualizationInfo
     }
   ) {
-    const { mstrTable, mstrTable: { isCrosstab, prevCrosstabDimensions, toCrosstabChange } } = instanceDefinition;
+    const { mstrTable } = instanceDefinition;
 
     const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindingId);
+    await this.clearEmptyCrosstabRow(mstrTable, prevOfficeTable, excelContext);
 
-    await this.clearEmptyCrosstabRow(
-      isCrosstab,
-      toCrosstabChange,
-      prevOfficeTable,
-      prevCrosstabDimensions,
-      excelContext,
-    );
 
     prevOfficeTable.showHeaders = true;
     prevOfficeTable.load('name');
@@ -52,7 +46,6 @@ class OfficeTableRefresh {
     );
 
     let startCell = await this.getStartCellOnRefresh(prevOfficeTable, excelContext);
-
     ({ tableColumnsChanged, startCell } = await this.clearIfCrosstabHeadersChanged(
       prevOfficeTable,
       excelContext,
@@ -94,13 +87,9 @@ class OfficeTableRefresh {
     };
   }
 
-  clearEmptyCrosstabRow = async (
-    isCrosstab,
-    toCrosstabChange,
-    prevOfficeTable,
-    prevCrosstabDimensions,
-    excelContext
-  ) => {
+  clearEmptyCrosstabRow = async (mstrTable, prevOfficeTable, excelContext) => {
+    const { isCrosstab, toCrosstabChange, prevCrosstabDimensions } = mstrTable;
+
     if (isCrosstab && !toCrosstabChange) {
       const crosstabEmptyRowExist = await officeApiCrosstabHelper.getValidOffset(
         prevOfficeTable,

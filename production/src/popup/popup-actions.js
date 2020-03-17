@@ -93,7 +93,6 @@ class PopupActions {
           reportsNumber,
           index,
           isRefreshAll,
-          promptsAnswers
         );
       } catch (error) {
         popupHelper.handleRefreshError(

@@ -20,7 +20,7 @@ class OfficeTableUpdate {
 
       prevOfficeTable.rows.load('count');
       await excelContext.sync();
-      if (subtotalsAddresses.length) {
+      if (subtotalsAddresses && subtotalsAddresses.length) {
         await officeFormatSubtotals.applySubtotalFormatting(
           { officeTable: prevOfficeTable, excelContext },
           mstrTable,

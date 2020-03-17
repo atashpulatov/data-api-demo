@@ -44,15 +44,17 @@ class OfficeTableCreate {
     const tableRange = officeApiHelper.getRange(columns, tableStartCell, rows);
     const range = this.getObjectRange(tableStartCell, worksheet, tableRange, mstrTable);
     excelContext.trackedObjects.add(range);
+
     await officeTableHelperRange.checkObjectRangeValidity(prevOfficeTable, excelContext, range, instanceDefinition);
 
     if (isCrosstab) {
       officeApiCrosstabHelper.createCrosstabHeaders(tableStartCell, mstrTable, worksheet, crosstabHeaderDimensions);
     }
 
-    const officeTable = worksheet.tables.add(tableRange, true); // create office table based on the range
 
+    const officeTable = worksheet.tables.add(tableRange, true); // create office table based on the range
     this.styleHeaders(officeTable, TABLE_HEADER_FONT_COLOR, TABLE_HEADER_FILL_COLOR);
+
     return this.setOfficeTableProperties({
       officeTable,
       newOfficeTableName,

@@ -56,7 +56,6 @@ function refreshRequested(state, payload) {
     operations: [
       ...state.operations,
       payload.operation,
-      payload.backupObjectData,
     ]
   };
 }

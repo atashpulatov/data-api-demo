@@ -14,11 +14,11 @@ class OfficeStoreService {
   }
 
   saveAndPreserveReportInStore = async (objectData, { operationType }) => {
+    const { instanceDefinition } = objectData;
     objectData.excelContext = false;
     objectData.officeTable = false;
-    const { instanceDefinition } = objectData;
+    objectData.previousTableDimensions = { columns: instanceDefinition.columns };
     const { mstrTable } = instanceDefinition;
-    const tableDimensions = { columns: instanceDefinition.columns };
     const refreshDate = new Date();
 
     const report = {
@@ -38,7 +38,7 @@ class OfficeStoreService {
       visualizationInfo: objectData.visualizationInfo,
       manipulationsXML: instanceDefinition.manipulationsXML,
       tableName: objectData.newOfficeTableName,
-      tableDimensions,
+      previousTableDimensions: objectData.previousTableDimensions,
       displayAttrFormNames: objectData.displayAttrFormNames,
       oldTableId: objectData.bindingId,
       objectWorkingId: objectData.objectWorkingId,
@@ -57,7 +57,7 @@ class OfficeStoreService {
         refreshedObject.crosstabHeaderDimensions = report.crosstabHeaderDimensions;
         refreshedObject.isCrosstab = report.isCrosstab;
         refreshedObject.bindId = report.bindId;
-        refreshedObject.tableDimensions = report.tableDimensions;
+        refreshedObject.previousTableDimensions = report.previousTableDimensions;
         refreshedObject.subtotalsInfo = report.subtotalsInfo;
         refreshedObject.displayAttrFormNames = report.displayAttrFormNames;
         refreshedObject.refreshDate = report.refreshDate;

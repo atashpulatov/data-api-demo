@@ -29,13 +29,9 @@ checkStatusOfSessions = async () => {
   ]);
 }
 
+getBindingRange = (excelContext, bindingId) => excelContext.workbook.bindings.getItem(bindingId).getTable().getRange()
 
-getBindingRange = (excelContext, bindingId) => excelContext.workbook.bindings
-  .getItem(bindingId).getTable()
-  .getRange()
-
-getTable = (excelContext, bindingId) => excelContext.workbook.bindings
-  .getItem(bindingId).getTable()
+getTable = (excelContext, bindingId) => excelContext.workbook.bindings.getItem(bindingId).getTable()
 
 getExcelContext = async () => window.Excel.run({ delayForCellEdit: true }, async (excelContext) => excelContext);
 

@@ -76,40 +76,12 @@ class PopupHelper {
     length,
     index,
     isRefreshAll,
-    promptsAnswers,
   ) => {
     const refreshReport = officeStoreService.getReportFromProperties(bindingId);
     if (isRefreshAll) { this.storageReportRefreshStart(refreshReport, index); }
     const mstrObjectType = objectTypeEnum.getMstrTypeByName(objectType);
-    const instanceId = null;
-    // TODO: Pass proper isPrompted value – promptsAnswers could probably serve as such,
-    // to be refactored.
-    const options = {
-      dossierData: instanceId,
-      promptsAnswers: !promptsAnswers
-        ? refreshReport.promptsAnswers
-        : promptsAnswers,
-      objectId: refreshReport.id,
-      preparedInstanceId: refreshReport.preparedInstanceId || false,
-      projectId: refreshReport.projectId,
-      mstrObjectType,
-      selectedCell: true,
-      bindingId,
-      body: refreshReport.body,
-      isCrosstab: refreshReport.isCrosstab,
-      crosstabHeaderDimensions: refreshReport.crosstabHeaderDimensions || false,
-      isRefresh: true,
-      isPrompted: refreshReport.isPrompted,
-      isRefreshAll,
-      subtotalsInfo: refreshReport.subtotalsInfo,
-      visualizationInfo: refreshReport.visualizationInfo || false,
-      manipulationsXML: refreshReport.manipulationsXML || false,
-      tableName: refreshReport.tableName,
-      previousTableDimensions: refreshReport.tableDimensions || false,
-      displayAttrFormNames: refreshReport.displayAttrFormNames,
-    };
 
-    this.reduxStore.dispatch(refreshRequestedTMP(options));
+    this.reduxStore.dispatch(refreshRequested(refreshReport));
 
 
     // const result = await officeDisplayService.printObject(options);
@@ -131,35 +103,6 @@ class PopupHelper {
     return false;
   };
 
-
-  // printRefreshedReportRedux = async () => {
-  //   const options = {
-  //     dossierData: instanceId,
-  //     promptsAnswers: !promptsAnswers
-  //       ? refreshReport.promptsAnswers
-  //       : promptsAnswers,
-  //     objectId: refreshReport.id,
-  //     preparedInstanceId: refreshReport.preparedInstanceId || false,
-  //     projectId: refreshReport.projectId,
-  //     mstrObjectType,
-  //     selectedCell: true,
-  //     bindingId,
-  //     body: refreshReport.body,
-  //     isCrosstab: refreshReport.isCrosstab,
-  //     crosstabHeaderDimensions: refreshReport.crosstabHeaderDimensions || false,
-  //     isRefresh: true,
-  //     isPrompted: refreshReport.isPrompted,
-  //     isRefreshAll,
-  //     subtotalsInfo: refreshReport.subtotalsInfo,
-  //     visualizationInfo: refreshReport.visualizationInfo || false,
-  //     manipulationsXML: refreshReport.manipulationsXML || false,
-  //     tableName:refreshReport.tableName,
-  //     previousTableDimensions: refreshReport.tableDimensions || false,
-  //     displayAttrFormNames: refreshReport.displayAttrFormNames,
-  //   };
-
-  //   this.reduxStore.dispatch(markStepCompleted(objectWorkingId, REFRESH_STORED_OBJECT));
-  // };
 
   handleRefreshError(error, length, index, isRefreshAll) {
     if (isRefreshAll) {

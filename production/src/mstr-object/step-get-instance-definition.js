@@ -49,6 +49,7 @@ class StepGetInstanceDefinition {
        insertNewWorksheet,
        crosstabHeaderDimensions,
        subtotalsInfo: { subtotalsAddresses } = false,
+       newBindingId,
      } = objectData;
      let { visualizationInfo, startCell } = objectData;
 
@@ -107,9 +108,10 @@ class StepGetInstanceDefinition {
        envUrl: officeApiHelper.getCurrentMstrContext(),
        body,
        instanceDefinition,
-       visualizationInfo,
+       visualizationInfo: visualizationInfo || false,
        startCell,
        excelContext,
+       bindingId: newBindingId,
      };
 
      // TODO add when error handlind added
