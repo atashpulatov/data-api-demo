@@ -8,7 +8,8 @@ import {
   switchToExcelFrame,
   switchToPromptFrameForEditDossier,
   switchToPromptFrameForEditReport,
-  switchToRefreshAllFrame
+  switchToRefreshAllFrame,
+  switchToDialogFrame,
 } from '../utils/iframe-helper';
 import pluginRightPanel from './plugin.right-panel';
 
@@ -140,7 +141,7 @@ class PluginPopup {
   }
 
   switchLibraryAndImportObject(objectName, myLibrarySwitch = false) {
-    switchToPluginFrame();
+    switchToDialogFrame();
     browser.pause(4000);
     this.switchLibrary(myLibrarySwitch);
     browser.pause(1000);
@@ -159,7 +160,7 @@ class PluginPopup {
   }
 
   importAnyObject(objectName, index) {
-    switchToPluginFrame();
+    switchToDialogFrame();
     browser.pause(500);
     this.switchLibrary(false);
     this.searchForObject(objectName);
@@ -588,7 +589,7 @@ class PluginPopup {
   }
 
   openPrepareData(objectName, isObjectFromLibrary = false) {
-    switchToPluginFrame();
+    switchToDialogFrame();
     this.switchLibrary(isObjectFromLibrary);
     this.searchForObject(objectName);
     browser.pause(1111);

@@ -78,8 +78,25 @@ exports.config = {
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-II.spec.js',
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-III.spec.js',
     ],
-    'F24086-Improved-browsing-by-adding-filters': [
+    'F24086-improved-browsing-by-adding-filters': [
       './test/specs/release-validation/F24086-filter-panel/TC54856-filtering-with-type-owner-certified-date.spec.js',
+    ],
+    'all-the-things': [
+      './test/specs/release-validation/F12909-import-report/*',
+      './test/specs/release-validation/F12910-import-dataset/*',
+      './test/specs/release-validation/F12910-import-dataset/*',
+      './test/specs/release-validation/F22954-editing/*',
+      './test/specs/release-validation/F22955-refresh/*',
+      './test/specs/release-validation/F24086-filter-panel/*',
+      './test/specs/release-validation/F24087-improve-scrolling-performance/*',
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/*',
+      './test/specs/release-validation/F24751-import subtotals/*',
+      './test/specs/release-validation/F25930-faster-display/*',
+      './test/specs/release-validation/F25932-import-attribute-forms/*',
+      './test/specs/release-validation/F25946-details-panel/*',
+      './test/specs/release-validation/F25968-object-numbers/*',
+      './test/specs/release-validation/TF7862-regression/*',
+      './test/specs/release-validation/TS41441-E2E Sanity checks/*',
     ]
   },
   // Patterns to exclude.

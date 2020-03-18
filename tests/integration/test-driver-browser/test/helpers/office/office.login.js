@@ -8,13 +8,14 @@ const OfficeLogin = function () {
   const nextBtn = '#idSIButton9';
   const passwordInput = '#i0118';
 
-  this.login = function (username, password) {
+  this.login = (username, password) => {
+    $(usernameInput).waitForDisplayed(3000);
     $(usernameInput).setValue(username);
     waitAndClick($(nextBtn));
-    browser.pause(1666);
+    $(passwordInput).waitForDisplayed(3000);
     $(passwordInput).setValue(password);
-    $(nextBtn).click();
-    $(nextBtn).click();
+    waitAndClick($(nextBtn));
+    waitAndClick($(nextBtn));
   };
 
   /**

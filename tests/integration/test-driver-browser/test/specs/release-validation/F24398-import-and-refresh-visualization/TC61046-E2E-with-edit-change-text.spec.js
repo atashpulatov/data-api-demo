@@ -4,7 +4,7 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { objectsList } from '../../../constants/objects-list';
 import { waitForNotification, waitForPopup } from '../../../helpers/utils/wait-helper';
-import { switchToPluginFrame, switchToExcelFrame } from '../../../helpers/utils/iframe-helper';
+import { switchToPluginFrame, switchToExcelFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 
 describe('IMPORT diferent types of vizualizations', () => {
   beforeAll(() => {
@@ -13,8 +13,7 @@ describe('IMPORT diferent types of vizualizations', () => {
 
   afterEach(() => {
     browser.closeWindow();
-    const handles = browser.getWindowHandles();
-    browser.switchToWindow(handles[0]);
+    changeBrowserTab(0);
   });
 
   // Create test for each visType defined in visualizations

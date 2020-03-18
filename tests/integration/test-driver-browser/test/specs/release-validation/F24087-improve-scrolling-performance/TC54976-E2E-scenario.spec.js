@@ -2,7 +2,7 @@ import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
+import { changeBrowserTab, switchToDialogFrame } from '../../../helpers/utils/iframe-helper';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
@@ -14,15 +14,14 @@ describe('F24087 - Improve performance of scrolling through the object list', ()
 
   afterEach(() => {
     browser.closeWindow();
-    const handles = browser.getWindowHandles();
-    browser.switchToWindow(handles[0]);
+    changeBrowserTab(0);
   });
 
   it('[TC54976][Object Table] End to End scenario on Excel implementation | E2E', () => {
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
 
-    switchToPluginFrame();
+    switchToDialogFrame();
     PluginPopup.switchLibrary(false);
 
     PluginPopup.scrollTableDownByPages(200);

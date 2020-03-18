@@ -1,12 +1,11 @@
 export function switchToPluginFrame() {
-  switchToExcelFrame();
   $('.AddinIframe').waitForExist(9999);
   browser.switchToFrame($('.AddinIframe'));
 }
 
 export function switchToExcelFrame() {
   browser.switchToFrame(null);
-  $('#WebApplicationFrame').waitForExist(9999);
+  $('#WebApplicationFrame').waitForDisplayed(19999);
   browser.switchToFrame($('#WebApplicationFrame'));
 }
 
@@ -55,4 +54,14 @@ export function switchToRefreshAllFrame() {
   switchToExcelFrame();
   $('iframe[src*="refresh-all-page"]').waitForExist(9999);
   browser.switchToFrame($('iframe[src*="refresh-all-page"]'));
+}
+
+/**
+ * Changes the browser tab to the passed index
+ *
+ * @param {Number} tabIndex
+ */
+export function changeBrowserTab(tabIndex) {
+  const handles = browser.getWindowHandles();
+  browser.switchToWindow(handles[tabIndex]);
 }

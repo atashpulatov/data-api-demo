@@ -2,7 +2,7 @@ import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { switchToPluginFrame, switchToExcelFrame, switchToRightPanelFrame } from '../../../helpers/utils/iframe-helper';
+import { switchToDialogFrame, switchToExcelFrame, switchToRightPanelFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
 import { removeTimestampFromTableName } from '../../../helpers/utils/tableName-helper';
 import { getTextOfNthObjectOnNameBoxList } from '../../../helpers/utils/excelManipulation-helper';
@@ -16,8 +16,7 @@ describe('F28550 - Excel Connector Hardening: Rename Excel table without losing 
   });
   afterEach(() => {
     browser.closeWindow();
-    const handles = browser.getWindowHandles();
-    browser.switchToWindow(handles[0]);
+    changeBrowserTab(0);
   });
 
   it('[TC59464] - Checking binding for newly imported report', () => {
@@ -25,7 +24,7 @@ describe('F28550 - Excel Connector Hardening: Rename Excel table without losing 
     OfficeWorksheet.selectCell('A2');
     PluginRightPanel.clickImportDataButton();
 
-    switchToPluginFrame();
+    switchToDialogFrame();
     PluginPopup.switchLibrary(false);
     PluginPopup.importObject(basic01Report.sourceName);
     browser.pause(10000);

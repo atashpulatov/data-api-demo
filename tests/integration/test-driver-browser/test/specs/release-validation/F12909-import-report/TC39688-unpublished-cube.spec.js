@@ -1,11 +1,9 @@
-import { switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
+import { switchToPluginFrame, changeBrowserTab, switchToDialogFrame } from '../../../helpers/utils/iframe-helper';
 import OfficeLogin from '../../../helpers/office/office.login';
-import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { objectsList } from '../../../constants/objects-list';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
-import settings from '../../../config';
 
 describe('F12909 - Ability to import a report from MicroStrategy report', () => {
   beforeEach(() => {
@@ -13,15 +11,13 @@ describe('F12909 - Ability to import a report from MicroStrategy report', () => 
   });
   afterEach(() => {
     browser.closeWindow();
-    const handles = browser.getWindowHandles();
-    browser.switchToWindow(handles[0]);
+    changeBrowserTab(0);
   });
 
   it('[TC39688] Importing not supported objects', () => {
     // should be unable to import
     PluginRightPanel.clickImportDataButton();
-    switchToPluginFrame();
-    browser.pause(500);
+    switchToDialogFrame();
     PluginPopup.switchLibrary(false);
     PluginPopup.searchForObject(objectsList.datasets.notPublished);
     browser.pause(500);

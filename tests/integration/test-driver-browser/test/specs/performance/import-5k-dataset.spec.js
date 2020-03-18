@@ -2,7 +2,7 @@ import OfficeLogin from '../../helpers/office/office.login';
 import OfficeWorksheet from '../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../helpers/plugin/plugin.popup';
-import { switchToPluginFrame } from '../../helpers/utils/iframe-helper';
+import { changeBrowserTab } from '../../helpers/utils/iframe-helper';
 import { writeDataIntoFile, getJsonData } from '../../helpers/utils/benchmark-helper';
 
 describe('Smart Folder - IMPORT -', () => {
@@ -37,8 +37,7 @@ describe('Smart Folder - IMPORT -', () => {
       console.log('Performance data saved');
     }
     browser.closeWindow();
-    const handles = browser.getWindowHandles();
-    browser.switchToWindow(handles[0]);
+    changeBrowserTab(0);
   });
 
   it('Import object (1st time)', () => {

@@ -1,7 +1,7 @@
 import OfficeLogin from '../../../helpers/office/office.login';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
+import { switchToDialogFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 import { objectsList } from '../../../constants/objects-list';
 
 describe('TC59677 - Altering Table of Objects with rows expanded', () => {
@@ -11,13 +11,12 @@ describe('TC59677 - Altering Table of Objects with rows expanded', () => {
 
   afterEach(() => {
     browser.closeWindow();
-    const handles = browser.getWindowHandles();
-    browser.switchToWindow(handles[0]);
+    changeBrowserTab(0);
   });
 
   it('Imports an object after checking details', () => {
     PluginRightPanel.clickImportDataButton();
-    switchToPluginFrame();
+    switchToDialogFrame();
 
     // Refreshing
     PluginPopup.switchLibrary(false);

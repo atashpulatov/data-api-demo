@@ -5,6 +5,7 @@ export const excelSelectors = {
   addInBtn: '#m_excelWebRenderer_ewaCtl_Apps\\2e AppsForOffice-Large',
   officeAddInsFrame: '#InsertDialog',
   uploadAddInBtn: '#UploadMyAddin',
+  addInFrame: '.AddinIframe',
   manifestInput: '#BrowserFile',
   confirmUpload: '#DialogInstall',
   newSheetBtn: '#m_excelWebRenderer_ewaCtl_m_sheetTabBar > div.ewa-stb-navareaextra > a:nth-child(2)',

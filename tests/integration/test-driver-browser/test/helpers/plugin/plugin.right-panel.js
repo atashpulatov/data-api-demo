@@ -1,5 +1,5 @@
 /* eslint-disable class-methods-use-this */
-import { switchToPluginFrame, switchToPopupFrame, switchToExcelFrame } from '../utils/iframe-helper';
+import { switchToPluginFrame, switchToExcelFrame, changeBrowserTab } from '../utils/iframe-helper';
 import { waitAndClick } from '../utils/click-helper';
 import { rightPanelSelectors } from '../../constants/selectors/plugin.right-panel-selectors';
 import { excelSelectors } from '../../constants/selectors/office-selectors';
@@ -135,11 +135,10 @@ class PluginRightPanel {
     $(rightPanelSelectors.loginRightPanelBtn).waitForDisplayed(17777);
     if ($(rightPanelSelectors.loginRightPanelBtn).isExisting()) {
       this.clickLoginRightPanelBtn();
-      const handles = browser.getWindowHandles();
-      browser.switchToWindow(handles[2]); // TODO: create help function to switch tabs
+      changeBrowserTab(2);
       this.enterCredentialsAndPressLoginBtn(username, password);
       if (isValidCredentials) {
-        browser.switchToWindow(handles[1]); // TODO: create help function to switch tabs
+        changeBrowserTab(1);
       }
     }
   }
