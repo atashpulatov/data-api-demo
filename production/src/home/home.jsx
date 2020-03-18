@@ -7,12 +7,13 @@ import HomeContent from './home-content';
 import { homeHelper } from './home-helper';
 import { toggleRenderSettingsFlag } from '../office/store/office-actions';
 import { officeStoreService } from '../office/store/office-store-service';
+import {RightSidePanel} from '../right-side-panel/right-side-panel';
 
 export class HomeNotConnected extends Component {
   componentDidMount = async () => {
     try {
       officeStoreService.restoreObjectsFromExcelStore();
-      //TODO: remove below
+      // TODO: remove below
       await officeStoreService.loadExistingReportBindingsExcel();
       homeHelper.saveLoginValues();
       homeHelper.saveTokenFromCookies();
@@ -27,7 +28,8 @@ export class HomeNotConnected extends Component {
   }
 
   render() {
-    return (<HomeContent {...this.props} />);
+    return (<RightSidePanel {...this.props} />);
+    // return (<HomeContent {...this.props} />);
   }
 }
 
