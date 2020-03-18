@@ -48,7 +48,7 @@ rake e2e_test_client
     end
 
     ext_mailer do
-      recipients_list 'dhornos@microstrategy.com,yzhai@microstrategy.com'
+      recipients_list 'dhornos@microstrategy.com,yzhai@microstrategy.com,dtamosiunas@microstrategy.com'
       subject '$JOB_NAME - $BUILD_STATUS'
       content '$DEFAULT_CONTENT'
       fail_trigger_recipients_list ''
