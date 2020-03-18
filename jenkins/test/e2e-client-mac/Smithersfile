@@ -41,12 +41,6 @@ rake e2e_test_client
   end
 
   publishers do
-    html do
-       report_name 'Browser e2e Test Report'
-       report_directory_path "tests/integration/test-driver-browser/allure-report"
-       index_file_name 'index.html'
-    end
-
     ext_mailer do
       recipients_list 'dhornos@microstrategy.com,yzhai@microstrategy.com,dtamosiunas@microstrategy.com'
       subject '$JOB_NAME - $BUILD_STATUS'
