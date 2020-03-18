@@ -36,7 +36,6 @@ class StepApplySubtotalFormatting {
     }
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, FORMAT_SUBTOTALS));
   };
-
 }
 
 const stepApplySubtotalFormatting = new StepApplySubtotalFormatting();

@@ -58,5 +58,5 @@ class StepSaveReportWithParams {
   }
 }
 
-export const stepSaveReportWithParams = new StepSaveReportWithParams();
+const stepSaveReportWithParams = new StepSaveReportWithParams();
 export default stepSaveReportWithParams;
