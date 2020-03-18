@@ -418,7 +418,7 @@ const mapDispatchToProps = {
 };
 
 OfficeLoadedFileNotConnected.propTypes = {
-  objectWorkingId: PropTypes.number,
+  objectWorkingId: PropTypes.string,
   fileName: PropTypes.string,
   bindingId: PropTypes.string,
   objectType: PropTypes.shape({ name: PropTypes.string }),
