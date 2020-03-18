@@ -4,7 +4,7 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
-import {waitAndClick} from '../../../helpers/utils/click-helper';
+import { waitAndClick } from '../../../helpers/utils/click-helper';
 
 describe('TC58932 - Deselecting/selecting filters with no objects', () => {
   beforeEach(() => {
@@ -34,12 +34,14 @@ describe('TC58932 - Deselecting/selecting filters with no objects', () => {
 
     // find empty owner
     const someEmptyElement = $(popupSelectors.filterPanel.disabledCheckboxAllPanel);
+    expect(someEmptyElement.$('input').isSelected()).toBe(true);
 
     // deselect empty owner
-    someEmptyElement.click();
+    someEmptyElement.$('.checkmark').click();
+    expect(someEmptyElement.$('input').isSelected()).toBe(false);
 
     // try to select it again
-    someEmptyElement.click();
-    expect(someEmptyElement.isSelected()).toBe(false);
+    someEmptyElement.$('.checkmark').click();
+    expect(someEmptyElement.$('input').isSelected()).toBe(false);
   });
 });
