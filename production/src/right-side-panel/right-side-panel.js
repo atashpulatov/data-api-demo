@@ -9,16 +9,12 @@ const RightSidePanelNotConnected = (props) => {
     console.log('gonna add data');
     props.addDataAction();
   };
-  const mapLoadedObjects = (objects) => {
-    return objects.map((object) => {
-      return {
-        bindId: object.newBindingId,
-        id: object.objectId,
-        name: object.instanceDefinition.mstrTable.name,
-        objectType: object.mstrObjectType,
-      };
-    });
-  };
+  const mapLoadedObjects = (objects) => objects.map((object) => ({
+    bindId: object.newBindingId,
+    id: object.objectId,
+    name: getName(object),
+    objectType: object.mstrObjectType,
+  }));
   // PropTypes.shape({
   //   bindId: PropTypes.string,
   //   body: PropTypes.shape({}),
@@ -76,3 +72,6 @@ const mapDispatchToProps = {};
 const RightSidePanelWrapped = fileHistoryContainerHOC(RightSidePanelNotConnected);
 
 export const RightSidePanel = connect(mapStateToProps, mapDispatchToProps)(RightSidePanelWrapped);
+function getName(object) {
+  return object.instanceDefinition && object.instanceDefinition.mstrTable && object.instanceDefinition.mstrTable.name;
+}
