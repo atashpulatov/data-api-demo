@@ -152,7 +152,7 @@ export class FileHistoryContainerNotConnected extends React.Component {
             </div>
           )
         }
-        {sessionHelper.isDevelopment
+        {(sessionHelper.isDevelopment())
          && (
            <div className="refresh-button-container">
              <Button
