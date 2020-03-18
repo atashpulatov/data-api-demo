@@ -3,52 +3,56 @@ import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 
 
 class OfficeTableRefresh {
-   getExistingOfficeTableData = async (excelContext, bindingId, instanceDefinition, previousTableDimensions) => {
-     const { mstrTable } = instanceDefinition;
-     let tableColumnsChanged = false;
+  getExistingOfficeTableData = async (excelContext, bindingId, instanceDefinition, previousTableDimensions) => {
+    const { mstrTable } = instanceDefinition;
 
-     const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindingId);
-     await this.clearEmptyCrosstabRow(mstrTable, prevOfficeTable, excelContext);
+    const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindingId);
+    await this.clearEmptyCrosstabRow(mstrTable, prevOfficeTable, excelContext);
 
-     prevOfficeTable.showHeaders = true;
-     prevOfficeTable.load('name');
-     await excelContext.sync();
+    prevOfficeTable.showHeaders = true;
+    prevOfficeTable.load('name');
+    await excelContext.sync();
 
-     let startCell = await this.getStartCellOnRefresh(prevOfficeTable, excelContext);
-     ({ tableColumnsChanged, startCell } = await this.handleColumnChange(
-       prevOfficeTable,
-       excelContext,
-       instanceDefinition,
-       previousTableDimensions,
-       startCell
-     ));
+    let startCell = await this.getStartCellOnRefresh(prevOfficeTable, excelContext);
 
-     return { tableColumnsChanged, prevOfficeTable, startCell };
-   }
+    let tableColumnsChanged = false;
+    ({ tableColumnsChanged, startCell } = await this.handleColumnChange(
+      prevOfficeTable,
+      excelContext,
+      instanceDefinition,
+      previousTableDimensions,
+      startCell,
+    ));
 
-   handleColumnChange = async (
-     prevOfficeTable,
-     excelContext,
-     instanceDefinition,
-     previousTableDimensions,
-     startCell,
-   ) => {
-     const { mstrTable } = instanceDefinition;
+    return { tableColumnsChanged, prevOfficeTable, startCell };
+  };
 
-     let tableColumnsChanged = await this.checkColumnsChange(prevOfficeTable,
-       excelContext,
-       instanceDefinition,
-       previousTableDimensions);
+  handleColumnChange = async (
+    prevOfficeTable,
+    excelContext,
+    instanceDefinition,
+    previousTableDimensions,
+    startCell,
+  ) => {
+    const { mstrTable } = instanceDefinition;
 
-     ({ tableColumnsChanged, startCell } = await this.clearIfCrosstabHeadersChanged(
-       prevOfficeTable,
-       excelContext,
-       tableColumnsChanged,
-       startCell,
-       mstrTable
-     ));
-     return { tableColumnsChanged, startCell };
-   }
+    let tableColumnsChanged = await this.checkColumnsChange(
+      prevOfficeTable,
+      excelContext,
+      instanceDefinition,
+      previousTableDimensions
+    );
+
+    ({ tableColumnsChanged, startCell } = await this.clearIfCrosstabHeadersChanged(
+      prevOfficeTable,
+      excelContext,
+      tableColumnsChanged,
+      startCell,
+      mstrTable
+    ));
+
+    return { tableColumnsChanged, startCell };
+  };
 
   clearEmptyCrosstabRow = async (mstrTable, prevOfficeTable, excelContext) => {
     const { isCrosstab, toCrosstabChange, prevCrosstabDimensions } = mstrTable;

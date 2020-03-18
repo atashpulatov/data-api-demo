@@ -4,7 +4,13 @@ import { errorService } from '../error/error-handler';
 
 
 class FileHistoryHelper {
-  deleteReport = async (onDelete, bindingId, isCrosstab = false, crosstabHeaderDimensions = {}, objectWorkingId, message) => {
+  deleteReport = async (
+    onDelete,
+    bindingId,
+    isCrosstab = false,
+    crosstabHeaderDimensions = {},
+    objectWorkingId, message
+  ) => {
     sessionHelper.enableLoading();
     try {
       const removed = await onDelete(bindingId, isCrosstab, crosstabHeaderDimensions, objectWorkingId);

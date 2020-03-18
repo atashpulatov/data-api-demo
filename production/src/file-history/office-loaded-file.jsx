@@ -88,7 +88,14 @@ export class OfficeLoadedFileNotConnected extends React.Component {
     } = this.props;
 
     const message = t('{{name}} has been removed from the workbook.', { name: fileName });
-    await fileHistoryHelper.deleteReport(onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, objectWorkingId, message);
+    await fileHistoryHelper.deleteReport(
+      onDelete,
+      bindingId,
+      isCrosstab,
+      crosstabHeaderDimensions,
+      objectWorkingId,
+      message
+    );
   }
 
   deleteAction = (e) => {
@@ -111,7 +118,14 @@ export class OfficeLoadedFileNotConnected extends React.Component {
           await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindingId);
           const message = t('{{name}} has been removed from the workbook.',
             { name: fileName });
-          await fileHistoryHelper.deleteReport(onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, objectWorkingId, message);
+          await fileHistoryHelper.deleteReport(
+            onDelete,
+            bindingId,
+            isCrosstab,
+            crosstabHeaderDimensions,
+            objectWorkingId,
+            message
+          );
           if (this.ismounted) { this.setState({ allowDeleteClick: true, allowRefreshClick: true }); }
           stopLoading();
         } catch (error) {
@@ -403,6 +417,7 @@ const mapDispatchToProps = {
 };
 
 OfficeLoadedFileNotConnected.propTypes = {
+  objectWorkingId: PropTypes.string,
   fileName: PropTypes.string,
   bindingId: PropTypes.string,
   objectType: PropTypes.shape({ name: PropTypes.string }),

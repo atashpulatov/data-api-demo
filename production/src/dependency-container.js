@@ -8,7 +8,6 @@ import { authenticationHelper } from './authentication/authentication-helper';
 import { homeHelper } from './home/home-helper';
 import { mstrObjectRestService } from './mstr-object/mstr-object-rest-service';
 import { popupController } from './popup/popup-controller';
-import { officeDisplayService } from './office/office-display-service';
 import { mstrListRestService } from './mstr-object/mstr-list-rest-service';
 import { popupHelper } from './popup/popup-helper';
 import { popupActions } from './popup/popup-actions';
@@ -25,10 +24,13 @@ import stepGetOfficeTableEditRefresh from './office/table/step-get-office-table-
 import stepGetOfficeTableImport from './office/table/step-get-office-table-import';
 import stepSaveReportWithParams from './popup/step-save-report-with-params';
 import stepApplySubtotalFormatting from './office/format/step-apply-subtotal-formatting';
+import subscribeSteps from './operation/operation-subscribe-steps';
 
 class DIContainer {
   constructor(autoInitialize) {
-    if (autoInitialize) { this.initializeAll(); }
+    if (autoInitialize) {
+      this.initializeAll();
+    }
   }
 
   initializeAll = () => {
@@ -69,20 +71,21 @@ class DIContainer {
       this.mstrObjectRestService,
       this.popupController
     );
+
     this.initialized = true;
-  }
+  };
 
   initilizeSingle = (ClassToInitialize, dependencies) => {
     this[ClassToInitialize.constructor.name] = new ClassToInitialize();
     this[ClassToInitialize.constructor.name].init(...dependencies);
     return this[ClassToInitialize.constructor.name];
-  }
+  };
 
-  get = (dependency) => this[dependency]
+  get = (dependency) => this[dependency];
 
   initializeOfficeDisplayServices() {
-    this.officeDisplayService = officeDisplayService;
-    this.officeDisplayService.init(reduxStore, operationBus);
+    this.subscribeSteps = subscribeSteps;
+    this.subscribeSteps.init(reduxStore, operationBus);
     this.mstrListRestService = mstrListRestService;
     this.mstrListRestService.init(reduxStore);
 

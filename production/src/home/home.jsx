@@ -12,7 +12,7 @@ export class HomeNotConnected extends Component {
   componentDidMount = async () => {
     try {
       officeStoreService.restoreObjectsFromExcelStore();
-      //TODO: remove below
+      // TODO: remove below
       await officeStoreService.loadExistingReportBindingsExcel();
       homeHelper.saveLoginValues();
       homeHelper.saveTokenFromCookies();
