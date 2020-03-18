@@ -57,7 +57,7 @@ class DIContainer {
     this.popupController = popupController;
     this.popupController.init(reduxStore, sessionHelper, popupActions);
 
-    this.initializeOfficeDisplayServices();
+    this.initializeOperationSteps();
 
     this.popupHelper = popupHelper;
     this.popupHelper.init(popupController, reduxStore);
@@ -83,7 +83,7 @@ class DIContainer {
 
   get = (dependency) => this[dependency];
 
-  initializeOfficeDisplayServices() {
+  initializeOperationSteps() {
     this.subscribeSteps = subscribeSteps;
     this.subscribeSteps.init(reduxStore, operationBus);
     this.mstrListRestService = mstrListRestService;
@@ -91,20 +91,26 @@ class DIContainer {
 
     this.stepGetInstanceDefinition = stepGetInstanceDefinition;
     this.stepGetInstanceDefinition.init(reduxStore);
+
     this.stepApplyFormatting = stepApplyFormatting;
     this.stepApplyFormatting.init(reduxStore);
+
     this.stepFormatTable = stepFormatTable;
     this.stepFormatTable.init(reduxStore);
+
     this.stepFetchInsertDataIntoExcel = stepFetchInsertDataIntoExcel;
     this.stepFetchInsertDataIntoExcel.init(reduxStore);
+
     this.stepBindOfficeTable = stepBindOfficeTable;
     this.stepBindOfficeTable.init(reduxStore);
     this.stepGetOfficeTableEditRefresh = stepGetOfficeTableEditRefresh;
     this.stepGetOfficeTableEditRefresh.init(reduxStore);
     this.stepGetOfficeTableImport = stepGetOfficeTableImport;
     this.stepGetOfficeTableImport.init(reduxStore);
+
     this.stepSaveReportWithParams = stepSaveReportWithParams;
     this.stepSaveReportWithParams.init(reduxStore);
+
     this.stepApplySubtotalFormatting = stepApplySubtotalFormatting;
     this.stepApplySubtotalFormatting.init(reduxStore);
 

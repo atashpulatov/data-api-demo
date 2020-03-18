@@ -5,7 +5,7 @@ import { PopupTypeEnum } from '../home/popup-type-enum';
 import objectTypeEnum from '../mstr-object/mstr-object-type-enum';
 import { officeContext } from '../office/office-context';
 import { selectorProperties } from '../attribute-selector/selector-properties';
-import { refreshRequestedTMP, refreshRequested } from '../operation/operation-actions';
+import { refreshRequested } from '../operation/operation-actions';
 
 
 function sortPromptsAnswers(array) {
@@ -83,15 +83,12 @@ class PopupHelper {
 
     this.reduxStore.dispatch(refreshRequested(refreshReport));
 
-
-    // const result = await officeDisplayService.printObject(options);
+    // TODO remove
     const result = {
       type: 'success',
       message: 'Data loaded successfully'
     };
-    // if (result) {
-    //   notificationService.displayNotification({ type: result.type, content: result.message });
-    // }
+
     if (result && result.type === 'warning') {
       throw new Error(result.message);
     }

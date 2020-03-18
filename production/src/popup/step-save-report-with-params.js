@@ -47,6 +47,7 @@ class StepSaveReportWithParams {
     this.reduxStore.dispatch(updateObject(updatedObject));
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, MODIFY_OBJECT));
 
+    // TODO add apllying bockup on erorr
     // if (isErrorOnRefresh) {
     //   if (reportPreviousState.objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
     //     await preserveReportValue(reportParams.bindId, 'manipulationsXML', reportPreviousState.manipulationsXML);

@@ -86,7 +86,7 @@ class PopupActions {
           isRefreshAll,
         });
 
-        const { bindId, objectType, promptsAnswers } = report;
+        const { bindId, objectType } = report;
         isError = await popupHelper.printRefreshedReport(
           bindId,
           objectType,

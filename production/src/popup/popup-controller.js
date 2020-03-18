@@ -187,11 +187,6 @@ class PopupController {
       };
 
       this.reduxStore.dispatch(importRequested(options));
-
-      // const result = await officeDisplayService.printObject(options);
-      // if (result) {
-      //   notificationService.displayNotification({ type: result.type, content: result.message });
-      // }
       this.reduxStore.dispatch({ type: STOP_REPORT_LOADING });
     }
   };
@@ -229,15 +224,6 @@ class PopupController {
       };
 
       this.reduxStore.dispatch(importRequested(options));
-
-      // const result = await officeDisplayService.printObject(options);
-      // const result = {
-      //   type: 'success',
-      //   message: 'Data loaded successfully'
-      // };
-      // if (result) {
-      //   notificationService.displayNotification({ type: result.type, content: result.message });
-      // }
       this.reduxStore.dispatch({ type: STOP_REPORT_LOADING });
     }
   };
