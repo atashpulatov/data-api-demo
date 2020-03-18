@@ -225,7 +225,7 @@ describe('Popup actions', () => {
     };
     const instanceDefinitionMocked = { instanceId: 'instanceId' };
     const listener = jest.fn();
-    officeStoreService.getReportFromProperties.mockReturnValueOnce(returnedValue);
+    officeStoreService.getObjectFromProperties.mockReturnValueOnce(returnedValue);
     mstrObjectRestService.getVisualizationInfo.mockReturnValueOnce(visInfo);
     createDossierInstance.mockReturnValueOnce(instanceDefinitionMocked);
     // when
@@ -233,7 +233,7 @@ describe('Popup actions', () => {
     // then
     expect(officeApiHelper.getExcelSessionStatus).toBeCalled();
     expect(authenticationHelper.validateAuthToken).toBeCalled();
-    expect(officeStoreService.getReportFromProperties).toBeCalledWith(bindingId);
+    expect(officeStoreService.getObjectFromProperties).toBeCalledWith(bindingId);
     expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedObject: returnedValue });
   });
 
@@ -244,12 +244,12 @@ describe('Popup actions', () => {
     const returnedValue = {
       id: 'id', projectId: 'projectId', instanceId: 'instanceId', body: {}, promptsAnswers: [], isPrompted: false
     };
-    officeStoreService.getReportFromProperties.mockReturnValueOnce(returnedValue);
+    officeStoreService.getObjectFromProperties.mockReturnValueOnce(returnedValue);
     const listener = jest.fn();
     // when
     await actions.callForEdit(report)(listener);
     // then
-    expect(officeStoreService.getReportFromProperties).toBeCalledWith(bindingId);
+    expect(officeStoreService.getObjectFromProperties).toBeCalledWith(bindingId);
     expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedObject: returnedValue });
     expect(popupController.runEditFiltersPopup).toBeCalledWith(report);
   });
@@ -261,12 +261,12 @@ describe('Popup actions', () => {
     const returnedValue = {
       id: 'id', projectId: 'projectId', instanceId: 'instanceId', body: {}, promptsAnswers: [], isPrompted: true
     };
-    officeStoreService.getReportFromProperties.mockReturnValueOnce(returnedValue);
+    officeStoreService.getObjectFromProperties.mockReturnValueOnce(returnedValue);
     const listener = jest.fn();
     // when
     await actions.callForEdit(report)(listener);
     // then
-    expect(officeStoreService.getReportFromProperties).toBeCalledWith(bindingId);
+    expect(officeStoreService.getObjectFromProperties).toBeCalledWith(bindingId);
     expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedObject: returnedValue });
     expect(popupController.runRepromptPopup).toBeCalledWith(report);
   });

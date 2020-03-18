@@ -5,7 +5,7 @@ import { withTranslation } from 'react-i18next';
 
 export class RenameInputNotConnected extends React.Component {
   getNameContainer(editable, bindingId, fileName, value) {
-    const { renameReport } = this.props;
+    const { renameObject } = this.props;
     if (editable) {
       return (
         <Input
@@ -14,8 +14,8 @@ export class RenameInputNotConnected extends React.Component {
           maxLength={255}
           id={`input-${bindingId}`}
           defaultValue={fileName}
-          onBlur={renameReport}
-          onPressEnter={renameReport}
+          onBlur={renameObject}
+          onPressEnter={renameObject}
         />
       );
     }
@@ -42,7 +42,7 @@ RenameInputNotConnected.propTypes = {
   fileName: PropTypes.string,
   bindingId: PropTypes.string,
   enableEdit: PropTypes.func,
-  renameReport: PropTypes.func,
+  renameObject: PropTypes.func,
 };
 
 export default withTranslation('common')(RenameInputNotConnected);

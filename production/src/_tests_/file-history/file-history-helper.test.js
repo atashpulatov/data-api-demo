@@ -19,7 +19,7 @@ describe('FileHistoryHelper', () => {
   afterAll(() => {
     jest.restoreAllMocks();
   });
-  describe('deleteReport', () => {
+  describe('deleteObject', () => {
     it('should enable loading on run and disable later when delete', async () => {
       // given
       const enableLoadingMock = sessionHelper.enableLoading;
@@ -27,7 +27,7 @@ describe('FileHistoryHelper', () => {
       const mockedOnDelete = jest.fn();
       const testBindId = 'someBindingIt';
       // when
-      await fileHistoryHelper.deleteReport(mockedOnDelete, testBindId);
+      await fileHistoryHelper.deleteObject(mockedOnDelete, testBindId);
       // then
       expect(enableLoadingMock).toBeCalled();
       expect(disableLoadingMock).toBeCalled();
@@ -41,7 +41,7 @@ describe('FileHistoryHelper', () => {
       const name = 'test';
       const objectWorkingId = 'objectWorkingId';
       // when
-      await fileHistoryHelper.deleteReport(
+      await fileHistoryHelper.deleteObject(
         mockedOnDelete,
         testBindId,
         isCrosstab,
@@ -59,7 +59,7 @@ describe('FileHistoryHelper', () => {
       const mockedOnDelete = jest.fn();
       const testBindId = 'someBindingIt';
       // when
-      await fileHistoryHelper.deleteReport(mockedOnDelete, testBindId);
+      await fileHistoryHelper.deleteObject(mockedOnDelete, testBindId);
       // then
       expect(mockedDisplayMessage).not.toBeCalled();
     });
@@ -70,7 +70,7 @@ describe('FileHistoryHelper', () => {
       const testBindId = 'someBindingIt';
       const mockedErrorHandler = errorService.handleError;
       // when
-      await fileHistoryHelper.deleteReport(mockedOnDelete, testBindId);
+      await fileHistoryHelper.deleteObject(mockedOnDelete, testBindId);
       // then
       expect(mockedErrorHandler).toBeCalled();
       expect(mockedErrorHandler).toBeCalledWith(testError);

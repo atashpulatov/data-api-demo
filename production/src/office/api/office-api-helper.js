@@ -148,7 +148,7 @@ getStartCellOfRange = (excelAdress) => excelAdress.match(/!(\w+\d+)(:|$)/)[1]
   onBindingObjectClick = async (
     bindingId,
     shouldSelect = true,
-    deleteReport,
+    deleteObject,
     chosenObjectName,
     isCrosstab,
     crosstabHeaderDimensions) => {
@@ -177,7 +177,7 @@ getStartCellOfRange = (excelAdress) => excelAdress.match(/!(\w+\d+)(:|$)/)[1]
       if (error && error.code === 'ItemNotFound') {
         return notificationService.displayTranslatedNotification({ type: 'info', content: OBJ_REMOVED_FROM_EXCEL });
       }
-      errorService.handleError(error, { chosenObjectName, onConfirm: deleteReport });
+      errorService.handleError(error, { chosenObjectName, onConfirm: deleteObject });
       return false;
     }
   };

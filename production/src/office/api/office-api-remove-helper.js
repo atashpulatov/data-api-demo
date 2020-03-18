@@ -30,10 +30,10 @@ class OfficeApiRemoveHelper {
         const officeTable = excelContext.workbook.tables.getItem(bindingId);
         this.removeExcelTable(officeTable, excelContext, isCrosstab, crosstabHeaderDimensions);
         await excelContext.sync();
-        return officeStoreService.removeReportFromStore(bindingId, objectWorkingId);
+        return officeStoreService.removeObjectFromStore(bindingId, objectWorkingId);
       } catch (error) {
         if (error && error.code === 'ItemNotFound') {
-          return officeStoreService.removeReportFromStore(bindingId, objectWorkingId);
+          return officeStoreService.removeObjectFromStore(bindingId, objectWorkingId);
         }
         return errorService.handleError(error);
       }
@@ -60,7 +60,7 @@ class OfficeApiRemoveHelper {
    * @param {Office} officeContext Excel context
    */
   removeObjectNotExistingInExcel = async (object, officeContext) => {
-    officeStoreService.removeReportFromStore(object.bindId);
+    officeStoreService.removeObjectFromStore(object.bindId);
     await officeContext.document.bindings.releaseByIdAsync(object.bindId, () => { console.log('released binding'); });
   }
 

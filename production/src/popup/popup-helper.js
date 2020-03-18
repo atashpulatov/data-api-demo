@@ -77,7 +77,7 @@ class PopupHelper {
     index,
     isRefreshAll,
   ) => {
-    const refreshReport = officeStoreService.getReportFromProperties(bindingId);
+    const refreshReport = officeStoreService.getObjectFromProperties(bindingId);
     if (isRefreshAll) { this.storageReportRefreshStart(refreshReport, index); }
     const mstrObjectType = objectTypeEnum.getMstrTypeByName(objectType);
 

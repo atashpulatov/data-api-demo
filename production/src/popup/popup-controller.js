@@ -115,7 +115,6 @@ class PopupController {
           } else {
             const reportPreviousState = this.getReportsPreviousState(reportParams);
             this.reduxStore.dispatch(editRequested(reportPreviousState, response));
-          // await stepSaveReportWithParams.saveReportWithParams(reportParams, response, reportPreviousState);
           }
           break;
         case selectorProperties.commandOnUpdate:
@@ -124,7 +123,6 @@ class PopupController {
           } else {
             const reportPreviousState = this.getReportsPreviousState(reportParams);
             this.reduxStore.dispatch(editRequested(reportPreviousState, response));
-          // await stepSaveReportWithParams.saveReportWithParams(reportParams, response, reportPreviousState);
           }
           break;
         case selectorProperties.commandCancel:

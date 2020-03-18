@@ -2,12 +2,12 @@ import { markStepCompleted } from '../operation/operation-actions';
 import { MODIFY_OBJECT } from '../operation/operation-steps';
 import { updateObject } from '../operation/object-actions';
 
-class StepSaveReportWithParams {
+class StepModifyObject {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
   };
 
-  saveReportWithParams = (objectData, { objectEditedData }) => {
+  ModifyObject = (objectData, { objectEditedData }) => {
     const { objectWorkingId, instanceDefinition: { mstrTable } } = objectData;
 
     const updatedObject = {
@@ -59,5 +59,5 @@ class StepSaveReportWithParams {
   }
 }
 
-const stepSaveReportWithParams = new StepSaveReportWithParams();
-export default stepSaveReportWithParams;
+const stepModifyObject = new StepModifyObject();
+export default stepModifyObject;

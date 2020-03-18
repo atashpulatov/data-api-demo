@@ -22,9 +22,10 @@ import stepFetchInsertDataIntoExcel from './office/import/step-fetch-insert-data
 import stepBindOfficeTable from './office/table/step-bind-office-table';
 import stepGetOfficeTableEditRefresh from './office/table/step-get-office-table-edit-refresh';
 import stepGetOfficeTableImport from './office/table/step-get-office-table-import';
-import stepSaveReportWithParams from './popup/step-save-report-with-params';
 import stepApplySubtotalFormatting from './office/format/step-apply-subtotal-formatting';
 import subscribeSteps from './operation/operation-subscribe-steps';
+import stepSaveObject from './office/store/step-save-object';
+import stepModifyObject from './popup/step-modify-object';
 
 class DIContainer {
   constructor(autoInitialize) {
@@ -108,8 +109,8 @@ class DIContainer {
     this.stepGetOfficeTableImport = stepGetOfficeTableImport;
     this.stepGetOfficeTableImport.init(reduxStore);
 
-    this.stepSaveReportWithParams = stepSaveReportWithParams;
-    this.stepSaveReportWithParams.init(reduxStore);
+    this.stepModifyObject = stepModifyObject;
+    this.stepModifyObject.init(reduxStore);
 
     this.stepApplySubtotalFormatting = stepApplySubtotalFormatting;
     this.stepApplySubtotalFormatting.init(reduxStore);
@@ -118,6 +119,9 @@ class DIContainer {
     this.officeFormatData.init(reduxStore);
     this.officeFormatSubtotals = officeFormatSubtotals;
     this.officeFormatSubtotals.init(reduxStore);
+
+    this.stepSaveObject = stepSaveObject;
+    this.stepSaveObject.init(reduxStore);
   }
 }
 

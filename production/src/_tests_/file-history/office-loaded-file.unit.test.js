@@ -42,7 +42,12 @@ describe('office loaded file', () => {
     // given
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
-    const wrappedComponent = mount(<OfficeLoadedFileNotConnected objectType={{ name: 'dataset' }} refreshDate={new Date()} visualizationInfo={visualizationInfoMock} />);
+    const wrappedComponent = mount(
+      <OfficeLoadedFileNotConnected
+        objectType={{ name: 'dataset' }}
+        refreshDate={new Date()}
+        visualizationInfo={visualizationInfoMock} />
+    );
     const wrappedCol = wrappedComponent.find('.object-title-row');
     const wrappedIcons = wrappedCol.find('img');
     // then
@@ -52,7 +57,12 @@ describe('office loaded file', () => {
     // given
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
-    const wrappedComponent = mount(<OfficeLoadedFileNotConnected objectType={{ name: 'report' }} refreshDate={new Date()} visualizationInfo={visualizationInfoMock} />);
+    const wrappedComponent = mount(
+      <OfficeLoadedFileNotConnected
+        objectType={{ name: 'report' }}
+        refreshDate={new Date()}
+        visualizationInfo={visualizationInfoMock} />
+    );
     const wrappedCol = wrappedComponent.find('.object-title-row');
     const wrappedIcons = wrappedCol.find('img');
     // then
@@ -77,7 +87,7 @@ describe('office loaded file', () => {
       crosstabHeaderDimensions={crosstabHeaderDimensions}
     />);
     // when
-    const mockDelete = jest.spyOn(wrappedComponent.instance(), 'deleteReport');
+    const mockDelete = jest.spyOn(wrappedComponent.instance(), 'deleteObject');
     const textWrapper = wrappedComponent.childAt(0).find('div');
 
     textWrapper.at(1).simulate('click');
@@ -339,7 +349,7 @@ describe('office loaded file', () => {
   });
   it('should NOT invoke delete method on button click if allowDeleteClick is false', () => {
     // given
-    fileHistoryHelper.deleteReport = jest.fn();
+    fileHistoryHelper.deleteObject = jest.fn();
     const mockEvent = { stopPropagation: jest.fn() };
     const testBindingId = 'testBindingId';
     const objectType = 'report';
@@ -359,7 +369,7 @@ describe('office loaded file', () => {
     // when
     deleteButton.props().onClick(mockEvent);
     // then
-    expect(fileHistoryHelper.deleteReport).not.toBeCalled();
+    expect(fileHistoryHelper.deleteObject).not.toBeCalled();
   });
   it('should invoke ONLY select method on button click', () => {
     // given
@@ -385,7 +395,7 @@ describe('office loaded file', () => {
       isCrosstab={isCrosstab}
       crosstabHeaderDimensions={crosstabHeaderDimensions}
     />);
-    const mockDelete = jest.spyOn(wrappedComponent.instance(), 'deleteReport');
+    const mockDelete = jest.spyOn(wrappedComponent.instance(), 'deleteObject');
     const textWrapper = wrappedComponent.find('.file-history-container');
     textWrapper.props().onClick(mockEvent);
     // then
@@ -445,13 +455,13 @@ describe('office loaded file', () => {
     expect(onEditMocked).toBeCalled();
     expect(onEditMocked).toBeCalledWith({ bindId: testBindingId, objectType }, loading);
   });
-  it('rename report should call officeStoreService.renameReport method when filename is given', () => {
+  it('rename report should call officeStoreService.renameObject method when filename is given', () => {
     // given
     const givenFileName = 'name';
     const testBindingId = 'testBindingId';
     const objectType = { name: 'report' };
     const target = { value: givenFileName };
-    const mockOfficeService = jest.spyOn(officeStoreService, 'preserveReportValue');
+    const mockOfficeService = jest.spyOn(officeStoreService, 'preserveObjectValue');
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
     const wrappedComponent = mount(<OfficeLoadedFileNotConnected
@@ -463,7 +473,7 @@ describe('office loaded file', () => {
       isPrompted
       visualizationInfo={visualizationInfoMock}
     />);
-    wrappedComponent.instance().renameReport({ target });
+    wrappedComponent.instance().renameObject({ target });
     // then
     expect(mockOfficeService).toHaveBeenCalled();
   });

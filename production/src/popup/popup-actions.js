@@ -32,7 +32,7 @@ class PopupActions {
         this.officeApiHelper.getExcelSessionStatus(),
         this.authenticationHelper.validateAuthToken(),
       ]);
-      const editedObject = this.officeStoreService.getReportFromProperties(reportParams.bindId);
+      const editedObject = this.officeStoreService.getObjectFromProperties(reportParams.bindId);
 
       dispatch({
         type: SET_REPORT_N_FILTERS,
@@ -120,7 +120,7 @@ class PopupActions {
         this.authenticationHelper.validateAuthToken(),
       ]);
 
-      const editedDossier = this.officeStoreService.getReportFromProperties(reportParams.bindId);
+      const editedDossier = this.officeStoreService.getObjectFromProperties(reportParams.bindId);
 
       const {
         projectId, id, manipulationsXML, visualizationInfo

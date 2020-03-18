@@ -12,16 +12,16 @@ describe('OfficeStoreService', () => {
         saveAsync: jest.fn(),
       });
 
-    jest.spyOn(officeStoreService, 'getReportProperties');
+    jest.spyOn(officeStoreService, 'getObjectProperties');
   });
 
   beforeEach(() => {
-    officeStoreService.getReportProperties
+    officeStoreService.getObjectProperties
       .mockReturnValue(mockReportProperties[1].slice());
   });
 
   afterEach(() => {
-    officeStoreService.getReportProperties.mockClear();
+    officeStoreService.getObjectProperties.mockClear();
   });
 
   it('should save report properties to office settings', () => {
@@ -29,9 +29,9 @@ describe('OfficeStoreService', () => {
     const settings = officeStoreService.getOfficeSettings();
     const givenReport = mockReports[1];
     // when
-    officeStoreService.preserveReport(givenReport);
+    officeStoreService.preserveObject(givenReport);
     // then
-    expect(officeStoreService.getReportProperties).toBeCalled();
+    expect(officeStoreService.getObjectProperties).toBeCalled();
     expect(settings.saveAsync).toBeCalled();
   });
   it('should delete report properties from office settings', () => {
@@ -39,7 +39,7 @@ describe('OfficeStoreService', () => {
     const settings = officeStoreService.getOfficeSettings();
     const givenBindingId = 'testBindId1';
     // when
-    officeStoreService.deleteReport(givenBindingId);
+    officeStoreService.deleteObject(givenBindingId);
     // then
     expect(settings.saveAsync).toBeCalled();
   });
@@ -49,7 +49,7 @@ describe('OfficeStoreService', () => {
     const givenBindingId = 'testBindId1';
     const givenName = 'testName';
     // when
-    officeStoreService.preserveReportValue(givenBindingId, 'name', givenName);
+    officeStoreService.preserveObjectValue(givenBindingId, 'name', givenName);
     // then
     expect(settings.saveAsync).toBeCalled();
   });
@@ -57,7 +57,7 @@ describe('OfficeStoreService', () => {
     // given
     const givenBindingId = 'testBindId2';
     // when
-    const result = officeStoreService.getReportFromProperties(givenBindingId);
+    const result = officeStoreService.getObjectFromProperties(givenBindingId);
     // then
     expect(result).toBeInstanceOf(Object);
     expect(result.envUrl).toEqual('testEnvUrl2');

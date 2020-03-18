@@ -4,7 +4,7 @@ import { errorService } from '../error/error-handler';
 
 
 class FileHistoryHelper {
-  deleteReport = async (
+  deleteObject = async (
     onDelete,
     bindingId,
     isCrosstab = false,

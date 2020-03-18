@@ -42,11 +42,11 @@ export class OfficeLoadedFileNotConnected extends React.Component {
     this.ismounted = false;
   }
 
-  renameReport = async ({ target }) => {
+  renameObject = async ({ target }) => {
     const { bindingId, fileName } = this.props;
     const newName = target.value || fileName;
     this.setState({ value: newName });
-    if (newName && bindingId) { await officeStoreService.preserveReportValue(bindingId, 'name', newName); }
+    if (newName && bindingId) { await officeStoreService.preserveObjectValue(bindingId, 'name', newName); }
     this.setEditable(false);
   };
 
@@ -82,13 +82,13 @@ export class OfficeLoadedFileNotConnected extends React.Component {
   }
 
 
-  deleteReport = async () => {
+  deleteObject = async () => {
     const {
       onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, fileName, t, objectWorkingId
     } = this.props;
 
     const message = t('{{name}} has been removed from the workbook.', { name: fileName });
-    await fileHistoryHelper.deleteReport(
+    await fileHistoryHelper.deleteObject(
       onDelete,
       bindingId,
       isCrosstab,
@@ -119,7 +119,7 @@ export class OfficeLoadedFileNotConnected extends React.Component {
           await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindingId);
           const message = t('{{name}} has been removed from the workbook.', { name: fileName });
 
-          await fileHistoryHelper.deleteReport(
+          await fileHistoryHelper.deleteObject(
             onDelete,
             bindingId,
             isCrosstab,
@@ -157,7 +157,7 @@ export class OfficeLoadedFileNotConnected extends React.Component {
           const excelContext = await officeApiHelper.getExcelContext();
           await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindingId);
 
-          if (await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport, fileName)) {
+          if (await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteObject, fileName)) {
             if (objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
               (await callForEditDossier({ bindId: bindingId, objectType }, loading));
             } else {
@@ -194,7 +194,7 @@ export class OfficeLoadedFileNotConnected extends React.Component {
           const excelContext = await officeApiHelper.getExcelContext();
 
           await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindingId);
-          if (await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteReport, fileName)) {
+          if (await officeApiHelper.onBindingObjectClick(bindingId, false, this.deleteObject, fileName)) {
             (await refreshReportsArray([{ bindId: bindingId, objectType }], false));
           }
         } catch (error) {
@@ -356,8 +356,8 @@ export class OfficeLoadedFileNotConnected extends React.Component {
           justify="center"
           role="button"
           tabIndex="0"
-          onClick={() => onClick(bindingId, true, this.deleteReport, fileName, isCrosstab, crosstabHeaderDimensions)}
-          onKeyUp={(e) => e.key === 'Enter' && onClick(bindingId, true, this.deleteReport, fileName, isCrosstab, crosstabHeaderDimensions)}
+          onClick={() => onClick(bindingId, true, this.deleteObject, fileName, isCrosstab, crosstabHeaderDimensions)}
+          onKeyUp={(e) => e.key === 'Enter' && onClick(bindingId, true, this.deleteObject, fileName, isCrosstab, crosstabHeaderDimensions)}
         >
           <div className="refresh-icons-row">
             <ButtonPopover
@@ -395,7 +395,7 @@ export class OfficeLoadedFileNotConnected extends React.Component {
               value={value}
               enableEdit={this.enableEdit}
               handleChange={this.handleChange}
-              renameReport={this.renameReport} />
+              renameObject={this.renameObject} />
           </div>
         </div>
       </Dropdown>
