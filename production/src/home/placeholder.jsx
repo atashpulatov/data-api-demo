@@ -15,8 +15,8 @@ export const PlaceHolderNotConnected = ({ loading, t, addDataAction }) => {
       <h2>{t('Let\'s get started')}</h2>
       <p>{t('You haven\'t imported any reports or datasets yet. Import data to start!')}</p>
       <Button id="import-data-placeholder" type="primary" onClick={() => addDataAction()} disabled={loading}>{t('Import Data')}</Button>
-      {sessionHelper.isDevelopment && <div style={{ marginTop: '5px' }}><Button type="primary" onClick={() => sessionHelper.importSeasonalReport()} disabled={loading}>Seasonal report</Button></div>}
-      {sessionHelper.isDevelopment && (
+      {sessionHelper.isDevelopment() && <div style={{ marginTop: '5px' }}><Button type="primary" onClick={() => sessionHelper.importSeasonalReport()} disabled={loading}>Seasonal report</Button></div>}
+      {sessionHelper.isDevelopment() && (
         <div style={{ marginTop: '5px' }}>
           <Button
             className="add-data-btn floating-button"
