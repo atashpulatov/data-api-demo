@@ -41,6 +41,13 @@ rake e2e_test_client
   end
 
   publishers do
+ 
+    html do
+      report_name 'Client Mac e2e Test Report'
+      report_directory_path "tests\integration\test-driver-client\target\surefire-reports"
+      index_file_name 'desktop.automation.functional.all.mvp.LogInLogOutTests.txt'
+    end
+
     ext_mailer do
       recipients_list 'dhornos@microstrategy.com,yzhai@microstrategy.com,dtamosiunas@microstrategy.com'
       subject '$JOB_NAME - $BUILD_STATUS'
