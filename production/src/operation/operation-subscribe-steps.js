@@ -20,7 +20,7 @@ import {
   GET_OFFICE_TABLE_IMPORT,
   MODIFY_OBJECT,
   SAVE_OBJECT_IN_EXCEL
-} from '../operation/operation-steps';
+} from './operation-steps';
 
 class SubscribeSteps {
   init = (reduxStore, operationBus) => {
