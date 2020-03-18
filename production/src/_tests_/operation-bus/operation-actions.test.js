@@ -14,7 +14,7 @@ describe('OperationActions', () => {
     expect(importAction.type).toEqual(IMPORT_REQUESTED);
     expect(importAction.payload.object).toBe(exampleObject);
     expect(importAction.payload.operation.objectWorkingId).toEqual(exampleObject.objectWorkingId,);
-    expect(importAction.payload.operation.operationType).toEqual('CREATE',);
+    expect(importAction.payload.operation.operationType).toEqual('IMPORT_OPERATION',);
   });
 
   it('returns MARK_STEP_COMPLETED action on markStepCompleted call', () => {

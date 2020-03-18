@@ -269,6 +269,7 @@ describe('office loaded file', () => {
     const startLoadingMocked = jest.fn();
     const stopLoadingMocked = jest.fn();
     const testBindingId = 'testBindingId';
+    const objectWorkingId = 'objectWorkingId';
     const mockEvent = { stopPropagation: jest.fn() };
     const mockSync = jest.fn();
     const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
@@ -286,6 +287,7 @@ describe('office loaded file', () => {
       stopLoading={stopLoadingMocked}
       objectType={{ name: 'report' }}
       visualizationInfo={visualizationInfoMock}
+      objectWorkingId={objectWorkingId}
     />);
     wrappedComponent.setState({ allowDeleteClick: true });
     const wrappedIcons = wrappedComponent.find('MSTRIcon').parent();
@@ -295,7 +297,7 @@ describe('office loaded file', () => {
     await expect(mockGetContext).toBeCalled();
     await expect(mockIsCurrentSheetProtected).toBeCalled();
     expect(onDeleteMocked).toBeCalled();
-    expect(onDeleteMocked).toBeCalledWith(testBindingId, true, {});
+    expect(onDeleteMocked).toBeCalledWith(testBindingId, true, {}, objectWorkingId);
   });
   it('should throw error if isCurrentReportSheetProtected fails in delete', async () => {
     // given

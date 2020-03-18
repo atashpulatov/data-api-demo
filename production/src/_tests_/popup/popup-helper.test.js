@@ -270,27 +270,7 @@ describe('Popup actions', () => {
     expect(notificationService.displayNotification).toHaveBeenCalled();
     expect(popupHelper.storageReportRefreshFinish).not.toHaveBeenCalled();
   });
-  it('printRefreshedReport throws error when result type is warning', async () => {
-    // given
-    const mockReport = {
-      id: 'testBindId',
-      projectId: 'testProjectId',
-      body: {},
-    };
-    const mockResult = {
-      type: 'warning',
-      message: 'Test err message',
-    };
-    officeStoreService.getReportFromProperties = jest
-      .fn()
-      .mockImplementation(() => mockReport);
-    popupHelper.storageReportRefreshStart = jest.fn();
-    // officeDisplayService.printObject = jest.fn().mockReturnValue(mockResult);
-    // then
-    await expect(
-      popupHelper.printRefreshedReport('testBind', 'Report', 10, 3, false),
-    ).rejects.toThrowError(new Error(mockResult.message));
-  });
+
   it('handleRefreshError calls proper methods when isRefreshAll flag is true', () => {
     // given
     const error = 'testError';

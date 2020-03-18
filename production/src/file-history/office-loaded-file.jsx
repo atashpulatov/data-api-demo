@@ -111,13 +111,14 @@ export class OfficeLoadedFileNotConnected extends React.Component {
     const {
       onDelete, bindingId, isCrosstab, crosstabHeaderDimensions, fileName, objectWorkingId
     } = this.props;
+
     this.setState({ allowDeleteClick: false, allowRefreshClick: false },
       async () => {
         try {
           const excelContext = await officeApiHelper.getExcelContext();
           await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindingId);
-          const message = t('{{name}} has been removed from the workbook.',
-            { name: fileName });
+          const message = t('{{name}} has been removed from the workbook.', { name: fileName });
+
           await fileHistoryHelper.deleteReport(
             onDelete,
             bindingId,

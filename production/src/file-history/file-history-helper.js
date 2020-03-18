@@ -9,7 +9,8 @@ class FileHistoryHelper {
     bindingId,
     isCrosstab = false,
     crosstabHeaderDimensions = {},
-    objectWorkingId, message
+    objectWorkingId,
+    message
   ) => {
     sessionHelper.enableLoading();
     try {
