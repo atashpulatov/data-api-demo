@@ -29,7 +29,6 @@ describe('TC58932 - Deselecting/selecting filters with no objects', () => {
     PluginPopup.clickFilterButton();
     PluginPopup.clickAllButton('Owner');
     PluginPopup.clickSelectAll();
-    // PluginPopup.tickFilterCheckBox('Type', 'Report');
     PluginPopup.tickFilterCheckBox('Certified Status', 'Certified');
 
     // find empty owner
