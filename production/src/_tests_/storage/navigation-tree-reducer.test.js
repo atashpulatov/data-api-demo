@@ -3,7 +3,9 @@ import {
   CHANGE_SEARCHING, CHANGE_SORTING, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED,
   REQUEST_DOSSIER_OPEN, CHANGE_IS_PROMPTED, SWITCH_MY_LIBRARY, CHANGE_FILTER
 } from '../../navigation/navigation-tree-actions';
-import { navigationTree, initialState, DEFAULT_TYPE, DEFAULT_PROJECT_NAME, } from '../../storage/navigation-tree-reducer';
+import {
+  navigationTree, initialState, DEFAULT_TYPE, DEFAULT_PROJECT_NAME,
+} from '../../storage/navigation-tree-reducer';
 import { CLEAR_WINDOW } from '../../popup/popup-actions';
 import { CREATE_CACHE, CLEAR_CACHE, REFRESH_CACHE } from '../../cache/cache-actions';
 
@@ -210,20 +212,20 @@ describe('NavigationTree Reducer', () => {
   });
 
   // TODO: once we have workflow with report instance id this may be needed
-  it.skip('should set request import flag and instance on REQUEST_IMPORT action', () => {
-    // given
-    const action = {
-      type: REQUEST_IMPORT,
-      data: { instanceId: 'instance', },
-    };
+  // it('should set request import flag and instance on REQUEST_IMPORT action', () => {
+  //   // given
+  //   const action = {
+  //     type: REQUEST_IMPORT,
+  //     data: { instanceId: 'instance', },
+  //   };
 
-    // when
-    const newState = navigationTree({}, action);
+  //   // when
+  //   const newState = navigationTree({}, action);
 
-    // then
-    expect(newState.importRequested).toBe(true);
-    expect(newState.instanceId).toBe(action.data.instanceId);
-  });
+  //   // then
+  //   expect(newState.importRequested).toBe(true);
+  //   expect(newState.instanceId).toBe(action.data.instanceId);
+  // });
 
   it('should set request import flag on REQUEST_IMPORT action', () => {
     // given

@@ -1,5 +1,12 @@
 import {
-  importRequested, IMPORT_REQUESTED, markStepCompleted, MARK_STEP_COMPLETED, CANCEL_OPERATION, cancelOperation, backupObject, BACKUP_OBJECT
+  importRequested,
+  IMPORT_REQUESTED,
+  markStepCompleted,
+  MARK_STEP_COMPLETED,
+  CANCEL_OPERATION,
+  cancelOperation,
+  backupObject,
+  BACKUP_OBJECT
 } from '../../operation/operation-actions';
 
 describe('OperationActions', () => {

@@ -82,7 +82,14 @@ describe('office loaded file', () => {
 
     textWrapper.at(1).simulate('click');
     expect(onClickMocked).toBeCalled();
-    expect(onClickMocked).toBeCalledWith(testBindingId, true, mockDelete, testName, isCrosstab, crosstabHeaderDimensions);
+    expect(onClickMocked).toBeCalledWith(
+      testBindingId,
+      true,
+      mockDelete,
+      testName,
+      isCrosstab,
+      crosstabHeaderDimensions
+    );
   });
   it('should display delete and refresh buttons', () => {
     // given
@@ -341,7 +348,6 @@ describe('office loaded file', () => {
     const wrappedComponent = mount(<OfficeLoadedFileNotConnected
       refreshDate={new Date()}
       bindingId={testBindingId}
-      objectType={objectType}
       fileName="test"
       isLoading={false}
       objectType={{ name: 'report' }}
@@ -384,7 +390,14 @@ describe('office loaded file', () => {
     textWrapper.props().onClick(mockEvent);
     // then
     expect(onClickMocked).toBeCalled();
-    expect(onClickMocked).toBeCalledWith(testBindingId, true, mockDelete, testName, isCrosstab, crosstabHeaderDimensions);
+    expect(onClickMocked).toBeCalledWith(
+      testBindingId,
+      true,
+      mockDelete,
+      testName,
+      isCrosstab,
+      crosstabHeaderDimensions
+    );
     expect(onDeleteMocked).not.toBeCalled();
     expect(onRefreshMocked).not.toBeCalled();
   });
@@ -448,7 +461,6 @@ describe('office loaded file', () => {
       fileName="test"
       isLoading={false}
       isPrompted
-      objectType={objectType}
       visualizationInfo={visualizationInfoMock}
     />);
     wrappedComponent.instance().renameReport({ target });
@@ -468,7 +480,6 @@ describe('office loaded file', () => {
       fileName="test"
       isLoading={false}
       isPrompted
-      objectType={objectType}
       visualizationInfo={visualizationInfoMock}
     />);
     wrappedComponent.simulate('contextmenu', {});
@@ -488,7 +499,6 @@ describe('office loaded file', () => {
       fileName="test"
       isLoading={false}
       isPrompted
-      objectType={objectType}
       visualizationInfo={visualizationInfoMock}
     />);
     // then
@@ -511,7 +521,6 @@ describe('office loaded file', () => {
       fileName="test"
       isLoading={false}
       isPrompted
-      objectType={objectType}
       visualizationInfo={visualizationInfoMock}
     />);
     wrappedComponent.instance().enableEdit(event);
@@ -533,7 +542,6 @@ describe('office loaded file', () => {
       fileName="test"
       isLoading={false}
       isPrompted
-      objectType={objectType}
       visualizationInfo={visualizationInfoMock}
     />);
     wrappedComponent.instance().selectTextAsync();
@@ -554,7 +562,6 @@ describe('office loaded file', () => {
       fileName="test"
       isLoading={false}
       isPrompted
-      objectType={objectType}
       visualizationInfo={visualizationInfoMock}
     />);
     // when

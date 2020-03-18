@@ -16,7 +16,9 @@ describe('Normalized JSON Handler', () => {
       subtotalAddress: false,
     };
     // when
-    const element = jsonHandler.lookupElement({ definition, axis, attributeIndex, elementIndex, });
+    const element = jsonHandler.lookupElement({
+      definition, axis, attributeIndex, elementIndex,
+    });
     // then
     expect(element).toEqual(expectedElement);
   });
@@ -26,9 +28,13 @@ describe('Normalized JSON Handler', () => {
     const axis = 'rows';
     const attributeIndex = 0;
     const elementIndex = 1;
-    const expectedElement = { id: 'h2010;9BC4691C11E97721AF570080EF55306C', formValues: ['2010'], value: ['2010'], subtotalAddress: false, };
+    const expectedElement = {
+      id: 'h2010;9BC4691C11E97721AF570080EF55306C', formValues: ['2010'], value: ['2010'], subtotalAddress: false,
+    };
     // when
-    const element = jsonHandler.lookupElement({ definition, axis, attributeIndex, elementIndex, });
+    const element = jsonHandler.lookupElement({
+      definition, axis, attributeIndex, elementIndex,
+    });
     // then
     expect(element).toEqual(expectedElement);
   });
@@ -37,7 +43,9 @@ describe('Normalized JSON Handler', () => {
     const { definition } = reportV2;
     const axis = 'columns';
     const headerCells = [0];
-    const expectedElements = [{ formValues: ['BWI', '1'], id: 'h1;1D5F4A7811E97722F1050080EF65506C', value: ['BWI', '1'], subtotalAddress: false, }];
+    const expectedElements = [{
+      formValues: ['BWI', '1'], id: 'h1;1D5F4A7811E97722F1050080EF65506C', value: ['BWI', '1'], subtotalAddress: false,
+    }];
     // when
     const elements = jsonHandler.mapElementIndicesToElements({ definition, axis, headerCells });
     // then

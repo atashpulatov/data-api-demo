@@ -41,7 +41,12 @@ describe('File history rename input', () => {
     // when
     const enableEdit = jest.spyOn(wrap.instance(), 'enableEdit');
     // when
-    const wrappedComponent = mount(<RenameInputNotConnected fileName={givenFileName} bindingId={givenId} enableEdit={enableEdit} />);
+    const wrappedComponent = mount(
+      <RenameInputNotConnected
+        fileName={givenFileName}
+        bindingId={givenId}
+        enableEdit={enableEdit} />
+    );
     wrappedComponent.find('.rename-container').simulate('dblclick', {});
     // then
     expect(enableEdit).toBeCalled();

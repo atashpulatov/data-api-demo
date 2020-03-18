@@ -41,7 +41,14 @@ describe('FileHistoryHelper', () => {
       const name = 'test';
       const objectWorkingId = 'objectWorkingId';
       // when
-      await fileHistoryHelper.deleteReport(mockedOnDelete, testBindId, isCrosstab, headerDimensions, objectWorkingId, name);
+      await fileHistoryHelper.deleteReport(
+        mockedOnDelete,
+        testBindId,
+        isCrosstab,
+        headerDimensions,
+        objectWorkingId,
+        name
+      );
       // then
       expect(mockedOnDelete).toBeCalled();
       expect(mockedOnDelete).toBeCalledWith(testBindId, isCrosstab, headerDimensions, objectWorkingId);

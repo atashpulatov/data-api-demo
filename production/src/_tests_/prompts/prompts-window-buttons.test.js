@@ -31,10 +31,10 @@ describe('PromptWindowButtons', () => {
     const handleBack = jest.fn();
     const buttonsWrapper = shallow(
       <PromptWindowButtonsNotConnected
-      isReprompt={false}
-      cancelImport={cancelImportRequestMock}
-      handleBack={handleBack}
-        />
+        isReprompt={false}
+        cancelImport={cancelImportRequestMock}
+        handleBack={handleBack}
+      />
     );
     const cancelButton = buttonsWrapper.find('#back');
     // when

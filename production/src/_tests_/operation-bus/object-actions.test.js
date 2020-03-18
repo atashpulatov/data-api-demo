@@ -1,4 +1,4 @@
- import {
+import {
   UPDATE_OBJECT, updateObject, DELETE_OBJECT, deleteObject, RESTORE_ALL_OBJECTS, restoreAllObjects
 } from '../../operation/object-actions';
 

@@ -111,7 +111,7 @@ describe('FileHistoryContainer', () => {
       stopLoading={stopLoadingMock}
     />);
     wrappedComponent.instance().ismounted = false;
-    wrappedComponent.instance().setState = jest.fn((obj, callback) => setStateCallBack = callback || (() => { }));
+    wrappedComponent.instance().setState = jest.fn((obj, callback) => { setStateCallBack = callback || (() => { }); });
     const refreshButton = wrappedComponent.find('.refresh-all-btn');
     // when
     refreshButton.simulate('click');

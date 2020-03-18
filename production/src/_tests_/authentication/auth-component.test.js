@@ -43,7 +43,13 @@ describe('AuthComponent', () => {
       validateFields: () => jest.fn(),
     };
     const mockMapping = jest.fn();
-    const wrappedComponent = mount(<AuthenticateNotConnected history={history} session={mockSession} form={mockForm} resetState={mockMapping} />);
+    const wrappedComponent = mount(
+      <AuthenticateNotConnected
+        history={history}
+        session={mockSession}
+        form={mockForm}
+        resetState={mockMapping} />
+    );
     const onLoginUserSpy = jest.spyOn(wrappedComponent.instance(), 'onLoginUser');
     const form = wrappedComponent.find('Form').at(0);
     // when

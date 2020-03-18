@@ -72,9 +72,27 @@ describe('Popup actions', () => {
       expect(popupHelper.storagePrepareRefreshAllData).toHaveBeenCalledWith(reportArray);
       expect(popupHelper.runRefreshAllPopup).toHaveBeenCalledWith(reportArray);
       expect(popupHelper.printRefreshedReport).toHaveBeenCalledTimes(3);
-      expect(popupHelper.printRefreshedReport).toHaveBeenCalledWith(reportArray[0].bindId, reportArray[0].objectType, reportArray.length, 0, true);
-      expect(popupHelper.printRefreshedReport).toHaveBeenCalledWith(reportArray[1].bindId, reportArray[1].objectType, reportArray.length, 1, true);
-      expect(popupHelper.printRefreshedReport).toHaveBeenCalledWith(reportArray[2].bindId, reportArray[2].objectType, reportArray.length, 2, true);
+      expect(popupHelper.printRefreshedReport).toHaveBeenCalledWith(
+        reportArray[0].bindId,
+        reportArray[0].objectType,
+        reportArray.length,
+        0,
+        true
+      );
+      expect(popupHelper.printRefreshedReport).toHaveBeenCalledWith(
+        reportArray[1].bindId,
+        reportArray[1].objectType,
+        reportArray.length,
+        1,
+        true
+      );
+      expect(popupHelper.printRefreshedReport).toHaveBeenCalledWith(
+        reportArray[2].bindId,
+        reportArray[2].objectType,
+        reportArray.length,
+        2,
+        true
+      );
       expect(listener).toHaveBeenCalledTimes(6);
       expect(listener).toHaveBeenCalledWith({
         type: officeProperties.actions.startLoadingReport,
@@ -135,10 +153,10 @@ describe('Popup actions', () => {
           name: 'testNamne1',
         },
       ];
+
       // when
-      try {
-        await actions.refreshReportsArray(reportArray, false)(listener);
-      } catch (error) {}
+      await actions.refreshReportsArray(reportArray, false)(listener);
+
       // then
       expect(popupHelper.handleRefreshError).toHaveBeenCalledWith(mockErrorObject, 1, 0, false);
     });
