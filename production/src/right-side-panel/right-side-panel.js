@@ -9,10 +9,48 @@ const RightSidePanelNotConnected = (props) => {
     console.log('gonna add data');
     props.addDataAction();
   };
+  const mapLoadedObjects = (objects) => {
+    return objects.map((object) => {
+      return {
+        bindId: object.newBindingId,
+        id: object.objectId,
+        name: object.instanceDefinition.mstrTable.name,
+        objectType: object.mstrObjectType,
+      };
+    });
+  };
+  // PropTypes.shape({
+  //   bindId: PropTypes.string,
+  //   body: PropTypes.shape({}),
+  //   crosstabHeaderDimensions: PropTypes.shape({}),
+  //   envUrl: PropTypes.string,
+  //   id: PropTypes.string,
+  //   isCrosstab: PropTypes.bool,
+  //   isPrompted: PropTypes.bool,
+  //   manipulationsXML: PropTypes.shape({}),
+  //   name: PropTypes.string,
+  //   objectType: PropTypes.shape({
+  //     name: PropTypes.string,
+  //     request: PropTypes.string,
+  //     subtypes: PropTypes.arrayOf(PropTypes.number),
+  //     type: PropTypes.number,
+  //   }),
+  //   isSelected: PropTypes.bool,
+  //   projectId: PropTypes.string,
+  //   promptsAnswers: PropTypes.shape({}),
+  //   refreshDate: PropTypes.instanceOf(Date),
+  //   subtotalInfo: PropTypes.shape({}),
+  //   visualizationInfo: PropTypes.shape({}),
+  //   loadingState: PropTypes.shape({}),
+  //   actionType: PropTypes.string,
+  //   totalRows: PropTypes.number,
+  //   loadedRows: PropTypes.number,
+  //   locale: PropTypes.string,
+  // })
   return (
     <>
       <SidePanel
-        loadedObjects={props.reportArray || []}
+        loadedObjects={mapLoadedObjects(props.loadedObjects)}
         onAddData={middleWareForAddData}
         onToggleChecked={() => {}}
         onCheckAll={() => {}}
@@ -28,9 +66,11 @@ const RightSidePanelNotConnected = (props) => {
   );
 };
 
-const mapStateToProps = (state) =>
-  // console.log(state);
-  ({});
+const mapStateToProps = (state) => {
+  console.log(state);
+  return { loadedObjects: state.objectReducer.objects, };
+};
+
 const mapDispatchToProps = {};
 
 const RightSidePanelWrapped = fileHistoryContainerHOC(RightSidePanelNotConnected);
