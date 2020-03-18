@@ -42,7 +42,7 @@ when 'mac_os_x'
       source "opencv-mstr-office.rb"
         end 
     execute "install open-CV" do 
-      command "brew install --build-from-source opencv-mstr-office"
+      command "brew install opencv-mstr-office"
       user ENV["USER"]
     end
   end
@@ -74,6 +74,5 @@ when 'mac_os_x'
       source "https://nexus.internal.microstrategy.com/repository/filerepo/org/apache/maven/3.6.3/maven-3.6.3-bin.zip"
       action :create_if_missing
     end
-  end
-else  
+  end 
 end
