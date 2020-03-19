@@ -22,6 +22,7 @@ describe('F12909 - Ability to import a report from MicroStrategy report', () => 
     // should display proper error message for importing report above cells covering currently imported one
     OfficeWorksheet.selectCell('A3');
     PluginRightPanel.clickImportDataButton();
+    PluginPopup.switchLibrary(false);
     PluginPopup.importObject(objectsList.reports.basicReport);
     waitForNotification();
     OfficeWorksheet.selectCell('A1');

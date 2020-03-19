@@ -20,6 +20,7 @@ describe('F12909 - Ability to import a report from MicroStrategy report', () => 
     // should import Number Formatting object
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
+    PluginPopup.switchLibrary(false);
     PluginPopup.importAnyObject(objectsList.reports.numberFormating, 2);
     waitForNotification();
     browser.pause(2000);

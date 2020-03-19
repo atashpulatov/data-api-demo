@@ -17,6 +17,7 @@ describe('F24751 Import report with or without subtotals', () => {
     // step1 - press import data button
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
+    PluginPopup.switchLibrary(false);
 
     // step2 + step3 + step4 - turn my library toggle off, select a report with subtotals press prepare data
     PluginPopup.openPrepareData(objectsList.reports.basicSubtotalsReport, false);

@@ -22,6 +22,7 @@ describe('F12909 - Ability to import a report from MicroStrategy report', () => 
     // should insert a dataset with data preparation
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
+    PluginPopup.switchLibrary(false);
     PluginPopup.prepareObject(objectsList.datasets.basicDataset, ['Order Date', 'Country', 'Region', 'Total Cost', 'Total Revenue'], [['Country', ['Angola', 'Albania', 'Bangladesh']], ['Region', ['Europe', 'Asia']]]);
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.importSuccess);

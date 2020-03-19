@@ -20,6 +20,7 @@ describe('[F22955] - Ability to refresh prompted data already imported to the wo
   it('[TC48135] Refresh a report with prompt - Nested prompts', () => {
     // should import a report
     PluginRightPanel.clickImportDataButton();
+    PluginPopup.switchLibrary(false);
     PluginPopup.importPromptDefaultNested(objectsList.reports.nestedPrompt);
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);

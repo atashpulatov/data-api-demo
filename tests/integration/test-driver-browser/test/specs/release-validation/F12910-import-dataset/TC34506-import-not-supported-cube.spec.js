@@ -21,6 +21,7 @@ describe('[F12910] - Ability to import a dataset from MicroStrategy', () => {
     // should display a correct error message when importing not supported cube
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
+    PluginPopup.switchLibrary(false);
     PluginPopup.switchLibraryAndImportObject(objectsList.datasets.notSupportedCube);
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.emptyObject);

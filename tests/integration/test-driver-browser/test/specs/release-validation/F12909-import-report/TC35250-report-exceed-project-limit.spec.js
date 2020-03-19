@@ -23,6 +23,7 @@ describe('F12909 - Ability to import a report from MicroStrategy report', () => 
     browser.pause(3000);
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
+    PluginPopup.switchLibrary(false);
     PluginPopup.importObject(objectsList.reports.over100k);
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.projectLimits);

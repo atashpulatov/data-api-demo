@@ -20,6 +20,7 @@ describe('F12910] - Ability to import a dataset from MicroStrategy', () => {
   it('[TC35249] Importing cubes which size exceed Project\'s rows/columns limitation', () => {
     // should display a correct error message when importing a report exceeding Project's rows/columns limitation
     PluginRightPanel.clickImportDataButton();
+    PluginPopup.switchLibrary(false);
     PluginPopup.switchLibraryAndImportObject(objectsList.datasets.cubeLimitProject);
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.projectLimits);

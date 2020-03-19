@@ -20,6 +20,7 @@ describe('[F22955] - Ability to refresh prompted data already imported to the wo
   it('[TC48136] [Refresh] Refresh a report with prompt - Multiple prompts', () => {
     // should import a report
     PluginRightPanel.clickImportDataButton();
+    PluginPopup.switchLibrary(false);
     PluginPopup.openPrompt(objectsList.reports.multiplePromptsReport);
     PluginPopup.writeMultiPrompt('07/07/2015\uE004\uE004');
     waitForNotification();

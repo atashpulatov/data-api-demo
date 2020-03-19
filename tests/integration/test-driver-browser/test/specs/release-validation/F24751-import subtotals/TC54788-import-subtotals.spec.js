@@ -17,6 +17,7 @@ describe('TC54788 - Import subtotals', () => {
   it('Enable and disable subtotals', () => {
     const objectName = 'Subtotals - display all types';
     PluginRightPanel.clickImportDataButton();
+    PluginPopup.switchLibrary(false);
     PluginPopup.openPrepareData(objectName);
     PluginPopup.selectAllAttributes();
     PluginPopup.selectAllMetrics();

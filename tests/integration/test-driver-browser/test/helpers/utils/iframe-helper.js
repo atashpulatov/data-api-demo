@@ -1,4 +1,5 @@
 export function switchToPluginFrame() {
+  switchToExcelFrame();
   $('.AddinIframe').waitForExist(9999);
   browser.switchToFrame($('.AddinIframe'));
 }

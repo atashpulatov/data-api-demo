@@ -152,7 +152,7 @@ class PluginPopup {
   }
 
   importObject(objectName) {
-    switchToPluginFrame();
+    switchToDialogFrame();
     this.searchForObject(objectName);
     browser.pause(500);
     this.selectFirstObject();
@@ -363,6 +363,7 @@ class PluginPopup {
   }
 
   switchLibrary(newState) {
+    switchToDialogFrame();
     const myLibrarySwitch = $(popupSelectors.myLibrary);
     myLibrarySwitch.waitForExist(5000);
     const checked = myLibrarySwitch.getAttribute('aria-checked');

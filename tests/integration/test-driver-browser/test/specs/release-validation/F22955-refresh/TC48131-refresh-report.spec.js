@@ -20,6 +20,7 @@ describe('[F22955] - Ability to refresh prompted data already imported to the wo
   it('[TC48131] Refresh a report (without prompt)', () => {
     // should import a report
     PluginRightPanel.clickImportDataButton();
+    PluginPopup.switchLibrary(false);
     PluginPopup.switchLibraryAndImportObject(objectsList.reports.reportXML);
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.importSuccess);

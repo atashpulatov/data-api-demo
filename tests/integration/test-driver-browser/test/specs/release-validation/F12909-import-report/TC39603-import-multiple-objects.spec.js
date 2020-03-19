@@ -24,6 +24,7 @@ describe('F12909 - Ability to import a report from MicroStrategy report', () => 
     OfficeWorksheet.selectCell('A1');
     switchToPluginFrame();
     PluginRightPanel.clickImportDataButton();
+    PluginPopup.switchLibrary(false);
     PluginPopup.importObject(objectsList.reports.reportXML);
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);

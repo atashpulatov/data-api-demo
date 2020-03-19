@@ -21,6 +21,7 @@ describe('F22954 Ability to edit data already imported to the workbook', () => {
   it('[TC48354] [Edit data] Editing a prompted report (with prompt - Value|Date &Time|Required|No default answer)', () => {
     // sholud import prompted report
     PluginRightPanel.clickImportDataButton();
+    PluginPopup.switchLibrary(false);
     PluginPopup.openPrompt(objectsList.reports.valueDayPromptReport);
     PluginPopup.writeValueText('07/07/2015\uE004\uE004');
     waitForNotification();

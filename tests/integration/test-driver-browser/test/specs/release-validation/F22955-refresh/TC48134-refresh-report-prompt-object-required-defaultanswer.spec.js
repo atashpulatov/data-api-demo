@@ -20,6 +20,7 @@ describe('[F22955] - Ability to refresh prompted data already imported to the wo
   it('[TC48134] Refresh a report with prompt - Object|Required|Default answer', () => {
     // should import a report
     PluginRightPanel.clickImportDataButton();
+    PluginPopup.switchLibrary(false);
     PluginPopup.switchLibraryAndImportObject(objectsList.reports.objectPromptedReport);
     browser.pause(5555); // temp solution
     PluginPopup.clickRun();
