@@ -19,13 +19,13 @@ import stepGetInstanceDefinition from './mstr-object/step-get-instance-definitio
 import stepApplyFormatting from './office/format/step-apply-formatting';
 import stepFormatTable from './office/format/step-format-table';
 import stepFetchInsertDataIntoExcel from './office/import/step-fetch-insert-data-into-excel';
-import stepBindOfficeTable from './office/table/step-bind-office-table';
 import stepGetOfficeTableEditRefresh from './office/table/step-get-office-table-edit-refresh';
 import stepGetOfficeTableImport from './office/table/step-get-office-table-import';
 import stepApplySubtotalFormatting from './office/format/step-apply-subtotal-formatting';
 import subscribeSteps from './operation/operation-subscribe-steps';
 import stepSaveObject from './office/store/step-save-object';
 import stepModifyObject from './popup/step-modify-object';
+import operationStepDispatcher from './operation/operation-step-dispatcher';
 
 class DIContainer {
   constructor(autoInitialize) {
@@ -87,6 +87,10 @@ class DIContainer {
   initializeOperationSteps() {
     this.subscribeSteps = subscribeSteps;
     this.subscribeSteps.init(reduxStore, operationBus);
+
+    this.operationStepDispatcher = operationStepDispatcher;
+    this.operationStepDispatcher.init(reduxStore);
+
     this.mstrListRestService = mstrListRestService;
     this.mstrListRestService.init(reduxStore);
 
@@ -102,8 +106,6 @@ class DIContainer {
     this.stepFetchInsertDataIntoExcel = stepFetchInsertDataIntoExcel;
     this.stepFetchInsertDataIntoExcel.init(reduxStore);
 
-    this.stepBindOfficeTable = stepBindOfficeTable;
-    this.stepBindOfficeTable.init(reduxStore);
     this.stepGetOfficeTableEditRefresh = stepGetOfficeTableEditRefresh;
     this.stepGetOfficeTableEditRefresh.init(reduxStore);
     this.stepGetOfficeTableImport = stepGetOfficeTableImport;

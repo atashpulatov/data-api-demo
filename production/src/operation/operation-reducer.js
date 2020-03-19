@@ -1,5 +1,11 @@
 import {
-  IMPORT_REQUESTED, EDIT_REQUESTED, REFRESH_REQUESTED, MARK_STEP_COMPLETED, CANCEL_OPERATION, BACKUP_OBJECT, UPDATE_OPERATION
+  IMPORT_REQUESTED,
+  EDIT_REQUESTED,
+  REFRESH_REQUESTED,
+  MARK_STEP_COMPLETED,
+  CANCEL_OPERATION,
+  BACKUP_OBJECT,
+  UPDATE_OPERATION,
 } from './operation-actions';
 
 const initialState = { operations: [] };
@@ -32,7 +38,6 @@ export const operationReducer = (state = initialState, action) => {
       return state;
   }
 };
-
 
 function importRequested(state, payload) {
   return {

@@ -1,23 +1,17 @@
 import { officeApiHelper } from '../api/office-api-helper';
-
-import { BIND_OFFICE_TABLE } from '../../operation/operation-steps';
-import { markStepCompleted } from '../../operation/operation-actions';
+import officeApiDataLoader from '../api/office-api-data-loader';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
 class StepBindOfficeTable {
-  init = (reduxStore) => {
-    this.reduxStore = reduxStore;
-  };
+  bindOfficeTable = async (objectData, operationData) => {
+    const { newBindingId, objectWorkingId } = objectData;
+    const { excelContext, officeTable } = operationData;
 
-  bindOfficeTable = async (ObjectData, operationData) => {
-    const { newBindingId, objectWorkingId } = ObjectData;
-    const { officeTable, excelContext } = operationData;
+    const tableName = await officeApiDataLoader.loadExcelDataSingle(excelContext, officeTable, 'name');
 
-    officeTable.load('name');
-    await excelContext.sync();
-    const tablename = officeTable.name;
-    await officeApiHelper.bindNamedItem(tablename, newBindingId);
+    await officeApiHelper.bindNamedItem(tableName, newBindingId);
 
-    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, BIND_OFFICE_TABLE));
+    operationStepDispatcher.completeBindOfficeTable(objectWorkingId);
   };
 }
 
