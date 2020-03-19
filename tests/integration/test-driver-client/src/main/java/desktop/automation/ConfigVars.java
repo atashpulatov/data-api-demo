@@ -34,5 +34,5 @@ public class ConfigVars {
     public static final String WINDOWS_HOST = "localhost";
     public static final boolean UTILIZE_INDEX_IMAGE_BASED_PREPARE_DATA_HELPER = true;
     public static final boolean RECORD_TEST_CASE = false;
-    public static final String EXCEL_ADD_IN_NAME_IN_HOME_TAB_WINDOWS_DESKTOP = "Import Data";
+    public static final String EXCEL_ADD_IN_NAME_IN_HOME_TAB_WINDOWS_DESKTOP = "yi_local_ip";
 }
