@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Dropdown, Menu } from 'antd';
 import { sessionHelper } from './storage/session-helper';
 import { officeStoreService } from './office/store/office-store-service';
+import mstrObjectType from './mstr-object/mstr-object-type-enum';
 
 export class DevelopmentImportList extends Component {
   constructor(props) {
@@ -20,8 +21,9 @@ export class DevelopmentImportList extends Component {
       <Menu>
         <Menu.Item key="SeasonalReport" onClick={(e) => { e.domEvent.stopPropagation(); this.setObject('SeasonalReport'); }}>SeasonalReport</Menu.Item>
         <Menu.Item key="SubtotalsAllTypes" onClick={(e) => { e.domEvent.stopPropagation(); this.setObject('SubtotalsAllTypes'); }}>SubtotalsAllTypes</Menu.Item>
+        <Menu.Item key="StoreGaugesPrompted" onClick={(e) => { e.domEvent.stopPropagation(); this.setObject('StoreGaugesPrompted'); }}>StoreGaugesPrompted</Menu.Item>
         <Menu.Item key="Crosstab123" onClick={(e) => { e.domEvent.stopPropagation(); this.setObject('Crosstab123'); }}>Crosstab123</Menu.Item>
-        <Menu.Item key="ErrorAnalysis" onClick={(e) => { e.domEvent.stopPropagation(); this.setObject('ErrorAnalysis'); }}>ErrorAnalysis Viz</Menu.Item>
+        <Menu.Item key="CrosstabSubtotal" onClick={(e) => { e.domEvent.stopPropagation(); this.setObject('CrosstabSubtotal'); }}>CrosstabSubtotal</Menu.Item>
       </Menu>
     );
     const { selectedObject } = this.state;
@@ -65,54 +67,93 @@ DevelopmentImportList.propTypes = {
 
 const objectList = {
   SeasonalReport: {
-    bindingId: null,
-    dossierData: undefined,
-    isPrompted: 0,
-    mstrObjectType: {
-      name: 'report',
-      request: 'reports',
-      subtypes: [768, 769, 774],
-      type: 3,
-    },
+    mstrObjectType: mstrObjectType.mstrObjectType.report,
     objectId: 'F3DA2FE611E75A9600000080EFC5B53B',
-    objectWorkingId: 1584090384002,
-    preparedInstanceId: null,
     projectId: 'B7CA92F04B9FAE8D941C3E9B7E0CD754',
-    promptsAnswers: null,
-    visualizationInfo: undefined,
   },
   SubtotalsAllTypes: {
-    bindingId: null,
-    dossierData: undefined,
-    isPrompted: 0,
-    mstrObjectType: {
-      name: 'report',
-      request: 'reports',
-      subtypes: [768, 769, 774],
-      type: 3,
-    },
+    mstrObjectType: mstrObjectType.mstrObjectType.report,
     objectId: '075E66184A788958195710920F81B7D9',
-    objectWorkingId: 1584543648066,
-    preparedInstanceId: null,
     projectId: 'B7CA92F04B9FAE8D941C3E9B7E0CD754',
-    promptsAnswers: null,
-    visualizationInfo: undefined,
   },
   Crosstab123: {
-    bindingId: null,
-    dossierData: undefined,
-    isPrompted: 0,
-    mstrObjectType: {
-      name: 'report',
-      request: 'reports',
-      subtypes: [768, 769, 774],
-      type: 3,
-    },
+    mstrObjectType: mstrObjectType.mstrObjectType.report,
     objectId: 'A6E8885611E99CC31A6E0080EFF50C15',
-    objectWorkingId: 1584545086057,
-    preparedInstanceId: null,
     projectId: 'B7CA92F04B9FAE8D941C3E9B7E0CD754',
-    promptsAnswers: null,
-    visualizationInfo: undefined,
+    body: {
+      viewFilter: {
+        operator: 'And', operands: [
+          {
+            operator: 'In', operands: [
+              {
+                type: 'attribute',
+                id: '8D679D4411D3E4981000E787EC6DE8A4'
+              },
+              {
+                type: 'elements',
+                elements: [
+                  { id: '8D679D4411D3E4981000E787EC6DE8A4:201401' },
+                  { id: '8D679D4411D3E4981000E787EC6DE8A4:201402' },
+                  { id: '8D679D4411D3E4981000E787EC6DE8A4:201403' }]
+              }
+            ]
+          },
+          {
+            operator: 'In', operands: [
+              {
+                type: 'attribute',
+                id: '8D679D4F11D3E4981000E787EC6DE8A4'
+              },
+              {
+                type: 'elements',
+                elements: [
+                  { id: '8D679D4F11D3E4981000E787EC6DE8A4:11' },
+                  { id: '8D679D4F11D3E4981000E787EC6DE8A4:12' }]
+              }
+            ]
+          },
+        ]
+      }
+    }
+  },
+  CrosstabSubtotal: {
+    mstrObjectType: mstrObjectType.mstrObjectType.report,
+    objectId: '86DADEE211E99CC328DA0080EF750B14',
+    projectId: 'B7CA92F04B9FAE8D941C3E9B7E0CD754',
+    body: {
+      viewFilter: {
+        operator: 'And', operands: [
+          {
+            operator: 'In', operands: [
+              {
+                type: 'attribute',
+                id: '8D679D4411D3E4981000E787EC6DE8A4'
+              },
+              {
+                type: 'elements',
+                elements: [
+                  { id: '8D679D4411D3E4981000E787EC6DE8A4:201401' },
+                  { id: '8D679D4411D3E4981000E787EC6DE8A4:201402' },
+                  { id: '8D679D4411D3E4981000E787EC6DE8A4:201403' }]
+              }
+            ]
+          },
+          {
+            operator: 'In', operands: [
+              {
+                type: 'attribute',
+                id: '8D679D4F11D3E4981000E787EC6DE8A4'
+              },
+              {
+                type: 'elements',
+                elements: [
+                  { id: '8D679D4F11D3E4981000E787EC6DE8A4:11' },
+                  { id: '8D679D4F11D3E4981000E787EC6DE8A4:12' }]
+              }
+            ]
+          },
+        ]
+      }
+    }
   }
 };
