@@ -9,12 +9,10 @@ class StepSaveObject {
     this.reduxStore = reduxStore;
   }
 
-  SaveObject = async (objectData, { operationType }) => {
-    const { instanceDefinition } = objectData;
-    objectData.excelContext = false;
-    objectData.officeTable = false;
-    objectData.previousTableDimensions = { columns: instanceDefinition.columns };
+  SaveObject = async (objectData, operationData) => {
+    const { instanceDefinition, operationType } = operationData;
     const { mstrTable } = instanceDefinition;
+    objectData.previousTableDimensions = { columns: instanceDefinition.columns };
     const refreshDate = new Date();
 
     const report = {

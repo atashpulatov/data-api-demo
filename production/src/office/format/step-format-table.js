@@ -14,15 +14,11 @@ class StepFormatTable {
    * @param {Office} crosstabHeaderDimensions
    * @param {Office} excelContext
    */
-  formatTable = async (objectData) => {
-    const {
-      excelContext,
-      instanceDefinition,
-      officeTable,
-      objectWorkingId,
-    } = objectData;
-
+  formatTable = async (objectData, operationData) => {
+    const { objectWorkingId, } = objectData;
+    const { excelContext, instanceDefinition, officeTable, } = operationData;
     const { crosstabHeaderDimensions, isCrosstab } = instanceDefinition.mstrTable;
+
     console.time('Column auto size');
     if (isCrosstab) {
       const { rowsX } = crosstabHeaderDimensions;

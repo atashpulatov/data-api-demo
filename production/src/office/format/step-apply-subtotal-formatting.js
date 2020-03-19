@@ -17,13 +17,9 @@ class StepApplySubtotalFormatting {
    * @param {Object} mstrTable contains information about mstr object
    * @param {Boolean} [shouldBold=true] Specify whether the values in cells should be bold
    */
-  applySubtotalFormattingRedux = async (objectData) => {
-    const {
-      officeTable,
-      instanceDefinition,
-      excelContext,
-      objectWorkingId,
-    } = objectData;
+  applySubtotalFormattingRedux = async (objectData, operationData) => {
+    const { objectWorkingId, } = objectData;
+    const { excelContext, instanceDefinition, officeTable, } = operationData;
     const { mstrTable } = instanceDefinition;
 
 

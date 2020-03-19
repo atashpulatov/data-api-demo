@@ -14,15 +14,11 @@ class StepApplyFormatting {
    * @param {Boolean} isCrosstab
    * @param {Office} excelContext
    */
-  applyFormatting = async (objectData) => {
+  applyFormatting = async (objectData, operationData) => {
     try {
       console.time('Apply formatting');
-      const {
-        excelContext,
-        instanceDefinition,
-        officeTable,
-        objectWorkingId
-      } = objectData;
+      const { objectWorkingId } = objectData;
+      const { excelContext, instanceDefinition, officeTable, } = operationData;
       const { columnInformation, isCrosstab } = instanceDefinition.mstrTable;
 
       const filteredColumnInformation = this.filterColumnInformation(columnInformation, isCrosstab);

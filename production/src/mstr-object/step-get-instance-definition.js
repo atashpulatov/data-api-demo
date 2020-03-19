@@ -3,7 +3,7 @@ import mstrObjectEnum from './mstr-object-type-enum';
 import { incomingErrorStrings, errorTypes, INVALID_VIZ_KEY_MESSAGE } from '../error/constants';
 
 import { GET_INSTANCE_DEFINITION, IMPORT_OPERATION } from '../operation/operation-steps';
-import { markStepCompleted } from '../operation/operation-actions';
+import { markStepCompleted, updateOperation } from '../operation/operation-actions';
 import { updateObject } from '../operation/object-actions';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
@@ -107,13 +107,16 @@ class StepGetInstanceDefinition {
        objectWorkingId,
        envUrl: officeApiHelper.getCurrentMstrContext(),
        body,
-       instanceDefinition,
        visualizationInfo: visualizationInfo || false,
-       startCell,
-       excelContext,
        bindingId: newBindingId,
      };
 
+     const updatedOperation = {
+       objectWorkingId,
+       instanceDefinition,
+       startCell,
+       excelContext,
+     };
      // TODO add when error handlind added
      // Check if instance returned data
      //  if (mstrTable.rows.length === 0) {
@@ -123,6 +126,7 @@ class StepGetInstanceDefinition {
      //    };
      //  }
 
+     this.reduxStore.dispatch(updateOperation(updatedOperation));
      this.reduxStore.dispatch(updateObject(updatedObject));
      this.reduxStore.dispatch(markStepCompleted(objectWorkingId, GET_INSTANCE_DEFINITION));
    }

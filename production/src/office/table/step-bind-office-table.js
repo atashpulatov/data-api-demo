@@ -8,13 +8,9 @@ class StepBindOfficeTable {
     this.reduxStore = reduxStore;
   };
 
-  bindOfficeTable = async (ObjectData) => {
-    const {
-      newBindingId,
-      excelContext,
-      officeTable,
-      objectWorkingId
-    } = ObjectData;
+  bindOfficeTable = async (ObjectData, operationData) => {
+    const { newBindingId, objectWorkingId } = ObjectData;
+    const { officeTable, excelContext } = operationData;
 
     officeTable.load('name');
     await excelContext.sync();

@@ -8,19 +8,18 @@ class StepModifyObject {
   };
 
   ModifyObject = (objectData, { objectEditedData }) => {
-    const { objectWorkingId, instanceDefinition: { mstrTable } } = objectData;
+    const { objectWorkingId, subtotalsInfo } = objectData;
 
     const updatedObject = {
       objectWorkingId,
       body: objectEditedData.body,
       bindingId: objectData.newBindingId,
       prevOfficeTable: objectData.officeTable,
-      previousTableDimensions: { columns: objectData.instanceDefinition.columns },
     };
 
     if (!objectEditedData.visualizationInfo
-      && mstrTable.subtotalsInfo.importSubtotal !== objectEditedData.subtotalsInfo.importSubtotal) {
-      const subtotalsInformation = { ...mstrTable.subtotalsInfo };
+      && subtotalsInfo.importSubtotal !== objectEditedData.subtotalsInfo.importSubtotal) {
+      const subtotalsInformation = { ...subtotalsInfo };
       subtotalsInformation.importSubtotal = objectEditedData.subtotalsInfo.importSubtotal;
       updatedObject.instanceDefinition.mstrTable.subtotalsInfo = subtotalsInformation;
     }

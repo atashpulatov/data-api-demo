@@ -1,6 +1,6 @@
 import officeTableCreate from './office-table-create';
 import { GET_OFFICE_TABLE_IMPORT } from '../../operation/operation-steps';
-import { markStepCompleted } from '../../operation/operation-actions';
+import { markStepCompleted, updateOperation } from '../../operation/operation-actions';
 import { updateObject } from '../../operation/object-actions';
 
 class StepGetOfficeTableImport {
@@ -19,16 +19,12 @@ class StepGetOfficeTableImport {
    * @param {string} startCell  Top left corner cell
    *
    */
-  getOfficeTableImport = async (objectData) => {
+  getOfficeTableImport = async (objectData, operationData) => {
+    console.log('operationData:', operationData);
     try {
       console.time('Create or get table - import');
-      const {
-        excelContext,
-        instanceDefinition,
-        tableName,
-        objectWorkingId,
-        startCell,
-      } = objectData;
+      const { tableName, objectWorkingId } = objectData;
+      const { excelContext, instanceDefinition, startCell, } = operationData;
 
       const {
         officeTable,
@@ -46,15 +42,21 @@ class StepGetOfficeTableImport {
 
       const updatedObject = {
         objectWorkingId,
-        officeTable,
         newOfficeTableName,
+        newBindingId,
+      };
+
+      const updatedOperation = {
+        objectWorkingId,
+        officeTable,
         shouldFormat: true,
         tableColumnsChanged: false,
-        newBindingId,
         instanceDefinition,
         startCell,
       };
 
+
+      this.reduxStore.dispatch(updateOperation(updatedOperation));
       this.reduxStore.dispatch(updateObject(updatedObject));
       this.reduxStore.dispatch(markStepCompleted(objectWorkingId, GET_OFFICE_TABLE_IMPORT));
     } catch (error) {

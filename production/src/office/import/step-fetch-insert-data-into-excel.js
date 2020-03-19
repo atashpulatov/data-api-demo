@@ -3,7 +3,7 @@ import { mstrObjectRestService, DATA_LIMIT, IMPORT_ROW_LIMIT, } from '../../mstr
 import officeInsertService from './office-insert-service';
 
 import { FETCH_INSERT_DATA } from '../../operation/operation-steps';
-import { markStepCompleted } from '../../operation/operation-actions';
+import { markStepCompleted, updateOperation } from '../../operation/operation-actions';
 import { updateObject } from '../../operation/object-actions';
 
 const { getObjectContentGenerator } = mstrObjectRestService;
@@ -24,7 +24,7 @@ class StepFetchInsertDataIntoExcel {
   * @param {Object} [parameter.visualizationInfo]
   * @returns {Object} Object containing officeTable and subtotalAddresses
   */
-   fetchInsertDataIntoExcel = async (objectData, { operationType }) => {
+   fetchInsertDataIntoExcel = async (objectData, operationData) => {
      try {
        const {
          objectId,
@@ -35,15 +35,17 @@ class StepFetchInsertDataIntoExcel {
          preparedInstanceId,
          manipulationsXML,
          promptsAnswers,
-         instanceDefinition,
-         tableColumnsChanged,
          visualizationInfo,
          displayAttrFormNames,
-         officeTable,
-         excelContext,
          objectWorkingId,
        } = objectData;
-
+       const {
+         operationType,
+         tableColumnsChanged,
+         officeTable,
+         excelContext,
+         instanceDefinition,
+       } = operationData;
 
        const { columns, rows, mstrTable } = instanceDefinition;
        const { subtotalsInfo: { importSubtotal = true } } = mstrTable;
@@ -100,11 +102,19 @@ class StepFetchInsertDataIntoExcel {
 
        await officeInsertService.syncChangesToExcel(contextPromises, true);
 
-       const updatedObject = {
+       const updatedOperation = {
          objectWorkingId,
          instanceDefinition,
        };
+       const updatedObject = {
+         objectWorkingId,
+         subtotalsInfo: {
+           subtotalsAddresses,
+           importSubtotal
+         },
+       };
 
+       this.reduxStore.dispatch(updateOperation(updatedOperation));
        this.reduxStore.dispatch(updateObject(updatedObject));
        this.reduxStore.dispatch(markStepCompleted(objectWorkingId, FETCH_INSERT_DATA));
      } catch (error) {

@@ -3,7 +3,7 @@ import getOfficeTableHelper from './get-office-table-helper';
 import officeTableCreate from './office-table-create';
 import officeTableUpdate from './office-table-update';
 import { GET_OFFICE_TABLE_EDIT_REFRESH } from '../../operation/operation-steps';
-import { markStepCompleted } from '../../operation/operation-actions';
+import { markStepCompleted, updateOperation } from '../../operation/operation-actions';
 import { updateObject } from '../../operation/object-actions';
 
 class StepGetOfficeTableEditRefresh {
@@ -22,20 +22,19 @@ class StepGetOfficeTableEditRefresh {
    * @param {string} startCell  Top left corner cell
    *
    */
-  getOfficeTableEditRefresh = async (objectData) => {
+  getOfficeTableEditRefresh = async (objectData, operationData) => {
     try {
       console.time('Create or get table - edit or refresh');
       const {
-        excelContext,
         bindingId,
-        instanceDefinition,
         tableName,
         previousTableDimensions,
         visualizationInfo,
         objectWorkingId,
       } = objectData;
-
+      const { excelContext, instanceDefinition, } = operationData;
       const { mstrTable } = instanceDefinition;
+
       const newOfficeTableName = tableName;
       let shouldFormat;
       let newBindingId = bindingId;
@@ -73,18 +72,21 @@ class StepGetOfficeTableEditRefresh {
         );
       }
 
-
-      const updatedObject = {
+      const updatedOperation = {
         objectWorkingId,
         officeTable,
-        newOfficeTableName,
         shouldFormat,
         tableColumnsChanged,
-        newBindingId,
         instanceDefinition,
         startCell,
       };
+      const updatedObject = {
+        objectWorkingId,
+        newOfficeTableName,
+        newBindingId,
+      };
 
+      this.reduxStore.dispatch(updateOperation(updatedOperation));
       this.reduxStore.dispatch(updateObject(updatedObject));
       this.reduxStore.dispatch(markStepCompleted(objectWorkingId, GET_OFFICE_TABLE_EDIT_REFRESH));
     } catch (error) {
