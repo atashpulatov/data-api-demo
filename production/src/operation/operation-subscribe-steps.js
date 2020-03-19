@@ -7,7 +7,7 @@ import stepGetOfficeTableEditRefresh from '../office/table/step-get-office-table
 import stepGetOfficeTableImport from '../office/table/step-get-office-table-import';
 import stepModifyObject from '../popup/step-modify-object';
 import stepApplySubtotalFormatting from '../office/format/step-apply-subtotal-formatting';
-import stepSaveObject from '../office/store/step-save-object';
+import stepSaveObjectInExcel from '../office/store/step-save-object-in-excel';
 
 import {
   BIND_OFFICE_TABLE,
@@ -44,7 +44,7 @@ class SubscribeSteps {
     operationBus.subscribe(BIND_OFFICE_TABLE, stepBindOfficeTable.bindOfficeTable);
     // operationBus.subscribe(SAVE_OBJECT_IN_EXCEL, officeStoreService.saveObjectsInExcelStore);
     // TODO: remove below after refactor
-    operationBus.subscribe(SAVE_OBJECT_IN_EXCEL, stepSaveObject.SaveObject);
+    operationBus.subscribe(SAVE_OBJECT_IN_EXCEL, stepSaveObjectInExcel.saveObject);
   };
 }
 

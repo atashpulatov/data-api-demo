@@ -1,15 +1,15 @@
 import { officeProperties } from './office-properties';
 import { errorService } from '../../error/error-handler';
-import { SAVE_OBJECT_IN_EXCEL, IMPORT_OPERATION } from '../../operation/operation-steps';
-import { markStepCompleted } from '../../operation/operation-actions';
+import { IMPORT_OPERATION } from '../../operation/operation-steps';
 import { officeStoreService } from './office-store-service';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
-class StepSaveObject {
+class StepSaveObjectInExcel {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
   }
 
-  SaveObject = async (objectData, operationData) => {
+  saveObject = async (objectData, operationData) => {
     const { instanceDefinition, operationType } = operationData;
     const { mstrTable } = instanceDefinition;
     objectData.previousTableDimensions = { columns: instanceDefinition.columns };
@@ -88,9 +88,10 @@ class StepSaveObject {
       reportBindId: objectData.newBindingId,
     });
     await officeStoreService.saveObjectsInExcelStore();
-    this.reduxStore.dispatch(markStepCompleted(objectData.objectWorkingId, SAVE_OBJECT_IN_EXCEL));
+
+    operationStepDispatcher.completeSaveObjectInExcel(objectData.objectWorkingId);
   };
 }
 
-const stepSaveObject = new StepSaveObject();
-export default stepSaveObject;
+const stepSaveObjectInExcel = new StepSaveObjectInExcel();
+export default stepSaveObjectInExcel;

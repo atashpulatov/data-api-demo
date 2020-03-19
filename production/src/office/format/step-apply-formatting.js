@@ -1,11 +1,6 @@
-import { FORMAT_DATA, } from '../../operation/operation-steps';
-import { markStepCompleted } from '../../operation/operation-actions';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
 class StepApplyFormatting {
-  init = (reduxStore) => {
-    this.reduxStore = reduxStore;
-  }
-
   /**
    * Applies Excel number formatting to imported object based on MSTR data type.
    *
@@ -52,7 +47,7 @@ class StepApplyFormatting {
       }
 
       await excelContext.sync();
-      this.reduxStore.dispatch(markStepCompleted(objectWorkingId, FORMAT_DATA));
+      operationStepDispatcher.completeFormatData(objectWorkingId);
     } catch (error) {
       console.error(error);
       console.log('Cannot apply formatting, skipping');

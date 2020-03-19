@@ -2,15 +2,9 @@ import officeTableRefresh from './office-table-refresh';
 import getOfficeTableHelper from './get-office-table-helper';
 import officeTableCreate from './office-table-create';
 import officeTableUpdate from './office-table-update';
-import { GET_OFFICE_TABLE_EDIT_REFRESH } from '../../operation/operation-steps';
-import { markStepCompleted, updateOperation } from '../../operation/operation-actions';
-import { updateObject } from '../../operation/object-actions';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
 class StepGetOfficeTableEditRefresh {
-  init = (reduxStore) => {
-    this.reduxStore = reduxStore;
-  };
-
   /**
    * Creates an office table if it's a new import or if the number of columns of an existing table changes.
    * If we are refreshing a table and the new definiton range is not empty we keep the original table.
@@ -86,9 +80,9 @@ class StepGetOfficeTableEditRefresh {
         newBindingId,
       };
 
-      this.reduxStore.dispatch(updateOperation(updatedOperation));
-      this.reduxStore.dispatch(updateObject(updatedObject));
-      this.reduxStore.dispatch(markStepCompleted(objectWorkingId, GET_OFFICE_TABLE_EDIT_REFRESH));
+      operationStepDispatcher.updateOperation(updatedOperation);
+      operationStepDispatcher.updateObject(updatedObject);
+      operationStepDispatcher.completeGetOfficeTableEditRefresh(objectWorkingId);
     } catch (error) {
       console.log('error:', error);
     } finally {

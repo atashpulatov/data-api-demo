@@ -15,17 +15,9 @@ import { actionCreator } from './notification/action-creator';
 import { authenticationService } from './authentication/auth-rest-service';
 import { operationBus } from './operation/operation-bus';
 import officeFormatSubtotals from './office/format/office-format-subtotals';
-import stepGetInstanceDefinition from './mstr-object/step-get-instance-definition';
-import stepApplyFormatting from './office/format/step-apply-formatting';
-import stepFormatTable from './office/format/step-format-table';
-import stepFetchInsertDataIntoExcel from './office/import/step-fetch-insert-data-into-excel';
-import stepGetOfficeTableEditRefresh from './office/table/step-get-office-table-edit-refresh';
-import stepGetOfficeTableImport from './office/table/step-get-office-table-import';
-import stepApplySubtotalFormatting from './office/format/step-apply-subtotal-formatting';
 import subscribeSteps from './operation/operation-subscribe-steps';
-import stepSaveObject from './office/store/step-save-object';
-import stepModifyObject from './popup/step-modify-object';
 import operationStepDispatcher from './operation/operation-step-dispatcher';
+import stepSaveObjectInExcel from './office/store/step-save-object-in-excel';
 
 class DIContainer {
   constructor(autoInitialize) {
@@ -91,39 +83,14 @@ class DIContainer {
     this.operationStepDispatcher = operationStepDispatcher;
     this.operationStepDispatcher.init(reduxStore);
 
+    this.stepSaveObjectInExcel = stepSaveObjectInExcel;
+    this.stepSaveObjectInExcel.init(reduxStore);
+
     this.mstrListRestService = mstrListRestService;
     this.mstrListRestService.init(reduxStore);
 
-    this.stepGetInstanceDefinition = stepGetInstanceDefinition;
-    this.stepGetInstanceDefinition.init(reduxStore);
-
-    this.stepApplyFormatting = stepApplyFormatting;
-    this.stepApplyFormatting.init(reduxStore);
-
-    this.stepFormatTable = stepFormatTable;
-    this.stepFormatTable.init(reduxStore);
-
-    this.stepFetchInsertDataIntoExcel = stepFetchInsertDataIntoExcel;
-    this.stepFetchInsertDataIntoExcel.init(reduxStore);
-
-    this.stepGetOfficeTableEditRefresh = stepGetOfficeTableEditRefresh;
-    this.stepGetOfficeTableEditRefresh.init(reduxStore);
-    this.stepGetOfficeTableImport = stepGetOfficeTableImport;
-    this.stepGetOfficeTableImport.init(reduxStore);
-
-    this.stepModifyObject = stepModifyObject;
-    this.stepModifyObject.init(reduxStore);
-
-    this.stepApplySubtotalFormatting = stepApplySubtotalFormatting;
-    this.stepApplySubtotalFormatting.init(reduxStore);
-
-    this.officeFormatData = stepApplyFormatting;
-    this.officeFormatData.init(reduxStore);
     this.officeFormatSubtotals = officeFormatSubtotals;
     this.officeFormatSubtotals.init(reduxStore);
-
-    this.stepSaveObject = stepSaveObject;
-    this.stepSaveObject.init(reduxStore);
   }
 }
 

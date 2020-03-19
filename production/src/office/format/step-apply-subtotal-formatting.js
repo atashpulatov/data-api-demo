@@ -1,12 +1,7 @@
-import { FORMAT_SUBTOTALS } from '../../operation/operation-steps';
-import { markStepCompleted } from '../../operation/operation-actions';
 import officeFormatSubtotals from './office-format-subtotals';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
 class StepApplySubtotalFormatting {
-  init = (reduxStore) => {
-    this.reduxStore = reduxStore;
-  };
-
   /**
    * Applies Excel number formatting to imported object based on MSTR data type.
    *
@@ -22,7 +17,6 @@ class StepApplySubtotalFormatting {
     const { excelContext, instanceDefinition, officeTable, } = operationData;
     const { mstrTable } = instanceDefinition;
 
-
     if (mstrTable.subtotalsInfo.subtotalsAddresses.length) {
       // Removing duplicated subtotal addresses from headers
       await officeFormatSubtotals.applySubtotalFormatting({
@@ -30,7 +24,8 @@ class StepApplySubtotalFormatting {
         officeTable
       }, mstrTable);
     }
-    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, FORMAT_SUBTOTALS));
+
+    operationStepDispatcher.completeFormatSubtotals(objectWorkingId);
   };
 }
 

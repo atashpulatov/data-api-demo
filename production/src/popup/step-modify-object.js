@@ -1,6 +1,4 @@
-import { markStepCompleted } from '../operation/operation-actions';
-import { MODIFY_OBJECT } from '../operation/operation-steps';
-import { updateObject } from '../operation/object-actions';
+import operationStepDispatcher from '../operation/operation-step-dispatcher';
 
 class StepModifyObject {
   init = (reduxStore) => {
@@ -43,8 +41,8 @@ class StepModifyObject {
       updatedObject.isEdit = false;
     }
 
-    this.reduxStore.dispatch(updateObject(updatedObject));
-    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, MODIFY_OBJECT));
+    operationStepDispatcher.updateObject(updatedObject);
+    operationStepDispatcher.completeModifyObject(objectWorkingId);
 
     // TODO add apllying bockup on erorr
     // if (isErrorOnRefresh) {

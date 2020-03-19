@@ -1,11 +1,6 @@
-import { FORMAT_OFFICE_TABLE, } from '../../operation/operation-steps';
-import { markStepCompleted } from '../../operation/operation-actions';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
 class StepFormatTable {
-  init = (reduxStore) => {
-    this.reduxStore = reduxStore;
-  }
-
   /**
    * Formatting table columns width
    *
@@ -39,7 +34,8 @@ class StepFormatTable {
       console.log('Error when formatting - no columns autofit applied', error);
     }
 
-    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, FORMAT_OFFICE_TABLE));
+    operationStepDispatcher.completeFormatOfficeTable(objectWorkingId);
+
     console.timeEnd('Column auto size');
   };
 }
