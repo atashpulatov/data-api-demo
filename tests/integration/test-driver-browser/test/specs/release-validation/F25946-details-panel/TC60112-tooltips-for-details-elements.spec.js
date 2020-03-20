@@ -47,13 +47,14 @@ describe('F25946 - Display more information about the objects in the objects lis
     browser.pause(2000); // wait for search to filter the Object Table
 
     PluginPopup.expandFirstRows(1);
+    const detailsTable = PluginPopup.getDetailsTableByIndex(1);
 
-    const descriptionText = PluginPopup.getDescriptionText();
-    const descriptionTooltipText = PluginPopup.getDescriptionTooltipText();
+    const descriptionText = PluginPopup.getDescriptionText(detailsTable);
+    const descriptionTooltipText = PluginPopup.getDescriptionTooltipText(detailsTable);
     expect(isTooltipCorrect(descriptionText, descriptionTooltipText)).toBe(true);
 
-    const locationText = PluginPopup.getLocationText();
-    const locationTooltipText = PluginPopup.getLocationTooltipText();
+    const locationText = PluginPopup.getLocationText(detailsTable);
+    const locationTooltipText = PluginPopup.getLocationTooltipText(detailsTable);
     expect(isTooltipCorrect(locationText, locationTooltipText)).toBe(true);
   });
 });
