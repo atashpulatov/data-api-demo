@@ -14,7 +14,7 @@ describe('F24086 Improved browsing by adding filters', () => {
     const handles = browser.getWindowHandles();
     browser.switchToWindow(handles[0]);
   });
-  it('TC53430 Refreshing and filtering during refresh', () => {
+  it('[TC53430] Refreshing and filtering during refresh', () => {
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
     switchToDialogFrame();
