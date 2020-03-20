@@ -35,6 +35,10 @@ const OfficeLogin = function () {
       this.login(settings.officeOnline.username, settings.officeOnline.password);
     }
     OfficeWorksheet.createNewWorkbook();
+
+    //Getting Language and Region for Excel logged in user
+    browser.config.languageRegion = $('html').getAttribute('lang');
+
     OfficeWorksheet.openPlugin();
     pluginRightPanel.loginToPlugin(username, password, isValidCredentials);
   }
