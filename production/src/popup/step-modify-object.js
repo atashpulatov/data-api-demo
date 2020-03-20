@@ -5,7 +5,7 @@ class StepModifyObject {
     this.reduxStore = reduxStore;
   };
 
-  ModifyObject = (objectData, { objectEditedData }) => {
+  modifyObject = (objectData, { objectEditedData }) => {
     const { objectWorkingId, subtotalsInfo } = objectData;
 
     const updatedObject = {

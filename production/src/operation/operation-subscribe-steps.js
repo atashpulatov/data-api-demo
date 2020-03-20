@@ -26,7 +26,7 @@ class SubscribeSteps {
   init = (reduxStore, operationBus) => {
     this.reduxStore = reduxStore;
 
-    operationBus.subscribe(MODIFY_OBJECT, stepModifyObject.ModifyObject);
+    operationBus.subscribe(MODIFY_OBJECT, stepModifyObject.modifyObject);
 
     operationBus.subscribe(GET_INSTANCE_DEFINITION, stepGetInstanceDefinition.getInstanceDefinition);
 
