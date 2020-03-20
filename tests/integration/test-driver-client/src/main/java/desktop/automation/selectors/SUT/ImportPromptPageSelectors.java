@@ -49,7 +49,7 @@ public class ImportPromptPageSelectors {
             case MAC_DESKTOP:
                 TITLE = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[0]/AXStaticText[@AXValue='Import data']");
                 MY_LIBRARY_LBL_ELEM = By.xpath("TODO");
-                MY_LIBRARY_SWITCH_ELEM = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[@AXDOMIdentifier='root']/AXGroup[0]/AXGroup[0]/AXCheckBox[@AXSubrole='AXSwitch']");
+                MY_LIBRARY_SWITCH_ELEM = null;
                 REFRESH_BTN_ELEM = By.xpath("TODO");
                 FILTERS_BTN_ELEM = By.xpath("TODO");
                 IMPORT_BTN_ELEM = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[@AXDOMIdentifier='root']/AXGroup[3]/AXButton[@AXTitle='Import' and @AXDOMIdentifier='import']");
@@ -60,13 +60,13 @@ public class ImportPromptPageSelectors {
                 OWNER_HEADER_ELEM = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXTable[0]/AXRow[0]/AXCell[4]/AXGroup[0]/AXStaticText[@AXValue='Owner']");
                 APPLICATION_HEADER_ELEM = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXTable[0]/AXRow[0]/AXCell[5]/AXGroup[0]/AXStaticText[@AXValue='Application']");
                 MODIFIED_HEADER_ELEM = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXTable[0]/AXRow[0]/AXCell[6]/AXGroup[0]/AXStaticText[@AXValue='Modified']");
-                OBJECT_TO_IMPORT_FIRST = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup[@AXTitle='MicroStrategy']/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXList[@AXSubrole='AXContentList']/AXGroup[0]/AXGroup[2]/AXGroup[0]/AXStaticText");
-                OBJECT_TO_IMPORT_BASE_BY_NAME = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup[@AXTitle='MicroStrategy']/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXList[@AXSubrole='AXContentList']/AXGroup/AXGroup[2]/AXGroup[0]/AXStaticText[@AXValue=%s']";
+                OBJECT_TO_IMPORT_FIRST = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXList[@AXSubrole='AXContentList']/AXGroup[0]/AXGroup[2]/AXGroup[0]/AXStaticText");
+                OBJECT_TO_IMPORT_BASE_BY_NAME = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXList[@AXSubrole='AXContentList']/AXGroup/AXGroup[2]/AXGroup[0]/AXStaticText[@AXValue=%s']";
 
                 TITLE_IMAGE = "importPromptPage/title";
                 break;
             case WINDOWS_DESKTOP:
-                TITLE = By.xpath("//Text[@Name=\"Import Data\"]");
+                TITLE = By.xpath("//Text[@Name='Import Data']");
                 MY_LIBRARY_LBL_ELEM = By.xpath("//Text[@Name='My Library']");
                 MY_LIBRARY_SWITCH_ELEM = By.xpath("//Group[@Name='My Library']");
                 REFRESH_BTN_ELEM = By.xpath("//Button[@Name='Refresh']");

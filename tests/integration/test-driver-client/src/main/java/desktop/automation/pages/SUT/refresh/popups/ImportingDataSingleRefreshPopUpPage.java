@@ -7,15 +7,13 @@ import desktop.automation.selectors.SUT.ImportingDataSingleRefreshPopUpPageSelec
 public abstract class ImportingDataSingleRefreshPopUpPage extends ImportingDataSingleRefreshPopUpPageSelectors {
     //current status
     //implemented, but not applied:
-    //Browser:  only asserts that the Data Loaded message loaded
+    //Browser:  only asserts that the Data Loaded, Refresh message loaded
     //Mac:      asserts that the popup Importing data title is present and the correct message afterwards in the add in panel
     //Windows   asserts that the import title is present within 2,5 seconds of the call to the assertion flow methods, if can't find print to system.out that the element was not found, but does not fail the test, later finds the respective notification expected to be present in the run
     //implemented and applied:
-    //Browser:  only asserts that the Data Loaded message loaded
-    //Mac:      only asserts that the Data Loaded message loaded
-    //Windows   only asserts that the Data Loaded message loaded
-
-
+    //Browser:  only asserts that the Data Loaded, Refresh message loaded
+    //Mac:      only asserts that the Data Loaded, Refresh message loaded
+    //Windows   only asserts that the Data Loaded, Refresh message loaded
     protected Machine machine;
 
     public ImportingDataSingleRefreshPopUpPage(Machine machine) {

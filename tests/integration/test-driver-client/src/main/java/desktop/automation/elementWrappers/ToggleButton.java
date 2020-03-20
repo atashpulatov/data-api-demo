@@ -1,9 +1,9 @@
 package desktop.automation.elementWrappers;
 
-import desktop.automation.driver.wrappers.DriverType;
-import desktop.automation.elementWrappers.browser.ToggleButtonBrowser;
-import desktop.automation.elementWrappers.mac.FontControls.ToggleButtonMacMachine;
-import desktop.automation.elementWrappers.windows.ToggleButtonWindowsMachine;
+import desktop.automation.driver.wrappers.enums.DriverType;
+import desktop.automation.elementWrappers.driver.implementations.browser.ToggleButtonBrowser;
+import desktop.automation.elementWrappers.driver.implementations.mac.ToggleButtonMacMachine;
+import desktop.automation.elementWrappers.driver.implementations.windows.ToggleButtonWindowsMachine;
 import desktop.automation.exceptions.NotImplementedForDriverWrapperException;
 
 public abstract class ToggleButton {

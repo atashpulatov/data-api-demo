@@ -13,6 +13,8 @@ public class ImportPromptPageMacMachine extends ImportPromptPage {
     private static final By IMPORT_BTN_ELEM_1 = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[3]/AXButton[@AXTitle='Import' and @AXDOMIdentifier='import']");
     private static final By SEARCH_BAR_ELEM_1 = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[0]/AXGroup[3]/AXTextField[0]");
     private static final By PREPARE_DATA_BTN_ELEM_1 = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[3]/AXButton[@AXTitle='Prepare Data' and @AXDOMIdentifier='prepare']");
+    private static final By MY_LIBRARY_SWITCH_ELEM_1 = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[@AXDOMIdentifier='root']/AXGroup[0]/AXGroup[0]/AXCheckBox[@AXSubrole='AXSwitch']");
+    private static final By MY_LIBRARY_SWITCH_ELEM_2 = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[0]/AXGroup[0]/AXCheckBox[@AXSubrole='AXSwitch']");
 
     public ImportPromptPageMacMachine(Machine machine) {
         super(machine);
@@ -23,14 +25,9 @@ public class ImportPromptPageMacMachine extends ImportPromptPage {
         return machine.waitAndFindElemWrapper(new By[]{SEARCH_BAR_ELEM, SEARCH_BAR_ELEM_1}, machine.getUnitIntValue() * 2);
     }
 
-    public WebElement getObjectToImportFirstElem() {
-        return machine.waitAndFind(OBJECT_TO_IMPORT_FIRST);
-    }
-
     @Override
     public String getSearchBarInputText(WebElement searchBarElem) {
-        String value = searchBarElem.getText();
-        return value;
+        return searchBarElem.getText();
     }
 
     @Override
@@ -65,5 +62,10 @@ public class ImportPromptPageMacMachine extends ImportPromptPage {
     @Override
     public AnyInterfaceElement getTitleElem() {
         return new ImageComparisonElem(TITLE_IMAGE, 340, 600, 150, 250);
+    }
+
+    @Override
+    protected WebDriverElemWrapper getMyLibrarySwitchElement() {
+        return machine.waitAndFindElemWrapper(new By[]{MY_LIBRARY_SWITCH_ELEM_1, MY_LIBRARY_SWITCH_ELEM_2});
     }
 }

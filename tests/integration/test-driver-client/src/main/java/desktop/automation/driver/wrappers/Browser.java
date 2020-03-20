@@ -1,23 +1,35 @@
 package desktop.automation.driver.wrappers;
 
+import desktop.automation.driver.wrappers.enums.BrowserType;
+import desktop.automation.driver.wrappers.enums.DriverType;
+import desktop.automation.driver.wrappers.enums.OS;
 import desktop.automation.exceptions.NotImplementedForDriverWrapperException;
 import desktop.automation.pages.SUT.prompts.*;
 import desktop.automation.pages.driver.implementation.browser.SUT.*;
 import desktop.automation.pages.driver.implementation.browser.SUT.prompts.*;
 import desktop.automation.pages.driver.implementation.browser.nonSUT.PreSUTPageBrowser;
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 
 import java.util.List;
 
+import static desktop.automation.ConfigVars.DESIRED_BROWSER_TYPE;
+
 public class Browser extends Machine {
     public static String addInIframeId = null;
     public static String importPrepareDataIframeId = null;
+
+    private static final By EXCEL_FRAME_ELEM = By.id("WebApplicationFrame");
+    private static final By ADD_IN_FRAME_ELEM = By.cssSelector(".AddinIframe");
+    private static final By PROMPT_POPUP_FRAME_ELEM = By.cssSelector("#root iframe");
+    private static final By ADD_IN_OVERLAY_ELEM = By.id("overlay");
+    private static final By ADD_IN_ROOT_ELEM = By.id("root");
+    private static final By IMPORT_POPUP_FRAME_ELEM = By.cssSelector("#WACDialogOuterContainer iframe");
 
     public Browser(String host) {
         super(host, DriverType.BROWSER, 10);
@@ -25,10 +37,7 @@ public class Browser extends Machine {
 
     @Override
     protected void initDriver(String host) {
-        System.setProperty("webdriver.gecko.driver", OS.getOSType().equals(OS.MAC) ? "libs/drivers/geckodriver" : "libs/drivers/geckodriver.exe");
-
-        //TODO add config parameter for browser type and switch on it here
-        driver = new FirefoxDriver();
+        driver = initBrowserType(DESIRED_BROWSER_TYPE);
         driver.get(host);
 
         preSUTPage = new PreSUTPageBrowser(this);
@@ -71,51 +80,60 @@ public class Browser extends Machine {
         switchToWindowByIndex(1);
     }
 
-    public void switchToLoginPopUpElem(){
+    public void switchToLoginPopUpWindow(){
         switchToWindowByIndex(2);
+        browserFocusedFrame = null;
     }
 
     public void focusOnExcelFrame(){
         driver.switchTo().defaultContent();
-        By EXCEL_FRAME_ELEM = By.id("WebApplicationFrame");
         WebElement excelFrame = waitAndFind(EXCEL_FRAME_ELEM, TWO_UNITS);
         driver.switchTo().frame(excelFrame);
     }
 
     void focusOnAddInFrame(){
-        focusOnExcelFrame();
-        WebElement addInFrameElem;
+        long start = System.currentTimeMillis();
 
-        if (addInIframeId == null) {
-            addInFrameElem = waitAndFind(By.cssSelector(".AddinIframe"), TWO_UNITS);
-            addInIframeId = addInFrameElem.getAttribute("id");
-        }
+        do {
+            try {
+                focusOnExcelFrame();
 
-        addInFrameElem = waitAndFind(By.id(addInIframeId));
-        driver.switchTo().frame(addInFrameElem);
+                WebElement addInFrame;
+                if (addInIframeId == null) {
+                    addInFrame = driver.findElement(ADD_IN_FRAME_ELEM);
+                    String addInIframeIdCandidate = addInFrame.getAttribute("id");
+                    driver.switchTo().frame(addInFrame);
+                    findAddInRootElem();
+                    addInIframeId = addInIframeIdCandidate;
+                }
+                else {
+                    addInFrame = driver.findElement(By.id(addInIframeId));
+                    driver.switchTo().frame(addInFrame);
+                    findAddInRootElem();
+                }
+                return;
+            } catch (Throwable ignored) {
+            }
+        } while (System.currentTimeMillis() - start < 30_000);
+
+        throw new RuntimeException("failed to focus on add in iframe");
     }
 
     void focusOnImportDataPopUpFrame(){
         focusOnExcelFrame();
+        RemoteWebElement popupFrameElem = waitAndFind(IMPORT_POPUP_FRAME_ELEM);
 
-        List<WebElement> elements;
-
-        long start = System.currentTimeMillis();
-        do {
-            elements = driver.findElements(By.cssSelector(".AddinIframe"));
-        } while (elements.size() < 2 && System.currentTimeMillis() - start < 10_000);
-
-        for (WebElement element : elements) {
-            try {
-                if (!element.getAttribute("id").equals(addInIframeId)) {
-                    importPrepareDataIframeId = element.getAttribute("id");
-                    driver.switchTo().frame(element);
-                }
-            } catch (org.openqa.selenium.StaleElementReferenceException ignored) {}
-        }
+        //may not be necessary to loop
+        try {
+            for (int i = 0; i < 10; i++) {
+                driver.switchTo().frame(popupFrameElem);
+                Thread.sleep(1_000);
+            }
+        } catch (StaleElementReferenceException | InterruptedException ignored) {}
     }
 
     void focusOnImportRefreshPopUp(){
+        //in progress
         long start = System.currentTimeMillis();
         do {
             try {
@@ -132,16 +150,12 @@ public class Browser extends Machine {
                     throw e;
             }
         } while (System.currentTimeMillis() - start < 10_000);
+
+        throw new RuntimeException("Method not implemented");
     }
 
     public boolean isUserLoggedOut(){
         //in loop look for start login button and mstr logo icon
-//        try {
-//            Thread.sleep(2_000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-
         focusOnAddInFrameForBrowser();
         long start = System.currentTimeMillis();
         do {
@@ -162,13 +176,20 @@ public class Browser extends Machine {
 
     void focusOnPromptPopupFrame() {
         focusOnImportDataPopUpFrame();
-        By selector = By.cssSelector("#root iframe");
-        WebElement popupFrame = waitAndFind(selector);
+        WebElement popupFrame = waitAndFind(PROMPT_POPUP_FRAME_ELEM);
         driver.switchTo().frame(popupFrame);
     }
 
     public WebElement getAddInOverlayElem(){
-        return waitAndFind(By.id("overlay"));
+        return waitAndFind(ADD_IN_OVERLAY_ELEM);
+    }
+
+    public WebElement findAddInOverlayElem(){
+        return driver.findElement(ADD_IN_OVERLAY_ELEM);
+    }
+
+    public WebElement findAddInRootElem(){
+        return driver.findElement(ADD_IN_ROOT_ELEM);
     }
 
     public ExpectedCondition<Boolean> addInFrameReady(){
@@ -192,4 +213,20 @@ public class Browser extends Machine {
         };
     }
 
+    private WebDriver initBrowserType(BrowserType browserType){
+        switch (browserType){
+            case CHROME:
+                System.setProperty("webdriver.chrome.driver", OS.getOSType().equals(OS.MAC) ? "libs/drivers/chromedriver" : "libs/drivers/chromedriver.exe");
+
+                ChromeOptions chromeOptions = new ChromeOptions();
+                chromeOptions.setPageLoadStrategy(PageLoadStrategy.NONE);
+
+                return new ChromeDriver(chromeOptions);
+            case FIREFOX:
+                System.setProperty("webdriver.gecko.driver", OS.getOSType().equals(OS.MAC) ? "libs/drivers/geckodriver" : "libs/drivers/geckodriver.exe");
+                return new FirefoxDriver();
+            default:
+                throw new RuntimeException("Test suite not set up for browser type");
+        }
+    }
 }

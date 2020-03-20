@@ -1,11 +1,11 @@
 package desktop.automation.test.infrastructure;
 
 import desktop.automation.driver.wrappers.Browser;
-import desktop.automation.driver.wrappers.DriverType;
 import desktop.automation.driver.wrappers.MacMachine;
 import desktop.automation.driver.wrappers.Machine;
+import desktop.automation.driver.wrappers.enums.DriverType;
 import desktop.automation.exceptions.ImageBasedElemNotFound;
-import desktop.automation.helpers.PowerPoint;
+import desktop.automation.helpers.windows.PowerPoint;
 import desktop.automation.pages.driver.implementation.mac.nonSUT.PreSUTPageMacMachine;
 import desktop.automation.test.infrastructure.web.driver.rules.RepeatRule;
 import org.junit.After;
@@ -23,6 +23,7 @@ public abstract class BaseCommonTests extends BaseTests {
     public static Machine machine;
     public static Browser browser;
     private static PowerPoint powerPoint;
+    private static boolean firstTC = true;
 
     @Rule
     public RepeatRule repeatRule = new RepeatRule();
@@ -35,7 +36,6 @@ public abstract class BaseCommonTests extends BaseTests {
 
             Runtime.getRuntime().addShutdownHook(new Thread(() -> machine.driver.quit()));
         }
-
     }
 
     @Before
@@ -72,14 +72,14 @@ public abstract class BaseCommonTests extends BaseTests {
                 getToSUTMacMachine();
                 break;
             case WINDOWS_DESKTOP:
-                getToSUTWidnowsMachine();
+                getToSUTWindowsMachine();
                 break;
             default:
                 throw new RuntimeException("Unimplemented driver requested, driver type: " + driverType);
         }
     }
 
-    protected static void getToSUTWidnowsMachine() throws IOException {
+    protected static void getToSUTWindowsMachine() {
         //open Excel, new blank sheet and open add in
         //Zero excel windows should be open for the test suite to work.
         if (RECORD_TEST_CASE) {
@@ -110,6 +110,20 @@ public abstract class BaseCommonTests extends BaseTests {
     }
 
     public static void getToSUTBrowser(){
+        //On Google Chrome the command driver.switchTo().defaultContent() can perpetuate with default PageLoadStrategy
+        //there PageLoadStrategy is set to PageLoadStrategy.NONE
+        //however due to this when loading the workbook clicking the "New blank workbook" GUI node can misdirect often to one drive instead of new workbook
+        //since the page only needs to load on the first run the below sleep does not introduce significant overhead in a longer test run
+        //possible to change by 1)going through the menu in the top left corner, 2) changing selector, 3) or waiting for different element to load
+        if (firstTC) {
+            try {
+                Thread.sleep(10_000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            firstTC = false;
+        }
+
         machine.getPreSUTPage().getBlankSheetElem().click();
         Browser browser = (Browser)machine;
         browser.switchToExcelWorkbookWindow();
@@ -208,7 +222,7 @@ public abstract class BaseCommonTests extends BaseTests {
         } catch (Exception ignored) {}
     }
 
-    private static void handleTearDownMacMachine() throws IOException {
+    private static void handleTearDownMacMachine() {
         ((PreSUTPageMacMachine)machine.getPreSUTPage()).closeExcel();
     }
 
@@ -216,6 +230,7 @@ public abstract class BaseCommonTests extends BaseTests {
         machine.driver.quit();
         Browser.addInIframeId = null;
         Machine.browserFocusedFrame = null;
+        firstTC = true;
         machine = getMachine();
         browser = (Browser)machine;
     }

@@ -8,8 +8,6 @@ import org.openqa.selenium.Point;
 import org.openqa.selenium.WebElement;
 
 public class HierarchyQualificationPromptPage extends BasePromptPage {
-    //mapping not finished, but enough to execute the relevant test case
-//    private static final By HIERARCHY_SEARCH_ELEM = MobileBy.AccessibilityId("id_mstr45_txt");
     private static Point AddBtnLoc = null;
 
     public HierarchyQualificationPromptPage(Machine machine) {
@@ -17,7 +15,7 @@ public class HierarchyQualificationPromptPage extends BasePromptPage {
     }
 
     @Override
-    public void answerPromptCorretly() {
+    public void answerPromptCorrectly() {
         try {
             Thread.sleep(3_000);
         } catch (InterruptedException e) {
@@ -27,11 +25,6 @@ public class HierarchyQualificationPromptPage extends BasePromptPage {
         WebElement runBtn = machine.getHierarchyQualificationPromptPage().getRunBtnElem();
         runBtn.click();
     }
-
-    //element is disabled
-//    public WebElement getSearchElem(){
-//        return machine.waitAndFind(HIERARCHY_SEARCH_ELEM);
-//    }
 
     public WebElement getHierarchyElemByNameAndClick(String name) {
         WebElement res = getHierarchyElemByName(name);
@@ -89,31 +82,4 @@ public class HierarchyQualificationPromptPage extends BasePromptPage {
         moveByOffsetFromAddBtnElemAndClick(360, 60);
         moveByOffsetFromAddBtnElemAndClick(410, -5);
     }
-
-//    public WebElement getFormLinkElem(){
-//        return machine.waitAndFind(By.xpath("//*[@Name='Form']"), machine.THREE_MINUTES);
-//    }
-//
-//    public WebElement getFormOptionElemByName(String name){
-//        String locator = String.format("//Group/Text[@Name=\"%s\"]", name);
-//        return machine.waitAndFind(By.xpath(locator));
-//    }
-
-    //alternative implementation helper
-//    private String formatFormOptionName(String formName, String attributeName){
-//        return String.format("%s. %s %s", formName, attributeName, formName);
-//    }
-
-//    public WebElement getFirstEqualsLinkElem(){
-//        return machine.waitAndFind(By.xpath("//Link[@Name='Equals']"));
-//    }
-//
-//    public WebElement getAttributeOperatorOptionElemByName(String name){
-//        String locator = String.format("//Group/Group[@Name=\"%s\"]", name);
-//        return machine.waitAndFind(By.xpath(locator));
-//    }
-//
-//    public WebElement getValueLinkElem(){
-//        return machine.waitAndFind(By.xpath("//Link[@Name=\"Value\"]"));
-//    }
 }

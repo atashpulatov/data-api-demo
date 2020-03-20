@@ -24,7 +24,9 @@ export PATH=$NODE_HOME/bin:$PATH
 
 if uname -a | grep -q "Darwin"; then
   export JAVA_HOME=/Library/Java/JavaVirtualMachines/$jdk_version.jdk/Contents/Home
+  export MAVEN_HOME=/usr/local/maven-3.3.9
   export PATH=/usr/local/git/bin:$JAVA_HOME/bin:$PATH
+  export PATH=$MAVEN_HOME/bin:$PATH
 elif uname -a | grep -q "MSYS"; then
   export JAVA_HOME=/c/java/$jdk_version
   export DOCKER_HOME=/C/Program\ Files/Docker/Docker/Resources/

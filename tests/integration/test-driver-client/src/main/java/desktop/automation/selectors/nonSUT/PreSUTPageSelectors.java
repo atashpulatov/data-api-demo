@@ -4,18 +4,19 @@ import desktop.automation.exceptions.NotImplementedForDriverWrapperException;
 import io.appium.java_client.MobileBy;
 import org.openqa.selenium.By;
 
-import static desktop.automation.ConfigVars.DESIRED_DRIVER_TYPE;
-import static desktop.automation.ConfigVars.EXCEL_ADD_IN_NAME_IN_HOME_TAB;
+import static desktop.automation.ConfigVars.*;
 
 public class PreSUTPageSelectors {
     protected static final By ADDIN;
+    protected static final By MY_ADD_INS_ELEM;
+    protected static final By ADD_IN_TO_LOAD_ELEM;
+    protected static final By ADD_ADD_IN_BTN_ELEM;
+    protected static final By ADDIN_TO_IMPORT;
+
     protected static final By BLANK_SHEET_ELEM;
     protected static final By HOME_TAB_ELEM;
     protected static final By INSERT_TAB_ELEM;
-    protected static final By MY_ADD_INS_ELEM;
     protected static final By SHARED_FOLDER_ELEM;
-    protected static final By ADD_IN_TO_LOAD_ELEM;
-    protected static final By ADD_ADD_IN_BTN_ELEM;
     protected static final By FILE_TAB_ELEM;
     protected static final By NEW_TAB_ELEM;
     protected static final By OPEN_TAB_ELEM;
@@ -27,24 +28,23 @@ public class PreSUTPageSelectors {
     protected static final By ADD_SHEET_BTN_ELEM;
     protected static final By DELETE_CONTEXT_MENU_ELEM;
     protected static final By DELETE_SHEET_PROMPT_DELETE_BTN_ELEM;
+    protected static final By PASTE_BTN = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXTabGroup[0]/AXScrollArea[0]/AXGroup[0]/AXMenuButton[@AXTitle='Paste']");
+    protected static final By EXCEL_IN_DOCK;
+    protected static final By CONTEXT_MENU_QUIT_BTN;
+    protected static final By ADDIN_DROP_DOWN;
+    protected static final By EDIT_MENU;
+    protected static final String SHEET_BTN_BASE_BY_INDEX;
+
     protected static final String BLANK_SHEET_IMAGE;
     protected static final String EXCEL_START_IMAGE_BASE;
     protected static final String ADD_IN_START_IMAGE;
     protected static final String CLOSE_BTN_IMAGE;
     protected static final String DONT_SAVE_BTN_IMAGE;
-    protected static final By PASTE_BTN = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXTabGroup[0]/AXScrollArea[0]/AXGroup[0]/AXMenuButton[@AXTitle='Paste']");
-
-    protected static final By EXCEL_IN_DOCK;
-    protected static final By CONTEXT_MENU_QUIT_BTN;
-    protected static final By ADDIN_DROP_DOWN;
-    protected static final By ADDIN_TO_IMPORT;
-    protected static final String SHEET_BTN_BASE_BY_INDEX;
-    protected static final By EDIT_MENU;
 
     static {
         switch (DESIRED_DRIVER_TYPE){
             case BROWSER:
-                ADDIN = By.xpath(String.format("//span[translate(string(),' ','')=translate('%s',' ','')]", EXCEL_ADD_IN_NAME_IN_HOME_TAB));
+                ADDIN = By.xpath(String.format("//span[translate(string(),' ','')=translate('%s',' ','')]", EXCEL_ADD_IN_NAME_IN_HOME_TAB_BROWSER));
                 BLANK_SHEET_ELEM = By.cssSelector("[title^='New blank workbook']");
                 HOME_TAB_ELEM = By.cssSelector("#m_excelWebRenderer_ewaCtl_Ribbon\\.Home-title");
                 INSERT_TAB_ELEM = null;
@@ -68,7 +68,7 @@ public class PreSUTPageSelectors {
                 ADD_IN_START_IMAGE = null;
                 CLOSE_BTN_IMAGE = null;
                 DONT_SAVE_BTN_IMAGE = null;
-                SHEET_BTN_BASE_BY_INDEX = null;
+                SHEET_BTN_BASE_BY_INDEX = "span[sheet-title=\"Sheet%d\"]";
 
                 CONTEXT_MENU_QUIT_BTN = null;
                 EXCEL_IN_DOCK = null;
@@ -77,7 +77,7 @@ public class PreSUTPageSelectors {
                 EDIT_MENU = null;
                 break;
             case MAC_DESKTOP:
-                ADDIN = By.xpath(String.format("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXTabGroup[0]/AXScrollArea[0]/AXGroup/AXButton[@AXTitle='%s']", EXCEL_ADD_IN_NAME_IN_HOME_TAB));
+                ADDIN = By.xpath(String.format("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXTabGroup[0]/AXScrollArea[0]/AXGroup/AXButton[@AXTitle='%s']", EXCEL_ADD_IN_NAME_IN_HOME_TAB_MAC_DESKTOP));
                 BLANK_SHEET_ELEM = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXTitle='Open new and recent files' and @AXIdentifier='DocStage' and @AXSubrole='AXStandardWindow']/AXScrollArea[0]/AXList[@AXSubrole='AXCollectionList']/AXList[@AXSubrole='AXSectionList']/AXGroup[@AXIdentifier='DocsUITemplate']/AXButton[@AXTitle='Blank Workbook']");
                 HOME_TAB_ELEM = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXTabGroup[0]/AXRadioButton[@AXTitle='Home']");
                 INSERT_TAB_ELEM = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXTabGroup[0]/AXRadioButton[@AXTitle='Insert']");
@@ -117,7 +117,7 @@ public class PreSUTPageSelectors {
                 EDIT_MENU = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXMenuBar[0]/AXMenuBarItem[@AXTitle='Edit']");
                 break;
             case WINDOWS_DESKTOP:
-                ADDIN = null;
+                ADDIN = By.xpath("//Button[@Name=\"" + EXCEL_ADD_IN_NAME_IN_HOME_TAB_WINDOWS_DESKTOP + "\"]");
                 BLANK_SHEET_ELEM = MobileBy.xpath("//ListItem[@Name=\"Blank workbook\"]");
                 HOME_TAB_ELEM = By.name("Home");
                 INSERT_TAB_ELEM = By.name("Insert");

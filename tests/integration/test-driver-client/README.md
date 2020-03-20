@@ -3,26 +3,43 @@
 Original Windows Desktop client test suite for the Excel add-in. 
 The test suite has been extended to automate all client applications.
 
+## Recordings
+Recordings for the Excel add-in runs can be found in the following link:
+Version 11.2.0100.22936: https://share.microstrategy.com/link/7Fn8gIUADMm2lx0svJxlbt
+
 Frameworks utilized for interacting with client interfaces:
-##### Windows desktop client: 
+### Windows desktop client: 
 1. WinAppDriver (Acccessiblity API based)
 2. OpenCV (Image based)
 
-##### Mac desktop client:
+### Mac desktop client:
 1. AppiumForMac (Acccessiblity API based)
 2. OpenCV (Image based)
 
-##### Browser clients:
+### Browser clients:
 1. Selenium (HTTP based)
 
 Test cases that are take priority for maintenance can be found under the "mvp"(Minimal Viable Product) package. 
 relative path: src/test/java/desktop/automation/functional/all/mvp
 
+# Running tests from CLI
+Standard Java maven surefire execution: 
+
+to run the tests execute command at the test suite project root: mvn clean test
+
+pass arguments for which test cases to execute:
+
+-Dtest=\<tests\>, replace \<tests\> with desired test cases (e.g. -Dtest="desktop.automation.functional.maintained.**" -Dtest=LogInLogOutTests)
+
+-DdriverType=\<driverType\>, replace \<driverType\> with desired DriverType enum value
+
+-DbrowserType=\<browserType\>, replace \<browserType\> with desired BrowserType enum value 
+
 # Intro:
-#### Element wrappers:
+## Element wrappers:
 The test suite implements multiple elements with convenience instant methods for easier and cleaner test implementation, different interface unified handling and wrapping the multiple objects across the SUT so that refactoring and updating the method calls can be handled in a single place
 
-##### AnyInterfaceElement
+### AnyInterfaceElement
 highest level element wrapper. Interface that at the time of writing has four methods:
 1.	void click(); - method to click the element in any manner
 2.	void clickExplicitlyByActionClass(); - method to click the element explicitly by utilizing the Actions class.
@@ -30,7 +47,7 @@ highest level element wrapper. Interface that at the time of writing has four me
 4.	String getText(); - get text of the element. In case of ImageComparisonElem that implements the interface the method throws the RuntimeException with the message: “Not Implemented”
 In order to support calling certain Machine object methods or objects, the ImageComparisonElem and WebDriverElemWrapper classes implement the static setMachine() method to set the machine on initialization.
 
-##### ImageComparisonElem
+### ImageComparisonElem
 implements AnyInterfaceElement  interface. Element for finding and interacting with an image based element. The object utilizes the imageComparison.jar dependency found under /lib folder in the project, which is built on top of OpenCV open source project for image comparison. The ImageComparisonElem has a few constructors for initialization convenience:
 1.	ImageComparisonElem(String imageFile, int startX, int endX, int startY, int endY)  - 
 The most utilized contructor for object initialization. This method takes a relative path of the object found under folder defined in Machine.rootImageFolder field and searches for it in the given screen coordinates. The constructor looks for the image for 10 seconds. Throws ImageBasedElemNotFound exception if image not found.
@@ -51,11 +68,11 @@ If desired the methods
 
 can be called to find the object again and update the coordinates of the element immediately with find or within a given timeframe with waitAndFind methods.
 
-##### WebDriverElemWrapper 
+### WebDriverElemWrapper 
 implements AnyInterfaceElement  interface. The object simply  wraps the WebElement object returned from the Selenium driver and implements all of the AnyInterfaceElement  interface methods as well as allows to get the original WebElement object by calling getDriverElement() method. 
 
-#### Machine wrappers:
-##### Machine class
+## Machine wrappers:
+### Machine class
 is the abstract class that wraps the Selenium driver that the test suite is executing against. It has helper methods created for more efficient test logic creation and it stores the page objects that can be called with getter methods to interact with the SUT.
 
 The notable mention is that the object has instance variables for WebDriverWaits that are named as follows:
@@ -73,22 +90,22 @@ One exceptionally important method in the class is
 getImageComparisonElemFallBackToWebDriver – the method calls returns an AnyInterfaceElement that can be located by an image and in case the image recognition fails then a fallback call to the webdriver based selector method is made and once the element is found the previous passed image is overwritten and by the newly captured screenshot. 
 This method is highly important for the Windows desktop client automation, where the webdriver is slow, but reliable and the image recognition fails after some time due to the GUI nodes rendering with slightly different fonts and font styles on a regular basis.
 
-#### Base classes:
-##### BaseTests 
+## Base classes:
+### BaseTests 
 the class implements is for implementation of any shared methods across the different classes only no test hooks should be present in the BaseTests class. At the time of writing the only methods implemented in the class is Machine getMachine(DriverType driverType) method for initializing a Machine object for test execution by desired driver type.
 
-##### BaseCommonTests
+### BaseCommonTests
 the class implements the set up and tear down hooks for getting to the SUT. 
 
 getToSUT() - opens up the client application (Microsoft Excel for Mac, Microsoft Excel, browser) opens a new blank workbook and opens the add-in starting at the Login task pane.
 handleTearDown() – method closes the workbook or application based on the test case.
 
-##### BaseLoggedInTests 
+### BaseLoggedInTests 
 the class extends the BaseCommonTests and simply gets to the SUT and logs in to the application if user is logged out.
 getToSUTAndLogIn() – get to SUT and log in to the add-in with default user “a”.
 
 
-#### ConfigVars:
+## ConfigVars:
 The class encapsulates the configuration for the test suite and stored as a Java class allows for compile time error checking.
 
 1.	SKIP_STANDARD_INITIALIZATION_AND_TEAR_DOWN – flag turns off set up and tear down hooks when executing test cases. Very useful for debugging
@@ -98,8 +115,8 @@ The class encapsulates the configuration for the test suite and stored as a Java
 5.	UTILIZE_INDEX_IMAGE_BASED_PREPARE_DATA_HELPER – flag for Windows automation specifically. Allows to utilize remembered prepare data checkbox coordinates for quicker test execution. At the time of writing implementation full implementation in-progress
 6.	RECORD_TEST_CASE– Windows specific. Starts PowerPoint and records the screen for each test case. Not maintained.
 
-#### Helpers:
-##### ImportPrepareDataHelper:
+## Helpers:
+### ImportPrepareDataHelper:
 Highly utilized class across the test suite. Encapsulates the logic from opening the “Import Data” popup to importing the object to the workbook. Either by simple import or by prepare data flow. Utilized as well for editing imported objects. 
 
 The methods in the class also interact with non-SUT functionality of going to the specified cell and specified Excel sheet provided the sheet is present.
@@ -116,7 +133,7 @@ The following methods are implemented for convenience in test execution:
 9.	initPrepareDataSimpleIndexAndImageBased – Windows specific method found in class ImportPrepareDataHelperWindowsMachine. The method foes through prepare data flow once on initialization to take screenshots of Filter value “(All)” checkbox when it’s unchecked, checke, partially checked and stores the indexes and there differences in y axis for the different “Prepare Data” popup column checkboxes.
 10.	handleImportProcess – method asserts the handling of import of an object.
 
-##### ImportPrepareDataHelperArguments:
+### ImportPrepareDataHelperArguments:
 Helper class that encapsulates the arguments for ImportPrepareDataHelper class static method calls. Highly utilized
 
 Machine machine – passed machine object to interact with
