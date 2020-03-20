@@ -9,7 +9,7 @@ describe('StepBindOfficeTable', () => {
     jest.restoreAllMocks();
   });
 
-  it('should work', async () => {
+  it('bindOfficeTable should work as expected', async () => {
     // given
     const objectData = {
       bindId: 'testbindId',
