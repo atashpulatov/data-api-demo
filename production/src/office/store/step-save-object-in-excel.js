@@ -18,7 +18,7 @@ class StepSaveObjectInExcel {
     const report = {
       id: objectData.objectId,
       name: mstrTable.name,
-      bindId: objectData.newBindingId,
+      bindId: objectData.bindId,
       projectId: objectData.projectId,
       envUrl: objectData.envUrl,
       body: objectData.body,
@@ -34,7 +34,7 @@ class StepSaveObjectInExcel {
       tableName: objectData.newOfficeTableName,
       previousTableDimensions: objectData.previousTableDimensions,
       displayAttrFormNames: objectData.displayAttrFormNames,
-      oldTableId: objectData.bindingId,
+      oldBindId: objectData.oldBindId,
       objectWorkingId: objectData.objectWorkingId,
       refreshDate
     };
@@ -44,7 +44,7 @@ class StepSaveObjectInExcel {
       try {
         const settings = officeStoreService.getOfficeSettings();
         const reportsArray = [...officeStoreService.getObjectProperties()];
-        const reportObj = reportsArray.find((element) => element.bindId === report.oldTableId);
+        const reportObj = reportsArray.find((element) => element.bindId === report.oldBindId);
         const ObjectIndex = reportsArray.indexOf(reportObj);
         const refreshedObject = reportsArray[ObjectIndex];
         refreshedObject.crosstabHeaderDimensions = report.crosstabHeaderDimensions;
@@ -85,7 +85,7 @@ class StepSaveObjectInExcel {
 
     this.reduxStore.dispatch({
       type: officeProperties.actions.finishLoadingReport,
-      reportBindId: objectData.newBindingId,
+      reportBindId: objectData.bindId,
     });
     await officeStoreService.saveObjectsInExcelStore();
 

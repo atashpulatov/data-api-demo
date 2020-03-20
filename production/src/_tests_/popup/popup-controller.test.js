@@ -73,7 +73,7 @@ describe('PopupController', () => {
     const expectedOptions = {
       objectId: chosenObjectData.objectId,
       projectId: chosenObjectData.projectId,
-      bindingId: null,
+      bindId: null,
       isRefresh: false,
       mstrObjectType: mstrObjectEnum.mstrObjectType.report,
     };
@@ -112,7 +112,7 @@ describe('PopupController', () => {
     officeApiHelper.getOfficeSessionStatus = jest.fn();
     // const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
     const expectedOptions = {
-      bindingId: null,
+      bindId: null,
       dossierData: chosenObjectData.dossierData,
       objectId: chosenObjectData.objectId,
       projectId: chosenObjectData.projectId,

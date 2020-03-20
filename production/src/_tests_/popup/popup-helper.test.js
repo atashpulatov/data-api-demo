@@ -220,7 +220,7 @@ describe('Popup actions', () => {
         request: 'reports',
       },
       selectedCell: true,
-      bindingId: 'testBind',
+      bindId: 'testBind',
       body: mockReport.body,
       isRefresh: true,
       isPrompted: mockReport.isPrompted,

@@ -193,8 +193,8 @@ describe('Popup actions', () => {
 
   it('should call error service when callForEditDossier fails', async () => {
     // given
-    const bindingId = 'bindingId';
-    const report = { bindId: bindingId, objectType: 'whatever' };
+    const bindId = 'bindId';
+    const report = { bindId, objectType: 'whatever' };
     const error = new Error('test error');
     officeApiHelper.getExcelSessionStatus.mockImplementationOnce(() => { throw error; });
     const listener = jest.fn();
@@ -206,8 +206,8 @@ describe('Popup actions', () => {
 
   it('should do certain operations when callForEditDossier action called', async () => {
     // given
-    const bindingId = 'bindingId';
-    const report = { bindId: bindingId, objectType: 'whatever' };
+    const bindId = 'bindId';
+    const report = { bindId, objectType: 'whatever' };
     const returnedValue = {
       projectId: 'projectId',
       id: 'id',
@@ -233,14 +233,14 @@ describe('Popup actions', () => {
     // then
     expect(officeApiHelper.getExcelSessionStatus).toBeCalled();
     expect(authenticationHelper.validateAuthToken).toBeCalled();
-    expect(officeStoreService.getObjectFromProperties).toBeCalledWith(bindingId);
+    expect(officeStoreService.getObjectFromProperties).toBeCalledWith(bindId);
     expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedObject: returnedValue });
   });
 
   it('should run edit popup if edit action for not prompted object is called', async () => {
     // given
-    const bindingId = 'bindingId';
-    const report = { bindId: bindingId, objectType: 'whatever' };
+    const bindId = 'bindId';
+    const report = { bindId, objectType: 'whatever' };
     const returnedValue = {
       id: 'id', projectId: 'projectId', instanceId: 'instanceId', body: {}, promptsAnswers: [], isPrompted: false
     };
@@ -249,15 +249,15 @@ describe('Popup actions', () => {
     // when
     await actions.callForEdit(report)(listener);
     // then
-    expect(officeStoreService.getObjectFromProperties).toBeCalledWith(bindingId);
+    expect(officeStoreService.getObjectFromProperties).toBeCalledWith(bindId);
     expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedObject: returnedValue });
     expect(popupController.runEditFiltersPopup).toBeCalledWith(report);
   });
 
   it('should run reprompt popup if edit action for prompted object is called', async () => {
     // given
-    const bindingId = 'bindingId';
-    const report = { bindId: bindingId, objectType: 'whatever' };
+    const bindId = 'bindId';
+    const report = { bindId, objectType: 'whatever' };
     const returnedValue = {
       id: 'id', projectId: 'projectId', instanceId: 'instanceId', body: {}, promptsAnswers: [], isPrompted: true
     };
@@ -266,15 +266,15 @@ describe('Popup actions', () => {
     // when
     await actions.callForEdit(report)(listener);
     // then
-    expect(officeStoreService.getObjectFromProperties).toBeCalledWith(bindingId);
+    expect(officeStoreService.getObjectFromProperties).toBeCalledWith(bindId);
     expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedObject: returnedValue });
     expect(popupController.runRepromptPopup).toBeCalledWith(report);
   });
 
   it('should call error service and dispatch stop loading when edit action fails', async () => {
     // given
-    const bindingId = 'bindingId';
-    const report = { bindId: bindingId, objectType: 'whatever' };
+    const bindId = 'bindId';
+    const report = { bindId, objectType: 'whatever' };
     const error = new Error('test error');
     officeApiHelper.getExcelSessionStatus.mockImplementationOnce(() => { throw error; });
     const mockedDispatch = jest.fn();

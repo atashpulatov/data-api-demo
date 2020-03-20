@@ -71,13 +71,13 @@ class PopupHelper {
   };
 
   printRefreshedReport = async (
-    bindingId,
+    bindId,
     objectType,
     length,
     index,
     isRefreshAll,
   ) => {
-    const refreshReport = officeStoreService.getObjectFromProperties(bindingId);
+    const refreshReport = officeStoreService.getObjectFromProperties(bindId);
     if (isRefreshAll) { this.storageReportRefreshStart(refreshReport, index); }
     const mstrObjectType = objectTypeEnum.getMstrTypeByName(objectType);
 

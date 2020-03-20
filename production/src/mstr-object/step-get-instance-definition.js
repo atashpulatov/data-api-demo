@@ -44,7 +44,7 @@ class StepGetInstanceDefinition {
        insertNewWorksheet,
        crosstabHeaderDimensions,
        subtotalsInfo: { subtotalsAddresses } = false,
-       newBindingId,
+       bindId,
      } = objectData;
      let { visualizationInfo, startCell } = objectData;
 
@@ -103,7 +103,7 @@ class StepGetInstanceDefinition {
        envUrl: officeApiHelper.getCurrentMstrContext(),
        body,
        visualizationInfo: visualizationInfo || false,
-       bindingId: newBindingId,
+       oldBindId: bindId,
      };
 
      const updatedOperation = {

@@ -140,6 +140,7 @@ export class FileHistoryContainerNotConnected extends React.Component {
     const {
       reportArray = [], loading, refreshingAll, refreshReportsArray, isSecured, addDataAction, t,
     } = this.props;
+    console.log('reportArray:', reportArray);
     return (
       <>
         {
@@ -206,7 +207,7 @@ export class FileHistoryContainerNotConnected extends React.Component {
               isPrompted={report.isPrompted}
               key={report.bindId}
               fileName={report.name}
-              bindingId={report.bindId}
+              bindId={report.bindId}
               onClick={officeApiHelper.onBindingObjectClick}
               onDelete={officeApiRemoveHelper.removeReportFromExcel}
               isLoading={report.isLoading}

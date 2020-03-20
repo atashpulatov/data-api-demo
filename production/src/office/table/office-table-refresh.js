@@ -3,10 +3,10 @@ import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 
 
 class OfficeTableRefresh {
-  getExistingOfficeTableData = async (excelContext, bindingId, instanceDefinition, previousTableDimensions) => {
+  getExistingOfficeTableData = async (excelContext, bindId, instanceDefinition, previousTableDimensions) => {
     const { mstrTable } = instanceDefinition;
 
-    const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindingId);
+    const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindId);
     await this.clearEmptyCrosstabRow(mstrTable, prevOfficeTable, excelContext);
 
     prevOfficeTable.showHeaders = true;

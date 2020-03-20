@@ -37,27 +37,27 @@ describe('OfficeStoreService', () => {
   it('should delete report properties from office settings', () => {
     // given
     const settings = officeStoreService.getOfficeSettings();
-    const givenBindingId = 'testBindId1';
+    const givenbindId = 'testBindId1';
     // when
-    officeStoreService.deleteObject(givenBindingId);
+    officeStoreService.deleteObject(givenbindId);
     // then
     expect(settings.saveAsync).toBeCalled();
   });
   it('should rename the report from office settings', () => {
     // given
     const settings = officeStoreService.getOfficeSettings();
-    const givenBindingId = 'testBindId1';
+    const givenbindId = 'testBindId1';
     const givenName = 'testName';
     // when
-    officeStoreService.preserveObjectValue(givenBindingId, 'name', givenName);
+    officeStoreService.preserveObjectValue(givenbindId, 'name', givenName);
     // then
     expect(settings.saveAsync).toBeCalled();
   });
-  it('should return a report found by bindingId', () => {
+  it('should return a report found by bindId', () => {
     // given
-    const givenBindingId = 'testBindId2';
+    const givenbindId = 'testBindId2';
     // when
-    const result = officeStoreService.getObjectFromProperties(givenBindingId);
+    const result = officeStoreService.getObjectFromProperties(givenbindId);
     // then
     expect(result).toBeInstanceOf(Object);
     expect(result.envUrl).toEqual('testEnvUrl2');

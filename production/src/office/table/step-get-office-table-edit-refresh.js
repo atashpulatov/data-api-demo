@@ -11,7 +11,7 @@ class StepGetOfficeTableEditRefresh {
    *
    * @param {boolean} isRefresh
    * @param {Object} excelContext
-   * @param {string} bindingId
+   * @param {string} bindId
    * @param {Object} instanceDefinition
    * @param {string} startCell  Top left corner cell
    *
@@ -20,7 +20,7 @@ class StepGetOfficeTableEditRefresh {
     try {
       console.time('Create or get table - edit or refresh');
       const {
-        bindingId,
+        oldBindId,
         tableName,
         previousTableDimensions,
         visualizationInfo,
@@ -31,13 +31,13 @@ class StepGetOfficeTableEditRefresh {
 
       const newOfficeTableName = tableName;
       let shouldFormat;
-      let newBindingId = bindingId;
+      let bindId = oldBindId;
       let officeTable;
 
       getOfficeTableHelper.checkReportTypeChange(mstrTable);
       const { tableColumnsChanged, prevOfficeTable, startCell } = await officeTableRefresh.getExistingOfficeTableData(
         excelContext,
-        bindingId,
+        oldBindId,
         instanceDefinition,
         previousTableDimensions
       );
@@ -45,7 +45,7 @@ class StepGetOfficeTableEditRefresh {
       if (tableColumnsChanged) {
         console.log('Instance definition changed, creating new table');
 
-        ({ officeTable, newBindingId } = await officeTableCreate.createOfficeTable(
+        ({ officeTable, bindId } = await officeTableCreate.createOfficeTable(
           {
             instanceDefinition,
             excelContext,
@@ -77,7 +77,7 @@ class StepGetOfficeTableEditRefresh {
       const updatedObject = {
         objectWorkingId,
         newOfficeTableName,
-        newBindingId,
+        bindId,
       };
 
       operationStepDispatcher.updateOperation(updatedOperation);

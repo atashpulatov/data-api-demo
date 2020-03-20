@@ -6,7 +6,7 @@ import { errorService } from '../error/error-handler';
 class FileHistoryHelper {
   deleteObject = async (
     onDelete,
-    bindingId,
+    bindId,
     isCrosstab = false,
     crosstabHeaderDimensions = {},
     objectWorkingId,
@@ -14,7 +14,7 @@ class FileHistoryHelper {
   ) => {
     sessionHelper.enableLoading();
     try {
-      const removed = await onDelete(bindingId, isCrosstab, crosstabHeaderDimensions, objectWorkingId);
+      const removed = await onDelete(bindId, isCrosstab, crosstabHeaderDimensions, objectWorkingId);
       removed && notificationService.displayTranslatedNotification({ type: 'success', content: message });
     } catch (error) {
       errorService.handleError(error);

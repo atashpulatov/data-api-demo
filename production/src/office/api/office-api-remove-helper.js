@@ -21,26 +21,26 @@ class OfficeApiRemoveHelper {
       notificationService.displayTranslatedNotification({ type: 'success', content: message });
     }
 
-    removeReportFromExcel = async (bindingId, isCrosstab, crosstabHeaderDimensions, objectWorkingId) => {
+    removeReportFromExcel = async (bindId, isCrosstab, crosstabHeaderDimensions, objectWorkingId) => {
       try {
         await authenticationHelper.validateAuthToken();
         const officeContext = await officeApiHelper.getOfficeContext();
-        await officeContext.document.bindings.releaseByIdAsync(bindingId, () => { console.log('released binding'); });
+        await officeContext.document.bindings.releaseByIdAsync(bindId, () => { console.log('released binding'); });
         const excelContext = await officeApiHelper.getExcelContext();
-        const officeTable = excelContext.workbook.tables.getItem(bindingId);
+        const officeTable = excelContext.workbook.tables.getItem(bindId);
         this.removeExcelTable(officeTable, excelContext, isCrosstab, crosstabHeaderDimensions);
         await excelContext.sync();
-        return officeStoreService.removeObjectFromStore(bindingId, objectWorkingId);
+        return officeStoreService.removeObjectFromStore(bindId, objectWorkingId);
       } catch (error) {
         if (error && error.code === 'ItemNotFound') {
-          return officeStoreService.removeObjectFromStore(bindingId, objectWorkingId);
+          return officeStoreService.removeObjectFromStore(bindId, objectWorkingId);
         }
         return errorService.handleError(error);
       }
     };
 
   /**
-   * Get object from store based on bindingId and remove it from workbook
+   * Get object from store based on bindId and remove it from workbook
    *
    * @param {Office} excelContext Excel Context
    * @param {Object} object Contains information obout the object

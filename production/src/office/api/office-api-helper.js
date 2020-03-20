@@ -29,9 +29,9 @@ checkStatusOfSessions = async () => {
   ]);
 }
 
-getBindingRange = (excelContext, bindingId) => excelContext.workbook.bindings.getItem(bindingId).getTable().getRange()
+getBindingRange = (excelContext, bindId) => excelContext.workbook.bindings.getItem(bindId).getTable().getRange()
 
-getTable = (excelContext, bindingId) => excelContext.workbook.bindings.getItem(bindingId).getTable()
+getTable = (excelContext, bindId) => excelContext.workbook.bindings.getItem(bindId).getTable()
 
 getExcelContext = async () => window.Excel.run({ delayForCellEdit: true }, async (excelContext) => excelContext);
 
@@ -146,7 +146,7 @@ getStartCellOfRange = (excelAdress) => excelAdress.match(/!(\w+\d+)(:|$)/)[1]
   }
 
   onBindingObjectClick = async (
-    bindingId,
+    bindId,
     shouldSelect = true,
     deleteObject,
     chosenObjectName,
@@ -155,7 +155,7 @@ getStartCellOfRange = (excelAdress) => excelAdress.match(/!(\w+\d+)(:|$)/)[1]
     let crosstabRange;
     try {
       const excelContext = await this.getExcelContext();
-      const officeTable = excelContext.workbook.tables.getItem(bindingId);
+      const officeTable = excelContext.workbook.tables.getItem(bindId);
 
       if (isCrosstab) {
         const tmpXtabDimensions = { ...crosstabHeaderDimensions, columnsY: crosstabHeaderDimensions.columnsY + 1, };
@@ -167,7 +167,7 @@ getStartCellOfRange = (excelAdress) => excelAdress.match(/!(\w+\d+)(:|$)/)[1]
 
         if (shouldSelect) { crosstabRange.select(); }
       } else {
-        const tableRange = this.getBindingRange(excelContext, bindingId);
+        const tableRange = this.getBindingRange(excelContext, bindId);
         if (shouldSelect) { tableRange.select(); }
       }
 
@@ -186,10 +186,10 @@ getStartCellOfRange = (excelAdress) => excelAdress.match(/!(\w+\d+)(:|$)/)[1]
    * Adds binding to the Excel table
    *
    * @param {Office} namedItem Excel Table
-   * @param {String} bindingId
+   * @param {String} bindId
    */
-  bindNamedItem = (namedItem, bindingId) => new Promise((resolve, reject) => {
-    window.Office.context.document.bindings.addFromNamedItemAsync(namedItem, 'table', { id: bindingId }, (result) => {
+  bindNamedItem = (namedItem, bindId) => new Promise((resolve, reject) => {
+    window.Office.context.document.bindings.addFromNamedItemAsync(namedItem, 'table', { id: bindId }, (result) => {
       if (result.status === 'succeeded') {
         console.log(`Added new binding with type: ${result.value.type} and id: ${result.value.id}`);
         resolve();

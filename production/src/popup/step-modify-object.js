@@ -11,7 +11,7 @@ class StepModifyObject {
     const updatedObject = {
       objectWorkingId,
       body: objectEditedData.body,
-      bindingId: objectData.newBindingId,
+      oldBindId: objectData.bindId,
       prevOfficeTable: objectData.officeTable,
     };
 

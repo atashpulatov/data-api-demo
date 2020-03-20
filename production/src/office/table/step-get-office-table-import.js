@@ -8,7 +8,7 @@ class StepGetOfficeTableImport {
    *
    * @param {boolean} isRefresh
    * @param {Object} excelContext
-   * @param {string} bindingId
+   * @param {string} bindId
    * @param {Object} instanceDefinition
    * @param {string} startCell  Top left corner cell
    *
@@ -22,7 +22,7 @@ class StepGetOfficeTableImport {
 
       const {
         officeTable,
-        newBindingId,
+        bindId,
         newOfficeTableName,
       } = await officeTableCreate.createOfficeTable(
         {
@@ -37,7 +37,7 @@ class StepGetOfficeTableImport {
       const updatedObject = {
         objectWorkingId,
         newOfficeTableName,
-        newBindingId,
+        bindId,
       };
 
       const updatedOperation = {

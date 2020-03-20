@@ -182,9 +182,9 @@ class OfficeTableCreate {
       }
       worksheet.activate();
       await excelContext.sync();
-      const newBindingId = officeTable.id;
+      const bindId = officeTable.id;
 
-      return { officeTable, newBindingId };
+      return { officeTable, bindId };
     } catch (error) {
       await excelContext.sync();
       throw error;

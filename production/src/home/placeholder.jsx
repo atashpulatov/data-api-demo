@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import { sessionHelper } from '../storage/session-helper';
 import { fileHistoryContainerHOC } from '../file-history/file-history-container-HOC';
 import { ReactComponent as FolderArt } from './assets/folder-art.svg';
-import { officeStoreService } from '../office/store/office-store-service';
 import { DevelopmentImportList } from '../development-import-list';
 
 export const PlaceHolderNotConnected = ({ loading, t, addDataAction }) => {

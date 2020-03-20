@@ -201,7 +201,7 @@ class PopupController {
       visualizationInfo,
       preparedInstanceId,
     },
-    bindingId,
+    bindId,
   ) => {
     if (chosenObject) {
       this.reduxStore.dispatch({ type: officeProperties.actions.startLoading });
@@ -214,7 +214,7 @@ class PopupController {
         objectId: chosenObject,
         projectId: chosenProject,
         mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype),
-        bindingId,
+        bindId,
         isPrompted,
         promptsAnswers,
         visualizationInfo,

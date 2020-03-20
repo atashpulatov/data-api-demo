@@ -12,7 +12,7 @@ describe('StepBindOfficeTable', () => {
   it('should work', async () => {
     // given
     const objectData = {
-      newBindingId: 'testNewBindingId',
+      bindId: 'testbindId',
       objectWorkingId: 'testObjectWorkingId',
     };
     const operationData = {
@@ -38,7 +38,7 @@ describe('StepBindOfficeTable', () => {
     expect(mockLoadExcelDataSingle).toBeCalledWith('testExcelContext', 'testOfficeTable', 'name');
 
     expect(mockOfficeApiHelper).toBeCalledTimes(1);
-    expect(mockOfficeApiHelper).toBeCalledWith('testTableName', 'testNewBindingId');
+    expect(mockOfficeApiHelper).toBeCalledWith('testTableName', 'testbindId');
 
     expect(mockCompleteBindOfficeTable).toBeCalledTimes(1);
     expect(mockCompleteBindOfficeTable).toBeCalledWith('testObjectWorkingId');
