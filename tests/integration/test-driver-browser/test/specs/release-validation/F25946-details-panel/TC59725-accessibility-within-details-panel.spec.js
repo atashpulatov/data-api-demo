@@ -7,7 +7,7 @@ import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 
-describe('TC59756 - Expanded view E2E workflow', () => {
+describe('[TC59725] - Accessibility in Details Panel', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
@@ -18,7 +18,7 @@ describe('TC59756 - Expanded view E2E workflow', () => {
     browser.switchToWindow(handles[0]);
   });
 
-  it('opens Detail panel using', () => {
+  it('opens Detail panel using keyboard', () => {
     PluginRightPanel.clickImportDataButton();
     switchToDialogFrame();
     PluginPopup.switchLibrary(false);
