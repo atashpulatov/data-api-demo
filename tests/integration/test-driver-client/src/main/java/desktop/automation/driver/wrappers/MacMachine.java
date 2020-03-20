@@ -1,8 +1,8 @@
 package desktop.automation.driver.wrappers;
 
+import desktop.automation.driver.wrappers.enums.DriverType;
 import desktop.automation.exceptions.NotImplementedForDriverWrapperException;
 import desktop.automation.pages.SUT.prompts.*;
-import desktop.automation.pages.SUT.refresh.popups.RefreshPromptPage;
 import desktop.automation.pages.driver.implementation.mac.SUT.*;
 import desktop.automation.pages.driver.implementation.mac.SUT.prompts.*;
 import desktop.automation.pages.driver.implementation.mac.SUT.refresh.popups.ImportingDataSingleRefreshPopUpPageMacMachine;
@@ -20,7 +20,6 @@ public class MacMachine extends Machine {
 
     public MacMachine(String host) {
         //TODO pass URL in basetest
-//        super(host);
         super(host, DriverType.MAC_DESKTOP, 10);
 
         preSUTPage = new PreSUTPageMacMachine(this);
@@ -32,9 +31,8 @@ public class MacMachine extends Machine {
         //TODO importRefreshProgressPopUp depricated?
         conditionalFormattingPage = new FormattingPageMacMachine(this);
         formatCellsPromptPage = new FormatCellsPromptPageMacMachine(this);
-        refreshPromptPage = new RefreshPromptPage(this); //TODO
         moreItemMenuPage = new MoreItemMenuPageMacMachine(this);
-        browserPage = new BrowserPageMacMachine(this);
+        moreItemsMenuLinkPage = new MoreItemsMenuLinkPageMacMachine(this);
         importingDataSingleRefreshPopUpPage = new ImportingDataSingleRefreshPopUpPageMacMachine(this);
         refreshAllPopUpPage = new RefreshAllPopUpPageMacMachine(this);
         applicationSelectionPopUpPage = new ApplicationSelectionPopUpPageMacMachine(this);
@@ -51,22 +49,27 @@ public class MacMachine extends Machine {
         metricQualificationPromptPage = new MetricQualificationPromptPageMacMachine(this);
         attributeQualificationPromptPage = new AttributeQualificationPromptPageMacMachine(this);
         multiplePrompts = new MultiplePromptsPage(this);
+        importDossierPage = new ImportDossierPageMacMachine(this);
 
     }
 
     @Override
     protected void initDriver(String host) {
+        startAppiumForMacDriver(host);
+    }
+
+    public void startAppiumForMacDriver(String host) {
         DesiredCapabilities caps = new DesiredCapabilities();
 
         caps.setCapability("platformName", "Mac");
         caps.setCapability("deviceName", "Mac");
-
         caps.setCapability("app", "Root");
+
         try {
             try {
                 driver = new AppiumDriver(new URL(host), caps);
             } catch (org.openqa.selenium.WebDriverException e){
-                if (e.getMessage().startsWith("Connection refused (Connection refused)")) {
+                if (e.getMessage().startsWith("Connection refused")) {
                     try {
                         Runtime.getRuntime().exec("open /Applications/AppiumForMac.app").waitFor();
                         Thread.sleep(3_000);

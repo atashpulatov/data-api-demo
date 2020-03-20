@@ -13,7 +13,7 @@ public abstract class ObjectPromptPage extends BasePromptWithSingleSelectionList
 
 
     @Override
-    public void answerPromptCorretly() {
+    public void answerPromptCorrectly() {
         WebElement runBtn = machine.getObjectPromptPage().getRunBtnElem();
 
         machine.getObjectPromptPage().getAddAllBtnElem().click();
@@ -21,6 +21,5 @@ public abstract class ObjectPromptPage extends BasePromptWithSingleSelectionList
 
     }
 
-    //#id_mstr37ListContainer > div
     public abstract List<WebElement> getImportObjectElems();
 }

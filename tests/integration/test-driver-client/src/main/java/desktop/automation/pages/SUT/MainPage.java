@@ -2,17 +2,14 @@ package desktop.automation.pages.SUT;
 
 import desktop.automation.driver.wrappers.Machine;
 import desktop.automation.elementWrappers.*;
-import desktop.automation.elementWrappers.browser.ImportedObjectInListBrowser;
-import desktop.automation.elementWrappers.mac.ImportedObjectInListMacMachine;
-import desktop.automation.elementWrappers.mac.enums.FontValue;
-import desktop.automation.elementWrappers.windows.FontControls.FontEditBox;
-import desktop.automation.elementWrappers.windows.FontControls.FontSizeEditBox;
-import desktop.automation.elementWrappers.windows.FontControls.SplitButton;
-import desktop.automation.elementWrappers.windows.FormatValue;
-import desktop.automation.elementWrappers.windows.ImportedObjectInListWindowsMachine;
+import desktop.automation.elementWrappers.driver.implementations.browser.ImportedObjectInListBrowser;
+import desktop.automation.elementWrappers.driver.implementations.mac.ImportedObjectInListMacMachine;
+import desktop.automation.elementWrappers.driver.implementations.windows.FontControls.SplitButton;
+import desktop.automation.elementWrappers.driver.implementations.windows.FormatValue;
+import desktop.automation.elementWrappers.driver.implementations.windows.ImportedObjectInListWindowsMachine;
+import desktop.automation.elementWrappers.enums.FontValue;
 import desktop.automation.exceptions.NotImplementedForDriverWrapperException;
 import desktop.automation.selectors.SUT.MainPageSelectors;
-import junit.framework.AssertionFailedError;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.RemoteWebElement;
@@ -37,10 +34,6 @@ public abstract class MainPage extends MainPageSelectors {
         return machine.driver.findElement(OFFICE_ADD_IN_LOGO_ELEM);
     }
 
-    protected WebDriverElemWrapper getOfficeAddInLogoWebDriverElem(){
-        return machine.waitAndFindElemWrapper(OFFICE_ADD_IN_LOGO_ELEM);
-    }
-
     public abstract AnyInterfaceElement getMoreItemsMenuElem();
 
     public ImageComparisonElem getMissingReportBindIdImageComparisonElem(){
@@ -55,21 +48,15 @@ public abstract class MainPage extends MainPageSelectors {
         return machine.waitAndFind(IMPORTED_DATA_TAB_ELEM);
     }
 
-//    public RemoteWebElement getOfficeAddInLogoElem(){
-//        return machine.waitAndFind(OFFICE_ADD_IN_LOGO_ELEM);
-//    }
-
-    public abstract AnyInterfaceElement getOfficeAddInLogoElem();
+    public AnyInterfaceElement getOfficeAddInLogoElem(){
+        return machine.waitAndFindElemWrapper(OFFICE_ADD_IN_LOGO_ELEM);
+    }
 
     public abstract AnyInterfaceElement getImportDataBtnElem();
 
     public AnyInterfaceElement getAddDataBtnElem(){
         machine.waitForAddInFrameReadyForBrowser();
         return new WebDriverElemWrapper(machine.waitAndFind(ADD_DATA_BTN_ELEM));
-    }
-
-    public AnyInterfaceElement getImportOrAddDataBtnElem() {
-        return getImportOrAddDataBtnElem(null);
     }
 
     public AnyInterfaceElement getImportOrAddDataBtnElem(Boolean isFirstImport){
@@ -90,10 +77,6 @@ public abstract class MainPage extends MainPageSelectors {
         return machine.waitAndFind(ADD_IN_PANE_ELEM);
     }
 
-    public List<WebElement> getAddInPanelChildrenElems(){
-        return getAddInPaneElem().findElements(By.xpath(".//*"));
-    }
-
     public RemoteWebElement getNoImportedObjectsLblElem(){
         return machine.waitAndFind(NO_IMPORTED_OBJECTS_LBL_ELEM);
     }
@@ -103,14 +86,13 @@ public abstract class MainPage extends MainPageSelectors {
     public abstract WebDriverElemWrapper getImportedObjectInListNameElem(String objectName, WebDriverWait wait);
 
     protected WebDriverElemWrapper getImportObjectInListElemHelper(String objectName, WebDriverWait wait){
-        //wait is ignored
-        List<ImportedObjectInList> importedObjectsInList = getImportedObjectsInList();
+        List<ImportedObjectInList> importedObjectsInList = getImportedObjectsInList(wait);
         for (ImportedObjectInList importedObjectInList : importedObjectsInList) {
             if (importedObjectInList.getName().equals(objectName))
                 return new WebDriverElemWrapper(importedObjectInList.getNameElem());
         }
 
-        throw new AssertionFailedError(String.format("Did not find any objects in the imported list of objects that match the name: %s, found object count: %d", objectName, importedObjectsInList.size()));
+        throw new RuntimeException(String.format("Did not find any objects in the imported list of objects that matches the name: %s, found object count: %d", objectName, importedObjectsInList.size()));
 
     }
 
@@ -128,12 +110,8 @@ public abstract class MainPage extends MainPageSelectors {
         }
     }
 
-    public RemoteWebElement getCrossTabTotalSubtotalErrorMessageElem(){
-        return machine.waitAndFind(CROSS_TAB_TOTAL_SUBTOTAL_ERROR_MESSAGE_ELEM);
-    }
-
     public RemoteWebElement getLimitsExceededErrorMessageElem(){
-        return machine.waitAndFind(LIMITS_EXCEEDED_ERROR_MESSAGE_ELEM, machine.isBrowser() ? machine.FOUR_UNITS : machine.TWO_UNITS);
+        return machine.waitAndFind(LIMITS_EXCEEDED_ERROR_MESSAGE_ELEM, machine.TWO_UNITS);
     }
 
     public RemoteWebElement getThisObjectCannotBeImportedErrorMessageElem(){
@@ -163,7 +141,10 @@ public abstract class MainPage extends MainPageSelectors {
         machine.assertNotPresent(PROJECTS_LIMITS_EXCEEDED_ERROR_MESSAGE);
     }
 
-    public abstract AnyInterfaceElement getSessionExpiredNotificationElem();
+    public AnyInterfaceElement getSessionExpiredNotificationElem() {
+        machine.focusOnAddInFrameForBrowser();
+        return machine.waitAndFindElemWrapper(SESSION_EXPIRED_NOTIFICATION);
+    }
 
     public AnyInterfaceElement getErrorMessageOKBtnElem() {
         if (machine.isBrowser()) {
@@ -184,11 +165,6 @@ public abstract class MainPage extends MainPageSelectors {
     public void assertRangeNotEmptyMessageElemNotPresent(){
         machine.focusOnAddInFrameForBrowser();
         machine.assertNotPresent(RANGE_NOT_EMPTY_MESSAGE);
-    }
-
-    public void assertCrossTabTotalSubtotalErrorMessageElemNotPresent(){
-        machine.focusOnAddInFrameForBrowser();
-        machine.assertNotPresent(CROSS_TAB_TOTAL_SUBTOTAL_ERROR_MESSAGE_ELEM);
     }
 
     public void assertLimitsExceededErrorMessageElemNotPresent(){
@@ -215,17 +191,6 @@ public abstract class MainPage extends MainPageSelectors {
         assertEquals(value, resVal);
     }
 
-
-
-    private boolean assertExpectedCellSelected(String cell, WebElement input) {
-        String inputText = input.getText();
-        if (inputText.matches(cell.toUpperCase())) {
-            input.sendKeys(Keys.ENTER);
-            return true;
-        }
-        return false;
-    }
-
     public WebElement getCellInputElem(){
         return machine.waitAndFind(CELL_TRAVERSAL_INPUT_ELEM);
     }
@@ -236,10 +201,15 @@ public abstract class MainPage extends MainPageSelectors {
     }
 
     public List<ImportedObjectInList> getImportedObjectsInList() {
+        return getImportedObjectsInList(machine.ONE_UNIT);
+    }
+
+    public List<ImportedObjectInList> getImportedObjectsInList(WebDriverWait wait) {
         List<ImportedObjectInList> res = new LinkedList<>();
         List<WebElement> items;
         try {
             machine.waitForAddInFrameReadyForBrowser();
+            machine.waitAndFindInElement(getImportedObjectListElem(), IMPORTED_OBJECT_ROOT_ELEM, wait);
             items = getImportedObjectListElem().findElements(IMPORTED_OBJECT_ROOT_ELEM);
         } catch (org.openqa.selenium.TimeoutException e){
             return res;
@@ -277,22 +247,16 @@ public abstract class MainPage extends MainPageSelectors {
         machine.assertNotPresent(getHeaderSelector(header));
     }
 
-    public abstract void assertHeaderPresent(String header);
-
-    protected void assertHeaderPresentByCellPresence(String header){
-        getHeaderSelector(header);
-    }
-
     protected abstract By getHeaderSelector(String header);
 
     private WebElement getMenuItemElem(String menuItemName){
         String selector = String.format(COLUMN_CONTEXT_MENU_ITEM_ELEM_BASE, menuItemName);
-        //"//*[@LocalizedControlType='Menu Item'][@Name='%s']"
-        //"/AXApplication[@AXTitle='Excel']/AXWindow[@AXTitle='Book1' and @AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXLayoutArea[@AXTitle='Content Area']/AXMenu[0]/AXMenuItem[@AXTitle='Hide' and @AXIdentifier='oui_performOfficeSpaceMenuAction:']"
-        //"/AXApplication[@AXTitle='Excel']/AXWindow[@AXTitle='Book1' and @AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXLayoutArea[@AXTitle='Content Area']/AXMenu[0]/AXMenuItem[@AXTitle='Unhide' and @AXIdentifier='oui_performOfficeSpaceMenuAction:']"
-
 
         return machine.waitAndFind(By.xpath(selector));
+    }
+
+    public WebDriverElemWrapper getHeaderSizeInputElem(){
+        return machine.waitAndFindElemWrapper(HEADER_SIZE_INPUT_ELEM);
     }
 
     public WebElement getHideMenuItemElem(){
@@ -306,11 +270,6 @@ public abstract class MainPage extends MainPageSelectors {
     public WebElement getColumnWidthMenuItemElem(){
         return getMenuItemElem("Column Width...");
     }
-
-    public WebDriverElemWrapper getHeaderSizeInputElem(){
-        return machine.waitAndFindElemWrapper(HEADER_SIZE_INPUT_ELEM);
-    }
-
 
     public WebElement getRowHeightMenuItemElem(){
         return getMenuItemElem("Row Height...");
@@ -409,14 +368,6 @@ public abstract class MainPage extends MainPageSelectors {
         changeHeaderSize(row, height, false);
     }
 
-    public FontEditBox getFontEditBox(){
-        return new FontEditBox(machine.waitAndFind(FONT_INPUT_ELEM));
-    }
-
-    public FontSizeEditBox getFontSizeEditBox(){
-        return new FontSizeEditBox(machine.waitAndFind(FONT_SIZE_INPUT_ELEM));
-    }
-
     public ToggleButton getBoldToggleButton(){
         machine.focusOnExcelFrameForBrowser();
         return ToggleButton.getToggleButton(machine.getDriverType(), machine.waitAndFindElemWrapper(BOLD_BUTTON_ELEM));
@@ -448,7 +399,7 @@ public abstract class MainPage extends MainPageSelectors {
 
     public AnyInterfaceElement getReportRefreshedMessageElem(){
         machine.focusOnAddInFrameForBrowser();
-        return getReportRefreshedMessageElem(machine.getUnitIntValue());
+        return getReportRefreshedMessageElem(40);
     }
 
     public AnyInterfaceElement getReportRefreshedMessageElem(int secondsToWaitFor){
@@ -458,7 +409,7 @@ public abstract class MainPage extends MainPageSelectors {
     }
 
     public AnyInterfaceElement getDataLoadedSuccessfullyNotification() {
-        return getDataLoadedSuccessfullyNotification(machine.getUnitIntValue());
+        return getDataLoadedSuccessfullyNotification(40);
     }
 
     public AnyInterfaceElement getDataLoadedSuccessfullyNotification(int secondsToWaitFor){
@@ -472,7 +423,7 @@ public abstract class MainPage extends MainPageSelectors {
     }
 
     public AnyInterfaceElement getDatasetRefreshedMessageElem() {
-        return getDatasetRefreshedMessageElem(machine.getUnitIntValue());
+        return getDatasetRefreshedMessageElem(40);
     }
 
     public AnyInterfaceElement getDatasetRefreshedMessageElem(int secondsToWaitFor) {
@@ -503,14 +454,11 @@ public abstract class MainPage extends MainPageSelectors {
 
     public FormatValue getCellFormatValueElem(String formatValue){
         return new FormatValue(machine.waitAndFind(By.xpath(String.format(CELL_FORMAT_VALUE_BASE, formatValue))));
-//        "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXTitle='Format Cells' and @AXIdentifier='_NS:9' and @AXSubrole='AXDialog']/AXTabGroup[@AXIdentifier='_NS:18']/AXScrollArea[@AXIdentifier='_NS:48']/AXTable[@AXIdentifier='_NS:52']/AXRow[@AXSubrole='AXTableRow']/AXStaticText[@AXValue='%s']"
-//        "//*[@LocalizedControlType='list item'][@Name='%s']"
     }
 
     public WebElement getFormatValuePaneOKBtnElem(){
         return machine.waitAndFind(FORMAT_VALUE_PANE_OK_BTN);
     }
-
 
     public WebElement getCopyContextMenuElem() {
         return machine.waitAndFind(IMPORTED_OBJECT_COPY_CONTEXT_MENU_ELEM);
@@ -547,12 +495,6 @@ public abstract class MainPage extends MainPageSelectors {
             goToCellAndAssertValue(cellExpectedValue[0], cellExpectedValue[1]);
     }
 
-    public void assertCellValuesAndClickAddInLogoInBetween(String[][] cellExpectedValues) {
-        for (String[] cellExpectedValue : cellExpectedValues) {
-            goToCellAndAssertValue(cellExpectedValue[0], cellExpectedValue[1]);
-        }
-    }
-
     public WebElement getClearDataBtnElem() {
         return machine.waitAndFind(CLEAR_DATA_BTN_ELEM);
     }
@@ -585,10 +527,6 @@ public abstract class MainPage extends MainPageSelectors {
         return machine.waitAndFind(FORMAT_CELLS_PROMPT_SAMPLE);
     }
 
-    public WebDriverElemWrapper getDialogOpenNotificationElem(){
-        return machine.waitAndFindElemWrapper(DIALOG_OPEN_NOTIFICATION);
-    }
-
     public WebDriverElemWrapper findDialogOpenNotificationElem(){
         return new WebDriverElemWrapper(machine.driver.findElement(DIALOG_OPEN_NOTIFICATION));
     }
@@ -599,4 +537,7 @@ public abstract class MainPage extends MainPageSelectors {
 
     public abstract void assertExpectedFontValueSelected(FontValue fontValue);
 
+    protected static boolean isRowHeader(String header) {
+        return Character.isAlphabetic(header.toCharArray()[0]);
+    }
 }

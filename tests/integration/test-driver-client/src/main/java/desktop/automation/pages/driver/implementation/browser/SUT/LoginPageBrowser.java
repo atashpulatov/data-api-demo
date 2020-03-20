@@ -14,14 +14,9 @@ public class LoginPageBrowser extends LoginPage {
     }
 
     @Override
-    public AnyInterfaceElement getLoginBtnElem() {
-        return getLoginBtnElemWebdriverElem();
-    }
-
-    @Override
     public AnyInterfaceElement getStartLoginBtnElem() {
         machine.focusOnAddInFrameForBrowser();
-        return getStartLoginBtnWebDriverElem();
+        return machine.waitAndFindElemWrapper(OPEN_LOGIN_PROMPT_BTN_ELEM, machine.FOUR_UNITS);
     }
 
     @Override
@@ -39,6 +34,6 @@ public class LoginPageBrowser extends LoginPage {
 
     @Override
     public void assertUserNameValueAsExpected(String expected) {
-        assertEquals(expected, getUserNameInputElem().getDriverElement().getAttribute("value"));
+        assertEquals(expected, getUserNameInputElemWebElement().getDriverElement().getAttribute("value"));
     }
 }
