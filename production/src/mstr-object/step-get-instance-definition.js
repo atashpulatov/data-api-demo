@@ -20,23 +20,22 @@ const {
 
 class StepGetInstanceDefinition {
   /**
-   * Create Instance definition object which stores data neede to continue import.
-   * If instance of object does not exist new one will be created
+   * Create Instance definition object which contains data about MSTR object needed in next steps.
+   * If instance of object does not exist new one will be created.
+   * All additional manipulations like prompts answers or body will be apllied.
    *
-   * @param {Object} [body] Contains requested objects and filters
-   * @param {Object} mstrObjectType Contains objectId, projectId, dossierData, mstrObjectType used in request
-   * @param {Object} [preparedInstanceId] Instance Id of the object
-   * @param {String} projectId
-   * @param {String} objectId
-   * @param {Object} [dossierData]
-   * @param {Object} [visualizationInfo]
-   * @param {Object} [promptsAnswers]
-   * @param {Object} [crosstabHeaderDimensions] Contains previous dimensions of crosstab headers.
-   * @param {Array} [subtotalsAddresses] Contains previous subtotal addresses
-   * @param {Boolean} subtotalsDefined Information if the report has subtotals
-   * @param {Boolean} subtotalsVisible Information if the subtotals are visible
-   * @returns {Object} Object containing officeTable and subtotalAddresses
+   * This function is subscribed as one of the operation steps with key GET_INSTANCE_DEFINITION,
+   * therefore should be called only via operation bus.
+   *
+   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing as to reference specific object
+   * @param {String} objectData.displayAttrFormNames Specify the style in which attribute form will be displayed
+   * @param {Boolean} objectData.insertNewWorksheet Determine if the object will be displayed in on new spreadsheet
+   * @param {Object} objectData.subtotalsInfo Deteermine if subtotals will be displayed and store subtotal adresses
+   * @param {String} objectData.bindId Unique id of the Office table used for referencing the table in Excel
+   * @param {Object} objectData.visualizationInfo Contains information about location od visualization in dossier
+   * @param {Office} operationData.operationType Specify type of the operation that called this function
    */
+
    getInstanceDefinition = async (objectData, { operationType }) => {
      const {
        objectWorkingId,
@@ -46,7 +45,7 @@ class StepGetInstanceDefinition {
        subtotalsInfo: { subtotalsAddresses } = false,
        bindId,
      } = objectData;
-     let { visualizationInfo, startCell } = objectData;
+     let { visualizationInfo } = objectData;
 
      const connectionData = {
        objectId: objectData.objectId,
@@ -64,7 +63,7 @@ class StepGetInstanceDefinition {
      // Get excel context and initial cell
      console.group('Importing data performance');
      console.time('Total');
-     startCell = await this.getStartCell(insertNewWorksheet, excelContext, operationType);
+     const startCell = await this.getStartCell(insertNewWorksheet, excelContext, operationType);
 
      let instanceDefinition;
      let { body } = connectionData;

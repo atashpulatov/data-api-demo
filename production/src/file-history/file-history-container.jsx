@@ -140,7 +140,6 @@ export class FileHistoryContainerNotConnected extends React.Component {
     const {
       reportArray = [], loading, refreshingAll, refreshReportsArray, isSecured, addDataAction, t,
     } = this.props;
-    console.log('reportArray:', reportArray);
     return (
       <>
         {

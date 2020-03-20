@@ -5,6 +5,7 @@ class StepFormatTable {
    * Function responsible autoresizing the columns of the Office table passed in parameters.
    * Columns are resized and synchronized with Excel for each column separately
    * In case of error we are skipping this step and continue import/refresh workflow.
+   *
    * This function is subscribed as one of the operation steps with key FORMAT_OFFICE_TABLE,
    * therefore should be called only via operation bus.
    *

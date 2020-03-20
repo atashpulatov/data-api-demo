@@ -9,6 +9,7 @@ class StepSaveObjectInExcel {
     this.reduxStore = reduxStore;
   }
 
+  // TODO add jsdoc after integration
   saveObject = async (objectData, operationData) => {
     const { instanceDefinition, operationType } = operationData;
     const { mstrTable } = instanceDefinition;
