@@ -7,7 +7,7 @@ import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 
-describe('[TC59725] - Accessibility in Details Panel', () => {
+describe('F25946 - details panel', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
@@ -18,7 +18,7 @@ describe('[TC59725] - Accessibility in Details Panel', () => {
     browser.switchToWindow(handles[0]);
   });
 
-  it('opens Detail panel using keyboard', () => {
+  it('TC59725] - [Object Details] Accessibility within details panel', () => {
     PluginRightPanel.clickImportDataButton();
     switchToDialogFrame();
     PluginPopup.switchLibrary(false);
