@@ -28,10 +28,7 @@ describe('StepGetOfficeTableImport', () => {
 
   it('getOfficeTableImport should work as expected', async () => {
     // given
-    const objectData = {
-      tableName: 'testTableName',
-      objectWorkingId: 'testObjectWorkingId',
-    };
+    const objectData = { objectWorkingId: 'testObjectWorkingId' };
 
     const operationData = {
       excelContext: 'testExcelContext',
@@ -61,7 +58,6 @@ describe('StepGetOfficeTableImport', () => {
     expect(mockCreateOfficeTable).toBeCalledWith({
       excelContext: 'testExcelContext',
       instanceDefinition: 'testInstanceDefinition',
-      tableName: 'testTableName',
       startCell: 'testStartCell',
     });
 
