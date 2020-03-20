@@ -6,7 +6,7 @@ import { switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
 
-describe('TC58932 - Deselecting/selecting filters with no objects', () => {
+describe('[F25968] - Dynamically update numbers of objects displayed next to categories in filter panel', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
@@ -17,11 +17,10 @@ describe('TC58932 - Deselecting/selecting filters with no objects', () => {
     browser.switchToWindow(handles[0]);
   });
 
-  it('TC58932 - Deselecting/selecting filters with no objects', () => {
+  it('[TC58932] - Deselecting/selecting filters with no objects', () => {
     // open import data popup
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
-    browser.pause(800);
     switchToPluginFrame();
 
     // apply filters
