@@ -871,6 +871,7 @@ class PluginPopup {
    * Finds the Details Table element with the given index from expanded Detail Tables
    *
    * @param {Number} index index of the Detail Table to find
+   * @returns {Element} Details Table element
    */
   getDetailsTableByIndex(index) {
     return $$(popupSelectors.detailsTable)[index];
