@@ -2,12 +2,16 @@ import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
 class StepFormatTable {
   /**
-   * Formatting table columns width
+   * Function responsible autoresizing the columns of the Office table passed in parameters.
+   * Columns are resized and synchronized with Excel for each column separately
+   * In case of error we are skipping this step and continue import/refresh workflow.
+   * This function is subscribed as one of the operation steps with key FORMAT_OFFICE_TABLE,
+   * therefore should be called only via operation bus.
    *
-   * @param {Office} table
-   * @param {Boolean} isCrosstab
-   * @param {Office} crosstabHeaderDimensions
-   * @param {Office} excelContext
+   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing as to reference specific object
+   * @param {Office} operationData.officeTable Reference to Table created by Excel
+   * @param {Object} operationData.instanceDefinition Object containing information about MSTR object
+   * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions
    */
   formatTable = async (objectData, operationData) => {
     const { objectWorkingId, } = objectData;
@@ -39,5 +43,6 @@ class StepFormatTable {
     console.timeEnd('Column auto size');
   };
 }
+
 const stepFormatTable = new StepFormatTable();
 export default stepFormatTable;
