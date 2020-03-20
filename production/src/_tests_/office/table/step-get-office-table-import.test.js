@@ -49,7 +49,7 @@ describe('StepGetOfficeTableImport', () => {
 
     const mockUpdateObject = jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
 
-    const mockCompleteBindOfficeTable = jest.spyOn(
+    const mockCompleteGetOfficeTableImport = jest.spyOn(
       operationStepDispatcher, 'completeGetOfficeTableImport'
     ).mockImplementation();
 
@@ -82,7 +82,7 @@ describe('StepGetOfficeTableImport', () => {
       bindId: 'testBindId',
     });
 
-    expect(mockCompleteBindOfficeTable).toBeCalledTimes(1);
-    expect(mockCompleteBindOfficeTable).toBeCalledWith('testObjectWorkingId');
+    expect(mockCompleteGetOfficeTableImport).toBeCalledTimes(1);
+    expect(mockCompleteGetOfficeTableImport).toBeCalledWith('testObjectWorkingId');
   });
 });

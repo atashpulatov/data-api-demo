@@ -6,19 +6,17 @@ import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
 class StepGetOfficeTableEditRefresh {
   /**
-   * Creates an office table if it's a new import or if the number of columns of an existing table changes.
-   * If we are refreshing a table and the new definiton range is not empty we keep the original table.
+   * Creates an office table if the number of columns of an existing table changes.
+   * If we are refreshing a table and the new definition range is not empty, we keep the original table.
    *
-   * @param {boolean} isRefresh
-   * @param {Object} excelContext
-   * @param {string} bindId
-   * @param {Object} instanceDefinition
-   * @param {string} startCell  Top left corner cell
-   *
+   * @param objectData
+   * @param operationData
+   * @returns {Promise<void>}
    */
   getOfficeTableEditRefresh = async (objectData, operationData) => {
+    console.time('Create or get table - edit or refresh');
+
     try {
-      console.time('Create or get table - edit or refresh');
       const {
         oldBindId,
         tableName,
@@ -35,11 +33,11 @@ class StepGetOfficeTableEditRefresh {
       let officeTable;
 
       getOfficeTableHelper.checkReportTypeChange(mstrTable);
-      const { tableColumnsChanged, prevOfficeTable, startCell } = await officeTableRefresh.getExistingOfficeTableData(
+      const { tableColumnsChanged, prevOfficeTable, startCell, } = await officeTableRefresh.getExistingOfficeTableData(
         excelContext,
         oldBindId,
         instanceDefinition,
-        previousTableDimensions
+        previousTableDimensions,
       );
 
       if (tableColumnsChanged) {
@@ -74,6 +72,7 @@ class StepGetOfficeTableEditRefresh {
         instanceDefinition,
         startCell,
       };
+
       const updatedObject = {
         objectWorkingId,
         newOfficeTableName,
@@ -85,9 +84,9 @@ class StepGetOfficeTableEditRefresh {
       operationStepDispatcher.completeGetOfficeTableEditRefresh(objectWorkingId);
     } catch (error) {
       console.log('error:', error);
-    } finally {
-      console.timeEnd('Create or get table - edit or refresh');
     }
+
+    console.timeEnd('Create or get table - edit or refresh');
   };
 }
 
