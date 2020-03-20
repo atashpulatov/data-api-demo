@@ -55,6 +55,7 @@ exports.config = {
     ],
     'F25946-details-panel': [
       './test/specs/release-validation/F25946-details-panel/TC59756-expanded-view.spec.js',
+      './test/specs/release-validation/F25946-details-panel/TC59725-accessibility-within-details-panel.spec.js',
       './test/specs/release-validation/F25946-details-panel/TC59677-altering-table-with-rows-expanded.spec.js',
     ],
     'F25930-faster-display': [
