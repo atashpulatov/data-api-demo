@@ -22,12 +22,6 @@ export function switchToPromptFrame() {
   browser.switchToFrame($('iframe[src*="app.embedded=true"]'));
 }
 
-export function switchToDialogFrame() {
-  switchToExcelFrame();
-  $('#WACDialogPanel .AddinIframe').waitForExist(9999);
-  browser.switchToFrame($('#WACDialogPanel .AddinIframe'));
-}
-
 export function switchToPromptFrameForEditDossier() {
   switchToPluginFrame();
   const editFrame = '#root > div > div:nth-child(3) > iframe';
