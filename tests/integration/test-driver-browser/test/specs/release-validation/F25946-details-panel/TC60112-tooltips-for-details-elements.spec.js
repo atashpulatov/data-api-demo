@@ -14,7 +14,7 @@ const ELLIPSIS = '...';
  *
  * @param {String} displayed actual text for the element in details table
  * @param {String} tooltip text displayed in the tooltip for the element
- * @returns
+ * @returns {Boolean} true if tooltip is correct, false otherwise
  */
 function isTooltipCorrect(displayed, tooltip) {
   const ellipsisIndex = displayed.indexOf(ELLIPSIS);
