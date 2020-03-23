@@ -1,7 +1,7 @@
 package desktop.automation.pages.SUT;
 
 import desktop.automation.driver.wrappers.WindowsMachine;
-import org.openqa.selenium.By;
+import desktop.automation.selectors.SUT.DataPreviewPageSelectors;
 import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
@@ -11,16 +11,8 @@ import java.util.ListIterator;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 
-public class DataPreviewPage {
+public class DataPreviewPage extends DataPreviewPageSelectors {
     private WindowsMachine windowsMachine;
-
-    private static final By TITLE = By.xpath("//Text[@Name=\"Data Preview\"]");
-
-    private static final By ROW_ELEM = By.xpath("//Document//DataItem");
-
-    private static final By ONLY_TEN_ROWS_DISPLAYED_WARNING = By.name("Data preview displays 10 rows of data only.");
-
-    private static final By CLOSE_PREVIEW_BTN = By.xpath("//Button[@Name=\"Close Preview\"]");
 
     public DataPreviewPage(WindowsMachine windowsMachine) {
         this.windowsMachine = windowsMachine;

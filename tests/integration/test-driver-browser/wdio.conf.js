@@ -55,6 +55,7 @@ exports.config = {
     ],
     'F25946-details-panel': [
       './test/specs/release-validation/F25946-details-panel/TC59756-expanded-view.spec.js',
+      './test/specs/release-validation/F25946-details-panel/TC59725-accessibility-within-details-panel.spec.js',
       './test/specs/release-validation/F25946-details-panel/TC59677-altering-table-with-rows-expanded.spec.js',
       './test/specs/release-validation/F25946-details-panel/TC60112-tooltips-for-details-elements.spec.js',
     ],
@@ -79,8 +80,9 @@ exports.config = {
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-II.spec.js',
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-III.spec.js',
     ],
-    'F24086-Improved-browsing-by-adding-filters': [
-      './test/specs/release-validation/F24086-filter-panel/TC54856-filtering-with-type-owner-certified-date.spec.js',
+    'F24086-improved-browsing-by-adding-filters': [
+      './test/specs/release-validation/F24086-improved-browsing-by-adding-filters/TC54856-filtering-with-type-owner-certified-date.spec.js',
+      './test/specs/release-validation/F24086-improved-browsing-by-adding-filters/TC53430-refreshing-and-filtering-during-refresh.spec.js',
     ]
   },
   // Patterns to exclude.

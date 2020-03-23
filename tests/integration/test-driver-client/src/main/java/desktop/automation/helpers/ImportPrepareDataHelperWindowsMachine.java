@@ -5,6 +5,7 @@ import desktop.automation.elementWrappers.ImageComparisonElem;
 import desktop.automation.elementWrappers.MyLibrarySwitch;
 import desktop.automation.elementWrappers.WebDriverElemWrapper;
 import desktop.automation.exceptions.ImageBasedElemNotFound;
+import desktop.automation.exceptions.NotImplementedForDriverWrapperException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebElement;
@@ -33,8 +34,7 @@ class ImportPrepareDataHelperWindowsMachine {
     }
 
     public static void prepareDataWithoutImportingSimple(ImportPrepareDataHelperArgumments argumments){
-        //TODO replace with same logic as for mac automation
-//        argumments.getMachine().getPrepareDataPromptPageWindowsMachine().assertTitleIsCorrect(argumments.isDataset(), argumments.getObjectName());
+        argumments.getMachine().getPrepareDataPromptPageWindowsMachine().assertPrepareDataPromptTitlePresent(argumments.isDataset(), argumments.getObjectName());
 
         if (UTILIZE_INDEX_IMAGE_BASED_PREPARE_DATA_HELPER && !SKIP_STANDARD_INITIALIZATION_AND_TEAR_DOWN) {
             prepareDataSimpleIndexAndImageBased(argumments);
@@ -147,44 +147,18 @@ class ImportPrepareDataHelperWindowsMachine {
         //import object
         argumments.getMachine().getMainPage().getImportOrAddDataBtnElem(argumments.getFirstImport()).click();
 
-        MyLibrarySwitch myLibSwitch = argumments.getMachine().getImportPromptPage().getMyLibrarySwitchElem();
+        MyLibrarySwitch myLibSwitch = argumments.getMachine().getImportPromptPage().getMyLibrarySwitch();
         if (argumments.isMyLibrarySwitchOn() != myLibSwitch.isOn()) {
             myLibSwitch.clickExplicitlyByActionClass();
         }
 
-        argumments.getMachine().getImportPromptPage().getSearchBarImageComparisonElem().sendKeys(argumments.getObjectName());
+        argumments.getMachine().getImportPromptPage().getSearchBarElem().sendKeys(argumments.getObjectName());
 //        argumments.getMachine().getImportPromptPage().getObjectToImportNameCellElem(argumments.getObjectName()).click();
         argumments.getMachine().getImportPromptPage().clickFirstObjectToImport();
     }
 
     public static void selectObjectToImportElaborate(ImportPrepareDataHelperArgumments argumments) {
-        //go to sheet
-        argumments.getMachine().getPreSUTPage().getSheetTabElemByIndex(argumments.getSheetIndex()).click();
-
-        //go to cell
-        argumments.getMachine().getMainPage().goToCell(argumments.getCell());
-
-        //import object
-        argumments.getMachine().getMainPage().getImportOrAddDataBtnElem(argumments.getFirstImport()).click();
-
-//        WebElementWithAriaProperties myLibSwitch = argumments.getMachine().getImportPromptPage().getMyLibrarySwitchElem();
-//        if (argumments.isMyLibrarySwitchOn() != myLibSwitch.isChecked())
-//            myLibSwitch.getElement().click();
-
-//        argumments.getMachine().getImportPromptPage().assertAllObjectRadioBtnsDisabled();
-//        assertFalse(argumments.getMachine().isButtonEnabled(argumments.getMachine().getImportPromptPage().getImportBtnElem()));
-        assertFalse(argumments.getMachine().isButtonEnabled(argumments.getMachine().getImportPromptPage().getPrepareDataBtnElem().getDriverElement()));
-        assertTrue(argumments.getMachine().isButtonEnabled(argumments.getMachine().getImportPromptPage().getCancelBtnElem()));
-
-        argumments.getMachine().getImportPromptPage().getSearchBarImageComparisonElem().sendKeys(argumments.getObjectName());
-//        argumments.getMachine().getImportPromptPage().getObjectToImportNameCellElem(argumments.getObjectName()).click();
-        argumments.getMachine().getImportPromptPage().clickFirstObjectToImport();
-
-//        argumments.getMachine().getImportPromptPage().assertOnlyTargetObjectSelected(argumments.getObjectName());
-
-//        assertTrue(argumments.getMachine().isButtonEnabled(argumments.getMachine().getImportPromptPage().getImportBtnElem()));
-        assertTrue(argumments.getMachine().isButtonEnabled(argumments.getMachine().getImportPromptPage().getPrepareDataBtnElem().getDriverElement()));
-        assertTrue(argumments.getMachine().isButtonEnabled(argumments.getMachine().getImportPromptPage().getCancelBtnElem()));
+        throw new NotImplementedForDriverWrapperException();
     }
 
     private static boolean prepareDataSimpleImageBasedIsInitialized = false;
@@ -211,9 +185,10 @@ class ImportPrepareDataHelperWindowsMachine {
         if (prepareDataSimpleImageBasedIsInitialized)
             return;
 
+        machine.getPrepareDataPromptPage().setDataset(true);
         machine.getMainPage().getImportDataBtnElem().click();
 
-        MyLibrarySwitch myLibSwitch = machine.getImportPromptPage().getMyLibrarySwitchElem();
+        MyLibrarySwitch myLibSwitch = machine.getImportPromptPage().getMyLibrarySwitch();
         System.out.println("myLibSwitch = " + myLibSwitch.isOn());
         if (myLibSwitch.isOn()) {
             try {
@@ -226,7 +201,7 @@ class ImportPrepareDataHelperWindowsMachine {
         }
         here();
 
-        machine.getImportPromptPage().getSearchBarElemAndSendKeys(ImportPrepareDataHelperArgumments.DEFAULT_REPORT);
+        machine.getImportPromptPage().getSearchBarElemAndSendKeys(ImportPrepareDataHelperArgumments.DEFAULT_DATASET);
 //        machine.getImportPromptPage().getObjectToImportNameCellElem(ImportPrepareDataHelperArgumments.DEFAULT_REPORT).click();
         machine.getImportPromptPage().clickFirstObjectToImport();
         machine.getImportPromptPage().getPrepareDataBtnElem().click();
@@ -239,7 +214,6 @@ class ImportPrepareDataHelperWindowsMachine {
     }
 
     private static void initPrepareDataPromptElemLocations(Machine machine){
-        //TODO all checkbox for some values selected
         String selectedCheckBoxStr = "prepareData/selectedCheckBox";
         String unselectedCheckBoxStr = "prepareData/unselectedCheckBox";
         String partiallySelectedCheckBoxStr = "prepareData/partiallySelectedCheckBox";
@@ -276,14 +250,14 @@ class ImportPrepareDataHelperWindowsMachine {
         filterValuesElemYDiff = filterValues[1].getDriverElement().getLocation().getY() - filterValueFirst.getY();
 
         //all checkboxs
-        List<WebElement> allCheckboxElems = machine.getPrepareDataPromptPageWindowsMachine().getAllCheckboxElems();
-        attributeAll =      allCheckboxElems.get(0).findElement(By.xpath(".//*[@LocalizedControlType=\"check box\"]")).getLocation();
-        metricAll =         allCheckboxElems.get(1).findElement(By.xpath(".//*[@LocalizedControlType=\"check box\"]")).getLocation();
-        filterValuesAll =   allCheckboxElems.get(2).findElement(By.xpath(".//*[@LocalizedControlType=\"check box\"]")).getLocation();
+        List<WebDriverElemWrapper> paneChildren = machine.getPrepareDataPromptPageWindowsMachine().getPaneChildren();
+        attributeAll =      machine.getPrepareDataPromptPageWindowsMachine().getAllAttributeElemFromChildren(paneChildren).getDriverElement().findElement(By.xpath(".//*[@LocalizedControlType=\"check box\"]")).getLocation();
+        metricAll =         machine.getPrepareDataPromptPageWindowsMachine().getAllMetricElemFromChildren(paneChildren).getDriverElement().findElement(By.xpath(".//*[@LocalizedControlType=\"check box\"]")).getLocation();
+        filterValuesAll =   machine.getPrepareDataPromptPageWindowsMachine().getAllFilterValueElemFromChildren(paneChildren).getDriverElement().findElement(By.xpath(".//*[@LocalizedControlType=\"check box\"]")).getLocation();
 
         //checkbox selected/unselected images
         try {
-            WebElement checkboxElem = allCheckboxElems.get(2).findElement(By.xpath(".//*[@LocalizedControlType=\"check box\"]"));
+            WebElement checkboxElem = machine.getPrepareDataPromptPageWindowsMachine().getAllFilterValueElemFromChildren(paneChildren).getDriverElement().findElement(By.xpath(".//*[@LocalizedControlType=\"check box\"]"));
             //unselected checkbox
             machine.takeScreenshot(unselectedCheckBoxStr, checkboxElem, -5, -5, -5, -5);
 
@@ -334,35 +308,38 @@ class ImportPrepareDataHelperWindowsMachine {
         if (!prepareDataSimpleImageBasedIsInitialized)
             initPrepareDataPromptElemLocations(argumments.getMachine());
 
+        boolean isCrosstab = !argumments.isDataset() && argumments.getMachine().getPrepareDataPromptPage().isCrosstabReport();
         // 5) clicks all the passed values by x,y coordinates.
         // 6) For Filter pane load attempt to look for image of checked and unchecked (All) element checkbox for predefined time out, if failed WinAppDriver find element method
-        clickByCoordinates(argumments.getMachine(), attributeAll, attributeFirst, attributeElemYDiff, argumments.getAttributesToChoose());
-        clickByCoordinates(argumments.getMachine(), metricAll, metricFirst, metricElemYDiff, argumments.getMetricsToChoose());
+        clickByCoordinates(argumments.getMachine(), attributeAll, attributeFirst, attributeElemYDiff, argumments.getAttributesToChoose(), isCrosstab);
+        clickByCoordinates(argumments.getMachine(), metricAll, metricFirst, metricElemYDiff, argumments.getMetricsToChoose(), isCrosstab);
         for (FilterAndValues filterAndValuesRaw : argumments.getFiltersAndValuesToChoose()) {
             FilterAndValuesIndexBased filterAndValues = (FilterAndValuesIndexBased)filterAndValuesRaw;
-            clickByCoordinates(argumments.getMachine(), null, filterFirst, filterElemYDiff, new int[]{filterAndValues.getFilter()});
+            clickByCoordinates(argumments.getMachine(), null, filterFirst, filterElemYDiff, new int[]{filterAndValues.getFilter()}, isCrosstab);
 
             //check for filter value all checkbox presence
-            waitForCheckboxToAppear(checkBoxSelected, checkBoxUnselected, checkBoxPartiallySelected,
-                    filterValuesAll.getX() - 10,
-                    filterValuesAll.getX() + 40,
-                    filterValuesAll.getY() - 10,
-                    filterValuesAll.getY() + 40,
-                    20_000);
-            clickByCoordinates(argumments.getMachine(), filterValuesAll, filterValueFirst, filterValuesElemYDiff, filterAndValues.getValues());
+            //TODO checkbox image comparison flaky
+            try {
+                Thread.sleep(10_000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+//            waitForCheckboxToAppear(checkBoxSelected, checkBoxUnselected, checkBoxPartiallySelected,
+//                    filterValuesAll.getX() - 10,
+//                    filterValuesAll.getX() + 40,
+//                    filterValuesAll.getY() - 10,
+//                    filterValuesAll.getY() + 40,
+//                    20_000);
+            clickByCoordinates(argumments.getMachine(), filterValuesAll, filterValueFirst, filterValuesElemYDiff, filterAndValues.getValues(), isCrosstab);
         }
     }
 
     private static void waitForCheckboxToAppear(ImageComparisonElem checkBoxSelected, ImageComparisonElem checkBoxUnselected, ImageComparisonElem checkBoxPartiallySelected, int startX, int endX, int startY, int endY, int waitInMilliseconds) {
         long start = System.currentTimeMillis();
-        ImageComparisonElem[] allChekcBoxImageElems = {checkBoxSelected, checkBoxUnselected, checkBoxPartiallySelected};
+        ImageComparisonElem[] allCheckBoxImageElems = {checkBoxSelected, checkBoxUnselected, checkBoxPartiallySelected};
         do {
-            for (ImageComparisonElem allChekcBoxImageElem : allChekcBoxImageElems) {
-                try {
-                    allChekcBoxImageElem.find(startX, endX, startY, endY);
-                    return;
-                } catch (ImageBasedElemNotFound ignored) {}
-            }
+            if (waitForFilterValueAllCheckBox(startX, endX, startY, endY, allCheckBoxImageElems))
+                return;
             if (waitInMilliseconds > 0){
                 try {
                     Thread.sleep(500);
@@ -372,18 +349,26 @@ class ImportPrepareDataHelperWindowsMachine {
             }
         } while (System.currentTimeMillis() - start < waitInMilliseconds);
 
-        try {
-            checkBoxSelected.find(startX, endX, startY, endY);
-            return;
-        } catch (ImageBasedElemNotFound e) {
-            checkBoxUnselected.find(startX, endX, startY, endY);
-            return;
-        }
+        if (!waitForFilterValueAllCheckBox(startX, endX, startY, endY, allCheckBoxImageElems))
+            throw new RuntimeException("Failed to find checkbox for (All) filter value");
     }
 
-    private static void clickByCoordinates(Machine machine, Point allElem, Point firstElem, int elemDiff, int[] elems) {
+    private static boolean waitForFilterValueAllCheckBox(int startX, int endX, int startY, int endY, ImageComparisonElem[] allCheckBoxImageElems) {
+        for (ImageComparisonElem allChekcBoxImageElem : allCheckBoxImageElems) {
+            try {
+                allChekcBoxImageElem.find(startX, endX, startY, endY);
+                return true;
+            } catch (ImageBasedElemNotFound ignored) {
+            }
+        }
+
+        return false;
+    }
+
+    private static void clickByCoordinates(Machine machine, Point allElem, Point firstElem, int elemDiff, int[] elems, boolean isCrosstab) {
         WebElement desktopElem = ImageComparisonElem.getDesktopElem();
 
+        int yOffsetForCrosstab = isCrosstab ? 20 : 0;
         for (int elem : elems) {
             try {
                 Thread.sleep(500);
@@ -396,7 +381,7 @@ class ImportPrepareDataHelperWindowsMachine {
                         .moveToElement(desktopElem)
                         .moveByOffset(allElem.getX() - desktopElem.getSize().getWidth() / 2
                                 , allElem.getY() - desktopElem.getSize().getHeight() / 2)
-                        .moveByOffset(5, 5)
+                        .moveByOffset(5, 5 + yOffsetForCrosstab)
                         .click()
                         .perform();
             }
@@ -407,7 +392,7 @@ class ImportPrepareDataHelperWindowsMachine {
                         .moveToElement(desktopElem)
                         .moveByOffset(targetX - desktopElem.getSize().getWidth() / 2,
                                 targetY - desktopElem.getSize().getHeight() / 2)
-                        .moveByOffset(5, 5)
+                        .moveByOffset(5, 5 + yOffsetForCrosstab)
                         .click()
                         .perform();
             }

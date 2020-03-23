@@ -13,7 +13,7 @@ public abstract class MetricQualificationPromptPage extends BasePromptPage {
     }
 
     @Override
-    public void answerPromptCorretly() {
+    public void answerPromptCorrectly() {
         getMetricSelectionInputDropDownElem().click();
 
         WebElement element = getMetricSelectionOptionByIndex(1);

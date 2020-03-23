@@ -5,8 +5,7 @@ import desktop.automation.elementWrappers.AnyInterfaceElement;
 import desktop.automation.elementWrappers.Cell;
 import desktop.automation.elementWrappers.ImageComparisonElem;
 import desktop.automation.elementWrappers.WebDriverElemWrapper;
-import desktop.automation.elementWrappers.mac.enums.FontValue;
-import desktop.automation.exceptions.NotImplementedForDriverWrapperException;
+import desktop.automation.elementWrappers.enums.FontValue;
 import desktop.automation.pages.SUT.MainPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -14,43 +13,48 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import static org.junit.Assert.assertEquals;
+
 public class MainPageWindowsMachine extends MainPage {
     private static final String IMPORT_DATA_BTN_IMAGE_1 = "mainPage/importDataBtn1";
     private static final String IMPORT_DATA_BTN_IMAGE_2 = "mainPage/importDataBtn2";
     private static final String ADD_DATA_BTN_IMAGE_1 = "mainPage/addDataBtn1";
     private static final String ADD_DATA_BTN_IMAGE_2 = "mainPage/addDataBtn2";
-
     private static final String DATA_LOADED_SUCCESSFULLY_IMAGE_1 = "mainPage/dataLoadedSuccessfully1";
     private static final String DATA_LOADED_SUCCESSFULLY_IMAGE_2 = "mainPage/dataLoadedSuccessfully2";
     private static final String REPORT_REFRESHED_IMAGE_1 = "mainPage/reportRefreshed1";
     private static final String REPORT_REFRESHED_IMAGE_2 = "mainPage/reportRefreshed2";
-    private static final String DATASET_REFRESHED_IMAGE = "mainPage/datasetRefreshed";
+    private static final String DATASET_REFRESHED_IMAGE_1 = "mainPage/datasetRefreshed1";
+    private static final String DATASET_REFRESHED_IMAGE_2 = "mainPage/datasetRefreshed2";
     private static final String SESSION_EXPIRED_IMAGE = "mainPage/sessionExpiredNotification";
+    private static final String MORE_ITEMS_MENU_BTN_IMGAGE_1 = "mainPage/moreItemsMenuButton_1";
+    private static final String MORE_ITEMS_MENU_BTN_IMGAGE_2 = "mainPage/moreItemsMenuButton_2";
+    private static final String OFFICE_ADD_IN_LOGO_IMGAGE_1 = "mainPage/OfficeAddInLogoElem_1";
+    private static final String OFFICE_ADD_IN_LOGO_IMGAGE_2 = "mainPage/OfficeAddInLogoElem_2";
 
     private static final String ERROR_OK_BTN_IMAGE = "mainPage/errorOkBtn";
+
+
 
     public MainPageWindowsMachine(WindowsMachine windowsMachine) {
         super(windowsMachine);
     }
-
     @Override
     public AnyInterfaceElement getMoreItemsMenuElem() {
         return getMoreItemsMenuImageComparisonElem();
     }
 
     public ImageComparisonElem getMoreItemsMenuImageComparisonElem() {
-        return new ImageComparisonElem(new String[]{"mainPage/moreItemsMenuButton_1", "mainPage/moreItemsMenuButton_2"},
+        return new ImageComparisonElem(new String[]{MORE_ITEMS_MENU_BTN_IMGAGE_1, MORE_ITEMS_MENU_BTN_IMGAGE_2},
                 1580, -1, 250, 470,
                 20_000);
     }
 
     @Override
     public AnyInterfaceElement getOfficeAddInLogoElem() {
-        return getOfficeAddInLogoImageComparisonElem();
-    }
-
-    public ImageComparisonElem getOfficeAddInLogoImageComparisonElem(){
-        return new ImageComparisonElem(new String[]{"mainPage/OfficeAddInLogoElem_1", "mainPage/OfficeAddInLogoElem_2"}, 1300, 1600, 260, 500, 20_000, 1000);
+        return new ImageComparisonElem(new String[]{OFFICE_ADD_IN_LOGO_IMGAGE_1, OFFICE_ADD_IN_LOGO_IMGAGE_2},
+                1300, 1600, 260, 500,
+                20_000, 1000);
     }
 
     @Override
@@ -81,9 +85,12 @@ public class MainPageWindowsMachine extends MainPage {
         return getCellObj(cell).getValue();
     }
 
-    @Override
     public void assertHeaderPresent(String header) {
         assertHeaderPresentByCellPresence(header);
+    }
+
+    protected void assertHeaderPresentByCellPresence(String header){
+        getHeaderSelector(header);
     }
 
     @Override
@@ -123,12 +130,21 @@ public class MainPageWindowsMachine extends MainPage {
 
     @Override
     public void inputFontValue(FontValue fontValue) {
-        throw new NotImplementedForDriverWrapperException();
+        WebElement fontEditBoxElem = getFontEditBox().getDriverElement();
+        fontEditBoxElem.clear();
+        fontEditBoxElem.sendKeys(fontValue.getInputValue());
+        fontEditBoxElem.sendKeys(Keys.ENTER);
+
     }
 
     @Override
     public void assertExpectedFontValueSelected(FontValue fontValue) {
-        throw new NotImplementedForDriverWrapperException();
+        WebElement fontEditBoxElem = getFontEditBox().getDriverElement();
+        assertEquals(fontEditBoxElem.getText(), fontValue.getInputValue());
+    }
+
+    public WebDriverElemWrapper getFontEditBox(){
+        return machine.waitAndFindElemWrapper(FONT_INPUT_ELEM);
     }
 
     public Cell getCellObj(String cell){
@@ -181,12 +197,12 @@ public class MainPageWindowsMachine extends MainPage {
 
     @Override
     public AnyInterfaceElement getReportRefreshedMessageElem(int secondsToWaitFor){
-        return new ImageComparisonElem(new String[]{REPORT_REFRESHED_IMAGE_1, REPORT_REFRESHED_IMAGE_2}, 1510, 1800, 600, 670,
+        return new ImageComparisonElem(new String[]{REPORT_REFRESHED_IMAGE_1, REPORT_REFRESHED_IMAGE_2}, 1510, 1620, 610, 660,
                 secondsToWaitFor * 1000);
     }
 
     public AnyInterfaceElement getDatasetRefreshedMessageElem(int secondsToWaitFor) {
-        return new ImageComparisonElem(DATASET_REFRESHED_IMAGE, 1510, 1800, 600, 670,
+        return new ImageComparisonElem(new String[]{DATASET_REFRESHED_IMAGE_1, DATASET_REFRESHED_IMAGE_2}, 1510, 1620, 610, 660,
                 secondsToWaitFor * 1000);
     }
 

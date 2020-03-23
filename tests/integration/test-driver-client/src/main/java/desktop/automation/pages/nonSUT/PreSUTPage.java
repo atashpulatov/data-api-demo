@@ -8,8 +8,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
 
-import java.io.IOException;
-
 public abstract class PreSUTPage extends PreSUTPageSelectors {
     protected Machine machine;
 
@@ -54,18 +52,17 @@ public abstract class PreSUTPage extends PreSUTPageSelectors {
         return machine.waitAndFind(ADD_ADD_IN_BTN_ELEM);
     }
 
-    public abstract WebElement getAddInStartElem();
+    public WebElement getAddInStartElem() {
+        machine.focusOnExcelFrameForBrowser();
+        return machine.waitAndFind(ADDIN, machine.isBrowser() ? machine.FOUR_UNITS : machine.ONE_UNIT);
+    }
 
-    public WebDriverElemWrapper getAddInStartElemAndTakeScreenshot() throws IOException {
+    public WebDriverElemWrapper getAddInStartElemAndTakeScreenshot() {
         return machine.takeElementScreenshotWithDetailsAndReturnElem(getAddInStartElem(), ADD_IN_START_IMAGE);
     }
 
     public ImageComparisonElem getAddInStartImageBasedElem(){
         return new ImageComparisonElem(ADD_IN_START_IMAGE, 1650, -1, 50, 200);
-    }
-
-    public void openAddIn(){
-        getAddInStartElem().click();
     }
 
     public RemoteWebElement getFileTabElem(){
@@ -88,22 +85,11 @@ public abstract class PreSUTPage extends PreSUTPageSelectors {
         return machine.waitAndFind(CLOSE_BTN_ELEM);
     }
 
-//    public WebElement getCloseBtnElemAndTakeScreenshot() {
-//        return machine.takeElementScreenshotWithDetailsAndReturnElem(getCloseBtnElem(), CLOSE_BTN_IMAGE,
-////                0, 5, 5, 0
-//                0, 5, 5, 0
-//        );
-//    }
-
-    public ImageComparisonElem getCloseBtnImageBasedElem(){
-        return new ImageComparisonElem(CLOSE_BTN_IMAGE, 1850, -1, 0, 50);
-    }
-
     public RemoteWebElement getDontSaveBtnElem(){
         return machine.waitAndFind(DONT_SAVE_BTN_ELEM);
     }
 
-    public WebDriverElemWrapper getDontSaveBtnElemAndTakeScreenshot() throws IOException {
+    public WebDriverElemWrapper getDontSaveBtnElemAndTakeScreenshot() {
         return machine.takeElementScreenshotWithDetailsAndReturnElem(getDontSaveBtnElem(), DONT_SAVE_BTN_IMAGE);
     }
 
@@ -117,15 +103,11 @@ public abstract class PreSUTPage extends PreSUTPageSelectors {
         return machine.waitAndFind(By.name(name));
     }
 
-//    public WebElement getExcelStartElemAndTakeScreenshot(int runningWindows) {
-//            return machine.takeElementScreenshotWithDetailsAndReturnElem(getExcelStartElem(runningWindows),
-//                    String.format(EXCEL_START_IMAGE_BASE, runningWindows)
-//                    , 0, 0, 0, 5);
-//    }
-
     public ImageComparisonElem getExcelStartImageBasedElem(int runningWindows) {
         return new ImageComparisonElem(String.format(EXCEL_START_IMAGE_BASE, runningWindows), 730, 820, 1000, 1080);
     }
+
+    public abstract WebDriverElemWrapper getSheetTabElemByIndex(int index);
 
     public WebDriverElemWrapper getAddSheetBtnElem(){
         machine.focusOnExcelFrameForBrowser();
@@ -140,16 +122,9 @@ public abstract class PreSUTPage extends PreSUTPageSelectors {
         return machine.waitAndFind(DELETE_SHEET_PROMPT_DELETE_BTN_ELEM);
     }
 
-    public abstract WebDriverElemWrapper getSheetTabElemByIndex(int index);
-
     public RemoteWebElement getExcelWindowElem(){
         return machine.waitAndFind(OPEN_EXCEL_ELEM);
     }
-
-    //Unnecessary
-//    public WebElement getExcelWindowElemAndTakeScreenshot() {
-//        return machine.takeElementScreenshotWithDetailsAndReturnElem(getExcelWindowElem(), "preSUTPage/excelWindowElem");
-//    }
 
     public RemoteWebElement getConnectionElem(){
         return machine.waitAndFind(CONNECTION_ELEM);
@@ -160,5 +135,4 @@ public abstract class PreSUTPage extends PreSUTPageSelectors {
     }
 
     public abstract void openFormatCellsPromptPage();
-
 }

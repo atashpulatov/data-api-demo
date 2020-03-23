@@ -1,9 +1,8 @@
 package desktop.automation.driver.wrappers;
 
+import desktop.automation.driver.wrappers.enums.DriverType;
 import desktop.automation.pages.SUT.DataPreviewPage;
-import desktop.automation.pages.SUT.ImportRefreshProgressPopUp;
 import desktop.automation.pages.SUT.prompts.*;
-import desktop.automation.pages.SUT.refresh.popups.RefreshPromptPage;
 import desktop.automation.pages.driver.implementation.windows.SUT.*;
 import desktop.automation.pages.driver.implementation.windows.SUT.prompts.*;
 import desktop.automation.pages.driver.implementation.windows.SUT.refresh.popups.ImportingDataSingleRefreshPopUpPageWindowsMachine;
@@ -11,17 +10,11 @@ import desktop.automation.pages.driver.implementation.windows.SUT.refresh.popups
 import desktop.automation.pages.driver.implementation.windows.nonSUT.PreSUTPageWindowsMachine;
 import io.appium.java_client.windows.WindowsDriver;
 import junit.framework.AssertionFailedError;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.io.IOException;
 import java.net.URL;
-import java.util.Set;
 
 import static desktop.automation.ConfigVars.SKIP_STANDARD_INITIALIZATION_AND_TEAR_DOWN;
 import static junit.framework.TestCase.assertTrue;
@@ -39,12 +32,10 @@ public class WindowsMachine extends Machine {
         importPromptPage = new ImportPromptPageWindowsMachine(this);
         prepareDataPromptPage = new PrepareDataPromptPageWindowsMachine(this);
         dataPreviewPage = new DataPreviewPage(this);
-        importRefreshProgressPopUp = new ImportRefreshProgressPopUp(this);
         conditionalFormattingPage = new FormattingPageWindowsMachine(this);
         formatCellsPromptPage = new FormatCellsPromptPageWindowsMachine(this);
-        refreshPromptPage = new RefreshPromptPage(this);
         moreItemMenuPage = new MoreItemMenuPageWindowsMachine(this);
-        browserPage = new BrowserPageWindowsMachine(this);
+        moreItemsMenuLinkPage = new MoreItemsMenuLinkPageWindowsMachine(this);
         importingDataSingleRefreshPopUpPage = new ImportingDataSingleRefreshPopUpPageWindowsMachine(this);
         refreshAllPopUpPage = new RefreshAllPopUpPageWindowsMachine(this);
         applicationSelectionPopUpPage = new ApplicationSelectionPopUpPageWindowsMachine(this);
@@ -61,6 +52,8 @@ public class WindowsMachine extends Machine {
         metricQualificationPromptPage = new MetricQualificationPromptPageWindowsMachine(this);
         attributeQualificationPromptPage = new AttributeQualificationPromptPageWindowsMachine(this);
         multiplePrompts = new MultiplePromptsPage(this);
+        importDossierPage = new ImportDossierPageWindowsMachine(this);
+
     }
 
     @Override
@@ -81,10 +74,7 @@ public class WindowsMachine extends Machine {
                 ((WindowsDriver)driver).launchApp();
 
                 if (!SKIP_STANDARD_INITIALIZATION_AND_TEAR_DOWN) {
-                    String expectedAppTitleToContain =
-                            "Desktop 1"
-                            //"Excel"
-                            ;
+                    String expectedAppTitleToContain = "Desktop 1";
                     String assertionMessage = String.format("application tile does not match.\nActual:%s\nExpected:%s\n", driver.getTitle(), expectedAppTitleToContain);
                     assertTrue(assertionMessage, driver.getTitle().contains(expectedAppTitleToContain));
 
@@ -97,51 +87,6 @@ public class WindowsMachine extends Machine {
         }
     }
 
-    public WebElement waitAndFindAndGetScreenshot(By selector, WebDriverWait wait, String screeshotName) throws IOException {
-        //time measuremnt was initially set for debugging purposes, but decided to leave it
-        long start = System.currentTimeMillis();
-
-        WebElement res = wait.until(ExpectedConditions.visibilityOfElementLocated(selector));
-
-        long diff = System.currentTimeMillis() - start;
-        System.out.println(diff / 1000 + "," + diff % 1000);
-
-        //screenshot phase
-        takeElementScreenshotWithDetails(res, screeshotName);
-
-        return res;
-    }
-
-    public RemoteWebElement waitAndClick(By selector) {
-        return waitAndClick(selector, ONE_UNIT);
-    }
-
-    public RemoteWebElement waitAndClick(By selector, WebDriverWait wait){
-        RemoteWebElement element = waitAndFind(selector, wait);
-        element.click();
-        return element;
-    }
-
-    public RemoteWebElement waitAndChangeWindowHandle(By selector) {
-        Set<String> handles = driver.getWindowHandles();
-
-        for (String handle : handles) {
-            try {
-                System.out.println("trying handle: " + handle);
-                driver.switchTo().window(handle);
-                return waitAndFind(selector);
-            } catch (Exception e){
-                System.out.println("failed to find with current window handle");
-                e.printStackTrace();
-            }
-        }
-
-        return waitAndFind(selector);
-    }
-
-    public ImportRefreshProgressPopUp getImportRefreshProgressPopUp() {
-        return importRefreshProgressPopUp;
-    }
 
     public boolean isButtonEnabled(WebElement button) {
         String res = button.getAttribute("IsEnabled").trim();

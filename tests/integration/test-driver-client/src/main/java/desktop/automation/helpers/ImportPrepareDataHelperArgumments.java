@@ -1,7 +1,7 @@
 package desktop.automation.helpers;
 
 import desktop.automation.driver.wrappers.Machine;
-import desktop.automation.elementWrappers.windows.ImportObject;
+import desktop.automation.elementWrappers.driver.implementations.ImportObject;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -23,13 +23,14 @@ public class ImportPrepareDataHelperArgumments {
     private FilterAndValues[] filtersAndValuesToChoose;
 
     private boolean isEditFlow;
+    private int importRefreshFlowTimeOut;
 
     public static final String DEFAULT_DATASET = "5k Sales Records.csv";
     public static final String DEFAULT_LARGE_DATASET = "100k Sales Records.csv";
     public static final String DEFAULT_REPORT = "1k report";
     public static final String DEFAULT_LARGE_REPORT = "report 100k rows";
 
-    public ImportPrepareDataHelperArgumments(ImportObject importObject, Machine machine, String cell, int sheetIndex, Boolean isFirstImport, boolean isDataset, boolean isMyLibrarySwitchOn, String objectName, int[] attributesToChoose, int[] metricsToChoose, FilterAndValues[] filtersAndValuesToChoose, boolean isEditFlow) {
+    public ImportPrepareDataHelperArgumments(ImportObject importObject, Machine machine, String cell, int sheetIndex, Boolean isFirstImport, boolean isDataset, boolean isMyLibrarySwitchOn, String objectName, int[] attributesToChoose, int[] metricsToChoose, FilterAndValues[] filtersAndValuesToChoose, boolean isEditFlow, int importRefreshFlowTimeOut) {
         this.importObject = importObject;
         this.machine = machine;
         this.cell = cell;
@@ -42,6 +43,7 @@ public class ImportPrepareDataHelperArgumments {
         this.metricsToChoose = metricsToChoose;
         this.filtersAndValuesToChoose = filtersAndValuesToChoose;
         this.isEditFlow = isEditFlow;
+        this.importRefreshFlowTimeOut = importRefreshFlowTimeOut;
     }
 
     public Machine getMachine() {
@@ -100,6 +102,10 @@ public class ImportPrepareDataHelperArgumments {
         return isEditFlow;
     }
 
+    public int getImportRefreshFlowTimeOut() {
+        return importRefreshFlowTimeOut;
+    }
+
     public ImportObject getImportObject() {
         return importObject;
     }
@@ -152,6 +158,7 @@ public class ImportPrepareDataHelperArgumments {
         private FilterAndValues[] filtersAndValuesToChoose = null;
 
         private boolean isEditFlow = false;
+        private int importRefreshFlowTimeOut = 40;
 
         public Builder(Machine machine) {
             this.machine = machine;
@@ -225,6 +232,12 @@ public class ImportPrepareDataHelperArgumments {
             return this;
         }
 
+        public Builder withImportRefreshFlowTimeOut(int importRefreshFlowTimeOut){
+            this.importRefreshFlowTimeOut = importRefreshFlowTimeOut;
+
+            return this;
+        }
+
         public Builder withImportObject(ImportObject importObject) {
             this.importObject = importObject;
             //import object has it's own name and isDataset defined, should not be overwritten later with withObjectName and isDataset methods
@@ -235,7 +248,7 @@ public class ImportPrepareDataHelperArgumments {
         }
 
         public ImportPrepareDataHelperArgumments build(){
-            return new ImportPrepareDataHelperArgumments(importObject, machine, cell, sheetIndex, isFirstImport, isDataset, isMyLibrarySwitchOn, objectName, attributesToChoose, metricsToChoose, filtersAndValuesToChoose, isEditFlow);
+            return new ImportPrepareDataHelperArgumments(importObject, machine, cell, sheetIndex, isFirstImport, isDataset, isMyLibrarySwitchOn, objectName, attributesToChoose, metricsToChoose, filtersAndValuesToChoose, isEditFlow, importRefreshFlowTimeOut);
         }
     }
 }

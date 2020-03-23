@@ -8,21 +8,15 @@ import desktop.automation.exceptions.NotImplementedForDriverWrapperException;
 import desktop.automation.pages.SUT.refresh.popups.ImportingDataSingleRefreshPopUpPage;
 
 public class ImportingDataSingleRefreshPopUpPageWindowsMachine extends ImportingDataSingleRefreshPopUpPage {
-    private static final String IMPORTING_DATA_TITLE = "importingDataSingleRefreshPopUpPage/importingDataTitle";
+    private static final String IMPORTING_DATA_TITLE_IMAGE = "importingDataSingleRefreshPopUpPage/importingDataTitle";
 
     public ImportingDataSingleRefreshPopUpPageWindowsMachine(WindowsMachine machine) {
         super(machine);
     }
 
     public AnyInterfaceElement getImportingDataTitleElem(double secondsToWaitFor){
-        return new ImageComparisonElem(IMPORTING_DATA_TITLE, 850, 1100, 450, 530,
+        return new ImageComparisonElem(IMPORTING_DATA_TITLE_IMAGE, 850, 1100, 450, 530,
                 (int)(secondsToWaitFor * 1000));
-    }
-
-    public AnyInterfaceElement findImportingDataTitleElem(){
-        ImageComparisonElem res = ImageComparisonElem.getImageComparisonElemWithoutElementSearch(IMPORTING_DATA_TITLE);
-        res.find( 850, 1100, 450, 530);
-        return res;
     }
 
     private void assertImportTitleElemPresence(){
@@ -49,13 +43,11 @@ public class ImportingDataSingleRefreshPopUpPageWindowsMachine extends Importing
 
     @Override
     public void assertRefreshSingleFlow(boolean isDataset, int secondsToWait) {
-//        assertImportTitleElemPresence();
         if (isDataset)
             machine.getMainPage().getDatasetRefreshedMessageElem(secondsToWait);
         else
             machine.getMainPage().getReportRefreshedMessageElem(secondsToWait);
 
-        //the retrieval of imported objects often fails due to too quick pull of elems from server, alternatively can extend the driver wait
         try {
             Thread.sleep(5_000);
         } catch (InterruptedException e) {

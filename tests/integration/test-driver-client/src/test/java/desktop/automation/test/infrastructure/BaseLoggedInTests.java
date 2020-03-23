@@ -1,7 +1,7 @@
 package desktop.automation.test.infrastructure;
 
 import desktop.automation.driver.wrappers.Browser;
-import desktop.automation.driver.wrappers.DriverType;
+import desktop.automation.driver.wrappers.enums.DriverType;
 
 import java.io.IOException;
 
@@ -15,29 +15,24 @@ public abstract class BaseLoggedInTests extends BaseCommonTests {
         getToSUTAndLogIn();
     }
 
-
     public static void getToSUTAndLogIn() throws IOException {
         getToSUT();
 
         if (DESIRED_DRIVER_TYPE.equals(DriverType.BROWSER))
-            ((Browser)machine).focusOnAddInFrameForBrowser();
+            machine.focusOnAddInFrameForBrowser();
 
         if (!DESIRED_DRIVER_TYPE.equals(DriverType.BROWSER) || ((Browser)machine).isUserLoggedOut()) {
             machine.getLoginPage().getStartLoginBtnElem().click();
 
             if (DESIRED_DRIVER_TYPE.equals(DriverType.BROWSER))
-                ((Browser) machine).switchToLoginPopUpElem();
+                browser.switchToLoginPopUpWindow();
 
             String usernameStr = EXCEL_ADD_IN_TEST_USER_NAME;
             String passwordStr = EXCEL_ADD_IN_TEST_USER_PASS;
-            (machine.isWindowsMachine() ?
-                    machine.getLoginPage().getUsernameInputImageBasedElem() :
-                    machine.getLoginPage().getUserNameInputElem())
-                    .sendKeys(usernameStr);
+            machine.getLoginPage().getUserNameInputElem().sendKeys(usernameStr);
 
             if (EXCEL_ADD_IN_TEST_USER_PASS != null && EXCEL_ADD_IN_TEST_USER_PASS.length() > 0)
-            machine.getLoginPage().getPasswordInputElem()
-                    .sendKeys(passwordStr);
+                machine.getLoginPage().getPasswordInputElem().sendKeys(passwordStr);
 
             machine.getLoginPage().getLoginBtnElem().click();
 

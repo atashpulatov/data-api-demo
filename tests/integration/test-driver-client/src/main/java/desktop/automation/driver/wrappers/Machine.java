@@ -1,5 +1,7 @@
 package desktop.automation.driver.wrappers;
 
+import desktop.automation.driver.wrappers.enums.DriverType;
+import desktop.automation.driver.wrappers.enums.OS;
 import desktop.automation.elementWrappers.AnyInterfaceElement;
 import desktop.automation.elementWrappers.ImageComparisonElem;
 import desktop.automation.elementWrappers.ImportedObjectInList;
@@ -10,11 +12,10 @@ import desktop.automation.pages.SUT.*;
 import desktop.automation.pages.SUT.prompts.*;
 import desktop.automation.pages.SUT.refresh.popups.ImportingDataSingleRefreshPopUpPage;
 import desktop.automation.pages.SUT.refresh.popups.RefreshAllPopUpPage;
-import desktop.automation.pages.SUT.refresh.popups.RefreshPromptPage;
 import desktop.automation.pages.driver.implementation.browser.nonSUT.PreSUTPageBrowser;
 import desktop.automation.pages.driver.implementation.mac.SUT.PrepareDataPromptPageMacMachine;
 import desktop.automation.pages.driver.implementation.windows.SUT.PrepareDataPromptPageWindowsMachine;
-import desktop.automation.pages.nonSUT.BrowserPage;
+import desktop.automation.pages.nonSUT.MoreItemsMenuLinkPage;
 import desktop.automation.pages.nonSUT.PreSUTPage;
 import org.apache.commons.io.FileUtils;
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
@@ -36,7 +37,6 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -49,6 +49,8 @@ public abstract class Machine {
     public WebDriver driver;
     public Actions actions;
     public static BrowserFocusedFrame browserFocusedFrame = null;
+
+    private static final By CHILDREN_ELEMS = By.xpath(".//*");
 
     private static final String rootImageFolder = "src/test/resources/images/";
     private static String currentDriverRootImageFolder;
@@ -65,12 +67,10 @@ public abstract class Machine {
     PreSUTPage preSUTPage;
     LoginPage loginPage;
     MainPage mainPage;
-    ImportRefreshProgressPopUp importRefreshProgressPopUp;
     MoreItemMenuPage moreItemMenuPage;
-    BrowserPage browserPage;
+    MoreItemsMenuLinkPage moreItemsMenuLinkPage;
     FormattingPage conditionalFormattingPage;
     FormatCellsPromptPage formatCellsPromptPage;
-    RefreshPromptPage refreshPromptPage;
     ImportPromptPage importPromptPage;
     ImportDossierPage importDossierPage;
     PrepareDataPromptPage prepareDataPromptPage;
@@ -108,7 +108,7 @@ public abstract class Machine {
         TWELVE_UNITS = new WebDriverWait(driver, unitIntValue * 12);
 
         if (!SKIP_STANDARD_INITIALIZATION_AND_TEAR_DOWN && DESIRED_DRIVER_TYPE.equals(DriverType.BROWSER))
-            ((PreSUTPageBrowser)preSUTPage).getToExcelInitialPage("testing.universal@mstrtesting.onmicrosoft.com", "somePassword1");
+            ((PreSUTPageBrowser)preSUTPage).getToExcelInitialPage(EXCEL_USER_NAME, EXCEL_USER_PASS);
     }
 
     private void initCurrentDriverRootImageFolder(DriverType driverType){
@@ -162,17 +162,12 @@ public abstract class Machine {
     }
 
     public RemoteWebElement waitAndFind(By selector, WebDriverWait wait){
-        //time measuremnt was initially set for debugging purposes, but decided to leave it
+        //time measurement was initially set for debugging purposes, but decided to leave it
         long start = System.currentTimeMillis();
 
-        RemoteWebElement res;
-        try {
-            res = (RemoteWebElement) wait.until(ExpectedConditions.visibilityOfElementLocated(selector));
-        } catch (org.openqa.selenium.WebDriverException e){
-            res = (RemoteWebElement) wait.until(ExpectedConditions.visibilityOfElementLocated(selector));
-        }
+        RemoteWebElement res = (RemoteWebElement) wait.until(ExpectedConditions.visibilityOfElementLocated(selector));
         long diff = System.currentTimeMillis() - start;
-        System.out.println(diff / 1000 + "," + diff % 1000);
+        System.out.println(diff / 1000 + String.format(",%3d", diff % 1000).replace(' ', '0'));
 
         return res;
     }
@@ -210,15 +205,13 @@ public abstract class Machine {
         try {
             WebElement elem = driver.findElement(selector);
 
-            if (!driverType.equals(DriverType.BROWSER) || elem.isDisplayed())
+            if (!isBrowser() || elem.isDisplayed())
                 throw getElementPresentException(selector, elem);
         } catch (org.openqa.selenium.NoSuchElementException ignored){ }
     }
 
     public List<WebElement> getChildren(RemoteWebElement parent){
-        return parent.findElements(
-                By.xpath(".//*")
-        );
+        return parent.findElements(CHILDREN_ELEMS);
     }
 
     public List<WebDriverElemWrapper> getChildrenElemWrapper(RemoteWebElement parent){
@@ -231,15 +224,15 @@ public abstract class Machine {
         return res;
     }
 
-    public List<WebElement> printChildren(RemoteWebElement parent) {
+    public void printChildren(RemoteWebElement parent) {
         List<WebElement> res = getChildren(parent);
-        return printChildren(res);
+        printChildren(res);
     }
 
     public List<WebElement> printChildren(List<WebElement> children) {
         int i = 0;
         for (WebElement child : children) {
-            System.out.println(i++);
+            System.out.println("child: " + i++);
             System.out.println("text: " + child.getText());
             System.out.println("tag name: " + child.getTagName());
             System.out.println("location: " + child.getLocation());
@@ -266,8 +259,9 @@ public abstract class Machine {
         List<WebElement> res = new LinkedList<>();
         for (int i = start; i < end; i++){
             try {
-                WebElement tmp = waitAndFind(By.xpath(String.format(base, i)), ONE_UNIT);
-                res.add(tmp);
+                String selector = String.format(base, i);
+                WebElement resEntry = waitAndFind(By.xpath(selector), ONE_UNIT);
+                res.add(resEntry);
             } catch (Exception ignored) {}
         }
 
@@ -279,9 +273,13 @@ public abstract class Machine {
 
         try {
             int i = 0;
+            String selector = String.format(base, i++);
+            WebElement tmp = waitAndFind(By.xpath(selector), ONE_UNIT);
+            res.add(tmp);
+
             while (true) {
-                String selector = String.format(base, i++);
-                WebElement tmp = waitAndFind(By.xpath(selector), ONE_UNIT);
+                selector = String.format(base, i++);
+                tmp = waitAndFind(By.xpath(selector), QUARTER_UNIT);
                 res.add(tmp);
             }
         } catch (Exception ignored) {}
@@ -394,16 +392,12 @@ public abstract class Machine {
         return formatCellsPromptPage;
     }
 
-    public RefreshPromptPage getRefreshPromptPage() {
-        return refreshPromptPage;
-    }
-
     public MoreItemMenuPage getMoreItemMenuPage() {
         return moreItemMenuPage;
     }
 
-    public BrowserPage getBrowserPage() {
-        return browserPage;
+    public MoreItemsMenuLinkPage getMoreItemsMenuLinkPage() {
+        return moreItemsMenuLinkPage;
     }
 
     public DriverType getDriverType() {
@@ -463,7 +457,7 @@ public abstract class Machine {
         Point loc = element.getLocation();
         Dimension size = element.getSize();
 
-        Mat res = null;
+        Mat res;
         try {
             res = CompareImages.getSubMat(Imgcodecs.imread(takeScreenshot(fileName)),
                     loc.getX() + diffLeft,
@@ -507,18 +501,6 @@ public abstract class Machine {
         return new WebDriverElemWrapper(element);
     }
 
-    public AnyInterfaceElement getElemByScreenshotFallbackToWebDriver(By selector, String fileName, int startX, int endX, int startY, int endY) throws IOException {
-        try {
-            return new ImageComparisonElem(fileName, startX, endX, startY, endY);
-        } catch (ImageBasedElemNotFound | IllegalArgumentException e) {
-            WebDriverElemWrapper res = waitAndFindElemWrapper(selector);
-
-            takeElementScreenshotWithDetails(res.getDriverElement(), fileName);
-
-            return res;
-        }
-    }
-
     public void clickObject(WebElement root){
         actions.moveToElement(root)
                 .click()
@@ -535,7 +517,7 @@ public abstract class Machine {
         return unitIntValue;
     }
 
-    public String getStringClipBoardContent() throws IOException, UnsupportedFlavorException {
+    public String getStringClipboardContent() throws IOException, UnsupportedFlavorException {
         return (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
     }
 
@@ -548,16 +530,6 @@ public abstract class Machine {
         return res;
     }
 
-    public void switchToWorkBookWindowForBrowser(){
-        if (driverType.equals(DriverType.BROWSER))
-            ((Browser)this).switchToExcelWorkbookWindow();
-    }
-
-    public void switchToLoginPopUpWindowForBrowser(){
-        if (driverType.equals(DriverType.BROWSER))
-            ((Browser)this).switchToLoginPopUpElem();
-    }
-
     public void focusOnExcelFrameForBrowser(){
         if (driverType.equals(DriverType.BROWSER) && (browserFocusedFrame == null || !browserFocusedFrame.equals(BrowserFocusedFrame.EXCEL))) {
             ((Browser) this).focusOnExcelFrame();
@@ -566,14 +538,14 @@ public abstract class Machine {
     }
 
     public void focusOnAddInFrameForBrowser(){
-        if (driverType.equals(DriverType.BROWSER) && (browserFocusedFrame == null || !browserFocusedFrame.equals(BrowserFocusedFrame.ADD_IN))) {
+        if (isBrowser() && (browserFocusedFrame == null || !browserFocusedFrame.equals(BrowserFocusedFrame.ADD_IN))) {
             ((Browser) this).focusOnAddInFrame();
             browserFocusedFrame = BrowserFocusedFrame.ADD_IN;
         }
     }
 
     public void focusOnImportDataPopUpFrameForBrowser(){
-        if (driverType.equals(DriverType.BROWSER)&& (browserFocusedFrame == null || !browserFocusedFrame.equals(BrowserFocusedFrame.IMPORT_DATA_POPUP))) {
+        if (isBrowser() && (browserFocusedFrame == null || !browserFocusedFrame.equals(BrowserFocusedFrame.IMPORT_DATA_POPUP))) {
             ((Browser) this).focusOnImportDataPopUpFrame();
             browserFocusedFrame = BrowserFocusedFrame.IMPORT_DATA_POPUP;
         }
@@ -587,7 +559,7 @@ public abstract class Machine {
     }
 
     public void focusOnPromptPopUpFrameForBrowser(){
-        if (driverType.equals(DriverType.BROWSER)&& (browserFocusedFrame == null || !browserFocusedFrame.equals(BrowserFocusedFrame.PROMPT_POPUP))) {
+        if (isBrowser() && (browserFocusedFrame == null || !browserFocusedFrame.equals(BrowserFocusedFrame.PROMPT_POPUP))) {
             ((Browser) this).focusOnPromptPopupFrame();
             browserFocusedFrame = BrowserFocusedFrame.PROMPT_POPUP;
         }
@@ -611,11 +583,8 @@ public abstract class Machine {
 
     public void waitForAddInFrameReadyForBrowser(WebDriverWait wait){
         if (isBrowser()) {
-            long start = System.currentTimeMillis();
-            ExpectedCondition<Boolean> addInFrameReadyCondition = ((Browser) this).addInFrameReady();
+            ExpectedCondition<Boolean> addInFrameReadyCondition = ((Browser)this).addInFrameReady();
             wait.until(addInFrameReadyCondition);
-
-            System.out.println("waited for add in ready " + (System.currentTimeMillis() - start));
         }
     }
 
@@ -633,7 +602,7 @@ public abstract class Machine {
             @NullableDecl
             @Override
             public WebElement apply(@NullableDecl WebDriver webDriver) {
-                return parent.findElement(childSelector);
+                return parent.findElements(childSelector).get(0);
             }
         };
     }

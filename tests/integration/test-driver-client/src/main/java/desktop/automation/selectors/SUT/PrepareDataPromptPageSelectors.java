@@ -9,6 +9,8 @@ import static desktop.automation.ConfigVars.DESIRED_DRIVER_TYPE;
 public class PrepareDataPromptPageSelectors {
     //Shared
     protected static final By FILTER_EXCLUDES_ALL_DATA_ERROR_MESSAGE;
+    protected static final By DISPLAY_ATTRIBUTE_FORM_NAMES_LINK_ELEM;
+    protected static final By CROSSTAB_NOTIFICATION;
 
     //Windows
     protected static final By PANE;
@@ -75,8 +77,10 @@ public class PrepareDataPromptPageSelectors {
     static {
         switch (DESIRED_DRIVER_TYPE){
             case BROWSER:
+                CROSSTAB_NOTIFICATION = null;
                 PANE = null;
                 COLUMNS_AND_FILTERS_SELECTION_TITLE_ELEM = null;
+                DISPLAY_ATTRIBUTE_FORM_NAMES_LINK_ELEM = null;
                 ATTRIBUTE_METRIC_GRIDS = null;
                 ALL_CHECKBOX_ELEMS = null;
                 FILTER_TREE_ELEM = null;
@@ -137,7 +141,7 @@ public class PrepareDataPromptPageSelectors {
                 FILTER_VALUE_PANE = null;
                 break;
             case MAC_DESKTOP:
-                TITLE_BASE = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[0]/AXStaticText[@AXValue='%s > %s']";
+                CROSSTAB_NOTIFICATION = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[0]/AXStaticText[@AXValue='To preserve this crosstab report, select all objects without changing their forms.']");                TITLE_BASE = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[0]/AXStaticText[@AXValue='%s > %s']";
                 TITLE_START_REPORT = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[0]/AXStaticText[@AXValue='Import Report > ']");
                 TITLE_START_DATASET = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[0]/AXStaticText[@AXValue='Import Dataset > ']");
                 TITLE_NAME_BASE = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[0]/AXStaticText[@AXValue='%s']";
@@ -185,12 +189,13 @@ public class PrepareDataPromptPageSelectors {
                 BACK_BTN_ELEM = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[13]/AXButton[@AXTitle='Back' and @AXDOMIdentifier='back']");
 
                 //Windows
-                PANE = By.xpath("TODO");
+                PANE = null;
                 COLUMNS_AND_FILTERS_SELECTION_TITLE_ELEM = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[1]/AXStaticText[@AXValue='Columns & Filters Selection']");
-                ATTRIBUTE_METRIC_GRIDS = By.xpath("TODO");
-                ALL_CHECKBOX_ELEMS = By.xpath("TODO");
-                FILTER_TREE_ELEM = By.xpath("TODO");
-                COLUMN_ELEM_CHECKBOX = By.xpath("TODO");
+                DISPLAY_ATTRIBUTE_FORM_NAMES_LINK_ELEM = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup/AXLink[@AXTitle='Display attribute form names' and @AXDOMIdentifier='form_names_label']/AXStaticText[@AXValue='Display attribute form names']");
+                ATTRIBUTE_METRIC_GRIDS = null;
+                ALL_CHECKBOX_ELEMS = null;
+                FILTER_TREE_ELEM = null;
+                COLUMN_ELEM_CHECKBOX = null;
                 VIEW_SELECTED_BTN_ELEM = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup/AXGroup[1]/AXCheckBox[@AXDOMIdentifier='view-selected-switch' and @AXSubrole='AXSwitch']");
                 DATA_PREVIEW_BTN_ELEM = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[12]/AXButton[@AXTitle='Data Preview' and @AXDOMIdentifier='data-preview']");
                 CANCEL_BTN_ELEM = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole='AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[13]/AXButton[@AXTitle='Cancel' and @AXDOMIdentifier='cancel']");
@@ -200,8 +205,10 @@ public class PrepareDataPromptPageSelectors {
                 IMPORT_BTN_IMAGE = "TODO";
                 break;
             case WINDOWS_DESKTOP:
+                CROSSTAB_NOTIFICATION = By.xpath("//Text[@Name='To preserve this crosstab report, select all objects without changing their forms.']");
                 PANE = By.name("MicroStrategy for Office");
                 COLUMNS_AND_FILTERS_SELECTION_TITLE_ELEM = By.name("Columns & Filters Selection");
+                DISPLAY_ATTRIBUTE_FORM_NAMES_LINK_ELEM = null;
                 ATTRIBUTE_METRIC_GRIDS = By.name("grid");
                 ALL_CHECKBOX_ELEMS = By.name("(All)");
                 FILTER_TREE_ELEM = By.tagName("Tree");

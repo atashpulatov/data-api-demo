@@ -1,6 +1,6 @@
 package desktop.automation.elementWrappers;
 
-import desktop.automation.selectors.helper.DossierChapterAndPagesSelectors;
+import desktop.automation.selectors.helpers.DossierChapterAndPagesSelectors;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;

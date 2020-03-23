@@ -20,10 +20,11 @@ public class ImportPrepareDataHelper {
             default:
                 throw new NotImplementedForDriverWrapperException();
         }
-        handleImportProcess(argumments);
+        handleImportRefreshProcess(argumments);
     }
 
     public static void importWithPrepareDataSimple(ImportPrepareDataHelperArgumments argumments) {
+        argumments.getMachine().getPrepareDataPromptPage().setDataset(argumments.isDataset());
         switch (DESIRED_DRIVER_TYPE) {
             case BROWSER:
                 ImportPrepareDataHelperBrowser.importWithPrepareDataSimple(argumments);
@@ -37,10 +38,11 @@ public class ImportPrepareDataHelper {
             default:
                 throw new NotImplementedForDriverWrapperException();
         }
-        handleImportProcess(argumments);
+        handleImportRefreshProcess(argumments);
     }
 
     public static void prepareDataWithoutImportingSimple(ImportPrepareDataHelperArgumments argumments) {
+        argumments.getMachine().getPrepareDataPromptPage().setDataset(argumments.isDataset());
         switch (DESIRED_DRIVER_TYPE) {
             case BROWSER:
                 ImportPrepareDataHelperBrowser.prepareDataWithoutImportingSimple(argumments);
@@ -57,6 +59,7 @@ public class ImportPrepareDataHelper {
     }
 
     public static void prepareDataSimple(ImportPrepareDataHelperArgumments argumments) {
+        argumments.getMachine().getPrepareDataPromptPage().setDataset(argumments.isDataset());
         switch (DESIRED_DRIVER_TYPE) {
             case BROWSER:
                 ImportPrepareDataHelperBrowser.prepareDataSimple(argumments);
@@ -70,7 +73,7 @@ public class ImportPrepareDataHelper {
             default:
                 throw new NotImplementedForDriverWrapperException();
         }
-        handleImportProcess(argumments);
+        handleImportRefreshProcess(argumments);
     }
 
     public static void importWithPrepareDataElaborate(ImportPrepareDataHelperArgumments argumments) {
@@ -87,7 +90,7 @@ public class ImportPrepareDataHelper {
             default:
                 throw new NotImplementedForDriverWrapperException();
         }
-        handleImportProcess(argumments);
+        handleImportRefreshProcess(argumments);
     }
 
     public static void prepareDataElaborate(ImportPrepareDataHelperArgumments argumments) {
@@ -104,7 +107,7 @@ public class ImportPrepareDataHelper {
             default:
                 throw new NotImplementedForDriverWrapperException();
         }
-        handleImportProcess(argumments);
+        handleImportRefreshProcess(argumments);
     }
 
     public static void selectObjectToImportSimple(ImportPrepareDataHelperArgumments argumments) {
@@ -143,10 +146,10 @@ public class ImportPrepareDataHelper {
         ImportPrepareDataHelperWindowsMachine.initPrepareDataSimpleIndexAndImageBased(machine);
     }
 
-    private static void handleImportProcess(ImportPrepareDataHelperArgumments argumments) {
+    private static void handleImportRefreshProcess(ImportPrepareDataHelperArgumments argumments) {
         if (argumments.isEditFlow())
-            argumments.getMachine().getImportingDataSingleRefreshPopUpPage().assertRefreshSingleFlow(argumments.isDataset(), 40);
+            argumments.getMachine().getImportingDataSingleRefreshPopUpPage().assertRefreshSingleFlow(argumments.isDataset(), argumments.getImportRefreshFlowTimeOut());
         else
-            argumments.getMachine().getImportingDataSingleRefreshPopUpPage().assertImportSingleFlow(40);
+            argumments.getMachine().getImportingDataSingleRefreshPopUpPage().assertImportSingleFlow(argumments.getImportRefreshFlowTimeOut());
     }
 }

@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static desktop.automation.ConfigVars.EXCEL_ADD_IN_TEST_USER_INITIALS;
+import static desktop.automation.ConfigVars.EXCEL_ADD_IN_TEST_USER_NAME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -47,9 +49,9 @@ public abstract class MoreItemMenuPage extends MoreItemsMenuPageSelectors {
         return machine.waitAndFind(TERMS_OF_USE_BTN_ELEM);
     }
 
-//    public WebElement getHelpBtnElem() {
-//        return machine.waitAndFind(HELP_BTN_ELEM);
-//    }
+    public WebElement getHelpBtnElem() {
+        return machine.waitAndFind(HELP_BTN_ELEM);
+    }
 
     public WebElement getContacUsBtnElem() {
         return machine.waitAndFind(CONTACT_US_BTN_ELEM);
@@ -71,10 +73,6 @@ public abstract class MoreItemMenuPage extends MoreItemsMenuPageSelectors {
     public WebElement getVersionNumberElem() {
         return machine.waitAndFind(VERSION_ELEM);
     }
-
-    //    public WebElement getClearDataIconElem(){
-//        return machine.waitAndFind(CLEAR_DATA_ICON);
-//    }
 
     public void assertClearDataTitleIsCorrect(){
         String expected = "Are you sure you want to Clear Data?";
@@ -148,8 +146,8 @@ public abstract class MoreItemMenuPage extends MoreItemsMenuPageSelectors {
     }
 
     public void assertMenuLoadedCorrectly(){
-        assertEquals("CU", getUserInitialElem().getText());
-        assertEquals("Copy of MSTR User", getUserNameTextElem().getText());
+        assertEquals(EXCEL_ADD_IN_TEST_USER_INITIALS, getUserInitialElem().getText());
+        assertEquals(EXCEL_ADD_IN_TEST_USER_NAME, getUserNameTextElem().getText());
 
         getClearDataBtnElem();
         getPrivacyPolicyBtnElem();
@@ -158,10 +156,6 @@ public abstract class MoreItemMenuPage extends MoreItemsMenuPageSelectors {
         getContacUsBtnElem();
         getLogOutBtnElem();
         assertVersionIsOfCorrectForm();
-    }
-
-    public WebElement getHelpBtnElem() {
-        return machine.waitAndFind(HELP_BTN_ELEM);
     }
 
     public void assertVersionIsOfCorrectForm(){

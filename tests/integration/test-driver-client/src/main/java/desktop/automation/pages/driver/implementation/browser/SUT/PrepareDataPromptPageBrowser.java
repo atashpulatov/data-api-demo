@@ -11,55 +11,67 @@ import java.util.List;
 import static junit.framework.TestCase.assertEquals;
 
 public class PrepareDataPromptPageBrowser extends PrepareDataPromptPage {
-    private static final By ATTRIBUTE_CHECKBOX_ELEM = By.xpath("//*[@id='Attribute']/ancestor::div[@class='attribute-forms']//li");
+    private static final By ATTRIBUTE_CHECKBOX_ELEM_DATASET = By.xpath("//*[@id='Attribute']/ancestor::label/input");
+    private static final By ATTRIBUTE_CHECKBOX_ELEM_REPORT = By.xpath("//*[@id='Attribute']/ancestor::div[@class='attribute-forms']//li");
     private static final By METRIC_CHECKBOX_ELEM = By.xpath("//span[text()='Metrics']/../..//input");
     private static final By FILTER_LIST_ELEM = By.xpath("//div[text()='Filters']/..//li");
     private static final By FILTER_VALUE_CHECKBOX_ELEM = By.xpath("//div[@class='selector-title']/div/../..//input");
+    private static final By TITLE_ROOT_ELEM = By.cssSelector("#root .folder-browser-title");
+    private static final By TITLE_ELEMS = By.cssSelector("#root .folder-browser-title > span");
+    private static final By ATTRIBUTE_ALL_CHECKBOX_ELEM_REPORT = By.xpath("//input[@name='All']/..");
 
     public PrepareDataPromptPageBrowser(Browser browser) {
         super(browser);
     }
 
     @Override
-    public void assertPrepareDataPromptTitlePresent(boolean isDataset, String objectName) {
+    public void assertPrepareDataPromptTitlePresent(boolean isDataset, String expectedObjectName) {
         List<WebElement> titleElems = getTitleElems();
+
         String actualTitleStart = titleElems.get(0).getText();
         assertEquals(isDataset ? "Import Dataset >" : "Import Report >", actualTitleStart);
-        assertEquals(objectName, titleElems.get(1).getText());
+
+        String actualObjectName = titleElems.get(1).getText();
+        assertEquals(expectedObjectName, actualObjectName);
     }
 
     public List<WebElement> getTitleElems(){
-        By TITLE_ROOT_ELEM = By.cssSelector("#root .folder-browser-title");
-        By TITLE_ELEMS = By.cssSelector("#root .folder-browser-title > span");
-
         machine.waitAndFind(TITLE_ROOT_ELEM);
         return machine.driver.findElements(TITLE_ELEMS);
     }
 
     @Override
     public WebDriverElemWrapper[] getAttributes(int[] attributes) {
-        List<WebElement> allAttributeCheckBoxElems = getAllAttributeCheckBoxElems();
+        List<WebElement> allCheckBoxElems = isDataset ? getAllAttributeCheckBoxElemsDataset() : getAttributesReport();
 
-        WebDriverElemWrapper attributeAllCheckboxElem = getAttributeAllCheckboxElem();
         WebDriverElemWrapper[] res = new WebDriverElemWrapper[attributes.length];
         for (int i = 0; i < attributes.length; i++) {
-            int attribute = attributes[i];
-            if (attribute == -1)
-                res[i] = attributeAllCheckboxElem;
-            else
-                res[i] = new WebDriverElemWrapper(allAttributeCheckBoxElems.get(attribute));
+            int attribute = attributes[i] + 1;
+            res[i] = new WebDriverElemWrapper(allCheckBoxElems.get(attribute));
         }
 
         return res;
     }
 
-    public WebDriverElemWrapper getAttributeAllCheckboxElem(){
-        return machine.waitAndFindElemWrapper(By.xpath("//input[@name='All']/.."));
+    private List<WebElement> getAttributesReport() {
+        List<WebElement> allAttributeCheckBoxElems = getAttributeElemCheckBoxElemsReport();
+        allAttributeCheckBoxElems.add(0, getAttributeAllCheckboxElemReport().getDriverElement());
+
+        return allAttributeCheckBoxElems;
     }
 
-    public List<WebElement> getAllAttributeCheckBoxElems(){
-        machine.waitAndFind(ATTRIBUTE_CHECKBOX_ELEM);
-        return machine.driver.findElements(ATTRIBUTE_CHECKBOX_ELEM);
+    private List<WebElement> getAllAttributeCheckBoxElemsDataset(){
+        machine.waitAndFind(ATTRIBUTE_CHECKBOX_ELEM_DATASET);
+        return machine.driver.findElements(ATTRIBUTE_CHECKBOX_ELEM_DATASET);
+    }
+
+    private WebDriverElemWrapper getAttributeAllCheckboxElemReport(){
+        return machine.waitAndFindElemWrapper(ATTRIBUTE_ALL_CHECKBOX_ELEM_REPORT);
+    }
+
+    private List<WebElement> getAttributeElemCheckBoxElemsReport(){
+        machine.waitAndFind(ATTRIBUTE_CHECKBOX_ELEM_REPORT);
+        return machine.driver.findElements(ATTRIBUTE_CHECKBOX_ELEM_REPORT);
     }
 
     @Override
@@ -68,21 +80,21 @@ public class PrepareDataPromptPageBrowser extends PrepareDataPromptPage {
 
         WebDriverElemWrapper[] res = new WebDriverElemWrapper[metrics.length];
         for (int i = 0; i < metrics.length; i++) {
-            int metric = metrics[i];
-            res[i] = new WebDriverElemWrapper(allMetricCheckBoxElems.get(metric + 1));
+            int metric = metrics[i] + 1;
+            res[i] = new WebDriverElemWrapper(allMetricCheckBoxElems.get(metric));
         }
 
         return res;
     }
 
-    public List<WebElement> getAllMetricCheckBoxElems(){
+    private List<WebElement> getAllMetricCheckBoxElems(){
         machine.waitAndFind(METRIC_CHECKBOX_ELEM);
         return machine.driver.findElements(METRIC_CHECKBOX_ELEM);
     }
 
     @Override
     public WebDriverElemWrapper[] getFilters(int[] filters) {
-        List<WebElement> allFitlerElems = getAllFitlerElems();
+        List<WebElement> allFitlerElems = getAllFilterElems();
 
         WebDriverElemWrapper[] res = new WebDriverElemWrapper[filters.length];
         for (int i = 0; i < filters.length; i++) {
@@ -93,7 +105,7 @@ public class PrepareDataPromptPageBrowser extends PrepareDataPromptPage {
         return res;
     }
 
-    public List<WebElement> getAllFitlerElems(){
+    private List<WebElement> getAllFilterElems(){
         machine.waitAndFind(FILTER_LIST_ELEM);
         return machine.driver.findElements(FILTER_LIST_ELEM);
     }
@@ -104,14 +116,14 @@ public class PrepareDataPromptPageBrowser extends PrepareDataPromptPage {
 
         WebDriverElemWrapper[] res = new WebDriverElemWrapper[filterValues.length];
         for (int i = 0; i < filterValues.length; i++) {
-            int filterValue = filterValues[i];
-            res[i] = new WebDriverElemWrapper(allFilterValueCheckboxElems.get(filterValue + 1));
+            int filterValue = filterValues[i] + 1;
+            res[i] = new WebDriverElemWrapper(allFilterValueCheckboxElems.get(filterValue));
         }
 
         return res;
     }
 
-    public List<WebElement> getAllFilterValueCheckboxElems(){
+    private List<WebElement> getAllFilterValueCheckboxElems(){
         machine.waitAndFind(FILTER_VALUE_CHECKBOX_ELEM);
         return machine.driver.findElements(FILTER_VALUE_CHECKBOX_ELEM);
     }

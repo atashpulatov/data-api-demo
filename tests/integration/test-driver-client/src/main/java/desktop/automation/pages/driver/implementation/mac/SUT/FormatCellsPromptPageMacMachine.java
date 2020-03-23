@@ -3,12 +3,12 @@ package desktop.automation.pages.driver.implementation.mac.SUT;
 import desktop.automation.driver.wrappers.Machine;
 import desktop.automation.elementWrappers.ImageComparisonElem;
 import desktop.automation.elementWrappers.WebDriverElemWrapper;
-import desktop.automation.elementWrappers.windows.FillColor;
+import desktop.automation.elementWrappers.driver.implementations.windows.FillColor;
 import desktop.automation.pages.SUT.FormatCellsPromptPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import static junit.framework.TestCase.assertTrue;
+import static junit.framework.TestCase.assertEquals;
 
 public class FormatCellsPromptPageMacMachine extends FormatCellsPromptPage {
     private static final String FILL_VALUE_BTN_BASE = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXTitle='Format Cells' and @AXIdentifier='_NS:9' and @AXSubrole='AXDialog']/AXTabGroup[@AXIdentifier='_NS:18']/AXGroup[@AXIdentifier='_NS:1427']/AXMenuButton[@AXIdentifier='_NS:1437']/AXMenu[0]/AXMenuItem[0]/AXGroup[0]/AXRadioButton[%d]";
@@ -22,7 +22,7 @@ public class FormatCellsPromptPageMacMachine extends FormatCellsPromptPage {
 
     @Override
     public void assertFillValueSelected(FillColor color) {
-        assertTrue(machine.getFormatCellsPromptPage().getFillValueElem(color).getAttribute("AXValue").equals("1"));
+        assertEquals("1", machine.getFormatCellsPromptPage().getFillValueElem(color).getAttribute("AXValue"));
     }
 
     @Override

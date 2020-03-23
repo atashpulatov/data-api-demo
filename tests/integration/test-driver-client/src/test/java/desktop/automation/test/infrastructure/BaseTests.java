@@ -1,7 +1,11 @@
 package desktop.automation.test.infrastructure;
 
 import desktop.automation.ConfigVars;
-import desktop.automation.driver.wrappers.*;
+import desktop.automation.driver.wrappers.Browser;
+import desktop.automation.driver.wrappers.MacMachine;
+import desktop.automation.driver.wrappers.Machine;
+import desktop.automation.driver.wrappers.WindowsMachine;
+import desktop.automation.driver.wrappers.enums.DriverType;
 import desktop.automation.elementWrappers.ImageComparisonElem;
 import desktop.automation.elementWrappers.WebDriverElemWrapper;
 
@@ -32,7 +36,7 @@ public abstract class BaseTests {
     }
 
     private static WindowsMachine getWindowsMachine(){
-        String host = ConfigVars.WINDOWS_REMOTE_HOST;
+        String host = ConfigVars.WINDOWS_HOST;
         String WindowsApplicationDriverUrl = String.format("http://%s:6007/wd/hub", host);
 
         WindowsMachine res = new WindowsMachine(WindowsApplicationDriverUrl);

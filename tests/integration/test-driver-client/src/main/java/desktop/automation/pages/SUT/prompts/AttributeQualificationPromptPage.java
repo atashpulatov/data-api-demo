@@ -8,9 +8,9 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 public abstract class AttributeQualificationPromptPage extends BasePromptPage {
-    //TODO
+    //TODO implement
     private static final By QUALIFY_BTN = By.xpath("//Group[@Name='Qualify']");
-    //TODO
+    //TODO implement
     private static final By SELECT_BTN = By.xpath("//Group[@Name='Select']");
 
     public AttributeQualificationPromptPage(Machine machine) {
@@ -18,7 +18,7 @@ public abstract class AttributeQualificationPromptPage extends BasePromptPage {
     }
 
     @Override
-    public void answerPromptCorretly() {
+    public void answerPromptCorrectly() {
         machine.getAttributeQualificationPromptPage().getOperatorSelectionDropDownElem().click();
         machine.getAttributeQualificationPromptPage().clickOperatorSelectionOptionByIndex(3);
 
@@ -33,8 +33,6 @@ public abstract class AttributeQualificationPromptPage extends BasePromptPage {
     }
 
     public List<WebElement> getAttributeSelectionOptionElems(){
-        //slow, just rely on .findElements
-//        machine.waitAndFind(ATTRIBUTE_SELECTION_OPTIONS, machine.SIX_UNITS);
         machine.focusOnPromptPopUpFrameForBrowser();
         return machine.driver.findElements(ATTRIBUTE_SELECTION_OPTIONS);
     }

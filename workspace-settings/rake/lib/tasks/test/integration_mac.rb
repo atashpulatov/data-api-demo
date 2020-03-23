@@ -14,24 +14,17 @@ task :deploy_tester_server,[:build_no] do | t, args|
   do_stop_local_web_dossier
   do_package_test_docker
   do_start_local_web_dossier
-
-  # cmd = "docker build -t mstr-dossier ."
-  # shell_command! cmd, cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/e2e-webserver"
 end
 
 desc "package test docker"
 task :p do
-  # stop_test_web_service
-  # download_latest_web_dossier
-  # download_mstr_office
   do_package_test_docker
-  # cmd = "docker build -t mstr-dossier ."
-  # shell_command! cmd, cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/e2e-webserver"
-  
 end
+
 def mac_env_dir
   "e2e-webserver-mac"
 end
+
 def do_package_test_docker()
   cmd = "docker build -t mstr-dossier ."
   shell_command! cmd, cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/#{mac_env_dir}"

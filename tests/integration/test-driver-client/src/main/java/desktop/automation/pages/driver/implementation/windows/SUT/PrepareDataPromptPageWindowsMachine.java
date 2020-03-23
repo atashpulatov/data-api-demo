@@ -12,10 +12,9 @@ import org.openqa.selenium.remote.RemoteWebElement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class PrepareDataPromptPageWindowsMachine extends PrepareDataPromptPage {
+
     public PrepareDataPromptPageWindowsMachine(Machine machine) {
         super(machine);
     }
@@ -27,12 +26,11 @@ public class PrepareDataPromptPageWindowsMachine extends PrepareDataPromptPage {
     }
 
     public RemoteWebElement getPromptPaneElem() {
-        //TODO store and if stale or null, update
         return machine.waitAndFind(PANE);
     }
 
     public List<WebElement> getPanelElems(){
-        return getPromptPaneElem().findElements(By.xpath(".//*"));
+        return machine.getChildren(getPromptPaneElem());
     }
 
     private RemoteWebElement getPanelElem(int index){
@@ -67,9 +65,7 @@ public class PrepareDataPromptPageWindowsMachine extends PrepareDataPromptPage {
     }
 
     public List<WebElement> getGridElems(){
-        List<WebElement> res = machine.driver.findElements(ATTRIBUTE_METRIC_GRIDS);
-
-        return res;
+        return machine.driver.findElements(ATTRIBUTE_METRIC_GRIDS);
     }
 
     public RemoteWebElement getFiltersTreeElem(){
@@ -84,7 +80,7 @@ public class PrepareDataPromptPageWindowsMachine extends PrepareDataPromptPage {
         return (RemoteWebElement) getGridElems().get(0);
     }
 
-    public RemoteWebElement getMeticGridElem(){
+    public RemoteWebElement getMetricGridElem(){
         return (RemoteWebElement) getGridElems().get(1);
     }
 
@@ -195,15 +191,21 @@ public class PrepareDataPromptPageWindowsMachine extends PrepareDataPromptPage {
 
     public WebDriverElemWrapper[] getAndClickAttributes(int[] indexes){
         WebDriverElemWrapper[] res = getAttributes(indexes);
-        for (WebDriverElemWrapper attributeColElem : res) {
-            machine.clickObjectWithOffset(attributeColElem.getDriverElement(), 25, 20);
+
+        for (int i = 0; i < res.length; i++) {
+            WebDriverElemWrapper attributeColElem = res[i];
+
+            int xOffset = indexes[i] != -1 && isDataset ? 15 : 25;
+            int yOffset = indexes[i] == -1 ? 15 : isDataset ? 10 : 25;
+
+            machine.clickObjectWithOffset(attributeColElem.getDriverElement(), xOffset, yOffset);
         }
 
         return res;
     }
 
     public WebDriverElemWrapper[] getAndClickGridElems(WebDriverElemWrapper[] elems){
-        // when mouse is hovering over an attribute an popup appears and can hide the element underneath it from being clickable,
+        // when mouse is hovering over an attribute a popup appears and can hide the element underneath it from being clickable,
         // therefor a helper elem is used to not allow the mouse to hover
         RemoteWebElement helper = getPromptPaneElem();
 
@@ -355,10 +357,7 @@ public class PrepareDataPromptPageWindowsMachine extends PrepareDataPromptPage {
     public WebElement getTitleNameElem(boolean isDataset, String objectName){
         By locator = By.xpath(String.format("//*/*[@Name=\"Import %s >\"]/following-sibling::*[@Name=\"%s\"]", isDataset ? "Dataset" : "Report", objectName));
 
-        List<WebElement> located = machine.driver.findElements(locator);
-        if (located.size() != 1)
-            throw new RuntimeException("should find one and only one elem, actual found: " + located.size());
-        return located.get(0);
+        return machine.waitAndFind(locator);
     }
 
     @Override
@@ -367,7 +366,7 @@ public class PrepareDataPromptPageWindowsMachine extends PrepareDataPromptPage {
     }
 
     public WebDriverElemWrapper getPaneElem(){
-        By prepDataPaneSelector = By.xpath("//*[@AutomationId='form_names_label']/..");
+        By prepDataPaneSelector = By.xpath("//Text[@Name=\"icon: search\"]/..");
         WebElement prepDataPaneElem = machine.waitAndFind(prepDataPaneSelector);
         return new WebDriverElemWrapper(prepDataPaneElem);
     }
@@ -434,14 +433,6 @@ public class PrepareDataPromptPageWindowsMachine extends PrepareDataPromptPage {
             }
         }
 
-        System.out.println("attributeColStart = " + attributeColStart);
-        System.out.println("attributeColEnd = " + attributeColEnd);
-        System.out.println("metricColStart = " + metricColStart);
-        System.out.println("metricColEnd = " + metricColEnd);
-        System.out.println("filterColStart = " + filterColStart);
-        System.out.println("filterColEnd = " + filterColEnd);
-        System.out.println("filterValuesColStart = " + filterValuesColStart);
-
         return res;
     }
 
@@ -451,14 +442,19 @@ public class PrepareDataPromptPageWindowsMachine extends PrepareDataPromptPage {
 
     public List<WebDriverElemWrapper> getAttributesFromChildren(List<WebDriverElemWrapper> children){
         List<WebDriverElemWrapper> attributes = new ArrayList<>();
-        for (int i = attributeColStart + 1; i < attributeColEnd; i++) {
+        for (int i = attributeColStart + 3; i < attributeColEnd; i++) {
             WebDriverElemWrapper current = children.get(i);
-            if (current.getDriverElement().getTagName().equals("ControlType.TreeItem"))
-                attributes.add(current);
+            addElemIfAttribute(attributes, current);
         }
 
         return attributes;
     }
+
+    private void addElemIfAttribute(List<WebDriverElemWrapper> attributes, WebDriverElemWrapper current) {
+        if (current.getDriverElement().getTagName().equals(isDataset ? "ControlType.CheckBox" : "ControlType.TreeItem"))
+            attributes.add(current);
+    }
+
 
     public WebDriverElemWrapper getAllMetricElemFromChildren(List<WebDriverElemWrapper> children){
         return children.get(metricColStart + 2);

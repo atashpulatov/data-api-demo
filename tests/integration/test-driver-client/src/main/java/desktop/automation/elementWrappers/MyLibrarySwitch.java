@@ -1,9 +1,9 @@
 package desktop.automation.elementWrappers;
 
-import desktop.automation.driver.wrappers.DriverType;
-import desktop.automation.elementWrappers.browser.MyLibrarySwitchBrowser;
-import desktop.automation.elementWrappers.mac.MyLibrarySwitchMacMachine;
-import desktop.automation.elementWrappers.windows.MyLibrarySwitchWindowsMachine;
+import desktop.automation.driver.wrappers.enums.DriverType;
+import desktop.automation.elementWrappers.driver.implementations.browser.MyLibrarySwitchBrowser;
+import desktop.automation.elementWrappers.driver.implementations.mac.MyLibrarySwitchMacMachine;
+import desktop.automation.elementWrappers.driver.implementations.windows.MyLibrarySwitchWindowsMachine;
 import desktop.automation.exceptions.NotImplementedForDriverWrapperException;
 import org.openqa.selenium.WebElement;
 

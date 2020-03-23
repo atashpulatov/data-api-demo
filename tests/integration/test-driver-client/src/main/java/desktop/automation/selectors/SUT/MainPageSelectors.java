@@ -124,52 +124,52 @@ public class MainPageSelectors {
                 DIALOG_OPEN_NOTIFICATION = By.xpath("//span[text()='A MicroStrategy for Office Add-in dialog is open']");;
                 break;
             case MAC_DESKTOP:
-                CLEAR_DATA_BTN_ELEM = By.xpath("TODO");
-                MORE_ITEMS_MENU_BTN = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup[@AXTitle='MicroStrategy']/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[@AXDOMIdentifier='app-header' and @AXSubrole='AXLandmarkBanner']/AXGroup[1]/AXButton[@AXDOMIdentifier='settings-button']");
-                RANGE_NOT_EMPTY_MESSAGE = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup[@AXTitle='MicroStrategy']/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup/AXGroup/AXStaticText[@AXValue='The required data range in the worksheet is not empty']");
-                IMPORTED_DATA_TAB_ELEM = By.xpath("TODO");
-                OFFICE_ADD_IN_LOGO_ELEM = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup[@AXTitle='MicroStrategy']/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[@AXDOMIdentifier='app-header' and @AXSubrole='AXLandmarkBanner']/AXGroup[0]/AXImage[0]");
+                CLEAR_DATA_BTN_ELEM = null;
+                MORE_ITEMS_MENU_BTN = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[@AXDOMIdentifier='app-header' and @AXSubrole='AXLandmarkBanner']/AXGroup[1]/AXButton[@AXDOMIdentifier='settings-button']");
+                RANGE_NOT_EMPTY_MESSAGE = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup/AXGroup/AXStaticText[@AXValue='The required data range in the worksheet is not empty']");
+                IMPORTED_DATA_TAB_ELEM = null;
+                OFFICE_ADD_IN_LOGO_ELEM = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[@AXDOMIdentifier='app-header' and @AXSubrole='AXLandmarkBanner']/AXGroup[0]/AXImage[0]");
                 IMPORT_DATA_BTN_ELEM = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[5]/AXButton[@AXTitle='Import Data' and @AXDOMIdentifier='import-data-placeholder']");
-                ADD_DATA_BTN_ELEM = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup[@AXTitle='MicroStrategy']/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[3]/AXButton[@AXTitle='Add Data' and @AXDOMIdentifier='add-data-btn-container']");
-                ADD_IN_PANE_ELEM = By.xpath("TODO");
-                NO_IMPORTED_OBJECTS_LBL_ELEM = By.xpath("TODO");
-                CROSS_TAB_TOTAL_SUBTOTAL_ERROR_MESSAGE_ELEM = By.xpath("TODO");
+                ADD_DATA_BTN_ELEM = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[3]/AXButton[@AXTitle='Add Data' and @AXDOMIdentifier='add-data-btn-container']");
+                ADD_IN_PANE_ELEM = null;
+                NO_IMPORTED_OBJECTS_LBL_ELEM = null;
+                CROSS_TAB_TOTAL_SUBTOTAL_ERROR_MESSAGE_ELEM = null;
                 LIMITS_EXCEEDED_ERROR_MESSAGE_ELEM = By.xpath(
-                        "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup[@AXTitle='MicroStrategy']/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup/AXGroup/AXStaticText[@AXValue='The table you try to import exceeds the worksheet limits.']"
+                        "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup/AXGroup/AXStaticText[@AXValue='The table you try to import exceeds the worksheet limits.']"
                 );
-                THIS_OBJECT_CANNOT_BE_IMPORTED_ERROR_MESSAGE = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup[@AXTitle='MicroStrategy']/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup/AXGroup[1]/AXStaticText[@AXValue='This object cannot be imported. Either you do not have necessary permissions to view it, or it is empty.']");
-                CUBE_NOT_PUBLISHED_ERROR_MESSAGE = By.xpath("TODO");
-                PROJECTS_LIMITS_EXCEEDED_ERROR_MESSAGE = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup[@AXTitle='MicroStrategy']/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup/AXGroup[1]/AXStaticText[@AXValue='The object exceeds project rows limitation']");
+                THIS_OBJECT_CANNOT_BE_IMPORTED_ERROR_MESSAGE = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup/AXGroup[1]/AXStaticText[@AXValue='This object cannot be imported. Either you do not have necessary permissions to view it, or it is empty.']");
+                CUBE_NOT_PUBLISHED_ERROR_MESSAGE = null;
+                PROJECTS_LIMITS_EXCEEDED_ERROR_MESSAGE = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup/AXGroup[1]/AXStaticText[@AXValue='The object exceeds project rows limitation']");
                 REFRESH_ALL_BTN_ELEM = By.xpath(
-                        "/AXApplication[@AXTitle='MicroStrategy Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup[@AXTitle='MicroStrategy']/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[3]/AXButton[@AXDOMIdentifier='refresh-all-btn']");
-                ERROR_OK_BTN_ELEM = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup[@AXTitle='MicroStrategy']/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup/AXGroup/AXButton[@AXTitle='OK']");
-                CELL_TRAVERSAL_INPUT_ELEM = By.xpath("TODO");
-                IMPORTED_OBJECT_LIST_ELEM = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup[@AXTitle='MicroStrategy']/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXList[@AXSubrole='AXContentList']");
+                        "/AXApplication[@AXTitle='MicroStrategy Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[3]/AXButton[@AXDOMIdentifier='refresh-all-btn']");
+                ERROR_OK_BTN_ELEM = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup/AXGroup/AXButton[@AXTitle='OK']");
+                CELL_TRAVERSAL_INPUT_ELEM = null;
+                IMPORTED_OBJECT_LIST_ELEM = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXList[@AXSubrole='AXContentList']");
                 IMPORTED_OBJECT_ROOT_ELEM = By.xpath(".//AXGroup");
                 IMPORTED_OBJECT_LIST_ELEM_NAME =
 //              "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXList[@AXSubrole='AXContentList']/AXGroup[%d]/AXGroup[2]/AXGroup[]/AXStaticText"
-                "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup[@AXTitle='MicroStrategy']/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXList[@AXSubrole='AXContentList']/AXGroup[%d]/AXGroup[2]/AXGroup[0]/AXStaticText"
+                "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXList[@AXSubrole='AXContentList']/AXGroup[%d]/AXGroup[2]/AXGroup[0]/AXStaticText"
                 ;
-                HEADER_SIZE_INPUT_ELEM = By.xpath("TODO");
-                FONT_INPUT_ELEM = By.xpath("TODO");
-                FONT_SIZE_INPUT_ELEM = By.xpath("TODO");
+                HEADER_SIZE_INPUT_ELEM = null;
+                FONT_INPUT_ELEM = null;
+                FONT_SIZE_INPUT_ELEM = null;
                 BOLD_BUTTON_ELEM = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXTabGroup[0]/AXScrollArea[0]/AXGroup[1]/AXCheckBox[@AXTitle='Bold' and @AXSubrole='AXToggle']");
                 ITALIC_BUTTON_ELEM = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXTabGroup[0]/AXScrollArea[0]/AXGroup[1]/AXCheckBox[@AXTitle='Italic' and @AXSubrole='AXToggle']");
                 UNDERLINE_BUTTON_ELEM = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXTabGroup[0]/AXScrollArea[0]/AXGroup[1]/AXMenuButton[@AXTitle='Underline']");
-                DATASET_REFRESHED_MESSAGE_ELEM = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup[@AXTitle='MicroStrategy']/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup/AXGroup[1]/AXStaticText[@AXValue='Dataset refreshed']");
-                REPORT_REFRESHED_MESSAGE_ELEM = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup[@AXTitle='MicroStrategy']/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup/AXGroup[1]/AXStaticText[@AXValue='Report refreshed']");
-                DATA_LOADED_SUCCESSFULLY_NOTIFICATION_ELEM = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup[@AXTitle='MicroStrategy']/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup/AXGroup[1]/AXStaticText[@AXValue='Data loaded successfully']");
-                DIALOG_OPEN_NOTIFICATION_ELEM = By.xpath("TODO");
-                REPORT_REMOVED_MESSAGE_ELEM = By.xpath("TODO");
-                IMPORTED_OBJECT_RENAME_CONTEXT_MENU_ELEM = By.xpath("TODO");
+                DATASET_REFRESHED_MESSAGE_ELEM = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup/AXGroup[1]/AXStaticText[@AXValue='Dataset refreshed']");
+                REPORT_REFRESHED_MESSAGE_ELEM = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup/AXGroup[1]/AXStaticText[@AXValue='Report refreshed']");
+                DATA_LOADED_SUCCESSFULLY_NOTIFICATION_ELEM = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup/AXGroup[1]/AXStaticText[@AXValue='Data loaded successfully']");
+                DIALOG_OPEN_NOTIFICATION_ELEM = null;
+                REPORT_REMOVED_MESSAGE_ELEM = null;
+                IMPORTED_OBJECT_RENAME_CONTEXT_MENU_ELEM = null;
                 IMPORTED_OBJECT_COPY_CONTEXT_MENU_ELEM = null;
-                DATASET_REMOVED_MESSAGE_ELEM = By.xpath("TODO");
-                DATA_CLEARED_IMAGE = By.xpath("TODO");
-                DATA_CLEARED_TITLE = By.xpath("TODO");
-                DATA_CLEARED_MESSAGE = By.xpath("TODO");
-                VIEW_DATA_BTN = By.xpath("TODO");
+                DATASET_REMOVED_MESSAGE_ELEM = null;
+                DATA_CLEARED_IMAGE = null;
+                DATA_CLEARED_TITLE = null;
+                DATA_CLEARED_MESSAGE = null;
+                VIEW_DATA_BTN = null;
 
-                SESSION_EXPIRED_NOTIFICATION = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup[@AXTitle='MicroStrategy']/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[7]/AXGroup[1]/AXStaticText[@AXValue='Your session has expired. Please log in.']");
+                SESSION_EXPIRED_NOTIFICATION = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXGroup/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[7]/AXGroup[1]/AXStaticText[@AXValue='Your session has expired. Please log in.']");
 
                 //Mac
                 EDIT_MENU = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXMenuBar[0]/AXMenuBarItem[@AXTitle='Edit']");
