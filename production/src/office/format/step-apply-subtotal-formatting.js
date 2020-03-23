@@ -1,31 +1,22 @@
-import { FORMAT_SUBTOTALS } from '../../operation/operation-steps';
-import { markStepCompleted } from '../../operation/operation-actions';
 import officeFormatSubtotals from './office-format-subtotals';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
 class StepApplySubtotalFormatting {
-  init = (reduxStore) => {
-    this.reduxStore = reduxStore;
-  };
-
   /**
-   * Applies Excel number formatting to imported object based on MSTR data type.
+   * Communicates with object reducer and calls officeFormatSubtotals.applySubtotalFormatting.
    *
-   * @param {Boolean} isCrosstab
-   * @param {Array} subtotalsAddresses Array containing object with cell coordinates
-   * @param {Office} officeTable
-   * @param {Office} excelContext ExcelContext
-   * @param {Object} mstrTable contains information about mstr object
-   * @param {Boolean} [shouldBold=true] Specify whether the values in cells should be bold
+   * This function is subscribed as one of the operation steps with the key FORMAT_SUBTOTALS,
+   * therefore should be called only via operation bus.
+   *
+   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param {Office} operationData.officeTable Reference to Table created by Excel
+   * @param {Object} operationData.instanceDefinition Object containing information about MSTR object
+   * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions
    */
-  applySubtotalFormattingRedux = async (objectData) => {
-    const {
-      officeTable,
-      instanceDefinition,
-      excelContext,
-      objectWorkingId,
-    } = objectData;
+  applySubtotalFormattingRedux = async (objectData, operationData) => {
+    const { objectWorkingId, } = objectData;
+    const { excelContext, instanceDefinition, officeTable, } = operationData;
     const { mstrTable } = instanceDefinition;
-
 
     if (mstrTable.subtotalsInfo.subtotalsAddresses.length) {
       // Removing duplicated subtotal addresses from headers
@@ -34,9 +25,9 @@ class StepApplySubtotalFormatting {
         officeTable
       }, mstrTable);
     }
-    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, FORMAT_SUBTOTALS));
-  };
 
+    operationStepDispatcher.completeFormatSubtotals(objectWorkingId);
+  };
 }
 
 const stepApplySubtotalFormatting = new StepApplySubtotalFormatting();

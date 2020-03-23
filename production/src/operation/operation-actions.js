@@ -10,6 +10,7 @@ export const EDIT_REQUESTED = 'EDIT_REQUESTED';
 export const REFRESH_REQUESTED = 'REFRESH_REQUESTED';
 
 export const MARK_STEP_COMPLETED = 'MARK_STEP_COMPLETED';
+export const UPDATE_OPERATION = 'UPDATE_OPERATION';
 export const CANCEL_OPERATION = 'CANCEL_OPERATION';
 export const BACKUP_OBJECT = 'BACKUP_OBJECT';
 export const SET_TOTAL_ROWS = 'SET_TOTAL_ROWS';
@@ -34,17 +35,6 @@ export const importRequested = (object) => {
   };
 };
 
-export const refreshRequestedTMP = (object) => {
-  const objectWorkingId = Date.now();
-  object.objectWorkingId = objectWorkingId;
-  return {
-    type: IMPORT_REQUESTED,
-    payload: {
-      operation: createOperation(REFRESH_REQUESTED, objectWorkingId),
-      object,
-    },
-  };
-};
 export const refreshRequested = (objectData) => {
   const backupObjectData = JSON.parse(JSON.stringify(objectData));
   const { objectWorkingId } = backupObjectData;
@@ -76,6 +66,11 @@ export const markStepCompleted = (objectWorkingId, completedStep) => ({
     objectWorkingId,
     completedStep,
   }
+});
+
+export const updateOperation = (updatedObject) => ({
+  type: UPDATE_OPERATION,
+  payload: updatedObject
 });
 
 export const cancelOperation = (objectWorkingId) => ({

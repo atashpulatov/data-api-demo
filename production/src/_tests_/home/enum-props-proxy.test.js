@@ -23,8 +23,7 @@ describe('propsProxy', () => {
 
     // then
     try {
-      expect(propsProxy.get(target, name)).toThrowError(`Property '${name}'
-             does not exist in '${target}'.`);
-    } catch {}
+      expect(propsProxy.get(target, name)).toThrowError(`Property '${name}' does not exist in '${target}'.`);
+    } catch (error) { console.error(error); }
   });
 });

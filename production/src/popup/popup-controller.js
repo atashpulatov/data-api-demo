@@ -115,7 +115,6 @@ class PopupController {
           } else {
             const reportPreviousState = this.getReportsPreviousState(reportParams);
             this.reduxStore.dispatch(editRequested(reportPreviousState, response));
-          // await stepSaveReportWithParams.saveReportWithParams(reportParams, response, reportPreviousState);
           }
           break;
         case selectorProperties.commandOnUpdate:
@@ -124,7 +123,6 @@ class PopupController {
           } else {
             const reportPreviousState = this.getReportsPreviousState(reportParams);
             this.reduxStore.dispatch(editRequested(reportPreviousState, response));
-          // await stepSaveReportWithParams.saveReportWithParams(reportParams, response, reportPreviousState);
           }
           break;
         case selectorProperties.commandCancel:
@@ -187,11 +185,6 @@ class PopupController {
       };
 
       this.reduxStore.dispatch(importRequested(options));
-
-      // const result = await officeDisplayService.printObject(options);
-      // if (result) {
-      //   notificationService.displayNotification({ type: result.type, content: result.message });
-      // }
       this.reduxStore.dispatch({ type: STOP_REPORT_LOADING });
     }
   };
@@ -208,7 +201,7 @@ class PopupController {
       visualizationInfo,
       preparedInstanceId,
     },
-    bindingId,
+    bindId,
   ) => {
     if (chosenObject) {
       this.reduxStore.dispatch({ type: officeProperties.actions.startLoading });
@@ -221,7 +214,7 @@ class PopupController {
         objectId: chosenObject,
         projectId: chosenProject,
         mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype),
-        bindingId,
+        bindId,
         isPrompted,
         promptsAnswers,
         visualizationInfo,
@@ -229,15 +222,6 @@ class PopupController {
       };
 
       this.reduxStore.dispatch(importRequested(options));
-
-      // const result = await officeDisplayService.printObject(options);
-      // const result = {
-      //   type: 'success',
-      //   message: 'Data loaded successfully'
-      // };
-      // if (result) {
-      //   notificationService.displayNotification({ type: result.type, content: result.message });
-      // }
       this.reduxStore.dispatch({ type: STOP_REPORT_LOADING });
     }
   };

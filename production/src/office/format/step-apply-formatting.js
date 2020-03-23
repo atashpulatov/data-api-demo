@@ -1,28 +1,26 @@
-import { FORMAT_DATA, } from '../../operation/operation-steps';
-import { markStepCompleted } from '../../operation/operation-actions';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
 class StepApplyFormatting {
-  init = (reduxStore) => {
-    this.reduxStore = reduxStore;
-  }
-
   /**
    * Applies Excel number formatting to imported object based on MSTR data type.
    *
-   * @param {Office} officeTable
-   * @param {Object} instanceDefinition
-   * @param {Boolean} isCrosstab
-   * @param {Office} excelContext
+   * Formatting is applied only to office table columns containing metrics.
+   * Columns are formatted one by one, but synchronized to Excel all at the same time.
+   * In case of error this step is skipped and import/refresh workflow continues.
+   *
+   * This function is subscribed as one of the operation steps with the key FORMAT_DATA,
+   * therefore should be called only via operation bus.
+   *
+   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param {Office} operationData.officeTable Reference to Table created by Excel
+   * @param {Object} operationData.instanceDefinition Object containing information about MSTR object
+   * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions
    */
-  applyFormatting = async (objectData) => {
+  applyFormatting = async (objectData, operationData) => {
     try {
       console.time('Apply formatting');
-      const {
-        excelContext,
-        instanceDefinition,
-        officeTable,
-        objectWorkingId
-      } = objectData;
+      const { objectWorkingId } = objectData;
+      const { excelContext, instanceDefinition, officeTable, } = operationData;
       const { columnInformation, isCrosstab } = instanceDefinition.mstrTable;
 
       const filteredColumnInformation = this.filterColumnInformation(columnInformation, isCrosstab);
@@ -56,7 +54,7 @@ class StepApplyFormatting {
       }
 
       await excelContext.sync();
-      this.reduxStore.dispatch(markStepCompleted(objectWorkingId, FORMAT_DATA));
+      operationStepDispatcher.completeFormatData(objectWorkingId);
     } catch (error) {
       console.error(error);
       console.log('Cannot apply formatting, skipping');

@@ -19,7 +19,7 @@ describe('FileHistoryHelper', () => {
   afterAll(() => {
     jest.restoreAllMocks();
   });
-  describe('deleteReport', () => {
+  describe('deleteObject', () => {
     it('should enable loading on run and disable later when delete', async () => {
       // given
       const enableLoadingMock = sessionHelper.enableLoading;
@@ -27,7 +27,7 @@ describe('FileHistoryHelper', () => {
       const mockedOnDelete = jest.fn();
       const testBindId = 'someBindingIt';
       // when
-      await fileHistoryHelper.deleteReport(mockedOnDelete, testBindId);
+      await fileHistoryHelper.deleteObject(mockedOnDelete, testBindId);
       // then
       expect(enableLoadingMock).toBeCalled();
       expect(disableLoadingMock).toBeCalled();
@@ -39,25 +39,19 @@ describe('FileHistoryHelper', () => {
       const isCrosstab = true;
       const headerDimensions = {};
       const name = 'test';
+      const objectWorkingId = 'objectWorkingId';
       // when
-      await fileHistoryHelper.deleteReport(mockedOnDelete, testBindId, isCrosstab, headerDimensions, name);
+      await fileHistoryHelper.deleteObject(
+        mockedOnDelete,
+        testBindId,
+        isCrosstab,
+        headerDimensions,
+        objectWorkingId,
+        name
+      );
       // then
       expect(mockedOnDelete).toBeCalled();
-      expect(mockedOnDelete).toBeCalledWith(testBindId, isCrosstab, headerDimensions);
-    });
-    it('should display message on success', async () => {
-      // given
-      const mockedDisplayMessage = notificationService.displayTranslatedNotification;
-      const mockedOnDelete = jest.fn().mockImplementation(() => true);
-      const testBindId = 'someBindingIt';
-      const isCrosstab = true;
-      const headerDimensions = {};
-      const message = 'test name';
-      // when
-      await fileHistoryHelper.deleteReport(mockedOnDelete, testBindId, isCrosstab, headerDimensions, message);
-      // then
-      expect(mockedDisplayMessage).toBeCalled();
-      expect(mockedDisplayMessage).toBeCalledWith({ type: 'success', content: message });
+      expect(mockedOnDelete).toBeCalledWith(testBindId, isCrosstab, headerDimensions, objectWorkingId);
     });
     it('should not display message without success', async () => {
       // given
@@ -65,7 +59,7 @@ describe('FileHistoryHelper', () => {
       const mockedOnDelete = jest.fn();
       const testBindId = 'someBindingIt';
       // when
-      await fileHistoryHelper.deleteReport(mockedOnDelete, testBindId);
+      await fileHistoryHelper.deleteObject(mockedOnDelete, testBindId);
       // then
       expect(mockedDisplayMessage).not.toBeCalled();
     });
@@ -76,7 +70,7 @@ describe('FileHistoryHelper', () => {
       const testBindId = 'someBindingIt';
       const mockedErrorHandler = errorService.handleError;
       // when
-      await fileHistoryHelper.deleteReport(mockedOnDelete, testBindId);
+      await fileHistoryHelper.deleteObject(mockedOnDelete, testBindId);
       // then
       expect(mockedErrorHandler).toBeCalled();
       expect(mockedErrorHandler).toBeCalledWith(testError);

@@ -1,28 +1,25 @@
-import { FORMAT_OFFICE_TABLE, } from '../../operation/operation-steps';
-import { markStepCompleted } from '../../operation/operation-actions';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
 class StepFormatTable {
-  init = (reduxStore) => {
-    this.reduxStore = reduxStore;
-  }
-
   /**
-   * Formatting table columns width
+   * Function responsible auto resizing the columns of the Office table passed in parameters.
    *
-   * @param {Office} table
-   * @param {Boolean} isCrosstab
-   * @param {Office} crosstabHeaderDimensions
-   * @param {Office} excelContext
+   * Columns are resized and synchronized with Excel for each column separately.
+   * In case of error this step is skipped and import/refresh workflow continues.
+   *
+   * This function is subscribed as one of the operation steps with key the FORMAT_OFFICE_TABLE,
+   * therefore should be called only via operation bus.
+   *
+   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param {Office} operationData.officeTable Reference to Table created by Excel
+   * @param {Object} operationData.instanceDefinition Object containing information about MSTR object
+   * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions
    */
-  formatTable = async (objectData) => {
-    const {
-      excelContext,
-      instanceDefinition,
-      officeTable,
-      objectWorkingId,
-    } = objectData;
-
+  formatTable = async (objectData, operationData) => {
+    const { objectWorkingId, } = objectData;
+    const { excelContext, instanceDefinition, officeTable, } = operationData;
     const { crosstabHeaderDimensions, isCrosstab } = instanceDefinition.mstrTable;
+
     console.time('Column auto size');
     if (isCrosstab) {
       const { rowsX } = crosstabHeaderDimensions;
@@ -43,9 +40,11 @@ class StepFormatTable {
       console.log('Error when formatting - no columns autofit applied', error);
     }
 
-    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, FORMAT_OFFICE_TABLE));
+    operationStepDispatcher.completeFormatOfficeTable(objectWorkingId);
+
     console.timeEnd('Column auto size');
   };
 }
+
 const stepFormatTable = new StepFormatTable();
 export default stepFormatTable;

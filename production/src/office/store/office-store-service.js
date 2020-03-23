@@ -1,126 +1,40 @@
 import { officeProperties } from './office-properties';
 import { RunOutsideOfficeError } from '../../error/run-outside-office-error';
 import { errorService } from '../../error/error-handler';
-
-import { SAVE_OBJECT_IN_EXCEL, IMPORT_OPERATION } from '../../operation/operation-steps';
-import { markStepCompleted } from '../../operation/operation-actions';
 import { restoreAllObjects, deleteObject } from '../../operation/object-actions';
 
 /* global Office */
 
+// TODO check after integration of new right panel
 class OfficeStoreService {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
   }
 
-  saveAndPreserveReportInStore = async (objectData, { operationType }) => {
-    const { instanceDefinition } = objectData;
-    objectData.excelContext = false;
-    objectData.officeTable = false;
-    objectData.previousTableDimensions = { columns: instanceDefinition.columns };
-    const { mstrTable } = instanceDefinition;
-    const refreshDate = new Date();
-
-    const report = {
-      id: objectData.objectId,
-      name: mstrTable.name,
-      bindId: objectData.newBindingId,
-      projectId: objectData.projectId,
-      envUrl: objectData.envUrl,
-      body: objectData.body,
-      isLoading: false,
-      objectType: objectData.mstrObjectType,
-      isCrosstab: mstrTable.isCrosstab,
-      isPrompted: objectData.isPrompted,
-      subtotalsInfo: mstrTable.subtotalsInfo,
-      promptsAnswers: objectData.promptsAnswers,
-      crosstabHeaderDimensions: mstrTable.crosstabHeaderDimensions,
-      visualizationInfo: objectData.visualizationInfo,
-      manipulationsXML: instanceDefinition.manipulationsXML,
-      tableName: objectData.newOfficeTableName,
-      previousTableDimensions: objectData.previousTableDimensions,
-      displayAttrFormNames: objectData.displayAttrFormNames,
-      oldTableId: objectData.bindingId,
-      objectWorkingId: objectData.objectWorkingId,
-      refreshDate
-    };
-
-    if (operationType !== IMPORT_OPERATION) {
-      // TODO remove after connecting right panel to object reducer
-      try {
-        const settings = this.getOfficeSettings();
-        const reportsArray = [...this.getReportProperties()];
-        const reportObj = reportsArray.find((element) => element.bindId === report.oldTableId);
-        const ObjectIndex = reportsArray.indexOf(reportObj);
-        const refreshedObject = reportsArray[ObjectIndex];
-        refreshedObject.crosstabHeaderDimensions = report.crosstabHeaderDimensions;
-        refreshedObject.isCrosstab = report.isCrosstab;
-        refreshedObject.bindId = report.bindId;
-        refreshedObject.previousTableDimensions = report.previousTableDimensions;
-        refreshedObject.subtotalsInfo = report.subtotalsInfo;
-        refreshedObject.displayAttrFormNames = report.displayAttrFormNames;
-        refreshedObject.refreshDate = report.refreshDate;
-        refreshedObject.preparedInstanceId = null;
-        refreshedObject.body = report.body;
-        refreshedObject.objectWorkingId = report.objectWorkingId; // Revert when we connect reducer to excel settings
-        if (refreshedObject.visualizationInfo) {
-          refreshedObject.manipulationsXML = report.manipulationsXML;
-          refreshedObject.visualizationInfo.dossierStructure = report.visualizationInfo.dossierStructure;
-          if (refreshedObject.visualizationInfo.nameShouldUpdate) {
-            // If visualization was changed, preserve new visualization name and new dossierStructure.
-            refreshedObject.name = report.name;
-            refreshedObject.visualizationInfo.nameShouldUpdate = false;
-          }
-        }
-
-        settings.set(officeProperties.loadedReportProperties, reportsArray);
-        settings.saveAsync((saveAsync) => console.log(`Refresh ${saveAsync.status}`));
-        await this.loadExistingReportBindingsExcel();
-      } catch (error) {
-        errorService.handleError(error);
-      }
-    } else {
-      this.reduxStore.dispatch({
-        type: officeProperties.actions.loadReport,
-        report
-      });
-      await this.preserveReport(report);
-    }
-    console.timeEnd('Total');
-    console.groupEnd();
-
-    this.reduxStore.dispatch({
-      type: officeProperties.actions.finishLoadingReport,
-      reportBindId: objectData.newBindingId,
-    });
-    await this.saveObjectsInExcelStore();
-    this.reduxStore.dispatch(markStepCompleted(objectData.objectWorkingId, SAVE_OBJECT_IN_EXCEL));
-  };
-
-  preserveReport = async (report) => {
+  preserveObject = async (object) => {
     try {
       const settings = this.getOfficeSettings();
-      const reportProperties = this.getReportProperties();
+      const reportProperties = this.getObjectProperties();
       reportProperties.unshift({
-        id: report.id,
-        name: report.name,
-        bindId: report.bindId,
-        projectId: report.projectId,
-        envUrl: report.envUrl,
-        body: report.body,
-        objectType: report.objectType,
-        isCrosstab: report.isCrosstab,
-        isPrompted: report.isPrompted,
-        subtotalsInfo: report.subtotalsInfo,
-        promptsAnswers: report.promptsAnswers,
-        crosstabHeaderDimensions: report.crosstabHeaderDimensions,
-        visualizationInfo: report.visualizationInfo,
-        manipulationsXML: report.manipulationsXML,
-        tableName: report.tableName,
-        tableDimensions: report.tableDimensions,
-        displayAttrFormNames: report.displayAttrFormNames,
-        refreshDate: report.refreshDate,
-        objectWorkingId: report.objectWorkingId,
+        id: object.id,
+        name: object.name,
+        bindId: object.bindId,
+        projectId: object.projectId,
+        envUrl: object.envUrl,
+        body: object.body,
+        objectType: object.objectType,
+        isCrosstab: object.isCrosstab,
+        isPrompted: object.isPrompted,
+        subtotalsInfo: object.subtotalsInfo,
+        promptsAnswers: object.promptsAnswers,
+        crosstabHeaderDimensions: object.crosstabHeaderDimensions,
+        visualizationInfo: object.visualizationInfo,
+        manipulationsXML: object.manipulationsXML,
+        tableName: object.tableName,
+        tableDimensions: object.tableDimensions,
+        displayAttrFormNames: object.displayAttrFormNames,
+        refreshDate: object.refreshDate,
+        objectWorkingId: object.objectWorkingId,
       });
       settings.set(officeProperties.loadedReportProperties, reportProperties);
       settings.saveAsync();
@@ -129,10 +43,10 @@ class OfficeStoreService {
     }
   }
 
-  preserveReportValue = async (bindId, key, value) => {
+  preserveObjectValue = async (bindId, key, value) => {
     try {
       const settings = this.getOfficeSettings();
-      const reportProperties = this.getReportProperties();
+      const reportProperties = this.getObjectProperties();
       const indexOfReport = reportProperties.findIndex((oldReport) => (oldReport.bindId === bindId));
       reportProperties[indexOfReport][key] = value;
       settings.set(officeProperties.loadedReportProperties, reportProperties);
@@ -143,7 +57,7 @@ class OfficeStoreService {
     }
   }
 
-  deleteReport = (bindingId, objectWorkingId) => {
+  deleteObject = (bindId, objectWorkingId) => {
     try {
       const settings = this.getOfficeSettings();
       if (objectWorkingId) {
@@ -155,8 +69,8 @@ class OfficeStoreService {
 
 
       // TODO remove after connecting object reducer to right panel
-      const reportProperties = this.getReportProperties();
-      const indexOfReport2 = reportProperties.findIndex((report) => (report.bindId === bindingId));
+      const reportProperties = this.getObjectProperties();
+      const indexOfReport2 = reportProperties.findIndex((report) => (report.bindId === bindId));
       reportProperties.splice(indexOfReport2, 1);
       settings.set(officeProperties.loadedReportProperties, reportProperties);
 
@@ -166,12 +80,12 @@ class OfficeStoreService {
     }
   }
 
-  getReportFromProperties = (bindingId) => {
-    const reportProperties = this.getReportProperties();
-    return reportProperties.find((report) => report.bindId === bindingId);
+  getObjectFromProperties = (bindId) => {
+    const reportProperties = this.getObjectProperties();
+    return reportProperties.find((report) => report.bindId === bindId);
   };
 
-  getReportProperties = () => {
+  getObjectProperties = () => {
     try {
       const settings = this.getOfficeSettings();
       if (!(settings.get(officeProperties.loadedReportProperties))) {
@@ -186,7 +100,7 @@ class OfficeStoreService {
   };
 
   loadExistingReportBindingsExcel = async () => {
-    const reportArray = await this.getReportProperties();
+    const reportArray = await this.getObjectProperties();
     this.reduxStore.dispatch({
       type: officeProperties.actions.loadAllReports,
       reportArray,
@@ -245,15 +159,15 @@ class OfficeStoreService {
   }
 
 
-  removeReportFromStore = (bindingId, objectWorkingId) => {
+  removeObjectFromStore = (bindId, objectWorkingId) => {
     this.reduxStore.dispatch(deleteObject(objectWorkingId));
 
     // TODO remove dispatch
     this.reduxStore.dispatch({
       type: officeProperties.actions.removeReport,
-      reportBindId: bindingId,
+      reportBindId: bindId,
     });
-    this.deleteReport(bindingId, objectWorkingId);
+    this.deleteObject(bindId, objectWorkingId);
     return true;
   };
 }

@@ -1,7 +1,6 @@
 import { popupController } from '../../popup/popup-controller';
 import { popupHelper } from '../../popup/popup-helper';
 import { officeStoreService } from '../../office/store/office-store-service';
-import { officeDisplayService } from '../../office/office-display-service';
 import { notificationService } from '../../notification/notification-service';
 import { errorService } from '../../error/error-handler';
 
@@ -202,11 +201,11 @@ describe('Popup actions', () => {
       body: {},
       isPrompted: false,
     };
-    officeStoreService.getReportFromProperties = jest
+    officeStoreService.getObjectFromProperties = jest
       .fn()
       .mockImplementation(() => mockReport);
     popupHelper.storageReportRefreshStart = jest.fn();
-    officeDisplayService.printObject = jest.fn();
+    // officeDisplayService.printObject = jest.fn();
     notificationService.displayNotification = jest.fn();
     popupHelper.storageReportRefreshFinish = jest.fn();
     const isRefreshAll = true;
@@ -221,7 +220,7 @@ describe('Popup actions', () => {
         request: 'reports',
       },
       selectedCell: true,
-      bindingId: 'testBind',
+      bindId: 'testBind',
       body: mockReport.body,
       isRefresh: true,
       isPrompted: mockReport.isPrompted,
@@ -236,11 +235,9 @@ describe('Popup actions', () => {
       isRefreshAll,
     );
     // then
-    expect(officeStoreService.getReportFromProperties).toHaveBeenCalled();
+    expect(officeStoreService.getObjectFromProperties).toHaveBeenCalled();
     expect(popupHelper.storageReportRefreshStart).toHaveBeenCalled();
-    expect(officeDisplayService.printObject).toHaveBeenCalledWith(
-      expectedOptions,
-    );
+    // expect(officeDisplayService.printObject).toHaveBeenCalledWith(expectedOptions,);
     expect(notificationService.displayNotification).not.toHaveBeenCalled();
     expect(popupHelper.storageReportRefreshFinish).toHaveBeenCalled();
   });
@@ -257,43 +254,23 @@ describe('Popup actions', () => {
       name: 'report',
       request: 'reports',
     };
-    officeStoreService.getReportFromProperties = jest
+    officeStoreService.getObjectFromProperties = jest
       .fn()
       .mockImplementation(() => mockReport);
     popupHelper.storageReportRefreshStart = jest.fn();
-    officeDisplayService.printObject = jest.fn();
+    // officeDisplayService.printObject = jest.fn();
     notificationService.displayNotification = jest.fn();
     popupHelper.storageReportRefreshFinish = jest.fn();
     // when
     await popupHelper.printRefreshedReport('testBind', objectType, 10, 3, false);
     // then
-    expect(officeStoreService.getReportFromProperties).toHaveBeenCalled();
+    expect(officeStoreService.getObjectFromProperties).toHaveBeenCalled();
     expect(popupHelper.storageReportRefreshStart).not.toHaveBeenCalled();
-    expect(officeDisplayService.printObject).toHaveBeenCalled();
+    // expect(officeDisplayService.printObject).toHaveBeenCalled();
     expect(notificationService.displayNotification).toHaveBeenCalled();
     expect(popupHelper.storageReportRefreshFinish).not.toHaveBeenCalled();
   });
-  it('printRefreshedReport throws error when result type is warning', async () => {
-    // given
-    const mockReport = {
-      id: 'testBindId',
-      projectId: 'testProjectId',
-      body: {},
-    };
-    const mockResult = {
-      type: 'warning',
-      message: 'Test err message',
-    };
-    officeStoreService.getReportFromProperties = jest
-      .fn()
-      .mockImplementation(() => mockReport);
-    popupHelper.storageReportRefreshStart = jest.fn();
-    officeDisplayService.printObject = jest.fn().mockReturnValue(mockResult);
-    // then
-    await expect(
-      popupHelper.printRefreshedReport('testBind', 'Report', 10, 3, false),
-    ).rejects.toThrowError(new Error(mockResult.message));
-  });
+
   it('handleRefreshError calls proper methods when isRefreshAll flag is true', () => {
     // given
     const error = 'testError';

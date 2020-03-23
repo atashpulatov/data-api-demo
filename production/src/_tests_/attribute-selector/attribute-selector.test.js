@@ -49,7 +49,13 @@ describe('AttributeSelectorNotConnected', () => {
       selectedFilters: editedObject.selectedFilters,
     };
     // when
-    const selectorWrapped = shallow(<AttributeSelectorNotConnected chosenObject={chosenObject} session={session} editedObject={editedObject} supportForms={supportForms} />);
+    const selectorWrapped = shallow(
+      <AttributeSelectorNotConnected
+        chosenObject={chosenObject}
+        session={session}
+        editedObject={editedObject}
+        supportForms={supportForms} />
+    );
     // then
     const attributeMetricFilterWrapped = selectorWrapped.find(AttributeMetricFilter).at(0);
     expect(attributeMetricFilterWrapped.prop('mstrData')).toEqual(mstrData);
@@ -79,7 +85,13 @@ describe('AttributeSelectorNotConnected', () => {
       },
     };
     // when
-    const wrappedComponent = shallow(<AttributeSelectorNotConnected chosenObject={chosenObject} session={session} editedObject={editedObject} handlePopupErrors={mockHandlePopupErrors} />);
+    const wrappedComponent = shallow(
+      <AttributeSelectorNotConnected
+        chosenObject={chosenObject}
+        session={session}
+        editedObject={editedObject}
+        handlePopupErrors={mockHandlePopupErrors} />
+    );
     wrappedComponent.instance().handleUnauthorized(libraryError);
     // then
     expect(mockHandlePopupErrors).toBeCalledWith(pupupExpectedError);

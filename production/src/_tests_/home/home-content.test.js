@@ -5,6 +5,7 @@ import HomeContent from '../../home/home-content';
 // TODO: get rid of Provider and reduxStore - everything should be mocked.
 //  Using right now, as children components require store. They should be mocked as well
 import { reduxStore } from '../../store';
+import { sessionHelper } from '../../storage/session-helper';
 
 
 describe('PageBuilder', () => {
@@ -143,6 +144,7 @@ describe('PageBuilder', () => {
       toggleRenderSettingsFlag: false,
       t: (t) => t,
     };
+    jest.spyOn(sessionHelper, 'isDevelopment').mockImplementationOnce(() => false);
     // when
     const wrappedComponent = mount(<Provider store={reduxStore}><HomeContent {...givenProps} /></Provider>);
 
@@ -162,6 +164,7 @@ describe('PageBuilder', () => {
       toggleRenderSettingsFlag: false,
       t: (t) => t,
     };
+    jest.spyOn(sessionHelper, 'isDevelopment').mockImplementationOnce(() => false);
     // when
     const wrappedComponent = mount(<Provider store={reduxStore}><HomeContent {...givenProps} /></Provider>);
 
@@ -182,6 +185,7 @@ describe('PageBuilder', () => {
       toggleRenderSettingsFlag: false,
       t: (t) => t,
     };
+    jest.spyOn(sessionHelper, 'isDevelopment').mockImplementationOnce(() => false);
     // when
     const wrappedComponent = mount(<Provider store={reduxStore}><HomeContent {...givenProps} /></Provider>);
 

@@ -11,30 +11,10 @@ import {
 } from '../cache/cache-actions';
 import { sessionProperties } from './session-properties';
 import { CLEAR_POPUP_STATE } from '../popup/popup-state-actions';
+import mstrObjectType from '../mstr-object/mstr-object-type-enum';
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
 export const DEFAULT_TYPE = 'Data';
-
-
-// TODO: use some global store, redux one probably will be the best choice, or maybe some const global value
-// TODO: use mstrObjectType instead of this array
-const supportedTypesArray = [
-  {
-    name: 'Report',
-    type: 3,
-    subtype: [768, 769, 774], // DssXmlSubTypeReportGrid, DssXmlSubTypeReportGraph, DssXmlSubTypeReportGridAndGraph
-  },
-  {
-    name: 'Dataset',
-    type: 3,
-    subtype: [776, 779],
-  },
-  {
-    name: 'Dossier',
-    type: 55,
-    subtype: [14081],
-  },
-];
 
 export const initialState = {
   folder: null,
@@ -67,10 +47,6 @@ export const initialState = {
   myLibraryOwners: {},
 };
 
-function getType(subtype) {
-  const selectedType = supportedTypesArray.find((item) => item.subtype.includes(subtype));
-  return selectedType ? selectedType.name : DEFAULT_TYPE;
-}
 
 function cleanSelection(state) {
   const newState = { ...state };
@@ -89,7 +65,7 @@ function makeSelection(newState, data) {
   newState.chosenProjectId = data.chosenProjectId || null;
   newState.chosenSubtype = data.chosenSubtype || null;
   newState.chosenObjectName = data.chosenObjectName || DEFAULT_PROJECT_NAME;
-  newState.chosenType = getType(data.chosenSubtype);
+  newState.chosenType = mstrObjectType.getMstrTypeBySubtype(data.chosenSubtype);
   newState.objectType = data.objectType;
   newState.chosenChapterKey = data.chosenChapterKey || null;
   newState.chosenVisualizationKey = data.chosenVisualizationKey || null;

@@ -22,6 +22,7 @@ import {
 } from '../navigation/navigation-tree-actions';
 import { officeApiRemoveHelper } from '../office/api/office-api-remove-helper';
 import { sessionHelper } from '../storage/session-helper';
+import { DevelopmentImportList } from '../development-import-list';
 
 export class FileHistoryContainerNotConnected extends React.Component {
   constructor(props) {
@@ -152,26 +153,11 @@ export class FileHistoryContainerNotConnected extends React.Component {
             </div>
           )
         }
-        {sessionHelper.isDevelopment
-         && (
-           <div className="refresh-button-container">
-             <Button
-               className="add-data-btn floating-button"
-               onClick={() => sessionHelper.importSeasonalReport()}
-               disabled={loading}
-             >
-            Seasonal
-             </Button>
-             <Button
-               style={{ width: '50px' }}
-               className="add-data-btn floating-button"
-               onClick={() => this.removeAllAction(reportArray)}
-               disabled={loading}
-             >
-            Kill All
-             </Button>
-           </div>
-         )}
+        {(sessionHelper.isDevelopment()) && (
+          <DevelopmentImportList
+            reportArray={reportArray}
+            removeAllAction={this.removeAllAction} />
+        )}
         <div className="refresh-button-container">
           <Button
             id="add-data-btn-container"
@@ -220,7 +206,7 @@ export class FileHistoryContainerNotConnected extends React.Component {
               isPrompted={report.isPrompted}
               key={report.bindId}
               fileName={report.name}
-              bindingId={report.bindId}
+              bindId={report.bindId}
               onClick={officeApiHelper.onBindingObjectClick}
               onDelete={officeApiRemoveHelper.removeReportFromExcel}
               isLoading={report.isLoading}

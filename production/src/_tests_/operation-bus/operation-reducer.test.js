@@ -7,8 +7,8 @@ describe('operation reducer', () => {
   let initialState;
   // eslint-disable-next-line no-underscore-dangle
   const _initialState = {
-    empty: { operations:[] },
-    singleOperation:{
+    empty: { operations: [] },
+    singleOperation: {
       operations: [{
         objectWorkingId: 'someOtherString234',
         operationType: 'someType24',
@@ -17,8 +17,8 @@ describe('operation reducer', () => {
         loadedRows: 0,
       }]
     },
-    multipleOperations:   {
-      operations:[{
+    multipleOperations: {
+      operations: [{
         objectWorkingId: 'someOtherString2',
         operationType: 'someType',
         stepsQueue: ['step1', 'step2', 'step3'],

@@ -5,7 +5,7 @@ import { PopupTypeEnum } from '../home/popup-type-enum';
 import objectTypeEnum from '../mstr-object/mstr-object-type-enum';
 import { officeContext } from '../office/office-context';
 import { selectorProperties } from '../attribute-selector/selector-properties';
-import { refreshRequestedTMP, refreshRequested } from '../operation/operation-actions';
+import { refreshRequested } from '../operation/operation-actions';
 
 
 function sortPromptsAnswers(array) {
@@ -71,27 +71,24 @@ class PopupHelper {
   };
 
   printRefreshedReport = async (
-    bindingId,
+    bindId,
     objectType,
     length,
     index,
     isRefreshAll,
   ) => {
-    const refreshReport = officeStoreService.getReportFromProperties(bindingId);
+    const refreshReport = officeStoreService.getObjectFromProperties(bindId);
     if (isRefreshAll) { this.storageReportRefreshStart(refreshReport, index); }
     const mstrObjectType = objectTypeEnum.getMstrTypeByName(objectType);
 
     this.reduxStore.dispatch(refreshRequested(refreshReport));
 
-
-    // const result = await officeDisplayService.printObject(options);
+    // TODO remove
     const result = {
       type: 'success',
       message: 'Data loaded successfully'
     };
-    // if (result) {
-    //   notificationService.displayNotification({ type: result.type, content: result.message });
-    // }
+
     if (result && result.type === 'warning') {
       throw new Error(result.message);
     }

@@ -2,12 +2,11 @@ import { mstrObjectRestService } from './mstr-object-rest-service';
 import mstrObjectEnum from './mstr-object-type-enum';
 import { incomingErrorStrings, errorTypes, INVALID_VIZ_KEY_MESSAGE } from '../error/constants';
 
-import { GET_INSTANCE_DEFINITION, IMPORT_OPERATION } from '../operation/operation-steps';
-import { markStepCompleted } from '../operation/operation-actions';
-import { updateObject } from '../operation/object-actions';
+import { IMPORT_OPERATION } from '../operation/operation-steps';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
 import { officeApiCrosstabHelper } from '../office/api/office-api-crosstab-helper';
+import operationStepDispatcher from '../operation/operation-step-dispatcher';
 
 
 const {
@@ -20,28 +19,24 @@ const {
 } = mstrObjectRestService;
 
 class StepGetInstanceDefinition {
-  init = (reduxStore) => {
-    this.reduxStore = reduxStore;
-  }
-
   /**
-   * Create Instance definition object which stores data neede to continue import.
-   * If instance of object does not exist new one will be created
+   * Creates Instance definition object which contains data about MSTR object needed in next steps.
    *
-   * @param {Object} [body] Contains requested objects and filters
-   * @param {Object} mstrObjectType Contains objectId, projectId, dossierData, mstrObjectType used in request
-   * @param {Object} [preparedInstanceId] Instance Id of the object
-   * @param {String} projectId
-   * @param {String} objectId
-   * @param {Object} [dossierData]
-   * @param {Object} [visualizationInfo]
-   * @param {Object} [promptsAnswers]
-   * @param {Object} [crosstabHeaderDimensions] Contains previous dimensions of crosstab headers.
-   * @param {Array} [subtotalsAddresses] Contains previous subtotal addresses
-   * @param {Boolean} subtotalsDefined Information if the report has subtotals
-   * @param {Boolean} subtotalsVisible Information if the subtotals are visible
-   * @returns {Object} Object containing officeTable and subtotalAddresses
+   * If instance of an object does not exist, new one will be created.
+   * All additional manipulations like prompts answers or body will be applied.
+   *
+   * This function is subscribed as one of the operation steps with the key GET_INSTANCE_DEFINITION,
+   * therefore should be called only via operation bus.
+   *
+   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param {String} objectData.displayAttrFormNames The style in which attribute form will be displayed
+   * @param {Boolean} objectData.insertNewWorksheet Determines if the object will be displayed in a new spreadsheet
+   * @param {Object} objectData.subtotalsInfo Determines if subtotals will be displayed and stores subtotal addresses
+   * @param {String} objectData.bindId Unique Id of the Office table used for referencing the table in Excel
+   * @param {Object} objectData.visualizationInfo Contains information about location of visualization in dossier
+   * @param {Office} operationData.operationType The type of the operation that called this function
    */
+
    getInstanceDefinition = async (objectData, { operationType }) => {
      const {
        objectWorkingId,
@@ -49,9 +44,9 @@ class StepGetInstanceDefinition {
        insertNewWorksheet,
        crosstabHeaderDimensions,
        subtotalsInfo: { subtotalsAddresses } = false,
-       newBindingId,
+       bindId,
      } = objectData;
-     let { visualizationInfo, startCell } = objectData;
+     let { visualizationInfo } = objectData;
 
      const connectionData = {
        objectId: objectData.objectId,
@@ -69,7 +64,7 @@ class StepGetInstanceDefinition {
      // Get excel context and initial cell
      console.group('Importing data performance');
      console.time('Total');
-     startCell = await this.getStartCell(insertNewWorksheet, excelContext, operationType);
+     const startCell = await this.getStartCell(insertNewWorksheet, excelContext, operationType);
 
      let instanceDefinition;
      let { body } = connectionData;
@@ -107,13 +102,16 @@ class StepGetInstanceDefinition {
        objectWorkingId,
        envUrl: officeApiHelper.getCurrentMstrContext(),
        body,
-       instanceDefinition,
        visualizationInfo: visualizationInfo || false,
-       startCell,
-       excelContext,
-       bindingId: newBindingId,
+       oldBindId: bindId,
      };
 
+     const updatedOperation = {
+       objectWorkingId,
+       instanceDefinition,
+       startCell,
+       excelContext,
+     };
      // TODO add when error handlind added
      // Check if instance returned data
      //  if (mstrTable.rows.length === 0) {
@@ -123,9 +121,10 @@ class StepGetInstanceDefinition {
      //    };
      //  }
 
-     this.reduxStore.dispatch(updateObject(updatedObject));
-     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, GET_INSTANCE_DEFINITION));
-   }
+     operationStepDispatcher.updateOperation(updatedOperation);
+     operationStepDispatcher.updateObject(updatedObject);
+     operationStepDispatcher.completeGetInstanceDefinition(objectWorkingId);
+   };
 
   /**
    * Returns an error type based on error get from visualization importing.

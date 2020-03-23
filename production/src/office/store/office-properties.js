@@ -10,7 +10,7 @@ export const officeProperties = new Proxy({
   workbookBindings: 'bindings',
   bindingItems: 'items',
   storedObjects: 'storedObjects',
-  //TODO: remove below after refactor
+  // TODO: remove below after refactor
   loadedReportProperties: 'reportProperties',
   isSecured: 'isSecured',
   isClearing: 'isClearing',

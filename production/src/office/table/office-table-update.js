@@ -8,7 +8,7 @@ class OfficeTableUpdate {
    * Updates office table if the number of columns or rows of an existing table changes.
    *
    * @param {Object} instanceDefinition
-   * @param {Object} excelContext ExcelContext
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    * @param {string} startCell  Top left corner cell
    * @param {Object} prevOfficeTable Previous office table to refresh
    *
@@ -63,7 +63,7 @@ class OfficeTableUpdate {
    * Updates number of rows in office table.
    *
    * @param {Object} prevOfficeTable Previous office table to refresh
-   * @param {Object} excelContext ExcelContext
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    * @param {number} rows  number of rows in the object
    *
    */

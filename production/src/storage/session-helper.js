@@ -155,25 +155,8 @@ class SessionHelper {
     }
   }
 
-  importSeasonalReport = async () => {
-    const options = {
-      bindingId: null,
-      dossierData: undefined,
-      isPrompted: 0,
-      mstrObjectType: {
-        name: 'report',
-        request: 'reports',
-        subtypes: [768, 769, 774],
-        type: 3,
-      },
-      objectId: 'F3DA2FE611E75A9600000080EFC5B53B',
-      objectWorkingId: 1584090384002,
-      preparedInstanceId: null,
-      projectId: 'B7CA92F04B9FAE8D941C3E9B7E0CD754',
-      promptsAnswers: null,
-      visualizationInfo: undefined,
-    };
-    this.reduxStore.dispatch(importRequested(options));
+  importObjectWithouPopup = async (object) => {
+    this.reduxStore.dispatch(importRequested(object));
   };
 }
 

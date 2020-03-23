@@ -135,7 +135,7 @@ class OfficeConverterServiceV2 {
    * Gets raw table rows
    *
    * @param {JSON} response
-   * @param {Boolean} isCrosstab
+   * @param {Boolean} isCrosstab Specify if object is a crosstab
    * @return {number[]}
    */
   getRows=(response, isCrosstab) => {
@@ -159,7 +159,7 @@ class OfficeConverterServiceV2 {
    * Gets object with crosstab rows and column headers
    *
    * @param {JSON} response
-   * @param {Boolean} isCrosstab
+   * @param {Boolean} isCrosstab Specify if object is a crosstab
    * @param {Boolean} isCrosstabular Crosstabular is a Crosstab report with metrics in Rows and nothing in columns
    * @return {Object}
 
@@ -195,7 +195,7 @@ class OfficeConverterServiceV2 {
    *
    * @param {JSON} response
    * @param {Object} columnInformation - Array with indexed column definition for metrics and attributes
-   * @param {Boolean} isCrosstab
+   * @param {Boolean} isCrosstab Specify if object is a crosstab
    * @return {Number}
    */
   getTableSize = (response, columnInformation, isCrosstab) => {

@@ -179,7 +179,12 @@ describe('Home', () => {
     it('should change isSettings flag when button settings is clicked', () => {
       // given
       const mockToggle = jest.fn();
-      const headerWrapper = mount(<HeaderNotConnected isSettings={false} isConfirm={false} toggleIsSettingsFlag={mockToggle} />);
+      const headerWrapper = mount(
+        <HeaderNotConnected
+          isSettings={false}
+          isConfirm={false}
+          toggleIsSettingsFlag={mockToggle} />
+      );
       const buttonWrapper = headerWrapper.find('Button .settings-btn');
       const mockToggleSettings = jest.spyOn(headerWrapper.instance(), 'toggleSettings');
       headerWrapper.instance().forceUpdate();

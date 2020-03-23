@@ -22,45 +22,92 @@ class OfficeApiHelper {
  * checks excel session and auth token
  *
  */
-checkStatusOfSessions = async () => {
-  await Promise.all([
-    this.getExcelSessionStatus(),
-    authenticationHelper.validateAuthToken(),
-  ]);
-}
+  checkStatusOfSessions = async () => {
+    await Promise.all([
+      this.getExcelSessionStatus(),
+      authenticationHelper.validateAuthToken(),
+    ]);
+  }
 
-getBindingRange = (excelContext, bindingId) => excelContext.workbook.bindings.getItem(bindingId).getTable().getRange()
+  /**
+  * Get range of the Excel table added to Workbook binded item collection
+  *
+  * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+  * @param {String} bindId Id of the Office table created on import used for referencing the Excel table
+  * @return {Office} Reference to Excel Range
+  */
+  getBindingRange = (excelContext, bindId) => excelContext.workbook.bindings.getItem(bindId).getTable().getRange()
 
-getTable = (excelContext, bindingId) => excelContext.workbook.bindings.getItem(bindingId).getTable()
+  /**
+  * Get Excel table added to Workbook binded item collection
+  *
+  * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+  * @param {String} bindId Id of the Office table created on import used for referencing the Excel table
+  * @return {Office} Reference to Excel Table
+  */
+  getTable = (excelContext, bindId) => excelContext.workbook.bindings.getItem(bindId).getTable()
 
-getExcelContext = async () => window.Excel.run({ delayForCellEdit: true }, async (excelContext) => excelContext);
+  /**
+  * Get Excel Context
+  *
+  * @return {Office} Reference to Excel Context used by Excel API functions
+  */
+  getExcelContext = async () => window.Excel.run({ delayForCellEdit: true }, async (excelContext) => excelContext);
 
-getOfficeContext = async () => window.Office.context
+  /**
+  * Get Office Context
+  *
+  * @return {Office} Reference to Office Context used by Office API functions
+  */
+  getOfficeContext = async () => window.Office.context
 
-getExcelSessionStatus = async () => !!await this.getExcelContext() // ToDo find better way to check session status
+  /**
+  * Checks the status of Excel session
+  *
+  * @return {Boolean} Specify if the Excel session is active
+  */
+  getExcelSessionStatus = async () => !!await this.getExcelContext() // ToDo find better way to check session status
 
-getCurrentMstrContext = () => {
-  const { envUrl } = this.reduxStore.getState().sessionReducer;
-  const { username } = this.reduxStore.getState().sessionReducer;
-  return { envUrl, username };
-}
+  /**
+  * Get username and environmnet URL from Redux store
+  *
+  * @return {Object} Object containing username and envUrl(environmnet URL)
+  */
+  getCurrentMstrContext = () => {
+    const { envUrl } = this.reduxStore.getState().sessionReducer;
+    const { username } = this.reduxStore.getState().sessionReducer;
+    return { envUrl, username };
+  }
 
-/**
- * Returns top left cell of selected range
- *
- * @param {Office} excelContext Excel Context
- * @return {String} Address of the cell.
- */
-getSelectedCell = async (excelContext) => {
-  const selectedRangeStart = excelContext.workbook.getSelectedRange().getCell(0, 0);
-  selectedRangeStart.load(officeProperties.officeAddress);
-  await excelContext.sync();
-  return this.getStartCellOfRange(selectedRangeStart.address);
-}
+  /**
+   * Returns top left cell of selected range
+   *
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+   * @return {String} Address of the cell.
+   */
+  getSelectedCell = async (excelContext) => {
+    const selectedRangeStart = excelContext.workbook.getSelectedRange().getCell(0, 0);
+    selectedRangeStart.load(officeProperties.officeAddress);
+    await excelContext.sync();
+    return this.getStartCellOfRange(selectedRangeStart.address);
+  }
 
-getStartCellOfRange = (excelAdress) => excelAdress.match(/!(\w+\d+)(:|$)/)[1]
+  /**
+   * Returns top left cell from passed address
+   *
+   * @param {Office} excelAdress Reference to Excel Context used by Excel API functions
+   * @return {String} Address of the cell.
+   */
+  getStartCellOfRange = (excelAdress) => excelAdress.match(/!(\w+\d+)(:|$)/)[1]
 
-
+  /**
+  * Get Excel range based on starting cell and number of columns and rows
+  *
+  * @param {Number} headerCount Number  of rows
+  * @param {String} startCell Address of the cell in Excel spreadsheet
+  * @param {Number} rowCount Number  of rows
+  * @return {String} Address of Excel Range
+  */
   getRange = (headerCount, startCell, rowCount = 0) => {
     if (!Number.isInteger(headerCount)) {
       throw new IncorrectInputTypeError();
@@ -79,11 +126,11 @@ getStartCellOfRange = (excelAdress) => excelAdress.match(/!(\w+\d+)(:|$)/)[1]
   };
 
   /**
-    * Returns excel sheet from specific table
-    *
-    * @param {Office} excelContext Excel context
-    * @param {String} bindId Report bind id
-    */
+  * Returns excel sheet from specific table
+  *
+  * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+  * @param {String} bindId Id of the Office table created on import used for referencing the Excel table
+  */
    getExcelSheetFromTable = async (excelContext, bindId) => {
      try {
        const officeTable = excelContext.workbook.tables.getItem(bindId);
@@ -95,13 +142,18 @@ getStartCellOfRange = (excelAdress) => excelAdress.match(/!(\w+\d+)(:|$)/)[1]
    }
 
   /**
-    * Returns current excel sheet
-    *
-    * @param {Office} excelContext Excel context
+  * Returns current excel sheet
+  *
+  * @param {Office} excelContext Reference to Excel Context used by Excel API functions
   */
   getCurrentExcelSheet = (excelContext) => excelContext.workbook.worksheets.getActiveWorksheet()
 
-
+  /**
+  * Convert number of column to Excel column name
+  *
+  * @param {Number} headerCount Number  of rows
+  * @return {String} Excel column indicator
+  */
   numberToLetters=(headerCount) => {
     let result = '';
     let firstNumber = ALPHABET_RANGE_START;
@@ -121,6 +173,27 @@ getStartCellOfRange = (excelAdress) => excelAdress.match(/!(\w+\d+)(:|$)/)[1]
     return result;
   }
 
+  /**
+  * Convert Excel column name to index of the column
+  *
+  * @param {String} letters Name of the Excel column
+  * @return {Number} Index of the Excel column
+  */
+  lettersToNumber = (letters) => {
+    if (!letters.match(/^[A-Z]*[A-Z]$/)) {
+      throw new IncorrectInputTypeError();
+    }
+    return letters.split('').reduce((r, a) => r * ALPHABET_RANGE_END + parseInt(a, 36) - 9, 0);
+  }
+
+  /**
+  * Offset Excel address by passed row and column offset
+  *ppackage
+  * @param {String} cell Address of the cell in Excel spreadsheet
+  * @param {Number} rowOffset Number of rows
+  * @param {Number} colOffset Number of column
+  * @return {String} Address of Excel cell
+  */
   offsetCellBy = (cell, rowOffset, colOffset) => {
     const cellArray = cell.split(/(\d+)/);
     const [column, row] = cellArray;
@@ -129,33 +202,28 @@ getStartCellOfRange = (excelAdress) => excelAdress.match(/!(\w+\d+)(:|$)/)[1]
     return `${endColumn}${endRow}`;
   }
 
-  handleOfficeApiException = (error) => {
-    console.error(`error: ${error}`);
-    if (error instanceof window.OfficeExtension.Error) {
-      console.error(`Debug info: ${JSON.stringify(error.debugInfo)}`);
-    } else {
-      throw error;
-    }
-  }
-
-  lettersToNumber = (letters) => {
-    if (!letters.match(/^[A-Z]*[A-Z]$/)) {
-      throw new IncorrectInputTypeError();
-    }
-    return letters.split('').reduce((r, a) => r * ALPHABET_RANGE_END + parseInt(a, 36) - 9, 0);
-  }
-
+  /**
+  * Highlights imported object in Excel Worksheet
+  * Throws error if object no longer exist in Excel or if Excel or MSTR session expired
+  *
+  * @param {String} bindId Id of the Office table created on import used for referencing the Excel table
+  * @param {Boolean} [shouldSelect=true] Specify if the Object on Worksheet should be highlighted
+  * @param {Function} deleteObject Function for removing imported object
+  * @param {String} chosenObjectName Name of the imported object
+  * @param {Boolean} isCrosstab Specify if object is a crosstab
+  * @param {Object} crosstabHeaderDimensions Contains information about crosstab headers dimensions
+  */
   onBindingObjectClick = async (
-    bindingId,
+    bindId,
     shouldSelect = true,
-    deleteReport,
+    deleteObject,
     chosenObjectName,
     isCrosstab,
     crosstabHeaderDimensions) => {
     let crosstabRange;
     try {
       const excelContext = await this.getExcelContext();
-      const officeTable = excelContext.workbook.tables.getItem(bindingId);
+      const officeTable = excelContext.workbook.tables.getItem(bindId);
 
       if (isCrosstab) {
         const tmpXtabDimensions = { ...crosstabHeaderDimensions, columnsY: crosstabHeaderDimensions.columnsY + 1, };
@@ -167,7 +235,7 @@ getStartCellOfRange = (excelAdress) => excelAdress.match(/!(\w+\d+)(:|$)/)[1]
 
         if (shouldSelect) { crosstabRange.select(); }
       } else {
-        const tableRange = this.getBindingRange(excelContext, bindingId);
+        const tableRange = this.getBindingRange(excelContext, bindId);
         if (shouldSelect) { tableRange.select(); }
       }
 
@@ -177,7 +245,7 @@ getStartCellOfRange = (excelAdress) => excelAdress.match(/!(\w+\d+)(:|$)/)[1]
       if (error && error.code === 'ItemNotFound') {
         return notificationService.displayTranslatedNotification({ type: 'info', content: OBJ_REMOVED_FROM_EXCEL });
       }
-      errorService.handleError(error, { chosenObjectName, onConfirm: deleteReport });
+      errorService.handleError(error, { chosenObjectName, onConfirm: deleteObject });
       return false;
     }
   };
@@ -186,10 +254,10 @@ getStartCellOfRange = (excelAdress) => excelAdress.match(/!(\w+\d+)(:|$)/)[1]
    * Adds binding to the Excel table
    *
    * @param {Office} namedItem Excel Table
-   * @param {String} bindingId
+   * @param {String} bindId Id of the Office table created on import used for referencing the Excel table
    */
-  bindNamedItem = (namedItem, bindingId) => new Promise((resolve, reject) => {
-    window.Office.context.document.bindings.addFromNamedItemAsync(namedItem, 'table', { id: bindingId }, (result) => {
+  bindNamedItem = (namedItem, bindId) => new Promise((resolve, reject) => {
+    window.Office.context.document.bindings.addFromNamedItemAsync(namedItem, 'table', { id: bindId }, (result) => {
       if (result.status === 'succeeded') {
         console.log(`Added new binding with type: ${result.value.type} and id: ${result.value.id}`);
         resolve();

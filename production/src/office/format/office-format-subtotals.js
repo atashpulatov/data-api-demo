@@ -1,19 +1,15 @@
 import { CONTEXT_LIMIT } from '../../mstr-object/mstr-object-rest-service';
 
 class OfficeFormatSubtotals {
-  init = (reduxStore) => {
-    this.reduxStore = reduxStore;
-  }
-
   /**
    * Applies Excel number formatting to imported object based on MSTR data type.
    *
-   * @param {Boolean} isCrosstab
+   * @param {Boolean} isCrosstab Specify if object is a crosstab
    * @param {Array} subtotalsAddresses Array containing object with cell coordinates
    * @param {Office} officeTable
-   * @param {Office} excelContext ExcelContext
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions ExcelContext
    * @param {Object} mstrTable contains information about mstr object
-   * @param {Boolean} [shouldBold=true] Specify whether the values in cells should be bold
+   * @param {Boolean} [shouldBold=true] Specify if the function should add or remove bold formatting
    */
   applySubtotalFormatting = async ({ excelContext, officeTable }, mstrTable, shouldBold = true) => {
     const { isCrosstab } = mstrTable;
@@ -81,8 +77,8 @@ class OfficeFormatSubtotals {
    * @param {Array} subtotalCells 2d array of all starting subtotal row cells
    * (each element contains row and column number of subtotal cell in headers columns)
    * @param {Object} mstrTable instance definition
-   * @param {Office} excelContext Excel context
-   * @param {Boolean} shouldBold
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+   * @param {Boolean} shouldBold Specify if the function should add or remove bold formatting
    */
   formatSubtotals = async (startCell, subtotalCells, mstrTable, excelContext, shouldBold) => {
     let contextPromises = [];

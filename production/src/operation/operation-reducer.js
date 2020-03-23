@@ -1,5 +1,11 @@
 import {
-  IMPORT_REQUESTED, EDIT_REQUESTED, REFRESH_REQUESTED, MARK_STEP_COMPLETED, CANCEL_OPERATION, BACKUP_OBJECT
+  IMPORT_REQUESTED,
+  EDIT_REQUESTED,
+  REFRESH_REQUESTED,
+  MARK_STEP_COMPLETED,
+  CANCEL_OPERATION,
+  BACKUP_OBJECT,
+  UPDATE_OPERATION,
 } from './operation-actions';
 
 const initialState = { operations: [] };
@@ -18,29 +24,20 @@ export const operationReducer = (state = initialState, action) => {
     case MARK_STEP_COMPLETED:
       return markStepCompleted(state, action.payload);
 
-    case CANCEL_OPERATION:
-      return cancelOperation(state, action.payload);
+    case UPDATE_OPERATION:
+      return updateOperation(state, action.payload);
 
     case BACKUP_OBJECT:
       return backupObject(state, action.payload);
+
+    case CANCEL_OPERATION:
+      return cancelOperation(state, action.payload);
+
 
     default:
       return state;
   }
 };
-
-function backupObject(state, { objectWorkingId, objectToBackup }) {
-  const processedOperationIndex = getProcessedOperationIndex(state.operations, objectWorkingId);
-  const processedOperation = state.operations[processedOperationIndex];
-  processedOperation.objectBackup = objectToBackup;
-  return { ...state };
-}
-
-function cancelOperation(state, { objectWorkingId }) {
-  const processedOperationIndex = getProcessedOperationIndex(state.operations, objectWorkingId);
-  state.operations.splice(processedOperationIndex, 1);
-  return { ...state };
-}
 
 function importRequested(state, payload) {
   return {
@@ -84,6 +81,28 @@ function markStepCompleted(state, { objectWorkingId, completedStep }) {
   }
   return { ...state };
 }
+
+function updateOperation(state, updatedOperationProps) {
+  const processedOperationIndex = getProcessedOperationIndex(state.operations, updatedOperationProps.objectWorkingId);
+  const newOperations = [...state.operations];
+  const updatedOperation = { ...state.operations[processedOperationIndex], ...updatedOperationProps };
+  newOperations.splice(processedOperationIndex, 1, updatedOperation);
+  return { operations: newOperations };
+}
+
+function backupObject(state, { objectWorkingId, objectToBackup }) {
+  const processedOperationIndex = getProcessedOperationIndex(state.operations, objectWorkingId);
+  const processedOperation = state.operations[processedOperationIndex];
+  processedOperation.objectBackup = objectToBackup;
+  return { ...state };
+}
+
+function cancelOperation(state, { objectWorkingId }) {
+  const processedOperationIndex = getProcessedOperationIndex(state.operations, objectWorkingId);
+  state.operations.splice(processedOperationIndex, 1);
+  return { ...state };
+}
+
 
 function getProcessedOperationIndex(operations, objectWorkingId) {
   const processedOperationIndex = operations

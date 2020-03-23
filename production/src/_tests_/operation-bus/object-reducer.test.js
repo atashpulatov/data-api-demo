@@ -9,16 +9,16 @@ describe('objectReducer', () => {
     objectId: 'someId',
   };
   const initialState = {
-    empty: { objects:[] },
-    singleObject:{
+    empty: { objects: [] },
+    singleObject: {
       objects: [{
         objectWorkingId: 'someOtherString234',
         envUrl: 'someURL24',
         objectId: 'someDiffId',
       }]
     },
-    multipleObjects:   {
-      objects:[{
+    multipleObjects: {
+      objects: [{
         objectWorkingId: 'someOtherString2',
         envUrl: 'someURL24',
         objectId: 'someDiffId',

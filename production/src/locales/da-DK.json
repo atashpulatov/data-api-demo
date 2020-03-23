@@ -96,7 +96,7 @@
   "Data is not relevant anymore. You can delete it from the list": "Data er ikke længere relevante Du kan slette dem på listen",
   "Excel returned error": "Excel returnerede en fejl",
   "Missing reportArray": "Manglende reportArray",
-  "Missing reportBindId": "Manglende reportBindingId",
+  "Missing reportBindId": "Manglende reportbindId",
   "Missing report": "Manglende report",
   "Missing report.id": "Manglende report.id",
   "Missing report.name": "Manglende report.name",

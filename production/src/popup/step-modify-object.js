@@ -1,26 +1,30 @@
-import { markStepCompleted } from '../operation/operation-actions';
-import { MODIFY_OBJECT } from '../operation/operation-steps';
-import { updateObject } from '../operation/object-actions';
+import operationStepDispatcher from '../operation/operation-step-dispatcher';
 
-class StepSaveReportWithParams {
-  init = (reduxStore) => {
-    this.reduxStore = reduxStore;
-  };
-
-  saveReportWithParams = (objectData, { objectEditedData }) => {
-    const { objectWorkingId, instanceDefinition: { mstrTable } } = objectData;
+class StepModifyObject {
+  /**
+   * Overrides the old data stored in object reducer with the data received from the popup after edit action.
+   *
+   * This function is subscribed as one of the operation steps with the key MODIFY_OBJECT,
+   * therefore should be called only via operation bus.
+   *
+   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param {Object} objectData.subtotalsInfo Determines if subtotals will be displayed and stores subtotal addresses
+   * @param {Object} objectData.body Contains information about location of visualization in dossier
+   * @param {String} objectData.bindId Unique id of the Office table used for referencing the table in Excel
+   * @param {Office} operationData.objectEditedData Contains new data for edit workflow
+   */
+  modifyObject = (objectData, { objectEditedData }) => {
+    const { objectWorkingId, subtotalsInfo } = objectData;
 
     const updatedObject = {
       objectWorkingId,
       body: objectEditedData.body,
-      bindingId: objectData.newBindingId,
-      prevOfficeTable: objectData.officeTable,
-      previousTableDimensions: { columns: objectData.instanceDefinition.columns },
+      oldBindId: objectData.bindId,
     };
 
     if (!objectEditedData.visualizationInfo
-      && mstrTable.subtotalsInfo.importSubtotal !== objectEditedData.subtotalsInfo.importSubtotal) {
-      const subtotalsInformation = { ...mstrTable.subtotalsInfo };
+      && subtotalsInfo.importSubtotal !== objectEditedData.subtotalsInfo.importSubtotal) {
+      const subtotalsInformation = { ...subtotalsInfo };
       subtotalsInformation.importSubtotal = objectEditedData.subtotalsInfo.importSubtotal;
       updatedObject.instanceDefinition.mstrTable.subtotalsInfo = subtotalsInformation;
     }
@@ -44,9 +48,10 @@ class StepSaveReportWithParams {
       updatedObject.isEdit = false;
     }
 
-    this.reduxStore.dispatch(updateObject(updatedObject));
-    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, MODIFY_OBJECT));
+    operationStepDispatcher.updateObject(updatedObject);
+    operationStepDispatcher.completeModifyObject(objectWorkingId);
 
+    // TODO add apllying bockup on erorr
     // if (isErrorOnRefresh) {
     //   if (reportPreviousState.objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
     //     await preserveReportValue(reportParams.bindId, 'manipulationsXML', reportPreviousState.manipulationsXML);
@@ -58,5 +63,5 @@ class StepSaveReportWithParams {
   }
 }
 
-export const stepSaveReportWithParams = new StepSaveReportWithParams();
-export default stepSaveReportWithParams;
+const stepModifyObject = new StepModifyObject();
+export default stepModifyObject;

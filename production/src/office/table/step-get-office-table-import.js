@@ -1,65 +1,54 @@
 import officeTableCreate from './office-table-create';
-import { GET_OFFICE_TABLE_IMPORT } from '../../operation/operation-steps';
-import { markStepCompleted } from '../../operation/operation-actions';
-import { updateObject } from '../../operation/object-actions';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
 class StepGetOfficeTableImport {
-  init = (reduxStore) => {
-    this.reduxStore = reduxStore;
-  };
-
   /**
-   * Creates an office table if it's a new import or if the number of columns of an existing table changes.
-   * If we are refreshing a table and the new definiton range is not empty we keep the original table.
+   * Creates Excel table during import workflow
    *
-   * @param {boolean} isRefresh
-   * @param {Object} excelContext
-   * @param {string} bindingId
-   * @param {Object} instanceDefinition
-   * @param {string} startCell  Top left corner cell
+   * Communicates with object reducer and calls officeTableCreate.createOfficeTable.
    *
+   * This function is subscribed as one of the operation steps with the key GET_OFFICE_TABLE_IMPORT,
+   * therefore should be called only via operation bus.
+   *
+   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param {Office} operationData.officeTable Reference to Table created by Excel
+   * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions
+   * @param {String} operationData.startCell Address of the cell in Excel spreadsheet
    */
-  getOfficeTableImport = async (objectData) => {
+  getOfficeTableImport = async (objectData, operationData) => {
+    console.time('Create or get table - import');
+
     try {
-      console.time('Create or get table - import');
-      const {
-        excelContext,
-        instanceDefinition,
-        tableName,
-        objectWorkingId,
-        startCell,
-      } = objectData;
+      const { objectWorkingId, } = objectData;
+      const { excelContext, instanceDefinition, startCell, } = operationData;
 
-      const {
-        officeTable,
-        newBindingId,
-        newOfficeTableName,
-      } = await officeTableCreate.createOfficeTable(
-        {
-          instanceDefinition,
-          excelContext,
-          startCell,
-          tableName
-        }
+      const { officeTable, bindId, newOfficeTableName, } = await officeTableCreate.createOfficeTable(
+        { excelContext, instanceDefinition, startCell, }
       );
-      console.timeEnd('Create or get table - import');
 
-      const updatedObject = {
+      const updatedOperation = {
         objectWorkingId,
         officeTable,
-        newOfficeTableName,
         shouldFormat: true,
         tableColumnsChanged: false,
-        newBindingId,
         instanceDefinition,
         startCell,
       };
 
-      this.reduxStore.dispatch(updateObject(updatedObject));
-      this.reduxStore.dispatch(markStepCompleted(objectWorkingId, GET_OFFICE_TABLE_IMPORT));
+      const updatedObject = {
+        objectWorkingId,
+        newOfficeTableName,
+        bindId,
+      };
+
+      operationStepDispatcher.updateOperation(updatedOperation);
+      operationStepDispatcher.updateObject(updatedObject);
+      operationStepDispatcher.completeGetOfficeTableImport(objectWorkingId);
     } catch (error) {
       console.log('error:', error);
     }
+
+    console.timeEnd('Create or get table - import');
   };
 }
 

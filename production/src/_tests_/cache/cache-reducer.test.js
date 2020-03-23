@@ -1,5 +1,13 @@
 import cacheReducer, { DEFAULT_STATE, REFRESH_STATE } from '../../cache/cache-reducer';
-import { SET_OBJECT_LIST_LOADING, SET_MY_LIBRARY_LOADING, ADD_MY_LIBRARY_OBJECTS, ADD_ENV_OBJECTS, ADD_PROJECTS, CLEAR_CACHE, REFRESH_CACHE } from '../../cache/cache-actions';
+import {
+  SET_OBJECT_LIST_LOADING,
+  SET_MY_LIBRARY_LOADING,
+  ADD_MY_LIBRARY_OBJECTS,
+  ADD_ENV_OBJECTS,
+  ADD_PROJECTS,
+  CLEAR_CACHE,
+  REFRESH_CACHE
+} from '../../cache/cache-actions';
 
 describe('Cache reducer', () => {
   it('should return default state', () => {
@@ -40,13 +48,26 @@ describe('Cache reducer', () => {
   it('should change state when append environment objects action is received', () => {
     // given
     const initObject = 'Default Test';
-    const initState = { ...DEFAULT_STATE, environmentLibrary: { ...DEFAULT_STATE.environmentLibrary, objects: [initObject] } };
+    const initState = {
+      ...DEFAULT_STATE,
+      environmentLibrary: {
+        ...DEFAULT_STATE.environmentLibrary,
+        objects: [initObject]
+      }
+    };
     const data = ['TestObject1', 'TestObject2'];
     const uuid = '55e30035-166b-4d01-8d82-bb2ef081d896';
     const action = { type: ADD_ENV_OBJECTS, data: { data, uuid } };
     // when
     const state = cacheReducer(initState, action);
-    const expectedState = { ...DEFAULT_STATE, environmentLibrary: { ...DEFAULT_STATE.environmentLibrary, objects: [initObject, ...action.data.data] }, uuidProcessed: [uuid] };
+    const expectedState = {
+      ...DEFAULT_STATE,
+      environmentLibrary: {
+        ...DEFAULT_STATE.environmentLibrary,
+        objects: [initObject, ...action.data.data]
+      },
+      uuidProcessed: [uuid]
+    };
     // then
     expect(state).toEqual(expectedState);
   });
@@ -59,7 +80,14 @@ describe('Cache reducer', () => {
     const action = { type: ADD_ENV_OBJECTS, data: { data, uuid } };
     // when
     const state = cacheReducer(initState, action);
-    const expectedState = { ...DEFAULT_STATE, environmentLibrary: { ...DEFAULT_STATE.environmentLibrary, objects: [...action.data.data] }, uuidProcessed: [uuid] };
+    const expectedState = {
+      ...DEFAULT_STATE,
+      environmentLibrary: {
+        ...DEFAULT_STATE.environmentLibrary,
+        objects: [...action.data.data]
+      },
+      uuidProcessed: [uuid]
+    };
     // then
     expect(state).toEqual(expectedState);
   });
@@ -73,7 +101,14 @@ describe('Cache reducer', () => {
     const action = { type: ADD_MY_LIBRARY_OBJECTS, data: { data, uuid } };
     // when
     const state = cacheReducer(initState, action);
-    const expectedState = { ...DEFAULT_STATE, myLibrary: { ...DEFAULT_STATE.myLibrary, objects: [...initObject, ...action.data.data] }, uuidProcessed: [uuid] };
+    const expectedState = {
+      ...DEFAULT_STATE,
+      myLibrary: {
+        ...DEFAULT_STATE.myLibrary,
+        objects: [...initObject, ...action.data.data]
+      },
+      uuidProcessed: [uuid]
+    };
     // then
     expect(state).toEqual(expectedState);
   });
@@ -86,7 +121,14 @@ describe('Cache reducer', () => {
     const action = { type: ADD_MY_LIBRARY_OBJECTS, data: { data, uuid } };
     // when
     const state = cacheReducer(initState, action);
-    const expectedState = { ...DEFAULT_STATE, myLibrary: { ...DEFAULT_STATE.myLibrary, objects: [...action.data.data] }, uuidProcessed: [uuid] };
+    const expectedState = {
+      ...DEFAULT_STATE,
+      myLibrary: {
+        ...DEFAULT_STATE.myLibrary,
+        objects: [...action.data.data]
+      },
+      uuidProcessed: [uuid]
+    };
     // then
     expect(state).toEqual(expectedState);
   });

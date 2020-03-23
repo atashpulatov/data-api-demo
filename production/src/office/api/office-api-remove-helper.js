@@ -7,42 +7,10 @@ import { officeApiCrosstabHelper } from './office-api-crosstab-helper';
 import { officeApiHelper } from './office-api-helper';
 
 class OfficeApiRemoveHelper {
-    /**
-     * Gets range of subtotal row based on subtotal cell
-     *
-     * @param {Office} object
-     * @param {Office} officeContext office context
-     * @param {Object} t i18n translating function
-     */
-    removeObjectAndDisplaytNotification = (object, officeContext, t) => {
-      const { name } = object;
-      this.removeObjectNotExistingInExcel(object, officeContext);
-      const message = t('{{name}} has been removed from the workbook.', { name });
-      notificationService.displayTranslatedNotification({ type: 'success', content: message });
-    }
-
-    removeReportFromExcel = async (bindingId, isCrosstab, crosstabHeaderDimensions, objectWorkingId) => {
-      try {
-        await authenticationHelper.validateAuthToken();
-        const officeContext = await officeApiHelper.getOfficeContext();
-        await officeContext.document.bindings.releaseByIdAsync(bindingId, () => { console.log('released binding'); });
-        const excelContext = await officeApiHelper.getExcelContext();
-        const officeTable = excelContext.workbook.tables.getItem(bindingId);
-        this.removeExcelTable(officeTable, excelContext, isCrosstab, crosstabHeaderDimensions);
-        await excelContext.sync();
-        return officeStoreService.removeReportFromStore(bindingId, objectWorkingId);
-      } catch (error) {
-        if (error && error.code === 'ItemNotFound') {
-          return officeStoreService.removeReportFromStore(bindingId, objectWorkingId);
-        }
-        return errorService.handleError(error);
-      }
-    };
-
   /**
-   * Get object from store based on bindingId and remove it from workbook
+   * Get object from store based on bindId and remove it from workbook
    *
-   * @param {Office} excelContext Excel Context
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    * @param {Object} object Contains information obout the object
    * @param {Boolean} isClear specify if object should be cleared or deleted
    */
@@ -53,42 +21,35 @@ class OfficeApiRemoveHelper {
   }
 
   /**
-   * Remove objects that no longer exists in the Excel workbook from the store
+   * Remove object from the redux store, Excel settings, Excel bindings and then display message
    *
-   * @param {Function} t i18n translating function
-   * @param {Object} object Contains information obout the object
-   * @param {Office} officeContext Excel context
+   * @param {Office} object
+   * @param {Office} officeContext office context
+   * @param {Object} t i18n translating function
    */
-  removeObjectNotExistingInExcel = async (object, officeContext) => {
-    officeStoreService.removeReportFromStore(object.bindId);
-    await officeContext.document.bindings.releaseByIdAsync(object.bindId, () => { console.log('released binding'); });
-  }
-
-  /**
-   * Checks if the object existing in Excel workbook
-   *
-   * @param {Function} t i18n translating function
-   * @param {Object} object Contains information obout the object
-   * @param {Office} excelContext Excel context
-   * @return {Boolean}
-   */
-  checkIfObjectExist = async (object, excelContext) => {
-    const officeContext = await officeApiHelper.getOfficeContext();
+  removeReportFromExcel = async (bindId, isCrosstab, crosstabHeaderDimensions, objectWorkingId) => {
     try {
-      await officeApiHelper.getTable(excelContext, object.bindId);
+      await authenticationHelper.validateAuthToken();
+      const officeContext = await officeApiHelper.getOfficeContext();
+      await officeContext.document.bindings.releaseByIdAsync(bindId, () => { console.log('released binding'); });
+      const excelContext = await officeApiHelper.getExcelContext();
+      const officeTable = excelContext.workbook.tables.getItem(bindId);
+      this.removeExcelTable(officeTable, excelContext, isCrosstab, crosstabHeaderDimensions);
       await excelContext.sync();
-      return true;
+      return officeStoreService.removeObjectFromStore(bindId, objectWorkingId);
     } catch (error) {
-      await this.removeObjectNotExistingInExcel(object, officeContext);
-      return false;
+      if (error && error.code === 'ItemNotFound') {
+        return officeStoreService.removeObjectFromStore(bindId, objectWorkingId);
+      }
+      return errorService.handleError(error);
     }
-  }
+  };
 
   /**
-  * Delete Excel table object from workbook. For crosstab reports will also clear the headers
+  * Remove Excel table object from workbook. For crosstab reports will also clear the headers
   *
   * @param {Office} officeTable Address of the first cell in report (top left)
-  * @param {Office} excelContext
+  * @param {Office} excelContext Reference to Excel Context used by Excel API functions
   * @param {Boolean} isCrosstab Specify if object is a crosstab
   * @param {Object} crosstabHeaderDimensions Contains dimensions of crosstab report headers
   * @param {Boolean} isClear Specify if object should be cleared or deleted. False by default
@@ -122,6 +83,52 @@ class OfficeApiRemoveHelper {
      await excelContext.sync();
      excelContext.trackedObjects.remove(tableRange);
    }
+
+  /**
+   * Checks if the object existing in Excel workbook
+   *
+   * @param {Function} t i18n translating function
+   * @param {Object} object Contains information obout the object
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+   * @return {Boolean}
+   */
+  checkIfObjectExist = async (object, excelContext) => {
+    const officeContext = await officeApiHelper.getOfficeContext();
+    try {
+      await officeApiHelper.getTable(excelContext, object.bindId);
+      await excelContext.sync();
+      return true;
+    } catch (error) {
+      await this.removeObjectNotExistingInExcel(object, officeContext);
+      return false;
+    }
+  }
+
+  /**
+   * Remove object from the redux store, Excel settings, Excel bindings and then display message
+   *
+   * @param {Office} object
+   * @param {Office} officeContext office context
+   * @param {Object} t i18n translating function
+   */
+  removeObjectAndDisplaytNotification = (object, officeContext, t) => {
+    const { name } = object;
+    this.removeObjectNotExistingInExcel(object, officeContext);
+    const message = t('{{name}} has been removed from the workbook.', { name });
+    notificationService.displayTranslatedNotification({ type: 'success', content: message });
+  }
+
+  /**
+   * Remove objects that no longer exists in the Excel workbook from the store
+   *
+   * @param {Function} t i18n translating function
+   * @param {Object} object Contains information obout the object
+   * @param {Office} officeContext Excel context
+   */
+  removeObjectNotExistingInExcel = async (object, officeContext) => {
+    officeStoreService.removeObjectFromStore(object.bindId);
+    await officeContext.document.bindings.releaseByIdAsync(object.bindId, () => { console.log('released binding'); });
+  }
 }
 
 export const officeApiRemoveHelper = new OfficeApiRemoveHelper();

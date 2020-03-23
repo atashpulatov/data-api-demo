@@ -1,5 +1,6 @@
 import { officeStoreService } from './store/office-store-service';
 
+// TODO jsdoc
 class OfficeDuplicateService {
   assignNewName = (originalObjectName, mstrTable) => {
     if (originalObjectName) {
@@ -42,7 +43,7 @@ class OfficeDuplicateService {
     const splitedName = nameCandidate.split(' ');
     let finalNameCandidate = nameCandidate;
 
-    const reportsArray = [...officeStoreService.getReportProperties()];
+    const reportsArray = [...officeStoreService.getObjectProperties()];
     const reportsArrayNames = [];
     for (const report of reportsArray) {
       reportsArrayNames.push(report.name);

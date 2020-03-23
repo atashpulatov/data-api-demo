@@ -24,7 +24,7 @@ class OfficeTableHelperRange {
    * Checks if range is valid on refresh.
    *
    * @param {Object} prevOfficeTable previous office table
-   * @param {Object} excelContext excelContext
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    * @param {Object} instanceDefinition
    *
    * @throws {OverlappingTablesError} when range is not empty.
@@ -114,7 +114,7 @@ class OfficeTableHelperRange {
    * @param {Number} addedColumns shows the number of added columns to the table
    * @param {Object} prevOfficeTable previous office table
    * @param {Object} mstrTable contains informations about mstr object
-   * @param {Object} excelContext excelContext
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    *
    * @throws {OverlappingTablesError} when range is not empty.
    */
@@ -151,7 +151,7 @@ class OfficeTableHelperRange {
    * @param {Number} addedColumns shows the number of added columns to the table
    * @param {Object} prevOfficeTable previous office table
    * @param {Object} mstrTable contains informations about mstr object
-   * @param {Object} excelContext excelContext
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    * @param {number} addedRows shows the number of added rows to the table
    *
    * @throws {OverlappingTablesError} when range is not empty.
@@ -187,7 +187,7 @@ class OfficeTableHelperRange {
   /**
    * Checks if the range is empty.
    *
-   * @param {Object} excelContext excelContext
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    * @param {Object} excelRange range in which table will be inserted
    *
    * @throws {OverlappingTablesError} when excelRange is not empty.

@@ -392,7 +392,11 @@ describe('NavigationTree', () => {
     // given
     const connectToDB = jest.fn().mockReturnValue(Promise.resolve());
     popupHelper.handlePopupErrors = jest.fn();
-    const wrappedComponent = shallow(<NavigationTreeNotConnected {...mockFunctionsAndProps} connectToDB={connectToDB} />);
+    const wrappedComponent = shallow(
+      <NavigationTreeNotConnected
+        {...mockFunctionsAndProps}
+        connectToDB={connectToDB} />
+    );
     // when
     await wrappedComponent.instance().refresh();
     // then
@@ -406,7 +410,11 @@ describe('NavigationTree', () => {
     const givenError = new Error('Session error');
     authenticationHelper.validateAuthToken.mockRejectedValue(givenError);
     popupHelper.handlePopupErrors = jest.fn();
-    const wrappedComponent = shallow(<NavigationTreeNotConnected {...mockFunctionsAndProps} connectToDB={connectToDB} />);
+    const wrappedComponent = shallow(
+      <NavigationTreeNotConnected
+        {...mockFunctionsAndProps}
+        connectToDB={connectToDB} />
+    );
     // when
     await wrappedComponent.instance().refresh();
     // then
