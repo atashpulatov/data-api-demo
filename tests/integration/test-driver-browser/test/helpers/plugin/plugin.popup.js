@@ -898,6 +898,66 @@ class PluginPopup {
   getAllPanelCheckboxState(item) {
     return $(popupSelectors.filterPanel.getAllPanelCheckboxState(item)).isSelected();
   }
+
+  /**
+     * Finds the Details Table element with the given index from expanded Detail Tables
+   *
+   * @param {Number} index index of the Detail Table to find
+   * @returns {Element} Details Table element
+   */
+  getDetailsTableByIndex(index) {
+    return $$(popupSelectors.detailsTable)[index];
+  }
+
+  /**
+    * Hovers over the location element in the given details table
+    * to show the tooltip and gets the tooltip text
+    *
+    * @param {Element} detailsTable Details Table to extract the tooltip from
+    * @returns {String} tooltip text for the location element
+    * @memberof PluginPopup
+    */
+  getLocationTooltipText(detailsTable) {
+    detailsTable.$(popupSelectors.locationDetail).moveTo();
+    browser.pause(1000); // Wait for DOM to update and show tooltip on hover
+    return detailsTable.$(popupSelectors.locationDetailTooltip).getText();
+  }
+
+  /**
+    * Gets the text for the location element in the given details table
+    *
+    * @param {Element} detailsTable Details Table to extract the location from
+    * @returns {String} text for the location element
+    * @memberof PluginPopup
+    */
+  getLocationText(detailsTable) {
+    return detailsTable.$(popupSelectors.locationDetail).getText();
+  }
+
+  /**
+    * Hovers over the description element in the given details table
+    * to show the tooltip and gets the tooltip text
+    *
+    * @param {Element} detailsTable Details Table to extract the tooltip from
+    * @returns {String} tooltip text for the description element
+    * @memberof PluginPopup
+    */
+  getDescriptionTooltipText(detailsTable) {
+    detailsTable.$(popupSelectors.descriptionDetail).moveTo();
+    browser.pause(1000); // Wait for DOM to update and show tooltip on hover
+    return $(popupSelectors.descriptionDetailTooltip).getText();
+  }
+
+  /**
+    * Gets the text for the description element in the given details table
+    *
+    * @param {Element} detailsTable Details Table to extract the description from
+    * @returns {String} text for the description element
+    * @memberof PluginPopup
+    */
+  getDescriptionText(detailsTable) {
+    return detailsTable.$(popupSelectors.descriptionDetail).getText();
+  }
 }
 
 export default new PluginPopup();
