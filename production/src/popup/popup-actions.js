@@ -10,14 +10,14 @@ export const SET_REPORT_N_FILTERS = 'SET_REPORT_N_FILTERS';
 export const SET_PREPARED_REPORT = 'SET_PREPARED_REPORT';
 // export const PRELOAD = 'PRELOAD';
 class PopupActions {
-  init = (authenticationHelper,
+  init = (
     errorService,
     officeApiHelper,
     officeStoreService,
     popupHelper,
     mstrObjectRestService,
-    popupController) => {
-    this.authenticationHelper = authenticationHelper;
+    popupController
+  ) => {
     this.errorService = errorService;
     this.officeApiHelper = officeApiHelper;
     this.officeStoreService = officeStoreService;
@@ -28,10 +28,7 @@ class PopupActions {
 
   callForEdit = (reportParams) => async (dispatch) => {
     try {
-      await Promise.all([
-        this.officeApiHelper.getExcelSessionStatus(),
-        this.authenticationHelper.validateAuthToken(),
-      ]);
+      await this.officeApiHelper.checkStatusOfSessions();
       const editedObject = this.officeStoreService.getObjectFromProperties(reportParams.bindId);
 
       dispatch({
@@ -58,10 +55,7 @@ class PopupActions {
   refreshReportsArray = (reportArray, isRefreshAll) => async (dispatch) => {
     const { popupHelper, officeApiHelper } = this;
     try {
-      await Promise.all([
-        this.officeApiHelper.getExcelSessionStatus(),
-        this.authenticationHelper.validateAuthToken(),
-      ]);
+      await this.officeApiHelper.checkStatusOfSessions();
     } catch (error) {
       dispatch({ type: officeProperties.actions.stopLoading });
       return this.errorService.handleError(error);
@@ -115,11 +109,7 @@ class PopupActions {
 
   callForEditDossier = (reportParams) => async (dispatch) => {
     try {
-      await Promise.all([
-        this.officeApiHelper.getExcelSessionStatus(),
-        this.authenticationHelper.validateAuthToken(),
-      ]);
-
+      await this.officeApiHelper.checkStatusOfSessions();
       const editedDossier = this.officeStoreService.getObjectFromProperties(reportParams.bindId);
 
       const {

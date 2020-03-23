@@ -55,7 +55,6 @@ class DIContainer {
     this.popupHelper.init(popupController, reduxStore);
     this.popupActions = popupActions;
     this.popupActions.init(
-      this.authenticationHelper,
       this.errorHandler,
       this.officeApiHelper,
       this.officeStoreService,

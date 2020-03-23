@@ -5,6 +5,7 @@ import { restoreAllObjects, deleteObject } from '../../operation/object-actions'
 
 /* global Office */
 
+// TODO check after integration of new right panel
 class OfficeStoreService {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
@@ -135,7 +136,6 @@ class OfficeStoreService {
   restoreObjectsFromExcelStore = () => {
     const settings = this.getOfficeSettings();
     const objects = settings.get(officeProperties.storedObjects);
-    console.log('objects:', objects);
 
     objects && this.reduxStore.dispatch(restoreAllObjects(objects));
   };

@@ -1,5 +1,6 @@
 import { officeStoreService } from './store/office-store-service';
 
+// TODO jsdoc
 class OfficeDuplicateService {
   assignNewName = (originalObjectName, mstrTable) => {
     if (originalObjectName) {

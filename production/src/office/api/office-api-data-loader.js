@@ -5,7 +5,7 @@ class OfficeApiDataLoader {
   /**
    * Loads single value from Excel.
    *
-   * @param {Office} excelContext Excel context used to load value
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions used to load value
    * @param {Object} object Object to load value from
    * @param {String} key Name of the variable to load
    *
@@ -22,7 +22,7 @@ class OfficeApiDataLoader {
   /**
    * Loads multiple values from Excel, synchronizing only once.
    *
-   * @param {Office} excelContext Excel context used to load value
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions used to load value
    * @param {Array} items Array of items containing object (to load value from)
    * and key (name of the variable to load), e.g.
    *
@@ -58,7 +58,7 @@ class OfficeApiDataLoader {
   /**
    * Validates excelContext.
    *
-   * @param {Office} excelContext Excel context to validate.
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions to validate.
    *
    * @throws Error when excelContext is empty.
    */

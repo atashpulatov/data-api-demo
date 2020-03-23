@@ -129,17 +129,6 @@ describe('OfficeApiHelper', () => {
     }
     expect(result).toBeUndefined();
   });
-  it('should forward error different than OfficeExtension.Error', () => {
-    // given
-    const error = new Error();
-    // when
-    const callThatThrows = () => {
-      officeApiHelper.handleOfficeApiException(error);
-    };
-    // then
-    expect(callThatThrows).toThrowError();
-  });
-
 
   describe('getSelectedCell', () => {
     it('should return starting cell from range address(single cell)', async () => {

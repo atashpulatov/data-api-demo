@@ -75,7 +75,7 @@ class OfficeTableRefresh {
    * Compares if the number of columns in table has changed.
    *
    * @param {Object} prevOfficeTable previous office table
-   * @param {Object} excelContext excelContext
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    * @param {Object} instanceDefinition
    *
    */
@@ -111,7 +111,7 @@ class OfficeTableRefresh {
    *
    * @param {Object} prevOfficeTable previous office table
    * @param {Object} excelContext excel context
-   * @param {Boolean} tableColumnsChanged Specify if table columns has been changed
+   * @param {Boolean} tableColumnsChanged Specify if table columns has been changed.
    * @param {string} startCell  Starting cell of Table
    * @param {Object} mstrTable  contains information about mstr object
    *
@@ -119,10 +119,9 @@ class OfficeTableRefresh {
    clearIfCrosstabHeadersChanged = async (prevOfficeTable, excelContext, tableColumnsChanged, startCell, mstrTable) => {
      const { prevCrosstabDimensions, crosstabHeaderDimensions, isCrosstab } = mstrTable;
      const { validColumnsY, validRowsX } = await officeApiCrosstabHelper.getCrosstabHeadersSafely(
+       prevCrosstabDimensions,
        prevOfficeTable,
-       prevCrosstabDimensions.columnsY,
        excelContext,
-       prevCrosstabDimensions.rowsX
      );
 
      if (isCrosstab && crosstabHeaderDimensions && prevCrosstabDimensions) {

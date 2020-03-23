@@ -13,7 +13,7 @@ class OfficeTableCreate {
    * If we are refreshing a table and the new definiton range is not empty we keep the original table.
    *
    * @param {Object} instanceDefinition
-   * @param {Object} excelContext ExcelContext
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    * @param {string} startCell  Top left corner cell
    * @param {string} newOfficeTableName Excel Binding ID
    * @param {Object} prevOfficeTable Previous office table to refresh
@@ -89,7 +89,7 @@ class OfficeTableCreate {
    * Get excel worksheet of previous office table or acxtive if no table was passed.
    *
    * @param {Object} prevOfficeTable previous office table
-   * @param {Object} excelContext excelContext
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    *
    */
   getExcelWorksheet = (prevOfficeTable, excelContext) => {
@@ -102,7 +102,7 @@ class OfficeTableCreate {
   /**
    * Get range of the table. For crosstabs range is extended by headers.
    *
-   * @param {Boolean} isCrosstab  Specified if object is crosstab report
+   * @param {Boolean} isCrosstab Specify if object is a crosstab
    * @param {Object} tableStartCell  Top left corner cell
    * @param {Object} crosstabHeaderDimensions contains dimension of crosstab headers (columnsY, cloumnsX, RowsY, RowsX)
    * @param {Object} sheet  excel worksheet
@@ -124,7 +124,7 @@ class OfficeTableCreate {
    * @param {Object} sheet  excel worksheet
    * @param {Object} instanceDefinition
    * @param {Object} prevOfficeTable previous office table
-   * @param {Boolean} tableColumnsChanged Specify if table columns has been changed
+   * @param {Boolean} tableColumnsChanged Specify if table columns has been changed.
    *
    */
   getTableStartCell = (startCell, sheet, instanceDefinition, prevOfficeTable, tableColumnsChanged) => {
@@ -160,7 +160,7 @@ class OfficeTableCreate {
    * @param {Object} officeTableId office table name
    * @param {Object} mstrTable  contains informations about mstr object
    * @param {Object} worksheet  excel worksheet
-   * @param {Object} excelContext excelContext
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    *
    */
   setOfficeTableProperties = async ({
