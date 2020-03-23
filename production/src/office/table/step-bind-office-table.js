@@ -4,13 +4,14 @@ import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
 class StepBindOfficeTable {
   /**
-   * Creates binding between Excel table and list of objects store by Excel
-   * Binding is created based on the Id of the table
+   * Creates binding between Excel table and list of objects stored by Excel.
    *
-   * This function is subscribed as one of the operation steps with key BIND_OFFICE_TABLE,
+   * Binding is created based on the Id of the table.
+   *
+   * This function is subscribed as one of the operation steps with the key BIND_OFFICE_TABLE,
    * therefore should be called only via operation bus.
    *
-   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing as to reference specific object
+   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
    * @param {String} objectData.bindId Unique id of the Office table used for referencing the table in Excel
    * @param {Office} operationData.officeTable Reference to Table created by Excel
    * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions

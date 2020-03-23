@@ -20,20 +20,21 @@ const {
 
 class StepGetInstanceDefinition {
   /**
-   * Create Instance definition object which contains data about MSTR object needed in next steps.
-   * If instance of object does not exist new one will be created.
-   * All additional manipulations like prompts answers or body will be apllied.
+   * Creates Instance definition object which contains data about MSTR object needed in next steps.
    *
-   * This function is subscribed as one of the operation steps with key GET_INSTANCE_DEFINITION,
+   * If instance of an object does not exist, new one will be created.
+   * All additional manipulations like prompts answers or body will be applied.
+   *
+   * This function is subscribed as one of the operation steps with the key GET_INSTANCE_DEFINITION,
    * therefore should be called only via operation bus.
    *
-   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing as to reference specific object
-   * @param {String} objectData.displayAttrFormNames Specify the style in which attribute form will be displayed
-   * @param {Boolean} objectData.insertNewWorksheet Determine if the object will be displayed in on new spreadsheet
-   * @param {Object} objectData.subtotalsInfo Deteermine if subtotals will be displayed and store subtotal adresses
-   * @param {String} objectData.bindId Unique id of the Office table used for referencing the table in Excel
-   * @param {Object} objectData.visualizationInfo Contains information about location od visualization in dossier
-   * @param {Office} operationData.operationType Specify type of the operation that called this function
+   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param {String} objectData.displayAttrFormNames The style in which attribute form will be displayed
+   * @param {Boolean} objectData.insertNewWorksheet Determines if the object will be displayed in a new spreadsheet
+   * @param {Object} objectData.subtotalsInfo Determines if subtotals will be displayed and stores subtotal addresses
+   * @param {String} objectData.bindId Unique Id of the Office table used for referencing the table in Excel
+   * @param {Object} objectData.visualizationInfo Contains information about location of visualization in dossier
+   * @param {Office} operationData.operationType The type of the operation that called this function
    */
 
    getInstanceDefinition = async (objectData, { operationType }) => {

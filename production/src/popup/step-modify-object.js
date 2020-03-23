@@ -6,16 +6,16 @@ class StepModifyObject {
   };
 
   /**
-   * Override the old data stored in object reducer with the data receive from the popup after edit action.
+   * Overrides the old data stored in object reducer with the data received from the popup after edit action.
    *
-   * This function is subscribed as one of the operation steps with key MODIFY_OBJECT,
+   * This function is subscribed as one of the operation steps with the key MODIFY_OBJECT,
    * therefore should be called only via operation bus.
    *
-   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing as to reference specific object
-   * @param {Object} objectData.subtotalsInfo Deteermine if subtotals will be displayed and store subtotal adresses
-   * @param {Object} objectData.body Contains information about location od visualization in dossier
+   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param {Object} objectData.subtotalsInfo Determines if subtotals will be displayed and stores subtotal addresses
+   * @param {Object} objectData.body Contains information about location of visualization in dossier
    * @param {String} objectData.bindId Unique id of the Office table used for referencing the table in Excel
-   * @param {Office} operationData.objectEditedData Contains new data foe edit workflow
+   * @param {Office} operationData.objectEditedData Contains new data for edit workflow
    */
   modifyObject = (objectData, { objectEditedData }) => {
     const { objectWorkingId, subtotalsInfo } = objectData;

@@ -3,14 +3,15 @@ import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 class StepApplyFormatting {
   /**
    * Applies Excel number formatting to imported object based on MSTR data type.
-   * Formatting is applied only to office table columns caontaining metrics.
-   * Columns are formated one by one  but synchronized to Excel all at the same time.
-   * In case of error we are skipping this step and continue import/refresh workflow.
    *
-   * This function is subscribed as one of the operation steps with key FORMAT_DATA,
+   * Formatting is applied only to office table columns containing metrics.
+   * Columns are formatted one by one, but synchronized to Excel all at the same time.
+   * In case of error this step is skipped and import/refresh workflow continues.
+   *
+   * This function is subscribed as one of the operation steps with the key FORMAT_DATA,
    * therefore should be called only via operation bus.
    *
-   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing as to reference specific object
+   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
    * @param {Office} operationData.officeTable Reference to Table created by Excel
    * @param {Object} operationData.instanceDefinition Object containing information about MSTR object
    * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions

@@ -3,16 +3,17 @@ import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
 class StepGetOfficeTableImport {
   /**
-   * Function responsible for communication with object reducer and calling officeTableCreate.createOfficeTable
-   * in order to create Excel table during import workflow.
+   * Creates Excel table during import workflow
    *
-   * This function is subscribed as one of the operation steps with key GET_OFFICE_TABLE_IMPORT,
+   * Communicates with object reducer and calls officeTableCreate.createOfficeTable.
+   *
+   * This function is subscribed as one of the operation steps with the key GET_OFFICE_TABLE_IMPORT,
    * therefore should be called only via operation bus.
    *
-   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing as to reference specific object
+   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
    * @param {Office} operationData.officeTable Reference to Table created by Excel
    * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions
-   * @param {String} operationData.startCell Adress of the cell in Excel spreadsheet
+   * @param {String} operationData.startCell Address of the cell in Excel spreadsheet
    */
   getOfficeTableImport = async (objectData, operationData) => {
     console.time('Create or get table - import');
