@@ -35,9 +35,9 @@ class MstrObjectType {
     },
   };
 
-  getMstrTypeBySubtype = (objectSubtype) => Object.values(this.mstrObjectType).find(
-    (type) => type.subtypes.indexOf(objectSubtype) !== -1,
-  );
+  getMstrTypeBySubtype = (objectSubtype = null) => Object.values(this.mstrObjectType).find(
+    (type) => type.subtypes.indexOf(objectSubtype) !== -1
+  )
 
   getMstrTypeByName = (typeName) => {
     let checkedType;

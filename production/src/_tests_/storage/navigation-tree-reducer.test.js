@@ -28,7 +28,6 @@ describe('NavigationTree Reducer', () => {
         requestPerformed: false,
       },
     };
-
     // when
     const newState = navigationTree({ myLibrary: true }, action);
 
@@ -117,7 +116,7 @@ describe('NavigationTree Reducer', () => {
     const newState = navigationTree({ dataSource: [{}] }, action);
 
     // then
-    expect(newState.chosenType).toEqual('Report');
+    expect(newState.chosenType.name).toEqual('report');
   });
 
   it('should return new proper state in case of SELECT_OBJECT action without proper data', () => {
