@@ -38,8 +38,8 @@ class DIContainer {
     this.notificationService.init(reduxStore, actionCreator);
     this.sessionHelper = sessionHelper;
     this.sessionHelper.init(reduxStore);
-    this.errorHandler = errorService;
-    this.errorHandler.init(sessionHelper, notificationService);
+    this.errorService = errorService;
+    this.errorService.init(sessionHelper, notificationService);
     this.authenticationHelper = authenticationHelper;
     this.authenticationHelper.init(reduxStore, sessionHelper, authenticationService, errorService);
     this.homeHelper = homeHelper;
@@ -55,12 +55,12 @@ class DIContainer {
     this.popupHelper.init(popupController, reduxStore);
     this.popupActions = popupActions;
     this.popupActions.init(
-      this.errorHandler,
-      this.officeApiHelper,
-      this.officeStoreService,
-      this.popupHelper,
-      this.mstrObjectRestService,
-      this.popupController
+      errorService,
+      officeApiHelper,
+      officeStoreService,
+      popupHelper,
+      mstrObjectRestService,
+      popupController
     );
 
     this.initialized = true;
