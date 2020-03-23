@@ -3,14 +3,15 @@ import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
 class StepApplySubtotalFormatting {
   /**
-   * Applies Excel number formatting to imported object based on MSTR data type.
+   * Communicates with object reducer and calls officeFormatSubtotals.applySubtotalFormatting.
    *
-   * @param {Boolean} isCrosstab
-   * @param {Array} subtotalsAddresses Array containing object with cell coordinates
-   * @param {Office} officeTable
-   * @param {Office} excelContext ExcelContext
-   * @param {Object} mstrTable contains information about mstr object
-   * @param {Boolean} [shouldBold=true] Specify whether the values in cells should be bold
+   * This function is subscribed as one of the operation steps with the key FORMAT_SUBTOTALS,
+   * therefore should be called only via operation bus.
+   *
+   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param {Office} operationData.officeTable Reference to Table created by Excel
+   * @param {Object} operationData.instanceDefinition Object containing information about MSTR object
+   * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions
    */
   applySubtotalFormattingRedux = async (objectData, operationData) => {
     const { objectWorkingId, } = objectData;

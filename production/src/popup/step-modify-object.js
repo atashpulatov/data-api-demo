@@ -1,10 +1,6 @@
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
 
 class StepModifyObject {
-  init = (reduxStore) => {
-    this.reduxStore = reduxStore;
-  };
-
   /**
    * Overrides the old data stored in object reducer with the data received from the popup after edit action.
    *

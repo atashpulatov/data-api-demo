@@ -1,10 +1,6 @@
 import { CONTEXT_LIMIT } from '../../mstr-object/mstr-object-rest-service';
 
 class OfficeFormatSubtotals {
-  init = (reduxStore) => {
-    this.reduxStore = reduxStore;
-  }
-
   /**
    * Applies Excel number formatting to imported object based on MSTR data type.
    *

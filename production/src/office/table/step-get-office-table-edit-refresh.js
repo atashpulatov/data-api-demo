@@ -8,10 +8,18 @@ class StepGetOfficeTableEditRefresh {
   /**
    * Creates an office table if the number of columns of an existing table changes.
    * If we are refreshing a table and the new definition range is not empty, we keep the original table.
+   * If the number of columns stays the same number of rows in table might be modified to contain all of the data.
    *
-   * @param objectData
-   * @param operationData
-   * @returns {Promise<void>}
+   * This function is subscribed as one of the operation steps with the key GET_OFFICE_TABLE_EDIT_REFRESH,
+   * therefore should be called only via operation bus.
+   *
+   * @param {Number} objectData.oldBindId Id of the Office table created on import used for referencing the Excel table
+   * @param {Number} objectData.tableName Name of Excel table created on import
+   * @param {Object} objectData.previousTableDimensions Contains dimensions of Excel table created on import
+   * @param {Object} [objectData.visualizationInfo] Contains information about location of visualization in dossier
+   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions
+   * @param {String} operationData.instanceDefinition Object containing information about MSTR object
    */
   getOfficeTableEditRefresh = async (objectData, operationData) => {
     console.time('Create or get table - edit or refresh');

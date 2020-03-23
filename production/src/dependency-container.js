@@ -88,9 +88,6 @@ class DIContainer {
 
     this.mstrListRestService = mstrListRestService;
     this.mstrListRestService.init(reduxStore);
-
-    this.officeFormatSubtotals = officeFormatSubtotals;
-    this.officeFormatSubtotals.init(reduxStore);
   }
 }
 
