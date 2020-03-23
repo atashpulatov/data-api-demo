@@ -63,11 +63,11 @@ describe('F12909 - Ability to import a report from MicroStrategy report', () => 
     expect($(popupSelectors.selectorTitle(1)).getText()).toEqual('ATTRIBUTES (0/2)');
 
     // should select one attribute from many listed
-    PluginPopup.selectAttributeIndex(1);
+    PluginPopup.selectAttributeIndex([1]);
     expect($(popupSelectors.selectorTitle(1)).getText()).toEqual('ATTRIBUTES (1/2)');
 
     // should select one more attribute from many listed
-    PluginPopup.selectAttributeIndex(2);
+    PluginPopup.selectAttributeIndex([2]);
     expect($(popupSelectors.selectorTitle(1)).getText()).toEqual('ATTRIBUTES (2/2)');
 
     // should click on one of the filters and select (All) object in the last column
