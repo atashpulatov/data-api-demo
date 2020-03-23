@@ -14,7 +14,6 @@ import { popupActions } from './popup/popup-actions';
 import { actionCreator } from './notification/action-creator';
 import { authenticationService } from './authentication/auth-rest-service';
 import { operationBus } from './operation/operation-bus';
-import officeFormatSubtotals from './office/format/office-format-subtotals';
 import subscribeSteps from './operation/operation-subscribe-steps';
 import operationStepDispatcher from './operation/operation-step-dispatcher';
 import stepSaveObjectInExcel from './office/store/step-save-object-in-excel';

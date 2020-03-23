@@ -2,7 +2,7 @@ import { mstrObjectRestService, DATA_LIMIT, IMPORT_ROW_LIMIT, } from '../../mstr
 import officeInsertService from './office-insert-service';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
-const { getObjectContentGenerator } = mstrObjectRestService;
+const { fetchContentGenerator } = mstrObjectRestService;
 
 class StepFetchInsertDataIntoExcel {
   /**
@@ -71,7 +71,7 @@ class StepFetchInsertDataIntoExcel {
         promptsAnswers,
       };
 
-      const rowGenerator = getObjectContentGenerator(configGenerator);
+      const rowGenerator = fetchContentGenerator(configGenerator);
       let rowIndex = 0;
       const contextPromises = [];
       const subtotalsAddresses = [];
