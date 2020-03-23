@@ -11,8 +11,12 @@
   max-width: 18px;
 }
 
-.dossier-window-information-text{
-  font-size: 10px;
+.dossier-window-information-text {
+  font-size: 11px;
   color: #9A9A9A;
   margin-left: 4px;
+}
+
+.dossier-title-margin-top {
+  margin-top: 10px;
 }
