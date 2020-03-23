@@ -144,20 +144,23 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       preparedInstanceId: instance.mid,
     };
 
-    const libraryUrl = envUrl.replace('api', 'app');
-    let url = `${libraryUrl}/${projectId}/${dossierId}`;
-    let selectedVizChecked = selectedViz;
+    const serverURL = envUrl.replace('/api', '');
 
+    let selectedVizChecked = selectedViz;
+    let activePage;
     if (selectedViz && visualizationInfo) {
       const { chapterKey, pageKey, visualizationKey } = visualizationInfo;
       selectedVizChecked = `${chapterKey}:${visualizationKey}`;
-      url = `${libraryUrl}/${projectId}/${dossierId}/${pageKey}`;
+      activePage = pageKey;
     }
     const { CustomAuthenticationType } = microstrategy.dossier;
 
     const props = {
       instance,
-      url,
+      serverURL,
+      applicationID: projectId,
+      objectID: dossierId,
+      pageKey: activePage,
       enableCustomAuthentication: true,
       customAuthenticationType: CustomAuthenticationType.AUTH_TOKEN,
       enableResponsive: true,
