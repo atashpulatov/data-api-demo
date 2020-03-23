@@ -144,7 +144,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       preparedInstanceId: instance.mid,
     };
 
-    const serverURL = envUrl.replace('/api', '');
+    const serverURL = envUrl.replace('MicroStrategyLibrary/api', 'MicroStrategyLibrary');
 
     let selectedVizChecked = selectedViz;
     let activePage;
