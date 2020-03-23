@@ -129,7 +129,8 @@ export class PromptsWindowNotConnected extends Component {
           promptsAnswersLocal = [_promptsAnswers];
         }
       };
-      const serverURL = envUrl.replace('MicroStrategyLibrary/api', 'MicroStrategyLibrary');
+      const serverURL = envUrl.slice(0, envUrl.lastIndexOf('/api'));
+      // delete last occurence of '/api' from the enviroment url
       const { CustomAuthenticationType } = microstrategy.dossier;
       const { EventType } = microstrategy.dossier;
 
