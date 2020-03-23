@@ -103,7 +103,7 @@ export const popupSelectors = {
     getAllPanelCheckbox: (checkboxTitle) => `.all-panel__content input[aria-label="Checkbox for ${checkboxTitle}"] + .checkmark`,
     getAllPanelCheckboxState: (checkboxTitle) => `.all-panel__content input[aria-label="Checkbox for ${checkboxTitle}."]`,
     getAllPanelDisabledCheckbox: (checkboxTitle) => `.all-panel__content .category-list-row.disabled label[title="${checkboxTitle}"]`,
-    disabledCheckboxAllPanel: '.all-panel__content .category-list-row.disabled input',
+    disabledCheckboxAllPanel: '.all-panel__content .category-list-row.disabled .checkbox-cell',
     categoryListRowDisabled: '.category-list-row.disabled',
     dates: '.mstr-date-picker input',
     clearAll: '.filter-panel__button'
