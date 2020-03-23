@@ -100,6 +100,19 @@ class PluginPopup {
     waitAndClick($(popupSelectors.allFilters));
   }
 
+  /**
+   * Waits for element to show up and dissapear
+   * useful to validate that action has been started and finished
+   *
+   * @param {String} selector a css selector to validate
+   * @memberof PluginPopup
+   */
+
+  waitUntilActionIsFinished(selector) {
+    browser.waitUntil(() => ($(selector).isExisting()));
+    browser.waitUntil(() => !($(selector).isExisting()));
+  }
+
   selectObjectElementsInPrepareData(elements) {
     $('#search-toolbar > div > span > input').waitForExist(7777);
     for (let i = 0; i < elements.length; i++) {
@@ -865,6 +878,25 @@ class PluginPopup {
 
     const rowTimestamp = this.getFirstRowTimestamp();
     return rowTimestamp >= dateFrom && rowTimestamp <= dateTo;
+  }
+
+  /**
+   * Returns true if checkbox is checked, false if not
+   * @param {String} category Category in which checkbox is located, f.e. "Type"
+   * @param {String} item Name of an item we want to check, f.e. "MicroStrategy Tutorial"
+   * @return {Boolean}
+   */
+  getCheckboxState(category, item) {
+    return $(popupSelectors.filterCheckboxState(category, item)).isSelected();
+  }
+
+  /**
+   * Returns true if checkbox in All Panel is checked, false if not
+   * @param {String} item Name of an item we want to check, f.e. "MicroStrategy Tutorial"
+   * @return {Boolean}
+   */
+  getAllPanelCheckboxState(item) {
+    return $(popupSelectors.filterPanel.getAllPanelCheckboxState(item)).isSelected();
   }
 }
 

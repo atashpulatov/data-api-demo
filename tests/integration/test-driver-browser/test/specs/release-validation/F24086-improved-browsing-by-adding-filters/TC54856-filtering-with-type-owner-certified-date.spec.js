@@ -71,9 +71,9 @@ describe('F24086 - Improved browsing by adding filters', () => {
     /* Open filter panel & click 'Clear All' button in the bottom right corner */
     PluginPopup.clickFilterButton();
     PluginPopup.clearAll();
-    expect($(popupSelectors.filterCheckbox('Owner', 'MSTR User')).isSelected()).toBe(false);
-    expect($(popupSelectors.filterCheckbox('Owner', 'Administrator')).isSelected()).toBe(false);
-    expect($(popupSelectors.filterCheckbox('Application', 'MicroStrategy Tutorial')).isSelected()).toBe(false);
-    expect($(popupSelectors.filterCheckbox('Type', 'Report')).isSelected()).toBe(false);
+    expect(PluginPopup.getCheckboxState('Owner', 'MSTR User')).toBe(false);
+    expect(PluginPopup.getCheckboxState('Owner', 'Administrator')).toBe(false);
+    expect(PluginPopup.getCheckboxState('Application', 'MicroStrategy Tutorial')).toBe(false);
+    expect(PluginPopup.getCheckboxState('Type', 'Report')).toBe(false);
   });
 });
