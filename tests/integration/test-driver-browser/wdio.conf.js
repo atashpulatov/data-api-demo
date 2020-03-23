@@ -20,6 +20,15 @@ exports.config = {
     //   './test/specs/release-validation/deprecated/sample.spec.js',
   ],
   suites: {
+    acceptance: [
+      // './test/specs/release-validation/TS41441-E2E Sanity checks/TC49100-E2E-Import-Prompted-Reports-Import-multiple-objects-Refresh-All-Re-Prompt-Refresh-Edit-Prompts.spec.js',
+      // './test/specs/release-validation/TS41441-E2E Sanity checks/TC48976-basic-functionalites.spec.js',
+      // './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-I.spec.js',
+      // './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-II.spec.js',
+      // './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-III.spec.js',
+      // './test/specs/release-validation/F24751-import subtotals/TC54788-import-subtotals.spec.js',
+      './test/specs/release-validation/F25932-import-attribute-forms/TC59987-attribute-form-display.spec.js',
+    ],
     'F12910-import-dataset': [
       './test/specs/release-validation/F12910-import-dataset/TC34506-import-not-supported-cube.spec.js',
       './test/specs/release-validation/F12910-import-dataset/TC35249-cubes-limits-project.spec.js',
