@@ -7,8 +7,10 @@ import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 class StepGetOfficeTableEditRefresh {
   /**
    * Creates an office table if the number of columns of an existing table changes.
-   * If we are refreshing a table and the new definition range is not empty, we keep the original table.
-   * If the number of columns stays the same number of rows in table might be modified to contain all of the data.
+   *
+   * On refreshing a table, when the new definition range is not empty, original table is kept.
+   *
+   * If the number of columns stays the same, number of rows in table might be modified to contain all of the data.
    *
    * This function is subscribed as one of the operation steps with the key GET_OFFICE_TABLE_EDIT_REFRESH,
    * therefore should be called only via operation bus.

@@ -6,9 +6,11 @@ const { fetchContentGenerator } = mstrObjectRestService;
 
 class StepFetchInsertDataIntoExcel {
   /**
-   * Fetch Data from Microstrategy and insert it into the Excel table.
-   * If needed extens the table adding new rows, for crosstab also creates row headers
-   * Fetch the data about subtotals and store them in subtotalsAddresses array.
+§   * Fetches Data from Microstrategy and inserts it into the Excel table.
+   *
+   * If needed extends the table by adding new rows, for crosstab also creates row headers.
+   *
+   * Fetches the data about subtotals and stores them in subtotalsAddresses array.
    *
    * This function is subscribed as one of the operation steps with the key FETCH_INSERT_DATA,
    * therefore should be called only via operation bus.
@@ -16,16 +18,16 @@ class StepFetchInsertDataIntoExcel {
    * @param {Number} objectData.objectId Id of the MSTR object being currently processed
    * @param {Number} objectData.projectId Id of the MSTR project from which we fetch data
    * @param {Object} objectData.dossierData Data of dossier used for answering prompts
-   * @param {Object} objectData.mstrObjectType Contains information about MSTR object type
-   * @param {Number} objectData.body Contains information about location of visualization in dossier
+   * @param {Object} objectData.mstrObjectType Information about MSTR object type
+   * @param {Number} objectData.body Information about location of visualization in dossier
    * @param {String} [objectData.preparedInstanceId] Id of the processed object instance
-   * @param {Object} [objectData.manipulationsXML] Contains information about manipulations in dossier
-   * @param {Array} [objectData.promptsAnswers] Contains prompts answers used for creating instance of processed object
-   * @param {Object} [objectData.visualizationInfo] Contains information about location of visualization in dossier
+   * @param {Object} [objectData.manipulationsXML] Information about manipulations in dossier
+   * @param {Array} [objectData.promptsAnswers] Prompts answers used for creating instance of processed object
+   * @param {Object} [objectData.visualizationInfo] Information about location of visualization in dossier
    * @param {Object} objectData.displayAttrFormNames The style in which attribute form will be displayed
    * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
    * @param {Office} operationData.operationType The type of the operation that called this function
-   * @param {Boolean} [operationData.tableColumnsChanged] Determine if columns number in Excel table has been changed
+   * @param {Boolean} [operationData.tableColumnsChanged] Determines if columns number in Excel table has been changed
    * @param {Office} operationData.officeTable Reference to Table created by Excel
    * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions
    * @param {String} operationData.instanceDefinition Object containing information about MSTR object
