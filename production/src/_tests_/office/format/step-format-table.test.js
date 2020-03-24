@@ -12,7 +12,7 @@ describe('StepGetOfficeTableImport', () => {
     console.log = jest.fn();
 
     // given
-    const mockFormatCrosstab = jest.spyOn(stepFormatTable, 'formatCrosstab')
+    const mockFormatCrosstabHeaders = jest.spyOn(stepFormatTable, 'formatCrosstabHeaders')
       .mockImplementation(() => {
         throw new Error('testError');
       });
@@ -26,8 +26,8 @@ describe('StepGetOfficeTableImport', () => {
     });
 
     // then
-    expect(mockFormatCrosstab).toBeCalledTimes(1);
-    expect(mockFormatCrosstab).toThrowError(Error);
+    expect(mockFormatCrosstabHeaders).toBeCalledTimes(1);
+    expect(mockFormatCrosstabHeaders).toThrowError(Error);
     expect(console.log).toBeCalledTimes(1);
     expect(console.log).toBeCalledWith('Error when formatting - no columns autofit applied', new Error('testError'));
   });
@@ -48,7 +48,7 @@ describe('StepGetOfficeTableImport', () => {
       officeTable: { columns: 'testColumns' },
     };
 
-    const mockFormatCrosstab = jest.spyOn(stepFormatTable, 'formatCrosstab').mockImplementation();
+    const mockFormatCrosstabHeaders = jest.spyOn(stepFormatTable, 'formatCrosstabHeaders').mockImplementation();
 
     const mockFormatColumns = jest.spyOn(stepFormatTable, 'formatColumns').mockImplementation();
 
@@ -60,8 +60,8 @@ describe('StepGetOfficeTableImport', () => {
     await stepFormatTable.formatTable(objectData, operationData);
 
     // then
-    expect(mockFormatCrosstab).toBeCalledTimes(1);
-    expect(mockFormatCrosstab).toBeCalledWith(
+    expect(mockFormatCrosstabHeaders).toBeCalledTimes(1);
+    expect(mockFormatCrosstabHeaders).toBeCalledWith(
       { columns: 'testColumns' },
       'testIsCrosstab',
       'testRowsX',
@@ -85,7 +85,7 @@ describe('StepGetOfficeTableImport', () => {
   ${true}    | ${1}                      | ${false}
   ${false}   | ${0}                      | ${true}
   
-  `('formatCrosstab should work as expected',
+  `('formatCrosstabHeaders should work as expected',
   ({ isCrosstab, autofitColumnsCalledTimes, showHeaders }) => {
     // given
     const mockAutofitColumns = jest.fn();
@@ -100,7 +100,7 @@ describe('StepGetOfficeTableImport', () => {
     };
 
     // when
-    stepFormatTable.formatCrosstab(mockOfficeTable, isCrosstab, 'testRowsX');
+    stepFormatTable.formatCrosstabHeaders(mockOfficeTable, isCrosstab, 'testRowsX');
 
     // then
     expect(mockGetColumnsBefore).toBeCalledTimes(autofitColumnsCalledTimes);

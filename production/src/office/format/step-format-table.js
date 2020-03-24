@@ -24,7 +24,7 @@ class StepFormatTable {
     const { crosstabHeaderDimensions, isCrosstab } = instanceDefinition.mstrTable;
 
     try {
-      this.formatCrosstab(officeTable, isCrosstab, crosstabHeaderDimensions.rowsX);
+      this.formatCrosstabHeaders(officeTable, isCrosstab, crosstabHeaderDimensions.rowsX);
 
       await this.formatColumns(excelContext, officeTable.columns);
 
@@ -38,7 +38,14 @@ class StepFormatTable {
     console.timeEnd('Column auto size');
   };
 
-  formatCrosstab = (officeTable, isCrosstab, rowsX) => {
+  /**
+   * Calls autofit function from Excel API for range containing all column that are part of row crosstab headers.
+   * Hides Excel table headers.
+   *
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+   * @param {Office} column Reference to Excel column
+   */
+  formatCrosstabHeaders = (officeTable, isCrosstab, rowsX) => {
     if (isCrosstab) {
       officeTable.getDataBodyRange()
         .getColumnsBefore(rowsX)
@@ -49,6 +56,12 @@ class StepFormatTable {
     }
   };
 
+  /**
+   * Calls formatSingleColumn function for each column in passed column collection
+   *
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+   * @param {Office} column Reference to Excel column
+   */
   formatColumns = async (excelContext, columns) => {
     const columnsCount = await officeApiDataLoader.loadExcelDataSingle(excelContext, columns, 'count');
 
@@ -57,6 +70,12 @@ class StepFormatTable {
     }
   };
 
+  /**
+   * Calls autofit function from Excel API for passed column
+   *
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+   * @param {Office} column Reference to Excel column
+   */
   formatSingleColumn = async (excelContext, column) => {
     column.getRange()
       .format

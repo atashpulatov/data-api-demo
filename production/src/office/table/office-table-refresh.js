@@ -3,6 +3,16 @@ import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 
 
 class OfficeTableRefresh {
+  /**
+   * Gets data about table created on import based on bind Id.
+   *
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+   * @param {Object} bindId Id of the Office table created on import used for referencing the Excel table
+   * @param {Object} instanceDefinition
+   * @param {Object} previousTableDimensions Dimensions of the previously created table
+   *
+   * @returns {Object} contains if Columns number changed, reference to previous table and starting cell adress
+   */
   getExistingOfficeTableData = async (excelContext, bindId, instanceDefinition, previousTableDimensions) => {
     const { mstrTable } = instanceDefinition;
 
@@ -27,6 +37,17 @@ class OfficeTableRefresh {
     return { tableColumnsChanged, prevOfficeTable, startCell };
   };
 
+  /**
+   * Checks if the number of columns in report has changed and handles cases when crosstab headers were modified
+   *
+   * @param {Object} prevOfficeTable Reference to previous Excel table
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+   * @param {Object} instanceDefinition
+   * @param {Object} previousTableDimensions Dimensions of the previously created table
+   * @param {String} startCell  Adress of starting cell of Table
+   *
+   * @returns {Object} contains information if table Columns changed and modfied starting cell andress
+   */
   handleColumnChange = async (
     prevOfficeTable,
     excelContext,
@@ -54,6 +75,15 @@ class OfficeTableRefresh {
     return { tableColumnsChanged, startCell };
   };
 
+  /**
+   * Checks if the empty row in Crosstab Report exist if it does clears it,
+   * by calling function officeApiCrosstabHelper.clearEmptyCrosstabRow
+   *
+   * @param {Object} mstrTable  Contains information about mstr object
+   * @param {Object} prevOfficeTable Reference to previous Excel table
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+   *
+   */
   clearEmptyCrosstabRow = async (mstrTable, prevOfficeTable, excelContext) => {
     const { isCrosstab, toCrosstabChange, prevCrosstabDimensions } = mstrTable;
 
@@ -74,9 +104,10 @@ class OfficeTableRefresh {
   /**
    * Compares if the number of columns in table has changed.
    *
-   * @param {Object} prevOfficeTable previous office table
+   * @param {Object} prevOfficeTable Reference to previous Excel table
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    * @param {Object} instanceDefinition
+   * @param {Object} previousTableDimensions Dimensions of the previously created table
    *
    */
   checkColumnsChange = async (prevOfficeTable, excelContext, instanceDefinition, previousTableDimensions) => {
@@ -95,7 +126,7 @@ class OfficeTableRefresh {
    /**
    * Get top left cell from the excel table.
    *
-   * @param {Object} prevOfficeTable previous office table
+   * @param {Object} prevOfficeTable Reference to previous Excel table
    * @param {Object} excelContext
    *
    */
@@ -109,11 +140,11 @@ class OfficeTableRefresh {
    /**
    * Get top left cell from the excel table. For crosstabs return the first cell of Excel table not crosstab headers.
    *
-   * @param {Object} prevOfficeTable previous office table
+   * @param {Object} prevOfficeTable Reference to previous Excel table
    * @param {Object} excelContext excel context
    * @param {Boolean} tableColumnsChanged Specify if table columns has been changed.
-   * @param {string} startCell  Starting cell of Table
-   * @param {Object} mstrTable  contains information about mstr object
+   * @param {String} startCell  Adress of starting cell of Table
+   * @param {Object} mstrTable  Contains information about mstr object
    *
    */
    clearIfCrosstabHeadersChanged = async (prevOfficeTable, excelContext, tableColumnsChanged, startCell, mstrTable) => {
