@@ -11,7 +11,6 @@ describe('StepGetOfficeTableImport', () => {
     // given
     console.log = jest.fn();
 
-    // given
     const mockFormatCrosstabHeaders = jest.spyOn(stepFormatTable, 'formatCrosstabHeaders')
       .mockImplementation(() => {
         throw new Error('testError');

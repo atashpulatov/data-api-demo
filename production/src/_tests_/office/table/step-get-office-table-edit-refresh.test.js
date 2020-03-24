@@ -14,7 +14,6 @@ describe('StepGetOfficeTableImport', () => {
     // given
     console.log = jest.fn();
 
-    // given
     const mockCheckReportTypeChange = jest.spyOn(getOfficeTableHelper, 'checkReportTypeChange')
       .mockImplementation(() => {
         throw new Error('testError');
