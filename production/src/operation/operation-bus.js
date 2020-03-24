@@ -1,6 +1,6 @@
 /**
  * This class suits as an event bus for operations.
- * 
+ *
  * Client services/classes subscribe for certain steps with method subscribe.
  * Thus callbacks that they provide are stored and called
  * when their step is next in the queue.

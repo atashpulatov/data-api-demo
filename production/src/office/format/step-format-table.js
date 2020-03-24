@@ -1,8 +1,9 @@
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import officeApiDataLoader from '../api/office-api-data-loader';
 
 class StepFormatTable {
   /**
-   * Function responsible auto resizing the columns of the Office table passed in parameters.
+   * Auto resizes the columns of the Office table passed in parameters.
    *
    * Columns are resized and synchronized with Excel for each column separately.
    * In case of error this step is skipped and import/refresh workflow continues.
@@ -16,25 +17,17 @@ class StepFormatTable {
    * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions
    */
   formatTable = async (objectData, operationData) => {
+    console.time('Column auto size');
+
     const { objectWorkingId, } = objectData;
     const { excelContext, instanceDefinition, officeTable, } = operationData;
     const { crosstabHeaderDimensions, isCrosstab } = instanceDefinition.mstrTable;
 
-    console.time('Column auto size');
-    if (isCrosstab) {
-      const { rowsX } = crosstabHeaderDimensions;
-      officeTable.getDataBodyRange().getColumnsBefore(rowsX).format.autofitColumns();
-    }
-
     try {
-      const { columns } = officeTable;
-      columns.load('count');
-      await excelContext.sync();
-      for (let index = 0; index < columns.count; index++) {
-        columns.getItemAt(index).getRange().format.autofitColumns();
-        await excelContext.sync();
-      }
-      if (isCrosstab) { officeTable.showHeaders = false; }
+      this.formatCrosstab(officeTable, isCrosstab, crosstabHeaderDimensions.rowsX);
+
+      await this.formatColumns(excelContext, officeTable.columns);
+
       await excelContext.sync();
     } catch (error) {
       console.log('Error when formatting - no columns autofit applied', error);
@@ -43,6 +36,33 @@ class StepFormatTable {
     operationStepDispatcher.completeFormatOfficeTable(objectWorkingId);
 
     console.timeEnd('Column auto size');
+  };
+
+  formatCrosstab = (officeTable, isCrosstab, rowsX) => {
+    if (isCrosstab) {
+      officeTable.getDataBodyRange()
+        .getColumnsBefore(rowsX)
+        .format
+        .autofitColumns();
+
+      officeTable.showHeaders = false;
+    }
+  };
+
+  formatColumns = async (excelContext, columns) => {
+    const columnsCount = await officeApiDataLoader.loadExcelDataSingle(excelContext, columns, 'count');
+
+    for (let i = 0; i < columnsCount; i++) {
+      await this.formatSingleColumn(excelContext, columns.getItemAt(i));
+    }
+  };
+
+  formatSingleColumn = async (excelContext, column) => {
+    column.getRange()
+      .format
+      .autofitColumns();
+
+    await excelContext.sync();
   };
 }
 
