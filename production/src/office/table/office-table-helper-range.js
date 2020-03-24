@@ -67,9 +67,8 @@ class OfficeTableHelperRange {
     return this.checkCrosstabAddedRowsAndColumns(mstrTable, addedRows, addedColumns);
   }
 
-
   /**
-   * Removes table created on import during refresh/edit workflow
+   * Removes table created on import during refresh/edit workflow.
    *
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    * @param {Object} prevOfficeTable previous office table
@@ -137,7 +136,7 @@ class OfficeTableHelperRange {
   }
 
   /**
-   * Extends the Excel table range for columns added during import/refresh
+   * Extends the Excel table range for columns added during import/refresh.
    *
    * @param {Office} prevOfficeTable Reference to previously imported Excel table
    * @param {Number} addedColumns Number of added columns to the table
@@ -152,6 +151,7 @@ class OfficeTableHelperRange {
 
   /**
    * Extends the Excel range by crosstab header column dimension.
+   *
    * For tabular report return range without changes.
    *
    * @param {Office} range Reference to Excel range object.
@@ -193,7 +193,7 @@ class OfficeTableHelperRange {
   }
 
   /**
-   * Extends the Excel table range for rows and columns added during import/refresh
+   * Extends the Excel table range for rows and columns added during import/refresh.
    *
    * @param {Office} prevOfficeTable Reference to previously imported Excel table
    * @param {Number} addedColumns Number of added columns to the table
@@ -210,7 +210,8 @@ class OfficeTableHelperRange {
 
   /**
    * Extends the Excel range by crosstab header row dimension.
-   * For tabular report return range without changes.
+   *
+   * For tabular report returns range without changes.
    *
    * @param {Office} range Reference to Excel range object.
    * @param {number} rowsX Number of columns in crosstab row headers

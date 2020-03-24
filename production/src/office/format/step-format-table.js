@@ -39,11 +39,12 @@ class StepFormatTable {
   };
 
   /**
-   * Calls autofit function from Excel API for range containing all column that are part of row crosstab headers.
-   * Hides Excel table headers.
+   * Calls autofit function from Excel API for range containing all column that are part of row crosstab headers
+   * and hides Excel table headers.
    *
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @param {Office} column Reference to Excel column
+   * @param {Office} officeTable Reference to Table created by Excel
+   * @param {Boolean} isCrosstab Indicates if it's a crosstab
+   * @param {number} rowsX Number of columns in crosstab row headers
    */
   formatCrosstabHeaders = (officeTable, isCrosstab, rowsX) => {
     if (isCrosstab) {
@@ -57,10 +58,10 @@ class StepFormatTable {
   };
 
   /**
-   * Calls formatSingleColumn function for each column in passed column collection
+   * Calls formatSingleColumn function for each column in passed column collection.
    *
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @param {Office} column Reference to Excel column
+   * @param {Office} columns Reference to Excel columns collection
    */
   formatColumns = async (excelContext, columns) => {
     const columnsCount = await officeApiDataLoader.loadExcelDataSingle(excelContext, columns, 'count');
@@ -71,7 +72,7 @@ class StepFormatTable {
   };
 
   /**
-   * Calls autofit function from Excel API for passed column
+   * Calls autofit function from Excel API for passed column.
    *
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    * @param {Office} column Reference to Excel column

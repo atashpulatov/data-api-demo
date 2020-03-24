@@ -13,7 +13,9 @@ class GetOfficeTableHelper {
 
   /**
    * Creates name for Excel table based on name of MSTR object and time of import.
+   *
    * Replaces all not allowed characters in object name with "_".
+   *
    * For refresh/edit returns name created during import.
    *
    * @param {Object} mstrTable contains information about mstr object
