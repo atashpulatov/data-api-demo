@@ -41,6 +41,7 @@ describe('StepFetchInsertDataIntoExcel', () => {
   /* eslint-enable object-curly-newline */
 
   const mockOperationData = {
+    objectWorkingId: 'testObjectWorkingId',
     operationType: 'testOperationType',
     tableColumnsChanged: 'testTableColumnsChanged',
     officeTable: 'testOfficeTable',
@@ -63,20 +64,8 @@ describe('StepFetchInsertDataIntoExcel', () => {
     },
   };
 
-  const generatorConfig = {
-    instanceDefinition: resultInstanceDefinition,
-    objectId: 'testObjectId',
-    projectId: 'testProjectId',
-    mstrObjectType: 'testMstrObjectType',
-    dossierData: 'testDossierData',
-    body: 'testBody',
-    limit: 4761,
-    visualizationInfo: 'testVisualizationInfo',
-    displayAttrFormNames: 'testDisplayAttrFormNames',
-    preparedInstanceId: 'testPreparedInstanceId',
-    manipulationsXML: 'testManipulationsXML',
-    promptsAnswers: 'testPromptsAnswers',
-  };
+  const limit = 4761;
+
 
   afterEach(() => {
     mockSuspendApiCalculationUntilNextSync.mockClear();
@@ -129,7 +118,11 @@ describe('StepFetchInsertDataIntoExcel', () => {
 
     // then
     expect(mockFetchContentGenerator).toBeCalledTimes(1);
-    expect(mockFetchContentGenerator).toBeCalledWith(generatorConfig);
+    expect(mockFetchContentGenerator).toBeCalledWith({
+      ...mockObjectData,
+      limit,
+      instanceDefinition: resultInstanceDefinition
+    });
 
     expect(mockAppendRows).not.toBeCalled();
 
@@ -204,7 +197,11 @@ describe('StepFetchInsertDataIntoExcel', () => {
 
     // then
     expect(mockFetchContentGenerator).toBeCalledTimes(1);
-    expect(mockFetchContentGenerator).toBeCalledWith(generatorConfig);
+    expect(mockFetchContentGenerator).toBeCalledWith({
+      ...mockObjectData,
+      limit,
+      instanceDefinition: resultInstanceDefinition
+    });
 
     expect(mockSuspendApiCalculationUntilNextSync).toBeCalledTimes(suspendApiCalculationUntilNextSyncCallsNo);
 
@@ -305,7 +302,11 @@ describe('StepFetchInsertDataIntoExcel', () => {
 
     // then
     expect(mockFetchContentGenerator).toBeCalledTimes(1);
-    expect(mockFetchContentGenerator).toBeCalledWith(generatorConfig);
+    expect(mockFetchContentGenerator).toBeCalledWith({
+      ...mockObjectData,
+      limit,
+      instanceDefinition: resultInstanceDefinition
+    });
 
     expect(mockSuspendApiCalculationUntilNextSync).toBeCalledTimes(suspendApiCalculationUntilNextSyncCallsNo);
 
