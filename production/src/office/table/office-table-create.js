@@ -15,7 +15,7 @@ class OfficeTableCreate {
    * @param {Object} instanceDefinition
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    * @param {string} startCell  Top left corner cell
-   * @param {string} tableName Excel Binding ID
+   * @param {string} tableName Name of the Excel Table
    * @param {Object} prevOfficeTable Previous office table to refresh
    * @param {Boolean} tableColumnsChanged Specify if table columns has been changed. False by default
    *

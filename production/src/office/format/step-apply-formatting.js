@@ -11,7 +11,7 @@ class StepApplyFormatting {
    * This function is subscribed as one of the operation steps with the key FORMAT_DATA,
    * therefore should be called only via operation bus.
    *
-   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param {Number} operationData.objectWorkingId Unique Id of the object allowing to reference specific object
    * @param {Office} operationData.officeTable Reference to Table created by Excel
    * @param {Object} operationData.instanceDefinition Object containing information about MSTR object
    * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions
@@ -19,8 +19,9 @@ class StepApplyFormatting {
   applyFormatting = async (objectData, operationData) => {
     try {
       console.time('Apply formatting');
-      const { objectWorkingId } = objectData;
-      const { excelContext, instanceDefinition, officeTable, } = operationData;
+      const {
+        objectWorkingId, excelContext, instanceDefinition, officeTable,
+      } = operationData;
       const { columnInformation, isCrosstab } = instanceDefinition.mstrTable;
 
       const filteredColumnInformation = this.filterColumnInformation(columnInformation, isCrosstab);

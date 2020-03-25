@@ -17,13 +17,9 @@ class StepFetchInsertDataIntoExcel {
    * @param {Number} objectData.projectId Id of the MSTR project from which we fetch data
    * @param {Object} objectData.dossierData Data of dossier used for answering prompts
    * @param {Object} objectData.mstrObjectType Information about MSTR object type
-   * @param {Number} objectData.body Information about location of visualization in dossier
-   * @param {String} [objectData.preparedInstanceId] Id of the processed object instance
-   * @param {Object} [objectData.manipulationsXML] Information about manipulations in dossier
-   * @param {Array} [objectData.promptsAnswers] Prompts answers used for creating instance of processed object
    * @param {Object} [objectData.visualizationInfo] Information about location of visualization in dossier
    * @param {Object} objectData.displayAttrFormNames The style in which attribute form will be displayed
-   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param {Number} operationData.objectWorkingId Unique Id of the object allowing to reference specific object
    * @param {Office} operationData.operationType The type of the operation that called this function
    * @param {Boolean} [operationData.tableColumnsChanged] Determines if columns number in Excel table has been changed
    * @param {Office} operationData.officeTable Reference to Table created by Excel
@@ -33,20 +29,7 @@ class StepFetchInsertDataIntoExcel {
   fetchInsertDataIntoExcel = async (objectData, operationData) => {
     try {
       const {
-        objectId,
-        projectId,
-        dossierData,
-        mstrObjectType,
-        body,
-        preparedInstanceId,
-        manipulationsXML,
-        promptsAnswers,
-        visualizationInfo,
-        displayAttrFormNames,
         objectWorkingId,
-      } = objectData;
-
-      const {
         operationType,
         tableColumnsChanged,
         officeTable,
@@ -56,25 +39,9 @@ class StepFetchInsertDataIntoExcel {
 
       const { columns, rows, mstrTable } = instanceDefinition;
       const { subtotalsInfo: { importSubtotal = true } } = mstrTable;
-
       const limit = Math.min(Math.floor(DATA_LIMIT / columns), IMPORT_ROW_LIMIT);
 
-      const generatorConfig = {
-        instanceDefinition,
-        objectId,
-        projectId,
-        mstrObjectType,
-        dossierData,
-        body,
-        limit,
-        visualizationInfo,
-        displayAttrFormNames,
-        preparedInstanceId,
-        manipulationsXML,
-        promptsAnswers,
-      };
-
-      const rowGenerator = mstrObjectRestService.fetchContentGenerator(generatorConfig);
+      const rowGenerator = mstrObjectRestService.fetchContentGenerator({ ...objectData, limit, instanceDefinition });
 
       let rowIndex = 0;
       const contextPromises = [];
